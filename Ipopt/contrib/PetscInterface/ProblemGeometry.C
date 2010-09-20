@@ -22,10 +22,8 @@ ProblemGeometry::Item::Item(const std::vector<double>& min, const std::vector<do
 
 void ProblemGeometry::Item::ValidateMinMax()
 {
-  for(int i=0;i<min_.size();i++)
-  {
-    if(min_[i]>max_[i])
-    {
+  for (int i=0;i<min_.size();i++) {
+    if (min_[i]>max_[i]) {
       double tmp=min_[i];
       min_[i]=max_[i];
       max_[i]=tmp;
@@ -37,11 +35,10 @@ bool ProblemGeometry::Item::IsInArea(const std::vector<double>& pt, double epsil
 {
   assert(pt.size()==min_.size());
   int dim = min_.size();
-  for( int i=0; i<dim; i++ )
-  {
-    if(min_[i]-epsilon>pt[i])
+  for ( int i=0; i<dim; i++ ) {
+    if (min_[i]-epsilon>pt[i])
       return false;
-    if(max_[i]+epsilon<pt[i])
+    if (max_[i]+epsilon<pt[i])
       return false;
   }
   return true;
@@ -53,15 +50,12 @@ int ProblemGeometry::Item::GetClosestBoundary(const std::vector<double>& pt)
   int dim = min_.size();
   double min_dist=fabs(pt[0]-min_[0]);
   int cur_min_dir=0;
-  for(int i=0; i<dim; i++)
-  {
-    if(fabs(pt[i]-min_[i])<min_dist)
-    {
+  for (int i=0; i<dim; i++) {
+    if (fabs(pt[i]-min_[i])<min_dist) {
       min_dist = fabs(pt[i]-min_[i]);
       cur_min_dir = 2*i;
     }
-    if(fabs(max_[i]-pt[i])<min_dist)
-    {
+    if (fabs(max_[i]-pt[i])<min_dist) {
       min_dist = fabs(max_[i]-pt[i]);
       cur_min_dir = 2*i+1;
     }
@@ -72,7 +66,7 @@ int ProblemGeometry::Item::GetClosestBoundary(const std::vector<double>& pt)
 int ProblemGeometry::Item::GetBoundaryMarker(const std::vector<double>& pt)
 {
   assert(pt.size()==min_.size());
-  if(!IsInArea(pt)) return -1;
+  if (!IsInArea(pt)) return -1;
   return BoundaryMarker[GetClosestBoundary(pt)];
 }
 
@@ -97,7 +91,7 @@ void ProblemGeometry::AddEquipment(const std::vector<double>& min, const std::ve
   // 1.st & 3rd Boundary: Head exchange
   item.BoundaryMarker[2] = BoundMark;
   item.BoundaryMarker[3] = BoundMark;
-  // Phi: hom. Neum. T: dT/dn = Kappa(T-Teq) => 1*dT/dn = Kappa*T -Kappa*Teq 
+  // Phi: hom. Neum. T: dT/dn = Kappa(T-Teq) => 1*dT/dn = Kappa*T -Kappa*Teq
   _BoundCond.push_back(BoundaryCondition(0.0,1.0,0.0,kappa,-1.0,-kappa*TempEquip));
   // No control parameters
   // 2.nd Boundary: Isolation
@@ -107,8 +101,7 @@ void ProblemGeometry::AddEquipment(const std::vector<double>& min, const std::ve
   _BoundCond.push_back(BoundaryCondition(0.0,1.0,0.0,0.0,1.0,0.0));
   // No control parameters
   NextFreeBoundaryMarker+=2;
-  if(GetDim()>2)
-  { // Equipmentceiling: heat exchange (same as on side)
+  if (GetDim()>2) { // Equipmentceiling: heat exchange (same as on side)
     item.BoundaryMarker[4] = -1;   // should never be accessed, since Equipment is standing on floor, so no boundary
     int BoundMark = NextFreeBoundaryMarker++;
     // 1.st & 3rd Boundary: Head exchange
@@ -126,7 +119,7 @@ void ProblemGeometry::AddAC(const std::vector<double>& min, const std::vector<do
   _ItemAtWall.clear();  // invalidate item at wall and rebuild it, when the mesh is created
   Item item(min,max);
   int BoundMark = NextFreeBoundaryMarker++;
-  for(unsigned int iBd=0;iBd<2*GetDim();iBd++)
+  for (unsigned int iBd=0;iBd<2*GetDim();iBd++)
     item.BoundaryMarker[iBd] = BoundMark;
   assert(_BoundCond.size()==BoundMark);
   _BoundCond.push_back(BoundaryCondition(0.0,-1.0,vAc,1.0,0.0,-TempAc)); // dPhi/dn = -vAc,T = TAc, i.e. 0 dT/dn = 1*T-TAc
@@ -142,7 +135,7 @@ void ProblemGeometry::AddExhaust(const std::vector<double>& min, const std::vect
   _ItemAtWall.clear();
   Item item(min,max);
   unsigned int BoundMark = NextFreeBoundaryMarker++;
-  for( int iBd=0;iBd<2*GetDim();iBd++)
+  for ( int iBd=0;iBd<2*GetDim();iBd++)
     item.BoundaryMarker[iBd] = BoundMark;
   assert(_BoundCond.size()==BoundMark);
   _BoundCond.push_back(BoundaryCondition(1.0,0.0,0.0,0.0,1.0,0.0));         // Phi = 0, dT/dn = 0
@@ -156,16 +149,14 @@ void ProblemGeometry::ReadFromStream(std::istream& is)
   int n;
   double Vals[8];
   _h=0;
-  while (!is.eof())
-  {
+  while (!is.eof()) {
     is >> Buf;
-    if(strlen(Buf)<1)
+    if (strlen(Buf)<1)
       continue;
-    if(Buf[0]=='#')
+    if (Buf[0]=='#')
       continue;
     n = sscanf(Buf,"h=%lf",Vals);
-    if( (n==1) )
-    {
+    if ( (n==1) ) {
       _h = Vals[0];
       break;
     }
@@ -177,17 +168,15 @@ void ProblemGeometry::ReadFromStream(std::istream& is)
   }
 
   _RoomSize.clear();
-  while (!is.eof())
-  {
+  while (!is.eof()) {
     is >> Buf;
-    if(strlen(Buf)<1)
+    if (strlen(Buf)<1)
       continue;
-    if(Buf[0]=='#')
+    if (Buf[0]=='#')
       continue;
     n = sscanf(Buf,"Roomsize=%lf,%lf,%lf",Vals,Vals+1,Vals+2);
-    if( (n==2) || (n==3) )
-    {
-      for(int i=0;i<n;i++)
+    if ( (n==2) || (n==3) ) {
+      for (int i=0;i<n;i++)
         _RoomSize.push_back(Vals[i]);
       break;
     }
@@ -197,37 +186,36 @@ void ProblemGeometry::ReadFromStream(std::istream& is)
       continue;
     }
   }
-  if(0==_RoomSize.size()) {
+  if (0==_RoomSize.size()) {
     throw std::runtime_error("Can't find line \"Roomsize=*,*[,*]\"");
   }
   else {
     std::cout << "Roomsize=" << _RoomSize[0] <<"," << _RoomSize[1];
-    if(_RoomSize.size()>2)
+    if (_RoomSize.size()>2)
       std::cout << "," << _RoomSize[2];
     std::cout << std::endl;
   }
-  
+
   _Equip.clear();
   _AC.clear();
   _Exh.clear();
   std::vector<double> tmp_min;
   std::vector<double> tmp_max;
-  while (!is.eof())
-  {
+  while (!is.eof()) {
     tmp_max.clear();
     tmp_min.clear();
     is >> Buf;
     std::cout << Buf << "line read" << std::endl;
-    if(strlen(Buf)<1)
+    if (strlen(Buf)<1)
       continue;
-    if(Buf[0]=='#')
+    if (Buf[0]=='#')
       continue;
 
     n = sscanf(Buf,"AC:Min=%lf,%lf,%lf;",Vals,Vals+1,Vals+2);
-    if(n>1) {
-      if(n==2) {
+    if (n>1) {
+      if (n==2) {
         n = sscanf(Buf,"AC:Min=%lf,%lf;Max=%lf,%lf;vAC=%lf;TAC=%lf",Vals,Vals+1,Vals+2,Vals+3,Vals+4,Vals+5);
-        if(n!=6) {
+        if (n!=6) {
           std::string str("Can't interpret line as AC in 2D:");
           str += Buf;
           throw std::runtime_error(str);
@@ -238,10 +226,9 @@ void ProblemGeometry::ReadFromStream(std::istream& is)
         tmp_max.push_back(Vals[3]);
         AddAC(tmp_min, tmp_max, Vals[4], Vals[5]);
       }
-      else
-      {
+      else {
         n = sscanf(Buf,"AC:Min=%lf,%lf,%lf;Max=%lf,%lf,%lf;vAC=%lf;TAC=%lf",Vals,Vals+1,Vals+2,Vals+3,Vals+4,Vals+5,Vals+6,Vals+7);
-        if(n!=8) {
+        if (n!=8) {
           std::string str("Can't interpret line as AC in 3D:");
           str += Buf;
           throw std::runtime_error(str);
@@ -257,10 +244,10 @@ void ProblemGeometry::ReadFromStream(std::istream& is)
     }
     else {
       n = sscanf(Buf,"Exh:Min=%lf,%lf,%lf;",Vals,Vals+1,Vals+2);
-      if(n>1) {
-        if(n==2) {
+      if (n>1) {
+        if (n==2) {
           n = sscanf(Buf,"Exh:Min=%lf,%lf;Max=%lf,%lf",Vals,Vals+1,Vals+2,Vals+3);
-          if(n!=4) {
+          if (n!=4) {
             std::string str("Can't interpret line as Exh in 2D:");
             str += Buf;
             throw std::runtime_error(str);
@@ -271,10 +258,9 @@ void ProblemGeometry::ReadFromStream(std::istream& is)
           tmp_max.push_back(Vals[3]);
           AddExhaust(tmp_min, tmp_max);
         }
-        else
-        {
+        else {
           n = sscanf(Buf,"Exh:Min=%lf,%lf,%lf;Max=%lf,%lf,%lf",Vals,Vals+1,Vals+2,Vals+3,Vals+4,Vals+5);
-          if(n!=6) {
+          if (n!=6) {
             std::string str("Can't interpret line as Exh in 3D:");
             str += Buf;
             throw std::runtime_error(str);
@@ -290,10 +276,10 @@ void ProblemGeometry::ReadFromStream(std::istream& is)
       }
       else {
         n = sscanf(Buf,"Equip:Min=%lf,%lf,%lf;",Vals,Vals+1,Vals+2);
-        if(n>1) {
-          if(n==2) {
+        if (n>1) {
+          if (n==2) {
             n = sscanf(Buf,"Equip:Min=%lf,%lf;Max=%lf,%lf;TEquip=%lf;kappa=%lf",Vals,Vals+1,Vals+2,Vals+3,Vals+4,Vals+5);
-            if(n!=6) {
+            if (n!=6) {
               std::string str("Can't interpret line as Equip in 2D:");
               str += Buf;
               throw std::runtime_error(str);
@@ -304,10 +290,9 @@ void ProblemGeometry::ReadFromStream(std::istream& is)
             tmp_max.push_back(Vals[3]);
             AddEquipment(tmp_min, tmp_max, Vals[4], Vals[5]);
           }
-          else
-          {
+          else {
             n = sscanf(Buf,"Equip:Min=%lf,%lf,%lf;Max=%lf,%lf,%lf;TEquip=%lf;kappa=%lf",Vals,Vals+1,Vals+2,Vals+3,Vals+4,Vals+5,Vals+6,Vals+7);
-            if(n!=8) {
+            if (n!=8) {
               std::string str("Can't interpret line as Equip in 3D:");
               str += Buf;
               throw std::runtime_error(str);
@@ -336,23 +321,23 @@ int ProblemGeometry::GetBoundaryMarker(const std::vector<double>& pt)
 {
   int iWall = GetWall(pt);
   int Tmp;
-  if(iWall<0)  {
-    for(int iEq=0;iEq<_Equip.size();iEq++) {
+  if (iWall<0)  {
+    for (int iEq=0;iEq<_Equip.size();iEq++) {
       Tmp=_Equip[iEq].GetBoundaryMarker(pt);
-      if(Tmp>=0)
+      if (Tmp>=0)
         return Tmp;
     }
     return -1;
   }
   else {
-    if(iWall>3) // floor and ceiling
+    if (iWall>3) // floor and ceiling
       return 1;
     ValidateItemAtWall();
     std::list< Item* >::iterator ppItem;
     ppItem = _ItemAtWall[iWall].begin();
-    for(;ppItem!=_ItemAtWall[iWall].end();ppItem++) {
+    for (;ppItem!=_ItemAtWall[iWall].end();ppItem++) {
       Tmp=(*ppItem)->GetBoundaryMarker(pt);
-      if(Tmp>=0)
+      if (Tmp>=0)
         return Tmp;
     }
     return 1;
@@ -366,9 +351,9 @@ int ProblemGeometry::GetWall(const std::vector<double>& pt)
   Null.resize(GetDim(),0.0);
 
   Item room(Null,_RoomSize);
-  if(room.IsInArea(pt,-1e-8)) // Check if it's inside
+  if (room.IsInArea(pt,-1e-8)) // Check if it's inside
     return -1;
-  if(room.IsInArea(pt))
+  if (room.IsInArea(pt))
     return room.GetClosestBoundary(pt);
   else
     return -1;
@@ -379,23 +364,22 @@ void ProblemGeometry::ValidateItemAtWall()
 {
   // _ItemAtWall: Index: 0:x0=0, 1:x0=Max, 2:x1=0, 3:x1=Max
   double epsilon = 1e-8;
-  if(_ItemAtWall.size()>0)
+  if (_ItemAtWall.size()>0)
     return;
   std::list< Item* > EmptyList;
   _ItemAtWall.resize(4,EmptyList);
   Item* pItem;
   unsigned int iItem;
-  for(iItem=0;iItem<_AC.size();iItem++)
-  {
+  for (iItem=0;iItem<_AC.size();iItem++) {
     pItem = &(_AC[iItem]);
-    for(int iDim=0;iDim<2;iDim++) // No check for iDim=2, thats floor or ceiling, special case
+    for (int iDim=0;iDim<2;iDim++) // No check for iDim=2, thats floor or ceiling, special case
     {
-      if( fabs(pItem->min_[iDim])<epsilon && fabs(pItem->max_[iDim])<epsilon )
+      if ( fabs(pItem->min_[iDim])<epsilon && fabs(pItem->max_[iDim])<epsilon )
       {
         _ItemAtWall[2*iDim].push_back(pItem);
         continue;
       }
-      if( fabs(pItem->min_[iDim]-_RoomSize[iDim])<epsilon && fabs(pItem->max_[iDim]-_RoomSize[iDim])<epsilon )
+      if ( fabs(pItem->min_[iDim]-_RoomSize[iDim])<epsilon && fabs(pItem->max_[iDim]-_RoomSize[iDim])<epsilon )
       {
         _ItemAtWall[2*iDim+1].push_back(pItem);
         continue;
@@ -403,17 +387,16 @@ void ProblemGeometry::ValidateItemAtWall()
     }
   }
 
-  for(iItem=0;iItem<_Exh.size();iItem++)
-  {
+  for (iItem=0;iItem<_Exh.size();iItem++) {
     pItem = &(_Exh[iItem]);
-    for(int iDim=0;iDim<2;iDim++) // No check for iDim=2, thats floor or ceiling, special case
+    for (int iDim=0;iDim<2;iDim++) // No check for iDim=2, thats floor or ceiling, special case
     {
-      if( fabs(pItem->min_[iDim])<epsilon && fabs(pItem->max_[iDim])<epsilon )
+      if ( fabs(pItem->min_[iDim])<epsilon && fabs(pItem->max_[iDim])<epsilon )
       {
         _ItemAtWall[2*iDim].push_back(pItem);
         continue;
       }
-      if( fabs(pItem->min_[iDim]-_RoomSize[iDim])<epsilon && fabs(pItem->max_[iDim]-_RoomSize[iDim])<epsilon )
+      if ( fabs(pItem->min_[iDim]-_RoomSize[iDim])<epsilon && fabs(pItem->max_[iDim]-_RoomSize[iDim])<epsilon )
       {
         _ItemAtWall[2*iDim+1].push_back(pItem);
         continue;
@@ -428,11 +411,10 @@ int ProblemGeometry::GetWallItemWall(const Item& item)
 {
   // Returnvalue: Min x1 -> 0, Max x1->1, Min x2 -> 2 Max x2 -> 3, Min x3 -> 4 Max x3 -> 5
   double epsilon = 1e-8;
-  for(int iDim=0;iDim<GetDim();iDim++)
-  {
-    if( (fabs(item.min_[iDim])<epsilon) && (fabs(item.max_[iDim])<epsilon) )
+  for (int iDim=0;iDim<GetDim();iDim++) {
+    if ( (fabs(item.min_[iDim])<epsilon) && (fabs(item.max_[iDim])<epsilon) )
       return 2*iDim;
-    if( (fabs(item.min_[iDim]-_RoomSize[iDim])<epsilon) && (fabs(item.max_[iDim]-_RoomSize[iDim])<epsilon) )
+    if ( (fabs(item.min_[iDim]-_RoomSize[iDim])<epsilon) && (fabs(item.max_[iDim]-_RoomSize[iDim])<epsilon) )
       return 2*iDim+1;
   }
   // We should never get here
@@ -457,21 +439,21 @@ void ProblemGeometry::SetBoundaryInfo(libMesh::Mesh* p_mesh)
       if ((*el)->neighbor(side) == NULL) {
         // this is element side on boundary
         libMesh::Point Center;
-        for(unsigned int iPt=0; iPt<(*el)->n_nodes();iPt++)
-          if((*el)->is_node_on_side(iPt,side))
+        for (unsigned int iPt=0; iPt<(*el)->n_nodes();iPt++)
+          if ((*el)->is_node_on_side(iPt,side))
             Center += (*el)->point(iPt);
         Center = (1.0/GetDim()) * Center;
-        for(unsigned int iDim=0;iDim<GetDim();iDim++)
+        for (unsigned int iDim=0;iDim<GetDim();iDim++)
           Pos[iDim] = Center(iDim);
         int BoundaryMarker = GetBoundaryMarker(Pos);
         assert(BoundaryMarker!=-1);
 //        p_mesh->boundary_info->add_side(*el,side,BoundaryMarker);
-        
+
         // mark nodes if Dirichlet cond.: Those are set at points (not sides) by putting diagonals into the matrix
-        if( (fabs(_BoundCond[BoundaryMarker].PhiNeumannCoef)<eps) || (fabs(_BoundCond[BoundaryMarker].TNeumannCoef)<eps) ) { 
+        if ( (fabs(_BoundCond[BoundaryMarker].PhiNeumannCoef)<eps) || (fabs(_BoundCond[BoundaryMarker].TNeumannCoef)<eps) ) {
           // mark side points
-          for(unsigned int iPt=0; iPt<(*el)->n_nodes();iPt++)
-            if((*el)->is_node_on_side(iPt,side))
+          for (unsigned int iPt=0; iPt<(*el)->n_nodes();iPt++)
+            if ((*el)->is_node_on_side(iPt,side))
               p_mesh->boundary_info->add_node((*el)->get_node(iPt),BoundaryMarker);
         }
       }
@@ -485,7 +467,7 @@ void ProblemGeometry::SetFacette(tetgenio::facet *f, int Base, int Offset0, int 
 {
   tetgenio::init(f);
   f->numberofholes=nHoles;
-  if(nHoles>0)
+  if (nHoles>0)
     f->holelist = new REAL[f->numberofholes * 3];
   f->numberofpolygons=1+nHoles;
   f->polygonlist = new tetgenio::polygon[f->numberofpolygons];
@@ -493,7 +475,10 @@ void ProblemGeometry::SetFacette(tetgenio::facet *f, int Base, int Offset0, int 
   tetgenio::init(p);
   p->numberofvertices = 4;
   p->vertexlist = new int[p->numberofvertices];
-  p->vertexlist[0]=Base+Offset0; p->vertexlist[1]=Base+Offset1; p->vertexlist[2]=Base+Offset2; p->vertexlist[3]=Base+Offset3;
+  p->vertexlist[0]=Base+Offset0;
+  p->vertexlist[1]=Base+Offset1;
+  p->vertexlist[2]=Base+Offset2;
+  p->vertexlist[3]=Base+Offset3;
 }
 
 void ProblemGeometry::SetPoint(REAL* pointlist,int idx,REAL x,REAL y,REAL z)
@@ -513,50 +498,42 @@ void ProblemGeometry::Tetgen2Mesh(const tetgenio& tet, libMesh::UnstructuredMesh
   // Add Nodes:
   unsigned long int iPt;
   int BoundaryMarker;
-  for(iPt=0;iPt<tet.numberofpoints;iPt++)
+  for (iPt=0;iPt<tet.numberofpoints;iPt++)
     p_mesh->add_point(libMesh::Point(tet.pointlist[3*iPt+0],tet.pointlist[3*iPt+1],tet.pointlist[3*iPt+2]) );
   // elements
   libMesh::Elem *pElem;
-  for (unsigned int iEl=0; iEl<tet.numberoftetrahedra; iEl++)
-  {
+  for (unsigned int iEl=0; iEl<tet.numberoftetrahedra; iEl++) {
     pElem = new libMesh::Tet4;
-    for(iPt=0;iPt<4;iPt++)
-    {
+    for (iPt=0;iPt<4;iPt++) {
       pElem->set_node(iPt) = p_mesh->node_ptr(tet.tetrahedronlist[4*iEl+iPt]);
     }
     // Finally, add this element to the mesh
     p_mesh->add_elem(pElem);
   }
 
-  if(tet.neighborlist)
-  {
-    for (unsigned int iEl=0; iEl<tet.numberoftetrahedra; iEl++)
-    {
-      for(int iNeig=0;iNeig<dim+1;++iNeig)
-      {
-        if(tet.neighborlist[4*iEl+iNeig]==-1)
-        {
+  if (tet.neighborlist) {
+    for (unsigned int iEl=0; iEl<tet.numberoftetrahedra; iEl++) {
+      for (int iNeig=0;iNeig<dim+1;++iNeig) {
+        if (tet.neighborlist[4*iEl+iNeig]==-1) {
           libMesh::Tet4 *pElem = static_cast<libMesh::Tet4*>(p_mesh->elem(iEl));
           int iBdNode1 = tet.tetrahedronlist[(dim+1)*iEl+((iNeig+1)%(dim+1))];
           int iBdNode2 = tet.tetrahedronlist[(dim+1)*iEl+((iNeig+2)%(dim+1))];
           int iBdNode3 = tet.tetrahedronlist[(dim+1)*iEl+((iNeig+3)%(dim+1))];
           int sum = iBdNode1+iBdNode2+iBdNode3;
-          for(int iSide=0;iSide<dim+1;iSide++)
-          { 
+          for (int iSide=0;iSide<dim+1;iSide++) {
             // sum is correct -> sid is correct (holds only, if side has one node less than elem)
-            if( (pElem->node(pElem->side_nodes_map[iSide][0])
-                    +pElem->node(pElem->side_nodes_map[iSide][1])
-                    +pElem->node(pElem->side_nodes_map[iSide][2])) == sum )
-            {
+            if ( (pElem->node(pElem->side_nodes_map[iSide][0])
+                  +pElem->node(pElem->side_nodes_map[iSide][1])
+                  +pElem->node(pElem->side_nodes_map[iSide][2])) == sum ) {
               std::vector<double> Center;
               Center.resize(dim);
-              for(int iDim=0;iDim<dim;iDim++)
+              for (int iDim=0;iDim<dim;iDim++)
                 Center[iDim] = (tet.pointlist[dim*iBdNode1+iDim] + tet.pointlist[dim*iBdNode2+iDim]+ tet.pointlist[dim*iBdNode3+iDim])/dim;
               int BoundaryMarker = GetBoundaryMarker(Center);
               assert(BoundaryMarker!=-1);
               p_mesh->boundary_info->add_side(iEl,iSide,BoundaryMarker);
-              if( (fabs(_BoundCond[BoundaryMarker].PhiNeumannCoef)<eps) ||
-                  (fabs(_BoundCond[BoundaryMarker].TNeumannCoef)<eps) ) {
+              if ( (fabs(_BoundCond[BoundaryMarker].PhiNeumannCoef)<eps) ||
+                   (fabs(_BoundCond[BoundaryMarker].TNeumannCoef)<eps) ) {
                 p_mesh->boundary_info->add_node(iBdNode1,BoundaryMarker);
                 p_mesh->boundary_info->add_node(iBdNode2,BoundaryMarker);
                 p_mesh->boundary_info->add_node(iBdNode3,BoundaryMarker);
@@ -571,17 +548,16 @@ void ProblemGeometry::Tetgen2Mesh(const tetgenio& tet, libMesh::UnstructuredMesh
 
 void ProblemGeometry::CreateMesh(libMesh::UnstructuredMesh* p_mesh)
 {
-  switch(GetDim())
-  {
-    case 2:
-      CreateMesh2D(p_mesh);
-      break;
-    case 3:
-      CreateMesh3D(p_mesh);
-      break;
-    default:
-      std::cout << "Dimension not implemented" << std::endl;
-      exit(0);
+  switch (GetDim()) {
+  case 2:
+    CreateMesh2D(p_mesh);
+    break;
+  case 3:
+    CreateMesh3D(p_mesh);
+    break;
+  default:
+    std::cout << "Dimension not implemented" << std::endl;
+    exit(0);
   }
 }
 
@@ -601,7 +577,7 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
   tetgen_in.pointlist = new REAL[3*tetgen_in.numberofpoints];
   int iPtInList = 0;
   int iFacInList = 0;
-  
+
   SetPoint(tetgen_in.pointlist,iPtInList++,0             ,0             ,0             );
   SetPoint(tetgen_in.pointlist,iPtInList++,0             ,0             ,_RoomSize[2]);
   SetPoint(tetgen_in.pointlist,iPtInList++,0             ,_RoomSize[1],0             );
@@ -617,12 +593,12 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
 
   int NumOfWallItems[4] = {0,0,0,0};
   unsigned int iItem;
-  for(iItem=0;iItem<_AC.size();iItem++)
+  for (iItem=0;iItem<_AC.size();iItem++)
     NumOfWallItems[GetWallItemWall(_AC[iItem])]++;
 
-  for(iItem=0;iItem<_Exh.size();iItem++)
+  for (iItem=0;iItem<_Exh.size();iItem++)
     NumOfWallItems[GetWallItemWall(_Exh[iItem])]++;
-  
+
   // facet marker:0: normal boundary condition, rest increasing
   int iFacMakerUsed = 1;
   tetgen_in.numberoffacets = 6+5*_Equip.size()+_AC.size()+_Exh.size();
@@ -637,10 +613,9 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
   FacWall = tetgen_in.facetlist+(iFacInList++);
   SetFacette(FacWall, 0, 0, 2, 6, 4,_Equip.size()); // Set Facet of wall
 
-  for(iItem=0;iItem<_Equip.size();iItem++)
-  {
+  for (iItem=0;iItem<_Equip.size();iItem++) {
     iFirstItemPt = iPtInList;
-    // Add Points of Item 
+    // Add Points of Item
     SetPoint(tetgen_in.pointlist,iPtInList++,_Equip[iItem].min_[0],_Equip[iItem].min_[1],_Equip[iItem].min_[2]);
     SetPoint(tetgen_in.pointlist,iPtInList++,_Equip[iItem].min_[0],_Equip[iItem].min_[1],_Equip[iItem].max_[2]);
     SetPoint(tetgen_in.pointlist,iPtInList++,_Equip[iItem].min_[0],_Equip[iItem].max_[1],_Equip[iItem].min_[2]);
@@ -649,17 +624,20 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
     SetPoint(tetgen_in.pointlist,iPtInList++,_Equip[iItem].max_[0],_Equip[iItem].min_[1],_Equip[iItem].max_[2]);
     SetPoint(tetgen_in.pointlist,iPtInList++,_Equip[iItem].max_[0],_Equip[iItem].max_[1],_Equip[iItem].min_[2]);
     SetPoint(tetgen_in.pointlist,iPtInList++,_Equip[iItem].max_[0],_Equip[iItem].max_[1],_Equip[iItem].max_[2]);
-    
+
     // Set Hole in Wall Facet
     p = FacWall->polygonlist+1+iHoleInList;
     p->numberofvertices = 4;
     p->vertexlist = new int[p->numberofvertices];
-    p->vertexlist[0]=iFirstItemPt+0; p->vertexlist[1]=iFirstItemPt+2; p->vertexlist[2]=iFirstItemPt+6; p->vertexlist[3]=iFirstItemPt+4;
+    p->vertexlist[0]=iFirstItemPt+0;
+    p->vertexlist[1]=iFirstItemPt+2;
+    p->vertexlist[2]=iFirstItemPt+6;
+    p->vertexlist[3]=iFirstItemPt+4;
     FacWall->holelist[3*iHoleInList+0] = 0.5*(_Equip[iItem].min_[0]+_Equip[iItem].max_[0]);
     FacWall->holelist[3*iHoleInList+1] = 0.5*(_Equip[iItem].min_[1]+_Equip[iItem].max_[1]);
     FacWall->holelist[3*iHoleInList+2] = 0.0;
     iHoleInList++;
-    
+
     // Add inner Facets (Equipment Boundary)
     SetFacette(tetgen_in.facetlist+(iFacInList++), iFirstItemPt, 1, 3, 7, 5);
     SetFacette(tetgen_in.facetlist+(iFacInList++), iFirstItemPt, 0, 1, 3, 2);
@@ -680,7 +658,10 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
   tetgenio::init(p);
   p->numberofvertices = 4;
   p->vertexlist = new int[p->numberofvertices];
-  p->vertexlist[0]=1; p->vertexlist[1]=3; p->vertexlist[2]=7; p->vertexlist[3]=5;
+  p->vertexlist[0]=1;
+  p->vertexlist[1]=3;
+  p->vertexlist[2]=7;
+  p->vertexlist[3]=5;
 
   Item* pItem;
 
@@ -693,8 +674,7 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
   SetFacette(FacWall, 0, 0, 1, 3, 2,NumOfWallItems[iWall]);
   // Handle items, i.e. add hole in wall, add points, add facet
   ppItem=_ItemAtWall[iWall].begin();
-  for(;ppItem!=_ItemAtWall[iWall].end();ppItem++)
-  {
+  for (;ppItem!=_ItemAtWall[iWall].end();ppItem++) {
     pItem = *ppItem;
     iFirstItemPt = iPtInList;
     SetPoint(tetgen_in.pointlist,iPtInList++,pItem->min_[0],pItem->min_[1],pItem->min_[2]);
@@ -704,7 +684,10 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
     p = FacWall->polygonlist+1+iHoleInList;
     p->numberofvertices = 4;
     p->vertexlist = new int[p->numberofvertices];
-    p->vertexlist[0]=iFirstItemPt+0; p->vertexlist[1]=iFirstItemPt+1; p->vertexlist[2]=iFirstItemPt+3; p->vertexlist[3]=iFirstItemPt+2;
+    p->vertexlist[0]=iFirstItemPt+0;
+    p->vertexlist[1]=iFirstItemPt+1;
+    p->vertexlist[2]=iFirstItemPt+3;
+    p->vertexlist[3]=iFirstItemPt+2;
     FacWall->holelist[3*iHoleInList+0] = 0.0;
     FacWall->holelist[3*iHoleInList+1] = 0.5*(pItem->min_[1]+pItem->max_[1]);
     FacWall->holelist[3*iHoleInList+2] = 0.5*(pItem->min_[2]+pItem->max_[2]);
@@ -720,8 +703,7 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
   FacWall = tetgen_in.facetlist+(iFacInList++);
   SetFacette(FacWall, 0, 4, 5, 7, 6,NumOfWallItems[iWall]);
   ppItem=_ItemAtWall[iWall].begin();
-  for(;ppItem!=_ItemAtWall[iWall].end();ppItem++)
-  {
+  for (;ppItem!=_ItemAtWall[iWall].end();ppItem++) {
     pItem = *ppItem;
     iFirstItemPt = iPtInList;
     SetPoint(tetgen_in.pointlist,iPtInList++,pItem->max_[0],pItem->min_[1],pItem->min_[2]);
@@ -731,7 +713,10 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
     p = FacWall->polygonlist+1+iHoleInList;
     p->numberofvertices = 4;
     p->vertexlist = new int[p->numberofvertices];
-    p->vertexlist[0]=iFirstItemPt+0; p->vertexlist[1]=iFirstItemPt+1; p->vertexlist[2]=iFirstItemPt+3; p->vertexlist[3]=iFirstItemPt+2;
+    p->vertexlist[0]=iFirstItemPt+0;
+    p->vertexlist[1]=iFirstItemPt+1;
+    p->vertexlist[2]=iFirstItemPt+3;
+    p->vertexlist[3]=iFirstItemPt+2;
     FacWall->holelist[3*iHoleInList+0] = _RoomSize[0];
     FacWall->holelist[3*iHoleInList+1] = 0.5*(pItem->min_[1]+pItem->max_[1]);
     FacWall->holelist[3*iHoleInList+2] = 0.5*(pItem->min_[2]+pItem->max_[2]);
@@ -747,8 +732,7 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
   FacWall = tetgen_in.facetlist+(iFacInList++);
   SetFacette(FacWall, 0, 0, 1, 5, 4, NumOfWallItems[iWall]);
   ppItem=_ItemAtWall[iWall].begin();
-  for(;ppItem!=_ItemAtWall[iWall].end();ppItem++)
-  {
+  for (;ppItem!=_ItemAtWall[iWall].end();ppItem++) {
     pItem = *ppItem;
     iFirstItemPt = iPtInList;
     SetPoint(tetgen_in.pointlist,iPtInList++,pItem->min_[0],pItem->min_[1],pItem->min_[2]);
@@ -758,7 +742,10 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
     p = FacWall->polygonlist+1+iHoleInList;
     p->numberofvertices = 4;
     p->vertexlist = new int[p->numberofvertices];
-    p->vertexlist[0]=iFirstItemPt+0; p->vertexlist[1]=iFirstItemPt+1; p->vertexlist[2]=iFirstItemPt+3; p->vertexlist[3]=iFirstItemPt+2;
+    p->vertexlist[0]=iFirstItemPt+0;
+    p->vertexlist[1]=iFirstItemPt+1;
+    p->vertexlist[2]=iFirstItemPt+3;
+    p->vertexlist[3]=iFirstItemPt+2;
     FacWall->holelist[3*iHoleInList+0] = 0.5*(pItem->min_[0]+pItem->max_[0]);
     FacWall->holelist[3*iHoleInList+1] = 0.0;
     FacWall->holelist[3*iHoleInList+2] = 0.5*(pItem->min_[2]+pItem->max_[2]);
@@ -774,8 +761,7 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
   FacWall = tetgen_in.facetlist+(iFacInList++);
   SetFacette(FacWall, 0, 2, 3, 7, 6, NumOfWallItems[iWall]);
   ppItem=_ItemAtWall[iWall].begin();
-  for(;ppItem!=_ItemAtWall[iWall].end();ppItem++)
-  {
+  for (;ppItem!=_ItemAtWall[iWall].end();ppItem++) {
     pItem = *ppItem;
     iFirstItemPt = iPtInList;
     SetPoint(tetgen_in.pointlist,iPtInList++,pItem->min_[0],pItem->min_[1],pItem->min_[2]);
@@ -785,7 +771,10 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
     p = FacWall->polygonlist+1+iHoleInList;
     p->numberofvertices = 4;
     p->vertexlist = new int[p->numberofvertices];
-    p->vertexlist[0]=iFirstItemPt+0; p->vertexlist[1]=iFirstItemPt+1; p->vertexlist[2]=iFirstItemPt+3; p->vertexlist[3]=iFirstItemPt+2;
+    p->vertexlist[0]=iFirstItemPt+0;
+    p->vertexlist[1]=iFirstItemPt+1;
+    p->vertexlist[2]=iFirstItemPt+3;
+    p->vertexlist[3]=iFirstItemPt+2;
     FacWall->holelist[3*iHoleInList+0] = 0.5*(pItem->min_[0]+pItem->max_[0]);
     FacWall->holelist[3*iHoleInList+1] = _RoomSize[1];
     FacWall->holelist[3*iHoleInList+2] = 0.5*(pItem->min_[2]+pItem->max_[2]);
@@ -795,10 +784,9 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
   }
 
   tetgenio tetgen_out;
-  
+
   bool bCallExternal=true;
-  if(bCallExternal)
-  {
+  if (bCallExternal) {
     std::ofstream os("Mesh3DRaw.poly",std::ios::out);
     PrintTetgenMesh(tetgen_in, os);
     char strBuf[256];
@@ -816,8 +804,7 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
   }
   else {
     bool PrintMeshingData=true;
-    if(PrintMeshingData)
-    {
+    if (PrintMeshingData) {
       std::ofstream os("Mesh3DRaw.poly",std::ios::out);
       PrintTetgenMesh(tetgen_in, os);
     }
@@ -827,10 +814,10 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
     //sprintf(strBuf,"zpQqa%f",h*h*h);  // tetgen in silent mode
     tetgen_beh.parse_commandline(strBuf);
     //tetrahedralize(&tetgen_beh, &tetgen_in, &tetgen_out);
-printf("NOT WORKING\n");
-exit(-1);
+    printf("NOT WORKING\n");
+    exit(-1);
   }
-  
+
   Tetgen2Mesh(tetgen_out, p_mesh);
   p_mesh->prepare_for_use();
 // TODO: Clearify what's going on here, why program termination?
@@ -852,11 +839,11 @@ void ProblemGeometry::CreateMesh2D(libMesh::UnstructuredMesh* p_mesh)
   tri_in.numberofsegments = 4+4*_Equip.size()+2*(_AC.size()+_Exh.size());
   tri_in.segmentlist = static_cast<int*> (std::malloc(tri_in.numberofsegments*2*sizeof(int)));
   int iSegInList = 0;
-  
+
   ////////////////////////
   // Outer Boundary (including AC's, Exhausts,
   // Roundtrip: x1=0 -> x2=1 -> x1=1 -> x2=0
-  
+
   double epsilon = 1e-8;
 
   std::vector<double> BdPts;
@@ -872,7 +859,7 @@ void ProblemGeometry::CreateMesh2D(libMesh::UnstructuredMesh* p_mesh)
 
   int iWall(0);
   CompareItem item;
-  double start, end; 
+  double start, end;
 
   tri_in.pointlist[2*iPtInList] = 0.0;
   tri_in.pointlist[2*iPtInList+1] = 0.0;
@@ -882,8 +869,7 @@ void ProblemGeometry::CreateMesh2D(libMesh::UnstructuredMesh* p_mesh)
   iWall=0;
   start=0.0;
   end=_RoomSize[1];
-  if(_ItemAtWall[iWall].empty())
-  {
+  if (_ItemAtWall[iWall].empty()) {
     tri_in.pointlist[2*iPtInList] = 0.0;
     tri_in.pointlist[2*iPtInList+1] = end;
     tri_in.segmentlist[2*iSegInList] = iPtInList-1;
@@ -891,19 +877,16 @@ void ProblemGeometry::CreateMesh2D(libMesh::UnstructuredMesh* p_mesh)
     ++iPtInList;
     ++iSegInList;
   }
-  else
-  {
+  else {
     BdItems.clear();
     ppItem=_ItemAtWall[iWall].begin();
-    for(;ppItem!=_ItemAtWall[iWall].end();++ppItem)
-    {
+    for (;ppItem!=_ItemAtWall[iWall].end();++ppItem) {
       item.pItem = *ppItem;
       item.SortValue = (*ppItem)->min_[1];
       BdItems.push_back(item);
     }
     sort(BdItems.begin(), BdItems.end(),CompareItems);
-    for(iItem=0;iItem<BdItems.size();++iItem)
-    {
+    for (iItem=0;iItem<BdItems.size();++iItem) {
       tri_in.pointlist[2*iPtInList] = 0.0;
       tri_in.pointlist[2*iPtInList+1] = BdItems[iItem].pItem->min_[1];
       tri_in.segmentlist[2*iSegInList] = iPtInList-1;
@@ -917,8 +900,7 @@ void ProblemGeometry::CreateMesh2D(libMesh::UnstructuredMesh* p_mesh)
       ++iPtInList;
       ++iSegInList;
     }
-    if(fabs(BdItems.back().pItem->max_[1]-end)>epsilon)
-    {
+    if (fabs(BdItems.back().pItem->max_[1]-end)>epsilon) {
       tri_in.pointlist[2*iPtInList] = 0.0;
       tri_in.pointlist[2*iPtInList+1] = end;
       tri_in.segmentlist[2*iSegInList] = iPtInList-1;
@@ -932,8 +914,7 @@ void ProblemGeometry::CreateMesh2D(libMesh::UnstructuredMesh* p_mesh)
   iWall = 3;
   start=0.0;
   end=_RoomSize[0];
-  if(_ItemAtWall[iWall].empty())
-  {
+  if (_ItemAtWall[iWall].empty()) {
     tri_in.pointlist[2*iPtInList] = end;
     tri_in.pointlist[2*iPtInList+1] = _RoomSize[1];
     tri_in.segmentlist[2*iSegInList] = iPtInList-1;
@@ -941,19 +922,16 @@ void ProblemGeometry::CreateMesh2D(libMesh::UnstructuredMesh* p_mesh)
     ++iPtInList;
     ++iSegInList;
   }
-  else
-  {
+  else {
     BdItems.clear();
     ppItem=_ItemAtWall[iWall].begin();
-    for(;ppItem!=_ItemAtWall[iWall].end();++ppItem)
-    {
+    for (;ppItem!=_ItemAtWall[iWall].end();++ppItem) {
       item.pItem = *ppItem;
       item.SortValue = (*ppItem)->min_[0];
       BdItems.push_back(item);
     }
     sort(BdItems.begin(), BdItems.end(),CompareItems);
-    for(iItem=0;iItem<BdItems.size();++iItem)
-    {
+    for (iItem=0;iItem<BdItems.size();++iItem) {
       tri_in.pointlist[2*iPtInList] = BdItems[iItem].pItem->min_[0];
       tri_in.pointlist[2*iPtInList+1] = _RoomSize[1];
       tri_in.segmentlist[2*iSegInList] = iPtInList-1;
@@ -967,8 +945,7 @@ void ProblemGeometry::CreateMesh2D(libMesh::UnstructuredMesh* p_mesh)
       ++iPtInList;
       ++iSegInList;
     }
-    if(fabs(BdItems.back().pItem->max_[0]-end)>epsilon)
-    {
+    if (fabs(BdItems.back().pItem->max_[0]-end)>epsilon) {
       tri_in.pointlist[2*iPtInList] = end;
       tri_in.pointlist[2*iPtInList+1] = _RoomSize[1];
       tri_in.segmentlist[2*iSegInList] = iPtInList-1;
@@ -981,8 +958,7 @@ void ProblemGeometry::CreateMesh2D(libMesh::UnstructuredMesh* p_mesh)
   iWall = 1;
   start=_RoomSize[1];
   end=0.0;
-  if(_ItemAtWall[iWall].empty())
-  {
+  if (_ItemAtWall[iWall].empty()) {
     tri_in.pointlist[2*iPtInList] = _RoomSize[0];
     tri_in.pointlist[2*iPtInList+1] = end;
     tri_in.segmentlist[2*iSegInList] = iPtInList-1;
@@ -990,19 +966,16 @@ void ProblemGeometry::CreateMesh2D(libMesh::UnstructuredMesh* p_mesh)
     ++iPtInList;
     ++iSegInList;
   }
-  else
-  {
+  else {
     BdItems.clear();
     ppItem=_ItemAtWall[iWall].begin();
-    for(;ppItem!=_ItemAtWall[iWall].end();++ppItem)
-    {
+    for (;ppItem!=_ItemAtWall[iWall].end();++ppItem) {
       item.pItem = *ppItem;
       item.SortValue = (*ppItem)->min_[1];
       BdItems.push_back(item);
     }
     sort(BdItems.begin(), BdItems.end(),CompareItems);
-    for(iItem=BdItems.size()-1;iItem>=0;--iItem)
-    {
+    for (iItem=BdItems.size()-1;iItem>=0;--iItem) {
       tri_in.pointlist[2*iPtInList] = _RoomSize[0];
       tri_in.pointlist[2*iPtInList+1] = BdItems[iItem].pItem->max_[1];
       tri_in.segmentlist[2*iSegInList] = iPtInList-1;
@@ -1016,8 +989,7 @@ void ProblemGeometry::CreateMesh2D(libMesh::UnstructuredMesh* p_mesh)
       ++iPtInList;
       ++iSegInList;
     }
-    if(fabs(BdItems.back().pItem->max_[1]-end)>epsilon)
-    {
+    if (fabs(BdItems.back().pItem->max_[1]-end)>epsilon) {
       tri_in.pointlist[2*iPtInList] = _RoomSize[0];
       tri_in.pointlist[2*iPtInList+1] = end;
       tri_in.segmentlist[2*iSegInList] = iPtInList-1;
@@ -1031,25 +1003,21 @@ void ProblemGeometry::CreateMesh2D(libMesh::UnstructuredMesh* p_mesh)
   iWall = 2;
   start=_RoomSize[0];
   end=0.0;
-  if(_ItemAtWall[iWall].empty())
-  {
+  if (_ItemAtWall[iWall].empty()) {
     tri_in.segmentlist[2*iSegInList] = iPtInList-1;
     tri_in.segmentlist[2*iSegInList+1] = 0;
     ++iSegInList;
   }
-  else
-  {
+  else {
     BdItems.clear();
     ppItem=_ItemAtWall[iWall].begin();
-    for(;ppItem!=_ItemAtWall[iWall].end();++ppItem)
-    {
+    for (;ppItem!=_ItemAtWall[iWall].end();++ppItem) {
       item.pItem = *ppItem;
       item.SortValue = (*ppItem)->min_[0];
       BdItems.push_back(item);
     }
     sort(BdItems.begin(), BdItems.end(),CompareItems);
-    for(iItem=BdItems.size()-1;iItem>=0;--iItem)
-    {
+    for (iItem=BdItems.size()-1;iItem>=0;--iItem) {
       tri_in.pointlist[2*iPtInList] = BdItems[iItem].pItem->max_[0];
       tri_in.pointlist[2*iPtInList+1] = 0.0;
       tri_in.segmentlist[2*iSegInList] = iPtInList-1;
@@ -1063,14 +1031,12 @@ void ProblemGeometry::CreateMesh2D(libMesh::UnstructuredMesh* p_mesh)
       ++iPtInList;
       ++iSegInList;
     }
-    if(fabs(BdItems.back().pItem->max_[0]-end)>epsilon)
-    {
+    if (fabs(BdItems.back().pItem->max_[0]-end)>epsilon) {
       tri_in.segmentlist[2*iSegInList] = iPtInList-1;
       tri_in.segmentlist[2*iSegInList+1] = 0;
       ++iSegInList;
     }
-    else
-    {
+    else {
       tri_in.segmentlist[2*iSegInList+1] = 0;
     }
   }
@@ -1080,17 +1046,24 @@ void ProblemGeometry::CreateMesh2D(libMesh::UnstructuredMesh* p_mesh)
   tri_in.holelist = static_cast<REAL*>(std::malloc(2*tri_in.numberofholes*sizeof(REAL)));
   int iHoleInList = 0;
   Point Center;
-  for(iItem=0; iItem<_Equip.size();iItem++)
-  {
+  for (iItem=0; iItem<_Equip.size();iItem++) {
     // Add hole boundary points and segments
-    tri_in.pointlist[2*iPtInList+0] = _Equip[iItem].min_[0]; tri_in.pointlist[2*iPtInList+1] = _Equip[iItem].min_[1];
-    tri_in.pointlist[2*iPtInList+2] = _Equip[iItem].min_[0]; tri_in.pointlist[2*iPtInList+3] = _Equip[iItem].max_[1];
-    tri_in.pointlist[2*iPtInList+4] = _Equip[iItem].max_[0]; tri_in.pointlist[2*iPtInList+5] = _Equip[iItem].min_[1];
-    tri_in.pointlist[2*iPtInList+6] = _Equip[iItem].max_[0]; tri_in.pointlist[2*iPtInList+7] = _Equip[iItem].max_[1];
-    tri_in.segmentlist[2*iSegInList+0] = iPtInList+0; tri_in.segmentlist[2*iSegInList+1] = iPtInList+1;
-    tri_in.segmentlist[2*iSegInList+2] = iPtInList+1; tri_in.segmentlist[2*iSegInList+3] = iPtInList+3;
-    tri_in.segmentlist[2*iSegInList+4] = iPtInList+3; tri_in.segmentlist[2*iSegInList+5] = iPtInList+2;
-    tri_in.segmentlist[2*iSegInList+6] = iPtInList+2; tri_in.segmentlist[2*iSegInList+7] = iPtInList+0;
+    tri_in.pointlist[2*iPtInList+0] = _Equip[iItem].min_[0];
+    tri_in.pointlist[2*iPtInList+1] = _Equip[iItem].min_[1];
+    tri_in.pointlist[2*iPtInList+2] = _Equip[iItem].min_[0];
+    tri_in.pointlist[2*iPtInList+3] = _Equip[iItem].max_[1];
+    tri_in.pointlist[2*iPtInList+4] = _Equip[iItem].max_[0];
+    tri_in.pointlist[2*iPtInList+5] = _Equip[iItem].min_[1];
+    tri_in.pointlist[2*iPtInList+6] = _Equip[iItem].max_[0];
+    tri_in.pointlist[2*iPtInList+7] = _Equip[iItem].max_[1];
+    tri_in.segmentlist[2*iSegInList+0] = iPtInList+0;
+    tri_in.segmentlist[2*iSegInList+1] = iPtInList+1;
+    tri_in.segmentlist[2*iSegInList+2] = iPtInList+1;
+    tri_in.segmentlist[2*iSegInList+3] = iPtInList+3;
+    tri_in.segmentlist[2*iSegInList+4] = iPtInList+3;
+    tri_in.segmentlist[2*iSegInList+5] = iPtInList+2;
+    tri_in.segmentlist[2*iSegInList+6] = iPtInList+2;
+    tri_in.segmentlist[2*iSegInList+7] = iPtInList+0;
     iPtInList+=4;
     iSegInList+=4;
     tri_in.holelist[2*iHoleInList+0] = 0.5*(_Equip[iItem].min_[0]+_Equip[iItem].max_[0]);
@@ -1099,8 +1072,7 @@ void ProblemGeometry::CreateMesh2D(libMesh::UnstructuredMesh* p_mesh)
   }
 
   bool PrintMeshingData=false;
-  if(PrintMeshingData)
-  {
+  if (PrintMeshingData) {
     std::ofstream file("Mesh2DIn.poly");
     PrintTriangleMesh(tri_in, file);
   }
@@ -1126,31 +1098,29 @@ void ProblemGeometry::ReadNodeFile(std::string str, tetgenio* tet)
   f.getline(Buf,1024);
 
   read = sscanf(Buf,"%d %d %lf %lf", &n_nodes,&dim,Vals,Vals+1);
-  if( (read<2) || (read>4) ) {
+  if ( (read<2) || (read>4) ) {
     std::string str("Can't read header line of node file:");
     str += Buf;
     throw std::runtime_error(str);
   }
-  if(dim!=3) {
+  if (dim!=3) {
     std::string str("wrong dimension in node file:");
     str += Buf;
     throw std::runtime_error(str);
   }
-  
+
   tet->numberofpoints = n_nodes;
   tet->pointlist = new double[3*tet->numberofpoints];
   int i_node;
-  for(int iPt=0;iPt<tet->numberofpoints;iPt++)
-  {
+  for (int iPt=0;iPt<tet->numberofpoints;iPt++) {
     f.getline(Buf,1024);
     read = sscanf(Buf,"%d %lf %lf %lf", &i_node,Vals,Vals+1,Vals+2);
-    if( read!=4 ) {
+    if ( read!=4 ) {
       std::string str("Can't read node from line:");
       str += Buf;
       throw std::runtime_error(str);
     }
-    else
-    {
+    else {
       assert(iPt==i_node-1);
       tet->pointlist[3*iPt+0] = Vals[0];
       tet->pointlist[3*iPt+1] = Vals[1];
@@ -1170,31 +1140,29 @@ void ProblemGeometry::ReadEleFile(std::string str, tetgenio* tet)
   f.getline(Buf,1024);
 
   read = sscanf(Buf,"%d %d %d %d", &n_elems,&n_PtsPerTet,Vals,Vals+1);
-  if( (read<2) || (read>4) ) {
+  if ( (read<2) || (read>4) ) {
     std::string str("Can't read header line of ele file:");
     str += Buf;
     throw std::runtime_error(str);
   }
-  if(n_PtsPerTet!=4) {
+  if (n_PtsPerTet!=4) {
     std::string str("Wrong number of points per tetrahedron:");
     str += Buf;
     throw std::runtime_error(str);
   }
-  
+
   tet->numberoftetrahedra = n_elems;
   tet->tetrahedronlist = new int[4*tet->numberoftetrahedra];
   int i_elem;
-  for(int i_elem=0;i_elem<tet->numberoftetrahedra;i_elem++)
-  {
+  for (int i_elem=0;i_elem<tet->numberoftetrahedra;i_elem++) {
     f.getline(Buf,1024);
     read = sscanf(Buf,"%d %d %d %d %d", Vals,Vals+1,Vals+2,Vals+3,Vals+4);
-    if( read!=5 ) {
+    if ( read!=5 ) {
       std::string str("Can't read tetrahedron from line:");
       str += Buf;
       throw std::runtime_error(str);
     }
-    else
-    {
+    else {
       assert(i_elem==Vals[0]-1);
       tet->tetrahedronlist[4*i_elem+0] = Vals[1]-1;
       tet->tetrahedronlist[4*i_elem+1] = Vals[2]-1;
@@ -1215,31 +1183,29 @@ void ProblemGeometry::ReadNeighFile(std::string str, tetgenio* tet)
   f.getline(Buf,1024);
 
   read = sscanf(Buf,"%d %d", &n_elems,&n_NeighPerTet,Vals,Vals+1);
-  if( (read<2) || (read>4) ) {
+  if ( (read<2) || (read>4) ) {
     std::string str("Can't read header line of neigh file:");
     str += Buf;
     throw std::runtime_error(str);
   }
-  if(n_NeighPerTet!=4) {
+  if (n_NeighPerTet!=4) {
     std::string str("Wrong number of neoghnbors per tetrahedron:");
     str += Buf;
     throw std::runtime_error(str);
   }
-  
+
   assert(n_elems==tet->numberoftetrahedra);
   tet->neighborlist = new int[4*tet->numberoftetrahedra];
   int i_elem;
-  for(int i_elem=0;i_elem<tet->numberoftetrahedra;i_elem++)
-  {
+  for (int i_elem=0;i_elem<tet->numberoftetrahedra;i_elem++) {
     f.getline(Buf,1024);
     read = sscanf(Buf,"%d %d %d %d %d", Vals,Vals+1,Vals+2,Vals+3,Vals+4);
-    if( read!=5 ) {
+    if ( read!=5 ) {
       std::string str("Can't read neighbors from line:");
       str += Buf;
       throw std::runtime_error(str);
     }
-    else
-    {
+    else {
       assert(i_elem==Vals[0]-1);
       tet->neighborlist[4*i_elem+0] = Vals[1]<0 ? -1 : (Vals[1]-1);
       tet->neighborlist[4*i_elem+1] = Vals[2]<0 ? -1 : (Vals[2]-1);
@@ -1255,29 +1221,26 @@ void PrintTetgenMesh(const tetgenio& tet, std::ostream& os)
   os.flush();
   os << tet.numberofpoints << " " << tet.mesh_dim << std::endl;
   os << "# Nodes" << std::endl;
-  for(int iPt=0;iPt<tet.numberofpoints;iPt++)
+  for (int iPt=0;iPt<tet.numberofpoints;iPt++)
     os << iPt+1 << " " << tet.pointlist[3*iPt+0] << " " << tet.pointlist[3*iPt+1] << " " << tet.pointlist[3*iPt+2] << std::endl;
   os << "# Facets" << std::endl;
   tetgenio::facet *f;
   tetgenio::polygon *p;
-  
+
   os << tet.numberoffacets << " 1" << std::endl;
-  for(int iFac=0;iFac<tet.numberoffacets;iFac++)
-  {
+  for (int iFac=0;iFac<tet.numberoffacets;iFac++) {
     f = tet.facetlist+iFac;
     os << f->numberofpolygons << " " << f->numberofholes << " " << iFac << std::endl;
-    for(int iPoly=0; iPoly<f->numberofpolygons; iPoly++)
-    { 
+    for (int iPoly=0; iPoly<f->numberofpolygons; iPoly++) {
       p = f->polygonlist+iPoly;
       os << p->numberofvertices << " ";
-      for( int iPt=0;iPt<p->numberofvertices; iPt++)
+      for ( int iPt=0;iPt<p->numberofvertices; iPt++)
         os << p->vertexlist[iPt]+1 << " ";
       os << std::endl;
     }
-    for(int iPt=0;iPt<f->numberofholes;iPt++)
-    {
+    for (int iPt=0;iPt<f->numberofholes;iPt++) {
       os << iPt+1 << " ";
-      for(int iDim=0;iDim<tet.mesh_dim;iDim++)
+      for (int iDim=0;iDim<tet.mesh_dim;iDim++)
         os << f->holelist[iPt*tet.mesh_dim+iDim] << " ";
       os << std::endl;
     }
@@ -1285,11 +1248,12 @@ void PrintTetgenMesh(const tetgenio& tet, std::ostream& os)
 
   os << "# volume holes" << std::endl << "0" << std::endl << std::endl;
   os << "# regions" << std::endl << "0" << std::endl << std::endl;
-/*  os << tet.numberoftetrahedra << std::endl;
-  for(int iEl=0;iEl<tet.numberoftetrahedra;iEl++)
-    os << iEl << " " << tet.tetrahedronlist[4*iEl+0]+1 << " " << tet.tetrahedronlist[4*iEl+1]+1 << " " << tet.tetrahedronlist[4*iEl+2]+1 << " " << tet.tetrahedronlist[4*iEl+3]+1 << std::endl;
-  os.flush();
-*/}
+  /*  os << tet.numberoftetrahedra << std::endl;
+    for(int iEl=0;iEl<tet.numberoftetrahedra;iEl++)
+      os << iEl << " " << tet.tetrahedronlist[4*iEl+0]+1 << " " << tet.tetrahedronlist[4*iEl+1]+1 << " " << tet.tetrahedronlist[4*iEl+2]+1 << " " << tet.tetrahedronlist[4*iEl+3]+1 << std::endl;
+    os.flush();
+  */
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // 2D
@@ -1303,44 +1267,37 @@ void ProblemGeometry::Triangle2Mesh(const libMesh::Triangle::triangulateio& tri,
   unsigned long int iPt;
   p_mesh->reserve_elem(tri.numberoftriangles);
   p_mesh->reserve_nodes(tri.numberofpoints);
-  for(iPt=0;iPt<tri.numberofpoints;iPt++)
+  for (iPt=0;iPt<tri.numberofpoints;iPt++)
     p_mesh->add_point(libMesh::Point(tri.pointlist[dim*iPt+0],tri.pointlist[dim*iPt+1],0),iPt);
   // elements
   libMesh::Tri3 *pElem;
-  for (unsigned int iEl=0; iEl<tri.numberoftriangles; iEl++)
-  {
+  for (unsigned int iEl=0; iEl<tri.numberoftriangles; iEl++) {
     pElem = new libMesh::Tri3;
-    for(iPt=0;iPt<dim+1;iPt++)
+    for (iPt=0;iPt<dim+1;iPt++)
       pElem->set_node(iPt) = p_mesh->node_ptr(tri.trianglelist[(dim+1)*iEl+iPt]);
     // Finally, add this element to the mesh
     p_mesh->add_elem(pElem);
   }
 
-  if(tri.neighborlist)
-  {
-    for (unsigned int iEl=0; iEl<tri.numberoftriangles; iEl++)
-    {
-      for(int iNeig=0;iNeig<dim+1;++iNeig)
-      {
-        if(tri.neighborlist[3*iEl+iNeig]==-1)
-        {
+  if (tri.neighborlist) {
+    for (unsigned int iEl=0; iEl<tri.numberoftriangles; iEl++) {
+      for (int iNeig=0;iNeig<dim+1;++iNeig) {
+        if (tri.neighborlist[3*iEl+iNeig]==-1) {
           pElem = static_cast<libMesh::Tri3*>(p_mesh->elem(iEl));
           int iBdNode1 = tri.trianglelist[(dim+1)*iEl+((iNeig+1)%(dim+1))];
           int iBdNode2 = tri.trianglelist[(dim+1)*iEl+((iNeig+2)%(dim+1))];
           int sum = iBdNode1+iBdNode2;
-          for(int iSide=0;iSide<GetDim()+1;iSide++)
-          { 
+          for (int iSide=0;iSide<GetDim()+1;iSide++) {
             // sum is correct -> sid is correct (holds only, if side has one node less than elem)
-            if( pElem->node(pElem->side_nodes_map[iSide][0])+pElem->node(pElem->side_nodes_map[iSide][1]) == sum )
-            {
+            if ( pElem->node(pElem->side_nodes_map[iSide][0])+pElem->node(pElem->side_nodes_map[iSide][1]) == sum ) {
               std::vector<double> Center;
               Center.resize(dim);
-              for(int iDim=0;iDim<dim;iDim++)
+              for (int iDim=0;iDim<dim;iDim++)
                 Center[iDim] = 0.5*(tri.pointlist[dim*iBdNode1+iDim] + tri.pointlist[dim*iBdNode2+iDim]);
               int BoundaryMarker = GetBoundaryMarker(Center);
               assert(BoundaryMarker!=-1);
               p_mesh->boundary_info->add_side(iEl,iSide,BoundaryMarker);
-              if( (fabs(_BoundCond[BoundaryMarker].PhiNeumannCoef)<eps) || (fabs(_BoundCond[BoundaryMarker].TNeumannCoef)<eps) ) { 
+              if ( (fabs(_BoundCond[BoundaryMarker].PhiNeumannCoef)<eps) || (fabs(_BoundCond[BoundaryMarker].TNeumannCoef)<eps) ) {
                 p_mesh->boundary_info->add_node(iBdNode1,BoundaryMarker);
                 p_mesh->boundary_info->add_node(iBdNode2,BoundaryMarker);
               }
@@ -1358,22 +1315,21 @@ void PrintTriangleMesh(const libMesh::Triangle::triangulateio& tri, std::ostream
   os.flush();
   os << "# Nodes:" << std::endl;
   os << tri.numberofpoints << " 2 0 0" << std::endl;
-  for(int iPt=0;iPt<tri.numberofpoints; ++iPt)
-    os << iPt << " " << tri.pointlist[2*iPt] << " " << tri.pointlist[2*iPt+1] << std::endl; 
+  for (int iPt=0;iPt<tri.numberofpoints; ++iPt)
+    os << iPt << " " << tri.pointlist[2*iPt] << " " << tri.pointlist[2*iPt+1] << std::endl;
   os << std::endl;
   os << "# Edges:" << std::endl;
   os << tri.numberofsegments << " " << (int)(tri.segmentmarkerlist!=NULL) << std::endl;
-  for(int iEdge=0;iEdge<tri.numberofsegments;iEdge++)
-  {
+  for (int iEdge=0;iEdge<tri.numberofsegments;iEdge++) {
     os << iEdge << " " << tri.segmentlist[2*iEdge] << " " << tri.segmentlist[2*iEdge+1];
-    if(tri.segmentmarkerlist!=NULL)
+    if (tri.segmentmarkerlist!=NULL)
       os << " " << tri.segmentmarkerlist[iEdge];
     os << std::endl;
   }
   os << std::endl;
   os << "# Holes:" << std::endl;
   os << tri.numberofholes << " 0" << std::endl;
-  for(int iHole=0;iHole<tri.numberofholes;iHole++)
+  for (int iHole=0;iHole<tri.numberofholes;iHole++)
     os << iHole << " " << tri.holelist[2*iHole] << " " << tri.holelist[2*iHole+1] << std::endl;
   os << std::endl;
   os << "# Region attrib., area constr.:" << std::endl;
@@ -1381,7 +1337,13 @@ void PrintTriangleMesh(const libMesh::Triangle::triangulateio& tri, std::ostream
 }
 
 std::ostream& operator << (std::ostream& os, const BoundaryCondition& BC)
-{ os << "BC: " << BC.PhiDiricheltCoef << ", " << BC.PhiNeumannCoef << ", " << BC.PhiRhs << ", " << BC.TDiricheltCoef << ", " << BC.TNeumannCoef << ", " << BC.TRhs << std::endl; return os;}
+{
+  os << "BC: " << BC.PhiDiricheltCoef << ", " << BC.PhiNeumannCoef << ", " << BC.PhiRhs << ", " << BC.TDiricheltCoef << ", " << BC.TNeumannCoef << ", " << BC.TRhs << std::endl;
+  return os;
+}
 
 std::ostream& operator << (std::ostream& os, const std::vector<BoundaryCondition>& BCs)
-{ for(int i=0;i<BCs.size(); i++) os << BCs[i]; return os; }
+{
+  for (int i=0;i<BCs.size(); i++) os << BCs[i];
+  return os;
+}

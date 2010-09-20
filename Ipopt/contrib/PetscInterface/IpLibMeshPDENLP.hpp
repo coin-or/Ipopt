@@ -19,13 +19,13 @@ namespace Ipopt
 
   /** Instantiation of a ParTNLP to formulate PDE constrained
       optimization problems where the PDE is provided by libMesh.*/
-  class LibMeshPDENLP : public ParTNLP 
+  class LibMeshPDENLP : public ParTNLP
   {
   public:
     /**@name Constructors/Destructors */
     //@{
     LibMeshPDENLP(LibMeshPDEBase& libmeshPDE,
-		  Journalist& jnlst);
+                  Journalist& jnlst);
 
     /** Default destructor */
     virtual ~LibMeshPDENLP()
@@ -254,12 +254,12 @@ namespace Ipopt
 
     /** Object containing all information regarding the PDE */
     LibMeshPDEBase* libmeshPDE_;
-		int control_first_;
-		int control_last_;
-		int state_first_;
-		int state_last_;
-		int n_first_;
-		int n_last_;
+    int control_first_;
+    int control_last_;
+    int state_first_;
+    int state_last_;
+    int n_first_;
+    int n_last_;
     int pde_first_;
     int pde_last_;
     int aux_first_;
@@ -271,8 +271,8 @@ namespace Ipopt
     void optim_var_global2libMesh(const Number* pglobal, libMesh::NumericVector<libMesh::Number>& state, libMesh::NumericVector<libMesh::Number>& control);
     void update_x(const Number* x);
     int GlobStateControlIdx2OptVarIdx(int i_var,int num_of_procs,
-                                   const int* proc_state_first_arr, const int* proc_state_last_arr,
-                                   const int* proc_var_first, const int* proc_loc_offset, int& prev_proc);
+                                      const int* proc_state_first_arr, const int* proc_state_last_arr,
+                                      const int* proc_var_first, const int* proc_loc_offset, int& prev_proc);
 
 
   };

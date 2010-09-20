@@ -37,23 +37,22 @@ int GetProcID();
 using namespace libMesh;
 
 LibMeshPDEBase::LibMeshPDEBase() :
-	calc_type_(Values), 
-  simulation_mode_(false),
-  jac_control_(NULL),
-  jac_aux_state_(NULL),
-  jac_aux_control_(NULL),
-  hess_control_control_(NULL),
-  hess_control_state_(NULL),
-  hess_state_state_(NULL),
-  lm_eqn_sys_(NULL),
-  lm_control_vec_(NULL),
-  lm_pde_residual_vec_(NULL),
-  lm_aux_constr_vec_(NULL),
-  lm_aux_constr_vec_low_bd_(NULL),
-  min_airflow(1.0),
-  first_aux_constr_(0)
-{
-}
+    calc_type_(Values),
+    simulation_mode_(false),
+    jac_control_(NULL),
+    jac_aux_state_(NULL),
+    jac_aux_control_(NULL),
+    hess_control_control_(NULL),
+    hess_control_state_(NULL),
+    hess_state_state_(NULL),
+    lm_eqn_sys_(NULL),
+    lm_control_vec_(NULL),
+    lm_pde_residual_vec_(NULL),
+    lm_aux_constr_vec_(NULL),
+    lm_aux_constr_vec_low_bd_(NULL),
+    min_airflow(1.0),
+    first_aux_constr_(0)
+{}
 
 // clear all matrices and vectors, but not problem geomatry data
 // used e.g. after refinement (since problem size changes)
@@ -72,7 +71,7 @@ void LibMeshPDEBase::clear_math_obj()
   DetroySelfOwnedLibMeshPetscMatrix(hess_control_state_);
   DetroySelfOwnedLibMeshPetscMatrix(hess_state_state_);
 
-  if(lm_eqn_sys_)
+  if (lm_eqn_sys_)
     delete lm_eqn_sys_;
   lm_eqn_sys_ = NULL;
 }
@@ -103,9 +102,9 @@ void LibMeshPDEBase::reinit()
   // initalize all members that store vectors and matrices
   clear_math_obj();
   lm_eqn_sys_ = new EquationSystems(mesh_);
-  
+
   std::string order("FIRST");
-  std::string family("LAGRANGE"); 
+  std::string family("LAGRANGE");
 
   libMesh::LinearImplicitSystem& lm_sys = lm_eqn_sys_->add_system<LinearImplicitSystem>("PDE");
   lm_sys.add_variable("Phi", Utility::string_to_enum<Order>(order), Utility::string_to_enum<FEFamily>(family));
@@ -143,16 +142,16 @@ void LibMeshPDEBase::reinit()
   InitAuxConstr(&m_aux_constr_local, &m_aux_constr_global, &LocIneqFactList);
 
   std::cout <<  GetProcID() << ": n_state_global: " << n_state_global <<
-                ", n_state_local: " << n_state_local <<
-                ", n_control_global: " << n_control_global <<
-                ", n_control_local: " << n_control_local << 
-                ", m_pde_constr_global: " << m_pde_constr_global <<
-                ", m_pde_constr_local: " << m_pde_constr_local <<
-                ", m_aux_constr_global: " << m_aux_constr_global <<
-                ", m_aux_constr_local: " << m_aux_constr_local << std::endl;
+  ", n_state_local: " << n_state_local <<
+  ", n_control_global: " << n_control_global <<
+  ", n_control_local: " << n_control_local <<
+  ", m_pde_constr_global: " << m_pde_constr_global <<
+  ", m_pde_constr_local: " << m_pde_constr_local <<
+  ", m_aux_constr_global: " << m_aux_constr_global <<
+  ", m_aux_constr_local: " << m_aux_constr_local << std::endl;
 
   PetscErrorCode ierr;
-   /// TODO: The following block nca probably be deleted (see tw blocks down)
+  /// TODO: The following block nca probably be deleted (see tw blocks down)
   {
     // create Petsc and libmesh vector for controls
     //lm_control_vec_ = new PetscVector<Number>::PetscVector(n_control_global,n_control_local); does NOT work, later Petsc-calls never terminate (?)
@@ -166,7 +165,7 @@ void LibMeshPDEBase::reinit()
   { // TODO: analyze nonzero structure more closely to pass tight numbers to init
     // create Jacobi matrix of PDE constraints for control variables part
     Mat petsc_mat;
-    ierr = MatCreateMPIAIJ(PETSC_COMM_WORLD,m_pde_constr_local,n_control_local,PETSC_DETERMINE,PETSC_DETERMINE,64,PETSC_NULL,16,PETSC_NULL,&petsc_mat); // alloc 64 entries per row on diagonal block and 16 on the off-diagonal block 
+    ierr = MatCreateMPIAIJ(PETSC_COMM_WORLD,m_pde_constr_local,n_control_local,PETSC_DETERMINE,PETSC_DETERMINE,64,PETSC_NULL,16,PETSC_NULL,&petsc_mat); // alloc 64 entries per row on diagonal block and 16 on the off-diagonal block
     CHKERRV(ierr);
     jac_control_ = new PetscMatrix<Number>::PetscMatrix(petsc_mat);
   }
@@ -197,7 +196,7 @@ void LibMeshPDEBase::reinit()
     VecGetArray(petsc_vec1,&Vals);
     std::list<Number>::iterator it = LocIneqFactList.begin();
     std::cout << "LocIneqFactList.size=" << LocIneqFactList.size() << std::endl;
-    for( unsigned int iVal=0; iVal<LocIneqFactList.size(); ++iVal, ++it) {
+    for ( unsigned int iVal=0; iVal<LocIneqFactList.size(); ++iVal, ++it) {
       Vals[iVal] = min_airflow * (*it);
     }
     std::cout << "Checkpoint 1" << std::endl;
@@ -209,7 +208,7 @@ void LibMeshPDEBase::reinit()
   //*lm_aux_constr_vec_ = 0.0;
   {
     Mat petsc_mat;
-    MatCreateMPIAIJ(PETSC_COMM_WORLD,m_aux_constr_local,n_state_local,m_aux_constr_global,n_state_global,64,PETSC_NULL,16,PETSC_NULL,&petsc_mat); // alloc 64 entries per row on diagonal block and 16 on the off-diagonal block 
+    MatCreateMPIAIJ(PETSC_COMM_WORLD,m_aux_constr_local,n_state_local,m_aux_constr_global,n_state_global,64,PETSC_NULL,16,PETSC_NULL,&petsc_mat); // alloc 64 entries per row on diagonal block and 16 on the off-diagonal block
     //MatCreateSeqAIJ(PETSC_COMM_SELF,m_aux_constr_local,n_state_global,4,PETSC_NULL,&petsc_mat);
     jac_aux_state_ = new PetscMatrix<Number>::PetscMatrix(petsc_mat);
   }
@@ -244,7 +243,7 @@ void LibMeshPDEBase::reinit()
 
 void LibMeshPDEBase::DetroySelfOwnedLibMeshPetscMatrix(SparseMatrix<Number>*& matrix)
 {
-  if(NULL==matrix)
+  if (NULL==matrix)
     return;
   PetscMatrix<Number>* lm_petsc_matrix = dynamic_cast<PetscMatrix<Number>*>(matrix);
   assert(NULL!=lm_petsc_matrix);  // Problem, if not a libMesh::PetscMatrix<Number>
@@ -256,7 +255,7 @@ void LibMeshPDEBase::DetroySelfOwnedLibMeshPetscMatrix(SparseMatrix<Number>*& ma
 
 void LibMeshPDEBase::DetroySelfOwnedLibMeshPetscVector(NumericVector<Number>*& vector)
 {
-  if(NULL==vector)
+  if (NULL==vector)
     return;
   PetscVector<Number>* lm_petsc_vector = dynamic_cast<PetscVector<Number>*>(vector);
   assert(NULL!=lm_petsc_vector);  // Problem, if not a libMesh::PetscMatrix<Number>
@@ -281,53 +280,52 @@ void LibMeshPDEBase::ConvertControl2PGData()
   ierr = VecScatterCreateToAll(vec_distr,&vscat,&vec_gathrd); CHKERRV(ierr);
   ierr = VecScatterBegin(vscat,vec_distr,vec_gathrd,INSERT_VALUES,SCATTER_FORWARD); CHKERRV(ierr);
   ierr = VecScatterEnd(vscat,vec_distr,vec_gathrd,INSERT_VALUES,SCATTER_FORWARD); CHKERRV(ierr);
-  
+
   PetscInt sz;
   VecGetSize(vec_gathrd,&sz);
   PetscScalar *vals;
   ierr=VecGetArray(vec_gathrd,&vals);CHKERRV(ierr);
-	int iControl = 0;
+  int iControl = 0;
   assert(PG_._AC.size()==(unsigned int)sz);
-	for(int iAC=0;iAC<sz;++iAC) {
-		int BoundaryMarker = PG_._AC[iAC].BoundaryMarker[0];
-		PG_._BoundCond[BoundaryMarker].PhiRhs = vals[iControl++]; 
-	}
+  for (int iAC=0;iAC<sz;++iAC) {
+    int BoundaryMarker = PG_._AC[iAC].BoundaryMarker[0];
+    PG_._BoundCond[BoundaryMarker].PhiRhs = vals[iControl++];
+  }
   ierr=VecRestoreArray(vec_gathrd,&vals);CHKERRV(ierr);
 //  DBG_PRINT("LibMeshPDEBase::ConvertControl2PGData finished");
 }
 
 void LibMeshPDEBase::calc_objective_part(Number& Val)
 {
-	Val = 0.0;
-	ConvertControl2PGData();
-	if(GetProcID()==0)
-	  for(unsigned int iAC=0;iAC<PG_._AC.size();iAC++) {
-		  int BoundaryMarker = PG_._AC[iAC].BoundaryMarker[0];
-      #ifdef QUAD_OBJ_FUNC
-		    Val += (PG_._BoundCond[BoundaryMarker].PhiRhs)*(PG_._BoundCond[BoundaryMarker].PhiRhs);
-      #else
-        Val += PG_._BoundCond[BoundaryMarker].PhiRhs;
-      #endif //QUAD_OBJ_FUNC
-	  }
+  Val = 0.0;
+  ConvertControl2PGData();
+  if (GetProcID()==0)
+    for (unsigned int iAC=0;iAC<PG_._AC.size();iAC++) {
+      int BoundaryMarker = PG_._AC[iAC].BoundaryMarker[0];
+#ifdef QUAD_OBJ_FUNC
+      Val += (PG_._BoundCond[BoundaryMarker].PhiRhs)*(PG_._BoundCond[BoundaryMarker].PhiRhs);
+#else
+      Val += PG_._BoundCond[BoundaryMarker].PhiRhs;
+#endif //QUAD_OBJ_FUNC
+    }
 }
 
 void LibMeshPDEBase::calc_objective_gradient(libMesh::NumericVector<libMesh::Number>& grad_state,
-					     libMesh::NumericVector<libMesh::Number>& grad_control)
+    libMesh::NumericVector<libMesh::Number>& grad_control)
 {
   DBG_PRINT("LibMeshPDEBase::calc_objective_gradient called");
-	grad_state.zero();
-	ConvertControl2PGData();
-	if(GetProcID()==0)
-	{
-		for(unsigned int iAC=0;iAC<PG_._AC.size();iAC++) {
-			#ifdef QUAD_OBJ_FUNC
-        int BoundaryMarker = PG_._AC[iAC].BoundaryMarker[0];
-			  grad_control.set(iAC,2.0*PG_._BoundCond[BoundaryMarker].PhiRhs);
-      #else
-        grad_control.set(iAC,1.0);
-      #endif //QUAD_OBJ_FUNC
-		}
-	}
+  grad_state.zero();
+  ConvertControl2PGData();
+  if (GetProcID()==0) {
+    for (unsigned int iAC=0;iAC<PG_._AC.size();iAC++) {
+#ifdef QUAD_OBJ_FUNC
+      int BoundaryMarker = PG_._AC[iAC].BoundaryMarker[0];
+      grad_control.set(iAC,2.0*PG_._BoundCond[BoundaryMarker].PhiRhs);
+#else
+      grad_control.set(iAC,1.0);
+#endif //QUAD_OBJ_FUNC
+    }
+  }
   DBG_PRINT("LibMeshPDEBase::calc_objective_gradient finished");
 }
 
@@ -336,7 +334,7 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
   DBG_PRINT("LibMeshPDEBase::calcPDE_residual called");
   ConvertControl2PGData();
 
-	const double eps = 1e-8;
+  const double eps = 1e-8;
   lm_pde_residual_vec_->zero();
   std::vector<BoundaryCondition>& BCs=PG_._BoundCond;
   const MeshBase& mesh = lm_eqn_sys_->get_mesh();
@@ -345,99 +343,96 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
   const DofMap& dof_map = system.get_dof_map();
   FEType fe_type = dof_map.variable_type(0);
 
-  AutoPtr<FEBase> fe (FEBase::build(dim, fe_type));	// this object will by the current volume object, actualy holding values for current phi and dphi
+  AutoPtr<FEBase> fe (FEBase::build(dim, fe_type)); // this object will by the current volume object, actualy holding values for current phi and dphi
   QGauss qrule (dim, FIFTH);
   fe->attach_quadrature_rule (&qrule);
-  AutoPtr<FEBase> fe_face (FEBase::build(dim, fe_type));	// surface object
+  AutoPtr<FEBase> fe_face (FEBase::build(dim, fe_type)); // surface object
   QGauss qface(dim-1, FIFTH);
   fe_face->attach_quadrature_rule (&qface);
-  const std::vector<Real>& JxW = fe->get_JxW();			// References to values hold by fe (i.e. the chang, ones fe changes
+  const std::vector<Real>& JxW = fe->get_JxW();   // References to values hold by fe (i.e. the chang, ones fe changes
   const std::vector<std::vector<Real> >& phi = fe->get_phi();
   const std::vector<std::vector<RealGradient> >& dphi = fe->get_dphi();
 
   DenseVector<Number> ElemRes;
-  std::vector<unsigned int> dof_indices;	// mapping local index -> global index
-	std::vector<Number> LocalSolution;			// solution values of current element
+  std::vector<unsigned int> dof_indices; // mapping local index -> global index
+  std::vector<Number> LocalSolution;   // solution values of current element
   MeshBase::const_element_iterator itCurEl = mesh.active_local_elements_begin();
   const MeshBase::const_element_iterator itEndEl = mesh.active_local_elements_end();
-  for ( ; itCurEl != itEndEl; ++itCurEl)
-    {
-      const Elem* CurElem = *itCurEl;
-      dof_map.dof_indices(CurElem, dof_indices);		// setup local->global mapping in form of array
-      fe->reinit(CurElem);	// reinit fe to fit the current element, i.e. recalulate JxW and dPhi 
-      ElemRes.resize(dof_indices.size());
-			LocalSolution.resize(dof_indices.size());
-			for(unsigned int iCurSol=0;iCurSol<LocalSolution.size();iCurSol++) {
-			  LocalSolution[iCurSol] = system.current_local_solution->el(dof_indices[iCurSol]);
-			}
-			// Point Center = (CurElem->point(0)+CurElem->point(1)+CurElem->point(2))/3.0;
-			// std::cout << "Element at " << Center << std::endl;
-			unsigned int qp,i,j;
-      for (qp=0; qp<qrule.n_points(); qp++)
-        for (i=0; i<phi.size(); i++)
-				  for (j=0; j<phi.size(); j++)
-            ElemRes(i) += JxW[qp]*(dphi[i][qp]*dphi[j][qp])*LocalSolution[j];
-
-      {
-        for (unsigned int side=0; side<CurElem->n_sides(); side++)
-				{
-					if (CurElem->neighbor(side) == NULL)
-					{
-						// std::cout << side << std::endl;
-						short int bc_id = mesh.boundary_info->boundary_id (CurElem,side);
-						assert(bc_id!=BoundaryInfo::invalid_id);
-						double NeumCoef, DiriCoef, Rhs;
-						// std::cout << "bc_id=" << bc_id << std::endl; 
-						NeumCoef = BCs[bc_id].PhiNeumannCoef;
-						DiriCoef = BCs[bc_id].PhiDiricheltCoef;
-						Rhs = BCs[bc_id].PhiRhs;
-						const std::vector<std::vector<Real> >&  phi_face = fe_face->get_phi();
-						const std::vector<Real>& JxW_face = fe_face->get_JxW();
-						fe_face->reinit(CurElem, side);
-						/*Point Center;
-						for(unsigned int iNode=0;iNode<CurElem->n_nodes();iNode++)
-							if( CurElem->is_node_on_side(iNode,side) )
-								Center += CurElem->point(iNode);
-						Center = Center/dim;
-						std::cout << "BC at " << Center << " and : ";
-						std::cout << NeumCoef << " dPhi/dn = " << DiriCoef << " Phi + " << Rhs << std::endl;*/
-						if( fabs(NeumCoef)>eps) {	// handle non-Dirichlet boundary conditions
-							for (unsigned int qp=0; qp<qface.n_points(); qp++) {
-									for (unsigned int i=0; i<phi_face.size(); i++)
-										for (unsigned int j=0; j<phi_face.size(); j++)
-											ElemRes(i) -= (DiriCoef/NeumCoef)*JxW_face[qp]*phi_face[i][qp]*LocalSolution[j];
-									for (unsigned int i=0; i<phi_face.size(); i++)
-										ElemRes(i) -= (Rhs/NeumCoef)*JxW_face[qp]*phi_face[i][qp];
-							}
-						}
-					} // end if CurElem->neigbor(side)==NULL
-				} // endfor side
-				for(unsigned int i=0;i<CurElem->n_nodes();i++) { // handle Dirichlet BC for nodes: set whole line to 0, set DiriCoef on main diagonal and Rhs in vector
-					std::vector<short int> bc_id = mesh.boundary_info->boundary_ids(CurElem->get_node(i));
-					if(bc_id.empty())
-						continue;
-					if(bc_id[0]==BoundaryInfo::invalid_id)
-						continue;
-					if( fabs(BCs[bc_id[0]].PhiNeumannCoef) > eps )
-						continue;
-					// std::cout << "Dirichlet: bc_id=" << bc_id[0] << std::endl; 
-					ElemRes(i) = BCs[bc_id[0]].PhiDiricheltCoef*LocalSolution[i];
-					ElemRes(i) += BCs[bc_id[0]].PhiRhs;
-				}
-			}
-			/*std::cout << "Assembled ElemMat: " << std::endl;
-			std::cout << ElemMat;
-			std::cout << "Element points: " << std::endl;
-			std::cout << CurElem->point(0);
-			std::cout << CurElem->point(1);
-			std::cout << CurElem->point(2);
-			std::cout.flush();*/
-			dof_map.constrain_element_vector(ElemRes, dof_indices);	// Add constrains for hanging nodes (refinement)
-			//std::cout << "Constrained ElemMat: " << std::endl;
-			//std::cout << ElemMat;
-
-      lm_pde_residual_vec_->add_vector(ElemRes, dof_indices);
+  for ( ; itCurEl != itEndEl; ++itCurEl) {
+    const Elem* CurElem = *itCurEl;
+    dof_map.dof_indices(CurElem, dof_indices);  // setup local->global mapping in form of array
+    fe->reinit(CurElem); // reinit fe to fit the current element, i.e. recalulate JxW and dPhi
+    ElemRes.resize(dof_indices.size());
+    LocalSolution.resize(dof_indices.size());
+    for (unsigned int iCurSol=0;iCurSol<LocalSolution.size();iCurSol++) {
+      LocalSolution[iCurSol] = system.current_local_solution->el(dof_indices[iCurSol]);
     }
+    // Point Center = (CurElem->point(0)+CurElem->point(1)+CurElem->point(2))/3.0;
+    // std::cout << "Element at " << Center << std::endl;
+    unsigned int qp,i,j;
+    for (qp=0; qp<qrule.n_points(); qp++)
+      for (i=0; i<phi.size(); i++)
+        for (j=0; j<phi.size(); j++)
+          ElemRes(i) += JxW[qp]*(dphi[i][qp]*dphi[j][qp])*LocalSolution[j];
+
+    {
+      for (unsigned int side=0; side<CurElem->n_sides(); side++) {
+        if (CurElem->neighbor(side) == NULL) {
+          // std::cout << side << std::endl;
+          short int bc_id = mesh.boundary_info->boundary_id (CurElem,side);
+          assert(bc_id!=BoundaryInfo::invalid_id);
+          double NeumCoef, DiriCoef, Rhs;
+          // std::cout << "bc_id=" << bc_id << std::endl;
+          NeumCoef = BCs[bc_id].PhiNeumannCoef;
+          DiriCoef = BCs[bc_id].PhiDiricheltCoef;
+          Rhs = BCs[bc_id].PhiRhs;
+          const std::vector<std::vector<Real> >&  phi_face = fe_face->get_phi();
+          const std::vector<Real>& JxW_face = fe_face->get_JxW();
+          fe_face->reinit(CurElem, side);
+          /*Point Center;
+          for(unsigned int iNode=0;iNode<CurElem->n_nodes();iNode++)
+           if( CurElem->is_node_on_side(iNode,side) )
+            Center += CurElem->point(iNode);
+          Center = Center/dim;
+          std::cout << "BC at " << Center << " and : ";
+          std::cout << NeumCoef << " dPhi/dn = " << DiriCoef << " Phi + " << Rhs << std::endl;*/
+          if ( fabs(NeumCoef)>eps) { // handle non-Dirichlet boundary conditions
+            for (unsigned int qp=0; qp<qface.n_points(); qp++) {
+              for (unsigned int i=0; i<phi_face.size(); i++)
+                for (unsigned int j=0; j<phi_face.size(); j++)
+                  ElemRes(i) -= (DiriCoef/NeumCoef)*JxW_face[qp]*phi_face[i][qp]*LocalSolution[j];
+              for (unsigned int i=0; i<phi_face.size(); i++)
+                ElemRes(i) -= (Rhs/NeumCoef)*JxW_face[qp]*phi_face[i][qp];
+            }
+          }
+        } // end if CurElem->neigbor(side)==NULL
+      } // endfor side
+      for (unsigned int i=0;i<CurElem->n_nodes();i++) { // handle Dirichlet BC for nodes: set whole line to 0, set DiriCoef on main diagonal and Rhs in vector
+        std::vector<short int> bc_id = mesh.boundary_info->boundary_ids(CurElem->get_node(i));
+        if (bc_id.empty())
+          continue;
+        if (bc_id[0]==BoundaryInfo::invalid_id)
+          continue;
+        if ( fabs(BCs[bc_id[0]].PhiNeumannCoef) > eps )
+          continue;
+        // std::cout << "Dirichlet: bc_id=" << bc_id[0] << std::endl;
+        ElemRes(i) = BCs[bc_id[0]].PhiDiricheltCoef*LocalSolution[i];
+        ElemRes(i) += BCs[bc_id[0]].PhiRhs;
+      }
+    }
+    /*std::cout << "Assembled ElemMat: " << std::endl;
+    std::cout << ElemMat;
+    std::cout << "Element points: " << std::endl;
+    std::cout << CurElem->point(0);
+    std::cout << CurElem->point(1);
+    std::cout << CurElem->point(2);
+    std::cout.flush();*/
+    dof_map.constrain_element_vector(ElemRes, dof_indices); // Add constrains for hanging nodes (refinement)
+    //std::cout << "Constrained ElemMat: " << std::endl;
+    //std::cout << ElemMat;
+
+    lm_pde_residual_vec_->add_vector(ElemRes, dof_indices);
+  }
   lm_pde_residual_vec_->close();
   residual = lm_pde_residual_vec_;
   DBG_PRINT("LibMeshPDEBase::calcPDE_residual finished");
@@ -447,7 +442,7 @@ void LibMeshPDEBase::calcPDE_jacobians(libMesh::SparseMatrix<libMesh::Number>*& 
 {
   DBG_PRINT( "LibMeshPDEBase::calcPDE_jacobians called" );
   calcPDE_jacobian_state(jac_state);
-	calcPDE_jacobian_control(jac_control);
+  calcPDE_jacobian_control(jac_control);
   DBG_PRINT( "LibMeshPDEBase::calcPDE_jacobians finished" );
 }
 
@@ -467,153 +462,146 @@ void LibMeshPDEBase::calcPDE_jacobian_control(libMesh::SparseMatrix<libMesh::Num
 {
   DBG_PRINT( "LibMeshPDEBase::calcPDE_jacobian_control called" );
   ConvertControl2PGData();
-	jac_control_->zero();
+  jac_control_->zero();
 
-	const double eps = 1e-8;
+  const double eps = 1e-8;
 
   const unsigned int dim = mesh_.mesh_dimension();
   LinearImplicitSystem& system = lm_eqn_sys_->get_system<LinearImplicitSystem>("PDE");
   const DofMap& dof_map = system.get_dof_map();
   FEType fe_type = dof_map.variable_type(0);
-	std::vector<BoundaryCondition>& BCs = PG_._BoundCond;	// Mapping boudary info (index) -> boundary condition, set up in Problem geometry class
+  std::vector<BoundaryCondition>& BCs = PG_._BoundCond; // Mapping boudary info (index) -> boundary condition, set up in Problem geometry class
 
-  AutoPtr<FEBase> fe (FEBase::build(dim, fe_type));	// this object will by the current volume object, actualy holding values for current phi and dphi
+  AutoPtr<FEBase> fe (FEBase::build(dim, fe_type)); // this object will by the current volume object, actualy holding values for current phi and dphi
   QGauss qrule (dim, FIFTH);
   fe->attach_quadrature_rule (&qrule);
-  AutoPtr<FEBase> fe_face (FEBase::build(dim, fe_type));	// surface object
+  AutoPtr<FEBase> fe_face (FEBase::build(dim, fe_type)); // surface object
   QGauss qface(dim-1, FIFTH);
   fe_face->attach_quadrature_rule (&qface);
 
-  DenseMatrix<Number> ElemMat;		// Matrices for current element
-  std::vector<unsigned int> dof_indices;	// mapping local index -> global index
-	std::vector<Number> LocalSolution;			// solution values of current element
+  DenseMatrix<Number> ElemMat;  // Matrices for current element
+  std::vector<unsigned int> dof_indices; // mapping local index -> global index
+  std::vector<Number> LocalSolution;   // solution values of current element
 
   MeshBase::const_element_iterator itCurEl = mesh_.active_local_elements_begin();
   const MeshBase::const_element_iterator itEndEl = mesh_.active_local_elements_end();
-  for ( ; itCurEl != itEndEl; ++itCurEl)
-	{
-		const Elem* CurElem = *itCurEl;
-		dof_map.dof_indices(CurElem, dof_indices);		// setup local->global mapping in form of array
-		fe->reinit (CurElem);	// reinit fe to fit the current element, i.e. recalulate JxW and dPhi 
-		ElemMat.resize (dof_indices.size(),dof_indices.size());
-		// Point Center = (CurElem->point(0)+CurElem->point(1)+CurElem->point(2))/3.0;
-		// std::cout << "Element at " << Center << std::endl;
-		for (unsigned int side=0; side<CurElem->n_sides(); side++)
-		{
-			if (CurElem->neighbor(side) == NULL)
-			{
-				// std::cout << side << std::endl;
-				short int bc_id = mesh_.boundary_info->boundary_id (CurElem,side);
-				assert(bc_id!=BoundaryInfo::invalid_id);
-				for(unsigned int icontrol=0;icontrol<lm_control_vec_->size();icontrol++)
-				{
-					int BoundCntrl = PG_._ParamIdx2BCParam[icontrol].BoundaryMarker;
-					if(BoundCntrl!=bc_id)
-						continue;
-					LocalSolution.resize(dof_indices.size());
-					for(unsigned int iCurSol=0;iCurSol<LocalSolution.size();iCurSol++) {
+  for ( ; itCurEl != itEndEl; ++itCurEl) {
+    const Elem* CurElem = *itCurEl;
+    dof_map.dof_indices(CurElem, dof_indices);  // setup local->global mapping in form of array
+    fe->reinit (CurElem); // reinit fe to fit the current element, i.e. recalulate JxW and dPhi
+    ElemMat.resize (dof_indices.size(),dof_indices.size());
+    // Point Center = (CurElem->point(0)+CurElem->point(1)+CurElem->point(2))/3.0;
+    // std::cout << "Element at " << Center << std::endl;
+    for (unsigned int side=0; side<CurElem->n_sides(); side++) {
+      if (CurElem->neighbor(side) == NULL) {
+        // std::cout << side << std::endl;
+        short int bc_id = mesh_.boundary_info->boundary_id (CurElem,side);
+        assert(bc_id!=BoundaryInfo::invalid_id);
+        for (unsigned int icontrol=0;icontrol<lm_control_vec_->size();icontrol++) {
+          int BoundCntrl = PG_._ParamIdx2BCParam[icontrol].BoundaryMarker;
+          if (BoundCntrl!=bc_id)
+            continue;
+          LocalSolution.resize(dof_indices.size());
+          for (unsigned int iCurSol=0;iCurSol<LocalSolution.size();iCurSol++) {
             LocalSolution[iCurSol] = system.current_local_solution->el(dof_indices[iCurSol]);
-					}
-					double NeumCoef, DiriCoef, Rhs;
-					// std::cout << "bc_id=" << bc_id << std::endl; 
-					NeumCoef = BCs[bc_id].PhiNeumannCoef;
-					DiriCoef = BCs[bc_id].PhiDiricheltCoef;
-					Rhs = BCs[bc_id].PhiRhs;
-					if(fabs(NeumCoef)>eps) {	// handle non-Dirichlet boundary conditions
-						const std::vector<std::vector<Real> >&  phi_face = fe_face->get_phi();
-						const std::vector<Real>& JxW_face = fe_face->get_JxW();
-						fe_face->reinit(CurElem, side);
-						switch(PG_._ParamIdx2BCParam[icontrol].BCParameter)
-						{	// 0:PhiDiriCoef, 1: PhiNeumCoef, 2: PhiRhs, 3:TDiriCoef, 4: TNeumCoef, 5: TiRhs
-							case 0:	
-                if(calc_type_ == StructureOnly) {
-								  for (unsigned int qp=0; qp<qface.n_points(); qp++)
-									  for (unsigned int i=0; i<phi_face.size(); i++)
-										  for (unsigned int j=0; j<phi_face.size(); j++){
-                        jac_control_->add(dof_indices[i], icontrol, 1.0);
-                      }
-                }
-                else {
-                  for (unsigned int qp=0; qp<qface.n_points(); qp++) {
-                    for (unsigned int i=0; i<phi_face.size(); i++)
-                      for (unsigned int j=0; j<phi_face.size(); j++) {
-											  jac_control_->add(dof_indices[i], icontrol, -(1.0/NeumCoef)*JxW_face[qp]*phi_face[i][qp]*LocalSolution[j]);
-                      }
-                  }
-								}
-								break;
-							case 1:
-                if(calc_type_ == StructureOnly) {
-                  for (unsigned int qp=0; qp<qface.n_points(); qp++) {
-                    for (unsigned int i=0; i<phi_face.size(); i++)
-                      for (unsigned int j=0; j<phi_face.size(); j++)
-                          jac_control_->add(dof_indices[i], icontrol,1.0);
+          }
+          double NeumCoef, DiriCoef, Rhs;
+          // std::cout << "bc_id=" << bc_id << std::endl;
+          NeumCoef = BCs[bc_id].PhiNeumannCoef;
+          DiriCoef = BCs[bc_id].PhiDiricheltCoef;
+          Rhs = BCs[bc_id].PhiRhs;
+          if (fabs(NeumCoef)>eps) { // handle non-Dirichlet boundary conditions
+            const std::vector<std::vector<Real> >&  phi_face = fe_face->get_phi();
+            const std::vector<Real>& JxW_face = fe_face->get_JxW();
+            fe_face->reinit(CurElem, side);
+            switch (PG_._ParamIdx2BCParam[icontrol].BCParameter) { // 0:PhiDiriCoef, 1: PhiNeumCoef, 2: PhiRhs, 3:TDiriCoef, 4: TNeumCoef, 5: TiRhs
+            case 0:
+              if (calc_type_ == StructureOnly) {
+                for (unsigned int qp=0; qp<qface.n_points(); qp++)
                   for (unsigned int i=0; i<phi_face.size(); i++)
-                        jac_control_->add(dof_indices[i], icontrol,1.0);
-                  }
+                    for (unsigned int j=0; j<phi_face.size(); j++) {
+                      jac_control_->add(dof_indices[i], icontrol, 1.0);
+                    }
+              }
+              else {
+                for (unsigned int qp=0; qp<qface.n_points(); qp++) {
+                  for (unsigned int i=0; i<phi_face.size(); i++)
+                    for (unsigned int j=0; j<phi_face.size(); j++) {
+                      jac_control_->add(dof_indices[i], icontrol, -(1.0/NeumCoef)*JxW_face[qp]*phi_face[i][qp]*LocalSolution[j]);
+                    }
                 }
-                else {
-                  for (unsigned int qp=0; qp<qface.n_points(); qp++) {
-                    for (unsigned int i=0; i<phi_face.size(); i++)
-                      for (unsigned int j=0; j<phi_face.size(); j++)
-                        jac_control_->add(dof_indices[i], icontrol,(DiriCoef/(NeumCoef*NeumCoef))*JxW_face[qp]*phi_face[i][qp]*LocalSolution[j]);
-                    for (unsigned int i=0; i<phi_face.size(); i++)
-                        jac_control_->add(dof_indices[i], icontrol,(Rhs/(NeumCoef*NeumCoef))*JxW_face[qp]*phi_face[i][qp]);
-                  }
-								}
-								break;
-							case 2:
-                if(calc_type_ == StructureOnly) {
-                  for (unsigned int qp=0; qp<qface.n_points(); qp++) {
-                    for (unsigned int i=0; i<phi_face.size(); i++)
+              }
+              break;
+            case 1:
+              if (calc_type_ == StructureOnly) {
+                for (unsigned int qp=0; qp<qface.n_points(); qp++) {
+                  for (unsigned int i=0; i<phi_face.size(); i++)
+                    for (unsigned int j=0; j<phi_face.size(); j++)
                       jac_control_->add(dof_indices[i], icontrol,1.0);
-                  }
+                  for (unsigned int i=0; i<phi_face.size(); i++)
+                    jac_control_->add(dof_indices[i], icontrol,1.0);
                 }
-                else {
-                  for (unsigned int qp=0; qp<qface.n_points(); qp++) {
-                    for (unsigned int i=0; i<phi_face.size(); i++)
-                      jac_control_->add(dof_indices[i], icontrol,-(1.0/NeumCoef)*JxW_face[qp]*phi_face[i][qp]);
-                  }
+              }
+              else {
+                for (unsigned int qp=0; qp<qface.n_points(); qp++) {
+                  for (unsigned int i=0; i<phi_face.size(); i++)
+                    for (unsigned int j=0; j<phi_face.size(); j++)
+                      jac_control_->add(dof_indices[i], icontrol,(DiriCoef/(NeumCoef*NeumCoef))*JxW_face[qp]*phi_face[i][qp]*LocalSolution[j]);
+                  for (unsigned int i=0; i<phi_face.size(); i++)
+                    jac_control_->add(dof_indices[i], icontrol,(Rhs/(NeumCoef*NeumCoef))*JxW_face[qp]*phi_face[i][qp]);
                 }
-								break;
-						}
-					} // end if(fabs(NeumCoef)>eps)
-				} // end Loop over Controls
-			} // end if boundary side
-		} // end side loop
-		for(unsigned int i=0;i<CurElem->n_nodes();i++) { // handle Dirichlet BC for nodes: set whole line to 0, set DiriCoef on main diagonal and Rhs in vector
-			std::vector<short int> bc_id = mesh_.boundary_info->boundary_ids(CurElem->get_node(i));
-			if(bc_id.empty())
-				continue;
-			if(bc_id[0]==BoundaryInfo::invalid_id)
-				continue;
-			if( fabs(BCs[bc_id[0]].PhiNeumannCoef) > eps )
-				continue;
-			for(unsigned int iControl=0;iControl<lm_control_vec_->size();iControl++)
-			{
-				int BoundCntrl = PG_._ParamIdx2BCParam[iControl].BoundaryMarker;
-				if(BoundCntrl!=bc_id[0])
-					continue;
-				switch(PG_._ParamIdx2BCParam[iControl].BCParameter)
-				{	// 0:PhiDiriCoef, 1: PhiNeumCoef, 2: PhiRhs, 3:TDiriCoef, 4: TNeumCoef, 5: TiRhs
-					case 0:	
-            if(calc_type_ == StructureOnly)
-              jac_control_->set(dof_indices[i], iControl,1.0);
-            else
-						  jac_control_->set(dof_indices[i], iControl,system.current_local_solution->el(dof_indices[i]));
-						break;
-					case 1:
-						assert(false); // derivative would be ... / NeumCoef^2, but NeumCoef < 1e-8
-					case 2:
-            if(calc_type_ == StructureOnly)
-              jac_control_->set(dof_indices[i], iControl,1.0);
-            else
-						  jac_control_->set(dof_indices[i], iControl,1.0);
-				}
-			}
-		}
-	// dof_map.constrain_element_matrix(ElemMat, dof_indices);	//There are no hangin nodes on the boundary, thus, no constraints needed 
-	}
+              }
+              break;
+            case 2:
+              if (calc_type_ == StructureOnly) {
+                for (unsigned int qp=0; qp<qface.n_points(); qp++) {
+                  for (unsigned int i=0; i<phi_face.size(); i++)
+                    jac_control_->add(dof_indices[i], icontrol,1.0);
+                }
+              }
+              else {
+                for (unsigned int qp=0; qp<qface.n_points(); qp++) {
+                  for (unsigned int i=0; i<phi_face.size(); i++)
+                    jac_control_->add(dof_indices[i], icontrol,-(1.0/NeumCoef)*JxW_face[qp]*phi_face[i][qp]);
+                }
+              }
+              break;
+            }
+          } // end if(fabs(NeumCoef)>eps)
+        } // end Loop over Controls
+      } // end if boundary side
+    } // end side loop
+    for (unsigned int i=0;i<CurElem->n_nodes();i++) { // handle Dirichlet BC for nodes: set whole line to 0, set DiriCoef on main diagonal and Rhs in vector
+      std::vector<short int> bc_id = mesh_.boundary_info->boundary_ids(CurElem->get_node(i));
+      if (bc_id.empty())
+        continue;
+      if (bc_id[0]==BoundaryInfo::invalid_id)
+        continue;
+      if ( fabs(BCs[bc_id[0]].PhiNeumannCoef) > eps )
+        continue;
+      for (unsigned int iControl=0;iControl<lm_control_vec_->size();iControl++) {
+        int BoundCntrl = PG_._ParamIdx2BCParam[iControl].BoundaryMarker;
+        if (BoundCntrl!=bc_id[0])
+          continue;
+        switch (PG_._ParamIdx2BCParam[iControl].BCParameter) { // 0:PhiDiriCoef, 1: PhiNeumCoef, 2: PhiRhs, 3:TDiriCoef, 4: TNeumCoef, 5: TiRhs
+        case 0:
+          if (calc_type_ == StructureOnly)
+            jac_control_->set(dof_indices[i], iControl,1.0);
+          else
+            jac_control_->set(dof_indices[i], iControl,system.current_local_solution->el(dof_indices[i]));
+          break;
+        case 1:
+          assert(false); // derivative would be ... / NeumCoef^2, but NeumCoef < 1e-8
+        case 2:
+          if (calc_type_ == StructureOnly)
+            jac_control_->set(dof_indices[i], iControl,1.0);
+          else
+            jac_control_->set(dof_indices[i], iControl,1.0);
+        }
+      }
+    }
+    // dof_map.constrain_element_matrix(ElemMat, dof_indices); //There are no hangin nodes on the boundary, thus, no constraints needed
+  }
   jac_control_->close();
   jac_control = jac_control_;
   DBG_PRINT( "LibMeshPDEBase::calcPDE_jacobian_control finished" );
@@ -627,112 +615,109 @@ void LibMeshPDEBase::calcPDE_jacobian_control(libMesh::SparseMatrix<libMesh::Num
 void LibMeshPDEBase::assemble_Phi_PDE(EquationSystems& es, const std::string& system_name)
 {
   DBG_PRINT( "LibMeshPDEBase::assemble_Phi_PDE called" );
-	const double eps = 1e-8;
-	libmesh_assert (system_name == "PDE");
+  const double eps = 1e-8;
+  libmesh_assert (system_name == "PDE");
 
   const MeshBase& mesh = es.get_mesh();
   const unsigned int dim = mesh.mesh_dimension();
   LinearImplicitSystem& system = es.get_system<LinearImplicitSystem>("PDE");
   const DofMap& dof_map = system.get_dof_map();
   FEType fe_type = dof_map.variable_type(0);
-	LibMeshPDEBase* pData = es.parameters.get< LibMeshPDEBase* >("LibMeshPDEBase");
-	std::vector<BoundaryCondition>& BCs = pData->PG_._BoundCond;	// Mapping boudary info (index) -> boundary condition, set up in Problem geometry class
+  LibMeshPDEBase* pData = es.parameters.get< LibMeshPDEBase* >("LibMeshPDEBase");
+  std::vector<BoundaryCondition>& BCs = pData->PG_._BoundCond; // Mapping boudary info (index) -> boundary condition, set up in Problem geometry class
   CalculationModeType calc_type=pData->calc_type_;
 
-  AutoPtr<FEBase> fe (FEBase::build(dim, fe_type));	// this object will by the current volume object, actualy holding values for current phi and dphi
+  AutoPtr<FEBase> fe (FEBase::build(dim, fe_type)); // this object will by the current volume object, actualy holding values for current phi and dphi
   QGauss qrule (dim, FIFTH);
   fe->attach_quadrature_rule (&qrule);
-  AutoPtr<FEBase> fe_face (FEBase::build(dim, fe_type));	// surface object
+  AutoPtr<FEBase> fe_face (FEBase::build(dim, fe_type)); // surface object
   QGauss qface(dim-1, FIFTH);
   fe_face->attach_quadrature_rule (&qface);
-  const std::vector<Real>& JxW = fe->get_JxW();			// References to values hold by fe (i.e. the chang, ones fe changes
+  const std::vector<Real>& JxW = fe->get_JxW();   // References to values hold by fe (i.e. the chang, ones fe changes
   const std::vector<std::vector<Real> >& phi = fe->get_phi();
   const std::vector<std::vector<RealGradient> >& dphi = fe->get_dphi();
 
-  DenseMatrix<Number> ElemMat;		// Matrices for current element
-  std::vector<unsigned int> dof_indices;	// mapping local index -> global index
+  DenseMatrix<Number> ElemMat;  // Matrices for current element
+  std::vector<unsigned int> dof_indices; // mapping local index -> global index
 
   MeshBase::const_element_iterator itCurEl = mesh.active_local_elements_begin();
   const MeshBase::const_element_iterator itEndEl = mesh.active_local_elements_end();
-  for ( ; itCurEl != itEndEl; ++itCurEl)
-	{
-		const Elem* CurElem = *itCurEl;
-		dof_map.dof_indices(CurElem, dof_indices);		// setup local->global mapping in form of array
-		fe->reinit (CurElem);	// reinit fe to fit the current element, i.e. recalulate JxW and dPhi 
-		ElemMat.resize (dof_indices.size(),dof_indices.size());
-		// Point Center = (CurElem->point(0)+CurElem->point(1)+CurElem->point(2))/3.0;
-		// std::cout << "Element at " << Center << std::endl;
-		unsigned int qp,i,j;
-		for (qp=0; qp<qrule.n_points(); qp++)
-			for (i=0; i<phi.size(); i++)
-				for (j=0; j<phi.size(); j++)
-          if(calc_type==StructureOnly)
+  for ( ; itCurEl != itEndEl; ++itCurEl) {
+    const Elem* CurElem = *itCurEl;
+    dof_map.dof_indices(CurElem, dof_indices);  // setup local->global mapping in form of array
+    fe->reinit (CurElem); // reinit fe to fit the current element, i.e. recalulate JxW and dPhi
+    ElemMat.resize (dof_indices.size(),dof_indices.size());
+    // Point Center = (CurElem->point(0)+CurElem->point(1)+CurElem->point(2))/3.0;
+    // std::cout << "Element at " << Center << std::endl;
+    unsigned int qp,i,j;
+    for (qp=0; qp<qrule.n_points(); qp++)
+      for (i=0; i<phi.size(); i++)
+        for (j=0; j<phi.size(); j++)
+          if (calc_type==StructureOnly)
             ElemMat(i,j) += 1.0;
           else
-					  ElemMat(i,j) += JxW[qp]*(dphi[i][qp]*dphi[j][qp]);
-		
-		for (unsigned int side=0; side<CurElem->n_sides(); side++)
-		{
-			if (CurElem->neighbor(side) == NULL)
-			{
-				// std::cout << side << std::endl;
-				short int bc_id = mesh.boundary_info->boundary_id (CurElem,side);
-				assert(bc_id!=BoundaryInfo::invalid_id);
-				double NeumCoef, DiriCoef, Rhs;
-				// std::cout << "bc_id=" << bc_id << std::endl; 
-				NeumCoef = BCs[bc_id].PhiNeumannCoef;
-				DiriCoef = BCs[bc_id].PhiDiricheltCoef;
-				Rhs = BCs[bc_id].PhiRhs;
-				const std::vector<std::vector<Real> >&  phi_face = fe_face->get_phi();
-				const std::vector<Real>& JxW_face = fe_face->get_JxW();
-				fe_face->reinit(CurElem, side);
-				/*Point Center;
-				for(unsigned int iNode=0;iNode<CurElem->n_nodes();iNode++)
-					if( CurElem->is_node_on_side(iNode,side) )
-						Center += CurElem->point(iNode);
-				Center = Center/dim;
-				std::cout << "BC at " << Center << " and : ";
-				std::cout << NeumCoef << " dPhi/dn = " << DiriCoef << " Phi + " << Rhs << std::endl;*/
-				if( fabs(NeumCoef)>eps) {	// handle non-Dirichlet boundary conditions
-					for (unsigned int qp=0; qp<qface.n_points(); qp++) {
-							for (unsigned int i=0; i<phi_face.size(); i++)
-								for (unsigned int j=0; j<phi_face.size(); j++)
-                  if(calc_type==StructureOnly)
-                    ElemMat(i,j) += 1.0;
-                  else
-									  ElemMat(i,j) -= (DiriCoef/NeumCoef)*JxW_face[qp]*phi_face[i][qp];
-					}
-				}
-			} // end if CurElem->neigbor(side)==NULL
-		} // endfor side
-		for(unsigned int i=0;i<CurElem->n_nodes();i++) { // handle Dirichlet BC for nodes: set whole line to 0, set DiriCoef on main diagonal and Rhs in vector
-			std::vector<short int> bc_id = mesh.boundary_info->boundary_ids(CurElem->get_node(i));
-			if(bc_id.empty())
-				continue;
-			if(bc_id[0]==BoundaryInfo::invalid_id)
-				continue;
-			if( fabs(BCs[bc_id[0]].PhiNeumannCoef) > eps )
-				continue;
-			// std::cout << "Dirichlet: bc_id=" << bc_id[0] << std::endl; 
-			for(j=0;j<CurElem->n_nodes();j++)
-				ElemMat(i,j)=0;
-      if(calc_type==StructureOnly)
+            ElemMat(i,j) += JxW[qp]*(dphi[i][qp]*dphi[j][qp]);
+
+    for (unsigned int side=0; side<CurElem->n_sides(); side++) {
+      if (CurElem->neighbor(side) == NULL) {
+        // std::cout << side << std::endl;
+        short int bc_id = mesh.boundary_info->boundary_id (CurElem,side);
+        assert(bc_id!=BoundaryInfo::invalid_id);
+        double NeumCoef, DiriCoef, Rhs;
+        // std::cout << "bc_id=" << bc_id << std::endl;
+        NeumCoef = BCs[bc_id].PhiNeumannCoef;
+        DiriCoef = BCs[bc_id].PhiDiricheltCoef;
+        Rhs = BCs[bc_id].PhiRhs;
+        const std::vector<std::vector<Real> >&  phi_face = fe_face->get_phi();
+        const std::vector<Real>& JxW_face = fe_face->get_JxW();
+        fe_face->reinit(CurElem, side);
+        /*Point Center;
+        for(unsigned int iNode=0;iNode<CurElem->n_nodes();iNode++)
+         if( CurElem->is_node_on_side(iNode,side) )
+          Center += CurElem->point(iNode);
+        Center = Center/dim;
+        std::cout << "BC at " << Center << " and : ";
+        std::cout << NeumCoef << " dPhi/dn = " << DiriCoef << " Phi + " << Rhs << std::endl;*/
+        if ( fabs(NeumCoef)>eps) { // handle non-Dirichlet boundary conditions
+          for (unsigned int qp=0; qp<qface.n_points(); qp++) {
+            for (unsigned int i=0; i<phi_face.size(); i++)
+              for (unsigned int j=0; j<phi_face.size(); j++)
+                if (calc_type==StructureOnly)
+                  ElemMat(i,j) += 1.0;
+                else
+                  ElemMat(i,j) -= (DiriCoef/NeumCoef)*JxW_face[qp]*phi_face[i][qp];
+          }
+        }
+      } // end if CurElem->neigbor(side)==NULL
+    } // endfor side
+    for (unsigned int i=0;i<CurElem->n_nodes();i++) { // handle Dirichlet BC for nodes: set whole line to 0, set DiriCoef on main diagonal and Rhs in vector
+      std::vector<short int> bc_id = mesh.boundary_info->boundary_ids(CurElem->get_node(i));
+      if (bc_id.empty())
+        continue;
+      if (bc_id[0]==BoundaryInfo::invalid_id)
+        continue;
+      if ( fabs(BCs[bc_id[0]].PhiNeumannCoef) > eps )
+        continue;
+      // std::cout << "Dirichlet: bc_id=" << bc_id[0] << std::endl;
+      for (j=0;j<CurElem->n_nodes();j++)
+        ElemMat(i,j)=0;
+      if (calc_type==StructureOnly)
         ElemMat(i,i) = 1.0;
       else
-  			ElemMat(i,i) = +BCs[bc_id[0]].PhiDiricheltCoef;
-		}
-		dof_map.constrain_element_matrix(ElemMat, dof_indices);	// Add constrains for hanging nodes (refinement)
-		system.matrix->add_matrix(ElemMat, dof_indices);
-	}
+        ElemMat(i,i) = +BCs[bc_id[0]].PhiDiricheltCoef;
+    }
+    dof_map.constrain_element_matrix(ElemMat, dof_indices); // Add constrains for hanging nodes (refinement)
+    system.matrix->add_matrix(ElemMat, dof_indices);
+  }
   DBG_PRINT( "LibMeshPDEBase::assemble_Phi_PDE finished" );
 }
 
 // sigma and lambda_pde not used, avoid warning
 void LibMeshPDEBase::calc_hessians(Number /*sigma*/, libMesh::DenseVector<Number>& /*lambda_pde*/,
-                                                 libMesh::DenseVector<Number>& lambda_aux,
-                                                 libMesh::SparseMatrix<Number>*& Hcc,
-                                                 libMesh::SparseMatrix<Number>*& Hcs,
-                                                 libMesh::SparseMatrix<Number>*& Hss)
+                                   libMesh::DenseVector<Number>& lambda_aux,
+                                   libMesh::SparseMatrix<Number>*& Hcc,
+                                   libMesh::SparseMatrix<Number>*& Hcs,
+                                   libMesh::SparseMatrix<Number>*& Hss)
 {
   DBG_PRINT( "LibMeshPDEBase::calc_hessians called" );
   hess_control_control_->zero();
@@ -762,14 +747,14 @@ void LibMeshPDEBase::calc_hessians(Number /*sigma*/, libMesh::DenseVector<Number
       if (CurElem->neighbor(side) == NULL) {
         short int bc_id = mesh.boundary_info->boundary_id (CurElem,side);
         assert(bc_id!=BoundaryInfo::invalid_id);
-        if( AuxConstrBoundMarkerList_.find(bc_id)!=AuxConstrBoundMarkerList_.end() ) {  // Heating boundary, apply min. velocity-constraint
+        if ( AuxConstrBoundMarkerList_.find(bc_id)!=AuxConstrBoundMarkerList_.end() ) { // Heating boundary, apply min. velocity-constraint
           fe_face->reinit(CurElem, side);
           dof_map.dof_indices(CurElem, dof_indices);   // setup local->global mapping in form of array
           DenseMatrix<Number> loc_l2dphi;
           loc_l2dphi.resize(dof_indices.size(),dof_indices.size());
-          if(calc_type_==StructureOnly) {
-            for(unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
-              for(unsigned short jnode=0;jnode<inode;++jnode) {
+          if (calc_type_==StructureOnly) {
+            for (unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
+              for (unsigned short jnode=0;jnode<inode;++jnode) {
                 loc_l2dphi(inode,jnode) = 1.0;
               }
             }
@@ -780,8 +765,8 @@ void LibMeshPDEBase::calc_hessians(Number /*sigma*/, libMesh::DenseVector<Number
             loc_l2dphi.resize(dof_indices.size(),dof_indices.size());
             DenseVector<Number> tmp;
             for (unsigned int qp=0; qp<qface.n_points(); qp++) {
-              for(unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
-                for( unsigned short jnode=0;jnode<=inode;++jnode) { // only lower triangle 
+              for (unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
+                for ( unsigned short jnode=0;jnode<=inode;++jnode) { // only lower triangle
                   loc_l2dphi(inode,jnode) = dphi_face[inode][qp]*dphi_face[jnode][qp];
                 }
               }
@@ -815,7 +800,7 @@ void LibMeshPDEBase::get_bounds(libMesh::NumericVector<libMesh::Number>& state_l
   double Inf = 1e20;
   state_l=-Inf;
   state_u=Inf;
-  if(simulation_mode_) {
+  if (simulation_mode_) {
     control_l=*lm_control_vec_;
     control_u=*lm_control_vec_;
     aux_constr_l = -100;
@@ -830,7 +815,7 @@ void LibMeshPDEBase::get_bounds(libMesh::NumericVector<libMesh::Number>& state_l
 }
 
 void LibMeshPDEBase::get_starting_point(libMesh::NumericVector<libMesh::Number>& state,
-        libMesh::NumericVector<libMesh::Number>& control)
+                                        libMesh::NumericVector<libMesh::Number>& control)
 {
   DBG_PRINT( "LibMeshPDE::get_starting_point called" );
   state = getStateVector();
@@ -848,10 +833,9 @@ void LibMeshPDEBase::WriteNodes(const MeshBase& mesh, std::ostream& os)
   MeshBase::const_node_iterator CurNode = mesh.nodes_begin();
   MeshBase::const_node_iterator EndNode = mesh.nodes_end();
   int iNode = 1;
-  for(;CurNode!=EndNode;CurNode++)
-  {
-    os << "  " << iNode++ << " "; 
-    for(iDim=0;iDim<Dim;iDim++)
+  for (;CurNode!=EndNode;CurNode++) {
+    os << "  " << iNode++ << " ";
+    for (iDim=0;iDim<Dim;iDim++)
       os << (*(*CurNode))(iDim) << " ";
     os << std::endl;
   }
@@ -872,10 +856,9 @@ void LibMeshPDEBase::WriteElems(const MeshBase& mesh, std::ostream& os)
   MeshBase::const_element_iterator EndEl = mesh.active_elements_end();
 
   int iEl = 1;
-  for(;CurEl!=EndEl;CurEl++)
-  {
-    os << "  " << iEl++ << " "; 
-    for(iNode=0;iNode<((*CurEl)->n_nodes());iNode++)
+  for (;CurEl!=EndEl;CurEl++) {
+    os << "  " << iEl++ << " ";
+    for (iNode=0;iNode<((*CurEl)->n_nodes());iNode++)
       os << (*CurEl)->node(iNode)+1 << " ";
     os << std::endl;
   }
@@ -891,7 +874,7 @@ void LibMeshPDEBase::Write2File( const std::string& pre_filename)
 {
   DBG_PRINT( "LibMeshPDEBase::Write2File called" );
   std::string my_pre_filename = pre_filename;
-  if(simulation_mode_)
+  if (simulation_mode_)
     my_pre_filename += "Sim";
 
   std::string filename = my_pre_filename + "Cntrl.dat";
@@ -905,7 +888,7 @@ void LibMeshPDEBase::Write2File( const std::string& pre_filename)
 
   filename = my_pre_filename + "State.dat";
   f.open(filename.c_str(),std::ios::out);
-  for(unsigned int iVal=0;iVal<State.size();iVal++)
+  for (unsigned int iVal=0;iVal<State.size();iVal++)
     f << State[iVal] << std::endl;
   f.close();
 
@@ -939,10 +922,9 @@ void LibMeshPDEBase::WritePotentialCSV(const std::string& Filename)
   const unsigned int dim = mesh_.mesh_dimension();
   MeshBase::node_iterator it_cur_node = mesh_.active_nodes_begin();
   const MeshBase::node_iterator end_node = mesh_.active_nodes_end();
-  for(;it_cur_node!=end_node;it_cur_node++)
-  {
+  for (;it_cur_node!=end_node;it_cur_node++) {
     const Node* cur_node = *it_cur_node;
-    for(int i=0;i<dim;i++)
+    for (int i=0;i<dim;i++)
       f << (*cur_node)(i) << ", ";
     f << State[cur_node->id()] << std::endl;
   }
@@ -983,9 +965,9 @@ void LibMeshPDEBase::WriteAirflowTKVs(const std::string& VolumeFilename, const s
     fe_vol->reinit(CurElem); // here: Phi and DPhi (basis function) are computed for this element
     dof_map.dof_indices(CurElem, dof_indices);   // setup local->global mapping in form of array
     CurGrad = 0.0;
-    for(unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
+    for (unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
       Number node_val = system.current_local_solution->el(dof_indices[inode]);
-printf("nodeval = %e\n", node_val);
+      printf("nodeval = %e\n", node_val);
       CurGrad += node_val*dphi_vol[inode][0];  // assume linear FE -> grad = const on one element
     }
     tmp.resize(dof_indices.size(),CurGrad(0));
@@ -996,7 +978,7 @@ printf("nodeval = %e\n", node_val);
     pvz->add_vector(tmp,dof_indices);
     One.resize(dof_indices.size(),1.0);
     pvn->add_vector(One,dof_indices);
-  }	
+  }
 
   pvx->close();
   pvy->close();
@@ -1005,19 +987,18 @@ printf("nodeval = %e\n", node_val);
   pvnorm->close();
   MeshBase::node_iterator it_cur_node = mesh_.active_nodes_begin();
   const MeshBase::node_iterator end_node = mesh_.active_nodes_end();
-  for(;it_cur_node!=end_node;it_cur_node++)
-  {
+  for (;it_cur_node!=end_node;it_cur_node++) {
     const Node* cur_node = *it_cur_node;
     unsigned int id = cur_node->id();
     double ncount = pvn->el(id);
     double vx = pvx->el(id)/ncount;
     double vy = pvy->el(id)/ncount;
     double vz = pvz->el(id)/ncount;
-printf("%d pvx = %e pvy = %e pvz = %e\n", id, vx, vy ,vz);
+    printf("%d pvx = %e pvy = %e pvz = %e\n", id, vx, vy ,vz);
     pvx->set( vx, id );
     pvy->set( vy, id );
     pvz->set( vz, id );
-printf("pvnorm[%d] = %e\n", id, std::sqrt(vx*vx + vy*vy + vz*vz));
+    printf("pvnorm[%d] = %e\n", id, std::sqrt(vx*vx + vy*vy + vz*vz));
     pvnorm->set( sqrt(vx*vx + vy*vy + vz*vz), id );
   }
   pvx->close();
@@ -1073,14 +1054,14 @@ void LibMeshPDEBase::WriteAirflowCSVs(const std::string& VolumeFilename, const s
     fe_vol->reinit(CurElem);
     dof_map.dof_indices(CurElem, dof_indices);   // local->global mapping in form of array
     CurGrad = 0.0;
-    for(unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
+    for (unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
       Number node_val = system.current_local_solution->el(dof_indices[inode]);
       CurGrad += node_val*dphi_vol[inode][0];  // assume linear FE -> grad = const on one element
     }
     Point Center = CurElem->centroid();
-    for(int i=0;i<dim;i++)
+    for (int i=0;i<dim;i++)
       VolFile << Center(i) << ", ";
-    for(int i=0;i<dim-1;i++)
+    for (int i=0;i<dim-1;i++)
       VolFile << CurGrad(i) << ", ";
     VolFile << CurGrad(dim-1) << std::endl;
 
@@ -1093,9 +1074,9 @@ void LibMeshPDEBase::WriteAirflowCSVs(const std::string& VolumeFilename, const s
         loc_sol.resize(dof_indices.size());
         loc_l2dphi.resize(dof_indices.size(),dof_indices.size());
         double GradL2=0.0;
-        for(unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
+        for (unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
           loc_sol(inode) = system.current_local_solution->el(dof_indices[inode]);
-          for( unsigned short jnode=0;jnode<CurElem->n_nodes();++jnode) {
+          for ( unsigned short jnode=0;jnode<CurElem->n_nodes();++jnode) {
             loc_l2dphi(inode,jnode) = dphi_face[inode][0]*dphi_face[jnode][0];
           }
         }
@@ -1104,7 +1085,7 @@ void LibMeshPDEBase::WriteAirflowCSVs(const std::string& VolumeFilename, const s
         GradL2 = loc_sol.dot(tmp);
         AutoPtr<Elem> Side = CurElem->build_side(side);
         Point Center = Side->centroid();
-        for(int i=0;i<dim;i++)
+        for (int i=0;i<dim;i++)
           SurFile << Center(i) << ", ";
         SurFile << GradL2 << std::endl;
       }
@@ -1120,20 +1101,20 @@ void LibMeshPDEBase::InitAuxConstr(int *plocal, int *pglobal, std::list<Number>*
   std::vector<ProblemGeometry::Item> _Exh;
 
   int nEquipWalls = 4;
-  if(mesh_.mesh_dimension()==3)
+  if (mesh_.mesh_dimension()==3)
     nEquipWalls = 5;
   int BoundaryMarker;
   AuxConstrBoundMarkerList_.clear();
   pFactList->clear();
-  for(unsigned int iEquip=0; iEquip<PG_._Equip.size();++iEquip)  {
-    for(int iWall=0; iWall<nEquipWalls; iWall++)  {
+  for (unsigned int iEquip=0; iEquip<PG_._Equip.size();++iEquip)  {
+    for (int iWall=0; iWall<nEquipWalls; iWall++)  {
       BoundaryMarker = PG_._Equip[iEquip].BoundaryMarker[iWall];
       // We notice, that ineq. const old here, by checking, if we have a real robin boundary condition for T, i.e. all coefficients are nonzero
-      if(BoundaryMarker<0)  // in 3D, floor of equipment
+      if (BoundaryMarker<0) // in 3D, floor of equipment
         continue;
-      if(fabs(PG_._BoundCond[BoundaryMarker].TDiricheltCoef
-              *PG_._BoundCond[BoundaryMarker].TNeumannCoef
-              *PG_._BoundCond[BoundaryMarker].TRhs) > eps) {
+      if (fabs(PG_._BoundCond[BoundaryMarker].TDiricheltCoef
+               *PG_._BoundCond[BoundaryMarker].TNeumannCoef
+               *PG_._BoundCond[BoundaryMarker].TRhs) > eps) {
         AuxConstrBoundMarkerList_.insert(BoundaryMarker);
       }
     }
@@ -1157,10 +1138,9 @@ void LibMeshPDEBase::InitAuxConstr(int *plocal, int *pglobal, std::list<Number>*
   for ( ; itCurEl != itEndEl; ++itCurEl) {
     const Elem* CurElem = *itCurEl;
     for (unsigned int side=0; side<CurElem->n_sides(); side++) {
-      if (CurElem->neighbor(side) == NULL)
-      {
+      if (CurElem->neighbor(side) == NULL) {
         int bc_id = mesh_.boundary_info->boundary_id (CurElem,side);
-        if( AuxConstrBoundMarkerList_.find(bc_id)!=AuxConstrBoundMarkerList_.end() ) {
+        if ( AuxConstrBoundMarkerList_.find(bc_id)!=AuxConstrBoundMarkerList_.end() ) {
           ++(*plocal);
 
           fe_face->reinit(CurElem, side);
@@ -1209,7 +1189,7 @@ void LibMeshPDEBase::calcAux_constr(libMesh::NumericVector<libMesh::Number>*& co
       if (CurElem->neighbor(side) == NULL) {
         short int bc_id = mesh_.boundary_info->boundary_id (CurElem,side);
         assert(bc_id!=BoundaryInfo::invalid_id);
-        if( AuxConstrBoundMarkerList_.find(bc_id)!=AuxConstrBoundMarkerList_.end() ) {  // Heating boundary, apply min. velocity-constraint
+        if ( AuxConstrBoundMarkerList_.find(bc_id)!=AuxConstrBoundMarkerList_.end() ) { // Heating boundary, apply min. velocity-constraint
           fe_face->reinit(CurElem, side);
           dof_map.dof_indices(CurElem, dof_indices);   // setup local->global mapping in form of array
           DenseVector<Number> loc_sol;
@@ -1218,9 +1198,9 @@ void LibMeshPDEBase::calcAux_constr(libMesh::NumericVector<libMesh::Number>*& co
           loc_l2dphi.resize(dof_indices.size(),dof_indices.size());
           double GradL2=0.0;
           for (unsigned int qp=0; qp<qface.n_points(); qp++) {
-            for(unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
+            for (unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
               loc_sol(inode) = system.current_local_solution->el(dof_indices[inode]);
-              for( unsigned short jnode=0;jnode<CurElem->n_nodes();++jnode) {
+              for ( unsigned short jnode=0;jnode<CurElem->n_nodes();++jnode) {
                 loc_l2dphi(inode,jnode) = dphi_face[inode][qp]*dphi_face[jnode][qp];
               }
             }
@@ -1240,7 +1220,7 @@ void LibMeshPDEBase::calcAux_constr(libMesh::NumericVector<libMesh::Number>*& co
 }
 
 void LibMeshPDEBase::calcAux_jacobians(libMesh::SparseMatrix<libMesh::Number>*& jac_state,
-                                        libMesh::SparseMatrix<libMesh::Number>*& jac_control)
+                                       libMesh::SparseMatrix<libMesh::Number>*& jac_control)
 {
   DBG_PRINT( "LibMeshPDEBase::calcAux_jacobians called" );
   calcAux_jacobian_state(jac_state);
@@ -1273,13 +1253,13 @@ void LibMeshPDEBase::calcAux_jacobian_state(libMesh::SparseMatrix<libMesh::Numbe
       if (CurElem->neighbor(side) == NULL) {
         short int bc_id = mesh.boundary_info->boundary_id (CurElem,side);
         assert(bc_id!=BoundaryInfo::invalid_id);
-        if( AuxConstrBoundMarkerList_.find(bc_id)!=AuxConstrBoundMarkerList_.end() ) {  // Heating boundary, apply min. velocity-constraint
+        if ( AuxConstrBoundMarkerList_.find(bc_id)!=AuxConstrBoundMarkerList_.end() ) { // Heating boundary, apply min. velocity-constraint
           fe_face->reinit(CurElem, side);
           dof_map.dof_indices(CurElem, dof_indices);   // setup local->global mapping in form of array
-          if(calc_type_==StructureOnly)
-            for(unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
+          if (calc_type_==StructureOnly)
+            for (unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
               jac_aux_state_->add(i_aux_constr,dof_indices[inode],1.0);
-          }
+            }
           else {
             DenseVector<Number> loc_sol;
             DenseMatrix<Number> loc_l2dphi;
@@ -1287,14 +1267,14 @@ void LibMeshPDEBase::calcAux_jacobian_state(libMesh::SparseMatrix<libMesh::Numbe
             loc_l2dphi.resize(dof_indices.size(),dof_indices.size());
             DenseVector<Number> tmp;
             for (unsigned int qp=0; qp<qface.n_points(); qp++) {
-              for(unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
+              for (unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
                 loc_sol(inode) = system.current_local_solution->el(dof_indices[inode]);
-                for( unsigned short jnode=0;jnode<CurElem->n_nodes();++jnode) {
+                for ( unsigned short jnode=0;jnode<CurElem->n_nodes();++jnode) {
                   loc_l2dphi(inode,jnode) = dphi_face[inode][qp]*dphi_face[jnode][qp];
                 }
               }
               loc_l2dphi.vector_mult(tmp,loc_sol);
-              for(unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
+              for (unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
                 jac_aux_state_->add(i_aux_constr,dof_indices[inode],2.0*JxW_face[qp]*tmp(inode));
               }
             }
@@ -1323,17 +1303,17 @@ void LibMeshPDEBase::RefineMesh()
   DBG_PRINT( "LibMeshPDEBase::RefineMesh called" );
   MeshRefinement rf(mesh_);
   rf.uniformly_refine(1);
-/*refine_fraction() = 1.0;
-  mesh_refinement.coarsen_fraction() = 0.0;
-  mesh_refinement.max_h_level() = 1;
+  /*refine_fraction() = 1.0;
+    mesh_refinement.coarsen_fraction() = 0.0;
+    mesh_refinement.max_h_level() = 1;
 
-  ErrorVector error;
-  KellyErrorEstimator error_estimator;
-  error_estimator.estimate_error(systemPhi, error);
-  mesh_refinement.flag_elements_by_error_fraction (error);
-  mesh_refinement.refine_and_coarsen_elements();
-  equation_systems.reinit();
-*/
+    ErrorVector error;
+    KellyErrorEstimator error_estimator;
+    error_estimator.estimate_error(systemPhi, error);
+    mesh_refinement.flag_elements_by_error_fraction (error);
+    mesh_refinement.refine_and_coarsen_elements();
+    equation_systems.reinit();
+  */
   std::cout << "RefineMesh" << std::endl;
   reinit();
   DBG_PRINT( "LibMeshPDEBase::RefineMesh finished" );

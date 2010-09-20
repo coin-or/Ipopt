@@ -41,14 +41,14 @@ int main (int argc, char** argv)
 
     LibMeshPDEBase* pLibMeshPDE = new LibMeshPDEBase;
     std::ifstream f("Problem.dat",std::ios::in);
-    if(f.fail()) {
+    if (f.fail()) {
       std::cout << "Can't open file Problem.dat" << std::endl;
       exit(1);
     }
     try {
       pLibMeshPDE->InitProblemData(f);
     }
-    catch(std::exception& e) {
+    catch (std::exception& e) {
       std::cerr << e.what() << std::endl;
       exit(1);
     }
@@ -94,13 +94,13 @@ int main (int argc, char** argv)
       lm_Number fact = sqrt(MaxLowBd/MinAuxConstr);
       fact = 2*fact;
       printf("Scaling simulation solution with fact = %e\n", fact);
-      if(1) //fact>0.9)
-      { 
+      if (1) //fact>0.9)
+      {
         pLibMeshPDE->getControlVector() *= fact;
         pLibMeshPDE->getStateVector() *= fact;
         // Now the inital point should be feasible
-        #if 0
-        // solve a second time to check 
+#if 0
+        // solve a second time to check
         status = app->Initialize();
         if (status != Solve_Succeeded) {
           printf("\n\n*** Error during initialization!\n");
@@ -114,11 +114,11 @@ int main (int argc, char** argv)
         else {
           printf("\n\n*** The problem FAILED!\n");
         }
-        #endif
+#endif
       }
 
-      // solve a second time to check 
-      #if 0
+      // solve a second time to check
+#if 0
       status = app->Initialize();
       if (status != Solve_Succeeded) {
         printf("\n\n*** Error during initialization!\n");
@@ -133,7 +133,7 @@ int main (int argc, char** argv)
         printf("\n\n*** The problem FAILED!\n");
         return (int)status;
       }
-      #endif
+#endif
     }
     // solve optimization problem
     pLibMeshPDE->simulation_mode_=false;
