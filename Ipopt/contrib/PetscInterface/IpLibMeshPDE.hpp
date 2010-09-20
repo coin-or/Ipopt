@@ -39,7 +39,8 @@ public:
   /** receive libmesh EquationSystem.  It is assumed that this
     *  system has been initialized with the mesh, and the system
     *  matrix and solution vector are initialized. */
-  libMesh::ImplicitSystem& getImplicitSystem() {
+  libMesh::ImplicitSystem& getImplicitSystem()
+  {
     return lm_eqn_sys_->get_system<ImplicitSystem>("PDE");
   }
 
@@ -51,28 +52,32 @@ public:
   }
   /** receive libmesh vector that stores the current values of the
     *  state, i.e. which is saved as solution vector in the libmesh system. */
-  libMesh::NumericVector<libMesh::Number>& getStateVector() {
+  libMesh::NumericVector<libMesh::Number>& getStateVector()
+  {
     return *(getImplicitSystem().solution);
   }
 
-  libMesh::NumericVector<libMesh::Number>& getAuxConstrVector() {
+  libMesh::NumericVector<libMesh::Number>& getAuxConstrVector()
+  {
     return *lm_aux_constr_vec_;
   }
 
-  libMesh::NumericVector<libMesh::Number>& getPDEResVector() {
+  libMesh::NumericVector<libMesh::Number>& getPDEResVector()
+  {
     return *lm_pde_residual_vec_;
   }
 
   /** Update internal data after change of values of state and
-control variables. */
-  void update() {
+  control variables. */
+  void update()
+  {
     ConvertControl2PGData();
     getImplicitSystem().update();
   }
 
   /** Calculate one part of the objective function. All parts of the
-processors are sumed up by Ipopt, so the intension is, to
-compute only the local contribution to the objective  */
+  processors are sumed up by Ipopt, so the intension is, to
+  compute only the local contribution to the objective  */
   virtual void calc_objective_part(Number& Val);
 
   /** Calculate the local part of the objective gradient, i.e.the
@@ -80,7 +85,7 @@ compute only the local contribution to the objective  */
       variables, uses lm_control_vec_ as control and lm_sys->solution
       as state */
   virtual void calc_objective_gradient(libMesh::NumericVector<libMesh::Number>& grad_state,
-					libMesh::NumericVector<libMesh::Number>& grad_control);
+                                       libMesh::NumericVector<libMesh::Number>& grad_control);
 
   /** Calculate the local part of the residual (e.g. for a linerar
       PDE typically written as A*x-b) of the constraining PDE,
@@ -98,34 +103,37 @@ compute only the local contribution to the objective  */
       lm_sys_->matrix and the control jacobian in jac_control_ and
       returns a handle to them */
   virtual void calcPDE_jacobians(libMesh::SparseMatrix<libMesh::Number>*& jac_state,
-				  libMesh::SparseMatrix<libMesh::Number>*& jac_control);
+                                 libMesh::SparseMatrix<libMesh::Number>*& jac_control);
 
-/** Calculate the local part of the hessian of the constraining PDE,
-      i.e. the ???
-      , uses lm_control_vec_ as control
-      and lm_sys_->solution as state. Saves the intermediate results
-      in hess_control_control_, hess_control_state_ and
-      hess_state_state_ and returns a handle to them */
+  /** Calculate the local part of the hessian of the constraining PDE,
+        i.e. the ???
+        , uses lm_control_vec_ as control
+        and lm_sys_->solution as state. Saves the intermediate results
+        in hess_control_control_, hess_control_state_ and
+        hess_state_state_ and returns a handle to them */
   virtual void calc_hessians(Number sigma, libMesh::DenseVector<Number>& lambda_loc_pde, libMesh::DenseVector<Number>& lambda_loc_aux, libMesh::SparseMatrix<Number>*& Hcc, libMesh::SparseMatrix<Number>*& Hcs,libMesh::SparseMatrix<Number>*& Hss);
 
   virtual void calcAux_constr(libMesh::NumericVector<libMesh::Number>*& constr);
   virtual void calcAux_jacobians(libMesh::SparseMatrix<libMesh::Number>*& jac_state,
-                                  libMesh::SparseMatrix<libMesh::Number>*& jac_control);
+                                 libMesh::SparseMatrix<libMesh::Number>*& jac_control);
 
   virtual void Write2File( const std::string& pre_filename);
 
-  enum CalculationModeType { StructureOnly, Values} ;
+  enum CalculationModeType
+  {
+    StructureOnly, Values
+  } ;
   CalculationModeType calc_type_;
 
   virtual void get_bounds(libMesh::NumericVector<libMesh::Number>& state_l,
-        libMesh::NumericVector<libMesh::Number>& state_u,
-        libMesh::NumericVector<libMesh::Number>& control_l,
-        libMesh::NumericVector<libMesh::Number>& control_u,
-        libMesh::NumericVector<libMesh::Number>& aux_constr_l,
-        libMesh::NumericVector<libMesh::Number>& aux_constr_u);
+                          libMesh::NumericVector<libMesh::Number>& state_u,
+                          libMesh::NumericVector<libMesh::Number>& control_l,
+                          libMesh::NumericVector<libMesh::Number>& control_u,
+                          libMesh::NumericVector<libMesh::Number>& aux_constr_l,
+                          libMesh::NumericVector<libMesh::Number>& aux_constr_u);
 
   virtual void get_starting_point(libMesh::NumericVector<libMesh::Number>& state,
-        libMesh::NumericVector<libMesh::Number>& control);
+                                  libMesh::NumericVector<libMesh::Number>& control);
 
   virtual void InitProblemData(std::istream& is);
   virtual void reinit();
@@ -139,7 +147,7 @@ protected:
   libMesh::SparseMatrix<libMesh::Number>* hess_control_control_;
   libMesh::SparseMatrix<libMesh::Number>* hess_control_state_;
   libMesh::SparseMatrix<libMesh::Number>* hess_state_state_;
-  
+
   virtual void InitAuxConstr(int *plocal, int *pglobal, std::list<Number>* pFactList);
 
   virtual void calcPDE_jacobian_state(libMesh::SparseMatrix<libMesh::Number>*& jac_state);
@@ -147,7 +155,7 @@ protected:
   virtual void calcAux_jacobian_state(libMesh::SparseMatrix<libMesh::Number>*& jac_state);
   virtual void calcAux_jacobian_control(libMesh::SparseMatrix<libMesh::Number>*& jac_control);
 
-	static void assemble_Phi_PDE(EquationSystems& es, const std::string& system_name);
+  static void assemble_Phi_PDE(EquationSystems& es, const std::string& system_name);
 
   void WriteNodes(const MeshBase& mesh, std::ostream& os);
   void WriteNodeFile(const MeshBase& mesh, const std::string& Filename);
@@ -177,7 +185,7 @@ private:
   //@}
 
   /** Store the libMesh system */
-	libMesh::EquationSystems* lm_eqn_sys_;
+  libMesh::EquationSystems* lm_eqn_sys_;
 
   /** Current values of control vector */
   libMesh::NumericVector<libMesh::Number>* lm_control_vec_;
@@ -186,10 +194,10 @@ private:
   libMesh::NumericVector<libMesh::Number>* lm_aux_constr_vec_low_bd_;
   libMesh::Number min_airflow;
   unsigned int first_aux_constr_;
-	ProblemGeometry PG_;
-	libMesh::Mesh mesh_;
+  ProblemGeometry PG_;
+  libMesh::Mesh mesh_;
   std::set<int> AuxConstrBoundMarkerList_;  // vector of all boundary markers, for which inequality constraints hold
-  
+
   void ConvertControl2PGData();
   void DetroySelfOwnedLibMeshPetscMatrix(SparseMatrix<Number>*& matrix);
   void DetroySelfOwnedLibMeshPetscVector(NumericVector<Number>*& vector);

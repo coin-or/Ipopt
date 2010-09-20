@@ -26,20 +26,19 @@ using namespace libMesh;
 typedef libMesh::Number lm_Number;
 
 LibMeshPDENLP::LibMeshPDENLP(LibMeshPDEBase& libmeshPDE,
-			     Journalist& jnlst)
-:
-  libmeshPDE_(&libmeshPDE),
-  jnlst_(&jnlst)
-{
-}
+                             Journalist& jnlst)
+    :
+    libmeshPDE_(&libmeshPDE),
+    jnlst_(&jnlst)
+{}
 
 bool
 LibMeshPDENLP::
 get_nlp_info(Index num_proc, Index proc_id,
-	     Index& n, Index& n_first, Index& n_last,
-	     Index& m, Index& m_first, Index& m_last,
-	     Index& nnz_jac_g_part, Index& nnz_h_lag_part,
-	     IndexStyleEnum& index_style)
+             Index& n, Index& n_first, Index& n_last,
+             Index& m, Index& m_first, Index& m_last,
+             Index& nnz_jac_g_part, Index& nnz_h_lag_part,
+             IndexStyleEnum& index_style)
 {
   DBG_PRINT("LibMeshDPENLP::get_nlp_info called")
 
@@ -101,12 +100,12 @@ get_nlp_info(Index num_proc, Index proc_id,
     n_last_ = n_last = n_glob_end-1;
     n = n_state+n_control;
   }
-  
+
   libmeshPDE_->calc_type_ = LibMeshPDEBase::StructureOnly;
   SparseMatrix<lm_Number>* jac_state;
   SparseMatrix<lm_Number>* jac_control;
   libmeshPDE_->calcPDE_jacobians(jac_state,jac_control);
-  
+
   PetscMatrix<lm_Number>* p_jac_state = dynamic_cast<PetscMatrix<lm_Number>*>(jac_state);
   Mat mat = p_jac_state->mat();
   MatInfo info;
@@ -128,7 +127,7 @@ get_nlp_info(Index num_proc, Index proc_id,
   mat = p_aux_jac_control->mat();
   MatGetInfo(mat,MAT_LOCAL,&info);
   nnz_jac_g_part += info.nz_used;
-  
+
   nnz_h_lag_part = 0;
 
   SparseMatrix<lm_Number>* hss;
@@ -138,10 +137,10 @@ get_nlp_info(Index num_proc, Index proc_id,
   libMesh::DenseVector<lm_Number> lambda_aux;
 
   lambda_pde.resize(m_pde);
-  for(int i=0.0;i<lambda_pde.size();++i)
+  for (int i=0.0;i<lambda_pde.size();++i)
     lambda_pde(i) = 1.0;
   lambda_aux.resize(m_aux);
-  for(int i=0.0;i<lambda_aux.size();++i)
+  for (int i=0.0;i<lambda_aux.size();++i)
     lambda_aux(i) = 1.0;
   libmeshPDE_->calc_hessians(1.0,lambda_pde,lambda_aux,hcc,hcs,hss);
   PetscMatrix<lm_Number>* lm_mat_h = dynamic_cast<PetscMatrix<lm_Number>*>(hcc);
@@ -156,7 +155,7 @@ get_nlp_info(Index num_proc, Index proc_id,
   mat = lm_mat_h->mat();
   MatGetInfo(mat,MAT_LOCAL,&info);
   nnz_h_lag_part += info.nz_used;
-  
+
   index_style = C_STYLE;
   DBG_PRINT( "LibMeshPDENLP::get_nlp_info finished" )
   libmeshPDE_->calc_type_ = LibMeshPDEBase::Values;
@@ -169,20 +168,20 @@ void LibMeshPDENLP::optim_var_libMesh2local(NumericVector<lm_Number>& state, Num
   int iVal = 0;
   int iOffset = 0;
   PetscVector<lm_Number>* p_vec = dynamic_cast<PetscVector<lm_Number>*>(&state);
-  Vec v = p_vec->vec();	
+  Vec v = p_vec->vec();
   PetscScalar *Vals;
   VecGetArray(v,&Vals);
-  for( iVal=0; iVal<=(state_last_-state_first_); ++iVal, ++iOffset)
+  for ( iVal=0; iVal<=(state_last_-state_first_); ++iVal, ++iOffset)
     *(plocalDest+iOffset) = Vals[iVal];
   VecRestoreArray(v,&Vals);
   p_vec = dynamic_cast<PetscVector<lm_Number>*>(&control);
-  v = p_vec->vec();	
+  v = p_vec->vec();
   VecGetArray(v,&Vals);
-  for( iVal=0; iVal<=(control_last_-control_first_); ++iVal, ++iOffset)
+  for ( iVal=0; iVal<=(control_last_-control_first_); ++iVal, ++iOffset)
     *(plocalDest+iOffset) = Vals[iVal];
   VecRestoreArray(v,&Vals);
   DBG_PRINT( "LibMeshPDENLP::optim_var_libMesh2local finished" );
-} 
+}
 
 void LibMeshPDENLP::optim_var_global2libMesh(const Number* pglobal, NumericVector<lm_Number>& state, NumericVector<lm_Number>& control)
 { // [state_proc0 contrl_proc0 state_proc1 contrl_proc1 .... state_procN contrl_procNn] -> local_state, local_cntrl
@@ -190,27 +189,27 @@ void LibMeshPDENLP::optim_var_global2libMesh(const Number* pglobal, NumericVecto
   int iVal = 0;
   int iOffset = n_first_;
   PetscVector<lm_Number>* p_vec = dynamic_cast<PetscVector<lm_Number>*>(&state);
-  Vec v = p_vec->vec();	
+  Vec v = p_vec->vec();
   PetscScalar *Vals;
   VecGetArray(v,&Vals);
-  for( iVal=0; iVal<=(state_last_-state_first_); ++iVal, ++iOffset)
+  for ( iVal=0; iVal<=(state_last_-state_first_); ++iVal, ++iOffset)
     Vals[iVal] = *(pglobal+iOffset);
   VecRestoreArray(v,&Vals);
   p_vec = dynamic_cast<PetscVector<lm_Number>*>(&control);
-  v = p_vec->vec();	
+  v = p_vec->vec();
   VecGetArray(v,&Vals);
-  for( iVal=0; iVal<=(control_last_-control_first_); ++iVal, ++iOffset)
+  for ( iVal=0; iVal<=(control_last_-control_first_); ++iVal, ++iOffset)
     Vals[iVal] = *(pglobal+iOffset);
   VecRestoreArray(v,&Vals);
   assert(iOffset == n_last_+1);
   DBG_PRINT( "LibMeshPDENLP::optim_var_global2libMesh finished" );
-} 
+}
 
-bool LibMeshPDENLP::get_bounds_info(Index num_proc, Index proc_id, 
-				    Index n, Index n_first, Index n_last,
-				    Number* x_l_part, Number* x_u_part,
-				    Index m, Index m_first, Index m_last,
-				    Number* g_l_part, Number* g_u_part)
+bool LibMeshPDENLP::get_bounds_info(Index num_proc, Index proc_id,
+                                    Index n, Index n_first, Index n_last,
+                                    Number* x_l_part, Number* x_u_part,
+                                    Index m, Index m_first, Index m_last,
+                                    Number* g_l_part, Number* g_u_part)
 {
   DBG_PRINT("LibMeshPDENLP::get_bounds_info called")
   AutoPtr<  NumericVector< lm_Number > > state_l = libmeshPDE_->getStateVector().clone();
@@ -226,8 +225,9 @@ bool LibMeshPDENLP::get_bounds_info(Index num_proc, Index proc_id,
   libMesh::NumericVector<Number>* pResidual;
   libmeshPDE_->calcPDE_residual(pResidual);
   int iVal=0;
-  for(iVal=0;iVal<=(pde_last_-pde_first_);++iVal){
-    g_l_part[iVal] = 0.0; g_u_part[iVal] = 0.0;
+  for (iVal=0;iVal<=(pde_last_-pde_first_);++iVal) {
+    g_l_part[iVal] = 0.0;
+    g_u_part[iVal] = 0.0;
   }
   int iAuxVal=0;
   PetscVector<lm_Number>* lm_vec_aux_l = dynamic_cast<PetscVector<lm_Number>*>(aux_constr_l.get());
@@ -237,8 +237,9 @@ bool LibMeshPDENLP::get_bounds_info(Index num_proc, Index proc_id,
   PetscScalar *Vals_l(NULL),*Vals_u(NULL);
   VecGetArray(vec_aux_l,&Vals_l);
   VecGetArray(vec_aux_u,&Vals_u);
-  for(iAuxVal=0;iAuxVal<=(aux_last_-aux_first_);++iVal,++iAuxVal) {
-    g_l_part[iVal] = Vals_l[iAuxVal]; g_u_part[iVal] = Vals_u[iAuxVal];
+  for (iAuxVal=0;iAuxVal<=(aux_last_-aux_first_);++iVal,++iAuxVal) {
+    g_l_part[iVal] = Vals_l[iAuxVal];
+    g_u_part[iVal] = Vals_u[iAuxVal];
   }
   VecRestoreArray(vec_aux_l,&Vals_l);
   VecRestoreArray(vec_aux_u,&Vals_u);
@@ -249,11 +250,11 @@ bool LibMeshPDENLP::get_bounds_info(Index num_proc, Index proc_id,
 
 bool
 LibMeshPDENLP::get_starting_point(Index num_proc, Index proc_id,
-				  Index n, Index n_first, Index n_last,
-				  bool init_x, Number* x_part,
-				  bool init_z, Number* z_L_part, Number* z_U_part,
-				  Index m, Index m_first, Index m_last,
-				  bool init_lambda, Number* lambda_part)
+                                  Index n, Index n_first, Index n_last,
+                                  bool init_x, Number* x_part,
+                                  bool init_z, Number* z_L_part, Number* z_U_part,
+                                  Index m, Index m_first, Index m_last,
+                                  bool init_lambda, Number* lambda_part)
 {
   DBG_PRINT( "LibMeshPDENLP::get_starting_point called" );
   assert(!init_z && !init_lambda);
@@ -279,8 +280,8 @@ void LibMeshPDENLP::update_x(const Number* x)
 
 bool
 LibMeshPDENLP::eval_f(Index num_proc, Index proc_id,
-		      Index n, Index n_first, Index n_last,
-		      const Number* x, bool new_x, Number& obj_value)
+                      Index n, Index n_first, Index n_last,
+                      const Number* x, bool new_x, Number& obj_value)
 {
   DBG_PRINT( "LibMeshPDENLP::eval_f called" );
   if (new_x) {
@@ -296,9 +297,9 @@ LibMeshPDENLP::eval_f(Index num_proc, Index proc_id,
 
 bool
 LibMeshPDENLP::eval_grad_f(Index num_proc, Index proc_id,
-			   Index n,  Index n_first, Index n_last,
-			   const Number* x, bool new_x,
-			   Number* grad_f_part)
+                           Index n,  Index n_first, Index n_last,
+                           const Number* x, bool new_x,
+                           Number* grad_f_part)
 {
   DBG_PRINT( "LibMeshPDENLP::eval_grad_f called" );
   if (new_x) {
@@ -316,9 +317,9 @@ LibMeshPDENLP::eval_grad_f(Index num_proc, Index proc_id,
 
 bool
 LibMeshPDENLP::eval_g(Index num_proc, Index proc_id,
-		      Index n, const Number* x, bool new_x,
-		      Index m, Index m_first, Index m_last,
-		      Number* g_part)
+                      Index n, const Number* x, bool new_x,
+                      Index m, Index m_first, Index m_last,
+                      Number* g_part)
 {
   // g = [Aux_Proc1 PDE_Proc_1 Aux_Proc2 PDE_Proc_2 .... Aux_ProcN PDE_ProcN]
   DBG_PRINT( "LibMeshPDENLP::eval_g called" );
@@ -334,7 +335,7 @@ LibMeshPDENLP::eval_g(Index num_proc, Index proc_id,
   PetscScalar *Vals = NULL;
   VecGetArray(v,&Vals);
   int iVal;
-  for(iVal=0; iVal<=(pde_last_-pde_first_); ++iVal) {
+  for (iVal=0; iVal<=(pde_last_-pde_first_); ++iVal) {
     g_part[iVal] = Vals[iVal];
   }
   VecRestoreArray(v,&Vals);
@@ -346,7 +347,7 @@ LibMeshPDENLP::eval_g(Index num_proc, Index proc_id,
   v = p_vec->vec();
   VecGetArray(v,&Vals);
   int iAuxVal(0);
-  for(int iAuxVal=0;iAuxVal<=(aux_last_-aux_first_);++iAuxVal,++iVal) {
+  for (int iAuxVal=0;iAuxVal<=(aux_last_-aux_first_);++iAuxVal,++iVal) {
     g_part[iVal] = Vals[iAuxVal];
   }
   VecRestoreArray(v,&Vals);
@@ -358,10 +359,10 @@ LibMeshPDENLP::eval_g(Index num_proc, Index proc_id,
 
 bool
 LibMeshPDENLP::eval_jac_g(Index num_proc, Index proc_id,
-			  Index n, const Number* x, bool new_x,
-			  Index m, Index m_first, Index m_last,
-			  Index nele_jac_part, Index* iRow_part,
-			  Index *jCol_part, Number* values_part)
+                          Index n, const Number* x, bool new_x,
+                          Index m, Index m_first, Index m_last,
+                          Index nele_jac_part, Index* iRow_part,
+                          Index *jCol_part, Number* values_part)
 {
   DBG_PRINT( "LibMeshPDENLP::eval_jac_g called" );
   if (new_x) {
@@ -403,17 +404,17 @@ LibMeshPDENLP::eval_jac_g(Index num_proc, Index proc_id,
     MPI_Allgather(&state_last_ ,1,MPI_INT,p_state_last ,1,MPI_INT,MPI_COMM_WORLD);
     MPI_Allgather(&control_first_,1,MPI_INT,p_control_first,1,MPI_INT,MPI_COMM_WORLD);
     MPI_Allgather(&control_last_ ,1,MPI_INT,p_control_last ,1,MPI_INT,MPI_COMM_WORLD);
-  
+
     DBG_PRINT( "p_state_first[0]:"<<p_state_first[0] );
     DBG_PRINT( "p_state_last[0]:"<<p_state_last[0] );
     DBG_PRINT( "p_control_first[0]:"<<p_control_first[0] );
     DBG_PRINT( "p_control_last[0]:"<<p_control_last[0] );
 
     int i_var(0);
-    for(int i_proc=0;i_proc<num_proc;++i_proc) {
+    for (int i_proc=0;i_proc<num_proc;++i_proc) {
       p_optvar_first[i_proc] = i_var;
       i_var += (p_state_last[i_proc]-p_state_first[i_proc]+1) +
-              (p_control_last[i_proc]-p_control_first[i_proc]+1);
+               (p_control_last[i_proc]-p_control_first[i_proc]+1);
       p_loc_control_offset[i_proc] = p_state_last[i_proc] - p_state_first[i_proc] + 1;
     }
 
@@ -428,21 +429,21 @@ LibMeshPDENLP::eval_jac_g(Index num_proc, Index proc_id,
       // state
       MatGetRow(mat_state, irow, &ncols, &cols, PETSC_NULL);
       for (int i=0; i<ncols; ++i) {
-	      iRow_part[iOffset] = (irow-pde_first_);
+        iRow_part[iOffset] = (irow-pde_first_);
         unsigned int i_var_glob = GlobStateControlIdx2OptVarIdx(cols[i],num_proc,p_state_first,p_state_last,
-                                                    p_optvar_first,NULL,prev_proc);
-	      jCol_part[iOffset] = i_var_glob;//n_first_state + (cols[i]-state_first_);
-	      iOffset++;
+                                  p_optvar_first,NULL,prev_proc);
+        jCol_part[iOffset] = i_var_glob;//n_first_state + (cols[i]-state_first_);
+        iOffset++;
       }
       MatRestoreRow(mat_state,irow,&ncols,&cols,PETSC_NULL);
       // control
       MatGetRow(mat_control, irow, &ncols, &cols, PETSC_NULL);
       for (int i=0; i<ncols; ++i) {
-	      iRow_part[iOffset] = (irow-pde_first_);
+        iRow_part[iOffset] = (irow-pde_first_);
         unsigned int i_var_glob = GlobStateControlIdx2OptVarIdx(cols[i],num_proc,
-                            p_control_first,p_control_last,p_optvar_first,p_loc_control_offset,prev_proc);
-	      jCol_part[iOffset] = i_var_glob;//n_first_control + (cols[i]-control_first_);
-	      iOffset++;
+                                  p_control_first,p_control_last,p_optvar_first,p_loc_control_offset,prev_proc);
+        jCol_part[iOffset] = i_var_glob;//n_first_control + (cols[i]-control_first_);
+        iOffset++;
       }
       MatRestoreRow(mat_control,irow,&ncols,&cols,PETSC_NULL);
     }
@@ -459,7 +460,7 @@ LibMeshPDENLP::eval_jac_g(Index num_proc, Index proc_id,
       for (int i=0; i<ncols; ++i) {
         iRow_part[iOffset] = m_loc_aux_offset + (irow-aux_first_);
         unsigned int i_var_glob = GlobStateControlIdx2OptVarIdx(cols[i],num_proc,p_state_first,p_state_last,
-                                                    p_optvar_first,NULL,prev_proc);
+                                  p_optvar_first,NULL,prev_proc);
         jCol_part[iOffset] = i_var_glob;//n_first_state + (cols[i]-state_first_);
         iOffset++;
       }
@@ -469,7 +470,7 @@ LibMeshPDENLP::eval_jac_g(Index num_proc, Index proc_id,
       for (int i=0; i<ncols; ++i) {
         iRow_part[iOffset] = m_loc_aux_offset + (irow-aux_first_);
         unsigned int i_var_glob = GlobStateControlIdx2OptVarIdx(cols[i],num_proc,
-                            p_control_first,p_control_last,p_optvar_first,p_loc_control_offset,prev_proc);
+                                  p_control_first,p_control_last,p_optvar_first,p_loc_control_offset,prev_proc);
         jCol_part[iOffset] = i_var_glob;//n_first_control + (cols[i]-control_first_);
         iOffset++;
       }
@@ -492,14 +493,14 @@ LibMeshPDENLP::eval_jac_g(Index num_proc, Index proc_id,
       MatGetRow(mat_state, irow, &ncols, PETSC_NULL, &vals);
       for (int i=0; i<ncols; ++i) {
         values_part[iOffset] = vals[i];
-	      iOffset++;
+        iOffset++;
       }
       MatRestoreRow(mat_state,irow,&ncols,PETSC_NULL,&vals);
       // control
       MatGetRow(mat_control, irow, &ncols, PETSC_NULL, &vals);
       for (int i=0; i<ncols; ++i) {
-	      values_part[iOffset] = vals[i];
-	      iOffset++;
+        values_part[iOffset] = vals[i];
+        iOffset++;
       }
       MatRestoreRow(mat_control,irow,&ncols,PETSC_NULL,&vals);
     }
@@ -525,8 +526,7 @@ LibMeshPDENLP::eval_jac_g(Index num_proc, Index proc_id,
       MatRestoreRow(mat_aux_control,irow,&ncols,PETSC_NULL,&vals);
     }
   }
-  if(nele_jac_part != iOffset)
-  {
+  if (nele_jac_part != iOffset) {
     DBG_PRINT( "n_ele_jac_part=" << nele_jac_part << "!=" << iOffset << "=iOffset" );
     assert(nele_jac_part == iOffset);
   }
@@ -535,43 +535,41 @@ LibMeshPDENLP::eval_jac_g(Index num_proc, Index proc_id,
 }
 
 int LibMeshPDENLP::GlobStateControlIdx2OptVarIdx(int i_var, int num_of_procs,
-                                   const int* proc_first_arr, const int* proc_last_arr,
-                                   const int* proc_var_first, const int* proc_loc_offset, int & prev_proc)
+    const int* proc_first_arr, const int* proc_last_arr,
+    const int* proc_var_first, const int* proc_loc_offset, int & prev_proc)
 {
   // start with previous proc, in hope to accelerate search, if distribution is contigious
   int rv;
-  for(int i_proc=prev_proc;i_proc<num_of_procs; ++i_proc) {
-    if( (proc_first_arr[i_proc]<=i_var)
-         && (proc_last_arr[i_proc]>=i_var) )
-    {
+  for (int i_proc=prev_proc;i_proc<num_of_procs; ++i_proc) {
+    if ( (proc_first_arr[i_proc]<=i_var)
+         && (proc_last_arr[i_proc]>=i_var) ) {
       prev_proc = i_proc;
       rv = proc_var_first[i_proc] + (i_var-proc_first_arr[i_proc]);
-      if(proc_loc_offset)
+      if (proc_loc_offset)
         rv += proc_loc_offset[i_proc];
       return rv;
     }
   }
 
-  for(int i_proc=0;i_proc<prev_proc; ++i_proc) {
-    if( (proc_first_arr[i_proc]<=i_var)
-         && (proc_last_arr[i_proc]>=i_var) )
-    {
+  for (int i_proc=0;i_proc<prev_proc; ++i_proc) {
+    if ( (proc_first_arr[i_proc]<=i_var)
+         && (proc_last_arr[i_proc]>=i_var) ) {
       prev_proc = i_proc;
       rv = proc_var_first[i_proc] + (i_var-proc_first_arr[i_proc]);
-      if(proc_loc_offset)
+      if (proc_loc_offset)
         rv += proc_loc_offset[i_proc];
       return rv;
     }
   }
-  
+
   int sz;
   MPI_Comm_size(MPI_COMM_WORLD,&sz);
   DBG_PRINT( "LibMeshPDENLP::GlobStateControlIdx2OptVarIdx(" << i_var << ")=? (no proc found)" );
   std::cout << "proc_first_arr:";
-  for(int i=0;i<sz;i++) std::cout << ", " << proc_first_arr[i];
+  for (int i=0;i<sz;i++) std::cout << ", " << proc_first_arr[i];
   std::cout << std::endl;
   std::cout << "proc_last_arr:";
-  for(int i=0;i<sz;i++) std::cout << ", " << proc_last_arr[i];
+  for (int i=0;i<sz;i++) std::cout << ", " << proc_last_arr[i];
   std::cout << std::endl;
 
   assert(false);
@@ -579,13 +577,13 @@ int LibMeshPDENLP::GlobStateControlIdx2OptVarIdx(int i_var, int num_of_procs,
 
 bool
 LibMeshPDENLP::eval_h(Index num_proc, Index proc_id,
-		      Index n, Index n_first, Index n_last,
-		      const Number* x, bool new_x, Number obj_factor,
-		      Index m, Index m_first, Index m_last,
-		      const Number* lambda,
-		      bool new_lambda, Index nele_hess_part,
-		      Index* iRow_part, Index* jCol_part,
-		      Number* values_part)
+                      Index n, Index n_first, Index n_last,
+                      const Number* x, bool new_x, Number obj_factor,
+                      Index m, Index m_first, Index m_last,
+                      const Number* lambda,
+                      bool new_lambda, Index nele_hess_part,
+                      Index* iRow_part, Index* jCol_part,
+                      Number* values_part)
 {
   DBG_PRINT( "LibMeshPDENLP::eval_h called" );
   if (new_x) {
@@ -608,11 +606,11 @@ LibMeshPDENLP::eval_h(Index num_proc, Index proc_id,
   lambda_aux.resize(m_aux);
 
   int m_aux_first =m_first+(pde_last_-pde_first_+1);
-  if(NULL==values_part) {
-    for(int i_constr=0;i_constr<m_pde;++i_constr) {
+  if (NULL==values_part) {
+    for (int i_constr=0;i_constr<m_pde;++i_constr) {
       lambda_pde(i_constr) = 1.0;
     }
-    for( int i_constr=0;i_constr<m_aux;++i_constr) {
+    for ( int i_constr=0;i_constr<m_aux;++i_constr) {
       lambda_aux(i_constr) = 1.0;
     }
   }
@@ -627,12 +625,11 @@ LibMeshPDENLP::eval_h(Index num_proc, Index proc_id,
     MPI_Allgather(&aux_last_ ,1,MPI_INT,p_aux_last ,1,MPI_INT,MPI_COMM_WORLD);
 
     int iVal(0);
-    for(int i_proc=0;i_proc<num_proc;i_proc++)
-    {
-      for(int i_constr=0;i_constr<=(p_pde_last[i_proc]-p_pde_first[i_proc]);++i_constr) {
+    for (int i_proc=0;i_proc<num_proc;i_proc++) {
+      for (int i_constr=0;i_constr<=(p_pde_last[i_proc]-p_pde_first[i_proc]);++i_constr) {
         lambda_pde(i_constr+p_pde_first[i_proc]) = lambda[iVal++];
       }
-      for(int i_constr=0;i_constr<=(p_aux_last[i_proc]-p_aux_first[i_proc]);++i_constr) {
+      for (int i_constr=0;i_constr<=(p_aux_last[i_proc]-p_aux_first[i_proc]);++i_constr) {
         lambda_aux(i_constr+p_aux_first[i_proc]) = lambda[iVal++];
       }
     }
@@ -645,7 +642,7 @@ LibMeshPDENLP::eval_h(Index num_proc, Index proc_id,
   libMesh::SparseMatrix<Number> *Hcc, *Hcs, *Hss;
   libmeshPDE_->calc_hessians(obj_factor, lambda_pde, lambda_aux, Hcc, Hcs, Hss);
   unsigned int n_control = Hcc->m();
-  unsigned int n_state = Hss->m(); 
+  unsigned int n_state = Hss->m();
   Mat mat_hcc = (dynamic_cast<PetscMatrix<lm_Number>*>(Hcc))->mat();
   Mat mat_hcs = (dynamic_cast<PetscMatrix<lm_Number>*>(Hcs))->mat();
   Mat mat_hss = (dynamic_cast<PetscMatrix<lm_Number>*>(Hss))->mat();
@@ -654,8 +651,7 @@ LibMeshPDENLP::eval_h(Index num_proc, Index proc_id,
   const PetscInt *cols;
   const PetscScalar* vals;
   unsigned long iOffset(0);
-  if(NULL==values_part)
-  {
+  if (NULL==values_part) {
     int *p_state_first = new int[num_proc];
     int *p_state_last = new int[num_proc];
     int *p_control_first = new int[num_proc];
@@ -667,24 +663,24 @@ LibMeshPDENLP::eval_h(Index num_proc, Index proc_id,
     MPI_Allgather(&control_first_,1,MPI_INT,p_control_first,1,MPI_INT,MPI_COMM_WORLD);
     MPI_Allgather(&control_last_ ,1,MPI_INT,p_control_last ,1,MPI_INT,MPI_COMM_WORLD);
     int i_var(0);
-    for(int i_proc=0;i_proc<num_proc;++i_proc) {
+    for (int i_proc=0;i_proc<num_proc;++i_proc) {
       p_optvar_first[i_proc] = i_var;
       i_var += (p_state_last[i_proc]-p_state_first[i_proc]+1) +
-              (p_control_last[i_proc]-p_control_first[i_proc]+1);
+               (p_control_last[i_proc]-p_control_first[i_proc]+1);
       p_loc_control_offset[i_proc] = p_state_last[i_proc] - p_state_first[i_proc] + 1;
     }
 
     int prev_proc_row(0);
     int prev_proc_col(0);
-    int i_loc_state_offset = state_last_-state_first_+1; 
+    int i_loc_state_offset = state_last_-state_first_+1;
     // state_state
-    for(unsigned int i_row=0;i_row<n_state;++i_row) {
+    for (unsigned int i_row=0;i_row<n_state;++i_row) {
       MatGetRow(mat_hss, i_row, &ncols, &cols, PETSC_NULL);
       unsigned int i_var_row = GlobStateControlIdx2OptVarIdx(i_row,num_proc,
-                                    p_state_first,p_state_last,p_optvar_first,NULL,prev_proc_row);
-      for(unsigned int i_col=0; i_col<ncols; ++i_col) {
+                               p_state_first,p_state_last,p_optvar_first,NULL,prev_proc_row);
+      for (unsigned int i_col=0; i_col<ncols; ++i_col) {
         unsigned int i_var_col = GlobStateControlIdx2OptVarIdx(cols[i_col],num_proc,
-                                    p_state_first,p_state_last,p_optvar_first,NULL,prev_proc_col);
+                                 p_state_first,p_state_last,p_optvar_first,NULL,prev_proc_col);
         iRow_part[iOffset] = i_var_row;
         jCol_part[iOffset] = i_var_col;
         ++iOffset;
@@ -695,13 +691,13 @@ LibMeshPDENLP::eval_h(Index num_proc, Index proc_id,
     // control control
     prev_proc_row=0;
     prev_proc_col=0;
-    for(unsigned int i_row=0;i_row<n_control;++i_row) {
+    for (unsigned int i_row=0;i_row<n_control;++i_row) {
       MatGetRow(mat_hcc, i_row, &ncols, &cols, PETSC_NULL);
       unsigned int i_var_row = GlobStateControlIdx2OptVarIdx(i_row,num_proc,
-                            p_control_first,p_control_last,p_optvar_first,p_loc_control_offset,prev_proc_row);
-      for(unsigned int i_col=0; i_col<ncols; ++i_col) {
+                               p_control_first,p_control_last,p_optvar_first,p_loc_control_offset,prev_proc_row);
+      for (unsigned int i_col=0; i_col<ncols; ++i_col) {
         unsigned int i_var_col = GlobStateControlIdx2OptVarIdx(cols[i_col],num_proc,p_control_first,p_control_last,
-                                                    p_optvar_first,p_loc_control_offset,prev_proc_col);
+                                 p_optvar_first,p_loc_control_offset,prev_proc_col);
         iRow_part[iOffset] = i_var_row;
         jCol_part[iOffset] = i_var_col;
         ++iOffset;
@@ -712,13 +708,13 @@ LibMeshPDENLP::eval_h(Index num_proc, Index proc_id,
     // control state
     prev_proc_row=0;
     prev_proc_col=0;
-    for(unsigned int i_row=0;i_row<n_control;++i_row) {
+    for (unsigned int i_row=0;i_row<n_control;++i_row) {
       MatGetRow(mat_hcs, i_row, &ncols, &cols, PETSC_NULL);
       unsigned int i_var_row = GlobStateControlIdx2OptVarIdx(i_row,num_proc,
-                            p_control_first,p_control_last,p_optvar_first,p_loc_control_offset,prev_proc_row);
-      for(unsigned int i_col=0; i_col<ncols; ++i_col) {
+                               p_control_first,p_control_last,p_optvar_first,p_loc_control_offset,prev_proc_row);
+      for (unsigned int i_col=0; i_col<ncols; ++i_col) {
         unsigned int i_var_col = GlobStateControlIdx2OptVarIdx(cols[i_col],num_proc,p_state_first,p_state_last,
-                                                    p_optvar_first,NULL,prev_proc_col);
+                                 p_optvar_first,NULL,prev_proc_col);
         iRow_part[iOffset] = i_var_row;
         jCol_part[iOffset] = i_var_col;
         ++iOffset;
@@ -737,9 +733,9 @@ LibMeshPDENLP::eval_h(Index num_proc, Index proc_id,
   }
   else {
     // state_state
-    for(unsigned int i_row=0;i_row<n_state;++i_row) {
+    for (unsigned int i_row=0;i_row<n_state;++i_row) {
       MatGetRow(mat_hss, i_row, &ncols, PETSC_NULL, &vals);
-      for(unsigned int i_col=0; i_col<ncols; ++i_col) {
+      for (unsigned int i_col=0; i_col<ncols; ++i_col) {
         values_part[iOffset] = vals[i_col];
         ++iOffset;
       }
@@ -747,9 +743,9 @@ LibMeshPDENLP::eval_h(Index num_proc, Index proc_id,
     }
 
     // control control
-    for(unsigned int i_row=0;i_row<n_control;++i_row) {
+    for (unsigned int i_row=0;i_row<n_control;++i_row) {
       MatGetRow(mat_hcc, i_row, &ncols, &cols, PETSC_NULL);
-      for(unsigned int i_col=0; i_col<ncols; ++i_col) {
+      for (unsigned int i_col=0; i_col<ncols; ++i_col) {
         values_part[iOffset] = vals[i_col];
         ++iOffset;
       }
@@ -757,9 +753,9 @@ LibMeshPDENLP::eval_h(Index num_proc, Index proc_id,
     }
 
     // control state
-    for(unsigned int i_row=0;i_row<n_control;++i_row) {
+    for (unsigned int i_row=0;i_row<n_control;++i_row) {
       MatGetRow(mat_hcs, i_row, &ncols, &cols, PETSC_NULL);
-      for(unsigned int i_col=0; i_col<ncols; ++i_col) {
+      for (unsigned int i_col=0; i_col<ncols; ++i_col) {
         values_part[iOffset] = vals[i_col];
         ++iOffset;
       }
@@ -773,11 +769,11 @@ LibMeshPDENLP::eval_h(Index num_proc, Index proc_id,
 }
 
 void LibMeshPDENLP::finalize_solution(SolverReturn status,
-                                   Index n, const Number* x, const Number* z_L, const Number* z_U,
-                                   Index m, const Number* g, const Number* lambda,
-                                   Number obj_value,
-                                   const IpoptData* ip_data,
-                                   IpoptCalculatedQuantities* ip_cq)
+                                      Index n, const Number* x, const Number* z_L, const Number* z_U,
+                                      Index m, const Number* g, const Number* lambda,
+                                      Number obj_value,
+                                      const IpoptData* ip_data,
+                                      IpoptCalculatedQuantities* ip_cq)
 {
   update_x(x);
   libmeshPDE_->Write2File("Sol");
