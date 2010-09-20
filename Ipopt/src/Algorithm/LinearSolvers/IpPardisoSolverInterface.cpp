@@ -192,7 +192,7 @@ namespace Ipopt
     roptions->AddLowerBoundedIntegerOption(
       "pardiso_iter_max_levels",
       "Maximum Size of Grid Levels",
-      1, 10000,
+      1, 10,
       "DPARM(4)");
     roptions->AddBoundedNumberOption(
       "pardiso_iter_dropping_factor",
