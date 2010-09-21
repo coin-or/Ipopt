@@ -237,22 +237,22 @@ namespace Ipopt
     if (Jnlst().ProduceOutput(J_DETAILED, J_MAIN)) {
       Jnlst().Printf(J_DETAILED, J_MAIN, "objective scaling factor = %g\n", df_);
       if (IsValid(dx_)) {
-        Jnlst().Printf(J_VECTOR, J_MAIN, "x scaling provided\n");
+        Jnlst().Printf(J_DETAILED, J_MAIN, "x scaling provided\n");
       }
       else {
-        Jnlst().Printf(J_VECTOR, J_MAIN, "No x scaling provided\n");
+        Jnlst().Printf(J_DETAILED, J_MAIN, "No x scaling provided\n");
       }
       if (IsValid(dc)) {
-        Jnlst().Printf(J_VECTOR, J_MAIN, "c scaling provided\n");
+        Jnlst().Printf(J_DETAILED, J_MAIN, "c scaling provided\n");
       }
       else {
-        Jnlst().Printf(J_VECTOR, J_MAIN, "No c scaling provided\n");
+        Jnlst().Printf(J_DETAILED, J_MAIN, "No c scaling provided\n");
       }
       if (IsValid(dd)) {
-        Jnlst().Printf(J_VECTOR, J_MAIN, "d scaling provided\n");
+        Jnlst().Printf(J_DETAILED, J_MAIN, "d scaling provided\n");
       }
       else {
-        Jnlst().Printf(J_VECTOR, J_MAIN, "No d scaling provided\n");
+        Jnlst().Printf(J_DETAILED, J_MAIN, "No d scaling provided\n");
       }
     }
 
