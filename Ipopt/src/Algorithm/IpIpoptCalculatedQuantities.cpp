@@ -1479,18 +1479,30 @@ namespace Ipopt
 
       SmartPtr<const Vector> d = curr_d();
 
-      SmartPtr<Vector> d_viol_L = ip_nlp_->d_L()->MakeNewCopy();
-      ip_nlp_->Pd_L()->TransMultVector(-1., *d, 1., *d_viol_L);
-      SmartPtr<Vector> tmp = d_viol_L->MakeNew();
-      tmp->Set(0.);
-      d_viol_L->ElementWiseMax(*tmp);
+      SmartPtr<const Vector> d_L = ip_nlp_->d_L();
+      SmartPtr<Vector> d_viol_L = d_L->MakeNew();
+      if (d_L->Dim()>0) {
+        SmartPtr<Vector> d_viol = d->MakeNewCopy();
+        ip_nlp_->Pd_L()->MultVector(1., *d_L, -1., *d_viol);
+        SmartPtr<const Vector> d_viol2 = ip_nlp_->NLP_scaling()->unapply_vector_scaling_d(ConstPtr(d_viol));
+        ip_nlp_->Pd_L()->TransMultVector(1., *d_viol2, 0., *d_viol_L);
+        SmartPtr<Vector> tmp = d_viol_L->MakeNew();
+        tmp->Set(0.);
+        d_viol_L->ElementWiseMax(*tmp);
+      }
       DBG_PRINT_VECTOR(2, "d_viol_L", *d_viol_L);
 
-      SmartPtr<Vector> d_viol_U = ip_nlp_->d_U()->MakeNewCopy();
-      ip_nlp_->Pd_U()->TransMultVector(-1., *d, 1., *d_viol_U);
-      tmp = d_viol_U->MakeNew();
-      tmp->Set(0.);
-      d_viol_U->ElementWiseMin(*tmp);
+      SmartPtr<const Vector> d_U = ip_nlp_->d_U();
+      SmartPtr<Vector> d_viol_U = d_U->MakeNew();
+      if (d_U->Dim()>0) {
+        SmartPtr<Vector> d_viol = d->MakeNewCopy();
+        ip_nlp_->Pd_U()->MultVector(1., *d_U, -1., *d_viol);
+        SmartPtr<const Vector> d_viol2 = ip_nlp_->NLP_scaling()->unapply_vector_scaling_d(ConstPtr(d_viol));
+        ip_nlp_->Pd_U()->TransMultVector(1., *d_viol2, 0., *d_viol_U);
+        SmartPtr<Vector> tmp = d_viol_U->MakeNew();
+        tmp->Set(0.);
+        d_viol_U->ElementWiseMin(*tmp);
+      }
       DBG_PRINT_VECTOR(2, "d_viol_U", *d_viol_U);
 
       std::vector<SmartPtr<const Vector> > vecs(3);
