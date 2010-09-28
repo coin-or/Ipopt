@@ -234,25 +234,37 @@ namespace Ipopt
 
     df_ *= obj_scaling_factor_;
 
-    if (Jnlst().ProduceOutput(J_VECTOR, J_MAIN)) {
-      Jnlst().Printf(J_VECTOR, J_MAIN, "objective scaling factor = %g\n", df_);
+    if (Jnlst().ProduceOutput(J_DETAILED, J_MAIN)) {
+      Jnlst().Printf(J_DETAILED, J_MAIN, "objective scaling factor = %g\n", df_);
       if (IsValid(dx_)) {
-        dx_->Print(Jnlst(), J_VECTOR, J_MAIN, "x scaling vector");
+        Jnlst().Printf(J_DETAILED, J_MAIN, "x scaling provided\n");
       }
       else {
-        Jnlst().Printf(J_VECTOR, J_MAIN, "No x scaling provided\n");
+        Jnlst().Printf(J_DETAILED, J_MAIN, "No x scaling provided\n");
+      }
+      if (IsValid(dc)) {
+        Jnlst().Printf(J_DETAILED, J_MAIN, "c scaling provided\n");
+      }
+      else {
+        Jnlst().Printf(J_DETAILED, J_MAIN, "No c scaling provided\n");
+      }
+      if (IsValid(dd)) {
+        Jnlst().Printf(J_DETAILED, J_MAIN, "d scaling provided\n");
+      }
+      else {
+        Jnlst().Printf(J_DETAILED, J_MAIN, "No d scaling provided\n");
+      }
+    }
+
+    if (Jnlst().ProduceOutput(J_VECTOR, J_MAIN)) {
+      if (IsValid(dx_)) {
+        dx_->Print(Jnlst(), J_VECTOR, J_MAIN, "x scaling vector");
       }
       if (IsValid(dc)) {
         dc->Print(Jnlst(), J_VECTOR, J_MAIN, "c scaling vector");
       }
-      else {
-        Jnlst().Printf(J_VECTOR, J_MAIN, "No c scaling provided\n");
-      }
       if (IsValid(dd)) {
         dd->Print(Jnlst(), J_VECTOR, J_MAIN, "d scaling vector");
-      }
-      else {
-        Jnlst().Printf(J_VECTOR, J_MAIN, "No d scaling provided\n");
       }
     }
 
