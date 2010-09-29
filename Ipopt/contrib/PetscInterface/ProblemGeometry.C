@@ -128,6 +128,7 @@ void ProblemGeometry::AddAC(const std::vector<double>& min, const std::vector<do
   _AC.push_back(item);
 }
 
+#ifndef EXHAUST_AS_CONTROL
 void ProblemGeometry::AddExhaust(const std::vector<double>& min, const std::vector<double>& max)
 {
   assert(min.size()==GetDim());
@@ -142,6 +143,26 @@ void ProblemGeometry::AddExhaust(const std::vector<double>& min, const std::vect
   // No Control Parameter
   _Exh.push_back(item);
 }
+#else
+void ProblemGeometry::AddExhaust(const std::vector<double>& min, const std::vector<double>& max)
+{
+  assert(min.size()==GetDim());
+  assert(max.size()==GetDim());
+  _ItemAtWall.clear();
+  Item item(min,max);
+  unsigned int BoundMark = NextFreeBoundaryMarker++;
+  for ( int iBd=0;iBd<2*GetDim();iBd++)
+    item.BoundaryMarker[iBd] = BoundMark;
+  assert(_BoundCond.size()==BoundMark);
+  // TODO: Retried vExh from input
+  double vExh = 1.0;
+  double TempExh = 1e30;
+  _BoundCond.push_back(BoundaryCondition(0.0,+1.0,vExh,1.0,0.0,-TempExh)); // dPhi/dn = -vAc,T = TAc, i.e. 0 dT/dn = 1*T-TAc
+  _ParamIdx2BCParam.push_back(ControlParameter(BoundMark,2));
+  //_ParamIdx2BCParam.push_back(ControlParameter(BoundMark,5));
+  _Exh.push_back(item);
+}
+#endif
 
 void ProblemGeometry::ReadFromStream(std::istream& is)
 {

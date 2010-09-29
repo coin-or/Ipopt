@@ -24,12 +24,16 @@
 #include "vtk_io.h"
 #include "exodusII_io.h"
 #include "error_vector.h"
+#include "kelly_error_estimator.h"
+#include "fourth_error_estimators.h"
+#include "patch_recovery_error_estimator.h"
 #include "mesh_refinement.h"
 
 
 #include <fstream>
 
-//#define SCALE_AUX_BOUNDS
+#define SCALE_AUX_BOUNDS
+#define USE_NEW_DIRICHLET
 
 int GetProcID();
 
@@ -294,11 +298,25 @@ void LibMeshPDEBase::ConvertControl2PGData()
   PetscScalar *vals;
   ierr=VecGetArray(vec_gathrd,&vals);CHKERRV(ierr);
   int iControl = 0;
+#ifndef EXHAUST_AS_CONTROL
   assert(PG_._AC.size()==(unsigned int)sz);
   for (int iAC=0;iAC<sz;++iAC) {
     int BoundaryMarker = PG_._AC[iAC].BoundaryMarker[0];
     PG_._BoundCond[BoundaryMarker].PhiRhs = vals[iControl++];
   }
+#else
+  assert(PG_._AC.size()+PG_._Exh.size()==(unsigned int)sz);
+  for (int iAC=0;iAC<PG_._AC.size();++iAC) {
+    int BoundaryMarker = PG_._AC[iAC].BoundaryMarker[0];
+    PG_._BoundCond[BoundaryMarker].PhiRhs = vals[iControl++];
+    //printf("DEBUG: iAC = %d BoundaryMarker=%d PhiRhs = %e\n", iAC, BoundaryMarker, PG_._BoundCond[BoundaryMarker].PhiRhs);
+  }
+  for (int iExh=0;iExh<PG_._Exh.size();++iExh) {
+    int BoundaryMarker = PG_._Exh[iExh].BoundaryMarker[0];
+    PG_._BoundCond[BoundaryMarker].PhiRhs = vals[iControl++];
+    //printf("DEBUG: iExh = %d BoundaryMarker=%d PhiRhs = %e\n", iExh, BoundaryMarker, PG_._BoundCond[BoundaryMarker].PhiRhs);
+  }
+#endif
   ierr=VecRestoreArray(vec_gathrd,&vals);CHKERRV(ierr);
 //  DBG_PRINT("LibMeshPDEBase::ConvertControl2PGData finished");
 }
@@ -323,6 +341,7 @@ void LibMeshPDEBase::calc_objective_gradient(libMesh::NumericVector<libMesh::Num
 {
   DBG_PRINT("LibMeshPDEBase::calc_objective_gradient called");
   grad_state.zero();
+  grad_control.zero();
   ConvertControl2PGData();
   if (GetProcID()==0) {
     for (unsigned int iAC=0;iAC<PG_._AC.size();iAC++) {
@@ -413,8 +432,44 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
                 ElemRes(i) -= (Rhs/NeumCoef)*JxW_face[qp]*phi_face[i][qp];
             }
           }
+#ifdef USE_NEW_DIRICHLET
+	  else {
+	    assert(DiriCoef != 0.);
+	    // loop over all nodes and find the ones corresponding to this side
+	    for (unsigned int i=0; i<CurElem->n_nodes(); i++) {
+	      if (CurElem->is_node_on_side(i, side)) {
+		ElemRes(i) += DiriCoef*LocalSolution[i];
+		ElemRes(i) += Rhs;
+	      }
+	    }
+	  }
+#endif
         } // end if CurElem->neigbor(side)==NULL
       } // endfor side
+#ifndef USE_NEW_DIRICHLET
+#if 0
+      for (unsigned int side=0; side<CurElem->n_sides(); side++) {
+	if (CurElem->neighbor(side) == NULL) {
+          short int bc_id = mesh.boundary_info->boundary_id (CurElem,side);
+          assert(bc_id!=BoundaryInfo::invalid_id);
+          double NeumCoef, DiriCoef, Rhs;
+          // std::cout << "bc_id=" << bc_id << std::endl;
+          NeumCoef = BCs[bc_id].PhiNeumannCoef;
+          DiriCoef = BCs[bc_id].PhiDiricheltCoef;
+          Rhs = BCs[bc_id].PhiRhs;
+          if ( fabs(NeumCoef)<=eps) { // handle Dirichlet boundary conditions
+	    assert(DiriCoef != 0.);
+	    // loop over all nodes and find the ones corresponding to this side
+	    for (unsigned int i=0; i<CurElem->n_nodes(); i++) {
+	      if (CurElem->is_node_on_side(i, side)) {
+		ElemRes(i) = DiriCoef*LocalSolution[i];
+		ElemRes(i) += Rhs;
+	      }
+	    }
+	  }	  
+	}
+      }
+#endif
       for (unsigned int i=0;i<CurElem->n_nodes();i++) { // handle Dirichlet BC for nodes: set whole line to 0, set DiriCoef on main diagonal and Rhs in vector
         std::vector<short int> bc_id = mesh.boundary_info->boundary_ids(CurElem->get_node(i));
         if (bc_id.empty())
@@ -427,7 +482,14 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
         ElemRes(i) = BCs[bc_id[0]].PhiDiricheltCoef*LocalSolution[i];
         ElemRes(i) += BCs[bc_id[0]].PhiRhs;
       }
+#endif
     }
+#ifdef BLA_EXHAUST_AS_CONTROL
+    // add first node as diriclet to pin down velocity potential
+    if (GetProcID()==0 && itCurEl == mesh.active_local_elements_begin()) {
+      ElemRes(0) = LocalSolution[0];
+    }
+#endif
     /*std::cout << "Assembled ElemMat: " << std::endl;
     std::cout << ElemMat;
     std::cout << "Element points: " << std::endl;
@@ -575,10 +637,47 @@ void LibMeshPDEBase::calcPDE_jacobian_control(libMesh::SparseMatrix<libMesh::Num
               }
               break;
             }
-          } // end if(fabs(NeumCoef)>eps)
+	  } // end if(fabs(NeumCoef)>eps)
+#ifdef USE_NEW_DIRICHLET
+	  else {
+	    assert(DiriCoef != 0.);
+	    switch (PG_._ParamIdx2BCParam[icontrol].BCParameter) { // 0:PhiDiriCoef, 1: PhiNeumCoef, 2: PhiRhs, 3:TDiriCoef, 4: TNeumCoef, 5: TiRhs
+	    case 0:
+	      if (calc_type_ == StructureOnly)
+		for (unsigned int i=0; i<CurElem->n_nodes(); i++) {
+		  if (CurElem->is_node_on_side(i, side)) {
+		    jac_control_->add(dof_indices[i], icontrol,1.0);
+		  }
+		}
+	      else
+		for (unsigned int i=0; i<CurElem->n_nodes(); i++) {
+		  if (CurElem->is_node_on_side(i, side)) {
+		    jac_control_->add(dof_indices[i], icontrol,system.current_local_solution->el(dof_indices[i]));
+		  }
+		}
+	      break;
+	    case 1:
+	      assert(false); // derivative would be ... / NeumCoef^2, but NeumCoef < 1e-8
+	    case 2:
+	      if (calc_type_ == StructureOnly)
+		for (unsigned int i=0; i<CurElem->n_nodes(); i++) {
+		  if (CurElem->is_node_on_side(i, side)) {
+		    jac_control_->add(dof_indices[i], icontrol,1.0);
+		  }
+		}
+	      else
+		for (unsigned int i=0; i<CurElem->n_nodes(); i++) {
+		  if (CurElem->is_node_on_side(i, side)) {
+		    jac_control_->add(dof_indices[i], icontrol,1.0);
+		  }
+		}
+	    }
+	  } // end else(fabs(NeumCoef)>eps)
+#endif
         } // end Loop over Controls
       } // end if boundary side
     } // end side loop
+#ifndef USE_NEW_DIRICHLET
     for (unsigned int i=0;i<CurElem->n_nodes();i++) { // handle Dirichlet BC for nodes: set whole line to 0, set DiriCoef on main diagonal and Rhs in vector
       std::vector<short int> bc_id = mesh_.boundary_info->boundary_ids(CurElem->get_node(i));
       if (bc_id.empty())
@@ -608,6 +707,7 @@ void LibMeshPDEBase::calcPDE_jacobian_control(libMesh::SparseMatrix<libMesh::Num
         }
       }
     }
+#endif
     // dof_map.constrain_element_matrix(ElemMat, dof_indices); //There are no hangin nodes on the boundary, thus, no constraints needed
   }
   jac_control_->close();
@@ -696,8 +796,24 @@ void LibMeshPDEBase::assemble_Phi_PDE(EquationSystems& es, const std::string& sy
                   ElemMat(i,j) -= (DiriCoef/NeumCoef)*JxW_face[qp]*phi_face[i][qp];
           }
         }
+#ifdef USE_NEW_DIRICHLET
+	else {
+	  assert(DiriCoef != 0.);
+	  for (unsigned int i=0; i<CurElem->n_nodes(); i++) {
+	    if (CurElem->is_node_on_side(i, side)) {
+	      //for (j=0;j<CurElem->n_nodes();j++)
+	      //ElemMat(i,j) = 0;
+	      if (calc_type==StructureOnly)
+		ElemMat(i,i) += 1.0;
+	      else
+		ElemMat(i,i) += DiriCoef;
+	    }
+	  }
+	}
+#endif
       } // end if CurElem->neigbor(side)==NULL
     } // endfor side
+#ifndef USE_NEW_DIRICHLET
     for (unsigned int i=0;i<CurElem->n_nodes();i++) { // handle Dirichlet BC for nodes: set whole line to 0, set DiriCoef on main diagonal and Rhs in vector
       std::vector<short int> bc_id = mesh.boundary_info->boundary_ids(CurElem->get_node(i));
       if (bc_id.empty())
@@ -714,6 +830,15 @@ void LibMeshPDEBase::assemble_Phi_PDE(EquationSystems& es, const std::string& sy
       else
         ElemMat(i,i) = +BCs[bc_id[0]].PhiDiricheltCoef;
     }
+#endif
+#ifdef BLA_EXHAUST_AS_CONTROL
+    // add first node as diriclet to pin down velocity potential
+    if (GetProcID()==0 && itCurEl == mesh.active_local_elements_begin()) {
+      for (j=0;j<CurElem->n_nodes();j++)
+	ElemMat(0,j) = 0;
+      ElemMat(0,0) = 1.0;
+    }
+#endif
     dof_map.constrain_element_matrix(ElemMat, dof_indices); // Add constrains for hanging nodes (refinement)
     system.matrix->add_matrix(ElemMat, dof_indices);
   }
@@ -1334,20 +1459,72 @@ void LibMeshPDEBase::calcAux_jacobian_control(libMesh::SparseMatrix<libMesh::Num
 
 void LibMeshPDEBase::RefineMesh()
 {
-  DBG_PRINT( "LibMeshPDEBase::RefineMesh called" );
-  MeshRefinement rf(mesh_);
-  rf.uniformly_refine(1);
-  /*refine_fraction() = 1.0;
-    mesh_refinement.coarsen_fraction() = 0.0;
-    mesh_refinement.max_h_level() = 1;
+  // here we print the mesh boundary before refinement
+  if (0) {
+    MeshBase::const_element_iterator itCurEl = mesh_.active_local_elements_begin();
+    const MeshBase::const_element_iterator itEndEl = mesh_.active_local_elements_end();
+    for ( ; itCurEl != itEndEl; ++itCurEl) {
+      const Elem* CurElem = *itCurEl;
+      const unsigned int n_nodes = CurElem->n_nodes();
+      for (unsigned int side=0; side<CurElem->n_sides(); side++) {
+	if (CurElem->neighbor(side) == NULL) {
+	  short int bc_id = mesh_.boundary_info->boundary_id (CurElem,side);
+	  printf("side: %d bc_id: %2d ", side, bc_id);
+	  for (unsigned int node=0; node<n_nodes; node++) {
+	    if (CurElem->is_node_on_side(node, side)) {
+	      const Point point = CurElem->point(node);
+	      printf("x=(%d)%e y(%d)=%e ", node, point(0), node, point(1));
+	    }
+	  }
+	  printf("\n");
+	}
+      }
+    }
+    itCurEl = mesh_.active_local_elements_begin();
+    for ( ; itCurEl != itEndEl; ++itCurEl) {
+      const Elem* CurElem = *itCurEl;
+      for (unsigned int i=0;i<CurElem->n_nodes();i++) { // handle Dirichlet BC for nodes: set whole line to 0, set DiriCoef on main diagonal and Rhs in vector
+        std::vector<short int> bc_id = mesh_.boundary_info->boundary_ids(CurElem->get_node(i));
+	if (bc_id.size()>0) {
+	  printf("node: %d ", i);
+	  for (int j=0; j<bc_id.size(); j++) {
+	    printf("bc_id[%d] = %2d ", j, bc_id[j]);
+	  }
+	  printf("\n");
+	}
+      }
+    }    
+    fflush(stdout);
+  }
 
-    ErrorVector error;
-    KellyErrorEstimator error_estimator;
-    error_estimator.estimate_error(systemPhi, error);
-    mesh_refinement.flag_elements_by_error_fraction (error);
-    mesh_refinement.refine_and_coarsen_elements();
-    equation_systems.reinit();
+  DBG_PRINT( "LibMeshPDEBase::RefineMesh called" );
+  //MeshRefinement rf(mesh_);
+  //rf.uniformly_refine(1);
+  MeshRefinement mesh_refinement(mesh_);
+  mesh_refinement.refine_fraction() = 0.3;
+  mesh_refinement.coarsen_fraction() = 0.0;
+  mesh_refinement.max_h_level() = 100;
+  mesh_refinement.absolute_global_tolerance() = 1e-4;
+  
+  ErrorVector error;
+  KellyErrorEstimator error_estimator;
+  //LaplacianErrorEstimator error_estimator;
+  //PatchRecoveryErrorEstimator error_estimator;
+  ImplicitSystem& sys = lm_eqn_sys_->get_system<ImplicitSystem>("PDE");
+  error_estimator.estimate_error(sys, error);
+
+  /*
+  int size = error.size();
+  for (int i=0; i<size; ++i) {
+    printf("Error [%4d] = %e\n", i, error[i]);
+  }
   */
+
+  mesh_refinement.flag_elements_by_error_fraction(error);
+  //mesh_refinement.flag_elements_by_error_tolerance(error);
+  mesh_refinement.refine_and_coarsen_elements();
+  lm_eqn_sys_->reinit();
+
   std::cout << "RefineMesh" << std::endl;
   reinit();
   DBG_PRINT( "LibMeshPDEBase::RefineMesh finished" );
