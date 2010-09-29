@@ -1,0 +1,17 @@
+h=1
+Roomsize=2,1
+
+#AC:Min=%lf,%lf,%lf;Max=%lf,%lf,%lf;vAC=%lf;TAC=%lf
+AC:Min=0,0.025;Max=0,0.075;vAC=3;TAC=10;
+AC:Min=0,0.925;Max=0,0.975;vAC=3;TAC=10;
+
+#Exh:Min=%lf,%lf,%lf;Max=%lf,%lf,%lf
+Exh:Min=2,0.45;Max=2,0.55;
+
+#Equip:Min=%lf,%lf,%lf;Max=%lf,%lf,%lf;TEquip=%lf;kappa=%lf
+Equip:Min=0.4,0.2;Max=0.8,0.4;TEquip=35;kappa=1;
+Equip:Min=0.4,0.6;Max=0.8,0.8;TEquip=35;kappa=1;
+Equip:Min=1.2,0.2;Max=1.6,0.4;TEquip=35;kappa=1;
+Equip:Min=1.2,0.6;Max=1.6,0.8;TEquip=35;kappa=1;
+
+#End
