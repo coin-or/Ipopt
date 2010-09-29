@@ -118,6 +118,7 @@ Ipopt/contrib/PetscInterface/Problem0.dat -text
 Ipopt/contrib/PetscInterface/Problem0s.dat -text
 Ipopt/contrib/PetscInterface/Problem1.dat -text
 Ipopt/contrib/PetscInterface/Problem2.dat -text
+Ipopt/contrib/PetscInterface/Problem2D-simple.dat -text
 Ipopt/contrib/PetscInterface/Problem5.dat -text
 Ipopt/contrib/PetscInterface/Problem5a.dat -text
 Ipopt/contrib/PetscInterface/Problem6.dat -text
