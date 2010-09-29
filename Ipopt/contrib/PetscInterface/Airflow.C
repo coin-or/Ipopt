@@ -57,7 +57,7 @@ int main (int argc, char** argv)
     SmartPtr<NLP> nlp = new ParTNLPAdapter(partnlp, ConstPtr(app->Jnlst()));
     ApplicationReturnStatus status;
 
-    for (int i=0; i<10; i++) {
+    for (int i=0; i<60; i++) {
     { // Find initial point:
       // get bounds
       pLibMeshPDE->simulation_mode_=true;
@@ -154,7 +154,7 @@ int main (int argc, char** argv)
     }
 
     // Try one set of refinements
-    pLibMeshPDE->RefineMesh();
+    pLibMeshPDE->RefineMesh(i);
     }
     
     delete pLibMeshPDE;

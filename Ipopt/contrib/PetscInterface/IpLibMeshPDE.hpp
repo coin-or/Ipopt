@@ -138,7 +138,7 @@ public:
   virtual void InitProblemData(std::istream& is);
   virtual void reinit();
 
-  void RefineMesh();
+  void RefineMesh(int iter);
   bool simulation_mode_;
 protected:
   libMesh::SparseMatrix<libMesh::Number>* jac_control_;
