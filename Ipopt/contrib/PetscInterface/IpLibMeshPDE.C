@@ -325,7 +325,7 @@ void LibMeshPDEBase::calc_objective_part(Number& Val)
 {
   Val = 0.0;
   ConvertControl2PGData();
-  if (GetProcID()==0)
+  if (GetProcID()==0) {
     for (unsigned int iAC=0;iAC<PG_._AC.size();iAC++) {
       int BoundaryMarker = PG_._AC[iAC].BoundaryMarker[0];
 #ifdef QUAD_OBJ_FUNC
@@ -334,6 +334,20 @@ void LibMeshPDEBase::calc_objective_part(Number& Val)
       Val += PG_._BoundCond[BoundaryMarker].PhiRhs;
 #endif //QUAD_OBJ_FUNC
     }
+#ifdef EXHAUST_AS_CONTROL
+    // quadratic objective to make the first node in the first element zero
+    // this is to pin down the potential
+    const MeshBase& mesh = lm_eqn_sys_->get_mesh();
+    LinearImplicitSystem& system = lm_eqn_sys_->get_system<LinearImplicitSystem>("PDE");
+    const DofMap& dof_map = system.get_dof_map();
+    MeshBase::const_element_iterator itCurEl = mesh.active_local_elements_begin();
+    const Elem* CurElem = *itCurEl;
+    std::vector<unsigned int> dof_indices;
+    dof_map.dof_indices(CurElem, dof_indices);
+    Number Phi_first_node = system.current_local_solution->el(dof_indices[0]);
+    Val += Phi_first_node*Phi_first_node;
+#endif
+  }
 }
 
 void LibMeshPDEBase::calc_objective_gradient(libMesh::NumericVector<libMesh::Number>& grad_state,
@@ -352,7 +366,22 @@ void LibMeshPDEBase::calc_objective_gradient(libMesh::NumericVector<libMesh::Num
       grad_control.set(iAC,1.0);
 #endif //QUAD_OBJ_FUNC
     }
+#ifdef EXHAUST_AS_CONTROL
+    // quadratic objective to make the first node in the first element zero
+    // this is to pin down the potential
+    const MeshBase& mesh = lm_eqn_sys_->get_mesh();
+    LinearImplicitSystem& system = lm_eqn_sys_->get_system<LinearImplicitSystem>("PDE");
+    const DofMap& dof_map = system.get_dof_map();
+    MeshBase::const_element_iterator itCurEl = mesh.active_local_elements_begin();
+    const Elem* CurElem = *itCurEl;
+    std::vector<unsigned int> dof_indices;
+    dof_map.dof_indices(CurElem, dof_indices);
+    Number Phi_first_node = system.current_local_solution->el(dof_indices[0]);
+    grad_state.set(dof_indices[0], 2.*Phi_first_node);
+#endif
   }
+  grad_state.close();
+  grad_control.close();
   DBG_PRINT("LibMeshPDEBase::calc_objective_gradient finished");
 }
 
@@ -846,7 +875,7 @@ void LibMeshPDEBase::assemble_Phi_PDE(EquationSystems& es, const std::string& sy
 }
 
 // sigma and lambda_pde not used, avoid warning
-void LibMeshPDEBase::calc_hessians(Number /*sigma*/, libMesh::DenseVector<Number>& /*lambda_pde*/,
+void LibMeshPDEBase::calc_hessians(Number sigma, libMesh::DenseVector<Number>& lambda_pde,
                                    libMesh::DenseVector<Number>& lambda_aux,
                                    libMesh::SparseMatrix<Number>*& Hcc,
                                    libMesh::SparseMatrix<Number>*& Hcs,
@@ -922,6 +951,17 @@ void LibMeshPDEBase::calc_hessians(Number /*sigma*/, libMesh::DenseVector<Number
       }
     }
   }
+
+#ifdef EXHAUST_AS_CONTROL
+  if (GetProcID()==0 && sigma!=0.0) {
+    // quadratic objective to make the first node in the first element zero
+    // this is to pin down the potential
+    MeshBase::const_element_iterator itCurEl = mesh.active_local_elements_begin();
+    const Elem* CurElem = *itCurEl;
+    dof_map.dof_indices(CurElem, dof_indices);
+    hess_state_state_->add(dof_indices[0], dof_indices[0], 2.*sigma);
+  }
+#endif
 
   hess_control_control_->close();
   hess_state_state_->close();
@@ -1457,7 +1497,7 @@ void LibMeshPDEBase::calcAux_jacobian_control(libMesh::SparseMatrix<libMesh::Num
   DBG_PRINT( "LibMeshPDEBase::calcAux_jacobian_control finished" );
 }
 
-void LibMeshPDEBase::RefineMesh()
+void LibMeshPDEBase::RefineMesh(int iter)
 {
   // here we print the mesh boundary before refinement
   if (0) {
@@ -1501,10 +1541,10 @@ void LibMeshPDEBase::RefineMesh()
   //MeshRefinement rf(mesh_);
   //rf.uniformly_refine(1);
   MeshRefinement mesh_refinement(mesh_);
-  mesh_refinement.refine_fraction() = 0.3;
+  mesh_refinement.refine_fraction() = 1.0;
   mesh_refinement.coarsen_fraction() = 0.0;
   mesh_refinement.max_h_level() = 100;
-  mesh_refinement.absolute_global_tolerance() = 1e-4;
+  mesh_refinement.absolute_global_tolerance() = 1e-1;
   
   ErrorVector error;
   KellyErrorEstimator error_estimator;
@@ -1513,15 +1553,16 @@ void LibMeshPDEBase::RefineMesh()
   ImplicitSystem& sys = lm_eqn_sys_->get_system<ImplicitSystem>("PDE");
   error_estimator.estimate_error(sys, error);
 
-  /*
-  int size = error.size();
-  for (int i=0; i<size; ++i) {
-    printf("Error [%4d] = %e\n", i, error[i]);
+  if (0) {
+    // plot the error
+    char buffer[255];
+    sprintf(buffer, "error_mesh-%d.ex2", iter);
+    std::string fname(buffer);
+    error.plot_error(fname, mesh_);
   }
-  */
 
-  mesh_refinement.flag_elements_by_error_fraction(error);
-  //mesh_refinement.flag_elements_by_error_tolerance(error);
+  //mesh_refinement.flag_elements_by_error_fraction(error);
+  mesh_refinement.flag_elements_by_error_tolerance(error);
   mesh_refinement.refine_and_coarsen_elements();
   lm_eqn_sys_->reinit();
 
