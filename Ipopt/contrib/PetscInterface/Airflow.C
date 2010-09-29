@@ -56,6 +56,8 @@ int main (int argc, char** argv)
     SmartPtr<ParTNLP> partnlp = new LibMeshPDENLP(*pLibMeshPDE,*(app->Jnlst()));
     SmartPtr<NLP> nlp = new ParTNLPAdapter(partnlp, ConstPtr(app->Jnlst()));
     ApplicationReturnStatus status;
+
+    for (int i=0; i<10; i++) {
     { // Find initial point:
       // get bounds
       pLibMeshPDE->simulation_mode_=true;
@@ -150,6 +152,11 @@ int main (int argc, char** argv)
     else {
       printf("\n\n*** The problem FAILED!\n");
     }
+
+    // Try one set of refinements
+    pLibMeshPDE->RefineMesh();
+    }
+    
     delete pLibMeshPDE;
   }
 
