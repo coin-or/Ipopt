@@ -218,6 +218,7 @@ private:
   ProblemGeometry PG_;
   libMesh::Mesh mesh_;
   std::set<int> AuxConstrBoundMarkerList_;  // vector of all boundary markers, for which inequality constraints hold
+  int node_id_for_phi0_;
 
   void ConvertControl2PGData();
   void DetroySelfOwnedLibMeshPetscMatrix(SparseMatrix<Number>*& matrix);
