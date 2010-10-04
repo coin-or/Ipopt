@@ -5,6 +5,7 @@
 // $Id$
 //
 // Authors:  Johannes Huber, Andreas Waechter     IBM        2010-09-03
+//#include "mpi.h"
 #include "IpLibMeshPDE.hpp"
 #include "petsc.h"
 
@@ -31,10 +32,11 @@
 
 
 #include <fstream>
+#include <set>
 
 #define SCALE_AUX_BOUNDS
-#define USE_NEW_DIRICHLET
-#define PHI_IN_OBJECTIVE
+//#define USE_NEW_DIRICHLET
+//#define PHI_IN_OBJECTIVE
 
 int GetProcID();
 
@@ -61,7 +63,8 @@ LibMeshPDEBase::LibMeshPDEBase() :
     lm_control_ub_mults_(NULL),
     lm_aux_constr_mults_(NULL),
     min_airflow(1.0),
-    first_aux_constr_(0)
+    first_aux_constr_(0),
+    node_id_for_phi0_(-1)  
 {}
 
 // clear all matrices and vectors, but not problem geomatry data
@@ -287,6 +290,48 @@ void LibMeshPDEBase::reinit()
     MatCreateSeqAIJ(PETSC_COMM_SELF,n_control_global,n_control_global,8,PETSC_NULL,&petsc_mat);
     hess_control_control_ = new PetscMatrix<Number>(petsc_mat);
   }
+#ifndef PHI_IN_OBJECTIVE
+  // determine a node ID of an interior node that is used to pinn down Phi
+  if (GetProcID()==0) {
+    const MeshBase& mesh = lm_eqn_sys_->get_mesh();
+#if 0
+    // first mark all local nodes in an element that is at a boundary
+    std::set<unsigned int> outer_nodes;
+    MeshBase::const_element_iterator itCurEl = mesh.active_local_elements_begin();
+    const MeshBase::const_element_iterator itEndEl = mesh.active_local_elements_end();
+    for ( ; itCurEl != itEndEl; ++itCurEl) {
+      const Elem* CurElem = *itCurEl;
+      for (unsigned int side=0; side<CurElem->n_sides(); side++) {
+	if (CurElem->neighbor(side) == NULL) {
+	  for (unsigned int i=0;i<CurElem->n_nodes();i++) {
+	    printf("CurElem->node(i) = %d\n",CurElem->node(i));
+	    outer_nodes.insert(CurElem->node(i));
+	  }
+	  break;
+	}
+      }
+    }
+    node_id_for_phi0_ = -1;
+    // now go through the local nodes to find the first that is not in a boundary element
+    MeshBase::const_node_iterator itCurNode = mesh.local_nodes_begin();
+    const MeshBase::const_node_iterator itEndNode = mesh.local_nodes_end();
+    for ( ; itCurNode != itEndNode; ++itCurNode) {
+      const Node* CurNode = *itCurNode;
+      const unsigned int nodeID = CurNode->id();
+	    printf("nodeID = %d\n",nodeID);
+      std::set<unsigned int>::const_iterator it = outer_nodes.find(nodeID);
+      if (it == outer_nodes.end()) {
+	node_id_for_phi0_ = nodeID;
+	break;
+      }
+    }
+    assert(node_id_for_phi0_ != -1);
+#endif
+    node_id_for_phi0_ = mesh.n_nodes()-1;
+    printf("Node ID for pinning down Phi = %d\n", node_id_for_phi0_);
+    // TODO: broadcast
+  }
+#endif
 }
 
 void LibMeshPDEBase::DetroySelfOwnedLibMeshPetscMatrix(SparseMatrix<Number>*& matrix)
@@ -545,21 +590,29 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
           continue;
         if (bc_id[0]==BoundaryInfo::invalid_id)
           continue;
-        if ( fabs(BCs[bc_id[0]].PhiNeumannCoef) > eps )
-          continue;
+	double diricoeff = 1.;
+	double rhs = 0.;
+	if (bc_id[0]!=666666) {
+	  diricoeff = BCs[bc_id[0]].PhiDiricheltCoef;
+	  rhs = BCs[bc_id[0]].PhiRhs;
+	  if ( fabs(BCs[bc_id[0]].PhiNeumannCoef) > eps )
+	    continue;
+	}
         // std::cout << "Dirichlet: bc_id=" << bc_id[0] << std::endl;
-        ElemRes(i) = BCs[bc_id[0]].PhiDiricheltCoef*LocalSolution[i];
-        ElemRes(i) += BCs[bc_id[0]].PhiRhs;
+        ElemRes(i) = diricoeff*LocalSolution[i];
+        ElemRes(i) += rhs;
       }
 #endif
     }
 #ifdef EXHAUST_AS_CONTROL
+#if 0
 # ifndef PHI_IN_OBJECTIVE
     // add first node as diriclet to pin down velocity potential
     if (GetProcID()==0 && itCurEl == mesh.active_local_elements_begin()) {
       ElemRes(0) += 1e20*LocalSolution[0];
     }
 # endif
+#endif
 #endif
     /*std::cout << "Assembled ElemMat: " << std::endl;
     std::cout << ElemMat;
@@ -571,7 +624,13 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
     dof_map.constrain_element_vector(ElemRes, dof_indices); // Add constrains for hanging nodes (refinement)
     //std::cout << "Constrained ElemMat: " << std::endl;
     //std::cout << ElemMat;
-
+#ifndef PHI_IN_OBJECTIVE
+    for (unsigned int i=0;i<CurElem->n_nodes();i++) { // handle Dirichlet BC for nodes: set whole line to 0, set DiriCoef on main diagonal and Rhs in vector
+      if(CurElem->node(i)==node_id_for_phi0_) {
+        ElemRes(i) = LocalSolution[i];
+      }
+    }
+#endif
     lm_pde_residual_vec_->add_vector(ElemRes, dof_indices);
   }
   lm_pde_residual_vec_->close();
@@ -891,18 +950,26 @@ void LibMeshPDEBase::assemble_Phi_PDE(EquationSystems& es, const std::string& sy
         continue;
       if (bc_id[0]==BoundaryInfo::invalid_id)
         continue;
-      if ( fabs(BCs[bc_id[0]].PhiNeumannCoef) > eps )
-        continue;
+      //if ( fabs(BCs[bc_id[0]].PhiNeumannCoef) > eps )
+      //continue;
       // std::cout << "Dirichlet: bc_id=" << bc_id[0] << std::endl;
+      double diricoeff = 1.;
+      if (bc_id[0]!=666666) {
+	diricoeff = +BCs[bc_id[0]].PhiDiricheltCoef;
+	if ( fabs(BCs[bc_id[0]].PhiNeumannCoef) > eps )
+	  continue;
+      }
+      printf("bc_id[0] = %d\n", bc_id[0]);
       for (j=0;j<CurElem->n_nodes();j++)
         ElemMat(i,j)=0;
       if (calc_type==StructureOnly)
         ElemMat(i,i) = 1.0;
       else
-        ElemMat(i,i) = +BCs[bc_id[0]].PhiDiricheltCoef;
+        ElemMat(i,i) = diricoeff;
     }
 #endif
 #ifdef EXHAUST_AS_CONTROL
+#if 0
 # ifndef PHI_IN_OBJECTIVE
     // add first node as diriclet to pin down velocity potential
     if (GetProcID()==0 && itCurEl == mesh.active_local_elements_begin()) {
@@ -910,7 +977,17 @@ void LibMeshPDEBase::assemble_Phi_PDE(EquationSystems& es, const std::string& sy
     }
 # endif
 #endif
+#endif
     dof_map.constrain_element_matrix(ElemMat, dof_indices); // Add constrains for hanging nodes (refinement)
+#ifndef PHI_IN_OBJECTIVE
+    for (unsigned int i=0;i<CurElem->n_nodes();i++) { // handle Dirichlet BC for nodes: set whole line to 0, set DiriCoef on main diagonal and Rhs in vector
+      if(CurElem->node(i)==pData->node_id_for_phi0_) {
+	for (j=0;j<CurElem->n_nodes();j++)
+	  ElemMat(i,j)=0;
+        ElemMat(i,i) = 1.0;
+      }
+    }
+#endif
     system.matrix->add_matrix(ElemMat, dof_indices);
   }
   DBG_PRINT( "LibMeshPDEBase::assemble_Phi_PDE finished" );
