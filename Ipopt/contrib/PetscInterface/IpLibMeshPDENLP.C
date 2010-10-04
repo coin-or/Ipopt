@@ -68,8 +68,8 @@ get_nlp_info(Index num_proc, Index proc_id,
     int m_local = aux_last_-aux_first_+1 + pde_last_-pde_first_+1;
     int m_glob_end;
     MPI_Scan(&m_local, &m_glob_end, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
-    m_first = m_glob_end - m_local;
-    m_last = m_glob_end-1;
+    m_first_ = m_first = m_glob_end - m_local;
+    m_last_ = m_last = m_glob_end-1;
     m = m_pde+m_aux;
   }
 
@@ -261,8 +261,44 @@ LibMeshPDENLP::get_starting_point(Index num_proc, Index proc_id,
 
   AutoPtr<  NumericVector< lm_Number > > state = libmeshPDE_->getStateVector().clone();
   AutoPtr<  NumericVector< lm_Number > > control = libmeshPDE_->getControlVector().clone();
-  libmeshPDE_->get_starting_point(*state, *control);
+
+  libMesh::NumericVector<libMesh::Number>* state_lb_mults;
+  libMesh::NumericVector<libMesh::Number>* state_ub_mults;
+  libMesh::NumericVector<libMesh::Number>* control_lb_mults;
+  libMesh::NumericVector<libMesh::Number>* control_ub_mults;
+  libMesh::NumericVector<libMesh::Number>* pde_residual_mults;
+  libMesh::NumericVector<libMesh::Number>* aux_constr_mults;
+
+  libmeshPDE_->get_starting_point(*state, *control, init_x, state_lb_mults,
+				  state_ub_mults, control_lb_mults,
+				  control_ub_mults, init_lambda,
+				  pde_residual_mults, aux_constr_mults);
   optim_var_libMesh2local(*state, *control, x_part);
+  if (init_z) {
+    optim_var_libMesh2local(*state_lb_mults, *control_lb_mults, z_L_part);
+    optim_var_libMesh2local(*state_ub_mults, *control_ub_mults, z_U_part);
+  }
+  if (init_lambda) {
+    PetscVector<lm_Number>* p_vec =
+      dynamic_cast<PetscVector<lm_Number>*>(pde_residual_mults);
+    Vec v = p_vec->vec();
+    PetscScalar *Vals = NULL;
+    VecGetArray(v,&Vals);
+    int iVal;
+    for (iVal=0; iVal<=(pde_last_-pde_first_); ++iVal) {
+      lambda_part[iVal] = Vals[iVal];
+    }
+    VecRestoreArray(v,&Vals);
+
+    p_vec = dynamic_cast<PetscVector<lm_Number>*>(aux_constr_mults);
+    v = p_vec->vec();
+    VecGetArray(v,&Vals);
+    int iAuxVal;
+    for (int iAuxVal=0;iAuxVal<=(aux_last_-aux_first_);++iAuxVal,++iVal) {
+      lambda_part[iVal] = Vals[iAuxVal];
+    }
+    VecRestoreArray(v,&Vals);
+  }
 
   DBG_PRINT( "LibMeshPDENLP::get_starting_point finished" );
   return true;
@@ -777,4 +813,51 @@ void LibMeshPDENLP::finalize_solution(SolverReturn status,
 {
   update_x(x);
   libmeshPDE_->Write2File("Sol");
+
+  libMesh::NumericVector<libMesh::Number>* lm_state_lb_mults;
+  libMesh::NumericVector<libMesh::Number>* lm_state_ub_mults;
+  libMesh::NumericVector<libMesh::Number>* lm_control_lb_mults;
+  libMesh::NumericVector<libMesh::Number>* lm_control_ub_mults;
+  libMesh::NumericVector<libMesh::Number>* lm_pde_residual_mults;
+  libMesh::NumericVector<libMesh::Number>* lm_aux_constr_mults;
+
+  libmeshPDE_->get_finalize_vectors(lm_state_lb_mults, lm_state_ub_mults,
+				    lm_control_lb_mults, lm_control_ub_mults,
+				    lm_pde_residual_mults, lm_aux_constr_mults);
+
+  if (lm_state_lb_mults) {
+    assert(lm_control_lb_mults);
+    optim_var_global2libMesh(z_L, *lm_state_lb_mults, *lm_control_lb_mults);
+  }
+  if (lm_state_ub_mults) {
+    assert(lm_control_ub_mults);
+    optim_var_global2libMesh(z_U, *lm_state_ub_mults, *lm_control_ub_mults);
+  }
+  if (lm_pde_residual_mults) {
+    PetscVector<lm_Number>* p_vec =
+      dynamic_cast<PetscVector<lm_Number>*>(lm_pde_residual_mults);
+    Vec v = p_vec->vec();
+    PetscScalar *Vals = NULL;
+    VecGetArray(v,&Vals);
+    int iVal;
+    int iLam = m_first_;
+      for (iVal=0; iVal<=(pde_last_-pde_first_); ++iVal, ++iLam) {
+      Vals[iVal] = lambda[iLam];
+    }
+    VecRestoreArray(v,&Vals);
+  }
+  if (lm_aux_constr_mults) {
+    PetscVector<lm_Number>* p_vec =
+      dynamic_cast<PetscVector<lm_Number>*>(lm_aux_constr_mults);
+    Vec v = p_vec->vec();
+    PetscScalar *Vals = NULL;
+    VecGetArray(v,&Vals);
+    int iVal;
+    int iLam = m_first_ + (pde_last_-pde_first_)+1;
+    for (iVal=0; iVal<=(aux_last_-aux_first_); ++iVal, ++iLam) {
+      Vals[iVal] = lambda[iLam];
+    }
+    VecRestoreArray(v,&Vals);
+  }
+
 }

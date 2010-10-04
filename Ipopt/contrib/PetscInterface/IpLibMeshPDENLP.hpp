@@ -260,6 +260,8 @@ namespace Ipopt
     int state_last_;
     int n_first_;
     int n_last_;
+    int m_first_;
+    int m_last_;
     int pde_first_;
     int pde_last_;
     int aux_first_;
