@@ -133,10 +133,25 @@ public:
                           libMesh::NumericVector<libMesh::Number>& aux_constr_u);
 
   virtual void get_starting_point(libMesh::NumericVector<libMesh::Number>& state,
-                                  libMesh::NumericVector<libMesh::Number>& control);
+                                  libMesh::NumericVector<libMesh::Number>& control,
+				  bool init_z,
+				  libMesh::NumericVector<libMesh::Number>* state_lb_mults,
+				  libMesh::NumericVector<libMesh::Number>* state_ub_mults,
+				  libMesh::NumericVector<libMesh::Number>* control_lb_mults,
+				  libMesh::NumericVector<libMesh::Number>* control_ub_mults,
+				  bool init_lambda,
+				  libMesh::NumericVector<libMesh::Number>* pde_residual_mults,
+				  libMesh::NumericVector<libMesh::Number>* aux_constr_mults);
 
   virtual void InitProblemData(std::istream& is);
   virtual void reinit();
+
+  virtual void get_finalize_vectors(libMesh::NumericVector<libMesh::Number>*& lm_state_lb_mults,
+				    libMesh::NumericVector<libMesh::Number>*& lm_state_ub_mults,
+				    libMesh::NumericVector<libMesh::Number>*& lm_control_lb_mults,
+				    libMesh::NumericVector<libMesh::Number>*& lm_control_ub_mults,
+				    libMesh::NumericVector<libMesh::Number>*& lm_pde_residual_mults,
+				    libMesh::NumericVector<libMesh::Number>*& lm_aux_constr_mults);
 
   void RefineMesh(int iter);
   bool simulation_mode_;
@@ -192,6 +207,12 @@ private:
   libMesh::NumericVector<libMesh::Number>* lm_pde_residual_vec_;
   libMesh::NumericVector<libMesh::Number>* lm_aux_constr_vec_;
   libMesh::NumericVector<libMesh::Number>* lm_aux_constr_vec_low_bd_;
+
+  /** Multipliers at solution */
+  AutoPtr<libMesh::NumericVector<libMesh::Number> > lm_control_lb_mults_;
+  AutoPtr<libMesh::NumericVector<libMesh::Number> > lm_control_ub_mults_;
+  AutoPtr<libMesh::NumericVector<libMesh::Number> > lm_aux_constr_mults_;
+
   libMesh::Number min_airflow;
   unsigned int first_aux_constr_;
   ProblemGeometry PG_;

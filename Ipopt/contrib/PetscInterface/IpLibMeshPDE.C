@@ -34,6 +34,7 @@
 
 #define SCALE_AUX_BOUNDS
 #define USE_NEW_DIRICHLET
+#define PHI_IN_OBJECTIVE
 
 int GetProcID();
 
@@ -56,6 +57,9 @@ LibMeshPDEBase::LibMeshPDEBase() :
     lm_pde_residual_vec_(NULL),
     lm_aux_constr_vec_(NULL),
     lm_aux_constr_vec_low_bd_(NULL),
+    lm_control_lb_mults_(NULL),
+    lm_control_ub_mults_(NULL),
+    lm_aux_constr_mults_(NULL),
     min_airflow(1.0),
     first_aux_constr_(0)
 {}
@@ -69,6 +73,15 @@ void LibMeshPDEBase::clear_math_obj()
   DetroySelfOwnedLibMeshPetscVector(lm_pde_residual_vec_);
   DetroySelfOwnedLibMeshPetscVector(lm_aux_constr_vec_);
   DetroySelfOwnedLibMeshPetscVector(lm_aux_constr_vec_low_bd_);
+
+  /*
+  DetroySelfOwnedLibMeshPetscVector(lm_state_lb_mults_);
+  DetroySelfOwnedLibMeshPetscVector(lm_state_ub_mults_);
+  DetroySelfOwnedLibMeshPetscVector(lm_control_lb_mults_);
+  DetroySelfOwnedLibMeshPetscVector(lm_control_ub_mults_);
+  DetroySelfOwnedLibMeshPetscVector(lm_pde_residual_mults_);
+  DetroySelfOwnedLibMeshPetscVector(lm_aux_constr_mults_);
+  */
 
   DetroySelfOwnedLibMeshPetscMatrix(jac_control_);
   DetroySelfOwnedLibMeshPetscMatrix(jac_aux_state_);
@@ -105,34 +118,57 @@ void LibMeshPDEBase::InitProblemData(std::istream& is)
 
 void LibMeshPDEBase::reinit()
 {
-  // initalize all members that store vectors and matrices
-  clear_math_obj();
-  lm_eqn_sys_ = new EquationSystems(mesh_);
+  libMesh::LinearImplicitSystem* lm_sys;
+  if (!lm_eqn_sys_) {
+    // We are running this for the first time
 
-  std::string order("FIRST");
-  std::string family("LAGRANGE");
+    // initalize all members that store vectors and matrices
+    clear_math_obj();
+    lm_eqn_sys_ = new EquationSystems(mesh_);
 
-  libMesh::LinearImplicitSystem& lm_sys = lm_eqn_sys_->add_system<LinearImplicitSystem>("PDE");
-  lm_sys.add_variable("Phi", Utility::string_to_enum<Order>(order), Utility::string_to_enum<FEFamily>(family));
-  lm_sys.attach_assemble_function(LibMeshPDEBase::assemble_Phi_PDE);
-  lm_eqn_sys_->parameters.set<LibMeshPDEBase*>("LibMeshPDEBase") = this;
-  lm_eqn_sys_->parameters.set<bool>("b_struct_only") =false;  // true -> 0/1 values
-  lm_eqn_sys_->init(); // here the matrix and the vector for solution of the PDE is generated
+    std::string order("FIRST");
+    std::string family("LAGRANGE");
+
+    lm_sys = &lm_eqn_sys_->add_system<LinearImplicitSystem>("PDE");
+    lm_sys->add_variable("Phi", Utility::string_to_enum<Order>(order), Utility::string_to_enum<FEFamily>(family));
+    lm_sys->attach_assemble_function(LibMeshPDEBase::assemble_Phi_PDE);
+    lm_eqn_sys_->parameters.set<LibMeshPDEBase*>("LibMeshPDEBase") = this;
+    lm_eqn_sys_->parameters.set<bool>("b_struct_only") =false;  // true -> 0/1 values
+
+    // Add vectors that we want to prolong later
+    lm_sys->add_vector("state_lb_mults");
+    lm_sys->add_vector("state_ub_mults");
+    lm_sys->add_vector("pde_residual_mults");
+    lm_sys->add_vector("full_aux_constr_mults");
+
+    lm_eqn_sys_->init(); // here the matrix and the vector for solution of the PDE is generated
+  }
+  else {
+    DetroySelfOwnedLibMeshPetscVector(lm_aux_constr_vec_);
+    DetroySelfOwnedLibMeshPetscVector(lm_aux_constr_vec_low_bd_);
+    DetroySelfOwnedLibMeshPetscMatrix(jac_control_);
+    DetroySelfOwnedLibMeshPetscMatrix(jac_aux_state_);
+    DetroySelfOwnedLibMeshPetscMatrix(jac_aux_control_);
+    DetroySelfOwnedLibMeshPetscMatrix(hess_control_control_);
+    DetroySelfOwnedLibMeshPetscMatrix(hess_control_state_);
+    DetroySelfOwnedLibMeshPetscMatrix(hess_state_state_);
+    lm_sys = &lm_eqn_sys_->get_system<LinearImplicitSystem>("PDE");
+  }
 
   // determine local and global ranges of state
   int n_state_global, n_state_local;
   int m_pde_constr_global, m_pde_constr_local;
   {
-    //nstate = lm_sys.matrix->n();
-    n_state_global = lm_sys.matrix->n();
-    PetscMatrix<Number> *pPetscMat = dynamic_cast<PetscMatrix<Number>*>(lm_sys.matrix);
+    //nstate = lm_sys->matrix->n();
+    n_state_global = lm_sys->matrix->n();
+    PetscMatrix<Number> *pPetscMat = dynamic_cast<PetscMatrix<Number>*>(lm_sys->matrix);
     Mat mat = pPetscMat->mat();
     int start, end;
     MatGetOwnershipRangeColumn(mat, &start, &end );
     n_state_local = end-start;
-    //int mlocal = lm_sys.matrix->row_stop() - lm_sys.matrix->row_start();
-    m_pde_constr_global = lm_sys.matrix->m();
-    m_pde_constr_local = lm_sys.matrix->row_stop()-lm_sys.matrix->row_start();
+    //int mlocal = lm_sys->matrix->row_stop() - lm_sys->matrix->row_start();
+    m_pde_constr_global = lm_sys->matrix->m();
+    m_pde_constr_local = lm_sys->matrix->row_stop()-lm_sys->matrix->row_start();
   }
 
   // determine local and global ranges of control
@@ -158,7 +194,7 @@ void LibMeshPDEBase::reinit()
 
   PetscErrorCode ierr;
   /// TODO: The following block nca probably be deleted (see tw blocks down)
-  {
+  if (!lm_control_vec_) {
     // create Petsc and libmesh vector for controls
     //lm_control_vec_ = new PetscVector<Number>::PetscVector(n_control_global,n_control_local); does NOT work, later Petsc-calls never terminate (?)
     Vec petsc_vec;
@@ -180,7 +216,7 @@ void LibMeshPDEBase::reinit()
     ierr = VecCreateMPI(PETSC_COMM_WORLD,m_pde_constr_local,PETSC_DETERMINE,&petsc_vec);
     CHKERRV(ierr);
     lm_pde_residual_vec_ = new PetscVector<Number>::PetscVector(petsc_vec);
-    lm_control_vec_->close();
+    lm_pde_residual_vec_->close();
   }
   //  lm_pde_residual_vec_ = new PetscVector<Number>::PetscVector(m_pde_constr_global,m_pde_constr_local);
   // compute actual Jacobian at Some(?) point to get distribution of rows and columns in parallel
@@ -335,6 +371,7 @@ void LibMeshPDEBase::calc_objective_part(Number& Val)
 #endif //QUAD_OBJ_FUNC
     }
 #ifdef EXHAUST_AS_CONTROL
+# ifdef PHI_IN_OBJECTIVE
     // quadratic objective to make the first node in the first element zero
     // this is to pin down the potential
     const MeshBase& mesh = lm_eqn_sys_->get_mesh();
@@ -346,6 +383,7 @@ void LibMeshPDEBase::calc_objective_part(Number& Val)
     dof_map.dof_indices(CurElem, dof_indices);
     Number Phi_first_node = system.current_local_solution->el(dof_indices[0]);
     Val += Phi_first_node*Phi_first_node;
+# endif
 #endif
   }
 }
@@ -367,6 +405,7 @@ void LibMeshPDEBase::calc_objective_gradient(libMesh::NumericVector<libMesh::Num
 #endif //QUAD_OBJ_FUNC
     }
 #ifdef EXHAUST_AS_CONTROL
+# ifdef PHI_IN_OBJECTIVE
     // quadratic objective to make the first node in the first element zero
     // this is to pin down the potential
     const MeshBase& mesh = lm_eqn_sys_->get_mesh();
@@ -378,6 +417,7 @@ void LibMeshPDEBase::calc_objective_gradient(libMesh::NumericVector<libMesh::Num
     dof_map.dof_indices(CurElem, dof_indices);
     Number Phi_first_node = system.current_local_solution->el(dof_indices[0]);
     grad_state.set(dof_indices[0], 2.*Phi_first_node);
+# endif
 #endif
   }
   grad_state.close();
@@ -513,11 +553,13 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
       }
 #endif
     }
-#ifdef BLA_EXHAUST_AS_CONTROL
+#ifdef EXHAUST_AS_CONTROL
+# ifndef PHI_IN_OBJECTIVE
     // add first node as diriclet to pin down velocity potential
     if (GetProcID()==0 && itCurEl == mesh.active_local_elements_begin()) {
-      ElemRes(0) = LocalSolution[0];
+      ElemRes(0) += 1e20*LocalSolution[0];
     }
+# endif
 #endif
     /*std::cout << "Assembled ElemMat: " << std::endl;
     std::cout << ElemMat;
@@ -860,13 +902,13 @@ void LibMeshPDEBase::assemble_Phi_PDE(EquationSystems& es, const std::string& sy
         ElemMat(i,i) = +BCs[bc_id[0]].PhiDiricheltCoef;
     }
 #endif
-#ifdef BLA_EXHAUST_AS_CONTROL
+#ifdef EXHAUST_AS_CONTROL
+# ifndef PHI_IN_OBJECTIVE
     // add first node as diriclet to pin down velocity potential
     if (GetProcID()==0 && itCurEl == mesh.active_local_elements_begin()) {
-      for (j=0;j<CurElem->n_nodes();j++)
-	ElemMat(0,j) = 0;
-      ElemMat(0,0) = 1.0;
+      ElemMat(0,0) += 1.0e20;
     }
+# endif
 #endif
     dof_map.constrain_element_matrix(ElemMat, dof_indices); // Add constrains for hanging nodes (refinement)
     system.matrix->add_matrix(ElemMat, dof_indices);
@@ -951,8 +993,8 @@ void LibMeshPDEBase::calc_hessians(Number sigma, libMesh::DenseVector<Number>& l
       }
     }
   }
-
 #ifdef EXHAUST_AS_CONTROL
+# ifdef PHI_IN_OBJECTIVE
   if (GetProcID()==0 && sigma!=0.0) {
     // quadratic objective to make the first node in the first element zero
     // this is to pin down the potential
@@ -961,6 +1003,7 @@ void LibMeshPDEBase::calc_hessians(Number sigma, libMesh::DenseVector<Number>& l
     dof_map.dof_indices(CurElem, dof_indices);
     hess_state_state_->add(dof_indices[0], dof_indices[0], 2.*sigma);
   }
+# endif
 #endif
 
   hess_control_control_->close();
@@ -987,6 +1030,16 @@ void LibMeshPDEBase::get_bounds(libMesh::NumericVector<libMesh::Number>& state_l
     control_l=*lm_control_vec_;
     control_u=*lm_control_vec_;
     aux_constr_l = -100;
+#ifdef EXHAUST_AS_CONTROL
+    if (GetProcID()==0) {
+      int iControl=PG_._AC.size();
+      for (int iExh=0;iExh<PG_._Exh.size();++iExh) {
+	control_l.set(iControl,-1e50);
+	control_u.set(iControl,1e50);
+	iControl++;
+      }
+    }
+#endif    
   }
   else {
     control_l=0.0;
@@ -997,12 +1050,36 @@ void LibMeshPDEBase::get_bounds(libMesh::NumericVector<libMesh::Number>& state_l
   DBG_PRINT( "LibMeshPDE::get_bounds finished" );
 }
 
-void LibMeshPDEBase::get_starting_point(libMesh::NumericVector<libMesh::Number>& state,
-                                        libMesh::NumericVector<libMesh::Number>& control)
+void LibMeshPDEBase::
+get_starting_point(libMesh::NumericVector<libMesh::Number>& state,
+		   libMesh::NumericVector<libMesh::Number>& control,
+		   bool init_z,
+		   libMesh::NumericVector<libMesh::Number>* state_lb_mults,
+		   libMesh::NumericVector<libMesh::Number>* state_ub_mults,
+		   libMesh::NumericVector<libMesh::Number>* control_lb_mults,
+		   libMesh::NumericVector<libMesh::Number>* control_ub_mults,
+		   bool init_lambda,
+		   libMesh::NumericVector<libMesh::Number>* pde_residual_mults,
+		   libMesh::NumericVector<libMesh::Number>* aux_constr_mults)
 {
   DBG_PRINT( "LibMeshPDE::get_starting_point called" );
   state = getStateVector();
   control = getControlVector();
+
+  libMesh::LinearImplicitSystem& lm_sys = lm_eqn_sys_->get_system<LinearImplicitSystem>("PDE");
+
+  if (init_z) {
+    state_lb_mults = &lm_sys.get_vector("state_lb_mults");
+    state_ub_mults = &lm_sys.get_vector("state_ub_mults");
+    control_lb_mults = &*lm_control_lb_mults_;
+    control_ub_mults = &*lm_control_ub_mults_;
+  }
+
+  if (init_lambda) {
+    pde_residual_mults = &lm_sys.get_vector("pde_residual_mults");
+    aux_constr_mults = &*lm_aux_constr_mults_;
+  }
+
   DBG_PRINT( "LibMeshPDE::get_starting_point finished" );
 }
 
@@ -1561,6 +1638,58 @@ void LibMeshPDEBase::RefineMesh(int iter)
     error.plot_error(fname, mesh_);
   }
 
+#if 0
+  //expand aux_constr_mults onto the full mesh
+  libMesh::NumericVector<libMesh::Number>& full_aux_constr_mults =
+    sys.get_vector("full_aux_constr_mults");
+  full_aux_constr_mults.zero();
+  
+  int i_aux_constr = first_aux_constr_;
+  MeshBase::const_element_iterator itCurEl = mesh_.active_local_elements_begin();
+  const MeshBase::const_element_iterator itEndEl = mesh_.active_local_elements_end();
+  DenseVector<Number> ElemRes;
+  for ( ; itCurEl != itEndEl; ++itCurEl) {
+    const Elem* CurElem = *itCurEl;
+    dof_map.dof_indices(CurElem, dof_indices);   // setup local->global mapping in form of array
+    ElemRes.resize(dof_indices.size());
+    for (unsigned int side=0; side<CurElem->n_sides(); side++) {
+      if (CurElem->neighbor(side) == NULL) {
+        short int bc_id = mesh_.boundary_info->boundary_id (CurElem,side);
+        assert(bc_id!=BoundaryInfo::invalid_id);
+        if ( AuxConstrBoundMarkerList_.find(bc_id)!=AuxConstrBoundMarkerList_.end() ) {
+	  
+
+	  DenseVector<Number> loc_sol;
+          DenseMatrix<Number> loc_l2dphi;
+          loc_sol.resize(dof_indices.size());
+          loc_l2dphi.resize(dof_indices.size(),dof_indices.size());
+          double GradL2=0.0;
+	  Number SideFact = 0.0;
+	  for (unsigned int qp=0; qp<qface.n_points(); qp++) {
+            for (unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
+              loc_sol(inode) = system.current_local_solution->el(dof_indices[inode]);
+              for ( unsigned short jnode=0;jnode<CurElem->n_nodes();++jnode) {
+                loc_l2dphi(inode,jnode) = dphi_face[inode][qp]*dphi_face[jnode][qp];
+              }
+            }
+            DenseVector<Number> tmp;
+            loc_l2dphi.vector_mult(tmp,loc_sol);
+            GradL2 += JxW_face[qp]*loc_sol.dot(tmp);
+	    SideFact += JxW_face[qp];
+          }
+#ifdef SCALE_AUX_BOUNDS
+          lm_aux_constr_vec_->set(i_aux_constr,GradL2);
+#else
+          lm_aux_constr_vec_->set(i_aux_constr,GradL2/SideFact);
+#endif
+          ++i_aux_constr;
+        }
+      }
+    }
+  }
+#endif
+
+
   //mesh_refinement.flag_elements_by_error_fraction(error);
   mesh_refinement.flag_elements_by_error_tolerance(error);
   mesh_refinement.refine_and_coarsen_elements();
@@ -1571,3 +1700,25 @@ void LibMeshPDEBase::RefineMesh(int iter)
   DBG_PRINT( "LibMeshPDEBase::RefineMesh finished" );
 }
 
+void LibMeshPDEBase::
+get_finalize_vectors(libMesh::NumericVector<libMesh::Number>*& lm_state_lb_mults,
+		     libMesh::NumericVector<libMesh::Number>*& lm_state_ub_mults,
+		     libMesh::NumericVector<libMesh::Number>*& lm_control_lb_mults,
+		     libMesh::NumericVector<libMesh::Number>*& lm_control_ub_mults,
+		     libMesh::NumericVector<libMesh::Number>*& lm_pde_residual_mults,
+		     libMesh::NumericVector<libMesh::Number>*& lm_aux_constr_mults)
+{
+  lm_control_lb_mults_ = getControlVector().clone();
+  lm_control_ub_mults_ = getControlVector().clone();
+
+  lm_aux_constr_mults_ = lm_aux_constr_vec_->clone();
+
+  libMesh::LinearImplicitSystem& lm_sys = lm_eqn_sys_->get_system<LinearImplicitSystem>("PDE");
+  lm_state_lb_mults = &lm_sys.get_vector("state_lb_mults");
+  lm_state_ub_mults = &lm_sys.get_vector("state_ub_mults");
+  lm_pde_residual_mults = &lm_sys.get_vector("pde_residual_mults");
+
+  lm_control_lb_mults = &*lm_control_lb_mults_;
+  lm_control_ub_mults = &*lm_control_ub_mults_;
+  lm_aux_constr_mults = &*lm_aux_constr_mults_;
+}

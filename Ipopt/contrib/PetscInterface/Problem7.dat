@@ -36,12 +36,6 @@ AC:Min=2.25,0,2.25;Max=2.75,0,2.75;vAC=3;TAC=10;
 #AC:Min=5.25,0,1.25;Max=5.75,0,1.75;vAC=3;TAC=10;
 #AC:Min=5.25,0,2.25;Max=5.75,0,2.75;vAC=3;TAC=10;
 
-#This_is_exhaust_high_up
-Exh:Min=4.75,0,2.25;Max=5.25,0,2.75;
-
-#This_is_exhaust_low_down
-#Exh:Min=4.75,0,0.25;Max=5.25,0,0.75;
-
 AC:Min=7.25,0,0.25;Max=7.75,0,0.75;vAC=3;TAC=10;
 AC:Min=7.25,0,1.25;Max=7.75,0,1.75;vAC=3;TAC=10;
 AC:Min=7.25,0,2.25;Max=7.75,0,2.75;vAC=3;TAC=10;
@@ -96,6 +90,12 @@ AC:Min=10,4.25,2.25;Max=10,4.75,2.75;vAC=3;TAC=10;
 
 
 #Exh:Min=10,3.5,2;Max=10,4.5,2.5;
+
+#This_is_exhaust_high_up
+Exh:Min=4.75,0,2.25;Max=5.25,0,2.75;
+
+#This_is_exhaust_low_down
+#Exh:Min=4.75,0,0.25;Max=5.25,0,0.75;
 
 #Equip:Min=%lf,%lf,%lf;Max=%lf,%lf,%lf;TEquip=%lf;kappa=%lf
 #Equip:Min=0.6,0.2,0.0;Max=0.8,0.4,0.6;TEquip=35;kappa=1;

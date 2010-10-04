@@ -57,8 +57,8 @@ int main (int argc, char** argv)
     SmartPtr<NLP> nlp = new ParTNLPAdapter(partnlp, ConstPtr(app->Jnlst()));
     ApplicationReturnStatus status;
 
-    for (int i=0; i<60; i++) {
-    { // Find initial point:
+    {
+      // Find initial point:
       // get bounds
       pLibMeshPDE->simulation_mode_=true;
       pLibMeshPDE->getControlVector() = 1.0;
@@ -137,24 +137,35 @@ int main (int argc, char** argv)
       }
 #endif
     }
-    // solve optimization problem
-    pLibMeshPDE->simulation_mode_=false;
-    status = app->Initialize();
-    if (status != Solve_Succeeded) {
-      printf("\n\n*** Error during initialization!\n");
-      return (int) status;
-    }
-    // Ask Ipopt to solve the problem
-    status = app->OptimizeNLP(nlp);
-    if (status == Solve_Succeeded) {
-      printf("\n\n*** The problem solved!\n");
-    }
-    else {
-      printf("\n\n*** The problem FAILED!\n");
-    }
+    bool warmstart = false;
+    for (int i=0; i<1; i++) {
+      // solve optimization problem
+      pLibMeshPDE->simulation_mode_=false;
+      status = app->Initialize();
+      if (status != Solve_Succeeded) {
+	printf("\n\n*** Error during initialization!\n");
+	return (int) status;
+      }
 
-    // Try one set of refinements
-    pLibMeshPDE->RefineMesh(i);
+      if (warmstart) {
+	//app->Options()->SetStringValue("warm_start_init_point", "yes");
+	app->Options()->SetStringValue("bound_mult_init_method", "mu-based");
+	app->Options()->SetNumericValue("bound_push", 1e-6);
+	app->Options()->SetNumericValue("bound_frac", 1e-6);
+	app->Options()->SetNumericValue("mu_init", 1e-4);
+      }
+      // Ask Ipopt to solve the problem
+      status = app->OptimizeNLP(nlp);
+      if (status == Solve_Succeeded) {
+	printf("\n\n*** The problem solved!\n");
+      }
+      else {
+	printf("\n\n*** The problem FAILED!\n");
+      }
+
+      // Try one set of refinements
+      pLibMeshPDE->RefineMesh(i);
+      warmstart = true;
     }
     
     delete pLibMeshPDE;
