@@ -152,22 +152,24 @@ namespace Ipopt
     DBG_START_METH("AmplNmpcTNLP::finalize_metadata", dbg_verbosity);
     ASL_pfgh* asl = AmplSolverObject();
 
-    NumericMetaDataMapType::const_iterator num_it;
-    num_it = var_numeric_md.find("nmpc_sol_state_1");
-    if (num_it!=var_numeric_md.end()) {
-      suf_rput("nmpc_sol_state_1", ASL_Sufkind_var, const_cast<Number*>(&num_it->second[0]));
-    }
-    num_it = var_numeric_md.find("nmpc_sol_state_1_z_L");
-    if (num_it!=var_numeric_md.end()) {
-      suf_rput("nmpc_sol_state_1_z_L", ASL_Sufkind_var, const_cast<Number*>(&num_it->second[0]));
-    }
-    num_it = var_numeric_md.find("nmpc_sol_state_1_z_U");
-    if (num_it!=var_numeric_md.end()) {
-      suf_rput("nmpc_sol_state_1_z_U", ASL_Sufkind_var, const_cast<Number*>(&num_it->second[0]));
-    }
-    num_it = con_numeric_md.find("nmpc_sol_state_1");
-    if (num_it!=var_numeric_md.end()) {
-      suf_rput("nmpc_sol_state_1", ASL_Sufkind_con, const_cast<Number*>(&num_it->second[0]));
+    if (run_nmpc_) {
+      NumericMetaDataMapType::const_iterator num_it;
+      num_it = var_numeric_md.find("nmpc_sol_state_1");
+      if (num_it!=var_numeric_md.end()) {
+	suf_rput("nmpc_sol_state_1", ASL_Sufkind_var, const_cast<Number*>(&num_it->second[0]));
+      }
+      num_it = var_numeric_md.find("nmpc_sol_state_1_z_L");
+      if (num_it!=var_numeric_md.end()) {
+	suf_rput("nmpc_sol_state_1_z_L", ASL_Sufkind_var, const_cast<Number*>(&num_it->second[0]));
+      }
+      num_it = var_numeric_md.find("nmpc_sol_state_1_z_U");
+      if (num_it!=var_numeric_md.end()) {
+	suf_rput("nmpc_sol_state_1_z_U", ASL_Sufkind_var, const_cast<Number*>(&num_it->second[0]));
+      }
+      num_it = con_numeric_md.find("nmpc_sol_state_1");
+      if (num_it!=var_numeric_md.end()) {
+	suf_rput("nmpc_sol_state_1", ASL_Sufkind_con, const_cast<Number*>(&num_it->second[0]));
+      }
     }
   }
 
@@ -189,7 +191,7 @@ namespace Ipopt
 				ip_data,
 				ip_cq);
   }
-
+  
   bool AmplNmpcTNLP::get_var_con_metadata(Index n,
 					  StringMetaDataMapType& var_string_md,
 					  IntegerMetaDataMapType& var_integer_md,
