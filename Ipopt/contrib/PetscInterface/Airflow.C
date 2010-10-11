@@ -3,6 +3,7 @@
 // This code is published under the Common Public License.
 //
 // Authors:  Johannes Huber, Andreas Waechter     IBM   2010-09-03
+#include "mpi.h"
 #include <iostream>
 #include <algorithm>
 #include <math.h>
@@ -50,6 +51,7 @@ int main (int argc, char** argv)
     }
     catch (std::exception& e) {
       std::cerr << e.what() << std::endl;
+      delete pLibMeshPDE;
       exit(1);
     }
     pLibMeshPDE->reinit();
@@ -67,6 +69,7 @@ int main (int argc, char** argv)
       status = app->Initialize("simu.opt");
       if (status != Solve_Succeeded) {
         printf("\n\n*** Error during initialization!\n");
+        delete pLibMeshPDE;
         return (int) status;
       }
       // Ask Ipopt to solve the problem
@@ -76,6 +79,7 @@ int main (int argc, char** argv)
       }
       else {
         printf("\n\n*** The problem FAILED!\n");
+        delete pLibMeshPDE;
         return (int)status;
       }
 
@@ -167,7 +171,6 @@ int main (int argc, char** argv)
       pLibMeshPDE->RefineMesh(i);
       warmstart = true;
     }
-    
     delete pLibMeshPDE;
   }
 
