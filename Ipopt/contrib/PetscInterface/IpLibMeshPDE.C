@@ -5,7 +5,7 @@
 // $Id$
 //
 // Authors:  Johannes Huber, Andreas Waechter     IBM        2010-09-03
-//#include "mpi.h"
+#include "mpi.h"
 #include "IpLibMeshPDE.hpp"
 #include "petsc.h"
 
@@ -352,8 +352,9 @@ void LibMeshPDEBase::DetroySelfOwnedLibMeshPetscVector(NumericVector<Number>*& v
     return;
   PetscVector<Number>* lm_petsc_vector = dynamic_cast<PetscVector<Number>*>(vector);
   assert(NULL!=lm_petsc_vector);  // Problem, if not a libMesh::PetscMatrix<Number>
-  //Vec petsc_vector = lm_petsc_vector->vec();
+  Vec petsc_vector = lm_petsc_vector->vec();
   //TODO: VecDestroy(petsc_vector); does not work
+  VecDestroy(petsc_vector);
   delete vector;
   vector = NULL;
 }
@@ -373,7 +374,7 @@ void LibMeshPDEBase::ConvertControl2PGData()
   ierr = VecScatterCreateToAll(vec_distr,&vscat,&vec_gathrd); CHKERRV(ierr);
   ierr = VecScatterBegin(vscat,vec_distr,vec_gathrd,INSERT_VALUES,SCATTER_FORWARD); CHKERRV(ierr);
   ierr = VecScatterEnd(vscat,vec_distr,vec_gathrd,INSERT_VALUES,SCATTER_FORWARD); CHKERRV(ierr);
-
+  ierr = VecScatterDestroy(vscat); CHKERRV(ierr);
   PetscInt sz;
   VecGetSize(vec_gathrd,&sz);
   PetscScalar *vals;
@@ -399,6 +400,7 @@ void LibMeshPDEBase::ConvertControl2PGData()
   }
 #endif
   ierr=VecRestoreArray(vec_gathrd,&vals);CHKERRV(ierr);
+  VecDestroy(vec_gathrd);
 //  DBG_PRINT("LibMeshPDEBase::ConvertControl2PGData finished");
 }
 
@@ -1233,8 +1235,10 @@ void LibMeshPDEBase::Write2File( const std::string& pre_filename)
   //VTKIO vtkio(mesh_);
   //vtkio.write_equation_systems(filename,*lm_eqn_sys_);
 
+  /* Creates Memory leak
   ExodusII_IO exoio(mesh_);
   exoio.write_equation_systems(my_pre_filename + "State.ex2", *lm_eqn_sys_);
+  */
 
 #if 0
   filename = my_pre_filename + "StatePot.csv";
