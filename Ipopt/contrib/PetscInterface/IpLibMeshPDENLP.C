@@ -5,7 +5,7 @@
 // $Id$
 //
 // Authors:  Johannes Huber, Andreas Waechter     IBM        2010-09-03
-
+#include "mpi.h"
 #include "IpLibMeshPDENLP.hpp"
 #include "IpJournalist.hpp"
 
@@ -262,12 +262,12 @@ LibMeshPDENLP::get_starting_point(Index num_proc, Index proc_id,
   AutoPtr<  NumericVector< lm_Number > > state = libmeshPDE_->getStateVector().clone();
   AutoPtr<  NumericVector< lm_Number > > control = libmeshPDE_->getControlVector().clone();
 
-  libMesh::NumericVector<libMesh::Number>* state_lb_mults;
-  libMesh::NumericVector<libMesh::Number>* state_ub_mults;
-  libMesh::NumericVector<libMesh::Number>* control_lb_mults;
-  libMesh::NumericVector<libMesh::Number>* control_ub_mults;
-  libMesh::NumericVector<libMesh::Number>* pde_residual_mults;
-  libMesh::NumericVector<libMesh::Number>* aux_constr_mults;
+  libMesh::NumericVector<libMesh::Number>* state_lb_mults(NULL);
+  libMesh::NumericVector<libMesh::Number>* state_ub_mults(NULL);
+  libMesh::NumericVector<libMesh::Number>* control_lb_mults(NULL);
+  libMesh::NumericVector<libMesh::Number>* control_ub_mults(NULL);
+  libMesh::NumericVector<libMesh::Number>* pde_residual_mults(NULL);
+  libMesh::NumericVector<libMesh::Number>* aux_constr_mults(NULL);
 
   libmeshPDE_->get_starting_point(*state, *control, init_x, state_lb_mults,
 				  state_ub_mults, control_lb_mults,
