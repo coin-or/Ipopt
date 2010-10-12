@@ -435,8 +435,8 @@ AC_ARG_WITH([pspike],
             [use_pspike=$withval], [use_pspike=no])
 
 if test "$use_pspike" != "no"; then
-  LIBS="$use_pspike $LIBS"
   ADDLIBS="$use_pspike $ADDLIBS"
+  PARDISO_LIB="$use_pspike $PARDISO_LIB"
   AC_DEFINE(HAVE_PSPIKE,1,[Define to 1 if PSPIKE is available])
 fi
 
