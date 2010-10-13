@@ -291,6 +291,7 @@ void LibMeshPDEBase::reinit()
     hess_control_control_ = new PetscMatrix<Number>(petsc_mat);
   }
 #ifndef PHI_IN_OBJECTIVE
+#ifdef EXHAUST_AS_CONTROL
   // determine a node ID of an interior node that is used to pinn down Phi
   if (GetProcID()==0) {
     const MeshBase& mesh = lm_eqn_sys_->get_mesh();
@@ -331,6 +332,7 @@ void LibMeshPDEBase::reinit()
     printf("Node ID for pinning down Phi = %d\n", node_id_for_phi0_);
     // TODO: broadcast
   }
+#endif
 #endif
 }
 
@@ -626,12 +628,14 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
     dof_map.constrain_element_vector(ElemRes, dof_indices); // Add constrains for hanging nodes (refinement)
     //std::cout << "Constrained ElemMat: " << std::endl;
     //std::cout << ElemMat;
+#ifdef EXHAUST_AS_CONTROL
 #ifndef PHI_IN_OBJECTIVE
     for (unsigned int i=0;i<CurElem->n_nodes();i++) { // handle Dirichlet BC for nodes: set whole line to 0, set DiriCoef on main diagonal and Rhs in vector
       if(CurElem->node(i)==node_id_for_phi0_) {
         ElemRes(i) = LocalSolution[i];
       }
     }
+#endif
 #endif
     lm_pde_residual_vec_->add_vector(ElemRes, dof_indices);
   }
@@ -961,7 +965,7 @@ void LibMeshPDEBase::assemble_Phi_PDE(EquationSystems& es, const std::string& sy
 	if ( fabs(BCs[bc_id[0]].PhiNeumannCoef) > eps )
 	  continue;
       }
-      printf("bc_id[0] = %d\n", bc_id[0]);
+      //printf("bc_id[0] = %d\n", bc_id[0]);
       for (j=0;j<CurElem->n_nodes();j++)
         ElemMat(i,j)=0;
       if (calc_type==StructureOnly)
@@ -981,6 +985,7 @@ void LibMeshPDEBase::assemble_Phi_PDE(EquationSystems& es, const std::string& sy
 #endif
 #endif
     dof_map.constrain_element_matrix(ElemMat, dof_indices); // Add constrains for hanging nodes (refinement)
+#ifdef EXHAUST_AS_CONTROL
 #ifndef PHI_IN_OBJECTIVE
     for (unsigned int i=0;i<CurElem->n_nodes();i++) { // handle Dirichlet BC for nodes: set whole line to 0, set DiriCoef on main diagonal and Rhs in vector
       if(CurElem->node(i)==pData->node_id_for_phi0_) {
@@ -989,6 +994,7 @@ void LibMeshPDEBase::assemble_Phi_PDE(EquationSystems& es, const std::string& sy
         ElemMat(i,i) = 1.0;
       }
     }
+#endif
 #endif
     system.matrix->add_matrix(ElemMat, dof_indices);
   }
@@ -1686,9 +1692,8 @@ void LibMeshPDEBase::RefineMesh(int iter)
 	if (bc_id.size()>0) {
 	  printf("node: %d ", i);
 	  for (int j=0; j<bc_id.size(); j++) {
-	    printf("bc_id[%d] = %2d ", j, bc_id[j]);
+	    DBG_PRINT("bc_id[" << j << "] = " bc_id[j] );
 	  }
-	  printf("\n");
 	}
       }
     }    
