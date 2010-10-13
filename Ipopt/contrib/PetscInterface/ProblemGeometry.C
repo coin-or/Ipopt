@@ -9,6 +9,8 @@
 #include "ProblemGeometry.h"
 #include <stdexcept>
 
+extern int GetProcID();
+
 ///////////////////////////////////////////////////////////////////////////////////
 //  ProblemGeometry::Item
 ProblemGeometry::Item::Item(const std::vector<double>& min, const std::vector<double>& max)
@@ -808,20 +810,37 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
 
   bool bCallExternal=true;
   if (bCallExternal) {
-    std::ofstream os("Mesh3DRaw.poly",std::ios::out);
-    PrintTetgenMesh(tetgen_in, os);
-    char strBuf[256];
-    sprintf(strBuf,"-nQpqa%f",_h*_h*_h);
-    //sprintf(strBuf,"zpQqa%f",h*h*h);  // tetgen in silent mode
-    char Buf[2014];
-    sprintf(Buf,"tetgen %s Mesh3DRaw.poly",strBuf);
-    std::cout << "calling \"" << Buf << "\"...";
-    std::cout.flush();
-    system(Buf);
-    std::cout << " ... finished" << std::endl;
-    ReadNodeFile("Mesh3DRaw.1.node",&tetgen_out);
-    ReadEleFile("Mesh3DRaw.1.ele",&tetgen_out);
-    ReadNeighFile("Mesh3DRaw.1.neigh",&tetgen_out);
+    int ProcID = GetProcID();
+    if(ProcID==0) {
+      std::ofstream os("Mesh3DRaw.poly",std::ios::out);
+      PrintTetgenMesh(tetgen_in, os);
+      char strBuf[256];
+      sprintf(strBuf,"-nQpqa%f",_h*_h*_h);
+      //sprintf(strBuf,"zpQqa%f",h*h*h);  // tetgen in silent mode
+      char Buf[2014];
+      sprintf(Buf,"tetgen %s Mesh3DRaw.poly",strBuf);
+      std::cout << "calling \"" << Buf << "\"...";
+      std::cout.flush();
+      system(Buf);
+      std::cout << " ... finished" << std::endl;
+   
+      ReadNodeFile("Mesh3DRaw.1.node",&tetgen_out);
+      ReadEleFile("Mesh3DRaw.1.ele",&tetgen_out);
+      ReadNeighFile("Mesh3DRaw.1.neigh",&tetgen_out);
+    }
+    MPI_Bcast(&(tetgen_out.numberofpoints), 1, MPI_INT, 0, MPI_COMM_WORLD);
+    if(ProcID!=0)
+      tetgen_out.pointlist = new double[3*tetgen_out.numberofpoints];
+    MPI_Bcast(tetgen_out.pointlist,3*tetgen_out.numberofpoints,MPI_DOUBLE,0,MPI_COMM_WORLD);
+
+    MPI_Bcast(&(tetgen_out.numberoftetrahedra), 1, MPI_INT, 0, MPI_COMM_WORLD);
+    if(ProcID!=0)
+      tetgen_out.tetrahedronlist = new int[4*tetgen_out.numberoftetrahedra];
+    MPI_Bcast(tetgen_out.tetrahedronlist,4*tetgen_out.numberoftetrahedra,MPI_INT,0,MPI_COMM_WORLD);
+
+    if(ProcID!=0)
+      tetgen_out.neighborlist = new int[4*tetgen_out.numberoftetrahedra];
+    MPI_Bcast(tetgen_out.neighborlist,4*tetgen_out.numberoftetrahedra,MPI_INT,0,MPI_COMM_WORLD);
   }
   else {
     bool PrintMeshingData=true;
