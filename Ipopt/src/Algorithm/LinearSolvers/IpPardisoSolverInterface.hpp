@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -11,6 +11,8 @@
 #define __IPPARDISOSOLVERINTERFACE_HPP__
 
 #include "IpSparseSymLinearSolverInterface.hpp"
+
+//#define PARDISO_MATCHING_PREPROCESS
 
 namespace Ipopt
 {
@@ -116,6 +118,16 @@ namespace Ipopt
     /** Array for storing the values of the matrix. */
     double* a_;
     //@}
+
+#ifdef PARDISO_MATCHING_PREPROCESS
+    /** Array for storing the values of a second matrix that has been already reordered. */
+    ipfint* ia2;
+    ipfint* ja2;
+    double* a2_;
+    ipfint* perm2;
+    double* scale2;
+
+#endif
 
     /** @name Information about most recent factorization/solve */
     //@{

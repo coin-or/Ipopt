@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2009 International Business Machines and others.
+// Copyright (C) 2005, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -11,6 +11,8 @@
 #define __IPWSMPSOLVERINTERFACE_HPP__
 
 #include "IpSparseSymLinearSolverInterface.hpp"
+
+//#define PARDISO_MATCHING_PREPROCESS
 
 namespace Ipopt
 {
@@ -120,8 +122,25 @@ namespace Ipopt
     /** Number of rows and columns of the matrix */
     Index dim_;
 
+    /** Number of nonzeros of the matrix in triplet representation. */
+    Index nonzeros_;
+
     /** Array for storing the values of the matrix. */
     double* a_;
+
+#ifdef PARDISO_MATCHING_PREPROCESS
+    /**  @name Arrays for storing the values of a second matrix that
+         has been already reordered. */
+    //@{
+    ipfint* ia2;
+    ipfint* ja2;
+    double* a2_;
+    ipfint* perm2;
+    double* scale2;
+    //@}
+
+#endif
+
     //@}
 
     /** @name Solver specific options */

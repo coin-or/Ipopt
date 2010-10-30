@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2009 International Business Machines and others.
+// Copyright (C) 2005, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -6,6 +6,8 @@
 //
 // Authors:  Andreas Waechter                 IBM    2006-01-04
 //
+
+
 
 #include "IpoptConfig.h"
 #include "IpWsmpSolverInterface.hpp"
@@ -44,7 +46,14 @@ extern "C"
                              ipfint* MRP, ipfint* IPARM,
                              double* DPARM);
   void F77_FUNC_(wsmp_clear,WSMP_CLEAR)(void);
+
+#ifdef PARDISO_MATCHING_PREPROCESS
+  void smat_reordering_pardiso_wsmp_(const ipfint* N, const ipfint* ia, const ipfint* ja, const double* a_, ipfint* a2, ipfint* ja2,  double* a2_,
+                                     ipfint* perm2,  double* scale2, ipfint* tmp2_, ipfint preprocess );
+#endif
+
 }
+
 
 namespace Ipopt
 {
@@ -55,6 +64,15 @@ namespace Ipopt
   WsmpSolverInterface::WsmpSolverInterface()
       :
       a_(NULL),
+
+#ifdef PARDISO_MATCHING_PREPROCESS
+      ia2(NULL),
+      ja2(NULL),
+      a2_(NULL),
+      perm2(NULL),
+      scale2(NULL),
+#endif
+
       negevals_(-1),
       initialized_(false),
 
@@ -75,6 +93,14 @@ namespace Ipopt
 
     // Clear WSMP's memory
     F77_FUNC_(wsmp_clear,WSMP_CLEAR)();
+
+#ifdef PARDISO_MATCHING_PREPROCESS
+    delete[] ia2;
+    delete[] ja2;
+    delete[] a2_;
+    delete[] perm2;
+    delete[] scale2;
+#endif
 
     delete[] PERM_;
     delete[] INVP_;
@@ -206,6 +232,23 @@ namespace Ipopt
     delete[] MRP_;
     MRP_ = NULL;
 
+#ifdef PARDISO_MATCHING_PREPROCESS
+    delete[] ia2;
+    ia2 = NULL;
+
+    delete[] ja2;
+    ja2 = NULL;
+
+    delete[] a2_;
+    a2_ = NULL;
+
+    delete[] perm2;
+    perm2 = NULL;
+
+    delete[] scale2;
+    scale2 = NULL;
+#endif
+
     // Set the number of threads
     ipfint NTHREADS = wsmp_num_threads_;
     F77_FUNC(wsetmaxthrds,WSETMAXTHRDS)(&NTHREADS);
@@ -300,6 +343,7 @@ namespace Ipopt
   {
     DBG_START_METH("WsmpSolverInterface::InitializeStructure",dbg_verbosity);
     dim_ = dim;
+    nonzeros_ = nonzeros;
 
     // Make space for storing the matrix elements
     delete[] a_;
@@ -351,8 +395,41 @@ namespace Ipopt
     INVP_ = new ipfint[dim_];
     MRP_ = new ipfint[dim_];
 
-    // Call WSSMP for ordering and symbolic factorization
     ipfint N = dim_;
+
+#ifdef PARDISO_MATCHING_PREPROCESS
+
+    delete[] ia2;
+    ia2 = NULL;
+
+    delete[] ja2;
+    ja2 = NULL;
+
+    delete[] a2_;
+    a2_ = NULL;
+
+    delete[] perm2;
+    perm2 = NULL;
+
+    delete[] scale2;
+    scale2 = NULL;
+
+    ia2    = new ipfint[N+1];
+    ja2    = new ipfint[nonzeros_];
+    a2_    = new double[nonzeros_];
+    perm2  = new ipfint[N];
+    scale2 = new double[N];
+    ipfint* tmp2_  = new ipfint[N];
+
+    smat_reordering_pardiso_wsmp_(&N, ia, ja, a_, ia2, ja2, a2_, perm2,
+                                  scale2, tmp2_, 0);
+
+    delete[] tmp2_;
+
+#endif
+
+
+    // Call WSSMP for ordering and symbolic factorization
     ipfint NAUX = 0;
     IPARM_[1] = 1; // ordering
     IPARM_[2] = 2; // symbolic factorization
@@ -367,7 +444,11 @@ namespace Ipopt
 
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Calling WSSMP-1-2 for ordering and symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+#ifdef PARDISO_MATCHING_PREPROCESS
+    F77_FUNC(wssmp,WSSMP)(&N,  ia2,  ja2,  a2_, &ddmy, PERM_, INVP_,
+#else
     F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
+#endif
                           &ddmy, &idmy, &idmy, &ddmy, &NAUX, MRP_,
                           IPARM_, DPARM_);
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
@@ -470,7 +551,11 @@ namespace Ipopt
 
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Calling WSSMP-3-3 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
-    F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
+#ifdef PARDISO_MATCHING_PREPROCESS
+    F77_FUNC(wssmp,WSSMP)(&N, ia2, ja2, a2_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
+#else
+    F77_FUNC(wssmp,WSSMP)(&N,  ia,  ja,  a_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
+#endif
                           &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Done with WSSMP-3-3 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
@@ -564,9 +649,26 @@ namespace Ipopt
     double ddmy;
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Calling WSSMP-4-5 for backsolve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+
+#ifdef PARDISO_MATCHING_PREPROCESS
+    double* X = new double[nrhs*N];
+
+    // Initialize solution with zero and save right hand side
+    for (int i = 0; i < nrhs*N; i++) {
+      X[perm2[i]] = scale2[i] * rhs_vals[i];
+    }
+    F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
+                          X, &LDB, &NRHS, &ddmy, &NAUX,
+                          MRP_, IPARM_, DPARM_);
+    for (int i = 0; i < N; i++) {
+      rhs_vals[i] = scale2[i]*X[perm2[i]];
+    }
+#else
     F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
                           rhs_vals, &LDB, &NRHS, &ddmy, &NAUX,
                           MRP_, IPARM_, DPARM_);
+#endif
+
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Done with WSSMP-4-5 for backsolve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
     if (HaveIpData()) {
@@ -589,6 +691,9 @@ namespace Ipopt
                    "Number of iterative refinement steps in WSSMP: %d\n",
                    IPARM_[5]);
 
+#ifdef PARDISO_MATCHING_PREPROCESS
+    delete [] X;
+#endif
 
     return SYMSOLVER_SUCCESS;
   }
@@ -664,8 +769,14 @@ namespace Ipopt
     ipfint idmy;
     double ddmy;
 
+#ifdef PARDISO_MATCHING_PREPROCESS
+    F77_FUNC(wssmp,WSSMP)(&N, ia2, ja2, a2_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
+                          &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
+#else
     F77_FUNC(wssmp,WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
                           &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
+#endif
+
     const Index ierror = IPARM_[63];
     if (ierror == 0) {
       int ii = 0;
