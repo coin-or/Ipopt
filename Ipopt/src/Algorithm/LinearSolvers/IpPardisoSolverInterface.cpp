@@ -9,6 +9,7 @@
 //           Olaf Schenk                      Univ of Basel 2005-09-20
 //                  - changed options, added PHASE_ flag
 
+
 #include "IpoptConfig.h"
 #include "IpPardisoSolverInterface.hpp"
 # include <math.h>
@@ -52,6 +53,7 @@
 # define PARDISO_FUNC F77_FUNC(pardiso,PARDISO)
 #endif
 
+
 /* Prototypes for Pardiso's subroutines */
 extern "C"
 {
@@ -73,6 +75,13 @@ extern "C"
                     const ipfint* NRHS, ipfint* IPARM,
                     const ipfint* MSGLVL, double* B, double* X,
                     ipfint* ERROR, double* DPARM);
+
+
+#ifdef PARDISO_MATCHING_PREPROCESS
+  void smat_reordering_pardiso_wsmp_(const ipfint* N, const ipfint* ia, const ipfint* ja, const double* a_, ipfint* a2, ipfint* ja2,  double* a2_,
+                                     ipfint* perm2,  double* scale2, ipfint* tmp2_, ipfint preprocess );
+#endif
+
 }
 
 namespace Ipopt
@@ -84,6 +93,15 @@ namespace Ipopt
   PardisoSolverInterface::PardisoSolverInterface()
       :
       a_(NULL),
+
+#ifdef PARDISO_MATCHING_PREPROCESS
+      ia2(NULL),
+      ja2(NULL),
+      a2_(NULL),
+      perm2(NULL),
+      scale2(NULL),
+#endif
+
       negevals_(-1),
       initialized_(false),
 
@@ -123,6 +141,15 @@ namespace Ipopt
     delete[] IPARM_;
     delete[] DPARM_;
     delete[] a_;
+
+#ifdef PARDISO_MATCHING_PREPROCESS
+    delete[] ia2;
+    delete[] ja2;
+    delete[] a2_;
+    delete[] perm2;
+    delete[] scale2;
+#endif
+
   }
 
   void PardisoSolverInterface::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
@@ -297,6 +324,23 @@ namespace Ipopt
     initialized_=false;
     delete[] a_;
     a_ = NULL;
+
+#ifdef PARDISO_MATCHING_PREPROCESS
+    delete[] ia2;
+    ia2 = NULL;
+
+    delete[] ja2;
+    ja2 = NULL;
+
+    delete[] a2_;
+    a2_ = NULL;
+
+    delete[] perm2;
+    perm2 = NULL;
+
+    delete[] scale2;
+    scale2 = NULL;
+#endif
 
     // Call Pardiso's initialization routine
     IPARM_[0] = 0;  // Tell it to fill IPARM with default values(?)
@@ -534,6 +578,34 @@ namespace Ipopt
 
       fclose (mat_file);
     }
+    /* addtional matrix format */
+    if (getenv ("IPOPT_WRITE_MAT_MTX")) {
+      /* Write header */
+      FILE    *mat_file;
+      char     mat_name[128];
+      char     mat_pref[32];
+
+      ipfint   NNZ = ia[N]-1;
+      ipfint   i;
+      ipfint   j;
+
+      if (getenv ("IPOPT_WRITE_PREFIX"))
+        strcpy (mat_pref, getenv ("IPOPT_WRITE_PREFIX"));
+      else
+        strcpy (mat_pref, "mat-ipopt");
+
+      Snprintf (mat_name, 127, "%s_%03d-%02d.mtx",
+                mat_pref, iter_cnt, sol_cnt);
+
+      // Open and write matrix file.
+      mat_file = fopen (mat_name, "w");
+
+      for (i = 0; i < N; i++)
+        for (j = ia[i]; j < ia[i+1]-1; j++)
+          fprintf (mat_file, " %d %d %32.24e \n", i+1, ja[j-1], a_[j-1]);
+
+      fclose (mat_file);
+    }
   }
 
   ESymSolverStatus
@@ -564,10 +636,44 @@ namespace Ipopt
           IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
         }
         PHASE = 11;
+
+#ifdef PARDISO_MATCHING_PREPROCESS
+        delete[] ia2;
+        ia2 = NULL;
+
+        delete[] ja2;
+        ja2 = NULL;
+
+        delete[] a2_;
+        a2_ = NULL;
+
+        delete[] perm2;
+        perm2 = NULL;
+
+        delete[] scale2;
+        scale2 = NULL;
+
+        ia2    = new ipfint[N+1];
+        ja2    = new ipfint[nonzeros_];
+        a2_    = new double[nonzeros_];
+        perm2  = new ipfint[N];
+        scale2 = new double[N];
+        ipfint* tmp2_  = new ipfint[N];
+
+        smat_reordering_pardiso_wsmp_(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp2_, 0);
+
+        delete[] tmp2_;
+
+#endif
+
         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                        "Calling Pardiso for symbolic factorization.\n");
         PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+#ifdef PARDISO_MATCHING_PREPROCESS
+                     &PHASE, &N, a2_, ia2, ja2, &PERM,
+#else
                      &PHASE, &N, a_, ia, ja, &PERM,
+#endif
                      &NRHS, IPARM_, &MSGLVL_, &B, &X,
                      &ERROR, DPARM_);
         if (HaveIpData()) {
@@ -613,184 +719,220 @@ namespace Ipopt
         debug_last_iter_ = 0;
       }
 
-      PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
-                   &PHASE, &N, a_, ia, ja, &PERM,
-                   &NRHS, IPARM_, &MSGLVL_, &B, &X,
-                   &ERROR, DPARM_);
-      if (HaveIpData()) {
-        IpData().TimingStats().LinearSystemFactorization().End();
-      }
+#ifdef PARDISO_MATCHING_PREPROCESS {
+      ipfint* tmp2_  = new ipfint[N];
+      smat_reordering_pardiso_wsmp_ (&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp2_, 1);
+      delete[] tmp2_;
+    }
+#endif
 
-      if (ERROR==-7) {
-        Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                       "Pardiso factorization returns ERROR = %d.  Matrix is singular.\n", ERROR);
-        return SYMSOLVER_SINGULAR;
-      }
-      else if (ERROR==-4) {
-        // I think this means that the matrix is singular
-        // OLAF said that this will never happen (ToDo)
-        return SYMSOLVER_SINGULAR;
-      }
-      else if (ERROR!=0 ) {
-        Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                       "Error in Pardiso during factorization phase.  ERROR = %d.\n", ERROR);
-        return SYMSOLVER_FATAL_ERROR;
-      }
+    PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+#ifdef PARDISO_MATCHING_PREPROCESS
+                 &PHASE, &N, a2_, ia2, ja2, &PERM,
+#else
+                 &PHASE, &N, a_, ia, ja, &PERM,
+#endif
+                 &NRHS, IPARM_, &MSGLVL_, &B, &X,
+                 &ERROR, DPARM_);
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemFactorization().End();
+    }
 
-      negevals_ = Max(IPARM_[22], numberOfNegEVals);
-      if (IPARM_[13] != 0) {
-        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                       "Number of perturbed pivots in factorization phase = %d.\n", IPARM_[13]);
-        if ( !pardiso_redo_symbolic_fact_only_if_inertia_wrong_ ||
-             (negevals_ != numberOfNegEVals) ) {
-          if (HaveIpData()) {
-            IpData().Append_info_string("Pn");
-          }
-          have_symbolic_factorization_ = false;
-          // We assume now that if there was just a symbolic
-          // factorization and we still have perturbed pivots, that
-          // the system is actually singular, if
-          // pardiso_repeated_perturbation_means_singular_ is true
-          if (just_performed_symbolic_factorization) {
-            if (pardiso_repeated_perturbation_means_singular_) {
-              if (HaveIpData()) {
-                IpData().Append_info_string("Ps");
-              }
-              return SYMSOLVER_SINGULAR;
+    if (ERROR==-7) {
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "Pardiso factorization returns ERROR = %d.  Matrix is singular.\n", ERROR);
+      return SYMSOLVER_SINGULAR;
+    }
+    else if (ERROR==-4) {
+      // I think this means that the matrix is singular
+      // OLAF said that this will never happen (ToDo)
+      return SYMSOLVER_SINGULAR;
+    }
+    else if (ERROR!=0 ) {
+      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                     "Error in Pardiso during factorization phase.  ERROR = %d.\n", ERROR);
+      return SYMSOLVER_FATAL_ERROR;
+    }
+
+    negevals_ = Max(IPARM_[22], numberOfNegEVals);
+    if (IPARM_[13] != 0) {
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Number of perturbed pivots in factorization phase = %d.\n", IPARM_[13]);
+      if ( !pardiso_redo_symbolic_fact_only_if_inertia_wrong_ ||
+           (negevals_ != numberOfNegEVals) ) {
+        if (HaveIpData()) {
+          IpData().Append_info_string("Pn");
+        }
+        have_symbolic_factorization_ = false;
+        // We assume now that if there was just a symbolic
+        // factorization and we still have perturbed pivots, that
+        // the system is actually singular, if
+        // pardiso_repeated_perturbation_means_singular_ is true
+        if (just_performed_symbolic_factorization) {
+          if (pardiso_repeated_perturbation_means_singular_) {
+            if (HaveIpData()) {
+              IpData().Append_info_string("Ps");
             }
-            else {
-              done = true;
-            }
+            return SYMSOLVER_SINGULAR;
           }
           else {
-            done = false;
+            done = true;
           }
         }
         else {
-          if (HaveIpData()) {
-            IpData().Append_info_string("Pp");
-          }
-          done = true;
+          done = false;
         }
       }
       else {
+        if (HaveIpData()) {
+          IpData().Append_info_string("Pp");
+        }
         done = true;
       }
     }
-
-    DBG_ASSERT(IPARM_[21]+IPARM_[22] == dim_);
-
-    // Check whether the number of negative eigenvalues matches the requested
-    // count
-    if (skip_inertia_check_) numberOfNegEVals=negevals_;
-
-    if (check_NegEVals && (numberOfNegEVals!=negevals_)) {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "Wrong inertia: required are %d, but we got %d.\n",
-                     numberOfNegEVals, negevals_);
-      return SYMSOLVER_WRONG_INERTIA;
+    else {
+      done = true;
     }
-
-    return SYMSOLVER_SUCCESS;
   }
 
-  ESymSolverStatus PardisoSolverInterface::Solve(const Index* ia,
-      const Index* ja,
-      Index nrhs,
-      double *rhs_vals)
-  {
-    DBG_START_METH("PardisoSolverInterface::Solve",dbg_verbosity);
+  DBG_ASSERT(IPARM_[21]+IPARM_[22] == dim_);
 
-    if (HaveIpData()) {
-      IpData().TimingStats().LinearSystemBackSolve().Start();
-    }
-    // Call Pardiso to do the solve for the given right-hand sides
-    ipfint PHASE = 33;
-    ipfint N = dim_;
-    ipfint PERM;   // This should not be accessed by Pardiso
-    ipfint NRHS = nrhs;
-    double* X = new double[nrhs*dim_];
-    double* ORIG_RHS = new double[nrhs*dim_];
-    ipfint ERROR;
-    // Initialize solution with zero and save right hand side
+  // Check whether the number of negative eigenvalues matches the requested
+  // count
+  if (skip_inertia_check_) numberOfNegEVals=negevals_;
+
+  if (check_NegEVals && (numberOfNegEVals!=negevals_)) {
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "Wrong inertia: required are %d, but we got %d.\n",
+                   numberOfNegEVals, negevals_);
+    return SYMSOLVER_WRONG_INERTIA;
+  }
+
+  return SYMSOLVER_SUCCESS;
+}
+
+ESymSolverStatus PardisoSolverInterface::Solve(const Index* ia,
+    const Index* ja,
+    Index nrhs,
+    double *rhs_vals)
+{
+  DBG_START_METH("PardisoSolverInterface::Solve",dbg_verbosity);
+
+  if (HaveIpData()) {
+    IpData().TimingStats().LinearSystemBackSolve().Start();
+  }
+  // Call Pardiso to do the solve for the given right-hand sides
+  ipfint PHASE = 33;
+  ipfint N = dim_;
+  ipfint PERM;   // This should not be accessed by Pardiso
+  ipfint NRHS = nrhs;
+  double* X = new double[nrhs*dim_];
+
+  double* ORIG_RHS = new double[nrhs*dim_];
+  ipfint ERROR;
+  // Initialize solution with zero and save right hand side
+  for (int i = 0; i < N; i++) {
+    X[i] = 0.;
+    ORIG_RHS[i] = rhs_vals[i];
+  }
+
+  // Dump matrix to file if requested
+  Index iter_count = 0;
+  if (HaveIpData()) {
+    iter_count = IpData().iter_count();
+  }
+
+#ifdef PARDISO_MATCHING_PREPROCESS
+  write_iajaa_matrix (N, ia2, ja2, a2_, rhs_vals, iter_count, debug_cnt_);
+#else
+  write_iajaa_matrix (N,  ia,  ja,  a_, rhs_vals, iter_count, debug_cnt_);
+#endif
+
+  int attempts = 0;
+  const int max_attempts =
+    pardiso_iterative_ ? pardiso_max_droptol_corrections_+1: 1;
+
+  while (attempts < max_attempts) {
+
+
+#ifdef PARDISO_MATCHING_PREPROCESS
     for (int i = 0; i < N; i++) {
-      X[i] = 0.;
-      ORIG_RHS[i] = rhs_vals[i];
+      rhs_vals[perm2[i]] = scale2[i] * ORIG_RHS[ i  ];
+    }
+    PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+                 &PHASE, &N, a2_, ia2, ja2, &PERM,
+                 &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
+                 &ERROR, DPARM_);
+    for (int i = 0; i < N; i++) {
+      X[i] = rhs_vals[ perm2[i]];
+    }
+    for (int i = 0; i < N; i++) {
+      rhs_vals[i] =  scale2[i]*X[i];
     }
 
-    // Dump matrix to file if requested
-    Index iter_count = 0;
+#else
+    for (int i = 0; i < N; i++) {
+      rhs_vals[i] = ORIG_RHS[i];
+    }
+    PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+                 &PHASE, &N, a_, ia, ja, &PERM,
+                 &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
+                 &ERROR, DPARM_);
+#endif
+
+
+    if (ERROR <= -100 && ERROR >= -102) {
+      Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                     "Iterative solver in Pardiso did not converge (ERROR = %d)\n", ERROR);
+      Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                     "  Decreasing drop tolerances from DPARM_[41] = %e and DPARM_[44] = %e\n", DPARM_[41], DPARM_[44]);
+      PHASE = 23;
+      DPARM_[4] /= 2.0 ;
+      DPARM_[5] /= 2.0 ;
+      Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                     "                               to DPARM_[41] = %e and DPARM_[44] = %e\n", DPARM_[41], DPARM_[44]);
+      attempts++;
+      ERROR = 0;
+    }
+    else {
+      attempts = max_attempts;
+    }
+  }
+
+  delete [] X;
+  delete [] ORIG_RHS;
+
+  if (IPARM_[6] != 0) {
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "Number of iterative refinement steps = %d.\n", IPARM_[6]);
     if (HaveIpData()) {
-      iter_count = IpData().iter_count();
+      IpData().Append_info_string("Pi");
     }
-    write_iajaa_matrix (N, ia, ja, a_, rhs_vals, iter_count, debug_cnt_);
-
-    int attempts = 0;
-    const int max_attempts =
-      pardiso_iterative_ ? pardiso_max_droptol_corrections_+1: 1;
-
-    while (attempts < max_attempts) {
-
-      for (int i = 0; i < N; i++) {
-        rhs_vals[i] = ORIG_RHS[i];
-      }
-      PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
-                   &PHASE, &N, a_, ia, ja, &PERM,
-                   &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
-                   &ERROR, DPARM_);
-
-      if (ERROR <= -100 && ERROR >= -102) {
-        Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                       "Iterative solver in Pardiso did not converge (ERROR = %d)\n", ERROR);
-        Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                       "  Decreasing drop tolerances from DPARM_[41] = %e and DPARM_[44] = %e\n", DPARM_[41], DPARM_[44]);
-        PHASE = 23;
-        DPARM_[4] /= 2.0 ;
-        DPARM_[5] /= 2.0 ;
-        Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                       "                               to DPARM_[41] = %e and DPARM_[44] = %e\n", DPARM_[41], DPARM_[44]);
-        attempts++;
-        ERROR = 0;
-      }
-      else {
-        attempts = max_attempts;
-      }
-    }
-
-    delete [] X;
-    delete [] ORIG_RHS;
-
-    if (IPARM_[6] != 0) {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "Number of iterative refinement steps = %d.\n", IPARM_[6]);
-      if (HaveIpData()) {
-        IpData().Append_info_string("Pi");
-      }
-    }
-
-    if (HaveIpData()) {
-      IpData().TimingStats().LinearSystemBackSolve().End();
-    }
-    if (ERROR!=0 ) {
-      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                     "Error in Pardiso during solve phase.  ERROR = %d.\n", ERROR);
-      return SYMSOLVER_FATAL_ERROR;
-    }
-    return SYMSOLVER_SUCCESS;
   }
 
-  Index PardisoSolverInterface::NumberOfNegEVals() const
-  {
-    DBG_START_METH("PardisoSolverInterface::NumberOfNegEVals",dbg_verbosity);
-    DBG_ASSERT(negevals_>=0);
-    return negevals_;
+  if (HaveIpData()) {
+    IpData().TimingStats().LinearSystemBackSolve().End();
   }
+  if (ERROR!=0 ) {
+    Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                   "Error in Pardiso during solve phase.  ERROR = %d.\n", ERROR);
+    return SYMSOLVER_FATAL_ERROR;
+  }
+  return SYMSOLVER_SUCCESS;
+}
 
-  bool PardisoSolverInterface::IncreaseQuality()
-  {
-    // At the moment, I don't see how we could tell Pardiso to do better
-    // (maybe switch from IPARM[20]=1 to IPARM[20]=2?)
-    return false;
-  }
+Index PardisoSolverInterface::NumberOfNegEVals() const
+{
+  DBG_START_METH("PardisoSolverInterface::NumberOfNegEVals",dbg_verbosity);
+  DBG_ASSERT(negevals_>=0);
+  return negevals_;
+}
+
+bool PardisoSolverInterface::IncreaseQuality()
+{
+  // At the moment, I don't see how we could tell Pardiso to do better
+  // (maybe switch from IPARM[20]=1 to IPARM[20]=2?)
+  return false;
+}
 
 } // namespace Ipopt
