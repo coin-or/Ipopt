@@ -719,7 +719,8 @@ namespace Ipopt
         debug_last_iter_ = 0;
       }
 
-#ifdef PARDISO_MATCHING_PREPROCESS {
+#ifdef PARDISO_MATCHING_PREPROCESS
+    {
       ipfint* tmp2_  = new ipfint[N];
       smat_reordering_pardiso_wsmp_ (&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp2_, 1);
       delete[] tmp2_;
