@@ -106,19 +106,19 @@ AM_CONDITIONAL([AIX_FIX_COMPILER_BUG], test "x$AIX_FIX_COMPILER_BUG" != x)
 
 AC_COIN_CHECK_LIBM(IpoptLib)
 
-AC_COIN_HAS_PACKAGE_BLAS(IpoptLib)
+AC_COIN_CHECK_PACKAGE_BLAS(IpoptLib)
 if test $coin_has_blas != yes; then
   AC_MSG_ERROR([Required package BLAS not found.])
 fi
 
-AC_COIN_HAS_PACKAGE_LAPACK(IpoptLib)
+AC_COIN_CHECK_PACKAGE_LAPACK(IpoptLib)
 if test $coin_has_lapack != yes; then
   AC_MSG_WARN([Compiling code without LAPACK.  Certain options (e.g., quasi-Newton) will not work.])
 fi
 
-AC_COIN_HAS_PACKAGE(ASL,   [coinasl])
-AC_COIN_HAS_PACKAGE(HSL,   [coinhsl],   [IpoptLib])
-AC_COIN_HAS_PACKAGE(Mumps, [coinmumps], [IpoptLib])
+AC_COIN_CHECK_PACKAGE(ASL,   [coinasl])
+AC_COIN_CHECK_PACKAGE(HSL,   [coinhsl],   [IpoptLib])
+AC_COIN_CHECK_PACKAGE(Mumps, [coinmumps], [IpoptLib])
 
 #############################################################################
 #                             Stuff for examples                            #
