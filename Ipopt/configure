@@ -22568,7 +22568,8 @@ else
   use_blas=
 fi;
 
-#if user specified --with-blas-lib, then we should give COIN_HAS_PACKAGE preference
+# if user specified --with-blas-lib, then we should give COIN_HAS_PACKAGE
+# preference
 
 # Check whether --with-blas-lib or --without-blas-lib was given.
 if test "${with_blas_lib+set}" = set; then
