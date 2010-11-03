@@ -284,8 +284,11 @@ namespace Ipopt
 
     // Call WSSMP for ordering and symbolic factorization
     ipfint N = 0;
-    if (my_rank_) {
+    const ipfint one = 1;
+    const ipfint* ia_wsmp = &one;
+    if (my_rank_==0) {
       N = dim_;
+      ia_wsmp = ia;
     }
     ipfint NAUX = 0;
     IPARM_[1] = 1; // ordering
@@ -299,7 +302,7 @@ namespace Ipopt
 
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Calling PWSSMP-1-2 for ordering and symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
-    F77_FUNC(pwssmp,PWSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
+    F77_FUNC(pwssmp,PWSSMP)(&N, ia_wsmp, ja, a_, &ddmy, PERM_, INVP_,
                             &ddmy, &idmy, &idmy, &ddmy, &NAUX, MRP_,
                             IPARM_, DPARM_);
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
@@ -397,8 +400,11 @@ namespace Ipopt
 
     // Call WSSMP for numerical factorization
     ipfint N = 0;
+    const ipfint one = 1;
+    const ipfint* ia_wsmp = &one;
     if (my_rank_==0) {
       N = dim_;
+      ia_wsmp = ia;
     }
     ipfint NAUX = 0;
     IPARM_[1] = 3; // numerical factorization
@@ -409,7 +415,7 @@ namespace Ipopt
 
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Calling PWSSMP-3-3 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
-    F77_FUNC(pwssmp,PWSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
+    F77_FUNC(pwssmp,PWSSMP)(&N, ia_wsmp, ja, a_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
                             &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Done with PWSSMP-3-3 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
@@ -493,9 +499,12 @@ namespace Ipopt
     // ToDo: Make iterative refinement an option?
     ipfint N = 0;
     ipfint LDB = 0;
+    const ipfint one = 1;
+    const ipfint* ia_wsmp = &one;
     if (my_rank_==0) {
       N = dim_;
       LDB = dim_;
+      ia_wsmp = ia;
     }
     ipfint NRHS = nrhs;
     ipfint NAUX = 0;
@@ -507,7 +516,7 @@ namespace Ipopt
     double ddmy;
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Calling PWSSMP-4-5 for backsolve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
-    F77_FUNC(pwssmp,PWSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
+    F77_FUNC(pwssmp,PWSSMP)(&N, ia_wsmp, ja, a_, &ddmy, PERM_, INVP_,
                             rhs_vals, &LDB, &NRHS, &ddmy, &NAUX,
                             MRP_, IPARM_, DPARM_);
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
