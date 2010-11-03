@@ -22,6 +22,10 @@
 #ifdef HAVE_WSMP
 # include "IpWsmpSolverInterface.hpp"
 # include "IpIterativeWsmpSolverInterface.hpp"
+# ifdef HAVE_MPI
+#  include "IpParWsmpSolverInterface.hpp"
+#  include "IpParCollectWsmpSolverInterface.hpp"
+# endif
 #endif
 
 namespace Ipopt
@@ -60,6 +64,10 @@ namespace Ipopt
     roptions->SetRegisteringCategory("WSMP Linear Solver");
     WsmpSolverInterface::RegisterOptions(roptions);
     IterativeWsmpSolverInterface::RegisterOptions(roptions);
+# ifdef HAVE_MPI
+    ParWsmpSolverInterface::RegisterOptions(roptions);
+    ParCollectWsmpSolverInterface::RegisterOptions(roptions);
+# endif
 #endif
 
 #if defined(HAVE_MA28) || defined(HAVE_LINEARSOLVERLOADER)

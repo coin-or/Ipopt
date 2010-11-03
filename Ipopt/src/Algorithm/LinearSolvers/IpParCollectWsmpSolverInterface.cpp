@@ -1,14 +1,15 @@
-// Copyright (C) 2009, 2010 International Business Machines and others.
+// Copyright (C) 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
 // $Id$
 //
-// Authors:  Andreas Waechter, Sanjeeb Dash          IBM    2009-08-03
-//                (based on IpWsmpSolverInterface rev 1535)
+// Authors:  Andreas Waechter                 IBM    2010-11-01
+//               (based on IpWsmpSolverInterface.cpp rev 1729)
+//
 
 #include "IpoptConfig.h"
-#include "IpParWsmpSolverInterface.hpp"
+#include "IpParCollectWsmpSolverInterface.hpp"
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -45,20 +46,6 @@ extern "C"
                                double* AUX, const ipfint* NAUX,
                                ipfint* MRP, ipfint* IPARM,
                                double* DPARM);
-  void F77_FUNC(wsetglobind, WSETGLOBIND)(const ipfint* N,
-                                          const ipfint* NUMBERIING,
-                                          const ipfint* GLI, ipfint* INFO);
-  void F77_FUNC_(pws_xpose_ia,PWS_XPOSE_IA)(const ipfint* N, const ipfint* IA,
-      const ipfint* JA, ipfint* NNZ,
-      ipfint* IERR);
-  void F77_FUNC_(pws_xpose_ja,PWS_XPOSE_JA)(const ipfint* N, const ipfint* IA,
-      const ipfint* JA, ipfint* TIA,
-      ipfint* TJA, ipfint* IERR);
-  void F77_FUNC_(pws_xpose_av,PWS_XPOSE_AV)(const ipfint* N, const ipfint* IA,
-      const ipfint* JA,
-      const double* AVALS, ipfint* TIA,
-      ipfint* TJA, double* TAVALS,
-      ipfint* IERR);
   void F77_FUNC_(pwsmp_clear,PWSMP_CLEAR)(void);
 }
 
@@ -68,13 +55,9 @@ namespace Ipopt
   static const Index dbg_verbosity = 3;
 #endif
 
-  ParWsmpSolverInterface::ParWsmpSolverInterface()
+  ParCollectWsmpSolverInterface::ParCollectWsmpSolverInterface()
       :
-      num_local_rows_(-1),
-      a_local_(NULL),
-      ta_local_(NULL),
-      tia_local_(NULL),
-      tja_local_(NULL),
+      a_(NULL),
       negevals_(-1),
       initialized_(false),
 
@@ -82,15 +65,16 @@ namespace Ipopt
       INVP_(NULL),
       MRP_(NULL)
   {
-    DBG_START_METH("ParWsmpSolverInterface::ParWsmpSolverInterface()",dbg_verbosity);
+    DBG_START_METH("ParCollectWsmpSolverInterface::ParCollectWsmpSolverInterface()",dbg_verbosity);
 
     IPARM_ = new ipfint[64];
     DPARM_ = new double[64];
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank_);
   }
 
-  ParWsmpSolverInterface::~ParWsmpSolverInterface()
+  ParCollectWsmpSolverInterface::~ParCollectWsmpSolverInterface()
   {
-    DBG_START_METH("ParWsmpSolverInterface::~ParWsmpSolverInterface()",
+    DBG_START_METH("ParCollectWsmpSolverInterface::~ParCollectWsmpSolverInterface()",
                    dbg_verbosity);
 
     // Clear WSMP's memory
@@ -101,16 +85,13 @@ namespace Ipopt
     delete[] MRP_;
     delete[] IPARM_;
     delete[] DPARM_;
-    delete[] a_local_;
-    delete[] ta_local_;
-    delete[] tia_local_;
-    delete[] tja_local_;
+    delete[] a_;
   }
 
-  void ParWsmpSolverInterface::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  void ParCollectWsmpSolverInterface::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {}
 
-  bool ParWsmpSolverInterface::InitializeImpl(const OptionsList& options,
+  bool ParCollectWsmpSolverInterface::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
     options.GetIntegerValue("wsmp_num_threads", wsmp_num_threads_, prefix);
@@ -134,20 +115,18 @@ namespace Ipopt
     options.GetIntegerValue("wsmp_scaling", wsmp_scaling_, prefix);
     options.GetIntegerValue("wsmp_write_matrix_iteration",
                             wsmp_write_matrix_iteration_, prefix);
+    options.GetBoolValue("wsmp_skip_inertia_check",
+                         skip_inertia_check_, prefix);
 
     // Reset all private data
     dim_=0;
     initialized_=false;
+    printed_num_threads_ = false;
     pivtol_changed_ = false;
     have_symbolic_factorization_ = false;
-    delete[] a_local_;
-    a_local_ = NULL;
-    delete[] ta_local_;
-    ta_local_ = NULL;
-    delete[] tia_local_;
-    tia_local_ = NULL;
-    delete[] tja_local_;
-    tja_local_ = NULL;
+    factorizations_since_recomputed_ordering_ = -1;
+    delete[] a_;
+    a_ = NULL;
     delete[] PERM_;
     PERM_ = NULL;
     delete[] INVP_;
@@ -180,11 +159,11 @@ namespace Ipopt
     IPARM_[17] = 0; // use local minimum fill-in ordering
     IPARM_[19] = wsmp_ordering_option2; // for ordering in IP methods?
     IPARM_[30] = 1; // No pivoting , since not implemented
-
+    // pivoting (Bunch/Kaufman)
     //IPARM_[31] = 1; // need D to see where first negative eigenvalue occurs
     //                   if we change this, we need DIAG arguments below!
 
-    IPARM_[10] = 2; // Mark bad pivots -- WE CAN USE THIS TO DETECT SINGULAR MAIRCES; see also DPARM(21)
+    IPARM_[10] = 2; // Mark bad pivots
 
     // Set WSMP's scaling option
     IPARM_[9] = wsmp_scaling_;
@@ -198,26 +177,31 @@ namespace Ipopt
     return true;
   }
 
-  ESymSolverStatus ParWsmpSolverInterface::MultiSolve(
+  ESymSolverStatus ParCollectWsmpSolverInterface::MultiSolve(
     bool new_matrix,
-    const Index* ia_local,
-    const Index* ja_local,
+    const Index* ia,
+    const Index* ja,
     Index nrhs,
     double* rhs_vals,
     bool check_NegEVals,
     Index numberOfNegEVals)
   {
-    DBG_START_METH("ParWsmpSolverInterface::MultiSolve",dbg_verbosity);
+    DBG_START_METH("ParCollectWsmpSolverInterface::MultiSolve",dbg_verbosity);
     DBG_ASSERT(!check_NegEVals || ProvidesInertia());
     DBG_ASSERT(initialized_);
 
+    if (!printed_num_threads_) {
+      Jnlst().Printf(J_ITERSUMMARY, J_LINEAR_ALGEBRA,
+                     "  -- WSMP is working with %d thread%s.\n", IPARM_[32],
+                     IPARM_[32]==1 ? "" : "s");
+      printed_num_threads_ = true;
+    }
     // check if a factorization has to be done
     if (new_matrix || pivtol_changed_) {
       pivtol_changed_ = false;
       // perform the factorization
       ESymSolverStatus retval;
-      retval = Factorization(ia_local, ja_local, check_NegEVals,
-                             numberOfNegEVals);
+      retval = Factorization(ia, ja, check_NegEVals, numberOfNegEVals);
       if (retval!=SYMSOLVER_SUCCESS) {
         DBG_PRINT((1, "FACTORIZATION FAILED!\n"));
         return retval;  // Matrix singular or error occurred
@@ -225,97 +209,34 @@ namespace Ipopt
     }
 
     // do the solve
-    return Solve(ia_local, ja_local, nrhs, rhs_vals);
+    return Solve(ia, ja, nrhs, rhs_vals);
   }
 
-  double* ParWsmpSolverInterface::GetValuesArrayPtr()
+  double* ParCollectWsmpSolverInterface::GetValuesArrayPtr()
   {
     DBG_ASSERT(initialized_);
-    DBG_ASSERT(a_local_);
-    return a_local_;
-  }
-
-  bool ParWsmpSolverInterface::SetGlobalPos(Index num_rows, const Index* global_pos)
-  {
-    DBG_ASSERT(num_local_rows_ == -1);
-    num_local_rows_ = num_rows;
-    const ipfint N = num_rows;
-    const ipfint NUMBERING = 1;
-    ipfint INFO;
-    F77_FUNC(wsetglobind,WSETGLOBIND)(&N, &NUMBERING, global_pos, &INFO);
-    if (INFO!=0) {
-      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                     "wsetglobind returned INFO = %d\n", INFO);
-    }
-    return (INFO==0);
+    return a_;
   }
 
   /** Initialize the local copy of the positions of the nonzero
       elements */
-  ESymSolverStatus ParWsmpSolverInterface::InitializeStructure
-  (Index dim, Index nonzeros_local,
-   const Index* ia_local,
-   const Index* ja_local)
+  ESymSolverStatus ParCollectWsmpSolverInterface::InitializeStructure
+  (Index dim, Index nonzeros,
+   const Index* ia,
+   const Index* ja)
   {
-    DBG_START_METH("ParWsmpSolverInterface::InitializeStructure",dbg_verbosity);
+    DBG_START_METH("ParCollectWsmpSolverInterface::InitializeStructure",dbg_verbosity);
     dim_ = dim;
 
-    // Compute the transpose of the system
-    DBG_ASSERT(num_local_rows_ != -1);
-    const ipfint N = num_local_rows_;
-    ipfint NNZ;
-    ipfint IERR;
-    F77_FUNC_(pws_xpose_ia,PWS_XPOSE_IA)(&N, ia_local, ja_local, &NNZ, &IERR);
-    if (IERR!=0) {
-      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                     "pws_xpose_ia returned IERR = %d\n", IERR);
-      return SYMSOLVER_FATAL_ERROR;
+    // Make space for storing the matrix elements
+    delete[] a_;
+    a_ = NULL;
+    if (my_rank_==0) {
+      a_ = new double[nonzeros];
     }
-    nnz_transpose_local_ = NNZ;
-    delete [] tia_local_;
-    delete [] tja_local_;
-    tia_local_ = NULL;
-    tja_local_ = NULL;
-    tia_local_ = new Index[nnz_transpose_local_];
-    tja_local_ = new Index[nnz_transpose_local_];
-    F77_FUNC_(pws_xpose_ja,PWS_XPOSE_JA)(&N, ia_local, ja_local, tia_local_,
-                                         tja_local_, &IERR);
-    if (IERR!=0) {
-      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                     "pws_xpose_ja returned IERR = %d\n", IERR);
-      return SYMSOLVER_FATAL_ERROR;
-    }
-
-    if (Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA)) {
-      const Index* ia_local = tia_local_;
-      const Index* ja_local = tja_local_-1;
-      Jnlst().StartDistributedOutput();
-      int my_rank;
-      MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
-      Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "On Process %d, WSMP's transpose structure:\n", my_rank);
-      for (Index i=0; i<num_local_rows_; i++) {
-        Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
-                       "  tia_local[%5d] = %5d\n", i, ia_local[i]);
-        for (Index j=ia_local[i]; j<ia_local[i+1]; j++) {
-          Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
-                         "    tja_local[%5d] = %5d\n", j, ja_local[j]);
-        }
-      }
-      Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
-                     "  tia_local[%5d] = %5d\n", num_local_rows_, ia_local[num_local_rows_]);
-      Jnlst().FinishDistributedOutput();
-    }
-
-    // Make space for storing the local matrix elements
-    delete[] a_local_;
-    a_local_ = NULL;
-    a_local_ = new double[nonzeros_local];
-    delete[] ta_local_;
-    ta_local_ = NULL;
-    ta_local_ = new double[nnz_transpose_local_];
 
     // Do the symbolic facotrization
-    ESymSolverStatus retval = SymbolicFactorization(tia_local_,tja_local_);
+    ESymSolverStatus retval = SymbolicFactorization(ia, ja);
     if (retval != SYMSOLVER_SUCCESS) {
       return retval;
     }
@@ -326,11 +247,11 @@ namespace Ipopt
   }
 
   ESymSolverStatus
-  ParWsmpSolverInterface::SymbolicFactorization(
-    const Index* ia_local,
-    const Index* ja_local)
+  ParCollectWsmpSolverInterface::SymbolicFactorization(
+    const Index* ia,
+    const Index* ja)
   {
-    DBG_START_METH("ParWsmpSolverInterface::SymbolicFactorization",
+    DBG_START_METH("ParCollectWsmpSolverInterface::SymbolicFactorization",
                    dbg_verbosity);
 
     // This is postponed until the first factorization call, since
@@ -339,15 +260,14 @@ namespace Ipopt
   }
 
   ESymSolverStatus
-  ParWsmpSolverInterface::InternalSymFact(
-    const Index* ia_local,
-    const Index* ja_local,
+  ParCollectWsmpSolverInterface::InternalSymFact(
+    const Index* ia,
+    const Index* ja,
     Index numberOfNegEVals)
   {
     if (HaveIpData()) {
       IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
     }
-    DBG_ASSERT(num_local_rows_ != -1);
 
     // Create space for the permutations
     delete [] PERM_;
@@ -358,87 +278,32 @@ namespace Ipopt
     MRP_ = NULL;
     PERM_ = new ipfint[dim_];
     INVP_ = new ipfint[dim_];
-    MRP_ = new ipfint[num_local_rows_];
-
-//#define TRY
-#ifdef TRY
-
-    {
-      IPARM_[14] = 0;
-
-
-      // Call PWSSMP for ordering and symbolic factorization
-      ipfint N = num_local_rows_;
-      ipfint NAUX = 0;
-      IPARM_[1] = 1; // ordering
-      IPARM_[2] = 2; // symbolic factorization
-      ipfint idmy;
-      double ddmy;
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                     "Calling PWSSMP-1-2 for ordering and symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
-      F77_FUNC(pwssmp,PWSSMP)(&N, tia_local_, tja_local_, ta_local_, &ddmy, PERM_, INVP_,
-                              &ddmy, &idmy, &idmy, &ddmy, &NAUX, MRP_,
-                              IPARM_, DPARM_);
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                     "Done with WSSMP-1-2 for ordering and symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
-
-      Index ierror = IPARM_[63];
-      if (ierror!=0) {
-        if (ierror==-102) {
-          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                         "Error: WSMP is not able to allocate sufficient amount of memory during ordering/symbolic factorization.\n");
-        }
-        else if (ierror>0) {
-          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                         "Matrix appears to be singular (with ierror = %d).\n",
-                         ierror);
-          if (HaveIpData()) {
-            IpData().TimingStats().LinearSystemSymbolicFactorization().End();
-          }
-          return SYMSOLVER_SINGULAR;
-        }
-        else {
-          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                         "Error in WSMP during ordering/symbolic factorization phase.\n     Error code is %d.\n", ierror);
-        }
-        if (HaveIpData()) {
-          IpData().TimingStats().LinearSystemSymbolicFactorization().End();
-        }
-        return SYMSOLVER_FATAL_ERROR;
-      }
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "Predicted memory usage for WSSMP after symbolic factorization IPARM(23)= %d.\n",
-                     IPARM_[22]);
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "Predicted number of nonzeros in factor for WSSMP after symbolic factorization IPARM(24)= %d.\n",
-                     IPARM_[23]);
-
-      Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                     "Predicted number of nonzeros in factor for WSSMP after symbolic factorization IPARM(24)= %d.\n",
-                     IPARM_[23]);
-
+    if (my_rank_==0) {
+      MRP_ = new ipfint[dim_];
     }
 
-#endif
-
-    IPARM_[14] = dim_ - numberOfNegEVals; // CHECK
-    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                   "Restricting WSMP static pivot sequence with IPARM(15) = %d\n", IPARM_[14]);
-
-    // Call PWSSMP for ordering and symbolic factorization
-    ipfint N = num_local_rows_;
+    // Call WSSMP for ordering and symbolic factorization
+    ipfint N = 0;
+    if (my_rank_) {
+      N = dim_;
+    }
     ipfint NAUX = 0;
     IPARM_[1] = 1; // ordering
     IPARM_[2] = 2; // symbolic factorization
     ipfint idmy;
     double ddmy;
+
+    IPARM_[14] = dim_ - numberOfNegEVals; // CHECK
+    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                   "Restricting WSMP static pivot sequence with IPARM(15) = %d\n", IPARM_[14]);
+
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Calling PWSSMP-1-2 for ordering and symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
-    F77_FUNC(pwssmp,PWSSMP)(&N, tia_local_, tja_local_, ta_local_, &ddmy, PERM_, INVP_,
+    F77_FUNC(pwssmp,PWSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
                             &ddmy, &idmy, &idmy, &ddmy, &NAUX, MRP_,
                             IPARM_, DPARM_);
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                   "Done with WSSMP-1-2 for ordering and symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+                   "Done with PWSSMP-1-2 for ordering and symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
 
     Index ierror = IPARM_[63];
     if (ierror!=0) {
@@ -465,10 +330,10 @@ namespace Ipopt
       return SYMSOLVER_FATAL_ERROR;
     }
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "Predicted memory usage for WSSMP after symbolic factorization IPARM(23)= %d.\n",
+                   "Predicted memory usage for PWSSMP after symbolic factorization IPARM(23)= %d.\n",
                    IPARM_[22]);
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "Predicted number of nonzeros in factor for WSSMP after symbolic factorization IPARM(24)= %d.\n",
+                   "Predicted number of nonzeros in factor for PWSSMP after symbolic factorization IPARM(23)= %d.\n",
                    IPARM_[23]);
 
     if (HaveIpData()) {
@@ -479,13 +344,13 @@ namespace Ipopt
   }
 
   ESymSolverStatus
-  ParWsmpSolverInterface::Factorization(
-    const Index* ia_local,
-    const Index* ja_local,
+  ParCollectWsmpSolverInterface::Factorization(
+    const Index* ia,
+    const Index* ja,
     bool check_NegEVals,
     Index numberOfNegEVals)
   {
-    DBG_START_METH("ParWsmpSolverInterface::Factorization",dbg_verbosity);
+    DBG_START_METH("ParCollectWsmpSolverInterface::Factorization",dbg_verbosity);
 
     // If desired, write out the matrix
     Index iter_count = -1;
@@ -506,35 +371,20 @@ namespace Ipopt
       FILE* fp = fopen(buf, "w");
       fprintf(fp, "%d\n", dim_); // N
       for (Index icol=0; icol<dim_; icol++) {
-        fprintf(fp, "%d", ia_local[icol+1]-ia_local[icol]); // number of elements for this column
+        fprintf(fp, "%d", ia[icol+1]-ia[icol]); // number of elements for this column
         // Now for each colum we write row indices and values
-        for (Index irow=ia_local[icol]; irow<ia_local[icol+1]; irow++) {
-          fprintf(fp, " %23.16e %d",a_local_[irow-1],ja_local[irow-1]);
+        for (Index irow=ia[icol]; irow<ia[icol+1]; irow++) {
+          fprintf(fp, " %23.16e %d",a_[irow-1],ja[irow-1]);
         }
         fprintf(fp, "\n");
       }
       fclose(fp);
     }
 
-    // Transpose the values
-    DBG_ASSERT(num_local_rows_ != -1);
-    DBG_ASSERT(tia_local_);
-    ipfint N = num_local_rows_;
-    ipfint IERR;
-    F77_FUNC_(pws_xpose_av,PWS_XPOSE_av)(&N, ia_local, ja_local, a_local_,
-                                         tia_local_, tja_local_, ta_local_,
-                                         &IERR);
-    if (IERR!=0) {
-      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                     "pws_xpose_av returned IERR = %d\n", IERR);
-      return SYMSOLVER_FATAL_ERROR;
-    }
-
     // Check if we have to do the symbolic factorization and ordering
     // phase yet
     if (!have_symbolic_factorization_) {
-      ESymSolverStatus retval = InternalSymFact(ia_local, ja_local,
-                                numberOfNegEVals);
+      ESymSolverStatus retval = InternalSymFact(ia, ja, numberOfNegEVals);
       if (retval != SYMSOLVER_SUCCESS) {
         return retval;
       }
@@ -546,7 +396,10 @@ namespace Ipopt
     }
 
     // Call WSSMP for numerical factorization
-    N = num_local_rows_;
+    ipfint N = 0;
+    if (my_rank_==0) {
+      N = dim_;
+    }
     ipfint NAUX = 0;
     IPARM_[1] = 3; // numerical factorization
     IPARM_[2] = 3; // numerical factorization
@@ -555,12 +408,11 @@ namespace Ipopt
     double ddmy;
 
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                   "Calling WSSMP-3-3 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
-    F77_FUNC(pwssmp,PWSSMP)(&N, tia_local_, tja_local_, ta_local_,
-                            &ddmy, PERM_, INVP_, &ddmy, &idmy,
+                   "Calling PWSSMP-3-3 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+    F77_FUNC(pwssmp,PWSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
                             &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                   "Done with WSSMP-3-3 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+                   "Done with PWSSMP-3-3 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
 
     const Index ierror = IPARM_[63];
     if (ierror > 0) {
@@ -586,18 +438,17 @@ namespace Ipopt
       return SYMSOLVER_FATAL_ERROR;
     }
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "Memory usage for WSSMP after factorization IPARM(23) = %d\n",
+                   "Memory usage for PWSSMP after factorization IPARM(23) = %d\n",
                    IPARM_[22]);
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "Number of nonzeros in WSSMP after factorization IPARM(24) = %d\n",
+                   "Number of nonzeros in PWSSMP after factorization IPARM(24) = %d\n",
                    IPARM_[23]);
 
-    // THE FOLLOWING SHOULD STILL BE CORRECT WITHOUT PIVOTING!
-    negevals_ = IPARM_[21]; // Number of negative eigenvalues
-    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "Number of negative eigenvalues detected by WSMP = %d\n",
-                   negevals_);
-    // determined during factorization
+    if (factorizations_since_recomputed_ordering_ != -1) {
+      factorizations_since_recomputed_ordering_++;
+    }
+
+    negevals_ = IPARM_[21]; // Number of negative eigenvalues determined during factorization
 
     // Check whether the number of negative eigenvalues matches the requested
     // count
@@ -605,10 +456,18 @@ namespace Ipopt
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Wrong inertia: required are %d, but we got %d.\n",
                      numberOfNegEVals, negevals_);
-      if (HaveIpData()) {
-        IpData().TimingStats().LinearSystemFactorization().End();
+      if (skip_inertia_check_) {
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                       "  But wsmp_skip_inertia_check is set.  Ignore inertia.\n");
+        IpData().Append_info_string("IC ");
+        negevals_ = numberOfNegEVals;
       }
-      return SYMSOLVER_WRONG_INERTIA;
+      else {
+        if (HaveIpData()) {
+          IpData().TimingStats().LinearSystemFactorization().End();
+        }
+        return SYMSOLVER_WRONG_INERTIA;
+      }
     }
 
     if (HaveIpData()) {
@@ -617,13 +476,13 @@ namespace Ipopt
     return SYMSOLVER_SUCCESS;
   }
 
-  ESymSolverStatus ParWsmpSolverInterface::Solve(
-    const Index* ia_local,
-    const Index* ja_local,
+  ESymSolverStatus ParCollectWsmpSolverInterface::Solve(
+    const Index* ia,
+    const Index* ja,
     Index nrhs,
     double *rhs_vals)
   {
-    DBG_START_METH("ParWsmpSolverInterface::Solve",dbg_verbosity);
+    DBG_START_METH("ParCollectWsmpSolverInterface::Solve",dbg_verbosity);
 
     if (HaveIpData()) {
       IpData().TimingStats().LinearSystemBackSolve().Start();
@@ -632,8 +491,12 @@ namespace Ipopt
     // Call WSMP to solve for some right hand sides (including
     // iterative refinement)
     // ToDo: Make iterative refinement an option?
-    ipfint N = num_local_rows_;
-    ipfint LDB = num_local_rows_;
+    ipfint N = 0;
+    ipfint LDB = 0;
+    if (my_rank_==0) {
+      N = dim_;
+      LDB = dim_;
+    }
     ipfint NRHS = nrhs;
     ipfint NAUX = 0;
     IPARM_[1] = 4; // Forward and Backward Elimintation
@@ -643,13 +506,12 @@ namespace Ipopt
 
     double ddmy;
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                   "Calling WSSMP-4-5 for backsolve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
-    F77_FUNC(pwssmp,PWSSMP)(&N, tia_local_, tja_local_, ta_local_,
-                            &ddmy, PERM_, INVP_,
+                   "Calling PWSSMP-4-5 for backsolve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+    F77_FUNC(pwssmp,PWSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
                             rhs_vals, &LDB, &NRHS, &ddmy, &NAUX,
                             MRP_, IPARM_, DPARM_);
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                   "Done with WSSMP-4-5 for backsolve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+                   "Done with PWSSMP-4-5 for backsolve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
     if (HaveIpData()) {
       IpData().TimingStats().LinearSystemBackSolve().End();
     }
@@ -667,24 +529,36 @@ namespace Ipopt
       return SYMSOLVER_FATAL_ERROR;
     }
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "Number of iterative refinement steps in WSSMP: %d\n",
+                   "Number of iterative refinement steps in PWSSMP: %d\n",
                    IPARM_[5]);
 
 
     return SYMSOLVER_SUCCESS;
   }
 
-  Index ParWsmpSolverInterface::NumberOfNegEVals() const
+  Index ParCollectWsmpSolverInterface::NumberOfNegEVals() const
   {
-    DBG_START_METH("ParWsmpSolverInterface::NumberOfNegEVals",dbg_verbosity);
+    DBG_START_METH("ParCollectWsmpSolverInterface::NumberOfNegEVals",dbg_verbosity);
+    DBG_ASSERT(negevals_>=0);
     return negevals_;
   }
 
-  bool ParWsmpSolverInterface::IncreaseQuality()
+  bool ParCollectWsmpSolverInterface::IncreaseQuality()
   {
-    return false;
-#if 0
-    DBG_START_METH("ParWsmpSolverInterface::IncreaseQuality",dbg_verbosity);
+// TODO: BEFORE INCREASING TOLERANCE, TRY TO REDO THE ORDERING. - USE DPARM(15) !!!
+//       ALSO: DECREASE PIVTOL AGAIN LATER?
+    DBG_START_METH("ParCollectWsmpSolverInterface::IncreaseQuality",dbg_verbosity);
+
+    if (factorizations_since_recomputed_ordering_ == -1 ||
+        factorizations_since_recomputed_ordering_ > 2) {
+      DPARM_[14] = 1.0;
+      pivtol_changed_ = true;
+      IpData().Append_info_string("RO ");
+      factorizations_since_recomputed_ordering_ = 0;
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Triggering WSMP's recomputation of the ordering for next factorization.\n");
+      return true;
+    }
     if (wsmp_pivtol_ == wsmp_pivtolmax_) {
       return false;
     }
@@ -698,8 +572,6 @@ namespace Ipopt
                    "to %7.2e.\n",
                    wsmp_pivtol_);
     return true;
-#endif
   }
-
 
 } // namespace Ipopt
