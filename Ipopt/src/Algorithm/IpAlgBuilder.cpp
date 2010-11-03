@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2009 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -77,6 +77,7 @@
 # include "IpParMumpsSolverInterface.hpp"
 # ifdef HAVE_WSMP
 #  include "IpParWsmpSolverInterface.hpp"
+#  include "IpParCollectWsmpSolverInterface.hpp"
 # endif
 #endif
 
@@ -269,6 +270,13 @@ namespace Ipopt
       "no", "use direct solver",
       "yes", "use iterative solver",
       "EXPERIMENTAL!");
+    roptions->AddStringOption2(
+      "wsmp_distributed_matrix",
+      "Provides the matrix to WSMP in a distributed manner.",
+      "yes",
+      "no", "collect matrix on root process",
+      "yes", "provide parts of matrix on all processes",
+      "");
   }
 
   SmartPtr<IpoptAlgorithm>
@@ -292,6 +300,7 @@ namespace Ipopt
     std::string linear_solver;
     options.GetStringValue("linear_solver", linear_solver, prefix);
     bool use_custom_solver = false;
+    bool wsmp_distributed_matrix = true;
     if (linear_solver=="ma27") {
 #ifndef HAVE_MA27
 # ifdef HAVE_LINEARSOLVERLOADER
@@ -368,7 +377,14 @@ namespace Ipopt
     else if (linear_solver=="wsmp") {
 #ifdef HAVE_WSMP
 # ifdef HAVE_MPI
-      SolverInterface = new ParWsmpSolverInterface();
+      options.GetBoolValue("wsmp_distributed_matrix", wsmp_distributed_matrix,
+                           prefix);
+      if (wsmp_distributed_matrix) {
+        SolverInterface = new ParWsmpSolverInterface();
+      }
+      else {
+        SolverInterface = new ParCollectWsmpSolverInterface();
+      }
 # else
       bool wsmp_iterative;
       options.GetBoolValue("wsmp_iterative", wsmp_iterative, prefix);
@@ -380,7 +396,6 @@ namespace Ipopt
       }
 # endif
 #else
-
       THROW_EXCEPTION(OPTION_INVALID,
                       "Selected linear solver WSMP not available.");
 #endif
@@ -446,8 +461,17 @@ namespace Ipopt
 
       SmartPtr<SymLinearSolver> ScaledSolver;
 #ifdef HAVE_MPI
-      if (linear_solver=="mumps" || linear_solver=="wsmp") {
+      if (linear_solver=="mumps") {
         ScaledSolver = new ParDistTSymLinearSolver(SolverInterface);
+      }
+      else if (linear_solver=="wsmp") {
+        if (wsmp_distributed_matrix) {
+          ScaledSolver = new ParDistTSymLinearSolver(SolverInterface);
+        }
+        else {
+          ScaledSolver =
+            new ParTSymLinearSolver(SolverInterface, ScalingMethod, true);
+        }
       }
       else {
         ScaledSolver = new ParTSymLinearSolver(SolverInterface, ScalingMethod);

@@ -79,7 +79,8 @@ if HAVE_MPI
 	IpParDistTGenLinearSolver.cpp IpParDistTGenLinearSolver.hpp
 if HAVE_WSMP
   liblinsolvers_la_SOURCES += \
-	IpParWsmpSolverInterface.cpp IpParWsmpSolverInterface.hpp
+	IpParWsmpSolverInterface.cpp IpParWsmpSolverInterface.hpp \
+	IpParCollectWsmpSolverInterface.cpp IpParCollectWsmpSolverInterface.hpp
 endif
 endif
 
@@ -153,6 +154,7 @@ ASTYLE_FILES = \
 	IpParMumpsSolverInterface.cppbak IpParMumpsSolverInterface.hppbak \
 	IpParTSymLinearSolver.cppbak IpParTSymLinearSolver.hppbak \
 	IpParWsmpSolverInterface.cppbak IpParWsmpSolverInterface.hppbak \
+	IpParCollectWsmpSolverInterface.cppbak IpParCollectWsmpSolverInterface.hppbak \
 	IpPardisoSolverInterface.cppbak IpPardisoSolverInterface.hppbak \
 	IpWsmpSolverInterface.cppbak IpWsmpSolverInterface.hppbak
 

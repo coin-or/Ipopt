@@ -79,7 +79,8 @@ host_triplet = @host@
 @HAVE_MPI_TRUE@	IpParDistTGenLinearSolver.cpp IpParDistTGenLinearSolver.hpp
 
 @HAVE_MPI_TRUE@@HAVE_WSMP_TRUE@am__append_10 = \
-@HAVE_MPI_TRUE@@HAVE_WSMP_TRUE@	IpParWsmpSolverInterface.cpp IpParWsmpSolverInterface.hpp
+@HAVE_MPI_TRUE@@HAVE_WSMP_TRUE@	IpParWsmpSolverInterface.cpp IpParWsmpSolverInterface.hpp \
+@HAVE_MPI_TRUE@@HAVE_WSMP_TRUE@	IpParCollectWsmpSolverInterface.cpp IpParCollectWsmpSolverInterface.hpp
 
 @COIN_HAS_MUMPS_TRUE@am__append_11 = \
 @COIN_HAS_MUMPS_TRUE@	IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
@@ -124,7 +125,9 @@ am__liblinsolvers_la_SOURCES_DIST = IpGenKKTSolverInterface.hpp \
 	IpParTSymLinearSolver.hpp IpParDistTSymLinearSolver.cpp \
 	IpParDistTSymLinearSolver.hpp IpParDistTGenLinearSolver.cpp \
 	IpParDistTGenLinearSolver.hpp IpParWsmpSolverInterface.cpp \
-	IpParWsmpSolverInterface.hpp IpMumpsSolverInterface.cpp \
+	IpParWsmpSolverInterface.hpp \
+	IpParCollectWsmpSolverInterface.cpp \
+	IpParCollectWsmpSolverInterface.hpp IpMumpsSolverInterface.cpp \
 	IpMumpsSolverInterface.hpp IpParMumpsSolverInterface.cpp \
 	IpParMumpsSolverInterface.hpp IpParGenMumpsSolverInterface.cpp \
 	IpParGenMumpsSolverInterface.hpp
@@ -148,7 +151,8 @@ am__liblinsolvers_la_SOURCES_DIST = IpGenKKTSolverInterface.hpp \
 @HAVE_MPI_TRUE@	IpParDistTSymLinearSolver.lo \
 @HAVE_MPI_TRUE@	IpParDistTGenLinearSolver.lo
 @HAVE_MPI_TRUE@@HAVE_WSMP_TRUE@am__objects_10 =  \
-@HAVE_MPI_TRUE@@HAVE_WSMP_TRUE@	IpParWsmpSolverInterface.lo
+@HAVE_MPI_TRUE@@HAVE_WSMP_TRUE@	IpParWsmpSolverInterface.lo \
+@HAVE_MPI_TRUE@@HAVE_WSMP_TRUE@	IpParCollectWsmpSolverInterface.lo
 @COIN_HAS_MUMPS_TRUE@am__objects_11 = IpMumpsSolverInterface.lo
 @COIN_HAS_MUMPS_TRUE@@HAVE_MPI_TRUE@am__objects_12 = IpParMumpsSolverInterface.lo \
 @COIN_HAS_MUMPS_TRUE@@HAVE_MPI_TRUE@	IpParGenMumpsSolverInterface.lo
@@ -470,6 +474,7 @@ ASTYLE_FILES = \
 	IpParMumpsSolverInterface.cppbak IpParMumpsSolverInterface.hppbak \
 	IpParTSymLinearSolver.cppbak IpParTSymLinearSolver.hppbak \
 	IpParWsmpSolverInterface.cppbak IpParWsmpSolverInterface.hppbak \
+	IpParCollectWsmpSolverInterface.cppbak IpParCollectWsmpSolverInterface.hppbak \
 	IpPardisoSolverInterface.cppbak IpPardisoSolverInterface.hppbak \
 	IpWsmpSolverInterface.cppbak IpWsmpSolverInterface.hppbak
 
@@ -534,6 +539,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMa77SolverInterface.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMc19TSymScalingMethod.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMumpsSolverInterface.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpParCollectWsmpSolverInterface.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpParDistTGenLinearSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpParDistTSymLinearSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpParGenMumpsSolverInterface.Plo@am__quote@
