@@ -152,6 +152,11 @@ int main(int argv, char* argc[])
     return 0;
   }
 
+#ifdef HAVE_MPI
+  printf("This example is not set up to work with MPI.  Aborting.\n");
+  exit(-1);
+#endif
+
 #ifdef TIME_LIMIT
   if (argv==4) {
     int runtime = atoi(argc[3]);
