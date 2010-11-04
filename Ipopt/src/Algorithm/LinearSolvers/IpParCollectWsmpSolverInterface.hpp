@@ -13,6 +13,8 @@
 
 #include "IpSparseSymLinearSolverInterface.hpp"
 
+//#define PARDISO_MATCHING_PREPROCESS
+
 namespace Ipopt
 {
 
@@ -113,6 +115,22 @@ namespace Ipopt
 
     /** Array for storing the values of the matrix. */
     double* a_;
+
+    /** Number of nonzeros */
+    Index nonzeros_;
+
+#ifdef PARDISO_MATCHING_PREPROCESS
+    /** @name Arrays for storing the values of a second matrix that has been
+    already reordered. */
+    //@{
+    ipfint* ia2_;
+    ipfint* ja2_;
+    double* a2_;
+    ipfint* perm2_;
+    double* scale2_;
+    //@}
+#endif
+
     //@}
 
     /** @name Solver specific options */

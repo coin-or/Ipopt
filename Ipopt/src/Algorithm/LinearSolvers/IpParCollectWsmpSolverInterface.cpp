@@ -47,6 +47,17 @@ extern "C"
                                ipfint* MRP, ipfint* IPARM,
                                double* DPARM);
   void F77_FUNC_(pwsmp_clear,PWSMP_CLEAR)(void);
+
+#ifdef PARDISO_MATCHING_PREPROCESS
+  void smat_reordering_pardiso_wsmp_(const ipfint* N, const ipfint* ia,
+                                     const ipfint* ja, const double* a,
+                                     ipfint* a2, ipfint* ja2,  double* a2_,
+                                     ipfint* perm2,  double* scale2,
+                                     ipfint* tmp2_, ipfint preprocess);
+#endif
+
+
+
 }
 
 namespace Ipopt
@@ -61,9 +72,19 @@ namespace Ipopt
       negevals_(-1),
       initialized_(false),
 
+#ifdef PARDISO_MATCHING_PREPROCESS
+      ia2_(NULL),
+      ja2_(NULL),
+      a2_(NULL),
+      perm2_(NULL),
+      scale2_(NULL),
+#endif
+
+
       PERM_(NULL),
       INVP_(NULL),
       MRP_(NULL)
+
   {
     DBG_START_METH("ParCollectWsmpSolverInterface::ParCollectWsmpSolverInterface()",dbg_verbosity);
 
@@ -79,6 +100,15 @@ namespace Ipopt
 
     // Clear WSMP's memory
     F77_FUNC_(pwsmp_clear,PWSMP_CLEAR)();
+
+#ifdef PARDISO_MATCHING_PREPROCESS
+    delete[] ia2_;
+    delete[] ja2_;
+    delete[] a2_;
+    delete[] perm2_;
+    delete[] scale2_;
+#endif
+
 
     delete[] PERM_;
     delete[] INVP_;
@@ -134,6 +164,25 @@ namespace Ipopt
     delete[] MRP_;
     MRP_ = NULL;
 
+
+#ifdef PARDISO_MATCHING_PREPROCESS
+    delete[] ia2_;
+    ia2_ = NULL;
+
+    delete[] ja2_;
+    ja2_ = NULL;
+
+    delete[] a2_;
+    a2_ = NULL;
+
+    delete[] perm2_;
+    perm2_ = NULL;
+
+    delete[] scale2_;
+    scale2_ = NULL;
+#endif
+
+
     // Set the number of threads
     if (wsmp_num_threads_==0) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
@@ -156,6 +205,13 @@ namespace Ipopt
                             &idmy, &ddmy, &idmy, &idmy, &ddmy, &idmy,
                             &idmy, IPARM_, DPARM_);
     IPARM_[15] = wsmp_ordering_option; // ordering option
+
+#ifdef PARDISO_MATCHING_PREPROCESS
+    //IPARM_[9]  =  2; // next step switch off WSMP's ordering and scaling
+    //IPARM_[15] = -1; // next step switch off WSMP's ordering and scaling
+    //IPARM_[30] =  6; // next step supernode pivoting , since not implemented
+#endif
+
     IPARM_[17] = 0; // use local minimum fill-in ordering
     IPARM_[19] = wsmp_ordering_option2; // for ordering in IP methods?
     IPARM_[30] = 1; // No pivoting , since not implemented
@@ -227,6 +283,7 @@ namespace Ipopt
   {
     DBG_START_METH("ParCollectWsmpSolverInterface::InitializeStructure",dbg_verbosity);
     dim_ = dim;
+    nonzeros_ = nonzeros;
 
     // Make space for storing the matrix elements
     delete[] a_;
@@ -282,6 +339,7 @@ namespace Ipopt
       MRP_ = new ipfint[dim_];
     }
 
+
     // Call WSSMP for ordering and symbolic factorization
     ipfint N = 0;
     const ipfint one = 1;
@@ -289,6 +347,38 @@ namespace Ipopt
     if (my_rank_==0) {
       N = dim_;
       ia_wsmp = ia;
+
+#ifdef PARDISO_MATCHING_PREPROCESS
+      delete[] ia2_;
+      ia2_ = NULL;
+
+      delete[] ja2_;
+      ja2_ = NULL;
+
+      delete[] a2_;
+      a2_ = NULL;
+
+      delete[] perm2_;
+      perm2_ = NULL;
+
+      delete[] scale2_;
+      scale2_ = NULL;
+
+      ia2_    = new ipfint[N+1];
+      ja2_    = new ipfint[nonzeros_];
+      a2_     = new double[nonzeros_];
+      perm2_  = new ipfint[N];
+      scale2_ = new double[N];
+      ipfint* tmp2_  = new ipfint[N];
+
+      smat_reordering_pardiso_wsmp_(&N, ia, ja, a_, ia2_, ja2_, a2_,
+                                    perm2_, scale2_, tmp2_, 0);
+
+      delete[] tmp2_;
+      ia_wsmp = ia2_;
+
+#endif
+
     }
     ipfint NAUX = 0;
     IPARM_[1] = 1; // ordering
@@ -302,9 +392,15 @@ namespace Ipopt
 
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Calling PWSSMP-1-2 for ordering and symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+
+#ifdef PARDISO_MATCHING_PREPROCESS
+    F77_FUNC(pwssmp,PWSSMP)(&N, ia_wsmp, ja2_, a2_, &ddmy, PERM_, INVP_,
+#else
     F77_FUNC(pwssmp,PWSSMP)(&N, ia_wsmp, ja, a_, &ddmy, PERM_, INVP_,
+#endif
                             &ddmy, &idmy, &idmy, &ddmy, &NAUX, MRP_,
                             IPARM_, DPARM_);
+
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Done with PWSSMP-1-2 for ordering and symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
 
@@ -404,7 +500,11 @@ namespace Ipopt
     const ipfint* ia_wsmp = &one;
     if (my_rank_==0) {
       N = dim_;
+#ifdef PARDISO_MATCHING_PREPROCESS
+      ia_wsmp = ia2_;
+#else
       ia_wsmp = ia;
+#endif
     }
     ipfint NAUX = 0;
     IPARM_[1] = 3; // numerical factorization
@@ -415,8 +515,13 @@ namespace Ipopt
 
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Calling PWSSMP-3-3 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+#ifdef PARDISO_MATCHING_PREPROCESS
+    F77_FUNC(pwssmp,PWSSMP)(&N, ia_wsmp, ja2_, a2_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
+#else
     F77_FUNC(pwssmp,PWSSMP)(&N, ia_wsmp, ja, a_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
+#endif
                             &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
+
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Done with PWSSMP-3-3 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
 
@@ -504,7 +609,11 @@ namespace Ipopt
     if (my_rank_==0) {
       N = dim_;
       LDB = dim_;
+#ifdef PARDISO_MATCHING_PREPROCESS
+      ia_wsmp = ia2_;
+#else
       ia_wsmp = ia;
+#endif
     }
     ipfint NRHS = nrhs;
     ipfint NAUX = 0;
@@ -516,9 +625,31 @@ namespace Ipopt
     double ddmy;
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Calling PWSSMP-4-5 for backsolve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+
+#ifdef PARDISO_MATCHING_PREPROCESS
+    double* X;
+    if (my_rank_==0) {
+      X = new double[nrhs*N];
+
+      // Initialize solution with zero and save right hand side
+      for (int i = 0; i < nrhs*N; i++) {
+        X[perm2_[i]] = scale2_[i] * rhs_vals[i];
+      }
+    }
+    F77_FUNC(pwssmp,PWSSMP)(&N, ia_wsmp, ja2_, a2_, &ddmy, PERM_, INVP_,
+                            X, &LDB, &NRHS, &ddmy, &NAUX,
+                            MRP_, IPARM_, DPARM_);
+    if (my_rank_==0) {
+      for (int i = 0; i < N; i++) {
+        rhs_vals[i] = scale2_[i]*X[perm2_[i]];
+      }
+    }
+#else
     F77_FUNC(pwssmp,PWSSMP)(&N, ia_wsmp, ja, a_, &ddmy, PERM_, INVP_,
                             rhs_vals, &LDB, &NRHS, &ddmy, &NAUX,
                             MRP_, IPARM_, DPARM_);
+#endif
+
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Done with PWSSMP-4-5 for backsolve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
     if (HaveIpData()) {
@@ -541,6 +672,9 @@ namespace Ipopt
                    "Number of iterative refinement steps in PWSSMP: %d\n",
                    IPARM_[5]);
 
+#ifdef PARDISO_MATCHING_PREPROCESS
+    delete [] X;
+#endif
 
     return SYMSOLVER_SUCCESS;
   }
