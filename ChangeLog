@@ -2,6 +2,11 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2010-11-05 releases/3.9.0
+        - switching to new BuildTools system
+        - added R interface (contributed by Jelmer Ypma)
+        - updates in AsNMPC (by Hans Pirnay)
+
 2010-06-29 releases/3.8.3
         - restated SolveStatistics::TotalCPUTime method for backward
           compatibility
