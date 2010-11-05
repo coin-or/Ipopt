@@ -5869,7 +5869,7 @@ else
 fi
 full_prefix=`cd $full_prefix ; pwd`
 
-abs_lib_dir=$full_prefix/lib
+abs_lib_dir=$full_prefix/lib/coin
 
 abs_include_dir=$full_prefix/include
 
@@ -20734,7 +20734,7 @@ if test $enable_shared = yes; then
     *-linux-*)
       if test "$GXX" = "yes"; then
         RPATH_FLAGS=
-        for dir in $abs_lib_dir/coin $abs_lib_dir/coin/ThirdParty; do
+        for dir in $abs_lib_dir $abs_lib_dir/ThirdParty; do
           RPATH_FLAGS="$RPATH_FLAGS -Wl,--rpath -Wl,$dir"
         done
       fi ;;
@@ -20751,7 +20751,7 @@ if test $enable_shared = yes; then
         RPATH_FLAGS=nothing ;;
     *-*-solaris*)
         RPATH_FLAGS=
-        for dir in $abs_lib_dir/coin $abs_lib_dir/coin/ThirdParty; do
+        for dir in $abs_lib_dir $abs_lib_dir/ThirdParty; do
           RPATH_FLAGS="$RPATH_FLAGS -R$dir"
         done
   esac
@@ -20984,7 +20984,11 @@ COIN_PKG_CONFIG_PATH="$PKG_CONFIG_PATH"
 # let's assume that when installing into $prefix, then the user may have installed some other coin projects there before, so it's worth to have a look into there
 # best would actually to use ${libdir}, since .pc files get installed into ${libdir}/pkgconfig,
 # unfortunately, ${libdir} expands to ${exec_prefix}/lib and ${exec_prefix} to ${prefix}...
-COIN_PKG_CONFIG_PATH="${prefix}/lib/pkgconfig:${COIN_PKG_CONFIG_PATH}"
+if test "x${prefix}" = xNONE ; then
+  COIN_PKG_CONFIG_PATH="${ac_default_prefix}/lib/pkgconfig:${COIN_PKG_CONFIG_PATH}"
+else
+  COIN_PKG_CONFIG_PATH="${prefix}/lib/pkgconfig:${COIN_PKG_CONFIG_PATH}"
+fi
 
 
 # Check whether --with-coin-instdir or --without-coin-instdir was given.
