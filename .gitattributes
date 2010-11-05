@@ -1,5 +1,6 @@
 * text=auto !eol
 /ChangeLog -text
+/Dependencies -text
 /Externals -text
 /INSTALL -text
 Ipopt/INSTALL -text
