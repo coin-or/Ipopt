@@ -1,0 +1,7 @@
+BuildTools  https://projects.coin-or.org/svn/BuildTools/releases/0.6.0/
+ThirdParty/ASL  https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/releases/1.1.0/
+ThirdParty/Metis  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Metis/releases/1.1.0/
+ThirdParty/HSL  https://projects.coin-or.org/svn/BuildTools/ThirdParty/HSL/releases/1.2.0/
+ThirdParty/Blas  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Blas/releases/1.1.0/
+ThirdParty/Lapack  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Lapack/releases/1.2.0/
+ThirdParty/Mumps  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Mumps/releases/1.3.0/
