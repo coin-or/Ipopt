@@ -22572,7 +22572,7 @@ else
   use_blas=
 fi;
 
-# if user specified --with-blas-lib, then we should give COIN_HAS_PACKAGE
+# if user specified --with-blas-lib, then we should give COIN_CHECK_PACKAGE
 # preference
 
 # Check whether --with-blas-lib or --without-blas-lib was given.
@@ -24895,7 +24895,7 @@ if test x"$use_lapack" != x; then
     echo "$as_me:$LINENO: checking whether user supplied LAPACKLIB=\"$use_lapack\" works" >&5
 echo $ECHO_N "checking whether user supplied LAPACKLIB=\"$use_lapack\" works... $ECHO_C" >&6
     coin_save_LIBS="$LIBS"
-    LIBS="$use_lapack $LIBS"
+    LIBS="$use_lapack $BLAS_LIBS $LIBS"
     case $ac_ext in
   f)
     cat >conftest.$ac_ext <<_ACEOF
@@ -25652,7 +25652,7 @@ esac
         echo "$as_me:$LINENO: checking whether -lcomplib.sgimath has LAPACK" >&5
 echo $ECHO_N "checking whether -lcomplib.sgimath has LAPACK... $ECHO_C" >&6
         coin_save_LIBS="$LIBS"
-        LIBS="-lcomplib.sgimath $LIBS"
+        LIBS="-lcomplib.sgimath $BLAS_LIBS $LIBS"
         case $ac_ext in
   f)
     cat >conftest.$ac_ext <<_ACEOF
@@ -26022,12 +26022,12 @@ esac
         LIBS="$coin_save_LIBS"
         ;;
 
-      # See comments in COIN_HAS_BLAS.
+      # See comments in COIN_CHECK_PACKAGE_BLAS.
       *-*-solaris*)
         echo "$as_me:$LINENO: checking for LAPACK in libsunperf" >&5
 echo $ECHO_N "checking for LAPACK in libsunperf... $ECHO_C" >&6
         coin_save_LIBS="$LIBS"
-        LIBS="-lsunperf $FLIBS $LIBS"
+        LIBS="-lsunperf $BLAS_LIBS $FLIBS $LIBS"
         case $ac_ext in
   f)
     cat >conftest.$ac_ext <<_ACEOF
@@ -26415,7 +26415,7 @@ esac
     echo "$as_me:$LINENO: checking whether -llapack has LAPACK" >&5
 echo $ECHO_N "checking whether -llapack has LAPACK... $ECHO_C" >&6
     coin_save_LIBS="$LIBS"
-    LIBS="-llapack $LIBS"
+    LIBS="-llapack $BLAS_LIBS $LIBS"
     case $ac_ext in
   f)
     cat >conftest.$ac_ext <<_ACEOF
