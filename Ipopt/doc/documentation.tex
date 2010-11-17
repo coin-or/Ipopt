@@ -563,6 +563,11 @@ Fortran 90 code}.
 Note: MUMPS will perform better with METIS, see
 Section~\ref{sec:METIS}.
 
+Note: MUMPS uses interally a fake implementation of MPI.  If you are
+using Ipopt within an MPI program together with MUMPS, the code will
+not run.  You will have to modified the MUMPS sources so that the MPI
+symbols inside the MUMPS code are renamed.
+
 \subsubsection{Obtaining METIS}\label{sec:METIS}
 
 The linear solvers MA57 and MUMPS can make use of the matrix ordering

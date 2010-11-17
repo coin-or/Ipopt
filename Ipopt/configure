@@ -24235,12 +24235,12 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                       use_blas='-lblas'
+  use_blas='-lblas'
                        if test $coin_need_flibs = yes ; then
                          use_blas="$use_blas $FLIBS"
                        fi
+                       echo "$as_me:$LINENO: result: yes: $use_blas" >&5
+echo "${ECHO_T}yes: $use_blas" >&6
 
 else
   echo "$as_me: failed program was:" >&5
@@ -24331,12 +24331,12 @@ rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
     fi
     if test $flink_try = yes; then
-      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                       use_blas='-lblas'
+      use_blas='-lblas'
                        if test $coin_need_flibs = yes ; then
                          use_blas="$use_blas $FLIBS"
                        fi
+                       echo "$as_me:$LINENO: result: yes: $use_blas" >&5
+echo "${ECHO_T}yes: $use_blas" >&6
 
     else
       if test x"$FLIBS" != x; then
@@ -24389,12 +24389,12 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   (exit $ac_status); }; }; then
   LIBS="$flink_save_libs"
                      coin_need_flibs=yes
-                     echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                       use_blas='-lblas'
+                     use_blas='-lblas'
                        if test $coin_need_flibs = yes ; then
                          use_blas="$use_blas $FLIBS"
                        fi
+                       echo "$as_me:$LINENO: result: yes: $use_blas" >&5
+echo "${ECHO_T}yes: $use_blas" >&6
 
 
 else
@@ -24492,12 +24492,12 @@ rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
     fi
     if test $flink_try = yes; then
-      echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                       use_blas='-lblas'
+      use_blas='-lblas'
                        if test $coin_need_flibs = yes ; then
                          use_blas="$use_blas $FLIBS"
                        fi
+                       echo "$as_me:$LINENO: result: yes: $use_blas" >&5
+echo "${ECHO_T}yes: $use_blas" >&6
 
     else
       if test x"$FLIBS" != x; then
@@ -24550,12 +24550,12 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   (exit $ac_status); }; }; then
   LIBS="$flink_save_libs"
                      coin_need_flibs=yes
-                     echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-                       use_blas='-lblas'
+                     use_blas='-lblas'
                        if test $coin_need_flibs = yes ; then
                          use_blas="$use_blas $FLIBS"
                        fi
+                       echo "$as_me:$LINENO: result: yes: $use_blas" >&5
+echo "${ECHO_T}yes: $use_blas" >&6
 
 
 else
@@ -24684,7 +24684,7 @@ echo "${ECHO_T}yes: $BLAS_VERSIONS" >&6
 
 
   else
-    BLAS_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors coinblas`
+    BLAS_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "coinblas"`
       coin_has_blas=notGiven
         echo "$as_me:$LINENO: result: not given: $BLAS_PKG_ERRORS" >&5
 echo "${ECHO_T}not given: $BLAS_PKG_ERRORS" >&6
@@ -27095,7 +27095,7 @@ echo "${ECHO_T}yes: $LAPACK_VERSIONS" >&6
 
 
   else
-    LAPACK_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors coinlapack`
+    LAPACK_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "coinlapack"`
       coin_has_lapack=notGiven
         echo "$as_me:$LINENO: result: not given: $LAPACK_PKG_ERRORS" >&5
 echo "${ECHO_T}not given: $LAPACK_PKG_ERRORS" >&6
@@ -27455,7 +27455,7 @@ echo "${ECHO_T}yes: $ASL_VERSIONS" >&6
 
 
   else
-    ASL_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors coinasl`
+    ASL_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "coinasl"`
       coin_has_asl=notGiven
         echo "$as_me:$LINENO: result: not given: $ASL_PKG_ERRORS" >&5
 echo "${ECHO_T}not given: $ASL_PKG_ERRORS" >&6
@@ -27754,7 +27754,7 @@ echo "${ECHO_T}yes: $HSL_VERSIONS" >&6
 
 
   else
-    HSL_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors coinhsl`
+    HSL_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "coinhsl"`
       coin_has_hsl=notGiven
         echo "$as_me:$LINENO: result: not given: $HSL_PKG_ERRORS" >&5
 echo "${ECHO_T}not given: $HSL_PKG_ERRORS" >&6
@@ -28070,7 +28070,7 @@ echo "${ECHO_T}yes: $MUMPS_VERSIONS" >&6
 
 
   else
-    MUMPS_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors coinmumps`
+    MUMPS_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "coinmumps"`
       coin_has_mumps=notGiven
         echo "$as_me:$LINENO: result: not given: $MUMPS_PKG_ERRORS" >&5
 echo "${ECHO_T}not given: $MUMPS_PKG_ERRORS" >&6
