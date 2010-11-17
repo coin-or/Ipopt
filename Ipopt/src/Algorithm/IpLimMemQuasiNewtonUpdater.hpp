@@ -100,6 +100,9 @@ namespace Ipopt
     Number sigma_safe_min_;
     /** Maximal safeguard value for sigma */
     Number sigma_safe_max_;
+    /** Flag indicating if initial Hessian approximation B0 should be
+     *  based on DR in restoration phase. */
+    bool limited_memory_init_matrix_special_for_resto_;
     //@}
 
     /** Flag indicating if the update is to be done for the original
@@ -125,9 +128,6 @@ namespace Ipopt
     /** Current value of weighing factor eta in the restoration phase
      *  objective function (only for update_for_resto_ = true) */
     Number curr_eta_;
-    /** Flag inidicating whether DR_x or eta have changed since the
-     *  last update */
-    bool eta_changed_;
 
     /** Counter for successive iterations in which the update was
      *  skipped */

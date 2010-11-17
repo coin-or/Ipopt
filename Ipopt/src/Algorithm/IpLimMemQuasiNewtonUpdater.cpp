@@ -95,6 +95,16 @@ namespace Ipopt
       1, 2,
       "If the update is skipped more than this number of successive "
       "iterations, we quasi-Newton approximation is reset.");
+
+    roptions->AddStringOption2(
+      "limited_memory_init_matrix_special_for_resto",
+      "Determines if the BFGS initial matrix is special in restoration "
+      "phase.",
+      "yes",
+      "no", "use the same initialization as in regular iterations",
+      "yes", "use the regularization matrix DR from restoration phase "
+      "objective function",
+      "");
   }
 
   bool LimMemQuasiNewtonUpdater::InitializeImpl(
@@ -116,6 +126,9 @@ namespace Ipopt
                             sigma_safe_max_, prefix);
     options.GetNumericValue("limited_memory_init_val_min",
                             sigma_safe_min_, prefix);
+    options.GetBoolValue("limited_memory_init_matrix_special_for_resto",
+                         limited_memory_init_matrix_special_for_resto_,
+                         prefix);
 
     h_space_ = NULL;
     curr_lm_memory_ = 0;
@@ -156,7 +169,7 @@ namespace Ipopt
         SmartPtr<const SymMatrixSpace> sp = IpNLP().HessianMatrixSpace();
         const CompoundSymMatrixSpace* csp =
           static_cast<const CompoundSymMatrixSpace*> (GetRawPtr(sp));
-        DBG_ASSERT(csp);
+        DBG_ASSERT(dynamic_cast<const CompoundSymMatrixSpace*> (GetRawPtr(sp)));
         h_space_ = static_cast<const LowRankUpdateSymMatrixSpace*>
                    (GetRawPtr(csp->GetCompSpace(0,0)));
       }
@@ -181,7 +194,7 @@ namespace Ipopt
     if (update_for_resto_) {
       DBG_ASSERT(IpNLP().objective_depends_on_mu());
       RestoIpoptNLP* resto_nlp = static_cast<RestoIpoptNLP*>(&IpNLP());
-      DBG_ASSERT(resto_nlp);
+      DBG_ASSERT(dynamic_cast<RestoIpoptNLP*>(&IpNLP()));
       curr_DR_x_ = resto_nlp->DR_x();
       DBG_ASSERT(IsValid(curr_DR_x_));
       DBG_ASSERT(curr_DR_x_tag_==0 || curr_DR_x_tag_==curr_DR_x_->GetTag());
@@ -195,7 +208,6 @@ namespace Ipopt
         curr_red_DR_x_ = ConstPtr(tmp);
       }
       curr_eta_ = resto_nlp->Eta(IpData().curr_mu());
-      eta_changed_ = (curr_eta_!=last_eta_);
       Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
                      "curr_eta (for B0) is %e\n", curr_eta_);
     }
@@ -208,7 +220,7 @@ namespace Ipopt
     if (update_for_resto_) {
       const CompoundVector* cv =
         static_cast<const CompoundVector*> (GetRawPtr(IpData().curr()->x()));
-      DBG_ASSERT(cv);
+      DBG_ASSERT(dynamic_cast<const CompoundVector*> (GetRawPtr(IpData().curr()->x())));
       //DBG_PRINT_VECTOR(2, "cv", *cv);
       curr_x = cv->GetComp(0);
       const CompoundMatrix* cm =
@@ -261,13 +273,13 @@ namespace Ipopt
       STDRS_ = NULL;
       DRS_ = NULL;
 
-      if (update_for_resto_) {
+      last_eta_ = -1.;
+      if (update_for_resto_ && limited_memory_init_matrix_special_for_resto_) {
         sigma_ = -1;
-        last_eta_ = -1.;
       }
       else {
         // Set up W to be multiple of I
-        sigma_ = limited_memory_init_val_; // not for resto
+        sigma_ = limited_memory_init_val_;
       }
       SetW();
       return;
@@ -382,7 +394,8 @@ namespace Ipopt
           }
 
           Number sTy_new = s_new->Dot(*y_new);
-          if (!update_for_resto_) {
+          if (!update_for_resto_ ||
+              !limited_memory_init_matrix_special_for_resto_) {
             // Compute the initial matrix B_0
             switch (limited_memory_initialization_) {
             case SCALAR1:
@@ -448,7 +461,8 @@ namespace Ipopt
           M->HighRankUpdate(false, 1., *Ltilde, 0.);
 
           // M += S^T B_0 S
-          if (!update_for_resto_) {
+          if (!update_for_resto_ ||
+              !limited_memory_init_matrix_special_for_resto_) {
             // For now, we assume that B_0 is sigma*I
             DBG_ASSERT(SdotS_uptodate_);
             DBG_PRINT_MATRIX(3, "SdotS", *SdotS_);
@@ -478,7 +492,8 @@ namespace Ipopt
 
           // Compute U = B_0 * S * C
           U_ = S_->MakeNewMultiVectorMatrix();
-          if (!update_for_resto_) {
+          if (!update_for_resto_ ||
+              !limited_memory_init_matrix_special_for_resto_) {
             DBG_ASSERT(sigma_>0.);
             U_->AddRightMultMatrix(sigma_, *S_, *C, 0.);
           }
@@ -513,7 +528,8 @@ namespace Ipopt
         // Update the internal stuff
         UpdateInternalData(*s_new, *y_new, ypart_new);
 
-        if (!update_for_resto_) {
+        if (!update_for_resto_ ||
+            !limited_memory_init_matrix_special_for_resto_) {
           // Set B0 for now as we do for BFGS - except that we take the
           // abs value?
           //
@@ -563,7 +579,8 @@ namespace Ipopt
 
         // Compute Z as D + L + L^T - S^TB_0S
         SmartPtr<DenseSymMatrix> Z;
-        if (!update_for_resto_) {
+        if (!update_for_resto_ ||
+            !limited_memory_init_matrix_special_for_resto_) {
           Z = SdotS_->MakeNewDenseSymMatrix();
           DBG_PRINT_MATRIX(3, "SdotS", *SdotS_);
           DBG_PRINT((1, "sigma_ = %e\n", sigma_));
@@ -598,7 +615,8 @@ namespace Ipopt
         // Compute Vtilde = Y - B_0*S
         SmartPtr<MultiVectorMatrix> Vtilde = Y_->MakeNewMultiVectorMatrix();
         Vtilde->AddOneMultiVectorMatrix(1., *Y_, 0.);
-        if (!update_for_resto_) {
+        if (!update_for_resto_ ||
+            !limited_memory_init_matrix_special_for_resto_) {
           Vtilde->AddOneMultiVectorMatrix(-sigma_, *S_, 1.);
         }
         else {
@@ -770,19 +788,36 @@ namespace Ipopt
     }
     else {
       // Compute DR*s_new;
-      SmartPtr<Vector> DRs_new = s_new.MakeNewCopy();
-      DRs_new->ElementWiseMultiply(*curr_red_DR_x_);
-      if (augment_memory) {
-        AugmentMultiVector(S_, s_new);
-        AugmentMultiVector(DRS_, *DRs_new);
-        AugmentMultiVector(Ypart_, *ypart_new);
-        AugmentSTDRSMatrix(STDRS_, *S_, *DRS_);
+      if (limited_memory_init_matrix_special_for_resto_) {
+        SmartPtr<Vector> DRs_new = s_new.MakeNewCopy();
+        DRs_new->ElementWiseMultiply(*curr_red_DR_x_);
+        if (augment_memory) {
+          AugmentMultiVector(S_, s_new);
+          AugmentMultiVector(DRS_, *DRs_new);
+          AugmentMultiVector(Ypart_, *ypart_new);
+          AugmentSTDRSMatrix(STDRS_, *S_, *DRS_);
+        }
+        else {
+          ShiftMultiVector(S_, s_new);
+          ShiftMultiVector(DRS_, *DRs_new);
+          ShiftMultiVector(Ypart_, *ypart_new);
+          ShiftSTDRSMatrix(STDRS_, *S_, *DRS_);
+        }
       }
-      else {
-        ShiftMultiVector(S_, s_new);
-        ShiftMultiVector(DRS_, *DRs_new);
-        ShiftMultiVector(Ypart_, *ypart_new);
-        ShiftSTDRSMatrix(STDRS_, *S_, *DRS_);
+      else  {
+        if (augment_memory) {
+          AugmentMultiVector(S_, s_new);
+          AugmentMultiVector(Ypart_, *ypart_new);
+          DBG_ASSERT(SdotS_uptodate_ || S_->NCols()==1);
+          AugmentSdotSMatrix(SdotS_, *S_);
+          SdotS_uptodate_ = true;
+        }
+        else {
+          ShiftMultiVector(S_, s_new);
+          ShiftMultiVector(Ypart_, *ypart_new);
+          DBG_ASSERT(SdotS_uptodate_);
+          ShiftSdotSMatrix(SdotS_, *S_);
+        }
       }
       DBG_PRINT((1,"curr_eta = %e\n", curr_eta_));
       DBG_PRINT_VECTOR(2,"curr_red_DR_x", *curr_red_DR_x_);
@@ -1219,7 +1254,7 @@ namespace Ipopt
                    dbg_verbosity);
 
     SmartPtr<Vector> B0;
-    if (update_for_resto_) {
+    if (update_for_resto_ && limited_memory_init_matrix_special_for_resto_) {
       B0 = curr_DR_x_->MakeNew();
       B0->AddOneVector(curr_eta_, *curr_DR_x_, 0.);
     }
@@ -1258,7 +1293,7 @@ namespace Ipopt
     // DELETEME
     const DenseVector* dx = static_cast<const DenseVector*>
                             (GetRawPtr(IpData().curr()->x()));
-    DBG_ASSERT(dx);
+    DBG_ASSERT(dynamic_cast<const DenseVector*>(GetRawPtr(IpData().curr()->x())));
     SmartPtr<DenseVector> tmpx = dx->MakeNewDenseVector();
     SmartPtr<DenseVector> tmpy = dx->MakeNewDenseVector();
     for (Index i=0; i<dx->Dim(); i++) {

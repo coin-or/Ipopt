@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -39,7 +39,6 @@ namespace Ipopt
       orig_ip_nlp_(&orig_ip_nlp),
       orig_ip_data_(&orig_ip_data),
       orig_ip_cq_(&orig_ip_cq),
-      eta_factor_(1.0),
       eta_mu_exponent_(0.5)
   {}
 
@@ -70,6 +69,14 @@ namespace Ipopt
       0.0, true, 1e3,
       "This is the parameter rho in equation (31a) in the Ipopt "
       "implementation paper.");
+    roptions->AddLowerBoundedNumberOption(
+      "resto_proximity_weight",
+      "Weighting factor for the proximity term in restoration phase objective.",
+      0.0, false, 1.,
+      "This determines how the parameter zera in equation (29a) in the "
+      "implementation paper is computed.  zeta here is "
+      "resto_proximity_weight*sqrt(mu), where mu is the current barrier "
+      "parameter.");
   }
 
   bool RestoIpoptNLP::Initialize(const Journalist& jnlst,
@@ -82,6 +89,7 @@ namespace Ipopt
     Index enum_int;
     options.GetEnumValue("hessian_approximation", enum_int, prefix);
     hessian_approximation_ = HessianApproximationType(enum_int);
+    options.GetNumericValue("resto_proximity_weight", eta_factor_, prefix);
 
     initialized_ = true;
     return IpoptNLP::Initialize(jnlst, options, prefix);
