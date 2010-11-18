@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -91,6 +91,10 @@ namespace Ipopt
     bool expect_infeasible_problem_;
     /** Constraint violation tolerance */
     Number constr_viol_tol_;
+    /** Primal infeasibility tolerance for declaring failure of
+     *  restoration phase when the non-regular termination tests are
+     *  met. */
+    Number resto_failure_feasibility_threshold_;
     //@}
 
     /** Counter for the number of time that PerformRestoration is
