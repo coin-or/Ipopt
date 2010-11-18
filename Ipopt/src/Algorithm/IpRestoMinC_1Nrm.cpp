@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2009 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -53,6 +53,15 @@ namespace Ipopt
       "After returning from the restoration phase, the constraint multipliers "
       "are recomputed by a least square estimate.  This option triggers when "
       "those least-square estimates should be ignored.");
+    roptions->AddLowerBoundedNumberOption(
+      "resto_failure_feasibility_threshold",
+      "Threshold for primal infeasibility to declare failure of restoration phase.",
+      0.0, false,
+      0e3,
+      "If the restoration phase is terminated because of the \"acceptable\" "
+      "termination criteria and the primal infeasbility is smaller than this "
+      "value, the restoration phase is declared to have failed.  The default "
+      "value is 1e2*tol, where tol is the general termination tolerance.");
   }
 
   bool MinC_1NrmRestorationPhase::InitializeImpl(const OptionsList& options,
@@ -85,6 +94,11 @@ namespace Ipopt
     if (!options.GetNumericValue("resto.theta_max_fact",
                                  theta_max_fact, "")) {
       resto_options_->SetNumericValue("resto.theta_max_fact", 1e8);
+    }
+
+    if (!options.GetNumericValue("resto_failure_feasibility_threshold",
+                                 resto_failure_feasibility_threshold_, prefix)) {
+      resto_failure_feasibility_threshold_ = 1e2*IpData().tol();
     }
 
     count_restorations_ = 0;
@@ -208,7 +222,7 @@ namespace Ipopt
       Number orig_primal_inf =
         IpCq().curr_primal_infeasibility(NORM_MAX);
       // ToDo make the factor in following line an option
-      if (orig_primal_inf <= 1e2*IpData().tol()) {
+      if (orig_primal_inf <= resto_failure_feasibility_threshold_) {
         Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
                        "Restoration phase converged to a point with small primal infeasibility.\n");
         THROW_EXCEPTION(RESTORATION_CONVERGED_TO_FEASIBLE_POINT,
