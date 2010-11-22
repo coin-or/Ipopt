@@ -7,10 +7,10 @@ Show sparseness structure of matrix
 This function shows the sparseness structure of a matrix in the format that is required by ipoptr.
 }
 \usage{
-print.sparseness( s, indices=TRUE, data=NULL, ncol=NULL )
+print.sparseness( x, indices=TRUE, data=NULL, ncol=NULL, ... )
 }
 \arguments{
-  \item{s}{
+  \item{x}{
     list of vectors with indices. Each element of the list corresponds to a row in 
     the matrix. Each index corresponds to a non-zero element in the matrix.
   }
@@ -23,6 +23,9 @@ print.sparseness( s, indices=TRUE, data=NULL, ncol=NULL )
   \item{ncol}{
     integer supplying the number of columns of the sparse matrix. If this is not supplied, 
     we take the number of columns as the largest index in \code{s}.
+  }
+  \item{...}{
+    further arguments passed to or from other methods.
   }
 }
 \value{
@@ -78,10 +81,10 @@ hessian_structure <- c( lapply( 1:m, function(x) { return( c(1:x) ) } ),
 # generate data
 set.seed( 3141 )
 A <- hessian( matrix( rnorm( n*m ), nrow=n, ncol=m ) )                        
-print.sparseness( s       = hessian_structure,
-                 indices = TRUE,
-                 data    = format( A, digits=2, nsmall=2, justify='right'),
-                 ncol    = 2*m )
+print.sparseness( x       = hessian_structure,
+                  indices = TRUE,
+                  data    = format( A, digits=2, nsmall=2, justify='right'),
+                  ncol    = 2*m )
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

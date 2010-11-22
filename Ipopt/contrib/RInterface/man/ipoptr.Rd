@@ -41,7 +41,8 @@ ipoptr( x0,
         eval_h = NULL,
         eval_h_structure = NULL,
         opts = list(),
-        ipoptr_environment = new.env() )
+        ipoptr_environment = new.env(),
+        ... )
 }
 
 %- maybe also 'usage' for other objects documented here.
@@ -88,13 +89,16 @@ ipoptr( x0,
 }
   \item{opts}{
     list with options, see examples below. For a full list of options use the option 
-    "print_options_documentation"='yes', or have a look at the 
-    \link[http://www.coin-or.org/Ipopt/documentation/]{Ipopt documentation}.
+    "print_options_documentation"='yes', or have a look at the Ipopt documentation at
+    \url{http://www.coin-or.org/Ipopt/documentation/}.
   }
   \item{ipoptr_environment}{
     environment that is used to evaluate the functions. Use this to pass 
     additional data or parameters to a function. See the second example in 
     \code{parameters.R} in the \code{tests} directory.
+  }
+  \item{...}{
+    arguments that will be passed to the user-defined objective and constraints functions.
   }
 }
 \value{
@@ -140,7 +144,7 @@ eval_grad_f <- function(x) {
 # This is a symmetric matrix, fill the lower left triangle only.
 eval_h_structure <- list( c(1), c(1,2) )
 
-eval_h <- function( x, obj_factor, lambda ) {
+eval_h <- function( x, obj_factor, hessian_lambda ) {
     
     return( obj_factor*c( 2 - 400*(x[2] - x[1]^2) + 800*x[1]^2,      # 1,1
                           -400*x[1],                                 # 2,1
@@ -219,8 +223,8 @@ eval_jac_g <- function( x ) {
 # diagonal matrix, usually only fill the lower triangle
 eval_h_structure <- list( c(1), c(2) )
 
-eval_h <- function( x, obj_factor, lambda ) {
-    return ( c( -2.0*lambda[1], -2.0*obj_factor ) )
+eval_h <- function( x, obj_factor, hessian_lambda ) {
+    return ( c( -2.0*hessian_lambda[1], -2.0*obj_factor ) )
 }
 
 x0 <- c(0.5,1.5)

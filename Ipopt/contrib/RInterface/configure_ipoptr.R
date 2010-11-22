@@ -11,11 +11,7 @@
 #
 # On Linux:
 # configure_ipoptr( ipopt.build.dir = "/cvos/shared/apps/Ipopt/3.5.5-source",
-#                   ipoptr.dir = "~/ipoptr" )
-#
-# At IFS:
-# configure_ipoptr( ipopt.build.dir = "T:/tools/CoinIpopt/build",
-#                   ipoptr.dir = "T:/Rpackages/ipoptr" )
+#                   ipoptr.dir = "~/Ipopt/contrib/RInterface" )
 
 configure_ipoptr <- function( ipopt.build.dir, ipoptr.dir ) {
 
