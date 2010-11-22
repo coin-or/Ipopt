@@ -97,14 +97,16 @@ namespace Ipopt
       "iterations, we quasi-Newton approximation is reset.");
 
     roptions->AddStringOption2(
-      "limited_memory_init_matrix_special_for_resto",
-      "Determines if the BFGS initial matrix is special in restoration "
-      "phase.",
-      "yes",
-      "no", "use the same initialization as in regular iterations",
-      "yes", "use the regularization matrix DR from restoration phase "
-      "objective function",
-      "");
+      "limited_memory_special_for_resto",
+      "Determines if the quasi-Newton updates should be special during the restoration phase.",
+      "no",
+      "no", "use the same update as in regular iterations",
+      "yes", "use the a special update during restoration phase",
+      "Until Nov 2010, Ipopt used a special update during the restoration "
+      "phase, but it turned out that this does not work well.  The new "
+      "default uses the regular update procedure and it improves results.  If "
+      "for some reason you want to get back to the original update, set this "
+      "option to \"yes\".");
   }
 
   bool LimMemQuasiNewtonUpdater::InitializeImpl(
@@ -126,8 +128,8 @@ namespace Ipopt
                             sigma_safe_max_, prefix);
     options.GetNumericValue("limited_memory_init_val_min",
                             sigma_safe_min_, prefix);
-    options.GetBoolValue("limited_memory_init_matrix_special_for_resto",
-                         limited_memory_init_matrix_special_for_resto_,
+    options.GetBoolValue("limited_memory_special_for_resto",
+                         limited_memory_special_for_resto_,
                          prefix);
 
     h_space_ = NULL;
@@ -274,7 +276,7 @@ namespace Ipopt
       DRS_ = NULL;
 
       last_eta_ = -1.;
-      if (update_for_resto_ && limited_memory_init_matrix_special_for_resto_) {
+      if (update_for_resto_ && limited_memory_special_for_resto_) {
         sigma_ = -1;
       }
       else {
@@ -395,7 +397,7 @@ namespace Ipopt
 
           Number sTy_new = s_new->Dot(*y_new);
           if (!update_for_resto_ ||
-              !limited_memory_init_matrix_special_for_resto_) {
+              !limited_memory_special_for_resto_) {
             // Compute the initial matrix B_0
             switch (limited_memory_initialization_) {
             case SCALAR1:
@@ -462,7 +464,7 @@ namespace Ipopt
 
           // M += S^T B_0 S
           if (!update_for_resto_ ||
-              !limited_memory_init_matrix_special_for_resto_) {
+              !limited_memory_special_for_resto_) {
             // For now, we assume that B_0 is sigma*I
             DBG_ASSERT(SdotS_uptodate_);
             DBG_PRINT_MATRIX(3, "SdotS", *SdotS_);
@@ -493,7 +495,7 @@ namespace Ipopt
           // Compute U = B_0 * S * C
           U_ = S_->MakeNewMultiVectorMatrix();
           if (!update_for_resto_ ||
-              !limited_memory_init_matrix_special_for_resto_) {
+              !limited_memory_special_for_resto_) {
             DBG_ASSERT(sigma_>0.);
             U_->AddRightMultMatrix(sigma_, *S_, *C, 0.);
           }
@@ -529,7 +531,7 @@ namespace Ipopt
         UpdateInternalData(*s_new, *y_new, ypart_new);
 
         if (!update_for_resto_ ||
-            !limited_memory_init_matrix_special_for_resto_) {
+            !limited_memory_special_for_resto_) {
           // Set B0 for now as we do for BFGS - except that we take the
           // abs value?
           //
@@ -580,7 +582,7 @@ namespace Ipopt
         // Compute Z as D + L + L^T - S^TB_0S
         SmartPtr<DenseSymMatrix> Z;
         if (!update_for_resto_ ||
-            !limited_memory_init_matrix_special_for_resto_) {
+            !limited_memory_special_for_resto_) {
           Z = SdotS_->MakeNewDenseSymMatrix();
           DBG_PRINT_MATRIX(3, "SdotS", *SdotS_);
           DBG_PRINT((1, "sigma_ = %e\n", sigma_));
@@ -616,7 +618,7 @@ namespace Ipopt
         SmartPtr<MultiVectorMatrix> Vtilde = Y_->MakeNewMultiVectorMatrix();
         Vtilde->AddOneMultiVectorMatrix(1., *Y_, 0.);
         if (!update_for_resto_ ||
-            !limited_memory_init_matrix_special_for_resto_) {
+            !limited_memory_special_for_resto_) {
           Vtilde->AddOneMultiVectorMatrix(-sigma_, *S_, 1.);
         }
         else {
@@ -788,7 +790,7 @@ namespace Ipopt
     }
     else {
       // Compute DR*s_new;
-      if (limited_memory_init_matrix_special_for_resto_) {
+      if (limited_memory_special_for_resto_) {
         SmartPtr<Vector> DRs_new = s_new.MakeNewCopy();
         DRs_new->ElementWiseMultiply(*curr_red_DR_x_);
         if (augment_memory) {
@@ -1254,7 +1256,7 @@ namespace Ipopt
                    dbg_verbosity);
 
     SmartPtr<Vector> B0;
-    if (update_for_resto_ && limited_memory_init_matrix_special_for_resto_) {
+    if (update_for_resto_ && limited_memory_special_for_resto_) {
       B0 = curr_DR_x_->MakeNew();
       B0->AddOneVector(curr_eta_, *curr_DR_x_, 0.);
     }

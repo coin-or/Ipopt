@@ -100,9 +100,9 @@ namespace Ipopt
     Number sigma_safe_min_;
     /** Maximal safeguard value for sigma */
     Number sigma_safe_max_;
-    /** Flag indicating if initial Hessian approximation B0 should be
-     *  based on DR in restoration phase. */
-    bool limited_memory_init_matrix_special_for_resto_;
+    /** Flag indicating if Hessian approximation should be done in a
+     *  special manner for the restoration phase. */
+    bool limited_memory_special_for_resto_;
     //@}
 
     /** Flag indicating if the update is to be done for the original

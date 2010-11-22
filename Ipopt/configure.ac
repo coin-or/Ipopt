@@ -819,6 +819,7 @@ AC_CONFIG_FILES([Makefile
 		 contrib/AsNMPC/examples/parametric_cpp/Makefile
 		 contrib/AsNMPC/examples/redhess_cpp/Makefile
 		 contrib/AsNMPC/src/Makefile
+		 contrib/RInterface/src/Makevars
 		 ipopt.pc ipopt-uninstalled.pc])
 
 AC_CONFIG_HEADER([inc/config_ipopt.h])
