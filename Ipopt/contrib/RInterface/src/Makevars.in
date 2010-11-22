@@ -13,22 +13,23 @@ CXX = @CXX@
 IPOPT_CXXFLAGS = @CXXFLAGS@
 
 # additional C++ Compiler options for linking
-IPOPT_CXXLINKFLAGS = @CXXLINKFLAGS@
+IPOPT_CXXLINKFLAGS = -Wl,--rpath -Wl,$(IPOPT_LIBDIR)
 
 # Directory with header files
-IPOPT_INCDIR = @includedir@
+IPOPT_INCDIR = @includedir@/coin
 
 # Directory with libipopt.a
-IPOPT_LIBDIR = @libdir@
+IPOPT_LIBDIR = @libdir@/coin
 exec_prefix = @exec_prefix@
 prefix = @prefix@
+IPOPTLIBDIR = $(IPOPT_LIBDIR)
 
 # Libraries necessary to link with IPOPT
 IPOPT_LIBS = @ipoptlib@ @IPOPTLIB_LIBS@
 
 # Necessary Include dirs (we use the CYGPATH_W variables to allow
 # compilation with Windows compilers)
-IPOPT_INCL = @ipoptinc@
+IPOPT_INCL = -I`$(CYGPATH_W) $(IPOPT_INCDIR)` $(ADDINCFLAGS)
 
 # The following is necessary under cygwin, if native compilers are used
 CYGPATH_W = @CYGPATH_W@
