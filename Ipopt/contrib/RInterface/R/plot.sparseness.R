@@ -10,11 +10,11 @@
 #         useful for matrices with many elements, for smaller ones
 #         use print.sparseness
 
-plot.sparseness <- function( s, pch='.', asp=1, xaxs='i', yaxs='i', ... ) {
+plot.sparseness <- function( x, pch='.', asp=1, xaxs='i', yaxs='i', ... ) {
     # make a list of y indices corresponding to the non-zero x indices
-    structure.y <- lapply( 1:length(s), function(i) { rep(i, length(s[[i]])) } )
+    structure.y <- lapply( 1:length( x ), function(i) { rep( i, length( x[[i]] ) ) } )
 
-    indices.x <- unlist( s )
+    indices.x <- unlist( x )
     indices.y <- unlist( structure.y )
 
     # plot non-zero elements, where we revert the y-axis (top-left element is 1,1),

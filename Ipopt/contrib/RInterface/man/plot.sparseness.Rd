@@ -7,10 +7,10 @@ Plot sparseness structure of matrix
 This function plots the sparseness structure of a matrix in the format that is required by ipoptr.
 }
 \usage{
-plot.sparseness( s, pch='.', asp=1, xaxs='i', yaxs='i', ... )
+plot.sparseness( x, pch='.', asp=1, xaxs='i', yaxs='i', ... )
 }
 \arguments{
-  \item{s}{
+  \item{x}{
     list of vectors with indices. Each element of the list corresponds to a row in 
     the matrix. Each index corresponds to a non-zero element in the matrix.
   }
