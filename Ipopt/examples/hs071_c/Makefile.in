@@ -39,13 +39,16 @@ CLINKFLAGS = @RPATH_FLAGS@
 # Directory with include file
 IPOPTINCDIR = @includedir@/coin
 
-# Directory with libipopt.a
-IPOPTLIBDIR = @libdir@/coin
+# Directory where libraries and .pc files are installed
+libdir = @libdir@
 exec_prefix = @exec_prefix@
 prefix = @prefix@
 
+# pkg-config command, if available
+PKG_CONFIG = @PKG_CONFIG@
+
 # Libraries necessary to link with IPOPT
-LIBS = -L$(IPOPTLIBDIR) -L$(IPOPTLIBDIR)/ThirdParty @ipoptlib@ @CXXLIBS@ @IPOPTLIB_LIBS@
+LIBS = @ipoptlib@ @CXXLIBS@
 
 # Necessary Include dirs (we use the CYGPATH_W variables to allow
 # compilation with Windows compilers)
