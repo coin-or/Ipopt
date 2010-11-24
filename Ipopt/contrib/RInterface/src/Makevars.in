@@ -13,7 +13,7 @@ CXX = @CXX@
 IPOPT_CXXFLAGS = @CXXFLAGS@
 
 # additional C++ Compiler options for linking
-IPOPT_CXXLINKFLAGS = -Wl,--rpath -Wl,$(IPOPT_LIBDIR)
+IPOPT_CXXLINKFLAGS = -Wl,--rpath -Wl,$(libdir)/coin -Wl,--rpath -Wl,$(libdir)/coin/ThirdParty
 
 # Directory with header files
 IPOPT_INCDIR = @includedir@/coin
