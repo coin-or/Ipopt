@@ -19,10 +19,9 @@ IPOPT_CXXLINKFLAGS = -Wl,--rpath -Wl,$(IPOPT_LIBDIR)
 IPOPT_INCDIR = @includedir@/coin
 
 # Directory with libipopt.a
-IPOPT_LIBDIR = @libdir@/coin
+libdir = @libdir@
 exec_prefix = @exec_prefix@
 prefix = @prefix@
-IPOPTLIBDIR = $(IPOPT_LIBDIR)
 
 # Libraries necessary to link with IPOPT
 IPOPT_LIBS = @ipoptlib@ @IPOPTLIB_LIBS@

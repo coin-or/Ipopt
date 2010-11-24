@@ -443,6 +443,7 @@ namespace Ipopt
       // e.g.  pardiso_inverse_norm_factor
       // Default is 500
       // 2 <= value < 50000
+      DPARM_[ 8] = 25; // maximum number of non-improvement steps
     }
 
     MSGLVL_ = pardiso_msglvl;
