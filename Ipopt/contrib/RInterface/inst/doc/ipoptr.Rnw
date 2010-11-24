@@ -53,29 +53,26 @@ where $f(x): R^n \rightarrow R$ is the objective function, and $g(x): R^n \right
 This vignette describes how to formulate minimization problems to be solved with the R interface to Ipopt. If you want to use the C++ interface directly or are interested in the Matlab interface, there are other sources of documentation avialable. Some of the information here is heavily based on the Ipopt Wiki\footnote{\texttt{https://projects.coin-or.org/Ipopt}} and generally that is a good source to find additional information, for instance on which options to use. All credit for implementing the C++ code for Ipopt should go to Andreas W\"achter and Carl Laird. Please show your appreciation by citing their paper.
 
 \section{Installation}
-Installing the \texttt{ipoptr} package is not as straightforward as most other R packages, because it depends on Ipopt, which has to be installed separately. Ipopt and the R interface to Ipopt are distributed separately because of differences in licenses between Ipopt, some of the libraries it depends on, and R. There are ways to simplify the Ipopt part of the installation by using some of the pre-compiled libraries of Ipopt with Mumps\footnote{Any help to simplify the installation process is appreciated and if someone uses the pre-compiled libraries and has a \texttt{Makefile}, please let me know.}. To install (and compile) Ipopt and the R interface a C/C++ compiler has to be available. Detailed installation instructions are available on \texttt{http://www.coin-or.org/Ipopt/documentation}. On Windows I was succesful using MSYS, on Ubuntu no additional tools were needed. Ipopt needs to be configured using the \texttt{-fPIC} flag for all GNU compilers. For 64bit Linux one needs to specify
+Installing the \texttt{ipoptr} package is not as straightforward as most other R packages, because it depends on Ipopt. To install (and compile) Ipopt and the R interface a C/C++ compiler has to be available. On Windows I was succesful using MSYS to compile Ipopt and then use Rtools\footnote{\texttt{http://www.murdoch-sutherland.com/Rtools/}} to compile the R interface from source. On Ubuntu no additional tools were needed.
+
+Detailed installation instructions for Ipopt are available on \texttt{http://www.coin-or.org/Ipopt/documentation}. You should follow these first, before trying to install the R interface. Ipopt needs to be configured using the \texttt{-fPIC} flag for all GNU compilers. For 64bit Linux one needs to specify
 \begin{verbatim}
 ADD_CXXFLAGS='-fPIC' ADD_FFLAGS='-fPIC' ADD_CFLAGS='-fPIC'
 \end{verbatim}
-In the description of the installation of the R interface, I will assume that you have a working installation of Ipopt. You need to be able to compile R packages from source. Since Ipopt was already successfully installed, compilers are probably available. On Windows platforms Rtools is needed to compile R packages from source\footnote{\texttt{http://www.murdoch-sutherland.com/Rtools/}}. 
 
-First, a file \texttt{Makevars} in the source directory of the interface package needs to be configured for your system from the file \texttt{Makevars.in}. The \texttt{configure\_ipoptr.R} script should make this easier. Start R, go to the directory where the \texttt{ipoptr} interface is located (I assume \texttt{~/Ipopt/contrib/RInterface}) and load the script. In the code below, you should change the directories to the correct ones for your system.
-<<configureIpoptrStep1, eval=FALSE>>=
-setwd('~/Ipopt/contrib/RInterface')
-source('configure_ipoptr.R')
-@
-Running this script defines a function \texttt{configure\_ipoptr}. Run the \texttt{configure\_ipoptr} command with the directory of the Ipopt build and the directory where \texttt{ipoptr} is located as arguments, e.g.
-<<configureIpoptrStep2, eval=FALSE>>=
-configure_ipoptr( ipopt.build.dir = "/cvos/shared/apps/Ipopt/3.5.5-source",
-                  ipoptr.dir = "~/Ipopt/contrib/RInterface" )
-@
-The \texttt{ipoptr.build.dir} should have a file called \texttt{Makefile} in the subdirectory \texttt{/Ipopt/examples/hs071\_cpp}. If there were no errors, then a file called \texttt{Makevars} (or \texttt{Makevars.win} if you're using Windows) has now been created in the directory \texttt{ipoptr/src}. 
+For the installation of the R interface, I will assume that you have a working installation of Ipopt (i.e. \texttt{configure}, \texttt{make} and \texttt{make install} executed without problems).  
 
-You can then install the package with the command
+During the installation of Ipopt a file \texttt{Makevars} has been created in the source directory of the R interface, e.g. \texttt{\$IPOPTDIR/build/Ipopt/contrib/RInterface/src} if you used the same build directory as in the Ipopt installation notes, \texttt{\$IPOPTDIR/build}. The file \texttt{Makevars} in this directory has been configured for your system. 
+
+To install the R interface, this file has to be copied to the Ipopt directory containing the source code, \texttt{\$IPOPTDIR/Ipopt/contrib/RInterface/src}. Notice that the path of this directory is different from the directory where you built Ipopt (\texttt{build} is not there).
+
+The source directory \texttt{\$IPOPTDIR/Ipopt/contrib/RInterface/src} contains four files, \texttt{ipoptr.cpp}, \texttt{IpoptRNLP.cpp}, \texttt{IpoptRNLP.hpp} and \texttt{Makevars.in}. Copy \texttt{Makevars} in this directory and, if you're on Windows, rename it to \texttt{Makevars.win}.
+
+You can then install the package from R with the command
 <<installIpoptPackage, eval=FALSE>>=
-install.packages('~/Ipopt/contrib/RInterface', repos=NULL, type='source')
+install.packages('$IPOPTDIR/Ipopt/contrib/RInterface', repos=NULL, type='source')
 @
-where the first argument specifies the directory where the R interface to Ipopt is located. You should now be able to load the R interface to Ipopt and read the help.
+where the first argument specifies the directory where the source code for the R interface to Ipopt is located. You should now be able to load the R interface to Ipopt and read the help.
 <<testIpoptInstallation, eval=FALSE>>=
 library('ipoptr')
 ?ipoptr
