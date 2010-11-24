@@ -8,4 +8,4 @@ Description: Ampl Interface TNLP to Ipopt
 Version: @PACKAGE_VERSION@
 Libs: -L${libdir} -lipoptamplinterface @IPOPTAMPLINTERFACELIB_PCLIBS@
 Cflags: -I${includedir}
-Requires: @IPOPTAMPLINTERFACELIB_PCREQUIRES@
+Requires: ipopt @IPOPTAMPLINTERFACELIB_PCREQUIRES@
