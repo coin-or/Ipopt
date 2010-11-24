@@ -21,6 +21,8 @@
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 
+
+
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 VPATH = @srcdir@
@@ -45,7 +47,8 @@ build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS = ipopt$(EXEEXT)
 subdir = src/Apps/AmplSolver
-DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+DIST_COMMON = $(includeipopt_HEADERS) $(srcdir)/Makefile.am \
+	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 	$(top_srcdir)/configure.ac
@@ -54,16 +57,26 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/inc/config_ipopt.h
 CONFIG_CLEAN_FILES =
-LTLIBRARIES = $(noinst_LTLIBRARIES)
-libamplinterface_la_LIBADD =
-am_libamplinterface_la_OBJECTS = AmplTNLP.lo
-libamplinterface_la_OBJECTS = $(am_libamplinterface_la_OBJECTS)
-am__installdirs = "$(DESTDIR)$(bindir)"
+am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
+am__vpath_adj = case $$p in \
+    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
+    *) f=$$p;; \
+  esac;
+am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
+am__installdirs = "$(DESTDIR)$(coinlibdir)" "$(DESTDIR)$(bindir)" \
+	"$(DESTDIR)$(pkgconfiglibdir)" "$(DESTDIR)$(includeipoptdir)"
+coinlibLTLIBRARIES_INSTALL = $(INSTALL)
+LTLIBRARIES = $(coinlib_LTLIBRARIES)
+libipoptamplinterface_la_LIBADD =
+am_libipoptamplinterface_la_OBJECTS = AmplTNLP.lo
+libipoptamplinterface_la_OBJECTS =  \
+	$(am_libipoptamplinterface_la_OBJECTS)
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
 am_ipopt_OBJECTS = ampl_ipopt.$(OBJEXT)
 ipopt_OBJECTS = $(am_ipopt_OBJECTS)
-ipopt_DEPENDENCIES = libamplinterface.la ../../Interfaces/libipopt.la
+ipopt_DEPENDENCIES = libipoptamplinterface.la \
+	../../Interfaces/libipopt.la
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -82,8 +95,12 @@ LTCOMPILE = $(LIBTOOL) --tag=CC --mode=compile $(CC) $(DEFS) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(libamplinterface_la_SOURCES) $(ipopt_SOURCES)
-DIST_SOURCES = $(libamplinterface_la_SOURCES) $(ipopt_SOURCES)
+SOURCES = $(libipoptamplinterface_la_SOURCES) $(ipopt_SOURCES)
+DIST_SOURCES = $(libipoptamplinterface_la_SOURCES) $(ipopt_SOURCES)
+pkgconfiglibDATA_INSTALL = $(INSTALL_DATA)
+DATA = $(pkgconfiglib_DATA)
+includeipoptHEADERS_INSTALL = $(INSTALL_HEADER)
+HEADERS = $(includeipopt_HEADERS)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -196,6 +213,10 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 IPALLLIBS = @IPALLLIBS@
+IPOPTAMPLINTERFACELIB_CFLAGS = @IPOPTAMPLINTERFACELIB_CFLAGS@
+IPOPTAMPLINTERFACELIB_LIBS = @IPOPTAMPLINTERFACELIB_LIBS@
+IPOPTAMPLINTERFACELIB_PCLIBS = @IPOPTAMPLINTERFACELIB_PCLIBS@
+IPOPTAMPLINTERFACELIB_PCREQUIRES = @IPOPTAMPLINTERFACELIB_PCREQUIRES@
 IPOPTLIB_CFLAGS = @IPOPTLIB_CFLAGS@
 IPOPTLIB_LIBS = @IPOPTLIB_LIBS@
 IPOPTLIB_PCLIBS = @IPOPTLIB_PCLIBS@
@@ -209,7 +230,7 @@ LAPACK_LIBS = @LAPACK_LIBS@
 LDFLAGS = @LDFLAGS@
 LIBEXT = @LIBEXT@
 LIBOBJS = @LIBOBJS@
-LIBS = $(ASL_LIBS) $(IPOPTLIB_LIBS)
+LIBS = $(IPOPTAMPLINTERFACELIB_LIBS) $(IPOPTLIB_LIBS)
 LIBTOOL = @LIBTOOL@
 LIBTOOLM4 = @LIBTOOLM4@
 LN_S = @LN_S@
@@ -306,19 +327,24 @@ sol_cc_compiler = @sol_cc_compiler@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
-noinst_LTLIBRARIES = libamplinterface.la
-libamplinterface_la_SOURCES = \
+coinlibdir = ${libdir}/coin
+coinlib_LTLIBRARIES = libipoptamplinterface.la
+libipoptamplinterface_la_SOURCES = \
 	AmplTNLP.cpp AmplTNLP.hpp
 
 ipopt_SOURCES = \
 	ampl_ipopt.cpp
 
-ipopt_LDADD = libamplinterface.la ../../Interfaces/libipopt.la
+ipopt_LDADD = libipoptamplinterface.la ../../Interfaces/libipopt.la
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` -I`$(CYGPATH_W) \
 	$(srcdir)/../../LinAlg` -I`$(CYGPATH_W) \
 	$(srcdir)/../../LinAlg/TMatrices` -I`$(CYGPATH_W) \
 	$(srcdir)/../../Algorithm` -I`$(CYGPATH_W) \
 	$(srcdir)/../../Interfaces` $(ASL_CFLAGS)
+includeipoptdir = $(includedir)/coin
+includeipopt_HEADERS = AmplTNLP.hpp
+pkgconfiglibdir = $(libdir)/pkgconfig
+pkgconfiglib_DATA = ../../../ipoptamplinterface.pc
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -364,17 +390,35 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
+install-coinlibLTLIBRARIES: $(coinlib_LTLIBRARIES)
+	@$(NORMAL_INSTALL)
+	test -z "$(coinlibdir)" || $(mkdir_p) "$(DESTDIR)$(coinlibdir)"
+	@list='$(coinlib_LTLIBRARIES)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    f=$(am__strip_dir) \
+	    echo " $(LIBTOOL) --mode=install $(coinlibLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) '$$p' '$(DESTDIR)$(coinlibdir)/$$f'"; \
+	    $(LIBTOOL) --mode=install $(coinlibLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) "$$p" "$(DESTDIR)$(coinlibdir)/$$f"; \
+	  else :; fi; \
+	done
 
-clean-noinstLTLIBRARIES:
-	-test -z "$(noinst_LTLIBRARIES)" || rm -f $(noinst_LTLIBRARIES)
-	@list='$(noinst_LTLIBRARIES)'; for p in $$list; do \
+uninstall-coinlibLTLIBRARIES:
+	@$(NORMAL_UNINSTALL)
+	@set -x; list='$(coinlib_LTLIBRARIES)'; for p in $$list; do \
+	  p=$(am__strip_dir) \
+	  echo " $(LIBTOOL) --mode=uninstall rm -f '$(DESTDIR)$(coinlibdir)/$$p'"; \
+	  $(LIBTOOL) --mode=uninstall rm -f "$(DESTDIR)$(coinlibdir)/$$p"; \
+	done
+
+clean-coinlibLTLIBRARIES:
+	-test -z "$(coinlib_LTLIBRARIES)" || rm -f $(coinlib_LTLIBRARIES)
+	@list='$(coinlib_LTLIBRARIES)'; for p in $$list; do \
 	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
 	  test "$$dir" != "$$p" || dir=.; \
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
-libamplinterface.la: $(libamplinterface_la_OBJECTS) $(libamplinterface_la_DEPENDENCIES) 
-	$(CXXLINK)  $(libamplinterface_la_LDFLAGS) $(libamplinterface_la_OBJECTS) $(libamplinterface_la_LIBADD) $(LIBS)
+libipoptamplinterface.la: $(libipoptamplinterface_la_OBJECTS) $(libipoptamplinterface_la_DEPENDENCIES) 
+	$(CXXLINK) -rpath $(coinlibdir) $(libipoptamplinterface_la_LDFLAGS) $(libipoptamplinterface_la_OBJECTS) $(libipoptamplinterface_la_LIBADD) $(LIBS)
 install-binPROGRAMS: $(bin_PROGRAMS)
 	@$(NORMAL_INSTALL)
 	test -z "$(bindir)" || $(mkdir_p) "$(DESTDIR)$(bindir)"
@@ -446,6 +490,40 @@ clean-libtool:
 distclean-libtool:
 	-rm -f libtool
 uninstall-info-am:
+install-pkgconfiglibDATA: $(pkgconfiglib_DATA)
+	@$(NORMAL_INSTALL)
+	test -z "$(pkgconfiglibdir)" || $(mkdir_p) "$(DESTDIR)$(pkgconfiglibdir)"
+	@list='$(pkgconfiglib_DATA)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f=$(am__strip_dir) \
+	  echo " $(pkgconfiglibDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(pkgconfiglibdir)/$$f'"; \
+	  $(pkgconfiglibDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(pkgconfiglibdir)/$$f"; \
+	done
+
+uninstall-pkgconfiglibDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(pkgconfiglib_DATA)'; for p in $$list; do \
+	  f=$(am__strip_dir) \
+	  echo " rm -f '$(DESTDIR)$(pkgconfiglibdir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(pkgconfiglibdir)/$$f"; \
+	done
+install-includeipoptHEADERS: $(includeipopt_HEADERS)
+	@$(NORMAL_INSTALL)
+	test -z "$(includeipoptdir)" || $(mkdir_p) "$(DESTDIR)$(includeipoptdir)"
+	@list='$(includeipopt_HEADERS)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f=$(am__strip_dir) \
+	  echo " $(includeipoptHEADERS_INSTALL) '$$d$$p' '$(DESTDIR)$(includeipoptdir)/$$f'"; \
+	  $(includeipoptHEADERS_INSTALL) "$$d$$p" "$(DESTDIR)$(includeipoptdir)/$$f"; \
+	done
+
+uninstall-includeipoptHEADERS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(includeipopt_HEADERS)'; for p in $$list; do \
+	  f=$(am__strip_dir) \
+	  echo " rm -f '$(DESTDIR)$(includeipoptdir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(includeipoptdir)/$$f"; \
+	done
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
@@ -524,9 +602,9 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LTLIBRARIES) $(PROGRAMS)
+all-am: Makefile $(LTLIBRARIES) $(PROGRAMS) $(DATA) $(HEADERS)
 installdirs:
-	for dir in "$(DESTDIR)$(bindir)"; do \
+	for dir in "$(DESTDIR)$(coinlibdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(pkgconfiglibdir)" "$(DESTDIR)$(includeipoptdir)"; do \
 	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
 	done
 install: install-am
@@ -556,8 +634,8 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-binPROGRAMS clean-generic clean-libtool \
-	clean-noinstLTLIBRARIES mostlyclean-am
+clean-am: clean-binPROGRAMS clean-coinlibLTLIBRARIES clean-generic \
+	clean-libtool mostlyclean-am
 
 distclean: distclean-am
 	-rm -rf ./$(DEPDIR)
@@ -575,7 +653,8 @@ info: info-am
 
 info-am:
 
-install-data-am:
+install-data-am: install-coinlibLTLIBRARIES \
+	install-includeipoptHEADERS install-pkgconfiglibDATA
 
 install-exec-am: install-binPROGRAMS
 
@@ -603,20 +682,25 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-binPROGRAMS uninstall-info-am
+uninstall-am: uninstall-binPROGRAMS uninstall-coinlibLTLIBRARIES \
+	uninstall-includeipoptHEADERS uninstall-info-am \
+	uninstall-pkgconfiglibDATA
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-binPROGRAMS \
-	clean-generic clean-libtool clean-noinstLTLIBRARIES ctags \
+	clean-coinlibLTLIBRARIES clean-generic clean-libtool ctags \
 	distclean distclean-compile distclean-generic \
 	distclean-libtool distclean-tags distdir dvi dvi-am html \
 	html-am info info-am install install-am install-binPROGRAMS \
-	install-data install-data-am install-exec install-exec-am \
-	install-info install-info-am install-man install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
+	install-coinlibLTLIBRARIES install-data install-data-am \
+	install-exec install-exec-am install-includeipoptHEADERS \
+	install-info install-info-am install-man \
+	install-pkgconfiglibDATA install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags uninstall uninstall-am uninstall-binPROGRAMS \
-	uninstall-info-am
+	uninstall-coinlibLTLIBRARIES uninstall-includeipoptHEADERS \
+	uninstall-info-am uninstall-pkgconfiglibDATA
 
 
 astyle: $(ASTYLE_FILES)

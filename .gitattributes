@@ -165,6 +165,8 @@ Ipopt/src/Algorithm/Inexact/Makefile.am -text
 Ipopt/src/Algorithm/Inexact/Makefile.in -text
 Ipopt/src/Algorithm/LinearSolvers/IpSlackBasedTSymScalingMethod.cpp -text
 Ipopt/src/Algorithm/LinearSolvers/IpSlackBasedTSymScalingMethod.hpp -text
+Ipopt/src/Apps/AmplSolver/ipoptamplinterface-uninstalled.pc.in -text
+Ipopt/src/Apps/AmplSolver/ipoptamplinterface.pc.in -text
 Ipopt/src/Interfaces/ipopt_addlibs_f.txt.in -text
 Ipopt/src/contrib/CGPenalty/Makefile.am -text
 Ipopt/src/contrib/CGPenalty/Makefile.in -text

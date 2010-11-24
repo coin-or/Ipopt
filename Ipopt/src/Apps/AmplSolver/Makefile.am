@@ -8,18 +8,19 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-noinst_LTLIBRARIES = libamplinterface.la
+coinlibdir = ${libdir}/coin
+coinlib_LTLIBRARIES = libipoptamplinterface.la
 bin_PROGRAMS = ipopt
 
-libamplinterface_la_SOURCES = \
+libipoptamplinterface_la_SOURCES = \
 	AmplTNLP.cpp AmplTNLP.hpp
 
 ipopt_SOURCES = \
 	ampl_ipopt.cpp
 
-ipopt_LDADD = libamplinterface.la ../../Interfaces/libipopt.la
+ipopt_LDADD = libipoptamplinterface.la ../../Interfaces/libipopt.la
 	
-LIBS = $(ASL_LIBS) $(IPOPTLIB_LIBS)
+LIBS = $(IPOPTAMPLINTERFACELIB_LIBS) $(IPOPTLIB_LIBS)
 
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \
@@ -28,6 +29,12 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../Interfaces`
 
 AM_CPPFLAGS += $(ASL_CFLAGS)
+
+includeipoptdir = $(includedir)/coin
+includeipopt_HEADERS = AmplTNLP.hpp
+
+pkgconfiglibdir = $(libdir)/pkgconfig
+pkgconfiglib_DATA = ../../../ipoptamplinterface.pc
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
