@@ -23,6 +23,9 @@ libdir = @libdir@
 exec_prefix = @exec_prefix@
 prefix = @prefix@
 
+# pkg-config command, if available
+PKG_CONFIG = @PKG_CONFIG@
+
 # Libraries necessary to link with IPOPT
 IPOPT_LIBS = @ipoptlib@ @IPOPTLIB_LIBS@
 
