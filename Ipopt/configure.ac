@@ -116,7 +116,7 @@ if test $coin_has_lapack != yes; then
   AC_MSG_WARN([Compiling code without LAPACK.  Certain options (e.g., quasi-Newton) will not work.])
 fi
 
-AC_COIN_CHECK_PACKAGE(ASL,   [coinasl])
+AC_COIN_CHECK_PACKAGE(ASL,   [coinasl],   [IpoptAmplInterfaceLib])
 AC_COIN_CHECK_PACKAGE(HSL,   [coinhsl],   [IpoptLib])
 AC_COIN_CHECK_PACKAGE(Mumps, [coinmumps], [IpoptLib])
 
@@ -848,6 +848,12 @@ AC_CONFIG_FILES([Makefile
 		 contrib/AsNMPC/src/Makefile
 		 contrib/RInterface/src/Makevars
 		 ipopt.pc ipopt-uninstalled.pc])
+
+if test $coin_has_asl = yes ; then
+  AC_CONFIG_FILES([ipoptamplinterface.pc:src/Apps/AmplSolver/ipoptamplinterface.pc.in
+                   ipoptamplinterface-uninstalled.pc:src/Apps/AmplSolver/ipoptamplinterface-uninstalled.pc.in
+                  ])
+fi
 
 AC_CONFIG_HEADER([inc/config_ipopt.h])
 

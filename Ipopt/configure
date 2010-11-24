@@ -471,7 +471,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ADDLIBS PCADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE have_svnversion IPOPT_SVN_REV EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 FFLAGS ac_ct_F77 MPIF77 FLIBS FC FCFLAGS ac_ct_FC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE PKG_CONFIG ac_pt_PKG_CONFIG COIN_HAS_PKGCONFIG_TRUE COIN_HAS_PKGCONFIG_FALSE COIN_PKG_CONFIG_PATH COIN_PKG_CONFIG_PATH_UNINSTALLED BLAS_LIBS BLAS_CFLAGS BLAS_DATA IPOPTLIB_CFLAGS IPOPTLIB_LIBS IPOPTLIB_PCLIBS IPOPTLIB_PCREQUIRES COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE LAPACK_LIBS LAPACK_CFLAGS LAPACK_DATA COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE ASL_LIBS ASL_CFLAGS ASL_DATA COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE HSL_LIBS HSL_CFLAGS HSL_DATA COIN_HAS_HSL_TRUE COIN_HAS_HSL_FALSE MUMPS_LIBS MUMPS_CFLAGS MUMPS_DATA COIN_HAS_MUMPS_TRUE COIN_HAS_MUMPS_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR JAVA_HOME JIPOPTDLL SHARED_FLAGS MATLAB_HOME MEXSUFFIX ASTYLE ASTYLEFLAGS IPALLLIBS HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MA28_TRUE HAVE_MA28_FALSE HAVE_MA77_TRUE HAVE_MA77_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILD_LINEARSOLVERLOADER_TRUE BUILD_LINEARSOLVERLOADER_FALSE BUILD_HSLLOADER_TRUE BUILD_HSLLOADER_FALSE BUILD_PARDISOLOADER_TRUE BUILD_PARDISOLOADER_FALSE BUILD_INEXACT_TRUE BUILD_INEXACT_FALSE ipoptlib LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ADDLIBS PCADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE have_svnversion IPOPT_SVN_REV EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 FFLAGS ac_ct_F77 MPIF77 FLIBS FC FCFLAGS ac_ct_FC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE PKG_CONFIG ac_pt_PKG_CONFIG COIN_HAS_PKGCONFIG_TRUE COIN_HAS_PKGCONFIG_FALSE COIN_PKG_CONFIG_PATH COIN_PKG_CONFIG_PATH_UNINSTALLED BLAS_LIBS BLAS_CFLAGS BLAS_DATA IPOPTLIB_CFLAGS IPOPTLIB_LIBS IPOPTLIB_PCLIBS IPOPTLIB_PCREQUIRES COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE LAPACK_LIBS LAPACK_CFLAGS LAPACK_DATA COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE ASL_LIBS ASL_CFLAGS ASL_DATA IPOPTAMPLINTERFACELIB_CFLAGS IPOPTAMPLINTERFACELIB_LIBS IPOPTAMPLINTERFACELIB_PCLIBS IPOPTAMPLINTERFACELIB_PCREQUIRES COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE HSL_LIBS HSL_CFLAGS HSL_DATA COIN_HAS_HSL_TRUE COIN_HAS_HSL_FALSE MUMPS_LIBS MUMPS_CFLAGS MUMPS_DATA COIN_HAS_MUMPS_TRUE COIN_HAS_MUMPS_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR JAVA_HOME JIPOPTDLL SHARED_FLAGS MATLAB_HOME MEXSUFFIX ASTYLE ASTYLEFLAGS IPALLLIBS HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MA28_TRUE HAVE_MA28_FALSE HAVE_MA77_TRUE HAVE_MA77_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILD_LINEARSOLVERLOADER_TRUE BUILD_LINEARSOLVERLOADER_FALSE BUILD_HSLLOADER_TRUE BUILD_HSLLOADER_FALSE BUILD_PARDISOLOADER_TRUE BUILD_PARDISOLOADER_FALSE BUILD_INEXACT_TRUE BUILD_INEXACT_FALSE ipoptlib LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -27446,6 +27446,11 @@ ASL_DATA=
 
 
 
+
+
+
+
+
 #check if user provided LIBS, CFLAGS, or DATA for module
 if test $coin_has_asl != skipping; then
 
@@ -27456,6 +27461,9 @@ if test "${with_asl_lib+set}" = set; then
   coin_has_asl=yes
        ASL_LIBS="$withval"
 
+         IPOPTAMPLINTERFACELIB_PCLIBS="$withval $IPOPTAMPLINTERFACELIB_PCLIBS"
+         IPOPTAMPLINTERFACELIB_LIBS="$withval $IPOPTAMPLINTERFACELIB_LIBS"
+
 
 fi;
 
@@ -27465,6 +27473,7 @@ if test "${with_asl_incdir+set}" = set; then
   withval="$with_asl_incdir"
   coin_has_asl=yes
      ASL_CFLAGS="-I`${CYGPATH_W} $withval`"
+     IPOPTAMPLINTERFACELIB_CFLAGS="$withval $IPOPTAMPLINTERFACELIB_CFLAGS"
 
 
 fi;
@@ -27507,6 +27516,7 @@ if test -n "$PKG_CONFIG" ; then
      coin_has_asl=yes
         echo "$as_me:$LINENO: result: yes: $ASL_VERSIONS" >&5
 echo "${ECHO_T}yes: $ASL_VERSIONS" >&6
+        IPOPTAMPLINTERFACELIB_PCREQUIRES="coinasl $IPOPTAMPLINTERFACELIB_PCREQUIRES"
 
 
 
@@ -27530,7 +27540,10 @@ fi
     PKG_CONFIG_PATH="$coin_save_PKG_CONFIG_PATH"
     export PKG_CONFIG_PATH
 
-    # augment X_CFLAGS and X_LIBS for each build target X in
+    # augment X_CFLAGS and X_LIBS for each build target X in IpoptAmplInterfaceLib
+
+      IPOPTAMPLINTERFACELIB_CFLAGS="$ASL_CFLAGS $IPOPTAMPLINTERFACELIB_CFLAGS"
+      IPOPTAMPLINTERFACELIB_LIBS="$ASL_LIBS $IPOPTAMPLINTERFACELIB_LIBS"
 
   else
     echo "$as_me:$LINENO: result: skipped check via pkg-config, redirect to fallback" >&5
@@ -27658,6 +27671,10 @@ _ACEOF
 
 
 
+    IPOPTAMPLINTERFACELIB_PCREQUIRES="coinasl $IPOPTAMPLINTERFACELIB_PCREQUIRES"
+    IPOPTAMPLINTERFACELIB_CFLAGS="$ASL_CFLAGS $IPOPTAMPLINTERFACELIB_CFLAGS"
+    IPOPTAMPLINTERFACELIB_LIBS="$ASL_LIBS $IPOPTAMPLINTERFACELIB_LIBS"
+
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
     if test -n "$ASL_CFLAGS" ; then
@@ -27672,6 +27689,11 @@ echo "$as_me: ASL LIBS   are $ASL_LIBS" >&6;}
       { echo "$as_me:$LINENO: ASL DATA   is  $ASL_DATA" >&5
 echo "$as_me: ASL DATA   is  $ASL_DATA" >&6;}
     fi
+
+      { echo "$as_me:$LINENO: IpoptAmplInterfaceLib CFLAGS are $IPOPTAMPLINTERFACELIB_CFLAGS" >&5
+echo "$as_me: IpoptAmplInterfaceLib CFLAGS are $IPOPTAMPLINTERFACELIB_CFLAGS" >&6;}
+      { echo "$as_me:$LINENO: IpoptAmplInterfaceLib LIBS   are $IPOPTAMPLINTERFACELIB_LIBS" >&5
+echo "$as_me: IpoptAmplInterfaceLib LIBS   are $IPOPTAMPLINTERFACELIB_LIBS" >&6;}
 
   fi
 
@@ -27722,6 +27744,11 @@ echo "$as_me: ASL DATA   is  $ASL_DATA" >&6;}
       { echo "$as_me:$LINENO: ASL CFLAGS are $ASL_CFLAGS" >&5
 echo "$as_me: ASL CFLAGS are $ASL_CFLAGS" >&6;}
     fi
+
+      { echo "$as_me:$LINENO: IpoptAmplInterfaceLib CFLAGS are $IPOPTAMPLINTERFACELIB_CFLAGS" >&5
+echo "$as_me: IpoptAmplInterfaceLib CFLAGS are $IPOPTAMPLINTERFACELIB_CFLAGS" >&6;}
+      { echo "$as_me:$LINENO: IpoptAmplInterfaceLib LIBS   are $IPOPTAMPLINTERFACELIB_LIBS" >&5
+echo "$as_me: IpoptAmplInterfaceLib LIBS   are $IPOPTAMPLINTERFACELIB_LIBS" >&6;}
 
   fi
 fi
@@ -34783,6 +34810,11 @@ fi
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Interfaces/ipopt_addlibs_f.txt src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Algorithm/Inexact/Makefile src/contrib/CGPenalty/Makefile src/contrib/LinearSolverLoader/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile src/Apps/CUTErInterface/Makefile examples/hs071_f/Makefile examples/hs071_f/hs071_f.f examples/Cpp_example/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile tutorial/CodingExercise/C/1-skeleton/Makefile tutorial/CodingExercise/C/2-mistake/Makefile tutorial/CodingExercise/C/3-solution/Makefile tutorial/CodingExercise/Cpp/1-skeleton/Makefile tutorial/CodingExercise/Cpp/2-mistake/Makefile tutorial/CodingExercise/Cpp/3-solution/Makefile tutorial/CodingExercise/Matlab/1-skeleton/startup.m tutorial/CodingExercise/Matlab/2-mistake/startup.m tutorial/CodingExercise/Matlab/3-solution/startup.m tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f tutorial/CodingExercise/Fortran/1-skeleton/Makefile tutorial/CodingExercise/Fortran/2-mistake/Makefile tutorial/CodingExercise/Fortran/3-solution/Makefile test/Makefile test/run_unitTests contrib/MatlabInterface/src/Makefile contrib/MatlabInterface/examples/startup.m contrib/MatlabInterface-Old/src/Makefile contrib/MatlabInterface-Old/examples/startup.m contrib/JavaInterface/Makefile contrib/AsNMPC/Makefile contrib/AsNMPC/AmplSolver/Makefile contrib/AsNMPC/examples/parametric_cpp/Makefile contrib/AsNMPC/examples/redhess_cpp/Makefile contrib/AsNMPC/src/Makefile contrib/RInterface/src/Makevars ipopt.pc ipopt-uninstalled.pc"
 
 
+if test $coin_has_asl = yes ; then
+                      ac_config_files="$ac_config_files ipoptamplinterface.pc:src/Apps/AmplSolver/ipoptamplinterface.pc.in ipoptamplinterface-uninstalled.pc:src/Apps/AmplSolver/ipoptamplinterface-uninstalled.pc.in"
+
+fi
+
           ac_config_headers="$ac_config_headers inc/config_ipopt.h"
 
 
@@ -35673,6 +35705,8 @@ do
   "contrib/RInterface/src/Makevars" ) CONFIG_FILES="$CONFIG_FILES contrib/RInterface/src/Makevars" ;;
   "ipopt.pc" ) CONFIG_FILES="$CONFIG_FILES ipopt.pc" ;;
   "ipopt-uninstalled.pc" ) CONFIG_FILES="$CONFIG_FILES ipopt-uninstalled.pc" ;;
+  "ipoptamplinterface.pc" ) CONFIG_FILES="$CONFIG_FILES ipoptamplinterface.pc:src/Apps/AmplSolver/ipoptamplinterface.pc.in" ;;
+  "ipoptamplinterface-uninstalled.pc" ) CONFIG_FILES="$CONFIG_FILES ipoptamplinterface-uninstalled.pc:src/Apps/AmplSolver/ipoptamplinterface-uninstalled.pc.in" ;;
   "test/hs071_main.cpp" ) CONFIG_LINKS="$CONFIG_LINKS test/hs071_main.cpp:examples/hs071_cpp/hs071_main.cpp" ;;
   "test/hs071_nlp.cpp" ) CONFIG_LINKS="$CONFIG_LINKS test/hs071_nlp.cpp:examples/hs071_cpp/hs071_nlp.cpp" ;;
   "test/hs071_nlp.hpp" ) CONFIG_LINKS="$CONFIG_LINKS test/hs071_nlp.hpp:examples/hs071_cpp/hs071_nlp.hpp" ;;
@@ -35902,6 +35936,10 @@ s,@COIN_HAS_LAPACK_FALSE@,$COIN_HAS_LAPACK_FALSE,;t t
 s,@ASL_LIBS@,$ASL_LIBS,;t t
 s,@ASL_CFLAGS@,$ASL_CFLAGS,;t t
 s,@ASL_DATA@,$ASL_DATA,;t t
+s,@IPOPTAMPLINTERFACELIB_CFLAGS@,$IPOPTAMPLINTERFACELIB_CFLAGS,;t t
+s,@IPOPTAMPLINTERFACELIB_LIBS@,$IPOPTAMPLINTERFACELIB_LIBS,;t t
+s,@IPOPTAMPLINTERFACELIB_PCLIBS@,$IPOPTAMPLINTERFACELIB_PCLIBS,;t t
+s,@IPOPTAMPLINTERFACELIB_PCREQUIRES@,$IPOPTAMPLINTERFACELIB_PCREQUIRES,;t t
 s,@COIN_HAS_ASL_TRUE@,$COIN_HAS_ASL_TRUE,;t t
 s,@COIN_HAS_ASL_FALSE@,$COIN_HAS_ASL_FALSE,;t t
 s,@HSL_LIBS@,$HSL_LIBS,;t t
