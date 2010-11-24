@@ -18,9 +18,8 @@ libipoptamplinterface_la_SOURCES = \
 ipopt_SOURCES = \
 	ampl_ipopt.cpp
 
-ipopt_LDADD = libipoptamplinterface.la ../../Interfaces/libipopt.la
-	
-LIBS = $(IPOPTAMPLINTERFACELIB_LIBS) $(IPOPTLIB_LIBS)
+ipopt_LDADD = libipoptamplinterface.la ../../Interfaces/libipopt.la \
+	$(IPOPTAMPLINTERFACELIB_LIBS) $(IPOPTLIB_LIBS)
 
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \
