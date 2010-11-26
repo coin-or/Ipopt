@@ -1,4 +1,4 @@
-C Copyright (C) 2002, 2007 Carnegie Mellon University and others.
+C Copyright (C) 2002, 2010 Carnegie Mellon University and others.
 C All Rights Reserved.
 C This code is published under the Common Public License.
 C
@@ -82,10 +82,15 @@ C
       integer i
 C
 C     The following are the Fortran routines for computing the model
-C     functions and their derivatives - their code can be found furhter
+C     functions and their derivatives - their code can be found further
 C     down in this file.
 C
       external EV_F, EV_G, EV_GRAD_F, EV_JAC_G, EV_HESS
+CC
+CC     The next is an optional callback method.  It is called once per
+CC     iteration.
+CC
+C      external ITER_CB
 C
 C     Set initial point and bounds:
 C
@@ -133,6 +138,14 @@ C     Set a double precision option
 C
       IERR = IPADDNUMOPTION(IPROBLEM, 'tol', 1.d-7)
       if (IERR.ne.0 ) goto 9990
+
+CC
+CC     Set a callback function to give you control once per iteration.
+CC     You can use it if you want to generate some output, or to stop
+CC     the optimization early.
+CC
+C      call IPSETCALLBACK(IPROBLEM, ITER_CB)
+
 C
 C     As a simple example, we pass the constants in the constraints to
 C     the EVAL_C routine via the "private" DAT array.
@@ -353,5 +366,34 @@ C
          HESS(10)= HESS(10)+ LAM(2) * 2d0
       endif
       IERR = 0
+      return
+      end
+C
+C =============================================================================
+C
+C                   Callback method called once per iteration
+C
+C =============================================================================
+C
+      subroutine ITER_CB(ALG_MODE, ITER_COUNT,OBJVAL, INF_PR, INF_DU,
+     1     MU, DNORM, REGU_SIZE, ALPHA_DU, ALPHA_PR, LS_TRIAL, IDAT,
+     2     DAT, ISTOP)
+      implicit none
+      integer ALG_MODE, ITER_COUNT, LS_TRIAL
+      double precision OBJVAL, INF_PR, INF_DU, MU, DNORM, REGU_SIZE
+      double precision ALPHA_DU, ALPHA_PR
+      double precision DAT(*)
+      integer IDAT(*)
+      integer ISTOP
+C
+C     You can put some output here
+C
+      write(*,*) 'Testing callback function in iteration ', ITER_COUNT
+C
+C     And set ISTOP to 1 if you want Ipopt to stop now.  Below is just a
+C     simple example.
+C
+      if (INF_PR.le.1D-04) ISTOP = 1
+
       return
       end

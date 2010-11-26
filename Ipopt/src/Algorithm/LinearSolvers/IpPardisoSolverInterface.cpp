@@ -194,7 +194,7 @@ namespace Ipopt
       "This is MSGLVL in the Pardiso manual.");
     roptions->AddStringOption2(
       "pardiso_skip_inertia_check",
-      "Always pretent inertia is correct.",
+      "Always pretend inertia is correct.",
       "no",
       "no", "check inertia",
       "yes", "skip inertia check",
