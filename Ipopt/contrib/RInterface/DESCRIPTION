@@ -1,7 +1,7 @@
 Package: ipoptr
 Type: Package
 Title: R interface to Ipopt
-Version: 0.8
+Version: 0.8.1
 Date: 2010-07-18
 Author: Jelmer Ypma
 Maintainer: Jelmer Ypma <uctpjyy@ucl.ac.uk>

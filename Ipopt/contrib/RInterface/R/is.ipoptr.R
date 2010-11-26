@@ -92,6 +92,7 @@ is.ipoptr <- function(x) {
             warning("Option supplied to approximate hessian, but eval_h_structure is defined.\nSolution: remove option hessian_approximation=limited-memory to use analytic derivatives.")
         }
     }
+    
 
     return( TRUE )
 }

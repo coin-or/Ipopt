@@ -125,7 +125,6 @@ Ipopt/contrib/RInterface/R/print.ipoptr.R -text
 Ipopt/contrib/RInterface/R/print.sparseness.R -text
 Ipopt/contrib/RInterface/R/show.sparseness.R -text
 Ipopt/contrib/RInterface/README -text
-Ipopt/contrib/RInterface/configure_ipoptr.R -text
 Ipopt/contrib/RInterface/inst/CITATION -text
 Ipopt/contrib/RInterface/inst/doc/figs/plot-sparsefig.eps -text
 Ipopt/contrib/RInterface/inst/doc/ipoptr.Rnw -text
@@ -141,7 +140,6 @@ Ipopt/contrib/RInterface/man/print.sparseness.Rd -text
 Ipopt/contrib/RInterface/man/show.sparseness.Rd -text
 Ipopt/contrib/RInterface/src/IpoptRNLP.cpp -text
 Ipopt/contrib/RInterface/src/IpoptRNLP.hpp -text
-Ipopt/contrib/RInterface/src/Makevars -text
 Ipopt/contrib/RInterface/src/Makevars.in -text
 Ipopt/contrib/RInterface/src/ipoptr.cpp -text
 Ipopt/contrib/RInterface/tests/approx_banana.R -text
@@ -168,6 +166,8 @@ Ipopt/src/Algorithm/Inexact/Makefile.am -text
 Ipopt/src/Algorithm/Inexact/Makefile.in -text
 Ipopt/src/Algorithm/LinearSolvers/IpSlackBasedTSymScalingMethod.cpp -text
 Ipopt/src/Algorithm/LinearSolvers/IpSlackBasedTSymScalingMethod.hpp -text
+Ipopt/src/Apps/AmplSolver/ipoptamplinterface-uninstalled.pc.in -text
+Ipopt/src/Apps/AmplSolver/ipoptamplinterface.pc.in -text
 Ipopt/src/Interfaces/ipopt_addlibs_f.txt.in -text
 Ipopt/src/contrib/CGPenalty/Makefile.am -text
 Ipopt/src/contrib/CGPenalty/Makefile.in -text

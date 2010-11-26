@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -27,6 +27,7 @@ struct IpoptProblemInfo
   Eval_Grad_F_CB eval_grad_f;
   Eval_Jac_G_CB eval_jac_g;
   Eval_H_CB eval_h;
+  Intermediate_CB intermediate_cb;
   Ipopt::SmartPtr<Ipopt::IpoptApplication> app;
   Number obj_scaling;
   Number* x_scaling;
@@ -92,6 +93,7 @@ IpoptProblem CreateIpoptProblem(
   retval->eval_grad_f = eval_grad_f;
   retval->eval_jac_g = eval_jac_g;
   retval->eval_h = eval_h;
+  retval->intermediate_cb = NULL;
 
   retval->app = new Ipopt::IpoptApplication();
 
@@ -184,6 +186,14 @@ Bool SetIpoptProblemScaling(IpoptProblem ipopt_problem,
   return (Bool)true;
 }
 
+Bool SetIntermediateCallback(IpoptProblem ipopt_problem,
+                             Intermediate_CB intermediate_cb)
+{
+  ipopt_problem->intermediate_cb = intermediate_cb;
+  return (Bool)true;
+}
+
+
 enum ApplicationReturnStatus IpoptSolve(
   IpoptProblem ipopt_problem,
   Number* x,
@@ -225,6 +235,7 @@ enum ApplicationReturnStatus IpoptSolve(
                                 ipopt_problem->eval_grad_f,
                                 ipopt_problem->eval_jac_g,
                                 ipopt_problem->eval_h,
+                                ipopt_problem->intermediate_cb,
                                 x, mult_x_L, mult_x_U, g, mult_g,
                                 obj_val, user_data,
                                 ipopt_problem->obj_scaling,

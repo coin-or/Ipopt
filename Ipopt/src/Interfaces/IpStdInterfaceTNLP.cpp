@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -27,6 +27,7 @@ namespace Ipopt
                                      Eval_Grad_F_CB eval_grad_f,
                                      Eval_Jac_G_CB eval_jac_g,
                                      Eval_H_CB eval_h,
+                                     Intermediate_CB intermediate_cb,
                                      Number* x_sol,
                                      Number* z_L_sol,
                                      Number* z_U_sol,
@@ -57,6 +58,7 @@ namespace Ipopt
       eval_grad_f_(eval_grad_f),
       eval_jac_g_(eval_jac_g),
       eval_h_(eval_h),
+      intermediate_cb_(intermediate_cb),
       user_data_(user_data),
       obj_scaling_(obj_scaling),
       x_scaling_(NULL),
@@ -321,6 +323,25 @@ namespace Ipopt
     }
     else {
       DBG_ASSERT(false && "Invalid combination of iRow, jCol, and values pointers");
+    }
+    return (retval!=0);
+  }
+
+  bool StdInterfaceTNLP::intermediate_callback(AlgorithmMode mode,
+      Index iter, Number obj_value,
+      Number inf_pr, Number inf_du,
+      Number mu, Number d_norm,
+      Number regularization_size,
+      Number alpha_du, Number alpha_pr,
+      Index ls_trials,
+      const IpoptData* ip_data,
+      IpoptCalculatedQuantities* ip_cq)
+  {
+    Bool retval = 1;
+    if (intermediate_cb_) {
+      retval = (*intermediate_cb_)((Index)mode, iter, obj_value, inf_pr, inf_du,
+                                   mu, d_norm, regularization_size, alpha_du,
+                                   alpha_pr, ls_trials, user_data_);
     }
     return (retval!=0);
   }

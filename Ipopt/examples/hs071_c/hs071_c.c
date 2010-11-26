@@ -1,4 +1,4 @@
-/* Copyright (C) 2005, 2006 International Business Machines and others.
+/* Copyright (C) 2005, 2010 International Business Machines and others.
  * All Rights Reserved.
  * This code is published under the Common Public License.
  *
@@ -32,6 +32,11 @@ Bool eval_h(Index n, Number *x, Bool new_x, Number obj_factor,
             Index nele_hess, Index *iRow, Index *jCol,
             Number *values, UserDataPtr user_data);
 
+Bool intermediate_cb(Index alg_mod, Index iter_count, Number obj_value,
+                     Number inf_pr, Number inf_du, Number mu, Number d_norm,
+                     Number regularization_size, Number alpha_du,
+                     Number alpha_pr, Index ls_trials, UserDataPtr user_data);
+
 /* Main Program */
 int main()
 {
@@ -45,9 +50,9 @@ int main()
   enum ApplicationReturnStatus status; /* Solve return code */
   Number* x = NULL;                    /* starting point and solution vector */
   Number* mult_x_L = NULL;             /* lower bound multipliers
-  					  at the solution */
+           at the solution */
   Number* mult_x_U = NULL;             /* upper bound multipliers
-  					  at the solution */
+           at the solution */
   Number obj;                          /* objective value */
   Index i;                             /* generic counter */
 
@@ -58,7 +63,7 @@ int main()
   Index nele_hess = 10;
   /* indexing style for matrices */
   Index index_style = 0; /* C-style; start counting of rows and column
-  			    indices at 0 */
+           indices at 0 */
 
   /* set the number of variables and allocate space for the bounds */
   n=4;
@@ -108,6 +113,11 @@ int main()
   /* allocate space to store the bound multipliers at the solution */
   mult_x_L = (Number*)malloc(sizeof(Number)*n);
   mult_x_U = (Number*)malloc(sizeof(Number)*n);
+
+  /* Set the callback method for intermediate user-control.  This is
+   * not required, just gives you some intermediate control in case
+   * you need it. */
+  /* SetIntermediateCallback(nlp, intermediate_cb); */
 
   /* solve the problem */
   status = IpoptSolve(nlp, x, NULL, &obj, NULL, mult_x_L, mult_x_U, NULL);
@@ -282,6 +292,17 @@ Bool eval_h(Index n, Number *x, Bool new_x, Number obj_factor,
 
     values[9] += lambda[1] * 2;                      /* 3,3 */
   }
+
+  return TRUE;
+}
+
+Bool intermediate_cb(Index alg_mod, Index iter_count, Number obj_value,
+                     Number inf_pr, Number inf_du, Number mu, Number d_norm,
+                     Number regularization_size, Number alpha_du,
+                     Number alpha_pr, Index ls_trials, UserDataPtr user_data)
+{
+  printf("Testing intermediate callback in iteration %d\n", iter_count);
+  if (inf_pr < 1e-4) return FALSE;
 
   return TRUE;
 }

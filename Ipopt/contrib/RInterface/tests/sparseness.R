@@ -51,10 +51,10 @@ hessian_structure <- c( lapply( 1:m, function(x) { return( c(1:x) ) } ),
 # generate data
 set.seed( 3141 )
 A <- hessian( matrix( rnorm( n*m ), nrow=n, ncol=m ) )                        
-print.sparseness( s       = hessian_structure,
-                 indices = TRUE,
-                 data    = format( A, digits=2, nsmall=2, justify='right'),
-                 ncol    = 2*m )
+print.sparseness( x       = hessian_structure,
+                  indices = TRUE,
+                  data    = format( A, digits=2, nsmall=2, justify='right'),
+                  ncol    = 2*m )
 
 # make a large sparseness structure and use plot                 
 s <- do.call( "cbind", lapply( 1:5, function(i) { diag(5) %x% matrix(1, nrow=5, ncol=20) } ) )

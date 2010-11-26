@@ -11,33 +11,30 @@
 
 library('ipoptr')
 
+
 #
-# First example: write wrapper around functions
+# First example: supply additional arguments in user-defined functions
 #
 
 # objective function and gradient in terms of parameters
 eval_f_ex1 <- function(x, params) { 
     return( params[1]*x^2 + params[2]*x + params[3] ) 
 }
-eval_grad_f_ex1 <- function(x,params) { 
+eval_grad_f_ex1 <- function(x, params) { 
     return( 2*params[1]*x + params[2] ) 
 }
 
 # define parameters that we want to use
 params <- c(1,2,3)
 
-# write wrappers around objective and gradient function
-wrap_eval_f_ex1      <- function(x) { return( eval_f_ex1(x, params) ) }
-wrap_eval_grad_f_ex1 <- function(x) { return( eval_grad_f_ex1(x, params) ) }
-
 # define initial value of the optimzation problem
 x0 <- 0
 
 # solve using ipoptr
 ipoptr( x0          = x0, 
-        eval_f      = wrap_eval_f_ex1, 
-        eval_grad_f = wrap_eval_grad_f_ex1 )
-
+        eval_f      = eval_f_ex1, 
+        eval_grad_f = eval_grad_f_ex1,
+        params      = params )
 
 
 #
@@ -70,4 +67,4 @@ ipoptr( x0                 = x0,
 # solve using algebra
 cat( paste( "Minimizing f(x) = ax^2 + bx + c\n" ) )
 cat( paste( "Optimal value of control is -b/(2a) = ", -params[2]/(2*params[1]), "\n" ) )
-cat( paste( "With value of the objective function f(-b/(2a)) = ", wrap_eval_f_ex1( -params[2]/(2*params[1]) ), "\n" ) )
+cat( paste( "With value of the objective function f(-b/(2a)) = ", eval_f_ex1( -params[2]/(2*params[1]), params ), "\n" ) )

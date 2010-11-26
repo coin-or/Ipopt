@@ -53,8 +53,8 @@ eval_jac_g <- function( x ) {
 # diagonal matrix, usually only fill the lower triangle
 eval_h_structure <- list( c(1), c(2) )
 
-eval_h <- function( x, obj_factor, lambda ) {
-    return ( c( -2.0*lambda[1], -2.0*obj_factor ) )
+eval_h <- function( x, obj_factor, hessian_lambda ) {
+    return ( c( -2.0*hessian_lambda[1], -2.0*obj_factor ) )
 }
 
 x0 <- c(0.5,1.5)
