@@ -362,14 +362,21 @@ namespace Ipopt
 
           options_to_print.push_back("#Quasi-Newton");
           options_to_print.push_back("hessian_approximation");
+	  options_to_print.push_back("limited_memory_update_type");
           options_to_print.push_back("limited_memory_max_history");
           options_to_print.push_back("limited_memory_max_skipping");
+	  options_to_print.push_back("limited_memory_initialization");
+	  options_to_print.push_back("limited_memory_init_val");
+	  options_to_print.push_back("limited_memory_init_val_max");
+	  options_to_print.push_back("limited_memory_init_val_min");
+	  options_to_print.push_back("limited_memory_special_for_resto");
 
           options_to_print.push_back("#Derivative Test");
           options_to_print.push_back("derivative_test");
           options_to_print.push_back("derivative_test_perturbation");
           options_to_print.push_back("derivative_test_tol");
           options_to_print.push_back("derivative_test_print_all");
+          options_to_print.push_back("derivative_test_first_index");
           options_to_print.push_back("point_perturbation_radius");
 
           // Special linear solver

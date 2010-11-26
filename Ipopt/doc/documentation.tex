@@ -1,4 +1,4 @@
-%% Copyright (C) 2005, 2009 Carnegie Mellon University and others.
+%% Copyright (C) 2005, 2010 Carnegie Mellon University and others.
 %%
 %% The first version of this file was contributed to the Ipopt project
 %% on Aug 1, 2005, by Yoshiaki Kawajiri
@@ -21,12 +21,14 @@
 \renewcommand{\baselinestretch}{1.1}
 \usepackage{amsfonts}
 \usepackage{amsmath}
+%\usepackage{hyperlatex}
 
 %\usepackage{showlabels}
 
 \newcommand{\RR}{{\mathbb{R}}}
-\newcommand{\Ipopt}{{\sc Ipopt}}
+\newcommand{\Ipopt}{{\textsc{Ipopt}}}
 
+%\htmltitle{Ipopt documentation}
 
 \begin{document}
 \title{Introduction to \Ipopt:\\
@@ -38,7 +40,7 @@ A tutorial for downloading, installing, and using \Ipopt.}
 \maketitle
 
 \begin{abstract}
-  This document is a guide to using \Ipopt\ 3.9.0.  It includes
+  This document is a guide to using \Ipopt\ 3.9.1.  It includes
   instructions on how to obtain and compile \Ipopt, a description of
   the interface, user options, etc., as well as a tutorial on how to
   solve a nonlinear optimization problem with \Ipopt.
@@ -48,7 +50,7 @@ A tutorial for downloading, installing, and using \Ipopt.}
 The initial version of this document was created by Yoshiaki
 Kawajir\footnote{then Department of Chemical Engineering, Carnegie Mellon
   University, Pittsburgh PA} as a course project for \textit{47852
-  Open Source Software for Optimization}, taught by Prof. Fran\c cois
+  Open Source Software for Optimization}, taught by Prof. Fran\c{c}ois
 Margot at Tepper School of Business, Carnegie Mellon University.
 After this, Carl Laird\footnote{then Department of Chemical
   Engineering, Carnegie Mellon University, Pittsburgh PA} has added
@@ -69,7 +71,7 @@ Visual Studio C++ .NET
 
 \section{Introduction}
 \Ipopt\ (\underline{I}nterior \underline{P}oint \underline{Opt}imizer,
-pronounced ``I--P--Opt'') is an open source software package for
+pronounced ``Eye--Pea--Opt'') is an open source software package for
 large-scale nonlinear optimization. It can be used to solve general
 nonlinear programming problems of the form
 %\begin{subequations}\label{NLP}
@@ -149,7 +151,8 @@ In order to build \Ipopt, some third party components are required:
   \end{itemize}
   You find more information on the web by googling them.
 
-  Note: BLAS libraries distributed with Linux are not optimized.
+  Note: BLAS libraries distributed with Linux are usually not
+  optimized.
 \item LAPACK (Linear Algebra PACKage).  Also for LAPACK, some vendors
   offer precompiled and optimized libraries.  But like with BLAS, you
   can get the source code from {\tt www.netlib.org} and have the
@@ -162,7 +165,8 @@ In order to build \Ipopt, some third party components are required:
   routines that are used by \Ipopt\ are only {\tt DPOTRF}, {\tt
     DPOTRS}, and {\tt DSYEV}.
 
-  Note: LAPACK libraries distributed with Linux are not optimized.
+  Note: LAPACK libraries distributed with Linux are usually not
+  optimized.
 \item A sparse symmetric indefinite linear solver. \Ipopt\ needs
   to obtain the solution of sparse, symmetric, indefinite linear
   systems, and for this it relies on third-party code.  
@@ -257,16 +261,25 @@ The \Ipopt\ distribution includes an interface for {\tt
   solving problems modeled in SIF), and also a Matlab (mex) interface
   which allows you to use Ipopt from Matlab, see
 
-\centerline{\tt https://projects.coin-or.org/Ipopt/wiki/MatlabInterface}
+\centerline{\tt https://projects.coin-or.org/Ipopt/wiki/MatlabInterface.}
+%
+The distribution also includes an interface to the R project for
+statistical computing, see the files in the
+\texttt{Ipopt/contrib/RInterface} directory.
 
 
 There are also interfaces maintained by other people:
 \begin{itemize}
 \item GAMS (modeling environment)
 
-  The GAMSlinks project on COIN-OR, maintained my Stefan Vigerske,
+  The GAMSlinks project on COIN-OR, maintained by Stefan Vigerske,
   includes a GAMS interface for Ipopt, see {\tt
   https://projects.coin-or.org/GAMSlinks}.
+\item AIMMS (modeling environment)
+
+  The AIMMSlinks project on COIN-OR, maintained by Marcel Hunting,
+  provides an interface for Ipopt within the AIMMS modeling tool, see
+  {\tt https://projects.coin-or.org/AIMMSlinks}.
 \item Scilab (free Matlab-like envirnoment):
 
   Edson Cordeiro do Valle has written an interface to use Ipopt from
@@ -274,6 +287,10 @@ There are also interfaces maintained by other people:
 
   Another Scilab interface is available here: {\tt
     http://forge.scilab.org/index.php/p/sci-ipopt}
+\item Python:
+
+  An interface to the python language is available here: {\tt
+    http://code.google.com/p/pyipopt}
 \end{itemize}
 
 \subsection{More Information and Contributions}
@@ -314,8 +331,12 @@ There is also a mailing list for \Ipopt, available from the webpage
 \end{center}
 where you can subscribe to get notified of updates, to ask general
 questions regarding installation and usage, or to share your
-experience with \Ipopt. (You might want to look at the archives before
-posting a question.)
+experience with \Ipopt. You might want to look at the archives before
+posting a question.  An easy way to search the archive with Google is
+to specify
+
+``\texttt{site:http://list.coin-or.org/pipermail/ipopt}''\\
+in addition to your keywords in the search string.
 
 We try to answer questions posted to the mailing list in a reasonable
 manner.  Please understand that we cannot answer all questions in
@@ -326,19 +347,20 @@ consulting services by IBM Research, please contact the \Ipopt\
 project leader, Andreas W\"achter.
 
 \subsection{History of \Ipopt}
-The original \Ipopt\ (Fortran version) was a product of the dissertation
-research of Andreas W\"achter \cite{WaechterPhD}, under Lorenz
-T. Biegler at the Chemical Engineering Department at Carnegie Mellon
-University. The code was made open source and distributed by the
-COIN-OR initiative, which is now a non-profit corporation.  \Ipopt\ has
-been actively developed under COIN-OR since 2002.
+The original \Ipopt\ (Fortran version) was a product of the
+dissertation research of Andreas W\"achter \cite{WaechterPhD}, under
+the supervision of Lorenz T. Biegler at the Chemical Engineering
+Department at Carnegie Mellon University. The code was made open
+source and distributed by the COIN-OR initiative, which is now a
+non-profit corporation.  \Ipopt\ has been actively developed under
+COIN-OR since 2002.
 
 To continue natural extension of the code and allow easy addition of
 new features, IBM Research decided to invest in an open source
 re-write of \Ipopt\ in C++.  With the help of Carl Laird, who came to
 the Mathematical Sciences Department at IBM Research as a summer
-student in 2004 and 2005, the code was re-implemented from
-scratch.
+intern in 2004 and 2005 during his PhD studies, the code was
+re-implemented from scratch.
 
 The new C++ version of the \Ipopt\ optimization code (\Ipopt\ 3.0.0
 and beyond) is maintained at IBM Research and remains part of the
@@ -376,7 +398,7 @@ directory in which you want to create a subdirectory {\tt Ipopt} with
 the \Ipopt\ source code.  Then follow the steps below:
 \begin{enumerate}
 \item{Download the code from the repository}\\
-{\tt \$ svn co https://projects.coin-or.org/svn/Ipopt/stable/3.6 CoinIpopt} \\
+{\tt \$ svn co https://projects.coin-or.org/svn/Ipopt/stable/3.9 CoinIpopt} \\
 Note: The {\tt \$} indicates the command line
 prompt, do not type {\tt \$}, only the text following it.
 \item Change into the root directory of the \Ipopt\ distribution\\
@@ -393,7 +415,7 @@ To use the tarball, follow the steps below:
 \item Download the desired tarball from
   \texttt{http://www.coin-or.org/download/source/Ipopt}, it has the form {\tt
     Ipopt-{\em x.y.z}.tgz}, where {\tt\em x.y.z} is the version
-  number, such as {\tt 3.8.2}.  There might also be daily snapshot
+  number, such as {\tt 3.9.1}.  There might also be daily snapshot
   from the stable branch.  The number of the latest official release
   can be found on the \Ipopt\ Trac page.
 \item Issue the following commands to unpack the archive file: \\
@@ -2818,8 +2840,14 @@ Since the second derivatives are approximates by finite differences of
 the first derivatives, you should first correct errors for the first
 derivatives.  Also, since the finite difference approximations are
 quite expensive, you should try to debug a small instance of your
-problem if you can.  Finally, it is of course also a good idea to run
-your code through some memory checker, such as {\tt valgrind} on Linux.
+problem if you can.  
+
+Another useful option is \texttt{derivative\_test\_first\_index} which
+allows your to start the derivative test with variables with a larger
+index.
+%
+Finally, it is of course always a good idea to run your code through
+some memory checker, such as {\tt valgrind} on Linux.
 
 \subsection{Quasi-Newton Approximation of Second Derivatives}
 \label{sec:quasiNewton}

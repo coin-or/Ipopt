@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -52,6 +52,7 @@ namespace Ipopt
                      Eval_Grad_F_CB eval_grad_f,
                      Eval_Jac_G_CB eval_jac_g,
                      Eval_H_CB eval_h,
+                     Intermediate_CB intermediate_cb,
                      Number* x_sol,
                      Number* z_L_sol,
                      Number* z_U_sol,
@@ -117,6 +118,17 @@ namespace Ipopt
                         Number obj_factor, Index m, const Number* lambda,
                         bool new_lambda, Index nele_hess, Index* iRow,
                         Index* jCol, Number* values);
+
+    /** Intermediate Callback method for the user.  Overloaded from TNLP */
+    virtual bool intermediate_callback(AlgorithmMode mode,
+                                       Index iter, Number obj_value,
+                                       Number inf_pr, Number inf_du,
+                                       Number mu, Number d_norm,
+                                       Number regularization_size,
+                                       Number alpha_du, Number alpha_pr,
+                                       Index ls_trials,
+                                       const IpoptData* ip_data,
+                                       IpoptCalculatedQuantities* ip_cq);
     //@}
 
     /** @name Solution Methods */
@@ -175,6 +187,8 @@ namespace Ipopt
     Eval_Jac_G_CB eval_jac_g_;
     /** Pointer to callback function evaluating Hessian of Lagrangian */
     Eval_H_CB eval_h_;
+    /** Pointer to intermediate callback function giving control to user */
+    Intermediate_CB intermediate_cb_;
     /** Pointer to user data */
     UserDataPtr user_data_;
     /** Objective scaling factor */
@@ -200,7 +214,6 @@ namespace Ipopt
     /** Internal function to update the internal and ampl state if the
      *  x value changes */
     void apply_new_x(bool new_x, Index n, const Number* x);
-
 
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
