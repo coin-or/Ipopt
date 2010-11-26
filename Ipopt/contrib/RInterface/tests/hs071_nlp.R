@@ -59,7 +59,7 @@ eval_jac_g <- function( x ) {
 # This is a symmetric matrix, fill the lower left triangle only.
 eval_h_structure <- list( c(1), c(1,2), c(1,2,3), c(1,2,3,4) )
 
-eval_h <- function( x, obj_factor, lambda ) {
+eval_h <- function( x, obj_factor, hessian_lambda ) {
 
     values <- numeric(10)
     values[1] = obj_factor * (2*x[4]) # 1,1
@@ -78,20 +78,20 @@ eval_h <- function( x, obj_factor, lambda ) {
 
 
     # add the portion for the first constraint
-    values[2] = values[2] + lambda[1] * (x[3] * x[4]) # 2,1
+    values[2] = values[2] + hessian_lambda[1] * (x[3] * x[4]) # 2,1
     
-    values[4] = values[4] + lambda[1] * (x[2] * x[4]) # 3,1
-    values[5] = values[5] + lambda[1] * (x[1] * x[4]) # 3,2
+    values[4] = values[4] + hessian_lambda[1] * (x[2] * x[4]) # 3,1
+    values[5] = values[5] + hessian_lambda[1] * (x[1] * x[4]) # 3,2
 
-    values[7] = values[7] + lambda[1] * (x[2] * x[3]) # 4,1
-    values[8] = values[8] + lambda[1] * (x[1] * x[3]) # 4,2
-    values[9] = values[9] + lambda[1] * (x[1] * x[2]) # 4,3
+    values[7] = values[7] + hessian_lambda[1] * (x[2] * x[3]) # 4,1
+    values[8] = values[8] + hessian_lambda[1] * (x[1] * x[3]) # 4,2
+    values[9] = values[9] + hessian_lambda[1] * (x[1] * x[2]) # 4,3
 
     # add the portion for the second constraint
-    values[1] = values[1] + lambda[2] * 2 # 1,1
-    values[3] = values[3] + lambda[2] * 2 # 2,2
-    values[6] = values[6] + lambda[2] * 2 # 3,3
-    values[10] = values[10] + lambda[2] * 2 # 4,4
+    values[1] = values[1] + hessian_lambda[2] * 2 # 1,1
+    values[3] = values[3] + hessian_lambda[2] * 2 # 2,2
+    values[6] = values[6] + hessian_lambda[2] * 2 # 3,3
+    values[10] = values[10] + hessian_lambda[2] * 2 # 4,4
 
     return ( values )
 }

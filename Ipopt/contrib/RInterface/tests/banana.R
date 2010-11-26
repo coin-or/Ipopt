@@ -24,7 +24,7 @@ eval_grad_f <- function(x) {
 # This is a symmetric matrix, fill the lower left triangle only.
 eval_h_structure <- list( c(1), c(1,2) )
 
-eval_h <- function( x, obj_factor, lambda ) {
+eval_h <- function( x, obj_factor, hessian_lambda ) {
     return( obj_factor*c( 2 - 400*(x[2] - x[1]^2) + 800*x[1]^2,      # 1,1
                           -400*x[1],                                 # 2,1
                           200 ) )                                    # 2,2

@@ -1,5 +1,5 @@
 /********************************************************************
-   Copyright (C) 2004, 2006 International Business Machines and others.
+   Copyright (C) 2004, 2010 International Business Machines and others.
    All Rights Reserved.
    This code is published under the Common Public License.
  
@@ -43,6 +43,12 @@ typedef void (*FEval_Hess_CB)(fint* TASK, fint* N, fdouble* X, fint* NEW_X,
                               fint* NEW_LAM, fint* NNZHESS, fint* IROW,
                               fint* JCOL, fdouble* VALUES, fint* IDAT,
                               fdouble* DDAT, fint* IERR);
+typedef void (*FIntermediate_CB)(fint* ALG_MODE, fint* ITER_COUNT,
+				 fdouble* OBJVAL, fdouble* INF_PR,
+				 fdouble* INF_DU, fdouble* MU, fdouble* DNORM,
+				 fdouble* REGU_SIZE, fdouble* ALPHA_DU,
+				 fdouble* ALPHA_PR, fint* LS_TRIAL, fint* IDAT,
+				 fdouble* DDAT, fint* ISTOP);
 
 struct _FUserData
 {
@@ -53,6 +59,7 @@ struct _FUserData
   FEval_Grad_F_CB EVAL_GRAD_F;
   FEval_Jac_G_CB EVAL_JAC_G;
   FEval_Hess_CB EVAL_HESS;
+  FIntermediate_CB INTERMEDIATE_CB;
   IpoptProblem Problem;
 };
 
@@ -173,6 +180,37 @@ static Bool eval_h(Index n, Number *x, Bool new_x, Number obj_factor,
   return (Bool) (IERR==OKRetVal);
 }
 
+static Bool intermediate_cb(Index alg_mod, Index iter_count, Number obj_value,
+			    Number inf_pr, Number inf_du, Number mu,
+			    Number d_norm, Number regularization_size,
+			    Number alpha_du, Number alpha_pr, Index ls_trials,
+			    UserDataPtr user_data)
+{
+  FUserData* fuser_data = (FUserData*)user_data;
+  fint ALG_MODE = alg_mod;
+  fint ITER_COUNT = iter_count;
+  fdouble OBJVAL = obj_value;
+  fdouble INF_PR = inf_pr;
+  fdouble INF_DU = inf_du;
+  fdouble MU = mu;
+  fdouble DNORM = d_norm;
+  fdouble REGU_SIZE = regularization_size;
+  fdouble ALPHA_DU = alpha_du;
+  fdouble ALPHA_PR = alpha_pr;
+  fint LS_TRIAL = ls_trials;
+  fint* IDAT = fuser_data->IDAT;
+  fdouble* DDAT = fuser_data->DDAT;
+  fint ISTOP=0;
+
+  if (!fuser_data->INTERMEDIATE_CB) return (Bool) TRUE;
+
+  fuser_data->INTERMEDIATE_CB(&ALG_MODE, &ITER_COUNT, &OBJVAL, &INF_PR,
+			      &INF_DU, &MU, &DNORM, &REGU_SIZE, &ALPHA_DU,
+			      &ALPHA_PR, &LS_TRIAL, IDAT, DDAT, &ISTOP);
+
+  return (Bool) (ISTOP==OKRetVal);
+}
+
 fptr F77_FUNC(ipcreate,IPCREATE)
 (fint* N,
  fdouble* X_L,
@@ -215,6 +253,7 @@ fptr F77_FUNC(ipcreate,IPCREATE)
   fuser_data->EVAL_GRAD_F = EVAL_GRAD_F;
   fuser_data->EVAL_JAC_G = EVAL_JAC_G;
   fuser_data->EVAL_HESS = EVAL_HESS;
+  fuser_data->INTERMEDIATE_CB = NULL;
 
   return (fptr)fuser_data;
 }
@@ -369,4 +408,21 @@ fint F77_FUNC(ipopenoutputfile,IPOPENOUTPUTFILE)
   else {
     return NotOKRetVal;
   }
+}
+
+void F77_FUNC(ipsetcallback,IPSETCALLBACK)
+(fptr* FProblem,
+ FIntermediate_CB inter_cb)
+{
+  FUserData* fuser_data = (FUserData*) *FProblem;
+  fuser_data->INTERMEDIATE_CB = inter_cb;
+  SetIntermediateCallback(fuser_data->Problem, intermediate_cb);
+}
+
+void F77_FUNC(ipunsetcallback,IPUNSETCALLBACK)
+(fptr* FProblem)
+{
+  FUserData* fuser_data = (FUserData*) *FProblem;
+  fuser_data->INTERMEDIATE_CB = NULL;
+  SetIntermediateCallback(fuser_data->Problem, NULL);
 }

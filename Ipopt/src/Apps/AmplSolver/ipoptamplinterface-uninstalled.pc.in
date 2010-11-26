@@ -1,0 +1,8 @@
+prefix=@prefix@
+
+Name: IPOPT
+Description: Ampl Interface TNLP to Ipopt
+Version: @PACKAGE_VERSION@
+Libs: -L@ABSBUILDDIR@/src/Apps/AmplSolver -lipoptamplinterface @IPOPTAMPLINTERFACELIB_PCLIBS@
+Cflags: -I@abs_source_dir@/src/Apps/AmplSolver
+Requires: ipopt @IPOPTAMPLINTERFACELIB_PCREQUIRES@

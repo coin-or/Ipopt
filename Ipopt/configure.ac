@@ -116,7 +116,7 @@ if test $coin_has_lapack != yes; then
   AC_MSG_WARN([Compiling code without LAPACK.  Certain options (e.g., quasi-Newton) will not work.])
 fi
 
-AC_COIN_CHECK_PACKAGE(ASL,   [coinasl])
+AC_COIN_CHECK_PACKAGE(ASL,   [coinasl],   [IpoptAmplInterfaceLib])
 AC_COIN_CHECK_PACKAGE(HSL,   [coinhsl],   [IpoptLib])
 AC_COIN_CHECK_PACKAGE(Mumps, [coinmumps], [IpoptLib])
 
@@ -622,15 +622,6 @@ AC_SUBST(ASTYLE)
 ASTYLEFLAGS="--mode=c --indent=spaces=2 --indent-cases --indent-namespaces --min-conditional-indent=1 --brackets=linux --brackets=break-closing --convert-tabs"
 AC_SUBST(ASTYLEFLAGS)
 
-# The following one is for the example makefiles
-case $CXX in
-  cl*)
-    ipoptlib='`$(CYGPATH_W) $(IPOPTLIBDIR)`\\libipopt.lib';;
-  *)
-    ipoptlib="-L\$(IPOPTLIBDIR) -lipopt";;
-esac
-AC_SUBST(ipoptlib)
-
 #########################
 # Makefile conditionals #
 #########################
@@ -706,6 +697,42 @@ esac
 AC_CHECK_FUNCS([snprintf _snprintf],[break])
 AC_CHECK_FUNCS([vsnprintf _vsnprintf],[break])
 AC_LANG_POP(C)
+
+########################################################################
+##                 Linker flags for examples Makefile's               ##
+########################################################################
+
+if test -n "$PKG_CONFIG"; then
+  # if we have pkg-config, then use it to determine linker flags for Ipopt
+  case $CXX in
+    cl* | icl*)
+      ipoptlib='`PKG_CONFIG_PATH=$(libdir)/pkgconfig:$$PKG_CONFIG_PATH $(PKG_CONFIG) --msvc-syntax --libs ipopt`'
+      ;;
+    *)
+      ipoptlib='`PKG_CONFIG_PATH=$(libdir)/pkgconfig:$$PKG_CONFIG_PATH $(PKG_CONFIG) --libs ipopt`'
+      ;;
+  esac
+    
+else
+  # if we have no pkg-config, then this is much more tricky
+  # the linker flags to link against uninstalled libraries are given in $IPOPTLIB_LIBS
+  # we 'convert' them to linker flags for installed libraries by removing all flags with an -L`cd ..; pwd` and adding the paths where the libraries will get installed
+  # for MS and intel compiler, we also replace all other -Lfoo by /libpath:`$(CYGPATH_W) foo` and all -lfoo by libfoo.lib
+  substcmd=`cd .. ; pwd | sed -e 's/\//./g' -e 's/ /./g'`
+  [substcmd="s/-L${substcmd}[^ ]*//g"]
+  ipoptlib=`echo "-lipopt $IPOPTLIB_LIBS" | sed -e "${substcmd}"`
+
+  case $CXX in
+    cl* | icl*)
+      [ipoptlib=`echo " $ipoptlib" | sed -e 's/ -l\([^ ]*\)/ lib\1.lib/g' | sed -e 's/-L\([^ ]*\)/\/libpath:\`$(CYGPATH_W) \1\`/g'`]
+      ipoptlib="/libpath:\`\$(CYGPATH_W) \$(libdir)/coin\` /libpath:\`\$(CYGPATH_W) \$(libdir)/coin/ThirdParty\` $ipoptlib"
+      ;;
+    *)
+      ipoptlib="-L\$(libdir)/coin -L\$(libdir)/coin/ThirdParty $ipoptlib"
+      ;;
+  esac
+fi
+AC_SUBST(ipoptlib)
 
 ########################################################################
 ##             Create links for the test source files                 ##
@@ -819,7 +846,14 @@ AC_CONFIG_FILES([Makefile
 		 contrib/AsNMPC/examples/parametric_cpp/Makefile
 		 contrib/AsNMPC/examples/redhess_cpp/Makefile
 		 contrib/AsNMPC/src/Makefile
+		 contrib/RInterface/src/Makevars
 		 ipopt.pc ipopt-uninstalled.pc])
+
+if test $coin_has_asl = yes ; then
+  AC_CONFIG_FILES([ipoptamplinterface.pc:src/Apps/AmplSolver/ipoptamplinterface.pc.in
+                   ipoptamplinterface-uninstalled.pc:src/Apps/AmplSolver/ipoptamplinterface-uninstalled.pc.in
+                  ])
+fi
 
 AC_CONFIG_HEADER([inc/config_ipopt.h])
 

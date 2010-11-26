@@ -1,5 +1,5 @@
 /*************************************************************************
-   Copyright (C) 2004, 2006 International Business Machines and others.
+   Copyright (C) 2004, 2010 International Business Machines and others.
    All Rights Reserved.
    This code is published under the Common Public License.
  
@@ -98,6 +98,21 @@ extern "C"
                             Index nele_hess, Index *iRow, Index *jCol,
                             Number *values, UserDataPtr user_data);
 
+  /** Type defining the callback function for giving intermediate
+   *  execution control to the user.  If set, it is called once per
+   *  iteration, providing the user with some information on the state
+   *  of the optimization.  This can be used to print some
+   *  user-defined output.  It also gives the user a way to terminate
+   *  the optimization prematurely.  If this method returns false,
+   *  Ipopt will terminate the optimization. */
+  typedef Bool (*Intermediate_CB)(Index alg_mod, /* 0 is regular, 1 is resto */
+				  Index iter_count, Number obj_value,
+				  Number inf_pr, Number inf_du,
+				  Number mu, Number d_norm,
+				  Number regularization_size,
+				  Number alpha_du, Number alpha_pr,
+				  Index ls_trials, UserDataPtr user_data);
+
   /** Function for creating a new Ipopt Problem object.  This function
    *  returns an object that can be passed to the IpoptSolve call.  It
    *  contains the basic definition of the optimization problem, such
@@ -195,6 +210,18 @@ extern "C"
 			      Number obj_scaling,
 			      Number* x_scaling,
 			      Number* g_scaling);
+
+  /** Setting a callback function for the "intermediate callback"
+   *  method in the TNLP.  This gives control back to the user once
+   *  per iteration.  If set, it provides the user with some
+   *  information on the state of the optimization.  This can be used
+   *  to print some user-defined output.  It also gives the user a way
+   *  to terminate the optimization prematurely.  If the callback
+   *  method returns false, Ipopt will terminate the optimization.
+   *  Calling this set method to set the CB pointer to NULL disables
+   *  the intermediate callback functionality. */
+  IPOPT_EXPORT(Bool) SetIntermediateCallback(IpoptProblem ipopt_problem,
+					     Intermediate_CB intermediate_cb);
 
   /** Function calling the Ipopt optimization algorithm for a problem
       previously defined with CreateIpoptProblem.  The return

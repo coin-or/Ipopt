@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2009 International Business Machines and others.
+// Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Common Public License.
 //
@@ -33,7 +33,7 @@ namespace Ipopt
       "algorithm terminates successfully, if the (scaled) NLP error "
       "becomes smaller than this value, and if the (absolute) criteria "
       "according to \"dual_inf_tol\", \"primal_inf_tol\", and "
-      "\"cmpl_inf_tol\" are met.  (This is epsilon_tol in Eqn. (6) in "
+      "\"compl_inf_tol\" are met.  (This is epsilon_tol in Eqn. (6) in "
       "implementation paper).  See also \"acceptable_tol\" as a second "
       "termination criterion.  Note, some other algorithmic features also use "
       "this quantity to determine thresholds etc.");
