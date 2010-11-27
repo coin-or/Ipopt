@@ -12,7 +12,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([Ipopt],[3.9stable],[http://projects.coin-or.org/Ipopt/newticket])
+AC_INIT([Ipopt],[3.9.1],[http://projects.coin-or.org/Ipopt/newticket])
 
 AC_COPYRIGHT(
 [Copyright 2004, 2010 International Business Machines and others.
@@ -41,7 +41,7 @@ AC_CANONICAL_BUILD
 # the source root directory contains definition of where to find those
 # externals.  The following macro ensures that those externals are
 # retrieved by svn if they are not there yet.
-AC_COIN_PROJECTDIR_INIT(Ipopt)
+AC_COIN_PROJECTDIR_INIT(Ipopt,8:1:7)
 
 # Check if user wants to produce debugging code
 AC_COIN_DEBUG_COMPILE(Ipopt)
