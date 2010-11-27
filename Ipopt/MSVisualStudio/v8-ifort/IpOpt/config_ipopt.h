@@ -197,13 +197,13 @@
 #define PACKAGE_NAME "Ipopt"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "Ipopt 3.9.1"
+#define PACKAGE_STRING "Ipopt 3.9stable"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "ipopt"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "3.9.1"
+#define PACKAGE_VERSION "3.9stable"
 
 /* Set to extension for shared libraries in quotes. */
 #define SHAREDLIBEXT "dll"
@@ -215,4 +215,4 @@
 #define STDC_HEADERS 1
 
 /* Version number of package */
-#define VERSION "3.9.1"
+#define VERSION "3.9stable"
