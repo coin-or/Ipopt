@@ -19,23 +19,14 @@ CXXAR = @CXXAR@
 # additional C++ Compiler options for linking
 CXXLINKFLAGS = @RPATH_FLAGS@
 
-# Directory with header files
-IPOPTINCDIR = @includedir@/coin
+# Compiler flags (we use the CYGPATH_W variables to allow compilation with Windows compilers)
+@COIN_HAS_PKGCONFIG_TRUE@INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipopt` $(ADDINCFLAGS)
+@COIN_HAS_PKGCONFIG_FALSE@INCL = -I`$(CYGPATH_W) @abs_include_dir@/coin` @IPOPTLIB_CFLAGS_INSTALLED@ $(ADDINCFLAGS)
 
-# Directory where libraries and .pc files are installed
-libdir = @libdir@
-exec_prefix = @exec_prefix@
-prefix = @prefix@
-
-# pkg-config command, if available
-PKG_CONFIG = @PKG_CONFIG@
-
-# Libraries necessary to link with IPOPT
-IPOPTLIBS = @ipoptlib@
-
-# Necessary Include dirs (we use the CYGPATH_W variables to allow
-# compilation with Windows compilers)
-INCL =  -I`$(CYGPATH_W) $(IPOPTINCDIR)`
+# Linker flags
+@COIN_HAS_PKGCONFIG_TRUE@@COIN_CXX_IS_CL_FALSE@IPOPTLIBS = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt`
+@COIN_HAS_PKGCONFIG_TRUE@@COIN_CXX_IS_CL_TRUE@IPOPTLIBS = /link: `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --msvc-syntax --libs ipopt`
+@COIN_HAS_PKGCONFIG_FALSE@IPOPTLIBS = -L@abs_lib_dir@ -lipopt @IPOPTLIB_LIBS_INSTALLED@
 
 # Name of the executable
 EXE = solve_problem@EXEEXT@
