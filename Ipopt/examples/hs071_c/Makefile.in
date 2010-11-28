@@ -36,23 +36,16 @@ CFLAGS = @CFLAGS@
 # additional C Compiler options for linking
 CLINKFLAGS = @RPATH_FLAGS@
 
-# Directory with include file
-IPOPTINCDIR = @includedir@/coin
+# Compiler flags (we use the CYGPATH_W variables to allow compilation with Windows compilers)
+@COIN_HAS_PKGCONFIG_TRUE@INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipopt` $(ADDINCFLAGS)
+@COIN_HAS_PKGCONFIG_FALSE@INCL = -I`$(CYGPATH_W) @abs_include_dir@/coin` @IPOPTLIB_CFLAGS_INSTALLED@ $(ADDINCFLAGS)
 
-# Directory where libraries and .pc files are installed
-libdir = @libdir@
-exec_prefix = @exec_prefix@
-prefix = @prefix@
+# Linker flags
+@COIN_HAS_PKGCONFIG_TRUE@@COIN_CXX_IS_CL_FALSE@LIBS = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt`
+@COIN_HAS_PKGCONFIG_TRUE@@COIN_CXX_IS_CL_TRUE@LIBS = /link: `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --msvc-syntax --libs ipopt`
+@COIN_HAS_PKGCONFIG_FALSE@LIBS = -L@abs_lib_dir@ -lipopt @IPOPTLIB_LIBS_INSTALLED@
 
-# pkg-config command, if available
-PKG_CONFIG = @PKG_CONFIG@
-
-# Libraries necessary to link with IPOPT
-LIBS = @ipoptlib@ @CXXLIBS@
-
-# Necessary Include dirs (we use the CYGPATH_W variables to allow
-# compilation with Windows compilers)
-INCL =  -I`$(CYGPATH_W) $(IPOPTINCDIR)` $(ADDINCFLAGS)
+LIBS += @CXXLIBS@
 
 # The following is necessary under cygwin, if native compilers are used
 CYGPATH_W = @CYGPATH_W@
@@ -64,7 +57,7 @@ all: $(EXE)
 $(EXE): $(OBJS)
 	bla=;\
 	for file in $(OBJS); do bla="$$bla `$(CYGPATH_W) $$file`"; done; \
-	$(CC) $(CFLAGS) $(CLINKFLAGS) -o $@ $$bla $(ADDLIBS) $(LIBS)
+	$(CC) $(CFLAGS) $(CLINKFLAGS) -o $@ $$bla $(LIBS) $(ADDLIBS)
 
 clean:
 	rm -f $(EXE) $(OBJS) ipopt.out

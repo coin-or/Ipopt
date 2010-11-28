@@ -142,16 +142,13 @@ pkgconfiglib_DATA = ipopt.pc
 
 addlibsdir = $(DESTDIR)$(datadir)/coin/doc/Ipopt
 
-if COIN_HAS_PKGCONFIG
 install-data-hook:
 	@$(mkdir_p) "$(addlibsdir)"
+if COIN_HAS_PKGCONFIG
 	PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ \
 	$(PKG_CONFIG) --libs ipopt > $(addlibsdir)/ipopt_addlibs_cpp.txt
 else
-#temporary hack to get addlibs file also if no pkg-config is available (points to build directories instead of installation directories)
-install-data-hook:
-	@$(mkdir_p) "$(addlibsdir)"
-	echo $(IPOPTLIB_LIBS) > $(addlibsdir)/ipopt_addlibs_cpp.txt
+	echo -L@abs_lib_dir@ -lipopt @IPOPTLIB_LIBS_INSTALLED@ > $(addlibsdir)/ipopt_addlibs.txt
 endif
 
 uninstall-hook:
