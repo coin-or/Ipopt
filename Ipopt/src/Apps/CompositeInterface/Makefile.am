@@ -18,18 +18,16 @@ composite_ampl_ipopt_SOURCES = \
 	comp_ampl_ipopt.cpp
 
 IPLIBS = \
-	../../Interfaces/libinterfaces.a \
-	../../Algorithm/libipoptalg.a \
-	../../Algorithm/LinearSolvers/liblinsolvers.a \
-	../../LinAlg/TMatrices/libtmatrices.a \
-	../../LinAlg/liblinalg.a \
-	../../Common/libcommon.a \
-	../AmplSolver/libamplinterface.a \
-	$(ASL_LIBS) $(IPOPTLIB_LIBS)
+	../../Interfaces/libinterfaces.la \
+	../../Algorithm/libipoptalg.la \
+	../../Algorithm/LinearSolvers/liblinsolvers.la \
+	../../LinAlg/TMatrices/libtmatrices.la \
+	../../LinAlg/liblinalg.la \
+	../../Common/libcommon.la \
+	../AmplSolver/libipoptamplinterface.la
 
-composite_ampl_ipopt_LDADD = $(IPLIBS) \
-	libcompositenlp.a
-
+composite_ampl_ipopt_LDADD = libcompositenlp.la $(IPLIBS) $(ASL_LIBS) $(IPOPTLIB_LIBS)
+composite_ampl_ipopt_DEPENDENCIES = libcompositenlp.la $(IPLIBS) $(ASL_DEPENDENCIES) $(IPOPTLIB_DEPENDENCIES)
 
 CXXFLAGS += -I$(srcdir)/../../Common \
 	-I$(srcdir)/../../LinAlg \

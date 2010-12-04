@@ -471,7 +471,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ADDLIBS PCADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE have_svnversion IPOPT_SVN_REV EGREP LN_S COIN_CC_IS_CL_TRUE COIN_CC_IS_CL_FALSE CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX COIN_CXX_IS_CL_TRUE COIN_CXX_IS_CL_FALSE MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 FFLAGS ac_ct_F77 MPIF77 FLIBS FC FCFLAGS ac_ct_FC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE PKG_CONFIG ac_pt_PKG_CONFIG COIN_HAS_PKGCONFIG_TRUE COIN_HAS_PKGCONFIG_FALSE COIN_PKG_CONFIG_PATH COIN_PKG_CONFIG_PATH_UNINSTALLED BLAS_LIBS BLAS_CFLAGS BLAS_DATA IPOPTLIB_CFLAGS IPOPTLIB_LIBS IPOPTLIB_PCLIBS IPOPTLIB_PCREQUIRES IPOPTLIB_CFLAGS_INSTALLED IPOPTLIB_LIBS_INSTALLED BLAS_DATA_INSTALLED COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE LAPACK_LIBS LAPACK_CFLAGS LAPACK_DATA LAPACK_DATA_INSTALLED COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE ASL_LIBS ASL_CFLAGS ASL_DATA IPOPTAMPLINTERFACELIB_CFLAGS IPOPTAMPLINTERFACELIB_LIBS IPOPTAMPLINTERFACELIB_PCLIBS IPOPTAMPLINTERFACELIB_PCREQUIRES IPOPTAMPLINTERFACELIB_CFLAGS_INSTALLED IPOPTAMPLINTERFACELIB_LIBS_INSTALLED ASL_DATA_INSTALLED COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE HSL_LIBS HSL_CFLAGS HSL_DATA HSL_DATA_INSTALLED COIN_HAS_HSL_TRUE COIN_HAS_HSL_FALSE MUMPS_LIBS MUMPS_CFLAGS MUMPS_DATA MUMPS_DATA_INSTALLED COIN_HAS_MUMPS_TRUE COIN_HAS_MUMPS_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR JAVA_HOME JIPOPTDLL SHARED_FLAGS MATLAB_HOME MEXSUFFIX ASTYLE ASTYLEFLAGS IPALLLIBS HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MA28_TRUE HAVE_MA28_FALSE HAVE_MA77_TRUE HAVE_MA77_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILD_LINEARSOLVERLOADER_TRUE BUILD_LINEARSOLVERLOADER_FALSE BUILD_HSLLOADER_TRUE BUILD_HSLLOADER_FALSE BUILD_PARDISOLOADER_TRUE BUILD_PARDISOLOADER_FALSE BUILD_INEXACT_TRUE BUILD_INEXACT_FALSE ipoptlib LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ADDLIBS PCADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE have_svnversion IPOPT_SVN_REV EGREP LN_S COIN_CC_IS_CL_TRUE COIN_CC_IS_CL_FALSE CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX COIN_CXX_IS_CL_TRUE COIN_CXX_IS_CL_FALSE MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 FFLAGS ac_ct_F77 MPIF77 FLIBS FC FCFLAGS ac_ct_FC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE PKG_CONFIG ac_pt_PKG_CONFIG COIN_HAS_PKGCONFIG_TRUE COIN_HAS_PKGCONFIG_FALSE COIN_PKG_CONFIG_PATH COIN_PKG_CONFIG_PATH_UNINSTALLED BLAS_LIBS BLAS_CFLAGS BLAS_DATA BLAS_DEPENDENCIES BLAS_LIBS_INSTALLED BLAS_CFLAGS_INSTALLED BLAS_DATA_INSTALLED IPOPTLIB_CFLAGS IPOPTLIB_LIBS IPOPTLIB_PCLIBS IPOPTLIB_PCREQUIRES IPOPTLIB_DEPENDENCIES IPOPTLIB_CFLAGS_INSTALLED IPOPTLIB_LIBS_INSTALLED COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE LAPACK_LIBS LAPACK_CFLAGS LAPACK_DATA LAPACK_DEPENDENCIES LAPACK_LIBS_INSTALLED LAPACK_CFLAGS_INSTALLED LAPACK_DATA_INSTALLED COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE ASL_LIBS ASL_CFLAGS ASL_DATA ASL_DEPENDENCIES ASL_LIBS_INSTALLED ASL_CFLAGS_INSTALLED ASL_DATA_INSTALLED IPOPTAMPLINTERFACELIB_CFLAGS IPOPTAMPLINTERFACELIB_LIBS IPOPTAMPLINTERFACELIB_PCLIBS IPOPTAMPLINTERFACELIB_PCREQUIRES IPOPTAMPLINTERFACELIB_DEPENDENCIES IPOPTAMPLINTERFACELIB_CFLAGS_INSTALLED IPOPTAMPLINTERFACELIB_LIBS_INSTALLED COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE HSL_LIBS HSL_CFLAGS HSL_DATA HSL_DEPENDENCIES HSL_LIBS_INSTALLED HSL_CFLAGS_INSTALLED HSL_DATA_INSTALLED COIN_HAS_HSL_TRUE COIN_HAS_HSL_FALSE MUMPS_LIBS MUMPS_CFLAGS MUMPS_DATA MUMPS_DEPENDENCIES MUMPS_LIBS_INSTALLED MUMPS_CFLAGS_INSTALLED MUMPS_DATA_INSTALLED COIN_HAS_MUMPS_TRUE COIN_HAS_MUMPS_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR JAVA_HOME JIPOPTDLL SHARED_FLAGS MATLAB_HOME MEXSUFFIX ASTYLE ASTYLEFLAGS IPALLLIBS HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MA28_TRUE HAVE_MA28_FALSE HAVE_MA77_TRUE HAVE_MA77_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILD_LINEARSOLVERLOADER_TRUE BUILD_LINEARSOLVERLOADER_FALSE BUILD_HSLLOADER_TRUE BUILD_HSLLOADER_FALSE BUILD_PARDISOLOADER_TRUE BUILD_PARDISOLOADER_FALSE BUILD_INEXACT_TRUE BUILD_INEXACT_FALSE ipoptlib LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -24649,6 +24649,13 @@ BLAS_DATA=
 
 
 
+
+
+
+
+
+
+
 #check if user provided LIBS, CFLAGS, or DATA for module
 if test $coin_has_blas != skipping; then
 
@@ -24940,48 +24947,6 @@ _ACEOF
     IPOPTLIB_LIBS_INSTALLED="$BLAS_LIBS_INSTALLED $IPOPTLIB_LIBS_INSTALLED"
 
 
-
-
-
-  if test 1 = 0 ; then  #change this test to enable a bit of debugging output
-    if test -n "$BLAS_CFLAGS" ; then
-      { echo "$as_me:$LINENO: Blas CFLAGS are $BLAS_CFLAGS" >&5
-echo "$as_me: Blas CFLAGS are $BLAS_CFLAGS" >&6;}
-    fi
-    if test -n "$BLAS_LIBS" ; then
-      { echo "$as_me:$LINENO: Blas LIBS   are $BLAS_LIBS" >&5
-echo "$as_me: Blas LIBS   are $BLAS_LIBS" >&6;}
-    fi
-    if test -n "$BLAS_DATA" ; then
-      { echo "$as_me:$LINENO: Blas DATA   is  $BLAS_DATA" >&5
-echo "$as_me: Blas DATA   is  $BLAS_DATA" >&6;}
-    fi
-    if test -n "$BLAS_CFLAGS_INSTALLED" ; then
-      { echo "$as_me:$LINENO: Blas CFLAGS_INSTALLED are $BLAS_CFLAGS_INSTALLED" >&5
-echo "$as_me: Blas CFLAGS_INSTALLED are $BLAS_CFLAGS_INSTALLED" >&6;}
-    fi
-    if test -n "$BLAS_LIBS_INSTALLED" ; then
-      { echo "$as_me:$LINENO: Blas LIBS_INSTALLED   are $BLAS_LIBS_INSTALLED" >&5
-echo "$as_me: Blas LIBS_INSTALLED   are $BLAS_LIBS_INSTALLED" >&6;}
-    fi
-    if test -n "$BLAS_DATA_INSTALLED" ; then
-      { echo "$as_me:$LINENO: Blas DATA_INSTALLED   is  $BLAS_DATA_INSTALLED" >&5
-echo "$as_me: Blas DATA_INSTALLED   is  $BLAS_DATA_INSTALLED" >&6;}
-    fi
-
-      { echo "$as_me:$LINENO: " >&5
-echo "$as_me: " >&6;}
-      { echo "$as_me:$LINENO: IpoptLib CFLAGS are $IPOPTLIB_CFLAGS" >&5
-echo "$as_me: IpoptLib CFLAGS are $IPOPTLIB_CFLAGS" >&6;}
-      { echo "$as_me:$LINENO: IpoptLib LIBS   are $IPOPTLIB_LIBS" >&5
-echo "$as_me: IpoptLib LIBS   are $IPOPTLIB_LIBS" >&6;}
-      { echo "$as_me:$LINENO: IpoptLib CFLAGS_INSTALLED are $IPOPTLIB_CFLAGS_INSTALLED" >&5
-echo "$as_me: IpoptLib CFLAGS_INSTALLED are $IPOPTLIB_CFLAGS_INSTALLED" >&6;}
-      { echo "$as_me:$LINENO: IpoptLib LIBS_INSTALLED   are $IPOPTLIB_LIBS_INSTALLED" >&5
-echo "$as_me: IpoptLib LIBS_INSTALLED   are $IPOPTLIB_LIBS_INSTALLED" >&6;}
-
-  fi
-
 fi
 
 
@@ -25012,6 +24977,13 @@ cat >>confdefs.h <<\_ACEOF
 _ACEOF
 
 
+  # construct dependencies variables from LIBS variables
+  # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  BLAS_DEPENDENCIES=`echo " $BLAS_LIBS" | sed -e 's/ -[^ ]*//g'`
+
+    IPOPTLIB_DEPENDENCIES=`echo " $IPOPTLIB_LIBS" | sed -e 's/ -[^ ]*//g'`
+
+
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
     if test -n "$BLAS_CFLAGS" ; then
       { echo "$as_me:$LINENO: Blas CFLAGS are $BLAS_CFLAGS" >&5
@@ -25020,6 +24992,10 @@ echo "$as_me: Blas CFLAGS are $BLAS_CFLAGS" >&6;}
     if test -n "$BLAS_LIBS" ; then
       { echo "$as_me:$LINENO: Blas LIBS   are $BLAS_LIBS" >&5
 echo "$as_me: Blas LIBS   are $BLAS_LIBS" >&6;}
+    fi
+    if test -n "$BLAS_DEPENDENCIES" ; then
+      { echo "$as_me:$LINENO: Blas DEPENDENCIES are $BLAS_DEPENDENCIES" >&5
+echo "$as_me: Blas DEPENDENCIES are $BLAS_DEPENDENCIES" >&6;}
     fi
     if test -n "$BLAS_DATA" ; then
       { echo "$as_me:$LINENO: Blas DATA   is  $BLAS_DATA" >&5
@@ -25034,6 +25010,8 @@ echo "$as_me: Blas CFLAGS are $BLAS_CFLAGS" >&6;}
 echo "$as_me: IpoptLib CFLAGS are $IPOPTLIB_CFLAGS" >&6;}
       { echo "$as_me:$LINENO: IpoptLib LIBS   are $IPOPTLIB_LIBS" >&5
 echo "$as_me: IpoptLib LIBS   are $IPOPTLIB_LIBS" >&6;}
+      { echo "$as_me:$LINENO: IpoptLib DEPENDENCIES are $IPOPTLIB_DEPENDENCIES" >&5
+echo "$as_me: IpoptLib DEPENDENCIES are $IPOPTLIB_DEPENDENCIES" >&6;}
 
   fi
 fi
@@ -27177,6 +27155,13 @@ LAPACK_DATA=
 
 
 
+
+
+
+
+
+
+
 #check if user provided LIBS, CFLAGS, or DATA for module
 if test $coin_has_lapack != skipping; then
 
@@ -27468,48 +27453,6 @@ _ACEOF
     IPOPTLIB_LIBS_INSTALLED="$LAPACK_LIBS_INSTALLED $IPOPTLIB_LIBS_INSTALLED"
 
 
-
-
-
-  if test 1 = 0 ; then  #change this test to enable a bit of debugging output
-    if test -n "$LAPACK_CFLAGS" ; then
-      { echo "$as_me:$LINENO: Lapack CFLAGS are $LAPACK_CFLAGS" >&5
-echo "$as_me: Lapack CFLAGS are $LAPACK_CFLAGS" >&6;}
-    fi
-    if test -n "$LAPACK_LIBS" ; then
-      { echo "$as_me:$LINENO: Lapack LIBS   are $LAPACK_LIBS" >&5
-echo "$as_me: Lapack LIBS   are $LAPACK_LIBS" >&6;}
-    fi
-    if test -n "$LAPACK_DATA" ; then
-      { echo "$as_me:$LINENO: Lapack DATA   is  $LAPACK_DATA" >&5
-echo "$as_me: Lapack DATA   is  $LAPACK_DATA" >&6;}
-    fi
-    if test -n "$LAPACK_CFLAGS_INSTALLED" ; then
-      { echo "$as_me:$LINENO: Lapack CFLAGS_INSTALLED are $LAPACK_CFLAGS_INSTALLED" >&5
-echo "$as_me: Lapack CFLAGS_INSTALLED are $LAPACK_CFLAGS_INSTALLED" >&6;}
-    fi
-    if test -n "$LAPACK_LIBS_INSTALLED" ; then
-      { echo "$as_me:$LINENO: Lapack LIBS_INSTALLED   are $LAPACK_LIBS_INSTALLED" >&5
-echo "$as_me: Lapack LIBS_INSTALLED   are $LAPACK_LIBS_INSTALLED" >&6;}
-    fi
-    if test -n "$LAPACK_DATA_INSTALLED" ; then
-      { echo "$as_me:$LINENO: Lapack DATA_INSTALLED   is  $LAPACK_DATA_INSTALLED" >&5
-echo "$as_me: Lapack DATA_INSTALLED   is  $LAPACK_DATA_INSTALLED" >&6;}
-    fi
-
-      { echo "$as_me:$LINENO: " >&5
-echo "$as_me: " >&6;}
-      { echo "$as_me:$LINENO: IpoptLib CFLAGS are $IPOPTLIB_CFLAGS" >&5
-echo "$as_me: IpoptLib CFLAGS are $IPOPTLIB_CFLAGS" >&6;}
-      { echo "$as_me:$LINENO: IpoptLib LIBS   are $IPOPTLIB_LIBS" >&5
-echo "$as_me: IpoptLib LIBS   are $IPOPTLIB_LIBS" >&6;}
-      { echo "$as_me:$LINENO: IpoptLib CFLAGS_INSTALLED are $IPOPTLIB_CFLAGS_INSTALLED" >&5
-echo "$as_me: IpoptLib CFLAGS_INSTALLED are $IPOPTLIB_CFLAGS_INSTALLED" >&6;}
-      { echo "$as_me:$LINENO: IpoptLib LIBS_INSTALLED   are $IPOPTLIB_LIBS_INSTALLED" >&5
-echo "$as_me: IpoptLib LIBS_INSTALLED   are $IPOPTLIB_LIBS_INSTALLED" >&6;}
-
-  fi
-
 fi
 
 
@@ -27540,6 +27483,13 @@ cat >>confdefs.h <<\_ACEOF
 _ACEOF
 
 
+  # construct dependencies variables from LIBS variables
+  # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  LAPACK_DEPENDENCIES=`echo " $LAPACK_LIBS" | sed -e 's/ -[^ ]*//g'`
+
+    IPOPTLIB_DEPENDENCIES=`echo " $IPOPTLIB_LIBS" | sed -e 's/ -[^ ]*//g'`
+
+
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
     if test -n "$LAPACK_CFLAGS" ; then
       { echo "$as_me:$LINENO: Lapack CFLAGS are $LAPACK_CFLAGS" >&5
@@ -27548,6 +27498,10 @@ echo "$as_me: Lapack CFLAGS are $LAPACK_CFLAGS" >&6;}
     if test -n "$LAPACK_LIBS" ; then
       { echo "$as_me:$LINENO: Lapack LIBS   are $LAPACK_LIBS" >&5
 echo "$as_me: Lapack LIBS   are $LAPACK_LIBS" >&6;}
+    fi
+    if test -n "$LAPACK_DEPENDENCIES" ; then
+      { echo "$as_me:$LINENO: Lapack DEPENDENCIES are $LAPACK_DEPENDENCIES" >&5
+echo "$as_me: Lapack DEPENDENCIES are $LAPACK_DEPENDENCIES" >&6;}
     fi
     if test -n "$LAPACK_DATA" ; then
       { echo "$as_me:$LINENO: Lapack DATA   is  $LAPACK_DATA" >&5
@@ -27562,6 +27516,8 @@ echo "$as_me: Lapack CFLAGS are $LAPACK_CFLAGS" >&6;}
 echo "$as_me: IpoptLib CFLAGS are $IPOPTLIB_CFLAGS" >&6;}
       { echo "$as_me:$LINENO: IpoptLib LIBS   are $IPOPTLIB_LIBS" >&5
 echo "$as_me: IpoptLib LIBS   are $IPOPTLIB_LIBS" >&6;}
+      { echo "$as_me:$LINENO: IpoptLib DEPENDENCIES are $IPOPTLIB_DEPENDENCIES" >&5
+echo "$as_me: IpoptLib DEPENDENCIES are $IPOPTLIB_DEPENDENCIES" >&6;}
 
   fi
 fi
@@ -27654,6 +27610,13 @@ fi
 ASL_LIBS=
 ASL_CFLAGS=
 ASL_DATA=
+
+
+
+
+
+
+
 
 
 
@@ -27955,48 +27918,6 @@ _ACEOF
     IPOPTAMPLINTERFACELIB_LIBS_INSTALLED="$ASL_LIBS_INSTALLED $IPOPTAMPLINTERFACELIB_LIBS_INSTALLED"
 
 
-
-
-
-  if test 1 = 0 ; then  #change this test to enable a bit of debugging output
-    if test -n "$ASL_CFLAGS" ; then
-      { echo "$as_me:$LINENO: ASL CFLAGS are $ASL_CFLAGS" >&5
-echo "$as_me: ASL CFLAGS are $ASL_CFLAGS" >&6;}
-    fi
-    if test -n "$ASL_LIBS" ; then
-      { echo "$as_me:$LINENO: ASL LIBS   are $ASL_LIBS" >&5
-echo "$as_me: ASL LIBS   are $ASL_LIBS" >&6;}
-    fi
-    if test -n "$ASL_DATA" ; then
-      { echo "$as_me:$LINENO: ASL DATA   is  $ASL_DATA" >&5
-echo "$as_me: ASL DATA   is  $ASL_DATA" >&6;}
-    fi
-    if test -n "$ASL_CFLAGS_INSTALLED" ; then
-      { echo "$as_me:$LINENO: ASL CFLAGS_INSTALLED are $ASL_CFLAGS_INSTALLED" >&5
-echo "$as_me: ASL CFLAGS_INSTALLED are $ASL_CFLAGS_INSTALLED" >&6;}
-    fi
-    if test -n "$ASL_LIBS_INSTALLED" ; then
-      { echo "$as_me:$LINENO: ASL LIBS_INSTALLED   are $ASL_LIBS_INSTALLED" >&5
-echo "$as_me: ASL LIBS_INSTALLED   are $ASL_LIBS_INSTALLED" >&6;}
-    fi
-    if test -n "$ASL_DATA_INSTALLED" ; then
-      { echo "$as_me:$LINENO: ASL DATA_INSTALLED   is  $ASL_DATA_INSTALLED" >&5
-echo "$as_me: ASL DATA_INSTALLED   is  $ASL_DATA_INSTALLED" >&6;}
-    fi
-
-      { echo "$as_me:$LINENO: " >&5
-echo "$as_me: " >&6;}
-      { echo "$as_me:$LINENO: IpoptAmplInterfaceLib CFLAGS are $IPOPTAMPLINTERFACELIB_CFLAGS" >&5
-echo "$as_me: IpoptAmplInterfaceLib CFLAGS are $IPOPTAMPLINTERFACELIB_CFLAGS" >&6;}
-      { echo "$as_me:$LINENO: IpoptAmplInterfaceLib LIBS   are $IPOPTAMPLINTERFACELIB_LIBS" >&5
-echo "$as_me: IpoptAmplInterfaceLib LIBS   are $IPOPTAMPLINTERFACELIB_LIBS" >&6;}
-      { echo "$as_me:$LINENO: IpoptAmplInterfaceLib CFLAGS_INSTALLED are $IPOPTAMPLINTERFACELIB_CFLAGS_INSTALLED" >&5
-echo "$as_me: IpoptAmplInterfaceLib CFLAGS_INSTALLED are $IPOPTAMPLINTERFACELIB_CFLAGS_INSTALLED" >&6;}
-      { echo "$as_me:$LINENO: IpoptAmplInterfaceLib LIBS_INSTALLED   are $IPOPTAMPLINTERFACELIB_LIBS_INSTALLED" >&5
-echo "$as_me: IpoptAmplInterfaceLib LIBS_INSTALLED   are $IPOPTAMPLINTERFACELIB_LIBS_INSTALLED" >&6;}
-
-  fi
-
 fi
 
 
@@ -28027,6 +27948,13 @@ cat >>confdefs.h <<\_ACEOF
 _ACEOF
 
 
+  # construct dependencies variables from LIBS variables
+  # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  ASL_DEPENDENCIES=`echo " $ASL_LIBS" | sed -e 's/ -[^ ]*//g'`
+
+    IPOPTAMPLINTERFACELIB_DEPENDENCIES=`echo " $IPOPTAMPLINTERFACELIB_LIBS" | sed -e 's/ -[^ ]*//g'`
+
+
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
     if test -n "$ASL_CFLAGS" ; then
       { echo "$as_me:$LINENO: ASL CFLAGS are $ASL_CFLAGS" >&5
@@ -28035,6 +27963,10 @@ echo "$as_me: ASL CFLAGS are $ASL_CFLAGS" >&6;}
     if test -n "$ASL_LIBS" ; then
       { echo "$as_me:$LINENO: ASL LIBS   are $ASL_LIBS" >&5
 echo "$as_me: ASL LIBS   are $ASL_LIBS" >&6;}
+    fi
+    if test -n "$ASL_DEPENDENCIES" ; then
+      { echo "$as_me:$LINENO: ASL DEPENDENCIES are $ASL_DEPENDENCIES" >&5
+echo "$as_me: ASL DEPENDENCIES are $ASL_DEPENDENCIES" >&6;}
     fi
     if test -n "$ASL_DATA" ; then
       { echo "$as_me:$LINENO: ASL DATA   is  $ASL_DATA" >&5
@@ -28049,6 +27981,8 @@ echo "$as_me: ASL CFLAGS are $ASL_CFLAGS" >&6;}
 echo "$as_me: IpoptAmplInterfaceLib CFLAGS are $IPOPTAMPLINTERFACELIB_CFLAGS" >&6;}
       { echo "$as_me:$LINENO: IpoptAmplInterfaceLib LIBS   are $IPOPTAMPLINTERFACELIB_LIBS" >&5
 echo "$as_me: IpoptAmplInterfaceLib LIBS   are $IPOPTAMPLINTERFACELIB_LIBS" >&6;}
+      { echo "$as_me:$LINENO: IpoptAmplInterfaceLib DEPENDENCIES are $IPOPTAMPLINTERFACELIB_DEPENDENCIES" >&5
+echo "$as_me: IpoptAmplInterfaceLib DEPENDENCIES are $IPOPTAMPLINTERFACELIB_DEPENDENCIES" >&6;}
 
   fi
 fi
@@ -28085,6 +28019,13 @@ fi
 HSL_LIBS=
 HSL_CFLAGS=
 HSL_DATA=
+
+
+
+
+
+
+
 
 
 
@@ -28386,48 +28327,6 @@ _ACEOF
     IPOPTLIB_LIBS_INSTALLED="$HSL_LIBS_INSTALLED $IPOPTLIB_LIBS_INSTALLED"
 
 
-
-
-
-  if test 1 = 0 ; then  #change this test to enable a bit of debugging output
-    if test -n "$HSL_CFLAGS" ; then
-      { echo "$as_me:$LINENO: HSL CFLAGS are $HSL_CFLAGS" >&5
-echo "$as_me: HSL CFLAGS are $HSL_CFLAGS" >&6;}
-    fi
-    if test -n "$HSL_LIBS" ; then
-      { echo "$as_me:$LINENO: HSL LIBS   are $HSL_LIBS" >&5
-echo "$as_me: HSL LIBS   are $HSL_LIBS" >&6;}
-    fi
-    if test -n "$HSL_DATA" ; then
-      { echo "$as_me:$LINENO: HSL DATA   is  $HSL_DATA" >&5
-echo "$as_me: HSL DATA   is  $HSL_DATA" >&6;}
-    fi
-    if test -n "$HSL_CFLAGS_INSTALLED" ; then
-      { echo "$as_me:$LINENO: HSL CFLAGS_INSTALLED are $HSL_CFLAGS_INSTALLED" >&5
-echo "$as_me: HSL CFLAGS_INSTALLED are $HSL_CFLAGS_INSTALLED" >&6;}
-    fi
-    if test -n "$HSL_LIBS_INSTALLED" ; then
-      { echo "$as_me:$LINENO: HSL LIBS_INSTALLED   are $HSL_LIBS_INSTALLED" >&5
-echo "$as_me: HSL LIBS_INSTALLED   are $HSL_LIBS_INSTALLED" >&6;}
-    fi
-    if test -n "$HSL_DATA_INSTALLED" ; then
-      { echo "$as_me:$LINENO: HSL DATA_INSTALLED   is  $HSL_DATA_INSTALLED" >&5
-echo "$as_me: HSL DATA_INSTALLED   is  $HSL_DATA_INSTALLED" >&6;}
-    fi
-
-      { echo "$as_me:$LINENO: " >&5
-echo "$as_me: " >&6;}
-      { echo "$as_me:$LINENO: IpoptLib CFLAGS are $IPOPTLIB_CFLAGS" >&5
-echo "$as_me: IpoptLib CFLAGS are $IPOPTLIB_CFLAGS" >&6;}
-      { echo "$as_me:$LINENO: IpoptLib LIBS   are $IPOPTLIB_LIBS" >&5
-echo "$as_me: IpoptLib LIBS   are $IPOPTLIB_LIBS" >&6;}
-      { echo "$as_me:$LINENO: IpoptLib CFLAGS_INSTALLED are $IPOPTLIB_CFLAGS_INSTALLED" >&5
-echo "$as_me: IpoptLib CFLAGS_INSTALLED are $IPOPTLIB_CFLAGS_INSTALLED" >&6;}
-      { echo "$as_me:$LINENO: IpoptLib LIBS_INSTALLED   are $IPOPTLIB_LIBS_INSTALLED" >&5
-echo "$as_me: IpoptLib LIBS_INSTALLED   are $IPOPTLIB_LIBS_INSTALLED" >&6;}
-
-  fi
-
 fi
 
 
@@ -28458,6 +28357,13 @@ cat >>confdefs.h <<\_ACEOF
 _ACEOF
 
 
+  # construct dependencies variables from LIBS variables
+  # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  HSL_DEPENDENCIES=`echo " $HSL_LIBS" | sed -e 's/ -[^ ]*//g'`
+
+    IPOPTLIB_DEPENDENCIES=`echo " $IPOPTLIB_LIBS" | sed -e 's/ -[^ ]*//g'`
+
+
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
     if test -n "$HSL_CFLAGS" ; then
       { echo "$as_me:$LINENO: HSL CFLAGS are $HSL_CFLAGS" >&5
@@ -28466,6 +28372,10 @@ echo "$as_me: HSL CFLAGS are $HSL_CFLAGS" >&6;}
     if test -n "$HSL_LIBS" ; then
       { echo "$as_me:$LINENO: HSL LIBS   are $HSL_LIBS" >&5
 echo "$as_me: HSL LIBS   are $HSL_LIBS" >&6;}
+    fi
+    if test -n "$HSL_DEPENDENCIES" ; then
+      { echo "$as_me:$LINENO: HSL DEPENDENCIES are $HSL_DEPENDENCIES" >&5
+echo "$as_me: HSL DEPENDENCIES are $HSL_DEPENDENCIES" >&6;}
     fi
     if test -n "$HSL_DATA" ; then
       { echo "$as_me:$LINENO: HSL DATA   is  $HSL_DATA" >&5
@@ -28480,6 +28390,8 @@ echo "$as_me: HSL CFLAGS are $HSL_CFLAGS" >&6;}
 echo "$as_me: IpoptLib CFLAGS are $IPOPTLIB_CFLAGS" >&6;}
       { echo "$as_me:$LINENO: IpoptLib LIBS   are $IPOPTLIB_LIBS" >&5
 echo "$as_me: IpoptLib LIBS   are $IPOPTLIB_LIBS" >&6;}
+      { echo "$as_me:$LINENO: IpoptLib DEPENDENCIES are $IPOPTLIB_DEPENDENCIES" >&5
+echo "$as_me: IpoptLib DEPENDENCIES are $IPOPTLIB_DEPENDENCIES" >&6;}
 
   fi
 fi
@@ -28516,6 +28428,13 @@ fi
 MUMPS_LIBS=
 MUMPS_CFLAGS=
 MUMPS_DATA=
+
+
+
+
+
+
+
 
 
 
@@ -28817,48 +28736,6 @@ _ACEOF
     IPOPTLIB_LIBS_INSTALLED="$MUMPS_LIBS_INSTALLED $IPOPTLIB_LIBS_INSTALLED"
 
 
-
-
-
-  if test 1 = 0 ; then  #change this test to enable a bit of debugging output
-    if test -n "$MUMPS_CFLAGS" ; then
-      { echo "$as_me:$LINENO: Mumps CFLAGS are $MUMPS_CFLAGS" >&5
-echo "$as_me: Mumps CFLAGS are $MUMPS_CFLAGS" >&6;}
-    fi
-    if test -n "$MUMPS_LIBS" ; then
-      { echo "$as_me:$LINENO: Mumps LIBS   are $MUMPS_LIBS" >&5
-echo "$as_me: Mumps LIBS   are $MUMPS_LIBS" >&6;}
-    fi
-    if test -n "$MUMPS_DATA" ; then
-      { echo "$as_me:$LINENO: Mumps DATA   is  $MUMPS_DATA" >&5
-echo "$as_me: Mumps DATA   is  $MUMPS_DATA" >&6;}
-    fi
-    if test -n "$MUMPS_CFLAGS_INSTALLED" ; then
-      { echo "$as_me:$LINENO: Mumps CFLAGS_INSTALLED are $MUMPS_CFLAGS_INSTALLED" >&5
-echo "$as_me: Mumps CFLAGS_INSTALLED are $MUMPS_CFLAGS_INSTALLED" >&6;}
-    fi
-    if test -n "$MUMPS_LIBS_INSTALLED" ; then
-      { echo "$as_me:$LINENO: Mumps LIBS_INSTALLED   are $MUMPS_LIBS_INSTALLED" >&5
-echo "$as_me: Mumps LIBS_INSTALLED   are $MUMPS_LIBS_INSTALLED" >&6;}
-    fi
-    if test -n "$MUMPS_DATA_INSTALLED" ; then
-      { echo "$as_me:$LINENO: Mumps DATA_INSTALLED   is  $MUMPS_DATA_INSTALLED" >&5
-echo "$as_me: Mumps DATA_INSTALLED   is  $MUMPS_DATA_INSTALLED" >&6;}
-    fi
-
-      { echo "$as_me:$LINENO: " >&5
-echo "$as_me: " >&6;}
-      { echo "$as_me:$LINENO: IpoptLib CFLAGS are $IPOPTLIB_CFLAGS" >&5
-echo "$as_me: IpoptLib CFLAGS are $IPOPTLIB_CFLAGS" >&6;}
-      { echo "$as_me:$LINENO: IpoptLib LIBS   are $IPOPTLIB_LIBS" >&5
-echo "$as_me: IpoptLib LIBS   are $IPOPTLIB_LIBS" >&6;}
-      { echo "$as_me:$LINENO: IpoptLib CFLAGS_INSTALLED are $IPOPTLIB_CFLAGS_INSTALLED" >&5
-echo "$as_me: IpoptLib CFLAGS_INSTALLED are $IPOPTLIB_CFLAGS_INSTALLED" >&6;}
-      { echo "$as_me:$LINENO: IpoptLib LIBS_INSTALLED   are $IPOPTLIB_LIBS_INSTALLED" >&5
-echo "$as_me: IpoptLib LIBS_INSTALLED   are $IPOPTLIB_LIBS_INSTALLED" >&6;}
-
-  fi
-
 fi
 
 
@@ -28889,6 +28766,13 @@ cat >>confdefs.h <<\_ACEOF
 _ACEOF
 
 
+  # construct dependencies variables from LIBS variables
+  # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  MUMPS_DEPENDENCIES=`echo " $MUMPS_LIBS" | sed -e 's/ -[^ ]*//g'`
+
+    IPOPTLIB_DEPENDENCIES=`echo " $IPOPTLIB_LIBS" | sed -e 's/ -[^ ]*//g'`
+
+
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
     if test -n "$MUMPS_CFLAGS" ; then
       { echo "$as_me:$LINENO: Mumps CFLAGS are $MUMPS_CFLAGS" >&5
@@ -28897,6 +28781,10 @@ echo "$as_me: Mumps CFLAGS are $MUMPS_CFLAGS" >&6;}
     if test -n "$MUMPS_LIBS" ; then
       { echo "$as_me:$LINENO: Mumps LIBS   are $MUMPS_LIBS" >&5
 echo "$as_me: Mumps LIBS   are $MUMPS_LIBS" >&6;}
+    fi
+    if test -n "$MUMPS_DEPENDENCIES" ; then
+      { echo "$as_me:$LINENO: Mumps DEPENDENCIES are $MUMPS_DEPENDENCIES" >&5
+echo "$as_me: Mumps DEPENDENCIES are $MUMPS_DEPENDENCIES" >&6;}
     fi
     if test -n "$MUMPS_DATA" ; then
       { echo "$as_me:$LINENO: Mumps DATA   is  $MUMPS_DATA" >&5
@@ -28911,6 +28799,8 @@ echo "$as_me: Mumps CFLAGS are $MUMPS_CFLAGS" >&6;}
 echo "$as_me: IpoptLib CFLAGS are $IPOPTLIB_CFLAGS" >&6;}
       { echo "$as_me:$LINENO: IpoptLib LIBS   are $IPOPTLIB_LIBS" >&5
 echo "$as_me: IpoptLib LIBS   are $IPOPTLIB_LIBS" >&6;}
+      { echo "$as_me:$LINENO: IpoptLib DEPENDENCIES are $IPOPTLIB_DEPENDENCIES" >&5
+echo "$as_me: IpoptLib DEPENDENCIES are $IPOPTLIB_DEPENDENCIES" >&6;}
 
   fi
 fi
@@ -36418,42 +36308,59 @@ s,@COIN_PKG_CONFIG_PATH_UNINSTALLED@,$COIN_PKG_CONFIG_PATH_UNINSTALLED,;t t
 s,@BLAS_LIBS@,$BLAS_LIBS,;t t
 s,@BLAS_CFLAGS@,$BLAS_CFLAGS,;t t
 s,@BLAS_DATA@,$BLAS_DATA,;t t
+s,@BLAS_DEPENDENCIES@,$BLAS_DEPENDENCIES,;t t
+s,@BLAS_LIBS_INSTALLED@,$BLAS_LIBS_INSTALLED,;t t
+s,@BLAS_CFLAGS_INSTALLED@,$BLAS_CFLAGS_INSTALLED,;t t
+s,@BLAS_DATA_INSTALLED@,$BLAS_DATA_INSTALLED,;t t
 s,@IPOPTLIB_CFLAGS@,$IPOPTLIB_CFLAGS,;t t
 s,@IPOPTLIB_LIBS@,$IPOPTLIB_LIBS,;t t
 s,@IPOPTLIB_PCLIBS@,$IPOPTLIB_PCLIBS,;t t
 s,@IPOPTLIB_PCREQUIRES@,$IPOPTLIB_PCREQUIRES,;t t
+s,@IPOPTLIB_DEPENDENCIES@,$IPOPTLIB_DEPENDENCIES,;t t
 s,@IPOPTLIB_CFLAGS_INSTALLED@,$IPOPTLIB_CFLAGS_INSTALLED,;t t
 s,@IPOPTLIB_LIBS_INSTALLED@,$IPOPTLIB_LIBS_INSTALLED,;t t
-s,@BLAS_DATA_INSTALLED@,$BLAS_DATA_INSTALLED,;t t
 s,@COIN_HAS_BLAS_TRUE@,$COIN_HAS_BLAS_TRUE,;t t
 s,@COIN_HAS_BLAS_FALSE@,$COIN_HAS_BLAS_FALSE,;t t
 s,@LAPACK_LIBS@,$LAPACK_LIBS,;t t
 s,@LAPACK_CFLAGS@,$LAPACK_CFLAGS,;t t
 s,@LAPACK_DATA@,$LAPACK_DATA,;t t
+s,@LAPACK_DEPENDENCIES@,$LAPACK_DEPENDENCIES,;t t
+s,@LAPACK_LIBS_INSTALLED@,$LAPACK_LIBS_INSTALLED,;t t
+s,@LAPACK_CFLAGS_INSTALLED@,$LAPACK_CFLAGS_INSTALLED,;t t
 s,@LAPACK_DATA_INSTALLED@,$LAPACK_DATA_INSTALLED,;t t
 s,@COIN_HAS_LAPACK_TRUE@,$COIN_HAS_LAPACK_TRUE,;t t
 s,@COIN_HAS_LAPACK_FALSE@,$COIN_HAS_LAPACK_FALSE,;t t
 s,@ASL_LIBS@,$ASL_LIBS,;t t
 s,@ASL_CFLAGS@,$ASL_CFLAGS,;t t
 s,@ASL_DATA@,$ASL_DATA,;t t
+s,@ASL_DEPENDENCIES@,$ASL_DEPENDENCIES,;t t
+s,@ASL_LIBS_INSTALLED@,$ASL_LIBS_INSTALLED,;t t
+s,@ASL_CFLAGS_INSTALLED@,$ASL_CFLAGS_INSTALLED,;t t
+s,@ASL_DATA_INSTALLED@,$ASL_DATA_INSTALLED,;t t
 s,@IPOPTAMPLINTERFACELIB_CFLAGS@,$IPOPTAMPLINTERFACELIB_CFLAGS,;t t
 s,@IPOPTAMPLINTERFACELIB_LIBS@,$IPOPTAMPLINTERFACELIB_LIBS,;t t
 s,@IPOPTAMPLINTERFACELIB_PCLIBS@,$IPOPTAMPLINTERFACELIB_PCLIBS,;t t
 s,@IPOPTAMPLINTERFACELIB_PCREQUIRES@,$IPOPTAMPLINTERFACELIB_PCREQUIRES,;t t
+s,@IPOPTAMPLINTERFACELIB_DEPENDENCIES@,$IPOPTAMPLINTERFACELIB_DEPENDENCIES,;t t
 s,@IPOPTAMPLINTERFACELIB_CFLAGS_INSTALLED@,$IPOPTAMPLINTERFACELIB_CFLAGS_INSTALLED,;t t
 s,@IPOPTAMPLINTERFACELIB_LIBS_INSTALLED@,$IPOPTAMPLINTERFACELIB_LIBS_INSTALLED,;t t
-s,@ASL_DATA_INSTALLED@,$ASL_DATA_INSTALLED,;t t
 s,@COIN_HAS_ASL_TRUE@,$COIN_HAS_ASL_TRUE,;t t
 s,@COIN_HAS_ASL_FALSE@,$COIN_HAS_ASL_FALSE,;t t
 s,@HSL_LIBS@,$HSL_LIBS,;t t
 s,@HSL_CFLAGS@,$HSL_CFLAGS,;t t
 s,@HSL_DATA@,$HSL_DATA,;t t
+s,@HSL_DEPENDENCIES@,$HSL_DEPENDENCIES,;t t
+s,@HSL_LIBS_INSTALLED@,$HSL_LIBS_INSTALLED,;t t
+s,@HSL_CFLAGS_INSTALLED@,$HSL_CFLAGS_INSTALLED,;t t
 s,@HSL_DATA_INSTALLED@,$HSL_DATA_INSTALLED,;t t
 s,@COIN_HAS_HSL_TRUE@,$COIN_HAS_HSL_TRUE,;t t
 s,@COIN_HAS_HSL_FALSE@,$COIN_HAS_HSL_FALSE,;t t
 s,@MUMPS_LIBS@,$MUMPS_LIBS,;t t
 s,@MUMPS_CFLAGS@,$MUMPS_CFLAGS,;t t
 s,@MUMPS_DATA@,$MUMPS_DATA,;t t
+s,@MUMPS_DEPENDENCIES@,$MUMPS_DEPENDENCIES,;t t
+s,@MUMPS_LIBS_INSTALLED@,$MUMPS_LIBS_INSTALLED,;t t
+s,@MUMPS_CFLAGS_INSTALLED@,$MUMPS_CFLAGS_INSTALLED,;t t
 s,@MUMPS_DATA_INSTALLED@,$MUMPS_DATA_INSTALLED,;t t
 s,@COIN_HAS_MUMPS_TRUE@,$COIN_HAS_MUMPS_TRUE,;t t
 s,@COIN_HAS_MUMPS_FALSE@,$COIN_HAS_MUMPS_FALSE,;t t
