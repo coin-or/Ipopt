@@ -25,6 +25,8 @@
 
 #include "TutorialCpp_nlp.hpp"
 
+#include <cstdio>
+
 // We use sin and cos
 #include <cmath>
 

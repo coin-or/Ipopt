@@ -23,6 +23,8 @@
 // The constant term "i/n" in the constraint is supposed to be input data
 //
 
+#include <cstdio>
+
 #include "IpIpoptApplication.hpp"
 #include "TutorialCpp_nlp.hpp"
 
