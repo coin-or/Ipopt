@@ -24875,6 +24875,8 @@ if test "$allproj" != fail ; then
     pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    projcflags=
+    projlibs=
     eval `sh -c "$pcfilemod"`
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
@@ -24918,6 +24920,8 @@ if test "$allproj" != fail ; then
     pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    projcflags=
+    projlibs=
     eval `sh -c "$pcfilemod"`
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
@@ -24949,7 +24953,7 @@ _ACEOF
   # adjust linker flags for (i)cl compiler
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
-    BLAS_LIBS_INSTALLED=`echo " $BLAS_LIBS_INSTALLED" | sed -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+    BLAS_LIBS_INSTALLED=`echo " $BLAS_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
 
@@ -27394,6 +27398,8 @@ if test "$allproj" != fail ; then
     pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    projcflags=
+    projlibs=
     eval `sh -c "$pcfilemod"`
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
@@ -27437,6 +27443,8 @@ if test "$allproj" != fail ; then
     pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    projcflags=
+    projlibs=
     eval `sh -c "$pcfilemod"`
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
@@ -27468,7 +27476,7 @@ _ACEOF
   # adjust linker flags for (i)cl compiler
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
-    LAPACK_LIBS_INSTALLED=`echo " $LAPACK_LIBS_INSTALLED" | sed -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+    LAPACK_LIBS_INSTALLED=`echo " $LAPACK_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
 
@@ -27872,6 +27880,8 @@ if test "$allproj" != fail ; then
     pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    projcflags=
+    projlibs=
     eval `sh -c "$pcfilemod"`
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
@@ -27915,6 +27925,8 @@ if test "$allproj" != fail ; then
     pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    projcflags=
+    projlibs=
     eval `sh -c "$pcfilemod"`
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
@@ -27946,7 +27958,7 @@ _ACEOF
   # adjust linker flags for (i)cl compiler
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
-    ASL_LIBS_INSTALLED=`echo " $ASL_LIBS_INSTALLED" | sed -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+    ASL_LIBS_INSTALLED=`echo " $ASL_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
 
@@ -28294,6 +28306,8 @@ if test "$allproj" != fail ; then
     pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    projcflags=
+    projlibs=
     eval `sh -c "$pcfilemod"`
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
@@ -28337,6 +28351,8 @@ if test "$allproj" != fail ; then
     pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    projcflags=
+    projlibs=
     eval `sh -c "$pcfilemod"`
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
@@ -28368,7 +28384,7 @@ _ACEOF
   # adjust linker flags for (i)cl compiler
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
-    HSL_LIBS_INSTALLED=`echo " $HSL_LIBS_INSTALLED" | sed -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+    HSL_LIBS_INSTALLED=`echo " $HSL_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
 
@@ -28716,6 +28732,8 @@ if test "$allproj" != fail ; then
     pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    projcflags=
+    projlibs=
     eval `sh -c "$pcfilemod"`
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
@@ -28759,6 +28777,8 @@ if test "$allproj" != fail ; then
     pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    projcflags=
+    projlibs=
     eval `sh -c "$pcfilemod"`
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
@@ -28790,7 +28810,7 @@ _ACEOF
   # adjust linker flags for (i)cl compiler
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
-    MUMPS_LIBS_INSTALLED=`echo " $MUMPS_LIBS_INSTALLED" | sed -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+    MUMPS_LIBS_INSTALLED=`echo " $MUMPS_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
 
