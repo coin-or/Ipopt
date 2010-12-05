@@ -24721,7 +24721,19 @@ if test -n "$PKG_CONFIG" ; then
      coin_has_blas=yes
         echo "$as_me:$LINENO: result: yes: $BLAS_VERSIONS" >&5
 echo "${ECHO_T}yes: $BLAS_VERSIONS" >&6
-        IPOPTLIB_PCREQUIRES="coinblas $IPOPTLIB_PCREQUIRES"
+
+        # adjust linker flags for (i)cl compiler
+        # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl)
+        if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
+        then
+          BLAS_LIBS=`echo " $BLAS_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
+        fi
+
+        # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in IpoptLib
+
+          IPOPTLIB_PCREQUIRES="coinblas $IPOPTLIB_PCREQUIRES"
+          IPOPTLIB_CFLAGS="$BLAS_CFLAGS $IPOPTLIB_CFLAGS"
+          IPOPTLIB_LIBS="$BLAS_LIBS $IPOPTLIB_LIBS"
 
 
 
@@ -24744,11 +24756,6 @@ fi
     # reset PKG_CONFIG_PATH variable
     PKG_CONFIG_PATH="$coin_save_PKG_CONFIG_PATH"
     export PKG_CONFIG_PATH
-
-    # augment X_CFLAGS and X_LIBS for each build target X in IpoptLib
-
-      IPOPTLIB_CFLAGS="$BLAS_CFLAGS $IPOPTLIB_CFLAGS"
-      IPOPTLIB_LIBS="$BLAS_LIBS $IPOPTLIB_LIBS"
 
   else
     echo "$as_me:$LINENO: result: skipped check via pkg-config, redirect to fallback" >&5
@@ -24951,8 +24958,13 @@ _ACEOF
 
 
   # adjust linker flags for (i)cl compiler
+  # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl),
+  # for the LIBS_INSTALLED, we replace everything of the form "/somepath/" by "`$(CYGPATH_W) /somepath/`",
+  #    everything of the form "-Lpath" by "/libpath:`$(CYGPATH_W) path`, and
+  #    everything of the form "-lname" by "libname.lib"
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
+    BLAS_LIBS=`echo " $BLAS_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
     BLAS_LIBS_INSTALLED=`echo " $BLAS_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
@@ -24996,9 +25008,10 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
-  BLAS_DEPENDENCIES=`echo " $BLAS_LIBS" | sed -e 's/ -[^ ]*//g'`
+  # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
+  BLAS_DEPENDENCIES=`echo " $BLAS_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    IPOPTLIB_DEPENDENCIES=`echo " $IPOPTLIB_LIBS" | sed -e 's/ -[^ ]*//g'`
+    IPOPTLIB_DEPENDENCIES=`echo " $IPOPTLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -27244,7 +27257,19 @@ if test -n "$PKG_CONFIG" ; then
      coin_has_lapack=yes
         echo "$as_me:$LINENO: result: yes: $LAPACK_VERSIONS" >&5
 echo "${ECHO_T}yes: $LAPACK_VERSIONS" >&6
-        IPOPTLIB_PCREQUIRES="coinlapack $IPOPTLIB_PCREQUIRES"
+
+        # adjust linker flags for (i)cl compiler
+        # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl)
+        if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
+        then
+          LAPACK_LIBS=`echo " $LAPACK_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
+        fi
+
+        # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in IpoptLib
+
+          IPOPTLIB_PCREQUIRES="coinlapack $IPOPTLIB_PCREQUIRES"
+          IPOPTLIB_CFLAGS="$LAPACK_CFLAGS $IPOPTLIB_CFLAGS"
+          IPOPTLIB_LIBS="$LAPACK_LIBS $IPOPTLIB_LIBS"
 
 
 
@@ -27267,11 +27292,6 @@ fi
     # reset PKG_CONFIG_PATH variable
     PKG_CONFIG_PATH="$coin_save_PKG_CONFIG_PATH"
     export PKG_CONFIG_PATH
-
-    # augment X_CFLAGS and X_LIBS for each build target X in IpoptLib
-
-      IPOPTLIB_CFLAGS="$LAPACK_CFLAGS $IPOPTLIB_CFLAGS"
-      IPOPTLIB_LIBS="$LAPACK_LIBS $IPOPTLIB_LIBS"
 
   else
     echo "$as_me:$LINENO: result: skipped check via pkg-config, redirect to fallback" >&5
@@ -27474,8 +27494,13 @@ _ACEOF
 
 
   # adjust linker flags for (i)cl compiler
+  # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl),
+  # for the LIBS_INSTALLED, we replace everything of the form "/somepath/" by "`$(CYGPATH_W) /somepath/`",
+  #    everything of the form "-Lpath" by "/libpath:`$(CYGPATH_W) path`, and
+  #    everything of the form "-lname" by "libname.lib"
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
+    LAPACK_LIBS=`echo " $LAPACK_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
     LAPACK_LIBS_INSTALLED=`echo " $LAPACK_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
@@ -27519,9 +27544,10 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
-  LAPACK_DEPENDENCIES=`echo " $LAPACK_LIBS" | sed -e 's/ -[^ ]*//g'`
+  # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
+  LAPACK_DEPENDENCIES=`echo " $LAPACK_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    IPOPTLIB_DEPENDENCIES=`echo " $IPOPTLIB_LIBS" | sed -e 's/ -[^ ]*//g'`
+    IPOPTLIB_DEPENDENCIES=`echo " $IPOPTLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -27726,7 +27752,19 @@ if test -n "$PKG_CONFIG" ; then
      coin_has_asl=yes
         echo "$as_me:$LINENO: result: yes: $ASL_VERSIONS" >&5
 echo "${ECHO_T}yes: $ASL_VERSIONS" >&6
-        IPOPTAMPLINTERFACELIB_PCREQUIRES="coinasl $IPOPTAMPLINTERFACELIB_PCREQUIRES"
+
+        # adjust linker flags for (i)cl compiler
+        # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl)
+        if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
+        then
+          ASL_LIBS=`echo " $ASL_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
+        fi
+
+        # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in IpoptAmplInterfaceLib
+
+          IPOPTAMPLINTERFACELIB_PCREQUIRES="coinasl $IPOPTAMPLINTERFACELIB_PCREQUIRES"
+          IPOPTAMPLINTERFACELIB_CFLAGS="$ASL_CFLAGS $IPOPTAMPLINTERFACELIB_CFLAGS"
+          IPOPTAMPLINTERFACELIB_LIBS="$ASL_LIBS $IPOPTAMPLINTERFACELIB_LIBS"
 
 
 
@@ -27749,11 +27787,6 @@ fi
     # reset PKG_CONFIG_PATH variable
     PKG_CONFIG_PATH="$coin_save_PKG_CONFIG_PATH"
     export PKG_CONFIG_PATH
-
-    # augment X_CFLAGS and X_LIBS for each build target X in IpoptAmplInterfaceLib
-
-      IPOPTAMPLINTERFACELIB_CFLAGS="$ASL_CFLAGS $IPOPTAMPLINTERFACELIB_CFLAGS"
-      IPOPTAMPLINTERFACELIB_LIBS="$ASL_LIBS $IPOPTAMPLINTERFACELIB_LIBS"
 
   else
     echo "$as_me:$LINENO: result: skipped check via pkg-config, redirect to fallback" >&5
@@ -27956,8 +27989,13 @@ _ACEOF
 
 
   # adjust linker flags for (i)cl compiler
+  # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl),
+  # for the LIBS_INSTALLED, we replace everything of the form "/somepath/" by "`$(CYGPATH_W) /somepath/`",
+  #    everything of the form "-Lpath" by "/libpath:`$(CYGPATH_W) path`, and
+  #    everything of the form "-lname" by "libname.lib"
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
+    ASL_LIBS=`echo " $ASL_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
     ASL_LIBS_INSTALLED=`echo " $ASL_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
@@ -28001,9 +28039,10 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
-  ASL_DEPENDENCIES=`echo " $ASL_LIBS" | sed -e 's/ -[^ ]*//g'`
+  # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
+  ASL_DEPENDENCIES=`echo " $ASL_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    IPOPTAMPLINTERFACELIB_DEPENDENCIES=`echo " $IPOPTAMPLINTERFACELIB_LIBS" | sed -e 's/ -[^ ]*//g'`
+    IPOPTAMPLINTERFACELIB_DEPENDENCIES=`echo " $IPOPTAMPLINTERFACELIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -28152,7 +28191,19 @@ if test -n "$PKG_CONFIG" ; then
      coin_has_hsl=yes
         echo "$as_me:$LINENO: result: yes: $HSL_VERSIONS" >&5
 echo "${ECHO_T}yes: $HSL_VERSIONS" >&6
-        IPOPTLIB_PCREQUIRES="coinhsl $IPOPTLIB_PCREQUIRES"
+
+        # adjust linker flags for (i)cl compiler
+        # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl)
+        if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
+        then
+          HSL_LIBS=`echo " $HSL_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
+        fi
+
+        # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in IpoptLib
+
+          IPOPTLIB_PCREQUIRES="coinhsl $IPOPTLIB_PCREQUIRES"
+          IPOPTLIB_CFLAGS="$HSL_CFLAGS $IPOPTLIB_CFLAGS"
+          IPOPTLIB_LIBS="$HSL_LIBS $IPOPTLIB_LIBS"
 
 
 
@@ -28175,11 +28226,6 @@ fi
     # reset PKG_CONFIG_PATH variable
     PKG_CONFIG_PATH="$coin_save_PKG_CONFIG_PATH"
     export PKG_CONFIG_PATH
-
-    # augment X_CFLAGS and X_LIBS for each build target X in IpoptLib
-
-      IPOPTLIB_CFLAGS="$HSL_CFLAGS $IPOPTLIB_CFLAGS"
-      IPOPTLIB_LIBS="$HSL_LIBS $IPOPTLIB_LIBS"
 
   else
     echo "$as_me:$LINENO: result: skipped check via pkg-config, redirect to fallback" >&5
@@ -28382,8 +28428,13 @@ _ACEOF
 
 
   # adjust linker flags for (i)cl compiler
+  # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl),
+  # for the LIBS_INSTALLED, we replace everything of the form "/somepath/" by "`$(CYGPATH_W) /somepath/`",
+  #    everything of the form "-Lpath" by "/libpath:`$(CYGPATH_W) path`, and
+  #    everything of the form "-lname" by "libname.lib"
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
+    HSL_LIBS=`echo " $HSL_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
     HSL_LIBS_INSTALLED=`echo " $HSL_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
@@ -28427,9 +28478,10 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
-  HSL_DEPENDENCIES=`echo " $HSL_LIBS" | sed -e 's/ -[^ ]*//g'`
+  # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
+  HSL_DEPENDENCIES=`echo " $HSL_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    IPOPTLIB_DEPENDENCIES=`echo " $IPOPTLIB_LIBS" | sed -e 's/ -[^ ]*//g'`
+    IPOPTLIB_DEPENDENCIES=`echo " $IPOPTLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -28578,7 +28630,19 @@ if test -n "$PKG_CONFIG" ; then
      coin_has_mumps=yes
         echo "$as_me:$LINENO: result: yes: $MUMPS_VERSIONS" >&5
 echo "${ECHO_T}yes: $MUMPS_VERSIONS" >&6
-        IPOPTLIB_PCREQUIRES="coinmumps $IPOPTLIB_PCREQUIRES"
+
+        # adjust linker flags for (i)cl compiler
+        # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl)
+        if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
+        then
+          MUMPS_LIBS=`echo " $MUMPS_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
+        fi
+
+        # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in IpoptLib
+
+          IPOPTLIB_PCREQUIRES="coinmumps $IPOPTLIB_PCREQUIRES"
+          IPOPTLIB_CFLAGS="$MUMPS_CFLAGS $IPOPTLIB_CFLAGS"
+          IPOPTLIB_LIBS="$MUMPS_LIBS $IPOPTLIB_LIBS"
 
 
 
@@ -28601,11 +28665,6 @@ fi
     # reset PKG_CONFIG_PATH variable
     PKG_CONFIG_PATH="$coin_save_PKG_CONFIG_PATH"
     export PKG_CONFIG_PATH
-
-    # augment X_CFLAGS and X_LIBS for each build target X in IpoptLib
-
-      IPOPTLIB_CFLAGS="$MUMPS_CFLAGS $IPOPTLIB_CFLAGS"
-      IPOPTLIB_LIBS="$MUMPS_LIBS $IPOPTLIB_LIBS"
 
   else
     echo "$as_me:$LINENO: result: skipped check via pkg-config, redirect to fallback" >&5
@@ -28808,8 +28867,13 @@ _ACEOF
 
 
   # adjust linker flags for (i)cl compiler
+  # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl),
+  # for the LIBS_INSTALLED, we replace everything of the form "/somepath/" by "`$(CYGPATH_W) /somepath/`",
+  #    everything of the form "-Lpath" by "/libpath:`$(CYGPATH_W) path`, and
+  #    everything of the form "-lname" by "libname.lib"
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
+    MUMPS_LIBS=`echo " $MUMPS_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
     MUMPS_LIBS_INSTALLED=`echo " $MUMPS_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
@@ -28853,9 +28917,10 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
-  MUMPS_DEPENDENCIES=`echo " $MUMPS_LIBS" | sed -e 's/ -[^ ]*//g'`
+  # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
+  MUMPS_DEPENDENCIES=`echo " $MUMPS_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    IPOPTLIB_DEPENDENCIES=`echo " $IPOPTLIB_LIBS" | sed -e 's/ -[^ ]*//g'`
+    IPOPTLIB_DEPENDENCIES=`echo " $IPOPTLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
