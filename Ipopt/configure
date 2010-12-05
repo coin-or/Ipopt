@@ -24713,8 +24713,8 @@ if test -n "$PKG_CONFIG" ; then
 	# but only do this if is not trivial
     if test "$CYGPATH_W" != "echo" ; then
       # need to put into brackets since otherwise autoconf replaces the brackets in the sed command
-	  cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
-	fi
+      cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    fi
     BLAS_CFLAGS="$cflags"
     BLAS_LIBS=`$PKG_CONFIG --libs "coinblas" 2>/dev/null`
     BLAS_DATA=`$PKG_CONFIG --variable=datadir "coinblas" 2>/dev/null`
@@ -24832,6 +24832,9 @@ echo "${ECHO_T}no, dependency $proj not available" >&6
         projdatadir=
         pcifilemod=`sed -e '/[a-zA-Z]:/d' -e 's/datadir=\(.*\)/echo projdatadir=\\\\"\1\\\\"/g' $pcifile`
         eval `sh -c "$pcifilemod"`
+        if test "${CYGPATH_W}" != "echo"; then
+          projdatadir="\`\$(CYGPATH_W) ${projdatadir} | sed -e 's/\\\\\\\\/\\\\\\\\\\\\\\\\/g'\`"
+        fi
         BLAS_DATA_INSTALLED="$projdatadir"
       fi
 
@@ -24875,7 +24878,9 @@ if test "$allproj" != fail ; then
     eval `sh -c "$pcfilemod"`
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
-    projcflags=`echo "$projcflags" | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    if test "${CYGPATH_W}" != "echo"; then
+      projcflags=`echo "$projcflags" | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    fi
     BLAS_CFLAGS="$projcflags $BLAS_CFLAGS"
 
     # set LIBS variable
@@ -24916,7 +24921,9 @@ if test "$allproj" != fail ; then
     eval `sh -c "$pcfilemod"`
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
-    projcflags=`echo "$projcflags" | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    if test "${CYGPATH_W}" != "echo"; then
+      projcflags=`echo "$projcflags" | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    fi
     BLAS_CFLAGS_INSTALLED="$projcflags $BLAS_CFLAGS_INSTALLED"
 
     # set LIBS variable
@@ -24938,6 +24945,12 @@ cat >>confdefs.h <<\_ACEOF
 #define COIN_HAS_BLAS 1
 _ACEOF
 
+
+  # adjust linker flags for (i)cl compiler
+  if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
+  then
+    BLAS_LIBS_INSTALLED=`echo " $BLAS_LIBS_INSTALLED" | sed -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+  fi
 
 
     IPOPTLIB_PCREQUIRES="coinblas $IPOPTLIB_PCREQUIRES"
@@ -27219,8 +27232,8 @@ if test -n "$PKG_CONFIG" ; then
 	# but only do this if is not trivial
     if test "$CYGPATH_W" != "echo" ; then
       # need to put into brackets since otherwise autoconf replaces the brackets in the sed command
-	  cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
-	fi
+      cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    fi
     LAPACK_CFLAGS="$cflags"
     LAPACK_LIBS=`$PKG_CONFIG --libs "coinlapack" 2>/dev/null`
     LAPACK_DATA=`$PKG_CONFIG --variable=datadir "coinlapack" 2>/dev/null`
@@ -27338,6 +27351,9 @@ echo "${ECHO_T}no, dependency $proj not available" >&6
         projdatadir=
         pcifilemod=`sed -e '/[a-zA-Z]:/d' -e 's/datadir=\(.*\)/echo projdatadir=\\\\"\1\\\\"/g' $pcifile`
         eval `sh -c "$pcifilemod"`
+        if test "${CYGPATH_W}" != "echo"; then
+          projdatadir="\`\$(CYGPATH_W) ${projdatadir} | sed -e 's/\\\\\\\\/\\\\\\\\\\\\\\\\/g'\`"
+        fi
         LAPACK_DATA_INSTALLED="$projdatadir"
       fi
 
@@ -27381,7 +27397,9 @@ if test "$allproj" != fail ; then
     eval `sh -c "$pcfilemod"`
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
-    projcflags=`echo "$projcflags" | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    if test "${CYGPATH_W}" != "echo"; then
+      projcflags=`echo "$projcflags" | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    fi
     LAPACK_CFLAGS="$projcflags $LAPACK_CFLAGS"
 
     # set LIBS variable
@@ -27422,7 +27440,9 @@ if test "$allproj" != fail ; then
     eval `sh -c "$pcfilemod"`
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
-    projcflags=`echo "$projcflags" | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    if test "${CYGPATH_W}" != "echo"; then
+      projcflags=`echo "$projcflags" | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    fi
     LAPACK_CFLAGS_INSTALLED="$projcflags $LAPACK_CFLAGS_INSTALLED"
 
     # set LIBS variable
@@ -27444,6 +27464,12 @@ cat >>confdefs.h <<\_ACEOF
 #define COIN_HAS_LAPACK 1
 _ACEOF
 
+
+  # adjust linker flags for (i)cl compiler
+  if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
+  then
+    LAPACK_LIBS_INSTALLED=`echo " $LAPACK_LIBS_INSTALLED" | sed -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+  fi
 
 
     IPOPTLIB_PCREQUIRES="coinlapack $IPOPTLIB_PCREQUIRES"
@@ -27684,8 +27710,8 @@ if test -n "$PKG_CONFIG" ; then
 	# but only do this if is not trivial
     if test "$CYGPATH_W" != "echo" ; then
       # need to put into brackets since otherwise autoconf replaces the brackets in the sed command
-	  cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
-	fi
+      cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    fi
     ASL_CFLAGS="$cflags"
     ASL_LIBS=`$PKG_CONFIG --libs "coinasl" 2>/dev/null`
     ASL_DATA=`$PKG_CONFIG --variable=datadir "coinasl" 2>/dev/null`
@@ -27803,6 +27829,9 @@ echo "${ECHO_T}no, dependency $proj not available" >&6
         projdatadir=
         pcifilemod=`sed -e '/[a-zA-Z]:/d' -e 's/datadir=\(.*\)/echo projdatadir=\\\\"\1\\\\"/g' $pcifile`
         eval `sh -c "$pcifilemod"`
+        if test "${CYGPATH_W}" != "echo"; then
+          projdatadir="\`\$(CYGPATH_W) ${projdatadir} | sed -e 's/\\\\\\\\/\\\\\\\\\\\\\\\\/g'\`"
+        fi
         ASL_DATA_INSTALLED="$projdatadir"
       fi
 
@@ -27846,7 +27875,9 @@ if test "$allproj" != fail ; then
     eval `sh -c "$pcfilemod"`
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
-    projcflags=`echo "$projcflags" | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    if test "${CYGPATH_W}" != "echo"; then
+      projcflags=`echo "$projcflags" | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    fi
     ASL_CFLAGS="$projcflags $ASL_CFLAGS"
 
     # set LIBS variable
@@ -27887,7 +27918,9 @@ if test "$allproj" != fail ; then
     eval `sh -c "$pcfilemod"`
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
-    projcflags=`echo "$projcflags" | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    if test "${CYGPATH_W}" != "echo"; then
+      projcflags=`echo "$projcflags" | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    fi
     ASL_CFLAGS_INSTALLED="$projcflags $ASL_CFLAGS_INSTALLED"
 
     # set LIBS variable
@@ -27909,6 +27942,12 @@ cat >>confdefs.h <<\_ACEOF
 #define COIN_HAS_ASL 1
 _ACEOF
 
+
+  # adjust linker flags for (i)cl compiler
+  if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
+  then
+    ASL_LIBS_INSTALLED=`echo " $ASL_LIBS_INSTALLED" | sed -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+  fi
 
 
     IPOPTAMPLINTERFACELIB_PCREQUIRES="coinasl $IPOPTAMPLINTERFACELIB_PCREQUIRES"
@@ -28093,8 +28132,8 @@ if test -n "$PKG_CONFIG" ; then
 	# but only do this if is not trivial
     if test "$CYGPATH_W" != "echo" ; then
       # need to put into brackets since otherwise autoconf replaces the brackets in the sed command
-	  cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
-	fi
+      cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    fi
     HSL_CFLAGS="$cflags"
     HSL_LIBS=`$PKG_CONFIG --libs "coinhsl" 2>/dev/null`
     HSL_DATA=`$PKG_CONFIG --variable=datadir "coinhsl" 2>/dev/null`
@@ -28212,6 +28251,9 @@ echo "${ECHO_T}no, dependency $proj not available" >&6
         projdatadir=
         pcifilemod=`sed -e '/[a-zA-Z]:/d' -e 's/datadir=\(.*\)/echo projdatadir=\\\\"\1\\\\"/g' $pcifile`
         eval `sh -c "$pcifilemod"`
+        if test "${CYGPATH_W}" != "echo"; then
+          projdatadir="\`\$(CYGPATH_W) ${projdatadir} | sed -e 's/\\\\\\\\/\\\\\\\\\\\\\\\\/g'\`"
+        fi
         HSL_DATA_INSTALLED="$projdatadir"
       fi
 
@@ -28255,7 +28297,9 @@ if test "$allproj" != fail ; then
     eval `sh -c "$pcfilemod"`
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
-    projcflags=`echo "$projcflags" | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    if test "${CYGPATH_W}" != "echo"; then
+      projcflags=`echo "$projcflags" | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    fi
     HSL_CFLAGS="$projcflags $HSL_CFLAGS"
 
     # set LIBS variable
@@ -28296,7 +28340,9 @@ if test "$allproj" != fail ; then
     eval `sh -c "$pcfilemod"`
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
-    projcflags=`echo "$projcflags" | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    if test "${CYGPATH_W}" != "echo"; then
+      projcflags=`echo "$projcflags" | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    fi
     HSL_CFLAGS_INSTALLED="$projcflags $HSL_CFLAGS_INSTALLED"
 
     # set LIBS variable
@@ -28318,6 +28364,12 @@ cat >>confdefs.h <<\_ACEOF
 #define COIN_HAS_HSL 1
 _ACEOF
 
+
+  # adjust linker flags for (i)cl compiler
+  if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
+  then
+    HSL_LIBS_INSTALLED=`echo " $HSL_LIBS_INSTALLED" | sed -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+  fi
 
 
     IPOPTLIB_PCREQUIRES="coinhsl $IPOPTLIB_PCREQUIRES"
@@ -28502,8 +28554,8 @@ if test -n "$PKG_CONFIG" ; then
 	# but only do this if is not trivial
     if test "$CYGPATH_W" != "echo" ; then
       # need to put into brackets since otherwise autoconf replaces the brackets in the sed command
-	  cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
-	fi
+      cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    fi
     MUMPS_CFLAGS="$cflags"
     MUMPS_LIBS=`$PKG_CONFIG --libs "coinmumps" 2>/dev/null`
     MUMPS_DATA=`$PKG_CONFIG --variable=datadir "coinmumps" 2>/dev/null`
@@ -28621,6 +28673,9 @@ echo "${ECHO_T}no, dependency $proj not available" >&6
         projdatadir=
         pcifilemod=`sed -e '/[a-zA-Z]:/d' -e 's/datadir=\(.*\)/echo projdatadir=\\\\"\1\\\\"/g' $pcifile`
         eval `sh -c "$pcifilemod"`
+        if test "${CYGPATH_W}" != "echo"; then
+          projdatadir="\`\$(CYGPATH_W) ${projdatadir} | sed -e 's/\\\\\\\\/\\\\\\\\\\\\\\\\/g'\`"
+        fi
         MUMPS_DATA_INSTALLED="$projdatadir"
       fi
 
@@ -28664,7 +28719,9 @@ if test "$allproj" != fail ; then
     eval `sh -c "$pcfilemod"`
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
-    projcflags=`echo "$projcflags" | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    if test "${CYGPATH_W}" != "echo"; then
+      projcflags=`echo "$projcflags" | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    fi
     MUMPS_CFLAGS="$projcflags $MUMPS_CFLAGS"
 
     # set LIBS variable
@@ -28705,7 +28762,9 @@ if test "$allproj" != fail ; then
     eval `sh -c "$pcfilemod"`
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
-    projcflags=`echo "$projcflags" | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    if test "${CYGPATH_W}" != "echo"; then
+      projcflags=`echo "$projcflags" | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    fi
     MUMPS_CFLAGS_INSTALLED="$projcflags $MUMPS_CFLAGS_INSTALLED"
 
     # set LIBS variable
@@ -28727,6 +28786,12 @@ cat >>confdefs.h <<\_ACEOF
 #define COIN_HAS_MUMPS 1
 _ACEOF
 
+
+  # adjust linker flags for (i)cl compiler
+  if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
+  then
+    MUMPS_LIBS_INSTALLED=`echo " $MUMPS_LIBS_INSTALLED" | sed -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+  fi
 
 
     IPOPTLIB_PCREQUIRES="coinmumps $IPOPTLIB_PCREQUIRES"
