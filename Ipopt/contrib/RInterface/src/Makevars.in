@@ -15,23 +15,26 @@ IPOPT_CXXFLAGS = @CXXFLAGS@
 # additional C++ Compiler options for linking
 IPOPT_CXXLINKFLAGS = @RPATH_FLAGS@
 
-# Directory with header files
-IPOPT_INCDIR = @includedir@/coin
+COIN_HAS_PKGCONFIG = @COIN_HAS_PKGCONFIG_TRUE@TRUE
+COIN_CXX_IS_CL = @COIN_CXX_IS_CL_TRUE@TRUE
 
-# Directory with libipopt.a
-libdir = @libdir@
-exec_prefix = @exec_prefix@
-prefix = @prefix@
+# Include directories (we use the CYGPATH_W variables to allow compilation with Windows compilers)
+ifeq ($(COIN_HAS_PKGCONFIG), TRUE)
+  INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipopt`
+else
+  INCL = -I`$(CYGPATH_W) @abs_include_dir@/coin` @IPOPTLIB_CFLAGS_INSTALLED@
+endif
 
-# pkg-config command, if available
-PKG_CONFIG = @PKG_CONFIG@
-
-# Libraries necessary to link with IPOPT
-IPOPT_LIBS = @ipoptlib@ @IPOPTLIB_LIBS@
-
-# Necessary Include dirs (we use the CYGPATH_W variables to allow
-# compilation with Windows compilers)
-IPOPT_INCL = -I`$(CYGPATH_W) $(IPOPT_INCDIR)` $(ADDINCFLAGS)
+# Linker flags
+ifeq ($(COIN_HAS_PKGCONFIG), TRUE)
+  LIBS = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt`
+else
+  ifeq ($(COIN_CXX_IS_CL), TRUE)
+    LIBS = /link /libpath:`$(CYGPATH_W) @abs_lib_dir@` libipopt.lib @IPOPTLIB_LIBS_INSTALLED@
+  else
+    LIBS = -L@abs_lib_dir@ -lipopt @IPOPTLIB_LIBS_INSTALLED@
+  endif
+endif
 
 # The following is necessary under cygwin, if native compilers are used
 CYGPATH_W = @CYGPATH_W@
@@ -40,5 +43,5 @@ CYGPATH_W = @CYGPATH_W@
 OBJECTS = ipoptr.o IpoptRNLP.o
 
 # Convert to R macros
-PKG_LIBS = ${IPOPT_CXXLINKFLAGS} ${IPOPT_LIBS}
-PKG_CXXFLAGS = ${IPOPT_CXXFLAGS} ${IPOPT_INCL}
+PKG_LIBS = ${IPOPT_CXXLINKFLAGS} ${LIBS}
+PKG_CXXFLAGS = ${IPOPT_CXXFLAGS} ${INCL}
