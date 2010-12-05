@@ -30,21 +30,27 @@ CXXFLAGS = `echo @CXXFLAGS@ | sed -e s'|-pedantic-errors||'`
 # additional C++ Compiler options for linking
 LINKFLAGS = $(CXXFLAGS) @RPATH_FLAGS@ @SHARED_FLAGS@
 
-# Directory with header files
-IPOPTINCDIR = @includedir@/coin
+COIN_HAS_PKGCONFIG = @COIN_HAS_PKGCONFIG_TRUE@TRUE
+COIN_CXX_IS_CL = @COIN_CXX_IS_CL_TRUE@TRUE
 
-# Directory with libipopt.a
-IPOPTLIBDIR = @libdir@
-exec_prefix = @exec_prefix@
-prefix = @prefix@
+# Include directories (we use the CYGPATH_W variables to allow compilation with Windows compilers)
+ifeq ($(COIN_HAS_PKGCONFIG), TRUE)
+  INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipopt`
+else
+  INCL = -I`$(CYGPATH_W) @abs_include_dir@/coin` @IPOPTLIB_CFLAGS_INSTALLED@
+endif
+INCL += -I`$(CYGPATH_W) $(JAVA_HOME)/include` -I.
 
-# Libraries necessary to link with IPOPT
-#LIBS = -L$(IPOPTLIBDIR) -lipopt @IPADDLIBS@
-LIBS = @ipoptlib@ @IPOPTLIB_LIBS@
-
-# Necessary Include dirs (we use the CYGPATH_W variables to allow
-# compilation with Windows compilers)
-INCL =  -I`$(CYGPATH_W) $(IPOPTINCDIR)` -I`$(CYGPATH_W) $(JAVA_HOME)/include` $(ADDINCFLAGS) -I.
+# Linker flags
+ifeq ($(COIN_HAS_PKGCONFIG), TRUE)
+  LIBS = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt`
+else
+  ifeq ($(COIN_CXX_IS_CL), TRUE)
+    LIBS = /link /libpath:`$(CYGPATH_W) @abs_lib_dir@` libipopt.lib @IPOPTLIB_LIBS_INSTALLED@
+  else
+    LIBS = -L@abs_lib_dir@ -lipopt @IPOPTLIB_LIBS_INSTALLED@
+  endif
+endif
 
 # The following is necessary under cygwin, if native compilers are used
 CYGPATH_W = @CYGPATH_W@
