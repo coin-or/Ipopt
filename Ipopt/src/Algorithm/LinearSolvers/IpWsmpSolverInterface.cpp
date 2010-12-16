@@ -433,6 +433,15 @@ namespace Ipopt
     ipfint NAUX = 0;
     IPARM_[1] = 1; // ordering
     IPARM_[2] = 2; // symbolic factorization
+#ifdef PARDISO_MATCHING_PREPROCESS
+    IPARM_[9]  =  2; // switch off WSMP's ordering and scaling
+    IPARM_[15] = -1; // switch off WSMP's ordering and scaling
+    IPARM_[30] =  6; // next step supernode pivoting , since not implemented
+    // =2 regular Bunch/Kaufman
+    // =1 no pivots
+    // =6 limited pivots
+    DPARM_[21] = 2e-8; // set pivot perturbation
+#endif
     ipfint idmy;
     double ddmy;
 
@@ -548,6 +557,15 @@ namespace Ipopt
     DPARM_[10] = wsmp_pivtol_; // set current pivot tolerance
     ipfint idmy;
     double ddmy;
+
+#ifdef PARDISO_MATCHING_PREPROCESS
+    {
+      ipfint* tmp2_  = new ipfint[N];
+      smat_reordering_pardiso_wsmp_ (&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp2_, 1);
+      delete[] tmp2_;
+    }
+#endif
+
 
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Calling WSSMP-3-3 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
