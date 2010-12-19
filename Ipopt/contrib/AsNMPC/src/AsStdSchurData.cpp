@@ -29,7 +29,8 @@ namespace Ipopt
     DBG_START_METH("StdSchurData::MakeNewSchurDataCopy", dbg_verbosity);
     
     SmartPtr<SchurData> retval = new StdSchurData();
-    
+   
+    return retval;   
   }
 
   void StdSchurData::SetData_Flag(Index dim, const Index* flags, Number v)

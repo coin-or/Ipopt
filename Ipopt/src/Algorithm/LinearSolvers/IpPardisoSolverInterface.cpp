@@ -45,7 +45,7 @@
 #endif
 
 // determine the correct name of the Pardiso function
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && defined(HAVE_PARDISO)
 # define PARDISOINIT_FUNC PARDISOINIT
 # define PARDISO_FUNC PARDISO
 #else

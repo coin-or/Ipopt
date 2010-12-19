@@ -27,6 +27,9 @@ ADDINCFLAGS =
 #  change certain compiler options, you might have to recompile Ipopt.   #
 ##########################################################################
 
+COIN_HAS_PKGCONFIG = @COIN_HAS_PKGCONFIG_TRUE@TRUE
+COIN_CXX_IS_CL = @COIN_CXX_IS_CL_TRUE@TRUE
+
 # C++ Compiler command
 CXX = @CXX@
 
@@ -36,25 +39,31 @@ CXXFLAGS = @CXXFLAGS@
 # additional C++ Compiler options for linking
 CXXLINKFLAGS = @RPATH_FLAGS@
 
-# Directory with header files
-IPOPTINCDIR = @includedir@/coin
-
-# Directory with libipopt.a
-IPOPTLIBDIR = @libdir@/coin
-exec_prefix = @exec_prefix@
-prefix = @prefix@
-
-# Libraries necessary to link with IPOPT
-LIBS = -L$(IPOPTLIBDIR) -L$(IPOPTLIBDIR)/ThirdParty @ipoptlib@ @IPOPTLIB_LIBS@ -lasnmpc
-
-# Necessary Include dirs (we use the CYGPATH_W variables to allow
-# compilation with Windows compilers)
 SRCDIR = @srcdir@
 ipoptsrcdir  = $(SRCDIR)/../../../../src
 asnmpcsrcdir = $(SRCDIR)/../../src
-INCLUDEDIR  = -I${prefix}/include/coin -I$(ipoptsrcdir)/Interfaces -I$(ipoptsrcdir)/Algorithm -I$(ipoptsrcdir)/LinAlg -I$(ipoptsrcdir)/LinAlg/TMatrices -I$(ipoptsrcdir)/Apps/AmplSolver -I$(asnmpcsrcdir)
-#INCL =  -I`$(CYGPATH_W) $(IPOPTINCDIR)` $(ADDINCFLAGS) $(ASNMPCINCL)
-INCL =  $(ADDINCFLAGS) $(ASNMPCINCL) $(INCLUDEDIR)
+
+# Include directories (we use the CYGPATH_W variables to allow compilation with Windows compilers)
+#   we also need some Ipopt headers that are not installed, so we add $(ipoptsrcdir)/Algorithm and $(ipoptsrcdir)/LinAlg
+ifeq ($(COIN_HAS_PKGCONFIG), TRUE)
+  INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipopt`
+else
+  INCL = -I`$(CYGPATH_W) @abs_include_dir@/coin` @IPOPTLIB_CFLAGS_INSTALLED@
+endif
+INCL += -I`$(CYGPATH_W) $(ipoptsrcdir)/Algorithm` -I`$(CYGPATH_W) $(ipoptsrcdir)/LinAlg` 
+INCL += -I`$(CYGPATH_W) $(asnmpcsrcdir)`
+INCL += $(ADDINCFLAGS)
+
+# Linker flags
+ifeq ($(COIN_HAS_PKGCONFIG), TRUE)
+  LIBS += `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt` -lasnmpc
+else
+  ifeq ($(COIN_CXX_IS_CL), TRUE)
+    LIBS += /link /libpath:`$(CYGPATH_W) @abs_lib_dir@` libasnmpc.lib libipopt.lib @IPOPTLIB_LIBS_INSTALLED@
+  else
+    LIBS += -L@abs_lib_dir@ -lasnmpc -lipopt @IPOPTLIB_LIBS_INSTALLED@
+  endif
+endif
 
 # The following is necessary under cygwin, if native compilers are used
 CYGPATH_W = @CYGPATH_W@
@@ -77,9 +86,3 @@ clean:
 
 .cpp.obj:
 	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `$(CYGPATH_W) '$<'`
-
-
-
-
-
-
