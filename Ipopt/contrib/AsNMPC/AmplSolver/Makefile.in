@@ -12,30 +12,50 @@ exec_prefix = @exec_prefix@
 libdir      = @libdir@
 bindir      = @bindir@
 CYGPATH_W   = @CYGPATH_W@
-ASL_CPPFLAGS = @ASL_CFLAGS@
-SRCDIR = @srcdir@
+SRCDIR      = @srcdir@
+COIN_HAS_PKGCONFIG = @COIN_HAS_PKGCONFIG_TRUE@TRUE
+COIN_CXX_IS_CL = @COIN_CXX_IS_CL_TRUE@TRUE
 ipoptsrcdir  = $(SRCDIR)/../../../src
 asnmpcsrcdir = $(SRCDIR)/../src
 
 CXX         = @CXX@
 CXXFLAGS    = @CXXFLAGS@
 LDFLAGS     = $(CXXFLAGS) @RPATH_FLAGS@
-IPOPTLIBDIR = @libdir@/coin
-LIBS        = -L$(IPOPTLIBDIR) -L$(IPOPTLIBDIR)/ThirdParty @ipoptlib@ @ASL_LIBS@ @IPOPTLIB_LIBS@ -L../src -Wl,-rpath=$(IPOPTLIBDIR) -Wl,-rpath=$(IPOPTLIBDIR)/ThirdParty -lasnmpc
-INCLUDEDIR  = -I${prefix}/include/coin -I$(ipoptsrcdir)/Interfaces -I$(ipoptsrcdir)/Algorithm -I$(ipoptsrcdir)/LinAlg -I$(ipoptsrcdir)/LinAlg/TMatrices -I$(ipoptsrcdir)/Apps/AmplSolver -I$(asnmpcsrcdir)
 
-LIBTOOL = @LIBTOOL@
-CXXLD = $(CXX)
-CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
-	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+# Include directories (we use the CYGPATH_W variables to allow compilation with Windows compilers)
+#   we also need some Ipopt headers that are not installed, so we add $(ipoptsrcdir)/Algorithm and $(ipoptsrcdir)/LinAlg
+ifeq ($(COIN_HAS_PKGCONFIG), TRUE)
+  INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipoptamplinterface`
+else
+  INCL = -I`$(CYGPATH_W) @abs_include_dir@/coin` @IPOPTLIB_CFLAGS_INSTALLED@ @ASL_CFLAGS_INSTALLED@
+endif
+INCL += -I`$(CYGPATH_W) $(ipoptsrcdir)/Algorithm` -I`$(CYGPATH_W) $(ipoptsrcdir)/LinAlg` 
+INCL += -I`$(CYGPATH_W) $(asnmpcsrcdir)`
+INCL += $(ADDINCFLAGS)
 
-ASNMPC_LIB =libasnmpc.so
+# Linker flags
+ifeq ($(COIN_HAS_PKGCONFIG), TRUE)
+  LIBS = -lasnmpc `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipoptamplinterface`
+else
+  ifeq ($(COIN_CXX_IS_CL), TRUE)
+    LIBS = /link /libpath:`$(CYGPATH_W) @abs_lib_dir@` libasnmpc.lib libipoptamplinterface.lib libipopt.lib @IPOPTLIB_LIBS_INSTALLED@ @ASL_LIBS_INSTALLED@
+  else
+    LIBS = -L@abs_lib_dir@ -lasnmpc -lipoptamplinterface -lipopt @IPOPTLIB_LIBS_INSTALLED@ @ASL_LIBS_INSTALLED@
+  endif
+endif
+
+#LIBTOOL = @LIBTOOL@
+#CXXLD = $(CXX)
+#CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
+#	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+
+ASNMPC_LIB = libasnmpc.so
 
 ASNMPC_LIBNAME =$(ASNMPC_LIB).0.0.0
 
 TARGET = ampl_asnmpc
 
-OBJS   = AmplTNLP.@OBJEXT@ AsAmplNmpcTNLP.@OBJEXT@ 
+OBJS   = AsAmplNmpcTNLP.@OBJEXT@ 
 
 VPATH = $(SRCDIR):$(ipoptsrcdir)/Apps/AmplSolver
 
@@ -49,11 +69,10 @@ uninstall:
 	rm -f $(bindir)/$(TARGET)
 
 $(TARGET): $(OBJS) ampl_nmpc.cpp
-	$(CXX) $(CXXFLAGS) $(SRCDIR)/ampl_nmpc.cpp -o $(TARGET) $(OBJS) $(LIBS) $(INCLUDEDIR) $(ASL_CPPFLAGS) 
+	$(CXX) $(LDFLAGS) $(SRCDIR)/ampl_nmpc.cpp -o $(TARGET) $(OBJS) $(INCL) $(LIBS)
 
 %.@OBJEXT@: %.cpp 
-	$(CXX) $(CXXFLAGS) $(INCLUDEDIR) $(ASL_CPPFLAGS) \
-        -o $@ -c $^
+	$(CXX) $(CXXFLAGS) $(INCL) -o $@ -c $^
 
 clean:
 	rm -f $(OBJS) $(TARGET)

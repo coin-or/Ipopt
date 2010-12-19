@@ -38,22 +38,25 @@ F77 = @F77@
 FFLAGS = @FFLAGS@
 
 # additional Fortran Compiler options for linking
-F77LINKFLAGS = @RPATH_FLAGS@ -L$(IPOPTLIBDIR) -L$(IPOPTLIBDIR)/ThirdParty
+F77LINKFLAGS = @RPATH_FLAGS@
 
-# Directory with include file
-IPOPTINCDIR = @includedir@/coin
+COIN_HAS_PKGCONFIG = @COIN_HAS_PKGCONFIG_TRUE@TRUE
 
-# Directory with libipopt.a
-IPOPTLIBDIR = @libdir@/coin
-exec_prefix = @exec_prefix@
-prefix = @prefix@
+# Include directories (we use the CYGPATH_W variables to allow compilation with Windows compilers)
+ifeq ($(COIN_HAS_PKGCONFIG), TRUE)
+  INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipopt`
+else
+  INCL = -I`$(CYGPATH_W) @abs_include_dir@/coin` @IPOPTLIB_CFLAGS_INSTALLED@
+endif
+INCL += $(ADDINCFLAGS)
 
-# Libraries necessary to link with IPOPT
-LIBS = @ipoptlib@ @IPOPTLIB_LIBS@ @CXXLIBS@
-
-# Necessary Include dirs (we use the CYGPATH_W variables to allow
-# compilation with Windows compilers)
-INCL =  -I`$(CYGPATH_W) $(IPOPTINCDIR)` $(ADDINCFLAGS)
+# Linker flags
+ifeq ($(COIN_HAS_PKGCONFIG), TRUE)
+  LIBS = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt`
+else
+  LIBS = -L@abs_lib_dir@ -lipopt @IPOPTLIB_LIBS_INSTALLED@
+endif
+LIBS += @CXXLIBS@
 
 # The following is necessary under cygwin, if native compilers are used
 CYGPATH_W = @CYGPATH_W@

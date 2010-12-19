@@ -21,6 +21,9 @@ ipopt_SOURCES = \
 ipopt_LDADD = libipoptamplinterface.la ../../Interfaces/libipopt.la \
 	$(IPOPTAMPLINTERFACELIB_LIBS) $(IPOPTLIB_LIBS)
 
+ipopt_DEPENDENCIES = libipoptamplinterface.la ../../Interfaces/libipopt.la \
+	$(IPOPTAMPLINTERFACELIB_DEPENDENCIES) $(IPOPTLIB_DEPENDENCIES)
+
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg/TMatrices` \
