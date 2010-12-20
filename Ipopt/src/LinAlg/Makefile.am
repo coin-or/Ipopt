@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2006 International Business Machines and others.
+# Copyright (C) 2004, 2010 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -14,7 +14,10 @@ includeipoptdir = $(includedir)/coin
 includeipopt_HEADERS = \
 	IpMatrix.hpp \
 	IpSymMatrix.hpp \
-	IpVector.hpp
+	IpVector.hpp \
+	IpDenseVector.hpp \
+	IpCompoundVector.hpp \
+	IpBlas.hpp
 
 noinst_LTLIBRARIES = liblinalg.la
 

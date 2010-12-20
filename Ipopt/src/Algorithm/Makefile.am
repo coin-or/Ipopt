@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2009 International Business Machines and others.
+# Copyright (C) 2004, 2010 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -11,7 +11,8 @@ AUTOMAKE_OPTIONS = foreign
 SUBDIRS = LinearSolvers Inexact
 
 includeipoptdir = $(includedir)/coin
-includeipopt_HEADERS = IpIpoptCalculatedQuantities.hpp
+includeipopt_HEADERS = IpIpoptCalculatedQuantities.hpp \
+	IpIpoptData.hpp IpIteratesVector.hpp IpTimingStatistics.hpp
 
 noinst_LTLIBRARIES = libipoptalg.la
 
