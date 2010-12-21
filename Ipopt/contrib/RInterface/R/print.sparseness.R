@@ -1,5 +1,5 @@
 # Copyright (C) 2010 Jelmer Ypma. All Rights Reserved.
-# This code is published under the Common Public License.
+# This code is published under the Eclipse Public License.
 #
 # File:   print.sparseness.R
 # Author: Jelmer Ypma

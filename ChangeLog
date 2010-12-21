@@ -2,6 +2,10 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2010-12-22 releases/3.9.2
+        - converted from Common Public License to Ecplise Public License
+        - some bugfixes from BuildTools
+
 2010-11-26 releases/3.9.1
         - improved Hessian update for restoration phase
         - added intermediate callback feature to C and Fortran interface

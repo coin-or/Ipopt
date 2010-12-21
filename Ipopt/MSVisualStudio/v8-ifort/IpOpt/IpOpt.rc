@@ -75,7 +75,7 @@ BEGIN
             VALUE "FileVersion", "3, 8, 2, 0"
             VALUE "InternalName", "Ipopt"
             VALUE "LegalCopyright", "Copyright (C) 2008 International Business Machines and others."
-            VALUE "LegalTrademarks", "All Rights Reserved. This code is published under the Common Public License."
+            VALUE "LegalTrademarks", "All Rights Reserved. This code is published under the Eclipse Public License."
             VALUE "OriginalFilename", " Ipopt38.dll"
             VALUE "ProductName", "Ipopt Dynamic Link Library"
             VALUE "ProductVersion", "3, 8, 2, 0"
