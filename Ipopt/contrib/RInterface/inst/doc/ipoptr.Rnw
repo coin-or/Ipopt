@@ -38,7 +38,7 @@ options(SweaveHooks=list(fig=function()
 @
 
 \begin{abstract}
-This document describes how to use \texttt{ipoptr}, which is an R interface to Ipopt (Interior Point Optimizer). Ipopt is an open source software package for large-scale nonlinear optimization \cite{WachterBiegler2006}. It can be used to solve general nonlinear programming problems with nonlinear constraints and lower and upper bounds for the controls. Ipopt is written in C++ and is released as open source code under the Common Public License (CPL). It is available from the COIN-OR initiative. The code has been written by Carl Laird and Andreas W\"achter, who is the COIN project leader for Ipopt. 
+This document describes how to use \texttt{ipoptr}, which is an R interface to Ipopt (Interior Point Optimizer). Ipopt is an open source software package for large-scale nonlinear optimization \cite{WachterBiegler2006}. It can be used to solve general nonlinear programming problems with nonlinear constraints and lower and upper bounds for the controls. Ipopt is written in C++ and is released as open source code under the Eclipse Public License (EPL). It is available from the COIN-OR initiative. The code has been written by Carl Laird and Andreas W\"achter, who is the COIN project leader for Ipopt. 
 \end{abstract}
 
 \section{Introduction}

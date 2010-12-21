@@ -11,7 +11,7 @@
 # Copyright 2004, 2010 International Business Machines and others.
 # All Rights Reserved.
 # This file is part of the open source package IPOPT which is distributed
-# under the Common Public License.
+# under the Eclipse Public License.
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -1316,7 +1316,7 @@ gives unlimited permission to copy, distribute and modify it.
 Copyright 2004, 2010 International Business Machines and others.
 All Rights Reserved.
 This file is part of the open source package IPOPT which is distributed
-under the Common Public License.
+under the Eclipse Public License.
 _ACEOF
   exit 0
 fi

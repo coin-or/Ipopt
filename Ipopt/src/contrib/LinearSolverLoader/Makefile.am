@@ -1,6 +1,6 @@
 # Copyright (C) 2008     GAMS Development
 # All Rights Reserved.
-# This file is distributed under the Common Public License.
+# This file is distributed under the Eclipse Public License.
 #
 ## $Id$
 #
