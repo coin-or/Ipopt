@@ -1,6 +1,6 @@
 C Copyright (C) 2002, 2007 Carnegie Mellon University and others.
 C All Rights Reserved.
-C This code is published under the Common Public License.
+C This code is published under the Eclipse Public License.
 C
 C This code is based on the file Ipopt/IPOPT/ipopt/ma28_call.F in the
 C Ipopt 2.2.1e distribution.

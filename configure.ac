@@ -1,6 +1,6 @@
 # Copyright (C) 2007, 2010 International Business Machines.
 # All Rights Reserved.
-# This file is distributed under the Common Public License.
+# This file is distributed under the Eclipse Public License.
 
 ## $Id$
 
@@ -18,7 +18,7 @@ AC_COPYRIGHT([
 Copyright 2007, 2010 International Business Machines and others.
 All Rights Reserved.
 This file is part of the open source package Coin which is distributed
-under the Common Public License.])
+under the Eclipse Public License.])
 
 AC_REVISION(0.9)
 

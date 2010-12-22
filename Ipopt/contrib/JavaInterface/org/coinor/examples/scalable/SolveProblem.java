@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2007 VRTech Industrial Technologies - www.vrtech.com.br.
  * All Rights Reserved.
- * This code is published under the Common Public License.
+ * This code is published under the Eclipse Public License.
  *
  * $Id$
  * Authors: Rafael de Pelegrini Soares
@@ -10,7 +10,7 @@
  *
  * Copyright (C) 2007 Tong Kewei, Beihang University, - www.buaa.edu.cn.
  * All Rights Reserved.
- * This code is published under the Common Public License.
+ * This code is published under the Eclipse Public License.
  *
  * $Id$
  *

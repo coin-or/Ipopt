@@ -1,6 +1,6 @@
 // Copyright (C) 2009 Paragon Decision Technology B.V.
 // All Rights Reserved.
-// This code is published under the Common Public License.
+// This code is published under the Eclipse Public License.
 //
 // Authors:  Marcel Roelofs	Paragon Decision Technology B.V. 2009-10-25
 
