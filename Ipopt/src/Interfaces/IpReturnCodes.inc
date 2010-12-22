@@ -1,6 +1,6 @@
 C Copyright (C) 2005, 2009 International Business Machines and others.
 C All Rights Reserved.
-C This code is published under the Common Public License.
+C This code is published under the Eclipse Public License.
 C
 C    $Id$
 C

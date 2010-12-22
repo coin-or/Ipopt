@@ -1,6 +1,6 @@
 # Copyright (C) 2004, 2006 International Business Machines and others.
 # All Rights Reserved.
-# This file is distributed under the Common Public License.
+# This file is distributed under the Eclipse Public License.
 
 ## $Id$
 

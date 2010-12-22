@@ -1,6 +1,6 @@
 // Copyright (C) 2008, 2010 International Business Machines and others.
 // All Rights Reserved.
-// This code is published under the Common Public License.
+// This code is published under the Eclipse Public License.
 //
 // $Id: IpTNLP.hpp 1235 2008-05-22 14:38:40Z andreasw $
 //

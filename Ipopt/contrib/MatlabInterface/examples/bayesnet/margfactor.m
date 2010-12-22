@@ -3,7 +3,7 @@
 % R. The return value is a factor defined on the set S.
 %
 % Copyright (C) 2007 Peter Carbonetto. All Rights Reserved.
-% This code is published under the Common Public License.
+% This code is published under the Eclipse Public License.
 %
 % Author: Peter Carbonetto
 %         Dept. of Computer Science
