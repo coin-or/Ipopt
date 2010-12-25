@@ -1,7 +1,8 @@
 The DLLs in this directory export the C interface of the Ipopt solver, as well as its C++ interface 
 (which can be accessed via the IpoptApplicationFactory method). By linking against the import library 
-you can use these DLLs from within any code compiled using the MSVC and/or Intel compilers for the 
-Windows platform.
+you can use these DLLs from within any code compiled using the MSVC 2005/2008 and/or Intel compilers for the 
+Windows platform. Note that the C++ interface to Ipopt provided by these DLLs will not work with MSVC 2010, 
+due to some incompatibility between the generated code for C++ sources by MSVC 2005/2008 and MSVC 2010.
 
 The DLLs include the MUMPS solver by default, and can dynamically load a separate DLL containing the 
 (non-free) HSL solvers if available. If you have access to the HSL solver sources, you have to compile 
@@ -22,3 +23,6 @@ against the optimized Intel MKL Blas and Lapack libraries rather than the netlib
 these optimized libraries on multi-core processors. On single core machines they do not appear to have much 
 effect or can even lead to slightly decreased performance.
 
+Author:  Marcel Roelofs (Marcel.Roelofs at aimms.com)
+	 Paragon Decision Technology 
+	 2009-10-25
