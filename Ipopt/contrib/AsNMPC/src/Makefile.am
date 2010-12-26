@@ -9,8 +9,7 @@ AUTOMAKE_OPTIONS = foreign
 
 includeasnmpcdir = $(includedir)/coin
 
-coinlibdir = $(libdir)/coin
-coinlib_LTLIBRARIES = libasnmpc.la
+lib_LTLIBRARIES = libasnmpc.la
 
 libasnmpc_la_SOURCES = \
 	AsAsBacksolver.hpp \

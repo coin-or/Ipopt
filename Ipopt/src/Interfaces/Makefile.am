@@ -22,8 +22,7 @@ includeipopt_HEADERS = \
 	IpTNLP.hpp \
 	IpTNLPReducer.hpp
 
-coinlibdir = $(libdir)/coin
-coinlib_LTLIBRARIES = libipopt.la
+lib_LTLIBRARIES = libipopt.la
 
 libipopt_la_SOURCES = \
 	IpAlgTypes.hpp \
