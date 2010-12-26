@@ -5903,7 +5903,7 @@ else
 fi
 full_prefix=`cd $full_prefix ; pwd`
 
-abs_lib_dir=$full_prefix/lib/coin
+abs_lib_dir=$full_prefix/lib
 
 abs_include_dir=$full_prefix/include
 
@@ -20768,7 +20768,7 @@ if test $enable_shared = yes; then
     *-linux-*)
       if test "$GXX" = "yes"; then
         RPATH_FLAGS=
-        for dir in $abs_lib_dir $abs_lib_dir/ThirdParty; do
+        for dir in $abs_lib_dir; do
           RPATH_FLAGS="$RPATH_FLAGS -Wl,--rpath -Wl,$dir"
         done
       fi ;;
@@ -20785,7 +20785,7 @@ if test $enable_shared = yes; then
         RPATH_FLAGS=nothing ;;
     *-*-solaris*)
         RPATH_FLAGS=
-        for dir in $abs_lib_dir $abs_lib_dir/ThirdParty; do
+        for dir in $abs_lib_dir; do
           RPATH_FLAGS="$RPATH_FLAGS -R$dir"
         done
   esac
@@ -21067,8 +21067,8 @@ fi
 
 
 
-echo "$as_me:$LINENO: checking whether project ASL is available" >&5
-echo $ECHO_N "checking whether project ASL is available... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking whether project ThirdParty/ASL is available" >&5
+echo $ECHO_N "checking whether project ThirdParty/ASL is available... $ECHO_C" >&6
 
 coin_has_asl=notGiven
 coin_have_project_dir=no
@@ -21166,8 +21166,8 @@ fi
 echo "$as_me:$LINENO: result: $coin_has_asl" >&5
 echo "${ECHO_T}$coin_has_asl" >&6
 
-echo "$as_me:$LINENO: checking whether project ASL needs to be configured" >&5
-echo $ECHO_N "checking whether project ASL needs to be configured... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking whether project ThirdParty/ASL needs to be configured" >&5
+echo $ECHO_N "checking whether project ThirdParty/ASL needs to be configured... $ECHO_C" >&6
 if test "$coin_have_project_dir" = yes ; then
 
   if test -r $srcdir/ThirdParty/ASL/configure; then
@@ -21188,8 +21188,8 @@ echo "${ECHO_T}no" >&6
 fi
 
 
-echo "$as_me:$LINENO: checking whether project Blas is available" >&5
-echo $ECHO_N "checking whether project Blas is available... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking whether project ThirdParty/Blas is available" >&5
+echo $ECHO_N "checking whether project ThirdParty/Blas is available... $ECHO_C" >&6
 
 coin_has_blas=notGiven
 coin_have_project_dir=no
@@ -21298,8 +21298,8 @@ fi
 echo "$as_me:$LINENO: result: $coin_has_blas" >&5
 echo "${ECHO_T}$coin_has_blas" >&6
 
-echo "$as_me:$LINENO: checking whether project Blas needs to be configured" >&5
-echo $ECHO_N "checking whether project Blas needs to be configured... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking whether project ThirdParty/Blas needs to be configured" >&5
+echo $ECHO_N "checking whether project ThirdParty/Blas needs to be configured... $ECHO_C" >&6
 if test "$coin_have_project_dir" = yes ; then
 
   if test -r $srcdir/ThirdParty/Blas/configure; then
@@ -21320,8 +21320,8 @@ echo "${ECHO_T}no" >&6
 fi
 
 
-echo "$as_me:$LINENO: checking whether project Lapack is available" >&5
-echo $ECHO_N "checking whether project Lapack is available... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking whether project ThirdParty/Lapack is available" >&5
+echo $ECHO_N "checking whether project ThirdParty/Lapack is available... $ECHO_C" >&6
 
 coin_has_lapack=notGiven
 coin_have_project_dir=no
@@ -21430,8 +21430,8 @@ fi
 echo "$as_me:$LINENO: result: $coin_has_lapack" >&5
 echo "${ECHO_T}$coin_has_lapack" >&6
 
-echo "$as_me:$LINENO: checking whether project Lapack needs to be configured" >&5
-echo $ECHO_N "checking whether project Lapack needs to be configured... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking whether project ThirdParty/Lapack needs to be configured" >&5
+echo $ECHO_N "checking whether project ThirdParty/Lapack needs to be configured... $ECHO_C" >&6
 if test "$coin_have_project_dir" = yes ; then
 
   if test -r $srcdir/ThirdParty/Lapack/configure; then
@@ -21452,8 +21452,8 @@ echo "${ECHO_T}no" >&6
 fi
 
 
-echo "$as_me:$LINENO: checking whether project Metis is available" >&5
-echo $ECHO_N "checking whether project Metis is available... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking whether project ThirdParty/Metis is available" >&5
+echo $ECHO_N "checking whether project ThirdParty/Metis is available... $ECHO_C" >&6
 
 coin_has_metis=notGiven
 coin_have_project_dir=no
@@ -21551,8 +21551,8 @@ fi
 echo "$as_me:$LINENO: result: $coin_has_metis" >&5
 echo "${ECHO_T}$coin_has_metis" >&6
 
-echo "$as_me:$LINENO: checking whether project Metis needs to be configured" >&5
-echo $ECHO_N "checking whether project Metis needs to be configured... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking whether project ThirdParty/Metis needs to be configured" >&5
+echo $ECHO_N "checking whether project ThirdParty/Metis needs to be configured... $ECHO_C" >&6
 if test "$coin_have_project_dir" = yes ; then
 
   if test -r $srcdir/ThirdParty/Metis/configure; then
@@ -21573,8 +21573,8 @@ echo "${ECHO_T}no" >&6
 fi
 
 
-echo "$as_me:$LINENO: checking whether project HSL is available" >&5
-echo $ECHO_N "checking whether project HSL is available... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking whether project ThirdParty/HSL is available" >&5
+echo $ECHO_N "checking whether project ThirdParty/HSL is available... $ECHO_C" >&6
 
 coin_has_hsl=notGiven
 coin_have_project_dir=no
@@ -21672,8 +21672,8 @@ fi
 echo "$as_me:$LINENO: result: $coin_has_hsl" >&5
 echo "${ECHO_T}$coin_has_hsl" >&6
 
-echo "$as_me:$LINENO: checking whether project HSL needs to be configured" >&5
-echo $ECHO_N "checking whether project HSL needs to be configured... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking whether project ThirdParty/HSL needs to be configured" >&5
+echo $ECHO_N "checking whether project ThirdParty/HSL needs to be configured... $ECHO_C" >&6
 if test "$coin_have_project_dir" = yes ; then
 
   if test -r $srcdir/ThirdParty/HSL/configure; then
@@ -21694,8 +21694,8 @@ echo "${ECHO_T}no" >&6
 fi
 
 
-echo "$as_me:$LINENO: checking whether project Mumps is available" >&5
-echo $ECHO_N "checking whether project Mumps is available... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking whether project ThirdParty/Mumps is available" >&5
+echo $ECHO_N "checking whether project ThirdParty/Mumps is available... $ECHO_C" >&6
 
 coin_has_mumps=notGiven
 coin_have_project_dir=no
@@ -21793,8 +21793,8 @@ fi
 echo "$as_me:$LINENO: result: $coin_has_mumps" >&5
 echo "${ECHO_T}$coin_has_mumps" >&6
 
-echo "$as_me:$LINENO: checking whether project Mumps needs to be configured" >&5
-echo $ECHO_N "checking whether project Mumps needs to be configured... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking whether project ThirdParty/Mumps needs to be configured" >&5
+echo $ECHO_N "checking whether project ThirdParty/Mumps needs to be configured... $ECHO_C" >&6
 if test "$coin_have_project_dir" = yes ; then
 
   if test -r $srcdir/ThirdParty/Mumps/configure; then

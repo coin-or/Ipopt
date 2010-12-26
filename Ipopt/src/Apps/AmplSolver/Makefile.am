@@ -8,8 +8,7 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-coinlibdir = ${libdir}/coin
-coinlib_LTLIBRARIES = libipoptamplinterface.la
+lib_LTLIBRARIES = libipoptamplinterface.la
 bin_PROGRAMS = ipopt
 
 libipoptamplinterface_la_SOURCES = \
