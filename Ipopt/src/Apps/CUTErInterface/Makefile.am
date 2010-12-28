@@ -1,4 +1,4 @@
-# Copyright (C) 2003, 2009 International Business Machines and others.
+# Copyright (C) 2003, 2010 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
 
@@ -8,9 +8,7 @@ AUTOMAKE_OPTIONS = foreign
 
 EXTRA_DIST = \
 	CUTErInterface.f \
-	ipo.pro \
-	ipoma-dummy.f \
-	sdipo.pro
+	ipoma-dummy.f
 
 noinst_LTLIBRARIES = libdummy.la
 
@@ -32,7 +30,8 @@ ipo:
 	if test -r $$CUTER/build/prototypes/gen.pro ; then \
 	  sed -e 's/gen/ipo/g' $$CUTER/build/prototypes/gen.pro \
 	    -e 's/"ipo.o"/""/' \
-	    -e 's!SYSLIBS ""!SYSLIBS "\`cat $${MYCUTER}/double/lib/ipo.liblist\`"!'> ipo.pro; \
+	    -e 's!SYSLIBS ""!SYSLIBS "\`cat $${MYCUTER}/double/lib/ipo.liblist\`"!'\
+            -e "s!set arguments = ''!set arguments = \"--blas -lm --lapack -lm\"!" > ipo.pro; \
 	  sed -f $$MYCUTER/double/config/script.sed ipo.pro > $@; \
 	  chmod a+x $@; \
 	else \
@@ -56,7 +55,7 @@ cuter:	ipoma.$(OBJEXT) ipo sdipo
 	if test -z "$$MYCUTER" -o -z "$$CUTER"; then \
 	  echo CUTEr environment variables not set - cannot install ipoma.f; \
 	else \
-	  echo "-L$(libdir) -lipopt $(IPOPTLIB_LIBS) $(CXXLIBS) $(RPATH_FLAGS)" >$$MYCUTER/double/lib/ipo.liblist ;\
+	  echo "-L$(libdir) -lipopt $(IPOPTLIB_LIBS_INSTALLED) $(CXXLIBS) $(RPATH_FLAGS)" >$$MYCUTER/double/lib/ipo.liblist ;\
 	  if test -r $$CUTER/build/prototypes/gen.pro ; then \
 	    cp ipoma.o $(MYCUTER)/double/bin/ipoma.$(OBJEXT); \
 	    cp ipo $(MYCUTER)/bin/ipo ;\

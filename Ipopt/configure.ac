@@ -418,6 +418,7 @@ if test "$use_pardiso" != "no"; then
   LIBS="$SAVE_LIBS"
   IPOPTLIB_LIBS="$PARDISO_LIB $IPOPTLIB_LIBS"
   IPOPTLIB_PCLIBS="$PARDISO_LIB $IPOPTLIB_PCLIBS"
+  IPOPTLIB_LIBS_INSTALLED="$PARDISO_LIB $IPOPTLIB_LIBS_INSTALLED"
 fi
 AC_LANG_POP([Fortran 77])
 
@@ -446,6 +447,7 @@ if test "$use_wsmp" != "no"; then
   LIBS="$SAVE_LIBS"
   IPOPTLIB_LIBS="$use_wsmp $IPOPTLIB_LIBS"
   IPOPTLIB_PCLIBS="$use_wsmp $IPOPTLIB_PCLIBS"
+  IPOPTLIB_LIBS_INSTALLED="$use_wsmp $IPOPTLIB_LIBS_INSTALLED"
 fi
 
 # Check if at least one linear solver was found
