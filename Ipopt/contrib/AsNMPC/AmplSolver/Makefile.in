@@ -13,8 +13,6 @@ libdir      = @libdir@
 bindir      = @bindir@
 CYGPATH_W   = @CYGPATH_W@
 SRCDIR      = @srcdir@
-COIN_HAS_PKGCONFIG = @COIN_HAS_PKGCONFIG_TRUE@TRUE
-COIN_CXX_IS_CL = @COIN_CXX_IS_CL_TRUE@TRUE
 ipoptsrcdir  = $(SRCDIR)/../../../src
 asnmpcsrcdir = $(SRCDIR)/../src
 
@@ -24,25 +22,13 @@ LDFLAGS     = $(CXXFLAGS) @RPATH_FLAGS@
 
 # Include directories (we use the CYGPATH_W variables to allow compilation with Windows compilers)
 #   we also need some Ipopt headers that are not installed, so we add $(ipoptsrcdir)/Algorithm and $(ipoptsrcdir)/LinAlg
-ifeq ($(COIN_HAS_PKGCONFIG), TRUE)
-  INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipoptamplinterface`
-else
-  INCL = -I`$(CYGPATH_W) @abs_include_dir@/coin` @IPOPTLIB_CFLAGS_INSTALLED@ @ASL_CFLAGS_INSTALLED@
-endif
-INCL += -I`$(CYGPATH_W) $(ipoptsrcdir)/Algorithm` -I`$(CYGPATH_W) $(ipoptsrcdir)/LinAlg` 
-INCL += -I`$(CYGPATH_W) $(asnmpcsrcdir)`
-INCL += $(ADDINCFLAGS)
+@COIN_HAS_PKGCONFIG_TRUE@INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipoptamplinterface` -I`$(CYGPATH_W) $(ipoptsrcdir)/Algorithm` -I`$(CYGPATH_W) $(ipoptsrcdir)/LinAlg` -I`$(CYGPATH_W) $(asnmpcsrcdir)` $(ADDINCFLAGS)
+@COIN_HAS_PKGCONFIG_FALSE@INCL = -I`$(CYGPATH_W) @abs_include_dir@/coin` @IPOPTLIB_CFLAGS_INSTALLED@ @ASL_CFLAGS_INSTALLED@ -I`$(CYGPATH_W) $(ipoptsrcdir)/Algorithm` -I`$(CYGPATH_W) $(ipoptsrcdir)/LinAlg` -I`$(CYGPATH_W) $(asnmpcsrcdir)` $(ADDINCFLAGS)
 
 # Linker flags
-ifeq ($(COIN_HAS_PKGCONFIG), TRUE)
-  LIBS = -lasnmpc `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipoptamplinterface`
-else
-  ifeq ($(COIN_CXX_IS_CL), TRUE)
-    LIBS = /link /libpath:`$(CYGPATH_W) @abs_lib_dir@` libasnmpc.lib libipoptamplinterface.lib libipopt.lib @IPOPTLIB_LIBS_INSTALLED@ @ASL_LIBS_INSTALLED@
-  else
-    LIBS = -L@abs_lib_dir@ -lasnmpc -lipoptamplinterface -lipopt @IPOPTLIB_LIBS_INSTALLED@ @ASL_LIBS_INSTALLED@
-  endif
-endif
+@COIN_HAS_PKGCONFIG_TRUE@LIBS = -lasnmpc `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipoptamplinterface`
+@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_TRUE@LIBS = /link /libpath:`$(CYGPATH_W) @abs_lib_dir@` libasnmpc.lib libipoptamplinterface.lib libipopt.lib @IPOPTLIB_LIBS_INSTALLED@ @ASL_LIBS_INSTALLED@
+@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_FALSE@LIBS = -L@abs_lib_dir@ -lasnmpc -lipoptamplinterface -lipopt @IPOPTLIB_LIBS_INSTALLED@ @ASL_LIBS_INSTALLED@
 
 #LIBTOOL = @LIBTOOL@
 #CXXLD = $(CXX)

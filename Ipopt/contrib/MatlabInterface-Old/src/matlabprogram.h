@@ -16,7 +16,7 @@
 #include "sparsematrix.h"
 #include "arrayofmatrices.h"
 #include "multipliers.h"
-#include "coin/IpTNLP.hpp"
+#include "IpTNLP.hpp"
 #include "mex.h"
 
 using Ipopt::TNLP;
