@@ -471,7 +471,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ADDLIBS PCADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE have_svnversion IPOPT_SVN_REV EGREP LN_S COIN_CC_IS_CL_TRUE COIN_CC_IS_CL_FALSE CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX COIN_CXX_IS_CL_TRUE COIN_CXX_IS_CL_FALSE MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 FFLAGS ac_ct_F77 MPIF77 FLIBS FC FCFLAGS ac_ct_FC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE PKG_CONFIG ac_pt_PKG_CONFIG COIN_HAS_PKGCONFIG_TRUE COIN_HAS_PKGCONFIG_FALSE COIN_PKG_CONFIG_PATH COIN_PKG_CONFIG_PATH_UNINSTALLED BLAS_LIBS BLAS_CFLAGS BLAS_DATA BLAS_DEPENDENCIES BLAS_LIBS_INSTALLED BLAS_CFLAGS_INSTALLED BLAS_DATA_INSTALLED IPOPTLIB_CFLAGS IPOPTLIB_LIBS IPOPTLIB_PCLIBS IPOPTLIB_PCREQUIRES IPOPTLIB_DEPENDENCIES IPOPTLIB_CFLAGS_INSTALLED IPOPTLIB_LIBS_INSTALLED COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE LAPACK_LIBS LAPACK_CFLAGS LAPACK_DATA LAPACK_DEPENDENCIES LAPACK_LIBS_INSTALLED LAPACK_CFLAGS_INSTALLED LAPACK_DATA_INSTALLED COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE ASL_LIBS ASL_CFLAGS ASL_DATA ASL_DEPENDENCIES ASL_LIBS_INSTALLED ASL_CFLAGS_INSTALLED ASL_DATA_INSTALLED IPOPTAMPLINTERFACELIB_CFLAGS IPOPTAMPLINTERFACELIB_LIBS IPOPTAMPLINTERFACELIB_PCLIBS IPOPTAMPLINTERFACELIB_PCREQUIRES IPOPTAMPLINTERFACELIB_DEPENDENCIES IPOPTAMPLINTERFACELIB_CFLAGS_INSTALLED IPOPTAMPLINTERFACELIB_LIBS_INSTALLED COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE HSL_LIBS HSL_CFLAGS HSL_DATA HSL_DEPENDENCIES HSL_LIBS_INSTALLED HSL_CFLAGS_INSTALLED HSL_DATA_INSTALLED COIN_HAS_HSL_TRUE COIN_HAS_HSL_FALSE MUMPS_LIBS MUMPS_CFLAGS MUMPS_DATA MUMPS_DEPENDENCIES MUMPS_LIBS_INSTALLED MUMPS_CFLAGS_INSTALLED MUMPS_DATA_INSTALLED COIN_HAS_MUMPS_TRUE COIN_HAS_MUMPS_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR JAVA_HOME JIPOPTDLL SHARED_FLAGS MATLAB_HOME MEXSUFFIX ASTYLE ASTYLEFLAGS IPALLLIBS HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MA28_TRUE HAVE_MA28_FALSE HAVE_MA77_TRUE HAVE_MA77_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILD_LINEARSOLVERLOADER_TRUE BUILD_LINEARSOLVERLOADER_FALSE BUILD_HSLLOADER_TRUE BUILD_HSLLOADER_FALSE BUILD_PARDISOLOADER_TRUE BUILD_PARDISOLOADER_FALSE BUILD_INEXACT_TRUE BUILD_INEXACT_FALSE LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE have_svnversion IPOPT_SVN_REV EGREP LN_S COIN_CC_IS_CL_TRUE COIN_CC_IS_CL_FALSE CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX COIN_CXX_IS_CL_TRUE COIN_CXX_IS_CL_FALSE MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 FFLAGS ac_ct_F77 MPIF77 FLIBS FC FCFLAGS ac_ct_FC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE PKG_CONFIG ac_pt_PKG_CONFIG COIN_HAS_PKGCONFIG_TRUE COIN_HAS_PKGCONFIG_FALSE COIN_PKG_CONFIG_PATH COIN_PKG_CONFIG_PATH_UNINSTALLED BLAS_LIBS BLAS_CFLAGS BLAS_DATA BLAS_DEPENDENCIES BLAS_LIBS_INSTALLED BLAS_CFLAGS_INSTALLED BLAS_DATA_INSTALLED IPOPTLIB_CFLAGS IPOPTLIB_LIBS IPOPTLIB_PCLIBS IPOPTLIB_PCREQUIRES IPOPTLIB_DEPENDENCIES IPOPTLIB_CFLAGS_INSTALLED IPOPTLIB_LIBS_INSTALLED COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE LAPACK_LIBS LAPACK_CFLAGS LAPACK_DATA LAPACK_DEPENDENCIES LAPACK_LIBS_INSTALLED LAPACK_CFLAGS_INSTALLED LAPACK_DATA_INSTALLED COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE ASL_LIBS ASL_CFLAGS ASL_DATA ASL_DEPENDENCIES ASL_LIBS_INSTALLED ASL_CFLAGS_INSTALLED ASL_DATA_INSTALLED IPOPTAMPLINTERFACELIB_CFLAGS IPOPTAMPLINTERFACELIB_LIBS IPOPTAMPLINTERFACELIB_PCLIBS IPOPTAMPLINTERFACELIB_PCREQUIRES IPOPTAMPLINTERFACELIB_DEPENDENCIES IPOPTAMPLINTERFACELIB_CFLAGS_INSTALLED IPOPTAMPLINTERFACELIB_LIBS_INSTALLED COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE HSL_LIBS HSL_CFLAGS HSL_DATA HSL_DEPENDENCIES HSL_LIBS_INSTALLED HSL_CFLAGS_INSTALLED HSL_DATA_INSTALLED COIN_HAS_HSL_TRUE COIN_HAS_HSL_FALSE MUMPS_LIBS MUMPS_CFLAGS MUMPS_DATA MUMPS_DEPENDENCIES MUMPS_LIBS_INSTALLED MUMPS_CFLAGS_INSTALLED MUMPS_DATA_INSTALLED COIN_HAS_MUMPS_TRUE COIN_HAS_MUMPS_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR JAVA_HOME JIPOPTDLL SHARED_FLAGS MATLAB_HOME MEXSUFFIX ASTYLE ASTYLEFLAGS IPALLLIBS HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MA28_TRUE HAVE_MA28_FALSE HAVE_MA77_TRUE HAVE_MA77_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILD_LINEARSOLVERLOADER_TRUE BUILD_LINEARSOLVERLOADER_FALSE BUILD_HSLLOADER_TRUE BUILD_HSLLOADER_FALSE BUILD_PARDISOLOADER_TRUE BUILD_PARDISOLOADER_FALSE BUILD_INEXACT_TRUE BUILD_INEXACT_FALSE LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1741,24 +1741,10 @@ build_os=`echo $ac_cv_build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 # the source root directory contains definition of where to find those
 # externals.  The following macro ensures that those externals are
 # retrieved by svn if they are not there yet.
-# Initialize the ADDLIBS variable
-ADDLIBS="-lm $LIBS"
-
-
-# Initialize the PCADDLIBS variable.
-# This variable is used to setup library flags for the "Libs:" section in a .pc file.
-# In certain cases, it may contain more flags than the ADDLIBS variable.
-PCADDLIBS=""
-
 
 # As backup, we make sure we don't loose an FLIBS if it has been set
 # by the user
 save_FLIBS="$FLIBS"
-
-# Initialize the FADDLIBS variable (which is to be used with a fortran
-# compiler and will not include FLIBS)
-FADDLIBS="$LIBS"
-
 
 # A useful makefile conditional that is always false
 
@@ -3280,10 +3266,9 @@ echo "$as_me: Will use MPI C compiler $MPICC" >&6;}
   CC="$MPICC"
 fi
 
-# Correct ADDLIBS initialization if we are using the MS compiler
+# Correct the LD variable if we are using the MS or Intel-windows compiler
 case "$CC" in
   cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
-    ADDLIBS=
     case $build in
   *-mingw*)
     if test "${LD+set}" = set; then :; else
@@ -4222,8 +4207,9 @@ echo "$as_me: Will use MPI C++ compiler $MPICXX" >&6;}
   CXX="$MPICXX"
 fi
 
+# correct the LD variable in a mingw build with MS or intel compiler
 case "$CXX" in
-  cl* | */cl* | CL* | */CL* )
+  cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
     case $build in
   *-mingw*)
     if test "${LD+set}" = set; then :; else
@@ -4504,7 +4490,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:4507:" \
+echo "$as_me:4493:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -4992,6 +4978,7 @@ echo "$as_me: Will use MPI Fortran compiler $MPIF77" >&6;}
   F77="$MPIF77"
 fi
 
+# correct the LD variable if we use the intel fortran compiler in windows
 case "$F77" in
   ifort* | */ifort* | IFORT* | */IFORT*)
     case $build in
@@ -5072,7 +5059,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_verb"
-(eval echo $as_me:5075: \"$ac_link\") >&5
+(eval echo $as_me:5062: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -5150,7 +5137,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_cv_prog_f77_v"
-(eval echo $as_me:5153: \"$ac_link\") >&5
+(eval echo $as_me:5140: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -6002,7 +5989,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:6005:" \
+echo "$as_me:5992:" \
      "checking for Fortran compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -7862,7 +7849,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 7865 "configure"' > conftest.$ac_ext
+  echo '#line 7852 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -9842,11 +9829,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9845: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9832: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:9849: \$? = $ac_status" >&5
+   echo "$as_me:9836: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -10110,11 +10097,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:10113: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:10100: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:10117: \$? = $ac_status" >&5
+   echo "$as_me:10104: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -10214,11 +10201,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:10217: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:10204: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:10221: \$? = $ac_status" >&5
+   echo "$as_me:10208: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -12631,7 +12618,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12634 "configure"
+#line 12621 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12731,7 +12718,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12734 "configure"
+#line 12721 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -15091,11 +15078,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15094: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15081: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15098: \$? = $ac_status" >&5
+   echo "$as_me:15085: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15195,11 +15182,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15198: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15185: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15202: \$? = $ac_status" >&5
+   echo "$as_me:15189: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16765,11 +16752,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16768: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16755: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16772: \$? = $ac_status" >&5
+   echo "$as_me:16759: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16869,11 +16856,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16872: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16859: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16876: \$? = $ac_status" >&5
+   echo "$as_me:16863: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -19076,11 +19063,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:19079: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:19066: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:19083: \$? = $ac_status" >&5
+   echo "$as_me:19070: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -19344,11 +19331,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:19347: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:19334: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:19351: \$? = $ac_status" >&5
+   echo "$as_me:19338: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -19448,11 +19435,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:19451: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:19438: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:19455: \$? = $ac_status" >&5
+   echo "$as_me:19442: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -22587,6 +22574,9 @@ if test x$coin_projectdir = xyes ; then
       if test -d ../$i ; then
         COIN_PKG_CONFIG_PATH_UNINSTALLED="`cd ../$i; pwd`:${COIN_PKG_CONFIG_PATH_UNINSTALLED}"
       fi
+      if test -d ../$i/pkgconfig ; then
+        COIN_PKG_CONFIG_PATH_UNINSTALLED="`cd ../$i/pkgconfig; pwd`:${COIN_PKG_CONFIG_PATH_UNINSTALLED}"
+      fi
     done
   fi
 
@@ -22594,6 +22584,9 @@ if test x$coin_projectdir = xyes ; then
     for i in `cat ../../coin_subdirs.txt` ; do
       if test -d ../../$i ; then
         COIN_PKG_CONFIG_PATH_UNINSTALLED="`cd ../../$i; pwd`:${COIN_PKG_CONFIG_PATH_UNINSTALLED}"
+      fi
+      if test -d ../../$i/pkgconfig ; then
+        COIN_PKG_CONFIG_PATH_UNINSTALLED="`cd ../../$i/pkgconfig; pwd`:${COIN_PKG_CONFIG_PATH_UNINSTALLED}"
       fi
     done
   fi
@@ -25109,7 +25102,7 @@ if test $coin_has_blas = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "coinblas"; then
-    BLAS_VERSIONS="`$PKG_CONFIG --modversion "coinblas" 2>/dev/null`"
+    BLAS_VERSIONS="`$PKG_CONFIG --modversion "coinblas" 2>/dev/null | tr '\n' ' '`"
      cflags=`$PKG_CONFIG --cflags "coinblas" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -28045,7 +28038,7 @@ if test $coin_has_lapack = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "coinlapack"; then
-    LAPACK_VERSIONS="`$PKG_CONFIG --modversion "coinlapack" 2>/dev/null`"
+    LAPACK_VERSIONS="`$PKG_CONFIG --modversion "coinlapack" 2>/dev/null | tr '\n' ' '`"
      cflags=`$PKG_CONFIG --cflags "coinlapack" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -28541,7 +28534,7 @@ if test $coin_has_asl = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "coinasl"; then
-    ASL_VERSIONS="`$PKG_CONFIG --modversion "coinasl" 2>/dev/null`"
+    ASL_VERSIONS="`$PKG_CONFIG --modversion "coinasl" 2>/dev/null | tr '\n' ' '`"
      cflags=`$PKG_CONFIG --cflags "coinasl" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -28981,7 +28974,7 @@ if test $coin_has_hsl = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "coinhsl"; then
-    HSL_VERSIONS="`$PKG_CONFIG --modversion "coinhsl" 2>/dev/null`"
+    HSL_VERSIONS="`$PKG_CONFIG --modversion "coinhsl" 2>/dev/null | tr '\n' ' '`"
      cflags=`$PKG_CONFIG --cflags "coinhsl" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -29421,7 +29414,7 @@ if test $coin_has_mumps = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "coinmumps"; then
-    MUMPS_VERSIONS="`$PKG_CONFIG --modversion "coinmumps" 2>/dev/null`"
+    MUMPS_VERSIONS="`$PKG_CONFIG --modversion "coinmumps" 2>/dev/null | tr '\n' ' '`"
      cflags=`$PKG_CONFIG --cflags "coinmumps" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -36098,7 +36091,7 @@ fi
 ##          Create Makefiles and other stuff                          ##
 ########################################################################
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Interfaces/ipopt_addlibs_f.txt src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Algorithm/Inexact/Makefile src/contrib/CGPenalty/Makefile src/contrib/LinearSolverLoader/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile src/Apps/CUTErInterface/Makefile examples/hs071_f/Makefile examples/hs071_f/hs071_f.f examples/Cpp_example/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile tutorial/CodingExercise/C/1-skeleton/Makefile tutorial/CodingExercise/C/2-mistake/Makefile tutorial/CodingExercise/C/3-solution/Makefile tutorial/CodingExercise/Cpp/1-skeleton/Makefile tutorial/CodingExercise/Cpp/2-mistake/Makefile tutorial/CodingExercise/Cpp/3-solution/Makefile tutorial/CodingExercise/Matlab/1-skeleton/startup.m tutorial/CodingExercise/Matlab/2-mistake/startup.m tutorial/CodingExercise/Matlab/3-solution/startup.m tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f tutorial/CodingExercise/Fortran/1-skeleton/Makefile tutorial/CodingExercise/Fortran/2-mistake/Makefile tutorial/CodingExercise/Fortran/3-solution/Makefile test/Makefile test/run_unitTests contrib/MatlabInterface/src/Makefile contrib/MatlabInterface/examples/startup.m contrib/MatlabInterface-Old/src/Makefile contrib/MatlabInterface-Old/examples/startup.m contrib/JavaInterface/Makefile contrib/AsNMPC/Makefile contrib/AsNMPC/AmplSolver/Makefile contrib/AsNMPC/examples/parametric_cpp/Makefile contrib/AsNMPC/examples/redhess_cpp/Makefile contrib/AsNMPC/src/Makefile contrib/RInterface/src/Makevars ipopt.pc ipopt-uninstalled.pc"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Algorithm/Inexact/Makefile src/contrib/CGPenalty/Makefile src/contrib/LinearSolverLoader/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile src/Apps/CUTErInterface/Makefile examples/hs071_f/Makefile examples/hs071_f/hs071_f.f examples/Cpp_example/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile tutorial/CodingExercise/C/1-skeleton/Makefile tutorial/CodingExercise/C/2-mistake/Makefile tutorial/CodingExercise/C/3-solution/Makefile tutorial/CodingExercise/Cpp/1-skeleton/Makefile tutorial/CodingExercise/Cpp/2-mistake/Makefile tutorial/CodingExercise/Cpp/3-solution/Makefile tutorial/CodingExercise/Matlab/1-skeleton/startup.m tutorial/CodingExercise/Matlab/2-mistake/startup.m tutorial/CodingExercise/Matlab/3-solution/startup.m tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f tutorial/CodingExercise/Fortran/1-skeleton/Makefile tutorial/CodingExercise/Fortran/2-mistake/Makefile tutorial/CodingExercise/Fortran/3-solution/Makefile test/Makefile test/run_unitTests contrib/MatlabInterface/src/Makefile contrib/MatlabInterface/examples/startup.m contrib/MatlabInterface-Old/src/Makefile contrib/MatlabInterface-Old/examples/startup.m contrib/JavaInterface/Makefile contrib/AsNMPC/Makefile contrib/AsNMPC/AmplSolver/Makefile contrib/AsNMPC/examples/parametric_cpp/Makefile contrib/AsNMPC/examples/redhess_cpp/Makefile contrib/AsNMPC/src/Makefile contrib/RInterface/src/Makevars ipopt.pc ipopt-uninstalled.pc"
 
 
 if test $coin_has_asl = yes ; then
@@ -36129,12 +36122,6 @@ echo "${ECHO_T}$coin_link_input_cmd" >&6
 
 
 if test x$coin_skip_ac_output != xyes; then
-
-  FADDLIBS="$ADDLIBS"
-  if test x"$coin_need_flibs" = xyes; then
-    ADDLIBS="$ADDLIBS $FLIBS"
-  fi
-  PCADDLIBS="$PCADDLIBS $ADDLIBS"
 
   # library extension
 
@@ -36965,7 +36952,6 @@ do
   "src/LinAlg/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/LinAlg/Makefile" ;;
   "src/LinAlg/TMatrices/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/LinAlg/TMatrices/Makefile" ;;
   "src/Interfaces/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Interfaces/Makefile" ;;
-  "src/Interfaces/ipopt_addlibs_f.txt" ) CONFIG_FILES="$CONFIG_FILES src/Interfaces/ipopt_addlibs_f.txt" ;;
   "src/Algorithm/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Algorithm/Makefile" ;;
   "src/Algorithm/LinearSolvers/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Algorithm/LinearSolvers/Makefile" ;;
   "src/Algorithm/Inexact/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Algorithm/Inexact/Makefile" ;;
@@ -37108,9 +37094,6 @@ s,@build@,$build,;t t
 s,@build_cpu@,$build_cpu,;t t
 s,@build_vendor@,$build_vendor,;t t
 s,@build_os@,$build_os,;t t
-s,@ADDLIBS@,$ADDLIBS,;t t
-s,@PCADDLIBS@,$PCADDLIBS,;t t
-s,@FADDLIBS@,$FADDLIBS,;t t
 s,@ALWAYS_FALSE_TRUE@,$ALWAYS_FALSE_TRUE,;t t
 s,@ALWAYS_FALSE_FALSE@,$ALWAYS_FALSE_FALSE,;t t
 s,@have_svnversion@,$have_svnversion,;t t

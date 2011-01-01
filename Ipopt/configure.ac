@@ -774,7 +774,6 @@ AC_CONFIG_FILES([Makefile
 		 src/LinAlg/Makefile
 		 src/LinAlg/TMatrices/Makefile 
 		 src/Interfaces/Makefile
-		 src/Interfaces/ipopt_addlibs_f.txt
 		 src/Algorithm/Makefile
 		 src/Algorithm/LinearSolvers/Makefile
 		 src/Algorithm/Inexact/Makefile

@@ -21,7 +21,6 @@
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 
-
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 VPATH = @srcdir@
@@ -44,11 +43,9 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@COIN_HAS_HSL_TRUE@am__append_1 = $(HSL_CFLAGS)
-@COIN_HAS_HSL_TRUE@am__append_2 = $(HSL_CFLAGS)
 subdir = src/Interfaces
 DIST_COMMON = $(includeipopt_HEADERS) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in $(srcdir)/ipopt_addlibs_f.txt.in
+	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 	$(top_srcdir)/configure.ac
@@ -56,15 +53,14 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/inc/config_ipopt.h
-CONFIG_CLEAN_FILES = ipopt_addlibs_f.txt
+CONFIG_CLEAN_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
     $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
     *) f=$$p;; \
   esac;
 am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
-am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(addlibsdir)" \
-	"$(DESTDIR)$(includeipoptdir)"
+am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includeipoptdir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
@@ -92,8 +88,6 @@ CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(libipopt_la_SOURCES)
 DIST_SOURCES = $(libipopt_la_SOURCES)
-addlibsDATA_INSTALL = $(INSTALL_DATA)
-DATA = $(addlibs_DATA)
 includeipoptHEADERS_INSTALL = $(INSTALL_HEADER)
 HEADERS = $(includeipopt_HEADERS)
 ETAGS = etags
@@ -101,7 +95,6 @@ CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ABSBUILDDIR = @ABSBUILDDIR@
 ACLOCAL = @ACLOCAL@
-ADDLIBS = @ADDLIBS@
 ADD_CFLAGS = @ADD_CFLAGS@
 ADD_CXXFLAGS = @ADD_CXXFLAGS@
 ADD_FFLAGS = @ADD_FFLAGS@
@@ -150,7 +143,7 @@ BUILD_PARDISOLOADER_TRUE = @BUILD_PARDISOLOADER_TRUE@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CDEFS = @CDEFS@
-CFLAGS = @CFLAGS@ -I`$(CYGPATH_W) $(srcdir)/../Common` $(am__append_2)
+CFLAGS = @CFLAGS@ -I`$(CYGPATH_W) $(srcdir)/../Common` $(HSL_CFLAGS)
 COIN_CC_IS_CL_FALSE = @COIN_CC_IS_CL_FALSE@
 COIN_CC_IS_CL_TRUE = @COIN_CC_IS_CL_TRUE@
 COIN_CXX_IS_CL_FALSE = @COIN_CXX_IS_CL_FALSE@
@@ -182,7 +175,7 @@ CXXFLAGS = @CXXFLAGS@ -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	$(srcdir)/../LinAlg/TMatrices` -I`$(CYGPATH_W) \
 	$(srcdir)/../Algorithm` -I`$(CYGPATH_W) \
 	$(srcdir)/../Algorithm/Inexact` -I`$(CYGPATH_W) \
-	$(srcdir)/../contrib/CGPenalty` $(am__append_1)
+	$(srcdir)/../contrib/CGPenalty` $(HSL_CFLAGS)
 CXXLIBS = @CXXLIBS@
 CYGPATH_W = @CYGPATH_W@
 DBG_CFLAGS = @DBG_CFLAGS@
@@ -197,7 +190,6 @@ ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 F77 = @F77@
-FADDLIBS = @FADDLIBS@
 FC = @FC@
 FCFLAGS = @FCFLAGS@
 FFLAGS = @FFLAGS@
@@ -290,7 +282,6 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
-PCADDLIBS = @PCADDLIBS@
 PKG_CONFIG = @PKG_CONFIG@
 RANLIB = @RANLIB@
 RPATH_FLAGS = @RPATH_FLAGS@
@@ -390,8 +381,6 @@ libipopt_la_SOURCES = \
 libipopt_la_LIBADD = $(IPALLLIBS)
 libipopt_la_DEPENDENCIES = $(IPALLLIBS)
 libipopt_la_LDFLAGS = $(LT_LDFLAGS)
-addlibsdir = $(datadir)/coin/doc/Ipopt
-addlibs_DATA = ipopt_addlibs_f.txt
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -446,8 +435,6 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
-ipopt_addlibs_f.txt: $(top_builddir)/config.status $(srcdir)/ipopt_addlibs_f.txt.in
-	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 install-libLTLIBRARIES: $(lib_LTLIBRARIES)
 	@$(NORMAL_INSTALL)
 	test -z "$(libdir)" || $(mkdir_p) "$(DESTDIR)$(libdir)"
@@ -544,23 +531,6 @@ clean-libtool:
 distclean-libtool:
 	-rm -f libtool
 uninstall-info-am:
-install-addlibsDATA: $(addlibs_DATA)
-	@$(NORMAL_INSTALL)
-	test -z "$(addlibsdir)" || $(mkdir_p) "$(DESTDIR)$(addlibsdir)"
-	@list='$(addlibs_DATA)'; for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  f=$(am__strip_dir) \
-	  echo " $(addlibsDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(addlibsdir)/$$f'"; \
-	  $(addlibsDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(addlibsdir)/$$f"; \
-	done
-
-uninstall-addlibsDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(addlibs_DATA)'; for p in $$list; do \
-	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(addlibsdir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(addlibsdir)/$$f"; \
-	done
 install-includeipoptHEADERS: $(includeipopt_HEADERS)
 	@$(NORMAL_INSTALL)
 	test -z "$(includeipoptdir)" || $(mkdir_p) "$(DESTDIR)$(includeipoptdir)"
@@ -656,9 +626,9 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LTLIBRARIES) $(DATA) $(HEADERS)
+all-am: Makefile $(LTLIBRARIES) $(HEADERS)
 installdirs:
-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(addlibsdir)" "$(DESTDIR)$(includeipoptdir)"; do \
+	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includeipoptdir)"; do \
 	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
 	done
 install: install-am
@@ -708,7 +678,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-addlibsDATA install-includeipoptHEADERS
+install-data-am: install-includeipoptHEADERS
 
 install-exec-am: install-libLTLIBRARIES
 
@@ -736,21 +706,20 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-addlibsDATA uninstall-includeipoptHEADERS \
-	uninstall-info-am uninstall-libLTLIBRARIES
+uninstall-am: uninstall-includeipoptHEADERS uninstall-info-am \
+	uninstall-libLTLIBRARIES
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
 	clean-libLTLIBRARIES clean-libtool ctags distclean \
 	distclean-compile distclean-generic distclean-libtool \
 	distclean-tags distdir dvi dvi-am html html-am info info-am \
-	install install-addlibsDATA install-am install-data \
-	install-data-am install-exec install-exec-am \
-	install-includeipoptHEADERS install-info install-info-am \
-	install-libLTLIBRARIES install-man install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags uninstall uninstall-addlibsDATA uninstall-am \
+	install install-am install-data install-data-am install-exec \
+	install-exec-am install-includeipoptHEADERS install-info \
+	install-info-am install-libLTLIBRARIES install-man \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
+	pdf pdf-am ps ps-am tags uninstall uninstall-am \
 	uninstall-includeipoptHEADERS uninstall-info-am \
 	uninstall-libLTLIBRARIES
 

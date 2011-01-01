@@ -174,7 +174,6 @@ distuninstallcheck_listfiles = find . -type f -print
 distcleancheck_listfiles = find . -type f -print
 ABSBUILDDIR = @ABSBUILDDIR@
 ACLOCAL = @ACLOCAL@
-ADDLIBS = @ADDLIBS@
 ADD_CFLAGS = @ADD_CFLAGS@
 ADD_CXXFLAGS = @ADD_CXXFLAGS@
 ADD_FFLAGS = @ADD_FFLAGS@
@@ -264,7 +263,6 @@ ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 F77 = @F77@
-FADDLIBS = @FADDLIBS@
 FC = @FC@
 FCFLAGS = @FCFLAGS@
 FFLAGS = @FFLAGS@
@@ -357,7 +355,6 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
-PCADDLIBS = @PCADDLIBS@
 PKG_CONFIG = @PKG_CONFIG@
 RANLIB = @RANLIB@
 RPATH_FLAGS = @RPATH_FLAGS@
@@ -791,7 +788,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/. $(distdir)/BuildTools $(distdir)/Windows/VisualStudio_dotNET $(distdir)/Windows/VisualStudio_dotNET/CppExample $(distdir)/Windows/VisualStudio_dotNET/FortranLinAlg $(distdir)/Windows/VisualStudio_dotNET/Ipopt $(distdir)/Windows/VisualStudio_dotNET/ScalableProblems $(distdir)/Windows/VisualStudio_dotNET/hs071_c $(distdir)/Windows/VisualStudio_dotNET/hs071_cpp $(distdir)/Windows/VisualStudio_dotNET/hs071_f $(distdir)/contrib/AsNMPC $(distdir)/contrib/AsNMPC/AmplSolver $(distdir)/contrib/AsNMPC/examples/parametric_cpp $(distdir)/contrib/AsNMPC/examples/redhess_cpp $(distdir)/contrib/JavaInterface $(distdir)/contrib/MatlabInterface-Old/examples $(distdir)/contrib/MatlabInterface-Old/src $(distdir)/contrib/MatlabInterface/examples $(distdir)/contrib/MatlabInterface/src $(distdir)/contrib/RInterface/src $(distdir)/doc $(distdir)/examples/Cpp_example $(distdir)/examples/ScalableProblems $(distdir)/examples/hs071_c $(distdir)/examples/hs071_cpp $(distdir)/examples/hs071_f $(distdir)/inc $(distdir)/src/Apps/AmplSolver $(distdir)/src/Interfaces $(distdir)/test $(distdir)/tutorial/CodingExercise/C/1-skeleton $(distdir)/tutorial/CodingExercise/C/2-mistake $(distdir)/tutorial/CodingExercise/C/3-solution $(distdir)/tutorial/CodingExercise/Cpp/1-skeleton $(distdir)/tutorial/CodingExercise/Cpp/2-mistake $(distdir)/tutorial/CodingExercise/Cpp/3-solution $(distdir)/tutorial/CodingExercise/Fortran/1-skeleton $(distdir)/tutorial/CodingExercise/Fortran/2-mistake $(distdir)/tutorial/CodingExercise/Fortran/3-solution $(distdir)/tutorial/CodingExercise/Matlab/1-skeleton $(distdir)/tutorial/CodingExercise/Matlab/2-mistake $(distdir)/tutorial/CodingExercise/Matlab/3-solution
+	$(mkdir_p) $(distdir)/. $(distdir)/BuildTools $(distdir)/Windows/VisualStudio_dotNET $(distdir)/Windows/VisualStudio_dotNET/CppExample $(distdir)/Windows/VisualStudio_dotNET/FortranLinAlg $(distdir)/Windows/VisualStudio_dotNET/Ipopt $(distdir)/Windows/VisualStudio_dotNET/ScalableProblems $(distdir)/Windows/VisualStudio_dotNET/hs071_c $(distdir)/Windows/VisualStudio_dotNET/hs071_cpp $(distdir)/Windows/VisualStudio_dotNET/hs071_f $(distdir)/contrib/AsNMPC $(distdir)/contrib/AsNMPC/AmplSolver $(distdir)/contrib/AsNMPC/examples/parametric_cpp $(distdir)/contrib/AsNMPC/examples/redhess_cpp $(distdir)/contrib/JavaInterface $(distdir)/contrib/MatlabInterface-Old/examples $(distdir)/contrib/MatlabInterface-Old/src $(distdir)/contrib/MatlabInterface/examples $(distdir)/contrib/MatlabInterface/src $(distdir)/contrib/RInterface/src $(distdir)/doc $(distdir)/examples/Cpp_example $(distdir)/examples/ScalableProblems $(distdir)/examples/hs071_c $(distdir)/examples/hs071_cpp $(distdir)/examples/hs071_f $(distdir)/inc $(distdir)/src/Apps/AmplSolver $(distdir)/test $(distdir)/tutorial/CodingExercise/C/1-skeleton $(distdir)/tutorial/CodingExercise/C/2-mistake $(distdir)/tutorial/CodingExercise/C/3-solution $(distdir)/tutorial/CodingExercise/Cpp/1-skeleton $(distdir)/tutorial/CodingExercise/Cpp/2-mistake $(distdir)/tutorial/CodingExercise/Cpp/3-solution $(distdir)/tutorial/CodingExercise/Fortran/1-skeleton $(distdir)/tutorial/CodingExercise/Fortran/2-mistake $(distdir)/tutorial/CodingExercise/Fortran/3-solution $(distdir)/tutorial/CodingExercise/Matlab/1-skeleton $(distdir)/tutorial/CodingExercise/Matlab/2-mistake $(distdir)/tutorial/CodingExercise/Matlab/3-solution
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -1064,14 +1061,26 @@ astyle:
 	cd src/LinAlg/TMatrices; $(MAKE) astyle
 	cd src/Interfaces; $(MAKE) astyle
 
+# setup addlibs files
+# the addlibs_cpp file is created by running pkg-config on the installed ipopt.pc, if pkg-config available,
+#   or by using variables setup in configure
+# the addlibs_c file is created by adding @CXXLIBS@ to the content of the addlibs_cpp file
+# the addlibs_f file is creating by taking the content of the addlibs_cpp file and removing the FLIBS
+#   since pkg-config may have reordered the flags from FLIBS, we take them out one by one
 install-data-hook:
 	@$(mkdir_p) "$(addlibsdir)"
 @COIN_HAS_PKGCONFIG_TRUE@	PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ \
 @COIN_HAS_PKGCONFIG_TRUE@	$(PKG_CONFIG) --libs ipopt > $(addlibsdir)/ipopt_addlibs_cpp.txt
-@COIN_HAS_PKGCONFIG_FALSE@	echo -L@abs_lib_dir@ -lipopt @IPOPTLIB_LIBS_INSTALLED@ > $(addlibsdir)/ipopt_addlibs.txt
+@COIN_HAS_PKGCONFIG_FALSE@	echo "-L@abs_lib_dir@ -lipopt @IPOPTLIB_LIBS_INSTALLED@" > $(addlibsdir)/ipopt_addlibs_cpp.txt
+	addlibs=`cat $(addlibsdir)/ipopt_addlibs_cpp.txt` ; \
+	echo "$$addlibs @CXXLIBS@" > $(addlibsdir)/ipopt_addlibs_c.txt ; \
+	for i in @FLIBS@ ; do \
+		addlibs=`echo -n " $$addlibs " | sed -e "s! $$i ! !g"` ; \
+	done ; \
+	echo "$$addlibs" > $(addlibsdir)/ipopt_addlibs_f.txt
 
 uninstall-hook:
-	rm -f $(addlibsdir)/ipopt_addlibs_cpp.txt
+	rm -f $(addlibsdir)/ipopt_addlibs_{cpp,c,f}.txt
 
 install-doc: $(DocFiles)
 	test -z "$(DocInstallDir)" || $(mkdir_p) "$(DESTDIR)$(DocInstallDir)"

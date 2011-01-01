@@ -142,16 +142,28 @@ pkgconfiglib_DATA = ipopt.pc
 
 addlibsdir = $(DESTDIR)$(datadir)/coin/doc/Ipopt
 
+# setup addlibs files
+# the addlibs_cpp file is created by running pkg-config on the installed ipopt.pc, if pkg-config available,
+#   or by using variables setup in configure
+# the addlibs_c file is created by adding @CXXLIBS@ to the content of the addlibs_cpp file
+# the addlibs_f file is creating by taking the content of the addlibs_cpp file and removing the FLIBS
+#   since pkg-config may have reordered the flags from FLIBS, we take them out one by one
 install-data-hook:
 	@$(mkdir_p) "$(addlibsdir)"
 if COIN_HAS_PKGCONFIG
 	PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ \
 	$(PKG_CONFIG) --libs ipopt > $(addlibsdir)/ipopt_addlibs_cpp.txt
 else
-	echo -L@abs_lib_dir@ -lipopt @IPOPTLIB_LIBS_INSTALLED@ > $(addlibsdir)/ipopt_addlibs.txt
+	echo "-L@abs_lib_dir@ -lipopt @IPOPTLIB_LIBS_INSTALLED@" > $(addlibsdir)/ipopt_addlibs_cpp.txt
 endif
+	addlibs=`cat $(addlibsdir)/ipopt_addlibs_cpp.txt` ; \
+	echo "$$addlibs @CXXLIBS@" > $(addlibsdir)/ipopt_addlibs_c.txt ; \
+	for i in @FLIBS@ ; do \
+		addlibs=`echo -n " $$addlibs " | sed -e "s! $$i ! !g"` ; \
+	done ; \
+	echo "$$addlibs" > $(addlibsdir)/ipopt_addlibs_f.txt
 
 uninstall-hook:
-	rm -f $(addlibsdir)/ipopt_addlibs_cpp.txt
+	rm -f $(addlibsdir)/ipopt_addlibs_{cpp,c,f}.txt
 
 include BuildTools/Makemain.inc
