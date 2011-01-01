@@ -47,8 +47,6 @@ sdipo:
 	  touch sdipo; \
 	fi
 
-IPADDLIBS = @IPADDLIBS@ $(IPOPTLIB_LIBS)
-
 CLEANFILES = ipoma.f ipo sdipo ipo.pro sdipo.pro
 
 cuter:	ipoma.$(OBJEXT) ipo sdipo

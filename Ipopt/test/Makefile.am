@@ -23,7 +23,7 @@ hs071_c_LDADD = ../src/Interfaces/libipopt.la $(IPOPTLIB_LIBS) $(CXXLIBS)
 hs071_c_DEPENDENCIES = ../src/Interfaces/libipopt.la $(IPOPTLIB_DEPENDENCIES)
 
 nodist_hs071_f_SOURCES = hs071_f.f
-hs071_f_LDADD = ../src/Interfaces/libipopt.la $(IPOPTLIB_LIBS) $(FADDLIBS) $(CXXLIBS)
+hs071_f_LDADD = ../src/Interfaces/libipopt.la $(IPOPTLIB_LIBS) $(CXXLIBS)
 hs071_f_DEPENDENCIES = ../src/Interfaces/libipopt.la $(IPOPTLIB_DEPENDENCIES)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
