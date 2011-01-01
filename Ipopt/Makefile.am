@@ -161,7 +161,7 @@ endif
 	for i in @FLIBS@ ; do \
 		addlibs=`echo -n " $$addlibs " | sed -e "s! $$i ! !g"` ; \
 	done ; \
-	echo "$$addlibs" > $(addlibsdir)/ipopt_addlibs_f.txt
+	echo "$$addlibs @CXXLIBS@" > $(addlibsdir)/ipopt_addlibs_f.txt
 
 uninstall-hook:
 	rm -f $(addlibsdir)/ipopt_addlibs_{cpp,c,f}.txt
