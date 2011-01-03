@@ -48,7 +48,7 @@
 				PreprocessorDefinitions="IPOPT_DLL;WIN32;_DEBUG;_LIB;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="0"
+				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
@@ -68,6 +68,8 @@
 				OutputFile="$(OutDir)\$(ProjectName)39.dll"
 				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\ia32&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\ia32\lib&quot;"
 				IgnoreDefaultLibraryNames="libcmt.lib"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)\$(ProjectName)39.pdb"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 			/>
 			<Tool
@@ -127,7 +129,7 @@
 				PreprocessorDefinitions="IPOPT_DLL;WIN32;_DEBUG;_LIB;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="0"
+				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
@@ -147,6 +149,8 @@
 				OutputFile="$(OutDir)\$(ProjectName)39.dll"
 				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\intel64&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\em64t\lib&quot;"
 				IgnoreDefaultLibraryNames="libcmt.lib"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)\$(ProjectName)39.pdb"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 			/>
 			<Tool
@@ -223,6 +227,8 @@
 				ShowProgress="0"
 				OutputFile="$(OutDir)\$(ProjectName)39.dll"
 				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\ia32&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\ia32\lib&quot;"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)\$(ProjectName)39.pdb"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 			/>
 			<Tool
@@ -300,6 +306,8 @@
 				ShowProgress="0"
 				OutputFile="$(OutDir)\$(ProjectName)39.dll"
 				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\intel64&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\em64t\lib&quot;"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)\$(ProjectName)39.pdb"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 			/>
 			<Tool
@@ -378,6 +386,8 @@
 				ShowProgress="0"
 				OutputFile="$(OutDir)\$(ProjectName)39.dll"
 				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\ia32&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\ia32\lib&quot;"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)\$(ProjectName)39.pdb"
 				GenerateMapFile="true"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 			/>
@@ -457,6 +467,8 @@
 				ShowProgress="0"
 				OutputFile="$(OutDir)\$(ProjectName)39.dll"
 				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\intel64&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\em64t\lib&quot;"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)\$(ProjectName)39.pdb"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 				TargetMachine="17"
 			/>
