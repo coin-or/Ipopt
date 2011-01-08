@@ -154,11 +154,15 @@ if COIN_HAS_PKGCONFIG
 	PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ \
 	$(PKG_CONFIG) --libs ipopt > $(addlibsdir)/ipopt_addlibs_cpp.txt
 else
+if COIN_CXX_IS_CL
+	echo "/libpath:`$(CYGPATH_W) @abs_lib_dir@` libipopt.lib @IPOPTLIB_LIBS_INSTALLED@" > $(addlibsdir)/ipopt_addlibs_cpp.txt
+else
 	echo "-L@abs_lib_dir@ -lipopt @IPOPTLIB_LIBS_INSTALLED@" > $(addlibsdir)/ipopt_addlibs_cpp.txt
+endif
 endif
 	addlibs=`cat $(addlibsdir)/ipopt_addlibs_cpp.txt` ; \
 	echo "$$addlibs @CXXLIBS@" > $(addlibsdir)/ipopt_addlibs_c.txt ; \
-	for i in @FLIBS@ ; do \
+	for i in @FLIBS@ coin_dummy ; do \
 		addlibs=`echo -n " $$addlibs " | sed -e "s! $$i ! !g"` ; \
 	done ; \
 	echo "$$addlibs @CXXLIBS@" > $(addlibsdir)/ipopt_addlibs_f.txt
