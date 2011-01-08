@@ -17,7 +17,8 @@ includeipopt_HEADERS = \
 	IpVector.hpp \
 	IpDenseVector.hpp \
 	IpCompoundVector.hpp \
-	IpBlas.hpp
+	IpBlas.hpp \
+	IpLapack.hpp
 
 noinst_LTLIBRARIES = liblinalg.la
 
