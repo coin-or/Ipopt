@@ -1,4 +1,4 @@
-%% Copyright (C) 2005, 2010 Carnegie Mellon University and others.
+%% Copyright (C) 2005, 2011 Carnegie Mellon University and others.
 %%
 %% The first version of this file was contributed to the Ipopt project
 %% on Aug 1, 2005, by Yoshiaki Kawajiri
@@ -3097,6 +3097,85 @@ to the console, and a brief description.
   \Ipopt\ via the mailing list.
 
 \end{description}
+
+\subsection{Diagnostic Tags for \Ipopt}
+
+There are a few diagnostic tags that appear in the \Ipopt\
+output. Some are displayed in default print level behind the number
+denoting the step size in the column labeled ``{\tt alpha\_pr}''.
+The provide information about the step acceptance criterion:
+
+\begin{tabular}{ll}
+Tag & Description \\
+\hline
+f & f-type iteration in the filter method w/o second order correction \\
+F & f-type iteration in the filter method w/ second order correction \\
+h & h-type iteration in the filter method w/o second order correction \\
+H & h-type iteration in the filter method w/ second order correction \\
+R & Restoration phase just started \\
+w &  in watchdog procedure \\
+s & step accepted in soft restoration phase \\
+t/T & tiny step accepted without line search \\
+r & some previous iterate restored \\
+% (forgot right now what that means ;-) )
+\hline \\
+\end{tabular} 
+
+\noindent
+Moreover, to print additional diagnostic tags for each iteration of \Ipopt, add
+the statement
+\begin{verbatim}
+print_info_string yes
+\end{verbatim} 
+to the ipopt.opt file. During the corresponding operation, a tag will
+appear at the end of an iteration line with the following diagnostic
+meaning. These tags correspond to the basic \Ipopt\ code. They are
+useful to flag difficulties for a particular \Ipopt\ run.
+
+% More information can be obtained by adding
+% \begin{verbatim} file_print_level #
+% \end{verbatim} to ipopt.opt, where
+% $\#$ is an integer between 1 and 12. \\
+
+\begin{tabular}{lll}
+Tag & Description & Reference \\
+\hline 
+! & Tighten resto tolerance if only slightly infeasible & Section 3.3 in \cite{WaecBieg06:mp} \\ 
+A & Current iteration is acceptable & Alternate termination \\  
+a & Perturbation for PD Singularity can't be done, assume singular & Section 3.1 in \cite{WaecBieg06:mp}\\  
+C & Second Order Correction taken & Section 2.4 in \cite{WaecBieg06:mp} \\  
+Dh & Hessian degenerate based on multiple iterations & Section 3.1 in \cite{WaecBieg06:mp}\\  
+Dhj & Hessian/Jacobian degenerate based on multiple iterations & Section 3.1 in \cite{WaecBieg06:mp}\\  
+Dj & Jacobian degenerate based on multiple iterations & Section 3.1 in \cite{WaecBieg06:mp}\\  
+dx & $\delta_x$ perturbation too large & Section 3.1 in \cite{WaecBieg06:mp}\\  
+e & Cutting back $\alpha$ due to evaluation error & in backtracking line search \\  
+F- & Filter should be reset, but maximal resets exceeded & Section 2.3 in \cite{WaecBieg06:mp} \\  
+F+ & Resetting filter due to last few rejections of filter & Section 2.3 in \cite{WaecBieg06:mp} \\  
+L & Degenerate Jacobian, $\delta_c$ already perturbed & Section 3.1 in \cite{WaecBieg06:mp}\\  
+l & Degenerate Jacobian, $\delta_c$ perturbed & Section 3.1 in \cite{WaecBieg06:mp}\\  
+M & Magic step taken for slack variables & in backtracking line search \\  
+Nh & Hessian not yet degenerate & Section 3.1 in \cite{WaecBieg06:mp}\\  
+Nhj & Hessian/Jacobian not yet degenerate & Section 3.1 in \cite{WaecBieg06:mp}\\  
+Nj & Jacobian not yet degenerate & Section 3.1 in \cite{WaecBieg06:mp}\\  
+NW & Warm start initialization failed & in Warm Start Initialization \\
+q & PD system possibly singular, attempt to improve solution quality & Section 3.1 in \cite{WaecBieg06:mp}\\  
+R & Solution of restoration phase & Section 3.3 in \cite{WaecBieg06:mp} \\  
+S & PD system possibly singular, accept current solution & Section 3.1 in \cite{WaecBieg06:mp}\\  
+s & PD system singular & Section 3.1 in \cite{WaecBieg06:mp}\\  
+s & Square Problem. Set multipliers to zero & Default initialization routine \\  
+Tmax & Trial $\theta$ is larger than $\theta_{max}$ & filter parameter, see (21) in \cite{WaecBieg06:mp} \\  
+W & Watchdog line search procedure successful & Section 3.2 in \cite{WaecBieg06:mp} \\  
+w & Watchdog line search procedure unsuccessful, stopped & Section 3.2 in \cite{WaecBieg06:mp} \\  
+Wb & Undoing most recent SR1 update & Section 5.4.1 in \cite{Biegler:nlpbook} \\  
+We & Skip Limited-Memory Update since $s^Ty$ is not positive &  Section 5.4.1 in \cite{Biegler:nlpbook} \\  
+Wp & Safeguard $B^0 = \sigma I$ for  Limited-Memory Update &  Section 5.4.1 in \cite{Biegler:nlpbook} \\  
+Wr & Resetting Limited-Memory Update &  Section 5.4.1 in \cite{Biegler:nlpbook} \\  
+Ws & Multiple skipping of Limited-Memory Update & Section 5.4.1 in \cite{Biegler:nlpbook} \\  
+WS & Skip Limited-Memory Update since $\Delta x$ is too small &  Section 5.4.1 in \cite{Biegler:nlpbook} \\  
+y & Dual infeasibility, use least square multiplier update & during ipopt algorithm \\                           
+z & Apply correction to bound multiplier if too large & during ipopt algorithm \\
+\end{tabular}
+
 
 \appendix
 \newpage
