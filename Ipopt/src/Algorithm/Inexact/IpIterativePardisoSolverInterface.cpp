@@ -1,4 +1,4 @@
-// Copyright (C) 2008, 2009 International Business Machines and others.
+// Copyright (C) 2008, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -471,6 +471,10 @@ namespace Ipopt
     bool just_performed_symbolic_factorization = false;
 
     while (!done) {
+      bool is_normal = false;
+      if (IsNull(InexData().normal_x()) && InexData().compute_normal()) {
+        is_normal = true;
+      }
       if (!have_symbolic_factorization_) {
         if (HaveIpData()) {
           IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
@@ -478,6 +482,28 @@ namespace Ipopt
         PHASE = 11;
         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                        "Calling Pardiso for symbolic factorization.\n");
+
+        if (is_normal) {
+          DPARM_[ 0] = normal_pardiso_max_iter_;
+          DPARM_[ 1] = normal_pardiso_iter_relative_tol_;
+          DPARM_[ 2] = normal_pardiso_iter_coarse_size_;
+          DPARM_[ 3] = normal_pardiso_iter_max_levels_;
+          DPARM_[ 4] = normal_pardiso_iter_dropping_factor_used_;
+          DPARM_[ 5] = normal_pardiso_iter_dropping_schur_used_;
+          DPARM_[ 6] = normal_pardiso_iter_max_row_fill_;
+          DPARM_[ 7] = normal_pardiso_iter_inverse_norm_factor_;
+        }
+        else {
+          DPARM_[ 0] = pardiso_max_iter_;
+          DPARM_[ 1] = pardiso_iter_relative_tol_;
+          DPARM_[ 2] = pardiso_iter_coarse_size_;
+          DPARM_[ 3] = pardiso_iter_max_levels_;
+          DPARM_[ 4] = pardiso_iter_dropping_factor_used_;
+          DPARM_[ 5] = pardiso_iter_dropping_schur_used_;
+          DPARM_[ 6] = pardiso_iter_max_row_fill_;
+          DPARM_[ 7] = pardiso_iter_inverse_norm_factor_;
+        }
+
         F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
                                   &PHASE, &N, a_, ia, ja, &PERM,
                                   &NRHS, IPARM_, &MSGLVL_, &B, &X,
@@ -525,10 +551,6 @@ namespace Ipopt
         debug_last_iter_ = 0;
       }
 
-      bool is_normal = false;
-      if (IsNull(InexData().normal_x()) && InexData().compute_normal()) {
-        is_normal = true;
-      }
       if (is_normal) {
         DPARM_[ 0] = normal_pardiso_max_iter_;
         DPARM_[ 1] = normal_pardiso_iter_relative_tol_;

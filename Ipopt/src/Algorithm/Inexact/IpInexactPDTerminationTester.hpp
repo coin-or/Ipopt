@@ -1,4 +1,4 @@
-// Copyright (C) 2008 International Business Machines and others.
+// Copyright (C) 2008, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -116,17 +116,17 @@ namespace Ipopt
     Number c_plus_Av_norm_;
     Number v_norm_scaled_;
     SmartPtr<const Vector> curr_grad_barrier_obj_x_;
-    SmartPtr<const Vector> curr_grad_barrier_obj_s_;
+    SmartPtr<const Vector> curr_grad_barrier_obj_s_; // in original space
     SmartPtr<const Matrix> curr_jac_c_;
     SmartPtr<const Matrix> curr_jac_d_;
     SmartPtr<const Vector> curr_scaling_slacks_;
     SmartPtr<Vector> curr_nabla_phi_plus_ATy_x_;
-    SmartPtr<Vector> curr_nabla_phi_plus_ATy_s_;
+    SmartPtr<Vector> curr_nabla_phi_plus_ATy_s_; // in scaled space
     Number curr_Av_norm_;
     Number curr_tt1_norm_;
     Number curr_tt2_norm_;
     SmartPtr<const Vector> curr_Wv_x_;
-    SmartPtr<const Vector> curr_Wv_s_;
+    SmartPtr<const Vector> curr_Wv_s_; // in original space
     bool try_tt2_;
     //@}
 
