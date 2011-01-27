@@ -1,4 +1,4 @@
-// Copyright (C) 2008 International Business Machines and others.
+// Copyright (C) 2008, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -83,7 +83,7 @@ namespace Ipopt
       SmartPtr<const Vector> curr_jac_dT_times_curr_d_minus_s =
         ip_cq_->curr_jac_dT_times_vec(*curr_d_minus_s);
 
-      // add them pu
+      // add them
       SmartPtr<Vector> tmp = curr_jac_cT_times_curr_c->MakeNew();
       tmp->AddTwoVectors(1., *curr_jac_cT_times_curr_c,
                          1., *curr_jac_dT_times_curr_d_minus_s, 0.);

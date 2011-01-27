@@ -1,4 +1,4 @@
-// Copyright (C) 2008, 2009 International Business Machines and others.
+// Copyright (C) 2008, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -143,7 +143,7 @@ namespace Ipopt
     SmartPtr<const Vector> normal_x = InexData().normal_x();
     SmartPtr<const Vector> normal_s = InexData().normal_s();
     if (compute_normal) {
-      // calculate scaled Jacobian times normal step
+      // calculate Jacobian times normal step (no scaling relevant in this space)
       curr_Av_c_ = InexCq().curr_jac_times_normal_c();
       curr_Av_d_ = InexCq().curr_jac_times_normal_d();
 
@@ -158,12 +158,12 @@ namespace Ipopt
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "TT: c_plus_Av_norm_ = %23.16e\n", c_plus_Av_norm_);
 
-      // compute scaled norm of the normal step
+      // compute norm of the normal step in the scaled space
       v_norm_scaled_ = InexCq().slack_scaled_norm(*normal_x, *normal_s);
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "TT: v_norm_scaled_ = %23.16e\n", v_norm_scaled_);
 
-      // compute Wv (Hessian times normal step)
+      // compute Wv (Hessian times normal step) in the unscaled space
       curr_Wv_x_ = InexCq().curr_W_times_vec_x(*normal_x);
       curr_Wv_s_ = InexCq().curr_W_times_vec_s(*normal_s);
     }
@@ -186,12 +186,12 @@ namespace Ipopt
 
     // get the current gradient and Jacobian information
     curr_grad_barrier_obj_x_ = IpCq().curr_grad_barrier_obj_x();
-    curr_grad_barrier_obj_s_ = IpCq().curr_grad_barrier_obj_s();
+    curr_grad_barrier_obj_s_ = IpCq().curr_grad_barrier_obj_s(); // (unscaled)
     curr_jac_c_ = IpCq().curr_jac_c();
     curr_jac_d_ = IpCq().curr_jac_d();
     curr_scaling_slacks_ = InexCq().curr_scaling_slacks();
 
-    // calculate \nabla phi(x_{k}) + A_{k}^Ty_k
+    // calculate \nabla phi(x_{k}) + A_{k}^Ty_k (in scaled space)
     SmartPtr<const Vector> curr_jac_cT_times_curr_y_c =
       IpCq().curr_jac_cT_times_curr_y_c();
     SmartPtr<const Vector> curr_jac_cT_times_curr_y_d =
@@ -202,9 +202,9 @@ namespace Ipopt
     curr_nabla_phi_plus_ATy_s_ = curr_grad_barrier_obj_s_->MakeNew();
     curr_nabla_phi_plus_ATy_s_->AddTwoVectors(1., *curr_grad_barrier_obj_s_,
         -1., *IpData().curr()->y_d(), 0.);
+    curr_nabla_phi_plus_ATy_s_->ElementWiseMultiply(*curr_scaling_slacks_);
 
     // calculate norms appearing in termination tests
-    curr_nabla_phi_plus_ATy_s_->ElementWiseMultiply(*curr_scaling_slacks_);
     curr_tt2_norm_ = IpCq().CalcNormOfType(NORM_2, *curr_nabla_phi_plus_ATy_x_,
                                            *curr_nabla_phi_plus_ATy_s_);
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
@@ -223,7 +223,7 @@ namespace Ipopt
     }
 
     if (compute_normal && IsValid(last_grad_barrier_obj_x)) {
-      // calculate \nabla phi(x_{k-1}) + A_{k-1}^Ty_k
+      // calculate \nabla phi(x_{k-1}) + A_{k-1}^Ty_k (in scaled space)
       SmartPtr<Vector> last_nabla_phi_plus_ATy_x =
         last_grad_barrier_obj_x->MakeNewCopy();
       last_jac_c->TransMultVector(1., *IpData().curr()->y_c(),
@@ -372,9 +372,7 @@ namespace Ipopt
                    "TT: rho_norm  = %23.16e\n", rho_norm);
     tmp = NULL;
 
-    // Compute scaled norm of entire residual
-    Number resid_norm = sqrt(pow(rho_norm, 2) + pow(c_plus_Ad_norm, 2));
-
+    // TODO: AW wants to discuss with Frank
     Number Upsilon = -1.;
     Number Nu = -1.;
     if (!compute_normal) {
@@ -477,6 +475,11 @@ namespace Ipopt
     bool tt1 = tcc;
     bool tt1_kappa1 = tcc;
     if (!compute_normal) {
+      // Compute scaled norm of entire residual in case there is no step
+      // decomposition.  In that case, c_plus_Ad_norm should indeed be
+      // the same as what resid_c and resid_d woulod give (TODO:
+      // check?!?)
+      Number resid_norm = sqrt(pow(rho_norm, 2) + pow(c_plus_Ad_norm, 2));
       lhs = resid_norm;
       rhs = tt_kappa1_*curr_tt1_norm_;
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,

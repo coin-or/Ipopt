@@ -1,4 +1,4 @@
-// Copyright (C) 2008 International Business Machines and others.
+// Copyright (C) 2008, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -36,8 +36,9 @@ namespace Ipopt
 
     /** Method for computing the normal step.  The computed step is
      *  returned as normal_x and normal_s, for the x and s variables,
-     *  respectively.  These quantities are not slack-scaled.  If the
-     *  step cannot be computed, this method returns false.  */
+     *  respectively.  These quantities are not in the original space,
+     *  but in the space scaled by the slacks.  If the step cannot be
+     *  computed, this method returns false.  */
     virtual bool ComputeNewtonNormalStep(Vector& newton_x, Vector& newton_s);
 
     /** Methods for IpoptType */

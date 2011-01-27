@@ -1,4 +1,4 @@
-// Copyright (C) 2008 International Business Machines and others.
+// Copyright (C) 2008, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -83,6 +83,7 @@ namespace Ipopt
 
     if (retval!=SYMSOLVER_SUCCESS) return false;
 
+    // return the step in the slack-scaled space
     newton_s.ElementWiseDivide(*curr_scaling_slacks);
 
     newton_x.Scal(-1.);
