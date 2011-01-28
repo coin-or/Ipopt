@@ -1,6 +1,6 @@
 // Copyright (C) 2006, 2009 Damien Hocking, KBC Advanced Technologies and others
 // All Rights Reserved.
-// This code is published under the Common Public License.
+// This code is published under the Eclipse Public License.
 //
 // $Id$
 //

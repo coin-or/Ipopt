@@ -1,7 +1,7 @@
 C Copyright (C) 2002, 2004, 2005 Carnegie Mellon University,
 C                                Dominique Orban and others.
 C All Rights Reserved.
-C This code is published under the Common Public License.
+C This code is published under the Eclipse Public License.
 C*******************************************************************************
       PROGRAM           IPOPTMA
 C
@@ -161,7 +161,7 @@ c
 
 C Copyright (C) 2002, Carnegie Mellon University and others.
 C All Rights Reserved.
-C This code is published under the Common Public License.
+C This code is published under the Eclipse Public License.
 C*******************************************************************************
 C
       subroutine EV_F(N, X, NEW_X, F, IDAT, DAT, IERR)
@@ -264,7 +264,7 @@ C
       end
 C Copyright (C) 2002, Carnegie Mellon University and others.
 C All Rights Reserved.
-C This code is published under the Common Public License.
+C This code is published under the Eclipse Public License.
 C*******************************************************************************
 C
       subroutine EV_GRAD_F(N, X, NEW_X, GRAD, IDAT, DAT, IERR)
@@ -368,7 +368,7 @@ C
       end
 C Copyright (C) 2002, Carnegie Mellon University and others.
 C All Rights Reserved.
-C This code is published under the Common Public License.
+C This code is published under the Eclipse Public License.
 C*******************************************************************************
 C
       subroutine EV_G(N, X, NEW_X, M, G, IDAT, DAT, IERR)
@@ -475,7 +475,7 @@ C
       end
 C Copyright (C) 2002, Carnegie Mellon University and others.
 C All Rights Reserved.
-C This code is published under the Common Public License.
+C This code is published under the Eclipse Public License.
 C*******************************************************************************
 C
       subroutine EV_JAC_G(TASK, N, X, NEW_X, M, NZ, ACON, AVAR, A,
@@ -604,7 +604,7 @@ C
       end
 C Copyright (C) 2002, Carnegie Mellon University and others.
 C All Rights Reserved.
-C This code is published under the Common Public License.
+C This code is published under the Eclipse Public License.
 C*******************************************************************************
 C
 

@@ -1,7 +1,7 @@
 function [Center,Grads] = trigrad(Nodes,E,Val)
   % Copyright (C) 2010 International Business Machines.
   % All Rights Reserved.
-  % This code is published under the Common Public License.
+  % This code is published under the Eclipse Public License.
   %
   % $Id: tri.m 29 2010-08-31 18:19:25Z jahuber $
   %

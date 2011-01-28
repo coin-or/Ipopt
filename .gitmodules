@@ -1,28 +1,28 @@
 [submodule "BuildTools"]
 	path = BuildTools
 	url = git://github.com/coin-or-tools/BuildTools.git
-	branch = master
+	branch = stable/0.7
 [submodule "ThirdParty/ASL"]
 	path = ThirdParty/ASL
 	url = git://github.com/coin-or-tools/ThirdParty-ASL.git
-	branch = master
+	branch = stable/1.2
 [submodule "ThirdParty/Metis"]
 	path = ThirdParty/Metis
 	url = git://github.com/coin-or-tools/ThirdParty-Metis.git
-	branch = master
+	branch = stable/1.2
 [submodule "ThirdParty/HSL"]
 	path = ThirdParty/HSL
 	url = git://github.com/coin-or-tools/ThirdParty-HSL.git
-	branch = master
+	branch = stable/1.3
 [submodule "ThirdParty/Blas"]
 	path = ThirdParty/Blas
 	url = git://github.com/coin-or-tools/ThirdParty-Blas.git
-	branch = master
+	branch = stable/1.2
 [submodule "ThirdParty/Lapack"]
 	path = ThirdParty/Lapack
 	url = git://github.com/coin-or-tools/ThirdParty-Lapack.git
-	branch = master
+	branch = stable/1.3
 [submodule "ThirdParty/Mumps"]
 	path = ThirdParty/Mumps
 	url = git://github.com/coin-or-tools/ThirdParty-Mumps.git
-	branch = master
+	branch = stable/1.4

@@ -1,6 +1,6 @@
 // Copyright 2009 Hans Pirnay
 // All Rights Reserved.
-// This code is published under the Common Public License.
+// This code is published under the Eclipse Public License.
 //
 // Date   : 2009-11-19
 
@@ -53,7 +53,7 @@ namespace Ipopt
     delta_rhs->Axpy(-1.0, *rhs); 
     delta_rhs->Print(Jnlst(),J_VECTOR,J_USER1,"delta_rhs");
 
-    backsolver_->Solve(lhs, ConstPtr(delta_rhs));
+    return backsolver_->Solve(lhs, ConstPtr(delta_rhs));
   }
 
   bool IFTSchurDriver::SchurSolve(SmartPtr<IteratesVector> lhs, // new left hand side will be stored here 

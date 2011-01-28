@@ -1,6 +1,6 @@
 // Copyright (C) 2005, 2010 International Business Machines and others.
 // All Rights Reserved.
-// This code is published under the Common Public License.
+// This code is published under the Eclipse Public License.
 //
 // $Id$
 //
@@ -100,6 +100,9 @@ namespace Ipopt
     Number sigma_safe_min_;
     /** Maximal safeguard value for sigma */
     Number sigma_safe_max_;
+    /** Flag indicating if Hessian approximation should be done in a
+     *  special manner for the restoration phase. */
+    bool limited_memory_special_for_resto_;
     //@}
 
     /** Flag indicating if the update is to be done for the original
@@ -125,9 +128,6 @@ namespace Ipopt
     /** Current value of weighing factor eta in the restoration phase
      *  objective function (only for update_for_resto_ = true) */
     Number curr_eta_;
-    /** Flag inidicating whether DR_x or eta have changed since the
-     *  last update */
-    bool eta_changed_;
 
     /** Counter for successive iterations in which the update was
      *  skipped */

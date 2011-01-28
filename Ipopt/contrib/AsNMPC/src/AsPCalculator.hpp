@@ -1,6 +1,6 @@
 // Copyright 2009 Hans Pirnay
 // All Rights Reserved.
-// This code is published under the Common Public License.
+// This code is published under the Eclipse Public License.
 //
 // Date   : 2009-05-06
 
@@ -52,7 +52,7 @@ namespace Ipopt
     virtual bool ComputeP()=0;
     
     /** Function to extract a SchurMatrix corresponding to $B K^{-1} A$. If B==NULL, use A=B*/
-    virtual bool GetSchurMatrix(const SchurData& B, Matrix& S) =0;
+    virtual bool GetSchurMatrix(const SmartPtr<const SchurData>& B, SmartPtr<Matrix>& S) =0;
 
     virtual void PrintImpl(const Journalist& jnlst,
 			   EJournalLevel level,

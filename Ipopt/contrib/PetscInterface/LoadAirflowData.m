@@ -1,7 +1,7 @@
 function [Nodes,Elem,Phi,T,Cntrl] = LoadAirflowData(Datafilename)
 % Copyright (C) 2010 International Business Machines.
 % All Rights Reserved.
-% This code is published under the Common Public License.
+% This code is published under the Eclipse Public License.
 %
 % Authors:  Johannes Huber     IBM        2010-09-03
   % read mesh data

@@ -1,6 +1,6 @@
 # Copyright (C) 2009 International Business Machines and others.
 # All Rights Reserved.
-# This file is distributed under the Common Public License.
+# This file is distributed under the Eclipse Public License.
 
 # $Id: Makefile.in 1135 2007-12-27 19:23:06Z andreasw $
 
@@ -38,20 +38,14 @@ CXXFLAGS = @CXXFLAGS@
 # additional C++ Compiler options for linking
 CXXLINKFLAGS = @RPATH_FLAGS@
 
-# Directory with header files
-IPOPTINCDIR = @includedir@/coin
+# Include directories (we use the CYGPATH_W variables to allow compilation with Windows compilers)
+@COIN_HAS_PKGCONFIG_TRUE@INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipopt` $(ADDINCFLAGS)
+@COIN_HAS_PKGCONFIG_FALSE@INCL = -I`$(CYGPATH_W) @abs_include_dir@/coin` @IPOPTLIB_CFLAGS_INSTALLED@ $(ADDINCFLAGS)
 
-# Directory with libipopt.a
-IPOPTLIBDIR = @libdir@
-exec_prefix = @exec_prefix@
-prefix = @prefix@
-
-# Libraries necessary to link with IPOPT
-LIBS = @ipoptlib@ @ADDLIBS@
-
-# Necessary Include dirs (we use the CYGPATH_W variables to allow
-# compilation with Windows compilers)
-INCL =  -I`$(CYGPATH_W) $(IPOPTINCDIR)` $(ADDINCFLAGS)
+# Linker flags
+@COIN_HAS_PKGCONFIG_TRUE@LIBS = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt` @CXXLIBS@
+@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_TRUE@LIBS = /link /libpath:`$(CYGPATH_W) @abs_lib_dir@` libipopt.lib @IPOPTLIB_LIBS_INSTALLED@ @CXXLIBS@
+@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_FALSE@LIBS = -L@abs_lib_dir@ -lipopt @IPOPTLIB_LIBS_INSTALLED@ @CXXLIBS@
 
 # The following is necessary under cygwin, if native compilers are used
 CYGPATH_W = @CYGPATH_W@

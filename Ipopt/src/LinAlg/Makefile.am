@@ -1,6 +1,6 @@
-# Copyright (C) 2004, 2009 International Business Machines and others.
+# Copyright (C) 2004, 2010 International Business Machines and others.
 # All Rights Reserved.
-# This file is distributed under the Common Public License.
+# This file is distributed under the Eclipse Public License.
 
 ## $Id$
 
@@ -18,7 +18,11 @@ includeipoptdir = $(includedir)/coin
 includeipopt_HEADERS = \
 	IpMatrix.hpp \
 	IpSymMatrix.hpp \
-	IpVector.hpp
+	IpVector.hpp \
+	IpDenseVector.hpp \
+	IpCompoundVector.hpp \
+	IpBlas.hpp \
+	IpLapack.hpp
 
 noinst_LTLIBRARIES = liblinalg.la
 

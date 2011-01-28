@@ -1,6 +1,6 @@
 # Copyright (C) 2004, 2010 International Business Machines and others.
 # All Rights Reserved.
-# This file is distributed under the Common Public License.
+# This file is distributed under the Eclipse Public License.
 
 ## $Id$
 
@@ -8,7 +8,7 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-noinst_LTLIBRARIES = libamplinterface.la
+lib_LTLIBRARIES = libipoptamplinterface.la
 bin_PROGRAMS =
 
 if HAVE_MPI
@@ -17,22 +17,28 @@ else
   bin_PROGRAMS += ipopt
 endif
 
-libamplinterface_la_SOURCES = \
+libipoptamplinterface_la_SOURCES = \
 	AmplTNLP.cpp AmplTNLP.hpp
 
 if HAVE_MPI
-  libamplinterface_la_SOURCES += AmplParTNLP.cpp AmplParTNLP.hpp
+  libipoptamplinterface_la_SOURCES += AmplParTNLP.cpp AmplParTNLP.hpp
 endif
 
 ipopt_SOURCES = ampl_ipopt.cpp
 
 par_ipopt_SOURCES = ampl_par_ipopt.cpp
 
-ipopt_LDADD = libamplinterface.la ../../Interfaces/libipopt.la
+ipopt_LDADD = libipoptamplinterface.la ../../Interfaces/libipopt.la \
+	$(IPOPTAMPLINTERFACELIB_LIBS) $(IPOPTLIB_LIBS)
 
-par_ipopt_LDADD = libamplinterface.la ../../Interfaces/libipopt.la
+par_ipopt_LDADD = libipoptamplinterface.la ../../Interfaces/libipopt.la \
+	$(IPOPTAMPLINTERFACELIB_LIBS) $(IPOPTLIB_LIBS)
 
-LIBS = $(ASL_LIBS) $(MUMPS_LIBS) $(HSL_LIBS) $(LAPACK_LIBS) $(BLAS_LIBS) $(ADDLIBS)
+ipopt_DEPENDENCIES = libipoptamplinterface.la ../../Interfaces/libipopt.la \
+	$(IPOPTAMPLINTERFACELIB_DEPENDENCIES) $(IPOPTLIB_DEPENDENCIES)
+
+par_ipopt_DEPENDENCIES = libipoptamplinterface.la ../../Interfaces/libipopt.la \
+	$(IPOPTAMPLINTERFACELIB_DEPENDENCIES) $(IPOPTLIB_DEPENDENCIES)
 
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \
@@ -41,6 +47,12 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../Interfaces`
 
 AM_CPPFLAGS += $(ASL_CFLAGS)
+
+includeipoptdir = $(includedir)/coin
+includeipopt_HEADERS = AmplTNLP.hpp
+
+pkgconfiglibdir = $(libdir)/pkgconfig
+pkgconfiglib_DATA = ../../../ipoptamplinterface.pc
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin

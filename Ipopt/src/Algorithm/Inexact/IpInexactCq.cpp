@@ -1,6 +1,6 @@
-// Copyright (C) 2008 International Business Machines and others.
+// Copyright (C) 2008, 2011 International Business Machines and others.
 // All Rights Reserved.
-// This code is published under the Common Public License.
+// This code is published under the Eclipse Public License.
 //
 // $Id$
 //
@@ -83,7 +83,7 @@ namespace Ipopt
       SmartPtr<const Vector> curr_jac_dT_times_curr_d_minus_s =
         ip_cq_->curr_jac_dT_times_vec(*curr_d_minus_s);
 
-      // add them pu
+      // add them
       SmartPtr<Vector> tmp = curr_jac_cT_times_curr_c->MakeNew();
       tmp->AddTwoVectors(1., *curr_jac_cT_times_curr_c,
                          1., *curr_jac_dT_times_curr_d_minus_s, 0.);
@@ -213,6 +213,8 @@ namespace Ipopt
   SmartPtr<const Vector>
   InexactCq::curr_W_times_vec_x(const Vector& vec_x)
   {
+    DBG_START_METH("InexactCq::curr_W_times_vec_x",
+                   dbg_verbosity);
     SmartPtr<const Vector> result;
 
     SmartPtr<const SymMatrix> W = ip_data_->W();
@@ -229,6 +231,9 @@ namespace Ipopt
     sdeps[0] = pd_pert_x;
 
     if (!curr_W_times_vec_x_cache_.GetCachedResult(result, tdeps, sdeps)) {
+      DBG_PRINT_VECTOR(2, "vec_x", vec_x);
+      DBG_PRINT_MATRIX(2, "W", *W);
+      DBG_PRINT((2, "pd_pert_x = %e\n", pd_pert_x));
       SmartPtr<Vector> tmp = vec_x.MakeNewCopy();
       W->MultVector(1., vec_x, pd_pert_x, *tmp);
       result = ConstPtr(tmp);

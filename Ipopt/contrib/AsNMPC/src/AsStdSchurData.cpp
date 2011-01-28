@@ -1,6 +1,6 @@
 // Copyright 2009, 2010 Hans Pirnay
 // All Rights Reserved.
-// This code is published under the Common Public License.
+// This code is published under the Eclipse Public License.
 //
 // Date   : 2009-05-08
 
@@ -29,7 +29,8 @@ namespace Ipopt
     DBG_START_METH("StdSchurData::MakeNewSchurDataCopy", dbg_verbosity);
     
     SmartPtr<SchurData> retval = new StdSchurData();
-    
+   
+    return retval;   
   }
 
   void StdSchurData::SetData_Flag(Index dim, const Index* flags, Number v)

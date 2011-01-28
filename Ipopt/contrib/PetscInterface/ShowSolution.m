@@ -1,7 +1,7 @@
 function ShowResult(Nodes,Elem,Phi,n,startpts)
   % Copyright (C) 2010 International Business Machines.
   % All Rights Reserved.
-  % This code is published under the Common Public License.
+  % This code is published under the Eclipse Public License.
   %
   % $Id: ShowSolution.m 29 2010-08-31 18:19:25Z jahuber $
   %
