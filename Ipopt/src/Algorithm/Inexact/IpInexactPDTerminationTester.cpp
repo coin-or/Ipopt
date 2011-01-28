@@ -299,6 +299,11 @@ namespace Ipopt
     SmartPtr<const Vector> sol_d;
     GetVectors(ndim, sol, sol_x, sol_s, sol_c, sol_d);
 
+    DBG_PRINT_VECTOR(2, "sol_x", *sol_x);
+    DBG_PRINT_VECTOR(2, "sol_s", *sol_s);
+    DBG_PRINT_VECTOR(2, "sol_c", *sol_c);
+    DBG_PRINT_VECTOR(2, "sol_d", *sol_d);
+
     SmartPtr<const Vector> resid_x;
     SmartPtr<const Vector> resid_s;
     SmartPtr<const Vector> resid_c;
@@ -346,8 +351,12 @@ namespace Ipopt
                    "TT: u_norm_scaled = %23.16e\n", u_norm_scaled);
 
     // Compute u^TWu
+    DBG_PRINT_VECTOR(2, "tangential_x", *tangential_x);
+    DBG_PRINT_VECTOR(2, "tangential_s", *tangential_s);
     SmartPtr<const Vector> Wu_x = InexCq().curr_W_times_vec_x(*tangential_x);
     SmartPtr<const Vector> Wu_s = InexCq().curr_W_times_vec_s(*tangential_s);
+    DBG_PRINT_VECTOR(2, "Wu_x", *Wu_x);
+    DBG_PRINT_VECTOR(2, "Wu_s", *Wu_s);
     Number uWu = Wu_x->Dot(*tangential_x) + Wu_s->Dot(*tangential_s);
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "TT: uWu = %23.16e\n", uWu);
