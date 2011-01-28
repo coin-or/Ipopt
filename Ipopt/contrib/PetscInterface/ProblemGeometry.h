@@ -18,7 +18,7 @@
 #include <vector>
 #include <list>
 
-#define EXHAUST_AS_CONTROL
+//#define EXHAUST_AS_CONTROL
 
 void PrintTetgenMesh(const tetgenio& tet, std::ostream& os);
 void PrintTriangleMesh(const libMesh::Triangle::triangulateio& tri, std::ostream& os);
