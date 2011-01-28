@@ -22507,7 +22507,7 @@ fi
 
   fi
   if test -n "$PKG_CONFIG"; then
-    _pkg_min_version=0.16.0
+    _pkg_min_version=0.9.0
     echo "$as_me:$LINENO: checking pkg-config is at least version $_pkg_min_version" >&5
 echo $ECHO_N "checking pkg-config is at least version $_pkg_min_version... $ECHO_C" >&6
     if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
@@ -22598,11 +22598,6 @@ if test x$coin_projectdir = xyes ; then
   fi
 
 
-fi
-
-if test -n "$PKG_CONFIG" && test x$coin_cc_is_cl = xtrue; then
-  { echo "$as_me:$LINENO: WARNING: Using pkg-config together with MS or Intel Compiler on Windows is not support by example Makefiles. Consider using --disable-pkg-config." >&5
-echo "$as_me: WARNING: Using pkg-config together with MS or Intel Compiler on Windows is not support by example Makefiles. Consider using --disable-pkg-config." >&2;}
 fi
 
 
@@ -25458,6 +25453,11 @@ if test "${with_blas_lib+set}" = set; then
          IPOPTLIB_PCLIBS="$withval $IPOPTLIB_PCLIBS"
          IPOPTLIB_LIBS="$withval $IPOPTLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         BLAS_LIBS_INSTALLED="$withval"
+         IPOPTLIB_LIBS_INSTALLED="$withval $IPOPTLIB_LIBS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -25473,7 +25473,12 @@ if test "${with_blas_incdir+set}" = set; then
      else
        coin_has_blas=yes
        BLAS_CFLAGS="-I`${CYGPATH_W} $withval`"
-       IPOPTLIB_CFLAGS="$withval $IPOPTLIB_CFLAGS"
+       IPOPTLIB_CFLAGS="-I`${CYGPATH_W} $withval` $IPOPTLIB_CFLAGS"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         BLAS_CFLAGS_INSTALLED="$BLAS_CFLAGS"
+         IPOPTLIB_CFLAGS_INSTALLED="$BLAS_CFLAGS $IPOPTLIB_CFLAGS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -25489,6 +25494,10 @@ if test "${with_blas_datadir+set}" = set; then
      else
        coin_has_blas=yes
        BLAS_DATA="$withval"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         BLAS_DATA_INSTALLED="$withval"
+       fi
      fi
 
 fi;
@@ -28027,6 +28036,11 @@ if test "${with_lapack_lib+set}" = set; then
          IPOPTLIB_PCLIBS="$withval $IPOPTLIB_PCLIBS"
          IPOPTLIB_LIBS="$withval $IPOPTLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         LAPACK_LIBS_INSTALLED="$withval"
+         IPOPTLIB_LIBS_INSTALLED="$withval $IPOPTLIB_LIBS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -28042,7 +28056,12 @@ if test "${with_lapack_incdir+set}" = set; then
      else
        coin_has_lapack=yes
        LAPACK_CFLAGS="-I`${CYGPATH_W} $withval`"
-       IPOPTLIB_CFLAGS="$withval $IPOPTLIB_CFLAGS"
+       IPOPTLIB_CFLAGS="-I`${CYGPATH_W} $withval` $IPOPTLIB_CFLAGS"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         LAPACK_CFLAGS_INSTALLED="$LAPACK_CFLAGS"
+         IPOPTLIB_CFLAGS_INSTALLED="$LAPACK_CFLAGS $IPOPTLIB_CFLAGS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -28058,6 +28077,10 @@ if test "${with_lapack_datadir+set}" = set; then
      else
        coin_has_lapack=yes
        LAPACK_DATA="$withval"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         LAPACK_DATA_INSTALLED="$withval"
+       fi
      fi
 
 fi;
@@ -28549,6 +28572,11 @@ if test "${with_asl_lib+set}" = set; then
          IPOPTAMPLINTERFACELIB_PCLIBS="$withval $IPOPTAMPLINTERFACELIB_PCLIBS"
          IPOPTAMPLINTERFACELIB_LIBS="$withval $IPOPTAMPLINTERFACELIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         ASL_LIBS_INSTALLED="$withval"
+         IPOPTAMPLINTERFACELIB_LIBS_INSTALLED="$withval $IPOPTAMPLINTERFACELIB_LIBS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -28564,7 +28592,12 @@ if test "${with_asl_incdir+set}" = set; then
      else
        coin_has_asl=yes
        ASL_CFLAGS="-I`${CYGPATH_W} $withval`"
-       IPOPTAMPLINTERFACELIB_CFLAGS="$withval $IPOPTAMPLINTERFACELIB_CFLAGS"
+       IPOPTAMPLINTERFACELIB_CFLAGS="-I`${CYGPATH_W} $withval` $IPOPTAMPLINTERFACELIB_CFLAGS"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         ASL_CFLAGS_INSTALLED="$ASL_CFLAGS"
+         IPOPTAMPLINTERFACELIB_CFLAGS_INSTALLED="$ASL_CFLAGS $IPOPTAMPLINTERFACELIB_CFLAGS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -28580,6 +28613,10 @@ if test "${with_asl_datadir+set}" = set; then
      else
        coin_has_asl=yes
        ASL_DATA="$withval"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         ASL_DATA_INSTALLED="$withval"
+       fi
      fi
 
 fi;
@@ -29015,6 +29052,11 @@ if test "${with_hsl_lib+set}" = set; then
          IPOPTLIB_PCLIBS="$withval $IPOPTLIB_PCLIBS"
          IPOPTLIB_LIBS="$withval $IPOPTLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         HSL_LIBS_INSTALLED="$withval"
+         IPOPTLIB_LIBS_INSTALLED="$withval $IPOPTLIB_LIBS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -29030,7 +29072,12 @@ if test "${with_hsl_incdir+set}" = set; then
      else
        coin_has_hsl=yes
        HSL_CFLAGS="-I`${CYGPATH_W} $withval`"
-       IPOPTLIB_CFLAGS="$withval $IPOPTLIB_CFLAGS"
+       IPOPTLIB_CFLAGS="-I`${CYGPATH_W} $withval` $IPOPTLIB_CFLAGS"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         HSL_CFLAGS_INSTALLED="$HSL_CFLAGS"
+         IPOPTLIB_CFLAGS_INSTALLED="$HSL_CFLAGS $IPOPTLIB_CFLAGS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -29046,6 +29093,10 @@ if test "${with_hsl_datadir+set}" = set; then
      else
        coin_has_hsl=yes
        HSL_DATA="$withval"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         HSL_DATA_INSTALLED="$withval"
+       fi
      fi
 
 fi;
@@ -29481,6 +29532,11 @@ if test "${with_mumps_lib+set}" = set; then
          IPOPTLIB_PCLIBS="$withval $IPOPTLIB_PCLIBS"
          IPOPTLIB_LIBS="$withval $IPOPTLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         MUMPS_LIBS_INSTALLED="$withval"
+         IPOPTLIB_LIBS_INSTALLED="$withval $IPOPTLIB_LIBS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -29496,7 +29552,12 @@ if test "${with_mumps_incdir+set}" = set; then
      else
        coin_has_mumps=yes
        MUMPS_CFLAGS="-I`${CYGPATH_W} $withval`"
-       IPOPTLIB_CFLAGS="$withval $IPOPTLIB_CFLAGS"
+       IPOPTLIB_CFLAGS="-I`${CYGPATH_W} $withval` $IPOPTLIB_CFLAGS"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         MUMPS_CFLAGS_INSTALLED="$MUMPS_CFLAGS"
+         IPOPTLIB_CFLAGS_INSTALLED="$MUMPS_CFLAGS $IPOPTLIB_CFLAGS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -29512,6 +29573,10 @@ if test "${with_mumps_datadir+set}" = set; then
      else
        coin_has_mumps=yes
        MUMPS_DATA="$withval"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         MUMPS_DATA_INSTALLED="$withval"
+       fi
      fi
 
 fi;

@@ -20986,7 +20986,7 @@ fi
 
   fi
   if test -n "$PKG_CONFIG"; then
-    _pkg_min_version=0.16.0
+    _pkg_min_version=0.9.0
     echo "$as_me:$LINENO: checking pkg-config is at least version $_pkg_min_version" >&5
 echo $ECHO_N "checking pkg-config is at least version $_pkg_min_version... $ECHO_C" >&6
     if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
@@ -21079,11 +21079,6 @@ if test x$coin_projectdir = xyes ; then
 
 fi
 
-if test -n "$PKG_CONFIG" && test x$coin_cc_is_cl = xtrue; then
-  { echo "$as_me:$LINENO: WARNING: Using pkg-config together with MS or Intel Compiler on Windows is not support by example Makefiles. Consider using --disable-pkg-config." >&5
-echo "$as_me: WARNING: Using pkg-config together with MS or Intel Compiler on Windows is not support by example Makefiles. Consider using --disable-pkg-config." >&2;}
-fi
-
 
 
 echo "$as_me:$LINENO: checking whether project ASL is available" >&5
@@ -21105,7 +21100,7 @@ if test x"$COIN_SKIP_PROJECTS" != x; then
   done
 fi
 
-if test "$coin_has_asl" != skipping; then
+if test $coin_has_asl != skipping; then
   if test $PACKAGE_TARNAME = asl; then
     coin_has_asl=yes
     coin_have_project_dir=yes
@@ -21123,7 +21118,7 @@ if test "${with_asl_lib+set}" = set; then
 fi;
 fi
 
-if test "$coin_has_asl" != skipping; then
+if test $coin_has_asl != skipping; then
 
 # Check whether --with-m4_tolower(ASL)-incdir or --without-m4_tolower(ASL)-incdir was given.
 if test "${with_asl_incdir+set}" = set; then
@@ -21136,7 +21131,7 @@ if test "${with_asl_incdir+set}" = set; then
 fi;
 fi
 
-if test "$coin_has_asl" != skipping; then
+if test $coin_has_asl != skipping; then
 
 # Check whether --with-m4_tolower(ASL)-datadir or --without-m4_tolower(ASL)-datadir was given.
 if test "${with_asl_datadir+set}" = set; then
@@ -21236,7 +21231,7 @@ if test x"$COIN_SKIP_PROJECTS" != x; then
   done
 fi
 
-if test "$coin_has_blas" != skipping; then
+if test $coin_has_blas != skipping; then
   if test $PACKAGE_TARNAME = blas; then
     coin_has_blas=yes
     coin_have_project_dir=yes
@@ -21254,7 +21249,7 @@ if test "${with_blas_lib+set}" = set; then
 fi;
 fi
 
-if test "$coin_has_blas" != skipping; then
+if test $coin_has_blas != skipping; then
 
 # Check whether --with-m4_tolower(Blas)-incdir or --without-m4_tolower(Blas)-incdir was given.
 if test "${with_blas_incdir+set}" = set; then
@@ -21267,7 +21262,7 @@ if test "${with_blas_incdir+set}" = set; then
 fi;
 fi
 
-if test "$coin_has_blas" != skipping; then
+if test $coin_has_blas != skipping; then
 
 # Check whether --with-m4_tolower(Blas)-datadir or --without-m4_tolower(Blas)-datadir was given.
 if test "${with_blas_datadir+set}" = set; then
@@ -21382,7 +21377,7 @@ if test x"$COIN_SKIP_PROJECTS" != x; then
   done
 fi
 
-if test "$coin_has_lapack" != skipping; then
+if test $coin_has_lapack != skipping; then
   if test $PACKAGE_TARNAME = lapack; then
     coin_has_lapack=yes
     coin_have_project_dir=yes
@@ -21400,7 +21395,7 @@ if test "${with_lapack_lib+set}" = set; then
 fi;
 fi
 
-if test "$coin_has_lapack" != skipping; then
+if test $coin_has_lapack != skipping; then
 
 # Check whether --with-m4_tolower(Lapack)-incdir or --without-m4_tolower(Lapack)-incdir was given.
 if test "${with_lapack_incdir+set}" = set; then
@@ -21413,7 +21408,7 @@ if test "${with_lapack_incdir+set}" = set; then
 fi;
 fi
 
-if test "$coin_has_lapack" != skipping; then
+if test $coin_has_lapack != skipping; then
 
 # Check whether --with-m4_tolower(Lapack)-datadir or --without-m4_tolower(Lapack)-datadir was given.
 if test "${with_lapack_datadir+set}" = set; then
@@ -21528,7 +21523,7 @@ if test x"$COIN_SKIP_PROJECTS" != x; then
   done
 fi
 
-if test "$coin_has_metis" != skipping; then
+if test $coin_has_metis != skipping; then
   if test $PACKAGE_TARNAME = metis; then
     coin_has_metis=yes
     coin_have_project_dir=yes
@@ -21546,7 +21541,7 @@ if test "${with_metis_lib+set}" = set; then
 fi;
 fi
 
-if test "$coin_has_metis" != skipping; then
+if test $coin_has_metis != skipping; then
 
 # Check whether --with-m4_tolower(Metis)-incdir or --without-m4_tolower(Metis)-incdir was given.
 if test "${with_metis_incdir+set}" = set; then
@@ -21559,7 +21554,7 @@ if test "${with_metis_incdir+set}" = set; then
 fi;
 fi
 
-if test "$coin_has_metis" != skipping; then
+if test $coin_has_metis != skipping; then
 
 # Check whether --with-m4_tolower(Metis)-datadir or --without-m4_tolower(Metis)-datadir was given.
 if test "${with_metis_datadir+set}" = set; then
@@ -21659,7 +21654,7 @@ if test x"$COIN_SKIP_PROJECTS" != x; then
   done
 fi
 
-if test "$coin_has_hsl" != skipping; then
+if test $coin_has_hsl != skipping; then
   if test $PACKAGE_TARNAME = hsl; then
     coin_has_hsl=yes
     coin_have_project_dir=yes
@@ -21677,7 +21672,7 @@ if test "${with_hsl_lib+set}" = set; then
 fi;
 fi
 
-if test "$coin_has_hsl" != skipping; then
+if test $coin_has_hsl != skipping; then
 
 # Check whether --with-m4_tolower(HSL)-incdir or --without-m4_tolower(HSL)-incdir was given.
 if test "${with_hsl_incdir+set}" = set; then
@@ -21690,7 +21685,7 @@ if test "${with_hsl_incdir+set}" = set; then
 fi;
 fi
 
-if test "$coin_has_hsl" != skipping; then
+if test $coin_has_hsl != skipping; then
 
 # Check whether --with-m4_tolower(HSL)-datadir or --without-m4_tolower(HSL)-datadir was given.
 if test "${with_hsl_datadir+set}" = set; then
@@ -21790,7 +21785,7 @@ if test x"$COIN_SKIP_PROJECTS" != x; then
   done
 fi
 
-if test "$coin_has_mumps" != skipping; then
+if test $coin_has_mumps != skipping; then
   if test $PACKAGE_TARNAME = mumps; then
     coin_has_mumps=yes
     coin_have_project_dir=yes
@@ -21808,7 +21803,7 @@ if test "${with_mumps_lib+set}" = set; then
 fi;
 fi
 
-if test "$coin_has_mumps" != skipping; then
+if test $coin_has_mumps != skipping; then
 
 # Check whether --with-m4_tolower(Mumps)-incdir or --without-m4_tolower(Mumps)-incdir was given.
 if test "${with_mumps_incdir+set}" = set; then
@@ -21821,7 +21816,7 @@ if test "${with_mumps_incdir+set}" = set; then
 fi;
 fi
 
-if test "$coin_has_mumps" != skipping; then
+if test $coin_has_mumps != skipping; then
 
 # Check whether --with-m4_tolower(Mumps)-datadir or --without-m4_tolower(Mumps)-datadir was given.
 if test "${with_mumps_datadir+set}" = set; then
@@ -21926,7 +21921,7 @@ if test x"$COIN_SKIP_PROJECTS" != x; then
   done
 fi
 
-if test "$coin_has_ipopt" != skipping; then
+if test $coin_has_ipopt != skipping; then
   if test $PACKAGE_TARNAME = ipopt; then
     coin_has_ipopt=yes
     coin_have_project_dir=yes
@@ -21944,7 +21939,7 @@ if test "${with_ipopt_lib+set}" = set; then
 fi;
 fi
 
-if test "$coin_has_ipopt" != skipping; then
+if test $coin_has_ipopt != skipping; then
 
 # Check whether --with-m4_tolower(Ipopt)-incdir or --without-m4_tolower(Ipopt)-incdir was given.
 if test "${with_ipopt_incdir+set}" = set; then
@@ -21957,7 +21952,7 @@ if test "${with_ipopt_incdir+set}" = set; then
 fi;
 fi
 
-if test "$coin_has_ipopt" != skipping; then
+if test $coin_has_ipopt != skipping; then
 
 # Check whether --with-m4_tolower(Ipopt)-datadir or --without-m4_tolower(Ipopt)-datadir was given.
 if test "${with_ipopt_datadir+set}" = set; then
