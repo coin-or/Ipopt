@@ -219,7 +219,7 @@ namespace Ipopt
     roptions->AddLowerBoundedIntegerOption(
       "pardiso_iter_max_levels",
       "Maximum Size of Grid Levels",
-      1, 10000,
+      1, 10,
       "DPARM(4)");
     roptions->AddBoundedNumberOption(
       "pardiso_iter_dropping_factor",
@@ -402,8 +402,8 @@ namespace Ipopt
     IPARM_[23] = 1; // parallel fac
     IPARM_[24] = 1; // parallel solve
     IPARM_[28] = 0; // 32-bit factorization
-    IPARM_[29] = 1; // we need this for IPOPT interface
-    IPARM_[29] = 1; // we need this for IPOPT interface
+    IPARM_[29] = 1; //we need this for IPOPT interface
+    //IPARM_[33] = 1; // bit-by-bit identical results in parallel run
 
     if (pardiso_iterative_) {
 #ifndef HAVE_PARDISO_NEWINTERFACE
