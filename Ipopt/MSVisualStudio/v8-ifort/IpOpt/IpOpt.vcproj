@@ -48,7 +48,7 @@
 				PreprocessorDefinitions="IPOPT_DLL;WIN32;_DEBUG;_LIB;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="0"
+				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
@@ -65,9 +65,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\$(ProjectName)38.dll"
+				OutputFile="$(OutDir)\$(ProjectName)39.dll"
 				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\ia32&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\ia32\lib&quot;"
 				IgnoreDefaultLibraryNames="libcmt.lib"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)\$(ProjectName)39.pdb"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 			/>
 			<Tool
@@ -127,7 +129,7 @@
 				PreprocessorDefinitions="IPOPT_DLL;WIN32;_DEBUG;_LIB;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="0"
+				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
@@ -144,9 +146,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\$(ProjectName)38.dll"
+				OutputFile="$(OutDir)\$(ProjectName)39.dll"
 				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\intel64&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\em64t\lib&quot;"
 				IgnoreDefaultLibraryNames="libcmt.lib"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)\$(ProjectName)39.pdb"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 			/>
 			<Tool
@@ -221,8 +225,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				ShowProgress="0"
-				OutputFile="$(OutDir)\$(ProjectName)38.dll"
+				OutputFile="$(OutDir)\$(ProjectName)39.dll"
 				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\ia32&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\ia32\lib&quot;"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)\$(ProjectName)39.pdb"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 			/>
 			<Tool
@@ -298,8 +304,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				ShowProgress="0"
-				OutputFile="$(OutDir)\$(ProjectName)38.dll"
+				OutputFile="$(OutDir)\$(ProjectName)39.dll"
 				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\intel64&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\em64t\lib&quot;"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)\$(ProjectName)39.pdb"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 			/>
 			<Tool
@@ -376,8 +384,10 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="mkl_intel_c.lib mkl_intel_thread.lib mkl_core.lib libiomp5mt.lib"
 				ShowProgress="0"
-				OutputFile="$(OutDir)\$(ProjectName)38.dll"
+				OutputFile="$(OutDir)\$(ProjectName)39.dll"
 				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\ia32&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\ia32\lib&quot;"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)\$(ProjectName)39.pdb"
 				GenerateMapFile="true"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 			/>
@@ -455,8 +465,10 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="mkl_intel_lp64.lib mkl_intel_thread.lib mkl_core.lib libiomp5mt.lib"
 				ShowProgress="0"
-				OutputFile="$(OutDir)\$(ProjectName)38.dll"
+				OutputFile="$(OutDir)\$(ProjectName)39.dll"
 				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\intel64&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\em64t\lib&quot;"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)\$(ProjectName)39.pdb"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 				TargetMachine="17"
 			/>

@@ -16,13 +16,13 @@
 
 # Copyright (C) 2006 International Business Machines and others.
 # All Rights Reserved.
-# This file is distributed under the Common Public License.
+# This file is distributed under the Eclipse Public License.
 
 # Author:  Andreas Waechter           IBM    2006-04-13
 
 # Copyright (C) 2006, 2007 International Business Machines and others.
 # All Rights Reserved.
-# This file is distributed under the Common Public License.
+# This file is distributed under the Eclipse Public License.
 
 # Author:  Andreas Waechter           IBM    2006-04-13
 
@@ -109,6 +109,10 @@ CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CDEFS = @CDEFS@
 CFLAGS = @CFLAGS@
+COIN_CC_IS_CL_FALSE = @COIN_CC_IS_CL_FALSE@
+COIN_CC_IS_CL_TRUE = @COIN_CC_IS_CL_TRUE@
+COIN_CXX_IS_CL_FALSE = @COIN_CXX_IS_CL_FALSE@
+COIN_CXX_IS_CL_TRUE = @COIN_CXX_IS_CL_TRUE@
 COIN_HAS_PKGCONFIG_FALSE = @COIN_HAS_PKGCONFIG_FALSE@
 COIN_HAS_PKGCONFIG_TRUE = @COIN_HAS_PKGCONFIG_TRUE@
 COIN_PKG_CONFIG_PATH = @COIN_PKG_CONFIG_PATH@

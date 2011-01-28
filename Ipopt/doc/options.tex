@@ -1,3 +1,4 @@
+
 \subsection{Output}
 
 \paragraph{print\_level:}\label{sec:print_level} Output verbosity level. $\;$ \\
@@ -82,8 +83,8 @@ algorithm.  The algorithm terminates
 successfully, if the (scaled) NLP error becomes
 smaller than this value, and if the (absolute)
 criteria according to "dual\_inf\_tol",
-"primal\_inf\_tol", and "cmpl\_inf\_tol" are met.
- (This is epsilon\_tol in Eqn. (6) in
+"primal\_inf\_tol", and "compl\_inf\_tol" are
+met.  (This is epsilon\_tol in Eqn. (6) in
 implementation paper).  See also
 "acceptable\_tol" as a second termination
 criterion.  Note, some other algorithmic features
@@ -1112,6 +1113,17 @@ Possible values:
 approximation
 \end{itemize}
 
+\paragraph{limited\_memory\_update\_type:}\label{sec:limited_memory_update_type} Quasi-Newton update formula for the limited memory approximation. $\;$ \\
+ Determines which update formula is to be used for
+the limited-memory quasi-Newton approximation.
+The default value for this string option is "bfgs".
+\\ 
+Possible values:
+\begin{itemize}
+   \item bfgs: BFGS update (with skipping)
+   \item sr1: SR1 (not working well)
+\end{itemize}
+
 \paragraph{limited\_memory\_max\_history:}\label{sec:limited_memory_max_history} Maximum size of the history for the limited quasi-Newton Hessian approximation. $\;$ \\
  This option determines the number of most recent
 iterations that are taken into account for the
@@ -1127,6 +1139,70 @@ approximation is reset. The valid range for this integer option is
 $1 \le {\tt limited\_memory\_max\_skipping } <  {\tt +inf}$
 and its default value is $2$.
 
+
+\paragraph{limited\_memory\_initialization:}\label{sec:limited_memory_initialization} Initialization strategy for the limited memory quasi-Newton approximation. $\;$ \\
+ Determines how the diagonal Matrix B\_0 as the
+first term in the limited memory approximation
+should be computed.
+The default value for this string option is "scalar1".
+\\ 
+Possible values:
+\begin{itemize}
+   \item scalar1: sigma = s\^Ty/s\^Ts
+   \item scalar2: sigma = y\^Ty/s\^Ty
+   \item scalar3: arithmetic average of scalar1 and scalar2
+   \item scalar4: geometric average of scalar1 and scalar2
+   \item constant: sigma = limited\_memory\_init\_val
+\end{itemize}
+
+\paragraph{limited\_memory\_init\_val:}\label{sec:limited_memory_init_val} Value for B0 in low-rank update. $\;$ \\
+ The starting matrix in the low rank update, B0,
+is chosen to be this multiple of the identity in
+the first iteration (when no updates have been
+performed yet), and is constantly chosen as this
+value, if "limited\_memory\_initialization" is
+"constant". The valid range for this real option is 
+$0 <  {\tt limited\_memory\_init\_val } <  {\tt +inf}$
+and its default value is $1$.
+
+
+\paragraph{limited\_memory\_init\_val\_max:}\label{sec:limited_memory_init_val_max} Upper bound on value for B0 in low-rank update. $\;$ \\
+ The starting matrix in the low rank update, B0,
+is chosen to be this multiple of the identity in
+the first iteration (when no updates have been
+performed yet), and is constantly chosen as this
+value, if "limited\_memory\_initialization" is
+"constant". The valid range for this real option is 
+$0 <  {\tt limited\_memory\_init\_val\_max } <  {\tt +inf}$
+and its default value is $1 \cdot 10^{+08}$.
+
+
+\paragraph{limited\_memory\_init\_val\_min:}\label{sec:limited_memory_init_val_min} Lower bound on value for B0 in low-rank update. $\;$ \\
+ The starting matrix in the low rank update, B0,
+is chosen to be this multiple of the identity in
+the first iteration (when no updates have been
+performed yet), and is constantly chosen as this
+value, if "limited\_memory\_initialization" is
+"constant". The valid range for this real option is 
+$0 <  {\tt limited\_memory\_init\_val\_min } <  {\tt +inf}$
+and its default value is $1 \cdot 10^{-08}$.
+
+
+\paragraph{limited\_memory\_special\_for\_resto:}\label{sec:limited_memory_special_for_resto} Determines if the quasi-Newton updates should be special during the restoration phase. $\;$ \\
+ Until Nov 2010, Ipopt used a special update
+during the restoration phase, but it turned out
+that this does not work well.  The new default
+uses the regular update procedure and it improves
+results.  If for some reason you want to get back
+to the original update, set this option to "yes".
+The default value for this string option is "no".
+\\ 
+Possible values:
+\begin{itemize}
+   \item no: use the same update as in regular iterations
+   \item yes: use the a special update during restoration
+phase
+\end{itemize}
 
 \subsection{Derivative Test}
 
@@ -1174,6 +1250,19 @@ Possible values:
    \item no: Print only suspect derivatives
    \item yes: Print all derivatives
 \end{itemize}
+
+\paragraph{derivative\_test\_first\_index:}\label{sec:derivative_test_first_index} Index of first quantity to be checked by derivative checker $\;$ \\
+ If this is set to -2, then all derivatives are
+checked.  Otherwise, for the first derivative
+test it specifies the first variable for which
+the test is done (counting starts at 0).  For
+second derivatives, it specifies the first
+constraint for which the test is done; counting
+of constraint indices starts at 0, and -1 refers
+to the objective function Hessian. The valid range for this integer option is
+$-2 \le {\tt derivative\_test\_first\_index } <  {\tt +inf}$
+and its default value is $-2$.
+
 
 \paragraph{point\_perturbation\_radius:}\label{sec:point_perturbation_radius} Maximal perturbation of an evaluation point. $\;$ \\
  If a random perturbation of a points is required,

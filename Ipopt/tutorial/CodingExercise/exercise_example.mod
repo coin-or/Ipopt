@@ -1,7 +1,7 @@
 # Copyright (C) 2009, International Business Machines
 #
 # This file is part of the Ipopt open source package, published under
-# the Common Public License
+# the Eclipse Public License
 #
 # Author:  Andreas Waechter         IBM       2009-04-02
 #

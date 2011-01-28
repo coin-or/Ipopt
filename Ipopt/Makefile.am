@@ -1,6 +1,6 @@
 # Copyright (C) 2004, 2008 International Business Machines and others.
 # All Rights Reserved.
-# This file is distributed under the Common Public License.
+# This file is distributed under the Eclipse Public License.
 
 ## $Id$
 
@@ -142,20 +142,32 @@ pkgconfiglib_DATA = ipopt.pc
 
 addlibsdir = $(DESTDIR)$(datadir)/coin/doc/Ipopt
 
-if COIN_HAS_PKGCONFIG
-	
+# setup addlibs files
+# the addlibs_cpp file is created by running pkg-config on the installed ipopt.pc, if pkg-config available,
+#   or by using variables setup in configure
+# the addlibs_c file is created by adding @CXXLIBS@ to the content of the addlibs_cpp file
+# the addlibs_f file is creating by taking the content of the addlibs_cpp file and removing the FLIBS
+#   since pkg-config may have reordered the flags from FLIBS, we take them out one by one
 install-data-hook:
 	@$(mkdir_p) "$(addlibsdir)"
+if COIN_HAS_PKGCONFIG
 	PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ \
 	$(PKG_CONFIG) --libs ipopt > $(addlibsdir)/ipopt_addlibs_cpp.txt
 else
-	
-install-data-hook:
-	@$(mkdir_p) "$(addlibsdir)"
-	echo "@PCADDLIBS@ @FLIBS@" > $(addlibsdir)/ipopt_addlibs_cpp.txt
+if COIN_CXX_IS_CL
+	echo "/libpath:`$(CYGPATH_W) @abs_lib_dir@` libipopt.lib @IPOPTLIB_LIBS_INSTALLED@" > $(addlibsdir)/ipopt_addlibs_cpp.txt
+else
+	echo "-L@abs_lib_dir@ -lipopt @IPOPTLIB_LIBS_INSTALLED@" > $(addlibsdir)/ipopt_addlibs_cpp.txt
 endif
+endif
+	addlibs=`cat $(addlibsdir)/ipopt_addlibs_cpp.txt` ; \
+	echo "$$addlibs @CXXLIBS@" > $(addlibsdir)/ipopt_addlibs_c.txt ; \
+	for i in @FLIBS@ coin_dummy ; do \
+		addlibs=`echo -n " $$addlibs " | sed -e "s! $$i ! !g"` ; \
+	done ; \
+	echo "$$addlibs @CXXLIBS@" > $(addlibsdir)/ipopt_addlibs_f.txt
 
 uninstall-hook:
-	rm -f $(addlibsdir)/ipopt_addlibs_cpp.txt
+	rm -f $(addlibsdir)/ipopt_addlibs_{cpp,c,f}.txt
 
 include BuildTools/Makemain.inc

@@ -1,6 +1,6 @@
 // Copyright 2009 Hans Pirnay
 // All Rights Reserved.
-// This code is published under the Common Public License.
+// This code is published under the Eclipse Public License.
 //
 // Date   : 2009-05-11
 
@@ -125,6 +125,13 @@ namespace Ipopt
 					  "useless for the use with AsNMPC. This option sets an upper bound, which the inertia correction"
 					  "may have. If any of the inertia correction values is above this bound, the AsNMPC algorithm"
 					  "is aborted.");
+    roptions->AddStringOption2(
+			       "rh_eigendecomp",
+			       "If yes, the eigenvalue decomposition of the reduced hessian matrix is computed",
+			       "no",
+			       "yes", "compute eigenvalue decomposition of reduced hessian",
+			       "no", "don't compute eigenvalue decomposition of reduced hessian",
+			       "The eigenvalue decomposition of the reduced hessian has different meanings depending on the specific problem. For parameter estimation problems, the eigenvalues are linked to the confidence interval of the parameters. See for example Victor Zavala's Phd thesis, chapter 4 for details.");
   }
 
   NmpControllerExitStatus NmpcApplication::Run()
@@ -136,7 +143,8 @@ namespace Ipopt
     bool nmpc_internal_abort, redhess_internal_abort;
     Options()->GetBoolValue("nmpc_internal_abort", nmpc_internal_abort, "");
     Options()->GetBoolValue("redhess_internal_abort", redhess_internal_abort, "");
-    
+
+    // Check for perturbation of primal dual system
     Number max_pdpert;
     Options()->GetNumericValue("nmpc_max_pdpert", max_pdpert, "");
     Number pdpert_x, pdpert_s, pdpert_c, pdpert_d;

@@ -1,6 +1,6 @@
 # Copyright (C) 2004, 2009 International Business Machines and others.
 # All Rights Reserved.
-# This file is distributed under the Common Public License.
+# This file is distributed under the Eclipse Public License.
 
 ## $Id$
 
@@ -22,8 +22,7 @@ includeipopt_HEADERS = \
 	IpTNLP.hpp \
 	IpTNLPReducer.hpp
 
-coinlibdir = $(libdir)/coin
-coinlib_LTLIBRARIES = libipopt.la
+lib_LTLIBRARIES = libipopt.la
 
 libipopt_la_SOURCES = \
 	IpAlgTypes.hpp \
@@ -55,9 +54,6 @@ libipopt_la_DEPENDENCIES = $(IPALLLIBS)
 
 libipopt_la_LDFLAGS = $(LT_LDFLAGS)
 
-addlibsdir = $(datadir)/coin/doc/Ipopt
-addlibs_DATA = ipopt_addlibs_f.txt
-
 CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg/Parallel` \
@@ -65,14 +61,11 @@ CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg/TMatrices` \
 	-I`$(CYGPATH_W) $(srcdir)/../Algorithm` \
 	-I`$(CYGPATH_W) $(srcdir)/../Algorithm/Inexact` \
-	-I`$(CYGPATH_W) $(srcdir)/../contrib/CGPenalty`
+	-I`$(CYGPATH_W) $(srcdir)/../contrib/CGPenalty` \
+	$(HSL_CFLAGS)
 
-CFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common`
-
-if COIN_HAS_HSL
-CXXFLAGS += $(HSL_CFLAGS)
-CFLAGS   += $(HSL_CFLAGS)
-endif
+CFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
+	$(HSL_CFLAGS)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin

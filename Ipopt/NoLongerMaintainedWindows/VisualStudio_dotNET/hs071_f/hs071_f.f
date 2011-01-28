@@ -1,6 +1,6 @@
 C Copyright (C) 2002, 2004, 2005, 2006 Carnegie Mellon University and others.
 C All Rights Reserved.
-C This code is published under the Common Public License.
+C This code is published under the Eclipse Public License.
 C
 C    $Id: hs071_f.f.in 661 2006-03-12 23:19:03Z andreasw $
 C

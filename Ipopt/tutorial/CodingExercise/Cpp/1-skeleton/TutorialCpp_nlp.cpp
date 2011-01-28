@@ -1,6 +1,6 @@
 // Copyright (C) 2009 International Business Machines.
 // All Rights Reserved.
-// This code is published under the Common Public License.
+// This code is published under the Eclipse Public License.
 //
 // $Id$
 //
@@ -24,6 +24,8 @@
 //
 
 #include "TutorialCpp_nlp.hpp"
+
+#include <cstdio>
 
 // We use sin and cos
 #include <cmath>

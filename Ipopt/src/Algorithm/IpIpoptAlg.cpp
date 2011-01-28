@@ -1,6 +1,6 @@
 // Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
-// This code is published under the Common Public License.
+// This code is published under the Eclipse Public License.
 //
 // $Id$
 //
@@ -948,7 +948,7 @@ namespace Ipopt
     jnlst.Printf(J_INSUPPRESSIBLE, J_MAIN,
                  "\n******************************************************************************\n"
                  "This program contains Ipopt, a library for large-scale nonlinear optimization.\n"
-                 " Ipopt is released as open source code under the Common Public License (CPL).\n"
+                 " Ipopt is released as open source code under the Eclipse Public License (EPL).\n"
                  "         For more information visit http://projects.coin-or.org/Ipopt\n"
                  "******************************************************************************\n\n");
 #ifdef COIN_HAS_MUMPS

@@ -1,6 +1,6 @@
 // Copyright (C) 2009 International Business Machines.
 // All Rights Reserved.
-// This code is published under the Common Public License.
+// This code is published under the Eclipse Public License.
 //
 // $Id$
 //
@@ -22,6 +22,8 @@
 //
 // The constant term "i/n" in the constraint is supposed to be input data
 //
+
+#include <cstdio>
 
 #include "IpIpoptApplication.hpp"
 #include "TutorialCpp_nlp.hpp"

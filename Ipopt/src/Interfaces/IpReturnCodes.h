@@ -1,7 +1,7 @@
 /***********************************************************************
 // Copyright (C) 2004, 2006 International Business Machines and others.
 // All Rights Reserved.
-// This code is published under the Common Public License.
+// This code is published under the Eclipse Public License.
 //
 // $Id$
 //

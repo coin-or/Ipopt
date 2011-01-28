@@ -1,6 +1,6 @@
 // Copyright (C) 2004, 2010 International Business Machines and others.
 // All Rights Reserved.
-// This code is published under the Common Public License.
+// This code is published under the Eclipse Public License.
 //
 // $Id$
 //
@@ -514,7 +514,7 @@ namespace Ipopt
   {
     DBG_START_METH("Journal::Print", 0);
     if (file_) {
-      fprintf(file_, str);
+      fprintf(file_, "%s", str);
       DBG_EXEC(0, fflush(file_));
     }
   }

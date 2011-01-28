@@ -1,6 +1,6 @@
 // Copyright 2009, 2010 Hans Pirnay
 // All Rights Reserved.
-// This code is published under the Common Public License.
+// This code is published under the Eclipse Public License.
 //
 // Date   : 2009-08-01
 
@@ -32,8 +32,14 @@ namespace Ipopt
 
   private:
 
+    /** Pointer to Schurdata object holding the indices for selecting the free variables */
     SmartPtr<SchurData> hess_data_;
+
+    /** Pointer to the P Calculator object that returns the reduced hessian matrix */
     SmartPtr<PCalculator> pcalc_;
+
+    /** True, if option rh_eigendecomp was set to yes */
+    bool compute_eigenvalues_;
   };
 
 }

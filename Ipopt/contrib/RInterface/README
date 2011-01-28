@@ -1,0 +1,15 @@
+Package: ipoptr
+Type: Package
+Title: R interface to Ipopt
+Version: 0.8
+Date: 2010-07-18
+Author: Jelmer Ypma
+Maintainer: Jelmer Ypma <uctpjyy@ucl.ac.uk>
+Description: ipoptr is an R interface to Ipopt (Interior Point Optimizer), an open source software package for large-scale nonlinear optimization. It can be used to solve general nonlinear programming problems with nonlinear constraints and lower and upper bounds for the controls. Ipopt is written in C++ and is released as open source code under the Eclipse Public License (EPL). It is available from the COIN-OR initiative. The code has been written by Carl Laird and Andreas Waechter, who is the COIN project leader for Ipopt.
+License: EPL
+Directories follow the standard structure of an R package:
+	- inst 		Contains citation information that is displayed by the R citation('ipoptr') command, and the TeX/Sweave code of the documentation.
+	- man  		Contains help-files for the commands available in this package. E.g. ?ipoptr in R shows the help-file for the ipoptr command.
+	- R    		Contains R code defining the R commands. Each command is defined in a separate file.
+	- src		Contains C++ code interfacing between R and Ipopt.
+	- tests		Contains some examples/tests to show how the R interface works.

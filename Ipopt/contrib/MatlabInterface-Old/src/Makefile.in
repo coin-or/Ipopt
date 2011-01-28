@@ -1,5 +1,5 @@
 # Copyright (C) 2007, 2009 Peter Carbonetto. All Rights Reserved.
-# This code is published under the Common Public License.
+# This code is published under the Eclipse Public License.
 #
 # Author: Peter Carbonetto
 #         Dept. of Computer Science
@@ -30,12 +30,21 @@ MEX = $(MATLAB_HOME)/bin/mex
 
 CXX           = @CXX@
 CXXFLAGS      = @CXXFLAGS@ -DMATLAB_MEXFILE # -DMWINDEXISINT
-IPOPT_INCLUDE = -I@includedir@
-IPOPTLIBDIR   = @libdir@
 libdir        = @libdir@
 exec_prefix   = @exec_prefix@
 prefix        = @prefix@
-LIBS          = @ipoptlib@ @ADDLIBS@
+
+# Include directories (we use the CYGPATH_W variables to allow compilation with Windows compilers)
+@COIN_HAS_PKGCONFIG_TRUE@INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipopt`
+@COIN_HAS_PKGCONFIG_FALSE@INCL = -I`$(CYGPATH_W) @abs_include_dir@/coin` @IPOPTLIB_CFLAGS_INSTALLED@
+
+# Linker flags
+@COIN_HAS_PKGCONFIG_TRUE@LIBS = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt`
+@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_TRUE@LIBS = /link /libpath:`$(CYGPATH_W) @abs_lib_dir@` libipopt.lib @IPOPTLIB_LIBS_INSTALLED@
+@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_FALSE@LIBS = -L@abs_lib_dir@ -lipopt @IPOPTLIB_LIBS_INSTALLED@
+
+# The following is necessary under cygwin, if native compilers are used
+CYGPATH_W = @CYGPATH_W@
 
 TARGET = ipopt.$(MEXSUFFIX)
 
@@ -58,7 +67,7 @@ VPATH = $(SRCDIR)
 all: $(TARGET)
 
 %.@OBJEXT@: %.cpp
-	$(CXX) $(CXXFLAGS) $(IPOPT_INCLUDE) $(MATLAB_INCLUDE) -o $@ -c $^
+	$(CXX) $(CXXFLAGS) $(INCL) $(MATLAB_INCLUDE) -o $@ -c $^
 
 $(TARGET): $(OBJS)
 	$(MEX) $(MEXFLAGS) $(LIBS) -output $@ $^

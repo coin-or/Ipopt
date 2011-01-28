@@ -1,5 +1,11 @@
 \begin{thebibliography}{1}
 
+\bibitem{Biegler:nlpbook}
+ L.~T.~Biegler.
+\newblock {\em Nonlinear Programming: Concepts, Algorithms and
+  Applications to Chemical Processes}
+\newblock SIAM, Philadelphia (2010)
+
 \bibitem{FouGayKer:AMPLbook}
 R.~Fourer, D.~M. Gay, and B.~W. Kernighan.
 \newblock {\em AMPL: A Modeling Language For Mathematical Programming}.

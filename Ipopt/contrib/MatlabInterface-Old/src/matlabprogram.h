@@ -1,5 +1,5 @@
 // Copyright (C) 2007 Peter Carbonetto. All Rights Reserved.
-// This code is published under the Common Public License.
+// This code is published under the Eclipse Public License.
 //
 // Author: Peter Carbonetto
 //         Dept. of Computer Science
@@ -16,7 +16,7 @@
 #include "sparsematrix.h"
 #include "arrayofmatrices.h"
 #include "multipliers.h"
-#include "coin/IpTNLP.hpp"
+#include "IpTNLP.hpp"
 #include "mex.h"
 
 using Ipopt::TNLP;
