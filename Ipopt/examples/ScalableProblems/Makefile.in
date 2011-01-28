@@ -25,15 +25,10 @@ CXXLINKFLAGS = @RPATH_FLAGS@
 
 LIB = libscalexamples.@LIBEXT@
 
-<<<<<<< .working
-# Libraries necessary to link with IPOPT
-IPOPTLIBS = -L$(IPOPTLIBDIR) -L$(IPOPTLIBDIR)/ThirdParty @ipoptlib@ @MUMPS_LIBS@ @HSL_LIBS@ @LAPACK_LIBS@ @BLAS_LIBS@ @ADDLIBS@
-=======
 # Linker flags
 @COIN_HAS_PKGCONFIG_TRUE@LIBS = $(LIB) `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt`
 @COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_TRUE@LIBS = $(LIB) /link /libpath:`$(CYGPATH_W) @abs_lib_dir@` libipopt.lib @IPOPTLIB_LIBS_INSTALLED@
 @COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_FALSE@LIBS = $(LIB) -L@abs_lib_dir@ -lipopt @IPOPTLIB_LIBS_INSTALLED@
->>>>>>> .merge-right.r1886
 
 # Name of the executable
 EXE = solve_problem@EXEEXT@
