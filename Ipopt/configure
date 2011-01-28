@@ -1129,6 +1129,9 @@ Optional Features:
   --disable-libtool-lock  avoid locking (might break parallel builds)
 
   --enable-pkg-config     use pkg-config if available (default is yes)
+  --enable-interpackage-dependencies
+                          whether to deduce Makefile dependencies from package
+                          linker flags (default: yes)
   --enable-inexact-solver enable inexact linear solver version EXPERIMENTAL!
                           (default: no)
   --enable-linear-solver-loader
@@ -2140,6 +2143,7 @@ fi
 	       comps="xlc gcc pgcc icc cc"
 	     fi
 	     ;;
+  *-linux-gnu*) comps="gcc cc pgcc icc xlc" ;;
   *-linux-*) comps="xlc gcc cc pgcc icc" ;;
   *)         comps="xlc_r xlc cc gcc pgcc icc" ;;
 esac
@@ -3339,6 +3343,8 @@ case $build in
   *-*-solaris*)
   	     comps="CC xlC_r aCC g++ c++ pgCC icpc gpp cxx cc++ cl FCC KCC RCC" ;;
   *-darwin*) comps="g++ c++ CC" ;;
+  *-linux-gnu*)
+             comps="g++ c++ pgCC icpc gpp cxx cc++ cl FCC KCC RCC xlC_r aCC CC" ;;
           *) comps="xlC_r aCC CC g++ c++ pgCC icpc gpp cxx cc++ cl FCC KCC RCC" ;;
 esac
 
@@ -4328,6 +4334,8 @@ case $build in
      fi ;;
   *-*-solaris*)
      coin_f77_comps="f95 f90 f77 xlf_r fort77 gfortran g77 pgf90 pgf77 ifort ifc frt af77" ;;
+  *-linux-gnu*)
+     coin_f77_comps="gfortran fort77 f77 g77 pgf90 pgf77 ifort ifc frt af77 xlf_r" ;;
   *) coin_f77_comps="xlf_r fort77 gfortran f77 g77 pgf90 pgf77 ifort ifc frt af77" ;;
  esac
 
@@ -4499,7 +4507,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:4502:" \
+echo "$as_me:4510:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -5067,7 +5075,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_verb"
-(eval echo $as_me:5070: \"$ac_link\") >&5
+(eval echo $as_me:5078: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -5145,7 +5153,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_cv_prog_f77_v"
-(eval echo $as_me:5148: \"$ac_link\") >&5
+(eval echo $as_me:5156: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -5997,7 +6005,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:6000:" \
+echo "$as_me:6008:" \
      "checking for Fortran compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -7857,7 +7865,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 7860 "configure"' > conftest.$ac_ext
+  echo '#line 7868 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -9837,11 +9845,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9840: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9848: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:9844: \$? = $ac_status" >&5
+   echo "$as_me:9852: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -10105,11 +10113,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:10108: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:10116: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:10112: \$? = $ac_status" >&5
+   echo "$as_me:10120: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -10209,11 +10217,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:10212: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:10220: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:10216: \$? = $ac_status" >&5
+   echo "$as_me:10224: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -12626,7 +12634,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12629 "configure"
+#line 12637 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12726,7 +12734,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12729 "configure"
+#line 12737 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -15086,11 +15094,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15089: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15097: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15093: \$? = $ac_status" >&5
+   echo "$as_me:15101: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15190,11 +15198,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15193: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15201: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15197: \$? = $ac_status" >&5
+   echo "$as_me:15205: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16760,11 +16768,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16763: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16771: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16767: \$? = $ac_status" >&5
+   echo "$as_me:16775: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16864,11 +16872,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16867: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16875: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16871: \$? = $ac_status" >&5
+   echo "$as_me:16879: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -19071,11 +19079,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:19074: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:19082: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:19078: \$? = $ac_status" >&5
+   echo "$as_me:19086: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -19339,11 +19347,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:19342: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:19350: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:19346: \$? = $ac_status" >&5
+   echo "$as_me:19354: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -19443,11 +19451,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:19446: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:19454: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:19450: \$? = $ac_status" >&5
+   echo "$as_me:19458: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -24669,6 +24677,11 @@ if test "${with_blas_lib+set}" = set; then
          IPOPTLIB_PCLIBS="$withval $IPOPTLIB_PCLIBS"
          IPOPTLIB_LIBS="$withval $IPOPTLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         BLAS_LIBS_INSTALLED="$withval"
+         IPOPTLIB_LIBS_INSTALLED="$withval $IPOPTLIB_LIBS_INSTALLED"
+       fi
 
 fi;
 
@@ -24679,6 +24692,12 @@ if test "${with_blas_incdir+set}" = set; then
   coin_has_blas=yes
      BLAS_CFLAGS="-I`${CYGPATH_W} $withval`"
      IPOPTLIB_CFLAGS="$withval $IPOPTLIB_CFLAGS"
+     IPOPTLIB_CFLAGS="-I`${CYGPATH_W} $withval` $IPOPTLIB_CFLAGS"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       BLAS_CFLAGS_INSTALLED="$BLAS_CFLAGS"
+       IPOPTLIB_CFLAGS_INSTALLED="$BLAS_CFLAGS $IPOPTLIB_CFLAGS_INSTALLED"
+     fi
 
 
 fi;
@@ -24689,6 +24708,11 @@ if test "${with_blas_datadir+set}" = set; then
   withval="$with_blas_datadir"
   coin_has_blas=yes
      BLAS_DATA="$withval"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       BLAS_DATA_INSTALLED="$withval"
+     fi
+
 fi;
 fi
 
@@ -25006,13 +25030,25 @@ cat >>confdefs.h <<\_ACEOF
 _ACEOF
 
 
-  # construct dependencies variables from LIBS variables
-  # we add an extra space in LIBS so we can substitute out everything starting with " -"
-  # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  BLAS_DEPENDENCIES=`echo " $BLAS_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  # Check whether --enable-interpackage-dependencies or --disable-interpackage-dependencies was given.
+if test "${enable_interpackage_dependencies+set}" = set; then
+  enableval="$enable_interpackage_dependencies"
 
-    IPOPTLIB_DEPENDENCIES=`echo " $IPOPTLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+else
+  enable_interpackage_dependencies=yes
+fi;
 
+  if test $enable_interpackage_dependencies = yes ; then
+     # construct dependencies variables from LIBS variables
+     # we add an extra space in LIBS so we can substitute out everything starting with " -"
+     # remove everything of the form -framework xxx as used on Mac and mklxxx as used on Windows
+     # then remove everything of the form -xxx
+     # also remove everything of the form `xxx`yyy (may have been added for cygwin/cl)
+     BLAS_DEPENDENCIES=`echo " $BLAS_LIBS" | sed -e 's/ mkl[^ ]*//g' -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+
+       IPOPTLIB_DEPENDENCIES=`echo " $IPOPTLIB_LIBS " | sed -e 's/ mkl[^ ]*//g' -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+
+  fi
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
     if test -n "$BLAS_CFLAGS" ; then
@@ -27205,6 +27241,11 @@ if test "${with_lapack_lib+set}" = set; then
          IPOPTLIB_PCLIBS="$withval $IPOPTLIB_PCLIBS"
          IPOPTLIB_LIBS="$withval $IPOPTLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         LAPACK_LIBS_INSTALLED="$withval"
+         IPOPTLIB_LIBS_INSTALLED="$withval $IPOPTLIB_LIBS_INSTALLED"
+       fi
 
 fi;
 
@@ -27215,6 +27256,12 @@ if test "${with_lapack_incdir+set}" = set; then
   coin_has_lapack=yes
      LAPACK_CFLAGS="-I`${CYGPATH_W} $withval`"
      IPOPTLIB_CFLAGS="$withval $IPOPTLIB_CFLAGS"
+     IPOPTLIB_CFLAGS="-I`${CYGPATH_W} $withval` $IPOPTLIB_CFLAGS"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       LAPACK_CFLAGS_INSTALLED="$LAPACK_CFLAGS"
+       IPOPTLIB_CFLAGS_INSTALLED="$LAPACK_CFLAGS $IPOPTLIB_CFLAGS_INSTALLED"
+     fi
 
 
 fi;
@@ -27225,6 +27272,11 @@ if test "${with_lapack_datadir+set}" = set; then
   withval="$with_lapack_datadir"
   coin_has_lapack=yes
      LAPACK_DATA="$withval"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       LAPACK_DATA_INSTALLED="$withval"
+     fi
+
 fi;
 fi
 
@@ -27542,13 +27594,25 @@ cat >>confdefs.h <<\_ACEOF
 _ACEOF
 
 
-  # construct dependencies variables from LIBS variables
-  # we add an extra space in LIBS so we can substitute out everything starting with " -"
-  # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  LAPACK_DEPENDENCIES=`echo " $LAPACK_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  # Check whether --enable-interpackage-dependencies or --disable-interpackage-dependencies was given.
+if test "${enable_interpackage_dependencies+set}" = set; then
+  enableval="$enable_interpackage_dependencies"
 
-    IPOPTLIB_DEPENDENCIES=`echo " $IPOPTLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+else
+  enable_interpackage_dependencies=yes
+fi;
 
+  if test $enable_interpackage_dependencies = yes ; then
+     # construct dependencies variables from LIBS variables
+     # we add an extra space in LIBS so we can substitute out everything starting with " -"
+     # remove everything of the form -framework xxx as used on Mac and mklxxx as used on Windows
+     # then remove everything of the form -xxx
+     # also remove everything of the form `xxx`yyy (may have been added for cygwin/cl)
+     LAPACK_DEPENDENCIES=`echo " $LAPACK_LIBS" | sed -e 's/ mkl[^ ]*//g' -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+
+       IPOPTLIB_DEPENDENCIES=`echo " $IPOPTLIB_LIBS " | sed -e 's/ mkl[^ ]*//g' -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+
+  fi
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
     if test -n "$LAPACK_CFLAGS" ; then
@@ -27700,6 +27764,11 @@ if test "${with_asl_lib+set}" = set; then
          IPOPTAMPLINTERFACELIB_PCLIBS="$withval $IPOPTAMPLINTERFACELIB_PCLIBS"
          IPOPTAMPLINTERFACELIB_LIBS="$withval $IPOPTAMPLINTERFACELIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         ASL_LIBS_INSTALLED="$withval"
+         IPOPTAMPLINTERFACELIB_LIBS_INSTALLED="$withval $IPOPTAMPLINTERFACELIB_LIBS_INSTALLED"
+       fi
 
 fi;
 
@@ -27710,6 +27779,12 @@ if test "${with_asl_incdir+set}" = set; then
   coin_has_asl=yes
      ASL_CFLAGS="-I`${CYGPATH_W} $withval`"
      IPOPTAMPLINTERFACELIB_CFLAGS="$withval $IPOPTAMPLINTERFACELIB_CFLAGS"
+     IPOPTAMPLINTERFACELIB_CFLAGS="-I`${CYGPATH_W} $withval` $IPOPTAMPLINTERFACELIB_CFLAGS"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       ASL_CFLAGS_INSTALLED="$ASL_CFLAGS"
+       IPOPTAMPLINTERFACELIB_CFLAGS_INSTALLED="$ASL_CFLAGS $IPOPTAMPLINTERFACELIB_CFLAGS_INSTALLED"
+     fi
 
 
 fi;
@@ -27720,6 +27795,11 @@ if test "${with_asl_datadir+set}" = set; then
   withval="$with_asl_datadir"
   coin_has_asl=yes
      ASL_DATA="$withval"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       ASL_DATA_INSTALLED="$withval"
+     fi
+
 fi;
 fi
 
@@ -28037,13 +28117,25 @@ cat >>confdefs.h <<\_ACEOF
 _ACEOF
 
 
-  # construct dependencies variables from LIBS variables
-  # we add an extra space in LIBS so we can substitute out everything starting with " -"
-  # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  ASL_DEPENDENCIES=`echo " $ASL_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  # Check whether --enable-interpackage-dependencies or --disable-interpackage-dependencies was given.
+if test "${enable_interpackage_dependencies+set}" = set; then
+  enableval="$enable_interpackage_dependencies"
 
-    IPOPTAMPLINTERFACELIB_DEPENDENCIES=`echo " $IPOPTAMPLINTERFACELIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+else
+  enable_interpackage_dependencies=yes
+fi;
 
+  if test $enable_interpackage_dependencies = yes ; then
+     # construct dependencies variables from LIBS variables
+     # we add an extra space in LIBS so we can substitute out everything starting with " -"
+     # remove everything of the form -framework xxx as used on Mac and mklxxx as used on Windows
+     # then remove everything of the form -xxx
+     # also remove everything of the form `xxx`yyy (may have been added for cygwin/cl)
+     ASL_DEPENDENCIES=`echo " $ASL_LIBS" | sed -e 's/ mkl[^ ]*//g' -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+
+       IPOPTAMPLINTERFACELIB_DEPENDENCIES=`echo " $IPOPTAMPLINTERFACELIB_LIBS " | sed -e 's/ mkl[^ ]*//g' -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+
+  fi
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
     if test -n "$ASL_CFLAGS" ; then
@@ -28139,6 +28231,11 @@ if test "${with_hsl_lib+set}" = set; then
          IPOPTLIB_PCLIBS="$withval $IPOPTLIB_PCLIBS"
          IPOPTLIB_LIBS="$withval $IPOPTLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         HSL_LIBS_INSTALLED="$withval"
+         IPOPTLIB_LIBS_INSTALLED="$withval $IPOPTLIB_LIBS_INSTALLED"
+       fi
 
 fi;
 
@@ -28149,6 +28246,12 @@ if test "${with_hsl_incdir+set}" = set; then
   coin_has_hsl=yes
      HSL_CFLAGS="-I`${CYGPATH_W} $withval`"
      IPOPTLIB_CFLAGS="$withval $IPOPTLIB_CFLAGS"
+     IPOPTLIB_CFLAGS="-I`${CYGPATH_W} $withval` $IPOPTLIB_CFLAGS"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       HSL_CFLAGS_INSTALLED="$HSL_CFLAGS"
+       IPOPTLIB_CFLAGS_INSTALLED="$HSL_CFLAGS $IPOPTLIB_CFLAGS_INSTALLED"
+     fi
 
 
 fi;
@@ -28159,6 +28262,11 @@ if test "${with_hsl_datadir+set}" = set; then
   withval="$with_hsl_datadir"
   coin_has_hsl=yes
      HSL_DATA="$withval"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       HSL_DATA_INSTALLED="$withval"
+     fi
+
 fi;
 fi
 
@@ -28476,13 +28584,25 @@ cat >>confdefs.h <<\_ACEOF
 _ACEOF
 
 
-  # construct dependencies variables from LIBS variables
-  # we add an extra space in LIBS so we can substitute out everything starting with " -"
-  # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  HSL_DEPENDENCIES=`echo " $HSL_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  # Check whether --enable-interpackage-dependencies or --disable-interpackage-dependencies was given.
+if test "${enable_interpackage_dependencies+set}" = set; then
+  enableval="$enable_interpackage_dependencies"
 
-    IPOPTLIB_DEPENDENCIES=`echo " $IPOPTLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+else
+  enable_interpackage_dependencies=yes
+fi;
 
+  if test $enable_interpackage_dependencies = yes ; then
+     # construct dependencies variables from LIBS variables
+     # we add an extra space in LIBS so we can substitute out everything starting with " -"
+     # remove everything of the form -framework xxx as used on Mac and mklxxx as used on Windows
+     # then remove everything of the form -xxx
+     # also remove everything of the form `xxx`yyy (may have been added for cygwin/cl)
+     HSL_DEPENDENCIES=`echo " $HSL_LIBS" | sed -e 's/ mkl[^ ]*//g' -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+
+       IPOPTLIB_DEPENDENCIES=`echo " $IPOPTLIB_LIBS " | sed -e 's/ mkl[^ ]*//g' -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+
+  fi
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
     if test -n "$HSL_CFLAGS" ; then
@@ -28578,6 +28698,11 @@ if test "${with_mumps_lib+set}" = set; then
          IPOPTLIB_PCLIBS="$withval $IPOPTLIB_PCLIBS"
          IPOPTLIB_LIBS="$withval $IPOPTLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         MUMPS_LIBS_INSTALLED="$withval"
+         IPOPTLIB_LIBS_INSTALLED="$withval $IPOPTLIB_LIBS_INSTALLED"
+       fi
 
 fi;
 
@@ -28588,6 +28713,12 @@ if test "${with_mumps_incdir+set}" = set; then
   coin_has_mumps=yes
      MUMPS_CFLAGS="-I`${CYGPATH_W} $withval`"
      IPOPTLIB_CFLAGS="$withval $IPOPTLIB_CFLAGS"
+     IPOPTLIB_CFLAGS="-I`${CYGPATH_W} $withval` $IPOPTLIB_CFLAGS"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       MUMPS_CFLAGS_INSTALLED="$MUMPS_CFLAGS"
+       IPOPTLIB_CFLAGS_INSTALLED="$MUMPS_CFLAGS $IPOPTLIB_CFLAGS_INSTALLED"
+     fi
 
 
 fi;
@@ -28598,6 +28729,11 @@ if test "${with_mumps_datadir+set}" = set; then
   withval="$with_mumps_datadir"
   coin_has_mumps=yes
      MUMPS_DATA="$withval"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       MUMPS_DATA_INSTALLED="$withval"
+     fi
+
 fi;
 fi
 
@@ -28915,13 +29051,25 @@ cat >>confdefs.h <<\_ACEOF
 _ACEOF
 
 
-  # construct dependencies variables from LIBS variables
-  # we add an extra space in LIBS so we can substitute out everything starting with " -"
-  # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  MUMPS_DEPENDENCIES=`echo " $MUMPS_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  # Check whether --enable-interpackage-dependencies or --disable-interpackage-dependencies was given.
+if test "${enable_interpackage_dependencies+set}" = set; then
+  enableval="$enable_interpackage_dependencies"
 
-    IPOPTLIB_DEPENDENCIES=`echo " $IPOPTLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+else
+  enable_interpackage_dependencies=yes
+fi;
 
+  if test $enable_interpackage_dependencies = yes ; then
+     # construct dependencies variables from LIBS variables
+     # we add an extra space in LIBS so we can substitute out everything starting with " -"
+     # remove everything of the form -framework xxx as used on Mac and mklxxx as used on Windows
+     # then remove everything of the form -xxx
+     # also remove everything of the form `xxx`yyy (may have been added for cygwin/cl)
+     MUMPS_DEPENDENCIES=`echo " $MUMPS_LIBS" | sed -e 's/ mkl[^ ]*//g' -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+
+       IPOPTLIB_DEPENDENCIES=`echo " $IPOPTLIB_LIBS " | sed -e 's/ mkl[^ ]*//g' -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+
+  fi
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
     if test -n "$MUMPS_CFLAGS" ; then
