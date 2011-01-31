@@ -35,7 +35,7 @@
 #include <set>
 
 #define SCALE_AUX_BOUNDS
-//#define USE_NEW_DIRICHLET
+#define USE_NEW_DIRICHLET
 //#define PHI_IN_OBJECTIVE
 
 int GetProcID();
@@ -386,18 +386,24 @@ void LibMeshPDEBase::ConvertControl2PGData()
   assert(PG_._AC.size()==(unsigned int)sz);
   for (int iAC=0;iAC<sz;++iAC) {
     int BoundaryMarker = PG_._AC[iAC].BoundaryMarker[0];
-    PG_._BoundCond[BoundaryMarker].PhiRhs = vals[iControl++];
+    BoundaryConditionSquarePhiRhs* pBC = dynamic_cast<BoundaryConditionSquarePhiRhs*>(PG_._BoundCond[BoundaryMarker]);
+    assert(pBC);
+    pBC->_PhiRhsScale = vals[iControl++];
   }
 #else
   assert(PG_._AC.size()+PG_._Exh.size()==(unsigned int)sz);
   for (int iAC=0;iAC<PG_._AC.size();++iAC) {
     int BoundaryMarker = PG_._AC[iAC].BoundaryMarker[0];
-    PG_._BoundCond[BoundaryMarker].PhiRhs = vals[iControl++];
+    BoundaryConditionSquarePhiRhs* pBC = dynamic_cast<BoundaryConditionSquarePhiRhs*>(PG_._BoundCond[BoundaryMarker]);
+    assert(pBC);
+    pBC->_PhiRhsScale = vals[iControl++];
     //printf("DEBUG: iAC = %d BoundaryMarker=%d PhiRhs = %e\n", iAC, BoundaryMarker, PG_._BoundCond[BoundaryMarker].PhiRhs);
   }
   for (int iExh=0;iExh<PG_._Exh.size();++iExh) {
     int BoundaryMarker = PG_._Exh[iExh].BoundaryMarker[0];
-    PG_._BoundCond[BoundaryMarker].PhiRhs = vals[iControl++];
+    BoundaryConditionConstValues* pBC = dynamic_cast<BoundaryConditionConstValues*>(PG_._BoundCond[BoundaryMarker]);
+    assert(pBC);
+    pBC->_PhiRhs = vals[iControl++];
     //printf("DEBUG: iExh = %d BoundaryMarker=%d PhiRhs = %e\n", iExh, BoundaryMarker, PG_._BoundCond[BoundaryMarker].PhiRhs);
   }
 #endif
@@ -413,10 +419,12 @@ void LibMeshPDEBase::calc_objective_part(Number& Val)
   if (GetProcID()==0) {
     for (unsigned int iAC=0;iAC<PG_._AC.size();iAC++) {
       int BoundaryMarker = PG_._AC[iAC].BoundaryMarker[0];
+      BoundaryConditionSquarePhiRhs* pBC = dynamic_cast<BoundaryConditionSquarePhiRhs*>(PG_._BoundCond[BoundaryMarker]);
+      assert(pBC);
 #ifdef QUAD_OBJ_FUNC
-      Val += (PG_._BoundCond[BoundaryMarker].PhiRhs)*(PG_._BoundCond[BoundaryMarker].PhiRhs);
+      Val += pBC->_PhiRhsScale*pBC->_PhiRhsScale;
 #else
-      Val += PG_._BoundCond[BoundaryMarker].PhiRhs;
+      Val += pBC->_PhiRhsScale;
 #endif //QUAD_OBJ_FUNC
     }
 #ifdef EXHAUST_AS_CONTROL
@@ -481,7 +489,7 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
 
   const double eps = 1e-8;
   lm_pde_residual_vec_->zero();
-  std::vector<BoundaryCondition>& BCs=PG_._BoundCond;
+  std::vector<BoundaryConditionBase*>& BCs=PG_._BoundCond;
   const MeshBase& mesh = lm_eqn_sys_->get_mesh();
   const unsigned int dim = mesh.mesh_dimension();
   LinearImplicitSystem& system = lm_eqn_sys_->get_system<LinearImplicitSystem>("PDE");
@@ -528,12 +536,10 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
           assert(bc_id!=BoundaryInfo::invalid_id);
           double NeumCoef, DiriCoef, Rhs;
           // std::cout << "bc_id=" << bc_id << std::endl;
-          NeumCoef = BCs[bc_id].PhiNeumannCoef;
-          DiriCoef = BCs[bc_id].PhiDiricheltCoef;
-          Rhs = BCs[bc_id].PhiRhs;
           const std::vector<std::vector<Real> >&  phi_face = fe_face->get_phi();
           const std::vector<Real>& JxW_face = fe_face->get_JxW();
           fe_face->reinit(CurElem, side);
+          const std::vector<Point>& q_point = fe_face->get_xyz(); // location of quadrature points in physical space
           /*Point Center;
           for(unsigned int iNode=0;iNode<CurElem->n_nodes();iNode++)
            if( CurElem->is_node_on_side(iNode,side) )
@@ -541,8 +547,12 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
           Center = Center/dim;
           std::cout << "BC at " << Center << " and : ";
           std::cout << NeumCoef << " dPhi/dn = " << DiriCoef << " Phi + " << Rhs << std::endl;*/
+          NeumCoef = BCs[bc_id]->PhiNeumannCoef(q_point[0]);  // PhiNeumCoef is constant anyway, so it doesn't matter at which pq we evaluate
           if ( fabs(NeumCoef)>eps) { // handle non-Dirichlet boundary conditions
             for (unsigned int qp=0; qp<qface.n_points(); qp++) {
+              NeumCoef = BCs[bc_id]->PhiNeumannCoef(q_point[qp]);
+              DiriCoef = BCs[bc_id]->PhiDirichletCoef(q_point[qp]);
+              Rhs = BCs[bc_id]->PhiRhs(q_point[qp]);
               for (unsigned int i=0; i<phi_face.size(); i++)
                 for (unsigned int j=0; j<phi_face.size(); j++)
                   ElemRes(i) -= (DiriCoef/NeumCoef)*JxW_face[qp]*phi_face[i][qp]*LocalSolution[j];
@@ -551,16 +561,15 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
             }
           }
 #ifdef USE_NEW_DIRICHLET
-	  else {
-	    assert(DiriCoef != 0.);
-	    // loop over all nodes and find the ones corresponding to this side
-	    for (unsigned int i=0; i<CurElem->n_nodes(); i++) {
-	      if (CurElem->is_node_on_side(i, side)) {
-		ElemRes(i) += DiriCoef*LocalSolution[i];
-		ElemRes(i) += Rhs;
-	      }
-	    }
-	  }
+	        else {
+	          // loop over all nodes and find the ones corresponding to this side
+	          for (unsigned int i=0; i<CurElem->n_nodes(); i++) {
+	            if (CurElem->is_node_on_side(i, side)) {
+		            ElemRes(i) += BCs[bc_id]->PhiDirichletCoef(CurElem->node(i))*LocalSolution[i];
+		            ElemRes(i) += BCs[bc_id]->PhiRhs(CurElem->node(i));
+	            }
+	          }
+	        }
 #endif
         } // end if CurElem->neigbor(side)==NULL
       } // endfor side
@@ -573,7 +582,7 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
           double NeumCoef, DiriCoef, Rhs;
           // std::cout << "bc_id=" << bc_id << std::endl;
           NeumCoef = BCs[bc_id].PhiNeumannCoef;
-          DiriCoef = BCs[bc_id].PhiDiricheltCoef;
+          DiriCoef = BCs[bc_id].PhiDirichletCoef;
           Rhs = BCs[bc_id].PhiRhs;
           if ( fabs(NeumCoef)<=eps) { // handle Dirichlet boundary conditions
 	    assert(DiriCoef != 0.);
@@ -594,14 +603,14 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
           continue;
         if (bc_id[0]==BoundaryInfo::invalid_id)
           continue;
-	double diricoeff = 1.;
-	double rhs = 0.;
-	if (bc_id[0]!=666666) {
-	  diricoeff = BCs[bc_id[0]].PhiDiricheltCoef;
-	  rhs = BCs[bc_id[0]].PhiRhs;
-	  if ( fabs(BCs[bc_id[0]].PhiNeumannCoef) > eps )
-	    continue;
-	}
+	      double diricoeff = 1.;
+	      double rhs = 0.;
+	      if (bc_id[0]!=666666) {
+	        diricoeff = BCs[bc_id[0]]->PhiDirichletCoef(CurElem->get_node(i));
+	        rhs = BCs[bc_id[0]].PhiRhs(CurElem->get_node(i));
+	        if ( fabs( BCs[bc_id[0]].PhiNeumannCoef(CurElem->get_node(i)) ) > eps )
+	          continue;
+	      }
         // std::cout << "Dirichlet: bc_id=" << bc_id[0] << std::endl;
         ElemRes(i) = diricoeff*LocalSolution[i];
         ElemRes(i) += rhs;
@@ -676,7 +685,7 @@ void LibMeshPDEBase::calcPDE_jacobian_control(libMesh::SparseMatrix<libMesh::Num
   LinearImplicitSystem& system = lm_eqn_sys_->get_system<LinearImplicitSystem>("PDE");
   const DofMap& dof_map = system.get_dof_map();
   FEType fe_type = dof_map.variable_type(0);
-  std::vector<BoundaryCondition>& BCs = PG_._BoundCond; // Mapping boudary info (index) -> boundary condition, set up in Problem geometry class
+  std::vector<BoundaryConditionBase*>& BCs = PG_._BoundCond; // Mapping boudary info (index) -> boundary condition, set up in Problem geometry class
 
   AutoPtr<FEBase> fe (FEBase::build(dim, fe_type)); // this object will by the current volume object, actualy holding values for current phi and dphi
   QGauss qrule (dim, FIFTH);
@@ -694,12 +703,14 @@ void LibMeshPDEBase::calcPDE_jacobian_control(libMesh::SparseMatrix<libMesh::Num
   for ( ; itCurEl != itEndEl; ++itCurEl) {
     const Elem* CurElem = *itCurEl;
     dof_map.dof_indices(CurElem, dof_indices);  // setup local->global mapping in form of array
-    fe->reinit (CurElem); // reinit fe to fit the current element, i.e. recalulate JxW and dPhi
+    fe->reinit(CurElem); // reinit fe to fit the current element, i.e. recalulate JxW and dPhi
     ElemMat.resize (dof_indices.size(),dof_indices.size());
     // Point Center = (CurElem->point(0)+CurElem->point(1)+CurElem->point(2))/3.0;
     // std::cout << "Element at " << Center << std::endl;
     for (unsigned int side=0; side<CurElem->n_sides(); side++) {
       if (CurElem->neighbor(side) == NULL) {
+        fe_face->reinit(CurElem,side);        // Missing before, check
+        const std::vector<Point>& q_point = fe_face->get_xyz();
         // std::cout << side << std::endl;
         short int bc_id = mesh_.boundary_info->boundary_id (CurElem,side);
         assert(bc_id!=BoundaryInfo::invalid_id);
@@ -713,13 +724,12 @@ void LibMeshPDEBase::calcPDE_jacobian_control(libMesh::SparseMatrix<libMesh::Num
           }
           double NeumCoef, DiriCoef, Rhs;
           // std::cout << "bc_id=" << bc_id << std::endl;
-          NeumCoef = BCs[bc_id].PhiNeumannCoef;
-          DiriCoef = BCs[bc_id].PhiDiricheltCoef;
-          Rhs = BCs[bc_id].PhiRhs;
-          if (fabs(NeumCoef)>eps) { // handle non-Dirichlet boundary conditions
+          NeumCoef = BCs[bc_id]->PhiNeumannCoef(q_point[0]);
+          DiriCoef = BCs[bc_id]->PhiDirichletCoef(q_point[0]);
+          if(fabs(NeumCoef)>eps) { // handle non-Dirichlet boundary conditions
             const std::vector<std::vector<Real> >&  phi_face = fe_face->get_phi();
             const std::vector<Real>& JxW_face = fe_face->get_JxW();
-            fe_face->reinit(CurElem, side);
+
             switch (PG_._ParamIdx2BCParam[icontrol].BCParameter) { // 0:PhiDiriCoef, 1: PhiNeumCoef, 2: PhiRhs, 3:TDiriCoef, 4: TNeumCoef, 5: TiRhs
             case 0:
               if (calc_type_ == StructureOnly) {
@@ -767,48 +777,51 @@ void LibMeshPDEBase::calcPDE_jacobian_control(libMesh::SparseMatrix<libMesh::Num
               }
               else {
                 for (unsigned int qp=0; qp<qface.n_points(); qp++) {
-                  for (unsigned int i=0; i<phi_face.size(); i++)
-                    jac_control_->add(dof_indices[i], icontrol,-(1.0/NeumCoef)*JxW_face[qp]*phi_face[i][qp]);
+                  for (unsigned int i=0; i<phi_face.size(); i++) {
+                    BoundaryConditionSquarePhiRhs* pBC=dynamic_cast<BoundaryConditionSquarePhiRhs*>(BCs[bc_id]);
+                    assert(pBC);
+                    double dPhiRhs_dCntrl = BCs[bc_id]->PhiRhs(q_point[qp])/pBC->_PhiRhsScale;
+                    jac_control_->add(dof_indices[i], icontrol,-(dPhiRhs_dCntrl/NeumCoef)*JxW_face[qp]*phi_face[i][qp]);
+                  }
                 }
               }
               break;
             }
-	  } // end if(fabs(NeumCoef)>eps)
+	        } // end if(fabs(NeumCoef)>eps)
 #ifdef USE_NEW_DIRICHLET
-	  else {
-	    assert(DiriCoef != 0.);
-	    switch (PG_._ParamIdx2BCParam[icontrol].BCParameter) { // 0:PhiDiriCoef, 1: PhiNeumCoef, 2: PhiRhs, 3:TDiriCoef, 4: TNeumCoef, 5: TiRhs
-	    case 0:
-	      if (calc_type_ == StructureOnly)
-		for (unsigned int i=0; i<CurElem->n_nodes(); i++) {
-		  if (CurElem->is_node_on_side(i, side)) {
-		    jac_control_->add(dof_indices[i], icontrol,1.0);
-		  }
-		}
-	      else
-		for (unsigned int i=0; i<CurElem->n_nodes(); i++) {
-		  if (CurElem->is_node_on_side(i, side)) {
-		    jac_control_->add(dof_indices[i], icontrol,system.current_local_solution->el(dof_indices[i]));
-		  }
-		}
-	      break;
-	    case 1:
-	      assert(false); // derivative would be ... / NeumCoef^2, but NeumCoef < 1e-8
-	    case 2:
-	      if (calc_type_ == StructureOnly)
-		for (unsigned int i=0; i<CurElem->n_nodes(); i++) {
-		  if (CurElem->is_node_on_side(i, side)) {
-		    jac_control_->add(dof_indices[i], icontrol,1.0);
-		  }
-		}
-	      else
-		for (unsigned int i=0; i<CurElem->n_nodes(); i++) {
-		  if (CurElem->is_node_on_side(i, side)) {
-		    jac_control_->add(dof_indices[i], icontrol,1.0);
-		  }
-		}
-	    }
-	  } // end else(fabs(NeumCoef)>eps)
+	        else {
+	          switch (PG_._ParamIdx2BCParam[icontrol].BCParameter) { // 0:PhiDiriCoef, 1: PhiNeumCoef, 2: PhiRhs, 3:TDiriCoef, 4: TNeumCoef, 5: TiRhs
+	          case 0:
+	            if (calc_type_ == StructureOnly)
+		            for (unsigned int i=0; i<CurElem->n_nodes(); i++) {
+		              if (CurElem->is_node_on_side(i, side)) {
+		                jac_control_->add(dof_indices[i], icontrol,1.0);
+		              }
+		            }
+	            else
+		            for (unsigned int i=0; i<CurElem->n_nodes(); i++) {
+		              if (CurElem->is_node_on_side(i, side)) {
+		                jac_control_->add(dof_indices[i], icontrol,system.current_local_solution->el(dof_indices[i]));
+		              }
+		            }
+	            break;
+	          case 1:
+	            assert(false); // derivative would be ... / NeumCoef^2, but NeumCoef < 1e-8
+	          case 2:
+	            if (calc_type_ == StructureOnly)
+		            for (unsigned int i=0; i<CurElem->n_nodes(); i++) {
+		              if (CurElem->is_node_on_side(i, side)) {
+		                jac_control_->add(dof_indices[i], icontrol,1.0);
+		              }
+		            }
+	            else
+		            for (unsigned int i=0; i<CurElem->n_nodes(); i++) {
+		              if (CurElem->is_node_on_side(i, side)) {
+		                jac_control_->add(dof_indices[i], icontrol,1.0);
+		              }
+		            }
+	          }
+	        } // end else(fabs(NeumCoef)>eps)
 #endif
         } // end Loop over Controls
       } // end if boundary side
@@ -868,7 +881,7 @@ void LibMeshPDEBase::assemble_Phi_PDE(EquationSystems& es, const std::string& sy
   const DofMap& dof_map = system.get_dof_map();
   FEType fe_type = dof_map.variable_type(0);
   LibMeshPDEBase* pData = es.parameters.get< LibMeshPDEBase* >("LibMeshPDEBase");
-  std::vector<BoundaryCondition>& BCs = pData->PG_._BoundCond; // Mapping boudary info (index) -> boundary condition, set up in Problem geometry class
+  std::vector<BoundaryConditionBase*>& BCs = pData->PG_._BoundCond; // Mapping boudary info (index) -> boundary condition, set up in Problem geometry class
   CalculationModeType calc_type=pData->calc_type_;
 
   AutoPtr<FEBase> fe (FEBase::build(dim, fe_type)); // this object will by the current volume object, actualy holding values for current phi and dphi
@@ -904,17 +917,17 @@ void LibMeshPDEBase::assemble_Phi_PDE(EquationSystems& es, const std::string& sy
 
     for (unsigned int side=0; side<CurElem->n_sides(); side++) {
       if (CurElem->neighbor(side) == NULL) {
+        fe_face->reinit(CurElem, side);
+        const std::vector<Point> q_point = fe_face->get_xyz();
         // std::cout << side << std::endl;
         short int bc_id = mesh.boundary_info->boundary_id (CurElem,side);
         assert(bc_id!=BoundaryInfo::invalid_id);
         double NeumCoef, DiriCoef, Rhs;
         // std::cout << "bc_id=" << bc_id << std::endl;
-        NeumCoef = BCs[bc_id].PhiNeumannCoef;
-        DiriCoef = BCs[bc_id].PhiDiricheltCoef;
-        Rhs = BCs[bc_id].PhiRhs;
+        NeumCoef = BCs[bc_id]->PhiNeumannCoef(q_point[0]);
+        DiriCoef = BCs[bc_id]->PhiDirichletCoef(q_point[0]);
         const std::vector<std::vector<Real> >&  phi_face = fe_face->get_phi();
         const std::vector<Real>& JxW_face = fe_face->get_JxW();
-        fe_face->reinit(CurElem, side);
         /*Point Center;
         for(unsigned int iNode=0;iNode<CurElem->n_nodes();iNode++)
          if( CurElem->is_node_on_side(iNode,side) )
@@ -940,9 +953,9 @@ void LibMeshPDEBase::assemble_Phi_PDE(EquationSystems& es, const std::string& sy
 	      //for (j=0;j<CurElem->n_nodes();j++)
 	      //ElemMat(i,j) = 0;
 	      if (calc_type==StructureOnly)
-		ElemMat(i,i) += 1.0;
+      		ElemMat(i,i) += 1.0;
 	      else
-		ElemMat(i,i) += DiriCoef;
+      		ElemMat(i,i) += DiriCoef;
 	    }
 	  }
 	}
@@ -961,7 +974,7 @@ void LibMeshPDEBase::assemble_Phi_PDE(EquationSystems& es, const std::string& sy
       // std::cout << "Dirichlet: bc_id=" << bc_id[0] << std::endl;
       double diricoeff = 1.;
       if (bc_id[0]!=666666) {
-	diricoeff = +BCs[bc_id[0]].PhiDiricheltCoef;
+	diricoeff = +BCs[bc_id[0]].PhiDirichletCoef;
 	if ( fabs(BCs[bc_id[0]].PhiNeumannCoef) > eps )
 	  continue;
       }
@@ -1453,18 +1466,10 @@ void LibMeshPDEBase::InitAuxConstr(int *plocal, int *pglobal, std::list<Number>*
   int BoundaryMarker;
   AuxConstrBoundMarkerList_.clear();
   pFactList->clear();
+  std::set<int> EquipHeatExchangeBdList;
   for (unsigned int iEquip=0; iEquip<PG_._Equip.size();++iEquip)  {
-    for (int iWall=0; iWall<nEquipWalls; iWall++)  {
-      BoundaryMarker = PG_._Equip[iEquip].BoundaryMarker[iWall];
-      // We notice, that ineq. const old here, by checking, if we have a real robin boundary condition for T, i.e. all coefficients are nonzero
-      if (BoundaryMarker<0) // in 3D, floor of equipment
-        continue;
-      if (fabs(PG_._BoundCond[BoundaryMarker].TDiricheltCoef
-               *PG_._BoundCond[BoundaryMarker].TNeumannCoef
-               *PG_._BoundCond[BoundaryMarker].TRhs) > eps) {
-        AuxConstrBoundMarkerList_.insert(BoundaryMarker);
-      }
-    }
+    PG_.GetHeatExchangeBoundaryMarkers(iEquip, &EquipHeatExchangeBdList);
+    AuxConstrBoundMarkerList_.insert(EquipHeatExchangeBdList.begin(),EquipHeatExchangeBdList.end());
   }
 
   LinearImplicitSystem& system = lm_eqn_sys_->get_system<LinearImplicitSystem>("PDE");
@@ -1692,7 +1697,7 @@ void LibMeshPDEBase::RefineMesh(int iter)
 	if (bc_id.size()>0) {
 	  printf("node: %d ", i);
 	  for (int j=0; j<bc_id.size(); j++) {
-	    DBG_PRINT("bc_id[" << j << "] = " bc_id[j] );
+	    DBG_PRINT("bc_id[" << j << "] = " << bc_id[j] );
 	  }
 	}
       }
