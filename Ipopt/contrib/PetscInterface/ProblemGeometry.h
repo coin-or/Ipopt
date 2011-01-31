@@ -23,24 +23,93 @@
 void PrintTetgenMesh(const tetgenio& tet, std::ostream& os);
 void PrintTriangleMesh(const libMesh::Triangle::triangulateio& tri, std::ostream& os);
 
-class BoundaryCondition
+class BoundaryConditionBase
 {
   //Boundary Conditions:  \alpha\del \Phi/\del n + \beta \Phi = \gamma
 public:
-  double PhiDiricheltCoef; // \beta
-  double PhiNeumannCoef;  // \alpha
-  double PhiRhs; // \gamma
-  double TDiricheltCoef;  // these three will be for temparature
-  double TNeumannCoef;
-  double TRhs;
-  BoundaryCondition() : PhiDiricheltCoef(0.0), PhiNeumannCoef(0.0), PhiRhs(0.0),
-      TDiricheltCoef(0.0), TNeumannCoef(0.0), TRhs(0.0)
+  virtual double PhiDirichletCoef(const libMesh::Point& x) = 0; // \beta
+  virtual double PhiNeumannCoef(const libMesh::Point& x) = 0;  // \alpha
+  virtual double PhiRhs(const libMesh::Point& x) = 0; // \gamma
+  virtual double TDirichletCoef(const libMesh::Point& x) = 0;  // these three will be for temparature
+  virtual double TNeumannCoef(const libMesh::Point& x) = 0;
+  virtual double TRhs(const libMesh::Point& x) = 0;
+  virtual bool IsPhiDirichlet() = 0;
+  virtual bool IsTDirichlet() = 0;
+  BoundaryConditionBase() {}
+  virtual ~BoundaryConditionBase() {}
+};
+
+class BoundaryConditionConstValues : public BoundaryConditionBase
+{
+  //Boundary Conditions:  \alpha\del \Phi/\del n + \beta \Phi = \gamma
+public:
+  double _PhiDirichletCoef; // \beta
+  double _PhiNeumannCoef;  // \alpha
+  double _PhiRhs; // \gamma
+  double _TDirichletCoef;  // these three will be for temparature
+  double _TNeumannCoef;
+  double _TRhs;
+
+  virtual double PhiDirichletCoef(const libMesh::Point& x) {return _PhiDirichletCoef;} // \beta
+  virtual double PhiNeumannCoef(const libMesh::Point& x) {return _PhiNeumannCoef;}  // \alpha
+  virtual double PhiRhs(const libMesh::Point& x) { return _PhiRhs;} // \gamma
+  virtual double TDirichletCoef(const libMesh::Point& x) {return _TDirichletCoef;}  // these three will be for temparature
+  virtual double TNeumannCoef(const libMesh::Point& x) {return _TNeumannCoef;}
+  virtual double TRhs(const libMesh::Point& x)  {return _TRhs;}
+  virtual bool IsPhiDirichlet() { if (fabs(_PhiDirichletCoef)<1e-16) return false; else return (fabs(_PhiNeumannCoef/_PhiDirichletCoef)<1e-16); }
+  virtual bool IsTDirichlet() { if (fabs(_TDirichletCoef)<1e-16) return false; else return (fabs(_TNeumannCoef/_TDirichletCoef)<1e-16); }
+
+  BoundaryConditionConstValues() : _PhiDirichletCoef(0.0), _PhiNeumannCoef(0.0), _PhiRhs(0.0),
+      _TDirichletCoef(0.0), _TNeumannCoef(0.0), _TRhs(0.0)
   {}
-  BoundaryCondition(double PhiDirC, double PhiNeumC, double PhiRhsVal, double TDirC, double TNeumC, double TRhsVal) : PhiDiricheltCoef(PhiDirC), PhiNeumannCoef(PhiNeumC), PhiRhs(PhiRhsVal), TDiricheltCoef(TDirC), TNeumannCoef(TNeumC), TRhs(TRhsVal)
+  BoundaryConditionConstValues(double PhiDirC, double PhiNeumC, double PhiRhsVal, double TDirC, double TNeumC, double TRhsVal) : _PhiDirichletCoef(PhiDirC), _PhiNeumannCoef(PhiNeumC), _PhiRhs(PhiRhsVal), _TDirichletCoef(TDirC), _TNeumannCoef(TNeumC), _TRhs(TRhsVal)
   {}
 };
 
-std::ostream& operator << (std::ostream& os, const BoundaryCondition& BC);
+class BoundaryConditionSquarePhiRhs : public BoundaryConditionBase
+{
+  //Boundary Conditions:  \alpha\del \Phi/\del n + \beta \Phi = \gamma
+public:
+  double _PhiDirichletCoef; // \beta
+  double _PhiNeumannCoef;  // \alpha
+  const std::vector<double> _min, _max;
+  double _PhiRhsScale; // \gamma
+  double _TDirichletCoef;  // these three will be for temparature
+  double _TNeumannCoef;
+  double _TRhs;
+
+  virtual double PhiDirichletCoef(const libMesh::Point& x) {return _PhiDirichletCoef;} // \beta
+  virtual double PhiNeumannCoef(const libMesh::Point& x) {return _PhiNeumannCoef;}  // \alpha
+  virtual double PhiRhs(const libMesh::Point& x)
+  {
+    double val = 0.0;
+    double tmp;
+    for(int idim=0; idim<x.size();idim++) {
+      if(_max[idim]-_min[idim]>1e-12) {
+        tmp = (_min[idim]+_max[idim])/2.0;
+        val += (x(idim)-_min[idim]) * (_max[idim]-x(idim)) / ((tmp-_min[idim]) * (_max[idim]-tmp));
+      }
+    }
+    return val*_PhiRhsScale;
+  }
+  virtual double TDirichletCoef(const libMesh::Point& x) {return _TDirichletCoef;}  // these three will be for temparature
+  virtual double TNeumannCoef(const libMesh::Point& x) {return _TNeumannCoef;}
+  virtual double TRhs(const libMesh::Point& x)  {return _TRhs;}
+  virtual bool IsPhiDirichlet() { if (fabs(_PhiDirichletCoef)<1e-16) return false; else return (fabs(_PhiNeumannCoef/_PhiDirichletCoef)<1e-16); }
+  virtual bool IsTDirichlet() { if (fabs(_TDirichletCoef)<1e-16) return false; else return (fabs(_TNeumannCoef/_TDirichletCoef)<1e-16); }
+
+  BoundaryConditionSquarePhiRhs() : _PhiDirichletCoef(0.0), _PhiNeumannCoef(0.0), _PhiRhsScale(0.0),
+      _TDirichletCoef(0.0), _TNeumannCoef(0.0), _TRhs(0.0)
+  {}
+  BoundaryConditionSquarePhiRhs(double PhiDirC, double PhiNeumC, double PhiRhsVal,
+				double TDirC, double TNeumC, double TRhsVal,
+				const std::vector<double>& min, const std::vector<double>& max)
+			 : _PhiDirichletCoef(PhiDirC), _PhiNeumannCoef(PhiNeumC), _PhiRhsScale(PhiRhsVal),
+			   _TDirichletCoef(TDirC), _TNeumannCoef(TNeumC), _TRhs(TRhsVal), _min(min), _max(max)
+  {}
+};
+
+//std::ostream& operator << (std::ostream& os, const BoundaryCondition& BC);
 //std::ostream& operator << (std::ostream& os, const std::vector<BoundaryCondition>& BCs);
 
 template<class T>
@@ -95,13 +164,14 @@ private:
   std::vector<Item> _Equip;
   std::vector<Item> _AC;
   std::vector<Item> _Exh;
-  std::vector<BoundaryCondition> _BoundCond;  // mapping boundary marker -> boundary condition
+  std::vector<BoundaryConditionBase*> _BoundCond;  // mapping boundary marker -> boundary condition
   std::vector<ControlParameter> _ParamIdx2BCParam;  // mapping control parameter index in optimization problem numbering -> control parameter
   std::vector< std::list<Item*> > _ItemAtWall; // Array of List of Item on each wall (dimension always 4: +x0 -x0 +x1 -x1)
   int NextFreeBoundaryMarker;                 // used to increment boundary markers when building the model (Add...)
   double _h;                                   // initial discretization width (refinement not tracked)
 public:
   ProblemGeometry();
+  ~ProblemGeometry();
   inline int GetDim() const
   {
     return _RoomSize.size();
@@ -109,9 +179,9 @@ public:
   void AddEquipment(const std::vector<double>& min, const std::vector<double>& max, double TempEquip, double kappa); // TEmpEquip and kappa for T variable (later)
   void AddAC(const std::vector<double>& min, const std::vector<double>& max, double vAc, double TempAc); // This vAc will be changed during optimization
   void AddExhaust(const std::vector<double>& min, const std::vector<double>& max);
-
+  void GetHeatExchangeBoundaryMarkers(int iEquip, std::set<int>* pVals);
   void CreateMesh(libMesh::UnstructuredMesh* p_mesh);
-  const std::vector<BoundaryCondition>& GetBoundaryConditions() const
+  const std::vector<BoundaryConditionBase*>& GetBoundaryConditions() const
   {
     return _BoundCond;
   }

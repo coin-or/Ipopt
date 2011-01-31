@@ -11,6 +11,10 @@
 
 extern int GetProcID();
 
+#define DBG_PRINT(s) {std::cout << GetProcID() << __FILE__ << ":" << __LINE__ <<":" << s << std::endl;}
+//#define DBG_PRINT(s) {}
+
+
 ///////////////////////////////////////////////////////////////////////////////////
 //  ProblemGeometry::Item
 ProblemGeometry::Item::Item(const std::vector<double>& min, const std::vector<double>& max)
@@ -76,11 +80,18 @@ int ProblemGeometry::Item::GetBoundaryMarker(const std::vector<double>& pt)
 // ProblemGeometry
 ProblemGeometry::ProblemGeometry()
 {
-  BoundaryCondition BC(0.0,1.0,0.0,0.0,1.0,0.0);  // 2 * homogene Neumann
-  _BoundCond.push_back(BC); //   Add one Dummy to start from 1 (0:Interior Point)
-  _BoundCond.push_back(BC);
+  _BoundCond.push_back(new BoundaryConditionConstValues(0.0,1.0,0.0,0.0,1.0,0.0)); //   Add one Dummy to start from 1 (0:Interior Point)
+  _BoundCond.push_back(new BoundaryConditionConstValues(0.0,1.0,0.0,0.0,1.0,0.0)); //   homogeneous boundary conditions on wall
   NextFreeBoundaryMarker = 2;
   _h = 0.0;
+}
+
+ProblemGeometry::~ProblemGeometry()
+{
+  for(int iBC=0;iBC<_BoundCond.size();iBC++) {
+    delete _BoundCond[iBC];
+    _BoundCond[iBC] = NULL;
+  }
 }
 
 void ProblemGeometry::AddEquipment(const std::vector<double>& min, const std::vector<double>& max, double TempEquip, double kappa)
@@ -94,13 +105,13 @@ void ProblemGeometry::AddEquipment(const std::vector<double>& min, const std::ve
   item.BoundaryMarker[2] = BoundMark;
   item.BoundaryMarker[3] = BoundMark;
   // Phi: hom. Neum. T: dT/dn = Kappa(T-Teq) => 1*dT/dn = Kappa*T -Kappa*Teq
-  _BoundCond.push_back(BoundaryCondition(0.0,1.0,0.0,kappa,-1.0,-kappa*TempEquip));
+  _BoundCond.push_back(new BoundaryConditionConstValues(0.0,1.0,0.0,kappa,-1.0,-kappa*TempEquip));
   // No control parameters
   // 2.nd Boundary: Isolation
   item.BoundaryMarker[0] = BoundMark+1;
   item.BoundaryMarker[1] = BoundMark+1;
   // Phi: hom. Neum. T: hom. Neum
-  _BoundCond.push_back(BoundaryCondition(0.0,1.0,0.0,0.0,1.0,0.0));
+  _BoundCond.push_back(new BoundaryConditionConstValues(0.0,1.0,0.0,0.0,1.0,0.0));
   // No control parameters
   NextFreeBoundaryMarker+=2;
   if (GetDim()>2) { // Equipmentceiling: heat exchange (same as on side)
@@ -109,9 +120,18 @@ void ProblemGeometry::AddEquipment(const std::vector<double>& min, const std::ve
     // 1.st & 3rd Boundary: Head exchange
     item.BoundaryMarker[5] = BoundMark;
     // Phi: hom. Neum. T: dT/dn = Kappa(T-Teq)
-    _BoundCond.push_back(BoundaryCondition(0.0,1.0,0.0,kappa,1.0,kappa*TempEquip));
+    _BoundCond.push_back(new BoundaryConditionConstValues(0.0,1.0,0.0,kappa,1.0,kappa*TempEquip));
   }
   _Equip.push_back(item);
+}
+
+void ProblemGeometry::GetHeatExchangeBoundaryMarkers(int iEquip, std::set<int>* pVals)
+{
+  assert(pVals);
+  pVals->clear();
+  // Only one boundary marker for both walls for heatr exchange (see AddEquipment)
+  pVals->insert(_Equip[iEquip].BoundaryMarker[2]);
+  pVals->insert(_Equip[iEquip].BoundaryMarker[3]);
 }
 
 void ProblemGeometry::AddAC(const std::vector<double>& min, const std::vector<double>& max, double vAc, double TempAc)
@@ -124,7 +144,7 @@ void ProblemGeometry::AddAC(const std::vector<double>& min, const std::vector<do
   for (unsigned int iBd=0;iBd<2*GetDim();iBd++)
     item.BoundaryMarker[iBd] = BoundMark;
   assert(_BoundCond.size()==BoundMark);
-  _BoundCond.push_back(BoundaryCondition(0.0,-1.0,vAc,1.0,0.0,-TempAc)); // dPhi/dn = -vAc,T = TAc, i.e. 0 dT/dn = 1*T-TAc
+  _BoundCond.push_back(new BoundaryConditionSquarePhiRhs(0.0,-1.0,vAc,1.0,0.0,-TempAc,min,max)); // dPhi/dn = -vAc,T = TAc, i.e. 0 dT/dn = 1*T-TAc
   _ParamIdx2BCParam.push_back(ControlParameter(BoundMark,2));
   //_ParamIdx2BCParam.push_back(ControlParameter(BoundMark,5));
   _AC.push_back(item);
@@ -141,7 +161,7 @@ void ProblemGeometry::AddExhaust(const std::vector<double>& min, const std::vect
   for ( int iBd=0;iBd<2*GetDim();iBd++)
     item.BoundaryMarker[iBd] = BoundMark;
   assert(_BoundCond.size()==BoundMark);
-  _BoundCond.push_back(BoundaryCondition(1.0,0.0,0.0,0.0,1.0,0.0));         // Phi = 0, dT/dn = 0
+  _BoundCond.push_back(new BoundaryConditionConstValues(1.0,0.0,0.0,0.0,1.0,0.0));         // Phi = 0, dT/dn = 0
   // No Control Parameter
   _Exh.push_back(item);
 }
@@ -159,7 +179,7 @@ void ProblemGeometry::AddExhaust(const std::vector<double>& min, const std::vect
   // TODO: Retried vExh from input
   double vExh = 1.0;
   double TempExh = 1e30;
-  _BoundCond.push_back(BoundaryCondition(0.0,+1.0,vExh,1.0,0.0,-TempExh)); // dPhi/dn = -vAc,T = TAc, i.e. 0 dT/dn = 1*T-TAc
+  _BoundCond.push_back(new BoundaryConditionConstValues(0.0,+1.0,vExh,1.0,0.0,-TempExh)); // dPhi/dn = -vAc,T = TAc, i.e. 0 dT/dn = 1*T-TAc
   _ParamIdx2BCParam.push_back(ControlParameter(BoundMark,2));
   //_ParamIdx2BCParam.push_back(ControlParameter(BoundMark,5));
   _Exh.push_back(item);
@@ -473,7 +493,7 @@ void ProblemGeometry::SetBoundaryInfo(libMesh::Mesh* p_mesh)
 //        p_mesh->boundary_info->add_side(*el,side,BoundaryMarker);
 
         // mark nodes if Dirichlet cond.: Those are set at points (not sides) by putting diagonals into the matrix
-        if ( (fabs(_BoundCond[BoundaryMarker].PhiNeumannCoef)<eps) || (fabs(_BoundCond[BoundaryMarker].TNeumannCoef)<eps) ) {
+        if ( _BoundCond[BoundaryMarker]->IsPhiDirichlet() || _BoundCond[BoundaryMarker]->IsTDirichlet() ) {
           // mark side points
           for (unsigned int iPt=0; iPt<(*el)->n_nodes();iPt++)
             if ((*el)->is_node_on_side(iPt,side))
@@ -555,8 +575,8 @@ void ProblemGeometry::Tetgen2Mesh(const tetgenio& tet, libMesh::UnstructuredMesh
               int BoundaryMarker = GetBoundaryMarker(Center);
               assert(BoundaryMarker!=-1);
               p_mesh->boundary_info->add_side(iEl,iSide,BoundaryMarker);
-              if ( (fabs(_BoundCond[BoundaryMarker].PhiNeumannCoef)<eps) ||
-                   (fabs(_BoundCond[BoundaryMarker].TNeumannCoef)<eps) ) {
+              if ( (_BoundCond[BoundaryMarker]->IsPhiDirichlet()) ||
+                   (_BoundCond[BoundaryMarker]->IsTDirichlet() ) ) {
                 p_mesh->boundary_info->add_node(iBdNode1,BoundaryMarker);
                 p_mesh->boundary_info->add_node(iBdNode2,BoundaryMarker);
                 p_mesh->boundary_info->add_node(iBdNode3,BoundaryMarker);
@@ -808,7 +828,7 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
 
   tetgenio tetgen_out;
 
-  bool bCallExternal=true;
+  bool bCallExternal=false;
   if (bCallExternal) {
     int ProcID = GetProcID();
     if(ProcID==0) {
@@ -850,14 +870,18 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
     }
     tetgenbehavior  tetgen_beh;
     char strBuf[256];
-    sprintf(strBuf,"-nzQpqa%f",_h*_h*_h);
+    sprintf(strBuf,"npqa%f",_h*_h*_h);
+    //sprintf(strBuf,"-n");
+    //sprintf(strBuf,"%s","pq1.414a0.1");
     //sprintf(strBuf,"zpQqa%f",h*h*h);  // tetgen in silent mode
-    tetgen_beh.parse_commandline(strBuf);
+    //tetgen_beh.parse_commandline(strBuf);
     //tetrahedralize(&tetgen_beh, &tetgen_in, &tetgen_out);
-    printf("NOT WORKING\n");
-    exit(-1);
+    printf("%s\n",strBuf);
+    //tetrahedralize(&tetgen_beh, &tetgen_in, &tetgen_out);
+    //tetrahedralize(&tetgen_beh, &tetgen_in, &tetgen_out);
+    tetrahedralize(strBuf, &tetgen_in, &tetgen_out);
   }
-
+DBG_PRINT("Checkpoint 666");
   Tetgen2Mesh(tetgen_out, p_mesh);
   p_mesh->prepare_for_use();
 // TODO: Clearify what's going on here, why program termination?
@@ -1222,14 +1246,14 @@ void ProblemGeometry::ReadNeighFile(std::string str, tetgenio* tet)
   std::ifstream f(str.c_str(),std::ios::in);
   f.getline(Buf,1024);
 
-  read = sscanf(Buf,"%d %d", &n_elems,&n_NeighPerTet,Vals,Vals+1);
+  read = sscanf(Buf,"%d %d", &n_elems,&n_NeighPerTet);
   if ( (read<2) || (read>4) ) {
     std::string str("Can't read header line of neigh file:");
     str += Buf;
     throw std::runtime_error(str);
   }
   if (n_NeighPerTet!=4) {
-    std::string str("Wrong number of neoghnbors per tetrahedron:");
+    std::string str("Wrong number of neighbors per tetrahedron:");
     str += Buf;
     throw std::runtime_error(str);
   }
@@ -1337,7 +1361,7 @@ void ProblemGeometry::Triangle2Mesh(const libMesh::Triangle::triangulateio& tri,
               int BoundaryMarker = GetBoundaryMarker(Center);
               assert(BoundaryMarker!=-1);
               p_mesh->boundary_info->add_side(iEl,iSide,BoundaryMarker);
-              if ( (fabs(_BoundCond[BoundaryMarker].PhiNeumannCoef)<eps) || (fabs(_BoundCond[BoundaryMarker].TNeumannCoef)<eps) ) {
+              if ( _BoundCond[BoundaryMarker]->IsPhiDirichlet() || _BoundCond[BoundaryMarker]->IsTDirichlet() ) {
                 p_mesh->boundary_info->add_node(iBdNode1,BoundaryMarker);
                 p_mesh->boundary_info->add_node(iBdNode2,BoundaryMarker);
               }
@@ -1376,14 +1400,17 @@ void PrintTriangleMesh(const libMesh::Triangle::triangulateio& tri, std::ostream
   os << "0";
 }
 
+
+/*
 std::ostream& operator << (std::ostream& os, const BoundaryCondition& BC)
 {
   os << "BC: " << BC.PhiDiricheltCoef << ", " << BC.PhiNeumannCoef << ", " << BC.PhiRhs << ", " << BC.TDiricheltCoef << ", " << BC.TNeumannCoef << ", " << BC.TRhs << std::endl;
   return os;
 }
 
+
 std::ostream& operator << (std::ostream& os, const std::vector<BoundaryCondition>& BCs)
 {
   for (int i=0;i<BCs.size(); i++) os << BCs[i];
   return os;
-}
+}*/

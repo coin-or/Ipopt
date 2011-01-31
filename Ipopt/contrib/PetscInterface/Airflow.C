@@ -168,7 +168,7 @@ int main (int argc, char** argv)
       }
 
       // Try one set of refinements
-      pLibMeshPDE->RefineMesh(i);
+      //pLibMeshPDE->RefineMesh(i);
       warmstart = true;
     }
     delete pLibMeshPDE;
