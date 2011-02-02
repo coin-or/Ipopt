@@ -105,7 +105,7 @@ LibMeshPDEBase::~LibMeshPDEBase()
 
 void LibMeshPDEBase::InitProblemData(std::istream& is)
 {
-  DBG_PRINT("ibMeshPDEBase::InitProblemData called");
+  DBG_PRINT("LibMeshPDEBase::InitProblemData called");
   PG_.ReadFromStream(is);
   PG_.CreateMesh(&mesh_);
 
@@ -181,7 +181,7 @@ void LibMeshPDEBase::reinit()
     n_control_local = (0==GetProcID()) ? n_control_global : 0;
   }
 
-  // create vectro and matrices for auxilliary constraints
+  // create vector and matrices for auxilliary constraints
   int m_aux_constr_global, m_aux_constr_local;
   std::list<Number> LocIneqFactList;
   InitAuxConstr(&m_aux_constr_local, &m_aux_constr_global, &LocIneqFactList);
@@ -250,7 +250,6 @@ void LibMeshPDEBase::reinit()
       Vals[iVal] = min_airflow;
     }
 #endif
-    std::cout << "Checkpoint 1" << std::endl;
     VecRestoreArray(petsc_vec1,&Vals);
     lm_aux_constr_vec_low_bd_ = new PetscVector<Number>::PetscVector(petsc_vec1);
     lm_aux_constr_vec_low_bd_->close();

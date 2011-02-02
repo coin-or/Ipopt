@@ -84,10 +84,11 @@ public:
   {
     double val = 0.0;
     double tmp;
-    for(int idim=0; idim<x.size();idim++) {
+    for(int idim=0; idim<3;idim++) {    // in LibMesh
       if(_max[idim]-_min[idim]>1e-12) {
         tmp = (_min[idim]+_max[idim])/2.0;
         val += (x(idim)-_min[idim]) * (_max[idim]-x(idim)) / ((tmp-_min[idim]) * (_max[idim]-tmp));
+        // std::cout << _min[idim] << ", " << _max[idim] << ", " << tmp << std::endl;
       }
     }
     return val*_PhiRhsScale;
