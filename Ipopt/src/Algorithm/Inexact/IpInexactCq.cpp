@@ -246,6 +246,8 @@ namespace Ipopt
   SmartPtr<const Vector>
   InexactCq::curr_W_times_vec_s(const Vector& vec_s)
   {
+    DBG_START_METH("InexactCq::curr_W_times_vec_s",
+                   dbg_verbosity);
     SmartPtr<const Vector> result;
 
     SmartPtr<const Vector> sigma_s = ip_cq_->curr_sigma_s();
@@ -262,6 +264,9 @@ namespace Ipopt
     sdeps[0] = pd_pert_s;
 
     if (!curr_W_times_vec_s_cache_.GetCachedResult(result, tdeps, sdeps)) {
+      DBG_PRINT_VECTOR(2, "vec_s", vec_s);
+      DBG_PRINT_VECTOR(2, "sigma_s", *sigma_s);
+      DBG_PRINT((2, "pd_pert_s = %e\n", pd_pert_s));
       SmartPtr<Vector> tmp = vec_s.MakeNewCopy();
       tmp->ElementWiseMultiply(*sigma_s);
       if (pd_pert_s>0.) {

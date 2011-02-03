@@ -1,4 +1,4 @@
-// Copyright (C) 2009, 2010 International Business Machines and others.
+// Copyright (C) 2009, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -101,6 +101,8 @@ namespace Ipopt
     // Registered in IpOrigIpoptNLP
     options.GetNumericValue("bound_relax_factor", bound_relax_factor_, prefix);
 
+    options.GetNumericValue("starting_point_perturbation_radius",
+                            starting_point_perturbation_radius_, prefix);
     Index enum_int;
     options.GetEnumValue("fixed_variable_treatment", enum_int, prefix);
     fixed_variable_treatment_ = FixedVariableTreatmentEnum(enum_int);
@@ -1340,6 +1342,11 @@ namespace Ipopt
       }
       else {
         IpBlasDcopy(n_x_var, x_part, 1, values, 1);
+      }
+      if (starting_point_perturbation_radius_ > 0.) {
+	for (Index i=0; i<n_x_var; i++) {
+          values[i] += Max(1., fabs(values[i]))*2.*(0.5-IpRandom01());
+        }
       }
     }
 

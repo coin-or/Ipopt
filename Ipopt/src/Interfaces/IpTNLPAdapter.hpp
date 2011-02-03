@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2008 International Business Machines and others.
+// Copyright (C) 2004, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -289,6 +289,9 @@ namespace Ipopt
 
     /** Overall convergence tolerance */
     Number tol_;
+
+    /** Starting point perturbation radius */
+    Number starting_point_perturbation_radius_;
     //@}
 
     /**@name Problem Size Data */

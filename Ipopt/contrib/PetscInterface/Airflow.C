@@ -1,4 +1,4 @@
-// Copyright (C) 2010 International Business Machines.
+// Copyright (C) 2010, 2011 International Business Machines.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -145,6 +145,7 @@ int main (int argc, char** argv)
     for (int i=0; i<1; i++) {
       // solve optimization problem
       pLibMeshPDE->simulation_mode_=false;
+      app = IpoptApplicationFactory();
       status = app->Initialize();
       if (status != Solve_Succeeded) {
 	printf("\n\n*** Error during initialization!\n");
