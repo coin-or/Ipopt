@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2010 International Business Machines and others.
+// Copyright (C) 2004, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -216,6 +216,13 @@ namespace Ipopt
       "indicates the maximal perturbation.  This is for example used when "
       "determining the center point at which the finite difference derivative "
       "test is executed.");
+    roptions->AddLowerBoundedNumberOption(
+      "starting_point_perturbation_radius",
+      "Perturbation radius for starting point.",
+      0., true,
+      0.,
+      "If this option is positive, the initial point is modified with random "
+      "perturbations of the size max(1,abs(x[i]).");
   }
 
   bool TNLPAdapter::ProcessOptions(const OptionsList& options,
@@ -232,6 +239,8 @@ namespace Ipopt
     // Registered in IpOrigIpoptNLP
     options.GetNumericValue("bound_relax_factor", bound_relax_factor_, prefix);
 
+    options.GetNumericValue("starting_point_perturbation_radius",
+                            starting_point_perturbation_radius_, prefix);
     Index enum_int;
     options.GetEnumValue("fixed_variable_treatment", enum_int, prefix);
     fixed_variable_treatment_ = FixedVariableTreatmentEnum(enum_int);
@@ -1467,6 +1476,11 @@ namespace Ipopt
       }
       else {
         IpBlasDcopy(n_x_var, full_x, 1, values, 1);
+      }
+      if (starting_point_perturbation_radius_ > 0.) {
+	for (Index i=0; i<n_x_var; i++) {
+          values[i] += Max(1., fabs(values[i]))*2.*(0.5-IpRandom01());
+        }
       }
     }
 

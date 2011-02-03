@@ -1,4 +1,4 @@
-// Copyright (C) 2009, 2010 International Business Machines and others.
+// Copyright (C) 2009, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -240,6 +240,8 @@ namespace Ipopt
     bool warm_start_same_structure_;
     /** Flag indicating what Hessian information is to be used. */
     int hessian_approximation_;
+    /** Starting point perturbation radius */
+    Number starting_point_perturbation_radius_;
     //@}
 
     /**@name Problem Size Data */
