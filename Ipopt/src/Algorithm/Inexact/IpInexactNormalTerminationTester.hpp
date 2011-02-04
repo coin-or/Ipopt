@@ -1,4 +1,4 @@
-// Copyright (C) 2008 International Business Machines and others.
+// Copyright (C) 2008, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -49,7 +49,7 @@ namespace Ipopt
      *  modified.  The input is the dimension of the augmented system,
      *  the current solution vector of the augmented system, the
      *  current residual vector. */
-    virtual ETerminationTest TestTermination(Index ndim, const Number* sol,
+    virtual InexactData::ETerminationTest TestTermination(Index ndim, const Number* sol,
         const Number* resid, Index iter,
         Number norm2_rhs);
 

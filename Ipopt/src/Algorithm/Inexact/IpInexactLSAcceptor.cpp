@@ -1,4 +1,4 @@
-// Copyright (C) 2008 International Business Machines and others.
+// Copyright (C) 2008, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -54,7 +54,7 @@ namespace Ipopt
     roptions->AddLowerBoundedNumberOption(
       "nu_update_inf_skip_tol",
       "Lower bound on infeasibility to perform penalty parameter update.",
-      0.0, true, 1e-9,
+      0.0, true, 1e-16,
       "If the current infeasibility is less than this value, the penalty "
       "parameter update is skipped");
     roptions->AddStringOption2(
@@ -191,59 +191,75 @@ namespace Ipopt
       DBG_PRINT((1,"gradBarrTDelta = %e norm_cplusAd = %e reference_theta_ = %e\n", gradBarrTDelta, norm_cplusAd, reference_theta_));
 
       // update the upper penalty parameter
+      InexactData::ETerminationTest term_test = InexData().pd_termination_test();
       Number nu_mid = nu_;
-      Number norm_delta_xs = Max(delta_x->Amax(), delta_s->Amax());
       last_nu_ = nu_;
       if (flexible_penalty_function_) {
         last_nu_low_ = nu_low_;
+        nu_mid = nu_low_;
+        DBG_ASSERT(nu_low_ == InexData().curr_nu());
       }
-      in_tt2_ = false;
-      if (norm_delta_xs == 0.) {
+      in_tt2_ = (term_test == InexactData::TEST_2_SATISFIED);
+      if (in_tt2_) {
         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                       "  Zero step, skipping line search\n");
-        in_tt2_ = true;
+                       "  Terminatin test 2 case, skipping line search\n");
       }
       // TODO: We need to find a proper cut-off value
       else if (reference_theta_ > nu_update_inf_skip_tol_) {
-        // Different numerator for different algorithms
-        Number numerator;
-        Number denominator;
-        if (!compute_normal) {
-          numerator = (gradBarrTDelta + Max(0.5*uWu, tcc_theta_*Upsilon));
-          denominator = (1-rho_)*(reference_theta_-norm_cplusAd);
+        if (term_test==InexactData::TEST_1_SATISFIED) {
+          // In this case, we do not need to update the penalty parameter
+          if (flexible_penalty_function_) {
+            Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,"In penalty parameter update formula:\n  MRC was satisfied for current nu_low (%e), this is used for nu_mid.\n", nu_low_);
+          }
         }
         else {
-          DBG_PRINT((1,"uWu=%e scaled_tangential_norm=%e\n",uWu ,scaled_tangential_norm ));
-          numerator = (gradBarrTDelta + Max(0.5*uWu, tcc_theta_*pow(scaled_tangential_norm,2)));
-          denominator = (1-rho_)*(reference_theta_-norm_cplusAd);
-        }
-        const Number nu_trial = numerator/denominator;
-        // Different numerator for different algorithms
-        if (!compute_normal) {
-          Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-                         "In penalty parameter update formula:\n  gradBarrTDelta = %e 0.5*dWd = %e tcc_theta_*Upsilon = %e numerator = %e\n  reference_theta_ = %e norm_cplusAd + %e denominator = %e nu_trial = %e\n", gradBarrTDelta, 0.5*uWu, tcc_theta_*Upsilon, numerator, reference_theta_, norm_cplusAd, denominator, nu_trial);
-        }
-        else {
-          Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-                         "In penalty parameter update formula:\n  gradBarrTDelta = %e 0.5*uWu = %e tcc_theta_*pow(scaled_tangential_norm,2) = %e numerator = %e\n  reference_theta_ = %e norm_cplusAd + %e denominator = %e nu_trial = %e\n", gradBarrTDelta, 0.5*uWu, tcc_theta_*pow(scaled_tangential_norm,2), numerator, reference_theta_, norm_cplusAd, denominator, nu_trial);
-        }
+          // Different numerator for different algorithms
+          Number numerator;
+          Number denominator;
+          if (!compute_normal) {
+            numerator = (gradBarrTDelta + Max(0.5*uWu, tcc_theta_*Upsilon));
+            denominator = (1-rho_)*(reference_theta_-norm_cplusAd);
+          }
+          else {
+            DBG_PRINT((1,"uWu=%e scaled_tangential_norm=%e\n",uWu ,scaled_tangential_norm ));
+            numerator = (gradBarrTDelta + Max(0.5*uWu, tcc_theta_*pow(scaled_tangential_norm,2)));
+            denominator = (1-rho_)*(reference_theta_-norm_cplusAd);
+          }
+          const Number nu_trial = numerator/denominator;
+          // Different numerator for different algorithms
+          if (!compute_normal) {
+            Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                           "In penalty parameter update formula:\n  gradBarrTDelta = %e 0.5*dWd = %e tcc_theta_*Upsilon = %e numerator = %e\n  reference_theta_ = %e norm_cplusAd + %e denominator = %e nu_trial = %e\n", gradBarrTDelta, 0.5*uWu, tcc_theta_*Upsilon, numerator, reference_theta_, norm_cplusAd, denominator, nu_trial);
+          }
+          else {
+            Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                           "In penalty parameter update formula:\n  gradBarrTDelta = %e 0.5*uWu = %e tcc_theta_*pow(scaled_tangential_norm,2) = %e numerator = %e\n  reference_theta_ = %e norm_cplusAd + %e denominator = %e nu_trial = %e\n", gradBarrTDelta, 0.5*uWu, tcc_theta_*pow(scaled_tangential_norm,2), numerator, reference_theta_, norm_cplusAd, denominator, nu_trial);
+          }
 
-        if (nu_ < nu_trial) {
-          nu_ = nu_trial + nu_inc_;
-          nu_mid = nu_;
-        }
-        if (flexible_penalty_function_) {
-          nu_mid = Max(nu_low_, nu_trial);
-          Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-                         "   nu_low = %8.2e\n", nu_low_);
+          if (nu_ < nu_trial) {
+            nu_ = nu_trial + nu_inc_;
+            nu_mid = nu_;
+          }
+          if (flexible_penalty_function_) {
+            nu_mid = Max(nu_low_, nu_trial);
+            Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                           "   nu_low = %8.2e\n", nu_low_);
+          }
         }
       }
       else {
         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,                       "Warning: Skipping nu update because current constraint violation (%e) less than nu_update_inf_skip_tol.\n", reference_theta_);
         IpData().Append_info_string("nS");
       }
-      InexData().set_curr_nu(nu_);
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "  using nu = %23.16e (nu_mid = %23.16e)\n", nu_, nu_mid);
+      if (flexible_penalty_function_) {
+        InexData().set_curr_nu(nu_low_);
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "  using nu_up = %23.16e, nu_low = %23.16e, and nu_mid = %23.16e\n", nu_, nu_low_, nu_mid);
+      }
+      else {
+        // We use nu_low_ in MRC for termination tests
+        InexData().set_curr_nu(nu_);
+        Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "  using nu_mid = %23.16e\n", nu_mid);
+      }
 
       // Compute the linear model reduction prediction
       DBG_PRINT((1,"gradBarrTDelta=%e reference_theta_=%e norm_cplusAd=%e\n", gradBarrTDelta, reference_theta_, norm_cplusAd));
@@ -342,6 +358,8 @@ namespace Ipopt
           Number nu_real = -(trial_barr - reference_barr_)/(trial_theta - reference_theta_);
           nu_low_ = Min(nu_, nu_low_ + Max(nu_low_fact_*(nu_real-nu_low_), nu_inc_));
 
+          // We use nu_low_ in MRC for termination tests
+          InexData().set_curr_nu(nu_low_);
           Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
                          "Updating nu_low to %8.2e with nu_real = %8.2e\n", nu_low_, nu_real);
         }
@@ -408,8 +426,11 @@ namespace Ipopt
     nu_ = nu_init_;
     if (flexible_penalty_function_) {
       nu_low_ = nu_low_init_;
+      InexData().set_curr_nu(nu_low_);
     }
-    InexData().set_curr_nu(nu_);
+    else {
+      InexData().set_curr_nu(nu_);
+    }
   }
 
   bool

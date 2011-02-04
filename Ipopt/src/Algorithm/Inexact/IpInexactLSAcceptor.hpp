@@ -1,4 +1,4 @@
-// Copyright (C) 2008 International Business Machines and others.
+// Copyright (C) 2008, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -210,7 +210,7 @@ namespace Ipopt
 
     /** @name Penalty parameter */
     //@{
-    /** Current value of the penalty parameter */
+    /** Current value of the penalty parameter (also nu_up) */
     Number nu_;
     /** Value of penalty parameter at beginning of the iteration. */
     Number last_nu_;
