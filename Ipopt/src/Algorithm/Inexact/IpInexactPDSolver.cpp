@@ -1,4 +1,4 @@
-// Copyright (C) 2008, 2009 International Business Machines and others.
+// Copyright (C) 2008, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -20,7 +20,7 @@
 
 #include "IpIterativeSolverTerminationTester.hpp"
 
-extern Ipopt::IterativeSolverTerminationTester::ETerminationTest test_result_;
+extern Ipopt::InexactData::ETerminationTest test_result_;
 
 namespace Ipopt
 {
@@ -268,7 +268,7 @@ namespace Ipopt
           char buf[32];
           Snprintf(buf, 31, " TT=%d ", test_result_);
           IpData().Append_info_string(buf);
-          if (test_result_ == IterativeSolverTerminationTester::CONTINUE) {
+          if (test_result_ == InexactData::CONTINUE) {
             if (InexData().compute_normal()) {
               Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                              "Termination tester not satisfied!!! Pretend singular\n");

@@ -1,4 +1,4 @@
-// Copyright (C) 2008, 2009 International Business Machines and others.
+// Copyright (C) 2008, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -19,6 +19,22 @@ namespace Ipopt
   class InexactData : public IpoptAdditionalData
   {
   public:
+    /** Enum to report result of termination test */
+    enum ETerminationTest {
+      /** The current solution is not yet good enough */
+      CONTINUE,
+      /** Termination Test 1 is satisfied */
+      TEST_1_SATISFIED,
+      /** Termination Test 2 is satisfied */
+      TEST_2_SATISFIED,
+      /** Termination Test 3 is satisfied */
+      TEST_3_SATISFIED,
+      /** Hessian matrix should be modified */
+      MODIFY_HESSIAN,
+      /** Some other termination criterion satisfied */
+      OTHER_SATISFIED
+    };
+
     /**@name Constructors/Destructors */
     //@{
     /** Constructor */
@@ -140,6 +156,18 @@ namespace Ipopt
     }
     //@}
 
+    /** @name Most recent termination test in PD solver */
+    //@{
+    void set_pd_termination_test(ETerminationTest pd_termination_test)
+    {
+      pd_termination_test_ = pd_termination_test;
+    }
+    ETerminationTest pd_termination_test()
+    {
+      return pd_termination_test_;
+    }
+    //@}
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -179,6 +207,9 @@ namespace Ipopt
 
     /** next iteration normal step computation flag */
     bool next_compute_normal_;
+
+    /** outcome of most recent PD termination test */
+    ETerminationTest pd_termination_test_;
   };
 
 } // namespace Ipopt

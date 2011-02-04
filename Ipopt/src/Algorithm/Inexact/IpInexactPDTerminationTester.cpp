@@ -262,7 +262,7 @@ namespace Ipopt
     return true;
   }
 
-  InexactPDTerminationTester::ETerminationTest
+  InexactData::ETerminationTest
   InexactPDTerminationTester::
   TestTermination(Index ndim, const Number* sol, const Number* resid,
                   Index iter, Number norm2_rhs)
@@ -276,7 +276,8 @@ namespace Ipopt
 
     last_iter_ = iter;
 
-    ETerminationTest retval = CONTINUE;
+    InexactData::ETerminationTest retval = InexactData::CONTINUE;
+    InexData().set_pd_termination_test(retval);
 
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                    "Starting PD Termination Tester for iteration %d.\n", iter);
@@ -602,7 +603,8 @@ namespace Ipopt
     if (tt1) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Termination Test 1 satisfied.\n");
       IpData().TimingStats().IterativeTerminationTester().End();
-      return TEST_1_SATISFIED;
+      InexData().set_pd_termination_test(InexactData::TEST_1_SATISFIED);
+      return InexactData::TEST_1_SATISFIED;
     }
     else {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Termination Test 1 not satisfied.\n");
@@ -659,7 +661,8 @@ namespace Ipopt
     if (tt3) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Termination Test 3 satisfied.\n");
       IpData().TimingStats().IterativeTerminationTester().End();
-      return TEST_3_SATISFIED;
+      InexData().set_pd_termination_test(InexactData::TEST_3_SATISFIED);
+      return InexactData::TEST_3_SATISFIED;
     }
     else {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Termination Test 3 not satisfied.\n");
@@ -705,7 +708,8 @@ namespace Ipopt
     if (tt2) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Termination Test 2 satisfied.\n");
       IpData().TimingStats().IterativeTerminationTester().End();
-      return TEST_2_SATISFIED;
+      InexData().set_pd_termination_test(InexactData::TEST_2_SATISFIED);
+      return InexactData::TEST_2_SATISFIED;
     }
     else if (try_tt2_) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Termination Test 2 not satisfied.\n");
@@ -718,7 +722,8 @@ namespace Ipopt
     else {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Hessian Modification requested.\n");
       IpData().TimingStats().IterativeTerminationTester().End();
-      return MODIFY_HESSIAN;
+      InexData().set_pd_termination_test(InexactData::MODIFY_HESSIAN);
+      return InexactData::MODIFY_HESSIAN;
     }
 
     IpData().TimingStats().IterativeTerminationTester().End();

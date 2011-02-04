@@ -1,4 +1,4 @@
-// Copyright (C) 2008 International Business Machines and others.
+// Copyright (C) 2008, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -82,7 +82,7 @@ namespace Ipopt
     return true;
   }
 
-  InexactNormalTerminationTester::ETerminationTest
+  InexactData::ETerminationTest
   InexactNormalTerminationTester::
   TestTermination(Index ndim, const Number* sol, const Number* resid,
                   Index iter, Number norm2_rhs)
@@ -96,7 +96,7 @@ namespace Ipopt
 
     DBG_ASSERT(c_Avc_norm_cauchy_ >= 0.);
 
-    ETerminationTest retval = CONTINUE;
+    InexactData::ETerminationTest retval = InexactData::CONTINUE;
 
     Number norm2_resid;
 #ifdef HAVE_MPI
@@ -117,7 +117,7 @@ namespace Ipopt
 
     if (iter > inexact_normal_max_iter_) {
       IpData().Append_info_string("N+");
-      retval = OTHER_SATISFIED;
+      retval = InexactData::OTHER_SATISFIED;
       IpData().TimingStats().IterativeTerminationTester().End();
       return retval;
     }
@@ -175,7 +175,7 @@ namespace Ipopt
     Number BasVal = Max(1., IpCq().curr_primal_infeasibility(NORM_2));
 
     if (Compare_le(trial_c_Av_norm, c_Avc_norm_cauchy_, BasVal)) {
-      retval = OTHER_SATISFIED;
+      retval = InexactData::OTHER_SATISFIED;
     }
 
     IpData().TimingStats().IterativeTerminationTester().End();

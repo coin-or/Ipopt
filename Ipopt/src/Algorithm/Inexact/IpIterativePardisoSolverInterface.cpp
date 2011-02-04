@@ -56,7 +56,7 @@ enum IterParTask {
 #endif
 
 Ipopt::IterativeSolverTerminationTester* global_tester_ptr_;
-Ipopt::IterativeSolverTerminationTester::ETerminationTest test_result_;
+Ipopt::InexactData::ETerminationTest test_result_;
 extern "C"
 {
   int IpoptTerminationTest(int n, double* sol, double* resid, int iter, double norm2_rhs) {
@@ -84,7 +84,7 @@ extern "C"
                                           "Termination Tester Result = %d.\n",
                                           test_result_);
     switch (test_result_) {
-    case Ipopt::IterativeSolverTerminationTester::CONTINUE:
+    case Ipopt::InexactData::CONTINUE:
       return false;
       break;
     default:
@@ -907,14 +907,14 @@ namespace Ipopt
                      "Error in Pardiso during solve phase.  ERROR = %d.\n", ERROR);
       retval = SYMSOLVER_FATAL_ERROR;
     }
-    else if (test_result_ == IterativeSolverTerminationTester::MODIFY_HESSIAN) {
+    else if (test_result_ == InexactData::MODIFY_HESSIAN) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Termination tester requests modification of Hessian\n");
       retval = SYMSOLVER_WRONG_INERTIA;
     }
 #if 0
     // FRANK: look at this:
-    else if (test_result_ == IterativeSolverTerminationTester::CONTINUE) {
+    else if (test_result_ == InexactData::CONTINUE) {
       if (InexData().compute_normal()) {
         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                        "Termination tester not satisfied!!! Pretend singular\n");
@@ -922,7 +922,7 @@ namespace Ipopt
       }
     }
 #endif
-    else if (test_result_ == IterativeSolverTerminationTester::TEST_2_SATISFIED) {
+    else if (test_result_ == InexactData::TEST_2_SATISFIED) {
       // Termination Test 2 is satisfied, set the step for the primal
       // iterates to zero
       Index nvars = IpData().curr()->x()->Dim() + IpData().curr()->s()->Dim();

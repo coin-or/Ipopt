@@ -1,4 +1,4 @@
-// Copyright (C) 2008 International Business Machines and others.
+// Copyright (C) 2008, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -21,22 +21,6 @@ namespace Ipopt
   class IterativeSolverTerminationTester: public AlgorithmStrategyObject
   {
   public:
-    /** Enum to report result of termination test */
-    enum ETerminationTest {
-      /** The current solution is not yet good enough */
-      CONTINUE,
-      /** Termination Test 1 is satisfied */
-      TEST_1_SATISFIED,
-      /** Termination Test 2 is satisfied */
-      TEST_2_SATISFIED,
-      /** Termination Test 3 is satisfied */
-      TEST_3_SATISFIED,
-      /** Hessian matrix should be modified */
-      MODIFY_HESSIAN,
-      /** Some other termination criterion satisfied */
-      OTHER_SATISFIED
-    };
-
     /** @name /Destructor */
     //@{
     /** Default constructor
@@ -64,7 +48,7 @@ namespace Ipopt
      *  modified.  The input is the dimension of the augmented system,
      *  the current solution vector of the augmented system, the
      *  current residual vector. */
-    virtual ETerminationTest TestTermination(Index ndim, const Number* sol,
+    virtual InexactData::ETerminationTest TestTermination(Index ndim, const Number* sol,
         const Number* resid, Index iter,
         Number norm2_rhs) = 0;
 

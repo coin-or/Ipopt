@@ -1,4 +1,4 @@
-// Copyright (C) 2008, 2009 International Business Machines and others.
+// Copyright (C) 2008, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -46,7 +46,7 @@
 #endif
 
 extern Ipopt::IterativeSolverTerminationTester* global_tester_ptr_;
-extern Ipopt::IterativeSolverTerminationTester::ETerminationTest test_result_;
+extern Ipopt::InexactData::ETerminationTest test_result_;
 extern "C"
 {
   int IpoptTerminationTest(int n, double* sol, double* resid, int iter, double norm2_rhs);
@@ -444,20 +444,20 @@ namespace Ipopt
       return SYMSOLVER_FATAL_ERROR;
     }
 
-    if (test_result_ == IterativeSolverTerminationTester::MODIFY_HESSIAN) {
+    if (test_result_ == InexactData::MODIFY_HESSIAN) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Termination tester requests modification of Hessian\n");
       return SYMSOLVER_WRONG_INERTIA;
     }
     // FRANK: look at this:
-    if (test_result_ == IterativeSolverTerminationTester::CONTINUE) {
+    if (test_result_ == InexactData::CONTINUE) {
       if (InexData().compute_normal()) {
         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                        "Termination tester not satisfied!!! Pretend singular\n");
         return SYMSOLVER_SINGULAR;
       }
     }
-    if (test_result_ == IterativeSolverTerminationTester::TEST_2_SATISFIED) {
+    if (test_result_ == InexactData::TEST_2_SATISFIED) {
       // Termination Test 2 is satisfied, set the step for the primal
       // iterates to zero
       Index nvars = IpData().curr()->x()->Dim() + IpData().curr()->s()->Dim();
