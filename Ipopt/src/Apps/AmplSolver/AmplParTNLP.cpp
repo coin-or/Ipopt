@@ -249,7 +249,7 @@ CLEANUP:
   if (num_proc > 1 && nnz_h_lag_ > 0) {
     Index *iRow = new Index[nnz_h_lag_];
     Index *jCol = new Index[nnz_h_lag_];
-    Number obj_value, *x = new Number[n];
+    Number *x = new Number[n];
     Number *g = new Number[m], *lambda = new Number[m];
     Number *val = new Number[nnz_h_lag_];
 
@@ -283,7 +283,7 @@ CLEANUP:
       if (val[i] != 0.0)
         hess_map_.push_back(i);
 
-    if (hess_map_.size() < nnz_h_lag_) {
+    if ((Index)hess_map_.size() < nnz_h_lag_) {
       nnz_h_lag_part = hess_map_.size();
     }
     else
