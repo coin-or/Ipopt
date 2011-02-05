@@ -1,4 +1,4 @@
-// Copyright (C) 2009 International Business Machines and others.
+// Copyright (C) 2009, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -435,8 +435,6 @@ AmplParTNLP::eval_g(Index num_proc, Index proc_id,
 
   DBG_ASSERT(asl);
 
-  if (m == 0 || m_last < m_first) return true;
-
   // AMPL's conval gets values of constraints with: n_conjac[0] <= i < n_conjac[1]
   // These are already set in get_nlp_info(); repeat for safety
   n_conjac[0] = m_first;
@@ -456,8 +454,6 @@ AmplParTNLP::eval_jac_g(Index num_proc, Index proc_id,
   bool rval = true;
   Index i;
   ASL_pfgh* asl = amplobj_->AmplSolverObject();
-
-  if (m == 0 || m_last < m_first || nele_jac_part == 0) return true;
 
   if (values_part == NULL) {
     if (num_proc == 1) {
@@ -524,9 +520,6 @@ bool AmplParTNLP::eval_h(Index num_proc, Index proc_id,
 {
   bool rval = true;
   Index i;
-
-  if (nele_hess_part == 0) return true;
-  if (proc_id > 0 && (m == 0 || m_last < m_first)) return true;
 
   if (iRow_part && jCol_part && !values_part) {
     if (nele_hess_part == nnz_h_lag_)
