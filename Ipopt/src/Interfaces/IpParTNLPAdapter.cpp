@@ -509,7 +509,7 @@ namespace Ipopt
       Index n_x_var = outcounts[0];
       Index n_x_l = outcounts[1];
       Index n_x_u = outcounts[2];
-      Index n_x_fixed = outcounts[3];
+      // Index n_x_fixed = outcounts[3];
       Index n_c = outcounts[4];
       Index n_d = outcounts[5];
       Index n_d_l = outcounts[6];
