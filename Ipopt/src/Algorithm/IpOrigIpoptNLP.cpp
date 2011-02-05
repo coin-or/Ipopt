@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2010 International Business Machines and others.
+// Copyright (C) 2004, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -483,8 +483,6 @@ namespace Ipopt
 
   Number OrigIpoptNLP::f(const Vector& x)
   {
-    x.Dot(x);
-    x.Dot(x);
     DBG_START_METH("OrigIpoptNLP::f", dbg_verbosity);
     Number ret = 0.0;
     DBG_PRINT((2, "x.Tag = %d\n", x.GetTag()));
