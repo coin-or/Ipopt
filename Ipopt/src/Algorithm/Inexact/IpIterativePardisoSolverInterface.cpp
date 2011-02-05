@@ -842,6 +842,9 @@ namespace Ipopt
       else  {
         attempts = max_attempts;
         Index iterations_used = tester->GetSolverIterations();
+        char buf[32];
+        Snprintf(buf, 31, "it=%d ", iterations_used);
+        IpData().Append_info_string(buf);
         if (is_normal) {
           Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                          "Number of iterations in Pardiso iterative solver for normal step = %d.\n", iterations_used);
