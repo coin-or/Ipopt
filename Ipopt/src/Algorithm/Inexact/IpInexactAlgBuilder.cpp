@@ -1,4 +1,4 @@
-// Copyright (C) 2008, 2010 International Business Machines and others.
+// Copyright (C) 2008, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -113,12 +113,13 @@ namespace Ipopt
   void InexactAlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->SetRegisteringCategory("Linear Solver");
-    roptions->AddStringOption2(
+    roptions->AddStringOption3(
       "inexact_linear_system_scaling",
       "Method for scaling the linear system for the inexact approach",
       "slack-based",
       "none", "no scaling will be performed",
       "slack-based", "scale the linear system as in paper",
+      "sigma-based", "scale the linear system with square-root of primal-dual Hessian",
       "");
     roptions->AddStringOption2(
       "use_unsymmetric_solver",
@@ -292,7 +293,7 @@ namespace Ipopt
     std::string inexact_linear_system_scaling;
     options.GetStringValue("inexact_linear_system_scaling",
                            inexact_linear_system_scaling, prefix);
-    if (inexact_linear_system_scaling=="slack-based") {
+    if (inexact_linear_system_scaling=="slack-based" || inexact_linear_system_scaling=="sigma-based") {
       ScalingMethod = new InexactTSymScalingMethod();
       call_scalingmethod_on_all_procs = true;
     }

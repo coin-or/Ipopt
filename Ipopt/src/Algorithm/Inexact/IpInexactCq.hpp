@@ -1,4 +1,4 @@
-// Copyright (C) 2008 International Business Machines and others.
+// Copyright (C) 2008, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -96,6 +96,11 @@ namespace Ipopt
      *  constraint Jacobian with the current normal step */
     SmartPtr<const Vector> curr_jac_times_normal_d();
 
+    /** Vector with scaling parameters for linear system scaling (only
+     *  if inexact_linear_system_scaling is not none) for the s-block
+     *  rows/columns */
+    SmartPtr<const Vector> linear_system_scaling_s();
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -113,6 +118,23 @@ namespace Ipopt
 
     /** Overloaded Equals Operator */
     void operator=(const InexactCq&);
+    //@}
+
+    /** @name Algorithmic options */
+    //@{
+    /** Enum for type of linear system scaling */
+    enum LinearSystemScalingType
+    {
+      NO_SCALING=0,
+      SLACK_BASED,
+      SIGMA_BASED
+    };
+    /** Chosen linear system scaling type */
+    LinearSystemScalingType linear_system_scaling_type_;
+    /** Maximum value of scaling parameter */
+    Number inexact_linear_system_scaling_max_;
+    /** Minimum value of scaling parameter */
+    Number inexact_linear_system_scaling_min_;
     //@}
 
     /** @name Pointers for easy access to data and NLP information. To
@@ -147,6 +169,7 @@ namespace Ipopt
     CachedResults<Number> curr_uWu_cache_;
     CachedResults<SmartPtr<const Vector> > curr_jac_times_normal_c_cache_;
     CachedResults<SmartPtr<const Vector> > curr_jac_times_normal_d_cache_;
+    CachedResults<SmartPtr<const Vector> > linear_system_scaling_s_cache_;
     //@}
 
     /** Upper bound on slack-based scaling factors */

@@ -35,7 +35,8 @@ namespace Ipopt
       curr_Wu_s_cache_(1),
       curr_uWu_cache_(1),
       curr_jac_times_normal_c_cache_(1),
-      curr_jac_times_normal_d_cache_(1)
+      curr_jac_times_normal_d_cache_(1),
+      linear_system_scaling_s_cache_(0)
   {
     DBG_START_METH("InexactCq::InexactCq", dbg_verbosity);
     DBG_ASSERT(ip_nlp_);
@@ -54,6 +55,19 @@ namespace Ipopt
       "Upper bound on slack-based scaling parameters.",
       0.0, true, 1.,
       "");
+    roptions->SetRegisteringCategory("Linear Solver");
+    roptions->AddLowerBoundedNumberOption(
+      "inexact_linear_system_scaling_max",
+      "Upper bound on scaling factors for the linear system.",
+      0.0, true, 1.,
+      "This is only used for sigma-based scaling.  For slack-based scaling, "
+      "the value of \"slack_scale_max\" is used to determine largest scaling "
+      "factor.");
+    roptions->AddLowerBoundedNumberOption(
+      "inexact_linear_system_scaling_min",
+      "Lower bound on scaling factors for the linear system.",
+      0.0, false, 0.,
+      "");
   }
 
   bool
@@ -62,6 +76,15 @@ namespace Ipopt
                         const std::string& prefix)
   {
     options.GetNumericValue("slack_scale_max", slack_scale_max_, prefix);
+    options.GetNumericValue("inexact_linear_system_scaling_max",
+                            inexact_linear_system_scaling_max_, prefix);
+    options.GetNumericValue("inexact_linear_system_scaling_min",
+                            inexact_linear_system_scaling_min_, prefix);
+    int enum_int;
+    options.GetEnumValue("inexact_linear_system_scaling", enum_int, prefix);
+    linear_system_scaling_type_ = LinearSystemScalingType(enum_int);
+    ASSERT_EXCEPTION(inexact_linear_system_scaling_min_ <= inexact_linear_system_scaling_max_,
+                     OPTION_INVALID, "inexact_linear_system_scaling_min cannot be larger than inexact_linear_system_scaling_max");
     return true;
   }
 
@@ -389,6 +412,43 @@ namespace Ipopt
 
       result = ConstPtr(tmp);
       curr_jac_times_normal_d_cache_.AddCachedResult3Dep(result, *x, *normal_x, *normal_s);
+    }
+
+    return result;
+  }
+
+  SmartPtr<const Vector>
+  InexactCq::linear_system_scaling_s()
+  {
+    SmartPtr<const Vector> result;
+
+    switch (linear_system_scaling_type_) {
+    case NO_SCALING:
+      break;
+    case SLACK_BASED:
+      result = curr_scaling_slacks();
+      if (inexact_linear_system_scaling_min_>result->Min()) {
+        SmartPtr<Vector> tmp = result->MakeNewCopy();
+        SmartPtr<Vector> small = tmp->MakeNew();
+        small->Set(inexact_linear_system_scaling_min_);
+        tmp->ElementWiseMax(*small);
+        result = ConstPtr(tmp);
+      }
+      break;
+    case SIGMA_BASED: {
+        SmartPtr<Vector> scaling_vec = ip_cq_->curr_sigma_s()->MakeNewCopy();
+        scaling_vec->ElementWiseReciprocal();
+        scaling_vec->ElementWiseSqrt();
+        SmartPtr<Vector> tmp = scaling_vec->MakeNew();
+        tmp->Set(inexact_linear_system_scaling_max_);
+        scaling_vec->ElementWiseMin(*tmp);
+        if (inexact_linear_system_scaling_min_>0.) {
+          tmp->Set(inexact_linear_system_scaling_min_);
+          scaling_vec->ElementWiseMax(*tmp);
+        }
+        result = ConstPtr(scaling_vec);
+      }
+      break;
     }
 
     return result;
