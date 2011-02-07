@@ -655,7 +655,7 @@ namespace Ipopt
                        "Double  memory in KB required for the numerical factorization  = %d.\n", IPARM_[16]);
       }
 
-      PHASE = 22;
+      PHASE = 12;
 
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemFactorization().Start();
@@ -808,6 +808,7 @@ namespace Ipopt
       ASSERT_EXCEPTION(ret, INTERNAL_ABORT, "tester->InitializeSolve(); returned false");
 
       for (int i = 0; i < N; i++) {
+        X[i] = 0;
         rhs_vals[i] = ORIG_RHS[i];
       }
 
@@ -830,7 +831,7 @@ namespace Ipopt
           Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                          "(PD step)\n");
         }
-        PHASE = 23;
+        PHASE = 13;
         DPARM_[ 4] *= decr_factor_;
         DPARM_[ 5] *= decr_factor_;
         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,

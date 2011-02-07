@@ -53,7 +53,7 @@ namespace Ipopt
       scaling_factors += nx;
     }
 
-    SmartPtr<const Vector> scaling_vec = InexCq().curr_scaling_slacks();
+    SmartPtr<const Vector> scaling_vec = InexCq().linear_system_scaling_s();
 #ifdef HAVE_MPI
     ParTripletHelper::FillAllValuesFromVector(ns, *scaling_vec, scaling_factors);
 #else

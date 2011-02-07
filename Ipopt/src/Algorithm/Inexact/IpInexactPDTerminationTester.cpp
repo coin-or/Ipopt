@@ -118,16 +118,6 @@ namespace Ipopt
     options.GetIntegerValue("inexact_desired_pd_residual_iter",
                             inexact_desired_pd_residual_iter_, prefix);
 
-    std::string inexact_linear_system_scaling;
-    options.GetStringValue("inexact_linear_system_scaling",
-                           inexact_linear_system_scaling, prefix);
-    if (inexact_linear_system_scaling=="slack-based") {
-      requires_scaling_ = true;
-    }
-    else {
-      requires_scaling_ = false;
-    }
-
     return true;
   }
 
@@ -362,8 +352,8 @@ namespace Ipopt
     }
 #endif
 
-    if (requires_scaling_) {
-      SmartPtr<const Vector> scaling_vec = curr_scaling_slacks_;
+    SmartPtr<const Vector> scaling_vec = InexCq().linear_system_scaling_s();
+    if (IsValid(scaling_vec)) {
       SmartPtr<Vector> tmp = sol_s->MakeNewCopy();
       tmp->ElementWiseMultiply(*scaling_vec);
       sol_s = ConstPtr(tmp);
