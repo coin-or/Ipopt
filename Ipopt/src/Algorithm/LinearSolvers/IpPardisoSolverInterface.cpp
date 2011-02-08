@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2010 International Business Machines and others.
+// Copyright (C) 2005, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -700,7 +700,12 @@ namespace Ipopt
                        "Double  memory in KB required for the numerical factorization  = %d.\n", IPARM_[16]);
       }
 
-      PHASE = 22;
+      if (pardiso_iterative_) {
+        PHASE = 12;
+      }
+      else {
+        PHASE = 22;
+      }
 
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemFactorization().Start();
@@ -887,7 +892,12 @@ namespace Ipopt
                        "Iterative solver in Pardiso did not converge (ERROR = %d)\n", ERROR);
         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                        "  Decreasing drop tolerances from DPARM_[41] = %e and DPARM_[44] = %e\n", DPARM_[41], DPARM_[44]);
-        PHASE = 23;
+        if (pardiso_iterative_) {
+          PHASE = 13;
+        }
+        else {
+          PHASE = 23;
+        }
         DPARM_[4] /= 2.0 ;
         DPARM_[5] /= 2.0 ;
         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,

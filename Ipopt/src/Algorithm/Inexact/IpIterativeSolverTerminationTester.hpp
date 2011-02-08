@@ -50,7 +50,7 @@ namespace Ipopt
      *  current residual vector. */
     virtual InexactData::ETerminationTest TestTermination(Index ndim, const Number* sol,
         const Number* resid, Index iter,
-        Number norm2_rhs) = 0;
+        Number norm2_rhs, Number norm2_resid) = 0;
 
     /** This method can be called after the Solve is over and we can
      *  delete anything that has been allocated to free memory. */

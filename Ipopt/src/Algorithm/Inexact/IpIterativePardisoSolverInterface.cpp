@@ -59,7 +59,7 @@ Ipopt::IterativeSolverTerminationTester* global_tester_ptr_;
 Ipopt::InexactData::ETerminationTest test_result_;
 extern "C"
 {
-  int IpoptTerminationTest(int n, double* sol, double* resid, int iter, double norm2_rhs) {
+  int IpoptTerminationTest(int n, double* sol, double* resid, int iter, double norm2_rhs, double norm2_resid) {
     fflush(stdout);
     fflush(stderr);
     // only do the termination test for PD system
@@ -76,10 +76,13 @@ extern "C"
       MPI_Bcast(ivals, 2, MPI_INT, 0, MPI_COMM_WORLD);
       MPI_Bcast(sol, n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
       MPI_Bcast(resid, n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-      MPI_Bcast(&norm2_rhs, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+      double dvals[2];
+      dvals[0] = norm2_rhs;
+      dvals[1] = norm2_resid;
+      MPI_Bcast(dvals, 2, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     }
 #endif
-    test_result_ = global_tester_ptr_->TestTermination(n, sol, resid, iter, norm2_rhs);
+    test_result_ = global_tester_ptr_->TestTermination(n, sol, resid, iter, norm2_rhs, norm2_resid);
     global_tester_ptr_->GetJnlst().Printf(Ipopt::J_DETAILED, Ipopt::J_LINEAR_ALGEBRA,
                                           "Termination Tester Result = %d.\n",
                                           test_result_);
@@ -94,7 +97,7 @@ extern "C"
   }
 
   // The following global function pointer is defined in the Pardiso library
-  void SetIpoptCallbackFunction(int (*IpoptFunction)(int n, double* x,  double* r, int k, double b));
+  void SetIpoptCallbackFunction(int (*IpoptFunction)(int n, double* x,  double* r, int k, double b, double resid));
 }
 
 /** Prototypes for Pardiso's subroutines */
@@ -405,11 +408,13 @@ namespace Ipopt
           MPI_Bcast(sol, n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
           double* resid = new double[n];
           MPI_Bcast(resid, n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-          double norm2_rhs;
-          MPI_Bcast(&norm2_rhs, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+          double dvals[2];
+          MPI_Bcast(dvals, 2, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+          double norm2_rhs = dvals[0];
+          double norm2_resid = dvals[1];
 
           // call the termination tester
-          IpoptTerminationTest(n, sol, resid, iter, norm2_rhs);
+          IpoptTerminationTest(n, sol, resid, iter, norm2_rhs, norm2_resid);
 
           delete [] resid;
           delete [] sol;
