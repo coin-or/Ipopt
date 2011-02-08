@@ -75,7 +75,7 @@ namespace Ipopt
   InexactData::ETerminationTest
   InexactNormalTerminationTester::
   TestTermination(Index ndim, const Number* sol, const Number* resid,
-                  Index iter, Number norm2_rhs)
+                  Index iter, Number norm2_rhs, Number norm2_resid)
   {
     DBG_START_METH("InexactNormalTerminationTester::TestTermination",
                    dbg_verbosity);
@@ -88,18 +88,11 @@ namespace Ipopt
 
     InexactData::ETerminationTest retval = InexactData::CONTINUE;
 
-    Number norm2_resid;
 #ifdef HAVE_MPI
     int my_rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
-    // TODO: We chould do this in parallel...?  But then we would first have to broadcast the values, so let's assume for now that it is cheaper to do the long vector only on the root process.
-    if (my_rank==0) {
-      norm2_resid = IpBlasDnrm2(ndim, resid, 1);
-    }
     MPI_Bcast(&norm2_resid, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     MPI_Bcast(&norm2_rhs, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-#else
-    norm2_resid = IpBlasDnrm2(ndim, resid, 1);
 #endif
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                    "TTNormal: iter = %d ||resid|| = %23.16e ||rhs|| = %23.16e\n",

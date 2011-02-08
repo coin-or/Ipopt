@@ -49,10 +49,10 @@ extern Ipopt::IterativeSolverTerminationTester* global_tester_ptr_;
 extern Ipopt::InexactData::ETerminationTest test_result_;
 extern "C"
 {
-  int IpoptTerminationTest(int n, double* sol, double* resid, int iter, double norm2_rhs);
+  int IpoptTerminationTest(int n, double* sol, double* resid, int iter, double norm2_rhs, double norm2_resid);
 
   // The following global function pointer is defined in the Pardiso library
-  void SetIpoptCallbackFunction(int (*IpoptFunction)(int n, double* x,  double* r, int k, double b));
+  void SetIpoptCallbackFunction(int (*IpoptFunction)(int n, double* x,  double* r, int k, double b, double resid));
 }
 
 /** Prototypes for Pardiso's subroutines */
