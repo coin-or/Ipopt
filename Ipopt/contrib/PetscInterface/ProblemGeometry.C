@@ -11,7 +11,7 @@
 
 extern int GetProcID();
 
-#define DBG_PRINT(s) {std::cout << GetProcID() << __FILE__ << ":" << __LINE__ <<":" << s << std::endl;}
+#define MY_DBG_PRINT(s) {std::cout << GetProcID() << __FILE__ << ":" << __LINE__ <<":" << s << std::endl;}
 //#define DBG_PRINT(s) {}
 
 
@@ -468,6 +468,7 @@ int ProblemGeometry::GetWallItemWall(const Item& item)
 // Update p_mesh to include BoundaryMarkers for all nodes that have Dirichlet
 void ProblemGeometry::SetBoundaryInfo(libMesh::Mesh* p_mesh)
 {
+  MY_DBG_PRINT("");
   const double eps = 1e-8;
 //  p_mesh->boundary_info->clear();
 
@@ -496,8 +497,10 @@ void ProblemGeometry::SetBoundaryInfo(libMesh::Mesh* p_mesh)
         if ( _BoundCond[BoundaryMarker]->IsPhiDirichlet() || _BoundCond[BoundaryMarker]->IsTDirichlet() ) {
           // mark side points
           for (unsigned int iPt=0; iPt<(*el)->n_nodes();iPt++)
-            if ((*el)->is_node_on_side(iPt,side))
+            if ((*el)->is_node_on_side(iPt,side)) {
+              MY_DBG_PRINT("added Dirichlet Boundary marker" << (*el)->get_node(iPt));
               p_mesh->boundary_info->add_node((*el)->get_node(iPt),BoundaryMarker);
+            }
         }
       }
     }
@@ -564,7 +567,7 @@ void ProblemGeometry::Tetgen2Mesh(const tetgenio& tet, libMesh::UnstructuredMesh
           int iBdNode3 = tet.tetrahedronlist[(dim+1)*iEl+((iNeig+3)%(dim+1))];
           int sum = iBdNode1+iBdNode2+iBdNode3;
           for (int iSide=0;iSide<dim+1;iSide++) {
-            // sum is correct -> sid is correct (holds only, if side has one node less than elem)
+            // sum is correct -> side is correct (holds only, if side has one node less than elem)
             if ( (pElem->node(pElem->side_nodes_map[iSide][0])
                   +pElem->node(pElem->side_nodes_map[iSide][1])
                   +pElem->node(pElem->side_nodes_map[iSide][2])) == sum ) {
@@ -580,6 +583,7 @@ void ProblemGeometry::Tetgen2Mesh(const tetgenio& tet, libMesh::UnstructuredMesh
                 p_mesh->boundary_info->add_node(iBdNode1,BoundaryMarker);
                 p_mesh->boundary_info->add_node(iBdNode2,BoundaryMarker);
                 p_mesh->boundary_info->add_node(iBdNode3,BoundaryMarker);
+                // std::cout << "Dirichlet at " << iBdNode1 << ", " << iBdNode2 << ", " << iBdNode3 << ", " << "Center: " << Center << std::endl;
               }
             }
           }
@@ -828,15 +832,15 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
 
   tetgenio tetgen_out;
 
-  bool bCallExternal=false;
+  bool bCallExternal=true;
   if (bCallExternal) {
     int ProcID = GetProcID();
     if(ProcID==0) {
       std::ofstream os("Mesh3DRaw.poly",std::ios::out);
       PrintTetgenMesh(tetgen_in, os);
       char strBuf[256];
-      sprintf(strBuf,"-nQpqa%f",_h*_h*_h);
-      //sprintf(strBuf,"zpQqa%f",h*h*h);  // tetgen in silent mode
+      sprintf(strBuf,"-nQpqa%e",_h*_h*_h);
+      //sprintf(strBuf,"zpQqa%e",h*h*h);  // tetgen in silent mode
       char Buf[2014];
       sprintf(Buf,"tetgen %s Mesh3DRaw.poly",strBuf);
       std::cout << "calling \"" << Buf << "\"...";
@@ -881,7 +885,6 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
     //tetrahedralize(&tetgen_beh, &tetgen_in, &tetgen_out);
     tetrahedralize(strBuf, &tetgen_in, &tetgen_out);
   }
-DBG_PRINT("Checkpoint 666");
   Tetgen2Mesh(tetgen_out, p_mesh);
   p_mesh->prepare_for_use();
 // TODO: Clearify what's going on here, why program termination?
