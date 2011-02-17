@@ -498,7 +498,7 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
         double diricoeff = BCs[bc_id[0]]->PhiDirichletCoef(*(CurElem->get_node(i)));
         diricoeff = 1.0;
         double rhs = BCs[bc_id[0]]->PhiRhs(*(CurElem->get_node(i)));
-        assert(fabs(BCs[bc_id[0]]->PhiNeumannCoef(*(CurElem->get_node(i)))) > 1e-6);
+        assert(fabs(BCs[bc_id[0]]->PhiNeumannCoef(*(CurElem->get_node(i)))) < 1e-6);
         ElemRes(i) = diricoeff*LocalSolution[i];
         ElemRes(i) += rhs;
       }
