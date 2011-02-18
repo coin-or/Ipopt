@@ -37,6 +37,7 @@ public:
   virtual bool IsTDirichlet() = 0;
   BoundaryConditionBase() {}
   virtual ~BoundaryConditionBase() {}
+  virtual void print() = 0;
 };
 
 class BoundaryConditionConstValues : public BoundaryConditionBase
@@ -58,6 +59,7 @@ public:
   virtual double TRhs(const libMesh::Point& x)  {return _TRhs;}
   virtual bool IsPhiDirichlet() { if (fabs(_PhiDirichletCoef)<1e-16) return false; else return (fabs(_PhiNeumannCoef/_PhiDirichletCoef)<1e-16); }
   virtual bool IsTDirichlet() { if (fabs(_TDirichletCoef)<1e-16) return false; else return (fabs(_TNeumannCoef/_TDirichletCoef)<1e-16); }
+  virtual void print() { std::cout << _PhiDirichletCoef << " " << _PhiNeumannCoef << " " << _PhiRhs << " " << _TDirichletCoef << " " << _TNeumannCoef << " " << _TRhs << std::endl; }
 
   BoundaryConditionConstValues() : _PhiDirichletCoef(0.0), _PhiNeumannCoef(0.0), _PhiRhs(0.0),
       _TDirichletCoef(0.0), _TNeumannCoef(0.0), _TRhs(0.0)
@@ -84,7 +86,7 @@ public:
   {
     double val = 0.0;
     double tmp;
-    for(int idim=0; idim<3;idim++) {    // in LibMesh
+    for(int idim=0; idim<_min.size();idim++) {    // in LibMesh
       if(_max[idim]-_min[idim]>1e-12) {
         tmp = (_min[idim]+_max[idim])/2.0;
         val += (x(idim)-_min[idim]) * (_max[idim]-x(idim)) / ((tmp-_min[idim]) * (_max[idim]-tmp));
@@ -108,6 +110,7 @@ public:
 			 : _PhiDirichletCoef(PhiDirC), _PhiNeumannCoef(PhiNeumC), _PhiRhsScale(PhiRhsVal),
 			   _TDirichletCoef(TDirC), _TNeumannCoef(TNeumC), _TRhs(TRhsVal), _min(min), _max(max)
   {}
+  virtual void print() { std::cout << _PhiDirichletCoef << " " << _PhiNeumannCoef << " " << _min[0] << " " << _max[0] << " " << _min[1] << " " << _max[1] << " " << _min[2] << " " << _max[2] << " " <<  _PhiRhsScale << " " << _TDirichletCoef << " " << _TNeumannCoef << " " << _TRhs << std::endl; }
 };
 
 //std::ostream& operator << (std::ostream& os, const BoundaryCondition& BC);
