@@ -8,11 +8,13 @@
 
 #include "ProblemGeometry.h"
 #include <stdexcept>
+#include "mesh_generation.h"
+
 
 extern int GetProcID();
 
-#define MY_DBG_PRINT(s) {std::cout << GetProcID() << __FILE__ << ":" << __LINE__ <<":" << s << std::endl;}
-//#define DBG_PRINT(s) {}
+//#define MY_DBG_PRINT(s) {std::cout << GetProcID() << __FILE__ << ":" << __LINE__ <<":" << s << std::endl;}
+#define MY_DBG_PRINT(s) {}
 
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -162,6 +164,8 @@ void ProblemGeometry::AddExhaust(const std::vector<double>& min, const std::vect
     item.BoundaryMarker[iBd] = BoundMark;
   assert(_BoundCond.size()==BoundMark);
   _BoundCond.push_back(new BoundaryConditionConstValues(1.0,0.0,0.0,0.0,1.0,0.0));         // Phi = 0, dT/dn = 0
+  //std::cout << "Adding BoundaryConditionConstValues at " << _BoundCond[_BoundCond.size()-1] << std::endl;
+  //_BoundCond[_BoundCond.size()-1]->print();
   // No Control Parameter
   _Exh.push_back(item);
 }
@@ -233,7 +237,8 @@ void ProblemGeometry::ReadFromStream(std::istream& is)
     throw std::runtime_error("Can't find line \"Roomsize=*,*[,*]\"");
   }
   else {
-    std::cout << "Roomsize=" << _RoomSize[0] <<"," << _RoomSize[1];
+    if(GetProcID()==0)
+      std::cout << "Roomsize=" << _RoomSize[0] <<"," << _RoomSize[1];
     if (_RoomSize.size()>2)
       std::cout << "," << _RoomSize[2];
     std::cout << std::endl;
@@ -248,7 +253,8 @@ void ProblemGeometry::ReadFromStream(std::istream& is)
     tmp_max.clear();
     tmp_min.clear();
     is >> Buf;
-    std::cout << Buf << "line read" << std::endl;
+    if(GetProcID()==0)
+      std::cout << Buf << "line read" << std::endl;
     if (strlen(Buf)<1)
       continue;
     if (Buf[0]=='#')
@@ -357,7 +363,8 @@ void ProblemGeometry::ReadFromStream(std::istream& is)
       }
     }
   }
-  std::cout << "Input file read" << std::endl;
+  if(GetProcID()==0)
+    std::cout << "Input file read" << std::endl;
 }
 
 int ProblemGeometry::GetBoundaryMarker(const std::vector<double>& pt)
@@ -853,6 +860,8 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
       ReadNeighFile("Mesh3DRaw.1.neigh",&tetgen_out);
     }
     MPI_Bcast(&(tetgen_out.numberofpoints), 1, MPI_INT, 0, MPI_COMM_WORLD);
+    //MY_DBG_PRINT("tetgen_out.numberofpoints:" << sizeof(tetgen_out.numberofpoints) << ", " << tetgen_out.numberofpoints)
+
     if(ProcID!=0)
       tetgen_out.pointlist = new double[3*tetgen_out.numberofpoints];
     MPI_Bcast(tetgen_out.pointlist,3*tetgen_out.numberofpoints,MPI_DOUBLE,0,MPI_COMM_WORLD);
@@ -865,6 +874,7 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
     if(ProcID!=0)
       tetgen_out.neighborlist = new int[4*tetgen_out.numberoftetrahedra];
     MPI_Bcast(tetgen_out.neighborlist,4*tetgen_out.numberoftetrahedra,MPI_INT,0,MPI_COMM_WORLD);
+
   }
   else {
     bool PrintMeshingData=true;
@@ -1144,10 +1154,10 @@ void ProblemGeometry::CreateMesh2D(libMesh::UnstructuredMesh* p_mesh)
     PrintTriangleMesh(tri_in, file);
   }
   char strBuf[256];
-  sprintf(strBuf,"zQnqpa%f",_h*_h);
-
+  sprintf(strBuf,"znqpa%f",_h*_h);
   triangulate(strBuf, &tri_in, &tri_out, NULL);
   //libMesh::Triangle::copy_tri_to_mesh(tri_out,*p_mesh,TRI3);
+
   Triangle2Mesh(tri_out,p_mesh);
   p_mesh->prepare_for_use();
   libMesh::Triangle::destroy(tri_in,Triangle::INPUT);   // deletes also the memory
@@ -1375,6 +1385,34 @@ void ProblemGeometry::Triangle2Mesh(const libMesh::Triangle::triangulateio& tri,
     }
   }
   p_mesh->prepare_for_use(false);
+/*
+  int dim = GetDim();
+  libMesh::MeshTools::Generation::build_square(*p_mesh, 2, 2,0.0,1.0,0.0,1.0,TRI3);
+  libMesh::MeshBase::const_element_iterator itCurEl = p_mesh->active_local_elements_begin();
+  const MeshBase::const_element_iterator itEndEl = p_mesh->active_local_elements_end();
+  for ( ; itCurEl != itEndEl; ++itCurEl) {
+    const libMesh::Elem* CurElem = *itCurEl;
+    for (unsigned int side=0; side<CurElem->n_sides(); side++) {
+      if (CurElem->neighbor(side) == NULL) {
+        AutoPtr<Elem> CurSide = CurElem->build_side(side);
+        std::vector<double> Center;
+        Center.resize(dim);
+        libMesh::Point CenterPt = CurSide->centroid();
+        for (int iDim=0;iDim<dim;iDim++)
+          Center[iDim] = CenterPt(iDim);
+        int BoundaryMarker = GetBoundaryMarker(Center);
+        assert(BoundaryMarker!=-1);
+        std::cout << "Adding boundary " << BoundaryMarker << "at point " << CenterPt << std::endl;
+        p_mesh->boundary_info->add_side(CurElem,side,BoundaryMarker);
+        if(_BoundCond[BoundaryMarker]->IsPhiDirichlet() || _BoundCond[BoundaryMarker]->IsTDirichlet() ) {
+          p_mesh->boundary_info->add_node(CurSide->get_node(0),BoundaryMarker);
+          p_mesh->boundary_info->add_node(CurSide->get_node(1),BoundaryMarker);
+        }
+      }
+    }
+  }
+  p_mesh->prepare_for_use(false);
+*/
 }
 
 void PrintTriangleMesh(const libMesh::Triangle::triangulateio& tri, std::ostream& os)
