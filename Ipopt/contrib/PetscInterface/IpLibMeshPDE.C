@@ -38,9 +38,9 @@
 
 int GetProcID();
 
-#define MY_DBG_PRINT(s) {std::cout << GetProcID() << __FILE__ << ":" << __LINE__ <<":" << s << std::endl;}
+//#define MY_DBG_PRINT(s) {std::cout << GetProcID() << __FILE__ << ":" << __LINE__ <<":" << s << std::endl;}
 //#define MY_DBG_PRINT(s) {std::cout << GetProcID() << ":" << s << std::endl;}
-//#define MY_DBG_PRINT(s) {}
+#define MY_DBG_PRINT(s) {}
 
 using namespace libMesh;
 
@@ -119,6 +119,7 @@ void LibMeshPDEBase::InitProblemData(std::istream& is)
 
 void LibMeshPDEBase::reinit()
 {
+  MY_DBG_PRINT("ibMeshPDEBase::reinit called");
   libMesh::LinearImplicitSystem* lm_sys;
   if (!lm_eqn_sys_) {
     // We are running this for the first time
@@ -287,6 +288,7 @@ void LibMeshPDEBase::reinit()
     MatCreateSeqAIJ(PETSC_COMM_SELF,n_control_global,n_control_global,8,PETSC_NULL,&petsc_mat);
     hess_control_control_ = new PetscMatrix<Number>(petsc_mat);
   }
+  MY_DBG_PRINT("ibMeshPDEBase::reinit finished");
 }
 
 void LibMeshPDEBase::DetroySelfOwnedLibMeshPetscMatrix(SparseMatrix<Number>*& matrix)
@@ -496,7 +498,6 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
       if( BCs[bc_id[0]]->IsPhiDirichlet())
       {
         double diricoeff = BCs[bc_id[0]]->PhiDirichletCoef(*(CurElem->get_node(i)));
-        diricoeff = 1.0;
         double rhs = BCs[bc_id[0]]->PhiRhs(*(CurElem->get_node(i)));
         assert(fabs(BCs[bc_id[0]]->PhiNeumannCoef(*(CurElem->get_node(i)))) < 1e-6);
         ElemRes(i) = diricoeff*LocalSolution[i];
@@ -547,7 +548,6 @@ void LibMeshPDEBase::calcPDE_jacobian_control(libMesh::SparseMatrix<libMesh::Num
   MY_DBG_PRINT( "LibMeshPDEBase::calcPDE_jacobian_control called" );
   ConvertControl2PGData();
   jac_control_->zero();
-
   const double eps = 1e-8;
 
   const unsigned int dim = mesh_.mesh_dimension();
@@ -1057,7 +1057,7 @@ void LibMeshPDEBase::WritePotentialCSV(const std::string& Filename)
   MY_DBG_PRINT( "LibMeshPDEBase::WritePotentialCSV called" );
   std::ofstream f;
   f.open(Filename.c_str(),std::ios::out);
-
+  f.precision(10);
   std::vector<libMesh::Number> State;
   lm_eqn_sys_->build_solution_vector(State);
 
@@ -1168,6 +1168,7 @@ void LibMeshPDEBase::WriteAirflowTKVs(const std::string& VolumeFilename, const s
 
 void LibMeshPDEBase::WriteAirflowCSVs(const std::string& VolumeFilename, const std::string& SurfFilename)
 {
+  return;
   MY_DBG_PRINT( "LibMeshPDEBase::WriteAirflowCSVs called" );
   std::ofstream VolFile;
   VolFile.open(VolumeFilename.c_str(),std::ios::out);
@@ -1289,7 +1290,6 @@ void LibMeshPDEBase::InitAuxConstr(int *plocal, int *pglobal, std::list<Number>*
       }
     }
   }
-
   assert(pglobal);
   MPI_Allreduce ( plocal, pglobal, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD );
   MPI_Scan(plocal,&first_aux_constr_,1,MPI_INT,MPI_SUM,MPI_COMM_WORLD);
@@ -1370,7 +1370,6 @@ void LibMeshPDEBase::calcAux_jacobian_state(libMesh::SparseMatrix<libMesh::Numbe
 {
   MY_DBG_PRINT( "LibMeshPDEBase::calcAux_jacobian_state called" );
   jac_aux_state_->zero();
-
   int i_aux_constr(first_aux_constr_);
   const MeshBase& mesh = lm_eqn_sys_->get_mesh();
   const unsigned int dim = mesh.mesh_dimension();
