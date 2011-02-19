@@ -123,7 +123,6 @@ Ipopt/contrib/RInterface/R/make.sparse.R -text
 Ipopt/contrib/RInterface/R/plot.sparseness.R -text
 Ipopt/contrib/RInterface/R/print.ipoptr.R -text
 Ipopt/contrib/RInterface/R/print.sparseness.R -text
-Ipopt/contrib/RInterface/R/show.sparseness.R -text
 Ipopt/contrib/RInterface/README -text
 Ipopt/contrib/RInterface/inst/CITATION -text
 Ipopt/contrib/RInterface/inst/doc/figs/plot-sparsefig.eps -text
@@ -137,7 +136,6 @@ Ipopt/contrib/RInterface/man/make.sparse.Rd -text
 Ipopt/contrib/RInterface/man/plot.sparseness.Rd -text
 Ipopt/contrib/RInterface/man/print.ipoptr.Rd -text
 Ipopt/contrib/RInterface/man/print.sparseness.Rd -text
-Ipopt/contrib/RInterface/man/show.sparseness.Rd -text
 Ipopt/contrib/RInterface/src/IpoptRJournal.cpp -text
 Ipopt/contrib/RInterface/src/IpoptRJournal.hpp -text
 Ipopt/contrib/RInterface/src/IpoptRNLP.cpp -text
