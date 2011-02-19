@@ -31,7 +31,7 @@ IPOPT_CXXLINKFLAGS = @RPATH_FLAGS@
 CYGPATH_W = @CYGPATH_W@
 
 # Define objects for R to build
-OBJECTS = ipoptr.o IpoptRNLP.o
+OBJECTS = ipoptr.o IpoptRNLP.o IpoptRJournal.o
 
 # Convert to R macros
 PKG_LIBS = ${IPOPT_CXXLINKFLAGS} ${IPOPT_LIBS}
