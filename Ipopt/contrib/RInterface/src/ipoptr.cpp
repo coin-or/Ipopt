@@ -15,11 +15,14 @@
  * Financial support of the UK Economic and Social Research Council 
  * through a grant (RES-589-28-0001) to the ESRC Centre for Microdata 
  * Methods and Practice (CeMMAP) is gratefully acknowledged.
+ *
+ * 30/01/2011: added IpoptRJournal to correctly direct output to R terminal.
  */
 
 #include "IpIpoptApplication.hpp"
 #include "IpSolveStatistics.hpp"
 #include "IpoptRNLP.hpp"
+#include "IpoptRJournal.hpp"
 
 #include <R.h>
 #include <Rdefines.h>
@@ -153,6 +156,19 @@ SEXP IpoptRSolve( SEXP args )
 	// Set options that were passed from R
 	setApplicationOptions( app, ipoptr_nlp, getListElement(args, "options") );
   
+    // Set up the IPOPT console.
+    //
+    // Get print_level from options
+    Ipopt::Index print_level;
+    app->Options()->GetIntegerValue( "print_level", print_level, "" );
+    
+    // Set print_level to 0 for default console (to avoid double output under Linux)
+    app->Options()->SetIntegerValue( "print_level", 0 );
+
+    // Add new journal with user-supplied print_level to print output to R console
+    Ipopt::SmartPtr<Ipopt::Journal> console = new IpoptRJournal( static_cast<Ipopt::EJournalLevel>( print_level ) );
+    app->Jnlst()->AddJournal(console);
+    
 	// Initialize the IpoptApplication and process the options
 	Ipopt::ApplicationReturnStatus status;
 	status = app->Initialize();

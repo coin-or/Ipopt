@@ -33,7 +33,7 @@ eval_h <- function( x, obj_factor, hessian_lambda ) {
 # initial values
 x0 <- c( -1.2, 1 )
 
-opts <- list("print_level"=0,
+opts <- list("print_level"=5,
              "file_print_level"=12,
              "output_file"="banana.out",
              "tol"=1.0e-8)

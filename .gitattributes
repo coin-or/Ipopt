@@ -138,6 +138,8 @@ Ipopt/contrib/RInterface/man/plot.sparseness.Rd -text
 Ipopt/contrib/RInterface/man/print.ipoptr.Rd -text
 Ipopt/contrib/RInterface/man/print.sparseness.Rd -text
 Ipopt/contrib/RInterface/man/show.sparseness.Rd -text
+Ipopt/contrib/RInterface/src/IpoptRJournal.cpp -text
+Ipopt/contrib/RInterface/src/IpoptRJournal.hpp -text
 Ipopt/contrib/RInterface/src/IpoptRNLP.cpp -text
 Ipopt/contrib/RInterface/src/IpoptRNLP.hpp -text
 Ipopt/contrib/RInterface/src/Makevars.in -text

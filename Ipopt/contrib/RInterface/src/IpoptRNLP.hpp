@@ -17,7 +17,7 @@
 #ifndef __IpoptRNLP_HPP__
 #define __IpoptRNLP_HPP__
 
-#include "IpTNLP.hpp"
+#include "IpTNLP.hpp"               // ISA TNLP
 
 #include <R.h>
 #include <Rdefines.h>

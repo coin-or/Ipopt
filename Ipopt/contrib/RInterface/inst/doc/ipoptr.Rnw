@@ -55,6 +55,8 @@ This vignette describes how to formulate minimization problems to be solved with
 \section{Installation}
 Installing the \texttt{ipoptr} package is not as straightforward as most other R packages, because it depends on Ipopt. To install (and compile) Ipopt and the R interface a C/C++ compiler has to be available. On Windows I was succesful using MSYS to compile Ipopt and then use Rtools\footnote{\texttt{http://www.murdoch-sutherland.com/Rtools/}} to compile the R interface from source. On Ubuntu no additional tools were needed.
 
+The code for the R interface to Ipopt is available from R-Forge and from the Ipopt website. Additional information is also available on \texttt{http://www.ucl.ac.uk/\textasciitilde uctpjyy/ipoptr.html}. The R interface to Ipopt comes with the most recent version of Ipopt, so there is no need to download it separately.
+
 Detailed installation instructions for Ipopt are available on \texttt{http://www.coin-or.org/Ipopt/documentation}. You should follow these first, before trying to install the R interface. Ipopt needs to be configured using the \texttt{-fPIC} flag for all GNU compilers. For 64bit Linux one needs to specify
 \begin{verbatim}
 ADD_CXXFLAGS='-fPIC' ADD_FFLAGS='-fPIC' ADD_CFLAGS='-fPIC'
@@ -120,7 +122,7 @@ res <- ipoptr( x0=x0,
                eval_f=eval_f, 
                eval_grad_f=eval_grad_f )
 @
-These are the minimal arguments that have to be supplied. If, like above, no Hessian is defined, Ipopt uses an approximation. We can see the results by printing the resulting object.
+These are the minimal arguments that have to be supplied. If, like above, no Hessian is defined, Ipopt uses an approximation. The Ipopt website has a detailed explanation of the output. We can see a summary of the results by printing the resulting object.
 <<printRosenbrockBanana>>=
 print( res )
 @
@@ -128,36 +130,42 @@ It's advised to always check the exit code for convergence of the problem and in
 
 If you do not want to, or cannot calculate the gradient analytically, you can supply a function \texttt{eval\_grad\_f} that approximates the gradient. However, this is not advisable and might result in convergence problems, for instance by not finding the minimum, or by finding the wrong minimum. We can see this from the following example where we approximate \texttt{eval\_grad\_f} using finite differences
 <<defineApproxGradF>>=
-# Approximate eval_f using finite differences
 # http://en.wikipedia.org/wiki/Numerical_differentiation
-approx_grad_f <- function( x ) {
-    minAbsValue     <- 0
-    stepSize        <- sqrt( .Machine$double.eps )
+finite.diff <- function( func, 
+                         x, 
+                         minAbsValue=0, 
+                         stepSize=sqrt( .Machine$double.eps ), ... ) {
 
-    # if we evaluate at 0, we need a different step size
-    stepSizeVec     <- ifelse( abs(x) <= minAbsValue, 
-                               stepSize^3, 
-                               x * stepSize )
+    stepSizeVec <- pmax( abs(x), 1 ) * stepSize 
     
-    x_prime <- x
-    f       <- eval_f( x )
-    grad_f  <- rep( 0, length(x) )
-    for (i in 1:length(x)) {
-        x_prime[i]      <- x[i] + stepSizeVec[i]
-        stepSizeVec[i]  <- x_prime[i] - x[i]
-
-        f_prime         <- eval_f( x_prime )
-        grad_f[i]       <- ( f_prime - f )/stepSizeVec[i]
-        x_prime[i]      <- x[i]
+    fx <- func( x, ... )
+    approx.gradf.index <- function(i, x, func, fx, stepSizeVec, ...) {
+        x_prime <- x
+        x_prime[i] <- x[i] + stepSizeVec[i]
+        stepSizeVec[i] <- x_prime[i] - x[i]
+        fx_prime <- func( x_prime, ... )
+        return( ( fx_prime - fx )/stepSizeVec[i] )
     }
+    grad_fx <- sapply( 1:length(x), 
+                       approx.gradf.index, 
+                       x=x, 
+                       func=func, 
+                       fx=fx, 
+                       stepSizeVec=stepSizeVec, 
+                       ... )
     
-    return( grad_f )
+    return( grad_fx )
+}
+
+# Approximate eval_f using finite differences
+approx_grad_f <- function( x ) {
+    return( finite.diff( eval_f, x ) )
 }
 @
-and using this approximation to minimize the same Rosenbrock Banana function.
+and using this approximation to minimize the same Rosenbrock Banana function. We suppress the output by the \texttt{printe\_level} option.
 <<solveRosenbrockBananaApproximation1>>=
 # increase the maximum number of iterations
-opts <- list("tol"=1.0e-8, "max_iter"=5000)
+opts <- list("tol"=1.0e-8, "max_iter"=5000, "print_level"=0)
  
 # solve Rosenbrock Banana function with approximated gradient
 print( ipoptr( x0=x0, 
@@ -172,7 +180,7 @@ sqrt( .Machine$double.eps )
 which is of the same order of magnitude. If we decrease the tolerance, the algorithm converges, but the solution is less precise than if we supply gradients and it takes more iterations to get there.
 <<solveRosenbrockBananaApproximation2>>=
 # decrease the convergence criterium
-opts <- list("tol"=1.0e-7)
+opts <- list("tol"=1.0e-7, "print_level"=0)
  
 # solve Rosenbrock Banana function with approximated gradient
 print( ipoptr( x0=x0, 
@@ -428,6 +436,7 @@ Then we can solve the problem for a specific set of parameters, in this case $a_
 ipoptr( x0          = 0, 
         eval_f      = eval_f_ex1, 
         eval_grad_f = eval_grad_f_ex1,
+        opts        = list("print_level"=0),
         params      = c(1,2,3) )
 @
 
@@ -452,7 +461,8 @@ To solve this we supply \texttt{auxdata} as an argument to \texttt{ipoptr}, whic
 ipoptr( x0                 = 0, 
         eval_f             = eval_f_ex2, 
         eval_grad_f        = eval_grad_f_ex2, 
-        ipoptr_environment = auxdata )
+        ipoptr_environment = auxdata,
+        opts               = list("print_level"=0) )
 @
 
 \section{Options}
@@ -461,7 +471,7 @@ There are many options available, all of which are described on the Ipopt websit
 \section{Remarks}
 If you run many large optimization problems in a row on Windows, at some point you'll get errors that Mumps is running out of memory and you won't get any solutions. On Linux this same problem hasn't occurred yet.
 
-The R terminal in Windows doesn't show any output. The Linux one does.
+From version 0.8.2 output is shown in the R terminal under Windows as well.
 
 \bibliographystyle{apacite}
 \bibliography{reflist}
