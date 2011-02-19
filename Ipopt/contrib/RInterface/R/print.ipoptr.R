@@ -30,17 +30,25 @@ print.ipoptr <- function(x, show.controls=TRUE, ...) {
     }
     
 	# if solved successfully
-	if ( x$status==0 ) {
+	if ( x$status<=0 ) {
 		cat( paste( "Optimal value of objective function: ", x$objective, "\n" ) )
-        if ( show.controls ) {
-            cat( "Optimal value of controls: " )
+		if ( show.controls ) {
+            if ( length( controls.indices ) < length(x$solution) ) {
+                cat( "Optimal value of user-defined subset of controls: " )
+            } else {
+                cat( "Optimal value of controls: " )
+            }
             cat( x$solution[ controls.indices ], fill=TRUE)
             cat("\n")
         }
 	} else {
 		cat( paste( "Current value of objective function: ", x$objective, "\n" ) )
-        if ( show.controls ) {
-            cat( "Current value of controls: " )
+		if ( show.controls ) {
+            if ( length( controls.indices ) < length(x$solution) ) {
+                cat( "Current value of user-defined subset of controls: " )
+            } else {
+                cat( "Current value of controls: " )
+            }
             cat( x$solution[ controls.indices ], fill=TRUE )
             cat("\n")
         }
