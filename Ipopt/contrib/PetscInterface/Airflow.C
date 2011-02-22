@@ -83,6 +83,37 @@ int main (int argc, char** argv)
         return (int)status;
       }
 
+//#define SIMULATION_CONVERGENCE
+#ifdef SIMULATION_CONVERGENCE
+      std::cout << "************************************************" << std::endl;
+      std::cout << "*                                              *" << std::endl;
+      std::cout << "*               Refine and solve               *" << std::endl;
+      std::cout << "*                                              *" << std::endl;
+      std::cout << "************************************************" << std::endl;
+      
+      pLibMeshPDE->RefineMesh(1);
+      AutoPtr<  NumericVector< lm_Number > > state1= pLibMeshPDE->getStateVector().clone();
+      status = app->Initialize("simu.opt");
+      if (status != Solve_Succeeded) {
+        printf("\n\n*** Error during initialization!\n");
+        delete pLibMeshPDE;
+        return (int) status;
+      }
+      // Ask Ipopt to solve the problem
+      status = app->OptimizeNLP(nlp);
+      if (status == Solve_Succeeded) {
+        printf("\n\n*** The problem solved!\n");
+      }
+      else {
+        printf("\n\n*** The problem FAILED!\n");
+        delete pLibMeshPDE;
+        return (int)status;
+      }
+      
+      std::cout << "L2-Diff: " << pLibMeshPDE->CalcL2Diff(state1.get()) << std::endl;
+      exit(1);
+#endif
+
       // scale the simulation solution to satisfy inequality constraints
       pLibMeshPDE->simulation_mode_=false;
       AutoPtr<  NumericVector< lm_Number > > state_l = pLibMeshPDE->getStateVector().clone();
@@ -141,6 +172,7 @@ int main (int argc, char** argv)
       }
 #endif
     }
+    
     bool warmstart = false;
     for (int i=0; i<1; i++) {
       // solve optimization problem
@@ -148,17 +180,17 @@ int main (int argc, char** argv)
       app = IpoptApplicationFactory();
       status = app->Initialize();
       if (status != Solve_Succeeded) {
-	printf("\n\n*** Error during initialization!\n");
-	return (int) status;
-      }
+	    printf("\n\n*** Error during initialization!\n");
+	    return (int) status;
+    }
 
-      if (warmstart) {
-	//app->Options()->SetStringValue("warm_start_init_point", "yes");
-	app->Options()->SetStringValue("bound_mult_init_method", "mu-based");
-	app->Options()->SetNumericValue("bound_push", 1e-6);
-	app->Options()->SetNumericValue("bound_frac", 1e-6);
-	app->Options()->SetNumericValue("mu_init", 1e-4);
-      }
+    if (warmstart) {
+      //app->Options()->SetStringValue("warm_start_init_point", "yes");
+      app->Options()->SetStringValue("bound_mult_init_method", "mu-based");
+      app->Options()->SetNumericValue("bound_push", 1e-6);
+      app->Options()->SetNumericValue("bound_frac", 1e-6);
+      app->Options()->SetNumericValue("mu_init", 1e-4);
+    }
       // Ask Ipopt to solve the problem
       status = app->OptimizeNLP(nlp);
       if (status == Solve_Succeeded) {

@@ -20,7 +20,7 @@
 #include "equation_systems.h"
 #include "implicit_system.h"
 #include "dense_vector.h"
-
+#include "enum_order.h"
 #include <string>
 
 /** Base class for problem description of a PDE constrainted
@@ -155,6 +155,7 @@ public:
 
   void RefineMesh(int iter);
   bool simulation_mode_;
+  double CalcL2Diff(libMesh::NumericVector<libMesh::Number>* jac_state);
 protected:
   libMesh::SparseMatrix<libMesh::Number>* jac_control_;
   libMesh::SparseMatrix<libMesh::Number>* jac_aux_state_;
@@ -223,6 +224,7 @@ private:
   void DetroySelfOwnedLibMeshPetscMatrix(SparseMatrix<Number>*& matrix);
   void DetroySelfOwnedLibMeshPetscVector(NumericVector<Number>*& vector);
   void clear_math_obj();
+  const libMeshEnums::Order lm_Num_quadrature_order;
 };
 
 #endif
