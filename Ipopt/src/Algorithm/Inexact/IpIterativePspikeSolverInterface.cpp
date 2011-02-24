@@ -61,7 +61,7 @@ extern "C"
   // INIT PSPIKE: job = 0, FACT PSPIKE = 1, SOLVE PSPIKE = 2, DESTROY PSPIKE = 3
   void F77_FUNC(pspike, PSPIKE)(int * job, int * neqns, int * nzmax,
                                 const ipfint * ia, const ipfint * ja, const double * a,
-                                double * f, int * kk, double * tol, int * nrhs);
+                                double * f, int * kk, double * tol, int * nrhs, int * info);
 }
 
 namespace Ipopt
@@ -94,9 +94,10 @@ namespace Ipopt
     int bandwidth = 0;
     double tol = 0.0;
     int nrhs = 0;
+    int info = 0;
 
     int job = 0;
-    F77_FUNC(pspike,PSPIKE)(&job, &neqns, &nzmax, ia, ja, a, f, &bandwidth, &tol, &nrhs);
+    F77_FUNC(pspike,PSPIKE)(&job, &neqns, &nzmax, ia, ja, a, f, &bandwidth, &tol, &nrhs, &info);
   }
 
   IterativePspikeSolverInterface::~IterativePspikeSolverInterface()
@@ -115,9 +116,10 @@ namespace Ipopt
       int bandwidth = 0;
       double tol = 0.0;
       int nrhs = 0;
+      int info = 0;
 
       int job = 4;
-      F77_FUNC(pspike,PSPIKE)(&job, &neqns, &nzmax, ia, ja, a, f, &bandwidth, &tol, &nrhs);
+      F77_FUNC(pspike,PSPIKE)(&job, &neqns, &nzmax, ia, ja, a, f, &bandwidth, &tol, &nrhs, &info);
       // Madan: Do we need to initialize again afterwards?
     }
   }
@@ -146,8 +148,10 @@ namespace Ipopt
                       int        iter_cnt,
                       int        sol_cnt)
   {
+
     if (getenv ("IPOPT_WRITE_MAT")) {
       /* Write header */
+
       FILE    *mat_file;
       char     mat_name[128];
       char     mat_pref[32];
@@ -177,13 +181,15 @@ namespace Ipopt
         fprintf (mat_file, "%32.24e\n", a_[i]);
 
       /* Right hand side. */
-      if (rhs_vals)
+     if (rhs_vals)
         for (i = 0; i < N; i++)
           //FIXME: PUT BACK ORIGINAL:          fprintf (mat_file, "%32.24e\n", rhs_vals[i]);
           fprintf (mat_file, "%32.24e\n", -rhs_vals[i]);
 
       fclose (mat_file);
+
     }
+
   }
 
 
@@ -204,15 +210,17 @@ namespace Ipopt
       int bandwidth = 0;
       double tol = 0.0;
       int nrhs = 0;
+      int info = 0;
 
       int job = 4;
-      F77_FUNC(pspike,PSPIKE)(&job, &neqns, &nzmax, ia, ja, a, f, &bandwidth, &tol, &nrhs);
+      F77_FUNC(pspike,PSPIKE)(&job, &neqns, &nzmax, ia, ja, a, f, &bandwidth, &tol, &nrhs, &info);
       job = 0;
-      F77_FUNC(pspike,PSPIKE)(&job, &neqns, &nzmax, ia, ja, a, f, &bandwidth, &tol, &nrhs);
+      F77_FUNC(pspike,PSPIKE)(&job, &neqns, &nzmax, ia, ja, a, f, &bandwidth, &tol, &nrhs, &info);
       // Madan: Do we need to initialize again afterwards?
     }
 
     have_symbolic_factorization_ = false;
+    spectral_enabled = true;
 
     SetIpoptCallbackFunction(&IpoptTerminationTest);
 
@@ -255,6 +263,21 @@ namespace Ipopt
 
     // do the solve
     ESymSolverStatus status = Solve(ia, ja, nrhs, rhs_vals);
+
+    if(status != SYMSOLVER_SUCCESS){
+	have_symbolic_factorization_ = false;
+    	spectral_enabled = true;
+	ESymSolverStatus retval;
+      	retval = Factorization(ia, ja, check_NegEVals, numberOfNegEVals);
+      	if (retval!=SYMSOLVER_SUCCESS) {
+        	DBG_PRINT((1, "FACTORIZATION FAILED!\n"));
+        	return retval;  // Matrix singular or error occurred
+      	}
+    
+    // do the solve
+    ESymSolverStatus status = Solve(ia, ja, nrhs, rhs_vals); 
+
+    }
 
     return status;
   }
@@ -333,12 +356,19 @@ namespace Ipopt
 
       double * rhs_vals = NULL;
       int nrhs = 1;
-      F77_FUNC(pspike,PSPIKE)(&job, &dim_, &nzmax, ia, ja, a_, rhs_vals, &bandwidth, &tol, &nrhs);
+      int info = 0;
 
+      a_ = GetValuesArrayPtr();
+
+	  if(!spectral_enabled) info = -2;
+
+      F77_FUNC(pspike,PSPIKE)(&job, &dim_, &nzmax, ia, ja, a_, rhs_vals, &bandwidth, &tol, &nrhs, &info);
+	
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemSymbolicFactorization().End();
       }
-      have_symbolic_factorization_ = true;
+      have_symbolic_factorization_ = false; // true := symbolic factorization is performed one time only 
+      spectral_enabled = true; // false := spectral method is performed one time only 
     }
 
     if (HaveIpData()) {
@@ -350,7 +380,8 @@ namespace Ipopt
 
     double * rhs_vals = NULL;
     int nrhs = 1;
-    F77_FUNC(pspike,PSPIKE)(&job, &dim_, &nzmax, ia, ja, a_, rhs_vals, &bandwidth, &tol, &nrhs);
+    int info = 0;
+    F77_FUNC(pspike,PSPIKE)(&job, &dim_, &nzmax, ia, ja, a_, rhs_vals, &bandwidth, &tol, &nrhs, &info);
 
     if (HaveIpData()) {
       IpData().TimingStats().LinearSystemFactorization().End();
@@ -390,7 +421,7 @@ namespace Ipopt
       if (HaveIpData()) {
         iter_count = IpData().iter_count();
       }
-
+	
       write_iajaa_matrix (N, ia, ja, a_, rhs_vals, iter_count, debug_cnt_);
     }
 
@@ -426,10 +457,19 @@ namespace Ipopt
 
       // SOLVE in PSPIKE with job = 3
       int job = 3;
-      F77_FUNC(pspike,PSPIKE)(&job, &N, &nzmax, ia, ja, a_, rhs_vals, &bandwidth, &tol, &NRHS);
-      ERROR = 0;
+      int info = 0;
+      F77_FUNC(pspike,PSPIKE)(&job, &N, &nzmax, ia, ja, a_, rhs_vals, &bandwidth, &tol, &NRHS, &info);
+      ERROR = info;
       attempts = max_attempts;
       Index iterations_used = tester->GetSolverIterations();
+      char buf[32];
+      Snprintf(buf, 31, "it=%d ", iterations_used);
+      IpData().Append_info_string(buf);
+      /*if(IpData().iter_count() > 4) {
+		have_symbolic_factorization_ = false;
+		spectral_enabled = true;
+	  }*/
+      
     }
     tester->Clear();
 
@@ -438,7 +478,9 @@ namespace Ipopt
     if (HaveIpData()) {
       IpData().TimingStats().LinearSystemBackSolve().End();
     }
-    if (ERROR!=0 ) {
+
+
+    if (ERROR != 0) {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                      "Error in Pspike during solve phase.  ERROR = %d.\n", ERROR);
       return SYMSOLVER_FATAL_ERROR;

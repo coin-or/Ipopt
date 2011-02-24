@@ -66,26 +66,37 @@ extern "C"
 #ifdef HAVE_MPI
     int my_rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    
+    int par_task;    
+    
     // if this is process 0, we need to send the command and data around
     if (my_rank==0) {
-      int par_task = PAR_TASK_TERMINATION_TEST;
-      MPI_Bcast(&par_task, 1, MPI_INT, 0, MPI_COMM_WORLD);
-      int ivals[2];
-      ivals[0] = n;
-      ivals[1] = iter;
-      MPI_Bcast(ivals, 2, MPI_INT, 0, MPI_COMM_WORLD);
-      MPI_Bcast(sol, n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-      MPI_Bcast(resid, n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-      double dvals[2];
-      dvals[0] = norm2_rhs;
-      dvals[1] = norm2_resid;
-      MPI_Bcast(dvals, 2, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+      par_task = PAR_TASK_TERMINATION_TEST;
     }
+   
+    MPI_Bcast(&par_task, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&n, 1, MPI_INT, 0, MPI_COMM_WORLD);    
+    MPI_Bcast(&iter, 1, MPI_INT, 0, MPI_COMM_WORLD);    
+    MPI_Bcast(&norm2_rhs, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    
+    if(my_rank != 0){
+    	sol = new double[n];
+    	resid = new double[n];
+    }
+    
+    MPI_Bcast(sol, n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(resid, n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+    
 #endif
     test_result_ = global_tester_ptr_->TestTermination(n, sol, resid, iter, norm2_rhs, norm2_resid);
     global_tester_ptr_->GetJnlst().Printf(Ipopt::J_DETAILED, Ipopt::J_LINEAR_ALGEBRA,
                                           "Termination Tester Result = %d.\n",
                                           test_result_);
+    if(my_rank != 0){
+    	delete [] sol;
+    	delete [] resid;
+    }
     switch (test_result_) {
     case Ipopt::InexactData::CONTINUE:
       return false;
