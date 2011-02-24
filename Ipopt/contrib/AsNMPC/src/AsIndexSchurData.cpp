@@ -27,7 +27,7 @@ namespace Ipopt
     idx_ = idx;
     val_ = val;
 
-    Set_NRows(idx_.size());
+    Set_NRows((Index)idx_.size());
     Set_Initialized();
   }
   
@@ -63,7 +63,7 @@ namespace Ipopt
       }
     }
     Set_Initialized();
-    Set_NRows(val_.size());
+    Set_NRows((Index)val_.size());
   }
 
   void IndexSchurData::SetData_Flag(Index dim, const Index* flags, const Number* values)
@@ -81,7 +81,7 @@ namespace Ipopt
       }
     }
     Set_Initialized();
-    Set_NRows(val_.size());
+    Set_NRows((Index)val_.size());
   }
 
   Index IndexSchurData::SetData_Index(Index dim, const Index* index, Number v)
@@ -115,7 +115,7 @@ namespace Ipopt
     }
 
     Set_Initialized();
-    Set_NRows(val_.size());
+    Set_NRows((Index)val_.size());
     return 0;
   }
 
@@ -143,7 +143,7 @@ namespace Ipopt
     DBG_ASSERT(row<GetNRowsAdded());
 
     // retrieve structure of IteratesVector - this should probably be cached or sth.
-    Index n_comps = v.NComps();
+    //Index n_comps = v.NComps();
     Index* v_lens = GetVectorLengths(v);
     // set vector v to 0
     v.Set(0.0);
@@ -184,7 +184,7 @@ namespace Ipopt
     Index* v_lens = GetVectorLengths(v);
 
     Index v_row, vec_idx;
-    for (Index i=0; i<idx_.size(); ++i) {
+    for (unsigned int i=0; i<idx_.size(); ++i) {
       v_row = idx_[i];
       
       // find vector in CompoundVector that corresponds to the given col in matrix/row in v.
@@ -230,7 +230,7 @@ namespace Ipopt
     // perform v_vals <- A^T*u
     Index row, col;
     Number val;
-    for (Index i=0; i<idx_.size(); ++i) {
+    for (unsigned int i=0; i<idx_.size(); ++i) {
       row = i;
       col = idx_[i];
       val = val_[i];
@@ -280,7 +280,7 @@ namespace Ipopt
                          "%sIndexSchurData \"%s\" with %d rows:\n",
                          prefix.c_str(), name.c_str(), GetNRowsAdded());
     if (Is_Initialized()) {
-      for (Index i=0; i<idx_.size(); i++) {
+      for (unsigned int i=0; i<idx_.size(); i++) {
 	jnlst.PrintfIndented(level, category, indent,
 			     "%s%s[%5d,%5d]=%d\n",
 			     prefix.c_str(), name.c_str(), i, idx_[i], val_[i]);
@@ -297,12 +297,12 @@ namespace Ipopt
   {
     DBG_START_METH("IndexSchurData::AddData_Flag", dbg_verbosity);
 
-    Index sortcounter = idx_.size();
+    Index sortcounter = (Index)idx_.size();
     bool oldindex;
     for (Index i=0; i<dim; ++i) {
       if (flags[i]) {
 	oldindex = false;
-	for (Index j=0; j<idx_.size(); ++j) {
+	for (unsigned int j=0; j<idx_.size(); ++j) {
 	  if (i==idx_[j]) {
 	    delta_u_sort.push_back(j);
 	    val_[j] = v;
@@ -323,11 +323,11 @@ namespace Ipopt
   {
     DBG_START_METH("IndexSchurData::AddData_List", dbg_verbosity);
 
-    new_du_size = idx_.size();
+    new_du_size = (Index)idx_.size();
     bool oldindex; 
-    for (Index i=0; i<cols.size(); ++i) {
+    for (unsigned int i=0; i<cols.size(); ++i) {
       oldindex = false;
-      for (Index j=0; j<idx_.size(); ++j) {
+      for (unsigned int j=0; j<idx_.size(); ++j) {
 	if (cols[i]==idx_[j]) {
 	  delta_u_sort.push_back(j);
 	  val_[j] = v;
@@ -341,7 +341,7 @@ namespace Ipopt
 	val_.push_back(v);
       }
     }
-    Set_NRows(idx_.size());
+    Set_NRows((Index)idx_.size());
     
   }
 
@@ -349,7 +349,7 @@ namespace Ipopt
   {
     DBG_START_METH("IndexSchurData::GetNRowsAdded", dbg_verbosity);
 
-    return idx_.size();
+    return (Index)idx_.size();
   }
 
   const std::vector<Index>* IndexSchurData::GetColIndices() const
