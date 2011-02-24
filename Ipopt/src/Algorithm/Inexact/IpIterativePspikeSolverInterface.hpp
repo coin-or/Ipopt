@@ -138,6 +138,8 @@ namespace Ipopt
     bool initialized_;
     /** Flag indicating ifsymbolic factoriziiton has been called. */
     bool have_symbolic_factorization_;
+	/** test flag to call only the spectral method one time */
+	bool spectral_enabled;
     //@}
 
     /** @name Solver specific information */
@@ -199,6 +201,8 @@ namespace Ipopt
     /** MPI rank */
     int my_rank_;
 
+    /** Number of MPI processes */
+    int m_nSize;
   };
 
 } // namespace Ipopt
