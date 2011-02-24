@@ -94,6 +94,51 @@ int main(int argv, char**argc)
   suffix_handler->
     AddAvailableSuffix("nmpc_state_value_1_z_U", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
 
+  suffix_handler->
+    AddAvailableSuffix("nmpc_sol_state_2_z_L", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+  suffix_handler->
+    AddAvailableSuffix("nmpc_state_value_2_z_L", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+  suffix_handler->
+    AddAvailableSuffix("nmpc_sol_state_2_z_U", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+  suffix_handler->
+    AddAvailableSuffix("nmpc_state_value_2_z_U", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+
+  suffix_handler->
+    AddAvailableSuffix("nmpc_sol_state_3_z_L", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+  suffix_handler->
+    AddAvailableSuffix("nmpc_state_value_3_z_L", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+  suffix_handler->
+    AddAvailableSuffix("nmpc_sol_state_3_z_U", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+  suffix_handler->
+    AddAvailableSuffix("nmpc_state_value_3_z_U", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+
+  suffix_handler->
+    AddAvailableSuffix("nmpc_sol_state_4_z_L", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+  suffix_handler->
+    AddAvailableSuffix("nmpc_state_value_4_z_L", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+  suffix_handler->
+    AddAvailableSuffix("nmpc_sol_state_4_z_U", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+  suffix_handler->
+    AddAvailableSuffix("nmpc_state_value_4_z_U", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+
+  suffix_handler->
+    AddAvailableSuffix("nmpc_sol_state_5_z_L", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+  suffix_handler->
+    AddAvailableSuffix("nmpc_state_value_5_z_L", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+  suffix_handler->
+    AddAvailableSuffix("nmpc_sol_state_5_z_U", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+  suffix_handler->
+    AddAvailableSuffix("nmpc_state_value_5_z_U", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+
+  suffix_handler->
+    AddAvailableSuffix("nmpc_sol_state_6_z_L", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+  suffix_handler->
+    AddAvailableSuffix("nmpc_state_value_6_z_L", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+  suffix_handler->
+    AddAvailableSuffix("nmpc_sol_state_6_z_U", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+  suffix_handler->
+    AddAvailableSuffix("nmpc_state_value_6_z_U", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+
   // for reduced hessian computation
   suffix_handler->AddAvailableSuffix("red_hessian", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Index_Type);
 

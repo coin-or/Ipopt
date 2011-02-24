@@ -153,22 +153,28 @@ namespace Ipopt
     ASL_pfgh* asl = AmplSolverObject();
 
     if (run_nmpc_) {
-      NumericMetaDataMapType::const_iterator num_it;
-      num_it = var_numeric_md.find("nmpc_sol_state_1");
-      if (num_it!=var_numeric_md.end()) {
-	suf_rput("nmpc_sol_state_1", ASL_Sufkind_var, const_cast<Number*>(&num_it->second[0]));
-      }
-      num_it = var_numeric_md.find("nmpc_sol_state_1_z_L");
-      if (num_it!=var_numeric_md.end()) {
-	suf_rput("nmpc_sol_state_1_z_L", ASL_Sufkind_var, const_cast<Number*>(&num_it->second[0]));
-      }
-      num_it = var_numeric_md.find("nmpc_sol_state_1_z_U");
-      if (num_it!=var_numeric_md.end()) {
-	suf_rput("nmpc_sol_state_1_z_U", ASL_Sufkind_var, const_cast<Number*>(&num_it->second[0]));
-      }
-      num_it = con_numeric_md.find("nmpc_sol_state_1");
-      if (num_it!=var_numeric_md.end()) {
-	suf_rput("nmpc_sol_state_1", ASL_Sufkind_con, const_cast<Number*>(&num_it->second[0]));
+      for (Index step=1; step<=n_nmpc_steps_; ++step) {
+	std::string sol_state_id = "nmpc_sol_state_";
+	append_Index(sol_state_id, step);
+	NumericMetaDataMapType::const_iterator num_it;
+	num_it = var_numeric_md.find(sol_state_id);
+	if (num_it!=var_numeric_md.end()) {
+	  suf_rput(sol_state_id.c_str(), ASL_Sufkind_var, const_cast<Number*>(&num_it->second[0]));
+	}
+	std::string sol_state_z_L_id = sol_state_id + "_z_L";
+	num_it = var_numeric_md.find(sol_state_z_L_id);
+	if (num_it!=var_numeric_md.end()) {
+	  suf_rput(sol_state_z_L_id.c_str(), ASL_Sufkind_var, const_cast<Number*>(&num_it->second[0]));
+	}
+	std::string sol_state_z_U_id = sol_state_id + "_z_U";
+	num_it = var_numeric_md.find(sol_state_z_U_id);
+	if (num_it!=var_numeric_md.end()) {
+	  suf_rput(sol_state_z_U_id.c_str(), ASL_Sufkind_var, const_cast<Number*>(&num_it->second[0]));
+	}
+	num_it = con_numeric_md.find(sol_state_id);
+	if (num_it!=var_numeric_md.end()) {
+	  suf_rput(sol_state_id.c_str(), ASL_Sufkind_con, const_cast<Number*>(&num_it->second[0]));
+	}
       }
     }
   }

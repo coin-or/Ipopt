@@ -139,7 +139,7 @@ namespace Ipopt
     // Find out how many steps there are and create as many SchurSolveDrivers
     int n_nmpc_steps;
     options.GetIntegerValue("n_nmpc_steps",n_nmpc_steps,prefix);
-    DBG_ASSERT(n_nmpc_steps<2); // for testing the new formula, can't do more!
+    //DBG_ASSERT(n_nmpc_steps<2); // for testing the new formula, can't do more!
 
     // Create std::vector container in which we are going to keep the SchurDrivers
     std::vector< SmartPtr<SchurDriver> > driver_vec(n_nmpc_steps);
