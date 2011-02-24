@@ -56,7 +56,7 @@ namespace Ipopt
       std::string nmpc_state_0 = "nmpc_state_1"; // nmpc_state_0 doesn't exist anymore...
       std::vector<Index> tmp_idx = x_owner_space_->GetIntegerMetaData(nmpc_state_0);
       
-      n_idx_ = AsIndexMax(tmp_idx.size(), &tmp_idx[0], 1);
+      n_idx_ = AsIndexMax((Index)tmp_idx.size(), &tmp_idx[0], 1);
 
       options.GetStringValue("select_step", select_step_, "");
 
