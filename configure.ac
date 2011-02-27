@@ -42,12 +42,12 @@ AC_COIN_CREATE_LIBTOOL
 #             Check which ThirdParty sources are available                  #
 #############################################################################
 
-AC_COIN_MAIN_PACKAGEDIR([ASL],[ThirdParty],[solvers/asl.h],[coinasl])
-AC_COIN_MAIN_PACKAGEDIR([Blas],[ThirdParty],[daxpy.f],[coinblas])
-AC_COIN_MAIN_PACKAGEDIR([Lapack],[ThirdParty],[LAPACK/SRC/dlarf.f],[coinlapack])
-AC_COIN_MAIN_PACKAGEDIR([Metis],[ThirdParty],[metis-4.0/Lib/balance.c],[coinmetis])
-AC_COIN_MAIN_PACKAGEDIR([HSL],[ThirdParty],[configure.ac],[coinhsl])
-AC_COIN_MAIN_PACKAGEDIR([Mumps],[ThirdParty],[MUMPS/src/dmumps_part1.F],[coinmumps])
+AC_COIN_MAIN_PACKAGEDIR([ASL],   [ThirdParty],[solvers/asl.h])
+AC_COIN_MAIN_PACKAGEDIR([Blas],  [ThirdParty],[daxpy.f])
+AC_COIN_MAIN_PACKAGEDIR([Lapack],[ThirdParty],[LAPACK/SRC/dlarf.f])
+AC_COIN_MAIN_PACKAGEDIR([Metis], [ThirdParty],[metis-4.0/Lib/balance.c])
+AC_COIN_MAIN_PACKAGEDIR([HSL],   [ThirdParty],[configure.ac])
+AC_COIN_MAIN_PACKAGEDIR([Mumps], [ThirdParty],[MUMPS/src/dmumps_part1.F])
 
 #############################################################################
 #                  Check which subprojects are there                        #
