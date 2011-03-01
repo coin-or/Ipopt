@@ -11,14 +11,12 @@
 #include "mesh_triangle_support.h"
 #include "mesh_tetgen_support.h"
 #include "mesh.h"
-#include <cell_tet4.h>
-#include <face_tri3.h>
 #include <boundary_info.h>
 
 #include <vector>
 #include <list>
 
-//#define EXHAUST_AS_CONTROL
+#define EXHAUST_AS_CONTROL
 
 void PrintTetgenMesh(const tetgenio& tet, std::ostream& os);
 void PrintTriangleMesh(const libMesh::Triangle::triangulateio& tri, std::ostream& os);
@@ -173,6 +171,7 @@ private:
   std::vector< std::list<Item*> > _ItemAtWall; // Array of List of Item on each wall (dimension always 4: +x0 -x0 +x1 -x1)
   int NextFreeBoundaryMarker;                 // used to increment boundary markers when building the model (Add...)
   double _h;                                   // initial discretization width (refinement not tracked)
+  unsigned short _FE_degree;                  // degree of finite elements (linear=1, quadratic=2)
 public:
   ProblemGeometry();
   ~ProblemGeometry();
@@ -180,11 +179,15 @@ public:
   {
     return _RoomSize.size();
   }
+  inline unsigned short GetFE_Degree() const
+  {
+    return _FE_degree;
+  }
   void AddEquipment(const std::vector<double>& min, const std::vector<double>& max, double TempEquip, double kappa); // TEmpEquip and kappa for T variable (later)
   void AddAC(const std::vector<double>& min, const std::vector<double>& max, double vAc, double TempAc); // This vAc will be changed during optimization
   void AddExhaust(const std::vector<double>& min, const std::vector<double>& max);
   void GetHeatExchangeBoundaryMarkers(int iEquip, std::set<int>* pVals);
-  void CreateMesh(libMesh::UnstructuredMesh* p_mesh);
+  void CreateMesh(libMesh::UnstructuredMesh* p_mesh, int order);
   const std::vector<BoundaryConditionBase*>& GetBoundaryConditions() const
   {
     return _BoundCond;
@@ -192,16 +195,16 @@ public:
   void ReadFromStream(std::istream& is); // read Problem.dat input file
 private:
   void SetBoundaryInfo( libMesh::Mesh* p_mesh );
-  void Tetgen2Mesh(const tetgenio& tet, libMesh::UnstructuredMesh* p_mesh);
+  void Tetgen2Mesh(const tetgenio& tet, libMesh::UnstructuredMesh* p_mesh, int order);
   int GetWallItemWall(const Item& item);
   void SetFacette(tetgenio::facet *f, int Base, int Offset0, int Offset1, int Offset2, int Offset3, int nHoles=0);
   void SetPoint(REAL* pointlist, int idx, REAL x, REAL y, REAL z);
   void ValidateItemAtWall();
-  void Triangle2Mesh(const libMesh::Triangle::triangulateio& tri, libMesh::UnstructuredMesh* p_mesh);
+  void Triangle2Mesh(const libMesh::Triangle::triangulateio& tri, libMesh::UnstructuredMesh* p_mesh, int order);
   int GetBoundaryMarker(const std::vector<double>& pt);
   int GetWall(const std::vector<double>& pt);
-  void CreateMesh3D(libMesh::UnstructuredMesh* p_mesh);
-  void CreateMesh2D(libMesh::UnstructuredMesh* p_mesh);
+  void CreateMesh3D(libMesh::UnstructuredMesh* p_mesh, int order);
+  void CreateMesh2D(libMesh::UnstructuredMesh* p_mesh, int order);
   void ReadNodeFile(std::string str, tetgenio* tet);
   void ReadEleFile(std::string str, tetgenio* tet);
   void ReadNeighFile(std::string str, tetgenio* tet);
