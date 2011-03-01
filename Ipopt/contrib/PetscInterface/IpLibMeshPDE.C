@@ -34,9 +34,25 @@
 #include <fstream>
 #include <set>
 
+int GetProcID();
+
+#ifdef SIMULATION_CONVERGENCE
+//#define ENABLE_NO_EQUPMENT
+#endif
+
 #define SCALE_AUX_BOUNDS
 
-int GetProcID();
+
+#ifdef EXHAUST_AS_CONTROL   // Only Neumann boundary conditions -> action required (int_Omega Phi = 0)
+// Add integral constraint to last line (-> Peak)
+//#define MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_PIN_LINE
+//// Add integral constraint as extra constraint
+////#define MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_INT_CONSTR
+// Add constraint to pin down Phi at a certain point in the equation system (-> Peak)
+//#define MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_FIRST_LINE
+// Add extra auxiliary constraint to pin down Phi at a certain point (-> restauration phase)
+#define MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_PIN_CONSTR
+#endif
 
 //#define MY_DBG_PRINT(s) {std::cout << GetProcID() << __FILE__ << ":" << __LINE__ <<":" << s << std::endl;}
 //#define MY_DBG_PRINT(s) {std::cout << GetProcID() << ":" << s << std::endl;}
@@ -63,7 +79,8 @@ LibMeshPDEBase::LibMeshPDEBase() :
     lm_aux_constr_mults_(NULL),
     min_airflow(1.0),
     first_aux_constr_(0),
-    lm_Num_quadrature_order(lm_Num_quadrature_order)
+    lm_Num_quadrature_order_(NINTH),
+    pin_down_node_(-1)
 {}
 
 // clear all matrices and vectors, but not problem geomatry data
@@ -106,10 +123,48 @@ void LibMeshPDEBase::InitProblemData(std::istream& is)
 {
   MY_DBG_PRINT("LibMeshPDEBase::InitProblemData called");
   PG_.ReadFromStream(is);
-  PG_.CreateMesh(&mesh_);
+  PG_.CreateMesh(&mesh_,PG_.GetFE_Degree());
 
   WriteNodeFile(mesh_, "MeshGen.node");
   WriteEleFile(mesh_, "MeshGen.ele");
+
+  // find node id to pin down pde solution
+  MeshBase::const_node_iterator CurNode = mesh_.local_nodes_begin();
+  MeshBase::const_node_iterator EndNode = mesh_.local_nodes_end();
+  double MinMagn = (*CurNode)->size();
+  int MinNodeID = (*CurNode)->id();
+  for (;CurNode!=EndNode;CurNode++) {
+    if(MinMagn>(*CurNode)->size()) {
+      MinMagn = (*CurNode)->size();
+      MinNodeID = (*CurNode)->id();
+    }
+  }
+  
+  double* MinMagnArr(NULL);
+  int* MinIDArr(NULL);
+  int NumOfProcs;
+  if(0==GetProcID()) {
+    MPI_Comm_size(MPI_COMM_WORLD,&NumOfProcs);
+    MinMagnArr = new double[NumOfProcs];
+    MinIDArr = new int[NumOfProcs];
+  }
+  MPI_Gather(&MinMagn, 1, MPI_DOUBLE, MinMagnArr, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD );
+  MPI_Gather(&MinNodeID, 1, MPI_INT, MinIDArr, 1, MPI_INT, 0, MPI_COMM_WORLD );
+  if(0==GetProcID()) {
+    double MinVal = MinMagnArr[0];
+    pin_down_node_ = MinIDArr[0];
+    for(int iProc=0;iProc<NumOfProcs;iProc++) {
+      if(MinMagnArr[iProc]<MinVal) {
+        MinVal=MinMagnArr[iProc];
+        pin_down_node_ = MinIDArr[iProc];
+      }
+    }
+    delete [] MinMagnArr;
+    delete [] MinIDArr;
+  }
+
+//  pin_down_node_ = 0;//MinNodeID;
+  MPI_Bcast(&pin_down_node_, 1, MPI_INT, 0, MPI_COMM_WORLD );
 
 //  RefineMesh();
 
@@ -129,7 +184,12 @@ void LibMeshPDEBase::reinit()
     clear_math_obj();
     lm_eqn_sys_ = new EquationSystems(mesh_);
 
-    std::string order("FIRST");
+    std::string order;
+    if(PG_.GetFE_Degree()==1)
+      order = "FIRST";
+    else
+      order = "SECOND";
+    
     std::string family("LAGRANGE");
 
     lm_sys = &lm_eqn_sys_->add_system<LinearImplicitSystem>("PDE");
@@ -162,14 +222,12 @@ void LibMeshPDEBase::reinit()
   int n_state_global, n_state_local;
   int m_pde_constr_global, m_pde_constr_local;
   {
-    //nstate = lm_sys->matrix->n();
     n_state_global = lm_sys->matrix->n();
     PetscMatrix<Number> *pPetscMat = dynamic_cast<PetscMatrix<Number>*>(lm_sys->matrix);
     Mat mat = pPetscMat->mat();
     int start, end;
     MatGetOwnershipRangeColumn(mat, &start, &end );
     n_state_local = end-start;
-    //int mlocal = lm_sys->matrix->row_stop() - lm_sys->matrix->row_start();
     m_pde_constr_global = lm_sys->matrix->m();
     m_pde_constr_local = lm_sys->matrix->row_stop()-lm_sys->matrix->row_start();
   }
@@ -186,7 +244,8 @@ void LibMeshPDEBase::reinit()
   std::list<Number> LocIneqFactList;
   InitAuxConstr(&m_aux_constr_local, &m_aux_constr_global, &LocIneqFactList);
 
-  std::cout <<  GetProcID() << ": n_state_global: " << n_state_global <<
+  std::cout <<  GetProcID() << ": order: " << lm_sys->variable_type(0).order <<
+  ", n_state_global: " << n_state_global <<
   ", n_state_local: " << n_state_local <<
   ", n_control_global: " << n_control_global <<
   ", n_control_local: " << n_control_local <<
@@ -358,8 +417,14 @@ void LibMeshPDEBase::ConvertControl2PGData()
   for (int iExh=0;iExh<PG_._Exh.size();++iExh) {
     int BoundaryMarker = PG_._Exh[iExh].BoundaryMarker[0];
     BoundaryConditionConstValues* pBC = dynamic_cast<BoundaryConditionConstValues*>(PG_._BoundCond[BoundaryMarker]);
-    assert(pBC);
-    pBC->_PhiRhs = vals[iControl++];
+    if(pBC) {
+      pBC->_PhiRhs = vals[iControl++];
+    }
+    else {
+      BoundaryConditionSquarePhiRhs* pBC = dynamic_cast<BoundaryConditionSquarePhiRhs*>(PG_._BoundCond[BoundaryMarker]);
+      assert(pBC);
+      pBC->_PhiRhsScale = vals[iControl++];
+    }
     //printf("DEBUG: iExh = %d BoundaryMarker=%d PhiRhs = %e\n", iExh, BoundaryMarker, PG_._BoundCond[BoundaryMarker].PhiRhs);
   }
 #endif
@@ -423,10 +488,10 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
   FEType fe_type = dof_map.variable_type(0);
 
   AutoPtr<FEBase> fe (FEBase::build(dim, fe_type)); // this object will by the current volume object, actualy holding values for current phi and dphi
-  QGauss qrule (dim, lm_Num_quadrature_order);
+  QGauss qrule (dim, lm_Num_quadrature_order_);
   fe->attach_quadrature_rule (&qrule);
   AutoPtr<FEBase> fe_face (FEBase::build(dim, fe_type)); // surface object
-  QGauss qface(dim-1, lm_Num_quadrature_order);
+  QGauss qface(dim-1, lm_Num_quadrature_order_);
   fe_face->attach_quadrature_rule (&qface);
   const std::vector<Real>& JxW = fe->get_JxW();   // References to values hold by fe (i.e. the chang, ones fe changes
   const std::vector<std::vector<Real> >& phi = fe->get_phi();
@@ -437,7 +502,10 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
   std::vector<Number> LocalSolution;   // solution values of current element
   MeshBase::const_element_iterator itCurEl = mesh.active_local_elements_begin();
   const MeshBase::const_element_iterator itEndEl = mesh.active_local_elements_end();
+  unsigned int pin_dof = mesh.node(pin_down_node_).dof_number(0, 0, 0);
+  double ElemIntSol;
   for ( ; itCurEl != itEndEl; ++itCurEl) {
+    ElemIntSol = 0.0;
     const Elem* CurElem = *itCurEl;
     dof_map.dof_indices(CurElem, dof_indices);  // setup local->global mapping in form of array
     fe->reinit(CurElem); // reinit fe to fit the current element, i.e. recalulate JxW and dPhi
@@ -447,10 +515,13 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
       LocalSolution[iCurSol] = system.current_local_solution->el(dof_indices[iCurSol]);
     }
     unsigned int qp,i,j;
-    for (qp=0; qp<qrule.n_points(); qp++)
-      for (i=0; i<phi.size(); i++)
+    for (qp=0; qp<qrule.n_points(); qp++) {
+      for (i=0; i<phi.size(); i++) {
+        ElemIntSol += JxW[qp]*LocalSolution[i]*phi[i][qp];
         for (j=0; j<phi.size(); j++)
           ElemRes(i) += JxW[qp]*(dphi[i][qp]*dphi[j][qp])*LocalSolution[j];
+       }
+    }
 
     for (unsigned int side=0; side<CurElem->n_sides(); side++) {
       if (CurElem->neighbor(side) == NULL) {
@@ -465,6 +536,8 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
           Pt[0] = q_point[0](0); Pt[1] = q_point[0](1); if(dim==3) Pt[2] = q_point[0](2); 
           bc_id=PG_.GetBoundaryMarker(Pt);
         }
+        if(bc_id<0 || bc_id>=BCs.size())
+          continue;
         double NeumCoef, DiriCoef, Rhs;
         NeumCoef = BCs[bc_id]->PhiNeumannCoef(q_point[0]);
         DiriCoef = BCs[bc_id]->PhiDirichletCoef(q_point[0]);        
@@ -485,7 +558,7 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
     }
 
     // handle Dirichlet BC for nodes
-    for (unsigned int i=0;i<CurElem->n_nodes();i++) {
+    for (unsigned int i=0;i<dof_indices.size();i++) {
       int bc_id;
       {
         std::vector<double> Pt;
@@ -507,7 +580,17 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
     }
     dof_map.constrain_element_vector(ElemRes, dof_indices); // Add constrains for hanging nodes (refinement)
     lm_pde_residual_vec_->add_vector(ElemRes, dof_indices);
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_PIN_LINE
+    lm_pde_residual_vec_->add(pin_dof,ElemIntSol);
+#endif // MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_PIN_LINE
   }
+  
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_FIRST_LINE
+  if(GetProcID()==0) {
+    lm_pde_residual_vec_->add(pin_dof,system.current_local_solution->el(pin_dof));
+  }
+#endif //MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_FIRST_LINE
+
   lm_pde_residual_vec_->close();
   residual = lm_pde_residual_vec_;
   MY_DBG_PRINT("LibMeshPDEBase::calcPDE_residual finished");
@@ -547,10 +630,10 @@ void LibMeshPDEBase::calcPDE_jacobian_control(libMesh::SparseMatrix<libMesh::Num
   std::vector<BoundaryConditionBase*>& BCs = PG_._BoundCond; // Mapping boudary info (index) -> boundary condition, set up in Problem geometry class
 
   AutoPtr<FEBase> fe (FEBase::build(dim, fe_type)); // this object will by the current volume object, actualy holding values for current phi and dphi
-  QGauss qrule (dim, lm_Num_quadrature_order);
+  QGauss qrule (dim, lm_Num_quadrature_order_);
   fe->attach_quadrature_rule (&qrule);
   AutoPtr<FEBase> fe_face (FEBase::build(dim, fe_type)); // surface object
-  QGauss qface(dim-1, lm_Num_quadrature_order);
+  QGauss qface(dim-1, lm_Num_quadrature_order_);
   fe_face->attach_quadrature_rule (&qface);
 
   DenseMatrix<Number> ElemMat;  // Matrices for current element
@@ -715,10 +798,10 @@ void LibMeshPDEBase::assemble_Phi_PDE(EquationSystems& es, const std::string& sy
   CalculationModeType calc_type=pData->calc_type_;
 
   AutoPtr<FEBase> fe (FEBase::build(dim, fe_type)); // this object will by the current volume object, actualy holding values for current phi and dphi
-  QGauss qrule (dim, pData->lm_Num_quadrature_order);
+  QGauss qrule (dim, pData->lm_Num_quadrature_order_);
   fe->attach_quadrature_rule (&qrule);
   AutoPtr<FEBase> fe_face (FEBase::build(dim, fe_type)); // surface object
-  QGauss qface(dim-1, pData->lm_Num_quadrature_order);
+  QGauss qface(dim-1, pData->lm_Num_quadrature_order_);
   fe_face->attach_quadrature_rule (&qface);
   const std::vector<Real>& JxW = fe->get_JxW();   // References to values hold by fe (i.e. the chang, ones fe changes
   const std::vector<std::vector<Real> >& phi = fe->get_phi();
@@ -726,22 +809,37 @@ void LibMeshPDEBase::assemble_Phi_PDE(EquationSystems& es, const std::string& sy
 
   DenseMatrix<Number> ElemMat;  // Matrices for current element
   std::vector<unsigned int> dof_indices; // mapping local index -> global index
+  unsigned int pin_dof = mesh.node(pData->pin_down_node_).dof_number(0, 0, 0);
 
   MeshBase::const_element_iterator itCurEl = mesh.active_local_elements_begin();
   const MeshBase::const_element_iterator itEndEl = mesh.active_local_elements_end();
+  double ElemArea;
+  std::vector<Real> IntConstrDer;
   for ( ; itCurEl != itEndEl; ++itCurEl) {
+    ElemArea = 0.0;
     const Elem* CurElem = *itCurEl;
     dof_map.dof_indices(CurElem, dof_indices);  // setup local->global mapping in form of array
     fe->reinit (CurElem); // reinit fe to fit the current element, i.e. recalulate JxW and dPhi
     ElemMat.resize (dof_indices.size(),dof_indices.size());
+    IntConstrDer.resize(dof_indices.size());
+    
     unsigned int qp,i,j;
-    for (qp=0; qp<qrule.n_points(); qp++)
-      for (i=0; i<phi.size(); i++)
+    for (i=0; i<phi.size(); i++)
+      IntConstrDer[i] = 0.0;
+    
+    for (qp=0; qp<qrule.n_points(); qp++) {
+      ElemArea += JxW[qp];
+      for (i=0; i<phi.size(); i++) {
+        //ElemIntSol += JxW[qp]*LocalSolution[i]*phi[i][qp];
+        IntConstrDer[i] += JxW[qp] * phi[i][qp];
         for (j=0; j<phi.size(); j++)
           if (calc_type==StructureOnly)
             ElemMat(i,j) += 1.0;
           else
             ElemMat(i,j) += JxW[qp]*(dphi[i][qp]*dphi[j][qp]);
+       }
+    }
+
 
     for (unsigned int side=0; side<CurElem->n_sides(); side++) {
       if (CurElem->neighbor(side) == NULL) {
@@ -753,6 +851,9 @@ void LibMeshPDEBase::assemble_Phi_PDE(EquationSystems& es, const std::string& sy
           Pt.resize(dim);
           Pt[0] = q_point[0](0); Pt[1] = q_point[0](1); if(dim==3) Pt[2] = q_point[0](2); 
           bc_id=pData->PG_.GetBoundaryMarker(Pt);
+        }
+        if(bc_id<0 || bc_id>=BCs.size()) {
+          continue;
         }
         double NeumCoef, DiriCoef, Rhs;
         NeumCoef = BCs[bc_id]->PhiNeumannCoef(q_point[0]);
@@ -796,7 +897,18 @@ void LibMeshPDEBase::assemble_Phi_PDE(EquationSystems& es, const std::string& sy
 
     dof_map.constrain_element_matrix(ElemMat, dof_indices); // Add constrains for hanging nodes (refinement)
     system.matrix->add_matrix(ElemMat, dof_indices);
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_PIN_LINE
+    //lm_pde_residual_vec_->add(pin_dof,ElemIntSol);
+    for(unsigned int i=0;i<dof_indices.size();i++) {
+      system.matrix->add(pin_dof,dof_indices[i],IntConstrDer[i]);
+    }
+#endif
   }
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_FIRST_LINE
+  if(GetProcID()==0) {
+    system.matrix->add(pin_dof,pin_dof,1.0);
+  }
+#endif //MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_FIRST_LINE
   MY_DBG_PRINT( "LibMeshPDEBase::assemble_Phi_PDE finished" );
 }
 
@@ -821,7 +933,7 @@ void LibMeshPDEBase::calc_hessians(Number sigma, libMesh::DenseVector<Number>& l
   const DofMap& dof_map = system.get_dof_map();
   FEType fe_type = dof_map.variable_type(0);
   AutoPtr<FEBase> fe_face (FEBase::build(dim, fe_type));  // surface object
-  QGauss qface(dim-1, lm_Num_quadrature_order);
+  QGauss qface(dim-1, lm_Num_quadrature_order_);
   fe_face->attach_quadrature_rule (&qface);
   const std::vector<std::vector<RealGradient> >&  dphi_face = fe_face->get_dphi();
   const std::vector<Real>& JxW_face = fe_face->get_JxW();
@@ -829,12 +941,25 @@ void LibMeshPDEBase::calc_hessians(Number sigma, libMesh::DenseVector<Number>& l
   MeshBase::const_element_iterator itCurEl = mesh.active_local_elements_begin();
   const MeshBase::const_element_iterator itEndEl = mesh.active_local_elements_end();
 
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_PIN_CONSTR
+  if(GetProcID()==0) {
+    i_aux_constr++;
+  }
+#endif
+
   for ( ; itCurEl != itEndEl; ++itCurEl) {
     const Elem* CurElem = *itCurEl;
     for (unsigned int side=0; side<CurElem->n_sides(); side++) {
       if (CurElem->neighbor(side) == NULL) {
-        short int bc_id = mesh.boundary_info->boundary_id (CurElem,side);
-        assert(bc_id!=BoundaryInfo::invalid_id);
+        AutoPtr<Elem> Side = CurElem->build_side(side);
+        short int bc_id;
+        {
+          std::vector<double> Pt;
+          Point SideCenter=Side->centroid();
+          Pt.resize(dim);
+          Pt[0] = SideCenter(0); Pt[1] = SideCenter(1); if(dim==3) Pt[2] = SideCenter(2); 
+          bc_id=PG_.GetBoundaryMarker(Pt);
+        }
         if ( AuxConstrBoundMarkerList_.find(bc_id)!=AuxConstrBoundMarkerList_.end() ) { // Heating boundary, apply min. velocity-constraint
           fe_face->reinit(CurElem, side);
           dof_map.dof_indices(CurElem, dof_indices);   // setup local->global mapping in form of array
@@ -901,14 +1026,14 @@ void LibMeshPDEBase::get_bounds(libMesh::NumericVector<libMesh::Number>& state_l
   if (simulation_mode_) {
     control_l=*lm_control_vec_;
     control_u=*lm_control_vec_;
-    aux_constr_l = -100;
+    aux_constr_l = -Inf;
 #ifdef EXHAUST_AS_CONTROL
     if (GetProcID()==0) {
       int iControl=PG_._AC.size();
       for (int iExh=0;iExh<PG_._Exh.size();++iExh) {
-	control_l.set(iControl,-1e50);
-	control_u.set(iControl,1e50);
-	iControl++;
+	      control_l.set(iControl,-Inf);
+	      control_u.set(iControl,Inf);
+	      iControl++;
       }
     }
 #endif    
@@ -919,7 +1044,22 @@ void LibMeshPDEBase::get_bounds(libMesh::NumericVector<libMesh::Number>& state_l
     aux_constr_l = *lm_aux_constr_vec_low_bd_; // lower bound for tangetial flow on equipment boundary
   }
   aux_constr_u = Inf;
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_PIN_CONSTR
+  aux_constr_l.set(0,0.0);
+  aux_constr_u.set(0,0.0);
+#endif
   MY_DBG_PRINT( "LibMeshPDE::get_bounds finished" );
+}
+
+void LibMeshPDEBase::GetAuxConstrIneqIdx(int* low, int* high)
+{
+  assert(low);
+  assert(high);
+  *low = 0;
+  *high= lm_aux_constr_vec_->size();
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_PIN_CONSTR
+  *low = 1;
+#endif
 }
 
 void LibMeshPDEBase::
@@ -1080,11 +1220,11 @@ void LibMeshPDEBase::WriteAirflowTKVs(const std::string& VolumeFilename, const s
   const DofMap& dof_map = system.get_dof_map();
   FEType fe_type = dof_map.variable_type(0);
   AutoPtr<FEBase> fe_vol (FEBase::build(dim, fe_type));  // volume object
-  QGauss qvol(dim, lm_Num_quadrature_order);
+  QGauss qvol(dim, lm_Num_quadrature_order_);
   fe_vol->attach_quadrature_rule (&qvol);
   const std::vector<std::vector<RealGradient> >&  dphi_vol = fe_vol->get_dphi();
   AutoPtr<FEBase> fe_face (FEBase::build(dim, fe_type));  // surface object
-  QGauss qface(dim-1, lm_Num_quadrature_order);
+  QGauss qface(dim-1, lm_Num_quadrature_order_);
   fe_face->attach_quadrature_rule (&qface);
   const std::vector<std::vector<RealGradient> >&  dphi_face = fe_face->get_dphi(); // gradeint of basis function phi at quadarture points
   std::vector<unsigned int> dof_indices;  // mapping local index -> global index
@@ -1172,11 +1312,11 @@ void LibMeshPDEBase::WriteAirflowCSVs(const std::string& VolumeFilename, const s
   const DofMap& dof_map = system.get_dof_map();
   FEType fe_type = dof_map.variable_type(0);
   AutoPtr<FEBase> fe_vol (FEBase::build(dim, fe_type));  // volume object
-  QGauss qvol(dim, lm_Num_quadrature_order);
+  QGauss qvol(dim, lm_Num_quadrature_order_);
   fe_vol->attach_quadrature_rule (&qvol);
   const std::vector<std::vector<RealGradient> >&  dphi_vol = fe_vol->get_dphi();
   AutoPtr<FEBase> fe_face (FEBase::build(dim, fe_type));  // surface object
-  QGauss qface(dim-1, lm_Num_quadrature_order);
+  QGauss qface(dim-1, lm_Num_quadrature_order_);
   fe_face->attach_quadrature_rule (&qface);
   const std::vector<std::vector<RealGradient> >&  dphi_face = fe_face->get_dphi();
   std::vector<unsigned int> dof_indices;  // mapping local index -> global index
@@ -1252,21 +1392,34 @@ void LibMeshPDEBase::InitAuxConstr(int *plocal, int *pglobal, std::list<Number>*
   FEType fe_type = dof_map.variable_type(0);
   const unsigned int dim = mesh_.mesh_dimension();
   AutoPtr<FEBase> fe_face (FEBase::build(dim, fe_type));  // surface object
-  QGauss qface(dim-1, lm_Num_quadrature_order);
+  QGauss qface(dim-1, lm_Num_quadrature_order_);
   fe_face->attach_quadrature_rule (&qface);
   const std::vector<Real>& JxW_face = fe_face->get_JxW();
   std::vector<unsigned int> dof_indices;  // mapping local index -> global index
-
   first_aux_constr_=0;
   assert(plocal);
   (*plocal) = 0;
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_PIN_CONSTR
+  if(GetProcID()==0) {
+    (*plocal)++;    // Extra constraint (Phi_0 = 0) will be first constraint on proc 0
+    pFactList->push_back(1.0);  // to be constistent
+  }
+#endif
   MeshBase::const_element_iterator itCurEl = mesh_.active_local_elements_begin();
   const MeshBase::const_element_iterator itEndEl = mesh_.active_local_elements_end();
   for ( ; itCurEl != itEndEl; ++itCurEl) {
     const Elem* CurElem = *itCurEl;
     for (unsigned int side=0; side<CurElem->n_sides(); side++) {
       if (CurElem->neighbor(side) == NULL) {
-        int bc_id = mesh_.boundary_info->boundary_id (CurElem,side);
+        AutoPtr<Elem> Side = CurElem->build_side(side);
+        short int bc_id;
+        {
+          Point SideCenter = Side->centroid();
+          std::vector<double> Pt;
+          Pt.resize(dim);
+          Pt[0] = SideCenter(0); Pt[1] = SideCenter(1); if(dim==3) Pt[2] = SideCenter(2); 
+          bc_id=PG_.GetBoundaryMarker(Pt);
+        }
         if ( AuxConstrBoundMarkerList_.find(bc_id)!=AuxConstrBoundMarkerList_.end() ) {
           ++(*plocal);
 
@@ -1282,6 +1435,10 @@ void LibMeshPDEBase::InitAuxConstr(int *plocal, int *pglobal, std::list<Number>*
       }
     }
   }
+#ifdef ENABLE_NO_EQUPMENT
+  if((*plocal)<1)
+    (*plocal)=1;
+#endif
   assert(pglobal);
   MPI_Allreduce ( plocal, pglobal, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD );
   MPI_Scan(plocal,&first_aux_constr_,1,MPI_INT,MPI_SUM,MPI_COMM_WORLD);
@@ -1299,7 +1456,7 @@ void LibMeshPDEBase::calcAux_constr(libMesh::NumericVector<libMesh::Number>*& co
   const DofMap& dof_map = system.get_dof_map();
   FEType fe_type = dof_map.variable_type(0);
   AutoPtr<FEBase> fe_face (FEBase::build(dim, fe_type));  // surface object
-  QGauss qface(dim-1, lm_Num_quadrature_order);
+  QGauss qface(dim-1, lm_Num_quadrature_order_);
   fe_face->attach_quadrature_rule (&qface);
   const std::vector<std::vector<RealGradient> >&  dphi_face = fe_face->get_dphi();
   const std::vector<Real>& JxW_face = fe_face->get_JxW();
@@ -1307,11 +1464,31 @@ void LibMeshPDEBase::calcAux_constr(libMesh::NumericVector<libMesh::Number>*& co
   MeshBase::const_element_iterator itCurEl = mesh_.active_local_elements_begin();
   const MeshBase::const_element_iterator itEndEl = mesh_.active_local_elements_end();
   RealGradient CurGrad;
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_PIN_CONSTR
+  if(GetProcID()==0) {
+    unsigned int pin_dof = mesh_.node(pin_down_node_).dof_number(0, 0, 0);
+    lm_aux_constr_vec_->set(i_aux_constr++,system.current_local_solution->el(pin_dof));
+  }
+#endif
+#ifdef ENABLE_NO_EQUPMENT
+  lm_aux_constr_vec_->close();
+  constr = lm_aux_constr_vec_;
+  MY_DBG_PRINT( "LibMeshPDEBase::calcAux_constr finished" );
+  return;
+#endif
   for ( ; itCurEl != itEndEl; ++itCurEl) {
     const Elem* CurElem = *itCurEl;
     for (unsigned int side=0; side<CurElem->n_sides(); side++) {
       if (CurElem->neighbor(side) == NULL) {
-        short int bc_id = mesh_.boundary_info->boundary_id (CurElem,side);
+        AutoPtr<Elem> Side = CurElem->build_side(side);
+        short int bc_id;
+        {
+          std::vector<double> Pt;
+          Point SideCenter=Side->centroid();
+          Pt.resize(dim);
+          Pt[0] = SideCenter(0); Pt[1] = SideCenter(1); if(dim==3) Pt[2] = SideCenter(2); 
+          bc_id=PG_.GetBoundaryMarker(Pt);
+        }
         assert(bc_id!=BoundaryInfo::invalid_id);
         if ( AuxConstrBoundMarkerList_.find(bc_id)!=AuxConstrBoundMarkerList_.end() ) { // Heating boundary, apply min. velocity-constraint
           fe_face->reinit(CurElem, side);
@@ -1321,8 +1498,8 @@ void LibMeshPDEBase::calcAux_constr(libMesh::NumericVector<libMesh::Number>*& co
           loc_sol.resize(dof_indices.size());
           loc_l2dphi.resize(dof_indices.size(),dof_indices.size());
           double GradL2=0.0;
-	  Number SideFact = 0.0;
-	  for (unsigned int qp=0; qp<qface.n_points(); qp++) {
+      	  Number SideFact = 0.0;
+      	  for (unsigned int qp=0; qp<qface.n_points(); qp++) {
             for (unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
               loc_sol(inode) = system.current_local_solution->el(dof_indices[inode]);
               for ( unsigned short jnode=0;jnode<CurElem->n_nodes();++jnode) {
@@ -1332,7 +1509,7 @@ void LibMeshPDEBase::calcAux_constr(libMesh::NumericVector<libMesh::Number>*& co
             DenseVector<Number> tmp;
             loc_l2dphi.vector_mult(tmp,loc_sol);
             GradL2 += JxW_face[qp]*loc_sol.dot(tmp);
-	    SideFact += JxW_face[qp];
+	          SideFact += JxW_face[qp];
           }
 #ifdef SCALE_AUX_BOUNDS
           lm_aux_constr_vec_->set(i_aux_constr,GradL2);
@@ -1369,18 +1546,40 @@ void LibMeshPDEBase::calcAux_jacobian_state(libMesh::SparseMatrix<libMesh::Numbe
   const DofMap& dof_map = system.get_dof_map();
   FEType fe_type = dof_map.variable_type(0);
   AutoPtr<FEBase> fe_face (FEBase::build(dim, fe_type));  // surface object
-  QGauss qface(dim-1, lm_Num_quadrature_order);
+  QGauss qface(dim-1, lm_Num_quadrature_order_);
   fe_face->attach_quadrature_rule (&qface);
   const std::vector<std::vector<RealGradient> >&  dphi_face = fe_face->get_dphi();
   const std::vector<Real>& JxW_face = fe_face->get_JxW();
   std::vector<unsigned int> dof_indices;  // mapping local index -> global index
   MeshBase::const_element_iterator itCurEl = mesh.active_local_elements_begin();
   const MeshBase::const_element_iterator itEndEl = mesh.active_local_elements_end();
+
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_PIN_CONSTR
+  if(GetProcID()==0) {
+    unsigned int pin_dof = mesh.node(pin_down_node_).dof_number(0, 0, 0);
+    jac_aux_state_->add(i_aux_constr++,pin_dof,1.0);
+  }
+#endif
+#ifdef ENABLE_NO_EQUPMENT
+  jac_aux_state_->close();
+  jac_state = jac_aux_state_;
+  MY_DBG_PRINT( "LibMeshPDEBase::calcAux_jacobian_state finished" );
+  return;
+#endif
+
   for ( ; itCurEl != itEndEl; ++itCurEl) {
     const Elem* CurElem = *itCurEl;
     for (unsigned int side=0; side<CurElem->n_sides(); side++) {
       if (CurElem->neighbor(side) == NULL) {
-        short int bc_id = mesh.boundary_info->boundary_id (CurElem,side);
+        AutoPtr<Elem> Side = CurElem->build_side(side);
+        short int bc_id;
+        {
+          std::vector<double> Pt;
+          Point SideCenter=Side->centroid();
+          Pt.resize(dim);
+          Pt[0] = SideCenter(0); Pt[1] = SideCenter(1); if(dim==3) Pt[2] = SideCenter(2); 
+          bc_id=PG_.GetBoundaryMarker(Pt);
+        }
         assert(bc_id!=BoundaryInfo::invalid_id);
         if ( AuxConstrBoundMarkerList_.find(bc_id)!=AuxConstrBoundMarkerList_.end() ) { // Heating boundary, apply min. velocity-constraint
           fe_face->reinit(CurElem, side);
@@ -1441,6 +1640,7 @@ void LibMeshPDEBase::RefineMesh(int iter)
 {
   // here we print the mesh boundary before refinement
   if (0) {
+    unsigned short dim = mesh_.mesh_dimension();
     MeshBase::const_element_iterator itCurEl = mesh_.active_local_elements_begin();
     const MeshBase::const_element_iterator itEndEl = mesh_.active_local_elements_end();
     for ( ; itCurEl != itEndEl; ++itCurEl) {
@@ -1448,7 +1648,15 @@ void LibMeshPDEBase::RefineMesh(int iter)
       const unsigned int n_nodes = CurElem->n_nodes();
       for (unsigned int side=0; side<CurElem->n_sides(); side++) {
 	      if (CurElem->neighbor(side) == NULL) {
-	        short int bc_id = mesh_.boundary_info->boundary_id (CurElem,side);
+          AutoPtr<Elem> Side = CurElem->build_side(side);
+          short int bc_id;
+          {
+            std::vector<double> Pt;
+            Point SideCenter=Side->centroid();
+            Pt.resize(mesh_.mesh_dimension());
+            Pt[0] = SideCenter(0); Pt[1] = SideCenter(1); if(dim==3) Pt[2] = SideCenter(2); 
+            bc_id=PG_.GetBoundaryMarker(Pt);
+          }
 	        printf("side: %d bc_id: %2d ", side, bc_id);
 	        for (unsigned int node=0; node<n_nodes; node++) {
 	          if (CurElem->is_node_on_side(node, side)) {
@@ -1464,15 +1672,20 @@ void LibMeshPDEBase::RefineMesh(int iter)
     for ( ; itCurEl != itEndEl; ++itCurEl) {
       const Elem* CurElem = *itCurEl;
       for (unsigned int i=0;i<CurElem->n_nodes();i++) { // handle Dirichlet BC for nodes: set whole line to 0, set DiriCoef on main diagonal and Rhs in vector
-        std::vector<short int> bc_id = mesh_.boundary_info->boundary_ids(CurElem->get_node(i));
-	      if (bc_id.size()>0) {
-	        printf("node: %d ", i);
-	        for (int j=0; j<bc_id.size(); j++) {
-	          MY_DBG_PRINT("bc_id[" << j << "] = " << bc_id[j] );
-	        }
-	      }
-      }
-    }    
+        short int bc_id;
+        {
+          std::vector<double> Pt;
+          Point Nd=CurElem->node(i);
+          Pt.resize(dim);
+          Pt[0] = Nd(0); Pt[1] = Nd(1); if(dim==3) Pt[2] = Nd(2); 
+          bc_id=PG_.GetBoundaryMarker(Pt);
+        }
+        printf("node: %d ", i);
+        if(bc_id>1) {
+          MY_DBG_PRINT("bc_id = " << bc_id );
+        }
+	    }
+    }
     fflush(stdout);
   }
 
@@ -1480,11 +1693,17 @@ void LibMeshPDEBase::RefineMesh(int iter)
   //MeshRefinement rf(mesh_);
   //rf.uniformly_refine(1);
   MeshRefinement mesh_refinement(mesh_);
+#ifdef SIMULATION_CONVERGENCE
   mesh_refinement.refine_fraction() = 1.0;
   mesh_refinement.coarsen_fraction() = 0.0;
   mesh_refinement.max_h_level() = 100;
+#else
+  mesh_refinement.refine_fraction() = 0.0;
+  mesh_refinement.coarsen_fraction() = 0.0;
+  mesh_refinement.max_h_level() = 100;
   mesh_refinement.absolute_global_tolerance() = 1e-1;
-  
+#endif
+
   ErrorVector error;
   KellyErrorEstimator error_estimator;
   //LaplacianErrorEstimator error_estimator;
@@ -1516,8 +1735,15 @@ void LibMeshPDEBase::RefineMesh(int iter)
     ElemRes.resize(dof_indices.size());
     for (unsigned int side=0; side<CurElem->n_sides(); side++) {
       if (CurElem->neighbor(side) == NULL) {
-        short int bc_id = mesh_.boundary_info->boundary_id (CurElem,side);
-        assert(bc_id!=BoundaryInfo::invalid_id);
+        AutoPtr<Elem> Side = CurElem->build_side(side);
+        short int bc_id;
+        {
+          std::vector<double> Pt;
+          Point SideCenter=Side->centroid();
+          Pt.resize(dim);
+          Pt[0] = SideCenter(0); Pt[1] = SideCenter(1); if(dim==3) Pt[2] = SideCenter(2); 
+          bc_id=PG_.GetBoundaryMarker(Pt);
+        }
         if ( AuxConstrBoundMarkerList_.find(bc_id)!=AuxConstrBoundMarkerList_.end() ) {
 	  
 
@@ -1595,7 +1821,7 @@ double LibMeshPDEBase::CalcL2Diff(libMesh::NumericVector<libMesh::Number>* CompF
   FEType fe_type = dof_map.variable_type(0);
 
   AutoPtr<FEBase> fe (FEBase::build(dim, fe_type)); // this object will by the current volume object, actualy holding values for current phi and dphi
-  QGauss qrule (dim, lm_Num_quadrature_order);
+  QGauss qrule (dim, lm_Num_quadrature_order_);
   fe->attach_quadrature_rule (&qrule);
   const std::vector<Real>& JxW = fe->get_JxW();   // References to values hold by fe (i.e. the chang, ones fe changes
   const std::vector<std::vector<Real> >& phi = fe->get_phi();

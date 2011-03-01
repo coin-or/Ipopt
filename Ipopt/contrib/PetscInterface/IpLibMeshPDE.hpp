@@ -23,6 +23,8 @@
 #include "enum_order.h"
 #include <string>
 
+//#define SIMULATION_CONVERGENCE
+
 /** Base class for problem description of a PDE constrainted
     optimization problem with libMesh. */
 class LibMeshPDEBase
@@ -156,6 +158,7 @@ public:
   void RefineMesh(int iter);
   bool simulation_mode_;
   double CalcL2Diff(libMesh::NumericVector<libMesh::Number>* jac_state);
+  void GetAuxConstrIneqIdx(int* low, int* high);
 protected:
   libMesh::SparseMatrix<libMesh::Number>* jac_control_;
   libMesh::SparseMatrix<libMesh::Number>* jac_aux_state_;
@@ -224,7 +227,7 @@ private:
   void DetroySelfOwnedLibMeshPetscMatrix(SparseMatrix<Number>*& matrix);
   void DetroySelfOwnedLibMeshPetscVector(NumericVector<Number>*& vector);
   void clear_math_obj();
-  const libMeshEnums::Order lm_Num_quadrature_order;
+  const libMeshEnums::Order lm_Num_quadrature_order_;
+  int pin_down_node_;
 };
-
 #endif

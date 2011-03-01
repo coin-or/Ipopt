@@ -10,6 +10,10 @@
 #include <stdexcept>
 #include "mesh_generation.h"
 
+#include <cell_tet4.h>
+#include <cell_tet10.h>
+#include <face_tri3.h>
+#include <face_tri6.h>
 
 extern int GetProcID();
 
@@ -86,6 +90,7 @@ ProblemGeometry::ProblemGeometry()
   _BoundCond.push_back(new BoundaryConditionConstValues(0.0,1.0,0.0,0.0,1.0,0.0)); //   homogeneous boundary conditions on wall
   NextFreeBoundaryMarker = 2;
   _h = 0.0;
+  _FE_degree = 2;
 }
 
 ProblemGeometry::~ProblemGeometry()
@@ -182,8 +187,9 @@ void ProblemGeometry::AddExhaust(const std::vector<double>& min, const std::vect
   assert(_BoundCond.size()==BoundMark);
   // TODO: Retried vExh from input
   double vExh = 1.0;
-  double TempExh = 1e30;
-  _BoundCond.push_back(new BoundaryConditionConstValues(0.0,+1.0,vExh,1.0,0.0,-TempExh)); // dPhi/dn = -vAc,T = TAc, i.e. 0 dT/dn = 1*T-TAc
+  //double TempExh = 1e30;
+  _BoundCond.push_back(new BoundaryConditionSquarePhiRhs(0.0,1.0,vExh,0.0,1.0,0.0,min,max)); // dPhi/dn=vExh, dT/dn=0,
+//  _BoundCond.push_back(new BoundaryConditionConstValues(0.0,+1.0,vExh,1.0,0.0,-TempExh)); // dPhi/dn = -vAc,T = TAc, i.e. 0 dT/dn = 1*T-TAc
   _ParamIdx2BCParam.push_back(ControlParameter(BoundMark,2));
   //_ParamIdx2BCParam.push_back(ControlParameter(BoundMark,5));
   _Exh.push_back(item);
@@ -356,9 +362,16 @@ void ProblemGeometry::ReadFromStream(std::istream& is)
           }
         }
         else {
-          std::string str("Can't interpret line:");
-          str += Buf;
-          throw std::runtime_error(str);
+          int dtmp;
+          n = sscanf(Buf,"FE_degree=%d;",&dtmp);
+          if (n==1) {
+            _FE_degree = dtmp;
+          }
+          else {
+            std::string str("Can't interpret line:");
+            str += Buf;
+            throw std::runtime_error(str);
+          }
         }
       }
     }
@@ -542,7 +555,7 @@ void ProblemGeometry::SetPoint(REAL* pointlist,int idx,REAL x,REAL y,REAL z)
 }
 
 
-void ProblemGeometry::Tetgen2Mesh(const tetgenio& tet, libMesh::UnstructuredMesh* p_mesh)
+void ProblemGeometry::Tetgen2Mesh(const tetgenio& tet, libMesh::UnstructuredMesh* p_mesh, int order)
 {
   const double eps(1e-8);
   assert(GetDim()==3);
@@ -551,19 +564,43 @@ void ProblemGeometry::Tetgen2Mesh(const tetgenio& tet, libMesh::UnstructuredMesh
   // Add Nodes:
   unsigned long int iPt;
   int BoundaryMarker;
-  for (iPt=0;iPt<tet.numberofpoints;iPt++)
-    p_mesh->add_point(libMesh::Point(tet.pointlist[3*iPt+0],tet.pointlist[3*iPt+1],tet.pointlist[3*iPt+2]) );
-  // elements
-  libMesh::Elem *pElem;
-  for (unsigned int iEl=0; iEl<tet.numberoftetrahedra; iEl++) {
-    pElem = new libMesh::Tet4;
-    for (iPt=0;iPt<4;iPt++) {
-      pElem->set_node(iPt) = p_mesh->node_ptr(tet.tetrahedronlist[4*iEl+iPt]);
+  if(order==1) {
+    for (iPt=0;iPt<tet.numberofpoints;iPt++)
+      p_mesh->add_point(libMesh::Point(tet.pointlist[3*iPt+0],tet.pointlist[3*iPt+1],tet.pointlist[3*iPt+2]) );
+    // elements
+    libMesh::Elem *pElem;
+    for (unsigned int iEl=0; iEl<tet.numberoftetrahedra; iEl++) {
+      pElem = new libMesh::Tet4;
+      for (iPt=0;iPt<4;iPt++) {
+        pElem->set_node(iPt) = p_mesh->node_ptr(tet.tetrahedronlist[4*iEl+iPt]);
+      }
+      // Finally, add this element to the mesh
+      p_mesh->add_elem(pElem);
     }
-    // Finally, add this element to the mesh
-    p_mesh->add_elem(pElem);
   }
-
+  else {
+    for (iPt=0;iPt<tet.numberofpoints;iPt++)
+      p_mesh->add_point(libMesh::Point(tet.pointlist[3*iPt+0],tet.pointlist[3*iPt+1],tet.pointlist[3*iPt+2]) );
+    // elements
+    libMesh::Elem *pElem;
+    for (unsigned int iEl=0; iEl<tet.numberoftetrahedra; iEl++) {
+      pElem = new libMesh::Tet10;
+      pElem->set_node(0) = p_mesh->node_ptr(tet.tetrahedronlist[10*iEl+0]);
+      pElem->set_node(1) = p_mesh->node_ptr(tet.tetrahedronlist[10*iEl+1]);
+      pElem->set_node(2) = p_mesh->node_ptr(tet.tetrahedronlist[10*iEl+2]);
+      pElem->set_node(3) = p_mesh->node_ptr(tet.tetrahedronlist[10*iEl+3]);
+      pElem->set_node(4) = p_mesh->node_ptr(tet.tetrahedronlist[10*iEl+4]);
+      pElem->set_node(5) = p_mesh->node_ptr(tet.tetrahedronlist[10*iEl+5]);
+      pElem->set_node(6) = p_mesh->node_ptr(tet.tetrahedronlist[10*iEl+6]);
+      pElem->set_node(7) = p_mesh->node_ptr(tet.tetrahedronlist[10*iEl+7]);
+      pElem->set_node(8) = p_mesh->node_ptr(tet.tetrahedronlist[10*iEl+8]);
+      pElem->set_node(9) = p_mesh->node_ptr(tet.tetrahedronlist[10*iEl+9]);
+      // Finally, add this element to the mesh
+      p_mesh->add_elem(pElem);
+    }
+  }
+  // this is not needed any more (I (Hannes) think, TODO: check)
+/*
   if (tet.neighborlist) {
     for (unsigned int iEl=0; iEl<tet.numberoftetrahedra; iEl++) {
       for (int iNeig=0;iNeig<dim+1;++iNeig) {
@@ -590,7 +627,6 @@ void ProblemGeometry::Tetgen2Mesh(const tetgenio& tet, libMesh::UnstructuredMesh
                 p_mesh->boundary_info->add_node(iBdNode1,BoundaryMarker);
                 p_mesh->boundary_info->add_node(iBdNode2,BoundaryMarker);
                 p_mesh->boundary_info->add_node(iBdNode3,BoundaryMarker);
-                // std::cout << "Dirichlet at " << iBdNode1 << ", " << iBdNode2 << ", " << iBdNode3 << ", " << "Center: " << Center << std::endl;
               }
             }
           }
@@ -598,16 +634,17 @@ void ProblemGeometry::Tetgen2Mesh(const tetgenio& tet, libMesh::UnstructuredMesh
       }
     }
   }
+*/
 }
 
-void ProblemGeometry::CreateMesh(libMesh::UnstructuredMesh* p_mesh)
+void ProblemGeometry::CreateMesh(libMesh::UnstructuredMesh* p_mesh, int order)
 {
   switch (GetDim()) {
   case 2:
-    CreateMesh2D(p_mesh);
+    CreateMesh2D(p_mesh, order);
     break;
   case 3:
-    CreateMesh3D(p_mesh);
+    CreateMesh3D(p_mesh, order);
     break;
   default:
     std::cout << "Dimension not implemented" << std::endl;
@@ -615,7 +652,7 @@ void ProblemGeometry::CreateMesh(libMesh::UnstructuredMesh* p_mesh)
   }
 }
 
-void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
+void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh, int order)
 {
   tetgenio tetgen_in;
   //tetgenmesh      tetgen_mesh;
@@ -846,7 +883,13 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
       std::ofstream os("Mesh3DRaw.poly",std::ios::out);
       PrintTetgenMesh(tetgen_in, os);
       char strBuf[256];
-      sprintf(strBuf,"-nQpqa%e",_h*_h*_h);
+      if(order==1) {
+        sprintf(strBuf,"-nQpqa%e",_h*_h*_h);
+      }
+      else {
+        assert(order==2);
+        sprintf(strBuf,"-nQpqa%eo2",_h*_h*_h);
+      }
       //sprintf(strBuf,"zpQqa%e",h*h*h);  // tetgen in silent mode
       char Buf[2014];
       sprintf(Buf,"tetgen %s Mesh3DRaw.poly",strBuf);
@@ -867,9 +910,12 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
     MPI_Bcast(tetgen_out.pointlist,3*tetgen_out.numberofpoints,MPI_DOUBLE,0,MPI_COMM_WORLD);
 
     MPI_Bcast(&(tetgen_out.numberoftetrahedra), 1, MPI_INT, 0, MPI_COMM_WORLD);
+    int NumOfPtsPerTet = 4;
+    if(order==2)
+      NumOfPtsPerTet = 10;  
     if(ProcID!=0)
-      tetgen_out.tetrahedronlist = new int[4*tetgen_out.numberoftetrahedra];
-    MPI_Bcast(tetgen_out.tetrahedronlist,4*tetgen_out.numberoftetrahedra,MPI_INT,0,MPI_COMM_WORLD);
+      tetgen_out.tetrahedronlist = new int[NumOfPtsPerTet*tetgen_out.numberoftetrahedra];
+    MPI_Bcast(tetgen_out.tetrahedronlist,NumOfPtsPerTet*tetgen_out.numberoftetrahedra,MPI_INT,0,MPI_COMM_WORLD);
 
     if(ProcID!=0)
       tetgen_out.neighborlist = new int[4*tetgen_out.numberoftetrahedra];
@@ -884,7 +930,13 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
     }
     tetgenbehavior  tetgen_beh;
     char strBuf[256];
-    sprintf(strBuf,"npqa%f",_h*_h*_h);
+    if(order==1) {
+      sprintf(strBuf,"npqa%f",_h*_h*_h);
+    }
+    else {
+      assert(order==2);
+      sprintf(strBuf,"npqa%fo2",_h*_h*_h);
+    }
     //sprintf(strBuf,"-n");
     //sprintf(strBuf,"%s","pq1.414a0.1");
     //sprintf(strBuf,"zpQqa%f",h*h*h);  // tetgen in silent mode
@@ -895,14 +947,14 @@ void ProblemGeometry::CreateMesh3D(libMesh::UnstructuredMesh* p_mesh)
     //tetrahedralize(&tetgen_beh, &tetgen_in, &tetgen_out);
     tetrahedralize(strBuf, &tetgen_in, &tetgen_out);
   }
-  Tetgen2Mesh(tetgen_out, p_mesh);
+  Tetgen2Mesh(tetgen_out, p_mesh, order);
   p_mesh->prepare_for_use();
 // TODO: Clearify what's going on here, why program termination?
 //  tetgen_in.deinitialize();
 //  tetgen_out.deinitialize();
 }
 
-void ProblemGeometry::CreateMesh2D(libMesh::UnstructuredMesh* p_mesh)
+void ProblemGeometry::CreateMesh2D(libMesh::UnstructuredMesh* p_mesh, int order)
 {
   assert(GetDim()==2);
   int dim = GetDim();
@@ -1154,11 +1206,15 @@ void ProblemGeometry::CreateMesh2D(libMesh::UnstructuredMesh* p_mesh)
     PrintTriangleMesh(tri_in, file);
   }
   char strBuf[256];
-  sprintf(strBuf,"znqpa%f",_h*_h);
+  if(order==1)
+    sprintf(strBuf,"znqpa%f",_h*_h);
+  else
+    sprintf(strBuf,"znqpa%fo2",_h*_h);  
+  
   triangulate(strBuf, &tri_in, &tri_out, NULL);
   //libMesh::Triangle::copy_tri_to_mesh(tri_out,*p_mesh,TRI3);
 
-  Triangle2Mesh(tri_out,p_mesh);
+  Triangle2Mesh(tri_out,p_mesh, order);
   p_mesh->prepare_for_use();
   libMesh::Triangle::destroy(tri_in,Triangle::INPUT);   // deletes also the memory
   libMesh::Triangle::destroy(tri_out,Triangle::OUTPUT);
@@ -1209,7 +1265,7 @@ void ProblemGeometry::ReadNodeFile(std::string str, tetgenio* tet)
 void ProblemGeometry::ReadEleFile(std::string str, tetgenio* tet)
 {
   char Buf[1024];
-  int Vals[5];
+  int Vals[11];
   int n_elems, n_PtsPerTet;
   int read;
 
@@ -1222,29 +1278,55 @@ void ProblemGeometry::ReadEleFile(std::string str, tetgenio* tet)
     str += Buf;
     throw std::runtime_error(str);
   }
-  if (n_PtsPerTet!=4) {
+  if (n_PtsPerTet!=4 && n_PtsPerTet!=10) {
     std::string str("Wrong number of points per tetrahedron:");
     str += Buf;
     throw std::runtime_error(str);
   }
 
   tet->numberoftetrahedra = n_elems;
-  tet->tetrahedronlist = new int[4*tet->numberoftetrahedra];
+  tet->tetrahedronlist = new int[n_PtsPerTet*tet->numberoftetrahedra];
   int i_elem;
   for (int i_elem=0;i_elem<tet->numberoftetrahedra;i_elem++) {
     f.getline(Buf,1024);
-    read = sscanf(Buf,"%d %d %d %d %d", Vals,Vals+1,Vals+2,Vals+3,Vals+4);
-    if ( read!=5 ) {
-      std::string str("Can't read tetrahedron from line:");
-      str += Buf;
-      throw std::runtime_error(str);
+    if(n_PtsPerTet==4) {
+      read = sscanf(Buf,"%d %d %d %d %d", Vals,Vals+1,Vals+2,Vals+3,Vals+4);
+      if ( read!=5 ) {
+        std::string str("Can't read tetrahedron from line:");
+        str += Buf;
+        throw std::runtime_error(str);
+      }
+      else {
+        assert(i_elem==Vals[0]-1);
+        tet->tetrahedronlist[n_PtsPerTet*i_elem+0] = Vals[1]-1;
+        tet->tetrahedronlist[n_PtsPerTet*i_elem+1] = Vals[2]-1;
+        tet->tetrahedronlist[n_PtsPerTet*i_elem+2] = Vals[3]-1;
+        tet->tetrahedronlist[n_PtsPerTet*i_elem+3] = Vals[4]-1;
+      }
     }
     else {
-      assert(i_elem==Vals[0]-1);
-      tet->tetrahedronlist[4*i_elem+0] = Vals[1]-1;
-      tet->tetrahedronlist[4*i_elem+1] = Vals[2]-1;
-      tet->tetrahedronlist[4*i_elem+2] = Vals[3]-1;
-      tet->tetrahedronlist[4*i_elem+3] = Vals[4]-1;
+      assert(n_PtsPerTet==10);
+      read = sscanf(Buf,"%d %d %d %d %d %d %d %d %d %d %d",
+                      Vals+0,Vals+1,Vals+2,Vals+3,Vals+4,Vals+5, 
+                      Vals+6,Vals+7,Vals+8,Vals+9,Vals+10);
+      if ( read!=11 ) {
+        std::string str("Can't read tetrahedron from line:");
+        str += Buf;
+        throw std::runtime_error(str);
+      }
+      else {
+        assert(i_elem==Vals[0]-1);
+        tet->tetrahedronlist[n_PtsPerTet*i_elem+0] = Vals[1]-1;
+        tet->tetrahedronlist[n_PtsPerTet*i_elem+1] = Vals[2]-1;
+        tet->tetrahedronlist[n_PtsPerTet*i_elem+2] = Vals[3]-1;
+        tet->tetrahedronlist[n_PtsPerTet*i_elem+3] = Vals[4]-1;
+        tet->tetrahedronlist[n_PtsPerTet*i_elem+4] = Vals[5]-1;
+        tet->tetrahedronlist[n_PtsPerTet*i_elem+5] = Vals[6]-1;
+        tet->tetrahedronlist[n_PtsPerTet*i_elem+6] = Vals[7]-1;
+        tet->tetrahedronlist[n_PtsPerTet*i_elem+7] = Vals[8]-1;
+        tet->tetrahedronlist[n_PtsPerTet*i_elem+8] = Vals[9]-1;
+        tet->tetrahedronlist[n_PtsPerTet*i_elem+9] = Vals[10]-1;
+      }
     }
   }
 }
@@ -1334,7 +1416,7 @@ void PrintTetgenMesh(const tetgenio& tet, std::ostream& os)
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // 2D
-void ProblemGeometry::Triangle2Mesh(const libMesh::Triangle::triangulateio& tri, libMesh::UnstructuredMesh* p_mesh)
+void ProblemGeometry::Triangle2Mesh(const libMesh::Triangle::triangulateio& tri, libMesh::UnstructuredMesh* p_mesh, int order)
 {
   const double eps=1e-8;
   assert(GetDim()==2);
@@ -1343,19 +1425,42 @@ void ProblemGeometry::Triangle2Mesh(const libMesh::Triangle::triangulateio& tri,
   // Add Nodes:
   unsigned long int iPt;
   p_mesh->reserve_elem(tri.numberoftriangles);
-  p_mesh->reserve_nodes(tri.numberofpoints);
-  for (iPt=0;iPt<tri.numberofpoints;iPt++)
-    p_mesh->add_point(libMesh::Point(tri.pointlist[dim*iPt+0],tri.pointlist[dim*iPt+1],0),iPt);
-  // elements
-  libMesh::Tri3 *pElem;
-  for (unsigned int iEl=0; iEl<tri.numberoftriangles; iEl++) {
-    pElem = new libMesh::Tri3;
-    for (iPt=0;iPt<dim+1;iPt++)
-      pElem->set_node(iPt) = p_mesh->node_ptr(tri.trianglelist[(dim+1)*iEl+iPt]);
-    // Finally, add this element to the mesh
-    p_mesh->add_elem(pElem);
+  if (order==1) {
+    p_mesh->reserve_nodes(tri.numberofpoints);
+    for (iPt=0;iPt<tri.numberofpoints;iPt++)
+      p_mesh->add_point(libMesh::Point(tri.pointlist[dim*iPt+0],tri.pointlist[dim*iPt+1],0),iPt);
+    // elements
+    libMesh::Tri3 *pElem;
+    for (unsigned int iEl=0; iEl<tri.numberoftriangles; iEl++) {
+      pElem = new libMesh::Tri3;
+      for (iPt=0;iPt<dim+1;iPt++)
+        pElem->set_node(iPt) = p_mesh->node_ptr(tri.trianglelist[(dim+1)*iEl+iPt]);
+      // Finally, add this element to the mesh
+      p_mesh->add_elem(pElem);
+    }
+  }
+  else {
+    assert(order==2); // higher degrees not implemented
+    p_mesh->reserve_nodes(tri.numberofpoints);
+    for (iPt=0;iPt<tri.numberofpoints;iPt++)
+      p_mesh->add_point(libMesh::Point(tri.pointlist[dim*iPt+0],tri.pointlist[dim*iPt+1],0),iPt);
+    // elements
+    libMesh::Tri6 *pElem;
+    for (unsigned int iEl=0; iEl<tri.numberoftriangles; iEl++) {
+      pElem = new libMesh::Tri6;
+      pElem->set_node(0) = p_mesh->node_ptr(tri.trianglelist[6*iEl+0]);
+      pElem->set_node(1) = p_mesh->node_ptr(tri.trianglelist[6*iEl+1]);
+      pElem->set_node(2) = p_mesh->node_ptr(tri.trianglelist[6*iEl+2]);
+      pElem->set_node(3) = p_mesh->node_ptr(tri.trianglelist[6*iEl+5]);
+      pElem->set_node(4) = p_mesh->node_ptr(tri.trianglelist[6*iEl+3]);
+      pElem->set_node(5) = p_mesh->node_ptr(tri.trianglelist[6*iEl+4]);
+      // Finally, add this element to the mesh
+      p_mesh->add_elem(pElem);
+    }
   }
 
+/*
+  // this is not needed any more (I (Hannes) think, TODO: check)
   if (tri.neighborlist) {
     for (unsigned int iEl=0; iEl<tri.numberoftriangles; iEl++) {
       for (int iNeig=0;iNeig<dim+1;++iNeig) {
@@ -1384,35 +1489,8 @@ void ProblemGeometry::Triangle2Mesh(const libMesh::Triangle::triangulateio& tri,
       }
     }
   }
-  p_mesh->prepare_for_use(false);
-/*
-  int dim = GetDim();
-  libMesh::MeshTools::Generation::build_square(*p_mesh, 2, 2,0.0,1.0,0.0,1.0,TRI3);
-  libMesh::MeshBase::const_element_iterator itCurEl = p_mesh->active_local_elements_begin();
-  const MeshBase::const_element_iterator itEndEl = p_mesh->active_local_elements_end();
-  for ( ; itCurEl != itEndEl; ++itCurEl) {
-    const libMesh::Elem* CurElem = *itCurEl;
-    for (unsigned int side=0; side<CurElem->n_sides(); side++) {
-      if (CurElem->neighbor(side) == NULL) {
-        AutoPtr<Elem> CurSide = CurElem->build_side(side);
-        std::vector<double> Center;
-        Center.resize(dim);
-        libMesh::Point CenterPt = CurSide->centroid();
-        for (int iDim=0;iDim<dim;iDim++)
-          Center[iDim] = CenterPt(iDim);
-        int BoundaryMarker = GetBoundaryMarker(Center);
-        assert(BoundaryMarker!=-1);
-        std::cout << "Adding boundary " << BoundaryMarker << "at point " << CenterPt << std::endl;
-        p_mesh->boundary_info->add_side(CurElem,side,BoundaryMarker);
-        if(_BoundCond[BoundaryMarker]->IsPhiDirichlet() || _BoundCond[BoundaryMarker]->IsTDirichlet() ) {
-          p_mesh->boundary_info->add_node(CurSide->get_node(0),BoundaryMarker);
-          p_mesh->boundary_info->add_node(CurSide->get_node(1),BoundaryMarker);
-        }
-      }
-    }
-  }
-  p_mesh->prepare_for_use(false);
 */
+  p_mesh->prepare_for_use(false);
 }
 
 void PrintTriangleMesh(const libMesh::Triangle::triangulateio& tri, std::ostream& os)
