@@ -46,17 +46,17 @@ int GetProcID();
 #ifdef EXHAUST_AS_CONTROL   // Only Neumann boundary conditions -> action required (int_Omega Phi = 0)
 // Add integral constraint to last line (-> Peak)
 //#define MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_TO_CONSTR
-//// Add integral constraint as extra constraint
-////#define MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_INT_CONSTR
+// Add integral constraint as extra constraint
+#define MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_INT_CONSTR
 // Add constraint to pin down Phi at a certain point in the equation system (-> Peak)
 //#define MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_TO_CONSTR
 // Add extra auxiliary constraint to pin down Phi at a certain point (-> restauration phase)
-#define MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_PIN_CONSTR
+//#define MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_PIN_CONSTR
 #endif
 
-#define MY_DBG_PRINT(s) {std::cout << GetProcID() << __FILE__ << ":" << __LINE__ <<":" << s << std::endl;}
+//#define MY_DBG_PRINT(s) {std::cout << GetProcID() << __FILE__ << ":" << __LINE__ <<":" << s << std::endl;}
 //#define MY_DBG_PRINT(s) {std::cout << GetProcID() << ":" << s << std::endl;}
-//#define MY_DBG_PRINT(s) {}
+#define MY_DBG_PRINT(s) {}
 
 using namespace libMesh;
 
@@ -394,6 +394,9 @@ int LibMeshPDEBase::GetPinConstrIdx()
 #endif
 #ifdef MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_TO_CONSTR
   return GetPinNodeDof();
+#endif
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_INT_CONSTR
+  return lm_aux_constr_vec_->size()-1;
 #endif
   assert(false);
   return 0;
@@ -1053,7 +1056,7 @@ void LibMeshPDEBase::get_bounds(libMesh::NumericVector<libMesh::Number>& state_l
   if (simulation_mode_) {
     control_l=*lm_control_vec_;
     control_u=*lm_control_vec_;
-    aux_constr_l = -Inf;
+    aux_constr_l = -100;
 #ifdef EXHAUST_AS_CONTROL
     if (GetProcID()==0) {
       int iControl=PG_._AC.size();
@@ -1079,6 +1082,14 @@ void LibMeshPDEBase::get_bounds(libMesh::NumericVector<libMesh::Number>& state_l
     aux_constr_u.set(GetPinConstrIdx(),0.0);
   }
 #endif
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_INT_CONSTR
+  bool bLocal;
+  GetPinNodeDof(&bLocal);
+  if(bLocal) {
+    aux_constr_l.set(GetPinConstrIdx(),0.0);
+    aux_constr_u.set(GetPinConstrIdx(),0.0);
+  }
+#endif
   MY_DBG_PRINT( "LibMeshPDE::get_bounds finished" );
 }
 
@@ -1094,6 +1105,11 @@ void LibMeshPDEBase::GetLocalIneqIdx(int* low, int* high)
   if(bLocal)
     *high-=1;
 #endif
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_INT_CONSTR
+  if(*high==lm_aux_constr_vec_->size()-1)
+    (*high)--;
+#endif
+
 }
 
 void LibMeshPDEBase::
@@ -1474,6 +1490,17 @@ void LibMeshPDEBase::InitAuxConstr(int *plocal, int *pglobal, std::list<Number>*
   }
 #endif
 
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_INT_CONSTR
+  {
+    int NumOfProcs;
+    MPI_Comm_size(MPI_COMM_WORLD,&NumOfProcs);
+    if((NumOfProcs-1)==GetProcID()) {
+      (*plocal)++;    // Extra constraint (Phi_0 = 0) will be last aux constraint on the proc, which own Node to pin down solution
+      pFactList->push_back(1.0);  // to be constistent
+    }
+  }
+#endif
+
 #ifdef ENABLE_NO_EQUPMENT
   if((*plocal)<1)
     (*plocal)=1;
@@ -1510,8 +1537,25 @@ void LibMeshPDEBase::calcAux_constr(libMesh::NumericVector<libMesh::Number>*& co
   MY_DBG_PRINT( "LibMeshPDEBase::calcAux_constr finished" );
   return;
 #endif
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_INT_CONSTR
+  AutoPtr<FEBase> fe_vol(FEBase::build(dim, fe_type));  // surface object
+  QGauss quad_vol(dim, lm_Num_quadrature_order_);
+  fe_vol->attach_quadrature_rule (&quad_vol);
+  const std::vector<std::vector<Real> >&  phi_vol = fe_vol->get_phi();
+  const std::vector<Real>& JxW_vol = fe_vol->get_JxW();
+#endif
   for ( ; itCurEl != itEndEl; ++itCurEl) {
     const Elem* CurElem = *itCurEl;
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_INT_CONSTR
+    fe_vol->reinit(CurElem);
+    dof_map.dof_indices(CurElem, dof_indices);   // setup local->global mapping in form of array
+	  for (unsigned int qp=0; qp<quad_vol.n_points(); qp++) {
+      for (unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
+          const double Val = system.current_local_solution->el(dof_indices[inode]);
+          lm_aux_constr_vec_->add(GetPinConstrIdx(),JxW_vol[qp]*phi_vol[inode][qp]*Val);
+        }
+      }
+#endif    
     for (unsigned int side=0; side<CurElem->n_sides(); side++) {
       if (CurElem->neighbor(side) == NULL) {
         AutoPtr<Elem> Side = CurElem->build_side(side);
@@ -1546,9 +1590,9 @@ void LibMeshPDEBase::calcAux_constr(libMesh::NumericVector<libMesh::Number>*& co
 	          SideFact += JxW_face[qp];
           }
 #ifdef SCALE_AUX_BOUNDS
-          lm_aux_constr_vec_->set(i_aux_constr,GradL2);
+          lm_aux_constr_vec_->add(i_aux_constr,GradL2);
 #else
-          lm_aux_constr_vec_->set(i_aux_constr,GradL2/SideFact);
+          lm_aux_constr_vec_->add(i_aux_constr,GradL2/SideFact);
 #endif
           ++i_aux_constr;
         }
@@ -1560,7 +1604,7 @@ void LibMeshPDEBase::calcAux_constr(libMesh::NumericVector<libMesh::Number>*& co
     bool bLocal;
     unsigned int pin_dof = GetPinNodeDof(&bLocal);
     if(bLocal) {
-      lm_aux_constr_vec_->set(GetPinConstrIdx(),system.current_local_solution->el(pin_dof));
+      lm_aux_constr_vec_->add(GetPinConstrIdx(),system.current_local_solution->el(pin_dof));
     }
   }
 #endif
@@ -1604,8 +1648,27 @@ void LibMeshPDEBase::calcAux_jacobian_state(libMesh::SparseMatrix<libMesh::Numbe
   return;
 #endif
 
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_INT_CONSTR
+  AutoPtr<FEBase> fe_vol(FEBase::build(dim, fe_type));  // surface object
+  QGauss quad_vol(dim, lm_Num_quadrature_order_);
+  fe_vol->attach_quadrature_rule (&quad_vol);
+  const std::vector<std::vector<Real> >&  phi_vol = fe_vol->get_phi();
+  const std::vector<Real>& JxW_vol = fe_vol->get_JxW();
+#endif
+
   for ( ; itCurEl != itEndEl; ++itCurEl) {
     const Elem* CurElem = *itCurEl;
+
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_INT_CONSTR
+    fe_vol->reinit(CurElem);
+    dof_map.dof_indices(CurElem, dof_indices);   // setup local->global mapping in form of array
+	  for (unsigned int qp=0; qp<quad_vol.n_points(); qp++) {
+      for (unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
+          jac_aux_state_->add(GetPinConstrIdx(),dof_indices[inode],JxW_vol[qp]*phi_vol[inode][qp]);
+        }
+      }
+#endif    
+    
     for (unsigned int side=0; side<CurElem->n_sides(); side++) {
       if (CurElem->neighbor(side) == NULL) {
         AutoPtr<Elem> Side = CurElem->build_side(side);
