@@ -127,19 +127,15 @@ int main (int argc, char** argv)
       libMesh::NumericVector<lm_Number>* aux_constr;
       pLibMeshPDE->calcAux_constr(aux_constr);
       int low, high;
-      pLibMeshPDE->GetAuxConstrIneqIdx(&low, &high);
-      double MaxFact = 0.0, CurFact;
-      for( int iIneq=low; iIneq<high; iIneq++) {
+      pLibMeshPDE->GetLocalIneqIdx(&low, &high);
+      double LocMaxFact(0.0), CurFact, GlobMaxFact(0.0);
+      for( int iIneq=low; iIneq<=high; iIneq++) {
         CurFact = aux_constr_l->el(iIneq)/aux_constr->el(iIneq);
-        if(CurFact>MaxFact)
-          MaxFact = CurFact;
-      }      
-/*
-      lm_Number MaxLowBd = aux_constr_l->max();
-      lm_Number MinAuxConstr = aux_constr->min();
-      lm_Number fact = sqrt(MaxLowBd/MinAuxConstr);
-*/
-      double fact = sqrt(MaxFact);
+        if(CurFact>LocMaxFact)
+          LocMaxFact = CurFact;
+      }
+      MPI_Allreduce(&LocMaxFact,&GlobMaxFact,1,MPI_DOUBLE,MPI_MAX,MPI_COMM_WORLD);
+      double fact = sqrt(GlobMaxFact);
       fact = 2*fact;
       printf("Scaling simulation solution with fact = %e\n", fact);
       if (1) //fact>0.9)

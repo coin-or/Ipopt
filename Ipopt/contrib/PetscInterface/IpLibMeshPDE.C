@@ -45,18 +45,18 @@ int GetProcID();
 
 #ifdef EXHAUST_AS_CONTROL   // Only Neumann boundary conditions -> action required (int_Omega Phi = 0)
 // Add integral constraint to last line (-> Peak)
-//#define MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_PIN_LINE
+//#define MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_TO_CONSTR
 //// Add integral constraint as extra constraint
 ////#define MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_INT_CONSTR
 // Add constraint to pin down Phi at a certain point in the equation system (-> Peak)
-//#define MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_FIRST_LINE
+//#define MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_TO_CONSTR
 // Add extra auxiliary constraint to pin down Phi at a certain point (-> restauration phase)
 #define MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_PIN_CONSTR
 #endif
 
-//#define MY_DBG_PRINT(s) {std::cout << GetProcID() << __FILE__ << ":" << __LINE__ <<":" << s << std::endl;}
+#define MY_DBG_PRINT(s) {std::cout << GetProcID() << __FILE__ << ":" << __LINE__ <<":" << s << std::endl;}
 //#define MY_DBG_PRINT(s) {std::cout << GetProcID() << ":" << s << std::endl;}
-#define MY_DBG_PRINT(s) {}
+//#define MY_DBG_PRINT(s) {}
 
 using namespace libMesh;
 
@@ -376,6 +376,30 @@ void LibMeshPDEBase::DetroySelfOwnedLibMeshPetscVector(NumericVector<Number>*& v
   vector = NULL;
 }
 
+int LibMeshPDEBase::GetPinNodeDof(bool* bLocal/*=NULL*/)
+{
+  unsigned int pin_dof = mesh_.node(pin_down_node_).dof_number(0, 0, 0);
+  if(bLocal)
+    *bLocal = ( (pin_dof>=getImplicitSystem().current_local_solution->first_local_index()) && (pin_dof<=getImplicitSystem().current_local_solution->last_local_index()) );
+  return pin_dof;
+}
+
+int LibMeshPDEBase::GetPinConstrIdx()
+{
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_PIN_CONSTR
+  bool bLocal;
+  GetPinNodeDof(&bLocal);
+  assert(bLocal); // should only be called from owner of pined node
+  return lm_aux_constr_vec_->last_local_index()-1;
+#endif
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_TO_CONSTR
+  return GetPinNodeDof();
+#endif
+  assert(false);
+  return 0;
+}
+
+
 // call this to transfor control vector data (e.g., from Ipopt) to the PG_ data structure that is used in assembly function
 void LibMeshPDEBase::ConvertControl2PGData()
 {
@@ -502,7 +526,8 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
   std::vector<Number> LocalSolution;   // solution values of current element
   MeshBase::const_element_iterator itCurEl = mesh.active_local_elements_begin();
   const MeshBase::const_element_iterator itEndEl = mesh.active_local_elements_end();
-  unsigned int pin_dof = mesh.node(pin_down_node_).dof_number(0, 0, 0);
+  bool bPinDofLocal(false);
+  unsigned int pin_dof = GetPinNodeDof(&bPinDofLocal);
   double ElemIntSol;
   for ( ; itCurEl != itEndEl; ++itCurEl) {
     ElemIntSol = 0.0;
@@ -580,16 +605,20 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
     }
     dof_map.constrain_element_vector(ElemRes, dof_indices); // Add constrains for hanging nodes (refinement)
     lm_pde_residual_vec_->add_vector(ElemRes, dof_indices);
-#ifdef MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_PIN_LINE
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_TO_CONSTR
     lm_pde_residual_vec_->add(pin_dof,ElemIntSol);
-#endif // MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_PIN_LINE
+#endif // MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_TO_CONSTR
   }
   
-#ifdef MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_FIRST_LINE
-  if(GetProcID()==0) {
-    lm_pde_residual_vec_->add(pin_dof,system.current_local_solution->el(pin_dof));
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_TO_CONSTR
+  {
+    bool bPinDofLocal(false);
+    unsigned int pin_dof = GetPinNodeDof(&bPinDofLocal);
+    if(bPinDofLocal) {
+      lm_pde_residual_vec_->add(pin_dof,system.current_local_solution->el(pin_dof));
+    }
   }
-#endif //MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_FIRST_LINE
+#endif //MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_TO_CONSTR
 
   lm_pde_residual_vec_->close();
   residual = lm_pde_residual_vec_;
@@ -897,18 +926,22 @@ void LibMeshPDEBase::assemble_Phi_PDE(EquationSystems& es, const std::string& sy
 
     dof_map.constrain_element_matrix(ElemMat, dof_indices); // Add constrains for hanging nodes (refinement)
     system.matrix->add_matrix(ElemMat, dof_indices);
-#ifdef MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_PIN_LINE
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_TO_CONSTR
     //lm_pde_residual_vec_->add(pin_dof,ElemIntSol);
     for(unsigned int i=0;i<dof_indices.size();i++) {
       system.matrix->add(pin_dof,dof_indices[i],IntConstrDer[i]);
     }
 #endif
   }
-#ifdef MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_FIRST_LINE
-  if(GetProcID()==0) {
-    system.matrix->add(pin_dof,pin_dof,1.0);
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_TO_CONSTR
+  {
+    bool bPinDofLocal(false);
+    unsigned int pin_dof = pData->GetPinNodeDof(&bPinDofLocal);
+    if(bPinDofLocal) {
+      system.matrix->add(pin_dof,pin_dof,1.0);
+    }
   }
-#endif //MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_FIRST_LINE
+#endif //MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_TO_CONSTR
   MY_DBG_PRINT( "LibMeshPDEBase::assemble_Phi_PDE finished" );
 }
 
@@ -940,12 +973,6 @@ void LibMeshPDEBase::calc_hessians(Number sigma, libMesh::DenseVector<Number>& l
   std::vector<unsigned int> dof_indices;  // mapping local index -> global index
   MeshBase::const_element_iterator itCurEl = mesh.active_local_elements_begin();
   const MeshBase::const_element_iterator itEndEl = mesh.active_local_elements_end();
-
-#ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_PIN_CONSTR
-  if(GetProcID()==0) {
-    i_aux_constr++;
-  }
-#endif
 
   for ( ; itCurEl != itEndEl; ++itCurEl) {
     const Elem* CurElem = *itCurEl;
@@ -1045,20 +1072,27 @@ void LibMeshPDEBase::get_bounds(libMesh::NumericVector<libMesh::Number>& state_l
   }
   aux_constr_u = Inf;
 #ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_PIN_CONSTR
-  aux_constr_l.set(0,0.0);
-  aux_constr_u.set(0,0.0);
+  bool bLocal;
+  GetPinNodeDof(&bLocal);
+  if(bLocal) {
+    aux_constr_l.set(GetPinConstrIdx(),0.0);
+    aux_constr_u.set(GetPinConstrIdx(),0.0);
+  }
 #endif
   MY_DBG_PRINT( "LibMeshPDE::get_bounds finished" );
 }
 
-void LibMeshPDEBase::GetAuxConstrIneqIdx(int* low, int* high)
+void LibMeshPDEBase::GetLocalIneqIdx(int* low, int* high)
 {
   assert(low);
   assert(high);
-  *low = 0;
-  *high= lm_aux_constr_vec_->size();
+  *low = lm_aux_constr_vec_->first_local_index();
+  *high= lm_aux_constr_vec_->last_local_index()-1;
 #ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_PIN_CONSTR
-  *low = 1;
+  bool bLocal;
+  GetPinNodeDof(&bLocal);
+  if(bLocal)
+    *high-=1;
 #endif
 }
 
@@ -1399,12 +1433,6 @@ void LibMeshPDEBase::InitAuxConstr(int *plocal, int *pglobal, std::list<Number>*
   first_aux_constr_=0;
   assert(plocal);
   (*plocal) = 0;
-#ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_PIN_CONSTR
-  if(GetProcID()==0) {
-    (*plocal)++;    // Extra constraint (Phi_0 = 0) will be first constraint on proc 0
-    pFactList->push_back(1.0);  // to be constistent
-  }
-#endif
   MeshBase::const_element_iterator itCurEl = mesh_.active_local_elements_begin();
   const MeshBase::const_element_iterator itEndEl = mesh_.active_local_elements_end();
   for ( ; itCurEl != itEndEl; ++itCurEl) {
@@ -1435,10 +1463,22 @@ void LibMeshPDEBase::InitAuxConstr(int *plocal, int *pglobal, std::list<Number>*
       }
     }
   }
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_PIN_CONSTR
+  {
+    bool bLocal;
+    GetPinNodeDof(&bLocal);
+    if(bLocal) {
+      (*plocal)++;    // Extra constraint (Phi_0 = 0) will be last aux constraint on the proc, which own Node to pin down solution
+      pFactList->push_back(1.0);  // to be constistent
+    }
+  }
+#endif
+
 #ifdef ENABLE_NO_EQUPMENT
   if((*plocal)<1)
     (*plocal)=1;
 #endif
+
   assert(pglobal);
   MPI_Allreduce ( plocal, pglobal, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD );
   MPI_Scan(plocal,&first_aux_constr_,1,MPI_INT,MPI_SUM,MPI_COMM_WORLD);
@@ -1464,12 +1504,6 @@ void LibMeshPDEBase::calcAux_constr(libMesh::NumericVector<libMesh::Number>*& co
   MeshBase::const_element_iterator itCurEl = mesh_.active_local_elements_begin();
   const MeshBase::const_element_iterator itEndEl = mesh_.active_local_elements_end();
   RealGradient CurGrad;
-#ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_PIN_CONSTR
-  if(GetProcID()==0) {
-    unsigned int pin_dof = mesh_.node(pin_down_node_).dof_number(0, 0, 0);
-    lm_aux_constr_vec_->set(i_aux_constr++,system.current_local_solution->el(pin_dof));
-  }
-#endif
 #ifdef ENABLE_NO_EQUPMENT
   lm_aux_constr_vec_->close();
   constr = lm_aux_constr_vec_;
@@ -1521,6 +1555,15 @@ void LibMeshPDEBase::calcAux_constr(libMesh::NumericVector<libMesh::Number>*& co
       }
     }
   }
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_PIN_CONSTR
+  {
+    bool bLocal;
+    unsigned int pin_dof = GetPinNodeDof(&bLocal);
+    if(bLocal) {
+      lm_aux_constr_vec_->set(GetPinConstrIdx(),system.current_local_solution->el(pin_dof));
+    }
+  }
+#endif
   lm_aux_constr_vec_->close();
   constr = lm_aux_constr_vec_;
   MY_DBG_PRINT( "LibMeshPDEBase::calcAux_constr finished" );
@@ -1554,12 +1597,6 @@ void LibMeshPDEBase::calcAux_jacobian_state(libMesh::SparseMatrix<libMesh::Numbe
   MeshBase::const_element_iterator itCurEl = mesh.active_local_elements_begin();
   const MeshBase::const_element_iterator itEndEl = mesh.active_local_elements_end();
 
-#ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_PIN_CONSTR
-  if(GetProcID()==0) {
-    unsigned int pin_dof = mesh.node(pin_down_node_).dof_number(0, 0, 0);
-    jac_aux_state_->add(i_aux_constr++,pin_dof,1.0);
-  }
-#endif
 #ifdef ENABLE_NO_EQUPMENT
   jac_aux_state_->close();
   jac_state = jac_aux_state_;
@@ -1622,6 +1659,14 @@ void LibMeshPDEBase::calcAux_jacobian_state(libMesh::SparseMatrix<libMesh::Numbe
       }
     }
   }
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_PIN_CONSTR
+  bool bLocal;
+  unsigned int pin_dof = GetPinNodeDof(&bLocal);
+  if(bLocal) {
+    jac_aux_state_->add(GetPinConstrIdx(),pin_dof,1.0);
+  }
+#endif
+  
   jac_aux_state_->close();
   jac_state = jac_aux_state_;
   MY_DBG_PRINT( "LibMeshPDEBase::calcAux_jacobian_state finished" );
@@ -1827,7 +1872,7 @@ double LibMeshPDEBase::CalcL2Diff(libMesh::NumericVector<libMesh::Number>* CompF
   const std::vector<std::vector<Real> >& phi = fe->get_phi();
   const std::vector<Point>& xyz = fe->get_xyz();
 //  DenseVector<Number> ElemRes;
-  double L2DistSqr = 0.0;
+  double LocL2DistSqr(0.0), GlobL2DistSqr(0.0);
   std::vector<unsigned int> dof_indices; // mapping local index -> global index
   MeshBase::const_element_iterator itCurEl = mesh.active_local_elements_begin();
   const MeshBase::const_element_iterator itEndEl = mesh.active_local_elements_end();
@@ -1843,10 +1888,13 @@ double LibMeshPDEBase::CalcL2Diff(libMesh::NumericVector<libMesh::Number>* CompF
       double AnaVal = 0.0;
       for (i=0; i<phi.size(); i++)
         AnaVal += phi[i][qp]*CompFunc->el(dof_indices[i]);
-      L2DistSqr += JxW[qp]*(SolVal-AnaVal)*(SolVal-AnaVal);
+      LocL2DistSqr += JxW[qp]*(SolVal-AnaVal)*(SolVal-AnaVal);
     }
   }
-  return sqrt(L2DistSqr);
+  
+  MPI_Allreduce(&LocL2DistSqr,&GlobL2DistSqr, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+
   MY_DBG_PRINT("LibMeshPDEBase::CalcL2Diff finished");
+  return sqrt(GlobL2DistSqr);
 }
 
