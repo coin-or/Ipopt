@@ -158,7 +158,7 @@ public:
   void RefineMesh(int iter);
   bool simulation_mode_;
   double CalcL2Diff(libMesh::NumericVector<libMesh::Number>* jac_state);
-  void GetAuxConstrIneqIdx(int* low, int* high);
+  void GetLocalIneqIdx(int* low, int* high);
 protected:
   libMesh::SparseMatrix<libMesh::Number>* jac_control_;
   libMesh::SparseMatrix<libMesh::Number>* jac_aux_state_;
@@ -203,6 +203,9 @@ private:
   void operator=(const LibMeshPDEBase&);
   //@}
 
+  int GetPinNodeDof(bool* bLocal=NULL);
+  int GetPinConstrIdx();
+  
   /** Store the libMesh system */
   libMesh::EquationSystems* lm_eqn_sys_;
 
@@ -229,5 +232,6 @@ private:
   void clear_math_obj();
   const libMeshEnums::Order lm_Num_quadrature_order_;
   int pin_down_node_;
+  
 };
 #endif
