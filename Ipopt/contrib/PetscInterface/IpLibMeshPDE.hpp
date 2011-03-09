@@ -205,7 +205,8 @@ private:
 
   int GetPinNodeDof(bool* bLocal=NULL);
   int GetPinConstrIdx();
-  
+  void GetControlIdx(int* low, int* high);
+  int GetMassConservationConstrIdx();
   /** Store the libMesh system */
   libMesh::EquationSystems* lm_eqn_sys_;
 
@@ -232,6 +233,7 @@ private:
   void clear_math_obj();
   const libMeshEnums::Order lm_Num_quadrature_order_;
   int pin_down_node_;
-  
+  int pin_down_constr_;
+  int mass_conservation_constr_;
 };
 #endif
