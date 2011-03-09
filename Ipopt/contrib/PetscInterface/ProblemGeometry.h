@@ -109,6 +109,14 @@ public:
 			   _TDirichletCoef(TDirC), _TNeumannCoef(TNeumC), _TRhs(TRhsVal), _min(min), _max(max)
   {}
   virtual void print() { std::cout << _PhiDirichletCoef << " " << _PhiNeumannCoef << " " << _min[0] << " " << _max[0] << " " << _min[1] << " " << _max[1] << " " << _min[2] << " " << _max[2] << " " <<  _PhiRhsScale << " " << _TDirichletCoef << " " << _TNeumannCoef << " " << _TRhs << std::endl; }
+  double Area()
+  {
+    double rv = 1.0;
+    for(int idim=0; idim<_min.size();idim++)
+      if(_max[idim]-_min[idim]>1e-8)
+        rv *=(_max[idim]-_min[idim]);
+    return rv;
+  }
 };
 
 //std::ostream& operator << (std::ostream& os, const BoundaryCondition& BC);
