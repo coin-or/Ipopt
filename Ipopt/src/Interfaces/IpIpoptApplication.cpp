@@ -818,28 +818,33 @@ namespace Ipopt
                      p2ip_data->iter_count());
 
       if (status!=INVALID_NUMBER_DETECTED) {
-        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
-                       "\n                                   (scaled)                 (unscaled)\n");
-        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
-                       "Objective...............: %24.16e  %24.16e\n",
-                       p2ip_cq->curr_f(),
-                       p2ip_cq->unscaled_curr_f());
-        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
-                       "Dual infeasibility......: %24.16e  %24.16e\n",
-                       p2ip_cq->curr_dual_infeasibility(NORM_MAX),
-                       p2ip_cq->unscaled_curr_dual_infeasibility(NORM_MAX));
-        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
-                       "Constraint violation....: %24.16e  %24.16e\n",
-                       p2ip_cq->curr_nlp_constraint_violation(NORM_MAX),
-                       p2ip_cq->unscaled_curr_nlp_constraint_violation(NORM_MAX));
-        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
-                       "Complementarity.........: %24.16e  %24.16e\n",
-                       p2ip_cq->curr_complementarity(0., NORM_MAX),
-                       p2ip_cq->unscaled_curr_complementarity(0., NORM_MAX));
-        jnlst_->Printf(J_SUMMARY, J_SOLUTION,
-                       "Overall NLP error.......: %24.16e  %24.16e\n\n",
-                       p2ip_cq->curr_nlp_error(),
-                       p2ip_cq->unscaled_curr_nlp_error());
+        try {
+          jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                         "\n                                   (scaled)                 (unscaled)\n");
+          jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                         "Objective...............: %24.16e  %24.16e\n",
+                         p2ip_cq->curr_f(),
+                         p2ip_cq->unscaled_curr_f());
+          jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                         "Dual infeasibility......: %24.16e  %24.16e\n",
+                         p2ip_cq->curr_dual_infeasibility(NORM_MAX),
+                         p2ip_cq->unscaled_curr_dual_infeasibility(NORM_MAX));
+          jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                         "Constraint violation....: %24.16e  %24.16e\n",
+                         p2ip_cq->curr_nlp_constraint_violation(NORM_MAX),
+                         p2ip_cq->unscaled_curr_nlp_constraint_violation(NORM_MAX));
+          jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                         "Complementarity.........: %24.16e  %24.16e\n",
+                         p2ip_cq->curr_complementarity(0., NORM_MAX),
+                         p2ip_cq->unscaled_curr_complementarity(0., NORM_MAX));
+         jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+                         "Overall NLP error.......: %24.16e  %24.16e\n\n",
+                         p2ip_cq->curr_nlp_error(),
+                         p2ip_cq->unscaled_curr_nlp_error());
+        } catch (IpoptNLP::Eval_Error& exc) {
+          status = INVALID_NUMBER_DETECTED;
+          exc.ReportException(*jnlst_, J_ERROR);
+        }
       }
 
       p2ip_data->curr()->x()->Print(*jnlst_, J_VECTOR, J_SOLUTION, "x");
