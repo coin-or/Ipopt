@@ -87,7 +87,8 @@ LibMeshPDEBase::LibMeshPDEBase() :
     min_airflow(1.0),
     first_aux_constr_(0),
     lm_Num_quadrature_order_(NINTH),
-    pin_down_node_(-1)
+    pin_down_node_(-1),
+    henderson_value_(0.0001)
 {}
 
 // clear all matrices and vectors, but not problem geomatry data
@@ -272,7 +273,7 @@ void LibMeshPDEBase::reinit()
     Vec petsc_vec;
     ierr = VecCreateMPI(PETSC_COMM_WORLD,n_control_local,PETSC_DETERMINE,&petsc_vec);
     CHKERRV(ierr);
-    lm_control_vec_ = new PetscVector<Number>::PetscVector(petsc_vec);
+    lm_control_vec_ = new PetscVector<Number>(petsc_vec);
     *lm_control_vec_ = 1.0;
     lm_control_vec_->close();
   }
@@ -281,13 +282,13 @@ void LibMeshPDEBase::reinit()
     Mat petsc_mat;
     ierr = MatCreateMPIAIJ(PETSC_COMM_WORLD,m_pde_constr_local,n_control_local,PETSC_DETERMINE,PETSC_DETERMINE,64,PETSC_NULL,16,PETSC_NULL,&petsc_mat); // alloc 64 entries per row on diagonal block and 16 on the off-diagonal block
     CHKERRV(ierr);
-    jac_control_ = new PetscMatrix<Number>::PetscMatrix(petsc_mat);
+    jac_control_ = new PetscMatrix<Number>(petsc_mat);
   }
   {
     Vec petsc_vec;
     ierr = VecCreateMPI(PETSC_COMM_WORLD,m_pde_constr_local,PETSC_DETERMINE,&petsc_vec);
     CHKERRV(ierr);
-    lm_pde_residual_vec_ = new PetscVector<Number>::PetscVector(petsc_vec);
+    lm_pde_residual_vec_ = new PetscVector<Number>(petsc_vec);
     lm_pde_residual_vec_->close();
   }
   //  lm_pde_residual_vec_ = new PetscVector<Number>::PetscVector(m_pde_constr_global,m_pde_constr_local);
@@ -299,7 +300,7 @@ void LibMeshPDEBase::reinit()
     Vec petsc_vec;
     ierr = VecCreateMPI(PETSC_COMM_WORLD,m_aux_constr_local,PETSC_DETERMINE,&petsc_vec);
     CHKERRV(ierr);
-    lm_aux_constr_vec_ = new PetscVector<Number>::PetscVector(petsc_vec);
+    lm_aux_constr_vec_ = new PetscVector<Number>(petsc_vec);
     lm_aux_constr_vec_->close();
 
     // constrains boundaries
@@ -320,7 +321,7 @@ void LibMeshPDEBase::reinit()
     }
 #endif
     VecRestoreArray(petsc_vec1,&Vals);
-    lm_aux_constr_vec_low_bd_ = new PetscVector<Number>::PetscVector(petsc_vec1);
+    lm_aux_constr_vec_low_bd_ = new PetscVector<Number>(petsc_vec1);
     lm_aux_constr_vec_low_bd_->close();
   }
   //lm_aux_constr_vec_ = new PetscVector<Number>::PetscVector(m_aux_constr_global,m_aux_constr_local);
@@ -329,7 +330,7 @@ void LibMeshPDEBase::reinit()
     Mat petsc_mat;
     MatCreateMPIAIJ(PETSC_COMM_WORLD,m_aux_constr_local,n_state_local,m_aux_constr_global,n_state_global,64,PETSC_NULL,16,PETSC_NULL,&petsc_mat); // alloc 64 entries per row on diagonal block and 16 on the off-diagonal block
     //MatCreateSeqAIJ(PETSC_COMM_SELF,m_aux_constr_local,n_state_global,4,PETSC_NULL,&petsc_mat);
-    jac_aux_state_ = new PetscMatrix<Number>::PetscMatrix(petsc_mat);
+    jac_aux_state_ = new PetscMatrix<Number>(petsc_mat);
   }
   {
     Mat petsc_mat;
@@ -657,7 +658,7 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
   int first = lm_pde_residual_vec_->first_local_index();
   int last = lm_pde_residual_vec_->last_local_index();
   for(int i=first;i<last;i++) {
-    lm_pde_residual_vec_->add(i,DummyControl);
+    lm_pde_residual_vec_->add(i,henderson_value_*DummyControl);
   }
 #endif
 
@@ -853,7 +854,7 @@ void LibMeshPDEBase::calcPDE_jacobian_control(libMesh::SparseMatrix<libMesh::Num
 #ifdef MAKE_PDE_WELLPOSED_STRATEGY_HENDERSON
   {
     for(int i=jac_control_->row_start();i<jac_control_->row_stop();i++) {
-        jac_control_->add(i,getControlVector().size()-1,1.0);
+        jac_control_->add(i,getControlVector().size()-1,henderson_value_);
     }
   }
 #endif
@@ -1762,7 +1763,7 @@ void LibMeshPDEBase::calcAux_constr(libMesh::NumericVector<libMesh::Number>*& co
     MPI_Allreduce(&tmp,&DummyControl,1,MPI_DOUBLE,MPI_SUM,MPI_COMM_WORLD);
     globsum -= DummyControl;
     if(0==GetProcID()) {
-      lm_aux_constr_vec_->add(GetPinConstrIdx(),globsum);
+      lm_aux_constr_vec_->add(GetPinConstrIdx(),henderson_value_*globsum);
     }
     // Mass conservation:
     if(0==GetProcID()) {
@@ -1909,7 +1910,7 @@ void LibMeshPDEBase::calcAux_jacobian_state(libMesh::SparseMatrix<libMesh::Numbe
   {
     if(0==GetProcID()) {
       for(int i=0;i<jac_aux_state_->n();i++) {
-        jac_aux_state_->add(GetPinConstrIdx(),i,1.0);
+        jac_aux_state_->add(GetPinConstrIdx(),i,henderson_value_);
       }
     }
   }
@@ -1949,7 +1950,7 @@ void LibMeshPDEBase::calcAux_jacobian_control(libMesh::SparseMatrix<libMesh::Num
 #ifdef MAKE_PDE_WELLPOSED_STRATEGY_HENDERSON
   {
     if(0==GetProcID()) {
-      jac_aux_control_->add(GetPinConstrIdx(),getControlVector().size()-1,-1.0);
+      jac_aux_control_->add(GetPinConstrIdx(),getControlVector().size()-1,-henderson_value_);
     }
 
     // Mass conservation:
