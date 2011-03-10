@@ -235,5 +235,6 @@ private:
   int pin_down_node_;
   int pin_down_constr_;
   int mass_conservation_constr_;
+  double henderson_value_;
 };
 #endif
