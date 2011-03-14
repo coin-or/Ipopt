@@ -382,10 +382,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="mkl_intel_c.lib mkl_intel_thread.lib mkl_core.lib libiomp5mt.lib"
 				ShowProgress="0"
 				OutputFile="$(OutDir)\$(ProjectName)39.dll"
-				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\ia32&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\ia32\lib&quot;"
+				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)\$(ProjectName)39.pdb"
 				GenerateMapFile="true"
@@ -463,10 +462,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="mkl_intel_lp64.lib mkl_intel_thread.lib mkl_core.lib libiomp5mt.lib"
 				ShowProgress="0"
 				OutputFile="$(OutDir)\$(ProjectName)39.dll"
-				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\intel64&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\em64t\lib&quot;"
+				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)\$(ProjectName)39.pdb"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"

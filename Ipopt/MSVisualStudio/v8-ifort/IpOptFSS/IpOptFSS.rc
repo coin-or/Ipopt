@@ -71,13 +71,13 @@ BEGIN
         BEGIN
             VALUE "Comments", "Source code of Ipopt can be found at http://www.coin-or.org/projects/Ipopt.xml"
             VALUE "CompanyName", "IBM"
-            VALUE "FileDescription", "Ipopt Dynamic Link Library"
+            VALUE "FileDescription", "Ipopt Fortran Solver Support DLL"
             VALUE "FileVersion", "3, 9, 2, 0"
-            VALUE "InternalName", "Ipopt"
+            VALUE "InternalName", "IpoptFSS"
             VALUE "LegalCopyright", "Copyright (C) 2008 International Business Machines and others."
             VALUE "LegalTrademarks", "All Rights Reserved. This code is published under the Eclipse Public License."
-            VALUE "OriginalFilename", " Ipopt39.dll"
-            VALUE "ProductName", "Ipopt Dynamic Link Library"
+            VALUE "OriginalFilename", " IpoptFSS.dll"
+            VALUE "ProductName", "Ipopt Fortran Solver Support DLL"
             VALUE "ProductVersion", "3, 9, 2, 0"
         END
     END

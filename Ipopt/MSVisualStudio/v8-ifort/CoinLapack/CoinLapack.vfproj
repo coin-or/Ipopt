@@ -69,85 +69,126 @@
 		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"/>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dgetf2.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dgetrf.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dgetrs.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\disnan.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlae2.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlaev2.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlaisnan.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\INSTALL\dlamch.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlanst.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlansy.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlapy2.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlarf.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlarfb.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlarfg.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlarft.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlartg.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlascl.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlaset.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlasr.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlasrt.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlassq.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlaswp.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dlatrd.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dorg2l.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dorg2r.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dorgql.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dorgqr.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dorgtr.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dpotf2.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dpotrf.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dpotrs.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dsteqr.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dsterf.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dsyev.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dsytd2.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dsytrd.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\ieeeck.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\iladlc.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\iladlr.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\ilaenv.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\iparmq.f">
+			<FileConfiguration Name="Release MKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="Release MKL|Win32" ExcludedFromBuild="true"/></File></Filter></Files>
 	<Globals/></VisualStudioProject>
