@@ -223,7 +223,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="C:\u\s\Supplier\ipopt\3.9\Win64x64\ipopt.lib"
 				OutputFile="$(OutDir)/hs071_cpp.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories=""
