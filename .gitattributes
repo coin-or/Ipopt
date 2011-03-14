@@ -19,6 +19,10 @@ Ipopt/MSVisualStudio/v8-ifort/IpOpt/IntelPaths.vsprops -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt/IpOpt.icproj -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt/IpOpt.rc -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt/IpOpt.vcproj -text
+Ipopt/MSVisualStudio/v8-ifort/IpOptFSS/Dummy.c -text
+Ipopt/MSVisualStudio/v8-ifort/IpOptFSS/IpOptFSS.rc -text
+Ipopt/MSVisualStudio/v8-ifort/IpOptFSS/IpoptFSS.def -text
+Ipopt/MSVisualStudio/v8-ifort/IpOptFSS/resource.h -text
 Ipopt/MSVisualStudio/v8-ifort/IpOptFor/IpOptFor.vfproj -text
 Ipopt/MSVisualStudio/v8-ifort/hs071_cpp/hs071_cpp.vcproj -text
 Ipopt/MSVisualStudio/v8-ifort/libhsl-no-MA57/libhsl-no-MA57.vfproj -text
