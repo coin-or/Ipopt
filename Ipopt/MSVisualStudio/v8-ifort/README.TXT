@@ -58,7 +58,9 @@ Here are the steps:
    
    Alternatively, you can use the C interface of Ipopt which is also exported by the DLL. 
 
-   
+To compile using MSVC 2010 using just the MSVC 2010 C++ compiler, you can follow the instructions 
+in Ipopt\README-LIB.txt.
+
 Author:  Marcel Roelofs (Marcel.Roelofs at aimms.com)
 	 Paragon Decision Technology 
 	 2009-10-25
