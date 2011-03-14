@@ -21,6 +21,7 @@ Ipopt/MSVisualStudio/v8-ifort/IpOpt/IpOpt.rc -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt/IpOpt.vcproj -text
 Ipopt/MSVisualStudio/v8-ifort/IpOptFSS/Dummy.c -text
 Ipopt/MSVisualStudio/v8-ifort/IpOptFSS/IpOptFSS.rc -text
+Ipopt/MSVisualStudio/v8-ifort/IpOptFSS/IpOptFSS.vcproj -text
 Ipopt/MSVisualStudio/v8-ifort/IpOptFSS/IpoptFSS.def -text
 Ipopt/MSVisualStudio/v8-ifort/IpOptFSS/resource.h -text
 Ipopt/MSVisualStudio/v8-ifort/IpOptFor/IpOptFor.vfproj -text
