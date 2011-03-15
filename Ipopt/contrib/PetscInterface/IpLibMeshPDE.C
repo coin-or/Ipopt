@@ -133,8 +133,8 @@ void LibMeshPDEBase::InitProblemData(std::istream& is)
   PG_.ReadFromStream(is);
   PG_.CreateMesh(&mesh_,PG_.GetFE_Degree());
 
-  WriteNodeFile(mesh_, "MeshGen.node");
-  WriteEleFile(mesh_, "MeshGen.ele");
+  //WriteNodeFile(mesh_, "MeshGen.node");
+  //WriteEleFile(mesh_, "MeshGen.ele");
 
   // find node id to pin down pde solution
   MeshBase::const_node_iterator CurNode = mesh_.local_nodes_begin();
@@ -1113,11 +1113,29 @@ void LibMeshPDEBase::get_bounds(libMesh::NumericVector<libMesh::Number>& state_l
     aux_constr_l = -100;
 #ifdef EXHAUST_AS_CONTROL
     if (GetProcID()==0) {
-      int iControl=PG_._AC.size();
+      double Inflow = 0.0;
+      for (int iAC=0;iAC<PG_._AC.size();++iAC) {
+        int BoundaryMarker = PG_._AC[iAC].BoundaryMarker[0];
+        BoundaryConditionSquarePhiRhs* pBC = dynamic_cast<BoundaryConditionSquarePhiRhs*>(PG_._BoundCond[BoundaryMarker]);
+        assert(pBC);
+        Inflow += lm_control_vec_->el(iAC)*pBC->Area()/pBC->_PhiNeumannCoef;
+      }      
+
+      double OutArea = 0.0;
       for (int iExh=0;iExh<PG_._Exh.size();++iExh) {
-	      control_l.set(iControl,-Inf);
-	      control_u.set(iControl,Inf);
-	      iControl++;
+        int BoundaryMarker = PG_._Exh[iExh].BoundaryMarker[0];
+        BoundaryConditionSquarePhiRhs* pBC = dynamic_cast<BoundaryConditionSquarePhiRhs*>(PG_._BoundCond[BoundaryMarker]);
+        assert(pBC);
+        OutArea += pBC->Area();
+      }
+      
+      for(int iCntrl=PG_._AC.size(), iExh=0; iCntrl<PG_._AC.size()+PG_._Exh.size();iCntrl++, iExh++) {
+        int BoundaryMarker = PG_._Exh[iExh].BoundaryMarker[0];
+        BoundaryConditionSquarePhiRhs* pBC = dynamic_cast<BoundaryConditionSquarePhiRhs*>(PG_._BoundCond[BoundaryMarker]);
+        assert(pBC);
+        double Val = pBC->Area()/(OutArea*pBC->_PhiNeumannCoef);
+	      control_l.set(iCntrl,Val);
+	      control_u.set(iCntrl,Val);
       }
     }
 #endif    
@@ -1145,22 +1163,20 @@ void LibMeshPDEBase::get_bounds(libMesh::NumericVector<libMesh::Number>& state_l
   }
 #endif
 #ifdef MAKE_PDE_WELLPOSED_STRATEGY_HENDERSON
-  for(int i=PG_._AC.size();i<PG_._AC.size()+PG_._Exh.size();i++) {
-    control_l.set(i,0);
-    control_u.set(i,Inf);
-  }
-
   aux_constr_l.set(GetPinConstrIdx(),0.0);
   aux_constr_u.set(GetPinConstrIdx(),0.0);
-  aux_constr_l.set(GetMassConservationConstrIdx(),0.0);
-  aux_constr_u.set(GetMassConservationConstrIdx(),0.0);
   if(simulation_mode_) {
-    control_l.set(lm_control_vec_->size()-1,0);
-    control_u.set(lm_control_vec_->size()-1,0);
+    // Dummy control
+    control_l.set(lm_control_vec_->size()-1,-Inf);
+    control_u.set(lm_control_vec_->size()-1,Inf);
+    aux_constr_l.set(GetMassConservationConstrIdx(),-1e10);
+    aux_constr_u.set(GetMassConservationConstrIdx(),Inf);
   }
   else {
     control_l.set(lm_control_vec_->size()-1,-Inf);
     control_u.set(lm_control_vec_->size()-1,Inf);
+    aux_constr_l.set(GetMassConservationConstrIdx(),0.0);
+    aux_constr_u.set(GetMassConservationConstrIdx(),0.0);
   }
 #endif
 
@@ -1314,9 +1330,9 @@ void LibMeshPDEBase::Write2File( const std::string& pre_filename)
 
 #if 1
   filename = my_pre_filename + "StatePot.csv";
-  WritePotentialCSV(filename);
+  //WritePotentialCSV(filename);
 
-  WriteAirflowCSVs(my_pre_filename + "StateVolFlow.csv", my_pre_filename + "StateSurfFlow.csv");
+  //WriteAirflowCSVs(my_pre_filename + "StateVolFlow.csv", my_pre_filename + "StateSurfFlow.csv");
 
 //  WriteAirflowTKVs("VolFlow", "SurfFlow");
 #endif
