@@ -1655,11 +1655,12 @@ void LibMeshPDEBase::InitAuxConstr(int *plocal, int *pglobal, std::list<Number>*
   }
   else {
     pin_down_constr_ = 0;
+    mass_conservation_constr_= 0;
   }
   int tmp = pin_down_constr_;
   MPI_Allreduce(&tmp,&pin_down_constr_,1,MPI_INT,MPI_SUM,MPI_COMM_WORLD);
   tmp = mass_conservation_constr_;
-  MPI_Allreduce(&tmp,&mass_conservation_constr_,1,MPI_INT,MPI_SUM,MPI_COMM_WORLD);
+  MPI_Allreduce(&tmp,&mass_conservation_constr_,1,MPI_INT,MPI_MAX,MPI_COMM_WORLD);
 #endif
 
   MY_DBG_PRINT( "LibMeshPDEBase::InitAuxConstr finished" );
