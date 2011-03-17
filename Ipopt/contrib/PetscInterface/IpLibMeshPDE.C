@@ -47,11 +47,11 @@ int GetProcID();
 // Add integral constraint to last line (-> Peak)
 //#define MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_TO_CONSTR
 // Add integral constraint as extra constraint
-//#define MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_INT_CONSTR
+////#define MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_INT_CONSTR
 // Add constraint to pin down Phi at a certain point in the equation system (-> Peak)
 //#define MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_TO_CONSTR
 // Add extra auxiliary constraint to pin down Phi at a certain point (-> restauration phase)
-//#define MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_PIN_CONSTR
+////#define MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_PIN_CONSTR
 #define MAKE_PDE_WELLPOSED_STRATEGY_HENDERSON
 #endif
 
@@ -88,6 +88,8 @@ LibMeshPDEBase::LibMeshPDEBase() :
     first_aux_constr_(0),
     lm_Num_quadrature_order_(NINTH),
     pin_down_node_(-1),
+    pin_down_constr_(-1),
+    mass_conservation_constr_(-1),
     henderson_value_(0.0001)
 {}
 
@@ -415,7 +417,7 @@ int LibMeshPDEBase::GetPinConstrIdx()
 
 int LibMeshPDEBase::GetMassConservationConstrIdx()
 {
-#ifdef MAKE_PDE_WELLPOSED_STRATEGY_HENDERSON
+#if defined(MAKE_PDE_WELLPOSED_STRATEGY_HENDERSON) || defined(MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_TO_CONSTR) || defined(MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_TO_CONSTR)
   return mass_conservation_constr_;
 #endif
   assert(false);
@@ -1120,7 +1122,6 @@ void LibMeshPDEBase::get_bounds(libMesh::NumericVector<libMesh::Number>& state_l
         assert(pBC);
         Inflow += lm_control_vec_->el(iAC)*pBC->Area()/pBC->_PhiNeumannCoef;
       }      
-
       double OutArea = 0.0;
       for (int iExh=0;iExh<PG_._Exh.size();++iExh) {
         int BoundaryMarker = PG_._Exh[iExh].BoundaryMarker[0];
@@ -1129,13 +1130,15 @@ void LibMeshPDEBase::get_bounds(libMesh::NumericVector<libMesh::Number>& state_l
         OutArea += pBC->Area();
       }
       
+      double tmp(0.0);
       for(int iCntrl=PG_._AC.size(), iExh=0; iCntrl<PG_._AC.size()+PG_._Exh.size();iCntrl++, iExh++) {
         int BoundaryMarker = PG_._Exh[iExh].BoundaryMarker[0];
         BoundaryConditionSquarePhiRhs* pBC = dynamic_cast<BoundaryConditionSquarePhiRhs*>(PG_._BoundCond[BoundaryMarker]);
         assert(pBC);
-        double Val = pBC->Area()/(OutArea*pBC->_PhiNeumannCoef);
+        double Val = -Inflow/(OutArea*pBC->_PhiNeumannCoef);
 	      control_l.set(iCntrl,Val);
 	      control_u.set(iCntrl,Val);
+        tmp += Val;
       }
     }
 #endif    
@@ -1160,6 +1163,16 @@ void LibMeshPDEBase::get_bounds(libMesh::NumericVector<libMesh::Number>& state_l
   if(bLocal) {
     aux_constr_l.set(GetPinConstrIdx(),0.0);
     aux_constr_u.set(GetPinConstrIdx(),0.0);
+  }
+#endif
+#if defined(MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_TO_CONSTR) || defined(MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_TO_CONSTR)
+  if(simulation_mode_) {
+    aux_constr_l.set(GetMassConservationConstrIdx(),-1e10);
+    aux_constr_u.set(GetMassConservationConstrIdx(),Inf);
+  }
+  else {
+    aux_constr_l.set(GetMassConservationConstrIdx(),0.0);
+    aux_constr_u.set(GetMassConservationConstrIdx(),0.0);
   }
 #endif
 #ifdef MAKE_PDE_WELLPOSED_STRATEGY_HENDERSON
@@ -1189,19 +1202,51 @@ void LibMeshPDEBase::get_bounds(libMesh::NumericVector<libMesh::Number>& state_l
   MY_DBG_PRINT( "LibMeshPDE::get_bounds finished" );
 }
 
+bool LibMeshPDEBase::IsLocalIneqIdx(int Idx)
+{
+  // not local
+  if(Idx<lm_aux_constr_vec_->first_local_index())
+    return false;
+  if(Idx>=lm_aux_constr_vec_->last_local_index())
+    return false;
+  // not an inequality
+  if(Idx==mass_conservation_constr_)
+    return false;
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_PIN_CONSTR
+  bool bLocal;
+  GetPinNodeDof(&bLocal);
+  if(bLocal && Idx==lm_aux_constr_vec_->last_local_index()-1)
+    return false;
+#endif
+#if defined(MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_INT_CONSTR)
+  if(Idx==lm_aux_constr_vec_->size()-1)
+    return false;
+#endif
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_HENDERSON
+  if(Idx>=lm_aux_constr_vec_->size()-2)
+    return false;
+#endif
+  return true;
+}
+
+/*
 void LibMeshPDEBase::GetLocalIneqIdx(int* low, int* high)
 {
   assert(low);
   assert(high);
   *low = lm_aux_constr_vec_->first_local_index();
   *high= lm_aux_constr_vec_->last_local_index()-1;
+#ifdef MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_TO_CONSTR
+  if(*high==lm_aux_constr_vec_->size()-1)
+    (*high)-=1;
+#endif
 #ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_PIN_CONSTR
   bool bLocal;
   GetPinNodeDof(&bLocal);
   if(bLocal)
     (*high)--;
 #endif
-#ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_INT_CONSTR
+#if defined(MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_INT_CONSTR) || defined(MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_TO_CONSTR)
   if(*high==lm_aux_constr_vec_->size()-1)
     (*high)--;
 #endif
@@ -1210,6 +1255,7 @@ void LibMeshPDEBase::GetLocalIneqIdx(int* low, int* high)
     (*high)-=2;
 #endif
 }
+*/
 
 void LibMeshPDEBase::
 get_starting_point(libMesh::NumericVector<libMesh::Number>& state,
@@ -1330,7 +1376,7 @@ void LibMeshPDEBase::Write2File( const std::string& pre_filename)
 
 #if 1
   filename = my_pre_filename + "StatePot.csv";
-  //WritePotentialCSV(filename);
+  WritePotentialCSV(filename);
 
   //WriteAirflowCSVs(my_pre_filename + "StateVolFlow.csv", my_pre_filename + "StateSurfFlow.csv");
 
@@ -1618,6 +1664,16 @@ void LibMeshPDEBase::InitAuxConstr(int *plocal, int *pglobal, std::list<Number>*
   }
 #endif
 
+#if defined(MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_TO_CONSTR) || defined(MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_TO_CONSTR)
+  {
+    if(0==GetProcID()) {
+      bHaveExtraPinConstr = true;
+      (*plocal)+=1;    // Extra mass conservation constraint will be last aux constraint on the proc, which own Node to pin down solution
+      pFactList->push_back(1.0);  // to be constistent
+    }
+  }
+#endif
+
 #ifdef ENABLE_NO_EQUPMENT
   if((*plocal)<1)
     (*plocal)=1;
@@ -1647,6 +1703,16 @@ void LibMeshPDEBase::InitAuxConstr(int *plocal, int *pglobal, std::list<Number>*
   }
   int tmp = pin_down_constr_;
   MPI_Allreduce(&tmp,&pin_down_constr_,1,MPI_INT,MPI_SUM,MPI_COMM_WORLD);
+#endif
+#if defined(MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_TO_CONSTR) || defined(MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_TO_CONSTR)
+  if(bHaveExtraPinConstr) {
+    mass_conservation_constr_= last_aux_constr-1;
+  }
+  else {
+    mass_conservation_constr_= 0;
+  }
+  int tmp = mass_conservation_constr_;
+  MPI_Allreduce(&tmp,&mass_conservation_constr_,1,MPI_INT,MPI_MAX,MPI_COMM_WORLD);
 #endif
 #ifdef MAKE_PDE_WELLPOSED_STRATEGY_HENDERSON
   if(bHaveExtraPinConstr) {
@@ -1782,6 +1848,10 @@ void LibMeshPDEBase::calcAux_constr(libMesh::NumericVector<libMesh::Number>*& co
     if(0==GetProcID()) {
       lm_aux_constr_vec_->add(GetPinConstrIdx(),henderson_value_*globsum);
     }
+  }
+#endif
+#if defined(MAKE_PDE_WELLPOSED_STRATEGY_HENDERSON) || defined(MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_TO_CONSTR) || defined(MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_TO_CONSTR)
+  {
     // Mass conservation:
     if(0==GetProcID()) {
       double InOut(0.0);
@@ -1799,6 +1869,7 @@ void LibMeshPDEBase::calcAux_constr(libMesh::NumericVector<libMesh::Number>*& co
         InOut += pBC->_PhiRhsScale*pBC->Area()/pBC->_PhiNeumannCoef;
       }
       lm_aux_constr_vec_->add(GetMassConservationConstrIdx(),InOut);
+    std::cout << "Mass conservation:" << InOut << std::endl;
     }
   }
 #endif
@@ -1944,32 +2015,15 @@ void LibMeshPDEBase::calcAux_jacobian_control(libMesh::SparseMatrix<libMesh::Num
 #ifdef MAKE_PDE_WELLPOSED_STRATEGY_EXTRA_CONSTR_COLUMN
   jac_aux_control_->add(GetPinConstrIdx(),getControlVector().size()-1,-1.0);
 #endif
-#ifdef ADD_MASS_CONSERVATION_CONSTR
-  ConvertControl2PGData();
-  int MassConservConstr = GetMassConservationConstrIdx();
-  Point Dummy;
-  int iControl(0);
-  if(0==GetProcID()) {
-    for (int iAC=0;iAC<PG_._AC.size();++iAC) {
-      int BoundaryMarker = PG_._AC[iAC].BoundaryMarker[0];
-      BoundaryConditionSquarePhiRhs* pBC = dynamic_cast<BoundaryConditionSquarePhiRhs*>(PG_._BoundCond[BoundaryMarker]);
-      assert(pBC);
-      jac_aux_control_->add(MassConservConstr,iControl++,pBC->Area()/pBC->PhiNeumannCoef(Dummy));
-    }
-    for (int iExh=0;iExh<PG_._Exh.size();++iExh) {
-      int BoundaryMarker = PG_._Exh[iExh].BoundaryMarker[0];
-      BoundaryConditionSquarePhiRhs* pBC = dynamic_cast<BoundaryConditionSquarePhiRhs*>(PG_._BoundCond[BoundaryMarker]);
-      assert(pBC);
-      jac_aux_control_->add(MassConservConstr,iControl++,pBC->Area()/pBC->PhiNeumannCoef(Dummy));
-    }
-  }
-#endif
 #ifdef MAKE_PDE_WELLPOSED_STRATEGY_HENDERSON
   {
     if(0==GetProcID()) {
       jac_aux_control_->add(GetPinConstrIdx(),getControlVector().size()-1,-henderson_value_);
     }
-
+  }
+#endif
+#if defined(MAKE_PDE_WELLPOSED_STRATEGY_HENDERSON) || defined(MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_TO_CONSTR) || defined(MAKE_PDE_WELLPOSED_STRATEGY_ADD_PIN_TO_CONSTR)
+  {
     // Mass conservation:
     if(0==GetProcID()) {
       int iControl(0);

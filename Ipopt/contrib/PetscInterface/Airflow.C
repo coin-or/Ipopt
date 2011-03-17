@@ -126,13 +126,14 @@ int main (int argc, char** argv)
 
       libMesh::NumericVector<lm_Number>* aux_constr;
       pLibMeshPDE->calcAux_constr(aux_constr);
-      int low, high;
-      pLibMeshPDE->GetLocalIneqIdx(&low, &high);
       double LocMaxFact(0.0), CurFact, GlobMaxFact(0.0);
-      for( int iIneq=low; iIneq<=high; iIneq++) {
-        CurFact = aux_constr_l->el(iIneq)/aux_constr->el(iIneq);
-        if(CurFact>LocMaxFact)
-          LocMaxFact = CurFact;
+      for( int iAuxConstr=0; iAuxConstr<aux_constr->size(); iAuxConstr++) {
+        if(pLibMeshPDE->IsLocalIneqIdx(iAuxConstr))
+        {
+          CurFact = aux_constr_l->el(iAuxConstr)/aux_constr->el(iAuxConstr);
+          if(CurFact>LocMaxFact)
+            LocMaxFact = CurFact;
+        }
       }
       MPI_Allreduce(&LocMaxFact,&GlobMaxFact,1,MPI_DOUBLE,MPI_MAX,MPI_COMM_WORLD);
       double fact = sqrt(GlobMaxFact);

@@ -158,7 +158,8 @@ public:
   void RefineMesh(int iter);
   bool simulation_mode_;
   double CalcL2Diff(libMesh::NumericVector<libMesh::Number>* jac_state);
-  void GetLocalIneqIdx(int* low, int* high);
+  //void GetLocalIneqIdx(int* low, int* high);
+  bool IsLocalIneqIdx(int Idx);
 protected:
   libMesh::SparseMatrix<libMesh::Number>* jac_control_;
   libMesh::SparseMatrix<libMesh::Number>* jac_aux_state_;
