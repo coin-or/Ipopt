@@ -129,6 +129,10 @@ namespace Ipopt
     //@{
     Index pspike_bandwidth_;
     Number pspike_tol_;
+    // to control pspike
+    Index * pspike_info;
+    // 
+    Number bandwidth_cntrl;
     //@}
 
     /** @name Initialization flags */

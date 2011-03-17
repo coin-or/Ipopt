@@ -94,10 +94,15 @@ namespace Ipopt
     int bandwidth = 0;
     double tol = 0.0;
     int nrhs = 0;
-    int info = 0;
+    pspike_info = NULL;
+    pspike_info = new int[2];
+    pspike_info[0] = 0;
+    pspike_info[1] = 0;
+
+    bandwidth_cntrl = 1.0;
 
     int job = 0;
-    F77_FUNC(pspike,PSPIKE)(&job, &neqns, &nzmax, ia, ja, a, f, &bandwidth, &tol, &nrhs, &info);
+    F77_FUNC(pspike,PSPIKE)(&job, &neqns, &nzmax, ia, ja, a, f, &bandwidth, &tol, &nrhs, pspike_info);
   }
 
   IterativePspikeSolverInterface::~IterativePspikeSolverInterface()
@@ -105,6 +110,8 @@ namespace Ipopt
     DBG_START_METH("IterativePspikeSolverInterface::~IterativePspikeSolverInterface()",
                    dbg_verbosity);
     delete[] a_;
+    delete[] pspike_info;
+    pspike_info = NULL;
 
     if (initialized_) {
       int neqns = 0;
@@ -116,10 +123,9 @@ namespace Ipopt
       int bandwidth = 0;
       double tol = 0.0;
       int nrhs = 0;
-      int info = 0;
 
       int job = 4;
-      F77_FUNC(pspike,PSPIKE)(&job, &neqns, &nzmax, ia, ja, a, f, &bandwidth, &tol, &nrhs, &info);
+      F77_FUNC(pspike,PSPIKE)(&job, &neqns, &nzmax, ia, ja, a, f, &bandwidth, &tol, &nrhs, pspike_info);
       // Madan: Do we need to initialize again afterwards?
     }
   }
@@ -210,12 +216,11 @@ namespace Ipopt
       int bandwidth = 0;
       double tol = 0.0;
       int nrhs = 0;
-      int info = 0;
 
       int job = 4;
-      F77_FUNC(pspike,PSPIKE)(&job, &neqns, &nzmax, ia, ja, a, f, &bandwidth, &tol, &nrhs, &info);
+      F77_FUNC(pspike,PSPIKE)(&job, &neqns, &nzmax, ia, ja, a, f, &bandwidth, &tol, &nrhs, pspike_info);
       job = 0;
-      F77_FUNC(pspike,PSPIKE)(&job, &neqns, &nzmax, ia, ja, a, f, &bandwidth, &tol, &nrhs, &info);
+      F77_FUNC(pspike,PSPIKE)(&job, &neqns, &nzmax, ia, ja, a, f, &bandwidth, &tol, &nrhs, pspike_info);
       // Madan: Do we need to initialize again afterwards?
     }
 
@@ -339,7 +344,7 @@ namespace Ipopt
     DBG_START_METH("IterativePspikeSolverInterface::Factorization",dbg_verbosity);
 
     double tol = pspike_tol_;
-    int bandwidth = pspike_bandwidth_;
+    int bandwidth = (int) pspike_bandwidth_ * bandwidth_cntrl;
     int nzmax = 0;
 
     if (my_rank_==0) {
@@ -356,13 +361,12 @@ namespace Ipopt
 
       double * rhs_vals = NULL;
       int nrhs = 1;
-      int info = 0;
 
       a_ = GetValuesArrayPtr();
 
-	  if(!spectral_enabled) info = -2;
+	  if(!spectral_enabled) pspike_info[0] = -2;
 
-      F77_FUNC(pspike,PSPIKE)(&job, &dim_, &nzmax, ia, ja, a_, rhs_vals, &bandwidth, &tol, &nrhs, &info);
+      F77_FUNC(pspike,PSPIKE)(&job, &dim_, &nzmax, ia, ja, a_, rhs_vals, &bandwidth, &tol, &nrhs, pspike_info);
 	
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemSymbolicFactorization().End();
@@ -380,8 +384,7 @@ namespace Ipopt
 
     double * rhs_vals = NULL;
     int nrhs = 1;
-    int info = 0;
-    F77_FUNC(pspike,PSPIKE)(&job, &dim_, &nzmax, ia, ja, a_, rhs_vals, &bandwidth, &tol, &nrhs, &info);
+    F77_FUNC(pspike,PSPIKE)(&job, &dim_, &nzmax, ia, ja, a_, rhs_vals, &bandwidth, &tol, &nrhs, pspike_info);
 
     if (HaveIpData()) {
       IpData().TimingStats().LinearSystemFactorization().End();
@@ -445,7 +448,7 @@ namespace Ipopt
       ASSERT_EXCEPTION(retval, INTERNAL_ABORT, "tester->InitializeSolve(); returned false");
 
       double tol = pspike_tol_;
-      int bandwidth = pspike_bandwidth_;
+      int bandwidth = (int) pspike_bandwidth_ * bandwidth_cntrl;
       int nzmax = -1;
 
       if (my_rank_ == 0) {
@@ -457,10 +460,9 @@ namespace Ipopt
 
       // SOLVE in PSPIKE with job = 3
       int job = 3;
-      int info = 0;
-      F77_FUNC(pspike,PSPIKE)(&job, &N, &nzmax, ia, ja, a_, rhs_vals, &bandwidth, &tol, &NRHS, &info);
-      ERROR = info;
+      F77_FUNC(pspike,PSPIKE)(&job, &N, &nzmax, ia, ja, a_, rhs_vals, &bandwidth, &tol, &NRHS, pspike_info);
       attempts = max_attempts;
+      bandwidth_cntrl = 1.0;
       Index iterations_used = tester->GetSolverIterations();
       char buf[32];
       Snprintf(buf, 31, "it=%d ", iterations_used);
@@ -469,7 +471,17 @@ namespace Ipopt
 		have_symbolic_factorization_ = false;
 		spectral_enabled = true;
 	  }*/
-      
+	  if(pspike_info[1] < 0){
+	     ERROR = pspike_info[1];
+		 bandwidth_cntrl = bandwidth_cntrl + 0.5;
+         int bandwidth_up = (int) bandwidth * bandwidth_cntrl;
+	  	 Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                       "Iterative solver PSPIKE did not converge (ERROR = %d)\n", ERROR);
+
+         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                       "    Increasing bandwidth from %d to %d\n", bandwidth, bandwidth_up);
+	  }
+      ERROR = 0;
     }
     tester->Clear();
 
@@ -484,13 +496,13 @@ namespace Ipopt
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                      "Error in Pspike during solve phase.  ERROR = %d.\n", ERROR);
       return SYMSOLVER_FATAL_ERROR;
-    }
-
-    if (test_result_ == InexactData::MODIFY_HESSIAN) {
+      
+    }else if (test_result_ == InexactData::MODIFY_HESSIAN) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Termination tester requests modification of Hessian\n");
       return SYMSOLVER_WRONG_INERTIA;
     }
+#if 0    
     // FRANK: look at this:
     if (test_result_ == InexactData::CONTINUE) {
       if (InexData().compute_normal()) {
@@ -499,6 +511,7 @@ namespace Ipopt
         return SYMSOLVER_SINGULAR;
       }
     }
+#endif    
     if (test_result_ == InexactData::TEST_2_SATISFIED) {
       // Termination Test 2 is satisfied, set the step for the primal
       // iterates to zero

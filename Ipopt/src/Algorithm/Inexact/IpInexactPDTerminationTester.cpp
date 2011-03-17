@@ -469,9 +469,9 @@ namespace Ipopt
     const Number mu = IpData().curr_mu();
     rhs = 0.5*uWu;
     if (!compute_normal) {
-      lhs = tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*Upsilon;
+      lhs = tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*Upsilon*Upsilon;
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                     "  TCC2a testing 0.5*uWu(=%23.16e) >=\n                tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*Upsilon(=%23.16e) -->", rhs, lhs);
+                     "  TCC2a testing 0.5*uWu(=%23.16e) >=\n                tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*Upsilon*Upsilon(=%23.16e) -->", rhs, lhs);
     }
     else {
       lhs = tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*pow(u_norm_scaled, 2);
@@ -521,7 +521,7 @@ namespace Ipopt
     if (!compute_normal) {
       // Compute scaled norm of entire residual in case there is no step
       // decomposition.  In that case, c_plus_Ad_norm should indeed be
-      // the same as what resid_c and resid_d woulod give (TODO:
+      // the same as what resid_c and resid_d would give (TODO:
       // check?!?)
       Number resid_norm = sqrt(pow(rho_norm, 2) + pow(c_plus_Ad_norm, 2));
       lhs = resid_norm;
