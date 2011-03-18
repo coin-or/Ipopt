@@ -269,7 +269,7 @@ namespace Ipopt
     // do the solve
     ESymSolverStatus status = Solve(ia, ja, nrhs, rhs_vals);
 
-    if(status != SYMSOLVER_SUCCESS){
+    if(status == SYMSOLVER_FATAL_ERROR){
 	have_symbolic_factorization_ = false;
     	spectral_enabled = true;
 	ESymSolverStatus retval;
@@ -467,6 +467,16 @@ namespace Ipopt
       char buf[32];
       Snprintf(buf, 31, "it=%d ", iterations_used);
       IpData().Append_info_string(buf);
+
+	if (is_normal) {
+          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                         "Number of iterations in PSPIKE iterative solver for normal step = %d.\n", iterations_used);
+        }
+        else {
+          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                         "Number of iterations in PSPIKE iterative solver for PD step = %d.\n", iterations_used);
+        }
+
       /*if(IpData().iter_count() > 4) {
 		have_symbolic_factorization_ = false;
 		spectral_enabled = true;
@@ -500,6 +510,7 @@ namespace Ipopt
     }else if (test_result_ == InexactData::MODIFY_HESSIAN) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Termination tester requests modification of Hessian\n");
+      pspike_info[1] = -1;
       return SYMSOLVER_WRONG_INERTIA;
     }
 #if 0    

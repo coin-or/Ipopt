@@ -435,7 +435,7 @@ namespace Ipopt
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "  TT: Nu = ||A*u||^2/||A||^2 = %23.16e\n", Nu);
 
       // Compute Upsilon = ||u||^2 - Nu
-      Upsilon = u_norm_scaled - Nu;
+      Upsilon = u_norm_scaled*u_norm_scaled - Nu;
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "  TT: Upsilon = ||u||^2 - ||A*u||^2/||A||^2 = %23.16e\n", Upsilon);
     }
 
@@ -469,9 +469,9 @@ namespace Ipopt
     const Number mu = IpData().curr_mu();
     rhs = 0.5*uWu;
     if (!compute_normal) {
-      lhs = tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*Upsilon*Upsilon;
+      lhs = tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*Upsilon;
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                     "  TCC2a testing 0.5*uWu(=%23.16e) >=\n                tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*Upsilon*Upsilon(=%23.16e) -->", rhs, lhs);
+                     "  TCC2a testing 0.5*uWu(=%23.16e) >=\n                tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*Upsilon(=%23.16e) -->", rhs, lhs);
     }
     else {
       lhs = tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*pow(u_norm_scaled, 2);
