@@ -90,7 +90,8 @@ LibMeshPDEBase::LibMeshPDEBase() :
     pin_down_node_(-1),
     pin_down_constr_(-1),
     mass_conservation_constr_(-1),
-    henderson_value_(0.0001)
+    henderson_value_(1e0),
+    henderson_value_diag_(1e8)
 {}
 
 // clear all matrices and vectors, but not problem geomatry data
@@ -313,7 +314,6 @@ void LibMeshPDEBase::reinit()
     VecGetArray(petsc_vec1,&Vals);
 #ifdef SCALE_AUX_BOUNDS
     std::list<Number>::iterator it = LocIneqFactList.begin();
-    std::cout << "LocIneqFactList.size=" << LocIneqFactList.size() << std::endl;
     for ( unsigned int iVal=0; iVal<LocIneqFactList.size(); ++iVal, ++it) {
       Vals[iVal] = min_airflow * (*it);
     }
@@ -635,7 +635,7 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
     dof_map.constrain_element_vector(ElemRes, dof_indices); // Add constrains for hanging nodes (refinement)
     lm_pde_residual_vec_->add_vector(ElemRes, dof_indices);
 #ifdef MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_TO_CONSTR
-    lm_pde_residual_vec_->add(pin_dof,ElemIntSol);
+    lm_pde_residual_vec_->add(pin_dof,henderson_value_*ElemIntSol);
 #endif // MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_TO_CONSTR
   }
   
@@ -988,7 +988,7 @@ void LibMeshPDEBase::assemble_Phi_PDE(EquationSystems& es, const std::string& sy
 #ifdef MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_TO_CONSTR
     //lm_pde_residual_vec_->add(pin_dof,ElemIntSol);
     for(unsigned int i=0;i<dof_indices.size();i++) {
-      system.matrix->add(pin_dof,dof_indices[i],IntConstrDer[i]);
+      system.matrix->add(pin_dof,dof_indices[i],pData->henderson_value_*IntConstrDer[i]);
     }
 #endif
   }
@@ -1836,17 +1836,19 @@ void LibMeshPDEBase::calcAux_constr(libMesh::NumericVector<libMesh::Number>*& co
       sum += system.current_local_solution->el(i);
     double globsum(0.0);
     MPI_Reduce(&sum,&globsum,1,MPI_DOUBLE,MPI_SUM,0,MPI_COMM_WORLD);
-    
+    globsum *= henderson_value_;
+
     int DummyIdx = getControlVector().size()-1;
     double DummyControl(0.0);
     if( (getControlVector().first_local_index()<=DummyIdx) && (getControlVector().last_local_index()>DummyIdx) ) {
       DummyControl = getControlVector().el(DummyIdx);
     }
+    
     double tmp(DummyControl);
     MPI_Allreduce(&tmp,&DummyControl,1,MPI_DOUBLE,MPI_SUM,MPI_COMM_WORLD);
-    globsum -= DummyControl;
+    globsum -= henderson_value_diag_*DummyControl;
     if(0==GetProcID()) {
-      lm_aux_constr_vec_->add(GetPinConstrIdx(),henderson_value_*globsum);
+      lm_aux_constr_vec_->add(GetPinConstrIdx(),globsum);
     }
   }
 #endif
@@ -1869,7 +1871,7 @@ void LibMeshPDEBase::calcAux_constr(libMesh::NumericVector<libMesh::Number>*& co
         InOut += pBC->_PhiRhsScale*pBC->Area()/pBC->_PhiNeumannCoef;
       }
       lm_aux_constr_vec_->add(GetMassConservationConstrIdx(),InOut);
-    std::cout << "Mass conservation:" << InOut << std::endl;
+    // std::cout << "Mass conservation:" << InOut << std::endl;
     }
   }
 #endif
@@ -2018,7 +2020,7 @@ void LibMeshPDEBase::calcAux_jacobian_control(libMesh::SparseMatrix<libMesh::Num
 #ifdef MAKE_PDE_WELLPOSED_STRATEGY_HENDERSON
   {
     if(0==GetProcID()) {
-      jac_aux_control_->add(GetPinConstrIdx(),getControlVector().size()-1,-henderson_value_);
+      jac_aux_control_->add(GetPinConstrIdx(),getControlVector().size()-1,-henderson_value_diag_);
     }
   }
 #endif
