@@ -614,6 +614,9 @@ namespace Ipopt
         is_normal = true;
       }
       if (!have_symbolic_factorization_) {
+        have_symbolic_factorization_ = true;
+        just_performed_symbolic_factorization = true;
+#if 0
         if (HaveIpData()) {
           IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
         }
@@ -669,6 +672,7 @@ namespace Ipopt
                        "Integer memory in KB required for the numerical factorization  = %d.\n", IPARM_[15]);
         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                        "Double  memory in KB required for the numerical factorization  = %d.\n", IPARM_[16]);
+#endif
       }
 
       PHASE = 12;
