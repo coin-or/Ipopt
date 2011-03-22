@@ -91,7 +91,9 @@ LibMeshPDEBase::LibMeshPDEBase() :
     pin_down_constr_(-1),
     mass_conservation_constr_(-1),
     henderson_value_(1e0),
-    henderson_value_diag_(1e8)
+    henderson_value_diag_(1e8),
+    pde_scaling_(1.0),
+    v_min_constr_scaling_(1.0)
 {}
 
 // clear all matrices and vectors, but not problem geomatry data
@@ -135,7 +137,13 @@ void LibMeshPDEBase::InitProblemData(std::istream& is)
   MY_DBG_PRINT("LibMeshPDEBase::InitProblemData called");
   PG_.ReadFromStream(is);
   PG_.CreateMesh(&mesh_,PG_.GetFE_Degree());
-
+  
+  pde_scaling_ = 1.0/pow(PG_._h,mesh_.mesh_dimension()-2);
+#ifdef SCALE_AUX_BOUNDS
+  v_min_constr_scaling_ = 1.0/pow(PG_._h,mesh_.mesh_dimension()-2);
+#else
+  v_min_constr_scaling_ = 1.0/pow(PG_._h,mesh_.mesh_dimension()-4);
+#endif
   //WriteNodeFile(mesh_, "MeshGen.node");
   //WriteEleFile(mesh_, "MeshGen.ele");
 
@@ -315,11 +323,11 @@ void LibMeshPDEBase::reinit()
 #ifdef SCALE_AUX_BOUNDS
     std::list<Number>::iterator it = LocIneqFactList.begin();
     for ( unsigned int iVal=0; iVal<LocIneqFactList.size(); ++iVal, ++it) {
-      Vals[iVal] = min_airflow * (*it);
+      Vals[iVal] = v_min_constr_scaling_*min_airflow * (*it);
     }
 #else
     for ( unsigned int iVal=0; iVal<LocIneqFactList.size(); ++iVal) {
-      Vals[iVal] = min_airflow;
+      Vals[iVal] = v_min_constr_scaling_*min_airflow;
     }
 #endif
     VecRestoreArray(petsc_vec1,&Vals);
@@ -500,6 +508,7 @@ void LibMeshPDEBase::calc_objective_part(Number& Val)
 #else
       Val += pBC->_PhiRhsScale;
 #endif //QUAD_OBJ_FUNC
+
     }
   }
 }
@@ -633,6 +642,7 @@ void LibMeshPDEBase::calcPDE_residual(libMesh::NumericVector<libMesh::Number>*& 
       }
     }
     dof_map.constrain_element_vector(ElemRes, dof_indices); // Add constrains for hanging nodes (refinement)
+    ElemRes *= pde_scaling_;
     lm_pde_residual_vec_->add_vector(ElemRes, dof_indices);
 #ifdef MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_TO_CONSTR
     lm_pde_residual_vec_->add(pin_dof,henderson_value_*ElemIntSol);
@@ -768,7 +778,7 @@ void LibMeshPDEBase::calcPDE_jacobian_control(libMesh::SparseMatrix<libMesh::Num
                 for (unsigned int qp=0; qp<qface.n_points(); qp++) {
                   for (unsigned int i=0; i<phi_face.size(); i++)
                     for (unsigned int j=0; j<phi_face.size(); j++) {
-                      jac_control_->add(dof_indices[i], icontrol, -(1.0/NeumCoef)*JxW_face[qp]*phi_face[i][qp]*LocalSolution[j]);
+                      jac_control_->add(dof_indices[i], icontrol, -pde_scaling_*(1.0/NeumCoef)*JxW_face[qp]*phi_face[i][qp]*LocalSolution[j]);
                     }
                 }
               }
@@ -787,9 +797,9 @@ void LibMeshPDEBase::calcPDE_jacobian_control(libMesh::SparseMatrix<libMesh::Num
                 for (unsigned int qp=0; qp<qface.n_points(); qp++) {
                   for (unsigned int i=0; i<phi_face.size(); i++)
                     for (unsigned int j=0; j<phi_face.size(); j++)
-                      jac_control_->add(dof_indices[i], icontrol,(DiriCoef/(NeumCoef*NeumCoef))*JxW_face[qp]*phi_face[i][qp]*LocalSolution[j]);
+                      jac_control_->add(dof_indices[i], icontrol,pde_scaling_*(DiriCoef/(NeumCoef*NeumCoef))*JxW_face[qp]*phi_face[i][qp]*LocalSolution[j]);
                   for (unsigned int i=0; i<phi_face.size(); i++)
-                    jac_control_->add(dof_indices[i], icontrol,(Rhs/(NeumCoef*NeumCoef))*JxW_face[qp]*phi_face[i][qp]);
+                    jac_control_->add(dof_indices[i], icontrol,pde_scaling_*(Rhs/(NeumCoef*NeumCoef))*JxW_face[qp]*phi_face[i][qp]);
                 }
               }
               break;
@@ -806,7 +816,7 @@ void LibMeshPDEBase::calcPDE_jacobian_control(libMesh::SparseMatrix<libMesh::Num
                     BoundaryConditionSquarePhiRhs* pBC=dynamic_cast<BoundaryConditionSquarePhiRhs*>(BCs[bc_id]);
                     assert(pBC);
                     double dPhiRhs_dCntrl = BCs[bc_id]->PhiRhs(q_point[qp])/pBC->_PhiRhsScale;
-                    jac_control_->add(dof_indices[i], icontrol,-(dPhiRhs_dCntrl/NeumCoef)*JxW_face[qp]*phi_face[i][qp]);
+                    jac_control_->add(dof_indices[i], icontrol,-pde_scaling_*(dPhiRhs_dCntrl/NeumCoef)*JxW_face[qp]*phi_face[i][qp]);
                   }
                 }
               }
@@ -838,7 +848,7 @@ void LibMeshPDEBase::calcPDE_jacobian_control(libMesh::SparseMatrix<libMesh::Num
           if (calc_type_ == StructureOnly)
             jac_control_->set(dof_indices[i], iControl,1.0);
           else
-            jac_control_->set(dof_indices[i], iControl,system.current_local_solution->el(dof_indices[i]));
+            jac_control_->set(dof_indices[i], iControl,pde_scaling_*system.current_local_solution->el(dof_indices[i]));
           break;
         case 1:
           assert(false); // derivative would be ... / NeumCoef^2, but NeumCoef < 1e-8
@@ -846,7 +856,7 @@ void LibMeshPDEBase::calcPDE_jacobian_control(libMesh::SparseMatrix<libMesh::Num
           if (calc_type_ == StructureOnly)
             jac_control_->set(dof_indices[i], iControl,1.0);
           else
-            jac_control_->set(dof_indices[i], iControl,1.0);
+            jac_control_->set(dof_indices[i], iControl,pde_scaling_);
         }
       }
     }
@@ -984,6 +994,7 @@ void LibMeshPDEBase::assemble_Phi_PDE(EquationSystems& es, const std::string& sy
     }
 
     dof_map.constrain_element_matrix(ElemMat, dof_indices); // Add constrains for hanging nodes (refinement)
+    ElemMat *= pData->pde_scaling_;
     system.matrix->add_matrix(ElemMat, dof_indices);
 #ifdef MAKE_PDE_WELLPOSED_STRATEGY_ADD_INT_TO_CONSTR
     //lm_pde_residual_vec_->add(pin_dof,ElemIntSol);
@@ -1017,6 +1028,7 @@ void LibMeshPDEBase::calc_hessians(Number sigma, libMesh::DenseVector<Number>& l
   hess_control_state_->zero();
   ConvertControl2PGData();
 
+  lambda_pde *= pde_scaling_;
   // The only functions, that have an non-zero hessian are the inequality constraiants (aux_constr)
   int i_aux_constr(first_aux_constr_);
   const MeshBase& mesh = lm_eqn_sys_->get_mesh();
@@ -1076,9 +1088,9 @@ void LibMeshPDEBase::calc_hessians(Number sigma, libMesh::DenseVector<Number>& l
                 }
               }
 #ifdef SCALE_AUX_BOUNDS
-              loc_l2dphi *= 2.0*lambda_aux(i_aux_constr)*JxW_face[qp];
+              loc_l2dphi *= 2.0*lambda_aux(i_aux_constr)*JxW_face[qp]*v_min_constr_scaling_;
 #else
-              loc_l2dphi *= 2.0*lambda_aux(i_aux_constr)*JxW_face[qp]/SideFact;
+              loc_l2dphi *= 2.0*lambda_aux(i_aux_constr)*JxW_face[qp]*v_min_constr_scaling_/SideFact;
 #endif
               hess_state_state_->add_matrix(loc_l2dphi,dof_indices);
             }
@@ -1809,9 +1821,9 @@ void LibMeshPDEBase::calcAux_constr(libMesh::NumericVector<libMesh::Number>*& co
 	          SideFact += JxW_face[qp];
           }
 #ifdef SCALE_AUX_BOUNDS
-          lm_aux_constr_vec_->add(i_aux_constr,GradL2);
+          lm_aux_constr_vec_->add(i_aux_constr,v_min_constr_scaling_*GradL2);
 #else
-          lm_aux_constr_vec_->add(i_aux_constr,GradL2/SideFact);
+          lm_aux_constr_vec_->add(i_aux_constr,v_min_constr_scaling_*GradL2/SideFact);
 #endif
           ++i_aux_constr;
         }
@@ -1962,10 +1974,10 @@ void LibMeshPDEBase::calcAux_jacobian_state(libMesh::SparseMatrix<libMesh::Numbe
             loc_l2dphi.resize(dof_indices.size(),dof_indices.size());
             DenseVector<Number> tmp;
 #ifndef SCALE_AUX_BOUNDS
-	    Number SideFact = 0.0;
-	    for (unsigned int qp=0; qp<qface.n_points(); qp++) {
-	      SideFact += JxW_face[qp];
-	    }
+	          Number SideFact = 0.0;
+	          for (unsigned int qp=0; qp<qface.n_points(); qp++) {
+	            SideFact += JxW_face[qp];
+	          }
 #endif
             for (unsigned int qp=0; qp<qface.n_points(); qp++) {
               for (unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
@@ -1977,9 +1989,9 @@ void LibMeshPDEBase::calcAux_jacobian_state(libMesh::SparseMatrix<libMesh::Numbe
               loc_l2dphi.vector_mult(tmp,loc_sol);
               for (unsigned short inode=0;inode<CurElem->n_nodes();++inode) {
 #ifdef SCALE_AUX_BOUNDS
-                jac_aux_state_->add(i_aux_constr,dof_indices[inode],2.0*JxW_face[qp]*tmp(inode));
+                jac_aux_state_->add(i_aux_constr,dof_indices[inode],2.0*v_min_constr_scaling_*JxW_face[qp]*tmp(inode));
 #else
-                jac_aux_state_->add(i_aux_constr,dof_indices[inode],2.0*JxW_face[qp]*tmp(inode)/SideFact);
+                jac_aux_state_->add(i_aux_constr,dof_indices[inode],2.0*v_min_constr_scaling_*JxW_face[qp]*tmp(inode)/SideFact);
 #endif
               }
             }
