@@ -238,5 +238,7 @@ private:
   int mass_conservation_constr_;
   double henderson_value_;
   double henderson_value_diag_;
+  double pde_scaling_;
+  double v_min_constr_scaling_;
 };
 #endif
