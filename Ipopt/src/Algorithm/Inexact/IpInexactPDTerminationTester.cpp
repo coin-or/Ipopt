@@ -74,19 +74,25 @@ namespace Ipopt
       "tt_kappa2",
       "kappa2 factor in Termination Test 2.",
       0.0, true,
-      1e-1,
+      1e-3,
       "");
     roptions->AddLowerBoundedNumberOption(
       "tt_eps2",
       "eps2 factor in Termination Test 2.",
       0.0, true,
-      1.,
+      1e-4,
       "");
     roptions->AddLowerBoundedNumberOption(
       "tt_eps3",
       "eps3 factor in Termination Test 3.",
       0.0, true,
       1.-1e-1,
+      "");
+    roptions->AddLowerBoundedNumberOption(
+      "tt_hessian_modification_resid_tol",
+      "Residuum tolerance for skipping test for Hessian modification.",
+      0.0, true,
+      1e-2,
       "");
     roptions->AddLowerBoundedNumberOption(
       "inexact_desired_pd_residual",
@@ -112,6 +118,8 @@ namespace Ipopt
     options.GetNumericValue("tt_kappa2", tt_kappa2_, prefix);
     options.GetNumericValue("tt_eps2", tt_eps2_, prefix);
     options.GetNumericValue("tt_eps3", tt_eps3_, prefix);
+    options.GetNumericValue("tt_hessian_modification_resid_tol",
+                            tt_hessian_modification_resid_tol_, prefix);
     options.GetNumericValue("rho", rho_, prefix);
     options.GetNumericValue("inexact_desired_pd_residual",
                             inexact_desired_pd_residual_, prefix);
@@ -706,10 +714,15 @@ namespace Ipopt
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, " Hessian Modification not requested.\n");
     }
     else {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, " Hessian Modification requested.\n");
-      IpData().TimingStats().IterativeTerminationTester().End();
-      InexData().set_pd_termination_test(InexactData::MODIFY_HESSIAN);
-      return InexactData::MODIFY_HESSIAN;
+      if (test_ratio > tt_hessian_modification_resid_tol_) {
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, " Hessian Modification skipped, because test_ratio = %e > hessian_modification_resid_tol (%e)\n", test_ratio, tt_hessian_modification_resid_tol_);
+      }
+      else {
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, " Hessian Modification requested.\n");
+        IpData().TimingStats().IterativeTerminationTester().End();
+        InexData().set_pd_termination_test(InexactData::MODIFY_HESSIAN);
+        return InexactData::MODIFY_HESSIAN;
+      }
     }
 
     IpData().TimingStats().IterativeTerminationTester().End();
