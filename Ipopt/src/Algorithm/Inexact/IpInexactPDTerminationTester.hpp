@@ -96,6 +96,8 @@ namespace Ipopt
     Number tt_eps2_;
     /** eps_3 constant in termination test 3 */
     Number tt_eps3_;
+    /** Residuum tolerance for hessian modification */
+    Number tt_hessian_modification_resid_tol_;
     /** rho constant from penalty parameter update.  This is called
      *  \tau_{\pi} in MIPS paper */
     Number rho_;
