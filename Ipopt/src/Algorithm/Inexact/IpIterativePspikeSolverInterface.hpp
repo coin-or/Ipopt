@@ -131,7 +131,7 @@ namespace Ipopt
     Number pspike_tol_;
     // to control pspike
     Index * pspike_info;
-    // 
+    //
     Number bandwidth_cntrl;
     //@}
 
@@ -142,8 +142,8 @@ namespace Ipopt
     bool initialized_;
     /** Flag indicating ifsymbolic factoriziiton has been called. */
     bool have_symbolic_factorization_;
-	/** test flag to call only the spectral method one time */
-	bool spectral_enabled;
+    /** test flag to call only the spectral method one time */
+    bool spectral_enabled;
     //@}
 
     /** @name Solver specific information */

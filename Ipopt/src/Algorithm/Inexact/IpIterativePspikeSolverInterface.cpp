@@ -187,7 +187,7 @@ namespace Ipopt
         fprintf (mat_file, "%32.24e\n", a_[i]);
 
       /* Right hand side. */
-     if (rhs_vals)
+      if (rhs_vals)
         for (i = 0; i < N; i++)
           //FIXME: PUT BACK ORIGINAL:          fprintf (mat_file, "%32.24e\n", rhs_vals[i]);
           fprintf (mat_file, "%32.24e\n", -rhs_vals[i]);
@@ -269,18 +269,18 @@ namespace Ipopt
     // do the solve
     ESymSolverStatus status = Solve(ia, ja, nrhs, rhs_vals);
 
-    if(status == SYMSOLVER_FATAL_ERROR){
-	have_symbolic_factorization_ = false;
-    	spectral_enabled = true;
-	ESymSolverStatus retval;
-      	retval = Factorization(ia, ja, check_NegEVals, numberOfNegEVals);
-      	if (retval!=SYMSOLVER_SUCCESS) {
-        	DBG_PRINT((1, "FACTORIZATION FAILED!\n"));
-        	return retval;  // Matrix singular or error occurred
-      	}
-    
-    // do the solve
-    ESymSolverStatus status = Solve(ia, ja, nrhs, rhs_vals); 
+    if (status == SYMSOLVER_FATAL_ERROR) {
+      have_symbolic_factorization_ = false;
+      spectral_enabled = true;
+      ESymSolverStatus retval;
+      retval = Factorization(ia, ja, check_NegEVals, numberOfNegEVals);
+      if (retval!=SYMSOLVER_SUCCESS) {
+        DBG_PRINT((1, "FACTORIZATION FAILED!\n"));
+        return retval;  // Matrix singular or error occurred
+      }
+
+      // do the solve
+      ESymSolverStatus status = Solve(ia, ja, nrhs, rhs_vals);
 
     }
 
@@ -364,15 +364,15 @@ namespace Ipopt
 
       a_ = GetValuesArrayPtr();
 
-	  if(!spectral_enabled) pspike_info[0] = -2;
+      if (!spectral_enabled) pspike_info[0] = -2;
 
       F77_FUNC(pspike,PSPIKE)(&job, &dim_, &nzmax, ia, ja, a_, rhs_vals, &bandwidth, &tol, &nrhs, pspike_info);
-	
+
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemSymbolicFactorization().End();
       }
-      have_symbolic_factorization_ = false; // true := symbolic factorization is performed one time only 
-      spectral_enabled = true; // false := spectral method is performed one time only 
+      have_symbolic_factorization_ = false; // true := symbolic factorization is performed one time only
+      spectral_enabled = true; // false := spectral method is performed one time only
     }
 
     if (HaveIpData()) {
@@ -424,7 +424,7 @@ namespace Ipopt
       if (HaveIpData()) {
         iter_count = IpData().iter_count();
       }
-	
+
       write_iajaa_matrix (N, ia, ja, a_, rhs_vals, iter_count, debug_cnt_);
     }
 
@@ -468,29 +468,29 @@ namespace Ipopt
       Snprintf(buf, 31, "it=%d ", iterations_used);
       IpData().Append_info_string(buf);
 
-	if (is_normal) {
-          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                         "Number of iterations in PSPIKE iterative solver for normal step = %d.\n", iterations_used);
-        }
-        else {
-          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                         "Number of iterations in PSPIKE iterative solver for PD step = %d.\n", iterations_used);
-        }
+      if (is_normal) {
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                       "Number of iterations in PSPIKE iterative solver for normal step = %d.\n", iterations_used);
+      }
+      else {
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                       "Number of iterations in PSPIKE iterative solver for PD step = %d.\n", iterations_used);
+      }
 
       /*if(IpData().iter_count() > 4) {
-		have_symbolic_factorization_ = false;
-		spectral_enabled = true;
-	  }*/
-	  if(pspike_info[1] < 0){
-	     ERROR = pspike_info[1];
-		 bandwidth_cntrl = bandwidth_cntrl + 0.5;
-         int bandwidth_up = (int) bandwidth * bandwidth_cntrl;
-	  	 Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+      have_symbolic_factorization_ = false;
+      spectral_enabled = true;
+      }*/
+      if (pspike_info[1] < 0) {
+        ERROR = pspike_info[1];
+        bandwidth_cntrl = bandwidth_cntrl + 0.5;
+        int bandwidth_up = (int) bandwidth * bandwidth_cntrl;
+        Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                        "Iterative solver PSPIKE did not converge (ERROR = %d)\n", ERROR);
 
-         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+        Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                        "    Increasing bandwidth from %d to %d\n", bandwidth, bandwidth_up);
-	  }
+      }
       ERROR = 0;
     }
     tester->Clear();
@@ -506,14 +506,15 @@ namespace Ipopt
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                      "Error in Pspike during solve phase.  ERROR = %d.\n", ERROR);
       return SYMSOLVER_FATAL_ERROR;
-      
-    }else if (test_result_ == InexactData::MODIFY_HESSIAN) {
+
+    }
+    else if (test_result_ == InexactData::MODIFY_HESSIAN) {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Termination tester requests modification of Hessian\n");
       pspike_info[1] = -1;
       return SYMSOLVER_WRONG_INERTIA;
     }
-#if 0    
+#if 0
     // FRANK: look at this:
     if (test_result_ == InexactData::CONTINUE) {
       if (InexData().compute_normal()) {
@@ -522,7 +523,7 @@ namespace Ipopt
         return SYMSOLVER_SINGULAR;
       }
     }
-#endif    
+#endif
     if (test_result_ == InexactData::TEST_2_SATISFIED) {
       // Termination Test 2 is satisfied, set the step for the primal
       // iterates to zero

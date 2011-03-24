@@ -1478,7 +1478,7 @@ namespace Ipopt
         IpBlasDcopy(n_x_var, full_x, 1, values, 1);
       }
       if (starting_point_perturbation_radius_ > 0.) {
-	for (Index i=0; i<n_x_var; i++) {
+        for (Index i=0; i<n_x_var; i++) {
           values[i] += Max(1., fabs(values[i]))*2.*(0.5-IpRandom01());
         }
       }
