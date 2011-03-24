@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2010 International Business Machines and others.
+// Copyright (C) 2004, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -190,6 +190,10 @@ namespace Ipopt
     bool mehrotra_algorithm_;
     /** String speficying linear solver */
     std::string linear_solver_;
+    /** Maximal value for multiplier estimates. Here is it only used
+     *  as a trigger to disable computation of final multipliers in
+     *  square case. */
+    Number constr_mult_init_max_;
     //@}
 
     /** @name auxilliary functions */

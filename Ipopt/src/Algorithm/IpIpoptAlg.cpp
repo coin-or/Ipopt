@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2010 International Business Machines and others.
+// Copyright (C) 2004, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -240,6 +240,8 @@ namespace Ipopt
       my_options->GetNumericValue("recalc_y_feas_tol", recalc_y_feas_tol_,
                                   prefix);
     }
+    my_options->GetNumericValue("constr_mult_init_max", constr_mult_init_max_,
+                                prefix);
 
     if (prefix=="resto.") {
       skip_print_problem_stats_ = true;
@@ -357,7 +359,7 @@ namespace Ipopt
 
       if (conv_status == ConvergenceCheck::CONVERGED ||
           conv_status == ConvergenceCheck::CONVERGED_TO_ACCEPTABLE_POINT) {
-        if (IpCq().IsSquareProblem()) {
+        if (IpCq().IsSquareProblem() && constr_mult_init_max_>0.) {
           // make the sure multipliers are computed properly
           ComputeFeasibilityMultipliers();
         }
