@@ -775,27 +775,27 @@ LibMeshPDENLP::eval_h(Index num_proc, Index proc_id,
         values_part[iOffset] = vals[i_col];
         ++iOffset;
       }
-      MatRestoreRow(mat_hss, i_row, &ncols, &cols, PETSC_NULL);
+      MatRestoreRow(mat_hss, i_row, &ncols, PETSC_NULL, &vals);
     }
 
     // control control
     for (unsigned int i_row=0;i_row<n_control;++i_row) {
-      MatGetRow(mat_hcc, i_row, &ncols, &cols, PETSC_NULL);
+      MatGetRow(mat_hcc, i_row, &ncols, PETSC_NULL, &vals);
       for (unsigned int i_col=0; i_col<ncols; ++i_col) {
         values_part[iOffset] = vals[i_col];
         ++iOffset;
       }
-      MatRestoreRow(mat_hcc, i_row, &ncols, &cols, PETSC_NULL);
+      MatRestoreRow(mat_hcc, i_row, &ncols, PETSC_NULL, &vals);
     }
 
     // control state
     for (unsigned int i_row=0;i_row<n_control;++i_row) {
-      MatGetRow(mat_hcs, i_row, &ncols, &cols, PETSC_NULL);
+      MatGetRow(mat_hcs, i_row, &ncols, PETSC_NULL, &vals);
       for (unsigned int i_col=0; i_col<ncols; ++i_col) {
         values_part[iOffset] = vals[i_col];
         ++iOffset;
       }
-      MatRestoreRow(mat_hcs, i_row, &ncols, &cols, PETSC_NULL);
+      MatRestoreRow(mat_hcs, i_row, &ncols, PETSC_NULL, &vals);
     }
     assert(iOffset==nele_hess_part);
   }
