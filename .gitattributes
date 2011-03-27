@@ -114,6 +114,16 @@ Ipopt/contrib/MatlabInterface/examples/lasso.m -text
 Ipopt/contrib/MatlabInterface/examples/startup.m.in -text
 Ipopt/contrib/MatlabInterface/ipopt.m -text
 Ipopt/contrib/MatlabInterface/readme.html -text
+Ipopt/contrib/PetscInterface/Example2/IpPetscPDE.hpp -text
+Ipopt/contrib/PetscInterface/Example2/IpPetscPDENLP.C -text
+Ipopt/contrib/PetscInterface/Example2/IpPetscPDENLP.hpp -text
+Ipopt/contrib/PetscInterface/Example2/IpPetscPDETempRadiation.C -text
+Ipopt/contrib/PetscInterface/Example2/IpPetscPDETempRadiation.hpp -text
+Ipopt/contrib/PetscInterface/Example2/MakefileTemplate -text
+Ipopt/contrib/PetscInterface/Example2/Problem.dat -text
+Ipopt/contrib/PetscInterface/Example2/SetVarsDbgTemplate -text
+Ipopt/contrib/PetscInterface/Example2/SetVarsOptTemplate -text
+Ipopt/contrib/PetscInterface/Example2/TempRadiation.C -text
 Ipopt/contrib/PetscInterface/LoadAirflowData.m -text
 Ipopt/contrib/PetscInterface/Problem0.dat -text
 Ipopt/contrib/PetscInterface/Problem0s.dat -text
