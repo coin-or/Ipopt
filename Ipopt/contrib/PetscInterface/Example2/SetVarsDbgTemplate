@@ -1,0 +1,8 @@
+export PETSC_DIR=/home/huber/libs/src/petsc/petsc-3.1-p7
+export PETSC_ARCH=linux-gnu-cxx-dbg
+export METHOD=dbg
+export LIBMESH_DIR=$HOME/libs/src/libmesh/libmesh
+export IPOPTDIR=$HOME/libs/src/ipopt/parallel/build/$METHOD
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/libs/pardiso
+export OMP_NUM_THREADS=1
+
