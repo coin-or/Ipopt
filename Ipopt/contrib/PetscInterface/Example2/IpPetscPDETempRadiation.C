@@ -27,6 +27,12 @@
 
 int GetProcID();
 
+// PDE boundary condition: dy/dn = alpha * (y^4-u^4) -> CONTROL_EXPONENT=4
+// control = u^2 -> dy/dn = alpha * (y^4-u^4) = alpha (y^4-Control^2) -> CONTROL_EXPONENT=2
+// control = u^4 -> dy/dn = alpha * (y^4-u^4) = alpha (y^4-Control  ) -> CONTROL_EXPONENT=1
+
+#define CONTROL_EXPONENT 1
+
 #define PRINT_LEVEL 10
 //#define MY_MY_DBG_PRINT(s) {std::cout << GetProcID() << ": " << s << std::endl;}
 #define MY_DBG_PRINT(s) {}
@@ -37,6 +43,7 @@ int GetProcID();
 using namespace libMesh;
 
 PetscPDETempRadiation::PetscPDETempRadiation() :
+    m_SolutionMode(Optimize),
     m_Control(NULL),
     m_State(NULL),
     m_PDEConstr(NULL),
@@ -55,7 +62,8 @@ PetscPDETempRadiation::PetscPDETempRadiation() :
     m_FEOrder(FIRST),
     m_StateDofMap(NULL),
     m_PDEConstrScale(1.0),
-    m_Alpha(1.0)
+    m_Alpha(1.0),
+    m_Beta(1e-8)
 {
   m_OmegaInner[0] = 0.2;
   m_OmegaInner[1] = 0.3;
@@ -241,9 +249,15 @@ void PetscPDETempRadiation::Init(const std::string filename)
               m_OuterMaxTemp = Vals[0];
             }
             else {
-              std::cout << "Can't interprete line:" << std::endl;
-              std::cout << Buf << std::endl;
-              exit(1);
+              n = sscanf(Buf,"Beta=%lf",Vals);
+              if(1==n) {
+                m_Beta = Vals[0];
+              }
+              else {
+                std::cout << "Can't interprete line:" << std::endl;
+                std::cout << Buf << std::endl;
+                exit(1);
+              }
             }
           }
         }
@@ -376,21 +390,29 @@ void PetscPDETempRadiation::get_bounds(Vec& state_l,
 {
   START_FUNCTION
   double Inf = 1e30;
-  VecSet(state_l,0.0);
 
-  PetscVector<Number> lm_state_u(state_u);
-  lm_state_u = Inf;
-  MeshBase::node_iterator       node_it  = m_StateMesh.local_nodes_begin();
-  const MeshBase::node_iterator node_end = m_StateMesh.local_nodes_end();
-  for ( ; node_it != node_end; ++node_it) {
-    if(IsInOmegaOuter(**node_it)) {
-      lm_state_u.set((*node_it)->dof_number(0,0,0),m_OuterMaxTemp);
-    }
+  if( m_SolutionMode==Simulate ) {
+    VecSet(state_l,0.0);
+    VecSet(state_u,Inf);
+    VecSet(control_l,1.0);
+    VecSet(control_u,1.0);
   }
-  lm_state_u.close();
-  
-  VecSet(control_l,-Inf);
-  VecSet(control_u,Inf);
+  else {
+    VecSet(state_l,0.0);
+    PetscVector<Number> lm_state_u(state_u);
+    lm_state_u = Inf;
+    MeshBase::node_iterator       node_it  = m_StateMesh.local_nodes_begin();
+    const MeshBase::node_iterator node_end = m_StateMesh.local_nodes_end();
+    for ( ; node_it != node_end; ++node_it) {
+      if(IsInOmegaOuter(**node_it)) {
+        lm_state_u.set((*node_it)->dof_number(0,0,0),m_OuterMaxTemp);
+      }
+    }
+    lm_state_u.close();
+    
+    VecSet(control_l,0.0);
+    VecSet(control_u,Inf);
+  }
   VecSet(aux_constr_l,0.0);
   VecSet(aux_constr_u,0.0);
   END_FUNCTION
@@ -427,6 +449,7 @@ void PetscPDETempRadiation::calc_objective_part(Number& Val)
 {
   START_FUNCTION
   Val = 0.0;
+  double TikhonovVal(0.0);
   const unsigned int Dim = m_StateMesh.mesh_dimension();
   FEType fe_type = m_StateDofMap->variable_type(0);
   AutoPtr<FEBase> FEVol(FEBase::build(Dim, fe_type)); // this object will by the current volume object, actualy holding values for current phi and dphi
@@ -437,6 +460,15 @@ void PetscPDETempRadiation::calc_objective_part(Number& Val)
   const std::vector< std::vector<Number> >& VolPhi = FEVol->get_phi();
   std::vector<Number> LocalState;   // solution values of current element
   std::vector<unsigned int> DofIdx;   // solution values of current element
+  AutoPtr<FEBase> FEFace(FEBase::build(Dim, fe_type)); // surface object
+  AutoPtr<QBase> QuadFace=fe_type.default_quadrature_rule(Dim-1,0);
+  FEFace->attach_quadrature_rule(QuadFace.get());
+  const std::vector<Real>& JxWFace = FEFace->get_JxW();
+  const std::vector<std::vector<Real> >& FacePhi = FEFace->get_phi();
+  std::vector<Number> LocalControl;
+  std::vector<int> FaceToVol;       // index face node -> index elem node
+  double ControlVal(0.0);
+  
   MeshBase::const_element_iterator itCurEl = m_StateMesh.active_local_elements_begin();
   const MeshBase::const_element_iterator itEndEl = m_StateMesh.active_local_elements_end();
   for ( ; itCurEl != itEndEl; ++itCurEl) {
@@ -457,7 +489,37 @@ void PetscPDETempRadiation::calc_objective_part(Number& Val)
         }
       }
     }
+
+    for (unsigned int side=0; side<CurElem->n_sides(); side++) {
+      if (CurElem->neighbor(side) == NULL) {
+        FEFace->reinit(CurElem, side);
+        AutoPtr<libMesh::Elem> Side = CurElem->build_side(side);
+        FaceToVol.resize(Side->n_nodes());
+        for(unsigned short iNode=0; iNode<Side->n_nodes(); iNode++) {
+          for(unsigned short jNode=0; jNode<CurElem->n_nodes(); jNode++) {
+            if(Side->node(iNode)==CurElem->node(jNode))
+              FaceToVol[iNode] = jNode;
+          }
+        }
+        LocalControl.resize(Side->n_nodes());
+        for(unsigned short iNode=0; iNode<Side->n_nodes(); iNode++) {
+          LocalControl[iNode] = m_Control->el(m_ControlNodeIDToControlDOF[Side->node(iNode)]);
+        }
+        for (qp=0; qp<QuadFace->n_points(); qp++) {
+          ControlVal=0.0;
+          for(unsigned int iNode=0; iNode<Side->n_nodes(); iNode++){
+            ControlVal += LocalControl[iNode] * FacePhi[FaceToVol[iNode]][qp];
+          }
+          for (i=0; i<Side->n_nodes(); i++) {
+            // TODO: Clarify: Why 6.0 instead of 2.0 in gradient ????
+            TikhonovVal += JxWFace[qp]*m_Beta*ControlVal*ControlVal;
+          }
+        }
+      }
+    } // End side loop
   }
+  std::cout << "Obj: " << Val << ", TikhonovVal:" << TikhonovVal << std::endl;
+  Val += TikhonovVal;
   END_FUNCTION
 }
 
@@ -476,6 +538,15 @@ void PetscPDETempRadiation::calc_objective_gradient(Vec& grad_state, Vec& grad_c
   const std::vector< std::vector<Number> >& VolPhi = FEVol->get_phi();
   std::vector<Number> LocalState;   // solution values of current element
   std::vector<unsigned int> DofIdx;   // solution values of current element
+  AutoPtr<FEBase> FEFace(FEBase::build(Dim, fe_type)); // surface object
+  AutoPtr<QBase> QuadFace=fe_type.default_quadrature_rule(Dim-1,0);
+  FEFace->attach_quadrature_rule(QuadFace.get());
+  const std::vector<Real>& JxWFace = FEFace->get_JxW();
+  const std::vector<std::vector<Real> >& FacePhi = FEFace->get_phi();
+  std::vector<Number> LocalControl;
+  std::vector<int> FaceToVol;       // index face node -> index elem node
+  double ControlVal(0.0);
+
   MeshBase::const_element_iterator itCurEl = m_StateMesh.active_local_elements_begin();
   const MeshBase::const_element_iterator itEndEl = m_StateMesh.active_local_elements_end();
   for ( ; itCurEl != itEndEl; ++itCurEl) {
@@ -496,6 +567,35 @@ void PetscPDETempRadiation::calc_objective_gradient(Vec& grad_state, Vec& grad_c
         }
       }
     }
+    
+    for (unsigned int side=0; side<CurElem->n_sides(); side++) {
+      if (CurElem->neighbor(side) == NULL) {
+        FEFace->reinit(CurElem, side);
+        AutoPtr<libMesh::Elem> Side = CurElem->build_side(side);
+        FaceToVol.resize(Side->n_nodes());
+        for(unsigned short iNode=0; iNode<Side->n_nodes(); iNode++) {
+          for(unsigned short jNode=0; jNode<CurElem->n_nodes(); jNode++) {
+            if(Side->node(iNode)==CurElem->node(jNode))
+              FaceToVol[iNode] = jNode;
+          }
+        }
+        LocalControl.resize(Side->n_nodes());
+        for(unsigned short iNode=0; iNode<Side->n_nodes(); iNode++) {
+          LocalControl[iNode] = m_Control->el(m_ControlNodeIDToControlDOF[Side->node(iNode)]);
+        }
+        for (qp=0; qp<QuadFace->n_points(); qp++) {
+          ControlVal=0.0;
+          for(unsigned int iNode=0; iNode<Side->n_nodes(); iNode++){
+            ControlVal += LocalControl[iNode] * FacePhi[FaceToVol[iNode]][qp];
+          }
+          for (i=0; i<Side->n_nodes(); i++) {
+            // TODO: Clarify: Why 6.0 instead of 2.0 in gradient ????
+            m_GradObjControl->add(m_ControlNodeIDToControlDOF[Side->node(i)],
+                                  6.0*JxWFace[qp]*m_Beta*ControlVal*FacePhi[FaceToVol[i]][qp]);
+          }
+        }
+      }
+    }
   }
 
   m_GradObjState->close();
@@ -510,7 +610,7 @@ void PetscPDETempRadiation::calcPDE_residual(Vec& residual)
   START_FUNCTION
   m_PDEConstr->zero();
 
-  double ControlVal(1.0);
+  double ControlVal(0.0), StateVal(0.0);
   const unsigned int Dim = m_StateMesh.mesh_dimension();
   FEType fe_type = m_StateDofMap->variable_type(0);
   AutoPtr<FEBase> FEVol(FEBase::build(Dim, fe_type)); // this object will by the current volume object, actualy holding values for current phi and dphi
@@ -569,7 +669,6 @@ void PetscPDETempRadiation::calcPDE_residual(Vec& residual)
           LocalState[iNode] = m_State->el(DofIdx[FaceToVol[iNode]]);
         }
         unsigned int qp,i;
-        double StateVal;
         for (qp=0; qp<QuadFace->n_points(); qp++) {
           ControlVal=0.0;
           StateVal=0.0;
@@ -578,7 +677,7 @@ void PetscPDETempRadiation::calcPDE_residual(Vec& residual)
             StateVal += LocalState[iNode]*FacePhi[FaceToVol[iNode]][qp];
           }
           for (i=0; i<Side->n_nodes(); i++) {
-            ElemRes(FaceToVol[i]) -= JxWFace[qp]*m_Alpha*(pow(ControlVal,4.0) - pow(StateVal,4.0))*FacePhi[FaceToVol[i]][qp];
+            ElemRes(FaceToVol[i]) -= JxWFace[qp]*m_Alpha* (pow(ControlVal,CONTROL_EXPONENT) - pow(StateVal,4.0))*FacePhi[FaceToVol[i]][qp];
           }
         }
       }
@@ -673,7 +772,7 @@ void PetscPDETempRadiation::calcPDE_jacobians(Mat& jac_state, Mat& jac_control)
             for (j=0; j<Side->n_nodes(); j++) {
               if(m_CalcType==Values) {
                 ElemJacPDEState(FaceToVol[i],FaceToVol[j]) += JxWFace[qp]*m_Alpha*4.0*pow(StateVal,3.0)*FacePhi[FaceToVol[j]][qp]*FacePhi[FaceToVol[i]][qp];
-                m_JacPDEControl->add(DofIdx[FaceToVol[i]],m_ControlNodeIDToControlDOF[Side->node(j)],-m_PDEConstrScale*JxWFace[qp]*m_Alpha*4.0*pow(ControlVal,3.0)*FacePhi[FaceToVol[j]][qp]*FacePhi[FaceToVol[i]][qp]);
+                m_JacPDEControl->add(DofIdx[FaceToVol[i]],m_ControlNodeIDToControlDOF[Side->node(j)],-m_PDEConstrScale*JxWFace[qp]*m_Alpha*CONTROL_EXPONENT*pow(ControlVal,CONTROL_EXPONENT-1.0)*FacePhi[FaceToVol[j]][qp]*FacePhi[FaceToVol[i]][qp]);
               }
               else {
                 ElemJacPDEState(FaceToVol[i],FaceToVol[j]) += 1.0;
@@ -757,7 +856,6 @@ void PetscPDETempRadiation::calc_hessians(Number sigma, Vec& lambda_loc_pde, Vec
       }
     }
 
-
     for (unsigned int side=0; side<CurElem->n_sides(); side++) {
       if (CurElem->neighbor(side) == NULL) {
         FEFace->reinit(CurElem, side);
@@ -789,8 +887,10 @@ void PetscPDETempRadiation::calc_hessians(Number sigma, Vec& lambda_loc_pde, Vec
               for (k=0; k<Side->n_nodes(); k++) {
                 if(m_CalcType==Values) {
                   ElemHessStateState(FaceToVol[i],FaceToVol[j]) += lambda_pde.el(StateDofIdx[FaceToVol[k]])*JxWFace[qp]*m_Alpha*12.0*pow(StateVal  ,2.0)*FacePhi[FaceToVol[j]][qp]*FacePhi[FaceToVol[i]][qp]*FacePhi[FaceToVol[k]][qp];
-                  m_HessControlControl->add(m_ControlNodeIDToControlDOF[Side->node(i)],m_ControlNodeIDToControlDOF[Side->node(j)],-lambda_pde.el(StateDofIdx[FaceToVol[k]])*JxWFace[qp]*m_Alpha*12.0*pow(ControlVal,2.0)*FacePhi[FaceToVol[j]][qp]*FacePhi[FaceToVol[i]][qp]*FacePhi[FaceToVol[k]][qp]*m_PDEConstrScale);
-                  //  m_JacPDEControl->add(DofIdx[FaceToVol[i]],m_ControlNodeIDToControlDOF[Side->node(j)],-m_PDEConstrScale*JxWFace[qp]*m_Alpha*4.0*pow(ControlVal,3.0)*FacePhi[FaceToVol[j]][qp]*FacePhi[FaceToVol[i]][qp]);
+                  if(CONTROL_EXPONENT>1) {
+                    m_HessControlControl->add(m_ControlNodeIDToControlDOF[Side->node(i)],m_ControlNodeIDToControlDOF[Side->node(j)],-lambda_pde.el(StateDofIdx[FaceToVol[k]])*JxWFace[qp]*m_Alpha*CONTROL_EXPONENT*(CONTROL_EXPONENT-1)*pow(ControlVal,CONTROL_EXPONENT-2.0)*FacePhi[FaceToVol[j]][qp]*FacePhi[FaceToVol[i]][qp]*FacePhi[FaceToVol[k]][qp]*m_PDEConstrScale);
+                  }
+                  m_HessControlControl->add(m_ControlNodeIDToControlDOF[Side->node(i)],m_ControlNodeIDToControlDOF[Side->node(j)],JxWFace[qp]*2.0*sigma*m_Beta*FacePhi[FaceToVol[j]][qp]*FacePhi[FaceToVol[i]][qp]);
                 }
                 else {
                   ElemHessStateState(FaceToVol[i],FaceToVol[j]) += 1.0;

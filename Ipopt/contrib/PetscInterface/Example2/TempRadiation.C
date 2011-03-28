@@ -34,30 +34,76 @@ int main (int argc, char** argv)
   pPDE->Init("Problem.dat");
   SmartPtr<ParTNLP> partnlp = new PetscPDENLP(*pPDE,*(app->Jnlst()));
   SmartPtr<NLP> nlp = new ParTNLPAdapter(partnlp, ConstPtr(app->Jnlst()));
-  ApplicationReturnStatus status;
+  ApplicationReturnStatus Status;
 
-  Vec State,Control;
-  pPDE->getControlVector(Control);
-  VecSet(Control, 1.0);
-  pPDE->getStateVector(State);
-  VecSet(State, 0.5);
+#if 0
+  {
+    // Find starting point: solve PDE once with fixed controls
+    std::cout << "****************************************************" << std::endl;
+    std::cout << "****************************************************" << std::endl;
+    std::cout << "**                                                **" << std::endl;
+    std::cout << "**                   Simulation                   **" << std::endl;
+    std::cout << "**                                                **" << std::endl;
+    std::cout << "****************************************************" << std::endl;
+    std::cout << "****************************************************" << std::endl;
+    Vec State,Control;
+    pPDE->getControlVector(Control);
+    VecSet(Control, 1.0);
+    pPDE->getStateVector(State);
+    VecSet(State, 0.5);
+    pPDE->m_SolutionMode = PetscPDETempRadiation::Simulate;
+    Status = app->Initialize("simu.opt");
+    if (Status != Solve_Succeeded) {
+      std::cout << "\n\n*** Error during initialization!\n" << std::endl;
+      delete pPDE;
+      return (int) Status;
+    }
+    // Ask Ipopt to solve the problem
+    Status = app->OptimizeNLP(nlp);
+    if (Status == Solve_Succeeded) {
+      printf("\n\n*** The problem solved!\n");
+    }
+    else {
+      printf("\n\n*** The problem FAILED!\n");
+      delete pPDE;
+      return (int)Status;
+    }
+  }
+#else
+    Vec State,Control;
+    pPDE->getControlVector(Control);
+    VecSet(Control, pow(pPDE->GetOuterMaxTemp()/2.0,4.0));
+    pPDE->getStateVector(State);
+    VecSet(State, pPDE->GetOuterMaxTemp()/2.0);
+#endif
+  {
+    std::cout << "****************************************************" << std::endl;
+    std::cout << "****************************************************" << std::endl;
+    std::cout << "**                                                **" << std::endl;
+    std::cout << "**                  Optimization                  **" << std::endl;
+    std::cout << "**                                                **" << std::endl;
+    std::cout << "****************************************************" << std::endl;
+    std::cout << "****************************************************" << std::endl;
+    pPDE->m_SolutionMode = PetscPDETempRadiation::Optimize;
+    app = IpoptApplicationFactory();
+    Status = app->Initialize();
+    if (Status != Solve_Succeeded) {
+      printf("\n\n*** Error during initialization!\n");
+      delete pPDE;
+      return (int) Status;
+    }
+    // Ask Ipopt to solve the problem
+    Status = app->OptimizeNLP(nlp);
+    if (Status == Solve_Succeeded) {
+      printf("\n\n*** The problem solved!\n");
+    }
+    else {
+      printf("\n\n*** The problem FAILED!\n");
+      delete pPDE;
+      return (int)Status;
+    }
+  }
 
-  status = app->Initialize();
-  if (status != Solve_Succeeded) {
-    printf("\n\n*** Error during initialization!\n");
-    delete pPDE;
-    return (int) status;
-  }
-  // Ask Ipopt to solve the problem
-  status = app->OptimizeNLP(nlp);
-  if (status == Solve_Succeeded) {
-    printf("\n\n*** The problem solved!\n");
-  }
-  else {
-    printf("\n\n*** The problem FAILED!\n");
-    delete pPDE;
-    return (int)status;
-  }
   delete pPDE;
 
   return 0;
