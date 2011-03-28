@@ -828,7 +828,7 @@ namespace Ipopt
       ASSERT_EXCEPTION(ret, INTERNAL_ABORT, "tester->InitializeSolve(); returned false");
 
       for (int i = 0; i < N; i++) {
-        X[i] = 0;
+        // X[i] = 0;
         rhs_vals[i] = ORIG_RHS[i];
       }
 
