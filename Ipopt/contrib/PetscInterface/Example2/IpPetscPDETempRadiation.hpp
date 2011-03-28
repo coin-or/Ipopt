@@ -19,6 +19,9 @@
 class PetscPDETempRadiation : public PetscPDEBase
 {
 public:
+  enum SolutionModeType { Simulate, Optimize };
+  SolutionModeType m_SolutionMode;
+
   /**@name Constructors/Destructors */
   //@{
   PetscPDETempRadiation();
@@ -112,6 +115,7 @@ public:
 				                            Vec& lm_aux_constr_mults);
   void Init(const std::string filename);
   virtual void Write2File( const std::string& pre_filename);
+  double GetOuterMaxTemp() {return m_OuterMaxTemp;}
 protected:
   AutoPtr<libMesh::PetscVector<libMesh::Number> > m_Control;
   AutoPtr<libMesh::PetscVector<libMesh::Number> > m_State;
@@ -157,7 +161,8 @@ private:
   //AutoPtr<DofMap> m_ControlDofMap;
   std::map<unsigned int, unsigned int> m_ControlNodeIDToControlDOF;
   double m_PDEConstrScale;
-  double m_Alpha;
+  double m_Alpha;           // Boundary Condition parameter
+  double m_Beta;            // Tikhonov reularization parameter
   double m_OmegaInner[6];   // border of hot inner region [x0Min, x1Min, x2Min, x0Max, x1Max, x2Max]
   double m_OmegaOuter[6];   // border of cold outer region R^n/[x0Min, x1Min, x2Min, x0Max, x1Max, x2Max]
   double m_OuterMaxTemp;    // upper bound of state variable in OmegaOuter
