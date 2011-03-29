@@ -1842,9 +1842,9 @@ fi
 
   if test "x$have_svnversion" = xyes; then
 
-    svn_rev_tmp=`cd $srcdir/$coin_has_ipopt ; svnversion`
-    IPOPT_SVN_REV=`echo $svn_rev_tmp | sed -n -e 's/^[0-9]*://' -e 's/\([0-9]\)[^0-9]*$/\1/p'`
-    if test $IPOPT_SVN_REV != exported; then
+    svn_rev_tmp=`LANG=en_EN svnversion $srcdir 2>/dev/null`
+    if test "$IPOPT_SVN_REV" != exported; then
+      IPOPT_SVN_REV=`echo $svn_rev_tmp | sed -n -e 's/^[0-9]*://' -e 's/\([0-9]\)[^0-9]*$/\1/p'`
 
 cat >>confdefs.h <<_ACEOF
 #define IPOPT_SVN_REV $IPOPT_SVN_REV
@@ -5036,6 +5036,8 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 # Find out how to call Fortran from C and determine Fortran runtime libraries
+
+# get FLIBS
 ac_ext=f
 ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
 ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
@@ -5087,7 +5089,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_verb"
-(eval echo $as_me:5090: \"$ac_link\") >&5
+(eval echo $as_me:5092: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -5165,7 +5167,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_cv_prog_f77_v"
-(eval echo $as_me:5168: \"$ac_link\") >&5
+(eval echo $as_me:5170: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -5331,10 +5333,70 @@ echo "${ECHO_T}$ac_cv_f77_libs" >&6
 FLIBS="$ac_cv_f77_libs"
 
 
-ac_ext=f
-ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
-ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_f77_compiler_gnu
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+orig_FLIBS="$FLIBS"
+
+# If FLIBS has been set by the user, we just restore its value here
+if test x"$save_FLIBS" != x; then
+  FLIBS="$save_FLIBS"
+else
+  # This is to correct a missing exclusion in autoconf 2.59
+  if test x"$FLIBS" != x; then
+    my_flibs=
+    for flag in $FLIBS; do
+      case $flag in
+        -lcrt*.o) ;;
+        -lcygwin) ;;
+               *) my_flibs="$my_flibs $flag" ;;
+      esac
+    done
+    FLIBS="$my_flibs"
+  fi
+
+  case $build in
+  # The following is a fix to define FLIBS for ifort on Windows
+  # In its original version, it linked in libifcorert.lib or libifcorertd.lib on Windows/ifort explicitly.
+  # However, this seem to create a dependency on libifcorert.dll (or libifcorertd.dll) in the executables.
+  # This is seem to be unnecessary, libifcorert(d).lib has been removed from the link line.
+  # Further, excluding libc.lib from the default libs seemed to be necessary only for VS < 8.
+  # Since the corresponding flag seems to make more trouble than it avoids, it has been removed now.
+     *-cygwin* | *-mingw*)
+       case "$F77" in
+#         ifort* | */ifort* | IFORT* | */IFORT*)
+#           FLIBS="-link $LIBS /NODEFAULTLIB:libc.lib"
+#           if "$coin_debug_compile" = true ; then
+#             FLIBS="-link $LIBS /NODEFAULTLIB:libc.lib /NODEFAULTLIB:libcmt.lib"
+#           else
+#             FLIBS="-link $LIBS /NODEFAULTLIB:libc.lib /NODEFAULTLIB:libcmtd.lib"
+#           fi
+#           ;;
+         compile_f2c*)
+           FLIBS=`$F77 -FLIBS` ;;
+       esac;;
+     *-hp-*)
+         FLIBS="$FLIBS -lm";;
+     *-ibm-*)
+         FLIBS=`echo $FLIBS | sed 's/-lc)/-lc/g'` ;;
+     *-linux-*)
+       case "$F77" in
+         pgf77* | */pgf77* | pgf90* | */pgf90*)
+# ask linker to go through the archives multiple times
+# (the Fortran compiler seems to do that automatically...)
+           FLIBS="-Wl,--start-group $FLIBS -Wl,--end-group" ;;
+       esac
+  esac
+  ac_cv_f77_libs="$FLIBS"
+fi
+
+if test "x$orig_FLIBS" != "x$FLIBS" ; then
+  { echo "$as_me:$LINENO: Corrected Fortran libraries: $FLIBS" >&5
+echo "$as_me: Corrected Fortran libraries: $FLIBS" >&6;}
+fi
 
 ac_ext=f
 ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
@@ -5763,7 +5825,6 @@ ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
 ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_f77_compiler_gnu
 
-
 ac_ext=f
 ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
 ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
@@ -5853,59 +5914,6 @@ ac_ext=f
 ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
 ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_f77_compiler_gnu
-
-
-# If FLIBS has been set by the user, we just restore its value here
-if test x"$save_FLIBS" != x; then
-  FLIBS="$save_FLIBS"
-else
-  # This is to correct a missing exclusion in autoconf 2.59
-  if test x"$FLIBS" != x; then
-    my_flibs=
-    for flag in $FLIBS; do
-      case $flag in
-        -lcrt*.o) ;;
-        -lcygwin) ;;
-               *) my_flibs="$my_flibs $flag" ;;
-      esac
-    done
-    FLIBS="$my_flibs"
-  fi
-
-  case $build in
-  # The following is a fix to define FLIBS for ifort on Windows
-  # In its original version, it linked in libifcorert.lib or libifcorertd.lib on Windows/ifort explicitly.
-  # However, this seem to create a dependency on libifcorert.dll (or libifcorertd.dll) in the executables.
-  # This is seem to be unnecessary, libifcorert(d).lib has been removed from the link line.
-  # Further, excluding libc.lib from the default libs seemed to be necessary only for VS < 8.
-  # Since the corresponding flag seems to make more trouble that it avoid, it has been removed now.
-     *-cygwin* | *-mingw*)
-       case "$F77" in
-#         ifort* | */ifort* | IFORT* | */IFORT*)
-#           FLIBS="-link $LIBS /NODEFAULTLIB:libc.lib"
-#           if "$coin_debug_compile" = true ; then
-#             FLIBS="-link $LIBS /NODEFAULTLIB:libc.lib /NODEFAULTLIB:libcmt.lib"
-#           else
-#             FLIBS="-link $LIBS /NODEFAULTLIB:libc.lib /NODEFAULTLIB:libcmtd.lib"
-#           fi
-#           ;;
-         compile_f2c*)
-           FLIBS=`$F77 -FLIBS` ;;
-       esac;;
-     *-hp-*)
-         FLIBS="$FLIBS -lm";;
-     *-ibm-*)
-         FLIBS=`echo $FLIBS | sed 's/-lc)/-lc/g'` ;;
-     *-linux-*)
-       case "$F77" in
-         pgf77* | */pgf77* | pgf90* | */pgf90*)
-# ask linker to go through the archives multiple times
-# (the Fortran compiler seems to do that automatically...)
-           FLIBS="-Wl,--start-group $FLIBS -Wl,--end-group" ;;
-       esac
-  esac
-  ac_cv_f77_libs="$FLIBS"
-fi
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -6017,7 +6025,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:6020:" \
+echo "$as_me:6028:" \
      "checking for Fortran compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -7883,7 +7891,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 7886 "configure"' > conftest.$ac_ext
+  echo '#line 7894 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -9863,11 +9871,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9866: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9874: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:9870: \$? = $ac_status" >&5
+   echo "$as_me:9878: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -10131,11 +10139,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:10134: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:10142: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:10138: \$? = $ac_status" >&5
+   echo "$as_me:10146: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -10235,11 +10243,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:10238: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:10246: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:10242: \$? = $ac_status" >&5
+   echo "$as_me:10250: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -12652,7 +12660,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12655 "configure"
+#line 12663 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12752,7 +12760,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12755 "configure"
+#line 12763 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -15112,11 +15120,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15115: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15123: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15119: \$? = $ac_status" >&5
+   echo "$as_me:15127: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15216,11 +15224,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15219: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15227: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15223: \$? = $ac_status" >&5
+   echo "$as_me:15231: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16786,11 +16794,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16789: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16797: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16793: \$? = $ac_status" >&5
+   echo "$as_me:16801: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16890,11 +16898,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16893: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16901: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16897: \$? = $ac_status" >&5
+   echo "$as_me:16905: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -19097,11 +19105,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:19100: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:19108: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:19104: \$? = $ac_status" >&5
+   echo "$as_me:19112: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -19365,11 +19373,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:19368: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:19376: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:19372: \$? = $ac_status" >&5
+   echo "$as_me:19380: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -19469,11 +19477,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:19472: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:19480: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:19476: \$? = $ac_status" >&5
+   echo "$as_me:19484: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
