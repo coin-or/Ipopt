@@ -5,4 +5,4 @@ Omega1=0.1,0.05,0,0.2,0.3,0.1
 Omega2=0.8,0.75,0.7,1,1,1
 MinTemp1=2.5
 MinTemp2=2
-
+StateReg=0
