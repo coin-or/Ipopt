@@ -341,7 +341,7 @@ void PetscPDETempRadiation::Init(const std::string filename)
 
   m_State =   AutoPtr<PetscVector<Number> >(new PetscVector<Number>(NumGlobStates, NumLocStates, m_StateDofMap->get_send_list(), GHOSTED));
   m_Control = AutoPtr<PetscVector<Number> >(new PetscVector<Number>(NumGlobControls, NumLocControls));
-  m_PDEConstrScale = 1/pow(h,m_StateMesh.mesh_dimension()-2);
+  m_PDEConstrScale = 1e-2/pow(h,m_StateMesh.mesh_dimension()-2);
   m_PDEConstr = AutoPtr<PetscVector<Number> >(new PetscVector<Number>(NumGlobPDEConstr, NumLocPDEConstr));
   m_AuxConstr = AutoPtr<PetscVector<Number> >(new PetscVector<Number>(NumGlobAuxConstr, NumLocAuxConstr));
   Vec tmp = ((PetscVector<double>*)m_Control.get())->vec();
