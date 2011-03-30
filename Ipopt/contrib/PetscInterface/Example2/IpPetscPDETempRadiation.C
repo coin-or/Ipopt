@@ -260,9 +260,15 @@ void PetscPDETempRadiation::Init(const std::string filename)
                 m_HotMinTemp2 = Vals[0];
               }
               else {
-                std::cout << "Can't interprete line:" << std::endl;
-                std::cout << Buf << std::endl;
-                exit(1);
+                n = sscanf(Buf,"StateReg=%lf",Vals);
+                if(1==n) {
+                  m_ReguStateParam = Vals[0];
+                }
+                else {
+                  std::cout << "Can't interprete line:" << std::endl;
+                  std::cout << Buf << std::endl;
+                  exit(1);
+                }
               }
             }
           }
@@ -842,7 +848,7 @@ void PetscPDETempRadiation::calc_hessians(Number sigma, Vec& lambda_loc_pde, Vec
     for (unsigned short qp=0; qp<QuadVol->n_points(); qp++) {
       for (unsigned short i=0; i<CurElem->n_nodes(); i++) {
         for (unsigned short j=0; j<=i; j++) {
-          ElemHessStateState(i,j) += JxWVol[qp]*sigma*2.0*m_ReguStateParam*VolPhi[i][qp]*VolPhi[j][qp];
+          ElemHessStateState(i,j) += JxWVol[qp]*sigma*m_ReguStateParam*VolPhi[i][qp]*VolPhi[j][qp];
         }
       }
     }
