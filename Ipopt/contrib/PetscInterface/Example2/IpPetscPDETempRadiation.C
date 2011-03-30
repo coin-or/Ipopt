@@ -300,7 +300,7 @@ void PetscPDETempRadiation::Init(const std::string filename)
       (*elem_it)->add_system();
     m_StateDofMap = AutoPtr<DofMap>(new DofMap(0));
     std::string Varname("State");
-    m_StateDofMap->add_variable(Variable(Varname, 0, FEType(m_FEOrder)));
+    m_StateDofMap->add_variable(System::Variable(Varname, 0, FEType(m_FEOrder)));
     m_StateDofMap->distribute_dofs(m_StateMesh);
     m_StateDofMap->create_dof_constraints(m_StateMesh);
     m_StateDofMap->process_constraints();
