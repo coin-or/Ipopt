@@ -115,7 +115,8 @@ public:
 				                            Vec& lm_aux_constr_mults);
   void Init(const std::string filename);
   virtual void Write2File( const std::string& pre_filename);
-  double GetOuterMaxTemp() {return m_OuterMaxTemp;}
+  double GetHotMinTemp1();
+  double GetHotMinTemp2();
 protected:
   AutoPtr<libMesh::PetscVector<libMesh::Number> > m_Control;
   AutoPtr<libMesh::PetscVector<libMesh::Number> > m_State;
@@ -133,8 +134,9 @@ protected:
   int m_Dim;
   libMesh::Mesh m_StateMesh;
   //libMesh::BoundaryMesh m_ControlMesh;
-  bool IsInOmegaInner(const libMesh::Point& pt);
-  bool IsInOmegaOuter(const libMesh::Point& pt);
+  bool IsInOmega1(const libMesh::Point& pt);
+  bool IsInOmega2(const libMesh::Point& pt);
+  bool IsOnBoundary(const libMesh::Point& pt);
 private:
   /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
@@ -162,9 +164,10 @@ private:
   std::map<unsigned int, unsigned int> m_ControlNodeIDToControlDOF;
   double m_PDEConstrScale;
   double m_Alpha;           // Boundary Condition parameter
-  double m_Beta;            // Tikhonov reularization parameter
-  double m_OmegaInner[6];   // border of hot inner region [x0Min, x1Min, x2Min, x0Max, x1Max, x2Max]
-  double m_OmegaOuter[6];   // border of cold outer region R^n/[x0Min, x1Min, x2Min, x0Max, x1Max, x2Max]
-  double m_OuterMaxTemp;    // upper bound of state variable in OmegaOuter
+  double m_Omega1[6];     // border of hot inner region with lower state constraint [x0Min, x1Min, x2Min, x0Max, x1Max, x2Max]
+  double m_Omega2[6];   // border of cold outer region with upper state constraint [x0Min, x1Min, x2Min, x0Max, x1Max, x2Max]
+  double m_HotMinTemp1;    // lower bound of state variable in Omega1
+  double m_HotMinTemp2;    // lower bound of state variable in Omega2
+  double m_ReguStateParam;
 };
 #endif

@@ -22,6 +22,7 @@
 #include "point_locator_tree.h"
 #include "fe_interface.h"
 #include "mesh_generation.h"
+#include "exodusII_io.h"
 
 #include <fstream>
 
@@ -63,20 +64,22 @@ PetscPDETempRadiation::PetscPDETempRadiation() :
     m_StateDofMap(NULL),
     m_PDEConstrScale(1.0),
     m_Alpha(1.0),
-    m_Beta(1e-8)
+    m_HotMinTemp1(2.0),
+    m_HotMinTemp2(1.0),
+    m_ReguStateParam(0.0)
 {
-  m_OmegaInner[0] = 0.2;
-  m_OmegaInner[1] = 0.3;
-  m_OmegaInner[2] = m_Dim==3 ? 0.4 : 0.0;
-  m_OmegaInner[3] = 0.5;
-  m_OmegaInner[4] = 0.6;
-  m_OmegaInner[5] = m_Dim==3 ? 0.7 : 0.0;
-  m_OmegaOuter[0] = 0.1;
-  m_OmegaOuter[1] = 0.2;
-  m_OmegaOuter[2] = 0.3;
-  m_OmegaOuter[3] = 0.6;
-  m_OmegaOuter[4] = 0.7;
-  m_OmegaOuter[5] = 0.8;  
+  m_Omega1[0] = 0.2;
+  m_Omega1[1] = 0.3;
+  m_Omega1[2] = m_Dim==3 ? 0.4 : 0.0;
+  m_Omega1[3] = 0.5;
+  m_Omega1[4] = 0.6;
+  m_Omega1[5] = m_Dim==3 ? 0.7 : 0.0;
+  m_Omega2[0] = 0.1;
+  m_Omega2[1] = 0.2;
+  m_Omega2[2] = 0.3;
+  m_Omega2[3] = 0.6;
+  m_Omega2[4] = 0.7;
+  m_Omega2[5] = 0.8;  
 }
 
 
@@ -132,6 +135,9 @@ void PetscPDETempRadiation::DetroySelfOwnedLibMeshPetscVector(AutoPtr<PetscVecto
   END_FUNCTION
 }
 
+double PetscPDETempRadiation::GetHotMinTemp1() {return m_HotMinTemp1;}
+double PetscPDETempRadiation::GetHotMinTemp2() {return m_HotMinTemp2;}
+
 void PetscPDETempRadiation::Init(const std::string filename)
 {
   START_FUNCTION
@@ -159,39 +165,39 @@ void PetscPDETempRadiation::Init(const std::string filename)
         h = Vals[0];
       }
       else {
-        n = sscanf(Buf,"OmegaInner=%lf,%lf,%lf,%lf,%lf,%lf",Vals+0,Vals+1,Vals+2,Vals+3,Vals+4,Vals+5);
+        n = sscanf(Buf,"Omega1=%lf,%lf,%lf,%lf,%lf,%lf",Vals+0,Vals+1,Vals+2,Vals+3,Vals+4,Vals+5);
         if(n>0) {
           if(n==4) {
             if((m_Dim==0) || (m_Dim==2))
               m_Dim = 2;
             else {
-              std::cout << "Dimension of OmegaInner and OmegaOuter not constsitent" << std::endl;
+              std::cout << "Dimension of Omega1 and Omega2 not constsitent" << std::endl;
               std::cout << "Problem interpreting line:" << std::endl;
               std::cout << Buf << std::endl;
               exit(1);
             }
-            m_OmegaInner[0] = Vals[0];
-            m_OmegaInner[1] = Vals[1];
-            m_OmegaInner[2] = 0.0;
-            m_OmegaInner[3] = Vals[2];
-            m_OmegaInner[4] = Vals[3];
-            m_OmegaInner[5] = 0.0;
+            m_Omega1[0] = Vals[0];
+            m_Omega1[1] = Vals[1];
+            m_Omega1[2] = 0.0;
+            m_Omega1[3] = Vals[2];
+            m_Omega1[4] = Vals[3];
+            m_Omega1[5] = 0.0;
           }
           else if(n==6) {
             if((m_Dim==0) || (m_Dim==3))
               m_Dim = 3;
             else {
-              std::cout << "Dimension of OmegaInner and OmegaOuter not constsitent" << std::endl;
+              std::cout << "Dimension of Omega1 and Omega2 not constsitent" << std::endl;
               std::cout << "Problem interpreting line:" << std::endl;
               std::cout << Buf << std::endl;
               exit(1);
             }
-            m_OmegaInner[0] = Vals[0];
-            m_OmegaInner[1] = Vals[1];
-            m_OmegaInner[2] = Vals[2];
-            m_OmegaInner[3] = Vals[3];
-            m_OmegaInner[4] = Vals[4];
-            m_OmegaInner[5] = Vals[5];
+            m_Omega1[0] = Vals[0];
+            m_Omega1[1] = Vals[1];
+            m_Omega1[2] = Vals[2];
+            m_Omega1[3] = Vals[3];
+            m_Omega1[4] = Vals[4];
+            m_Omega1[5] = Vals[5];
           }
           else {
             std::cout << "Dimension not implemented, must be 2 or 3" << std::endl;
@@ -201,39 +207,39 @@ void PetscPDETempRadiation::Init(const std::string filename)
           }
         }
         else {
-          n = sscanf(Buf,"OmegaOuter=%lf,%lf,%lf,%lf,%lf,%lf",Vals+0,Vals+1,Vals+2,Vals+3,Vals+4,Vals+5);
+          n = sscanf(Buf,"Omega2=%lf,%lf,%lf,%lf,%lf,%lf",Vals+0,Vals+1,Vals+2,Vals+3,Vals+4,Vals+5);
           if(n>0) {
             if(n==4) {
               if((m_Dim==0) || (m_Dim==2))
                 m_Dim = 2;
               else {
-                std::cout << "Dimension of OmegaInner and OmegaOuter not constsitent" << std::endl;
+                std::cout << "Dimension of Omega1 and Omega2 not constsitent" << std::endl;
                 std::cout << "Problem interpreting line:" << std::endl;
                 std::cout << Buf << std::endl;
                 exit(1);
               }
-              m_OmegaOuter[0] = Vals[0];
-              m_OmegaOuter[1] = Vals[1];
-              m_OmegaOuter[2] = 0.0;
-              m_OmegaOuter[3] = Vals[2];
-              m_OmegaOuter[4] = Vals[3];
-              m_OmegaOuter[5] = 0.0;
+              m_Omega2[0] = Vals[0];
+              m_Omega2[1] = Vals[1];
+              m_Omega2[2] = 0.0;
+              m_Omega2[3] = Vals[2];
+              m_Omega2[4] = Vals[3];
+              m_Omega2[5] = 0.0;
             }
             else if(n==6) {
               if((m_Dim==0) || (m_Dim==3))
                 m_Dim = 3;
               else {
-                std::cout << "Dimension of OmegaInner and OmegaOuter not constsitent" << std::endl;
+                std::cout << "Dimension of Omega1 and Omega2 not constsitent" << std::endl;
                 std::cout << "Problem interpreting line:" << std::endl;
                 std::cout << Buf << std::endl;
                 exit(1);
               }
-              m_OmegaOuter[0] = Vals[0];
-              m_OmegaOuter[1] = Vals[1];
-              m_OmegaOuter[2] = Vals[2];
-              m_OmegaOuter[3] = Vals[3];
-              m_OmegaOuter[4] = Vals[4];
-              m_OmegaOuter[5] = Vals[5];
+              m_Omega2[0] = Vals[0];
+              m_Omega2[1] = Vals[1];
+              m_Omega2[2] = Vals[2];
+              m_Omega2[3] = Vals[3];
+              m_Omega2[4] = Vals[4];
+              m_Omega2[5] = Vals[5];
             }
             else {
               std::cout << "Dimension not implemented, must be 2 or 3" << std::endl;
@@ -244,14 +250,14 @@ void PetscPDETempRadiation::Init(const std::string filename)
           }
           else
           {
-            n = sscanf(Buf,"OuterMaxTemp=%lf",Vals);
+            n = sscanf(Buf,"MinTemp1=%lf",Vals);
             if(1==n) {
-              m_OuterMaxTemp = Vals[0];
+              m_HotMinTemp1 = Vals[0];
             }
             else {
-              n = sscanf(Buf,"Beta=%lf",Vals);
+              n = sscanf(Buf,"MinTemp2=%lf",Vals);
               if(1==n) {
-                m_Beta = Vals[0];
+                m_HotMinTemp2 = Vals[0];
               }
               else {
                 std::cout << "Can't interprete line:" << std::endl;
@@ -400,12 +406,17 @@ void PetscPDETempRadiation::get_bounds(Vec& state_l,
   else {
     VecSet(state_l,0.0);
     PetscVector<Number> lm_state_u(state_u);
+    PetscVector<Number> lm_state_l(state_l);
     lm_state_u = Inf;
+    lm_state_l = -Inf;
     MeshBase::node_iterator       node_it  = m_StateMesh.local_nodes_begin();
     const MeshBase::node_iterator node_end = m_StateMesh.local_nodes_end();
     for ( ; node_it != node_end; ++node_it) {
-      if(IsInOmegaOuter(**node_it)) {
-        lm_state_u.set((*node_it)->dof_number(0,0,0),m_OuterMaxTemp);
+      if(IsInOmega1(**node_it)) {
+        lm_state_l.set((*node_it)->dof_number(0,0,0),m_HotMinTemp1);
+      }
+      if(IsInOmega2(**node_it)) {
+        lm_state_l.set((*node_it)->dof_number(0,0,0),m_HotMinTemp2);
       }
     }
     lm_state_u.close();
@@ -449,45 +460,43 @@ void PetscPDETempRadiation::calc_objective_part(Number& Val)
 {
   START_FUNCTION
   Val = 0.0;
-  double TikhonovVal(0.0);
   const unsigned int Dim = m_StateMesh.mesh_dimension();
   FEType fe_type = m_StateDofMap->variable_type(0);
+
   AutoPtr<FEBase> FEVol(FEBase::build(Dim, fe_type)); // this object will by the current volume object, actualy holding values for current phi and dphi
   AutoPtr<QBase> QuadVol=fe_type.default_quadrature_rule(Dim,0);
   FEVol->attach_quadrature_rule(QuadVol.get());
   const std::vector<Real>& JxWVol = FEVol->get_JxW();   // References to values hold by fe (i.e. they change, ones fe changes)
-  const std::vector<Point>& xyzVol = FEVol->get_xyz();
-  const std::vector< std::vector<Number> >& VolPhi = FEVol->get_phi();
-  std::vector<Number> LocalState;   // solution values of current element
-  std::vector<unsigned int> DofIdx;   // solution values of current element
+  const std::vector<std::vector<Number> >& VolPhi = FEVol->get_phi();
+  std::vector<unsigned int> DofIdx; // mapping local index -> global index
+
   AutoPtr<FEBase> FEFace(FEBase::build(Dim, fe_type)); // surface object
   AutoPtr<QBase> QuadFace=fe_type.default_quadrature_rule(Dim-1,0);
   FEFace->attach_quadrature_rule(QuadFace.get());
   const std::vector<Real>& JxWFace = FEFace->get_JxW();
   const std::vector<std::vector<Real> >& FacePhi = FEFace->get_phi();
   std::vector<Number> LocalControl;
+  std::vector<Number> LocalState;   // solution values of current element
   std::vector<int> FaceToVol;       // index face node -> index elem node
-  double ControlVal(0.0);
+  double ControlVal(0.0), StateVal(0.0);
   
   MeshBase::const_element_iterator itCurEl = m_StateMesh.active_local_elements_begin();
   const MeshBase::const_element_iterator itEndEl = m_StateMesh.active_local_elements_end();
   for ( ; itCurEl != itEndEl; ++itCurEl) {
     const Elem* CurElem = *itCurEl;
+    FEVol->reinit(CurElem);
     m_StateDofMap->dof_indices(CurElem, DofIdx);  // setup local->global mapping in form of array
-    FEVol->reinit(CurElem); // reinit fe to fit the current element, i.e. recalulate JxW and dPhi
     LocalState.resize(DofIdx.size());
-    for (unsigned int iCurSol=0;iCurSol<LocalState.size();iCurSol++) {
-      LocalState[iCurSol] = m_State->el(DofIdx[iCurSol]);
+    for (unsigned int i=0;i<LocalState.size();i++) {
+      LocalState[i] = m_State->el(DofIdx[i]);
     }
-    unsigned int qp,i,j;
-    for (qp=0; qp<QuadVol->n_points(); qp++) {
-      if(IsInOmegaInner(xyzVol[qp])) {
-        for (i=0; i<CurElem->n_nodes(); i++) {
-          for (j=0; j<CurElem->n_nodes(); j++) {
-            Val -= JxWVol[qp]*VolPhi[i][qp]*LocalState[i]*LocalState[j]*VolPhi[j][qp];
-          }
-        }
+
+    for (unsigned short qp=0; qp<QuadVol->n_points(); qp++) {
+      StateVal=0.0;
+      for(unsigned int iNode=0; iNode<CurElem->n_nodes(); iNode++){
+        StateVal += LocalState[iNode] * VolPhi[iNode][qp];
       }
+      Val += JxWVol[qp]*m_ReguStateParam*StateVal*StateVal;
     }
 
     for (unsigned int side=0; side<CurElem->n_sides(); side++) {
@@ -505,21 +514,16 @@ void PetscPDETempRadiation::calc_objective_part(Number& Val)
         for(unsigned short iNode=0; iNode<Side->n_nodes(); iNode++) {
           LocalControl[iNode] = m_Control->el(m_ControlNodeIDToControlDOF[Side->node(iNode)]);
         }
-        for (qp=0; qp<QuadFace->n_points(); qp++) {
+        for (unsigned short qp=0; qp<QuadFace->n_points(); qp++) {
           ControlVal=0.0;
           for(unsigned int iNode=0; iNode<Side->n_nodes(); iNode++){
             ControlVal += LocalControl[iNode] * FacePhi[FaceToVol[iNode]][qp];
           }
-          for (i=0; i<Side->n_nodes(); i++) {
-            // TODO: Clarify: Why 6.0 instead of 2.0 in gradient ????
-            TikhonovVal += JxWFace[qp]*m_Beta*ControlVal*ControlVal;
-          }
+          Val += JxWFace[qp]*ControlVal*ControlVal;
         }
       }
     } // End side loop
   }
-  std::cout << "Obj: " << Val << ", TikhonovVal:" << TikhonovVal << std::endl;
-  Val += TikhonovVal;
   END_FUNCTION
 }
 
@@ -530,44 +534,44 @@ void PetscPDETempRadiation::calc_objective_gradient(Vec& grad_state, Vec& grad_c
   m_GradObjControl->zero();
   const unsigned int Dim = m_StateMesh.mesh_dimension();
   FEType fe_type = m_StateDofMap->variable_type(0);
+
   AutoPtr<FEBase> FEVol(FEBase::build(Dim, fe_type)); // this object will by the current volume object, actualy holding values for current phi and dphi
   AutoPtr<QBase> QuadVol=fe_type.default_quadrature_rule(Dim,0);
   FEVol->attach_quadrature_rule(QuadVol.get());
   const std::vector<Real>& JxWVol = FEVol->get_JxW();   // References to values hold by fe (i.e. they change, ones fe changes)
-  const std::vector<Point>& xyzVol = FEVol->get_xyz();
-  const std::vector< std::vector<Number> >& VolPhi = FEVol->get_phi();
-  std::vector<Number> LocalState;   // solution values of current element
-  std::vector<unsigned int> DofIdx;   // solution values of current element
+  const std::vector<std::vector<Number> >& VolPhi = FEVol->get_phi();
+  std::vector<unsigned int> DofIdx; // mapping local index -> global index
+
   AutoPtr<FEBase> FEFace(FEBase::build(Dim, fe_type)); // surface object
   AutoPtr<QBase> QuadFace=fe_type.default_quadrature_rule(Dim-1,0);
   FEFace->attach_quadrature_rule(QuadFace.get());
   const std::vector<Real>& JxWFace = FEFace->get_JxW();
   const std::vector<std::vector<Real> >& FacePhi = FEFace->get_phi();
-  std::vector<Number> LocalControl;
+  std::vector<Number> LocalControl, LocalState;
   std::vector<int> FaceToVol;       // index face node -> index elem node
-  double ControlVal(0.0);
+  double ControlVal(0.0), StateVal(0.0);
 
   MeshBase::const_element_iterator itCurEl = m_StateMesh.active_local_elements_begin();
   const MeshBase::const_element_iterator itEndEl = m_StateMesh.active_local_elements_end();
   for ( ; itCurEl != itEndEl; ++itCurEl) {
     const Elem* CurElem = *itCurEl;
+    FEVol->reinit(CurElem);
     m_StateDofMap->dof_indices(CurElem, DofIdx);  // setup local->global mapping in form of array
-    FEVol->reinit(CurElem); // reinit fe to fit the current element, i.e. recalulate JxW and dPhi
     LocalState.resize(DofIdx.size());
-    for (unsigned int iCurSol=0;iCurSol<LocalState.size();iCurSol++) {
-      LocalState[iCurSol] = m_State->el(DofIdx[iCurSol]);
+    for (unsigned int i=0;i<LocalState.size();i++) {
+      LocalState[i] = m_State->el(DofIdx[i]);
     }
-    unsigned int qp,i,j;
-    for (qp=0; qp<QuadVol->n_points(); qp++) {
-      if(IsInOmegaInner(xyzVol[qp])) {
-        for (i=0; i<CurElem->n_nodes(); i++) {
-          for (j=0; j<CurElem->n_nodes(); j++) {
-            m_GradObjState->add(DofIdx[i], -2.0*JxWVol[qp]*VolPhi[i][qp]*LocalState[j]*VolPhi[j][qp]);
-          }
-        }
+
+    for (unsigned short qp=0; qp<QuadVol->n_points(); qp++) {
+      StateVal=0.0;
+      for(unsigned int iNode=0; iNode<CurElem->n_nodes(); iNode++){
+        StateVal += LocalState[iNode] * VolPhi[iNode][qp];
+      }
+      for(unsigned int iNode=0; iNode<CurElem->n_nodes(); iNode++){
+        m_GradObjState->add(DofIdx[iNode],2.0*m_ReguStateParam*JxWVol[qp]*StateVal*VolPhi[iNode][qp]);
       }
     }
-    
+
     for (unsigned int side=0; side<CurElem->n_sides(); side++) {
       if (CurElem->neighbor(side) == NULL) {
         FEFace->reinit(CurElem, side);
@@ -583,15 +587,14 @@ void PetscPDETempRadiation::calc_objective_gradient(Vec& grad_state, Vec& grad_c
         for(unsigned short iNode=0; iNode<Side->n_nodes(); iNode++) {
           LocalControl[iNode] = m_Control->el(m_ControlNodeIDToControlDOF[Side->node(iNode)]);
         }
-        for (qp=0; qp<QuadFace->n_points(); qp++) {
+        for (unsigned short qp=0; qp<QuadFace->n_points(); qp++) {
           ControlVal=0.0;
-          for(unsigned int iNode=0; iNode<Side->n_nodes(); iNode++){
+          for(unsigned short iNode=0; iNode<Side->n_nodes(); iNode++){
             ControlVal += LocalControl[iNode] * FacePhi[FaceToVol[iNode]][qp];
           }
-          for (i=0; i<Side->n_nodes(); i++) {
-            // TODO: Clarify: Why 6.0 instead of 2.0 in gradient ????
-            m_GradObjControl->add(m_ControlNodeIDToControlDOF[Side->node(i)],
-                                  6.0*JxWFace[qp]*m_Beta*ControlVal*FacePhi[FaceToVol[i]][qp]);
+          for (unsigned short iNode=0; iNode<Side->n_nodes(); iNode++) {
+            m_GradObjControl->add(m_ControlNodeIDToControlDOF[Side->node(iNode)],
+                                  2.0*JxWFace[qp]*ControlVal*FacePhi[FaceToVol[iNode]][qp]);
           }
         }
       }
@@ -832,30 +835,19 @@ void PetscPDETempRadiation::calc_hessians(Number sigma, Vec& lambda_loc_pde, Vec
 
   for ( ; itCurEl != itEndEl; ++itCurEl) {
     const Elem* CurElem = *itCurEl;
-    m_StateDofMap->dof_indices(CurElem, StateDofIdx);  // setup local->global mapping in form of array
     FEVol->reinit(CurElem); // reinit fe to fit the current element, i.e. recalulate JxW and dPhi
+    m_StateDofMap->dof_indices(CurElem, StateDofIdx);  // setup local->global mapping in form of array
     ElemHessStateState.resize(StateDofIdx.size(),StateDofIdx.size());
-    LocalState.resize(StateDofIdx.size());
-    for (unsigned int iCurSol=0;iCurSol<LocalState.size();iCurSol++) {
-      LocalState[iCurSol] = m_State->el(StateDofIdx[iCurSol]);
-    }
 
-    unsigned int qp,i,j;
-    for (qp=0; qp<QuadVol->n_points(); qp++) {
-      if(IsInOmegaInner(xyzVol[qp])) {
-        for (i=0; i<CurElem->n_nodes(); i++) {
-          for (j=0; j<=i; j++) {
-            if(m_CalcType==Values) {
-              m_HessStateState->add(StateDofIdx[i],StateDofIdx[j], -2.0*sigma*JxWVol[qp]*VolPhi[i][qp]*VolPhi[j][qp]);
-            }
-            else {
-              m_HessStateState->add(StateDofIdx[i],StateDofIdx[j],1.0);
-            }
-          }
+    for (unsigned short qp=0; qp<QuadVol->n_points(); qp++) {
+      for (unsigned short i=0; i<CurElem->n_nodes(); i++) {
+        for (unsigned short j=0; j<=i; j++) {
+          ElemHessStateState(i,j) += JxWVol[qp]*sigma*2.0*m_ReguStateParam*VolPhi[i][qp]*VolPhi[j][qp];
         }
       }
     }
 
+    unsigned int qp,i,j;
     for (unsigned int side=0; side<CurElem->n_sides(); side++) {
       if (CurElem->neighbor(side) == NULL) {
         FEFace->reinit(CurElem, side);
@@ -884,13 +876,13 @@ void PetscPDETempRadiation::calc_hessians(Number sigma, Vec& lambda_loc_pde, Vec
           }
           for (i=0; i<Side->n_nodes(); i++) {
             for (j=0; j<=i; j++) {
+              m_HessControlControl->add(m_ControlNodeIDToControlDOF[Side->node(i)],m_ControlNodeIDToControlDOF[Side->node(j)],JxWFace[qp]*2.0*sigma*FacePhi[FaceToVol[j]][qp]*FacePhi[FaceToVol[i]][qp]);
               for (k=0; k<Side->n_nodes(); k++) {
                 if(m_CalcType==Values) {
                   ElemHessStateState(FaceToVol[i],FaceToVol[j]) += lambda_pde.el(StateDofIdx[FaceToVol[k]])*JxWFace[qp]*m_Alpha*12.0*pow(StateVal  ,2.0)*FacePhi[FaceToVol[j]][qp]*FacePhi[FaceToVol[i]][qp]*FacePhi[FaceToVol[k]][qp];
                   if(CONTROL_EXPONENT>1) {
                     m_HessControlControl->add(m_ControlNodeIDToControlDOF[Side->node(i)],m_ControlNodeIDToControlDOF[Side->node(j)],-lambda_pde.el(StateDofIdx[FaceToVol[k]])*JxWFace[qp]*m_Alpha*CONTROL_EXPONENT*(CONTROL_EXPONENT-1)*pow(ControlVal,CONTROL_EXPONENT-2.0)*FacePhi[FaceToVol[j]][qp]*FacePhi[FaceToVol[i]][qp]*FacePhi[FaceToVol[k]][qp]*m_PDEConstrScale);
                   }
-                  m_HessControlControl->add(m_ControlNodeIDToControlDOF[Side->node(i)],m_ControlNodeIDToControlDOF[Side->node(j)],JxWFace[qp]*2.0*sigma*m_Beta*FacePhi[FaceToVol[j]][qp]*FacePhi[FaceToVol[i]][qp]);
                 }
                 else {
                   ElemHessStateState(FaceToVol[i],FaceToVol[j]) += 1.0;
@@ -972,41 +964,81 @@ void PetscPDETempRadiation::set_finalize_vectors(Vec& lm_state_lb_mults,
 				                            Vec& lm_aux_constr_mults)
 {
   START_FUNCTION
+
+  ExodusII_IO exoio(m_StateMesh);
+  std::vector<double> Var;
+  m_State->localize_to_one(Var);
+  std::vector< std::string > VarNames;
+  VarNames.push_back("State");
+  exoio.write_nodal_data (std::string("State.ex2"), Var, VarNames);
+
+  ExodusII_IO exoio2(m_StateMesh);
+  MeshBase::node_iterator it_cur_node = m_StateMesh.active_nodes_begin();
+  const MeshBase::node_iterator end_node = m_StateMesh.active_nodes_end();
+  for (;it_cur_node!=end_node;it_cur_node++) {
+    const Node* cur_node = *it_cur_node;
+    if(IsOnBoundary(*cur_node)) {
+      Var[cur_node->dof_number(0,0,0)] = m_Control->el(m_ControlNodeIDToControlDOF[cur_node->id()]);
+    }
+    else {
+      Var[cur_node->dof_number(0,0,0)] = 0;
+    }
+  }
+
+  VarNames[0] = "Control";
+  exoio2.write_nodal_data (std::string("Control.ex2"), Var, VarNames);
+
   END_FUNCTION
 }
 
-
-bool PetscPDETempRadiation::IsInOmegaInner(const Point& pt)
+bool PetscPDETempRadiation::IsOnBoundary(const libMesh::Point& pt)
 {
-  // is in the rectangle defined by OmegaInner?
-  if(pt(0)<m_OmegaInner[0])
+  START_FUNCTION
+  double eps = 1e-8;
+  if( (fabs(pt(0))>eps) && (fabs(pt(0)-1)>eps) &&
+      (fabs(pt(1))>eps) && (fabs(pt(1)-1)>eps) &&
+      (fabs(pt(2))>eps) && (fabs(pt(2)-1)>eps) ) 
     return false;
-  if(pt(1)<m_OmegaInner[1])
-    return false;
-  if( (m_Dim==3) && (pt(2)<m_OmegaInner[2]) )
-    return false;
-  if(pt(0)>m_OmegaInner[3])
-    return false;
-  if(pt(1)>m_OmegaInner[4])
-    return false;
-  if( (m_Dim==3) && (pt(2)>m_OmegaInner[5]) )
-    return false;
-  return true;
+  else
+    return true;
+  END_FUNCTION
 }
 
-bool PetscPDETempRadiation::IsInOmegaOuter(const Point& pt)
+bool PetscPDETempRadiation::IsInOmega1(const Point& pt)
 {
-  if(pt(0)>m_OmegaOuter[0])
-    return true;
-  if(pt(1)>m_OmegaOuter[1])
+  START_FUNCTION
+  // is in the rectangle defined by OmegaInner?
+  if(pt(0)<m_Omega1[0])
     return false;
-  if( (m_Dim==3) && (pt(2)<m_OmegaOuter[2]) )
+  if(pt(1)<m_Omega1[1])
     return false;
-  if(pt(0)<m_OmegaOuter[3])
+  if( (m_Dim==3) && (pt(2)<m_Omega1[2]) )
     return false;
-  if(pt(1)<m_OmegaOuter[4])
+  if(pt(0)>m_Omega1[3])
     return false;
-  if( (m_Dim==3) && (pt(2)<m_OmegaOuter[5]) )
+  if(pt(1)>m_Omega1[4])
+    return false;
+  if( (m_Dim==3) && (pt(2)>m_Omega1[5]) )
     return false;
   return true;
+  END_FUNCTION
+}
+
+bool PetscPDETempRadiation::IsInOmega2(const Point& pt)
+{
+  START_FUNCTION
+  if(pt(0)<m_Omega2[0])
+    return false;
+  if(pt(1)<m_Omega2[1])
+    return false;
+  if( (m_Dim==3) && (pt(2)<m_Omega2[2]) )
+    return false;
+  if(pt(0)>m_Omega2[3])
+    return false;
+  if(pt(1)>m_Omega2[4])
+    return false;
+  if( (m_Dim==3) && (pt(2)>m_Omega2[5]) )
+    return false;
+  return true;
+  END_FUNCTION
 }

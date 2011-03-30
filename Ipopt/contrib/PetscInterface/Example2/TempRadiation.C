@@ -71,10 +71,11 @@ int main (int argc, char** argv)
   }
 #else
     Vec State,Control;
+    double InitVal = 1.1*(pPDE->GetHotMinTemp1()+pPDE->GetHotMinTemp2());
     pPDE->getControlVector(Control);
-    VecSet(Control, pow(pPDE->GetOuterMaxTemp()/2.0,4.0));
+    VecSet(Control, pow(InitVal,4.0));
     pPDE->getStateVector(State);
-    VecSet(State, pPDE->GetOuterMaxTemp()/2.0);
+    VecSet(State, InitVal);
 #endif
   {
     std::cout << "****************************************************" << std::endl;
