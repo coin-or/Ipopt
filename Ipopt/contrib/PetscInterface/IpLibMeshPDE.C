@@ -138,11 +138,11 @@ void LibMeshPDEBase::InitProblemData(std::istream& is)
   PG_.ReadFromStream(is);
   PG_.CreateMesh(&mesh_,PG_.GetFE_Degree());
   
-  pde_scaling_ = 1.0/pow(PG_._h,mesh_.mesh_dimension()-2);
+  pde_scaling_ = 1e-2/pow(PG_._h,mesh_.mesh_dimension()-2);
 #ifdef SCALE_AUX_BOUNDS
-  v_min_constr_scaling_ = 1.0/pow(PG_._h,mesh_.mesh_dimension()-2);
+  v_min_constr_scaling_ = 1e-1/pow(PG_._h,mesh_.mesh_dimension()-2);
 #else
-  v_min_constr_scaling_ = 1.0/pow(PG_._h,mesh_.mesh_dimension()-4);
+  v_min_constr_scaling_ = 1e-1/pow(PG_._h,mesh_.mesh_dimension()-4);
 #endif
   //WriteNodeFile(mesh_, "MeshGen.node");
   //WriteEleFile(mesh_, "MeshGen.ele");
@@ -352,21 +352,21 @@ void LibMeshPDEBase::reinit()
     // each processor has hole matrix, but sets only part of local constraints
     Mat petsc_mat;
     //MatCreateMPIAIJ(PETSC_COMM_WORLD,n_state_global,n_state_global,n_state_global,n_state_global,8,PETSC_NULL,0,PETSC_NULL,&petsc_mat);
-    MatCreateSeqAIJ(PETSC_COMM_SELF,n_state_global,n_state_global,8,PETSC_NULL,&petsc_mat);
+    MatCreateSeqAIJ(PETSC_COMM_SELF,n_state_global,n_state_global,30,PETSC_NULL,&petsc_mat);
     hess_state_state_ = new PetscMatrix<Number>(petsc_mat);
   }
   {
     // each processor has hole matrix, but sets only part of local constraints
     Mat petsc_mat;
     //MatCreateMPIAIJ(PETSC_COMM_WORLD,n_control_global,n_state_global,n_control_global,n_state_global,8,PETSC_NULL,0,PETSC_NULL,&petsc_mat);
-    MatCreateSeqAIJ(PETSC_COMM_SELF,n_control_global,n_state_global,8,PETSC_NULL,&petsc_mat);
+    MatCreateSeqAIJ(PETSC_COMM_SELF,n_control_global,n_state_global,30,PETSC_NULL,&petsc_mat);
     hess_control_state_ = new PetscMatrix<Number>(petsc_mat);
   }
   {
     // each processor has hole matrix, but sets only part of local constraints
     Mat petsc_mat;
     //MatCreateMPIAIJ(PETSC_COMM_WORLD,n_control_global,n_control_global,n_control_global,n_control_global,8,PETSC_NULL,0,PETSC_NULL,&petsc_mat);
-    MatCreateSeqAIJ(PETSC_COMM_SELF,n_control_global,n_control_global,8,PETSC_NULL,&petsc_mat);
+    MatCreateSeqAIJ(PETSC_COMM_SELF,n_control_global,n_control_global,30,PETSC_NULL,&petsc_mat);
     hess_control_control_ = new PetscMatrix<Number>(petsc_mat);
   }
   MY_DBG_PRINT("ibMeshPDEBase::reinit finished");

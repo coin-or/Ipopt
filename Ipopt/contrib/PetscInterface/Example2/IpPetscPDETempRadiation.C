@@ -373,20 +373,20 @@ void PetscPDETempRadiation::Init(const std::string filename)
   {
     // each processor has hole matrix, but sets only part of local constraints
     Mat petsc_mat;
-    MatCreateSeqAIJ(PETSC_COMM_SELF,NumGlobStates,NumGlobStates,8,PETSC_NULL,&petsc_mat);
+    MatCreateSeqAIJ(PETSC_COMM_SELF,NumGlobStates,NumGlobStates,30,PETSC_NULL,&petsc_mat);
     m_HessStateState = AutoPtr<PetscMatrix<Number> >(new PetscMatrix<Number>(petsc_mat));
   }
   {
     // each processor has hole matrix, but sets only part of local constraints
     Mat petsc_mat;  MY_DBG_PRINT("LibMeshPDEBase::calc_objective_gradient called");
 
-    MatCreateSeqAIJ(PETSC_COMM_SELF,NumGlobControls,NumGlobStates,8,PETSC_NULL,&petsc_mat);
+    MatCreateSeqAIJ(PETSC_COMM_SELF,NumGlobControls,NumGlobStates,30,PETSC_NULL,&petsc_mat);
     m_HessControlState = AutoPtr<PetscMatrix<Number> >(new PetscMatrix<Number>(petsc_mat));
   }
   {
     // each processor has hole matrix, but sets only part of local constraints
     Mat petsc_mat;
-    MatCreateSeqAIJ(PETSC_COMM_SELF,NumGlobControls,NumGlobControls,8,PETSC_NULL,&petsc_mat);
+    MatCreateSeqAIJ(PETSC_COMM_SELF,NumGlobControls,NumGlobControls,30,PETSC_NULL,&petsc_mat);
     m_HessControlControl = AutoPtr<PetscMatrix<Number> >(new PetscMatrix<Number>(petsc_mat));
   }
   END_FUNCTION
