@@ -1843,7 +1843,7 @@ fi
   if test "x$have_svnversion" = xyes; then
 
     svn_rev_tmp=`LANG=en_EN svnversion $srcdir 2>/dev/null`
-    if test "$IPOPT_SVN_REV" != exported; then
+    if test "x$svn_rev_tmp" != xexported -a "x$svn_rev_tmp" != x; then
       IPOPT_SVN_REV=`echo $svn_rev_tmp | sed -n -e 's/^[0-9]*://' -e 's/\([0-9]\)[^0-9]*$/\1/p'`
 
 cat >>confdefs.h <<_ACEOF
