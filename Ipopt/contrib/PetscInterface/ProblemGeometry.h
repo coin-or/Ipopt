@@ -1,4 +1,4 @@
-// Copyright (C) 2010 International Business Machines.
+// Copyright (C) 2010, 2011 International Business Machines.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //

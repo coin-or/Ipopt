@@ -63,7 +63,9 @@ int main (int argc, char** argv)
       // Find initial point:
       // get bounds
       pLibMeshPDE->simulation_mode_=true;
-      pLibMeshPDE->getControlVector() = 1.0;
+      double initContr = 20.;
+      printf("Simulation with initial AC setting %e\n", initContr);
+      pLibMeshPDE->getControlVector() = initContr;
       // solve simulation (fixed controls)
       // Intialize the IpoptApplication and process the options
       status = app->Initialize("simu.opt");
@@ -114,6 +116,8 @@ int main (int argc, char** argv)
       exit(1);
 #endif
 
+// #define SCALE_INIT
+#ifdef SCALE_INIT
       // scale the simulation solution to satisfy inequality constraints
       pLibMeshPDE->simulation_mode_=false;
       AutoPtr<  NumericVector< lm_Number > > state_l = pLibMeshPDE->getStateVector().clone();
@@ -161,6 +165,7 @@ int main (int argc, char** argv)
         }
 #endif
       }
+#endif
 
       // solve a second time to check
 #if 0
