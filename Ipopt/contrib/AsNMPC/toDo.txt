@@ -19,6 +19,7 @@ SchurData
 
 AsSensStepCalc
 + move InitializeImpl to the implementation!
+- change boundchecking: instead of bound_check yes/no have option bound_check active_set/step_until_bound/none  which will then call the appropriate module. Make sure that active_set is only used in conjunction with the Schur algorithms
 
 AsIndexPCalculator
 + use std::map instead of std::vector for PColumn list so it is easier to sort/find them
