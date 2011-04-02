@@ -16,11 +16,11 @@ suffix nmpc_init_constr, IN;
 option solver ampl_asnmpc                ;
 
 option presolve 0;
-option ipopt_options 'run_nmpc no'; 
+option ipopt_options 'run_sens no'; 
 
 model hicks.mod                          ; 
 data hicks.dat                           ; 
 
-option ipopt_options 'run_nmpc yes'; 
+option ipopt_options 'run_sens yes'; 
 solve;
 include nmpcresults.inc                  ; 

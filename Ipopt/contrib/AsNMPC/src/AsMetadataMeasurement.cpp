@@ -50,9 +50,9 @@ namespace Ipopt
 
 
 
-    bool run_nmpc;
-    options.GetBoolValue("run_nmpc", run_nmpc, "");
-    if (run_nmpc) {
+    bool run_sens;
+    options.GetBoolValue("run_sens", run_sens, "");
+    if (run_sens) {
       std::string nmpc_state_0 = "nmpc_state_1"; // nmpc_state_0 doesn't exist anymore...
       std::vector<Index> tmp_idx = x_owner_space_->GetIntegerMetaData(nmpc_state_0);
       

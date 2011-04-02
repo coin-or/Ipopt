@@ -36,7 +36,7 @@ namespace Ipopt
     virtual bool InitializeImpl(const OptionsList& options,
 			const std::string& prefix)
     {
-      options.GetBoolValue("nmpc_boundcheck", do_boundcheck_, prefix);
+      options.GetBoolValue("sens_boundcheck", do_boundcheck_, prefix);
       return true;
     }
     

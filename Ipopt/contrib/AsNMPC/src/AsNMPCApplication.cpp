@@ -51,7 +51,7 @@ namespace Ipopt
 					   0, 0,
 					   "");
     roptions->AddStringOption2(
-			       "nmpc_boundcheck",
+			       "sens_boundcheck",
 			       "Activate boundcheck and resolve for AsNMPC",
 			       "no",
 			       "no", "don't check bounds and do another SchurSolve",
@@ -65,7 +65,7 @@ namespace Ipopt
 			       "index", "use IndexPCalculator and IndexSchurData",
 			       "Determines which implementation of SchurData and PCalculator will be used. Only the index style can do boundchecking.");
     roptions->AddLowerBoundedNumberOption(
-					  "nmpc_bound_eps",
+					  "sens_bound_eps",
 					  "Bound accuracy within which a bound still is considered to be valid",
 					  0, true, 1e-3,
 					  "The schur complement solution cannot make sure that variables stay inside bounds."
@@ -89,7 +89,7 @@ namespace Ipopt
 			       "see paper for more information on each step computation");
     // This option must be in IpInterfacesRegOp.cpp
     roptions->AddStringOption2(
-			       "run_nmpc",
+			       "run_sens",
 			       "Determines if nmpc alg runs",
 			       "no",
 			       "yes", "run nmpc",
@@ -117,7 +117,7 @@ namespace Ipopt
 			       "no", "abort on suffix error",
 			       "");
     roptions->AddLowerBoundedNumberOption(
-					  "nmpc_max_pdpert",
+					  "sens_max_pdpert",
 					  "Maximum perturbation of primal dual system, for that the AsNMPC algorithm will not abort",
 					  0.0, true, 1e-3, 
 					  "For certain problems, IPOPT uses inertia correction of the primal dual matrix to achieve"
@@ -146,13 +146,13 @@ namespace Ipopt
 
     // Check for perturbation of primal dual system
     Number max_pdpert;
-    Options()->GetNumericValue("nmpc_max_pdpert", max_pdpert, "");
+    Options()->GetNumericValue("sens_max_pdpert", max_pdpert, "");
     Number pdpert_x, pdpert_s, pdpert_c, pdpert_d;
     ip_data_->getPDPert(pdpert_x, pdpert_s, pdpert_c, pdpert_d);
     if (Max(pdpert_x, pdpert_s, pdpert_c, pdpert_d)>max_pdpert) {
       jnlst_->Printf(J_WARNING, J_MAIN, "\n\t--------------= Warning =--------------\nInertia correction of primal dual system is too large for meaningful AsNMPC results.\n"
 		    "\t... aborting computation.\n"
-		     "Set option asnmpc_max_pdpert to a higher value (current: %f) to run AsNMPC algorithm anyway\n", max_pdpert);
+		     "Set option sens_max_pdpert to a higher value (current: %f) to run AsNMPC algorithm anyway\n", max_pdpert);
       nmpc_internal_abort = true;
       redhess_internal_abort = true;
     }
@@ -172,7 +172,7 @@ namespace Ipopt
       red_hess_calc->ComputeReducedHessian();
     }
 
-    if (run_nmpc_ && n_sens_steps_>0 && !nmpc_internal_abort) {
+    if (run_sens_ && n_sens_steps_>0 && !nmpc_internal_abort) {
       SmartPtr<SchurBuilder> schur_builder = new SchurBuilder();
       const std::string prefix = ""; // I should be getting this somewhere else...
       SmartPtr<AsNmpController> controller = schur_builder->BuildNmpc(*jnlst_,
@@ -185,10 +185,10 @@ namespace Ipopt
 
       retval = controller->Run();
     }
-    else if (run_nmpc_) {
+    else if (run_sens_) {
       if (n_sens_steps_<=0) {
 	jnlst_->Printf(J_WARNING, J_MAIN, "\n"
-		       "The run_nmpc option was set to true, but the specified\n"
+		       "The run_sens option was set to true, but the specified\n"
 		       "number of advanced steps was set to zero.\n"
 		       "Computation is aborted.\n\n");
       }
@@ -275,11 +275,11 @@ namespace Ipopt
     const std::string prefix = ""; // I should be getting this somewhere else...
 
     Options()->GetIntegerValue("n_sens_steps",n_sens_steps_, prefix.c_str());
-    Options()->GetBoolValue("run_nmpc", run_nmpc_, prefix.c_str());
+    Options()->GetBoolValue("run_sens", run_sens_, prefix.c_str());
     Options()->GetBoolValue("compute_red_hessian", compute_red_hessian_, prefix.c_str());
 
-    // make sure run_nmpc and skip_finalize_solution_call are consistent
-    if (run_nmpc_ || compute_red_hessian_) {
+    // make sure run_sens and skip_finalize_solution_call are consistent
+    if (run_sens_ || compute_red_hessian_) {
       Options()->SetStringValue("skip_finalize_solution_call", "yes");
     }
     else {
@@ -326,7 +326,7 @@ namespace Ipopt
     options_->GetIntegerValue("n_sens_steps",n_sens_steps_,"");
 
     // This checking should be rewritten
-    /*    if (false && run_nmpc_) {
+    /*    if (false && run_sens_) {
     // check suffixes
     std::string state;
     std::string state_value;

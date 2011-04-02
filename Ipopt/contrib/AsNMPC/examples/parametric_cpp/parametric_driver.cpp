@@ -39,7 +39,7 @@ int main(int argv, char**argc)
   // create AmplSensTNLP from argc. This is an nlp because we are using our own TNLP Adapter
   SmartPtr<TNLP> nmpc_tnlp = new ParametricTNLP();
 
-  app_ipopt->Options()->SetStringValueIfUnset("run_nmpc", "yes");
+  app_ipopt->Options()->SetStringValueIfUnset("run_sens", "yes");
   app_ipopt->Options()->SetIntegerValueIfUnset("n_sens_steps", 1);
 
   app_nmpc->Initialize();

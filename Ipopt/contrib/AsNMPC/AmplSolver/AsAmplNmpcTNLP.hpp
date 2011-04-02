@@ -95,7 +95,7 @@ namespace Ipopt
 
     /** important Options */
     Index n_sens_steps_;
-    bool run_nmpc_;
+    bool run_sens_;
     bool compute_red_hessian_;
 
     std::vector< SmartPtr<IteratesVector> > nmpc_sol_;
