@@ -2,7 +2,7 @@
 # dynamic optimization formulation of the hicks-ray reactor
 # model declaration
 # victor m zavala  march 2006
-# adapted for asNMPC by Hans Pirnay 2009
+# adapted for asNMPC by Hans Pirnay 2009, 2011
 # ===================================================================
 
 # define indexes and general variables
@@ -66,7 +66,7 @@ var tdot{i in fe, j in cp} = (yf-t[i,j])/theta+k10*exp(-n/t[i,j])*c[i,j]-alpha*u
 # The initial constraints have to be defined as variables.
 # They have to be set explictly with initial constraints.
 # These constraints need to be identified by the 
-# nmpc_init_constr suffix.
+# sens_init_constr suffix.
 var c_init_var;
 var t_init_var;
 

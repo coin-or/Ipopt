@@ -1,4 +1,4 @@
-// Copyright 2009 Hans Pirnay
+// Copyright 2009, 2011 Hans Pirnay
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -36,7 +36,7 @@ namespace Ipopt
     virtual std::vector<Index> GetInitialEqConstraints() =0;
 
     /** This function returns a std::vector holding the indices of the variables indexed 
-     *  as nmpc_state_i */
+     *  as sens_state_i */
     virtual std::vector<Index> GetNmpcState(Index i) =0;
 
     /** This function returns delta_u. It should use the values of IpData().trial()->x()*/

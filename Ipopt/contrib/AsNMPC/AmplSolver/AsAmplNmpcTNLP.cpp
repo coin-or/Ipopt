@@ -1,4 +1,4 @@
-// Copyright 2009 Hans Pirnay
+// Copyright 2009, 2011 Hans Pirnay
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -154,7 +154,7 @@ namespace Ipopt
 
     if (run_sens_) {
       for (Index step=1; step<=n_sens_steps_; ++step) {
-	std::string sol_state_id = "nmpc_sol_state_";
+	std::string sol_state_id = "sens_sol_state_";
 	append_Index(sol_state_id, step);
 	NumericMetaDataMapType::const_iterator num_it;
 	num_it = var_numeric_md.find(sol_state_id);
@@ -212,23 +212,23 @@ namespace Ipopt
     try {
       if (run_sens_) {
 	// Get Nmpc Suffixes
-	std::string nmpc_state = "nmpc_state_";
+	std::string sens_state = "sens_state_";
 	std::vector<Index> state;
 	for (Index i=1; i<=n_sens_steps_; ++i) {
-	  append_Index(nmpc_state,i);
-	  state = get_index_suffix_vec(nmpc_state.c_str());
-	  set_integer_metadata_for_var(nmpc_state, state); 
-	  nmpc_state = "nmpc_state_";
+	  append_Index(sens_state,i);
+	  state = get_index_suffix_vec(sens_state.c_str());
+	  set_integer_metadata_for_var(sens_state, state); 
+	  sens_state = "sens_state_";
 	}
-	std::string nmpc_state_value = "nmpc_state_value_";
+	std::string sens_state_value = "sens_state_value_";
 	std::vector<Number> state_val;
 	for (Index i=1; i<=n_sens_steps_; ++i) {
-	  append_Index(nmpc_state_value,i);
-	  state_val = get_number_suffix_vec(nmpc_state_value.c_str());
-	  set_numeric_metadata_for_var(nmpc_state_value, state_val); 
-	  nmpc_state_value = "nmpc_state_value_";
+	  append_Index(sens_state_value,i);
+	  state_val = get_number_suffix_vec(sens_state_value.c_str());
+	  set_numeric_metadata_for_var(sens_state_value, state_val); 
+	  sens_state_value = "sens_state_value_";
 	}
-	std::string init_constr = "nmpc_init_constr";
+	std::string init_constr = "sens_init_constr";
 	if (n_sens_steps_ >0) {
 	  std::vector<Index> init_idx = get_index_suffix_constr_vec(init_constr.c_str());
 	  set_integer_metadata_for_con(init_constr,init_idx);

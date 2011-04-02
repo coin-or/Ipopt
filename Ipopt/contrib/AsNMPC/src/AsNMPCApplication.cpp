@@ -1,4 +1,4 @@
-// Copyright 2009 Hans Pirnay
+// Copyright 2009, 2011 Hans Pirnay
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -334,15 +334,15 @@ namespace Ipopt
     const Number* number;
     Index n_nmpc_indices, n_this_nmpc_indices;
     // collect information from suffixes
-    state = "nmpc_state_1";
+    state = "sens_state_1";
     //index = ampl_tnlp_->get_index_suffix(state.c_str());
     if (index==NULL) {
-    THROW_EXCEPTION(NMPC_SUFFIX_ERROR, "Suffix nmpc_state_1 is not set");
+    THROW_EXCEPTION(NMPC_SUFFIX_ERROR, "Suffix sens_state_1 is not set");
     }
     n_nmpc_indices = AsIndexSum(ip_data_->curr()->x()->Dim(), index, 1);
     for (Index i=1; i<=n_sens_steps_; ++i) {
-    state = "nmpc_state_";
-    state_value = "nmpc_state_value_";
+    state = "sens_state_";
+    state_value = "sens_state_value_";
     append_Index(state, i);
     append_Index(state_value, i);
     //index = ampl_tnlp_->get_index_suffix(state.c_str());

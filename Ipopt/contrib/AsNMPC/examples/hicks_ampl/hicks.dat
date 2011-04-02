@@ -2,7 +2,7 @@
 # dynamic optimization formulation of the hicks-ray reactor
 # data declaration
 # victor m zavala  march 2006
-# adapted for asNMPC by Hans Pirnay 2009
+# adapted for asNMPC by Hans Pirnay 2009, 2011
 # ===================================================================
 
 param  a:        1                  2                  3 :=         #
@@ -65,21 +65,21 @@ let h[i] := 1/nfe ;
 # Here, the suffixes are set for the advanced step computations:
 #
 # 1. Define the order of the initial variables
-let c_init_var.nmpc_state_0 := 1;
-let t_init_var.nmpc_state_0 := 2;
+let c_init_var.sens_state_0 := 1;
+let t_init_var.sens_state_0 := 2;
 #
 # 2. Identify the variables at first sampling time
-let c[5,1].nmpc_state_1 := 1;
-let t[5,1].nmpc_state_1 := 2;
+let c[5,1].sens_state_1 := 1;
+let t[5,1].sens_state_1 := 2;
 #
 # 3. Set the measurement of the variables at first sampling time
-let c[5,1].nmpc_state_value_1 := 0.135;
-let t[5,1].nmpc_state_value_1 := 0.745;
+let c[5,1].sens_state_value_1 := 0.135;
+let t[5,1].sens_state_value_1 := 0.745;
 #
 # 4. Identify the initial constraints, that will be relaxed 
 #    in favor of the new measurements
-let c_init_constr.nmpc_init_constr :=1;
-let t_init_constr.nmpc_init_constr :=1;
+let c_init_constr.sens_init_constr :=1;
+let t_init_constr.sens_init_constr :=1;
 
 #-- end of the hicks.dat file -
 

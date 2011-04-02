@@ -1,4 +1,4 @@
-# Copyright 2009 Hans Pirnay
+# Copyright 2009, 2011 Hans Pirnay
 # All Rights Reserved.
 # This code is published under the Eclipse Public License.
 #
@@ -6,11 +6,11 @@
 
 reset                                    ;
 
-suffix nmpc_state_0, IN;
-suffix nmpc_state_1, IN;
-suffix nmpc_state_value_1, IN;
-suffix nmpc_sol_state_1, OUT;
-suffix nmpc_init_constr, IN;
+suffix sens_state_0, IN;
+suffix sens_state_1, IN;
+suffix sens_state_value_1, IN;
+suffix sens_sol_state_1, OUT;
+suffix sens_init_constr, IN;
 
 
 option solver ampl_asnmpc                ;
