@@ -1,4 +1,4 @@
-// Copyright 2009 Hans Pirnay
+// Copyright 2009, 2011 Hans Pirnay
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -53,8 +53,8 @@ namespace Ipopt
     bool run_sens;
     options.GetBoolValue("run_sens", run_sens, "");
     if (run_sens) {
-      std::string nmpc_state_0 = "nmpc_state_1"; // nmpc_state_0 doesn't exist anymore...
-      std::vector<Index> tmp_idx = x_owner_space_->GetIntegerMetaData(nmpc_state_0);
+      std::string sens_state_0 = "sens_state_1"; // sens_state_0 doesn't exist anymore...
+      std::vector<Index> tmp_idx = x_owner_space_->GetIntegerMetaData(sens_state_0);
       
       n_idx_ = AsIndexMax((Index)tmp_idx.size(), &tmp_idx[0], 1);
 
@@ -72,7 +72,7 @@ namespace Ipopt
     SmartPtr<const IteratesVector> it = IpData().curr();
     Index n_base = it->x()->Dim() + it->s()->Dim();
 
-    const std::vector<Index> constr_metadata = y_c_owner_space_->GetIntegerMetaData("nmpc_init_constr");
+    const std::vector<Index> constr_metadata = y_c_owner_space_->GetIntegerMetaData("sens_init_constr");
     
     std::vector<Index> retval;
     for (Index i = 0; i<constr_metadata.size(); ++i) {
@@ -87,7 +87,7 @@ namespace Ipopt
   {
     DBG_START_METH("MetadataMeasurement::GetNmpcState", dbg_verbosity);
     
-    std::string state      = "nmpc_state_";
+    std::string state      = "sens_state_";
     append_Index(state, state_number);
 
     const std::vector<Index> idx_ipopt = x_owner_space_->GetIntegerMetaData(state.c_str());
@@ -112,8 +112,8 @@ namespace Ipopt
     std::string state;
     std::string statevalue;
       
-    state      = "nmpc_state_";
-    statevalue = "nmpc_state_value_";
+    state      = "sens_state_";
+    statevalue = "sens_state_value_";
     append_Index(state,measurement_number);
     append_Index(statevalue,measurement_number);
 
@@ -164,7 +164,7 @@ namespace Ipopt
   {
     DBG_START_METH("MetadataMeasurement::SetSolution", dbg_verbosity);
 
-    std::string nmpc_sol = "nmpc_sol_state_";
+    std::string nmpc_sol = "sens_sol_state_";
     append_Index(nmpc_sol, measurement_number);
 
     const Number* sol_x_val = dynamic_cast<const DenseVector*>(GetRawPtr(sol->x()))->Values();

@@ -1,4 +1,4 @@
-// Copyright 2009 Hans Pirnay
+// Copyright 2009, 2011 Hans Pirnay
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -146,7 +146,7 @@ namespace Ipopt
 
     /** Here there should be the point to pass on the driver_vec and fork off the 
      *  Schurcomputations to a different function/process if needed. */
-    std::vector<Index> nmpc_state_list;
+    std::vector<Index> sens_state_list;
     Index schur_retval;
     std::string E_i_name;
 
@@ -167,10 +167,10 @@ namespace Ipopt
 	else if (nmpc_calc_style=="std") {
 	  E_i = new StdSchurData();
 	}
-	nmpc_state_list = measurement->GetNmpcState(i+1);
-	DBG_PRINT((dbg_verbosity, "nmpc_state_list.size()=%d", nmpc_state_list.size()));
-	// E_i->SetData_List(nmpc_state_list); // this is obsolete since Measurement class changed behaviour and now outputs indices!
-	E_i->SetData_Index(nmpc_state_list.size(),&nmpc_state_list[0]);
+	sens_state_list = measurement->GetNmpcState(i+1);
+	DBG_PRINT((dbg_verbosity, "sens_state_list.size()=%d", sens_state_list.size()));
+	// E_i->SetData_List(sens_state_list); // this is obsolete since Measurement class changed behaviour and now outputs indices!
+	E_i->SetData_Index(sens_state_list.size(),&sens_state_list[0]);
 	E_i_name = "E_";
 	append_Index(E_i_name, i+1);
 	E_i->Print(jnlst,J_VECTOR,J_USER1,E_i_name.c_str());

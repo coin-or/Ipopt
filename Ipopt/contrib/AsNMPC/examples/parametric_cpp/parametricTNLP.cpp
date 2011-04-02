@@ -1,4 +1,4 @@
-// Copyright 2010 Hans Pirnay
+// Copyright 2010, 2011 Hans Pirnay
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -204,32 +204,32 @@ bool ParametricTNLP::get_var_con_metadata(Index n,
    */
 
 
-  /* 1. nmpc_init_constr: in this list, the constraints that set the initial 
+  /* 1. sens_init_constr: in this list, the constraints that set the initial 
    *    values for the parameters are indicated. 
    *    For parameter 1 (eta_1) this is constraint 3 (e.g. C++ index 2), which is
    *    the constraint   eta_1 = eta_1_nominal;
    *    For parameter 2 (eta_2) this is constraint 4 (e.g. C++ index 3).
    */
-  std::vector<Index> nmpc_init_constr(m,0);
-  nmpc_init_constr[2] = 1;
-  nmpc_init_constr[3] = 2;
-  con_integer_md["nmpc_init_constr"] = nmpc_init_constr;
+  std::vector<Index> sens_init_constr(m,0);
+  sens_init_constr[2] = 1;
+  sens_init_constr[3] = 2;
+  con_integer_md["sens_init_constr"] = sens_init_constr;
 
-  /* 2. nmpc_state_1: in this index list, the parameters are indicated: 
+  /* 2. sens_state_1: in this index list, the parameters are indicated: 
    *    Here: [1] eta_1, [2] eta_2
    */
-  std::vector<Index> nmpc_state_1(n,0);
-  nmpc_state_1[3] = 1;
-  nmpc_state_1[4] = 2;
-  var_integer_md["nmpc_state_1"] = nmpc_state_1;
+  std::vector<Index> sens_state_1(n,0);
+  sens_state_1[3] = 1;
+  sens_state_1[4] = 2;
+  var_integer_md["sens_state_1"] = sens_state_1;
 
-  /* 3. nmpc_state_values_1: In this list of Numbers (=doubles), the perturbed
+  /* 3. sens_state_values_1: In this list of Numbers (=doubles), the perturbed
    *    values for the parameters are set.
    */
-  std::vector<Number> nmpc_state_value_1(n,0);
-  nmpc_state_value_1[3] = eta_1_perturbed_value_;
-  nmpc_state_value_1[4] = eta_2_perturbed_value_;
-  var_numeric_md["nmpc_state_value_1"] = nmpc_state_value_1;
+  std::vector<Number> sens_state_value_1(n,0);
+  sens_state_value_1[3] = eta_1_perturbed_value_;
+  sens_state_value_1[4] = eta_2_perturbed_value_;
+  var_numeric_md["sens_state_value_1"] = sens_state_value_1;
 
   return true;
 }
@@ -254,7 +254,7 @@ void ParametricTNLP::finalize_solution(SolverReturn status,
   }
   std::string state;
   std::vector<Number> nmpc_sol_vec;
-  state = "nmpc_sol_state_1";
+  state = "sens_sol_state_1";
   nmpc_sol_vec = x_owner_space->GetNumericMetaData(state.c_str());
 
   // Print the solution vector
@@ -276,8 +276,8 @@ void ParametricTNLP::finalize_metadata(Index n,
 {
   // bound multipliers for lower and upper bounds 
   printf("\nDual bound multipliers:\n");
-  NumericMetaDataMapType::const_iterator z_L_solution = var_numeric_md.find("nmpc_sol_state_1_z_L"); 
-  NumericMetaDataMapType::const_iterator z_U_solution = var_numeric_md.find("nmpc_sol_state_1_z_U"); 
+  NumericMetaDataMapType::const_iterator z_L_solution = var_numeric_md.find("sens_sol_state_1_z_L"); 
+  NumericMetaDataMapType::const_iterator z_U_solution = var_numeric_md.find("sens_sol_state_1_z_U"); 
   if (z_L_solution!=var_numeric_md.end() && z_U_solution!=var_numeric_md.end()) {
     for (Index k=0; k<n; ++k) {
       printf("z_L[%d] = %f      z_U[%d] = %f\n", k, z_L_solution->second[k], k, z_U_solution->second[k]);
@@ -286,7 +286,7 @@ void ParametricTNLP::finalize_metadata(Index n,
 
   // constraint mutlipliers
   printf("\nConstraint multipliers:\n");
-  NumericMetaDataMapType::const_iterator lambda_solution = con_numeric_md.find("nmpc_sol_state_1");
+  NumericMetaDataMapType::const_iterator lambda_solution = con_numeric_md.find("sens_sol_state_1");
   if (lambda_solution!=con_numeric_md.end()) {
     for (Index k=0; k<m; ++k) {
       printf("lambda[%d] = %f\n", k, lambda_solution->second[k]);

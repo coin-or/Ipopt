@@ -50,7 +50,7 @@ int main(int argv, char**argc)
   suffix_handler->AddAvailableSuffix("perturbed_value", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
 
   // Suffixes for NMPC
-  suffix_handler->AddAvailableSuffix("nmpc_init_constr", AmplSuffixHandler::Constraint_Source, AmplSuffixHandler::Index_Type);
+  suffix_handler->AddAvailableSuffix("sens_init_constr", AmplSuffixHandler::Constraint_Source, AmplSuffixHandler::Index_Type);
 
   int n_sens_steps = 0;
   app_ipopt->Options()->GetIntegerValue("n_sens_steps",n_sens_steps,"");
@@ -62,9 +62,9 @@ int main(int argv, char**argc)
   std::string sol_state_zL;
   std::string sol_state_zU;
   for (int k=0; k<n_sens_steps+1; ++k) {
-    state          = "nmpc_state_";
-    state_value    = "nmpc_state_value_";
-    sol_state      = "nmpc_sol_state_";
+    state          = "sens_state_";
+    state_value    = "sens_state_value_";
+    sol_state      = "sens_sol_state_";
     state_value_zL = state_value;
     state_value_zU = state_value;
     sol_state_zL   = sol_state;

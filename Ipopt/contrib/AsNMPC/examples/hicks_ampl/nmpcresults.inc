@@ -2,6 +2,7 @@
 # dynamic optimization formulation of the hicks-ray reactor
 # create results file for matlab
 # victor m zavala  march 2006
+# Adapted for sIPOPT by Hans Pirnay 2009, 2011
 # ===================================================================
 
 printf "clc\n" >graph.m;
@@ -31,19 +32,19 @@ printf "]';\n" >>graph.m;
 printf "c1=[" >graph.m;
 printf "%5.5f ",c_init>>graph.m;
 printf {j in fe,k in cp}:
-"%5.5f ",c[j,k].nmpc_sol_state_1>>graph.m;
+"%5.5f ",c[j,k].sens_sol_state_1>>graph.m;
 printf "]';\n" >>graph.m;
 
 printf "t1=[" >graph.m;
 printf "%5.5f ",t_init>>graph.m;
 printf {j in fe,k in cp}:
-"%5.5f ",t[j,k].nmpc_sol_state_1>>graph.m;
+"%5.5f ",t[j,k].sens_sol_state_1>>graph.m;
 printf "]';\n" >>graph.m;
 
 printf "u1=[" >graph.m;
 printf "%5.5f ",u_init>>graph.m;
 printf {j in fe,k in cp}:
-"%5.5f ",u[j,k].nmpc_sol_state_1>>graph.m;
+"%5.5f ",u[j,k].sens_sol_state_1>>graph.m;
 printf "]';\n" >>graph.m;
 
 printf "nfe= %5i ",nfe>>graph.m; printf ";\n">>graph.m;
