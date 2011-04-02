@@ -80,11 +80,11 @@ namespace Ipopt
     options->GetIntegerValue("n_sens_steps",n_sens_steps_,prefix);
     nmpc_sol_.resize(n_sens_steps_, NULL);
     if ( n_sens_steps_==0 ) {
-      options->SetStringValue("run_nmpc","no");
-      run_nmpc_ = false;
+      options->SetStringValue("run_sens","no");
+      run_sens_ = false;
     }
 
-    options->GetBoolValue("run_nmpc", run_nmpc_, "");
+    options->GetBoolValue("run_sens", run_sens_, "");
     options->GetBoolValue("compute_red_hessian", compute_red_hessian_, "");
   }
 
@@ -152,7 +152,7 @@ namespace Ipopt
     DBG_START_METH("AmplNmpcTNLP::finalize_metadata", dbg_verbosity);
     ASL_pfgh* asl = AmplSolverObject();
 
-    if (run_nmpc_) {
+    if (run_sens_) {
       for (Index step=1; step<=n_sens_steps_; ++step) {
 	std::string sol_state_id = "nmpc_sol_state_";
 	append_Index(sol_state_id, step);
@@ -210,7 +210,7 @@ namespace Ipopt
     DBG_START_METH("AmplNmpcTNLP::get_var_con_metadata", dbg_verbosity);
 
     try {
-      if (run_nmpc_) {
+      if (run_sens_) {
 	// Get Nmpc Suffixes
 	std::string nmpc_state = "nmpc_state_";
 	std::vector<Index> state;

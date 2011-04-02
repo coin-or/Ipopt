@@ -32,8 +32,8 @@ option presolve 0;
 # by AMPL
 option solver ampl_asnmpc;
 
-# set run_nmpc to yes
-option ipopt_options 'run_nmpc yes'; 
+# set run_sens to yes
+option ipopt_options 'run_sens yes'; 
 
 model parametric.mod;
 

@@ -34,7 +34,7 @@ namespace Ipopt
   bool StdStepCalculator::InitializeImpl(const OptionsList& options,
 					 const std::string& prefix)
   {
-    options.GetNumericValue("nmpc_bound_eps", bound_eps_, prefix);
+    options.GetNumericValue("sens_bound_eps", bound_eps_, prefix);
     SensitivityStepCalculator::InitializeImpl(options,
 					      prefix);
     return true;

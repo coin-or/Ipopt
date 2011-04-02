@@ -1,5 +1,5 @@
 select_step sensitivity
 #select_step advanced
 n_sens_steps 1
-nmpc_boundcheck no
-#nmpc_bound_eps -1e-10
+sens_boundcheck no
+#sens_bound_eps -1e-10

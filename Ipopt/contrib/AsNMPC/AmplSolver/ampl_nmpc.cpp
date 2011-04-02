@@ -97,7 +97,7 @@ int main(int argv, char**argc)
   // Create AmplOptionsList for AsNMPC AMPL options
   SmartPtr<AmplOptionsList> ampl_options_list = new AmplOptionsList();
 
-  ampl_options_list->AddAmplOption("run_nmpc", "run_nmpc",
+  ampl_options_list->AddAmplOption("run_sens", "run_sens",
 				   AmplOptionsList::String_Option,
 				   "Set to yes if nmpc algorithm should be run.");
   ampl_options_list->AddAmplOption("compute_red_hessian", "compute_red_hessian", 
