@@ -56,29 +56,39 @@ int main(int argv, char**argc)
   app_ipopt->Options()->GetIntegerValue("n_nmpc_steps",n_nmpc_steps,"");
   std::string state;
   std::string state_value;
+  std::string state_value_zL;
+  std::string state_value_zU;
   std::string sol_state;
   std::string sol_state_zL;
   std::string sol_state_zU;
-  for (int k=0; k<n_nmpc_steps; ++k) {
-    state        = "nmpc_state_";
-    state_value  = "nmpc_state_value_";
-    sol_state    = "nmpc_sol_state_";
-    sol_state_zL = sol_state;
-    sol_state_zU = sol_state;
+  for (int k=0; k<n_nmpc_steps+1; ++k) {
+    state          = "nmpc_state_";
+    state_value    = "nmpc_state_value_";
+    sol_state      = "nmpc_sol_state_";
+    state_value_zL = state_value;
+    state_value_zU = state_value;
+    sol_state_zL   = sol_state;
+    sol_state_zU   = sol_state;
     append_Index(state,k);
     append_Index(state_value,k);
+    append_Index(state_value_zL,k);
+    append_Index(state_value_zU,k);
     append_Index(sol_state,k);
     append_Index(sol_state_zL,k);
     append_Index(sol_state_zU,k);
-    sol_state_zL += "z_L";
-    sol_state_zU += "z_U";
+    sol_state_zL += "_z_L";
+    sol_state_zU += "_z_U";
+    state_value_zL += "_z_L";
+    state_value_zU += "_z_U";
     suffix_handler->AddAvailableSuffix(state, AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Index_Type);
     suffix_handler->AddAvailableSuffix(state_value, AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+    suffix_handler->AddAvailableSuffix(state_value_zL, AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+    suffix_handler->AddAvailableSuffix(state_value_zU, AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
     suffix_handler->AddAvailableSuffix(sol_state, AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
     suffix_handler->AddAvailableSuffix(sol_state, AmplSuffixHandler::Constraint_Source, AmplSuffixHandler::Number_Type);
     suffix_handler->AddAvailableSuffix(sol_state_zL, AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
     suffix_handler->AddAvailableSuffix(sol_state_zU, AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
-    // what's this good for??  suffix_handler->AddAvailableSuffix("nmpc_state_value_1_z_L", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
+    
   }
 
   // for reduced hessian computation
