@@ -137,12 +137,12 @@ namespace Ipopt
     
 
     // Find out how many steps there are and create as many SchurSolveDrivers
-    int n_nmpc_steps;
-    options.GetIntegerValue("n_nmpc_steps",n_nmpc_steps,prefix);
-    //DBG_ASSERT(n_nmpc_steps<2); // for testing the new formula, can't do more!
+    int n_sens_steps;
+    options.GetIntegerValue("n_sens_steps",n_sens_steps,prefix);
+    //DBG_ASSERT(n_sens_steps<2); // for testing the new formula, can't do more!
 
     // Create std::vector container in which we are going to keep the SchurDrivers
-    std::vector< SmartPtr<SchurDriver> > driver_vec(n_nmpc_steps);
+    std::vector< SmartPtr<SchurDriver> > driver_vec(n_sens_steps);
 
     /** Here there should be the point to pass on the driver_vec and fork off the 
      *  Schurcomputations to a different function/process if needed. */
@@ -152,7 +152,7 @@ namespace Ipopt
 
     /** THIS FOR-LOOP should be done better with a better
      *  Measurement class. This should get it's own branch! */
-    for (Index i=0; i<n_nmpc_steps; ++i) {
+    for (Index i=0; i<n_sens_steps; ++i) {
       if (select_step=="advanced") {
 	driver_vec[i] = new DenseGenSchurDriver(backsolver, pcalc, E_0);
       }
@@ -200,7 +200,7 @@ namespace Ipopt
     SmartPtr<AsNmpController> controller = new AsNmpController(driver_vec,
 							       sens_stepper,
 							       measurement,
-							       n_nmpc_steps);
+							       n_sens_steps);
 
     controller->Initialize(jnlst,
 			   ip_nlp,

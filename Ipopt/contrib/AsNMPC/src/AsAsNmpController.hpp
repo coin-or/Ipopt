@@ -26,7 +26,7 @@ namespace Ipopt
     AsNmpController(std::vector< SmartPtr<SchurDriver> >& driver_vec,
 		    SmartPtr<SensitivityStepCalculator> sens_step_calc,
 		    SmartPtr<Measurement> measurement,
-		    Index n_nmpc_steps);
+		    Index n_sens_steps);
 
     virtual ~AsNmpController();
 
@@ -43,7 +43,7 @@ namespace Ipopt
     std::vector< SmartPtr<SchurDriver> > driver_vec_;
     SmartPtr<SensitivityStepCalculator> sens_step_calc_;
     SmartPtr<Measurement> measurement_;
-    Index n_nmpc_steps_; // I think it is useful to state this number explicitly in the constructor and here.
+    Index n_sens_steps_; // I think it is useful to state this number explicitly in the constructor and here.
 
   };
 }

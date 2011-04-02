@@ -17,16 +17,16 @@ namespace Ipopt
   AsNmpController::AsNmpController(std::vector< SmartPtr<SchurDriver> >& driver_vec,
 				   SmartPtr<SensitivityStepCalculator> sens_step_calc,
 				   SmartPtr<Measurement> measurement,
-				   Index n_nmpc_steps)
+				   Index n_sens_steps)
     :
     driver_vec_(driver_vec),
     sens_step_calc_(sens_step_calc),
     measurement_(measurement),
-    n_nmpc_steps_(n_nmpc_steps)  
+    n_sens_steps_(n_sens_steps)  
   {
     DBG_START_METH("AsNmpController::AsNmpController", dbg_verbosity);
 
-    DBG_ASSERT(n_nmpc_steps<=driver_vec.size());
+    DBG_ASSERT(n_sens_steps<=driver_vec.size());
   }
 
   AsNmpController::~AsNmpController()
@@ -54,7 +54,7 @@ namespace Ipopt
     SmartPtr<DenseVector> delta_u;
     SmartPtr<const Vector> unscaled_x;
     SmartPtr<IteratesVector> trialcopy;
-    for (Index step_i=0; step_i<n_nmpc_steps_; ++step_i) {
+    for (Index step_i=0; step_i<n_sens_steps_; ++step_i) {
       sens_step_calc_->SetSchurDriver(driver_vec_[step_i]);
       delta_u = measurement_->GetMeasurement(step_i+1);
       delta_u->Print(Jnlst(),J_VECTOR,J_USER1,"delta_u");

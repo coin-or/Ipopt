@@ -1,4 +1,4 @@
-n_nmpc_steps 1
+n_sens_steps 1
 nmpc_boundcheck yes
 nmpc_calc_style index
 #nmpc_bound_eps -1e-10
