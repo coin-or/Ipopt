@@ -52,8 +52,8 @@ int main(int argv, char**argc)
   // Suffixes for NMPC
   suffix_handler->AddAvailableSuffix("nmpc_init_constr", AmplSuffixHandler::Constraint_Source, AmplSuffixHandler::Index_Type);
 
-  int n_nmpc_steps = 0;
-  app_ipopt->Options()->GetIntegerValue("n_nmpc_steps",n_nmpc_steps,"");
+  int n_sens_steps = 0;
+  app_ipopt->Options()->GetIntegerValue("n_sens_steps",n_sens_steps,"");
   std::string state;
   std::string state_value;
   std::string state_value_zL;
@@ -61,7 +61,7 @@ int main(int argv, char**argc)
   std::string sol_state;
   std::string sol_state_zL;
   std::string sol_state_zU;
-  for (int k=0; k<n_nmpc_steps+1; ++k) {
+  for (int k=0; k<n_sens_steps+1; ++k) {
     state          = "nmpc_state_";
     state_value    = "nmpc_state_value_";
     sol_state      = "nmpc_sol_state_";

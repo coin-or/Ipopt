@@ -77,9 +77,9 @@ namespace Ipopt
       }
     }
     std::string prefix = "";
-    options->GetIntegerValue("n_nmpc_steps",n_nmpc_steps_,prefix);
-    nmpc_sol_.resize(n_nmpc_steps_, NULL);
-    if ( n_nmpc_steps_==0 ) {
+    options->GetIntegerValue("n_sens_steps",n_sens_steps_,prefix);
+    nmpc_sol_.resize(n_sens_steps_, NULL);
+    if ( n_sens_steps_==0 ) {
       options->SetStringValue("run_nmpc","no");
       run_nmpc_ = false;
     }
@@ -133,7 +133,7 @@ namespace Ipopt
   {
     DBG_START_METH("AmplNmpcTNLP::set_nmpc_solution", dbg_verbosity);
 
-    DBG_PRINT((dbg_verbosity, "n_nmpc_steps=%d\n", nmpc_sol_.size()));
+    DBG_PRINT((dbg_verbosity, "n_sens_steps=%d\n", nmpc_sol_.size()));
     DBG_ASSERT(idx>0);
     DBG_ASSERT(idx<=(Index)nmpc_sol_.size());
 
@@ -153,7 +153,7 @@ namespace Ipopt
     ASL_pfgh* asl = AmplSolverObject();
 
     if (run_nmpc_) {
-      for (Index step=1; step<=n_nmpc_steps_; ++step) {
+      for (Index step=1; step<=n_sens_steps_; ++step) {
 	std::string sol_state_id = "nmpc_sol_state_";
 	append_Index(sol_state_id, step);
 	NumericMetaDataMapType::const_iterator num_it;
@@ -214,7 +214,7 @@ namespace Ipopt
 	// Get Nmpc Suffixes
 	std::string nmpc_state = "nmpc_state_";
 	std::vector<Index> state;
-	for (Index i=1; i<=n_nmpc_steps_; ++i) {
+	for (Index i=1; i<=n_sens_steps_; ++i) {
 	  append_Index(nmpc_state,i);
 	  state = get_index_suffix_vec(nmpc_state.c_str());
 	  set_integer_metadata_for_var(nmpc_state, state); 
@@ -222,14 +222,14 @@ namespace Ipopt
 	}
 	std::string nmpc_state_value = "nmpc_state_value_";
 	std::vector<Number> state_val;
-	for (Index i=1; i<=n_nmpc_steps_; ++i) {
+	for (Index i=1; i<=n_sens_steps_; ++i) {
 	  append_Index(nmpc_state_value,i);
 	  state_val = get_number_suffix_vec(nmpc_state_value.c_str());
 	  set_numeric_metadata_for_var(nmpc_state_value, state_val); 
 	  nmpc_state_value = "nmpc_state_value_";
 	}
 	std::string init_constr = "nmpc_init_constr";
-	if (n_nmpc_steps_ >0) {
+	if (n_sens_steps_ >0) {
 	  std::vector<Index> init_idx = get_index_suffix_constr_vec(init_constr.c_str());
 	  set_integer_metadata_for_con(init_constr,init_idx);
 	}

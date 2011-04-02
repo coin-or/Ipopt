@@ -47,7 +47,7 @@ namespace Ipopt
     // Options for NMPC Parameter Sensitivity
     roptions->SetRegisteringCategory("AsNmpc");
     roptions->AddLowerBoundedIntegerOption(
-					   "n_nmpc_steps", "Number of time steps computed by NMPController",
+					   "n_sens_steps", "Number of time steps computed by NMPController",
 					   0, 0,
 					   "");
     roptions->AddStringOption2(
@@ -172,7 +172,7 @@ namespace Ipopt
       red_hess_calc->ComputeReducedHessian();
     }
 
-    if (run_nmpc_ && n_nmpc_steps_>0 && !nmpc_internal_abort) {
+    if (run_nmpc_ && n_sens_steps_>0 && !nmpc_internal_abort) {
       SmartPtr<SchurBuilder> schur_builder = new SchurBuilder();
       const std::string prefix = ""; // I should be getting this somewhere else...
       SmartPtr<AsNmpController> controller = schur_builder->BuildNmpc(*jnlst_,
@@ -186,7 +186,7 @@ namespace Ipopt
       retval = controller->Run();
     }
     else if (run_nmpc_) {
-      if (n_nmpc_steps_<=0) {
+      if (n_sens_steps_<=0) {
 	jnlst_->Printf(J_WARNING, J_MAIN, "\n"
 		       "The run_nmpc option was set to true, but the specified\n"
 		       "number of advanced steps was set to zero.\n"
@@ -274,7 +274,7 @@ namespace Ipopt
 
     const std::string prefix = ""; // I should be getting this somewhere else...
 
-    Options()->GetIntegerValue("n_nmpc_steps",n_nmpc_steps_, prefix.c_str());
+    Options()->GetIntegerValue("n_sens_steps",n_sens_steps_, prefix.c_str());
     Options()->GetBoolValue("run_nmpc", run_nmpc_, prefix.c_str());
     Options()->GetBoolValue("compute_red_hessian", compute_red_hessian_, prefix.c_str());
 
@@ -323,7 +323,7 @@ namespace Ipopt
     // get NLP
     ip_nlp_ = app_ipopt->IpoptNLPObject();
 
-    options_->GetIntegerValue("n_nmpc_steps",n_nmpc_steps_,"");
+    options_->GetIntegerValue("n_sens_steps",n_sens_steps_,"");
 
     // This checking should be rewritten
     /*    if (false && run_nmpc_) {
@@ -340,7 +340,7 @@ namespace Ipopt
     THROW_EXCEPTION(NMPC_SUFFIX_ERROR, "Suffix nmpc_state_1 is not set");
     }
     n_nmpc_indices = AsIndexSum(ip_data_->curr()->x()->Dim(), index, 1);
-    for (Index i=1; i<=n_nmpc_steps_; ++i) {
+    for (Index i=1; i<=n_sens_steps_; ++i) {
     state = "nmpc_state_";
     state_value = "nmpc_state_value_";
     append_Index(state, i);

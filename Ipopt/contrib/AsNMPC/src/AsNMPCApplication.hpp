@@ -74,7 +74,7 @@ namespace Ipopt
     /** storing options values */
     bool run_nmpc_;
     bool compute_red_hessian_;
-    Index n_nmpc_steps_;
+    Index n_sens_steps_;
   };
 }
 

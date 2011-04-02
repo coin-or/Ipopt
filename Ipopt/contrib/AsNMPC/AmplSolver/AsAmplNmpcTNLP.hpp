@@ -94,7 +94,7 @@ namespace Ipopt
     Number* parameter_values_;
 
     /** important Options */
-    Index n_nmpc_steps_;
+    Index n_sens_steps_;
     bool run_nmpc_;
     bool compute_red_hessian_;
 
