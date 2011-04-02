@@ -47,12 +47,12 @@ namespace Ipopt
     // Options for NMPC Parameter Sensitivity
     roptions->SetRegisteringCategory("AsNmpc");
     roptions->AddLowerBoundedIntegerOption(
-					   "n_sens_steps", "Number of time steps computed by NMPController",
+					   "n_sens_steps", "Number of steps computed by sIPOPT",
 					   0, 0,
 					   "");
     roptions->AddStringOption2(
 			       "sens_boundcheck",
-			       "Activate boundcheck and resolve for AsNMPC",
+			       "Activate boundcheck and re-solve for sIPOPT",
 			       "no",
 			       "no", "don't check bounds and do another SchurSolve",
 			       "yes", "check bounds and resolve Schur decomposition",
@@ -81,26 +81,26 @@ namespace Ipopt
     roptions->AddStringOption4(
 			       "select_step",
 			       "Choose by which formula the step is computed",
-			       "advanced",
+			       "iftsensitivity",
 			       "advanced","use advanced step based on KKT",
 			       "sensitivity","use sensitivity step",
 			       "ift","use one-parametric step with multiplier correction",
 			       "iftsensitivity","use one-parametric step without multiplier correction"
-			       "see paper for more information on each step computation");
+			       "see original paper for more information on each step computation");
     // This option must be in IpInterfacesRegOp.cpp
     roptions->AddStringOption2(
 			       "run_sens",
-			       "Determines if nmpc alg runs",
+			       "Determines if sIPOPT alg runs",
 			       "no",
-			       "yes", "run nmpc",
-			       "no", "don't run nmpc",
+			       "yes", "run sIPOPT",
+			       "no", "don't run sIPOPT",
 			       "");
     roptions->AddStringOption2(
 			       "nmpc_internal_abort",
 			       "Internal option - if set (internally), nmpc algorithm is not conducted",
 			       "no",
-			       "yes", "abort nmpc",
-			       "no", "run nmpc",
+			       "yes", "abort sIPOPT",
+			       "no", "run sIPOPT",
 			       "");
     roptions->AddStringOption2(
 			       "redhess_internal_abort",
@@ -118,12 +118,12 @@ namespace Ipopt
 			       "");
     roptions->AddLowerBoundedNumberOption(
 					  "sens_max_pdpert",
-					  "Maximum perturbation of primal dual system, for that the AsNMPC algorithm will not abort",
+					  "Maximum perturbation of primal dual system, for that the sIPOPT algorithm will not abort",
 					  0.0, true, 1e-3, 
 					  "For certain problems, IPOPT uses inertia correction of the primal dual matrix to achieve"
 					  "better convergence properties. This inertia correction changes the matrix and renders it"
-					  "useless for the use with AsNMPC. This option sets an upper bound, which the inertia correction"
-					  "may have. If any of the inertia correction values is above this bound, the AsNMPC algorithm"
+					  "useless for the use with sIPOPT. This option sets an upper bound, which the inertia correction"
+					  "may have. If any of the inertia correction values is above this bound, the sIPOPT algorithm"
 					  "is aborted.");
     roptions->AddStringOption2(
 			       "rh_eigendecomp",
