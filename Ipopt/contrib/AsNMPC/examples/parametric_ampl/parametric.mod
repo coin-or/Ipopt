@@ -1,13 +1,13 @@
-# Copyright 2009 Hans Pirnay
+# Copyright 2009, 2011 Hans Pirnay
 # All Rights Reserved.
 # This code is published under the Eclipse Public License.
 #
 # Date   : 2010-10-04
 
 # variables
-var x1>=0;
-var x2>=0;
-var x3>=0;
+var x1>=0 := 0.15;
+var x2>=0 := 0.15;
+var x3>=0 := 0.0 ;
 
 # parameters
 var eta1;

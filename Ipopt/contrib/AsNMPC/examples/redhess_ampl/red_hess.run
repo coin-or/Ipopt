@@ -1,4 +1,4 @@
-# Copyright 2009 Hans Pirnay
+# Copyright 2009, 2011 Hans Pirnay
 # All Rights Reserved.
 # This code is published under the Eclipse Public License.
 #
@@ -8,7 +8,7 @@
 # of the asNMPC code. 
 
 reset;
-option solver ampl_asnmpc;
+option solver ipopt_sens;
 
 # set option to compute reduced hessian
 option ipopt_options 'compute_red_hessian yes'; 

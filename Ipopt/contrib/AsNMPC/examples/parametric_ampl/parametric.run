@@ -30,7 +30,7 @@ option presolve 0;
 
 # turn presolve off so no variables / equations are eliminated
 # by AMPL
-option solver ampl_asnmpc;
+option solver ipopt_sens;
 
 # set run_sens to yes
 option ipopt_options 'run_sens yes'; 
@@ -47,9 +47,6 @@ let eta2.sens_state_value_1 := perturbed_eta2;
 
 let consteta1.sens_init_constr := 1;
 let consteta2.sens_init_constr := 2;
-
-# select an initial value so that ipopt doesn't find the solution immediately (we need at least one evaluation of the jacobian!)
-let x1:=5;
 
 solve;
 
