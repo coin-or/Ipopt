@@ -9,7 +9,7 @@
 
 asnmpc_lib = asnmpc_lib
 ampl_asnmpc_exe = ampl_asnmpc_exe
-ALL_TARGETS = $(asnmpc_lib)
+ALL_TARGETS = $(asnmpc_lib) $(ampl_asnmpc_exe)
 DIRS = ./src
 TARGETDIRS = ./src
 

@@ -75,10 +75,10 @@ namespace Ipopt
      *  the second vector gives the numbers in B(row,indices) */
     virtual void GetMultiplyingVectors(Index row, std::vector<Index>& indices, std::vector<Number>& factors) const =0;
 
-    /** Computes A*v with A in R(nxm), KKT in R(n,n) */
+    /** Computes B*v with B in R(mxn) */
     virtual void Multiply(const IteratesVector& v, Vector& u) const =0;
     
-    /** Computes B*v with B in R(mxn) */
+    /** Computes A*u with A in R(nxm), KKT in R(n,n) */
     virtual void TransMultiply(const Vector& u, IteratesVector& v) const =0;
 
     virtual void PrintImpl(const Journalist& jnlst,

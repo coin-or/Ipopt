@@ -77,6 +77,7 @@ namespace Ipopt
     
     std::string select_step;
     options.GetStringValue("select_step", select_step, "");
+    DBG_PRINT((dbg_verbosity, "Selected step is %s\n", select_step.c_str()));
 
     std::vector<Index> initial_c = measurement->GetInitialEqConstraints(); // type: List
     if (select_step=="advanced") {
@@ -134,6 +135,22 @@ namespace Ipopt
 	// Throw exception that P calculation failed
       }
     }
+    else { // ift steps get an empty pcalculator if boundcheck is on (for fix-relax)
+      bool bound_check;
+      options.GetBoolValue("sens_boundcheck", bound_check, prefix);
+      if (bound_check) {
+	if (nmpc_calc_style=="index") {
+	  pcalc = new IndexPCalculator(backsolver, new IndexSchurData());
+	  bool retval = pcalc->Initialize(jnlst,
+					  ip_nlp,
+					  ip_data,
+					  ip_cq,
+					  options,
+					  prefix);
+	  DBG_ASSERT(retval);
+      	}
+      }
+    }
     
 
     // Find out how many steps there are and create as many SchurSolveDrivers
@@ -154,10 +171,11 @@ namespace Ipopt
      *  Measurement class. This should get it's own branch! */
     for (Index i=0; i<n_sens_steps; ++i) {
       if (select_step=="advanced") {
-	driver_vec[i] = new DenseGenSchurDriver(backsolver, pcalc, E_0);
+	assert(false);
+	//driver_vec[i] = new DenseGenSchurDriver(backsolver, pcalc, E_0);
       }
       else if (select_step=="ift" || "iftsensitivity") {
-	driver_vec[i] = new IFTSchurDriver(backsolver, E_0);
+	driver_vec[i] = new IFTSchurDriver(backsolver, pcalc,E_0);
       } else if (select_step=="sensitivity") {
 	// Create SchurDriver from pcalc and suffix indices
 	SmartPtr<SchurData> E_i;
@@ -174,7 +192,8 @@ namespace Ipopt
 	E_i_name = "E_";
 	append_Index(E_i_name, i+1);
 	E_i->Print(jnlst,J_VECTOR,J_USER1,E_i_name.c_str());
-	driver_vec[i] = new DenseGenSchurDriver(backsolver, pcalc, E_i);
+	assert(false);
+	//driver_vec[i] = new DenseGenSchurDriver(backsolver, pcalc, E_i);
       }
       driver_vec[i]->Initialize(jnlst,
 				ip_nlp,
@@ -188,7 +207,7 @@ namespace Ipopt
       DBG_ASSERT(schur_retval);
     }
     
-    SmartPtr<SensitivityStepCalculator> sens_stepper = new StdStepCalculator();
+    SmartPtr<SensitivityStepCalculator> sens_stepper = new StdStepCalculator(E_0, backsolver);
 
     sens_stepper->Initialize(jnlst,
 			     ip_nlp,

@@ -89,14 +89,15 @@ namespace Ipopt
     /** Performs a backsolve on S and K */
     virtual bool SchurSolve(SmartPtr<IteratesVector> lhs, 
 			    SmartPtr<const IteratesVector> rhs,
-			    SmartPtr<IteratesVector> sol, // the vector K^(-1)*r_s which usually should have been computed before.
-			    SmartPtr<Vector> delta_u) =0;
+			    SmartPtr<Vector> delta_u,
+			    SmartPtr<IteratesVector> sol=NULL)=0; // the vector K^(-1)*r_s which usually should have been computed before.
+			   
 
-    /** Performs a backsolve on S and K; calls the latter with sol=K^(-1)*r_s=0*/
+    /** Performs a backsolve on S and K; calls the latter with sol=K^(-1)*r_s=0
     virtual bool SchurSolve(SmartPtr<IteratesVector> lhs, 
 			    SmartPtr<const IteratesVector> rhs,
 			    SmartPtr<Vector> delta_u) =0;
-    
+    */
   private:
     SchurDriver()
     {

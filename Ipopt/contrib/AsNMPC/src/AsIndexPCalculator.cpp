@@ -36,7 +36,7 @@ namespace Ipopt
   bool IndexPCalculator::InitializeImpl(const OptionsList& options,
 					const std::string& prefix)
   {
-    DBG_START_METH("StdPCalculator::InitializeImpl", dbg_verbosity);
+    DBG_START_METH("IndexPCalculator::InitializeImpl", dbg_verbosity);
 
     SmartPtr<const IteratesVector> iv = IpData().curr(); 
     nrows_ = 0;

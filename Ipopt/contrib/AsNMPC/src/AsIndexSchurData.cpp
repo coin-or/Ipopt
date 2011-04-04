@@ -342,7 +342,9 @@ namespace Ipopt
       }
     }
     Set_NRows((Index)idx_.size());
-    
+    if(!Is_Initialized()) {
+      Set_Initialized();
+    }
   }
 
   Index IndexSchurData::GetNRowsAdded() const

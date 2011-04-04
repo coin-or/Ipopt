@@ -8,6 +8,9 @@
 #ifndef __ASASBACKSOLVER_HPP__
 #define __ASASBACKSOLVER_HPP__
 
+#include "IpAlgStrategy.hpp"
+#include "IpIteratesVector.hpp"
+
 namespace Ipopt
 {
 
