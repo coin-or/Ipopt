@@ -7,6 +7,7 @@
 #ifndef __ASSTDSTEPCALC_HPP__
 #define __ASSTDSTEPCALC_HPP__
 
+#include "AsAsBacksolver.hpp"
 #include "AsSensStepCalc.hpp"
 #include <vector>
 
@@ -17,7 +18,8 @@ namespace Ipopt
   class StdStepCalculator : public SensitivityStepCalculator
   {
   public: 
-    StdStepCalculator();
+    StdStepCalculator(SmartPtr<SchurData> ift_data,
+		      SmartPtr<AsBacksolver> backsolver);
 
     virtual ~StdStepCalculator();
 
@@ -33,6 +35,8 @@ namespace Ipopt
 		    std::vector<Number>& x_bound_violations_du);
 
   private:
+    SmartPtr<SchurData> ift_data_;
+    SmartPtr<AsBacksolver> backsolver_;
     Number bound_eps_;
   };
 }

@@ -5,7 +5,6 @@
 // Date   : 2009-05-16
 
 
-
 #include "AsStdStepCalc.hpp"
 #include "IpDenseVector.hpp"
 #include "IpIteratesVector.hpp"
@@ -19,8 +18,11 @@ namespace Ipopt
   static const Index dbg_verbosity = 1;
 #endif
 
-  StdStepCalculator::StdStepCalculator()
+  StdStepCalculator::StdStepCalculator(SmartPtr<SchurData> ift_data,
+				       SmartPtr<AsBacksolver> backsolver)
     :
+    ift_data_(ift_data),
+    backsolver_(backsolver),
     bound_eps_(1e-3)
   {
     DBG_START_METH("StdStepCalculator::StdStepCalculator", dbg_verbosity);
@@ -51,22 +53,32 @@ namespace Ipopt
     //SmartPtr<IteratesVector> r_s = sol.MakeNewIteratesVector();
     //r_s->Set(0.0);
     // now try real rhs
-    SmartPtr<IteratesVector> r_s = IpData().trial()->MakeNewContainer();
-    r_s->Set_x(*IpCq().trial_grad_lag_x());
-    r_s->Set_s(*IpCq().trial_grad_lag_s());
-    r_s->Set_y_c(*IpCq().trial_c());
-    r_s->Set_y_d(*IpCq().trial_d_minus_s());
-    r_s->Set_z_L(*IpCq().trial_compl_x_L());
-    r_s->Set_z_U(*IpCq().trial_compl_x_U());
-    r_s->Set_v_L(*IpCq().trial_compl_s_L());
-    r_s->Set_v_U(*IpCq().trial_compl_s_U());
-
+    SmartPtr<IteratesVector> r_s = IpData().trial()->MakeNewIteratesVector();
+    /* This is zero...
+    r_s->Set_x_NonConst(*IpCq().curr_grad_lag_x());
+    r_s->Set_s_NonConst(*IpCq().curr_grad_lag_s());
+    r_s->Set_y_c_NonConst(*IpCq().curr_c());
+    r_s->Set_y_d_NonConst(*IpCq().curr_d_minus_s());
+    r_s->Set_z_L_NonConst(*IpCq().curr_compl_x_L());
+    r_s->Set_z_U_NonConst(*IpCq().curr_compl_x_U());
+    r_s->Set_v_L_NonConst(*IpCq().curr_compl_s_L());
+    r_s->Set_v_U_NonConst(*IpCq().curr_compl_s_U());
+    */
     r_s->Print(Jnlst(),J_VECTOR,J_USER1,"r_s init");
-    DBG_PRINT((dbg_verbosity,"r_s init Nrm2=%23.16e\n", r_s->Asum()));
+    //DBG_PRINT((dbg_verbosity,"r_s init Nrm2=%23.16e\n", r_s->Asum()));
+    Jnlst().FlushBuffer();
     
-    retval = Driver()->SchurSolve(&sol,
-				  ConstPtr(r_s),
-				  &delta_u);
+    ift_data_->TransMultiply(delta_u, *r_s);
+    backsolver_->Solve(&sol, ConstPtr(r_s));
+
+    SmartPtr<IteratesVector> Kr_s;
+    if (Do_Boundcheck()) {
+      Kr_s = sol.MakeNewIteratesVectorCopy();
+    }
+
+    //retval = Driver()->SchurSolve(&sol,
+    //				  ConstPtr(r_s),
+    //				  &delta_u);
 
     sol.Axpy(1.0, *IpData().trial());
 
@@ -79,7 +91,8 @@ namespace Ipopt
       std::vector<Number> x_bound_violations_du;
       std::vector<Index> delta_u_sort;
       bool bounds_violated;
-      SmartPtr<DenseVector> old_delta_u = &delta_u;
+      SmartPtr<DenseVectorSpace> delta_u_space = new DenseVectorSpace(0);
+      SmartPtr<DenseVector> old_delta_u = new DenseVector(GetRawPtr(delta_u_space));
       SmartPtr<DenseVector> new_delta_u;
     
       bounds_violated = BoundCheck(sol, x_bound_violations_idx, x_bound_violations_du);
@@ -96,8 +109,8 @@ namespace Ipopt
 	Driver()->SchurFactorize();
 
 	old_delta_u->Print(Jnlst(),J_VECTOR,J_USER1,"old_delta_u");
-	// create new delta_u
-	SmartPtr<DenseVectorSpace> delta_u_space = new DenseVectorSpace(new_du_size);
+	delta_u_space = NULL; // delete old delta_u space 
+	delta_u_space = new DenseVectorSpace(new_du_size); // create new delta_u space
 	new_delta_u = new DenseVector(GetRawPtr(ConstPtr(delta_u_space)));
 	new_du_values = new_delta_u->Values();
 	IpBlasDcopy(old_delta_u->Dim(), old_delta_u->Values(), 1, new_du_values, 1);
@@ -109,7 +122,7 @@ namespace Ipopt
 	new_delta_u->Print(Jnlst(),J_VECTOR,J_USER1,"new_delta_u");
 
 	// solve with new data_B and delta_u
-	retval = Driver()->SchurSolve(&sol, ConstPtr(r_s), dynamic_cast<Vector*>(GetRawPtr(new_delta_u)));
+	retval = Driver()->SchurSolve(&sol, ConstPtr(r_s), dynamic_cast<Vector*>(GetRawPtr(new_delta_u)), Kr_s);
 
 	sol.Axpy(1.0, *IpData().trial());
 
@@ -136,6 +149,7 @@ namespace Ipopt
 
     // find bound violations in x vector
     const Number* x_val = dynamic_cast<const DenseVector*>(GetRawPtr(IpData().curr()->x()))->Values();
+    const Number* sol_val = dynamic_cast<const DenseVector*>(GetRawPtr(sol.x()))->Values();
 
     SmartPtr<Vector> x_L_exp = IpData().curr()->x()->MakeNew();
     SmartPtr<Vector> x_U_exp = IpData().curr()->x()->MakeNew();
@@ -174,12 +188,10 @@ namespace Ipopt
     for (Index i=0; i<x_L_exp->Dim(); ++i) {
       if (x_L_exp_val[i]<-bound_eps_) {
 	x_bound_violations_idx.push_back(i);
-	x_bound_violations_du.push_back((x_L_bound[i]-x_val[i]));
-	//printf("Lower Bound no. i=%d violated: delta_u=%f\n", i, x_L_bound[i]-x_val[i]);
-      } else if (x_U_exp_val[i]<-bound_eps_) {
+	x_bound_violations_du.push_back(-x_L_exp_val[i]+sol_val[i]-x_val[i]); // this is just an awkward way to compute x_bound[i] - x_curr_val[i].
+      } else if (-x_U_exp_val[i]<-bound_eps_) {
 	x_bound_violations_idx.push_back(i);
-	x_bound_violations_du.push_back((x_U_bound[i]-x_val[i]));
-	//printf("Upper Bound no. i=%d violated: delta_u=%f\n", i, x_U_bound[i]-x_val[i]);
+	x_bound_violations_du.push_back(-x_U_exp_val[i]+sol_val[i]-x_val[i]);
       }
     }
 
