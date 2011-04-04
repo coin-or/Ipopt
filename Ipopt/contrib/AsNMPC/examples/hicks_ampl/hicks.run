@@ -13,7 +13,7 @@ suffix sens_sol_state_1, OUT;
 suffix sens_init_constr, IN;
 
 
-option solver ampl_asnmpc                ;
+option solver ipopt_sens                 ;
 
 option presolve 0;
 option ipopt_options 'run_sens no'; 

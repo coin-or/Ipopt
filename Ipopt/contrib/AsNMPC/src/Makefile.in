@@ -61,15 +61,15 @@ am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
 am__installdirs = "$(DESTDIR)$(libdir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
-libasnmpc_la_LIBADD =
-am_libasnmpc_la_OBJECTS = AsAsNmpController.lo AsAsNMPCRegOp.lo \
+libsipopt_la_LIBADD =
+am_libsipopt_la_OBJECTS = AsAsNmpController.lo AsAsNMPCRegOp.lo \
 	AsDenseGenSchurDriver.lo AsIFTSchurDriver.lo \
 	AsIndexPCalculator.lo AsIndexSchurData.lo \
 	AsMetadataMeasurement.lo AsNMPCApplication.lo AsNmpcUtils.lo \
 	AsReducedHessianCalculator.lo AsSchurBuilder.lo \
 	AsSimpleBacksolver.lo AsStdPCalculator.lo AsStdSchurData.lo \
 	AsStdStepCalc.lo
-libasnmpc_la_OBJECTS = $(am_libasnmpc_la_OBJECTS)
+libsipopt_la_OBJECTS = $(am_libsipopt_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -88,8 +88,8 @@ LTCOMPILE = $(LIBTOOL) --tag=CC --mode=compile $(CC) $(DEFS) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(libasnmpc_la_SOURCES)
-DIST_SOURCES = $(libasnmpc_la_SOURCES)
+SOURCES = $(libsipopt_la_SOURCES)
+DIST_SOURCES = $(libsipopt_la_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -169,7 +169,6 @@ CXXAR = @CXXAR@
 CXXCPP = @CXXCPP@
 CXXDEFS = @CXXDEFS@
 CXXDEPMODE = @CXXDEPMODE@
-#addlibs_DATA = asnmpc_addlibs_cpp.txt asnmpc_addlibs_f.txt
 CXXFLAGS = @CXXFLAGS@ -I`$(CYGPATH_W) $(srcdir)/../../../src/Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../../src/Interfaces` \
 	-I`$(CYGPATH_W) $(srcdir)/../../../src/LinAlg` -I`$(CYGPATH_W) \
@@ -350,9 +349,9 @@ sol_cc_compiler = @sol_cc_compiler@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
-includeasnmpcdir = $(includedir)/coin
-lib_LTLIBRARIES = libasnmpc.la
-libasnmpc_la_SOURCES = \
+includesipoptdir = $(includedir)/coin
+lib_LTLIBRARIES = libsipopt.la
+libsipopt_la_SOURCES = \
 	AsAsBacksolver.hpp \
 	AsAsNmpController.cpp \
 	AsAsNmpController.hpp \
@@ -391,11 +390,7 @@ libasnmpc_la_SOURCES = \
 	AsStdStepCalc.hpp \
 	AsSuffixHandler.hpp
 
-
-#libasnmpc_la_LIBADD = 
-
-#libasnmpc_la_DEPENDENCIES = $(IPALLLIBS)
-libasnmpc_la_LDFLAGS = $(LT_LDFLAGS)
+libsipopt_la_LDFLAGS = $(LT_LDFLAGS)
 addlibsdir = $(datadir)/coin/doc/Ipopt
 
 # This line is necessary to allow VPATH compilation with MS compilers
@@ -504,8 +499,8 @@ clean-libLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
-libasnmpc.la: $(libasnmpc_la_OBJECTS) $(libasnmpc_la_DEPENDENCIES) 
-	$(CXXLINK) -rpath $(libdir) $(libasnmpc_la_LDFLAGS) $(libasnmpc_la_OBJECTS) $(libasnmpc_la_LIBADD) $(LIBS)
+libsipopt.la: $(libsipopt_la_OBJECTS) $(libsipopt_la_DEPENDENCIES) 
+	$(CXXLINK) -rpath $(libdir) $(libsipopt_la_LDFLAGS) $(libsipopt_la_OBJECTS) $(libsipopt_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)

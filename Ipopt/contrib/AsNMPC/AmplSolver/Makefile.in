@@ -26,7 +26,7 @@ LDFLAGS     = $(CXXFLAGS) @RPATH_FLAGS@
 @COIN_HAS_PKGCONFIG_FALSE@INCL = -I`$(CYGPATH_W) @abs_include_dir@/coin` @IPOPTLIB_CFLAGS_INSTALLED@ @ASL_CFLAGS_INSTALLED@ -I`$(CYGPATH_W) $(ipoptsrcdir)/Algorithm` -I`$(CYGPATH_W) $(ipoptsrcdir)/LinAlg` -I`$(CYGPATH_W) $(asnmpcsrcdir)` $(ADDINCFLAGS)
 
 # Linker flags
-@COIN_HAS_PKGCONFIG_TRUE@LIBS = -lasnmpc `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipoptamplinterface`
+@COIN_HAS_PKGCONFIG_TRUE@LIBS = -lsipopt `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipoptamplinterface`
 @COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_TRUE@LIBS = /link /libpath:`$(CYGPATH_W) @abs_lib_dir@` libasnmpc.lib libipoptamplinterface.lib libipopt.lib @IPOPTLIB_LIBS_INSTALLED@ @ASL_LIBS_INSTALLED@
 @COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_FALSE@LIBS = -L@abs_lib_dir@ -lasnmpc -lipoptamplinterface -lipopt @IPOPTLIB_LIBS_INSTALLED@ @ASL_LIBS_INSTALLED@
 
@@ -35,11 +35,11 @@ LDFLAGS     = $(CXXFLAGS) @RPATH_FLAGS@
 #CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 #	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 
-ASNMPC_LIB = libasnmpc.so
+ASNMPC_LIB = libsipopt.so
 
 ASNMPC_LIBNAME =$(ASNMPC_LIB).0.0.0
 
-TARGET = ampl_asnmpc
+TARGET = ipopt_sens
 
 OBJS   = AsAmplNmpcTNLP.@OBJEXT@ 
 

@@ -7,11 +7,11 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-includeasnmpcdir = $(includedir)/coin
+includesipoptdir = $(includedir)/coin
 
-lib_LTLIBRARIES = libasnmpc.la
+lib_LTLIBRARIES = libsipopt.la
 
-libasnmpc_la_SOURCES = \
+libsipopt_la_SOURCES = \
 	AsAsBacksolver.hpp \
 	AsAsNmpController.cpp \
 	AsAsNmpController.hpp \
@@ -50,14 +50,9 @@ libasnmpc_la_SOURCES = \
 	AsStdStepCalc.hpp \
 	AsSuffixHandler.hpp
 
-#libasnmpc_la_LIBADD = 
-
-#libasnmpc_la_DEPENDENCIES = $(IPALLLIBS)
-
-libasnmpc_la_LDFLAGS = $(LT_LDFLAGS)
+libsipopt_la_LDFLAGS = $(LT_LDFLAGS)
 
 addlibsdir = $(datadir)/coin/doc/Ipopt
-#addlibs_DATA = asnmpc_addlibs_cpp.txt asnmpc_addlibs_f.txt
 
 CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../../../src/Common` \
 -I`$(CYGPATH_W) $(srcdir)/../../../src/Interfaces` \
