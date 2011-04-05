@@ -17,7 +17,8 @@ namespace Ipopt
 
   SimpleBacksolver::SimpleBacksolver(SmartPtr<PDSystemSolver> pd_solver)
     :
-    pd_solver_(pd_solver)
+    pd_solver_(pd_solver),
+    allow_inexact_(true)
   {
     DBG_START_METH("SimpleBacksolver::SimpleBacksolver", dbg_verbosity);
   }
@@ -27,6 +28,7 @@ namespace Ipopt
 				   const std::string& prefix)
   {
     DBG_START_METH("SimpleBackSolver::InitializeImpl",dbg_verbosity);
+    options.GetBoolValue("sens_allow_inexact_backsolve", allow_inexact_, prefix);
     return true;
   }
 
@@ -35,10 +37,9 @@ namespace Ipopt
     DBG_START_METH("SimpleBacksolver::Solve(IteratesVector,IteratesVector)", dbg_verbosity);
     bool retval;
 
-    bool allow_inexact = false;
     bool improve_solution = false;
 
-    retval = pd_solver_->Solve(1.0, 0.0, *delta_rhs, *delta_lhs, allow_inexact,
+    retval = pd_solver_->Solve(1.0, 0.0, *delta_rhs, *delta_lhs, allow_inexact_,
 			       improve_solution);
 
     return retval;

@@ -35,6 +35,7 @@ namespace Ipopt {
     SimpleBacksolver();
 
     SmartPtr<PDSystemSolver> pd_solver_;
+    bool allow_inexact_;
   };
 }
 
