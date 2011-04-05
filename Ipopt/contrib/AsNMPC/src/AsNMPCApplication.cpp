@@ -132,6 +132,13 @@ namespace Ipopt
 			       "yes", "compute eigenvalue decomposition of reduced hessian",
 			       "no", "don't compute eigenvalue decomposition of reduced hessian",
 			       "The eigenvalue decomposition of the reduced hessian has different meanings depending on the specific problem. For parameter estimation problems, the eigenvalues are linked to the confidence interval of the parameters. See for example Victor Zavala's Phd thesis, chapter 4 for details.");
+    roptions->AddStringOption2(
+			       "sens_allow_inexact_backsolve",
+			       "Allow inexact computation of backsolve in sIPOPT.",
+			       "yes",
+			       "yes", "Allow inexact computation of backsolve in sIPOPT.",
+			       "no", "Don't allow inexact computation of backsolve in sIPOPT.",
+			       "");
   }
 
   NmpControllerExitStatus NmpcApplication::Run()

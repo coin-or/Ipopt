@@ -51,7 +51,7 @@ namespace Ipopt
 
 
     bool run_sens;
-    options.GetBoolValue("run_sens", run_sens, "");
+    options.GetBoolValue("run_sens", run_sens, prefix);
     if (run_sens) {
       std::string sens_state_0 = "sens_state_1"; // sens_state_0 doesn't exist anymore...
       std::vector<Index> tmp_idx = x_owner_space_->GetIntegerMetaData(sens_state_0);
