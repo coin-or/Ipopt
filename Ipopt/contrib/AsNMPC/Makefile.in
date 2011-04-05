@@ -22,6 +22,9 @@ all: $(ALL_TARGETS)
 install: all
 	for d in $(TARGETDIRS); do (cd $$d; $(MAKE) install ); done
 
+uninstall:
+	for d in $(TARGETDIRS); do (cd $$d; $(MAKE) uninstall ); done
+
 clean: 
 	-for d in $(DIRS); do (cd $$d; $(MAKE) clean ); done
 
