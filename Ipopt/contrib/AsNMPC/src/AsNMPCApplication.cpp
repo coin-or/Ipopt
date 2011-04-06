@@ -31,7 +31,7 @@ namespace Ipopt
     ipopt_retval_(Internal_Error)
   {
     DBG_START_METH("NmpcApplication::NmpcApplication", dbg_verbosity);
-    
+
     // Initialize Journalist
     DBG_DO(SmartPtr<Journal> sens_jrnl = jnlst_->AddFileJournal("Sensitivity","sensdebug.out",J_ITERSUMMARY);
 	   sens_jrnl->SetPrintLevel(J_USER1,J_ALL));
@@ -49,7 +49,7 @@ namespace Ipopt
     roptions->SetRegisteringCategory("AsNmpc");
     roptions->AddLowerBoundedIntegerOption(
 					   "n_sens_steps", "Number of steps computed by sIPOPT",
-					   0, 0,
+					   0, 1,
 					   "");
     roptions->AddStringOption2(
 			       "sens_boundcheck",
@@ -120,7 +120,7 @@ namespace Ipopt
     roptions->AddLowerBoundedNumberOption(
 					  "sens_max_pdpert",
 					  "Maximum perturbation of primal dual system, for that the sIPOPT algorithm will not abort",
-					  0.0, true, 1e-3, 
+					  0.0, true, 1e-3,
 					  "For certain problems, IPOPT uses inertia correction of the primal dual matrix to achieve"
 					  "better convergence properties. This inertia correction changes the matrix and renders it"
 					  "useless for the use with sIPOPT. This option sets an upper bound, which the inertia correction"
@@ -180,7 +180,7 @@ namespace Ipopt
 											 *ip_data_,
 											 *ip_cq_,
 											 *pd_solver_);
-      
+
       red_hess_calc->ComputeReducedHessian();
     }
 
@@ -206,7 +206,7 @@ namespace Ipopt
       }
     }
 
-   
+
     if (IsValid(ip_data_->curr()) && IsValid(ip_data_->curr()->x())) {
       SmartPtr<const Vector> c;
       SmartPtr<const Vector> d;
@@ -242,7 +242,7 @@ namespace Ipopt
 	yc = ip_data_->curr()->y_c();
 	yd = ip_data_->curr()->y_d();
 	break;
-      default: 
+      default:
 	SmartPtr<Vector> tmp = ip_data_->curr()->y_c()->MakeNew();
 	tmp->Set(0.);
 	c = ConstPtr(tmp);
@@ -278,7 +278,7 @@ namespace Ipopt
     return retval;
   }
 
-  void NmpcApplication::Initialize() 
+  void NmpcApplication::Initialize()
   {
     DBG_START_METH("NmpcApplication::Initialize", dbg_verbosity);
 
@@ -323,9 +323,9 @@ namespace Ipopt
 
     // get PD_Solver
     pd_solver_ = pd_search->PDSolver();
-  
 
-    // get data 
+
+    // get data
     ip_data_ = app_ipopt->IpoptDataObject();
 
     // get calulated quantities
