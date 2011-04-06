@@ -94,6 +94,8 @@ int main (int argc, char** argv)
       return (int) Status;
     }
     // Ask Ipopt to solve the problem
+    const double h = pPDE->GetDiscretizationH();
+    app->Options()->SetNumericValue("obj_scaling_factor", 1e-2/(h*h));
     Status = app->OptimizeNLP(nlp);
     if (Status == Solve_Succeeded) {
       printf("\n\n*** The problem solved!\n");
@@ -105,6 +107,9 @@ int main (int argc, char** argv)
     }
   }
 
+  nlp = NULL;
+  partnlp = NULL;
+  app = NULL;
   delete pPDE;
 
   return 0;
