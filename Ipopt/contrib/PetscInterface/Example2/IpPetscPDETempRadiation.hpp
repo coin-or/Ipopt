@@ -117,6 +117,7 @@ public:
   virtual void Write2File( const std::string& pre_filename);
   double GetHotMinTemp1();
   double GetHotMinTemp2();
+  double GetDiscretizationH() const {return m_h;}
 protected:
   AutoPtr<libMesh::PetscVector<libMesh::Number> > m_Control;
   AutoPtr<libMesh::PetscVector<libMesh::Number> > m_State;
@@ -169,5 +170,6 @@ private:
   double m_HotMinTemp1;    // lower bound of state variable in Omega1
   double m_HotMinTemp2;    // lower bound of state variable in Omega2
   double m_ReguStateParam;
+  double m_h;           // discretization parameter
 };
 #endif

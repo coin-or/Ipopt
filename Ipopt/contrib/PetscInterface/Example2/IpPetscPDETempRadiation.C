@@ -341,6 +341,7 @@ void PetscPDETempRadiation::Init(const std::string filename)
 
   m_State =   AutoPtr<PetscVector<Number> >(new PetscVector<Number>(NumGlobStates, NumLocStates, m_StateDofMap->get_send_list(), GHOSTED));
   m_Control = AutoPtr<PetscVector<Number> >(new PetscVector<Number>(NumGlobControls, NumLocControls));
+  //m_PDEConstrScale = 1e-2/pow(h,m_StateMesh.mesh_dimension()-2);
   m_PDEConstrScale = 1e-2/pow(h,m_StateMesh.mesh_dimension()-2);
   m_PDEConstr = AutoPtr<PetscVector<Number> >(new PetscVector<Number>(NumGlobPDEConstr, NumLocPDEConstr));
   m_AuxConstr = AutoPtr<PetscVector<Number> >(new PetscVector<Number>(NumGlobAuxConstr, NumLocAuxConstr));
@@ -389,6 +390,8 @@ void PetscPDETempRadiation::Init(const std::string filename)
     MatCreateSeqAIJ(PETSC_COMM_SELF,NumGlobControls,NumGlobControls,30,PETSC_NULL,&petsc_mat);
     m_HessControlControl = AutoPtr<PetscMatrix<Number> >(new PetscMatrix<Number>(petsc_mat));
   }
+
+  m_h = h;
   END_FUNCTION
 }
 
@@ -525,7 +528,8 @@ void PetscPDETempRadiation::calc_objective_part(Number& Val)
           for(unsigned int iNode=0; iNode<Side->n_nodes(); iNode++){
             ControlVal += LocalControl[iNode] * FacePhi[FaceToVol[iNode]][qp];
           }
-          Val += JxWFace[qp]*ControlVal*ControlVal;
+          //Val += JxWFace[qp]*ControlVal*ControlVal;
+          Val += JxWFace[qp]*ControlVal;
         }
       }
     } // End side loop
@@ -600,7 +604,8 @@ void PetscPDETempRadiation::calc_objective_gradient(Vec& grad_state, Vec& grad_c
           }
           for (unsigned short iNode=0; iNode<Side->n_nodes(); iNode++) {
             m_GradObjControl->add(m_ControlNodeIDToControlDOF[Side->node(iNode)],
-                                  2.0*JxWFace[qp]*ControlVal*FacePhi[FaceToVol[iNode]][qp]);
+                                  JxWFace[qp]*FacePhi[FaceToVol[iNode]][qp]);
+                                  //2.0*JxWFace[qp]*ControlVal*FacePhi[FaceToVol[iNode]][qp]);
           }
         }
       }
@@ -882,7 +887,7 @@ void PetscPDETempRadiation::calc_hessians(Number sigma, Vec& lambda_loc_pde, Vec
           }
           for (i=0; i<Side->n_nodes(); i++) {
             for (j=0; j<=i; j++) {
-              m_HessControlControl->add(m_ControlNodeIDToControlDOF[Side->node(i)],m_ControlNodeIDToControlDOF[Side->node(j)],JxWFace[qp]*2.0*sigma*FacePhi[FaceToVol[j]][qp]*FacePhi[FaceToVol[i]][qp]);
+              //m_HessControlControl->add(m_ControlNodeIDToControlDOF[Side->node(i)],m_ControlNodeIDToControlDOF[Side->node(j)],JxWFace[qp]*2.0*sigma*FacePhi[FaceToVol[j]][qp]*FacePhi[FaceToVol[i]][qp]);
               for (k=0; k<Side->n_nodes(); k++) {
                 if(m_CalcType==Values) {
                   ElemHessStateState(FaceToVol[i],FaceToVol[j]) += lambda_pde.el(StateDofIdx[FaceToVol[k]])*JxWFace[qp]*m_Alpha*12.0*pow(StateVal  ,2.0)*FacePhi[FaceToVol[j]][qp]*FacePhi[FaceToVol[i]][qp]*FacePhi[FaceToVol[k]][qp];

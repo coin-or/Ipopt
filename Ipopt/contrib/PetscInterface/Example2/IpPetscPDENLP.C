@@ -637,7 +637,7 @@ PetscPDENLP::eval_h(Index num_proc, Index proc_id,
       }
       VecSetValues(lambda_pde,ni,Idx,lambda+iVal,INSERT_VALUES);
       iVal += ni;
-      delete Idx;
+      delete [] Idx;
       
       ni = p_aux_last[i_proc]-p_aux_first[i_proc]+1;
       Idx = new int[ni];
@@ -646,7 +646,7 @@ PetscPDENLP::eval_h(Index num_proc, Index proc_id,
       }
       VecSetValues(lambda_aux,ni,Idx,lambda+iVal,INSERT_VALUES);
       iVal += ni;
-      delete Idx;
+      delete [] Idx;
     }
     delete[] p_pde_first;
     delete[] p_pde_last;
