@@ -69,7 +69,8 @@ namespace Ipopt
     SmartPtr<PDSystemSolver> pd_solver_;
     SmartPtr<IpoptNLP> ip_nlp_;
     //SmartPtr<NmpcTNLPAdapter> tnlp_adapter_;
-    SmartPtr<RegisteredOptions> reg_options_;    
+    SmartPtr<RegisteredOptions> reg_options_;
+    ApplicationReturnStatus ipopt_retval_;
 
     /** storing options values */
     bool run_sens_;

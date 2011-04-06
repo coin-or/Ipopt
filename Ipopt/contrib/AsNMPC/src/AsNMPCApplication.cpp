@@ -27,7 +27,8 @@ namespace Ipopt
     :
     jnlst_(jnlst),
     options_(options),
-    reg_options_(reg_options)
+    reg_options_(reg_options),
+    ipopt_retval_(Internal_Error)
   {
     DBG_START_METH("NmpcApplication::NmpcApplication", dbg_verbosity);
     
@@ -151,17 +152,21 @@ namespace Ipopt
     Options()->GetBoolValue("nmpc_internal_abort", nmpc_internal_abort, "");
     Options()->GetBoolValue("redhess_internal_abort", redhess_internal_abort, "");
 
+    SolverReturn status = AppReturn2SolverReturn(ipopt_retval_);
+
     // Check for perturbation of primal dual system
     Number max_pdpert;
-    Options()->GetNumericValue("sens_max_pdpert", max_pdpert, "");
-    Number pdpert_x, pdpert_s, pdpert_c, pdpert_d;
-    ip_data_->getPDPert(pdpert_x, pdpert_s, pdpert_c, pdpert_d);
-    if (Max(pdpert_x, pdpert_s, pdpert_c, pdpert_d)>max_pdpert) {
-      jnlst_->Printf(J_WARNING, J_MAIN, "\n\t--------------= Warning =--------------\nInertia correction of primal dual system is too large for meaningful AsNMPC results.\n"
-		    "\t... aborting computation.\n"
-		     "Set option sens_max_pdpert to a higher value (current: %f) to run AsNMPC algorithm anyway\n", max_pdpert);
-      nmpc_internal_abort = true;
-      redhess_internal_abort = true;
+    if (ipopt_retval_==0 || ipopt_retval_==1) { // otherwise, the values might not be available
+      Options()->GetNumericValue("sens_max_pdpert", max_pdpert, "");
+      Number pdpert_x, pdpert_s, pdpert_c, pdpert_d;
+      ip_data_->getPDPert(pdpert_x, pdpert_s, pdpert_c, pdpert_d);
+      if (Max(pdpert_x, pdpert_s, pdpert_c, pdpert_d)>max_pdpert) {
+	jnlst_->Printf(J_WARNING, J_MAIN, "\n\t--------------= Warning =--------------\nInertia correction of primal dual system is too large for meaningful sIPOPT results.\n"
+		       "\t... aborting computation.\n"
+		       "Set option sens_max_pdpert to a higher value (current: %f) to run sIPOPT algorithm anyway\n", max_pdpert);
+	nmpc_internal_abort = true;
+	redhess_internal_abort = true;
+      }
     }
 
 
@@ -201,8 +206,7 @@ namespace Ipopt
       }
     }
 
-    SolverReturn status = SUCCESS;
-
+   
     if (IsValid(ip_data_->curr()) && IsValid(ip_data_->curr()->x())) {
       SmartPtr<const Vector> c;
       SmartPtr<const Vector> d;
@@ -214,13 +218,13 @@ namespace Ipopt
 
       switch (status) {
       case SUCCESS:
-	c = ip_cq_->curr_c();
+	/*c = ip_cq_->curr_c();
 	d = ip_cq_->curr_d();
 	obj = ip_cq_->curr_f();
 	zL = ip_data_->curr()->z_L();
 	zU = ip_data_->curr()->z_U();
 	yc = ip_data_->curr()->y_c();
-	yd = ip_data_->curr()->y_d();
+	yd = ip_data_->curr()->y_d();*/
       case MAXITER_EXCEEDED:
       case STOP_AT_TINY_STEP:
       case STOP_AT_ACCEPTABLE_POINT:
@@ -238,7 +242,7 @@ namespace Ipopt
 	yc = ip_data_->curr()->y_c();
 	yd = ip_data_->curr()->y_d();
 	break;
-      default: {
+      default: 
 	SmartPtr<Vector> tmp = ip_data_->curr()->y_c()->MakeNew();
 	tmp->Set(0.);
 	c = ConstPtr(tmp);
@@ -254,15 +258,14 @@ namespace Ipopt
 	tmp->Set(0.);
 	zU = ConstPtr(tmp);
       }
-      }
 
-      if (redhess_internal_abort) {
+      if (compute_red_hessian_ && redhess_internal_abort) {
 	jnlst_->Printf(J_WARNING, J_MAIN, "\nReduced hessian was not computed "
 		       "because an error occured.\n"
 		       "See exception message above for details.\n\n");
       }
-      if (nmpc_internal_abort) {
-	jnlst_->Printf(J_WARNING, J_MAIN, "\nNMPC controller was not called "
+      if (run_sens_ && nmpc_internal_abort) {
+	jnlst_->Printf(J_WARNING, J_MAIN, "\nsIPOPT was not called "
 		       "because an error occured.\n"
 		       "See exception message above for details.\n\n");
       }
@@ -303,10 +306,11 @@ namespace Ipopt
     // get optionsList and Journalist
     options_ = app_ipopt->Options();
     jnlst_ = app_ipopt->Jnlst();
+    ipopt_retval_ = ipopt_retval;
 
     // Check whether Ipopt solved to optimality - if not, end computation.
     if ( ipopt_retval != Solve_Succeeded ) {
-      jnlst_->Printf(J_ERROR, J_MAIN, "ASNMPC: Aborting AsNMPC computation, because IPOPT did not succeed\n\n");
+      jnlst_->Printf(J_ERROR, J_MAIN, "sIPOPT: Aborting sIPOPT computation, because IPOPT did not succeed\n\n");
       options_->SetStringValue("nmpc_internal_abort", "yes");
       options_->SetStringValue("redhess_internal_abort", "yes");
     }

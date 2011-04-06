@@ -10,6 +10,8 @@
 
 #include "IpUtils.hpp"
 #include <string>
+#include "IpAlgTypes.hpp"
+#include "IpReturnCodes.hpp"
 
 namespace Ipopt
 {
@@ -27,7 +29,8 @@ namespace Ipopt
   Index AsIndexSum(Index length, const Index* x, Index Incr);
 
   void append_Index(std::string& str, Index idx);
-  
+
+  SolverReturn AppReturn2SolverReturn(ApplicationReturnStatus ipopt_retval);  
 }
 
 #endif
