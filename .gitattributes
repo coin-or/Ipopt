@@ -53,11 +53,10 @@ Ipopt/NoLongerMaintainedWindows/VisualStudio_dotNET/hs071_f/hs071_f.f -text
 Ipopt/config.guess -text
 Ipopt/config.sub -text
 Ipopt/configure -text
-Ipopt/contrib/AsNMPC/doc/asnmpc.bib -text
-Ipopt/contrib/AsNMPC/doc/overview.pdf -text
-Ipopt/contrib/AsNMPC/doc/overview.tex -text
-Ipopt/contrib/AsNMPC/doc/usage.pdf -text
-Ipopt/contrib/AsNMPC/doc/usage.tex -text
+Ipopt/contrib/AsNMPC/doc/iecrv5.bst -text
+Ipopt/contrib/AsNMPC/doc/sipopt.bib -text
+Ipopt/contrib/AsNMPC/doc/sipopt_manual.pdf -text
+Ipopt/contrib/AsNMPC/doc/sipopt_manual.tex -text
 Ipopt/contrib/AsNMPC/examples/hicks_ampl/hicks.dat -text
 Ipopt/contrib/AsNMPC/examples/hicks_ampl/hicks.mod -text
 Ipopt/contrib/AsNMPC/examples/hicks_ampl/hicks.run -text

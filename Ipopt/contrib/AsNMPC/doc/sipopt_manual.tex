@@ -1,0 +1,848 @@
+\documentclass[letter, 11pt]{article}
+% \usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[listofformat=subparens]{subfig}
+\usepackage{setspace}
+\usepackage{theorem}
+
+\usepackage{palatino}
+
+
+% Bibliography related
+\def\BIBand{and}
+
+\usepackage[numbers,sort]{natbib}
+%\bibliographystyle{achemso}
+\bibliographystyle{iecrv5}
+\usepackage{natmove}
+
+\usepackage[top=3cm,bottom=3cm,left=1.8cm,right=1.8cm,centering]{geometry} % proposal
+
+\newcommand{\RR}{{\mathbb{R}}}
+\newcommand{\vect}[1]{{\left[\begin{array}{c} #1 \end{array}\right]}}
+\newcommand{\matr}[2]{{\left[\begin{array}{#1} #2 \end{array}\right]}}
+
+\newtheorem{property}{Property}
+\newtheorem{definition}{Definition}
+\usepackage{setspace}
+
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Code Listing}
+\lstset{aboveskip=22pt,belowskip=22pt}
+
+\newcommand{\sensKKT}{\emph{sIPOPT}}
+\newcommand{\AMPL}{AMPL}
+
+% Citation related
+\newcommand{\citetcomma}[1]{\citeauthor{#1},\cite{#1}\ }
+\newcommand{\citetperiod}[1]{\citeauthor{#1}.\cite{#1}\ }
+\newcommand{\citetfcomma}[1]{\citeauthor{#1}.\cite{#1}\ }
+
+
+\newcommand{\parens}[1]{\ensuremath{\left( #1 \right)}}
+\newcommand{\bracs}[1]{\ensuremath{\left[ #1 \right]}}
+\newcommand{\curls}[1]{\ensuremath{\left\{ #1 \right\}}}
+\newcommand{\bars}[1]{\ensuremath{\left\| #1 \right\|}}
+
+\newcommand{\func}[2]{\ensuremath{ #1\parens{#2}  }}
+\newcommand{\norms}[2]{\ensuremath{ \bars{#1}_{#2}  }}
+
+\newcommand{\expect}[1]{\ensuremath{\mathbb{E}\bracs{#1}}}
+\newcommand{\expectc}[1]{\ensuremath{\mathbb{E}\curls{#1}}}
+
+
+% Folders and directories
+\newcommand{\ipoptf}{\$IPOPT}
+
+
+%\newcommand{\sensdir}{AsNMPC}
+%\newcommand{\sensexe}{ampl\_asnmpc}
+%\newcommand{\senslib}{libasnmpc}
+\newcommand{\sensdir}{sIPOPT}
+\newcommand{\sensexe}{ipopt\_sens}
+\newcommand{\senslib}{libsipopt}
+
+
+
+% options and suffixes
+%\newcommand{\runaskkt}{run\_nmpc}
+%\newcommand{\statez}{nmpc\_state\_0}
+%\newcommand{\stateo}{nmpc\_state\_1}
+%\newcommand{\statevo}{nmpc\_state\_value\_1}
+%\newcommand{\initc}{nmpc\_init\_constr}
+%
+%\newcommand{\sstateo}{nmpc\_sol\_state\_1}
+%\newcommand{\sstatezl}{nmpc\_sol\_state\_1\_z\_L}
+%\newcommand{\sstatezu}{nmpc\_sol\_state\_1\_z\_U}
+%
+%\newcommand{\redhessopt}{compute\_red\_hessian}
+%\newcommand{\redhess}{red\_hessian}
+%
+%\newcommand{\selectstep}{select\_step}
+%
+%\newcommand{\nstepsopt}{n\_nmpc\_steps}
+%\newcommand{\boundcheckopt}{nmpc\_boundcheck}
+%\newcommand{\boundepsopt}{nmpc\_bound\_eps}
+%\newcommand{\maxpdpertopt}{nmpc\_max\_pdpert}
+%\newcommand{\eigendecompopt}{rh\_eigendecomp}
+
+\newcommand{\runaskkt}{run\_sens}
+\newcommand{\statez}{sens\_state\_0}
+\newcommand{\stateo}{sens\_state\_1}
+\newcommand{\statevo}{sens\_state\_value\_1}
+\newcommand{\initc}{sens\_init\_constr}
+
+\newcommand{\sstateo}{sens\_sol\_state\_1}
+\newcommand{\sstatezl}{sens\_sol\_state\_1\_z\_L}
+\newcommand{\sstatezu}{sens\_sol\_state\_1\_z\_U}
+
+\newcommand{\redhessopt}{compute\_red\_hessian}
+\newcommand{\redhess}{red\_hessian}
+
+\newcommand{\selectstep}{select\_step}
+
+\newcommand{\nstepsopt}{n\_sens\_steps}
+\newcommand{\boundcheckopt}{sens\_boundcheck}
+\newcommand{\boundepsopt}{sens\_bound\_eps}
+\newcommand{\maxpdpertopt}{sens\_max\_pdpert}
+\newcommand{\eigendecompopt}{rh\_eigendecomp}
+
+
+
+% Define ampl language for listings
+\lstdefinelanguage{ampl} {
+  alsoletter={.,:, >, <, =},
+  morekeywords={param, var, minimize, maximize, let, solve, display, printf,
+                suffix, reset, subject, to, options, option, =,:=, >=, <=, s.t.,
+                IN, OUT},
+  sensitive=false,
+  morecomment=[l]{\#},
+  morecomment=[s]{/*}{*/}
+}
+
+
+\title{ \sensKKT\ Reference Manual}
+\author{Hans Pirnay, Rodrigo L\'opez-Negrete, and
+        Lorenz T. Biegler \\
+Chemical Engineering Department \\
+Carnegie Mellon University \\
+Pittsburgh, PA 15213}
+
+\begin{document}
+\maketitle
+\tableofcontents
+%\newpage
+
+\section{Introduction}
+\onehalfspacing
+
+Sensitivity of nonlinear programming problems is a key
+step in any optimization study. Sensitivity provides
+information on regularity and curvature conditions at KKT points,
+assesses which variables play dominant roles in the optimization, and
+provides first order estimates for parametric nonlinear programs.
+Moreover, for NLP algorithms that use exact second derivatives,
+sensitivity can be implemented very efficiently within NLP solvers and
+provide valuable information with very little added computation. This
+implementation provides IPOPT with the capabilities to calculate
+sensitivities, and approximate perturbed solutions with them.
+
+The basic sensitivity strategy implemented here is based on the
+application of the Implicit Function Theorem (IFT) to the KKT conditions
+of the NLP. As shown in \citet{Fiacco1983},
+sensitivities can be obtained from a solution with suitable regularity
+conditions merely by solving a linearization of the KKT
+conditions. In \citet{pirnay:2011} we have extended these results to
+the barrier penalty method implemented in IPOPT. In the following subsections
+we have summarized the main concepts in the paper.
+
+\subsection{Barrier Sensitivity} \label{sec:barrier}
+
+Consider the parametric nonlinear program of the form:
+
+\begin{subequations} \label{NLPsens}
+ \begin{eqnarray}
+  &\min_x & f(x; p) \\
+  &\mbox{s.t.} & c(x; p) = 0, x \geq 0
+ \end{eqnarray}
+\end{subequations}
+
+\noindent with the vectors $x \in \mathbb{R}^{n_x}$, $p \in \mathbb{R}^{n_p}$,
+and $c(x; p): \mathbb{R}^{n_x+n_p} \to \mathbb{R}^{m}$. Without loss of generality,
+only the variables $x$ have been assumed zero or positive. However,
+the following derivations can be extended to the case where there are both
+upper and lower bounds.
+
+The IPOPT NLP algorithm substitutes a barrier function for the inequality
+constraints and solves the following sequence of problems with
+$\mu \rightarrow 0$:
+
+\begin{subequations}
+\label{IPNLP2}
+\begin{eqnarray}
+& \min_x  &  \; \; B(x; p, \mu) = f(x; p)  - \mu_{\ell} \sum_{i=1}^{n_x} ln (x_i) \\
+& \mbox{s.t.} & c(x; p) = 0
+\end{eqnarray}
+\end{subequations}
+
+At a solution with $p = p_0$ (the nominal value) we compute the
+sensitivities $\frac{d x^{*}(p_0)}{dp}$ and $\frac{df(x^*; p_0)}{d p} =
+\frac{\partial f(x^*; p_0)}{\partial p} + \frac{d x(p_0)}{d p}\frac{\partial f(x^*; p_0)}{\partial x}$.  To
+calculate these sensitivities, we first
+consider properties of the solutions of (\ref{NLPsens}) obtained by
+IPOPT when $p = p_0$ \cite{Fiacco1983,forsgren}.
+
+
+For NLP (\ref{NLPsens}), the Karush-Kuhn-Tucker (KKT) conditions
+are defined as:
+
+\begin{subequations}\label{kktc}
+\begin{eqnarray}
+& \nabla_x L(x^*, \lambda^*, \nu^*; p_0) =
+\nabla_x f(x^*; p_0) + \nabla_x c(x^*; p_0)\lambda^* - \nu^* = 0 \\
+& c(x^*; p_0) = 0 \\
+& 0 \leq \nu^* \perp x^* \geq 0
+\end{eqnarray}
+\end{subequations}
+
+For the KKT conditions to serve as necessary conditions for a local
+minimum of (\ref{NLPsens}), constraint qualifications are needed,
+such as Linear Independence Constraint Qualification (LICQ)
+or Mangasarian-Fromowitz Constraint Qualification (MFCQ).
+Definitions of these regularity conditions may be found in \citet{larrybook},
+\citet{nocedalbook}, or \citet{Fiacco1983}.
+
+
+Calculation of the sensitivity of the primal and dual variables with
+respect to $p$ now proceeds from the implicit function theorem (IFT)
+applied to the optimality conditions of (\ref{IPNLP2}) at
+$p_0$. Defining the quantities:
+
+\begin{equation}  \label{mdef}
+  M(s(\mu; p_0)) =
+  \matr{ccc}{
+    \func{W}{\func{s}{\mu;p_0}} & \func{A}{\func{x}{\mu;p_0}}  & -I\\
+   \func{A}{\func{x}{\mu;p_0}} ^T &0 &0\\ \func{V}{\mu;p_0} &0&X(\mu; p_0)}
+\end{equation}
+
+\noindent and
+
+\begin{equation}  \label{ndef}
+N_p(s(\mu; p_0)) =
+\vect{\nabla_{xp} L(s(\mu; p_0)) \\ \nabla_p c(x(\mu; p_0))\\ 0}, \quad
+N_{\mu} = \vect{0 \\ 0 \\ -\mu e}
+\end{equation}
+
+\noindent where $W(s(\mu; p_0))$ denotes the Hessian $\nabla_{xx} L(x
+,\lambda, \nu)$ of the Lagrangian function evaluated at $s(\mu; p_0)$,
+$A(x(\mu; p_0)) = \nabla_{x} c(x)$ evaluated at $x(\mu; p_0)$, $X =
+diag\{x\}$ and $V = diag\{\nu\}$, application of IFT leads to:
+
+\begin{equation}\label{sensfiacco}
+M(s(\mu; p_0)) \frac{d s(\mu; p_0)}{d p}^T + N_p(s(\mu; p_0)) = 0.
+\end{equation}
+
+Because LICQ, Strict Complementarity (SC), and SSOSC
+hold, $M(s(\mu; p_0))$ is nonsingular and
+the sensitivities can be calculated from:
+
+\begin{equation} \label{sens:1}
+\frac{d s(\mu; p_0)}{d p}^T =   - \func{M}{\func{s}{\mu; p_0}}^{-1} \func{N_p}{ \func{s}{\mu; p_0} } .
+\end{equation}
+
+Note, also, that $M(s(\mu; p_0))$ is directly available in factored form
+from the solution of (\ref{IPNLP2}), so the sensitivity can be calculated
+through a simple backsolve. For small values of $\mu$ and $\|p-p_0\|$
+it can be shown from the above properties \cite{Fiacco1983} that
+
+\begin{equation} \label{init1}
+s(\mu; p) = s(\mu; p_0) - M(s(\mu; p_0))^{-1}N_p(s(\mu; p_0)) (p-p_0) +
+o\|p-p_0\| . %= s(0; p) + O(\mu).
+\end{equation}
+
+%\noindent or
+%
+%\begin{equation} \label{init2}
+%s(0; p) = s(\mu; p_0) - M(s(\mu; p_0))^{-1} \bracs{ N_p(s(\mu; p_0))(p-p_0) + N_{\mu}(s(\mu; p_0)) }  + o\|p-p_0\| + o\| \mu \|.
+%\end{equation}
+
+
+Finally, in the way IPOPT is implemented, it cannot distinguish between
+variables and parameters. Thus we can make this distinction apparent by
+adding some artificial variables and constraints. In this way we write:
+
+\begin{subequations} \label{NLPsens2}
+\begin{eqnarray}
+&  \min_{x, w} & f(x, w) \\
+&  \mbox{s.t.} & c(x, w) = 0, x \geq 0 \\
+& & w - p_0 = 0
+\end{eqnarray}
+\end{subequations}
+
+Note that the NLP solution is equivalent to (\ref{NLPsens}), and
+it is easy to see that the NLP sensitivity is equivalent as well.
+Writing the KKT conditions for (\ref{NLPsens2}) leads to:
+
+\begin{subequations}\label{eq:reform}
+\begin{eqnarray}
+& \nabla_x f(x, w) + \nabla_x c^T(x, w)\lambda -\nu = 0\\
+& \nabla_w f(x, w) + \nabla_w c^T(x, w)\lambda + \bar{\lambda} = 0\\
+& c(x) = 0 \\ & XVe =0 \\ & w - p_0 = 0
+\end{eqnarray}
+\end{subequations}
+
+In this definition $\bar{\lambda}$ represents the Lagrange multiplier
+corresponding to the equation $w - p =0$. For the Newton step we write:
+
+\begin{equation}
+  \label{eq:reordered_K_3}
+  \left[
+  \begin{array}{ccccc}
+  W&   \nabla_{xw} L(x, w, \lambda, \nu) & A & -I & 0 \\
+  \nabla_{wx} L(x, w, \lambda, \nu) &  \nabla_{ww} L(x, w, \lambda, \nu)
+  & \nabla_w c(x, w) & 0 & I \\
+      A^T& \nabla_w c(x, w)^T & 0 & 0 & 0 \\
+      V &0&0& X & 0 \\
+      0 & I &0&0&0\\
+  \end{array}
+  \right]
+  \left[
+    \begin{array}{c}
+      \Delta z\\ \Delta w \\ \Delta \lambda\\\Delta\nu\\ \Delta\bar{\lambda}
+    \end{array}
+  \right]
+  =
+  \left[
+   \begin{array}{c}
+      0 \\0 \\ 0 \\ 0 \\ \Delta p
+   \end{array} \right].
+\end{equation}
+
+Since $\Delta w = \Delta p$, the step computed by this matrix (without
+the second row) is the same as the optimal step stated in
+(\ref{sensfiacco}).
+
+
+\subsection{Multiple Sequential Parameter Perturbations} \label{sec:multirhs}
+
+
+In the derivations in the previous sections we considered changes to the parameter vector.
+However, in some cases we may be interested in making multiple parameter perturbations in a sequential manner.
+For example we may want to perturb the current solution {\func{s}{\mu; p_0}} using the parameter vectors
+$p_1, \ldots, p_{n_{\mbox{\tiny pert}}}$. This amounts to solving system \eqref{sensfiacco} with different right hand sides
+{\func{N_p}{\func{s}{\mu;p_0}}} (Eq. \eqref{ndef}). Note that, because we already have \eqref{mdef}
+factorized at the solution, it is very
+cheap to obtain the $n_{\mbox{\tiny pert}}$ sensitivities. With them and using Equation \eqref{init1}
+we can determine the approximated solutions {\func{s}{\mu; p_1}}, \ldots, {\func{s}{\mu; p_{n_{\mbox{\tiny pert}}}}}.
+
+
+\section{Usage}
+
+In the following sections we describe how the \sensKKT\ library can be used through the \AMPL\ interface.
+However, we also provide examples for the C++ interface in the examples folder of the distribution.
+To help illustrate the use of \sensKKT\ the following NLP, taken from \cite{Ganesh1987}, will be used:
+
+\begin{eqnarray}  \label{eq:ex1}
+    \min&& x_1^2+x_2^2+x_3^2\\
+  \mathrm{s.t.}&&6x_1+3x_2+2x_3-p_1 = 0\nonumber\\
+  &&p_2x_1+x_2-x_3-1 = 0\nonumber\\
+  &&x_1,x_2,x_3\geq 0 , \nonumber
+\end{eqnarray}
+
+\noindent with variables $x_1,x_2$, and $x_3$ and parameters $p_1$, and $p_2$.
+Since IPOPT does not distinguish variables from parameters, we reformulate
+the NLP as \eqref{NLPsens2} by introducing equations
+that fix the parameters $p_1$ and $p_2$ to their nominal values
+$p_{1,a}$ and $p_{2,a}$.
+
+\begin{subequations}\label{eq:exr}
+\begin{eqnarray}
+  \min&& x_1^2+x_2^2+x_3^2\\
+  \mathrm{s.t.}&&6x_1+3x_2+2x_3-p_1 = 0\\
+  &&p_2x_1+x_2-x_3-1 = 0\\
+  &&p_1 = p_{1,a}\\
+  &&p_2 = p_{2,a}\\
+  &&x_1,x_2,x_3\geq 0.
+\end{eqnarray}
+\end{subequations}
+
+For \eqref{eq:exr}, the KKT conditions are:
+
+\begin{eqnarray}   \label{eq:exr:kkt}
+  2x_1+6\lambda_1+p_2\lambda_2-\nu_1 &=& 0\\
+  2x_2+3\lambda_1+\lambda_2-\nu_2&=& 0\\
+  2x_3+2\lambda_1-\lambda_2-\nu_3 &=&0\\
+  -\lambda_1+\lambda_3&=&0\\
+  \lambda_2x_1+\lambda_4&=&0\\
+  6x_1+3x_2+2x_3-p_1 &=&0\\
+  p_2x_1+x_2-x_3-1 &=&0\\
+  p_1-p_{1,a}&=&0\\
+  p_2-p_{2,a}&=&0\\
+  \nu_1x_1-\mu &=& 0\\
+  \nu_2x_2-\mu&=& 0\\
+  \nu_3x_3-\mu&=& 0\\
+  x_1,x_2,x_3,\nu_1,\nu_2,\nu_3&\geq& 0,
+\end{eqnarray}
+
+\noindent and the corresponding Newton step is
+
+\begin{equation}  \label{eq:exr:newton}
+  \left[
+    \begin{array}{cccccccccccc}
+      2&&&&\lambda_2&6&p_2&&&-1\\
+      &2&&&&3&1&&&&-1\\
+      &&2&&&2&-1&&&&&-1\\
+      &&&&&-1&&1\\
+      \lambda_2&&&&&&x_1&&1\\
+      6&3&2&-1\\
+      p_2&1&-1&&x_1\\
+      &&&1\\
+      &&&&1\\
+      \nu_1&&&&&&&&&x_1\\
+      &\nu_2&&&&&&&&&x_2\\
+      &&\nu_3&&&&&&&&&x_3
+    \end{array}
+  \right]
+  \left[
+    \begin{array}{c}
+      \Delta x_1\\
+      \Delta x_2\\
+      \Delta x_3\\
+      \Delta p_1\\
+      \Delta p_2\\
+      \Delta \lambda_1\\
+      \Delta \lambda_2\\
+      \Delta \lambda_3\\
+      \Delta \lambda_4\\
+      \Delta \nu_1\\
+      \Delta \nu_2\\
+      \Delta \nu_3\\
+    \end{array}
+  \right]
+  =-
+  \left[
+    \begin{array}{c}
+      2x^{*}_1+6\lambda^{*}_1+p_2\lambda^{*}_2-\nu^{*}_1\\
+      2x^{*}_2+3\lambda^{*}_1+\lambda^{*}_2-\nu^{*}_2\\
+      2x^{*}_3+2\lambda^{*}_1-\lambda^{*}_2-\nu^{*}_3\\
+      -\lambda^{*}_1+\lambda^{*}_3\\
+      \lambda^{*}_2x^{*}_1+\lambda^{*}_4\\
+      6x^{*}_1+3x^{*}_2+2x^{*}_3-p^{*}_1\\
+      p^{*}_2x^{*}_1+x^{*}_2-x^{*}_3-1\\
+      p^{*}_1-p_{1,a}\\
+      p^{*}_2-p_{2,a}\\
+      \nu^{*}_1x^{*}_1-\mu\\
+      \nu^{*}_2x^{*}_2-\mu\\
+      \nu^{*}_3x^{*}_3-\mu\\
+    \end{array}
+  \right]
+\end{equation}
+
+\noindent where the right hand side is zero at the solution.
+
+\subsection{\AMPL\ Interface}
+
+In this section we will show how to use \sensKKT\ through the \AMPL\ interface \cite{ampl}. This is the preferred method for using IPOPT,
+because this allows us to take advantage of the exact first and second order derivatives provided by the modeling language.
+The first thing to do is to write the problem in the \AMPL\ language as shown in code listing \ref{ampl:ex1}.
+
+%\begin{minipage}{0.9\textwidth}\centering
+\begin{lstlisting}[language=ampl, caption={\AMPL\ code for Problem \ref{eq:exr}.}, label={ampl:ex1}, frame=single, captionpos=b]
+reset ;
+
+# Define parameters
+param et1p ;
+param et2p ;
+
+# Original parameter values
+let et1p := 5 ;
+let et2p := 1 ;
+
+# Define variables, with bounds and initial guess
+var x1 >= 0, := 0.15 ;
+var x2 >= 0, := 0.15 ;
+var x3 >= 0, := 0.00 ;
+
+# objective function
+minimize objf: x1^2 + x2^2 + x3^2 ;
+
+# constraints
+subject to
+
+r1:    6*x1 + 3*x2 + 2*x3 - et1p = 0 ;
+r2: et2p*x1 +   x2 -   x3 - 1    = 0 ;
+
+# Define solver and Ampl options in this case we don't want Ampl's
+# presolve to accidentally remove artificial variables.
+options solver ipopt_sens ;
+option presolve 0 ;
+
+# Solve problem
+solve ;
+\end{lstlisting}
+%\end{minipage}
+
+
+We can now proceed to modify the above code to add the information needed to use \sensKKT.
+For this we need to create the following suffixes. These will be used to communicate the nominal and perturbed values of the
+parameters, and also some will serve as flags to indicate to IPOPT which are the artificial constraints that were added.
+
+
+\begin{description}
+\item[\statez] This is used to enumerate the parameters that will be perturbed. It takes values from 1 to length($p$), and
+                      the values may not be repeated. Note that the order of the values is crucial.
+\item[\stateo] This is similar to \textbf{\statez}, but it now indicates the order for the parameters at the perturbed value.
+                      This suffix should have the same values as \textbf{\statez}. It takes values from 1 to length($p$), and
+                      the values may no be repeated.
+\item[\statevo] This is used to communicate the values of the perturbed parameters.
+                             It has to be set for the same variables as \textbf{\stateo}.
+\item[\initc] This is a flag that indicates the constraint is artificial, e.g., $w - p=0$ in Problem \eqref{eq:reform}.
+                          If the constraint is artificial, set this suffix to 1 (no indexing is necessary).
+\end{description}
+
+Once these suffixes have been set, we must enable \sensKKT\ by setting the \emph{\runaskkt} to `\emph{yes}'. Note that
+this option can alternatively be set in the ipopt.opt file. In addition, to ensure that
+\AMPL's presolve feature does not eliminate the initial value constraints, we disable it. Thus, the modified code is
+
+\begin{lstlisting}[language=ampl, caption={\AMPL\ code for sensitivity update of Problem \ref{eq:exr}.}, label={ampl:ex2}, frame=single, captionpos=b]
+reset ;
+
+# Suffixes for sensitivity update
+suffix sens_state_0, IN;
+suffix sens_state_1, IN;
+suffix sens_state_value_1, IN;
+suffix sens_sol_state_1, OUT;
+suffix sens_init_constr, IN;
+
+# Original value of parameters
+param et1p ;
+param et2p ;
+
+# Original parameter values
+let et1p := 5 ;
+let et2p := 1 ;
+
+# Define variables, with bounds and initial guess
+var x1 >= 0, := 0.15 ;
+var x2 >= 0, := 0.15 ;
+var x3 >= 0, := 0.00 ;
+
+# Artificial variables so IPOPT sees the parameters
+var et1 ;
+var et2 ;
+
+# objective function
+minimize objf: x1^2 + x2^2 + x3^2 ;
+
+# constraints
+subject to
+
+r1: 6*x1 + 3*x2 + 2*x3 - et1 = 0 ;
+r2: et2*x1 + x2 - x3 - 1 = 0 ;
+
+# Artificial constraints to pass parameters to IPOPT
+r3: et1 = et1p ;
+r4: et2 = et2p ;
+
+# Define solver and Ampl options in this case we don't want Ampl's
+# presolve to accidentally remove artificial variables.
+options solver ipopt_sens ;
+option presolve 0;
+
+# define an order to the parameters that will change.
+# In step 0, only et1 changes, and has position 1
+let et1.sens_state_0 := 1 ;
+
+# in the first step/change et1 has position 1
+let et1.sens_state_1 := 1 ;
+
+# Perturbed value of parameter et1 (in step 1)
+let et1.sens_state_value_1 := 4.5 ;
+
+# In step 0, et2 has position 1
+let et2.sens_state_0 := 2 ;
+
+# in the second step/change et1 has position 1
+let et2.sens_state_1 := 2 ;
+
+# Perturbed value of parameter et2 (in step 1)
+let et2.sens_state_value_1 := 1 ;
+
+# Artificial constraints
+let r3.sens_init_constr := 1 ;
+let r4.sens_init_constr := 1 ;
+
+# solve problem
+solve ;
+\end{lstlisting}
+
+
+
+After the algorithm has completed successfully, the perturbed solution is stored in the following \AMPL\ suffixes:
+
+\begin{description}
+\item[\sstateo]  This holds the updated variables, as well as, the updated constraint multiplier
+                 values computed in the sensitivity update.
+\item[\sstatezl] This suffix holds updated lower bound multipliers.
+\item[\sstatezu] This suffix holds updated upper bound multipliers.
+\end{description}
+
+For example we could append the following code to Listing \ref{ampl:ex2} in order to print both the nominal
+solution, as well as the updated values.
+
+%
+\begin{lstlisting}[language=ampl, frame=single, captionpos=b,caption={\AMPL\ code to print updated solution.}, label={ampl:ex3}]
+#**********************************************
+# Print nominal solution and bound multipliers
+#**********************************************
+display x1, x2, x3, et1, et2 ;
+display x1.ipopt_zU_out, x2.ipopt_zU_out, x3.ipopt_zU_out,
+        et1.ipopt_zU_out, et2.ipopt_zU_out ;
+
+display x1.ipopt_zL_out, x2.ipopt_zL_out, x3.ipopt_zL_out,
+        et1.ipopt_zL_out, et2.ipopt_zL_out ;
+
+# Constraint multipliers
+display r1, r2, r3, r4 ;
+
+#************************
+# Print updated solution
+#************************
+display x1.sens_sol_state_1, x2.sens_sol_state_1,
+        x3.sens_sol_state_1, et1.sens_sol_state_1,
+        et2.sens_sol_state_1 ;
+
+display x1.sens_sol_state_1_z_U, x2.sens_sol_state_1_z_U,
+        x3.sens_sol_state_1_z_U,
+        et1.sens_sol_state_1_z_U, et2.sens_sol_state_1_z_U ;
+
+display x1.sens_sol_state_1_z_L, x2.sens_sol_state_1_z_L,
+        x3.sens_sol_state_1_z_L,
+        et1.sens_sol_state_1_z_L, et2.sens_sol_state_1_z_L ;
+
+# and updated constraint multipliers
+display r1.sens_sol_state_1, r2.sens_sol_state_1,
+        r3.sens_sol_state_1, r4.sens_sol_state_1 ;
+\end{lstlisting}
+
+
+An example implementation of the above is provided in the directory:
+
+\begin{description}
+\item {\tt \ipoptf/Ipopt/contrib/\sensdir/examples/parametric\_ampl}.
+\end{description}
+
+%\subsection{C++ Interface}
+
+\section{Reduced Hessian}
+
+An important byproduct of the sensitivity calculation is information
+related to the Hessian of the Lagrange function pertinent to the
+second order conditions. At the solution of (\ref{NLPsens}) we again
+consider the sensitivity system, $M S = N_{rh}$, and partition the
+variables into free and bounded variables, i.e., $x^* = [x_f^T \; x_b^T]$ where $x^*_f > 0,
+x^*_b = 0$. Assuming strict complementarity (SC), the IFT sensitivity
+system using (\ref{mdef}) can be partitioned with:
+
+\begin{equation}
+M =  \matr{ccccc}{W_{ff}(x^*,\lambda^*) & W_{fb}(x^*,\lambda^*) & A_f(x^*) & -I_f & 0 \\
+W_{bf}(x^*,\lambda^*) & W_{bb}(x^*,\lambda^*) & A_b(x^*) & 0  & -I_b \\
+A_f(x^*)^T &  A_b(x^*))^T &0 &0 & 0\\
+0 &  0 & 0 &X_f^* & 0 \\
+0 & V_b^*& 0 & 0  & 0},
+S = \vect{S_{x_f} \\ S_{x_b} \\ S_{\lambda} \\ S_{\nu_f} \\ S_{\nu_b}},
+\mbox{ and }
+N_{rh} = \vect{E \\ 0 \\ 0 \\ 0 \\ 0}  \label{matdef}
+\end{equation}
+
+%\noindent where $E$ is defined below.
+From (\ref{matdef}) it is easy to see that $S_{x_b} = 0, S_{\nu_f}
+= 0$. These variables and the last two rows can therefore be removed,
+leading to:
+
+\begin{equation*}
+\matr{ccc}{W_{ff}(x^*,\lambda^*) & A_f(x^*) &  0 \\
+A_f(x^*))^T  &0 & 0\\
+W_{bf}(x^*,\lambda^*) & A_b(x^*)  & -I_b}
+\vect{S_{x_f}  \\ S_{\lambda} \\ S_{\nu_b}}
+= \vect{E \\ 0 \\ 0}
+\end{equation*}
+
+For a chosen set of $n_I \leq n_x -
+m$ independent variables with elements reordered at the end of the
+$x$ vector, $A_D$ nonsingular, $E^T = [0 \;|\: I_{n_I}]$
+and the matrices defined in (\ref{matdef}), the reduced Hessian can be
+found directly by solving $M S = N_{rh}$. As described in \cite{pirnay:2011},
+the reduced Hessian can be
+extracted easily from the rows of $S$. Thus taking advantage of the
+implementation described in Section \ref{sec:barrier} for sensitivity
+based updates, we can obtain an approximation of the reduced Hessian
+via back solves involving the factorized KKT matrix.
+
+\section{Usage}
+
+In the following sections we describe the usage of the reduced Hessian
+calculator using the \AMPL. We also provide examples of
+the C++ interface in the examples folder.
+
+
+\subsection{\AMPL\ Interface}
+
+The usage of the reduced Hessian calculation is similar to the sensitivity updates described above.
+The critical step here is deciding which variables will be independent variables at the optimal solution.
+Theses independent variables are then identified with the suffix \textbf{\redhess}.
+
+This suffix provides an enumeration of the independent variables, thus it needs to take ordered values from
+$1..n_I$, where $n_I$ is the number of independent variables. The columns of the inverse reduced Hessian will be printed to
+the screen, and their order is determined by the ordering of these indices.
+
+To enable reduced Hessian calculations we need to set the option
+The algorithm is enabled by setting the solver option \emph{\redhessopt} to `\emph{yes}'.
+Using Example 1 defined by Problem \eqref{eq:ex1}, we illustrate the use of the
+reduced Hessian calculator. The code for this is shown in Listing \ref{ampl:exrh}.
+
+\begin{lstlisting}[language=ampl, caption={\AMPL\ code for Problem \ref{eq:exr}.}, label={ampl:exrh}, frame=single, captionpos=b]
+reset ;
+
+# Define reduced Hessian suffixes
+suffix red_hessian, IN ;
+
+# Define parameters
+param et1 ;
+param et2 ;
+
+# Parameter values
+let et1p := 5 ;
+let et2p := 1 ;
+
+# Define variables, with bounds and initial guess
+var x1 >= 0, := 0.15 ;
+var x2 >= 0, := 0.15 ;
+var x3 >= 0, := 0.00 ;
+
+# objective function
+minimize objf: x1^2 + x2^2 + x3^2 ;
+
+# constraints
+subject to
+
+r1:    6*x1 + 3*x2 + 2*x3 - et1p = 0 ;
+r2: et2p*x1 +   x2 -   x3 - 1    = 0 ;
+
+# Define solver and Ampl options in this case we don't want Ampl's
+# presolve to accidentally remove artificial variables.
+options solver ipopt_sens ;
+option presolve 0 ;
+
+# Define free variables
+let x3.red_hess := 1 ;
+
+# Solve problem
+solve ;
+\end{lstlisting}
+
+
+
+
+\section{C++ Interface}
+
+The C++ interface is very simple to apply to an existing {\tt Ipopt::TNLP} implementation.
+The member function {\tt TNLP::::get\_var\_con\_metadata} in Ipopt provides a feature very
+similar to that of \AMPL\ suffixes.
+
+The steps taken to make a TNLP class ready for using the \sensKKT\ code are similar to those used in \AMPL.
+First, the parameter values are defined with artificial variables and constraints. Note that
+because of this the Jacobian and Hessian computations have to be adjusted accordingly. Finally,
+the suffixes need to be set the same way they would in \AMPL\ as described above.
+This is done using member function {\tt TNLP::::get\_var\_con\_metadata}.
+This is illustrated in examples \texttt{examples/redhess\_cpp} and \\
+\texttt{examples/parametric\_cpp}.
+
+\section{Installation}
+
+The first step to install the software is to install IPOPT, once this is done
+installing \sensKKT\ is very simple. IPOPT's installation instructions can be
+found in \texttt{http://www.coin-or.org/Ipopt/documentation/}. Also note that in the following
+we refer to {\tt \ipoptf} as the main folder, where the Ipopt, ThirdParty, BuildTools, \ldots,
+folders are located. If you wish to use the \AMPL\ interface, make sure that your IPOPT
+installation also includes it. To
+do this you need to download the ASL library, with the {\tt get.ASL}
+script located in {\tt \ipoptf/ThirdParty/ASL}. Finally, we assume that you created
+a build folder to install IPOPT in \\ {\tt \ipoptf/build/}.
+
+Once IPOPT has been compiled and installed, we can proceed to build \sensKKT. To do this go
+to the {\tt \ipoptf/build/Ipopt/contrib/\sensdir/} folder, and type {\tt make} there.
+
+\begin{description}
+  \item \noindent {\tt \$ cd \ipoptf/build/Ipopt/contrib/\sensdir}
+  \item \noindent {\tt \$ make}
+\end{description}
+
+If no errors are shown after compilation you can proceed to install the libraries and
+to generate the \AMPL\ executable. To do this type
+
+\begin{description}
+  \item \noindent {\tt \$ make install}
+\end{description}
+
+This should copy the generated libraries ({\tt \senslib.*}) to {\tt \ipoptf/build/lib}, and the \AMPL\
+executable ({\tt \sensexe}) to {\tt \ipoptf/build/bin/}.
+
+\section{Options}
+
+There are several new options that can be set in the {\tt ipopt.opt} file, that determine the behavior of the \sensKKT\ code. The more important options are the ones enable the execution of the post-optimal \sensKKT code. These are
+
+\begin{description}
+ \item \texttt{{\runaskkt} yes}
+\end{description}
+
+
+\noindent to enable sensitivity computations, and
+
+\begin{description}
+  \item \texttt{{\redhessopt} yes}
+\end{description}
+
+\noindent to enable the computation of the reduced Hessian.
+
+\paragraph{Other options are:}
+
+\begin{description}
+
+% \item[\selectstep] This option determines how the sensitivity update is performed, and it
+%          can take any of the following values:
+%
+%  \begin{tabular}{lp{0.7\textwidth}}
+%     \textbf{\texttt{iftsensitivity}} & This option calculates the update using Equation \eqref{init1}.
+%        Note that here we consider the problem is formulated as Problem (11) from the
+%        implementation paper \cite{pirnay:2011}, and
+%        also we use general upper and lower bounds (see Section 2.6 from \cite{pirnay:2011}).
+%        This is the default. \\
+%     \texttt{advanced}   & for the full advanced step with Schur complement and multiplier correction \\
+%     \texttt{sensitivity}& for the Schur step without multiplier correction, \\
+%     \texttt{ift}        & for the fast back solve without Schur complement computation, but with multiplier correction \\
+%  \end{tabular}
+%
+%    For parametric problems, the options \texttt{sensitivity} and \texttt{iftsensitivity} should be used,
+%    whereas for advanced step problems, the options \texttt{advanced} and \texttt{ift} are more suitable.
+
+\item[\nstepsopt] In general, the update can be done sequentially for any number of parameters.
+				  The valid range for this integer option is $1 \leq \mbox{\nstepsopt} \leq \infty$,
+                  and the default value is 1. Please see Section \ref{sec:multirhs} for more details on this.
+
+\item[\boundcheckopt] If set to \texttt{yes}, this option turns on the bound correction algorithm (see Section 2.4 in the
+           implementation paper). The default value of this string option is \texttt{no}.
+
+\item[\boundepsopt] This option sets the value by which the bounds are to be relaxed. This is only used if the
+\texttt{\boundcheckopt} is set to \texttt{yes}. The valid range of this real valued option is: $-\infty \leq \mbox{\boundepsopt} \leq \infty$, and the default is $10^{-3}$.
+
+\item[\maxpdpertopt] For certain problems, IPOPT uses inertia correction of the primal dual matrix to achieve better convergence properties. This inertia correction changes the matrix and renders it useless for the use with \sensKKT. This option sets an upper bound, which the inertia correction may have. If any of the inertia correction values is above this bound, the \sensKKT\  algorithm is aborted. The valid range of this real valued option is: $-\infty \leq \mbox{\maxpdpertopt} \leq \infty$, and the default is $10^{-3}$. Please see Section 2.2 of the IPOPT implementation paper \cite{Waechter2006}, and Section \ref{} of the {\sensKKT} implementation paper \cite{pirnay:2011} for more details.
+
+\item[\eigendecompopt] If this option is set to \texttt{yes}, the reduced Hessian code will compute the eigenvalue decomposition of the reduced Hessian matrix. The default value of this string option is \texttt{no}.
+\end{description}
+
+\bibliography{sipopt}
+\end{document}
