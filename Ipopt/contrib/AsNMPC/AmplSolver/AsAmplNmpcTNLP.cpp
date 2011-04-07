@@ -17,12 +17,12 @@
 #include "asl_pfgh.h"
 #include "getstub.h"
 
-namespace Ipopt 
+namespace Ipopt
 {
 #if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 1;
 #endif
-  
+
   AmplNmpcTNLP::AmplNmpcTNLP(const SmartPtr<const Journalist>& jnlst,
 			     const SmartPtr<OptionsList> options,
 			     char**& argv,
@@ -48,7 +48,7 @@ namespace Ipopt
     options_(options),
     have_parameters_(false),
     parameter_flags_(NULL),
-    parameter_values_(NULL)    
+    parameter_values_(NULL)
   {
     DBG_START_METH("AmplNmpcTNLP::AmplNmpcTNLP", dbg_verbosity);
 
@@ -63,7 +63,7 @@ namespace Ipopt
 	parameter_flags_[i] = parameter_flags[i];
       }
       parameter_values_ = new Number[n_var];
-      const Number* nominal_values = 
+      const Number* nominal_values =
 	suff_handler->GetNumberSuffixValues("nominal_value", AmplSuffixHandler::Variable_Source);
       if (nominal_values==NULL) {
 	for (Index i=0; i<n_var; ++i) {
@@ -125,7 +125,7 @@ namespace Ipopt
 	  x_u[i] = parameter_values_[i];
 	}
       }
-    } 
+    }
     return true;
   }
 
@@ -188,7 +188,7 @@ namespace Ipopt
 				       IpoptCalculatedQuantities* ip_cq)
   {
     DBG_START_METH("AmplNmpcTNLP::finalize_solution", dbg_verbosity);
-    
+
 
     AmplTNLP::finalize_solution(status,
 				n, x, z_L,  z_U,
@@ -197,7 +197,7 @@ namespace Ipopt
 				ip_data,
 				ip_cq);
   }
-  
+
   bool AmplNmpcTNLP::get_var_con_metadata(Index n,
 					  StringMetaDataMapType& var_string_md,
 					  IntegerMetaDataMapType& var_integer_md,
@@ -217,7 +217,7 @@ namespace Ipopt
 	for (Index i=1; i<=n_sens_steps_; ++i) {
 	  append_Index(sens_state,i);
 	  state = get_index_suffix_vec(sens_state.c_str());
-	  set_integer_metadata_for_var(sens_state, state); 
+	  set_integer_metadata_for_var(sens_state, state);
 	  sens_state = "sens_state_";
 	}
 	std::string sens_state_value = "sens_state_value_";
@@ -225,7 +225,7 @@ namespace Ipopt
 	for (Index i=1; i<=n_sens_steps_; ++i) {
 	  append_Index(sens_state_value,i);
 	  state_val = get_number_suffix_vec(sens_state_value.c_str());
-	  set_numeric_metadata_for_var(sens_state_value, state_val); 
+	  set_numeric_metadata_for_var(sens_state_value, state_val);
 	  sens_state_value = "sens_state_value_";
 	}
 	std::string init_constr = "sens_init_constr";
@@ -239,8 +239,8 @@ namespace Ipopt
       //exc.ReportException(*jnlst_);
       // const std::string exc_mess = exc.Message();
       const std::string exc_mess = exc.Message();
-      jnlst_->Printf(J_WARNING, J_INITIALIZATION, 
-		     "    WARNING: Will not run NMPC controller "
+      jnlst_->Printf(J_WARNING, J_INITIALIZATION,
+		     "    WARNING: Will not run sIPOPT "
 		     "because of incorrect AMPL suffix!\n"
 		     "      Message: %s\n\n", exc_mess.c_str() );
       options_->SetStringValue("nmpc_internal_abort", "yes");
@@ -251,7 +251,7 @@ namespace Ipopt
 			"Encountered Suffix Error");
       }
     }
-    
+
     try {
       if (compute_red_hessian_) {
 	std::string red_hess_str = "red_hessian";
@@ -261,7 +261,7 @@ namespace Ipopt
     }
     catch ( SUFFIX_EMPTY& exc ) {
       const std::string exc_mess = exc.Message();
-      jnlst_->Printf(J_WARNING, J_INITIALIZATION, 
+      jnlst_->Printf(J_WARNING, J_INITIALIZATION,
 		     "    WARNING: Will not run reduced hessian computation "
 		     "because of incorrect AMPL suffix!\n"
 		     "      Message: %s\n\n", exc_mess.c_str() );
@@ -286,89 +286,89 @@ namespace Ipopt
   }
 
 
-  const Index* AmplNmpcTNLP::get_index_suffix(const char* suffix_name) 
+  const Index* AmplNmpcTNLP::get_index_suffix(const char* suffix_name)
   {
     DBG_START_METH("AmplNmpcTNLP::get_index_suffix", dbg_verbosity);
 
     SmartPtr<AmplSuffixHandler> suffix_handler = get_suffix_handler();
-    
-    const Index* index_suffix= 
+
+    const Index* index_suffix=
       suffix_handler->GetIntegerSuffixValues(suffix_name, AmplSuffixHandler::Variable_Source);
-   
-    return index_suffix; 
+
+    return index_suffix;
   }
 
-  std::vector<Index> AmplNmpcTNLP::get_index_suffix_vec(const char* suffix_name) 
+  std::vector<Index> AmplNmpcTNLP::get_index_suffix_vec(const char* suffix_name)
   {
     DBG_START_METH("AmplNmpcTNLP::get_index_suffix_vec", dbg_verbosity);
 
     ASL_pfgh* asl = AmplSolverObject();
     SmartPtr<AmplSuffixHandler> suffix_handler = get_suffix_handler();
     DBG_ASSERT(IsValid(suffix_handler));
-    
-    std::vector<Index> index_suffix= 
+
+    std::vector<Index> index_suffix=
       suffix_handler->GetIntegerSuffixValues(n_var, suffix_name, AmplSuffixHandler::Variable_Source);
     if ( index_suffix.size()==0 ) {
       index_suffix.resize(n_var, 0);
     }
-    return index_suffix; 
+    return index_suffix;
   }
 
-  const Number* AmplNmpcTNLP::get_number_suffix(const char* suffix_name) 
+  const Number* AmplNmpcTNLP::get_number_suffix(const char* suffix_name)
   {
     DBG_START_METH("AmplNmpcTNLP::get_number_suffix", dbg_verbosity);
 
     SmartPtr<AmplSuffixHandler> suffix_handler = get_suffix_handler();
-    
-    const Number* number_suffix= 
+
+    const Number* number_suffix=
       suffix_handler->GetNumberSuffixValues(suffix_name, AmplSuffixHandler::Variable_Source);
 
     if (number_suffix==NULL) {
-      // suffix invalid 
+      // suffix invalid
       std::string except = suffix_name;
       except.append(" is empty");
       THROW_EXCEPTION(SUFFIX_EMPTY, except);
     }
-   
-    return number_suffix; 
+
+    return number_suffix;
   }
 
-  std::vector<Number> AmplNmpcTNLP::get_number_suffix_vec(const char* suffix_name) 
+  std::vector<Number> AmplNmpcTNLP::get_number_suffix_vec(const char* suffix_name)
   {
     DBG_START_METH("AmplNmpcTNLP::get_number_suffix_vec", dbg_verbosity);
     ASL_pfgh* asl = AmplSolverObject();
     SmartPtr<AmplSuffixHandler> suffix_handler = get_suffix_handler();
-    
-    std::vector<Number> number_suffix= 
+
+    std::vector<Number> number_suffix=
       suffix_handler->GetNumberSuffixValues(n_var, suffix_name, AmplSuffixHandler::Variable_Source);
 
     if (number_suffix.empty()) {
-      // suffix invalid 
+      // suffix invalid
       std::string except = suffix_name;
       except.append(" is empty");
       THROW_EXCEPTION(SUFFIX_EMPTY, except);
     }
-   
-    return number_suffix; 
+
+    return number_suffix;
   }
 
   const Index* AmplNmpcTNLP::get_index_suffix_constr(const char* suffix_name)
   {
     DBG_START_METH("AmplNmpcTNLP::get_index_suffix_constr", dbg_verbosity);
-    
+
     SmartPtr<AmplSuffixHandler> suffix_handler = get_suffix_handler();
-    
-    const Index* index_suffix= 
+
+    const Index* index_suffix=
       suffix_handler->GetIntegerSuffixValues(suffix_name, AmplSuffixHandler::Constraint_Source);
 
     if (index_suffix==NULL) {
-      // suffix invalid 
+      // suffix invalid
       std::string except = suffix_name;
       except.append(" is empty");
       THROW_EXCEPTION(SUFFIX_EMPTY, except);
     }
-   
-    return index_suffix; 
+
+    return index_suffix;
   }
 
   std::vector<Index> AmplNmpcTNLP::get_index_suffix_constr_vec(const char* suffix_name)
@@ -376,18 +376,18 @@ namespace Ipopt
     DBG_START_METH("AmplNmpcTNLP::get_index_suffix_constr_vec", dbg_verbosity);
     ASL_pfgh* asl = AmplSolverObject();
     SmartPtr<AmplSuffixHandler> suffix_handler = get_suffix_handler();
-    
-    std::vector<Index> index_suffix= 
-      suffix_handler->GetIntegerSuffixValues(n_var, suffix_name, AmplSuffixHandler::Constraint_Source);
+
+    std::vector<Index> index_suffix=
+      suffix_handler->GetIntegerSuffixValues(n_con, suffix_name, AmplSuffixHandler::Constraint_Source);
 
     if (index_suffix.empty()) {
-      // suffix invalid 
+      // suffix invalid
       std::string except = suffix_name;
       except.append(" is empty");
       THROW_EXCEPTION(SUFFIX_EMPTY, except);
     }
-   
-    return index_suffix; 
+
+    return index_suffix;
   }
 
   const Number* AmplNmpcTNLP::get_number_suffix_constr(const char* suffix_name)
@@ -395,18 +395,18 @@ namespace Ipopt
     DBG_START_METH("AmplNmpcTNLP::get_number_suffix_constr", dbg_verbosity);
 
     SmartPtr<AmplSuffixHandler> suffix_handler = get_suffix_handler();
-    
-    const Number* number_suffix= 
+
+    const Number* number_suffix=
       suffix_handler->GetNumberSuffixValues(suffix_name, AmplSuffixHandler::Constraint_Source);
 
     if (number_suffix==NULL) {
-      // suffix invalid 
+      // suffix invalid
       std::string except = suffix_name;
       except.append(" is empty");
       THROW_EXCEPTION(SUFFIX_EMPTY, except);
     }
-   
-    return number_suffix; 
+
+    return number_suffix;
   }
 
 
