@@ -22,7 +22,7 @@ namespace Ipopt
     driver_vec_(driver_vec),
     sens_step_calc_(sens_step_calc),
     measurement_(measurement),
-    n_sens_steps_(n_sens_steps)  
+    n_sens_steps_(n_sens_steps)
   {
     DBG_START_METH("AsNmpController::AsNmpController", dbg_verbosity);
 
@@ -40,8 +40,8 @@ namespace Ipopt
     return true;
   }
 
-  /** Main loop: Wait for new measurement, Get new step, maybe deal with 
-   *  bounds,  see to it that everything happens in the required 
+  /** Main loop: Wait for new measurement, Get new step, maybe deal with
+   *  bounds,  see to it that everything happens in the required
    *  timeframe. */
   NmpControllerExitStatus AsNmpController::Run()
   {
@@ -68,8 +68,8 @@ namespace Ipopt
       unscaled_x = NULL;
       measurement_->SetSolution(step_i+1, saved_sol);
 
-      trialcopy = sol->MakeNewIteratesVectorCopy();
-      IpData().set_trial(trialcopy);
+      //trialcopy = sol->MakeNewIteratesVectorCopy();
+      //IpData().set_trial(trialcopy);
 
       /*// compute rhs (KKT evalutaion)
 	SmartPtr<IteratesVector> rhs_err = IpData().curr()->MakeNewIteratesVectorCopy();
@@ -91,14 +91,14 @@ namespace Ipopt
 	KKT_slacks->Print(Jnlst(),J_VECTOR,J_USER1,"error");
 
 	printf("***********************************\n"
-	"Running AsNMPC my-formula\n"	       
+	"Running AsNMPC my-formula\n"
 	"value of objective function:  %23.16e\n"
 	"Nrm2 of KKT residual:         %23.16e\n"
 	"Constraint violation:         %23.16e\n"
 	"***********************************\n",IpCq().unscaled_trial_f(), KKT_slacks->Nrm2(), KKT_slacks->y_c()->Nrm2());
       */
-      SmartPtr<IteratesVector> trialcopyvector = IpData().curr()->MakeNewIteratesVectorCopy();
-      IpData().set_trial(trialcopyvector);
+      //SmartPtr<IteratesVector> trialcopyvector = IpData().curr()->MakeNewIteratesVectorCopy();
+      //IpData().set_trial(trialcopyvector);
       //IpData().curr()->x()->Print(Jnlst(),J_VECTOR,J_USER1,"curr");
     }
 

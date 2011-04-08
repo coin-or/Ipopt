@@ -120,6 +120,7 @@
 \newcommand{\boundepsopt}{sens\_bound\_eps}
 \newcommand{\maxpdpertopt}{sens\_max\_pdpert}
 \newcommand{\eigendecompopt}{rh\_eigendecomp}
+\newcommand{\senskktresiduals}{sens\_kkt\_residuals}
 
 \newcommand{\allowinex}{sens\_allow\_inexact\_backsolve}
 
@@ -859,6 +860,10 @@ There are several new options that can be set in the {\tt ipopt.opt} file, that 
 
 \item[\texttt{\allowinex}] This option is used to enable or disable  IPOPT's Iterative Refinement. See Section 3.10 of the IPOPT implementation paper \cite{Waechter2006}. By default this string option is set to \texttt{yes} (do not do iterative refinement), and it can take values of \texttt{yes} or \texttt{no}.
 
+\item[\texttt{\senskktresiduals}] The residuals of the KKT conditions should be zero at the optimal solution.
+  However, in practice, especially for large problems and depending on the termination criteria, they may deviate from this theoretical state.
+  If this option is set to the default \texttt{yes}, the residuals will be taken into account when computing the right hand side for the sensitivity step.
+  If set to \texttt{no}, the residuals will not be computed and assumed to be zero.
 \end{description}
 
 \bibliography{sipopt}
