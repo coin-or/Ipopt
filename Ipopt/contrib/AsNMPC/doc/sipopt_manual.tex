@@ -19,7 +19,7 @@
 \bibliographystyle{iecrv5}
 \usepackage{natmove}
 
-\usepackage[top=3cm,bottom=3cm,left=1.8cm,right=1.8cm,centering]{geometry} % proposal
+\usepackage[top=2.5cm,bottom=2.5cm,left=2cm,right=2cm,centering]{geometry} % proposal
 
 \newcommand{\RR}{{\mathbb{R}}}
 \newcommand{\vect}[1]{{\left[\begin{array}{c} #1 \end{array}\right]}}
@@ -32,6 +32,9 @@
 \usepackage{listings}
 \renewcommand{\lstlistingname}{Code Listing}
 \lstset{aboveskip=22pt,belowskip=22pt}
+
+
+\usepackage{array,multirow}
 
 \newcommand{\sensKKT}{\emph{sIPOPT}}
 \newcommand{\AMPL}{AMPL}
@@ -93,11 +96,19 @@
 \newcommand{\statez}{sens\_state\_0}
 \newcommand{\stateo}{sens\_state\_1}
 \newcommand{\statevo}{sens\_state\_value\_1}
+
+\newcommand{\statei}[1]{sens\_state\_#1}
+\newcommand{\statevi}[1]{sens\_state\_value\_#1}
+
 \newcommand{\initc}{sens\_init\_constr}
 
 \newcommand{\sstateo}{sens\_sol\_state\_1}
 \newcommand{\sstatezl}{sens\_sol\_state\_1\_z\_L}
 \newcommand{\sstatezu}{sens\_sol\_state\_1\_z\_U}
+
+\newcommand{\sstatei}[1]{sens\_sol\_state\_#1}
+\newcommand{\sstatezli}[1]{sens\_sol\_state\_#1\_z\_L}
+\newcommand{\sstatezui}[1]{sens\_sol\_state\_#1\_z\_U}
 
 \newcommand{\redhessopt}{compute\_red\_hessian}
 \newcommand{\redhess}{red\_hessian}
@@ -110,6 +121,7 @@
 \newcommand{\maxpdpertopt}{sens\_max\_pdpert}
 \newcommand{\eigendecompopt}{rh\_eigendecomp}
 
+\newcommand{\allowinex}{sens\_allow\_inexact\_backsolve}
 
 
 % Define ampl language for listings
@@ -829,20 +841,77 @@ There are several new options that can be set in the {\tt ipopt.opt} file, that 
 %    For parametric problems, the options \texttt{sensitivity} and \texttt{iftsensitivity} should be used,
 %    whereas for advanced step problems, the options \texttt{advanced} and \texttt{ift} are more suitable.
 
-\item[\nstepsopt] In general, the update can be done sequentially for any number of parameters.
-				  The valid range for this integer option is $1 \leq \mbox{\nstepsopt} \leq \infty$,
+\item[\texttt{\nstepsopt}] In general, the update can be done sequentially for any number of parameters.
+				  The valid range for this integer option is $1 \leq \mbox{\texttt{\nstepsopt}} \leq \infty$,
                   and the default value is 1. Please see Section \ref{sec:multirhs} for more details on this.
 
-\item[\boundcheckopt] If set to \texttt{yes}, this option turns on the bound correction algorithm (see Section 2.4 in the
+\item[\texttt{\boundcheckopt}] If set to \texttt{yes}, this option turns on the bound correction algorithm (see Section 2.4 in the
            implementation paper). The default value of this string option is \texttt{no}.
 
-\item[\boundepsopt] This option sets the value by which the bounds are to be relaxed. This is only used if the
-\texttt{\boundcheckopt} is set to \texttt{yes}. The valid range of this real valued option is: $-\infty \leq \mbox{\boundepsopt} \leq \infty$, and the default is $10^{-3}$.
+\item[\texttt{\boundepsopt}]  This option makes sure that only variables that violate the bound by more than {\texttt{\boundepsopt}}
+   are considered as real violations. Otherwise, the bound checking might continue until the full active set has been covered.
+   This is only used if the \texttt{\boundcheckopt} is set to \texttt{yes}. The valid range of this real valued option is:
+   $0 \leq \mbox{\texttt{\boundepsopt}} \leq \infty$, and the default is $10^{-3}$.
 
-\item[\maxpdpertopt] For certain problems, IPOPT uses inertia correction of the primal dual matrix to achieve better convergence properties. This inertia correction changes the matrix and renders it useless for the use with \sensKKT. This option sets an upper bound, which the inertia correction may have. If any of the inertia correction values is above this bound, the \sensKKT\  algorithm is aborted. The valid range of this real valued option is: $-\infty \leq \mbox{\maxpdpertopt} \leq \infty$, and the default is $10^{-3}$. Please see Section 2.2 of the IPOPT implementation paper \cite{Waechter2006}, and Section \ref{} of the {\sensKKT} implementation paper \cite{pirnay:2011} for more details.
+\item[\texttt{\maxpdpertopt}] For certain problems, IPOPT uses inertia correction of the primal dual matrix to achieve better convergence properties. This inertia correction changes the matrix and renders it useless for the use with \sensKKT. This option sets an upper bound, which the inertia correction may have. If any of the inertia correction values is above this bound, the \sensKKT\  algorithm is aborted. The valid range of this real valued option is: $0 \leq \mbox{\texttt{\maxpdpertopt}} \leq \infty$, and the default is $10^{-3}$. Please see Section 2.2 of the IPOPT implementation paper \cite{Waechter2006}, and Section \ref{} of the {\sensKKT} implementation paper \cite{pirnay:2011} for more details.
 
-\item[\eigendecompopt] If this option is set to \texttt{yes}, the reduced Hessian code will compute the eigenvalue decomposition of the reduced Hessian matrix. The default value of this string option is \texttt{no}.
+\item[\texttt{\eigendecompopt}] If this option is set to \texttt{yes}, the reduced Hessian code will compute the eigenvalue decomposition of the reduced Hessian matrix. The default value of this string option is \texttt{no}.
+
+\item[\texttt{\allowinex}] This option is used to enable or disable  IPOPT's Iterative Refinement. See Section 3.10 of the IPOPT implementation paper \cite{Waechter2006}. By default this string option is set to \texttt{yes} (do not do iterative refinement), and it can take values of \texttt{yes} or \texttt{no}.
+
 \end{description}
 
 \bibliography{sipopt}
+
+\appendix
+\section{Summary of Suffixes}
+
+In this section we summarize the suffixes that need to be set for sensitivity updates, or reduced Hessian calculations.
+
+
+\paragraph{Sensitivity Calculations:} Set the option \texttt{{\runaskkt}} to \texttt{yes}.\\
+
+Some suffixes will need to be defined by the user, while others are automatically generated by {\sensKKT}. Moreover,
+some of the suffixes need to be indexed by  $\curls{i: 1 \leq i \leq \mbox{\texttt{\nstepsopt}}}$. Also note that the
+direction column below is used to indicate to {\AMPL} if the suffix will be sent to the solver, or passed by the solver to {\AMPL}.
+More information on this can be found in \cite{ampl}.\\
+
+\begin{tabular}{|>{\centering}m{3.5cm}|>{\centering}m{2cm}|m{0.6\textwidth}|}\hline
+\multicolumn{3}{|c|}{\textbf{Defined by User}} \\ \hline
+Suffix & Direction & \multicolumn{1}{c|}{Description}  \\ \hline
+\textbf{\statez} & IN & This is used to enumerate the parameters that will be perturbed. It takes values from 1 to length($p$), and
+                      the values may not be repeated. Note that the order of the values is crucial.\\ \hline
+\multirow{2}{*}{\textbf{\statei{\emph{i}}}} & \multirow{2}{*}{IN } &
+                         This is similar to \textbf{\statez}, but it now indicates the order for the parameters at the perturbed value.
+						 You must define one for each $\curls{i: 1 \leq i \leq \mbox{\texttt{\nstepsopt}}}$. \\
+                      && This suffix should have the same values as \textbf{\statez}. It takes values from 1 to length($p$), and
+                         the values may no be repeated.\\ \hline
+\multirow{2}{*}{\textbf{\statevi{\emph{i}}}} & \multirow{2}{*}{IN} &
+                           This is used to communicate the values of the perturbed parameters.
+					       You must define one for each  $\curls{i: 1 \leq i \leq \mbox{\texttt{\nstepsopt}}}$. \\
+                      &&   It has to be set for the same variables as \textbf{\stateo}.\\ \hline
+\textbf{\initc} & IN & This is a flag that indicates the constraint is artificial, e.g., $w - p=0$ in Problem \eqref{eq:reform}.
+              If the constraint is artificial, set this suffix to 1 (no indexing is necessary). \\ \hline
+\multicolumn{3}{|c|}{\textbf{Defined by \sensKKT}} \\ \hline
+\multirow{2}{*}{\textbf{\sstatei{\emph{i}}}} & \multirow{2}{*}{OUT} &  This holds the updated variables, as well as, the updated constraint multiplier
+                 values computed in the sensitivity update. \\
+            &&   One for each $\curls{i: 1 \leq i \leq \mbox{\texttt{\nstepsopt}}}$ will be defined. \\ \hline
+\multirow{2}{*}{\textbf{\sstatezli{\emph{i}}}} & \multirow{2}{*}{OUT} & This suffix holds updated lower bound multipliers.\\
+            &&   One for each $\curls{i: 1 \leq i \leq \mbox{\texttt{\nstepsopt}}}$ will be defined.\\ \hline
+\multirow{2}{*}{\textbf{\sstatezui{\emph{i}}}} & \multirow{2}{*}{OUT} & This suffix holds updated upper bound multipliers.\\
+            &&   One for each $\curls{i: 1 \leq i \leq \mbox{\texttt{\nstepsopt}}}$ will be defined.\\ \hline
+\end{tabular}
+
+\paragraph{Reduced Hessian Calculations:} Set the option \texttt{{\redhessopt}} to \texttt{yes}. \\
+
+\begin{tabular}{|>{\centering}m{3.5cm}|>{\centering}m{2cm}|m{0.6\textwidth}|}\hline
+Suffix & Direction & \multicolumn{1}{c|}{Description}  \\ \hline
+ \textbf{\redhess} &  IN & This is used to enumerate the independent variables, thus it needs to take ordered values from
+$1..n_I$, and $n_I$ is the number of independent variables. \\ \hline
+\end{tabular}
+
+$\:$\\
+
+
+
 \end{document}
