@@ -140,6 +140,13 @@ namespace Ipopt
 			       "yes", "Allow inexact computation of backsolve in sIPOPT.",
 			       "no", "Don't allow inexact computation of backsolve in sIPOPT.",
 			       "");
+    roptions->AddStringOption2(
+			       "sens_kkt_residuals",
+			       "For sonsitivity solution, take KKT residuals into account",
+			       "yes",
+			       "yes", "Take residuals into account",
+			       "no", "Don't take residuals into account",
+			       "The residuals of the KKT conditions should be zero at the optimal solution. However, in practice, especially for large problems and depending on the termination criteria, they may deviate from this theoretical state. If this option is set to yes, the residuals will be taken into account when computing the right hand side for the sensitivity step.");
   }
 
   NmpControllerExitStatus NmpcApplication::Run()

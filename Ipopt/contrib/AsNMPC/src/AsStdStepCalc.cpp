@@ -23,7 +23,8 @@ namespace Ipopt
     :
     ift_data_(ift_data),
     backsolver_(backsolver),
-    bound_eps_(1e-3)
+    bound_eps_(1e-3),
+    kkt_residuals_(true)
   {
     DBG_START_METH("StdStepCalculator::StdStepCalculator", dbg_verbosity);
   }
@@ -37,6 +38,7 @@ namespace Ipopt
 					 const std::string& prefix)
   {
     options.GetNumericValue("sens_bound_eps", bound_eps_, prefix);
+    options.GetBoolValue("sens_kkt_residuals", kkt_residuals_, prefix);
     SensitivityStepCalculator::InitializeImpl(options,
 					      prefix);
     return true;
@@ -47,38 +49,37 @@ namespace Ipopt
 			       IteratesVector& sol)
   {
     DBG_START_METH("StdStepCalculator::Step", dbg_verbosity);
-    
+
     bool retval;
-    // Which rhs r_s to use; First try with all zeros
-    //SmartPtr<IteratesVector> r_s = sol.MakeNewIteratesVector();
-    //r_s->Set(0.0);
-    // now try real rhs
+
+    SmartPtr<IteratesVector> delta_u_long = IpData().trial()->MakeNewIteratesVector();
+    ift_data_->TransMultiply(delta_u, *delta_u_long);
+
     SmartPtr<IteratesVector> r_s = IpData().trial()->MakeNewIteratesVector();
-    /* This is zero...
-    r_s->Set_x_NonConst(*IpCq().curr_grad_lag_x());
-    r_s->Set_s_NonConst(*IpCq().curr_grad_lag_s());
-    r_s->Set_y_c_NonConst(*IpCq().curr_c());
-    r_s->Set_y_d_NonConst(*IpCq().curr_d_minus_s());
-    r_s->Set_z_L_NonConst(*IpCq().curr_compl_x_L());
-    r_s->Set_z_U_NonConst(*IpCq().curr_compl_x_U());
-    r_s->Set_v_L_NonConst(*IpCq().curr_compl_s_L());
-    r_s->Set_v_U_NonConst(*IpCq().curr_compl_s_U());
-    */
-    r_s->Print(Jnlst(),J_VECTOR,J_USER1,"r_s init");
-    //DBG_PRINT((dbg_verbosity,"r_s init Nrm2=%23.16e\n", r_s->Asum()));
-    Jnlst().FlushBuffer();
-    
-    ift_data_->TransMultiply(delta_u, *r_s);
-    backsolver_->Solve(&sol, ConstPtr(r_s));
+    if (kkt_residuals_) {
+      /* This should be almost zero... */
+      r_s->Set_x_NonConst(*IpCq().curr_grad_lag_x()->MakeNewCopy());
+      r_s->Set_s_NonConst(*IpCq().curr_grad_lag_s()->MakeNewCopy());
+      r_s->Set_y_c_NonConst(*IpCq().curr_c()->MakeNewCopy());
+      r_s->Set_y_d_NonConst(*IpCq().curr_d_minus_s()->MakeNewCopy());
+      r_s->Set_z_L_NonConst(*IpCq().curr_compl_x_L()->MakeNewCopy());
+      r_s->Set_z_U_NonConst(*IpCq().curr_compl_x_U()->MakeNewCopy());
+      r_s->Set_v_L_NonConst(*IpCq().curr_compl_s_L()->MakeNewCopy());
+      r_s->Set_v_U_NonConst(*IpCq().curr_compl_s_U()->MakeNewCopy());
+
+      r_s->Print(Jnlst(),J_VECTOR,J_USER1,"r_s init");
+      delta_u.Print(Jnlst(),J_VECTOR,J_USER1,"delta_u init");
+      DBG_PRINT((dbg_verbosity,"r_s init Nrm2=%23.16e\n", r_s->Asum()));
+
+      delta_u_long->Axpy(-1.0, *r_s);
+    }
+
+    backsolver_->Solve(&sol, ConstPtr(delta_u_long));
 
     SmartPtr<IteratesVector> Kr_s;
     if (Do_Boundcheck()) {
       Kr_s = sol.MakeNewIteratesVectorCopy();
     }
-
-    //retval = Driver()->SchurSolve(&sol,
-    //				  ConstPtr(r_s),
-    //				  &delta_u);
 
     sol.Axpy(1.0, *IpData().trial());
 
@@ -94,7 +95,7 @@ namespace Ipopt
       SmartPtr<DenseVectorSpace> delta_u_space = new DenseVectorSpace(0);
       SmartPtr<DenseVector> old_delta_u = new DenseVector(GetRawPtr(delta_u_space));
       SmartPtr<DenseVector> new_delta_u;
-    
+
       bounds_violated = BoundCheck(sol, x_bound_violations_idx, x_bound_violations_du);
       while (bounds_violated) {
 	Driver()->data_A()->Print(Jnlst(),J_VECTOR,J_USER1,"data_A_init");
@@ -109,7 +110,7 @@ namespace Ipopt
 	Driver()->SchurFactorize();
 
 	old_delta_u->Print(Jnlst(),J_VECTOR,J_USER1,"old_delta_u");
-	delta_u_space = NULL; // delete old delta_u space 
+	delta_u_space = NULL; // delete old delta_u space
 	delta_u_space = new DenseVectorSpace(new_du_size); // create new delta_u space
 	new_delta_u = new DenseVector(GetRawPtr(ConstPtr(delta_u_space)));
 	new_du_values = new_delta_u->Values();
@@ -122,7 +123,7 @@ namespace Ipopt
 	new_delta_u->Print(Jnlst(),J_VECTOR,J_USER1,"new_delta_u");
 
 	// solve with new data_B and delta_u
-	retval = Driver()->SchurSolve(&sol, ConstPtr(r_s), dynamic_cast<Vector*>(GetRawPtr(new_delta_u)), Kr_s);
+	retval = Driver()->SchurSolve(&sol, ConstPtr(delta_u_long), dynamic_cast<Vector*>(GetRawPtr(new_delta_u)), Kr_s);
 
 	sol.Axpy(1.0, *IpData().trial());
 
@@ -184,7 +185,7 @@ namespace Ipopt
 
     const Number* x_L_exp_val = dynamic_cast<DenseVector*>(GetRawPtr(x_L_exp))->Values();
     const Number* x_U_exp_val = dynamic_cast<DenseVector*>(GetRawPtr(x_U_exp))->Values();
-    
+
     for (Index i=0; i<x_L_exp->Dim(); ++i) {
       if (x_L_exp_val[i]<-bound_eps_) {
 	x_bound_violations_idx.push_back(i);
@@ -239,5 +240,4 @@ namespace Ipopt
       return true;
     }
   }
-				     				     
 }

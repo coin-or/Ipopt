@@ -17,7 +17,7 @@ namespace Ipopt
 
   class StdStepCalculator : public SensitivityStepCalculator
   {
-  public: 
+  public:
     StdStepCalculator(SmartPtr<SchurData> ift_data,
 		      SmartPtr<AsBacksolver> backsolver);
 
@@ -38,6 +38,7 @@ namespace Ipopt
     SmartPtr<SchurData> ift_data_;
     SmartPtr<AsBacksolver> backsolver_;
     Number bound_eps_;
+    bool kkt_residuals_;
   };
 }
 
