@@ -19,7 +19,7 @@
 \bibliographystyle{iecrv5}
 \usepackage{natmove}
 
-\usepackage[top=2.5cm,bottom=2.5cm,left=2cm,right=2cm,centering]{geometry} % proposal
+\usepackage[top=3cm,bottom=3cm,left=1.8cm,right=1.8cm,centering]{geometry} % proposal
 
 \newcommand{\RR}{{\mathbb{R}}}
 \newcommand{\vect}[1]{{\left[\begin{array}{c} #1 \end{array}\right]}}
@@ -32,7 +32,6 @@
 \usepackage{listings}
 \renewcommand{\lstlistingname}{Code Listing}
 \lstset{aboveskip=22pt,belowskip=22pt}
-
 
 \usepackage{array,multirow}
 
@@ -96,15 +95,14 @@
 \newcommand{\statez}{sens\_state\_0}
 \newcommand{\stateo}{sens\_state\_1}
 \newcommand{\statevo}{sens\_state\_value\_1}
-
-\newcommand{\statei}[1]{sens\_state\_#1}
-\newcommand{\statevi}[1]{sens\_state\_value\_#1}
-
 \newcommand{\initc}{sens\_init\_constr}
 
 \newcommand{\sstateo}{sens\_sol\_state\_1}
 \newcommand{\sstatezl}{sens\_sol\_state\_1\_z\_L}
 \newcommand{\sstatezu}{sens\_sol\_state\_1\_z\_U}
+
+\newcommand{\statei}[1]{sens\_state\_#1}
+\newcommand{\statevi}[1]{sens\_state\_value\_#1}
 
 \newcommand{\sstatei}[1]{sens\_sol\_state\_#1}
 \newcommand{\sstatezli}[1]{sens\_sol\_state\_#1\_z\_L}
@@ -121,8 +119,8 @@
 \newcommand{\maxpdpertopt}{sens\_max\_pdpert}
 \newcommand{\eigendecompopt}{rh\_eigendecomp}
 \newcommand{\senskktresiduals}{sens\_kkt\_residuals}
-
 \newcommand{\allowinex}{sens\_allow\_inexact\_backsolve}
+
 
 
 % Define ampl language for listings
@@ -258,7 +256,7 @@ diag\{x\}$ and $V = diag\{\nu\}$, application of IFT leads to:
 M(s(\mu; p_0)) \frac{d s(\mu; p_0)}{d p}^T + N_p(s(\mu; p_0)) = 0.
 \end{equation}
 
-Because LICQ, Strict Complementarity (SC), and SSOSC
+When LICQ, Strict Complementarity (SC), and SSOSC
 hold, $M(s(\mu; p_0))$ is nonsingular and
 the sensitivities can be calculated from:
 
@@ -266,10 +264,13 @@ the sensitivities can be calculated from:
 \frac{d s(\mu; p_0)}{d p}^T =   - \func{M}{\func{s}{\mu; p_0}}^{-1} \func{N_p}{ \func{s}{\mu; p_0} } .
 \end{equation}
 
-Note, also, that $M(s(\mu; p_0))$ is directly available in factored form
-from the solution of (\ref{IPNLP2}), so the sensitivity can be calculated
-through a simple backsolve. For small values of $\mu$ and $\|p-p_0\|$
-it can be shown from the above properties \cite{Fiacco1983} that
+We note that at the solution of (\ref{IPNLP2}) these assumptions can
+be checked by the inertia of $M$ as well as other information in IPOPT
+(see \cite{Waechter2006}).  Moreover, in IPOPT, $M(s(\mu; p_0))$ is directly
+available in factored form from the solution of (\ref{IPNLP2}), so the
+sensitivity can be calculated through a simple backsolve. For small
+values of $\mu$ and $\|p-p_0\|$ it can be shown from the above properties
+\cite{Fiacco1983} that
 
 \begin{equation} \label{init1}
 s(\mu; p) = s(\mu; p_0) - M(s(\mu; p_0))^{-1}N_p(s(\mu; p_0)) (p-p_0) +
@@ -303,7 +304,7 @@ Writing the KKT conditions for (\ref{NLPsens2}) leads to:
 \begin{eqnarray}
 & \nabla_x f(x, w) + \nabla_x c^T(x, w)\lambda -\nu = 0\\
 & \nabla_w f(x, w) + \nabla_w c^T(x, w)\lambda + \bar{\lambda} = 0\\
-& c(x) = 0 \\ & XVe =0 \\ & w - p_0 = 0
+& c(x) = 0 \\ & XVe =0 \\ & w - p = 0
 \end{eqnarray}
 \end{subequations}
 
@@ -509,10 +510,10 @@ parameters, and also some will serve as flags to indicate to IPOPT which are the
                       the values may not be repeated. Note that the order of the values is crucial.
 \item[\stateo] This is similar to \textbf{\statez}, but it now indicates the order for the parameters at the perturbed value.
                       This suffix should have the same values as \textbf{\statez}. It takes values from 1 to length($p$), and
-                      the values may no be repeated.
+                      the values may not be repeated.
 \item[\statevo] This is used to communicate the values of the perturbed parameters.
                              It has to be set for the same variables as \textbf{\stateo}.
-\item[\initc] This is a flag that indicates the constraint is artificial, e.g., $w - p=0$ in Problem \eqref{eq:reform}.
+\item[\initc] This is a flag that indicates the constraint is artificial, e.g., $w - p_0=0$ in Problem \eqref{eq:reform}.
                           If the constraint is artificial, set this suffix to 1 (no indexing is necessary).
 \end{description}
 
@@ -578,7 +579,7 @@ let et1.sens_state_value_1 := 4.5 ;
 # In step 0, et2 has position 1
 let et2.sens_state_0 := 2 ;
 
-# in the second step/change et1 has position 1
+# in the first step/change et1 has position 2
 let et2.sens_state_1 := 2 ;
 
 # Perturbed value of parameter et2 (in step 1)
@@ -597,7 +598,7 @@ solve ;
 After the algorithm has completed successfully, the perturbed solution is stored in the following \AMPL\ suffixes:
 
 \begin{description}
-\item[\sstateo]  This holds the updated variables, as well as, the updated constraint multiplier
+\item[\sstateo]  This holds the updated variables as well as the updated constraint multiplier
                  values computed in the sensitivity update.
 \item[\sstatezl] This suffix holds updated lower bound multipliers.
 \item[\sstatezu] This suffix holds updated upper bound multipliers.
@@ -693,7 +694,7 @@ the reduced Hessian can be
 extracted easily from the rows of $S$. Thus taking advantage of the
 implementation described in Section \ref{sec:barrier} for sensitivity
 based updates, we can obtain an approximation of the reduced Hessian
-via back solves involving the factorized KKT matrix.
+via backsolves involving the factorized KKT matrix.
 
 \section{Usage}
 
@@ -716,6 +717,9 @@ To enable reduced Hessian calculations we need to set the option
 The algorithm is enabled by setting the solver option \emph{\redhessopt} to `\emph{yes}'.
 Using Example 1 defined by Problem \eqref{eq:ex1}, we illustrate the use of the
 reduced Hessian calculator. The code for this is shown in Listing \ref{ampl:exrh}.
+In addition, the calculated reduced Hessian is displayed on the screen automatically
+at the end of IPOPT's normal output.
+
 
 \begin{lstlisting}[language=ampl, caption={\AMPL\ code for Problem \ref{eq:exr}.}, label={ampl:exrh}, frame=single, captionpos=b]
 reset ;
@@ -776,29 +780,40 @@ This is illustrated in examples \texttt{examples/redhess\_cpp} and \\
 
 \section{Installation}
 
-The first step to install the software is to install IPOPT, once this is done
+The first step to install the software is to install the \emph{trunk} version of IPOPT, once this is done
 installing \sensKKT\ is very simple. IPOPT's installation instructions can be
-found in \texttt{http://www.coin-or.org/Ipopt/documentation/}. Also note that in the following
-we refer to {\tt \ipoptf} as the main folder, where the Ipopt, ThirdParty, BuildTools, \ldots,
+found in the following website.
+
+\begin{description}
+\item \texttt{http://www.coin-or.org/Ipopt/documentation/}
+\end{description}
+
+Also note that in the following we refer to {\tt \ipoptf} as the main folder,
+where the Ipopt, ThirdParty, BuildTools, \ldots,
 folders are located. If you wish to use the \AMPL\ interface, make sure that your IPOPT
 installation also includes it. To
 do this you need to download the ASL library, with the {\tt get.ASL}
 script located in {\tt \ipoptf/ThirdParty/ASL}. Finally, we assume that you created
-a build folder to install IPOPT in \\ {\tt \ipoptf/build/}.
+a build folder to install IPOPT in  {\tt \ipoptf/build/}. In this case, to download
+the \emph{trunk} version of IPOPT you would type:
+
+\begin{description}
+  \item  {\tt \$ svn co https://projects.coin-or.org/svn/Ipopt/trunk \ipoptf}
+\end{description}
 
 Once IPOPT has been compiled and installed, we can proceed to build \sensKKT. To do this go
 to the {\tt \ipoptf/build/Ipopt/contrib/\sensdir/} folder, and type {\tt make} there.
 
 \begin{description}
-  \item \noindent {\tt \$ cd \ipoptf/build/Ipopt/contrib/\sensdir}
-  \item \noindent {\tt \$ make}
+  \item  {\tt \$ cd \ipoptf/build/Ipopt/contrib/\sensdir}
+  \item  {\tt \$ make}
 \end{description}
 
 If no errors are shown after compilation you can proceed to install the libraries and
 to generate the \AMPL\ executable. To do this type
 
 \begin{description}
-  \item \noindent {\tt \$ make install}
+  \item  {\tt \$ make install}
 \end{description}
 
 This should copy the generated libraries ({\tt \senslib.*}) to {\tt \ipoptf/build/lib}, and the \AMPL\
@@ -808,16 +823,15 @@ executable ({\tt \sensexe}) to {\tt \ipoptf/build/bin/}.
 
 There are several new options that can be set in the {\tt ipopt.opt} file, that determine the behavior of the \sensKKT\ code. The more important options are the ones enable the execution of the post-optimal \sensKKT code. These are
 
-\begin{description}
- \item \texttt{{\runaskkt} yes}
-\end{description}
-
+\begin{verbatim}
+run_sens yes
+\end{verbatim}
 
 \noindent to enable sensitivity computations, and
 
-\begin{description}
-  \item \texttt{{\redhessopt} yes}
-\end{description}
+\begin{verbatim}
+compute_red_hessian yes
+\end{verbatim}
 
 \noindent to enable the computation of the reduced Hessian.
 
@@ -825,7 +839,7 @@ There are several new options that can be set in the {\tt ipopt.opt} file, that 
 
 \begin{description}
 
-% \item[\selectstep] This option determines how the sensitivity update is performed, and it
+%\item[\selectstep] This option determines how the sensitivity update is performed, and it
 %          can take any of the following values:
 %
 %  \begin{tabular}{lp{0.7\textwidth}}
@@ -842,32 +856,31 @@ There are several new options that can be set in the {\tt ipopt.opt} file, that 
 %    For parametric problems, the options \texttt{sensitivity} and \texttt{iftsensitivity} should be used,
 %    whereas for advanced step problems, the options \texttt{advanced} and \texttt{ift} are more suitable.
 
-\item[\texttt{\nstepsopt}] In general, the update can be done sequentially for any number of parameters.
-				  The valid range for this integer option is $1 \leq \mbox{\texttt{\nstepsopt}} \leq \infty$,
+\item[\texttt{\textbf{\nstepsopt}}]  In general, the update can be done sequentially for any number of parameters. However,
+                  for now, the valid range for this integer option is $1 \leq \mbox{\nstepsopt} \leq \infty$,
                   and the default value is 1. Please see Section \ref{sec:multirhs} for more details on this.
 
-\item[\texttt{\boundcheckopt}] If set to \texttt{yes}, this option turns on the bound correction algorithm (see Section 2.4 in the
+\item[\texttt{\textbf{\boundcheckopt}}]  If set to \texttt{yes}, this option turns on the bound correction algorithm (see Section 2.4 in the
            implementation paper). The default value of this string option is \texttt{no}.
 
-\item[\texttt{\boundepsopt}]  This option makes sure that only variables that violate the bound by more than {\texttt{\boundepsopt}}
-   are considered as real violations. Otherwise, the bound checking might continue until the full active set has been covered.
+\item[\texttt{\textbf{\boundepsopt}}] This option makes sure that only variables that violate the bound by more than\\ {\texttt{\boundepsopt}}
+   are considered as real violations. Otherwise,  bound checking might continue until the full active set has been covered.
    This is only used if the \texttt{\boundcheckopt} is set to \texttt{yes}. The valid range of this real valued option is:
-   $0 \leq \mbox{\texttt{\boundepsopt}} \leq \infty$, and the default is $10^{-3}$.
+   $0 \leq \mbox{\texttt{\boundepsopt}} \leq \infty$, and the default value is $10^{-3}$.
 
-\item[\texttt{\maxpdpertopt}] For certain problems, IPOPT uses inertia correction of the primal dual matrix to achieve better convergence properties. This inertia correction changes the matrix and renders it useless for the use with \sensKKT. This option sets an upper bound, which the inertia correction may have. If any of the inertia correction values is above this bound, the \sensKKT\  algorithm is aborted. The valid range of this real valued option is: $0 \leq \mbox{\texttt{\maxpdpertopt}} \leq \infty$, and the default is $10^{-3}$. Please see Section 2.2 of the IPOPT implementation paper \cite{Waechter2006}, and Section \ref{} of the {\sensKKT} implementation paper \cite{pirnay:2011} for more details.
+\item[\texttt{\textbf{\maxpdpertopt}}] For certain problems, IPOPT uses inertia correction of the primal dual matrix to achieve better convergence properties. This inertia correction changes the matrix and renders it useless for the use with \sensKKT. This option sets an upper bound, which the inertia correction may have. If any of the inertia correction values is above this bound, the \sensKKT\  algorithm is aborted. The valid range of this real valued option is: $0 \leq \mbox{\texttt{\maxpdpertopt}} \leq \infty$, and the default is $10^{-3}$. Please see Section 2.2 of the IPOPT implementation paper \cite{Waechter2006} for more details.
 
-\item[\texttt{\eigendecompopt}] If this option is set to \texttt{yes}, the reduced Hessian code will compute the eigenvalue decomposition of the reduced Hessian matrix. The default value of this string option is \texttt{no}.
+\item[\texttt{\textbf{\eigendecompopt}}] If this option is set to \texttt{yes}, the reduced Hessian code will compute the eigenvalue decomposition of the reduced Hessian matrix. The default value of this string option is \texttt{no}.
 
-\item[\texttt{\allowinex}] This option is used to enable or disable  IPOPT's Iterative Refinement. See Section 3.10 of the IPOPT implementation paper \cite{Waechter2006}. By default this string option is set to \texttt{yes} (do not do iterative refinement), and it can take values of \texttt{yes} or \texttt{no}.
+\item[\texttt{\textbf{\allowinex}}] This option is used to enable or disable  IPOPT's Iterative Refinement. See Section 3.10 of the IPOPT implementation paper \cite{Waechter2006}. By default this string option is set to \texttt{yes} (do not do iterative refinement), and it can take values of \texttt{yes} or \texttt{no}.
 
-\item[\texttt{\senskktresiduals}] The residuals of the KKT conditions should be zero at the optimal solution.
-  However, in practice, especially for large problems and depending on the termination criteria, they may deviate from this theoretical state.
-  If this option is set to the default \texttt{yes}, the residuals will be taken into account when computing the right hand side for the sensitivity step.
-  If set to \texttt{no}, the residuals will not be computed and assumed to be zero.
+\item[\texttt{\textbf{\senskktresiduals}}] The residuals of the KKT conditions should be zero at the optimal solution.
+  However, in practice, especially for large problems and depending on the termination criteria, they may deviate from this theoretical state. If this option is set to the default \texttt{yes}, the residuals will be taken into account when computing the right hand side for the sensitivity step. If set to \texttt{no}, the residuals will not be computed and assumed to be zero.
 \end{description}
 
 \bibliography{sipopt}
 
+\newpage
 \appendix
 \section{Summary of Suffixes}
 
@@ -895,7 +908,7 @@ Suffix & Direction & \multicolumn{1}{c|}{Description}  \\ \hline
                            This is used to communicate the values of the perturbed parameters.
 					       You must define one for each  $\curls{i: 1 \leq i \leq \mbox{\texttt{\nstepsopt}}}$. \\
                       &&   It has to be set for the same variables as \textbf{\stateo}.\\ \hline
-\textbf{\initc} & IN & This is a flag that indicates the constraint is artificial, e.g., $w - p=0$ in Problem \eqref{eq:reform}.
+\textbf{\initc} & IN & This is a flag that indicates the constraint is artificial, e.g., $w - p_0=0$ in Problem \eqref{eq:reform}.
               If the constraint is artificial, set this suffix to 1 (no indexing is necessary). \\ \hline
 \multicolumn{3}{|c|}{\textbf{Defined by \sensKKT}} \\ \hline
 \multirow{2}{*}{\textbf{\sstatei{\emph{i}}}} & \multirow{2}{*}{OUT} &  This holds the updated variables, as well as, the updated constraint multiplier
@@ -914,9 +927,6 @@ Suffix & Direction & \multicolumn{1}{c|}{Description}  \\ \hline
  \textbf{\redhess} &  IN & This is used to enumerate the independent variables, thus it needs to take ordered values from
 $1..n_I$, and $n_I$ is the number of independent variables. \\ \hline
 \end{tabular}
-
-$\:$\\
-
 
 
 \end{document}
