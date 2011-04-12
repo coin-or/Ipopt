@@ -58,16 +58,16 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(srcdir)/BuildTools/Makemain.inc $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/ipopt-uninstalled.pc.in \
 	$(srcdir)/ipopt.pc.in $(top_srcdir)/configure \
-	$(top_srcdir)/contrib/AsNMPC/AmplSolver/Makefile.in \
-	$(top_srcdir)/contrib/AsNMPC/Makefile.in \
-	$(top_srcdir)/contrib/AsNMPC/examples/parametric_cpp/Makefile.in \
-	$(top_srcdir)/contrib/AsNMPC/examples/redhess_cpp/Makefile.in \
 	$(top_srcdir)/contrib/JavaInterface/Makefile.in \
 	$(top_srcdir)/contrib/MatlabInterface-Old/examples/startup.m.in \
 	$(top_srcdir)/contrib/MatlabInterface-Old/src/Makefile.in \
 	$(top_srcdir)/contrib/MatlabInterface/examples/startup.m.in \
 	$(top_srcdir)/contrib/MatlabInterface/src/Makefile.in \
 	$(top_srcdir)/contrib/RInterface/src/Makevars.in \
+	$(top_srcdir)/contrib/sIPOPT/AmplSolver/Makefile.in \
+	$(top_srcdir)/contrib/sIPOPT/Makefile.in \
+	$(top_srcdir)/contrib/sIPOPT/examples/parametric_cpp/Makefile.in \
+	$(top_srcdir)/contrib/sIPOPT/examples/redhess_cpp/Makefile.in \
 	$(top_srcdir)/examples/Cpp_example/Makefile.in \
 	$(top_srcdir)/examples/ScalableProblems/Makefile.in \
 	$(top_srcdir)/examples/hs071_c/Makefile.in \
@@ -133,10 +133,10 @@ CONFIG_CLEAN_FILES = examples/hs071_f/Makefile \
 	contrib/MatlabInterface/examples/startup.m \
 	contrib/MatlabInterface-Old/src/Makefile \
 	contrib/MatlabInterface-Old/examples/startup.m \
-	contrib/JavaInterface/Makefile contrib/AsNMPC/Makefile \
-	contrib/AsNMPC/AmplSolver/Makefile \
-	contrib/AsNMPC/examples/parametric_cpp/Makefile \
-	contrib/AsNMPC/examples/redhess_cpp/Makefile \
+	contrib/JavaInterface/Makefile contrib/sIPOPT/Makefile \
+	contrib/sIPOPT/AmplSolver/Makefile \
+	contrib/sIPOPT/examples/parametric_cpp/Makefile \
+	contrib/sIPOPT/examples/redhess_cpp/Makefile \
 	contrib/RInterface/src/Makevars ipopt.pc ipopt-uninstalled.pc \
 	ipoptamplinterface.pc ipoptamplinterface-uninstalled.pc
 SOURCES =
@@ -607,13 +607,13 @@ contrib/MatlabInterface-Old/examples/startup.m: $(top_builddir)/config.status $(
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 contrib/JavaInterface/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/JavaInterface/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
-contrib/AsNMPC/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/AsNMPC/Makefile.in
+contrib/sIPOPT/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/sIPOPT/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
-contrib/AsNMPC/AmplSolver/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/AsNMPC/AmplSolver/Makefile.in
+contrib/sIPOPT/AmplSolver/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/sIPOPT/AmplSolver/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
-contrib/AsNMPC/examples/parametric_cpp/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/AsNMPC/examples/parametric_cpp/Makefile.in
+contrib/sIPOPT/examples/parametric_cpp/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/sIPOPT/examples/parametric_cpp/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
-contrib/AsNMPC/examples/redhess_cpp/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/AsNMPC/examples/redhess_cpp/Makefile.in
+contrib/sIPOPT/examples/redhess_cpp/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/sIPOPT/examples/redhess_cpp/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 contrib/RInterface/src/Makevars: $(top_builddir)/config.status $(top_srcdir)/contrib/RInterface/src/Makevars.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
@@ -788,7 +788,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/. $(distdir)/BuildTools $(distdir)/Windows/VisualStudio_dotNET $(distdir)/Windows/VisualStudio_dotNET/CppExample $(distdir)/Windows/VisualStudio_dotNET/FortranLinAlg $(distdir)/Windows/VisualStudio_dotNET/Ipopt $(distdir)/Windows/VisualStudio_dotNET/ScalableProblems $(distdir)/Windows/VisualStudio_dotNET/hs071_c $(distdir)/Windows/VisualStudio_dotNET/hs071_cpp $(distdir)/Windows/VisualStudio_dotNET/hs071_f $(distdir)/contrib/AsNMPC $(distdir)/contrib/AsNMPC/AmplSolver $(distdir)/contrib/AsNMPC/examples/parametric_cpp $(distdir)/contrib/AsNMPC/examples/redhess_cpp $(distdir)/contrib/JavaInterface $(distdir)/contrib/MatlabInterface-Old/examples $(distdir)/contrib/MatlabInterface-Old/src $(distdir)/contrib/MatlabInterface/examples $(distdir)/contrib/MatlabInterface/src $(distdir)/contrib/RInterface/src $(distdir)/doc $(distdir)/examples/Cpp_example $(distdir)/examples/ScalableProblems $(distdir)/examples/hs071_c $(distdir)/examples/hs071_cpp $(distdir)/examples/hs071_f $(distdir)/inc $(distdir)/src/Apps/AmplSolver $(distdir)/test $(distdir)/tutorial/CodingExercise/C/1-skeleton $(distdir)/tutorial/CodingExercise/C/2-mistake $(distdir)/tutorial/CodingExercise/C/3-solution $(distdir)/tutorial/CodingExercise/Cpp/1-skeleton $(distdir)/tutorial/CodingExercise/Cpp/2-mistake $(distdir)/tutorial/CodingExercise/Cpp/3-solution $(distdir)/tutorial/CodingExercise/Fortran/1-skeleton $(distdir)/tutorial/CodingExercise/Fortran/2-mistake $(distdir)/tutorial/CodingExercise/Fortran/3-solution $(distdir)/tutorial/CodingExercise/Matlab/1-skeleton $(distdir)/tutorial/CodingExercise/Matlab/2-mistake $(distdir)/tutorial/CodingExercise/Matlab/3-solution
+	$(mkdir_p) $(distdir)/. $(distdir)/BuildTools $(distdir)/Windows/VisualStudio_dotNET $(distdir)/Windows/VisualStudio_dotNET/CppExample $(distdir)/Windows/VisualStudio_dotNET/FortranLinAlg $(distdir)/Windows/VisualStudio_dotNET/Ipopt $(distdir)/Windows/VisualStudio_dotNET/ScalableProblems $(distdir)/Windows/VisualStudio_dotNET/hs071_c $(distdir)/Windows/VisualStudio_dotNET/hs071_cpp $(distdir)/Windows/VisualStudio_dotNET/hs071_f $(distdir)/contrib/JavaInterface $(distdir)/contrib/MatlabInterface-Old/examples $(distdir)/contrib/MatlabInterface-Old/src $(distdir)/contrib/MatlabInterface/examples $(distdir)/contrib/MatlabInterface/src $(distdir)/contrib/RInterface/src $(distdir)/contrib/sIPOPT $(distdir)/contrib/sIPOPT/AmplSolver $(distdir)/contrib/sIPOPT/examples/parametric_cpp $(distdir)/contrib/sIPOPT/examples/redhess_cpp $(distdir)/doc $(distdir)/examples/Cpp_example $(distdir)/examples/ScalableProblems $(distdir)/examples/hs071_c $(distdir)/examples/hs071_cpp $(distdir)/examples/hs071_f $(distdir)/inc $(distdir)/src/Apps/AmplSolver $(distdir)/test $(distdir)/tutorial/CodingExercise/C/1-skeleton $(distdir)/tutorial/CodingExercise/C/2-mistake $(distdir)/tutorial/CodingExercise/C/3-solution $(distdir)/tutorial/CodingExercise/Cpp/1-skeleton $(distdir)/tutorial/CodingExercise/Cpp/2-mistake $(distdir)/tutorial/CodingExercise/Cpp/3-solution $(distdir)/tutorial/CodingExercise/Fortran/1-skeleton $(distdir)/tutorial/CodingExercise/Fortran/2-mistake $(distdir)/tutorial/CodingExercise/Fortran/3-solution $(distdir)/tutorial/CodingExercise/Matlab/1-skeleton $(distdir)/tutorial/CodingExercise/Matlab/2-mistake $(distdir)/tutorial/CodingExercise/Matlab/3-solution
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \

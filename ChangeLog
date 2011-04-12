@@ -2,6 +2,10 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2011-04-07 releases/3.9.3
+        - include updates in BuildTools, including new ThirdParty/Metis
+           (required to work with current metis release)
+
 2010-12-22 releases/3.9.2
         - converted from Common Public License to Eclipse Public License
         - some bugfixes from BuildTools

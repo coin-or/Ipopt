@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2010 International Business Machines and others.
+# Copyright (C) 2004, 2011 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
 
@@ -758,12 +758,12 @@ AC_COIN_VPATH_LINK(tutorial/CodingExercise/Matlab/1-skeleton/TutorialMatlab.m)
 AC_COIN_VPATH_LINK(tutorial/CodingExercise/Matlab/2-mistake/TutorialMatlab.m)
 AC_COIN_VPATH_LINK(tutorial/CodingExercise/Matlab/3-solution/TutorialMatlab.m)
 
-AC_COIN_VPATH_LINK(contrib/AsNMPC/examples/parametric_cpp/parametric_driver.cpp)
-AC_COIN_VPATH_LINK(contrib/AsNMPC/examples/parametric_cpp/parametricTNLP.cpp)
-AC_COIN_VPATH_LINK(contrib/AsNMPC/examples/parametric_cpp/parametricTNLP.hpp)
-AC_COIN_VPATH_LINK(contrib/AsNMPC/examples/redhess_cpp/MyNmpcTNLP.cpp)
-AC_COIN_VPATH_LINK(contrib/AsNMPC/examples/redhess_cpp/MyNmpcTNLP.hpp)
-AC_COIN_VPATH_LINK(contrib/AsNMPC/examples/redhess_cpp/redhess_cpp.cpp)
+AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/parametric_cpp/parametric_driver.cpp)
+AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/parametric_cpp/parametricTNLP.cpp)
+AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/parametric_cpp/parametricTNLP.hpp)
+AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/redhess_cpp/MyNmpcTNLP.cpp)
+AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/redhess_cpp/MyNmpcTNLP.hpp)
+AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/redhess_cpp/redhess_cpp.cpp)
 
 ########################################################################
 ##          Create Makefiles and other stuff                          ##
@@ -810,11 +810,11 @@ AC_CONFIG_FILES([Makefile
 		 contrib/MatlabInterface-Old/src/Makefile
 		 contrib/MatlabInterface-Old/examples/startup.m
 		 contrib/JavaInterface/Makefile
-		 contrib/AsNMPC/Makefile
-		 contrib/AsNMPC/AmplSolver/Makefile
-		 contrib/AsNMPC/examples/parametric_cpp/Makefile
-		 contrib/AsNMPC/examples/redhess_cpp/Makefile
-		 contrib/AsNMPC/src/Makefile
+		 contrib/sIPOPT/Makefile
+		 contrib/sIPOPT/AmplSolver/Makefile
+		 contrib/sIPOPT/examples/parametric_cpp/Makefile
+		 contrib/sIPOPT/examples/redhess_cpp/Makefile
+		 contrib/sIPOPT/src/Makefile
 		 contrib/RInterface/src/Makevars
 		 ipopt.pc ipopt-uninstalled.pc])
 
