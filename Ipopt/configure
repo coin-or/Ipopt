@@ -36262,7 +36262,7 @@ fi
 
 # Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
-  cvl_tmp="contrib/AsNMPC/examples/parametric_cpp/parametric_driver.cpp"
+  cvl_tmp="contrib/sIPOPT/examples/parametric_cpp/parametric_driver.cpp"
   for file in $cvl_tmp ; do
     coin_vpath_link_files="$coin_vpath_link_files $file"
   done
@@ -36272,7 +36272,7 @@ fi
 
 # Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
-  cvl_tmp="contrib/AsNMPC/examples/parametric_cpp/parametricTNLP.cpp"
+  cvl_tmp="contrib/sIPOPT/examples/parametric_cpp/parametricTNLP.cpp"
   for file in $cvl_tmp ; do
     coin_vpath_link_files="$coin_vpath_link_files $file"
   done
@@ -36282,7 +36282,7 @@ fi
 
 # Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
-  cvl_tmp="contrib/AsNMPC/examples/parametric_cpp/parametricTNLP.hpp"
+  cvl_tmp="contrib/sIPOPT/examples/parametric_cpp/parametricTNLP.hpp"
   for file in $cvl_tmp ; do
     coin_vpath_link_files="$coin_vpath_link_files $file"
   done
@@ -36292,7 +36292,7 @@ fi
 
 # Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
-  cvl_tmp="contrib/AsNMPC/examples/redhess_cpp/MyNmpcTNLP.cpp"
+  cvl_tmp="contrib/sIPOPT/examples/redhess_cpp/MyNmpcTNLP.cpp"
   for file in $cvl_tmp ; do
     coin_vpath_link_files="$coin_vpath_link_files $file"
   done
@@ -36302,7 +36302,7 @@ fi
 
 # Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
-  cvl_tmp="contrib/AsNMPC/examples/redhess_cpp/MyNmpcTNLP.hpp"
+  cvl_tmp="contrib/sIPOPT/examples/redhess_cpp/MyNmpcTNLP.hpp"
   for file in $cvl_tmp ; do
     coin_vpath_link_files="$coin_vpath_link_files $file"
   done
@@ -36312,7 +36312,7 @@ fi
 
 # Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
-  cvl_tmp="contrib/AsNMPC/examples/redhess_cpp/redhess_cpp.cpp"
+  cvl_tmp="contrib/sIPOPT/examples/redhess_cpp/redhess_cpp.cpp"
   for file in $cvl_tmp ; do
     coin_vpath_link_files="$coin_vpath_link_files $file"
   done
@@ -36323,7 +36323,7 @@ fi
 ##          Create Makefiles and other stuff                          ##
 ########################################################################
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Algorithm/Inexact/Makefile src/contrib/CGPenalty/Makefile src/contrib/LinearSolverLoader/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile src/Apps/CUTErInterface/Makefile examples/hs071_f/Makefile examples/hs071_f/hs071_f.f examples/Cpp_example/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile tutorial/CodingExercise/C/1-skeleton/Makefile tutorial/CodingExercise/C/2-mistake/Makefile tutorial/CodingExercise/C/3-solution/Makefile tutorial/CodingExercise/Cpp/1-skeleton/Makefile tutorial/CodingExercise/Cpp/2-mistake/Makefile tutorial/CodingExercise/Cpp/3-solution/Makefile tutorial/CodingExercise/Matlab/1-skeleton/startup.m tutorial/CodingExercise/Matlab/2-mistake/startup.m tutorial/CodingExercise/Matlab/3-solution/startup.m tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f tutorial/CodingExercise/Fortran/1-skeleton/Makefile tutorial/CodingExercise/Fortran/2-mistake/Makefile tutorial/CodingExercise/Fortran/3-solution/Makefile test/Makefile test/run_unitTests contrib/MatlabInterface/src/Makefile contrib/MatlabInterface/examples/startup.m contrib/MatlabInterface-Old/src/Makefile contrib/MatlabInterface-Old/examples/startup.m contrib/JavaInterface/Makefile contrib/AsNMPC/Makefile contrib/AsNMPC/AmplSolver/Makefile contrib/AsNMPC/examples/parametric_cpp/Makefile contrib/AsNMPC/examples/redhess_cpp/Makefile contrib/AsNMPC/src/Makefile contrib/RInterface/src/Makevars ipopt.pc ipopt-uninstalled.pc"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Algorithm/Inexact/Makefile src/contrib/CGPenalty/Makefile src/contrib/LinearSolverLoader/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile src/Apps/CUTErInterface/Makefile examples/hs071_f/Makefile examples/hs071_f/hs071_f.f examples/Cpp_example/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile tutorial/CodingExercise/C/1-skeleton/Makefile tutorial/CodingExercise/C/2-mistake/Makefile tutorial/CodingExercise/C/3-solution/Makefile tutorial/CodingExercise/Cpp/1-skeleton/Makefile tutorial/CodingExercise/Cpp/2-mistake/Makefile tutorial/CodingExercise/Cpp/3-solution/Makefile tutorial/CodingExercise/Matlab/1-skeleton/startup.m tutorial/CodingExercise/Matlab/2-mistake/startup.m tutorial/CodingExercise/Matlab/3-solution/startup.m tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f tutorial/CodingExercise/Fortran/1-skeleton/Makefile tutorial/CodingExercise/Fortran/2-mistake/Makefile tutorial/CodingExercise/Fortran/3-solution/Makefile test/Makefile test/run_unitTests contrib/MatlabInterface/src/Makefile contrib/MatlabInterface/examples/startup.m contrib/MatlabInterface-Old/src/Makefile contrib/MatlabInterface-Old/examples/startup.m contrib/JavaInterface/Makefile contrib/sIPOPT/Makefile contrib/sIPOPT/AmplSolver/Makefile contrib/sIPOPT/examples/parametric_cpp/Makefile contrib/sIPOPT/examples/redhess_cpp/Makefile contrib/sIPOPT/src/Makefile contrib/RInterface/src/Makevars ipopt.pc ipopt-uninstalled.pc"
 
 
 if test $coin_has_asl = yes ; then
@@ -37220,11 +37220,11 @@ do
   "contrib/MatlabInterface-Old/src/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/MatlabInterface-Old/src/Makefile" ;;
   "contrib/MatlabInterface-Old/examples/startup.m" ) CONFIG_FILES="$CONFIG_FILES contrib/MatlabInterface-Old/examples/startup.m" ;;
   "contrib/JavaInterface/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/JavaInterface/Makefile" ;;
-  "contrib/AsNMPC/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/AsNMPC/Makefile" ;;
-  "contrib/AsNMPC/AmplSolver/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/AsNMPC/AmplSolver/Makefile" ;;
-  "contrib/AsNMPC/examples/parametric_cpp/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/AsNMPC/examples/parametric_cpp/Makefile" ;;
-  "contrib/AsNMPC/examples/redhess_cpp/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/AsNMPC/examples/redhess_cpp/Makefile" ;;
-  "contrib/AsNMPC/src/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/AsNMPC/src/Makefile" ;;
+  "contrib/sIPOPT/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/sIPOPT/Makefile" ;;
+  "contrib/sIPOPT/AmplSolver/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/sIPOPT/AmplSolver/Makefile" ;;
+  "contrib/sIPOPT/examples/parametric_cpp/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/sIPOPT/examples/parametric_cpp/Makefile" ;;
+  "contrib/sIPOPT/examples/redhess_cpp/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/sIPOPT/examples/redhess_cpp/Makefile" ;;
+  "contrib/sIPOPT/src/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/sIPOPT/src/Makefile" ;;
   "contrib/RInterface/src/Makevars" ) CONFIG_FILES="$CONFIG_FILES contrib/RInterface/src/Makevars" ;;
   "ipopt.pc" ) CONFIG_FILES="$CONFIG_FILES ipopt.pc" ;;
   "ipopt-uninstalled.pc" ) CONFIG_FILES="$CONFIG_FILES ipopt-uninstalled.pc" ;;
