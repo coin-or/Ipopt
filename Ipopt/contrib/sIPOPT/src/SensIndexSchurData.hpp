@@ -7,7 +7,7 @@
 #ifndef __ASINDEXSCHURDATA_HPP__
 #define __ASINDEXSCHURDATA_HPP__
 
-#include "AsSchurData.hpp"
+#include "SensSchurData.hpp"
 
 namespace Ipopt
 {
@@ -22,7 +22,7 @@ namespace Ipopt
     IndexSchurData();
 
     IndexSchurData(const std::vector<Index> idx, const std::vector<Index> val);
-    
+
     virtual ~IndexSchurData();
 
     virtual SmartPtr<SchurData> MakeNewSchurDataCopy() const;
@@ -34,7 +34,7 @@ namespace Ipopt
     virtual void SetData_Flag(Index dim, const Index* flags, const Number* values);
 
     virtual Index SetData_Index(Index dim, const Index* index, Number v=1.0);
-    
+
     virtual void SetData_List(const std::vector<Index>& list, Number v=1.0);
 
     virtual void GetRow(Index i, IteratesVector& v) const;
@@ -58,7 +58,7 @@ namespace Ipopt
      *  a value v and adds indices accordingly. If the column is already set in the data,
      *  it stays at the same place, otherwise the new indices are added at the bottom,
      *  in the order specified by the indices. The vector delta_u_sort returns the actual
-     *  sorting so that the user knows how to place the new values inside the elongated 
+     *  sorting so that the user knows how to place the new values inside the elongated
      *  delta_u vector. These places are in C++ index style, so they correspond exactly
      *  to the indices used for the C++-array of the delta_u DenseVector*/
     void AddData_Flag(Index dim, Index* flags, std::vector<Index>& delta_u_sort, Index v);

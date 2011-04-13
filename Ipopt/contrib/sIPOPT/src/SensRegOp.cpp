@@ -8,7 +8,7 @@
 // modified for AsNMPC by Hans Pirnay, 2009-07-22
 
 #include "IpRegOptions.hpp"
-#include "AsNMPCApplication.hpp"
+#include "SensApplication.hpp"
 
 namespace Ipopt
 {

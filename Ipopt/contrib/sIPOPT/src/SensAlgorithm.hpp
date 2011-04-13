@@ -8,21 +8,21 @@
 #define __ASASNMPCONTROLLER_HPP__
 
 #include "IpAlgStrategy.hpp"
-#include "AsSensStepCalc.hpp"
-#include "AsMeasurement.hpp"
-#include "AsSchurDriver.hpp"
-#include "AsNmpcUtils.hpp"
+#include "SensStepCalc.hpp"
+#include "SensMeasurement.hpp"
+#include "SensSchurDriver.hpp"
+#include "SensUtils.hpp"
 
 namespace Ipopt
 {
 
   class AsNmpController : public AlgorithmStrategyObject
   {
-    /** This is the interface for the actual controller. It handles 
+    /** This is the interface for the actual controller. It handles
      *  Data input to the controller (measurement) and returns controls */
 
-  public: 
-    
+  public:
+
     AsNmpController(std::vector< SmartPtr<SchurDriver> >& driver_vec,
 		    SmartPtr<SensitivityStepCalculator> sens_step_calc,
 		    SmartPtr<Measurement> measurement,
@@ -33,8 +33,8 @@ namespace Ipopt
     virtual bool InitializeImpl(const OptionsList& options,
                                 const std::string& prefix);
 
-    /** Main loop: Wait for new measurement, Get new step, maybe deal with 
-     *  bounds,  see to it that everything happens in the required 
+    /** Main loop: Wait for new measurement, Get new step, maybe deal with
+     *  bounds,  see to it that everything happens in the required
      *  timeframe. */
     NmpControllerExitStatus Run();
 

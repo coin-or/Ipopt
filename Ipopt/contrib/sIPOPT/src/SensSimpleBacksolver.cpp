@@ -3,11 +3,11 @@
 // This code is published under the Eclipse Public License.
 //
 // Date    : 2009-04-06
-// 
+//
 // Purpose : This is the same as IpSensitivityCalculator.hpp
 
 
-#include "AsSimpleBacksolver.hpp"
+#include "SensSimpleBacksolver.hpp"
 
 namespace Ipopt
 {

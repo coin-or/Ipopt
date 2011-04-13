@@ -4,11 +4,11 @@
 //
 // Date   : 2009-05-27
 
-#include "AsIndexSchurData.hpp"
+#include "SensIndexSchurData.hpp"
 #include "IpIteratesVector.hpp"
 #include "IpDenseVector.hpp"
 #include "IpBlas.hpp"
-#include "AsNmpcUtils.hpp"
+#include "SensUtils.hpp"
 
 namespace Ipopt
 {
@@ -22,7 +22,7 @@ namespace Ipopt
   }
 
   IndexSchurData::IndexSchurData(const std::vector<Index> idx, const std::vector<Index> val)
-  { 
+  {
     DBG_START_METH("IndexSchurData::IndexSchurData(vector,vector)", dbg_verbosity);
     idx_ = idx;
     val_ = val;
@@ -30,7 +30,7 @@ namespace Ipopt
     Set_NRows((Index)idx_.size());
     Set_Initialized();
   }
-  
+
 
   IndexSchurData::~IndexSchurData()
   {
@@ -50,7 +50,7 @@ namespace Ipopt
     DBG_ASSERT(idx_.size()==0);
     DBG_ASSERT(!Is_Initialized());
     DBG_ASSERT(v!=0);
-    
+
     Index w;
     (v>0) ? w=1 : w=-1;
 
@@ -71,7 +71,7 @@ namespace Ipopt
     DBG_START_METH("InexSchurData::SetData_Flag", dbg_verbosity);
     DBG_ASSERT(idx_.size()==0);
     DBG_ASSERT(!Is_Initialized());
-    
+
     for (Index i=0; i<dim; ++i) {
       DBG_ASSERT(flags[i]==1 || flags[i]==0);
       DBG_ASSERT(values[i]!=0);
@@ -122,7 +122,7 @@ namespace Ipopt
   void IndexSchurData::SetData_List(const std::vector<Index>& list, Number v)
   {
     DBG_START_METH("IndexSchurData::SetData_List", dbg_verbosity);
-    
+
     DBG_ASSERT(!Is_Initialized());
     DBG_ASSERT(idx_.empty());
     DBG_ASSERT(v!=0);
@@ -131,8 +131,8 @@ namespace Ipopt
     (v>0) ? w=1 : w=-1;
 
     val_.resize(list.size(), w);
-    idx_ = list;    
-    
+    idx_ = list;
+
     Set_Initialized();
   }
 
@@ -152,10 +152,10 @@ namespace Ipopt
     Index col = idx_[row];
 
     Index vec_idx = 0;
-    while(!(col<v_lens[vec_idx])) { 
+    while(!(col<v_lens[vec_idx])) {
       vec_idx++;
     }
-    
+
     dynamic_cast<DenseVector*>(GetRawPtr(v.GetCompNonConst(vec_idx)))->Values()[col+v.GetComp(vec_idx)->Dim()-v_lens[vec_idx]] = (Number)val_[row];
 
     delete[] v_lens;
@@ -186,14 +186,14 @@ namespace Ipopt
     Index v_row, vec_idx;
     for (unsigned int i=0; i<idx_.size(); ++i) {
       v_row = idx_[i];
-      
+
       // find vector in CompoundVector that corresponds to the given col in matrix/row in v.
       vec_idx = -1;
       while(!(v_row<v_lens[++vec_idx])) { }
-      
+
       SmartPtr<const DenseVector> d_ptr = dynamic_cast<const DenseVector*>(GetRawPtr(v.GetComp(vec_idx)));
       if (!d_ptr->IsHomogeneous()) {
-	u_val[i] += 
+	u_val[i] +=
 	  val_[i]*d_ptr->Values()[v_row+v.GetComp(vec_idx)->Dim()-v_lens[vec_idx]];
       }
       else {
@@ -226,7 +226,7 @@ namespace Ipopt
     for (Index i=0; i<ncols; ++i) {
       v_vals[i] = 0;
     }
-    
+
     // perform v_vals <- A^T*u
     Index row, col;
     Number val;
@@ -252,7 +252,7 @@ namespace Ipopt
     delete [] v_vals;
   }
 
-  Index* IndexSchurData::GetVectorLengths(const IteratesVector& v) const 
+  Index* IndexSchurData::GetVectorLengths(const IteratesVector& v) const
   {
     DBG_START_METH("IndexSchurData::GetVectorLengths", dbg_verbosity);
     // retrieve structure of IteratesVector - this should probably be cached or sth.
@@ -275,7 +275,7 @@ namespace Ipopt
 			       const std::string& prefix) const
   {
     DBG_START_METH("IndexSchurData::PrintImpl", dbg_verbosity);
-    
+
     jnlst.PrintfIndented(level, category, indent,
                          "%sIndexSchurData \"%s\" with %d rows:\n",
                          prefix.c_str(), name.c_str(), GetNRowsAdded());
@@ -316,7 +316,7 @@ namespace Ipopt
 	  val_.push_back(v);
 	}
       }
-    }    
+    }
   }
 
   void IndexSchurData::AddData_List(std::vector<Index> cols, std::vector<Index>& delta_u_sort, Index& new_du_size, Index v)
@@ -324,7 +324,7 @@ namespace Ipopt
     DBG_START_METH("IndexSchurData::AddData_List", dbg_verbosity);
 
     new_du_size = (Index)idx_.size();
-    bool oldindex; 
+    bool oldindex;
     for (unsigned int i=0; i<cols.size(); ++i) {
       oldindex = false;
       for (unsigned int j=0; j<idx_.size(); ++j) {
@@ -359,4 +359,4 @@ namespace Ipopt
     DBG_START_METH("IndexSchurData::GetColIndices", dbg_verbosity);
     return &idx_;
   }
-} 
+}

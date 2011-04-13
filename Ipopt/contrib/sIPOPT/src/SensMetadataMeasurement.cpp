@@ -4,8 +4,8 @@
 //
 // Date   : 2009-07-10
 
-#include "AsMetadataMeasurement.hpp"
-#include "AsNmpcUtils.hpp"
+#include "SensMetadataMeasurement.hpp"
+#include "SensUtils.hpp"
 
 #include <vector>
 
@@ -44,7 +44,7 @@ namespace Ipopt
     y_d_owner_space_ = dynamic_cast<const DenseVectorSpace*>(GetRawPtr(IpData().curr()->y_d()->OwnerSpace()));
     z_L_owner_space_ = dynamic_cast<const DenseVectorSpace*>(GetRawPtr(IpData().curr()->z_L()->OwnerSpace()));
     z_U_owner_space_ = dynamic_cast<const DenseVectorSpace*>(GetRawPtr(IpData().curr()->z_U()->OwnerSpace()));
-    DBG_ASSERT(IsValid(x_owner_space_) && IsValid(s_owner_space_) && 
+    DBG_ASSERT(IsValid(x_owner_space_) && IsValid(s_owner_space_) &&
 	       IsValid(y_c_owner_space_) && IsValid(y_d_owner_space_) &&
 	       IsValid(z_L_owner_space_) && IsValid(z_U_owner_space_));
 
@@ -55,7 +55,7 @@ namespace Ipopt
     if (run_sens) {
       std::string sens_state_0 = "sens_state_1"; // sens_state_0 doesn't exist anymore...
       std::vector<Index> tmp_idx = x_owner_space_->GetIntegerMetaData(sens_state_0);
-      
+
       n_idx_ = AsIndexMax((Index)tmp_idx.size(), &tmp_idx[0], 1);
 
       options.GetStringValue("select_step", select_step_, "");
@@ -73,7 +73,7 @@ namespace Ipopt
     Index n_base = it->x()->Dim() + it->s()->Dim();
 
     const std::vector<Index> constr_metadata = y_c_owner_space_->GetIntegerMetaData("sens_init_constr");
-    
+
     std::vector<Index> retval;
     for (Index i = 0; i<constr_metadata.size(); ++i) {
       if (constr_metadata[i]>0) {
@@ -86,7 +86,7 @@ namespace Ipopt
   std::vector<Index> MetadataMeasurement::GetNmpcState(Index state_number)
   {
     DBG_START_METH("MetadataMeasurement::GetNmpcState", dbg_verbosity);
-    
+
     std::string state      = "sens_state_";
     append_Index(state, state_number);
 
@@ -111,7 +111,7 @@ namespace Ipopt
 
     std::string state;
     std::string statevalue;
-      
+
     state      = "sens_state_";
     statevalue = "sens_state_value_";
     append_Index(state,measurement_number);
@@ -147,16 +147,16 @@ namespace Ipopt
       Index n_base = it->x()->Dim() + it->s()->Dim();
 
       const Number* u_0_lambda = dynamic_cast<const DenseVector*>(GetRawPtr(IpData().trial()->y_c()))->Values();
-    
+
       Index ind_it = constr_ipopt.size();
       for (std::vector<Index>::iterator it=constr_ipopt.begin(); it!=constr_ipopt.end(); ++it) {
 	DBG_PRINT((dbg_verbosity,"constr-nr. %d : %f\n", *it-n_base,-u_0_lambda[*it-n_base]));
 	du_val[ind_it++] = -u_0_lambda[*it-n_base];
       }
     }
-    
+
     delta_u->SetValues(du_val);
-    
+
     return delta_u;
   }
 
@@ -171,7 +171,7 @@ namespace Ipopt
     std::vector<Number> x_sol = std::vector<Number>(sol_x_val, sol_x_val+sol->x()->Dim());
     SmartPtr<DenseVectorSpace> x_owner_space_nonconst = const_cast<DenseVectorSpace*>(GetRawPtr(x_owner_space_));
     x_owner_space_nonconst->SetNumericMetaData(nmpc_sol, x_sol);
-    
+
     SmartPtr<const DenseVector> s_dv = dynamic_cast<const DenseVector*>(GetRawPtr(sol->s()));
     if (IsValid(s_dv)) {
       const Number* sol_s_val = s_dv->Values();
@@ -179,7 +179,7 @@ namespace Ipopt
       SmartPtr<DenseVectorSpace> s_owner_space_nonconst = const_cast<DenseVectorSpace*>(GetRawPtr(s_owner_space_));
       s_owner_space_nonconst->SetNumericMetaData(nmpc_sol, s_sol);
     }
-    
+
     const Number* sol_y_c_val = dynamic_cast<const DenseVector*>(GetRawPtr(sol->y_c()))->Values();
     std::vector<Number> y_c_sol = std::vector<Number>(sol_y_c_val, sol_y_c_val+sol->y_c()->Dim());
     SmartPtr<DenseVectorSpace> y_c_owner_space_nonconst = const_cast<DenseVectorSpace*>(GetRawPtr(y_c_owner_space_));
@@ -189,7 +189,7 @@ namespace Ipopt
     std::vector<Number> y_d_sol = std::vector<Number>(sol_y_d_val, sol_y_d_val+sol->y_d()->Dim());
     SmartPtr<DenseVectorSpace> y_d_owner_space_nonconst = const_cast<DenseVectorSpace*>(GetRawPtr(y_d_owner_space_));
     y_d_owner_space_nonconst->SetNumericMetaData(nmpc_sol, y_d_sol);
-    
+
     const Number* sol_z_L_val = dynamic_cast<const DenseVector*>(GetRawPtr(sol->z_L()))->Values();
     std::vector<Number> z_L_sol = std::vector<Number>(sol_z_L_val, sol_z_L_val+sol->z_L()->Dim());
     SmartPtr<DenseVectorSpace> z_L_owner_space_nonconst = const_cast<DenseVectorSpace*>(GetRawPtr(z_L_owner_space_));
@@ -208,7 +208,7 @@ namespace Ipopt
     const std::vector<Index> idx_ipopt = x_owner_space_->GetIntegerMetaData(suffix_string.c_str());
 
     std::vector<Index> retval = idx_ipopt;
-    
-    return retval;    
+
+    return retval;
   }
 }

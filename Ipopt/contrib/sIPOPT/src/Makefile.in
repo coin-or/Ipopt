@@ -62,13 +62,12 @@ am__installdirs = "$(DESTDIR)$(libdir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libsipopt_la_LIBADD =
-am_libsipopt_la_OBJECTS = AsAsNmpController.lo AsAsNMPCRegOp.lo \
-	AsDenseGenSchurDriver.lo AsIFTSchurDriver.lo \
-	AsIndexPCalculator.lo AsIndexSchurData.lo \
-	AsMetadataMeasurement.lo AsNMPCApplication.lo AsNmpcUtils.lo \
-	AsReducedHessianCalculator.lo AsSchurBuilder.lo \
-	AsSimpleBacksolver.lo AsStdPCalculator.lo AsStdSchurData.lo \
-	AsStdStepCalc.lo
+am_libsipopt_la_OBJECTS = SensAlgorithm.lo SensRegOp.lo \
+	SensDenseGenSchurDriver.lo SensIndexPCalculator.lo \
+	SensIndexSchurData.lo SensMetadataMeasurement.lo \
+	SensApplication.lo SensUtils.lo \
+	SensReducedHessianCalculator.lo SensBuilder.lo \
+	SensSimpleBacksolver.lo SensStdStepCalc.lo
 libsipopt_la_OBJECTS = $(am_libsipopt_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -352,43 +351,37 @@ AUTOMAKE_OPTIONS = foreign
 includesipoptdir = $(includedir)/coin
 lib_LTLIBRARIES = libsipopt.la
 libsipopt_la_SOURCES = \
-	AsAsBacksolver.hpp \
-	AsAsNmpController.cpp \
-	AsAsNmpController.hpp \
-	AsAsNMPCRegOp.cpp \
-	AsAsNMPCRegOp.hpp \
-	AsDenseGenSchurDriver.cpp \
-	AsDenseGenSchurDriver.hpp \
-	AsIFTSchurDriver.cpp \
-	AsIFTSchurDriver.hpp \
-	AsIndexPCalculator.cpp \
-	AsIndexPCalculator.hpp \
-	AsIndexSchurData.cpp \
-	AsIndexSchurData.hpp \
-	AsMeasurement.hpp \
-	AsMetadataMeasurement.cpp \
-	AsMetadataMeasurement.hpp \
-	AsNMPCApplication.cpp \
-	AsNMPCApplication.hpp \
-	AsNmpcUtils.cpp \
-	AsNmpcUtils.hpp \
-	AsPCalculator.hpp \
-	AsReducedHessianCalculator.cpp \
-	AsReducedHessianCalculator.hpp \
-	AsSchurBuilder.cpp \
-	AsSchurBuilder.hpp \
-	AsSchurData.hpp \
-	AsSchurDriver.hpp \
-	AsSensStepCalc.hpp \
-	AsSimpleBacksolver.cpp \
-	AsSimpleBacksolver.hpp \
-	AsStdPCalculator.cpp \
-	AsStdPCalculator.hpp \
-	AsStdSchurData.cpp \
-	AsStdSchurData.hpp \
-	AsStdStepCalc.cpp \
-	AsStdStepCalc.hpp \
-	AsSuffixHandler.hpp
+	SensBacksolver.hpp \
+	SensAlgorithm.cpp \
+	SensAlgorithm.hpp \
+	SensRegOp.cpp \
+	SensRegOp.hpp \
+	SensDenseGenSchurDriver.cpp \
+	SensDenseGenSchurDriver.hpp \
+	SensIndexPCalculator.cpp \
+	SensIndexPCalculator.hpp \
+	SensIndexSchurData.cpp \
+	SensIndexSchurData.hpp \
+	SensMeasurement.hpp \
+	SensMetadataMeasurement.cpp \
+	SensMetadataMeasurement.hpp \
+	SensApplication.cpp \
+	SensApplication.hpp \
+	SensUtils.cpp \
+	SensUtils.hpp \
+	SensPCalculator.hpp \
+	SensReducedHessianCalculator.cpp \
+	SensReducedHessianCalculator.hpp \
+	SensBuilder.cpp \
+	SensBuilder.hpp \
+	SensSchurData.hpp \
+	SensSchurDriver.hpp \
+	SensStepCalc.hpp \
+	SensSimpleBacksolver.cpp \
+	SensSimpleBacksolver.hpp \
+	SensStdStepCalc.cpp \
+	SensStdStepCalc.hpp \
+	SensSuffixHandler.hpp
 
 libsipopt_la_LDFLAGS = $(LT_LDFLAGS)
 addlibsdir = $(datadir)/coin/doc/Ipopt
@@ -399,43 +392,37 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 
 # Astyle stuff
 ASTYLE_FILES = \
-	AsAsBacksolver.hppbak \
-	AsAsNmpController.cppbak \
-	AsAsNmpController.hppbak \
-	AsAsNMPCRegOp.cppbak \
-	AsAsNMPCRegOp.hppbak \
-	AsDenseGenSchurDriver.cppbak \
-	AsDenseGenSchurDriver.hppbak \
-	AsIFTSchurDriver.cppbak \
-	AsIFTSchurDriver.hppbak \
-	AsIndexPCalculator.cppbak \
-	AsIndexPCalculator.hppbak \
-	AsIndexSchurData.cppbak \
-	AsIndexSchurData.hppbak \
-	AsMeasurement.hppbak \
-	AsMetadataMeasurement.cppbak \
-	AsMetadataMeasurement.hppbak \
-	AsNMPCAppbaklication.cppbak \
-	AsNMPCAppbaklication.hppbak \
-	AsNmpcUtils.cppbak \
-	AsNmpcUtils.hppbak \
-	AsPCalculator.hppbak \
-	AsReducedHessianCalculator.cppbak \
-	AsReducedHessianCalculator.hppbak \
-	AsSchurBuilder.cppbak \
-	AsSchurBuilder.hppbak \
-	AsSchurData.hppbak \
-	AsSchurDriver.hppbak \
-	AsSensStepCalc.hppbak \
-	AsSimpleBacksolver.cppbak \
-	AsSimpleBacksolver.hppbak \
-	AsStdPCalculator.cppbak \
-	AsStdPCalculator.hppbak \
-	AsStdSchurData.cppbak \
-	AsStdSchurData.hppbak \
-	AsStdStepCalc.cppbak \
-	AsStdStepCalc.hppbak \
-	AsSuffixHandler.hppbak
+	SensBacksolver.hppbak \
+	SensAlgorithm.cppbak \
+	SensAlgorithm.hppbak \
+	SensRegOp.cppbak \
+	SensRegOp.hppbak \
+	SensDenseGenSchurDriver.cppbak \
+	SensDenseGenSchurDriver.hppbak \
+	SensIndexPCalculator.cppbak \
+	SensIndexPCalculator.hppbak \
+	SensIndexSchurData.cppbak \
+	SensIndexSchurData.hppbak \
+	SensMeasurement.hppbak \
+	SensMetadataMeasurement.cppbak \
+	SensMetadataMeasurement.hppbak \
+	SensApplication.cppbak \
+	SensApplication.hppbak \
+	SensUtils.cppbak \
+	SensUtils.hppbak \
+	SensPCalculator.hppbak \
+	SensReducedHessianCalculator.cppbak \
+	SensReducedHessianCalculator.hppbak \
+	SensBuilder.cppbak \
+	SensBuilder.hppbak \
+	SensSchurData.hppbak \
+	SensSchurDriver.hppbak \
+	SensStepCalc.hppbak \
+	SensSimpleBacksolver.cppbak \
+	SensSimpleBacksolver.hppbak \
+	SensStdStepCalc.cppbak \
+	SensStdStepCalc.hppbak \
+	SensSuffixHandler.hppbak
 
 DISTCLEANFILES = $(ASTYLE_FILES)
 SUFFIXES = .cppbak .hppbak
@@ -508,21 +495,18 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AsAsNMPCRegOp.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AsAsNmpController.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AsDenseGenSchurDriver.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AsIFTSchurDriver.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AsIndexPCalculator.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AsIndexSchurData.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AsMetadataMeasurement.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AsNMPCApplication.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AsNmpcUtils.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AsReducedHessianCalculator.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AsSchurBuilder.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AsSimpleBacksolver.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AsStdPCalculator.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AsStdSchurData.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AsStdStepCalc.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SensAlgorithm.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SensApplication.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SensBuilder.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SensDenseGenSchurDriver.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SensIndexPCalculator.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SensIndexSchurData.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SensMetadataMeasurement.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SensReducedHessianCalculator.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SensRegOp.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SensSimpleBacksolver.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SensStdStepCalc.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SensUtils.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

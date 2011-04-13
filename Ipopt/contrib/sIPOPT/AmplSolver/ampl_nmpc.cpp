@@ -6,10 +6,10 @@
 
 #include "AsAmplNmpcTNLP.hpp"
 #include "IpIpoptApplication.hpp"
-#include "AsNMPCApplication.hpp"
+#include "SensApplication.hpp"
 #include "IpPDSearchDirCalc.hpp"
 #include "IpIpoptAlg.hpp"
-#include "AsAsNMPCRegOp.hpp"
+#include "SensRegOp.hpp"
 
 
 int main(int argv, char**argc)
@@ -34,7 +34,7 @@ int main(int argv, char**argc)
     //printf("ampl_ipopt.cpp: Error in first Initialize!!!!\n");
     exit(-100);
   }
-    
+
   app_ipopt->Initialize();
 
   // prepare suffixes, or metadata ...
@@ -88,7 +88,7 @@ int main(int argv, char**argc)
     suffix_handler->AddAvailableSuffix(sol_state, AmplSuffixHandler::Constraint_Source, AmplSuffixHandler::Number_Type);
     suffix_handler->AddAvailableSuffix(sol_state_zL, AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
     suffix_handler->AddAvailableSuffix(sol_state_zU, AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
-    
+
   }
 
   // for reduced hessian computation
@@ -100,7 +100,7 @@ int main(int argv, char**argc)
   ampl_options_list->AddAmplOption("run_sens", "run_sens",
 				   AmplOptionsList::String_Option,
 				   "Set to yes if nmpc algorithm should be run.");
-  ampl_options_list->AddAmplOption("compute_red_hessian", "compute_red_hessian", 
+  ampl_options_list->AddAmplOption("compute_red_hessian", "compute_red_hessian",
 				   AmplOptionsList::String_Option,
 				   "Set to yes if reduced hessian should be computed.");
 

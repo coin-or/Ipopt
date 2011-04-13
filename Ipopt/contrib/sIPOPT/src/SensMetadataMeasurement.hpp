@@ -7,14 +7,14 @@
 #ifndef __AS_METADATAMEASUREMENT_HPP__
 #define __AS_METADATAMEASUREMENT_HPP__
 
-#include "AsMeasurement.hpp"
-#include "AsSuffixHandler.hpp"
+#include "SensMeasurement.hpp"
+#include "SensSuffixHandler.hpp"
 #include "IpAlgStrategy.hpp"
 
 
 namespace Ipopt
 {
-  
+
   class MetadataMeasurement : public Measurement, public SuffixHandler, public AlgorithmStrategyObject
   {
   public:
@@ -33,30 +33,30 @@ namespace Ipopt
 
     virtual SmartPtr<DenseVector> GetMeasurement(Index measurement_number);
 
-    virtual void SetSolution(Index measurement_number, SmartPtr<IteratesVector> sol);    
+    virtual void SetSolution(Index measurement_number, SmartPtr<IteratesVector> sol);
 
     /** suffix handler methods */
-    
+
     virtual std::vector<Index> GetIntegerSuffix(std::string suffix_string);
 
   private:
 
     /** Number of nmpc_indices */
     Index n_idx_;
-    
+
     std::string select_step_;
     /** owner space of x */
     SmartPtr<const DenseVectorSpace> x_owner_space_;
     /** owner space of s */
     SmartPtr<const DenseVectorSpace> s_owner_space_;
     /** owner space of y_c */
-    SmartPtr<const DenseVectorSpace> y_c_owner_space_; 
+    SmartPtr<const DenseVectorSpace> y_c_owner_space_;
     /** owner space of y_d */
-    SmartPtr<const DenseVectorSpace> y_d_owner_space_; 
+    SmartPtr<const DenseVectorSpace> y_d_owner_space_;
     /** owner space of z_L */
-    SmartPtr<const DenseVectorSpace> z_L_owner_space_; 
+    SmartPtr<const DenseVectorSpace> z_L_owner_space_;
     /** owner space of z_U */
-    SmartPtr<const DenseVectorSpace> z_U_owner_space_; 
+    SmartPtr<const DenseVectorSpace> z_U_owner_space_;
 
   };
 

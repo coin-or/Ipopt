@@ -7,7 +7,7 @@
 #ifndef __ASINDEXPCALCULATOR_HPP__
 #define __ASINDEXPCALCULATOR_HPP__
 
-#include "AsPCalculator.hpp"
+#include "SensPCalculator.hpp"
 
 namespace Ipopt
 {
@@ -23,7 +23,7 @@ namespace Ipopt
 
     IndexPCalculator(SmartPtr<AsBacksolver> backsolver,
 		     SmartPtr<SchurData> A_data);
-    
+
     virtual ~IndexPCalculator();
 
     /** Overloaded from PCalculator */
@@ -31,7 +31,7 @@ namespace Ipopt
                                 const std::string& prefix);
 
     virtual bool ComputeP();
-    
+
     virtual bool GetSchurMatrix(const SmartPtr<const SchurData>& B, SmartPtr<Matrix>& S);
 
     virtual void PrintImpl(const Journalist& jnlst,
@@ -44,16 +44,16 @@ namespace Ipopt
   private:
 
     /** Rows of P = Rows of KKT */
-    Index nrows_; 
+    Index nrows_;
 
     /** Cols of P */
     Index ncols_;
-    
+
     std::map< Index, SmartPtr<PColumn> > cols_;
 
   };
 
-  class PColumn : public ReferencedObject 
+  class PColumn : public ReferencedObject
   {
     /** This class provides an easy interface for PCalculators with data where columns are
      *  not necessarily in adjacent parts of memory. */
@@ -67,8 +67,8 @@ namespace Ipopt
 
     virtual const Number* Values() const;
 
-  private: 
-    
+  private:
+
     Index nrows_;
     Number* val_;
   };

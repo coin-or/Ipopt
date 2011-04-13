@@ -5,11 +5,11 @@
 // Date   : 2009-05-16
 
 
-#include "AsStdStepCalc.hpp"
+#include "SensStdStepCalc.hpp"
 #include "IpDenseVector.hpp"
 #include "IpIteratesVector.hpp"
 #include "IpBlas.hpp"
-#include "AsIndexSchurData.hpp"
+#include "SensIndexSchurData.hpp"
 
 
 namespace Ipopt

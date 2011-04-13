@@ -7,8 +7,8 @@
 #ifndef __ASSCHURDRIVER_HPP__
 #define __ASSCHURDRIVER_HPP__
 
-#include "AsSchurData.hpp"
-#include "AsPCalculator.hpp"
+#include "SensSchurData.hpp"
+#include "SensPCalculator.hpp"
 #include "IpVector.hpp"
 #include "IpIteratesVector.hpp"
 
@@ -19,17 +19,17 @@ namespace Ipopt
   {
     /** This class is the interface for any class that deals with the Schur matrix
      *  from the point when it is constructed by the PCalculator to the solution
-     *  against one vector. Specific implementations may also incorporate the 
+     *  against one vector. Specific implementations may also incorporate the
      *  treatment of adding rows/cols (like QPSchur).
      *
-     *  The computations done by this class are 
+     *  The computations done by this class are
      *  1. Solve $S \Delta\nu = r_s
      *  2. Solve $K\Delta s = ... - \Delta nu (really?)*/
 
-  public: 
-    
+  public:
+
     SchurDriver(SmartPtr<PCalculator> pcalc,
-		SmartPtr<SchurData> data_B) 
+		SmartPtr<SchurData> data_B)
       :
       pcalc_(pcalc),
       data_B_(data_B)
@@ -58,12 +58,12 @@ namespace Ipopt
       return ConstPtr(data_B_);
     }
 
-    virtual SmartPtr<SchurData> data_A_nonconst() 
+    virtual SmartPtr<SchurData> data_A_nonconst()
     {
       return pcalc_->data_A_nonconst();
     }
 
-    virtual SmartPtr<SchurData> data_B_nonconst() 
+    virtual SmartPtr<SchurData> data_B_nonconst()
     {
       return data_B_;
     }
@@ -87,14 +87,14 @@ namespace Ipopt
     virtual bool SchurFactorize() =0;
 
     /** Performs a backsolve on S and K */
-    virtual bool SchurSolve(SmartPtr<IteratesVector> lhs, 
+    virtual bool SchurSolve(SmartPtr<IteratesVector> lhs,
 			    SmartPtr<const IteratesVector> rhs,
 			    SmartPtr<Vector> delta_u,
 			    SmartPtr<IteratesVector> sol=NULL)=0; // the vector K^(-1)*r_s which usually should have been computed before.
-			   
+
 
     /** Performs a backsolve on S and K; calls the latter with sol=K^(-1)*r_s=0
-    virtual bool SchurSolve(SmartPtr<IteratesVector> lhs, 
+    virtual bool SchurSolve(SmartPtr<IteratesVector> lhs,
 			    SmartPtr<const IteratesVector> rhs,
 			    SmartPtr<Vector> delta_u) =0;
     */

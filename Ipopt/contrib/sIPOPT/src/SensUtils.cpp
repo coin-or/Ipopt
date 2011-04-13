@@ -5,10 +5,10 @@
 // Date   : 2009-05-19
 
 
-#include "AsNmpcUtils.hpp"
+#include "SensUtils.hpp"
 #include <sstream>
 
-namespace Ipopt 
+namespace Ipopt
 {
 
   Index AsIndexMax(Index length, const Index* x, Index Incr)

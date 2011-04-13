@@ -7,10 +7,10 @@
 #include "MyNmpcTNLP.hpp"
 
 #include "IpIpoptApplication.hpp"
-#include "AsNMPCApplication.hpp"
+#include "SensApplication.hpp"
 #include "IpPDSearchDirCalc.hpp"
 #include "IpIpoptAlg.hpp"
-#include "AsAsNMPCRegOp.hpp"
+#include "SensRegOp.hpp"
 
 int main(int argv, char**argc)
 {
@@ -36,7 +36,7 @@ int main(int argv, char**argc)
     exit(-100);
   }
 
-    
+
   app_ipopt->Initialize();
 
   // create AmplSensTNLP from argc. This is an nlp because we are using our own TNLP Adapter

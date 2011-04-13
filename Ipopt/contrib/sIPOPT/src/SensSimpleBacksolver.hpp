@@ -3,7 +3,7 @@
 // This code is published under the Eclipse Public License.
 //
 // Date    : 2009-04-06
-// 
+//
 // Purpose : This is the same as IpSensitivityCalculator.hpp
 //           It implements the AsBacksolver Interface.
 
@@ -12,7 +12,7 @@
 
 
 #include "IpPDSystemSolver.hpp"
-#include "AsAsBacksolver.hpp"
+#include "SensBacksolver.hpp"
 
 namespace Ipopt {
   class SimpleBacksolver : public AsBacksolver

@@ -4,8 +4,8 @@
 //
 // Date   : 2009-11-19
 
-#include "AsIFTSchurDriver.hpp"
-#include "AsIndexSchurData.hpp"
+#include "SensDenseGenSchurDriver.hpp"
+#include "SensIndexSchurData.hpp"
 
 namespace Ipopt
 {
@@ -63,7 +63,7 @@ namespace Ipopt
   }
 
   /* The functions SchurSolve do IFT step, if S_==NULL, and DenseGenSchurDriver otherwise. */
-  bool IFTSchurDriver::SchurSolve(SmartPtr<IteratesVector> lhs, // new left hand side will be stored here 
+  bool IFTSchurDriver::SchurSolve(SmartPtr<IteratesVector> lhs, // new left hand side will be stored here
 				  SmartPtr<const IteratesVector> rhs, // rhs r_s
 				  SmartPtr<Vector> delta_u,  // should be (u_p - u_0) WATCH OUT FOR THE SIGN! I like it this way, so that u_0+delta_u = u_p, but victor always used it the other way round, so be careful. At the end, delta_nu is saved in here.
 				  SmartPtr<IteratesVector> sol) // the vector K^(-1)*r_s which usually should have been computed before.
@@ -78,7 +78,7 @@ namespace Ipopt
     data_B()->Multiply(*sol, *delta_rhs);
     delta_rhs->Print(Jnlst(),J_VECTOR,J_USER1,"delta_rhs");
     delta_rhs->Scal(-1.0);
-    delta_rhs->Axpy(1.0, *delta_u); 
+    delta_rhs->Axpy(1.0, *delta_u);
     delta_rhs->Print(Jnlst(),J_VECTOR,J_USER1,"rhs 3.48a");
 
     // solve equation (3.48a) for delta_nu
@@ -94,7 +94,7 @@ namespace Ipopt
     new_rhs->Scal(-1.0);
     new_rhs->Print(Jnlst(),J_VECTOR,J_USER1,"new_rhs");
     retval = backsolver_->Solve(lhs, ConstPtr(new_rhs));
-    
+
     return retval;
   }
 }

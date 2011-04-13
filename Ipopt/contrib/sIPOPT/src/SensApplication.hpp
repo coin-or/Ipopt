@@ -8,8 +8,8 @@
 #define __ASNMPCAPPLICATION_HPP__
 
 #include "IpReferenced.hpp"
-#include "AsNmpcUtils.hpp"
-#include "AsNmpcUtils.hpp"
+#include "SensUtils.hpp"
+#include "SensUtils.hpp"
 #include "IpRegOptions.hpp"
 
 #include "IpIpoptApplication.hpp"
@@ -57,7 +57,7 @@ namespace Ipopt
 
 
   private:
-  
+
     // standard constructor just so it can't be used
     //    NmpcApplication();
 
