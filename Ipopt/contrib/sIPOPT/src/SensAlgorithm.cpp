@@ -4,8 +4,8 @@
 //
 // Date   : 2009-05-16
 
-#include "AsAsNmpController.hpp"
-#include "AsNmpcUtils.hpp"
+#include "SensAlgorithm.hpp"
+#include "SensUtils.hpp"
 
 
 namespace Ipopt

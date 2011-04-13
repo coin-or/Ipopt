@@ -8,15 +8,15 @@
 #define __ASREDUCEDHESSIANCALCULATOR_HPP__
 
 #include "IpAlgStrategy.hpp"
-#include "AsSchurData.hpp"
-#include "AsPCalculator.hpp"
+#include "SensSchurData.hpp"
+#include "SensPCalculator.hpp"
 
 namespace Ipopt
 {
 
   class ReducedHessianCalculator : public AlgorithmStrategyObject
   {
-    /** This is the interface for the actual controller. It handles 
+    /** This is the interface for the actual controller. It handles
      *  Data input to the controller (measurement) and returns controls */
   public:
     ReducedHessianCalculator(SmartPtr<SchurData> hess_data,

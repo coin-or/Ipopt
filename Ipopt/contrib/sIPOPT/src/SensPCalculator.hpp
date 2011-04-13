@@ -8,8 +8,8 @@
 #define __ASPCALCULATOR_HPP__
 
 #include "IpAlgStrategy.hpp"
-#include "AsSimpleBacksolver.hpp"
-#include "AsSchurData.hpp"
+#include "SensSimpleBacksolver.hpp"
+#include "SensSchurData.hpp"
 
 namespace Ipopt
 {
@@ -17,7 +17,7 @@ namespace Ipopt
   class PCalculator : public AlgorithmStrategyObject
   {
     /** This class is the interface for implementations of any class that calculates the matrix $P =K^{-1}A
-     *  of the following matrix: 
+     *  of the following matrix:
      *  \begin{eqnarray}
      *  \left(\begin{array}{cc}
      *  K & A\\
@@ -36,7 +36,7 @@ namespace Ipopt
       data_A_(A_data)
     {
     }
-    
+
     virtual ~PCalculator()
     {
     }
@@ -50,7 +50,7 @@ namespace Ipopt
 
     /** Function to start the computation of  P from E_0 and KKT*/
     virtual bool ComputeP()=0;
-    
+
     /** Function to extract a SchurMatrix corresponding to $B K^{-1} A$. If B==NULL, use A=B*/
     virtual bool GetSchurMatrix(const SmartPtr<const SchurData>& B, SmartPtr<Matrix>& S) =0;
 
@@ -85,7 +85,7 @@ namespace Ipopt
       }
     }
 
-    /** Accessor methods for data and backsolver. This unconstness seems 
+    /** Accessor methods for data and backsolver. This unconstness seems
      *  kind of dangerous but I don't think there is a way around it. Anyway,
      *  there is no difference between this and the IpData() method of AlgStrategy.*/
     SmartPtr<AsBacksolver> Solver() const
@@ -103,7 +103,7 @@ namespace Ipopt
       return data_A_;
     }
 
-    void reset_data_A() 
+    void reset_data_A()
     {
       data_A_ = data_A_init->MakeNewSchurDataCopy();
     }
@@ -115,7 +115,7 @@ namespace Ipopt
     SmartPtr<const SchurData> data_A_init;
     SmartPtr<SchurData> data_A_;
 
-    
+
   };
 
 

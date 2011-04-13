@@ -4,15 +4,15 @@
 //
 // Date   : 2009-05-27
 
-#include "AsIndexPCalculator.hpp"
-#include "AsIndexSchurData.hpp"
+#include "SensIndexPCalculator.hpp"
+#include "SensIndexSchurData.hpp"
 #include "IpDenseVector.hpp"
 #include "IpDenseGenMatrix.hpp"
 //#include "IpDenseSymMatrix.hpp"
 #include "IpBlas.hpp"
 #include <vector>
 
-namespace Ipopt 
+namespace Ipopt
 {
 #if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 1;
@@ -38,7 +38,7 @@ namespace Ipopt
   {
     DBG_START_METH("IndexPCalculator::InitializeImpl", dbg_verbosity);
 
-    SmartPtr<const IteratesVector> iv = IpData().curr(); 
+    SmartPtr<const IteratesVector> iv = IpData().curr();
     nrows_ = 0;
     for (Index i=0; i<iv->NComps(); ++i) {
       nrows_+=iv->GetComp(i)->Dim();
@@ -68,19 +68,19 @@ namespace Ipopt
 
       find_it = cols_.find(col);
       if (find_it==cols_.end()) {
-	// column is in data_A but not in P-matrix ->create 
+	// column is in data_A but not in P-matrix ->create
 	data_A()->GetRow(curr_schur_row, *col_vec);
 	retval = Solver()->Solve(sol_vec, ConstPtr(col_vec));
-	DBG_ASSERT(retval);	
+	DBG_ASSERT(retval);
 
 	/* This part is for displaying norm2(I_z*K^(-1)*I_1) */
 	DBG_PRINT((dbg_verbosity,"\ncurr_schur_row=%d, ",curr_schur_row));
 	DBG_PRINT((dbg_verbosity,"norm2(z)=%23.16e\n",sol_vec->x()->Nrm2()));
 	/* end displaying norm2 */
-	
+
 	DBG_ASSERT(col_values== NULL);
 	col_values = new Number[nrows_];
-	curr_dim = 0;	
+	curr_dim = 0;
 	 for (Index j=0; j<sol_vec->NComps(); ++j) {
 	   comp_vec = dynamic_cast<const DenseVector*>(GetRawPtr(sol_vec->GetComp(j)));
 	   comp_values = comp_vec->Values();
@@ -92,12 +92,12 @@ namespace Ipopt
       }
       curr_schur_row++;
     }
-    
-    return retval;    
+
+    return retval;
   }
 
   bool IndexPCalculator::GetSchurMatrix(const SmartPtr<const SchurData>& B, SmartPtr<Matrix>& S)
-  {  
+  {
     DBG_START_METH("IndexPCalculator::GetSchurMatrix", dbg_verbosity);
     bool retval = true;
 
@@ -135,7 +135,7 @@ namespace Ipopt
     if (ncols_!=data_A()->GetNRowsAdded()) {
 	  ncols_ = data_A()->GetNRowsAdded();
 	  ComputeP();
-    }    
+    }
     /*
     DBG_ASSERT(dS->NRows()==dS->NCols());
     DBG_ASSERT(dS->NRows()==data_A()->GetNRowsAdded());

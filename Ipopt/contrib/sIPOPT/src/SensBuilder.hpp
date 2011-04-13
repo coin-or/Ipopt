@@ -9,10 +9,10 @@
 
 
 #include "IpReferenced.hpp"
-#include "AsAsNmpController.hpp"
+#include "SensAlgorithm.hpp"
 #include "IpPDSystemSolver.hpp"
-#include "AsNmpcUtils.hpp"
-#include "AsReducedHessianCalculator.hpp"
+#include "SensUtils.hpp"
+#include "SensReducedHessianCalculator.hpp"
 
 
 namespace Ipopt
@@ -22,7 +22,7 @@ namespace Ipopt
   class SchurBuilder : public ReferencedObject
   {
     /** This class sets up everything necessary and
-     *  builds the P matrix which is an intermediate step 
+     *  builds the P matrix which is an intermediate step
      *  in calculating the schur matrix. */
   public:
     SchurBuilder();

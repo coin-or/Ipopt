@@ -8,7 +8,7 @@
 #define __ASSENSSTEPCALC_HPP__
 
 #include "IpAlgStrategy.hpp"
-#include "AsSchurDriver.hpp"
+#include "SensSchurDriver.hpp"
 
 
 namespace Ipopt
@@ -39,7 +39,7 @@ namespace Ipopt
       options.GetBoolValue("sens_boundcheck", do_boundcheck_, prefix);
       return true;
     }
-    
+
     bool Do_Boundcheck() const
     {
       return do_boundcheck_;
@@ -64,7 +64,7 @@ namespace Ipopt
     /** This is the main algorithmic function of this class; It calculates
      *  a step using its SchurDriver, checks bounds, and returns it */
     virtual bool Step(DenseVector& delta_u, IteratesVector& sol) =0;
-    
+
 
   private:
     SmartPtr<SchurDriver> driver_;

@@ -4,7 +4,7 @@
 //
 // Date   : 2009-08-01
 
-#include "AsReducedHessianCalculator.hpp"
+#include "SensReducedHessianCalculator.hpp"
 #include "IpDenseGenMatrix.hpp"
 
 namespace Ipopt
@@ -38,26 +38,26 @@ namespace Ipopt
   bool ReducedHessianCalculator::ComputeReducedHessian()
   {
     DBG_START_METH("ReducedHessianCalculator::ComputeReducedHessian", dbg_verbosity);
-    
+
     Index dim_S = hess_data_->GetNRowsAdded();
     //SmartPtr<DenseGenMatrixSpace> S_space = new DenseGenMatrixSpace(dim_S, dim_S);
     //SmartPtr<DenseGenMatrix> S = new DenseGenMatrix(GetRawPtr(S_space));
     SmartPtr<Matrix> S;
     bool retval = pcalc_->GetSchurMatrix(GetRawPtr(hess_data_), S);
-    
+
     SmartPtr<DenseSymMatrix> S_sym = dynamic_cast<DenseSymMatrix*>(GetRawPtr(S));
     if (!IsValid(S_sym)) {
       std::exception exc;
       throw (exc);
     }
-    
+
     bool have_x_scaling, have_c_scaling, have_d_scaling;
     have_x_scaling = IpNLP().NLP_scaling()->have_x_scaling();
     have_c_scaling = IpNLP().NLP_scaling()->have_c_scaling();
     have_d_scaling = IpNLP().NLP_scaling()->have_d_scaling();
 
     if (have_x_scaling || have_c_scaling || have_d_scaling) {
-      Jnlst().Printf(J_WARNING, J_MAIN, 
+      Jnlst().Printf(J_WARNING, J_MAIN,
 		     "\n"
 		     "-------------------------------------------------------------------------------\n"
 		     "                              *** WARNING ***\n"
@@ -72,12 +72,12 @@ namespace Ipopt
       if (have_d_scaling) {
 	Jnlst().Printf(J_WARNING, J_MAIN, "*** inequality constraints\n");
       }
-      Jnlst().Printf(J_WARNING, J_MAIN, 
+      Jnlst().Printf(J_WARNING, J_MAIN,
 		     "enabled.\n"
 		     "A correct unscaled solution of the reduced hessian cannot be guaranteed in this\n"
 		     "case. Please consider rerunning with scaling turned off.\n"
 		     "-------------------------------------------------------------------------------\n\n");
-      
+
     }
 
     // Unscale by objective factor and multiply by (-1)
@@ -95,11 +95,11 @@ namespace Ipopt
       SmartPtr<DenseGenMatrix> eigenvectors = new DenseGenMatrix(GetRawPtr(eigenvectorspace));
       SmartPtr<DenseVectorSpace> eigenvaluesspace = new DenseVectorSpace(dim_S);
       SmartPtr<DenseVector> eigenvalues = new DenseVector(GetRawPtr(eigenvaluesspace));
-    
+
       eigenvectors->ComputeEigenVectors(*S_sym, *eigenvalues);
       eigenvalues->Print(Jnlst(),J_INSUPPRESSIBLE,J_USER1,"Eigenvalues of reduced hessian matrix");
     }
-    
+
     return retval;
   }
 

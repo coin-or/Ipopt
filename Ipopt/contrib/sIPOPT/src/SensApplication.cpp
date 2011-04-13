@@ -5,10 +5,10 @@
 // Date   : 2009-05-11
 
 
-#include "AsNMPCApplication.hpp"
-#include "AsSchurBuilder.hpp"
-#include "AsNmpcUtils.hpp"
-#include "AsAsNMPCRegOp.hpp"
+#include "SensApplication.hpp"
+#include "SensBuilder.hpp"
+#include "SensUtils.hpp"
+#include "SensRegOp.hpp"
 
 // Ipopt includes
 #include "IpPDSearchDirCalc.hpp"
@@ -58,13 +58,6 @@ namespace Ipopt
 			       "no", "don't check bounds and do another SchurSolve",
 			       "yes", "check bounds and resolve Schur decomposition",
 			       "If this option is activated, the algorithm will check the iterate after an initilal Schursolve and will resolve the decomposition if any bounds are not satisfied");
-    roptions->AddStringOption2(
-			       "nmpc_calc_style",
-			       "Determines which implementation of SchurData and PCalculator will be used",
-			       "index",
-			       "std", "use StdPCalculator and StdSchurData",
-			       "index", "use IndexPCalculator and IndexSchurData",
-			       "Determines which implementation of SchurData and PCalculator will be used. Only the index style can do boundchecking.");
     roptions->AddLowerBoundedNumberOption(
 					  "sens_bound_eps",
 					  "Bound accuracy within which a bound still is considered to be valid",

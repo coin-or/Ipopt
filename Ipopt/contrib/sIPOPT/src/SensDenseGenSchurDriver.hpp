@@ -7,8 +7,8 @@
 #ifndef __ASIFTSCHURDRIVER_HPP__
 #define __ASIFTSCHURDRIVER_HPP__
 
-#include "AsSchurDriver.hpp"
-#include "AsAsBacksolver.hpp"
+#include "SensSchurDriver.hpp"
+#include "SensBacksolver.hpp"
 #include "IpDenseGenMatrix.hpp"
 
 namespace Ipopt
@@ -17,8 +17,8 @@ namespace Ipopt
   class IFTSchurDriver: public SchurDriver
   {
 
-  public: 
-    
+  public:
+
     IFTSchurDriver(SmartPtr<AsBacksolver> backsolver,
 		   SmartPtr<PCalculator> pcalc,
 		   SmartPtr<SchurData> data_B);
@@ -32,30 +32,30 @@ namespace Ipopt
     virtual bool SchurFactorize();
 
     /** Performs a backsolve on S and : Solves the system
-     *  
+     *
      *  \f$\left[\begin{array}{c|c}
      *  K & E\\\hline
-     *  E^T & 0 
+     *  E^T & 0
      *  \end{array}
-     *  \right] 
-     *  \left[\begin{array}{c}x\\y\end{array}\right] = 
+     *  \right]
+     *  \left[\begin{array}{c}x\\y\end{array}\right] =
      *  \left[\begin{array}{c}f\\g\end{array}\right]$\f
      *
      *  y will be stored in g at exit.
-     *  Kf should hold 
+     *  Kf should hold
      *
      *  \f$K^{-1}f$\f
      *
      *  if it has been computed previously. If it is not available, just
      *  pass in Kf=NULL and it will be computed internally.
      */
-    virtual bool SchurSolve(SmartPtr<IteratesVector> x, 
+    virtual bool SchurSolve(SmartPtr<IteratesVector> x,
 			    SmartPtr<const IteratesVector> f,
 			    SmartPtr<Vector> g,
 			    SmartPtr<IteratesVector> Kf=NULL);
 
-    /** DEPRECATED Performs a backsolve on S and K 
-    virtual bool SchurSolve(SmartPtr<IteratesVector> lhs, 
+    /** DEPRECATED Performs a backsolve on S and K
+    virtual bool SchurSolve(SmartPtr<IteratesVector> lhs,
 			    SmartPtr<const IteratesVector> rhs,
 			    SmartPtr<Vector> delta_u);
     */

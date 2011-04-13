@@ -6,7 +6,7 @@
 
 
 #include "AsAmplNmpcTNLP.hpp"
-#include "AsNmpcUtils.hpp"
+#include "SensUtils.hpp"
 #include "IpDenseVector.hpp"
 #include "IpIteratesVector.hpp"
 #include "IpBlas.hpp"
