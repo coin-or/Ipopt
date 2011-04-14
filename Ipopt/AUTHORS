@@ -87,7 +87,8 @@ Contributors:
 
 - Hans Pirnay (RWTH Aachen)
   Rodrigo Lopez-Negrete (Carnegie Mellon University)
-  Advanced Step Nonlinear Model Predictive Control Toolbox
+
+  Sensitivity Based on IPOPT
 
   contrib/sIPOPT  (formerly called contrib/AsNMPC)
 
