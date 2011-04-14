@@ -1,25 +1,25 @@
                                     INSTALL
                                     =======
 
-Just like IPOPT, the AsNMPC code is separated into a library
-"libasnmpc" that holds the main algorithm, and an executable that acts
+Just like IPOPT, the sIPOPT code is separated into a library
+"libsipopt" that holds the main algorithm, and an executable that acts
 as a solver for AMPL. By default, the library is installed in the same
 directory as libipopt, and the executable is installed in the same
 directory as IPOPT's ampl executable.
 
-The AsNMPC code has only been compiled and tested on Linux
+The sIPOPT code has only been compiled and tested on Linux
 machines. Any experience with building and running the code on other
 systems is greatly appreciated. 
 
-If you have compiled IPOPT successfully, building AsNMPC should be no
-problem either. AsNMPC links to the IPOPT library, so you should
+If you have compiled IPOPT successfully, building sIPOPT should be no
+problem either. sIPOPT links to the IPOPT library, so you should
 compile that first. If you want to make use of the AMPL options that
-are specific to AsNMPC, you need to configure with the option 
+are specific to sIPOPT, you need to configure with the option 
 
 ADD_CPPFLAGS="-DENABLE_RUN_MPC"
 
 After successful compilation of IPOPT, change into the directory
-IPOPT_BUILD_DIR/Ipopt/contrib/AsNMPC and run 
+IPOPT_BUILD_DIR/Ipopt/contrib/sIPOPT and run 
 
 make && make install
 

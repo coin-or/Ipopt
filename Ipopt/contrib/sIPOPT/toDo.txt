@@ -1,7 +1,7 @@
 AmplTNLP
 - rewrite get_suffixhandler as const
 
-AsAmplNmpcTNLP
+SensAmplTNLP
 - errorcheck in get_number_suffix for NULL suffix
 - remove get_bounds_info ?
 
@@ -27,24 +27,24 @@ AsIndexPCalculator
 SchurDriver
 + write InitializeImpl
 
-AsNmpController
+SensController
 + write InitializeImpl
 
-AsNMPCApplication
+SensApplication
 - in function SetIpoptAlgorithmObjects: rewrite checking of consistency of inputs
 
-NmpcTNLPAdapter
+SensTNLPAdapter
 + write inverse of ResortX in TNLPAdapter
 
 MakeFile 
-+ Remove AsAsNmpcSetup if decided so
++ Remove AsSenscSetup if decided so
 
 General
 + include print functions for all major classes. Allows deep testing
 + include #ifndefs in all new header files
 + make sure debug mode is switched on in every cpp file
 - think about using the same ownerspace for all u-vectors - makes use of meta-data possible
-+ decide on AsAsNmpcSetup (decision made: get rid of it)
++ decide on AsSenscSetup (decision made: get rid of it)
 + Add options to decide which Pcalc to use
 + Add options to decide which SchurData to use (this is in a lot of places...)
 - Add options to decide which SchurDriver to use
@@ -55,7 +55,7 @@ General
 - where does the function go that resets the SchurData??
 - measure time for each action
 - decent output at beginning and end
-+ is AmplNMPCTNLP necessary to be given to NMPCApplication??
++ is SensAmplTNLP necessary to be given to SensApplication??
 - the measurement class should go outside the library so everyone can/must write their own measurement class
 
 Milestones
