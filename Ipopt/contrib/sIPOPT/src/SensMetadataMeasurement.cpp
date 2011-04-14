@@ -58,8 +58,6 @@ namespace Ipopt
 
       n_idx_ = AsIndexMax((Index)tmp_idx.size(), &tmp_idx[0], 1);
 
-      options.GetStringValue("select_step", select_step_, "");
-
     }
 
     return true;
@@ -121,12 +119,7 @@ namespace Ipopt
     const std::vector<Number> val_ipopt = x_owner_space_->GetNumericMetaData(statevalue.c_str());
 
     SmartPtr<DenseVectorSpace> delta_u_space;
-    if (select_step_=="advanced" || select_step_=="ift") {
-      delta_u_space = new DenseVectorSpace(2*n_idx_);
-    }
-    else if (select_step_=="sensitivity" || select_step_=="iftsensitivity") {
-      delta_u_space = new DenseVectorSpace(n_idx_);
-    }
+    delta_u_space = new DenseVectorSpace(n_idx_);
 
     SmartPtr<DenseVector> delta_u = new DenseVector(GetRawPtr(ConstPtr(delta_u_space)));
     Number* du_val = delta_u->Values();
@@ -138,20 +131,6 @@ namespace Ipopt
       if (idx_ipopt[i]>0) {
 	du_val[idx_ipopt[i]-1] = val_ipopt[i]-u_0_val[i]; //initial_val[idx_ipopt[i]-1];
 	//du_val[idx_ipopt[i]-1] = val_ipopt[i];
-      }
-    }
-
-    if (select_step_=="advanced" || select_step_=="ift") {
-      std::vector<Index> constr_ipopt = GetInitialEqConstraints();
-      SmartPtr<const IteratesVector> it = IpData().curr();
-      Index n_base = it->x()->Dim() + it->s()->Dim();
-
-      const Number* u_0_lambda = dynamic_cast<const DenseVector*>(GetRawPtr(IpData().trial()->y_c()))->Values();
-
-      Index ind_it = constr_ipopt.size();
-      for (std::vector<Index>::iterator it=constr_ipopt.begin(); it!=constr_ipopt.end(); ++it) {
-	DBG_PRINT((dbg_verbosity,"constr-nr. %d : %f\n", *it-n_base,-u_0_lambda[*it-n_base]));
-	du_val[ind_it++] = -u_0_lambda[*it-n_base];
       }
     }
 

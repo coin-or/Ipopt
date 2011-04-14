@@ -63,48 +63,15 @@ namespace Ipopt
     SmartPtr<SchurData> E_0;
     E_0 = new IndexSchurData();
 
-    std::string select_step;
-    options.GetStringValue("select_step", select_step, "");
-    DBG_PRINT((dbg_verbosity, "Selected step is %s\n", select_step.c_str()));
-
     std::vector<Index> initial_c = measurement->GetInitialEqConstraints(); // type: List
-    if (select_step=="advanced") {
-      std::vector<Index> z_k_index = measurement->GetNmpcState(1); // type: Index
-
-      E_0->SetData_Index(z_k_index.size(), &z_k_index[0]);
-
-      std::vector<Index> delta_u_sort_empty;
-      Index new_du_size_empty=0;
-
-      E_0->AddData_List(initial_c, delta_u_sort_empty,new_du_size_empty,1);
-    }
-    else if (select_step=="sensitivity" || select_step=="iftsensitivity") {
-      E_0->SetData_List(initial_c);
-    }
-    else if (select_step=="ift") {
-      /* For the IFT-step, the variables have to be ordered the other way around:
-	 The delta_u for the lambda_0 goes into the line of z_0
-	 and vice versa. */
-      std::vector<Index> z_k_index = measurement->GetNmpcState(1); // type: Index
-      Index i_c_size = initial_c.size();
-      Index count = i_c_size;
-      std::vector<Index>::iterator it=z_k_index.begin();
-      while (it!=z_k_index.end() && count<2*i_c_size) {
-	if (*it>0) {
-	  initial_c.push_back(*it+i_c_size);
-	}
-	++it;
-      }
-      E_0->SetData_List(initial_c);
-    }
-
+    E_0->SetData_List(initial_c);
     E_0->Print(jnlst,J_VECTOR,J_USER1,"E_0");
 
     SmartPtr<PCalculator> pcalc;
-    if (select_step=="advanced" || select_step=="sensitivity") { // don't create pcalculator for IFT step
-      // Check options which PCalculator to use here
-      pcalc = new IndexPCalculator(backsolver, E_0);
-
+    bool bound_check;
+    options.GetBoolValue("sens_boundcheck", bound_check, prefix);
+    if (bound_check) {
+      pcalc = new IndexPCalculator(backsolver, new IndexSchurData());
       bool retval = pcalc->Initialize(jnlst,
 				      ip_nlp,
 				      ip_data,
@@ -112,32 +79,11 @@ namespace Ipopt
 				      options,
 				      prefix);
       DBG_ASSERT(retval);
-      retval = pcalc->ComputeP();
-      //pcalc->Print(jnlst,J_VECTOR,J_USER1,"PCalc");
-      if (!retval) {
-	// Throw exception that P calculation failed
-      }
     }
-    else { // ift steps get an empty pcalculator if boundcheck is on (for fix-relax)
-      bool bound_check;
-      options.GetBoolValue("sens_boundcheck", bound_check, prefix);
-      if (bound_check) {
-	pcalc = new IndexPCalculator(backsolver, new IndexSchurData());
-	bool retval = pcalc->Initialize(jnlst,
-					ip_nlp,
-					ip_data,
-					ip_cq,
-					options,
-					prefix);
-	DBG_ASSERT(retval);
-      }
-    }
-
 
     // Find out how many steps there are and create as many SchurSolveDrivers
     int n_sens_steps;
     options.GetIntegerValue("n_sens_steps",n_sens_steps,prefix);
-    //DBG_ASSERT(n_sens_steps<2); // for testing the new formula, can't do more!
 
     // Create std::vector container in which we are going to keep the SchurDrivers
     std::vector< SmartPtr<SchurDriver> > driver_vec(n_sens_steps);
@@ -151,27 +97,7 @@ namespace Ipopt
     /** THIS FOR-LOOP should be done better with a better
      *  Measurement class. This should get it's own branch! */
     for (Index i=0; i<n_sens_steps; ++i) {
-      if (select_step=="advanced") {
-	assert(false);
-	//driver_vec[i] = new DenseGenSchurDriver(backsolver, pcalc, E_0);
-      }
-      else if (select_step=="ift" || "iftsensitivity") {
-	driver_vec[i] = new IFTSchurDriver(backsolver, pcalc,E_0);
-      } else if (select_step=="sensitivity") {
-	// Create SchurDriver from pcalc and suffix indices
-	SmartPtr<SchurData> E_i;
-	E_i = new IndexSchurData();
-
-	sens_state_list = measurement->GetNmpcState(i+1);
-	DBG_PRINT((dbg_verbosity, "sens_state_list.size()=%d", sens_state_list.size()));
-	// E_i->SetData_List(sens_state_list); // this is obsolete since Measurement class changed behaviour and now outputs indices!
-	E_i->SetData_Index(sens_state_list.size(),&sens_state_list[0]);
-	E_i_name = "E_";
-	append_Index(E_i_name, i+1);
-	E_i->Print(jnlst,J_VECTOR,J_USER1,E_i_name.c_str());
-	assert(false);
-	//driver_vec[i] = new DenseGenSchurDriver(backsolver, pcalc, E_i);
-      }
+      driver_vec[i] = new IFTSchurDriver(backsolver, pcalc,E_0);
       driver_vec[i]->Initialize(jnlst,
 				ip_nlp,
 				ip_data,
