@@ -35,10 +35,6 @@ namespace Ipopt
      *  This std::vector is used in the construction of the A-SchurData for the Schur Decomposition. */
     virtual std::vector<Index> GetInitialEqConstraints() =0;
 
-    /** This function returns a std::vector holding the indices of the variables indexed
-     *  as sens_state_i */
-    virtual std::vector<Index> GetNmpcState(Index i) =0;
-
     /** This function returns delta_u. It should use the values of IpData().trial()->x()*/
     virtual SmartPtr<DenseVector> GetMeasurement(Index measurement_number) =0;
 

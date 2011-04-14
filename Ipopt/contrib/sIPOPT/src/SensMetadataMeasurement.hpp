@@ -29,8 +29,6 @@ namespace Ipopt
     /* measurement methods */
     virtual std::vector<Index> GetInitialEqConstraints();
 
-    virtual std::vector<Index> GetNmpcState(Index i);
-
     virtual SmartPtr<DenseVector> GetMeasurement(Index measurement_number);
 
     virtual void SetSolution(Index measurement_number, SmartPtr<IteratesVector> sol);

@@ -81,26 +81,6 @@ namespace Ipopt
     return retval;
   }
 
-  std::vector<Index> MetadataMeasurement::GetNmpcState(Index state_number)
-  {
-    DBG_START_METH("MetadataMeasurement::GetNmpcState", dbg_verbosity);
-
-    std::string state      = "sens_state_";
-    append_Index(state, state_number);
-
-    const std::vector<Index> idx_ipopt = x_owner_space_->GetIntegerMetaData(state.c_str());
-
-    std::vector<Index> retval = idx_ipopt;
-    /*
-      for (Index i=0; i<idx_ipopt.size(); ++i) {
-      if (idx_ipopt[i]>0) {
-      retval.push_back(i);
-      }
-      }
-    */
-    return retval;
-  }
-
   SmartPtr<DenseVector> MetadataMeasurement::GetMeasurement(Index measurement_number)
   {
     DBG_START_METH("MetadataMeasurement::GetMeasurement", dbg_verbosity);
