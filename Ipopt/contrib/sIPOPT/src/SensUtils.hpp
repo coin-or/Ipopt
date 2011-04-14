@@ -5,8 +5,8 @@
 // Date   : 2009-05-14
 
 
-#ifndef __ASNMPCUTILS_HPP__
-#define __ASNMPCUTILS_HPP__
+#ifndef __SENSCUTILS_HPP__
+#define __SENSCUTILS_HPP__
 
 #include "IpUtils.hpp"
 #include <string>

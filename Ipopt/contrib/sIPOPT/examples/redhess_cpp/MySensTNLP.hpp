@@ -4,23 +4,23 @@
 //
 // Date   : 2010-10-04
 
-#ifndef __MYNMPCNLP_HPP__
-#define __MYNMPCNLP_HPP__
+#ifndef __MYSENSNLP_HPP__
+#define __MYSENSNLP_HPP__
 
 #include "IpTNLP.hpp"
 
 namespace Ipopt
 {
   
-  class MyNmpcTNLP : public TNLP
+  class MySensTNLP : public TNLP
   {
   public:
 
     /** default constructor */
-    MyNmpcTNLP();
+    MySensTNLP();
 
     /** default destructor */
-    virtual ~MyNmpcTNLP();
+    virtual ~MySensTNLP();
 
     /**@name Overloaded from TNLP */
     //@{
@@ -98,8 +98,8 @@ namespace Ipopt
      *  
      */
     //@{
-    MyNmpcTNLP(const MyNmpcTNLP&);
-    MyNmpcTNLP& operator=(const MyNmpcTNLP&);
+    MySensTNLP(const MySensTNLP&);
+    MySensTNLP& operator=(const MySensTNLP&);
     //@}
   };
 

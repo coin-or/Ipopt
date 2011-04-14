@@ -123,41 +123,41 @@ namespace Ipopt
   {
     DBG_START_METH("MetadataMeasurement::SetSolution", dbg_verbosity);
 
-    std::string nmpc_sol = "sens_sol_state_";
-    append_Index(nmpc_sol, measurement_number);
+    std::string sens_sol = "sens_sol_state_";
+    append_Index(sens_sol, measurement_number);
 
     const Number* sol_x_val = dynamic_cast<const DenseVector*>(GetRawPtr(sol->x()))->Values();
     std::vector<Number> x_sol = std::vector<Number>(sol_x_val, sol_x_val+sol->x()->Dim());
     SmartPtr<DenseVectorSpace> x_owner_space_nonconst = const_cast<DenseVectorSpace*>(GetRawPtr(x_owner_space_));
-    x_owner_space_nonconst->SetNumericMetaData(nmpc_sol, x_sol);
+    x_owner_space_nonconst->SetNumericMetaData(sens_sol, x_sol);
 
     SmartPtr<const DenseVector> s_dv = dynamic_cast<const DenseVector*>(GetRawPtr(sol->s()));
     if (IsValid(s_dv)) {
       const Number* sol_s_val = s_dv->Values();
       std::vector<Number> s_sol = std::vector<Number>(sol_s_val, sol_s_val+sol->s()->Dim());
       SmartPtr<DenseVectorSpace> s_owner_space_nonconst = const_cast<DenseVectorSpace*>(GetRawPtr(s_owner_space_));
-      s_owner_space_nonconst->SetNumericMetaData(nmpc_sol, s_sol);
+      s_owner_space_nonconst->SetNumericMetaData(sens_sol, s_sol);
     }
 
     const Number* sol_y_c_val = dynamic_cast<const DenseVector*>(GetRawPtr(sol->y_c()))->Values();
     std::vector<Number> y_c_sol = std::vector<Number>(sol_y_c_val, sol_y_c_val+sol->y_c()->Dim());
     SmartPtr<DenseVectorSpace> y_c_owner_space_nonconst = const_cast<DenseVectorSpace*>(GetRawPtr(y_c_owner_space_));
-    y_c_owner_space_nonconst->SetNumericMetaData(nmpc_sol, y_c_sol);
+    y_c_owner_space_nonconst->SetNumericMetaData(sens_sol, y_c_sol);
 
     const Number* sol_y_d_val = dynamic_cast<const DenseVector*>(GetRawPtr(sol->y_d()))->Values();
     std::vector<Number> y_d_sol = std::vector<Number>(sol_y_d_val, sol_y_d_val+sol->y_d()->Dim());
     SmartPtr<DenseVectorSpace> y_d_owner_space_nonconst = const_cast<DenseVectorSpace*>(GetRawPtr(y_d_owner_space_));
-    y_d_owner_space_nonconst->SetNumericMetaData(nmpc_sol, y_d_sol);
+    y_d_owner_space_nonconst->SetNumericMetaData(sens_sol, y_d_sol);
 
     const Number* sol_z_L_val = dynamic_cast<const DenseVector*>(GetRawPtr(sol->z_L()))->Values();
     std::vector<Number> z_L_sol = std::vector<Number>(sol_z_L_val, sol_z_L_val+sol->z_L()->Dim());
     SmartPtr<DenseVectorSpace> z_L_owner_space_nonconst = const_cast<DenseVectorSpace*>(GetRawPtr(z_L_owner_space_));
-    z_L_owner_space_nonconst->SetNumericMetaData(nmpc_sol, z_L_sol);
+    z_L_owner_space_nonconst->SetNumericMetaData(sens_sol, z_L_sol);
 
     const Number* sol_z_U_val = dynamic_cast<const DenseVector*>(GetRawPtr(sol->z_U()))->Values();
     std::vector<Number> z_U_sol = std::vector<Number>(sol_z_U_val, sol_z_U_val+sol->z_U()->Dim());
     SmartPtr<DenseVectorSpace> z_U_owner_space_nonconst = const_cast<DenseVectorSpace*>(GetRawPtr(z_U_owner_space_));
-    z_U_owner_space_nonconst->SetNumericMetaData(nmpc_sol, z_U_sol);
+    z_U_owner_space_nonconst->SetNumericMetaData(sens_sol, z_U_sol);
   }
 
   std::vector<Index> MetadataMeasurement::GetIntegerSuffix(std::string suffix_string)

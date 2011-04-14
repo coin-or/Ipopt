@@ -81,8 +81,8 @@ namespace Ipopt
 			       "no", "don't run sIPOPT",
 			       "");
     roptions->AddStringOption2(
-			       "nmpc_internal_abort",
-			       "Internal option - if set (internally), nmpc algorithm is not conducted",
+			       "sens_internal_abort",
+			       "Internal option - if set (internally), sens algorithm is not conducted",
 			       "no",
 			       "yes", "abort sIPOPT",
 			       "no", "run sIPOPT",
@@ -139,8 +139,8 @@ namespace Ipopt
 
     SensAlgorithmExitStatus retval = SOLVE_SUCCESS;
 
-    bool nmpc_internal_abort, redhess_internal_abort;
-    Options()->GetBoolValue("nmpc_internal_abort", nmpc_internal_abort, "");
+    bool sens_internal_abort, redhess_internal_abort;
+    Options()->GetBoolValue("sens_internal_abort", sens_internal_abort, "");
     Options()->GetBoolValue("redhess_internal_abort", redhess_internal_abort, "");
 
     SolverReturn status = AppReturn2SolverReturn(ipopt_retval_);
@@ -155,7 +155,7 @@ namespace Ipopt
 	jnlst_->Printf(J_WARNING, J_MAIN, "\n\t--------------= Warning =--------------\nInertia correction of primal dual system is too large for meaningful sIPOPT results.\n"
 		       "\t... aborting computation.\n"
 		       "Set option sens_max_pdpert to a higher value (current: %f) to run sIPOPT algorithm anyway\n", max_pdpert);
-	nmpc_internal_abort = true;
+	sens_internal_abort = true;
 	redhess_internal_abort = true;
       }
     }
@@ -175,7 +175,7 @@ namespace Ipopt
       red_hess_calc->ComputeReducedHessian();
     }
 
-    if (run_sens_ && n_sens_steps_>0 && !nmpc_internal_abort) {
+    if (run_sens_ && n_sens_steps_>0 && !sens_internal_abort) {
       SmartPtr<SensBuilder> schur_builder = new SensBuilder();
       const std::string prefix = ""; // I should be getting this somewhere else...
       SmartPtr<SensAlgorithm> controller = schur_builder->BuildSensAlg(*jnlst_,
@@ -255,7 +255,7 @@ namespace Ipopt
 		       "because an error occured.\n"
 		       "See exception message above for details.\n\n");
       }
-      if (run_sens_ && nmpc_internal_abort) {
+      if (run_sens_ && sens_internal_abort) {
 	jnlst_->Printf(J_WARNING, J_MAIN, "\nsIPOPT was not called "
 		       "because an error occured.\n"
 		       "See exception message above for details.\n\n");
@@ -302,7 +302,7 @@ namespace Ipopt
     // Check whether Ipopt solved to optimality - if not, end computation.
     if ( ipopt_retval != Solve_Succeeded ) {
       jnlst_->Printf(J_ERROR, J_MAIN, "sIPOPT: Aborting sIPOPT computation, because IPOPT did not succeed\n\n");
-      options_->SetStringValue("nmpc_internal_abort", "yes");
+      options_->SetStringValue("sens_internal_abort", "yes");
       options_->SetStringValue("redhess_internal_abort", "yes");
     }
 
@@ -334,7 +334,7 @@ namespace Ipopt
     std::string state_value;
     const Index* index;
     const Number* number;
-    Index n_nmpc_indices, n_this_nmpc_indices;
+    Index n_sens_indices, n_this_nmpc_indices;
     // collect information from suffixes
     state = "sens_state_1";
     //index = ampl_tnlp_->get_index_suffix(state.c_str());

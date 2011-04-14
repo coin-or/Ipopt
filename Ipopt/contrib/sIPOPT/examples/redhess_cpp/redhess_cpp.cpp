@@ -4,7 +4,7 @@
 //
 // Date   : 2010-10-04
 
-#include "MyNmpcTNLP.hpp"
+#include "MySensTNLP.hpp"
 
 #include "IpIpoptApplication.hpp"
 #include "SensApplication.hpp"
@@ -40,15 +40,15 @@ int main(int argv, char**argc)
   app_ipopt->Initialize();
 
   // create AmplSensTNLP from argc. This is an nlp because we are using our own TNLP Adapter
-  SmartPtr<TNLP> nmpc_tnlp = new MyNmpcTNLP();
+  SmartPtr<TNLP> sens_tnlp = new MySensTNLP();
 
   app_ipopt->Options()->SetStringValueIfUnset("compute_red_hessian", "yes");
 
   app_sens->Initialize();
 
-  retval = app_ipopt->OptimizeTNLP(nmpc_tnlp);
+  retval = app_ipopt->OptimizeTNLP(sens_tnlp);
 
-  /* give pointers to Ipopt algorithm objects to NMPC Application */
+  /* give pointers to Ipopt algorithm objects to Sens Application */
   app_sens->SetIpoptAlgorithmObjects(app_ipopt, retval);
 
   app_sens->Run();

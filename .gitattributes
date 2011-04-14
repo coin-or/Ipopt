@@ -153,6 +153,8 @@ Ipopt/contrib/sIPOPT/examples/parametric_ampl/ipopt.opt -text
 Ipopt/contrib/sIPOPT/examples/parametric_ampl/parametric.mod -text
 Ipopt/contrib/sIPOPT/examples/parametric_ampl/parametric.run -text
 Ipopt/contrib/sIPOPT/examples/redhess_ampl/red_hess.run -text
+Ipopt/contrib/sIPOPT/examples/redhess_cpp/MySensTNLP.cpp -text
+Ipopt/contrib/sIPOPT/examples/redhess_cpp/MySensTNLP.hpp -text
 Ipopt/depcomp -text
 Ipopt/doc/documentation.pdf -text
 Ipopt/doc/options.tex -text

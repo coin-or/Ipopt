@@ -3,8 +3,8 @@
 // This code is published under the Eclipse Public License.
 //
 
-#ifndef __ASASNMPCREGOP_HPP__
-#define __ASASNMPCREGOP_HPP__
+#ifndef __SENSREGOP_HPP__
+#define __SENSREGOP_HPP__
 
 #include "IpSmartPtr.hpp"
 

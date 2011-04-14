@@ -46,7 +46,7 @@ int main(int argv, char**argc)
 
   retval = app_ipopt->OptimizeTNLP(sens_tnlp);
 
-  /* give pointers to Ipopt algorithm objects to NMPC Application */
+  /* give pointers to Ipopt algorithm objects to Sens Application */
   app_sens->SetIpoptAlgorithmObjects(app_ipopt, retval);
 
   app_sens->Run();

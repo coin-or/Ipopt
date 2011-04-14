@@ -4,8 +4,8 @@
 //
 // Date   : 2009-05-06
 
-#ifndef __ASASNMPCONTROLLER_HPP__
-#define __ASASNMPCONTROLLER_HPP__
+#ifndef __SENSALGORITHM_HPP__
+#define __SENSALGORITHM_HPP__
 
 #include "IpAlgStrategy.hpp"
 #include "SensStepCalc.hpp"

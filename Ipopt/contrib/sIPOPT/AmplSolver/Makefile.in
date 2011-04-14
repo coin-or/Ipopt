@@ -14,7 +14,7 @@ bindir      = @bindir@
 CYGPATH_W   = @CYGPATH_W@
 SRCDIR      = @srcdir@
 ipoptsrcdir  = $(SRCDIR)/../../../src
-asnmpcsrcdir = $(SRCDIR)/../src
+senssrcdir = $(SRCDIR)/../src
 
 CXX         = @CXX@
 CXXFLAGS    = @CXXFLAGS@
@@ -22,26 +22,26 @@ LDFLAGS     = $(CXXFLAGS) @RPATH_FLAGS@
 
 # Include directories (we use the CYGPATH_W variables to allow compilation with Windows compilers)
 #   we also need some Ipopt headers that are not installed, so we add $(ipoptsrcdir)/Algorithm and $(ipoptsrcdir)/LinAlg
-@COIN_HAS_PKGCONFIG_TRUE@INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipoptamplinterface` -I`$(CYGPATH_W) $(ipoptsrcdir)/Algorithm` -I`$(CYGPATH_W) $(ipoptsrcdir)/LinAlg` -I`$(CYGPATH_W) $(asnmpcsrcdir)` $(ADDINCFLAGS)
-@COIN_HAS_PKGCONFIG_FALSE@INCL = -I`$(CYGPATH_W) @abs_include_dir@/coin` @IPOPTLIB_CFLAGS_INSTALLED@ @ASL_CFLAGS_INSTALLED@ -I`$(CYGPATH_W) $(ipoptsrcdir)/Algorithm` -I`$(CYGPATH_W) $(ipoptsrcdir)/LinAlg` -I`$(CYGPATH_W) $(asnmpcsrcdir)` $(ADDINCFLAGS)
+@COIN_HAS_PKGCONFIG_TRUE@INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipoptamplinterface` -I`$(CYGPATH_W) $(ipoptsrcdir)/Algorithm` -I`$(CYGPATH_W) $(ipoptsrcdir)/LinAlg` -I`$(CYGPATH_W) $(senssrcdir)` $(ADDINCFLAGS)
+@COIN_HAS_PKGCONFIG_FALSE@INCL = -I`$(CYGPATH_W) @abs_include_dir@/coin` @IPOPTLIB_CFLAGS_INSTALLED@ @ASL_CFLAGS_INSTALLED@ -I`$(CYGPATH_W) $(ipoptsrcdir)/Algorithm` -I`$(CYGPATH_W) $(ipoptsrcdir)/LinAlg` -I`$(CYGPATH_W) $(senssrcdir)` $(ADDINCFLAGS)
 
 # Linker flags
 @COIN_HAS_PKGCONFIG_TRUE@LIBS = -lsipopt `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipoptamplinterface`
-@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_TRUE@LIBS = /link /libpath:`$(CYGPATH_W) @abs_lib_dir@` libasnmpc.lib libipoptamplinterface.lib libipopt.lib @IPOPTLIB_LIBS_INSTALLED@ @ASL_LIBS_INSTALLED@
-@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_FALSE@LIBS = -L@abs_lib_dir@ -lasnmpc -lipoptamplinterface -lipopt @IPOPTLIB_LIBS_INSTALLED@ @ASL_LIBS_INSTALLED@
+@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_TRUE@LIBS = /link /libpath:`$(CYGPATH_W) @abs_lib_dir@` libsipopt.lib libipoptamplinterface.lib libipopt.lib @IPOPTLIB_LIBS_INSTALLED@ @ASL_LIBS_INSTALLED@
+@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_FALSE@LIBS = -L@abs_lib_dir@ -lsipopt -lipoptamplinterface -lipopt @IPOPTLIB_LIBS_INSTALLED@ @ASL_LIBS_INSTALLED@
 
 #LIBTOOL = @LIBTOOL@
 #CXXLD = $(CXX)
 #CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 #	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 
-ASNMPC_LIB = libsipopt.so
+sIPOPT_LIB = libsipopt.so
 
-ASNMPC_LIBNAME =$(ASNMPC_LIB).0.0.0
+sIPOPT_LIBNAME =$(sIPOPT_LIB).0.0.0
 
 TARGET = ipopt_sens
 
-OBJS   = AsAmplNmpcTNLP.@OBJEXT@ 
+OBJS   = SensAmplTNLP.@OBJEXT@ 
 
 VPATH = $(SRCDIR):$(ipoptsrcdir)/Apps/AmplSolver
 
@@ -54,8 +54,8 @@ install: $(TARGET)
 uninstall:
 	rm -f $(bindir)/$(TARGET)
 
-$(TARGET): $(OBJS) ampl_nmpc.cpp
-	$(CXX) $(LDFLAGS) $(SRCDIR)/ampl_nmpc.cpp -o $(TARGET) $(OBJS) $(INCL) $(LIBS)
+$(TARGET): $(OBJS) ampl_sipopt.cpp
+	$(CXX) $(LDFLAGS) $(SRCDIR)/ampl_sipopt.cpp -o $(TARGET) $(OBJS) $(INCL) $(LIBS)
 
 %.@OBJEXT@: %.cpp 
 	$(CXX) $(CXXFLAGS) $(INCL) -o $@ -c $^

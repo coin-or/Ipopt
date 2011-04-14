@@ -5,19 +5,19 @@
 // Date   : 2010-10-04
 
 
-#include "MyNmpcTNLP.hpp"
+#include "MySensTNLP.hpp"
 #include "IpDenseVector.hpp"
 
 using namespace Ipopt;
 
 /* Constructor. */
-MyNmpcTNLP::MyNmpcTNLP()
+MySensTNLP::MySensTNLP()
 {}
 
-MyNmpcTNLP::~MyNmpcTNLP()
+MySensTNLP::~MySensTNLP()
 {}
 
-bool MyNmpcTNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
+bool MySensTNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 			     Index& nnz_h_lag, IndexStyleEnum& index_style)
 {
   // The problem has 3 variables
@@ -35,7 +35,7 @@ bool MyNmpcTNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
   return true;
 }
 
-bool MyNmpcTNLP::get_bounds_info(Index n, Number* x_l, Number* x_u,
+bool MySensTNLP::get_bounds_info(Index n, Number* x_l, Number* x_u,
 				 Index m, Number* g_l, Number* g_u)
 {
   assert(n==3);
@@ -52,7 +52,7 @@ bool MyNmpcTNLP::get_bounds_info(Index n, Number* x_l, Number* x_u,
   return true;
 }
 
-bool MyNmpcTNLP::get_starting_point(Index n, bool init_x, Number* x,
+bool MySensTNLP::get_starting_point(Index n, bool init_x, Number* x,
 				   bool init_z, Number* z_L, Number* z_U,
 				   Index m, bool init_lambda,
 				   Number* lambda)
@@ -65,7 +65,7 @@ bool MyNmpcTNLP::get_starting_point(Index n, bool init_x, Number* x,
   return true;
 }
 
-bool MyNmpcTNLP::eval_f(Index n, const Number* x, bool new_x, Number& obj_value)
+bool MySensTNLP::eval_f(Index n, const Number* x, bool new_x, Number& obj_value)
 {
   // return the value of the objective function
   Number x1 = x[0];
@@ -76,7 +76,7 @@ bool MyNmpcTNLP::eval_f(Index n, const Number* x, bool new_x, Number& obj_value)
   return true;
 }
 
-bool MyNmpcTNLP::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f)
+bool MySensTNLP::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f)
 {
   // return the gradient of the objective function grad_{x} f(x)
 
@@ -91,7 +91,7 @@ bool MyNmpcTNLP::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_
   return true;
 }
 
-bool MyNmpcTNLP::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g)
+bool MySensTNLP::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g)
 {
   // return the value of the constraints: g(x)
   Number x1 = x[0];
@@ -103,7 +103,7 @@ bool MyNmpcTNLP::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g
   return true;
 }
 
-bool MyNmpcTNLP::eval_jac_g(Index n, const Number* x, bool new_x,
+bool MySensTNLP::eval_jac_g(Index n, const Number* x, bool new_x,
 			   Index m, Index nele_jac, Index* iRow, Index *jCol,
 			   Number* values)
 {
@@ -137,7 +137,7 @@ bool MyNmpcTNLP::eval_jac_g(Index n, const Number* x, bool new_x,
   return true;
 }
 
-bool MyNmpcTNLP::eval_h(Index n, const Number* x, bool new_x,
+bool MySensTNLP::eval_h(Index n, const Number* x, bool new_x,
 		       Number obj_factor, Index m, const Number* lambda,
 		       bool new_lambda, Index nele_hess, Index* iRow,
 		       Index* jCol, Number* values)
@@ -176,7 +176,7 @@ bool MyNmpcTNLP::eval_h(Index n, const Number* x, bool new_x,
 }
 
 
-bool MyNmpcTNLP::get_var_con_metadata(Index n,
+bool MySensTNLP::get_var_con_metadata(Index n,
 				      StringMetaDataMapType& var_string_md,
 				      IntegerMetaDataMapType& var_integer_md,
                                       NumericMetaDataMapType& var_numeric_md,
@@ -195,7 +195,7 @@ bool MyNmpcTNLP::get_var_con_metadata(Index n,
 }
 
 
-void MyNmpcTNLP::finalize_solution(SolverReturn status,
+void MySensTNLP::finalize_solution(SolverReturn status,
 				  Index n, const Number* x, const Number* z_L, const Number* z_U,
 				  Index m, const Number* g, const Number* lambda,
 				  Number obj_value,

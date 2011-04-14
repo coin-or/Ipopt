@@ -5,8 +5,8 @@
 // Date   : 2009-08-01
 
 
-#ifndef __AS_ASSUFFIXHANDLER_HPP__
-#define __AS_ASSUFFIXHANDLER_HPP__
+#ifndef __SENS_ASSUFFIXHANDLER_HPP__
+#define __SENS_ASSUFFIXHANDLER_HPP__
 
 #include "IpReferenced.hpp"
 #include <vector>
