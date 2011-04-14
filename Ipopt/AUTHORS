@@ -86,9 +86,10 @@ Contributors:
   src/Algorithm/LinearSolvers/IpMa77SolverInterface.cpp
 
 - Hans Pirnay (RWTH Aachen)
+  Rodrigo Lopez-Negrete (Carnegie Mellon University)
   Advanced Step Nonlinear Model Predictive Control Toolbox
 
-  contrib/AsNMPC
+  contrib/sIPOPT  (formerly called contrib/AsNMPC)
 
 - Jelmer Ypma (University College London)
   R interface with examples, all files in directory (and subdirectory of)
