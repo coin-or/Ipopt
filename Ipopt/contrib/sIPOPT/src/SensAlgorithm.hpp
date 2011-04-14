@@ -1,4 +1,4 @@
-// Copyright 2009 Hans Pirnay
+// Copyright 2009, 2011 Hans Pirnay
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -16,19 +16,19 @@
 namespace Ipopt
 {
 
-  class AsNmpController : public AlgorithmStrategyObject
+  class SensAlgorithm : public AlgorithmStrategyObject
   {
     /** This is the interface for the actual controller. It handles
      *  Data input to the controller (measurement) and returns controls */
 
   public:
 
-    AsNmpController(std::vector< SmartPtr<SchurDriver> >& driver_vec,
-		    SmartPtr<SensitivityStepCalculator> sens_step_calc,
-		    SmartPtr<Measurement> measurement,
-		    Index n_sens_steps);
+    SensAlgorithm(std::vector< SmartPtr<SchurDriver> >& driver_vec,
+		  SmartPtr<SensitivityStepCalculator> sens_step_calc,
+		  SmartPtr<Measurement> measurement,
+		  Index n_sens_steps);
 
-    virtual ~AsNmpController();
+    virtual ~SensAlgorithm();
 
     virtual bool InitializeImpl(const OptionsList& options,
                                 const std::string& prefix);
@@ -36,7 +36,7 @@ namespace Ipopt
     /** Main loop: Wait for new measurement, Get new step, maybe deal with
      *  bounds,  see to it that everything happens in the required
      *  timeframe. */
-    NmpControllerExitStatus Run();
+    SensAlgorithmExitStatus Run();
 
   private:
 

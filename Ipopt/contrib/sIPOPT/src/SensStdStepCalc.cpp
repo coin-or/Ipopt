@@ -1,4 +1,4 @@
-// Copyright 2009, 2010 Hans Pirnay
+// Copyright 2009, 2011 Hans Pirnay
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -19,7 +19,7 @@ namespace Ipopt
 #endif
 
   StdStepCalculator::StdStepCalculator(SmartPtr<SchurData> ift_data,
-				       SmartPtr<AsBacksolver> backsolver)
+				       SmartPtr<SensBacksolver> backsolver)
     :
     ift_data_(ift_data),
     backsolver_(backsolver),

@@ -23,17 +23,17 @@ namespace Ipopt
   static const Index dbg_verbosity = 1;
 #endif
 
-  SchurBuilder::SchurBuilder()
+  SensBuilder::SensBuilder()
   {
-    DBG_START_METH("SchurBuilder::SchurBuilder", dbg_verbosity);
+    DBG_START_METH("SensBuilder::SensBuilder", dbg_verbosity);
   }
 
-  SchurBuilder::~SchurBuilder()
+  SensBuilder::~SensBuilder()
   {
-    DBG_START_METH("SchurBuilder::~SchurBuilder", dbg_verbosity);
+    DBG_START_METH("SensBuilder::~SensBuilder", dbg_verbosity);
   }
 
-  SmartPtr<AsNmpController> SchurBuilder::BuildNmpc(const Journalist& jnlst,
+  SmartPtr<SensAlgorithm> SensBuilder::BuildSensAlg(const Journalist& jnlst,
 						    const OptionsList& options,
 						    const std::string& prefix,
 						    IpoptNLP& ip_nlp,
@@ -41,14 +41,14 @@ namespace Ipopt
 						    IpoptCalculatedQuantities& ip_cq,
 						    PDSystemSolver& pd_solver)
   {
-    DBG_START_METH("SchurBuilder::BuildNmpc", dbg_verbosity);
+    DBG_START_METH("SensBuilder::BuildSensAlg", dbg_verbosity);
 
     // Very first thing is setting trial = curr.
     SmartPtr<IteratesVector> trialcopyvector = ip_data.curr()->MakeNewIteratesVectorCopy();
     ip_data.set_trial(trialcopyvector);
 
     // Check options which Backsolver to use here
-    SmartPtr<AsBacksolver> backsolver = new SimpleBacksolver(&pd_solver);
+    SmartPtr<SensBacksolver> backsolver = new SimpleBacksolver(&pd_solver);
 
     // Create measurement unit
     SmartPtr<Measurement> measurement = new MetadataMeasurement();
@@ -97,7 +97,7 @@ namespace Ipopt
     /** THIS FOR-LOOP should be done better with a better
      *  Measurement class. This should get it's own branch! */
     for (Index i=0; i<n_sens_steps; ++i) {
-      driver_vec[i] = new IFTSchurDriver(backsolver, pcalc,E_0);
+      driver_vec[i] = new DenseGenSchurDriver(backsolver, pcalc,E_0);
       driver_vec[i]->Initialize(jnlst,
 				ip_nlp,
 				ip_data,
@@ -119,10 +119,10 @@ namespace Ipopt
 			     options,
 			     prefix);
 
-    SmartPtr<AsNmpController> controller = new AsNmpController(driver_vec,
-							       sens_stepper,
-							       measurement,
-							       n_sens_steps);
+    SmartPtr<SensAlgorithm> controller = new SensAlgorithm(driver_vec,
+							   sens_stepper,
+							   measurement,
+							   n_sens_steps);
 
     controller->Initialize(jnlst,
 			   ip_nlp,
@@ -133,19 +133,18 @@ namespace Ipopt
     return controller;
   }
 
-  SmartPtr<ReducedHessianCalculator> SchurBuilder::BuildRedHessCalc(const Journalist& jnlst,
-								    const OptionsList& options,
-								    const std::string& prefix,
-								    IpoptNLP& ip_nlp,
-								    IpoptData& ip_data,
-								    IpoptCalculatedQuantities& ip_cq,
-								    //NmpcTNLPAdapter& nmpc_tnlp_adapter,
-								    PDSystemSolver& pd_solver)
+  SmartPtr<ReducedHessianCalculator> SensBuilder::BuildRedHessCalc(const Journalist& jnlst,
+								   const OptionsList& options,
+								   const std::string& prefix,
+								   IpoptNLP& ip_nlp,
+								   IpoptData& ip_data,
+								   IpoptCalculatedQuantities& ip_cq,
+								   PDSystemSolver& pd_solver)
   {
-    DBG_START_METH("SchurBuilder::BuildRedHessCalc", dbg_verbosity);
+    DBG_START_METH("SensBuilder::BuildRedHessCalc", dbg_verbosity);
 
     // Check options which Backsolver to use here
-    SmartPtr<AsBacksolver> backsolver = new SimpleBacksolver(&pd_solver);
+    SmartPtr<SensBacksolver> backsolver = new SimpleBacksolver(&pd_solver);
 
     // Create suffix handler
     SmartPtr<SuffixHandler> suffix_handler = new MetadataMeasurement();
@@ -165,7 +164,7 @@ namespace Ipopt
       jnlst.Printf(J_ERROR, J_MAIN, "\nEXIT: An Error Occured while processing "
 		   "the Indices for the reduced hessian computation: Something "
 		   "is wrong with index %d\n",setdata_error);
-      THROW_EXCEPTION(ASNMPC_BUILDER_ERROR,
+      THROW_EXCEPTION(SENS_BUILDER_ERROR,
                       "Reduced Hessian Index Error");
     }
 

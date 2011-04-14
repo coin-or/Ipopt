@@ -1,11 +1,11 @@
-// Copyright 2009 Hans Pirnay
+// Copyright 2009, 2011 Hans Pirnay
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
 // Date    : 2009-04-06
 //
 // Purpose : This is the same as IpSensitivityCalculator.hpp
-//           It implements the AsBacksolver Interface.
+//           It implements the SensBacksolver Interface.
 
 #ifndef __ASSIMPLEBACKSOLVER_HPP__
 #define __ASSIMPLEBACKSOLVER_HPP__
@@ -15,7 +15,7 @@
 #include "SensBacksolver.hpp"
 
 namespace Ipopt {
-  class SimpleBacksolver : public AsBacksolver
+  class SimpleBacksolver : public SensBacksolver
   {
   public:
 

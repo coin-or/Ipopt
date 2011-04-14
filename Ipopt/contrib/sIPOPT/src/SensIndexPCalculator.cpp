@@ -1,4 +1,4 @@
-// Copyright 2009 Hans Pirnay
+// Copyright 2009, 2011 Hans Pirnay
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -8,7 +8,6 @@
 #include "SensIndexSchurData.hpp"
 #include "IpDenseVector.hpp"
 #include "IpDenseGenMatrix.hpp"
-//#include "IpDenseSymMatrix.hpp"
 #include "IpBlas.hpp"
 #include <vector>
 
@@ -18,9 +17,9 @@ namespace Ipopt
   static const Index dbg_verbosity = 1;
 #endif
 
-  IndexPCalculator::IndexPCalculator(SmartPtr<AsBacksolver> backsolver,
+  IndexPCalculator::IndexPCalculator(SmartPtr<SensBacksolver> backsolver,
 				     SmartPtr<SchurData> A_data)
-  :
+    :
     PCalculator(backsolver, A_data),
     nrows_(0),
     ncols_(A_data->GetNRowsAdded())
@@ -81,14 +80,14 @@ namespace Ipopt
 	DBG_ASSERT(col_values== NULL);
 	col_values = new Number[nrows_];
 	curr_dim = 0;
-	 for (Index j=0; j<sol_vec->NComps(); ++j) {
-	   comp_vec = dynamic_cast<const DenseVector*>(GetRawPtr(sol_vec->GetComp(j)));
-	   comp_values = comp_vec->Values();
-	   IpBlasDcopy(comp_vec->Dim(), comp_values, 1, col_values+curr_dim,1);
-	   curr_dim += comp_vec->Dim();
-	 }
-	 cols_[col] = new PColumn(nrows_, col_values);
-	 col_values = NULL;
+	for (Index j=0; j<sol_vec->NComps(); ++j) {
+	  comp_vec = dynamic_cast<const DenseVector*>(GetRawPtr(sol_vec->GetComp(j)));
+	  comp_values = comp_vec->Values();
+	  IpBlasDcopy(comp_vec->Dim(), comp_values, 1, col_values+curr_dim,1);
+	  curr_dim += comp_vec->Dim();
+	}
+	cols_[col] = new PColumn(nrows_, col_values);
+	col_values = NULL;
       }
       curr_schur_row++;
     }
@@ -128,17 +127,17 @@ namespace Ipopt
       }
     }
     /*
-    DenseGenMatrix* dS = static_cast<DenseGenMatrix*>(&S);
-    DBG_ASSERT(dynamic_cast<const DenseGenMatrix*>(&S));
+      DenseGenMatrix* dS = static_cast<DenseGenMatrix*>(&S);
+      DBG_ASSERT(dynamic_cast<const DenseGenMatrix*>(&S));
     */
     // Check whether data_A was changed from the outside
     if (ncols_!=data_A()->GetNRowsAdded()) {
-	  ncols_ = data_A()->GetNRowsAdded();
-	  ComputeP();
+      ncols_ = data_A()->GetNRowsAdded();
+      ComputeP();
     }
     /*
-    DBG_ASSERT(dS->NRows()==dS->NCols());
-    DBG_ASSERT(dS->NRows()==data_A()->GetNRowsAdded());
+      DBG_ASSERT(dS->NRows()==dS->NCols());
+      DBG_ASSERT(dS->NRows()==data_A()->GetNRowsAdded());
     */
     std::vector<Index> indices;
     std::vector<Number> factors;

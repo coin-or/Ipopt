@@ -1,8 +1,8 @@
-// Copyright 2009, 2010 Hans Pirnay
+// Copyright 2009, 2011 Hans Pirnay
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// Date   : 2009-05-06 
+// Date   : 2009-05-06
 
 #ifndef __ASSCHURDATA_HPP__
 #define __ASSCHURDATA_HPP__
@@ -18,17 +18,17 @@ namespace Ipopt
   class SchurData : public ReferencedObject
   {
     /** This interface serves as a reference point for multiple classes
-     *  that need to use SchurData (PCalculator, SchurDriver). It 
+     *  that need to use SchurData (PCalculator, SchurDriver). It
      *  declares as little as possible, so that SchurData implementations
-     *  can be very special and fast. 
+     *  can be very special and fast.
      *
      *  I have not decided yet if there are certain ways I want to impose
-     *  that SchurData can be set. I will figure this out as soon as I 
-     *  write the upstream classes that need to do that 
+     *  that SchurData can be set. I will figure this out as soon as I
+     *  write the upstream classes that need to do that
      *
      *  Nomenclature in this program is based on Victor Zavalas thesis. */
-    
-  public: 
+
+  public:
 
     SchurData()  : initialized_(false), nrows_(0)
     {}
@@ -68,8 +68,8 @@ namespace Ipopt
     /** Returns the i-th column vector of the matrix */
     virtual void GetRow(Index i, IteratesVector& v) const = 0;
 
-    /** Returns two vectors that are needed for matrix-vector 
-     *  multiplication of B and P. 
+    /** Returns two vectors that are needed for matrix-vector
+     *  multiplication of B and P.
      *  The index is the row, the first vector are the indices
      *  of non-zero components, in this row of B,
      *  the second vector gives the numbers in B(row,indices) */
@@ -77,7 +77,7 @@ namespace Ipopt
 
     /** Computes B*v with B in R(mxn) */
     virtual void Multiply(const IteratesVector& v, Vector& u) const =0;
-    
+
     /** Computes A*u with A in R(nxm), KKT in R(n,n) */
     virtual void TransMultiply(const Vector& u, IteratesVector& v) const =0;
 

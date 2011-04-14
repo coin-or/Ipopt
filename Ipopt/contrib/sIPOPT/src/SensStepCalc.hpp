@@ -1,4 +1,4 @@
-// Copyright 2009 Hans Pirnay
+// Copyright 2009, 2011 Hans Pirnay
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -34,7 +34,7 @@ namespace Ipopt
     }
 
     virtual bool InitializeImpl(const OptionsList& options,
-			const std::string& prefix)
+				const std::string& prefix)
     {
       options.GetBoolValue("sens_boundcheck", do_boundcheck_, prefix);
       return true;

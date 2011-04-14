@@ -1,4 +1,4 @@
-// Copyright 2009 Hans Pirnay
+// Copyright 2009, 2011 Hans Pirnay
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -19,19 +19,19 @@ namespace Ipopt
   /** Standard exception for wrong/inconsistent suffixes for nmpc */
   DECLARE_STD_EXCEPTION(NMPC_SUFFIX_ERROR);
 
-  class NmpcApplication : public ReferencedObject
+  class SensApplication : public ReferencedObject
   {
   public:
     // constructor
-    NmpcApplication(SmartPtr<Journalist> jnlst,
+    SensApplication(SmartPtr<Journalist> jnlst,
 		    SmartPtr<OptionsList> options,
 		    SmartPtr<RegisteredOptions> reg_options);
 
-    ~NmpcApplication();
+    ~SensApplication();
 
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
 
-    NmpControllerExitStatus Run();
+    SensAlgorithmExitStatus Run();
 
     void Initialize();
 
@@ -59,7 +59,7 @@ namespace Ipopt
   private:
 
     // standard constructor just so it can't be used
-    //    NmpcApplication();
+    //    SensApplication();
 
     // Pointers that are immediately passed from Ipopt and initialized by the constructor
     SmartPtr<Journalist> jnlst_;
@@ -68,7 +68,6 @@ namespace Ipopt
     SmartPtr<IpoptCalculatedQuantities> ip_cq_;
     SmartPtr<PDSystemSolver> pd_solver_;
     SmartPtr<IpoptNLP> ip_nlp_;
-    //SmartPtr<NmpcTNLPAdapter> tnlp_adapter_;
     SmartPtr<RegisteredOptions> reg_options_;
     ApplicationReturnStatus ipopt_retval_;
 

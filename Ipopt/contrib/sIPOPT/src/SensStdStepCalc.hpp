@@ -1,4 +1,4 @@
-// Copyright 2009, 2010 Hans Pirnay
+// Copyright 2009, 2011 Hans Pirnay
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -19,7 +19,7 @@ namespace Ipopt
   {
   public:
     StdStepCalculator(SmartPtr<SchurData> ift_data,
-		      SmartPtr<AsBacksolver> backsolver);
+		      SmartPtr<SensBacksolver> backsolver);
 
     virtual ~StdStepCalculator();
 
@@ -36,7 +36,7 @@ namespace Ipopt
 
   private:
     SmartPtr<SchurData> ift_data_;
-    SmartPtr<AsBacksolver> backsolver_;
+    SmartPtr<SensBacksolver> backsolver_;
     Number bound_eps_;
     bool kkt_residuals_;
   };
