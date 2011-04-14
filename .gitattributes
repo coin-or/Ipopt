@@ -142,6 +142,7 @@ Ipopt/contrib/RInterface/tests/parameters.R -text
 Ipopt/contrib/RInterface/tests/sparseness.R -text
 Ipopt/contrib/sIPOPT/AmplSolver/SensAmplTNLP.cpp -text
 Ipopt/contrib/sIPOPT/AmplSolver/SensAmplTNLP.hpp -text
+Ipopt/contrib/sIPOPT/AmplSolver/ampl_sipopt.cpp -text
 Ipopt/contrib/sIPOPT/doc/iecrv5.bst -text
 Ipopt/contrib/sIPOPT/doc/sipopt.bib -text
 Ipopt/contrib/sIPOPT/doc/sipopt_manual.pdf -text
