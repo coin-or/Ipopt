@@ -72,15 +72,6 @@ namespace Ipopt
 			       "yes", "compute reduced hessian",
 			       "no", "don't compute reduced hessian",
 			       "");
-    roptions->AddStringOption4(
-			       "select_step",
-			       "Choose by which formula the step is computed",
-			       "iftsensitivity",
-			       "advanced","use advanced step based on KKT",
-			       "sensitivity","use sensitivity step",
-			       "ift","use one-parametric step with multiplier correction",
-			       "iftsensitivity","use one-parametric step without multiplier correction"
-			       "see original paper for more information on each step computation");
     // This option must be in IpInterfacesRegOp.cpp
     roptions->AddStringOption2(
 			       "run_sens",

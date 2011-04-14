@@ -44,7 +44,6 @@ namespace Ipopt
     /** Number of nmpc_indices */
     Index n_idx_;
 
-    std::string select_step_;
     /** owner space of x */
     SmartPtr<const DenseVectorSpace> x_owner_space_;
     /** owner space of s */
