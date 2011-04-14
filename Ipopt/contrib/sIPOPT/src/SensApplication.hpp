@@ -4,8 +4,8 @@
 //
 // Date   : 2009-05-06
 
-#ifndef __ASNMPCAPPLICATION_HPP__
-#define __ASNMPCAPPLICATION_HPP__
+#ifndef __SENSAPPLICATION_HPP__
+#define __SENSAPPLICATION_HPP__
 
 #include "IpReferenced.hpp"
 #include "SensUtils.hpp"
@@ -16,8 +16,8 @@
 #include "IpPDSystemSolver.hpp"
 namespace Ipopt
 {
-  /** Standard exception for wrong/inconsistent suffixes for nmpc */
-  DECLARE_STD_EXCEPTION(NMPC_SUFFIX_ERROR);
+  /** Standard exception for wrong/inconsistent suffixes for sipopt */
+  DECLARE_STD_EXCEPTION(SENS_SUFFIX_ERROR);
 
   class SensApplication : public ReferencedObject
   {

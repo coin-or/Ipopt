@@ -242,8 +242,8 @@ void ParametricTNLP::finalize_solution(SolverReturn status,
 				       IpoptCalculatedQuantities* ip_cq)
 {
   // Check whether sIPOPT Algorithm aborted internally
-  //  bool nmpc_internal_abort;
-  //options_->GetBoolValue("nmpc_internal_abort", nmpc_internal_abort, "");
+  //  bool sens_internal_abort;
+  //options_->GetBoolValue("sens_internal_abort", sens_internal_abort, "");
 
   // Get access to the metadata, where the solutions are stored. The metadata is part of the DenseVectorSpace.
   SmartPtr<const DenseVectorSpace> x_owner_space = dynamic_cast<const DenseVectorSpace*>(GetRawPtr(ip_data->curr()->x()->OwnerSpace()));
@@ -253,15 +253,15 @@ void ParametricTNLP::finalize_solution(SolverReturn status,
     return;
   }
   std::string state;
-  std::vector<Number> nmpc_sol_vec;
+  std::vector<Number> sens_sol_vec;
   state = "sens_sol_state_1";
-  nmpc_sol_vec = x_owner_space->GetNumericMetaData(state.c_str());
+  sens_sol_vec = x_owner_space->GetNumericMetaData(state.c_str());
 
   // Print the solution vector
   printf("\n"
 	 "                Nominal                    Perturbed\n");
-  for (Index k=0; k<(Index) nmpc_sol_vec.size(); ++k) {
-    printf("x[%3d]   % .23f   % .23f\n", k, x[k], nmpc_sol_vec[k]);
+  for (Index k=0; k<(Index) sens_sol_vec.size(); ++k) {
+    printf("x[%3d]   % .23f   % .23f\n", k, x[k], sens_sol_vec[k]);
   }
 }
 

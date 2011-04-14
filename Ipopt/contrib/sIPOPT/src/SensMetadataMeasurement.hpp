@@ -39,7 +39,7 @@ namespace Ipopt
 
   private:
 
-    /** Number of nmpc_indices */
+    /** Number of sens_indices */
     Index n_idx_;
 
     /** owner space of x */
