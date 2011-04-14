@@ -1,4 +1,4 @@
-// Copyright 2009, 2010 Hans Pirnay
+// Copyright 2009, 2011 Hans Pirnay
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -25,7 +25,7 @@ namespace Ipopt
 
 
   bool SimpleBacksolver::InitializeImpl(const OptionsList& options,
-				   const std::string& prefix)
+					const std::string& prefix)
   {
     DBG_START_METH("SimpleBackSolver::InitializeImpl",dbg_verbosity);
     options.GetBoolValue("sens_allow_inexact_backsolve", allow_inexact_, prefix);

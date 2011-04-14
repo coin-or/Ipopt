@@ -14,28 +14,28 @@ namespace Ipopt
   static const Index dbg_verbosity = 1;
 #endif
 
-  AsNmpController::AsNmpController(std::vector< SmartPtr<SchurDriver> >& driver_vec,
-				   SmartPtr<SensitivityStepCalculator> sens_step_calc,
-				   SmartPtr<Measurement> measurement,
-				   Index n_sens_steps)
+  SensAlgorithm::SensAlgorithm(std::vector< SmartPtr<SchurDriver> >& driver_vec,
+			       SmartPtr<SensitivityStepCalculator> sens_step_calc,
+			       SmartPtr<Measurement> measurement,
+			       Index n_sens_steps)
     :
     driver_vec_(driver_vec),
     sens_step_calc_(sens_step_calc),
     measurement_(measurement),
-    n_sens_steps_(n_sens_steps)
+    n_sens_steps_(n_sens_steps) // why doesn't he get this from the options?
   {
-    DBG_START_METH("AsNmpController::AsNmpController", dbg_verbosity);
+    DBG_START_METH("SensAlgorithm::SensAlgorithm", dbg_verbosity);
 
     DBG_ASSERT(n_sens_steps<=driver_vec.size());
   }
 
-  AsNmpController::~AsNmpController()
+  SensAlgorithm::~SensAlgorithm()
   {
-    DBG_START_METH("AsNmpController::~AsNmpController", dbg_verbosity);
+    DBG_START_METH("SensAlgorithm::~SensAlgorithm", dbg_verbosity);
   }
 
-  bool AsNmpController::InitializeImpl(const OptionsList& options,
-				       const std::string& prefix)
+  bool SensAlgorithm::InitializeImpl(const OptionsList& options,
+				     const std::string& prefix)
   {
     return true;
   }
@@ -43,11 +43,11 @@ namespace Ipopt
   /** Main loop: Wait for new measurement, Get new step, maybe deal with
    *  bounds,  see to it that everything happens in the required
    *  timeframe. */
-  NmpControllerExitStatus AsNmpController::Run()
+  SensAlgorithmExitStatus SensAlgorithm::Run()
   {
-    DBG_START_METH("AsNmpController::Run", dbg_verbosity);
+    DBG_START_METH("SensAlgorithm::Run", dbg_verbosity);
 
-    NmpControllerExitStatus retval = SOLVE_SUCCESS;
+    SensAlgorithmExitStatus retval = SOLVE_SUCCESS;
 
     /* Loop through all steps */
     SmartPtr<IteratesVector> sol = IpData().curr()->MakeNewIteratesVector();
@@ -91,7 +91,7 @@ namespace Ipopt
 	KKT_slacks->Print(Jnlst(),J_VECTOR,J_USER1,"error");
 
 	printf("***********************************\n"
-	"Running AsNMPC my-formula\n"
+	"Running sIPOPT my-formula\n"
 	"value of objective function:  %23.16e\n"
 	"Nrm2 of KKT residual:         %23.16e\n"
 	"Constraint violation:         %23.16e\n"
@@ -106,4 +106,3 @@ namespace Ipopt
   }
 
 }
-

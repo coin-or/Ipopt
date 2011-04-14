@@ -18,12 +18,12 @@ int main(int argv, char**argc)
 
   SmartPtr<IpoptApplication> app_ipopt = new IpoptApplication();
 
-  SmartPtr<NmpcApplication> app_nmpc = new NmpcApplication(app_ipopt->Jnlst(),
+  SmartPtr<SensApplication> app_sens = new SensApplication(app_ipopt->Jnlst(),
 							   app_ipopt->Options(),
 							   app_ipopt->RegOptions());
 
-  // Register AsNMPC options
-  RegisterOptions_AsNMPC(app_ipopt->RegOptions());
+  // Register sIPOPT options
+  RegisterOptions_sIPOPT(app_ipopt->RegOptions());
   app_ipopt->Options()->SetRegisteredOptions(app_ipopt->RegOptions());
 
   // Call Initialize the first time to create a journalist, but ignore
@@ -49,7 +49,7 @@ int main(int argv, char**argc)
   suffix_handler->AddAvailableSuffix("nominal_value", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
   suffix_handler->AddAvailableSuffix("perturbed_value", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
 
-  // Suffixes for NMPC
+  // Suffixes for sIPOPT
   suffix_handler->AddAvailableSuffix("sens_init_constr", AmplSuffixHandler::Constraint_Source, AmplSuffixHandler::Index_Type);
 
   int n_sens_steps = 0;
@@ -88,13 +88,12 @@ int main(int argv, char**argc)
     suffix_handler->AddAvailableSuffix(sol_state, AmplSuffixHandler::Constraint_Source, AmplSuffixHandler::Number_Type);
     suffix_handler->AddAvailableSuffix(sol_state_zL, AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
     suffix_handler->AddAvailableSuffix(sol_state_zU, AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Number_Type);
-
   }
 
   // for reduced hessian computation
   suffix_handler->AddAvailableSuffix("red_hessian", AmplSuffixHandler::Variable_Source, AmplSuffixHandler::Index_Type);
 
-  // Create AmplOptionsList for AsNMPC AMPL options
+  // Create AmplOptionsList for sIPOPT AMPL options
   SmartPtr<AmplOptionsList> ampl_options_list = new AmplOptionsList();
 
   ampl_options_list->AddAmplOption("run_sens", "run_sens",
@@ -110,7 +109,7 @@ int main(int argv, char**argc)
 					      argc, suffix_handler, false,
 					      ampl_options_list);
 
-  app_nmpc->Initialize();
+  app_sens->Initialize();
 
   const int n_loops = 1; // make larger for profiling
   for (Index i=0; i<n_loops; i++) {
@@ -118,9 +117,9 @@ int main(int argv, char**argc)
   }
 
   /* give pointers to Ipopt algorithm objects to NMPC Application */
-  app_nmpc->SetIpoptAlgorithmObjects(app_ipopt, retval);
+  app_sens->SetIpoptAlgorithmObjects(app_ipopt, retval);
 
-  app_nmpc->Run();
+  app_sens->Run();
 
 
   return 0;

@@ -1,4 +1,4 @@
-// Copyright 2009 Hans Pirnay
+// Copyright 2009, 2011 Hans Pirnay
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -268,11 +268,11 @@ namespace Ipopt
   }
 
   void IndexSchurData::PrintImpl(const Journalist& jnlst,
-			       EJournalLevel level,
-			       EJournalCategory category,
-			       const std::string& name,
-			       Index indent,
-			       const std::string& prefix) const
+				 EJournalLevel level,
+				 EJournalCategory category,
+				 const std::string& name,
+				 Index indent,
+				 const std::string& prefix) const
   {
     DBG_START_METH("IndexSchurData::PrintImpl", dbg_verbosity);
 

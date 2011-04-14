@@ -1,4 +1,4 @@
-// Copyright 2009 Hans Pirnay
+// Copyright 2009, 2011 Hans Pirnay
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -17,25 +17,25 @@
 
 namespace Ipopt
 {
-  DECLARE_STD_EXCEPTION(ASNMPC_BUILDER_ERROR);
+  DECLARE_STD_EXCEPTION(SENS_BUILDER_ERROR);
 
-  class SchurBuilder : public ReferencedObject
+  class SensBuilder : public ReferencedObject
   {
     /** This class sets up everything necessary and
      *  builds the P matrix which is an intermediate step
      *  in calculating the schur matrix. */
   public:
-    SchurBuilder();
+    SensBuilder();
 
-    ~SchurBuilder();
+    ~SensBuilder();
 
-    SmartPtr<AsNmpController> BuildNmpc(const Journalist& jnlst,
-					const OptionsList& options,
-					const std::string& prefix,
-					IpoptNLP& ip_nlp,
-					IpoptData& ip_data,
-					IpoptCalculatedQuantities& ip_cq,
-					PDSystemSolver& pd_solver);
+    SmartPtr<SensAlgorithm> BuildSensAlg(const Journalist& jnlst,
+					 const OptionsList& options,
+					 const std::string& prefix,
+					 IpoptNLP& ip_nlp,
+					 IpoptData& ip_data,
+					 IpoptCalculatedQuantities& ip_cq,
+					 PDSystemSolver& pd_solver);
 
     SmartPtr<ReducedHessianCalculator> BuildRedHessCalc(const Journalist& jnlst,
 							const OptionsList& options,
@@ -43,7 +43,6 @@ namespace Ipopt
 							IpoptNLP& ip_nlp,
 							IpoptData& ip_data,
 							IpoptCalculatedQuantities& ip_cq,
-							//NmpcTNLPAdapter& nmpc_tnlp_adapter,
 							PDSystemSolver& pd_solver);
 
   private:

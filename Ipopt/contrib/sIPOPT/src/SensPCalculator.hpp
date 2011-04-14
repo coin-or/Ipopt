@@ -1,4 +1,4 @@
-// Copyright 2009 Hans Pirnay
+// Copyright 2009, 2011 Hans Pirnay
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -28,7 +28,7 @@ namespace Ipopt
 
   public:
 
-    PCalculator(SmartPtr<AsBacksolver> backsolver,
+    PCalculator(SmartPtr<SensBacksolver> backsolver,
 		SmartPtr<SchurData> A_data)
       :
       backsolver_(backsolver),
@@ -88,7 +88,7 @@ namespace Ipopt
     /** Accessor methods for data and backsolver. This unconstness seems
      *  kind of dangerous but I don't think there is a way around it. Anyway,
      *  there is no difference between this and the IpData() method of AlgStrategy.*/
-    SmartPtr<AsBacksolver> Solver() const
+    SmartPtr<SensBacksolver> Solver() const
     {
       return backsolver_;
     }
@@ -110,7 +110,7 @@ namespace Ipopt
 
   private:
 
-    SmartPtr<AsBacksolver> backsolver_;
+    SmartPtr<SensBacksolver> backsolver_;
 
     SmartPtr<const SchurData> data_A_init;
     SmartPtr<SchurData> data_A_;
@@ -122,4 +122,3 @@ namespace Ipopt
 }
 
 #endif
-

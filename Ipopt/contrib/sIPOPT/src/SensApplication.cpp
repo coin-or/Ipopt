@@ -21,7 +21,7 @@ namespace Ipopt
 #endif
 
 
-  NmpcApplication::NmpcApplication(SmartPtr<Journalist> jnlst,
+  SensApplication::SensApplication(SmartPtr<Journalist> jnlst,
 				   SmartPtr<OptionsList> options,
 				   SmartPtr<RegisteredOptions> reg_options)
     :
@@ -30,7 +30,7 @@ namespace Ipopt
     reg_options_(reg_options),
     ipopt_retval_(Internal_Error)
   {
-    DBG_START_METH("NmpcApplication::NmpcApplication", dbg_verbosity);
+    DBG_START_METH("SensApplication::SensApplication", dbg_verbosity);
 
     // Initialize Journalist
     DBG_DO(SmartPtr<Journal> sens_jrnl = jnlst_->AddFileJournal("Sensitivity","sensdebug.out",J_ITERSUMMARY);
@@ -38,15 +38,15 @@ namespace Ipopt
 
   }
 
-  NmpcApplication::~NmpcApplication()
+  SensApplication::~SensApplication()
   {
-    DBG_START_METH("NmpcApplication::~NmpcApplication", dbg_verbosity);
+    DBG_START_METH("SensApplication::~SensApplication", dbg_verbosity);
   }
 
-  void NmpcApplication::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+  void SensApplication::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
-    // Options for NMPC Parameter Sensitivity
-    roptions->SetRegisteringCategory("AsNmpc");
+    // Options for parameter sensitivity
+    roptions->SetRegisteringCategory("sIPOPT");
     roptions->AddLowerBoundedIntegerOption(
 					   "n_sens_steps", "Number of steps computed by sIPOPT",
 					   0, 1,
@@ -133,11 +133,11 @@ namespace Ipopt
 			       "The residuals of the KKT conditions should be zero at the optimal solution. However, in practice, especially for large problems and depending on the termination criteria, they may deviate from this theoretical state. If this option is set to yes, the residuals will be taken into account when computing the right hand side for the sensitivity step.");
   }
 
-  NmpControllerExitStatus NmpcApplication::Run()
+  SensAlgorithmExitStatus SensApplication::Run()
   {
-    DBG_START_METH("NmpcApplication::Run", dbg_verbosity);
+    DBG_START_METH("SensApplication::Run", dbg_verbosity);
 
-    NmpControllerExitStatus retval = SOLVE_SUCCESS;
+    SensAlgorithmExitStatus retval = SOLVE_SUCCESS;
 
     bool nmpc_internal_abort, redhess_internal_abort;
     Options()->GetBoolValue("nmpc_internal_abort", nmpc_internal_abort, "");
@@ -162,7 +162,7 @@ namespace Ipopt
 
 
     if (compute_red_hessian_ && !redhess_internal_abort) {
-      SmartPtr<SchurBuilder> schur_builder = new SchurBuilder();
+      SmartPtr<SensBuilder> schur_builder = new SensBuilder();
       const std::string prefix = ""; // I should be getting this somewhere else...
       SmartPtr<ReducedHessianCalculator> red_hess_calc = schur_builder->BuildRedHessCalc(*jnlst_,
 											 *options_,
@@ -176,15 +176,15 @@ namespace Ipopt
     }
 
     if (run_sens_ && n_sens_steps_>0 && !nmpc_internal_abort) {
-      SmartPtr<SchurBuilder> schur_builder = new SchurBuilder();
+      SmartPtr<SensBuilder> schur_builder = new SensBuilder();
       const std::string prefix = ""; // I should be getting this somewhere else...
-      SmartPtr<AsNmpController> controller = schur_builder->BuildNmpc(*jnlst_,
-								      *options_,
-								      prefix,
-								      *ip_nlp_,
-								      *ip_data_,
-								      *ip_cq_,
-								      *pd_solver_);
+      SmartPtr<SensAlgorithm> controller = schur_builder->BuildSensAlg(*jnlst_,
+								       *options_,
+								       prefix,
+								       *ip_nlp_,
+								       *ip_data_,
+								       *ip_cq_,
+								       *pd_solver_);
 
       retval = controller->Run();
     }
@@ -210,12 +210,12 @@ namespace Ipopt
       switch (status) {
       case SUCCESS:
 	/*c = ip_cq_->curr_c();
-	d = ip_cq_->curr_d();
-	obj = ip_cq_->curr_f();
-	zL = ip_data_->curr()->z_L();
-	zU = ip_data_->curr()->z_U();
-	yc = ip_data_->curr()->y_c();
-	yd = ip_data_->curr()->y_d();*/
+	  d = ip_cq_->curr_d();
+	  obj = ip_cq_->curr_f();
+	  zL = ip_data_->curr()->z_L();
+	  zU = ip_data_->curr()->z_U();
+	  yc = ip_data_->curr()->y_c();
+	  yd = ip_data_->curr()->y_d();*/
       case MAXITER_EXCEEDED:
       case STOP_AT_TINY_STEP:
       case STOP_AT_ACCEPTABLE_POINT:
@@ -269,9 +269,9 @@ namespace Ipopt
     return retval;
   }
 
-  void NmpcApplication::Initialize()
+  void SensApplication::Initialize()
   {
-    DBG_START_METH("NmpcApplication::Initialize", dbg_verbosity);
+    DBG_START_METH("SensApplication::Initialize", dbg_verbosity);
 
     const std::string prefix = ""; // I should be getting this somewhere else...
 
@@ -289,10 +289,10 @@ namespace Ipopt
 
   }
 
-  void NmpcApplication::SetIpoptAlgorithmObjects(SmartPtr<IpoptApplication> app_ipopt,
+  void SensApplication::SetIpoptAlgorithmObjects(SmartPtr<IpoptApplication> app_ipopt,
 						 ApplicationReturnStatus ipopt_retval)
   {
-    DBG_START_METH("NmpcApplication::SetIpoptAlgorithmObjects", dbg_verbosity);
+    DBG_START_METH("SensApplication::SetIpoptAlgorithmObjects", dbg_verbosity);
 
     // get optionsList and Journalist
     options_ = app_ipopt->Options();

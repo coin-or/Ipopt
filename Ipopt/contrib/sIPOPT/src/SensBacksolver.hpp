@@ -1,4 +1,4 @@
-// Copyright 2009 Hans Pirnay
+// Copyright 2009, 2011 Hans Pirnay
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -14,17 +14,17 @@
 namespace Ipopt
 {
 
-  class AsBacksolver : public AlgorithmStrategyObject
+  class SensBacksolver : public AlgorithmStrategyObject
   {
 
     /** This class is the interface to all backsolvers that may
-     *  be used for the AsNMPC. */
+     *  be used for the sIPOPT. */
   public:
-    AsBacksolver()
+    SensBacksolver()
     {
     }
-    
-    virtual ~AsBacksolver()
+
+    virtual ~SensBacksolver()
     {
     }
 

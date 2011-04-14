@@ -1,4 +1,4 @@
-// Copyright 2009, 2010 Hans Pirnay
+// Copyright 2009, 2011 Hans Pirnay
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -28,7 +28,7 @@ namespace Ipopt
   }
 
   bool ReducedHessianCalculator::InitializeImpl(const OptionsList& options,
-			      const std::string& prefix)
+						const std::string& prefix)
   {
     DBG_START_METH("ReducedHessianCalculator::InitializeImpl", dbg_verbosity);
     options.GetBoolValue("rh_eigendecomp", compute_eigenvalues_, prefix);

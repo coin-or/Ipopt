@@ -14,7 +14,7 @@ using namespace Ipopt;
 
 
 /* Constructor */
-ParametricTNLP::ParametricTNLP() : 
+ParametricTNLP::ParametricTNLP() :
   nominal_eta1_(4.5),
   nominal_eta2_(1.0),
   eta_1_perturbed_value_(4.0),
@@ -198,14 +198,14 @@ bool ParametricTNLP::get_var_con_metadata(Index n,
 					  NumericMetaDataMapType& con_numeric_md)
 {
   /* In this function, the indices for the parametric computations are set.
-   * To keep track of the parameters, each parameter gets an index from 1 to n_parameters. 
+   * To keep track of the parameters, each parameter gets an index from 1 to n_parameters.
    * In this case, [1] eta_1, [2] eta_2.
    * The following metadata vectors are important:
    */
 
 
-  /* 1. sens_init_constr: in this list, the constraints that set the initial 
-   *    values for the parameters are indicated. 
+  /* 1. sens_init_constr: in this list, the constraints that set the initial
+   *    values for the parameters are indicated.
    *    For parameter 1 (eta_1) this is constraint 3 (e.g. C++ index 2), which is
    *    the constraint   eta_1 = eta_1_nominal;
    *    For parameter 2 (eta_2) this is constraint 4 (e.g. C++ index 3).
@@ -215,7 +215,7 @@ bool ParametricTNLP::get_var_con_metadata(Index n,
   sens_init_constr[3] = 2;
   con_integer_md["sens_init_constr"] = sens_init_constr;
 
-  /* 2. sens_state_1: in this index list, the parameters are indicated: 
+  /* 2. sens_state_1: in this index list, the parameters are indicated:
    *    Here: [1] eta_1, [2] eta_2
    */
   std::vector<Index> sens_state_1(n,0);
@@ -241,7 +241,7 @@ void ParametricTNLP::finalize_solution(SolverReturn status,
 				       const IpoptData* ip_data,
 				       IpoptCalculatedQuantities* ip_cq)
 {
-  // Check whether AsNMPC Algorithm aborted internally 
+  // Check whether sIPOPT Algorithm aborted internally
   //  bool nmpc_internal_abort;
   //options_->GetBoolValue("nmpc_internal_abort", nmpc_internal_abort, "");
 
@@ -274,10 +274,10 @@ void ParametricTNLP::finalize_metadata(Index n,
 				       const IntegerMetaDataMapType& con_integer_md,
 				       const NumericMetaDataMapType& con_numeric_md)
 {
-  // bound multipliers for lower and upper bounds 
+  // bound multipliers for lower and upper bounds
   printf("\nDual bound multipliers:\n");
-  NumericMetaDataMapType::const_iterator z_L_solution = var_numeric_md.find("sens_sol_state_1_z_L"); 
-  NumericMetaDataMapType::const_iterator z_U_solution = var_numeric_md.find("sens_sol_state_1_z_U"); 
+  NumericMetaDataMapType::const_iterator z_L_solution = var_numeric_md.find("sens_sol_state_1_z_L");
+  NumericMetaDataMapType::const_iterator z_U_solution = var_numeric_md.find("sens_sol_state_1_z_U");
   if (z_L_solution!=var_numeric_md.end() && z_U_solution!=var_numeric_md.end()) {
     for (Index k=0; k<n; ++k) {
       printf("z_L[%d] = %f      z_U[%d] = %f\n", k, z_L_solution->second[k], k, z_U_solution->second[k]);

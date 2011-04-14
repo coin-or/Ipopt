@@ -1,4 +1,4 @@
-// Copyright 2009, 2010 Hans Pirnay
+// Copyright 2009, 2011 Hans Pirnay
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -94,9 +94,9 @@ namespace Ipopt
 
 
     /** Performs a backsolve on S and K; calls the latter with sol=K^(-1)*r_s=0
-    virtual bool SchurSolve(SmartPtr<IteratesVector> lhs,
-			    SmartPtr<const IteratesVector> rhs,
-			    SmartPtr<Vector> delta_u) =0;
+	virtual bool SchurSolve(SmartPtr<IteratesVector> lhs,
+	SmartPtr<const IteratesVector> rhs,
+	SmartPtr<Vector> delta_u) =0;
     */
   private:
     SchurDriver()

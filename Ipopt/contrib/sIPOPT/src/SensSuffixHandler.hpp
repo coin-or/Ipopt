@@ -1,4 +1,4 @@
-// Copyright 2009, 2010 Hans Pirnay
+// Copyright 2009, 2011 Hans Pirnay
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -24,11 +24,11 @@ namespace Ipopt
     SuffixHandler()
     {
     }
-    
+
     virtual ~SuffixHandler()
     {
     }
-    
+
     virtual std::vector<Index> GetIntegerSuffix(std::string suffix_string) =0;
 
   };

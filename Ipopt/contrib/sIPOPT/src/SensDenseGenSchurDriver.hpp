@@ -1,4 +1,4 @@
-// Copyright 2009 Hans Pirnay
+// Copyright 2009, 2011 Hans Pirnay
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -14,16 +14,16 @@
 namespace Ipopt
 {
 
-  class IFTSchurDriver: public SchurDriver
+  class DenseGenSchurDriver: public SchurDriver
   {
 
   public:
 
-    IFTSchurDriver(SmartPtr<AsBacksolver> backsolver,
-		   SmartPtr<PCalculator> pcalc,
-		   SmartPtr<SchurData> data_B);
+    DenseGenSchurDriver(SmartPtr<SensBacksolver> backsolver,
+			SmartPtr<PCalculator> pcalc,
+			SmartPtr<SchurData> data_B);
 
-    virtual ~IFTSchurDriver();
+    virtual ~DenseGenSchurDriver();
 
     /** Creates the SchurMatrix from B and P */
     virtual bool SchurBuild();
@@ -55,13 +55,13 @@ namespace Ipopt
 			    SmartPtr<IteratesVector> Kf=NULL);
 
     /** DEPRECATED Performs a backsolve on S and K
-    virtual bool SchurSolve(SmartPtr<IteratesVector> lhs,
-			    SmartPtr<const IteratesVector> rhs,
-			    SmartPtr<Vector> delta_u);
+	virtual bool SchurSolve(SmartPtr<IteratesVector> lhs,
+	SmartPtr<const IteratesVector> rhs,
+	SmartPtr<Vector> delta_u);
     */
   private:
     SmartPtr<SchurData> ift_data_;
-    SmartPtr<AsBacksolver> backsolver_;
+    SmartPtr<SensBacksolver> backsolver_;
     SmartPtr<DenseGenMatrix> S_;
 
   };

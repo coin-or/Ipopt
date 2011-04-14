@@ -1,4 +1,4 @@
-// Copyright 2009 Hans Pirnay
+// Copyright 2009, 2011 Hans Pirnay
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -19,7 +19,7 @@ namespace Ipopt
   /** This header file provides some definitions used throughout the program. */
 
 
-  enum NmpControllerExitStatus{
+  enum SensAlgorithmExitStatus{
     SOLVE_SUCCESS,
     FATAL_ERROR
   };
@@ -30,7 +30,7 @@ namespace Ipopt
 
   void append_Index(std::string& str, Index idx);
 
-  SolverReturn AppReturn2SolverReturn(ApplicationReturnStatus ipopt_retval);  
+  SolverReturn AppReturn2SolverReturn(ApplicationReturnStatus ipopt_retval);
 }
 
 #endif
