@@ -300,7 +300,7 @@ namespace Ipopt
     ipopt_retval_ = ipopt_retval;
 
     // Check whether Ipopt solved to optimality - if not, end computation.
-    if ( ipopt_retval != Solve_Succeeded ) {
+    if ( ipopt_retval != Solve_Succeeded && ipopt_retval != Solved_To_Acceptable_Level) {
       jnlst_->Printf(J_ERROR, J_MAIN, "sIPOPT: Aborting sIPOPT computation, because IPOPT did not succeed\n\n");
       options_->SetStringValue("sens_internal_abort", "yes");
       options_->SetStringValue("redhess_internal_abort", "yes");
