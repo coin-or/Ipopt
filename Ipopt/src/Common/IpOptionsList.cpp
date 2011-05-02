@@ -532,14 +532,14 @@ namespace Ipopt
     std::string strvalue;
     if (find_tag(tag, prefix, strvalue)) {
       char* p_end;
-      Index retval = strtol(strvalue.c_str(), &p_end, 10);
+      size_t retval = strtol(strvalue.c_str(), &p_end, 10);
       if (*p_end!='\0' && !isspace(*p_end)) {
         std::string msg = "Option \"" + tag +
                           "\": Integer value expected, but non-integer value \"" +
                           strvalue+"\" found.\n";
         THROW_EXCEPTION(OPTION_INVALID, msg);
       }
-      value = retval;
+      value = static_cast<Index>(retval);
       return true;
     }
     else if (IsValid(option)) {
@@ -669,7 +669,7 @@ namespace Ipopt
         }
         else if (option->Type() == OT_Integer) {
           char* p_end;
-          Index retval = strtol(value.c_str(), &p_end, 10);
+          size_t retval = strtol(value.c_str(), &p_end, 10);
           if (*p_end!='\0' && !isspace(*p_end)) {
             std::string msg = "Option \"" + tag +
                               "\": Integer value expected, but non-integer option value \"" +
@@ -679,7 +679,7 @@ namespace Ipopt
             }
             THROW_EXCEPTION(OPTION_INVALID, msg);
           }
-          bool result = SetIntegerValue(tag, retval, false);
+          bool result = SetIntegerValue(tag, static_cast<Index>(retval), false);
           ASSERT_EXCEPTION(result, OPTION_INVALID,
                            "Error setting integer value read from option file.");
         }

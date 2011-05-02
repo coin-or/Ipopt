@@ -143,7 +143,7 @@ inline double IpCoinGetTimeOfDay()
 {
   struct timeval tv;
   gettimeofday(&tv, NULL);
-  return tv.tv_sec + tv.tv_usec/1000000.0;
+  return static_cast<double>(tv.tv_sec) + static_cast<double>(tv.tv_usec)/1000000.0;
 }
 
 #endif // _MSC_VER
