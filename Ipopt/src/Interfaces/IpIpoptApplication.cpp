@@ -837,11 +837,12 @@ namespace Ipopt
                          "Complementarity.........: %24.16e  %24.16e\n",
                          p2ip_cq->curr_complementarity(0., NORM_MAX),
                          p2ip_cq->unscaled_curr_complementarity(0., NORM_MAX));
-         jnlst_->Printf(J_SUMMARY, J_SOLUTION,
+          jnlst_->Printf(J_SUMMARY, J_SOLUTION,
                          "Overall NLP error.......: %24.16e  %24.16e\n\n",
                          p2ip_cq->curr_nlp_error(),
                          p2ip_cq->unscaled_curr_nlp_error());
-        } catch (IpoptNLP::Eval_Error& exc) {
+        }
+        catch (IpoptNLP::Eval_Error& exc) {
           status = INVALID_NUMBER_DETECTED;
           exc.ReportException(*jnlst_, J_ERROR);
         }
