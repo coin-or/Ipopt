@@ -1,4 +1,4 @@
-/* Copyright (C) 2005, 2010 International Business Machines and others.
+/* Copyright (C) 2005, 2011 International Business Machines and others.
  * All Rights Reserved.
  * This code is published under the Eclipse Public License.
  *
@@ -37,6 +37,12 @@ Bool intermediate_cb(Index alg_mod, Index iter_count, Number obj_value,
                      Number regularization_size, Number alpha_du,
                      Number alpha_pr, Index ls_trials, UserDataPtr user_data);
 
+/* This is an example how user_data can be used. */
+struct MyUserData
+{
+  Number g_offset[2]; /* This is an offset for the constraints.  */
+};
+
 /* Main Program */
 int main()
 {
@@ -49,10 +55,12 @@ int main()
   IpoptProblem nlp = NULL;             /* IpoptProblem */
   enum ApplicationReturnStatus status; /* Solve return code */
   Number* x = NULL;                    /* starting point and solution vector */
+  Number* mult_g = NULL;               /* constraint multipliers
+             at the solution */
   Number* mult_x_L = NULL;             /* lower bound multipliers
-           at the solution */
+             at the solution */
   Number* mult_x_U = NULL;             /* upper bound multipliers
-           at the solution */
+             at the solution */
   Number obj;                          /* objective value */
   Index i;                             /* generic counter */
 
@@ -63,7 +71,10 @@ int main()
   Index nele_hess = 10;
   /* indexing style for matrices */
   Index index_style = 0; /* C-style; start counting of rows and column
-           indices at 0 */
+             indices at 0 */
+
+  /* our user data for the function evalutions. */
+  struct MyUserData user_data;
 
   /* set the number of variables and allocate space for the bounds */
   n=4;
@@ -111,8 +122,13 @@ int main()
   x[3] = 1.0;
 
   /* allocate space to store the bound multipliers at the solution */
+  mult_g = (Number*)malloc(sizeof(Number)*m);
   mult_x_L = (Number*)malloc(sizeof(Number)*n);
   mult_x_U = (Number*)malloc(sizeof(Number)*n);
+
+  /* Initialize the user data */
+  user_data.g_offset[0] = 0.;
+  user_data.g_offset[1] = 0.;
 
   /* Set the callback method for intermediate user-control.  This is
    * not required, just gives you some intermediate control in case
@@ -120,7 +136,7 @@ int main()
   /* SetIntermediateCallback(nlp, intermediate_cb); */
 
   /* solve the problem */
-  status = IpoptSolve(nlp, x, NULL, &obj, NULL, mult_x_L, mult_x_U, NULL);
+  status = IpoptSolve(nlp, x, NULL, &obj, mult_g, mult_x_L, mult_x_U, &user_data);
 
   if (status == Solve_Succeeded) {
     printf("\n\nSolution of the primal variables, x\n");
@@ -128,6 +144,10 @@ int main()
       printf("x[%d] = %e\n", i, x[i]);
     }
 
+    printf("\n\nSolution of the ccnstraint multipliers, lambda\n");
+    for (i=0; i<m; i++) {
+      printf("lambda[%d] = %e\n", i, mult_g[i]);
+    }
     printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
     for (i=0; i<n; i++) {
       printf("z_L[%d] = %e\n", i, mult_x_L[i]);
@@ -139,14 +159,59 @@ int main()
     printf("\n\nObjective value\n");
     printf("f(x*) = %e\n", obj);
   }
+  else {
+    printf("\n\nERROR OCCURRED DURING IPOPT OPTIMIZATION.\n");
+  }
+
+  /* Now we are going to solve this problem again, but with slightly
+     modified constraints.  We change the constraint offset of the
+     first constraint a bit, and resolve the problem using the warm
+     start option. */
+  user_data.g_offset[0] = 0.2;
+
+  if (status == Solve_Succeeded) {
+    /* Now resolve with a warmstart. */
+    AddIpoptStrOption(nlp, "warm_start_init_point", "yes");
+    /* The following option reduce the automatic modification of the
+       starting point done my Ipopt. */
+    AddIpoptNumOption(nlp, "bound_push", 1e-5);
+    AddIpoptNumOption(nlp, "bound_frac", 1e-5);
+    status = IpoptSolve(nlp, x, NULL, &obj, mult_g, mult_x_L, mult_x_U, &user_data);
+
+    if (status == Solve_Succeeded) {
+      printf("\n\nSolution of the primal variables, x\n");
+      for (i=0; i<n; i++) {
+        printf("x[%d] = %e\n", i, x[i]);
+      }
+
+      printf("\n\nSolution of the ccnstraint multipliers, lambda\n");
+      for (i=0; i<m; i++) {
+        printf("lambda[%d] = %e\n", i, mult_g[i]);
+      }
+      printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
+      for (i=0; i<n; i++) {
+        printf("z_L[%d] = %e\n", i, mult_x_L[i]);
+      }
+      for (i=0; i<n; i++) {
+        printf("z_U[%d] = %e\n", i, mult_x_U[i]);
+      }
+
+      printf("\n\nObjective value\n");
+      printf("f(x*) = %e\n", obj);
+    }
+    else {
+      printf("\n\nERROR OCCURRED DURING IPOPT OPTIMIZATION WITH WARM START.\n");
+    }
+  }
 
   /* free allocated memory */
   FreeIpoptProblem(nlp);
   free(x);
+  free(mult_g);
   free(mult_x_L);
   free(mult_x_U);
 
-  return 0;
+  return (int)status;
 }
 
 
@@ -177,11 +242,13 @@ Bool eval_grad_f(Index n, Number* x, Bool new_x,
 Bool eval_g(Index n, Number* x, Bool new_x,
             Index m, Number* g, UserDataPtr user_data)
 {
+  struct MyUserData* my_data = user_data;
+
   assert(n == 4);
   assert(m == 2);
 
-  g[0] = x[0] * x[1] * x[2] * x[3];
-  g[1] = x[0]*x[0] + x[1]*x[1] + x[2]*x[2] + x[3]*x[3];
+  g[0] = x[0] * x[1] * x[2] * x[3] + my_data->g_offset[0];
+  g[1] = x[0]*x[0] + x[1]*x[1] + x[2]*x[2] + x[3]*x[3] + my_data->g_offset[1];
 
   return TRUE;
 }

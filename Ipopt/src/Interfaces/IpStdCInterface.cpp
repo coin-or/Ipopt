@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2010 International Business Machines and others.
+// Copyright (C) 2004, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -212,11 +212,37 @@ enum ApplicationReturnStatus IpoptSolve(
     return (::ApplicationReturnStatus) retval;
   }
 
-  // For now only copy the values of the x's.  When we allow warm
-  // starts we also need to copy the values of the multipliers
+  if (!x) {
+    ipopt_problem->app->Jnlst()->Printf(J_ERROR, J_MAIN,
+                                        "Error: Array x with starting point information is NULL.");
+    return (::ApplicationReturnStatus) Ipopt::Invalid_Problem_Definition;
+  }
+
+  // Copy the starting point information
   ::Number* start_x = new ::Number[ipopt_problem->n];
   for (::Index i=0; i<ipopt_problem->n; i++) {
     start_x[i] = x[i];
+  }
+  ::Number* start_lam = NULL;
+  if (mult_g) {
+    start_lam = new ::Number[ipopt_problem->m];
+    for (::Index i=0; i<ipopt_problem->m; i++) {
+      start_lam[i] = mult_g[i];
+    }
+  }
+  ::Number* start_z_L = NULL;
+  if (mult_x_L) {
+    start_z_L = new ::Number[ipopt_problem->n];
+    for (::Index i=0; i<ipopt_problem->n; i++) {
+      start_z_L[i] = mult_x_L[i];
+    }
+  }
+  ::Number* start_z_U = NULL;
+  if (mult_x_U) {
+    start_z_U = new ::Number[ipopt_problem->n];
+    for (::Index i=0; i<ipopt_problem->n; i++) {
+      start_z_U[i] = mult_x_U[i];
+    }
   }
 
   // Create the original nlp
@@ -230,7 +256,7 @@ enum ApplicationReturnStatus IpoptSolve(
                                 ipopt_problem->nele_jac,
                                 ipopt_problem->nele_hess,
                                 ipopt_problem->index_style,
-                                start_x, NULL, NULL, NULL,
+                                start_x, start_lam, start_z_L, start_z_U,
                                 ipopt_problem->eval_f, ipopt_problem->eval_g,
                                 ipopt_problem->eval_grad_f,
                                 ipopt_problem->eval_jac_g,
@@ -256,6 +282,9 @@ enum ApplicationReturnStatus IpoptSolve(
   }
 
   delete [] start_x;
+  delete [] start_lam;
+  delete [] start_z_L;
+  delete [] start_z_U;
 
   return (::ApplicationReturnStatus) status;
 }
