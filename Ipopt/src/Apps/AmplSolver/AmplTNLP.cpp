@@ -1280,6 +1280,10 @@ namespace Ipopt
                                      "ma57_pivtolmax",
                                      AmplOptionsList::Number_Option,
                                      "Maximal pivot tolerance for the linear solver MA57");
+    ampl_options_list->AddAmplOption("ma57_pivot_order",
+                                     "ma57_pivot_order",
+                                     AmplOptionsList::Integer_Option,
+                                     "Controls pivot order in MA57");
 
     ampl_options_list->AddAmplOption("pardiso_matching_strategy",
                                      "pardiso_matching_strategy",
