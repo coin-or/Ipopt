@@ -96,6 +96,11 @@
 /* Define to 1 if WSMP is available */
 /* #undef HAVE_WSMP */
 
+/* Define to the C type corresponding to Fortran INTEGER */
+#ifndef FORTRAN_INTEGER_TYPE
+#define FORTRAN_INTEGER_TYPE int
+#endif
+
 #endif /* HAVE_CONFIG_H */
 
 /* Type of Fortran integer translated into C */
