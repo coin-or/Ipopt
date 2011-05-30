@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2008 International Business Machines and others.
+// Copyright (C) 2005, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -8,6 +8,16 @@
 
 #include "IpTripletToCSRConverter.hpp"
 #include <list>
+
+#ifdef HAVE_CSTDDEF
+# include <cstddef>
+#else
+# ifdef HAVE_STDDEF_H
+#  include <stddef.h>
+# else
+#  error "don't have header file for stddef"
+# endif
+#endif
 
 namespace Ipopt
 {

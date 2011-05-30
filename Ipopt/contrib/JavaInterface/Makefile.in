@@ -1,4 +1,4 @@
-# Copyright (C) 2007 International Business Machines and others.
+# Copyright (C) 2007, 2011 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
 #
@@ -6,8 +6,8 @@
 
 # $Id$
 
-# Installation of JDK
-JAVA_HOME = @JAVA_HOME@
+## Installation of JDK
+#JAVA_HOME = @JAVA_HOME@
 
 # Java compiler
 JAVAC = $(JAVA_HOME)/bin/javac

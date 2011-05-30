@@ -327,7 +327,7 @@ bool Jipopt::eval_f(Index n, const Number* x, bool new_x,
                         Number& obj_value){
 	if(new_x){
 	/* Copy the native double x to the Java double array xj */ 
-	env->SetDoubleArrayRegion(xj, 0, n, x);
+	  env->SetDoubleArrayRegion(xj, 0, n, const_cast<Number*>(x));
 	}
     
 	/* Call the java method */
@@ -346,7 +346,7 @@ bool Jipopt::eval_grad_f(Index n, const Number* x, bool new_x,
                              Number* grad_f){
 	if(new_x){
 	/* Copy the native double x to the Java double array xj */ 
-	env->SetDoubleArrayRegion(xj, 0, n, x);	
+	  env->SetDoubleArrayRegion(xj, 0, n, const_cast<Number*>(x));	
 	}
 
 	/* Call the java method */
@@ -364,7 +364,7 @@ bool Jipopt::eval_g(Index n, const Number* x, bool new_x,
                         Index m, Number* g){
 	if(new_x){
 		/* Copy the native double x to the Java double array xj */ 
-		env->SetDoubleArrayRegion(xj, 0, n, x);
+	  env->SetDoubleArrayRegion(xj, 0, n, const_cast<Number*>(x));
 	}
 	
 	
@@ -384,7 +384,7 @@ bool Jipopt::eval_jac_g(Index n, const Number* x, bool new_x,
                             Index *jCol, Number* jac_g){
   	if( new_x &&x!=NULL){
 		// Copy the native double x to the Java double array xj  
-    	env->SetDoubleArrayRegion(xj, 0, n, x);
+	  env->SetDoubleArrayRegion(xj, 0, n, const_cast<Number*>(x));
   	}
   	
   	/// Create the index arrays if needed
@@ -428,11 +428,11 @@ bool Jipopt::eval_h(Index n, const Number* x, bool new_x,
 {
   	if(new_x && x!=NULL){		
 		/* Copy the native double x to the Java double array xj */ 
-    	env->SetDoubleArrayRegion(xj, 0, n, x);
+	  env->SetDoubleArrayRegion(xj, 0, n, const_cast<Number*>(x));
   	}
   	if( new_lambda && lambda!=NULL){		
 		/* Copy the native double lambda to the Java double array lambdaj */ 
-    	env->SetDoubleArrayRegion(mult_gj, 0, m, lambda);//multi_gj <==> lambdaj
+	  env->SetDoubleArrayRegion(mult_gj, 0, m, const_cast<Number*>(lambda));//multi_gj <==> lambdaj
   	}
   	
   	/// Create the index arrays if needed
