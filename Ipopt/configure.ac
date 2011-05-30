@@ -15,7 +15,7 @@ AC_PREREQ(2.59)
 AC_INIT([Ipopt],[3.9trunk],[http://projects.coin-or.org/Ipopt/newticket])
 
 AC_COPYRIGHT(
-[Copyright 2004, 2010 International Business Machines and others.
+[Copyright 2004, 2011 International Business Machines and others.
 All Rights Reserved.
 This file is part of the open source package IPOPT which is distributed
 under the Eclipse Public License.])
@@ -193,6 +193,7 @@ AC_COIN_CHECK_CXX_CHEADER(stdarg)
 AC_COIN_CHECK_CXX_CHEADER(string)
 AC_COIN_CHECK_CXX_CHEADER(float)
 AC_COIN_CHECK_CXX_CHEADER(time)
+AC_COIN_CHECK_CXX_CHEADER(stddef)
 
 ###################
 # Function finite #

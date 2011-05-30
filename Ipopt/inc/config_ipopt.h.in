@@ -62,6 +62,9 @@
 /* Define to 1 if you have the <cstdarg> header file. */
 #undef HAVE_CSTDARG
 
+/* Define to 1 if you have the <cstddef> header file. */
+#undef HAVE_CSTDDEF
+
 /* Define to 1 if you have the <cstdio> header file. */
 #undef HAVE_CSTDIO
 
@@ -119,6 +122,9 @@
 
 /* Define to 1 if you have the <stdarg.h> header file. */
 #undef HAVE_STDARG_H
+
+/* Define to 1 if you have the <stddef.h> header file. */
+#undef HAVE_STDDEF_H
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H

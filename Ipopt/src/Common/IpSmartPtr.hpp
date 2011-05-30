@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -14,6 +14,16 @@
 #include "IpDebug.hpp"
 #if COIN_IPOPT_CHECKLEVEL > 2
 # define IP_DEBUG_SMARTPTR
+#endif
+
+#ifdef HAVE_CSTDDEF
+# include <cstddef>
+#else
+# ifdef HAVE_STDDEF_H
+#  include <stddef.h>
+# else
+#  error "don't have header file for stddef"
+# endif
 #endif
 
 namespace Ipopt
