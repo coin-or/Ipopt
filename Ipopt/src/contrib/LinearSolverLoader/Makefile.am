@@ -1,4 +1,4 @@
-# Copyright (C) 2008     GAMS Development
+# Copyright (C) 2008, 2011    GAMS Development
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
 #
@@ -14,7 +14,8 @@ noinst_LTLIBRARIES = libLinearSolverLoader.la
 
 libLinearSolverLoader_la_SOURCES = LibraryHandler.c LibraryHandler.h
 
-AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common`
+AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
+	-I`$(CYGPATH_W) $(srcdir)/../../Algorithm/LinearSolvers`
 
 if BUILD_HSLLOADER
   libLinearSolverLoader_la_SOURCES += HSLLoader.c HSLLoader.h

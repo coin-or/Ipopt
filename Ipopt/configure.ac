@@ -351,6 +351,7 @@ using namespace std;])
 have_ma27=no
 have_ma28=no
 have_ma57=no
+have_ma86=no
 have_mc19=no
 have_ma77=no
 if test $coin_has_hsl = yes ; then
@@ -367,6 +368,11 @@ if test $coin_has_hsl = yes ; then
   case $HSL_CFLAGS in 
     *HAVE_MA57*)
        have_ma57=yes
+       ;;
+  esac
+  case $HSL_CFLAGS in 
+    *HAVE_MA86*)
+       have_ma86=yes
        ;;
   esac
   case $HSL_CFLAGS in 
@@ -453,7 +459,7 @@ fi
 
 # Check if at least one linear solver was found
 
-if test "$have_ma27" != "yes" -a "$have_ma57" != "yes" -a "$have_ma77" != "yes" -a "$use_pardiso" = "no" -a "$use_taucs" = no -a "$use_wsmp" = no -a "$coin_has_mumps" != yes; then
+if test "$have_ma27" != "yes" -a "$have_ma57" != "yes" -a "$have_ma77" != "yes" -a "$have_ma86" != "yes" -a "$use_pardiso" = "no" -a "$use_taucs" = no -a "$use_wsmp" = no -a "$coin_has_mumps" != yes; then
   AC_MSG_WARN("You are compiling Ipopt without any linear solver (such as MUMPS).  You will only be able to run Ipopt if you compile a shared library with a linear solver.")
 fi
 
@@ -638,6 +644,7 @@ IPALLLIBS="../contrib/CGPenalty/libcgpenalty.la ../Algorithm/libipoptalg.la ../A
 
 AM_CONDITIONAL([HAVE_MA27],[test "$have_ma27" = yes])
 AM_CONDITIONAL([HAVE_MA57],[test "$have_ma57" = yes])
+AM_CONDITIONAL([HAVE_MA86],[test "$have_ma86" = yes])
 AM_CONDITIONAL([HAVE_MA28],[test "$have_ma28" = yes])
 AM_CONDITIONAL([HAVE_MA77],[test "$have_ma77" = yes])
 AM_CONDITIONAL([HAVE_MC19],[test "$have_mc19" = yes])
@@ -665,7 +672,7 @@ if test $use_linearsolverloader = yes; then
 fi
 
 AM_CONDITIONAL([BUILD_LINEARSOLVERLOADER],[test $use_linearsolverloader = yes])
-AM_CONDITIONAL([BUILD_HSLLOADER],[test "$have_ma27" != yes -o "$have_ma28" != yes -o "$have_ma57" != yes -o "$have_ma77" != yes -o "$have_mc19" != yes])
+AM_CONDITIONAL([BUILD_HSLLOADER],[test "$have_ma27" != yes -o "$have_ma28" != yes -o "$have_ma57" != yes -o "$have_ma77" != yes -o "$have_ma86" != yes -o "$have_mc19" != yes])
 AM_CONDITIONAL([BUILD_PARDISOLOADER],[test "$use_pardiso" = no])
 
 AM_CONDITIONAL([BUILD_INEXACT], [test $use_inexact = yes])

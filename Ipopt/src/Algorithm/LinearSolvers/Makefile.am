@@ -1,4 +1,4 @@
-# Copyright (C) 2004, 2009 International Business Machines and others.
+# Copyright (C) 2004, 2011 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
 
@@ -26,6 +26,7 @@ if BUILD_LINEARSOLVERLOADER
   liblinsolvers_la_SOURCES += \
 	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp \
 	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp \
+	IpMa86SolverInterface.cpp IpMa86SolverInterface.hpp \
 	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
 	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp \
 	IpMa28Partition.f \
@@ -41,6 +42,11 @@ endif
 if HAVE_MA57
   liblinsolvers_la_SOURCES += \
 	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp
+endif
+
+if HAVE_MA86
+  liblinsolvers_la_SOURCES += \
+	IpMa86SolverInterface.cpp IpMa86SolverInterface.hpp
 endif
 
 if HAVE_MC19
@@ -119,6 +125,7 @@ ASTYLE_FILES = \
 	IpMa27TSolverInterface.cppbak IpMa27TSolverInterface.hppbak \
 	IpMa28TDependencyDetector.cppbak IpMa28TDependencyDetector.hppbak \
 	IpMa57TSolverInterface.cppbak IpMa57TSolverInterface.hppbak \
+	IpMa86SolverInterface.cppbak IpMa86SolverInterface.hppbak \
 	IpMc19TSymScalingMethod.cppbak IpMc19TSymScalingMethod.hppbak \
 	IpMumpsSolverInterface.cppbak IpMumpsSolverInterface.hppbak \
 	IpSlackBasedTSymScalingMethod.cppbak IpSlackBasedTSymScalingMethod.hppbak \

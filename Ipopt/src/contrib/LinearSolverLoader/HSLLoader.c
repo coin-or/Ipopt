@@ -1,4 +1,4 @@
-/* Copyright (C) 2008 GAMS Development and others
+/* Copyright (C) 2008, 2011 GAMS Development and others
  All Rights Reserved.
  This code is published under the Eclipse Public License.
 
@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "hsl_ma86d.h"
 
 #define HSLLIBNAME "libhsl." SHAREDLIBEXT
 
@@ -106,6 +107,24 @@ typedef void (*ma57ed_t) (
 
 typedef void (*mc19ad_t)(ipfint *N, ipfint *NZ, double* A, ipfint *IRN, ipfint* ICN, float* R, float* C, float* W);
 
+typedef void (*ma86_default_control_t)(struct ma86_control *control);
+typedef void (*ma86_analyse_t)(const int n, const int ptr[], const int row[],
+   int order[], void **keep, const struct ma86_control *control,
+   struct ma86_info *info);
+typedef void (*ma86_factor_t)(const int n, const int ptr[], const int row[],
+   const ma86pkgtype_d_ val[], const int order[], void **keep,
+   const struct ma86_control *control, struct ma86_info *info,
+   const ma86pkgtype_d_ scale[]);
+typedef void (*ma86_factor_solve_t)(const int n, const int ptr[],
+   const int row[], const ma86pkgtype_d_ val[], const int order[], void **keep,
+   const struct ma86_control *control, struct ma86_info *info, const int nrhs,
+   const int ldx, ma86pkgtype_d_ x[], const ma86pkgtype_d_ scale[]);
+typedef void (*ma86_solve_t)(const int job, const int nrhs, const int ldx,
+   ma86pkgtype_d_ *x, const int order[], void **keep,
+   const struct ma86_control *control, struct ma86_info *info,
+   const ma86pkgtype_d_ scale[]);
+typedef void (*ma86_finalise_t)(void **keep,
+   const struct ma86_control *control);
 
 #ifndef HAVE_MA27
 ma27id_t func_ma27id=NULL;
@@ -281,6 +300,81 @@ void  F77_FUNC (ma57ed, MA57ED) (
 }
 #endif
 
+#ifndef HAVE_MA86
+
+ma86_default_control_t func_ma86_default_control=NULL;
+ma86_analyse_t func_ma86_analyse=NULL;
+ma86_factor_t func_ma86_factor=NULL;
+ma86_factor_solve_t func_ma86_factor_solve=NULL;
+ma86_solve_t func_ma86_solve=NULL;
+ma86_finalise_t func_ma86_finalise=NULL;
+
+void ma86_default_control(struct ma86_control *control) {
+  if (func_ma86_default_control==NULL) LSL_lateHSLLoad();
+  if (func_ma86_default_control==NULL) {
+    fprintf(stderr, "HSL routine ma86_default_control not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma86_default_control(control);
+}
+
+void ma86_analyse(const int n, const int ptr[], const int row[], int order[],
+      void **keep, const struct ma86_control *control, struct ma86_info *info) {
+  if (func_ma86_analyse==NULL) LSL_lateHSLLoad();
+  if (func_ma86_analyse==NULL) {
+    fprintf(stderr, "HSL routine ma86_analyse not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma86_analyse(n, ptr, row, order, keep, control, info);
+}
+
+void ma86_factor(const int n, const int ptr[], const int row[],
+      const ma86pkgtype_d_ val[], const int order[], void **keep,
+      const struct ma86_control *control, struct ma86_info *info,
+      const ma86pkgtype_d_ scale[]) {
+  if (func_ma86_factor==NULL) LSL_lateHSLLoad();
+  if (func_ma86_factor==NULL) {
+    fprintf(stderr, "HSL routine ma86_factor not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma86_factor(n, ptr, row, val, order, keep, control, info, scale);
+}
+
+void ma86_factor_solve(const int n, const int ptr[], const int row[],
+      const ma86pkgtype_d_ val[], const int order[], void **keep,
+      const struct ma86_control *control, struct ma86_info *info,
+      const int nrhs, const int ldx, ma86pkgtype_d_ x[],
+      const ma86pkgtype_d_ scale[]) {
+  if (func_ma86_factor_solve==NULL) LSL_lateHSLLoad();
+  if (func_ma86_factor_solve==NULL) {
+    fprintf(stderr, "HSL routine ma86_factor_solve not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma86_factor_solve(n, ptr, row, val, order, keep, control, info, nrhs,
+      ldx, x, scale);
+}
+
+void ma86_solve(const int job, const int nrhs, const int ldx, ma86pkgtype_d_ *x,
+      const int order[], void **keep, const struct ma86_control *control,
+      struct ma86_info *info, const ma86pkgtype_d_ scale[]) {
+  if (func_ma86_solve==NULL) LSL_lateHSLLoad();
+  if (func_ma86_solve==NULL) {
+    fprintf(stderr, "HSL routine ma86_solve not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma86_solve(job, nrhs, ldx, x, order, keep, control, info, scale);
+}
+
+void ma86_finalise(void **keep, const struct ma86_control *control) {
+  if (func_ma86_finalise==NULL) LSL_lateHSLLoad();
+  if (func_ma86_finalise==NULL) {
+    fprintf(stderr, "HSL routine ma86_finalise not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma86_finalise(keep, control);
+}
+#endif
+
 #ifndef HAVE_MC19
 
 mc19ad_t func_mc19ad=NULL;
@@ -326,6 +420,15 @@ int LSL_loadHSL(const char* libname, char* msgbuf, int msglen) {
   func_ma57ed=(ma57ed_t)LSL_loadSym(HSL_handle, "ma57ed", msgbuf, msglen);
 #endif
 
+#ifndef HAVE_MA86
+  func_ma86_default_control=(ma86_default_control_t)LSL_loadSym(HSL_handle, "ma86_default_control_d", msgbuf, msglen);
+  func_ma86_analyse=(ma86_analyse_t)LSL_loadSym(HSL_handle, "ma86_analyse_d", msgbuf, msglen);
+  func_ma86_factor=(ma86_factor_t)LSL_loadSym(HSL_handle, "ma86_factor_d", msgbuf, msglen);
+  func_ma86_factor_solve=(ma86_factor_solve_t)LSL_loadSym(HSL_handle, "ma86_factor_solve_d", msgbuf, msglen);
+  func_ma86_solve=(ma86_solve_t)LSL_loadSym(HSL_handle, "ma86_solve_d", msgbuf, msglen);
+  func_ma86_finalise=(ma86_finalise_t)LSL_loadSym(HSL_handle, "ma86_finalise_d", msgbuf, msglen);
+#endif
+
 #ifndef HAVE_MC19
   func_mc19ad=(mc19ad_t)LSL_loadSym(HSL_handle, "mc19ad", msgbuf, msglen);
 #endif
@@ -359,6 +462,15 @@ int LSL_unloadHSL() {
   func_ma57bd=NULL;
   func_ma57cd=NULL;
   func_ma57ed=NULL;
+#endif
+
+#ifndef HAVE_MA86
+  func_ma86_default_control=NULL;
+  func_ma86_analyse=NULL;
+  func_ma86_factor=NULL;
+  func_ma86_factor_solve=NULL;
+  func_ma86_solve=NULL;
+  func_ma86_finalise=NULL;
 #endif
 
 #ifndef HAVE_MC19
@@ -395,6 +507,15 @@ int LSL_isMA57available() {
 	return 0;
 #endif
 }
+
+int LSL_isMA86available() {
+#ifndef HAVE_MA86
+	return HSL_handle!=NULL && func_ma86_default_control!=NULL && func_ma86_analyse!=NULL && func_ma86_factor!=NULL && func_ma86_factor_solve!=NULL && func_ma86_solve!=NULL && func_ma86_finalise!=NULL;
+#else
+	return 0;
+#endif
+}
+
 
 int LSL_isMC19available() {
 #ifndef HAVE_MC19
