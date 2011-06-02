@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2010 International Business Machines and others.
+// Copyright (C) 2004, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -954,11 +954,13 @@ namespace Ipopt
 #ifdef COIN_HAS_MUMPS
 # ifndef HAVE_MA27
 #  ifndef HAVE_MA57
-#   ifndef HAVE_PARDISO
-#    ifndef HAVE_WSMP
+#   ifndef HAVE_MA86
+#    ifndef HAVE_PARDISO
+#     ifndef HAVE_WSMP
     jnlst.Printf(J_INSUPPRESSIBLE, J_MAIN,
                  "NOTE: You are using Ipopt by default with the MUMPS linear solver.\n"
                  "      Other linear solvers might be more efficient (see Ipopt documentation).\n\n\n");
+#     endif
 #    endif
 #   endif
 #  endif

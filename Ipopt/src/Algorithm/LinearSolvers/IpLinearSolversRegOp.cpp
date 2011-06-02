@@ -1,4 +1,4 @@
-// Copyright (C) 2005, 2009 International Business Machines and others.
+// Copyright (C) 2005, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -14,6 +14,7 @@
 #include "IpMa27TSolverInterface.hpp"
 #include "IpMa57TSolverInterface.hpp"
 #include "IpMa77SolverInterface.hpp"
+#include "IpMa86SolverInterface.hpp"
 #include "IpMa28TDependencyDetector.hpp"
 #include "IpPardisoSolverInterface.hpp"
 #ifdef COIN_HAS_MUMPS
@@ -42,6 +43,10 @@ namespace Ipopt
 #if defined(HAVE_MA77)
     roptions->SetRegisteringCategory("MA77 Linear Solver");
     Ma77SolverInterface::RegisterOptions(roptions);
+#endif
+#if defined(HAVE_MA86) || defined(HAVE_LINEARSOLVERLOADER)
+    roptions->SetRegisteringCategory("MA86 Linear Solver");
+    Ma86SolverInterface::RegisterOptions(roptions);
 #endif
 
 #ifdef COIN_HAS_MUMPS

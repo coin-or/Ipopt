@@ -1,4 +1,4 @@
-/* Copyright (C) 2008 GAMS Development and others
+/* Copyright (C) 2008, 2011 GAMS Development and others
  All Rights Reserved.
  This code is published under the Eclipse Public License.
 
@@ -19,6 +19,7 @@ extern "C" {
    * @see LSL_isMA27available
    * @see LSL_isMA28available
    * @see LSL_isMA57available
+   * @see LSL_isMA86available
    * @see LSL_isMC19available
    * @param libname The name under which the HSL lib can be found, or NULL to use a default name (libhsl.<SHAREDLIBEXT>).
    * @param msgbuf A buffer where we can store a failure message. Assumed to be NOT NULL!
@@ -51,6 +52,11 @@ extern "C" {
    * @return Zero if not available, nonzero if MA57 is available in the loaded library.
    */
   int LSL_isMA57available();
+
+  /** Indicates whether a HSL library is loaded and all symbols necessary to use HSL_MA86 have been found.
+   * @return Zero if not available, nonzero if HSL_MA86 is available in the loaded library.
+   */
+  int LSL_isMA86available();
   
   /** Indicates whether a HSL library is loaded and all symbols necessary to use MA57 have been found.
    * @return Zero if not available, nonzero if MA57 is available in the loaded library.

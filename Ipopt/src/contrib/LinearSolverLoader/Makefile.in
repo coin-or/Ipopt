@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# Copyright (C) 2008     GAMS Development
+# Copyright (C) 2008, 2011    GAMS Development
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
 #
@@ -186,6 +186,8 @@ HAVE_MA57_FALSE = @HAVE_MA57_FALSE@
 HAVE_MA57_TRUE = @HAVE_MA57_TRUE@
 HAVE_MA77_FALSE = @HAVE_MA77_FALSE@
 HAVE_MA77_TRUE = @HAVE_MA77_TRUE@
+HAVE_MA86_FALSE = @HAVE_MA86_FALSE@
+HAVE_MA86_TRUE = @HAVE_MA86_TRUE@
 HAVE_MC19_FALSE = @HAVE_MC19_FALSE@
 HAVE_MC19_TRUE = @HAVE_MC19_TRUE@
 HAVE_PARDISO_FALSE = @HAVE_PARDISO_FALSE@
@@ -334,7 +336,8 @@ EXTRA_DIST =
 noinst_LTLIBRARIES = libLinearSolverLoader.la
 libLinearSolverLoader_la_SOURCES = LibraryHandler.c LibraryHandler.h \
 	$(am__append_1) $(am__append_3)
-AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` $(am__append_2)
+AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` -I`$(CYGPATH_W) \
+	$(srcdir)/../../Algorithm/LinearSolvers` $(am__append_2)
 libLinearSolverLoader_la_LIBADD = 
 libLinearSolverLoader_la_DEPENDENCIES = 
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc

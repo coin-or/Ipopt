@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2009 International Business Machines and others.
+// Copyright (C) 2004, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -55,6 +55,7 @@
 #include "IpMa27TSolverInterface.hpp"
 #include "IpMa57TSolverInterface.hpp"
 #include "IpMa77SolverInterface.hpp"
+#include "IpMa86SolverInterface.hpp"
 #include "IpMc19TSymScalingMethod.hpp"
 #include "IpPardisoSolverInterface.hpp"
 #include "IpSlackBasedTSymScalingMethod.hpp"
@@ -133,7 +134,7 @@ namespace Ipopt
   void AlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->SetRegisteringCategory("Linear Solver");
-    roptions->AddStringOption7(
+    roptions->AddStringOption8(
       "linear_solver",
       "Linear solver used for step computations.",
 #ifdef HAVE_MA27
@@ -142,16 +143,20 @@ namespace Ipopt
 # ifdef HAVE_MA57
       "ma57",
 # else
-#  ifdef HAVE_PARDISO
-      "pardiso",
+#  ifdef HAVE_MA86
+      "ma86",
 #  else
-#   ifdef HAVE_WSMP
-      "wsmp",
+#   ifdef HAVE_PARDISO
+      "pardiso",
 #   else
-#    ifdef COIN_HAS_MUMPS
-      "mumps",
+#    ifdef HAVE_WSMP
+      "wsmp",
 #    else
+#     ifdef COIN_HAS_MUMPS
+      "mumps",
+#     else
       "ma27",
+#     endif
 #    endif
 #   endif
 #  endif
@@ -159,7 +164,8 @@ namespace Ipopt
 #endif
       "ma27", "use the Harwell routine MA27",
       "ma57", "use the Harwell routine MA57",
-      "ma77", "use the Harwell routine MA77",
+      "ma77", "use the Harwell routine HSL_MA77",
+      "ma86", "use the Harwell routine HSL_MA86",
       "pardiso", "use the Pardiso package",
       "wsmp", "use WSMP package",
       "mumps", "use MUMPS package",
@@ -332,6 +338,28 @@ namespace Ipopt
 #else
       SolverInterface = new Ma77SolverInterface();
 #endif
+    }
+    else if (linear_solver=="ma86") {
+#ifndef HAVE_MA86
+# ifdef HAVE_LINEARSOLVERLOADER
+      SolverInterface = new Ma86SolverInterface();
+      char buf[256];
+      int rc = LSL_loadHSL(NULL, buf, 255);
+      if (rc) {
+        std::string errmsg;
+        errmsg = "Selected linear solver HSL_MA86 not available.\nTried to obtain HSL_MA86 from shared library \"";
+        errmsg += LSL_HSLLibraryName();
+        errmsg += "\", but the following error occured:\n";
+        errmsg += buf;
+        THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
+      }
+# else
+      THROW_EXCEPTION(OPTION_INVALID, "Support for HSL_MA86 has not been compiled into Ipopt.");
+# endif
+#else
+      SolverInterface = new Ma86SolverInterface();
+#endif
+
     }
     else if (linear_solver=="pardiso") {
 #ifndef HAVE_PARDISO

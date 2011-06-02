@@ -78,12 +78,18 @@ Contributors:
 
   MSVisualStudio/v8-ifort
 
-- Jonathan Hogg
+- Jonathan Hogg (STFC Rutherford Appleton Laboratory)
   MA77 interface
 
   src/Algorithm/LinearSolvers/ma77_iface.f90
   src/Algorithm/LinearSolvers/IpMa77SolverInterface.hpp
   src/Algorithm/LinearSolvers/IpMa77SolverInterface.cpp
+
+  MA86 interface
+
+  src/Algorithm/LinearSolvers/hsl_ma86d.h
+  src/Algorithm/LinearSolvers/IpMa86SolverInterface.hpp
+  src/Algorithm/LinearSolvers/IpMa86SolverInterface.cpp
 
 - Hans Pirnay (RWTH Aachen)
   Rodrigo Lopez-Negrete (Carnegie Mellon University)
