@@ -295,7 +295,9 @@ namespace Ipopt
 
     // Note that MeTiS's iperm is our perm and vice-versa
     Index *iperm = new Index[ndim];
-    METIS_NodeND(&ndim_nc, ptr_tmp, row_tmp, &numflag, options, iperm, perm);
+    //METIS_NodeND(&ndim_nc, ptr_tmp, row_tmp, &numflag, options, iperm, perm);
+    THROW_EXCEPTION(INTERNAL_ABORT,
+                    "Code in the MA86 currently needs to be changed.  The above line require Metis, but not all Ipopt builts have it.");
     delete[] iperm;
     delete[] row_tmp;
     delete[] ptr_tmp;
