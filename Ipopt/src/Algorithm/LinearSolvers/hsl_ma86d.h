@@ -57,7 +57,7 @@ struct ma86_control_d {
                   if false */
    int nbi;    /* Inner block size for use with ma64*/
    int pool_size; /* Size of task pool arrays*/
-   ma86realtype_d_ small; /* Pivots less than small are treated as zero*/
+   ma86realtype_d_ small_; /* Pivots less than small are treated as zero*/
    ma86realtype_d_ static_;/* Control static pivoting*/
    ma86realtype_d_ u;      /* Pivot tolerance*/
    ma86realtype_d_ umin;   /* Minimum pivot tolerance*/

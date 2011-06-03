@@ -95,7 +95,7 @@ namespace Ipopt
     options.GetIntegerValue("ma86_print_level", control_.diagnostics_level,
                             prefix);
     options.GetIntegerValue("ma86_nemin", control_.nemin, prefix);
-    options.GetNumericValue("ma86_small", control_.small, prefix);
+    options.GetNumericValue("ma86_small", control_.small_, prefix);
     options.GetNumericValue("ma86_static", control_.static_, prefix);
     options.GetNumericValue("ma86_u", control_.u, prefix);
     options.GetNumericValue("ma86_u", umax_, prefix);
