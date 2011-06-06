@@ -8,16 +8,8 @@
 
 #include "hs071_nlp.hpp"
 
-// for printf
-#ifdef HAVE_CSTDIO
-# include <cstdio>
-#else
-# ifdef HAVE_STDIO_H
-#  include <stdio.h>
-# else
-#  error "don't have header file for stdio"
-# endif
-#endif
+#include <cassert>
+#include <iostream>
 
 using namespace Ipopt;
 
@@ -262,24 +254,24 @@ void HS071_NLP::finalize_solution(SolverReturn status,
   // so we could use the solution.
 
   // For this example, we write the solution to the console
-  printf("\n\nSolution of the primal variables, x\n");
+  std::cout << std::endl << std::endl << "Solution of the primal variables, x" << std::endl;
   for (Index i=0; i<n; i++) {
-    printf("x[%d] = %e\n", i, x[i]);
+     std::cout << "x[" << i << "] = " << x[i] << std::endl;
   }
 
-  printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
+  std::cout << std::endl << std::endl << "Solution of the bound multipliers, z_L and z_U" << std::endl;
   for (Index i=0; i<n; i++) {
-    printf("z_L[%d] = %e\n", i, z_L[i]);
+    std::cout << "z_L[" << i << "] = " << z_L[i] << std::endl;
   }
   for (Index i=0; i<n; i++) {
-    printf("z_U[%d] = %e\n", i, z_U[i]);
+    std::cout << "z_U[" << i << "] = " << z_U[i] << std::endl;
   }
 
-  printf("\n\nObjective value\n");
-  printf("f(x*) = %e\n", obj_value);
+  std::cout << std::endl << std::endl << "Objective value" << std::endl;
+  std::cout << "f(x*) = " << obj_value << std::endl;
 
-  printf("\nFinal value of the constraints:\n");
+  std::cout << std::endl << "Final value of the constraints:" << std::endl;
   for (Index i=0; i<m ;i++) {
-    printf("g(%d) = %e\n", i, g[i]);
+    std::cout << "g(" << i << ") = " << g[i] << std::endl;
   }
 }

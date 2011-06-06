@@ -16,16 +16,6 @@
 # define IP_DEBUG_SMARTPTR
 #endif
 
-#ifdef HAVE_CSTDDEF
-# include <cstddef>
-#else
-# ifdef HAVE_STDDEF_H
-#  include <stddef.h>
-# else
-#  error "don't have header file for stddef"
-# endif
-#endif
-
 namespace Ipopt
 {
 
@@ -347,7 +337,7 @@ namespace Ipopt
   template <class T>
   SmartPtr<T>::SmartPtr()
       :
-      ptr_(NULL)
+      ptr_(0)
   {
 #ifdef IP_DEBUG_SMARTPTR
     DBG_START_METH("SmartPtr<T>::SmartPtr()", dbg_smartptr_verbosity);
@@ -357,7 +347,7 @@ namespace Ipopt
 
     const ReferencedObject* trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_
     = ptr_;
-    trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = NULL;
+    trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = 0;
 #endif
 
   }
@@ -366,7 +356,7 @@ namespace Ipopt
   template <class T>
   SmartPtr<T>::SmartPtr(const SmartPtr<T>& copy)
       :
-      ptr_(NULL)
+      ptr_(0)
   {
 #ifdef IP_DEBUG_SMARTPTR
     DBG_START_METH("SmartPtr<T>::SmartPtr(const SmartPtr<T>& copy)", dbg_smartptr_verbosity);
@@ -376,7 +366,7 @@ namespace Ipopt
 
     const ReferencedObject* trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_
     = ptr_;
-    trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = NULL;
+    trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = 0;
 #endif
 
     (void) SetFromSmartPtr_(copy);
@@ -386,7 +376,7 @@ namespace Ipopt
   template <class T>
   SmartPtr<T>::SmartPtr(T* ptr)
       :
-      ptr_(NULL)
+      ptr_(0)
   {
 #ifdef IP_DEBUG_SMARTPTR
     DBG_START_METH("SmartPtr<T>::SmartPtr(T* ptr)", dbg_smartptr_verbosity);
@@ -396,7 +386,7 @@ namespace Ipopt
 
     const ReferencedObject* trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_
     = ptr_;
-    trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = NULL;
+    trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = 0;
 #endif
 
     (void) SetFromRawPtr_(ptr);
@@ -482,7 +472,7 @@ namespace Ipopt
     // Release any old pointer
     ReleasePointer_();
 
-    if (rhs != NULL) {
+    if (rhs != 0) {
       rhs->AddRef(this);
       ptr_ = rhs;
     }
@@ -525,7 +515,7 @@ namespace Ipopt
       if (ptr_->ReferenceCount() == 0) {
         delete ptr_;
       }
-      ptr_ = NULL;
+      ptr_ = 0;
     }
   }
 
@@ -564,7 +554,7 @@ namespace Ipopt
       0);
 #endif
 
-    return (smart_ptr.ptr_ == NULL);
+    return (smart_ptr.ptr_ == 0);
   }
 
 

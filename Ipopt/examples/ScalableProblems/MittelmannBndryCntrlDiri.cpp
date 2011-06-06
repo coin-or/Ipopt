@@ -9,6 +9,16 @@
 
 #include "MittelmannBndryCntrlDiri.hpp"
 
+#ifdef HAVE_CASSERT
+# include <cassert>
+#else
+# ifdef HAVE_ASSERT_H
+#  include <assert.h>
+# else
+#  error "don't have header file for assert"
+# endif
+#endif
+
 using namespace Ipopt;
 
 /* Constructor. */

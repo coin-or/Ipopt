@@ -11,6 +11,12 @@
 
 #include "RegisteredTNLP.hpp"
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#else
+#include "configall_system.h"
+#endif
+
 #ifdef HAVE_CMATH
 # include <cmath>
 #else

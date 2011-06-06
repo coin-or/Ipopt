@@ -1,7 +1,10 @@
-/* inc/config_ipopt.h.in.  Generated from configure.ac by autoheader.  */
+/* src/Common/config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* Define to 1 if the inexact linear solver option is included */
 #undef BUILD_INEXACT
+
+/* Define to be the name of C-function for NaNInf check */
+#undef COIN_C_FINITE
 
 /* Define to 1 if the ASL package is available */
 #undef COIN_HAS_ASL
@@ -188,9 +191,6 @@
 
 /* Release Version number of project */
 #undef IPOPT_VERSION_RELEASE
-
-/* Define to be the name of C-function for NaNInf check */
-#undef MY_C_FINITE
 
 /* Name of package */
 #undef PACKAGE

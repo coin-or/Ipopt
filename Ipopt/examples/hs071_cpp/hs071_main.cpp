@@ -9,16 +9,7 @@
 #include "IpIpoptApplication.hpp"
 #include "hs071_nlp.hpp"
 
-// for printf
-#ifdef HAVE_CSTDIO
-# include <cstdio>
-#else
-# ifdef HAVE_STDIO_H
-#  include <stdio.h>
-# else
-#  error "don't have header file for stdio"
-# endif
-#endif
+#include <iostream>
 
 using namespace Ipopt;
 
@@ -48,7 +39,7 @@ int main(int argv, char* argc[])
   ApplicationReturnStatus status;
   status = app->Initialize();
   if (status != Solve_Succeeded) {
-    printf("\n\n*** Error during initialization!\n");
+    std::cout << std::endl << std::endl << "*** Error during initialization!" << std::endl;
     return (int) status;
   }
 
@@ -56,10 +47,10 @@ int main(int argv, char* argc[])
   status = app->OptimizeTNLP(mynlp);
 
   if (status == Solve_Succeeded) {
-    printf("\n\n*** The problem solved!\n");
+    std::cout << std::endl << std::endl << "*** The problem solved!" << std::endl;
   }
   else {
-    printf("\n\n*** The problem FAILED!\n");
+    std::cout << std::endl << std::endl << "*** The problem FAILED!" << std::endl;
   }
 
   // As the SmartPtrs go out of scope, the reference count

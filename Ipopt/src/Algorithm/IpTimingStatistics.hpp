@@ -13,31 +13,6 @@
 #include "IpJournalist.hpp"
 #include "IpTimedTask.hpp"
 
-#ifdef HAVE_CTIME
-# include <ctime>
-#else
-# ifdef HAVE_TIME_H
-#  include <time.h>
-# else
-#  error "don't have header file for time"
-# endif
-#endif
-
-// The following lines are copied from CoinTime.hpp
-// We should probably make some more tests here
-#if defined(_MSC_VER)
-// Turn off compiler warning about long names
-#  pragma warning(disable:4786)
-#else
-// MacOS-X and FreeBSD needs sys/time.h
-# if defined(__MACH__) || defined (__FreeBSD__)
-#  include <sys/time.h>
-# endif
-# if !defined(__MSVCRT__)
-#  include <sys/resource.h>
-# endif
-#endif
-
 namespace Ipopt
 {
   /** This class collects all timing statistics for Ipopt.

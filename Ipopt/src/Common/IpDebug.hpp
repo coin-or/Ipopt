@@ -12,6 +12,7 @@
 #include "IpoptConfig.h"
 #include "IpTypes.hpp"
 
+#ifdef COIN_IPOPT_CHECKLEVEL
 #ifdef HAVE_CASSERT
 # include <cassert>
 #else
@@ -20,6 +21,9 @@
 # else
 #  error "don't have header file for assert"
 # endif
+#endif
+#else
+#define COIN_IPOPT_CHECKLEVEL 0
 #endif
 
 #if COIN_IPOPT_CHECKLEVEL > 0
@@ -34,6 +38,10 @@
 # define DBG_ASSERT(test)
 # define DBG_ASSERT_EXCEPTION(__condition, __except_type, __msg)
 # define DBG_DO(__cmd)
+#endif
+
+#ifndef COIN_IPOPT_VERBOSITY
+#define COIN_IPOPT_VERBOSITY 0
 #endif
 
 #if COIN_IPOPT_VERBOSITY < 1

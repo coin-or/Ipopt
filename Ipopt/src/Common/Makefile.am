@@ -10,7 +10,6 @@ AUTOMAKE_OPTIONS = foreign
 
 includeipoptdir = $(includedir)/coin
 includeipopt_HEADERS = \
-	../../inc/config_ipopt.h \
 	IpCachedResults.hpp \
 	IpDebug.hpp \
 	IpException.hpp \
@@ -49,23 +48,21 @@ libcommon_la_LDFLAGS = $(LT_LDFLAGS)
 # Create the Config.h file that always defines HAVE_CONFIG_H and install it #
 #############################################################################
 
-# You only need to adapt the following line
 ConfigHeader = IpoptConfig.h
 
 install-exec-local:
-	echo "#ifndef HAVE_CONFIG_H" >bla
-	echo "#define HAVE_CONFIG_H" >>bla
+	echo "#ifndef __CONFIG_IPOPT_H__" >bla
+	echo "#define __CONFIG_IPOPT_H__" >>bla
+	tail -n +3 config_ipopt.h >> bla
 	echo "#endif" >> bla
-	cat $(srcdir)/$(ConfigHeader) >> bla
 	$(install_sh_DATA) bla $(DESTDIR)$(includeipoptdir)/$(ConfigHeader)
 	rm -f bla
 
 uninstall-local:
 	rm -f $(DESTDIR)$(includeipoptdir)/$(ConfigHeader)
 
-# This line is necessary to allow VPATH compilation with MS compilers
-# on Cygwin
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
+# This line is necessary to allow VPATH compilation
+DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)`
 
 # Astyle stuff
 

@@ -8,6 +8,8 @@
 
 #include "MyNLP.hpp"
 
+#include <cassert>
+
 using namespace Ipopt;
 
 /* Constructor. */

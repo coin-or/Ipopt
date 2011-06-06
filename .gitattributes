@@ -162,6 +162,7 @@ Ipopt/depcomp -text
 Ipopt/doc/documentation.pdf -text
 Ipopt/doc/options.tex -text
 Ipopt/examples/ScalableProblems/README -text
+Ipopt/examples/ScalableProblems/config.h.in -text
 Ipopt/examples/hs071_c/Makefile.in -text
 Ipopt/examples/hs071_cpp/Makefile.in -text
 Ipopt/install-sh -text
@@ -177,6 +178,10 @@ Ipopt/src/Algorithm/LinearSolvers/IpSlackBasedTSymScalingMethod.cpp -text
 Ipopt/src/Algorithm/LinearSolvers/IpSlackBasedTSymScalingMethod.hpp -text
 Ipopt/src/Apps/AmplSolver/ipoptamplinterface-uninstalled.pc.in -text
 Ipopt/src/Apps/AmplSolver/ipoptamplinterface.pc.in -text
+Ipopt/src/Common/config.h.in -text
+Ipopt/src/Common/config_default.h -text
+Ipopt/src/Common/config_ipopt.h.in -text
+Ipopt/src/Common/config_ipopt_default.h -text
 Ipopt/src/contrib/CGPenalty/Makefile.am -text
 Ipopt/src/contrib/CGPenalty/Makefile.in -text
 Ipopt/src/contrib/LinearSolverLoader/Makefile.am -text

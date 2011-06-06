@@ -48,7 +48,9 @@ am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
-CONFIG_HEADER = $(top_builddir)/inc/config_ipopt.h
+CONFIG_HEADER = $(top_builddir)/src/Common/config.h \
+	$(top_builddir)/src/Common/config_ipopt.h \
+	$(top_builddir)/examples/ScalableProblems/config.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libdummy_la_LIBADD =
@@ -323,9 +325,8 @@ EXTRA_DIST = \
 noinst_LTLIBRARIES = libdummy.la
 nodist_libdummy_la_SOURCES = ipoma.f
 
-# This line is necessary to allow VPATH compilation with MS compilers
-# on Cygwin
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
+# This line is necessary to allow VPATH compilation
+DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
 CLEANFILES = ipoma.f ipo sdipo ipo.pro sdipo.pro
 all: all-am
 
