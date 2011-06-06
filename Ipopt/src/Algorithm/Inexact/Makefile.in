@@ -51,7 +51,9 @@ am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
-CONFIG_HEADER = $(top_builddir)/inc/config_ipopt.h
+CONFIG_HEADER = $(top_builddir)/src/Common/config.h \
+	$(top_builddir)/src/Common/config_ipopt.h \
+	$(top_builddir)/examples/ScalableProblems/config.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libinexact_la_LIBADD =
@@ -365,9 +367,8 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` -I`$(CYGPATH_W) \
 	-I`$(CYGPATH_W) $(srcdir)/../LinearSolvers` -I`$(CYGPATH_W) \
 	$(srcdir)/../../contrib/LinearSolverLoader` $(am__append_1)
 
-# This line is necessary to allow VPATH compilation with MS compilers
-# on Cygwin
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
+# This line is necessary to allow VPATH compilation
+DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
 
 # Astyle stuff
 ASTYLE_FILES = \

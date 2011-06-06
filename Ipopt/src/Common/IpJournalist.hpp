@@ -20,7 +20,7 @@
 # ifdef HAVE_STDARG_H
 #  include <stdarg.h>
 # else
-#  error "don't have header file for stdarg"
+#  include <cstdarg>  // if this header is included by someone who does not define HAVE_CSTDARG or HAVE_STDARG, let's hope that cstdarg is available
 # endif
 #endif
 

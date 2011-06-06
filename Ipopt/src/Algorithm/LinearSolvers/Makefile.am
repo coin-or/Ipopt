@@ -96,9 +96,8 @@ if COIN_HAS_HSL
 AM_CPPFLAGS += $(HSL_CFLAGS)
 endif
 
-# This line is necessary to allow VPATH compilation with MS compilers
-# on Cygwin
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
+# This line is necessary to allow VPATH compilation
+DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
 
 # Workaround a bug in the AIX C++ compiler
 if AIX_FIX_COMPILER_BUG

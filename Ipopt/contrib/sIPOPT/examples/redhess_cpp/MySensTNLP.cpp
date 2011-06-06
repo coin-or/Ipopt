@@ -8,6 +8,8 @@
 #include "MySensTNLP.hpp"
 #include "IpDenseVector.hpp"
 
+#include <cassert>
+
 using namespace Ipopt;
 
 /* Constructor. */

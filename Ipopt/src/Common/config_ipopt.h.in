@@ -1,0 +1,16 @@
+/* src/Common/config_ipopt.h.in. */
+
+/* Version number of project */
+#undef IPOPT_VERSION
+
+/* Major Version number of project */
+#undef IPOPT_VERSION_MAJOR
+
+/* Minor Version number of project */
+#undef IPOPT_VERSION_MINOR
+
+/* Release Version number of project */
+#undef IPOPT_VERSION_RELEASE
+
+/* Define to the C type corresponding to Fortran INTEGER */
+#undef FORTRAN_INTEGER_TYPE

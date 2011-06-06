@@ -29,6 +29,6 @@ endif
 libLinearSolverLoader_la_LIBADD = 
 libLinearSolverLoader_la_DEPENDENCIES =  
 
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
+DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
 
 DISTCLEANFILES = 

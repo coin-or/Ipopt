@@ -8,6 +8,12 @@
 
 #include "LuksanVlcek2.hpp"
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#else
+#include "configall_system.h"
+#endif
+
 #ifdef HAVE_CMATH
 # include <cmath>
 #else
@@ -18,7 +24,15 @@
 # endif
 #endif
 
-#include <cstdio>
+#ifdef HAVE_CSTDIO
+# include <cstdio>
+#else
+# ifdef HAVE_STDIO_H
+#  include <stdio.h>
+# else
+#  error "don't have header file for stdio"
+# endif
+#endif
 
 using namespace Ipopt;
 

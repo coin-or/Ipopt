@@ -34256,7 +34256,7 @@ esac
 
 # now try to guess the correct name of the finite function
 
-MY_C_FINITE=
+COIN_C_FINITE=
 echo "$as_me:$LINENO: checking whether finite is declared" >&5
 echo $ECHO_N "checking whether finite is declared... $ECHO_C" >&6
 if test "${ac_cv_have_decl_finite+set}" = set; then
@@ -34344,10 +34344,10 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_have_decl_finite" >&5
 echo "${ECHO_T}$ac_cv_have_decl_finite" >&6
 if test $ac_cv_have_decl_finite = yes; then
-  MY_C_FINITE=finite
+  COIN_C_FINITE=finite
 fi
 
-if test -z "$MY_C_FINITE"; then
+if test -z "$COIN_C_FINITE"; then
   echo "$as_me:$LINENO: checking whether _finite is declared" >&5
 echo $ECHO_N "checking whether _finite is declared... $ECHO_C" >&6
 if test "${ac_cv_have_decl__finite+set}" = set; then
@@ -34435,10 +34435,10 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_have_decl__finite" >&5
 echo "${ECHO_T}$ac_cv_have_decl__finite" >&6
 if test $ac_cv_have_decl__finite = yes; then
-  MY_C_FINITE=_finite
+  COIN_C_FINITE=_finite
 fi
 
-  if test -z "$MY_C_FINITE"; then
+  if test -z "$COIN_C_FINITE"; then
     echo "$as_me:$LINENO: checking whether isfinite is declared" >&5
 echo $ECHO_N "checking whether isfinite is declared... $ECHO_C" >&6
 if test "${ac_cv_have_decl_isfinite+set}" = set; then
@@ -34526,18 +34526,18 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_have_decl_isfinite" >&5
 echo "${ECHO_T}$ac_cv_have_decl_isfinite" >&6
 if test $ac_cv_have_decl_isfinite = yes; then
-  MY_C_FINITE=isfinite
+  COIN_C_FINITE=isfinite
 fi
 
   fi
 fi
-if test -z "$MY_C_FINITE"; then
+if test -z "$COIN_C_FINITE"; then
   { echo "$as_me:$LINENO: WARNING: Cannot find C-function for checking NaN and Inf.  Check will be disabled" >&5
 echo "$as_me: WARNING: Cannot find C-function for checking NaN and Inf.  Check will be disabled" >&2;}
 else
 
 cat >>confdefs.h <<_ACEOF
-#define MY_C_FINITE $MY_C_FINITE
+#define COIN_C_FINITE $COIN_C_FINITE
 _ACEOF
 
 fi
@@ -36746,7 +36746,7 @@ if test $coin_has_asl = yes ; then
 
 fi
 
-          ac_config_headers="$ac_config_headers inc/config_ipopt.h"
+                              ac_config_headers="$ac_config_headers src/Common/config.h src/Common/config_ipopt.h examples/ScalableProblems/config.h"
 
 
 
@@ -37657,7 +37657,9 @@ do
   "test/hs071_nlp.hpp" ) CONFIG_LINKS="$CONFIG_LINKS test/hs071_nlp.hpp:examples/hs071_cpp/hs071_nlp.hpp" ;;
   "test/hs071_c.c" ) CONFIG_LINKS="$CONFIG_LINKS test/hs071_c.c:examples/hs071_c/hs071_c.c" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
-  "inc/config_ipopt.h" ) CONFIG_HEADERS="$CONFIG_HEADERS inc/config_ipopt.h" ;;
+  "src/Common/config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS src/Common/config.h" ;;
+  "src/Common/config_ipopt.h" ) CONFIG_HEADERS="$CONFIG_HEADERS src/Common/config_ipopt.h" ;;
+  "examples/ScalableProblems/config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS examples/ScalableProblems/config.h" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
    { (exit 1); exit 1; }; };;

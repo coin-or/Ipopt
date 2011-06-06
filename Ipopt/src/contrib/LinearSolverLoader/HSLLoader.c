@@ -17,6 +17,9 @@
 
 #define HSLLIBNAME "libhsl." SHAREDLIBEXT
 
+/* Type of Fortran integer translated into C */
+typedef FORTRAN_INTEGER_TYPE ipfint;
+
 soHandle_t HSL_handle=NULL;
 
 void LSL_lateHSLLoad();

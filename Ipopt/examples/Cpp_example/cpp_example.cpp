@@ -10,16 +10,7 @@
 #include "IpSolveStatistics.hpp"
 #include "MyNLP.hpp"
 
-// for printf
-#ifdef HAVE_CSTDIO
-# include <cstdio>
-#else
-# ifdef HAVE_STDIO_H
-#  include <stdio.h>
-# else
-#  error "don't have header file for stdio"
-# endif
-#endif
+#include <iostream>
 
 using namespace Ipopt;
 
@@ -38,7 +29,7 @@ int main(int argv, char* argc[])
   ApplicationReturnStatus status;
   status = app->Initialize();
   if (status != Solve_Succeeded) {
-    printf("\n\n*** Error during initialization!\n");
+    std::cout << std::endl << std::endl << "*** Error during initialization!" << std::endl;
     return (int) status;
   }
 
@@ -47,10 +38,10 @@ int main(int argv, char* argc[])
   if (status == Solve_Succeeded) {
     // Retrieve some statistics about the solve
     Index iter_count = app->Statistics()->IterationCount();
-    printf("\n\n*** The problem solved in %d iterations!\n", iter_count);
+    std::cout << std::endl << std::endl << "*** The problem solved in " << iter_count << " iterations!" << std::endl;
 
     Number final_obj = app->Statistics()->FinalObjective();
-    printf("\n\n*** The final value of the objective function is %e.\n", final_obj);
+    std::cout << std::endl << std::endl << "*** The final value of the objective function is " << final_obj << '.' << std::endl;
   }
 
   return (int) status;

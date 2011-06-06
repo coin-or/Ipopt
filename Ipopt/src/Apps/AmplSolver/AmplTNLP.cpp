@@ -7,10 +7,8 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpoptConfig.h"
-#ifdef HAVE_CONFIG_H
-# include "config_ipopt.h"
-#else
-# define PACKAGE_VERSION IPOPT_VERSION
+#ifndef PACKAGE_VERSION
+#define PACKAGE_VERSION IPOPT_VERSION
 #endif
 
 #include "AmplTNLP.hpp"
@@ -18,6 +16,16 @@
 #include "IpGenTMatrix.hpp"
 #include "IpSymTMatrix.hpp"
 #include "IpBlas.hpp"
+
+#ifdef HAVE_CSTRING
+# include <cstring>
+#else
+# ifdef HAVE_STRING_H
+#  include <string.h>
+# else
+#  error "don't have header file for string"
+# endif
+#endif
 
 /* AMPL includes */
 #include "asl.h"
@@ -945,6 +953,18 @@ namespace Ipopt
 
       return retval;
     }
+  }
+
+
+  AmplOptionsList::AmplOption::AmplOption(const std::string ipopt_option_name,
+    AmplOptionType type,
+    const std::string description)
+  :
+    ipopt_option_name_(ipopt_option_name),
+    type_(type)
+  {
+    description_ = new char[description.size()+1];
+    strcpy(description_, description.c_str());
   }
 
   AmplOptionsList::~AmplOptionsList()

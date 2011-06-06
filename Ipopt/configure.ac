@@ -208,8 +208,8 @@ esac
 
 # now try to guess the correct name of the finite function
 
-MY_C_FINITE=
-AC_CHECK_DECL([finite],[MY_C_FINITE=finite],,[
+COIN_C_FINITE=
+AC_CHECK_DECL([finite],[COIN_C_FINITE=finite],,[
 #ifdef HAVE_CMATH
 # include <cmath>
 #else
@@ -231,8 +231,8 @@ AC_CHECK_DECL([finite],[MY_C_FINITE=finite],,[
 #  include <ieeefp.h>
 # endif
 #endif])
-if test -z "$MY_C_FINITE"; then
-  AC_CHECK_DECL([_finite],[MY_C_FINITE=_finite],,[
+if test -z "$COIN_C_FINITE"; then
+  AC_CHECK_DECL([_finite],[COIN_C_FINITE=_finite],,[
 #ifdef HAVE_CMATH
 # include <cmath>
 #else
@@ -254,8 +254,8 @@ if test -z "$MY_C_FINITE"; then
 #  include <ieeefp.h>
 # endif
 #endif])
-  if test -z "$MY_C_FINITE"; then
-    AC_CHECK_DECL([isfinite],[MY_C_FINITE=isfinite],,[
+  if test -z "$COIN_C_FINITE"; then
+    AC_CHECK_DECL([isfinite],[COIN_C_FINITE=isfinite],,[
 #ifdef HAVE_CMATH
 # include <cmath>
 #else
@@ -279,10 +279,10 @@ if test -z "$MY_C_FINITE"; then
 #endif])
   fi
 fi
-if test -z "$MY_C_FINITE"; then
+if test -z "$COIN_C_FINITE"; then
   AC_MSG_WARN(Cannot find C-function for checking NaN and Inf.  Check will be disabled)
 else
-  AC_DEFINE_UNQUOTED([MY_C_FINITE],[$MY_C_FINITE],
+  AC_DEFINE_UNQUOTED([COIN_C_FINITE],[$COIN_C_FINITE],
                      [Define to be the name of C-function for NaNInf check])
 fi
 
@@ -832,6 +832,6 @@ if test $coin_has_asl = yes ; then
                   ])
 fi
 
-AC_CONFIG_HEADER([inc/config_ipopt.h])
+AC_CONFIG_HEADER([src/Common/config.h src/Common/config_ipopt.h examples/ScalableProblems/config.h])
 
 AC_COIN_FINALIZE

@@ -14,17 +14,6 @@
 #include "IpJournalist.hpp"
 #include "IpOptionsList.hpp"
 
-#include "IpoptConfig.h"
-#ifdef HAVE_CSTRING
-# include <cstring>
-#else
-# ifdef HAVE_STRING_H
-#  include <string.h>
-# else
-#  error "don't have header file for string"
-# endif
-#endif
-
 #include <map>
 #include <string>
 
@@ -128,14 +117,7 @@ namespace Ipopt
     public:
       AmplOption(const std::string ipopt_option_name,
                  AmplOptionType type,
-                 const std::string description)
-          :
-          ipopt_option_name_(ipopt_option_name),
-          type_(type)
-      {
-        description_ = new char[description.size()+1];
-        strcpy(description_, description.c_str());
-      }
+                 const std::string description);
 
       ~AmplOption()
       {

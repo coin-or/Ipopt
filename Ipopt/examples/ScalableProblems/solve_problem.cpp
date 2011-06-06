@@ -9,6 +9,12 @@
 #include "IpIpoptApplication.hpp"
 #include "RegisteredTNLP.hpp"
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#else
+#include "configall_system.h"
+#endif
+
 #ifdef HAVE_CSTDIO
 # include <cstdio>
 #else
