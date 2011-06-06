@@ -1,5 +1,8 @@
 /* src/Common/config_ipopt.h.in. */
 
+#ifndef __CONFIG_IPOPT_H__
+#define __CONFIG_IPOPT_H__
+
 /* Version number of project */
 #undef IPOPT_VERSION
 
@@ -14,3 +17,5 @@
 
 /* Define to the C type corresponding to Fortran INTEGER */
 #undef FORTRAN_INTEGER_TYPE
+
+#endif

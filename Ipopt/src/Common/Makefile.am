@@ -44,22 +44,11 @@ libcommon_la_SOURCES = \
 
 libcommon_la_LDFLAGS = $(LT_LDFLAGS)
 
-#############################################################################
-# Create the Config.h file that always defines HAVE_CONFIG_H and install it #
-#############################################################################
-
-ConfigHeader = IpoptConfig.h
-
 install-exec-local:
-	echo "#ifndef __CONFIG_IPOPT_H__" >bla
-	echo "#define __CONFIG_IPOPT_H__" >>bla
-	tail -n +3 config_ipopt.h >> bla
-	echo "#endif" >> bla
-	$(install_sh_DATA) bla $(DESTDIR)$(includeipoptdir)/$(ConfigHeader)
-	rm -f bla
+	$(install_sh_DATA) config_ipopt.h $(DESTDIR)$(includeipoptdir)/IpoptConfig.h
 
 uninstall-local:
-	rm -f $(DESTDIR)$(includeipoptdir)/$(ConfigHeader)
+	rm -f $(DESTDIR)$(includeipoptdir)/IpoptConfig.h
 
 # This line is necessary to allow VPATH compilation
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)`

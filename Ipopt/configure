@@ -25644,7 +25644,7 @@ BLAS_CFLAGS_INSTALLED=
 BLAS_DATA=
 BLAS_DATA_INSTALLED=
 
-# initial list of dependencies is "coinblas", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "coinblas", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="coinblas"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -28239,7 +28239,7 @@ LAPACK_CFLAGS_INSTALLED=
 LAPACK_DATA=
 LAPACK_DATA_INSTALLED=
 
-# initial list of dependencies is "coinlapack", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "coinlapack", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="coinlapack"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -28787,7 +28787,7 @@ ASL_CFLAGS_INSTALLED=
 ASL_DATA=
 ASL_DATA_INSTALLED=
 
-# initial list of dependencies is "coinasl", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "coinasl", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="coinasl"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -29279,7 +29279,7 @@ HSL_CFLAGS_INSTALLED=
 HSL_DATA=
 HSL_DATA_INSTALLED=
 
-# initial list of dependencies is "coinhsl", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "coinhsl", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="coinhsl"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -29771,7 +29771,7 @@ MUMPS_CFLAGS_INSTALLED=
 MUMPS_DATA=
 MUMPS_DATA_INSTALLED=
 
-# initial list of dependencies is "coinmumps", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "coinmumps", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="coinmumps"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
