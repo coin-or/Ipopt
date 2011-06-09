@@ -2912,7 +2912,7 @@ if test x"$CFLAGS" = x; then
       *)
         coin_opt_cflags="-O3"
         coin_add_cflags="-pipe"
-        coin_dbg_cflags="-g"
+        coin_dbg_cflags="-g -O0"
         coin_warn_cflags="-Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall -Wno-unknown-pragmas -Wno-long-long"
         case $build in
           *-darwin*)
@@ -3846,7 +3846,7 @@ if test x"$CXXFLAGS" = x; then
 # ToDo decide about unroll-loops
         coin_opt_cxxflags="-O3"
         coin_add_cxxflags="-pipe"
-        coin_dbg_cxxflags="-g"
+        coin_dbg_cxxflags="-g -O0"
         coin_warn_cxxflags="-Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas -Wno-long-long"
         case $build in
           *-darwin*)
@@ -4694,7 +4694,7 @@ if test "$F77" != "unavailable" && test x"$FFLAGS" = x ; then
   if test "$G77" = "yes"; then
     coin_opt_fflags="-O3"
     coin_add_fflags="-pipe"
-    coin_dbg_fflags="-g"
+    coin_dbg_fflags="-g -O0"
     case $enable_doscompile in
       mingw)
 	FFLAGS="-mno-cygwin"
@@ -25482,6 +25482,10 @@ fi
 BLAS_LIBS=
 BLAS_CFLAGS=
 BLAS_DATA=
+BLAS_DEPENDENCIES=
+BLAS_PCLIBS=
+BLAS_PCREQUIRES=
+BLAS_DATA=
 
 
 
@@ -25510,6 +25514,7 @@ if test "${with_blas_lib+set}" = set; then
      else
        coin_has_blas=yes
        BLAS_LIBS="$withval"
+       BLAS_PCLIBS="$withval"
 
          IPOPTLIB_PCLIBS="$withval $IPOPTLIB_PCLIBS"
          IPOPTLIB_LIBS="$withval $IPOPTLIB_LIBS"
@@ -25600,6 +25605,7 @@ echo "${ECHO_T}yes: $BLAS_VERSIONS" >&6
         then
           BLAS_LIBS=`echo " $BLAS_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
         fi
+        BLAS_PCREQUIRES="coinblas"
 
         # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in IpoptLib
 
@@ -25643,6 +25649,8 @@ BLAS_CFLAGS=
 BLAS_CFLAGS_INSTALLED=
 BLAS_DATA=
 BLAS_DATA_INSTALLED=
+BLAS_PCLIBS=
+BLAS_PCREQUIRES=
 
 # initial list of dependencies is "coinblas", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="coinblas"
@@ -25840,6 +25848,7 @@ _ACEOF
     BLAS_LIBS_INSTALLED=`echo " $BLAS_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
+  BLAS_PCREQUIRES="coinblas"
 
     IPOPTLIB_PCREQUIRES="coinblas $IPOPTLIB_PCREQUIRES"
     IPOPTLIB_CFLAGS="$BLAS_CFLAGS $IPOPTLIB_CFLAGS"
@@ -25915,9 +25924,13 @@ echo "$as_me: Blas DEPENDENCIES are $BLAS_DEPENDENCIES" >&6;}
       { echo "$as_me:$LINENO: Blas DATA   is  $BLAS_DATA" >&5
 echo "$as_me: Blas DATA   is  $BLAS_DATA" >&6;}
     fi
-    if test -n "$BLAS_CFLAGS" ; then
-      { echo "$as_me:$LINENO: Blas CFLAGS are $BLAS_CFLAGS" >&5
-echo "$as_me: Blas CFLAGS are $BLAS_CFLAGS" >&6;}
+    if test -n "$BLAS_PCLIBS" ; then
+      { echo "$as_me:$LINENO: Blas PCLIBS are $BLAS_PCLIBS" >&5
+echo "$as_me: Blas PCLIBS are $BLAS_PCLIBS" >&6;}
+    fi
+    if test -n "$BLAS_PCREQUIRES" ; then
+      { echo "$as_me:$LINENO: Blas PCREQUIRES are $BLAS_PCREQUIRES" >&5
+echo "$as_me: Blas PCREQUIRES are $BLAS_PCREQUIRES" >&6;}
     fi
 
       { echo "$as_me:$LINENO: IpoptLib CFLAGS are $IPOPTLIB_CFLAGS" >&5
@@ -28077,6 +28090,10 @@ fi
 LAPACK_LIBS=
 LAPACK_CFLAGS=
 LAPACK_DATA=
+LAPACK_DEPENDENCIES=
+LAPACK_PCLIBS=
+LAPACK_PCREQUIRES=
+LAPACK_DATA=
 
 
 
@@ -28105,6 +28122,7 @@ if test "${with_lapack_lib+set}" = set; then
      else
        coin_has_lapack=yes
        LAPACK_LIBS="$withval"
+       LAPACK_PCLIBS="$withval"
 
          IPOPTLIB_PCLIBS="$withval $IPOPTLIB_PCLIBS"
          IPOPTLIB_LIBS="$withval $IPOPTLIB_LIBS"
@@ -28195,6 +28213,7 @@ echo "${ECHO_T}yes: $LAPACK_VERSIONS" >&6
         then
           LAPACK_LIBS=`echo " $LAPACK_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
         fi
+        LAPACK_PCREQUIRES="coinlapack"
 
         # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in IpoptLib
 
@@ -28238,6 +28257,8 @@ LAPACK_CFLAGS=
 LAPACK_CFLAGS_INSTALLED=
 LAPACK_DATA=
 LAPACK_DATA_INSTALLED=
+LAPACK_PCLIBS=
+LAPACK_PCREQUIRES=
 
 # initial list of dependencies is "coinlapack", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="coinlapack"
@@ -28435,6 +28456,7 @@ _ACEOF
     LAPACK_LIBS_INSTALLED=`echo " $LAPACK_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
+  LAPACK_PCREQUIRES="coinlapack"
 
     IPOPTLIB_PCREQUIRES="coinlapack $IPOPTLIB_PCREQUIRES"
     IPOPTLIB_CFLAGS="$LAPACK_CFLAGS $IPOPTLIB_CFLAGS"
@@ -28510,9 +28532,13 @@ echo "$as_me: Lapack DEPENDENCIES are $LAPACK_DEPENDENCIES" >&6;}
       { echo "$as_me:$LINENO: Lapack DATA   is  $LAPACK_DATA" >&5
 echo "$as_me: Lapack DATA   is  $LAPACK_DATA" >&6;}
     fi
-    if test -n "$LAPACK_CFLAGS" ; then
-      { echo "$as_me:$LINENO: Lapack CFLAGS are $LAPACK_CFLAGS" >&5
-echo "$as_me: Lapack CFLAGS are $LAPACK_CFLAGS" >&6;}
+    if test -n "$LAPACK_PCLIBS" ; then
+      { echo "$as_me:$LINENO: Lapack PCLIBS are $LAPACK_PCLIBS" >&5
+echo "$as_me: Lapack PCLIBS are $LAPACK_PCLIBS" >&6;}
+    fi
+    if test -n "$LAPACK_PCREQUIRES" ; then
+      { echo "$as_me:$LINENO: Lapack PCREQUIRES are $LAPACK_PCREQUIRES" >&5
+echo "$as_me: Lapack PCREQUIRES are $LAPACK_PCREQUIRES" >&6;}
     fi
 
       { echo "$as_me:$LINENO: IpoptLib CFLAGS are $IPOPTLIB_CFLAGS" >&5
@@ -28625,6 +28651,10 @@ fi
 ASL_LIBS=
 ASL_CFLAGS=
 ASL_DATA=
+ASL_DEPENDENCIES=
+ASL_PCLIBS=
+ASL_PCREQUIRES=
+ASL_DATA=
 
 
 
@@ -28653,6 +28683,7 @@ if test "${with_asl_lib+set}" = set; then
      else
        coin_has_asl=yes
        ASL_LIBS="$withval"
+       ASL_PCLIBS="$withval"
 
          IPOPTAMPLINTERFACELIB_PCLIBS="$withval $IPOPTAMPLINTERFACELIB_PCLIBS"
          IPOPTAMPLINTERFACELIB_LIBS="$withval $IPOPTAMPLINTERFACELIB_LIBS"
@@ -28743,6 +28774,7 @@ echo "${ECHO_T}yes: $ASL_VERSIONS" >&6
         then
           ASL_LIBS=`echo " $ASL_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
         fi
+        ASL_PCREQUIRES="coinasl"
 
         # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in IpoptAmplInterfaceLib
 
@@ -28786,6 +28818,8 @@ ASL_CFLAGS=
 ASL_CFLAGS_INSTALLED=
 ASL_DATA=
 ASL_DATA_INSTALLED=
+ASL_PCLIBS=
+ASL_PCREQUIRES=
 
 # initial list of dependencies is "coinasl", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="coinasl"
@@ -28983,6 +29017,7 @@ _ACEOF
     ASL_LIBS_INSTALLED=`echo " $ASL_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
+  ASL_PCREQUIRES="coinasl"
 
     IPOPTAMPLINTERFACELIB_PCREQUIRES="coinasl $IPOPTAMPLINTERFACELIB_PCREQUIRES"
     IPOPTAMPLINTERFACELIB_CFLAGS="$ASL_CFLAGS $IPOPTAMPLINTERFACELIB_CFLAGS"
@@ -29058,9 +29093,13 @@ echo "$as_me: ASL DEPENDENCIES are $ASL_DEPENDENCIES" >&6;}
       { echo "$as_me:$LINENO: ASL DATA   is  $ASL_DATA" >&5
 echo "$as_me: ASL DATA   is  $ASL_DATA" >&6;}
     fi
-    if test -n "$ASL_CFLAGS" ; then
-      { echo "$as_me:$LINENO: ASL CFLAGS are $ASL_CFLAGS" >&5
-echo "$as_me: ASL CFLAGS are $ASL_CFLAGS" >&6;}
+    if test -n "$ASL_PCLIBS" ; then
+      { echo "$as_me:$LINENO: ASL PCLIBS are $ASL_PCLIBS" >&5
+echo "$as_me: ASL PCLIBS are $ASL_PCLIBS" >&6;}
+    fi
+    if test -n "$ASL_PCREQUIRES" ; then
+      { echo "$as_me:$LINENO: ASL PCREQUIRES are $ASL_PCREQUIRES" >&5
+echo "$as_me: ASL PCREQUIRES are $ASL_PCREQUIRES" >&6;}
     fi
 
       { echo "$as_me:$LINENO: IpoptAmplInterfaceLib CFLAGS are $IPOPTAMPLINTERFACELIB_CFLAGS" >&5
@@ -29117,6 +29156,10 @@ fi
 HSL_LIBS=
 HSL_CFLAGS=
 HSL_DATA=
+HSL_DEPENDENCIES=
+HSL_PCLIBS=
+HSL_PCREQUIRES=
+HSL_DATA=
 
 
 
@@ -29145,6 +29188,7 @@ if test "${with_hsl_lib+set}" = set; then
      else
        coin_has_hsl=yes
        HSL_LIBS="$withval"
+       HSL_PCLIBS="$withval"
 
          IPOPTLIB_PCLIBS="$withval $IPOPTLIB_PCLIBS"
          IPOPTLIB_LIBS="$withval $IPOPTLIB_LIBS"
@@ -29235,6 +29279,7 @@ echo "${ECHO_T}yes: $HSL_VERSIONS" >&6
         then
           HSL_LIBS=`echo " $HSL_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
         fi
+        HSL_PCREQUIRES="coinhsl"
 
         # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in IpoptLib
 
@@ -29278,6 +29323,8 @@ HSL_CFLAGS=
 HSL_CFLAGS_INSTALLED=
 HSL_DATA=
 HSL_DATA_INSTALLED=
+HSL_PCLIBS=
+HSL_PCREQUIRES=
 
 # initial list of dependencies is "coinhsl", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="coinhsl"
@@ -29475,6 +29522,7 @@ _ACEOF
     HSL_LIBS_INSTALLED=`echo " $HSL_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
+  HSL_PCREQUIRES="coinhsl"
 
     IPOPTLIB_PCREQUIRES="coinhsl $IPOPTLIB_PCREQUIRES"
     IPOPTLIB_CFLAGS="$HSL_CFLAGS $IPOPTLIB_CFLAGS"
@@ -29550,9 +29598,13 @@ echo "$as_me: HSL DEPENDENCIES are $HSL_DEPENDENCIES" >&6;}
       { echo "$as_me:$LINENO: HSL DATA   is  $HSL_DATA" >&5
 echo "$as_me: HSL DATA   is  $HSL_DATA" >&6;}
     fi
-    if test -n "$HSL_CFLAGS" ; then
-      { echo "$as_me:$LINENO: HSL CFLAGS are $HSL_CFLAGS" >&5
-echo "$as_me: HSL CFLAGS are $HSL_CFLAGS" >&6;}
+    if test -n "$HSL_PCLIBS" ; then
+      { echo "$as_me:$LINENO: HSL PCLIBS are $HSL_PCLIBS" >&5
+echo "$as_me: HSL PCLIBS are $HSL_PCLIBS" >&6;}
+    fi
+    if test -n "$HSL_PCREQUIRES" ; then
+      { echo "$as_me:$LINENO: HSL PCREQUIRES are $HSL_PCREQUIRES" >&5
+echo "$as_me: HSL PCREQUIRES are $HSL_PCREQUIRES" >&6;}
     fi
 
       { echo "$as_me:$LINENO: IpoptLib CFLAGS are $IPOPTLIB_CFLAGS" >&5
@@ -29609,6 +29661,10 @@ fi
 MUMPS_LIBS=
 MUMPS_CFLAGS=
 MUMPS_DATA=
+MUMPS_DEPENDENCIES=
+MUMPS_PCLIBS=
+MUMPS_PCREQUIRES=
+MUMPS_DATA=
 
 
 
@@ -29637,6 +29693,7 @@ if test "${with_mumps_lib+set}" = set; then
      else
        coin_has_mumps=yes
        MUMPS_LIBS="$withval"
+       MUMPS_PCLIBS="$withval"
 
          IPOPTLIB_PCLIBS="$withval $IPOPTLIB_PCLIBS"
          IPOPTLIB_LIBS="$withval $IPOPTLIB_LIBS"
@@ -29727,6 +29784,7 @@ echo "${ECHO_T}yes: $MUMPS_VERSIONS" >&6
         then
           MUMPS_LIBS=`echo " $MUMPS_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
         fi
+        MUMPS_PCREQUIRES="coinmumps"
 
         # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in IpoptLib
 
@@ -29770,6 +29828,8 @@ MUMPS_CFLAGS=
 MUMPS_CFLAGS_INSTALLED=
 MUMPS_DATA=
 MUMPS_DATA_INSTALLED=
+MUMPS_PCLIBS=
+MUMPS_PCREQUIRES=
 
 # initial list of dependencies is "coinmumps", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="coinmumps"
@@ -29967,6 +30027,7 @@ _ACEOF
     MUMPS_LIBS_INSTALLED=`echo " $MUMPS_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
+  MUMPS_PCREQUIRES="coinmumps"
 
     IPOPTLIB_PCREQUIRES="coinmumps $IPOPTLIB_PCREQUIRES"
     IPOPTLIB_CFLAGS="$MUMPS_CFLAGS $IPOPTLIB_CFLAGS"
@@ -30042,9 +30103,13 @@ echo "$as_me: Mumps DEPENDENCIES are $MUMPS_DEPENDENCIES" >&6;}
       { echo "$as_me:$LINENO: Mumps DATA   is  $MUMPS_DATA" >&5
 echo "$as_me: Mumps DATA   is  $MUMPS_DATA" >&6;}
     fi
-    if test -n "$MUMPS_CFLAGS" ; then
-      { echo "$as_me:$LINENO: Mumps CFLAGS are $MUMPS_CFLAGS" >&5
-echo "$as_me: Mumps CFLAGS are $MUMPS_CFLAGS" >&6;}
+    if test -n "$MUMPS_PCLIBS" ; then
+      { echo "$as_me:$LINENO: Mumps PCLIBS are $MUMPS_PCLIBS" >&5
+echo "$as_me: Mumps PCLIBS are $MUMPS_PCLIBS" >&6;}
+    fi
+    if test -n "$MUMPS_PCREQUIRES" ; then
+      { echo "$as_me:$LINENO: Mumps PCREQUIRES are $MUMPS_PCREQUIRES" >&5
+echo "$as_me: Mumps PCREQUIRES are $MUMPS_PCREQUIRES" >&6;}
     fi
 
       { echo "$as_me:$LINENO: IpoptLib CFLAGS are $IPOPTLIB_CFLAGS" >&5
