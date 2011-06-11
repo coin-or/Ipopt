@@ -8,6 +8,14 @@
 //               original version (based on MA27TSolverInterface.cpp)
 
 #include "IpoptConfig.h"
+
+#ifdef COIN_HAS_HSL
+#include "CoinHslConfig.h"
+#endif
+
+// if we do not have MA57 in HSL or the linear solver loader, then we want to build the MA57 interface
+#if defined(COINHSL_HAS_MA57) || defined(HAVE_LINEARSOLVERLOADER)
+
 #include "IpMa57TSolverInterface.hpp"
 
 #ifdef HAVE_CMATH
@@ -792,3 +800,5 @@ namespace Ipopt
   }
 
 } // namespace Ipopt
+
+#endif /* COINHSL_HAS_MA57 or HAVE_LINEARSOLVERLOADER */

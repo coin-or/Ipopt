@@ -7,6 +7,18 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-03-17
 
 #include "IpoptConfig.h"
+
+#ifdef COIN_HAS_HSL
+#include "CoinHslConfig.h"
+#endif
+
+#ifdef COIN_HAS_HSL
+#include "CoinHslConfig.h"
+#endif
+
+// if we do not have MC19 in HSL or the linear solver loader, then we want to build the MC19 interface
+#if defined(COINHSL_HAS_MC19) || defined(HAVE_LINEARSOLVERLOADER)
+
 #include "IpMc19TSymScalingMethod.hpp"
 
 #ifdef HAVE_CMATH
@@ -168,3 +180,5 @@ namespace Ipopt
   }
 
 } // namespace Ipopt
+
+#endif /* COINHSL_HAS_MC19 or HAVE_LINEARSOLVERLOADER */

@@ -5,6 +5,14 @@
 ! $Id$
 !
 ! Authors: Jonathan Hogg                           2009-07-29 
+!
+#include "IpoptConfig.h"
+!
+#if defined(COIN_HAS_HSL)
+#include "CoinHslConfig.h"
+#endif
+!
+#if defined COINHSL_HAS_MA77
 
 module ma77_iface_data
    use hsl_ma77_double
@@ -198,3 +206,4 @@ subroutine ma77_iface_finalise(icntl,rcntl)
 
    call ma77_finalise(keep, control, info77)
 end subroutine ma77_iface_finalise
+#endif

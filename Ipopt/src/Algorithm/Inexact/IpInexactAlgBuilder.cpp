@@ -45,6 +45,10 @@
 #include "IpInexactNormalTerminationTester.hpp"
 #include "IpInexactPDTerminationTester.hpp"
 
+#ifdef COIN_HAS_HSL
+# include "CoinHslConfig.h"
+#endif
+
 #ifdef HAVE_WSMP
 # include "IpWsmpSolverInterface.hpp"
 #endif
@@ -123,7 +127,7 @@ namespace Ipopt
     std::string linear_solver;
     options.GetStringValue("linear_solver", linear_solver, prefix);
     if (linear_solver=="ma27") {
-#ifndef HAVE_MA27
+#ifndef COINHSL_HAS_MA27
 # ifdef HAVE_LINEARSOLVERLOADER
       SolverInterface = new Ma27TSolverInterface();
       char buf[256];
@@ -145,7 +149,7 @@ namespace Ipopt
 
     }
     else if (linear_solver=="ma57") {
-#ifndef HAVE_MA57
+#ifndef COINHSL_HAS_MA57
 # ifdef HAVE_LINEARSOLVERLOADER
       SolverInterface = new Ma57TSolverInterface();
       char buf[256];

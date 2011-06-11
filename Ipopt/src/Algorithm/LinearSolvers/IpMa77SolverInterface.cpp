@@ -8,6 +8,12 @@
 // Authors: Jonathan Hogg                           2009-07-29 
 //          Carl Laird, Andreas Waechter     IBM    2004-03-17
 
+#ifdef COIN_HAS_HSL
+#include "CoinHslConfig.h"
+#endif
+
+#ifdef COINHSL_HAS_MA77
+
 #include "IpMa77SolverInterface.hpp"
 #include <iostream>
 using namespace std;
@@ -306,3 +312,4 @@ void Ma77SolverInterface::MetisOrder(const int ndim, const Index *ptr,
 
 } // namespace Ipopt
 
+#endif /* COINHSL_HAS_MA77 */

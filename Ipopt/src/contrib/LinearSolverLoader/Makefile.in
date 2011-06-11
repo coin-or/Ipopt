@@ -43,9 +43,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@BUILD_HSLLOADER_TRUE@am__append_1 = HSLLoader.c HSLLoader.h
-@BUILD_HSLLOADER_TRUE@am__append_2 = $(HSL_CFLAGS)
-@BUILD_PARDISOLOADER_TRUE@am__append_3 = PardisoLoader.c PardisoLoader.h
+@BUILD_PARDISOLOADER_TRUE@am__append_1 = PardisoLoader.c PardisoLoader.h
 subdir = src/contrib/LinearSolverLoader
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -62,10 +60,9 @@ LTLIBRARIES = $(noinst_LTLIBRARIES)
 am__libLinearSolverLoader_la_SOURCES_DIST = LibraryHandler.c \
 	LibraryHandler.h HSLLoader.c HSLLoader.h PardisoLoader.c \
 	PardisoLoader.h
-@BUILD_HSLLOADER_TRUE@am__objects_1 = HSLLoader.lo
-@BUILD_PARDISOLOADER_TRUE@am__objects_2 = PardisoLoader.lo
-am_libLinearSolverLoader_la_OBJECTS = LibraryHandler.lo \
-	$(am__objects_1) $(am__objects_2)
+@BUILD_PARDISOLOADER_TRUE@am__objects_1 = PardisoLoader.lo
+am_libLinearSolverLoader_la_OBJECTS = LibraryHandler.lo HSLLoader.lo \
+	$(am__objects_1)
 libLinearSolverLoader_la_OBJECTS =  \
 	$(am_libLinearSolverLoader_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -122,8 +119,6 @@ BLAS_LIBS = @BLAS_LIBS@
 BLAS_LIBS_INSTALLED = @BLAS_LIBS_INSTALLED@
 BLUEGENEEXTRA = @BLUEGENEEXTRA@
 BUILDTOOLSDIR = @BUILDTOOLSDIR@
-BUILD_HSLLOADER_FALSE = @BUILD_HSLLOADER_FALSE@
-BUILD_HSLLOADER_TRUE = @BUILD_HSLLOADER_TRUE@
 BUILD_INEXACT_FALSE = @BUILD_INEXACT_FALSE@
 BUILD_INEXACT_TRUE = @BUILD_INEXACT_TRUE@
 BUILD_LINEARSOLVERLOADER_FALSE = @BUILD_LINEARSOLVERLOADER_FALSE@
@@ -180,18 +175,6 @@ FFLAGS = @FFLAGS@
 FLIBS = @FLIBS@
 HAVE_EXTERNALS_FALSE = @HAVE_EXTERNALS_FALSE@
 HAVE_EXTERNALS_TRUE = @HAVE_EXTERNALS_TRUE@
-HAVE_MA27_FALSE = @HAVE_MA27_FALSE@
-HAVE_MA27_TRUE = @HAVE_MA27_TRUE@
-HAVE_MA28_FALSE = @HAVE_MA28_FALSE@
-HAVE_MA28_TRUE = @HAVE_MA28_TRUE@
-HAVE_MA57_FALSE = @HAVE_MA57_FALSE@
-HAVE_MA57_TRUE = @HAVE_MA57_TRUE@
-HAVE_MA77_FALSE = @HAVE_MA77_FALSE@
-HAVE_MA77_TRUE = @HAVE_MA77_TRUE@
-HAVE_MA86_FALSE = @HAVE_MA86_FALSE@
-HAVE_MA86_TRUE = @HAVE_MA86_TRUE@
-HAVE_MC19_FALSE = @HAVE_MC19_FALSE@
-HAVE_MC19_TRUE = @HAVE_MC19_TRUE@
 HAVE_PARDISO_FALSE = @HAVE_PARDISO_FALSE@
 HAVE_PARDISO_TRUE = @HAVE_PARDISO_TRUE@
 HAVE_WSMP_FALSE = @HAVE_WSMP_FALSE@
@@ -337,9 +320,11 @@ AUTOMAKE_OPTIONS = foreign
 EXTRA_DIST = 
 noinst_LTLIBRARIES = libLinearSolverLoader.la
 libLinearSolverLoader_la_SOURCES = LibraryHandler.c LibraryHandler.h \
-	$(am__append_1) $(am__append_3)
-AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` -I`$(CYGPATH_W) \
-	$(srcdir)/../../Algorithm/LinearSolvers` $(am__append_2)
+	HSLLoader.c HSLLoader.h $(am__append_1)
+AM_CPPFLAGS = $(HSL_CFLAGS) \
+  -I`$(CYGPATH_W) $(srcdir)/../../Common` \
+  -I`$(CYGPATH_W) $(srcdir)/../../Algorithm/LinearSolvers`
+
 libLinearSolverLoader_la_LIBADD = 
 libLinearSolverLoader_la_DEPENDENCIES = 
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common

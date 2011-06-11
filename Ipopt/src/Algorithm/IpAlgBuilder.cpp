@@ -52,6 +52,9 @@
 #include "IpEquilibrationScaling.hpp"
 #include "IpExactHessianUpdater.hpp"
 
+#ifdef COIN_HAS_HSL
+#include "CoinHslConfig.h"
+#endif
 #include "IpMa27TSolverInterface.hpp"
 #include "IpMa57TSolverInterface.hpp"
 #include "IpMa77SolverInterface.hpp"
@@ -137,13 +140,13 @@ namespace Ipopt
     roptions->AddStringOption8(
       "linear_solver",
       "Linear solver used for step computations.",
-#ifdef HAVE_MA27
+#ifdef COINHSL_HAS_MA27
       "ma27",
 #else
-# ifdef HAVE_MA57
+# ifdef COINHSL_HAS_MA57
       "ma57",
 # else
-#  ifdef HAVE_MA86
+#  ifdef COINHSL_HAS_MA86
       "ma86",
 #  else
 #   ifdef HAVE_PARDISO
@@ -180,7 +183,7 @@ namespace Ipopt
     roptions->AddStringOption3(
       "linear_system_scaling",
       "Method for scaling the linear system.",
-#ifdef HAVE_MC19
+#ifdef COINHSL_HAS_MC19
       "mc19",
 #else
       "none",
@@ -289,7 +292,7 @@ namespace Ipopt
     options.GetStringValue("linear_solver", linear_solver, prefix);
     bool use_custom_solver = false;
     if (linear_solver=="ma27") {
-#ifndef HAVE_MA27
+#ifndef COINHSL_HAS_MA27
 # ifdef HAVE_LINEARSOLVERLOADER
       SolverInterface = new Ma27TSolverInterface();
       char buf[256];
@@ -311,7 +314,7 @@ namespace Ipopt
 
     }
     else if (linear_solver=="ma57") {
-#ifndef HAVE_MA57
+#ifndef COINHSL_HAS_MA57
 # ifdef HAVE_LINEARSOLVERLOADER
       SolverInterface = new Ma57TSolverInterface();
       char buf[256];
@@ -333,14 +336,14 @@ namespace Ipopt
 
     }
     else if (linear_solver=="ma77") {
-#ifndef HAVE_MA77
+#ifndef COINHSL_HAS_MA77
       THROW_EXCEPTION(OPTION_INVALID, "Support for MA77 has not been compiled into Ipopt.");
 #else
       SolverInterface = new Ma77SolverInterface();
 #endif
     }
     else if (linear_solver=="ma86") {
-#ifndef HAVE_MA86
+#ifndef COINHSL_HAS_MA86
 # ifdef HAVE_LINEARSOLVERLOADER
       SolverInterface = new Ma86SolverInterface();
       char buf[256];
@@ -431,7 +434,7 @@ namespace Ipopt
         }
       }
       if (linear_system_scaling=="mc19") {
-#ifndef HAVE_MC19
+#ifndef COINHSL_HAS_MC19
 # ifdef HAVE_LINEARSOLVERLOADER
         ScalingMethod = new Mc19TSymScalingMethod();
         char buf[256];

@@ -7,6 +7,14 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2005-03-17
 
 #include "IpoptConfig.h"
+
+#ifdef COIN_HAS_HSL
+#include "CoinHslConfig.h"
+#endif
+
+// if we do not have MA27 in HSL or the linear solver loader, then we want to build the MA27 interface
+#if defined(COINHSL_HAS_MA27) || defined(HAVE_LINEARSOLVERLOADER)
+
 #include "IpMa27TSolverInterface.hpp"
 
 #ifdef HAVE_CMATH
@@ -605,3 +613,5 @@ namespace Ipopt
   }
 
 } // namespace Ipopt
+
+#endif /* COINHSL_HAS_MA27 or HAVE_LINEARSOLVERLOADER */

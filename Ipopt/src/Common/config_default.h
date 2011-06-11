@@ -35,18 +35,6 @@
    loading of shared libraries with linear solvers */
 /* #undef HAVE_LINEARSOLVERLOADER */
 
-/* Define to 1 if MA27 is available */
-#define HAVE_MA27 1
-
-/* Define to 1 if MA28 is available */
-/* #undef HAVE_MA28 */
-
-/* Define to 1 if MA57 is available */
-/* #undef HAVE_MA57 */
-
-/* Define to 1 if MC19 is available */
-#define HAVE_MC19 1
-
 /* Define to 1 if Pardiso is available */
 /* #undef HAVE_PARDISO */
 

@@ -43,43 +43,16 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 @BUILD_LINEARSOLVERLOADER_TRUE@am__append_1 = \
-@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp \
-@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp \
-@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa86SolverInterface.cpp IpMa86SolverInterface.hpp \
-@BUILD_LINEARSOLVERLOADER_TRUE@	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
-@BUILD_LINEARSOLVERLOADER_TRUE@	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp \
-@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa28Partition.f \
-@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp
+@BUILD_LINEARSOLVERLOADER_TRUE@	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
 
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA27_TRUE@am__append_2 = \
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA27_TRUE@	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp
-
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA57_TRUE@am__append_3 = \
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA57_TRUE@	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp
-
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA86_TRUE@am__append_4 = \
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA86_TRUE@	IpMa86SolverInterface.cpp IpMa86SolverInterface.hpp
-
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MC19_TRUE@am__append_5 = \
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MC19_TRUE@	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp
-
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__append_6 = \
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__append_2 = \
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
 
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@am__append_7 = \
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@	IpMa28Partition.f \
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp
-
-@HAVE_MA77_TRUE@am__append_8 = \
-@HAVE_MA77_TRUE@	IpMa77SolverInterface.cpp IpMa77SolverInterface.hpp ma77_iface.f90
-
-@HAVE_WSMP_TRUE@am__append_9 = \
+@HAVE_WSMP_TRUE@am__append_3 = \
 @HAVE_WSMP_TRUE@	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp \
 @HAVE_WSMP_TRUE@	IpIterativeWsmpSolverInterface.cpp IpIterativeWsmpSolverInterface.hpp
 
-@COIN_HAS_MUMPS_TRUE@am__append_10 = IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
-@COIN_HAS_MUMPS_TRUE@am__append_11 = $(MUMPS_CFLAGS)
-@COIN_HAS_HSL_TRUE@am__append_12 = $(HSL_CFLAGS)
+@COIN_HAS_MUMPS_TRUE@am__append_4 = IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
 subdir = src/Algorithm/LinearSolvers
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -107,43 +80,47 @@ am__liblinsolvers_la_SOURCES_DIST = IpGenKKTSolverInterface.hpp \
 	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp \
 	IpMa86SolverInterface.cpp IpMa86SolverInterface.hpp \
 	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
-	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp \
-	IpMa28Partition.f IpMa28TDependencyDetector.cpp \
+	IpMa28Partition.F IpMa28TDependencyDetector.cpp \
 	IpMa28TDependencyDetector.hpp IpMa77SolverInterface.cpp \
-	IpMa77SolverInterface.hpp ma77_iface.f90 \
+	IpMa77SolverInterface.hpp ma77_iface.F90 \
+	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp \
 	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp \
 	IpIterativeWsmpSolverInterface.cpp \
 	IpIterativeWsmpSolverInterface.hpp IpMumpsSolverInterface.cpp \
 	IpMumpsSolverInterface.hpp
 @BUILD_LINEARSOLVERLOADER_TRUE@am__objects_1 =  \
-@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa27TSolverInterface.lo \
-@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa57TSolverInterface.lo \
-@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa86SolverInterface.lo \
-@BUILD_LINEARSOLVERLOADER_TRUE@	IpMc19TSymScalingMethod.lo \
-@BUILD_LINEARSOLVERLOADER_TRUE@	IpPardisoSolverInterface.lo \
-@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa28Partition.lo \
-@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa28TDependencyDetector.lo
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA27_TRUE@am__objects_2 = IpMa27TSolverInterface.lo
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA57_TRUE@am__objects_3 = IpMa57TSolverInterface.lo
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA86_TRUE@am__objects_4 = IpMa86SolverInterface.lo
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MC19_TRUE@am__objects_5 = IpMc19TSymScalingMethod.lo
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__objects_6 = IpPardisoSolverInterface.lo
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@am__objects_7 = IpMa28Partition.lo \
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@	IpMa28TDependencyDetector.lo
-@HAVE_MA77_TRUE@am__objects_8 = IpMa77SolverInterface.lo ma77_iface.lo
-@HAVE_WSMP_TRUE@am__objects_9 = IpWsmpSolverInterface.lo \
+@BUILD_LINEARSOLVERLOADER_TRUE@	IpPardisoSolverInterface.lo
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__objects_2 = IpPardisoSolverInterface.lo
+@HAVE_WSMP_TRUE@am__objects_3 = IpWsmpSolverInterface.lo \
 @HAVE_WSMP_TRUE@	IpIterativeWsmpSolverInterface.lo
-@COIN_HAS_MUMPS_TRUE@am__objects_10 = IpMumpsSolverInterface.lo
+@COIN_HAS_MUMPS_TRUE@am__objects_4 = IpMumpsSolverInterface.lo
 am_liblinsolvers_la_OBJECTS = IpLinearSolversRegOp.lo \
 	IpSlackBasedTSymScalingMethod.lo IpTripletToCSRConverter.lo \
 	IpTSymDependencyDetector.lo IpTSymLinearSolver.lo \
-	$(am__objects_1) $(am__objects_2) $(am__objects_3) \
-	$(am__objects_4) $(am__objects_5) $(am__objects_6) \
-	$(am__objects_7) $(am__objects_8) $(am__objects_9) \
-	$(am__objects_10)
+	IpMa27TSolverInterface.lo IpMa57TSolverInterface.lo \
+	IpMa86SolverInterface.lo IpMc19TSymScalingMethod.lo \
+	IpMa28Partition.lo IpMa28TDependencyDetector.lo \
+	IpMa77SolverInterface.lo ma77_iface.lo $(am__objects_1) \
+	$(am__objects_2) $(am__objects_3) $(am__objects_4)
 liblinsolvers_la_OBJECTS = $(am_liblinsolvers_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
+PPF77COMPILE = $(F77) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_FFLAGS) $(FFLAGS)
+LTPPF77COMPILE = $(LIBTOOL) --tag=F77 --mode=compile $(F77) $(DEFS) \
+	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+	$(AM_FFLAGS) $(FFLAGS)
+F77LD = $(F77)
+F77LINK = $(LIBTOOL) --tag=F77 --mode=link $(F77LD) $(AM_FFLAGS) \
+	$(FFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+PPFCCOMPILE = $(FC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_FCFLAGS) $(FCFLAGS)
+LTPPFCCOMPILE = $(LIBTOOL) --mode=compile $(FC) $(DEFS) \
+	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+	$(AM_FCFLAGS) $(FCFLAGS)
+FCLD = $(FC)
+FCLINK = $(LIBTOOL) --mode=link $(FCLD) $(AM_FCFLAGS) $(FCFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
@@ -152,16 +129,6 @@ LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-F77COMPILE = $(F77) $(AM_FFLAGS) $(FFLAGS)
-LTF77COMPILE = $(LIBTOOL) --tag=F77 --mode=compile $(F77) $(AM_FFLAGS) \
-	$(FFLAGS)
-F77LD = $(F77)
-F77LINK = $(LIBTOOL) --tag=F77 --mode=link $(F77LD) $(AM_FFLAGS) \
-	$(FFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-FCCOMPILE = $(FC) $(AM_FCFLAGS) $(FCFLAGS)
-FCLD = $(FC)
-FCLINK = $(LIBTOOL) --mode=link $(FCLD) $(AM_FCFLAGS) $(FCFLAGS) \
-	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --tag=CC --mode=compile $(CC) $(DEFS) \
@@ -214,8 +181,6 @@ BLAS_LIBS = @BLAS_LIBS@
 BLAS_LIBS_INSTALLED = @BLAS_LIBS_INSTALLED@
 BLUEGENEEXTRA = @BLUEGENEEXTRA@
 BUILDTOOLSDIR = @BUILDTOOLSDIR@
-BUILD_HSLLOADER_FALSE = @BUILD_HSLLOADER_FALSE@
-BUILD_HSLLOADER_TRUE = @BUILD_HSLLOADER_TRUE@
 BUILD_INEXACT_FALSE = @BUILD_INEXACT_FALSE@
 BUILD_INEXACT_TRUE = @BUILD_INEXACT_TRUE@
 BUILD_LINEARSOLVERLOADER_FALSE = @BUILD_LINEARSOLVERLOADER_FALSE@
@@ -272,18 +237,6 @@ FFLAGS = @FFLAGS@
 FLIBS = @FLIBS@
 HAVE_EXTERNALS_FALSE = @HAVE_EXTERNALS_FALSE@
 HAVE_EXTERNALS_TRUE = @HAVE_EXTERNALS_TRUE@
-HAVE_MA27_FALSE = @HAVE_MA27_FALSE@
-HAVE_MA27_TRUE = @HAVE_MA27_TRUE@
-HAVE_MA28_FALSE = @HAVE_MA28_FALSE@
-HAVE_MA28_TRUE = @HAVE_MA28_TRUE@
-HAVE_MA57_FALSE = @HAVE_MA57_FALSE@
-HAVE_MA57_TRUE = @HAVE_MA57_TRUE@
-HAVE_MA77_FALSE = @HAVE_MA77_FALSE@
-HAVE_MA77_TRUE = @HAVE_MA77_TRUE@
-HAVE_MA86_FALSE = @HAVE_MA86_FALSE@
-HAVE_MA86_TRUE = @HAVE_MA86_TRUE@
-HAVE_MC19_FALSE = @HAVE_MC19_FALSE@
-HAVE_MC19_TRUE = @HAVE_MC19_TRUE@
 HAVE_PARDISO_FALSE = @HAVE_PARDISO_FALSE@
 HAVE_PARDISO_TRUE = @HAVE_PARDISO_TRUE@
 HAVE_WSMP_FALSE = @HAVE_WSMP_FALSE@
@@ -435,17 +388,27 @@ liblinsolvers_la_SOURCES = IpGenKKTSolverInterface.hpp \
 	IpTDependencyDetector.hpp IpTripletToCSRConverter.cpp \
 	IpTripletToCSRConverter.hpp IpTSymDependencyDetector.cpp \
 	IpTSymDependencyDetector.hpp IpTSymLinearSolver.cpp \
-	IpTSymLinearSolver.hpp IpTSymScalingMethod.hpp $(am__append_1) \
-	$(am__append_2) $(am__append_3) $(am__append_4) \
-	$(am__append_5) $(am__append_6) $(am__append_7) \
-	$(am__append_8) $(am__append_9) $(am__append_10)
+	IpTSymLinearSolver.hpp IpTSymScalingMethod.hpp \
+	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp \
+	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp \
+	IpMa86SolverInterface.cpp IpMa86SolverInterface.hpp \
+	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
+	IpMa28Partition.F IpMa28TDependencyDetector.cpp \
+	IpMa28TDependencyDetector.hpp IpMa77SolverInterface.cpp \
+	IpMa77SolverInterface.hpp ma77_iface.F90 $(am__append_1) \
+	$(am__append_2) $(am__append_3) $(am__append_4)
 liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)
-AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` -I`$(CYGPATH_W) \
-	$(srcdir)/../../LinAlg` -I`$(CYGPATH_W) \
-	$(srcdir)/../../LinAlg/TMatrices` -I`$(CYGPATH_W) \
-	$(srcdir)/..` -I`$(CYGPATH_W) $(srcdir)/../../Interfaces` \
+AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
+	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \
+	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg/TMatrices` \
+	-I`$(CYGPATH_W) $(srcdir)/..` \
+	-I`$(CYGPATH_W) $(srcdir)/../../Interfaces` \
 	-I`$(CYGPATH_W) $(srcdir)/../../contrib/CGPenalty` \
-	$(am__append_11) $(am__append_12)
+	$(MUMPS_CFLAGS) $(HSL_CFLAGS)
+
+
+# this define is added automatically only for C/C++ code, but here we need it also for Fortran code
+AM_FFLAGS = -DIPOPT_BUILD
 
 # This line is necessary to allow VPATH compilation
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
@@ -483,7 +446,7 @@ SUFFIXES = .cppbak .hppbak
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .cppbak .hppbak .cpp .f .f90 .hpp .lo .o .obj
+.SUFFIXES: .cppbak .hppbak .F .F90 .cpp .f .hpp .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -547,6 +510,26 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTripletToCSRConverter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpWsmpSolverInterface.Plo@am__quote@
 
+.F.o:
+	$(PPF77COMPILE) -c -o $@ $<
+
+.F.obj:
+	$(PPF77COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+.F.lo:
+	$(LTPPF77COMPILE) -c -o $@ $<
+.F.f:
+	$(F77COMPILE) -F $<
+
+.F90.o:
+	$(PPFCCOMPILE) -c -o $@ $<
+
+.F90.obj:
+	$(PPFCCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+.F90.lo:
+	$(LTPPFCCOMPILE) -c -o $@ $<
+
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
 @am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
@@ -567,24 +550,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
-
-.f.o:
-	$(F77COMPILE) -c -o $@ $<
-
-.f.obj:
-	$(F77COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
-
-.f.lo:
-	$(LTF77COMPILE) -c -o $@ $<
-
-.f90.o:
-	$(FCCOMPILE) -c -o $@ $<
-
-.f90.obj:
-	$(FCCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
-
-.f90.lo:
-	$(LTFCCOMPILE) -c -o $@ $<
 
 mostlyclean-libtool:
 	-rm -f *.lo
