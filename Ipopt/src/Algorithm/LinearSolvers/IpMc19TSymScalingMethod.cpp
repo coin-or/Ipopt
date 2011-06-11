@@ -12,10 +12,6 @@
 #include "CoinHslConfig.h"
 #endif
 
-#ifdef COIN_HAS_HSL
-#include "CoinHslConfig.h"
-#endif
-
 // if we do not have MC19 in HSL or the linear solver loader, then we want to build the MC19 interface
 #if defined(COINHSL_HAS_MC19) || defined(HAVE_LINEARSOLVERLOADER)
 
