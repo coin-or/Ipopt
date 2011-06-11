@@ -471,7 +471,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE have_svnversion IPOPT_SVN_REV EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COIN_CC_IS_CL_TRUE COIN_CC_IS_CL_FALSE MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX COIN_CXX_IS_CL_TRUE COIN_CXX_IS_CL_FALSE MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 FFLAGS ac_ct_F77 MPIF77 FLIBS FC FCFLAGS ac_ct_FC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE PKG_CONFIG ac_pt_PKG_CONFIG COIN_HAS_PKGCONFIG_TRUE COIN_HAS_PKGCONFIG_FALSE COIN_PKG_CONFIG_PATH COIN_PKG_CONFIG_PATH_UNINSTALLED BLAS_LIBS BLAS_CFLAGS BLAS_DATA BLAS_DEPENDENCIES BLAS_LIBS_INSTALLED BLAS_CFLAGS_INSTALLED BLAS_DATA_INSTALLED IPOPTLIB_CFLAGS IPOPTLIB_LIBS IPOPTLIB_PCLIBS IPOPTLIB_PCREQUIRES IPOPTLIB_DEPENDENCIES IPOPTLIB_CFLAGS_INSTALLED IPOPTLIB_LIBS_INSTALLED COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE LAPACK_LIBS LAPACK_CFLAGS LAPACK_DATA LAPACK_DEPENDENCIES LAPACK_LIBS_INSTALLED LAPACK_CFLAGS_INSTALLED LAPACK_DATA_INSTALLED COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE ASL_LIBS ASL_CFLAGS ASL_DATA ASL_DEPENDENCIES ASL_LIBS_INSTALLED ASL_CFLAGS_INSTALLED ASL_DATA_INSTALLED IPOPTAMPLINTERFACELIB_CFLAGS IPOPTAMPLINTERFACELIB_LIBS IPOPTAMPLINTERFACELIB_PCLIBS IPOPTAMPLINTERFACELIB_PCREQUIRES IPOPTAMPLINTERFACELIB_DEPENDENCIES IPOPTAMPLINTERFACELIB_CFLAGS_INSTALLED IPOPTAMPLINTERFACELIB_LIBS_INSTALLED COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE HSL_LIBS HSL_CFLAGS HSL_DATA HSL_DEPENDENCIES HSL_LIBS_INSTALLED HSL_CFLAGS_INSTALLED HSL_DATA_INSTALLED COIN_HAS_HSL_TRUE COIN_HAS_HSL_FALSE MUMPS_LIBS MUMPS_CFLAGS MUMPS_DATA MUMPS_DEPENDENCIES MUMPS_LIBS_INSTALLED MUMPS_CFLAGS_INSTALLED MUMPS_DATA_INSTALLED COIN_HAS_MUMPS_TRUE COIN_HAS_MUMPS_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR JAVA_HOME JIPOPTDLL SHARED_FLAGS MATLAB_HOME MEXSUFFIX ASTYLE ASTYLEFLAGS IPALLLIBS HAVE_MA27_TRUE HAVE_MA27_FALSE HAVE_MA57_TRUE HAVE_MA57_FALSE HAVE_MA86_TRUE HAVE_MA86_FALSE HAVE_MA28_TRUE HAVE_MA28_FALSE HAVE_MA77_TRUE HAVE_MA77_FALSE HAVE_MC19_TRUE HAVE_MC19_FALSE HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILD_LINEARSOLVERLOADER_TRUE BUILD_LINEARSOLVERLOADER_FALSE BUILD_HSLLOADER_TRUE BUILD_HSLLOADER_FALSE BUILD_PARDISOLOADER_TRUE BUILD_PARDISOLOADER_FALSE BUILD_INEXACT_TRUE BUILD_INEXACT_FALSE LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE have_svnversion IPOPT_SVN_REV EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COIN_CC_IS_CL_TRUE COIN_CC_IS_CL_FALSE MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX COIN_CXX_IS_CL_TRUE COIN_CXX_IS_CL_FALSE MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 FFLAGS ac_ct_F77 MPIF77 FLIBS FC FCFLAGS ac_ct_FC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE PKG_CONFIG ac_pt_PKG_CONFIG COIN_HAS_PKGCONFIG_TRUE COIN_HAS_PKGCONFIG_FALSE COIN_PKG_CONFIG_PATH COIN_PKG_CONFIG_PATH_UNINSTALLED BLAS_LIBS BLAS_CFLAGS BLAS_DATA BLAS_DEPENDENCIES BLAS_LIBS_INSTALLED BLAS_CFLAGS_INSTALLED BLAS_DATA_INSTALLED IPOPTLIB_CFLAGS IPOPTLIB_LIBS IPOPTLIB_PCLIBS IPOPTLIB_PCREQUIRES IPOPTLIB_DEPENDENCIES IPOPTLIB_CFLAGS_INSTALLED IPOPTLIB_LIBS_INSTALLED COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE LAPACK_LIBS LAPACK_CFLAGS LAPACK_DATA LAPACK_DEPENDENCIES LAPACK_LIBS_INSTALLED LAPACK_CFLAGS_INSTALLED LAPACK_DATA_INSTALLED COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE ASL_LIBS ASL_CFLAGS ASL_DATA ASL_DEPENDENCIES ASL_LIBS_INSTALLED ASL_CFLAGS_INSTALLED ASL_DATA_INSTALLED IPOPTAMPLINTERFACELIB_CFLAGS IPOPTAMPLINTERFACELIB_LIBS IPOPTAMPLINTERFACELIB_PCLIBS IPOPTAMPLINTERFACELIB_PCREQUIRES IPOPTAMPLINTERFACELIB_DEPENDENCIES IPOPTAMPLINTERFACELIB_CFLAGS_INSTALLED IPOPTAMPLINTERFACELIB_LIBS_INSTALLED COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE HSL_LIBS HSL_CFLAGS HSL_DATA HSL_DEPENDENCIES HSL_LIBS_INSTALLED HSL_CFLAGS_INSTALLED HSL_DATA_INSTALLED COIN_HAS_HSL_TRUE COIN_HAS_HSL_FALSE MUMPS_LIBS MUMPS_CFLAGS MUMPS_DATA MUMPS_DEPENDENCIES MUMPS_LIBS_INSTALLED MUMPS_CFLAGS_INSTALLED MUMPS_DATA_INSTALLED COIN_HAS_MUMPS_TRUE COIN_HAS_MUMPS_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR JAVA_HOME JIPOPTDLL SHARED_FLAGS MATLAB_HOME MEXSUFFIX ASTYLE ASTYLEFLAGS IPALLLIBS HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILD_LINEARSOLVERLOADER_TRUE BUILD_LINEARSOLVERLOADER_FALSE BUILD_PARDISOLOADER_TRUE BUILD_PARDISOLOADER_FALSE BUILD_INEXACT_TRUE BUILD_INEXACT_FALSE LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -34947,51 +34947,6 @@ fi
 
 # Additional libraries and packages
 
-#######
-# HSL #
-#######
-
-# check HSL_CFLAGS to see which HSL functions are available in the HSL lib
-
-have_ma27=no
-have_ma28=no
-have_ma57=no
-have_ma86=no
-have_mc19=no
-have_ma77=no
-if test $coin_has_hsl = yes ; then
-  case $HSL_CFLAGS in
-    *HAVE_MA27*)
-       have_ma27=yes
-       ;;
-  esac
-  case $HSL_CFLAGS in
-    *HAVE_MA28*)
-       have_ma28=yes
-       ;;
-  esac
-  case $HSL_CFLAGS in
-    *HAVE_MA57*)
-       have_ma57=yes
-       ;;
-  esac
-  case $HSL_CFLAGS in
-    *HAVE_MA86*)
-       have_ma86=yes
-       ;;
-  esac
-  case $HSL_CFLAGS in
-    *HAVE_MC19*)
-       have_mc19=yes
-       ;;
-  esac
-  case $HSL_CFLAGS in
-    *HAVE_MA77*)
-       have_ma77=yes
-       ;;
-  esac
-fi
-
 ###########
 # PARDISO #
 ###########
@@ -35544,66 +35499,6 @@ IPALLLIBS="../contrib/CGPenalty/libcgpenalty.la ../Algorithm/libipoptalg.la ../A
 
 
 
-if test "$have_ma27" = yes; then
-  HAVE_MA27_TRUE=
-  HAVE_MA27_FALSE='#'
-else
-  HAVE_MA27_TRUE='#'
-  HAVE_MA27_FALSE=
-fi
-
-
-
-if test "$have_ma57" = yes; then
-  HAVE_MA57_TRUE=
-  HAVE_MA57_FALSE='#'
-else
-  HAVE_MA57_TRUE='#'
-  HAVE_MA57_FALSE=
-fi
-
-
-
-if test "$have_ma86" = yes; then
-  HAVE_MA86_TRUE=
-  HAVE_MA86_FALSE='#'
-else
-  HAVE_MA86_TRUE='#'
-  HAVE_MA86_FALSE=
-fi
-
-
-
-if test "$have_ma28" = yes; then
-  HAVE_MA28_TRUE=
-  HAVE_MA28_FALSE='#'
-else
-  HAVE_MA28_TRUE='#'
-  HAVE_MA28_FALSE=
-fi
-
-
-
-if test "$have_ma77" = yes; then
-  HAVE_MA77_TRUE=
-  HAVE_MA77_FALSE='#'
-else
-  HAVE_MA77_TRUE='#'
-  HAVE_MA77_FALSE=
-fi
-
-
-
-if test "$have_mc19" = yes; then
-  HAVE_MC19_TRUE=
-  HAVE_MC19_FALSE='#'
-else
-  HAVE_MC19_TRUE='#'
-  HAVE_MC19_FALSE=
-fi
-
-
-
 if test ! "$use_pardiso" = no; then
   HAVE_PARDISO_TRUE=
   HAVE_PARDISO_FALSE='#'
@@ -35660,16 +35555,6 @@ if test $use_linearsolverloader = yes; then
 else
   BUILD_LINEARSOLVERLOADER_TRUE='#'
   BUILD_LINEARSOLVERLOADER_FALSE=
-fi
-
-
-
-if test "$have_ma27" != yes -o "$have_ma28" != yes -o "$have_ma57" != yes -o "$have_ma77" != yes -o "$have_ma86" != yes -o "$have_mc19" != yes; then
-  BUILD_HSLLOADER_TRUE=
-  BUILD_HSLLOADER_FALSE='#'
-else
-  BUILD_HSLLOADER_TRUE='#'
-  BUILD_HSLLOADER_FALSE=
 fi
 
 
@@ -37135,48 +37020,6 @@ echo "$as_me: error: conditional \"COIN_HAS_MUMPS\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
-if test -z "${HAVE_MA27_TRUE}" && test -z "${HAVE_MA27_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"HAVE_MA27\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"HAVE_MA27\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${HAVE_MA57_TRUE}" && test -z "${HAVE_MA57_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"HAVE_MA57\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"HAVE_MA57\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${HAVE_MA86_TRUE}" && test -z "${HAVE_MA86_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"HAVE_MA86\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"HAVE_MA86\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${HAVE_MA28_TRUE}" && test -z "${HAVE_MA28_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"HAVE_MA28\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"HAVE_MA28\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${HAVE_MA77_TRUE}" && test -z "${HAVE_MA77_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"HAVE_MA77\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"HAVE_MA77\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${HAVE_MC19_TRUE}" && test -z "${HAVE_MC19_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"HAVE_MC19\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"HAVE_MC19\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
 if test -z "${HAVE_PARDISO_TRUE}" && test -z "${HAVE_PARDISO_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"HAVE_PARDISO\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
@@ -37195,13 +37038,6 @@ if test -z "${BUILD_LINEARSOLVERLOADER_TRUE}" && test -z "${BUILD_LINEARSOLVERLO
   { { echo "$as_me:$LINENO: error: conditional \"BUILD_LINEARSOLVERLOADER\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
 echo "$as_me: error: conditional \"BUILD_LINEARSOLVERLOADER\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${BUILD_HSLLOADER_TRUE}" && test -z "${BUILD_HSLLOADER_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"BUILD_HSLLOADER\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"BUILD_HSLLOADER\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -38003,26 +37839,12 @@ s,@MEXSUFFIX@,$MEXSUFFIX,;t t
 s,@ASTYLE@,$ASTYLE,;t t
 s,@ASTYLEFLAGS@,$ASTYLEFLAGS,;t t
 s,@IPALLLIBS@,$IPALLLIBS,;t t
-s,@HAVE_MA27_TRUE@,$HAVE_MA27_TRUE,;t t
-s,@HAVE_MA27_FALSE@,$HAVE_MA27_FALSE,;t t
-s,@HAVE_MA57_TRUE@,$HAVE_MA57_TRUE,;t t
-s,@HAVE_MA57_FALSE@,$HAVE_MA57_FALSE,;t t
-s,@HAVE_MA86_TRUE@,$HAVE_MA86_TRUE,;t t
-s,@HAVE_MA86_FALSE@,$HAVE_MA86_FALSE,;t t
-s,@HAVE_MA28_TRUE@,$HAVE_MA28_TRUE,;t t
-s,@HAVE_MA28_FALSE@,$HAVE_MA28_FALSE,;t t
-s,@HAVE_MA77_TRUE@,$HAVE_MA77_TRUE,;t t
-s,@HAVE_MA77_FALSE@,$HAVE_MA77_FALSE,;t t
-s,@HAVE_MC19_TRUE@,$HAVE_MC19_TRUE,;t t
-s,@HAVE_MC19_FALSE@,$HAVE_MC19_FALSE,;t t
 s,@HAVE_PARDISO_TRUE@,$HAVE_PARDISO_TRUE,;t t
 s,@HAVE_PARDISO_FALSE@,$HAVE_PARDISO_FALSE,;t t
 s,@HAVE_WSMP_TRUE@,$HAVE_WSMP_TRUE,;t t
 s,@HAVE_WSMP_FALSE@,$HAVE_WSMP_FALSE,;t t
 s,@BUILD_LINEARSOLVERLOADER_TRUE@,$BUILD_LINEARSOLVERLOADER_TRUE,;t t
 s,@BUILD_LINEARSOLVERLOADER_FALSE@,$BUILD_LINEARSOLVERLOADER_FALSE,;t t
-s,@BUILD_HSLLOADER_TRUE@,$BUILD_HSLLOADER_TRUE,;t t
-s,@BUILD_HSLLOADER_FALSE@,$BUILD_HSLLOADER_FALSE,;t t
 s,@BUILD_PARDISOLOADER_TRUE@,$BUILD_PARDISOLOADER_TRUE,;t t
 s,@BUILD_PARDISOLOADER_FALSE@,$BUILD_PARDISOLOADER_FALSE,;t t
 s,@BUILD_INEXACT_TRUE@,$BUILD_INEXACT_TRUE,;t t

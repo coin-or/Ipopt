@@ -21,6 +21,10 @@
 #include "IpCGPenaltyRegOp.hpp"
 #include "IpNLPBoundsRemover.hpp"
 
+#ifdef COIN_HAS_HSL
+#include "CoinHslConfig.h"
+#endif
+
 #ifdef BUILD_INEXACT
 # include "IpInexactRegOp.hpp"
 # include "IpInexactAlgBuilder.hpp"
@@ -380,7 +384,7 @@ namespace Ipopt
           options_to_print.push_back("point_perturbation_radius");
 
           // Special linear solver
-#if defined(HAVE_MA27) || defined(HAVE_LINEARSOLVERLOADER)
+#if defined(COINHSL_HAS_MA27) || defined(HAVE_LINEARSOLVERLOADER)
 
           options_to_print.push_back("#MA27 Linear Solver");
           options_to_print.push_back("ma27_pivtol");
@@ -390,7 +394,7 @@ namespace Ipopt
           options_to_print.push_back("ma27_meminc_factor");
 #endif
 
-#if defined(HAVE_MA57) || defined(HAVE_LINEARSOLVERLOADER)
+#if defined(COINHSL_HAS_MA57) || defined(HAVE_LINEARSOLVERLOADER)
 
           options_to_print.push_back("#MA57 Linear Solver");
           options_to_print.push_back("ma57_pivtol");
@@ -403,7 +407,7 @@ namespace Ipopt
           options_to_print.push_back("ma57_small_pivot_flag");
 #endif
 
-#if defined(HAVE_MA77)
+#if defined(COINHSL_HAS_MA77)
 
           options_to_print.push_back("#MA77 Linear Solver");
           options_to_print.push_back("ma77_print_level");

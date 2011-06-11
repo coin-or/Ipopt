@@ -11,6 +11,10 @@
 #include "LibraryHandler.h"
 #include "HSLLoader.h"
 
+#ifdef COIN_HAS_HSL
+#include "CoinHslConfig.h"
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "hsl_ma86d.h"
@@ -129,7 +133,7 @@ typedef void (*ma86_solve_t)(const int job, const int nrhs, const int ldx,
 typedef void (*ma86_finalise_t)(void **keep,
    const struct ma86_control *control);
 
-#ifndef HAVE_MA27
+#ifndef COINHSL_HAS_MA27
 ma27id_t func_ma27id=NULL;
 ma27ad_t func_ma27ad=NULL;
 ma27bd_t func_ma27bd=NULL;
@@ -184,7 +188,7 @@ void F77_FUNC(ma27cd,MA27CD)(ipfint *N, double* A, ipfint* LA, ipfint* IW,
 
 #endif
 
-#ifndef HAVE_MA28
+#ifndef COINHSL_HAS_MA28
 
 ma28ad_t func_ma28ad=NULL;
 
@@ -199,7 +203,7 @@ void F77_FUNC(ma28ad,MA28AD)(void* nsize, void* nz, void* rw, void* licn, void* 
 }
 #endif
 
-#ifndef HAVE_MA57
+#ifndef COINHSL_HAS_MA57
 
 ma57id_t func_ma57id=NULL;
 ma57ad_t func_ma57ad=NULL;
@@ -303,7 +307,7 @@ void  F77_FUNC (ma57ed, MA57ED) (
 }
 #endif
 
-#ifndef HAVE_MA86
+#ifndef COINHSL_HAS_MA86
 
 ma86_default_control_t func_ma86_default_control=NULL;
 ma86_analyse_t func_ma86_analyse=NULL;
@@ -378,7 +382,7 @@ void ma86_finalise(void **keep, const struct ma86_control *control) {
 }
 #endif
 
-#ifndef HAVE_MC19
+#ifndef COINHSL_HAS_MC19
 
 mc19ad_t func_mc19ad=NULL;
 
@@ -404,18 +408,18 @@ int LSL_loadHSL(const char* libname, char* msgbuf, int msglen) {
     return 1;
 	
   /* load HSL functions */
-#ifndef HAVE_MA27
+#ifndef COINHSL_HAS_MA27
   func_ma27id=(ma27id_t)LSL_loadSym(HSL_handle, "ma27id", msgbuf, msglen);
   func_ma27ad=(ma27ad_t)LSL_loadSym(HSL_handle, "ma27ad", msgbuf, msglen);
   func_ma27bd=(ma27bd_t)LSL_loadSym(HSL_handle, "ma27bd", msgbuf, msglen);
   func_ma27cd=(ma27cd_t)LSL_loadSym(HSL_handle, "ma27cd", msgbuf, msglen);
 #endif
 
-#ifndef HAVE_MA28
+#ifndef COINHSL_HAS_MA28
   func_ma28ad=(ma28ad_t)LSL_loadSym(HSL_handle, "ma28ad", msgbuf, msglen);
 #endif
 
-#ifndef HAVE_MA57
+#ifndef COINHSL_HAS_MA57
   func_ma57id=(ma57id_t)LSL_loadSym(HSL_handle, "ma57id", msgbuf, msglen);
   func_ma57ad=(ma57ad_t)LSL_loadSym(HSL_handle, "ma57ad", msgbuf, msglen);
   func_ma57bd=(ma57bd_t)LSL_loadSym(HSL_handle, "ma57bd", msgbuf, msglen);
@@ -423,7 +427,7 @@ int LSL_loadHSL(const char* libname, char* msgbuf, int msglen) {
   func_ma57ed=(ma57ed_t)LSL_loadSym(HSL_handle, "ma57ed", msgbuf, msglen);
 #endif
 
-#ifndef HAVE_MA86
+#ifndef COINHSL_HAS_MA86
   func_ma86_default_control=(ma86_default_control_t)LSL_loadSym(HSL_handle, "ma86_default_control_d", msgbuf, msglen);
   func_ma86_analyse=(ma86_analyse_t)LSL_loadSym(HSL_handle, "ma86_analyse_d", msgbuf, msglen);
   func_ma86_factor=(ma86_factor_t)LSL_loadSym(HSL_handle, "ma86_factor_d", msgbuf, msglen);
@@ -432,7 +436,7 @@ int LSL_loadHSL(const char* libname, char* msgbuf, int msglen) {
   func_ma86_finalise=(ma86_finalise_t)LSL_loadSym(HSL_handle, "ma86_finalise_d", msgbuf, msglen);
 #endif
 
-#ifndef HAVE_MC19
+#ifndef COINHSL_HAS_MC19
   func_mc19ad=(mc19ad_t)LSL_loadSym(HSL_handle, "mc19ad", msgbuf, msglen);
 #endif
 
@@ -448,18 +452,18 @@ int LSL_unloadHSL() {
   rc = LSL_unloadLib(HSL_handle);
   HSL_handle=NULL;
 	
-#ifndef HAVE_MA27
+#ifndef COINHSL_HAS_MA27
   func_ma27id=NULL;
   func_ma27ad=NULL;
   func_ma27bd=NULL;
   func_ma27cd=NULL;
 #endif
 
-#ifndef HAVE_MA28
+#ifndef COINHSL_HAS_MA28
   func_ma28ad=NULL;
 #endif
 
-#ifndef HAVE_MA57
+#ifndef COINHSL_HAS_MA57
   func_ma57id=NULL;
   func_ma57ad=NULL;
   func_ma57bd=NULL;
@@ -467,7 +471,7 @@ int LSL_unloadHSL() {
   func_ma57ed=NULL;
 #endif
 
-#ifndef HAVE_MA86
+#ifndef COINHSL_HAS_MA86
   func_ma86_default_control=NULL;
   func_ma86_analyse=NULL;
   func_ma86_factor=NULL;
@@ -476,7 +480,7 @@ int LSL_unloadHSL() {
   func_ma86_finalise=NULL;
 #endif
 
-#ifndef HAVE_MC19
+#ifndef COINHSL_HAS_MC19
   func_mc19ad=NULL;
 #endif
 
@@ -488,7 +492,7 @@ int LSL_isHSLLoaded() {
 }
 
 int LSL_isMA27available() {
-#ifndef HAVE_MA27
+#ifndef COINHSL_HAS_MA27
 	return HSL_handle!=NULL && func_ma27id!=NULL && func_ma27ad!=NULL && func_ma27bd!=NULL && func_ma27cd!=NULL;
 #else
 	return 0;
@@ -496,7 +500,7 @@ int LSL_isMA27available() {
 }
 
 int LSL_isMA28available() {
-#ifndef HAVE_MA28
+#ifndef COINHSL_HAS_MA28
 	return HSL_handle!=NULL && func_ma28ad!=NULL;
 #else
 	return 0;
@@ -504,7 +508,7 @@ int LSL_isMA28available() {
 }
 
 int LSL_isMA57available() {
-#ifndef HAVE_MA57
+#ifndef COINHSL_HAS_MA57
 	return HSL_handle!=NULL && func_ma57id!=NULL && func_ma57ad!=NULL && func_ma57bd!=NULL && func_ma57cd!=NULL && func_ma57ed!=NULL;
 #else
 	return 0;
@@ -512,7 +516,7 @@ int LSL_isMA57available() {
 }
 
 int LSL_isMA86available() {
-#ifndef HAVE_MA86
+#ifndef COINHSL_HAS_MA86
 	return HSL_handle!=NULL && func_ma86_default_control!=NULL && func_ma86_analyse!=NULL && func_ma86_factor!=NULL && func_ma86_factor_solve!=NULL && func_ma86_solve!=NULL && func_ma86_finalise!=NULL;
 #else
 	return 0;
@@ -521,7 +525,7 @@ int LSL_isMA86available() {
 
 
 int LSL_isMC19available() {
-#ifndef HAVE_MC19
+#ifndef COINHSL_HAS_MC19
 	return HSL_handle!=NULL && func_mc19ad!=NULL;
 #else
 	return 0;

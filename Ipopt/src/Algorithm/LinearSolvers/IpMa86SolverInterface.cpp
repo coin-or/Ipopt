@@ -10,6 +10,15 @@
 //          Jonathan Hogg                           2009-07-29
 //          Carl Laird, Andreas Waechter     IBM    2004-03-17
 
+#include "IpoptConfig.h"
+
+#ifdef COIN_HAS_HSL
+#include "CoinHslConfig.h"
+#endif
+
+// if we do not have MA86 in HSL or the linear solver loader, then we want to build the MA86 interface
+#if defined(COINHSL_HAS_MA86) || defined(HAVE_LINEARSOLVERLOADER)
+
 #include "IpMa86SolverInterface.hpp"
 #include <iostream>
 #include <stdio.h>
@@ -321,3 +330,5 @@ namespace Ipopt
   }
 
 } // namespace Ipopt
+
+#endif /* COINHSL_HAS_MA86 or HAVE_LINEARSOLVERLOADER */

@@ -12,15 +12,13 @@ EXTRA_DIST =
 
 noinst_LTLIBRARIES = libLinearSolverLoader.la
 
-libLinearSolverLoader_la_SOURCES = LibraryHandler.c LibraryHandler.h
+libLinearSolverLoader_la_SOURCES = \
+  LibraryHandler.c LibraryHandler.h \
+  HSLLoader.c HSLLoader.h
 
-AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
-	-I`$(CYGPATH_W) $(srcdir)/../../Algorithm/LinearSolvers`
-
-if BUILD_HSLLOADER
-  libLinearSolverLoader_la_SOURCES += HSLLoader.c HSLLoader.h
-  AM_CPPFLAGS += $(HSL_CFLAGS)
-endif
+AM_CPPFLAGS = $(HSL_CFLAGS) \
+  -I`$(CYGPATH_W) $(srcdir)/../../Common` \
+  -I`$(CYGPATH_W) $(srcdir)/../../Algorithm/LinearSolvers`
 
 if BUILD_PARDISOLOADER
   libLinearSolverLoader_la_SOURCES += PardisoLoader.c PardisoLoader.h

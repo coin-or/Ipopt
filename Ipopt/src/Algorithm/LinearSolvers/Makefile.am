@@ -22,60 +22,33 @@ liblinsolvers_la_SOURCES = \
 	IpTSymLinearSolver.cpp IpTSymLinearSolver.hpp \
 	IpTSymScalingMethod.hpp
 
-if BUILD_LINEARSOLVERLOADER
-  liblinsolvers_la_SOURCES += \
+liblinsolvers_la_SOURCES += \
 	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp \
 	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp \
 	IpMa86SolverInterface.cpp IpMa86SolverInterface.hpp \
 	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
-	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp \
-	IpMa28Partition.f \
-	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp
+	IpMa28Partition.F \
+	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp \
+	IpMa77SolverInterface.cpp IpMa77SolverInterface.hpp ma77_iface.F90
 
+if BUILD_LINEARSOLVERLOADER
+  liblinsolvers_la_SOURCES += \
+	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
 else
-
-if HAVE_MA27
-  liblinsolvers_la_SOURCES += \
-	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp
-endif
-
-if HAVE_MA57
-  liblinsolvers_la_SOURCES += \
-	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp
-endif
-
-if HAVE_MA86
-  liblinsolvers_la_SOURCES += \
-	IpMa86SolverInterface.cpp IpMa86SolverInterface.hpp
-endif
-
-if HAVE_MC19
-  liblinsolvers_la_SOURCES += \
-	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp
-endif
-
 if HAVE_PARDISO
   liblinsolvers_la_SOURCES += \
 	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
 endif
-
-if HAVE_MA28
-  liblinsolvers_la_SOURCES += \
-	IpMa28Partition.f \
-	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp
-endif
-
 endif # BUILD_LINEARSOLVERLOADER
-
-if HAVE_MA77
-  liblinsolvers_la_SOURCES += \
-	IpMa77SolverInterface.cpp IpMa77SolverInterface.hpp ma77_iface.f90
-endif
 
 if HAVE_WSMP
   liblinsolvers_la_SOURCES += \
 	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp \
 	IpIterativeWsmpSolverInterface.cpp IpIterativeWsmpSolverInterface.hpp
+endif
+
+if COIN_HAS_MUMPS
+liblinsolvers_la_SOURCES += IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
 endif
 
 liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)
@@ -85,16 +58,11 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg/TMatrices` \
 	-I`$(CYGPATH_W) $(srcdir)/..` \
 	-I`$(CYGPATH_W) $(srcdir)/../../Interfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/../../contrib/CGPenalty`
+	-I`$(CYGPATH_W) $(srcdir)/../../contrib/CGPenalty` \
+	$(MUMPS_CFLAGS) $(HSL_CFLAGS)
 
-if COIN_HAS_MUMPS
-liblinsolvers_la_SOURCES += IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
-AM_CPPFLAGS += $(MUMPS_CFLAGS)
-endif
-
-if COIN_HAS_HSL
-AM_CPPFLAGS += $(HSL_CFLAGS)
-endif
+# this define is added automatically only for C/C++ code, but here we need it also for Fortran code
+AM_FFLAGS = -DIPOPT_BUILD
 
 # This line is necessary to allow VPATH compilation
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common

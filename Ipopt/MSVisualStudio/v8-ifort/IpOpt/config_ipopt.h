@@ -101,19 +101,19 @@
 #define HAVE_LINEARSOLVERLOADER 1
 
 /* Define to 1 if MA27 is available */
-#undef HAVE_MA27 
+#undef COINHSL_HAS_MA27
 
 /* Define to 1 if MA28 is available */
-#undef HAVE_MA28 
+#undef COINHSL_HAS_MA28
 
 /* Define to 1 if MA57 is available */
-#undef HAVE_MA57 
+#undef COINHSL_HAS_MA57
 
 /* Define to 1 if you have the <math.h> header file. */
 /* #undef HAVE_MATH_H */
 
 /* Define to 1 if MC19 is available */
-#undef HAVE_MC19 
+#undef COINHSL_HAS_MC19
 
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1

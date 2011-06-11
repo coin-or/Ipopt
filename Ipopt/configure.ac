@@ -342,51 +342,6 @@ using namespace std;])
 
 # Additional libraries and packages
 
-#######
-# HSL #
-#######
-
-# check HSL_CFLAGS to see which HSL functions are available in the HSL lib
-
-have_ma27=no
-have_ma28=no
-have_ma57=no
-have_ma86=no
-have_mc19=no
-have_ma77=no
-if test $coin_has_hsl = yes ; then
-  case $HSL_CFLAGS in 
-    *HAVE_MA27*)
-       have_ma27=yes
-       ;;
-  esac
-  case $HSL_CFLAGS in 
-    *HAVE_MA28*)
-       have_ma28=yes
-       ;;
-  esac
-  case $HSL_CFLAGS in 
-    *HAVE_MA57*)
-       have_ma57=yes
-       ;;
-  esac
-  case $HSL_CFLAGS in 
-    *HAVE_MA86*)
-       have_ma86=yes
-       ;;
-  esac
-  case $HSL_CFLAGS in 
-    *HAVE_MC19*)
-       have_mc19=yes
-       ;;
-  esac
-  case $HSL_CFLAGS in 
-    *HAVE_MA77*)
-       have_ma77=yes
-       ;;
-  esac
-fi
-
 ###########
 # PARDISO #
 ###########
@@ -642,12 +597,6 @@ AC_SUBST(ASTYLEFLAGS)
 AC_SUBST(IPALLLIBS)
 IPALLLIBS="../contrib/CGPenalty/libcgpenalty.la ../Algorithm/libipoptalg.la ../Algorithm/LinearSolvers/liblinsolvers.la ../Common/libcommon.la ../LinAlg/liblinalg.la ../LinAlg/TMatrices/libtmatrices.la"
 
-AM_CONDITIONAL([HAVE_MA27],[test "$have_ma27" = yes])
-AM_CONDITIONAL([HAVE_MA57],[test "$have_ma57" = yes])
-AM_CONDITIONAL([HAVE_MA86],[test "$have_ma86" = yes])
-AM_CONDITIONAL([HAVE_MA28],[test "$have_ma28" = yes])
-AM_CONDITIONAL([HAVE_MA77],[test "$have_ma77" = yes])
-AM_CONDITIONAL([HAVE_MC19],[test "$have_mc19" = yes])
 AM_CONDITIONAL([HAVE_PARDISO],[test ! "$use_pardiso" = no])
 AM_CONDITIONAL([HAVE_WSMP],[test ! "$use_wsmp" = no])
 
@@ -672,7 +621,6 @@ if test $use_linearsolverloader = yes; then
 fi
 
 AM_CONDITIONAL([BUILD_LINEARSOLVERLOADER],[test $use_linearsolverloader = yes])
-AM_CONDITIONAL([BUILD_HSLLOADER],[test "$have_ma27" != yes -o "$have_ma28" != yes -o "$have_ma57" != yes -o "$have_ma77" != yes -o "$have_ma86" != yes -o "$have_mc19" != yes])
 AM_CONDITIONAL([BUILD_PARDISOLOADER],[test "$use_pardiso" = no])
 
 AM_CONDITIONAL([BUILD_INEXACT], [test $use_inexact = yes])

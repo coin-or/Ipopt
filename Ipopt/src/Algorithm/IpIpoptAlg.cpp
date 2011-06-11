@@ -6,15 +6,14 @@
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
+#include "IpoptConfig.h"
 #include "IpIpoptAlg.hpp"
 #include "IpJournalist.hpp"
 #include "IpRestoPhase.hpp"
 #include "IpOrigIpoptNLP.hpp"
 
-#ifdef HAVE_CONFIG_H
-# include "config_ipopt.h"
-#else
-# define PACKAGE_VERSION IPOPT_VERSION
+#ifdef COIN_HAS_HSL
+#include "CoinHslConfig.h"
 #endif
 
 namespace Ipopt
@@ -263,8 +262,7 @@ namespace Ipopt
     }
 
     if (!isResto) {
-      char vernum[] = PACKAGE_VERSION;
-      Jnlst().Printf(J_ITERSUMMARY, J_MAIN, "This is Ipopt version %s, running with linear solver %s.\n\n", vernum, linear_solver_.c_str());
+      Jnlst().Printf(J_ITERSUMMARY, J_MAIN, "This is Ipopt version "IPOPT_VERSION", running with linear solver %s.\n\n", linear_solver_.c_str());
     }
 
     SolverReturn retval = UNASSIGNED;
@@ -952,9 +950,9 @@ namespace Ipopt
                  "         For more information visit http://projects.coin-or.org/Ipopt\n"
                  "******************************************************************************\n\n");
 #ifdef COIN_HAS_MUMPS
-# ifndef HAVE_MA27
-#  ifndef HAVE_MA57
-#   ifndef HAVE_MA86
+# ifndef COINHSL_HAS_MA27
+#  ifndef COINHSL_HAS_MA57
+#   ifndef COINHSL_HAS_MA86
 #    ifndef HAVE_PARDISO
 #     ifndef HAVE_WSMP
     jnlst.Printf(J_INSUPPRESSIBLE, J_MAIN,

@@ -6,6 +6,7 @@
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
+#include "IpoptConfig.h"
 #include "IpTNLPAdapter.hpp"
 #include "IpBlas.hpp"
 #include "IpIpoptData.hpp"
@@ -18,13 +19,17 @@
 #include "IpTSymDependencyDetector.hpp"
 #include "IpTripletToCSRConverter.hpp"
 
+#ifdef COIN_HAS_HSL
+#include "CoinHslConfig.h"
+#endif
+
 #ifdef COIN_HAS_MUMPS
 # include "IpMumpsSolverInterface.hpp"
 #endif
 #ifdef HAVE_WSMP
 # include "IpWsmpSolverInterface.hpp"
 #endif
-#ifdef HAVE_MA28
+#ifdef COINHSL_HAS_MA28
 # include "IpMa28TDependencyDetector.hpp"
 #endif
 
@@ -298,7 +303,7 @@ namespace Ipopt
 
       }
       else if (dependency_detector == "ma28") {
-#ifdef HAVE_MA28
+#ifdef COINHSL_HAS_MA28
         dependency_detector_ = new Ma28TDependencyDetector();
 #else
 

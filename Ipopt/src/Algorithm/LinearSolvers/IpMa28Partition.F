@@ -2,6 +2,14 @@ C Copyright (C) 2002, 2007 Carnegie Mellon University and others.
 C All Rights Reserved.
 C This code is published under the Eclipse Public License.
 C
+#include "IpoptConfig.h"
+C
+#if defined(COIN_HAS_HSL)
+#include "CoinHslConfig.h"
+#endif
+C
+#if defined(COINHSL_HAS_MA28) || defined(HAVE_LINEARSOLVERLOADER)
+C
 C This code is based on the file Ipopt/IPOPT/ipopt/ma28_call.F in the
 C Ipopt 2.2.1e distribution.
 C
@@ -262,3 +270,4 @@ C-------------------------------------------------------------------------------
  9999 continue
       return
       end
+#endif
