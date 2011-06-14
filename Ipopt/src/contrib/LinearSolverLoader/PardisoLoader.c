@@ -43,7 +43,7 @@ typedef void (*pardisoinit_new_t)(void* PT, const ipfint* MTYPE,
                               const ipfint * SOLVER,
                               ipfint* IPARM,
                               double* DPARM,
-                              ipfint* ERROR);
+                              ipfint* E);
 typedef void (*pardiso_new_t)(void** PT, const ipfint* MAXFCT,
                            const ipfint* MNUM, const ipfint* MTYPE,
                            const ipfint* PHASE, const ipfint* N,
@@ -59,11 +59,11 @@ static pardiso_old_t func_pardiso     = NULL;
 static pardiso_new_t func_new_pardiso = NULL;
 static int pardiso_is_parallel = 0;
 
-void wrap_old_pardisoinit(void* PT, const ipfint* MTYPE, const ipfint* SOLVER, ipfint* IPARM, double* DPARM, ipfint* ERROR) {
+void wrap_old_pardisoinit(void* PT, const ipfint* MTYPE, const ipfint* SOLVER, ipfint* IPARM, double* DPARM, ipfint* E) {
    if (func_pardisoinit == NULL)
       LSL_lateParadisoLibLoad();
    func_pardisoinit(PT, MTYPE, IPARM);
-   *ERROR = 0;
+   *E = 0;
 }
 
 void wrap_old_pardiso(void** PT, const ipfint* MAXFCT,
@@ -89,11 +89,11 @@ void F77_FUNC(pardisoinit,PARDISOINIT)(void* PT, const ipfint* MTYPE,
                       const ipfint* SOLVER,
                       ipfint* IPARM,
                       double* DPARM,
-                      ipfint* ERROR) {
+                      ipfint* E) {
    if (func_new_pardisoinit == NULL)
       LSL_lateParadisoLibLoad();
    assert(func_new_pardisoinit != NULL);
-   func_new_pardisoinit(PT, MTYPE, SOLVER, IPARM, DPARM, ERROR);
+   func_new_pardisoinit(PT, MTYPE, SOLVER, IPARM, DPARM, E);
 }
 
 void F77_FUNC(pardiso,PARDISO)(void** PT, const ipfint* MAXFCT,
@@ -103,14 +103,14 @@ void F77_FUNC(pardiso,PARDISO)(void** PT, const ipfint* MAXFCT,
                   const ipfint* JA, const ipfint* PERM,
                   const ipfint* NRHS, ipfint* IPARM,
                   const ipfint* MSGLVL, double* B, double* X,
-                  ipfint* ERROR, double* DPARM) {
+                  ipfint* E, double* DPARM) {
    if (func_new_pardiso == NULL)
       LSL_lateParadisoLibLoad();
    assert(func_new_pardiso != NULL);
    /* if we do not have a parallel version, ensure that IPARM[2] (#threads) is set to 1 */
    if (!pardiso_is_parallel)
       IPARM[2] = 1;
-   func_new_pardiso(PT, MAXFCT, MNUM, MTYPE, PHASE, N, A, IA, JA, PERM, NRHS, IPARM, MSGLVL, B, X, ERROR, DPARM);
+   func_new_pardiso(PT, MAXFCT, MNUM, MTYPE, PHASE, N, A, IA, JA, PERM, NRHS, IPARM, MSGLVL, B, X, E, DPARM);
 }
 
 #define PARDISOLIBNAME "libpardiso." SHAREDLIBEXT
