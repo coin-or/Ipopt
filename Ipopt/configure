@@ -35097,17 +35097,17 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   (exit $ac_status); }; }; then
   echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_PARDISO_NEWINTERFACE 1
-_ACEOF
-
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
 echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_PARDISO_OLDINTERFACE 1
+_ACEOF
+
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext

@@ -57,7 +57,7 @@
 /* Prototypes for Pardiso's subroutines */
 extern "C"
 {
-#ifndef HAVE_PARDISO_NEWINTERFACE
+#ifdef HAVE_PARDISO_OLDINTERFACE
   void PARDISOINIT_FUNC(void* PT, const ipfint* MTYPE, ipfint* IPARM);
 #else
   // The following is a fix to allow linking with Pardiso library under Windows
@@ -345,9 +345,9 @@ namespace Ipopt
     // Call Pardiso's initialization routine
     IPARM_[0] = 0;  // Tell it to fill IPARM with default values(?)
 
-#ifdef HAVE_PARDISO_NEWINTERFACE
+#ifndef HAVE_PARDISO_OLDINTERFACE
     ipfint ERROR = 0;
-    ipfint SOLVER = 0; // initialze only direct solver
+    ipfint SOLVER = 0; // initialize only direct solver
 
     PARDISOINIT_FUNC(PT_, &MTYPE_, &SOLVER, IPARM_, DPARM_, &ERROR);
 #else
@@ -357,7 +357,7 @@ namespace Ipopt
     // Set some parameters for Pardiso
     IPARM_[0] = 1;  // Don't use the default values
 
-#ifdef HAVE_PARDISO_PARALLEL
+#if defined(HAVE_PARDISO_PARALLEL) || ! defined(HAVE_PARDISO)
     // Obtain the numbers of processors from the value of OMP_NUM_THREADS
     char    *var = getenv("OMP_NUM_THREADS");
     int      num_procs;
@@ -371,14 +371,18 @@ namespace Ipopt
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Using environment OMP_NUM_THREADS = %d as the number of processors.\n", num_procs);
     }
+#ifdef HAVE_PARDISO
+    // If we run Pardiso through the linear solver loader,
+    // we do not know whether it is the parallel version, so we do not report an error if OMP_NUM_THREADS is not set.
     else {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                      "You need to set environment variable OMP_NUM_THREADS to the number of processors used in Pardiso (e.g., 1).\n\n");
       return false;
     }
+#endif
     IPARM_[2] = num_procs;  // Set the number of processors
-#else
 
+#else
     IPARM_[2] = 1;
 #endif
 
@@ -406,7 +410,7 @@ namespace Ipopt
     //IPARM_[33] = 1; // bit-by-bit identical results in parallel run
 
     if (pardiso_iterative_) {
-#ifndef HAVE_PARDISO_NEWINTERFACE
+#ifdef HAVE_PARDISO_OLDINTERFACE
       THROW_EXCEPTION(OPTION_INVALID,
                       "You chose to use the iterative version of Pardiso, but you need to use a Pardiso version of at least 4.0.");
 #endif
