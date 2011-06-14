@@ -250,7 +250,7 @@ namespace Ipopt
 #if defined(HAVE_PARDISO_PARALLEL) || ! defined(HAVE_PARDISO)
     // Obtain the numbers of processors from the value of OMP_NUM_THREADS
     char    *var = getenv("OMP_NUM_THREADS");
-    int      num_procs;
+    int      num_procs = 1;
     if (var != NULL) {
       sscanf( var, "%d", &num_procs );
       if (num_procs < 1) {
