@@ -374,9 +374,9 @@ if test "$use_pardiso" != "no"; then
   
   AC_MSG_CHECKING([whether Pardiso library is at least version 4.0])
   AC_TRY_LINK([],[      call pardiso_ipopt_newinterface()],
-              [AC_MSG_RESULT(yes)
-               AC_DEFINE(HAVE_PARDISO_NEWINTERFACE,1,[Define to 1 if you are using at least a 4.0 version of Pardiso])],
-              [AC_MSG_RESULT(no)])
+              [AC_MSG_RESULT(yes)],
+              [AC_MSG_RESULT(no)
+               AC_DEFINE(HAVE_PARDISO_OLDINTERFACE,1,[Define to 1 if you are not using at least a 4.0 version of Pardiso])])
   LIBS="$SAVE_LIBS"
   IPOPTLIB_LIBS="$PARDISO_LIB $IPOPTLIB_LIBS"
   IPOPTLIB_PCLIBS="$PARDISO_LIB $IPOPTLIB_PCLIBS"
