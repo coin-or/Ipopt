@@ -24,7 +24,7 @@
 /* Type of Fortran integer translated into C */
 typedef FORTRAN_INTEGER_TYPE ipfint;
 
-soHandle_t HSL_handle=NULL;
+static soHandle_t HSL_handle=NULL;
 
 void LSL_lateHSLLoad();
 
@@ -134,10 +134,10 @@ typedef void (*ma86_finalise_t)(void **keep,
    const struct ma86_control *control);
 
 #ifndef COINHSL_HAS_MA27
-ma27id_t func_ma27id=NULL;
-ma27ad_t func_ma27ad=NULL;
-ma27bd_t func_ma27bd=NULL;
-ma27cd_t func_ma27cd=NULL;
+static ma27id_t func_ma27id=NULL;
+static ma27ad_t func_ma27ad=NULL;
+static ma27bd_t func_ma27bd=NULL;
+static ma27cd_t func_ma27cd=NULL;
 
 void F77_FUNC(ma27id,MA27ID)(ipfint* ICNTL, double* CNTL)
 {
@@ -190,7 +190,7 @@ void F77_FUNC(ma27cd,MA27CD)(ipfint *N, double* A, ipfint* LA, ipfint* IW,
 
 #ifndef COINHSL_HAS_MA28
 
-ma28ad_t func_ma28ad=NULL;
+static ma28ad_t func_ma28ad=NULL;
 
 void F77_FUNC(ma28ad,MA28AD)(void* nsize, void* nz, void* rw, void* licn, void* iw,
 		                         void* lirn, void* iw2, void* pivtol, void* iw3, void* iw4, void* rw2, void* iflag) {
@@ -205,11 +205,11 @@ void F77_FUNC(ma28ad,MA28AD)(void* nsize, void* nz, void* rw, void* licn, void* 
 
 #ifndef COINHSL_HAS_MA57
 
-ma57id_t func_ma57id=NULL;
-ma57ad_t func_ma57ad=NULL;
-ma57bd_t func_ma57bd=NULL;
-ma57cd_t func_ma57cd=NULL;
-ma57ed_t func_ma57ed=NULL;
+static ma57id_t func_ma57id=NULL;
+static ma57ad_t func_ma57ad=NULL;
+static ma57bd_t func_ma57bd=NULL;
+static ma57cd_t func_ma57cd=NULL;
+static ma57ed_t func_ma57ed=NULL;
 
 void  F77_FUNC (ma57id, MA57ID) (double    *cntl,  ipfint    *icntl) {
   if (func_ma57id==NULL) LSL_lateHSLLoad();
@@ -309,12 +309,12 @@ void  F77_FUNC (ma57ed, MA57ED) (
 
 #ifndef COINHSL_HAS_MA86
 
-ma86_default_control_t func_ma86_default_control=NULL;
-ma86_analyse_t func_ma86_analyse=NULL;
-ma86_factor_t func_ma86_factor=NULL;
-ma86_factor_solve_t func_ma86_factor_solve=NULL;
-ma86_solve_t func_ma86_solve=NULL;
-ma86_finalise_t func_ma86_finalise=NULL;
+static ma86_default_control_t func_ma86_default_control=NULL;
+static ma86_analyse_t func_ma86_analyse=NULL;
+static ma86_factor_t func_ma86_factor=NULL;
+static ma86_factor_solve_t func_ma86_factor_solve=NULL;
+static ma86_solve_t func_ma86_solve=NULL;
+static ma86_finalise_t func_ma86_finalise=NULL;
 
 void ma86_default_control(struct ma86_control *control) {
   if (func_ma86_default_control==NULL) LSL_lateHSLLoad();
@@ -384,7 +384,7 @@ void ma86_finalise(void **keep, const struct ma86_control *control) {
 
 #ifndef COINHSL_HAS_MC19
 
-mc19ad_t func_mc19ad=NULL;
+static mc19ad_t func_mc19ad=NULL;
 
 void F77_FUNC(mc19ad,MC19AD)(ipfint *N, ipfint *NZ, double* A, ipfint *IRN,
                              ipfint* ICN, float* R, float* C, float* W) {
