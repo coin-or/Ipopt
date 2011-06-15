@@ -24,7 +24,7 @@ IPOPT_CXXLINKFLAGS = @RPATH_FLAGS@
 
 # Linker flags
 @COIN_HAS_PKGCONFIG_TRUE@IPOPT_LIBS = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt`
-@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_TRUE@IPOPT_LIBS = /link /libpath:`$(CYGPATH_W) @abs_lib_dir@` libipopt.lib @IPOPTLIB_LIBS_INSTALLED@
+@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_TRUE@IPOPT_LIBS = -link -libpath:`$(CYGPATH_W) @abs_lib_dir@` libipopt.lib @IPOPTLIB_LIBS_INSTALLED@
 @COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_FALSE@IPOPT_LIBS = -L@abs_lib_dir@ -lipopt @IPOPTLIB_LIBS_INSTALLED@
 
 # The following is necessary under cygwin, if native compilers are used

@@ -27,7 +27,7 @@ LDFLAGS     = $(CXXFLAGS) @RPATH_FLAGS@
 
 # Linker flags
 @COIN_HAS_PKGCONFIG_TRUE@LIBS = -lsipopt `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipoptamplinterface`
-@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_TRUE@LIBS = /link /libpath:`$(CYGPATH_W) @abs_lib_dir@` libsipopt.lib libipoptamplinterface.lib libipopt.lib @IPOPTLIB_LIBS_INSTALLED@ @ASL_LIBS_INSTALLED@
+@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_TRUE@LIBS = -link -libpath:`$(CYGPATH_W) @abs_lib_dir@` libsipopt.lib libipoptamplinterface.lib libipopt.lib @IPOPTLIB_LIBS_INSTALLED@ @ASL_LIBS_INSTALLED@
 @COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_FALSE@LIBS = -L@abs_lib_dir@ -lsipopt -lipoptamplinterface -lipopt @IPOPTLIB_LIBS_INSTALLED@ @ASL_LIBS_INSTALLED@
 
 #LIBTOOL = @LIBTOOL@

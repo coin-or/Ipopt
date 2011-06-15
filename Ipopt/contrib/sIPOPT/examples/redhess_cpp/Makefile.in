@@ -47,7 +47,7 @@ senssrcdir = $(SRCDIR)/../../src
 
 # Linker flags
 @COIN_HAS_PKGCONFIG_TRUE@LIBS = -lsipopt `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt`
-@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_TRUE@LIBS = /link /libpath:`$(CYGPATH_W) @abs_lib_dir@` libsipopt.lib libipopt.lib @IPOPTLIB_LIBS_INSTALLED@
+@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_TRUE@LIBS = -link -libpath:`$(CYGPATH_W) @abs_lib_dir@` libsipopt.lib libipopt.lib @IPOPTLIB_LIBS_INSTALLED@
 @COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_FALSE@LIBS = -L@abs_lib_dir@ -lsipopt -lipopt @IPOPTLIB_LIBS_INSTALLED@
 
 # The following is necessary under cygwin, if native compilers are used
