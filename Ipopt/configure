@@ -25846,12 +25846,12 @@ _ACEOF
   # adjust linker flags for (i)cl compiler
   # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl),
   # for the LIBS_INSTALLED, we replace everything of the form "/somepath/" by "`$(CYGPATH_W) /somepath/`",
-  #    everything of the form "-Lpath" by "-libpath:`$(CYGPATH_W) path`, and
-  #    everything of the form "-lname" by "libname.lib"
+  #    everything of the form "-lname" by "libname.lib", and
+  #    everything of the form "-Lpath" by "-libpath:`$(CYGPATH_W) path`
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
     BLAS_LIBS=`echo " $BLAS_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
-    BLAS_LIBS_INSTALLED=`echo " $BLAS_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+    BLAS_LIBS_INSTALLED=`echo " $BLAS_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g'`
   fi
 
   BLAS_PCREQUIRES="coinblas"
@@ -28460,12 +28460,12 @@ _ACEOF
   # adjust linker flags for (i)cl compiler
   # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl),
   # for the LIBS_INSTALLED, we replace everything of the form "/somepath/" by "`$(CYGPATH_W) /somepath/`",
-  #    everything of the form "-Lpath" by "-libpath:`$(CYGPATH_W) path`, and
-  #    everything of the form "-lname" by "libname.lib"
+  #    everything of the form "-lname" by "libname.lib", and
+  #    everything of the form "-Lpath" by "-libpath:`$(CYGPATH_W) path`
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
     LAPACK_LIBS=`echo " $LAPACK_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
-    LAPACK_LIBS_INSTALLED=`echo " $LAPACK_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+    LAPACK_LIBS_INSTALLED=`echo " $LAPACK_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g'`
   fi
 
   LAPACK_PCREQUIRES="coinlapack"
@@ -29027,12 +29027,12 @@ _ACEOF
   # adjust linker flags for (i)cl compiler
   # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl),
   # for the LIBS_INSTALLED, we replace everything of the form "/somepath/" by "`$(CYGPATH_W) /somepath/`",
-  #    everything of the form "-Lpath" by "-libpath:`$(CYGPATH_W) path`, and
-  #    everything of the form "-lname" by "libname.lib"
+  #    everything of the form "-lname" by "libname.lib", and
+  #    everything of the form "-Lpath" by "-libpath:`$(CYGPATH_W) path`
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
     ASL_LIBS=`echo " $ASL_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
-    ASL_LIBS_INSTALLED=`echo " $ASL_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+    ASL_LIBS_INSTALLED=`echo " $ASL_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g'`
   fi
 
   ASL_PCREQUIRES="coinasl"
@@ -29538,12 +29538,12 @@ _ACEOF
   # adjust linker flags for (i)cl compiler
   # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl),
   # for the LIBS_INSTALLED, we replace everything of the form "/somepath/" by "`$(CYGPATH_W) /somepath/`",
-  #    everything of the form "-Lpath" by "-libpath:`$(CYGPATH_W) path`, and
-  #    everything of the form "-lname" by "libname.lib"
+  #    everything of the form "-lname" by "libname.lib", and
+  #    everything of the form "-Lpath" by "-libpath:`$(CYGPATH_W) path`
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
     HSL_LIBS=`echo " $HSL_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
-    HSL_LIBS_INSTALLED=`echo " $HSL_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+    HSL_LIBS_INSTALLED=`echo " $HSL_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g'`
   fi
 
   HSL_PCREQUIRES="coinhsl"
@@ -30049,12 +30049,12 @@ _ACEOF
   # adjust linker flags for (i)cl compiler
   # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl),
   # for the LIBS_INSTALLED, we replace everything of the form "/somepath/" by "`$(CYGPATH_W) /somepath/`",
-  #    everything of the form "-Lpath" by "-libpath:`$(CYGPATH_W) path`, and
-  #    everything of the form "-lname" by "libname.lib"
+  #    everything of the form "-lname" by "libname.lib", and
+  #    everything of the form "-Lpath" by "-libpath:`$(CYGPATH_W) path`
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
     MUMPS_LIBS=`echo " $MUMPS_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
-    MUMPS_LIBS_INSTALLED=`echo " $MUMPS_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+    MUMPS_LIBS_INSTALLED=`echo " $MUMPS_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g'`
   fi
 
   MUMPS_PCREQUIRES="coinmumps"
