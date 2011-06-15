@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2007 International Business Machines and others.
+// Copyright (C) 2004, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -761,8 +761,8 @@ namespace Ipopt
 #ifdef IP_DEBUG_CACHE
     DBG_START_METH("CachedResults<T>::DebugPrintCachedResults", dbg_verbosity);
     if (DBG_VERBOSITY()>=2 ) {
-      if (!chached_results_) {
-        DBG_PRINT((2,"  DependentResult:0x%x\n", (*iter)));
+      if (!cached_results_) {
+        DBG_PRINT((2,"Currentlt no cached results:\n"));
       }
       else {
         typename std::list< DependentResult<T>* >::const_iterator iter;
