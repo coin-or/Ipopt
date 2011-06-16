@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -41,6 +41,14 @@ namespace Ipopt
      *  include the one-line summary output as well as writing the
      *  details about the iterates if desired */
     virtual void WriteOutput() = 0;
+
+  protected:
+    /** enumeration for different inf_pr output options */
+    enum InfPrOutput
+    {
+      INTERNAL=0,
+      ORIGINAL
+    };
 
   private:
     /**@name Default Compiler Generated Methods (Hidden to avoid

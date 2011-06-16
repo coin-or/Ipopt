@@ -43,6 +43,9 @@ namespace Ipopt
       const std::string& prefix)
   {
     options.GetBoolValue("print_info_string", print_info_string_, prefix);
+    Index enum_int;
+    options.GetEnumValue("inf_pr_output", enum_int, prefix);
+    inf_pr_output_ = InfPrOutput(enum_int);
 
     bool retval = true;
     if (IsValid(resto_orig_iteration_output_)) {
@@ -119,7 +122,16 @@ namespace Ipopt
     orig_ip_data->set_trial(trial);
 
     // Compute primal infeasibility
-    Number inf_pr = orig_ip_cq->trial_primal_infeasibility(NORM_MAX);
+    Number inf_pr;
+    switch (inf_pr_output_) {
+    case INTERNAL:
+      inf_pr = orig_ip_cq->trial_primal_infeasibility(NORM_MAX);
+      break;
+    case ORIGINAL:
+      inf_pr = orig_ip_cq->unscaled_trial_nlp_constraint_violation(NORM_MAX);
+      break;
+    }
+    // Compute original objective function
     Number f = orig_ip_cq->unscaled_trial_f();
 
     // Retrieve some information set in the different parts of the algorithm

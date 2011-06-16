@@ -508,7 +508,7 @@ namespace Ipopt
           DPARM_[ 7] = pardiso_iter_inverse_norm_factor_;
         }
         DPARM_[ 8] = 25; // maximum number of non-improvement steps
-        
+
         F77_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
                                   &PHASE, &N, a_, ia, ja, &PERM,
                                   &NRHS, IPARM_, &MSGLVL_, &B, &X,

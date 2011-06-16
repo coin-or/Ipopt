@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2006 International Business Machines and others.
+// Copyright (C) 2004, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -59,6 +59,9 @@ namespace Ipopt
     /** Flag indicating weather info string should be printed at end
      *  of iteration summary line. */
     bool print_info_string_;
+
+    /** Option indication what should be printed in inf_pr column */
+    InfPrOutput inf_pr_output_;
   };
 
 } // namespace Ipopt

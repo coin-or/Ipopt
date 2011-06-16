@@ -258,6 +258,8 @@ namespace Ipopt
           options_to_print.push_back("output_file");
           options_to_print.push_back("file_print_level");
           options_to_print.push_back("option_file_name");
+          options_to_print.push_back("print_info_string");
+          options_to_print.push_back("inf_pr_output");
 
           options_to_print.push_back("#Termination");
           options_to_print.push_back("tol");
@@ -306,6 +308,7 @@ namespace Ipopt
           options_to_print.push_back("mu_oracle");
           options_to_print.push_back("quality_function_max_section_steps");
           options_to_print.push_back("fixed_mu_oracle");
+          options_to_print.push_back("adaptive_mu_globalization");
           options_to_print.push_back("mu_init");
           options_to_print.push_back("mu_max_fact");
           options_to_print.push_back("mu_max");

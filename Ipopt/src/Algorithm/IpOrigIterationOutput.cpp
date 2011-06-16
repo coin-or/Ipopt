@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2009 International Business Machines and others.
+// Copyright (C) 2004, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -48,6 +48,17 @@ namespace Ipopt
       "no", "don't print string",
       "yes", "print string at end of each iteration output",
       "This string contains some insider information about the current iteration.");
+    roptions->AddStringOption2(
+      "inf_pr_output",
+      "Determines what value is printed in the \"inf_pr\" output column.",
+      "original",
+      "internal", "max-norm of violation of internal equality constraints",
+      "original", "maximal constraint violation in original NLP",
+      "Ipopt works with a reformulation of the original problem, where slacks "
+      "are introduced and the problem might have been scaled.  The choice "
+      "\"internal\" prints out the constraint violation of this formulation. "
+      "With \"original\" the true constraint violation in the original NLP is "
+      "printed.");
     roptions->SetRegisteringCategory(prev_cat);
   }
 
@@ -55,6 +66,9 @@ namespace Ipopt
       const std::string& prefix)
   {
     options.GetBoolValue("print_info_string", print_info_string_, prefix);
+    Index enum_int;
+    options.GetEnumValue("inf_pr_output", enum_int, prefix);
+    inf_pr_output_ = InfPrOutput(enum_int);
 
     return true;
   }
@@ -81,7 +95,15 @@ namespace Ipopt
     else {
       Jnlst().Printf(J_DETAILED, J_MAIN, header.c_str());
     }
-    Number inf_pr = IpCq().curr_primal_infeasibility(NORM_MAX);
+    Number inf_pr;
+    switch (inf_pr_output_) {
+    case INTERNAL:
+      inf_pr = IpCq().curr_primal_infeasibility(NORM_MAX);
+      break;
+    case ORIGINAL:
+      inf_pr = IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX);
+      break;
+    }
     Number inf_du = IpCq().curr_dual_infeasibility(NORM_MAX);
     Number mu = IpData().curr_mu();
     Number dnrm;
