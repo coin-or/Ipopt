@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2010 International Business Machines and others.
+// Copyright (C) 2004, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -187,6 +187,8 @@ namespace Ipopt
     SmartPtr<const Vector> unscaled_curr_c();
     /** c(x) (at trial point) */
     SmartPtr<const Vector> trial_c();
+    /** unscaled c(x) (at trial point) */
+    SmartPtr<const Vector> unscaled_trial_c();
     /** d(x) (at current point) */
     SmartPtr<const Vector> curr_d();
     /** unscaled d(x) (at current point) */
@@ -251,6 +253,10 @@ namespace Ipopt
      *  iterate).  This considers the inequality constraints without
      *  slacks. */
     virtual Number unscaled_curr_nlp_constraint_violation(ENormType NormType);
+    /** Unscaled real constraint violation in a given norm (at trial
+     *  iterate).  This considers the inequality constraints without
+     *  slacks. */
+    virtual Number unscaled_trial_nlp_constraint_violation(ENormType NormType);
     //@}
 
     /** @name Hessian matrices */
@@ -561,6 +567,7 @@ namespace Ipopt
     CachedResults<Number> trial_constraint_violation_cache_;
     CachedResults<Number> curr_nlp_constraint_violation_cache_;
     CachedResults<Number> unscaled_curr_nlp_constraint_violation_cache_;
+    CachedResults<Number> unscaled_trial_nlp_constraint_violation_cache_;
     //@}
 
     /** Cache for the exact Hessian */

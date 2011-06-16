@@ -2964,19 +2964,28 @@ iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
 and the columns of output are defined as,
 \begin{description}
 \item[{\tt iter}:] The current iteration count. This includes regular
-  iterations and iterations while in restoration phase. If the
+  iterations and iterations during the restoration phase. If the
   algorithm is in the restoration phase, the letter {\tt r'} will be
   appended to the iteration number.
 \item[{\tt objective}:] The unscaled objective value at the current
   point. During the restoration phase, this value remains the unscaled
   objective value for the original problem.
 \item[{\tt inf\_pr}:] The scaled primal infeasibility at the current
-  point. During the restoration phase, this value is the primal
-  infeasibility of the original problem at the current point.
+  point. This quantities measure the infinity-norm (max) of the
+  internal equality constraints, Eq.~(4b) in the implementation paper
+  \cite{WaecBieg06:mp}, including inequality constraints reformulated
+  using slack variables and problem scaling.  During the restoration
+  phase, this value is the primal infeasibility of the original
+  problem at the current point.
 \item[{\tt inf\_du}:] The scaled dual infeasibility at the current
-  point. During the restoration phase, this is the value of the dual
-  infeasibility for the restoration phase problem.
-\item[{\tt lg(mu)}:] $\log_{10}$ of the value of the barrier parameter mu.
+  point.  This quantities measure the infinity-norm (max) of the
+  internal dual infeasibility, Eq.~(4a) in the implementation paper
+  \cite{WaecBieg06:mp}, including inequality constraints reformulated
+  using slack variables and problem scaling. During the restoration
+  phase, this is the value of the dual infeasibility for the
+  restoration phase problem.
+\item[{\tt lg(mu)}:] $\log_{10}$ of the value of the barrier parameter
+  $\mu$.
 \item[{\tt ||d||}:] The infinity norm (max) of the primal step (for
   the original variables $x$ and the internal slack variables $s$).
   During the restoration phase, this value includes the values of
@@ -2984,10 +2993,37 @@ and the columns of output are defined as,
   \cite{WaecBieg06:mp}).
 \item[{\tt lg(rg)}:] $\log_{10}$ of the value of the regularization
   term for the Hessian of the Lagrangian in the augmented system.
-\item[{\tt alpha\_du}:] The stepsize for the dual variables.
-\item[{\tt alpha\_pr}:] The stepsize for the primal variables.
+\item[{\tt alpha\_du}:] The stepsize for the dual variables
+  ($\alpha^z_k$ in Eq.~(14c) in \cite{WaecBieg06:mp}).
+\item[{\tt alpha\_pr}:] The stepsize for the primal
+  variables($\alpha_k$ in Eq.~(14a) in \cite{WaecBieg06:mp}).  The
+  number is usually followed by a character for additional diagnostic
+  information regarding the step acceptance criterion, see
+  Table~\ref{tab:alpha_pr}.
 \item[{\tt ls}:] The number of backtracking line search steps.
 \end{description}
+
+\begin{table}
+  \centering
+  \begin{tabular}{ll}
+    Tag & Description \\
+    \hline
+    f & f-type iteration in the filter method w/o second order correction \\
+    F & f-type iteration in the filter method w/ second order correction \\
+    h & h-type iteration in the filter method w/o second order correction \\
+    H & h-type iteration in the filter method w/ second order correction \\
+    R & Restoration phase just started \\
+    w &  in watchdog procedure \\
+    s & step accepted in soft restoration phase \\
+    t/T & tiny step accepted without line search \\
+    r & some previous iterate restored \\
+    % (forgot right now what that means ;-) )
+    \hline \\
+  \end{tabular} 
+
+  \caption{Diagnostic output in {\tt alpha\_pr} column.}
+  \label{tab:alpha_pr}
+\end{table}
 
 When the algorithm terminates, \Ipopt\ will output a message to the
 screen based on the return status of the call to {\tt Optimize}. The following
@@ -3100,37 +3136,12 @@ to the console, and a brief description.
 
 \subsection{Diagnostic Tags for \Ipopt}
 
-There are a few diagnostic tags that appear in the \Ipopt\
-output. Some are displayed in default print level behind the number
-denoting the step size in the column labeled ``{\tt alpha\_pr}''.
-The provide information about the step acceptance criterion:
-
-\begin{tabular}{ll}
-Tag & Description \\
-\hline
-f & f-type iteration in the filter method w/o second order correction \\
-F & f-type iteration in the filter method w/ second order correction \\
-h & h-type iteration in the filter method w/o second order correction \\
-H & h-type iteration in the filter method w/ second order correction \\
-R & Restoration phase just started \\
-w &  in watchdog procedure \\
-s & step accepted in soft restoration phase \\
-t/T & tiny step accepted without line search \\
-r & some previous iterate restored \\
-% (forgot right now what that means ;-) )
-\hline \\
-\end{tabular} 
-
-\noindent
-Moreover, to print additional diagnostic tags for each iteration of \Ipopt, add
-the statement
-\begin{verbatim}
-print_info_string yes
-\end{verbatim} 
-to the ipopt.opt file. During the corresponding operation, a tag will
-appear at the end of an iteration line with the following diagnostic
-meaning. These tags correspond to the basic \Ipopt\ code. They are
-useful to flag difficulties for a particular \Ipopt\ run.
+To print additional diagnostic tags for each iteration of \Ipopt, set
+the option ``\texttt{print\_info\_string}'' to ``\texttt{yes}''.
+Then, during the corresponding operation, a tag will appear at the end
+of an iteration line with the following diagnostic meaning. These tags
+correspond to the basic \Ipopt\ code. They are useful to flag
+difficulties for a particular \Ipopt\ run.
 
 % More information can be obtained by adding
 % \begin{verbatim} file_print_level #
@@ -3386,7 +3397,15 @@ or simply run the \Ipopt\ AMPL solver executable as
 ipopt --print-options
 \end{verbatim}
 
+Usually, option values are identical for the regular mode of \Ipopt\
+and the restoration phase.  However, to set an option value
+specifically for the restoration phase, the prefix ``\texttt{resto.}''
+should be appended.  For example, to set the acceptable tolerance for
+the restoration phase, use the keyword
+``\texttt{resto.acceptable\_tol}''.
 
+\medskip
+\noindent
 The most common options are:
 
 \input{options.tex}

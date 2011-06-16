@@ -66,6 +66,9 @@ namespace Ipopt
     /** Flag indicating weather info string should be printed at end
      *  of iteration summary line. */
     bool print_info_string_;
+
+    /** Option indication what should be printed in inf_pr column */
+    InfPrOutput inf_pr_output_;
   };
 
 } // namespace Ipopt

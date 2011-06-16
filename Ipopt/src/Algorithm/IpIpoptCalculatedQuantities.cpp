@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2010 International Business Machines and others.
+// Copyright (C) 2004, 2011 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -81,6 +81,7 @@ namespace Ipopt
       trial_constraint_violation_cache_(5),
       curr_nlp_constraint_violation_cache_(3),
       unscaled_curr_nlp_constraint_violation_cache_(3),
+      unscaled_trial_nlp_constraint_violation_cache_(3),
 
       curr_exact_hessian_cache_(1),
 
@@ -1095,6 +1096,12 @@ namespace Ipopt
   }
 
   SmartPtr<const Vector>
+  IpoptCalculatedQuantities::unscaled_trial_c()
+  {
+    return ip_nlp_->NLP_scaling()->unapply_vector_scaling_c(trial_c());
+  }
+
+  SmartPtr<const Vector>
   IpoptCalculatedQuantities::curr_d()
   {
     DBG_START_METH("IpoptCalculatedQuantities::curr_d()",
@@ -1475,42 +1482,103 @@ namespace Ipopt
     sdeps[0] = (Number)NormType;
 
     if (!unscaled_curr_nlp_constraint_violation_cache_.GetCachedResult(result, deps, sdeps)) {
-      SmartPtr<const Vector> c = unscaled_curr_c();
+      if (!unscaled_trial_nlp_constraint_violation_cache_.GetCachedResult(result, deps, sdeps)) {
+        SmartPtr<const Vector> c = unscaled_curr_c();
 
-      SmartPtr<const Vector> d = curr_d();
+        SmartPtr<const Vector> d = curr_d();
 
-      SmartPtr<const Vector> d_L = ip_nlp_->d_L();
-      SmartPtr<Vector> d_viol_L = d_L->MakeNew();
-      if (d_L->Dim()>0) {
-        SmartPtr<Vector> d_viol = d->MakeNewCopy();
-        ip_nlp_->Pd_L()->MultVector(1., *d_L, -1., *d_viol);
-        SmartPtr<const Vector> d_viol2 = ip_nlp_->NLP_scaling()->unapply_vector_scaling_d(ConstPtr(d_viol));
-        ip_nlp_->Pd_L()->TransMultVector(1., *d_viol2, 0., *d_viol_L);
-        SmartPtr<Vector> tmp = d_viol_L->MakeNew();
-        tmp->Set(0.);
-        d_viol_L->ElementWiseMax(*tmp);
+        SmartPtr<const Vector> d_L = ip_nlp_->d_L();
+        SmartPtr<Vector> d_viol_L = d_L->MakeNew();
+        if (d_L->Dim()>0) {
+          SmartPtr<Vector> d_viol = d->MakeNewCopy();
+          ip_nlp_->Pd_L()->MultVector(1., *d_L, -1., *d_viol);
+          SmartPtr<const Vector> d_viol2 = ip_nlp_->NLP_scaling()->unapply_vector_scaling_d(ConstPtr(d_viol));
+          ip_nlp_->Pd_L()->TransMultVector(1., *d_viol2, 0., *d_viol_L);
+          SmartPtr<Vector> tmp = d_viol_L->MakeNew();
+          tmp->Set(0.);
+          d_viol_L->ElementWiseMax(*tmp);
+        }
+        DBG_PRINT_VECTOR(2, "d_viol_L", *d_viol_L);
+
+        SmartPtr<const Vector> d_U = ip_nlp_->d_U();
+        SmartPtr<Vector> d_viol_U = d_U->MakeNew();
+        if (d_U->Dim()>0) {
+          SmartPtr<Vector> d_viol = d->MakeNewCopy();
+          ip_nlp_->Pd_U()->MultVector(1., *d_U, -1., *d_viol);
+          SmartPtr<const Vector> d_viol2 = ip_nlp_->NLP_scaling()->unapply_vector_scaling_d(ConstPtr(d_viol));
+          ip_nlp_->Pd_U()->TransMultVector(1., *d_viol2, 0., *d_viol_U);
+          SmartPtr<Vector> tmp = d_viol_U->MakeNew();
+          tmp->Set(0.);
+          d_viol_U->ElementWiseMin(*tmp);
+        }
+        DBG_PRINT_VECTOR(2, "d_viol_U", *d_viol_U);
+
+        std::vector<SmartPtr<const Vector> > vecs(3);
+        vecs[0] = c;
+        vecs[1] = GetRawPtr(d_viol_L);
+        vecs[2] = GetRawPtr(d_viol_U);
+        result = CalcNormOfType(NormType, vecs);
       }
-      DBG_PRINT_VECTOR(2, "d_viol_L", *d_viol_L);
-
-      SmartPtr<const Vector> d_U = ip_nlp_->d_U();
-      SmartPtr<Vector> d_viol_U = d_U->MakeNew();
-      if (d_U->Dim()>0) {
-        SmartPtr<Vector> d_viol = d->MakeNewCopy();
-        ip_nlp_->Pd_U()->MultVector(1., *d_U, -1., *d_viol);
-        SmartPtr<const Vector> d_viol2 = ip_nlp_->NLP_scaling()->unapply_vector_scaling_d(ConstPtr(d_viol));
-        ip_nlp_->Pd_U()->TransMultVector(1., *d_viol2, 0., *d_viol_U);
-        SmartPtr<Vector> tmp = d_viol_U->MakeNew();
-        tmp->Set(0.);
-        d_viol_U->ElementWiseMin(*tmp);
-      }
-      DBG_PRINT_VECTOR(2, "d_viol_U", *d_viol_U);
-
-      std::vector<SmartPtr<const Vector> > vecs(3);
-      vecs[0] = c;
-      vecs[1] = GetRawPtr(d_viol_L);
-      vecs[2] = GetRawPtr(d_viol_U);
-      result = CalcNormOfType(NormType, vecs);
       unscaled_curr_nlp_constraint_violation_cache_.AddCachedResult(result, deps, sdeps);
+    }
+
+    return result;
+  }
+
+  Number
+  IpoptCalculatedQuantities::unscaled_trial_nlp_constraint_violation
+  (ENormType NormType)
+  {
+    DBG_START_METH("IpoptCalculatedQuantities::unscaled_trial_nlp_constraint_violation()",
+                   dbg_verbosity);
+    Number result;
+
+    SmartPtr<const Vector> x = ip_data_->trial()->x();
+
+    std::vector<const TaggedObject*> deps(1);
+    deps[0] = GetRawPtr(x);
+    std::vector<Number> sdeps(1);
+    sdeps[0] = (Number)NormType;
+
+    if (!unscaled_trial_nlp_constraint_violation_cache_.GetCachedResult(result, deps, sdeps)) {
+      if (!unscaled_curr_nlp_constraint_violation_cache_.GetCachedResult(result, deps, sdeps)) {
+        SmartPtr<const Vector> c = unscaled_trial_c();
+
+        SmartPtr<const Vector> d = trial_d();
+
+        SmartPtr<const Vector> d_L = ip_nlp_->d_L();
+        SmartPtr<Vector> d_viol_L = d_L->MakeNew();
+        if (d_L->Dim()>0) {
+          SmartPtr<Vector> d_viol = d->MakeNewCopy();
+          ip_nlp_->Pd_L()->MultVector(1., *d_L, -1., *d_viol);
+          SmartPtr<const Vector> d_viol2 = ip_nlp_->NLP_scaling()->unapply_vector_scaling_d(ConstPtr(d_viol));
+          ip_nlp_->Pd_L()->TransMultVector(1., *d_viol2, 0., *d_viol_L);
+          SmartPtr<Vector> tmp = d_viol_L->MakeNew();
+          tmp->Set(0.);
+          d_viol_L->ElementWiseMax(*tmp);
+        }
+        DBG_PRINT_VECTOR(2, "d_viol_L", *d_viol_L);
+
+        SmartPtr<const Vector> d_U = ip_nlp_->d_U();
+        SmartPtr<Vector> d_viol_U = d_U->MakeNew();
+        if (d_U->Dim()>0) {
+          SmartPtr<Vector> d_viol = d->MakeNewCopy();
+          ip_nlp_->Pd_U()->MultVector(1., *d_U, -1., *d_viol);
+          SmartPtr<const Vector> d_viol2 = ip_nlp_->NLP_scaling()->unapply_vector_scaling_d(ConstPtr(d_viol));
+          ip_nlp_->Pd_U()->TransMultVector(1., *d_viol2, 0., *d_viol_U);
+          SmartPtr<Vector> tmp = d_viol_U->MakeNew();
+          tmp->Set(0.);
+          d_viol_U->ElementWiseMin(*tmp);
+        }
+        DBG_PRINT_VECTOR(2, "d_viol_U", *d_viol_U);
+
+        std::vector<SmartPtr<const Vector> > vecs(3);
+        vecs[0] = c;
+        vecs[1] = GetRawPtr(d_viol_L);
+        vecs[2] = GetRawPtr(d_viol_U);
+        result = CalcNormOfType(NormType, vecs);
+      }
+      unscaled_trial_nlp_constraint_violation_cache_.AddCachedResult(result, deps, sdeps);
     }
 
     return result;

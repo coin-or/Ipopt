@@ -957,11 +957,11 @@ namespace Ipopt
 
 
   AmplOptionsList::AmplOption::AmplOption(const std::string ipopt_option_name,
-    AmplOptionType type,
-    const std::string description)
-  :
-    ipopt_option_name_(ipopt_option_name),
-    type_(type)
+                                          AmplOptionType type,
+                                          const std::string description)
+      :
+      ipopt_option_name_(ipopt_option_name),
+      type_(type)
   {
     description_ = new char[description.size()+1];
     strcpy(description_, description.c_str());
