@@ -183,7 +183,6 @@ AC_LANG_PUSH(C++)
 # Header Files #
 ################
 
-
 AC_COIN_CHECK_CXX_CHEADER(math)
 AC_COIN_CHECK_CXX_CHEADER(ctype)
 AC_COIN_CHECK_CXX_CHEADER(assert)
@@ -199,92 +198,7 @@ AC_COIN_CHECK_CXX_CHEADER(stddef)
 # Function finite #
 ###################
 
-# First check for a few headers
-
-case $build in
-  *-cygwin*) ;;
-  *) AC_COIN_CHECK_CXX_CHEADER([ieeefp]) ;;
-esac
-
-# now try to guess the correct name of the finite function
-
-COIN_C_FINITE=
-AC_CHECK_DECL([finite],[COIN_C_FINITE=finite],,[
-#ifdef HAVE_CMATH
-# include <cmath>
-#else
-# ifdef HAVE_MATH_H
-#  include <math.h>
-# endif
-#endif
-#ifdef HAVE_CFLOAT
-# include <cfloat>
-#else
-# ifdef HAVE_FLOAT_H
-#  include <float.h>
-# endif
-#endif
-#ifdef HAVE_CIEEEFP
-# include <cieeefp>
-#else
-# ifdef HAVE_IEEEFP_H
-#  include <ieeefp.h>
-# endif
-#endif])
-if test -z "$COIN_C_FINITE"; then
-  AC_CHECK_DECL([_finite],[COIN_C_FINITE=_finite],,[
-#ifdef HAVE_CMATH
-# include <cmath>
-#else
-# ifdef HAVE_MATH_H
-#  include <math.h>
-# endif
-#endif
-#ifdef HAVE_CFLOAT
-# include <cfloat>
-#else
-# ifdef HAVE_FLOAT_H
-#  include <float.h>
-# endif
-#endif
-#ifdef HAVE_CIEEEFP
-# include <cieeefp>
-#else
-# ifdef HAVE_IEEEFP_H
-#  include <ieeefp.h>
-# endif
-#endif])
-  if test -z "$COIN_C_FINITE"; then
-    AC_CHECK_DECL([isfinite],[COIN_C_FINITE=isfinite],,[
-#ifdef HAVE_CMATH
-# include <cmath>
-#else
-# ifdef HAVE_MATH_H
-#  include <math.h>
-# endif
-#endif
-#ifdef HAVE_CFLOAT
-# include <cfloat>
-#else
-# ifdef HAVE_FLOAT_H
-#  include <float.h>
-# endif
-#endif
-#ifdef HAVE_CIEEEFP
-# include <cieeefp>
-#else
-# ifdef HAVE_IEEEFP_H
-#  include <ieeefp.h>
-# endif
-#endif])
-  fi
-fi
-if test -z "$COIN_C_FINITE"; then
-  AC_MSG_WARN(Cannot find C-function for checking NaN and Inf.  Check will be disabled)
-else
-  AC_DEFINE_UNQUOTED([COIN_C_FINITE],[$COIN_C_FINITE],
-                     [Define to be the name of C-function for NaNInf check])
-fi
+AC_COIN_CHECK_ISFINITE
 
 ###########
 # va_copy #
