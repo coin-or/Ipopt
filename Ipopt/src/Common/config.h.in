@@ -3,7 +3,7 @@
 /* Define to 1 if the inexact linear solver option is included */
 #undef BUILD_INEXACT
 
-/* Define to be the name of C-function for NaNInf check */
+/* Define to be the name of C-function for Inf check */
 #undef COIN_C_FINITE
 
 /* Define to 1 if the ASL package is available */
