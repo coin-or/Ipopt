@@ -118,6 +118,8 @@ namespace Ipopt
     std::string type_;
   };
 
+} // namespace Ipopt
+
 #define THROW_EXCEPTION(__except_type, __msg) \
   throw __except_type( (__msg), (__FILE__), (__LINE__) );
 
@@ -130,18 +132,16 @@ namespace Ipopt
   }
 
 #define DECLARE_STD_EXCEPTION(__except_type) \
-    class __except_type : public IpoptException \
+    class __except_type : public Ipopt::IpoptException \
     { \
     public: \
-      __except_type(std::string msg, std::string fname, Index line) \
- : IpoptException(msg,fname,line, #__except_type) {} \
+      __except_type(std::string msg, std::string fname, Ipopt::Index line) \
+ : Ipopt::IpoptException(msg,fname,line, #__except_type) {} \
       __except_type(const __except_type& copy) \
- : IpoptException(copy) {} \
+ : Ipopt::IpoptException(copy) {} \
     private: \
        __except_type(); \
        void operator=(const __except_type&); \
     }
-
-} // namespace Ipopt
 
 #endif
