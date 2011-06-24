@@ -43,16 +43,19 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 @BUILD_LINEARSOLVERLOADER_TRUE@am__append_1 = \
-@BUILD_LINEARSOLVERLOADER_TRUE@	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
+@BUILD_LINEARSOLVERLOADER_TRUE@	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp \
+@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa28Partition.F
 
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__append_2 = \
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
 
-@HAVE_WSMP_TRUE@am__append_3 = \
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@am__append_3 = IpMa28Partition.F
+@HAVE_MA77_TRUE@am__append_4 = ma77_iface.F90
+@HAVE_WSMP_TRUE@am__append_5 = \
 @HAVE_WSMP_TRUE@	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp \
 @HAVE_WSMP_TRUE@	IpIterativeWsmpSolverInterface.cpp IpIterativeWsmpSolverInterface.hpp
 
-@COIN_HAS_MUMPS_TRUE@am__append_4 = IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
+@COIN_HAS_MUMPS_TRUE@am__append_6 = IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
 subdir = src/Algorithm/LinearSolvers
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -80,28 +83,30 @@ am__liblinsolvers_la_SOURCES_DIST = IpGenKKTSolverInterface.hpp \
 	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp \
 	IpMa86SolverInterface.cpp IpMa86SolverInterface.hpp \
 	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
-	IpMa28Partition.F IpMa28TDependencyDetector.cpp \
-	IpMa28TDependencyDetector.hpp IpMa77SolverInterface.cpp \
-	IpMa77SolverInterface.hpp ma77_iface.F90 \
+	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp \
+	IpMa77SolverInterface.cpp IpMa77SolverInterface.hpp \
 	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp \
-	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp \
-	IpIterativeWsmpSolverInterface.cpp \
+	IpMa28Partition.F ma77_iface.F90 IpWsmpSolverInterface.cpp \
+	IpWsmpSolverInterface.hpp IpIterativeWsmpSolverInterface.cpp \
 	IpIterativeWsmpSolverInterface.hpp IpMumpsSolverInterface.cpp \
 	IpMumpsSolverInterface.hpp
 @BUILD_LINEARSOLVERLOADER_TRUE@am__objects_1 =  \
-@BUILD_LINEARSOLVERLOADER_TRUE@	IpPardisoSolverInterface.lo
+@BUILD_LINEARSOLVERLOADER_TRUE@	IpPardisoSolverInterface.lo \
+@BUILD_LINEARSOLVERLOADER_TRUE@	IpMa28Partition.lo
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__objects_2 = IpPardisoSolverInterface.lo
-@HAVE_WSMP_TRUE@am__objects_3 = IpWsmpSolverInterface.lo \
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_MA28_TRUE@am__objects_3 = IpMa28Partition.lo
+@HAVE_MA77_TRUE@am__objects_4 = ma77_iface.lo
+@HAVE_WSMP_TRUE@am__objects_5 = IpWsmpSolverInterface.lo \
 @HAVE_WSMP_TRUE@	IpIterativeWsmpSolverInterface.lo
-@COIN_HAS_MUMPS_TRUE@am__objects_4 = IpMumpsSolverInterface.lo
+@COIN_HAS_MUMPS_TRUE@am__objects_6 = IpMumpsSolverInterface.lo
 am_liblinsolvers_la_OBJECTS = IpLinearSolversRegOp.lo \
 	IpSlackBasedTSymScalingMethod.lo IpTripletToCSRConverter.lo \
 	IpTSymDependencyDetector.lo IpTSymLinearSolver.lo \
 	IpMa27TSolverInterface.lo IpMa57TSolverInterface.lo \
 	IpMa86SolverInterface.lo IpMc19TSymScalingMethod.lo \
-	IpMa28Partition.lo IpMa28TDependencyDetector.lo \
-	IpMa77SolverInterface.lo ma77_iface.lo $(am__objects_1) \
-	$(am__objects_2) $(am__objects_3) $(am__objects_4)
+	IpMa28TDependencyDetector.lo IpMa77SolverInterface.lo \
+	$(am__objects_1) $(am__objects_2) $(am__objects_3) \
+	$(am__objects_4) $(am__objects_5) $(am__objects_6)
 liblinsolvers_la_OBJECTS = $(am_liblinsolvers_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -233,11 +238,14 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 FC = @FC@
 FCFLAGS = @FCFLAGS@
-FDEFS_IPOPT_BUILD = @FDEFS_IPOPT_BUILD@
 FFLAGS = @FFLAGS@
 FLIBS = @FLIBS@
 HAVE_EXTERNALS_FALSE = @HAVE_EXTERNALS_FALSE@
 HAVE_EXTERNALS_TRUE = @HAVE_EXTERNALS_TRUE@
+HAVE_MA28_FALSE = @HAVE_MA28_FALSE@
+HAVE_MA28_TRUE = @HAVE_MA28_TRUE@
+HAVE_MA77_FALSE = @HAVE_MA77_FALSE@
+HAVE_MA77_TRUE = @HAVE_MA77_TRUE@
 HAVE_PARDISO_FALSE = @HAVE_PARDISO_FALSE@
 HAVE_PARDISO_TRUE = @HAVE_PARDISO_TRUE@
 HAVE_WSMP_FALSE = @HAVE_WSMP_FALSE@
@@ -394,10 +402,10 @@ liblinsolvers_la_SOURCES = IpGenKKTSolverInterface.hpp \
 	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp \
 	IpMa86SolverInterface.cpp IpMa86SolverInterface.hpp \
 	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
-	IpMa28Partition.F IpMa28TDependencyDetector.cpp \
-	IpMa28TDependencyDetector.hpp IpMa77SolverInterface.cpp \
-	IpMa77SolverInterface.hpp ma77_iface.F90 $(am__append_1) \
-	$(am__append_2) $(am__append_3) $(am__append_4)
+	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp \
+	IpMa77SolverInterface.cpp IpMa77SolverInterface.hpp \
+	$(am__append_1) $(am__append_2) $(am__append_3) \
+	$(am__append_4) $(am__append_5) $(am__append_6)
 liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \
@@ -407,9 +415,6 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../contrib/CGPenalty` \
 	$(MUMPS_CFLAGS) $(HSL_CFLAGS)
 
-
-# this define is added automatically only for C/C++ code, but here we need it also for Fortran code
-AM_FFLAGS = @FDEFS_IPOPT_BUILD@
 
 # This line is necessary to allow VPATH compilation
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
