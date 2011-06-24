@@ -27,19 +27,26 @@ liblinsolvers_la_SOURCES += \
 	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp \
 	IpMa86SolverInterface.cpp IpMa86SolverInterface.hpp \
 	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
-	IpMa28Partition.F \
 	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp \
-	IpMa77SolverInterface.cpp IpMa77SolverInterface.hpp ma77_iface.F90
+	IpMa77SolverInterface.cpp IpMa77SolverInterface.hpp
 
 if BUILD_LINEARSOLVERLOADER
   liblinsolvers_la_SOURCES += \
-	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
+	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp \
+	IpMa28Partition.F
 else
 if HAVE_PARDISO
   liblinsolvers_la_SOURCES += \
 	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
 endif
+if HAVE_MA28
+  liblinsolvers_la_SOURCES += IpMa28Partition.F
+endif
 endif # BUILD_LINEARSOLVERLOADER
+
+if HAVE_MA77
+  liblinsolvers_la_SOURCES += ma77_iface.F90
+endif
 
 if HAVE_WSMP
   liblinsolvers_la_SOURCES += \
@@ -60,9 +67,6 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../Interfaces` \
 	-I`$(CYGPATH_W) $(srcdir)/../../contrib/CGPenalty` \
 	$(MUMPS_CFLAGS) $(HSL_CFLAGS)
-
-# this define is added automatically only for C/C++ code, but here we need it also for Fortran code
-AM_FFLAGS = @FDEFS_IPOPT_BUILD@
 
 # This line is necessary to allow VPATH compilation
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common

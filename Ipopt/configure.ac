@@ -100,17 +100,6 @@ AC_ARG_ENABLE([bg],,
 # A Fix for the AIX compiler
 AM_CONDITIONAL([AIX_FIX_COMPILER_BUG], test "x$AIX_FIX_COMPILER_BUG" != x)
 
-# Setup Fortran preprocessor flag for having IPOPT_BUILD defined
-case $F77 in
-  *xlf*)
-    FDEFS_IPOPT_BUILD="-WF,-DIPOPT_BUILD"
-    ;;
-  *)
-    FDEFS_IPOPT_BUILD="-DIPOPT_BUILD"
-    ;;
-esac
-AC_SUBST(FDEFS_IPOPT_BUILD)
-
 #############################################################################
 #                              COIN components                              #
 #############################################################################
@@ -266,6 +255,53 @@ using namespace std;])
 ##########################################################################
 
 # Additional libraries and packages
+
+###########
+#   HSL   #
+###########
+
+# some Fortran compilers do not allow preprocessor directives
+# so we check here whether the defines for MA28 and MA77 are set in CoinHslConfig.h
+have_ma28=no
+have_ma77=no
+
+if test "$coin_has_hsl" = "yes" ; then
+  AC_LANG_PUSH(C)
+  save_CPPFLAGS="$CPPFLAGS"
+  CPPFLAGS="$CPPFLAGS $HSL_CFLAGS"
+  
+  AC_MSG_CHECKING([whether MA28 is available with HSL])
+  AC_PREPROC_IFELSE(
+    [AC_LANG_PROGRAM([
+#define HAVE_CONFIG_H
+#include "CoinHslConfig.h"
+#ifndef COINHSL_HAS_MA28
+#error "do not have MA28"
+#endif
+    ])],
+    [AC_MSG_RESULT([yes])
+     have_ma28=yes],
+    [AC_MSG_RESULT([no])])
+
+  AC_MSG_CHECKING([whether MA77 is available with HSL])
+  AC_PREPROC_IFELSE(
+    [AC_LANG_PROGRAM([
+#define HAVE_CONFIG_H
+#include "CoinHslConfig.h"
+#ifndef COINHSL_HAS_MA77
+#error "do not have MA77"
+#endif
+    ])],
+    [AC_MSG_RESULT([yes])
+     have_ma77=yes],
+    [AC_MSG_RESULT([no])])
+
+  CPPFLAGS="$save_CPPFLAGS"
+  AC_LANG_POP(C)
+fi
+
+AM_CONDITIONAL(HAVE_MA28, test $have_ma28 = yes)
+AM_CONDITIONAL(HAVE_MA77, test $have_ma77 = yes)
 
 ###########
 # PARDISO #
