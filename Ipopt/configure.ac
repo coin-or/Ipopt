@@ -100,6 +100,17 @@ AC_ARG_ENABLE([bg],,
 # A Fix for the AIX compiler
 AM_CONDITIONAL([AIX_FIX_COMPILER_BUG], test "x$AIX_FIX_COMPILER_BUG" != x)
 
+# Setup Fortran preprocessor flag for having IPOPT_BUILD defined
+case $F77 in
+  *xlf*)
+    FDEFS_IPOPT_BUILD="-WF,-DIPOPT_BUILD"
+    ;;
+  *)
+    FDEFS_IPOPT_BUILD="-DIPOPT_BUILD"
+    ;;
+esac
+AC_SUBST(FDEFS_IPOPT_BUILD)
+
 #############################################################################
 #                              COIN components                              #
 #############################################################################

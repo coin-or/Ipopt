@@ -471,7 +471,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE have_svnversion IPOPT_SVN_REV EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COIN_CC_IS_CL_TRUE COIN_CC_IS_CL_FALSE MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX COIN_CXX_IS_CL_TRUE COIN_CXX_IS_CL_FALSE MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 ac_ct_F77 FFLAGS MPIF77 FLIBS FC FCFLAGS ac_ct_FC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE PKG_CONFIG ac_pt_PKG_CONFIG COIN_HAS_PKGCONFIG_TRUE COIN_HAS_PKGCONFIG_FALSE COIN_PKG_CONFIG_PATH COIN_PKG_CONFIG_PATH_UNINSTALLED BLAS_LIBS BLAS_CFLAGS BLAS_DATA BLAS_DEPENDENCIES BLAS_LIBS_INSTALLED BLAS_CFLAGS_INSTALLED BLAS_DATA_INSTALLED IPOPTLIB_CFLAGS IPOPTLIB_LIBS IPOPTLIB_PCLIBS IPOPTLIB_PCREQUIRES IPOPTLIB_DEPENDENCIES IPOPTLIB_CFLAGS_INSTALLED IPOPTLIB_LIBS_INSTALLED COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE LAPACK_LIBS LAPACK_CFLAGS LAPACK_DATA LAPACK_DEPENDENCIES LAPACK_LIBS_INSTALLED LAPACK_CFLAGS_INSTALLED LAPACK_DATA_INSTALLED COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE ASL_LIBS ASL_CFLAGS ASL_DATA ASL_DEPENDENCIES ASL_LIBS_INSTALLED ASL_CFLAGS_INSTALLED ASL_DATA_INSTALLED IPOPTAMPLINTERFACELIB_CFLAGS IPOPTAMPLINTERFACELIB_LIBS IPOPTAMPLINTERFACELIB_PCLIBS IPOPTAMPLINTERFACELIB_PCREQUIRES IPOPTAMPLINTERFACELIB_DEPENDENCIES IPOPTAMPLINTERFACELIB_CFLAGS_INSTALLED IPOPTAMPLINTERFACELIB_LIBS_INSTALLED COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE HSL_LIBS HSL_CFLAGS HSL_DATA HSL_DEPENDENCIES HSL_LIBS_INSTALLED HSL_CFLAGS_INSTALLED HSL_DATA_INSTALLED COIN_HAS_HSL_TRUE COIN_HAS_HSL_FALSE MUMPS_LIBS MUMPS_CFLAGS MUMPS_DATA MUMPS_DEPENDENCIES MUMPS_LIBS_INSTALLED MUMPS_CFLAGS_INSTALLED MUMPS_DATA_INSTALLED COIN_HAS_MUMPS_TRUE COIN_HAS_MUMPS_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR JAVA_HOME JIPOPTDLL SHARED_FLAGS MATLAB_HOME MEXSUFFIX ASTYLE ASTYLEFLAGS IPALLLIBS HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILD_LINEARSOLVERLOADER_TRUE BUILD_LINEARSOLVERLOADER_FALSE BUILD_PARDISOLOADER_TRUE BUILD_PARDISOLOADER_FALSE BUILD_INEXACT_TRUE BUILD_INEXACT_FALSE LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE have_svnversion IPOPT_SVN_REV EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COIN_CC_IS_CL_TRUE COIN_CC_IS_CL_FALSE MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX COIN_CXX_IS_CL_TRUE COIN_CXX_IS_CL_FALSE MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 ac_ct_F77 FFLAGS MPIF77 FLIBS FC FCFLAGS ac_ct_FC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE FDEFS_IPOPT_BUILD PKG_CONFIG ac_pt_PKG_CONFIG COIN_HAS_PKGCONFIG_TRUE COIN_HAS_PKGCONFIG_FALSE COIN_PKG_CONFIG_PATH COIN_PKG_CONFIG_PATH_UNINSTALLED BLAS_LIBS BLAS_CFLAGS BLAS_DATA BLAS_DEPENDENCIES BLAS_LIBS_INSTALLED BLAS_CFLAGS_INSTALLED BLAS_DATA_INSTALLED IPOPTLIB_CFLAGS IPOPTLIB_LIBS IPOPTLIB_PCLIBS IPOPTLIB_PCREQUIRES IPOPTLIB_DEPENDENCIES IPOPTLIB_CFLAGS_INSTALLED IPOPTLIB_LIBS_INSTALLED COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE LAPACK_LIBS LAPACK_CFLAGS LAPACK_DATA LAPACK_DEPENDENCIES LAPACK_LIBS_INSTALLED LAPACK_CFLAGS_INSTALLED LAPACK_DATA_INSTALLED COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE ASL_LIBS ASL_CFLAGS ASL_DATA ASL_DEPENDENCIES ASL_LIBS_INSTALLED ASL_CFLAGS_INSTALLED ASL_DATA_INSTALLED IPOPTAMPLINTERFACELIB_CFLAGS IPOPTAMPLINTERFACELIB_LIBS IPOPTAMPLINTERFACELIB_PCLIBS IPOPTAMPLINTERFACELIB_PCREQUIRES IPOPTAMPLINTERFACELIB_DEPENDENCIES IPOPTAMPLINTERFACELIB_CFLAGS_INSTALLED IPOPTAMPLINTERFACELIB_LIBS_INSTALLED COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE HSL_LIBS HSL_CFLAGS HSL_DATA HSL_DEPENDENCIES HSL_LIBS_INSTALLED HSL_CFLAGS_INSTALLED HSL_DATA_INSTALLED COIN_HAS_HSL_TRUE COIN_HAS_HSL_FALSE MUMPS_LIBS MUMPS_CFLAGS MUMPS_DATA MUMPS_DEPENDENCIES MUMPS_LIBS_INSTALLED MUMPS_CFLAGS_INSTALLED MUMPS_DATA_INSTALLED COIN_HAS_MUMPS_TRUE COIN_HAS_MUMPS_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR JAVA_HOME JIPOPTDLL SHARED_FLAGS MATLAB_HOME MEXSUFFIX ASTYLE ASTYLEFLAGS IPALLLIBS HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILD_LINEARSOLVERLOADER_TRUE BUILD_LINEARSOLVERLOADER_FALSE BUILD_PARDISOLOADER_TRUE BUILD_PARDISOLOADER_FALSE BUILD_INEXACT_TRUE BUILD_INEXACT_FALSE LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -22476,6 +22476,17 @@ else
 fi
 
 
+# Setup Fortran preprocessor flag for having IPOPT_BUILD defined
+case $F77 in
+  *xlf*)
+    FDEFS_IPOPT_BUILD="-WF,-DIPOPT_BUILD"
+    ;;
+  *)
+    FDEFS_IPOPT_BUILD="-DIPOPT_BUILD"
+    ;;
+esac
+
+
 #############################################################################
 #                              COIN components                              #
 #############################################################################
@@ -25629,7 +25640,7 @@ if test $coin_has_blas = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "coinblas"; then
-    BLAS_VERSIONS="`$PKG_CONFIG --modversion "coinblas" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
+    BLAS_VERSIONS="`$PKG_CONFIG --modversion "coinblas" 2>/dev/null | tr '\n' ' '`"
      cflags=`$PKG_CONFIG --cflags "coinblas" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -28243,7 +28254,7 @@ if test $coin_has_lapack = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "coinlapack"; then
-    LAPACK_VERSIONS="`$PKG_CONFIG --modversion "coinlapack" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
+    LAPACK_VERSIONS="`$PKG_CONFIG --modversion "coinlapack" 2>/dev/null | tr '\n' ' '`"
      cflags=`$PKG_CONFIG --cflags "coinlapack" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -28810,7 +28821,7 @@ if test $coin_has_asl = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "coinasl"; then
-    ASL_VERSIONS="`$PKG_CONFIG --modversion "coinasl" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
+    ASL_VERSIONS="`$PKG_CONFIG --modversion "coinasl" 2>/dev/null | tr '\n' ' '`"
      cflags=`$PKG_CONFIG --cflags "coinasl" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -29321,7 +29332,7 @@ if test $coin_has_hsl = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "coinhsl"; then
-    HSL_VERSIONS="`$PKG_CONFIG --modversion "coinhsl" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
+    HSL_VERSIONS="`$PKG_CONFIG --modversion "coinhsl" 2>/dev/null | tr '\n' ' '`"
      cflags=`$PKG_CONFIG --cflags "coinhsl" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -29832,7 +29843,7 @@ if test $coin_has_mumps = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "coinmumps"; then
-    MUMPS_VERSIONS="`$PKG_CONFIG --modversion "coinmumps" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
+    MUMPS_VERSIONS="`$PKG_CONFIG --modversion "coinmumps" 2>/dev/null | tr '\n' ' '`"
      cflags=`$PKG_CONFIG --cflags "coinmumps" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -37504,10 +37515,6 @@ if test x$coin_skip_ac_output != xyes; then
 
   fi
 
-  # On AIX, the default sed cannot deal with somewhat long sed commands executed by config.status.
-  # So we reduce the hardcoded number of commands given to sed from 48 to 5 in config.status, hoping this will suffice.
-
-
   cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -38509,6 +38516,7 @@ s,@LT_LDFLAGS@,$LT_LDFLAGS,;t t
 s,@BLUEGENEEXTRA@,$BLUEGENEEXTRA,;t t
 s,@AIX_FIX_COMPILER_BUG_TRUE@,$AIX_FIX_COMPILER_BUG_TRUE,;t t
 s,@AIX_FIX_COMPILER_BUG_FALSE@,$AIX_FIX_COMPILER_BUG_FALSE,;t t
+s,@FDEFS_IPOPT_BUILD@,$FDEFS_IPOPT_BUILD,;t t
 s,@PKG_CONFIG@,$PKG_CONFIG,;t t
 s,@ac_pt_PKG_CONFIG@,$ac_pt_PKG_CONFIG,;t t
 s,@COIN_HAS_PKGCONFIG_TRUE@,$COIN_HAS_PKGCONFIG_TRUE,;t t
@@ -39431,16 +39439,6 @@ cat >>$CONFIG_STATUS <<\_ACEOF
 _ACEOF
 chmod +x $CONFIG_STATUS
 ac_clean_files=$ac_clean_files_save
-
-
-    case $build in
-      *-aix*)
-        { echo "$as_me:$LINENO: patching config.status to reduce ac_max_sed_lines to 5" >&5
-echo "$as_me: patching config.status to reduce ac_max_sed_lines to 5" >&6;}
-        sed -e 's/ac_max_sed_lines=48/ac_max_sed_lines=5/g' config.status > config.status.tmp
-        mv config.status.tmp config.status
-      ;;
-    esac
 
 
 # configure is writing to config.log, and then calls config.status.

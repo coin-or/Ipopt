@@ -62,7 +62,7 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	$(MUMPS_CFLAGS) $(HSL_CFLAGS)
 
 # this define is added automatically only for C/C++ code, but here we need it also for Fortran code
-AM_FFLAGS = -DIPOPT_BUILD
+AM_FFLAGS = @FDEFS_IPOPT_BUILD@
 
 # This line is necessary to allow VPATH compilation
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
