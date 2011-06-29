@@ -25629,7 +25629,7 @@ if test $coin_has_blas = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "coinblas"; then
-    BLAS_VERSIONS="`$PKG_CONFIG --modversion "coinblas" 2>/dev/null | tr '\n' ' '`"
+    BLAS_VERSIONS=`$PKG_CONFIG --modversion "coinblas" 2>/dev/null | tr '\n' ' '`
      cflags=`$PKG_CONFIG --cflags "coinblas" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -28243,7 +28243,7 @@ if test $coin_has_lapack = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "coinlapack"; then
-    LAPACK_VERSIONS="`$PKG_CONFIG --modversion "coinlapack" 2>/dev/null | tr '\n' ' '`"
+    LAPACK_VERSIONS=`$PKG_CONFIG --modversion "coinlapack" 2>/dev/null | tr '\n' ' '`
      cflags=`$PKG_CONFIG --cflags "coinlapack" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -28810,7 +28810,7 @@ if test $coin_has_asl = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "coinasl"; then
-    ASL_VERSIONS="`$PKG_CONFIG --modversion "coinasl" 2>/dev/null | tr '\n' ' '`"
+    ASL_VERSIONS=`$PKG_CONFIG --modversion "coinasl" 2>/dev/null | tr '\n' ' '`
      cflags=`$PKG_CONFIG --cflags "coinasl" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -29321,7 +29321,7 @@ if test $coin_has_hsl = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "coinhsl"; then
-    HSL_VERSIONS="`$PKG_CONFIG --modversion "coinhsl" 2>/dev/null | tr '\n' ' '`"
+    HSL_VERSIONS=`$PKG_CONFIG --modversion "coinhsl" 2>/dev/null | tr '\n' ' '`
      cflags=`$PKG_CONFIG --cflags "coinhsl" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -29832,7 +29832,7 @@ if test $coin_has_mumps = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "coinmumps"; then
-    MUMPS_VERSIONS="`$PKG_CONFIG --modversion "coinmumps" 2>/dev/null | tr '\n' ' '`"
+    MUMPS_VERSIONS=`$PKG_CONFIG --modversion "coinmumps" 2>/dev/null | tr '\n' ' '`
      cflags=`$PKG_CONFIG --cflags "coinmumps" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
