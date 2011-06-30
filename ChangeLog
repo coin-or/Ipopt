@@ -2,6 +2,11 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2011-06-20 releases/3.10.0
+        - move to new COIN configuration and installation convention
+        - primal infeasibility output is now true infeasibility in original
+          problem formulation
+
 2011-04-07 releases/3.9.3
         - include updates in BuildTools, including new ThirdParty/Metis
            (required to work with current metis release)
