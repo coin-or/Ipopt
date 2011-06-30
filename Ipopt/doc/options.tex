@@ -75,6 +75,35 @@ Possible values:
    \item *: Any acceptable standard file name
 \end{itemize}
 
+\paragraph{print\_info\_string:}\label{sec:print_info_string} Enables printing of additional info string at end of iteration output. $\;$ \\
+ This string contains some insider information
+about the current iteration.  For details, look
+for "Diagnostic Tags" in the Ipopt documentation.
+The default value for this string option is "no".
+\\ 
+Possible values:
+\begin{itemize}
+   \item no: don't print string
+   \item yes: print string at end of each iteration output
+\end{itemize}
+
+\paragraph{inf\_pr\_output:}\label{sec:inf_pr_output} Determines what value is printed in the "inf\_pr" output column. $\;$ \\
+ Ipopt works with a reformulation of the original
+problem, where slacks are introduced and the
+problem might have been scaled.  The choice
+"internal" prints out the constraint violation of
+this formulation. With "original" the true
+constraint violation in the original NLP is
+printed.
+The default value for this string option is "original".
+\\ 
+Possible values:
+\begin{itemize}
+   \item internal: max-norm of violation of internal equality
+constraints
+   \item original: maximal constraint violation in original NLP
+\end{itemize}
+
 \subsection{Termination}
 
 \paragraph{tol:}\label{sec:tol} Desired convergence tolerance (relative). $\;$ \\
@@ -558,6 +587,24 @@ Possible values:
    \item average\_compl: base on current average complementarity
 \end{itemize}
 
+\paragraph{adaptive\_mu\_globalization:}\label{sec:adaptive_mu_globalization} Globalization strategy for the adaptive mu selection mode. $\;$ \\
+ To achieve global convergence of the adaptive
+version, the algorithm has to switch to the
+monotone mode (Fiacco-McCormick approach) when
+convergence does not seem to appear.  This option
+sets the criterion used to decide when to do this
+switch. (Only used if option "mu\_strategy" is
+chosen as "adaptive".)
+The default value for this string option is "obj-constr-filter".
+\\ 
+Possible values:
+\begin{itemize}
+   \item kkt-error: nonmonotone decrease of kkt-error
+   \item obj-constr-filter: 2-dim filter for objective and constraint
+violation
+   \item never-monotone-mode: disables globalization
+\end{itemize}
+
 \paragraph{mu\_init:}\label{sec:mu_init} Initial value for the barrier parameter. $\;$ \\
  This option determines the initial value for the
 barrier parameter (mu).  It is only relevant in
@@ -956,7 +1003,8 @@ Possible values:
 \begin{itemize}
    \item ma27: use the Harwell routine MA27
    \item ma57: use the Harwell routine MA57
-   \item ma77: use the Harwell routine MA77
+   \item ma77: use the Harwell routine HSL\_MA77
+   \item ma86: use the Harwell routine HSL\_MA86
    \item pardiso: use the Pardiso package
    \item wsmp: use WSMP package
    \item mumps: use MUMPS package

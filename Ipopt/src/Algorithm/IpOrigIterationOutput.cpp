@@ -47,7 +47,9 @@ namespace Ipopt
       "no",
       "no", "don't print string",
       "yes", "print string at end of each iteration output",
-      "This string contains some insider information about the current iteration.");
+      "This string contains some insider information about the current "
+      "iteration.  For details, look for \"Diagnostic Tags\" in the Ipopt "
+      "documentation.");
     roptions->AddStringOption2(
       "inf_pr_output",
       "Determines what value is printed in the \"inf_pr\" output column.",
