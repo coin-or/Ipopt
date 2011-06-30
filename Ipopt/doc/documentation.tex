@@ -40,7 +40,7 @@ A tutorial for downloading, installing, and using \Ipopt.}
 \maketitle
 
 \begin{abstract}
-  This document is a guide to using \Ipopt\ 3.9.2.  It includes
+  This document is a guide to using \Ipopt\ 3.10.0.  It includes
   instructions on how to obtain and compile \Ipopt, a description of
   the interface, user options, etc., as well as a tutorial on how to
   solve a nonlinear optimization problem with \Ipopt.
@@ -77,7 +77,7 @@ nonlinear programming problems of the form
 %\begin{subequations}\label{NLP}
 \begin{eqnarray}
 \min_{x\in\RR^n} &&f(x) \label{eq:obj} \\
-\mbox{s.t.} \;  &&g^L \leq g(x) \leq g^U \\
+\mbox{s.t.} \;  &&g^L \leq g(x) \leq g^U \label{eq:constraints}\\
                 &&x^L \leq x \leq x^U, \label{eq:bounds}
 \end{eqnarray}
 %\end{subequations}
@@ -398,7 +398,7 @@ directory in which you want to create a subdirectory {\tt Ipopt} with
 the \Ipopt\ source code.  Then follow the steps below:
 \begin{enumerate}
 \item{Download the code from the repository}\\
-{\tt \$ svn co https://projects.coin-or.org/svn/Ipopt/stable/3.9 CoinIpopt} \\
+{\tt \$ svn co https://projects.coin-or.org/svn/Ipopt/stable/3.10 CoinIpopt} \\
 Note: The {\tt \$} indicates the command line
 prompt, do not type {\tt \$}, only the text following it.
 \item Change into the root directory of the \Ipopt\ distribution\\
@@ -415,7 +415,7 @@ To use the tarball, follow the steps below:
 \item Download the desired tarball from
   \texttt{http://www.coin-or.org/download/source/Ipopt}, it has the form {\tt
     Ipopt-{\em x.y.z}.tgz}, where {\tt\em x.y.z} is the version
-  number, such as {\tt 3.9.2}.  There might also be daily snapshot
+  number, such as {\tt 3.10.0}.  There might also be daily snapshot
   from the stable branch.  The number of the latest official release
   can be found on the \Ipopt\ Trac page.
 \item Issue the following commands to unpack the archive file: \\
@@ -2970,15 +2970,14 @@ and the columns of output are defined as,
 \item[{\tt objective}:] The unscaled objective value at the current
   point. During the restoration phase, this value remains the unscaled
   objective value for the original problem.
-\item[{\tt inf\_pr}:] The scaled primal infeasibility at the current
-  point. This quantities measure the infinity-norm (max) of the
-  internal equality constraints, Eq.~(4b) in the implementation paper
-  \cite{WaecBieg06:mp}, including inequality constraints reformulated
-  using slack variables and problem scaling.  During the restoration
-  phase, this value is the primal infeasibility of the original
-  problem at the current point.
+\item[{\tt inf\_pr}:] The unscaled constraint violation at the current
+  point.  This quantity is the infinity-norm (max) of the (unscaled)
+  constraints (\ref{eq:constraints}).  During the restoration phase,
+  this value remains the constraint violation of the original problem
+  at the current point.  The option ``\texttt{inf\_pr\_output}'' can
+  be used to switch to the printing of a different quantity.
 \item[{\tt inf\_du}:] The scaled dual infeasibility at the current
-  point.  This quantities measure the infinity-norm (max) of the
+  point.  This quantity measure the infinity-norm (max) of the
   internal dual infeasibility, Eq.~(4a) in the implementation paper
   \cite{WaecBieg06:mp}, including inequality constraints reformulated
   using slack variables and problem scaling. During the restoration
@@ -2992,15 +2991,18 @@ and the columns of output are defined as,
   additional variables, $p$ and $n$ (see Eq.~(30) in
   \cite{WaecBieg06:mp}).
 \item[{\tt lg(rg)}:] $\log_{10}$ of the value of the regularization
-  term for the Hessian of the Lagrangian in the augmented system.
+  term for the Hessian of the Lagrangian in the augmented system
+  ($\delta_w$ in Eq.~(26) and Section 3.1 in \cite{WaecBieg06:mp}).  A
+  dash (``\texttt{-}'') indicates that no regularization was done.
 \item[{\tt alpha\_du}:] The stepsize for the dual variables
   ($\alpha^z_k$ in Eq.~(14c) in \cite{WaecBieg06:mp}).
 \item[{\tt alpha\_pr}:] The stepsize for the primal
-  variables($\alpha_k$ in Eq.~(14a) in \cite{WaecBieg06:mp}).  The
+  variables ($\alpha_k$ in Eq.~(14a) in \cite{WaecBieg06:mp}).  The
   number is usually followed by a character for additional diagnostic
   information regarding the step acceptance criterion, see
   Table~\ref{tab:alpha_pr}.
-\item[{\tt ls}:] The number of backtracking line search steps.
+\item[{\tt ls}:] The number of backtracking line search steps (does
+  not include second-order correction steps).
 \end{description}
 
 \begin{table}
@@ -3012,6 +3014,10 @@ and the columns of output are defined as,
     F & f-type iteration in the filter method w/ second order correction \\
     h & h-type iteration in the filter method w/o second order correction \\
     H & h-type iteration in the filter method w/ second order correction \\
+    k & penalty value unchanged in merit function method w/o second order correction \\
+    K & penalty value unchanged in merit function method w/ second order correction \\
+    n & penalty value updated in merit function method w/o second order correction \\
+    N & penalty value updated in merit function method w/ second order correction \\
     R & Restoration phase just started \\
     w &  in watchdog procedure \\
     s & step accepted in soft restoration phase \\
@@ -3024,6 +3030,18 @@ and the columns of output are defined as,
   \caption{Diagnostic output in {\tt alpha\_pr} column.}
   \label{tab:alpha_pr}
 \end{table}
+
+Note that the step acceptance mechanisms in \Ipopt\ consider the
+barrier objective function (Eq~(3a) in \cite{WaecBieg06:mp}) which is
+usually different from the value reported in the \texttt{objective}
+column.  Similarly, for the purposes of the step acceptance, the
+constraint violation is measured for the internal problem formulation,
+which includes slack variables for inequality constraints and
+potentially scaling of the constraint functions.  This value, too, is
+usually different from the value reported in \texttt{inf\_pr}.  As a
+consequence, a new iterate might have worse values both for the
+objective function and the constraint violation as reported in the
+iteration output, seemingly contradicting globalization procedure.
 
 When the algorithm terminates, \Ipopt\ will output a message to the
 screen based on the return status of the call to {\tt Optimize}. The following
@@ -3137,55 +3155,54 @@ to the console, and a brief description.
 \subsection{Diagnostic Tags for \Ipopt}
 
 To print additional diagnostic tags for each iteration of \Ipopt, set
-the option ``\texttt{print\_info\_string}'' to ``\texttt{yes}''.
-Then, during the corresponding operation, a tag will appear at the end
-of an iteration line with the following diagnostic meaning. These tags
-correspond to the basic \Ipopt\ code. They are useful to flag
-difficulties for a particular \Ipopt\ run.
+the options ``\texttt{print\_info\_string}'' to ``\texttt{yes}''. With
+this, a tag will appear at the end of an iteration line with the
+following diagnostic meaning that are useful to flag difficulties for
+a particular \Ipopt\ run.  A list of possible strings is given in
+Table~\ref{tab:info_string}.
 
-% More information can be obtained by adding
-% \begin{verbatim} file_print_level #
-% \end{verbatim} to ipopt.opt, where
-% $\#$ is an integer between 1 and 12. \\
-
-\begin{tabular}{lll}
-Tag & Description & Reference \\
-\hline 
-! & Tighten resto tolerance if only slightly infeasible & Section 3.3 in \cite{WaecBieg06:mp} \\ 
-A & Current iteration is acceptable & Alternate termination \\  
-a & Perturbation for PD Singularity can't be done, assume singular & Section 3.1 in \cite{WaecBieg06:mp}\\  
-C & Second Order Correction taken & Section 2.4 in \cite{WaecBieg06:mp} \\  
-Dh & Hessian degenerate based on multiple iterations & Section 3.1 in \cite{WaecBieg06:mp}\\  
-Dhj & Hessian/Jacobian degenerate based on multiple iterations & Section 3.1 in \cite{WaecBieg06:mp}\\  
-Dj & Jacobian degenerate based on multiple iterations & Section 3.1 in \cite{WaecBieg06:mp}\\  
-dx & $\delta_x$ perturbation too large & Section 3.1 in \cite{WaecBieg06:mp}\\  
-e & Cutting back $\alpha$ due to evaluation error & in backtracking line search \\  
-F- & Filter should be reset, but maximal resets exceeded & Section 2.3 in \cite{WaecBieg06:mp} \\  
-F+ & Resetting filter due to last few rejections of filter & Section 2.3 in \cite{WaecBieg06:mp} \\  
-L & Degenerate Jacobian, $\delta_c$ already perturbed & Section 3.1 in \cite{WaecBieg06:mp}\\  
-l & Degenerate Jacobian, $\delta_c$ perturbed & Section 3.1 in \cite{WaecBieg06:mp}\\  
-M & Magic step taken for slack variables & in backtracking line search \\  
-Nh & Hessian not yet degenerate & Section 3.1 in \cite{WaecBieg06:mp}\\  
-Nhj & Hessian/Jacobian not yet degenerate & Section 3.1 in \cite{WaecBieg06:mp}\\  
-Nj & Jacobian not yet degenerate & Section 3.1 in \cite{WaecBieg06:mp}\\  
-NW & Warm start initialization failed & in Warm Start Initialization \\
-q & PD system possibly singular, attempt to improve solution quality & Section 3.1 in \cite{WaecBieg06:mp}\\  
-R & Solution of restoration phase & Section 3.3 in \cite{WaecBieg06:mp} \\  
-S & PD system possibly singular, accept current solution & Section 3.1 in \cite{WaecBieg06:mp}\\  
-s & PD system singular & Section 3.1 in \cite{WaecBieg06:mp}\\  
-s & Square Problem. Set multipliers to zero & Default initialization routine \\  
-Tmax & Trial $\theta$ is larger than $\theta_{max}$ & filter parameter, see (21) in \cite{WaecBieg06:mp} \\  
-W & Watchdog line search procedure successful & Section 3.2 in \cite{WaecBieg06:mp} \\  
-w & Watchdog line search procedure unsuccessful, stopped & Section 3.2 in \cite{WaecBieg06:mp} \\  
-Wb & Undoing most recent SR1 update & Section 5.4.1 in \cite{Biegler:nlpbook} \\  
-We & Skip Limited-Memory Update since $s^Ty$ is not positive &  Section 5.4.1 in \cite{Biegler:nlpbook} \\  
-Wp & Safeguard $B^0 = \sigma I$ for  Limited-Memory Update &  Section 5.4.1 in \cite{Biegler:nlpbook} \\  
-Wr & Resetting Limited-Memory Update &  Section 5.4.1 in \cite{Biegler:nlpbook} \\  
-Ws & Multiple skipping of Limited-Memory Update & Section 5.4.1 in \cite{Biegler:nlpbook} \\  
-WS & Skip Limited-Memory Update since $\Delta x$ is too small &  Section 5.4.1 in \cite{Biegler:nlpbook} \\  
-y & Dual infeasibility, use least square multiplier update & during ipopt algorithm \\                           
-z & Apply correction to bound multiplier if too large & during ipopt algorithm \\
-\end{tabular}
+\begin{table}\centering
+  \begin{tabular}{lll}
+    Tag & Description & Reference \\
+    \hline 
+    ! & Tighten resto tolerance if only slightly infeasible & Section 3.3 in \cite{WaecBieg06:mp} \\ 
+    A & Current iteration is acceptable & Alternate termination \\  
+    a & Perturbation for PD Singularity can't be done, assume singular & Section 3.1 in \cite{WaecBieg06:mp}\\  
+    C & Second Order Correction taken & Section 2.4 in \cite{WaecBieg06:mp} \\  
+    Dh & Hessian degenerate based on multiple iterations & Section 3.1 in \cite{WaecBieg06:mp}\\  
+    Dhj & Hessian/Jacobian degenerate based on multiple iterations & Section 3.1 in \cite{WaecBieg06:mp}\\  
+    Dj & Jacobian degenerate based on multiple iterations & Section 3.1 in \cite{WaecBieg06:mp}\\  
+    dx & $\delta_x$ perturbation too large & Section 3.1 in \cite{WaecBieg06:mp}\\  
+    e & Cutting back $\alpha$ due to evaluation error & in backtracking line search \\  
+    F- & Filter should be reset, but maximal resets exceeded & Section 2.3 in \cite{WaecBieg06:mp} \\  
+    F+ & Resetting filter due to last few rejections of filter & Section 2.3 in \cite{WaecBieg06:mp} \\  
+    L & Degenerate Jacobian, $\delta_c$ already perturbed & Section 3.1 in \cite{WaecBieg06:mp}\\  
+    l & Degenerate Jacobian, $\delta_c$ perturbed & Section 3.1 in \cite{WaecBieg06:mp}\\  
+    M & Magic step taken for slack variables & in backtracking line search \\  
+    Nh & Hessian not yet degenerate & Section 3.1 in \cite{WaecBieg06:mp}\\  
+    Nhj & Hessian/Jacobian not yet degenerate & Section 3.1 in \cite{WaecBieg06:mp}\\  
+    Nj & Jacobian not yet degenerate & Section 3.1 in \cite{WaecBieg06:mp}\\  
+    NW & Warm start initialization failed & in Warm Start Initialization \\
+    q & PD system possibly singular, attempt to improve solution quality & Section 3.1 in \cite{WaecBieg06:mp}\\  
+    R & Solution of restoration phase & Section 3.3 in \cite{WaecBieg06:mp} \\  
+    S & PD system possibly singular, accept current solution & Section 3.1 in \cite{WaecBieg06:mp}\\  
+    s & PD system singular & Section 3.1 in \cite{WaecBieg06:mp}\\  
+    s & Square Problem. Set multipliers to zero & Default initialization routine \\  
+    Tmax & Trial $\theta$ is larger than $\theta_{max}$ & filter parameter, see (21) in \cite{WaecBieg06:mp} \\  
+    W & Watchdog line search procedure successful & Section 3.2 in \cite{WaecBieg06:mp} \\  
+    w & Watchdog line search procedure unsuccessful, stopped & Section 3.2 in \cite{WaecBieg06:mp} \\  
+    Wb & Undoing most recent SR1 update & Section 5.4.1 in \cite{Biegler:nlpbook} \\  
+    We & Skip Limited-Memory Update in restoration phase  & Section 5.4.1 in \cite{Biegler:nlpbook} \\ 
+    Wp & Safeguard $B^0 = \sigma I$ for  Limited-Memory Update &  Section 5.4.1 in \cite{Biegler:nlpbook} \\  
+    Wr & Resetting Limited-Memory Update &  Section 5.4.1 in \cite{Biegler:nlpbook} \\  
+    Ws & Skip Limited-Memory Update since $s^Ty$ is not positive &  Section 5.4.1 in \cite{Biegler:nlpbook} \\  
+    WS & Skip Limited-Memory Update since $\Delta x$ is too small &  Section 5.4.1 in \cite{Biegler:nlpbook} \\  
+    y & Dual infeasibility, use least square multiplier update & during ipopt algorithm \\                           
+    z & Apply correction to bound multiplier if too large & during ipopt algorithm \\
+  \end{tabular}
+  \caption{Diagnostic output appended using \texttt{print\_info\_sting}.}
+  \label{tab:info_string}
+\end{table}
 
 
 \appendix
