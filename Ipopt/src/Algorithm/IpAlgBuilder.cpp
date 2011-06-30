@@ -252,7 +252,7 @@ namespace Ipopt
       "extended", "use an extended augmented system",
       "");
 
-    roptions->SetRegisteringCategory("Undocumented");
+    roptions->SetRegisteringCategory("Line Search");
     roptions->AddStringOption3(
       "line_search_method",
       "Globalization method used in backtracking line search",
@@ -260,7 +260,9 @@ namespace Ipopt
       "filter", "Filter method",
       "cg-penalty", "Chen-Goldfarb penalty function",
       "penalty", "Standard penalty function",
-      "");
+      "Only the \"filter\" choice is officially supported.  But sometimes, "
+      "good results might be obtained with the other choices.");
+    roptions->SetRegisteringCategory("Undocumented");
     roptions->AddStringOption2(
       "wsmp_iterative",
       "Switches to iterative solver in WSMP.",
