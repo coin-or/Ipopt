@@ -5,7 +5,7 @@
 /***************************************************************************/
 
 /* Version number of project */
-#define IPOPT_VERSION   "3.9trunk"
+#define IPOPT_VERSION      "trunk"
 
 /* Major Version number of project */
 #define IPOPT_VERSION_MAJOR   9999
