@@ -12,7 +12,8 @@ SUBDIRS = LinearSolvers Inexact
 
 includeipoptdir = $(includedir)/coin
 includeipopt_HEADERS = IpIpoptCalculatedQuantities.hpp \
-	IpIpoptData.hpp IpIteratesVector.hpp IpTimingStatistics.hpp
+	IpIpoptData.hpp IpIteratesVector.hpp IpTimingStatistics.hpp \
+	IpIpoptNLP.hpp IpOrigIpoptNLP.hpp IpNLPScaling.hpp
 
 noinst_LTLIBRARIES = libipoptalg.la
 

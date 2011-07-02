@@ -20,6 +20,7 @@ includeipopt_HEADERS = \
 	IpSolveStatistics.hpp \
 	IpStdCInterface.h \
 	IpTNLP.hpp \
+	IpTNLPAdapter.hpp \
 	IpTNLPReducer.hpp
 
 lib_LTLIBRARIES = libipopt.la
