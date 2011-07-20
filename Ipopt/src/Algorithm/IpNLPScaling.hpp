@@ -9,14 +9,21 @@
 #ifndef __IPNLPSCALING_HPP__
 #define __IPNLPSCALING_HPP__
 
-#include "IpSymMatrix.hpp"
-#include "IpScaledMatrix.hpp"
-#include "IpSymScaledMatrix.hpp"
 #include "IpOptionsList.hpp"
 #include "IpRegOptions.hpp"
 
 namespace Ipopt
 {
+  // forward declarations
+  class Vector;
+  class VectorSpace;
+  class Matrix;
+  class MatrixSpace;
+  class SymMatrix;
+  class SymMatrixSpace;
+  class ScaledMatrixSpace;
+  class SymScaledMatrixSpace;
+  
   /** This is the abstract base class for problem scaling.
    *  It is repsonsible for determining the scaling factors
    *  and mapping quantities in and out of scaled and unscaled
@@ -27,12 +34,10 @@ namespace Ipopt
   public:
     /**@name Constructors/Destructors */
     //@{
-    NLPScalingObject()
-    {}
+    NLPScalingObject();
 
     /** Default destructor */
-    virtual ~NLPScalingObject()
-    {}
+    virtual ~NLPScalingObject();
     //@}
 
     /** Method to initialize the options */
@@ -226,12 +231,10 @@ namespace Ipopt
   public:
     /**@name Constructors/Destructors */
     //@{
-    StandardScalingBase()
-    {}
+    StandardScalingBase();
 
     /** Default destructor */
-    virtual ~StandardScalingBase()
-    {}
+    virtual ~StandardScalingBase();
     //@}
 
     /** Methods to map scaled and unscaled matrices */

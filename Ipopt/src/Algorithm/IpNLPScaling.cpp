@@ -7,6 +7,9 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2005-06-25
 
 #include "IpNLPScaling.hpp"
+#include "IpSymMatrix.hpp"
+#include "IpScaledMatrix.hpp"
+#include "IpSymScaledMatrix.hpp"
 
 namespace Ipopt
 {
@@ -14,6 +17,12 @@ namespace Ipopt
 #if COIN_IPOPT_VERBOSITY > 0
   static const Index dbg_verbosity = 0;
 #endif
+
+  NLPScalingObject::NLPScalingObject()
+  {}
+
+  NLPScalingObject::~NLPScalingObject()
+  {}
 
   SmartPtr<Vector> NLPScalingObject::apply_vector_scaling_x_LU_NonConst(
     const Matrix& Px_LU,
@@ -188,6 +197,12 @@ namespace Ipopt
       return scaled_v;
     }
   }
+
+  StandardScalingBase::StandardScalingBase()
+  {}
+
+  StandardScalingBase::~StandardScalingBase()
+  {}
 
   void
   StandardScalingBase::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
