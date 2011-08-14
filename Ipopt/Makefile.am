@@ -155,7 +155,7 @@ if COIN_HAS_PKGCONFIG
 	$(PKG_CONFIG) --libs ipopt > $(addlibsdir)/ipopt_addlibs_cpp.txt
 else
 if COIN_CXX_IS_CL
-	echo "/libpath:`$(CYGPATH_W) @abs_lib_dir@` libipopt.lib @IPOPTLIB_LIBS_INSTALLED@" > $(addlibsdir)/ipopt_addlibs_cpp.txt
+	echo "-libpath:`$(CYGPATH_W) @abs_lib_dir@` libipopt.lib @IPOPTLIB_LIBS_INSTALLED@" > $(addlibsdir)/ipopt_addlibs_cpp.txt
 else
 	echo "-L@abs_lib_dir@ -lipopt @IPOPTLIB_LIBS_INSTALLED@" > $(addlibsdir)/ipopt_addlibs_cpp.txt
 endif
