@@ -16,9 +16,10 @@ libLinearSolverLoader_la_SOURCES = \
   LibraryHandler.c LibraryHandler.h \
   HSLLoader.c HSLLoader.h
 
-AM_CPPFLAGS = $(HSL_CFLAGS) \
+AM_CPPFLAGS = \
   -I`$(CYGPATH_W) $(srcdir)/../../Common` \
-  -I`$(CYGPATH_W) $(srcdir)/../../Algorithm/LinearSolvers`
+  -I`$(CYGPATH_W) $(srcdir)/../../Algorithm/LinearSolvers` \
+  $(HSL_CFLAGS)
 
 if BUILD_PARDISOLOADER
   libLinearSolverLoader_la_SOURCES += PardisoLoader.c PardisoLoader.h
