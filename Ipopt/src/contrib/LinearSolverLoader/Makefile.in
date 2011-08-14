@@ -325,9 +325,10 @@ EXTRA_DIST =
 noinst_LTLIBRARIES = libLinearSolverLoader.la
 libLinearSolverLoader_la_SOURCES = LibraryHandler.c LibraryHandler.h \
 	HSLLoader.c HSLLoader.h $(am__append_1)
-AM_CPPFLAGS = $(HSL_CFLAGS) \
+AM_CPPFLAGS = \
   -I`$(CYGPATH_W) $(srcdir)/../../Common` \
-  -I`$(CYGPATH_W) $(srcdir)/../../Algorithm/LinearSolvers`
+  -I`$(CYGPATH_W) $(srcdir)/../../Algorithm/LinearSolvers` \
+  $(HSL_CFLAGS)
 
 libLinearSolverLoader_la_LIBADD = 
 libLinearSolverLoader_la_DEPENDENCIES = 
