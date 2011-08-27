@@ -24,6 +24,16 @@
 # endif
 #endif
 
+#ifdef HAVE_CSTDIO
+# include <cstdio>
+#else
+# ifdef HAVE_STDIO_H
+#  include <stdio.h>
+# else
+#  include <cstdio>  // if this header is included by someone who does not define HAVE_CSTDIO or HAVE_STDIO, let's hope that cstdio is available
+# endif
+#endif
+
 #include <string>
 #include <vector>
 #include <ostream>
