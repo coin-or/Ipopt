@@ -73,6 +73,9 @@ namespace Ipopt
     mumps_->sym = 2;//general symetric matrix
     mumps_->comm_fortran = USE_COMM_WORLD;
     dmumps_c(mumps_);
+    mumps_->icntl[1] = 0;
+    mumps_->icntl[2] = 0;//QUIETLY!
+    mumps_->icntl[3] = 0;
     mumps_ptr_ = (void*)mumps_;
   }
 
@@ -316,10 +319,6 @@ namespace Ipopt
     }
 
     mumps_data->job = 1;//symbolic ordering pass
-
-    mumps_data->icntl[1] = 0;
-    mumps_data->icntl[2] = 0;//QUIETLY!
-    mumps_data->icntl[3] = 0;
 
     //mumps_data->icntl[1] = 6;
     //mumps_data->icntl[2] = 6;//QUIETLY!
