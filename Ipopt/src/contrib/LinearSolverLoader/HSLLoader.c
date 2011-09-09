@@ -143,7 +143,7 @@ void F77_FUNC(ma27id,MA27ID)(ipfint* ICNTL, double* CNTL)
 {
   if (func_ma27id==NULL) LSL_lateHSLLoad();
   if (func_ma27id==NULL) {
-    fprintf(stderr, "HSL routine MA27AD not found in " HSLLIBNAME ".\nAbort...\n");
+    fprintf(stderr, "HSL routine MA27ID not found in " HSLLIBNAME ".\nAbort...\n");
     exit(EXIT_FAILURE);
   }
   func_ma27id(ICNTL, CNTL);

@@ -43,7 +43,7 @@ soHandle_t LSL_loadLib(const char *libName, char *msgBuf, int msgLen)
 # ifdef HAVE_WINDOWS_H
   h = LoadLibrary (libName);
   if (NULL == h) {
-    mysnprintf(msgBuf, msgLen, "Windows error while loading dynamic library %s", libName);
+    mysnprintf(msgBuf, msgLen, "Windows error while loading dynamic library %s, error = %d.\n(see http://msdn.microsoft.com/en-us/library/ms681381%%28v=vs.85%%29.aspx)\n", libName, GetLastError());
   }
 # else
   h = dlopen (libName, RTLD_NOW);
@@ -157,6 +157,8 @@ symtype LSL_loadSym (soHandle_t h, const char *symName, char *msgBuf, int msgLen
     s = GetProcAddress (h, tripSym);
     if (NULL != s) {
       return s;
+    } else {
+      mysnprintf(msgBuf, msgLen, "Cannot find symbol %s in dynamic library, error = %d.", symName, GetLastError());
     }
 #else
 # ifdef HAVE_DLFCN_H
@@ -171,10 +173,6 @@ symtype LSL_loadSym (soHandle_t h, const char *symName, char *msgBuf, int msgLen
 # endif
 #endif
   } /* end loop over symbol name variations */
-
-#ifdef HAVE_WINDOWS_H
-  mysnprintf(msgBuf, msgLen, "Cannot find symbol %s in dynamic library.", symName);
-#endif
 
   return NULL;
 } /* LSL_loadSym */
