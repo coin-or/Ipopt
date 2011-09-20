@@ -5,13 +5,13 @@
 /***************************************************************************/
 
 /* Version number of project */
-#define IPOPT_VERSION "3.10.1"
+#define IPOPT_VERSION       "3.10"
 
 /* Major Version number of project */
-#define IPOPT_VERSION_MAJOR 3
+#define IPOPT_VERSION_MAJOR      3
 
 /* Minor Version number of project */
-#define IPOPT_VERSION_MINOR 10
+#define IPOPT_VERSION_MINOR     10
 
 /* Release Version number of project */
-#define IPOPT_VERSION_RELEASE 1
+#define IPOPT_VERSION_RELEASE 9999
