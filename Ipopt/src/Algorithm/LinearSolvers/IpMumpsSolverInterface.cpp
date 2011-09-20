@@ -434,8 +434,8 @@ namespace Ipopt
 
     if (error == -13) {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                     "MUMPS returned INFO(1) =%d - out or memory.\nIn some cases it helps to decrease the value of the option \"mumps_mem_percent\".\n",
-                     error);
+                     "MUMPS returned INFO(1) =%d - out of memory when trying to allocate %d %s.\nIn some cases it helps to decrease the value of the option \"mumps_mem_percent\".\n",
+                     error, mumps_data->info[1] < 0 ? -mumps_data->info[1] : mumps_data->info[1], mumps_data->info[1] < 0 ? "MB" : "bytes");
       return SYMSOLVER_FATAL_ERROR;
     }
     if (error < 0) {//some other error
