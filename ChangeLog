@@ -2,8 +2,18 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2011-09-20 releases/3.10.1
+        - include updates in BuildTools, including new ThirdParty/Metis
+           (fix for URL to download Metis 4.0.3 release)
+        - linear solver loader prints error code when failing to load
+          library under Windows
+        - message on failure when reallocating memory in Mumps now includes
+          size of memory that was tried to be allocated
+        - added missing include of cstdio/stdio.h to IpJournalist.hpp
+        - minor fixes to build system
+
 2011-06-20 releases/3.10.0
-        - move to new COIN configuration and installation convention
+        - move to new COIN-OR configuration and installation convention
         - primal infeasibility output is now true infeasibility in original
           problem formulation
 
