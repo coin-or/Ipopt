@@ -27,13 +27,8 @@ using namespace std;
 
 extern "C"
 {
-  /*
-   * Easier to just have our own definition than include the full metis.h
-   */
-  extern void METIS_NodeND(int *n, int *xadj, int *adjncy,
-                             int *numflag, int *options, int *perm, int *iperm);
+#include "hsl_mc68i.h"
 
-  /*#include "hsl_mc64d.h"*/
 }
 
 namespace Ipopt
@@ -86,13 +81,22 @@ namespace Ipopt
       "Maximum Pivoting Threshold",
       0.0, false, 0.5, false, 1e-4,
       "See MA86 documentation.");
-    /*roptions->AddStringOption2(
-      "ma86_mc64_scaling",
-      "Controls scaling of matrix using HSL_MC64",
-      "yes",
-      "no", "Do not scale the linear system matrix",
-      "yes", "Scale the linear system matrix",
-      "This option controls scaling for the solve HSL_MA86.");*/
+    roptions->AddStringOption3(
+      "ma86_scaling",
+      "Controls scaling of matrix",
+      "mc64",
+      "none", "Do not scale the linear system matrix",
+      "mc64", "Scale linear system matrix using MC64",
+      "mc77", "Scale linear system matrix using MC77 [1,3,0]",
+      "This option controls scaling for the solver HSL_MA86.");
+    roptions->AddStringOption3(
+      "ma86_order",
+      "Controls type of ordering used by HSL_MA86",
+      "auto",
+      "auto", "Try both AMD and MeTiS, pick best",
+      "amd", "Use the HSL_MC68 approximate minimum degree algorithm",
+      "metis", "Use the MeTiS nested dissection algorithm",
+      "This option controls ordering for the solver HSL_MA86.");
   }
 
   bool Ma86SolverInterface::InitializeImpl(const OptionsList& options,
@@ -100,6 +104,8 @@ namespace Ipopt
   {
     ma86_default_control(&control_);
     control_.f_arrays = 1; // Use Fortran numbering (faster)
+    /* Note: we can't set control_.action = false as we need to know the
+     * intertia. (Otherwise we just enter the restoration phase and fail) */
 
     options.GetIntegerValue("ma86_print_level", control_.diagnostics_level,
                             prefix);
@@ -108,7 +114,23 @@ namespace Ipopt
     options.GetNumericValue("ma86_static", control_.static_, prefix);
     options.GetNumericValue("ma86_u", control_.u, prefix);
     options.GetNumericValue("ma86_u", umax_, prefix);
-    /*options.GetBoolValue("ma86_mc64_scaling", scale_, prefix);*/
+    std::string order_method, scaling_method;
+    options.GetStringValue("ma86_order", order_method, prefix);
+    if(order_method == "metis") {
+      ordering_ = ORDER_METIS;
+    } else if(order_method == "amd") {
+      ordering_ = ORDER_AMD;
+    } else {
+      ordering_ = ORDER_AUTO;
+    }
+    options.GetStringValue("ma86_scaling", scaling_method, prefix);
+    if(scaling_method == "mc64") {
+      control_.scaling = 1;
+    } else if(scaling_method == "mc77") {
+      control_.scaling = 2;
+    } else {
+      control_.scaling = 0;
+    }
 
     return true; // All is well
   }
@@ -122,33 +144,75 @@ namespace Ipopt
   ESymSolverStatus Ma86SolverInterface::InitializeStructure(Index dim,
       Index nonzeros, const Index* ia, const Index* ja)
   {
-    struct ma86_info info;
+    struct ma86_info info, info2;
+    struct mc68_control control68;
+    struct mc68_info info68;
+    Index *order_amd, *order_metis;
+    void *keep_amd, *keep_metis;
 
     // Store size for later use
     ndim_ = dim;
 
     // Determine an ordering
-    order_ = new Index[dim];
-    MetisOrder(dim, ia, ja, order_);
-    //for(int i=0; i<dim; i++) perm[i] = i+1;
-
-    // Setup memory for values
-    if (val_!=NULL) delete[] val_;
-    val_ = new double[nonzeros];
-
-    // Setup memory for scaling
-    //if(scale_) scaling_ = new double[2*dim]; //size m+n for mc64 call
+    mc68_default_control(&control68);
+    control68.f_array_in = 1; // Use Fortran numbering (faster)
+    control68.f_array_out = 1; // Use Fortran numbering (faster)
+    order_amd = NULL; order_metis = NULL;
+    if(ordering_ == ORDER_METIS || ordering_ == ORDER_AUTO) {
+      order_metis = new Index[dim];
+      mc68_order(3, dim, ia, ja, order_metis, &control68, &info68); /* MeTiS */
+      if(info68.flag == -5) {
+         // MeTiS not available
+         ordering_ = ORDER_AMD;
+         delete[] order_metis;
+      } else if(info68.flag<0) {
+         return SYMSOLVER_FATAL_ERROR;
+      }
+    }
+    if(ordering_ == ORDER_AMD || ordering_ == ORDER_AUTO) {
+      order_amd = new Index[dim];
+      mc68_order(1, dim, ia, ja, order_amd, &control68, &info68); /* AMD */
+    }
+    if(info68.flag<0) return SYMSOLVER_FATAL_ERROR;
 
     if (HaveIpData()) {
       IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
     }
 
     // perform analyse
-    ma86_analyse(dim, ia, ja, order_, &keep_, &control_, &info);
+    if(ordering_ == ORDER_AUTO) {
+      ma86_analyse(dim, ia, ja, order_amd, &keep_amd, &control_, &info2);
+      if (info2.flag<0) return SYMSOLVER_FATAL_ERROR;
+      ma86_analyse(dim, ia, ja, order_metis, &keep_metis, &control_, &info);
+      if (info.flag<0) return SYMSOLVER_FATAL_ERROR;
+      if(info.num_flops > info2.num_flops) {
+         // Use AMD
+         //cout << "Choose AMD\n";
+         order_ = order_amd;
+         keep_ = keep_amd;
+         delete[] order_metis;
+         ma86_finalise(&keep_metis, &control_);
+      } else {
+         // Use MeTiS
+         //cout << "Choose MeTiS\n";
+         order_ = order_metis;
+         keep_ = keep_metis;
+         delete[] order_amd;
+         ma86_finalise(&keep_amd, &control_);
+      }
+    } else {
+      if(ordering_ == ORDER_AMD) order_ = order_amd;
+      if(ordering_ == ORDER_METIS) order_ = order_metis;
+      ma86_analyse(dim, ia, ja, order_, &keep_, &control_, &info);
+    }
 
     if (HaveIpData()) {
       IpData().TimingStats().LinearSystemSymbolicFactorization().End();
     }
+
+    // Setup memory for values
+    if (val_!=NULL) delete[] val_;
+    val_ = new double[nonzeros];
 
     if (info.flag>=0) {
       return SYMSOLVER_SUCCESS;
@@ -195,39 +259,20 @@ namespace Ipopt
       bool check_NegEVals, Index numberOfNegEVals)
   {
     struct ma86_info info;
-    /*struct mc64_control control64;
-    struct mc64_info info64;
-    int *perm64;*/
 
     if (new_matrix || pivtol_changed_) {
-      /*if(scale_) {
-         if (HaveIpData()) {
-            IpData().TimingStats().LinearSystemScaling().Start();
-         }
-         control64.checking=1; //disabled
-         perm64 = new int[2*ndim_];
-         mc64_matching(5, 4, ndim_, ndim_, ia, ja, val_, &control64, &info64,
-            perm64, scaling_);
-         delete[] perm64;
-         for(int i=0; i<ndim_; i++) {
-            scaling_[i] = exp(scaling_[i]);
-            if(scaling_[i]>1e10) scaling_[i] = 1.0;
-         }
-         if (HaveIpData()) {
-            IpData().TimingStats().LinearSystemScaling().End();
-         }
-      }*/
 
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemFactorization().Start();
       }
       //ma86_factor(ndim_, ia, ja, val_, order_, &keep_, &control_, &info);
       ma86_factor_solve(ndim_, ia, ja, val_, order_, &keep_, &control_, &info,
-                        1, ndim_, rhs_vals, scaling_);
+                        1, ndim_, rhs_vals, NULL);
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemFactorization().End();
       }
       if (info.flag<0) return SYMSOLVER_FATAL_ERROR;
+      if (info.flag==2 || info.flag==-3) return SYMSOLVER_SINGULAR;
       if (check_NegEVals && info.num_neg!=numberOfNegEVals)
         return SYMSOLVER_WRONG_INERTIA;
 
@@ -247,7 +292,7 @@ namespace Ipopt
         IpData().TimingStats().LinearSystemBackSolve().Start();
       }
       ma86_solve(0, 1, ndim_, rhs_vals, order_, &keep_, &control_, &info,
-                 scaling_);
+                 NULL);
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemBackSolve().End();
       }
@@ -256,61 +301,6 @@ namespace Ipopt
     return SYMSOLVER_SUCCESS;
   }
 
-  /*
-   * Call metis_NodeND to perform ordering on the graph, return it in perm
-   */
-  void Ma86SolverInterface::MetisOrder(const int ndim, const Index *ptr,
-                                       const Index *row, Index *perm)
-  {
-    int options[8];
-    options[0] = 0; // Defaults
-    int numflag = 1;
-    int ndim_nc = ndim;
-
-    // Metis requires the full matrix, sans diagonal entries
-    // As we only have the lower triangle we must expand
-    Index *ptr_tmp = new Index[ndim+3]; // Two bigger than final ptr
-    Index *row_tmp = new Index[2*(ptr[ndim]-1)];
-
-    // First pass counts number of entries in each column
-    // We do this at an offset of two so we can do everything in place
-    for (int i=0; i<ndim+2; i++) ptr_tmp[i] = 0;
-    for (int i=0; i<ndim; i++) {
-      for (int j=ptr[i]-1; j<ptr[i+1]-1; j++) {
-        if (i==row[j]-1) continue; // Skip diagonals
-        ptr_tmp[i+2]++;
-        ptr_tmp[row[j]-1+2]++;
-      }
-    }
-    // Set ptr_tmp up so that ptr_tmp[i+1] is start of row i
-    // This allows us to use ptr_tmp[i+1] as insert location for row i in
-    // second pass of matrix data
-    ptr_tmp[0] = 1;
-    ptr_tmp[1]=1;
-    for (int i=1;i<ndim;i++)
-      ptr_tmp[i+1] = ptr_tmp[i] + ptr_tmp[i+1];
-    // Second pass drops entries into correct locations
-    ptr_tmp[0] = 1;
-    for (int i=0; i<ndim; i++) {
-      for (int j=ptr[i]-1; j<ptr[i+1]-1; j++) {
-        if (i==row[j]-1) continue; // Skip diagonals
-        int k = row[j]-1;
-        row_tmp[ptr_tmp[i+1]-1] = row[j];
-        row_tmp[ptr_tmp[k+1]-1] = i+1;
-        ptr_tmp[i+1]++;
-        ptr_tmp[k+1]++;
-      }
-    }
-
-    // Note that MeTiS's iperm is our perm and vice-versa
-    Index *iperm = new Index[ndim];
-    //METIS_NodeND(&ndim_nc, ptr_tmp, row_tmp, &numflag, options, iperm, perm);
-    THROW_EXCEPTION(INTERNAL_ABORT,
-                    "Code in the MA86 currently needs to be changed.  The above line require Metis, but not all Ipopt builts have it.");
-    delete[] iperm;
-    delete[] row_tmp;
-    delete[] ptr_tmp;
-  }
 
   bool Ma86SolverInterface::IncreaseQuality()
   {

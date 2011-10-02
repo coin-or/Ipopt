@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "hsl_ma86d.h"
+#include "hsl_mc68i.h"
 
 #define HSLLIBNAME "libhsl." SHAREDLIBEXT
 
@@ -113,6 +114,11 @@ typedef void (*ma57ed_t) (
     ipfint    *info);
 
 typedef void (*mc19ad_t)(ipfint *N, ipfint *NZ, double* A, ipfint *IRN, ipfint* ICN, float* R, float* C, float* W);
+
+typedef void (*mc68_default_control_t)(struct mc68_control *control);
+typedef void (*mc68_order_t)(const int ord, const int n, const int ptr[],
+   const int row[], int perm[], const struct mc68_control *control,
+   struct mc68_info *info);
 
 typedef void (*ma86_default_control_t)(struct ma86_control *control);
 typedef void (*ma86_analyse_t)(const int n, const int ptr[], const int row[],
@@ -397,6 +403,33 @@ void F77_FUNC(mc19ad,MC19AD)(ipfint *N, ipfint *NZ, double* A, ipfint *IRN,
 }
 #endif
 
+#ifndef COINHSL_HAS_MC68
+
+mc68_default_control_t func_mc68_default_control=NULL;
+mc68_order_t func_mc68_order=NULL;
+
+void mc68_default_control(struct mc68_control *control) {
+  if (func_mc68_default_control==NULL) LSL_lateHSLLoad();
+  if (func_mc68_default_control==NULL) {
+    fprintf(stderr, "HSL routine mc68_default_control not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_mc68_default_control(control);
+}
+
+void mc68_order(const int ord, const int n, const int ptr[], const int row[],
+                int perm[], const struct mc68_control *control,
+                struct mc68_info *info) {
+  if (func_mc68_order==NULL) LSL_lateHSLLoad();
+  if (func_mc68_order==NULL) {
+    fprintf(stderr, "HSL routine mc68_default_control not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_mc68_order(ord, n, ptr, row, perm, control, info);
+}
+
+#endif
+
 int LSL_loadHSL(const char* libname, char* msgbuf, int msglen) {
   /* load HSL library */
   if (libname) {
@@ -438,6 +471,11 @@ int LSL_loadHSL(const char* libname, char* msgbuf, int msglen) {
 
 #ifndef COINHSL_HAS_MC19
   func_mc19ad=(mc19ad_t)LSL_loadSym(HSL_handle, "mc19ad", msgbuf, msglen);
+#endif
+
+#ifndef COINHSL_HAS_MC68
+  func_mc68_default_control=(mc68_default_control_t)LSL_loadSym(HSL_handle, "mc68_default_control", msgbuf, msglen);
+  func_mc68_order=(mc68_order_t)LSL_loadSym(HSL_handle, "mc68_order", msgbuf, msglen);
 #endif
 
   return 0;
@@ -484,6 +522,11 @@ int LSL_unloadHSL() {
   func_mc19ad=NULL;
 #endif
 
+#ifndef COINHSL_HAS_MC68
+  func_mc68_default_control=NULL;
+  func_mc68_order=NULL;
+#endif
+
   return rc;
 }
 
@@ -527,6 +570,14 @@ int LSL_isMA86available() {
 int LSL_isMC19available() {
 #ifndef COINHSL_HAS_MC19
 	return HSL_handle!=NULL && func_mc19ad!=NULL;
+#else
+	return 0;
+#endif
+}
+
+int LSL_isMC68available() {
+#ifndef COINHSL_HAS_MC68
+	return HSL_handle!=NULL && func_mc68_default_control!=NULL && func_mc68_order!=NULL;
 #else
 	return 0;
 #endif
