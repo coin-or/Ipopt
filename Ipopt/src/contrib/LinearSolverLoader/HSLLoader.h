@@ -62,6 +62,11 @@ extern "C" {
    * @return Zero if not available, nonzero if MA57 is available in the loaded library.
    */
   int LSL_isMC19available();
+  
+  /** Indicates whether a HSL library is loaded and all symbols necessary to use HSL_MC68 have been found.
+   * @return Zero if not available, nonzero if MA57 is available in the loaded library.
+   */
+  int LSL_isMC68available();
 
   /** Returns name of the shared library that should contain HSL */
   char* LSL_HSLLibraryName();
