@@ -25,6 +25,9 @@
 /* If defined, the LAPACK Library is available. */
 #define COIN_HAS_LAPACK 1
 
+/* If defined, the HSL library is available. */
+#define COIN_HAS_HSL 1
+
 /* If defined, the METIS library is available. */
 /* #undef COIN_HAS_METIS */
 
