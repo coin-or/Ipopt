@@ -478,6 +478,7 @@ ac_subdirs_all="$ac_subdirs_all ThirdParty/Blas"
 ac_subdirs_all="$ac_subdirs_all ThirdParty/Lapack"
 ac_subdirs_all="$ac_subdirs_all ThirdParty/Metis"
 ac_subdirs_all="$ac_subdirs_all ThirdParty/HSL"
+ac_subdirs_all="$ac_subdirs_all ThirdParty/HSLold"
 ac_subdirs_all="$ac_subdirs_all ThirdParty/Mumps"
 ac_subdirs_all="$ac_subdirs_all Ipopt"
 ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COIN_CC_IS_CL_TRUE COIN_CC_IS_CL_FALSE MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX COIN_CXX_IS_CL_TRUE COIN_CXX_IS_CL_FALSE MPICXX ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 ac_ct_F77 FFLAGS MPIF77 EGREP LN_S INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS COIN_SKIP_PROJECTS subdirs LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
@@ -1149,6 +1150,9 @@ Optional Packages:
   --with-hsl-lib linker flags for using project HSL
   --with-hsl-incdir directory with header files for using project HSL
   --with-hsl-datadir directory with data files for using project HSL
+  --with-hslold-lib linker flags for using project HSLold
+  --with-hslold-incdir directory with header files for using project HSLold
+  --with-hslold-datadir directory with data files for using project HSLold
   --with-mumps-lib linker flags for using project Mumps
   --with-mumps-incdir directory with header files for using project Mumps
   --with-mumps-datadir directory with data files for using project Mumps
@@ -1826,6 +1830,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 # compiler, if the C++ is set, but the C compiler isn't (only for CXX=cl)
 if test x"$CXX" != x; then
   case "$CXX" in
+    clang* ) ;;
     cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
       if test x"$CC" = x; then
         CC="$CXX"
@@ -2645,6 +2650,7 @@ echo "$as_me: error: Failed to find a C compiler!" >&2;}
 fi
 # Autoconf incorrectly concludes that cl recognises -g. It doesn't.
 case "$CC" in
+  clang* ) ;;
   cl* | */cl* | CL* | */CL* )
     if test "$ac_cv_prog_cc_g" = yes ; then
       ac_cv_prog_cc_g=no
@@ -2657,6 +2663,7 @@ CFLAGS="$save_cflags"
 # add automake conditional so we can recognize cl compiler in makefile
 coin_cc_is_cl=false
 case "$CC" in
+  clang* ) ;;
   cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
     coin_cc_is_cl=true
     ;;
@@ -2760,6 +2767,7 @@ rm -f conftest.err conftest.$ac_objext \
     case $build in
       *-cygwin* | *-mingw*)
         case "$CC" in
+          clang* ) ;;
           cl* | */cl* | CL* | */CL*)
             coin_opt_cflags='-MT -O2'
             coin_add_cflags='-nologo -wd4996 -D_CRT_SECURE_NO_DEPRECATE'
@@ -3081,6 +3089,7 @@ fi
 
 # Correct the LD variable if we are using the MS or Intel-windows compiler
 case "$CC" in
+  clang* ) ;;
   cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
     case $build in
   *-mingw*)
@@ -3574,6 +3583,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 coin_cxx_is_cl=false
 # It seems that we need to cleanup something here for the Windows
 case "$CXX" in
+  clang* ) ;;
   cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
     sed -e 's/^void exit (int);//' confdefs.h >> confdefs.hh
     mv confdefs.hh confdefs.h
@@ -3595,6 +3605,7 @@ fi
 
 # Autoconf incorrectly concludes that cl recognises -g. It doesn't.
 case "$CXX" in
+  clang* ) ;;
   cl* | */cl* | CL* | */CL* )
     if test "$ac_cv_prog_cxx_g" = yes ; then
       ac_cv_prog_cxx_g=no
@@ -3698,6 +3709,7 @@ rm -f conftest.err conftest.$ac_objext \
     case $build in
       *-cygwin* | *-mingw*)
         case "$CXX" in
+          clang* ) ;;
           cl* | */cl* | CL* | */CL*)
 	    # The MT and MTd options are mutually exclusive
             coin_opt_cxxflags='-MT -O2'
@@ -4027,6 +4039,7 @@ fi
 
 # correct the LD variable in a mingw build with MS or intel compiler
 case "$CXX" in
+  clang* ) ;;
   cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
     case $build in
   *-mingw*)
@@ -4283,7 +4296,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:4286:" \
+echo "$as_me:4299:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -6549,7 +6562,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 6552 "configure"' > conftest.$ac_ext
+  echo '#line 6565 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -8513,11 +8526,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8516: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8529: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8520: \$? = $ac_status" >&5
+   echo "$as_me:8533: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8781,11 +8794,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8784: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8797: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8788: \$? = $ac_status" >&5
+   echo "$as_me:8801: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8885,11 +8898,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8888: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8901: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:8892: \$? = $ac_status" >&5
+   echo "$as_me:8905: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -11230,7 +11243,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11233 "configure"
+#line 11246 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11330,7 +11343,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11333 "configure"
+#line 11346 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13674,11 +13687,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13677: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13690: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13681: \$? = $ac_status" >&5
+   echo "$as_me:13694: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13778,11 +13791,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13781: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13794: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13785: \$? = $ac_status" >&5
+   echo "$as_me:13798: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15348,11 +15361,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15351: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15364: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15355: \$? = $ac_status" >&5
+   echo "$as_me:15368: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15452,11 +15465,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15455: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15468: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15459: \$? = $ac_status" >&5
+   echo "$as_me:15472: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -17659,11 +17672,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17662: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17675: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17666: \$? = $ac_status" >&5
+   echo "$as_me:17679: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -17927,11 +17940,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17930: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17943: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17934: \$? = $ac_status" >&5
+   echo "$as_me:17947: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -18031,11 +18044,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18034: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18047: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:18038: \$? = $ac_status" >&5
+   echo "$as_me:18051: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -20771,6 +20784,15 @@ echo "$as_me: Applying patches to libtool for 64-bit GCC compilation" >&6;}
     # Cygwin. Ah, cygwin. Too big and ugly to inline; see the macro.
     *-cygwin* | *-mingw*)
        case "$CXX" in
+    clang* )
+      # we assume that libtool patches for CLANG are the same as for GNU compiler - correct???
+      { echo "$as_me:$LINENO: Applying patches to libtool for CLANG compiler" >&5
+echo "$as_me: Applying patches to libtool for CLANG compiler" >&6;}
+      sed -e 's|fix_srcfile_path=\"`cygpath -w \"\$srcfile\"`\"|fix_srcfile_path=\"\\\`'"$CYGPATH_W"' \\\"\\$srcfile\\\"\\\`\"|' \
+	  -e 's|"lib /OUT:\\$oldlib\\$oldobjs\\$old_deplibs"|"\\$AR \\$AR_FLAGS \\$oldlib\\$oldobjs\\$old_deplibs~\\$RANLIB \\$oldlib"|' \
+	  -e 's|libext="lib"|libext="a"|' \
+      libtool > conftest.bla
+      ;;
     cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
       { echo "$as_me:$LINENO: Applying patches to libtool for cl compiler" >&5
 echo "$as_me: Applying patches to libtool for cl compiler" >&6;}
@@ -20786,9 +20808,6 @@ echo "$as_me: Applying patches to libtool for cl compiler" >&6;}
 	  -e 's%^archive_cmds=.*%archive_cmds="\\$CC -o \\$lib \\$libobjs \\$compiler_flags \\\\\\`echo \\\\\\"\\$deplibs\\\\\\" | \\$SED -e '"\'"'s/ -lc\\$//'"\'"'\\\\\\` -link -dll~linknames="%' \
 	  -e 's%old_archive_cmds="lib -OUT:\\$oldlib\\$oldobjs\\$old_deplibs"%old_archive_cmds="if test -r \\$oldlib; then bla=\\"\\$oldlib\\"; else bla=; fi; lib -OUT:\\$oldlib \\\\\\$bla\\$oldobjs\\$old_deplibs"%' \
       libtool > conftest.bla
-
-      mv conftest.bla libtool
-      chmod 755 libtool
       ;;
     *)
       { echo "$as_me:$LINENO: Applying patches to libtool for GNU compiler" >&5
@@ -20797,11 +20816,11 @@ echo "$as_me: Applying patches to libtool for GNU compiler" >&6;}
 	  -e 's|"lib /OUT:\\$oldlib\\$oldobjs\\$old_deplibs"|"\\$AR \\$AR_FLAGS \\$oldlib\\$oldobjs\\$old_deplibs~\\$RANLIB \\$oldlib"|' \
 	  -e 's|libext="lib"|libext="a"|' \
       libtool > conftest.bla
-
-      mv conftest.bla libtool
-      chmod 755 libtool
       ;;
   esac
+  mv conftest.bla libtool
+  chmod 755 libtool
+
       ;;
     *-darwin*)
       { echo "$as_me:$LINENO: Applying patches to libtool for Darwin" >&5
@@ -21560,7 +21579,7 @@ if test "$coin_has_hsl" = notGiven; then
     # If a third argument is given, then we have to check if one one the files given in that third argument is present.
     # If none of the files in the third argument is available, then we consider the project directory as non-existing.
     # However, if no third argument is given, then this means that there should be no check, and existence of the directory is sufficient.
-    for i in $srcdir/ThirdParty/HSL/configure.ac; do
+    for i in $srcdir/ThirdParty/HSL/common/deps.f; do
          if test -r $i; then
            coin_has_hsl="yes"
          else
@@ -21587,6 +21606,130 @@ if test "$coin_has_hsl" = yes ; then
 
 
 subdirs="$subdirs ThirdParty/HSL"
+
+  fi
+fi
+
+
+echo "$as_me:$LINENO: checking whether source of project HSLold is available and should be compiled" >&5
+echo $ECHO_N "checking whether source of project HSLold is available and should be compiled... $ECHO_C" >&6
+
+coin_has_hslold=notGiven
+coin_reason=
+
+# check if user wants to skip project in any case
+
+if test x"$COIN_SKIP_PROJECTS" != x; then
+  for dir in $COIN_SKIP_PROJECTS; do
+    if test $dir = "HSLold"; then
+      coin_has_hslold="no"
+      coin_reason="HSLold has been specified in COIN_SKIP_PROJECTS"
+    fi
+
+    if test $dir = "ThirdParty/HSLold"; then
+      coin_has_hslold="no"
+      coin_reason="ThirdParty/HSLold has been specified in COIN_SKIP_PROJECTS"
+    fi
+  done
+fi
+
+if test "$coin_has_hslold" != no; then
+
+# Check whether --with-m4_tolower(HSLold) or --without-m4_tolower(HSLold) was given.
+if test "${with_hslold+set}" = set; then
+  withval="$with_hslold"
+  if test "$withval" = no ; then
+       coin_has_hslold="no"
+       coin_reason="--without-hslold has been specified"
+     fi
+
+fi;
+fi
+
+if test "$coin_has_hslold" != no; then
+
+# Check whether --with-m4_tolower(HSLold)-lib or --without-m4_tolower(HSLold)-lib was given.
+if test "${with_hslold_lib+set}" = set; then
+  withval="$with_hslold_lib"
+  if test "$withval" = no ; then
+       coin_has_hslold="no"
+       coin_reason="--without-hslold-lib has been specified"
+     else
+       coin_has_hslold="no"
+       coin_reason="--with-hslold-lib has been specified"
+     fi
+fi;
+fi
+
+if test "$coin_has_hslold" != no; then
+
+# Check whether --with-m4_tolower(HSLold)-incdir or --without-m4_tolower(HSLold)-incdir was given.
+if test "${with_hslold_incdir+set}" = set; then
+  withval="$with_hslold_incdir"
+  if test "$withval" = no ; then
+       coin_has_hslold="no"
+       coin_reason="--without-hslold-incdir has been specified"
+     else
+       coin_has_hslold="no"
+       coin_reason="--with-hslold-incdir has been specified"
+     fi
+fi;
+fi
+
+if test "$coin_has_hslold" != no; then
+
+# Check whether --with-m4_tolower(HSLold)-datadir or --without-m4_tolower(HSLold)-datadir was given.
+if test "${with_hslold_datadir+set}" = set; then
+  withval="$with_hslold_datadir"
+  if test "$withval" = no ; then
+       coin_has_hslold="no"
+       coin_reason="--without-hslold-datadir has been specified"
+     else
+       coin_has_hslold="no"
+       coin_reason="--with-hslold-datadir has been specified"
+     fi
+fi;
+fi
+
+
+
+
+
+# check if project is available in present directory
+if test "$coin_has_hslold" = notGiven; then
+  coin_has_hslold=no
+  if test -d $srcdir/ThirdParty/HSLold; then
+    coin_reason="source in ThirdParty/HSLold"
+    # If a third argument is given, then we have to check if one one the files given in that third argument is present.
+    # If none of the files in the third argument is available, then we consider the project directory as non-existing.
+    # However, if no third argument is given, then this means that there should be no check, and existence of the directory is sufficient.
+    for i in $srcdir/ThirdParty/HSLold/configure.ac; do
+         if test -r $i; then
+           coin_has_hslold="yes"
+         else
+           coin_has_hslold="no"
+           coin_reason="source file $i not available"
+           break
+         fi
+       done
+
+  fi
+fi
+
+if test -z "$coin_reason" ; then
+  echo "$as_me:$LINENO: result: $coin_has_hslold" >&5
+echo "${ECHO_T}$coin_has_hslold" >&6
+else
+  echo "$as_me:$LINENO: result: $coin_has_hslold, $coin_reason" >&5
+echo "${ECHO_T}$coin_has_hslold, $coin_reason" >&6
+fi
+
+if test "$coin_has_hslold" = yes ; then
+  if test -r $srcdir/ThirdParty/HSLold/configure; then
+    coin_subdirs="$coin_subdirs ThirdParty/HSLold"
+
+
+subdirs="$subdirs ThirdParty/HSLold"
 
   fi
 fi
@@ -21854,6 +21997,7 @@ if test "$enable_doscompile" = mingw; then
   coin_link_input_cmd=cp
 fi
 case "$CC" in
+  clang* ) ;;
   cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
     coin_link_input_cmd=cp ;;
 esac
@@ -21867,6 +22011,8 @@ if test x$coin_skip_ac_output != xyes; then
   # library extension
 
   case "$CC" in
+    clang* )
+         LIBEXT=a ;;
     cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
          LIBEXT=lib ;;
       *) LIBEXT=a ;;
