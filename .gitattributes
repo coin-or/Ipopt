@@ -105,6 +105,7 @@ Ipopt/contrib/MatlabInterface/examples/lasso.m -text
 Ipopt/contrib/MatlabInterface/examples/startup.m.in -text
 Ipopt/contrib/MatlabInterface/ipopt.m -text
 Ipopt/contrib/MatlabInterface/readme.html -text
+Ipopt/contrib/RInterface/CHANGELOG -text
 Ipopt/contrib/RInterface/DESCRIPTION -text
 Ipopt/contrib/RInterface/NAMESPACE -text
 Ipopt/contrib/RInterface/R/get.option.types.R -text
