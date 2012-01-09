@@ -63,4 +63,4 @@ in Ipopt\README-LIB.txt.
 
 Author:  Marcel Roelofs (Marcel.Roelofs at aimms.com)
 	 Paragon Decision Technology 
-	 2009-10-25
+	 2012-01-07

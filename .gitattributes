@@ -19,6 +19,7 @@ Ipopt/MSVisualStudio/v8-ifort/IpOpt/IntelPaths.vsprops -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt/IpOpt.icproj -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt/IpOpt.rc -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt/IpOpt.vcproj -text
+Ipopt/MSVisualStudio/v8-ifort/IpOpt/config.h -text
 Ipopt/MSVisualStudio/v8-ifort/IpOptFSS/Dummy.c -text
 Ipopt/MSVisualStudio/v8-ifort/IpOptFSS/IpOptFSS.rc -text
 Ipopt/MSVisualStudio/v8-ifort/IpOptFSS/IpOptFSS.vcproj -text

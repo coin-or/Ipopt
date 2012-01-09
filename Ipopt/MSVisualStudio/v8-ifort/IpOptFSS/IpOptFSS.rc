@@ -1,6 +1,7 @@
 // Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
+#include "config.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
@@ -53,8 +54,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,9,2,0
- PRODUCTVERSION 3,9,2,0
+ FILEVERSION IPOPT_RESOURCE_VERSION
+ PRODUCTVERSION IPOPT_RESOURCE_VERSION
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -72,13 +73,13 @@ BEGIN
             VALUE "Comments", "Source code of Ipopt can be found at http://www.coin-or.org/projects/Ipopt.xml"
             VALUE "CompanyName", "IBM"
             VALUE "FileDescription", "Ipopt Fortran Solver Support DLL"
-            VALUE "FileVersion", "3, 9, 2, 0"
+            VALUE "FileVersion", __xstr__(IPOPT_RESOURCE_VERSION)
             VALUE "InternalName", "IpoptFSS"
             VALUE "LegalCopyright", "Copyright (C) 2008 International Business Machines and others."
             VALUE "LegalTrademarks", "All Rights Reserved. This code is published under the Eclipse Public License."
             VALUE "OriginalFilename", " IpoptFSS.dll"
             VALUE "ProductName", "Ipopt Fortran Solver Support DLL"
-            VALUE "ProductVersion", "3, 9, 2, 0"
+            VALUE "ProductVersion", __xstr__(IPOPT_RESOURCE_VERSION)
         END
     END
     BLOCK "VarFileInfo"
