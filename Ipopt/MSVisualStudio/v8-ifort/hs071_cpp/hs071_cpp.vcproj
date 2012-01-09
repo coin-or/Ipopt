@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="hs071_cpp"
+	Name="hs071_cpp-vc8"
 	ProjectGUID="{84B04F75-86DB-4056-8A02-6A2374E72A4E}"
 	RootNamespace="hs071_cpp"
 	Keyword="Win32Proj"
@@ -65,7 +65,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/hs071_cpp.exe"
+				OutputFile="$(OutDir)/$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
@@ -146,7 +146,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/hs071_cpp.exe"
+				OutputFile="$(OutDir)/$(ProjectName).exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
@@ -223,7 +223,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/hs071_cpp.exe"
+				OutputFile="$(OutDir)/$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
@@ -302,7 +302,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/hs071_cpp.exe"
+				OutputFile="$(OutDir)/$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
@@ -380,7 +380,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/hs071_cpp.exe"
+				OutputFile="$(OutDir)/$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
@@ -459,7 +459,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/hs071_cpp.exe"
+				OutputFile="$(OutDir)/$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"

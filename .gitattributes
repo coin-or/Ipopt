@@ -14,8 +14,11 @@ Ipopt/MSVisualStudio/v8-ifort/CoinMumps/CoinMumpsF90.vfproj -text
 Ipopt/MSVisualStudio/v8-ifort/CoinMumpsC/CoinMumpsC.icproj -text
 Ipopt/MSVisualStudio/v8-ifort/CoinMumpsC/CoinMumpsC.vcproj -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt-ifort.sln -text
+Ipopt/MSVisualStudio/v8-ifort/IpOpt-vc10.sln -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt/ExportBinaries.bat -text
+Ipopt/MSVisualStudio/v8-ifort/IpOpt/IntelPaths.props -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt/IntelPaths.vsprops -text
+Ipopt/MSVisualStudio/v8-ifort/IpOpt/IpOpt-vc10.vcxproj -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt/IpOpt.icproj -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt/IpOpt.rc -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt/IpOpt.vcproj -text
@@ -27,6 +30,7 @@ Ipopt/MSVisualStudio/v8-ifort/IpOptFSS/IpOptFSS.vcproj -text
 Ipopt/MSVisualStudio/v8-ifort/IpOptFSS/IpoptFSS.def -text
 Ipopt/MSVisualStudio/v8-ifort/IpOptFSS/resource.h -text
 Ipopt/MSVisualStudio/v8-ifort/IpOptFor/IpOptFor.vfproj -text
+Ipopt/MSVisualStudio/v8-ifort/hs071_cpp/hs071_cpp-vc10.vcxproj -text
 Ipopt/MSVisualStudio/v8-ifort/hs071_cpp/hs071_cpp.vcproj -text
 Ipopt/MSVisualStudio/v8-ifort/libhsl-no-MA57/libhsl-no-MA57.vfproj -text
 Ipopt/MSVisualStudio/v8-ifort/libhsl-no-MA57/libhsl.def -text
