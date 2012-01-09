@@ -70,7 +70,7 @@
 				IgnoreDefaultLibraryNames="libcmt.lib"
 				ModuleDefinitionFile="IpoptFSS.def"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)\$(ProjectName)39.pdb"
+				ProgramDatabaseFile="$(OutDir)\$(ProjectName).pdb"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 			/>
 			<Tool
@@ -152,7 +152,7 @@
 				IgnoreDefaultLibraryNames="libcmt.lib"
 				ModuleDefinitionFile="IpoptFSS.def"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)\$(ProjectName)39.pdb"
+				ProgramDatabaseFile="$(OutDir)\$(ProjectName).pdb"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 			/>
 			<Tool
@@ -231,7 +231,7 @@
 				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\ia32&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\ia32\lib&quot;"
 				ModuleDefinitionFile="IpoptFSS.def"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)\$(ProjectName)39.pdb"
+				ProgramDatabaseFile="$(OutDir)\$(ProjectName).pdb"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 			/>
 			<Tool
@@ -311,7 +311,7 @@
 				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\intel64&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\em64t\lib&quot;"
 				ModuleDefinitionFile="IpoptFSS.def"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)\$(ProjectName)39.pdb"
+				ProgramDatabaseFile="$(OutDir)\$(ProjectName).pdb"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 			/>
 			<Tool
@@ -392,7 +392,7 @@
 				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\ia32&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\ia32\lib&quot;"
 				ModuleDefinitionFile="IpoptFSS.def"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)\$(ProjectName)39.pdb"
+				ProgramDatabaseFile="$(OutDir)\$(ProjectName).pdb"
 				GenerateMapFile="true"
 				SubSystem="2"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"
@@ -475,7 +475,7 @@
 				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\intel64&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\em64t\lib&quot;"
 				ModuleDefinitionFile="IpoptFSS.def"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)\$(ProjectName)39.pdb"
+				ProgramDatabaseFile="$(OutDir)\$(ProjectName).pdb"
 				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 				TargetMachine="17"
 			/>
