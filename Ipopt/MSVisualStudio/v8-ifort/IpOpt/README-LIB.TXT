@@ -1,15 +1,7 @@
 The DLLs in this directory export the C interface of the Ipopt solver, as well as its C++ interface 
 (which can be accessed via the IpoptApplicationFactory method). By linking against the import library 
-you can use these DLLs from within any code compiled using the MSVC 2005/2008 and/or Intel compilers for the 
-Windows platform. 
-
-Note that the C++ interface to Ipopt provided by these DLLs will not work with MSVC 2010, due to some 
-incompatibility between the generated code for C++ sources by MSVC 2005/2008 and MSVC 2010. However, 
-to support compiling Ipopt using MSVC 2010, all Fortran-based sources are split off into a separate DLL 
-named IpoptFSS.dll. Hence, if you have MSVC 2010 but do not have a Fortran compiler, you can convert 
-just the Ipopt project proper to VS 2010 (skipping all the other projects), and simply link it against the 
-import library of IpoptFSS.dll. This will give you a working Ipopt version for MSVC 2010 without the 
-need to possess a Fortran 90 compiler.
+you can use these DLLs from within any code compiled using the MSVC 2005/2008/2010 and/or Intel compilers 
+for the Windows platform. 
 
 The DLLs include the MUMPS solver by default, and can dynamically load a separate DLL containing the 
 (non-free) HSL solvers if available. If you have access to the HSL solver sources, you have to compile 
@@ -34,4 +26,4 @@ effect or can even lead to slightly decreased performance.
 
 Author:  Marcel Roelofs (Marcel.Roelofs at aimms.com)
 	 Paragon Decision Technology 
-	 2012-01-07
+	 2012-01-09

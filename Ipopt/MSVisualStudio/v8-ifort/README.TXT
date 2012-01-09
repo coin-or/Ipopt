@@ -1,9 +1,14 @@
-This file describes how to use the Microsoft Visual Studio 2005 project files
-included in the subdirectories in order to compile a DLL version of Ipopt. 
-This DLL includes the BLAS, LAPACK and MUMPS solvers which can be freely
+This file describes how to use the Microsoft Visual Studio 2005 and 2010 
+project files included in the subdirectories in order to compile a DLL 
+version of Ipopt both for MSVC 2005 and 2010.
+
+These DLLs include the BLAS, LAPACK and MUMPS solvers which can be freely
 distributed. Alternatively, the solution contains a configuration where the 
 resulting DLL uses the (optimized, multi-threaded) Intel MKL versions of 
-the BLAS and LAPACK libraries rather than the netlib versions. 
+the BLAS and LAPACK libraries rather than the netlib versions. The current 
+configuration requires MSVC 2005 and the Intel Fortran compiler to compile
+the Fortran 90 sources of the MUMPS solver. However, the resulting code DLL 
+can be used both by MSVC 2005/2008 and MSVC 2010. 
 
 The non-free HSL and PARDISO solvers can be dynamically added at runtime by 
 compiling these solvers into separate DLLs that are dynamically loaded by the 
@@ -58,9 +63,6 @@ Here are the steps:
    
    Alternatively, you can use the C interface of Ipopt which is also exported by the DLL. 
 
-To compile using MSVC 2010 using just the MSVC 2010 C++ compiler, you can follow the instructions 
-in Ipopt\README-LIB.txt.
-
 Author:  Marcel Roelofs (Marcel.Roelofs at aimms.com)
 	 Paragon Decision Technology 
-	 2012-01-07
+	 2012-01-09
