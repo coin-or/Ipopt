@@ -19,9 +19,10 @@ libhsl using f2c and C++ (cf. the v8 MSVC project). All DLLs are statically link
 other runtime DLLs. 
  
 To use these DLLs, you need to add the include\coin directory to the include path of your MSVC project.
-In addition, you have to make sure that the Ipopt import library for your platform is added to list of 
-linker inputs of your project. To run your program, you have to copy the correct Ipopt DLL for your 
-platform and configuration to the directory where your executable is located. 
+In addition, you have to make sure that you have HAVE_CONFIG_H defined in your project, and that the Ipopt 
+import library for your platform is added to list of  linker inputs of your project. To run your program, 
+you have to copy the correct Ipopt DLL for your platform and configuration to the directory where your 
+executable is located. 
 
 Please note that the debug and release versions of the Ipopt DLL are *not* binary compatible, because 
 the MSVC compiler unfortunately treats std::string objects slightly differently in both configurations. 
