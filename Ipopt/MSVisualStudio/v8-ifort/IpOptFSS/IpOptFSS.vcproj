@@ -44,8 +44,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;../../../src/Algorithm;../../../src/Algorithm/Inexact;../../../src/Algorithm/LinearSolvers;../../../src/Common;../../../src/Contrib/CGPenalty;../../../src/Contrib/LinearSolverLoader;../../../src/Interfaces;../../../src/Linalg;../../../src/Linalg/TMatrices;../../../../Thirdparty/Mumps/MUMPS/libseq;../../../../Thirdparty/Mumps/MUMPS/include;../Ipopt"
-				PreprocessorDefinitions="IPOPT_DLL;WIN32;_DEBUG;_LIB;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS"
+				AdditionalIncludeDirectories=".;../../../src/Algorithm;../../../src/Algorithm/Inexact;../../../src/Algorithm/LinearSolvers;../../../src/Common;../../../src/Contrib/CGPenalty;../../../src/Contrib/LinearSolverLoader;../../../src/Interfaces;../../../src/Linalg;../../../src/Linalg/TMatrices;../../../../Thirdparty/Mumps/MUMPS/libseq;../../../../Thirdparty/Mumps/MUMPS/include;../Ipopt;../../../../BuildTools/headers"
+				PreprocessorDefinitions="IPOPT_BUILD;IPOPT_DLL;WIN32;_DEBUG;_LIB;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -65,7 +65,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\$(ProjectName)39.dll"
+				OutputFile="$(OutDir)\$(ProjectName).dll"
 				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\ia32&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\ia32\lib&quot;"
 				IgnoreDefaultLibraryNames="libcmt.lib"
 				ModuleDefinitionFile="IpoptFSS.def"
@@ -126,8 +126,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;../../../src/Algorithm;../../../src/Algorithm/Inexact;../../../src/Algorithm/LinearSolvers;../../../src/Common;../../../src/Contrib/CGPenalty;../../../src/Contrib/LinearSolverLoader;../../../src/Interfaces;../../../src/Linalg;../../../src/Linalg/TMatrices;../../../../Thirdparty/Mumps/MUMPS/libseq;../../../../Thirdparty/Mumps/MUMPS/include;../Ipopt"
-				PreprocessorDefinitions="IPOPT_DLL;WIN32;_DEBUG;_LIB;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS"
+				AdditionalIncludeDirectories=".;../../../src/Algorithm;../../../src/Algorithm/Inexact;../../../src/Algorithm/LinearSolvers;../../../src/Common;../../../src/Contrib/CGPenalty;../../../src/Contrib/LinearSolverLoader;../../../src/Interfaces;../../../src/Linalg;../../../src/Linalg/TMatrices;../../../../Thirdparty/Mumps/MUMPS/libseq;../../../../Thirdparty/Mumps/MUMPS/include;../Ipopt;../../../../BuildTools/headers"
+				PreprocessorDefinitions="IPOPT_BUILD;IPOPT_DLL;WIN32;_DEBUG;_LIB;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -147,7 +147,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\$(ProjectName)39.dll"
+				OutputFile="$(OutDir)\$(ProjectName).dll"
 				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\intel64&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\em64t\lib&quot;"
 				IgnoreDefaultLibraryNames="libcmt.lib"
 				ModuleDefinitionFile="IpoptFSS.def"
@@ -207,8 +207,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;../../../src/Algorithm;../../../src/Algorithm/Inexact;../../../src/Algorithm/LinearSolvers;../../../src/Common;../../../src/Contrib/CGPenalty;../../../src/Contrib/LinearSolverLoader;../../../src/Interfaces;../../../src/Linalg;../../../src/Linalg/TMatrices;../../../../Thirdparty/Mumps/MUMPS/libseq;../../../../Thirdparty/Mumps/MUMPS/include;../Ipopt"
-				PreprocessorDefinitions="IPOPT_DLL;WIN32;NDEBUG;_LIB;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS"
+				AdditionalIncludeDirectories=".;../../../src/Algorithm;../../../src/Algorithm/Inexact;../../../src/Algorithm/LinearSolvers;../../../src/Common;../../../src/Contrib/CGPenalty;../../../src/Contrib/LinearSolverLoader;../../../src/Interfaces;../../../src/Linalg;../../../src/Linalg/TMatrices;../../../../Thirdparty/Mumps/MUMPS/libseq;../../../../Thirdparty/Mumps/MUMPS/include;../Ipopt;../../../../BuildTools/headers"
+				PreprocessorDefinitions="IPOPT_BUILD;IPOPT_DLL;WIN32;NDEBUG;_LIB;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -227,7 +227,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				ShowProgress="0"
-				OutputFile="$(OutDir)\$(ProjectName)39.dll"
+				OutputFile="$(OutDir)\$(ProjectName).dll"
 				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\ia32&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\ia32\lib&quot;"
 				ModuleDefinitionFile="IpoptFSS.def"
 				GenerateDebugInformation="true"
@@ -287,8 +287,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;../../../src/Algorithm;../../../src/Algorithm/Inexact;../../../src/Algorithm/LinearSolvers;../../../src/Common;../../../src/Contrib/CGPenalty;../../../src/Contrib/LinearSolverLoader;../../../src/Interfaces;../../../src/Linalg;../../../src/Linalg/TMatrices;../../../../Thirdparty/Mumps/MUMPS/libseq;../../../../Thirdparty/Mumps/MUMPS/include;../Ipopt"
-				PreprocessorDefinitions="IPOPT_DLL;WIN32;NDEBUG;_LIB;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS"
+				AdditionalIncludeDirectories=".;../../../src/Algorithm;../../../src/Algorithm/Inexact;../../../src/Algorithm/LinearSolvers;../../../src/Common;../../../src/Contrib/CGPenalty;../../../src/Contrib/LinearSolverLoader;../../../src/Interfaces;../../../src/Linalg;../../../src/Linalg/TMatrices;../../../../Thirdparty/Mumps/MUMPS/libseq;../../../../Thirdparty/Mumps/MUMPS/include;../Ipopt;../../../../BuildTools/headers"
+				PreprocessorDefinitions="IPOPT_BUILD;IPOPT_DLL;WIN32;NDEBUG;_LIB;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -307,7 +307,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				ShowProgress="0"
-				OutputFile="$(OutDir)\$(ProjectName)39.dll"
+				OutputFile="$(OutDir)\$(ProjectName).dll"
 				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\intel64&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\em64t\lib&quot;"
 				ModuleDefinitionFile="IpoptFSS.def"
 				GenerateDebugInformation="true"
@@ -366,8 +366,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;../../../src/Algorithm;../../../src/Algorithm/Inexact;../../../src/Algorithm/LinearSolvers;../../../src/Common;../../../src/Contrib/CGPenalty;../../../src/Contrib/LinearSolverLoader;../../../src/Interfaces;../../../src/Linalg;../../../src/Linalg/TMatrices;../../../../Thirdparty/Mumps/MUMPS/libseq;../../../../Thirdparty/Mumps/MUMPS/include;../Ipopt"
-				PreprocessorDefinitions="IPOPT_DLL;WIN32;NDEBUG;_LIB;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS"
+				AdditionalIncludeDirectories=".;../../../src/Algorithm;../../../src/Algorithm/Inexact;../../../src/Algorithm/LinearSolvers;../../../src/Common;../../../src/Contrib/CGPenalty;../../../src/Contrib/LinearSolverLoader;../../../src/Interfaces;../../../src/Linalg;../../../src/Linalg/TMatrices;../../../../Thirdparty/Mumps/MUMPS/libseq;../../../../Thirdparty/Mumps/MUMPS/include;../Ipopt;../../../../BuildTools/headers"
+				PreprocessorDefinitions="IPOPT_BUILD;IPOPT_DLL;WIN32;NDEBUG;_LIB;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="0"
 				OpenMP="true"
 				UsePrecompiledHeader="0"
@@ -388,7 +388,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="mkl_intel_c.lib mkl_intel_thread.lib mkl_core.lib libiomp5mt.lib"
 				ShowProgress="0"
-				OutputFile="$(OutDir)\$(ProjectName)39.dll"
+				OutputFile="$(OutDir)\$(ProjectName).dll"
 				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\ia32&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\ia32\lib&quot;"
 				ModuleDefinitionFile="IpoptFSS.def"
 				GenerateDebugInformation="true"
@@ -450,8 +450,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;../../../src/Algorithm;../../../src/Algorithm/Inexact;../../../src/Algorithm/LinearSolvers;../../../src/Common;../../../src/Contrib/CGPenalty;../../../src/Contrib/LinearSolverLoader;../../../src/Interfaces;../../../src/Linalg;../../../src/Linalg/TMatrices;../../../../Thirdparty/Mumps/MUMPS/libseq;../../../../Thirdparty/Mumps/MUMPS/include;../Ipopt"
-				PreprocessorDefinitions="IPOPT_DLL;WIN32;NDEBUG;_LIB;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS"
+				AdditionalIncludeDirectories=".;../../../src/Algorithm;../../../src/Algorithm/Inexact;../../../src/Algorithm/LinearSolvers;../../../src/Common;../../../src/Contrib/CGPenalty;../../../src/Contrib/LinearSolverLoader;../../../src/Interfaces;../../../src/Linalg;../../../src/Linalg/TMatrices;../../../../Thirdparty/Mumps/MUMPS/libseq;../../../../Thirdparty/Mumps/MUMPS/include;../Ipopt;../../../../BuildTools/headers"
+				PreprocessorDefinitions="IPOPT_BUILD;IPOPT_DLL;WIN32;NDEBUG;_LIB;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -471,7 +471,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="mkl_intel_lp64.lib mkl_intel_thread.lib mkl_core.lib libiomp5mt.lib"
 				ShowProgress="0"
-				OutputFile="$(OutDir)\$(ProjectName)39.dll"
+				OutputFile="$(OutDir)\$(ProjectName).dll"
 				AdditionalLibraryDirectories="&quot;$(INTEL_COMPILER_PATH)\lib\intel64&quot;;&quot;$(INTEL_COMPILER_PATH)\mkl\em64t\lib&quot;"
 				ModuleDefinitionFile="IpoptFSS.def"
 				GenerateDebugInformation="true"
@@ -545,6 +545,60 @@
 			<File
 				RelativePath=".\IpOptFSS.rc"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCResourceCompilerTool"
+						PreprocessorDefinitions="_MSC_VER"
+						AdditionalIncludeDirectories="../IpOpt;../../../src/Common;../../../../BuildTools/headers"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCResourceCompilerTool"
+						PreprocessorDefinitions="_MSC_VER"
+						AdditionalIncludeDirectories="../IpOpt;../../../src/Common;../../../../BuildTools/headers"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCResourceCompilerTool"
+						PreprocessorDefinitions="_MSC_VER"
+						AdditionalIncludeDirectories="../IpOpt;../../../src/Common;../../../../BuildTools/headers"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCResourceCompilerTool"
+						PreprocessorDefinitions="_MSC_VER"
+						AdditionalIncludeDirectories="../IpOpt;../../../src/Common;../../../../BuildTools/headers"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release MKL|Win32"
+					>
+					<Tool
+						Name="VCResourceCompilerTool"
+						PreprocessorDefinitions="_MSC_VER"
+						AdditionalIncludeDirectories="../IpOpt;../../../src/Common;../../../../BuildTools/headers"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release MKL|x64"
+					>
+					<Tool
+						Name="VCResourceCompilerTool"
+						PreprocessorDefinitions="_MSC_VER"
+						AdditionalIncludeDirectories="../IpOpt;../../../src/Common;../../../../BuildTools/headers"
+					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<File

@@ -4,7 +4,8 @@ mkdir ..\include
 rmdir ..\include /s /q
 mkdir ..\include\coin
 copy ..\..\..\src\LinAlg\IpVector.hpp				..\include\coin /Y
-copy ..\..\..\MSVisualStudio\v8-ifort\IpOpt\config_ipopt.h      ..\include\coin /Y
+copy ..\..\..\src\Common\config_ipopt_default.h      			..\include\coin /Y
+copy ..\..\..\src\Common\config_ipopt_default.h      			..\include\coin\config_ipopt.h /Y
 copy ..\..\..\src\Interfaces\IpAlgTypes.hpp                     ..\include\coin /Y
 copy ..\..\..\src\Common\IpCachedResults.hpp                    ..\include\coin /Y
 copy ..\..\..\src\Common\IpDebug.hpp                            ..\include\coin /Y
