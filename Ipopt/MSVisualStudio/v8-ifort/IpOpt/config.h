@@ -15,6 +15,8 @@
 /* Define to 1 if Pardiso is available */
 #undef HAVE_PARDISO
 
+#define HAVE_CSTDDEF 1
+
 #define SHAREDLIBEXT ".dll"
 
 #define __str__(s) #s
