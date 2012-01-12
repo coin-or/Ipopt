@@ -19,6 +19,7 @@ Ipopt/MSVisualStudio/v8-ifort/IpOpt/ExportBinaries.bat -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt/IntelPaths.props -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt/IntelPaths.vsprops -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt/IpOpt-vc10.vcxproj -text
+Ipopt/MSVisualStudio/v8-ifort/IpOpt/IpOpt-vc10.vcxproj.filters -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt/IpOpt.icproj -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt/IpOpt.rc -text
 Ipopt/MSVisualStudio/v8-ifort/IpOpt/IpOpt.vcproj -text
