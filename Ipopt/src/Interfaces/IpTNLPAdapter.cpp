@@ -1969,11 +1969,19 @@ namespace Ipopt
       const DenseVector* dy_c = static_cast<const DenseVector*>(&y_c);
       DBG_ASSERT(dynamic_cast<const DenseVector*>(&y_c));
       DBG_ASSERT(!dy_c->IsHomogeneous());
-      const Number* values = dy_c->Values();
       Index n_c_no_fixed = y_c.Dim() - n_x_fixed_;
-      for (Index i=0; i<n_x_fixed_; i++) {
-        full_z_L[x_fixed_map_[i]] = Max(0., -values[n_c_no_fixed+i]);
-        full_z_U[x_fixed_map_[i]] = Max(0., values[n_c_no_fixed+i]);
+      if (!dy_c->IsHomogeneous()) {
+        const Number* values = dy_c->Values();
+        for (Index i=0; i<n_x_fixed_; i++) {
+          full_z_L[x_fixed_map_[i]] = Max(0., -values[n_c_no_fixed+i]);
+          full_z_U[x_fixed_map_[i]] = Max(0., values[n_c_no_fixed+i]);
+        }
+      } else {
+        double value = dy_c->Scalar();
+        for (Index i=0; i<n_x_fixed_; i++) {
+          full_z_L[x_fixed_map_[i]] = Max(0., -value);
+          full_z_U[x_fixed_map_[i]] = Max(0.,  value);
+        }
       }
     }
 
