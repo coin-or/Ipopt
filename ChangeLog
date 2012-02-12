@@ -2,6 +2,17 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2012-02-12 releases/3.10.2
+        - updates to HSL interface (by Jonathan Hogg):
+          - MC68 can now be loaded dynamically, too
+          - MA87 exploits built-in scaling
+          - MA87 can choose best ordering from AMD and Metis
+          - fix for return code of MA87 for singular matrices
+        - corrected computation of Upsilon (norm of step SQUARED)
+        - updates to MSVS v8-ifort project files and addition of vc10
+          project files (using vc8-generated IpoptFSS.dll) (by Marcel Roelofs)
+        - minor bugfixes, include updates in BuildTools
+
 2011-09-20 releases/3.10.1
         - include updates in BuildTools, including new ThirdParty/Metis
            (fix for URL to download Metis 4.0.3 release)

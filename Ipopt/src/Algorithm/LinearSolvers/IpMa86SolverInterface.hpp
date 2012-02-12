@@ -104,23 +104,28 @@ namespace Ipopt
   class Ma86SolverInterface: public SparseSymLinearSolverInterface
   {
   private:
+    enum order_opts {
+       ORDER_AUTO,
+       ORDER_AMD,
+       ORDER_METIS
+    };
+
     int ndim_; // Number of dimensions
     double *val_; // Storage for variables
     int numneg_; // Number of negative pivots in last factorization
     Index *order_; // Fill reducing permutation
     void *keep_; // Stores pointer to factors (only understood by Fortran code!)
     bool pivtol_changed_; // indicates if pivtol has been changed
-    double *scaling_; // Scaling factors
 
     /* Options */
     struct ma86_control control_;
     double umax_;
-    bool scale_;
+    int ordering_;
 
   public:
 
     Ma86SolverInterface() :
-        val_(NULL), pivtol_changed_(false), scaling_(NULL)
+        val_(NULL), pivtol_changed_(false)
     {}
     ~Ma86SolverInterface();
 

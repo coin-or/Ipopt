@@ -19,6 +19,8 @@
 
 #include "IpTNLP.hpp"               // ISA TNLP
 
+#include <assert.h>
+
 #include <R.h>
 #include <Rdefines.h>
 #include <R_ext/Utils.h>
