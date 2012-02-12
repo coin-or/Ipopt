@@ -38,7 +38,7 @@ namespace Ipopt
   {
     delete [] val_;
 
-    ma86_finalise(&keep_, &control_);
+    if(keep_) ma86_finalise(&keep_, &control_);
   }
 
   void Ma86SolverInterface::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
