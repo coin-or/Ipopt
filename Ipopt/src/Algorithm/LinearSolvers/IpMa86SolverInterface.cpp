@@ -92,10 +92,14 @@ namespace Ipopt
     roptions->AddStringOption3(
       "ma86_order",
       "Controls type of ordering used by HSL_MA86",
+#ifdef COINHSL_HAS_METIS
       "auto",
+#else
+      "amd",
+#endif
       "auto", "Try both AMD and MeTiS, pick best",
       "amd", "Use the HSL_MC68 approximate minimum degree algorithm",
-      "metis", "Use the MeTiS nested dissection algorithm",
+      "metis", "Use the MeTiS nested dissection algorithm (if available)",
       "This option controls ordering for the solver HSL_MA86.");
   }
 
