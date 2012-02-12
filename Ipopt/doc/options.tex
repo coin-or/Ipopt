@@ -1434,6 +1434,140 @@ $0 \le {\tt ma57\_small\_pivot\_flag } \le 1$
 and its default value is $0$.
 
 
+\subsection{MA77 Linear Solver}
+
+\paragraph{ma77\_print\_level:}\label{sec:ma77_print_level} Debug printing level for the linear solver MA77 $\;$ \\
+ Meep The valid range for this integer option is
+${\tt -inf} <  {\tt ma77\_print\_level } <  {\tt +inf}$
+and its default value is $0$.
+
+
+\paragraph{ma77\_buffer\_lpage:}\label{sec:ma77_buffer_lpage} Number of scalars per MA77 buffer page $\;$ \\
+ Number of scalars per an in-core buffer in the
+out-of-core solver MA77. Must be at most
+ma77\_file\_size. The valid range for this integer option is
+$1 \le {\tt ma77\_buffer\_lpage } <  {\tt +inf}$
+and its default value is $4096$.
+
+
+\paragraph{ma77\_buffer\_npage:}\label{sec:ma77_buffer_npage} Number of pages that make up MA77 buffer $\;$ \\
+ Number of pages of size buffer\_lpage that exist
+in-core for the out-of-core solver MA77. The valid range for this integer option is
+$1 \le {\tt ma77\_buffer\_npage } <  {\tt +inf}$
+and its default value is $1600$.
+
+
+\paragraph{ma77\_file\_size:}\label{sec:ma77_file_size} Target size of each temporary file for MA77, scalars per type $\;$ \\
+ MA77 uses many temporary files, this option
+controls the size of each one. It is measured in
+the number of entries (int or double), NOT bytes. The valid range for this integer option is
+$1 \le {\tt ma77\_file\_size } <  {\tt +inf}$
+and its default value is $2097152$.
+
+
+\paragraph{ma77\_maxstore:}\label{sec:ma77_maxstore} Maximum storage size for MA77 in-core mode $\;$ \\
+ If greater than zero, the maximum size of factors
+stored in core before out-of-core mode is invoked. The valid range for this integer option is
+$0 \le {\tt ma77\_maxstore } <  {\tt +inf}$
+and its default value is $0$.
+
+
+\paragraph{ma77\_nemin:}\label{sec:ma77_nemin} Node Amalgamation parameter $\;$ \\
+ Two nodes in elimination tree are merged if
+result has fewer than ma77\_nemin variables. The valid range for this integer option is
+$1 \le {\tt ma77\_nemin } <  {\tt +inf}$
+and its default value is $8$.
+
+
+\paragraph{ma77\_small:}\label{sec:ma77_small} Zero Pivot Threshold $\;$ \\
+ Any pivot less than ma77\_small is treated as
+zero. The valid range for this real option is 
+$0 \le {\tt ma77\_small } <  {\tt +inf}$
+and its default value is $1 \cdot 10^{-308}$.
+
+
+\paragraph{ma77\_static:}\label{sec:ma77_static} Static Pivoting Threshold $\;$ \\
+ See MA77 documentation. Either ma77\_static=0.0
+or ma77\_static>ma77\_small. ma77\_static=0.0
+disables static pivoting. The valid range for this real option is 
+$0 \le {\tt ma77\_static } <  {\tt +inf}$
+and its default value is $0$.
+
+
+\paragraph{ma77\_u:}\label{sec:ma77_u} Pivoting Threshold $\;$ \\
+ See MA77 documentation. The valid range for this real option is 
+$0 \le {\tt ma77\_u } \le 0.5$
+and its default value is $0.01$.
+
+
+\subsection{MA86 Linear Solver}
+
+\paragraph{ma86\_print\_level:}\label{sec:ma86_print_level} Debug printing level for the linear solver MA86 $\;$ \\
+ Meep The valid range for this integer option is
+${\tt -inf} <  {\tt ma86\_print\_level } <  {\tt +inf}$
+and its default value is $0$.
+
+
+\paragraph{ma86\_nemin:}\label{sec:ma86_nemin} Node Amalgamation parameter $\;$ \\
+ Two nodes in elimination tree are merged if
+result has fewer than ma86\_nemin variables. The valid range for this integer option is
+$1 \le {\tt ma86\_nemin } <  {\tt +inf}$
+and its default value is $32$.
+
+
+\paragraph{ma86\_order:}\label{sec:ma86_order} Controls type of ordering used by HSL\_MA86 $\;$ \\
+ This option controls ordering for the solver
+HSL\_MA86.
+The default value for this string option is "auto".
+\\ 
+Possible values:
+\begin{itemize}
+   \item auto: Try both AMD and MeTiS, pick best
+   \item amd: Use the HSL\_MC68 approximate minimum degree
+algorithm
+   \item metis: Use the MeTiS nested dissection algorithm (if
+available)
+\end{itemize}
+
+\paragraph{ma86\_scaling:}\label{sec:ma86_scaling} Controls scaling of matrix $\;$ \\
+ This option controls scaling for the solver
+HSL\_MA86.
+The default value for this string option is "mc64".
+\\ 
+Possible values:
+\begin{itemize}
+   \item none: Do not scale the linear system matrix
+   \item mc64: Scale linear system matrix using MC64
+   \item mc77: Scale linear system matrix using MC77 [1,3,0]
+\end{itemize}
+
+\paragraph{ma86\_small:}\label{sec:ma86_small} Zero Pivot Threshold $\;$ \\
+ Any pivot less than ma86\_small is treated as
+zero. The valid range for this real option is 
+$0 \le {\tt ma86\_small } <  {\tt +inf}$
+and its default value is $1 \cdot 10^{-20}$.
+
+
+\paragraph{ma86\_static:}\label{sec:ma86_static} Static Pivoting Threshold $\;$ \\
+ See MA86 documentation. Either ma86\_static=0.0
+or ma86\_static>ma86\_small. ma86\_static=0.0
+disables static pivoting. The valid range for this real option is 
+$0 \le {\tt ma86\_static } <  {\tt +inf}$
+and its default value is $0$.
+
+
+\paragraph{ma86\_u:}\label{sec:ma86_u} Pivoting Threshold $\;$ \\
+ See MA86 documentation. The valid range for this real option is 
+$0 \le {\tt ma86\_u } \le 0.5$
+and its default value is $1 \cdot 10^{-08}$.
+
+
+\paragraph{ma86\_umax:}\label{sec:ma86_umax} Maximum Pivoting Threshold $\;$ \\
+ See MA86 documentation. The valid range for this real option is 
+$0 \le {\tt ma86\_umax } \le 0.5$
+and its default value is $0.0001$.
+
+
 \subsection{MUMPS Linear Solver}
 
 \paragraph{mumps\_pivtol:}\label{sec:mumps_pivtol} Pivot tolerance for the linear solver MUMPS. $\;$ \\

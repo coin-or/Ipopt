@@ -424,6 +424,19 @@ namespace Ipopt
           options_to_print.push_back("ma77_u");
 #endif
 
+#if defined(COINHSL_HAS_MA86) || defined(HAVE_LINEARSOLVERLOADER)
+
+          options_to_print.push_back("#MA86 Linear Solver");
+          options_to_print.push_back("ma86_print_level");
+          options_to_print.push_back("ma86_nemin");
+          options_to_print.push_back("ma86_order");
+          options_to_print.push_back("ma86_scaling");
+          options_to_print.push_back("ma86_small");
+          options_to_print.push_back("ma86_static");
+          options_to_print.push_back("ma86_u");
+          options_to_print.push_back("ma86_umax");
+#endif
+
 #ifdef COIN_HAS_MUMPS
 
           options_to_print.push_back("#MUMPS Linear Solver");

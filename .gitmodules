@@ -17,7 +17,7 @@
 [submodule "ThirdParty/HSL"]
 	path = ThirdParty/HSL
 	url = git://github.com/coin-or-tools/ThirdParty-HSL.git
-	branch = master
+	branch = stable/1.4
 [submodule "ThirdParty/Blas"]
 	path = ThirdParty/Blas
 	url = git://github.com/coin-or-tools/ThirdParty-Blas.git

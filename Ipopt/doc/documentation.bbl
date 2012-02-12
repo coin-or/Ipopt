@@ -19,8 +19,7 @@ W.~Hock and K.~Schittkowski.
 \bibitem{NocWaeWal:adaptive}
 J.~Nocedal, A.~W{\"a}chter, and R.~A. Waltz.
 \newblock Adaptive barrier strategies for nonlinear interior methods.
-\newblock Technical Report RC 23563, IBM T.J. Watson Research Center, Yorktown
-  Heights, USA, March 2005.
+\newblock {\em SIAM Journal on Optimization}, 19(4):1674--1693, 2008.
 
 \bibitem{WaechterPhD}
 A.~W\"achter.
