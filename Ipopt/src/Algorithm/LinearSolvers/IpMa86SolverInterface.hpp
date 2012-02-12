@@ -125,7 +125,7 @@ namespace Ipopt
   public:
 
     Ma86SolverInterface() :
-        val_(NULL), pivtol_changed_(false)
+        val_(NULL), keep_(NULL), pivtol_changed_(false)
     {}
     ~Ma86SolverInterface();
 
