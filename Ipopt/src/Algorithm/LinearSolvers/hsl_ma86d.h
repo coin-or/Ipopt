@@ -61,6 +61,7 @@ struct ma86_control_d {
    ma86realtype_d_ static_;/* Control static pivoting*/
    ma86realtype_d_ u;      /* Pivot tolerance*/
    ma86realtype_d_ umin;   /* Minimum pivot tolerance*/
+   int scaling;            /* Scaling algorithm to use */
 };
 
 /***************************************************/

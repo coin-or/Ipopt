@@ -29333,9 +29333,9 @@ if test $coin_has_hsl = notGiven; then
 
 
 if test -n "$PKG_CONFIG" ; then
-  if $PKG_CONFIG --exists "coinhsl"; then
-    HSL_VERSIONS=`$PKG_CONFIG --modversion "coinhsl" 2>/dev/null | tr '\n' ' '`
-     cflags=`$PKG_CONFIG --cflags "coinhsl" 2>/dev/null`
+  if $PKG_CONFIG --exists "coinhsl >= 1.3"; then
+    HSL_VERSIONS=`$PKG_CONFIG --modversion "coinhsl >= 1.3" 2>/dev/null | tr '\n' ' '`
+     cflags=`$PKG_CONFIG --cflags "coinhsl >= 1.3" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
 	# but only do this if is not trivial
@@ -29344,8 +29344,8 @@ if test -n "$PKG_CONFIG" ; then
       cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
     fi
     HSL_CFLAGS="$cflags"
-    HSL_LIBS=`$PKG_CONFIG --libs "coinhsl" 2>/dev/null`
-    HSL_DATA=`$PKG_CONFIG --variable=datadir "coinhsl" 2>/dev/null`
+    HSL_LIBS=`$PKG_CONFIG --libs "coinhsl >= 1.3" 2>/dev/null`
+    HSL_DATA=`$PKG_CONFIG --variable=datadir "coinhsl >= 1.3" 2>/dev/null`
      coin_has_hsl=yes
         echo "$as_me:$LINENO: result: yes: $HSL_VERSIONS" >&5
 echo "${ECHO_T}yes: $HSL_VERSIONS" >&6
@@ -29356,18 +29356,18 @@ echo "${ECHO_T}yes: $HSL_VERSIONS" >&6
         then
           HSL_LIBS=`echo " $HSL_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
         fi
-        HSL_PCREQUIRES="coinhsl"
+        HSL_PCREQUIRES="coinhsl >= 1.3"
 
         # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in IpoptLib
 
-          IPOPTLIB_PCREQUIRES="coinhsl $IPOPTLIB_PCREQUIRES"
+          IPOPTLIB_PCREQUIRES="coinhsl >= 1.3 $IPOPTLIB_PCREQUIRES"
           IPOPTLIB_CFLAGS="$HSL_CFLAGS $IPOPTLIB_CFLAGS"
           IPOPTLIB_LIBS="$HSL_LIBS $IPOPTLIB_LIBS"
 
 
 
   else
-    HSL_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "coinhsl"`
+    HSL_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "coinhsl >= 1.3"`
       coin_has_hsl=notGiven
         echo "$as_me:$LINENO: result: not given: $HSL_PKG_ERRORS" >&5
 echo "${ECHO_T}not given: $HSL_PKG_ERRORS" >&6
@@ -29403,8 +29403,8 @@ HSL_DATA_INSTALLED=
 HSL_PCLIBS=
 HSL_PCREQUIRES=
 
-# initial list of dependencies is "coinhsl", but we need to filter out version number specifications (= x, <= x, >= x, != x)
-projtoprocess="coinhsl"
+# initial list of dependencies is "coinhsl >= 1.3", but we need to filter out version number specifications (= x, <= x, >= x, != x)
+projtoprocess="coinhsl "
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
 # further, we collect the list of corresponding .pc files, but do this in reverse order, because we need this order afterwards
@@ -29605,9 +29605,9 @@ _ACEOF
     HSL_LIBS_INSTALLED=`echo " $HSL_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g'`
   fi
 
-  HSL_PCREQUIRES="coinhsl"
+  HSL_PCREQUIRES="coinhsl >= 1.3"
 
-    IPOPTLIB_PCREQUIRES="coinhsl $IPOPTLIB_PCREQUIRES"
+    IPOPTLIB_PCREQUIRES="coinhsl >= 1.3 $IPOPTLIB_PCREQUIRES"
     IPOPTLIB_CFLAGS="$HSL_CFLAGS $IPOPTLIB_CFLAGS"
     IPOPTLIB_LIBS="$HSL_LIBS $IPOPTLIB_LIBS"
     IPOPTLIB_CFLAGS_INSTALLED="$HSL_CFLAGS_INSTALLED $IPOPTLIB_CFLAGS_INSTALLED"

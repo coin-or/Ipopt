@@ -400,7 +400,7 @@ namespace Ipopt
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT: Nu = ||A*u||^2/||A||^2 = %23.16e\n", Nu);
 
       // Compute Upsilon = ||u||^2 - Nu
-      Upsilon = u_norm_scaled - Nu;
+      Upsilon = u_norm_scaled*u_norm_scaled - Nu;
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT: Upsilon = ||u||^2 - ||A*u||^2/||A||^2 = %23.16e\n", Upsilon);
     }
 

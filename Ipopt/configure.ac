@@ -117,7 +117,7 @@ if test $coin_has_lapack != yes; then
 fi
 
 AC_COIN_CHECK_PACKAGE(ASL,   [coinasl],   [IpoptAmplInterfaceLib])
-AC_COIN_CHECK_PACKAGE(HSL,   [coinhsl],   [IpoptLib])
+AC_COIN_CHECK_PACKAGE(HSL,   [coinhsl >= 1.3],   [IpoptLib])
 AC_COIN_CHECK_PACKAGE(Mumps, [coinmumps], [IpoptLib])
 
 #############################################################################

@@ -1,0 +1,4 @@
+20 November 2011, version 0.8.3:
+
+	* Added #include <assert.h> to src/IpoptRNLP.hpp
+	
