@@ -21579,7 +21579,7 @@ if test "$coin_has_hsl" = notGiven; then
     # If a third argument is given, then we have to check if one one the files given in that third argument is present.
     # If none of the files in the third argument is available, then we consider the project directory as non-existing.
     # However, if no third argument is given, then this means that there should be no check, and existence of the directory is sufficient.
-    for i in $srcdir/ThirdParty/HSL/common/deps.f; do
+    for i in $srcdir/ThirdParty/HSL/coinhsl/common/deps.f; do
          if test -r $i; then
            coin_has_hsl="yes"
          else
