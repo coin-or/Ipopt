@@ -173,10 +173,10 @@ In order to build \Ipopt, some third party components are required:
 
   Currently, the following linear solvers can be used:
   \begin{itemize}
-  \item MA27 from the Harwell Subroutine Library\\ (see \url{http://www.hsl.rl.ac.uk}).
-  \item MA57 from the Harwell Subroutine Library\\ (see \url{http://www.hsl.rl.ac.uk}).
-  \item MA77 from the Harwell Subroutine Library\\ (see \url{http://www.hsl.rl.ac.uk}).
-  \item MA86 from the Harwell Subroutine Library\\ (see \url{http://www.hsl.rl.ac.uk}).
+  \item MA27 from the HSL Mathematical Software Library\\ (see \url{http://www.hsl.rl.ac.uk}).
+  \item MA57 from the HSL Mathematical Software Library\\ (see \url{http://www.hsl.rl.ac.uk}).
+  \item HSL\_MA77 from the HSL Mathematical Software Library\\ (see \url{http://www.hsl.rl.ac.uk}).
+  \item HSL\_MA86 from the HSL Mathematical Software Library\\ (see \url{http://www.hsl.rl.ac.uk}).
   \item MUMPS (MUltifrontal Massively Parallel sparse direct Solver)\\
     (see \url{http://graal.ens-lyon.fr/MUMPS})
   \item The Parallel Sparse Direct Solver (PARDISO)\\ (see \url{http://www.pardiso-project.org}).\\
@@ -188,7 +188,7 @@ In order to build \Ipopt, some third party components are required:
   to run \Ipopt, and if you want to be able to switch easily between
   different alternatives, you can compile \Ipopt\ with all of them.
 
-  The \Ipopt\ library also has mechanisms to load the MA27, MA57, MA86, and
+  The \Ipopt\ library also has mechanisms to load the MA27, MA57, HSL\_MA86, and
   Pardiso linear solvers from a shared library at runtime, if the
   library has not been compiled with them (see
   Section~\ref{sec:linear_solver_loader}).
@@ -202,8 +202,8 @@ In order to build \Ipopt, some third party components are required:
     Please keep this in mind, particularly when you are comparing
     \Ipopt\ with other optimization codes.}
 
-  If you are compiling MA57, MA86, or MUMPS within the \Ipopt\ build system,
-  you should also include the METIS linear system ordering package.
+  If you are compiling MA57, HSL\_MA86, or MUMPS within the \Ipopt\ build
+  system, you should also include the METIS linear system ordering package.
 
   Interfaces to other linear solvers might be added in the future; if
   you are interested in contributing such an interface please contact
@@ -211,7 +211,7 @@ In order to build \Ipopt, some third party components are required:
   provide the inertia (number of positive and negative eigenvalues) of
   the symmetric matrix that is factorized.
 
-\item Furthermore, \Ipopt\ can also use the Harwell Subroutine MC19
+\item Furthermore, \Ipopt\ can also use the HSL package MC19
   for scaling of the linear systems before they are passed to the
   linear solver.  This may be particularly useful if \Ipopt\ is used
   with MA27 or MA57.  However, it is not required to have MC19 to
@@ -480,7 +480,7 @@ the \texttt{INSTALL.*} files in the
 \texttt{\$IPOPTDIR/ThirdParty/ASL} directories for alternative
 instructions.
 
-\subsubsection{Download HSL Subroutines}  %TODO: needs update
+\subsubsection{Download HSL Subroutines}
 \Ipopt\ requires a sparse symmetric linear solver.  There are
 different possibilities.  {\bf It is important to keep in mind that usually
 the largest fraction of computation time in the optimizer is spent for
@@ -489,62 +489,63 @@ impacts \Ipopt's speed and robustness.  It might be worthwhile to try
 different linear solver to experiment with what is best for your
 application.}
 
-In this section we describe how to obtain the source code for MA27
-(and MC19) from the Harwell Subroutine Library (HSL) Archive.  Those
-routines are freely available for non-commercial, academic use, but it
-is your responsibility to investigate the licensing of all third party
-code.  (Since recently, also MA57 (the successor of MA27) is available
-for free for academic institutions, via the ``HSL 2007 for
-Researchers'' library, see below.)
+\vspace{0.1cm}
+\noindent
+There are two versions of HSL available:
+\vspace{-0.2cm}
+\begin{description}
+\item[HSL Archive] contains outdated codes that are freely available for
+personal commercial or non-com\-mer\-cial usage. Note that you may not,
+redistribute these codes in either source or binary form without purchasing a
+licence from the authors. This version includes both MA27 and MC19.
+\item[HSL 2011] contains more modern codes that are freely available for
+academic use only. This version includes the codes from the HSL Archive and additionally MA57, HSL\_MA77 and HSL\_MA86.
+\end{description}
 
 The use of alternative linear solvers is described in
-Sections~\ref{sec:MUMPS}-\ref{sec:WSMP}.  You do not necessarily
-have to use MA27 as described in this section, but at least one linear
-solver is required for \Ipopt\ to function.
+Sections~\ref{sec:MUMPS}--\ref{sec:WSMP}.  You do not necessarily
+have to use a HSL code such as MA27 as described in this section, but at least
+one linear solver is required for \Ipopt\ to function.
 
 \begin{enumerate}
-\item Go to \url{http://hsl.rl.ac.uk/archive/hslarchive.html}
-\item Follow the instruction on the website, read the license, and
-  submit the registration form.
-\item Go to \textit{HSL Archive Programs}, and find the package list.
-\item In your browser window, click on \textit{MA27}.
-\item Make sure that \textit{Double precision:} is checked. 
-  Click \textit{Download package (comments removed)}
-\item Save the file as {\tt ma27ad.f} in {\tt \$IPOPTDIR/ThirdParty/HSL/}\\
-  Note: Some browsers append a file extension ({\tt .txt}) when you save
-  the file, in which case you have to rename it.
-\item Go back to the package list using the back button of your browser.
-\item In your browser window, click on \textit{MC19}.
-\item Make sure \textit{Double precision:} is checked. Click 
-  \textit{Download package (comments removed)}
-\item Save the file as {\tt mc19ad.f} in {\tt
-    \$IPOPTDIR/ThirdParty/HSL/}\\
-  Note: Some browsers append a file extension ({\tt .txt}) when you save
-  the file, so you may have to rename it.
+\item Go to \url{http://hsl.rl.ac.uk/ipopt}.
+\item Choose whether to download either the Archive code or the HSL 2011
+   code. To download, select the relevant
+   ``source'' link.
+\item Follow the instructions on the website, read the license, and
+   submit the registration form.
+\item Wait for an email containing a download link (this should take no
+   more than one working day).
 \end{enumerate}
+
+\noindent
+You may either:
+\begin{itemize}
+   \item Compile the HSL code as part of \Ipopt. See the instructions below.
+   \item Compile the HSL code separately either before or after the \Ipopt\ code
+      and use the shared library loading mechanism. See the documentation
+      distributed with the HSL package for information on how to do so.
+\end{itemize}
+
+To compile the HSL code as part of \Ipopt, unpack the archive, then move and
+rename the resulting directory so that it becomes
+{\tt \$IPOPTDIR/ThirdParty/HSL/coinhsl}. \Ipopt\ may then be configured as
+normal.
 
 Note: Whereas it is essential to have at least one linear solver, the
 package MC19 could be omitted (with the consequence that you cannot
 use this method for scaling the linear systems arising inside the
 \Ipopt\ algorithm).  By default, MC19 is only used to scale the linear
-system when using one of the Harwell solvers, but it can also be
+system when using one of the HSL solvers, but it can also be
 switched on for other linear solvers (which usually have internal
 scaling mechanisms).
 
-Note: If you satisfy the conditions to use the HSL 2007 for
-Researchers library\\ (see
-\url{http://hsl.rl.ac.uk/hsl2007/hsl20074researchers.html}), you
-can download the MA57 in a way very similar to the procedure outlined
-above.  To have Ipopt compile it for you, you need to put the source
-code into a \emph{single} file called ma57ad.f (\emph{including all
-  dependencies!}) that is in the {\tt \$IPOPTDIR/ThirdParty/HSL/}
-directory. The \Ipopt\ configuration script will then find this file
-and compile it into the \Ipopt\ library (just as is would compile
-MA27).  MA57 will perform better with METIS, see
-Section~\ref{sec:METIS}.
+Note: If you are an academic or a student, we recommend you download the
+HSL 2011 package as this ensures you have access to the full range of solvers.
+MA57 can be considerably faster than MA27 on some problems.
 
 Yet another note: If you have a precompiled library containing the
-Harwell codes, you can specify the directory with the header files and
+HSL codes, you can specify the directory with the header files and
 the linker flags for this library with the \verb|--with-hsl-incdir| and
 \verb|--with-hsl-lib| flags for the {\tt configure} script described in
 Section~\ref{sec.comp_and_inst}.
@@ -583,8 +584,8 @@ symbols inside the MUMPS code are renamed.
 
 \subsubsection{Obtaining METIS}\label{sec:METIS}
 
-The linear solvers MA57, MA86, and MUMPS can make use of the matrix ordering
-algorithms implemented in METIS (see
+The linear solvers MA57, HSL\_MA86, and MUMPS can make use of the matrix
+ordering algorithms implemented in METIS (see
 \url{http://glaros.dtc.umn.edu/gkhome/metis/metis/overview}).  If
 you are using one of those linear solvers, you should obtain the METIS
 source code and put it into \texttt{\$IPOPTDIR/ThirdParty/Metis}.
@@ -599,6 +600,7 @@ Linear Solver (Pardiso), you need to obtain the Pardiso library for
 your operating system.  Information about Pardiso can be found at
 \url{http://www.pardiso-project.org}.
 
+% FIXME: This refers to an old version of the licence?
 You can obtain a free download for Pardiso if you want to use it for
 ``non-commercial and non-profit internal research purposes'' and are
 an ``academic, non-profit, or government agency'' (taken from the
@@ -646,7 +648,7 @@ configure your \Ipopt\ installation to work with WSMP.
 \subsubsection{Using the Linear Solver  Loader}\label{sec:linear_solver_loader}
 By default, \Ipopt\ will be compiled with a mechanism, the Linear
 Solver Loader, which can dynamically load shared libraries with MA27,
-MA57, MA86, MA97 or the Pardiso linear solver at runtime\footnote{This is not
+MA57, HSL\_MA86 or the Pardiso linear solver at runtime\footnote{This is not
   enabled if you compile Ipopt with the Developer Studio project files
   provided in the Ipopt distribution.  Further, if you have problems
   compiling this new feature, you can disable this by specifying
@@ -3461,7 +3463,7 @@ Below a few particular options are discussed:
   \Ipopt.
 
 \item Similarly, if you have a precompiled library containing the
-  Harwell Subroutines, you can specify the directory with the
+  HSL packages, you can specify the directory with the
   \texttt{CoinHslConfig.h} header file with the \verb|--with-hsl-incdir| flag and
   the linker flags with the \verb|--with-hsl-lib| flag. 
   Analogously, use \verb|--with-asl-incdir| and \verb|--with-asl-lib| for
