@@ -330,7 +330,7 @@ experience with \Ipopt. You might want to look at the archives before
 posting a question.  An easy way to search the archive with Google is
 to specify
 
-``\url{site:http://list.coin-or.org/pipermail/ipopt}''\\
+``\texttt{site:http://list.coin-or.org/pipermail/ipopt}''\\
 in addition to your keywords in the search string.
 
 We try to answer questions posted to the mailing list in a reasonable
@@ -429,8 +429,18 @@ which you are right now (output of \texttt{pwd}).
 \Ipopt\ uses a few external packages that are not included in the
 \Ipopt\ source code distribution, namely ASL (the AMPL Solver Library
 if you want to compile the Ipopt AMPL solver executable), Blas,
-Lapack.  It also requires at least one linear solver for symmetric
-indefinite matrices.
+Lapack.
+
+\Ipopt\ also requires at least one linear solver for sparse symmetric
+indefinite matrices. There are
+different possibilities, see Sections~\ref{sec:HSL}--\ref{sec:WSMP}.
+{\bf It is important to keep in mind that usually
+the largest fraction of computation time in the optimizer is spent for
+solving the linear system, and that your choice of the linear solver
+impacts \Ipopt's speed and robustness.  It might be worthwhile to try
+different linear solver to experiment with what is best for your
+application.}
+
 
 Since this third party software released under different licenses than
 \Ipopt, we cannot distribute that code together with the \Ipopt\
@@ -481,13 +491,7 @@ the \texttt{INSTALL.*} files in the
 instructions.
 
 \subsubsection{Download HSL Subroutines}
-\Ipopt\ requires a sparse symmetric linear solver.  There are
-different possibilities.  {\bf It is important to keep in mind that usually
-the largest fraction of computation time in the optimizer is spent for
-solving the linear system, and that your choice of the linear solver
-impacts \Ipopt's speed and robustness.  It might be worthwhile to try
-different linear solver to experiment with what is best for your
-application.}
+\label{sec:HSL}
 
 \vspace{0.1cm}
 \noindent
@@ -499,14 +503,14 @@ personal commercial or non-com\-mer\-cial usage. Note that you may not,
 redistribute these codes in either source or binary form without purchasing a
 licence from the authors. This version includes both MA27 and MC19.
 \item[HSL 2011] contains more modern codes that are freely available for
-academic use only. This version includes the codes from the HSL Archive and additionally MA57, HSL\_MA77 and HSL\_MA86.
+academic use only. This version includes the codes from the HSL Archive and additionally MA57, HSL\_MA77, and HSL\_MA86.
 \end{description}
 
-The use of alternative linear solvers is described in
-Sections~\ref{sec:MUMPS}--\ref{sec:WSMP}.  You do not necessarily
-have to use a HSL code such as MA27 as described in this section, but at least
-one linear solver is required for \Ipopt\ to function.
-
+% The use of alternative linear solvers is described in
+% Sections~\ref{sec:MUMPS}--\ref{sec:WSMP}.  You do not necessarily
+% have to use a HSL code such as MA27 as described in this section, but at least
+% one linear solver is required for \Ipopt\ to function.
+To obtain the HSL code, you can follow the following steps:
 \begin{enumerate}
 \item Go to \url{http://hsl.rl.ac.uk/ipopt}.
 \item Choose whether to download either the Archive code or the HSL 2011
@@ -582,17 +586,6 @@ using Ipopt within an MPI program together with MUMPS, the code will
 not run.  You will have to modified the MUMPS sources so that the MPI
 symbols inside the MUMPS code are renamed.
 
-\subsubsection{Obtaining METIS}\label{sec:METIS}
-
-The linear solvers MA57, HSL\_MA86, and MUMPS can make use of the matrix
-ordering algorithms implemented in METIS (see
-\url{http://glaros.dtc.umn.edu/gkhome/metis/metis/overview}).  If
-you are using one of those linear solvers, you should obtain the METIS
-source code and put it into \texttt{\$IPOPTDIR/ThirdParty/Metis}.
-Read the \texttt{INSTALL.Metis} file in that directory, and if you
-have the \texttt{wget} utility installed on your system, you can
-download the code by running the \texttt{./get.Metis} script.
-
 \subsubsection{Obtaining the Linear Solver Pardiso}\label{sec:Pardiso}
 
 If you would like to compile \Ipopt\ with the Parallel Sparse Direct
@@ -600,11 +593,10 @@ Linear Solver (Pardiso), you need to obtain the Pardiso library for
 your operating system.  Information about Pardiso can be found at
 \url{http://www.pardiso-project.org}.
 
-% FIXME: This refers to an old version of the licence?
-You can obtain a free download for Pardiso if you want to use it for
-``non-commercial and non-profit internal research purposes'' and are
-an ``academic, non-profit, or government agency'' (taken from the
-license agreement).  Instructions for this are on the above mentioned
+You can obtain a free evaluation license of Pardiso for
+``internal evaluation, examination and testing purposes''
+(taken from the license agreement) or buy an academic or commercial
+license. Instructions for this are on the above mentioned
 website; make sure you read the license agreement before filling out
 the download form.
 
@@ -623,21 +615,19 @@ system.  Information about WSMP can be found at
 \url{http://www.research.ibm.com/projects/wsmp}.
 %http://researcher.ibm.com/view_project.php?id=1426
 
-%TODO needs update, e.g., there is no license info on the webpage anymore...
-%At this website you can obtain a ``complimentary 90-day evaluation
-%license'' and download the library for several operating systems; make
-%sure you read the license agreement before downloading the code. 
-%Once you obtained the code and the license, please check if the version
-%number of the library matches the one on the WSMP website at
-%\url{http://researcher.ibm.com/view_project.php?id=1426}.
-%
-%If a newer version is announced on that website, you can (and
-%probably should) request the current version by sending a message to
-%\verb|wsmp@watson.ibm.com|.  Please include the operating system and
-%other details to describe which particular version of WSMP you need.
-%
-%You can use the bugfix releases with the license you obtained from
-%alphaWorks.
+At this website you can download the library for several operating systems
+including a trial license key for a few weeks that allows you to use WSMP
+for ``internal evaluation or testing purposes'' (taken from the license agreement);
+make sure you read the license agreement before downloading the library.
+Once you obtained the library and license, please check if the version
+number of the library matches the one on the WSMP website.
+
+If a newer version is announced on that website, you can (and
+probably should) request the current version by sending a message to
+\verb|wsmp@watson.ibm.com|.  Please include the operating system and
+other details to describe which particular version of WSMP you need.
+
+% You can use the bugfix releases with the license you obtained from alphaWorks.
 
 Note: Only the interface to the shared-memory version of WSMP is
 currently supported.
@@ -667,6 +657,21 @@ used with Pardiso), the names are \texttt{libhsl.dll} and \texttt{PATH}.
 The Pardiso shared library can be downloaded from the Pardiso website.
 To create a shared library containing the HSL linear solvers, read the
 instructions in \texttt{\$IPOPTDIR/ThirdParty/HSL/INSTALL.HSL}.
+
+\subsubsection{Obtaining METIS}\label{sec:METIS}
+
+The linear solvers MA57, HSL\_MA86, and MUMPS can make use of the matrix
+ordering algorithms implemented in METIS (see
+\url{http://glaros.dtc.umn.edu/gkhome/metis/metis/overview}).  If
+you are using one of those linear solvers, you should obtain the METIS
+source code and put it into \texttt{\$IPOPTDIR/ThirdParty/Metis}.
+Read the \texttt{INSTALL.Metis} file in that directory, and if you
+have the \texttt{wget} utility installed on your system, you can
+download the code by running the \texttt{./get.Metis} script.
+
+Note, that {\bf only the older Metis 4.x version\footnote{\url{http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/OLD/metis-4.0.3.tar.gz}} is supported} by
+MA57, HSL\_MA86, MUMPS, and the build system.
+The \texttt{./get.Metis} script takes care of downloading the right Metis version.
 
 \subsection{Compiling and Installing \Ipopt} \label{sec.comp_and_inst}
 
