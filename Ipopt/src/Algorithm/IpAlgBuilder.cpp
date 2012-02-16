@@ -158,7 +158,11 @@ namespace Ipopt
 #     ifdef COIN_HAS_MUMPS
       "mumps",
 #     else
-      "ma27",
+#      ifdef COINHSL_HAS_MA77
+       "ma77",
+#      else
+       "ma27",
+#      endif
 #     endif
 #    endif
 #   endif
@@ -339,10 +343,25 @@ namespace Ipopt
     }
     else if (linear_solver=="ma77") {
 #ifndef COINHSL_HAS_MA77
-      THROW_EXCEPTION(OPTION_INVALID, "Support for MA77 has not been compiled into Ipopt.");
+# ifdef HAVE_LINEARSOLVERLOADER
+      SolverInterface = new Ma77SolverInterface();
+      char buf[256];
+      int rc = LSL_loadHSL(NULL, buf, 255);
+      if (rc) {
+        std::string errmsg;
+        errmsg = "Selected linear solver HSL_MA77 not available.\nTried to obtain HSL_MA77 from shared library \"";
+        errmsg += LSL_HSLLibraryName();
+        errmsg += "\", but the following error occured:\n";
+        errmsg += buf;
+        THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
+      }
+# else
+      THROW_EXCEPTION(OPTION_INVALID, "Support for HSL_MA77 has not been compiled into Ipopt.");
+# endif
 #else
       SolverInterface = new Ma77SolverInterface();
 #endif
+
     }
     else if (linear_solver=="ma86") {
 #ifndef COINHSL_HAS_MA86

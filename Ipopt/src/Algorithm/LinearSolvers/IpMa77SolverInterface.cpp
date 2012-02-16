@@ -16,7 +16,7 @@
 #endif
 
 // if we do not have HSL_MA77 in HSL or the linear solver loader, then we want to build the MA77 interface
-#if defined(COINHSL_HAS_MA77) /*|| defined(HAVE_LINEARSOLVERLOADER)*/
+#if defined(COINHSL_HAS_MA77) || defined(HAVE_LINEARSOLVERLOADER)
 
 #include "IpMa77SolverInterface.hpp"
 #include <iostream>
