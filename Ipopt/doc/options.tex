@@ -1439,7 +1439,7 @@ and its default value is $0$.
 \paragraph{ma77\_print\_level:}\label{sec:ma77_print_level} Debug printing level for the linear solver MA77 $\;$ \\
  Meep The valid range for this integer option is
 ${\tt -inf} <  {\tt ma77\_print\_level } <  {\tt +inf}$
-and its default value is $0$.
+and its default value is $-1$.
 
 
 \paragraph{ma77\_buffer\_lpage:}\label{sec:ma77_buffer_lpage} Number of scalars per MA77 buffer page $\;$ \\
@@ -1483,7 +1483,7 @@ and its default value is $8$.
  Any pivot less than ma77\_small is treated as
 zero. The valid range for this real option is 
 $0 \le {\tt ma77\_small } <  {\tt +inf}$
-and its default value is $1 \cdot 10^{-308}$.
+and its default value is $1 \cdot 10^{-20}$.
 
 
 \paragraph{ma77\_static:}\label{sec:ma77_static} Static Pivoting Threshold $\;$ \\
@@ -1497,7 +1497,7 @@ and its default value is $0$.
 \paragraph{ma77\_u:}\label{sec:ma77_u} Pivoting Threshold $\;$ \\
  See MA77 documentation. The valid range for this real option is 
 $0 \le {\tt ma77\_u } \le 0.5$
-and its default value is $0.01$.
+and its default value is $1 \cdot 10^{-08}$.
 
 
 \subsection{MA86 Linear Solver}
@@ -1505,7 +1505,7 @@ and its default value is $0.01$.
 \paragraph{ma86\_print\_level:}\label{sec:ma86_print_level} Debug printing level for the linear solver MA86 $\;$ \\
  Meep The valid range for this integer option is
 ${\tt -inf} <  {\tt ma86\_print\_level } <  {\tt +inf}$
-and its default value is $0$.
+and its default value is $-1$.
 
 
 \paragraph{ma86\_nemin:}\label{sec:ma86_nemin} Node Amalgamation parameter $\;$ \\
@@ -1563,7 +1563,8 @@ and its default value is $1 \cdot 10^{-08}$.
 
 
 \paragraph{ma86\_umax:}\label{sec:ma86_umax} Maximum Pivoting Threshold $\;$ \\
- See MA86 documentation. The valid range for this real option is 
+ Maximum value to which u will be increased to
+improve quality. The valid range for this real option is 
 $0 \le {\tt ma86\_umax } \le 0.5$
 and its default value is $0.0001$.
 
