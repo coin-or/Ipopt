@@ -248,7 +248,7 @@ enum ApplicationReturnStatus IpoptSolve(
   // Create the original nlp
   SmartPtr<TNLP> tnlp;
 
-  bool skip_optimize = false;
+  Ipopt::ApplicationReturnStatus status;
   try {
     tnlp = new StdInterfaceTNLP(ipopt_problem->n, ipopt_problem->x_L,
                                 ipopt_problem->x_U, ipopt_problem->m,
@@ -267,18 +267,15 @@ enum ApplicationReturnStatus IpoptSolve(
                                 ipopt_problem->obj_scaling,
                                 ipopt_problem->x_scaling,
                                 ipopt_problem->g_scaling);
+    status = ipopt_problem->app->OptimizeTNLP(tnlp);
   }
   catch (INVALID_STDINTERFACE_NLP& exc) {
     exc.ReportException(*ipopt_problem->app->Jnlst(), J_ERROR);
-    skip_optimize = true;
-  }
-
-  Ipopt::ApplicationReturnStatus status;
-  if (!skip_optimize) {
-    status = ipopt_problem->app->OptimizeTNLP(tnlp);
-  }
-  else {
     status = Ipopt::Invalid_Problem_Definition;
+  }
+  catch( IpoptException& exc ) {
+    exc.ReportException(*ipopt_problem->app->Jnlst(), J_ERROR);
+    status = Ipopt::Unrecoverable_Exception;
   }
 
   delete [] start_x;
