@@ -60,9 +60,9 @@ namespace Ipopt
     DMUMPS_STRUC_C* mumps_ = new DMUMPS_STRUC_C;
     int argc=1;
     char ** argv = 0;
-    int myid, ierr;
-    ierr = MPI_Init(&argc, &argv);
-    ierr = MPI_Comm_rank(MPI_COMM_WORLD, &myid);
+    int myid;
+    MPI_Init(&argc, &argv);
+    MPI_Comm_rank(MPI_COMM_WORLD, &myid);
     mumps_->n = 0;
     mumps_->nz = 0;
     mumps_->a = NULL;
