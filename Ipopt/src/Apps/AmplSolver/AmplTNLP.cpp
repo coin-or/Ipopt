@@ -569,7 +569,7 @@ namespace Ipopt
       DBG_ASSERT(k==nele_hess);
       return true;
     }
-    else if (!iRow & !jCol && values) {
+    else if (!iRow && !jCol && values) {
       if (!apply_new_x(new_x, n, x)) {
         return false;
       }
