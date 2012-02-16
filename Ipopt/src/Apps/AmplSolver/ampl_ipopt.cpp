@@ -31,20 +31,20 @@
 # endif
 #endif
 
-int main(int argv, char**argc)
+int main(int argc, char**args)
 {
   using namespace Ipopt;
 
   SmartPtr<IpoptApplication> app = IpoptApplicationFactory();
 
   // Check if executable is run only to print out options documentation
-  if (argv == 2) {
+  if (argc == 2) {
     bool print_options = false;
     bool print_latex_options = false;
-    if (!strcmp(argc[1],"--print-options")) {
+    if (!strcmp(args[1],"--print-options")) {
       print_options = true;
     }
-    else if (!strcmp(argc[1],"--print-latex-options")) {
+    else if (!strcmp(args[1],"--print-latex-options")) {
       print_options = true;
       print_latex_options = true;
     }
@@ -81,7 +81,7 @@ int main(int argv, char**argc)
 
   SmartPtr<TNLP> ampl_tnlp = new AmplTNLP(ConstPtr(app->Jnlst()),
                                           app->Options(),
-                                          argc, suffix_handler);
+                                          args, suffix_handler);
 
   // Call Initialize again to process output related options
   retval = app->Initialize();
