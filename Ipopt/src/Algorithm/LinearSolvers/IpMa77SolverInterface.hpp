@@ -13,6 +13,10 @@
 
 #include "IpSparseSymLinearSolverInterface.hpp"
 
+extern "C" {
+#include "hsl_ma77d.h"
+}
+
 namespace Ipopt
 {
 
@@ -101,23 +105,18 @@ namespace Ipopt
     int ndim_; // Number of dimensions
     double *val_; // Storage for variables
     int numneg_; // Number of negative pivots in last factorization
+    void *keep_; // Stores pointer to factors (only understood by Fortran code!)
+    bool pivtol_changed_; // indicates if pivtol has been changed
 
     /* Options */
-    int icntl_[8];
-    double rcntl_[3];
-    int ma77_print_level_;
-    int ma77_buffer_lpage_;
-    int ma77_buffer_npage_;
-    int ma77_file_size_;
-    int ma77_maxstore_;
-    int ma77_nemin_;
-    double ma77_small_;
-    double ma77_static_;
-    double ma77_u_;
+    struct ma77_control control_;
+    double umax_;
 
   public:
 
-    Ma77SolverInterface() : val_(NULL) {}
+    Ma77SolverInterface() :
+        val_(NULL), keep_(NULL), pivtol_changed_(false)
+    {}
     ~Ma77SolverInterface();
 
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
@@ -134,8 +133,8 @@ namespace Ipopt
      *  determined by MatrixFormat.
      */
     ESymSolverStatus InitializeStructure(Index dim, Index nonzeros,
-        const Index* ia,
-        const Index* ja);
+                                         const Index* ia,
+                                         const Index* ja);
 
     /** Method returing an internal array into which the nonzero
      *  elements (in the same order as ja) will be stored by the
@@ -202,7 +201,7 @@ namespace Ipopt
      *  Returns false, if this is not possible (e.g. maximal pivot
      *  tolerance already used.)
      */
-    bool IncreaseQuality() { return false; }
+    bool IncreaseQuality();
 
     /** Query whether inertia is computed by linear solver.  Returns
      *  true, if linear solver provides inertia.
@@ -212,7 +211,7 @@ namespace Ipopt
     /** Query of requested matrix type that the linear solver
      *  understands.
      */
-    EMatrixFormat MatrixFormat() const { return CSR_Full_Format_1_Offset; }
+    EMatrixFormat MatrixFormat() const { return CSR_Full_Format_0_Offset; }
     //@}
 
     /** @name Methods related to the detection of linearly dependent
@@ -224,8 +223,11 @@ namespace Ipopt
     /** This method determines the list of row indices of the linearly
      *  dependent rows. */
     ESymSolverStatus DetermineDependentRows(const Index* ia,
-        const Index* ja,
-        std::list<Index>& c_deps) { return SYMSOLVER_FATAL_ERROR; }
+                                            const Index* ja,
+                                            std::list<Index>& c_deps)
+    {
+      return SYMSOLVER_FATAL_ERROR;
+    }
 
     /** Calls METIS_NodeND to obtain an ordering */
     static void MetisOrder(const int dim, const Index *ptr, const Index *row, Index *perm);
