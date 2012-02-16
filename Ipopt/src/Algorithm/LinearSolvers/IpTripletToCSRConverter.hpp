@@ -227,6 +227,9 @@ namespace Ipopt
     /** Number of nonzeros in the compressed format. */
     Index nonzeros_compressed_;
 
+    /** Number of repeated entries */
+    Index num_doubles_;
+
     /** Flag indicating if initialize method had been called. */
     bool initialized_;
 

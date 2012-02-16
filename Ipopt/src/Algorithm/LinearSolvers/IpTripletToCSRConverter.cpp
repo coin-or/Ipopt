@@ -212,6 +212,7 @@ namespace Ipopt
       }
       delete[] ipos_double_triplet_tmp;
       delete[] ipos_double_compressed_tmp;
+      num_doubles_ = nonzeros_triplet_ - nonzeros_compressed_;
     }
     else { // hf_==Full_Format
 
@@ -267,6 +268,7 @@ namespace Ipopt
 
       // Set nonzeros_compressed_ to correct size
       nonzeros_compressed_ = nonzeros_compressed_full;
+      num_doubles_ = idouble_full;
     }
 
     initialized_ = true;
@@ -302,7 +304,7 @@ namespace Ipopt
     for (Index i=0; i<nonzeros_compressed_; i++) {
       a_compressed[i] = a_triplet[ipos_first_[i]];
     }
-    for (Index i=0; i<nonzeros_triplet_-nonzeros_compressed_; i++) {
+    for (Index i=0; i<num_doubles_; i++) {
       a_compressed[ipos_double_compressed_[i]] +=
         a_triplet[ipos_double_triplet_[i]];
     }
