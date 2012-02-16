@@ -73,17 +73,6 @@ AC_COIN_PROG_F77
 # Find out how to call Fortran from C and determine Fortran runtime libraries
 AC_COIN_F77_WRAPPERS
 
-# Also set up the FC compiler variable, required to compile .f90
-# files.  We use the same compile and flags as F77 and FFLAGS, unless
-# the user has set FC and FCFLAGS explicitly.
-if test "$FC" = ""; then
-  FC="$F77"
-fi
-if test "$FCFLAGS" = ""; then
-  FCFLAGS="$FFLAGS"
-fi
-AC_PROG_FC
-
 # Initialize automake and libtool
 AC_COIN_INIT_AUTO_TOOLS
 
@@ -261,9 +250,8 @@ using namespace std;])
 ###########
 
 # some Fortran compilers do not allow preprocessor directives
-# so we check here whether the defines for MA28 and MA77 are set in CoinHslConfig.h
+# so we check here whether the define for MA28 is set in CoinHslConfig.h
 have_ma28=no
-have_ma77=no
 
 if test "$coin_has_hsl" = "yes" ; then
   AC_LANG_PUSH(C)
@@ -283,25 +271,11 @@ if test "$coin_has_hsl" = "yes" ; then
      have_ma28=yes],
     [AC_MSG_RESULT([no])])
 
-  AC_MSG_CHECKING([whether MA77 is available with HSL])
-  AC_PREPROC_IFELSE(
-    [AC_LANG_PROGRAM([
-#define HAVE_CONFIG_H
-#include "CoinHslConfig.h"
-#ifndef COINHSL_HAS_MA77
-#error "do not have MA77"
-#endif
-    ])],
-    [AC_MSG_RESULT([yes])
-     have_ma77=yes],
-    [AC_MSG_RESULT([no])])
-
   CPPFLAGS="$save_CPPFLAGS"
   AC_LANG_POP(C)
 fi
 
 AM_CONDITIONAL(HAVE_MA28, test $have_ma28 = yes)
-AM_CONDITIONAL(HAVE_MA77, test $have_ma77 = yes)
 
 ###########
 # PARDISO #
