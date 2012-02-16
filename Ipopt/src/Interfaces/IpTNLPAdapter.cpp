@@ -1968,7 +1968,6 @@ namespace Ipopt
     if (fixed_variable_treatment_==MAKE_CONSTRAINT && n_x_fixed_>0) {
       const DenseVector* dy_c = static_cast<const DenseVector*>(&y_c);
       DBG_ASSERT(dynamic_cast<const DenseVector*>(&y_c));
-      DBG_ASSERT(!dy_c->IsHomogeneous());
       Index n_c_no_fixed = y_c.Dim() - n_x_fixed_;
       if (!dy_c->IsHomogeneous()) {
         const Number* values = dy_c->Values();
