@@ -43,7 +43,7 @@ namespace Ipopt
     roptions->SetRegisteringCategory("MA57 Linear Solver");
     Ma57TSolverInterface::RegisterOptions(roptions);
 #endif
-#if defined(COINHSL_HAS_MA77)
+#if defined(COINHSL_HAS_MA77) || defined(HAVE_LINEARSOLVERLOADER)
     roptions->SetRegisteringCategory("MA77 Linear Solver");
     Ma77SolverInterface::RegisterOptions(roptions);
 #endif

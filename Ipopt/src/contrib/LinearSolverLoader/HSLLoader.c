@@ -17,6 +17,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "hsl_ma77d.h"
 #include "hsl_ma86d.h"
 #include "hsl_mc68i.h"
 
@@ -119,6 +120,50 @@ typedef void (*mc68_default_control_t)(struct mc68_control *control);
 typedef void (*mc68_order_t)(const int ord, const int n, const int ptr[],
    const int row[], int perm[], const struct mc68_control *control,
    struct mc68_info *info);
+
+typedef void (*ma77_default_control_t)(struct ma77_control_d *control);
+typedef void (*ma77_open_nelt_t)(const int n, const char* fname1, const char* fname2,
+   const char *fname3, const char *fname4, void **keep,
+   const struct ma77_control_d *control, struct ma77_info_d *info,
+   const int nelt);
+typedef void (*ma77_open_t)(const int n, const char* fname1, const char* fname2,
+   const char *fname3, const char *fname4, void **keep,
+   const struct ma77_control_d *control, struct ma77_info_d *info);
+typedef void (*ma77_input_vars_t)(const int idx, const int nvar, const int list[],
+   void **keep, const struct ma77_control_d *control, struct ma77_info_d *info);
+typedef void (*ma77_input_reals_t)(const int idx, const int length,
+   const ma77pkgtype_d_ reals[], void **keep, const struct ma77_control_d *control,
+   struct ma77_info_d *info);
+typedef void (*ma77_analyse_t)(const int order[], void **keep,
+   const struct ma77_control_d *control, struct ma77_info_d *info);
+typedef void (*ma77_factor_t)(const int posdef, void **keep, 
+   const struct ma77_control_d *control, struct ma77_info_d *info,
+   const ma77pkgtype_d_ *scale);
+typedef void (*ma77_factor_solve_t)(const int posdef, void **keep, 
+   const struct ma77_control_d *control, struct ma77_info_d *info,
+   const ma77pkgtype_d_ *scale, const int nrhs, const int lx,
+   ma77pkgtype_d_ rhs[]);
+typedef void (*ma77_solve_t)(const int job, const int nrhs, const int lx, ma77pkgtype_d_ x[],
+   void **keep, const struct ma77_control_d *control, struct ma77_info_d *info,
+   const ma77pkgtype_d_ *scale);
+typedef void (*ma77_resid_t)(const int nrhs, const int lx, const ma77pkgtype_d_ x[],
+   const int lresid, ma77pkgtype_d_ resid[], void **keep, 
+   const struct ma77_control_d *control, struct ma77_info_d *info,
+   ma77pkgtype_d_ *anorm_bnd);
+typedef void (*ma77_scale_t)(ma77pkgtype_d_ scale[], void **keep, 
+   const struct ma77_control_d *control, struct ma77_info_d *info,
+   ma77pkgtype_d_ *anorm);
+typedef void (*ma77_enquire_posdef_t)(ma77pkgtype_d_ d[], void **keep, 
+   const struct ma77_control_d *control, struct ma77_info_d *info);
+typedef void (*ma77_enquire_indef_t)(int piv_order[], ma77pkgtype_d_ d[], void **keep, 
+   const struct ma77_control_d *control, struct ma77_info_d *info);
+typedef void (*ma77_alter_t)(const ma77pkgtype_d_ d[], void **keep, 
+   const struct ma77_control_d *control, struct ma77_info_d *info);
+typedef void (*ma77_restart_t)(const char *restart_file, const char *fname1, 
+   const char *fname2, const char *fname3, const char *fname4, void **keep, 
+   const struct ma77_control_d *control, struct ma77_info_d *info);
+typedef void (*ma77_finalise_t)(void **keep, const struct ma77_control_d *control,
+   struct ma77_info_d *info);
 
 typedef void (*ma86_default_control_t)(struct ma86_control *control);
 typedef void (*ma86_analyse_t)(const int n, const int ptr[], const int row[],
@@ -313,6 +358,200 @@ void  F77_FUNC (ma57ed, MA57ED) (
 }
 #endif
 
+#ifndef COINHSL_HAS_MA77
+
+static ma77_default_control_t func_ma77_default_control = NULL;
+static ma77_open_nelt_t func_ma77_open_nelt = NULL;
+static ma77_open_t func_ma77_open = NULL;
+static ma77_input_vars_t func_ma77_input_vars = NULL;
+static ma77_input_reals_t func_ma77_input_reals = NULL;
+static ma77_analyse_t func_ma77_analyse = NULL;
+static ma77_factor_t func_ma77_factor = NULL;
+static ma77_factor_solve_t func_ma77_factor_solve = NULL;
+static ma77_solve_t func_ma77_solve = NULL;
+static ma77_resid_t func_ma77_resid = NULL;
+static ma77_scale_t func_ma77_scale = NULL;
+static ma77_enquire_posdef_t func_ma77_enquire_posdef = NULL;
+static ma77_enquire_indef_t func_ma77_enquire_indef = NULL;
+static ma77_alter_t func_ma77_alter = NULL;
+static ma77_restart_t func_ma77_restart = NULL;
+static ma77_finalise_t func_ma77_finalise = NULL;
+
+/* Initialise control with default values */
+void ma77_default_control(struct ma77_control_d *control) {
+  if (func_ma77_default_control==NULL) LSL_lateHSLLoad();
+  if (func_ma77_default_control==NULL) {
+    fprintf(stderr, "HSL routine ma77_default_control not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma77_default_control(control);
+}
+
+void ma77_open_nelt(const int n, const char* fname1, const char* fname2,
+   const char *fname3, const char *fname4, void **keep,
+   const struct ma77_control_d *control, struct ma77_info_d *info,
+   const int nelt) {
+  if (func_ma77_open_nelt==NULL) LSL_lateHSLLoad();
+  if (func_ma77_open_nelt==NULL) {
+    fprintf(stderr, "HSL routine ma77_open_nelt not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma77_open_nelt(n, fname1, fname2, fname3, fname4, keep, control, info, nelt);
+}
+
+void ma77_open(const int n, const char* fname1, const char* fname2,
+   const char *fname3, const char *fname4, void **keep,
+   const struct ma77_control_d *control, struct ma77_info_d *info) {
+  if (func_ma77_open==NULL) LSL_lateHSLLoad();
+  if (func_ma77_open==NULL) {
+    fprintf(stderr, "HSL routine ma77_open not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma77_open(n, fname1, fname2, fname3, fname4, keep, control, info);
+}
+
+void ma77_input_vars(const int idx, const int nvar, const int list[],
+   void **keep, const struct ma77_control_d *control, struct ma77_info_d *info) {
+  if (func_ma77_input_vars==NULL) LSL_lateHSLLoad();
+  if (func_ma77_input_vars==NULL) {
+    fprintf(stderr, "HSL routine ma77_input_vars not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma77_input_vars(idx, nvar, list, keep, control, info);
+}
+
+void ma77_input_reals(const int idx, const int length,
+   const ma77pkgtype_d_ reals[], void **keep, const struct ma77_control_d *control,
+   struct ma77_info_d *info) {
+  if (func_ma77_input_reals==NULL) LSL_lateHSLLoad();
+  if (func_ma77_input_reals==NULL) {
+    fprintf(stderr, "HSL routine ma77_input_reals not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma77_input_reals(idx, length, reals, keep, control, info);
+}
+
+void ma77_analyse(const int order[], void **keep,
+   const struct ma77_control_d *control, struct ma77_info_d *info) {
+  if (func_ma77_analyse==NULL) LSL_lateHSLLoad();
+  if (func_ma77_analyse==NULL) {
+    fprintf(stderr, "HSL routine ma77_analyse not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma77_analyse(order, keep, control, info);
+}
+
+void ma77_factor(const int posdef, void **keep, 
+   const struct ma77_control_d *control, struct ma77_info_d *info,
+   const ma77pkgtype_d_ *scale) {
+  if (func_ma77_factor==NULL) LSL_lateHSLLoad();
+  if (func_ma77_factor==NULL) {
+    fprintf(stderr, "HSL routine ma77_factor not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma77_factor(posdef, keep, control, info, scale);
+}
+
+void ma77_factor_solve(const int posdef, void **keep, 
+   const struct ma77_control_d *control, struct ma77_info_d *info,
+   const ma77pkgtype_d_ *scale, const int nrhs, const int lx,
+   ma77pkgtype_d_ rhs[]) {
+  if (func_ma77_factor_solve==NULL) LSL_lateHSLLoad();
+  if (func_ma77_factor_solve==NULL) {
+    fprintf(stderr, "HSL routine ma77_factor_solve not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma77_factor_solve(posdef, keep, control, info, scale, nrhs, lx, rhs);
+}
+
+void ma77_solve(const int job, const int nrhs, const int lx, ma77pkgtype_d_ x[],
+   void **keep, const struct ma77_control_d *control, struct ma77_info_d *info,
+   const ma77pkgtype_d_ *scale) {
+  if (func_ma77_solve==NULL) LSL_lateHSLLoad();
+  if (func_ma77_solve==NULL) {
+    fprintf(stderr, "HSL routine ma77_solve not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma77_solve(job, nrhs, lx, x, keep, control, info, scale);
+}
+
+void ma77_resid(const int nrhs, const int lx, const ma77pkgtype_d_ x[],
+   const int lresid, ma77pkgtype_d_ resid[], void **keep, 
+   const struct ma77_control_d *control, struct ma77_info_d *info,
+   ma77pkgtype_d_ *anorm_bnd) {
+  if (func_ma77_resid==NULL) LSL_lateHSLLoad();
+  if (func_ma77_resid==NULL) {
+    fprintf(stderr, "HSL routine ma77_resid not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma77_resid(nrhs, lx, x, lresid, resid, keep, control, info, anorm_bnd);
+}
+
+void ma77_scale(ma77pkgtype_d_ scale[], void **keep, 
+   const struct ma77_control_d *control, struct ma77_info_d *info,
+   ma77pkgtype_d_ *anorm) {
+  if (func_ma77_scale==NULL) LSL_lateHSLLoad();
+  if (func_ma77_scale==NULL) {
+    fprintf(stderr, "HSL routine ma77_scale not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma77_scale(scale, keep, control, info, anorm);
+}
+
+void ma77_enquire_posdef(ma77pkgtype_d_ d[], void **keep, 
+   const struct ma77_control_d *control, struct ma77_info_d *info) {
+  if (func_ma77_enquire_posdef==NULL) LSL_lateHSLLoad();
+  if (func_ma77_enquire_posdef==NULL) {
+    fprintf(stderr, "HSL routine ma77_enquire_posdef not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma77_enquire_posdef(d, keep, control, info);
+}
+
+void ma77_enquire_indef(int piv_order[], ma77pkgtype_d_ d[], void **keep, 
+   const struct ma77_control_d *control, struct ma77_info_d *info) {
+  if (func_ma77_enquire_indef==NULL) LSL_lateHSLLoad();
+  if (func_ma77_enquire_indef==NULL) {
+    fprintf(stderr, "HSL routine ma77_enquire_indef not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma77_enquire_indef(piv_order, d, keep, control, info);
+}
+
+void ma77_alter(const ma77pkgtype_d_ d[], void **keep, 
+   const struct ma77_control_d *control, struct ma77_info_d *info) {
+  if (func_ma77_alter==NULL) LSL_lateHSLLoad();
+  if (func_ma77_alter==NULL) {
+    fprintf(stderr, "HSL routine ma77_alter not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma77_alter(d, keep, control, info);
+}
+
+void ma77_restart(const char *restart_file, const char *fname1, 
+   const char *fname2, const char *fname3, const char *fname4, void **keep, 
+   const struct ma77_control_d *control, struct ma77_info_d *info) {
+  if (func_ma77_restart==NULL) LSL_lateHSLLoad();
+  if (func_ma77_restart==NULL) {
+    fprintf(stderr, "HSL routine ma77_restart not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma77_restart(restart_file, fname1, fname2, fname3, fname4, keep, control, info);
+}
+
+void ma77_finalise(void **keep, const struct ma77_control_d *control,
+   struct ma77_info_d *info) {
+  if (func_ma77_finalise==NULL) LSL_lateHSLLoad();
+  if (func_ma77_finalise==NULL) {
+    fprintf(stderr, "HSL routine ma77_finalise not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma77_finalise(keep, control, info);
+}
+
+#endif
+
+
 #ifndef COINHSL_HAS_MA86
 
 static ma86_default_control_t func_ma86_default_control=NULL;
@@ -460,6 +699,28 @@ int LSL_loadHSL(const char* libname, char* msgbuf, int msglen) {
   func_ma57ed=(ma57ed_t)LSL_loadSym(HSL_handle, "ma57ed", msgbuf, msglen);
 #endif
 
+#ifndef COINHSL_HAS_MA77
+#define LOADMA77SYM( sym ) \
+  func_##sym = (sym##_t)LSL_loadSym(HSL_handle, #sym"_d", msgbuf, msglen);
+
+  LOADMA77SYM(ma77_default_control)
+  LOADMA77SYM(ma77_open_nelt)
+  LOADMA77SYM(ma77_open)
+  LOADMA77SYM(ma77_input_vars)
+  LOADMA77SYM(ma77_input_reals)
+  LOADMA77SYM(ma77_analyse)
+  LOADMA77SYM(ma77_factor)
+  LOADMA77SYM(ma77_factor_solve)
+  LOADMA77SYM(ma77_solve)
+  LOADMA77SYM(ma77_resid)
+  LOADMA77SYM(ma77_scale)
+  LOADMA77SYM(ma77_enquire_posdef)
+  LOADMA77SYM(ma77_enquire_indef)
+  LOADMA77SYM(ma77_alter)
+  LOADMA77SYM(ma77_restart)
+  LOADMA77SYM(ma77_finalise)
+#endif
+
 #ifndef COINHSL_HAS_MA86
   func_ma86_default_control=(ma86_default_control_t)LSL_loadSym(HSL_handle, "ma86_default_control_d", msgbuf, msglen);
   func_ma86_analyse=(ma86_analyse_t)LSL_loadSym(HSL_handle, "ma86_analyse_d", msgbuf, msglen);
@@ -509,6 +770,25 @@ int LSL_unloadHSL() {
   func_ma57ed=NULL;
 #endif
 
+#ifndef COINHSL_HAS_MA77
+  func_ma77_default_control = NULL;
+  func_ma77_open_nelt = NULL;
+  func_ma77_open = NULL;
+  func_ma77_input_vars = NULL;
+  func_ma77_input_reals = NULL;
+  func_ma77_analyse = NULL;
+  func_ma77_factor = NULL;
+  func_ma77_factor_solve = NULL;
+  func_ma77_solve = NULL;
+  func_ma77_resid = NULL;
+  func_ma77_scale = NULL;
+  func_ma77_enquire_posdef = NULL;
+  func_ma77_enquire_indef = NULL;
+  func_ma77_alter = NULL;
+  func_ma77_restart = NULL;
+  func_ma77_finalise = NULL;
+#endif
+  
 #ifndef COINHSL_HAS_MA86
   func_ma86_default_control=NULL;
   func_ma86_analyse=NULL;
@@ -558,6 +838,14 @@ int LSL_isMA57available() {
 #endif
 }
 
+int LSL_isMA77available() {
+#ifndef COINHSL_HAS_MA86
+	return HSL_handle!=NULL && func_ma77_default_control!=NULL && func_ma77_open_nelt!=NULL && func_ma77_open!=NULL && func_ma77_input_vars!=NULL && func_ma77_input_reals!=NULL && func_ma77_analyse!=NULL && func_ma77_factor!=NULL && func_ma77_factor_solve!=NULL && func_ma77_solve!=NULL && func_ma77_resid!=NULL && func_ma77_scale!=NULL && func_ma77_enquire_posdef!=NULL && func_ma77_enquire_indef!=NULL && func_ma77_alter!=NULL && func_ma77_restart!=NULL && func_ma77_finalise!=NULL;
+#else
+	return 0;
+#endif
+}
+
 int LSL_isMA86available() {
 #ifndef COINHSL_HAS_MA86
 	return HSL_handle!=NULL && func_ma86_default_control!=NULL && func_ma86_analyse!=NULL && func_ma86_factor!=NULL && func_ma86_factor_solve!=NULL && func_ma86_solve!=NULL && func_ma86_finalise!=NULL;
@@ -565,7 +853,6 @@ int LSL_isMA86available() {
 	return 0;
 #endif
 }
-
 
 int LSL_isMC19available() {
 #ifndef COINHSL_HAS_MC19

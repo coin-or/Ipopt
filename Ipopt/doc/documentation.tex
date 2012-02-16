@@ -188,7 +188,7 @@ In order to build \Ipopt, some third party components are required:
   to run \Ipopt, and if you want to be able to switch easily between
   different alternatives, you can compile \Ipopt\ with all of them.
 
-  The \Ipopt\ library also has mechanisms to load the MA27, MA57, HSL\_MA86, and
+  The \Ipopt\ library also has mechanisms to load the MA27, MA57, HSL\_MA77, HSL\_MA86, and
   Pardiso linear solvers from a shared library at runtime, if the
   library has not been compiled with them (see
   Section~\ref{sec:linear_solver_loader}).
@@ -202,7 +202,7 @@ In order to build \Ipopt, some third party components are required:
     Please keep this in mind, particularly when you are comparing
     \Ipopt\ with other optimization codes.}
 
-  If you are compiling MA57, HSL\_MA86, or MUMPS within the \Ipopt\ build
+  If you are compiling MA57, HSL\_MA77, HSL\_MA86, or MUMPS within the \Ipopt\ build
   system, you should also include the METIS linear system ordering package.
 
   Interfaces to other linear solvers might be added in the future; if
@@ -638,7 +638,7 @@ configure your \Ipopt\ installation to work with WSMP.
 \subsubsection{Using the Linear Solver  Loader}\label{sec:linear_solver_loader}
 By default, \Ipopt\ will be compiled with a mechanism, the Linear
 Solver Loader, which can dynamically load shared libraries with MA27,
-MA57, HSL\_MA86 or the Pardiso linear solver at runtime\footnote{This is not
+MA57, HSL\_MA77, HSL\_MA86 or the Pardiso linear solver at runtime\footnote{This is not
   enabled if you compile Ipopt with the Developer Studio project files
   provided in the Ipopt distribution.  Further, if you have problems
   compiling this new feature, you can disable this by specifying
@@ -660,7 +660,7 @@ instructions in \texttt{\$IPOPTDIR/ThirdParty/HSL/INSTALL.HSL}.
 
 \subsubsection{Obtaining METIS}\label{sec:METIS}
 
-The linear solvers MA57, HSL\_MA86, and MUMPS can make use of the matrix
+The linear solvers MA57, HSL\_MA77, HSL\_MA86, and MUMPS can make use of the matrix
 ordering algorithms implemented in METIS (see
 \url{http://glaros.dtc.umn.edu/gkhome/metis/metis/overview}).  If
 you are using one of those linear solvers, you should obtain the METIS
@@ -670,7 +670,7 @@ have the \texttt{wget} utility installed on your system, you can
 download the code by running the \texttt{./get.Metis} script.
 
 Note, that {\bf only the older Metis 4.x version\footnote{\url{http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/OLD/metis-4.0.3.tar.gz}} is supported} by
-MA57, HSL\_MA86, MUMPS, and the build system.
+MA57, HSL\_MA77, HSL\_MA86, MUMPS, and the build system.
 The \texttt{./get.Metis} script takes care of downloading the right Metis version.
 
 \subsection{Compiling and Installing \Ipopt} \label{sec.comp_and_inst}
