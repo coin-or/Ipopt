@@ -46,7 +46,7 @@ namespace Ipopt
     roptions->AddIntegerOption(
       "ma86_print_level",
       "Debug printing level for the linear solver MA86",
-      0,
+      -1,
       "Meep");
     /*
     "<0 no printing.\n"
@@ -80,7 +80,7 @@ namespace Ipopt
       "ma86_umax",
       "Maximum Pivoting Threshold",
       0.0, false, 0.5, false, 1e-4,
-      "See MA86 documentation.");
+      "Maximum value to which u will be increased to improve quality.");
     roptions->AddStringOption3(
       "ma86_scaling",
       "Controls scaling of matrix",
@@ -117,7 +117,7 @@ namespace Ipopt
     options.GetNumericValue("ma86_small", control_.small_, prefix);
     options.GetNumericValue("ma86_static", control_.static_, prefix);
     options.GetNumericValue("ma86_u", control_.u, prefix);
-    options.GetNumericValue("ma86_u", umax_, prefix);
+    options.GetNumericValue("ma86_umax", umax_, prefix);
     std::string order_method, scaling_method;
     options.GetStringValue("ma86_order", order_method, prefix);
     if(order_method == "metis") {
@@ -265,6 +265,7 @@ namespace Ipopt
     struct ma86_info info;
 
     if (new_matrix || pivtol_changed_) {
+
 
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemFactorization().Start();
