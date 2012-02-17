@@ -275,7 +275,11 @@ namespace Ipopt
 
       // Note that MeTiS's iperm is our perm and vice-versa
       Index *iperm = new Index[ndim];
+#ifdef COINHSL_HAS_METIS
       METIS_NodeND(&ndim_nc, ptr_tmp, row_tmp, &numflag, options, iperm, perm);
+#else
+      std::cerr << "MA77 interface did not know at compile time whether Metis is available and thus assumed it isn't. This need to be fixed.\n";
+#endif
       delete[] iperm;
       delete[] row_tmp;
       delete[] ptr_tmp;
