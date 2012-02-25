@@ -118,6 +118,12 @@ namespace Ipopt
                      "Either remove the integer variables, or change the flag in the constructor of AmplTNLP"
                     );
 
+    if (n_cc != 0) {
+      jnlst_->Printf(J_ERROR, J_MAIN, "\n\n***** Currently, the AMPL interface to Ipopt does not support\n      complementarity constraints.  Aborting. *****\n\n");
+      ASSERT_EXCEPTION(n_cc == 0, IpoptException,
+		       "Currently, the AMPL interface to Ipopt does not support complementarity constraints.");
+    }
+
     DBG_ASSERT(nlo == 0 || nlo == 1); // Can handle nonlinear obj.
     DBG_ASSERT(nwv == 0); // Don't know what "linear arc" variables are
     DBG_ASSERT(nlnc == 0); // Don't know what "nonlinear network"constraints are
