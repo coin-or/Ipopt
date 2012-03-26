@@ -75,9 +75,11 @@ bool ParametricTNLP::get_starting_point(Index n, bool init_x, Number* x,
 					Index m, bool init_lambda,
 					Number* lambda)
 {
-  for (Index k=0; k<n; ++k) {
-    x[k] = 5.0;
-  }
+  x[0] = 0.15;
+  x[1] = 0.15;
+  x[2] = 0.0;
+  x[3] = 0.0;
+  x[4] = 0.0;
 
   return true;
 }
