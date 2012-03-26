@@ -74,7 +74,7 @@ namespace Ipopt
 
     std::vector<Index> retval;
     for (Index i = 0; i<constr_metadata.size(); ++i) {
-      if (constr_metadata[i]>0) {
+      if (constr_metadata[i]!=0) {
 	retval.push_back(n_base+i);
       }
     }
