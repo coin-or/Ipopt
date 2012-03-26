@@ -15,9 +15,9 @@ using namespace Ipopt;
 
 /* Constructor */
 ParametricTNLP::ParametricTNLP() :
-  nominal_eta1_(4.5),
+  nominal_eta1_(5.0),
   nominal_eta2_(1.0),
-  eta_1_perturbed_value_(4.0),
+  eta_1_perturbed_value_(4.5),
   eta_2_perturbed_value_(1.0)
 {
 }

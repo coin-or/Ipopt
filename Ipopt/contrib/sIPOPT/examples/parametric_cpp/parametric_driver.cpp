@@ -49,7 +49,17 @@ int main(int argv, char**argc)
   /* give pointers to Ipopt algorithm objects to Sens Application */
   app_sens->SetIpoptAlgorithmObjects(app_ipopt, retval);
 
+  printf("\n");
+  printf("#-------------------------------------------\n");
+  printf("# Sensitivity without bound checking\n");
+  printf("#-------------------------------------------\n");
   app_sens->Run();
 
+  printf("\n");
+  printf("#-------------------------------------------\n");
+  printf("# Sensitivity with bound checking\n");
+  printf("#-------------------------------------------\n");
+  app_ipopt->Options()->SetStringValue("sens_boundcheck", "yes");
+  app_sens->Run();
 
 }

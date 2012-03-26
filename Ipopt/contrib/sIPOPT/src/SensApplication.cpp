@@ -142,6 +142,12 @@ namespace Ipopt
     bool sens_internal_abort, redhess_internal_abort;
     Options()->GetBoolValue("sens_internal_abort", sens_internal_abort, "");
     Options()->GetBoolValue("redhess_internal_abort", redhess_internal_abort, "");
+    if (run_sens_ && sens_internal_abort) {
+      jnlst_->Printf(J_WARNING, J_MAIN, "\n\t--------------= Warning =--------------\nInternal abort has been called for the sensitivity calculations.\n");
+    }
+    if (compute_red_hessian_ && redhess_internal_abort) {
+      jnlst_->Printf(J_WARNING, J_MAIN, "\n\t--------------= Warning =--------------\nInternal abort has been called for the sensitivity calculations.\n");
+    }
 
     SolverReturn status = AppReturn2SolverReturn(ipopt_retval_);
 
@@ -192,7 +198,7 @@ namespace Ipopt
       if (n_sens_steps_<=0) {
 	jnlst_->Printf(J_WARNING, J_MAIN, "\n"
 		       "The run_sens option was set to true, but the specified\n"
-		       "number of advanced steps was set to zero.\n"
+		       "number of sensitivity steps was set to zero.\n"
 		       "Computation is aborted.\n\n");
       }
     }
