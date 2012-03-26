@@ -47,7 +47,7 @@ let eta2.sens_state_1 := 2;
 let eta2.sens_state_value_1 := perturbed_eta2;
 
 let consteta1.sens_init_constr := 1;
-let consteta2.sens_init_constr := 2;
+let consteta2.sens_init_constr := 1;
 
 solve;
 print "";
