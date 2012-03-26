@@ -160,7 +160,6 @@ Ipopt/contrib/sIPOPT/examples/hicks_ampl/hicks.mod -text
 Ipopt/contrib/sIPOPT/examples/hicks_ampl/hicks.run -text
 Ipopt/contrib/sIPOPT/examples/hicks_ampl/ipopt.opt -text
 Ipopt/contrib/sIPOPT/examples/hicks_ampl/nmpcresults.inc -text
-Ipopt/contrib/sIPOPT/examples/parametric_ampl/ipopt.opt -text
 Ipopt/contrib/sIPOPT/examples/parametric_ampl/parametric.mod -text
 Ipopt/contrib/sIPOPT/examples/parametric_ampl/parametric.run -text
 Ipopt/contrib/sIPOPT/examples/redhess_ampl/red_hess.run -text
