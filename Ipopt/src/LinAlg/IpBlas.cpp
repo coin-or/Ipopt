@@ -9,6 +9,8 @@
 #include "IpoptConfig.h"
 #include "IpBlas.hpp"
 
+#include <cstring>
+
 // Prototypes for the BLAS routines
 extern "C"
 {
@@ -64,9 +66,21 @@ namespace Ipopt
   Number IpBlasDdot(Index size, const Number *x, Index incX, const Number *y,
                     Index incY)
   {
-    ipfint n=size, INCX=incX, INCY=incY;
+    if (incX > 0 && incY > 0)
+    {
+      ipfint n=size, INCX=incX, INCY=incY;
 
-    return F77_FUNC(ddot,DDOT)(&n, x, &INCX, y, &INCY);
+      return F77_FUNC(ddot,DDOT)(&n, x, &INCX, y, &INCY);
+    }
+    else
+    {
+      Number s = 0.0;
+
+      for (; size; --size, x += incX, y += incY)
+        s += *x * *y;
+
+      return s;
+    }
   }
 
   /* Interface to FORTRAN routine DNRM2. */
@@ -96,18 +110,44 @@ namespace Ipopt
   /* Interface to FORTRAN routine DCOPY. */
   void IpBlasDcopy(Index size, const Number *x, Index incX, Number *y, Index incY)
   {
-    ipfint N=size, INCX=incX, INCY=incY;
+    if (incX > 0)
+    {
+      ipfint N=size, INCX=incX, INCY=incY;
 
-    F77_FUNC(dcopy,DCOPY)(&N, x, &INCX, y, &INCY);
+      F77_FUNC(dcopy,DCOPY)(&N, x, &INCX, y, &INCY);
+    }
+    else if (incY == 1)
+    {
+      for (; size; --size, ++y)
+        *y = *x;
+    }
+    else
+    {
+      for (; size; --size, y += incY)
+        *y = *x;
+    }
   }
 
   /* Interface to FORTRAN routine DAXPY. */
   void IpBlasDaxpy(Index size, Number alpha, const Number *x, Index incX, Number *y,
                    Index incY)
   {
-    ipfint N=size, INCX=incX, INCY=incY;
+    if (incX > 0)
+    {
+      ipfint N=size, INCX=incX, INCY=incY;
 
-    F77_FUNC(daxpy,DAXPY)(&N, &alpha, x, &INCX, y, &INCY);
+      F77_FUNC(daxpy,DAXPY)(&N, &alpha, x, &INCX, y, &INCY);
+    }
+    else if (incY == 1)
+    {
+      for (; size; --size, ++y)
+        *y += alpha * *x;
+    }
+    else
+    {
+      for (; size; --size, y += incY)
+        *y += alpha * *x;
+    }
   }
 
   /* Interface to FORTRAN routine DSCAL. */
