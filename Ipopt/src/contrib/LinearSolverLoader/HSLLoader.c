@@ -839,7 +839,7 @@ int LSL_isMA57available() {
 }
 
 int LSL_isMA77available() {
-#ifndef COINHSL_HAS_MA86
+#ifndef COINHSL_HAS_MA77
 	return HSL_handle!=NULL && func_ma77_default_control!=NULL && func_ma77_open_nelt!=NULL && func_ma77_open!=NULL && func_ma77_input_vars!=NULL && func_ma77_input_reals!=NULL && func_ma77_analyse!=NULL && func_ma77_factor!=NULL && func_ma77_factor_solve!=NULL && func_ma77_solve!=NULL && func_ma77_resid!=NULL && func_ma77_scale!=NULL && func_ma77_enquire_posdef!=NULL && func_ma77_enquire_indef!=NULL && func_ma77_alter!=NULL && func_ma77_restart!=NULL && func_ma77_finalise!=NULL;
 #else
 	return 0;
