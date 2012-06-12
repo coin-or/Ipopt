@@ -301,15 +301,17 @@ namespace Ipopt
 #ifndef COINHSL_HAS_MA27
 # ifdef HAVE_LINEARSOLVERLOADER
       SolverInterface = new Ma27TSolverInterface();
-      char buf[256];
-      int rc = LSL_loadHSL(NULL, buf, 255);
-      if (rc) {
-        std::string errmsg;
-        errmsg = "Selected linear solver MA27 not available.\nTried to obtain MA27 from shared library \"";
-        errmsg += LSL_HSLLibraryName();
-        errmsg += "\", but the following error occured:\n";
-        errmsg += buf;
-        THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
+      if (!LSL_isMA27available()) {
+        char buf[256];
+        int rc = LSL_loadHSL(NULL, buf, 255);
+        if (rc) {
+          std::string errmsg;
+          errmsg = "Selected linear solver MA27 not available.\nTried to obtain MA27 from shared library \"";
+          errmsg += LSL_HSLLibraryName();
+          errmsg += "\", but the following error occured:\n";
+          errmsg += buf;
+          THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
+        }
       }
 # else
       THROW_EXCEPTION(OPTION_INVALID, "Support for MA27 has not been compiled into Ipopt.");
@@ -323,15 +325,17 @@ namespace Ipopt
 #ifndef COINHSL_HAS_MA57
 # ifdef HAVE_LINEARSOLVERLOADER
       SolverInterface = new Ma57TSolverInterface();
-      char buf[256];
-      int rc = LSL_loadHSL(NULL, buf, 255);
-      if (rc) {
-        std::string errmsg;
-        errmsg = "Selected linear solver MA57 not available.\nTried to obtain MA57 from shared library \"";
-        errmsg += LSL_HSLLibraryName();
-        errmsg += "\", but the following error occured:\n";
-        errmsg += buf;
-        THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
+      if (!LSL_isMA57available()) {
+        char buf[256];
+        int rc = LSL_loadHSL(NULL, buf, 255);
+        if (rc) {
+          std::string errmsg;
+          errmsg = "Selected linear solver MA57 not available.\nTried to obtain MA57 from shared library \"";
+          errmsg += LSL_HSLLibraryName();
+          errmsg += "\", but the following error occured:\n";
+          errmsg += buf;
+          THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
+        }
       }
 # else
       THROW_EXCEPTION(OPTION_INVALID, "Support for MA57 has not been compiled into Ipopt.");
@@ -345,15 +349,17 @@ namespace Ipopt
 #ifndef COINHSL_HAS_MA77
 # ifdef HAVE_LINEARSOLVERLOADER
       SolverInterface = new Ma77SolverInterface();
-      char buf[256];
-      int rc = LSL_loadHSL(NULL, buf, 255);
-      if (rc) {
-        std::string errmsg;
-        errmsg = "Selected linear solver HSL_MA77 not available.\nTried to obtain HSL_MA77 from shared library \"";
-        errmsg += LSL_HSLLibraryName();
-        errmsg += "\", but the following error occured:\n";
-        errmsg += buf;
-        THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
+      if (!LSL_isMA77available()) {
+        char buf[256];
+        int rc = LSL_loadHSL(NULL, buf, 255);
+        if (rc) {
+          std::string errmsg;
+          errmsg = "Selected linear solver HSL_MA77 not available.\nTried to obtain HSL_MA77 from shared library \"";
+          errmsg += LSL_HSLLibraryName();
+          errmsg += "\", but the following error occured:\n";
+          errmsg += buf;
+          THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
+        }
       }
 # else
       THROW_EXCEPTION(OPTION_INVALID, "Support for HSL_MA77 has not been compiled into Ipopt.");
@@ -367,15 +373,17 @@ namespace Ipopt
 #ifndef COINHSL_HAS_MA86
 # ifdef HAVE_LINEARSOLVERLOADER
       SolverInterface = new Ma86SolverInterface();
-      char buf[256];
-      int rc = LSL_loadHSL(NULL, buf, 255);
-      if (rc) {
-        std::string errmsg;
-        errmsg = "Selected linear solver HSL_MA86 not available.\nTried to obtain HSL_MA86 from shared library \"";
-        errmsg += LSL_HSLLibraryName();
-        errmsg += "\", but the following error occured:\n";
-        errmsg += buf;
-        THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
+      if (!LSL_isMA86available()) {
+        char buf[256];
+        int rc = LSL_loadHSL(NULL, buf, 255);
+        if (rc) {
+          std::string errmsg;
+          errmsg = "Selected linear solver HSL_MA86 not available.\nTried to obtain HSL_MA86 from shared library \"";
+          errmsg += LSL_HSLLibraryName();
+          errmsg += "\", but the following error occured:\n";
+          errmsg += buf;
+          THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
+        }
       }
 # else
       THROW_EXCEPTION(OPTION_INVALID, "Support for HSL_MA86 has not been compiled into Ipopt.");
@@ -458,13 +466,15 @@ namespace Ipopt
 #ifndef COINHSL_HAS_MC19
 # ifdef HAVE_LINEARSOLVERLOADER
         ScalingMethod = new Mc19TSymScalingMethod();
-        char buf[256];
-        int rc = LSL_loadHSL(NULL, buf, 255);
-        if (rc) {
-          std::string errmsg;
-          errmsg = "Selected linear system scaling method MC19 not available.\n";
-          errmsg += buf;
-          THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
+        if (!LSL_isMC19available()) {
+          char buf[256];
+          int rc = LSL_loadHSL(NULL, buf, 255);
+          if (rc) {
+            std::string errmsg;
+            errmsg = "Selected linear system scaling method MC19 not available.\n";
+            errmsg += buf;
+            THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
+          }
         }
 # else
         THROW_EXCEPTION(OPTION_INVALID, "Support for MC19 has not been compiled into Ipopt.");

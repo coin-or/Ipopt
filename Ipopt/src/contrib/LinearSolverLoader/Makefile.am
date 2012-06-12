@@ -28,6 +28,9 @@ endif
 libLinearSolverLoader_la_LIBADD = 
 libLinearSolverLoader_la_DEPENDENCIES =  
 
+includeipoptdir = $(includedir)/coin
+includeipopt_HEADERS = HSLLoader.h PardisoLoader.h
+
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
 
 DISTCLEANFILES = 

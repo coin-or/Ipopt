@@ -17,14 +17,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "hsl_ma77d.h"
-#include "hsl_ma86d.h"
-#include "hsl_mc68i.h"
 
 #define HSLLIBNAME "libhsl." SHAREDLIBEXT
-
-/* Type of Fortran integer translated into C */
-typedef FORTRAN_INTEGER_TYPE ipfint;
 
 static soHandle_t HSL_handle=NULL;
 
@@ -34,171 +28,11 @@ typedef void (*voidfun)(void);
 
 voidfun LSL_loadSym (soHandle_t h, const char *symName, char *msgBuf, int msgLen);
 
-
-typedef void (*ma27id_t)(ipfint* ICNTL, double* CNTL);
-typedef void (*ma27ad_t)(ipfint *N, ipfint *NZ, const ipfint *IRN, const ipfint* ICN,
-			 ipfint *IW, ipfint* LIW, ipfint* IKEEP, ipfint *IW1,
-			 ipfint* NSTEPS, ipfint* IFLAG, ipfint* ICNTL,
-			 double* CNTL, ipfint *INFO, double* OPS);
-typedef void (*ma27bd_t)(ipfint *N, ipfint *NZ, const ipfint *IRN, const ipfint* ICN,
-			 double* A, ipfint* LA, ipfint* IW, ipfint* LIW,
-			 ipfint* IKEEP, ipfint* NSTEPS, ipfint* MAXFRT,
-			 ipfint* IW1, ipfint* ICNTL, double* CNTL,
-			 ipfint* INFO);
-typedef void (*ma27cd_t)(ipfint *N, double* A, ipfint* LA, ipfint* IW,
-			 ipfint* LIW, double* W, ipfint* MAXFRT,
-			 double* RHS, ipfint* IW1, ipfint* NSTEPS,
-			 ipfint* ICNTL, double* CNTL);
-
-typedef void (*ma28ad_t)(void* nsize, void* nz, void* rw, void* licn, void* iw,
-			 void* lirn, void* iw2, void* pivtol, void* iw3, void* iw4, void* rw2, void* iflag);
-
-typedef void (*ma57id_t) (double    *cntl, ipfint    *icntl);
-
-typedef void (*ma57ad_t) (
-    ipfint    *n,     /* Order of matrix. */
-    ipfint    *ne,            /* Number of entries. */
-    const ipfint    *irn,       /* Matrix nonzero row structure */
-    const ipfint    *jcn,       /* Matrix nonzero column structure */
-    ipfint    *lkeep,     /* Workspace for the pivot order of lenght 3*n */
-    ipfint    *keep,      /* Workspace for the pivot order of lenght 3*n */
-    /* Automatically iflag = 0; ikeep pivot order iflag = 1 */
-    ipfint    *iwork,     /* Integer work space. */
-    ipfint    *icntl,     /* Integer Control parameter of length 30*/
-    ipfint    *info,      /* Statistical Information; Integer array of length 20 */
-    double    *rinfo);    /* Double Control parameter of length 5 */
-
-typedef void (*ma57bd_t) (
-    ipfint    *n,     /* Order of matrix. */
-    ipfint    *ne,            /* Number of entries. */
-    double    *a,     /* Numerical values. */
-    double    *fact,      /* Entries of factors. */
-    ipfint    *lfact,     /* Length of array `fact'. */
-    ipfint    *ifact,     /* Indexing info for factors. */
-    ipfint    *lifact,    /* Length of array `ifact'. */
-    ipfint    *lkeep,     /* Length of array `keep'. */
-    ipfint    *keep,      /* Integer array. */
-    ipfint    *iwork,     /* Workspace of length `n'. */
-    ipfint    *icntl,     /* Integer Control parameter of length 20. */
-    double    *cntl,      /* Double Control parameter of length 5. */
-    ipfint    *info,      /* Statistical Information; Integer array of length 40. */
-    double    *rinfo);    /* Statistical Information; Real array of length 20. */
-
-typedef void (*ma57cd_t) (
-    ipfint    *job,       /* Solution job.  Solve for... */
-    ipfint    *n,         /* Order of matrix. */
-    double    *fact,      /* Entries of factors. */
-    ipfint    *lfact,     /* Length of array `fact'. */
-    ipfint    *ifact,     /* Indexing info for factors. */
-    ipfint    *lifact,    /* Length of array `ifact'. */
-    ipfint    *nrhs,      /* Number of right hand sides. */
-    double    *rhs,       /* Numerical Values. */
-    ipfint    *lrhs,      /* Leading dimensions of `rhs'. */
-    double    *work,      /* Real workspace. */
-    ipfint    *lwork,     /* Length of `work', >= N*NRHS. */
-    ipfint    *iwork,     /* Integer array of length `n'. */
-    ipfint    *icntl,     /* Integer Control parameter array of length 20. */
-    ipfint    *info);     /* Statistical Information; Integer array of length 40. */
-
-typedef void (*ma57ed_t) (
-    ipfint    *n,
-    ipfint    *ic,        /* 0: copy real array.  >=1:  copy integer array. */
-    ipfint    *keep,
-    double    *fact,
-    ipfint    *lfact,
-    double    *newfac,
-    ipfint    *lnew,
-    ipfint    *ifact,
-    ipfint    *lifact,
-    ipfint    *newifc,
-    ipfint    *linew,
-    ipfint    *info);
-
-typedef void (*mc19ad_t)(ipfint *N, ipfint *NZ, double* A, ipfint *IRN, ipfint* ICN, float* R, float* C, float* W);
-
-typedef void (*mc68_default_control_t)(struct mc68_control *control);
-typedef void (*mc68_order_t)(const int ord, const int n, const int ptr[],
-   const int row[], int perm[], const struct mc68_control *control,
-   struct mc68_info *info);
-
-typedef void (*ma77_default_control_t)(struct ma77_control_d *control);
-typedef void (*ma77_open_nelt_t)(const int n, const char* fname1, const char* fname2,
-   const char *fname3, const char *fname4, void **keep,
-   const struct ma77_control_d *control, struct ma77_info_d *info,
-   const int nelt);
-typedef void (*ma77_open_t)(const int n, const char* fname1, const char* fname2,
-   const char *fname3, const char *fname4, void **keep,
-   const struct ma77_control_d *control, struct ma77_info_d *info);
-typedef void (*ma77_input_vars_t)(const int idx, const int nvar, const int list[],
-   void **keep, const struct ma77_control_d *control, struct ma77_info_d *info);
-typedef void (*ma77_input_reals_t)(const int idx, const int length,
-   const ma77pkgtype_d_ reals[], void **keep, const struct ma77_control_d *control,
-   struct ma77_info_d *info);
-typedef void (*ma77_analyse_t)(const int order[], void **keep,
-   const struct ma77_control_d *control, struct ma77_info_d *info);
-typedef void (*ma77_factor_t)(const int posdef, void **keep, 
-   const struct ma77_control_d *control, struct ma77_info_d *info,
-   const ma77pkgtype_d_ *scale);
-typedef void (*ma77_factor_solve_t)(const int posdef, void **keep, 
-   const struct ma77_control_d *control, struct ma77_info_d *info,
-   const ma77pkgtype_d_ *scale, const int nrhs, const int lx,
-   ma77pkgtype_d_ rhs[]);
-typedef void (*ma77_solve_t)(const int job, const int nrhs, const int lx, ma77pkgtype_d_ x[],
-   void **keep, const struct ma77_control_d *control, struct ma77_info_d *info,
-   const ma77pkgtype_d_ *scale);
-typedef void (*ma77_resid_t)(const int nrhs, const int lx, const ma77pkgtype_d_ x[],
-   const int lresid, ma77pkgtype_d_ resid[], void **keep, 
-   const struct ma77_control_d *control, struct ma77_info_d *info,
-   ma77pkgtype_d_ *anorm_bnd);
-typedef void (*ma77_scale_t)(ma77pkgtype_d_ scale[], void **keep, 
-   const struct ma77_control_d *control, struct ma77_info_d *info,
-   ma77pkgtype_d_ *anorm);
-typedef void (*ma77_enquire_posdef_t)(ma77pkgtype_d_ d[], void **keep, 
-   const struct ma77_control_d *control, struct ma77_info_d *info);
-typedef void (*ma77_enquire_indef_t)(int piv_order[], ma77pkgtype_d_ d[], void **keep, 
-   const struct ma77_control_d *control, struct ma77_info_d *info);
-typedef void (*ma77_alter_t)(const ma77pkgtype_d_ d[], void **keep, 
-   const struct ma77_control_d *control, struct ma77_info_d *info);
-typedef void (*ma77_restart_t)(const char *restart_file, const char *fname1, 
-   const char *fname2, const char *fname3, const char *fname4, void **keep, 
-   const struct ma77_control_d *control, struct ma77_info_d *info);
-typedef void (*ma77_finalise_t)(void **keep, const struct ma77_control_d *control,
-   struct ma77_info_d *info);
-
-typedef void (*ma86_default_control_t)(struct ma86_control *control);
-typedef void (*ma86_analyse_t)(const int n, const int ptr[], const int row[],
-   int order[], void **keep, const struct ma86_control *control,
-   struct ma86_info *info);
-typedef void (*ma86_factor_t)(const int n, const int ptr[], const int row[],
-   const ma86pkgtype_d_ val[], const int order[], void **keep,
-   const struct ma86_control *control, struct ma86_info *info,
-   const ma86pkgtype_d_ scale[]);
-typedef void (*ma86_factor_solve_t)(const int n, const int ptr[],
-   const int row[], const ma86pkgtype_d_ val[], const int order[], void **keep,
-   const struct ma86_control *control, struct ma86_info *info, const int nrhs,
-   const int ldx, ma86pkgtype_d_ x[], const ma86pkgtype_d_ scale[]);
-typedef void (*ma86_solve_t)(const int job, const int nrhs, const int ldx,
-   ma86pkgtype_d_ *x, const int order[], void **keep,
-   const struct ma86_control *control, struct ma86_info *info,
-   const ma86pkgtype_d_ scale[]);
-typedef void (*ma86_finalise_t)(void **keep,
-   const struct ma86_control *control);
-
 #ifndef COINHSL_HAS_MA27
-static ma27id_t func_ma27id=NULL;
 static ma27ad_t func_ma27ad=NULL;
 static ma27bd_t func_ma27bd=NULL;
 static ma27cd_t func_ma27cd=NULL;
-
-void F77_FUNC(ma27id,MA27ID)(ipfint* ICNTL, double* CNTL)
-{
-  if (func_ma27id==NULL) LSL_lateHSLLoad();
-  if (func_ma27id==NULL) {
-    fprintf(stderr, "HSL routine MA27ID not found in " HSLLIBNAME ".\nAbort...\n");
-    exit(EXIT_FAILURE);
-  }
-  func_ma27id(ICNTL, CNTL);
-}
+static ma27id_t func_ma27id=NULL;
 
 void F77_FUNC(ma27ad,MA27AD)(ipfint *N, ipfint *NZ, const ipfint *IRN, const ipfint* ICN,
                              ipfint *IW, ipfint* LIW, ipfint* IKEEP, ipfint *IW1,
@@ -235,6 +69,16 @@ void F77_FUNC(ma27cd,MA27CD)(ipfint *N, double* A, ipfint* LA, ipfint* IW,
     exit(EXIT_FAILURE);
   }
   func_ma27cd(N, A, LA, IW, LIW, W, MAXFRT, RHS, IW1, NSTEPS, ICNTL, CNTL);
+}
+
+void F77_FUNC(ma27id,MA27ID)(ipfint* ICNTL, double* CNTL)
+{
+  if (func_ma27id==NULL) LSL_lateHSLLoad();
+  if (func_ma27id==NULL) {
+    fprintf(stderr, "HSL routine MA27ID not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma27id(ICNTL, CNTL);
 }
 
 #endif
@@ -816,57 +660,57 @@ int LSL_isHSLLoaded() {
 
 int LSL_isMA27available() {
 #ifndef COINHSL_HAS_MA27
-	return HSL_handle!=NULL && func_ma27id!=NULL && func_ma27ad!=NULL && func_ma27bd!=NULL && func_ma27cd!=NULL;
+	return func_ma27id!=NULL && func_ma27ad!=NULL && func_ma27bd!=NULL && func_ma27cd!=NULL;
 #else
-	return 0;
+	return 1;
 #endif
 }
 
 int LSL_isMA28available() {
 #ifndef COINHSL_HAS_MA28
-	return HSL_handle!=NULL && func_ma28ad!=NULL;
+	return func_ma28ad!=NULL;
 #else
-	return 0;
+	return 1;
 #endif
 }
 
 int LSL_isMA57available() {
 #ifndef COINHSL_HAS_MA57
-	return HSL_handle!=NULL && func_ma57id!=NULL && func_ma57ad!=NULL && func_ma57bd!=NULL && func_ma57cd!=NULL && func_ma57ed!=NULL;
+	return func_ma57id!=NULL && func_ma57ad!=NULL && func_ma57bd!=NULL && func_ma57cd!=NULL && func_ma57ed!=NULL;
 #else
-	return 0;
+	return 1;
 #endif
 }
 
 int LSL_isMA77available() {
 #ifndef COINHSL_HAS_MA77
-	return HSL_handle!=NULL && func_ma77_default_control!=NULL && func_ma77_open_nelt!=NULL && func_ma77_open!=NULL && func_ma77_input_vars!=NULL && func_ma77_input_reals!=NULL && func_ma77_analyse!=NULL && func_ma77_factor!=NULL && func_ma77_factor_solve!=NULL && func_ma77_solve!=NULL && func_ma77_resid!=NULL && func_ma77_scale!=NULL && func_ma77_enquire_posdef!=NULL && func_ma77_enquire_indef!=NULL && func_ma77_alter!=NULL && func_ma77_restart!=NULL && func_ma77_finalise!=NULL;
+	return func_ma77_default_control!=NULL && func_ma77_open_nelt!=NULL && func_ma77_open!=NULL && func_ma77_input_vars!=NULL && func_ma77_input_reals!=NULL && func_ma77_analyse!=NULL && func_ma77_factor!=NULL && func_ma77_factor_solve!=NULL && func_ma77_solve!=NULL && func_ma77_resid!=NULL && func_ma77_scale!=NULL && func_ma77_enquire_posdef!=NULL && func_ma77_enquire_indef!=NULL && func_ma77_alter!=NULL && func_ma77_restart!=NULL && func_ma77_finalise!=NULL;
 #else
-	return 0;
+	return 1;
 #endif
 }
 
 int LSL_isMA86available() {
 #ifndef COINHSL_HAS_MA86
-	return HSL_handle!=NULL && func_ma86_default_control!=NULL && func_ma86_analyse!=NULL && func_ma86_factor!=NULL && func_ma86_factor_solve!=NULL && func_ma86_solve!=NULL && func_ma86_finalise!=NULL;
+	return func_ma86_default_control!=NULL && func_ma86_analyse!=NULL && func_ma86_factor!=NULL && func_ma86_factor_solve!=NULL && func_ma86_solve!=NULL && func_ma86_finalise!=NULL;
 #else
-	return 0;
+	return 1;
 #endif
 }
 
 int LSL_isMC19available() {
 #ifndef COINHSL_HAS_MC19
-	return HSL_handle!=NULL && func_mc19ad!=NULL;
+	return func_mc19ad!=NULL;
 #else
-	return 0;
+	return 1;
 #endif
 }
 
 int LSL_isMC68available() {
 #ifndef COINHSL_HAS_MC68
-	return HSL_handle!=NULL && func_mc68_default_control!=NULL && func_mc68_order!=NULL;
+	return func_mc68_default_control!=NULL && func_mc68_order!=NULL;
 #else
-	return 0;
+	return 1;
 #endif
 }
 
@@ -885,4 +729,93 @@ void LSL_lateHSLLoad() {
 char* LSL_HSLLibraryName() {
   static char name[] = HSLLIBNAME;
   return name;
+}
+
+void LSL_setMA27(ma27ad_t ma27ad, ma27bd_t ma27bd, ma27cd_t ma27cd, ma27id_t ma27id) {
+#ifndef COINHSL_HAS_MA27
+   func_ma27ad = ma27ad;
+   func_ma27bd = ma27bd;
+   func_ma27cd = ma27cd;
+   func_ma27id = ma27id;
+#endif
+}
+
+void LSL_setMA28(ma28ad_t ma28ad) {
+#ifndef COINHSL_HAS_MA28
+   func_ma28ad = ma28ad;
+#endif
+}
+
+void LSL_setMA57(ma57ad_t ma57ad, ma57bd_t ma57bd, ma57cd_t ma57cd, ma57ed_t ma57ed, ma57id_t ma57id) {
+#ifndef COINHSL_HAS_MA57
+   func_ma57ad = ma57ad;
+   func_ma57bd = ma57bd;
+   func_ma57cd = ma57cd;
+   func_ma57ed = ma57ed;
+   func_ma57id = ma57id;
+#endif
+}
+
+void LSL_setMA77(ma77_default_control_t ma77_default_control,
+   ma77_open_nelt_t ma77_open_nelt,
+   ma77_open_t ma77_open,
+   ma77_input_vars_t ma77_input_vars,
+   ma77_input_reals_t ma77_input_reals,
+   ma77_analyse_t ma77_analyse,
+   ma77_factor_t ma77_factor,
+   ma77_factor_solve_t ma77_factor_solve,
+   ma77_solve_t ma77_solve,
+   ma77_resid_t ma77_resid,
+   ma77_scale_t ma77_scale,
+   ma77_enquire_posdef_t ma77_enquire_posdef,
+   ma77_enquire_indef_t ma77_enquire_indef,
+   ma77_alter_t ma77_alter,
+   ma77_restart_t ma77_restart,
+   ma77_finalise_t ma77_finalise) {
+#ifndef COINHSL_HAS_MA77
+   func_ma77_open_nelt = ma77_open_nelt;
+   func_ma77_open = ma77_open;
+   func_ma77_input_vars = ma77_input_vars;
+   func_ma77_input_reals = ma77_input_reals;
+   func_ma77_analyse = ma77_analyse;
+   func_ma77_factor = ma77_factor;
+   func_ma77_factor_solve = ma77_factor_solve;
+   func_ma77_solve = ma77_solve;
+   func_ma77_resid = ma77_resid;
+   func_ma77_scale = ma77_scale;
+   func_ma77_enquire_posdef = ma77_enquire_posdef;
+   func_ma77_enquire_indef = ma77_enquire_indef;
+   func_ma77_alter = ma77_alter;
+   func_ma77_restart = ma77_restart;
+   func_ma77_finalise = ma77_finalise;
+#endif
+}
+
+void LSL_setMA86(ma86_default_control_t ma86_default_control,
+   ma86_analyse_t ma86_analyse,
+   ma86_factor_t ma86_factor,
+   ma86_factor_solve_t ma86_factor_solve,
+   ma86_solve_t ma86_solve,
+   ma86_finalise_t ma86_finalise) {
+#ifndef COINHSL_HAS_MA86
+   func_ma86_default_control = ma86_default_control;
+   func_ma86_analyse = ma86_analyse;
+   func_ma86_factor = ma86_factor;
+   func_ma86_factor_solve = ma86_factor_solve;
+   func_ma86_solve = ma86_solve;
+   func_ma86_finalise = ma86_finalise;
+#endif
+}
+
+void LSL_setMC19(mc19ad_t mc19ad) {
+#ifndef COINHSL_HAS_MC19
+   func_mc19ad = mc19ad;
+#endif
+}
+
+void LSL_setMC68(mc68_default_control_t mc68_default_control, mc68_order_t mc68_order) {
+#ifndef COINHSL_HAS_MC68
+   func_mc68_default_control = mc68_default_control;
+   func_mc68_order = mc68_order;
+#endif
 }
