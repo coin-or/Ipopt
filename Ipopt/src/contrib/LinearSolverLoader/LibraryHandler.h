@@ -17,6 +17,9 @@
 #ifdef HAVE_WINDOWS_H
 # include <windows.h>
   typedef HINSTANCE soHandle_t;
+#ifdef small
+#undef small
+#endif
 #else
 # ifdef HAVE_DLFCN_H
 #  include <unistd.h>
