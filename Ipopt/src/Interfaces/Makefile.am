@@ -53,6 +53,7 @@ CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../Algorithm` \
 	-I`$(CYGPATH_W) $(srcdir)/../Algorithm/Inexact` \
 	-I`$(CYGPATH_W) $(srcdir)/../contrib/CGPenalty` \
+	-I`$(CYGPATH_W) $(srcdir)/../contrib/LinearSolverLoader` \
 	$(HSL_CFLAGS)
 
 CFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \

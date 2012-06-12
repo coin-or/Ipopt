@@ -22,6 +22,7 @@
 #ifdef COIN_HAS_HSL
 #include "CoinHslConfig.h"
 #endif
+#include "IpMa28TDependencyDetector.hpp"
 
 #ifdef COIN_HAS_MUMPS
 # include "IpMumpsSolverInterface.hpp"
@@ -29,9 +30,8 @@
 #ifdef HAVE_WSMP
 # include "IpWsmpSolverInterface.hpp"
 #endif
-#ifdef COINHSL_HAS_MA28
-# include "IpMa28TDependencyDetector.hpp"
-#endif
+
+#include "HSLLoader.h"
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -306,10 +306,24 @@ namespace Ipopt
 #ifdef COINHSL_HAS_MA28
         dependency_detector_ = new Ma28TDependencyDetector();
 #else
-
-        THROW_EXCEPTION(OPTION_INVALID, "Ipopt has not been compiled with MA28.  You cannot choose \"ma28\" for \"dependency_detector\".");
+# ifdef HAVE_LINEARSOLVERLOADER
+        dependency_detector_ = new Ma28TDependencyDetector();
+        if (!LSL_isMA28available()) {
+          char buf[256];
+          int rc = LSL_loadHSL(NULL, buf, 255);
+          if (rc) {
+            std::string errmsg;
+            errmsg = "Selected dependency detector MA28 not available.\nTried to obtain MA28 from shared library \"";
+            errmsg += LSL_HSLLibraryName();
+            errmsg += "\", but the following error occured:\n";
+            errmsg += buf;
+            THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
+          }
+        }
+# else
+      THROW_EXCEPTION(OPTION_INVALID, "Ipopt has not been compiled with MA28.  You cannot choose \"ma28\" for \"dependency_detector\".");
+# endif
 #endif
-
       }
       else {
         THROW_EXCEPTION(OPTION_INVALID, "Something internally wrong for \"dependency_detector\".");

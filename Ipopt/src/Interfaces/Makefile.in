@@ -175,7 +175,8 @@ CXXFLAGS = @CXXFLAGS@ -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	$(srcdir)/../LinAlg/TMatrices` -I`$(CYGPATH_W) \
 	$(srcdir)/../Algorithm` -I`$(CYGPATH_W) \
 	$(srcdir)/../Algorithm/Inexact` -I`$(CYGPATH_W) \
-	$(srcdir)/../contrib/CGPenalty` $(HSL_CFLAGS)
+	$(srcdir)/../contrib/CGPenalty` -I`$(CYGPATH_W) \
+	$(srcdir)/../contrib/LinearSolverLoader` $(HSL_CFLAGS)
 CXXLIBS = @CXXLIBS@
 CYGPATH_W = @CYGPATH_W@
 DBG_CFLAGS = @DBG_CFLAGS@
