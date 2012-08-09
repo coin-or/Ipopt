@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2010 International Business Machines and others.
+// Copyright (C) 2004, 2012 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -949,7 +949,7 @@ namespace Ipopt
       }
       else if (status == DIVERGING_ITERATES) {
         retValue = Diverging_Iterates;
-        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Iterates divering; problem might be unbounded.\n");
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Iterates diverging; problem might be unbounded.\n");
       }
       else if (status == RESTORATION_FAILURE) {
         retValue = Restoration_Failed;
