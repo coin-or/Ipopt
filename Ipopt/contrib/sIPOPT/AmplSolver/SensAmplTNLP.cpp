@@ -172,7 +172,7 @@ namespace Ipopt
 	  suf_rput(sol_state_z_U_id.c_str(), ASL_Sufkind_var, const_cast<Number*>(&num_it->second[0]));
 	}
 	num_it = con_numeric_md.find(sol_state_id);
-	if (num_it!=var_numeric_md.end()) {
+	if (num_it!=con_numeric_md.end()) {
 	  suf_rput(sol_state_id.c_str(), ASL_Sufkind_con, const_cast<Number*>(&num_it->second[0]));
 	}
       }
