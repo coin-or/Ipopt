@@ -23,7 +23,8 @@ MEXSUFFIX   = @MEXSUFFIX@
 # This is the command used to call the mex program. Usually, it is
 # just "mex". But it also may be something like
 # /user/local/R2006b/bin/mex if "mex" doesn't work.
-MEX = $(MATLAB_HOME)/bin/mex
+@MEX_WINDOWS_FALSE@MEX = $(MATLAB_HOME)/bin/mex
+@MEX_WINDOWS_TRUE@MEX = "$(MATLAB_HOME)/sys/perl/win32/bin/perl" "`$(CYGPATH_W) "$(MATLAB_HOME)/bin/mex.pl"`"
 
 #############################################################################
 # Do not modify anything below unless you know what you're doing.
@@ -33,21 +34,23 @@ libdir      = @libdir@
 
 CXX         = @CXX@
 CXXFLAGS    = @CXXFLAGS@ -DMATLAB_MEXFILE # -DMWINDEXISINT
-LDFLAGS     = $(CXXFLAGS) @RPATH_FLAGS@
+LDFLAGS     = $(CXXFLAGS) @RPATH_FLAGS@ @FRAMEWORK_VECLIB@
 
 # Include directories (we use the CYGPATH_W variables to allow compilation with Windows compilers)
 @COIN_HAS_PKGCONFIG_TRUE@INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipopt`
 @COIN_HAS_PKGCONFIG_FALSE@INCL = -I`$(CYGPATH_W) @abs_include_dir@/coin` @IPOPTLIB_CFLAGS_INSTALLED@
 
 # Linker flags
-@COIN_HAS_PKGCONFIG_TRUE@LIBS = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt`
-@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_TRUE@LIBS = -link -libpath:`$(CYGPATH_W) @abs_lib_dir@` libipopt.lib @IPOPTLIB_LIBS_INSTALLED@
-@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_FALSE@LIBS = -L@abs_lib_dir@ -lipopt @IPOPTLIB_LIBS_INSTALLED@
+@COIN_HAS_PKGCONFIG_TRUE@LIBS = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt | sed -e 's/-framework vecLib//g'`
+@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_TRUE@LIBS = -link -libpath:`$(CYGPATH_W) @abs_lib_dir@` libipopt.lib `echo "@IPOPTLIB_LIBS_INSTALLED@" | sed -e 's/-framework vecLib//g'`
+@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_FALSE@LIBS = -L@abs_lib_dir@ -lipopt `echo "@IPOPTLIB_LIBS_INSTALLED@" | sed -e 's/-framework vecLib//g'`
 
 # The following is necessary under cygwin, if native compilers are used
 CYGPATH_W = @CYGPATH_W@
 
-MEXFLAGS    = -v -cxx -O CC="$(CXX)" CXX="$(CXX)" LD="$(CXX)"       \
+@MEX_WINDOWS_TRUE@MEXFLAGCXX = 
+@MEX_WINDOWS_FALSE@MEXFLAGCXX = -cxx
+MEXFLAGS    = -v $(MEXFLAGCXX) -O CC="$(CXX)" CXX="$(CXX)" LD="$(CXX)"       \
               COPTIMFLAGS="$(CXXFLAGS)" CXXOPTIMFLAGS="$(CXXFLAGS)" \
               LDOPTIMFLAGS="$(LDFLAGS)" 
 
@@ -80,7 +83,7 @@ $(TARGET): $(OBJS)
 	$(MEX) $(MEXFLAGS) $(LIBS) -output $@ $^
 
 %.@OBJEXT@: %.cpp
-	$(CXX) $(CXXFLAGS) $(INCL) -I$(MATLAB_HOME)/extern/include \
+	$(CXX) $(CXXFLAGS) $(INCL) -I"$(MATLAB_HOME)/extern/include" \
         -o $@ -c $^
 
 clean:

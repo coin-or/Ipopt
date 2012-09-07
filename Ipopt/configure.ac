@@ -464,22 +464,34 @@ AC_ARG_WITH([matlab-home],
                            [specify location of matlab installation for the matlab Ipopt interface.  The "mex" compiler should be in MATLAB_HOME/bin]),
             [use_matlab_home=$withval], [use_matlab_home=])
 
+# If we're in Windows, need to add .bat extension to find mex and mexext, and set conditional to modify Matlab interface Makefile
+batext=
+case $build in
+  *-cygwin* | *-mingw*)
+    batext=.bat
+    ;;
+esac
+AM_CONDITIONAL([MEX_WINDOWS], test x"$batext" != x)
 
 if test x"$use_matlab_home" = x; then
   # Try to detect matlab home automatically
-  mexpath=`which mexext 2>/dev/null`
+  mexpath=`which matlab$EXEEXT 2>/dev/null`
   if test -z "$mexpath" ||
-     expr "$mexpath" : '.*no mexext.*' >/dev/null 2>&1 ; then
+     expr "$mexpath" : '.*no matlab.*' >/dev/null 2>&1 ; then
     AC_MSG_RESULT([no])
   else
-    MATLAB_HOME=`echo $mexpath | sed -e 's=/bin/mexext=='`
+    if test -L "$mexpath"; then
+      # matlab is a symbolic link, follow it
+      mexpath=`ls -l "$mexpath" | awk '{print $NF}'`
+    fi
+    MATLAB_HOME=`echo $mexpath | sed -e "s=/bin/matlab$EXEEXT$=="`
     AC_MSG_RESULT([$MATLAB_HOME])
   fi
 else
   MATLAB_HOME="$use_matlab_home"
   AC_MSG_RESULT([$MATLAB_HOME])
-  if test ! -x $MATLAB_HOME/bin/mex; then
-    AC_MSG_ERROR([Matlab compiler $MATLAB_HOME/bin/mex not found or not executable])
+  if test ! -x "$MATLAB_HOME/bin/mex$batext"; then
+    AC_MSG_ERROR([Matlab compiler $MATLAB_HOME/bin/mex$batext not found or not executable])
   fi
 fi
 
@@ -501,13 +513,28 @@ if test x"$MATLAB_HOME" != x; then
 ##    AC_MSG_RESULT([error running MEX compiler])
 ##  fi
 
-  if ! test -x $MATLAB_HOME/bin/mexext; then
-    AC_MSG_WARN([Cannot find $MATLAB_HOME/bin/mexext executable to determine MEXSUFFIX])
+  if ! test -x "$MATLAB_HOME/bin/mexext$batext"; then
+    AC_MSG_WARN([Cannot find $MATLAB_HOME/bin/mexext$batext executable to determine MEXSUFFIX])
   else
-    MEXSUFFIX=`$MATLAB_HOME/bin/mexext`
+    case $build in
+      *-mingw*)
+        # MinGW cannot execute .bat files natively, so use cmd /c
+        MEXSUFFIX=$(cd "$MATLAB_HOME/bin"; cmd /c mexext$batext)
+        ;;
+      *)
+        MEXSUFFIX=`"$MATLAB_HOME/bin/mexext$batext"`
+        ;;
+    esac
     AC_MSG_RESULT([$MEXSUFFIX])
   fi
 fi
+
+# On Mac, need to move "-framework vecLib" from LIBS to LDFLAGS (if being used)
+FRAMEWORK_VECLIB=
+if test -n "`echo $BLAS_LIBS $LAPACK_LIBS | grep -e '-framework vecLib'`"; then
+  FRAMEWORK_VECLIB='-framework vecLib'
+fi
+AC_SUBST(FRAMEWORK_VECLIB)
 
 AC_SUBST(MATLAB_HOME)
 AC_SUBST(MEXSUFFIX)
