@@ -1,0 +1,107 @@
+Index: gnumex/gnumex.m
+===================================================================
+--- gnumex/gnumex.m	(revision 50)
++++ gnumex/gnumex.m	(working copy)
+@@ -767,7 +767,11 @@
+     deffiles = varargin{3};
+     % defdir = varargin{4};
+     % libs will probably be {'libmex', 'libmx', 'libmat', 'libeng'};
+-    libdir = [matlabroot '\extern\lib\win32\lcc\'];
++    if strcmp(computer('arch'),'win64')
++        libdir = [matlabroot '\extern\lib\win64\microsoft\'];
++    else
++        libdir = [matlabroot '\extern\lib\win32\lcc\'];
++    end
+     for i=1:length(deffiles)
+       [p, lib] = fileparts(deffiles{i});
+       [err,list] = dos([nmcmd ' -g --defined-only "' libdir lib '.lib"']);
+@@ -787,6 +791,7 @@
+       fprintf(fid, 'LIBRARY %s.dll\nEXPORTS\n', lib);
+       J = strmatch('_', symbols)';
+       for j = J, symbols{j}(1) = ''; end
++      symbols(strmatch('.text', symbols)) = []; % remove .text entries
+       for j = 1:length(symbols), fprintf(fid,'%s\n', symbols{j}); end
+       fclose(fid);
+       ok = 1;
+@@ -922,9 +927,12 @@
+       path_to_deffiles = pps.precompath;
+       full_deffiles = strcat(path_to_deffiles, '\', deffiles); 
+       if ~all(paths_exist(full_deffiles))
+-        % Check that nm.exe can be found
+-        nm = fullfile(pps.cygwinpath, 'bin', 'nm.exe');
+-        if ~exist(nm, 'file'), nm = fullfile(pps.mingwpath, 'bin', 'nm.exe'); end
++        % Use correct nm.exe from selected environment
++        if pps.environ > 1
++            nm = fullfile(pps.cygwinpath, 'bin', 'nm.exe');
++        else
++            nm = fullfile(pps.mingwpath, 'bin', 'nm.exe');
++        end
+         if ~exist(nm, 'file'), nm = fullfile(pps.gfortpath, 'nm.exe'); end
+         if ~exist(nm, 'file'), errmsg(tit, 'Cannot find nm.exe');  return, end
+         if gui_f, 
+@@ -1263,7 +1271,7 @@
+     end
+     linker = '%GM_PERLPATH% %GM_UTIL_PATH%\linkmex.pl';
+     if (pps.mexf == 1)    % mexf compile
+-      if mlv_ge('7.1'), oext = 'mexw32'; else oext = 'dll'; end
++      if mlv_ge('7.1'), oext = mexext; else oext = 'dll'; end
+     else                  % engine compile
+       oext = 'exe';
+     end
+Index: gnumex/shortpath74.m
+===================================================================
+--- gnumex/shortpath74.m	(revision 0)
++++ gnumex/shortpath74.m	(working copy)
+@@ -0,0 +1,29 @@
++function shortpath = shortpath74(longpath)
++if isempty(longpath)
++    % empty input, empty output
++    shortpath = longpath;
++else
++    if exist('shortpath74','file') ~= 3
++        % cannot find shortpath74 mex file, try compiling it
++        try
++            mex -output shortpath74 src/shortpath.c
++        catch
++        end
++    end
++    if exist('shortpath74','file') == 3
++        % compilation of mex file succeeded
++        % (so the next line is not an infinite recursion)
++        shortpath = shortpath74(longpath);
++    elseif exist('@RTW/transformPaths','file')
++        % use RTW toolbox internal function to get same result
++        if ~exist(longpath,'dir')
++            % limitation of RTW.transformPaths is you cannot call it
++            % on a folder that doesn't exist, so create folder first
++            mkdir(longpath)
++        end
++        shortpath = RTW.transformPaths(longpath);
++    else
++        warning('Failed to compile mex file. Try calling mex -setup')
++        shortpath = longpath;
++    end
++end
+Index: gnumex/src/shortpath.c
+===================================================================
+--- gnumex/src/shortpath.c	(revision 50)
++++ gnumex/src/shortpath.c	(working copy)
+@@ -5,6 +5,7 @@
+      to make sure lcc is used delete mexopts.bat in the prefdir folder
+      (>> delete ([prefdir '\mexopts.bat'])). Then do:
+      >> mex shortpath.c
++*/
+ 
+ #include <windows.h>
+ #include <string.h>
+Index: gnumex/uigetpath74.m
+===================================================================
+--- gnumex/uigetpath74.m	(revision 0)
++++ gnumex/uigetpath74.m	(working copy)
+@@ -0,0 +1,6 @@
++function outpath = uigetpath74(varargin)
++outpath = uigetdir('\','Choose directory');
++if isequal(outpath, 0)
++    % user hit cancel, output empty instead of 0
++    outpath = '';
++end

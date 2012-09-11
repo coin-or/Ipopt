@@ -80,6 +80,7 @@ uninstall:
 	rm -f $(libdir)/ipopt.m $(libdir)/ipopt.$(MEXSUFFIX)
 
 $(TARGET): $(OBJS)
+	make mexopts
 	$(MEX) $(MEXFLAGS) $(LIBS) -output $@ $^
 
 %.@OBJEXT@: %.cpp
@@ -90,3 +91,72 @@ clean:
 	rm -f $(OBJS) $(TARGET)
 
 distclean: clean
+
+# make mexopts applies a set of fixes to mexopts.sh on Mac,
+# or mexopts.bat on Windows (if that file was generated
+# by Gnumex to use gcc via Cygwin or MinGW)
+mexopts:
+	case `uname` in \
+	  Darwin*) \
+	    SDKROOT=`grep -m1 'SDKROOT=' "$(MATLAB_HOME)/bin/mexopts.sh" | sed -e 's/SDKROOT=//g'`; \
+	    if ! test -d $$SDKROOT -o -e mexopts.sh; then \
+	      sed -e 's/-isysroot $$SDKROOT //g' -e 's/-Wl,-syslibroot,$$SDKROOT //g' "$(MATLAB_HOME)/bin/mexopts.sh" > mexopts.sh; \
+	    fi \
+	    ;; \
+	  MINGW*) \
+	    if ! test -e mexopts.bat; then \
+	      echo Warning: no mexopts.bat found. You will probably need to run Gnumex to generate this file. Call \"make gnumex\" then try again.; \
+	    else \
+	      libdirwin=$$(cd $(libdir); cmd /c 'for %i in (.) do @echo %~fi' | sed 's|\\|/|g'); \
+	      GM_ADD_LIBS="-llibmx -llibmex -llibmat $(LIBS) "; \
+	      GM_ADD_LIBS=`echo $$GM_ADD_LIBS | sed "s| -L$(libdir) | -L$$libdirwin |g"`; \
+	      cp mexopts.bat mexopts.bat.orig; \
+	      sed -e 's|COMPILER=gcc|COMPILER=g++|' -e 's|GM_MEXLANG=c$$|GM_MEXLANG=cxx|' \
+	        -e "s|GM_ADD_LIBS=-llibmx -llibmex -llibmat$$|GM_ADD_LIBS=$$GM_ADD_LIBS|" \
+	        mexopts.bat.orig > mexopts.bat; \
+	    fi \
+	    ;; \
+	  CYGWIN*) \
+	    if ! test -e mexopts.bat; then \
+	      echo Warning: no mexopts.bat found. You will probably need to run Gnumex to generate this file. Call \"make gnumex\" then try again.; \
+	    else \
+	      libdirwin=`cygpath -m $(libdir)`; \
+	      GM_ADD_LIBS="-llibmx -llibmex -llibmat $(LIBS) "; \
+	      GM_ADD_LIBS=`echo $$GM_ADD_LIBS | sed "s| -L$(libdir) | -L$$libdirwin |g"`; \
+	      GM_ADD_LIBS=`echo $$GM_ADD_LIBS | sed "s| -L/usr/lib/| -L$$(cygpath -m /usr/lib)/|g"`; \
+	      cp mexopts.bat mexopts.bat.orig; \
+	      if test -n "`which g++-4 2> /dev/null`"; then \
+	        sed -e 's|COMPILER=gcc|COMPILER=g++-4|' mexopts.bat.orig > mexopts.bat.tmp; \
+	      elif test -n "`which g++-3 2> /dev/null`"; then \
+	        sed -e 's|COMPILER=gcc|COMPILER=g++-3|' mexopts.bat.orig > mexopts.bat.tmp; \
+	      else \
+	        sed -e 's|COMPILER=gcc|COMPILER=g++|' mexopts.bat.orig > mexopts.bat.tmp; \
+	      fi; \
+	      sed -e 's|GM_MEXLANG=c$$|GM_MEXLANG=cxx|' \
+	        -e "s|GM_ADD_LIBS=-llibmx -llibmex -llibmat$$|GM_ADD_LIBS=$$GM_ADD_LIBS|" \
+	        mexopts.bat.tmp > mexopts.bat; \
+	    fi \
+	    ;; \
+	esac
+
+# make gnumex opens a Matlab session and calls the Gnumex tool to
+# generate mexopts.bat set up for using gcc via Cygwin or MinGW
+gnumex:
+	if ! test -d "$(SRCDIR)/../gnumex"; then \
+	  echo "Warning: no gnumex folder found. Run \"cd `dirname $(SRCDIR)`; ./get.Gnumex\" first."; \
+	else \
+	  GM_COMMANDS="oldpwd=pwd; cd $(SRCDIR)/../gnumex; gnumex('startup'); \
+	    gnumexopts=gnumex('defaults'); gnumexopts.precompath=[pwd '\libdef']; \
+	    gnumexopts.optfile=[oldpwd '\mexopts.bat'];"; \
+	  case `uname` in \
+	    MINGW*) \
+	      echo Use gnumex in Matlab to create mexopts.bat file, then close this new instance of Matlab.; \
+	      "$(MATLAB_HOME)/bin/matlab" -wait -r "$$GM_COMMANDS \
+	        gnumexopts.mingwpath=fileparts(gnumexopts.gfortpath); gnumex('struct2fig',gnumexopts)" \
+	      ;; \
+	    CYGWIN*) \
+	      echo Use gnumex in Matlab to create mexopts.bat file, then close this new instance of Matlab.; \
+	      "$(MATLAB_HOME)/bin/matlab" -wait -r "$$GM_COMMANDS gnumexopts.environ=3; gnumex('struct2fig',gnumexopts)" \
+	      ;; \
+	  esac \
+	fi
