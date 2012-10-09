@@ -9,7 +9,7 @@
 
 sipopt_lib = sipopt_lib
 ampl_sipopt_exe = ampl_sipopt_exe
-ALL_TARGETS = $(sipopt_lib) $(ampl_sipopt_exe)
+ALL_TARGETS = $(sipopt_lib)
 DIRS = ./src
 TARGETDIRS = ./src
 
@@ -25,11 +25,11 @@ install: all
 uninstall:
 	for d in $(TARGETDIRS); do (cd $$d; $(MAKE) uninstall ); done
 
-clean: 
+clean:
 	-for d in $(DIRS); do (cd $$d; $(MAKE) clean ); done
 
 $(ampl_sipopt_exe): $(sipopt_lib)
 	$(MAKE) -C AmplSolver
 
-$(sipopt_lib): 
+$(sipopt_lib):
 	$(MAKE) -C src
