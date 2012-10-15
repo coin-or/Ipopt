@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2010 International Business Machines and others.
+// Copyright (C) 2004, 2012 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -340,7 +340,8 @@ namespace Ipopt
     else {
       // Here we are in the free mu mode.
       bool sufficient_progress = CheckSufficientProgress();
-      if (linesearch_->CheckSkippedLineSearch() || tiny_step_flag ) {
+      if (adaptive_mu_globalization_!=NEVER_MONOTONE_MODE &&
+        (linesearch_->CheckSkippedLineSearch() || tiny_step_flag) ) {
         sufficient_progress = false;
       }
       if (sufficient_progress) {
