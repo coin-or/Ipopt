@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2010 International Business Machines and others.
+// Copyright (C) 2004, 2012 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -176,28 +176,31 @@ namespace Ipopt
     int retval=-1;
 
     if (resto_status != SUCCESS) {
-      // In case of a failure, we still copy the values of primal and
-      // dual variables into the data fields of the regular NLP, so
-      // that they will be returned to the user
-      SmartPtr<IteratesVector> trial = IpData().trial()->MakeNewContainer();
+      SmartPtr<const IteratesVector> resto_curr = resto_ip_data->curr();
+      if (IsValid(resto_curr)) {
+        // In case of a failure, we still copy the values of primal and
+        // dual variables into the data fields of the regular NLP, so
+        // that they will be returned to the user
+        SmartPtr<IteratesVector> trial = IpData().trial()->MakeNewContainer();
 
-      SmartPtr<const CompoundVector> cx =
-        static_cast<const CompoundVector*>(GetRawPtr(resto_ip_data->curr()->x()));
-      DBG_ASSERT(IsValid(cx));
-      trial->Set_primal(*cx->GetComp(0), *resto_ip_data->curr()->s());
+        SmartPtr<const CompoundVector> cx =
+          static_cast<const CompoundVector*>(GetRawPtr(resto_curr->x()));
+        DBG_ASSERT(IsValid(cx));
+        trial->Set_primal(*cx->GetComp(0), *resto_ip_data->curr()->s());
 
-      trial->Set_eq_mult(*resto_ip_data->curr()->y_c(),
-                         *resto_ip_data->curr()->y_d());
+        trial->Set_eq_mult(*resto_ip_data->curr()->y_c(),
+                           *resto_ip_data->curr()->y_d());
 
-      cx = static_cast<const CompoundVector*>
-           (GetRawPtr(resto_ip_data->curr()->z_L()));
-      DBG_ASSERT(IsValid(cx));
-      trial->Set_bound_mult(*cx->GetComp(0), *resto_ip_data->curr()->z_U(),
-                            *resto_ip_data->curr()->v_L(),
-                            *resto_ip_data->curr()->v_U());
+        cx = static_cast<const CompoundVector*>
+             (GetRawPtr(resto_ip_data->curr()->z_L()));
+        DBG_ASSERT(IsValid(cx));
+        trial->Set_bound_mult(*cx->GetComp(0), *resto_ip_data->curr()->z_U(),
+                              *resto_ip_data->curr()->v_L(),
+                              *resto_ip_data->curr()->v_U());
 
-      IpData().set_trial(trial);
-      IpData().AcceptTrialPoint();
+        IpData().set_trial(trial);
+        IpData().AcceptTrialPoint();
+      }
     }
 
     if (resto_status == SUCCESS) {
