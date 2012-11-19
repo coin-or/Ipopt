@@ -102,6 +102,12 @@ int main(int argv, char**argc)
   ampl_options_list->AddAmplOption("compute_red_hessian", "compute_red_hessian",
 				   AmplOptionsList::String_Option,
 				   "Set to yes if reduced hessian should be computed.");
+  ampl_options_list->AddAmplOption("sens_boundcheck", "sens_boundcheck",
+				   AmplOptionsList::String_Option,
+				   "Set to yes to enable the fix-relax QP adaption to a possible bound check. This feature is experimental.");
+  ampl_options_list->AddAmplOption("n_sens_steps", "n_sens_steps",
+				   AmplOptionsList::Integer_Option,
+				   "Number of sensitivity steps");
 
   // create AmplSensTNLP from argc.
   SmartPtr<TNLP> sens_tnlp = new SensAmplTNLP(ConstPtr(app_ipopt->Jnlst()),
