@@ -1,4 +1,4 @@
-// Copyright (C) 2004, 2011 International Business Machines and others.
+// Copyright (C) 2004, 2012 International Business Machines and others.
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -138,7 +138,7 @@ namespace Ipopt
       // ComputeSearchDirection below
       if (new_options->GetStringValue("corrector_type", string_option, prefix)) {
         ASSERT_EXCEPTION(string_option=="none", OPTION_INVALID,
-                         "If mehrotra_algorithm=yes, corrector_type must be \"afnone\".");
+                         "If mehrotra_algorithm=yes, corrector_type must be \"none\".");
       }
       else {
         new_options->SetStringValue("corrector_type", "none", false);

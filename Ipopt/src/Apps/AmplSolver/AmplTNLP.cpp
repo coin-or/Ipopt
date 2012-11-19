@@ -672,7 +672,7 @@ namespace Ipopt
       solve_result_num = 501;
     }
     else if (status == DIVERGING_ITERATES) {
-      message = "Iterates divering; problem might be unbounded.";
+      message = "Iterates diverging; problem might be unbounded.";
       solve_result_num = 300;
     }
     else {
