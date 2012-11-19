@@ -17,6 +17,8 @@ history management of subversion.
           catastrophic failure in restoration phase [r2115]
         - fixed default for mumps_dep_tol to work with current Mumps versions [r2116]
         - fixed sign of dual values in AMPL solution [r2123, #183]
+        - fixed issue with sparse gradients in Matlab interface
+          (by T. Kelman) [r2133, #187]
         - sIPOPT (by H. Pirnay):
           - starting values in C++ version of parametric example now
             match AMPL version [r2098]
@@ -25,6 +27,9 @@ history management of subversion.
           - any non-zero suffix value is now accepted for sens_init_constr [r2100]
           - fix typo in AMPL interface (by Weifeng Chen) [r2110]
           - fix bug when compiling without AMPL interface [r2113]
+        - build system:
+          - updated instruction on using nowadays HSL sources (by T. Kelman)
+          - fixed issue with libdir being <prefix>/lib64
         - other minor fixes
 
 2012-02-12 releases/3.10.2
