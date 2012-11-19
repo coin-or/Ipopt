@@ -2,12 +2,37 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2012-11-19 releases/3.10.3
+        - minor fixes in MA86 interface (by Jonathan Hogg) [r2069, r2086]
+        - fix in IpTripletToCSRConverter for CSR forms with
+          extra entries (by Jonathan Hogg) [r2087]
+        - workaround problems with MacOSX-Lion's blas library
+          (by Frederic Hetch) [r2102, #181]
+        - the C interface now catches also Ipopt exceptions thrown
+          within the OptimizeTNLP call and returns Ipopt::Unrecoverable_Exception
+          as status [r2094, #144]
+        - fixed segmentation fault in adaptive barrier parameter update rule
+          when using the mehrotra option on unconstrained problems [r2114, #114]
+        - fixed segmentation fault in case no iterate is available in case of
+          catastrophic failure in restoration phase [r2115]
+        - fixed default for mumps_dep_tol to work with current Mumps versions [r2116]
+        - fixed sign of dual values in AMPL solution [r2123, #183]
+        - sIPOPT (by H. Pirnay):
+          - starting values in C++ version of parametric example now
+            match AMPL version [r2098]
+          - numerical values in parametric example now match publication [r2099]
+          - added options n_sens_steps and sens_boundcheck as AMPL options [r2099]
+          - any non-zero suffix value is now accepted for sens_init_constr [r2100]
+          - fix typo in AMPL interface (by Weifeng Chen) [r2110]
+          - fix bug when compiling without AMPL interface [r2113]
+        - other minor fixes
+
 2012-02-12 releases/3.10.2
         - updates to HSL interface (by Jonathan Hogg):
           - MC68 can now be loaded dynamically, too
-          - MA87 exploits built-in scaling
-          - MA87 can choose best ordering from AMD and Metis
-          - fix for return code of MA87 for singular matrices
+          - MA86 exploits built-in scaling
+          - MA86 can choose best ordering from AMD and Metis
+          - fix for return code of MA86 for singular matrices
         - corrected computation of Upsilon (norm of step SQUARED)
         - updates to MSVS v8-ifort project files and addition of vc10
           project files (using vc8-generated IpoptFSS.dll) (by Marcel Roelofs)
