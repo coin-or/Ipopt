@@ -239,16 +239,25 @@ extern "C"
                              (output only - ignored if set to NULL) */
     , Number* obj_val    /** Final value of objective function
                              (output only - ignored if set to NULL) */
-    , Number* mult_g     /** Final multipliers for constraints
-                             (output only - ignored if set to NULL) */
-    , Number* mult_x_L   /** Final multipliers for lower variable bounds
-                             (output only - ignored if set to NULL) */
-    , Number* mult_x_U   /** Final multipliers for upper variable bounds
-                             (output only - ignored if set to NULL) */
+    , Number* mult_g     /** Input: Initial values for the constraint
+                                    multipliers (only if warm start option
+                                    is chosen)
+                             Output: Final multipliers for constraints
+                                     (ignored if set to NULL) */
+    , Number* mult_x_L   /** Input: Initial values for the multipliers for
+                                    lower variable bounds (only if warm start
+                                    option is chosen)
+                             Output: Final multipliers for lower variable
+                                     bounds (ignored if set to NULL) */
+    , Number* mult_x_U   /** Input: Initial values for the multipliers for
+                                    upper variable bounds (only if warm start
+                                    option is chosen)
+                             Output: Final multipliers for upper variable
+                                     bounds (ignored if set to NULL) */
     , UserDataPtr user_data
-    /** Pointer to user data.  This will be
-    passed unmodified to the callback
-    functions. */
+                         /** Pointer to user data.  This will be
+                             passed unmodified to the callback
+                             functions. */
   );
 
   /**

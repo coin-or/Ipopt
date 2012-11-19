@@ -122,7 +122,7 @@ namespace Ipopt
     orig_ip_data->set_trial(trial);
 
     // Compute primal infeasibility
-    Number inf_pr;
+    Number inf_pr = 0.0;
     switch (inf_pr_output_) {
     case INTERNAL:
       inf_pr = orig_ip_cq->trial_primal_infeasibility(NORM_MAX);
