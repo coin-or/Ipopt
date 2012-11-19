@@ -97,7 +97,7 @@ namespace Ipopt
     else {
       Jnlst().Printf(J_DETAILED, J_MAIN, header.c_str());
     }
-    Number inf_pr;
+    Number inf_pr = 0.0;
     switch (inf_pr_output_) {
     case INTERNAL:
       inf_pr = IpCq().curr_primal_infeasibility(NORM_MAX);
