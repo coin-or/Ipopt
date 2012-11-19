@@ -23,18 +23,20 @@ using Ipopt::Snprintf;
 IpoptOptions::IpoptOptions (IpoptApplication& app, const mxArray* ptr) 
   : app(app) {
 
-  // Check to make sure the MATLAB array is a structure array.
-  if (!mxIsStruct(ptr))
-    throw MatlabException("The OPTIONS input must be a structure array; \
+  if (ptr != NULL) { // avoid segfault if no ipopt field in options
+    // Check to make sure the MATLAB array is a structure array.
+    if (!mxIsStruct(ptr))
+      throw MatlabException("The OPTIONS input must be a structure array; \
 type HELP STRUCT in the MATLAB console for more information");
 
-  // Each field in the structure array should correspond to an option
-  // in IPOPT. Repeat for each field.
-  int n = mxGetNumberOfFields(ptr);
-  for (int i = 0; i < n; i++) {
-    const char* label = mxGetFieldNameByNumber(ptr,i);
-    mxArray*    p     = mxGetFieldByNumber(ptr,0,i);
-    setOption(label,p);
+    // Each field in the structure array should correspond to an option
+    // in IPOPT. Repeat for each field.
+    int n = mxGetNumberOfFields(ptr);
+    for (int i = 0; i < n; i++) {
+      const char* label = mxGetFieldNameByNumber(ptr,i);
+      mxArray*    p     = mxGetFieldByNumber(ptr,0,i);
+      setOption(label,p);
+    }
   }
 }
 
