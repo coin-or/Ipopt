@@ -11,13 +11,13 @@ Contributors:
 
   Docs/documentation.tex
 
-- Olaf Schenk (Universirty of Basel):
+- Olaf Schenk (University of Basel):
   Modifications to the PARDISO interface in the files
 
   Algorithm/LinearSolvers/IpPardisoSolverInterface.cpp
   Algorithm/LinearSolvers/IpPardisoSolverInterface.hpp
 
-- Michael Hagemann (Universirty of Basel):
+- Michael Hagemann (University of Basel):
   MA57 interface
 
   Algorithm/LinearSolvers/IpMa57SolverInterface.cpp
@@ -63,7 +63,7 @@ Contributors:
   src/contrib/CGPenalty/IpPiecewisePenalty.cpp
   src/contrib/CGPenalty/IpPiecewisePenalty.hpp
 
-- Stefan Vigerske (Humboldt University Berlin and GAMS)
+- Stefan Vigerske (GAMS)
   Dynamic loading of linear solver shared libraries
 
   src/contrib/LinearSolverLoader/HSLLoader.c
