@@ -102,6 +102,11 @@ Contributors:
   R interface with examples, all files in directory (and subdirectory of)
 
   contrib/RInterface
+  
+- Tony Kelman (Berkeley)
+  improvements to Matlab interface
+  
+  Ipopt/contrib/MatlabInterface
 
 Contributors of code that is no longer included in Ipopt distribution:
 
