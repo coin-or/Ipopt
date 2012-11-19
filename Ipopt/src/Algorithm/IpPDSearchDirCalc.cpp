@@ -79,9 +79,8 @@ namespace Ipopt
       rhs->Set_y_d(*IpCq().curr_d_minus_s());
       Index nbounds = IpNLP().x_L()->Dim()+ IpNLP().x_U()->Dim() +
                       IpNLP().d_L()->Dim()+ IpNLP().d_U()->Dim();
-      if (nbounds>0 && mehrotra_algorithm_) {
+      if (nbounds>0 && mehrotra_algorithm_ && IpData().HaveAffineDeltas()) {
         // set up the right hand side a la Mehrotra
-        DBG_ASSERT(IpData().HaveAffineDeltas());
         DBG_ASSERT(!IpData().HaveDeltas());
         const SmartPtr<const IteratesVector> delta_aff = IpData().delta_aff();
 
