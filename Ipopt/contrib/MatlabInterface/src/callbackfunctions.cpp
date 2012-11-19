@@ -190,6 +190,11 @@ gradient callback function");
   // Get the output from the MATLAB callback function, which is the
   // value of the gradient of the objective function at x.
   mxArray* ptr = outputs[0];
+  if (mxIsSparse(ptr)) {
+      // convert sparse gradient to full (simplest method, not fastest)
+      mexCallMATLAB(1, &ptr, 1, outputs, "full");
+      mxDestroyArray(outputs[0]);
+  }
   Iterate grad(ptr);
   if (numvars(x) != numvars(grad))
     throw MatlabException("Invalid gradient passed back from MATLAB \
