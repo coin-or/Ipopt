@@ -1,4 +1,4 @@
-// Copyright (C) 2006, 2009 Damien Hocking, KBC Advanced Technologies
+// Copyright (C) 2006, 2012 Damien Hocking, KBC Advanced Technologies
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
@@ -137,7 +137,7 @@ namespace Ipopt
     roptions->AddNumberOption(
       "mumps_dep_tol",
       "Pivot threshold for detection of linearly dependent constraints in MUMPS.",
-      -1.,
+      0.0,
       "When MUMPS is used to determine linearly dependent constraints, this "
       "is determines the threshold for a pivot to be considered zero.  This "
       "is CNTL(3) in MUMPS.");
