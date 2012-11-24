@@ -12,6 +12,12 @@
 
 #include "IpSparseSymLinearSolverInterface.hpp"
 
+#ifdef FUNNY_MA57_FINT
+typedef long ma57int;
+#else
+typedef ipfint ma57int;
+#endif
+
 namespace Ipopt
 {
   /** Interface to the symmetric linear solver MA57, derived from
@@ -167,20 +173,20 @@ namespace Ipopt
      */
     //@{
     double   wd_cntl_[5];
-    ipfint   wd_icntl_[20];
+    ma57int  wd_icntl_[20];
 
-    ipfint   wd_info_[40];
+    ma57int  wd_info_[40];
     double   wd_rinfo_[20];
 
-    ipfint   wd_lkeep_;      /* LKEEP >= 5*N + NE + max(N,NE) + 42. */
-    ipfint  *wd_keep_;
+    ma57int  wd_lkeep_;      /* LKEEP >= 5*N + NE + max(N,NE) + 42. */
+    ma57int *wd_keep_;
 
-    ipfint  *wd_iwork_;      /* 5 * N. */
+    ma57int *wd_iwork_;      /* 5 * N. */
 
     double  *wd_fact_;
-    ipfint   wd_lfact_;
-    ipfint  *wd_ifact_;
-    ipfint   wd_lifact_;
+    ma57int  wd_lfact_;
+    ma57int *wd_ifact_;
+    ma57int  wd_lifact_;
 
 
     /** factor A of matrix */

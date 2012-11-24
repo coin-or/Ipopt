@@ -30,6 +30,12 @@
 
 #include <iostream>
 
+#ifdef FUNNY_MA57_FINT
+typedef long ma57int;
+#else
+typedef ipfint ma57int;
+#endif
+
 /** Prototypes for MA57's Fortran subroutines */
 extern "C"
 {
@@ -38,96 +44,96 @@ extern "C"
    */
   extern void  F77_FUNC (ma57id, MA57ID) (
       double    *cntl,
-      ipfint    *icntl);
+      ma57int   *icntl);
 
   /*
    *  MA57AD -- Symbolic Factorization.
    */
   extern void  F77_FUNC (ma57ad, MA57AD) (
-      ipfint    *n,     /* Order of matrix. */
-      ipfint    *ne,            /* Number of entries. */
+      ma57int   *n,     /* Order of matrix. */
+      ma57int   *ne,            /* Number of entries. */
 
-      const ipfint    *irn,       /* Matrix nonzero row structure */
-      const ipfint    *jcn,       /* Matrix nonzero column structure */
+      const ma57int    *irn,       /* Matrix nonzero row structure */
+      const ma57int    *jcn,       /* Matrix nonzero column structure */
 
-      ipfint    *lkeep,     /* Workspace for the pivot order of lenght 3*n */
-      ipfint    *keep,      /* Workspace for the pivot order of lenght 3*n */
+      ma57int   *lkeep,     /* Workspace for the pivot order of lenght 3*n */
+      ma57int   *keep,      /* Workspace for the pivot order of lenght 3*n */
       /* Automatically iflag = 0; ikeep pivot order iflag = 1 */
-      ipfint    *iwork,     /* Integer work space. */
-      ipfint    *icntl,     /* Integer Control parameter of length 30*/
-      ipfint    *info,      /* Statistical Information; Integer array of length 20 */
+      ma57int   *iwork,     /* Integer work space. */
+      ma57int   *icntl,     /* Integer Control parameter of length 30*/
+      ma57int   *info,      /* Statistical Information; Integer array of length 20 */
       double    *rinfo);    /* Double Control parameter of length 5 */
 
   /*
    * MA57BD -- Numerical Factorization.
    */
   extern void  F77_FUNC (ma57bd, MA57BD) (
-      ipfint    *n,     /* Order of matrix. */
-      ipfint    *ne,            /* Number of entries. */
+      ma57int   *n,     /* Order of matrix. */
+      ma57int   *ne,            /* Number of entries. */
 
       double    *a,     /* Numerical values. */
       double    *fact,      /* Entries of factors. */
-      ipfint    *lfact,     /* Length of array `fact'. */
-      ipfint    *ifact,     /* Indexing info for factors. */
-      ipfint    *lifact,    /* Length of array `ifact'. */
+      ma57int   *lfact,     /* Length of array `fact'. */
+      ma57int   *ifact,     /* Indexing info for factors. */
+      ma57int   *lifact,    /* Length of array `ifact'. */
 
-      ipfint    *lkeep,     /* Length of array `keep'. */
-      ipfint    *keep,      /* Integer array. */
+      ma57int   *lkeep,     /* Length of array `keep'. */
+      ma57int   *keep,      /* Integer array. */
 
-      ipfint    *iwork,     /* Workspace of length `n'. */
+      ma57int   *iwork,     /* Workspace of length `n'. */
 
-      ipfint    *icntl,     /* Integer Control parameter of length 20. */
+      ma57int   *icntl,     /* Integer Control parameter of length 20. */
       double    *cntl,      /* Double Control parameter of length 5. */
-      ipfint    *info,      /* Statistical Information; Integer array of length 40. */
+      ma57int   *info,      /* Statistical Information; Integer array of length 40. */
       double    *rinfo);    /* Statistical Information; Real array of length 20. */
 
   /*
    * MA57CD -- Solution.
    */
   extern void  F77_FUNC (ma57cd, MA57CD) (
-      ipfint    *job,       /* Solution job.  Solve for... */
+      ma57int    *job,       /* Solution job.  Solve for... */
       /* JOB <= 1:  A */
       /* JOB == 2:  PLP^t */
       /* JOB == 3:  PDP^t */
       /* JOB >= 4:  PL^t P^t */
 
-      ipfint    *n,         /* Order of matrix. */
+      ma57int   *n,         /* Order of matrix. */
 
       double    *fact,      /* Entries of factors. */
-      ipfint    *lfact,     /* Length of array `fact'. */
-      ipfint    *ifact,     /* Indexing info for factors. */
-      ipfint    *lifact,    /* Length of array `ifact'. */
+      ma57int   *lfact,     /* Length of array `fact'. */
+      ma57int   *ifact,     /* Indexing info for factors. */
+      ma57int   *lifact,    /* Length of array `ifact'. */
 
-      ipfint    *nrhs,      /* Number of right hand sides. */
+      ma57int   *nrhs,      /* Number of right hand sides. */
       double    *rhs,       /* Numerical Values. */
-      ipfint    *lrhs,      /* Leading dimensions of `rhs'. */
+      ma57int   *lrhs,      /* Leading dimensions of `rhs'. */
 
       double    *work,      /* Real workspace. */
-      ipfint    *lwork,     /* Length of `work', >= N*NRHS. */
-      ipfint    *iwork,     /* Integer array of length `n'. */
+      ma57int   *lwork,     /* Length of `work', >= N*NRHS. */
+      ma57int   *iwork,     /* Integer array of length `n'. */
 
-      ipfint    *icntl,     /* Integer Control parameter array of length 20. */
-      ipfint    *info);     /* Statistical Information; Integer array of length 40. */
+      ma57int   *icntl,     /* Integer Control parameter array of length 20. */
+      ma57int   *info);     /* Statistical Information; Integer array of length 40. */
 
   /*
    * MC57ED -- Copy arrays.
    */
   extern void  F77_FUNC (ma57ed, MA57ED) (
-      ipfint    *n,
-      ipfint    *ic,        /* 0: copy real array.  >=1:  copy integer array. */
-      ipfint    *keep,
+      ma57int   *n,
+      ma57int   *ic,        /* 0: copy real array.  >=1:  copy integer array. */
+      ma57int   *keep,
 
       double    *fact,
-      ipfint    *lfact,
+      ma57int   *lfact,
       double    *newfac,
-      ipfint    *lnew,
+      ma57int   *lnew,
 
-      ipfint    *ifact,
-      ipfint    *lifact,
-      ipfint    *newifc,
-      ipfint    *linew,
+      ma57int   *ifact,
+      ma57int   *lifact,
+      ma57int   *newifc,
+      ma57int   *linew,
 
-      ipfint    *info);
+      ma57int   *info);
 }
 
 namespace Ipopt
@@ -343,8 +349,8 @@ namespace Ipopt
                        "Option \"pivtolmax\": This value must be between "
                        "pivtol and 1.");
     }
-    else {
-      pivtolmax_ = Max(pivtolmax_, pivtol_);
+    else if (pivtol_ > pivtolmax_) {
+      pivtolmax_ = pivtol_;
     }
 
     options.GetNumericValue("ma57_pre_alloc", ma57_pre_alloc_, prefix);
@@ -531,31 +537,53 @@ namespace Ipopt
       IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
     }
 
-    ipfint n  = dim_;
-    ipfint ne = nonzeros_;
+    ma57int n  = dim_;
+    ma57int ne = nonzeros_;
 
-    wd_lkeep_ = 5*n + ne + Max (n,ne) + 42;
+    wd_lkeep_ = 5*n + ne + (n > ne ? n : ne) + 42;
 
     wd_cntl_[1-1]  = pivtol_;    /* Pivot threshold. */
 
-    wd_iwork_ = new ipfint[5*n];
-    wd_keep_  = new ipfint[wd_lkeep_];
+    wd_iwork_ = new ma57int[5*n];
+    wd_keep_  = new ma57int[wd_lkeep_];
     // Initialize to 0 as otherwise MA57ED can sometimes fail
     for (int k=0; k<wd_lkeep_; k++) {
       wd_keep_[k] = 0;
     }
 
+    // copy-cast airn and ajcn into ma57int arrays
+    ma57int* airn_ma57int;
+    ma57int* ajcn_ma57int;
+    if (sizeof(ma57int) != sizeof(Index)) {
+      airn_ma57int = new ma57int[ne];
+      ajcn_ma57int = new ma57int[ne];
+      for (int k = 0; k < ne; ++k) {
+        airn_ma57int[k] = (ma57int) airn[k];
+        ajcn_ma57int[k] = (ma57int) ajcn[k];
+      }
+    }
+    else {
+       airn_ma57int = const_cast<ma57int*>(airn);
+       ajcn_ma57int = const_cast<ma57int*>(ajcn);
+    }
+
     F77_FUNC (ma57ad, MA57AD)
-    (&n, &ne, airn, ajcn, &wd_lkeep_, wd_keep_, wd_iwork_,
+    (&n, &ne, airn_ma57int, ajcn_ma57int, &wd_lkeep_, wd_keep_, wd_iwork_,
      wd_icntl_, wd_info_, wd_rinfo_);
+
+    // free copy-casted ma57int arrays, no longer needed
+    if (sizeof(ma57int) != sizeof(Index)) {
+      delete [] airn_ma57int;
+      delete [] ajcn_ma57int;
+    }
 
     if (wd_info_[0] < 0) {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                      "*** Error from MA57AD *** INFO(0) = %d\n", wd_info_[0]);
     }
 
-    wd_lfact_  = (ipfint)((Number)wd_info_[8] * ma57_pre_alloc_);
-    wd_lifact_ = (ipfint)((Number)wd_info_[9] * ma57_pre_alloc_);
+    wd_lfact_  = (ma57int)((Number)wd_info_[8] * ma57_pre_alloc_);
+    wd_lifact_ = (ma57int)((Number)wd_info_[9] * ma57_pre_alloc_);
 
     // XXX MH:  Why is this necessary?  Is `::Factorization' called more
     // than once per object lifetime?  Where should allocation take
@@ -571,7 +599,7 @@ namespace Ipopt
     wd_ifact_ = NULL;
 
     wd_fact_  = new double[wd_lfact_];
-    wd_ifact_ = new int[wd_lifact_];
+    wd_ifact_ = new ma57int[wd_lifact_];
 
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                    "Suggested lfact  (*%e):  %d\n", ma57_pre_alloc_, wd_lfact_);
@@ -599,8 +627,8 @@ namespace Ipopt
 
     wd_cntl_[1-1]  = pivtol_;    /* Pivot threshold. */
 
-    ipfint n  = dim_;
-    ipfint ne = nonzeros_;
+    ma57int n  = dim_;
+    ma57int ne = nonzeros_;
 
     while (fact_error > 0) {
       F77_FUNC (ma57bd, MA57BD)
@@ -621,15 +649,15 @@ namespace Ipopt
          * MA57B/BD.
          */
         double  *temp;
-        ipfint  ic = 0;
+        ma57int ic = 0;
 
-        wd_lfact_ = (ipfint)((Number)wd_info_[16] * ma57_pre_alloc_);
+        wd_lfact_ = (ma57int)((Number)wd_info_[16] * ma57_pre_alloc_);
         temp = new double[wd_lfact_];
 
         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                        "Reallocating memory for MA57: lfact (%d)\n", wd_lfact_);
 
-        ipfint idmy;
+        ma57int idmy;
         F77_FUNC (ma57ed, MA57ED)
         (&n, &ic, wd_keep_,
          wd_fact_,  &wd_info_[1], temp, &wd_lfact_,
@@ -647,11 +675,11 @@ namespace Ipopt
          * MA57E/ED, and recall MA57B/BD.
          */
 
-        ipfint  *temp;
-        ipfint   ic = 1;
+        ma57int  *temp;
+        ma57int  ic = 1;
 
-        wd_lifact_ = (ipfint)((Number)wd_info_[17] * ma57_pre_alloc_);
-        temp = new ipfint[wd_lifact_];
+        wd_lifact_ = (ma57int)((Number)wd_info_[17] * ma57_pre_alloc_);
+        temp = new ma57int[wd_lifact_];
 
         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                        "Reallocating lifact (%d)\n", wd_lifact_);
@@ -696,7 +724,7 @@ namespace Ipopt
 
     double peak_mem = 1.0e-3 * (wd_lfact_*8.0 + wd_lifact_*4.0 + wd_lkeep_*4.0);
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "MA57 peak memory use: %dKB\n", (ipfint)(peak_mem));
+                   "MA57 peak memory use: %dKB\n", (ma57int)(peak_mem));
 
 
     // Check whether the number of negative eigenvalues matches the
@@ -724,13 +752,13 @@ namespace Ipopt
       IpData().TimingStats().LinearSystemBackSolve().Start();
     }
 
-    ipfint  n      = dim_;
-    ipfint  job    = 1;
+    ma57int n      = dim_;
+    ma57int job    = 1;
 
-    ipfint  nrhs_X = nrhs;
-    ipfint  lrhs   = n;
+    ma57int nrhs_X = nrhs;
+    ma57int lrhs   = n;
 
-    ipfint  lwork;
+    ma57int lwork;
     double* work;
 
     lwork = n * nrhs;
