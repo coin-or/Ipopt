@@ -36,6 +36,7 @@ public:
   ApplicationReturnStatus getExitStatus () const;
   void                    setExitStatus (ApplicationReturnStatus status);
   void                    setIterationCount (int iter);
+  void                    setFuncEvals(int obj, int con, int grad, int jac, int hess);
   void                    setCpuTime (double cpu);
 
   // Access and modify the Lagrange multipliers.

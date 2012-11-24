@@ -88,8 +88,10 @@ work in the MATLAB interface for IPOPT");
     // Set up the IPOPT console.
     EJournalLevel printLevel = (EJournalLevel) 
       options.ipoptOptions().printLevel();
-    SmartPtr<Journal> console = new MatlabJournal(printLevel);
-    app.Jnlst()->AddJournal(console);
+    if(printLevel > 0) { //prevents IPOPT display if we don't want it
+        SmartPtr<Journal> console = new MatlabJournal(printLevel);
+        app.Jnlst()->AddJournal(console);
+    }
 
     // Intialize the IpoptApplication object and process the options.
     ApplicationReturnStatus exitstatus;
@@ -110,6 +112,11 @@ work in the MATLAB interface for IPOPT");
     if (IsValid(app.Statistics())) {
       SmartPtr<SolveStatistics> stats = app.Statistics();
       info.setIterationCount(stats->IterationCount());
+      //Get Function Calls
+      int obj, con, grad, jac, hess;
+      stats->NumberOfEvaluations(obj,con,grad,jac,hess);
+      info.setFuncEvals(obj, con, grad, jac, hess);      
+      //CPU Time
       info.setCpuTime(stats->TotalCpuTime());
     }
 

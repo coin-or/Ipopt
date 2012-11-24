@@ -15,25 +15,50 @@ MatlabInfo::MatlabInfo (mxArray*& ptr)
   : ptr(0) {
 
   // Create the structure array.
-  const char* fieldnames[6];
+  const char* fieldnames[7];
   const char* exitstatusfield = "status";
   const char* multlbfield     = "zl";
   const char* multubfield     = "zu";
   const char* multconstrfield = "lambda";
   const char* iterfield       = "iter";
+  const char* evalfield       = "eval";
   const char* cpu             = "cpu";
   fieldnames[0] = exitstatusfield;
   fieldnames[1] = multlbfield;
   fieldnames[2] = multubfield;
   fieldnames[3] = multconstrfield;
   fieldnames[4] = iterfield;
-  fieldnames[5] = cpu;
-  this->ptr = ptr = mxCreateStructMatrix(1,1,6,fieldnames);
+  fieldnames[5] = evalfield;
+  fieldnames[6] = cpu;
+  this->ptr = ptr = mxCreateStructMatrix(1,1,7,fieldnames);
 
   // Initialize some fields.
   mxSetField(ptr,0,"status",mxCreateDoubleScalar(0));
   mxSetField(ptr,0,"iter",mxCreateDoubleScalar(0));
   mxSetField(ptr,0,"cpu",mxCreateDoubleScalar(0));
+  
+  //Build Eval Structure
+  const char* evalfields[5];
+  const char* obj = "objective";
+  const char* con = "constraint";
+  const char* grd = "gradient";
+  const char* jac = "Jacobian";
+  const char* hes = "Hessian";
+  evalfields[0] = obj;
+  evalfields[1] = con;
+  evalfields[2] = grd;
+  evalfields[3] = jac;
+  evalfields[4] = hes;
+  
+  mxArray *evalStruct = mxCreateStructMatrix(1,1,5,evalfields);
+  
+  mxSetField(evalStruct,0,"objective",mxCreateDoubleScalar(0));
+  mxSetField(evalStruct,0,"constraint",mxCreateDoubleScalar(0));
+  mxSetField(evalStruct,0,"gradient",mxCreateDoubleScalar(0));
+  mxSetField(evalStruct,0,"Jacobian",mxCreateDoubleScalar(0));
+  mxSetField(evalStruct,0,"Hessian",mxCreateDoubleScalar(0));
+  
+  mxSetField(ptr,0,"eval",evalStruct);       
 }
 
 ApplicationReturnStatus MatlabInfo::getExitStatus() const {
@@ -49,6 +74,15 @@ void MatlabInfo::setExitStatus (ApplicationReturnStatus status) {
 void MatlabInfo::setIterationCount (int iter) {
   mxArray* p = mxGetField(ptr,0,"iter");
   *mxGetPr(p) = (double) iter;
+}
+
+void MatlabInfo::setFuncEvals(int obj, int con, int grad, int jac, int hess){
+    mxArray* p = mxGetField(ptr,0,"eval");
+    *mxGetPr(mxGetField(p,0,"objective")) = obj;
+    *mxGetPr(mxGetField(p,0,"constraint")) = con;
+    *mxGetPr(mxGetField(p,0,"gradient")) = grad;
+    *mxGetPr(mxGetField(p,0,"Jacobian")) = jac;
+    *mxGetPr(mxGetField(p,0,"Hessian")) = hess;
 }
 
 void MatlabInfo::setCpuTime (double cpu) {
