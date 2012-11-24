@@ -30,12 +30,6 @@
 
 #include <iostream>
 
-#ifdef FUNNY_MA57_FINT
-typedef long ma57int;
-#else
-typedef ipfint ma57int;
-#endif
-
 /** Prototypes for MA57's Fortran subroutines */
 extern "C"
 {
