@@ -40,10 +40,10 @@ MatlabInfo::MatlabInfo (mxArray*& ptr)
   //Build Eval Structure
   const char* evalfields[5];
   const char* obj = "objective";
-  const char* con = "constraint";
+  const char* con = "constraints";
   const char* grd = "gradient";
-  const char* jac = "Jacobian";
-  const char* hes = "Hessian";
+  const char* jac = "jacobian";
+  const char* hes = "hessian";
   evalfields[0] = obj;
   evalfields[1] = con;
   evalfields[2] = grd;
@@ -53,10 +53,10 @@ MatlabInfo::MatlabInfo (mxArray*& ptr)
   mxArray *evalStruct = mxCreateStructMatrix(1,1,5,evalfields);
   
   mxSetField(evalStruct,0,"objective",mxCreateDoubleScalar(0));
-  mxSetField(evalStruct,0,"constraint",mxCreateDoubleScalar(0));
+  mxSetField(evalStruct,0,"constraints",mxCreateDoubleScalar(0));
   mxSetField(evalStruct,0,"gradient",mxCreateDoubleScalar(0));
-  mxSetField(evalStruct,0,"Jacobian",mxCreateDoubleScalar(0));
-  mxSetField(evalStruct,0,"Hessian",mxCreateDoubleScalar(0));
+  mxSetField(evalStruct,0,"jacobian",mxCreateDoubleScalar(0));
+  mxSetField(evalStruct,0,"hessian",mxCreateDoubleScalar(0));
   
   mxSetField(ptr,0,"eval",evalStruct);       
 }
@@ -79,10 +79,10 @@ void MatlabInfo::setIterationCount (int iter) {
 void MatlabInfo::setFuncEvals(int obj, int con, int grad, int jac, int hess){
     mxArray* p = mxGetField(ptr,0,"eval");
     *mxGetPr(mxGetField(p,0,"objective")) = obj;
-    *mxGetPr(mxGetField(p,0,"constraint")) = con;
+    *mxGetPr(mxGetField(p,0,"constraints")) = con;
     *mxGetPr(mxGetField(p,0,"gradient")) = grad;
-    *mxGetPr(mxGetField(p,0,"Jacobian")) = jac;
-    *mxGetPr(mxGetField(p,0,"Hessian")) = hess;
+    *mxGetPr(mxGetField(p,0,"jacobian")) = jac;
+    *mxGetPr(mxGetField(p,0,"hessian")) = hess;
 }
 
 void MatlabInfo::setCpuTime (double cpu) {
