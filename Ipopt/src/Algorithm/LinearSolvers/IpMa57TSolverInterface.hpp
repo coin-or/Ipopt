@@ -13,7 +13,7 @@
 #include "IpSparseSymLinearSolverInterface.hpp"
 
 #ifdef FUNNY_MA57_FINT
-typedef size_t ma57int;
+typedef ssize_t ma57int;
 #else
 typedef ipfint ma57int;
 #endif
