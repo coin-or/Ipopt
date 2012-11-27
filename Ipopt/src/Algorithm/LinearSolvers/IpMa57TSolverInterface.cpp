@@ -555,10 +555,9 @@ namespace Ipopt
         airn_ma57int[k] = (ma57int) airn[k];
         ajcn_ma57int[k] = (ma57int) ajcn[k];
       }
-    }
-    else {
-       airn_ma57int = const_cast<ma57int*>(airn);
-       ajcn_ma57int = const_cast<ma57int*>(ajcn);
+    } else {
+       airn_ma57int = (ma57int*)(void*)airn;
+       ajcn_ma57int = (ma57int*)(void*)ajcn;
     }
 
     F77_FUNC (ma57ad, MA57AD)
@@ -630,7 +629,7 @@ namespace Ipopt
        &wd_lkeep_, wd_keep_, wd_iwork_,
        wd_icntl_, wd_cntl_, wd_info_, wd_rinfo_);
 
-      negevals_ = wd_info_[24-1];   // Number of negative eigenvalues
+      negevals_ = (Index)wd_info_[24-1];   // Number of negative eigenvalues
 
       if (wd_info_[0] == 0) {
         fact_error = 0;
@@ -716,7 +715,7 @@ namespace Ipopt
       }
     }
 
-    double peak_mem = 1.0e-3 * (wd_lfact_*8.0 + wd_lifact_*4.0 + wd_lkeep_*4.0);
+    double peak_mem = 1.0e-3 * ((double)wd_lfact_*8.0 + (double)wd_lifact_*4.0 + (double)wd_lkeep_*4.0);
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                    "MA57 peak memory use: %dKB\n", (ma57int)(peak_mem));
 
