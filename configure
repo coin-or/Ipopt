@@ -1834,10 +1834,10 @@ echo "$as_me: error: invalid argument for --enable-static-standardlibs: $enablev
    esac
    use_static_standardlibs=$enableval
 else
-  if test $enable_shared = yes ; then
-     use_static_standardlibs = no
-   else
+  if test x$enable_shared = xno ; then
      use_static_standardlibs = auto
+   else
+     use_static_standardlibs = no
    fi
 
 

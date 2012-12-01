@@ -519,6 +519,7 @@ if test x"$MATLAB_HOME" != x; then
     FRAMEWORK_VECLIB='-framework vecLib'
   fi
 
+  # check whether to build static MEX files
   AC_ARG_ENABLE([matlab-static],
     [AC_HELP_STRING([--enable-matlab-static],
        [enable static linking of standard libraries into Ipopt mex file (default: no)])],
@@ -529,6 +530,76 @@ if test x"$MATLAB_HOME" != x; then
      esac
      use_matlab_static=$enableval],
     [use_matlab_static=no])
+
+  # check whether to use Matlab's MA57
+  AC_ARG_ENABLE([matlab-ma57],
+    [AC_HELP_STRING([--enable-matlab-ma57],
+       [enable linking against Matlab's MA57 library (if no HSL library is available)])],
+    [enable_matlab_ma57=$enableval],
+    [enable_matlab_ma57=no])
+  if test x"$enable_matlab_ma57" = xyes && test "$coin_has_hsl" != "yes" ; then
+    case $MEXSUFFIX in
+      mexglx)
+        # not tested
+        MWMA57LIB="-L$with_matlab_home/bin/glnx86 -lmwma57"
+        ;;
+      mexa64)
+        MWMA57LIB="-L$with_matlab_home/bin/glnxa64 -lmwma57"
+        ;;
+      mexmac)
+        # not tested
+        MWMA57LIB="-L$with_matlab_home/bin/mac -lmwma57"
+        ;;
+      mexmaci)
+        # not tested
+        MWMA57LIB="-L$with_matlab_home/bin/maci -lmwma57"
+        ;;
+      mexmaci64)
+        MWMA57LIB="-L$with_matlab_home/bin/maci64 -lmwma57"
+        ;;
+      mexs64)
+        # not tested
+        MWMA57LIB="-L$with_matlab_home/bin/sol64 -lmwma57"
+        ;;
+      mexw32)
+        MWMA57LIB="-L$with_matlab_home/bin/win32 -lmwma57"
+        if test x"$enable_matlab_static" = xyes; then
+          MWMA57LIB="-L$with_matlab_home/bin/win32 -Wl,-Bdynamic,-lmwma57,-Bstatic"
+        fi
+        ;;
+      mexw64)
+        MWMA57LIB="-L$with_matlab_home/bin/win64 -lmwma57"
+        if test x"$enable_matlab_static" = xyes; then
+          MWMA57LIB="-L$with_matlab_home/bin/win64 -Wl,-Bdynamic,-lmwma57,-Bstatic"
+        fi
+        ;;
+      *)
+        # something unexpected, either too old or too new?
+        ;;
+    esac
+    #TODO check whether MAMW57LIB works
+
+    IPOPTLIB_LIBS="$IPOPT_LIBS $MWMA57LIB"
+    IPOPTLIB_PCLIBS="$IPOPT_LIBS $MWMA57LIB"
+    IPOPTLIB_LIBS_INSTALLED="$IPOPT_LIBS $MWMA57LIB"
+
+    CXXDEFS="$CXXDEFS -DFUNNY_MA57_FINT"
+    mkdir -p src/Common
+    echo "#define COINHSL_HAS_MA57 1" > src/Algorithm/LinearSolvers/CoinHslConfig.h
+    # also fix Fortran naming convention on Windows
+    # (no trailing underscores in libmwma57.dll)
+    case $MEXSUFFIX in
+      mexw32 | mexw64)
+        echo "#define ma57ad_ ma57ad" >> src/Algorithm/LinearSolvers/CoinHslConfig.h
+        echo "#define ma57bd_ ma57bd" >> src/Algorithm/LinearSolvers/CoinHslConfig.h
+        echo "#define ma57cd_ ma57cd" >> src/Algorithm/LinearSolvers/CoinHslConfig.h
+        echo "#define ma57ed_ ma57ed" >> src/Algorithm/LinearSolvers/CoinHslConfig.h
+        echo "#define ma57id_ ma57id" >> src/Algorithm/LinearSolvers/CoinHslConfig.h
+        ;;
+    esac
+
+    AM_CONDITIONAL(COIN_HAS_HSL, test 1 = 1)
+  fi
 fi
 
 AM_CONDITIONAL([MEX_STATIC], test x"$use_matlab_static" = xyes)
