@@ -464,18 +464,6 @@ AC_ARG_WITH([matlab-home],
                            [specify location of matlab installation for the matlab Ipopt interface.  The "mex" compiler should be in MATLAB_HOME/bin]),
             [use_matlab_home=$withval], [use_matlab_home=])
 
-AC_ARG_ENABLE([matlab-static],
-  [AC_HELP_STRING([--enable-matlab-static],
-     [enable static linking of standard libraries into Ipopt mex file (default: no)])],
-  [case "$enableval" in
-     no | yes) ;;
-     *)
-       AC_MSG_ERROR([invalid argument for --enable-matlab-static: $enableval]);;
-   esac
-   use_matlab_static=$enableval],
-  [use_matlab_static=no])
-AM_CONDITIONAL([MEX_STATIC], test "$use_matlab_static" = yes)
-
 # If we're in Windows, need to add .bat extension to find mex and mexext, and set conditional to modify Matlab interface Makefile
 batext=
 case $build in
@@ -508,23 +496,9 @@ else
 fi
 
 MEXSUFFIX=
+FRAMEWORK_VECLIB=
 if test x"$MATLAB_HOME" != x; then
   AC_MSG_CHECKING([for Matlab executable extension (MEXSUFFIX)])
-
-##   cat >conftest.c <<_ACEOF
-## #include "mex.h"
-## void mexFunction(int nlhs, mxArray *plhs@<:@@:>@,
-##   int nrhs, const mxArray *prhs@<:@@:>@) {
-##   int i=0;
-## }
-## _ACEOF
-##   if $MATLAB_HOME/bin/mex conftest.c >5 2>&5; then
-##    MEXSUFFIX=`ls conftest.mex* 5>/dev/null | sed -e 's=conftest.=='`
-##    AC_MSG_RESULT([$MEXSUFFIX])
-##  else
-##    AC_MSG_RESULT([error running MEX compiler])
-##  fi
-
   if ! test -x "$MATLAB_HOME/bin/mexext$batext"; then
     AC_MSG_WARN([Cannot find $MATLAB_HOME/bin/mexext$batext executable to determine MEXSUFFIX])
   else
@@ -539,17 +513,29 @@ if test x"$MATLAB_HOME" != x; then
     esac
     AC_MSG_RESULT([$MEXSUFFIX])
   fi
+
+  # On Mac, need to move "-framework vecLib" from LIBS to LDFLAGS (if being used)
+  if test -n "`echo $BLAS_LIBS $LAPACK_LIBS | grep -e '-framework vecLib'`"; then
+    FRAMEWORK_VECLIB='-framework vecLib'
+  fi
+
+  AC_ARG_ENABLE([matlab-static],
+    [AC_HELP_STRING([--enable-matlab-static],
+       [enable static linking of standard libraries into Ipopt mex file (default: no)])],
+    [case "$enableval" in
+       no | yes) ;;
+       *)
+         AC_MSG_ERROR([invalid argument for --enable-matlab-static: $enableval]);;
+     esac
+     use_matlab_static=$enableval],
+    [use_matlab_static=no])
 fi
 
-# On Mac, need to move "-framework vecLib" from LIBS to LDFLAGS (if being used)
-FRAMEWORK_VECLIB=
-if test -n "`echo $BLAS_LIBS $LAPACK_LIBS | grep -e '-framework vecLib'`"; then
-  FRAMEWORK_VECLIB='-framework vecLib'
-fi
-AC_SUBST(FRAMEWORK_VECLIB)
+AM_CONDITIONAL([MEX_STATIC], test x"$use_matlab_static" = xyes)
 
 AC_SUBST(MATLAB_HOME)
 AC_SUBST(MEXSUFFIX)
+AC_SUBST(FRAMEWORK_VECLIB)
 
 ##########
 # ASTYLE #
