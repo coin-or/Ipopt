@@ -297,7 +297,11 @@ namespace Ipopt
     roptions->AddBoundedIntegerOption(
       "ma57_pivot_order",
       "Controls pivot order in MA57",
+#ifdef FUNNY_MA57_FINT
+      0, 5, 2, // Matlab's MA57 can crash if you try to use Metis
+#else
       0, 5, 5,
+#endif
       "This is ICNTL(6) in MA57.");
     roptions->AddStringOption2(
       "ma57_automatic_scaling",
