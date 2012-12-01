@@ -464,6 +464,18 @@ AC_ARG_WITH([matlab-home],
                            [specify location of matlab installation for the matlab Ipopt interface.  The "mex" compiler should be in MATLAB_HOME/bin]),
             [use_matlab_home=$withval], [use_matlab_home=])
 
+AC_ARG_ENABLE([matlab-static],
+  [AC_HELP_STRING([--enable-matlab-static],
+     [enable static linking of standard libraries into Ipopt mex file (default: no)])],
+  [case "$enableval" in
+     no | yes) ;;
+     *)
+       AC_MSG_ERROR([invalid argument for --enable-matlab-static: $enableval]);;
+   esac
+   use_matlab_static=$enableval],
+  [use_matlab_static=no])
+AM_CONDITIONAL([MEX_STATIC], test "$use_matlab_static" = yes)
+
 # If we're in Windows, need to add .bat extension to find mex and mexext, and set conditional to modify Matlab interface Makefile
 batext=
 case $build in

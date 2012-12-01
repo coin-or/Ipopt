@@ -34,7 +34,7 @@ libdir      = @libdir@
 
 CXX         = @CXX@
 CXXFLAGS    = @CXXFLAGS@ -DMATLAB_MEXFILE # -DMWINDEXISINT
-LDFLAGS     = $(CXXFLAGS) @RPATH_FLAGS@ @FRAMEWORK_VECLIB@
+LDFLAGS     = $(CXXFLAGS) @RPATH_FLAGS@ @FRAMEWORK_VECLIB@ @MEX_STATIC_TRUE@@MEX_WINDOWS_FALSE@-static-libgcc -static-libstdc++
 
 # Include directories (we use the CYGPATH_W variables to allow compilation with Windows compilers)
 @COIN_HAS_PKGCONFIG_TRUE@INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipopt`
@@ -44,6 +44,10 @@ LDFLAGS     = $(CXXFLAGS) @RPATH_FLAGS@ @FRAMEWORK_VECLIB@
 @COIN_HAS_PKGCONFIG_TRUE@LIBS = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt | sed -e 's/-framework vecLib//g'`
 @COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_TRUE@LIBS = -link -libpath:`$(CYGPATH_W) @abs_lib_dir@` libipopt.lib `echo "@IPOPTLIB_LIBS_INSTALLED@" | sed -e 's/-framework vecLib//g'`
 @COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_FALSE@LIBS = -L@abs_lib_dir@ -lipopt `echo "@IPOPTLIB_LIBS_INSTALLED@" | sed -e 's/-framework vecLib//g'`
+@MEX_STATIC_FALSE@LIBS_STATIC = $(LIBS)
+@MEX_STATIC_TRUE@@MEX_WINDOWS_FALSE@LIBS_STATIC = $$(echo " $(LIBS) " | sed -e "s| -lgfortran | `@F77@ -print-file-name=libgfortran.a` |g" -e "s| -lquadmath | `@F77@ -print-file-name=libquadmath.a` |g")
+@MEX_STATIC_TRUE@@MEX_WINDOWS_TRUE@LIBS_STATIC = $$(echo " $(LIBS) " | sed -e 's| -Wl,-Bdynamic,-lmwma57,-Bstatic | -lmwma57 |g')
+# mex doesn't understand -Wl,-Bdynamic,-lmwma57,-Bstatic on Windows
 
 # The following is necessary under cygwin, if native compilers are used
 CYGPATH_W = @CYGPATH_W@
@@ -81,10 +85,10 @@ uninstall:
 
 $(TARGET): $(OBJS)
 	make mexopts
-	$(MEX) $(MEXFLAGS) $(LIBS) -output $@ $^
+	$(MEX) $(MEXFLAGS) $(LIBS_STATIC) -output $@ $^
 
 %.@OBJEXT@: %.cpp
-	$(CXX) $(CXXFLAGS) $(INCL) -I"$(MATLAB_HOME)/extern/include" \
+	../../../../libtool --tag=CXX --mode=compile $(CXX) $(CXXFLAGS) $(INCL) -I"$(MATLAB_HOME)/extern/include" \
         -o $@ -c $^
 
 clean:
@@ -92,15 +96,25 @@ clean:
 
 distclean: clean
 
+@MEX_STATIC_FALSE@GM_ADD_LIBS_STATIC = 
+@MEX_STATIC_TRUE@GM_ADD_LIBS_STATIC = GM_ADD_LIBS="-static $$GM_ADD_LIBS";
+
 # make mexopts applies a set of fixes to mexopts.sh on Mac,
 # or mexopts.bat on Windows (if that file was generated
 # by Gnumex to use gcc via Cygwin or MinGW)
 mexopts:
 	case `uname` in \
 	  Darwin*) \
-	    SDKROOT=`grep -m1 'SDKROOT=' "$(MATLAB_HOME)/bin/mexopts.sh" | sed -e 's/SDKROOT=//g'`; \
-	    if ! test -d $$SDKROOT -o -e mexopts.sh; then \
-	      sed -e 's/-isysroot $$SDKROOT //g' -e 's/-Wl,-syslibroot,$$SDKROOT //g' "$(MATLAB_HOME)/bin/mexopts.sh" > mexopts.sh; \
+	    if ! test -e mexopts.sh; then \
+	      sed -e 's/-arch $$ARCHS//g' \
+	        $(MATLAB_HOME)/bin/mexopts.sh > mexopts.sh; \
+	      SDKROOT=`grep -m1 'SDKROOT=' mexopts.sh | sed -e 's/SDKROOT=//g'`; \
+	      if ! test -d $$SDKROOT; then \
+	        sed -e 's/-arch $$ARCHS//g' \
+	          -e 's/-isysroot $$SDKROOT//g' \
+	          -e 's/-Wl,-syslibroot,$$SDKROOT//g' \
+	          $(MATLAB_HOME)/bin/mexopts.sh > mexopts.sh; \
+	      fi; \
 	    fi \
 	    ;; \
 	  MINGW*) \
@@ -108,8 +122,11 @@ mexopts:
 	      echo Warning: no mexopts.bat found. You will probably need to run Gnumex to generate this file. Call \"make gnumex\" then try again.; \
 	    else \
 	      libdirwin=$$(cd $(libdir); cmd /c 'for %i in (.) do @echo %~fi' | sed 's|\\|/|g'); \
-	      GM_ADD_LIBS="-llibmx -llibmex -llibmat $(LIBS) "; \
-	      GM_ADD_LIBS=`echo $$GM_ADD_LIBS | sed "s| -L$(libdir) | -L$$libdirwin |g"`; \
+	      mingwlibdirwin=$$(cd /mingw/lib; cmd /c 'for %i in (.) do @echo %~fi' | sed 's|\\|/|g'); \
+	      GM_ADD_LIBS=$$(echo "-llibmx -llibmex -llibmat $(LIBS) " | \
+	        sed -e "s| -L$(libdir) | -L$$libdirwin |g" \
+	        -e "s| -L/mingw/lib | -L$$mingwlibdirwin |g"); \
+	      $(GM_ADD_LIBS_STATIC) \
 	      cp mexopts.bat mexopts.bat.orig; \
 	      sed -e 's|COMPILER=gcc|COMPILER=g++|' -e 's|GM_MEXLANG=c$$|GM_MEXLANG=cxx|' \
 	        -e "s|GM_ADD_LIBS=-llibmx -llibmex -llibmat$$|GM_ADD_LIBS=$$GM_ADD_LIBS|" \
@@ -121,9 +138,11 @@ mexopts:
 	      echo Warning: no mexopts.bat found. You will probably need to run Gnumex to generate this file. Call \"make gnumex\" then try again.; \
 	    else \
 	      libdirwin=`cygpath -m $(libdir)`; \
-	      GM_ADD_LIBS="-llibmx -llibmex -llibmat $(LIBS) "; \
-	      GM_ADD_LIBS=`echo $$GM_ADD_LIBS | sed "s| -L$(libdir) | -L$$libdirwin |g"`; \
-	      GM_ADD_LIBS=`echo $$GM_ADD_LIBS | sed "s| -L/usr/lib/| -L$$(cygpath -m /usr/lib)/|g"`; \
+	      cyglibdirwin=`cygpath -m /usr/lib`; \
+	      GM_ADD_LIBS=$$(echo "-llibmx -llibmex -llibmat $(LIBS) " | \
+	        sed -e "s| -L$(libdir) | -L$$libdirwin |g" \
+	        -e "s| -L/usr/lib/| -L$$cyglibdirwin/|g"); \
+	      $(GM_ADD_LIBS_STATIC) \
 	      cp mexopts.bat mexopts.bat.orig; \
 	      if test -n "`which g++-4 2> /dev/null`"; then \
 	        sed -e 's|COMPILER=gcc|COMPILER=g++-4|' mexopts.bat.orig > mexopts.bat.tmp; \
