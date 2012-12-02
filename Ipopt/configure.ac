@@ -464,6 +464,19 @@ AC_ARG_WITH([matlab-home],
                            [specify location of matlab installation for the matlab Ipopt interface.  The "mex" compiler should be in MATLAB_HOME/bin]),
             [use_matlab_home=$withval], [use_matlab_home=])
 
+# check whether to build static MEX files
+AC_ARG_ENABLE([matlab-static],
+  [AC_HELP_STRING([--enable-matlab-static],
+     [enable static linking of standard libraries into Ipopt mex file (default: no)])],
+  [case "$enableval" in
+     no | yes) ;;
+     *)
+       AC_MSG_ERROR([invalid argument for --enable-matlab-static: $enableval]);;
+   esac
+   use_matlab_static=$enableval],
+  [use_matlab_static=no])
+AM_CONDITIONAL([MEX_STATIC], test x"$use_matlab_static" = xyes)
+
 # If we're in Windows, need to add .bat extension to find mex and mexext, and set conditional to modify Matlab interface Makefile
 batext=
 case $build in
@@ -496,7 +509,6 @@ else
 fi
 
 MEXSUFFIX=
-FRAMEWORK_VECLIB=
 if test x"$MATLAB_HOME" != x; then
   AC_MSG_CHECKING([for Matlab executable extension (MEXSUFFIX)])
   if ! test -x "$MATLAB_HOME/bin/mexext$batext"; then
@@ -506,30 +518,22 @@ if test x"$MATLAB_HOME" != x; then
       *-mingw*)
         # MinGW cannot execute .bat files natively, so use cmd /c
         MEXSUFFIX=$(cd "$MATLAB_HOME/bin"; cmd /c mexext$batext)
+        # Also get short DOS form of MATLAB_HOME to avoid spaces in paths
+        MATLAB_HOME=$(cd "$MATLAB_HOME"; cmd /c 'for %i in (.) do @echo %~fsi' | \
+          sed 's|\\|/|g') # replace backslashes with forward slashes
+        ;;
+      *-cygwin*)
+        # need to strip trailing carriage return from mexext result in Cygwin
+        MEXSUFFIX=`"$MATLAB_HOME/bin/mexext$batext" | dos2unix`
+        # Also get short DOS form of MATLAB_HOME to avoid spaces in paths
+        MATLAB_HOME=$(cygpath -u $(cygpath -d "$MATLAB_HOME"))
         ;;
       *)
-        MEXSUFFIX=`"$MATLAB_HOME/bin/mexext$batext"`
+        MEXSUFFIX=`$MATLAB_HOME/bin/mexext`
         ;;
     esac
     AC_MSG_RESULT([$MEXSUFFIX])
   fi
-
-  # On Mac, need to move "-framework vecLib" from LIBS to LDFLAGS (if being used)
-  if test -n "`echo $BLAS_LIBS $LAPACK_LIBS | grep -e '-framework vecLib'`"; then
-    FRAMEWORK_VECLIB='-framework vecLib'
-  fi
-
-  # check whether to build static MEX files
-  AC_ARG_ENABLE([matlab-static],
-    [AC_HELP_STRING([--enable-matlab-static],
-       [enable static linking of standard libraries into Ipopt mex file (default: no)])],
-    [case "$enableval" in
-       no | yes) ;;
-       *)
-         AC_MSG_ERROR([invalid argument for --enable-matlab-static: $enableval]);;
-     esac
-     use_matlab_static=$enableval],
-    [use_matlab_static=no])
 
   # check whether to use Matlab's MA57
   AC_ARG_ENABLE([matlab-ma57],
@@ -541,36 +545,36 @@ if test x"$MATLAB_HOME" != x; then
     case $MEXSUFFIX in
       mexglx)
         # not tested
-        MWMA57LIB="-L$with_matlab_home/bin/glnx86 -lmwma57"
+        MWMA57LIB="-L$MATLAB_HOME/bin/glnx86 -lmwma57"
         ;;
       mexa64)
-        MWMA57LIB="-L$with_matlab_home/bin/glnxa64 -lmwma57"
+        MWMA57LIB="-L$MATLAB_HOME/bin/glnxa64 -lmwma57"
         ;;
       mexmac)
         # not tested
-        MWMA57LIB="-L$with_matlab_home/bin/mac -lmwma57"
+        MWMA57LIB="-L$MATLAB_HOME/bin/mac -lmwma57"
         ;;
       mexmaci)
         # not tested
-        MWMA57LIB="-L$with_matlab_home/bin/maci -lmwma57"
+        MWMA57LIB="-L$MATLAB_HOME/bin/maci -lmwma57"
         ;;
       mexmaci64)
-        MWMA57LIB="-L$with_matlab_home/bin/maci64 -lmwma57"
+        MWMA57LIB="-L$MATLAB_HOME/bin/maci64 -lmwma57"
         ;;
       mexs64)
         # not tested
-        MWMA57LIB="-L$with_matlab_home/bin/sol64 -lmwma57"
+        MWMA57LIB="-L$MATLAB_HOME/bin/sol64 -lmwma57"
         ;;
       mexw32)
-        MWMA57LIB="-L$with_matlab_home/bin/win32 -lmwma57"
-        if test x"$enable_matlab_static" = xyes; then
-          MWMA57LIB="-L$with_matlab_home/bin/win32 -Wl,-Bdynamic,-lmwma57,-Bstatic"
+        MWMA57LIB="-L$MATLAB_HOME/bin/win32 -lmwma57"
+        if test x"$use_matlab_static" = xyes; then
+          MWMA57LIB="-L$MATLAB_HOME/bin/win32 -Wl,-Bdynamic,-lmwma57,-Bstatic"
         fi
         ;;
       mexw64)
-        MWMA57LIB="-L$with_matlab_home/bin/win64 -lmwma57"
-        if test x"$enable_matlab_static" = xyes; then
-          MWMA57LIB="-L$with_matlab_home/bin/win64 -Wl,-Bdynamic,-lmwma57,-Bstatic"
+        MWMA57LIB="-L$MATLAB_HOME/bin/win64 -lmwma57"
+        if test x"$use_matlab_static" = xyes; then
+          MWMA57LIB="-L$MATLAB_HOME/bin/win64 -Wl,-Bdynamic,-lmwma57,-Bstatic"
         fi
         ;;
       *)
@@ -579,34 +583,38 @@ if test x"$MATLAB_HOME" != x; then
     esac
     #TODO check whether MAMW57LIB works
 
-    IPOPTLIB_LIBS="$IPOPT_LIBS $MWMA57LIB"
-    IPOPTLIB_PCLIBS="$IPOPT_LIBS $MWMA57LIB"
-    IPOPTLIB_LIBS_INSTALLED="$IPOPT_LIBS $MWMA57LIB"
+    IPOPTLIB_LIBS="$MWMA57LIB $IPOPTLIB_LIBS"
+    IPOPTLIB_PCLIBS="$MWMA57LIB $IPOPTLIB_PCLIBS"
+    IPOPTLIB_LIBS_INSTALLED="$MWMA57LIB $IPOPTLIB_LIBS_INSTALLED"
 
-    CXXDEFS="$CXXDEFS -DFUNNY_MA57_FINT"
+    CXXFLAGS="$CXXFLAGS -DFUNNY_MA57_FINT"
     mkdir -p src/Common
-    echo "#define COINHSL_HAS_MA57 1" > src/Algorithm/LinearSolvers/CoinHslConfig.h
+    echo "#define COINHSL_HAS_MA57 1" > src/Common/CoinHslConfig.h
     # also fix Fortran naming convention on Windows
     # (no trailing underscores in libmwma57.dll)
     case $MEXSUFFIX in
       mexw32 | mexw64)
-        echo "#define ma57ad_ ma57ad" >> src/Algorithm/LinearSolvers/CoinHslConfig.h
-        echo "#define ma57bd_ ma57bd" >> src/Algorithm/LinearSolvers/CoinHslConfig.h
-        echo "#define ma57cd_ ma57cd" >> src/Algorithm/LinearSolvers/CoinHslConfig.h
-        echo "#define ma57ed_ ma57ed" >> src/Algorithm/LinearSolvers/CoinHslConfig.h
-        echo "#define ma57id_ ma57id" >> src/Algorithm/LinearSolvers/CoinHslConfig.h
+        echo "#define ma57ad_ ma57ad" >> src/Common/CoinHslConfig.h
+        echo "#define ma57bd_ ma57bd" >> src/Common/CoinHslConfig.h
+        echo "#define ma57cd_ ma57cd" >> src/Common/CoinHslConfig.h
+        echo "#define ma57ed_ ma57ed" >> src/Common/CoinHslConfig.h
+        echo "#define ma57id_ ma57id" >> src/Common/CoinHslConfig.h
         ;;
     esac
 
-    AM_CONDITIONAL(COIN_HAS_HSL, test 1 = 1)
+    AC_DEFINE(COIN_HAS_HSL,1,[Define to 1 if the HSL package is available])
   fi
 fi
 
-AM_CONDITIONAL([MEX_STATIC], test x"$use_matlab_static" = xyes)
+# On Mac, need to move "-framework vecLib" from LIBS to LDFLAGS (if being used)
+FRAMEWORK_VECLIB=
+if test -n "`echo $BLAS_LIBS $LAPACK_LIBS | grep -e '-framework vecLib'`"; then
+  FRAMEWORK_VECLIB='-framework vecLib'
+fi
+AC_SUBST(FRAMEWORK_VECLIB)
 
 AC_SUBST(MATLAB_HOME)
 AC_SUBST(MEXSUFFIX)
-AC_SUBST(FRAMEWORK_VECLIB)
 
 ##########
 # ASTYLE #
