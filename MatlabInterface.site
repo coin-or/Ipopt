@@ -64,5 +64,7 @@ if test x"$enable_matlab_static" != xno; then
       fi
       ;;
   esac
+  # Prevent -lgcc_s from being pulled in during "checking for Fortran libraries of gfortran"
+  ADD_FFLAGS="$ADD_FFLAGS -static-libgcc"
 fi
 
