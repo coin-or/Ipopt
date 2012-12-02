@@ -509,6 +509,7 @@ else
 fi
 
 MEXSUFFIX=
+MWMA57PATH=
 if test x"$MATLAB_HOME" != x; then
   AC_MSG_CHECKING([for Matlab executable extension (MEXSUFFIX)])
   if ! test -x "$MATLAB_HOME/bin/mexext$batext"; then
@@ -545,36 +546,44 @@ if test x"$MATLAB_HOME" != x; then
     case $MEXSUFFIX in
       mexglx)
         # not tested
-        MWMA57LIB="-L$MATLAB_HOME/bin/glnx86 -lmwma57"
+        MWMA57PATH="$MATLAB_HOME/bin/glnx86"
+        MWMA57LIB="-L$MWMA57PATH -lmwma57"
         ;;
       mexa64)
-        MWMA57LIB="-L$MATLAB_HOME/bin/glnxa64 -lmwma57"
+        MWMA57PATH="$MATLAB_HOME/bin/glnxa64"
+        MWMA57LIB="-L$MWMA57PATH -lmwma57"
         ;;
       mexmac)
         # not tested
-        MWMA57LIB="-L$MATLAB_HOME/bin/mac -lmwma57"
+        MWMA57PATH="$MATLAB_HOME/bin/mac"
+        MWMA57LIB="-L$MWMA57PATH -lmwma57"
         ;;
       mexmaci)
         # not tested
-        MWMA57LIB="-L$MATLAB_HOME/bin/maci -lmwma57"
+        MWMA57PATH="$MATLAB_HOME/bin/maci"
+        MWMA57LIB="-L$MWMA57PATH -lmwma57"
         ;;
       mexmaci64)
-        MWMA57LIB="-L$MATLAB_HOME/bin/maci64 -lmwma57"
+        MWMA57PATH="$MATLAB_HOME/bin/maci64"
+        MWMA57LIB="-L$MWMA57PATH -lmwma57"
         ;;
       mexs64)
         # not tested
-        MWMA57LIB="-L$MATLAB_HOME/bin/sol64 -lmwma57"
+        MWMA57PATH="$MATLAB_HOME/bin/sol64"
+        MWMA57LIB="-L$MWMA57PATH -lmwma57"
         ;;
       mexw32)
-        MWMA57LIB="-L$MATLAB_HOME/bin/win32 -lmwma57"
+        MWMA57PATH="$MATLAB_HOME/bin/win32"
+        MWMA57LIB="-L$MWMA57PATH -lmwma57"
         if test x"$use_matlab_static" = xyes; then
-          MWMA57LIB="-L$MATLAB_HOME/bin/win32 -Wl,-Bdynamic,-lmwma57,-Bstatic"
+          MWMA57LIB="-L$MWMA57PATH -Wl,-Bdynamic,-lmwma57,-Bstatic"
         fi
         ;;
       mexw64)
-        MWMA57LIB="-L$MATLAB_HOME/bin/win64 -lmwma57"
+        MWMA57PATH="$MATLAB_HOME/bin/win64"
+        MWMA57LIB="-L$MWMA57PATH -lmwma57"
         if test x"$use_matlab_static" = xyes; then
-          MWMA57LIB="-L$MATLAB_HOME/bin/win64 -Wl,-Bdynamic,-lmwma57,-Bstatic"
+          MWMA57LIB="-L$MWMA57PATH -Wl,-Bdynamic,-lmwma57,-Bstatic"
         fi
         ;;
       *)
@@ -615,6 +624,7 @@ AC_SUBST(FRAMEWORK_VECLIB)
 
 AC_SUBST(MATLAB_HOME)
 AC_SUBST(MEXSUFFIX)
+AC_SUBST(MWMA57PATH)
 
 ##########
 # ASTYLE #
