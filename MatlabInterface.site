@@ -105,7 +105,10 @@ case `uname` in
     if test x"$enable_matlab_static" = xyes; then
       enable_pthread_mumps=no
     else
-      ADD_FFLAGS="$ADD_FFLAGS -static-libgcc"
+      case $F77 in
+        *ifort*) ;;
+        *) ADD_FFLAGS="$ADD_FFLAGS -static-libgcc" ;;
+      esac
     fi
     ;;
 esac
