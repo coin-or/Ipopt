@@ -49,22 +49,64 @@ if test -z "$with_lapack"; then
   with_lapack=BUILD
 fi
 
-# Unless user set --disable-matlab-static, enable static linking against
-# standard libraries (if possible and not forbidden) and disable
-# use of pthread library under mingw (seem to have only dll)
-if test x"$enable_matlab_static" != xno; then
-  if test x"$enable_static_standardlibs" != xno ; then
-    enable_static_standardlibs=auto
+# Unless user specified --enable-matlab-static (or disable), test
+# if we can statically link standard libraries into a shared lib
+if test -z "$enable_matlab_static"; then
+  cxxtemp=$CXX
+  f77temp=$F77
+  # shortcut: if CXX and F77 not specified, assume g++ and gfortran
+  if test -z "$cxxtemp"; then
+    cxxtemp=g++
   fi
-
+  if test -z "$f77temp"; then
+    f77temp=gfortran
+  fi
+  # make dummy test programs
+  echo "#include <iostream>"   > conftest.cc
+  echo "using namespace std;" >> conftest.cc
+  echo "int main ()"          >> conftest.cc
+  echo "{"                    >> conftest.cc
+  echo "  cout << endl;"      >> conftest.cc
+  echo "  return 0;"          >> conftest.cc
+  echo "}"                    >> conftest.cc
+  echo "      PROGRAM MAIN"    > conftest.f
+  echo "      END"            >> conftest.f
   case `uname` in
+    Darwin*)
+      $cxxtemp -static-libgcc -static-libstdc++ \
+        -shared -o conftest.dylib conftest.cc && test -z \
+        "`otool -L conftest.dylib | grep libstdc++`" && \
+        enable_matlab_static=yes
+      ;;
     MINGW*)
-      if test -z "$enable_pthread_mumps"; then
-        enable_pthread_mumps=no
-      fi
+      $cxxtemp -static -shared -o conftest.dll \
+        conftest.cc && test -z "`objdump -p conftest.dll | \
+        grep libstdc++`" && enable_matlab_static=yes
+      ;;
+    Linux*)
+      # also need to test if libgfortran.a is -fPIC on Linux
+      $cxxtemp -fPIC -static-libgcc -static-libstdc++ \
+        -shared -o conftest.so conftest.cc && test -z \
+        "`objdump -p conftest.so | grep libstdc++`" && \
+        $f77temp -fPIC -shared -o conftest.so conftest.f \
+        `$f77temp -print-file-name=libgfortran.a` && \
+        enable_matlab_static=yes
       ;;
   esac
-  # Prevent -lgcc_s from being pulled in during "checking for Fortran libraries of gfortran"
+  rm -f conftest*
+fi
+
+# Set configure flags which depend on enable_matlab_static
+if test x"$enable_matlab_static" = xyes; then
   ADD_FFLAGS="$ADD_FFLAGS -static-libgcc"
 fi
+case `uname` in
+  MINGW*)
+    if test x"$enable_matlab_static" = xyes; then
+      enable_pthread_mumps=no
+    else
+      ADD_FFLAGS="$ADD_FFLAGS -static-libgcc"
+    fi
+    ;;
+esac
 
