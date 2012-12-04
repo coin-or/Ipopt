@@ -36141,10 +36141,12 @@ fi;
         # not tested
         MWMA57PATH="$MATLAB_HOME/bin/glnx86"
         MWMA57LIB="-L$MWMA57PATH -lmwma57"
+        MWMA57PATH="$MWMA57PATH:$MATLAB_HOME/sys/os/glnx86"
         ;;
       mexa64)
         MWMA57PATH="$MATLAB_HOME/bin/glnxa64"
         MWMA57LIB="-L$MWMA57PATH -lmwma57"
+        MWMA57PATH="$MWMA57PATH:$MATLAB_HOME/sys/os/glnxa64"
         ;;
       mexmac)
         # not tested

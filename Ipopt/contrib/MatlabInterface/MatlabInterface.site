@@ -1,30 +1,32 @@
 # MatlabInterface.site
 # This is a config.site file to set appropriate flags for
 # building the Matlab Mex interface to Ipopt. Usage:
-# (assuming build directory is one level below configure)
-# ../configure CONFIG_SITE=$PWD/../MatlabInterface.site \
-#   --with-matlab-home=<output of matlabroot command in matlab> \
-#   CC=<location of C compiler> CXX=<location of C++ compiler> \
-#   F77=<location of Fortran compiler>
-# Ipopt configure will look for matlab on the path if you don't
-# specify --with-matlab-home. If the following command:
-# which matlab && ls -l $(which matlab)
+# 1. mkdir -p $prefix/share # (where $prefix is your build directory
+#    unless you specify a non-default value of --prefix to configure)
+# 2. Copy this file (MatlabInterface.site) to the new share folder
+# 3. Rename $prefix/share/MatlabInterface.site to $prefix/share/config.site
+# 4. $IPOPT_TOP_SRCDIR/configure CC=<C compiler command> \
+#      CXX=<C++ compiler command> F77=<Fortran compiler command> \
+#      --with-matlab-home=<Matlab location>
+# Ipopt configure will choose CC, CXX, and F77 automatically if you
+# do not specify them. It will also look for matlab on the path if
+# you don't specify --with-matlab-home. If the following command:
+#    which matlab && ls -l $(which matlab)
 # does not point to the version of Matlab you want, you need
 # to provide the correct path in --with-matlab-home.
-# Ipopt configure will choose CC, CXX, and F77 automatically
-# if you do not specify them. If the g++ or user-specified CXX
-# compiler is capable of statically linking libstdc++ (and the
-# libgfortran.a of gfortran or the user-specified F77 compiler)
-# into a shared library (4.5 or newer on Mac or Windows,
-# 4.7.3 or newer built --with-pic on Linux) then this script
-# will set up the Ipopt Matlab interface with all standard
-# libraries statically linked. This way the same mex file
-# should be usable across multiple versions of Matlab.
+# If the g++ or user-specified CXX compiler is capable of statically
+# linking libstdc++ (and the libgfortran.a of gfortran or the
+# user-specified F77 compiler) into a shared library (4.5 or newer
+# on Mac or Windows, 4.7.3 or newer built --with-pic on Linux)
+# then this script will set up the Ipopt Matlab interface with
+# all standard libraries statically linked. This way the same
+# mex file should be usable across multiple versions of Matlab.
 # If this causes any problems you can disable this behavior
 # by setting the flag --disable-matlab-static to configure.
 #
-# If you also specify --enable-matlab-ma57 in your configure call,
-# this file will set appropriate flags to use Matlab's MA57 library.
+# If you also specify --enable-matlab-ma57 in your configure
+# call and do not provide the HSL source code, configure will
+# try to use Matlab's MA57 library.
 # Note that when using Matlab's MA57, standalone Ipopt executables
 # (such as from "make test") require setting the environment variable
 # LD_LIBRARY_PATH=$MATLAB_HOME/bin/$ARCH:$MATLAB_HOME/sys/os/$ARCH
@@ -106,7 +108,7 @@ case `uname` in
       enable_pthread_mumps=no
     else
       case $F77 in
-        *ifort*) ;;
+        *ifort* | *compile_f2c*) ;;
         *) ADD_FFLAGS="$ADD_FFLAGS -static-libgcc" ;;
       esac
     fi
