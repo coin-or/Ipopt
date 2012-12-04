@@ -15,8 +15,8 @@ retval=0
 # for some reasons, the path could not be stored in the Ipopt
 # library via -rpath
 if test -n "@MWMA57PATH@" ; then
-  LD_LIBRARY_PATH="$LD_LIBRARY_PATH:@MWMA57PATH@"
-  DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:@MWMA57PATH@"
+  export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:@MWMA57PATH@"
+  export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:@MWMA57PATH@"
 fi
 
 echo " "
