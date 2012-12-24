@@ -26,6 +26,7 @@ liblinsolvers_la_SOURCES += \
 	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp \
 	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp \
 	IpMa86SolverInterface.cpp IpMa86SolverInterface.hpp \
+	IpMa97SolverInterface.cpp IpMa97SolverInterface.hpp \
 	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
 	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp \
 	IpMa77SolverInterface.cpp IpMa77SolverInterface.hpp
@@ -93,6 +94,7 @@ ASTYLE_FILES = \
 	IpMa28TDependencyDetector.cppbak IpMa28TDependencyDetector.hppbak \
 	IpMa57TSolverInterface.cppbak IpMa57TSolverInterface.hppbak \
 	IpMa86SolverInterface.cppbak IpMa86SolverInterface.hppbak \
+	IpMa97SolverInterface.cppbak IpMa97SolverInterface.hppbak \
 	IpMc19TSymScalingMethod.cppbak IpMc19TSymScalingMethod.hppbak \
 	IpMumpsSolverInterface.cppbak IpMumpsSolverInterface.hppbak \
 	IpSlackBasedTSymScalingMethod.cppbak IpSlackBasedTSymScalingMethod.hppbak \

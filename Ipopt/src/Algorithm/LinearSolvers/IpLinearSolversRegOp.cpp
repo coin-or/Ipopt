@@ -18,6 +18,7 @@
 #include "IpMa57TSolverInterface.hpp"
 #include "IpMa77SolverInterface.hpp"
 #include "IpMa86SolverInterface.hpp"
+#include "IpMa97SolverInterface.hpp"
 #include "IpMa28TDependencyDetector.hpp"
 #include "IpPardisoSolverInterface.hpp"
 #ifdef COIN_HAS_MUMPS
@@ -50,6 +51,10 @@ namespace Ipopt
 #if defined(COINHSL_HAS_MA86) || defined(HAVE_LINEARSOLVERLOADER)
     roptions->SetRegisteringCategory("MA86 Linear Solver");
     Ma86SolverInterface::RegisterOptions(roptions);
+#endif
+#if defined(COINHSL_HAS_MA97) || defined(HAVE_LINEARSOLVERLOADER)
+    roptions->SetRegisteringCategory("MA97 Linear Solver");
+    Ma97SolverInterface::RegisterOptions(roptions);
 #endif
 
 #ifdef COIN_HAS_MUMPS

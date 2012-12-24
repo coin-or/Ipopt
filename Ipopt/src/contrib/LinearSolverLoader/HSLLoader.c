@@ -471,6 +471,93 @@ void ma86_finalise(void **keep, const struct ma86_control *control) {
 }
 #endif
 
+#ifndef COINHSL_HAS_MA97
+
+static ma97_default_control_t func_ma97_default_control=NULL;
+static ma97_analyse_t func_ma97_analyse=NULL;
+static ma97_factor_t func_ma97_factor=NULL;
+static ma97_factor_solve_t func_ma97_factor_solve=NULL;
+static ma97_solve_t func_ma97_solve=NULL;
+static ma97_finalise_t func_ma97_finalise=NULL;
+static ma97_free_akeep_t func_ma97_free_akeep=NULL;
+
+void ma97_default_control(struct ma97_control *control) {
+  if (func_ma97_default_control==NULL) LSL_lateHSLLoad();
+  if (func_ma97_default_control==NULL) {
+    fprintf(stderr, "HSL routine ma97_default_control not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma97_default_control(control);
+}
+
+void ma97_analyse(const int check, const int n, const int ptr[],
+      const int row[], ma97pkgtype_d_ val[], void **akeep,
+      const struct ma97_control *control, struct ma97_info *info, int order[]) {
+  if (func_ma97_analyse==NULL) LSL_lateHSLLoad();
+  if (func_ma97_analyse==NULL) {
+    fprintf(stderr, "HSL routine ma97_analyse not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma97_analyse(check, n, ptr, row, val, akeep, control, info, order);
+}
+
+void ma97_factor(const int matrix_type, const int ptr[], const int row[],
+      const ma97pkgtype_d_ val[], void **akeep, void **fkeep,
+      const struct ma97_control *control, struct ma97_info *info,
+      const ma97pkgtype_d_ scale[]) {
+  if (func_ma97_factor==NULL) LSL_lateHSLLoad();
+  if (func_ma97_factor==NULL) {
+    fprintf(stderr, "HSL routine ma97_factor not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma97_factor(matrix_type, ptr, row, val, akeep, fkeep, control, info,
+        scale);
+}
+
+void ma97_factor_solve(const int matrix_type, const int ptr[], const int row[],
+      const ma97pkgtype_d_ val[], const int nrhs, ma97pkgtype_d_ x[],
+      const int ldx, void **akeep, void **fkeep,
+      const struct ma97_control *control, struct ma97_info *info,
+      const ma97pkgtype_d_ scale[]) {
+  if (func_ma97_factor_solve==NULL) LSL_lateHSLLoad();
+  if (func_ma97_factor_solve==NULL) {
+    fprintf(stderr, "HSL routine ma97_factor_solve not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma97_factor_solve(n, ptr, row, val, order, keep, control, info, nrhs,
+      ldx, x, scale);
+}
+
+void ma97_solve(const int job, const int nrhs, ma97pkgtype_d_ *x, const int ldx,
+      void **akeep, void **fkeep, const struct ma97_control *control,
+      struct ma97_info *info) {
+  if (func_ma97_solve==NULL) LSL_lateHSLLoad();
+  if (func_ma97_solve==NULL) {
+    fprintf(stderr, "HSL routine ma97_solve not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma97_solve(job, nrhs, x, ldx, akeep, fkeep, control, info);
+}
+
+void ma97_finalise(void **akeep, void **fkeep) {
+  if (func_ma97_finalise==NULL) LSL_lateHSLLoad();
+  if (func_ma97_finalise==NULL) {
+    fprintf(stderr, "HSL routine ma97_finalise not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma97_finalise(akeep, fkeep);
+}
+
+void ma97_free_akeep(void **akeep) {
+  if (func_ma97_free_akeep==NULL) LSL_lateHSLLoad();
+  if (func_ma97_free_akeep==NULL) {
+    fprintf(stderr, "HSL routine ma97_free_akeep not found in " HSLLIBNAME ".\nAbort...\n");
+    exit(EXIT_FAILURE);
+  }
+  func_ma97_free_akeep(akeep);
+}
+#endif
+
 #ifndef COINHSL_HAS_MC19
 
 static mc19ad_t func_mc19ad=NULL;
@@ -574,6 +661,16 @@ int LSL_loadHSL(const char* libname, char* msgbuf, int msglen) {
   func_ma86_finalise=(ma86_finalise_t)LSL_loadSym(HSL_handle, "ma86_finalise_d", msgbuf, msglen);
 #endif
 
+#ifndef COINHSL_HAS_MA97
+  func_ma97_default_control=(ma97_default_control_t)LSL_loadSym(HSL_handle, "ma97_default_control_d", msgbuf, msglen);
+  func_ma97_analyse=(ma97_analyse_t)LSL_loadSym(HSL_handle, "ma97_analyse_d", msgbuf, msglen);
+  func_ma97_factor=(ma97_factor_t)LSL_loadSym(HSL_handle, "ma97_factor_d", msgbuf, msglen);
+  func_ma97_factor_solve=(ma97_factor_solve_t)LSL_loadSym(HSL_handle, "ma97_factor_solve_d", msgbuf, msglen);
+  func_ma97_solve=(ma97_solve_t)LSL_loadSym(HSL_handle, "ma97_solve_d", msgbuf, msglen);
+  func_ma97_finalise=(ma97_finalise_t)LSL_loadSym(HSL_handle, "ma97_finalise_d", msgbuf, msglen);
+  func_ma97_free_akeep=(ma97_free_akeep_t)LSL_loadSym(HSL_handle, "ma97_free_akeep_d", msgbuf, msglen);
+#endif
+
 #ifndef COINHSL_HAS_MC19
   func_mc19ad=(mc19ad_t)LSL_loadSym(HSL_handle, "mc19ad", msgbuf, msglen);
 #endif
@@ -642,6 +739,15 @@ int LSL_unloadHSL() {
   func_ma86_finalise=NULL;
 #endif
 
+#ifndef COINHSL_HAS_MA97
+  func_ma97_default_control=NULL;
+  func_ma97_analyse=NULL;
+  func_ma97_factor=NULL;
+  func_ma97_factor_solve=NULL;
+  func_ma97_solve=NULL;
+  func_ma97_finalise=NULL;
+#endif
+
 #ifndef COINHSL_HAS_MC19
   func_mc19ad=NULL;
 #endif
@@ -693,6 +799,14 @@ int LSL_isMA77available() {
 int LSL_isMA86available() {
 #ifndef COINHSL_HAS_MA86
 	return func_ma86_default_control!=NULL && func_ma86_analyse!=NULL && func_ma86_factor!=NULL && func_ma86_factor_solve!=NULL && func_ma86_solve!=NULL && func_ma86_finalise!=NULL;
+#else
+	return 1;
+#endif
+}
+
+int LSL_isMA97available() {
+#ifndef COINHSL_HAS_MA97
+	return func_ma97_default_control!=NULL && func_ma97_analyse!=NULL && func_ma97_factor!=NULL && func_ma97_factor_solve!=NULL && func_ma97_solve!=NULL && func_ma97_finalise!=NULL && func_ma97_free_akeep!=NULL;
 #else
 	return 1;
 #endif
@@ -804,6 +918,24 @@ void LSL_setMA86(ma86_default_control_t ma86_default_control,
    func_ma86_factor_solve = ma86_factor_solve;
    func_ma86_solve = ma86_solve;
    func_ma86_finalise = ma86_finalise;
+#endif
+}
+
+void LSL_setMA97(ma97_default_control_t ma97_default_control,
+   ma97_analyse_t ma97_analyse,
+   ma97_factor_t ma97_factor,
+   ma97_factor_solve_t ma97_factor_solve,
+   ma97_solve_t ma97_solve,
+   ma97_finalise_t ma97_finalise,
+   ma97_free_akeep_t ma97_free_akeep) {
+#ifndef COINHSL_HAS_MA97
+   func_ma97_default_control = ma97_default_control;
+   func_ma97_analyse = ma97_analyse;
+   func_ma97_factor = ma97_factor;
+   func_ma97_factor_solve = ma97_factor_solve;
+   func_ma97_solve = ma97_solve;
+   func_ma97_finalise = ma97_finalise;
+   func_ma97_free_akeep = ma97_free_akeep;
 #endif
 }
 

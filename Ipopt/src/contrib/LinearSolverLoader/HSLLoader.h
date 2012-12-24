@@ -58,6 +58,22 @@ struct ma86_info;
 typedef double ma86pkgtype_d_;
 typedef double ma86realtype_d_;
 
+#ifndef ma97_default_control
+#define ma97_control ma97_control_d
+#define ma97_info ma97_info_d
+#define ma97_default_control ma97_default_control_d
+#define ma97_analyse ma97_analyse_d
+#define ma97_factor ma97_factor_d
+#define ma97_factor_solve ma97_factor_solve_d
+#define ma97_solve ma97_solve_d
+#define ma97_finalise ma97_finalise_d
+#define ma97_free_akeep ma97_free_akeep_d
+#endif
+
+struct ma97_control;
+struct ma97_info;
+typedef double ma97pkgtype_d_;
+typedef double ma97realtype_d_;
 
 struct mc68_control;
 struct mc68_info;
@@ -209,6 +225,25 @@ typedef void (*ma86_solve_t)(const int job, const int nrhs, const int ldx,
 typedef void (*ma86_finalise_t)(void **keep,
    const struct ma86_control *control);
 
+typedef void (*ma97_default_control_t)(struct ma97_control *control);
+typedef void (*ma97_analyse_t)(const int check, const int n, const int ptr[],
+   const int row[], ma97pkgtype_d_ val[], void **akeep,
+   const struct ma97_control *control, struct ma97_info *info, int order[]);
+typedef void (*ma97_factor_t)(const int matrix_type, const int ptr[],
+   const int row[], const ma97pkgtype_d_ val[], void **akeep, void **fkeep,
+   const struct ma97_control *control, struct ma97_info *info,
+   const ma97pkgtype_d_ scale[]);
+typedef void (*ma97_factor_solve_t)(const int matrix_type, const int ptr[],
+   const int row[], const ma97pkgtype_d_ val[], const int nrhs,
+   ma97pkgtype_d_ x[], const int ldx,  void **akeep, void **fkeep,
+   const struct ma97_control *control, struct ma97_info *info,
+   const ma97pkgtype_d_ scale[]);
+typedef void (*ma97_solve_t)(const int job, const int nrhs, ma97pkgtype_d_ *x,
+   const int ldx, const int order[], void **keep,
+   const struct ma97_control *control, struct ma97_info *info);
+typedef void (*ma97_finalise_t)(void **akeep, void **fkeep);
+typedef void (*ma97_free_akeep_t)(void **akeep);
+
 typedef void (*mc19ad_t)(ipfint *N, ipfint *NZ, double* A, ipfint *IRN, ipfint* ICN, float* R, float* C, float* W);
 
 typedef void (*mc68_default_control_t)(struct mc68_control *control);
@@ -224,6 +259,7 @@ typedef void (*mc68_order_t)(const int ord, const int n, const int ptr[],
    * @see LSL_isMA57available
    * @see LSL_isMA77available
    * @see LSL_isMA86available
+   * @see LSL_isMA97available
    * @see LSL_isMC19available
    * @param libname The name under which the HSL lib can be found, or NULL to use a default name (libhsl.<SHAREDLIBEXT>).
    * @param msgbuf A buffer where we can store a failure message. Assumed to be NOT NULL!
@@ -258,7 +294,7 @@ typedef void (*mc68_order_t)(const int ord, const int n, const int ptr[],
   int LSL_isMA57available();
 
   /** Indicates whether a HSL library is loaded and all symbols necessary to use MA77 have been found.
-   * @return Zero if not available, nonzero if MA77 is available in the loaded library.
+   * @return Zero if not available, nonzero if HSL_MA77 is available in the loaded library.
    */
   int LSL_isMA77available();
 
@@ -266,14 +302,19 @@ typedef void (*mc68_order_t)(const int ord, const int n, const int ptr[],
    * @return Zero if not available, nonzero if HSL_MA86 is available in the loaded library.
    */
   int LSL_isMA86available();
+
+  /** Indicates whether a HSL library is loaded and all symbols necessary to use HSL_MA97 have been found.
+   * @return Zero if not available, nonzero if HSL_MA97 is available in the loaded library.
+   */
+  int LSL_isMA97available();
   
   /** Indicates whether a HSL library is loaded and all symbols necessary to use MA57 have been found.
-   * @return Zero if not available, nonzero if MA57 is available in the loaded library.
+   * @return Zero if not available, nonzero if MC19 is available in the loaded library.
    */
   int LSL_isMC19available();
   
   /** Indicates whether a HSL library is loaded and all symbols necessary to use HSL_MC68 have been found.
-   * @return Zero if not available, nonzero if MA57 is available in the loaded library.
+   * @return Zero if not available, nonzero if MC68 is available in the loaded library.
    */
   int LSL_isMC68available();
 
@@ -314,6 +355,15 @@ typedef void (*mc68_order_t)(const int ord, const int n, const int ptr[],
      ma86_factor_solve_t ma86_factor_solve,
      ma86_solve_t ma86_solve,
      ma86_finalise_t ma86_finalise);
+
+  /** sets pointers to MA97 functions */
+  void LSL_setMA97(ma97_default_control_t ma97_default_control,
+     ma97_analyse_t ma97_analyse,
+     ma97_factor_t ma97_factor,
+     ma97_factor_solve_t ma97_factor_solve,
+     ma97_solve_t ma97_solve,
+     ma97_finalise_t ma97_finalise,
+     ma97_free_akeep_t ma97_free_akeep);
 
   /** sets pointer to MC19 function */
   void LSL_setMC19(mc19ad_t mc19ad);

@@ -59,6 +59,7 @@
 #include "IpMa57TSolverInterface.hpp"
 #include "IpMa77SolverInterface.hpp"
 #include "IpMa86SolverInterface.hpp"
+#include "IpMa97SolverInterface.hpp"
 #include "IpMc19TSymScalingMethod.hpp"
 #include "IpPardisoSolverInterface.hpp"
 #include "IpSlackBasedTSymScalingMethod.hpp"
@@ -137,7 +138,7 @@ namespace Ipopt
   void AlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->SetRegisteringCategory("Linear Solver");
-    roptions->AddStringOption8(
+    roptions->AddStringOption9(
       "linear_solver",
       "Linear solver used for step computations.",
 #ifdef COINHSL_HAS_MA27
@@ -146,22 +147,26 @@ namespace Ipopt
 # ifdef COINHSL_HAS_MA57
       "ma57",
 # else
-#  ifdef COINHSL_HAS_MA86
-      "ma86",
-#  else
-#   ifdef HAVE_PARDISO
-      "pardiso",
+# ifdef COINHSL_HAS_MA97
+      "ma97",
+#else
+#   ifdef COINHSL_HAS_MA86
+       "ma86",
 #   else
-#    ifdef HAVE_WSMP
-      "wsmp",
+#    ifdef HAVE_PARDISO
+       "pardiso",
 #    else
-#     ifdef COIN_HAS_MUMPS
-      "mumps",
+#     ifdef HAVE_WSMP
+       "wsmp",
 #     else
-#      ifdef COINHSL_HAS_MA77
-       "ma77",
+#      ifdef COIN_HAS_MUMPS
+       "mumps",
 #      else
-       "ma27",
+#       ifdef COINHSL_HAS_MA77
+        "ma77",
+#       else
+        "ma27",
+#       endif
 #      endif
 #     endif
 #    endif
@@ -173,6 +178,7 @@ namespace Ipopt
       "ma57", "use the Harwell routine MA57",
       "ma77", "use the Harwell routine HSL_MA77",
       "ma86", "use the Harwell routine HSL_MA86",
+      "ma97", "use the Harwell routine HSL_MA97",
       "pardiso", "use the Pardiso package",
       "wsmp", "use WSMP package",
       "mumps", "use MUMPS package",
@@ -415,6 +421,30 @@ namespace Ipopt
 #endif
 
     }
+    else if (linear_solver=="ma97") {
+#ifndef COINHSL_HAS_MA97
+# ifdef HAVE_LINEARSOLVERLOADER
+      SolverInterface = new Ma97SolverInterface();
+      if (!LSL_isMA97available()) {
+        char buf[256];
+        int rc = LSL_loadHSL(NULL, buf, 255);
+        if (rc) {
+          std::string errmsg;
+          errmsg = "Selected linear solver HSL_MA97 not available.\nTried to obtain HSL_MA97 from shared library \"";
+          errmsg += LSL_HSLLibraryName();
+          errmsg += "\", but the following error occured:\n";
+          errmsg += buf;
+          THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
+        }
+      }
+# else
+      THROW_EXCEPTION(OPTION_INVALID, "Support for HSL_MA97 has not been compiled into Ipopt.");
+# endif
+#else
+      SolverInterface = new Ma97SolverInterface();
+#endif
+
+    }
     else if (linear_solver=="wsmp") {
 #ifdef HAVE_WSMP
       bool wsmp_iterative;
@@ -457,8 +487,8 @@ namespace Ipopt
       std::string linear_system_scaling;
       if (!options.GetStringValue("linear_system_scaling",
                                   linear_system_scaling, prefix)) {
-        // By default, don't use mc19 for non-HSL solvers
-        if (linear_solver!="ma27" && linear_solver!="ma57") {
+        // By default, don't use mc19 for non-HSL solvers, or HSL_MA97
+        if (linear_solver!="ma27" && linear_solver!="ma57" && linear_solver!="ma77" && linear_solver!="ma86") {
           linear_system_scaling="none";
         }
       }
