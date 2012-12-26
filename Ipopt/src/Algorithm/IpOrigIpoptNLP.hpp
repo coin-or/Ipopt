@@ -31,7 +31,7 @@ namespace Ipopt
   /** This class maps the traditional NLP into
    *  something that is more useful by Ipopt.
    *  This class takes care of storing the
-   *  calculated model results, handles cacheing,
+   *  calculated model results, handles caching,
    *  and (some day) takes care of addition of slacks.
    */
   class OrigIpoptNLP : public IpoptNLP
@@ -263,6 +263,9 @@ namespace Ipopt
       return nlp_;
     }
 
+    /**@name Methods related to function evaluation timing. */
+    //@{
+
     /** Reset the timing statistics */
     void ResetTimes();
 
@@ -270,9 +273,39 @@ namespace Ipopt
                                EJournalLevel level,
                                EJournalCategory category) const;
 
+    const TimedTask& f_eval_time() const
+    {
+      return f_eval_time_;
+    }
+    const TimedTask& grad_f_eval_time() const
+    {
+      return grad_f_eval_time_;
+    }
+    const TimedTask& c_eval_time() const
+    {
+      return c_eval_time_;
+    }
+    const TimedTask& jac_c_eval_time() const
+    {
+      return jac_c_eval_time_;
+    }
+    const TimedTask& d_eval_time() const
+    {
+      return d_eval_time_;
+    }
+    const TimedTask& jac_d_eval_time() const
+    {
+      return jac_d_eval_time_;
+    }
+    const TimedTask& h_eval_time() const
+    {
+      return h_eval_time_;
+    }
+
     Number TotalFunctionEvaluationCpuTime() const;
     Number TotalFunctionEvaluationSysTime() const;
     Number TotalFunctionEvaluationWallclockTime() const;
+    //@}
 
   private:
     /** journalist */
