@@ -78,6 +78,7 @@ namespace Ipopt
     }
 
     /** Create a new vector in the x entry */
+    inline
     SmartPtr<Vector> create_new_x();
 
     /** Create a new vector in the x entry and copy the current values
@@ -119,6 +120,7 @@ namespace Ipopt
     }
 
     /** Create a new vector in the s entry */
+    inline
     SmartPtr<Vector> create_new_s();
 
     /** Create a new vector in the s entry and copy the current values
@@ -160,6 +162,7 @@ namespace Ipopt
     }
 
     /** Create a new vector in the y_c entry */
+    inline
     SmartPtr<Vector> create_new_y_c();
 
     /** Create a new vector in the y_c entry and copy the current
@@ -201,6 +204,7 @@ namespace Ipopt
     }
 
     /** Create a new vector in the y_d entry */
+    inline
     SmartPtr<Vector> create_new_y_d();
 
     /** Create a new vector in the y_d entry and copy the current
@@ -242,7 +246,8 @@ namespace Ipopt
     }
 
     /** Create a new vector in the z_L entry */
-    SmartPtr<Vector> create_new_z_L() ;
+    inline
+    SmartPtr<Vector> create_new_z_L();
 
     /** Create a new vector in the z_L entry and copy the current
      *  values into it. */
@@ -283,6 +288,7 @@ namespace Ipopt
     }
 
     /** Create a new vector in the z_U entry */
+    inline
     SmartPtr<Vector> create_new_z_U();
 
     /** Create a new vector in the z_U entry and copy the current
@@ -324,6 +330,7 @@ namespace Ipopt
     }
 
     /** Create a new vector in the v_L entry */
+    inline
     SmartPtr<Vector> create_new_v_L();
 
     /** Create a new vector in the v_L entry and copy the current
@@ -365,6 +372,7 @@ namespace Ipopt
     }
 
     /** Create a new vector in the v_U entry */
+    inline
     SmartPtr<Vector> create_new_v_U();
 
     /** Create a new vector in the v_U entry and copy the current

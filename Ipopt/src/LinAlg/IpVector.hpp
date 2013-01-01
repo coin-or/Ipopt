@@ -52,16 +52,20 @@ namespace Ipopt
     /** Constructor.  It has to be given a pointer to the
      *  corresponding VectorSpace.
      */
+    inline
     Vector(const VectorSpace* owner_space);
 
     /** Destructor */
+    inline
     virtual ~Vector();
     //@}
 
     /** Create new Vector of the same type with uninitialized data */
+    inline
     Vector* MakeNew() const;
 
     /** Create new Vector of the same type and copy the data over */
+    inline
     Vector* MakeNewCopy() const;
 
     /**@name Standard BLAS-1 Operations
@@ -70,24 +74,30 @@ namespace Ipopt
      *  protected versions of these methods). */
     //@{
     /** Copy the data of the vector x into this vector (DCOPY). */
+    inline
     void Copy(const Vector& x);
 
     /** Scales the vector by scalar alpha (DSCAL) */
     void Scal(Number alpha);
 
     /** Add the multiple alpha of vector x to this vector (DAXPY) */
+    inline
     void Axpy(Number alpha, const Vector &x);
 
     /** Computes inner product of vector x with this (DDOT) */
+    inline
     Number Dot(const Vector &x) const;
 
     /** Computes the 2-norm of this vector (DNRM2) */
+    inline
     Number Nrm2() const;
 
     /** Computes the 1-norm of this vector (DASUM) */
+    inline
     Number Asum() const;
 
     /** Computes the max-norm of this vector (based on IDAMAX) */
+    inline
     Number Amax() const;
     //@}
 
@@ -97,47 +107,61 @@ namespace Ipopt
      *  protected versions of these methods). */
     //@{
     /** Set each element in the vector to the scalar alpha. */
+    inline
     void Set(Number alpha);
 
     /** Element-wise division  \f$y_i \gets y_i/x_i\f$*/
+    inline
     void ElementWiseDivide(const Vector& x);
 
     /** Element-wise multiplication \f$y_i \gets y_i*x_i\f$ */
+    inline
     void ElementWiseMultiply(const Vector& x);
 
     /** Element-wise max against entries in x */
+    inline
     void ElementWiseMax(const Vector& x);
 
     /** Element-wise min against entries in x */
+    inline
     void ElementWiseMin(const Vector& x);
 
     /** Reciprocates the entries in the vector */
+    inline
     void ElementWiseReciprocal();
 
     /** Absolute values of the entries in the vector */
+    inline
     void ElementWiseAbs();
 
     /** Element-wise square root of the entries in the vector */
+    inline
     void ElementWiseSqrt();
 
     /** Replaces the vector values with their sgn values
     ( -1 if x_i < 0, 0 if x_i == 0, and 1 if x_i > 0)
     */
+    inline
     void ElementWiseSgn();
 
     /** Add scalar to every vector component */
+    inline
     void AddScalar(Number scalar);
 
     /** Returns the maximum value in the vector */
+    inline
     Number Max() const;
 
     /** Returns the minimum value in the vector */
+    inline
     Number Min() const;
 
     /** Returns the sum of the vector entries */
+    inline
     Number Sum() const;
 
     /** Returns the sum of the logs of each vector entry */
+    inline
     Number SumLogs() const;
     //@}
 
@@ -148,31 +172,37 @@ namespace Ipopt
     //@{
     /** Add one vector, y = a * v1 + c * y.  This is automatically
      *  reduced to call AddTwoVectors.  */
+    inline
     void AddOneVector(Number a, const Vector& v1, Number c);
 
     /** Add two vectors, y = a * v1 + b * v2 + c * y.  Here, this
      *  vector is y */
-    void AddTwoVectors(Number a, const Vector& v1,
+    inline void AddTwoVectors(Number a, const Vector& v1,
                        Number b, const Vector& v2, Number c);
     /** Fraction to the boundary parameter.  Computes \f$\alpha =
      *  \max\{\bar\alpha\in(0,1] : x + \bar\alpha \Delta \geq (1-\tau)x\}\f$
      */
+    inline
     Number FracToBound(const Vector& delta, Number tau) const;
     /** Add the quotient of two vectors, y = a * z/s + c * y. */
+    inline
     void AddVectorQuotient(Number a, const Vector& z, const Vector& s,
                            Number c);
     //@}
 
     /** Method for determining if all stored numbers are valid (i.e.,
      *  no Inf or Nan). */
+    inline
     bool HasValidNumbers() const;
 
     /** @name Accessor methods */
     //@{
     /** Dimension of the Vector */
+    inline
     Index Dim() const;
 
     /** Return the owner VectorSpace*/
+    inline
     SmartPtr<const VectorSpace> OwnerSpace() const;
     //@}
 
