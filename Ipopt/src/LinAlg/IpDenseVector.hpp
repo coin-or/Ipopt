@@ -251,6 +251,7 @@ namespace Ipopt
 
     /** Method of getting the internal values array, making sure that
      *  memory has been allocated */
+    inline
     Number* values_allocated();
 
     /** Flag for Initialization.  This flag is false, if the data has
@@ -300,6 +301,7 @@ namespace Ipopt
     //@}
 
     /** Method for creating a new vector of this specific type. */
+    inline
     DenseVector* MakeNewDenseVector() const
     {
       return new DenseVector(this);
@@ -319,9 +321,11 @@ namespace Ipopt
      */
     //@{
     /** Allocate internal storage for the DenseVector */
+    inline
     Number* AllocateInternalStorage() const;
 
     /** Deallocate internal storage for the DenseVector */
+    inline
     void FreeInternalStorage(Number* values) const;
     //@}
 
@@ -329,39 +333,51 @@ namespace Ipopt
      */
     //@{
     /** Check if string meta exists for tag */
+    inline
     bool HasStringMetaData(const std::string tag) const;
 
     /** Check if Integer meta exists for tag */
+    inline
     bool HasIntegerMetaData(const std::string tag) const;
 
     /** Check if Numeric meta exists for tag */
+    inline
     bool HasNumericMetaData(const std::string tag) const;
 
     /** Get meta data of type std::string by tag */
+    inline
     const std::vector<std::string>& GetStringMetaData(const std::string& tag) const;
 
     /** Get meta data of type Index by tag */
+    inline
     const std::vector<Index>& GetIntegerMetaData(const std::string& tag) const;
 
     /** Get meta data of type Number by tag */
+    inline
     const std::vector<Number>& GetNumericMetaData(const std::string& tag) const;
 
     /** Set meta data of type std::string by tag */
+    inline
     void SetStringMetaData(std::string tag, std::vector<std::string> meta_data);
 
     /** Set meta data of type Index by tag */
+    inline
     void SetIntegerMetaData(std::string tag, std::vector<Index> meta_data);
 
     /** Set meta data of type Number by tag */
+    inline
     void SetNumericMetaData(std::string tag, std::vector<Number> meta_data);
 
     /** Get map of meta data of type Number */
+    inline
     const StringMetaDataMapType& GetStringMetaData() const;
 
     /** Get map of meta data of type Number */
+    inline
     const IntegerMetaDataMapType& GetIntegerMetaData() const;
 
     /** Get map of meta data of type Number */
+    inline
     const NumericMetaDataMapType& GetNumericMetaData() const;
     //@}
 
