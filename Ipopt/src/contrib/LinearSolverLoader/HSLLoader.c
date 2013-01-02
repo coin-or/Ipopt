@@ -524,8 +524,7 @@ void ma97_factor_solve(const int matrix_type, const int ptr[], const int row[],
     fprintf(stderr, "HSL routine ma97_factor_solve not found in " HSLLIBNAME ".\nAbort...\n");
     exit(EXIT_FAILURE);
   }
-  func_ma97_factor_solve(n, ptr, row, val, order, keep, control, info, nrhs,
-      ldx, x, scale);
+  func_ma97_factor_solve(matrix_type, ptr, row, val, nrhs, x, ldx, akeep, fkeep, control, info, scale);
 }
 
 void ma97_solve(const int job, const int nrhs, ma97pkgtype_d_ *x, const int ldx,

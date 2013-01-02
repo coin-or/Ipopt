@@ -239,7 +239,7 @@ typedef void (*ma97_factor_solve_t)(const int matrix_type, const int ptr[],
    const struct ma97_control *control, struct ma97_info *info,
    const ma97pkgtype_d_ scale[]);
 typedef void (*ma97_solve_t)(const int job, const int nrhs, ma97pkgtype_d_ *x,
-   const int ldx, const int order[], void **keep,
+   const int ldx, void **akeep, void **fkeep,
    const struct ma97_control *control, struct ma97_info *info);
 typedef void (*ma97_finalise_t)(void **akeep, void **fkeep);
 typedef void (*ma97_free_akeep_t)(void **akeep);
