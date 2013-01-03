@@ -169,7 +169,7 @@ namespace Ipopt
       "ma97_order",
       "Controls type of ordering used by HSL_MA97",
       "auto",
-      "auto", "Use HSL_MA97 heurisitic to guess best of AMD and METIS",
+      "auto", "Use HSL_MA97 heuristic to guess best of AMD and METIS",
       "best", "Try both AMD and MeTiS, pick best",
       "amd", "Use the HSL_MC68 approximate minimum degree algorithm",
       "metis", "Use the MeTiS nested dissection algorithm",
@@ -564,6 +564,7 @@ namespace Ipopt
                break;
             case SWITCH_NDELAY_REUSE:
             case SWITCH_OD_ND_REUSE:
+               if(rescale_) numdelay_ = info.num_delay; // Need to do this before we reset rescale_
                if(i==current_level_ && rescale_) rescale_ = false;
                // Falls through to:
             case SWITCH_NDELAY:
