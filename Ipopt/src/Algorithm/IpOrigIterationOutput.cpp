@@ -61,6 +61,20 @@ namespace Ipopt
       "\"internal\" prints out the constraint violation of this formulation. "
       "With \"original\" the true constraint violation in the original NLP is "
       "printed.");
+    roptions->AddLowerBoundedIntegerOption(
+       "print_frequency_iter",
+       "Determines at which iteration frequency the summarizing iteration output line should be printed.",
+       1,
+       1,
+       "Summarizing iteration output is printed every print_frequency_iter iterations, "
+       "if at least print_frequency_time seconds have passed since last output.");
+    roptions->AddLowerBoundedNumberOption(
+       "print_frequency_time",
+       "Determines at which time frequency the summarizing iteration output line should be printed.",
+       0.0, false,
+       0.0,
+       "Summarizing iteration output is printed if at least print_frequency_time seconds have "
+       "passed since last output and the iteration number is a multiple of print_frequency_iter.");
     roptions->SetRegisteringCategory(prev_cat);
   }
 
@@ -71,6 +85,8 @@ namespace Ipopt
     Index enum_int;
     options.GetEnumValue("inf_pr_output", enum_int, prefix);
     inf_pr_output_ = InfPrOutput(enum_int);
+    options.GetIntegerValue("print_frequency_iter", print_frequency_iter_, prefix);
+    options.GetNumericValue("print_frequency_time", print_frequency_time_, prefix);
 
     return true;
   }
@@ -90,9 +106,10 @@ namespace Ipopt
                    "*** Summary of Iteration: %d:", IpData().iter_count());
     Jnlst().Printf(J_DETAILED, J_MAIN,
                    "\n**************************************************\n\n");
-    if (iter%10 == 0 && !IpData().info_skip_output()) {
+    if (IpData().info_iters_since_header() >= 10 && !IpData().info_skip_output()) {
       // output the header
       Jnlst().Printf(J_ITERSUMMARY, J_MAIN, header.c_str());
+      IpData().Set_info_iters_since_header(0);
     }
     else {
       Jnlst().Printf(J_DETAILED, J_MAIN, header.c_str());
@@ -138,7 +155,11 @@ namespace Ipopt
     Index ls_count = IpData().info_ls_count();
     const std::string info_string = IpData().info_string();
 
-    if (!IpData().info_skip_output()) {
+    Number current_time = 0.0;
+    Number last_output = IpData().info_last_output();
+    if (!IpData().info_skip_output() &&
+       (iter % print_frequency_iter_) == 0 &&
+       (print_frequency_time_ == 0.0 || last_output < (current_time = WallclockTime()) - print_frequency_time_ || last_output < 0.0) ) {
       Jnlst().Printf(J_ITERSUMMARY, J_MAIN,
                      "%4d%c%14.7e %7.2e %7.2e %5.1f %7.2e %5s %7.2e %7.2e%c%3d",
                      iter, info_iter, unscaled_f, inf_pr, inf_du, log10(mu), dnrm, regu_x_ptr,
@@ -151,6 +172,9 @@ namespace Ipopt
         Jnlst().Printf(J_DETAILED, J_MAIN, " %s", info_string.c_str());
       }
       Jnlst().Printf(J_ITERSUMMARY, J_MAIN, "\n");
+
+      IpData().Set_info_last_output(current_time);
+      IpData().Inc_info_iters_since_header();
     }
 
 

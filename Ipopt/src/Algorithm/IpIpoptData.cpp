@@ -78,6 +78,8 @@ namespace Ipopt
 
     info_ls_count_ = 0;
     ResetInfo();
+    info_last_output_ = -1.;
+    info_iters_since_header_ = 1000; // need to be larger 10
 
     initialize_called_ = true;
 

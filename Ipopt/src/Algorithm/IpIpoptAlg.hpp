@@ -188,11 +188,11 @@ namespace Ipopt
      *  means that a number of options are ignored, or have to be set
      *  (or are automatically set) to certain values. */
     bool mehrotra_algorithm_;
-    /** String speficying linear solver */
+    /** String specifying linear solver */
     std::string linear_solver_;
     //@}
 
-    /** @name auxilliary functions */
+    /** @name auxiliary functions */
     //@{
     void calc_number_of_bounds(
       const Vector& x,
