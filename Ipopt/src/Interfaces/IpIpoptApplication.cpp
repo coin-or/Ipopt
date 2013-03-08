@@ -255,6 +255,8 @@ namespace Ipopt
           options_to_print.push_back("print_level");
           options_to_print.push_back("print_user_options");
           options_to_print.push_back("print_options_documentation");
+          options_to_print.push_back("print_frequency_iter");
+          options_to_print.push_back("print_frequency_time");
           options_to_print.push_back("output_file");
           options_to_print.push_back("file_print_level");
           options_to_print.push_back("option_file_name");

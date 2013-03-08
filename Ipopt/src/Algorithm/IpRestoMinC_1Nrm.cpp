@@ -168,6 +168,8 @@ namespace Ipopt
     resto_ip_data->Set_info_alpha_primal_char(IpData().info_alpha_primal_char());
     resto_ip_data->Set_info_alpha_dual(IpData().info_alpha_dual());
     resto_ip_data->Set_info_ls_count(IpData().info_ls_count());
+    resto_ip_data->Set_info_iters_since_header(IpData().info_iters_since_header());
+    resto_ip_data->Set_info_last_output(IpData().info_last_output());
 
     // Call the optimization algorithm to solve the restoration phase
     // problem
@@ -352,6 +354,8 @@ namespace Ipopt
       // Skip the next line, because it would just replicate the first
       // on during the restoration phase.
       IpData().Set_info_skip_output(true);
+      IpData().Set_info_iters_since_header(resto_ip_data->info_iters_since_header());
+      IpData().Set_info_last_output(resto_ip_data->info_last_output());
     }
 
     return (retval == 0);

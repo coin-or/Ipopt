@@ -46,6 +46,8 @@ namespace Ipopt
     Index enum_int;
     options.GetEnumValue("inf_pr_output", enum_int, prefix);
     inf_pr_output_ = InfPrOutput(enum_int);
+    options.GetIntegerValue("print_frequency_iter", print_frequency_iter_, prefix);
+    options.GetNumericValue("print_frequency_time", print_frequency_time_, prefix);
 
     bool retval = true;
     if (IsValid(resto_orig_iteration_output_)) {
@@ -90,9 +92,10 @@ namespace Ipopt
                    "*** Summary of Iteration %d for original NLP:", IpData().iter_count());
     Jnlst().Printf(J_DETAILED, J_MAIN,
                    "\n**************************************************\n\n");
-    if (iter%10 == 0 && !IsValid(resto_orig_iteration_output_)) {
+    if (IpData().info_iters_since_header() >= 10 && !IsValid(resto_orig_iteration_output_)) {
       // output the header
       Jnlst().Printf(J_ITERSUMMARY, J_MAIN, header.c_str());
+      IpData().Set_info_iters_since_header(0);
     }
     else {
       Jnlst().Printf(J_DETAILED, J_MAIN, header.c_str());
@@ -154,18 +157,26 @@ namespace Ipopt
     Index ls_count = IpData().info_ls_count();
     const std::string info_string = IpData().info_string();
 
-    Jnlst().Printf(J_ITERSUMMARY, J_MAIN,
-                   "%4d%c%14.7e %7.2e %7.2e %5.1f %7.2e %5s %7.2e %7.2e%c%3d",
-                   iter, info_iter, f, inf_pr, inf_du, log10(mu), dnrm, regu_x_ptr,
-                   alpha_dual, alpha_primal, alpha_primal_char,
-                   ls_count);
-    if (print_info_string_) {
-      Jnlst().Printf(J_ITERSUMMARY, J_MAIN, " %s", info_string.c_str());
+    Number current_time = 0.0;
+    Number last_output = IpData().info_last_output();
+    if ((iter % print_frequency_iter_) == 0 &&
+        (print_frequency_time_ == 0.0 || last_output < (current_time = WallclockTime()) - print_frequency_time_ || last_output < 0.0)) {
+      Jnlst().Printf(J_ITERSUMMARY, J_MAIN,
+                     "%4d%c%14.7e %7.2e %7.2e %5.1f %7.2e %5s %7.2e %7.2e%c%3d",
+                     iter, info_iter, f, inf_pr, inf_du, log10(mu), dnrm, regu_x_ptr,
+                     alpha_dual, alpha_primal, alpha_primal_char,
+                    ls_count);
+      if (print_info_string_) {
+        Jnlst().Printf(J_ITERSUMMARY, J_MAIN, " %s", info_string.c_str());
+      }
+      else {
+        Jnlst().Printf(J_DETAILED, J_MAIN, " %s", info_string.c_str());
+      }
+      Jnlst().Printf(J_ITERSUMMARY, J_MAIN, "\n");
+
+      IpData().Set_info_last_output(current_time);
+      IpData().Inc_info_iters_since_header();
     }
-    else {
-      Jnlst().Printf(J_DETAILED, J_MAIN, " %s", info_string.c_str());
-    }
-    Jnlst().Printf(J_ITERSUMMARY, J_MAIN, "\n");
 
     //////////////////////////////////////////////////////////////////////
     //           Now if desired more detail on the iterates             //

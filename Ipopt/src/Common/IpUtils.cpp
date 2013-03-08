@@ -241,7 +241,7 @@ namespace Ipopt
     return sys_temp;
   }
 
-  double WallclockTime()
+  Number WallclockTime()
   {
     double callTime = IpCoinGetTimeOfDay();
     if (Wallclock_firstCall_ == -1.) {

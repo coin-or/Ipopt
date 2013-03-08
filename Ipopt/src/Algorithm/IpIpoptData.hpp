@@ -436,6 +436,36 @@ namespace Ipopt
       info_skip_output_ = info_skip_output;
     }
 
+    /** gives time when the last summary output line was printed */
+    Number info_last_output()
+    {
+       return info_last_output_;
+    }
+    /** sets time when the last summary output line was printed */
+    void Set_info_last_output(Number info_last_output)
+    {
+       info_last_output_ = info_last_output;
+    }
+
+    /** gives number of iteration summaries actually printed
+     * since last summary header was printed */
+    int info_iters_since_header()
+    {
+       return info_iters_since_header_;
+    }
+    /** increases number of iteration summaries actually printed
+     * since last summary header was printed */
+    void Inc_info_iters_since_header()
+    {
+       info_iters_since_header_++;
+    }
+    /** sets number of iteration summaries actually printed
+     * since last summary header was printed */
+    void Set_info_iters_since_header(int info_iters_since_header)
+    {
+       info_iters_since_header_ = info_iters_since_header;
+    }
+
     /** Reset all info fields */
     void ResetInfo()
     {
@@ -593,6 +623,11 @@ namespace Ipopt
     bool info_skip_output_;
     /** any string of characters for the end of the output line */
     std::string info_string_;
+    /** time when the last summary output line was printed */
+    Number info_last_output_;
+    /** number of iteration summaries actually printed since last
+     * summary header was printed */
+    int info_iters_since_header_;
     //@}
 
     /** VectorSpace for all the iterates */
