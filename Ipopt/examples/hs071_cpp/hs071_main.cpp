@@ -35,7 +35,7 @@ int main(int argv, char* argc[])
   // options file
   // app->Options()->SetStringValue("option_file_name", "hs071.opt");
 
-  // Intialize the IpoptApplication and process the options
+  // Initialize the IpoptApplication and process the options
   ApplicationReturnStatus status;
   status = app->Initialize();
   if (status != Solve_Succeeded) {
