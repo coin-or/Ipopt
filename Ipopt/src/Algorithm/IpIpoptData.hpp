@@ -111,6 +111,7 @@ namespace Ipopt
     /** @name Get Methods for Iterates */
     //@{
     /** Current point */
+    inline
     SmartPtr<const IteratesVector> curr() const;
 
     /** Get the current point in a copied container that is non-const.
@@ -120,6 +121,7 @@ namespace Ipopt
     //    SmartPtr<IteratesVector> curr_container() const;
 
     /** Get Trial point */
+    inline
     SmartPtr<const IteratesVector> trial() const;
 
     /** Get Trial point in a copied container that is non-const.
@@ -132,6 +134,7 @@ namespace Ipopt
      *  efficiency (no copy and to keep cache tags the same) so
      *  after you call set you cannot modify the data again
      */
+    inline
     void set_trial(SmartPtr<IteratesVector>& trial);
 
     /** Set the values of the primal trial variables (x and s) from
@@ -164,12 +167,14 @@ namespace Ipopt
     // void set_trial(SmartPtr<const IteratesVector>& trial_iterates);
 
     /** get the current delta */
+    inline
     SmartPtr<const IteratesVector> delta() const;
 
     /** Set the current delta - like the trial point, this method copies
      *  the pointer for efficiency (no copy and to keep cache tags the
      *  same) so after you call set, you cannot modify the data
      */
+    inline
     void set_delta(SmartPtr<IteratesVector>& delta);
 
     /** Set the current delta - like the trial point, this method
@@ -178,15 +183,18 @@ namespace Ipopt
      *  data.  This is the version that is happy with a pointer to
      *  const IteratesVector.
      */
+    inline
     void set_delta(SmartPtr<const IteratesVector>& delta);
 
     /** Affine Delta */
+    inline
     SmartPtr<const IteratesVector> delta_aff() const;
 
     /** Set the affine delta - like the trial point, this method copies
      *  the pointer for efficiency (no copy and to keep cache tags the
      *  same) so after you call set, you cannot modify the data
      */
+    inline
     void set_delta_aff(SmartPtr<IteratesVector>& delta_aff);
 
     /** Hessian or Hessian approximation (do not hold on to it, it might be changed) */
@@ -265,6 +273,7 @@ namespace Ipopt
     /** @name Public Methods for updating iterates */
     //@{
     /** Copy the trial values to the current values */
+    inline
     void CopyTrialToCurrent();
 
     /** Set the current iterate values from the

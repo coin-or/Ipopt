@@ -176,10 +176,13 @@ namespace Ipopt
       DBG_ASSERT(reference_count_ == 0);
     }
 
+    inline
     Index ReferenceCount() const;
 
+    inline
     void AddRef(const Referencer* referencer) const;
 
+    inline
     void ReleaseRef(const Referencer* referencer) const;
 
   private:

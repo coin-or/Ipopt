@@ -27,6 +27,7 @@ namespace Ipopt
     //@{
     /** Constructor, taking the owner_space.
      */
+    inline
     SymMatrix(const SymMatrixSpace* owner_space);
 
     /** Destructor */
@@ -37,9 +38,11 @@ namespace Ipopt
     /** @name Information about the size of the matrix */
     //@{
     /** Dimension of the matrix (number of rows and columns) */
+    inline
     Index Dim() const;
     //@}
 
+    inline
     SmartPtr<const SymMatrixSpace> OwnerSymMatrixSpace() const;
 
   protected:

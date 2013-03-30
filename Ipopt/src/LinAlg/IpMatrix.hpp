@@ -92,9 +92,11 @@ namespace Ipopt
     /** @name Information about the size of the matrix */
     //@{
     /** Number of rows */
+    inline
     Index  NRows() const;
 
     /** Number of columns */
+    inline
     Index  NCols() const;
     //@}
 
@@ -139,6 +141,7 @@ namespace Ipopt
     //@}
 
     /** Return the owner MatrixSpace*/
+    inline
     SmartPtr<const MatrixSpace> OwnerSpace() const;
 
   protected:
