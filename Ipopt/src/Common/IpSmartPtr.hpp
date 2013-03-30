@@ -565,22 +565,14 @@ namespace Ipopt
       dbg_smartptr_verbosity);
 #endif
 
-    if (lhs == rhs) {
-      return true;
-    }
-
     // Even if lhs and rhs point to the same object
     // with different interfaces U1 and U2, we cannot guarantee that
     // the value of the pointers will be equivalent. We can
-    // guarantee this if we convert to void*
-    const void* v_lhs = static_cast<const void*>(lhs);
-    const void* v_rhs = static_cast<const void*>(rhs);
-    if (v_lhs == v_rhs) {
-      return true;
-    }
+    // guarantee this if we convert to ReferencedObject* (see also #162)
+    const ReferencedObject* v_lhs = lhs;
+    const ReferencedObject* v_rhs = rhs;
 
-    // They must not be the same
-    return false;
+    return v_lhs == v_rhs;
   }
 
   template <class U1, class U2>
