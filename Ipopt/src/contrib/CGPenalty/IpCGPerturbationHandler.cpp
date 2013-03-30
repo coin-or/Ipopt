@@ -246,7 +246,7 @@ namespace Ipopt
         if (!retval) {
           return false;
         }
-        DBG_ASSERT(true || delta_c == 0. && delta_d == 0.);
+        /* DBG_ASSERT(delta_c == 0. && delta_d == 0.); */
         test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_GT_0;
         //}
         /*
