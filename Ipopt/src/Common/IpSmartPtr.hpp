@@ -469,13 +469,13 @@ namespace Ipopt
       "SmartPtr<T>& SmartPtr<T>::SetFromRawPtr_(T* rhs)", dbg_smartptr_verbosity);
 #endif
 
+    if (rhs != 0)
+      rhs->AddRef(this);
+
     // Release any old pointer
     ReleasePointer_();
 
-    if (rhs != 0) {
-      rhs->AddRef(this);
-      ptr_ = rhs;
-    }
+    ptr_ = rhs;
 
     return *this;
   }
@@ -512,10 +512,8 @@ namespace Ipopt
 
     if (ptr_) {
       ptr_->ReleaseRef(this);
-      if (ptr_->ReferenceCount() == 0) {
+      if (ptr_->ReferenceCount() == 0)
         delete ptr_;
-      }
-      ptr_ = 0;
     }
   }
 
