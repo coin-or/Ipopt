@@ -255,10 +255,12 @@ namespace Ipopt
    void Ma77SolverInterface::MetisOrder(const int ndim, const Index *ptr, 
       const Index *row, Index *perm)
    {
+#ifdef COINHSL_HAS_METIS
       int options[8];
       options[0] = 0; // Defaults
       int numflag = 0;
       int ndim_nc = ndim;
+#endif
 
       Index *ptr_tmp = new Index[ndim+1];
       Index *row_tmp = new Index[ptr[ndim]];
