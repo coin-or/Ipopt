@@ -462,7 +462,7 @@ namespace Ipopt
       bool check_NegEVals, Index numberOfNegEVals)
   {
     struct ma97_info info;
-    Number t1,t2;
+    Number t1=0,t2;
 
     if (new_matrix || pivtol_changed_) {
 
