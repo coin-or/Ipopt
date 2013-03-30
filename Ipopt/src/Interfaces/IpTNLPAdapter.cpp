@@ -609,7 +609,7 @@ namespace Ipopt
         }
 
         if (fixed_variable_treatment_ == RELAX_BOUNDS ||
-            n_x_fixed_ == 0 || n_x_var >= n_c) {
+            n_x_fixed_ == 0 || n_x_var >= n_c || n_x_var == 0) {
           done = true;
         }
         else {
@@ -635,9 +635,8 @@ namespace Ipopt
           max_viol = Max(max_viol, full_g_[i]-g_u[i], g_l[i]-full_g_[i]);
         }
 
-        Number tol = 1e-6;  //ToDo: base on tol option etc
         SolverReturn status;
-        if (max_viol <= tol) {
+        if (max_viol <= tol_) { //ToDo: base also on (acceptable) (constraint violation) tolerance
           status = SUCCESS;
         }
         else {
@@ -652,7 +651,7 @@ namespace Ipopt
         Number* full_z_L = new Number[n_full_x_];
         Number* full_z_U = new Number[n_full_x_];
         Number* full_lambda = new Number[n_full_g_];
-        // For now, we return zeros are multipliers... (ToDo?)
+        // For now, we return zeros as multipliers... (ToDo?)
         const Number zero = 0.;
         IpBlasDcopy(n_full_x_, &zero, 0, full_z_L, 1);
         IpBlasDcopy(n_full_x_, &zero, 0, full_z_U, 1);
