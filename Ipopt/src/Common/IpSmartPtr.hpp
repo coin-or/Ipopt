@@ -15,6 +15,13 @@
 #if COIN_IPOPT_CHECKLEVEL > 2
 # define IP_DEBUG_SMARTPTR
 #endif
+#ifndef IPOPT_UNUSED
+# if defined(__GNUC__)
+#   define IPOPT_UNUSED __attribute__((unused))
+# else
+#   define IPOPT_UNUSED
+# endif
+#endif
 
 namespace Ipopt
 {
@@ -165,7 +172,7 @@ namespace Ipopt
   class SmartPtr : public Referencer
   {
   public:
-#define dbg_smartptr_verbosity 0
+#define ipopt_dbg_smartptr_verbosity 0
 
     /**@name Constructors/Destructors */
     //@{
@@ -356,14 +363,11 @@ namespace Ipopt
       ptr_(0)
   {
 #ifdef IP_DEBUG_SMARTPTR
-    DBG_START_METH("SmartPtr<T>::SmartPtr()", dbg_smartptr_verbosity);
+    DBG_START_METH("SmartPtr<T>::SmartPtr()", ipopt_dbg_smartptr_verbosity);
 #endif
 
 #ifdef CHECK_SMARTPTR
-
-    const ReferencedObject* trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_
-    = ptr_;
-    trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = 0;
+    const ReferencedObject* IPOPT_UNUSED trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = ptr_;
 #endif
 
   }
@@ -375,14 +379,11 @@ namespace Ipopt
       ptr_(0)
   {
 #ifdef IP_DEBUG_SMARTPTR
-    DBG_START_METH("SmartPtr<T>::SmartPtr(const SmartPtr<T>& copy)", dbg_smartptr_verbosity);
+    DBG_START_METH("SmartPtr<T>::SmartPtr(const SmartPtr<T>& copy)", ipopt_dbg_smartptr_verbosity);
 #endif
 
 #ifdef CHECK_SMARTPTR
-
-    const ReferencedObject* trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_
-    = ptr_;
-    trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = 0;
+    const ReferencedObject* IPOPT_UNUSED trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = ptr_;
 #endif
 
     (void) SetFromSmartPtr_(copy);
@@ -396,14 +397,11 @@ namespace Ipopt
       ptr_(0)
   {
 #ifdef IP_DEBUG_SMARTPTR
-    DBG_START_METH("SmartPtr<T>::SmartPtr(const SmartPtr<U>& copy)", dbg_smartptr_verbosity);
+    DBG_START_METH("SmartPtr<T>::SmartPtr(const SmartPtr<U>& copy)", ipopt_dbg_smartptr_verbosity);
 #endif
 
 #ifdef CHECK_SMARTPTR
-
-    const ReferencedObject* trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_
-    = ptr_;
-    trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = 0;
+    const ReferencedObject* IPOPT_UNUSED trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = ptr_;
 #endif
 
     (void) SetFromSmartPtr_(GetRawPtr(copy));
@@ -416,14 +414,11 @@ namespace Ipopt
       ptr_(0)
   {
 #ifdef IP_DEBUG_SMARTPTR
-    DBG_START_METH("SmartPtr<T>::SmartPtr(T* ptr)", dbg_smartptr_verbosity);
+    DBG_START_METH("SmartPtr<T>::SmartPtr(T* ptr)", ipopt_dbg_smartptr_verbosity);
 #endif
 
 #ifdef CHECK_SMARTPTR
-
-    const ReferencedObject* trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_
-    = ptr_;
-    trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = 0;
+    const ReferencedObject* IPOPT_UNUSED trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = ptr_;
 #endif
 
     (void) SetFromRawPtr_(ptr);
@@ -433,7 +428,7 @@ namespace Ipopt
   SmartPtr<T>::~SmartPtr()
   {
 #ifdef IP_DEBUG_SMARTPTR
-    DBG_START_METH("SmartPtr<T>::~SmartPtr(T* ptr)", dbg_smartptr_verbosity);
+    DBG_START_METH("SmartPtr<T>::~SmartPtr(T* ptr)", ipopt_dbg_smartptr_verbosity);
 #endif
 
     ReleasePointer_();
@@ -444,12 +439,11 @@ namespace Ipopt
   T* SmartPtr<T>::operator->() const
   {
 #ifdef IP_DEBUG_SMARTPTR
-    DBG_START_METH("T* SmartPtr<T>::operator->()", dbg_smartptr_verbosity);
+    DBG_START_METH("T* SmartPtr<T>::operator->()", ipopt_dbg_smartptr_verbosity);
 #endif
 
     // cannot deref a null pointer
 #if COIN_IPOPT_CHECKLEVEL > 0
-
     assert(ptr_);
 #endif
 
@@ -461,12 +455,11 @@ namespace Ipopt
   T& SmartPtr<T>::operator*() const
   {
 #ifdef IP_DEBUG_SMARTPTR
-    DBG_START_METH("T& SmartPtr<T>::operator*()", dbg_smartptr_verbosity);
+    DBG_START_METH("T& SmartPtr<T>::operator*()", ipopt_dbg_smartptr_verbosity);
 #endif
 
     // cannot dereference a null pointer
 #if COIN_IPOPT_CHECKLEVEL > 0
-
     assert(ptr_);
 #endif
 
@@ -478,7 +471,7 @@ namespace Ipopt
   SmartPtr<T>& SmartPtr<T>::operator=(T* rhs)
   {
 #ifdef IP_DEBUG_SMARTPTR
-    DBG_START_METH("SmartPtr<T>& SmartPtr<T>::operator=(T* rhs)", dbg_smartptr_verbosity);
+    DBG_START_METH("SmartPtr<T>& SmartPtr<T>::operator=(T* rhs)", ipopt_dbg_smartptr_verbosity);
 #endif
 
     return SetFromRawPtr_(rhs);
@@ -491,7 +484,7 @@ namespace Ipopt
 #ifdef IP_DEBUG_SMARTPTR
     DBG_START_METH(
       "SmartPtr<T>& SmartPtr<T>::operator=(const SmartPtr<T>& rhs)",
-      dbg_smartptr_verbosity);
+      ipopt_dbg_smartptr_verbosity);
 #endif
 
     return SetFromSmartPtr_(rhs);
@@ -505,7 +498,7 @@ namespace Ipopt
 #ifdef IP_DEBUG_SMARTPTR
     DBG_START_METH(
       "SmartPtr<T>& SmartPtr<T>::operator=(const SmartPtr<U>& rhs)",
-      dbg_smartptr_verbosity);
+      ipopt_dbg_smartptr_verbosity);
 #endif
 
     return SetFromSmartPtr_(GetRawPtr(rhs));
@@ -517,7 +510,7 @@ namespace Ipopt
   {
 #ifdef IP_DEBUG_SMARTPTR
     DBG_START_METH(
-      "SmartPtr<T>& SmartPtr<T>::SetFromRawPtr_(T* rhs)", dbg_smartptr_verbosity);
+      "SmartPtr<T>& SmartPtr<T>::SetFromRawPtr_(T* rhs)", ipopt_dbg_smartptr_verbosity);
 #endif
 
     if (rhs != 0)
@@ -537,16 +530,10 @@ namespace Ipopt
 #ifdef IP_DEBUG_SMARTPTR
     DBG_START_METH(
       "SmartPtr<T>& SmartPtr<T>::SetFromSmartPtr_(const SmartPtr<T>& rhs)",
-      dbg_smartptr_verbosity);
+      ipopt_dbg_smartptr_verbosity);
 #endif
 
-    T* ptr = GetRawPtr(rhs);
-    /* AW: I changed this so that NULL is correctly copied from the
-       right hand side */
-    //     if (ptr != NULL) {
-    //       SetFromRawPtr_(ptr);
-    //     }
-    SetFromRawPtr_(ptr);
+    SetFromRawPtr_(GetRawPtr(rhs));
 
     return (*this);
   }
@@ -558,7 +545,7 @@ namespace Ipopt
 #ifdef IP_DEBUG_SMARTPTR
     DBG_START_METH(
       "void SmartPtr<T>::ReleasePointer()",
-      dbg_smartptr_verbosity);
+      ipopt_dbg_smartptr_verbosity);
 #endif
 
     if (ptr_) {
@@ -613,7 +600,7 @@ namespace Ipopt
 #ifdef IP_DEBUG_SMARTPTR
     DBG_START_FUN(
       "bool ComparePtrs(const U1* lhs, const U2* rhs)",
-      dbg_smartptr_verbosity);
+      ipopt_dbg_smartptr_verbosity);
 #endif
 
     // Even if lhs and rhs point to the same object
@@ -632,7 +619,7 @@ namespace Ipopt
 #ifdef IP_DEBUG_SMARTPTR
     DBG_START_FUN(
       "bool operator==(const SmartPtr<U1>& lhs, const SmartPtr<U2>& rhs)",
-      dbg_smartptr_verbosity);
+      ipopt_dbg_smartptr_verbosity);
 #endif
 
     U1* raw_lhs = GetRawPtr(lhs);
@@ -646,7 +633,7 @@ namespace Ipopt
 #ifdef IP_DEBUG_SMARTPTR
     DBG_START_FUN(
       "bool operator==(SmartPtr<U1>& lhs, U2* rhs)",
-      dbg_smartptr_verbosity);
+      ipopt_dbg_smartptr_verbosity);
 #endif
 
     U1* raw_lhs = GetRawPtr(lhs);
@@ -659,7 +646,7 @@ namespace Ipopt
 #ifdef IP_DEBUG_SMARTPTR
     DBG_START_FUN(
       "bool operator==(U1* raw_lhs, SmartPtr<U2>& rhs)",
-      dbg_smartptr_verbosity);
+      ipopt_dbg_smartptr_verbosity);
 #endif
 
     const U2* raw_rhs = GetRawPtr(rhs);
@@ -672,7 +659,7 @@ namespace Ipopt
 #ifdef IP_DEBUG_SMARTPTR
     DBG_START_FUN(
       "bool operator!=(const SmartPtr<U1>& lhs, const SmartPtr<U2>& rhs)",
-      dbg_smartptr_verbosity);
+      ipopt_dbg_smartptr_verbosity);
 #endif
 
     bool retValue = operator==(lhs, rhs);
@@ -685,7 +672,7 @@ namespace Ipopt
 #ifdef IP_DEBUG_SMARTPTR
     DBG_START_FUN(
       "bool operator!=(SmartPtr<U1>& lhs, U2* rhs)",
-      dbg_smartptr_verbosity);
+      ipopt_dbg_smartptr_verbosity);
 #endif
 
     bool retValue = operator==(lhs, raw_rhs);
@@ -698,7 +685,7 @@ namespace Ipopt
 #ifdef IP_DEBUG_SMARTPTR
     DBG_START_FUN(
       "bool operator!=(U1* raw_lhs, SmartPtr<U2>& rhs)",
-      dbg_smartptr_verbosity);
+      ipopt_dbg_smartptr_verbosity);
 #endif
 
     bool retValue = operator==(raw_lhs, rhs);
@@ -742,5 +729,6 @@ namespace Ipopt
   }
 } // namespace Ipopt
 
-#endif
+#undef ipopt_dbg_smartptr_verbosity
 
+#endif
