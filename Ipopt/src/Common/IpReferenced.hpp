@@ -14,6 +14,10 @@
 
 #include <list>
 
+#if COIN_IPOPT_CHECKLEVEL > 3
+  #define IP_DEBUG_REFERENCED
+#endif
+
 namespace Ipopt
 {
 
@@ -192,10 +196,9 @@ namespace Ipopt
   private:
     mutable Index reference_count_;
 
-#     ifdef REF_DEBUG
-
+#   ifdef IP_DEBUG_REFERENCED
     mutable std::list<const Referencer*> referencers_;
-#     endif
+#   endif
 
   };
 
@@ -214,10 +217,9 @@ namespace Ipopt
     //    DBG_START_METH("ReferencedObject::AddRef(const Referencer* referencer)", 0);
     reference_count_++;
     //    DBG_PRINT((1, "New reference_count_ = %d\n", reference_count_));
-#     ifdef REF_DEBUG
-
+#   ifdef IP_DEBUG_REFERENCED
     referencers_.push_back(referencer);
-#     endif
+#   endif
 
   }
 
@@ -229,7 +231,7 @@ namespace Ipopt
     reference_count_--;
     //    DBG_PRINT((1, "New reference_count_ = %d\n", reference_count_));
 
-#     ifdef REF_DEBUG
+#   ifdef IP_DEBUG_REFERENCED
 
     bool found = false;
     std::list<const Referencer*>::iterator iter;
@@ -246,7 +248,7 @@ namespace Ipopt
     if (found) {
       referencers_.erase(iter);
     }
-#     endif
+#   endif
 
   }
 
