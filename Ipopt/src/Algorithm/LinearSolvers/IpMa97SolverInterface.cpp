@@ -193,6 +193,8 @@ namespace Ipopt
      if(name=="mc64") return 1;
      if(name=="mc77") return 2;
      if(name=="mc30") return 4;
+     assert(0);
+     return -1;
   }
 
   bool Ma97SolverInterface::InitializeImpl(const OptionsList& options,
@@ -635,6 +637,7 @@ namespace Ipopt
           Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
             "HSL_MA97: Enabling scaling %d due to failure of iterative refinement\n", current_level_); 
           break;
+        default: ;
       }
     }
 
