@@ -449,7 +449,7 @@ namespace Ipopt
       Number delta_d;
       perturbHandler_->CurrentPerturbation(delta_x, delta_s, delta_c, delta_d);
 
-      // No need to go throught the pain of finding the appropriate
+      // No need to go through the pain of finding the appropriate
       // values for the deltas, because the matrix hasn't changed since
       // the last call.  So, just call the Solve Method
       //
@@ -527,7 +527,8 @@ namespace Ipopt
                  augSysSolver_->NumberOfNegEVals() < numberOfEVals) {
           Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                          "Number of negative eigenvalues too small!\n");
-          // If the number of negative eigenvalues is too small, then          // we first try to remedy this by asking for better quality
+          // If the number of negative eigenvalues is too small, then
+          // we first try to remedy this by asking for better quality
           // solution (e.g. increasing pivot tolerance), and if that
           // doesn't help, we assume that the system is singular
           bool assume_singular = true;
@@ -537,7 +538,6 @@ namespace Ipopt
             augsys_improved_ = augSysSolver_->IncreaseQuality();
             if (augsys_improved_) {
               IpData().Append_info_string("q");
-              resolve_with_better_quality = true;
               assume_singular = false;
             }
             else {
