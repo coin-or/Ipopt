@@ -439,7 +439,7 @@ namespace Ipopt
     if (init_lambda) {
       for (Index i=0; i<m; i++) {
         if (havepi0[i]) {
-          lambda[i] = pi0[i];
+          lambda[i] = -obj_sign_ * pi0[i];
         }
         else {
           lambda[i] = 0.0;
