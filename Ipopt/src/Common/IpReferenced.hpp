@@ -99,7 +99,7 @@ namespace Ipopt
    *    \verbatim
    *    if (GetRawPtr(smrt_ptr) == ptr) // Don't use this
    *    \endverbatim
-   * SmartPtr's, as currently implemented, do NOT handle circular references.
+   *  SmartPtr's, as currently implemented, do NOT handle circular references.
    *    For example: consider a higher level object using SmartPtrs to point to 
    *    A and B, but A and B also point to each other (i.e. A has a SmartPtr 
    *    to B and B has a SmartPtr to A). In this scenario, when the higher
@@ -149,6 +149,10 @@ namespace Ipopt
    *        it and, in its destructor, tell these pointers that it is
    *        dying. They could then set themselves to NULL, or set an
    *        internal flag to detect usage past this point.
+   *
+   *   For every most derived object only one ReferencedObject may exist,
+   *   that is multiple inheritance requires virtual inheritance, see also
+   *   the 2nd point in ticket #162.
    * 
    * Comments on Non-Intrusive Design:
    * In a non-intrusive design, the reference count is stored somewhere other
