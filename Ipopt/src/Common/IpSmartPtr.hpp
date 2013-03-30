@@ -248,6 +248,12 @@ namespace Ipopt
     template <class U1, class U2>
     friend
     bool operator!=(U1* lhs, const SmartPtr<U2>& raw_rhs);
+
+    /** Overloaded less-than comparison operator, allows the
+     * user to compare the value of two SmartPtrs */
+    template <class U>
+    friend
+    bool operator<(const SmartPtr<U>& lhs, const SmartPtr<U>& rhs);
     //@}
 
     /**@name friend method declarations. */
@@ -699,6 +705,41 @@ namespace Ipopt
     return !retValue;
   }
 
+  template <class T>
+  void swap(SmartPtr<T>& a, SmartPtr<T>& b)
+  {
+#ifdef REF_DEBUG
+    SmartPtr<T> tmp(a);
+    a = b;
+    b = tmp;
+#else
+    std::swap(a.prt_, b.ptr_);
+#endif
+  }
+
+  template <class T>
+  bool operator<(const SmartPtr<T>& lhs, const SmartPtr<T>& rhs)
+  {
+    return lhs.ptr_ < rhs.ptr_;
+  }
+
+  template <class T>
+  bool operator> (const SmartPtr<T>& lhs, const SmartPtr<T>& rhs)
+  {
+    return rhs < lhs;
+  }
+
+  template <class T> bool
+  operator<=(const SmartPtr<T>& lhs, const SmartPtr<T>& rhs)
+  {
+    return !( rhs < lhs );
+  }
+
+  template <class T> bool
+  operator>=(const SmartPtr<T>& lhs, const SmartPtr<T>& rhs)
+  {
+    return !( lhs < rhs );
+  }
 } // namespace Ipopt
 
 #endif
