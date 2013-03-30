@@ -55,13 +55,6 @@ AC_COIN_PROG_CC
 
 # Get the name of the C++ compiler and appropriate compiler options
 AC_COIN_PROG_CXX
-# We add one more definition in if we are using g++ compilers and are
-# in debug mode
-if test "$coin_debug_compile" = true; then
-  if test "$GXX" = yes; then
-    CXXFLAGS="$CXXFLAGS -DCHECK_SMARTPTR"
-  fi
-fi
 
 # Get the C++ runtime libraries in case we want to link with a C or
 # Fortran compiler

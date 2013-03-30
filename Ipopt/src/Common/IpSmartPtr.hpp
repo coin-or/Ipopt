@@ -366,7 +366,7 @@ namespace Ipopt
     DBG_START_METH("SmartPtr<T>::SmartPtr()", ipopt_dbg_smartptr_verbosity);
 #endif
 
-#ifdef CHECK_SMARTPTR
+#ifndef NDEBUG
     const ReferencedObject* IPOPT_UNUSED trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = ptr_;
 #endif
 
@@ -382,7 +382,7 @@ namespace Ipopt
     DBG_START_METH("SmartPtr<T>::SmartPtr(const SmartPtr<T>& copy)", ipopt_dbg_smartptr_verbosity);
 #endif
 
-#ifdef CHECK_SMARTPTR
+#ifndef NDEBUG
     const ReferencedObject* IPOPT_UNUSED trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = ptr_;
 #endif
 
@@ -400,7 +400,7 @@ namespace Ipopt
     DBG_START_METH("SmartPtr<T>::SmartPtr(const SmartPtr<U>& copy)", ipopt_dbg_smartptr_verbosity);
 #endif
 
-#ifdef CHECK_SMARTPTR
+#ifndef NDEBUG
     const ReferencedObject* IPOPT_UNUSED trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = ptr_;
 #endif
 
@@ -417,7 +417,7 @@ namespace Ipopt
     DBG_START_METH("SmartPtr<T>::SmartPtr(T* ptr)", ipopt_dbg_smartptr_verbosity);
 #endif
 
-#ifdef CHECK_SMARTPTR
+#ifndef NDEBUG
     const ReferencedObject* IPOPT_UNUSED trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = ptr_;
 #endif
 
@@ -695,7 +695,7 @@ namespace Ipopt
   template <class T>
   void swap(SmartPtr<T>& a, SmartPtr<T>& b)
   {
-#ifdef REF_DEBUG
+#ifdef IP_DEBUG_REFERENCED
     SmartPtr<T> tmp(a);
     a = b;
     b = tmp;
