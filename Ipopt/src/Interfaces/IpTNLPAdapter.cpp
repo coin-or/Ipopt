@@ -1955,7 +1955,8 @@ namespace Ipopt
     for (z_L_meta_iter=z_L_meta.begin();
          z_L_meta_iter!=z_L_meta.end(); ++z_L_meta_iter) {
       if ((Index)z_L_meta_iter->second.size()==z_L.Dim()) {
-        if (z_U_space->HasNumericMetaData(z_L_meta_iter->first.c_str())) {// && z_U_meta[z_L_meta_iter->first.c_str()].size()==z_U.Dim()) {
+        if (z_U_space->HasNumericMetaData(z_L_meta_iter->first.c_str())
+           && (Index)z_U_meta.find(z_L_meta_iter->first.c_str())->second.size()==z_U.Dim()) {
           std::vector<Number> z_U_second = z_U_space->GetNumericMetaData(z_L_meta_iter->first);
           SmartPtr<DenseVector> z_L_meta_vector =
             z_L_space->MakeNewDenseVector();
