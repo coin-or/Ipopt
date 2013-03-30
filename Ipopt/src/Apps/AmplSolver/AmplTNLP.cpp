@@ -635,8 +635,11 @@ namespace Ipopt
     IpBlasDcopy(n, z_L, 1, z_L_sol_, 1);
     IpBlasDcopy(n, z_U, 1, z_U_sol_, 1);
     IpBlasDcopy(m, g, 1, g_sol_, 1);
-    for( int i = 0; i < m; ++i )
-       lambda_sol_[i] = -lambda[i];
+    if( obj_sign_ == -1.0 )
+      IpBlasDcopy(m, lambda, 1, lambda_sol_, 1);
+    else
+      for( int i = 0; i < m; ++i )
+        lambda_sol_[i] = -lambda[i];
     obj_sol_ = obj_value;
 
     std::string message;
