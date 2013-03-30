@@ -60,8 +60,7 @@ namespace Ipopt
       :
       read_params_dat_(true),
       inexact_algorithm_(false),
-      replace_bounds_(false),
-      skip_finalize_solution_call_(false)
+      replace_bounds_(false)
   {
     options_ = new OptionsList();
     if (create_empty)
@@ -118,8 +117,7 @@ namespace Ipopt
       reg_options_(reg_options),
       options_(options),
       inexact_algorithm_(false),
-      replace_bounds_(false),
-      skip_finalize_solution_call_(false)
+      replace_bounds_(false)
   {}
 
   SmartPtr<IpoptApplication> IpoptApplication::clone()
@@ -132,7 +130,6 @@ namespace Ipopt
     retval->read_params_dat_ = read_params_dat_;
     retval->inexact_algorithm_ = inexact_algorithm_;
     retval->replace_bounds_ = replace_bounds_;
-    retval->skip_finalize_solution_call_ = skip_finalize_solution_call_;
 
     return retval;
   }
@@ -800,6 +797,9 @@ namespace Ipopt
 
     ApplicationReturnStatus retValue = Internal_Error;
     SolverReturn status = INTERNAL_ERROR;
+    /** Flag indicating if the NLP:FinalizeSolution method should not
+     *  be called after optimization. */
+    bool skip_finalize_solution_call = false;
     try {
 
       // Set up the algorithm
@@ -1001,12 +1001,14 @@ namespace Ipopt
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Optimal Solution Found.\n");
       retValue = Solve_Succeeded;
       status = SUCCESS;
+      skip_finalize_solution_call = true; /* has already been called by TNLPAdapter (and we don't know the correct primal solution) */
     }
     catch (NO_FREE_VARIABLES_AND_INFEASIBLE& exc) {
       exc.ReportException(*jnlst_, J_MOREDETAILED);
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Problem has only fixed variables and constraints are infeasible.\n");
       retValue = Infeasible_Problem_Detected;
       status = LOCAL_INFEASIBILITY;
+      skip_finalize_solution_call = true; /* has already been called by TNLPAdapter (and we don't know the correct primal solution) */
     }
     catch (IpoptException& exc) {
       exc.ReportException(*jnlst_, J_ERROR);
@@ -1024,7 +1026,10 @@ namespace Ipopt
       retValue = NonIpopt_Exception_Thrown;
     }
 
-    if (IsValid(p2ip_data->curr()) && IsValid(p2ip_data->curr()->x())) {
+    if (!skip_finalize_solution_call)
+      options_->GetBoolValue("skip_finalize_solution_call", skip_finalize_solution_call, "");
+
+    if (!skip_finalize_solution_call && IsValid(p2ip_data->curr()) && IsValid(p2ip_data->curr()->x())) {
       SmartPtr<const Vector> c;
       SmartPtr<const Vector> d;
       SmartPtr<const Vector> zL;
@@ -1070,15 +1075,10 @@ namespace Ipopt
         }
       }
 
-      options_->GetBoolValue("skip_finalize_solution_call",
-                             skip_finalize_solution_call_, "");
-
-      if (!skip_finalize_solution_call_) {
-        p2ip_nlp->FinalizeSolution(status,
-                                   *p2ip_data->curr()->x(),
-                                   *zL, *zU, *c, *d, *yc, *yd,
-                                   obj, p2ip_data, p2ip_cq);
-      }
+      p2ip_nlp->FinalizeSolution(status,
+                                 *p2ip_data->curr()->x(),
+                                 *zL, *zU, *c, *d, *yc, *yd,
+                                 obj, p2ip_data, p2ip_cq);
     }
 
     jnlst_->FlushBuffer();

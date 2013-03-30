@@ -677,6 +677,10 @@ namespace Ipopt
         delete [] g_l;
         delete [] g_u;
 
+        // NOTE: we have passed the primal solution to the user, but not to Ipopt
+        // that is, Ipopt's data object still holds none or another solution
+        // However, since IpoptApplication will not call finalize_solution with this point if
+        // it gets a NO_FREE_VARIABLES_* exception, this should be good enough.
         char string[128];
         Snprintf(string, 127, "All variables are fixed, and constraint violation is %e", max_viol);
         if (status == SUCCESS) {
