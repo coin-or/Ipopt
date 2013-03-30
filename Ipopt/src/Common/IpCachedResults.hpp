@@ -201,7 +201,7 @@ namespace Ipopt
     }
     //@}
 
-    /** Invalidates the result for given dependecies. Sets the stale
+    /** Invalidates the result for given dependencies. Sets the stale
      *  flag for the corresponding cached result to true if it is
      *  found.  Returns true, if the result was found. */
     bool InvalidateResult(const std::vector<const TaggedObject*>& dependents,
