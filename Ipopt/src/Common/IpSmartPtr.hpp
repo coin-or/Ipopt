@@ -172,8 +172,12 @@ namespace Ipopt
     /** Default constructor, initialized to NULL */
     SmartPtr();
 
-    /** Copy constructor, initialized from copy */
+    /** Copy constructor, initialized from copy of type T */
     SmartPtr(const SmartPtr<T>& copy);
+
+    /** Copy constructor, initialized from copy of type U */
+    template <class U>
+    SmartPtr(const SmartPtr<U>& copy);
 
     /** Constructor, initialized from T* ptr */
     SmartPtr(T* ptr);
@@ -202,6 +206,12 @@ namespace Ipopt
      * set the value of the SmartPtr from another 
      * SmartPtr */
     SmartPtr<T>& operator=(const SmartPtr<T>& rhs);
+
+    /** Overloaded equals operator, allows the user to
+     * set the value of the SmartPtr from another
+     * SmartPtr of a different type */
+    template <class U>
+    SmartPtr<T>& operator=(const SmartPtr<U>& rhs);
 
     /** Overloaded equality comparison operator, allows the
      * user to compare the value of two SmartPtrs */
@@ -374,6 +384,27 @@ namespace Ipopt
 
 
   template <class T>
+  template <class U>
+  SmartPtr<T>::SmartPtr(const SmartPtr<U>& copy)
+      :
+      ptr_(0)
+  {
+#ifdef IP_DEBUG_SMARTPTR
+    DBG_START_METH("SmartPtr<T>::SmartPtr(const SmartPtr<U>& copy)", dbg_smartptr_verbosity);
+#endif
+
+#ifdef CHECK_SMARTPTR
+
+    const ReferencedObject* trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_
+    = ptr_;
+    trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = 0;
+#endif
+
+    (void) SetFromSmartPtr_(GetRawPtr(copy));
+  }
+
+
+  template <class T>
   SmartPtr<T>::SmartPtr(T* ptr)
       :
       ptr_(0)
@@ -458,6 +489,20 @@ namespace Ipopt
 #endif
 
     return SetFromSmartPtr_(rhs);
+  }
+
+
+  template <class T>
+  template <class U>
+  SmartPtr<T>& SmartPtr<T>::operator=(const SmartPtr<U>& rhs)
+  {
+#ifdef IP_DEBUG_SMARTPTR
+    DBG_START_METH(
+      "SmartPtr<T>& SmartPtr<T>::operator=(const SmartPtr<U>& rhs)",
+      dbg_smartptr_verbosity);
+#endif
+
+    return SetFromSmartPtr_(GetRawPtr(rhs));
   }
 
 
