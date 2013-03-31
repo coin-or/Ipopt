@@ -46,18 +46,19 @@ namespace Ipopt
 
     /** Constructors / Destructors */
     //@{
-    RegisteredOption()
+    RegisteredOption(Index counter)
         :
         type_(OT_Unknown),
         has_lower_(false),
         has_upper_(false),
-        counter_(0)
+        counter_(counter)
     {}
 
     RegisteredOption(const std::string& name,
                      const std::string& short_description,
                      const std::string& long_description,
-                     const std::string& registering_category)
+                     const std::string& registering_category,
+                     Index counter)
         :
         name_(name),
         short_description_(short_description),
@@ -66,7 +67,7 @@ namespace Ipopt
         type_(OT_Unknown),
         has_lower_(false),
         has_upper_(false),
-        counter_(next_counter_++)
+        counter_(counter)
     {}
 
     RegisteredOption(const RegisteredOption& copy)
@@ -381,8 +382,6 @@ namespace Ipopt
     /** Has the information as how many-th option this one was
      *  registered. */
     const Index counter_;
-
-    static Index next_counter_;
   };
 
   /** Class for storing registered options. Used for validation and
@@ -396,6 +395,7 @@ namespace Ipopt
     /** Standard Constructor */
     RegisteredOptions()
         :
+        next_counter_(0),
         current_registering_category_("Uncategorized")
     {}
 
@@ -649,6 +649,7 @@ namespace Ipopt
     }
 
   private:
+    Index next_counter_;
     std::string current_registering_category_;
     std::map<std::string, SmartPtr<RegisteredOption> > registered_options_;
   };
