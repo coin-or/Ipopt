@@ -16,14 +16,14 @@
 #include <list>
 
 namespace Ipopt
-      //#define IP_DEBUG_CACHE
+{
+
 #if COIN_IPOPT_CHECKLEVEL > 2
 # define IP_DEBUG_CACHE
 #endif
 #ifdef IP_DEBUG_CACHE
 # include "IpDebug.hpp"
 #endif
-{
 
   // Forward Declarations
 
@@ -41,9 +41,9 @@ namespace Ipopt
   //     CP_Iterate
   //   };
 
-  /** Templated class for Chached Results.  This class stores up to a
+  /** Templated class for Cached Results.  This class stores up to a
    *  given number of "results", entities that are stored here
-   *  together with identifies, that can be used to later retrieve the
+   *  together with identifiers, that can be used to later retrieve the
    *  information again.
    *
    *  Typically, T is a SmartPtr for some calculated quantity that
@@ -53,7 +53,7 @@ namespace Ipopt
    *  the cache using the AddCachedResults methods, and the can be
    *  retrieved with the GetCachedResults methods. The second set of
    *  methods checks whether a result has been cached for the given
-   *  identifiers.  If a corresponding results is found, a copy of it
+   *  identifiers.  If a corresponding result is found, a copy of it
    *  is returned and the method evaluates to true, otherwise it
    *  evaluates to false.
    *
@@ -79,7 +79,7 @@ namespace Ipopt
     //@{
     /** Constructor, where max_cache_size is the maximal number of
      *  results that should be cached.  If max_cache_size is negative,
-     *  we allow an infinite abount of cache.
+     *  we allow an infinite amount of cache.
      */
     CachedResults(Int max_cache_size);
 
@@ -259,7 +259,6 @@ namespace Ipopt
   public:
 
 #ifdef IP_DEBUG_CACHE
-
     static const Index dbg_verbosity;
 #endif
 
@@ -338,7 +337,6 @@ namespace Ipopt
   };
 
 #ifdef IP_DEBUG_CACHE
-
   template <class T>
   const Index CachedResults<T>::dbg_verbosity = 0;
 
