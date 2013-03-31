@@ -150,12 +150,12 @@ namespace Ipopt
 
     debug_curr_tag_ = curr_->GetTag();
     debug_curr_tag_sum_ = curr_->GetTagSum();
-    debug_trial_tag_ = 0;
-    debug_trial_tag_sum_ = 0;
-    debug_delta_tag_ = 0;
-    debug_delta_tag_sum_ = 0;
-    debug_delta_aff_tag_ = 0;
-    debug_delta_aff_tag_sum_ = 0;
+    debug_trial_tag_ = TaggedObject::Tag();
+    debug_trial_tag_sum_ = TaggedObject::Tag();
+    debug_delta_tag_ = TaggedObject::Tag();
+    debug_delta_tag_sum_ = TaggedObject::Tag();
+    debug_delta_aff_tag_ = TaggedObject::Tag();
+    debug_delta_aff_tag_sum_ = TaggedObject::Tag();
 #endif
 
     trial_ = NULL;

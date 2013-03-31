@@ -37,7 +37,7 @@ libcommon_la_SOURCES = \
 	IpRegOptions.cpp IpRegOptions.hpp \
 	IpReferenced.hpp \
 	IpSmartPtr.hpp \
-	IpTaggedObject.cpp IpTaggedObject.hpp \
+	IpTaggedObject.hpp \
 	IpTimedTask.hpp \
 	IpTypes.hpp \
 	IpUtils.cpp IpUtils.hpp
@@ -65,7 +65,7 @@ ASTYLE_FILES = \
 	IpRegOptions.cppbak IpRegOptions.hppbak \
 	IpReferenced.hppbak \
 	IpSmartPtr.hppbak \
-	IpTaggedObject.cppbak IpTaggedObject.hppbak \
+	IpTaggedObject.hppbak \
 	IpTimedTask.hppbak \
 	IpTypes.hppbak \
 	IpUtils.cppbak IpUtils.hppbak

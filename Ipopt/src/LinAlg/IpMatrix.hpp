@@ -35,8 +35,7 @@ namespace Ipopt
     Matrix(const MatrixSpace* owner_space)
         :
         TaggedObject(),
-        owner_space_(owner_space),
-        valid_cache_tag_(0)
+        owner_space_(owner_space)
     {}
 
     /** Destructor */
