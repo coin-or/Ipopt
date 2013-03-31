@@ -34,8 +34,6 @@
 namespace Ipopt
 {
 
-  Index RegisteredOption::next_counter_ = 1;
-
   void RegisteredOption::OutputDescription(const Journalist& jnlst) const
   {
     std::string type_str = "Unknown";
@@ -443,7 +441,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_);
+                           current_registering_category_, next_counter_++);
     option->SetType(OT_Number);
     option->SetDefaultNumber(default_value);
     ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(),
@@ -461,7 +459,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_);
+                           current_registering_category_, next_counter_++);
     option->SetType(OT_Number);
     option->SetDefaultNumber(default_value);
     option->SetLowerNumber(lower, strict);
@@ -479,7 +477,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_);
+                           current_registering_category_, next_counter_++);
     option->SetType(OT_Number);
     option->SetDefaultNumber(default_value);
     option->SetUpperNumber(upper, strict);
@@ -498,7 +496,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_);
+                           current_registering_category_, next_counter_++);
     option->SetType(OT_Number);
     option->SetDefaultNumber(default_value);
     option->SetLowerNumber(lower, lower_strict);
@@ -516,7 +514,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_);
+                           current_registering_category_, next_counter_++);
     option->SetType(OT_Integer);
     option->SetDefaultInteger(default_value);
     ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
@@ -532,7 +530,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_);
+                           current_registering_category_, next_counter_++);
     option->SetType(OT_Integer);
     option->SetDefaultInteger(default_value);
     option->SetLowerInteger(lower);
@@ -549,7 +547,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_);
+                           current_registering_category_, next_counter_++);
     option->SetType(OT_Integer);
     option->SetDefaultInteger(default_value);
     option->SetUpperInteger(upper);
@@ -567,7 +565,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_);
+                           current_registering_category_, next_counter_++);
     option->SetType(OT_Integer);
     option->SetDefaultInteger(default_value);
     option->SetLowerInteger(lower);
@@ -587,7 +585,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_);
+                           current_registering_category_, next_counter_++);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     DBG_ASSERT(settings.size() == descriptions.size());
@@ -609,7 +607,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_);
+                           current_registering_category_, next_counter_++);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -630,7 +628,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_);
+                           current_registering_category_, next_counter_++);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -654,7 +652,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_);
+                           current_registering_category_, next_counter_++);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -681,7 +679,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_);
+                           current_registering_category_, next_counter_++);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -711,7 +709,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_);
+                           current_registering_category_, next_counter_++);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -744,7 +742,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_);
+                           current_registering_category_, next_counter_++);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -780,7 +778,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_);
+                           current_registering_category_, next_counter_++);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -819,7 +817,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_);
+                           current_registering_category_, next_counter_++);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -861,7 +859,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_);
+                           current_registering_category_, next_counter_++);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
@@ -906,7 +904,7 @@ namespace Ipopt
   {
     SmartPtr<RegisteredOption> option =
       new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_);
+                           current_registering_category_, next_counter_++);
     option->SetType(OT_String);
     option->SetDefaultString(default_value);
     option->AddValidStringSetting(setting1, description1);
