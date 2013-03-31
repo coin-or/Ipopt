@@ -28,14 +28,12 @@ namespace Ipopt
    * Users of a TaggedObject class, need their own Tag data
    * member to keep track of the state of the TaggedObject, the
    * last time they performed a calculation. A basic use case for 
-   * users of a class inheriting off of TaggedObject follows like
+   * users of a class inheriting from TaggedObject follows like
    * this:
    * 
-   *  Initialize your own Tag to zero in constructor.
+   *  1. Initialize your own Tag to zero in constructor.
    *  
-   *  
-   *  
-   *  Before an expensive calculation,
+   *  2. Before an expensive calculation,
    *      check if the TaggedObject has changed, passing in
    *      your own Tag, indicating the last time you used
    *      the object for the calculation. If it has changed,
@@ -54,7 +52,6 @@ namespace Ipopt
           }
    \endverbatim
    * 
-   * Objects derived from TaggedObject:
    *  Objects derived from TaggedObject must indicate that they have changed to
    *  the base class using the protected member function ObjectChanged(). For
    *  example, a Vector class, inside its own set method, MUST call 
