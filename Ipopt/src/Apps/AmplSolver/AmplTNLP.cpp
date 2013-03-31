@@ -404,16 +404,9 @@ namespace Ipopt
     DBG_ASSERT(n == n_var);
     DBG_ASSERT(m == n_con);
 
-    if (init_x) {
-      for (Index i=0; i<n; i++) {
-        if (havex0[i]) {
-          x[i] = X0[i];
-        }
-        else {
-          x[i] = 0.0;
-        }
-      }
-    }
+    if (init_x)
+      for (Index i=0; i<n; i++)
+        x[i] = havex0[i] ? X0[i] : 0.0;
 
     if (init_z) {
       // Modified for warm-start from AMPL
@@ -421,31 +414,14 @@ namespace Ipopt
       const double* zL_init = suffix_handler_->GetNumberSuffixValues("ipopt_zL_in", AmplSuffixHandler::Variable_Source);
       const double* zU_init = suffix_handler_->GetNumberSuffixValues("ipopt_zU_in", AmplSuffixHandler::Variable_Source);
       for (Index i=0; i<n; i++) {
-        if (zL_init) {
-          z_L[i]=zL_init[i];
-        }
-        else {
-          z_L[i] =1.0;
-        }
-        if (zU_init) {
-          z_U[i]=zU_init[i];
-        }
-        else {
-          z_U[i] =1.0;
-        }
+        z_L[i] = zL_init != NULL ?  obj_sign_ * zL_init[i] : 1.0;
+        z_U[i] = zU_init != NULL ? -obj_sign_ * zU_init[i] : 1.0;
       }
     }
 
-    if (init_lambda) {
-      for (Index i=0; i<m; i++) {
-        if (havepi0[i]) {
-          lambda[i] = -obj_sign_ * pi0[i];
-        }
-        else {
-          lambda[i] = 0.0;
-        }
-      }
-    }
+    if (init_lambda)
+      for (Index i=0; i<m; i++)
+        lambda[i] = havepi0[i] ? -obj_sign_ * pi0[i] : 0.0;
 
     return true;
   }
@@ -632,14 +608,22 @@ namespace Ipopt
     }
 
     IpBlasDcopy(n, x, 1, x_sol_, 1);
-    IpBlasDcopy(n, z_L, 1, z_L_sol_, 1);
-    IpBlasDcopy(n, z_U, 1, z_U_sol_, 1);
     IpBlasDcopy(m, g, 1, g_sol_, 1);
-    if( obj_sign_ == -1.0 )
+    if( obj_sign_ == -1.0 ) // maximization
+    {
+      for( int i = 0; i < n; ++i )
+        z_L_sol_[i] = -z_L[i];
+      IpBlasDcopy(n, z_U, 1, z_U_sol_, 1);
       IpBlasDcopy(m, lambda, 1, lambda_sol_, 1);
+    }
     else
+    {
+      IpBlasDcopy(n, z_L, 1, z_L_sol_, 1);
+      for( int i = 0; i < n; ++i )
+        z_U_sol_[i] = -z_U[i];
       for( int i = 0; i < m; ++i )
         lambda_sol_[i] = -lambda[i];
+    }
     obj_sol_ = obj_value;
 
     std::string message;
