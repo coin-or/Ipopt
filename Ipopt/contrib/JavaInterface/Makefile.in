@@ -21,6 +21,11 @@ JAR = $(JAVA_HOME)/bin/jar
 # Java runtime
 JAVA = $(JAVA_HOME)/bin/java
 
+# libtool
+top_builddir = ../..
+SHELL = @SHELL@
+LIBTOOL = @LIBTOOL@
+
 # C++ Compiler command
 CXX = @CXX@
 
@@ -50,7 +55,7 @@ VPATH = @srcdir@
 ORGDIR = org/coinor
 JNIHEADER = org_coinor_Ipopt.h
 
-JIPOPTOBJ = jipopt.@OBJEXT@
+JIPOPTOBJ = jipopt.lo
 JIPOPTDLL = @JIPOPTDLL@
 LIBJIPOPT = lib/$(JIPOPTDLL)
 
@@ -68,7 +73,7 @@ SCALCLASSES = \
 SCALJAR = ScalableProblems.jar
 
 $(LIBJIPOPT): $(JIPOPTOBJ) lib
-	$(CXX) $(LINKFLAGS) -o $(LIBJIPOPT) $(JIPOPTOBJ) $(LIBS)
+	$(LIBTOOL) --tag=CXX --mode=link $(CXX) $(LINKFLAGS) -o $(LIBJIPOPT) $(JIPOPTOBJ) $(LIBS)
 
 $(JNIHEADER): $(IPOPTCLASS)
 	$(JAVAH) `echo $(IPOPTCLASS) | sed -e 's|/|.|g' -e 's|.class||'`
@@ -81,7 +86,7 @@ lib:
 .java.class:
 	$(JAVAC) $<
 
-.SUFFIXES: .cpp .o .obj .java .class
+.SUFFIXES: .cpp .lo .obj .java .class
 
 $(SCALJAR): $(SCALCLASSES)
 	$(JAR) cfm $(SCALJAR) $(SRCDIR)/manifest.txt $(IPOPTCLASS) $(SCALCLASSES)
@@ -93,8 +98,8 @@ test: $(LIBJIPOPT) $(HS071CLASSES) $(SCALJAR)
 clean:
 	rm -rf $(LIBJIPOPT) $(JIPOPTOBJ) $(JNIHEADER) $(IPOPTCLASS) $(HS071CLASSES) $(SCALCLASSES) $(SCALJAR)
 
-.cpp.o:
-	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `test -f '$<' || echo '$(SRCDIR)/'`$<
+.cpp.lo:
+	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `test -f '$<' || echo '$(SRCDIR)/'`$<
 
 .cpp.obj:
 	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `if test -f '$<'; then $(CYGPATH_W) '$<'; else $(CYGPATH_W) '$(SRCDIR)/$<'; fi`
