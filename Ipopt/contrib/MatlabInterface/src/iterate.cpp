@@ -22,18 +22,18 @@ Iterate::Iterate (mxArray* ptr)
     int n = mxGetNumberOfElements(ptr);
     for (int i = 0; i < n; i++) {
       p = mxGetCell(ptr,i);  // Get the ith cell.
-      if (!mxIsDouble(p))
-	throw MatlabException("The initial iterate must be either an array \
-in DOUBLE precision, or a cell array in which each cell is an array in \
+      if (!mxIsDouble(p) || mxIsComplex(p) || mxIsSparse(p))
+	throw MatlabException("The initial iterate must be either a full real array \
+in DOUBLE precision, or a cell array in which each cell is a full real array in \
 DOUBLE precision");      
       nv += mxGetNumberOfElements(p);
     }
   } else {
     
     // The MATLAB array should be a numeric array.
-    if (!mxIsDouble(ptr))
-      throw MatlabException("The initial iterate must be either an array \
-in DOUBLE precision, or a cell array in which each cell is an array in \
+    if (!mxIsDouble(ptr) || mxIsComplex(ptr) || mxIsSparse(ptr))
+      throw MatlabException("The initial iterate must be either a full real array \
+in DOUBLE precision, or a cell array in which each cell is a full real array in \
 DOUBLE precision");
     nv = mxGetNumberOfElements(ptr);
   }

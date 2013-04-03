@@ -159,9 +159,14 @@ callback function");
   // Get the output from the MATLAB callback function, which is the
   // value of the objective function at x.
   mxArray* ptr = outputs[0];
-  if (!mxIsDouble(ptr) || mxGetNumberOfElements(ptr) != 1)
+  if (!mxIsDouble(ptr) || mxIsComplex(ptr) || mxGetNumberOfElements(ptr) != 1)
     throw MatlabException("The first return value of the objective \
-callback function must be a double scalar");
+callback function must be a real double scalar");
+  if (mxIsSparse(ptr)) {
+    // convert sparse objective (unlikely but possible) to full
+    mexCallMATLAB(1, &ptr, 1, outputs, "full");
+    mxDestroyArray(outputs[0]);
+  }
   f = *mxGetPr(ptr);
 
   // Free the dynamically allocated memory.
@@ -190,10 +195,12 @@ gradient callback function");
   // Get the output from the MATLAB callback function, which is the
   // value of the gradient of the objective function at x.
   mxArray* ptr = outputs[0];
+  if (!mxIsDouble(ptr) || mxIsComplex(ptr))
+    throw MatlabException("The gradient callback must return a real double vector");
   if (mxIsSparse(ptr)) {
-      // convert sparse gradient to full (simplest method, not fastest)
-      mexCallMATLAB(1, &ptr, 1, outputs, "full");
-      mxDestroyArray(outputs[0]);
+    // convert sparse gradient to full (simplest method, not fastest)
+    mexCallMATLAB(1, &ptr, 1, outputs, "full");
+    mxDestroyArray(outputs[0]);
   }
   Iterate grad(ptr);
   if (numvars(x) != numvars(grad))
@@ -228,6 +235,13 @@ constraints callback function");
   if ((unsigned) m != mxGetNumberOfElements(ptr))
     throw MatlabException("Invalid constraint values passed back from \
 Matlab routine");
+  if (!mxIsDouble(ptr) || mxIsComplex(ptr))
+    throw MatlabException("The constraint callback must return a real double vector");
+  if (mxIsSparse(ptr)) {
+    // convert sparse constraint vector (unlikely but possible) to full
+    mexCallMATLAB(1, &ptr, 1, outputs, "full");
+    mxDestroyArray(outputs[0]);
+  }
   copymemory(mxGetPr(ptr),c,m);
 
   // Free the dynamically allocated memory.
@@ -253,13 +267,18 @@ of the Jacobian matrix from MATLAB");
   // Get the output from the MATLAB callback function, which is the
   // sparse matrix specifying the structure of the Jacobian.
   mxArray* ptr = outputs[0];
-  if (!mxIsSparse(ptr))
-    throw MatlabException("Jacobian must be a sparse matrix");
+  if (!mxIsSparse(ptr) || mxIsComplex(ptr))
+    throw MatlabException("Jacobian must be a real sparse matrix");
   if ((int) mxGetM(ptr) != m || (int) mxGetN(ptr) != n || 
       !SparseMatrix::inIncOrder(ptr))
     throw MatlabException("Jacobian must be an m x n sparse matrix with \
 row indices in increasing order, where m is the number of constraints and \
 n is the number of variables");
+  if (!mxIsDouble(ptr)) {
+    // convert non-double Jacobian structure to double
+    mexCallMATLAB(1, &ptr, 1, outputs, "double");
+    mxDestroyArray(outputs[0]);
+  }
   SparseMatrix* J = new SparseMatrix(ptr);  // The return value.
 
   // Free the dynamically allocated memory.
@@ -287,13 +306,18 @@ of the Hessian matrix from MATLAB");
   // Get the output from the MATLAB callback function, which is the
   // sparse matrix specifying the structure of the Hessian.
   mxArray* ptr = outputs[0];
-  if (!mxIsSparse(ptr))
-    throw MatlabException("Hessian must be a sparse matrix");
+  if (!mxIsSparse(ptr) || mxIsComplex(ptr))
+    throw MatlabException("Hessian must be a real sparse matrix");
   if ((int) mxGetM(ptr) != n || (int) mxGetN(ptr) != n || 
       !SparseMatrix::isLowerTri(ptr) || !SparseMatrix::inIncOrder(ptr))
     throw MatlabException("Hessian must be an n x n sparse, symmetric and \
 lower triangular matrix with row indices in increasing order, where n is \
 the number of variables");
+  if (!mxIsDouble(ptr)) {
+    // convert non-double Hessian structure to double
+    mexCallMATLAB(1, &ptr, 1, outputs, "double");
+    mxDestroyArray(outputs[0]);
+  }
   SparseMatrix* H = new SparseMatrix(ptr);  // The return value.
 
   // Free the dynamically allocated memory.
@@ -323,13 +347,18 @@ Jacobian callback function");
   // Get the output from the MATLAB callback function, which is the
   // sparse matrix specifying the value the Jacobian.
   mxArray* ptr = outputs[0];
-  if (!mxIsSparse(ptr))
-    throw MatlabException("Jacobian must be a sparse matrix");
+  if (!mxIsSparse(ptr) || mxIsComplex(ptr))
+    throw MatlabException("Jacobian must be a real sparse matrix");
   if ((int) mxGetM(ptr) != m || (int) mxGetN(ptr) != numvars(x) || 
       !SparseMatrix::inIncOrder(ptr))
     throw MatlabException("Jacobian must be an m x n sparse matrix with \
 row indices in increasing order, where m is the number of constraints and \
 n is the number of variables");
+  if (!mxIsDouble(ptr)) {
+    // convert non-double Jacobian to double
+    mexCallMATLAB(1, &ptr, 1, outputs, "double");
+    mxDestroyArray(outputs[0]);
+  }
   SparseMatrix Jnew(ptr);
   Jnew.copyto(J);
 
@@ -365,13 +394,18 @@ callback function");
   // Get the output from the MATLAB callback function, which is the
   // sparse matrix specifying the value the Hessian.
   mxArray* ptr = outputs[0];
-  if (!mxIsSparse(ptr))
-    throw MatlabException("Hessian must be a sparse matrix");
+  if (!mxIsSparse(ptr) || mxIsComplex(ptr))
+    throw MatlabException("Hessian must be a real sparse matrix");
   if ((int) mxGetM(ptr) != numvars(x) || (int) mxGetN(ptr) != numvars(x) || 
       !SparseMatrix::isLowerTri(ptr) || !SparseMatrix::inIncOrder(ptr))
     throw MatlabException("Hessian must be an n x n sparse, symmetric and \
 lower triangular matrix with row indices in increasing order, where n is \
 the number of variables");
+  if (!mxIsDouble(ptr)) {
+    // convert non-double Hessian to double
+    mexCallMATLAB(1, &ptr, 1, outputs, "double");
+    mxDestroyArray(outputs[0]);
+  }
   SparseMatrix Hnew(ptr);
   Hnew.copyto(H);
 
