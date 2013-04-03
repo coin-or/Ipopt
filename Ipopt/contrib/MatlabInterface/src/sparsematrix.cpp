@@ -37,7 +37,7 @@ SparseMatrix::~SparseMatrix() {
 }
 
 int SparseMatrix::numelems (int c) const {
-  return jc[c+1] - jc[c];
+  return (int) jc[c+1] - (int) jc[c];
 }
 
 void SparseMatrix::getColsAndRows (int* cols, int* rows) const {
@@ -118,7 +118,7 @@ int SparseMatrix::getSizeOfSparseMatrix (const mxArray* ptr) {
   // last entry of the jc array. (There is one jc entry for each
   // column in the matrix, plus an extra one.)
   mwIndex* jc = mxGetJc(ptr);
-  return jc[w];    
+  return (int) jc[w];    
 }  
 
 bool SparseMatrix::isLowerTri (const mxArray* ptr) {
