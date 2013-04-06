@@ -126,7 +126,7 @@ bounds on the constraints");
 double-precision arrays with the same number of elements");
 
     // Get the number of constraints.
-    m = mxGetNumberOfElements(pl);
+    m = (int) mxGetNumberOfElements(pl);
 
     // Load the lower bounds on the constraints and convert MATLAB's
     // convention of infinity to IPOPT's convention of infinity.
