@@ -723,6 +723,16 @@ AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/examplehs071.m)
 AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/examplelasso.m)
 AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/lasso.m)
 
+AC_COIN_VPATH_LINK(contrib/RInterface/DESCRIPTION)
+AC_COIN_VPATH_LINK(contrib/RInterface/NAMESPACE)
+AC_COIN_VPATH_LINK(contrib/RInterface/inst)
+AC_COIN_VPATH_LINK(contrib/RInterface/man)
+AC_COIN_VPATH_LINK(contrib/RInterface/R)
+AC_COIN_VPATH_LINK(contrib/RInterface/tests)
+AC_COIN_VPATH_LINK(contrib/RInterface/src/ipoptr.cpp)
+AC_COIN_VPATH_LINK(contrib/RInterface/src/IpoptRJournal.cpp)
+AC_COIN_VPATH_LINK(contrib/RInterface/src/IpoptRNLP.cpp)
+
 AC_COIN_VPATH_LINK(examples/Cpp_example/cpp_example.cpp)
 AC_COIN_VPATH_LINK(examples/Cpp_example/MyNLP.cpp)
 AC_COIN_VPATH_LINK(examples/Cpp_example/MyNLP.hpp)
@@ -807,8 +817,6 @@ AC_CONFIG_FILES([Makefile
 		 test/run_unitTests
 		 contrib/MatlabInterface/src/Makefile
 		 contrib/MatlabInterface/examples/startup.m
-		 contrib/MatlabInterface-Old/src/Makefile
-		 contrib/MatlabInterface-Old/examples/startup.m
 		 contrib/JavaInterface/Makefile
 		 contrib/sIPOPT/Makefile
 		 contrib/sIPOPT/AmplSolver/Makefile
