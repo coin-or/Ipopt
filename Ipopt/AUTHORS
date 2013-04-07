@@ -81,15 +81,22 @@ Contributors:
 - Jonathan Hogg (STFC Rutherford Appleton Laboratory)
   MA77 interface
 
-  src/Algorithm/LinearSolvers/ma77_iface.f90
+  src/Algorithm/LinearSolvers/hsl_ma77d.h
   src/Algorithm/LinearSolvers/IpMa77SolverInterface.hpp
   src/Algorithm/LinearSolvers/IpMa77SolverInterface.cpp
 
   MA86 interface
 
   src/Algorithm/LinearSolvers/hsl_ma86d.h
+  src/Algorithm/LinearSolvers/hsl_mc68i.h
   src/Algorithm/LinearSolvers/IpMa86SolverInterface.hpp
   src/Algorithm/LinearSolvers/IpMa86SolverInterface.cpp
+
+  MA97 interface
+
+  src/Algorithm/LinearSolvers/hsl_ma97d.h
+  src/Algorithm/LinearSolvers/IpMa97SolverInterface.hpp
+  src/Algorithm/LinearSolvers/IpMa97SolverInterface.cpp
 
 - Hans Pirnay (RWTH Aachen)
   Rodrigo Lopez-Negrete (Carnegie Mellon University)
