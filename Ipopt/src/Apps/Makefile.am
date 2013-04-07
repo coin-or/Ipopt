@@ -12,5 +12,4 @@ SUBDIRS = CUTErInterface
 
 if COIN_HAS_ASL
   SUBDIRS += AmplSolver
-#  SUBDIRS += CompositeInterface
 endif
