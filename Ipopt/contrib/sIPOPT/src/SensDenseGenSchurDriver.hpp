@@ -39,12 +39,12 @@ namespace Ipopt
      *  \end{array}
      *  \right]
      *  \left[\begin{array}{c}x\\y\end{array}\right] =
-     *  \left[\begin{array}{c}f\\g\end{array}\right]$\f
+     *  \left[\begin{array}{c}f\\g\end{array}\right]\f$
      *
      *  y will be stored in g at exit.
      *  Kf should hold
      *
-     *  \f$K^{-1}f$\f
+     *  \f$K^{-1}f\f$
      *
      *  if it has been computed previously. If it is not available, just
      *  pass in Kf=NULL and it will be computed internally.
