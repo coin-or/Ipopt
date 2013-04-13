@@ -7,7 +7,7 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-03-17
 
 #ifndef __IPMC19TSYMSCALINGMETHOD_HPP__
-#define __IPMC19TSYMSCLAINGMETHOD_HPP__
+#define __IPMC19TSYMSCALINGMETHOD_HPP__
 
 #include "IpUtils.hpp"
 #include "IpTSymScalingMethod.hpp"

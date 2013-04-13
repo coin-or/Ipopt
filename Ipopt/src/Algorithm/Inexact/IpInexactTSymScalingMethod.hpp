@@ -8,7 +8,7 @@
 //               (based on IpMc19TSymScalingMethod.hpp rev 699)
 
 #ifndef __IPINEXACTTSYMSCALINGMETHOD_HPP__
-#define __IPINEXACTTSYMSCLAINGMETHOD_HPP__
+#define __IPINEXACTTSYMSCALINGMETHOD_HPP__
 
 #include "IpUtils.hpp"
 #include "IpTSymScalingMethod.hpp"

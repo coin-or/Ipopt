@@ -23,8 +23,8 @@ namespace Ipopt
      *  treatment of adding rows/cols (like QPSchur).
      *
      *  The computations done by this class are
-     *  1. Solve $S \Delta\nu = r_s
-     *  2. Solve $K\Delta s = ... - \Delta nu (really?)*/
+     *  1. Solve \f$S \Delta\nu = r_s\f$
+     *  2. Solve \f$K\Delta s = ... - \Delta nu\f$ (really?)*/
 
   public:
 
