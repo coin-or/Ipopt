@@ -97,7 +97,7 @@ namespace Ipopt
     /** eps_3 constant in termination test 3 */
     Number tt_eps3_;
     /** rho constant from penalty parameter update.  This is called
-     *  \tau_{\pi} in MIPS paper */
+     *  \f$\tau_{\pi}\f$ in MIPS paper */
     Number rho_;
     /** Desired reduction of residual */
     Number inexact_desired_pd_residual_;

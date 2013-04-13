@@ -16,14 +16,14 @@ namespace Ipopt
 
   class PCalculator : public AlgorithmStrategyObject
   {
-    /** This class is the interface for implementations of any class that calculates the matrix $P =K^{-1}A
+    /** This class is the interface for implementations of any class that calculates the matrix \f$P =K^{-1}A\f$
      *  of the following matrix:
-     *  \begin{eqnarray}
+     *  \f[
      *  \left(\begin{array}{cc}
      *  K & A\\
      *  B & 0
-     *  \end{array}
-     *  \end{eqnarray}
+     *  \end{array}\right)
+     *  \f]
      */
 
   public:
