@@ -15,7 +15,7 @@ extern "C" {
 #endif
   /** Tries to load a dynamically linked library with Pardiso.
    * Return a failure if the library cannot be loaded or not all Pardiso symbols are found.
-   * @param libname The name under which the Pardiso lib can be found, or NULL to use a default name (libpardiso.<SHAREDLIBEXT>).
+   * @param libname The name under which the Pardiso lib can be found, or NULL to use a default name (libpardiso.SHAREDLIBEXT).
    * @param msgbuf A buffer where we can store a failure message. Assumed to be NOT NULL!
    * @param msglen Length of the message buffer.
    * @return Zero on success, nonzero on failure.

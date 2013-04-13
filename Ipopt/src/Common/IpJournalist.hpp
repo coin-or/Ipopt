@@ -229,9 +229,9 @@ namespace Ipopt
      *  was a problem creating a new Journal.    
      */
     virtual SmartPtr<Journal> AddFileJournal(
-      const std::string& location_name,    /** identifier */
-      const std::string& fname,
-      EJournalLevel default_level = J_WARNING
+      const std::string& location_name,        /**< journal identifier */
+      const std::string& fname,                /**< file name */
+      EJournalLevel default_level = J_WARNING  /**< default journal level */
     );
 
     /** Get an existing journal.  You can use this method to change

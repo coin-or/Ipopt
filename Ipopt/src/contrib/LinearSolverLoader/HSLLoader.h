@@ -21,7 +21,7 @@ extern "C" {
    * @see LSL_isMA57available
    * @see LSL_isMA86available
    * @see LSL_isMC19available
-   * @param libname The name under which the HSL lib can be found, or NULL to use a default name (libhsl.<SHAREDLIBEXT>).
+   * @param libname The name under which the HSL lib can be found, or NULL to use a default name (libhsl.SHAREDLIBEXT).
    * @param msgbuf A buffer where we can store a failure message. Assumed to be NOT NULL!
    * @param msglen Length of the message buffer.
    * @return Zero on success, nonzero on failure.
