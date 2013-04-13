@@ -439,7 +439,11 @@ esac
 AC_SUBST(JIPOPTDLL)
 
 # Compiler flag for linking DLLs/shared objects (not yet portable!)
-SHARED_FLAGS=-shared
+if test $coin_cxx_is_cl = true; then
+  SHARED_FLAGS=-LD
+else 
+  SHARED_FLAGS=-shared
+fi
 AC_SUBST(SHARED_FLAGS)
 
 #doing this check here avoids its repetition for each file in the following loop
