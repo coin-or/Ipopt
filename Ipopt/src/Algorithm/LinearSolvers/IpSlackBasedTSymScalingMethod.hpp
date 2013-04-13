@@ -8,7 +8,7 @@
 //               (based on IpInexactTSymScalingMethod.hpp)
 
 #ifndef __IPSLACKBASEDTSYMSCALINGMETHOD_HPP__
-#define __IPSLACKBASEDTSYMSCLAINGMETHOD_HPP__
+#define __IPSLACKBASEDTSYMSCALINGMETHOD_HPP__
 
 #include "IpUtils.hpp"
 #include "IpTSymScalingMethod.hpp"
