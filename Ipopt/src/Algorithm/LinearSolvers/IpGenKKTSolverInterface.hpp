@@ -82,10 +82,10 @@ namespace Ipopt
       , const Number* D_s /** Array with the elements D_s (if NULL, assume all zero) */
       , const Number* D_c /** Array with the elements D_c (if NULL, assume all zero) */
       , const Number* D_d /** Array with the elements D_d (if NULL, assume all zero) */
-      , Number delta_x /** /f$ \delta_x\f$ */
-      , Number delta_s /** /f$ \delta_s\f$ */
-      , Number delta_c /** /f$ \delta_c\f$ */
-      , Number delta_d /** /f$ \delta_d\f$ */
+      , Number delta_x /** \f$ \delta_x\f$ */
+      , Number delta_s /** \f$ \delta_s\f$ */
+      , Number delta_c /** \f$ \delta_c\f$ */
+      , Number delta_d /** \f$ \delta_d\f$ */
       , Index n_rhs  /** Number of right hand sides */
       , Number* rhssol /** On input, this containts the right hand sides, and on successful termination of the solver, the solutions are expected in there on return. At the moment, the order is x,d,c,s, but this can be made flexible and chosen according to an option. */
       , bool check_NegEVals /** if true, we want to ensure that the inertia is correct */
