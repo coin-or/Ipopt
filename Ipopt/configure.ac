@@ -82,8 +82,12 @@ AC_ARG_ENABLE([bg],,
 # A Fix for the AIX compiler
 AM_CONDITIONAL([AIX_FIX_COMPILER_BUG], test "x$AIX_FIX_COMPILER_BUG" != x)
 
+# Doxygen
+AC_COIN_DOXYGEN()
+
+
 #############################################################################
-#                              COIN components                              #
+#                              COIN-OR components                           #
 #############################################################################
 
 AC_COIN_CHECK_LIBM(IpoptLib)
@@ -187,7 +191,7 @@ AC_COIN_CHECK_ISFINITE
 ###########
 
 AC_CHECK_DECL([va_copy],[AC_DEFINE([HAVE_VA_COPY],[1],
-                                   [Define to 1 if va_copy is avaliable])],,[
+                                   [Define to 1 if va_copy is available])],,[
 #ifdef HAVE_CSTDARG
 # include <cstdarg>
 #else
@@ -846,7 +850,8 @@ AC_CONFIG_FILES([Makefile
 		 contrib/sIPOPT/examples/redhess_cpp/Makefile
 		 contrib/sIPOPT/src/Makefile
 		 contrib/RInterface/src/Makevars
-		 ipopt.pc ipopt-uninstalled.pc])
+		 ipopt.pc ipopt-uninstalled.pc
+		 doxydoc/doxygen.conf])
 
 if test $coin_has_asl = yes ; then
   AC_CONFIG_FILES([ipoptamplinterface.pc:src/Apps/AmplSolver/ipoptamplinterface.pc.in

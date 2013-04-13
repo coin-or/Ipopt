@@ -84,7 +84,7 @@ EXTRA_DIST = \
 	Windows/VisualStudio_dotNET/Ipopt/Ipopt.vcproj \
 	Windows/VisualStudio_dotNET/ScalableProblems/ScalableProblems.vcproj
 
-.PHONY: cuter test unitTest astyle
+.PHONY: cuter test unitTest astyle doxydoc
 
 # Stuff to clean up from "make test"
 
@@ -121,10 +121,18 @@ test: unitTest
 
 unitTest: all
 	cd test; $(MAKE) test
+	
+doxydoc :
+	doxygen doxydoc/doxygen.conf
+	
+clean-doxydoc:
+	cd doxydoc && rm -rf html *.log *.tag
 
 install-exec-local: install-doc
 
 uninstall-local: uninstall-doc
+
+clean-local : clean-doxydoc
 
 astyle:
 	cd src/Algorithm; $(MAKE) astyle
