@@ -955,9 +955,11 @@ namespace Ipopt
 #   ifndef COINHSL_HAS_MA86
 #    ifndef HAVE_PARDISO
 #     ifndef HAVE_WSMP
+#      ifndef IPOPT_NOMUMPSNOTE
     jnlst.Printf(J_INSUPPRESSIBLE, J_MAIN,
                  "NOTE: You are using Ipopt by default with the MUMPS linear solver.\n"
                  "      Other linear solvers might be more efficient (see Ipopt documentation).\n\n\n");
+#      endif
 #     endif
 #    endif
 #   endif
