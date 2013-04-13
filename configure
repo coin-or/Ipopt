@@ -481,7 +481,7 @@ ac_subdirs_all="$ac_subdirs_all ThirdParty/HSL"
 ac_subdirs_all="$ac_subdirs_all ThirdParty/HSLold"
 ac_subdirs_all="$ac_subdirs_all ThirdParty/Mumps"
 ac_subdirs_all="$ac_subdirs_all Ipopt"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COIN_CC_IS_CL_TRUE COIN_CC_IS_CL_FALSE MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX COIN_CXX_IS_CL_TRUE COIN_CXX_IS_CL_FALSE MPICXX ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 ac_ct_F77 FFLAGS MPIF77 EGREP LN_S INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS COIN_SKIP_PROJECTS subdirs LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COIN_CC_IS_CL_TRUE COIN_CC_IS_CL_FALSE MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX COIN_CXX_IS_CL_TRUE COIN_CXX_IS_CL_FALSE MPICXX ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 ac_ct_F77 FFLAGS MPIF77 EGREP LN_S INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS COIN_SKIP_PROJECTS subdirs coin_have_doxygen coin_doxy_usedot coin_doxy_tagname coin_doxy_logname coin_doxy_tagfiles coin_doxy_excludes LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1159,6 +1159,8 @@ Optional Packages:
   --with-ipopt-lib linker flags for using project Ipopt
   --with-ipopt-incdir directory with header files for using project Ipopt
   --with-ipopt-datadir directory with data files for using project Ipopt
+  --with-dot              use dot (from graphviz) when creating documentation
+                          with doxygen if available; --without-dot to disable
 
 Some influential environment variables:
   CDEFS       Additional -D flags to be used when compiling C code.
@@ -4296,7 +4298,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:4299:" \
+echo "$as_me:4301:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -6562,7 +6564,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 6565 "configure"' > conftest.$ac_ext
+  echo '#line 6567 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -8526,11 +8528,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8529: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8531: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8533: \$? = $ac_status" >&5
+   echo "$as_me:8535: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8794,11 +8796,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8797: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8799: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8801: \$? = $ac_status" >&5
+   echo "$as_me:8803: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8898,11 +8900,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8901: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8903: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:8905: \$? = $ac_status" >&5
+   echo "$as_me:8907: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -11243,7 +11245,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11246 "configure"
+#line 11248 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11343,7 +11345,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11346 "configure"
+#line 11348 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13687,11 +13689,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13690: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13692: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13694: \$? = $ac_status" >&5
+   echo "$as_me:13696: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13791,11 +13793,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13794: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13796: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13798: \$? = $ac_status" >&5
+   echo "$as_me:13800: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15361,11 +15363,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15364: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15366: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15368: \$? = $ac_status" >&5
+   echo "$as_me:15370: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15465,11 +15467,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15468: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15470: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15472: \$? = $ac_status" >&5
+   echo "$as_me:15474: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -17672,11 +17674,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17675: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17677: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17679: \$? = $ac_status" >&5
+   echo "$as_me:17681: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -17940,11 +17942,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17943: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17945: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17947: \$? = $ac_status" >&5
+   echo "$as_me:17949: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -18044,11 +18046,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18047: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18049: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:18051: \$? = $ac_status" >&5
+   echo "$as_me:18053: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -21976,13 +21978,184 @@ subdirs="$subdirs Ipopt"
 fi
 
 
+#############################################################################
+#                             Doxygen setup                                 #
+#############################################################################
+
+
+
+{ echo "$as_me:$LINENO: configuring doxygen documentation options" >&5
+echo "$as_me: configuring doxygen documentation options" >&6;}
+
+# Check to see if doxygen is available.
+
+# Extract the first word of "doxygen", so it can be a program name with args.
+set dummy doxygen; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_prog_coin_have_doxygen+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  if test -n "$coin_have_doxygen"; then
+  ac_cv_prog_coin_have_doxygen="$coin_have_doxygen" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_coin_have_doxygen="yes"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  test -z "$ac_cv_prog_coin_have_doxygen" && ac_cv_prog_coin_have_doxygen="no"
+fi
+fi
+coin_have_doxygen=$ac_cv_prog_coin_have_doxygen
+if test -n "$coin_have_doxygen"; then
+  echo "$as_me:$LINENO: result: $coin_have_doxygen" >&5
+echo "${ECHO_T}$coin_have_doxygen" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+
+# Look for the dot tool from the graphviz package, unless the user has
+# disabled it.
+
+
+# Check whether --with-dot or --without-dot was given.
+if test "${with_dot+set}" = set; then
+  withval="$with_dot"
+
+else
+  withval=yes
+fi;
+if test x"$withval" = xno ; then
+  coin_doxy_usedot=NO
+  echo "$as_me:$LINENO: checking for dot " >&5
+echo $ECHO_N "checking for dot ... $ECHO_C" >&6
+  echo "$as_me:$LINENO: result: disabled" >&5
+echo "${ECHO_T}disabled" >&6
+else
+  # Extract the first word of "dot", so it can be a program name with args.
+set dummy dot; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_prog_coin_doxy_usedot+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  if test -n "$coin_doxy_usedot"; then
+  ac_cv_prog_coin_doxy_usedot="$coin_doxy_usedot" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_coin_doxy_usedot="YES"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  test -z "$ac_cv_prog_coin_doxy_usedot" && ac_cv_prog_coin_doxy_usedot="NO"
+fi
+fi
+coin_doxy_usedot=$ac_cv_prog_coin_doxy_usedot
+if test -n "$coin_doxy_usedot"; then
+  echo "$as_me:$LINENO: result: $coin_doxy_usedot" >&5
+echo "${ECHO_T}$coin_doxy_usedot" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+fi
+
+# Generate a tag file name and a log file name
+
+coin_doxy_tagname=doxydoc/${PACKAGE}_doxy.tag
+
+coin_doxy_logname=doxydoc/${PACKAGE}_doxy.log
+
+
+# Process the list of project names and massage them into possible doxygen
+# doc'n directories. Prefer 1) classic external, source processed using
+# a project-specific doxygen.conf, we use the tag file; 2) classic
+# external, source processed using package doxygen.conf; 3) installed
+# doxydoc. Alternatives 1) and 2) are only possible if the directory will be
+# configured, which we can't know unless this is the package base configure,
+# since coin_subdirs is only set there. Hence it's sufficient to check for
+# membership. If we use a tag file from a classic external, exclude the
+# source from doxygen processing when doxygen runs in the base directory.
+
+coin_doxy_tagfiles=
+coin_doxy_excludes=
+tmp=""
+for proj in $tmp ; do
+  lc_proj=`echo $proj | tr [A-Z] [a-z]`
+  echo "$as_me:$LINENO: checking for doxygen doc'n for $proj " >&5
+echo $ECHO_N "checking for doxygen doc'n for $proj ... $ECHO_C" >&6
+  doxytag=${lc_proj}_doxy.tag
+  doxyfound=no
+  for chkProj in $coin_subdirs ; do
+    if test "$chkProj" = "$proj" ; then
+      # proj will be configured, hence doxydoc present in build tree
+      doxysrcdir="${srcdir}/${proj}"
+      # AC_MSG_NOTICE([Considering $doxysrcdir (base)])
+      if test -d "$doxysrcdir" ; then
+	# with a doxydoc directory?
+	doxydir="$doxysrcdir/doxydoc"
+	# AC_MSG_NOTICE([Considering $doxydir (base)])
+	# AC_MSG_NOTICE([Subdirs: $coin_subdirs)])
+	if test -d "$doxydir" ; then
+	  # use tag file; don't process source
+	  eval doxydir="`pwd`/${proj}/doxydoc"
+	  coin_doxy_tagfiles="$coin_doxy_tagfiles $doxydir/$doxytag=$doxydir/html"
+	  echo "$as_me:$LINENO: result: $doxydir (tag)" >&5
+echo "${ECHO_T}$doxydir (tag)" >&6
+	  coin_doxy_excludes="$coin_doxy_excludes */${proj}"
+	else
+	  # will process the source -- nothing further to be done here
+	  echo "$as_me:$LINENO: result: $doxysrcdir (src)" >&5
+echo "${ECHO_T}$doxysrcdir (src)" >&6
+	fi
+	doxyfound=yes
+      fi
+    fi
+  done
+  # Not built, fall back to installed tag file
+  if test $doxyfound = no ; then
+    eval doxydir="${datadir}/coin/doc/${proj}/doxydoc"
+    # AC_MSG_NOTICE([Considering $doxydir (install)])
+    # AC_MSG_NOTICE([Subdirs: $coin_subdirs)])
+    coin_doxy_tagfiles="$coin_doxy_tagfiles $doxydir/$doxytag=$doxydir/html"
+    echo "$as_me:$LINENO: result: $doxydir (tag)" >&5
+echo "${ECHO_T}$doxydir (tag)" >&6
+  fi
+done
+
+
+
+
+
 ##############################################################################
 #                   Finishing up by writing all the output                   #
 ##############################################################################
 
 # Here list all the files that configure should create (except for the
 # configuration header file)
-          ac_config_files="$ac_config_files Makefile"
+                    ac_config_files="$ac_config_files Makefile doxydoc/doxygen.conf"
 
 
 # Finally, we let configure write all the output...
@@ -22662,6 +22835,7 @@ do
   case "$ac_config_target" in
   # Handling of arguments.
   "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
+  "doxydoc/doxygen.conf" ) CONFIG_FILES="$CONFIG_FILES doxydoc/doxygen.conf" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
@@ -22852,6 +23026,12 @@ s,@RPATH_FLAGS@,$RPATH_FLAGS,;t t
 s,@LT_LDFLAGS@,$LT_LDFLAGS,;t t
 s,@COIN_SKIP_PROJECTS@,$COIN_SKIP_PROJECTS,;t t
 s,@subdirs@,$subdirs,;t t
+s,@coin_have_doxygen@,$coin_have_doxygen,;t t
+s,@coin_doxy_usedot@,$coin_doxy_usedot,;t t
+s,@coin_doxy_tagname@,$coin_doxy_tagname,;t t
+s,@coin_doxy_logname@,$coin_doxy_logname,;t t
+s,@coin_doxy_tagfiles@,$coin_doxy_tagfiles,;t t
+s,@coin_doxy_excludes@,$coin_doxy_excludes,;t t
 s,@LIBEXT@,$LIBEXT,;t t
 s,@VPATH_DISTCLEANFILES@,$VPATH_DISTCLEANFILES,;t t
 s,@ABSBUILDDIR@,$ABSBUILDDIR,;t t

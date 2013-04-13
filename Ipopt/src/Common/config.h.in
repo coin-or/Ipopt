@@ -159,7 +159,7 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
-/* Define to 1 if va_copy is avaliable */
+/* Define to 1 if va_copy is available */
 #undef HAVE_VA_COPY
 
 /* Define to 1 if you have the `vsnprintf' function. */

@@ -53,9 +53,9 @@ build_triplet = @build@
 host_triplet = @host@
 DIST_COMMON = README $(am__configure_deps) \
 	$(srcdir)/BuildTools/Makemain.inc $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in $(top_srcdir)/configure ChangeLog \
-	INSTALL config.guess config.sub depcomp install-sh ltmain.sh \
-	missing
+	$(srcdir)/Makefile.in $(top_srcdir)/configure \
+	$(top_srcdir)/doxydoc/doxygen.conf.in ChangeLog INSTALL \
+	config.guess config.sub depcomp install-sh ltmain.sh missing
 @HAVE_EXTERNALS_TRUE@am__append_1 = Dependencies
 @HAVE_EXTERNALS_TRUE@am__append_2 = .Dependencies-stamp
 subdir = .
@@ -67,7 +67,7 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno configure.status.lineno
 mkinstalldirs = $(install_sh) -d
-CONFIG_CLEAN_FILES =
+CONFIG_CLEAN_FILES = doxydoc/doxygen.conf
 SOURCES =
 DIST_SOURCES =
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
@@ -202,6 +202,12 @@ build_alias = @build_alias@
 build_cpu = @build_cpu@
 build_os = @build_os@
 build_vendor = @build_vendor@
+coin_doxy_excludes = @coin_doxy_excludes@
+coin_doxy_logname = @coin_doxy_logname@
+coin_doxy_tagfiles = @coin_doxy_tagfiles@
+coin_doxy_tagname = @coin_doxy_tagname@
+coin_doxy_usedot = @coin_doxy_usedot@
+coin_have_doxygen = @coin_have_doxygen@
 datadir = @datadir@
 exec_prefix = @exec_prefix@
 have_autoconf = @have_autoconf@
@@ -285,6 +291,8 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 	cd $(srcdir) && $(AUTOCONF)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
+doxydoc/doxygen.conf: $(top_builddir)/config.status $(top_srcdir)/doxydoc/doxygen.conf.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -602,7 +610,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-recursive
 
-clean-am: clean-generic clean-libtool mostlyclean-am
+clean-am: clean-generic clean-libtool clean-local mostlyclean-am
 
 distclean: distclean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
@@ -622,7 +630,7 @@ info-am:
 
 install-data-am:
 
-install-exec-am:
+install-exec-am: install-exec-local
 
 install-info: install-info-recursive
 
@@ -648,24 +656,25 @@ ps: ps-recursive
 
 ps-am:
 
-uninstall-am: uninstall-info-am
+uninstall-am: uninstall-info-am uninstall-local
 
 uninstall-info: uninstall-info-recursive
 
 .PHONY: $(RECURSIVE_TARGETS) CTAGS GTAGS all all-am am--refresh check \
-	check-am clean clean-generic clean-libtool clean-recursive \
-	ctags ctags-recursive dist dist-all dist-bzip2 dist-gzip \
-	dist-shar dist-tarZ dist-zip distcheck distclean \
+	check-am clean clean-generic clean-libtool clean-local \
+	clean-recursive ctags ctags-recursive dist dist-all dist-bzip2 \
+	dist-gzip dist-shar dist-tarZ dist-zip distcheck distclean \
 	distclean-generic distclean-libtool distclean-recursive \
 	distclean-tags distcleancheck distdir distuninstallcheck dvi \
 	dvi-am html html-am info info-am install install-am \
 	install-data install-data-am install-exec install-exec-am \
-	install-info install-info-am install-man install-strip \
-	installcheck installcheck-am installdirs installdirs-am \
-	maintainer-clean maintainer-clean-generic \
+	install-exec-local install-info install-info-am install-man \
+	install-strip installcheck installcheck-am installdirs \
+	installdirs-am maintainer-clean maintainer-clean-generic \
 	maintainer-clean-recursive mostlyclean mostlyclean-generic \
 	mostlyclean-libtool mostlyclean-recursive pdf pdf-am ps ps-am \
-	tags tags-recursive uninstall uninstall-am uninstall-info-am
+	tags tags-recursive uninstall uninstall-am uninstall-info-am \
+	uninstall-local
 
 
 ########################################################################
@@ -687,12 +696,31 @@ tests: all
 unitTests: tests
 
 doxydoc:
-	cd $(srcdir); doxygen doxydoc/doxygen.conf
+	doxygen doxydoc/doxygen.conf
+
+clean-doxydoc :
+	cd doxydoc && rm -rf html *.log *.tag
+
+install-doxydoc : doxydoc
+	$(mkdir_p) $(DocInstallDir)
+	cp -R doxydoc/html $(DocInstallDir)
+
+uninstall-doxydoc:
+	if test -e $(DocInstallDir)/html ; then rm -rf $(DocInstallDir)/html ; fi
 
 cuter:
 	cd Ipopt; $(MAKE) cuter
 
 .PHONY: test unitTest tests unitTests doxydoc cuter
+
+clean-local: clean-doxydoc
+uninstall-local: uninstall-doxydoc
+install-exec-local:
+	@if test -e doxydoc/html ; then \
+	  $(MAKE) install-doxydoc ; \
+	else \
+	  echo "Run make install-doxydoc to generate and install Doxygen documentation." ; \
+	fi
 
 install-doc: $(DocFiles)
 	test -z "$(DocInstallDir)" || $(mkdir_p) "$(DESTDIR)$(DocInstallDir)"
