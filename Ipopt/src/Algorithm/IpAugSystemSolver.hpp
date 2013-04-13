@@ -28,7 +28,7 @@ namespace Ipopt
    *  J_d & -I & 0 & D_d - \delta_dI
    *  \end{array}\right]
    *  \left(\begin{array}{c}sol_x\\sol_s\\sol_c\\sol_d\end{array}\right)=
-   *  \left(\begin{array}{c}rhs_x\\rhs_s\\rhs_c\\rhs_d\end{array}\right)$\f
+   *  \left(\begin{array}{c}rhs_x\\rhs_s\\rhs_c\\rhs_d\end{array}\right)\f$
    *
    *  Since this system might be solved repeatedly for different right
    *  hand sides, it is desirable to step the factorization of a

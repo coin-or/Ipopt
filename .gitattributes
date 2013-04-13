@@ -192,5 +192,4 @@ Ipopt/tutorial/Modeling/bad1.mod -text
 /LICENSE -text
 /Makefile.am -text
 /README -text
-doxydoc/doxydoc/doxygen.conf -text
 doxydoc/doxygen.conf -text
