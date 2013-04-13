@@ -9,6 +9,10 @@
 ## Installation of JDK
 #JAVA_HOME = @JAVA_HOME@
 
+# NOTE: We assume here that there are no spaces in $JAVA_HOME.
+#   If you are on Windows and have Java in a path like C:\Program Files\Java,
+#   try setting JAVA_HOME to the DOS equivalent C:\Progra~1 or similar.
+
 # Java compiler
 JAVAC = $(JAVA_HOME)/bin/javac
 
@@ -36,8 +40,8 @@ CXXFLAGS = `echo @CXXFLAGS@ | sed -e s'|-pedantic-errors||'`
 LINKFLAGS = $(CXXFLAGS) @RPATH_FLAGS@ @SHARED_FLAGS@
 
 # Include directories (we use the CYGPATH_W variables to allow compilation with Windows compilers)
-@COIN_HAS_PKGCONFIG_TRUE@INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipopt` -I`$(CYGPATH_W) $(JAVA_HOME)/include` -I.
-@COIN_HAS_PKGCONFIG_FALSE@INCL = -I`$(CYGPATH_W) @abs_include_dir@/coin` @IPOPTLIB_CFLAGS_INSTALLED@ -I`$(CYGPATH_W) $(JAVA_HOME)/include` -I.
+@COIN_HAS_PKGCONFIG_TRUE@INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipopt` -I`$(CYGPATH_W) $(JAVA_HOME)/include` -I`$(CYGPATH_W) $(JAVA_HOME)/include/win32` -I.
+@COIN_HAS_PKGCONFIG_FALSE@INCL = -I`$(CYGPATH_W) @abs_include_dir@/coin` @IPOPTLIB_CFLAGS_INSTALLED@ -I`$(CYGPATH_W) $(JAVA_HOME)/include` -I`$(CYGPATH_W) $(JAVA_HOME)/include/win32` -I.
 
 # Linker flags
 @COIN_HAS_PKGCONFIG_TRUE@LIBS = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt`
