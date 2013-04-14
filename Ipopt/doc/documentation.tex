@@ -2465,7 +2465,86 @@ need to list the indices of all nonlinear variables in {\tt
   pos\_nonlin\_vars}, where the numbering starts with 0 order 1,
 depending on the numbering style determined in {\tt get\_nlp\_info}.
 
-% TODO finalize_metadata, get_var_con_metadata, get_variables_linearity, get_constraints_linearity, get_warm_start_iterate
+\paragraph{Method \texttt{get\_variables\_linearity}} with prototype
+\begin{verbatim}
+virtual bool get_variables_linearity(Index n,
+                                     LinearityType* var_types)
+\end{verbatim}
+
+This method is never called by \Ipopt, but is used by \textsc{Bonmin} to get information about which variables occur only in linear terms.
+\Ipopt\ passes a {\tt var\_types} array of size {\tt n}, which the user should fill with the appropriate linearity type of the variables ({\tt TNLP::LINEAR} or {\tt TNLP::NON\_LINEAR}).
+
+If the user doesn't overload this method in her implementation of the class derived from {\tt TNLP}, the default implementation returns {\tt false}.
+
+\paragraph{Method \texttt{get\_constraints\_linearity}} with prototype
+\begin{verbatim}
+virtual bool get_constraints_linearity(Index m,
+                                       LinearityType* const_types)
+\end{verbatim}
+
+This method is never called by \Ipopt, but is used by \textsc{Bonmin} to get information about which constraints are linear.
+\Ipopt\ passes a {\tt const\_types} array of size {\tt m}, which the user should fill with the appropriate linearity type of the constraints ({\tt TNLP::LINEAR} or {\tt TNLP::NON\_LINEAR}).
+
+If the user doesn't overload this method in her implementation of the class derived from {\tt TNLP}, the default implementation returns {\tt false}.
+
+\paragraph{Method \texttt{get\_var\_con\_metadata}} with prototype
+\begin{verbatim}
+virtual bool get_var_con_metadata(Index n,
+                                  StringMetaDataMapType& var_string_md,
+                                  IntegerMetaDataMapType& var_integer_md,
+                                  NumericMetaDataMapType& var_numeric_md,
+                                  Index m,
+                                  StringMetaDataMapType& con_string_md,
+                                  IntegerMetaDataMapType& con_integer_md,
+                                  NumericMetaDataMapType& con_numeric_md)
+\end{verbatim}
+
+This method is used to pass meta data about variables or constraints to 
+\Ipopt. The data can be either of integer, numeric, or string type.
+\Ipopt\ passes this data on to its internal problem representation.
+The meta data type is a {\tt std::map} with {\tt std::string} as key type and 
+a {\tt std::vector} as value type.
+So far, \Ipopt\ itself makes only use of string meta data under the key {\tt 
+idx\_names}. With this key, variable and constraint names can be passed to 
+Ipopt, which are shown when printing internal vector or matrix data structures 
+if \Ipopt\ is run with a high value for the {\tt print\_level} option. This 
+allows a user to identify the original variables and constraints corresponding 
+to \Ipopt's internal problem representation.
+
+If the user doesn't overload this method in her implementation of the class 
+derived from {\tt TNLP}, the default implementation does not set any meta data 
+and returns {\tt false}.
+
+\paragraph{Method \texttt{finalize\_metadata}} with prototype
+\begin{verbatim}
+virtual void finalize_metadata(Index n,
+                               const StringMetaDataMapType& var_string_md,
+                               const IntegerMetaDataMapType& var_integer_md,
+                               const NumericMetaDataMapType& var_numeric_md,
+                               Index m,
+                               const StringMetaDataMapType& con_string_md,
+                               const IntegerMetaDataMapType& con_integer_md,
+                               const NumericMetaDataMapType& con_numeric_md)
+\end{verbatim}
+
+This method is called just before {\tt finalize\_solution} and is used to
+return any meta data collected during the algorithms run, including the meta 
+data provided by the user with the {\tt get\_var\_con\_metadata} method.
+
+If the user doesn't overload this method in her implementation of the class 
+derived from {\tt TNLP}, the default implementation does nothing.
+
+\paragraph{Method \texttt{get\_warm\_start\_iterate}} with prototype
+\begin{verbatim}
+virtual bool get_warm_start_iterate(IteratesVector& warm_start_iterate)
+\end{verbatim}
+
+Overload this method to provide an \Ipopt\ iterate which is already in the form \Ipopt\ requires it internally for a warm starts.
+This method is only for expert users.
+
+If the user doesn't overload this method in her implementation of the class 
+derived from {\tt TNLP}, the default implementation does not provide a warm start iterate and returns {\tt false}.
+
 
 \subsection{The C Interface}\label{sec.cinterface}
 The C interface for \Ipopt\ is declared in the header file {\tt
