@@ -25,6 +25,9 @@ JAR = $(JAVA_HOME)/bin/jar
 # Java runtime
 JAVA = $(JAVA_HOME)/bin/java
 
+# Java documentation utility
+JAVADOC = $(JAVA_HOME)/bin/javadoc
+
 # libtool
 top_builddir = ../..
 SHELL = @SHELL@
@@ -101,6 +104,9 @@ test: $(LIBJIPOPT) $(HS071CLASSES) $(SCALJAR)
 
 clean:
 	rm -rf $(LIBJIPOPT) $(JIPOPTOBJ) $(JNIHEADER) $(IPOPTCLASS) $(HS071CLASSES) $(SCALCLASSES) $(SCALJAR)
+
+doc:
+	$(JAVADOC) -d javadoc -windowtitle "JIpopt API documentation" org/coinor/Ipopt.java
 
 .cpp.lo:
 	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `test -f '$<' || echo '$(SRCDIR)/'`$<
