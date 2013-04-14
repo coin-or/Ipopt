@@ -3,10 +3,13 @@ More detailed information for incremetal change can be found in the
 history management of subversion.
 
 2012-04-?? releases/3.10.4
-        - fixed sign of dual values in AMPL solution again [r2169, r2170, r2184, #183]
+        - fixed sign of dual values in AMPL solution again (with help of Gabe)
+          [r2169, r2170, r2184, #183]
         - fixed bugs with reoptimizing a TNLP with all variables fixed [r2172, r2173, #179]
         - fixed more issues with sparse data structures and non-double numbers
           in Matlab interface (by T. Kelman) [r2191]
+        - added missing final int for Ipopt return code Maximum_CpuTime_Exceeded
+          in Java interface [r2216]
 
 2012-11-19 releases/3.10.3
         - minor fixes in MA86 interface (by Jonathan Hogg) [r2069, r2086]
