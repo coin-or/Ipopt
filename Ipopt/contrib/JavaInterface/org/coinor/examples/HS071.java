@@ -64,7 +64,7 @@ public class HS071 extends Ipopt {
         //hs071.setStringOption(Ipopt.KEY_MU_STRATEGY,"adaptive");
         //hs071.setStringOption(Ipopt.KEY_OUTPUT_FILE,"hs071cpp.out");
         //hs071.setStringOption(Ipopt.KEY_PRINT_USER_OPTIONS,"yes");
-        hs071.setStringOption("nlp_scaling_method","usER-ScAling");//ignor case
+        //hs071.setStringOption("nlp_scaling_method","usER-ScAling");//ignor case
         //hs071.setStringOption(Ipopt.KEY_HESSIAN_APPROXIMATION,"lImIted-memory");//LBFGS
         //hs071.setStringOption(Ipopt.KEY_DERIVATIVE_TEST,"first-order");
         //hs071.setStringOption(Ipopt.KEY_PRINT_USER_OPTIONS,"yes");
@@ -98,28 +98,16 @@ public class HS071 extends Ipopt {
     public HS071() {
         /* Number of nonzeros in the Jacobian of the constraints */
         nele_jac = 8;
-                /* Number of nonzeros in the Hessian of the Lagrangian (lower or
-                 * upper triangual part only) */
+        
+        /* Number of nonzeros in the Hessian of the Lagrangian (lower or
+         * upper triangual part only) */
         nele_hess = 10;
         
-        /* set the number of variables and allocate space for the bounds */
-        n=4;
-        double x_L[] = new double[n];
-        double x_U[] = new double[n];
-        for(int i=0; i < x_L.length; i++){
-            x_L[i] = 1.0;
-            x_U[i] = 5.0;
-        }
+        /* Number of variables */
+        n = 4;
         
-        /* set the number of constraints and allocate space for the bounds */
-        m=2;
-        double g_L[] = new double[m];
-        double g_U[] = new double[m];
-        /* set the values of the constraint bounds */
-        g_L[0] = 25;
-        g_U[0] = 2e19;
-        g_L[1] = 40;
-        g_U[1] = 40;
+        /* Number of constraints */
+        m = 2;
         
         /* Index style for the irow/jcol elements */
         int index_style = Ipopt.C_STYLE;
@@ -128,29 +116,34 @@ public class HS071 extends Ipopt {
         create(n, m,  nele_jac, nele_hess, index_style);
     }
     
-    // Callback function for the objective function.
+    /** Callback function for variable bounds and constraint sides. */
     protected boolean get_bounds_info(int n, double[] x_L, double[] x_U,
             int m, double[] g_L, double[] g_U){
         
+    	/* set the values of the variable bounds */
         for(int i=0; i < x_L.length; i++){
             x_L[i] = 1.0;
             x_U[i] = 5.0;
         }
         /* set the values of the constraint bounds */
-        g_L[0] = 25;
+        g_L[0] = 25.0;
         g_U[0] = 2e19;
-        g_L[1] = 40;
-        g_U[1] = 40;
+        g_L[1] = 40.0;
+        g_U[1] = 40.0;
         
         return true;
         
     }
     
     
-    /** Callback function for the objective function. */
+    /** Callback function for the starting point. */
     protected boolean get_starting_point(int n, boolean init_x, double[] x,
             boolean init_z, double[] z_L, double[] z_U,
             int m, boolean init_lambda,double[] lambda){
+    	assert init_x == true;
+    	assert init_z == false;
+    	assert init_lambda = false;
+    	
         x[0] = 1.0;
         x[1] = 5.0;
         x[2] = 5.0;
@@ -298,7 +291,7 @@ public class HS071 extends Ipopt {
             int m, double[] g_scaling,
             boolean[] use_x_g_scaling) {
         //System.out.println("get_scaling_parameters");
-        obj_scaling[0]=-1;
+        //obj_scaling[0]=-1;
         return true;
     }
     
