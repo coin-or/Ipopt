@@ -46,21 +46,21 @@ import java.io.File;
  * operating system platform) and libraries written in other languages,
  * such as C and C++.
  * <p>
- * This class is a JNI hook around the C interface of Ipopt, as a consequence
+ * This class is a JNI hook around the C++ interface of Ipopt, as a consequence
  * it will need a nativelly compiled DLL to run.
  * For more details about Ipopt
  * <a href="https://projects.coin-or.org/Ipopt">click here</a>.
  * <p>
  * The user should subclass this class and implement the abstract methods.
  * At some point before solving the problem the
- * {@link #create(int, double[], double[], int, double[], double[], int, int, int)}
+ * {@link #create(int, int, int, int, int)}
  * function should be called.
  * For simple cases you can call this function in the constructor of your class.
  * <p>
- * Once the problem was created, {@link #solve(double[])} will solve the problem.
+ * Once the problem was created, {@link #OptimizeNLP()} will solve the problem.
  * Objects of this class can be reused to solve different problems, in other words,
- * {@link #create(int, double[], double[], int, double[], double[], int, int, int)}
- * and {@link #solve(double[])} can be called multiple times.
+ * {@link #create(int, int, int, int, int)}
+ * and {@link #OptimizeNLP()} can be called multiple times.
  * <p>
  * Programmers should, for efficiency, call {@link #dispose()} when finished using a
  * Ipopt object, otherwise the nativelly allocated memory will be disposed of only
@@ -310,7 +310,7 @@ public abstract class Ipopt {
 	 * @param val the value
 	 * @return false if the option could not be set (e.g., if keyword is unknown)
 	 * 
-	 * @see #addIntOption(String, int)
+	 * @see #setIntegerOption(String, int)
 	 */
 	public boolean setNumericOption(String keyword, double val){
 		return ipopt==0 ? false : AddIpoptNumOption(ipopt, keyword, val);
@@ -323,7 +323,7 @@ public abstract class Ipopt {
 	 * @param val the value
 	 * @return false if the option could not be set (e.g., if keyword is unknown)
 	 * 
-	 * @see #addIntOption(String, int)
+	 * @see #setIntegerOption(String, int)
 	 */
 	public boolean setStringOption(String keyword, String val){
 		return ipopt==0 ? false : AddIpoptStrOption(ipopt, keyword, val.toLowerCase());
@@ -366,7 +366,7 @@ public abstract class Ipopt {
 	/**
 	 * @return the status of the solver.
 	 * 
-	 * @see OptimizeNLP()
+	 * @see #OptimizeNLP()
 	 */
 	public int getStatus(){
 		return status;
@@ -408,7 +408,7 @@ public abstract class Ipopt {
 	 * @param x_scaling  the scaling factors for the variables which are orderd like x, dimension is n. If you
 	 *  want IPOPT so scale the variables, you should set use_x_scaling=true in use_x_g_scaling's first element.
 	 * @param m  the number of constraints in the problem, dimension of g(x).
-	 * @param g_sacling  the scaling factors for the constraints which are orderd like g(x), dimension is m. If
+	 * @param g_scaling  the scaling factors for the constraints which are orderd like g(x), dimension is m. If
 	 *  you want IPOPT so scale the constraints, you should set use_g_scaling=true in use_x_g_scaling's second
 	 *  element.
 	 * @param use_x_g_scaling =boolean[2]: means {use_x_scaling=true/fasle,use_g_scaling=true/false} which you 
@@ -434,9 +434,9 @@ public abstract class Ipopt {
 
 	/**  If you using_LBFGS("limited-memory"), please overload this method,  
 	 *
-	 * @param num_nonlin_vars: number_of_nonlinear_variables, identical with number_of_nonlinear_variables and the 
+	 * @param num_nonlin_vars number_of_nonlinear_variables, identical with number_of_nonlinear_variables and the 
 	 *  length of the array pos_nonlin_vars.
-	 * @param pos_nonlin_vars: the indices of all nonlinear variables
+	 * @param pos_nonlin_vars the indices of all nonlinear variables
 	 *
 	 * @return true means success, false means fail! 
 	 */
