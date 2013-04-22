@@ -135,9 +135,10 @@ CONFIG_CLEAN_FILES = examples/hs071_f/Makefile \
 	contrib/JavaInterface/Makefile contrib/sIPOPT/Makefile \
 	contrib/sIPOPT/AmplSolver/Makefile \
 	contrib/sIPOPT/examples/parametric_cpp/Makefile \
-	contrib/sIPOPT/examples/redhess_cpp/Makefile \
-	contrib/RInterface/src/Makevars ipopt.pc ipopt-uninstalled.pc \
-	doxydoc/doxygen.conf ipoptamplinterface.pc \
+	contrib/sIPOPT/examples/redhess_cpp/Makefile ipopt.pc \
+	ipopt-uninstalled.pc doxydoc/doxygen.conf \
+	contrib/RInterface/src/Makevars.win \
+	contrib/RInterface/src/Makevars ipoptamplinterface.pc \
 	ipoptamplinterface-uninstalled.pc
 SOURCES =
 DIST_SOURCES =
@@ -610,13 +611,15 @@ contrib/sIPOPT/examples/parametric_cpp/Makefile: $(top_builddir)/config.status $
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 contrib/sIPOPT/examples/redhess_cpp/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/sIPOPT/examples/redhess_cpp/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
-contrib/RInterface/src/Makevars: $(top_builddir)/config.status $(top_srcdir)/contrib/RInterface/src/Makevars.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
 ipopt.pc: $(top_builddir)/config.status $(srcdir)/ipopt.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 ipopt-uninstalled.pc: $(top_builddir)/config.status $(srcdir)/ipopt-uninstalled.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 doxydoc/doxygen.conf: $(top_builddir)/config.status $(top_srcdir)/doxydoc/doxygen.conf.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+contrib/RInterface/src/Makevars.win: $(top_builddir)/config.status $(top_srcdir)/contrib/RInterface/src/Makevars.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+contrib/RInterface/src/Makevars: $(top_builddir)/config.status $(top_srcdir)/contrib/RInterface/src/Makevars.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 ipoptamplinterface.pc: $(top_builddir)/config.status $(top_srcdir)/src/Apps/AmplSolver/ipoptamplinterface.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
