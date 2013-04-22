@@ -853,9 +853,18 @@ AC_CONFIG_FILES([Makefile
 		 contrib/sIPOPT/examples/parametric_cpp/Makefile
 		 contrib/sIPOPT/examples/redhess_cpp/Makefile
 		 contrib/sIPOPT/src/Makefile
-		 contrib/RInterface/src/Makevars
 		 ipopt.pc ipopt-uninstalled.pc
 		 doxydoc/doxygen.conf])
+
+# under Windows, the Makevars file for the R Interface need to be named Makevars.win
+case $build in 
+  *-cygwin* | *-mingw*)
+    AC_CONFIG_FILES([contrib/RInterface/src/Makevars.win:contrib/RInterface/src/Makevars.in])
+    ;;
+  *)
+    AC_CONFIG_FILES([contrib/RInterface/src/Makevars])
+    ;;
+esac
 
 if test $coin_has_asl = yes ; then
   AC_CONFIG_FILES([ipoptamplinterface.pc:src/Apps/AmplSolver/ipoptamplinterface.pc.in
