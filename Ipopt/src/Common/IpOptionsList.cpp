@@ -755,6 +755,9 @@ namespace Ipopt
       c=is.get();
     }
 
+    if( is.eof() )
+       return false;
+
     // Now read the token
     while (!is.eof() && (inside_quotes || !isspace(c))) {
       token += (char)c;
@@ -766,7 +769,7 @@ namespace Ipopt
       }
     }
 
-    return (!is.eof());
+    return !inside_quotes;
   }
 
 } // namespace Ipopt
