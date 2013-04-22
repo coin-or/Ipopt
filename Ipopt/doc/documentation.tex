@@ -30,6 +30,7 @@
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\Ipopt}{\textsc{Ipopt}\xspace}
 \newcommand{\JIpopt}{\textsc{JIpopt}\xspace}
+\newcommand{\ipoptr}{\texttt{ipoptr}\xspace}
 
 %\htmltitle{Ipopt documentation}
 
@@ -519,10 +520,8 @@ instructions.
 \subsubsection{Download HSL Subroutines}
 \label{sec:HSL}
 
-\vspace{0.1cm}
 \noindent
 There are two versions of HSL available:
-\vspace{-0.2cm}
 \begin{description}
 \item[HSL Archive] contains outdated codes that are freely available for
 personal commercial or non-com\-mer\-cial usage. Note that you may not
@@ -1129,6 +1128,42 @@ issuing the command {\tt make test} inside the \JIpopt directory.
 in the path to the JDK. If you are on Windows and have Java in a path like 
 \verb|C:\Program Files\Java|, try setting {\tt JAVA\_HOME} to the DOS 
 equivalent \verb|C:\Progra~1| (or similar).
+
+\textbf{NOTE}: \JIpopt needs to be able to load the \Ipopt library dynamically 
+at runtime. Therefor, \Ipopt must have been compiled with the {\tt -fPIC} 
+compiler flag. While per default, an Ipopt shared library is compiled with 
+this flag, for a configuration of \Ipopt in debug mode ({\tt --enable-debug}) 
+or as static library ({\tt --disable-shared}), the configure flag {\tt --with-
+pic} need to be used to enable compilation with {\tt -fPIC}.
+
+\subsection{Compiling and Installing the R Interface \ipoptr} 
+\label{sec.ipoptr.build}
+
+The \ipoptr interface can be build after \Ipopt has been build and installed.
+In the best case, it is sufficient to execute the following command in R:
+\begin{verbatim}
+install.packages('$IPOPTDIR/build/Ipopt/contrib/RInterface', repos=NULL, type='source')
+\end{verbatim}
+
+In certain situations, however, it can be necessary to setup the dynamic 
+library load path to the path where the \Ipopt library has been installed, 
+e.g.,
+\begin{verbatim}
+  LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$IPOPTDIR/build/lib
+\end{verbatim}
+
+\textbf{NOTE}: R needs to be able to load the \Ipopt library dynamically 
+at runtime. Therefor, \Ipopt must have been compiled with the {\tt -fPIC} 
+compiler flag. While per default, an Ipopt shared library is compiled with 
+this flag, for a configuration of \Ipopt in debug mode ({\tt --enable-debug}) 
+or as static library ({\tt --disable-shared}), the configure flag {\tt --with-
+pic} need to be used to enable compilation with {\tt -fPIC}.
+
+After installation of the \ipoptr package, it should be possible to load the package in R and to view the help page:
+\begin{verbatim}
+> library('ipoptr')
+> ?ipoptr
+\end{verbatim}
 
 \section{Interfacing your NLP to \Ipopt: A tutorial example.}
 \label{sec:tutorial-example}
@@ -3112,6 +3147,225 @@ getMultConstraints()}, {\tt getMultLowerBounds()}, and {\tt
 getMultUpperBounds()} can be used to obtain the objective value, the primal 
 solution value of the variables, and dual solution values, respectively.
 
+\subsection{The R Interface} 
+\hfill \textit{based on documentation by Jelmer Ypma}%
+\footnote{University College London}
+\medskip
+
+The \ipoptr package (see Section \ref{sec.ipoptr.build} for installation instructions) offers a R function {\tt ipoptr} which takes an NLP specification, a starting point, and \Ipopt options as input and returns information about a \Ipopt run (status, message, ...) and a solution point.
+
+In the following, we discuss necessary steps to implement the HS071 example 
+with \ipoptr.
+A more detailed documentation of \ipoptr is available in {\tt Ipopt/contrib/RInterface/inst/doc/ipoptr.pdf}.
+
+First, we define the objective function and its gradient
+\begin{verbatim}
+> eval_f <- function( x ) { 
+     return( x[1]*x[4]*(x[1] + x[2] + x[3]) + x[3] ) 
+ }
+> eval_grad_f <- function( x ) {
+     return( c( x[1] * x[4] + x[4] * (x[1] + x[2] + x[3]),
+                x[1] * x[4],
+                x[1] * x[4] + 1.0,
+                x[1] * (x[1] + x[2] + x[3]) ) )		  
+ }
+\end{verbatim}
+Then we define a function that returns the value of the two constraints. We define the bounds of the constraints (in this case the $g_L$ and $g_U$ are $25$ and $40$) later.
+\begin{verbatim}
+> # constraint functions
+> eval_g <- function( x ) {
+     return( c( x[1] * x[2] * x[3] * x[4],
+                x[1]^2 + x[2]^2 + x[3]^2 + x[4]^2 ) )
+ }
+\end{verbatim}
+Then we define the structure of the Jacobian, which is a dense matrix in this case, and function to evaluate it
+\begin{verbatim}
+> eval_jac_g_structure <- list( c(1,2,3,4), c(1,2,3,4) )
+> eval_jac_g <- function( x ) {
+     return( c ( x[2]*x[3]*x[4],
+                 x[1]*x[3]*x[4],
+                 x[1]*x[2]*x[4],
+                 x[1]*x[2]*x[3],
+                 2.0*x[1],
+                 2.0*x[2],
+                 2.0*x[3],
+                 2.0*x[4] ) )
+ }
+\end{verbatim}
+The Hessian is also dense, but it looks slightly more complicated because we have to take into account the Hessian of the objective function and of the constraints at the same time, although you could write a function to calculate them both separately and then return the combined result in \texttt{eval\_h}.
+\begin{verbatim}
+> # The Hessian for this problem is actually dense, 
+> # This is a symmetric matrix, fill the lower left triangle only.
+> eval_h_structure <- list( c(1), c(1,2), c(1,2,3), c(1,2,3,4) )
+> eval_h <- function( x, obj_factor, hessian_lambda ) {
+ 
+     values <- numeric(10)
+     values[1] = obj_factor * (2*x[4]) # 1,1
+ 
+     values[2] = obj_factor * (x[4])   # 2,1
+     values[3] = 0                     # 2,2
+ 
+     values[4] = obj_factor * (x[4])   # 3,1
+     values[5] = 0                     # 4,2
+     values[6] = 0                     # 3,3
+ 
+     values[7] = obj_factor * (2*x[1] + x[2] + x[3]) # 4,1
+     values[8] = obj_factor * (x[1])                 # 4,2
+     values[9] = obj_factor * (x[1])                 # 4,3
+     values[10] = 0                                  # 4,4
+ 
+ 
+     # add the portion for the first constraint
+     values[2] = values[2] + hessian_lambda[1] * (x[3] * x[4]) # 2,1
+     
+     values[4] = values[4] + hessian_lambda[1] * (x[2] * x[4]) # 3,1
+     values[5] = values[5] + hessian_lambda[1] * (x[1] * x[4]) # 3,2
+ 
+     values[7] = values[7] + hessian_lambda[1] * (x[2] * x[3]) # 4,1
+     values[8] = values[8] + hessian_lambda[1] * (x[1] * x[3]) # 4,2
+     values[9] = values[9] + hessian_lambda[1] * (x[1] * x[2]) # 4,3
+ 
+     # add the portion for the second constraint
+     values[1] = values[1] + hessian_lambda[2] * 2 # 1,1
+     values[3] = values[3] + hessian_lambda[2] * 2 # 2,2
+     values[6] = values[6] + hessian_lambda[2] * 2 # 3,3
+     values[10] = values[10] + hessian_lambda[2] * 2 # 4,4
+ 
+     return ( values )
+ }
+\end{verbatim}
+After the hard part is done, we only have to define the initial values, the lower and upper bounds of the control variables, and the lower and upper bounds of the constraints. If a variable or a constraint does not have lower or upper bounds, the values \texttt{-Inf} or \texttt{Inf} can be used. If the upper and lower bounds of a constraint are equal, Ipopt recognizes this as an equality constraint and acts accordingly.
+\begin{verbatim}
+> # initial values
+> x0 <- c( 1, 5, 5, 1 )
+> # lower and upper bounds of control
+> lb <- c( 1, 1, 1, 1 )
+> ub <- c( 5, 5, 5, 5 )
+> # lower and upper bounds of constraints
+> constraint_lb <- c(  25, 40 )
+> constraint_ub <- c( Inf, 40 )
+\end{verbatim}
+Finally, we can call \Ipopt with the {\tt ipoptr} function.
+In order to redirect the \Ipopt output into a file, we use \Ipopt's {\tt output\_file} and {\tt print\_level} options.
+\begin{verbatim}
+> opts <- list("print_level" = 0,
+              "file_print_level" = 12,
+              "output_file" = "hs071_nlp.out")
+> print( ipoptr( x0 = x0, 
+                eval_f = eval_f, 
+                eval_grad_f = eval_grad_f, 
+                lb = lb, 
+                ub = ub, 
+                eval_g = eval_g, 
+                eval_jac_g = eval_jac_g, 
+                constraint_lb = constraint_lb, 
+                constraint_ub = constraint_ub, 
+                eval_jac_g_structure = eval_jac_g_structure,
+                eval_h = eval_h,
+                eval_h_structure = eval_h_structure,
+                opts = opts) )
+
+Call:
+
+ipoptr(x0 = x0, eval_f = eval_f, eval_grad_f = eval_grad_f, lb = lb, 
+  ub = ub, eval_g = eval_g, eval_jac_g = eval_jac_g,
+  eval_jac_g_structure = eval_jac_g_structure, constraint_lb = constraint_lb,
+  constraint_ub = constraint_ub, eval_h = eval_h, eval_h_structure = eval_h_structure,
+  opts = opts)
+
+Ipopt solver status: 0 ( SUCCESS: Algorithm terminated 
+successfully at a locally optimal point, satisfying the 
+convergence tolerances (can be specified by options). )
+
+Number of Iterations....: 8 
+Optimal value of objective function:  17.0140171451792 
+Optimal value of controls: 1 4.743 3.82115 1.379408
+\end{verbatim}
+
+To pass additional data to the evaluation routines, one can either supply additional arguments to the user defined functions and {\tt ipoptr} or define an environment that holds the data and pass this environment to {\tt ipoptr}.
+Both methods are shown in the file \texttt{tests/parameters.R} that comes with \ipoptr.
+
+As a very simple example, suppose we want to find the minimum of
+\[
+f( x ) = a_1 x^2 + a_2 x + a_3
+\]
+for different values of the parameters $a_1$, $a_2$ and $a_3$. 
+
+First, we define the objective function and its gradient using, assuming that there is some variable \texttt{params} that contains the values of the parameters.
+\begin{verbatim}
+> eval_f_ex1 <- function(x, params) { 
+     return( params[1]*x^2 + params[2]*x + params[3] ) 
+ }
+> eval_grad_f_ex1 <- function(x, params) { 
+     return( 2*params[1]*x + params[2] ) 
+ }
+\end{verbatim}
+Note, that the first parameter should always be the control variable. All of the user-defined functions should contain the same set of additional parameters. You have to supply them as input argument to all functions, even if you're not using them in some of the functions. 
+
+Then we can solve the problem for a specific set of parameters, in this case $a_1=1$, $a_2=2$ and $a_3=3$, from initial value $x_0=0$, with the following command
+\begin{verbatim}
+> # solve using ipoptr with additional parameters
+> ipoptr(x0          = 0, 
+         eval_f      = eval_f_ex1, 
+         eval_grad_f = eval_grad_f_ex1,
+         opts        = list("print_level"=0),
+         params      = c(1,2,3) )
+         
+Call:
+
+ipoptr(x0 = 0, eval_f = eval_f_ex1, eval_grad_f = eval_grad_f_ex1, 
+    opts = list(print_level = 0), params = c(1, 2, 3))
+
+
+Ipopt solver status: 0 ( SUCCESS: Algorithm terminated 
+successfully at a locally optimal point, satisfying the 
+convergence tolerances (can be specified by options). )
+
+Number of Iterations....: 1 
+Optimal value of objective function:  2 
+Optimal value of controls: -1
+\end{verbatim}
+
+For the second method, we don't have to supply the parameters as additional arguments to the function.
+\begin{verbatim}
+> eval_f_ex2 <- function(x) { 
+     return( params[1]*x^2 + params[2]*x + params[3] ) 
+ }
+> eval_grad_f_ex2 <- function(x) { 
+     return( 2*params[1]*x + params[2] ) 
+ }
+\end{verbatim}
+Instead, we define an environment that contains specific values of \texttt{params}
+\begin{verbatim}
+> # define a new environment that contains params
+> auxdata        <- new.env()
+> auxdata$params <- c(1,2,3)
+\end{verbatim}
+To solve this we supply \texttt{auxdata} as an argument to \texttt{ipoptr}, which will take care of evaluating the functions in the correct environment, so that the auxiliary data is available.
+\begin{verbatim}
+> # pass the environment that should be used to evaluate functions to ipoptr
+> ipoptr(x0                 = 0, 
+         eval_f             = eval_f_ex2, 
+         eval_grad_f        = eval_grad_f_ex2, 
+         ipoptr_environment = auxdata,
+         opts               = list("print_level"=0) )
+         
+Call:
+
+ipoptr(x0 = 0, eval_f = eval_f_ex2, eval_grad_f = eval_grad_f_ex2, 
+    opts = list(print_level = 0), ipoptr_environment = auxdata)
+
+
+Ipopt solver status: 0 ( SUCCESS: Algorithm terminated 
+successfully at a locally optimal point, satisfying the 
+convergence tolerances (can be specified by options). )
+
+Number of Iterations....: 1 
+Optimal value of objective function:  2 
+Optimal value of controls: -1
+\end{verbatim}
+
+
 \section{Special Features}
 \subsection{Derivative Checker}\label{sec:deriv-checker}
 When writing code for the evaluation of derivatives it is very easy to
@@ -3263,8 +3517,7 @@ file in the directory you are executing \Ipopt.
 
 The {\tt ipopt.opt} file is read line by line and each line should
 contain the option name, followed by whitespace, and then the
-value. Comments can be included with the {\tt \#} symbol. Don't forget
-to ensure you have a newline at the end of the file. For example,
+value. Comments can be included with the {\tt \#} symbol. For example,
 \begin{verbatim}
 # This is a comment
 

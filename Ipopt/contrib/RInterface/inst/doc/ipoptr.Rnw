@@ -53,28 +53,21 @@ where $f(x): R^n \rightarrow R$ is the objective function, and $g(x): R^n \right
 This vignette describes how to formulate minimization problems to be solved with the R interface to Ipopt. If you want to use the C++ interface directly or are interested in the Matlab interface, there are other sources of documentation avialable. Some of the information here is heavily based on the Ipopt Wiki\footnote{\texttt{https://projects.coin-or.org/Ipopt}} and generally that is a good source to find additional information, for instance on which options to use. All credit for implementing the C++ code for Ipopt should go to Andreas W\"achter and Carl Laird. Please show your appreciation by citing their paper.
 
 \section{Installation}
-Installing the \texttt{ipoptr} package is not as straightforward as most other R packages, because it depends on Ipopt. To install (and compile) Ipopt and the R interface a C/C++ compiler has to be available. On Windows I was succesful using MSYS to compile Ipopt and then use Rtools\footnote{\texttt{http://www.murdoch-sutherland.com/Rtools/}} to compile the R interface from source. On Ubuntu no additional tools were needed.
+Installing the \texttt{ipoptr} package is not as straightforward as most other R packages, because it depends on Ipopt. To install (and compile) Ipopt and the R interface a C/C++ compiler has to be available. On Windows I was successful using MSYS to compile Ipopt and then use Rtools\footnote{\texttt{http://www.murdoch-sutherland.com/Rtools/}} to compile the R interface from source. On Ubuntu no additional tools were needed.
 
 The code for the R interface to Ipopt is available from R-Forge and from the Ipopt website. Additional information is also available on \texttt{http://www.ucl.ac.uk/\textasciitilde uctpjyy/ipoptr.html}. The R interface to Ipopt comes with the most recent version of Ipopt, so there is no need to download it separately.
 
-Detailed installation instructions for Ipopt are available on \texttt{http://www.coin-or.org/Ipopt/documentation}. You should follow these first, before trying to install the R interface. Ipopt needs to be configured using the \texttt{-fPIC} flag for all GNU compilers. For 64bit Linux one needs to specify
-\begin{verbatim}
-ADD_CXXFLAGS='-fPIC' ADD_FFLAGS='-fPIC' ADD_CFLAGS='-fPIC'
-\end{verbatim}
+Detailed installation instructions for Ipopt are available on \texttt{http://www.coin-or.org/Ipopt/documentation}. You should follow these first, before trying to install the R interface. Ipopt needs to be configured using the \texttt{-fPIC} flag for all GNU compilers, which usually happens by default. In builds of debug or static libraries, one need to use the option \verb|--with-pic| for configure.
 
 For the installation of the R interface, I will assume that you have a working installation of Ipopt (i.e. \texttt{configure}, \texttt{make} and \texttt{make install} executed without problems).  
 
-During the installation of Ipopt a file \texttt{Makevars} has been created in the source directory of the R interface, e.g. \texttt{\$IPOPTDIR/build/Ipopt/contrib/RInterface/src} if you used the same build directory as in the Ipopt installation notes, \texttt{\$IPOPTDIR/build}. The file \texttt{Makevars} in this directory has been configured for your system. 
-
-To install the R interface, this file has to be copied to the Ipopt directory containing the source code, \texttt{\$IPOPTDIR/Ipopt/contrib/RInterface/src}. Notice that the path of this directory is different from the directory where you built Ipopt (\texttt{build} is not there).
-
-The source directory \texttt{\$IPOPTDIR/Ipopt/contrib/RInterface/src} contains four files, \texttt{ipoptr.cpp}, \texttt{IpoptRNLP.cpp}, \texttt{IpoptRNLP.hpp} and \texttt{Makevars.in}. Copy \texttt{Makevars} in this directory and, if you're on Windows, rename it to \texttt{Makevars.win}.
+During the installation of Ipopt a file \texttt{Makevars} (or \texttt{Makevars.win} on Windows) has been created in the \texttt{src} subdirectory of the build directory of the R interface, e.g., \texttt{\$IPOPTDIR/build/Ipopt/contrib/RInterface/src} if you used the same build directory as in the Ipopt installation notes, \texttt{\$IPOPTDIR/build}. The file \texttt{Makevars}(\texttt{.win}) in this directory has been configured for your system. 
 
 You can then install the package from R with the command
 <<installIpoptPackage, eval=FALSE>>=
-install.packages('$IPOPTDIR/Ipopt/contrib/RInterface', repos=NULL, type='source')
+install.packages('$IPOPTDIR/build/Ipopt/contrib/RInterface', repos=NULL, type='source')
 @
-where the first argument specifies the directory where the source code for the R interface to Ipopt is located. You should now be able to load the R interface to Ipopt and read the help.
+where the first argument specifies the build directory for the R interface of Ipopt. You should now be able to load the R interface to Ipopt and read the help.
 <<testIpoptInstallation, eval=FALSE>>=
 library('ipoptr')
 ?ipoptr
@@ -162,7 +155,7 @@ approx_grad_f <- function( x ) {
     return( finite.diff( eval_f, x ) )
 }
 @
-and using this approximation to minimize the same Rosenbrock Banana function. We suppress the output by the \texttt{printe\_level} option.
+and using this approximation to minimize the same Rosenbrock Banana function. We suppress the output by the \texttt{print\_level} option.
 <<solveRosenbrockBananaApproximation1>>=
 # increase the maximum number of iterations
 opts <- list("tol"=1.0e-8, "max_iter"=5000, "print_level"=0)
@@ -395,19 +388,19 @@ opts <- list("print_level"=0,
              "file_print_level"=12,
              "output_file"="hs071_nlp.out")
   
-print( ipoptr( x0=x0, 
-               eval_f=eval_f, 
-               eval_grad_f=eval_grad_f, 
-               lb=lb, 
-               ub=ub, 
-               eval_g=eval_g, 
-               eval_jac_g=eval_jac_g, 
-               constraint_lb=constraint_lb, 
-               constraint_ub=constraint_ub, 
-               eval_jac_g_structure=eval_jac_g_structure,
-               eval_h=eval_h,
-               eval_h_structure=eval_h_structure,
-               opts=opts) )
+print( ipoptr( x0 = x0, 
+               eval_f = eval_f, 
+               eval_grad_f = eval_grad_f, 
+               lb = lb, 
+               ub = ub, 
+               eval_g = eval_g, 
+               eval_jac_g = eval_jac_g, 
+               constraint_lb = constraint_lb, 
+               constraint_ub = constraint_ub, 
+               eval_jac_g_structure = eval_jac_g_structure,
+               eval_h = eval_h,
+               eval_h_structure = eval_h_structure,
+               opts = opts) )
 @
 
 \section{Using data}
@@ -466,7 +459,7 @@ ipoptr( x0                 = 0,
 @
 
 \section{Options}
-There are many options available, all of which are described on the Ipopt website. One of the options can test whether your derivatives are correct. This option is activated by setting \texttt{derivative\_test} to \texttt{first-order} or \texttt{second-order} if you want to test second derivatives as well. This process can take quite some time. To see all the output from this process you can set \texttt{derivative\_test\_print\_all} to \texttt{yes}, preferably when writing to a file, because of the problems with displaying on some terminals mentioned above. Without this optios the derivative checker only shows those lines where an error occurs if a high enough \texttt{print\_level} is supplied.
+There are many options available, all of which are described on the Ipopt website. One of the options can test whether your derivatives are correct. This option is activated by setting \texttt{derivative\_test} to \texttt{first-order} or \texttt{second-order} if you want to test second derivatives as well. This process can take quite some time. To see all the output from this process you can set \texttt{derivative\_test\_print\_all} to \texttt{yes}, preferably when writing to a file, because of the problems with displaying on some terminals mentioned above. Without this option the derivative checker only shows those lines where an error occurs if a high enough \texttt{print\_level} is supplied.
 
 \section{Remarks}
 If you run many large optimization problems in a row on Windows, at some point you'll get errors that Mumps is running out of memory and you won't get any solutions. On Linux this same problem hasn't occurred yet.
