@@ -234,7 +234,13 @@
     <ClCompile Include="..\..\..\src\Algorithm\LinearSolvers\IpMa57TSolverInterface.cpp">
       <Filter>Source Files\Algorithm\LinearSolver</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\Algorithm\LinearSolvers\IpMa77SolverInterface.cpp">
+      <Filter>Source Files\Algorithm\LinearSolver</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\Algorithm\LinearSolvers\IpMa86SolverInterface.cpp">
+      <Filter>Source Files\Algorithm\LinearSolver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Algorithm\LinearSolvers\IpMa97SolverInterface.cpp">
       <Filter>Source Files\Algorithm\LinearSolver</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\Algorithm\LinearSolvers\IpMc19TSymScalingMethod.cpp">
@@ -397,9 +403,6 @@
       <Filter>Source Files\Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\Common\IpRegOptions.cpp">
-      <Filter>Source Files\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\Common\IpTaggedObject.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\Common\IpUtils.cpp">
