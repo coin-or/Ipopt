@@ -988,6 +988,8 @@ namespace Ipopt
       nkeywds_ = 0;
     }
 
+    /* PrintLatex(jnlst); */
+
     Index n_options = NumberOfAmplOptions();
     keyword* keywords = new keyword[n_options];
 
@@ -1034,6 +1036,52 @@ namespace Ipopt
     nkeywds_ = n_options;
     keywds_ = (void*) keywords;
     return keywds_;
+  }
+
+  void AmplOptionsList::MakeValidLatexString(std::string source, std::string& dest) const
+  {
+    std::string::iterator c;
+    for (c=source.begin(); c!=source.end(); c++) {
+      if (*c == '_') {
+        dest.append("\\_");
+      }
+      else if (*c == '^') {
+        dest.append("\\^");
+      }
+      else if (*c == '>' || *c == '<') {
+        ;
+      }
+      else if (*c == '\n') {
+        dest += ', ';
+      }
+      else {
+        dest += *c;
+      }
+    }
+  }
+
+  void AmplOptionsList::PrintLatex(SmartPtr<const Journalist> jnlst)
+  {
+     jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, "\\begin{description}\n");
+     for( std::map<std::string, SmartPtr<const AmplOption> >::iterator iter = ampl_options_map_.begin();
+          iter != ampl_options_map_.end(); ++iter)
+     {
+        std::string amplname;
+        std::string ipoptname;
+        std::string descr;
+
+        MakeValidLatexString(iter->first.c_str(), amplname);
+        MakeValidLatexString(iter->second->IpoptOptionName(), ipoptname);
+        MakeValidLatexString(iter->second->Description(), descr);
+
+        jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, "\\item[{\\hyperref[sec:%s]{%s}}]",
+           iter->second->IpoptOptionName().c_str(), amplname.c_str());
+        if( amplname != ipoptname && ipoptname.length() > 0 )
+           jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, " (Ipopt name: \\hyperref[sec:%s]{%s})",
+              iter->second->IpoptOptionName().c_str(), ipoptname.c_str());
+        jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, " %s\n", descr.c_str());
+     }
+     jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, "\\end{description}\n");
   }
 
   char*

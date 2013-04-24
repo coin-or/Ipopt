@@ -248,6 +248,10 @@ namespace Ipopt
     void operator=(const AmplOptionsList&);
     //@}
 
+    void MakeValidLatexString(std::string source, std::string& dest) const;
+
+    void PrintLatex(SmartPtr<const Journalist> jnlst);
+
     /** map for storing registered AMPL options */
     std::map<std::string, SmartPtr<const AmplOption> > ampl_options_map_;
     // AW: I think it should be with const like in the following line
