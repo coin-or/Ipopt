@@ -1135,7 +1135,7 @@ in the path to the JDK. If you are on Windows and have Java in a path like
 equivalent \verb|C:\Progra~1| (or similar).
 
 \textbf{NOTE}: \JIpopt needs to be able to load the \Ipopt library dynamically 
-at runtime. Therefor, \Ipopt must have been compiled with the {\tt -fPIC} 
+at runtime. Therefore, \Ipopt must have been compiled with the {\tt -fPIC} 
 compiler flag. While per default, an Ipopt shared library is compiled with 
 this flag, for a configuration of \Ipopt in debug mode ({\tt --enable-debug}) 
 or as static library ({\tt --disable-shared}), the configure flag
@@ -1158,7 +1158,7 @@ e.g.,
 \end{verbatim}
 
 \textbf{NOTE}: R needs to be able to load the \Ipopt library dynamically 
-at runtime. Therefor, \Ipopt must have been compiled with the {\tt -fPIC} 
+at runtime. Therefore, \Ipopt must have been compiled with the {\tt -fPIC} 
 compiler flag. While per default, an Ipopt shared library is compiled with 
 this flag, for a configuration of \Ipopt in debug mode ({\tt --enable-debug}) 
 or as static library ({\tt --disable-shared}), the configure flag {\tt --with-
@@ -1182,7 +1182,7 @@ work on earlier versions of \Matlab, but there is also a good chance that it
 will not. It is unlikely that the software will run with versions prior to 
 \Matlab 6.5.
 
-First, note that some binaries of \Ipopt {\tt mex} files are available at
+First, note that some binaries of \Ipopt { \tt mex} files are available at
 \url{http://www.coin-or.org/download/binary/Ipopt}.
 Further, the OPTI Toolbox (\url{www.i2c2.aut.ac.nz/Wiki/OPTI}) comes with a 
 precompiled \Matlab interface for \Ipopt on Windows.
@@ -1192,28 +1192,66 @@ your system and have it configured to build {\tt mex} files,  see
 \url{http://www.mathworks.com/support/tech-notes/1600/1605.html} for detail on 
 how to set this up.
 
+Ipopt 3.11 has added makefile options to automate fixes for commonly-encountered
+issues with building the Matlab interface. On Mac OS X or Windows, the file
+{\tt mexopts.sh} ({\tt mexopts.bat} on Windows) will need to be modified.
+This is performed automatically by calling {\tt make mexopts} in the
+{\tt \$IPOPTDIR/build/Ipopt/contrib/MatlabInterface/src} folder. No changes
+will be made if you already have a {\tt mexopts.sh} file in that directory.
+If you need to make these modifications manually, follow the steps below.
+
+
 For Mac OS X, the following procedure has been reported: First, one executes a command like
 \begin{verbatim}
 /Applications/MATLAB_R2012.app/bin/mex -setup
 \end{verbatim}
-This creates a {\tt mexopts.sh} file in the {\tt ~/.matlab/R2010} directory, 
-which is then modified as following.
-In the {\tt maci} section (32 bit builds) or the {\tt maci64} section (64 bit 
-builds), change both instances of {\tt libgfortran.dylib} to
-{\tt libgfortran.a} in the {\tt FC\_LIBDIR} line and remove
-{\tt -Wl,-syslibroot,\$SDKROOT} from {\tt LDFLAGS} (otherwise it can't find 
-the {\tt gfortran} libraries).
+This creates a {\tt mexopts.sh} file in the {\tt ~/.matlab/R2010} directory. 
+Copy that file to the {\tt \$IPOPTDIR/build/ \\ Ipopt/contrib/MatlabInterface/src}
+folder then modify it as follows.
+\begin{itemize}
+\item In the {\tt maci} section (32 bit builds) or the {\tt maci64} section
+(64 bit builds), change both instances of {\tt libgfortran.dylib} to
+{\tt libgfortran.a} in the {\tt FC\_LIBDIR} line (in case your Fortran
+compiler only comes with static libraries).
+\item Remove all occurrences of {\tt -isysroot \$SDKROOT} or
+{\tt -Wl,-syslibroot,\$SDKROOT} in case the hard-coded version of the Xcode
+SDK that Matlab expects does not match what you have installed on your system.
+\item Remove all occurrences of {\tt -arch \$ARCHS} in case you are using a
+GNU compiler that does not recognize these Apple-specific flags.
+\end{itemize}
+
+On Windows, if you are using the GNU compilers via MinGW, then you will need
+to use the {\tt gnumex} project. First, execute the script {\tt ./get.Gnumex}
+from the {\tt \$IPOPTDIR/Ipopt/contrib/MatlabInterface} folder. Then, after
+configuring \Ipopt, go to the folder {\tt \$IPOPTDIR/build/contrib/MatlabInterface/src}
+and execute {\tt make gnumex}. This will start an instance of \Matlab and open
+the {\tt gnumex} tool. Check that the options are filled out appropriately for
+your MinGW installation, click ``Make options file," then close this new instance
+of \Matlab after {\tt gnumex} has created {\tt mexopts.bat}.
+
+Calling {\tt make mexopts} will automatically make the necessary changes to this
+new {\tt mexopts.bat} file. If you would like to do so manually, the changes are
+as follows.
+\begin{itemize}
+\item Change {\tt COMPILER=gcc} to {\tt COMPILER=g++}
+\item Change {\tt GM\_MEXLANG=c} to {\tt GM\_MEXLANG=cxx}
+\item Add the contents of the {\tt LIBS=} line from the \Matlab interface Makefile
+to {\tt GM\_ADD\_LIBS}
+\item If you would like to statically link the standard libraries into the {\tt mex} file,
+add {\tt -static} to {\tt GM\_ADD\_LIBS}
+\end{itemize}
 
 
 The configure script of \Ipopt attempts to automatically locate the directory 
-where \Matlab is installed by querying the location of the {\tt mex} 
+where \Matlab is installed by querying the location of the {\tt matlab} 
 executable. You can also manually specify the \Matlab home directory when 
-calling the configure script with the flag {\tt --with-matlab-home}.
+calling the configure script with the flag {\tt --with-matlab-home}. You can
+determine this home directory by the command {\tt matlabroot} within \Matlab.
 
 
 In practice, it has been found easier to install and use the \Matlab interface 
 by disabling compilation of the shared libraries, and use only static 
-libraries instead. However, these static libraries need to be build in a way 
+libraries instead. However, these static libraries need to be built in a way 
 that allow using them in a shared library, i.e., they need to build with 
 position-independent code.
 This is achieved with the configure script flags
@@ -1228,9 +1266,9 @@ configure should be used:
   ADD_FFLAGS="-fexceptions -fbackslash" 
 \end{verbatim}
 
-With Ipopt 3.11, a \emph{site script for configure} has been added to the 
+With \Ipopt 3.11, a \emph{site script for configure} has been added to the 
 \Matlab interface. This script takes care of setting configure options in a 
-way that is appropriate for building an \Ipopt that is useable via the 
+way that is appropriate for building an \Ipopt { \tt mex} file that is useable via
 \Matlab. Therefore, instead of setting configure options as described in the 
 previous section, it should be sufficient to setup an environment variable 
 {\tt CONFIG\_SITE} that points to the site file
@@ -1239,6 +1277,37 @@ configure, e.g.,
 \begin{verbatim}
   CONFIG_SITE=$IPOPTDIR/contrib/MatlabInterface/MatlabInterface.site ../configure
 \end{verbatim}
+Alternately, you can create a folder {\tt \$IPOPTDIR/build/share}, copy the
+site file to that folder, and rename it to {\tt config.site}.
+
+This site script sets the configure flags (if not specified by the user)
+{\tt --disable-shared --with-pic --with-blas=BUILD --with-lapack=BUILD}.
+The first two flags are discussed above. We also specify that the reference
+versions of BLAS and LAPACK should be used by default because of a commonly
+observed issue on 64-bit Linux systems. If \Ipopt configure finds BLAS and/or
+LAPACK libraries already installed then it will use them. However, \Matlab
+includes its own versions of BLAS and LAPACK, which on 64-bit systems are
+incompatible with the expected interface used by \Ipopt and the BLAS and LAPACK
+packages available in many Linux distributions. If the \Ipopt { \tt mex} file is
+compiled in such a way that the BLAS and LAPACK libraries are dynamically linked
+as shared libraries (as found in installed Linux packages), those library
+dependencies will be overridden by \Matlab's incompatible versions. This can
+be avoided by statically linking BLAS and LAPACK into the \Ipopt { \tt mex} file,
+which the above combination of configure flags will do. Note that this issue does
+not appear to affect Mac OS X versions of Matlab, so if you would like to use
+the Apple optimized BLAS and LAPACK libraries you can override these settings and
+specify {\tt --with-blas='-framework vecLib' --with-lapack='-framework vecLib'}.
+
+The site script also tests whether the compilers on your system are capable of
+statically linking the standard C++ and Fortran libraries into a shared library.
+This is possible with GCC versions 4.5.0 or newer on Mac or Windows, 4.7.3 or newer
+(when GCC itself is built {\tt --with-pic}) on Linux. If this is the case, then
+the site script will set appropriate configure flags and options in the \Matlab
+interface Makefile to statically link all standard libraries into the \Ipopt { \tt mex}
+file. This should allow a single {\tt mex} file to work with a variety of versions of
+\Matlab, and on computers that do not have the same compiler versions installed.
+If this static linking of standard libraries causes any issues, you can disable
+it with the configure flag {\tt --disable-matlab-static}.
 
 After configuring, building, and installing \Ipopt itself, it is time to build 
 the \Matlab interface.
@@ -1257,8 +1326,9 @@ from the {\tt LIBS} line.
 
 Once you think you've set up the {\tt Makefile} properly, type
 {\tt make install} in the same directory as the {\tt Makefile}. If you didn't 
-get any errors, then you should have ended up with a {\tt mex} file. On a 
-Linux machine, the {\tt mex} file will be called {\tt ipopt.mexglx}.
+get any errors, then you should have ended up with a {\tt mex} file. The {\tt mex}
+file will be called {\tt ipopt.\$MEXEXT}, where {\tt \$MEXEXT} is {\tt mexglx}
+for 32-bit Linux, {\tt mexa64} for 64-bit Linux, {\tt mexw32} for 32-bit Windows, etc.
 
 In order to use the {\tt mex} file in \Matlab, you need to tell \Matlab where 
 to find it. The best way to do this is to type
@@ -1274,11 +1344,11 @@ command (in Bash shell) or the {\tt setenv} command (in C-shell).
 
 %There's a great possibility you will encounter problems with the installation instructions we have just described here. I'm afraid some resourcefulness will be required on your part, as the installation will be slightly different for each person. Please consult the troubleshooting section on this webpage, and the archives of the IPOPT mailing list. If you can't find the answer at either of these locations, try sending an email to the IPOPT mailing list.
 
-\textbf{TODO:} The instructions given above are somewhat outdated due to 
-recent improvements that were made for building the \Matlab interface.
-For information on these, see
-\url{https://projects.coin-or.org/Ipopt/changeset/2111} and
-\url{https://projects.coin-or.org/Ipopt/changeset/2112}.
+%\textbf{TODO:} The instructions given above are somewhat outdated due to 
+%recent improvements that were made for building the \Matlab interface.
+%For information on these, see
+%\url{https://projects.coin-or.org/Ipopt/changeset/2111} and
+%\url{https://projects.coin-or.org/Ipopt/changeset/2112}.
 
 \textbf{NOTE}: Starting with version 7.3, \Matlab can handle 64-bit 
 addressing, and the authors of \Matlab have modified the implementation of 
@@ -1287,12 +1357,11 @@ the sparse matrix are converted to signed integers, and this could potentially
 cause problems when dealing with large, sparse matrices on 64-bit platforms 
 with \Matlab version 7.3 or greater.
 
-\textbf{NOTE}: As \Matlab brings its own HSL MA57 library, \Ipopt's configure
-can be setup to enable using this library in \Ipopt's MA57 solver interface. 
-To enable this, one should specify the configure option
-{\tt --enable-matlab-ma57}. Note, that using this option is not advisable to 
-use this configure option if one also provides the source for MA57 via 
-ThirdParty/HSL.
+\textbf{NOTE}: As \Matlab (version R2008a or newer) includes its own HSL MA57
+library, \Ipopt's configure can be setup to enable using this library in
+\Ipopt's MA57 solver interface. To enable this, one should specify the
+configure option {\tt --enable-matlab-ma57}. Note, that using this option is
+not advisable if one also provides the source for MA57 via ThirdParty/HSL.
 
 \subsubsection{Troubleshooting}
 
@@ -1308,7 +1377,7 @@ What follows are a list of common errors encountered, along with a suggested rem
 \textbf{Problem:} compilation is successful, but \Matlab crashes
 
 \textbf{Remedy:} Even if you didn't get any errors during compilation, there's 
-still a possibility that you didn't link the {\tt mex}file properly. In this 
+still a possibility that you didn't link the {\tt mex} file properly. In this 
 case, executing \Ipopt in \Matlab will cause \Matlab to crash. This is a 
 common problem, and usually arises because you did not choose the proper 
 compiler or set the proper compilation flags (e.g. {\tt --with-pic}) when you 
