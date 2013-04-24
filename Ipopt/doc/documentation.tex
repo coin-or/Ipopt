@@ -529,7 +529,8 @@ personal commercial or non-com\-mer\-cial usage. Note that you may not
 redistribute these codes in either source or binary form without purchasing a
 licence from the authors. This version includes MA27, MA28, and MC19.
 \item[HSL 2011] contains more modern codes that are freely available for
-academic use only. This version includes the codes from the HSL Archive and additionally MA57, HSL\_MA77, HSL\_MA86, and HSL\_MA97.
+academic use only. This version includes the codes from the HSL Archive and 
+additionally MA57, HSL\_MA77, HSL\_MA86, and HSL\_MA97.
 \end{description}
 
 % The use of alternative linear solvers is described in
@@ -664,10 +665,11 @@ currently supported.
 Please consult Appendix~\ref{ExpertInstall} to find out how to
 configure your \Ipopt installation to work with WSMP.
 
-\subsubsection{Using the Linear Solver  Loader}\label{sec:linear_solver_loader}
+\subsubsection{Using the Linear Solver Loader}\label{sec:linear_solver_loader}
 By default, \Ipopt will be compiled with a mechanism, the Linear
 Solver Loader, which can dynamically load shared libraries with MA27,
-MA57, HSL\_MA77, HSL\_MA86, HSL\_MA97, or the Pardiso linear solver at runtime\footnote{This is not
+MA57, HSL\_MA77, HSL\_MA86, HSL\_MA97, or the Pardiso linear solver at 
+runtime\footnote{This is not
   enabled if you compile \Ipopt with the MS Visual Studio project files
   provided in the \Ipopt distribution.  Further, if you have problems
   compiling this new feature, you can disable this by specifying
@@ -688,14 +690,14 @@ instructions in \texttt{\$IPOPTDIR/ThirdParty/HSL/INSTALL.HSL}.
 
 \subsubsection{Obtaining METIS}\label{sec:METIS}
 
-The linear solvers MA57, HSL\_MA77, HSL\_MA86, HSL\_MA97, and MUMPS can make use of the matrix
-ordering algorithms implemented in METIS (see
+The linear solvers MA57, HSL\_MA77, HSL\_MA86, HSL\_MA97, and MUMPS can make 
+use of the matrix ordering algorithms implemented in METIS (see
 \url{http://glaros.dtc.umn.edu/gkhome/metis/metis/overview}).  If
 you are using one of these linear solvers, you should obtain the METIS
 source code and put it into \texttt{\$IPOPTDIR/ThirdParty/Metis}.
 Read the \texttt{INSTALL.Metis} file in that directory, and if you
-have the \texttt{wget} utility (or \texttt{ftp} on Mac OS X) installed on your system, you can
-download the code by running the \texttt{./get.Metis} script.
+have the \texttt{wget} utility (or \texttt{ftp} on Mac OS X) installed on your 
+system, you can download the code by running the \texttt{./get.Metis} script.
 
 Note, that {\bf only the older METIS 4.x version\footnote{\url{http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/OLD/metis-4.0.3.tar.gz}} is supported} by
 MA57, HSL\_MA77, HSL\_MA86, HSL\_MA97, MUMPS, and the build system.
@@ -784,8 +786,9 @@ ticket or sending a message to the mailing list.
   \item the \Ipopt library (\texttt{libipopt.so}, \texttt{libipopt.a}
     or similar) and all its dependencies (MUMPS, HSL, Metis libraries)
     in \texttt{\$IPOPTDIR/build/lib},
-  \item text files {\tt ipopt\_addlibs\_cpp.txt}, {\tt ipopt\_addlibs\_c.txt}, and {\tt
-      ipopt\_addlibs\_f.txt} in\\ \texttt{\$IPOPTDIR/build/share/coin/doc/Ipopt} each 
+  \item text files {\tt ipopt\_addlibs\_cpp.txt}, {\tt ipopt\_addlibs\_c.txt}, 
+      and {\tt ipopt\_addlibs\_f.txt} in\\ 
+    \texttt{\$IPOPTDIR/build/share/coin/doc/Ipopt} each 
     containing a line with linking flags that are required for
     linking code with the \Ipopt library for C++, C, and Fortran main
     programs, respectively. (This is only for convenience if you want
@@ -1097,7 +1100,8 @@ to make sure that the environment variables are set for the compilers
 %\texttt{Ipopt$\backslash$src$\backslash$Algorithm$\backslash$LinearSolvers}
 %and add the corresponding libraries to your project.
 
-\subsection{Compiling and Installing the Java Interface \JIpopt}  \label{sec.jipopt.build}
+\subsection{Compiling and Installing the Java Interface \JIpopt}  
+\label{sec.jipopt.build}
 \hfill \textit{based on documentation by Rafael de Pelegrini Soares}%
 \footnote{VRTech Industrial Technologies}
 \medskip
@@ -1160,7 +1164,8 @@ this flag, for a configuration of \Ipopt in debug mode ({\tt --enable-debug})
 or as static library ({\tt --disable-shared}), the configure flag {\tt --with-
 pic} need to be used to enable compilation with {\tt -fPIC}.
 
-After installation of the \ipoptr package, it should be possible to load the package in R and to view the help page:
+After installation of the \ipoptr package, it should be possible to load the 
+package in R and to view the help page:
 \begin{verbatim}
 > library('ipoptr')
 > ?ipoptr
@@ -1172,97 +1177,178 @@ After installation of the \ipoptr package, it should be possible to load the pac
 \medskip
 
 The \Matlab interface to \Ipopt uses the {\tt mex} interface of \Matlab.
-It has been tested on \Matlab versions 7.2 through 7.7. It might very well work on earlier versions of \Matlab, but there is also a good chance that it will not. It is unlikely that the software will run with versions prior to \Matlab 6.5.
+It has been tested on \Matlab versions 7.2 through 7.7. It might very well 
+work on earlier versions of \Matlab, but there is also a good chance that it 
+will not. It is unlikely that the software will run with versions prior to 
+\Matlab 6.5.
 
 First, note that some binaries of \Ipopt {\tt mex} files are available at
 \url{http://www.coin-or.org/download/binary/Ipopt}.
-Further, the OPTI Toolbox (\url{www.i2c2.aut.ac.nz/Wiki/OPTI}) comes with a precompiled \Matlab interface for \Ipopt on Windows.
+Further, the OPTI Toolbox (\url{www.i2c2.aut.ac.nz/Wiki/OPTI}) comes with a 
+precompiled \Matlab interface for \Ipopt on Windows.
 
-To build the interface by yourself, you will need to have \Matlab installed on your system and have it configured to build {\tt mex} files,  see \url{http://www.mathworks.com/support/tech-notes/1600/1605.html} for detail on how to set this up.
+To build the interface by yourself, you will need to have \Matlab installed on 
+your system and have it configured to build {\tt mex} files,  see 
+\url{http://www.mathworks.com/support/tech-notes/1600/1605.html} for detail on 
+how to set this up.
 
 For Mac OS X, the following procedure has been reported: First, one executes a command like
 \begin{verbatim}
 /Applications/MATLAB_R2012.app/bin/mex -setup
 \end{verbatim}
-This creates a {\tt mexopts.sh} file in the {\tt ~/.matlab/R2010} directory, which is then modified as following.
-In the {\tt maci} section (32 bit builds) or the {\tt maci64} section (64 bit builds), change both instances of {\tt libgfortran.dylib} to {\tt libgfortran.a} in the {\tt FC\_LIBDIR} line and remove {\tt -Wl,-syslibroot,\$SDKROOT} from {\tt LDFLAGS} (otherwise it can't find the {\tt gfortran} libraries).
+This creates a {\tt mexopts.sh} file in the {\tt ~/.matlab/R2010} directory, 
+which is then modified as following.
+In the {\tt maci} section (32 bit builds) or the {\tt maci64} section (64 bit 
+builds), change both instances of {\tt libgfortran.dylib} to
+{\tt libgfortran.a} in the {\tt FC\_LIBDIR} line and remove
+{\tt -Wl,-syslibroot,\$SDKROOT} from {\tt LDFLAGS} (otherwise it can't find 
+the {\tt gfortran} libraries).
 
 
-The configure script of \Ipopt attempts to automatically locate the directory where \Matlab is installed by querying the location of the {\tt mex} executable. You can also manually specify the \Matlab home directory when calling the configure script with the flag {\tt --with-matlab-home}.
+The configure script of \Ipopt attempts to automatically locate the directory 
+where \Matlab is installed by querying the location of the {\tt mex} 
+executable. You can also manually specify the \Matlab home directory when 
+calling the configure script with the flag {\tt --with-matlab-home}.
 
 
-In practice, it has been found easier to install and use the \Matlab interface by disabling compilation of the shared libraries, and use only static libraries instead. However, these static libraries need to be build in a way that allow using them in a shared library, i.e., they need to build with position-independent code.
+In practice, it has been found easier to install and use the \Matlab interface 
+by disabling compilation of the shared libraries, and use only static 
+libraries instead. However, these static libraries need to be build in a way 
+that allow using them in a shared library, i.e., they need to build with 
+position-independent code.
 This is achieved with the configure script flags
 \begin{verbatim}
   --disable-shared --with-pic
 \end{verbatim}
-On Mac OS X, it has been reported that additionally the following flags for configure should be used:
+On Mac OS X, it has been reported that additionally the following flags for 
+configure should be used:
 \begin{verbatim}
   ADD_CFLAGS="-fno-common -fexceptions -no-cpp-precomp"
   ADD_CXXFLAGS="-fno-common -fexceptions -no-cpp-precomp"
   ADD_FFLAGS="-fexceptions -fbackslash" 
 \end{verbatim}
 
-With Ipopt 3.11, a \emph{site script for configure} has been added to the \Matlab interface. This script takes care of setting configure options in a way that is appropriate for building an \Ipopt that is useable via the \Matlab. Therefore, instead of setting configure options as described in the previous section, it should be sufficient to setup an environment variable {\tt CONFIG\_SITE} that points to the site file {\tt \$IPOPTDIR/contrib/MatlabInterface/MatlabInterface.site} before running configure, e.g.,
+With Ipopt 3.11, a \emph{site script for configure} has been added to the 
+\Matlab interface. This script takes care of setting configure options in a 
+way that is appropriate for building an \Ipopt that is useable via the 
+\Matlab. Therefore, instead of setting configure options as described in the 
+previous section, it should be sufficient to setup an environment variable 
+{\tt CONFIG\_SITE} that points to the site file
+{\tt \$IPOPTDIR/contrib/MatlabInterface/MatlabInterface.site} before running 
+configure, e.g.,
 \begin{verbatim}
   CONFIG_SITE=$IPOPTDIR/contrib/MatlabInterface/MatlabInterface.site ../configure
 \end{verbatim}
 
-After configuring, building, and installing \Ipopt itself, it is time to build the \Matlab interface.
-For that, \Ipopt's configure has setup a directory {\tt \$IPOPTDIR/build/contrib/MatlabInterface/src} which contains a {\tt Makefile}.
-You may need to edit this file a little bit to suit for your system setup. You will find that most of the variables such as {\tt CXX} and {\tt CXXFLAGS} have been automatically (and hopefully, correctly) set according to the flags specified during your initial call to configure script.
-However, you may need to modify {\tt MATLAB\_HOME}, {\tt MEXSUFFIX} and {\tt MEX} as explained in the comments of the Makefile.
-For example, on Mac OS X, it has been reported that all duplicates of strings like {\tt -L/usr/lib/gcc/i686-apple-darwin11/4.2.1/../../..} should be removed from the {\tt LIBS} line.
+After configuring, building, and installing \Ipopt itself, it is time to build 
+the \Matlab interface.
+For that, \Ipopt's configure has setup a directory
+{\tt \$IPOPTDIR/build/contrib/MatlabInterface/src} which contains a
+{\tt Makefile}.
+You may need to edit this file a little bit to suit for your system setup. You 
+will find that most of the variables such as {\tt CXX} and {\tt CXXFLAGS} have 
+been automatically (and hopefully, correctly) set according to the flags 
+specified during your initial call to configure script.
+However, you may need to modify {\tt MATLAB\_HOME}, {\tt MEXSUFFIX} and
+{\tt MEX} as explained in the comments of the Makefile.
+For example, on Mac OS X, it has been reported that all duplicates of strings 
+like {\tt -L/usr/lib/gcc/i686-apple-darwin11/4.2.1/../../..} should be removed 
+from the {\tt LIBS} line.
 
-Once you think you've set up the {\tt Makefile} properly, type {\tt make install} in the same directory as the {\tt Makefile}. If you didn't get any errors, then you should have ended up with a {\tt mex} file. On a Linux machine, the {\tt mex} file will be called {\tt ipopt.mexglx}.
+Once you think you've set up the {\tt Makefile} properly, type
+{\tt make install} in the same directory as the {\tt Makefile}. If you didn't 
+get any errors, then you should have ended up with a {\tt mex} file. On a 
+Linux machine, the {\tt mex} file will be called {\tt ipopt.mexglx}.
 
-In order to use the {\tt mex} file in \Matlab, you need to tell \Matlab where to find it. The best way to do this is to type
+In order to use the {\tt mex} file in \Matlab, you need to tell \Matlab where 
+to find it. The best way to do this is to type
 \begin{verbatim}
   addpath sourcedir
 \end{verbatim}
-in the \Matlab command prompt, where {\tt sourcedir} is the location of the {\tt mex} file you created. (For more information, type {\tt help addpath} in \Matlab. You can also achieve the same thing by modifying the {\tt MATLABPATH} environment variable in the UNIX command line, using either the {\tt export} command (in Bash shell) or the {\tt setenv} command (in C-shell).
+in the \Matlab command prompt, where {\tt sourcedir} is the location of the 
+{\tt mex} file you created. (For more information, type {\tt help addpath} in 
+\Matlab. You can also achieve the same thing by modifying the {\tt MATLABPATH} 
+environment variable in the UNIX command line, using either the {\tt export} 
+command (in Bash shell) or the {\tt setenv} command (in C-shell).
 
 
 %There's a great possibility you will encounter problems with the installation instructions we have just described here. I'm afraid some resourcefulness will be required on your part, as the installation will be slightly different for each person. Please consult the troubleshooting section on this webpage, and the archives of the IPOPT mailing list. If you can't find the answer at either of these locations, try sending an email to the IPOPT mailing list.
 
-\textbf{TODO:} The instructions given above are somewhat outdated due to recent improvements that were made for building the \Matlab interface.
+\textbf{TODO:} The instructions given above are somewhat outdated due to 
+recent improvements that were made for building the \Matlab interface.
 For information on these, see
 \url{https://projects.coin-or.org/Ipopt/changeset/2111} and
 \url{https://projects.coin-or.org/Ipopt/changeset/2112}.
 
-\textbf{NOTE}: Starting with version 7.3, \Matlab can handle 64-bit addressing, and the authors of \Matlab have modified the implementation of sparse matrices to reflect this change. However, the row and column indices in the sparse matrix are converted to signed integers, and this could potentially cause problems when dealing with large, sparse matrices on 64-bit platforms with \Matlab version 7.3 or greater.
+\textbf{NOTE}: Starting with version 7.3, \Matlab can handle 64-bit 
+addressing, and the authors of \Matlab have modified the implementation of 
+sparse matrices to reflect this change. However, the row and column indices in 
+the sparse matrix are converted to signed integers, and this could potentially 
+cause problems when dealing with large, sparse matrices on 64-bit platforms 
+with \Matlab version 7.3 or greater.
 
 \textbf{NOTE}: As \Matlab brings its own HSL MA57 library, \Ipopt's configure
-can be setup to enable using this library in \Ipopt's MA57 solver interface. To enable this, one should specify the configure option {\tt --enable-matlab-ma57}. Note, that using this option is not advisable to use this configure option if one also provides the source for MA57 via ThirdParty/HSL.
+can be setup to enable using this library in \Ipopt's MA57 solver interface. 
+To enable this, one should specify the configure option
+{\tt --enable-matlab-ma57}. Note, that using this option is not advisable to 
+use this configure option if one also provides the source for MA57 via 
+ThirdParty/HSL.
 
 \subsubsection{Troubleshooting}
 
-The installation procedure described above does involve a certain amount of expertise on the part of the user. If you are encountering problems, it is highly recommended that you follow the standard installation of \Ipopt first, and then test the installation by running some examples, either in C++ or in AMPL.
+The installation procedure described above does involve a certain amount of 
+expertise on the part of the user. If you are encountering problems, it is 
+highly recommended that you follow the standard installation of \Ipopt first, 
+and then test the installation by running some examples, either in C++ or in 
+AMPL.
 
 What follows are a list of common errors encountered, along with a suggested remedy.
 \medskip
 
 \textbf{Problem:} compilation is successful, but \Matlab crashes
 
-\textbf{Remedy:} Even if you didn't get any errors during compilation, there's still a possibility that you didn't link the {\tt mex}file properly. In this case, executing \Ipopt in \Matlab will cause \Matlab to crash. This is a common problem, and usually arises because you did not choose the proper compiler or set the proper compilation flags (e.g. {\tt --with-pic}) when you ran the configure script at the very beginning.
+\textbf{Remedy:} Even if you didn't get any errors during compilation, there's 
+still a possibility that you didn't link the {\tt mex}file properly. In this 
+case, executing \Ipopt in \Matlab will cause \Matlab to crash. This is a 
+common problem, and usually arises because you did not choose the proper 
+compiler or set the proper compilation flags (e.g. {\tt --with-pic}) when you 
+ran the configure script at the very beginning.
 \medskip
 
 \textbf{Problem:} \Matlab fails to link to \Ipopt shared library
 
-\textbf{Remedy:}You might encounter this problem if you try to execute one of the examples in \Matlab, and \Matlab complains that it cannot find the \Ipopt shared library. The installation script has been set up so that the {\tt mex} file you are calling knows where to look for the \Ipopt shared library. However, if you moved the library then you will run into a problem. One way to fix this problem is to modify the {\tt LDFLAGS} variable in the \Matlab interface {\tt Makefile} (see above) so that the correct path of the \Ipopt library is specified. Alternatively, you could modify the {\tt LD\_LIBRARY\_PATH} environment variable so that the location of the \Ipopt library is included in the path. If none of this is familiar to you, you might want to do a web search to find out more.
+\textbf{Remedy:} You might encounter this problem if you try to execute one of 
+the examples in \Matlab, and \Matlab complains that it cannot find the \Ipopt 
+shared library. The installation script has been set up so that the {\tt mex} 
+file you are calling knows where to look for the \Ipopt shared library. 
+However, if you moved the library then you will run into a problem. One way to 
+fix this problem is to modify the {\tt LDFLAGS} variable in the \Matlab 
+interface {\tt Makefile} (see above) so that the correct path of the \Ipopt 
+library is specified. Alternatively, you could modify the
+{\tt LD\_LIBRARY\_PATH} environment variable so that the location of the 
+\Ipopt library is included in the path. If none of this is familiar to you, 
+you might want to do a web search to find out more.
 \medskip
 
 \textbf{Problem:} {\tt mwIndex} is not defined
 
-\textbf{Remedy:} You may get a compilation error that says something to the effect that {\tt mwIndex} is not defined. This error will surface on a version of \Matlab prior to 7.3. The solution is to add the flag {\tt -DMWINDEXISINT} to the {\tt CXXFLAGS} variable in the \Matlab interface {\tt Makefile} (see above).
+\textbf{Remedy:} You may get a compilation error that says something to the 
+effect that {\tt mwIndex} is not defined. This error will surface on a version 
+of \Matlab prior to 7.3. The solution is to add the flag {\tt -DMWINDEXISINT} 
+to the {\tt CXXFLAGS} variable in the \Matlab interface {\tt Makefile} (see 
+above).
 
 \subsubsection{More Information}
 
-The difficulties with building and using the \Matlab interface of \Ipopt have lead to several installation instructions on the web:
+The difficulties with building and using the \Matlab interface of \Ipopt have 
+lead to several installation instructions on the web:
 \begin{itemize}
-\item Peter Carbonetto's original instructions on how to build the \Matlab interface:\\ \url{https://projects.coin-or.org/Ipopt/wiki/MatlabInterface}
-\item Ray Zimmerman's instructions on how to build the \Matlab interface on Mac OS X:\\ \url{https://projects.coin-or.org/Ipopt/wiki/Ipopt_on_Mac_OS_X}
-\item Giacomo Perantoni's experiences and help with the \Matlab interface on Windows:\\ \url{http://users.ox.ac.uk/~newc3480}
+\item Peter Carbonetto's original instructions on how to build the \Matlab 
+interface:\\ \url{https://projects.coin-or.org/Ipopt/wiki/MatlabInterface}
+\item Ray Zimmerman's instructions on how to build the \Matlab interface on 
+Mac OS X:\\ \url{https://projects.coin-or.org/Ipopt/wiki/Ipopt_on_Mac_OS_X}
+\item Giacomo Perantoni's experiences and help with the \Matlab interface on 
+Windows:\\ \url{http://users.ox.ac.uk/~newc3480}
 \end{itemize}
 
 \section{Interfacing your NLP to \Ipopt: A tutorial example.}
@@ -1314,9 +1400,9 @@ in AMPL syntax, and solve the problem through the AMPL environment.
 There are drawbacks, however. AMPL is a 3rd party package and, as
 such, must be appropriately licensed (a free student version for
 limited problem size is available from the AMPL website,
-\url{http://www.ampl.com}). Furthermore, the AMPL environment may be prohibitive
-for very large problems. Nevertheless, formulating the problem in AMPL
-is straightforward and even for large problems, it is often used as a
+\url{http://www.ampl.com}). Furthermore, the AMPL environment may be 
+prohibitive for very large problems. Nevertheless, formulating the problem in 
+AMPL is straightforward and even for large problems, it is often used as a
 prototyping tool before using one of the code interfaces.
 
 This tutorial is not intended as a guide to formulating models in
@@ -3252,11 +3338,15 @@ solution value of the variables, and dual solution values, respectively.
 \footnote{University College London}
 \medskip
 
-The \ipoptr package (see Section \ref{sec.ipoptr.build} for installation instructions) offers a R function {\tt ipoptr} which takes an NLP specification, a starting point, and \Ipopt options as input and returns information about a \Ipopt run (status, message, ...) and a solution point.
+The \ipoptr package (see Section \ref{sec.ipoptr.build} for installation 
+instructions) offers a R function {\tt ipoptr} which takes an NLP 
+specification, a starting point, and \Ipopt options as input and returns 
+information about a \Ipopt run (status, message, ...) and a solution point.
 
 In the following, we discuss necessary steps to implement the HS071 example 
 with \ipoptr.
-A more detailed documentation of \ipoptr is available in {\tt Ipopt/contrib/RInterface/inst/doc/ipoptr.pdf}.
+A more detailed documentation of \ipoptr is available in
+{\tt Ipopt/contrib/RInterface/inst/doc/ipoptr.pdf}.
 
 First, we define the objective function and its gradient
 \begin{verbatim}
@@ -3270,7 +3360,9 @@ First, we define the objective function and its gradient
                 x[1] * (x[1] + x[2] + x[3]) ) )		  
  }
 \end{verbatim}
-Then we define a function that returns the value of the two constraints. We define the bounds of the constraints (in this case the $g_L$ and $g_U$ are $25$ and $40$) later.
+Then we define a function that returns the value of the two constraints. We 
+define the bounds of the constraints (in this case the $g_L$ and $g_U$ are 
+$25$ and $40$) later.
 \begin{verbatim}
 > # constraint functions
 > eval_g <- function( x ) {
@@ -3278,7 +3370,8 @@ Then we define a function that returns the value of the two constraints. We defi
                 x[1]^2 + x[2]^2 + x[3]^2 + x[4]^2 ) )
  }
 \end{verbatim}
-Then we define the structure of the Jacobian, which is a dense matrix in this case, and function to evaluate it
+Then we define the structure of the Jacobian, which is a dense matrix in this 
+case, and function to evaluate it
 \begin{verbatim}
 > eval_jac_g_structure <- list( c(1,2,3,4), c(1,2,3,4) )
 > eval_jac_g <- function( x ) {
@@ -3292,7 +3385,10 @@ Then we define the structure of the Jacobian, which is a dense matrix in this ca
                  2.0*x[4] ) )
  }
 \end{verbatim}
-The Hessian is also dense, but it looks slightly more complicated because we have to take into account the Hessian of the objective function and of the constraints at the same time, although you could write a function to calculate them both separately and then return the combined result in \texttt{eval\_h}.
+The Hessian is also dense, but it looks slightly more complicated because we 
+have to take into account the Hessian of the objective function and of the 
+constraints at the same time, although you could write a function to calculate 
+them both separately and then return the combined result in \texttt{eval\_h}.
 \begin{verbatim}
 > # The Hessian for this problem is actually dense, 
 > # This is a symmetric matrix, fill the lower left triangle only.
@@ -3334,7 +3430,12 @@ The Hessian is also dense, but it looks slightly more complicated because we hav
      return ( values )
  }
 \end{verbatim}
-After the hard part is done, we only have to define the initial values, the lower and upper bounds of the control variables, and the lower and upper bounds of the constraints. If a variable or a constraint does not have lower or upper bounds, the values \texttt{-Inf} or \texttt{Inf} can be used. If the upper and lower bounds of a constraint are equal, Ipopt recognizes this as an equality constraint and acts accordingly.
+After the hard part is done, we only have to define the initial values, the 
+lower and upper bounds of the control variables, and the lower and upper 
+bounds of the constraints. If a variable or a constraint does not have lower 
+or upper bounds, the values \texttt{-Inf} or \texttt{Inf} can be used. If the 
+upper and lower bounds of a constraint are equal, Ipopt recognizes this as an 
+equality constraint and acts accordingly.
 \begin{verbatim}
 > # initial values
 > x0 <- c( 1, 5, 5, 1 )
@@ -3346,7 +3447,8 @@ After the hard part is done, we only have to define the initial values, the lowe
 > constraint_ub <- c( Inf, 40 )
 \end{verbatim}
 Finally, we can call \Ipopt with the {\tt ipoptr} function.
-In order to redirect the \Ipopt output into a file, we use \Ipopt's {\tt output\_file} and {\tt print\_level} options.
+In order to redirect the \Ipopt output into a file, we use \Ipopt's
+{\tt output\_file} and {\tt print\_level} options.
 \begin{verbatim}
 > opts <- list("print_level" = 0,
               "file_print_level" = 12,
@@ -3382,8 +3484,11 @@ Optimal value of objective function:  17.0140171451792
 Optimal value of controls: 1 4.743 3.82115 1.379408
 \end{verbatim}
 
-To pass additional data to the evaluation routines, one can either supply additional arguments to the user defined functions and {\tt ipoptr} or define an environment that holds the data and pass this environment to {\tt ipoptr}.
-Both methods are shown in the file \texttt{tests/parameters.R} that comes with \ipoptr.
+To pass additional data to the evaluation routines, one can either supply 
+additional arguments to the user defined functions and {\tt ipoptr} or define 
+an environment that holds the data and pass this environment to {\tt ipoptr}.
+Both methods are shown in the file \texttt{tests/parameters.R} that comes with 
+\ipoptr.
 
 As a very simple example, suppose we want to find the minimum of
 \[
@@ -3391,7 +3496,9 @@ f( x ) = a_1 x^2 + a_2 x + a_3
 \]
 for different values of the parameters $a_1$, $a_2$ and $a_3$. 
 
-First, we define the objective function and its gradient using, assuming that there is some variable \texttt{params} that contains the values of the parameters.
+First, we define the objective function and its gradient using, assuming that 
+there is some variable \texttt{params} that contains the values of the 
+parameters.
 \begin{verbatim}
 > eval_f_ex1 <- function(x, params) { 
      return( params[1]*x^2 + params[2]*x + params[3] ) 
@@ -3400,9 +3507,14 @@ First, we define the objective function and its gradient using, assuming that th
      return( 2*params[1]*x + params[2] ) 
  }
 \end{verbatim}
-Note, that the first parameter should always be the control variable. All of the user-defined functions should contain the same set of additional parameters. You have to supply them as input argument to all functions, even if you're not using them in some of the functions. 
+Note, that the first parameter should always be the control variable. All of 
+the user-defined functions should contain the same set of additional 
+parameters. You have to supply them as input argument to all functions, even 
+if you're not using them in some of the functions. 
 
-Then we can solve the problem for a specific set of parameters, in this case $a_1=1$, $a_2=2$ and $a_3=3$, from initial value $x_0=0$, with the following command
+Then we can solve the problem for a specific set of parameters, in this case 
+$a_1=1$, $a_2=2$ and $a_3=3$, from initial value $x_0=0$, with the following 
+command
 \begin{verbatim}
 > # solve using ipoptr with additional parameters
 > ipoptr(x0          = 0, 
@@ -3426,7 +3538,8 @@ Optimal value of objective function:  2
 Optimal value of controls: -1
 \end{verbatim}
 
-For the second method, we don't have to supply the parameters as additional arguments to the function.
+For the second method, we don't have to supply the parameters as additional 
+arguments to the function.
 \begin{verbatim}
 > eval_f_ex2 <- function(x) { 
      return( params[1]*x^2 + params[2]*x + params[3] ) 
@@ -3435,13 +3548,16 @@ For the second method, we don't have to supply the parameters as additional argu
      return( 2*params[1]*x + params[2] ) 
  }
 \end{verbatim}
-Instead, we define an environment that contains specific values of \texttt{params}
+Instead, we define an environment that contains specific values of 
+\texttt{params}
 \begin{verbatim}
 > # define a new environment that contains params
 > auxdata        <- new.env()
 > auxdata$params <- c(1,2,3)
 \end{verbatim}
-To solve this we supply \texttt{auxdata} as an argument to \texttt{ipoptr}, which will take care of evaluating the functions in the correct environment, so that the auxiliary data is available.
+To solve this we supply \texttt{auxdata} as an argument to \texttt{ipoptr}, 
+which will take care of evaluating the functions in the correct environment, 
+so that the auxiliary data is available.
 \begin{verbatim}
 > # pass the environment that should be used to evaluate functions to ipoptr
 > ipoptr(x0                 = 0, 
@@ -3469,14 +3585,20 @@ Optimal value of controls: -1
 \hfill \textit{based on documentation by Peter Carbonetto\footnote{University of British Columbia}}%
 \medskip
 
-See Section \ref{sec.matlab.build} for instructions on how to build a {\tt mex} file of the \Matlab interface for \Ipopt and how to make it known to \Matlab.
+See Section \ref{sec.matlab.build} for instructions on how to build a
+{\tt mex} file of the \Matlab interface for \Ipopt and how to make it known to 
+\Matlab.
 
-The {\tt \$IPOPTDIR/contrib/MatlabInterface/examples} directory contains several illustrative examples on how to use the \Matlab interface.
-The best way to understand how to use the interface is to carefully go over these examples.
+The {\tt \$IPOPTDIR/contrib/MatlabInterface/examples} directory contains 
+several illustrative examples on how to use the \Matlab interface.
+The best way to understand how to use the interface is to carefully go over 
+these examples.
 
 For more information, type {\tt help ipopt} in the \Matlab prompt.
 
-Further, Jonas Asprion assembled information about the \Matlab\ {\tt ipopt} function and its arguments: \url{http://www.idsc.ethz.ch/Downloads/IPOPT_InstallMatlab/IPOPT_MatlabInterface_V0p1.pdf}
+Further, Jonas Asprion assembled information about the \Matlab\ {\tt ipopt} 
+function and its arguments: 
+\url{http://www.idsc.ethz.ch/Downloads/IPOPT_InstallMatlab/IPOPT_MatlabInterface_V0p1.pdf}
 
 
 \section{Special Features}
