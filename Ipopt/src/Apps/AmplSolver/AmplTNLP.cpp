@@ -1052,7 +1052,7 @@ namespace Ipopt
         ;
       }
       else if (*c == '\n') {
-        dest += ', ';
+        dest += ", ";
       }
       else {
         dest += *c;
@@ -1074,11 +1074,18 @@ namespace Ipopt
         MakeValidLatexString(iter->second->IpoptOptionName(), ipoptname);
         MakeValidLatexString(iter->second->Description(), descr);
 
-        jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, "\\item[{\\hyperref[sec:%s]{%s}}]",
-           iter->second->IpoptOptionName().c_str(), amplname.c_str());
-        if( amplname != ipoptname && ipoptname.length() > 0 )
-           jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, " (Ipopt name: \\hyperref[sec:%s]{%s})",
-              iter->second->IpoptOptionName().c_str(), ipoptname.c_str());
+        if( ipoptname.length() > 0 )
+        {
+           jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, "\\item[{\\hyperref[sec:%s]{%s}}]",
+              iter->second->IpoptOptionName().c_str(), amplname.c_str());
+           if( amplname != ipoptname )
+              jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, " (Ipopt name: \\hyperref[sec:%s]{%s})",
+                 iter->second->IpoptOptionName().c_str(), ipoptname.c_str());
+        }
+        else
+        {
+           jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, "\\item[%s]", amplname.c_str());
+        }
         jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, " %s\n", descr.c_str());
      }
      jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, "\\end{description}\n");
