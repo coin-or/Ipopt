@@ -247,9 +247,9 @@ libraries, those compilers are in principle not necessary.  Also, it
 is possible to use the Fortran-to-C compiler {\tt f2c} from
 \url{http://www.netlib.org/f2c} to convert Fortran 77 code to C, and compile the
 resulting C files with a C compiler and create a library containing
-the required third party dependencies.  We have tested and used this
-in connection with the Microsoft Visual C++ compiler, and instructions
-on how to use it in this context are given below.
+the required third party dependencies.  %We have tested and used this
+%in connection with the Microsoft Visual C++ compiler, and instructions
+%on how to use it in this context are given below.
 
 \subsection{How to use \Ipopt}
 If desired, the \Ipopt distribution generates an executable for the
@@ -365,6 +365,9 @@ We try to answer questions posted to the mailing list in a reasonable
 manner.  Please understand that we cannot answer all questions in
 detail, and because of time constraints, we may not be able to help
 you model and debug your particular optimization problem.
+
+A short tutorial on getting started with \Ipopt is also available 
+\cite{Waechter90Minutes}.
 
 \subsection{History of \Ipopt}
 The original \Ipopt (Fortran version) was a product of the
@@ -1173,7 +1176,7 @@ package in R and to view the help page:
 
 \subsection{Compiling and Installing the \Matlab interface}
 \label{sec.matlab.build}
-\hfill \textit{based on documentation by Peter Carbonetto\footnote{University of British Columbia} and Ray Zimmerman}%
+\hfill \textit{based on documentation by Peter Carbonetto\footnote{University of British Columbia}, Tony Kelman\footnote{University of California, Berkeley}, and Ray Zimmerman}%
 \medskip
 
 The \Matlab interface to \Ipopt uses the {\tt mex} interface of \Matlab.
@@ -1182,7 +1185,7 @@ work on earlier versions of \Matlab, but there is also a good chance that it
 will not. It is unlikely that the software will run with versions prior to 
 \Matlab 6.5.
 
-First, note that some binaries of \Ipopt { \tt mex} files are available at
+First, note that some binaries of \Ipopt\ {\tt mex} files are available for download at
 \url{http://www.coin-or.org/download/binary/Ipopt}.
 Further, the OPTI Toolbox (\url{www.i2c2.aut.ac.nz/Wiki/OPTI}) comes with a 
 precompiled \Matlab interface for \Ipopt on Windows.
@@ -1198,7 +1201,7 @@ Ipopt 3.11 has added Makefile options to automate fixes for commonly-encountered
 issues with building the \Matlab interface. On Mac OS X or Windows, the file
 {\tt mexopts.sh} ({\tt mexopts.bat} on Windows) will need to be modified.
 This is performed automatically by calling {\tt make mexopts} in the
-{\tt \$IPOPTDIR/build/Ipopt/contrib/MatlabInterface/src} folder. No changes
+{\tt \$IPOPTDIR/build/Ipopt/contrib/MatlabInterface/src} directory. No changes
 will be made if you already have a {\tt mexopts.sh} file in that directory.
 If you need to make these modifications manually, follow the steps below.
 
@@ -1208,8 +1211,8 @@ For Mac OS X, the following procedure has been reported: First, one executes a c
 /Applications/MATLAB_R2012.app/bin/mex -setup
 \end{verbatim}
 This creates a {\tt mexopts.sh} file in the {\tt ~/.matlab/R2010} directory. 
-Copy that file to the {\tt \$IPOPTDIR/build/ \\ Ipopt/contrib/MatlabInterface/src}
-folder then modify it as follows.
+Copy that file to the directory {\tt \$IPOPTDIR/build/Ipopt/contrib/MatlabInterface/src}
+and modify it as follows.
 \begin{itemize}
 \item In the {\tt maci} section (32 bit builds) or the {\tt maci64} section
 (64 bit builds), change both instances of {\tt libgfortran.dylib} to
@@ -1224,8 +1227,8 @@ GNU compiler that does not recognize these Apple-specific flags.
 
 On Windows, if you are using the GNU compilers via MinGW, then you will need
 to use the {\tt gnumex} project. First, execute the script {\tt ./get.Gnumex}
-from the {\tt \$IPOPTDIR/Ipopt/contrib/MatlabInterface} folder. Then, after
-configuring \Ipopt, go to the folder {\tt \$IPOPTDIR/build/contrib/MatlabInterface/src}
+from the {\tt \$IPOPTDIR/Ipopt/contrib/MatlabInterface} directory. Then, after
+configuring \Ipopt, go to {\tt \$IPOPTDIR/build/contrib/MatlabInterface/src}
 and execute {\tt make gnumex}. This will start an instance of \Matlab and open
 the {\tt gnumex} tool. Check that the options are filled out appropriately for
 your MinGW installation, click ``Make options file," then close this new instance
@@ -1239,8 +1242,8 @@ as follows.
 \item Change {\tt GM\_MEXLANG=c} to {\tt GM\_MEXLANG=cxx}
 \item Add the contents of the {\tt LIBS=} line from the \Matlab interface Makefile
 to {\tt GM\_ADD\_LIBS}
-\item If you would like to statically link the standard libraries into the {\tt mex} file,
-add {\tt -static} to {\tt GM\_ADD\_LIBS}
+\item If you want to statically link the standard libraries into the 
+{\tt mex} file, add {\tt -static} to {\tt GM\_ADD\_LIBS}
 \end{itemize}
 
 \subsubsection{Adjusting configuration and build of \Ipopt}
@@ -1273,10 +1276,9 @@ With \Ipopt 3.11, a \emph{site script for configure} has been added to the
 \Matlab interface. This script takes care of setting configure options in a 
 way that is appropriate for building an \Ipopt { \tt mex} file that is useable via
 \Matlab. Therefore, instead of setting configure options as described in the 
-previous section, it should be sufficient to create a folder {\tt \$IPOPTDIR/build/share}, copy the site file to that folder, and rename it to {\tt config.site} before running configure.
-Alternatively, you can setup an environment variable 
-{\tt CONFIG\_SITE} that points to the site file
-{\tt \$IPOPTDIR/contrib/MatlabInterface/MatlabInterface.site}.
+previous section, it should be sufficient to create a directory {\tt \$IPOPTDIR/build/share}, copy the site file {\tt \$IPOPTDIR/contrib/MatlabInterface/MatlabInterface.site} to that directory, and rename it to {\tt config.site} before running configure.
+Alternatively, you can set an environment variable 
+{\tt CONFIG\_SITE} that points to the site file.
 
 This site script sets the configure flags (if not specified by the user)
 {\tt --disable-shared --with-pic --with-blas=BUILD --with-lapack=BUILD}.
