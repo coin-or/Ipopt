@@ -2972,6 +2972,50 @@ with the {\tt User\_Requested\_Stop} status.  If you do not implement
 this method (as we do in this example), the default implementation
 always returns {\tt true}.
 
+A frequently asked question is how to access the values of the primal and dual variables in this callback. The values are stored in the {\tt ip\_cq} object for the \emph{internal representation} of the problem.
+To access the values in a form that corresponds to those used in the evaluation routines, the user has to request \Ipopt's {\tt TNLPAdapter} object to ``resort'' the data vectors and to fill in information about possibly filtered out fixed variables.
+The {\tt TNLPAdapter} can be accessed as follows.
+First, add the following includes to your {\tt TNLP} implementation:
+\begin{verbatim}
+  #include "IpIpoptCalculatedQuantities.hpp"
+  #include "IpIpoptData.hpp"
+  #include "IpTNLPAdapter.hpp"
+  #include "IpOrigIpoptNLP.hpp"
+\end{verbatim}
+Next, add the following code to your implementation of the {\tt intermediate\_callback}:
+\begin{verbatim}
+  Ipopt::TNLPAdapter* tnlp_adapter = NULL;
+  if( ip_cq != NULL )
+  {
+    Ipopt::OrigIpoptNLP* orignlp;
+    orignlp = dynamic_cast<OrigIpoptNLP*>(GetRawPtr(ip_cq->GetIpoptNLP()));
+    if( orignlp != NULL )
+      tnlp_adapter = dynamic_cast<TNLPAdapter*>(GetRawPtr(orignlp->nlp()));
+  }
+\end{verbatim}
+Note, that retrieving the {\tt TNLPAdapter} will fail (i.e., {\tt orignlp} will be {\tt NULL}) if \Ipopt is currently in restoration mode.
+If, however, {\tt tnlp\_adapter} is not {\tt NULL}, then it can be used to obtain primal variable values $x$ and the dual values for the constraints \ref{eq:constraints} and the variable bounds \ref{eq:bounds} as follows.
+\begin{verbatim}
+  double* primals = new double[n];
+  double* dualeqs = new double[m];
+  double* duallbs = new double[n];
+  double* dualubs = new double[n];
+  tnlp_adapter->ResortX(*ip_data->curr()->x(), primals);
+  tnlp_adapter->ResortG(*ip_data->curr()->y_c(), *ip_data->curr()->y_d(), dualeqs);
+  tnlp_adapter->ResortBnds(*ip_data->curr()->z_L(), duallbs,
+                           *ip_data->curr()->z_U(), dualubs);
+\end{verbatim}
+Additionally, information about scaled violation of constraint 
+\ref{eq:constraints} and violation of complementarity constraints can be 
+obtained via
+\begin{verbatim}
+  tnlp_adapter->ResortG(*ip_data->curr_c(), *ip_data->curr_d_minus_s(), ...)
+  tnlp_adapter->ResortBnds(*ip_data->curr_compl_x_L(), ...,
+                           *ip_data->curr_compl_x_U(), ...)
+  tnlp_adapter->ResortG(*ip_data->curr_compl_s_L(), ...)
+  tnlp_adapter->ResortG(*ip_data->curr_compl_s_U(), ...)
+\end{verbatim}
+
 \paragraph{Method \texttt{get\_scaling\_parameters}} with prototype
 \begin{verbatim}
 virtual bool get_scaling_parameters(Number& obj_scaling,
