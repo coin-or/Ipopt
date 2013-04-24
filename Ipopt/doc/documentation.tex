@@ -398,6 +398,15 @@ The following sections describe the installation procedures on
 UNIX/Linux systems.  For installation instructions on Windows
 see Section~\ref{WindowsInstall}.
 
+Additional hints on installing \Ipopt and its various interfaces is available
+on the \Ipopt and CoinHelp wiki pages, in particular
+\begin{itemize}
+\item \Ipopt compilation hints:\\
+  \url{https://projects.coin-or.org/Ipopt/wiki/CompilationHints}
+\item Current configuration and installation issues for COIN-OR projects:\\
+  \url{https://projects.coin-or.org/BuildTools/wiki/current-issues}
+\end{itemize}
+
 \subsection{Getting System Packages (Compilers, ...)}
 
 Many Linux distributions will come with all necessary tools. All you should need to do is check the compiler versions. On a Debian-based distribution, you can obtain all necessary tools with the following command:
@@ -1467,6 +1476,192 @@ above).
 %\item Giacomo Perantoni's experiences and help with the \Matlab interface on 
 %Windows:\\ \url{http://users.ox.ac.uk/~newc3480}
 %\end{itemize}
+
+
+\subsection{Expert Installation Options for \Ipopt}\label{ExpertInstall}
+
+The configuration script and Makefiles in the \Ipopt distribution
+have been created using GNU's {\tt autoconf} and {\tt automake}.  They
+attempt to automatically adapt the compiler settings etc.\ to the
+system they are running on.  We tested the provided scripts for a
+number of different machines, operating systems and compilers, but you
+might run into a situation where the default setting does not work, or
+where you need to change the settings to fit your particular
+environment.
+
+In general, you can see the list of options and variables that can be
+set for the {\tt configure} script by typing \verb/configure --help/.
+Also, the generic COIN-OR help pages are a valuable resource of
+information:
+
+\centerline{\url{https://projects.coin-or.org/CoinHelp}}
+
+Below a few particular options are discussed:
+
+\begin{itemize}
+\item The {\tt configure} script tries to determine automatically, if
+  you have BLAS and/or LAPACK already installed on your system (trying
+  a few default libraries), and if it does not find them, it makes
+  sure that you put the source code in the required place.
+
+  However, you can specify a BLAS library (such as your local ATLAS
+  library\footnote{see \url{http://math-atlas.sourceforge.net}})
+  explicitly, using the \verb/--with-blas/ flag for {\tt configure}.
+  For example,
+
+  \verb|./configure --with-blas="-L$HOME/lib -lf77blas -lcblas -latlas"| %$
+
+  To tell the configure script to compile and use the downloaded BLAS
+  source files even if a BLAS library is found on your system, specify
+  \verb|--with-blas=BUILD|.
+
+  Similarly, you can use the \verb/--with-lapack/ switch to specify
+  the location of your LAPACK library, or use the keyword {\tt BUILD}
+  to force the \Ipopt makefiles to compile LAPACK together with
+  \Ipopt.
+
+\item Similarly, if you have a precompiled library containing the
+  HSL packages, you can specify the directory with the
+  \texttt{CoinHslConfig.h} header file with the \verb|--with-hsl-incdir| flag and
+  the linker flags with the \verb|--with-hsl-lib| flag. 
+  Analogously, use \verb|--with-asl-incdir| and \verb|--with-asl-lib| for
+  building against a precompiled AMPL solver library.
+
+\item If you want to compile \Ipopt with the linear solver Pardiso
+  (see Section~\ref{sec:Pardiso}), you need to specify the link flags
+  for the library with the \verb|--with-pardiso| flag, including
+  required additional libraries and flags.  For example, if you want
+  to compile \Ipopt with the parallel version of Pardiso (located in
+  {\tt \$HOME/lib}) on an AIX system in 64bit mode, you should add the
+  flag
+
+  \verb|--with-pardiso="-qsmp=omp $HOME/lib/libpardiso_P4AIX51_64_P.so"|  %$
+
+  If you are using the parallel version of Pardiso, you need to
+  specify the number of processors it should run on with the
+  environment variable \verb|OMP_NUM_THREADS|, as described in the
+  Pardiso manual.
+
+\item If you want to compile \Ipopt with the linear solver WSMP (see
+  Section~\ref{sec:WSMP}), you need to specify the link flags for the
+  library with the \verb|--with-wsmp| flag, including required
+  additional libraries and flags.  For example, if you want to compile
+  \Ipopt with WSMP (located in {\tt \$HOME/lib}) on an Intel IA32
+  Linux system, you should add the flag
+
+  \verb|--with-wsmp="$HOME/lib/wsmp/wsmp-Linux/lib/IA32/libwsmp.a -lpthread"| %$
+
+\item If you want to compile \Ipopt with a precompiled MUMPS library
+  (see Section~\ref{sec:MUMPS}), you need to specify the directory containing
+  the MUMPS header files with the \verb|--with-mumps-incdir| flag,
+  e.g.,
+
+  \verb|--with-mumps-incdir="$HOME/MUMPS/include"|  %$
+
+  and you also need to provide the link flags for MUMPS with the
+  \verb|--with-mumps-lib| flag.
+
+\item If you want to specify that you want to use particular
+  compilers, you can do so by adding the variables definitions for
+  {\tt CXX}, {\tt CC}, and {\tt F77} to the {\tt ./configure} command
+  line, to specify the C++, C, and Fortran compiler, respectively.
+  For example,
+
+  {\tt ./configure CXX=g++-4.2.0 CC=gcc-4.2.0 F77=gfortran-4.2.0}
+
+  In order to set the compiler flags, you should use the variables
+  {\tt CXXFLAGS}, {\tt CFLAGS}, {\tt FFLAGS}.  Note, that the \Ipopt
+  code uses ``{\tt dynamic\_cast}''.  Therefore it is necessary that
+  the C++ code is compiled including RTTI (Run-Time Type Information).
+  Some compilers need to be given special flags to do that (e.g.,
+  ``{\tt -qrtti=dyna}'' for the AIX {\tt xlC} compiler).
+
+  Please also check the generic COIN-OR help page at
+
+  \centerline{\url{https://projects.coin-or.org/CoinHelp/wiki/user-configure\#GivingOptions}}
+
+  for the description of more variables that can be set for {\tt
+    configure}.
+
+\item By default, the \Ipopt library is compiled as a shared library,
+  on systems where this is supported.  If you want to generate a
+  static library, you need to specify the {\tt --disable-shared}
+  flag.  If you want to compile both shared and static libraries, you
+  should specify the {\tt --enable-static} flag.
+
+\item If you want to link the \Ipopt library with a main program
+  written in C or Fortran, the C and Fortran compiler doing the
+  linking of the executable needs to be told about the C++ runtime
+  libraries.  Unfortunately, the current version of {\tt autoconf}
+  does not provide the automatic detection of those libraries.  We
+  have hard-coded some default values for some systems and compilers,
+  but this might not work all the time.
+
+  If you have problems linking your Fortran or C code with the \Ipopt
+  library {\tt libipopt.a} and the linker complains about missing
+  symbols from C++ (e.g., the standard template library), you should
+  specify the C++ libraries with the {\tt CXXLIBS} variable.  To find out
+  what those libraries are, it is probably helpful to link a  simple C++
+  program with verbose compiler output.
+
+  For example, for the Intel compilers on a Linux system, you
+  might need to specify something like
+
+  {\tt ./configure CC=icc F77=ifort CXX=icpc $\backslash$\\ \hspace*{14ex} CXXLIBS='-L/usr/lib/gcc-lib/i386-redhat-linux/3.2.3 -lstdc++'}
+
+\item Compilation in 64bit mode sometimes requires some special
+  consideration.  For example, for compilation of 64bit code on AIX,
+  we recommend the following configuration
+
+  {\tt ./configure AR='ar -X64' NM='nm -X64' $\backslash$\\
+    \hspace*{14ex} CC='xlc -q64' F77='xlf -q64' CXX='xlC
+    -q64'$\backslash$\\ \hspace*{14ex} CFLAGS='-O3
+    -bmaxdata:0x3f0000000'
+    $\backslash$\\ \hspace*{14ex} FFLAGS='-O3 -bmaxdata:0x3f0000000' $\backslash$\\
+    \hspace*{14ex} CXXFLAGS='-qrtti=dyna -O3 -bmaxdata:0x3f0000000'}
+
+  (Alternatively, a simpler solution for AIX is to set the environment variable {\tt OBJECT\_MODE} to 64.)
+
+% \item To build library/archive files (with the ending {\tt .a})
+%   including C++ code in some environments, it is necessary to use the
+%   C++ compiler instead of {\tt ar} to build the archive.  This is for
+%   example the case for some older compilers on SGI and SUN.  For this,
+%   the {\tt configure} variables {\tt AR}, {\tt ARFLAGS}, and {\tt
+%     AR\_X} are provided.  Here, {\tt AR} specifies the command for the
+%   archiver for creating an archive, and {\tt ARFLAGS} specifies
+%   additional flags.  {\tt AR\_X} contains the command for extracting
+%   all files from an archive.  For example, the default setting for SUN
+%   compilers for our configure script is
+
+%   {\tt AR='CC -xar' ARFLAGS='-o' AR\_X='ar x'}
+
+\item It is possible to compile the \Ipopt library in a debug
+  configuration, by specifying \verb|--enable-debug|.  Then the
+  compilers will use the debug flags (unless the compilation flag
+  variables are overwritten in the {\tt configure} command line)
+
+  Also, you can tell \Ipopt to do some additional runtime sanity
+  checks, by specifying the flag {\tt --with-ipopt-checklevel=1}.
+
+  This usually leads to a significant slowdown of the code, but might
+  be helpful when debugging something.
+
+% We assume vpath installations already during this chapter.
+%\item It is not necessary to produce the binary files in the
+%  directories where the source files are.  If you want to compile the
+%  code on different systems or with different compilers/options on a
+%  shared file system, you can keep one single copy of the source files
+%  in one directory, and the binary files for each configuration in
+%  separate directories.  For this, simply run the configure script in
+%  the directory where you want the base directory for the \Ipopt
+%  binary files.  For example:
+%
+%  {\tt \$ mkdir \$HOME/Ipopt-objects}\\
+%  {\tt \$ cd \$HOME/Ipopt-objects}\\
+%  {\tt \$ \$HOME/CoinIpopt/configure}
+
+\end{itemize}
+
 
 \section{Interfacing your NLP to \Ipopt: A tutorial example.}
 \label{sec:tutorial-example}
@@ -4400,189 +4595,6 @@ the restoration phase, use the keyword
 The most common options are:
 
 \input{options.tex}
-
-\section{Detailed Installation Information}\label{ExpertInstall}
-
-The configuration script and Makefiles in the \Ipopt distribution
-have been created using GNU's {\tt autoconf} and {\tt automake}.  They
-attempt to automatically adapt the compiler settings etc.\ to the
-system they are running on.  We tested the provided scripts for a
-number of different machines, operating systems and compilers, but you
-might run into a situation where the default setting does not work, or
-where you need to change the settings to fit your particular
-environment.
-
-In general, you can see the list of options and variables that can be
-set for the {\tt configure} script by typing \verb/configure --help/.
-Also, the generic COIN-OR help pages are a valuable resource of
-information:
-
-\centerline{\url{https://projects.coin-or.org/CoinHelp}}
-
-Below a few particular options are discussed:
-
-\begin{itemize}
-\item The {\tt configure} script tries to determine automatically, if
-  you have BLAS and/or LAPACK already installed on your system (trying
-  a few default libraries), and if it does not find them, it makes
-  sure that you put the source code in the required place.
-
-  However, you can specify a BLAS library (such as your local ATLAS
-  library\footnote{see \url{http://math-atlas.sourceforge.net}})
-  explicitly, using the \verb/--with-blas/ flag for {\tt configure}.
-  For example,
-
-  \verb|./configure --with-blas="-L$HOME/lib -lf77blas -lcblas -latlas"| %$
-
-  To tell the configure script to compile and use the downloaded BLAS
-  source files even if a BLAS library is found on your system, specify
-  \verb|--with-blas=BUILD|.
-
-  Similarly, you can use the \verb/--with-lapack/ switch to specify
-  the location of your LAPACK library, or use the keyword {\tt BUILD}
-  to force the \Ipopt makefiles to compile LAPACK together with
-  \Ipopt.
-
-\item Similarly, if you have a precompiled library containing the
-  HSL packages, you can specify the directory with the
-  \texttt{CoinHslConfig.h} header file with the \verb|--with-hsl-incdir| flag and
-  the linker flags with the \verb|--with-hsl-lib| flag. 
-  Analogously, use \verb|--with-asl-incdir| and \verb|--with-asl-lib| for
-  building against a precompiled AMPL solver library.
-
-\item If you want to compile \Ipopt with the linear solver Pardiso
-  (see Section~\ref{sec:Pardiso}), you need to specify the link flags
-  for the library with the \verb|--with-pardiso| flag, including
-  required additional libraries and flags.  For example, if you want
-  to compile \Ipopt with the parallel version of Pardiso (located in
-  {\tt \$HOME/lib}) on an AIX system in 64bit mode, you should add the
-  flag
-
-  \verb|--with-pardiso="-qsmp=omp $HOME/lib/libpardiso_P4AIX51_64_P.so"|  %$
-
-  If you are using the parallel version of Pardiso, you need to
-  specify the number of processors it should run on with the
-  environment variable \verb|OMP_NUM_THREADS|, as described in the
-  Pardiso manual.
-
-\item If you want to compile \Ipopt with the linear solver WSMP (see
-  Section~\ref{sec:WSMP}), you need to specify the link flags for the
-  library with the \verb|--with-wsmp| flag, including required
-  additional libraries and flags.  For example, if you want to compile
-  \Ipopt with WSMP (located in {\tt \$HOME/lib}) on an Intel IA32
-  Linux system, you should add the flag
-
-  \verb|--with-wsmp="$HOME/lib/wsmp/wsmp-Linux/lib/IA32/libwsmp.a -lpthread"| %$
-
-\item If you want to compile \Ipopt with a precompiled MUMPS library
-  (see Section~\ref{sec:MUMPS}), you need to specify the directory containing
-  the MUMPS header files with the \verb|--with-mumps-incdir| flag,
-  e.g.,
-
-  \verb|--with-mumps-incdir="$HOME/MUMPS/include"|  %$
-
-  and you also need to provide the link flags for MUMPS with the
-  \verb|--with-mumps-lib| flag.
-
-\item If you want to specify that you want to use particular
-  compilers, you can do so by adding the variables definitions for
-  {\tt CXX}, {\tt CC}, and {\tt F77} to the {\tt ./configure} command
-  line, to specify the C++, C, and Fortran compiler, respectively.
-  For example,
-
-  {\tt ./configure CXX=g++-4.2.0 CC=gcc-4.2.0 F77=gfortran-4.2.0}
-
-  In order to set the compiler flags, you should use the variables
-  {\tt CXXFLAGS}, {\tt CFLAGS}, {\tt FFLAGS}.  Note, that the \Ipopt
-  code uses ``{\tt dynamic\_cast}''.  Therefore it is necessary that
-  the C++ code is compiled including RTTI (Run-Time Type Information).
-  Some compilers need to be given special flags to do that (e.g.,
-  ``{\tt -qrtti=dyna}'' for the AIX {\tt xlC} compiler).
-
-  Please also check the generic COIN-OR help page at
-
-  \centerline{\url{https://projects.coin-or.org/CoinHelp/wiki/user-configure\#GivingOptions}}
-
-  for the description of more variables that can be set for {\tt
-    configure}.
-
-\item By default, the \Ipopt library is compiled as a shared library,
-  on systems where this is supported.  If you want to generate a
-  static library, you need to specify the {\tt --disable-shared}
-  flag.  If you want to compile both shared and static libraries, you
-  should specify the {\tt --enable-static} flag.
-
-\item If you want to link the \Ipopt library with a main program
-  written in C or Fortran, the C and Fortran compiler doing the
-  linking of the executable needs to be told about the C++ runtime
-  libraries.  Unfortunately, the current version of {\tt autoconf}
-  does not provide the automatic detection of those libraries.  We
-  have hard-coded some default values for some systems and compilers,
-  but this might not work all the time.
-
-  If you have problems linking your Fortran or C code with the \Ipopt
-  library {\tt libipopt.a} and the linker complains about missing
-  symbols from C++ (e.g., the standard template library), you should
-  specify the C++ libraries with the {\tt CXXLIBS} variable.  To find out
-  what those libraries are, it is probably helpful to link a  simple C++
-  program with verbose compiler output.
-
-  For example, for the Intel compilers on a Linux system, you
-  might need to specify something like
-
-  {\tt ./configure CC=icc F77=ifort CXX=icpc $\backslash$\\ \hspace*{14ex} CXXLIBS='-L/usr/lib/gcc-lib/i386-redhat-linux/3.2.3 -lstdc++'}
-
-\item Compilation in 64bit mode sometimes requires some special
-  consideration.  For example, for compilation of 64bit code on AIX,
-  we recommend the following configuration
-
-  {\tt ./configure AR='ar -X64' NM='nm -X64' $\backslash$\\
-    \hspace*{14ex} CC='xlc -q64' F77='xlf -q64' CXX='xlC
-    -q64'$\backslash$\\ \hspace*{14ex} CFLAGS='-O3
-    -bmaxdata:0x3f0000000'
-    $\backslash$\\ \hspace*{14ex} FFLAGS='-O3 -bmaxdata:0x3f0000000' $\backslash$\\
-    \hspace*{14ex} CXXFLAGS='-qrtti=dyna -O3 -bmaxdata:0x3f0000000'}
-
-  (Alternatively, a simpler solution for AIX is to set the environment variable {\tt OBJECT\_MODE} to 64.)
-
-% \item To build library/archive files (with the ending {\tt .a})
-%   including C++ code in some environments, it is necessary to use the
-%   C++ compiler instead of {\tt ar} to build the archive.  This is for
-%   example the case for some older compilers on SGI and SUN.  For this,
-%   the {\tt configure} variables {\tt AR}, {\tt ARFLAGS}, and {\tt
-%     AR\_X} are provided.  Here, {\tt AR} specifies the command for the
-%   archiver for creating an archive, and {\tt ARFLAGS} specifies
-%   additional flags.  {\tt AR\_X} contains the command for extracting
-%   all files from an archive.  For example, the default setting for SUN
-%   compilers for our configure script is
-
-%   {\tt AR='CC -xar' ARFLAGS='-o' AR\_X='ar x'}
-
-\item It is possible to compile the \Ipopt library in a debug
-  configuration, by specifying \verb|--enable-debug|.  Then the
-  compilers will use the debug flags (unless the compilation flag
-  variables are overwritten in the {\tt configure} command line)
-
-  Also, you can tell \Ipopt to do some additional runtime sanity
-  checks, by specifying the flag {\tt --with-ipopt-checklevel=1}.
-
-  This usually leads to a significant slowdown of the code, but might
-  be helpful when debugging something.
-
-\item It is not necessary to produce the binary files in the
-  directories where the source files are.  If you want to compile the
-  code on different systems or with different compilers/options on a
-  shared file system, you can keep one single copy of the source files
-  in one directory, and the binary files for each configuration in
-  separate directories.  For this, simply run the configure script in
-  the directory where you want the base directory for the \Ipopt
-  binary files.  For example:
-
-  {\tt \$ mkdir \$HOME/Ipopt-objects}\\
-  {\tt \$ cd \$HOME/Ipopt-objects}\\
-  {\tt \$ \$HOME/CoinIpopt/configure}
-
-\end{itemize}
 
 %\bibliographystyle{plain}
 %\bibliography{/home/andreasw/tex/andreas}
