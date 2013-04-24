@@ -31,6 +31,7 @@
 \newcommand{\Ipopt}{\textsc{Ipopt}\xspace}
 \newcommand{\JIpopt}{\textsc{JIpopt}\xspace}
 \newcommand{\ipoptr}{\texttt{ipoptr}\xspace}
+\newcommand{\sIpopt}{\textsc{sIpopt}\xspace}
 \newcommand{\Matlab}{\textsc{MATLAB}\xspace}
 
 %\htmltitle{Ipopt documentation}
@@ -4077,6 +4078,35 @@ If active-set changes are observed between subsequent solutions, then this strat
 You might also want to try the adaptive barrier update (instead of the default monotone one where above we chose the initial value $10^{-6}$) when doing the warm start. This can be activated with the {\tt mu\_strategy adaptive} option, and the option {\tt mu\_oracle} gives some alternative choices. In general, the adaptive choice often leads to less iterations, but the computational cost per iteration might be higher.
 
 The file {\tt \$IPOPTDIR/Ipopt/doc/hs071\_warmstart.mod} illustrates the use of the warm-start feature on the HS071 problem, see also Section \ref{sec.ipoptampl}.
+
+\subsection{\sIpopt: Optimal Sensitivity Based on \Ipopt}
+\hfill \textit{based on documentation by Hans Pirnay}\footnote{RWTH Aachen, {\tt hans.pirnay@avt.rwth-aachen.de}}
+\medskip
+
+The \sIpopt project provides a toolbox that uses NLP sensitivity theory to generate fast approximations to solutions when parameters in the problem change. It has been developed primarily by Hans Pirnay (RWTH-Aachen), Rodrigo L\'opez-Negrete (CMU), and Lorenz Biegler (CMU).
+
+Sensitivity of nonlinear programming problems is a key step in any optimization study. Sensitivity provides information on regularity and curvature conditions at KKT points, assesses which variables play dominant roles in the optimization, and provides first order estimates for parametric nonlinear programs. Moreover, for NLP algorithms that use exact second derivatives, sensitivity can be implemented very efficiently within NLP solvers and provide valuable information with very little added computation. This implementation provides \Ipopt with the capabilities to calculate sensitivities, and approximate perturbed solutions with them.
+
+The basic sensitivity strategy implemented here is based on the application of the Implicit Function Theorem (IFT) to the KKT conditions of the NLP. As shown by Fiacco (1983), sensitivities can be obtained from a solution with suitable regularity conditions merely by solving a linearization of the KKT conditions. More details can be found in \cite{PLNB:sIpopt}.
+If you are using \sIpopt for your research, please cite \cite{PLNB:sIpopt}.
+
+The \sIpopt project is available in the \Ipopt repository under
+{\tt \$IPOPTDIR/Ipopt/contrib/sIPOPT}.
+After having installed \Ipopt successfully, \sIpopt can be build and installed by changing to the directory {\tt \$IPOPTDIR/build/Ipopt/contrib/sIPOPT} and executing {\tt make install}. 
+This should copy the generated libraries {\tt libsipopt.*} to {\tt \$IPOPTDIR/build/lib} and an AMPL executable {\tt ipopt\_sens} to {\tt \$IPOPTDIR/build/bin}.
+
+The files {\tt \$IPOPTDIR/Ipopt/contrib/sIPOPT/examples/parametric\_ampl/parametric.\{mod,run\}} are an example that shows how to use \sIpopt to solve the NLP
+\begin{align}
+\min\quad & x_1^2 + x_2^2 + x_3^2, \\
+\mathrm{such~that}\quad & 6x_1 + 3x_2 + 2x_3 = p_1, \\
+ & p_2 x_1 + x_2 - x_3  = 1, \\
+ & x_1, x_2, x_3 \geq 0,
+\end{align}
+where we perturb the parameters $p_1$ and $p_2$ from $p_a = (p_1, p_2) = (5, 1)$ to $p_b = (4.5, 1)$.
+
+
+Note, that \sIpopt has been developed under the constraint that it must work with the regular \Ipopt code. Due to this constraint, some compromises had to be made.
+However, there is an ongoing effort to develop \sIpopt 2, which is a fork of the \Ipopt code that allows for the explicit definition of parametric NLPs. This code can be found at \url{https://github.com/athrpf/sipopt2}. If you have questions about \sIpopt 2, please contact ​Hans Pirnay.
 
 \section{\Ipopt Options}\label{sec:options}
 \Ipopt has many (maybe too many) options that can be adjusted for the
