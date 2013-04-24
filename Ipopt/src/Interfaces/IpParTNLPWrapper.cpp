@@ -509,3 +509,19 @@ void ParTNLPWrapper::finalize_solution(SolverReturn status,
 {
   tnlpobj_->finalize_solution (status, n, x, z_L, z_U, m, g, lambda, obj_value, ip_data, ip_cq);
 }
+
+bool ParTNLPWrapper::intermediate_callback(AlgorithmMode mode,
+                                       Index iter, Number obj_value,
+                                       Number inf_pr, Number inf_du,
+                                       Number mu, Number d_norm,
+                                       Number regularization_size,
+                                       Number alpha_du, Number alpha_pr,
+                                       Index ls_trials,
+                                       const IpoptData* ip_data,
+                                       IpoptCalculatedQuantities* ip_cq)
+{
+  return tnlpobj_->intermediate_callback(mode, iter, obj_value, inf_pr, inf_du,
+                                    mu, d_norm, regularization_size,
+                                    alpha_du, alpha_pr, ls_trials,
+                                    ip_data, ip_cq);
+}
