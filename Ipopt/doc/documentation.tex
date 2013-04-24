@@ -1663,7 +1663,7 @@ Below a few particular options are discussed:
 \end{itemize}
 
 
-\section{Interfacing your NLP to \Ipopt: A tutorial example.}
+\section{Interfacing your NLP to \Ipopt.}
 \label{sec:tutorial-example}
 
 \Ipopt has been designed to be flexible for a wide variety of
@@ -1705,7 +1705,7 @@ x_* = (1.00000000, 4.74299963, 3.82114998, 1.37940829). \nonumber
 You can find further, less documented examples for using \Ipopt from
 your own source code in the {\tt Ipopt/examples} subdirectory.
 
-\subsection{Using \Ipopt through AMPL}
+\subsection{Using \Ipopt through AMPL} \label{sec.ipoptampl}
 Using the AMPL solver executable is by far the easiest way to
 solve a problem with \Ipopt. The user must simply formulate the problem
 in AMPL syntax, and solve the problem through the AMPL environment.
@@ -4050,6 +4050,33 @@ approximate the Hessian in the space of the nonlinear variables, if
 you are using the quasi-Newton option for AMPL models.)  Currently,
 those two methods are not available through the C or Fortran
 interface.
+
+\subsection{Warm-Starting Capabilities via AMPL}
+\hfill \textit{based on documentation by Victor M. Zavala}\footnote{Department of Chemical Engineering, Carnegie Mellon University}
+\medskip
+
+Warm-starting an interior-point algorithm is an important issue. One of the main difficulties arises from the fact that full-space variable information is required to generate the warm-starting point. While \Ipopt is currently equipped to retrieve and receive this type of information through the {\tt TNLP} interface, there exist some communication barriers in the AMPL interface. When the user solves the problem \eqref{eq:obj}--\eqref{eq:bounds}, \Ipopt will only return the optimal values of the primal variables $x$ and of the constraint multipliers corresponding to the active bounds of $g(x)$ (see \eqref{eq:constraints}). The constraint multiplier values can be accessed through the {\tt .dual} suffix or through the {\tt .sol} file. If this information is used to solve the same problem again, you will notice that \Ipopt will take some iterations in finding the same solution. The reason for this is that we are missing the input information of the multipliers $z^L$ and $z^U$ corresponding to the variable bounds (see \eqref{eq:bounds}).
+
+However, \Ipopt also passes the values of the bound multipliers $z^L$ and $z^U$ to AMPL. This will be communicated to the AMPL user through the suffixes {\tt ipopt\_zL\_out} and {\tt ipopt\_zU\_out}, respectively. The user does not need to declare these suffixes, they will be generated automatically in the AMPL interface. The user can use the suffix values to initialize the bound multipliers for subsequent calls. In order to pass this information to \Ipopt, the user will need to declare and assign values to the suffixes {\tt ipopt\_zL\_in} and {\tt ipopt\_zU\_in}. For instance, for a given variable {\tt x[i]}, this can be done by setting:
+\begin{verbatim}
+  let x[i].ipopt_zL_in := x[i].ipopt_zL_out;
+  let x[i].ipopt_zU_in := x[i].ipopt_zU_out;
+\end{verbatim}
+
+If the user does not specify some of these values, \Ipopt will set these multipliers to 1.0 (as before). In order to make the warm-start effective, the user has control over the following options from AMPL:
+\begin{verbatim}
+  warm_start_init_point
+  warm_start_bound_push
+  warm_start_mult_bound_push
+\end{verbatim}
+Please refer to Appendix \ref{app.options_ref} for more information on the use of these options.
+
+Note, that the use of this feature is far from solving the complicated issue of warm-starting interior-point algorithms. As a general advice, this feature will be useful if the user observes that the solution of subsequent problems (i.e., for different data instances) preserves the same set of active inequalities and bounds (monitor the values of $z^L$ and $z^U$ for subsequent solutions). In this case, initializing the bound multipliers and setting {\tt warm\_start\_init\_point} to {\tt yes} and setting {\tt warm\_start\_bound\_push}, {\tt warm\_start\_mult\_bound\_push} and {\tt mu\_init} to a small value ($10^{-6}$ or so) will reduce significantly the number of iterations. This is particularly useful in setting up on-line applications and high-level optimization strategies in AMPL.
+If active-set changes are observed between subsequent solutions, then this strategy might not decrease the number of iterations (in some cases, it might even tend to increase the number of iterations).
+
+You might also want to try the adaptive barrier update (instead of the default monotone one where above we chose the initial value $10^{-6}$) when doing the warm start. This can be activated with the {\tt mu\_strategy adaptive} option, and the option {\tt mu\_oracle} gives some alternative choices. In general, the adaptive choice often leads to less iterations, but the computational cost per iteration might be higher.
+
+The file {\tt \$IPOPTDIR/Ipopt/doc/hs071\_warmstart.mod} illustrates the use of the warm-start feature on the HS071 problem, see also Section \ref{sec.ipoptampl}.
 
 \section{\Ipopt Options}\label{sec:options}
 \Ipopt has many (maybe too many) options that can be adjusted for the
