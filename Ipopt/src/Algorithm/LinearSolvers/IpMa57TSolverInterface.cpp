@@ -306,10 +306,11 @@ namespace Ipopt
     roptions->AddStringOption2(
       "ma57_automatic_scaling",
       "Controls MA57 automatic scaling",
-      "yes",
+      "no",
       "no", "Do not scale the linear system matrix",
       "yes", "Scale the linear system matrix",
-      "This option controls the internal scaling option of MA57."
+      "This option controls the internal scaling option of MA57. "
+      "For higher reliability of the MA57 solver, you may want to set this option to yes. "
       "This is ICNTL(15) in MA57.");
 
     // CET: 04-29-2010
