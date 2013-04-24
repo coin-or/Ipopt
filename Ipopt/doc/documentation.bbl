@@ -11,6 +11,13 @@ R.~Fourer, D.~M. Gay, and B.~W. Kernighan.
 \newblock {\em AMPL: A Modeling Language For Mathematical Programming}.
 \newblock Thomson Publishing Company, Danvers, MA, USA, 1993.
 
+\bibitem{SWH:parallel}
+O.~Schenk, A.~W\"achter, and M.~Hagemann.
+\newblock Matching-based preprocessing algorithms to the solution of saddle-point problems in large-scale nonconvex interior-point optimization.
+\newblock {\em Computational Optimization Applications}, 36(2-3):321--341, 2007
+\newblock doi: \href{http://dx.doi.org/10.1007/s10589-006-9003-y}{10.1007/s10589-006-9003-y}.
+\newblock preprint at \url{http://www.research.ibm.com/people/a/andreasw/papers/rc23824.pdf}
+
 \bibitem{HS}
 W.~Hock and K.~Schittkowski.
 \newblock Test examples for nonlinear programming codes.
@@ -20,6 +27,12 @@ W.~Hock and K.~Schittkowski.
 J.~Nocedal, A.~W{\"a}chter, and R.~A. Waltz.
 \newblock Adaptive barrier strategies for nonlinear interior methods.
 \newblock {\em SIAM Journal on Optimization}, 19(4):1674--1693, 2008.
+
+\bibitem{PLNB:sIpopt} H.~Pirnay, R.~Lopez-Negrete, and L.~T.~Biegler.
+\newblock ​Optimal Sensitivity based on \Ipopt.
+\newblock {\em Mathematical Programming Computations}, 4(4):307--331, 2012.
+\newblock doi: \href{http://dx.doi.org/10.1007/s12532-012-0043-2}{10.1007/s12532-012-0043-2}.
+\newblock preprint at \url{http://www.optimization-online.org/DB_HTML/2011/04/3008.html}
 
 \bibitem{WaechterPhD}
 A.~W\"achter.
@@ -32,7 +45,7 @@ A.~W\"achter.
 A.~W\"achter.
 \newblock Short Tutorial: Getting Started With Ipopt in 90 Minutes.
 \newblock In {\em Combinatorial Scientific Computing} (U. Naumann, O. Schenk, H. D. Simon, eds.), 2009.
-\newblock \url{http://nbn-resolving.de/urn/resolver.pl?urn=urn:nbn:de:0030-drops-20890}
+\newblock \href{http://nbn-resolving.de/urn/resolver.pl?urn=urn:nbn:de:0030-drops-20890}{urn:nbn:de:0030-drops-20890}
 
 \bibitem{WaeBie05:filterlocal}
 A.~W{\"a}chter and L.~T. Biegler.
