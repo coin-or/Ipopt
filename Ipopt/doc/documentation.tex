@@ -251,6 +251,8 @@ the required third party dependencies.  %We have tested and used this
 %in connection with the Microsoft Visual C++ compiler, and instructions
 %on how to use it in this context are given below.
 
+When using GNU compilers, we recommend you use the same version numbers for {\tt gcc}, {\tt g++}, and {\tt gfortran}. For {\tt gfortran} specifically, we recommend versions newer than 4.5.2 (versions 4.5.1, 4.5.2, and before 4.2.0 are known to have bugs that caused issues with some of the newer Fortran 90 HSL linear solvers).
+
 \subsection{How to use \Ipopt}
 If desired, the \Ipopt distribution generates an executable for the
 modeling environment AMPL. As well, you can link your problem
@@ -396,6 +398,19 @@ The following sections describe the installation procedures on
 UNIX/Linux systems.  For installation instructions on Windows
 see Section~\ref{WindowsInstall}.
 
+\subsection{Getting System Packages (Compilers, ...)}
+
+Many Linux distributions will come with all necessary tools. All you should need to do is check the compiler versions. On a Debian-based distribution, you can obtain all necessary tools with the following command:
+\begin{verbatim}
+  sudo apt-get install gcc g++ gfortran subversion patch wget
+\end{verbatim}
+Replace {\tt apt-get} with your relevant package manager, e.g. {\tt yum} for Red Hat-based distributions, {\tt zypper} for SUSE, etc. The {\tt g++} and {\tt gfortran} compilers may need to be specified respectively as {\tt gcc-c++} and {\tt gcc-gfortran} with some package managers.
+
+On Mac OS X, you need either the Xcode Command Line Tools, available at \url{https://developer.apple.com/downloads} after registering as an Apple Developer, or a community alternative such as \url{https://github.com/kennethreitz/osx-gcc-installer/downloads} to install the gcc and g++ compilers.
+If you have a recent version of Xcode installed, the Command Line Tools are available under Preferences, Downloads. In Xcode 3.x, the Command Line Tools are contained in the optional item ``UNIX Dev Support'' during Xcode installation.
+%If you are using OS X 10.6 or earlier, then see the instructions at \url{http://kitcambridge.tumblr.com/post/17778742499/installing-the-xcode-command-line-tools-on-snow-leopard} on how to install the Xcode Command Line Tools without needing to download the rest of Xcode. 
+These items unfortunately do not come with a Fortran compiler, but you can get {\tt gfortran} from {\tt http://gcc.gnu.org/wiki/GFortranBinaries\#MacOS}. We have been able to compile \Ipopt using default Xcode versions of {\tt gcc} and {\tt g++} and a newer version of {\tt gfortran} from this link, but consistent version numbers may be an issue in future cases.
+
 \subsection{Getting the \Ipopt Code}
 \Ipopt is available from the COIN-OR subversion repository. You can
 either download the code using \texttt{svn} (the
@@ -520,6 +535,10 @@ on your system, please read the \texttt{INSTALL.*} files in the
 \texttt{\$IPOPTDIR/ThirdParty/Lapack} and
 \texttt{\$IPOPTDIR/ThirdParty/ASL} directories for alternative
 instructions.
+
+If you are having firewall issues with {\tt wget}, try opening the {\tt get.<library>} scripts and replace the line {\tt wgetcmd=wget} with {\tt wgetcmd="wget --passive-ftp"}.
+
+If you are getting permissions errors from tar, try opening the {\tt get.<library>} scripts and replace any instances of {\tt tar xf} with {\tt tar --no-same-owner -xf}.
 
 \subsubsection{Download HSL Subroutines}
 \label{sec:HSL}
@@ -838,7 +857,8 @@ compiler) and want to use those to compile \Ipopt, please see
 Section~\ref{CygwinInstallNative}.  If you use MSYS/MinGW (a
 light-weight UNIX-like environment for Windows), please consider the
 notes in Section~\ref{MinGWInstall}.
-%
+If you want to compile the \Ipopt\ {\tt mex} interface to \Matlab, then we recommend to use the MSYS/MinGW option.
+
 %The \Ipopt distribution also includes projects files for
 %Microsoft Visual Studio. % (see Section~\ref{VisualStudioInstall}).
 
@@ -873,7 +893,6 @@ Then you do the following steps (assuming here that you don't have any
 complications with firewall settings etc - in that case you might have
 to choose some connection settings differently):
 
-% TODO verify and update
 \begin{enumerate}
 \item Click next
 \item Select ``install from the internet'' (default) and click next
@@ -888,30 +907,35 @@ to choose some connection settings differently):
   You need to select the packages that you want to have installed.  By
   default, there are already selections, but the compilers are usually
   not pre-chosen.  You need to make sure that you select the GNU
-  compilers (for Fortran, C, and C++ --- together with the MinGW
-  options), the GNU Make, and Subversion.  For this, click on the "Devel"
-  branch (which opens a subtree) and select:
+  compilers (for Fortran, C, and C++), Subversion, and some additional tools.
+  For this, get the following packages from the associated branches:
   \begin{itemize}
-  \item gcc
-  \item gcc-core
-  \item gcc-g77  % FIXME no gcc-gfortran?
-  \item gcc-g++
-  \item gcc-mingw
-  \item gcc-mingw-core
-  \item gcc-mingw-g77
-  \item gcc-mingw-g++
-  \item make
-  \item subversion
+  \item ``Devel'': {\tt gcc4}
+  \item ``Devel'': {\tt gcc4-fortran}
+  \item ``Devel'': {\tt pkg-config}
+  \item ``Devel'': {\tt subversion}
+  \item ``Archive'': {\tt unzip}
+  \item ``Utils'': {\tt patch}
+  \item ``Web'': {\tt wget}
   \end{itemize}
-
-  Then, in the ``Web'' branch, please select ``wget'' (which will make
-  the installation of third party dependencies for \Ipopt easier)
-
+  When a Resolving Dependencies window comes up, be sure to
+  ``Select required packages (RECOMMENDED)''.
   This will automatically also select some other packages.
+  
 \item\label{it:cyg_done} Then you click on next, and Cygwin will be
   installed (follow the rest of the instructions and choose everything
   else to your liking).  At a later point you can easily add/remove
   packages with the setup program.
+
+\item The version of the GNU Make utility provided by the Cygwin installer 
+   will not work. Therefore, you need to download the fixed version from 
+  \url{http://www.cmake.org/files/cygwin/make.exe} and save it to {\tt C:$\backslash$cygwin$\backslash$bin}.
+   Double-check this new version by typing {\tt make --version} in a Cygwin 
+   terminal (see next point).
+   If you get an error {\tt -bash: /usr/bin/make: Bad address}, then try 
+   \url{http://www.cmake.org/files/cygwin/make.exe-cygwin1.7} instead, rename 
+   it to {\tt make.exe} and move it to {\tt C:$\backslash$cygwin$\backslash$bin}.
+   (Replace {\tt C:$\backslash$cygwin} with your installation location if different.)
 
 \item Now that you have Cygwin, you can open a Cygwin window, which is
   like a UNIX shell window.
@@ -937,13 +961,14 @@ to choose some connection settings differently):
 
   \texttt{make test}
 
-  \textbf{NOTE:} By default, the compiled binaries (library and
-  executables) will be ``Cygwin-native'', i.e., in order to run
-  executables using this, the {\tt Cygwin1.dll} has to be present
-  (e.g., in a Cygwin window).  If you want to compile things in a way
-  that allow your executables to run outside of Cygwin, e.g., in a
-  regular DOS prompt, you need to specify the option ``{\tt
-    --enable-doscompile}'' when you run {\tt configure}.
+% I think this is outdated nowadays:
+%  \textbf{NOTE:} By default, the compiled binaries (library and
+%  executables) will be ``Cygwin-native'', i.e., in order to run
+%  executables using this, the {\tt Cygwin1.dll} has to be present
+%  (e.g., in a Cygwin window).  If you want to compile things in a way
+%  that allow your executables to run outside of Cygwin, e.g., in a
+%  regular DOS prompt, you need to specify the option ``{\tt
+%    --enable-doscompile}'' when you run {\tt configure}.
 \end{enumerate}
 
 \subsubsection{Installation with Cygwin using the MSVC++ compiler}
@@ -1044,13 +1069,36 @@ install is the basic version\footnote{which used to come as a
 compilers, you need to install those as well, of course.
 
 A compilation with the GNU compilers works just like with any other
-UNIX system, as described in Section~\ref{sec.comp_and_inst}.  If you
-want to use the native MSVC++ compiler (with {\tt f2c} or a native
+UNIX system, as described in Section~\ref{sec.comp_and_inst}.
+That is, during the installation, select (at least) the C Compiler, C++ Compiler, Fortran Compiler, MSYS Basic System, and the MinGW Developer ToolKit. 
+Additionally, {\tt wget} and {\tt unzip} should be installed with the following command in an MSYS terminal:
+\begin{verbatim}
+  mingw-get install msys-wget msys-unzip
+\end{verbatim}
+
+If you want to use the native MSVC++ compiler (with {\tt f2c} or a native
 Fortran compiler), you essentially follow the steps outlined in
-Section~\ref{CygwinInstallNative}.  In the latter case, you again need
-to make sure that the environment variables are set for the compilers
-(see step~\ref{it:setupmsvcpath}), this time adding the line to the
-{\tt msys.bat} file.  %Also, you need to run the
+Section~\ref{CygwinInstallNative}. 
+Additionally, you need to make sure that the environment variables are set for 
+the compilers (see step~\ref{it:setupmsvcpath}), this time adding the line to 
+the {\tt msys.bat} file.
+
+For a 64-bit build, you will need to install also a MinGW-64 distribution.
+We recommend TDM-GCC, which is available from \url{http://sourceforge.net/projects/tdm-gcc/files/TDM-GCC\%20Installer/tdm64-gcc-4.7.1-3.exe/download}.
+Install MinGW-64 in a different folder than your existing 32-bit MinGW installation!
+The components you need are: {\tt core} (under {\tt gcc}), {\tt c++} (under {\tt gcc}), {\tt fortran} (under {\tt gcc}), {\tt openmp} (under {\tt gcc}, necessary if you want to use any multi-threaded linear solvers), {\tt binutils}, and {\tt mingw64-runtime}.
+
+After MinGW-64 is installed, open the file {\tt C:$\backslash$MinGW$\backslash$msys$\backslash$1.0$\backslash$etc$\backslash$fstab}, and replace the line
+\begin{verbatim}
+  C:\MinGW\     /mingw
+\end{verbatim}
+with
+\begin{verbatim}
+  C:\MinGW64\   /mingw
+\end{verbatim}
+(Replace paths with your installation locations if different.) 
+
+  %Also, you need to run the
 %\texttt{compile\_MS\_ASL} script in the \texttt{ThirdParty/ASL}
 %immediately after you run the configuration script.
 
