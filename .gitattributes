@@ -127,7 +127,6 @@ Ipopt/contrib/sIPOPT/examples/redhess_ampl/red_hess.run -text
 Ipopt/contrib/sIPOPT/examples/redhess_cpp/MySensTNLP.cpp -text
 Ipopt/contrib/sIPOPT/examples/redhess_cpp/MySensTNLP.hpp -text
 Ipopt/depcomp -text
-Ipopt/doc/documentation.pdf -text
 Ipopt/doc/options.tex -text
 Ipopt/examples/ScalableProblems/README -text
 Ipopt/examples/ScalableProblems/config.h.in -text
