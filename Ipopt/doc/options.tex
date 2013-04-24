@@ -36,6 +36,24 @@ Possible values:
    \item yes: print list
 \end{itemize}
 
+\paragraph{print\_frequency\_iter:}\label{sec:print_frequency_iter} Determines at which iteration frequency the summarizing iteration output line should be printed. $\;$ \\
+ Summarizing iteration output is printed every
+print\_frequency\_iter iterations, if at least
+print\_frequency\_time seconds have passed since
+last output. The valid range for this integer option is
+$1 \le {\tt print\_frequency\_iter } <  {\tt +inf}$
+and its default value is $1$.
+
+
+\paragraph{print\_frequency\_time:}\label{sec:print_frequency_time} Determines at which time frequency the summarizing iteration output line should be printed. $\;$ \\
+ Summarizing iteration output is printed if at
+least print\_frequency\_time seconds have passed
+since last output and the iteration number is a
+multiple of print\_frequency\_iter. The valid range for this real option is 
+$0 \le {\tt print\_frequency\_time } <  {\tt +inf}$
+and its default value is $0$.
+
+
 \paragraph{output\_file:}\label{sec:output_file} File name of desired output file (leave unset for no file output). $\;$ \\
  NOTE: This option only works when read from the
 ipopt.opt options file! An output file with this
@@ -1005,6 +1023,7 @@ Possible values:
    \item ma57: use the Harwell routine MA57
    \item ma77: use the Harwell routine HSL\_MA77
    \item ma86: use the Harwell routine HSL\_MA86
+   \item ma97: use the Harwell routine HSL\_MA97
    \item pardiso: use the Pardiso package
    \item wsmp: use WSMP package
    \item mumps: use MUMPS package
@@ -1407,8 +1426,10 @@ and its default value is $5$.
 
 \paragraph{ma57\_automatic\_scaling:}\label{sec:ma57_automatic_scaling} Controls MA57 automatic scaling $\;$ \\
  This option controls the internal scaling option
-of MA57.This is ICNTL(15) in MA57.
-The default value for this string option is "yes".
+of MA57. For higher reliability of the MA57
+solver, you may want to set this option to yes.
+This is ICNTL(15) in MA57.
+The default value for this string option is "no".
 \\ 
 Possible values:
 \begin{itemize}
@@ -1500,6 +1521,13 @@ $0 \le {\tt ma77\_u } \le 0.5$
 and its default value is $1 \cdot 10^{-08}$.
 
 
+\paragraph{ma77\_umax:}\label{sec:ma77_umax} Maximum Pivoting Threshold $\;$ \\
+ Maximum value to which u will be increased to
+improve quality. The valid range for this real option is 
+$0 \le {\tt ma77\_umax } \le 0.5$
+and its default value is $0.0001$.
+
+
 \subsection{MA86 Linear Solver}
 
 \paragraph{ma86\_print\_level:}\label{sec:ma86_print_level} Debug printing level for the linear solver MA86 $\;$ \\
@@ -1518,7 +1546,7 @@ and its default value is $32$.
 \paragraph{ma86\_order:}\label{sec:ma86_order} Controls type of ordering used by HSL\_MA86 $\;$ \\
  This option controls ordering for the solver
 HSL\_MA86.
-The default value for this string option is "auto".
+The default value for this string option is "amd".
 \\ 
 Possible values:
 \begin{itemize}
@@ -1566,6 +1594,203 @@ and its default value is $1 \cdot 10^{-08}$.
  Maximum value to which u will be increased to
 improve quality. The valid range for this real option is 
 $0 \le {\tt ma86\_umax } \le 0.5$
+and its default value is $0.0001$.
+
+
+\subsection{MA97 Linear Solver}
+
+\paragraph{ma97\_print\_level:}\label{sec:ma97_print_level} Debug printing level for the linear solver MA97 $\;$ \\
+ <0 no printing.
+0  Error and warning messages
+only.
+=1 Limited diagnostic printing.
+>1
+Additional diagnostic printing. The valid range for this integer option is
+${\tt -inf} <  {\tt ma97\_print\_level } <  {\tt +inf}$
+and its default value is $0$.
+
+
+\paragraph{ma97\_nemin:}\label{sec:ma97_nemin} Node Amalgamation parameter $\;$ \\
+ Two nodes in elimination tree are merged if
+result has fewer than ma97\_nemin variables. The valid range for this integer option is
+$1 \le {\tt ma97\_nemin } <  {\tt +inf}$
+and its default value is $8$.
+
+
+\paragraph{ma97\_order:}\label{sec:ma97_order} Controls type of ordering used by HSL\_MA97 $\;$ \\
+ This option controls ordering for the solver
+HSL\_MA97.
+The default value for this string option is "auto".
+\\ 
+Possible values:
+\begin{itemize}
+   \item auto: Use HSL\_MA97 heuristic to guess best of AMD
+and METIS
+   \item best: Try both AMD and MeTiS, pick best
+   \item amd: Use the HSL\_MC68 approximate minimum degree
+algorithm
+   \item metis: Use the MeTiS nested dissection algorithm
+   \item matched-auto: Use the HSL\_MC80 matching with heuristic
+choice of AMD or METIS
+   \item matched-metis: Use the HSL\_MC80 matching based ordering with
+METIS
+   \item matched-amd: Use the HSL\_MC80 matching based ordering with
+AMD
+\end{itemize}
+
+\paragraph{ma97\_scaling:}\label{sec:ma97_scaling} Specifies strategy for scaling in HSL\_MA97 linear solver $\;$ \\
+ Specifies strategy for scaling in HSL\_MA97
+linear solver
+The default value for this string option is "dynamic".
+\\ 
+Possible values:
+\begin{itemize}
+   \item none: Do not scale the linear system matrix
+   \item mc30: Scale all linear system matrices using MC30
+   \item mc64: Scale all linear system matrices using MC64
+   \item mc77: Scale all linear system matrices using MC77
+[1,3,0]
+   \item dynamic: Dynamically select scaling according to rules
+specifed by ma97\_scalingX and ma97\_switchX
+options.
+\end{itemize}
+
+\paragraph{ma97\_scaling1:}\label{sec:ma97_scaling1} First scaling. $\;$ \\
+ If ma97\_scaling=dynamic, this scaling is used
+according to the trigger ma97\_switch1. If
+ma97\_switch2 is triggered it is disabled.
+The default value for this string option is "mc64".
+\\ 
+Possible values:
+\begin{itemize}
+   \item none: No scaling
+   \item mc30: Scale linear system matrix using MC30
+   \item mc64: Scale linear system matrix using MC64
+   \item mc77: Scale linear system matrix using MC77 [1,3,0]
+\end{itemize}
+
+\paragraph{ma97\_scaling2:}\label{sec:ma97_scaling2} Second scaling. $\;$ \\
+ If ma97\_scaling=dynamic, this scaling is used
+according to the trigger ma97\_switch2. If
+ma97\_switch3 is triggered it is disabled.
+The default value for this string option is "mc64".
+\\ 
+Possible values:
+\begin{itemize}
+   \item none: No scaling
+   \item mc30: Scale linear system matrix using MC30
+   \item mc64: Scale linear system matrix using MC64
+   \item mc77: Scale linear system matrix using MC77 [1,3,0]
+\end{itemize}
+
+\paragraph{ma97\_scaling3:}\label{sec:ma97_scaling3} Third scaling. $\;$ \\
+ If ma97\_scaling=dynamic, this scaling is used
+according to the trigger ma97\_switch3.
+The default value for this string option is "mc64".
+\\ 
+Possible values:
+\begin{itemize}
+   \item none: No scaling
+   \item mc30: Scale linear system matrix using MC30
+   \item mc64: Scale linear system matrix using MC64
+   \item mc77: Scale linear system matrix using MC77 [1,3,0]
+\end{itemize}
+
+\paragraph{ma97\_small:}\label{sec:ma97_small} Zero Pivot Threshold $\;$ \\
+ Any pivot less than ma97\_small is treated as
+zero. The valid range for this real option is 
+$0 \le {\tt ma97\_small } <  {\tt +inf}$
+and its default value is $1 \cdot 10^{-20}$.
+
+
+\paragraph{ma97\_switch1:}\label{sec:ma97_switch1} First switch, determine when ma97\_scaling1 is enabled. $\;$ \\
+ If ma97\_scaling=dynamic, ma97\_scaling1 is
+enabled according to this condition. If
+ma97\_switch2 occurs this option is henceforth
+ignored
+The default value for this string option is "od\_hd\_reuse".
+\\ 
+Possible values:
+\begin{itemize}
+   \item never: Scaling is never enabled.
+   \item at\_start: Scaling to be used from the very start.
+   \item at\_start\_reuse: Scaling to be used on first iteration, then
+reused thereafter.
+   \item on\_demand: Scaling to be used after Ipopt request improved
+solution (i.e. iterative refinement has failed).
+   \item on\_demand\_reuse: As on\_demand, but reuse scaling from previous
+itr
+   \item high\_delay: Scaling to be used after more than 0.05*n
+delays are present
+   \item high\_delay\_reuse: Scaling to be used only when previous itr
+created more that 0.05*n additional delays,
+otherwise reuse scaling from previous itr
+   \item od\_hd: Combination of on\_demand and high\_delay
+   \item od\_hd\_reuse: Combination of on\_demand\_reuse and
+high\_delay\_reuse
+\end{itemize}
+
+\paragraph{ma97\_switch2:}\label{sec:ma97_switch2} Second switch, determine when ma97\_scaling2 is enabled. $\;$ \\
+ If ma97\_scaling=dynamic, ma97\_scaling2 is
+enabled according to this condition. If
+ma97\_switch3 occurs this option is henceforth
+ignored
+The default value for this string option is "never".
+\\ 
+Possible values:
+\begin{itemize}
+   \item never: Scaling is never enabled.
+   \item at\_start: Scaling to be used from the very start.
+   \item at\_start\_reuse: Scaling to be used on first iteration, then
+reused thereafter.
+   \item on\_demand: Scaling to be used after Ipopt request improved
+solution (i.e. iterative refinement has failed).
+   \item on\_demand\_reuse: As on\_demand, but reuse scaling from previous
+itr
+   \item high\_delay: Scaling to be used after more than 0.05*n
+delays are present
+   \item high\_delay\_reuse: Scaling to be used only when previous itr
+created more that 0.05*n additional delays,
+otherwise reuse scaling from previous itr
+   \item od\_hd: Combination of on\_demand and high\_delay
+   \item od\_hd\_reuse: Combination of on\_demand\_reuse and
+high\_delay\_reuse
+\end{itemize}
+
+\paragraph{ma97\_switch3:}\label{sec:ma97_switch3} Third switch, determine when ma97\_scaling3 is enabled. $\;$ \\
+ If ma97\_scaling=dynamic, ma97\_scaling3 is
+enabled according to this condition.
+The default value for this string option is "never".
+\\ 
+Possible values:
+\begin{itemize}
+   \item never: Scaling is never enabled.
+   \item at\_start: Scaling to be used from the very start.
+   \item at\_start\_reuse: Scaling to be used on first iteration, then
+reused thereafter.
+   \item on\_demand: Scaling to be used after Ipopt request improved
+solution (i.e. iterative refinement has failed).
+   \item on\_demand\_reuse: As on\_demand, but reuse scaling from previous
+itr
+   \item high\_delay: Scaling to be used after more than 0.05*n
+delays are present
+   \item high\_delay\_reuse: Scaling to be used only when previous itr
+created more that 0.05*n additional delays,
+otherwise reuse scaling from previous itr
+   \item od\_hd: Combination of on\_demand and high\_delay
+   \item od\_hd\_reuse: Combination of on\_demand\_reuse and
+high\_delay\_reuse
+\end{itemize}
+
+\paragraph{ma97\_u:}\label{sec:ma97_u} Pivoting Threshold $\;$ \\
+ See MA97 documentation. The valid range for this real option is 
+$0 \le {\tt ma97\_u } \le 0.5$
+and its default value is $1 \cdot 10^{-08}$.
+
+
+\paragraph{ma97\_umax:}\label{sec:ma97_umax} Maximum Pivoting Threshold $\;$ \\
+ See MA97 documentation. The valid range for this real option is 
+$0 \le {\tt ma97\_umax } \le 0.5$
 and its default value is $0.0001$.
 
 

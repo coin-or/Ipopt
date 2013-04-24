@@ -421,6 +421,7 @@ namespace Ipopt
           options_to_print.push_back("ma77_small");
           options_to_print.push_back("ma77_static");
           options_to_print.push_back("ma77_u");
+          options_to_print.push_back("ma77_umax");
 #endif
 
 #if defined(COINHSL_HAS_MA86) || defined(HAVE_LINEARSOLVERLOADER)
@@ -434,6 +435,24 @@ namespace Ipopt
           options_to_print.push_back("ma86_static");
           options_to_print.push_back("ma86_u");
           options_to_print.push_back("ma86_umax");
+#endif
+
+#if defined(COINHSL_HAS_MA97) || defined(HAVE_LINEARSOLVERLOADER)
+
+          options_to_print.push_back("#MA97 Linear Solver");
+          options_to_print.push_back("ma97_print_level");
+          options_to_print.push_back("ma97_nemin");
+          options_to_print.push_back("ma97_order");
+          options_to_print.push_back("ma97_scaling");
+          options_to_print.push_back("ma97_scaling1");
+          options_to_print.push_back("ma97_scaling2");
+          options_to_print.push_back("ma97_scaling3");
+          options_to_print.push_back("ma97_small");
+          options_to_print.push_back("ma97_switch1");
+          options_to_print.push_back("ma97_switch2");
+          options_to_print.push_back("ma97_switch3");
+          options_to_print.push_back("ma97_u");
+          options_to_print.push_back("ma97_umax");
 #endif
 
 #ifdef COIN_HAS_MUMPS
