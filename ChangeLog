@@ -2,6 +2,40 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
+2012-05-?? releases/3.11.0
+        - update and extension of Ipopt documentation
+        - updated build of doxygen documentation to comply with other COIN-OR projects
+        - localized global variables in TaggedObject and RegisteredOption,
+          so that Ipopt should now be threadsafe as long as Ipopt objects
+          (esp. SmartPtr's) are not shared between threads and a threadsafe
+          linear solver is used (e.g., MA27) [#167]
+        - no more need for whitespace character at end of options file
+        - added options print_frequency_iter and print_frequency_time to regulate
+          which iteration summary lines should be printed [#161]
+        - function evaluation timings are now available in OrigIpoptNLP [#86]
+        - some fixes to uncommon issues with the Ipopt SmartPtr [#162]
+
+        - new build system for Harwell codes (ThirdParty/HSL), which requires
+          the coin-hsl archives from http://www.hsl.rl.ac.uk/ipopt/;
+          previously downloaded HSL sources can still be used by placing them
+          into ThirdParty/HSLold, but this option may be removed in a future
+          Ipopt version
+        - new interfaces for Harwell codes HSL_MA77, HSL_MA86, and HSL_MA97;
+          see http://www.hsl.rl.ac.uk/ipopt/ about help on when to use which solver;
+          especially MA57 and HSL_MA97 can be considered to replace MA27;
+          however, MA27 is still the default for now
+        - changed default of ma57_automatic_scaling to no (faster in general,
+          but for higher reliability, you may want to set this option to yes)
+
+        - major improvements for building the MATLAB interface (see documentation)
+        - MATLAB interface now returns number of function evaluations, too
+        - the MA57 interface can now be used with the MA57 library that comes with
+          MATLAB (configure option --enable-matlab-ma57; cannot use Metis)
+        
+        - fixes to JIpopt buildsystem (now may work on windows and uses libtool)
+        
+        - simplified installation of R interface        
+
 2012-04-?? releases/3.10.4
         - fixed sign of dual values in AMPL solution again (with help of Gabe)
           [r2169, r2170, r2184, #183]
