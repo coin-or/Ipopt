@@ -59,7 +59,7 @@ CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libcommon_la_LIBADD =
 am_libcommon_la_OBJECTS = IpDebug.lo IpJournalist.lo IpObserver.lo \
-	IpOptionsList.lo IpRegOptions.lo IpUtils.lo
+	IpOptionsList.lo IpRegOptions.lo IpTaggedObject.lo IpUtils.lo
 libcommon_la_OBJECTS = $(am_libcommon_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -369,7 +369,7 @@ libcommon_la_SOURCES = \
 	IpRegOptions.cpp IpRegOptions.hpp \
 	IpReferenced.hpp \
 	IpSmartPtr.hpp \
-	IpTaggedObject.hpp \
+	IpTaggedObject.cpp IpTaggedObject.hpp \
 	IpTimedTask.hpp \
 	IpTypes.hpp \
 	IpUtils.cpp IpUtils.hpp
@@ -390,7 +390,7 @@ ASTYLE_FILES = \
 	IpRegOptions.cppbak IpRegOptions.hppbak \
 	IpReferenced.hppbak \
 	IpSmartPtr.hppbak \
-	IpTaggedObject.hppbak \
+	IpTaggedObject.cppbak IpTaggedObject.hppbak \
 	IpTimedTask.hppbak \
 	IpTypes.hppbak \
 	IpUtils.cppbak IpUtils.hppbak
@@ -481,6 +481,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpObserver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpOptionsList.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpRegOptions.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTaggedObject.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpUtils.Plo@am__quote@
 
 .cpp.o:

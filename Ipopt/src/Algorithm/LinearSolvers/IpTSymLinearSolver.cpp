@@ -21,6 +21,7 @@ namespace Ipopt
    SmartPtr<TSymScalingMethod> scaling_method)
       :
       SymLinearSolver(),
+      atag_(0),
       dim_(0),
       nonzeros_triplet_(0),
       nonzeros_compressed_(0),
@@ -90,6 +91,7 @@ namespace Ipopt
 
     if (!warm_start_same_structure_) {
       // Reset all private data
+      atag_=0;
       dim_=0;
       nonzeros_triplet_=0;
       nonzeros_compressed_=0;

@@ -57,11 +57,12 @@ namespace Ipopt
     roptions->AddIntegerOption(
       "ma97_print_level",
       "Debug printing level for the linear solver MA97",
-      0,
+      0, ""
+      /*
       "<0 no printing.\n"
       "0  Error and warning messages only.\n"
       "=1 Limited diagnostic printing.\n"
-      ">1 Additional diagnostic printing.");
+      ">1 Additional diagnostic printing."*/);
     roptions->AddLowerBoundedIntegerOption(
       "ma97_nemin",
       "Node Amalgamation parameter",
