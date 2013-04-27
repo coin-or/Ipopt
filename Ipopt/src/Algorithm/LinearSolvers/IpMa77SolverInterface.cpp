@@ -48,7 +48,7 @@ namespace Ipopt
       "ma77_print_level",
       "Debug printing level for the linear solver MA77",
       -1,
-      "Meep");
+      "");
     /*
     "<0 no printing.\n"
     "0  Error and warning messages only.\n"

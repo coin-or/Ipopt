@@ -447,6 +447,13 @@ namespace Ipopt
       TaggedObject(),
       owner_space_(owner_space),
       dot_cache_(10),
+      nrm2_cache_tag_(0),
+      asum_cache_tag_(0),
+      amax_cache_tag_(0),
+      max_cache_tag_(0),
+      min_cache_tag_(0),
+      sum_cache_tag_(0),
+      sumlogs_cache_tag_(0),
       cached_valid_(0)
   {
     DBG_ASSERT(IsValid(owner_space_));
