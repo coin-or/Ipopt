@@ -287,7 +287,7 @@ namespace Ipopt
       debug_delta_cgpen_tag_sum_ = delta_cgpen->GetTagSum();
     }
     else {
-      debug_delta_cgpen_tag_ = TaggedObject::Tag();
+      debug_delta_cgpen_tag_ = 0;
       debug_delta_cgpen_tag_sum_ = delta_cgpen->GetTagSum();
     }
 #endif
@@ -306,7 +306,7 @@ namespace Ipopt
       debug_delta_cgpen_tag_sum_ = delta_cgpen->GetTagSum();
     }
     else {
-      debug_delta_cgpen_tag_ = TaggedObject::Tag();
+      debug_delta_cgpen_tag_ = 0;
       debug_delta_cgpen_tag_sum_ = delta_cgpen->GetTagSum();
     }
 #endif
@@ -325,7 +325,7 @@ namespace Ipopt
       debug_delta_cgfast_tag_sum_ = delta_cgfast->GetTagSum();
     }
     else {
-      debug_delta_cgfast_tag_ = TaggedObject::Tag();
+      debug_delta_cgfast_tag_ = 0;
       debug_delta_cgfast_tag_sum_ = delta_cgfast->GetTagSum();
     }
 #endif

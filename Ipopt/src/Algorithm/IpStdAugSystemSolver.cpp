@@ -45,9 +45,16 @@ namespace Ipopt
       diag_space_c_(NULL),
       ident_space_ds_(NULL),
       diag_space_d_(NULL),
+      w_tag_(0),
+      d_x_tag_(0),
       delta_x_(0.),
+      d_s_tag_(0),
       delta_s_(0.),
+      j_c_tag_(0),
+      d_c_tag_(0),
       delta_c_(0.),
+      j_d_tag_(0),
+      d_d_tag_(0),
       delta_d_(0.),
       old_w_(NULL)
   {
@@ -69,7 +76,7 @@ namespace Ipopt
                          warm_start_same_structure_, prefix);
 
     if (!warm_start_same_structure_) {
-      augsys_tag_ = TaggedObject::Tag();
+      augsys_tag_ = 0;
       augmented_system_ = NULL;
     }
     else {
@@ -336,7 +343,7 @@ namespace Ipopt
     }
     else {
       sumsym_x->SetTerm(0, 0.0, *old_w_);
-      w_tag_ = TaggedObject::Tag();
+      w_tag_ = 0;
     }
     w_factor_ = W_factor;
 
@@ -356,7 +363,7 @@ namespace Ipopt
       SmartPtr<Vector> tmp = proto_x.MakeNew();
       tmp->Set(delta_x);
       diag_x->SetDiag(*tmp);
-      d_x_tag_ = TaggedObject::Tag();
+      d_x_tag_ = 0;
     }
     sumsym_x->SetTerm(1, 1.0, *diag_x);
     delta_x_ = delta_x;
@@ -380,7 +387,7 @@ namespace Ipopt
       SmartPtr<Vector> tmp = proto_s.MakeNew();
       tmp->Set(delta_s);
       diag_s->SetDiag(*tmp);
-      d_s_tag_ = TaggedObject::Tag();
+      d_s_tag_ = 0;
     }
     delta_s_ = delta_s;
 
@@ -407,7 +414,7 @@ namespace Ipopt
       SmartPtr<Vector> tmp = proto_c.MakeNew();
       tmp->Set(-delta_c);
       diag_c->SetDiag(*tmp);
-      d_c_tag_ = TaggedObject::Tag();
+      d_c_tag_ = 0;
     }
     delta_c_ = delta_c;
 
@@ -439,7 +446,7 @@ namespace Ipopt
       SmartPtr<Vector> tmp = proto_d.MakeNew();
       tmp->Set(-delta_d);
       diag_d->SetDiag(*tmp);
-      d_d_tag_ = TaggedObject::Tag();
+      d_d_tag_ = 0;
     }
     delta_d_ = delta_d;
 
@@ -469,21 +476,21 @@ namespace Ipopt
 #if COIN_IPOPT_VERBOSITY > 0
 
     bool Wtest = (W && W->GetTag() != w_tag_);
-    bool iWtest = (!W && w_tag_ != TaggedObject::Tag());
+    bool iWtest = (!W && w_tag_ != 0);
     bool wfactor_test = (W_factor != w_factor_);
     bool D_xtest = (D_x && D_x->GetTag() != d_x_tag_);
-    bool iD_xtest = (!D_x && d_x_tag_ != TaggedObject::Tag());
+    bool iD_xtest = (!D_x && d_x_tag_ != 0);
     bool delta_xtest = (delta_x != delta_x_);
     bool D_stest = (D_s && D_s->GetTag() != d_s_tag_);
-    bool iD_stest = (!D_s && d_s_tag_ != TaggedObject::Tag());
+    bool iD_stest = (!D_s && d_s_tag_ != 0);
     bool delta_stest = (delta_s != delta_s_);
     bool J_ctest = (J_c.GetTag() != j_c_tag_);
     bool D_ctest = (D_c && D_c->GetTag() != d_c_tag_);
-    bool iD_ctest = (!D_c && d_c_tag_ != TaggedObject::Tag());
+    bool iD_ctest = (!D_c && d_c_tag_ != 0);
     bool delta_ctest = (delta_c != delta_c_);
     bool J_dtest = (J_d.GetTag() != j_d_tag_);
     bool D_dtest = (D_d && D_d->GetTag() != d_d_tag_);
-    bool iD_dtest = (!D_d && d_d_tag_ != TaggedObject::Tag());
+    bool iD_dtest = (!D_d && d_d_tag_ != 0);
     bool delta_dtest = (delta_d != delta_d_);
 #endif
 
@@ -506,21 +513,21 @@ namespace Ipopt
     DBG_PRINT((2,"delta_dtest = %d\n", delta_dtest));
 
     if ( (W && W->GetTag() != w_tag_)
-         || (!W && w_tag_ != TaggedObject::Tag())
+         || (!W && w_tag_ != 0)
          || (W_factor != w_factor_)
          || (D_x && D_x->GetTag() != d_x_tag_)
-         || (!D_x && d_x_tag_ != TaggedObject::Tag())
+         || (!D_x && d_x_tag_ != 0)
          || (delta_x != delta_x_)
          || (D_s && D_s->GetTag() != d_s_tag_)
-         || (!D_s && d_s_tag_ != TaggedObject::Tag())
+         || (!D_s && d_s_tag_ != 0)
          || (delta_s != delta_s_)
          || (J_c.GetTag() != j_c_tag_)
          || (D_c && D_c->GetTag() != d_c_tag_)
-         || (!D_c && d_c_tag_ != TaggedObject::Tag())
+         || (!D_c && d_c_tag_ != 0)
          || (delta_c != delta_c_)
          || (J_d.GetTag() != j_d_tag_)
          || (D_d && D_d->GetTag() != d_d_tag_)
-         || (!D_d && d_d_tag_ != TaggedObject::Tag())
+         || (!D_d && d_d_tag_ != 0)
          || (delta_d != delta_d_) ) {
       return true;
     }
