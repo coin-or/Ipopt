@@ -1,14 +1,11 @@
 This file contain the log of changes for the main release branch (trunk).
-More detailed information for incremetal change can be found in the
+More detailed information for incremental change can be found in the
 history management of subversion.
 
 2012-05-?? releases/3.11.0
         - update and extension of Ipopt documentation
         - updated build of doxygen documentation to comply with other COIN-OR projects
-        - localized global variables in TaggedObject and RegisteredOption,
-          so that Ipopt should now be threadsafe as long as Ipopt objects
-          (esp. SmartPtr's) are not shared between threads and a threadsafe
-          linear solver is used (e.g., MA27) [#167]
+        - localized global variable in RegisteredOption class
         - no more need for whitespace character at end of options file
         - added options print_frequency_iter and print_frequency_time to regulate
           which iteration summary lines should be printed [#161]
