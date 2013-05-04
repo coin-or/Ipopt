@@ -605,14 +605,14 @@ JNIEXPORT jlong JNICALL Java_org_coinor_Ipopt_CreateIpoptProblem
  jint nele_jac, jint nele_hess,
  jint index_style)
 {
-	/* create the IpoptProblem */
-	Jipopt* problem=new Jipopt(env, obj_this, n, m, nele_jac, nele_hess, index_style);
-	if(problem == NULL){
-		return 0;
-	}
-	
-	// return our class
-	return (jlong)problem;
+   /* create the smart pointer to the Ipopt problem */
+   SmartPtr<Jipopt>* pproblem = new SmartPtr<Jipopt>;
+
+   /* create the IpoptProblem */
+   *pproblem = new Jipopt(env, obj_this, n, m, nele_jac, nele_hess, index_style);
+
+   /* return the smart pointer to our class */
+   return (jlong)pproblem;
 }
 
 
@@ -631,9 +631,10 @@ jdoubleArray callback_jac_g,
 jdoubleArray callback_hess)
 {
 	// cast back our class
-	Jipopt *problem = (Jipopt *)pipopt;
-	problem->env = env;
-	problem->solver = obj_this;
+	Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*)pipopt);
+
+    problem->env = env;
+    problem->solver = obj_this;
 
 	problem->xj = xj;
 	problem->gj = gj;
@@ -683,22 +684,22 @@ jdoubleArray callback_hess)
   
 }
 
-
-
 JNIEXPORT void JNICALL Java_org_coinor_Ipopt_FreeIpoptProblem
 (JNIEnv *env, 
 jobject obj_this, 
 jlong pipopt){
-	// cast back our class
-	Jipopt *problem = (Jipopt *)pipopt;
+   SmartPtr<Jipopt>* pproblem = (SmartPtr<Jipopt>*)pipopt;
 
-	if(problem!=NULL){
-	   /* if OptimizeTNLP has been called, application holds a smartptr to the problem
-	    *   so freeing the application will also free the problem itself
-	    * if OptimizeTNLP has not been called, we will have a memory leak here
-	    */
-	   problem->application = NULL;
-	}
+   if( pproblem != NULL && IsValid(*pproblem) )
+   {
+      /* if OptimizeTNLP has been called, the application holds a SmartPtr to our problem class
+       * to resolve this circular dependency we first free the application explicitly
+       */
+      (*pproblem)->application = NULL;
+
+      /* now free our JIpopt itself */
+      *pproblem = NULL;
+   }
 }
 
 
@@ -706,7 +707,7 @@ jlong pipopt){
 JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptIntOption
 (JNIEnv * env, jobject obj_this, jlong pipopt, jstring jparname, jint jparvalue){
 	// cast back our class
-	Jipopt *problem = (Jipopt *)pipopt;
+   Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*)pipopt);
 	
 	const char *pparameterName = env->GetStringUTFChars(jparname, 0);
 	string parameterName=pparameterName;
@@ -720,25 +721,23 @@ JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptIntOption
 }
 
 JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptNumOption
-(JNIEnv * env, jobject obj_this, jlong pipopt, jstring jparname, jdouble jparvalue){  
-	// cast back our class
-	Jipopt *problem = (Jipopt *)pipopt;
-	
-	const char *pparameterName = env->GetStringUTFChars(jparname, 0);
-	string parameterName=pparameterName;
+(JNIEnv * env, jobject obj_this, jlong pipopt, jstring jparname, jdouble jparvalue){
+   Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*)pipopt);
 
-	// Try to set the real option
-	jboolean ret = problem->application->Options()->SetNumericValue(parameterName,jparvalue);
-	
-	env->ReleaseStringUTFChars(jparname, pparameterName);
-	
-	return ret;
+   const char* pparameterName = env->GetStringUTFChars(jparname, 0);
+   string parameterName=pparameterName;
+
+   // Try to set the real option
+   jboolean ret = problem->application->Options()->SetNumericValue(parameterName,jparvalue);
+
+   env->ReleaseStringUTFChars(jparname, pparameterName);
+
+   return ret;
 }
 
 JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptStrOption
 (JNIEnv * env, jobject obj_this, jlong pipopt, jstring jparname, jstring jparvalue){
-	// cast back our class
-	Jipopt *problem = (Jipopt *)pipopt;
+   Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*)pipopt);
 	
 	const char *pparameterName = env->GetStringUTFChars(jparname, NULL);
 	string parameterName=pparameterName;
