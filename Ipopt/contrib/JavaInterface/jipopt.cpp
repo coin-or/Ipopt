@@ -151,7 +151,6 @@ public:
    SmartPtr<IpoptApplication> application;
 
    // the callback methods
-   //jmethodID get_nlp_info_;
    jmethodID get_bounds_info_;
    jmethodID get_starting_point_;
    jmethodID eval_f_;
@@ -165,22 +164,8 @@ public:
    jmethodID get_list_of_nonlinear_variables_;
 
 private:
-   /**@name Methods to block default compiler methods.
-    * The compiler automatically generates the following three methods.
-    *  Since the default compiler implementation is generally not what
-    *  you want (for all but the most simple classes), we usually
-    *  put the declarations of these methods in the private section
-    *  and never implement them. This prevents the compiler from
-    *  implementing an incorrect "default" behavior without us
-    *  knowing. (See Scott Meyers book, "Effective C++")
-    *
-    */
-   //@{
-   //  MyNLP();
    Jipopt(const Jipopt&);
    Jipopt& operator=(const Jipopt&);
-
-   //@}
 };
 
 Jipopt::Jipopt(JNIEnv *env_, jobject solver_, jint n_, jint m_, jint nele_jac_, jint nele_hess_, jint index_style_)
@@ -428,16 +413,24 @@ void Jipopt::finalize_solution(SolverReturn status, Index n, const Number *x,
    const Number *g, const Number *lambda, Number obj_value,
    const IpoptData *ip_data, IpoptCalculatedQuantities *ip_cq)
 {
-   /*
-	//you can add anything you like, it is not need for me!
+   /* Copy the native arrays to Java double arrays */
 
-	JNIEnv *env=ipopt->env;
-	jobject solver=ipopt->solver;
+   if( x != NULL )
+      env->SetDoubleArrayRegion(xj, 0, n, const_cast<Number*>(x));
 
+   if( z_L != NULL )
+      env->SetDoubleArrayRegion(mult_x_Lj, 0, n, const_cast<Number*>(z_L));
 
-    */
+   if( z_U != NULL )
+      env->SetDoubleArrayRegion(mult_x_Uj, 0, n, const_cast<Number*>(z_U));
 
-   /* TODO this should definitely be implemented */
+   if( g != NULL )
+      env->SetDoubleArrayRegion(gj, 0, m, const_cast<Number*>(g));
+
+   if( lambda != NULL )
+      env->SetDoubleArrayRegion(mult_gj, 0, m, const_cast<Number*>(lambda));
+
+   env->GetDoubleArrayRegion(fj, 0, 1, &obj_value);
 }
 
 /** overload this method to return scaling parameters. This is
