@@ -298,7 +298,7 @@ bool Jipopt::get_starting_point(Index n, bool init_x, Number* x,
                                     Index m, bool init_lambda, Number* lambda){
 	jdoubleArray xj=this->xj;
 	jdoubleArray z_lj=this->mult_x_Lj;
-	jdoubleArray z_uj=this->mult_x_Lj;
+	jdoubleArray z_uj=this->mult_x_Uj;
 	jdoubleArray lambdaj=this->mult_gj;
 
 	if(!env->CallBooleanMethod(solver,get_starting_point_,
