@@ -30,6 +30,7 @@ history management of subversion.
           MATLAB (configure option --enable-matlab-ma57; cannot use Metis)
         
         - fixes to JIpopt buildsystem (now may work on windows and uses libtool)
+        - JIpopt now reads options file ipopt.opt by default, if present
         
         - simplified installation of R interface        
 
