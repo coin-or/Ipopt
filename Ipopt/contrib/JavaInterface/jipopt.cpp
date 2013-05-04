@@ -481,16 +481,24 @@ void Jipopt::finalize_solution(SolverReturn status, Index n, const Number *x,
 							   const Number *g, const Number *lambda, Number obj_value, 
 							   const IpoptData *ip_data, IpoptCalculatedQuantities *ip_cq)
 {
-	/*
-	//you can add anything you like, it is not need for me!
+   /* Copy the native arrays to Java double arrays */
 
-	JNIEnv *env=ipopt->env;
-	jobject solver=ipopt->solver;
+   if( x != NULL )
+      env->SetDoubleArrayRegion(xj, 0, n, const_cast<Number*>(x));
 
-	
-	*/
-	
+   if( z_L != NULL )
+      env->SetDoubleArrayRegion(mult_x_Lj, 0, n, const_cast<Number*>(z_L));
 
+   if( z_U != NULL )
+      env->SetDoubleArrayRegion(mult_x_Uj, 0, n, const_cast<Number*>(z_U));
+
+   if( g != NULL )
+      env->SetDoubleArrayRegion(gj, 0, m, const_cast<Number*>(g));
+
+   if( lambda != NULL )
+      env->SetDoubleArrayRegion(mult_gj, 0, m, const_cast<Number*>(lambda));
+
+   env->GetDoubleArrayRegion(fj, 0, 1, &obj_value);
 }
 
 
