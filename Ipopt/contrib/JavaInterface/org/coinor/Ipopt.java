@@ -373,6 +373,13 @@ public abstract class Ipopt {
 	}
 
 	/**
+	 * @return Returns the final values for constraints. 
+	 */
+	public double[] getValuesConstraints() {
+		return g;
+	}
+
+	/**
 	 * @return Returns the final multipliers for constraints. 
 	 */
 	public double[] getMultConstraints() {
