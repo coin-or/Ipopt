@@ -285,18 +285,12 @@ public class HS071 extends Ipopt
      */
     public static void main(String []args)
     {
-        // Create the problem
+        //Create the problem
         HS071 hs071 = new HS071();
         
-        //add options, the same with IPOPT.
-        //hs071.setNumericOption("tol",1E-7); //hs071.setNumericOption(Ipopt.KEY_TOL,1E-7);
-        //hs071.setStringOption(Ipopt.KEY_MU_STRATEGY,"adaptive");
-        //hs071.setStringOption(Ipopt.KEY_OUTPUT_FILE,"hs071cpp.out");
-        //hs071.setStringOption(Ipopt.KEY_PRINT_USER_OPTIONS,"yes");
-        //hs071.setStringOption("nlp_scaling_method","usER-ScAling");//ignor case
-        //hs071.setStringOption(Ipopt.KEY_HESSIAN_APPROXIMATION,"lImIted-memory");//LBFGS
-        //hs071.setStringOption(Ipopt.KEY_DERIVATIVE_TEST,"first-order");
-        //hs071.setStringOption(Ipopt.KEY_PRINT_USER_OPTIONS,"yes");
+        //Set some options
+        //hs071.setNumericOption("tol",1E-7);
+        //hs071.setStringOption("nlp_scaling_method","user-scaling");
         //hs071.setStringOption("print_options_documentation","yes");
         //hs071.setStringOption("warm_start_init_point","yes");
         //hs071.setNumericOption("warm_start_bound_push",1e-9);
@@ -304,25 +298,32 @@ public class HS071 extends Ipopt
         //hs071.setNumericOption("warm_start_slack_bound_frac",1e-9);
         //hs071.setNumericOption("warm_start_slack_bound_push",1e-9);
         //hs071.setNumericOption("warm_start_mult_bound_push",1e-9);
-        hs071.OptimizeNLP();        
         
-        //Print primal and dual point
-        double obj = hs071.getObjVal();
+        //Solve the problem
+        int status = hs071.OptimizeNLP();        
+        
+        //Print the solution
+        if( status == SOLVE_SUCCEEDED )
+        	System.out.println("\n\n*** The problem solved!");
+        else
+        	System.out.println("\n\n*** The problem was not solved successfully!");
+        
+        double obj = hs071.getObjectiveValue();
         System.out.println("\nObjective Value = " + obj + "\n");
 
-        double constraints[] = hs071.getValuesConstraints();
-        hs071.print(constraints, "Constraint Values:");
-
-        double x[] = hs071.getState();
+        double x[] = hs071.getVariableValues();
         hs071.print(x, "Primal Variable Values:");
         
-        double MLB[] = hs071.getMultLowerBounds();
+        double constraints[] = hs071.getConstraintValues();
+        hs071.print(constraints, "Constraint Values:");
+
+        double MLB[] = hs071.getLowerBoundMultipliers();
         hs071.print(MLB, "Dual Multipliers for Variable Lower Bounds:");
         
-        double MUB[] = hs071.getMultUpperBounds();
+        double MUB[] = hs071.getUpperBoundMultipliers();
         hs071.print(MUB, "Dual Multipliers for Variable Upper Bounds:");
         
-        double lam[] = hs071.getMultConstraints();
+        double lam[] = hs071.getConstraintMultipliers();
         hs071.print(lam, "Dual Multipliers for Constraints:");
     }
 }

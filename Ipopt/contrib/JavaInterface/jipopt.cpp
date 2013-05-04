@@ -586,11 +586,6 @@ JNIEXPORT jint JNICALL Java_org_coinor_Ipopt_OptimizeTNLP(
    /* solve the problem */
    status = problem->application->OptimizeTNLP(problem);
 
-   if( status == Solve_Succeeded )
-      printf("\n\n*** The problem solved!\n");
-   else
-      printf("\n\n*** The problem was not solved successfully!\n");
-
    return (jint) status;
 }
 

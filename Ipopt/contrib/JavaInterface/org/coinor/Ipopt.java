@@ -122,33 +122,6 @@ public abstract class Ipopt
 	public final static int INSUFFICIENT_MEMORY = -102;
 	public final static int INTERNAL_ERROR = -199;
 
-	/* The possible parameter names: should be kept in sync with Ipopt parameters */
-	public final static String KEY_TOL = "tol";
-	public final static String KEY_COMPL_INF_TOL = "compl_inf_tol"; 
-	public final static String KEY_DUAL_INF_TOL = "dual_inf_tol";
-	public final static String KEY_CONSTR_VIOL_TOL = "constr_viol_tol";
-	public final static String KEY_ACCEPTABLE_TOL = "acceptable_tol"; 
-	public final static String KEY_ACCEPTABLE_COMPL_INF_TOL = "acceptable_compl_inf_tol";
-	public final static String KEY_ACCEPTABLE_CONSTR_VIOL_TOL = "acceptable_constr_viol_tol";
-	public final static String KEY_ACCEPTABLE_DUAL_INF_TOL= "acceptable_dual_inf_tol"; 
-	public final static String KEY_BARRIER_TOL_FACTOR = "barrier_tol_factor";
-	public final static String KEY_OBJ_SCALING_FACTOR = "obj_scaling_factor";
-	public final static String KEY_BOUND_RELAX_FACTOR = "bound_relax_factor"; 
-	public final static String KEY_MAX_ITER = "max_iter";
-	public final static String KEY_LIMITED_MEMORY_MAX_HISTORY = "limited_memory_max_history";
-	public final static String KEY_FILE_PRINT_LEVEL = "file_print_level";
-	public final static String KEY_PRINT_LEVEL = "print_level";
-	public final static String KEY_MU_STRATEGY = "mu_strategy";
-	public final static String KEY_OUTPUT_FILE = "output_file";
-	public final static String KEY_DERIVATIVE_TEST_TOL = "derivative_test_tol";
-	public final static String KEY_DERIVATIVE_TEST = "derivative_test";
-	public final static String KEY_DERIVATIVE_TEST_PRINT_ALL = "derivative_test_print_all";
-	public final static String KEY_PRINT_USER_OPTIONS = "print_user_options";
-	public final static String KEY_LINEAR_SOLVER = "linear_solver";
-
-	/** The hessian approximation, set to "limited-memory" if no hessian is available */
-	public final static String KEY_HESSIAN_APPROXIMATION = "hessian_approximation";
-
 	/** Pointer to the native optimization object */
 	private long ipopt;
 
@@ -332,8 +305,7 @@ public abstract class Ipopt
 	 * <p>
 	 * The solve status returned is one of the constant fields of this class,
 	 * e.g. SOLVE_SUCCEEDED. For more details about the valid solve status
-	 * check the Ipopt documentation or the <code>ReturnCodes_inc.h<\code>
-	 * which is installed in the Ipopt include directory.	 * 
+	 * check the Ipopt documentation.
 	 * 
 	 * @return the solve status
 	 * 
@@ -348,9 +320,9 @@ public abstract class Ipopt
 	}
 
 	/**
-	 * @return the primal variables at optimal point.
+	 * @return the primal variable values at the final point.
 	 */
-	public double[] getState()
+	public double[] getVariableValues()
 	{
 		return x;
 	}
@@ -358,7 +330,7 @@ public abstract class Ipopt
 	/**
 	 * @return the final value of the objective function.
 	 */
-	public double getObjVal()
+	public double getObjectiveValue()
 	{
 		return obj_val[0];
 	}
@@ -374,40 +346,40 @@ public abstract class Ipopt
 	}
 
 	/**
-	 * @return Returns the final values for constraints. 
+	 * @return Returns the final values for the constraints functions. 
 	 */
-	public double[] getValuesConstraints()
+	public double[] getConstraintValues()
 	{
 		return g;
 	}
 
 	/**
-	 * @return Returns the final multipliers for constraints. 
+	 * @return Returns the final multipliers for the constraints. 
 	 */
-	public double[] getMultConstraints()
+	public double[] getConstraintMultipliers()
 	{
 		return mult_g;
 	}
 
 	/**
-	 * @return Returns the final multipliers for upper variable bounds.
+	 * @return Returns the final multipliers for the variable lower bounds.
 	 */
-	public double[] getMultUpperBounds()
-	{
-		return mult_x_U;
-	}
-
-	/**
-	 * @return Returns the final multipliers for lower variable bounds.
-	 */
-	public double[] getMultLowerBounds()
+	public double[] getLowerBoundMultipliers()
 	{
 		return mult_x_L;
 	}
 
-	/** If you using_scaling_parameters=true, please overload this method, 
+	/**
+	 * @return Returns the final multipliers for the variable upper bounds.
+	 */
+	public double[] getUpperBoundMultipliers()
+	{
+		return mult_x_U;
+	}
+
+	/** If you using_scaling_parameters = true, please overload this method, 
 	 *
-	 * @param obj_scaling  =double[1] which you should supply,  negative value means maximize the obj function. 
+	 * @param obj_scaling double[1] which you should supply,  negative value means maximize the obj function. 
 	 * @param n  the number of variables in the problem, dimension of x.
 	 * @param x_scaling  the scaling factors for the variables which are orderd like x, dimension is n. If you
 	 *  want IPOPT so scale the variables, you should set use_x_scaling=true in use_x_g_scaling's first element.
@@ -415,7 +387,7 @@ public abstract class Ipopt
 	 * @param g_scaling  the scaling factors for the constraints which are orderd like g(x), dimension is m. If
 	 *  you want IPOPT so scale the constraints, you should set use_g_scaling=true in use_x_g_scaling's second
 	 *  element.
-	 * @param use_x_g_scaling =boolean[2]: means {use_x_scaling=true/fasle,use_g_scaling=true/false} which you 
+	 * @param use_x_g_scaling boolean[2]: means {use_x_scaling=true/false, use_g_scaling=true/false} which you 
 	 *  should supply. 
 	 *
 	 * @return true means success, false means fail! 
