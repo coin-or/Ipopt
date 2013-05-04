@@ -2,11 +2,6 @@
  * Copyright (C) 2007 Tong Kewei, BeiHang University - www.buaa.edu.cn.
  * All Rights Reserved.
  * This code is published under the Eclipse Public License.
- * 
- * Authors: Rafael de Pelegrini Soares
- *          Tong Kewei, E-mail:tongkewei@126.com
- *          Beihang University, website: www.buaa.edu.cn
- *          Beijing, China.
  *
  * $Id$
  */
@@ -20,8 +15,7 @@
 using namespace std;
 using namespace Ipopt;
 
-/**
- * Main structure for Ipopt JNI implementation.
+/** Main structure for Ipopt JNI implementation.
  * 
  * All functions will receive a pointer to this structure as
  * an integer argument (the address in memory of the structure).
@@ -598,12 +592,12 @@ JNIEXPORT void JNICALL Java_org_coinor_Ipopt_FreeIpoptProblem(JNIEnv *env,  jobj
 
    if( pproblem != NULL && IsValid(*pproblem) )
    {
-      /* if OptimizeTNLP has been called, the application holds a SmartPtr to your problem class
+      /* if OptimizeTNLP has been called, the application holds a SmartPtr to our problem class
        * to resolve this circular dependency we first free the application explicitly
        */
       (*pproblem)->application = NULL;
 
-      /* now free your JIpopt itself */
+      /* now free our JIpopt itself */
       *pproblem = NULL;
    }
 }
