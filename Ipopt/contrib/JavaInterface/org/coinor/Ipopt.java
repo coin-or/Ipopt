@@ -1,17 +1,11 @@
-/* 
- * Copyright (C) 2007 VRTech Industrial Technologies - www.vrtech.com.br.
- * All Rights Reserved.
- * This code is published under the Eclipse Public License.
- * 
- * $Id$
- * Authors: Rafael de Pelegrini Soares
- *
- *
+/** Copyright (C) 2007 VRTech Industrial Technologies - www.vrtech.com.br.
  * Copyright (C) 2007 Tong Kewei, Beihang University, - www.buaa.edu.cn.
  * All Rights Reserved.
  * This code is published under the Eclipse Public License.
  * 
  * $Id$
+ * 
+ * Comments by Tong Kewei:
  * This is a revised version of JNI of C++ interface of IPOPT.
  * I changed from Rafael de Pelegrini Soares's original code.
  * His codes are originally derived form C version of IPOPT,which has limited functions. 
@@ -72,8 +66,8 @@ import java.io.File;
  * of BeiHang University.
  * @author Tong Kewei
  */
-public abstract class Ipopt {
-
+public abstract class Ipopt
+{
 	/** Native function should not be used directly */
 	private native boolean AddIpoptIntOption(long ipopt, String keyword, int val);
 
@@ -87,11 +81,11 @@ public abstract class Ipopt {
 	private native long CreateIpoptProblem(int n,int m, 
 			int nele_jac, int nele_hess, int index_style);
 
-	/* Native function should not be used directly */
+	/** Native function should not be used directly */
 	private native void FreeIpoptProblem(long ipopt);
 
 	/** Native function should not be used directly */
-	private native int OptimizeTNLP(long ipopt, String outfilename,
+	private native int OptimizeTNLP(long ipopt,
 			double x[], double g[],
 			double obj_val[], double mult_g[], double mult_x_L[], double mult_x_U[],
 			double callback_grad_f[], double callback_jac_g[], double callback_hess[]);
@@ -155,7 +149,6 @@ public abstract class Ipopt {
 	/** The hessian approximation, set to "limited-memory" if no hessian is available */
 	public final static String KEY_HESSIAN_APPROXIMATION = "hessian_approximation";
 
-
 	/** Pointer to the native optimization object */
 	private long ipopt;
 
@@ -164,7 +157,9 @@ public abstract class Ipopt {
 	private double callback_jac_g[];
 	private double callback_hess[];
 
-	private double[]x;
+	/** Final value of variable values */
+	private double x[];
+	
 	/** Final value of objective function */
 	private double obj_val[] = {0.0};
 
@@ -180,9 +175,8 @@ public abstract class Ipopt {
 	/** Final multipliers for constraints */
 	private double mult_g[];
 
-	/**Status returned by the solver*/
+	/** Status returned by the solver*/
 	private int status = INVALID_PROBLEM_DEFINITION;
-
 
 	/**
 	 * Creates a new NLP Solver using {@value #DLLPATH} as path and {@value #DLLNAME}
@@ -190,7 +184,8 @@ public abstract class Ipopt {
 	 * 
 	 * @see #Ipopt(String, String)
 	 */
-	public Ipopt(){
+	public Ipopt()
+	{
 		this(DLLPATH, DLLNAME);
 	}
 
@@ -203,7 +198,8 @@ public abstract class Ipopt {
 	 * 
 	 * @see #Ipopt()
 	 */
-	public Ipopt(String path, String DLL){
+	public Ipopt(String path, String DLL)
+	{
 		// Loads the library
 		File file = new File(path, System.mapLibraryName(DLL));
 		System.load(file.getAbsolutePath());
@@ -212,12 +208,10 @@ public abstract class Ipopt {
 	/** Callback function for the c++ original get_bounds_info function.*/  
 	abstract protected boolean get_bounds_info(int n, double[] x_l, double[] x_u,
 			int m, double[] g_l, double[] g_u);
-
-	/** Callback function for the  c++ original get_starting_point function. */
+	/** Callback function for the c++ original get_starting_point function. */
 	abstract protected boolean get_starting_point(int n, boolean init_x, double[] x,
 			boolean init_z, double[] z_L, double[] z_U,
-			int m, boolean init_lambda,double[] lambda);
-
+			int m, boolean init_lambda, double[] lambda);
 	/** Callback function for the objective function. */
 	abstract protected boolean eval_f(int n, double []x, boolean new_x, double []obj_value);
 	/** Callback function for the objective function gradient */
@@ -244,9 +238,11 @@ public abstract class Ipopt {
 	 * finished with the object and it is not needed anymore.
 	 * 	
 	 */
-	public void dispose(){
+	public void dispose()
+	{
 		// dispose the native implementation
-		if(ipopt!=0){
+		if( ipopt != 0 )
+		{
 			FreeIpoptProblem(ipopt);
 			ipopt = 0;
 		}
@@ -269,7 +265,7 @@ public abstract class Ipopt {
 		// delete any previously created native memory
 		dispose();
 
-		x=new double[n];
+		x = new double[n];
 		// allocate the callback arguments
 		callback_grad_f = new double[n];
 		callback_jac_g = new double[nele_jac];
@@ -299,8 +295,9 @@ public abstract class Ipopt {
 	 * @param val the value
 	 * @return false if the option could not be set (e.g., if keyword is unknown)
 	 */
-	public boolean setIntegerOption(String keyword, int val){
-		return ipopt==0 ? false : AddIpoptIntOption(ipopt, keyword, val);
+	public boolean setIntegerOption(String keyword, int val)
+	{
+		return ipopt == 0 ? false : AddIpoptIntOption(ipopt, keyword, val);
 	}
 
 	/**
@@ -312,8 +309,9 @@ public abstract class Ipopt {
 	 * 
 	 * @see #setIntegerOption(String, int)
 	 */
-	public boolean setNumericOption(String keyword, double val){
-		return ipopt==0 ? false : AddIpoptNumOption(ipopt, keyword, val);
+	public boolean setNumericOption(String keyword, double val)
+	{
+		return ipopt == 0 ? false : AddIpoptNumOption(ipopt, keyword, val);
 	}
 
 	/**
@@ -325,9 +323,9 @@ public abstract class Ipopt {
 	 * 
 	 * @see #setIntegerOption(String, int)
 	 */
-	public boolean setStringOption(String keyword, String val){
-		return ipopt==0 ? false : AddIpoptStrOption(ipopt, keyword, val.toLowerCase());
-		//return ipopt==0 ? false : AddIpoptStrOption(ipopt, keyword, val.toLowerCase(Locale.ENGLISH));
+	public boolean setStringOption(String keyword, String val)
+	{
+		return ipopt == 0 ? false : AddIpoptStrOption(ipopt, keyword, val.toLowerCase());
 	}
 
 	/** This function actually solve the problem.
@@ -341,25 +339,27 @@ public abstract class Ipopt {
 	 * 
 	 * @see #getStatus()
 	 */
-	public int OptimizeNLP(){
-		String outfilename="";//I found input filename has no use in ipopt, future may be corrected!
-		this.status= this.OptimizeTNLP( ipopt,outfilename,
-				x,g,obj_val,mult_g,mult_x_L,mult_x_U,
-				callback_grad_f,callback_jac_g,callback_hess);
+	public int OptimizeNLP()
+	{
+		this.status = this.OptimizeTNLP(ipopt,
+				x, g, obj_val, mult_g, mult_x_L, mult_x_U,
+				callback_grad_f, callback_jac_g, callback_hess);
 		return this.status;
 	}
 
 	/**
 	 * @return the primal variables at optimal point.
 	 */
-	public double[] getState() {
+	public double[] getState()
+	{
 		return x;
 	}
 
 	/**
 	 * @return the final value of the objective function.
 	 */
-	public double getObjVal() {
+	public double getObjVal()
+	{
 		return obj_val[0];
 	}
 
@@ -368,45 +368,42 @@ public abstract class Ipopt {
 	 * 
 	 * @see #OptimizeNLP()
 	 */
-	public int getStatus(){
+	public int getStatus()
+	{
 		return status;
 	}
 
 	/**
 	 * @return Returns the final values for constraints. 
 	 */
-	public double[] getValuesConstraints() {
+	public double[] getValuesConstraints()
+	{
 		return g;
 	}
 
 	/**
 	 * @return Returns the final multipliers for constraints. 
 	 */
-	public double[] getMultConstraints() {
+	public double[] getMultConstraints()
+	{
 		return mult_g;
 	}
 
 	/**
 	 * @return Returns the final multipliers for upper variable bounds.
 	 */
-	public double[] getMultUpperBounds() {
+	public double[] getMultUpperBounds()
+	{
 		return mult_x_U;
 	}
 
 	/**
 	 * @return Returns the final multipliers for lower variable bounds.
 	 */
-	public double[] getMultLowerBounds() {
+	public double[] getMultLowerBounds()
+	{
 		return mult_x_L;
 	}
-
-
-
-
-	///////////////////////////////////////////////////////////////////
-	// Below are some additional functions, it can be added more! 
-	// such as get_variables_linearity, get_constraints_linearity, get_warm_start_iterate, etc.
-	///////////////////////////////////////////////////////////////////
 
 	/** If you using_scaling_parameters=true, please overload this method, 
 	 *
@@ -431,15 +428,16 @@ public abstract class Ipopt {
 		return false;
 	}
 
-	/** If you using_LBFGS("limited-memory"), please overload this method,  
+	/** If you using_LBFGS("limited-memory"), please overload this method
 	 *
-	 * @return number_of_nonlinear_variables, negtive means no number_of_nonlinear_variables.
+	 * @return number of nonlinear variables, negtive means that all variables are negative
 	 */
-	public int get_number_of_nonlinear_variables(){
+	public int get_number_of_nonlinear_variables()
+	{
 		return -1;
 	}
 
-	/**  If you using_LBFGS("limited-memory"), please overload this method,  
+	/**  If you using_LBFGS("limited-memory"), please overload this method
 	 *
 	 * @param num_nonlin_vars number_of_nonlinear_variables, identical with number_of_nonlinear_variables and the 
 	 *  length of the array pos_nonlin_vars.
@@ -448,7 +446,8 @@ public abstract class Ipopt {
 	 * @return true means success, false means fail! 
 	 */
 	public boolean get_list_of_nonlinear_variables(int num_nonlin_vars,
-			int[] pos_nonlin_vars){
+			int[] pos_nonlin_vars)
+	{
 		return false;
 	}
 }
