@@ -31,7 +31,7 @@ namespace Ipopt
 
     /** Constructor, taking the owner_space.
      */
-    MultiVectorMatrix(const MultiVectorMatrixSpace* owner_space);
+    MultiVectorMatrix(const MultiVectorMatrixSpace* owner_space, TaggedObject::Tag& unique_tag);
 
     /** Destructor */
     ~MultiVectorMatrix();
@@ -198,16 +198,16 @@ namespace Ipopt
     //@}
 
     /** Method for creating a new matrix of this specific type. */
-    MultiVectorMatrix* MakeNewMultiVectorMatrix() const
+    MultiVectorMatrix* MakeNewMultiVectorMatrix(TaggedObject::Tag& unique_tag) const
     {
-      return new MultiVectorMatrix(this);
+      return new MultiVectorMatrix(this, unique_tag);
     }
 
     /** Overloaded MakeNew method for the MatrixSpace base class.
      */
-    virtual Matrix* MakeNew() const
+    virtual Matrix* MakeNew(TaggedObject::Tag& unique_tag) const
     {
-      return MakeNewMultiVectorMatrix();
+      return MakeNewMultiVectorMatrix(unique_tag);
     }
 
     /** Accessor method for the VectorSpace for the columns */
@@ -228,7 +228,7 @@ namespace Ipopt
   inline
   SmartPtr<MultiVectorMatrix> MultiVectorMatrix::MakeNewMultiVectorMatrix() const
   {
-    return owner_space_->MakeNewMultiVectorMatrix();
+    return owner_space_->MakeNewMultiVectorMatrix(UniqueTag());
   }
 
   inline

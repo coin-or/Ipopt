@@ -28,7 +28,7 @@ namespace Ipopt
     /** Constructor, initializing with dimensions of the matrix
      *  (true identity matrix).
      */
-    IdentityMatrix(const SymMatrixSpace* owner_space);
+    IdentityMatrix(const SymMatrixSpace* owner_space, TaggedObject::Tag& unique_tag);
 
     /** Destructor */
     ~IdentityMatrix();
@@ -114,15 +114,15 @@ namespace Ipopt
 
     /** Overloaded MakeNew method for the SymMatrixSpace base class.
      */
-    virtual SymMatrix* MakeNewSymMatrix() const
+    virtual SymMatrix* MakeNewSymMatrix(TaggedObject::Tag& unique_tag) const
     {
-      return MakeNewIdentityMatrix();
+      return MakeNewIdentityMatrix(unique_tag);
     }
 
     /** Method for creating a new matrix of this specific type. */
-    IdentityMatrix* MakeNewIdentityMatrix() const
+    IdentityMatrix* MakeNewIdentityMatrix(TaggedObject::Tag& unique_tag) const
     {
-      return new IdentityMatrix(this);
+      return new IdentityMatrix(this, unique_tag);
     }
 
   private:

@@ -24,6 +24,7 @@ namespace Ipopt
   NLPBoundsRemover::NLPBoundsRemover(NLP& nlp,
                                      bool allow_twosided_inequalities /* = false */)
       :
+      NLP(nlp),
       nlp_(&nlp),
       allow_twosided_inequalities_(allow_twosided_inequalities)
   {}
@@ -67,8 +68,8 @@ namespace Ipopt
       return retval;
     }
     // Keep a copy of the expansion matrices for the x bounds
-    Px_l_orig_ = px_l_space_orig->MakeNew();
-    Px_u_orig_ = px_u_space_orig->MakeNew();
+    Px_l_orig_ = px_l_space_orig->MakeNew(unique_tag_);
+    Px_u_orig_ = px_u_space_orig->MakeNew(unique_tag_);
 
     // create the new d_space
     Index total_dim = d_space_orig->Dim() + x_l_space_orig->Dim() +
@@ -190,7 +191,7 @@ namespace Ipopt
     // Here we do a santiy check to make sure that no inequality
     // constraint has two non-infite bounds.
     if (d_space_orig_->Dim()>0 && !allow_twosided_inequalities_) {
-      SmartPtr<Vector> d = d_space_orig_->MakeNew();
+      SmartPtr<Vector> d = d_space_orig_->MakeNew(unique_tag_);
       SmartPtr<Vector> tmp = d_l_orig->MakeNew();
       tmp->Set(1.);
       pd_l_orig->MultVector(1., *tmp, 0., *d);
@@ -264,7 +265,7 @@ namespace Ipopt
     const CompoundMatrixSpace* comp_jac_d_space =
       static_cast<const CompoundMatrixSpace*>(GetRawPtr(jac_d_space));
     DBG_ASSERT(dynamic_cast<const CompoundMatrixSpace*>(GetRawPtr(jac_d_space)));
-    SmartPtr<Matrix> jac_d_orig = comp_jac_d_space->GetCompSpace(0,0)->MakeNew();
+    SmartPtr<Matrix> jac_d_orig = comp_jac_d_space->GetCompSpace(0,0)->MakeNew(unique_tag_);
     bool retval = nlp_->Eval_jac_d(x, *jac_d_orig);
     if (retval) {
       comp_jac_d->SetComp(0, 0, *jac_d_orig);
@@ -333,7 +334,7 @@ namespace Ipopt
     if (IsValid(x_scaling) || IsValid(d_scaling_orig)) {
 
       SmartPtr<CompoundVector> comp_d_scaling =
-        comp_d_space->MakeNewCompoundVector();
+        comp_d_space->MakeNewCompoundVector(unique_tag_);
 
       SmartPtr<Vector> xL_scaling = comp_d_scaling->GetCompNonConst(1);
       SmartPtr<Vector> xU_scaling = comp_d_scaling->GetCompNonConst(2);

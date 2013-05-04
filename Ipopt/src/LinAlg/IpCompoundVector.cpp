@@ -38,9 +38,9 @@ namespace Ipopt
   static const Index dbg_verbosity = 0;
 #endif
 
-  CompoundVector::CompoundVector(const CompoundVectorSpace* owner_space, bool create_new)
+  CompoundVector::CompoundVector(const CompoundVectorSpace* owner_space, TaggedObject::Tag& unique_tag, bool create_new)
       :
-      Vector(owner_space),
+      Vector(owner_space, unique_tag),
       comps_(owner_space->NCompSpaces()),
       const_comps_(owner_space->NCompSpaces()),
       owner_space_(owner_space),
@@ -53,7 +53,7 @@ namespace Ipopt
       dim_check += space->Dim();
 
       if (create_new) {
-        comps_[i] = space->MakeNew();
+        comps_[i] = space->MakeNew(unique_tag);
       }
     }
 

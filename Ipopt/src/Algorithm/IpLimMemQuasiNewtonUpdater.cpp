@@ -29,9 +29,11 @@ namespace Ipopt
 #endif
 
   LimMemQuasiNewtonUpdater::LimMemQuasiNewtonUpdater(
-    bool update_for_resto)
+     TaggedObject::Tag& unique_tag,
+     bool update_for_resto)
       :
-      update_for_resto_(update_for_resto)
+      update_for_resto_(update_for_resto),
+      unique_tag_(unique_tag)
   {}
 
   void LimMemQuasiNewtonUpdater::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
@@ -146,7 +148,7 @@ namespace Ipopt
     SdotS_uptodate_ = false;
     STDRS_ = NULL;
     DRS_ = NULL;
-    curr_DR_x_tag_ = 0;
+    curr_DR_x_tag_ = TaggedObject::Tag();
 
     last_x_ = NULL;
     last_grad_f_ = NULL;
@@ -199,13 +201,13 @@ namespace Ipopt
       DBG_ASSERT(dynamic_cast<RestoIpoptNLP*>(&IpNLP()));
       curr_DR_x_ = resto_nlp->DR_x();
       DBG_ASSERT(IsValid(curr_DR_x_));
-      DBG_ASSERT(curr_DR_x_tag_==0 || curr_DR_x_tag_==curr_DR_x_->GetTag());
+      DBG_ASSERT(curr_DR_x_tag_==TaggedObject::Tag() || curr_DR_x_tag_==curr_DR_x_->GetTag());
       curr_DR_x_tag_ = curr_DR_x_->GetTag();
       if (IsNull(P_LM)) {
         curr_red_DR_x_ = curr_DR_x_;
       }
       else {
-        SmartPtr<Vector> tmp = LM_vecspace->MakeNew();
+        SmartPtr<Vector> tmp = LM_vecspace->MakeNew(unique_tag_);
         P_LM->TransMultVector(1, *curr_DR_x_, 0., *tmp);
         curr_red_DR_x_ = ConstPtr(tmp);
       }
@@ -323,8 +325,8 @@ namespace Ipopt
       y_new = y_full_new;
     }
     else {
-      s_new = LM_vecspace->MakeNew();
-      y_new = LM_vecspace->MakeNew();
+      s_new = LM_vecspace->MakeNew(unique_tag_);
+      y_new = LM_vecspace->MakeNew(unique_tag_);
       P_LM->TransMultVector(1., *s_full_new, 0., *s_new);
       P_LM->TransMultVector(1., *y_full_new, 0., *y_new);
     }
@@ -459,7 +461,7 @@ namespace Ipopt
           // M = Ltilde * Ltilde^T
           SmartPtr<DenseSymMatrixSpace> Mspace =
             new DenseSymMatrixSpace(curr_lm_memory_);
-          SmartPtr<DenseSymMatrix> M = Mspace->MakeNewDenseSymMatrix();
+          SmartPtr<DenseSymMatrix> M = Mspace->MakeNewDenseSymMatrix(unique_tag_);
           M->HighRankUpdate(false, 1., *Ltilde, 0.);
 
           // M += S^T B_0 S
@@ -630,7 +632,7 @@ namespace Ipopt
         if (IsValid(Qminus)) {
           SmartPtr<MultiVectorMatrixSpace> U_space =
             new MultiVectorMatrixSpace(Qminus->NCols(), *s_new->OwnerSpace());
-          U_ = U_space->MakeNewMultiVectorMatrix();
+          U_ = U_space->MakeNewMultiVectorMatrix(unique_tag_);
           U_->AddRightMultMatrix(1., *Vtilde, *Qminus, 0.);
           DBG_PRINT_MATRIX(3, "U", *U_);
         }
@@ -642,7 +644,7 @@ namespace Ipopt
         if (IsValid(Qplus)) {
           SmartPtr<MultiVectorMatrixSpace> V_space =
             new MultiVectorMatrixSpace(Qplus->NCols(), *s_new->OwnerSpace());
-          V_ = V_space->MakeNewMultiVectorMatrix();
+          V_ = V_space->MakeNewMultiVectorMatrix(unique_tag_);
           V_->AddRightMultMatrix(1., *Vtilde, *Qplus, 0.);
           DBG_PRINT_MATRIX(3, "V", *V_);
         }
@@ -909,7 +911,7 @@ namespace Ipopt
     // Create Qminus
     SmartPtr<DenseGenMatrixSpace> Qminus_space =
       new DenseGenMatrixSpace(dim, nneg);
-    Qminus = Qminus_space->MakeNewDenseGenMatrix();
+    Qminus = Qminus_space->MakeNewDenseGenMatrix(unique_tag_);
     Number* Qminus_vals = Qminus->Values();
     for (Index j=0; j<nneg; j++) {
       Number esqrt = sqrt(-Evals[j]);
@@ -921,7 +923,7 @@ namespace Ipopt
     // Create Qplus
     SmartPtr<DenseGenMatrixSpace> Qplus_space =
       new DenseGenMatrixSpace(dim, dim-nneg);
-    Qplus = Qplus_space->MakeNewDenseGenMatrix();
+    Qplus = Qplus_space->MakeNewDenseGenMatrix(unique_tag_);
     Number* Qplus_vals = Qplus->Values();
     for (Index j=0; j<dim-nneg; j++) {
       DBG_ASSERT(Evals[j+nneg]>0.);
@@ -983,7 +985,7 @@ namespace Ipopt
     SmartPtr<MultiVectorMatrixSpace> new_Vspace =
       new MultiVectorMatrixSpace(ncols+1, *vec_space);
     SmartPtr<MultiVectorMatrix> new_V =
-      new_Vspace->MakeNewMultiVectorMatrix();
+      new_Vspace->MakeNewMultiVectorMatrix(unique_tag_);
     for (Index i=0; i<ncols; i++) {
       new_V->SetVector(i, *V->GetVector(i));
     }
@@ -1007,7 +1009,7 @@ namespace Ipopt
     SmartPtr<DenseVectorSpace> new_Vspace =
       new DenseVectorSpace(ndim+1);
     SmartPtr<DenseVector> new_V =
-      new_Vspace->MakeNewDenseVector();
+      new_Vspace->MakeNewDenseVector(unique_tag_);
     Number* newVvalues = new_V->Values();
     if (IsValid(V)) {
       DBG_ASSERT(!V->IsHomogeneous());
@@ -1040,7 +1042,7 @@ namespace Ipopt
     SmartPtr<DenseGenMatrixSpace> new_Vspace =
       new DenseGenMatrixSpace(ndim+1, ndim+1);
     SmartPtr<DenseGenMatrix> new_V =
-      new_Vspace->MakeNewDenseGenMatrix();
+      new_Vspace->MakeNewDenseGenMatrix(unique_tag_);
     Number* newVvalues = new_V->Values();
     if (IsValid(V)) {
       const Number* Vvalues = V->Values();
@@ -1079,7 +1081,7 @@ namespace Ipopt
     SmartPtr<DenseSymMatrixSpace> new_Vspace =
       new DenseSymMatrixSpace(ndim+1);
     SmartPtr<DenseSymMatrix> new_V =
-      new_Vspace->MakeNewDenseSymMatrix();
+      new_Vspace->MakeNewDenseSymMatrix(unique_tag_);
     Number* newVvalues = new_V->Values();
     if (IsValid(V)) {
       const Number* Vvalues = V->Values();
@@ -1115,7 +1117,7 @@ namespace Ipopt
     SmartPtr<DenseSymMatrixSpace> new_Vspace =
       new DenseSymMatrixSpace(ndim+1);
     SmartPtr<DenseSymMatrix> new_V =
-      new_Vspace->MakeNewDenseSymMatrix();
+      new_Vspace->MakeNewDenseSymMatrix(unique_tag_);
     Number* newVvalues = new_V->Values();
     if (IsValid(V)) {
       const Number* Vvalues = V->Values();
@@ -1264,13 +1266,13 @@ namespace Ipopt
       SmartPtr<const VectorSpace> LM_vecspace =
         h_space_->LowRankVectorSpace();
       DBG_ASSERT(IsValid(LM_vecspace));
-      B0 = LM_vecspace->MakeNew();
+      B0 = LM_vecspace->MakeNew(unique_tag_);
       B0->Set(sigma_);
     }
     DBG_PRINT_VECTOR(2, "B0", *B0);
 
     SmartPtr<LowRankUpdateSymMatrix> W =
-      h_space_->MakeNewLowRankUpdateSymMatrix();
+      h_space_->MakeNewLowRankUpdateSymMatrix(unique_tag_);
     W->SetDiag(*B0);
     if (IsValid(V_)) {
       W->SetV(*V_);
@@ -1283,7 +1285,7 @@ namespace Ipopt
       const CompoundSymMatrixSpace* csp =
         static_cast<const CompoundSymMatrixSpace*> (GetRawPtr(sp));
       SmartPtr<CompoundSymMatrix> CW =
-        csp->MakeNewCompoundSymMatrix();
+        csp->MakeNewCompoundSymMatrix(unique_tag_);
       CW->SetComp(0,0,*W);
       IpData().Set_W(GetRawPtr(CW));
     }
@@ -1320,7 +1322,7 @@ namespace Ipopt
   {
     SmartPtr<const MultiVectorMatrixSpace> mvspace =
       Ypart.MultiVectorMatrixOwnerSpace();
-    Y = mvspace->MakeNewMultiVectorMatrix();
+    Y = mvspace->MakeNewMultiVectorMatrix(unique_tag_);
     Y->AddOneMultiVectorMatrix(eta, DRS, 0.);
     Y->AddOneMultiVectorMatrix(1., Ypart, 1.);
   }
@@ -1331,7 +1333,7 @@ namespace Ipopt
   {
     SmartPtr<DenseVectorSpace> space =
       new DenseVectorSpace(S.NCols());
-    D = space->MakeNewDenseVector();
+    D = space->MakeNewDenseVector(unique_tag_);
     Number* Dvalues = D->Values();
     for (Index i=0; i<S.NCols(); i++) {
       Dvalues[i] = S.GetVector(i)->Dot(*Y.GetVector(i));
@@ -1345,7 +1347,7 @@ namespace Ipopt
     Index dim = S.NCols();
     SmartPtr<DenseGenMatrixSpace> space =
       new DenseGenMatrixSpace(dim, dim);
-    L = space->MakeNewDenseGenMatrix();
+    L = space->MakeNewDenseGenMatrix(unique_tag_);
     Number* Lvalues = L->Values();
     for (Index j=0; j<dim; j++) {
       for (Index i=0; i<=j; i++) {

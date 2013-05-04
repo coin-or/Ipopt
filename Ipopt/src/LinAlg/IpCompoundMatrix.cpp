@@ -25,9 +25,9 @@
 namespace Ipopt
 {
 
-  CompoundMatrix::CompoundMatrix(const CompoundMatrixSpace* owner_space)
+  CompoundMatrix::CompoundMatrix(const CompoundMatrixSpace* owner_space, TaggedObject::Tag& unique_tag)
       :
-      Matrix(owner_space),
+      Matrix(owner_space, unique_tag),
       owner_space_(owner_space),
       matrices_valid_(false)
   {
@@ -70,7 +70,7 @@ namespace Ipopt
     DBG_ASSERT(irow < NComps_Rows());
     DBG_ASSERT(jcol < NComps_Cols());
     DBG_ASSERT(IsValid(owner_space_->GetCompSpace(irow, jcol)));
-    SetCompNonConst(irow, jcol, *owner_space_->GetCompSpace(irow,jcol)->MakeNew());
+    SetCompNonConst(irow, jcol, *owner_space_->GetCompSpace(irow,jcol)->MakeNew(UniqueTag()));
   }
 
   void CompoundMatrix::MultVectorImpl(Number alpha, const Vector &x,
@@ -704,18 +704,18 @@ namespace Ipopt
     }
   }
 
-  CompoundMatrix* CompoundMatrixSpace::MakeNewCompoundMatrix() const
+  CompoundMatrix* CompoundMatrixSpace::MakeNewCompoundMatrix(TaggedObject::Tag& unique_tag) const
   {
     if (!dimensions_set_) {
       dimensions_set_ = DimensionsSet();
     }
     DBG_ASSERT(dimensions_set_);
 
-    CompoundMatrix* mat = new CompoundMatrix(this);
+    CompoundMatrix* mat = new CompoundMatrix(this, unique_tag);
     for (Index i=0; i<ncomps_rows_; i++) {
       for (Index j=0; j<ncomps_cols_; j++) {
         if (allocate_block_[i][j]) {
-          mat->SetCompNonConst(i, j, *GetCompSpace(i, j)->MakeNew());
+          mat->SetCompNonConst(i, j, *GetCompSpace(i, j)->MakeNew(unique_tag));
         }
       }
     }

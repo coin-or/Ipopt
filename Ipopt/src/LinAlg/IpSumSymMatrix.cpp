@@ -22,9 +22,9 @@
 namespace Ipopt
 {
 
-  SumSymMatrix::SumSymMatrix(const SumSymMatrixSpace* owner_space)
+  SumSymMatrix::SumSymMatrix(const SumSymMatrixSpace* owner_space, TaggedObject::Tag& unique_tag)
       :
-      SymMatrix(owner_space),
+      SymMatrix(owner_space, unique_tag),
       factors_(owner_space->NTerms(), 1.0),
       matrices_(owner_space->NTerms()),
       owner_space_(owner_space)
@@ -140,14 +140,14 @@ namespace Ipopt
     return NULL;
   }
 
-  SumSymMatrix* SumSymMatrixSpace::MakeNewSumSymMatrix() const
+  SumSymMatrix* SumSymMatrixSpace::MakeNewSumSymMatrix(TaggedObject::Tag& unique_tag) const
   {
     DBG_ASSERT(nterms_ == (Index)term_spaces_.size());
-    return new SumSymMatrix(this);
+    return new SumSymMatrix(this, unique_tag);
   }
 
-  SymMatrix* SumSymMatrixSpace::MakeNewSymMatrix() const
+  SymMatrix* SumSymMatrixSpace::MakeNewSymMatrix(TaggedObject::Tag& unique_tag) const
   {
-    return MakeNewSumSymMatrix();
+    return MakeNewSumSymMatrix(unique_tag);
   }
 } // namespace Ipopt

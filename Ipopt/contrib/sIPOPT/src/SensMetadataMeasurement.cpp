@@ -73,9 +73,9 @@ namespace Ipopt
     const std::vector<Index> constr_metadata = y_c_owner_space_->GetIntegerMetaData("sens_init_constr");
 
     std::vector<Index> retval;
-    for (Index i = 0; i<constr_metadata.size(); ++i) {
+    for (size_t i = 0; i<constr_metadata.size(); ++i) {
       if (constr_metadata[i]!=0) {
-	retval.push_back(n_base+i);
+	retval.push_back(n_base+(int)i);
       }
     }
     return retval;
@@ -101,13 +101,13 @@ namespace Ipopt
     SmartPtr<DenseVectorSpace> delta_u_space;
     delta_u_space = new DenseVectorSpace(n_idx_);
 
-    SmartPtr<DenseVector> delta_u = new DenseVector(GetRawPtr(ConstPtr(delta_u_space)));
+    SmartPtr<DenseVector> delta_u = new DenseVector(GetRawPtr(ConstPtr(delta_u_space)), IpData().trial()->x()->UniqueTag());
     Number* du_val = delta_u->Values();
 
     const Number* u_0_val = dynamic_cast<const DenseVector*>(GetRawPtr(IpData().trial()->x()))->Values();
 
     // Fill up values of delta_u vector
-    for (Index i=0; i<val_ipopt.size(); ++i) {
+    for (size_t i=0; i<val_ipopt.size(); ++i) {
       if (idx_ipopt[i]>0) {
 	du_val[idx_ipopt[i]-1] = val_ipopt[i]-u_0_val[i]; //initial_val[idx_ipopt[i]-1];
 	//du_val[idx_ipopt[i]-1] = val_ipopt[i];

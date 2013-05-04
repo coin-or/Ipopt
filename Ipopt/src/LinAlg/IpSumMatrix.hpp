@@ -29,7 +29,7 @@ namespace Ipopt
     //@{
     /** Constructor, taking the owner_space.
      */
-    SumMatrix(const SumMatrixSpace* owner_space);
+    SumMatrix(const SumMatrixSpace* owner_space, TaggedObject::Tag& unique_tag);
 
     /** Destructor */
     virtual ~SumMatrix();
@@ -133,11 +133,11 @@ namespace Ipopt
     SmartPtr<const MatrixSpace> GetTermSpace(Index term_idx) const;
 
     /** Method for creating a new matrix of this specific type. */
-    SumMatrix* MakeNewSumMatrix() const;
+    SumMatrix* MakeNewSumMatrix(TaggedObject::Tag& unique_tag) const;
 
     /** Overloaded MakeNew method for the MatrixSpace base class.
      */
-    virtual Matrix* MakeNew() const;
+    virtual Matrix* MakeNew(TaggedObject::Tag& unique_tag) const;
 
   private:
     /**@name Default Compiler Generated Methods

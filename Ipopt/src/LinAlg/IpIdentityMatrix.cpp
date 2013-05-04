@@ -11,9 +11,9 @@
 namespace Ipopt
 {
 
-  IdentityMatrix::IdentityMatrix(const SymMatrixSpace* owner_space)
+  IdentityMatrix::IdentityMatrix(const SymMatrixSpace* owner_space, TaggedObject::Tag& unique_tag)
       :
-      SymMatrix(owner_space),
+      SymMatrix(owner_space, unique_tag),
       factor_(1.0)
   {}
 

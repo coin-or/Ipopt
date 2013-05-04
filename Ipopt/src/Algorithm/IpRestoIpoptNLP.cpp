@@ -35,7 +35,7 @@ namespace Ipopt
                                IpoptData& orig_ip_data,
                                IpoptCalculatedQuantities& orig_ip_cq)
       :
-      IpoptNLP(new NoNLPScalingObject()),
+      IpoptNLP(new NoNLPScalingObject(orig_ip_nlp.UniqueTag()), orig_ip_nlp.UniqueTag()),
       orig_ip_nlp_(&orig_ip_nlp),
       orig_ip_data_(&orig_ip_data),
       orig_ip_cq_(&orig_ip_cq),
@@ -317,7 +317,7 @@ namespace Ipopt
     ///////////////////////////
 
     // x_L
-    x_L_ = x_l_space_->MakeNewCompoundVector();
+    x_L_ = x_l_space_->MakeNewCompoundVector(unique_tag_);
     x_L_->SetComp(0, *orig_ip_nlp_->x_L()); // x >= x_L
     x_L_->GetCompNonConst(1)->Set(0.0); // n_c >= 0
     x_L_->GetCompNonConst(2)->Set(0.0); // p_c >= 0
@@ -335,12 +335,12 @@ namespace Ipopt
     d_U_ = orig_ip_nlp_->d_U();
 
     // Px_L
-    Px_L_ = px_l_space_->MakeNewCompoundMatrix();
+    Px_L_ = px_l_space_->MakeNewCompoundMatrix(unique_tag_);
     Px_L_->SetComp(0, 0, *orig_ip_nlp_->Px_L());
     // Identities are auto-created (true flag passed into SetCompSpace)
 
     // Px_U
-    Px_U_ = px_u_space_->MakeNewCompoundMatrix();
+    Px_U_ = px_u_space_->MakeNewCompoundMatrix(unique_tag_);
     Px_U_->SetComp(0, 0, *orig_ip_nlp_->Px_U());
     // Remaining matrices will be zero'ed out
 
@@ -373,7 +373,7 @@ namespace Ipopt
     /////////////////////////////////////////////////////////////////////////
 
     // Vector x
-    SmartPtr<CompoundVector> comp_x = x_space_->MakeNewCompoundVector();
+    SmartPtr<CompoundVector> comp_x = x_space_->MakeNewCompoundVector(unique_tag_);
     if (init_x) {
       comp_x->GetCompNonConst(0)->Copy(*orig_ip_data_->curr()->x());
       comp_x->GetCompNonConst(1)->Set(1.0);
@@ -384,42 +384,42 @@ namespace Ipopt
     x = GetRawPtr(comp_x);
 
     // Vector y_c
-    y_c = c_space_->MakeNew();
+    y_c = c_space_->MakeNew(unique_tag_);
     if (init_y_c) {
       y_c->Set(0.0);  // ToDo
     }
 
     // Vector y_d
-    y_d = d_space_->MakeNew();
+    y_d = d_space_->MakeNew(unique_tag_);
     if (init_y_d) {
       y_d->Set(0.0);
     }
 
     // Vector z_L
-    z_L = x_l_space_->MakeNew();
+    z_L = x_l_space_->MakeNew(unique_tag_);
     if (init_z_L) {
       z_L->Set(1.0);
     }
 
     // Vector z_U
-    z_U = x_u_space_->MakeNew();
+    z_U = x_u_space_->MakeNew(unique_tag_);
     if (init_z_U) {
       z_U->Set(1.0);
     }
 
     // Vector v_L
-    v_L = d_l_space_->MakeNew();
+    v_L = d_l_space_->MakeNew(unique_tag_);
 
     // Vector v_U
-    v_U = d_u_space_->MakeNew();
+    v_U = d_u_space_->MakeNew(unique_tag_);
 
     // Initialize other data needed by the restoration nlp.  x_ref is
     // the point to reference to which we based the regularization
     // term
-    x_ref_ = orig_x_space->MakeNew();
+    x_ref_ = orig_x_space->MakeNew(unique_tag_);
     x_ref_->Copy(*orig_ip_data_->curr()->x());
 
-    dr_x_ = orig_x_space->MakeNew();
+    dr_x_ = orig_x_space->MakeNew(unique_tag_);
     dr_x_->Set(1.0);
     SmartPtr<Vector> tmp = dr_x_->MakeNew();
     tmp->Copy(*x_ref_);
@@ -428,7 +428,7 @@ namespace Ipopt
     dr_x_->ElementWiseMax(*tmp);
     dr_x_->ElementWiseReciprocal();
     DBG_PRINT_VECTOR(2, "dr_x_", *dr_x_);
-    DR_x_ = DR_x_space->MakeNewDiagMatrix();
+    DR_x_ = DR_x_space->MakeNewDiagMatrix(unique_tag_);
     DR_x_->SetDiag(*dr_x_);
 
     return true;
@@ -505,7 +505,7 @@ namespace Ipopt
     SmartPtr<const Vector> pc_only = c_vec->GetComp(2);
 
     SmartPtr<const Vector> orig_c = orig_ip_nlp_->c(*x_only);
-    SmartPtr<Vector> retPtr = c_space_->MakeNew();
+    SmartPtr<Vector> retPtr = c_space_->MakeNew(unique_tag_);
     retPtr->Copy(*orig_c);
     retPtr->Axpy(1.0, *nc_only);
     retPtr->Axpy(-1.0, *pc_only);
@@ -527,7 +527,7 @@ namespace Ipopt
     SmartPtr<const Vector> pd_only = c_vec->GetComp(4);
 
     SmartPtr<const Vector> orig_d = orig_ip_nlp_->d(*x_only);
-    SmartPtr<Vector> retPtr = d_space_->MakeNew();
+    SmartPtr<Vector> retPtr = d_space_->MakeNew(unique_tag_);
     retPtr->Copy(*orig_d);
     retPtr->Axpy(1., *nd_only);
     retPtr->Axpy(-1., *pd_only);
@@ -552,7 +552,7 @@ namespace Ipopt
     // Create the new compound matrix
     // The zero parts remain NULL, the identities are created from the matrix
     // space (since auto_allocate was set to true in SetCompSpace)
-    SmartPtr<CompoundMatrix> retPtr = jac_c_space_->MakeNewCompoundMatrix();
+    SmartPtr<CompoundMatrix> retPtr = jac_c_space_->MakeNewCompoundMatrix(unique_tag_);
 
     // set the (0,0) block to the original jacobian
     retPtr->SetComp(0,0,*jac_c_only);
@@ -588,7 +588,7 @@ namespace Ipopt
     // Create the new compound matrix
     // The zero parts remain NULL, the identities are created from the matrix
     // space (since auto_allocate was set to true in SetCompSpace)
-    SmartPtr<CompoundMatrix> retPtr = jac_d_space_->MakeNewCompoundMatrix();
+    SmartPtr<CompoundMatrix> retPtr = jac_d_space_->MakeNewCompoundMatrix(unique_tag_);
     DBG_PRINT((1, "jac_d_space_ = %x\n", GetRawPtr(jac_d_space_)))
 
     // Set the block for the original Jacobian
@@ -641,7 +641,7 @@ namespace Ipopt
 
     // Create the new compound matrix
     // The SumSymMatrix is auto_allocated
-    SmartPtr<CompoundSymMatrix> retPtr = h_space_->MakeNewCompoundSymMatrix();
+    SmartPtr<CompoundSymMatrix> retPtr = h_space_->MakeNewCompoundSymMatrix(unique_tag_);
 
     // Set the entries in the SumSymMatrix
     SmartPtr<Matrix> h_sum_mat = retPtr->GetCompNonConst(0,0);
@@ -656,11 +656,11 @@ namespace Ipopt
   {
     SmartPtr<CompoundSymMatrix> retPtr;
     if (hessian_approximation_==LIMITED_MEMORY) {
-      retPtr = h_space_->MakeNewCompoundSymMatrix();
+      retPtr = h_space_->MakeNewCompoundSymMatrix(unique_tag_);
     }
     else {
       SmartPtr<const SymMatrix> h_con_orig = orig_ip_nlp_->uninitialized_h();
-      retPtr = h_space_->MakeNewCompoundSymMatrix();
+      retPtr = h_space_->MakeNewCompoundSymMatrix(unique_tag_);
       SmartPtr<Matrix> h_sum_mat = retPtr->GetCompNonConst(0,0);
       SmartPtr<SumSymMatrix> h_sum = static_cast<SumSymMatrix*>(GetRawPtr(h_sum_mat));
       h_sum->SetTerm(0, 1.0, *h_con_orig);

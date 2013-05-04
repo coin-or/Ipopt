@@ -30,8 +30,9 @@ namespace Ipopt
   public:
     /**@name Constructors/Destructors */
     //@{
-    IpoptNLP(const SmartPtr<NLPScalingObject> nlp_scaling)
+    IpoptNLP(const SmartPtr<NLPScalingObject> nlp_scaling, TaggedObject::Tag& unique_tag)
         :
+        unique_tag_(unique_tag),
         nlp_scaling_(nlp_scaling)
     {}
 
@@ -231,6 +232,15 @@ namespace Ipopt
       DBG_ASSERT(IsValid(nlp_scaling_));
       return nlp_scaling_;
     }
+
+    TaggedObject::Tag& UniqueTag() const
+    {
+       return unique_tag_;
+    }
+
+  protected:
+    /** Unique tag for caching mechanism */
+    TaggedObject::Tag& unique_tag_;
 
   private:
 

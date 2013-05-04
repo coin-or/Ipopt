@@ -1709,10 +1709,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\Ipopt\src\Common\IpTaggedObject.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\Ipopt\src\Common\IpUtils.cpp"
 					>
 				</File>

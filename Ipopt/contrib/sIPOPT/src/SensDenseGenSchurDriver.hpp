@@ -21,7 +21,8 @@ namespace Ipopt
 
     DenseGenSchurDriver(SmartPtr<SensBacksolver> backsolver,
 			SmartPtr<PCalculator> pcalc,
-			SmartPtr<SchurData> data_B);
+			SmartPtr<SchurData> data_B,
+			TaggedObject::Tag& unique_tag);
 
     virtual ~DenseGenSchurDriver();
 

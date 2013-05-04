@@ -24,7 +24,7 @@ namespace Ipopt
     //@{
     UserScaling(const SmartPtr<const NLP>& nlp)
         :
-        StandardScalingBase(),
+        StandardScalingBase(nlp->UniqueTag()),
         nlp_(nlp)
     {}
 

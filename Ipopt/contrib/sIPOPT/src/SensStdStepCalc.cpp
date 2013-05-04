@@ -93,7 +93,7 @@ namespace Ipopt
       std::vector<Index> delta_u_sort;
       bool bounds_violated;
       SmartPtr<DenseVectorSpace> delta_u_space = new DenseVectorSpace(0);
-      SmartPtr<DenseVector> old_delta_u = new DenseVector(GetRawPtr(delta_u_space));
+      SmartPtr<DenseVector> old_delta_u = new DenseVector(GetRawPtr(delta_u_space), delta_u.UniqueTag());
       SmartPtr<DenseVector> new_delta_u;
 
       bounds_violated = BoundCheck(sol, x_bound_violations_idx, x_bound_violations_du);
@@ -112,7 +112,7 @@ namespace Ipopt
 	old_delta_u->Print(Jnlst(),J_VECTOR,J_USER1,"old_delta_u");
 	delta_u_space = NULL; // delete old delta_u space
 	delta_u_space = new DenseVectorSpace(new_du_size); // create new delta_u space
-	new_delta_u = new DenseVector(GetRawPtr(ConstPtr(delta_u_space)));
+	new_delta_u = new DenseVector(GetRawPtr(ConstPtr(delta_u_space)), delta_u.UniqueTag());
 	new_du_values = new_delta_u->Values();
 	IpBlasDcopy(old_delta_u->Dim(), old_delta_u->Values(), 1, new_du_values, 1);
 	for (Index i=0; i<x_bound_violations_idx.size(); ++i) {

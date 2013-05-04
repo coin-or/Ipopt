@@ -36,7 +36,7 @@ namespace Ipopt
     //@{
 
     /** Constructor, given the corresponding matrix space. */
-    LowRankUpdateSymMatrix(const LowRankUpdateSymMatrixSpace* owner_space);
+    LowRankUpdateSymMatrix(const LowRankUpdateSymMatrixSpace* owner_space, TaggedObject::Tag& unique_tag);
 
     /** Destructor */
     ~LowRankUpdateSymMatrix();
@@ -174,15 +174,15 @@ namespace Ipopt
 
     /** Overloaded MakeNew method for the SymMatrixSpace base class.
      */
-    virtual SymMatrix* MakeNewSymMatrix() const
+    virtual SymMatrix* MakeNewSymMatrix(TaggedObject::Tag& unique_tag) const
     {
-      return MakeNewLowRankUpdateSymMatrix();
+      return MakeNewLowRankUpdateSymMatrix(unique_tag);
     }
 
     /** Method for creating a new matrix of this specific type. */
-    LowRankUpdateSymMatrix* MakeNewLowRankUpdateSymMatrix() const
+    LowRankUpdateSymMatrix* MakeNewLowRankUpdateSymMatrix(TaggedObject::Tag& unique_tag) const
     {
-      return new LowRankUpdateSymMatrix(this);
+      return new LowRankUpdateSymMatrix(this, unique_tag);
     }
 
     SmartPtr<const Matrix> P_LowRank() const
