@@ -3545,14 +3545,15 @@ protected boolean get_bounds_info(int n, double[] x_L, double[] x_U,
 protected boolean get_starting_point(int n, boolean init_x, double[] x,
                                      boolean init_z, double[] z_L, double[] z_U,
                                      int m, boolean init_lambda,double[] lambda) {
-  assert init_x == true;
   assert init_z == false;
   assert init_lambda = false;
   
-  x[0] = 1.0;
-  x[1] = 5.0;
-  x[2] = 5.0;
-  x[3] = 1.0;     
+  if( init_x ) {
+    x[0] = 1.0;
+    x[1] = 5.0;
+    x[2] = 5.0;
+    x[3] = 1.0;
+  }
         
   return true;
 }
@@ -3680,14 +3681,14 @@ public static void main(String[] args) {
   
   // print the status and optimal value
   System.out.println("Status    = " + status);
-  System.out.println("Obj Value = " + hs071.getObjVal());
+  System.out.println("Obj Value = " + hs071.getObjectiveValue());
 }
 \end{verbatim}
 The {\tt OptimizeNLP} method returns the \Ipopt solve status as integer, which 
 indicates whether the problem was solved successfully.
-Further, the methods {\tt getObjVal()}, {\tt getState()}, {\tt 
-getMultConstraints()}, {\tt getMultLowerBounds()}, and {\tt 
-getMultUpperBounds()} can be used to obtain the objective value, the primal 
+Further, the methods {\tt getObjectiveValue()}, {\tt getVariableValues()}, and {\tt 
+getConstraintMultipliers()}, {\tt getLowerBoundMultipliers()}, {\tt 
+getUpperBoundMultipliers()} can be used to obtain the objective value, the primal 
 solution value of the variables, and dual solution values, respectively.
 
 \subsection{The R Interface} 
