@@ -298,7 +298,7 @@ bool Jipopt::get_starting_point(Index n, bool init_x, Number* x,
                                     Index m, bool init_lambda, Number* lambda){
 	jdoubleArray xj=this->xj;
 	jdoubleArray z_lj=this->mult_x_Lj;
-	jdoubleArray z_uj=this->mult_x_Lj;
+	jdoubleArray z_uj=this->mult_x_Uj;
 	jdoubleArray lambdaj=this->mult_gj;
 
 	if(!env->CallBooleanMethod(solver,get_starting_point_,
@@ -665,7 +665,7 @@ jdoubleArray callback_hess)
   else {
     printf("\n\n*** The problem FAILED!\n");
   }
-  
+
 
   // As the SmartPtrs go out of scope, the reference count
   // will be decremented and the objects will automatically
@@ -685,7 +685,11 @@ jlong pipopt){
 	Jipopt *problem = (Jipopt *)pipopt;
 
 	if(problem!=NULL){
-		delete problem;
+	   /* if OptimizeTNLP has been called, application holds a smartptr to the problem
+	    *   so freeing the application will also free the problem itself
+	    * if OptimizeTNLP has not been called, we will have a memory leak here
+	    */
+	   problem->application = NULL;
 	}
 }
 

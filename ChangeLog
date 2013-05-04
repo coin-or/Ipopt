@@ -2,7 +2,7 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremetal change can be found in the
 history management of subversion.
 
-2012-04-?? releases/3.10.4
+2012-05-?? releases/3.10.4
         - fixed sign of dual values in AMPL solution again (with help of Gabe)
           [r2169, r2170, r2184, #183]
         - fixed bugs with reoptimizing a TNLP with all variables fixed [r2172, r2173, #179]
@@ -10,6 +10,8 @@ history management of subversion.
           in Matlab interface (by T. Kelman) [r2191]
         - added missing final int for Ipopt return code Maximum_CpuTime_Exceeded
           in Java interface [r2216]
+        - fixed bug when trying to warmstart Ipopt in Java interface [r2253]
+        - worked around wrong use of SmartPtr's in Java interface [r2255]
 
 2012-11-19 releases/3.10.3
         - minor fixes in MA86 interface (by Jonathan Hogg) [r2069, r2086]
