@@ -31,8 +31,10 @@ history management of subversion.
         
         - fixes to JIpopt buildsystem (now may work on windows and uses libtool)
         - JIpopt now reads options file ipopt.opt by default, if present
+        - removed predefined KEY_ strings in JIpopt
+        - renamed API functions to retrieve solution values in JIpopt
         
-        - simplified installation of R interface        
+        - simplified installation of R interface
 
 2012-05-?? releases/3.10.4
         - fixed sign of dual values in AMPL solution again (with help of Gabe)
