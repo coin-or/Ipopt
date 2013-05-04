@@ -44,6 +44,7 @@ history management of subversion.
           in Java interface [r2216]
         - fixed bug when trying to warmstart Ipopt in Java interface [r2253]
         - worked around wrong use of SmartPtr's in Java interface [r2255]
+        - fixed bug in returning final solution in Java interface [r2258]
 
 2012-11-19 releases/3.10.3
         - minor fixes in MA86 interface (by Jonathan Hogg) [r2069, r2086]
