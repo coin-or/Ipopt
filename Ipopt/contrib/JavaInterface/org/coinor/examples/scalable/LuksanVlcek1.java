@@ -4,23 +4,6 @@
  * This code is published under the Eclipse Public License.
  * 
  * $Id$
- * 
- * Comments by Tong Kewei:
- * I changed from Rafael de Pelegrini Soares's original code.
- * His codes are originally derived form C version of IPOPT,which has limited functions. 
- * I derived my codes from C++ version of IPOPT, which is much more powerful.  
- * I also fix a bug in Rafael de Pelegrini Soares's code on function setProblemScaling,
- * In his original code the function setProblemScaling has no use to change problem.
- * I added some useful functions in JIpopt, such as get_scaling_parameters or get_number_of_nonlinear_variables
- * or get_list_of_nonlinear_variables. You can add any more functions as you like. Follow my structure it is 
- * very easy.
- *
- * If you have problem or you need me to add another functions, please contact me.
- *
- * Authors: Tong Kewei, E-mail:tongkewei@126.com
- * Beihang University, website: www.buaa.edu.cn
- * Beijing,China.
- * 2007-11-11
  */
 
 package org.coinor.examples.scalable;

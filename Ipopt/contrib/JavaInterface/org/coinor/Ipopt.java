@@ -4,35 +4,15 @@
  * This code is published under the Eclipse Public License.
  * 
  * $Id$
- * 
- * Comments by Tong Kewei:
- * This is a revised version of JNI of C++ interface of IPOPT.
- * I changed from Rafael de Pelegrini Soares's original code.
- * His codes are originally derived form C version of IPOPT,which has limited functions. 
- * I derived my codes from C++ version of IPOPT, which is much more powerful.  
- * I also fix a bug in Rafael de Pelegrini Soares's code on function setProblemScaling,
- * In his original code the function setProblemScaling has no use to change problem.
- * I added some useful functions in JIpopt, such as get_scaling_parameters or get_number_of_nonlinear_variables
- * or get_list_of_nonlinear_variables. You can add any more functions as you like. Follow my structure it is 
- * very easy.
- *
- * If you have problem or you need me to add another functions, please contact me.
- *
- * Authors: Tong Kewei, E-mail:tongkewei@126.com
- * Beihang University, website: www.buaa.edu.cn
- * Beijing,China.
- * 2007-11-11
  */
 
 package org.coinor;
 
 import java.io.File;
 
-/**
- * A Java Native Interface for the Ipopt optimization solver.
+/** A Java Native Interface for the Ipopt optimization solver.
  * <p>
- * Ipopt is a solver for large scale nonlinear optimization problems (NLP) with 
- * non-linear contraints.
+ * Ipopt is a solver for large scale nonlinear optimization problems (NLP).
  * <p>
  * The Java Native Interface (JNI) is a programming framework that allows
  * Java code running in the Java Virtual Machine (JVM) to call and be
@@ -60,11 +40,9 @@ import java.io.File;
  * Ipopt object, otherwise the nativelly allocated memory will be disposed of only
  * when the JVM call {@link #finalize()} on it.
  * 
- * @author Rafael de Pelegrini Soares, Edson C. do Valle
- *
- * This is a revised version of JNI, a C++ interface of Ipopt, revised by Tong Kewei
- * of BeiHang University.
- * @author Tong Kewei
+ * @author Rafael de Pelegrini Soares
+ * @author Edson C. do Valle
+ * @author Tong Kewei, BeiHang University
  */
 public abstract class Ipopt
 {
@@ -91,8 +69,7 @@ public abstract class Ipopt
 			double callback_grad_f[], double callback_jac_g[], double callback_hess[]);
 
 
-	/** The default DLL name of the native implementation (without any platform dependent
-	 * prefixes or sufixes) */
+	/** The default DLL name of the native implementation (without any platform dependent prefixes or suffixes) */
 	public static final String DLLNAME = "jipopt";
 	/** The relative path where the native DLL is found */
 	public static final String DLLPATH = "lib";
@@ -102,7 +79,7 @@ public abstract class Ipopt
 	/** Use FORTRAN index style for iRow and jCol vectors */
 	public final static int FORTRAN_STYLE = 1;
 
-	/* The possible return codes: should be kept in sync with Ipopt return codes */
+	/** The possible Ipopt status return codes: should be kept in sync with Ipopt return codes */
 	public final static int SOLVE_SUCCEEDED = 0;
 	public final static int ACCEPTABLE_LEVEL = 1;
 	public final static int INFEASIBLE_PROBLEM = 2;
@@ -151,9 +128,7 @@ public abstract class Ipopt
 	/** Status returned by the solver*/
 	private int status = INVALID_PROBLEM_DEFINITION;
 
-	/**
-	 * Creates a new NLP Solver using {@value #DLLPATH} as path and {@value #DLLNAME}
-	 * as the DLL name.
+	/** Creates a new NLP Solver using {@value #DLLPATH} as path and {@value #DLLNAME} as the DLL name.
 	 * 
 	 * @see #Ipopt(String, String)
 	 */
@@ -162,8 +137,7 @@ public abstract class Ipopt
 		this(DLLPATH, DLLNAME);
 	}
 
-	/**
-	 * Creates a NLP Solver for the given DLL file.
+	/** Creates a NLP Solver for the given DLL file.
 	 * The given file must implement the native interface required by this class.
 	 * 
 	 * @param path the path where the DLL is found.
@@ -178,30 +152,35 @@ public abstract class Ipopt
 		System.load(file.getAbsolutePath());
 	}
 
-	/** Callback function for the c++ original get_bounds_info function.*/  
+	/** Callback function for the variable bounds and constraint sides. */  
 	abstract protected boolean get_bounds_info(int n, double[] x_l, double[] x_u,
 			int m, double[] g_l, double[] g_u);
-	/** Callback function for the c++ original get_starting_point function. */
+	
+	/** Callback function for retrieving a starting point. */
 	abstract protected boolean get_starting_point(int n, boolean init_x, double[] x,
 			boolean init_z, double[] z_L, double[] z_U,
 			int m, boolean init_lambda, double[] lambda);
+	
 	/** Callback function for the objective function. */
-	abstract protected boolean eval_f(int n, double []x, boolean new_x, double []obj_value);
-	/** Callback function for the objective function gradient */
-	abstract protected boolean eval_grad_f(int n, double []x, boolean new_x, double []grad_f);
-	/** Callback function for the constraints */
-	abstract protected boolean eval_g(int n, double []x, boolean new_x, int m, double []g);
-	/** Callback function for the constraints Jacobian */
-	abstract protected boolean eval_jac_g(int n, double []x, boolean new_x,
-			int m, int nele_jac, int []iRow, int []jCol, double []values);
-	/** Callback function for the hessian */
+	abstract protected boolean eval_f(int n, double[] x, boolean new_x, double[] obj_value);
+	
+	/** Callback function for the objective function gradient. */
+	abstract protected boolean eval_grad_f(int n, double[] x, boolean new_x, double[] grad_f);
+	
+	/** Callback function for the constraints. */
+	abstract protected boolean eval_g(int n, double[] x, boolean new_x, int m, double[] g);
+	
+	/** Callback function for the constraints Jacobian. */
+	abstract protected boolean eval_jac_g(int n, double[] x, boolean new_x,
+			int m, int nele_jac, int[] iRow, int[] jCol, double[] values);
+	
+	/** Callback function for the hessian. */
 	abstract protected boolean eval_h(int n, double[] x, boolean new_x, double obj_factor,
-			int m, double []lambda, boolean new_lambda,
-			int nele_hess, int[] iRow, int []jCol,
-			double []values);
+			int m, double[] lambda, boolean new_lambda,
+			int nele_hess, int[] iRow, int[] jCol,
+			double[] values);
 
-	/**
-	 * Disposes of the natively allocated memory.
+	/** Dispose of the natively allocated memory.
 	 * Programmers should, for efficiency, call the dispose method when finished
 	 * using a Ipopt object.
 	 * <p>
@@ -209,7 +188,6 @@ public abstract class Ipopt
 	 * {@link #create(int, int, int, int, int)}.
 	 * In this case, you should call the dispose method only when you
 	 * finished with the object and it is not needed anymore.
-	 * 	
 	 */
 	public void dispose()
 	{
@@ -220,6 +198,11 @@ public abstract class Ipopt
 			ipopt = 0;
 		}
 	}
+	
+	protected void finalize() throws Throwable
+	{
+		dispose();
+	}
 
 	/** Create a new problem. the use is the same as get_nlp_info, change the name for clarity in java.
 	 * 
@@ -227,13 +210,11 @@ public abstract class Ipopt
 	 * @param m the number of constraints in the problem.
 	 * @param nele_jac the number of nonzero entries in the Jacobian.
 	 * @param nele_hess the number of nonzero entries in the Hessian.
-	 * @param index_style the numbering style used for row/col entries in the sparse matrix format(0 for 
-	 *  C_STYLE, 1 for FORTRAN_STYLE).
+	 * @param index_style the numbering style used for row/col entries in the sparse matrix format (C_STYLE or FORTRAN_STYLE).
 	 *
-	 * @return true means success, false means fail! 
+	 * @return true on success, otherwise false
 	 */
-	public boolean create(int n, int m, 
-			int nele_jac, int nele_hess, int index_style)
+	public boolean create(int n, int m,  int nele_jac, int nele_hess, int index_style)
 	{
 		// delete any previously created native memory
 		dispose();
@@ -257,12 +238,9 @@ public abstract class Ipopt
 		return ipopt == 0 ? false : true;
 	}
 
-	/**
-	 * Function for adding an integer option.
+	/** Function for setting an integer option.
 	 * <p>
-	 * The valid keywords are public static members of this class, with names
-	 * beginning with <code>KEY_</code>, e.g, {@link #KEY_TOL}.
-	 * For more details about the valid options check the Ipopt documentation.
+	 * For a list of valid keywords check the Ipopt documentation.
 	 * 
 	 * @param keyword the option keyword
 	 * @param val the value
@@ -273,28 +251,26 @@ public abstract class Ipopt
 		return ipopt == 0 ? false : AddIpoptIntOption(ipopt, keyword, val);
 	}
 
-	/**
-	 * Function for adding a number option.
+	/** Function for setting a number option.
+	 * <p>
+	 * For a list of valid keywords check the Ipopt documentation.
 	 * 
 	 * @param keyword the option keyword
 	 * @param val the value
 	 * @return false if the option could not be set (e.g., if keyword is unknown)
-	 * 
-	 * @see #setIntegerOption(String, int)
 	 */
 	public boolean setNumericOption(String keyword, double val)
 	{
 		return ipopt == 0 ? false : AddIpoptNumOption(ipopt, keyword, val);
 	}
 
-	/**
-	 * Function for adding a string option.
+	/** Function for setting a string option.
+	 * <p>
+	 * For a list of valid keywords check the Ipopt documentation.
 	 * 
 	 * @param keyword the option keyword
 	 * @param val the value
 	 * @return false if the option could not be set (e.g., if keyword is unknown)
-	 * 
-	 * @see #setIntegerOption(String, int)
 	 */
 	public boolean setStringOption(String keyword, String val)
 	{
@@ -316,10 +292,11 @@ public abstract class Ipopt
 		this.status = this.OptimizeTNLP(ipopt,
 				x, g, obj_val, mult_g, mult_x_L, mult_x_U,
 				callback_grad_f, callback_jac_g, callback_hess);
+		
 		return this.status;
 	}
 
-	/**
+	/** Gives primal variable values at final point.
 	 * @return the primal variable values at the final point.
 	 */
 	public double[] getVariableValues()
@@ -327,7 +304,7 @@ public abstract class Ipopt
 		return x;
 	}
 
-	/**
+	/** Gives objective function value at final point.
 	 * @return the final value of the objective function.
 	 */
 	public double getObjectiveValue()
@@ -335,7 +312,7 @@ public abstract class Ipopt
 		return obj_val[0];
 	}
 
-	/**
+	/** Gives Ipopt status of last OptimizeNLP call.
 	 * @return the status of the solver.
 	 * 
 	 * @see #OptimizeNLP()
@@ -345,7 +322,7 @@ public abstract class Ipopt
 		return status;
 	}
 
-	/**
+	/** Gives constraint function values at final point.
 	 * @return Returns the final values for the constraints functions. 
 	 */
 	public double[] getConstraintValues()
@@ -353,7 +330,7 @@ public abstract class Ipopt
 		return g;
 	}
 
-	/**
+	/** Gives constraint dual multipliers in final point.
 	 * @return Returns the final multipliers for the constraints. 
 	 */
 	public double[] getConstraintMultipliers()
@@ -361,7 +338,7 @@ public abstract class Ipopt
 		return mult_g;
 	}
 
-	/**
+	/** Gives dual multipliers for variable lower bounds in final point.
 	 * @return Returns the final multipliers for the variable lower bounds.
 	 */
 	public double[] getLowerBoundMultipliers()
@@ -369,7 +346,7 @@ public abstract class Ipopt
 		return mult_x_L;
 	}
 
-	/**
+	/** Gives dual multipliers for variable upper bounds in final point.
 	 * @return Returns the final multipliers for the variable upper bounds.
 	 */
 	public double[] getUpperBoundMultipliers()
@@ -379,18 +356,17 @@ public abstract class Ipopt
 
 	/** If you using_scaling_parameters = true, please overload this method, 
 	 *
-	 * @param obj_scaling double[1] which you should supply,  negative value means maximize the obj function. 
-	 * @param n  the number of variables in the problem, dimension of x.
-	 * @param x_scaling  the scaling factors for the variables which are orderd like x, dimension is n. If you
-	 *  want IPOPT so scale the variables, you should set use_x_scaling=true in use_x_g_scaling's first element.
-	 * @param m  the number of constraints in the problem, dimension of g(x).
-	 * @param g_scaling  the scaling factors for the constraints which are orderd like g(x), dimension is m. If
-	 *  you want IPOPT so scale the constraints, you should set use_g_scaling=true in use_x_g_scaling's second
-	 *  element.
-	 * @param use_x_g_scaling boolean[2]: means {use_x_scaling=true/false, use_g_scaling=true/false} which you 
-	 *  should supply. 
+	 * To instruct IPOPT to use scaling values for variables, the first element of use_x_g_scaling should be set.
+	 * To instruct IPOPT to use scaling values for constraints, the second element of use_x_g_scaling should be set.
+	 *  
+	 * @param obj_scaling  double[1] to store a scaling factor for the objective (negative value leads to maximizing the objective function) 
+	 * @param n  the number of variables in the problem
+	 * @param x_scaling  array to store the scaling factors for the variables
+	 * @param m  the number of constraints in the problem
+	 * @param g_scaling  array to store the scaling factors for the constraints
+	 * @param use_x_g_scaling boolean[2] to store whether scaling factors for variables (1st entry) and constraints (2nd entry) should be used
 	 *
-	 * @return true means success, false means fail! 
+	 * @return true on success, otherwise false
 	 */
 	public boolean get_scaling_parameters(double[] obj_scaling,
 			int n, double[] x_scaling,
@@ -400,22 +376,21 @@ public abstract class Ipopt
 		return false;
 	}
 
-	/** If you using_LBFGS("limited-memory"), please overload this method
+	/** When LBFGS hessian approximation is used, this method should be overloaded.
 	 *
-	 * @return number of nonlinear variables, negtive means that all variables are negative
+	 * @return number of nonlinear variables, a negative value indicates that all variables are negative
 	 */
 	public int get_number_of_nonlinear_variables()
 	{
 		return -1;
 	}
 
-	/**  If you using_LBFGS("limited-memory"), please overload this method
+	/** When LBFGS hessian approximation is used, this method should be overloaded.
 	 *
-	 * @param num_nonlin_vars number_of_nonlinear_variables, identical with number_of_nonlinear_variables and the 
-	 *  length of the array pos_nonlin_vars.
+	 * @param num_nonlin_vars number of nonlinear variables and length of pos_nonlin_vars array
 	 * @param pos_nonlin_vars the indices of all nonlinear variables
 	 *
-	 * @return true means success, false means fail! 
+	 * @return true on success, otherwise false
 	 */
 	public boolean get_list_of_nonlinear_variables(int num_nonlin_vars,
 			int[] pos_nonlin_vars)
