@@ -11,9 +11,9 @@
 namespace Ipopt
 {
 
-  ScaledMatrix::ScaledMatrix(const ScaledMatrixSpace* owner_space)
+  ScaledMatrix::ScaledMatrix(const ScaledMatrixSpace* owner_space, TaggedObject::Tag& unique_tag)
       :
-      Matrix(owner_space),
+      Matrix(owner_space, unique_tag),
       owner_space_(owner_space)
   {}
 

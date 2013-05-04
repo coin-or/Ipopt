@@ -70,6 +70,7 @@ namespace Ipopt
     SmartPtr<IpoptNLP> ip_nlp_;
     SmartPtr<RegisteredOptions> reg_options_;
     ApplicationReturnStatus ipopt_retval_;
+    TaggedObject::Tag* unique_tag_;
 
     /** storing options values */
     bool run_sens_;

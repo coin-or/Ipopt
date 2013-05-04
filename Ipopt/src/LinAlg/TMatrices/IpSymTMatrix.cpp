@@ -23,9 +23,9 @@
 namespace Ipopt
 {
 
-  SymTMatrix::SymTMatrix(const SymTMatrixSpace* owner_space)
+  SymTMatrix::SymTMatrix(const SymTMatrixSpace* owner_space, TaggedObject::Tag& unique_tag)
       :
-      SymMatrix(owner_space),
+      SymMatrix(owner_space, unique_tag),
       owner_space_(owner_space),
       values_(NULL),
       initialized_(false)

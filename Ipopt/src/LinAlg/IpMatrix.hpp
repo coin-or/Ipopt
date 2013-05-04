@@ -32,11 +32,11 @@ namespace Ipopt
     /** Constructor.  It has to be given a pointer to the
      *  corresponding MatrixSpace.
      */
-    Matrix(const MatrixSpace* owner_space)
+    Matrix(const MatrixSpace* owner_space, TaggedObject::Tag& unique_tag)
         :
-        TaggedObject(),
+        TaggedObject(unique_tag),
         owner_space_(owner_space),
-        valid_cache_tag_(0)
+        valid_cache_tag_(TaggedObject::Tag())
     {}
 
     /** Destructor */
@@ -258,7 +258,7 @@ namespace Ipopt
     /** Pure virtual method for creating a new Matrix of the
      *  corresponding type.
      */
-    virtual Matrix* MakeNew() const=0;
+    virtual Matrix* MakeNew(TaggedObject::Tag& unique_tag) const=0;
 
     /** Accessor function for the number of rows. */
     Index NRows() const

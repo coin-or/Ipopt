@@ -21,20 +21,20 @@ namespace Ipopt
     AugSystemSolver& aug_system_solver,
     Index max_rank)
       :
-      AugSystemSolver(),
+      AugSystemSolver(aug_system_solver),
       aug_system_solver_(&aug_system_solver),
       max_rank_(max_rank),
-      w_tag_(0),
+      w_tag_(TaggedObject::Tag()),
       w_factor_(0.),
-      d_x_tag_(0),
+      d_x_tag_(TaggedObject::Tag()),
       delta_x_(0.),
-      d_s_tag_(0),
+      d_s_tag_(TaggedObject::Tag()),
       delta_s_(0.),
-      j_c_tag_(0),
-      d_c_tag_(0),
+      j_c_tag_(TaggedObject::Tag()),
+      d_c_tag_(TaggedObject::Tag()),
       delta_c_(0.),
-      j_d_tag_(0),
-      d_d_tag_(0),
+      j_d_tag_(TaggedObject::Tag()),
+      d_d_tag_(TaggedObject::Tag()),
       delta_d_(0.)
   {
     DBG_START_METH("LowRankSSAugSystemSolver::LowRankSSAugSystemSolver()",dbg_verbosity);
@@ -93,7 +93,7 @@ namespace Ipopt
       // Set up the diagonal matrix Wdiag_
       Index dimx = rhs_x.Dim();
       SmartPtr<DiagMatrixSpace> Wdiag_space = new DiagMatrixSpace(dimx);
-      Wdiag_ = Wdiag_space->MakeNewDiagMatrix();
+      Wdiag_ = Wdiag_space->MakeNewDiagMatrix(unique_tag_);
     }
 
     // This might be used with a linear solver that cannot detect the
@@ -121,40 +121,40 @@ namespace Ipopt
         d_x_tag_ = D_x->GetTag();
       }
       else {
-        d_x_tag_ = 0;
+        d_x_tag_ = TaggedObject::Tag();
       }
       delta_x_ = delta_x;
       if (D_s) {
         d_s_tag_ = D_s->GetTag();
       }
       else {
-        d_s_tag_ = 0;
+        d_s_tag_ = TaggedObject::Tag();
       }
       delta_s_ = delta_s;
       if (J_c) {
         j_c_tag_ = J_c->GetTag();
       }
       else {
-        j_c_tag_ = 0;
+        j_c_tag_ = TaggedObject::Tag();
       }
       if (D_c) {
         d_c_tag_ = D_c->GetTag();
       }
       else {
-        d_c_tag_ = 0;
+        d_c_tag_ = TaggedObject::Tag();
       }
       delta_c_ = delta_c;
       if (J_d) {
         j_d_tag_ = J_d->GetTag();
       }
       else {
-        j_d_tag_ = 0;
+        j_d_tag_ = TaggedObject::Tag();
       }
       if (D_d) {
         d_d_tag_ = D_d->GetTag();
       }
       else {
-        d_d_tag_ = 0;
+        d_d_tag_ = TaggedObject::Tag();
       }
       delta_d_ = delta_d;
 
@@ -163,11 +163,11 @@ namespace Ipopt
 
     // Extend the right hand side
     SmartPtr<CompoundVector> rhs_c_ext =
-      y_c_ext_space_->MakeNewCompoundVector(true);
+      y_c_ext_space_->MakeNewCompoundVector(unique_tag_, true);
     rhs_c_ext->SetComp(0, rhs_c);
     rhs_c_ext->GetCompNonConst(1)->Set(0.);
     SmartPtr<CompoundVector> sol_c_ext =
-      y_c_ext_space_->MakeNewCompoundVector(true);
+      y_c_ext_space_->MakeNewCompoundVector(unique_tag_, true);
     sol_c_ext->SetCompNonConst(0, sol_c);
 
     // Now solve the system for the given right hand side, using the
@@ -235,7 +235,7 @@ namespace Ipopt
       }
       SmartPtr<ExpandedMultiVectorMatrixSpace> expanded_vu_space =
         new ExpandedMultiVectorMatrixSpace(max_rank_, *LR_VecSpace, exp_matrix);
-      expanded_vu_ = expanded_vu_space->MakeNewExpandedMultiVectorMatrix();
+      expanded_vu_ = expanded_vu_space->MakeNewExpandedMultiVectorMatrix(unique_tag_);
 
       // Create extended y_c quantities to include the V and U matrices
       DBG_ASSERT(IsNull(J_c_ext_));
@@ -248,7 +248,7 @@ namespace Ipopt
       J_c_ext_space->SetCompSpace(0, 0, *J_c.OwnerSpace());
       J_c_ext_space->SetCompSpace(1, 0, *expanded_vu_space);
 
-      J_c_ext_ = J_c_ext_space->MakeNewCompoundMatrix();
+      J_c_ext_ = J_c_ext_space->MakeNewCompoundMatrix(unique_tag_);
 
       DBG_ASSERT(IsNull(D_c_ext_));
       DBG_ASSERT(IsNull(y_c_ext_space_));
@@ -257,7 +257,7 @@ namespace Ipopt
       SmartPtr<DenseVectorSpace> D_c_rank_space =
         new DenseVectorSpace(max_rank_);
       y_c_ext_space_->SetCompSpace(1, *D_c_rank_space);
-      D_c_ext_ = y_c_ext_space_->MakeNewCompoundVector(true);
+      D_c_ext_ = y_c_ext_space_->MakeNewCompoundVector(unique_tag_, true);
     }
 
     SmartPtr<const Vector> B0;
@@ -270,7 +270,7 @@ namespace Ipopt
     }
 
     if (IsNull(B0)) {
-      SmartPtr<Vector> zero_B0 = (IsValid(P_LM)) ? LR_VecSpace->MakeNew() : proto_rhs_x.MakeNew();
+      SmartPtr<Vector> zero_B0 = (IsValid(P_LM)) ? LR_VecSpace->MakeNew(unique_tag_) : proto_rhs_x.MakeNew();
       zero_B0->Set(0.0);
       B0 = GetRawPtr(zero_B0);
     }
@@ -356,21 +356,21 @@ namespace Ipopt
 #if COIN_IPOPT_VERBOSITY > 0
 
     bool Wtest = (W && W->GetTag() != w_tag_);
-    bool iWtest = (!W && w_tag_ != 0);
+    bool iWtest = (!W && w_tag_ != TaggedObject::Tag());
     bool wfactor_test = (W_factor != w_factor_);
     bool D_xtest = (D_x && D_x->GetTag() != d_x_tag_);
-    bool iD_xtest = (!D_x && d_x_tag_ != 0);
+    bool iD_xtest = (!D_x && d_x_tag_ != TaggedObject::Tag());
     bool delta_xtest = (delta_x != delta_x_);
     bool D_stest = (D_s && D_s->GetTag() != d_s_tag_);
-    bool iD_stest = (!D_s && d_s_tag_ != 0);
+    bool iD_stest = (!D_s && d_s_tag_ != TaggedObject::Tag());
     bool delta_stest = (delta_s != delta_s_);
     bool J_ctest = (J_c.GetTag() != j_c_tag_);
     bool D_ctest = (D_c && D_c->GetTag() != d_c_tag_);
-    bool iD_ctest = (!D_c && d_c_tag_ != 0);
+    bool iD_ctest = (!D_c && d_c_tag_ != TaggedObject::Tag());
     bool delta_ctest = (delta_c != delta_c_);
     bool J_dtest = (J_d.GetTag() != j_d_tag_);
     bool D_dtest = (D_d && D_d->GetTag() != d_d_tag_);
-    bool iD_dtest = (!D_d && d_d_tag_ != 0);
+    bool iD_dtest = (!D_d && d_d_tag_ != TaggedObject::Tag());
     bool delta_dtest = (delta_d != delta_d_);
 #endif
 
@@ -393,21 +393,21 @@ namespace Ipopt
     DBG_PRINT((2,"delta_dtest = %d\n", delta_dtest));
 
     if ( (W && W->GetTag() != w_tag_)
-         || (!W && w_tag_ != 0)
+         || (!W && w_tag_ != TaggedObject::Tag())
          || (W_factor != w_factor_)
          || (D_x && D_x->GetTag() != d_x_tag_)
-         || (!D_x && d_x_tag_ != 0)
+         || (!D_x && d_x_tag_ != TaggedObject::Tag())
          || (delta_x != delta_x_)
          || (D_s && D_s->GetTag() != d_s_tag_)
-         || (!D_s && d_s_tag_ != 0)
+         || (!D_s && d_s_tag_ != TaggedObject::Tag())
          || (delta_s != delta_s_)
          || (J_c.GetTag() != j_c_tag_)
          || (D_c && D_c->GetTag() != d_c_tag_)
-         || (!D_c && d_c_tag_ != 0)
+         || (!D_c && d_c_tag_ != TaggedObject::Tag())
          || (delta_c != delta_c_)
          || (J_d.GetTag() != j_d_tag_)
          || (D_d && D_d->GetTag() != d_d_tag_)
-         || (!D_d && d_d_tag_ != 0)
+         || (!D_d && d_d_tag_ != TaggedObject::Tag())
          || (delta_d != delta_d_) ) {
       return true;
     }

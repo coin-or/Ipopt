@@ -15,9 +15,9 @@ namespace Ipopt
   static const Index dbg_verbosity = 0;
 #endif
 
-  LowRankUpdateSymMatrix::LowRankUpdateSymMatrix(const LowRankUpdateSymMatrixSpace* owner_space)
+  LowRankUpdateSymMatrix::LowRankUpdateSymMatrix(const LowRankUpdateSymMatrixSpace* owner_space, TaggedObject::Tag& unique_tag)
       :
-      SymMatrix(owner_space),
+      SymMatrix(owner_space, unique_tag),
       owner_space_(owner_space)
   {}
 
@@ -63,11 +63,11 @@ namespace Ipopt
       if (ReducedDiag()) {
         // Get everything into the smaller space
         SmartPtr<const VectorSpace> LR_vec_space = LowRankVectorSpace();
-        SmartPtr<Vector> small_x = LR_vec_space->MakeNew();
+        SmartPtr<Vector> small_x = LR_vec_space->MakeNew(UniqueTag());
         P_LR->TransMultVector(1., x, 0., *small_x);
 
         // Diagonal part in small space
-        SmartPtr<Vector> small_y = LR_vec_space->MakeNew();
+        SmartPtr<Vector> small_y = LR_vec_space->MakeNew(UniqueTag());
         small_y->Copy(*small_x);
         small_y->ElementWiseMultiply(*D_);
 
@@ -92,10 +92,10 @@ namespace Ipopt
 
         // Get x into the smaller space
         SmartPtr<const VectorSpace> LR_vec_space = LowRankVectorSpace();
-        SmartPtr<Vector> small_x = LR_vec_space->MakeNew();
+        SmartPtr<Vector> small_x = LR_vec_space->MakeNew(UniqueTag());
         P_LR->TransMultVector(1., x, 0., *small_x);
 
-        SmartPtr<Vector> small_y = LR_vec_space->MakeNew();
+        SmartPtr<Vector> small_y = LR_vec_space->MakeNew(UniqueTag());
         if (IsValid(V_)) {
           // Positive update
           V_->LRMultVector(1., *small_x, 0., *small_y);

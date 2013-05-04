@@ -28,9 +28,9 @@ namespace Ipopt
   static const Index dbg_verbosity = 0;
 #endif
 
-  DenseSymMatrix::DenseSymMatrix(const DenseSymMatrixSpace* owner_space)
+  DenseSymMatrix::DenseSymMatrix(const DenseSymMatrixSpace* owner_space, TaggedObject::Tag& unique_tag)
       :
-      SymMatrix(owner_space),
+      SymMatrix(owner_space, unique_tag),
       owner_space_(owner_space),
       values_(new Number[NCols()*NRows()]),
       initialized_(false)

@@ -22,9 +22,9 @@
 namespace Ipopt
 {
 
-  SumMatrix::SumMatrix(const SumMatrixSpace* owner_space)
+  SumMatrix::SumMatrix(const SumMatrixSpace* owner_space, TaggedObject::Tag& unique_tag)
       :
-      Matrix(owner_space),
+      Matrix(owner_space, unique_tag),
       factors_(owner_space->NTerms(), 1.0),
       matrices_(owner_space->NTerms()),
       owner_space_(owner_space)
@@ -160,14 +160,14 @@ namespace Ipopt
     return NULL;
   }
 
-  SumMatrix* SumMatrixSpace::MakeNewSumMatrix() const
+  SumMatrix* SumMatrixSpace::MakeNewSumMatrix(TaggedObject::Tag& unique_tag) const
   {
     DBG_ASSERT(nterms_ == (Index)term_spaces_.size());
-    return new SumMatrix(this);
+    return new SumMatrix(this, unique_tag);
   }
 
-  Matrix* SumMatrixSpace::MakeNew() const
+  Matrix* SumMatrixSpace::MakeNew(TaggedObject::Tag& unique_tag) const
   {
-    return MakeNewSumMatrix();
+    return MakeNewSumMatrix(unique_tag);
   }
 } // namespace Ipopt

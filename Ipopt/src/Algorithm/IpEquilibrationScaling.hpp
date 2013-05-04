@@ -25,7 +25,7 @@ namespace Ipopt
     //@{
     EquilibrationScaling(const SmartPtr<NLP>& nlp)
         :
-        StandardScalingBase(),
+        StandardScalingBase(nlp->UniqueTag()),
         nlp_(nlp)
     {}
 

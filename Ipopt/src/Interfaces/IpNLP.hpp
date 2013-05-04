@@ -34,7 +34,11 @@ namespace Ipopt
     /**@name Constructors/Destructors */
     //@{
     /** Default constructor */
-    NLP()
+    NLP(TaggedObject::Tag& unique_tag)
+    : unique_tag_(unique_tag)
+    {}
+    NLP(NLP& nlp)
+    : unique_tag_(nlp.unique_tag_)
     {}
 
     /** Default destructor */
@@ -221,6 +225,14 @@ namespace Ipopt
       P_approx = NULL;
     }
 
+    /** Reference to the unique tag object
+     * Not to be modified by user.
+     */
+    TaggedObject::Tag& UniqueTag() const
+    {
+       return unique_tag_;
+    }
+
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
@@ -236,6 +248,10 @@ namespace Ipopt
     /** Overloaded Equals Operator */
     void operator=(const NLP&);
     //@}
+
+  protected:
+    /** Unique tag for caching mechanism */
+    TaggedObject::Tag& unique_tag_;
   };
 
 } // namespace Ipopt

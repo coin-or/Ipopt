@@ -44,7 +44,7 @@ namespace Ipopt
      *  be set afterwards with the SeteComp and SetCompNonConst
      *  methods.
      */
-    CompoundMatrix(const CompoundMatrixSpace* owner_space);
+    CompoundMatrix(const CompoundMatrixSpace* owner_space, TaggedObject::Tag& unique_tag);
 
     /** Destructor */
     virtual ~CompoundMatrix();
@@ -239,13 +239,13 @@ namespace Ipopt
     //@}
 
     /** Method for creating a new matrix of this specific type. */
-    CompoundMatrix* MakeNewCompoundMatrix() const;
+    CompoundMatrix* MakeNewCompoundMatrix(TaggedObject::Tag& unique_tag) const;
 
     /** Overloaded MakeNew method for the MatrixSpace base class.
      */
-    virtual Matrix* MakeNew() const
+    virtual Matrix* MakeNew(TaggedObject::Tag& unique_tag) const
     {
-      return MakeNewCompoundMatrix();
+      return MakeNewCompoundMatrix(unique_tag);
     }
 
   private:

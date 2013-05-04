@@ -42,7 +42,7 @@ namespace Ipopt
      *  individual components can later be set using the SetComp and
      *  SetCompNonConst method.
      */
-    CompoundVector(const CompoundVectorSpace* owner_space, bool create_new);
+    CompoundVector(const CompoundVectorSpace* owner_space, TaggedObject::Tag& unique_tag, bool create_new);
 
     /** Default destructor */
     virtual ~CompoundVector();
@@ -265,16 +265,16 @@ namespace Ipopt
     }
 
     /** Method for creating a new vector of this specific type. */
-    virtual CompoundVector* MakeNewCompoundVector(bool create_new = true) const
+    virtual CompoundVector* MakeNewCompoundVector(TaggedObject::Tag& unique_tag, bool create_new = true) const
     {
-      return new CompoundVector(this, create_new);
+      return new CompoundVector(this, unique_tag, create_new);
     }
 
     /** Overloaded MakeNew method for the VectorSpace base class.
      */
-    virtual Vector* MakeNew() const
+    virtual Vector* MakeNew(TaggedObject::Tag& unique_tag) const
     {
-      return MakeNewCompoundVector();
+      return MakeNewCompoundVector(unique_tag);
     }
 
   private:

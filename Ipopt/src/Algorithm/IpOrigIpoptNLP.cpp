@@ -31,7 +31,7 @@ namespace Ipopt
                              const SmartPtr<NLP>& nlp,
                              const SmartPtr<NLPScalingObject>& nlp_scaling)
       :
-      IpoptNLP(nlp_scaling),
+      IpoptNLP(nlp_scaling, nlp->UniqueTag()),
       jnlst_(jnlst),
       nlp_(nlp),
       x_space_(NULL),
@@ -282,14 +282,14 @@ namespace Ipopt
       }
 
       // Create the bounds structures
-      x_L = x_l_space_->MakeNew();
-      Px_L = px_l_space_->MakeNew();
-      x_U = x_u_space_->MakeNew();
-      Px_U = px_u_space_->MakeNew();
-      d_L = d_l_space_->MakeNew();
-      Pd_L = pd_l_space_->MakeNew();
-      d_U = d_u_space_->MakeNew();
-      Pd_U = pd_u_space_->MakeNew();
+      x_L = x_l_space_->MakeNew(nlp_->UniqueTag());
+      Px_L = px_l_space_->MakeNew(nlp_->UniqueTag());
+      x_U = x_u_space_->MakeNew(nlp_->UniqueTag());
+      Px_U = px_u_space_->MakeNew(nlp_->UniqueTag());
+      d_L = d_l_space_->MakeNew(nlp_->UniqueTag());
+      Pd_L = pd_l_space_->MakeNew(nlp_->UniqueTag());
+      d_U = d_u_space_->MakeNew(nlp_->UniqueTag());
+      Pd_U = pd_u_space_->MakeNew(nlp_->UniqueTag());
 
       retValue = nlp_->GetBoundsInformation(*Px_L, *x_L, *Px_U, *x_U,
                                             *Pd_L, *d_L, *Pd_U, *d_U);
@@ -333,14 +333,14 @@ namespace Ipopt
       ASSERT_EXCEPTION(IsValid(x_space_), INVALID_WARMSTART,
                        "OrigIpoptNLP called with warm_start_same_structure, but the problem is solved for the first time.");
       // Create the bounds structures
-      x_L = x_l_space_->MakeNew();
-      Px_L = px_l_space_->MakeNew();
-      x_U = x_u_space_->MakeNew();
-      Px_U = px_u_space_->MakeNew();
-      d_L = d_l_space_->MakeNew();
-      Pd_L = pd_l_space_->MakeNew();
-      d_U = d_u_space_->MakeNew();
-      Pd_U = pd_u_space_->MakeNew();
+      x_L = x_l_space_->MakeNew(nlp_->UniqueTag());
+      Px_L = px_l_space_->MakeNew(nlp_->UniqueTag());
+      x_U = x_u_space_->MakeNew(nlp_->UniqueTag());
+      Px_U = px_u_space_->MakeNew(nlp_->UniqueTag());
+      d_L = d_l_space_->MakeNew(nlp_->UniqueTag());
+      Pd_L = pd_l_space_->MakeNew(nlp_->UniqueTag());
+      d_U = d_u_space_->MakeNew(nlp_->UniqueTag());
+      Pd_U = pd_u_space_->MakeNew(nlp_->UniqueTag());
 
       retValue = nlp_->GetBoundsInformation(*Px_L, *x_L, *Px_U, *x_U,
                                             *Pd_L, *d_L, *Pd_U, *d_U);
@@ -396,13 +396,13 @@ namespace Ipopt
                 "modified d_U scaled");
 
     // Create the iterates structures
-    x = x_space_->MakeNew();
-    y_c = c_space_->MakeNew();
-    y_d = d_space_->MakeNew();
-    z_L = x_l_space_->MakeNew();
-    z_U = x_u_space_->MakeNew();
-    v_L = d_l_space_->MakeNew();
-    v_U = d_u_space_->MakeNew();
+    x = x_space_->MakeNew(nlp_->UniqueTag());
+    y_c = c_space_->MakeNew(nlp_->UniqueTag());
+    y_d = d_space_->MakeNew(nlp_->UniqueTag());
+    z_L = x_l_space_->MakeNew(nlp_->UniqueTag());
+    z_U = x_u_space_->MakeNew(nlp_->UniqueTag());
+    v_L = d_l_space_->MakeNew(nlp_->UniqueTag());
+    v_U = d_u_space_->MakeNew(nlp_->UniqueTag());
 
     retValue = nlp_->GetStartingPoint(GetRawPtr(x), init_x,
                                       GetRawPtr(y_c), init_y_c,
@@ -514,7 +514,7 @@ namespace Ipopt
     SmartPtr<const Vector> retValue;
     if (!grad_f_cache_.GetCachedResult1Dep(retValue, &x)) {
       grad_f_evals_++;
-      unscaled_grad_f = x_space_->MakeNew();
+      unscaled_grad_f = x_space_->MakeNew(nlp_->UniqueTag());
 
       SmartPtr<const Vector> unscaled_x = get_unscaled_x(x);
       grad_f_eval_time_.Start();
@@ -546,13 +546,13 @@ namespace Ipopt
       // in cases where only the constraints are supposed to change...
       SmartPtr<const Vector> dep = NULL;
       if (!c_cache_.GetCachedResult1Dep(retValue, GetRawPtr(dep))) {
-        retValue = c_space_->MakeNew();
+        retValue = c_space_->MakeNew(nlp_->UniqueTag());
         c_cache_.AddCachedResult1Dep(retValue, GetRawPtr(dep));
       }
     }
     else {
       if (!c_cache_.GetCachedResult1Dep(retValue, x)) {
-        SmartPtr<Vector> unscaled_c = c_space_->MakeNew();
+        SmartPtr<Vector> unscaled_c = c_space_->MakeNew(nlp_->UniqueTag());
         c_evals_++;
         SmartPtr<const Vector> unscaled_x = get_unscaled_x(x);
         c_eval_time_.Start();
@@ -585,14 +585,14 @@ namespace Ipopt
       // in cases where only the constraints are supposed to change...
       SmartPtr<const Vector> dep = NULL;
       if (!d_cache_.GetCachedResult1Dep(retValue, GetRawPtr(dep))) {
-        retValue = d_space_->MakeNew();
+        retValue = d_space_->MakeNew(nlp_->UniqueTag());
         d_cache_.AddCachedResult1Dep(retValue, GetRawPtr(dep));
       }
     }
     else {
       if (!d_cache_.GetCachedResult1Dep(retValue, x)) {
         d_evals_++;
-        SmartPtr<Vector> unscaled_d = d_space_->MakeNew();
+        SmartPtr<Vector> unscaled_d = d_space_->MakeNew(nlp_->UniqueTag());
 
         DBG_PRINT_VECTOR(2, "scaled_x", x);
         SmartPtr<const Vector> unscaled_x = get_unscaled_x(x);
@@ -625,7 +625,7 @@ namespace Ipopt
       // Matrix has always the same tag
       SmartPtr<const Vector> dep = NULL;
       if (!jac_c_cache_.GetCachedResult1Dep(retValue, GetRawPtr(dep))) {
-        SmartPtr<Matrix> unscaled_jac_c = jac_c_space_->MakeNew();
+        SmartPtr<Matrix> unscaled_jac_c = jac_c_space_->MakeNew(nlp_->UniqueTag());
         retValue = NLP_scaling()->apply_jac_c_scaling(ConstPtr(unscaled_jac_c));
         jac_c_cache_.AddCachedResult1Dep(retValue, GetRawPtr(dep));
       }
@@ -637,7 +637,7 @@ namespace Ipopt
       }
       if (!jac_c_cache_.GetCachedResult1Dep(retValue, GetRawPtr(dep))) {
         jac_c_evals_++;
-        SmartPtr<Matrix> unscaled_jac_c = jac_c_space_->MakeNew();
+        SmartPtr<Matrix> unscaled_jac_c = jac_c_space_->MakeNew(nlp_->UniqueTag());
 
         SmartPtr<const Vector> unscaled_x = get_unscaled_x(x);
         jac_c_eval_time_.Start();
@@ -669,7 +669,7 @@ namespace Ipopt
       // Matrix has always the same tag
       SmartPtr<const Vector> dep = NULL;
       if (!jac_d_cache_.GetCachedResult1Dep(retValue, GetRawPtr(dep))) {
-        SmartPtr<Matrix> unscaled_jac_d = jac_d_space_->MakeNew();
+        SmartPtr<Matrix> unscaled_jac_d = jac_d_space_->MakeNew(nlp_->UniqueTag());
         retValue = NLP_scaling()->apply_jac_d_scaling(ConstPtr(unscaled_jac_d));
         jac_d_cache_.AddCachedResult1Dep(retValue, GetRawPtr(dep));
       }
@@ -682,7 +682,7 @@ namespace Ipopt
 
       if (!jac_d_cache_.GetCachedResult1Dep(retValue, GetRawPtr(dep))) {
         jac_d_evals_++;
-        SmartPtr<Matrix> unscaled_jac_d = jac_d_space_->MakeNew();
+        SmartPtr<Matrix> unscaled_jac_d = jac_d_space_->MakeNew(nlp_->UniqueTag());
 
         SmartPtr<const Vector> unscaled_x = get_unscaled_x(x);
         jac_d_eval_time_.Start();
@@ -709,7 +709,7 @@ namespace Ipopt
 
   SmartPtr<const SymMatrix> OrigIpoptNLP::uninitialized_h()
   {
-    return h_space_->MakeNewSymMatrix();
+    return h_space_->MakeNewSymMatrix(nlp_->UniqueTag());
   }
 
   SmartPtr<const SymMatrix> OrigIpoptNLP::h(const Vector& x,
@@ -736,7 +736,7 @@ namespace Ipopt
 
     if (!h_cache_.GetCachedResult(retValue, deps, scalar_deps)) {
       h_evals_++;
-      unscaled_h = h_space_->MakeNewSymMatrix();
+      unscaled_h = h_space_->MakeNewSymMatrix(nlp_->UniqueTag());
 
       SmartPtr<const Vector> unscaled_x = get_unscaled_x(x);
       SmartPtr<const Vector> unscaled_yc = NLP_scaling()->apply_vector_scaling_c(&yc);

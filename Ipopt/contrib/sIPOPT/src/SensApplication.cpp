@@ -28,7 +28,8 @@ namespace Ipopt
     jnlst_(jnlst),
     options_(options),
     reg_options_(reg_options),
-    ipopt_retval_(Internal_Error)
+    ipopt_retval_(Internal_Error),
+    unique_tag_(NULL)
   {
     DBG_START_METH("SensApplication::SensApplication", dbg_verbosity);
 
@@ -136,6 +137,7 @@ namespace Ipopt
   SensAlgorithmExitStatus SensApplication::Run()
   {
     DBG_START_METH("SensApplication::Run", dbg_verbosity);
+    assert(unique_tag_ != NULL);
 
     SensAlgorithmExitStatus retval = SOLVE_SUCCESS;
 
@@ -168,7 +170,7 @@ namespace Ipopt
 
 
     if (compute_red_hessian_ && !redhess_internal_abort) {
-      SmartPtr<SensBuilder> schur_builder = new SensBuilder();
+      SmartPtr<SensBuilder> schur_builder = new SensBuilder(*unique_tag_);
       const std::string prefix = ""; // I should be getting this somewhere else...
       SmartPtr<ReducedHessianCalculator> red_hess_calc = schur_builder->BuildRedHessCalc(*jnlst_,
 											 *options_,
@@ -182,7 +184,7 @@ namespace Ipopt
     }
 
     if (run_sens_ && n_sens_steps_>0 && !sens_internal_abort) {
-      SmartPtr<SensBuilder> schur_builder = new SensBuilder();
+      SmartPtr<SensBuilder> schur_builder = new SensBuilder(*unique_tag_);
       const std::string prefix = ""; // I should be getting this somewhere else...
       SmartPtr<SensAlgorithm> controller = schur_builder->BuildSensAlg(*jnlst_,
 								       *options_,
@@ -330,6 +332,9 @@ namespace Ipopt
 
     // get NLP
     ip_nlp_ = app_ipopt->IpoptNLPObject();
+
+    // get unique tag
+    unique_tag_ = &app_ipopt->UniqueTag();
 
     options_->GetIntegerValue("n_sens_steps",n_sens_steps_,"");
 

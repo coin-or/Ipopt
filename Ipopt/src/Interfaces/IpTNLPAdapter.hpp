@@ -34,6 +34,7 @@ namespace Ipopt
     //@{
     /** Default constructor */
     TNLPAdapter(const SmartPtr<TNLP> tnlp,
+                TaggedObject::Tag& unique_tag,
                 const SmartPtr<const Journalist> jnlst = NULL);
 
     /** Default destructor */

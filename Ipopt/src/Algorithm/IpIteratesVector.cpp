@@ -11,9 +11,9 @@
 namespace Ipopt
 {
 
-  IteratesVector::IteratesVector(const IteratesVectorSpace* owner_space, bool create_new)
+  IteratesVector::IteratesVector(const IteratesVectorSpace* owner_space, TaggedObject::Tag& unique_tag, bool create_new)
       :
-      CompoundVector(owner_space, create_new),
+      CompoundVector(owner_space, unique_tag, create_new),
       owner_space_(owner_space)
   {
     DBG_ASSERT(owner_space_);
@@ -24,7 +24,7 @@ namespace Ipopt
 
   SmartPtr<IteratesVector> IteratesVector::MakeNewIteratesVector(bool create_new) const
   {
-    return owner_space_->MakeNewIteratesVector(create_new);
+    return owner_space_->MakeNewIteratesVector(UniqueTag(), create_new);
   }
 
   SmartPtr<IteratesVector> IteratesVector::MakeNewContainer() const

@@ -53,7 +53,7 @@ namespace Ipopt
      *  corresponding VectorSpace.
      */
     inline
-    Vector(const VectorSpace* owner_space);
+    Vector(const VectorSpace* owner_space, TaggedObject::Tag& unique_tag);
 
     /** Destructor */
     inline
@@ -405,7 +405,7 @@ namespace Ipopt
     /** Pure virtual method for creating a new Vector of the
      *  corresponding type.
      */
-    virtual Vector* MakeNew() const=0;
+    virtual Vector* MakeNew(TaggedObject::Tag& unique_tag) const=0;
 
     /** Accessor function for the dimension of the vectors of this type.*/
     Index Dim() const
@@ -442,18 +442,18 @@ namespace Ipopt
   {}
 
   inline
-  Vector::Vector(const VectorSpace* owner_space)
+  Vector::Vector(const VectorSpace* owner_space, TaggedObject::Tag& unique_tag)
       :
-      TaggedObject(),
+      TaggedObject(unique_tag),
       owner_space_(owner_space),
       dot_cache_(10),
-      nrm2_cache_tag_(0),
-      asum_cache_tag_(0),
-      amax_cache_tag_(0),
-      max_cache_tag_(0),
-      min_cache_tag_(0),
-      sum_cache_tag_(0),
-      sumlogs_cache_tag_(0),
+      nrm2_cache_tag_(TaggedObject::Tag()),
+      asum_cache_tag_(TaggedObject::Tag()),
+      amax_cache_tag_(TaggedObject::Tag()),
+      max_cache_tag_(TaggedObject::Tag()),
+      min_cache_tag_(TaggedObject::Tag()),
+      sum_cache_tag_(TaggedObject::Tag()),
+      sumlogs_cache_tag_(TaggedObject::Tag()),
       cached_valid_(0)
   {
     DBG_ASSERT(IsValid(owner_space_));
@@ -462,7 +462,7 @@ namespace Ipopt
   inline
   Vector* Vector::MakeNew() const
   {
-    return owner_space_->MakeNew();
+    return owner_space_->MakeNew(UniqueTag());
   }
 
   inline

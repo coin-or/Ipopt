@@ -27,9 +27,9 @@ namespace Ipopt
   static const Index dbg_verbosity = 0;
 #endif
 
-  DenseGenMatrix::DenseGenMatrix(const DenseGenMatrixSpace* owner_space)
+  DenseGenMatrix::DenseGenMatrix(const DenseGenMatrixSpace* owner_space, TaggedObject::Tag& unique_tag)
       :
-      Matrix(owner_space),
+      Matrix(owner_space, unique_tag),
       owner_space_(owner_space),
       values_(new Number[NCols()*NRows()]),
       initialized_(false),

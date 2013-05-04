@@ -32,7 +32,7 @@ namespace Ipopt
 
     /** Constructor, taking the owner_space.
      */
-    DenseGenMatrix(const DenseGenMatrixSpace* owner_space);
+    DenseGenMatrix(const DenseGenMatrixSpace* owner_space, TaggedObject::Tag& unique_tag);
 
     /** Destructor */
     ~DenseGenMatrix();
@@ -221,16 +221,16 @@ namespace Ipopt
     //@}
 
     /** Method for creating a new matrix of this specific type. */
-    DenseGenMatrix* MakeNewDenseGenMatrix() const
+    DenseGenMatrix* MakeNewDenseGenMatrix(TaggedObject::Tag& unique_tag) const
     {
-      return new DenseGenMatrix(this);
+      return new DenseGenMatrix(this, unique_tag);
     }
 
     /** Overloaded MakeNew method for the MatrixSpace base class.
      */
-    virtual Matrix* MakeNew() const
+    virtual Matrix* MakeNew(TaggedObject::Tag& unique_tag) const
     {
-      return MakeNewDenseGenMatrix();
+      return MakeNewDenseGenMatrix(unique_tag);
     }
 
   };
@@ -238,7 +238,7 @@ namespace Ipopt
   inline
   SmartPtr<DenseGenMatrix> DenseGenMatrix::MakeNewDenseGenMatrix() const
   {
-    return owner_space_->MakeNewDenseGenMatrix();
+    return owner_space_->MakeNewDenseGenMatrix(UniqueTag());
   }
 
 } // namespace Ipopt

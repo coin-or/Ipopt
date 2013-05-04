@@ -25,7 +25,7 @@ namespace Ipopt
      *  builds the P matrix which is an intermediate step
      *  in calculating the schur matrix. */
   public:
-    SensBuilder();
+    SensBuilder(TaggedObject::Tag& unique_tag);
 
     ~SensBuilder();
 
@@ -46,7 +46,8 @@ namespace Ipopt
 							PDSystemSolver& pd_solver);
 
   private:
-
+    /** Unique tag for caching mechanism */
+    TaggedObject::Tag& unique_tag_;
   };
 
 }

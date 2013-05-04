@@ -13,7 +13,7 @@
 
 namespace Ipopt
 {
-  /** This is an adaper for an NLP that converts variable bound
+  /** This is an adapter for an NLP that converts variable bound
    *  constraints to inequality constraints.  This is necessary for
    *  the version of Ipopt that uses iterative linear solvers.  At
    *  this point, none of the original inequality constraints is

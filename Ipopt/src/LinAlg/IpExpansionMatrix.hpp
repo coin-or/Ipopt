@@ -33,7 +33,7 @@ namespace Ipopt
 
     /** Constructor, taking the owner_space.
      */
-    ExpansionMatrix(const ExpansionMatrixSpace* owner_space);
+    ExpansionMatrix(const ExpansionMatrixSpace* owner_space, TaggedObject::Tag& unique_tag);
 
     /** Destructor */
     ~ExpansionMatrix();
@@ -155,16 +155,16 @@ namespace Ipopt
     //@}
 
     /** Method for creating a new matrix of this specific type. */
-    ExpansionMatrix* MakeNewExpansionMatrix() const
+    ExpansionMatrix* MakeNewExpansionMatrix(TaggedObject::Tag& unique_tag) const
     {
-      return new ExpansionMatrix(this);
+      return new ExpansionMatrix(this, unique_tag);
     }
 
     /** Overloaded MakeNew method for the MatrixSpace base class.
      */
-    virtual Matrix* MakeNew() const
+    virtual Matrix* MakeNew(TaggedObject::Tag& unique_tag) const
     {
-      return MakeNewExpansionMatrix();
+      return MakeNewExpansionMatrix(unique_tag);
     }
 
     /** Accessor Method to obtain the Index array (of length
