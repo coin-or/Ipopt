@@ -537,11 +537,14 @@ JNIEXPORT jlong JNICALL Java_org_coinor_Ipopt_CreateIpoptProblem(
    jint nele_jac, jint nele_hess,
    jint index_style)
 {
-   /* create the IpoptProblem */
-   Jipopt* problem = new Jipopt(env, obj_this, n, m, nele_jac, nele_hess, index_style);
+   /* create the smart pointer to the Ipopt problem */
+   SmartPtr<Jipopt>* pproblem = new SmartPtr<Jipopt>;
 
-   // return our class
-   return (jlong)problem;
+   /* create the IpoptProblem */
+   *pproblem = new Jipopt(env, obj_this, n, m, nele_jac, nele_hess, index_style);
+
+   /* return the smart pointer to our class */
+   return (jlong)pproblem;
 }
 
 JNIEXPORT jint JNICALL Java_org_coinor_Ipopt_OptimizeTNLP(
@@ -556,8 +559,8 @@ JNIEXPORT jint JNICALL Java_org_coinor_Ipopt_OptimizeTNLP(
    jdoubleArray callback_jac_g,
    jdoubleArray callback_hess)
 {
-   // cast back our class
-   Jipopt *problem = (Jipopt *)pipopt;
+   Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*)pipopt);
+
    problem->env = env;
    problem->solver = obj_this;
 
@@ -591,30 +594,30 @@ JNIEXPORT jint JNICALL Java_org_coinor_Ipopt_OptimizeTNLP(
 
 JNIEXPORT void JNICALL Java_org_coinor_Ipopt_FreeIpoptProblem(JNIEnv *env,  jobject obj_this, jlong pipopt)
 {
-   // cast back our class
-   Jipopt *problem = (Jipopt *)pipopt;
+   SmartPtr<Jipopt>* pproblem = (SmartPtr<Jipopt>*)pipopt;
 
-   if( problem != NULL )
+   if( pproblem != NULL && IsValid(*pproblem) )
    {
-      /* if OptimizeTNLP has been called, application holds a smartptr to the problem
-       *   so freeing the application will also free the problem itself
-       * if OptimizeTNLP has not been called, we will have a memory leak here
+      /* if OptimizeTNLP has been called, the application holds a SmartPtr to your problem class
+       * to resolve this circular dependency we first free the application explicitly
        */
-      problem->application = NULL;
+      (*pproblem)->application = NULL;
+
+      /* now free your JIpopt itself */
+      *pproblem = NULL;
    }
 }
 
 JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptIntOption(
    JNIEnv * env, jobject obj_this, jlong pipopt, jstring jparname, jint jparvalue)
 {
-   // cast back our class
-   Jipopt *problem = (Jipopt *)pipopt;
+   Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*)pipopt);
 
-   const char *pparameterName = env->GetStringUTFChars(jparname, 0);
+   const char* pparameterName = env->GetStringUTFChars(jparname, 0);
    string parameterName = pparameterName;
 
    // Try to apply the integer option
-   jboolean ret=problem->application->Options()->SetIntegerValue(parameterName, jparvalue);
+   jboolean ret = problem->application->Options()->SetIntegerValue(parameterName, jparvalue);
 
    env->ReleaseStringUTFChars(jparname, pparameterName);
 
@@ -624,10 +627,9 @@ JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptIntOption(
 JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptNumOption(
    JNIEnv * env, jobject obj_this, jlong pipopt, jstring jparname, jdouble jparvalue)
 {
-   // cast back our class
-   Jipopt *problem = (Jipopt *)pipopt;
+   Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*)pipopt);
 
-   const char *pparameterName = env->GetStringUTFChars(jparname, 0);
+   const char* pparameterName = env->GetStringUTFChars(jparname, 0);
    string parameterName=pparameterName;
 
    // Try to set the real option
@@ -641,18 +643,17 @@ JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptNumOption(
 JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptStrOption(
    JNIEnv * env, jobject obj_this, jlong pipopt, jstring jparname, jstring jparvalue)
 {
-   // cast back our class
-   Jipopt *problem = (Jipopt *)pipopt;
+   Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*)pipopt);
 
-   const char *pparameterName = env->GetStringUTFChars(jparname, NULL);
+   const char* pparameterName = env->GetStringUTFChars(jparname, NULL);
    string parameterName = pparameterName;
-   const char *pparameterValue = env->GetStringUTFChars(jparvalue, NULL);
+   const char* pparameterValue = env->GetStringUTFChars(jparvalue, NULL);
    string parameterValue = pparameterValue;
 
-   //parameterValue has been changed to LowerCase in Java!
+   // parameterValue has been changed to LowerCase in Java!
    if( parameterName == "hessian_approximation" && (parameterValue == "limited-memory") )
       problem->using_LBFGS = true;
-   else if( parameterName=="nlp_scaling_method" && (parameterValue=="user-scaling") )
+   else if( parameterName == "nlp_scaling_method" && (parameterValue == "user-scaling") )
       problem->using_scaling_parameters = true;
 
    // Try to apply the string option
