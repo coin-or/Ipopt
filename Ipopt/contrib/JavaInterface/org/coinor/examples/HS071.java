@@ -69,6 +69,12 @@ public class HS071 extends Ipopt {
         //hs071.setStringOption(Ipopt.KEY_DERIVATIVE_TEST,"first-order");
         //hs071.setStringOption(Ipopt.KEY_PRINT_USER_OPTIONS,"yes");
         //hs071.setStringOption("print_options_documentation","yes");
+        //hs071.setStringOption("warm_start_init_point","yes");
+        //hs071.setNumericOption("warm_start_bound_push",1e-9);
+        //hs071.setNumericOption("warm_start_bound_frac",1e-9);
+        //hs071.setNumericOption("warm_start_slack_bound_frac",1e-9);
+        //hs071.setNumericOption("warm_start_slack_bound_push",1e-9);
+        //hs071.setNumericOption("warm_start_mult_bound_push",1e-9);
         hs071.OptimizeNLP();        
         
         
@@ -77,19 +83,18 @@ public class HS071 extends Ipopt {
         hs071.print(x,"Optimal Solution:");
         
         double []MLB=hs071.getMultLowerBounds();
-        hs071.print(x,"Multipler LowerBounds:");
+        hs071.print(MLB,"Multiplier LowerBounds:");
         
         double[] MUB=hs071.getMultUpperBounds();
-        hs071.print(MUB,"Multipler UpperBounds:");
+        hs071.print(MUB,"Multiplier UpperBounds:");
         
         double obj=hs071.getObjVal();
         System.out.println("Obj Value="+obj);
         
-        double[] constraints=hs071.getMultConstraints();
+        double[] constraints=hs071.getValuesConstraints();
         hs071.print(constraints,"G(x):");
         double[]lam=hs071.getMultConstraints();
-        hs071.print(lam,"Constraints Multipler");
-        
+        hs071.print(lam,"Constraints Multiplier");
     }    
     
     
@@ -148,6 +153,26 @@ public class HS071 extends Ipopt {
         x[1] = 5.0;
         x[2] = 5.0;
         x[3] = 1.0;     
+
+        /*
+        x[0] = 0.9999999923240762;
+        x[1] = 4.742999641809297;
+        x[2] = 3.8211499817883072;
+        x[3] = 1.3794082897556983;
+
+        z_L[0] = 1.0878712258676539e+00;
+        z_L[1] = 0;
+        z_L[2] = 0;	
+        z_L[3] = 0;
+        
+        z_U[0] = 0;
+        z_U[1] = 0;
+        z_U[2] = 0;
+        z_U[3] = 0;
+        
+        lambda[0] = -0.552293195627571;
+        lambda[1] = 0.16146777361782;
+        */
         
         return true;
     }
