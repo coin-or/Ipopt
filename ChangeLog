@@ -1,8 +1,8 @@
 This file contain the log of changes for the main release branch (trunk).
-More detailed information for incremetal change can be found in the
+More detailed information for incremental change can be found in the
 history management of subversion.
 
-2012-05-?? releases/3.10.4
+2012-05-05 releases/3.10.4
         - fixed sign of dual values in AMPL solution again (with help of Gabe)
           [r2169, r2170, r2184, #183]
         - fixed bugs with reoptimizing a TNLP with all variables fixed [r2172, r2173, #179]
@@ -13,6 +13,8 @@ history management of subversion.
         - fixed bug when trying to warmstart Ipopt in Java interface [r2253]
         - fixed wrong use of SmartPtr's in Java interface [r2255, r2263]
         - fixed bug in returning final solution in Java interface [r2258]
+        - included patch in ThirdParty/Mumps to work around bugs in Mumps
+          matrix ordering routines AMF and QAMD (now give preference to AMD and METIS)
 
 2012-11-19 releases/3.10.3
         - minor fixes in MA86 interface (by Jonathan Hogg) [r2069, r2086]
