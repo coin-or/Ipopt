@@ -30,9 +30,9 @@ namespace Ipopt
   static const Index dbg_verbosity = 0;
 #endif
 
-  DenseVector::DenseVector(const DenseVectorSpace* owner_space, TaggedObject::Tag& unique_tag)
+  DenseVector::DenseVector(const DenseVectorSpace* owner_space)
       :
-      Vector(owner_space, unique_tag),
+      Vector(owner_space),
       owner_space_(owner_space),
       values_(NULL),
       expanded_values_(NULL),

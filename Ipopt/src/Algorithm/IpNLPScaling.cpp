@@ -10,7 +10,6 @@
 #include "IpSymMatrix.hpp"
 #include "IpScaledMatrix.hpp"
 #include "IpSymScaledMatrix.hpp"
-#include "IpNLP.hpp"
 
 namespace Ipopt
 {
@@ -19,8 +18,7 @@ namespace Ipopt
   static const Index dbg_verbosity = 0;
 #endif
 
-  NLPScalingObject::NLPScalingObject(TaggedObject::Tag& unique_tag)
-  : unique_tag_(unique_tag)
+  NLPScalingObject::NLPScalingObject()
   {}
 
   NLPScalingObject::~NLPScalingObject()
@@ -34,7 +32,7 @@ namespace Ipopt
     DBG_START_METH("NLPScalingObject::apply_vector_scaling_x_LU_NonConst", dbg_verbosity);
     SmartPtr<Vector> scaled_x_LU = lu->MakeNew();
     if (have_x_scaling()) {
-      SmartPtr<Vector> tmp_x = x_space.MakeNew(unique_tag_);
+      SmartPtr<Vector> tmp_x = x_space.MakeNew();
 
       // move to full x space
       Px_LU.MultVector(1.0, *lu, 0.0, *tmp_x);
@@ -74,7 +72,7 @@ namespace Ipopt
     DBG_START_METH("NLPScalingObject::apply_vector_scaling_d_LU_NonConst", dbg_verbosity);
     SmartPtr<Vector> scaled_d_LU = lu->MakeNew();
     if (have_d_scaling()) {
-      SmartPtr<Vector> tmp_d = d_space.MakeNew(unique_tag_);
+      SmartPtr<Vector> tmp_d = d_space.MakeNew();
 
       // move to full d space
       Pd_LU.MultVector(1.0, *lu, 0.0, *tmp_d);
@@ -114,7 +112,7 @@ namespace Ipopt
     DBG_START_METH("NLPScalingObject::unapply_vector_scaling_d_LU_NonConst", dbg_verbosity);
     SmartPtr<Vector> unscaled_d_LU = lu->MakeNew();
     if (have_d_scaling()) {
-      SmartPtr<Vector> tmp_d = d_space.MakeNew(unique_tag_);
+      SmartPtr<Vector> tmp_d = d_space.MakeNew();
 
       // move to full d space
       Pd_LU.MultVector(1.0, *lu, 0.0, *tmp_d);
@@ -200,8 +198,7 @@ namespace Ipopt
     }
   }
 
-  StandardScalingBase::StandardScalingBase(TaggedObject::Tag& unique_tag)
-  : NLPScalingObject(unique_tag)
+  StandardScalingBase::StandardScalingBase()
   {}
 
   StandardScalingBase::~StandardScalingBase()
@@ -512,7 +509,7 @@ namespace Ipopt
   {
     DBG_START_METH("NLPScalingObject::apply_jac_c_scaling", dbg_verbosity);
     if (IsValid(scaled_jac_c_space_)) {
-      SmartPtr<ScaledMatrix> ret = scaled_jac_c_space_->MakeNewScaledMatrix(unique_tag_, false);
+      SmartPtr<ScaledMatrix> ret = scaled_jac_c_space_->MakeNewScaledMatrix(false);
       ret->SetUnscaledMatrix(matrix);
       return GetRawPtr(ret);
     }
@@ -528,7 +525,7 @@ namespace Ipopt
   {
     DBG_START_METH("NLPScalingObject::apply_jac_d_scaling", dbg_verbosity);
     if (IsValid(scaled_jac_d_space_)) {
-      SmartPtr<ScaledMatrix> ret = scaled_jac_d_space_->MakeNewScaledMatrix(unique_tag_, false);
+      SmartPtr<ScaledMatrix> ret = scaled_jac_d_space_->MakeNewScaledMatrix(false);
       ret->SetUnscaledMatrix(matrix);
       return GetRawPtr(ret);
     }
@@ -544,7 +541,7 @@ namespace Ipopt
   {
     DBG_START_METH("NLPScalingObject::apply_hessian_scaling", dbg_verbosity);
     if (IsValid(scaled_h_space_)) {
-      SmartPtr<SymScaledMatrix> ret = scaled_h_space_->MakeNewSymScaledMatrix(unique_tag_, false);
+      SmartPtr<SymScaledMatrix> ret = scaled_h_space_->MakeNewSymScaledMatrix(false);
       ret->SetUnscaledMatrix(matrix);
       return GetRawPtr(ret);
     }

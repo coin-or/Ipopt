@@ -25,7 +25,7 @@ namespace Ipopt
     /**@name Constructors/Destructors */
     //@{
     /** Constructor using only a linear solver object */
-    GenAugSystemSolver(GenKKTSolverInterface& SolverInterface, TaggedObject::Tag& unique_tag);
+    GenAugSystemSolver(GenKKTSolverInterface& SolverInterface);
 
     /** Default destructor */
     virtual ~GenAugSystemSolver();

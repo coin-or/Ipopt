@@ -22,8 +22,7 @@ namespace Ipopt
   public:
 
     IndexPCalculator(SmartPtr<SensBacksolver> backsolver,
-		     SmartPtr<SchurData> A_data,
-		     TaggedObject::Tag& unique_tag);
+		     SmartPtr<SchurData> A_data);
 
     virtual ~IndexPCalculator();
 

@@ -11,9 +11,9 @@
 namespace Ipopt
 {
 
-  DiagMatrix::DiagMatrix(const SymMatrixSpace* owner_space, TaggedObject::Tag& unique_tag)
+  DiagMatrix::DiagMatrix(const SymMatrixSpace* owner_space)
       :
-      SymMatrix(owner_space, unique_tag)
+      SymMatrix(owner_space)
   {}
 
   DiagMatrix::~DiagMatrix()

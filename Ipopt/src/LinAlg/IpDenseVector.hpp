@@ -45,7 +45,7 @@ namespace Ipopt
     //@{
     /** Default Constructor
      */
-    DenseVector(const DenseVectorSpace* owner_space, TaggedObject::Tag& unique_tag);
+    DenseVector(const DenseVectorSpace* owner_space);
 
     /** Destructor
      */
@@ -302,17 +302,17 @@ namespace Ipopt
 
     /** Method for creating a new vector of this specific type. */
     inline
-    DenseVector* MakeNewDenseVector(TaggedObject::Tag& unique_tag) const
+    DenseVector* MakeNewDenseVector() const
     {
-      return new DenseVector(this, unique_tag);
+      return new DenseVector(this);
     }
 
     /** Instantiation of the generate MakeNew method for the
      *  VectorSpace base class.
      */
-    virtual Vector* MakeNew(TaggedObject::Tag& unique_tag) const
+    virtual Vector* MakeNew() const
     {
-      return MakeNewDenseVector(unique_tag);
+      return MakeNewDenseVector();
     }
 
     /**@name Methods called by DenseVector for memory management.
@@ -441,7 +441,7 @@ namespace Ipopt
   inline
   SmartPtr<DenseVector> DenseVector::MakeNewDenseVector() const
   {
-    return owner_space_->MakeNewDenseVector(UniqueTag());
+    return owner_space_->MakeNewDenseVector();
   }
 
   inline

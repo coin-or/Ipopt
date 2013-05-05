@@ -60,10 +60,8 @@ namespace Ipopt
 #endif
 
   TNLPAdapter::TNLPAdapter(const SmartPtr<TNLP> tnlp,
-                           TaggedObject::Tag& unique_tag,
                            const SmartPtr<const Journalist> jnlst /* = NULL */)
       :
-      NLP(unique_tag),
       tnlp_(tnlp),
       jnlst_(jnlst),
       full_x_(NULL),
@@ -71,11 +69,6 @@ namespace Ipopt
       full_g_(NULL),
       jac_g_(NULL),
       c_rhs_(NULL),
-      x_tag_for_iterates_(TaggedObject::Tag()),
-      y_c_tag_for_iterates_(TaggedObject::Tag()),
-      y_d_tag_for_iterates_(TaggedObject::Tag()),
-      x_tag_for_g_(TaggedObject::Tag()),
-      x_tag_for_jac_g_(TaggedObject::Tag()),
       jac_idx_map_(NULL),
       h_idx_map_(NULL),
       x_fixed_map_(NULL),
@@ -776,7 +769,7 @@ namespace Ipopt
         P_x_full_x_space_ =
           new ExpansionMatrixSpace(n_full_x_, n_x_var,
                                    x_not_fixed_map);
-        P_x_full_x_ = P_x_full_x_space_->MakeNewExpansionMatrix(unique_tag_);
+        P_x_full_x_ = P_x_full_x_space_->MakeNewExpansionMatrix();
       }
       else {
         P_x_full_x_space_ = NULL;
@@ -785,10 +778,10 @@ namespace Ipopt
 
       P_x_x_L_space_ = new ExpansionMatrixSpace(n_x_var, n_x_l, x_l_map);
       px_l_space_ = GetRawPtr(P_x_x_L_space_);
-      P_x_x_L_ = P_x_x_L_space_->MakeNewExpansionMatrix(unique_tag_);
+      P_x_x_L_ = P_x_x_L_space_->MakeNewExpansionMatrix();
       P_x_x_U_space_ = new ExpansionMatrixSpace(n_x_var, n_x_u, x_u_map);
       px_u_space_ = GetRawPtr(P_x_x_U_space_);
-      P_x_x_U_ = P_x_x_U_space_->MakeNewExpansionMatrix(unique_tag_);
+      P_x_x_U_ = P_x_x_U_space_->MakeNewExpansionMatrix();
 
       // setup the variable meta data if present
       if (var_string_md.size() > 0) {
@@ -920,7 +913,7 @@ namespace Ipopt
 
       // create the internal expansion matrix for c to g
       P_c_g_space_ = new ExpansionMatrixSpace(n_full_g_, n_c, c_map);
-      P_c_g_ = P_c_g_space_->MakeNewExpansionMatrix(unique_tag_);
+      P_c_g_ = P_c_g_space_->MakeNewExpansionMatrix();
       delete [] c_map;
       c_map = NULL;
 
@@ -930,7 +923,7 @@ namespace Ipopt
       d_space_ = GetRawPtr(dv_d_space);
       // create the internal expansion matrix for d to g
       P_d_g_space_ = new ExpansionMatrixSpace(n_full_g_, n_d, d_map);
-      P_d_g_ = P_d_g_space_->MakeNewExpansionMatrix(unique_tag_);
+      P_d_g_ = P_d_g_space_->MakeNewExpansionMatrix();
       delete [] d_map;
       d_map = NULL;
 
@@ -1777,9 +1770,9 @@ namespace Ipopt
     SmartPtr<Vector>& c_scaling,
     SmartPtr<Vector>& d_scaling) const
   {
-    x_scaling = x_space->MakeNew(unique_tag_);
-    c_scaling = c_space->MakeNew(unique_tag_);
-    d_scaling = d_space->MakeNew(unique_tag_);
+    x_scaling = x_space->MakeNew();
+    c_scaling = c_space->MakeNew();
+    d_scaling = d_space->MakeNew();
     DBG_ASSERT((c_scaling->Dim()+d_scaling->Dim()) == n_full_g_);
 
     DenseVector* dx = static_cast<DenseVector*>(GetRawPtr(x_scaling));
@@ -1891,7 +1884,7 @@ namespace Ipopt
       if ((Index)x_meta_iter->second.size()==x.Dim()) {
         std::vector<Number> new_meta_data;
         new_meta_data.resize(n_full_x_);
-        SmartPtr<DenseVector> x_meta_vector = x_space->MakeNewDenseVector(unique_tag_);
+        SmartPtr<DenseVector> x_meta_vector = x_space->MakeNewDenseVector();
         x_meta_vector->SetValues(&(x_meta_iter->second)[0]);
         ResortX(*x_meta_vector, &new_meta_data[0]);
         var_numeric_md[x_meta_iter->first] = new_meta_data;
@@ -1916,9 +1909,9 @@ namespace Ipopt
           std::vector<Number> new_g_meta_data;
           new_g_meta_data.resize(n_full_g_);
           SmartPtr<DenseVector> y_c_meta_vector =
-            y_c_space->MakeNewDenseVector(unique_tag_);
+            y_c_space->MakeNewDenseVector();
           SmartPtr<DenseVector> y_d_meta_vector =
-            y_d_space->MakeNewDenseVector(unique_tag_);
+            y_d_space->MakeNewDenseVector();
           y_c_meta_vector->SetValues(&(y_c_meta_iter->second)[0]);
           y_d_meta_vector->SetValues(&y_d_second[0]);
           ResortG(*y_c_meta_vector, *y_d_meta_vector, &new_g_meta_data[0]);
@@ -1964,9 +1957,9 @@ namespace Ipopt
            && (Index)z_U_meta.find(z_L_meta_iter->first.c_str())->second.size()==z_U.Dim()) {
           std::vector<Number> z_U_second = z_U_space->GetNumericMetaData(z_L_meta_iter->first);
           SmartPtr<DenseVector> z_L_meta_vector =
-            z_L_space->MakeNewDenseVector(unique_tag_);
+            z_L_space->MakeNewDenseVector();
           SmartPtr<DenseVector> z_U_meta_vector =
-            z_U_space->MakeNewDenseVector(unique_tag_);
+            z_U_space->MakeNewDenseVector();
           z_L_meta_vector->SetValues(&(z_L_meta_iter->second)[0]);
           z_U_meta_vector->SetValues(&z_U_second[0]);
           std::vector<Number> new_z_L_meta_data(n_full_x_, 0.0);
@@ -2110,7 +2103,7 @@ namespace Ipopt
         SmartPtr<ExpansionMatrixSpace> ex_sp =
           new ExpansionMatrixSpace(n_full_x_, num_nonlin_vars,
                                    pos_nonlin_vars);
-        P_approx = ex_sp->MakeNew(unique_tag_);
+        P_approx = ex_sp->MakeNew();
         approx_space = new DenseVectorSpace(num_nonlin_vars);
       }
     }
@@ -2137,7 +2130,7 @@ namespace Ipopt
         SmartPtr<ExpansionMatrixSpace> ex_sp =
           new ExpansionMatrixSpace(n_x_free, nonfixed_nonlin_vars,
                                    nonfixed_pos_nonlin_vars);
-        P_approx = ex_sp->MakeNew(unique_tag_);
+        P_approx = ex_sp->MakeNew();
         approx_space = new DenseVectorSpace(nonfixed_nonlin_vars);
       }
 
@@ -2832,7 +2825,7 @@ namespace Ipopt
     // constraints
     SmartPtr<ExpansionMatrixSpace> P_c_g_space =
       new ExpansionMatrixSpace(n_full_g_, n_c, c_map);
-    SmartPtr<ExpansionMatrix> P_c_g = P_c_g_space->MakeNewExpansionMatrix(unique_tag_);
+    SmartPtr<ExpansionMatrix> P_c_g = P_c_g_space->MakeNewExpansionMatrix();
 
     // Get the structure of the big Jacobian of g and get the map for
     // the equality constraints entries

@@ -32,7 +32,7 @@ namespace Ipopt
 
     /** Constructor, taking the owner_space.
      */
-    ScaledMatrix(const ScaledMatrixSpace* owner_space, TaggedObject::Tag& unique_tag);
+    ScaledMatrix(const ScaledMatrixSpace* owner_space);
 
     /** Destructor */
     ~ScaledMatrix();
@@ -145,11 +145,11 @@ namespace Ipopt
     //@}
 
     /** Method for creating a new matrix of this specific type. */
-    ScaledMatrix* MakeNewScaledMatrix(TaggedObject::Tag& unique_tag, bool allocate_unscaled_matrix = false) const
+    ScaledMatrix* MakeNewScaledMatrix(bool allocate_unscaled_matrix = false) const
     {
-      ScaledMatrix* ret = new ScaledMatrix(this, unique_tag);
+      ScaledMatrix* ret = new ScaledMatrix(this);
       if (allocate_unscaled_matrix) {
-        SmartPtr<Matrix> unscaled_matrix = unscaled_matrix_space_->MakeNew(unique_tag);
+        SmartPtr<Matrix> unscaled_matrix = unscaled_matrix_space_->MakeNew();
         ret->SetUnscaledMatrixNonConst(unscaled_matrix);
       }
       return ret;
@@ -157,9 +157,9 @@ namespace Ipopt
 
     /** Overloaded MakeNew method for the MatrixSpace base class.
      */
-    virtual Matrix* MakeNew(TaggedObject::Tag& unique_tag) const
+    virtual Matrix* MakeNew() const
     {
-      return MakeNewScaledMatrix(unique_tag);
+      return MakeNewScaledMatrix();
     }
 
     /** return the vector for the row scaling */

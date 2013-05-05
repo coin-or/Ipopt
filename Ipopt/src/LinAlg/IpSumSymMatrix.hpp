@@ -31,7 +31,7 @@ namespace Ipopt
     /** Constructor, initializing with dimensions of the matrix and
      *  the number of terms in the sum.
      */
-    SumSymMatrix(const SumSymMatrixSpace* owner_space, TaggedObject::Tag& unique_tag);
+    SumSymMatrix(const SumSymMatrixSpace* owner_space);
 
     /** Destructor */
     ~SumSymMatrix();
@@ -136,11 +136,11 @@ namespace Ipopt
     SmartPtr<const SymMatrixSpace> GetTermSpace(Index term_idx) const;
 
     /** Method for creating a new matrix of this specific type. */
-    SumSymMatrix* MakeNewSumSymMatrix(TaggedObject::Tag& unique_tag) const;
+    SumSymMatrix* MakeNewSumSymMatrix() const;
 
     /** Overloaded MakeNew method for the SymMatrixSpace base class.
      */
-    virtual SymMatrix* MakeNewSymMatrix(TaggedObject::Tag& unique_tag) const;
+    virtual SymMatrix* MakeNewSymMatrix() const;
 
   private:
     Index nterms_;

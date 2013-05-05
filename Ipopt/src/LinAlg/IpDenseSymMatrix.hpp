@@ -37,7 +37,7 @@ namespace Ipopt
 
     /** Constructor, taking the owner_space.
      */
-    DenseSymMatrix(const DenseSymMatrixSpace* owner_space, TaggedObject::Tag& unique_tag);
+    DenseSymMatrix(const DenseSymMatrixSpace* owner_space);
 
     /** Destructor */
     ~DenseSymMatrix();
@@ -162,16 +162,16 @@ namespace Ipopt
     //@}
 
     /** Method for creating a new matrix of this specific type. */
-    DenseSymMatrix* MakeNewDenseSymMatrix(TaggedObject::Tag& unique_tag) const
+    DenseSymMatrix* MakeNewDenseSymMatrix() const
     {
-      return new DenseSymMatrix(this, unique_tag);
+      return new DenseSymMatrix(this);
     }
 
     /** Overloaded MakeNew method for the MatrixSpace base class.
      */
-    virtual SymMatrix* MakeNewSymMatrix(TaggedObject::Tag& unique_tag) const
+    virtual SymMatrix* MakeNewSymMatrix() const
     {
-      return MakeNewDenseSymMatrix(unique_tag);
+      return MakeNewDenseSymMatrix();
     }
 
   };
@@ -179,7 +179,7 @@ namespace Ipopt
   inline
   SmartPtr<DenseSymMatrix> DenseSymMatrix::MakeNewDenseSymMatrix() const
   {
-    return owner_space_->MakeNewDenseSymMatrix(UniqueTag());
+    return owner_space_->MakeNewDenseSymMatrix();
   }
 
 } // namespace Ipopt

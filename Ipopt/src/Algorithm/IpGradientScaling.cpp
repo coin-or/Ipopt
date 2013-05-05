@@ -82,7 +82,7 @@ namespace Ipopt
   {
     DBG_ASSERT(IsValid(nlp_));
 
-    SmartPtr<Vector> x = x_space->MakeNew(x_L.UniqueTag());
+    SmartPtr<Vector> x = x_space->MakeNew();
     if (!nlp_->GetStartingPoint(GetRawPtr(x), true,
                                 NULL, false,
                                 NULL, false,
@@ -95,7 +95,7 @@ namespace Ipopt
     //
     // Calculate grad_f scaling
     //
-    SmartPtr<Vector> grad_f = x_space->MakeNew(x_L.UniqueTag());
+    SmartPtr<Vector> grad_f = x_space->MakeNew();
     if (nlp_->Eval_grad_f(*x, *grad_f)) {
       double max_grad_f = grad_f->Amax();
       df = 1.;
@@ -132,9 +132,9 @@ namespace Ipopt
       //
       // Calculate c scaling
       //
-      SmartPtr<Matrix> jac_c = jac_c_space->MakeNew(x_L.UniqueTag());
+      SmartPtr<Matrix> jac_c = jac_c_space->MakeNew();
       if (nlp_->Eval_jac_c(*x, *jac_c)) {
-        dc = c_space->MakeNew(x_L.UniqueTag());
+        dc = c_space->MakeNew();
         const double dbl_min = std::numeric_limits<double>::min();
         dc->Set(dbl_min);
         jac_c->ComputeRowAMax(*dc, false);
@@ -171,9 +171,9 @@ namespace Ipopt
       //
       // Calculate d scaling
       //
-      SmartPtr<Matrix> jac_d = jac_d_space->MakeNew(x_L.UniqueTag());
+      SmartPtr<Matrix> jac_d = jac_d_space->MakeNew();
       if (nlp_->Eval_jac_d(*x, *jac_d)) {
-        dd = d_space->MakeNew(x_L.UniqueTag());
+        dd = d_space->MakeNew();
         const double dbl_min = std::numeric_limits<double>::min();
         dd->Set(dbl_min);
         jac_d->ComputeRowAMax(*dd, false);

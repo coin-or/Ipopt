@@ -25,7 +25,7 @@ namespace Ipopt
     //@{
     GradientScaling(const SmartPtr<NLP>& nlp)
         :
-        StandardScalingBase(nlp->UniqueTag()),
+        StandardScalingBase(),
         nlp_(nlp)
     {}
 

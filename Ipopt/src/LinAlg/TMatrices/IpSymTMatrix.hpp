@@ -48,7 +48,7 @@ namespace Ipopt
 
     /** Constructor, taking the corresponding matrix space.
      */
-    SymTMatrix(const SymTMatrixSpace* owner_space, TaggedObject::Tag& unique_tag);
+    SymTMatrix(const SymTMatrixSpace* owner_space);
 
     /** Destructor */
     ~SymTMatrix();
@@ -180,15 +180,15 @@ namespace Ipopt
 
     /** Overloaded MakeNew method for the sYMMatrixSpace base class.
      */
-    virtual SymMatrix* MakeNewSymMatrix(TaggedObject::Tag& unique_tag) const
+    virtual SymMatrix* MakeNewSymMatrix() const
     {
-      return MakeNewSymTMatrix(unique_tag);
+      return MakeNewSymTMatrix();
     }
 
     /** Method for creating a new matrix of this specific type. */
-    SymTMatrix* MakeNewSymTMatrix(TaggedObject::Tag& unique_tag) const
+    SymTMatrix* MakeNewSymTMatrix() const
     {
-      return new SymTMatrix(this, unique_tag);
+      return new SymTMatrix(this);
     }
 
     /**@name Methods describing Matrix structure */

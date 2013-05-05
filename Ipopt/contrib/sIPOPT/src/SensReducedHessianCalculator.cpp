@@ -92,9 +92,9 @@ namespace Ipopt
 
     if ( compute_eigenvalues_ ) {
       SmartPtr<DenseGenMatrixSpace> eigenvectorspace = new DenseGenMatrixSpace(dim_S, dim_S);
-      SmartPtr<DenseGenMatrix> eigenvectors = new DenseGenMatrix(GetRawPtr(eigenvectorspace), S->UniqueTag());
+      SmartPtr<DenseGenMatrix> eigenvectors = new DenseGenMatrix(GetRawPtr(eigenvectorspace));
       SmartPtr<DenseVectorSpace> eigenvaluesspace = new DenseVectorSpace(dim_S);
-      SmartPtr<DenseVector> eigenvalues = new DenseVector(GetRawPtr(eigenvaluesspace), S->UniqueTag());
+      SmartPtr<DenseVector> eigenvalues = new DenseVector(GetRawPtr(eigenvaluesspace));
 
       eigenvectors->ComputeEigenVectors(*S_sym, *eigenvalues);
       eigenvalues->Print(Jnlst(),J_INSUPPRESSIBLE,J_USER1,"Eigenvalues of reduced hessian matrix");

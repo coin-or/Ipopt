@@ -29,7 +29,7 @@ namespace Ipopt
 
     /** Constructor, initializing with dimensions of the matrix.
      */
-    TransposeMatrix(const TransposeMatrixSpace* owner_space, TaggedObject::Tag& unique_tag);
+    TransposeMatrix(const TransposeMatrixSpace* owner_space);
 
     /** Destructor */
     ~TransposeMatrix()
@@ -129,20 +129,20 @@ namespace Ipopt
 
     /** Overloaded MakeNew method for the MatrixSpace base class.
      */
-    virtual Matrix* MakeNew(TaggedObject::Tag& unique_tag) const
+    virtual Matrix* MakeNew() const
     {
-      return MakeNewTransposeMatrix(unique_tag);
+      return MakeNewTransposeMatrix();
     }
 
     /** Method for creating a new matrix of this specific type. */
-    TransposeMatrix* MakeNewTransposeMatrix(TaggedObject::Tag& unique_tag) const
+    TransposeMatrix* MakeNewTransposeMatrix() const
     {
-      return new TransposeMatrix(this, unique_tag);
+      return new TransposeMatrix(this);
     }
 
-    Matrix* MakeNewOrigMatrix(TaggedObject::Tag& unique_tag) const
+    Matrix* MakeNewOrigMatrix() const
     {
-      return orig_matrix_space_->MakeNew(unique_tag);
+      return orig_matrix_space_->MakeNew();
     }
 
   private:

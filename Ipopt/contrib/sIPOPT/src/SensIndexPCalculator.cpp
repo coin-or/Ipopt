@@ -18,10 +18,9 @@ namespace Ipopt
 #endif
 
   IndexPCalculator::IndexPCalculator(SmartPtr<SensBacksolver> backsolver,
-				     SmartPtr<SchurData> A_data,
-				     TaggedObject::Tag& unique_tag)
+				     SmartPtr<SchurData> A_data)
     :
-    PCalculator(backsolver, A_data, unique_tag),
+    PCalculator(backsolver, A_data),
     nrows_(0),
     ncols_(A_data->GetNRowsAdded())
   {
@@ -105,13 +104,13 @@ namespace Ipopt
     if (!IsValid(S)) {
       if ( B==data_A() ) {
 	SmartPtr<DenseSymMatrixSpace> S_sym_space = new DenseSymMatrixSpace(B->GetNRowsAdded());
-	SmartPtr<DenseSymMatrix> dS = new DenseSymMatrix(GetRawPtr(S_sym_space), unique_tag_);
+	SmartPtr<DenseSymMatrix> dS = new DenseSymMatrix(GetRawPtr(S_sym_space));
 	S_values = dS->Values();
 	S = GetRawPtr(dS);
       }
       else {
 	SmartPtr<DenseGenMatrixSpace> S_sym_space = new DenseGenMatrixSpace(B->GetNRowsAdded(), B->GetNRowsAdded());
-	SmartPtr<DenseGenMatrix> dS = new DenseGenMatrix(GetRawPtr(S_sym_space), unique_tag_);
+	SmartPtr<DenseGenMatrix> dS = new DenseGenMatrix(GetRawPtr(S_sym_space));
 	S_values = dS->Values();
 	S = GetRawPtr(dS);
       }
@@ -197,7 +196,7 @@ namespace Ipopt
   {
     DBG_START_METH("PColumn::GetSchurMatrixRows", dbg_verbosity);
 
-    for (size_t i=0; i<row_idx_B->size(); ++i) {
+    for (Index i=0; i<row_idx_B->size(); ++i) {
       S_col[i] = -val_[(*row_idx_B)[i]];
     }
   }

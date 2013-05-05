@@ -59,7 +59,6 @@ namespace Ipopt
                                      bool create_empty /* = false */)
       :
       read_params_dat_(true),
-      unique_tag_(1),
       inexact_algorithm_(false),
       replace_bounds_(false)
   {
@@ -683,7 +682,7 @@ namespace Ipopt
   ApplicationReturnStatus
   IpoptApplication::OptimizeTNLP(const SmartPtr<TNLP>& tnlp)
   {
-    nlp_adapter_ = new TNLPAdapter(GetRawPtr(tnlp), unique_tag_, ConstPtr(jnlst_));
+    nlp_adapter_ = new TNLPAdapter(GetRawPtr(tnlp), ConstPtr(jnlst_));
     return OptimizeNLP(nlp_adapter_);
   }
 
@@ -739,7 +738,7 @@ namespace Ipopt
       alg_builder->BuildIpoptObjects(*jnlst_, *options_, "", use_nlp,
                                      ip_nlp_, ip_data_, ip_cq_);
 
-      alg_ = GetRawPtr(alg_builder->BuildBasicAlgorithm(*jnlst_, *options_, "", unique_tag_));
+      alg_ = GetRawPtr(alg_builder->BuildBasicAlgorithm(*jnlst_, *options_, ""));
 
       // finally call the optimization
       retValue = call_optimize();

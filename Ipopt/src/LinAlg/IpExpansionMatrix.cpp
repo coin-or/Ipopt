@@ -16,9 +16,9 @@ namespace Ipopt
   static const Index dbg_verbosity = 0;
 #endif
 
-  ExpansionMatrix::ExpansionMatrix(const ExpansionMatrixSpace* owner_space, TaggedObject::Tag& unique_tag)
+  ExpansionMatrix::ExpansionMatrix(const ExpansionMatrixSpace* owner_space)
       :
-      Matrix(owner_space, unique_tag),
+      Matrix(owner_space),
       owner_space_(owner_space)
   {}
 

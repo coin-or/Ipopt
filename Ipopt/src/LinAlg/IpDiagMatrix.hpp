@@ -25,7 +25,7 @@ namespace Ipopt
     //@{
 
     /** Constructor, given the corresponding matrix space. */
-    DiagMatrix(const SymMatrixSpace* owner_space, TaggedObject::Tag& unique_tag);
+    DiagMatrix(const SymMatrixSpace* owner_space);
 
     /** Destructor */
     ~DiagMatrix();
@@ -105,15 +105,15 @@ namespace Ipopt
 
     /** Overloaded MakeNew method for the SymMatrixSpace base class.
      */
-    virtual SymMatrix* MakeNewSymMatrix(TaggedObject::Tag& unique_tag) const
+    virtual SymMatrix* MakeNewSymMatrix() const
     {
-      return MakeNewDiagMatrix(unique_tag);
+      return MakeNewDiagMatrix();
     }
 
     /** Method for creating a new matrix of this specific type. */
-    DiagMatrix* MakeNewDiagMatrix(TaggedObject::Tag& unique_tag) const
+    DiagMatrix* MakeNewDiagMatrix() const
     {
-      return new DiagMatrix(this, unique_tag);
+      return new DiagMatrix(this);
     }
 
   private:

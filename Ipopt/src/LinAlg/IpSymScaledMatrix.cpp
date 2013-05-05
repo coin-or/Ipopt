@@ -11,9 +11,9 @@
 namespace Ipopt
 {
 
-  SymScaledMatrix::SymScaledMatrix(const SymScaledMatrixSpace* owner_space, TaggedObject::Tag& unique_tag)
+  SymScaledMatrix::SymScaledMatrix(const SymScaledMatrixSpace* owner_space)
       :
-      SymMatrix(owner_space, unique_tag),
+      SymMatrix(owner_space),
       owner_space_(owner_space)
   {}
 

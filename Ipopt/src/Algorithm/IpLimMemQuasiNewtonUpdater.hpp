@@ -28,7 +28,7 @@ namespace Ipopt
     /**@name Constructors/Destructors */
     //@{
     /** Default Constructor */
-    LimMemQuasiNewtonUpdater(TaggedObject::Tag& unique_tag, bool update_for_resto);
+    LimMemQuasiNewtonUpdater(bool update_for_resto);
 
     /** Default destructor */
     virtual ~LimMemQuasiNewtonUpdater()
@@ -132,9 +132,6 @@ namespace Ipopt
     /** Counter for successive iterations in which the update was
      *  skipped */
     Index lm_skipped_iter_;
-
-    /** Reference to unique tag object */
-    TaggedObject::Tag& unique_tag_;
 
     /** @name Information for the limited memory update */
     //@{
