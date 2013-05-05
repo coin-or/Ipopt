@@ -372,7 +372,7 @@ namespace Ipopt
         dependent_tags_[i] = dependents[i]->GetTag();
       }
       else {
-        dependent_tags_[i] = 0;
+        dependent_tags_[i] = TaggedObject::Tag();
       }
     }
   }
@@ -434,7 +434,7 @@ namespace Ipopt
     else {
       for (Index i=0; i<(Index)dependents.size(); i++) {
         if ( (dependents[i] && dependents[i]->GetTag() != dependent_tags_[i])
-             || (!dependents[i] && dependent_tags_[i] != 0) ) {
+             || (!dependents[i] && dependent_tags_[i] != TaggedObject::Tag()) ) {
           retVal = false;
           break;
         }

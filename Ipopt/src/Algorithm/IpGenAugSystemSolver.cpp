@@ -20,16 +20,9 @@ namespace Ipopt
       :
       AugSystemSolver(),
       solver_interface_(&SolverInterface),
-      w_tag_(0),
-      d_x_tag_(0),
       delta_x_(0.),
-      d_s_tag_(0),
       delta_s_(0.),
-      j_c_tag_(0),
-      d_c_tag_(0),
       delta_c_(0.),
-      j_d_tag_(0),
-      d_d_tag_(0),
       delta_d_(0.),
       dx_vals_copy_(NULL),
       ds_vals_copy_(NULL),
@@ -250,7 +243,7 @@ namespace Ipopt
       w_tag_ = W->GetTag();
     }
     else {
-      w_tag_ = 0;
+      w_tag_ = TaggedObject::Tag();
     }
     w_factor_ = W_factor;
 
@@ -258,28 +251,28 @@ namespace Ipopt
       d_x_tag_ = D_x->GetTag();
     }
     else {
-      d_x_tag_ = 0;
+      d_x_tag_ = TaggedObject::Tag();
     }
     delta_x_ = delta_x;
     if (D_s) {
       d_s_tag_ = D_s->GetTag();
     }
     else {
-      d_s_tag_ = 0;
+      d_s_tag_ = TaggedObject::Tag();
     }
     delta_s_ = delta_s;
     if (D_c) {
       d_c_tag_ = D_c->GetTag();
     }
     else {
-      d_c_tag_ = 0;
+      d_c_tag_ = TaggedObject::Tag();
     }
     delta_c_ = delta_c;
     if (D_d) {
       d_d_tag_ = D_d->GetTag();
     }
     else {
-      d_d_tag_ = 0;
+      d_d_tag_ = TaggedObject::Tag();
     }
     delta_d_ = delta_d;
     j_c_tag_ = J_c.GetTag();
@@ -306,21 +299,21 @@ namespace Ipopt
 #if COIN_IPOPT_VERBOSITY > 0
 
     bool Wtest = (W && W->GetTag() != w_tag_);
-    bool iWtest = (!W && w_tag_ != 0);
+    bool iWtest = (!W && w_tag_ != TaggedObject::Tag());
     bool wfactor_test = (W_factor != w_factor_);
     bool D_xtest = (D_x && D_x->GetTag() != d_x_tag_);
-    bool iD_xtest = (!D_x && d_x_tag_ != 0);
+    bool iD_xtest = (!D_x && d_x_tag_ != TaggedObject::Tag());
     bool delta_xtest = (delta_x != delta_x_);
     bool D_stest = (D_s && D_s->GetTag() != d_s_tag_);
-    bool iD_stest = (!D_s && d_s_tag_ != 0);
+    bool iD_stest = (!D_s && d_s_tag_ != TaggedObject::Tag());
     bool delta_stest = (delta_s != delta_s_);
     bool J_ctest = (J_c.GetTag() != j_c_tag_);
     bool D_ctest = (D_c && D_c->GetTag() != d_c_tag_);
-    bool iD_ctest = (!D_c && d_c_tag_ != 0);
+    bool iD_ctest = (!D_c && d_c_tag_ != TaggedObject::Tag());
     bool delta_ctest = (delta_c != delta_c_);
     bool J_dtest = (J_d.GetTag() != j_d_tag_);
     bool D_dtest = (D_d && D_d->GetTag() != d_d_tag_);
-    bool iD_dtest = (!D_d && d_d_tag_ != 0);
+    bool iD_dtest = (!D_d && d_d_tag_ != TaggedObject::Tag());
     bool delta_dtest = (delta_d != delta_d_);
 #endif
 
@@ -343,21 +336,21 @@ namespace Ipopt
     DBG_PRINT((2,"delta_dtest = %d\n", delta_dtest));
 
     if ( (W && W->GetTag() != w_tag_)
-         || (!W && w_tag_ != 0)
+         || (!W && w_tag_ != TaggedObject::Tag())
          || (W_factor != w_factor_)
          || (D_x && D_x->GetTag() != d_x_tag_)
-         || (!D_x && d_x_tag_ != 0)
+         || (!D_x && d_x_tag_ != TaggedObject::Tag())
          || (delta_x != delta_x_)
          || (D_s && D_s->GetTag() != d_s_tag_)
-         || (!D_s && d_s_tag_ != 0)
+         || (!D_s && d_s_tag_ != TaggedObject::Tag())
          || (delta_s != delta_s_)
          || (J_c.GetTag() != j_c_tag_)
          || (D_c && D_c->GetTag() != d_c_tag_)
-         || (!D_c && d_c_tag_ != 0)
+         || (!D_c && d_c_tag_ != TaggedObject::Tag())
          || (delta_c != delta_c_)
          || (J_d.GetTag() != j_d_tag_)
          || (D_d && D_d->GetTag() != d_d_tag_)
-         || (!D_d && d_d_tag_ != 0)
+         || (!D_d && d_d_tag_ != TaggedObject::Tag())
          || (delta_d != delta_d_) ) {
       return true;
     }

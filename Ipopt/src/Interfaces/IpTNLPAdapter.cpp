@@ -69,11 +69,6 @@ namespace Ipopt
       full_g_(NULL),
       jac_g_(NULL),
       c_rhs_(NULL),
-      x_tag_for_iterates_(0),
-      y_c_tag_for_iterates_(0),
-      y_d_tag_for_iterates_(0),
-      x_tag_for_g_(0),
-      x_tag_for_jac_g_(0),
       jac_idx_map_(NULL),
       h_idx_map_(NULL),
       x_fixed_map_(NULL),
@@ -2356,7 +2351,7 @@ namespace Ipopt
     bool retval = tnlp_->eval_g(n_full_x_, full_x_, new_x, n_full_g_, full_g_);
 
     if (!retval) {
-      x_tag_for_jac_g_ = 0;
+      x_tag_for_jac_g_ = TaggedObject::Tag();
     }
 
     return retval;
@@ -2411,7 +2406,7 @@ namespace Ipopt
     }
 
     if (!retval) {
-      x_tag_for_jac_g_ = 0;
+      x_tag_for_jac_g_ = TaggedObject::Tag();
     }
 
     return retval;

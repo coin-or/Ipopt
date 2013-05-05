@@ -405,9 +405,6 @@
     <ClCompile Include="..\..\..\src\Common\IpRegOptions.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\Common\IpTaggedObject.cpp">
-      <Filter>Source Files\Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\Common\IpUtils.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>

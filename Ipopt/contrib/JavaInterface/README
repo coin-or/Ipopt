@@ -1,41 +1,27 @@
-This directory and its subdirectories contain a Java interface for
-Ipopt.  It was written and contributed by
+This directory and its subdirectories contain a Java interface for Ipopt. 
 
-Rafael de Pelegrini Soares
+It was written and contributed by
+
+  Rafael de Pelegrini Soares
   VRTech Industrial Technologies   (http://www.vrtech.com.br)
+  
+and later updated by
+
+  Tong Kewei
+  Beihang University   (http://www.buaa.edu.cn)
 
 The code is published under the Eclipse Public License.
 
-You can find more information to this at the wiki page:
-
-  https://projects.coin-or.org/Ipopt/wiki/JavaInterface
-
 -----------
 
-Installation:
+You can find more information on installing and using this interface
+in the Ipopt documentation.
+In the best cases, it is sufficient to run 'make' after Ipopt has been
+installed successfully.
 
-1. Before you run Ipopt's configure, you need to set the JAVA_HOME
-   environment variable to the directory that contains your JDK, e.g.,
+With 'make test' you can run two example problems.
 
-   /usr/lib/jvm/java-1.5.0
-
-2. Follow the regular Ipopt installation instructions.  After the
-   final 'make install' go into the subdirectory
-
-   Ipopt/contrib/JavaInterface
-
-   of the directory where you can configure and make install
-
-3. Type 'make' to compile the JNI interface code and the JIpopt class.
-   This will generate the shared object
-
-   lib/libjipopt.so
-
-   and the class
-
-   org/coinor/Ipopt.class
-
-4. With 'make test' you can run two example problems.
+With 'make doc' you can generate javadoc help.
 
 -----------
 
@@ -46,4 +32,21 @@ org/coinor/Ipopt.class file.  At runtime, there must be the
 lib/libjipopt.so file.
 
 
-(So far, this has only been tested on Linux...)
+-----------
+
+Comments by Tong Kewei (2007-11-11):
+This is a revised version of JNI of C++ interface of IPOPT.
+I changed from Rafael de Pelegrini Soares's original code.
+His codes are originally derived form C version of IPOPT,which has limited functions. 
+I derived my codes from C++ version of IPOPT, which is much more powerful.  
+I also fix a bug in Rafael de Pelegrini Soares's code on function setProblemScaling,
+In his original code the function setProblemScaling has no use to change problem.
+I added some useful functions in JIpopt, such as get_scaling_parameters or get_number_of_nonlinear_variables
+or get_list_of_nonlinear_variables. You can add any more functions as you like. Follow my structure it is 
+very easy.
+ 
+If you have problem or you need me to add another functions, please contact me.
+ 
+Authors: Tong Kewei, E-mail:tongkewei@126.com
+Beihang University, website: www.buaa.edu.cn
+Beijing,China.
