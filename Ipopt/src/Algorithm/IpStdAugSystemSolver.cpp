@@ -34,9 +34,9 @@ namespace Ipopt
   static const Index dbg_verbosity = 0;
 #endif
 
-  StdAugSystemSolver::StdAugSystemSolver(SymLinearSolver& linSolver, TaggedObject::Tag& unique_tag)
+  StdAugSystemSolver::StdAugSystemSolver(SymLinearSolver& linSolver)
       :
-      AugSystemSolver(unique_tag),
+      AugSystemSolver(),
       linsolver_(&linSolver),
       augmented_system_space_(NULL),
       sumsym_space_x_(NULL),
@@ -45,16 +45,9 @@ namespace Ipopt
       diag_space_c_(NULL),
       ident_space_ds_(NULL),
       diag_space_d_(NULL),
-      w_tag_(TaggedObject::Tag()),
-      d_x_tag_(TaggedObject::Tag()),
       delta_x_(0.),
-      d_s_tag_(TaggedObject::Tag()),
       delta_s_(0.),
-      j_c_tag_(TaggedObject::Tag()),
-      d_c_tag_(TaggedObject::Tag()),
       delta_c_(0.),
-      j_d_tag_(TaggedObject::Tag()),
-      d_d_tag_(TaggedObject::Tag()),
       delta_d_(0.),
       old_w_(NULL)
   {
@@ -170,7 +163,7 @@ namespace Ipopt
     std::vector<SmartPtr<const Vector> > augmented_rhsV(nrhs);
     for (Index i=0; i<nrhs; i++) {
       SmartPtr<CompoundVector> augrhs =
-        augmented_vector_space_->MakeNewCompoundVector(unique_tag_);
+        augmented_vector_space_->MakeNewCompoundVector();
       augrhs->SetComp(0, *rhs_xV[i]);
       augrhs->SetComp(1, *rhs_sV[i]);
       augrhs->SetComp(2, *rhs_cV[i]);
@@ -209,7 +202,7 @@ namespace Ipopt
     std::vector<SmartPtr<Vector> > augmented_solV(nrhs);
     for (Index i=0; i<nrhs; i++) {
       SmartPtr<CompoundVector> augsol =
-        augmented_vector_space_->MakeNewCompoundVector(unique_tag_);
+        augmented_vector_space_->MakeNewCompoundVector();
       augsol->SetCompNonConst(0, *sol_xV[i]);
       augsol->SetCompNonConst(1, *sol_sV[i]);
       augsol->SetCompNonConst(2, *sol_cV[i]);
@@ -331,10 +324,10 @@ namespace Ipopt
     const Vector& proto_c,
     const Vector& proto_d)
   {
-    augmented_system_ = augmented_system_space_->MakeNewCompoundSymMatrix(unique_tag_);
+    augmented_system_ = augmented_system_space_->MakeNewCompoundSymMatrix();
 
     // (1,1) block
-    SmartPtr<SumSymMatrix> sumsym_x = sumsym_space_x_->MakeNewSumSymMatrix(unique_tag_);
+    SmartPtr<SumSymMatrix> sumsym_x = sumsym_space_x_->MakeNewSumSymMatrix();
 
     if (W) {
       sumsym_x->SetTerm(0, W_factor, *W);
@@ -347,7 +340,7 @@ namespace Ipopt
     }
     w_factor_ = W_factor;
 
-    SmartPtr<DiagMatrix> diag_x = diag_space_x_->MakeNewDiagMatrix(unique_tag_);
+    SmartPtr<DiagMatrix> diag_x = diag_space_x_->MakeNewDiagMatrix();
     if (D_x) {
       if (delta_x==0.) {
         diag_x->SetDiag(*D_x);
@@ -371,7 +364,7 @@ namespace Ipopt
     augmented_system_->SetComp(0,0, *sumsym_x);
 
     // (2,2) block
-    SmartPtr<DiagMatrix> diag_s = diag_space_s_->MakeNewDiagMatrix(unique_tag_);
+    SmartPtr<DiagMatrix> diag_s = diag_space_s_->MakeNewDiagMatrix();
     if (D_s) {
       if (delta_s==0.) {
         diag_s->SetDiag(*D_s);
@@ -398,7 +391,7 @@ namespace Ipopt
     j_c_tag_ = J_c.GetTag();
 
     // (3,3) block
-    SmartPtr<DiagMatrix> diag_c = diag_space_c_->MakeNewDiagMatrix(unique_tag_);
+    SmartPtr<DiagMatrix> diag_c = diag_space_c_->MakeNewDiagMatrix();
     if (D_c) {
       if (delta_c==0.) {
         diag_c->SetDiag(*D_c);
@@ -425,12 +418,12 @@ namespace Ipopt
     j_d_tag_ = J_d.GetTag();
 
     // (4,2) block
-    SmartPtr<IdentityMatrix> ident_ds = ident_space_ds_->MakeNewIdentityMatrix(unique_tag_);
+    SmartPtr<IdentityMatrix> ident_ds = ident_space_ds_->MakeNewIdentityMatrix();
     ident_ds->SetFactor(-1.0);
     augmented_system_->SetComp(3,1, *ident_ds);
 
     // (4,4) block
-    SmartPtr<DiagMatrix> diag_d = diag_space_d_->MakeNewDiagMatrix(unique_tag_);
+    SmartPtr<DiagMatrix> diag_d = diag_space_d_->MakeNewDiagMatrix();
     if (D_d) {
       if (delta_d==0.) {
         diag_d->SetDiag(*D_d);

@@ -32,7 +32,7 @@ namespace Ipopt
 
     /** Constructor, taking the owner_space.
      */
-    SymScaledMatrix(const SymScaledMatrixSpace* owner_space, TaggedObject::Tag& unique_tag);
+    SymScaledMatrix(const SymScaledMatrixSpace* owner_space);
 
     /** Destructor */
     ~SymScaledMatrix();
@@ -131,26 +131,26 @@ namespace Ipopt
     //@}
 
     /** Method for creating a new matrix of this specific type. */
-    SymScaledMatrix* MakeNewSymScaledMatrix(TaggedObject::Tag& unique_tag, bool allocate_unscaled_matrix = false) const
+    SymScaledMatrix* MakeNewSymScaledMatrix(bool allocate_unscaled_matrix = false) const
     {
-      SymScaledMatrix* ret = new SymScaledMatrix(this, unique_tag);
+      SymScaledMatrix* ret = new SymScaledMatrix(this);
       if (allocate_unscaled_matrix) {
-        SmartPtr<SymMatrix> unscaled_matrix = unscaled_matrix_space_->MakeNewSymMatrix(unique_tag);
+        SmartPtr<SymMatrix> unscaled_matrix = unscaled_matrix_space_->MakeNewSymMatrix();
         ret->SetUnscaledMatrixNonConst(unscaled_matrix);
       }
       return ret;
     }
 
     /** Overloaded method from SymMatrixSpace */
-    virtual SymMatrix* MakeNewSymMatrix(TaggedObject::Tag& unique_tag) const
+    virtual SymMatrix* MakeNewSymMatrix() const
     {
-      return MakeNewSymScaledMatrix(unique_tag);
+      return MakeNewSymScaledMatrix();
     }
     /** Overloaded MakeNew method for the MatrixSpace base class.
      */
-    virtual Matrix* MakeNew(TaggedObject::Tag& unique_tag) const
+    virtual Matrix* MakeNew() const
     {
-      return MakeNewSymScaledMatrix(unique_tag);
+      return MakeNewSymScaledMatrix();
     }
 
     /** return the vector for the row and column scaling */

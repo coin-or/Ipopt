@@ -16,20 +16,13 @@ namespace Ipopt
   static const Index dbg_verbosity = 0;
 #endif
 
-  GenAugSystemSolver::GenAugSystemSolver(GenKKTSolverInterface& SolverInterface, TaggedObject::Tag& unique_tag)
+  GenAugSystemSolver::GenAugSystemSolver(GenKKTSolverInterface& SolverInterface)
       :
-      AugSystemSolver(unique_tag),
+      AugSystemSolver(),
       solver_interface_(&SolverInterface),
-      w_tag_(TaggedObject::Tag()),
-      d_x_tag_(TaggedObject::Tag()),
       delta_x_(0.),
-      d_s_tag_(TaggedObject::Tag()),
       delta_s_(0.),
-      j_c_tag_(TaggedObject::Tag()),
-      d_c_tag_(TaggedObject::Tag()),
       delta_c_(0.),
-      j_d_tag_(TaggedObject::Tag()),
-      d_d_tag_(TaggedObject::Tag()),
       delta_d_(0.),
       dx_vals_copy_(NULL),
       ds_vals_copy_(NULL),

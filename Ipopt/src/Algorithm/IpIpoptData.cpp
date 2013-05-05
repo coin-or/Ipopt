@@ -183,7 +183,7 @@ namespace Ipopt
     DBG_ASSERT(have_prototypes_);
 
     if (IsNull(trial_)) {
-      trial_ = iterates_space_->MakeNewIteratesVector(delta_x.UniqueTag(), false);
+      trial_ = iterates_space_->MakeNewIteratesVector(false);
     }
 
     SmartPtr<IteratesVector> newvec = trial_->MakeNewContainer();

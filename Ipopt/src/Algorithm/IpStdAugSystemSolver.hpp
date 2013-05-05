@@ -30,7 +30,7 @@ namespace Ipopt
     /**@name Constructors/Destructors */
     //@{
     /** Constructor using only a linear solver object */
-    StdAugSystemSolver(SymLinearSolver& LinSolver, TaggedObject::Tag& unique_tag);
+    StdAugSystemSolver(SymLinearSolver& LinSolver);
 
     /** Default destructor */
     virtual ~StdAugSystemSolver();

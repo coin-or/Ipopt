@@ -14,6 +14,7 @@
 #include "IpReferenced.hpp"
 #include "IpObserver.hpp"
 #include <limits>
+#include <utility> // for std::pair
 
 namespace Ipopt
 {
@@ -60,14 +61,20 @@ namespace Ipopt
   class TaggedObject : public ReferencedObject, public Subject
   {
   public:
-    /** Type for the Tag values */
-    typedef unsigned int Tag;
+    /** Type for the Tag values
+     *
+     * To make the tag unique among all objects, we
+     * include the memory address of the object into the
+     * tag value.
+     */
+    typedef std::pair<const TaggedObject*, unsigned int> Tag;
 
     /** Constructor. */
-    TaggedObject(Tag& unique_tag)
+    TaggedObject()
         :
         Subject(),
-        unique_tag_(unique_tag),
+        /* We can initialize the tag counter to 0, because this objects Tag
+         * will differ from a Tag() object in its first member. */
         tagcount_(0)
     {
       ObjectChanged();
@@ -83,15 +90,7 @@ namespace Ipopt
      */
     Tag GetTag() const
     {
-       return tagcount_;
-    }
-
-    /** Reference to the unique tag object
-     * Not to be modified by user.
-     */
-    Tag& UniqueTag() const
-    {
-       return unique_tag_;
+      return Tag(this, tagcount_);
     }
 
     /** Users of TaggedObjects call this to
@@ -101,7 +100,7 @@ namespace Ipopt
      */
     bool HasChanged(const Tag comparison_tag) const
     {
-      return comparison_tag != tagcount_;
+      return (comparison_tag.first != this) || (comparison_tag.second != tagcount_);
     }
   protected:
     /** Objects derived from TaggedObject MUST call this
@@ -111,17 +110,12 @@ namespace Ipopt
     void ObjectChanged()
     {
       DBG_START_METH("TaggedObject::ObjectChanged()", 0);
-
-      tagcount_ = unique_tag_;
-
-      ++unique_tag_;
-      DBG_ASSERT(unique_tag_ < std::numeric_limits<Tag>::max());
-
+      tagcount_++;
+      DBG_ASSERT(tagcount_ < std::numeric_limits<Tag::second_type>::max());
       // The Notify method from the Subject base class notifies all
       // registered Observers that this subject has changed.
       Notify(Observer::NT_Changed);
     }
-
   private:
     /**@name Default Compiler Generated Methods (Hidden to avoid
      * implicit creation/calling).  These methods are not implemented
@@ -136,19 +130,12 @@ namespace Ipopt
     void operator=(const TaggedObject&);
     //@}
 
-    /** reference to a counter that is incremented every
-     *  time ANY TaggedObject in the current application changes.
-     *  This allows us to obtain a unique Tag when the object changes
-     */
-    Tag& unique_tag_;
-
     /** The tag indicating the current state of the object.
      *  We use this to compare against the comparison_tag
-     *  in the HasChanged method. This member is set to the
-     *  value of unique_tag_ every time the object changes
-     *  and unique_tag_ is increased.
+     *  in the HasChanged method. This member is increased
+     *  every time the object changes.
      */
-    Tag tagcount_;
+    Tag::second_type tagcount_;
 
     /** The index indicating the cache priority for this
      * TaggedObject. If a result that depended on this 
@@ -157,6 +144,16 @@ namespace Ipopt
      */
     Index cache_priority_;
   };
+
+  /** The addition of two tags - do not use.
+   *
+   * @note Do not use this operator, unless you really know what you are doing.
+   */
+  inline
+  TaggedObject::Tag operator+(const TaggedObject::Tag& tag1, const TaggedObject::Tag& tag2)
+  {
+    return TaggedObject::Tag(tag1.first, tag1.second + tag2.second);
+  }
 
 } // namespace Ipopt
 #endif

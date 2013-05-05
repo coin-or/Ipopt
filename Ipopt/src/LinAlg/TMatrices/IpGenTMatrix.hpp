@@ -42,7 +42,7 @@ namespace Ipopt
 
     /** Constructor, taking the owner_space.
      */
-    GenTMatrix(const GenTMatrixSpace* owner_space, TaggedObject::Tag& unique_tag);
+    GenTMatrix(const GenTMatrixSpace* owner_space);
 
     /** Destructor */
     ~GenTMatrix();
@@ -186,16 +186,16 @@ namespace Ipopt
     //@}
 
     /** Method for creating a new matrix of this specific type. */
-    GenTMatrix* MakeNewGenTMatrix(TaggedObject::Tag& unique_tag) const
+    GenTMatrix* MakeNewGenTMatrix() const
     {
-      return new GenTMatrix(this, unique_tag);
+      return new GenTMatrix(this);
     }
 
     /** Overloaded MakeNew method for the MatrixSpace base class.
      */
-    virtual Matrix* MakeNew(TaggedObject::Tag& unique_tag) const
+    virtual Matrix* MakeNew() const
     {
-      return MakeNewGenTMatrix(unique_tag);
+      return MakeNewGenTMatrix();
     }
 
     /**@name Methods describing Matrix structure */

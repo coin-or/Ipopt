@@ -11,9 +11,9 @@
 namespace Ipopt
 {
 
-  ZeroMatrix::ZeroMatrix(const MatrixSpace* owner_space, TaggedObject::Tag& unique_tag)
+  ZeroMatrix::ZeroMatrix(const MatrixSpace* owner_space)
       :
-      Matrix(owner_space, unique_tag)
+      Matrix(owner_space)
   {}
 
   ZeroMatrix::~ZeroMatrix()

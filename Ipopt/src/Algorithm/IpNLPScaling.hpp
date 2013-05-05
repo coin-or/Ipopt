@@ -11,7 +11,6 @@
 
 #include "IpOptionsList.hpp"
 #include "IpRegOptions.hpp"
-#include "IpTaggedObject.hpp"
 
 namespace Ipopt
 {
@@ -24,7 +23,6 @@ namespace Ipopt
   class SymMatrixSpace;
   class ScaledMatrixSpace;
   class SymScaledMatrixSpace;
-  class NLP;
   
   /** This is the abstract base class for problem scaling.
    *  It is repsonsible for determining the scaling factors
@@ -36,7 +34,7 @@ namespace Ipopt
   public:
     /**@name Constructors/Destructors */
     //@{
-    NLPScalingObject(TaggedObject::Tag& unique_tag);
+    NLPScalingObject();
 
     /** Default destructor */
     virtual ~NLPScalingObject();
@@ -203,11 +201,8 @@ namespace Ipopt
     {
       return *jnlst_;
     }
-
-    /** Unique tag for caching mechanism */
-    TaggedObject::Tag& unique_tag_;
-
   private:
+
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
      * These methods are not implemented and 
@@ -236,7 +231,7 @@ namespace Ipopt
   public:
     /**@name Constructors/Destructors */
     //@{
-    StandardScalingBase(TaggedObject::Tag& unique_tag);
+    StandardScalingBase();
 
     /** Default destructor */
     virtual ~StandardScalingBase();
@@ -407,8 +402,7 @@ namespace Ipopt
   public:
     /**@name Constructors/Destructors */
     //@{
-    NoNLPScalingObject(TaggedObject::Tag& unique_tag)
-    : StandardScalingBase(unique_tag)
+    NoNLPScalingObject()
     {}
 
     /** Default destructor */

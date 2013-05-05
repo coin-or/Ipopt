@@ -29,7 +29,7 @@ namespace Ipopt
   public:
     /** Constructors / Destructors */
     //@{
-    IteratesVector(const IteratesVectorSpace* owner_space, TaggedObject::Tag& unique_tag, bool create_new);
+    IteratesVector(const IteratesVectorSpace* owner_space, bool create_new);
 
     virtual ~IteratesVector();
     //@}
@@ -449,31 +449,31 @@ namespace Ipopt
      */
     TaggedObject::Tag GetTagSum() const
     {
-      TaggedObject::Tag tag = TaggedObject::Tag();
+      TaggedObject::Tag tag;
 
       if (IsValid(x()))
-        tag += x()->GetTag();
+        tag = x()->GetTag() + tag;
 
       if (IsValid(s()))
-        tag += s()->GetTag();
+        tag = s()->GetTag() + tag;
 
       if (IsValid(y_c()))
-        tag += y_c()->GetTag();
+        tag = y_c()->GetTag() + tag;
 
       if (IsValid(y_d()))
-        tag += y_d()->GetTag();
+        tag = y_d()->GetTag() + tag;
 
       if (IsValid(z_L()))
-        tag += z_L()->GetTag();
+        tag = z_L()->GetTag() + tag;
 
       if (IsValid(z_U()))
-        tag += z_U()->GetTag();
+        tag = z_U()->GetTag() + tag;
 
       if (IsValid(v_L()))
-        tag += v_L()->GetTag();
+        tag = v_L()->GetTag() + tag;
 
       if (IsValid(v_U()))
-        tag += v_U()->GetTag();
+        tag = v_U()->GetTag() + tag;
 
       return tag;
     }
@@ -551,9 +551,9 @@ namespace Ipopt
      *  create_new = false if you only want a container and do not
      *  want vectors allocated.
      */
-    virtual IteratesVector* MakeNewIteratesVector(TaggedObject::Tag& unique_tag, bool create_new = true) const
+    virtual IteratesVector* MakeNewIteratesVector(bool create_new = true) const
     {
-      return new IteratesVector(this, unique_tag, create_new);
+      return new IteratesVector(this, create_new);
     }
 
     /** Use this method to create a new const IteratesVector. You must pass in
@@ -564,7 +564,7 @@ namespace Ipopt
         const Vector& z_L, const Vector& z_U,
         const Vector& v_L, const Vector& v_U)
     {
-      SmartPtr<IteratesVector> newvec = MakeNewIteratesVector(x.UniqueTag(), false);
+      SmartPtr<IteratesVector> newvec = MakeNewIteratesVector(false);
       newvec->Set_x(x);
       newvec->Set_s(s);
       newvec->Set_y_c(y_c);
@@ -581,9 +581,9 @@ namespace Ipopt
      *  ComooundVectorSpace::MakeNewCompoundVector to make sure that
      *  we get a vector of the correct type
      */
-    virtual CompoundVector* MakeNewCompoundVector(TaggedObject::Tag& unique_tag, bool create_new = true) const
+    virtual CompoundVector* MakeNewCompoundVector(bool create_new = true) const
     {
-      return MakeNewIteratesVector(unique_tag, create_new);
+      return MakeNewIteratesVector(create_new);
     }
 
     /** This method creates a new vector (and allocates space in all
@@ -591,9 +591,9 @@ namespace Ipopt
      *  does not know what type of vector it is dealing with - for
      *  example, this method is called from Vector::MakeNew()
      */
-    virtual Vector* MakeNew(TaggedObject::Tag& unique_tag) const
+    virtual Vector* MakeNew() const
     {
-      return MakeNewIteratesVector(unique_tag);
+      return MakeNewIteratesVector();
     }
     //@}
 
@@ -638,49 +638,49 @@ namespace Ipopt
   inline
   SmartPtr<Vector> IteratesVector::create_new_x()
   {
-    Set_x_NonConst(*owner_space_->GetCompSpace(0)->MakeNew(UniqueTag()));
+    Set_x_NonConst(*owner_space_->GetCompSpace(0)->MakeNew());
     return x_NonConst();
   }
   inline
   SmartPtr<Vector> IteratesVector::create_new_s()
   {
-    Set_s_NonConst(*owner_space_->GetCompSpace(1)->MakeNew(UniqueTag()));
+    Set_s_NonConst(*owner_space_->GetCompSpace(1)->MakeNew());
     return s_NonConst();
   }
   inline
   SmartPtr<Vector> IteratesVector::create_new_y_c()
   {
-    Set_y_c_NonConst(*owner_space_->GetCompSpace(2)->MakeNew(UniqueTag()));
+    Set_y_c_NonConst(*owner_space_->GetCompSpace(2)->MakeNew());
     return y_c_NonConst();
   }
   inline
   SmartPtr<Vector> IteratesVector::create_new_y_d()
   {
-    Set_y_d_NonConst(*owner_space_->GetCompSpace(3)->MakeNew(UniqueTag()));
+    Set_y_d_NonConst(*owner_space_->GetCompSpace(3)->MakeNew());
     return y_d_NonConst();
   }
   inline
   SmartPtr<Vector> IteratesVector::create_new_z_L()
   {
-    Set_z_L_NonConst(*owner_space_->GetCompSpace(4)->MakeNew(UniqueTag()));
+    Set_z_L_NonConst(*owner_space_->GetCompSpace(4)->MakeNew());
     return z_L_NonConst();
   }
   inline
   SmartPtr<Vector> IteratesVector::create_new_z_U()
   {
-    Set_z_U_NonConst(*owner_space_->GetCompSpace(5)->MakeNew(UniqueTag()));
+    Set_z_U_NonConst(*owner_space_->GetCompSpace(5)->MakeNew());
     return z_U_NonConst();
   }
   inline
   SmartPtr<Vector> IteratesVector::create_new_v_L()
   {
-    Set_v_L_NonConst(*owner_space_->GetCompSpace(6)->MakeNew(UniqueTag()));
+    Set_v_L_NonConst(*owner_space_->GetCompSpace(6)->MakeNew());
     return v_L_NonConst();
   }
   inline
   SmartPtr<Vector> IteratesVector::create_new_v_U()
   {
-    Set_v_U_NonConst(*owner_space_->GetCompSpace(7)->MakeNew(UniqueTag()));
+    Set_v_U_NonConst(*owner_space_->GetCompSpace(7)->MakeNew());
     return v_U_NonConst();
   }
 } // namespace Ipopt

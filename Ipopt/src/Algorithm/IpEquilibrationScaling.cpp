@@ -71,7 +71,7 @@ namespace Ipopt
   {
     DBG_ASSERT(IsValid(nlp_));
 
-    SmartPtr<Vector> x0 = x_space->MakeNew(unique_tag_);
+    SmartPtr<Vector> x0 = x_space->MakeNew();
     if (!nlp_->GetStartingPoint(GetRawPtr(x0), true,
                                 NULL, false,
                                 NULL, false,
@@ -84,9 +84,9 @@ namespace Ipopt
     // We store the added absolute values of the Jacobian and
     // objective function gradient in an array of sufficient size
 
-    SmartPtr<Matrix> jac_c = jac_c_space->MakeNew(unique_tag_);
-    SmartPtr<Matrix> jac_d = jac_d_space->MakeNew(unique_tag_);
-    SmartPtr<Vector> grad_f = x_space->MakeNew(unique_tag_);
+    SmartPtr<Matrix> jac_c = jac_c_space->MakeNew();
+    SmartPtr<Matrix> jac_d = jac_d_space->MakeNew();
+    SmartPtr<Vector> grad_f = x_space->MakeNew();
     const Index nnz_jac_c = TripletHelper::GetNumberEntries(*jac_c);
     const Index nnz_jac_d = TripletHelper::GetNumberEntries(*jac_d);
     const Index nc = jac_c_space->NRows();
@@ -221,11 +221,11 @@ namespace Ipopt
 
     // get the scaling factors
     df = row_scale[nc+nd];
-    dc = c_space->MakeNew(unique_tag_);
+    dc = c_space->MakeNew();
     TripletHelper::PutValuesInVector(nc, &row_scale[0], *dc);
-    dd = d_space->MakeNew(unique_tag_);
+    dd = d_space->MakeNew();
     TripletHelper::PutValuesInVector(nd, &row_scale[nc], *dd);
-    dx = x_space->MakeNew(unique_tag_);
+    dx = x_space->MakeNew();
     TripletHelper::PutValuesInVector(nx, col_scale, *dx);
 
     delete [] row_scale;

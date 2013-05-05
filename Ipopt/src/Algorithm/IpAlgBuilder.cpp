@@ -109,7 +109,7 @@ namespace Ipopt
       nlp_scaling = new EquilibrationScaling(nlp);
     }
     else {
-      nlp_scaling = new NoNLPScalingObject(nlp->UniqueTag());
+      nlp_scaling = new NoNLPScalingObject();
     }
 
     ip_nlp = new OrigIpoptNLP(&jnlst, GetRawPtr(nlp), nlp_scaling);
@@ -285,8 +285,7 @@ namespace Ipopt
   SmartPtr<IpoptAlgorithm>
   AlgorithmBuilder::BuildBasicAlgorithm(const Journalist& jnlst,
                                         const OptionsList& options,
-                                        const std::string& prefix,
-                                        TaggedObject::Tag& unique_tag)
+                                        const std::string& prefix)
   {
     DBG_START_FUN("AlgorithmBuilder::BuildBasicAlgorithm",
                   dbg_verbosity);
@@ -522,7 +521,7 @@ namespace Ipopt
       SmartPtr<SymLinearSolver> ScaledSolver =
         new TSymLinearSolver(SolverInterface, ScalingMethod);
 
-      AugSolver = new StdAugSystemSolver(*ScaledSolver, unique_tag);
+      AugSolver = new StdAugSystemSolver(*ScaledSolver);
     }
 
     Index enum_int;
@@ -701,7 +700,7 @@ namespace Ipopt
         break;
       case LIMITED_MEMORY:
         // ToDo This needs to be replaced!
-        resto_HessUpdater  = new LimMemQuasiNewtonUpdater(unique_tag, true);
+        resto_HessUpdater  = new LimMemQuasiNewtonUpdater(true);
         break;
       }
 
@@ -827,7 +826,7 @@ namespace Ipopt
       break;
     case LIMITED_MEMORY:
       // ToDo This needs to be replaced!
-      HessUpdater  = new LimMemQuasiNewtonUpdater(unique_tag, false);
+      HessUpdater  = new LimMemQuasiNewtonUpdater(false);
       break;
     }
 

@@ -27,9 +27,9 @@ namespace Ipopt
   static const Index dbg_verbosity = 0;
 #endif
 
-  MultiVectorMatrix::MultiVectorMatrix(const MultiVectorMatrixSpace* owner_space, TaggedObject::Tag& unique_tag)
+  MultiVectorMatrix::MultiVectorMatrix(const MultiVectorMatrixSpace* owner_space)
       :
-      Matrix(owner_space, unique_tag),
+      Matrix(owner_space),
       owner_space_(owner_space),
       const_vecs_(owner_space->NCols()),
       non_const_vecs_(owner_space->NCols())
@@ -142,7 +142,7 @@ namespace Ipopt
   {
     SmartPtr<const VectorSpace> vec_space = owner_space_->ColVectorSpace();
     for (Index i=0; i<NCols(); i++) {
-      non_const_vecs_[i] = vec_space->MakeNew(UniqueTag());
+      non_const_vecs_[i] = vec_space->MakeNew();
       const_vecs_[i] = NULL;
     }
     ObjectChanged();
@@ -220,7 +220,7 @@ namespace Ipopt
     // we might be more efficient (at least in the non-parallel case)
     // if we used Level 3 Blas
     SmartPtr<const DenseVectorSpace> mydspace = new DenseVectorSpace(C.NRows());
-    SmartPtr<DenseVector> mydvec = mydspace->MakeNewDenseVector(UniqueTag());
+    SmartPtr<DenseVector> mydvec = mydspace->MakeNewDenseVector();
 
     const DenseGenMatrix* dgm_C = static_cast<const DenseGenMatrix*>(&C);
     DBG_ASSERT(dynamic_cast<const DenseGenMatrix*>(&C));

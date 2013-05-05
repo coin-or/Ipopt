@@ -145,11 +145,6 @@ namespace Ipopt
 
     /** Get the Algorithm Object */
     SmartPtr<IpoptAlgorithm> AlgorithmObject();
-
-    TaggedObject::Tag& UniqueTag()
-    {
-       return unique_tag_;
-    }
     //@}
 
     /** Method for printing Ipopt copyright message now instead of
@@ -230,9 +225,6 @@ namespace Ipopt
     /** Pointer to the TNLPAdapter used to convert the TNLP to an NLP.
      *  We keep this around for the ReOptimizerTNLP call. */
     SmartPtr<NLP> nlp_adapter_;
-
-    /** Unique tag for caching mechanism */
-    TaggedObject::Tag unique_tag_;
 
     /** @name Algorithmic parameters */
     //@{

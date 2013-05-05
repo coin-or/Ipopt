@@ -40,11 +40,7 @@ namespace Ipopt
     /**@name Constructors/Destructors */
     //@{
     /** Default constructor. */
-    AugSystemSolver(TaggedObject::Tag& unique_tag)
-    : unique_tag_(unique_tag)
-    {}
-    AugSystemSolver(AugSystemSolver& aug_system_solver)
-    : unique_tag_(aug_system_solver.unique_tag_)
+    AugSystemSolver()
     {}
     /** Default destructor */
     virtual ~AugSystemSolver()
@@ -197,9 +193,6 @@ namespace Ipopt
     void operator=(const AugSystemSolver&);
     //@}
 
-  protected:
-    /** Unique tag for caching mechanism */
-    TaggedObject::Tag& unique_tag_;
   };
 
 } // namespace Ipopt

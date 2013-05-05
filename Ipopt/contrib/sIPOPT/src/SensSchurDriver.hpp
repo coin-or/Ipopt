@@ -29,10 +29,8 @@ namespace Ipopt
   public:
 
     SchurDriver(SmartPtr<PCalculator> pcalc,
-		SmartPtr<SchurData> data_B,
-		TaggedObject::Tag& unique_tag)
+		SmartPtr<SchurData> data_B)
       :
-      unique_tag_(unique_tag),
       pcalc_(pcalc),
       data_B_(data_B)
     {
@@ -100,13 +98,10 @@ namespace Ipopt
 	SmartPtr<const IteratesVector> rhs,
 	SmartPtr<Vector> delta_u) =0;
     */
-
-  protected:
-    /** Unique tag for caching mechanism */
-    TaggedObject::Tag& unique_tag_;
-
   private:
-    SchurDriver();
+    SchurDriver()
+    {
+    }
 
     SmartPtr<PCalculator> pcalc_;
 

@@ -26,7 +26,7 @@ namespace Ipopt
 
     /** Constructor, taking the corresponding matrix space.
      */
-    ZeroMatrix(const MatrixSpace* owner_space, TaggedObject::Tag& unique_tag);
+    ZeroMatrix(const MatrixSpace* owner_space);
 
     /** Destructor */
     ~ZeroMatrix();
@@ -95,15 +95,15 @@ namespace Ipopt
 
     /** Overloaded MakeNew method for the MatrixSpace base class.
      */
-    virtual Matrix* MakeNew(TaggedObject::Tag& unique_tag) const
+    virtual Matrix* MakeNew() const
     {
-      return MakeNewZeroMatrix(unique_tag);
+      return MakeNewZeroMatrix();
     }
 
     /** Method for creating a new matrix of this specific type. */
-    ZeroMatrix* MakeNewZeroMatrix(TaggedObject::Tag& unique_tag) const
+    ZeroMatrix* MakeNewZeroMatrix() const
     {
-      return new ZeroMatrix(this, unique_tag);
+      return new ZeroMatrix(this);
     }
   private:
     /**@name Default Compiler Generated Methods

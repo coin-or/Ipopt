@@ -23,7 +23,7 @@ namespace Ipopt
   AugRestoSystemSolver::AugRestoSystemSolver(AugSystemSolver& orig_aug_solver,
       bool skip_orig_aug_solver_init)
       :
-      AugSystemSolver(orig_aug_solver),
+      AugSystemSolver(),
       neg_omega_c_plus_D_c_cache_(1),
       neg_omega_d_plus_D_d_cache_(1),
       sigma_tilde_n_c_inv_cache_(1),

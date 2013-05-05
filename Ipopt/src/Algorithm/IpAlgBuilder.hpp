@@ -55,8 +55,7 @@ namespace Ipopt
 
     virtual SmartPtr<IpoptAlgorithm> BuildBasicAlgorithm(const Journalist& jnlst,
         const OptionsList& options,
-        const std::string& prefix,
-        TaggedObject::Tag& unique_tag);
+        const std::string& prefix);
     //@}
 
     /** Methods for IpoptTypeInfo */

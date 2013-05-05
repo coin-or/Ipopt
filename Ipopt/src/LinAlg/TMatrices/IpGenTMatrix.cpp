@@ -23,9 +23,9 @@
 namespace Ipopt
 {
 
-  GenTMatrix::GenTMatrix(const GenTMatrixSpace* owner_space, TaggedObject::Tag& unique_tag)
+  GenTMatrix::GenTMatrix(const GenTMatrixSpace* owner_space)
       :
-      Matrix(owner_space, unique_tag),
+      Matrix(owner_space),
       owner_space_(owner_space),
       values_(NULL),
       initialized_(false)

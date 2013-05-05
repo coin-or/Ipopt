@@ -29,10 +29,8 @@ namespace Ipopt
   public:
 
     PCalculator(SmartPtr<SensBacksolver> backsolver,
-		SmartPtr<SchurData> A_data,
-		TaggedObject::Tag& unique_tag)
+		SmartPtr<SchurData> A_data)
       :
-      unique_tag_(unique_tag),
       backsolver_(backsolver),
       data_A_init(ConstPtr(A_data->MakeNewSchurDataCopy())),
       data_A_(A_data)
@@ -109,10 +107,6 @@ namespace Ipopt
     {
       data_A_ = data_A_init->MakeNewSchurDataCopy();
     }
-
-  protected:
-    /** Unique tag for caching mechanism */
-    TaggedObject::Tag& unique_tag_;
 
   private:
 

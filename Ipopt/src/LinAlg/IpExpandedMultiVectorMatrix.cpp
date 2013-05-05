@@ -26,9 +26,9 @@ namespace Ipopt
   static const Index dbg_verbosity = 0;
 #endif
 
-  ExpandedMultiVectorMatrix::ExpandedMultiVectorMatrix(const ExpandedMultiVectorMatrixSpace* owner_space, TaggedObject::Tag& unique_tag)
+  ExpandedMultiVectorMatrix::ExpandedMultiVectorMatrix(const ExpandedMultiVectorMatrixSpace* owner_space)
       :
-      Matrix(owner_space, unique_tag),
+      Matrix(owner_space),
       owner_space_(owner_space),
       vecs_(owner_space->NRows())
   {}
@@ -51,7 +51,7 @@ namespace Ipopt
     SmartPtr<Vector> y_tmp;
 
     if (IsValid(P)) {
-      y_tmp = RowVectorSpace()->MakeNew(UniqueTag());
+      y_tmp = RowVectorSpace()->MakeNew();
       y_tmp->Set(0.);
     }
     else {
@@ -103,7 +103,7 @@ namespace Ipopt
     SmartPtr<const ExpansionMatrix> P = GetExpansionMatrix();
     SmartPtr<const Vector> x_tmp;
     if (IsValid(P)) {
-      SmartPtr<Vector> exp_x = RowVectorSpace()->MakeNew(UniqueTag());
+      SmartPtr<Vector> exp_x = RowVectorSpace()->MakeNew();
       P->TransMultVector(1., x, 0., *exp_x);
       x_tmp = ConstPtr(exp_x);
     }

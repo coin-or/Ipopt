@@ -23,8 +23,7 @@ namespace Ipopt
   static const Index dbg_verbosity = 1;
 #endif
 
-  SensBuilder::SensBuilder(TaggedObject::Tag& unique_tag)
-  : unique_tag_(unique_tag)
+  SensBuilder::SensBuilder()
   {
     DBG_START_METH("SensBuilder::SensBuilder", dbg_verbosity);
   }
@@ -72,7 +71,7 @@ namespace Ipopt
     bool bound_check;
     options.GetBoolValue("sens_boundcheck", bound_check, prefix);
     if (bound_check) {
-      pcalc = new IndexPCalculator(backsolver, new IndexSchurData(), unique_tag_);
+      pcalc = new IndexPCalculator(backsolver, new IndexSchurData());
       bool retval = pcalc->Initialize(jnlst,
 				      ip_nlp,
 				      ip_data,
@@ -98,7 +97,7 @@ namespace Ipopt
     /** THIS FOR-LOOP should be done better with a better
      *  Measurement class. This should get it's own branch! */
     for (Index i=0; i<n_sens_steps; ++i) {
-      driver_vec[i] = new DenseGenSchurDriver(backsolver, pcalc,E_0, unique_tag_);
+      driver_vec[i] = new DenseGenSchurDriver(backsolver, pcalc,E_0);
       driver_vec[i]->Initialize(jnlst,
 				ip_nlp,
 				ip_data,
@@ -160,7 +159,7 @@ namespace Ipopt
 
     std::vector<Index> hessian_suff = suffix_handler->GetIntegerSuffix("red_hessian");
 
-    Index setdata_error = E_0->SetData_Index((Index)hessian_suff.size(), &hessian_suff[0], 1.0);
+    Index setdata_error = E_0->SetData_Index(hessian_suff.size(), &hessian_suff[0], 1.0);
     if ( setdata_error ){
       jnlst.Printf(J_ERROR, J_MAIN, "\nEXIT: An Error Occured while processing "
 		   "the Indices for the reduced hessian computation: Something "
@@ -170,7 +169,7 @@ namespace Ipopt
     }
 
     SmartPtr<PCalculator> pcalc;
-    pcalc = new IndexPCalculator(backsolver, E_0, unique_tag_);
+    pcalc = new IndexPCalculator(backsolver, E_0);
 
     bool retval = pcalc->Initialize(jnlst,
 				    ip_nlp,

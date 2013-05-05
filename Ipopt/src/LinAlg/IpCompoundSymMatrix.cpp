@@ -23,9 +23,9 @@
 namespace Ipopt
 {
 
-  CompoundSymMatrix::CompoundSymMatrix(const CompoundSymMatrixSpace* owner_space, TaggedObject::Tag& unique_tag)
+  CompoundSymMatrix::CompoundSymMatrix(const CompoundSymMatrixSpace* owner_space)
       :
-      SymMatrix(owner_space, unique_tag),
+      SymMatrix(owner_space),
       owner_space_(owner_space),
       matrices_valid_(false)
   {
@@ -307,18 +307,18 @@ namespace Ipopt
     allocate_block_[irow][jcol] = auto_allocate;
   }
 
-  CompoundSymMatrix* CompoundSymMatrixSpace::MakeNewCompoundSymMatrix(TaggedObject::Tag& unique_tag) const
+  CompoundSymMatrix* CompoundSymMatrixSpace::MakeNewCompoundSymMatrix() const
   {
     if (!dimensions_set_) {
       dimensions_set_ = DimensionsSet();
     }
     DBG_ASSERT(dimensions_set_);
 
-    CompoundSymMatrix* mat = new CompoundSymMatrix(this, unique_tag);
+    CompoundSymMatrix* mat = new CompoundSymMatrix(this);
     for (Index i=0; i<NComps_Dim(); i++) {
       for (Index j=0; j<=i; j++) {
         if (allocate_block_[i][j]) {
-          mat->SetCompNonConst(i, j, *GetCompSpace(i, j)->MakeNew(unique_tag));
+          mat->SetCompNonConst(i, j, *GetCompSpace(i, j)->MakeNew());
         }
       }
     }

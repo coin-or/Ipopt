@@ -18,19 +18,12 @@ namespace Ipopt
   LowRankAugSystemSolver::LowRankAugSystemSolver(
     AugSystemSolver& aug_system_solver)
       :
-      AugSystemSolver(aug_system_solver),
+      AugSystemSolver(),
       aug_system_solver_(&aug_system_solver),
-      w_tag_(TaggedObject::Tag()),
       w_factor_(0.),
-      d_x_tag_(TaggedObject::Tag()),
       delta_x_(0.),
-      d_s_tag_(TaggedObject::Tag()),
       delta_s_(0.),
-      j_c_tag_(TaggedObject::Tag()),
-      d_c_tag_(TaggedObject::Tag()),
       delta_c_(0.),
-      j_d_tag_(TaggedObject::Tag()),
-      d_d_tag_(TaggedObject::Tag()),
       delta_d_(0.)
   {
     DBG_START_METH("LowRankAugSystemSolver::LowRankAugSystemSolver()",dbg_verbosity);
@@ -90,7 +83,7 @@ namespace Ipopt
       // Set up the diagonal matrix Wdiag_
       Index dimx = rhs_x.Dim();
       SmartPtr<DiagMatrixSpace> Wdiag_space = new DiagMatrixSpace(dimx);
-      Wdiag_ = Wdiag_space->MakeNewDiagMatrix(unique_tag_);
+      Wdiag_ = Wdiag_space->MakeNewDiagMatrix();
     }
 
     // This might be used with a linear solver that cannot detect the
@@ -181,13 +174,13 @@ namespace Ipopt
       // Create a CompoundVectors to store the right hand side and
       // solutions
       SmartPtr<CompoundVector> crhs =
-        compound_sol_vecspace_->MakeNewCompoundVector(unique_tag_, false);
+        compound_sol_vecspace_->MakeNewCompoundVector(false);
       crhs->SetComp(0, rhs_x);
       crhs->SetComp(1, rhs_s);
       crhs->SetComp(2, rhs_c);
       crhs->SetComp(3, rhs_d);
       SmartPtr<CompoundVector> csol =
-        compound_sol_vecspace_->MakeNewCompoundVector(unique_tag_, false);
+        compound_sol_vecspace_->MakeNewCompoundVector(false);
       csol->SetCompNonConst(0, sol_x);
       csol->SetCompNonConst(1, sol_s);
       csol->SetCompNonConst(2, sol_c);
@@ -197,7 +190,7 @@ namespace Ipopt
         Index nU = Utilde2_->NCols();
         SmartPtr<DenseVectorSpace> bUspace =
           new DenseVectorSpace(nU);
-        SmartPtr<DenseVector> bU = bUspace->MakeNewDenseVector(unique_tag_);
+        SmartPtr<DenseVector> bU = bUspace->MakeNewDenseVector();
         Utilde2_->TransMultVector(1., *crhs, 0., *bU);
         J2_->CholeskySolveVector(*bU);
         Utilde2_->MultVector(1., *bU, 1., *csol);
@@ -206,7 +199,7 @@ namespace Ipopt
         Index nV = Vtilde1_->NCols();
         SmartPtr<DenseVectorSpace> bVspace =
           new DenseVectorSpace(nV);
-        SmartPtr<DenseVector> bV = bVspace->MakeNewDenseVector(unique_tag_);
+        SmartPtr<DenseVector> bV = bVspace->MakeNewDenseVector();
         Vtilde1_->TransMultVector(1., *crhs, 0., *bV);
         J1_->CholeskySolveVector(*bV);
         Vtilde1_->MultVector(-1., *bV, 1., *csol);
@@ -260,7 +253,7 @@ namespace Ipopt
     SmartPtr<const VectorSpace> LR_VecSpace = LR_W->LowRankVectorSpace();
 
     if (IsNull(B0)) {
-      SmartPtr<Vector> zero_B0 = (IsValid(P_LM)) ? LR_VecSpace->MakeNew(unique_tag_) : proto_rhs_x.MakeNew();
+      SmartPtr<Vector> zero_B0 = (IsValid(P_LM)) ? LR_VecSpace->MakeNew() : proto_rhs_x.MakeNew();
       zero_B0->Set(0.0);
       B0 = GetRawPtr(zero_B0);
     }
@@ -298,13 +291,13 @@ namespace Ipopt
 
       SmartPtr<DenseSymMatrixSpace> M1space =
         new DenseSymMatrixSpace(nV);
-      SmartPtr<DenseSymMatrix> M1 = M1space->MakeNewDenseSymMatrix(unique_tag_);
+      SmartPtr<DenseSymMatrix> M1 = M1space->MakeNewDenseSymMatrix();
       M1->FillIdentity();
       M1->HighRankUpdateTranspose(1., *Vtilde1_x, *V_x, 1.);
       //DBG_PRINT_MATRIX(2, "M1", *M1);
       SmartPtr<DenseGenMatrixSpace> J1space =
         new DenseGenMatrixSpace(nV, nV);
-      J1_ = J1space->MakeNewDenseGenMatrix(unique_tag_);
+      J1_ = J1space->MakeNewDenseGenMatrix();
       bool retchol = J1_->ComputeCholeskyFactor(*M1);
       // M1 must be positive definite!
       //DBG_ASSERT(retchol);
@@ -346,7 +339,7 @@ namespace Ipopt
         Index nV = Vtilde1_->NCols();
         SmartPtr<DenseGenMatrixSpace> Cspace =
           new DenseGenMatrixSpace(nV, nU);
-        SmartPtr<DenseGenMatrix> C = Cspace->MakeNewDenseGenMatrix(unique_tag_);
+        SmartPtr<DenseGenMatrix> C = Cspace->MakeNewDenseGenMatrix();
         C->HighRankUpdateTranspose(1., *Vtilde1_x, *U_x, 0.);
         J1_->CholeskySolveMatrix(*C);
         Utilde2_ = Utilde1;
@@ -362,12 +355,12 @@ namespace Ipopt
 
       SmartPtr<DenseSymMatrixSpace> M2space =
         new DenseSymMatrixSpace(nU);
-      SmartPtr<DenseSymMatrix> M2 = M2space->MakeNewDenseSymMatrix(unique_tag_);
+      SmartPtr<DenseSymMatrix> M2 = M2space->MakeNewDenseSymMatrix();
       M2->FillIdentity();
       M2->HighRankUpdateTranspose(-1., *Utilde2_x, *U_x, 1.);
       SmartPtr<DenseGenMatrixSpace> J2space =
         new DenseGenMatrixSpace(nU, nU);
-      J2_ = J2space->MakeNewDenseGenMatrix(unique_tag_);
+      J2_ = J2space->MakeNewDenseGenMatrix();
       //DBG_PRINT_MATRIX(2, "M2", *M2);
       bool retchol = J2_->ComputeCholeskyFactor(*M2);
       if (!retchol) {
@@ -419,7 +412,7 @@ namespace Ipopt
 
     SmartPtr<MultiVectorMatrixSpace> V_xspace =
       new MultiVectorMatrixSpace(nrhs, *proto_rhs_x.OwnerSpace());
-    V_x = V_xspace->MakeNewMultiVectorMatrix(unique_tag_);
+    V_x = V_xspace->MakeNewMultiVectorMatrix();
 
     // Create the right hand sides
     std::vector<SmartPtr<const Vector> > rhs_xV(nrhs);
@@ -493,12 +486,12 @@ namespace Ipopt
     }
     SmartPtr<MultiVectorMatrixSpace> V1space =
       new MultiVectorMatrixSpace(nrhs, *compound_sol_vecspace_);
-    Vtilde = V1space->MakeNewMultiVectorMatrix(unique_tag_);
-    Vtilde_x = V_xspace->MakeNewMultiVectorMatrix(unique_tag_);
+    Vtilde = V1space->MakeNewMultiVectorMatrix();
+    Vtilde_x = V_xspace->MakeNewMultiVectorMatrix();
     for (Index i=0; i<nrhs; i++) {
       Vtilde_x->SetVector(i, *sol_xV[i]);
       SmartPtr<CompoundVector> cvec =
-        compound_sol_vecspace_->MakeNewCompoundVector(unique_tag_, false);
+        compound_sol_vecspace_->MakeNewCompoundVector(false);
       cvec->SetCompNonConst(0, *sol_xV[i]);
       cvec->SetCompNonConst(1, *sol_sV[i]);
       cvec->SetCompNonConst(2, *sol_cV[i]);

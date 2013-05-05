@@ -21,20 +21,13 @@ namespace Ipopt
     AugSystemSolver& aug_system_solver,
     Index max_rank)
       :
-      AugSystemSolver(aug_system_solver),
+      AugSystemSolver(),
       aug_system_solver_(&aug_system_solver),
       max_rank_(max_rank),
-      w_tag_(TaggedObject::Tag()),
       w_factor_(0.),
-      d_x_tag_(TaggedObject::Tag()),
       delta_x_(0.),
-      d_s_tag_(TaggedObject::Tag()),
       delta_s_(0.),
-      j_c_tag_(TaggedObject::Tag()),
-      d_c_tag_(TaggedObject::Tag()),
       delta_c_(0.),
-      j_d_tag_(TaggedObject::Tag()),
-      d_d_tag_(TaggedObject::Tag()),
       delta_d_(0.)
   {
     DBG_START_METH("LowRankSSAugSystemSolver::LowRankSSAugSystemSolver()",dbg_verbosity);
@@ -93,7 +86,7 @@ namespace Ipopt
       // Set up the diagonal matrix Wdiag_
       Index dimx = rhs_x.Dim();
       SmartPtr<DiagMatrixSpace> Wdiag_space = new DiagMatrixSpace(dimx);
-      Wdiag_ = Wdiag_space->MakeNewDiagMatrix(unique_tag_);
+      Wdiag_ = Wdiag_space->MakeNewDiagMatrix();
     }
 
     // This might be used with a linear solver that cannot detect the
@@ -163,11 +156,11 @@ namespace Ipopt
 
     // Extend the right hand side
     SmartPtr<CompoundVector> rhs_c_ext =
-      y_c_ext_space_->MakeNewCompoundVector(unique_tag_, true);
+      y_c_ext_space_->MakeNewCompoundVector(true);
     rhs_c_ext->SetComp(0, rhs_c);
     rhs_c_ext->GetCompNonConst(1)->Set(0.);
     SmartPtr<CompoundVector> sol_c_ext =
-      y_c_ext_space_->MakeNewCompoundVector(unique_tag_, true);
+      y_c_ext_space_->MakeNewCompoundVector(true);
     sol_c_ext->SetCompNonConst(0, sol_c);
 
     // Now solve the system for the given right hand side, using the
@@ -235,7 +228,7 @@ namespace Ipopt
       }
       SmartPtr<ExpandedMultiVectorMatrixSpace> expanded_vu_space =
         new ExpandedMultiVectorMatrixSpace(max_rank_, *LR_VecSpace, exp_matrix);
-      expanded_vu_ = expanded_vu_space->MakeNewExpandedMultiVectorMatrix(unique_tag_);
+      expanded_vu_ = expanded_vu_space->MakeNewExpandedMultiVectorMatrix();
 
       // Create extended y_c quantities to include the V and U matrices
       DBG_ASSERT(IsNull(J_c_ext_));
@@ -248,7 +241,7 @@ namespace Ipopt
       J_c_ext_space->SetCompSpace(0, 0, *J_c.OwnerSpace());
       J_c_ext_space->SetCompSpace(1, 0, *expanded_vu_space);
 
-      J_c_ext_ = J_c_ext_space->MakeNewCompoundMatrix(unique_tag_);
+      J_c_ext_ = J_c_ext_space->MakeNewCompoundMatrix();
 
       DBG_ASSERT(IsNull(D_c_ext_));
       DBG_ASSERT(IsNull(y_c_ext_space_));
@@ -257,7 +250,7 @@ namespace Ipopt
       SmartPtr<DenseVectorSpace> D_c_rank_space =
         new DenseVectorSpace(max_rank_);
       y_c_ext_space_->SetCompSpace(1, *D_c_rank_space);
-      D_c_ext_ = y_c_ext_space_->MakeNewCompoundVector(unique_tag_, true);
+      D_c_ext_ = y_c_ext_space_->MakeNewCompoundVector(true);
     }
 
     SmartPtr<const Vector> B0;
@@ -270,7 +263,7 @@ namespace Ipopt
     }
 
     if (IsNull(B0)) {
-      SmartPtr<Vector> zero_B0 = (IsValid(P_LM)) ? LR_VecSpace->MakeNew(unique_tag_) : proto_rhs_x.MakeNew();
+      SmartPtr<Vector> zero_B0 = (IsValid(P_LM)) ? LR_VecSpace->MakeNew() : proto_rhs_x.MakeNew();
       zero_B0->Set(0.0);
       B0 = GetRawPtr(zero_B0);
     }

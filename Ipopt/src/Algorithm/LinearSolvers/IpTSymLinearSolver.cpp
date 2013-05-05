@@ -21,7 +21,6 @@ namespace Ipopt
    SmartPtr<TSymScalingMethod> scaling_method)
       :
       SymLinearSolver(),
-      atag_(TaggedObject::Tag()),
       dim_(0),
       nonzeros_triplet_(0),
       nonzeros_compressed_(0),

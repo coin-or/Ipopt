@@ -33,7 +33,7 @@ namespace Ipopt
      *  that at each block row and column contain at least one non-NULL
      *  component.
      */
-    CompoundSymMatrix(const CompoundSymMatrixSpace* owner_space, TaggedObject::Tag& unique_tag);
+    CompoundSymMatrix(const CompoundSymMatrixSpace* owner_space);
 
     /** Destructor */
     ~CompoundSymMatrix();
@@ -66,7 +66,7 @@ namespace Ipopt
     }
 
     /** Method for creating a new matrix of this specific type. */
-    SmartPtr<CompoundSymMatrix> MakeNewCompoundSymMatrix(TaggedObject::Tag& unique_tag) const;
+    SmartPtr<CompoundSymMatrix> MakeNewCompoundSymMatrix() const;
 
     // The following don't seem to be necessary
     /* Number of block rows of this compound matrix. */
@@ -221,13 +221,13 @@ namespace Ipopt
     //@}
 
     /** Method for creating a new matrix of this specific type. */
-    CompoundSymMatrix* MakeNewCompoundSymMatrix(TaggedObject::Tag& unique_tag) const;
+    CompoundSymMatrix* MakeNewCompoundSymMatrix() const;
 
     /** Overloaded MakeNew method for the SymMatrixSpace base class.
      */
-    virtual SymMatrix* MakeNewSymMatrix(TaggedObject::Tag& unique_tag) const
+    virtual SymMatrix* MakeNewSymMatrix() const
     {
-      return MakeNewCompoundSymMatrix(unique_tag);
+      return MakeNewCompoundSymMatrix();
     }
 
   private:
@@ -274,9 +274,9 @@ namespace Ipopt
   };
 
   inline
-  SmartPtr<CompoundSymMatrix> CompoundSymMatrix::MakeNewCompoundSymMatrix(TaggedObject::Tag& unique_tag) const
+  SmartPtr<CompoundSymMatrix> CompoundSymMatrix::MakeNewCompoundSymMatrix() const
   {
-    return owner_space_->MakeNewCompoundSymMatrix(UniqueTag());
+    return owner_space_->MakeNewCompoundSymMatrix();
   }
 
 } // namespace Ipopt
