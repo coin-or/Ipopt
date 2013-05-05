@@ -1666,7 +1666,7 @@ Below a few particular options are discussed:
 \end{itemize}
 
 
-\section{Interfacing your NLP to \Ipopt.}
+\section{Interfacing your NLP to \Ipopt}
 \label{sec:tutorial-example}
 
 \Ipopt has been designed to be flexible for a wide variety of
@@ -1726,11 +1726,8 @@ AMPL. If you are not already familiar with AMPL, please consult
 
 The problem presented in equations
 (\ref{eq:ex_obj})--(\ref{eq:ex_startpt}) can be solved with \Ipopt with
-the AMPL model file given in Figure~\ref{fig:HS71}.
+the following AMPL model.
 
-\begin{figure}
-  \centering
-\begin{footnotesize}
 \begin{verbatim}
 # tell ampl to use the ipopt executable as a solver
 # make sure ipopt is in the path!
@@ -1745,15 +1742,15 @@ var x4 >= 1, <= 5;
 
 # specify the objective function
 minimize obj:
-                x1 * x4 * (x1 + x2 + x3) + x3;
+    x1 * x4 * (x1 + x2 + x3) + x3;
         
 # specify the constraints
 s.t.
-        inequality:
-                x1 * x2 * x3 * x4 >= 25;
+  inequality:
+    x1 * x2 * x3 * x4 >= 25;
                 
-        equality:
-                x1^2 + x2^2 + x3^2 +x4^2 = 40;
+  equality:
+    x1^2 + x2^2 + x3^2 +x4^2 = 40;
 
 # specify the starting point            
 let x1 := 1;
@@ -1770,12 +1767,7 @@ display x2;
 display x3;
 display x4;
 \end{verbatim}
-\end{footnotesize}
   
-  \caption{AMPL model file hs071\_ampl.mod}
-  \label{fig:HS71}
-\end{figure}
-
 The line, ``{\tt option solver ipopt;}'' tells AMPL to use \Ipopt as
 the solver. The \Ipopt executable (installed in
 Section~\ref{sec.comp_and_inst}) must be in the {\tt PATH} for AMPL to
@@ -1841,14 +1833,14 @@ the current directory, see Section \ref{sec:options}.
 
 
 \subsection{Interfacing with \Ipopt through code}
+\label{sec.required_info}
 In order to solve a problem, \Ipopt needs more information than just
 the problem definition (for example, the derivative information). If
 you are using a modeling language like AMPL, the extra information is
 provided by the modeling tool and the \Ipopt interface. When
 interfacing with \Ipopt through your own code, however, you must
 provide this additional information.
-
-\begin{figure}
+The following information is required by \Ipopt:
 \begin{enumerate}
 \item Problem dimensions \label{it.prob_dim}
   \begin{itemize}
@@ -1888,12 +1880,7 @@ provide this additional information.
     approximate the second derivatives)
   \end{itemize}
 \end{enumerate}
-\caption{Information required by \Ipopt}
-\label{fig.required_info}
-\end{figure}
-%\vspace{0.1in}
-The information required by \Ipopt is shown in Figure
-\ref{fig.required_info}. The problem dimensions and bounds are
+The problem dimensions and bounds are
 straightforward and come solely from the problem definition. The
 initial starting point is used by the algorithm when it begins
 iterating to solve the problem. If \Ipopt has difficulty converging, or
@@ -1916,7 +1903,7 @@ the structure needs to include entries for any element that could ever
 be nonzero, not only those that are nonzero at the starting point.
 
 As \Ipopt iterates, it will need the values for
-Item~\ref{it.prob_eval} in Figure~\ref{fig.required_info} evaluated at
+Item~\ref{it.prob_eval} in Section \ref{sec.required_info} evaluated at
 particular points. Before we can begin coding the interface, however,
 we need to work out the details of these equations symbolically for
 example problem (\ref{eq:ex_obj})-(\ref{eq:ex_bounds}).
@@ -2061,7 +2048,7 @@ the header files are installed in \texttt{\$IPOPTDIR/include/coin}
 \verb|--prefix=$PREFIX| was used for {\tt configure}).  %$
 
 \subsubsection{Coding the Problem Representation}\label{sec.cpp_problem}
-We provide the information required in Figure \ref{fig.required_info}
+We provide the required information
 by coding the {\tt HS071\_NLP} class, a specific implementation of the
 {\tt TNLP} base class. In the executable, we will create an instance
 of the {\tt HS071\_NLP} class and give this class to \Ipopt so it can
@@ -2195,14 +2182,12 @@ bool HS071_NLP::get_bounds_info(Index n, Number* x_l, Number* x_u,
   assert(m == 2);
 
   // the variables have lower bounds of 1
-  for (Index i=0; i<4; i++) {
+  for (Index i=0; i<4; i++)
     x_l[i] = 1.0;
-  }
 
   // the variables have upper bounds of 5
-  for (Index i=0; i<4; i++) {
+  for (Index i=0; i<4; i++)
     x_u[i] = 5.0;
-  }
 
   // the first constraint g1 has a lower bound of 25
   g_l[0] = 25;
@@ -2655,8 +2640,8 @@ virtual void finalize_solution(SolverReturn status, Index n,
                                const IpoptData* ip_data,
                                IpoptCalculatedQuantities* ip_cq)
 \end{verbatim}
-This is the only method that is not mentioned in Figure
-\ref{fig.required_info}. This method is called by \Ipopt after the
+This is the only method that is not mentioned in Section
+\ref{sec.required_info}. This method is called by \Ipopt after the
 algorithm has finished (successfully or even with most errors).
 \begin{itemize}
 \item {\tt status}: (in), gives the status of the algorithm as
@@ -3264,10 +3249,6 @@ callback routines. The {\tt IpoptSolve} function requires the {\tt
 solution.  The {\tt main} function from the example is shown next and
 discussed below.
 
-%in Figure~\ref{fig:cexample-main}.
-%\begin{figure}
-%  \centering
-\begin{footnotesize}
 \begin{verbatim}
 int main()
 {
@@ -3280,10 +3261,8 @@ int main()
   IpoptProblem nlp = NULL;             /* IpoptProblem */
   enum ApplicationReturnStatus status; /* Solve return code */
   Number* x = NULL;                    /* starting point and solution vector */
-  Number* mult_x_L = NULL;             /* lower bound multipliers 
-					  at the solution */
-  Number* mult_x_U = NULL;             /* upper bound multipliers 
-					  at the solution */
+  Number* mult_x_L = NULL;             /* lower bound multipliers at the solution */
+  Number* mult_x_U = NULL;             /* upper bound multipliers at the solution */
   Number obj;                          /* objective value */
   Index i;                             /* generic counter */
   
@@ -3337,20 +3316,16 @@ int main()
 
   if (status == Solve_Succeeded) {
     printf("\n\nSolution of the primal variables, x\n");
-    for (i=0; i<n; i++) {
+    for (i=0; i<n; i++)
       printf("x[%d] = %e\n", i, x[i]); 
-    }
 
     printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
-    for (i=0; i<n; i++) {
+    for (i=0; i<n; i++)
       printf("z_L[%d] = %e\n", i, mult_x_L[i]); 
-    }
-    for (i=0; i<n; i++) {
+    for (i=0; i<n; i++)
       printf("z_U[%d] = %e\n", i, mult_x_U[i]); 
-    }
 
-    printf("\n\nObjective value\n");
-    printf("f(x*) = %e\n", obj); 
+    printf("\n\nObjective value\nf(x*) = %e\n", obj); 
   }
  
   /* free allocated memory */
@@ -3362,10 +3337,6 @@ int main()
   return 0;
 }
 \end{verbatim}
-\end{footnotesize}
-%  \caption{{\tt main} function for C example}
-%  \label{fig:cexample-main}
-%\end{figure}
 
 Here, we declare all the necessary variables and set the dimensions of
 the problem.  The problem has 4 variables, so we set {\tt n} and
