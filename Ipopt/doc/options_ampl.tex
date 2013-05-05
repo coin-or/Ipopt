@@ -1,63 +1,59 @@
 \begin{description}
-\item[{\hyperref[opt:acceptable_compl_inf_tol]{acceptable\_compl\_inf\_tol}}] Acceptance threshold for the complementarity conditions
-\item[{\hyperref[opt:acceptable_constr_viol_tol]{acceptable\_constr\_viol\_tol}}] Acceptance threshold for the constraint violation
-\item[{\hyperref[opt:acceptable_dual_inf_tol]{acceptable\_dual\_inf\_tol}}] Acceptance threshold for the dual infeasibility
-\item[{\hyperref[opt:acceptable_tol]{acceptable\_tol}}] Acceptable convergence tolerance (relative)
-\item[{\hyperref[opt:alpha_for_y]{alpha\_for\_y}}] Step size for constraint multipliers
-\item[{\hyperref[opt:bound_frac]{bound\_frac}}] Desired minimal relative distance of initial point to bound
-\item[{\hyperref[opt:bound_mult_init_val]{bound\_mult\_init\_val}}] Initial value for the bound multipliers
-\item[{\hyperref[opt:bound_push]{bound\_push}}] Desired minimal absolute distance of initial point to bound
-\item[{\hyperref[opt:bound_relax_factor]{bound\_relax\_factor}}] Factor for initial relaxation of the bounds
-\item[{\hyperref[opt:compl_inf_tol]{compl\_inf\_tol}}] Acceptance threshold for the complementarity conditions
-\item[{\hyperref[opt:constr_mult_init_max]{constr\_mult\_init\_max}}] Maximal allowed least-square guess of constraint multipliers
-\item[{\hyperref[opt:constr_viol_tol]{constr\_viol\_tol}}] Desired threshold for the constraint violation
-\item[{\hyperref[opt:diverging_iterates_tol]{diverging\_iterates\_tol}}] Threshold for maximal value of primal iterates
-\item[{\hyperref[opt:dual_inf_tol]{dual\_inf\_tol}}] Desired threshold for the dual infeasibility
-\item[{\hyperref[opt:expect_infeasible_problem]{expect\_infeasible\_problem}}] Enable heuristics to quickly detect an infeasible problem
-\item[{\hyperref[opt:file_print_level]{file\_print\_level}}] Verbosity level for output file
+\item[{\htmlref{acceptable\_compl\_inf\_tol}{opt:acceptable_compl_inf_tol}}] Acceptance threshold for the complementarity conditions
+\item[{\htmlref{acceptable\_constr\_viol\_tol}{opt:acceptable_constr_viol_tol}}] Acceptance threshold for the constraint violation
+\item[{\htmlref{acceptable\_dual\_inf\_tol}{opt:acceptable_dual_inf_tol}}] Acceptance threshold for the dual infeasibility
+\item[{\htmlref{acceptable\_tol}{opt:acceptable_tol}}] Acceptable convergence tolerance (relative)
+\item[{\htmlref{alpha\_for\_y}{opt:alpha_for_y}}] Step size for constraint multipliers
+\item[{\htmlref{bound\_frac}{opt:bound_frac}}] Desired minimal relative distance of initial point to bound
+\item[{\htmlref{bound\_mult\_init\_val}{opt:bound_mult_init_val}}] Initial value for the bound multipliers
+\item[{\htmlref{bound\_push}{opt:bound_push}}] Desired minimal absolute distance of initial point to bound
+\item[{\htmlref{bound\_relax\_factor}{opt:bound_relax_factor}}] Factor for initial relaxation of the bounds
+\item[{\htmlref{compl\_inf\_tol}{opt:compl_inf_tol}}] Acceptance threshold for the complementarity conditions
+\item[{\htmlref{constr\_mult\_init\_max}{opt:constr_mult_init_max}}] Maximal allowed least-square guess of constraint multipliers
+\item[{\htmlref{constr\_viol\_tol}{opt:constr_viol_tol}}] Desired threshold for the constraint violation
+\item[{\htmlref{diverging\_iterates\_tol}{opt:diverging_iterates_tol}}] Threshold for maximal value of primal iterates
+\item[{\htmlref{dual\_inf\_tol}{opt:dual_inf_tol}}] Desired threshold for the dual infeasibility
+\item[{\htmlref{expect\_infeasible\_problem}{opt:expect_infeasible_problem}}] Enable heuristics to quickly detect an infeasible problem
+\item[{\htmlref{file\_print\_level}{opt:file_print_level}}] Verbosity level for output file
 \item[halt\_on\_ampl\_error] Exit with message on evaluation error
-\item[{\hyperref[opt:hessian_approximation]{hessian\_approximation}}] Can enable Quasi-Newton approximation of hessian
-\item[{\hyperref[opt:honor_original_bounds]{honor\_original\_bounds}}] If no, solution might slightly violate bounds
-\item[{\hyperref[opt:linear_scaling_on_demand]{linear\_scaling\_on\_demand}}] Enables heuristic for scaling only when seems required
-\item[{\hyperref[opt:linear_solver]{linear\_solver}}] Linear solver to be used for step calculation
-\item[{\hyperref[opt:linear_system_scaling]{linear\_system\_scaling}}] Method for scaling the linear systems
-\item[{\hyperref[opt:ma27_pivtol]{ma27\_pivtol}}] Pivot tolerance for the linear solver MA27
-\item[{\hyperref[opt:ma27_pivtolmax]{ma27\_pivtolmax}}] Maximal pivot tolerance for the linear solver MA27
-\item[{\hyperref[opt:ma57_pivot_order]{ma57\_pivot\_order}}] Controls pivot order in MA57
-\item[{\hyperref[opt:ma57_pivtol]{ma57\_pivtol}}] Pivot tolerance for the linear solver MA57
-\item[{\hyperref[opt:ma57_pivtolmax]{ma57\_pivtolmax}}] Maximal pivot tolerance for the linear solver MA57
-\item[{\hyperref[opt:max_cpu_time]{max\_cpu\_time}}] CPU time limit
-\item[{\hyperref[opt:max_iter]{max\_iter}}] Maximum number of iterations
-\item[{\hyperref[opt:max_refinement_steps]{max\_refinement\_steps}}] Maximal number of iterative refinement steps per linear system solve
-\item[{\hyperref[opt:max_soc]{max\_soc}}] Maximal number of second order correction trial steps
-\item[{\hyperref[opt:max_iter]{maxit}}] (Ipopt name: \hyperref[opt:max_iter]{max\_iter}) Maximum number of iterations (same as max\_iter)
-\item[{\hyperref[opt:min_refinement_steps]{min\_refinement\_steps}}] Minimum number of iterative refinement steps per linear system solve
-\item[{\hyperref[opt:mu_init]{mu\_init}}] Initial value for the barrier parameter
-\item[{\hyperref[opt:mu_max]{mu\_max}}] Maximal value for barrier parameter for adaptive strategy
-\item[{\hyperref[opt:mu_oracle]{mu\_oracle}}] Oracle for a new barrier parameter in the adaptive strategy
-\item[{\hyperref[opt:mu_strategy]{mu\_strategy}}] Update strategy for barrier parameter
-\item[{\hyperref[opt:nlp_scaling_max_gradient]{nlp\_scaling\_max\_gradient}}] Maximum gradient after scaling
-\item[{\hyperref[opt:nlp_scaling_method]{nlp\_scaling\_method}}] Select the technique used for scaling the NLP
-\item[{\hyperref[opt:obj_scaling_factor]{obj\_scaling\_factor}}] Scaling factor for the objective function
-\item[{\hyperref[opt:option_file_name]{option\_file\_name}}] File name of options file (default: ipopt.opt)
-\item[{\hyperref[opt:print_level]{outlev}}] (Ipopt name: \hyperref[opt:print_level]{print\_level}) Verbosity level (same as print\_level)
-\item[{\hyperref[opt:output_file]{output\_file}}] File name of an output file (leave unset for no file output)
-\item[{\hyperref[opt:pardiso_matching_strategy]{pardiso\_matching\_strategy}}] Matching strategy for linear solver Pardiso
-\item[{\hyperref[opt:pardiso_out_of_core_power]{pardiso\_out\_of\_core\_power}}] Enables out-of-core version of linear solver Pardiso
-\item[{\hyperref[opt:print_level]{print\_level}}] Verbosity level
-\item[{\hyperref[opt:print_options_documentation]{print\_options\_documentation}}] Print all available options (for ipopt.opt)
-\item[{\hyperref[opt:print_user_options]{print\_user\_options}}] Toggle printing of user options
-\item[{\hyperref[opt:required_infeasibility_reduction]{required\_infeasibility\_reduction}}] Required infeasibility reduction in restoration phase
-\item[{\hyperref[opt:slack_bound_frac]{slack\_bound\_frac}}] Desired minimal relative distance of initial slack to bound
-\item[{\hyperref[opt:slack_bound_push]{slack\_bound\_push}}] Desired minimal absolute distance of initial slack to bound
-\item[{\hyperref[opt:tol]{tol}}] Desired convergence tolerance (relative)
-\item[wantsol] solution report without -AMPL: sum of 		1 == write .sol file 		2 == print primal variable values 		4 == print dual variable values 		8 == do not print solution message
-\item[{\hyperref[opt:warm_start_bound_push]{warm\_start\_bound\_push}}] Enables to specify how much should variables should be pushed inside the feasible region
-\item[{\hyperref[opt:warm_start_init_point]{warm\_start\_init\_point}}] Enables to specify bound multiplier values
-\item[{\hyperref[opt:warm_start_mult_bound_push]{warm\_start\_mult\_bound\_push}}] Enables to specify how much should bound multipliers should be pushed inside the feasible region
-\item[{\hyperref[opt:watchdog_shortened_iter_trigger]{watchdog\_shortened\_iter\_trigger}}] Trigger counter for watchdog procedure
-\item[{\hyperref[opt:wsmp_num_threads]{wsmp\_num\_threads}}] Number of threads to be used in WSMP
-\item[{\hyperref[opt:wsmp_pivtol]{wsmp\_pivtol}}] Pivot tolerance for the linear solver WSMP
-\item[{\hyperref[opt:wsmp_pivtolmax]{wsmp\_pivtolmax}}] Maximum pivot tolerance for the linear solver WSMP
-\item[{\hyperref[opt:wsmp_scaling]{wsmp\_scaling}}] Determines how the matrix is scaled by WSMP
+\item[{\htmlref{hessian\_approximation}{opt:hessian_approximation}}] Can enable Quasi-Newton approximation of hessian
+\item[{\htmlref{honor\_original\_bounds}{opt:honor_original_bounds}}] If no, solution might slightly violate bounds
+\item[{\htmlref{linear\_scaling\_on\_demand}{opt:linear_scaling_on_demand}}] Enables heuristic for scaling only when seems required
+\item[{\htmlref{linear\_solver}{opt:linear_solver}}] Linear solver to be used for step calculation
+\item[{\htmlref{linear\_system\_scaling}{opt:linear_system_scaling}}] Method for scaling the linear systems
+\item[{\htmlref{ma27\_pivtol}{opt:ma27_pivtol}}] Pivot tolerance for the linear solver MA27
+\item[{\htmlref{ma27\_pivtolmax}{opt:ma27_pivtolmax}}] Maximal pivot tolerance for the linear solver MA27
+\item[{\htmlref{ma57\_pivot\_order}{opt:ma57_pivot_order}}] Controls pivot order in MA57
+\item[{\htmlref{ma57\_pivtol}{opt:ma57_pivtol}}] Pivot tolerance for the linear solver MA57
+\item[{\htmlref{ma57\_pivtolmax}{opt:ma57_pivtolmax}}] Maximal pivot tolerance for the linear solver MA57
+\item[{\htmlref{max\_cpu\_time}{opt:max_cpu_time}}] CPU time limit
+\item[{\htmlref{max\_iter}{opt:max_iter}}] Maximum number of iterations
+\item[{\htmlref{max\_refinement\_steps}{opt:max_refinement_steps}}] Maximal number of iterative refinement steps per linear system solve
+\item[{\htmlref{max\_soc}{opt:max_soc}}] Maximal number of second order correction trial steps
+\item[{\htmlref{maxit}{opt:max_iter}}] (Ipopt name: \htmlref{max\_iter}{opt:max_iter}) Maximum number of iterations
+\item[{\htmlref{min\_refinement\_steps}{opt:min_refinement_steps}}] Minimum number of iterative refinement steps per linear system solve
+\item[{\htmlref{mu\_init}{opt:mu_init}}] Initial value for the barrier parameter
+\item[{\htmlref{mu\_max}{opt:mu_max}}] Maximal value for barrier parameter for adaptive strategy
+\item[{\htmlref{mu\_oracle}{opt:mu_oracle}}] Oracle for a new barrier parameter in the adaptive strategy
+\item[{\htmlref{mu\_strategy}{opt:mu_strategy}}] Update strategy for barrier parameter
+\item[{\htmlref{nlp\_scaling\_max\_gradient}{opt:nlp_scaling_max_gradient}}] Maximum gradient after scaling
+\item[{\htmlref{nlp\_scaling\_method}{opt:nlp_scaling_method}}] Select the technique used for scaling the NLP
+\item[{\htmlref{obj\_scaling\_factor}{opt:obj_scaling_factor}}] Scaling factor for the objective function
+\item[{\htmlref{option\_file\_name}{opt:option_file_name}}] File name of options file (default: ipopt.opt)
+\item[{\htmlref{outlev}{opt:print_level}}] (Ipopt name: \htmlref{print\_level}{opt:print_level}) Verbosity level
+\item[{\htmlref{output\_file}{opt:output_file}}] File name of an output file (leave unset for no file output)
+\item[{\htmlref{pardiso\_matching\_strategy}{opt:pardiso_matching_strategy}}] Matching strategy for linear solver Pardiso
+\item[{\htmlref{pardiso\_out\_of\_core\_power}{opt:pardiso_out_of_core_power}}] Enables out-of-core version of linear solver Pardiso
+\item[{\htmlref{print\_level}{opt:print_level}}] Verbosity level
+\item[{\htmlref{print\_options\_documentation}{opt:print_options_documentation}}] Print all available options (for ipopt.opt)
+\item[{\htmlref{print\_user\_options}{opt:print_user_options}}] Toggle printing of user options
+\item[{\htmlref{required\_infeasibility\_reduction}{opt:required_infeasibility_reduction}}] Required infeasibility reduction in restoration phase
+\item[{\htmlref{slack\_bound\_frac}{opt:slack_bound_frac}}] Desired minimal relative distance of initial slack to bound
+\item[{\htmlref{slack\_bound\_push}{opt:slack_bound_push}}] Desired minimal absolute distance of initial slack to bound
+\item[{\htmlref{tol}{opt:tol}}] Desired convergence tolerance (relative)
+\item[wantsol] solution report without -AMPL: sum of, 		1 == write .sol file, 		2 == print primal variable values, 		4 == print dual variable values, 		8 == do not print solution message
+\item[{\htmlref{warm\_start\_bound\_push}{opt:warm_start_bound_push}}] Enables to specify how much should variables should be pushed inside the feasible region
+\item[{\htmlref{warm\_start\_init\_point}{opt:warm_start_init_point}}] Enables to specify bound multiplier values
+\item[{\htmlref{warm\_start\_mult\_bound\_push}{opt:warm_start_mult_bound_push}}] Enables to specify how much should bound multipliers should be pushed inside the feasible region
+\item[{\htmlref{watchdog\_shortened\_iter\_trigger}{opt:watchdog_shortened_iter_trigger}}] Trigger counter for watchdog procedure
 \end{description}
