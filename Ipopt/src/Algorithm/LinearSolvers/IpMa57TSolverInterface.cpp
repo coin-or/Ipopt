@@ -561,8 +561,8 @@ namespace Ipopt
         ajcn_ma57int[k] = (ma57int) ajcn[k];
       }
     } else {
-       airn_ma57int = (ma57int*)(void*)airn;
-       ajcn_ma57int = (ma57int*)(void*)ajcn;
+       airn_ma57int = (ma57int*)(void*)const_cast<Index*>(airn);
+       ajcn_ma57int = (ma57int*)(void*)const_cast<Index*>(ajcn);
     }
 
     F77_FUNC (ma57ad, MA57AD)

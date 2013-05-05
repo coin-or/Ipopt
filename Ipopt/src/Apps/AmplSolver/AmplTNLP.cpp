@@ -1076,10 +1076,10 @@ namespace Ipopt
 
         if( ipoptname.length() > 0 )
         {
-           jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, "\\item[{\\hyperref[sec:%s]{%s}}]",
+           jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, "\\item[{\\hyperref[opt:%s]{%s}}]",
               iter->second->IpoptOptionName().c_str(), amplname.c_str());
            if( amplname != ipoptname )
-              jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, " (Ipopt name: \\hyperref[sec:%s]{%s})",
+              jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, " (Ipopt name: \\hyperref[opt:%s]{%s})",
                  iter->second->IpoptOptionName().c_str(), ipoptname.c_str());
         }
         else

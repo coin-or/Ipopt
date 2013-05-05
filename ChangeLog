@@ -5,7 +5,10 @@ history management of subversion.
 2012-05-?? releases/3.11.0
         - update and extension of Ipopt documentation
         - updated build of doxygen documentation to comply with other COIN-OR projects
-        - localized global variable in RegisteredOption class
+        - localized global variables in TaggedObject and RegisteredOption,
+          so that Ipopt should now be threadsafe as long as Ipopt objects
+          (esp. SmartPtr's) are not shared between threads and a threadsafe
+          linear solver is used (e.g., MA27) [#167]
         - no more need for whitespace character at end of options file
         - added options print_frequency_iter and print_frequency_time to regulate
           which iteration summary lines should be printed [#161]
@@ -30,10 +33,13 @@ history management of subversion.
           MATLAB (configure option --enable-matlab-ma57; cannot use Metis)
         
         - fixes to JIpopt buildsystem (now may work on windows and uses libtool)
+        - JIpopt now reads options file ipopt.opt by default, if present
+        - removed predefined KEY_ strings in JIpopt
+        - renamed API functions to retrieve solution values in JIpopt
         
-        - simplified installation of R interface        
+        - simplified installation of R interface
 
-2012-04-?? releases/3.10.4
+2012-05-05 releases/3.10.4
         - fixed sign of dual values in AMPL solution again (with help of Gabe)
           [r2169, r2170, r2184, #183]
         - fixed bugs with reoptimizing a TNLP with all variables fixed [r2172, r2173, #179]
@@ -41,6 +47,11 @@ history management of subversion.
           in Matlab interface (by T. Kelman) [r2191]
         - added missing final int for Ipopt return code Maximum_CpuTime_Exceeded
           in Java interface [r2216]
+        - fixed bug when trying to warmstart Ipopt in Java interface [r2253]
+        - fixed wrong use of SmartPtr's in Java interface [r2255, r2263]
+        - fixed bug in returning final solution in Java interface [r2258]
+        - included patch in ThirdParty/Mumps to work around bugs in Mumps
+          matrix ordering routines AMF and QAMD (now give preference to AMD and METIS)
 
 2012-11-19 releases/3.10.3
         - minor fixes in MA86 interface (by Jonathan Hogg) [r2069, r2086]

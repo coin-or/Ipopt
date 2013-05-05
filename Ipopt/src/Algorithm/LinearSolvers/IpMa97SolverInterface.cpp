@@ -92,8 +92,8 @@ namespace Ipopt
       "mc30", "Scale all linear system matrices using MC30",
       "mc64", "Scale all linear system matrices using MC64",
       "mc77", "Scale all linear system matrices using MC77 [1,3,0]",
-      "dynamic", "Dynamically select scaling according to rules specifed by ma97_scalingX and ma97_switchX options.",
-      "Specifies strategy for scaling in HSL_MA97 linear solver");
+      "dynamic", "Dynamically select scaling according to rules specified by ma97_scalingX and ma97_switchX options.",
+      "");
     roptions->AddStringOption4(
       "ma97_scaling1",
       "First scaling.",
@@ -117,7 +117,7 @@ namespace Ipopt
       "high_delay_reuse", "Scaling to be used only when previous itr created more that 0.05*n additional delays, otherwise reuse scaling from previous itr",
       "od_hd", "Combination of on_demand and high_delay",
       "od_hd_reuse", "Combination of on_demand_reuse and high_delay_reuse",
-      "If ma97_scaling=dynamic, ma97_scaling1 is enabled according to this condition. If ma97_switch2 occurs this option is henceforth ignored");
+      "If ma97_scaling=dynamic, ma97_scaling1 is enabled according to this condition. If ma97_switch2 occurs this option is henceforth ignored.");
     roptions->AddStringOption4(
       "ma97_scaling2",
       "Second scaling.",
@@ -141,7 +141,7 @@ namespace Ipopt
       "high_delay_reuse", "Scaling to be used only when previous itr created more that 0.05*n additional delays, otherwise reuse scaling from previous itr",
       "od_hd", "Combination of on_demand and high_delay",
       "od_hd_reuse", "Combination of on_demand_reuse and high_delay_reuse",
-      "If ma97_scaling=dynamic, ma97_scaling2 is enabled according to this condition. If ma97_switch3 occurs this option is henceforth ignored");
+      "If ma97_scaling=dynamic, ma97_scaling2 is enabled according to this condition. If ma97_switch3 occurs this option is henceforth ignored.");
     roptions->AddStringOption4(
       "ma97_scaling3",
       "Third scaling.",
@@ -177,7 +177,7 @@ namespace Ipopt
       "matched-auto", "Use the HSL_MC80 matching with heuristic choice of AMD or METIS",
       "matched-metis", "Use the HSL_MC80 matching based ordering with METIS",
       "matched-amd", "Use the HSL_MC80 matching based ordering with AMD",
-      "This option controls ordering for the solver HSL_MA97.");
+      "");
 #ifdef MA97_DUMP_MATRIX
     roptions->AddStringOption2(
       "ma97_dump_matrix",

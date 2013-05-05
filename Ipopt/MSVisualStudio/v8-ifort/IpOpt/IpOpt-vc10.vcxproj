@@ -478,7 +478,6 @@
     <ClCompile Include="..\..\..\src\Common\IpObserver.cpp" />
     <ClCompile Include="..\..\..\src\Common\IpOptionsList.cpp" />
     <ClCompile Include="..\..\..\src\Common\IpRegOptions.cpp" />
-    <ClCompile Include="..\..\..\src\Common\IpTaggedObject.cpp" />
     <ClCompile Include="..\..\..\src\Common\IpUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
