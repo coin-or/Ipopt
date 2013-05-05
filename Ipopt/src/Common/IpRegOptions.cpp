@@ -119,7 +119,7 @@ namespace Ipopt
     std::string latex_desc;
     MakeValidLatexString(short_description_, latex_desc);
     jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                 "\\paragraph{%s:}\\label{sec:%s} %s $\\;$ \\\\\n",
+                 "\\paragraph{%s:}\\label{opt:%s} %s \\\\\n",
                  latex_name.c_str(),
                  name_.c_str(),
                  latex_desc.c_str());
@@ -205,7 +205,7 @@ namespace Ipopt
       std::string buff;
       MakeValidLatexString(default_string_, buff);
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                   "\nThe default value for this string option is \"%s\".\n",
+                   " The default value for this string option is \"%s\".\n",
                    buff.c_str());
 
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\\\ \nPossible values:\n");

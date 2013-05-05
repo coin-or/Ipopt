@@ -2164,11 +2164,14 @@ Give \Ipopt the value of the bounds on the variables and constraints.
 The values of {\tt n} and {\tt m} that you specified in {\tt
   get\_nlp\_info} are passed to you for debug checking.  Setting a
 lower bound to a value less than or equal to the value of the option
-{\tt nlp\_lower\_bound\_inf} will cause \Ipopt to assume no lower
-bound. Likewise, specifying the upper bound above or equal to the
-value of the option {\tt nlp\_upper\_bound\_inf} will cause \Ipopt to
-assume no upper bound.  These options, {\tt nlp\_lower\_bound\_inf}
-and {\tt nlp\_upper\_bound\_inf}, are set to $-10^{19}$ and $10^{19}$,
+\hyperref[opt:nlp_lower_bound_inf]{\tt nlp\_lower\_bound\_inf} will
+cause \Ipopt to assume no lower bound. Likewise, specifying the upper
+bound above or equal to the value of the option
+\hyperref[opt:nlp_upper_bound_inf]{\tt nlp\_upper\_bound\_inf} will cause \Ipopt to
+assume no upper bound.  These options,
+\hyperref[opt:nlp_lower_bound_inf]{\tt nlp\_lower\_bound\_inf}
+and \hyperref[opt:nlp_upper_bound_inf]{\tt nlp\_upper\_bound\_inf},
+are set to $-10^{19}$ and $10^{19}$,
 respectively, by default, but may be modified by changing the options
 (see Section \ref{sec:options}).
 
@@ -2682,7 +2685,7 @@ algorithm has finished (successfully or even with most errors).
     occurred while \Ipopt tried to compute the search direction.
   \item {\tt INVALID\_NUMBER\_DETECTED}:  Algorithm received an
     invalid number (such as {\tt NaN} or {\tt Inf}) from the NLP; see
-    also option {\tt check\_derivatives\_for\_naninf}.
+    also option \hyperref[opt:check_derivatives_for_naninf]{\tt check\_derivatives\_for\_naninf}.
   \item {\tt
       INTERNAL\_ERROR}: An unknown internal error occurred.  Please
     contact the \Ipopt authors through the mailing list.
@@ -3126,9 +3129,9 @@ a {\tt std::vector} as value type.
 So far, \Ipopt itself makes only use of string meta data under the key {\tt 
 idx\_names}. With this key, variable and constraint names can be passed to 
 \Ipopt, which are shown when printing internal vector or matrix data structures 
-if \Ipopt is run with a high value for the {\tt print\_level} option. This 
-allows a user to identify the original variables and constraints corresponding 
-to \Ipopt's internal problem representation.
+if \Ipopt is run with a high value for the \hyperref[opt:print_level]{\tt print\_level} 
+option. This allows a user to identify the original variables and constraints
+corresponding to \Ipopt's internal problem representation.
 
 If the user doesn't overload this method in her implementation of the class 
 derived from {\tt TNLP}, the default implementation does not set any meta data 
@@ -3372,8 +3375,9 @@ The problem has 2 constraints, so we set {\tt m} and allocate space
 for the constraint bounds. The first constraint has a lower bound of
 $25$ and no upper bound.  Here we set the upper bound to
 \texttt{2e19}. \Ipopt interprets any number greater than or equal to
-\texttt{nlp\_upper\_bound\_inf} as infinity. The default value of
-\texttt{nlp\_lower\_bound\_inf} and \texttt{nlp\_upper\_bound\_inf} is
+\hyperref[opt:nlp_upper_bound_inf]{\tt nlp\_upper\_bound\_inf} as infinity.
+The default value of \hyperref[opt:nlp_lower_bound_inf]{\tt nlp\_lower\_bound\_inf}
+and \hyperref[opt:nlp_upper_bound_inf]{\tt nlp\_upper\_bound\_inf} is
 \texttt{-1e19} and \texttt{1e19}, respectively, and can be changed
 through \Ipopt options.  The second constraint is an equality with
 right hand side 40, so we set both the upper and the lower bound to
@@ -3806,7 +3810,8 @@ equality constraint and acts accordingly.
 \end{verbatim}
 Finally, we can call \Ipopt with the {\tt ipoptr} function.
 In order to redirect the \Ipopt output into a file, we use \Ipopt's
-{\tt output\_file} and {\tt print\_level} options.
+\hyperref[opt:output_file]{\tt output\_file} and
+\hyperref[opt:print_level]{\tt print\_level} options.
 \begin{verbatim}
 > opts <- list("print_level" = 0,
               "file_print_level" = 12,
@@ -3967,8 +3972,9 @@ make mistakes (much easier than writing it correctly the first time
 simple derivative checker, based on finite differences, before the
 optimization is started.
 
-To use the derivative checker, you need to use the option {\tt
-  derivative\_test}.  By default, this option is set to {\tt none},
+To use the derivative checker, you need to use the option
+\hyperref[opt:derivative_test]{\tt derivative\_test}.
+By default, this option is set to {\tt none},
 i.e., no finite difference test is performed,  It is set to {\tt
   first-order}, then the first derivatives of the objective function
 and the constraints are verified, and for the setting {\tt
@@ -3977,18 +3983,20 @@ and the constraints are verified, and for the setting {\tt
 The verification is done by a simple finite differences approximation,
 where each component of the user-provided starting point is perturbed
 one of the other.  The relative size of the perturbation is determined
-by the option {\tt derivative\_test\_perturbation}.  The default value
+by the option \hyperref[opt:derivative_test_perturbation]{\tt derivative\_test\_perturbation}.  The default value
 ($10^{-8}$, about the square root of the machine precision) is
 probably fine in most cases, but if you believe that you see wrong
 warnings, you might want to play with this parameter.  When the test is
 performed, \Ipopt prints out a line for every partial derivative, for
 which the user-provided derivative value deviates too much from the
 finite difference approximation.  The relative tolerance for deciding
-when a warning should be issued, is determined by the option {\tt
-  derivative\_test\_tol}.  If you want to see the user-provided and
+when a warning should be issued, is determined by the option
+\hyperref[opt:derivative_test_tol]{\tt derivative\_test\_tol}.
+If you want to see the user-provided and
 estimated derivative values with the relative deviation for each
-single partial derivative, you can switch the {\tt
-  derivative\_test\_print\_all} option to {\tt yes}.
+single partial derivative, you can switch the
+\hyperref[opt:derivative_test_print_all]{\tt derivative\_test\_print\_all}
+option to {\tt yes}.
 
 A typical output is:
 
@@ -4054,8 +4062,9 @@ derivatives.  Also, since the finite difference approximations are
 quite expensive, you should try to debug a small instance of your
 problem if you can.  
 
-Another useful option is \texttt{derivative\_test\_first\_index} which
-allows your to start the derivative test with variables with a larger
+Another useful option is 
+\hyperref[opt:derivative_test_first_index]{\tt derivative\_test\_first\_index}
+which allows your to start the derivative test with variables with a larger
 index.
 %
 Finally, it is of course always a good idea to run your code through
@@ -4066,7 +4075,8 @@ some memory checker, such as {\tt valgrind} on Linux.
 
 \Ipopt has an option to approximate the Hessian of the Lagrangian by
 a limited-memory quasi-Newton method (L-BFGS).  You can use this
-feature using the {\tt hessian\_approximation=limited-memory} option.  In this case, it is not necessary to
+feature by setting the \hyperref[opt:hessian_approximation]{\tt hessian\_approximation} 
+option to the value {\tt limited-memory}.  In this case, it is not necessary to
 implement the Hessian computation method {\tt eval\_h} in {\tt TNLP}.
 If you are using the C or Fortran interface, you still need to
 implement these functions, but they should return {\tt false} or {\tt
@@ -4101,26 +4111,55 @@ interface.
 \hfill \textit{based on documentation by Victor M. Zavala}\footnote{Department of Chemical Engineering, Carnegie Mellon University}
 \medskip
 
-Warm-starting an interior-point algorithm is an important issue. One of the main difficulties arises from the fact that full-space variable information is required to generate the warm-starting point. While \Ipopt is currently equipped to retrieve and receive this type of information through the {\tt TNLP} interface, there exist some communication barriers in the AMPL interface. When the user solves the problem \eqref{eq:obj}--\eqref{eq:bounds}, \Ipopt will only return the optimal values of the primal variables $x$ and of the constraint multipliers corresponding to the active bounds of $g(x)$ (see \eqref{eq:constraints}). The constraint multiplier values can be accessed through the {\tt .dual} suffix or through the {\tt .sol} file. If this information is used to solve the same problem again, you will notice that \Ipopt will take some iterations in finding the same solution. The reason for this is that we are missing the input information of the multipliers $z^L$ and $z^U$ corresponding to the variable bounds (see \eqref{eq:bounds}).
+Warm-starting an interior-point algorithm is an important issue. One of the main 
+difficulties arises from the fact that full-space variable information is required to 
+generate the warm-starting point. While \Ipopt is currently equipped to retrieve and receive 
+this type of information through the {\tt TNLP} interface, there exist some communication 
+barriers in the AMPL interface. When the user solves the problem 
+\eqref{eq:obj}--\eqref{eq:bounds}, \Ipopt will only return the optimal values of the primal 
+variables $x$ and of the constraint multipliers corresponding to the active bounds of $g(x)$ 
+(see \eqref{eq:constraints}). The constraint multiplier values can be accessed through the 
+{\tt .dual} suffix or through the {\tt .sol} file. If this information is used to solve the 
+same problem again, you will notice that \Ipopt will take some iterations in finding the 
+same solution. The reason for this is that we are missing the input information of the 
+multipliers $z^L$ and $z^U$ corresponding to the variable bounds (see \eqref{eq:bounds}).
 
-However, \Ipopt also passes the values of the bound multipliers $z^L$ and $z^U$ to AMPL. This will be communicated to the AMPL user through the suffixes {\tt ipopt\_zL\_out} and {\tt ipopt\_zU\_out}, respectively. The user does not need to declare these suffixes, they will be generated automatically in the AMPL interface. The user can use the suffix values to initialize the bound multipliers for subsequent calls. In order to pass this information to \Ipopt, the user will need to declare and assign values to the suffixes {\tt ipopt\_zL\_in} and {\tt ipopt\_zU\_in}. For instance, for a given variable {\tt x[i]}, this can be done by setting:
+However, \Ipopt also passes the values of the bound multipliers $z^L$ and $z^U$ to AMPL. 
+This will be communicated to the AMPL user through the suffixes {\tt ipopt\_zL\_out} and 
+{\tt ipopt\_zU\_out}, respectively. The user does not need to declare these suffixes, they 
+will be generated automatically in the AMPL interface. The user can use the suffix values to 
+initialize the bound multipliers for subsequent calls. In order to pass this information to 
+\Ipopt, the user will need to declare and assign values to the suffixes {\tt ipopt\_zL\_in} 
+and {\tt ipopt\_zU\_in}. For instance, for a given variable {\tt x[i]}, this can be done by 
+setting:
 \begin{verbatim}
   let x[i].ipopt_zL_in := x[i].ipopt_zL_out;
   let x[i].ipopt_zU_in := x[i].ipopt_zU_out;
 \end{verbatim}
 
-If the user does not specify some of these values, \Ipopt will set these multipliers to 1.0 (as before). In order to make the warm-start effective, the user has control over the following options from AMPL:
-\begin{verbatim}
-  warm_start_init_point
-  warm_start_bound_push
-  warm_start_mult_bound_push
-\end{verbatim}
-Please refer to Appendix \ref{app.options_ref} for more information on the use of these options.
+If the user does not specify some of these values, \Ipopt will set these multipliers to 1.0 
+(as before). In order to make the warm-start effective, the user has control over the 
+following options from AMPL:\\
+\hyperref[opt:warm_start_init_point]{\tt warm\_start\_init\_point} \\
+\hyperref[opt:warm_start_bound_push]{\tt warm\_start\_bound\_push} \\
+\hyperref[opt:warm_start_mult_bound_push]{\tt warm\_start\_mult\_bound\_push}
 
-Note, that the use of this feature is far from solving the complicated issue of warm-starting interior-point algorithms. As a general advice, this feature will be useful if the user observes that the solution of subsequent problems (i.e., for different data instances) preserves the same set of active inequalities and bounds (monitor the values of $z^L$ and $z^U$ for subsequent solutions). In this case, initializing the bound multipliers and setting {\tt warm\_start\_init\_point} to {\tt yes} and setting {\tt warm\_start\_bound\_push}, {\tt warm\_start\_mult\_bound\_push} and {\tt mu\_init} to a small value ($10^{-6}$ or so) will reduce significantly the number of iterations. This is particularly useful in setting up on-line applications and high-level optimization strategies in AMPL.
-If active-set changes are observed between subsequent solutions, then this strategy might not decrease the number of iterations (in some cases, it might even tend to increase the number of iterations).
+Note, that the use of this feature is far from solving the complicated issue of warm-
+starting interior-point algorithms. As a general advice, this feature will be useful if the 
+user observes that the solution of subsequent problems (i.e., for different data instances) 
+preserves the same set of active inequalities and bounds (monitor the values of $z^L$ and 
+$z^U$ for subsequent solutions). In this case, initializing the bound multipliers and 
+setting \hyperref[opt:warm_start_init_point]{\tt warm\_start\_init\_point} to {\tt yes} and 
+setting \hyperref[opt:warm_start_bound_push]{\tt warm\_start\_bound\_push},
+\hyperref[opt:warm_start_mult_bound_push]{\tt warm\_start\_mult\_bound\_push} and
+\hyperref[opt:mu_init]{\tt mu\_init} to a small value ($10^{-6}$ or so) will reduce 
+significantly the number of iterations. This is particularly useful in setting up on-line 
+applications and high-level optimization strategies in AMPL.
+If active-set changes are observed between subsequent solutions, then this strategy might 
+not decrease the number of iterations (in some cases, it might even tend to increase the 
+number of iterations).
 
-You might also want to try the adaptive barrier update (instead of the default monotone one where above we chose the initial value $10^{-6}$) when doing the warm start. This can be activated with the {\tt mu\_strategy adaptive} option, and the option {\tt mu\_oracle} gives some alternative choices. In general, the adaptive choice often leads to less iterations, but the computational cost per iteration might be higher.
+You might also want to try the adaptive barrier update (instead of the default monotone one where above we chose the initial value $10^{-6}$) when doing the warm start. This can be activated by setting the \hyperref[opt:mu_strategy]{\tt mu\_strategy} option to {\tt adaptive}. Also the option \hyperref[opt:mu_oracle]{\tt mu\_oracle} gives some alternative choices. In general, the adaptive choice often leads to less iterations, but the computational cost per iteration might be higher.
 
 The file {\tt \$IPOPTDIR/Ipopt/doc/hs071\_warmstart.mod} illustrates the use of the warm-start feature on the HS071 problem, see also Section \ref{sec.ipoptampl}.
 
@@ -4203,7 +4242,7 @@ For a list of the most important valid options, see the Appendix
 options by using the option
 \medskip
 
-{\tt print\_options\_documentation yes}
+\hyperref[opt:print_options_documentation]{\tt print\_options\_documentation}{\tt~yes}
 \medskip
 
 and running \Ipopt (like the AMPL solver executable, for
@@ -4212,7 +4251,7 @@ console.
 
 \section{\Ipopt Output}\label{sec:output}
 This section describes the standard \Ipopt console output with the
-default setting for {\tt print\_level}. The output is designed to
+default setting for \hyperref[opt:print_level]{\tt print\_level}. The output is designed to
 provide a quick summary of each iteration as \Ipopt solves the problem.
 
 Before \Ipopt starts to solve the problem, it displays the problem
@@ -4242,7 +4281,7 @@ and the columns of output are defined as,
   point.  This quantity is the infinity-norm (max) of the (unscaled)
   constraints (\ref{eq:constraints}).  During the restoration phase,
   this value remains the constraint violation of the original problem
-  at the current point.  The option ``\texttt{inf\_pr\_output}'' can
+  at the current point.  The option \hyperref[opt:inf_pr_output]{\tt inf\_pr\_output} can
   be used to switch to the printing of a different quantity.
 \item[{\tt inf\_du}:] The scaled dual infeasibility at the current
   point.  This quantity measure the infinity-norm (max) of the
@@ -4324,8 +4363,9 @@ to the console, and a brief description.
   Console Message: {\tt EXIT: Solved To Acceptable Level.} \\
   This indicates that the algorithm did not converge to the
   ``desired'' tolerances, but that it was able to obtain a point
-  satisfying the ``acceptable'' tolerance level as specified by {\tt
-    acceptable-*} options. This may happen if the desired tolerances
+  satisfying the ``acceptable'' tolerance level as specified by the
+  \hyperref[opt:acceptable_tol]{\tt acceptable\_*} options.
+  This may happen if the desired tolerances
   are too small for the current problem.
 \item[{\tt Feasible\_Point\_Found}:]  $\;$ \\
   Console Message: {\tt EXIT: Feasible point for square problem found.} \\
@@ -4353,7 +4393,8 @@ to the console, and a brief description.
   Console Message: {\tt EXIT: Iterates divering; problem might be
     unbounded.} \\
   This message is printed if the max-norm of the iterates becomes
-  larger than the value of the option {\tt diverging\_iterates\_tol}.
+  larger than the value of the option
+  \hyperref[opt:diverging_iterates_tol]{\tt diverging\_iterates\_tol}.
   This can happen if the problem is unbounded below and the iterates
   are diverging.
 \item[{\tt User\_Requested\_Stop}:]  $\;$ \\
@@ -4365,11 +4406,11 @@ to the console, and a brief description.
 \item[{\tt Maximum\_Iterations\_Exceeded}:]  $\;$ \\
   Console Message: {\tt EXIT: Maximum Number of Iterations Exceeded.} \\
   This indicates that \Ipopt has exceeded the maximum number of
-  iterations as specified by the option {\tt max\_iter}.
+  iterations as specified by the option \hyperref[opt:max_iter]{\tt max\_iter}.
 \item[{\tt Maximum\_CpuTime\_Exceeded}:]  $\;$ \\
   Console Message: {\tt EXIT: Maximum CPU time exceeded.} \\
   This indicates that \Ipopt has exceeded the maximum number of
-  CPU seconds as specified by the option {\tt max\_cpu\_time}.
+  CPU seconds as specified by the option \hyperref[opt:max_cpu_time]{\tt max\_cpu\_time}.
 \item[{\tt Restoration\_Failed}:]  $\;$ \\
   Console Message: {\tt EXIT: Restoration Failed!} \\
   This indicates that the restoration phase failed to find a feasible
@@ -4384,7 +4425,8 @@ to the console, and a brief description.
   Usually, the value of the regularization parameter then becomes too
   large.  One situation where this can happen is when values in the
   Hessian are invalid ({\tt NaN} or {\tt Inf}).  You can check whether this
-  is true by using the {\tt check\_derivatives\_for\_naninf} option.
+  is true by using the
+  \hyperref[opt:check_derivatives_for_naninf]{\tt check\_derivatives\_for\_naninf} option.
 \item[{\tt Invalid\_Option}:]  $\;$ \\
   Console Message: (details about the particular error
   will be output to the console) \\
@@ -4395,7 +4437,7 @@ to the console, and a brief description.
   This indicates that your problem, as specified, has too few degrees
   of freedom. This can happen if you have too many equality
   constraints, or if you fix too many variables (\Ipopt removes fixed
-  variables by default, see also the {\tt fixed\_variable\_treatment} option).
+  variables by default, see also the \hyperref[opt:fixed_variable_treatment]{\tt fixed\_variable\_treatment} option).
 \item[{\tt Invalid\_Problem\_Definition}:]  $\;$ \\
   Console Message: (no console message, this is a return code for the
   C and Fortran interfaces only.) \\
@@ -4427,7 +4469,8 @@ to the console, and a brief description.
 \subsection{Diagnostic Tags for \Ipopt}
 
 To print additional diagnostic tags for each iteration of \Ipopt, set
-the options ``\texttt{print\_info\_string}'' to ``\texttt{yes}''. With
+the options \hyperref[opt:print_info_string]{\tt print\_info\_string}
+to \texttt{yes}. With
 this, a tag will appear at the end of an iteration line with the
 following diagnostic meaning that are useful to flag difficulties for
 a particular \Ipopt run.  A list of possible strings is given in
@@ -4512,7 +4555,7 @@ space savings are very dramatic\footnote{For an $n \times n$ matrix,
 the dense representation grows with the the square of $n$, while the
 sparse representation grows linearly in the number of nonzeros.}.
 
-The option {\tt index\_style} in {\tt get\_nlp\_info} tells \Ipopt if
+The parameter {\tt index\_style} in {\tt get\_nlp\_info} tells \Ipopt if
 you prefer to use C style indexing (0-based, i.e., starting the
 counting at 0) for the row and column indices or Fortran style
 (1-based). Tables \ref{tab.fortran_triplet} and \ref{tab.c_triplet}
@@ -4677,10 +4720,8 @@ through the AMPL {\tt ipopt\_options} command. See Section
 \ref{sec:options} for an explanation of how to use these commands.
 Shown here is a list of the most important options for \Ipopt. To view
 the full list of options, you can set the option 
-\begin{verbatim}
-print_options_documentation yes
-\end{verbatim}
-or simply run the \Ipopt AMPL solver executable as
+\hyperref[opt:print_options_documentation]{\tt print\_options\_documentation}
+to {\tt yes} or simply run the \Ipopt AMPL solver executable as
 \begin{verbatim}
 ipopt --print-options
 \end{verbatim}
