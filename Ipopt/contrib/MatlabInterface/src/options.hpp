@@ -39,9 +39,6 @@ public:
   const double* constraintlb() const { return cl; };
   const double* constraintub() const { return cu; };
 
-  // Access the auxiliary data.
-  const mxArray* getAuxData() const { return auxdata; };
-
   // Access the IPOPT options object.
   const IpoptOptions ipoptOptions() const { return ipopt; };
 
@@ -60,7 +57,6 @@ protected:
   double*        zl;      // Lagrange multipliers for lower bounds.
   double*        zu;      // Lagrange multipliers for upper bounds.
   double*        lambda;  // Lagrange multipliers for constraints.
-  const mxArray* auxdata; // MATLAB array containing the auxiliary data.
   IpoptOptions   ipopt;   // The IPOPT options.
 
   // These are helper functions used by the class constructor.

@@ -41,44 +41,36 @@ public:
   bool iterFuncIsAvailable      () const { return *iterfunc;       };
 
   // These functions execute the various callback functions with the
-  // appropriate inputs and outputs. The auxiliary data may be altered
-  // over the course of executing the callback function. If there is
-  // no auxiliary data, then simply pass in a null pointer. Here, m is
-  // the number of constraints. The first function returns the value
-  // of the objective at x.
-  double computeObjective (const Iterate& x, const mxArray* auxdata) const;
+  // appropriate inputs and outputs. Here, m is the number of constraints.
+  // The first function returns the value of the objective at x.
+  double computeObjective (const Iterate& x) const;
 
   // This function computes the value of the gradient at x, and
   // returns the gradient entries in the array g, which must be of
   // length equal to the number of optimization variables.
-  void computeGradient (const Iterate& x, double* g, 
-			const mxArray* auxdata) const;
+  void computeGradient (const Iterate& x, double* g) const;
 
   // This function computes the response of the vector-valued
   // constraint function at x, and stores the result in the array c
   // which must be of length m.
-  void computeConstraints (const Iterate& x, int m, double* c, 
-			   const mxArray* auxdata) const;
+  void computeConstraints (const Iterate& x, int m, double* c) const;
 
   // This function gets the structure of the sparse m x n Jacobian matrix.
-  SparseMatrix* getJacobianStructure (int n, int m, 
-				      const mxArray* auxdata) const;
+  SparseMatrix* getJacobianStructure (int n, int m) const;
 
   // This function gets the structure of the sparse n x n Hessian matrix.
-  SparseMatrix* getHessianStructure (int n, const mxArray* auxdata) const;
+  SparseMatrix* getHessianStructure (int n) const;
 
   // This function computes the Jacobian of the constraints at x.
-  void computeJacobian (int m, const Iterate& x, SparseMatrix& J, 
-			const mxArray* auxdata) const;
+  void computeJacobian (int m, const Iterate& x, SparseMatrix& J) const;
 
   // This function computes the Hessian of the Lagrangian at x.
   void computeHessian (const Iterate& x, double sigma, int m, 
-		       const double* lambda, SparseMatrix& H, 
-		       const mxArray* auxdata) const;
+		       const double* lambda, SparseMatrix& H) const;
 
   // Call the intermediate callback function. A return value of false
   // tells IPOPT to terminate.
-  bool iterCallback (int t, double f, const mxArray*& auxdata) const;
+  bool iterCallback (int t, double f) const;
 
 protected:
   MatlabFunctionHandle* objfunc;        // Objective callback function.

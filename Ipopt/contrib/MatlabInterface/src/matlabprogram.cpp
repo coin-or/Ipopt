@@ -15,8 +15,8 @@
 MatlabProgram::MatlabProgram (const Iterate& x0, 
 			      const CallbackFunctions& funcs,
 			      const Options& options, Iterate& x, 
-			      const mxArray* auxdata, MatlabInfo& info)
-  : x0(x0), funcs(funcs), options(options), x(x), auxdata(auxdata), 
+			      MatlabInfo& info)
+  : x0(x0), funcs(funcs), options(options), x(x), 
     info(info), J(0), H(0) { }
 
 MatlabProgram::~MatlabProgram() { 
@@ -37,7 +37,7 @@ bool MatlabProgram::get_nlp_info (int& n, int& m, int& sizeOfJ, int& sizeOfH,
       if (!funcs.jacobianFuncIsAvailable())
 	throw MatlabException("You need to specify the callback functions \
 for computing the Jacobian and the sparsity structure of the Jacobian");
-      SparseMatrix* J = funcs.getJacobianStructure(n,m,auxdata);
+      SparseMatrix* J = funcs.getJacobianStructure(n,m);
       sizeOfJ = J->numelems();
       delete J;
     }
@@ -51,7 +51,7 @@ for computing the Jacobian and the sparsity structure of the Jacobian");
       if (!funcs.hessianFuncIsAvailable())
 	throw MatlabException("You need to specify the callback functions \
 for computing the Hessian and the sparsity structure of the Hessian");
-      SparseMatrix* H = funcs.getHessianStructure(n,auxdata);
+      SparseMatrix* H = funcs.getHessianStructure(n);
       sizeOfH = H->numelems();
       delete H;
     }
@@ -126,7 +126,7 @@ for constraints are requested but initial values are not provided");
 bool MatlabProgram::eval_f (int n, const double* vars, bool ignore, double& f) 
   try {
     x.inject(vars);
-    f = funcs.computeObjective(x,auxdata);
+    f = funcs.computeObjective(x);
     return true;
   } catch (std::exception& error) {
     mexPrintf(error.what());
@@ -138,7 +138,7 @@ bool MatlabProgram::eval_grad_f (int n, const double* vars, bool ignore,
 				 double* grad) 
   try {
     x.inject(vars);
-    funcs.computeGradient(x,grad,auxdata);
+    funcs.computeGradient(x,grad);
     return true;
   } catch (std::exception& error) {
     mexPrintf(error.what());
@@ -154,7 +154,7 @@ bool MatlabProgram::eval_g (int n, const double* vars, bool ignore, int m,
 	throw MatlabException("You need to specify the callback function \
 for computing the constraints");
       x.inject(vars);
-      funcs.computeConstraints(x,m,g,auxdata);
+      funcs.computeConstraints(x,m,g);
     }
     return true;
   } catch (std::exception& error) {
@@ -184,7 +184,7 @@ for computing the Jacobian and the sparsity structure of the Jacobian");
  	}
 	  
  	// Get the sparse matrix structure of the Jacobian.
-	J = funcs.getJacobianStructure(n,m,auxdata);
+	J = funcs.getJacobianStructure(n,m);
  	if (J->numelems() != sizeOfJ)
  	  throw MatlabException("The constraint Jacobian passed back from \
 the MATLAB routine has an incorrect number of nonzero entries");
@@ -196,7 +196,7 @@ the MATLAB routine has an incorrect number of nonzero entries");
 	
  	// Return the value of the Jacobian.
  	x.inject(vars);
-	funcs.computeJacobian(m,x,*J,auxdata);
+	funcs.computeJacobian(m,x,*J);
 	J->copyto(Jx);
       }
     }
@@ -228,7 +228,7 @@ for computing the Hessian and the sparsity structure of the Hessian");
       }
       
       // Return the sparse matrix structure of the symmetric Hessian.
-      H = funcs.getHessianStructure(n,auxdata);
+      H = funcs.getHessianStructure(n);
       if (H->numelems() != sizeOfH)
 	throw MatlabException("The Hessian passed back from the MATLAB \
 routine has an incorrect number of nonzero entries");
@@ -240,7 +240,7 @@ routine has an incorrect number of nonzero entries");
 	
       // Return the value of the lower triangular portion of the Hessian.
       x.inject(vars);
-      funcs.computeHessian(x,sigma,m,lambda,*H,auxdata);
+      funcs.computeHessian(x,sigma,m,lambda,*H);
       H->copyto(Hx);
     }
     return true;
@@ -277,7 +277,7 @@ bool MatlabProgram::intermediate_callback (AlgorithmMode mode,
 					   IpoptCalculatedQuantities* ip_cq)
   try {  
     if (funcs.iterFuncIsAvailable())
-      return funcs.iterCallback(t,f,auxdata);
+      return funcs.iterCallback(t,f);
     else
       return true;
   } catch (std::exception& error) {

@@ -160,7 +160,8 @@
 %     time, you may want to consider global variables (type HELP
 %     GLOBAL). See the lasso.m file in the examples subdirectory for an
 %     illustration of how the auxiliary data is passed to the various
-%     callback functions.
+%     callback functions. Starting with Ipopt version 3.11, you must call
+%     ipopt_auxdata(x0,funcs,options) to use auxdata functionality.
 %
 %     options.zl, options.zu, options.lambda
 %

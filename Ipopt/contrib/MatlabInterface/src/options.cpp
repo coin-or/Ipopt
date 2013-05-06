@@ -14,7 +14,7 @@
 Options::Options (const Iterate& x, Ipopt::IpoptApplication& app, 
 		  const mxArray* ptr) 
   : n(numvars(x)), m(0), lb(0), ub(0), cl(0), cu(0), zl(0), zu(0),
-    lambda(0), auxdata(0),
+    lambda(0),
 
     // Process the IPOPT options.
     ipopt(app,mxGetField(ptr,0,"ipopt")) { 
@@ -31,9 +31,6 @@ Options::Options (const Iterate& x, Ipopt::IpoptApplication& app,
 
   // Load the Lagrange multipliers.
   loadMultipliers(n,m,ptr,zl,zu,lambda);
-
-  // Load the auxiliary data.
-  auxdata = mxGetField(ptr,0,"auxdata");
 }
 
 Options::~Options() {

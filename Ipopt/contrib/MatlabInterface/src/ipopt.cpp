@@ -101,7 +101,7 @@ work in the MATLAB interface for IPOPT");
 
     // Create a new instance of the constrained, nonlinear program.
     MatlabProgram* matlabProgram 
-      = new MatlabProgram(x0,funcs,options,x,options.getAuxData(),info);
+      = new MatlabProgram(x0,funcs,options,x,info);
     SmartPtr<TNLP> program = matlabProgram;
 
     // Ask Ipopt to solve the problem.

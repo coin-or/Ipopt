@@ -31,6 +31,9 @@ history management of subversion.
         - MATLAB interface now returns number of function evaluations, too
         - the MA57 interface can now be used with the MA57 library that comes with
           MATLAB (configure option --enable-matlab-ma57; cannot use Metis)
+        - auxdata is now handled by a wrapper function ipopt_auxdata.m instead
+          of internally within the mex code (replace Matlab call to ipopt with
+          ipopt_auxdata if using auxiliary data in any callbacks)
         
         - fixes to JIpopt buildsystem (now may work on windows and uses libtool)
         - JIpopt now reads options file ipopt.opt by default, if present

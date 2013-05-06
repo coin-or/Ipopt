@@ -138,20 +138,15 @@ CallbackFunctions::~CallbackFunctions() {
   if (iterfunc)       delete iterfunc;
 }
 
-double CallbackFunctions::computeObjective (const Iterate& x, 
-					    const mxArray* auxdata) const {
+double CallbackFunctions::computeObjective (const Iterate& x) const {
   double         f;  // The return value.
   bool           success;
-  const mxArray* inputs[2];
+  const mxArray* inputs[1];
   mxArray*       outputs[1];
 
-  // Call the MATLAB call function, with or without the auxiliary data.
+  // Call the MATLAB callback function.
   inputs[0] = x;
-  inputs[1] = auxdata;
-  if (auxdata)
-    success = objfunc->evaluate(2,1,inputs,outputs);
-  else
-    success = objfunc->evaluate(1,1,inputs,outputs);
+  success = objfunc->evaluate(1,1,inputs,outputs);
   if (!success)
     throw MatlabException("There was an error when executing the objective \
 callback function");
@@ -175,19 +170,14 @@ callback function must be a real double scalar");
   return f;
 }
 
-void CallbackFunctions::computeGradient (const Iterate& x, double* g, 
-					 const mxArray* auxdata) const {
+void CallbackFunctions::computeGradient (const Iterate& x, double* g) const {
   bool           success;
-  const mxArray* inputs[2];
+  const mxArray* inputs[1];
   mxArray*       outputs[1];
 
-  // Call the MATLAB call function, with or without the auxiliary data.
+  // Call the MATLAB callback function.
   inputs[0] = x;
-  inputs[1] = auxdata;
-  if (auxdata)
-    success = gradfunc->evaluate(2,1,inputs,outputs);
-  else
-    success = gradfunc->evaluate(1,1,inputs,outputs);
+  success = gradfunc->evaluate(1,1,inputs,outputs);
   if (!success)
     throw MatlabException("There was an error when executing the \
 gradient callback function");
@@ -212,19 +202,14 @@ routine");
   mxDestroyArray(ptr);
 }
 
-void CallbackFunctions::computeConstraints(const Iterate& x, int m, double* c, 
-					   const mxArray* auxdata) const {
+void CallbackFunctions::computeConstraints(const Iterate& x, int m, double* c) const {
   bool           success;
-  const mxArray* inputs[2];
+  const mxArray* inputs[1];
   mxArray*       outputs[1];
 
-  // Call the MATLAB call function, with or without the auxiliary data.
+  // Call the MATLAB callback function.
   inputs[0] = x;
-  inputs[1] = auxdata;
-  if (auxdata)
-    success = constraintfunc->evaluate(2,1,inputs,outputs);
-  else
-    success = constraintfunc->evaluate(1,1,inputs,outputs);
+  success = constraintfunc->evaluate(1,1,inputs,outputs);
   if (!success)
     throw MatlabException("There was an error when executing the \
 constraints callback function");
@@ -248,18 +233,13 @@ Matlab routine");
   mxDestroyArray(ptr);
 }
 
-SparseMatrix* CallbackFunctions::getJacobianStructure (int n, int m, 
-					      const mxArray* auxdata) const {
+SparseMatrix* CallbackFunctions::getJacobianStructure (int n, int m) const {
   const mxArray* inputs[1];
   mxArray*       outputs[1];
   bool           success;
 
-  // Call the MATLAB call function, with or without the auxiliary data.
-  inputs[0] = auxdata;
-  if (auxdata)
-    success = jacstrucfunc->evaluate(1,1,inputs,outputs);
-  else
-    success = jacstrucfunc->evaluate(0,1,inputs,outputs);
+  // Call the MATLAB callback function.
+  success = jacstrucfunc->evaluate(0,1,inputs,outputs);
   if (!success)
     throw MatlabException("There was an error when getting the structure \
 of the Jacobian matrix from MATLAB");
@@ -287,18 +267,13 @@ n is the number of variables");
   return J;
 }
 
-SparseMatrix* CallbackFunctions::getHessianStructure (int n, const mxArray* 
-						      auxdata) const {
+SparseMatrix* CallbackFunctions::getHessianStructure (int n) const {
   const mxArray* inputs[1];
   mxArray*       outputs[1];
   bool           success;
 
-  // Call the MATLAB call function, with or without the auxiliary data.
-  inputs[0] = auxdata;
-  if (auxdata)
-    success = hesstrucfunc->evaluate(1,1,inputs,outputs);
-  else
-    success = hesstrucfunc->evaluate(0,1,inputs,outputs);
+  // Call the MATLAB callback function.
+  success = hesstrucfunc->evaluate(0,1,inputs,outputs);
   if (!success)
     throw MatlabException("There was an error when getting the structure \
 of the Hessian matrix from MATLAB");
@@ -327,19 +302,14 @@ the number of variables");
 }
 
 void CallbackFunctions::computeJacobian (int m, const Iterate& x, 
-					 SparseMatrix& J, 
-					 const mxArray* auxdata) const {
+					 SparseMatrix& J) const {
   bool           success;
-  const mxArray* inputs[2];
+  const mxArray* inputs[1];
   mxArray*       outputs[1];
 
-  // Call the MATLAB call function, with or without the auxiliary data.
+  // Call the MATLAB callback function.
   inputs[0] = x;
-  inputs[1] = auxdata;
-  if (auxdata)
-    success = jacobianfunc->evaluate(2,1,inputs,outputs);
-  else
-    success = jacobianfunc->evaluate(1,1,inputs,outputs);
+  success = jacobianfunc->evaluate(1,1,inputs,outputs);
   if (!success)
     throw MatlabException("There was an error when executing the \
 Jacobian callback function");
@@ -367,10 +337,9 @@ n is the number of variables");
 }
 
 void CallbackFunctions::computeHessian (const Iterate& x, double sigma, int m, 
-					const double* lambda, SparseMatrix& H, 
-					const mxArray* auxdata) const {
+					const double* lambda, SparseMatrix& H) const {
   bool           success;
-  const mxArray* inputs[4];
+  const mxArray* inputs[3];
   mxArray*       outputs[1];
 
   // Create the input arguments to the MATLAB routine, sigma and lambda.
@@ -378,15 +347,11 @@ void CallbackFunctions::computeHessian (const Iterate& x, double sigma, int m,
   mxArray* plambda = mxCreateDoubleMatrix(m,1,mxREAL);
   copymemory(lambda,mxGetPr(plambda),m);
 
-  // Call the MATLAB call function, with or without the auxiliary data.
+  // Call the MATLAB callback function.
   inputs[0] = x;
   inputs[1] = psigma;
   inputs[2] = plambda;
-  inputs[3] = auxdata;
-  if (auxdata)
-    success = hessianfunc->evaluate(4,1,inputs,outputs);
-  else
-    success = hessianfunc->evaluate(3,1,inputs,outputs);
+  success = hessianfunc->evaluate(3,1,inputs,outputs);
   if (!success)
     throw MatlabException("There was an error when executing the Hessian \
 callback function");
@@ -415,24 +380,19 @@ the number of variables");
   mxDestroyArray(plambda);
 }
 
-bool CallbackFunctions::iterCallback (int t, double f, 
-				      const mxArray*& auxdata) const {
+bool CallbackFunctions::iterCallback (int t, double f) const {
   bool           success;
-  const mxArray* inputs[3];
+  const mxArray* inputs[2];
   mxArray*       outputs[1];
 
-  // Create the input arguments to the MATLAB routine, sigma and lambda.
+  // Create the input arguments to the MATLAB routine.
   mxArray* pt = mxCreateDoubleScalar(t);
   mxArray* pf = mxCreateDoubleScalar(f);
 
-  // Call the MATLAB call function, with or without the auxiliary data.
+  // Call the MATLAB callback function.
   inputs[0] = pt;
   inputs[1] = pf;
-  inputs[2] = auxdata;
-  if (auxdata)
-    success = iterfunc->evaluate(3,1,inputs,outputs);
-  else
-    success = iterfunc->evaluate(2,1,inputs,outputs);
+  success = iterfunc->evaluate(2,1,inputs,outputs);
   if (!success)
     throw MatlabException("There was an error when executing the iterative \
 callback function");
