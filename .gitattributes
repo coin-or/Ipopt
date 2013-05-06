@@ -59,6 +59,7 @@ Ipopt/contrib/MatlabInterface/examples/startup.m.in -text
 Ipopt/contrib/MatlabInterface/get.Gnumex -text
 Ipopt/contrib/MatlabInterface/gnumex_win64.patch -text
 Ipopt/contrib/MatlabInterface/ipopt.m -text
+Ipopt/contrib/MatlabInterface/ipopt_auxdata.m -text
 Ipopt/contrib/MatlabInterface/readme.html -text
 Ipopt/contrib/RInterface/CHANGELOG -text
 Ipopt/contrib/RInterface/DESCRIPTION -text

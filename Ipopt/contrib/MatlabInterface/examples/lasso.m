@@ -46,7 +46,7 @@ function w = lasso (A, y, lambda)
   funcs.hessianstructure  = @hessianstructure;
   
   % Run IPOPT.
-  [x info] = ipopt(x0,funcs,options);
+  [x info] = ipopt_auxdata(x0,funcs,options);
   w        = x{1};
   
 % ------------------------------------------------------------------
