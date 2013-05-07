@@ -2,7 +2,7 @@ This file contain the log of changes for the main release branch (trunk).
 More detailed information for incremental change can be found in the
 history management of subversion.
 
-2012-05-?? releases/3.11.0
+2012-05-07 releases/3.11.0
         - update and extension of Ipopt documentation
         - updated build of doxygen documentation to comply with other COIN-OR projects
         - localized global variables in TaggedObject and RegisteredOption,
@@ -22,7 +22,7 @@ history management of subversion.
           Ipopt version
         - new interfaces for Harwell codes HSL_MA77, HSL_MA86, and HSL_MA97;
           see http://www.hsl.rl.ac.uk/ipopt/ about help on when to use which solver;
-          especially MA57 and HSL_MA97 can be considered to replace MA27;
+          especially MA57 and HSL_MA97 should be considered as replacement for MA27;
           however, MA27 is still the default for now
         - changed default of ma57_automatic_scaling to no (faster in general,
           but for higher reliability, you may want to set this option to yes)
@@ -39,7 +39,7 @@ history management of subversion.
         - fixes to JIpopt buildsystem (now may work on windows and uses libtool)
         - JIpopt now reads options file ipopt.opt by default, if present
         - removed predefined KEY_ strings in JIpopt
-        - renamed API functions to retrieve solution values in JIpopt
+        - renamed API functions that retrieve solution values in JIpopt
         
         - simplified installation of R interface
 
