@@ -13,6 +13,10 @@
 #include "iterate.hpp"
 #include "sparsematrix.hpp"
 #include "matlabfunctionhandle.hpp"
+#include "IpIpoptCalculatedQuantities.hpp"
+#include "IpIpoptData.hpp"
+#include "IpTNLPAdapter.hpp"
+#include "IpOrigIpoptNLP.hpp"
 
 // Class CallbackFunctions.
 // -----------------------------------------------------------------
@@ -70,7 +74,14 @@ public:
 
   // Call the intermediate callback function. A return value of false
   // tells IPOPT to terminate.
-  bool iterCallback (int t, double f) const;
+  bool iterCallback (int t, double f, 
+				      double inf_pr, double inf_du, 
+				      double mu, double d_norm,
+				      double regularization_size,
+				      double alpha_du, double alpha_pr,
+				      int ls_trials, const Ipopt::IpoptData* ip_data, 
+				      Ipopt::IpoptCalculatedQuantities* ip_cq,
+				      int n) const;
 
 protected:
   MatlabFunctionHandle* objfunc;        // Objective callback function.

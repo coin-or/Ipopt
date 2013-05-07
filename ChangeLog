@@ -33,7 +33,8 @@ history management of subversion.
           MATLAB (configure option --enable-matlab-ma57; cannot use Metis)
         - auxdata is now handled by a wrapper function ipopt_auxdata.m instead
           of internally within the mex code (replace Matlab call to ipopt with
-          ipopt_auxdata if using auxiliary data in any callbacks)
+          ipopt_auxdata if using auxiliary data in any callbacks) [r2282]
+        - exposed more intermediate Ipopt information to iterfunc callback [r2283]
         
         - fixes to JIpopt buildsystem (now may work on windows and uses libtool)
         - JIpopt now reads options file ipopt.opt by default, if present

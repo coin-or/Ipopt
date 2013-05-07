@@ -86,7 +86,7 @@ public:
   virtual bool intermediate_callback (AlgorithmMode mode, int t, double f,
 				      double inf_pr, double inf_du,
 				      double mu, double d_norm,
-				      double regularization_ize,
+				      double regularization_size,
 				      double alpha_du, double alpha_pr,
 				      int ls_trials,
 				      const IpoptData* ip_data,

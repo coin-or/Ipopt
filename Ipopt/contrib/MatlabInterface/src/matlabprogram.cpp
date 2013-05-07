@@ -270,14 +270,14 @@ bool MatlabProgram::intermediate_callback (AlgorithmMode mode,
 					   int t, double f, double inf_pr, 
 					   double inf_du, double mu, 
 					   double d_norm,
-					   double regularization_ize,
+					   double regularization_size,
 					   double alpha_du, double alpha_pr,
 					   int ls_trials,
 					   const IpoptData* ip_data,
 					   IpoptCalculatedQuantities* ip_cq)
   try {  
     if (funcs.iterFuncIsAvailable())
-      return funcs.iterCallback(t,f);
+      return funcs.iterCallback(t,f,inf_pr,inf_du,mu,d_norm,regularization_size,alpha_du,alpha_pr,ls_trials,ip_data,ip_cq,numvars(x));
     else
       return true;
   } catch (std::exception& error) {
