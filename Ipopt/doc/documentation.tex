@@ -3936,6 +3936,8 @@ Further, Jonas Asprion assembled information about the \Matlab\ {\tt ipopt}
 function and its arguments: 
 \url{http://www.idsc.ethz.ch/Downloads/IPOPT_InstallMatlab/IPOPT_MatlabInterface_V0p1.pdf}
 
+Note, that this document refers to \Ipopt versions before 3.11.
+With 3.11, the {\tt auxdata} option has been removed from the {\tt mex} code. The new wrapper function {\tt ipopt\_auxdata} implements the same functionality as the previous {\tt ipopt} function, but uses \Matlab function handles to do so.
 
 \section{Special Features}
 \subsection{Derivative Checker}\label{sec:deriv-checker}
