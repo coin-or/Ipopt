@@ -28,8 +28,7 @@ public:
     
   // The constructor.
   MatlabProgram (const Iterate& x0, const CallbackFunctions& funcs,
-		 const Options& options, Iterate& x, const mxArray* auxdata,
-		 MatlabInfo& info);
+		 const Options& options, Iterate& x, MatlabInfo& info);
     
   // The destructor.
   virtual ~MatlabProgram();
@@ -87,7 +86,7 @@ public:
   virtual bool intermediate_callback (AlgorithmMode mode, int t, double f,
 				      double inf_pr, double inf_du,
 				      double mu, double d_norm,
-				      double regularization_ize,
+				      double regularization_size,
 				      double alpha_du, double alpha_pr,
 				      int ls_trials,
 				      const IpoptData* ip_data,
@@ -98,7 +97,6 @@ protected:
   const CallbackFunctions& funcs;    // Callback routines.
   const Options&           options;  // Further program info.
   Iterate&                 x;        // Current point.
-  const mxArray*           auxdata;  // The auxiliary data.
   MatlabInfo&              info;     // Info passed back to MATLAB.
 
   // These next two members store information about the structure of

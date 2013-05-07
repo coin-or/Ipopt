@@ -15,26 +15,26 @@ R.~Fourer, D.~M. Gay, and B.~W. Kernighan.
 O.~Schenk, A.~W\"achter, and M.~Hagemann.
 \newblock Matching-based preprocessing algorithms to the solution of saddle-point problems in large-scale nonconvex interior-point optimization.
 \newblock {\em Computational Optimization Applications}, 36(2-3):321--341, 2007
-\newblock doi: \href{http://dx.doi.org/10.1007/s10589-006-9003-y}{10.1007/s10589-006-9003-y}.
+\newblock doi: \htmladdnormallink{10.1007/s10589-006-9003-y}{http://dx.doi.org/10.1007/s10589-006-9003-y}.
 %\newblock preprint at \url{http://www.research.ibm.com/people/a/andreasw/papers/rc23824.pdf}
 
 \bibitem{HS}
 W.~Hock and K.~Schittkowski.
 \newblock Test examples for nonlinear programming codes.
 \newblock {\em Lecture Notes in Economics and Mathematical Systems}, 187, 1981.
-\newblock doi: \href{http://dx.doi.org/10.1007/978-3-642-48320-2}{10.1007/978-3-642-48320-2}.
+\newblock doi: \htmladdnormallink{10.1007/978-3-642-48320-2}{http://dx.doi.org/10.1007/978-3-642-48320-2}.
 
 \bibitem{NocWaeWal:adaptive}
 J.~Nocedal, A.~W{\"a}chter, and R.~A. Waltz.
 \newblock Adaptive barrier strategies for nonlinear interior methods.
 \newblock {\em SIAM Journal on Optimization}, 19(4):1674--1693, 2008.
-\newblock doi: \href{http://dx.doi.org/10.1137/060649513}{10.1137/060649513}.
+\newblock doi: \htmladdnormallink{10.1137/060649513}{http://dx.doi.org/10.1137/060649513}.
 \newblock preprint at \url{http://www.optimization-online.org/DB_HTML/2005/03/1089.html}
 
 \bibitem{PLNB:sIpopt} H.~Pirnay, R.~Lopez-Negrete, and L.~T.~Biegler.
 \newblock ​Optimal Sensitivity based on \Ipopt.
 \newblock {\em Mathematical Programming Computations}, 4(4):307--331, 2012.
-\newblock doi: \href{http://dx.doi.org/10.1007/s12532-012-0043-2}{10.1007/s12532-012-0043-2}.
+\newblock doi: \htmladdnormallink{10.1007/s12532-012-0043-2}{http://dx.doi.org/10.1007/s12532-012-0043-2}.
 \newblock preprint at \url{http://www.optimization-online.org/DB_HTML/2011/04/3008.html}
 
 \bibitem{WaechterPhD}
@@ -49,21 +49,21 @@ A.~W\"achter.
 A.~W\"achter.
 \newblock Short Tutorial: Getting Started With Ipopt in 90 Minutes.
 \newblock In {\em Combinatorial Scientific Computing} (U. Naumann, O. Schenk, H. D. Simon, eds.), 2009.
-\newblock \href{http://nbn-resolving.de/urn/resolver.pl?urn=urn:nbn:de:0030-drops-20890}{urn:nbn:de:0030-drops-20890}
+\newblock urn: \htmladdnormallink{nbn:de:0030-drops-20890}{http://nbn-resolving.de/urn/resolver.pl?urn=urn:nbn:de:0030-drops-20890}
 
 \bibitem{WaeBie05:filterlocal}
 A.~W{\"a}chter and L.~T. Biegler.
 \newblock Line search filter methods for nonlinear programming: {L}ocal
   convergence.
 \newblock {\em SIAM Journal on Optimization}, 16(1):32--48, 2005.
-\newblock doi: \href{http://dx.doi.org/10.1137/S1052623403426544}{10.1137/S1052623403426544}
+\newblock doi: \htmladdnormallink{10.1137/S1052623403426544}{http://dx.doi.org/10.1137/S1052623403426544}
 
 \bibitem{WaeBie05:filterglobal}
 A.~W{\"a}chter and L.~T. Biegler.
 \newblock Line search filter methods for nonlinear programming: {M}otivation
   and global convergence.
 \newblock {\em SIAM Journal on Optimization}, 16(1):1--31, 2005.
-\newblock doi: \href{http://dx.doi.org/10.1137/S1052623403426556}{10.1137/S1052623403426556}
+\newblock doi: \htmladdnormallink{10.1137/S1052623403426556}{http://dx.doi.org/10.1137/S1052623403426556}
 
 \bibitem{WaeBie05:filterboth}
 A.~W{\"a}chter and L.~T. Biegler.
@@ -76,7 +76,7 @@ A.~W\"achter and L.~T. Biegler.
 \newblock On the implementation of a primal-dual interior point filter line
   search algorithm for large-scale nonlinear programming.
 \newblock {\em Mathematical Programming}, 106(1):25--57, 2006.
-\newblock doi: \href{http://dx.doi.org/10.1007/s10107-004-0559-y}{10.1007/s10107-004-0559-y}.
+\newblock doi: \htmladdnormallink{10.1007/s10107-004-0559-y}{http://dx.doi.org/10.1007/s10107-004-0559-y}.
 \newblock preprint at \url{http://www.optimization-online.org/DB_HTML/2004/03/836.html}
 
 \end{thebibliography}
