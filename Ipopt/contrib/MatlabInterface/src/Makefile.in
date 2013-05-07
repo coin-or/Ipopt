@@ -78,10 +78,10 @@ all: $(TARGET)
 
 install: $(TARGET)
 	if test -d $(libdir); then : ; else mkdir $(libdir); fi
-	cp $(SRCDIR)/../ipopt.m $(TARGET) $(libdir)
+	cp $(SRCDIR)/../ipopt.m $(SRCDIR)/../ipopt_auxdata.m $(TARGET) $(libdir)
 
 uninstall:
-	rm -f $(libdir)/ipopt.m $(libdir)/ipopt.$(MEXSUFFIX)
+	rm -f $(libdir)/ipopt.m $(libdir)/ipopt_auxdata.m $(libdir)/ipopt.$(MEXSUFFIX)
 
 $(TARGET): $(OBJS)
 	make mexopts

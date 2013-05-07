@@ -138,20 +138,15 @@ CallbackFunctions::~CallbackFunctions() {
   if (iterfunc)       delete iterfunc;
 }
 
-double CallbackFunctions::computeObjective (const Iterate& x, 
-					    const mxArray* auxdata) const {
+double CallbackFunctions::computeObjective (const Iterate& x) const {
   double         f;  // The return value.
   bool           success;
-  const mxArray* inputs[2];
+  const mxArray* inputs[1];
   mxArray*       outputs[1];
 
-  // Call the MATLAB call function, with or without the auxiliary data.
+  // Call the MATLAB callback function.
   inputs[0] = x;
-  inputs[1] = auxdata;
-  if (auxdata)
-    success = objfunc->evaluate(2,1,inputs,outputs);
-  else
-    success = objfunc->evaluate(1,1,inputs,outputs);
+  success = objfunc->evaluate(1,1,inputs,outputs);
   if (!success)
     throw MatlabException("There was an error when executing the objective \
 callback function");
@@ -175,19 +170,14 @@ callback function must be a real double scalar");
   return f;
 }
 
-void CallbackFunctions::computeGradient (const Iterate& x, double* g, 
-					 const mxArray* auxdata) const {
+void CallbackFunctions::computeGradient (const Iterate& x, double* g) const {
   bool           success;
-  const mxArray* inputs[2];
+  const mxArray* inputs[1];
   mxArray*       outputs[1];
 
-  // Call the MATLAB call function, with or without the auxiliary data.
+  // Call the MATLAB callback function.
   inputs[0] = x;
-  inputs[1] = auxdata;
-  if (auxdata)
-    success = gradfunc->evaluate(2,1,inputs,outputs);
-  else
-    success = gradfunc->evaluate(1,1,inputs,outputs);
+  success = gradfunc->evaluate(1,1,inputs,outputs);
   if (!success)
     throw MatlabException("There was an error when executing the \
 gradient callback function");
@@ -195,7 +185,7 @@ gradient callback function");
   // Get the output from the MATLAB callback function, which is the
   // value of the gradient of the objective function at x.
   mxArray* ptr = outputs[0];
-  if (!mxIsDouble(ptr) || mxIsComplex(ptr))
+  if (!mxIsCell(ptr) && (!mxIsDouble(ptr) || mxIsComplex(ptr)))
     throw MatlabException("The gradient callback must return a real double vector");
   if (mxIsSparse(ptr)) {
     // convert sparse gradient to full (simplest method, not fastest)
@@ -212,19 +202,14 @@ routine");
   mxDestroyArray(ptr);
 }
 
-void CallbackFunctions::computeConstraints(const Iterate& x, int m, double* c, 
-					   const mxArray* auxdata) const {
+void CallbackFunctions::computeConstraints(const Iterate& x, int m, double* c) const {
   bool           success;
-  const mxArray* inputs[2];
+  const mxArray* inputs[1];
   mxArray*       outputs[1];
 
-  // Call the MATLAB call function, with or without the auxiliary data.
+  // Call the MATLAB callback function.
   inputs[0] = x;
-  inputs[1] = auxdata;
-  if (auxdata)
-    success = constraintfunc->evaluate(2,1,inputs,outputs);
-  else
-    success = constraintfunc->evaluate(1,1,inputs,outputs);
+  success = constraintfunc->evaluate(1,1,inputs,outputs);
   if (!success)
     throw MatlabException("There was an error when executing the \
 constraints callback function");
@@ -248,18 +233,13 @@ Matlab routine");
   mxDestroyArray(ptr);
 }
 
-SparseMatrix* CallbackFunctions::getJacobianStructure (int n, int m, 
-					      const mxArray* auxdata) const {
+SparseMatrix* CallbackFunctions::getJacobianStructure (int n, int m) const {
   const mxArray* inputs[1];
   mxArray*       outputs[1];
   bool           success;
 
-  // Call the MATLAB call function, with or without the auxiliary data.
-  inputs[0] = auxdata;
-  if (auxdata)
-    success = jacstrucfunc->evaluate(1,1,inputs,outputs);
-  else
-    success = jacstrucfunc->evaluate(0,1,inputs,outputs);
+  // Call the MATLAB callback function.
+  success = jacstrucfunc->evaluate(0,1,inputs,outputs);
   if (!success)
     throw MatlabException("There was an error when getting the structure \
 of the Jacobian matrix from MATLAB");
@@ -287,18 +267,13 @@ n is the number of variables");
   return J;
 }
 
-SparseMatrix* CallbackFunctions::getHessianStructure (int n, const mxArray* 
-						      auxdata) const {
+SparseMatrix* CallbackFunctions::getHessianStructure (int n) const {
   const mxArray* inputs[1];
   mxArray*       outputs[1];
   bool           success;
 
-  // Call the MATLAB call function, with or without the auxiliary data.
-  inputs[0] = auxdata;
-  if (auxdata)
-    success = hesstrucfunc->evaluate(1,1,inputs,outputs);
-  else
-    success = hesstrucfunc->evaluate(0,1,inputs,outputs);
+  // Call the MATLAB callback function.
+  success = hesstrucfunc->evaluate(0,1,inputs,outputs);
   if (!success)
     throw MatlabException("There was an error when getting the structure \
 of the Hessian matrix from MATLAB");
@@ -327,19 +302,14 @@ the number of variables");
 }
 
 void CallbackFunctions::computeJacobian (int m, const Iterate& x, 
-					 SparseMatrix& J, 
-					 const mxArray* auxdata) const {
+					 SparseMatrix& J) const {
   bool           success;
-  const mxArray* inputs[2];
+  const mxArray* inputs[1];
   mxArray*       outputs[1];
 
-  // Call the MATLAB call function, with or without the auxiliary data.
+  // Call the MATLAB callback function.
   inputs[0] = x;
-  inputs[1] = auxdata;
-  if (auxdata)
-    success = jacobianfunc->evaluate(2,1,inputs,outputs);
-  else
-    success = jacobianfunc->evaluate(1,1,inputs,outputs);
+  success = jacobianfunc->evaluate(1,1,inputs,outputs);
   if (!success)
     throw MatlabException("There was an error when executing the \
 Jacobian callback function");
@@ -367,10 +337,9 @@ n is the number of variables");
 }
 
 void CallbackFunctions::computeHessian (const Iterate& x, double sigma, int m, 
-					const double* lambda, SparseMatrix& H, 
-					const mxArray* auxdata) const {
+					const double* lambda, SparseMatrix& H) const {
   bool           success;
-  const mxArray* inputs[4];
+  const mxArray* inputs[3];
   mxArray*       outputs[1];
 
   // Create the input arguments to the MATLAB routine, sigma and lambda.
@@ -378,15 +347,11 @@ void CallbackFunctions::computeHessian (const Iterate& x, double sigma, int m,
   mxArray* plambda = mxCreateDoubleMatrix(m,1,mxREAL);
   copymemory(lambda,mxGetPr(plambda),m);
 
-  // Call the MATLAB call function, with or without the auxiliary data.
+  // Call the MATLAB callback function.
   inputs[0] = x;
   inputs[1] = psigma;
   inputs[2] = plambda;
-  inputs[3] = auxdata;
-  if (auxdata)
-    success = hessianfunc->evaluate(4,1,inputs,outputs);
-  else
-    success = hessianfunc->evaluate(3,1,inputs,outputs);
+  success = hessianfunc->evaluate(3,1,inputs,outputs);
   if (!success)
     throw MatlabException("There was an error when executing the Hessian \
 callback function");
@@ -416,23 +381,61 @@ the number of variables");
 }
 
 bool CallbackFunctions::iterCallback (int t, double f, 
-				      const mxArray*& auxdata) const {
+				      double inf_pr, double inf_du, 
+				      double mu, double d_norm,
+				      double regularization_size,
+				      double alpha_du, double alpha_pr,
+				      int ls_trials, const Ipopt::IpoptData* ip_data, 
+				      Ipopt::IpoptCalculatedQuantities* ip_cq,
+				      int n) const {
   bool           success;
   const mxArray* inputs[3];
   mxArray*       outputs[1];
 
-  // Create the input arguments to the MATLAB routine, sigma and lambda.
+  // Create the input arguments to the MATLAB routine.
   mxArray* pt = mxCreateDoubleScalar(t);
   mxArray* pf = mxCreateDoubleScalar(f);
 
-  // Call the MATLAB call function, with or without the auxiliary data.
+  // Create structure to hold extra IPOPT variables
+  const char* varfields[9];
+  varfields[0] = "x";
+  varfields[1] = "inf_pr";
+  varfields[2] = "inf_du";
+  varfields[3] = "mu";
+  varfields[4] = "d_norm";
+  varfields[5] = "regularization_size";
+  varfields[6] = "alpha_du";
+  varfields[7] = "alpha_pr";
+  varfields[8] = "ls_trials"; 
+  mxArray *varStruct = mxCreateStructMatrix(1,1,9,varfields);
+  mxSetField(varStruct,0,"inf_pr",mxCreateDoubleScalar(inf_pr));
+  mxSetField(varStruct,0,"inf_du",mxCreateDoubleScalar(inf_du));
+  mxSetField(varStruct,0,"mu",mxCreateDoubleScalar(mu));
+  mxSetField(varStruct,0,"d_norm",mxCreateDoubleScalar(d_norm));
+  mxSetField(varStruct,0,"regularization_size",mxCreateDoubleScalar(regularization_size));  
+  mxSetField(varStruct,0,"alpha_du",mxCreateDoubleScalar(alpha_du));
+  mxSetField(varStruct,0,"alpha_pr",mxCreateDoubleScalar(alpha_pr));
+  mxSetField(varStruct,0,"ls_trials",mxCreateDoubleScalar(ls_trials));
+  
+  //The following code translates IPOPT's NLP to the Original NLP, so we can extract x
+  //Original code by Steven Dirske, Stefan Vigerske [GAMS]
+  Ipopt::TNLPAdapter* tnlp_adapter = NULL;
+  if(ip_cq != NULL) {
+      Ipopt::OrigIpoptNLP* orignlp = dynamic_cast<Ipopt::OrigIpoptNLP*>(GetRawPtr(ip_cq->GetIpoptNLP()));
+      if(orignlp != NULL) 
+          tnlp_adapter = dynamic_cast<Ipopt::TNLPAdapter*>(GetRawPtr(orignlp->nlp()));
+  }
+  //If we successfully converted the NLP, extract x [ResortX auto sorts and fills in fixed vars]
+  if(tnlp_adapter != NULL && ip_data != NULL && IsValid(ip_data->curr())) {
+      mxSetField(varStruct,0,"x",mxCreateDoubleMatrix(n,1,mxREAL)); //ip_data->curr()->x()->Dim()+1
+      tnlp_adapter->ResortX(*ip_data->curr()->x(),mxGetPr(mxGetField(varStruct,0,"x")));
+  }
+  
+  // Call the MATLAB callback function.
   inputs[0] = pt;
   inputs[1] = pf;
-  inputs[2] = auxdata;
-  if (auxdata)
-    success = iterfunc->evaluate(3,1,inputs,outputs);
-  else
-    success = iterfunc->evaluate(2,1,inputs,outputs);
+  inputs[2] = varStruct;
+  success = iterfunc->evaluate(3,1,inputs,outputs);
   if (!success)
     throw MatlabException("There was an error when executing the iterative \
 callback function");
@@ -449,6 +452,7 @@ either be TRUE or FALSE");
   mxDestroyArray(ptr);
   mxDestroyArray(pt);
   mxDestroyArray(pf);
+  mxDestroyArray(varStruct);
 
   return b;
 }

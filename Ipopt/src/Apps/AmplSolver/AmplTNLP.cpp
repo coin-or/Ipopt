@@ -1076,11 +1076,11 @@ namespace Ipopt
 
         if( ipoptname.length() > 0 )
         {
-           jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, "\\item[{\\hyperref[opt:%s]{%s}}]",
-              iter->second->IpoptOptionName().c_str(), amplname.c_str());
+           jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, "\\item[{\\htmlref{%s}{opt:%s}}]",
+              amplname.c_str(), iter->second->IpoptOptionName().c_str());
            if( amplname != ipoptname )
-              jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, " (Ipopt name: \\hyperref[opt:%s]{%s})",
-                 iter->second->IpoptOptionName().c_str(), ipoptname.c_str());
+              jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, " (Ipopt name: \\htmlref{%s}{opt:%s})",
+                 ipoptname.c_str(), iter->second->IpoptOptionName().c_str());
         }
         else
         {
@@ -1112,7 +1112,7 @@ namespace Ipopt
     ampl_options_list->AddAmplOption("outlev",
                                      "print_level",
                                      AmplOptionsList::Integer_Option,
-                                     "Verbosity level (same as print_level)");
+                                     "Verbosity level");
     ampl_options_list->AddAmplOption("print_user_options",
                                      "print_user_options",
                                      AmplOptionsList::String_Option,
@@ -1146,7 +1146,7 @@ namespace Ipopt
     ampl_options_list->AddAmplOption("maxit",
                                      "max_iter",
                                      AmplOptionsList::Integer_Option,
-                                     "Maximum number of iterations (same as max_iter)");
+                                     "Maximum number of iterations");
     ampl_options_list->AddAmplOption("max_cpu_time",
                                      "max_cpu_time",
                                      AmplOptionsList::Number_Option,

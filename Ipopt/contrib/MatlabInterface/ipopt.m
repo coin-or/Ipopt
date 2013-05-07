@@ -122,10 +122,14 @@
 %     funcs.iterfunc (optional)
 %
 %     An additional callback routine that is called once per algorithm
-%     iteration. It takes two inputs, is the current iteration of the
-%     algorithm, and the current value of the objective. This function
-%     should always return true unless you want IPOPT to terminate
-%     prematurely for whatever reason.
+%     iteration. It takes three inputs: the first is the current iteration
+%     of the algorithm, the second is the current value of the objective,
+%     and the third is a structure containing fields x, inf_pr, inf_du, mu,
+%     d_norm, regularization_size, alpha_du, alpha_pr, and ls_trials. This
+%     function should always return true unless you want IPOPT to terminate
+%     prematurely for whatever reason. If you would like to use the third
+%     input to iterfunc along with auxdata functionality, you will need to
+%     modify the appropriate section of ipopt_auxdata.m.
 %
 %   OPTIONS
 %
@@ -160,7 +164,8 @@
 %     time, you may want to consider global variables (type HELP
 %     GLOBAL). See the lasso.m file in the examples subdirectory for an
 %     illustration of how the auxiliary data is passed to the various
-%     callback functions.
+%     callback functions. Starting with Ipopt version 3.11, you must call
+%     ipopt_auxdata(x0,funcs,options) to use auxdata functionality.
 %
 %     options.zl, options.zu, options.lambda
 %

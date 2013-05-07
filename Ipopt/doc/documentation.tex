@@ -8,6 +8,7 @@
 %%
 %% Since then, the content of this file has been updated significantly by
 %%     Carl Laird and Andreas Waechter        IBM
+%%     Stefan Vigerske                        GAMS
 %%
 %%
 %% $Id$
@@ -21,8 +22,9 @@
 \renewcommand{\baselinestretch}{1.1}
 \usepackage{amsfonts}
 \usepackage{amsmath}
+\PassOptionsToPackage{hidelinks,pdftitle={Ipopt documentation},pdflang=en}{hyperref}
 \usepackage{url}
-\usepackage{hyperref}
+\usepackage{html}
 \usepackage{xspace}
 
 %\usepackage{showlabels}
@@ -38,7 +40,7 @@
 
 \begin{document}
 \title{Introduction to \Ipopt:\\
-A tutorial for downloading, installing, and using \Ipopt.}
+A tutorial for downloading, installing, and using \Ipopt}
 
 \author{Revision number of this document: $Revision$}
 
@@ -1245,7 +1247,7 @@ will not. It is unlikely that the software will run with versions prior to
 
 First, note that some binaries of \Ipopt\ {\tt mex} files are available for download at
 \url{http://www.coin-or.org/download/binary/Ipopt}.
-Further, the OPTI Toolbox (\url{www.i2c2.aut.ac.nz/Wiki/OPTI}) comes with a 
+Further, the OPTI Toolbox (\url{http://www.i2c2.aut.ac.nz/Wiki/OPTI}) comes with a 
 precompiled \Matlab interface for \Ipopt on Windows.
 
 \subsubsection{Setting up {\tt mex}}
@@ -1664,7 +1666,7 @@ Below a few particular options are discussed:
 \end{itemize}
 
 
-\section{Interfacing your NLP to \Ipopt.}
+\section{Interfacing your NLP to \Ipopt}
 \label{sec:tutorial-example}
 
 \Ipopt has been designed to be flexible for a wide variety of
@@ -1724,11 +1726,8 @@ AMPL. If you are not already familiar with AMPL, please consult
 
 The problem presented in equations
 (\ref{eq:ex_obj})--(\ref{eq:ex_startpt}) can be solved with \Ipopt with
-the AMPL model file given in Figure~\ref{fig:HS71}.
+the following AMPL model.
 
-\begin{figure}
-  \centering
-\begin{footnotesize}
 \begin{verbatim}
 # tell ampl to use the ipopt executable as a solver
 # make sure ipopt is in the path!
@@ -1743,15 +1742,15 @@ var x4 >= 1, <= 5;
 
 # specify the objective function
 minimize obj:
-                x1 * x4 * (x1 + x2 + x3) + x3;
+    x1 * x4 * (x1 + x2 + x3) + x3;
         
 # specify the constraints
 s.t.
-        inequality:
-                x1 * x2 * x3 * x4 >= 25;
+  inequality:
+    x1 * x2 * x3 * x4 >= 25;
                 
-        equality:
-                x1^2 + x2^2 + x3^2 +x4^2 = 40;
+  equality:
+    x1^2 + x2^2 + x3^2 +x4^2 = 40;
 
 # specify the starting point            
 let x1 := 1;
@@ -1768,12 +1767,7 @@ display x2;
 display x3;
 display x4;
 \end{verbatim}
-\end{footnotesize}
   
-  \caption{AMPL model file hs071\_ampl.mod}
-  \label{fig:HS71}
-\end{figure}
-
 The line, ``{\tt option solver ipopt;}'' tells AMPL to use \Ipopt as
 the solver. The \Ipopt executable (installed in
 Section~\ref{sec.comp_and_inst}) must be in the {\tt PATH} for AMPL to
@@ -1839,14 +1833,14 @@ the current directory, see Section \ref{sec:options}.
 
 
 \subsection{Interfacing with \Ipopt through code}
+\label{sec.required_info}
 In order to solve a problem, \Ipopt needs more information than just
 the problem definition (for example, the derivative information). If
 you are using a modeling language like AMPL, the extra information is
 provided by the modeling tool and the \Ipopt interface. When
 interfacing with \Ipopt through your own code, however, you must
 provide this additional information.
-
-\begin{figure}
+The following information is required by \Ipopt:
 \begin{enumerate}
 \item Problem dimensions \label{it.prob_dim}
   \begin{itemize}
@@ -1886,12 +1880,7 @@ provide this additional information.
     approximate the second derivatives)
   \end{itemize}
 \end{enumerate}
-\caption{Information required by \Ipopt}
-\label{fig.required_info}
-\end{figure}
-%\vspace{0.1in}
-The information required by \Ipopt is shown in Figure
-\ref{fig.required_info}. The problem dimensions and bounds are
+The problem dimensions and bounds are
 straightforward and come solely from the problem definition. The
 initial starting point is used by the algorithm when it begins
 iterating to solve the problem. If \Ipopt has difficulty converging, or
@@ -1914,7 +1903,7 @@ the structure needs to include entries for any element that could ever
 be nonzero, not only those that are nonzero at the starting point.
 
 As \Ipopt iterates, it will need the values for
-Item~\ref{it.prob_eval} in Figure~\ref{fig.required_info} evaluated at
+Item~\ref{it.prob_eval} in Section \ref{sec.required_info} evaluated at
 particular points. Before we can begin coding the interface, however,
 we need to work out the details of these equations symbolically for
 example problem (\ref{eq:ex_obj})-(\ref{eq:ex_bounds}).
@@ -2059,7 +2048,7 @@ the header files are installed in \texttt{\$IPOPTDIR/include/coin}
 \verb|--prefix=$PREFIX| was used for {\tt configure}).  %$
 
 \subsubsection{Coding the Problem Representation}\label{sec.cpp_problem}
-We provide the information required in Figure \ref{fig.required_info}
+We provide the required information
 by coding the {\tt HS071\_NLP} class, a specific implementation of the
 {\tt TNLP} base class. In the executable, we will create an instance
 of the {\tt HS071\_NLP} class and give this class to \Ipopt so it can
@@ -2164,13 +2153,13 @@ Give \Ipopt the value of the bounds on the variables and constraints.
 The values of {\tt n} and {\tt m} that you specified in {\tt
   get\_nlp\_info} are passed to you for debug checking.  Setting a
 lower bound to a value less than or equal to the value of the option
-\hyperref[opt:nlp_lower_bound_inf]{\tt nlp\_lower\_bound\_inf} will
+\htmlref{\tt nlp\_lower\_bound\_inf}{opt:nlp_lower_bound_inf} will
 cause \Ipopt to assume no lower bound. Likewise, specifying the upper
 bound above or equal to the value of the option
-\hyperref[opt:nlp_upper_bound_inf]{\tt nlp\_upper\_bound\_inf} will cause \Ipopt to
+\htmlref{\tt nlp\_upper\_bound\_inf}{opt:nlp_upper_bound_inf} will cause \Ipopt to
 assume no upper bound.  These options,
-\hyperref[opt:nlp_lower_bound_inf]{\tt nlp\_lower\_bound\_inf}
-and \hyperref[opt:nlp_upper_bound_inf]{\tt nlp\_upper\_bound\_inf},
+\htmlref{\tt nlp\_lower\_bound\_inf}{opt:nlp_lower_bound_inf}
+and \htmlref{\tt nlp\_upper\_bound\_inf}{opt:nlp_upper_bound_inf},
 are set to $-10^{19}$ and $10^{19}$,
 respectively, by default, but may be modified by changing the options
 (see Section \ref{sec:options}).
@@ -2193,14 +2182,12 @@ bool HS071_NLP::get_bounds_info(Index n, Number* x_l, Number* x_u,
   assert(m == 2);
 
   // the variables have lower bounds of 1
-  for (Index i=0; i<4; i++) {
+  for (Index i=0; i<4; i++)
     x_l[i] = 1.0;
-  }
 
   // the variables have upper bounds of 5
-  for (Index i=0; i<4; i++) {
+  for (Index i=0; i<4; i++)
     x_u[i] = 5.0;
-  }
 
   // the first constraint g1 has a lower bound of 25
   g_l[0] = 25;
@@ -2653,8 +2640,8 @@ virtual void finalize_solution(SolverReturn status, Index n,
                                const IpoptData* ip_data,
                                IpoptCalculatedQuantities* ip_cq)
 \end{verbatim}
-This is the only method that is not mentioned in Figure
-\ref{fig.required_info}. This method is called by \Ipopt after the
+This is the only method that is not mentioned in Section
+\ref{sec.required_info}. This method is called by \Ipopt after the
 algorithm has finished (successfully or even with most errors).
 \begin{itemize}
 \item {\tt status}: (in), gives the status of the algorithm as
@@ -2685,7 +2672,7 @@ algorithm has finished (successfully or even with most errors).
     occurred while \Ipopt tried to compute the search direction.
   \item {\tt INVALID\_NUMBER\_DETECTED}:  Algorithm received an
     invalid number (such as {\tt NaN} or {\tt Inf}) from the NLP; see
-    also option \hyperref[opt:check_derivatives_for_naninf]{\tt check\_derivatives\_for\_naninf}.
+    also option \htmlref{\tt check\_derivatives\_for\_naninf}{opt:check_derivatives_for_naninf}.
   \item {\tt
       INTERNAL\_ERROR}: An unknown internal error occurred.  Please
     contact the \Ipopt authors through the mailing list.
@@ -3129,7 +3116,7 @@ a {\tt std::vector} as value type.
 So far, \Ipopt itself makes only use of string meta data under the key {\tt 
 idx\_names}. With this key, variable and constraint names can be passed to 
 \Ipopt, which are shown when printing internal vector or matrix data structures 
-if \Ipopt is run with a high value for the \hyperref[opt:print_level]{\tt print\_level} 
+if \Ipopt is run with a high value for the \htmlref{\tt print\_level}{opt:print_level} 
 option. This allows a user to identify the original variables and constraints
 corresponding to \Ipopt's internal problem representation.
 
@@ -3262,10 +3249,6 @@ callback routines. The {\tt IpoptSolve} function requires the {\tt
 solution.  The {\tt main} function from the example is shown next and
 discussed below.
 
-%in Figure~\ref{fig:cexample-main}.
-%\begin{figure}
-%  \centering
-\begin{footnotesize}
 \begin{verbatim}
 int main()
 {
@@ -3278,10 +3261,8 @@ int main()
   IpoptProblem nlp = NULL;             /* IpoptProblem */
   enum ApplicationReturnStatus status; /* Solve return code */
   Number* x = NULL;                    /* starting point and solution vector */
-  Number* mult_x_L = NULL;             /* lower bound multipliers 
-					  at the solution */
-  Number* mult_x_U = NULL;             /* upper bound multipliers 
-					  at the solution */
+  Number* mult_x_L = NULL;             /* lower bound multipliers at the solution */
+  Number* mult_x_U = NULL;             /* upper bound multipliers at the solution */
   Number obj;                          /* objective value */
   Index i;                             /* generic counter */
   
@@ -3335,20 +3316,16 @@ int main()
 
   if (status == Solve_Succeeded) {
     printf("\n\nSolution of the primal variables, x\n");
-    for (i=0; i<n; i++) {
+    for (i=0; i<n; i++)
       printf("x[%d] = %e\n", i, x[i]); 
-    }
 
     printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
-    for (i=0; i<n; i++) {
+    for (i=0; i<n; i++)
       printf("z_L[%d] = %e\n", i, mult_x_L[i]); 
-    }
-    for (i=0; i<n; i++) {
+    for (i=0; i<n; i++)
       printf("z_U[%d] = %e\n", i, mult_x_U[i]); 
-    }
 
-    printf("\n\nObjective value\n");
-    printf("f(x*) = %e\n", obj); 
+    printf("\n\nObjective value\nf(x*) = %e\n", obj); 
   }
  
   /* free allocated memory */
@@ -3360,10 +3337,6 @@ int main()
   return 0;
 }
 \end{verbatim}
-\end{footnotesize}
-%  \caption{{\tt main} function for C example}
-%  \label{fig:cexample-main}
-%\end{figure}
 
 Here, we declare all the necessary variables and set the dimensions of
 the problem.  The problem has 4 variables, so we set {\tt n} and
@@ -3375,9 +3348,9 @@ The problem has 2 constraints, so we set {\tt m} and allocate space
 for the constraint bounds. The first constraint has a lower bound of
 $25$ and no upper bound.  Here we set the upper bound to
 \texttt{2e19}. \Ipopt interprets any number greater than or equal to
-\hyperref[opt:nlp_upper_bound_inf]{\tt nlp\_upper\_bound\_inf} as infinity.
-The default value of \hyperref[opt:nlp_lower_bound_inf]{\tt nlp\_lower\_bound\_inf}
-and \hyperref[opt:nlp_upper_bound_inf]{\tt nlp\_upper\_bound\_inf} is
+\htmlref{\tt nlp\_upper\_bound\_inf}{opt:nlp_upper_bound_inf} as infinity.
+The default value of \htmlref{\tt nlp\_lower\_bound\_inf}{opt:nlp_lower_bound_inf}
+and \htmlref{\tt nlp\_upper\_bound\_inf}{opt:nlp_upper_bound_inf} is
 \texttt{-1e19} and \texttt{1e19}, respectively, and can be changed
 through \Ipopt options.  The second constraint is an equality with
 right hand side 40, so we set both the upper and the lower bound to
@@ -3810,8 +3783,8 @@ equality constraint and acts accordingly.
 \end{verbatim}
 Finally, we can call \Ipopt with the {\tt ipoptr} function.
 In order to redirect the \Ipopt output into a file, we use \Ipopt's
-\hyperref[opt:output_file]{\tt output\_file} and
-\hyperref[opt:print_level]{\tt print\_level} options.
+\htmlref{\tt output\_file}{opt:output_file} and
+\htmlref{\tt print\_level}{opt:print_level} options.
 \begin{verbatim}
 > opts <- list("print_level" = 0,
               "file_print_level" = 12,
@@ -3963,6 +3936,8 @@ Further, Jonas Asprion assembled information about the \Matlab\ {\tt ipopt}
 function and its arguments: 
 \url{http://www.idsc.ethz.ch/Downloads/IPOPT_InstallMatlab/IPOPT_MatlabInterface_V0p1.pdf}
 
+Note, that this document refers to \Ipopt versions before 3.11.
+With 3.11, the {\tt auxdata} option has been removed from the {\tt mex} code. The new wrapper function {\tt ipopt\_auxdata} implements the same functionality as the previous {\tt ipopt} function, but uses \Matlab function handles to do so.
 
 \section{Special Features}
 \subsection{Derivative Checker}\label{sec:deriv-checker}
@@ -3973,7 +3948,7 @@ simple derivative checker, based on finite differences, before the
 optimization is started.
 
 To use the derivative checker, you need to use the option
-\hyperref[opt:derivative_test]{\tt derivative\_test}.
+\htmlref{\tt derivative\_test}{opt:derivative_test}.
 By default, this option is set to {\tt none},
 i.e., no finite difference test is performed,  It is set to {\tt
   first-order}, then the first derivatives of the objective function
@@ -3983,7 +3958,7 @@ and the constraints are verified, and for the setting {\tt
 The verification is done by a simple finite differences approximation,
 where each component of the user-provided starting point is perturbed
 one of the other.  The relative size of the perturbation is determined
-by the option \hyperref[opt:derivative_test_perturbation]{\tt derivative\_test\_perturbation}.  The default value
+by the option \htmlref{\tt derivative\_test\_perturbation}{opt:derivative_test_perturbation}.  The default value
 ($10^{-8}$, about the square root of the machine precision) is
 probably fine in most cases, but if you believe that you see wrong
 warnings, you might want to play with this parameter.  When the test is
@@ -3991,11 +3966,11 @@ performed, \Ipopt prints out a line for every partial derivative, for
 which the user-provided derivative value deviates too much from the
 finite difference approximation.  The relative tolerance for deciding
 when a warning should be issued, is determined by the option
-\hyperref[opt:derivative_test_tol]{\tt derivative\_test\_tol}.
+\htmlref{\tt derivative\_test\_tol}{opt:derivative_test_tol}.
 If you want to see the user-provided and
 estimated derivative values with the relative deviation for each
 single partial derivative, you can switch the
-\hyperref[opt:derivative_test_print_all]{\tt derivative\_test\_print\_all}
+\htmlref{\tt derivative\_test\_print\_all}{opt:derivative_test_print_all}
 option to {\tt yes}.
 
 A typical output is:
@@ -4063,7 +4038,7 @@ quite expensive, you should try to debug a small instance of your
 problem if you can.  
 
 Another useful option is 
-\hyperref[opt:derivative_test_first_index]{\tt derivative\_test\_first\_index}
+\htmlref{\tt derivative\_test\_first\_index}{opt:derivative_test_first_index}
 which allows your to start the derivative test with variables with a larger
 index.
 %
@@ -4075,7 +4050,7 @@ some memory checker, such as {\tt valgrind} on Linux.
 
 \Ipopt has an option to approximate the Hessian of the Lagrangian by
 a limited-memory quasi-Newton method (L-BFGS).  You can use this
-feature by setting the \hyperref[opt:hessian_approximation]{\tt hessian\_approximation} 
+feature by setting the \htmlref{\tt hessian\_approximation}{opt:hessian_approximation} 
 option to the value {\tt limited-memory}.  In this case, it is not necessary to
 implement the Hessian computation method {\tt eval\_h} in {\tt TNLP}.
 If you are using the C or Fortran interface, you still need to
@@ -4140,26 +4115,26 @@ setting:
 If the user does not specify some of these values, \Ipopt will set these multipliers to 1.0 
 (as before). In order to make the warm-start effective, the user has control over the 
 following options from AMPL:\\
-\hyperref[opt:warm_start_init_point]{\tt warm\_start\_init\_point} \\
-\hyperref[opt:warm_start_bound_push]{\tt warm\_start\_bound\_push} \\
-\hyperref[opt:warm_start_mult_bound_push]{\tt warm\_start\_mult\_bound\_push}
+\htmlref{\tt warm\_start\_init\_point}{opt:warm_start_init_point} \\
+\htmlref{\tt warm\_start\_bound\_push}{opt:warm_start_bound_push} \\
+\htmlref{\tt warm\_start\_mult\_bound\_push}{opt:warm_start_mult_bound_push}
 
 Note, that the use of this feature is far from solving the complicated issue of warm-
 starting interior-point algorithms. As a general advice, this feature will be useful if the 
 user observes that the solution of subsequent problems (i.e., for different data instances) 
 preserves the same set of active inequalities and bounds (monitor the values of $z^L$ and 
 $z^U$ for subsequent solutions). In this case, initializing the bound multipliers and 
-setting \hyperref[opt:warm_start_init_point]{\tt warm\_start\_init\_point} to {\tt yes} and 
-setting \hyperref[opt:warm_start_bound_push]{\tt warm\_start\_bound\_push},
-\hyperref[opt:warm_start_mult_bound_push]{\tt warm\_start\_mult\_bound\_push} and
-\hyperref[opt:mu_init]{\tt mu\_init} to a small value ($10^{-6}$ or so) will reduce 
+setting \htmlref{\tt warm\_start\_init\_point}{opt:warm_start_init_point} to {\tt yes} and 
+setting \htmlref{\tt warm\_start\_bound\_push}{opt:warm_start_bound_push},
+\htmlref{\tt warm\_start\_mult\_bound\_push}{opt:warm_start_mult_bound_push} and
+\htmlref{\tt mu\_init}{opt:mu_init} to a small value ($10^{-6}$ or so) will reduce 
 significantly the number of iterations. This is particularly useful in setting up on-line 
 applications and high-level optimization strategies in AMPL.
 If active-set changes are observed between subsequent solutions, then this strategy might 
 not decrease the number of iterations (in some cases, it might even tend to increase the 
 number of iterations).
 
-You might also want to try the adaptive barrier update (instead of the default monotone one where above we chose the initial value $10^{-6}$) when doing the warm start. This can be activated by setting the \hyperref[opt:mu_strategy]{\tt mu\_strategy} option to {\tt adaptive}. Also the option \hyperref[opt:mu_oracle]{\tt mu\_oracle} gives some alternative choices. In general, the adaptive choice often leads to less iterations, but the computational cost per iteration might be higher.
+You might also want to try the adaptive barrier update (instead of the default monotone one where above we chose the initial value $10^{-6}$) when doing the warm start. This can be activated by setting the \htmlref{\tt mu\_strategy}{opt:mu_strategy} option to {\tt adaptive}. Also the option \htmlref{\tt mu\_oracle}{opt:mu_oracle} gives some alternative choices. In general, the adaptive choice often leads to less iterations, but the computational cost per iteration might be higher.
 
 The file {\tt \$IPOPTDIR/Ipopt/doc/hs071\_warmstart.mod} illustrates the use of the warm-start feature on the HS071 problem, see also Section \ref{sec.ipoptampl}.
 
@@ -4242,7 +4217,7 @@ For a list of the most important valid options, see the Appendix
 options by using the option
 \medskip
 
-\hyperref[opt:print_options_documentation]{\tt print\_options\_documentation}{\tt~yes}
+\htmlref{\tt print\_options\_documentation}{opt:print_options_documentation} {\tt~yes}
 \medskip
 
 and running \Ipopt (like the AMPL solver executable, for
@@ -4251,7 +4226,7 @@ console.
 
 \section{\Ipopt Output}\label{sec:output}
 This section describes the standard \Ipopt console output with the
-default setting for \hyperref[opt:print_level]{\tt print\_level}. The output is designed to
+default setting for \htmlref{\tt print\_level}{opt:print_level}. The output is designed to
 provide a quick summary of each iteration as \Ipopt solves the problem.
 
 Before \Ipopt starts to solve the problem, it displays the problem
@@ -4281,7 +4256,7 @@ and the columns of output are defined as,
   point.  This quantity is the infinity-norm (max) of the (unscaled)
   constraints (\ref{eq:constraints}).  During the restoration phase,
   this value remains the constraint violation of the original problem
-  at the current point.  The option \hyperref[opt:inf_pr_output]{\tt inf\_pr\_output} can
+  at the current point.  The option \htmlref{\tt inf\_pr\_output}{opt:inf_pr_output} can
   be used to switch to the printing of a different quantity.
 \item[{\tt inf\_du}:] The scaled dual infeasibility at the current
   point.  This quantity measure the infinity-norm (max) of the
@@ -4364,7 +4339,7 @@ to the console, and a brief description.
   This indicates that the algorithm did not converge to the
   ``desired'' tolerances, but that it was able to obtain a point
   satisfying the ``acceptable'' tolerance level as specified by the
-  \hyperref[opt:acceptable_tol]{\tt acceptable\_*} options.
+  \htmlref{\tt acceptable\_*}{opt:acceptable_tol} options.
   This may happen if the desired tolerances
   are too small for the current problem.
 \item[{\tt Feasible\_Point\_Found}:]  $\;$ \\
@@ -4394,7 +4369,7 @@ to the console, and a brief description.
     unbounded.} \\
   This message is printed if the max-norm of the iterates becomes
   larger than the value of the option
-  \hyperref[opt:diverging_iterates_tol]{\tt diverging\_iterates\_tol}.
+  \htmlref{\tt diverging\_iterates\_tol}{opt:diverging_iterates_tol}.
   This can happen if the problem is unbounded below and the iterates
   are diverging.
 \item[{\tt User\_Requested\_Stop}:]  $\;$ \\
@@ -4406,11 +4381,11 @@ to the console, and a brief description.
 \item[{\tt Maximum\_Iterations\_Exceeded}:]  $\;$ \\
   Console Message: {\tt EXIT: Maximum Number of Iterations Exceeded.} \\
   This indicates that \Ipopt has exceeded the maximum number of
-  iterations as specified by the option \hyperref[opt:max_iter]{\tt max\_iter}.
+  iterations as specified by the option \htmlref{\tt max\_iter}{opt:max_iter}.
 \item[{\tt Maximum\_CpuTime\_Exceeded}:]  $\;$ \\
   Console Message: {\tt EXIT: Maximum CPU time exceeded.} \\
   This indicates that \Ipopt has exceeded the maximum number of
-  CPU seconds as specified by the option \hyperref[opt:max_cpu_time]{\tt max\_cpu\_time}.
+  CPU seconds as specified by the option \htmlref{\tt max\_cpu\_time}{opt:max_cpu_time}.
 \item[{\tt Restoration\_Failed}:]  $\;$ \\
   Console Message: {\tt EXIT: Restoration Failed!} \\
   This indicates that the restoration phase failed to find a feasible
@@ -4426,7 +4401,7 @@ to the console, and a brief description.
   large.  One situation where this can happen is when values in the
   Hessian are invalid ({\tt NaN} or {\tt Inf}).  You can check whether this
   is true by using the
-  \hyperref[opt:check_derivatives_for_naninf]{\tt check\_derivatives\_for\_naninf} option.
+  \htmlref{\tt check\_derivatives\_for\_naninf}{opt:check_derivatives_for_naninf} option.
 \item[{\tt Invalid\_Option}:]  $\;$ \\
   Console Message: (details about the particular error
   will be output to the console) \\
@@ -4437,7 +4412,7 @@ to the console, and a brief description.
   This indicates that your problem, as specified, has too few degrees
   of freedom. This can happen if you have too many equality
   constraints, or if you fix too many variables (\Ipopt removes fixed
-  variables by default, see also the \hyperref[opt:fixed_variable_treatment]{\tt fixed\_variable\_treatment} option).
+  variables by default, see also the \htmlref{\tt fixed\_variable\_treatment}{opt:fixed_variable_treatment} option).
 \item[{\tt Invalid\_Problem\_Definition}:]  $\;$ \\
   Console Message: (no console message, this is a return code for the
   C and Fortran interfaces only.) \\
@@ -4469,7 +4444,7 @@ to the console, and a brief description.
 \subsection{Diagnostic Tags for \Ipopt}
 
 To print additional diagnostic tags for each iteration of \Ipopt, set
-the options \hyperref[opt:print_info_string]{\tt print\_info\_string}
+the options \htmlref{\tt print\_info\_string}{opt:print_info_string}
 to \texttt{yes}. With
 this, a tag will appear at the end of an iteration line with the
 following diagnostic meaning that are useful to flag difficulties for
@@ -4720,7 +4695,7 @@ through the AMPL {\tt ipopt\_options} command. See Section
 \ref{sec:options} for an explanation of how to use these commands.
 Shown here is a list of the most important options for \Ipopt. To view
 the full list of options, you can set the option 
-\hyperref[opt:print_options_documentation]{\tt print\_options\_documentation}
+\htmlref{\tt print\_options\_documentation}{opt:print_options_documentation}
 to {\tt yes} or simply run the \Ipopt AMPL solver executable as
 \begin{verbatim}
 ipopt --print-options
