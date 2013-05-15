@@ -259,6 +259,7 @@ namespace Ipopt
           options_to_print.push_back("option_file_name");
           options_to_print.push_back("print_info_string");
           options_to_print.push_back("inf_pr_output");
+          options_to_print.push_back("print_timing_statistics");
 
           options_to_print.push_back("#Termination");
           options_to_print.push_back("tol");
