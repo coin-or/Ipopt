@@ -8,7 +8,7 @@ resulting DLL uses the (optimized, multi-threaded) Intel MKL versions of
 the BLAS and LAPACK libraries rather than the netlib versions. The current 
 configuration requires MSVC 2005 and the Intel Fortran compiler to compile
 the Fortran 90 sources of the MUMPS solver. However, the resulting code DLL 
-can be used both by MSVC 2005/2008 and MSVC 2010. 
+can be used both by MSVC 2005/2008 and MSVC 2010.
 
 The non-free HSL and PARDISO solvers can be dynamically added at runtime by 
 compiling these solvers into separate DLLs that are dynamically loaded by the 
@@ -20,7 +20,10 @@ be used in any Visual Studio project without the need for a Fortran compiler
 to compile the Ipopt solver components. This project itself relies on the Intel 
 Fortran compiler to compile the third party Fortran components (especially 
 since the MUMPS solver uses F90). The solution contains project files for both
-the MSVC C++ compiler or the Intel C++ compiler.
+the MSVC C++ compiler or the Intel C++ compiler. The binary distribution only 
+contains the optimized MKL version of the Fortran solver DLL IpoptFSS.dll, which 
+can be re-used by all configurations of the Ipopt solver project itself. The latter
+only require a working MSVC compiler.
 
 Below, BASDIR refers to the basic directory of your downloaded Ipopt
 package.  This is the directory where you find subdirectories like
@@ -38,7 +41,8 @@ Here are the steps:
    BASDIR\Ipopt\MSVisualStudio\v8-ifort\Ipopt\IntelPaths.vsprops
    
    to reflect the base path to the Intel compiler on your computer to allow the
-   link step succeed in finding the appropriate libraries.
+   link step succeed in finding the appropriate libraries. You will only need to set these
+   if you want to compile IpoptFSS.dll yourself.
    
 3. Now you can open the solution file
 
@@ -65,4 +69,4 @@ Here are the steps:
 
 Author:  Marcel Roelofs (Marcel.Roelofs at aimms.com)
 	 Paragon Decision Technology 
-	 2012-01-09
+	 2013-05-24

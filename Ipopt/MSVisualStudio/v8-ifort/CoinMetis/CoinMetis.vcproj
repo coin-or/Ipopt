@@ -269,7 +269,7 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release MKL|Win32"
+			Name="ReleaseMKL|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
@@ -330,7 +330,7 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release MKL|x64"
+			Name="ReleaseMKL|x64"
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="4"
