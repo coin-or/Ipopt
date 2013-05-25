@@ -133,8 +133,7 @@ namespace Ipopt
       latex_desc = "";
       MakeValidLatexString(long_description_, latex_desc);
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " ");
-      jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 0, 50,
-                                 latex_desc.c_str());
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, latex_desc.c_str());
     }
 
     if (type_ == OT_Number) {
@@ -215,13 +214,16 @@ namespace Ipopt
            i != valid_strings_.end(); i++) {
         std::string latex_value;
         MakeValidLatexString((*i).value_, latex_value);
-        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "   \\item %s: ",
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "   \\item %s",
                      latex_value.c_str());
 
-        std::string latex_desc;
-        MakeValidLatexString((*i).description_, latex_desc);
-        jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 0, 48,
-                                   latex_desc.c_str());
+        if( (*i).description_.length() > 0 )
+        {
+           std::string latex_desc;
+           MakeValidLatexString((*i).description_, latex_desc);
+           jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, ": ");
+           jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, latex_desc.c_str());
+        }
         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
       }
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\end{itemize}\n");
@@ -341,12 +343,16 @@ namespace Ipopt
       for (std::vector<string_entry>::const_iterator
            i = valid_strings_.begin();
            i != valid_strings_.end(); i++) {
-        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "    - %-23s [",
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "    - %-23s",
                      (*i).value_.c_str());
 
-        jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 31, 48,
-                                   (*i).description_.c_str());
-        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "]\n");
+        if( (*i).description_.length() > 0 ) {
+           jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " [");
+           jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 31, 48,
+                                      (*i).description_.c_str());
+           jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "]");
+        }
+        jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
       }
     }
     else {
