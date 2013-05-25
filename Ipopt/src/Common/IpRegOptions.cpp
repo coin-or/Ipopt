@@ -119,10 +119,14 @@ namespace Ipopt
     std::string latex_desc;
     MakeValidLatexString(short_description_, latex_desc);
     jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                 "\\paragraph{%s:}\\label{opt:%s} %s \\\\\n",
+                 "\\paragraph{%s:}\\label{opt:%s} ",
                  latex_name.c_str(),
-                 name_.c_str(),
-                 latex_desc.c_str());
+                 name_.c_str());
+    if( short_description_.length() == 0 )
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "~");
+    else
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, latex_desc.c_str());
+    jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " \\\\\n");
 
     //    Index length = name_.length() + short_description_.length();
     //    DBG_ASSERT(length <= 80);
