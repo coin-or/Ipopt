@@ -7,23 +7,27 @@ The DLLs include the MUMPS solver by default, and can dynamically load a separat
 (non-free) HSL solvers if available. If you have access to the HSL solver sources, you have to compile 
 the DLL for the HSL solvers yourself. The v8-ifort directory in the Ipopt source distribution contains 
 a separate libhsl project to create the DLL using the Intel fortran compiler. Alternatively, you can compile
-libhsl using f2c and C++ (cf. the v8 MSVC project). All DLLs are statically linked, so do not require any 
-other runtime DLLs. 
+libhsl using f2c and C++ (cf. the v8 MSVC project).
  
 To use these DLLs, you need to add the include\coin directory to the include path of your MSVC project.
 In addition, you have to make sure that you have HAVE_CONFIG_H defined in your project, and that the Ipopt 
 import library for your platform is added to list of  linker inputs of your project. To run your program, 
-you have to copy the correct Ipopt DLL for your platform and configuration to the directory where your 
-executable is located. 
+you have to copy the correct Ipopt DLL and all necessary runtime DLLs for your platform and configuration 
+to the directory where your executable is located. 
 
 Please note that the debug and release versions of the Ipopt DLL are *not* binary compatible, because 
 the MSVC compiler unfortunately treats std::string objects slightly differently in both configurations. 
 Using a release DLL in debug code and vice versa will therefore propably lead to stack corruption, runtime 
-errors, or other hard-to-explain crashes. In addition, there is a release version of the DLL that is linked
-against the optimized Intel MKL Blas and Lapack libraries rather than the netlib versions. You can benefit from
-these optimized libraries on multi-core processors. On single core machines they do not appear to have much 
-effect or can even lead to slightly decreased performance.
+errors, or other hard-to-explain crashes.
+
+This binary distribution only contains the optimized MKL version of the Fortran solver DLL IpoptFSS.dll. You 
+can re-use this for any configuration of the Ipopt solver itself (Debug/Release, MSVC 2005/2008/2010). 
+
+It also contains just the Release versions of the Ipopt solver itself plus all necessary MSVC runtime DLLs. Because 
+the Debug runtime DLLs of MSVC are not redistributable, you have to build the Debug configurations of the Ipopt solver 
+yourself using the v8-ifort MSVC solution, if you are developing Debug versions of your own software using 
+the Ipopt solver. When doing so, you can safely link against the MKL release version of IpoptFSS.dll.
 
 Author:  Marcel Roelofs (Marcel.Roelofs at aimms.com)
 	 Paragon Decision Technology 
-	 2012-01-09
+	 2013-05-24
