@@ -339,15 +339,8 @@ bool Jipopt::eval_jac_g(Index n, const Number* x, bool new_x,
 
    if( iRow != NULL && jCol != NULL )
    {
-      jint* iRow_jint = env->GetIntArrayElements(iRowj, 0);
-      jint* jCol_jint = env->GetIntArrayElements(jColj, 0);
-      for( int i = 0; i < nele_jac; ++i )
-      {
-         iRow[i] = iRow_jint[i];
-         jCol[i] = jCol_jint[i];
-      }
-
-      /* FIXME shouldn't there be some calls to ReleaseIntArrayElements() here? */
+      env->GetIntArrayRegion(iRowj, 0, nele_jac, iRow);
+      env->GetIntArrayRegion(jColj, 0, nele_jac, jCol);
    }
 
    return true;
@@ -387,16 +380,8 @@ bool Jipopt::eval_h(Index n, const Number* x, bool new_x,
 
    if( iRow != NULL && jCol != NULL )
    {
-      jint *iRow_jint = env->GetIntArrayElements(iRowj, 0);
-      jint *jCol_jint = env->GetIntArrayElements(jColj, 0);
-
-      for( int i = 0; i < nele_hess; ++i )
-      {
-         iRow[i] = iRow_jint[i];
-         jCol[i] = jCol_jint[i];
-      }
-
-      /* FIXME shouldn't there be some calls to ReleaseIntArrayElements() here? */
+      env->GetIntArrayRegion(iRowj, 0, nele_hess, iRow);
+      env->GetIntArrayRegion(jColj, 0, nele_hess, jCol);
    }
 
    return true;
@@ -508,13 +493,7 @@ bool Jipopt::get_list_of_nonlinear_variables(Index num_nonlin_vars,Index* pos_no
 
       if( pos_nonlin_vars != NULL )
       {
-         //env->GetIntArrayRegion(pos_nonlin_vars_j,0,num_nonlin_vars,pos_nonlin_vars);
-
-         jint* pos_nonlin_vars_jp = env->GetIntArrayElements(pos_nonlin_vars_j, 0);
-         for( int i = 0; i < num_nonlin_vars; ++i )
-            pos_nonlin_vars[i] = pos_nonlin_vars_jp[i];
-
-         //env->ReleaseIntArrayElements(pos_nonlin_vars_j,pos_nonlin_vars,0);
+         env->GetIntArrayRegion(pos_nonlin_vars_j, 0, num_nonlin_vars, pos_nonlin_vars);
       }
 
       return true;
