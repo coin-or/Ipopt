@@ -6,6 +6,7 @@ history management of subversion.
         - the setup for the v8-ifort MSVS project changed to use dynamic runtime
           DLLs instead of static linking, which caused crashes in debug mode
           (by M. Roelofs) [r2301]
+        - fixed memory leaks in Java Interface (by javier) [#200, r2312]
 
 2013-05-07 releases/3.11.0
         - update and extension of Ipopt documentation
