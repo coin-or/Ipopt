@@ -272,7 +272,7 @@ namespace Ipopt
       }
       //ma86_factor(ndim_, ia, ja, val_, order_, &keep_, &control_, &info);
       ma86_factor_solve(ndim_, ia, ja, val_, order_, &keep_, &control_, &info,
-                        1, ndim_, rhs_vals, NULL);
+                        nrhs, ndim_, rhs_vals, NULL);
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemFactorization().End();
       }
@@ -296,7 +296,7 @@ namespace Ipopt
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemBackSolve().Start();
       }
-      ma86_solve(0, 1, ndim_, rhs_vals, order_, &keep_, &control_, &info,
+      ma86_solve(0, nrhs, ndim_, rhs_vals, order_, &keep_, &control_, &info,
                  NULL);
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemBackSolve().End();
