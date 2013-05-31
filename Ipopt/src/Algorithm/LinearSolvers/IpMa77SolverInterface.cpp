@@ -1,3 +1,4 @@
+// Copyright (C) 2013, Science and Technology Facilities Council.
 // Copyright (C) 2009, Jonathan Hogg <jdh41.at.cantab.net>
 // Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
@@ -23,12 +24,17 @@
 #include <cmath>
 using namespace std;
 
-extern "C" {
+extern "C"
+{
+#ifndef HSL2013
    /*
     * Easier to just have our own definition than include the full metis.h
     */
    extern void METIS_NodeND(int *n, int *xadj, int *adjncy,
       int *numflag, int *options, int *perm, int *iperm);
+#else
+#include "hsl_mc68i.h"
+#endif
 }
 
 namespace Ipopt
@@ -39,7 +45,7 @@ namespace Ipopt
     delete [] val_;
 
     struct ma77_info info;
-    if(keep_) ma77_finalise(&keep_, &control_, &info);
+    if (keep_) ma77_finalise(&keep_, &control_, &info);
   }
 
   void Ma77SolverInterface::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
@@ -107,6 +113,17 @@ namespace Ipopt
       "Maximum Pivoting Threshold",
       0.0, false, 0.5, false, 1e-4,
       "Maximum value to which u will be increased to improve quality.");
+    roptions->AddStringOption2(
+      "ma77_order",
+      "Controls type of ordering used by HSL_MA77",
+#ifdef COINHSL_HAS_METIS
+      "metis",
+#else
+      "amd",
+#endif
+      "amd", "Use the HSL_MC68 approximate minimum degree algorithm",
+      "metis", "Use the MeTiS nested dissection algorithm (if available)",
+      "This option controls ordering for the solver HSL_MA77.");
   }
 
   bool Ma77SolverInterface::InitializeImpl(const OptionsList& options,
@@ -114,6 +131,10 @@ namespace Ipopt
   {
     ma77_default_control(&control_);
     control_.bits=32;
+    // FIXME: HSL_MA77 should be updated to allow a matrix with new
+    // values to be refactorized after a -11 (singular) error.
+    //control_.action = 0; // false, should exit with error on singularity
+
     options.GetIntegerValue("ma77_print_level", control_.print_level, prefix);
     options.GetIntegerValue("ma77_buffer_lpage", control_.buffer_lpage[0], prefix);
     options.GetIntegerValue("ma77_buffer_lpage", control_.buffer_lpage[1], prefix);
@@ -128,8 +149,14 @@ namespace Ipopt
     options.GetNumericValue("ma77_small", control_.small, prefix);
     options.GetNumericValue("ma77_static", control_.static_, prefix);
     options.GetNumericValue("ma77_u", control_.u, prefix);
-    options.GetNumericValue("ma77_u", umax_, prefix);
-
+    options.GetNumericValue("ma77_umax", umax_, prefix);
+    std::string order_method;
+    options.GetStringValue("ma77_order", order_method, prefix);
+    if (order_method == "metis") {
+      ordering_ = ORDER_METIS;
+    } else {
+      ordering_ = ORDER_AMD;
+    }
     return true; // All is well
   }
 
@@ -143,37 +170,72 @@ namespace Ipopt
       Index nonzeros, const Index* ia, const Index* ja)
   {
     struct ma77_info info;
+#ifdef HSL2013
+    struct mc68_control control68;
+    struct mc68_info info68;
+#endif
 
     // Store size for later use
     ndim_ = dim;
 
-    // Setup memory for values
-    if(val_!=NULL) delete[] val_;
-    val_ = new double[nonzeros];
+#ifdef HSL2013
+    // Determine an ordering
+    mc68_default_control(&control68);
+    control68.f_array_in = 0; // Use Fortran numbering (faster)
+    control68.f_array_out = 0; // Use Fortran numbering (faster)
+    Index *perm = new Index[dim];
+    if(ordering_ == ORDER_METIS) {
+      mc68_order(3, dim, ia, ja, perm, &control68, &info68); /* MeTiS */
+      if(info68.flag == -5) {
+         // MeTiS not available
+         ordering_ = ORDER_AMD;
+      } else if(info68.flag<0) {
+         return SYMSOLVER_FATAL_ERROR;
+      }
+    }
+    if(ordering_ == ORDER_AMD) {
+      mc68_order(1, dim, ia, ja, perm, &control68, &info68); /* AMD */
+    }
+    if(info68.flag<0) return SYMSOLVER_FATAL_ERROR;
+
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+    }
+#endif
 
     // Open files
     ma77_open(ndim_, "ma77_int", "ma77_real", "ma77_work", "ma77_delay", &keep_,
       &control_, &info);
-    if(info.flag < 0) return SYMSOLVER_FATAL_ERROR;
+    if (info.flag < 0) return SYMSOLVER_FATAL_ERROR;
 
     // Store data into files
     for(int i=0; i<dim; i++) {
       ma77_input_vars(i, ia[i+1]-ia[i], &(ja[ia[i]]), &keep_,
         &control_, &info);
-      if(info.flag < 0) return SYMSOLVER_FATAL_ERROR;
+      if (info.flag < 0) return SYMSOLVER_FATAL_ERROR;
     }
 
+#ifndef HSL2013
     // Determine an ordering
     Index *perm = new Index[dim];
     MetisOrder(dim, ia, ja, perm);
     //for(int i=0; i<dim; i++) perm[i] = i+1;
+#endif
 
     // Perform analyse
     ma77_analyse(perm, &keep_, &control_, &info);
     delete[] perm; // Done with order
-    if(info.flag < 0) return SYMSOLVER_FATAL_ERROR;
 
-    return SYMSOLVER_SUCCESS;
+    // Setup memory for values
+    if (val_!=NULL) delete[] val_;
+    val_ = new double[nonzeros];
+
+    if (info.flag>=0) {
+      return SYMSOLVER_SUCCESS;
+    }
+    else {
+      return SYMSOLVER_FATAL_ERROR;
+    }
   }
 
   /*  Solve operation for multiple right hand sides.  Solves the
@@ -214,36 +276,39 @@ namespace Ipopt
   {
     struct ma77_info info;
 
-    if(new_matrix || pivtol_changed_)
+    if (new_matrix || pivtol_changed_)
     {
       for(int i=0; i<ndim_; i++) {
          ma77_input_reals(i, ia[i+1]-ia[i], &(val_[ia[i]]), &keep_,
             &control_, &info);
-         if(info.flag < 0) return SYMSOLVER_FATAL_ERROR;
+         if (info.flag < 0) return SYMSOLVER_FATAL_ERROR;
       }
 
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemFactorization().Start();
       }
-      ma77_factor(0, &keep_, &control_, &info, NULL);
+      //ma77_factor(0, &keep_, &control_, &info, NULL);
+      ma77_factor_solve(0, &keep_, &control_, &info, NULL,
+                        nrhs, ndim_, rhs_vals);
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemFactorization().End();
       }
+      if (info.flag==4 || info.flag==-11) return SYMSOLVER_SINGULAR;
       if (info.flag<0) return SYMSOLVER_FATAL_ERROR;
-      if (info.flag==4) return SYMSOLVER_SINGULAR;
       if (check_NegEVals && info.num_neg!=numberOfNegEVals)
         return SYMSOLVER_WRONG_INERTIA;
 
       numneg_ = info.num_neg;
       pivtol_changed_ = false;
     }
-
-    if (HaveIpData()) {
-      IpData().TimingStats().LinearSystemBackSolve().Start();
-    }
-    ma77_solve(0, nrhs, ndim_, rhs_vals, &keep_, &control_, &info, NULL);
-    if (HaveIpData()) {
-      IpData().TimingStats().LinearSystemBackSolve().End();
+    else {
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemBackSolve().Start();
+      }
+      ma77_solve(0, nrhs, ndim_, rhs_vals, &keep_, &control_, &info, NULL);
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemBackSolve().End();
+      }
     }
 
     return SYMSOLVER_SUCCESS;
@@ -303,7 +368,6 @@ namespace Ipopt
                    control_.u);
     return true;
   }
-
 
 } // namespace Ipopt
 

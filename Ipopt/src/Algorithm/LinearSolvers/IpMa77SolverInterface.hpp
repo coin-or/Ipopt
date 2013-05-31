@@ -5,7 +5,8 @@
 //
 // $Id$
 //
-// Authors: Jonathan Hogg                           2009-07-29 
+// Authors: Jonathan Hogg                    STFC   2013-30-05
+//          Jonathan Hogg                           2009-07-29
 //          Carl Laird, Andreas Waechter     IBM    2004-03-17
 
 #ifndef __IPMA77SOLVERINTERFACE_HPP__
@@ -102,6 +103,11 @@ namespace Ipopt
   class Ma77SolverInterface: public SparseSymLinearSolverInterface
   {
   private:
+    enum order_opts {
+       ORDER_AMD,
+       ORDER_METIS
+    };
+
     int ndim_; // Number of dimensions
     double *val_; // Storage for variables
     int numneg_; // Number of negative pivots in last factorization
@@ -111,6 +117,7 @@ namespace Ipopt
     /* Options */
     struct ma77_control control_;
     double umax_;
+    int ordering_;
 
   public:
 
@@ -142,7 +149,10 @@ namespace Ipopt
      *  new_matrix=true (or after a return of MultiSolve with
      *  SYMSOLV_CALL_AGAIN). The returned array must have space for at
      *  least nonzero elements. */
-    double* GetValuesArrayPtr() { return val_; }
+    double* GetValuesArrayPtr()
+    {
+      return val_;
+    }
 
     /** Solve operation for multiple right hand sides.  Solves the
      *  linear system A * x = b with multiple right hand sides, where
@@ -190,7 +200,10 @@ namespace Ipopt
      *  the linear solver does not compute this quantities (see
      *  ProvidesInertia).
      */
-    Index NumberOfNegEVals() const { return numneg_; }
+    Index NumberOfNegEVals() const
+    {
+      return numneg_;
+    }
     //@}
 
     //* @name Options of Linear solver */
@@ -206,12 +219,18 @@ namespace Ipopt
     /** Query whether inertia is computed by linear solver.  Returns
      *  true, if linear solver provides inertia.
      */
-    bool ProvidesInertia() const { return true; }
+    bool ProvidesInertia() const
+    {
+      return true;
+    }
 
     /** Query of requested matrix type that the linear solver
      *  understands.
      */
-    EMatrixFormat MatrixFormat() const { return CSR_Full_Format_0_Offset; }
+    EMatrixFormat MatrixFormat() const
+    {
+      return CSR_Full_Format_0_Offset;
+    }
     //@}
 
     /** @name Methods related to the detection of linearly dependent
@@ -219,7 +238,10 @@ namespace Ipopt
     //@{
     /** Query whether the indices of linearly dependent rows/columns
      *  can be determined by this linear solver. */
-    bool ProvidesDegeneracyDetection() const { return false; }
+    bool ProvidesDegeneracyDetection() const
+    {
+      return false;
+    }
     /** This method determines the list of row indices of the linearly
      *  dependent rows. */
     ESymSolverStatus DetermineDependentRows(const Index* ia,
