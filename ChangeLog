@@ -7,6 +7,10 @@ history management of subversion.
           DLLs instead of static linking, which caused crashes in debug mode
           (by M. Roelofs) [r2301]
         - fixed memory leaks in Java Interface (by javier) [#200, r2312]
+        - updates to MA77 and MA87 interfaces, adding support for HSL 2013 codes
+          (by J. Hogg) [r2315, r2316];
+          HSL 2012 still supported when compiled with Ipopt, but the linear solver
+          loader to dynamically load a HSL library at runtime now assumes HSL 2013  
 
 2013-05-07 releases/3.11.0
         - update and extension of Ipopt documentation

@@ -410,7 +410,7 @@ namespace Ipopt
           options_to_print.push_back("ma57_small_pivot_flag");
 #endif
 
-#if defined(COINHSL_HAS_MA77)
+#if defined(COINHSL_HAS_MA77) || defined(HAVE_LINEARSOLVERLOADER)
 
           options_to_print.push_back("#MA77 Linear Solver");
           options_to_print.push_back("ma77_print_level");
@@ -419,6 +419,9 @@ namespace Ipopt
           options_to_print.push_back("ma77_file_size");
           options_to_print.push_back("ma77_maxstore");
           options_to_print.push_back("ma77_nemin");
+#if defined(COINHSL_HSL2013) || defined(HAVE_LINEARSOLVERLOADER)
+          options_to_print.push_back("ma77_order");
+#endif
           options_to_print.push_back("ma77_small");
           options_to_print.push_back("ma77_static");
           options_to_print.push_back("ma77_u");

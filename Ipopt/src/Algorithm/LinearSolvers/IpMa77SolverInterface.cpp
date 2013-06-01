@@ -24,6 +24,11 @@
 #include <cmath>
 using namespace std;
 
+// if we use HSL_MA77 via the linear solver loader, we assume HSL 2013
+#if !defined(COINHSL_HAS_MA77) && !defined(COINHSL_HSL2013)
+#define HSL2013
+#endif
+
 extern "C"
 {
 #ifndef HSL2013
@@ -170,15 +175,11 @@ namespace Ipopt
       Index nonzeros, const Index* ia, const Index* ja)
   {
     struct ma77_info info;
+
 #ifdef HSL2013
     struct mc68_control control68;
     struct mc68_info info68;
-#endif
 
-    // Store size for later use
-    ndim_ = dim;
-
-#ifdef HSL2013
     // Determine an ordering
     mc68_default_control(&control68);
     control68.f_array_in = 0; // Use Fortran numbering (faster)
@@ -203,6 +204,9 @@ namespace Ipopt
     }
 #endif
 
+    // Store size for later use
+    ndim_ = dim;
+
     // Open files
     ma77_open(ndim_, "ma77_int", "ma77_real", "ma77_work", "ma77_delay", &keep_,
       &control_, &info);
@@ -215,6 +219,7 @@ namespace Ipopt
       if (info.flag < 0) return SYMSOLVER_FATAL_ERROR;
     }
 
+    // before HSL 2013, we call Metis directly
 #ifndef HSL2013
     // Determine an ordering
     Index *perm = new Index[dim];
