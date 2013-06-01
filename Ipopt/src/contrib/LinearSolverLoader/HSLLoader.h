@@ -75,8 +75,8 @@ struct ma97_info;
 typedef double ma97pkgtype_d_;
 typedef double ma97realtype_d_;
 
-struct mc68_control;
-struct mc68_info;
+struct mc68_control_i;
+struct mc68_info_i;
 
 #ifndef __IPTYPES_HPP__
 /* Type of Fortran integer translated into C */
@@ -246,10 +246,10 @@ typedef void (*ma97_free_akeep_t)(void **akeep);
 
 typedef void (*mc19ad_t)(ipfint *N, ipfint *NZ, double* A, ipfint *IRN, ipfint* ICN, float* R, float* C, float* W);
 
-typedef void (*mc68_default_control_t)(struct mc68_control *control);
+typedef void (*mc68_default_control_t)(struct mc68_control_i *control);
 typedef void (*mc68_order_t)(const int ord, const int n, const int ptr[],
-   const int row[], int perm[], const struct mc68_control *control,
-   struct mc68_info *info);
+   const int row[], int perm[], const struct mc68_control_i *control,
+   struct mc68_info_i *info);
 
   /** Tries to load a dynamically linked library with HSL routines.
    * Also tries to load symbols for those HSL routines that are not linked into Ipopt, i.e., HAVE_... is not defined. 

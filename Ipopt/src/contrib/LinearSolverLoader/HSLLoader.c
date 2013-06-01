@@ -577,7 +577,7 @@ void F77_FUNC(mc19ad,MC19AD)(ipfint *N, ipfint *NZ, double* A, ipfint *IRN,
 mc68_default_control_t func_mc68_default_control=NULL;
 mc68_order_t func_mc68_order=NULL;
 
-void mc68_default_control(struct mc68_control *control) {
+void mc68_default_control_i(struct mc68_control_i *control) {
   if (func_mc68_default_control==NULL) LSL_lateHSLLoad();
   if (func_mc68_default_control==NULL) {
     fprintf(stderr, "HSL routine mc68_default_control not found in " HSLLIBNAME ".\nAbort...\n");
@@ -586,9 +586,9 @@ void mc68_default_control(struct mc68_control *control) {
   func_mc68_default_control(control);
 }
 
-void mc68_order(const int ord, const int n, const int ptr[], const int row[],
-                int perm[], const struct mc68_control *control,
-                struct mc68_info *info) {
+void mc68_order_i(const int ord, const int n, const int ptr[], const int row[],
+                  int perm[], const struct mc68_control_i *control,
+                  struct mc68_info_i *info) {
   if (func_mc68_order==NULL) LSL_lateHSLLoad();
   if (func_mc68_order==NULL) {
     fprintf(stderr, "HSL routine mc68_default_control not found in " HSLLIBNAME ".\nAbort...\n");
@@ -675,8 +675,8 @@ int LSL_loadHSL(const char* libname, char* msgbuf, int msglen) {
 #endif
 
 #ifndef COINHSL_HAS_MC68
-  func_mc68_default_control=(mc68_default_control_t)LSL_loadSym(HSL_handle, "mc68_default_control", msgbuf, msglen);
-  func_mc68_order=(mc68_order_t)LSL_loadSym(HSL_handle, "mc68_order", msgbuf, msglen);
+  func_mc68_default_control=(mc68_default_control_t)LSL_loadSym(HSL_handle, "mc68_default_control_i", msgbuf, msglen);
+  func_mc68_order=(mc68_order_t)LSL_loadSym(HSL_handle, "mc68_order_i", msgbuf, msglen);
 #endif
 
   return 0;
