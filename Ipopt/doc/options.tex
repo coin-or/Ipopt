@@ -947,6 +947,15 @@ $1 \le {\tt ma77\_nemin } <  {\tt +inf}$
 and its default value is $8$.
 
 
+\paragraph{ma77\_order:}\label{opt:ma77_order} Controls type of ordering used by HSL\_MA77 \\
+ This option controls ordering for the solver HSL\_MA77. The default value for this string option is "metis".
+\\ 
+Possible values:
+\begin{itemize}
+   \item amd: Use the HSL\_MC68 approximate minimum degree algorithm
+   \item metis: Use the MeTiS nested dissection algorithm (if available)
+\end{itemize}
+
 \paragraph{ma77\_small:}\label{opt:ma77_small} Zero Pivot Threshold \\
  Any pivot less than ma77\_small is treated as zero. The valid range for this real option is 
 $0 \le {\tt ma77\_small } <  {\tt +inf}$
@@ -986,7 +995,7 @@ and its default value is $32$.
 
 
 \paragraph{ma86\_order:}\label{opt:ma86_order} Controls type of ordering used by HSL\_MA86 \\
- This option controls ordering for the solver HSL\_MA86. The default value for this string option is "amd".
+ This option controls ordering for the solver HSL\_MA86. The default value for this string option is "auto".
 \\ 
 Possible values:
 \begin{itemize}
