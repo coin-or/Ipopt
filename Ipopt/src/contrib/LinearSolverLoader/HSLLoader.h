@@ -247,7 +247,7 @@ typedef void (*ma97_free_akeep_t)(void **akeep);
 typedef void (*mc19ad_t)(ipfint *N, ipfint *NZ, double* A, ipfint *IRN, ipfint* ICN, float* R, float* C, float* W);
 
 typedef void (*mc68_default_control_t)(struct mc68_control_i *control);
-typedef void (*mc68_order_t)(const int ord, const int n, const int ptr[],
+typedef void (*mc68_order_t)(int ord, int n, const int ptr[],
    const int row[], int perm[], const struct mc68_control_i *control,
    struct mc68_info_i *info);
 

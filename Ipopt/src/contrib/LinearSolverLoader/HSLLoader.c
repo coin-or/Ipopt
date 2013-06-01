@@ -586,7 +586,7 @@ void mc68_default_control_i(struct mc68_control_i *control) {
   func_mc68_default_control(control);
 }
 
-void mc68_order_i(const int ord, const int n, const int ptr[], const int row[],
+void mc68_order_i(int ord, int n, const int ptr[], const int row[],
                   int perm[], const struct mc68_control_i *control,
                   struct mc68_info_i *info) {
   if (func_mc68_order==NULL) LSL_lateHSLLoad();
