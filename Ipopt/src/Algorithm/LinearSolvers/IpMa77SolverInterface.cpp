@@ -325,6 +325,7 @@ namespace Ipopt
    void Ma77SolverInterface::MetisOrder(const int ndim, const Index *ptr, 
       const Index *row, Index *perm)
    {
+#ifndef HSL2013
 #ifdef COINHSL_HAS_METIS
       int options[8];
       options[0] = 0; // Defaults
@@ -355,6 +356,7 @@ namespace Ipopt
       delete[] iperm;
       delete[] row_tmp;
       delete[] ptr_tmp;
+#endif
    }
 
   bool Ma77SolverInterface::IncreaseQuality()
