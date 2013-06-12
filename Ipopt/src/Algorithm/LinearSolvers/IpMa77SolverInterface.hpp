@@ -227,10 +227,7 @@ namespace Ipopt
     /** Query of requested matrix type that the linear solver
      *  understands.
      */
-    EMatrixFormat MatrixFormat() const
-    {
-      return CSR_Format_1_Offset;
-    }
+    EMatrixFormat MatrixFormat() const;
     //@}
 
     /** @name Methods related to the detection of linearly dependent
