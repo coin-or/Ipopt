@@ -227,7 +227,10 @@ namespace Ipopt
     /** Query of requested matrix type that the linear solver
      *  understands.
      */
-    EMatrixFormat MatrixFormat() const;
+    EMatrixFormat MatrixFormat() const
+    {
+       return CSR_Format_0_Offset;
+    }
     //@}
 
     /** @name Methods related to the detection of linearly dependent
@@ -247,9 +250,6 @@ namespace Ipopt
     {
       return SYMSOLVER_FATAL_ERROR;
     }
-
-    /** Calls METIS_NodeND to obtain an ordering */
-    static void MetisOrder(const int dim, const Index *ptr, const Index *row, Index *perm);
   };
 
 } // namespace Ipopt
