@@ -24,22 +24,9 @@
 #include <cmath>
 using namespace std;
 
-// if we use HSL_MA77 via the linear solver loader, we assume HSL 2013
-#if !defined(COINHSL_HAS_MA77) || defined(COINHSL_HSL2013)
-#define HSL2013
-#endif
-
 extern "C"
 {
-#ifndef HSL2013
-   /*
-    * Easier to just have our own definition than include the full metis.h
-    */
-   extern void METIS_NodeND(int *n, int *xadj, int *adjncy,
-      int *numflag, int *options, int *perm, int *iperm);
-#else
 #include "hsl_mc68i.h"
-#endif
 }
 
 namespace Ipopt
@@ -175,8 +162,6 @@ namespace Ipopt
       Index nonzeros, const Index* ia, const Index* ja)
   {
     struct ma77_info info;
-
-#ifdef HSL2013
     struct mc68_control control68;
     struct mc68_info info68;
 
@@ -202,7 +187,6 @@ namespace Ipopt
     if (HaveIpData()) {
       IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
     }
-#endif
 
     // Store size for later use
     ndim_ = dim;
@@ -218,14 +202,6 @@ namespace Ipopt
         &control_, &info);
       if (info.flag < 0) return SYMSOLVER_FATAL_ERROR;
     }
-
-    // before HSL 2013, we call Metis directly
-#ifndef HSL2013
-    // Determine an ordering
-    Index *perm = new Index[dim];
-    MetisOrder(dim, ia, ja, perm);
-    //for(int i=0; i<dim; i++) perm[i] = i+1;
-#endif
 
     // Perform analyse
     ma77_analyse(perm, &keep_, &control_, &info);
@@ -318,55 +294,6 @@ namespace Ipopt
 
     return SYMSOLVER_SUCCESS;
   }
-
-  SparseSymLinearSolverInterface::EMatrixFormat Ma77SolverInterface::MatrixFormat() const
-  {
-#ifndef HSL2013
-    return CSR_Full_Format_0_Offset;
-#else
-    return CSR_Format_0_Offset;
-#endif
-  }
-
-   /*
-    * Call metis_NodeND to perform ordering on the graph, return it in perm
-    */
-   void Ma77SolverInterface::MetisOrder(const int ndim, const Index *ptr, 
-      const Index *row, Index *perm)
-   {
-#ifndef HSL2013
-#ifdef COINHSL_HAS_METIS
-      int options[8];
-      options[0] = 0; // Defaults
-      int numflag = 0;
-      int ndim_nc = ndim;
-#endif
-
-      Index *ptr_tmp = new Index[ndim+1];
-      Index *row_tmp = new Index[ptr[ndim]];
-      ptr_tmp[0] = 0;
-      for(int i=0; i<ndim; i++)
-      {
-         ptr_tmp[i+1] = ptr_tmp[i];
-         for(int j=ptr[i]; j<ptr[i+1]; j++)
-         {
-            if(i==row[j]) continue; // Skip diagonals
-            row_tmp[ ptr_tmp[i+1]++ ] = row[j];
-         }
-      }
-
-      // Note that MeTiS's iperm is our perm and vice-versa
-      Index *iperm = new Index[ndim];
-#ifdef COINHSL_HAS_METIS
-      METIS_NodeND(&ndim_nc, ptr_tmp, row_tmp, &numflag, options, iperm, perm);
-#else
-      std::cerr << "MA77 interface did not know at compile time whether Metis is available and thus assumed it isn't. This need to be fixed.\n";
-#endif
-      delete[] iperm;
-      delete[] row_tmp;
-      delete[] ptr_tmp;
-#endif
-   }
 
   bool Ma77SolverInterface::IncreaseQuality()
   {
