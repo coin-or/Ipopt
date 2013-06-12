@@ -25,7 +25,7 @@
 using namespace std;
 
 // if we use HSL_MA77 via the linear solver loader, we assume HSL 2013
-#if !defined(COINHSL_HAS_MA77) && !defined(COINHSL_HSL2013)
+#if !defined(COINHSL_HAS_MA77) || defined(COINHSL_HSL2013)
 #define HSL2013
 #endif
 
@@ -182,8 +182,8 @@ namespace Ipopt
 
     // Determine an ordering
     mc68_default_control(&control68);
-    control68.f_array_in = 1; // Use Fortran numbering (faster)
-    control68.f_array_out = 1; // Use Fortran numbering (faster)
+    control68.f_array_in = 0;
+    control68.f_array_out = 0;
     Index *perm = new Index[dim];
     if(ordering_ == ORDER_METIS) {
       mc68_order(3, dim, ia, ja, perm, &control68, &info68); /* MeTiS */
@@ -319,6 +319,15 @@ namespace Ipopt
     return SYMSOLVER_SUCCESS;
   }
 
+  SparseSymLinearSolverInterface::EMatrixFormat Ma77SolverInterface::MatrixFormat() const
+  {
+#ifndef HSL2013
+    return CSR_Full_Format_0_Offset;
+#else
+    return CSR_Format_0_Offset;
+#endif
+  }
+
    /*
     * Call metis_NodeND to perform ordering on the graph, return it in perm
     */
@@ -367,7 +376,7 @@ namespace Ipopt
     pivtol_changed_ = true;
 
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "Indreasing pivot tolerance for HSL_MA77 from %7.2e ",
+                   "Increasing pivot tolerance for HSL_MA77 from %7.2e ",
                    control_.u);
     control_.u = Min(umax_, pow(control_.u,0.75));
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
