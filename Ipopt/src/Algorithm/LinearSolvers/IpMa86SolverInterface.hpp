@@ -253,9 +253,6 @@ namespace Ipopt
     {
       return SYMSOLVER_FATAL_ERROR;
     }
-
-    /** Calls METIS_NodeND to obtain an ordering */
-    static void MetisOrder(const int dim, const Index *ptr, const Index *row, Index *perm);
   };
 
 } // namespace Ipopt

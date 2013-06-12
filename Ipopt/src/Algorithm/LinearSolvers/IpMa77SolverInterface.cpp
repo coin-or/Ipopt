@@ -122,6 +122,7 @@ namespace Ipopt
       const std::string& prefix)
   {
     ma77_default_control(&control_);
+    control_.f_arrays = 0;
     control_.bits=32;
     // FIXME: HSL_MA77 should be updated to allow a matrix with new
     // values to be refactorized after a -11 (singular) error.
@@ -203,9 +204,15 @@ namespace Ipopt
       if (info.flag < 0) return SYMSOLVER_FATAL_ERROR;
     }
 
+    if (HaveIpData())
+      IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+
     // Perform analyse
     ma77_analyse(perm, &keep_, &control_, &info);
     delete[] perm; // Done with order
+
+    if (HaveIpData())
+      IpData().TimingStats().LinearSystemSymbolicFactorization().End();
 
     // Setup memory for values
     if (val_!=NULL) delete[] val_;
@@ -274,8 +281,8 @@ namespace Ipopt
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemFactorization().End();
       }
-      if (info.flag==4 || info.flag==-11) return SYMSOLVER_SINGULAR;
       if (info.flag<0) return SYMSOLVER_FATAL_ERROR;
+      if (info.flag==4 || info.flag==-11) return SYMSOLVER_SINGULAR;
       if (check_NegEVals && info.num_neg!=numberOfNegEVals)
         return SYMSOLVER_WRONG_INERTIA;
 

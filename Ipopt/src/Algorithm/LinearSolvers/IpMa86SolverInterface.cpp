@@ -21,14 +21,12 @@
 
 #include "IpMa86SolverInterface.hpp"
 #include <iostream>
-#include <stdio.h>
 #include <cmath>
 using namespace std;
 
 extern "C"
 {
 #include "hsl_mc68i.h"
-
 }
 
 namespace Ipopt
@@ -315,7 +313,7 @@ namespace Ipopt
     pivtol_changed_ = true;
 
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "Indreasing pivot tolerance for HSL_MA86 from %7.2e ",
+                   "Increasing pivot tolerance for HSL_MA86 from %7.2e ",
                    control_.u);
     control_.u = Min(umax_, pow(control_.u,0.75));
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
