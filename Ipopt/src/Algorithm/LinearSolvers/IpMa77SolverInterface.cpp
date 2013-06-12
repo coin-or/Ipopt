@@ -165,7 +165,7 @@ namespace Ipopt
     return true; // All is well
   }
 
-  /*  Method for initializing internal stuctures.  Here, ndim gives
+  /*  Method for initializing internal structures.  Here, ndim gives
    *  the number of rows and columns of the matrix, nonzeros give
    *  the number of nonzero elements, and ia and ja give the
    *  positions of the nonzero elements, given in the matrix format
@@ -182,8 +182,8 @@ namespace Ipopt
 
     // Determine an ordering
     mc68_default_control(&control68);
-    control68.f_array_in = 0; // Use Fortran numbering (faster)
-    control68.f_array_out = 0; // Use Fortran numbering (faster)
+    control68.f_array_in = 1; // Use Fortran numbering (faster)
+    control68.f_array_out = 1; // Use Fortran numbering (faster)
     Index *perm = new Index[dim];
     if(ordering_ == ORDER_METIS) {
       mc68_order(3, dim, ia, ja, perm, &control68, &info68); /* MeTiS */

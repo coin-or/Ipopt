@@ -509,7 +509,7 @@ namespace Ipopt
       a_ = NULL;
       a_ = new double [nonzeros_];
 
-      // Do the symbolic facotrization
+      // Do the symbolic factorization
       retval = SymbolicFactorization(airn, ajcn);
       if (retval != SYMSOLVER_SUCCESS ) {
         return retval;
