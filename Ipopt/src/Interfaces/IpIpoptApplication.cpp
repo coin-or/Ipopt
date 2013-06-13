@@ -452,6 +452,7 @@ namespace Ipopt
           options_to_print.push_back("ma97_scaling2");
           options_to_print.push_back("ma97_scaling3");
           options_to_print.push_back("ma97_small");
+          options_to_print.push_back("ma97_solve_blas3");
           options_to_print.push_back("ma97_switch1");
           options_to_print.push_back("ma97_switch2");
           options_to_print.push_back("ma97_switch3");

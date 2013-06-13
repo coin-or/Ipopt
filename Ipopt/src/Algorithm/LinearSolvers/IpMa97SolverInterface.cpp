@@ -185,8 +185,15 @@ namespace Ipopt
       "no",
       "no", "Do not dump matrix",
       "yes", "Do dump matrix",
-      "Controls whether HSL_MA97 dumps each matrix to a file.");
+      "");
 #endif
+    roptions->AddStringOption2(
+      "ma97_solve_blas3",
+      "Controls if blas2 or blas3 routines are used for solve",
+      "no",
+      "no", "Use BLAS2 (faster, some implementations bit incompatible)",
+      "yes", "Use BLAS3 (slower)",
+      "");
   }
 
   int Ma97SolverInterface::ScaleNameToNum(const std::string& name) {
@@ -279,6 +286,9 @@ namespace Ipopt
 #ifdef MA97_DUMP_MATRIX
     options.GetBoolValue("ma97_dump_matrix", dump_, prefix);
 #endif
+    bool solve_blas3;
+    options.GetBoolValue("ma97_solve_blas3", solve_blas3, prefix);
+    control_.solve_blas3 = solve_blas3 ? 1 : 0;
 
     // Set whether we scale on first iteration or not
     switch(switch_[current_level_]) {

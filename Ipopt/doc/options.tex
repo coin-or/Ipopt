@@ -1117,6 +1117,15 @@ $0 \le {\tt ma97\_small } <  {\tt +inf}$
 and its default value is $1 \cdot 10^{-20}$.
 
 
+\paragraph{ma97\_solve\_blas3:}\label{opt:ma97_solve_blas3} Controls if blas2 or blas3 routines are used for solve \\
+ The default value for this string option is "no".
+\\ 
+Possible values:
+\begin{itemize}
+   \item no: Use BLAS2 (faster, some implementations bit incompatible)
+   \item yes: Use BLAS3 (slower)
+\end{itemize}
+
 \paragraph{ma97\_switch1:}\label{opt:ma97_switch1} First switch, determine when ma97\_scaling1 is enabled. \\
  If ma97\_scaling=dynamic, ma97\_scaling1 is enabled according to this condition. If ma97\_switch2 occurs this option is henceforth ignored. The default value for this string option is "od\_hd\_reuse".
 \\ 
