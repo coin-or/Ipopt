@@ -53,7 +53,11 @@ struct mc68_info {
    int duplicate;       /* holds number of duplicate entries */
    int n_compressions;  /* holds number of compressions in order */
    int n_zero_eigs;     /* holds the number of zero eigs from ma47 */
+#if defined(COINHSL_HSL2013) || !defined(COINHSL_HAS_MC68)
+   long l_workspace;     /* holds length of workspace iw used in order */
+#else
    int l_workspace;     /* holds length of workspace iw used in order */
+#endif
    int zb01_info;       /* holds flag from zb01_expand1 call */
    int n_dense_rows;    /* holds number of dense rows from amdd */
 };
