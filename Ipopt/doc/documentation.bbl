@@ -6,6 +6,13 @@
   Applications to Chemical Processes}
 \newblock SIAM, Philadelphia (2010)
 
+\bibitem{CouHubSchWae:inexact}
+ F.~E.~Curtis, J.~Huber, O.~Schenk, A.~W{\"a}chter.
+ \newblock A note on the implementation of an interior-point algorithm for nonlinear optimization with inexact step computations.
+ \newblock {\em Mathematical Programming}, 136(1):209--227, 2012
+ \newblock doi: \htmladdnormallink{10.1007/s10107-012-0557-4}{http://dx.doi.org/10.1007/s10107-012-0557-4}.
+ \newblock preprint at \url{http://www.optimization-online.org/DB_HTML/2011/04/2992.html}
+
 \bibitem{FouGayKer:AMPLbook}
 R.~Fourer, D.~M. Gay, and B.~W. Kernighan.
 \newblock {\em AMPL: A Modeling Language For Mathematical Programming}.
