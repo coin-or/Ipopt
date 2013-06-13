@@ -166,31 +166,54 @@ namespace Ipopt
     struct mc68_control control68;
     struct mc68_info info68;
 
+    // Store size for later use
+    ndim_ = dim;
+
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+    }
+
+    // mc68 requires a half matrix. A future version will support full
+    // matrix entry, and this code should be removed when it is available.
+    Index *ia_half = new Index[dim+1];
+    Index *ja_half = new Index[ia[dim]-1];
+    {
+       int k = 0;
+       for(int i=0; i<dim; i++) {
+          ia_half[i] = k+1;
+          for(int j=ia[i]-1; j<ia[i+1]-1; j++)
+             if(ja[j]-1 >= i)
+                ja_half[k++] = ja[j];
+       }
+       ia_half[dim] = k+1;
+    }
+
     // Determine an ordering
     mc68_default_control(&control68);
     control68.f_array_in = 1; // Use Fortran numbering (faster)
     control68.f_array_out = 1; // Use Fortran numbering (faster)
     Index *perm = new Index[dim];
     if(ordering_ == ORDER_METIS) {
-      mc68_order(3, dim, ia, ja, perm, &control68, &info68); /* MeTiS */
+      mc68_order(3, dim, ia_half, ja_half, perm, &control68, &info68); /* MeTiS */
       if(info68.flag == -5) {
          // MeTiS not available
          ordering_ = ORDER_AMD;
       } else if(info68.flag<0) {
+         delete[] ia_half;
+         delete[] ja_half;
          return SYMSOLVER_FATAL_ERROR;
       }
     }
     if(ordering_ == ORDER_AMD) {
-      mc68_order(1, dim, ia, ja, perm, &control68, &info68); /* AMD */
+      mc68_order(1, dim, ia_half, ja_half, perm, &control68, &info68); /* AMD */
+      if(info68.flag<0) {
+         delete[] ia_half;
+         delete[] ja_half;
+         return SYMSOLVER_FATAL_ERROR;
+      }
     }
-    if(info68.flag<0) return SYMSOLVER_FATAL_ERROR;
-
-    if (HaveIpData()) {
-      IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
-    }
-
-    // Store size for later use
-    ndim_ = dim;
+    delete[] ia_half;
+    delete[] ja_half;
 
     // Open files
     ma77_open(ndim_, "ma77_int", "ma77_real", "ma77_work", "ma77_delay", &keep_,
@@ -199,13 +222,10 @@ namespace Ipopt
 
     // Store data into files
     for(int i=0; i<dim; i++) {
-      ma77_input_vars(i, ia[i+1]-ia[i], &(ja[ia[i]-1]), &keep_,
+      ma77_input_vars(i+1, ia[i+1]-ia[i], &(ja[ia[i]-1]), &keep_,
         &control_, &info);
       if (info.flag < 0) return SYMSOLVER_FATAL_ERROR;
     }
-
-    if (HaveIpData())
-      IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
 
     // Perform analyse
     ma77_analyse(perm, &keep_, &control_, &info);
@@ -267,7 +287,7 @@ namespace Ipopt
     if (new_matrix || pivtol_changed_)
     {
       for(int i=0; i<ndim_; i++) {
-         ma77_input_reals(i, ia[i+1]-ia[i], &(val_[ia[i]-1]), &keep_,
+         ma77_input_reals(i+1, ia[i+1]-ia[i], &(val_[ia[i]-1]), &keep_,
             &control_, &info);
          if (info.flag < 0) return SYMSOLVER_FATAL_ERROR;
       }
@@ -281,8 +301,8 @@ namespace Ipopt
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemFactorization().End();
       }
-      if (info.flag<0) return SYMSOLVER_FATAL_ERROR;
       if (info.flag==4 || info.flag==-11) return SYMSOLVER_SINGULAR;
+      if (info.flag<0) return SYMSOLVER_FATAL_ERROR;
       if (check_NegEVals && info.num_neg!=numberOfNegEVals)
         return SYMSOLVER_WRONG_INERTIA;
 

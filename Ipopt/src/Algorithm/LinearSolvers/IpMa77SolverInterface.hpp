@@ -229,7 +229,7 @@ namespace Ipopt
      */
     EMatrixFormat MatrixFormat() const
     {
-       return CSR_Format_1_Offset;
+      return CSR_Full_Format_1_Offset;
     }
     //@}
 
