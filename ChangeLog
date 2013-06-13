@@ -10,7 +10,8 @@ history management of subversion.
         - updates and fixes to MA77 and MA87 interfaces, adding support of
           HSL 2013 codes (by J. Hogg);
           HSL 2012 still supported when compiled with Ipopt, but the linear solver
-          loader to dynamically load a HSL library at runtime now assumes HSL 2013  
+          loader to dynamically load a HSL library at runtime now assumes HSL 2013
+        - added option ma97_solve_blas3 (by J. Hogg) [r2329]
 
 2013-05-07 releases/3.11.0
         - update and extension of Ipopt documentation
