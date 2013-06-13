@@ -122,7 +122,7 @@ namespace Ipopt
       const std::string& prefix)
   {
     ma77_default_control(&control_);
-    control_.f_arrays = 0;
+    control_.f_arrays = 1; // Use Fortran numbering (faster)
     control_.bits=32;
     // FIXME: HSL_MA77 should be updated to allow a matrix with new
     // values to be refactorized after a -11 (singular) error.
@@ -168,8 +168,8 @@ namespace Ipopt
 
     // Determine an ordering
     mc68_default_control(&control68);
-    control68.f_array_in = 0;
-    control68.f_array_out = 0;
+    control68.f_array_in = 1; // Use Fortran numbering (faster)
+    control68.f_array_out = 1; // Use Fortran numbering (faster)
     Index *perm = new Index[dim];
     if(ordering_ == ORDER_METIS) {
       mc68_order(3, dim, ia, ja, perm, &control68, &info68); /* MeTiS */
@@ -199,7 +199,7 @@ namespace Ipopt
 
     // Store data into files
     for(int i=0; i<dim; i++) {
-      ma77_input_vars(i, ia[i+1]-ia[i], &(ja[ia[i]]), &keep_,
+      ma77_input_vars(i, ia[i+1]-ia[i], &(ja[ia[i]-1]), &keep_,
         &control_, &info);
       if (info.flag < 0) return SYMSOLVER_FATAL_ERROR;
     }
@@ -267,7 +267,7 @@ namespace Ipopt
     if (new_matrix || pivtol_changed_)
     {
       for(int i=0; i<ndim_; i++) {
-         ma77_input_reals(i, ia[i+1]-ia[i], &(val_[ia[i]]), &keep_,
+         ma77_input_reals(i, ia[i+1]-ia[i], &(val_[ia[i]-1]), &keep_,
             &control_, &info);
          if (info.flag < 0) return SYMSOLVER_FATAL_ERROR;
       }
