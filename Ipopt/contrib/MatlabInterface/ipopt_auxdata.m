@@ -3,6 +3,11 @@ function [x, info] = ipopt_auxdata(x0, funcs, options)
 
 if ~isfield(options, 'auxdata')
     % no auxdata given, call ipopt as normal
+    if isfield(funcs, 'iterfunc') && nargin(funcs.iterfunc) == 2
+        % check if iterfunc has only 2 inputs as before Ipopt version 3.11
+        funcs_old = funcs;
+        funcs.iterfunc = @(t, f, varstruct) funcs_old.iterfunc(t, f);
+    end
     [x, info] = ipopt(x0, funcs, options);
 else
     % remove auxdata from options structure and modify function handles
@@ -30,7 +35,7 @@ else
         % like to use the additional information that is available via the
         % third input argument to iterfunc as of Ipopt version 3.11, you
         % will need to modify this section by uncommenting the line below.
-        funcs_new.iterfunc = @(t, f) funcs.iterfunc(t, f, auxdata);
+        funcs_new.iterfunc = @(t, f, varstruct) funcs.iterfunc(t, f, auxdata);
         % funcs_new.iterfunc = @(t, f, varstruct) funcs.iterfunc(t, f, varstruct, auxdata);
     end
     [x, info] = ipopt(x0, funcs_new, options_new);

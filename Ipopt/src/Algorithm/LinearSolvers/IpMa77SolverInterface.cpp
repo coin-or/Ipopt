@@ -1,3 +1,4 @@
+// Copyright (C) 2013, Science and Technology Facilities Council.
 // Copyright (C) 2009, Jonathan Hogg <jdh41.at.cantab.net>
 // Copyright (C) 2004, 2007 International Business Machines and others.
 // All Rights Reserved.
@@ -23,12 +24,9 @@
 #include <cmath>
 using namespace std;
 
-extern "C" {
-   /*
-    * Easier to just have our own definition than include the full metis.h
-    */
-   extern void METIS_NodeND(int *n, int *xadj, int *adjncy,
-      int *numflag, int *options, int *perm, int *iperm);
+extern "C"
+{
+#include "hsl_mc68i.h"
 }
 
 namespace Ipopt
@@ -39,7 +37,7 @@ namespace Ipopt
     delete [] val_;
 
     struct ma77_info info;
-    if(keep_) ma77_finalise(&keep_, &control_, &info);
+    if (keep_) ma77_finalise(&keep_, &control_, &info);
   }
 
   void Ma77SolverInterface::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
@@ -107,13 +105,29 @@ namespace Ipopt
       "Maximum Pivoting Threshold",
       0.0, false, 0.5, false, 1e-4,
       "Maximum value to which u will be increased to improve quality.");
+    roptions->AddStringOption2(
+      "ma77_order",
+      "Controls type of ordering used by HSL_MA77",
+#ifdef COINHSL_HAS_METIS
+      "metis",
+#else
+      "amd",
+#endif
+      "amd", "Use the HSL_MC68 approximate minimum degree algorithm",
+      "metis", "Use the MeTiS nested dissection algorithm (if available)",
+      "This option controls ordering for the solver HSL_MA77.");
   }
 
   bool Ma77SolverInterface::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
     ma77_default_control(&control_);
+    control_.f_arrays = 1; // Use Fortran numbering (faster)
     control_.bits=32;
+    // FIXME: HSL_MA77 should be updated to allow a matrix with new
+    // values to be refactorized after a -11 (singular) error.
+    //control_.action = 0; // false, should exit with error on singularity
+
     options.GetIntegerValue("ma77_print_level", control_.print_level, prefix);
     options.GetIntegerValue("ma77_buffer_lpage", control_.buffer_lpage[0], prefix);
     options.GetIntegerValue("ma77_buffer_lpage", control_.buffer_lpage[1], prefix);
@@ -128,12 +142,18 @@ namespace Ipopt
     options.GetNumericValue("ma77_small", control_.small, prefix);
     options.GetNumericValue("ma77_static", control_.static_, prefix);
     options.GetNumericValue("ma77_u", control_.u, prefix);
-    options.GetNumericValue("ma77_u", umax_, prefix);
-
+    options.GetNumericValue("ma77_umax", umax_, prefix);
+    std::string order_method;
+    options.GetStringValue("ma77_order", order_method, prefix);
+    if (order_method == "metis") {
+      ordering_ = ORDER_METIS;
+    } else {
+      ordering_ = ORDER_AMD;
+    }
     return true; // All is well
   }
 
-  /*  Method for initializing internal stuctures.  Here, ndim gives
+  /*  Method for initializing internal structures.  Here, ndim gives
    *  the number of rows and columns of the matrix, nonzeros give
    *  the number of nonzero elements, and ia and ja give the
    *  positions of the nonzero elements, given in the matrix format
@@ -143,37 +163,87 @@ namespace Ipopt
       Index nonzeros, const Index* ia, const Index* ja)
   {
     struct ma77_info info;
+    struct mc68_control control68;
+    struct mc68_info info68;
 
     // Store size for later use
     ndim_ = dim;
 
-    // Setup memory for values
-    if(val_!=NULL) delete[] val_;
-    val_ = new double[nonzeros];
+    if (HaveIpData()) {
+      IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+    }
+
+    // mc68 requires a half matrix. A future version will support full
+    // matrix entry, and this code should be removed when it is available.
+    Index *ia_half = new Index[dim+1];
+    Index *ja_half = new Index[ia[dim]-1];
+    {
+       int k = 0;
+       for(int i=0; i<dim; i++) {
+          ia_half[i] = k+1;
+          for(int j=ia[i]-1; j<ia[i+1]-1; j++)
+             if(ja[j]-1 >= i)
+                ja_half[k++] = ja[j];
+       }
+       ia_half[dim] = k+1;
+    }
+
+    // Determine an ordering
+    mc68_default_control(&control68);
+    control68.f_array_in = 1; // Use Fortran numbering (faster)
+    control68.f_array_out = 1; // Use Fortran numbering (faster)
+    Index *perm = new Index[dim];
+    if(ordering_ == ORDER_METIS) {
+      mc68_order(3, dim, ia_half, ja_half, perm, &control68, &info68); /* MeTiS */
+      if(info68.flag == -5) {
+         // MeTiS not available
+         ordering_ = ORDER_AMD;
+      } else if(info68.flag<0) {
+         delete[] ia_half;
+         delete[] ja_half;
+         return SYMSOLVER_FATAL_ERROR;
+      }
+    }
+    if(ordering_ == ORDER_AMD) {
+      mc68_order(1, dim, ia_half, ja_half, perm, &control68, &info68); /* AMD */
+      if(info68.flag<0) {
+         delete[] ia_half;
+         delete[] ja_half;
+         return SYMSOLVER_FATAL_ERROR;
+      }
+    }
+    delete[] ia_half;
+    delete[] ja_half;
 
     // Open files
     ma77_open(ndim_, "ma77_int", "ma77_real", "ma77_work", "ma77_delay", &keep_,
       &control_, &info);
-    if(info.flag < 0) return SYMSOLVER_FATAL_ERROR;
+    if (info.flag < 0) return SYMSOLVER_FATAL_ERROR;
 
     // Store data into files
     for(int i=0; i<dim; i++) {
-      ma77_input_vars(i, ia[i+1]-ia[i], &(ja[ia[i]]), &keep_,
+      ma77_input_vars(i+1, ia[i+1]-ia[i], &(ja[ia[i]-1]), &keep_,
         &control_, &info);
-      if(info.flag < 0) return SYMSOLVER_FATAL_ERROR;
+      if (info.flag < 0) return SYMSOLVER_FATAL_ERROR;
     }
-
-    // Determine an ordering
-    Index *perm = new Index[dim];
-    MetisOrder(dim, ia, ja, perm);
-    //for(int i=0; i<dim; i++) perm[i] = i+1;
 
     // Perform analyse
     ma77_analyse(perm, &keep_, &control_, &info);
     delete[] perm; // Done with order
-    if(info.flag < 0) return SYMSOLVER_FATAL_ERROR;
 
-    return SYMSOLVER_SUCCESS;
+    if (HaveIpData())
+      IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+
+    // Setup memory for values
+    if (val_!=NULL) delete[] val_;
+    val_ = new double[nonzeros];
+
+    if (info.flag>=0) {
+      return SYMSOLVER_SUCCESS;
+    }
+    else {
+      return SYMSOLVER_FATAL_ERROR;
+    }
   }
 
   /*  Solve operation for multiple right hand sides.  Solves the
@@ -214,78 +284,43 @@ namespace Ipopt
   {
     struct ma77_info info;
 
-    if(new_matrix || pivtol_changed_)
+    if (new_matrix || pivtol_changed_)
     {
       for(int i=0; i<ndim_; i++) {
-         ma77_input_reals(i, ia[i+1]-ia[i], &(val_[ia[i]]), &keep_,
+         ma77_input_reals(i+1, ia[i+1]-ia[i], &(val_[ia[i]-1]), &keep_,
             &control_, &info);
-         if(info.flag < 0) return SYMSOLVER_FATAL_ERROR;
+         if (info.flag < 0) return SYMSOLVER_FATAL_ERROR;
       }
 
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemFactorization().Start();
       }
-      ma77_factor(0, &keep_, &control_, &info, NULL);
+      //ma77_factor(0, &keep_, &control_, &info, NULL);
+      ma77_factor_solve(0, &keep_, &control_, &info, NULL,
+                        nrhs, ndim_, rhs_vals);
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemFactorization().End();
       }
+      if (info.flag==4 || info.flag==-11) return SYMSOLVER_SINGULAR;
       if (info.flag<0) return SYMSOLVER_FATAL_ERROR;
-      if (info.flag==4) return SYMSOLVER_SINGULAR;
       if (check_NegEVals && info.num_neg!=numberOfNegEVals)
         return SYMSOLVER_WRONG_INERTIA;
 
       numneg_ = info.num_neg;
       pivtol_changed_ = false;
     }
-
-    if (HaveIpData()) {
-      IpData().TimingStats().LinearSystemBackSolve().Start();
-    }
-    ma77_solve(0, nrhs, ndim_, rhs_vals, &keep_, &control_, &info, NULL);
-    if (HaveIpData()) {
-      IpData().TimingStats().LinearSystemBackSolve().End();
+    else {
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemBackSolve().Start();
+      }
+      ma77_solve(0, nrhs, ndim_, rhs_vals, &keep_, &control_, &info, NULL);
+      if (HaveIpData()) {
+        IpData().TimingStats().LinearSystemBackSolve().End();
+      }
     }
 
     return SYMSOLVER_SUCCESS;
   }
-
-   /*
-    * Call metis_NodeND to perform ordering on the graph, return it in perm
-    */
-   void Ma77SolverInterface::MetisOrder(const int ndim, const Index *ptr, 
-      const Index *row, Index *perm)
-   {
-#ifdef COINHSL_HAS_METIS
-      int options[8];
-      options[0] = 0; // Defaults
-      int numflag = 0;
-      int ndim_nc = ndim;
-#endif
-
-      Index *ptr_tmp = new Index[ndim+1];
-      Index *row_tmp = new Index[ptr[ndim]];
-      ptr_tmp[0] = 0;
-      for(int i=0; i<ndim; i++)
-      {
-         ptr_tmp[i+1] = ptr_tmp[i];
-         for(int j=ptr[i]; j<ptr[i+1]; j++)
-         {
-            if(i==row[j]) continue; // Skip diagonals
-            row_tmp[ ptr_tmp[i+1]++ ] = row[j];
-         }
-      }
-
-      // Note that MeTiS's iperm is our perm and vice-versa
-      Index *iperm = new Index[ndim];
-#ifdef COINHSL_HAS_METIS
-      METIS_NodeND(&ndim_nc, ptr_tmp, row_tmp, &numflag, options, iperm, perm);
-#else
-      std::cerr << "MA77 interface did not know at compile time whether Metis is available and thus assumed it isn't. This need to be fixed.\n";
-#endif
-      delete[] iperm;
-      delete[] row_tmp;
-      delete[] ptr_tmp;
-   }
 
   bool Ma77SolverInterface::IncreaseQuality()
   {
@@ -295,7 +330,7 @@ namespace Ipopt
     pivtol_changed_ = true;
 
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "Indreasing pivot tolerance for HSL_MA77 from %7.2e ",
+                   "Increasing pivot tolerance for HSL_MA77 from %7.2e ",
                    control_.u);
     control_.u = Min(umax_, pow(control_.u,0.75));
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
@@ -303,7 +338,6 @@ namespace Ipopt
                    control_.u);
     return true;
   }
-
 
 } // namespace Ipopt
 

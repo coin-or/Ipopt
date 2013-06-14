@@ -1,12 +1,19 @@
-This file contain the log of changes for the main release branch (trunk).
+This file contain the log of changes for Ipopt.
 More detailed information for incremental change can be found in the
 history management of subversion.
 
-2013-??-?? releases/3.11.1
+2013-06-14 releases/3.11.1
         - the setup for the v8-ifort MSVS project changed to use dynamic runtime
           DLLs instead of static linking, which caused crashes in debug mode
           (by M. Roelofs) [r2301]
         - fixed memory leaks in Java Interface (by javier) [#200, r2312]
+        - updates and fixes to MA77 and MA87 interfaces, adding support of
+          HSL 2013 codes (by J. Hogg);
+          HSL 2012 still supported when compiled with Ipopt, but the linear solver
+          loader to dynamically load a HSL library at runtime now assumes HSL 2013
+        - added option ma97_solve_blas3 (by J. Hogg) [r2329]
+        - changed default for option ma27_meminc_factor from 10.0 to 2.0 [r2330]
+        - fixed bug in ipopt_auxdata of MATLAB Interface related to iterfunc [r2325]
 
 2013-05-07 releases/3.11.0
         - update and extension of Ipopt documentation
@@ -169,7 +176,7 @@ history management of subversion.
           Party)
         - changes in some exposed header files to provide access to internal
           data structures for specific applications
-	
+
 2009-05-01 releases/3.6.1
         - minor corrections in tutorial files
 
@@ -296,7 +303,7 @@ history management of subversion.
 
 2006-04-08 - version 3.1.0 - dev release number 714
         Several bug-fixes, improvements and additions. In particular:
-	- new quasi-Newton approximation using L-BFGS
+        - new quasi-Newton approximation using L-BFGS
         - interfaces to linear solver MA57, WSMP, Pardiso
           (MUMPS and TAUCS not yet completed)
         - derivative checker
