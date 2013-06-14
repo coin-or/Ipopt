@@ -116,7 +116,7 @@ namespace Ipopt
     roptions->AddLowerBoundedNumberOption(
       "ma27_meminc_factor",
       "Increment factor for workspace size for MA27.",
-      1.0, false, 10.0,
+      1.0, false, 2.0,
       "If the integer or real workspace is not large enough, "
       "Ipopt will increase its size by this factor.  This option is only "
       "available if Ipopt has been compiled with MA27.");
@@ -298,7 +298,7 @@ namespace Ipopt
     delete [] iw_;
     iw_ = NULL;
 
-    // Overstimation factor for LIW (20% recommended in MA27 documentation)
+    // Overestimation factor for LIW (20% recommended in MA27 documentation)
     const double LiwFact = 2.0;   // This is 100% overestimation
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                    "In Ma27TSolverInterface::InitializeStructure: Using overestimation factor LiwFact = %e\n",

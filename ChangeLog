@@ -12,6 +12,8 @@ history management of subversion.
           HSL 2012 still supported when compiled with Ipopt, but the linear solver
           loader to dynamically load a HSL library at runtime now assumes HSL 2013
         - added option ma97_solve_blas3 (by J. Hogg) [r2329]
+        - changed default for option ma27_meminc_factor from 10.0 to 2.0 [r2330]
+        - fixed bug in ipopt_auxdata of MATLAB Interface related to iterfunc [r2325]
 
 2013-05-07 releases/3.11.0
         - update and extension of Ipopt documentation
