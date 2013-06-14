@@ -853,7 +853,7 @@ and its default value is $5$.
 \paragraph{ma27\_meminc\_factor:}\label{opt:ma27_meminc_factor} Increment factor for workspace size for MA27. \\
  If the integer or real workspace is not large enough, Ipopt will increase its size by this factor.  This option is only available if Ipopt has been compiled with MA27. The valid range for this real option is 
 $1 \le {\tt ma27\_meminc\_factor } <  {\tt +inf}$
-and its default value is $10$.
+and its default value is $2$.
 
 
 \subsection{MA57 Linear Solver}
@@ -947,6 +947,15 @@ $1 \le {\tt ma77\_nemin } <  {\tt +inf}$
 and its default value is $8$.
 
 
+\paragraph{ma77\_order:}\label{opt:ma77_order} Controls type of ordering used by HSL\_MA77 \\
+ This option controls ordering for the solver HSL\_MA77. The default value for this string option is "metis".
+\\ 
+Possible values:
+\begin{itemize}
+   \item amd: Use the HSL\_MC68 approximate minimum degree algorithm
+   \item metis: Use the MeTiS nested dissection algorithm (if available)
+\end{itemize}
+
 \paragraph{ma77\_small:}\label{opt:ma77_small} Zero Pivot Threshold \\
  Any pivot less than ma77\_small is treated as zero. The valid range for this real option is 
 $0 \le {\tt ma77\_small } <  {\tt +inf}$
@@ -986,7 +995,7 @@ and its default value is $32$.
 
 
 \paragraph{ma86\_order:}\label{opt:ma86_order} Controls type of ordering used by HSL\_MA86 \\
- This option controls ordering for the solver HSL\_MA86. The default value for this string option is "amd".
+ This option controls ordering for the solver HSL\_MA86. The default value for this string option is "auto".
 \\ 
 Possible values:
 \begin{itemize}
@@ -1107,6 +1116,15 @@ Possible values:
 $0 \le {\tt ma97\_small } <  {\tt +inf}$
 and its default value is $1 \cdot 10^{-20}$.
 
+
+\paragraph{ma97\_solve\_blas3:}\label{opt:ma97_solve_blas3} Controls if blas2 or blas3 routines are used for solve \\
+ The default value for this string option is "no".
+\\ 
+Possible values:
+\begin{itemize}
+   \item no: Use BLAS2 (faster, some implementations bit incompatible)
+   \item yes: Use BLAS3 (slower)
+\end{itemize}
 
 \paragraph{ma97\_switch1:}\label{opt:ma97_switch1} First switch, determine when ma97\_scaling1 is enabled. \\
  If ma97\_scaling=dynamic, ma97\_scaling1 is enabled according to this condition. If ma97\_switch2 occurs this option is henceforth ignored. The default value for this string option is "od\_hd\_reuse".

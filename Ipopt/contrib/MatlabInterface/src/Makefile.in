@@ -7,7 +7,7 @@
 #         May 19, 2007
 
 # INSTRUCTIONS: Please modify the following few variables. See the
-# readme.html file for more information.
+# Ipopt documentation (Ipopt/doc/documentation.pdf) for more details.
 
 # This variable corresponds to the base directory of your MATLAB
 # installation. This is the directory so that in its 'bin/'
