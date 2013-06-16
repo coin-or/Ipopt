@@ -31,7 +31,9 @@
 # include "IpWsmpSolverInterface.hpp"
 #endif
 
-#include "HSLLoader.h"
+#ifdef HAVE_LINEARSOLVERLOADER
+# include "HSLLoader.h"
+#endif
 
 #ifdef HAVE_CMATH
 # include <cmath>
