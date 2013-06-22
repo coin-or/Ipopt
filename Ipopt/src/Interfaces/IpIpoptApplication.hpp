@@ -63,15 +63,32 @@ namespace Ipopt
     list. */
     virtual SmartPtr<IpoptApplication> clone();
 
-    /** Initialize method. This method reads the params file and
-     *  initializes the journalists. You should call this method at
-     *  some point before the first optimize call. Note: you can skip
-     *  the processing of a params file by setting params_file to "".
+    /** Initialization method. This method reads options from the
+     *  input stream and initializes the journalists. It returns
+     *  something other than Solve_Succeeded if there was a
+     *  problem in the initialization (such as an invalid option).
+     *  You should call one of the initialization methods at some
+     *  point before the first optimize call.
+     */
+    virtual ApplicationReturnStatus Initialize(std::istream& is);
+    /** Initialization method. This method reads options from the
+     *  params file and initializes the journalists. It returns
+     *  something other than Solve_Succeeded if there was a
+     *  problem in the initialization (such as an invalid option).
+     *  You should call one of the initialization methods at some
+     *  point before the first optimize call.
+     *  Note: You can skip the processing of a params file by
+     *  setting params_file to "".
+     */
+    virtual ApplicationReturnStatus Initialize(std::string params_file);
+    /** Initialize method. This method reads the options file specified
+     *  by the option_file_name option and initializes the journalists.
+     *  You should call this method at some point before the first optimize
+     *  call.
      *  It returns something other than Solve_Succeeded if there was a
      *  problem in the initialization (such as an invalid option).
      */
-    virtual ApplicationReturnStatus Initialize(std::string params_file = "ipopt.opt");
-    virtual ApplicationReturnStatus Initialize(std::istream& is);
+    virtual ApplicationReturnStatus Initialize();
 
     /**@name Solve methods */
     //@{
