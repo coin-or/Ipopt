@@ -403,7 +403,7 @@ namespace Ipopt
 
     if (init_x)
       for (Index i=0; i<n; i++)
-        x[i] = havex0[i] ? X0[i] : 0.0;
+        x[i] = havex0[i] ? X0[i] : Max(LUv[2*i], Min(LUv[2*i+1], 0.0));
 
     if (init_z) {
       // Modified for warm-start from AMPL
