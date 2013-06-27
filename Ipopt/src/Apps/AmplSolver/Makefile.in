@@ -736,9 +736,11 @@ uninstall-am: uninstall-binPROGRAMS uninstall-includeipoptHEADERS \
 
 
 install-exec-hook:
-	test -s ipopt.exe.manifest && \
-	mt -manifest ipopt.exe.manifest -outputresource:ipopt.exe;\
-	cp ipopt.exe $(bindir)/ipopt.exe
+	if COIN_CXX_IS_CL
+		test -s ipopt.exe.manifest && \
+		mt -manifest ipopt.exe.manifest -outputresource:ipopt.exe;\
+		cp ipopt.exe $(bindir)/ipopt.exe
+	endif
 
 astyle: $(ASTYLE_FILES)
 
