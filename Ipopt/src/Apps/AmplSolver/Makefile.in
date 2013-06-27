@@ -300,10 +300,10 @@ ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
 ac_ct_F77 = @ac_ct_F77@
+ac_ct_PKG_CONFIG = @ac_ct_PKG_CONFIG@
 ac_ct_RANLIB = @ac_ct_RANLIB@
 ac_ct_STRIP = @ac_ct_STRIP@
 ac_cxx_preproc_warn_flag = @ac_cxx_preproc_warn_flag@
-ac_pt_PKG_CONFIG = @ac_pt_PKG_CONFIG@
 am__fastdepCC_FALSE = @am__fastdepCC_FALSE@
 am__fastdepCC_TRUE = @am__fastdepCC_TRUE@
 am__fastdepCXX_FALSE = @am__fastdepCXX_FALSE@
@@ -687,6 +687,8 @@ info-am:
 install-data-am: install-includeipoptHEADERS install-pkgconfiglibDATA
 
 install-exec-am: install-binPROGRAMS install-libLTLIBRARIES
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
 
 install-info: install-info-am
 
@@ -722,16 +724,21 @@ uninstall-am: uninstall-binPROGRAMS uninstall-includeipoptHEADERS \
 	distclean-libtool distclean-tags distdir dvi dvi-am html \
 	html-am info info-am install install-am install-binPROGRAMS \
 	install-data install-data-am install-exec install-exec-am \
-	install-includeipoptHEADERS install-info install-info-am \
-	install-libLTLIBRARIES install-man install-pkgconfiglibDATA \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	pdf pdf-am ps ps-am tags uninstall uninstall-am \
-	uninstall-binPROGRAMS uninstall-includeipoptHEADERS \
-	uninstall-info-am uninstall-libLTLIBRARIES \
-	uninstall-pkgconfiglibDATA
+	install-exec-hook install-includeipoptHEADERS install-info \
+	install-info-am install-libLTLIBRARIES install-man \
+	install-pkgconfiglibDATA install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags uninstall uninstall-am uninstall-binPROGRAMS \
+	uninstall-includeipoptHEADERS uninstall-info-am \
+	uninstall-libLTLIBRARIES uninstall-pkgconfiglibDATA
 
+
+install-exec-hook:
+	test -s ipopt.exe.manifest && \
+	mt -manifest ipopt.exe.manifest -outputresource:ipopt.exe;\
+	cp ipopt.exe $(bindir)/ipopt.exe
 
 astyle: $(ASTYLE_FILES)
 
