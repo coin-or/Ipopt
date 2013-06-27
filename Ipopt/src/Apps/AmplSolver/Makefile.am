@@ -41,9 +41,11 @@ pkgconfiglib_DATA = ../../../ipoptamplinterface.pc
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
 
 install-exec-hook:
-	test -s ipopt.exe.manifest && \
-	mt -manifest ipopt.exe.manifest -outputresource:ipopt.exe;\
-	cp ipopt.exe $(bindir)/ipopt.exe
+	if COIN_CXX_IS_CL
+		test -s ipopt.exe.manifest && \
+		mt -manifest ipopt.exe.manifest -outputresource:ipopt.exe;\
+		cp ipopt.exe $(bindir)/ipopt.exe
+	endif
 
 # Astyle stuff
 
