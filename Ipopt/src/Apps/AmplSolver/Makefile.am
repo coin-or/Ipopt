@@ -40,6 +40,11 @@ pkgconfiglib_DATA = ../../../ipoptamplinterface.pc
 # This line is necessary to allow VPATH compilation
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
 
+install-exec-hook:
+	test -s ipopt.exe.manifest && \
+	mt -manifest ipopt.exe.manifest -outputresource:ipopt.exe;\
+	cp ipopt.exe $(bindir)/ipopt.exe
+
 # Astyle stuff
 
 ASTYLE_FILES = \
