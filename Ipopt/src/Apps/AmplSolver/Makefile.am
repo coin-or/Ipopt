@@ -40,12 +40,12 @@ pkgconfiglib_DATA = ../../../ipoptamplinterface.pc
 # This line is necessary to allow VPATH compilation
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
 
+if COIN_CXX_IS_CL
 install-exec-hook:
-	if COIN_CXX_IS_CL
-		test -s ipopt.exe.manifest && \
-		mt -manifest ipopt.exe.manifest -outputresource:ipopt.exe;\
-		cp ipopt.exe $(bindir)/ipopt.exe
-	endif
+	test -s ipopt.exe.manifest && \
+	mt -manifest ipopt.exe.manifest -outputresource:ipopt.exe;\
+	cp ipopt.exe $(bindir)/ipopt.exe
+endif
 
 # Astyle stuff
 

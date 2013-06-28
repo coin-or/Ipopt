@@ -663,6 +663,7 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+@COIN_CXX_IS_CL_FALSE@install-exec-hook:
 clean: clean-am
 
 clean-am: clean-binPROGRAMS clean-generic clean-libLTLIBRARIES \
@@ -735,12 +736,10 @@ uninstall-am: uninstall-binPROGRAMS uninstall-includeipoptHEADERS \
 	uninstall-libLTLIBRARIES uninstall-pkgconfiglibDATA
 
 
-install-exec-hook:
-	if COIN_CXX_IS_CL
-		test -s ipopt.exe.manifest && \
-		mt -manifest ipopt.exe.manifest -outputresource:ipopt.exe;\
-		cp ipopt.exe $(bindir)/ipopt.exe
-	endif
+@COIN_CXX_IS_CL_TRUE@install-exec-hook:
+@COIN_CXX_IS_CL_TRUE@	test -s ipopt.exe.manifest && \
+@COIN_CXX_IS_CL_TRUE@	mt -manifest ipopt.exe.manifest -outputresource:ipopt.exe;\
+@COIN_CXX_IS_CL_TRUE@	cp ipopt.exe $(bindir)/ipopt.exe
 
 astyle: $(ASTYLE_FILES)
 
