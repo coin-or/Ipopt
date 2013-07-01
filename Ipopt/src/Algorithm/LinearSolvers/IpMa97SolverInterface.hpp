@@ -149,7 +149,7 @@ namespace Ipopt
   public:
 
     Ma97SolverInterface() :
-        val_(NULL), numdelay_(0), fkeep_(NULL), pivtol_changed_(false),
+        val_(NULL), numdelay_(0), akeep_(NULL), fkeep_(NULL), pivtol_changed_(false),
         rescale_(false), scaling_(NULL), fctidx_(0), scaling_type_(0),
         dump_(false)
     {}

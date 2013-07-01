@@ -72,8 +72,10 @@
 # include "IpMumpsSolverInterface.hpp"
 #endif
 
-#include "HSLLoader.h"
-#include "PardisoLoader.h"
+#ifdef HAVE_LINEARSOLVERLOADER
+# include "HSLLoader.h"
+# include "PardisoLoader.h"
+#endif
 
 namespace Ipopt
 {
