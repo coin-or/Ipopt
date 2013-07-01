@@ -95,7 +95,7 @@ namespace Ipopt
       THROW_EXCEPTION(IPOPT_APPLICATION_ERROR,
                       "Caught unknown Ipopt exception");
     }
-    catch (std::bad_alloc) {
+    catch (std::bad_alloc&) {
       jnlst_->Printf(J_ERROR, J_MAIN, "\nEXIT: Not enough memory.\n");
       THROW_EXCEPTION(IPOPT_APPLICATION_ERROR,
                       "Not enough memory");
@@ -131,41 +131,6 @@ namespace Ipopt
     retval->inexact_algorithm_ = inexact_algorithm_;
     retval->replace_bounds_ = replace_bounds_;
 
-    return retval;
-  }
-
-  ApplicationReturnStatus
-  IpoptApplication::Initialize(std::string params_file /*= "ipopt.opt"*/)
-  {
-    std::string option_file_name;
-    options_->GetStringValue("option_file_name", option_file_name, "");
-    if (option_file_name != "") {
-      if (params_file !="") {
-        jnlst_->Printf(J_SUMMARY, J_MAIN, "Using option file \"%s\".\n\n",
-                       option_file_name.c_str());
-      }
-      params_file = option_file_name;
-    }
-
-    std::ifstream is;
-    if (params_file != "") {
-      try {
-        is.open(params_file.c_str());
-      }
-      catch (std::bad_alloc) {
-        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
-        return Insufficient_Memory;
-      }
-      catch (...) {
-        IpoptException exc("Unknown Exception caught in ipopt", "Unknown File", -1);
-        exc.ReportException(*jnlst_);
-        return NonIpopt_Exception_Thrown;
-      }
-    }
-    ApplicationReturnStatus retval = Initialize(is);
-    if (is) {
-      is.close();
-    }
     return retval;
   }
 
@@ -546,7 +511,7 @@ namespace Ipopt
       exc.ReportException(*jnlst_, J_ERROR);
       return Unrecoverable_Exception;
     }
-    catch (std::bad_alloc) {
+    catch (std::bad_alloc&) {
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
       return Insufficient_Memory;
     }
@@ -556,6 +521,42 @@ namespace Ipopt
       return NonIpopt_Exception_Thrown;
     }
     return Solve_Succeeded;
+  }
+
+  ApplicationReturnStatus
+  IpoptApplication::Initialize(std::string params_file)
+  {
+    std::ifstream is;
+    if (params_file != "") {
+      try {
+        is.open(params_file.c_str());
+      }
+      catch (std::bad_alloc&) {
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
+        return Insufficient_Memory;
+      }
+      catch (...) {
+        IpoptException exc("Unknown Exception caught in ipopt", "Unknown File", -1);
+        exc.ReportException(*jnlst_);
+        return NonIpopt_Exception_Thrown;
+      }
+    }
+    ApplicationReturnStatus retval = Initialize(is);
+    if (is) {
+      is.close();
+    }
+    return retval;
+  }
+
+  ApplicationReturnStatus
+  IpoptApplication::Initialize()
+  {
+     std::string option_file_name;
+     options_->GetStringValue("option_file_name", option_file_name, "");
+     if (option_file_name != "" && option_file_name != "ipopt.opt")
+        jnlst_->Printf(J_SUMMARY, J_MAIN, "Using option file \"%s\".\n\n", option_file_name.c_str());
+
+     return Initialize(option_file_name);
   }
 
   IpoptApplication::~IpoptApplication()
@@ -635,14 +636,15 @@ namespace Ipopt
 
     roptions->AddStringOption1(
       "option_file_name",
-      "File name of options file (to overwrite default).",
-      "",
+      "File name of options file.",
+      "ipopt.opt",
       "*", "Any acceptable standard file name",
       "By default, the name of the Ipopt options file is \"ipopt.opt\" - or "
       "something else if specified in the IpoptApplication::Initialize call. "
       "If this option is set by SetStringValue BEFORE the options file is "
       "read, it specifies the name of the options file.  It does not make any "
-      "sense to specify this option within the options file.");
+      "sense to specify this option within the options file. "
+      "Setting this option to an empty string disables reading of an options file.");
 
     roptions->AddStringOption2(
       "replace_bounds",
@@ -758,7 +760,7 @@ namespace Ipopt
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Some uncaught Ipopt exception encountered.\n");
       retValue = Unrecoverable_Exception;
     }
-    catch (std::bad_alloc) {
+    catch (std::bad_alloc&) {
       retValue = Insufficient_Memory;
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
     }
@@ -1039,7 +1041,7 @@ namespace Ipopt
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Some uncaught Ipopt exception encountered.\n");
       retValue = Unrecoverable_Exception;
     }
-    catch (std::bad_alloc) {
+    catch (std::bad_alloc&) {
       retValue = Insufficient_Memory;
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
       status = OUT_OF_MEMORY;

@@ -663,6 +663,7 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+@COIN_CXX_IS_CL_FALSE@install-exec-hook:
 clean: clean-am
 
 clean-am: clean-binPROGRAMS clean-generic clean-libLTLIBRARIES \
@@ -687,6 +688,8 @@ info-am:
 install-data-am: install-includeipoptHEADERS install-pkgconfiglibDATA
 
 install-exec-am: install-binPROGRAMS install-libLTLIBRARIES
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
 
 install-info: install-info-am
 
@@ -722,16 +725,21 @@ uninstall-am: uninstall-binPROGRAMS uninstall-includeipoptHEADERS \
 	distclean-libtool distclean-tags distdir dvi dvi-am html \
 	html-am info info-am install install-am install-binPROGRAMS \
 	install-data install-data-am install-exec install-exec-am \
-	install-includeipoptHEADERS install-info install-info-am \
-	install-libLTLIBRARIES install-man install-pkgconfiglibDATA \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	pdf pdf-am ps ps-am tags uninstall uninstall-am \
-	uninstall-binPROGRAMS uninstall-includeipoptHEADERS \
-	uninstall-info-am uninstall-libLTLIBRARIES \
-	uninstall-pkgconfiglibDATA
+	install-exec-hook install-includeipoptHEADERS install-info \
+	install-info-am install-libLTLIBRARIES install-man \
+	install-pkgconfiglibDATA install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags uninstall uninstall-am uninstall-binPROGRAMS \
+	uninstall-includeipoptHEADERS uninstall-info-am \
+	uninstall-libLTLIBRARIES uninstall-pkgconfiglibDATA
 
+
+@COIN_CXX_IS_CL_TRUE@install-exec-hook:
+@COIN_CXX_IS_CL_TRUE@	test -s ipopt.exe.manifest && \
+@COIN_CXX_IS_CL_TRUE@	mt -manifest ipopt.exe.manifest -outputresource:ipopt.exe;\
+@COIN_CXX_IS_CL_TRUE@	cp ipopt.exe $(bindir)/ipopt.exe
 
 astyle: $(ASTYLE_FILES)
 

@@ -547,7 +547,7 @@ namespace Ipopt
       //    p_l->Axpy(1.0, *tiny_l);  we shouldn't need this
 
       // At this point, p_l is
-      //  min(bound_push * max(|x_L|,1), bound_frac*(x_U-x_L)  for components
+      //  min(bound_push * max(|x_L|,1), bound_frac*(x_U-x_L)) for components
       //                                                       with two bounds
       //  bound_push * max(|x_L|,1)                            otherwise
       // This is the margin we want to the lower bound
@@ -582,7 +582,7 @@ namespace Ipopt
       p_u->ElementWiseReciprocal();
       p_u->Axpy(1.0, *tiny_u);
       // At this point, p_l is
-      //  min(bound_push * max(|x_U|,1), bound_frac*(x_U-x_L)  for components
+      //  min(bound_push * max(|x_U|,1), bound_frac*(x_U-x_L)) for components
       //                                                       with two bounds
       //  bound_push * max(|x_U|,1)                            otherwise
       // This is the margin we want to the upper bound
