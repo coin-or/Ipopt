@@ -50,8 +50,8 @@ $0 \le {\tt file\_print\_level } \le 12$
 and its default value is $5$.
 
 
-\paragraph{option\_file\_name:}\label{opt:option_file_name} File name of options file (to overwrite default). \\
- By default, the name of the Ipopt options file is "ipopt.opt" - or something else if specified in the IpoptApplication::Initialize call. If this option is set by SetStringValue BEFORE the options file is read, it specifies the name of the options file.  It does not make any sense to specify this option within the options file. The default value for this string option is "".
+\paragraph{option\_file\_name:}\label{opt:option_file_name} File name of options file. \\
+ By default, the name of the Ipopt options file is "ipopt.opt" - or something else if specified in the IpoptApplication::Initialize call. If this option is set by SetStringValue BEFORE the options file is read, it specifies the name of the options file.  It does not make any sense to specify this option within the options file. Setting this option to an empty string disables reading of an options file. The default value for this string option is "ipopt.opt".
 \\ 
 Possible values:
 \begin{itemize}

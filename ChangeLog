@@ -2,12 +2,12 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information for incremental change can be found in the
 history management of subversion.
 
-2013-xx-yy releases/3.11.2
+2013-07-01 releases/3.11.2
         - changed default for option option_file_name to ipopt.opt; specifying an
           empty string for this option now disables reading of an option file [r2339]
         - missing initial values are now set to 0.0, projected onto variable bounds,
           in AMPL interface [r2340, #205]
-        - fix missing variable initialization in MA97 interface [r2341, #206]
+        - fixed missing variable initialization in MA97 interface [r2341, #206]
 
 2013-06-14 releases/3.11.1
         - the setup for the v8-ifort MSVS project changed to use dynamic runtime
