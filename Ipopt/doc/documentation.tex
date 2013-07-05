@@ -283,8 +283,15 @@ Additionally, the \Ipopt distribution includes interfaces for
 \texttt{Ipopt/contrib/RInterface} directory.
 \end{itemize}
 
-There are also interfaces maintained by other people, among them are:
+There is also software that facilitates use of \Ipopt maintained by other people, among them are:
 \begin{itemize}
+\item ADOL-C (automatic differentiation)
+
+  ADOL-C facilitates the evaluation of first and higher derivatives of
+  vector functions that are defined by computer programs written in C or C++.
+  It comes with examples that show how to use it in connection with \Ipopt, see
+  \url{https://projects.coin-or.org/ADOL-C}.
+    
 \item AIMMS (modeling environment)
 
   The AIMMSlinks project on COIN-OR, maintained by Marcel Hunting,
@@ -296,6 +303,14 @@ There are also interfaces maintained by other people, among them are:
   CasADi is a symbolic framework for automatic differentiation and
   numeric optimization and comes with \Ipopt, see
   \url{https://github.com/casadi/casadi/wiki}.
+
+\item CppAD (automatic differentiation)
+
+  Given a C++ algorithm that computes function values, CppAD generates an
+  algorithm that computes corresponding derivative values (of arbitrary
+  order using either forward or reverse mode).
+  It comes with an example that shows how to use it in connection with \Ipopt, see
+  \url{https://projects.coin-or.org/CppAD}.
 
 \item GAMS (modeling environment)
 
