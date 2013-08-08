@@ -2,6 +2,10 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information for incremental change can be found in the
 history management of subversion.
 
+2013-08-08 releases/3.11.3
+        - get.* scripts for ThirdParty/{ASL,Blas,Lapack} now work around broken
+          ftp access to www.netlib.org.
+
 2013-07-01 releases/3.11.2
         - changed default for option option_file_name to ipopt.opt; specifying an
           empty string for this option now disables reading of an option file [r2339]
