@@ -45,7 +45,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".;../../../src/Algorithm;../../../src/Algorithm/Inexact;../../../src/Algorithm/LinearSolvers;../../../src/Common;../../../src/Contrib/CGPenalty;../../../src/Contrib/LinearSolverLoader;../../../src/Interfaces;../../../src/Linalg;../../../src/Linalg/TMatrices;../../../../Thirdparty/Mumps/MUMPS/libseq;../../../../Thirdparty/Mumps/MUMPS/include;../../../../BuildTools/headers"
-				PreprocessorDefinitions="IPOPT_BUILD;IPOPT_DLL;WIN32;_DEBUG;_LIB;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS"
+				PreprocessorDefinitions="IPOPT_BUILD;IPOPT_DLL;WIN32;_DEBUG;_LIB;HAVE_CONFIG_H;HAVE_WINDOWS_H;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -126,7 +126,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".;../../../src/Algorithm;../../../src/Algorithm/Inexact;../../../src/Algorithm/LinearSolvers;../../../src/Common;../../../src/Contrib/CGPenalty;../../../src/Contrib/LinearSolverLoader;../../../src/Interfaces;../../../src/Linalg;../../../src/Linalg/TMatrices;../../../../Thirdparty/Mumps/MUMPS/libseq;../../../../Thirdparty/Mumps/MUMPS/include;../../../../BuildTools/headers"
-				PreprocessorDefinitions="IPOPT_BUILD;IPOPT_DLL;WIN32;_DEBUG;_LIB;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS"
+				PreprocessorDefinitions="IPOPT_BUILD;IPOPT_DLL;WIN32;_DEBUG;_LIB;HAVE_CONFIG_H;HAVE_WINDOWS_H;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -206,7 +206,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories=".;../../../src/Algorithm;../../../src/Algorithm/Inexact;../../../src/Algorithm/LinearSolvers;../../../src/Common;../../../src/Contrib/CGPenalty;../../../src/Contrib/LinearSolverLoader;../../../src/Interfaces;../../../src/Linalg;../../../src/Linalg/TMatrices;../../../../Thirdparty/Mumps/MUMPS/libseq;../../../../Thirdparty/Mumps/MUMPS/include;../../../../BuildTools/headers"
-				PreprocessorDefinitions="IPOPT_BUILD;IPOPT_DLL;WIN32;NDEBUG;_LIB;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS"
+				PreprocessorDefinitions="IPOPT_BUILD;IPOPT_DLL;WIN32;NDEBUG;_LIB;HAVE_CONFIG_H;HAVE_WINDOWS_H;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -285,7 +285,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories=".;../../../src/Algorithm;../../../src/Algorithm/Inexact;../../../src/Algorithm/LinearSolvers;../../../src/Common;../../../src/Contrib/CGPenalty;../../../src/Contrib/LinearSolverLoader;../../../src/Interfaces;../../../src/Linalg;../../../src/Linalg/TMatrices;../../../../Thirdparty/Mumps/MUMPS/libseq;../../../../Thirdparty/Mumps/MUMPS/include;../../../../BuildTools/headers"
-				PreprocessorDefinitions="IPOPT_BUILD;IPOPT_DLL;WIN32;NDEBUG;_LIB;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS"
+				PreprocessorDefinitions="IPOPT_BUILD;IPOPT_DLL;WIN32;NDEBUG;_LIB;HAVE_CONFIG_H;HAVE_WINDOWS_H;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -363,7 +363,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories=".;../../../src/Algorithm;../../../src/Algorithm/Inexact;../../../src/Algorithm/LinearSolvers;../../../src/Common;../../../src/Contrib/CGPenalty;../../../src/Contrib/LinearSolverLoader;../../../src/Interfaces;../../../src/Linalg;../../../src/Linalg/TMatrices;../../../../Thirdparty/Mumps/MUMPS/libseq;../../../../Thirdparty/Mumps/MUMPS/include;../../../../BuildTools/headers"
-				PreprocessorDefinitions="IPOPT_BUILD;IPOPT_DLL;WIN32;NDEBUG;_LIB;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS"
+				PreprocessorDefinitions="IPOPT_BUILD;IPOPT_DLL;WIN32;NDEBUG;_LIB;HAVE_CONFIG_H;HAVE_WINDOWS_H;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				OpenMP="true"
 				UsePrecompiledHeader="0"
@@ -444,7 +444,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories=".;../../../src/Algorithm;../../../src/Algorithm/Inexact;../../../src/Algorithm/LinearSolvers;../../../src/Common;../../../src/Contrib/CGPenalty;../../../src/Contrib/LinearSolverLoader;../../../src/Interfaces;../../../src/Linalg;../../../src/Linalg/TMatrices;../../../../Thirdparty/Mumps/MUMPS/libseq;../../../../Thirdparty/Mumps/MUMPS/include;../../../../BuildTools/headers"
-				PreprocessorDefinitions="IPOPT_BUILD;IPOPT_DLL;WIN32;NDEBUG;_LIB;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS"
+				PreprocessorDefinitions="IPOPT_BUILD;IPOPT_DLL;WIN32;NDEBUG;_LIB;HAVE_CONFIG_H;HAVE_WINDOWS_H;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
