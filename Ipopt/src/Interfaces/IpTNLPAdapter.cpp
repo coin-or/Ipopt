@@ -2919,7 +2919,7 @@ namespace Ipopt
         return false;
       }
     }
-    if (!tnlp_->eval_jac_g(n_full_x_, full_x_, false, n_full_g_,
+    if (!tnlp_->eval_jac_g(n_full_x_, full_x_, !dependency_detection_with_rhs_, n_full_g_,
                            nz_full_jac_g_, NULL, NULL, jac_g_)) {
       delete [] jac_c_iRow;
       delete [] jac_c_jCol;
