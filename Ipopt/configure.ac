@@ -315,14 +315,7 @@ if test "$use_pardiso" != "no"; then
               [AC_MSG_ERROR([Pardiso library $use_pardiso does not seem to work])])
 
   AC_DEFINE(HAVE_PARDISO,1,[Define to 1 if Pardiso is available])
-  
-# Test if this is the parallel version of Pardiso
-  AC_MSG_CHECKING([whether Pardiso library is the parallel version])
-  AC_TRY_LINK([],[      call pardiso_exist_parallel()],
-              [AC_MSG_RESULT(yes)
-               AC_DEFINE(HAVE_PARDISO_PARALLEL,1,[Define to 1 if you are using the parallel version of Pardiso])],
-              [AC_MSG_RESULT(no)])
-  
+
   AC_MSG_CHECKING([whether Pardiso library is at least version 4.0])
   AC_TRY_LINK([],[      call pardiso_ipopt_newinterface()],
               [AC_MSG_RESULT(yes)],
@@ -330,7 +323,26 @@ if test "$use_pardiso" != "no"; then
                AC_DEFINE(HAVE_PARDISO_OLDINTERFACE,1,[Define to 1 if you are not using at least a 4.0 version of Pardiso])
                if test "$have_mkl" = "yes"; then
                  AC_DEFINE(HAVE_PARDISO_MKL,1,[Define to 1 if you are using Pardiso from MKL])
+               else
+                 have_mkl=no
                fi])
+  
+# Test if this is the parallel version of Pardiso
+# (MKL PARDISO is always parallel, even though it does not have this function implemented)
+  pardiso_parallel=no
+  if test "$have_mkl" = "yes" ; then
+    pardiso_parallel=yes
+  else
+    AC_MSG_CHECKING([whether Pardiso library is the parallel version])
+    AC_TRY_LINK([],[      call pardiso_exist_parallel()],
+                [AC_MSG_RESULT(yes)
+                 pardiso_parallel=yes],
+                [AC_MSG_RESULT(no)])
+  fi
+  if test "$pardiso_parallel" = yes ; then
+    AC_DEFINE(HAVE_PARDISO_PARALLEL,1,[Define to 1 if you are using the parallel version of Pardiso])
+  fi
+  
   LIBS="$SAVE_LIBS"
   IPOPTLIB_LIBS="$PARDISO_LIB $IPOPTLIB_LIBS"
   IPOPTLIB_PCLIBS="$PARDISO_LIB $IPOPTLIB_PCLIBS"

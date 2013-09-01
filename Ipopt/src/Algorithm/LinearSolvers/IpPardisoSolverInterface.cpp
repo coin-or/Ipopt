@@ -357,10 +357,10 @@ namespace Ipopt
     // Set some parameters for Pardiso
     IPARM_[0] = 1;  // Don't use the default values
 
+    int num_procs = 1;
 #if defined(HAVE_PARDISO_PARALLEL) || ! defined(HAVE_PARDISO)
     // Obtain the numbers of processors from the value of OMP_NUM_THREADS
-    char    *var = getenv("OMP_NUM_THREADS");
-    int      num_procs = 1;
+    char* var = getenv("OMP_NUM_THREADS");
     if (var != NULL) {
       sscanf( var, "%d", &num_procs );
       if (num_procs < 1) {
@@ -369,25 +369,22 @@ namespace Ipopt
         return false;
       }
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "Using environment OMP_NUM_THREADS = %d as the number of processors.\n", num_procs);
+                     "Using environment OMP_NUM_THREADS = %d as the number of processors for PARDISO.\n", num_procs);
     }
-#ifdef HAVE_PARDISO
+#if defined(HAVE_PARDISO) && not defined(HAVE_PARDISO_MKL)
     // If we run Pardiso through the linear solver loader,
-    // we do not know whether it is the parallel version, so we do not report an error if OMP_NUM_THREADS is not set.
+    // we do not know whether it is the parallel version, so we do not report a warning if OMP_NUM_THREADS is not set.
+    // If we run Pardiso from MKL, then OMP_NUM_THREADS does not need to be set, so no warning.
     else {
-      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                     "You need to set environment variable OMP_NUM_THREADS to the number of processors used in Pardiso (e.g., 1).\n\n");
-      return false;
+      Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                     "You should set the environment variable OMP_NUM_THREADS to the number of processors used in Pardiso (e.g., 1).\n\n");
     }
 #endif
-    IPARM_[2] = num_procs;  // Set the number of processors
-
-#elif ! defined HAVE_PARDISO_MKL
-    IPARM_[2] = 1;
 #endif
 
 #ifdef HAVE_PARDISO_MKL
     IPARM_[5] = 1;  // Overwrite right-hand side
+    // For MKL PARDSIO, the documentation says, "iparm(3) Reserved. Set to zero.", so we don't set IPARM_[2]
     IPARM_[10] = 1; // enable scaling (recommended for interior-point indefinite matrices)
     IPARM_[12] = 1; // enable matching (recommended, as above)
     IPARM_[20] = 1; // bunch-kaufman pivoting
@@ -395,6 +392,7 @@ namespace Ipopt
     IPARM_[24] = 1; // parallel solve
 #else
     IPARM_[1] = 5;
+    IPARM_[2] = num_procs; // Set the number of processors
     IPARM_[5] = 1;  // Overwrite right-hand side
     // ToDo: decide if we need iterative refinement in Pardiso.  For
     // now, switch it off ?
