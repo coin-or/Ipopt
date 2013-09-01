@@ -284,6 +284,25 @@ AC_ARG_WITH([pardiso],
                            [specify Pardiso library]),
             [use_pardiso=$withval], [use_pardiso=no])
 
+# Check whether MKL is being used
+have_mkl=no
+SAVE_LIBS="$LIBS"
+if test "$use_pardiso" = "no"; then
+  LIBS="$LIBS $LAPACK_LIBS $BLAS_LIBS"
+else
+  LIBS="$use_pardiso $LIBS $LAPACK_LIBS $BLAS_LIBS"
+fi
+AC_MSG_CHECKING([whether MKL is being used])
+AC_TRY_LINK([],[      call mkl_get_version_string()],
+            [AC_MSG_RESULT(yes)
+             have_mkl=yes],
+            [AC_MSG_RESULT(no)])
+# If using MKL, always enable Pardiso
+if test "$have_mkl" = "yes" -a "$use_pardiso" = "no"; then
+  use_pardiso=""
+fi
+LIBS="$SAVE_LIBS"
+
 if test "$use_pardiso" != "no"; then
   SAVE_LIBS="$LIBS"
   PARDISO_LIB="$use_pardiso"
@@ -308,7 +327,10 @@ if test "$use_pardiso" != "no"; then
   AC_TRY_LINK([],[      call pardiso_ipopt_newinterface()],
               [AC_MSG_RESULT(yes)],
               [AC_MSG_RESULT(no)
-               AC_DEFINE(HAVE_PARDISO_OLDINTERFACE,1,[Define to 1 if you are not using at least a 4.0 version of Pardiso])])
+               AC_DEFINE(HAVE_PARDISO_OLDINTERFACE,1,[Define to 1 if you are not using at least a 4.0 version of Pardiso])
+               if test "$have_mkl" = "yes"; then
+                 AC_DEFINE(HAVE_PARDISO_MKL,1,[Define to 1 if you are using Pardiso from MKL])
+               fi])
   LIBS="$SAVE_LIBS"
   IPOPTLIB_LIBS="$PARDISO_LIB $IPOPTLIB_LIBS"
   IPOPTLIB_PCLIBS="$PARDISO_LIB $IPOPTLIB_PCLIBS"
@@ -668,7 +690,7 @@ AC_MSG_RESULT([$use_linearsolverloader])
 
 if test $use_linearsolverloader = yes; then
   AC_DEFINE([HAVE_LINEARSOLVERLOADER],[1],
-            [Define to 1 if the linear solver loader should be compiled to allow dynamic loading of shared libaries with linear solvers])
+            [Define to 1 if the linear solver loader should be compiled to allow dynamic loading of shared libraries with linear solvers])
   IPALLLIBS="../contrib/LinearSolverLoader/libLinearSolverLoader.la $IPALLLIBS"
 fi
 
