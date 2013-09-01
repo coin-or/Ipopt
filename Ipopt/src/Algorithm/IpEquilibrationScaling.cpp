@@ -191,7 +191,7 @@ namespace Ipopt
     float* R = new float[N];
     float* C = new float[N];
     float* W = new float[5*N];
-#ifdef COINHSL_HAS_MC19
+#if defined(COINHSL_HAS_MC19) || defined(HAVE_LINEARSOLVERLOADER)
     const ipfint NZ = nnz_jac_c+nnz_jac_d+nnz_grad_f;
     //F77_FUNC(mc19ad,MC19AD)(&N, &NZ, avrg_values, AIRN, AJCN, R, C, W);
     F77_FUNC(mc19ad,MC19AD)(&N, &NZ, avrg_values, AJCN, AIRN, C, R, W);
