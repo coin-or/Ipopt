@@ -382,10 +382,18 @@ namespace Ipopt
 #endif
     IPARM_[2] = num_procs;  // Set the number of processors
 
-#else
+#elif ! defined HAVE_PARDISO_MKL
     IPARM_[2] = 1;
 #endif
 
+#ifdef HAVE_PARDISO_MKL
+    IPARM_[5] = 1;  // Overwrite right-hand side
+    IPARM_[10] = 1; // enable scaling (recommended for interior-point indefinite matrices)
+    IPARM_[12] = 1; // enable matching (recommended, as above)
+    IPARM_[20] = 1; // bunch-kaufman pivoting
+    IPARM_[23] = 1; // parallel fac
+    IPARM_[24] = 1; // parallel solve
+#else
     IPARM_[1] = 5;
     IPARM_[5] = 1;  // Overwrite right-hand side
     // ToDo: decide if we need iterative refinement in Pardiso.  For
@@ -408,13 +416,15 @@ namespace Ipopt
     IPARM_[28] = 0; // 32-bit factorization
     IPARM_[29] = 1; //we need this for IPOPT interface
     //IPARM_[33] = 1; // bit-by-bit identical results in parallel run
+#endif
 
     if (pardiso_iterative_) {
 #ifdef HAVE_PARDISO_OLDINTERFACE
       THROW_EXCEPTION(OPTION_INVALID,
                       "You chose to use the iterative version of Pardiso, but you need to use a Pardiso version of at least 4.0.");
-#endif
+#elif ! defined HAVE_PARDISO_MKL
       IPARM_[31] = 1 ;  // active direct solver
+#endif
 
       DPARM_[ 0] = pardiso_max_iter; // maximum number of Krylov-Subspace Iteration
       // Default is 300

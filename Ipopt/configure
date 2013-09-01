@@ -35763,6 +35763,61 @@ else
   use_pardiso=no
 fi;
 
+# Check whether MKL is being used
+have_mkl=no
+SAVE_LIBS="$LIBS"
+if test "$use_pardiso" = "no"; then
+  LIBS="$LIBS $LAPACK_LIBS $BLAS_LIBS"
+else
+  LIBS="$use_pardiso $LIBS $LAPACK_LIBS $BLAS_LIBS"
+fi
+echo "$as_me:$LINENO: checking whether MKL is being used" >&5
+echo $ECHO_N "checking whether MKL is being used... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+      program main
+      call mkl_get_version_string()
+      end
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_f77_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+             have_mkl=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+# If using MKL, always enable Pardiso
+if test "$have_mkl" = "yes" -a "$use_pardiso" = "no"; then
+  use_pardiso=""
+fi
+LIBS="$SAVE_LIBS"
+
 if test "$use_pardiso" != "no"; then
   SAVE_LIBS="$LIBS"
   PARDISO_LIB="$use_pardiso"
@@ -35906,6 +35961,13 @@ cat >>confdefs.h <<\_ACEOF
 #define HAVE_PARDISO_OLDINTERFACE 1
 _ACEOF
 
+               if test "$have_mkl" = "yes"; then
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_PARDISO_MKL 1
+_ACEOF
+
+               fi
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
