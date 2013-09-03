@@ -141,7 +141,8 @@ function( x0,
                  "eval_h"=eval_h_wrapper,
                  "eval_h_structure"=eval_h_structure,
                  "options"=get.option.types(opts),
-                 "ipoptr_environment"=ipoptr_environment )
+                 #"ipoptr_environment"=ipoptr_environment,
+                  "environment" = new.env() )
     
     attr(ret, "class") <- "ipoptr"
     
