@@ -15,7 +15,7 @@ is.ipoptr <- function(x) {
     if( !is.list(x) ) { return( FALSE ) }
 
     # Check whether a correct environment was specified
-    stopifnot( is.environment(x$ipoptr_environment) )
+    stopifnot( is.environment(x$environment) )
    
     # Define local flag defining whether we approximate the Hessian or not
     flag_hessian_approximation = FALSE
