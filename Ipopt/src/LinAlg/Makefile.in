@@ -65,7 +65,8 @@ am_liblinalg_la_OBJECTS = IpBlas.lo IpCompoundMatrix.lo \
 	IpIdentityMatrix.lo IpLapack.lo IpLowRankUpdateSymMatrix.lo \
 	IpMatrix.lo IpMultiVectorMatrix.lo IpScaledMatrix.lo \
 	IpSumMatrix.lo IpSumSymMatrix.lo IpSymScaledMatrix.lo \
-	IpTransposeMatrix.lo IpVector.lo IpZeroMatrix.lo
+	IpTransposeMatrix.lo IpVector.lo IpZeroMatrix.lo \
+	IpZeroSymMatrix.lo
 liblinalg_la_OBJECTS = $(am_liblinalg_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -389,7 +390,8 @@ liblinalg_la_SOURCES = \
 	IpSymScaledMatrix.cpp IpSymScaledMatrix.hpp \
 	IpTransposeMatrix.cpp IpTransposeMatrix.hpp \
 	IpVector.cpp IpVector.hpp \
-	IpZeroMatrix.cpp IpZeroMatrix.hpp
+	IpZeroMatrix.cpp IpZeroMatrix.hpp \
+	IpZeroSymMatrix.cpp IpZeroSymMatrix.hpp
 
 liblinalg_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../Common`
@@ -420,7 +422,8 @@ ASTYLE_FILES = IpBlas.cppbak IpBlas.hppbak \
 	IpSymScaledMatrix.cppbak IpSymScaledMatrix.hppbak \
 	IpTransposeMatrix.cppbak IpTransposeMatrix.hppbak \
 	IpVector.cppbak IpVector.hppbak \
-	IpZeroMatrix.cppbak IpZeroMatrix.hppbak
+	IpZeroMatrix.cppbak IpZeroMatrix.hppbak \
+	IpZeroSymMatrix.cppbak IpZeroSymMatrix.hppbak
 
 DISTCLEANFILES = $(ASTYLE_FILES)
 SUFFIXES = .cppbak .hppbak
@@ -497,6 +500,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTransposeMatrix.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpVector.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpZeroMatrix.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpZeroSymMatrix.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

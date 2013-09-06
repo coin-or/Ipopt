@@ -136,6 +136,8 @@ Ipopt/src/Common/config.h.in -text
 Ipopt/src/Common/config_default.h -text
 Ipopt/src/Common/config_ipopt.h.in -text
 Ipopt/src/Common/config_ipopt_default.h -text
+Ipopt/src/LinAlg/IpZeroSymMatrix.cpp -text
+Ipopt/src/LinAlg/IpZeroSymMatrix.hpp -text
 Ipopt/src/contrib/CGPenalty/Makefile.am -text
 Ipopt/src/contrib/CGPenalty/Makefile.in -text
 Ipopt/src/contrib/LinearSolverLoader/Makefile.am -text

@@ -30,6 +30,7 @@ namespace Ipopt
   class SumMatrix;
   class SumSymMatrix;
   class ZeroMatrix;
+  class ZeroSymMatrix;
   class CompoundMatrix;
   class CompoundSymMatrix;
   class TransposeMatrix;
