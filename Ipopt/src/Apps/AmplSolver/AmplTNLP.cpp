@@ -104,12 +104,12 @@ namespace Ipopt
 
     // check the problem statistics (see Table 1 in AMPL doc)
     DBG_ASSERT(n_var > 0); // need some continuous variables
-    if (!allow_discrete && (nbv>0 || niv>0) ) {
-      jnlst_->Printf(J_WARNING, J_MAIN, "==> Warning: Treating %d binary and %d integer variables as continous.\n\n", nbv, niv);
+    if (!allow_discrete && (nbv>0 || niv>0 || nlvbi>0 || nlvci>0 || nlvoi>0) ) {
+      jnlst_->Printf(J_WARNING, J_MAIN, "==> Warning: Treating %d binary and %d integer variables as continous.\n\n", nbv, niv+nlvbi+nlvci+nlvoi);
       allow_discrete = true;
     }
     allow_discrete = true;
-    ASSERT_EXCEPTION(allow_discrete || (nbv == 0 && niv == 0),
+    ASSERT_EXCEPTION(allow_discrete || (nbv == 0 && niv == 0 && nlvbi == 0 && nlvci == 0 && nlvoi == 0),
                      IpoptException,
                      "Discrete variables not allowed when the allow_discrete flag is false, "
                      "Either remove the integer variables, or change the flag in the constructor of AmplTNLP"
