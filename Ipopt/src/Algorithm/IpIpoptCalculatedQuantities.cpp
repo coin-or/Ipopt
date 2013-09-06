@@ -546,7 +546,7 @@ namespace Ipopt
     Number result;
     SmartPtr<const Vector> x = ip_data_->curr()->x();
     DBG_PRINT_VECTOR(2,"curr_x",*x);
-    DBG_PRINT((1, "curr_x tag = %d\n", x->GetTag()));
+    DBG_PRINT((1, "curr_x tag = (%p,%d)\n", x->GetTag().first, x->GetTag().second));
 
     bool objective_depends_on_mu = ip_nlp_->objective_depends_on_mu();
     std::vector<const TaggedObject*> tdeps(1);
@@ -589,7 +589,7 @@ namespace Ipopt
     Number result;
     SmartPtr<const Vector> x = ip_data_->trial()->x();
     DBG_PRINT_VECTOR(2,"trial_x",*x);
-    DBG_PRINT((1, "trial_x tag = %d\n", x->GetTag()));
+    DBG_PRINT((1, "trial_x tag = (%p,%d)\n", x->GetTag().first, x->GetTag().second));
 
     bool objective_depends_on_mu = ip_nlp_->objective_depends_on_mu();
     std::vector<const TaggedObject*> tdeps(1);
