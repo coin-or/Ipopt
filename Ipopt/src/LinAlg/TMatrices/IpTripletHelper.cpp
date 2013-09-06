@@ -18,6 +18,7 @@
 #include "IpSumMatrix.hpp"
 #include "IpSumSymMatrix.hpp"
 #include "IpZeroMatrix.hpp"
+#include "IpZeroSymMatrix.hpp"
 #include "IpCompoundMatrix.hpp"
 #include "IpCompoundSymMatrix.hpp"
 #include "IpTransposeMatrix.hpp"
@@ -81,6 +82,11 @@ namespace Ipopt
 
     const ZeroMatrix* zero = dynamic_cast<const ZeroMatrix*>(mptr);
     if (zero) {
+      return 0;
+    }
+
+    const ZeroSymMatrix* zerosym = dynamic_cast<const ZeroSymMatrix*>(mptr);
+    if (zerosym) {
       return 0;
     }
 
@@ -166,6 +172,12 @@ namespace Ipopt
 
     const ZeroMatrix* zero = dynamic_cast<const ZeroMatrix*>(mptr);
     if (zero) {
+      DBG_ASSERT(n_entries == 0);
+      return;
+    }
+
+    const ZeroSymMatrix* zerosym = dynamic_cast<const ZeroSymMatrix*>(mptr);
+    if (zerosym) {
       DBG_ASSERT(n_entries == 0);
       return;
     }
@@ -256,6 +268,12 @@ namespace Ipopt
 
     const ZeroMatrix* zero = dynamic_cast<const ZeroMatrix*>(mptr);
     if (zero) {
+      DBG_ASSERT(n_entries == 0);
+      return;
+    }
+
+    const ZeroSymMatrix* zerosym = dynamic_cast<const ZeroSymMatrix*>(mptr);
+    if (zerosym) {
       DBG_ASSERT(n_entries == 0);
       return;
     }
