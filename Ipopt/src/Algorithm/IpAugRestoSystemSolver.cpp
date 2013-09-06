@@ -185,7 +185,7 @@ namespace Ipopt
     SmartPtr<const Vector> D_cR =
       Neg_Omega_c_plus_D_c(sigma_tilde_n_c_inv, sigma_tilde_p_c_inv,
                            D_c, rhs_c);
-    DBG_PRINT((1,"D_cR tag = %d\n",D_cR->GetTag()));
+    DBG_PRINT((1,"D_cR tag = (%p,%d)\n", D_cR->GetTag().first, D_cR->GetTag().second));
     Number delta_cR = delta_c;
     SmartPtr<const Matrix> J_dR = CJ_d->GetComp(0,0);
     SmartPtr<const Vector> D_dR =
