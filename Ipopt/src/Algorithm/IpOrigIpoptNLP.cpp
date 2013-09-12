@@ -485,7 +485,7 @@ namespace Ipopt
   {
     DBG_START_METH("OrigIpoptNLP::f", dbg_verbosity);
     Number ret = 0.0;
-    DBG_PRINT((2, "x.Tag = %d\n", x.GetTag()));
+    DBG_PRINT((2, "x.Tag = (%p,%d)\n", x.GetTag().first, x.GetTag().second));
     if (!f_cache_.GetCachedResult1Dep(ret, &x)) {
       f_evals_++;
       SmartPtr<const Vector> unscaled_x = get_unscaled_x(x);

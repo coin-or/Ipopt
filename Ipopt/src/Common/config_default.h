@@ -41,6 +41,9 @@
 /* Define to 1 if Pardiso is available */
 /* #undef HAVE_PARDISO */
 
+/* Define to 1 if you are using Pardiso from MKL */
+/* #undef HAVE_PARDISO_MKL */
+
 /* Define to 1 if you are not using at least a 4.0 version of Pardiso */
 /* #undef HAVE_PARDISO_OLDINTERFACE 1 */
 

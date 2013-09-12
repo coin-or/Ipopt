@@ -11,7 +11,10 @@
  *
  * Financial support of the UK Economic and Social Research Council 
  * through a grant (RES-589-28-0001) to the ESRC Centre for Microdata 
- * Methods and Practice (CeMMAP) is gratefully acknowledged.
+ * Methods and Practice (CeMMAP) is gratefully acknowledged. 
+ *
+ * Changelog:
+ *   09/03/2012: added outputs in finalize_solution; z_L, z_U, constraints, lambda (thanks to Michael Schedl)
  */
 
 #include "IpoptRNLP.hpp"
@@ -454,10 +457,17 @@ void IpoptRNLP::finalize_solution(Ipopt::SolverReturn status,
 			                  const Ipopt::IpoptData* ip_data,
 			                  Ipopt::IpoptCalculatedQuantities* ip_cq)
 {
-	// here is where we would store the solution to variables, or write to a file, etc
-	// so we could use the solution. Since the solution is displayed to the console,
-	// we currently do nothing here.
-	int num_return_elements = 5;
+	// Here we convert the results from c++ to an SEXP list with elements
+    // 0. 	status;      integer with convergence status
+	// 1.   message;     string with convergence status
+	// 2.   iterations;  number of iterations
+	// 3.   objective;   final value of the objective function
+    // 4.   solution;    final values for the control variables
+	// 5.   z_L;         final values for the lower bound multipliers
+	// 6.   z_U;         final values for the upper bound multipliers
+	// 7.   constraints; final values for the constraints
+	// 8.   lambda;      final values for the Lagrange mulipliers
+	int num_return_elements = 9;
   
     // R_result_list is a member object, which has been protected in the constructor
     // and will be unprotected in the destructor.
@@ -473,6 +483,10 @@ void IpoptRNLP::finalize_solution(Ipopt::SolverReturn status,
 	SET_STRING_ELT(names, 2, mkChar("iterations"));
 	SET_STRING_ELT(names, 3, mkChar("objective"));
 	SET_STRING_ELT(names, 4, mkChar("solution"));
+	SET_STRING_ELT(names, 5, mkChar("z_L"));
+	SET_STRING_ELT(names, 6, mkChar("z_U"));
+	SET_STRING_ELT(names, 7, mkChar("constraints"));
+	SET_STRING_ELT(names, 8, mkChar("lambda"));
 	setAttrib(R_result_list, R_NamesSymbol, names);
 	
 	// convert status to an R object
@@ -537,12 +551,40 @@ void IpoptRNLP::finalize_solution(Ipopt::SolverReturn status,
 	for (Ipopt::Index i=0;i<n;i++) {
 		REAL(R_solution)[i] = x[i];
 	}
-	
+    
+    SEXP R_z_L;
+    PROTECT(R_z_L = allocVector(REALSXP,n));
+    for (Ipopt::Index i=0;i<n;i++) {
+        REAL(R_z_L)[i] = z_L[i];
+    }
+    
+    SEXP R_z_U;
+    PROTECT(R_z_U = allocVector(REALSXP,n));
+    for (Ipopt::Index i=0;i<n;i++) {
+        REAL(R_z_U)[i] = z_U[i];
+    }
+    
+	SEXP R_constraints;
+	PROTECT(R_constraints = allocVector(REALSXP,m));
+	for (Ipopt::Index i=0;i<m;i++) {
+		REAL(R_constraints)[i] = g[i];
+	}
+    
+    SEXP R_lambda;
+    PROTECT(R_lambda = allocVector(REALSXP,m));
+    for (Ipopt::Index i=0;i<m;i++) {
+        REAL(R_lambda)[i] = lambda[i];
+    }
+
 	// add elements to the list
 	SET_VECTOR_ELT(R_result_list, 0, R_status);
 	SET_VECTOR_ELT(R_result_list, 1, R_status_message);
 	SET_VECTOR_ELT(R_result_list, 3, R_objective);
 	SET_VECTOR_ELT(R_result_list, 4, R_solution);
+    SET_VECTOR_ELT(R_result_list, 5, R_z_L);
+	SET_VECTOR_ELT(R_result_list, 6, R_z_U);
+	SET_VECTOR_ELT(R_result_list, 7, R_constraints);
+	SET_VECTOR_ELT(R_result_list, 8, R_lambda);
 	
 	UNPROTECT(num_return_elements);
 }

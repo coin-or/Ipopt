@@ -7,15 +7,16 @@
 #
 # Input: object
 # Output: bool telling whether the object is an ipoptr or not
+#
+# Changelog:
+#   09/03/2012: Removed ipoptr_environment because this caused a bug in combination with 
+#               data.table and it wasn't useful (thanks to Florian Oswald for reporting)
 
 is.ipoptr <- function(x) {
     
     # Check whether the object exists and is a list
     if( is.null(x) ) { return( FALSE ) }
     if( !is.list(x) ) { return( FALSE ) }
-
-    # Check whether a correct environment was specified
-    stopifnot( is.environment(x$ipoptr_environment) )
    
     # Define local flag defining whether we approximate the Hessian or not
     flag_hessian_approximation = FALSE

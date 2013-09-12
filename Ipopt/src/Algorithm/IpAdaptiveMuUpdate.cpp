@@ -698,6 +698,7 @@ namespace Ipopt
         break;
       case 2:
         centrality = complty/xi;
+        break;
       case 3:
         centrality = complty/pow(xi,3);
         break;

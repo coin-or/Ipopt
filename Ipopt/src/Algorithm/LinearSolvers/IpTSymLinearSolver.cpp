@@ -174,7 +174,7 @@ namespace Ipopt
     DBG_ASSERT(nonzeros_triplet_== TripletHelper::GetNumberEntries(sym_A));
 
     // Check if the matrix has been changed
-    DBG_PRINT((1,"atag_=%d sym_A->GetTag()=%d\n",atag_,sym_A.GetTag()));
+    DBG_PRINT((1, "atag_ = (%p,%d)   sym_A->GetTag() = (%p,%d)\n", atag_.first, atag_.second, sym_A.GetTag().first, sym_A.GetTag().second));
     bool new_matrix = sym_A.HasChanged(atag_);
     atag_ = sym_A.GetTag();
 

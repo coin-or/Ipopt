@@ -99,7 +99,7 @@
 #undef HAVE_INTTYPES_H
 
 /* Define to 1 if the linear solver loader should be compiled to allow dynamic
-   loading of shared libaries with linear solvers */
+   loading of shared libraries with linear solvers */
 #undef HAVE_LINEARSOLVERLOADER
 
 /* Define to 1 if you have the <math.h> header file. */
@@ -110,6 +110,9 @@
 
 /* Define to 1 if Pardiso is available */
 #undef HAVE_PARDISO
+
+/* Define to 1 if you are using Pardiso from MKL */
+#undef HAVE_PARDISO_MKL
 
 /* Define to 1 if you are not using at least a 4.0 version of Pardiso */
 #undef HAVE_PARDISO_OLDINTERFACE
