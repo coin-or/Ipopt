@@ -7,12 +7,13 @@ history management of subversion.
           MSVS/v8-ifort project files [r2365]
         - allow MC19 to be loaded via linear solver loader (by J. Currie) [r2366]
         - fixed new point flag when running dependendency detector [r2368]
-        - adapt Pardiso interface to work with MKL Pardiso (by J. Currie, T. Kelman)
-          [r2369, #216]:
+        - experimental: adapt Pardiso interface to work with MKL Pardiso
+          (by J. Currie, T. Kelman) [r2369, #216]:
           - in a few tests it has been found that Pardiso from Intel MKL nowadays
             seems to work fine with Ipopt
           - to use Intel MKL with Ipopt 3.11, one has to specify the MKL libs via
-            --with-pardiso and add -DHAVE_PARDISO_MKL to the compiler flags
+            --with-pardiso and add -DHAVE_PARDISO_MKL -DHAVE_PARDISO_PARALLEL
+            to the compiler flags
           - note that this is still an experimental feature (and thus not enabled
             by default)
         - updated Ipopt/R interface to version 0.8.4 [r2373]
@@ -26,6 +27,8 @@ history management of subversion.
           default) [#219, r2374]
         - minor bugfixes in AMPL interface, debug print statements, and compound matrix
           (by G. Hackebeil) [#218, r2371, r2377, r2378, r2379]
+        - download scripts for ASL, Blas, and Lapack now first try to download tarball
+          copies from the COIN-OR server
 
 2013-08-08 releases/3.11.3
         - get.* scripts for ThirdParty/{ASL,Blas,Lapack} now work around broken
