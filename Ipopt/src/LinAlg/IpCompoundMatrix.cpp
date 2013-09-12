@@ -516,15 +516,17 @@ namespace Ipopt
 
     for (Index jcol = 0; jcol < NComps_Cols(); jcol++) {
       for (Index irow = 0; irow < NComps_Rows(); irow++) {
-        SmartPtr<Vector> vec_i;
-        if (comp_vec) {
-          vec_i = comp_vec->GetCompNonConst(irow);
+        if (ConstComp(irow, jcol)) {
+          SmartPtr<Vector> vec_i;
+          if (comp_vec) {
+            vec_i = comp_vec->GetCompNonConst(irow);
+          }
+          else {
+            vec_i = &rows_norms;
+          }
+          DBG_ASSERT(IsValid(vec_i));
+          ConstComp(irow, jcol)->ComputeRowAMax(*vec_i, false);
         }
-        else {
-          vec_i = &rows_norms;
-        }
-        DBG_ASSERT(IsValid(vec_i));
-        ConstComp(irow, jcol)->ComputeRowAMax(*vec_i, false);
       }
     }
   }
@@ -557,15 +559,17 @@ namespace Ipopt
 
     for (Index irow = 0; irow < NComps_Rows(); irow++) {
       for (Index jcol = 0; jcol < NComps_Cols(); jcol++) {
-        SmartPtr<Vector> vec_i;
-        if (comp_vec) {
-          vec_i = comp_vec->GetCompNonConst(irow);
+        if (ConstComp(irow, jcol)) {
+          SmartPtr<Vector> vec_i;
+          if (comp_vec) {
+            vec_i = comp_vec->GetCompNonConst(irow);
+          }
+          else {
+            vec_i = &cols_norms;
+          }
+          DBG_ASSERT(IsValid(vec_i));
+          ConstComp(irow, jcol)->ComputeColAMax(*vec_i, false);
         }
-        else {
-          vec_i = &cols_norms;
-        }
-        DBG_ASSERT(IsValid(vec_i));
-        ConstComp(irow, jcol)->ComputeColAMax(*vec_i, false);
       }
     }
   }

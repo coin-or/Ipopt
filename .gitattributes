@@ -72,7 +72,6 @@ Ipopt/contrib/RInterface/R/print.ipoptr.R -text
 Ipopt/contrib/RInterface/R/print.sparseness.R -text
 Ipopt/contrib/RInterface/README -text
 Ipopt/contrib/RInterface/inst/CITATION -text
-Ipopt/contrib/RInterface/inst/doc/figs/plot-sparsefig.eps -text
 Ipopt/contrib/RInterface/inst/doc/ipoptr.pdf -text
 Ipopt/contrib/RInterface/inst/doc/reflist.bib -text
 Ipopt/contrib/RInterface/man/ipoptr-package.Rd -text

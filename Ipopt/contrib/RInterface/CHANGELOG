@@ -1,3 +1,21 @@
+09 March 2012, version 0.8.4:
+
+    * Included additional variables to the object that is returned from ipoptr (thanks to Michael Schedl). These are:
+            z_L         : final values for the lower bound multipliers
+            z_U         : final values for the upper bound multipliers
+            constraints : final values for the constraints
+            lambda      : final values for the Lagrange mulipliers
+      After solving the NLP using
+            R> res <- ipoptr( ... )
+      They can be accessed using
+            R> res$z_L
+            R> res$z_U
+            R> res$constraints
+            R> res$lambda
+
+    * Removed ipoptr_environment as argument in ipoptr because it wasn't useful and it caused undesired behaviour in 
+      combination with the data.table package (thanks to Florian Oswald for reporting).
+      
 20 November 2011, version 0.8.3:
 
 	* Added #include <assert.h> to src/IpoptRNLP.hpp
