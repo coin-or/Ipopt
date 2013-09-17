@@ -188,9 +188,9 @@ In order to build \Ipopt, some third party components are required:
   \item HSL\_MA97 from the HSL Mathematical Software Library\\ (see \url{http://www.hsl.rl.ac.uk}).
   \item MUMPS (MUltifrontal Massively Parallel sparse direct Solver)\\
     (see \url{http://graal.ens-lyon.fr/MUMPS})
-  \item The Parallel Sparse Direct Solver (PARDISO)\\ (see \url{http://www.pardiso-project.org}).\\
-    Note: The Pardiso version in Intel's MKL library does not yet
-    support the features necessary for \Ipopt.
+  \item The Parallel Sparse Direct Solver (PARDISO)\\ (see \url{http://www.pardiso-project.org}).%\\
+    %Note: The Pardiso version in Intel's MKL library does not yet
+    %support the features necessary for \Ipopt.
   \item The Watson Sparse Matrix Package (WSMP)\\ (see \url{http://researcher.ibm.com/view_project.php?id=1426})
   \end{itemize}
   You should include at least one of the linear solvers above in order
@@ -684,19 +684,19 @@ symbols inside the MUMPS code are renamed.
 \subsubsection{Obtaining the Linear Solver Pardiso}\label{sec:Pardiso}
 
 If you would like to compile \Ipopt with the Parallel Sparse Direct
-Linear Solver (Pardiso), you need to obtain the Pardiso library for
-your operating system.  Information about Pardiso can be found at
-\url{http://www.pardiso-project.org}.
+Linear Solver (Pardiso), you need to obtain either Intel's MKL library
+or the Pardiso library from \url{http://www.pardiso-project.org} for
+your operating system.
 
-You can obtain a limited time license of Pardiso for academic or
+From \url{http://www.pardiso-project.org},
+you can obtain a limited time license of Pardiso for academic or
 evaluation purposes or buy a non-profit or commercial
-license. Instructions for this are on the above mentioned
-website; make sure you read the license agreement before filling out
+license. Make sure you read the license agreement before filling out
 the download form.
 
-Note: Pardiso is included in Intel's MKL library.  However, that
-version does not include the changes done by the Pardiso developers to
-make the linear solver work smoothly with \Ipopt.
+%Note: Pardiso is included in Intel's MKL library.  However, that
+%version does not include the changes done by the Pardiso developers to
+%make the linear solver work smoothly with \Ipopt.
 
 Please consult Appendix~\ref{ExpertInstall} to find out how to
 configure your \Ipopt installation to work with Pardiso.
@@ -1570,7 +1570,8 @@ has been reported that the following configure flags should be used:
   \verb|ADD_CFLAGS=-fopenmp ADD_FFLAGS=-fopenmp ADD_CXXFLAGS=-fopenmp|
 
 \item If you want to compile \Ipopt with the linear solver Pardiso
-  (see Section~\ref{sec:Pardiso}), you need to specify the link flags
+  (see Section~\ref{sec:Pardiso}) from the Pardiso project website,
+  you need to specify the link flags
   for the library with the \verb|--with-pardiso| flag, including
   required additional libraries and flags.  For example, if you want
   to compile \Ipopt with the parallel version of Pardiso (located in
@@ -1583,6 +1584,12 @@ has been reported that the following configure flags should be used:
   specify the number of processors it should run on with the
   environment variable \verb|OMP_NUM_THREADS|, as described in the
   Pardiso manual.
+  
+  If you want to compile \Ipopt with the Pardiso library that is included
+  in Intel MKL, it should be sufficient to ensure that MKL is used for
+  the linear algebra routines (Blas/Lapack). On some systems, configure
+  is able to find MKL automatically when looking for Blas. On other systems,
+  one has to specify the MKL libraries with the \verb|--with-blas| option.
 
 \item If you want to compile \Ipopt with the linear solver WSMP (see
   Section~\ref{sec:WSMP}), you need to specify the link flags for the
