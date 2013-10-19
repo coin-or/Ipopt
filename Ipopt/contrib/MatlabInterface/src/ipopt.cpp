@@ -55,6 +55,8 @@ void mexFunction (int nlhs, mxArray *plhs[],
     IpoptApplication app(false);
     Options          options(x0,app,prhs[2]);
 
+    app.RethrowNonIpoptException(false);
+
     // The first output argument is the value of the optimization
     // variables obtained at the solution.
     plhs[0] = mxDuplicateArray(x0);

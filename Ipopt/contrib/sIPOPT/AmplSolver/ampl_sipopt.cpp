@@ -17,6 +17,7 @@ int main(int argv, char**argc)
   using namespace Ipopt;
 
   SmartPtr<IpoptApplication> app_ipopt = new IpoptApplication();
+  app_ipopt->RethrowNonIpoptException(false);
 
   SmartPtr<SensApplication> app_sens = new SensApplication(app_ipopt->Jnlst(),
 							   app_ipopt->Options(),

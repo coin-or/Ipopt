@@ -24,6 +24,7 @@ int main(int argv, char* argc[])
   // We are using the factory, since this allows us to compile this
   // example with an Ipopt Windows DLL
   SmartPtr<IpoptApplication> app = IpoptApplicationFactory();
+  app->RethrowNonIpoptException(true);
 
   // Change some options
   // Note: The following choices are only examples, they might not be
