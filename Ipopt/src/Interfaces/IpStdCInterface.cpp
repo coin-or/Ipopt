@@ -101,6 +101,8 @@ IpoptProblem CreateIpoptProblem(
   retval->x_scaling = NULL;
   retval->g_scaling = NULL;
 
+  retval->app->RethrowNonIpoptException(false);
+
   return retval;
 }
 
