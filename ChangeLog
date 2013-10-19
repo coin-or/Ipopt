@@ -2,6 +2,12 @@ This file contain the log of changes for Ipopt.
 More detailed information for incremental change can be found in the
 history management of subversion.
 
+2013-xx-yy releases/3.11.5
+        - added method IpoptApplication::RethrowNonIpoptException() to enable
+          rethrowing of non-ipopt and non-bad_alloc exceptions catched in
+          the *Optimize() and Initialization() methods; default is still to
+          return with NonIpopt_Exception_Thrown status
+
 2013-09-12 releases/3.11.4
         - hopefully fixed non-working linear solver loader in DLLs build with
           MSVS/v8-ifort project files [r2365]

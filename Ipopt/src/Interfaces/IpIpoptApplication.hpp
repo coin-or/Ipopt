@@ -170,6 +170,18 @@ namespace Ipopt
      *  method at the convenient time.  */
     void PrintCopyrightMessage();
 
+    /** Method to set whether non-ipopt non-bad_alloc exceptions
+     * are rethrown by Ipopt.
+     * By default, non-Ipopt and non-std::bad_alloc exceptions are
+     * caught by Ipopts initialization and optimization methods
+     * and the status NonIpopt_Exception_Thrown is returned.
+     * This function allows to enable rethrowing of such exceptions.
+     */
+    void RethrowNonIpoptException(bool dorethrow)
+    {
+       rethrow_nonipoptexception_ = dorethrow;
+    }
+
     /** @name Methods for IpoptTypeInfo */
     //@{
     static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
@@ -206,6 +218,9 @@ namespace Ipopt
     //@{
     /** Decide whether or not the ipopt.opt file should be read */
     bool read_params_dat_;
+
+    /** Decide whether non-ipopt non-bad_alloc exceptions should be rethrown */
+    bool rethrow_nonipoptexception_;
     //@}
 
     /** Journalist for reporting output */

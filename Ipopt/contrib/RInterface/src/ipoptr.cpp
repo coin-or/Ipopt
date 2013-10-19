@@ -152,6 +152,7 @@ SEXP IpoptRSolve( SEXP args )
   
 	// Create an instance of the IpoptApplication
 	Ipopt::SmartPtr<Ipopt::IpoptApplication> app = new Ipopt::IpoptApplication();
+	app->RethrowNonIpoptException(false);
 
 	// Set options that were passed from R
 	setApplicationOptions( app, ipoptr_nlp, getListElement(args, "options") );

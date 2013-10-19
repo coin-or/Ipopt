@@ -169,6 +169,7 @@ Jipopt::Jipopt(JNIEnv *env_, jobject solver_, jint n_, jint m_, jint nele_jac_, 
   using_scaling_parameters(false), using_LBFGS(false)
 {
    application = new IpoptApplication();
+   application->RethrowNonIpoptException(false);
 
    // the solver class
    jclass solverCls = env->GetObjectClass(solver);
