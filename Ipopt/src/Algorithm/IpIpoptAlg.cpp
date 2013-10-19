@@ -262,7 +262,16 @@ namespace Ipopt
     }
 
     if (!isResto) {
-      Jnlst().Printf(J_ITERSUMMARY, J_MAIN, "This is Ipopt version "IPOPT_VERSION", running with linear solver %s.\n\n", linear_solver_.c_str());
+      Jnlst().Printf(J_ITERSUMMARY, J_MAIN, "This is Ipopt version "IPOPT_VERSION", running with linear solver %s.\n", linear_solver_.c_str());
+
+#ifndef IPOPT_NOMUMPSNOTE
+      if( linear_solver_ == "mumps" )
+      {
+         Jnlst().Printf(J_ITERSUMMARY, J_MAIN,
+                        "NOTE: Other linear solvers might be more efficient (see Ipopt documentation).\n");
+      }
+#endif
+      Jnlst().Printf(J_ITERSUMMARY, J_MAIN, "\n");
     }
 
     SolverReturn retval = UNASSIGNED;
@@ -949,23 +958,6 @@ namespace Ipopt
                  " Ipopt is released as open source code under the Eclipse Public License (EPL).\n"
                  "         For more information visit http://projects.coin-or.org/Ipopt\n"
                  "******************************************************************************\n\n");
-#ifdef COIN_HAS_MUMPS
-# ifndef COINHSL_HAS_MA27
-#  ifndef COINHSL_HAS_MA57
-#   ifndef COINHSL_HAS_MA86
-#    ifndef HAVE_PARDISO
-#     ifndef HAVE_WSMP
-#      ifndef IPOPT_NOMUMPSNOTE
-    jnlst.Printf(J_INSUPPRESSIBLE, J_MAIN,
-                 "NOTE: You are using Ipopt by default with the MUMPS linear solver.\n"
-                 "      Other linear solvers might be more efficient (see Ipopt documentation).\n\n\n");
-#      endif
-#     endif
-#    endif
-#   endif
-#  endif
-# endif
-#endif
     copyright_message_printed = true;
   }
 

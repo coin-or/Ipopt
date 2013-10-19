@@ -59,6 +59,7 @@ namespace Ipopt
                                      bool create_empty /* = false */)
       :
       read_params_dat_(true),
+      rethrow_nonipoptexception_(false),
       inexact_algorithm_(false),
       replace_bounds_(false)
   {
@@ -113,6 +114,7 @@ namespace Ipopt
                                      SmartPtr<Journalist> jnlst)
       :
       read_params_dat_(true),
+      rethrow_nonipoptexception_(false),
       jnlst_(jnlst),
       reg_options_(reg_options),
       options_(options),
@@ -516,9 +518,16 @@ namespace Ipopt
       return Insufficient_Memory;
     }
     catch (...) {
-      IpoptException exc("Unknown Exception caught in ipopt", "Unknown File", -1);
-      exc.ReportException(*jnlst_);
-      return NonIpopt_Exception_Thrown;
+      if( !rethrow_nonipoptexception_ )
+      {
+        IpoptException exc("Unknown Exception caught in ipopt", "Unknown File", -1);
+        exc.ReportException(*jnlst_);
+        return NonIpopt_Exception_Thrown;
+      }
+      else
+      {
+        throw;
+      }
     }
     return Solve_Succeeded;
   }
@@ -536,9 +545,16 @@ namespace Ipopt
         return Insufficient_Memory;
       }
       catch (...) {
-        IpoptException exc("Unknown Exception caught in ipopt", "Unknown File", -1);
-        exc.ReportException(*jnlst_);
-        return NonIpopt_Exception_Thrown;
+        if( !rethrow_nonipoptexception_ )
+        {
+          IpoptException exc("Unknown Exception caught in ipopt", "Unknown File", -1);
+          exc.ReportException(*jnlst_);
+          return NonIpopt_Exception_Thrown;
+        }
+        else
+        {
+          throw;
+        }
       }
     }
     ApplicationReturnStatus retval = Initialize(is);
@@ -765,9 +781,16 @@ namespace Ipopt
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
     }
     catch (...) {
-      IpoptException exc("Unknown Exception caught in Ipopt", "Unknown File", -1);
-      exc.ReportException(*jnlst_, J_ERROR);
-      retValue = NonIpopt_Exception_Thrown;
+      if( !rethrow_nonipoptexception_ )
+      {
+        IpoptException exc("Unknown Exception caught in Ipopt", "Unknown File", -1);
+        exc.ReportException(*jnlst_, J_ERROR);
+        retValue = NonIpopt_Exception_Thrown;
+      }
+      else
+      {
+        throw;
+      }
     }
 
     jnlst_->FlushBuffer();
@@ -1047,9 +1070,17 @@ namespace Ipopt
       status = OUT_OF_MEMORY;
     }
     catch (...) {
-      IpoptException exc("Unknown Exception caught in Ipopt", "Unknown File", -1);
-      exc.ReportException(*jnlst_, J_ERROR);
-      retValue = NonIpopt_Exception_Thrown;
+      if( !rethrow_nonipoptexception_ )
+      {
+        IpoptException exc("Unknown Exception caught in Ipopt", "Unknown File", -1);
+        exc.ReportException(*jnlst_, J_ERROR);
+        retValue = NonIpopt_Exception_Thrown;
+      }
+      else
+      {
+        jnlst_->FlushBuffer();
+        throw;
+      }
     }
 
     if (!skip_finalize_solution_call)

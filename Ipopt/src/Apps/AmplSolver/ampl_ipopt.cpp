@@ -36,6 +36,7 @@ int main(int argc, char**args)
   using namespace Ipopt;
 
   SmartPtr<IpoptApplication> app = IpoptApplicationFactory();
+  app->RethrowNonIpoptException(false);
 
   // Check if executable is run only to print out options documentation
   if (argc == 2) {
