@@ -7045,12 +7045,12 @@ fi
 
 
 LIBTOOL=
-if test -r ../libtool; then
+if test -f ../libtool; then
   coin_config_dir=..
   LIBTOOL='$(SHELL) $(top_builddir)/../libtool'
 fi
 if test "x$LIBTOOL" = x; then
-  if test -r ../../libtool; then
+  if test -f ../../libtool; then
     coin_config_dir=../..
     LIBTOOL='$(SHELL) $(top_builddir)/../../libtool'
   fi
@@ -22483,7 +22483,7 @@ if test x$coin_projectdir = xyes ; then
   # unfortunately, if the user set prefix, then we do not know where the project base directory is located
   # but it is likely to be either .. (if we are a usual coin project) or ../.. (if we are a unusual coin project like ThirdParty or Data)
   COIN_PKG_CONFIG_PATH_UNINSTALLED=
-  if test -e ../coin_subdirs.txt ; then
+  if test -f ../coin_subdirs.txt ; then
     for i in `cat ../coin_subdirs.txt` ; do
       if test -d ../$i ; then
         COIN_PKG_CONFIG_PATH_UNINSTALLED="`cd ../$i; pwd`:${COIN_PKG_CONFIG_PATH_UNINSTALLED}"
@@ -22494,7 +22494,7 @@ if test x$coin_projectdir = xyes ; then
     done
   fi
 
-  if test -e ../../coin_subdirs.txt ; then
+  if test -f ../../coin_subdirs.txt ; then
     for i in `cat ../../coin_subdirs.txt` ; do
       if test -d ../../$i ; then
         COIN_PKG_CONFIG_PATH_UNINSTALLED="`cd ../../$i; pwd`:${COIN_PKG_CONFIG_PATH_UNINSTALLED}"
@@ -37197,16 +37197,6 @@ fi
 # Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
   cvl_tmp="contrib/RInterface/inst/doc/reflist.bib"
-  for file in $cvl_tmp ; do
-    coin_vpath_link_files="$coin_vpath_link_files $file"
-  done
-fi
-
-
-
-# Allow for newlines in the parameter
-if test $coin_vpath_config = yes; then
-  cvl_tmp="contrib/RInterface/inst/doc/figs/plot-sparsefig.eps"
   for file in $cvl_tmp ; do
     coin_vpath_link_files="$coin_vpath_link_files $file"
   done
