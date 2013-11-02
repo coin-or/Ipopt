@@ -28,9 +28,6 @@
 /* If defined, the HSL library is available. */
 #define COIN_HAS_HSL 1
 
-/* If defined, the METIS library is available. */
-/* #undef COIN_HAS_METIS */
-
 /* If defined, the MUMPS library is available. */
 /* #undef COIN_HAS_MUMPS */
 
