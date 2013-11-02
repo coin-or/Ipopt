@@ -140,7 +140,8 @@ function( x0,
                  "eval_jac_g_structure"=eval_jac_g_structure,
                  "eval_h"=eval_h_wrapper,
                  "eval_h_structure"=eval_h_structure,
-                 "options"=get.option.types(opts) )
+                 "options"=get.option.types(opts),
+                 "environment" = new.env() )
     
     attr(ret, "class") <- "ipoptr"
     
