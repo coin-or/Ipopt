@@ -659,6 +659,17 @@ if test -n "`echo $BLAS_LIBS $LAPACK_LIBS | grep -e '-framework vecLib'`"; then
 fi
 AC_SUBST(FRAMEWORK_VECLIB)
 
+if test "$CYGPATH_W" = echo; then
+  if (cygpath --version) >/dev/null 2>/dev/null; then
+    MATLAB_CYGPATH_W='cygpath -w'
+  else
+    MATLAB_CYGPATH_W=echo
+  fi
+else
+  MATLAB_CYGPATH_W="$CYGPATH_W"
+fi
+AC_SUBST(MATLAB_CYGPATH_W)
+
 AC_SUBST(MATLAB_HOME)
 AC_SUBST(MEXSUFFIX)
 AC_SUBST(MWMA57PATH)
