@@ -2,7 +2,7 @@
 
 set -e
 
-gnumex_ver=2.04
+gnumex_ver=2.05
 
 wgetcmd=wget
 wgetcount=`which wget 2>/dev/null | wc -l`
@@ -37,17 +37,12 @@ if test -d gnumex ; then
 fi
 
 echo "Uncompressing the zip..."
-unzip gnumex-${gnumex_ver}.zip
+unzip gnumex-${gnumex_ver}.zip -d gnumex
 
 echo " "
 echo "Done downloading the source code for gnumex."
 echo "Modifying permissions of exe and mex files."
 chmod +x gnumex/*.exe gnumex/*.mexw32
-
-echo " "
-echo "Applying patch file."
-
-patch -p0 < gnumex_win64.patch
 
 echo " "
 echo "Verify that there are no error messages in the output above."
