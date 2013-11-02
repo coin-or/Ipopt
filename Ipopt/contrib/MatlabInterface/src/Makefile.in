@@ -50,7 +50,7 @@ LDFLAGS     = $(CXXFLAGS) @RPATH_FLAGS@ @FRAMEWORK_VECLIB@ @MEX_STATIC_TRUE@@MEX
 # mex doesn't understand -Wl,-Bdynamic,-lmwma57,-Bstatic on Windows
 
 # The following is necessary under cygwin, if native compilers are used
-CYGPATH_W = @CYGPATH_W@
+CYGPATH_W = @MATLAB_CYGPATH_W@
 
 @MEX_WINDOWS_TRUE@MEXFLAGCXX = 
 @MEX_WINDOWS_FALSE@MEXFLAGCXX = -cxx
