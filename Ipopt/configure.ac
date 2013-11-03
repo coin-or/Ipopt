@@ -46,6 +46,20 @@ AC_COIN_PROJECTDIR_INIT(Ipopt)
 # Check if user wants to produce debugging code
 AC_COIN_DEBUG_COMPILE(Ipopt)
 
+# Store original choice for CYGPATH_W in MATLAB_CYGPATH_W
+# Need to do this early, so I can check whether user has set CYGPATH_W
+if test -z "$CYGPATH_W" ; then
+  if (cygpath --version) >/dev/null 2>/dev/null; then
+    MATLAB_CYGPATH_W='cygpath -w'
+  else
+    MATLAB_CYGPATH_W=echo
+  fi
+else
+  MATLAB_CYGPATH_W="$CYGPATH_W"
+fi
+AC_SUBST(MATLAB_CYGPATH_W)
+
+
 # We need egrep and ln -s somewherw
 AC_PROG_EGREP
 AC_PROG_LN_S
@@ -658,17 +672,6 @@ if test -n "`echo $BLAS_LIBS $LAPACK_LIBS | grep -e '-framework vecLib'`"; then
   FRAMEWORK_VECLIB='-framework vecLib'
 fi
 AC_SUBST(FRAMEWORK_VECLIB)
-
-if test "$CYGPATH_W" = echo; then
-  if (cygpath --version) >/dev/null 2>/dev/null; then
-    MATLAB_CYGPATH_W='cygpath -w'
-  else
-    MATLAB_CYGPATH_W=echo
-  fi
-else
-  MATLAB_CYGPATH_W="$CYGPATH_W"
-fi
-AC_SUBST(MATLAB_CYGPATH_W)
 
 AC_SUBST(MATLAB_HOME)
 AC_SUBST(MEXSUFFIX)
