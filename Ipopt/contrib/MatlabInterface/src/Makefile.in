@@ -42,7 +42,7 @@ LDFLAGS     = $(CXXFLAGS) @RPATH_FLAGS@ @FRAMEWORK_VECLIB@ @MEX_STATIC_TRUE@@MEX
 
 # Linker flags
 @COIN_HAS_PKGCONFIG_TRUE@LIBS = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt | sed -e 's/-framework vecLib//g'`
-@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_TRUE@LIBS = -link -libpath:`$(CYGPATH_W) @abs_lib_dir@` libipopt.lib `echo @IPOPTLIB_LIBS_INSTALLED@ | sed -e 's/-framework vecLib//g'`
+@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_TRUE@LIBS = -link -libpath:`$(CYGPATH_W) @abs_lib_dir@` libipopt.lib @IPOPTLIB_LIBS_INSTALLED@
 @COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_FALSE@LIBS = -L@abs_lib_dir@ -lipopt `echo @IPOPTLIB_LIBS_INSTALLED@ | sed -e 's/-framework vecLib//g'`
 @MEX_STATIC_FALSE@LIBS_STATIC = $(LIBS)
 @MEX_STATIC_TRUE@@MEX_WINDOWS_FALSE@LIBS_STATIC = $$(echo " $(LIBS) " | sed -e "s| -lgfortran | `@F77@ -print-file-name=libgfortran.a` |g" -e "s| -lquadmath | `@F77@ -print-file-name=libquadmath.a` |g")
