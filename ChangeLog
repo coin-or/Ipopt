@@ -2,6 +2,11 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information for incremental change can be found in the
 history management of subversion.
 
+2013-11-xx releases/3.11.6
+        - updates to Matlab Interface build system (by T. Kelman)
+        - fix to updates of R Interface [r2416, #223]
+        - minor fixes to the buildsystem
+
 2013-10-26 releases/3.11.5
         - added method IpoptApplication::RethrowNonIpoptException() to enable
           rethrowing of non-ipopt and non-bad_alloc exceptions catched in
