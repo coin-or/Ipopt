@@ -621,11 +621,11 @@ namespace Ipopt
         for (Index i=0; i<n_full_x_; i++) {
           DBG_ASSERT(x_l[i]==x_u[i]);
           full_x_[i] = x_l[i];
-          bool retval = tnlp_->eval_g(n_full_x_, full_x_, true,
-                                      n_full_g_, full_g_);
-          ASSERT_EXCEPTION(retval, IpoptNLP::Eval_Error,
-                           "All variables are fixed, but constraints cannot be evaluated at fixed point.");
         }
+        bool retval = tnlp_->eval_g(n_full_x_, full_x_, true,
+                                    n_full_g_, full_g_);
+        ASSERT_EXCEPTION(retval, IpoptNLP::Eval_Error,
+                         "All variables are fixed, but constraints cannot be evaluated at fixed point.");
         Number max_viol = 0.;
         for (Index i=0; i<n_full_g_; i++) {
           //printf("%d %23.16e %23.16e %23.16e\n",i,full_g_[i], g_l[i], g_u[i]);
@@ -641,7 +641,7 @@ namespace Ipopt
         }
 
         Number obj_value;
-        bool retval = tnlp_->eval_f(n_full_x_, full_x_, false, obj_value);
+        retval = tnlp_->eval_f(n_full_x_, full_x_, false, obj_value);
         ASSERT_EXCEPTION(retval, IpoptNLP::Eval_Error,
                          "All variables are fixed, but objective cannot be evaluated at fixed point.");
         // Call finalize_solution so that user has required information

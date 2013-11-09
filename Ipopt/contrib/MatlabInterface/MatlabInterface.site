@@ -80,7 +80,7 @@ if test -z "$enable_matlab_static"; then
         "`otool -L conftest.dylib | grep libstdc++`" && \
         enable_matlab_static=yes
       ;;
-    MINGW*)
+    MINGW* | CYGWIN*)
       $cxxtemp -static -shared -o conftest.dll \
         conftest.cc && test -z "`objdump -p conftest.dll | \
         grep libstdc++`" && enable_matlab_static=yes
@@ -99,18 +99,10 @@ if test -z "$enable_matlab_static"; then
 fi
 
 # Set configure flags which depend on enable_matlab_static
-if test x"$enable_matlab_static" = xyes; then
-  ADD_FFLAGS="$ADD_FFLAGS -static-libgcc"
-fi
 case `uname` in
-  MINGW*)
+  MINGW* | CYGWIN*)
     if test x"$enable_matlab_static" = xyes; then
       enable_pthread_mumps=no
-    else
-      case $F77 in
-        *ifort* | *compile_f2c*) ;;
-        *) ADD_FFLAGS="$ADD_FFLAGS -static-libgcc" ;;
-      esac
     fi
     ;;
 esac
