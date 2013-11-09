@@ -42,7 +42,7 @@ LDFLAGS     = $(CXXFLAGS) @RPATH_FLAGS@ @FRAMEWORK_VECLIB@ @MEX_STATIC_TRUE@@MEX
 
 # Linker flags
 @COIN_HAS_PKGCONFIG_TRUE@LIBS = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt | sed -e 's/-framework vecLib//g'`
-@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_TRUE@LIBS = -link -libpath:`$(CYGPATH_W) @abs_lib_dir@` libipopt.lib `echo @IPOPTLIB_LIBS_INSTALLED@ | sed -e 's/-framework vecLib//g'`
+@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_TRUE@LIBS = -link -libpath:`$(CYGPATH_W) @abs_lib_dir@` libipopt.lib @IPOPTLIB_LIBS_INSTALLED@
 @COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_FALSE@LIBS = -L@abs_lib_dir@ -lipopt `echo @IPOPTLIB_LIBS_INSTALLED@ | sed -e 's/-framework vecLib//g'`
 @MEX_STATIC_FALSE@LIBS_STATIC = $(LIBS)
 @MEX_STATIC_TRUE@@MEX_WINDOWS_FALSE@LIBS_STATIC = $$(echo " $(LIBS) " | sed -e "s| -lgfortran | `@F77@ -print-file-name=libgfortran.a` |g" -e "s| -lquadmath | `@F77@ -print-file-name=libquadmath.a` |g")
@@ -50,7 +50,7 @@ LDFLAGS     = $(CXXFLAGS) @RPATH_FLAGS@ @FRAMEWORK_VECLIB@ @MEX_STATIC_TRUE@@MEX
 # mex doesn't understand -Wl,-Bdynamic,-lmwma57,-Bstatic on Windows
 
 # The following is necessary under cygwin, if native compilers are used
-CYGPATH_W = @CYGPATH_W@
+CYGPATH_W = @MATLAB_CYGPATH_W@
 
 @MEX_WINDOWS_TRUE@MEXFLAGCXX = 
 @MEX_WINDOWS_FALSE@MEXFLAGCXX = -cxx
@@ -129,7 +129,7 @@ mexopts:
 	        -e "s| -L/mingw/lib | -L$$mingwlibdirwin |g"); \
 	      $(GM_ADD_LIBS_STATIC) \
 	      cp mexopts.bat mexopts.bat.orig; \
-	      sed -e 's|COMPILER=gcc|COMPILER=g++|' -e 's|GM_MEXLANG=c$$|GM_MEXLANG=cxx|' \
+	      sed -e 's|COMPILER=gcc|COMPILER=@CXX@|' -e 's|GM_MEXLANG=c$$|GM_MEXLANG=cxx|' \
 	        -e "s|GM_ADD_LIBS=-llibmx -llibmex -llibmat$$|GM_ADD_LIBS=$$GM_ADD_LIBS|" \
 	        mexopts.bat.orig > mexopts.bat; \
 	    fi \
@@ -145,16 +145,9 @@ mexopts:
 	        -e "s| -L/usr/lib/| -L$$cyglibdirwin/|g"); \
 	      $(GM_ADD_LIBS_STATIC) \
 	      cp mexopts.bat mexopts.bat.orig; \
-	      if test -n "`which g++-4 2> /dev/null`"; then \
-	        sed -e 's|COMPILER=gcc|COMPILER=g++-4|' mexopts.bat.orig > mexopts.bat.tmp; \
-	      elif test -n "`which g++-3 2> /dev/null`"; then \
-	        sed -e 's|COMPILER=gcc|COMPILER=g++-3|' mexopts.bat.orig > mexopts.bat.tmp; \
-	      else \
-	        sed -e 's|COMPILER=gcc|COMPILER=g++|' mexopts.bat.orig > mexopts.bat.tmp; \
-	      fi; \
-	      sed -e 's|GM_MEXLANG=c$$|GM_MEXLANG=cxx|' \
+	      sed -e 's|COMPILER=gcc|COMPILER=@CXX@|' -e 's|GM_MEXLANG=c$$|GM_MEXLANG=cxx|' \
 	        -e "s|GM_ADD_LIBS=-llibmx -llibmex -llibmat$$|GM_ADD_LIBS=$$GM_ADD_LIBS|" \
-	        mexopts.bat.tmp > mexopts.bat; \
+	        mexopts.bat.orig > mexopts.bat; \
 	    fi \
 	    ;; \
 	esac
