@@ -187,6 +187,8 @@ DBG_CXXFLAGS = @DBG_CXXFLAGS@
 DBG_FFLAGS = @DBG_FFLAGS@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
+DEPENDENCY_LINKING_FALSE = @DEPENDENCY_LINKING_FALSE@
+DEPENDENCY_LINKING_TRUE = @DEPENDENCY_LINKING_TRUE@
 ECHO = @ECHO@
 ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
@@ -358,6 +360,7 @@ lib_LTLIBRARIES = libipoptamplinterface.la
 libipoptamplinterface_la_SOURCES = \
 	AmplTNLP.cpp AmplTNLP.hpp
 
+libipoptamplinterface_la_LDFLAGS = $(LT_LDFLAGS)
 ipopt_SOURCES = \
 	ampl_ipopt.cpp
 
