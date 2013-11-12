@@ -73,9 +73,11 @@ namespace Ipopt
     TaggedObject()
         :
         Subject(),
-        /* We can initialize the tag counter to 0, because this objects Tag
-         * will differ from a Tag() object in its first member. */
-        tagcount_(0)
+        /* We initialize the tag counter to a number depending on the time,
+         * since no two different objects can use the same memory address
+         * at the same time (however, we only use microseconds here).
+         */
+        tagcount_((unsigned int)(1.e+6 * CpuTime()))
     {
       ObjectChanged();
     }
