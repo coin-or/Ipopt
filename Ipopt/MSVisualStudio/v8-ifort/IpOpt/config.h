@@ -17,7 +17,7 @@
 
 #define HAVE_CSTDDEF 1
 
-#define SHAREDLIBEXT ".dll"
+#define SHAREDLIBEXT "dll"
 
 #define __str__(s) #s
 #define __xstr__(s) __str__(s)
