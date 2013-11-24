@@ -383,19 +383,23 @@ namespace Ipopt
 #endif
 
 #ifdef HAVE_PARDISO_MKL
-    IPARM_[5] = 1;  // Overwrite right-hand side
+    //IPARM_[1] = 0;  // switch from metis to minimum degree ordering
     // For MKL PARDSIO, the documentation says, "iparm(3) Reserved. Set to zero.", so we don't set IPARM_[2]
-    IPARM_[10] = 1; // enable scaling (recommended for interior-point indefinite matrices)
-    IPARM_[12] = 1; // enable matching (recommended, as above)
-    IPARM_[20] = 1; // bunch-kaufman pivoting
+    IPARM_[5] = 1;  // Overwrite right-hand side
+    IPARM_[7] = 1;  // enable iterative refinement in Pardiso for now: it seems to make Ipopt with PARDISO more robust
+    IPARM_[9] = 12; // pivot perturbation (as higher as less perturbation)
+    IPARM_[10] = 2; // enable scaling (recommended for interior-point indefinite matrices)
+    IPARM_[12] = (int)match_strat_; // enable matching (recommended, as above)
+    IPARM_[20] = 3; // bunch-kaufman pivoting
     IPARM_[23] = 1; // parallel fac
     IPARM_[24] = 1; // parallel solve
+    //IPARM_[26] = 1; // matrix checker
 #else
     IPARM_[1] = 5;
     IPARM_[2] = num_procs; // Set the number of processors
     IPARM_[5] = 1;  // Overwrite right-hand side
-    // ToDo: decide if we need iterative refinement in Pardiso.  For
-    // now, switch it off ?
+    // ToDo: Decide if we need iterative refinement in Pardiso.
+    //       For now, switch it off ?  (0 seems to be default, as well)
     IPARM_[7] = 0;
 
     // Options suggested by Olaf Schenk
@@ -405,8 +409,6 @@ namespace Ipopt
     // large number of pivot perturbation
     // Matching information:  IPARM_[12] = 2 robust,  but more  expensive method
     IPARM_[12] = (int)match_strat_;
-    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "Pardiso matching strategy (IPARM(13)): %d\n", IPARM_[12]);
 
     IPARM_[20] = 3; // Results in better accuracy
     IPARM_[23] = 1; // parallel fac
@@ -415,6 +417,9 @@ namespace Ipopt
     IPARM_[29] = 1; //we need this for IPOPT interface
     //IPARM_[33] = 1; // bit-by-bit identical results in parallel run
 #endif
+
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "Pardiso matching strategy (IPARM(13)): %d\n", IPARM_[12]);
 
     if (pardiso_iterative_) {
 #ifdef HAVE_PARDISO_OLDINTERFACE
