@@ -162,30 +162,29 @@ namespace Ipopt
       "complete", "Match complete (IPAR(13)=1)",
       "complete+2x2", "Match complete+2x2 (IPAR(13)=2)",
       "constraints", "Match constraints (IPAR(13)=3)",
-      "This is IPAR(13) in Pardiso manual.  This option is only available if "
-      "Ipopt has been compiled with Pardiso.");
+      "This is IPAR(13) in Pardiso manual.");
     roptions->AddStringOption2(
       "pardiso_redo_symbolic_fact_only_if_inertia_wrong",
       "Toggle for handling case when elements were perturbed by Pardiso.",
       "no",
       "no", "Always redo symbolic factorization when elements were perturbed",
       "yes", "Only redo symbolic factorization when elements were perturbed if also the inertia was wrong",
-      "This option is only available if Ipopt has been compiled with Pardiso.");
+      "");
     roptions->AddStringOption2(
       "pardiso_repeated_perturbation_means_singular",
       "Interpretation of perturbed elements.",
       "no",
       "no", "Don't assume that matrix is singular if elements were perturbed after recent symbolic factorization",
       "yes", "Assume that matrix is singular if elements were perturbed after recent symbolic factorization",
-      "This option is only available if Ipopt has been compiled with Pardiso.");
-    roptions->AddLowerBoundedIntegerOption(
-      "pardiso_out_of_core_power",
-      "Enables out-of-core variant of Pardiso",
-      0, 0,
-      "Setting this option to a positive integer k makes Pardiso work in the "
-      "out-of-core variant where the factor is split in 2^k subdomains.  This "
-      "is IPARM(50) in the Pardiso manual.  This option is only available if "
-      "Ipopt has been compiled with Pardiso.");
+      "");
+    //roptions->AddLowerBoundedIntegerOption(
+    //  "pardiso_out_of_core_power",
+    //  "Enables out-of-core variant of Pardiso",
+    //  0, 0,
+    //  "Setting this option to a positive integer k makes Pardiso work in the "
+    //  "out-of-core variant where the factor is split in 2^k subdomains.  This "
+    //  "is IPARM(50) in the Pardiso manual.  This option is only available if "
+    //  "Ipopt has been compiled with Pardiso.");
     roptions->AddLowerBoundedIntegerOption(
       "pardiso_msglvl",
       "Pardiso message level",
@@ -201,6 +200,7 @@ namespace Ipopt
       "Setting this option to \"yes\" essentially disables inertia check. "
       "This option makes the algorithm non-robust and easily fail, but it "
       "might give some insight into the necessity of inertia control.");
+#if !defined(HAVE_PARDISO_OLDINTERFACE) && !defined(HAVE_PARDISO_MKL)
     roptions->AddLowerBoundedIntegerOption(
       "pardiso_max_iter",
       "Maximum number of Krylov-Subspace Iteration",
@@ -247,12 +247,13 @@ namespace Ipopt
       "no",
       "no", "",
       "yes", "",
-      "");
+      "This option is not available for Pardiso < 4.0 or MKL Pardiso");
     roptions->AddLowerBoundedIntegerOption(
       "pardiso_max_droptol_corrections",
       "Maximal number of decreases of drop tolerance during one solve.",
       1, 4,
       "This is relevant only for iterative Pardiso options.");
+#endif
   }
 
   bool PardisoSolverInterface::InitializeImpl(const OptionsList& options,
@@ -267,11 +268,14 @@ namespace Ipopt
     options.GetBoolValue("pardiso_repeated_perturbation_means_singular",
                          pardiso_repeated_perturbation_means_singular_,
                          prefix);
-    Index pardiso_out_of_core_power;
-    options.GetIntegerValue("pardiso_out_of_core_power",
-                            pardiso_out_of_core_power, prefix);
+    //Index pardiso_out_of_core_power;
+    //options.GetIntegerValue("pardiso_out_of_core_power",
+    //                        pardiso_out_of_core_power, prefix);
     options.GetBoolValue("pardiso_skip_inertia_check",
                          skip_inertia_check_, prefix);
+    int pardiso_msglvl;
+    options.GetIntegerValue("pardiso_msglvl", pardiso_msglvl, prefix);
+#if !defined(HAVE_PARDISO_OLDINTERFACE) && !defined(HAVE_PARDISO_MKL)
     options.GetBoolValue("pardiso_iterative", pardiso_iterative_, prefix);
     int pardiso_max_iter;
     options.GetIntegerValue("pardiso_max_iter", pardiso_max_iter, prefix);
@@ -296,10 +300,11 @@ namespace Ipopt
     Number pardiso_iter_inverse_norm_factor;
     options.GetNumericValue("pardiso_iter_inverse_norm_factor",
                             pardiso_iter_inverse_norm_factor, prefix);
-    int pardiso_msglvl;
-    options.GetIntegerValue("pardiso_msglvl", pardiso_msglvl, prefix);
     options.GetIntegerValue("pardiso_max_droptol_corrections",
                             pardiso_max_droptol_corrections_, prefix);
+#else
+    pardiso_iterative_ = false;
+#endif
 
     // Number value = 0.0;
 
@@ -422,12 +427,11 @@ namespace Ipopt
                    "Pardiso matching strategy (IPARM(13)): %d\n", IPARM_[12]);
 
     if (pardiso_iterative_) {
-#ifdef HAVE_PARDISO_OLDINTERFACE
+#if defined(HAVE_PARDISO_OLDINTERFACE) || defined(HAVE_PARDISO_MKL)
       THROW_EXCEPTION(OPTION_INVALID,
                       "You chose to use the iterative version of Pardiso, but you need to use a Pardiso version of at least 4.0.");
-#elif ! defined HAVE_PARDISO_MKL
+#else
       IPARM_[31] = 1 ;  // active direct solver
-#endif
 
       DPARM_[ 0] = pardiso_max_iter; // maximum number of Krylov-Subspace Iteration
       // Default is 300
@@ -461,6 +465,7 @@ namespace Ipopt
       // Default is 500
       // 2 <= value < 50000
       DPARM_[ 8] = 25; // maximum number of non-improvement steps
+#endif
     }
 
     MSGLVL_ = pardiso_msglvl;

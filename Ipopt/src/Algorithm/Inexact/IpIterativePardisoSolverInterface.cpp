@@ -148,6 +148,10 @@ namespace Ipopt
   bool IterativePardisoSolverInterface::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
+#ifdef HAVE_PARDISO_OLDINTERFACE
+    THROW_EXCEPTION(OPTION_INVALID, "The inexact version works only with a new version of Pardiso (at least 4.0)");
+#endif
+
     Index enum_int;
     options.GetEnumValue("pardiso_matching_strategy", enum_int, prefix);
     match_strat_ = PardisoMatchingStrategy(enum_int);
@@ -157,9 +161,9 @@ namespace Ipopt
     options.GetBoolValue("pardiso_repeated_perturbation_means_singular",
                          pardiso_repeated_perturbation_means_singular_,
                          prefix);
-    Index pardiso_out_of_core_power;
-    options.GetIntegerValue("pardiso_out_of_core_power",
-                            pardiso_out_of_core_power, prefix);
+    //Index pardiso_out_of_core_power;
+    //options.GetIntegerValue("pardiso_out_of_core_power",
+    //                        pardiso_out_of_core_power, prefix);
     options.GetBoolValue("pardiso_skip_inertia_check",
                          skip_inertia_check_, prefix);
 
@@ -232,10 +236,6 @@ namespace Ipopt
     initialized_=false;
     delete[] a_;
     a_ = NULL;
-
-#ifdef HAVE_PARDISO_OLDINTERFACE
-    THROW_EXCEPTION(OPTION_INVALID, "The inexact version works only with a new version of Pardiso (at least 4.0)");
-#endif
 
     // Call Pardiso's initialization routine
     IPARM_[0] = 0;  // Tell it to fill IPARM with default values(?)
