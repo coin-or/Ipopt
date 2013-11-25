@@ -214,6 +214,29 @@ namespace Ipopt
       "The solver does not perform more than the absolute value of this value steps of iterative refinement and stops the process if a satisfactory level of accuracy of the solution in terms of backward error is achieved. "
       "If negative, the accumulation of the residue uses extended precision real and complex data types. Perturbed pivots result in iterative refinement. "
       "The solver automatically performs two steps of iterative refinements when perturbed pivots are obtained during the numerical factorization and this option is set to 0.");
+#ifdef HAVE_PARDISO_MKL
+    roptions->AddStringOption4(
+      "pardiso_order",
+      "Controls the fill-in reduction ordering algorithm for the input matrix.",
+      "metis",
+      "amd", "minimum degree algorithm",
+      "one", "undocumented",
+      "metis", "MeTiS nested dissection algorithm",
+      "pmetis", "parallel (OpenMP) version of MeTiS nested dissection algorithm",
+      "");
+#else
+    roptions->AddStringOption6(
+      "pardiso_order",
+      "Controls the fill-in reduction ordering algorithm for the input matrix.",
+      "five",
+      "amd", "minimum degree algorithm",
+      "one", "undocumented",
+      "metis", "MeTiS nested dissection algorithm",
+      "pmetis", "parallel (OpenMP) version of MeTiS nested dissection algorithm",
+      "four", "undocumented",
+      "five", "undocumented"
+      "");
+#endif
 #if !defined(HAVE_PARDISO_OLDINTERFACE) && !defined(HAVE_PARDISO_MKL)
     roptions->AddLowerBoundedIntegerOption(
       "pardiso_max_iter",
@@ -291,6 +314,8 @@ namespace Ipopt
     options.GetIntegerValue("pardiso_msglvl", pardiso_msglvl, prefix);
     int max_iterref_steps;
     options.GetIntegerValue("pardiso_max_iterative_refinement_steps", max_iterref_steps, prefix);
+    int order;
+    options.GetEnumValue("pardiso_order", order, prefix);
 #if !defined(HAVE_PARDISO_OLDINTERFACE) && !defined(HAVE_PARDISO_MKL)
     options.GetBoolValue("pardiso_iterative", pardiso_iterative_, prefix);
     int pardiso_max_iter;
@@ -404,7 +429,7 @@ namespace Ipopt
 #endif
 
 #ifdef HAVE_PARDISO_MKL
-    //IPARM_[1] = 0;  // switch from metis to minimum degree ordering
+    IPARM_[1] = order;
     // For MKL PARDSIO, the documentation says, "iparm(3) Reserved. Set to zero.", so we don't set IPARM_[2]
     IPARM_[5] = 1;  // Overwrite right-hand side
     IPARM_[7] = max_iterref_steps;
@@ -416,7 +441,7 @@ namespace Ipopt
     IPARM_[24] = 1; // parallel solve
     //IPARM_[26] = 1; // matrix checker
 #else
-    IPARM_[1] = 5;
+    IPARM_[1] = order;
     IPARM_[2] = num_procs; // Set the number of processors
     IPARM_[5] = 1;  // Overwrite right-hand side
     IPARM_[7] = max_iterref_steps;
@@ -438,7 +463,11 @@ namespace Ipopt
 #endif
 
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                   "Pardiso matching strategy (IPARM(13)): %d\n", IPARM_[12]);
+                   "Pardiso matrix ordering     (IPARM(2)): %d\n", IPARM_[1]);
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "Pardiso max. iterref. steps (IPARM(8)): %d\n", IPARM_[7]);
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                   "Pardiso matching strategy  (IPARM(13)): %d\n", IPARM_[12]);
 
     if (pardiso_iterative_) {
 #if defined(HAVE_PARDISO_OLDINTERFACE) || defined(HAVE_PARDISO_MKL)

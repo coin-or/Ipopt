@@ -1226,14 +1226,8 @@ and its default value is $77$.
 
 \subsection{Pardiso Linear Solver}
 
-\paragraph{pardiso\_msglvl:}\label{opt:pardiso_msglvl} Pardiso message level \\
- This determines the amount of analysis output from the Pardiso solver. This is MSGLVL in the Pardiso manual. The valid range for this integer option is
-$0 \le {\tt pardiso\_msglvl } <  {\tt +inf}$
-and its default value is $0$.
-
-
 \paragraph{pardiso\_matching\_strategy:}\label{opt:pardiso_matching_strategy} Matching strategy to be used by Pardiso \\
- This is IPAR(13) in Pardiso manual.  This option is only available if Ipopt has been compiled with Pardiso. The default value for this string option is "complete+2x2".
+ This is IPAR(13) in Pardiso manual. The default value for this string option is "complete+2x2".
 \\ 
 Possible values:
 \begin{itemize}
@@ -1242,10 +1236,31 @@ Possible values:
    \item constraints: Match constraints (IPAR(13)=3)
 \end{itemize}
 
-\paragraph{pardiso\_out\_of\_core\_power:}\label{opt:pardiso_out_of_core_power} Enables out-of-core variant of Pardiso \\
- Setting this option to a positive integer k makes Pardiso work in the out-of-core variant where the factor is split in 2\^k subdomains.  This is IPARM(50) in the Pardiso manual.  This option is only available if Ipopt has been compiled with Pardiso. The valid range for this integer option is
-$0 \le {\tt pardiso\_out\_of\_core\_power } <  {\tt +inf}$
+\paragraph{pardiso\_max\_iterative\_refinement\_steps:}\label{opt:pardiso_max_iterative_refinement_steps} Limit on number of iterative refinement steps. \\
+ The solver does not perform more than the absolute value of this value steps of iterative refinement and stops the process if a satisfactory level of accuracy of the solution in terms of backward error is achieved. If negative, the accumulation of the residue uses extended precision real and complex data types. Perturbed pivots result in iterative refinement. The solver automatically performs two steps of iterative refinements when perturbed pivots are obtained during the numerical factorization and this option is set to 0. The valid range for this integer option is
+${\tt -inf} <  {\tt pardiso\_max\_iterative\_refinement\_steps } <  {\tt +inf}$
 and its default value is $0$.
+
+
+\paragraph{pardiso\_msglvl:}\label{opt:pardiso_msglvl} Pardiso message level \\
+ This determines the amount of analysis output from the Pardiso solver. This is MSGLVL in the Pardiso manual. The valid range for this integer option is
+$0 \le {\tt pardiso\_msglvl } <  {\tt +inf}$
+and its default value is $0$.
+
+
+\paragraph{pardiso\_order:}\label{opt:pardiso_order} Controls the fill-in reduction ordering algorithm for the input matrix. \\
+ The default value for this string option is "five".
+\\ 
+Possible values:
+\begin{itemize}
+   \item amd: minimum degree algorithm
+   \item one: undocumented
+   \item metis: MeTiS nested dissection algorithm
+   \item pmetis: parallel (OpenMP) version of MeTiS nested dissection algorithm
+   \item four: undocumented
+   \item five: undocumented
+\end{itemize}
+
 
 \subsection{WSMP Linear Solver}
 

@@ -4,7 +4,9 @@ history management of subversion.
 
 2013-xx-xx releases/3.11.7
         - tuned parameters for using MKL PARDISO in the hope to make it
-          more robust [r2435]
+          more robust [r2435, r2437]
+        - added options pardiso_max_iterative_refinement_steps and
+          pardiso_order
 
 2013-11-16 releases/3.11.6
         - updates to Matlab Interface build system (by T. Kelman)
