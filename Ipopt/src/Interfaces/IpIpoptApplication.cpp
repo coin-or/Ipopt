@@ -441,8 +441,10 @@ namespace Ipopt
 #if defined(HAVE_PARDISO) || defined(HAVE_LINEARSOLVERLOADER)
 
           options_to_print.push_back("#Pardiso Linear Solver");
-          options_to_print.push_back("pardiso_msglvl");
           options_to_print.push_back("pardiso_matching_strategy");
+          options_to_print.push_back("pardiso_max_iterative_refinement_steps");
+          options_to_print.push_back("pardiso_msglvl");
+          options_to_print.push_back("pardiso_order");
           //options_to_print.push_back("pardiso_out_of_core_power");
 #endif
 
