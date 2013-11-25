@@ -443,7 +443,7 @@ namespace Ipopt
           options_to_print.push_back("#Pardiso Linear Solver");
           options_to_print.push_back("pardiso_msglvl");
           options_to_print.push_back("pardiso_matching_strategy");
-          options_to_print.push_back("pardiso_out_of_core_power");
+          //options_to_print.push_back("pardiso_out_of_core_power");
 #endif
 
 #ifdef HAVE_WSMP
