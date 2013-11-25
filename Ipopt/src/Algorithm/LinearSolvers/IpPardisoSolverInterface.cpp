@@ -200,6 +200,20 @@ namespace Ipopt
       "Setting this option to \"yes\" essentially disables inertia check. "
       "This option makes the algorithm non-robust and easily fail, but it "
       "might give some insight into the necessity of inertia control.");
+    roptions->AddIntegerOption(
+      "pardiso_max_iterative_refinement_steps",
+      "Limit on number of iterative refinement steps.",
+#ifdef HAVE_PARDISO_MKL
+      // allow more iterative refinement in MKL Pardiso for now: it seems to make Ipopt with PARDISO more robust
+      1,
+#else
+      // ToDo: Decide if we need iterative refinement in Pardiso.
+      //       For now, switch it off ?  (0 seems to be default, as well)
+      0,
+#endif
+      "The solver does not perform more than the absolute value of this value steps of iterative refinement and stops the process if a satisfactory level of accuracy of the solution in terms of backward error is achieved. "
+      "If negative, the accumulation of the residue uses extended precision real and complex data types. Perturbed pivots result in iterative refinement. "
+      "The solver automatically performs two steps of iterative refinements when perturbed pivots are obtained during the numerical factorization and this option is set to 0.");
 #if !defined(HAVE_PARDISO_OLDINTERFACE) && !defined(HAVE_PARDISO_MKL)
     roptions->AddLowerBoundedIntegerOption(
       "pardiso_max_iter",
@@ -275,6 +289,8 @@ namespace Ipopt
                          skip_inertia_check_, prefix);
     int pardiso_msglvl;
     options.GetIntegerValue("pardiso_msglvl", pardiso_msglvl, prefix);
+    int max_iterref_steps;
+    options.GetIntegerValue("pardiso_max_iterative_refinement_steps", max_iterref_steps, prefix);
 #if !defined(HAVE_PARDISO_OLDINTERFACE) && !defined(HAVE_PARDISO_MKL)
     options.GetBoolValue("pardiso_iterative", pardiso_iterative_, prefix);
     int pardiso_max_iter;
@@ -391,7 +407,7 @@ namespace Ipopt
     //IPARM_[1] = 0;  // switch from metis to minimum degree ordering
     // For MKL PARDSIO, the documentation says, "iparm(3) Reserved. Set to zero.", so we don't set IPARM_[2]
     IPARM_[5] = 1;  // Overwrite right-hand side
-    IPARM_[7] = 1;  // enable iterative refinement in Pardiso for now: it seems to make Ipopt with PARDISO more robust
+    IPARM_[7] = max_iterref_steps;
     IPARM_[9] = 12; // pivot perturbation (as higher as less perturbation)
     IPARM_[10] = 2; // enable scaling (recommended for interior-point indefinite matrices)
     IPARM_[12] = (int)match_strat_; // enable matching (recommended, as above)
@@ -403,9 +419,7 @@ namespace Ipopt
     IPARM_[1] = 5;
     IPARM_[2] = num_procs; // Set the number of processors
     IPARM_[5] = 1;  // Overwrite right-hand side
-    // ToDo: Decide if we need iterative refinement in Pardiso.
-    //       For now, switch it off ?  (0 seems to be default, as well)
-    IPARM_[7] = 0;
+    IPARM_[7] = max_iterref_steps;
 
     // Options suggested by Olaf Schenk
     IPARM_[9] = 12;
