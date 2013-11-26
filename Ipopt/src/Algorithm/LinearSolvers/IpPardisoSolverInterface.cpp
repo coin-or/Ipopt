@@ -9,6 +9,11 @@
 //           Olaf Schenk                      Univ of Basel 2005-09-20
 //                  - changed options, added PHASE_ flag
 
+/* some useful links:
+ * MKL Pardiso API: http://software.intel.com/sites/products/documentation/hpc/mkl/mklman/GUID-431916D5-B76D-48A1-ABB5-1A0613FDC0FA.htm
+ * MKL Pardiso IPARM: http://software.intel.com/sites/products/documentation/doclib/mkl_sa/11/mklman/GUID-264E311E-ACED-4D56-AC31-E9D3B11D1CBF.htm
+ * API differences MKL vs Basel PARDISO: http://software.intel.com/en-us/articles/summary-of-api-differences-between-intel-mkl-pardiso-and-university-of-basel-pardiso-400
+ */
 
 #include "IpoptConfig.h"
 #include "IpPardisoSolverInterface.hpp"
