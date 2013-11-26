@@ -2,6 +2,13 @@ This file contain the log of changes for Ipopt.
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
+2013-xx-xx releases/3.11.7
+        - adapted PARDISO parameters when using MKL PARDISO to be as close as
+          possible to using Basel PARDISO
+        - added options pardiso_max_iterative_refinement_steps and
+          pardiso_order; alternating the former may help to on instances
+          where MKL PARDISO fails due to numerical issues
+
 2013-11-16 releases/3.11.6
         - updates to Matlab Interface build system (by T. Kelman)
         - fix to updates of R Interface [r2416, #223]

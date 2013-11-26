@@ -148,6 +148,10 @@ namespace Ipopt
   bool IterativePardisoSolverInterface::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
   {
+#ifdef HAVE_PARDISO_OLDINTERFACE
+    THROW_EXCEPTION(OPTION_INVALID, "The inexact version works only with a new version of Pardiso (at least 4.0)");
+#endif
+
     Index enum_int;
     options.GetEnumValue("pardiso_matching_strategy", enum_int, prefix);
     match_strat_ = PardisoMatchingStrategy(enum_int);
@@ -157,11 +161,13 @@ namespace Ipopt
     options.GetBoolValue("pardiso_repeated_perturbation_means_singular",
                          pardiso_repeated_perturbation_means_singular_,
                          prefix);
-    Index pardiso_out_of_core_power;
-    options.GetIntegerValue("pardiso_out_of_core_power",
-                            pardiso_out_of_core_power, prefix);
+    //Index pardiso_out_of_core_power;
+    //options.GetIntegerValue("pardiso_out_of_core_power",
+    //                        pardiso_out_of_core_power, prefix);
     options.GetBoolValue("pardiso_skip_inertia_check",
                          skip_inertia_check_, prefix);
+    int max_iterref_steps;
+    options.GetIntegerValue("pardiso_max_iterative_refinement_steps", max_iterref_steps, prefix);
 
     // PD system
     options.GetIntegerValue("pardiso_max_iter", pardiso_max_iter_, prefix);
@@ -206,6 +212,8 @@ namespace Ipopt
 
     int pardiso_msglvl;
     options.GetIntegerValue("pardiso_msglvl", pardiso_msglvl, prefix);
+    int order;
+    options.GetEnumValue("pardiso_order", order, prefix);
     options.GetIntegerValue("pardiso_max_droptol_corrections",
                             pardiso_max_droptol_corrections_, prefix);
 
@@ -232,10 +240,6 @@ namespace Ipopt
     initialized_=false;
     delete[] a_;
     a_ = NULL;
-
-#ifdef HAVE_PARDISO_OLDINTERFACE
-    THROW_EXCEPTION(OPTION_INVALID, "The inexact version works only with a new version of Pardiso (at least 4.0)");
-#endif
 
     // Call Pardiso's initialization routine
     IPARM_[0] = 0;  // Tell it to fill IPARM with default values(?)
@@ -276,11 +280,9 @@ namespace Ipopt
     IPARM_[2] = 1;
 #endif
 
-    IPARM_[1] = 5;
+    IPARM_[1] = order;
     IPARM_[5] = 1;  // Overwrite right-hand side
-    // ToDo: decide if we need iterative refinement in Pardiso.  For
-    // now, switch it off ?
-    IPARM_[7] = 0;
+    IPARM_[7] = max_iterref_steps;
 
     // Options suggested by Olaf Schenk
     IPARM_[9] = 12;
