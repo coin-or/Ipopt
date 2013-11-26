@@ -203,14 +203,10 @@ namespace Ipopt
     roptions->AddIntegerOption(
       "pardiso_max_iterative_refinement_steps",
       "Limit on number of iterative refinement steps.",
-#ifdef HAVE_PARDISO_MKL
-      // allow more iterative refinement in MKL Pardiso for now: it seems to make Ipopt with PARDISO more robust
-      1,
-#else
-      // ToDo: Decide if we need iterative refinement in Pardiso.
-      //       For now, switch it off ?  (0 seems to be default, as well)
+      // ToDo: Decide if we need iterative refinement in Pardiso. For now, we keep the default.
+      //       It seems that setting it to, e.g., 1, decreases performance, but can make it more
+      //       robust on some numerically difficult NLPs.
       0,
-#endif
       "The solver does not perform more than the absolute value of this value steps of iterative refinement and stops the process if a satisfactory level of accuracy of the solution in terms of backward error is achieved. "
       "If negative, the accumulation of the residue uses extended precision real and complex data types. Perturbed pivots result in iterative refinement. "
       "The solver automatically performs two steps of iterative refinements when perturbed pivots are obtained during the numerical factorization and this option is set to 0.");
@@ -960,6 +956,7 @@ namespace Ipopt
       }
       else {
         attempts = max_attempts;
+        // TODO we could try again with some PARDISO parameters changed, i.e., enabling iterative refinement
       }
     }
 
