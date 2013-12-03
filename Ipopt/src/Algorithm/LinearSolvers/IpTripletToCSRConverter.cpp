@@ -244,6 +244,7 @@ namespace Ipopt
             if (jrow!=i) {
               ipos_double_triplet_[jd2] = ipos_double_triplet_tmp[jd1];
               ipos_double_compressed_[jd2] = ia_tmp[jrow+1];
+              jd2++;
             }
             jd1++;
           }
