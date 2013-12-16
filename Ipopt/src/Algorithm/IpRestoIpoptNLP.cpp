@@ -154,11 +154,15 @@ namespace Ipopt
 
     DBG_PRINT((1, "Setting the c_space_\n"));
     // vector c
-    c_space_ = orig_c_space;
+    //c_space_ = orig_c_space;
+    c_space_ = new CompoundVectorSpace(1,orig_c_space->Dim());
+    c_space_->SetCompSpace(0, *orig_c_space);
 
     DBG_PRINT((1, "Setting the d_space_\n"));
     // vector d
-    d_space_ = orig_d_space;
+    //d_space_ = orig_d_space;
+    d_space_ = new CompoundVectorSpace(1,orig_d_space->Dim());
+    d_space_->SetCompSpace(0, *orig_d_space);
 
     DBG_PRINT((1, "Creating the x_l_space_\n"));
     // vector x_L
@@ -173,7 +177,8 @@ namespace Ipopt
 
     DBG_PRINT((1, "Setting the x_u_space_\n"));
     // vector x_U
-    x_u_space_ = orig_x_u_space;
+    x_u_space_ = new CompoundVectorSpace(1,orig_x_u_space->Dim());
+    x_u_space_->SetCompSpace(0, *orig_x_u_space);
 
     DBG_PRINT((1, "Creating the px_l_space_\n"));
     // matrix px_l
@@ -213,8 +218,7 @@ namespace Ipopt
     px_l_space_->SetCompSpace(4, 4, *identity_mat_space_nd, true);
 
     DBG_PRINT((1, "Creating the px_u_space_\n"));
-    // matrix px_u    px_u_space_->SetBlockRows(0, orig_x_space->Dim());
-
+    // matrix px_u
     total_rows = orig_x_space->Dim() + 2*orig_c_space->Dim()
                  + 2*orig_d_space->Dim();
     total_cols = orig_x_u_space->Dim();
@@ -231,16 +235,28 @@ namespace Ipopt
     // other matrices are zero'ed out
 
     // vector d_L
-    d_l_space_ = orig_d_l_space;
+    //d_l_space_ = orig_d_l_space;
+    d_l_space_ = new CompoundVectorSpace(1,orig_d_l_space->Dim());
+    d_l_space_->SetCompSpace(0, *orig_d_l_space);
 
     // vector d_U
-    d_u_space_ = orig_d_u_space;
+    //d_u_space_ = orig_d_u_space;
+    d_u_space_ = new CompoundVectorSpace(1,orig_d_u_space->Dim());
+    d_u_space_->SetCompSpace(0, *orig_d_u_space);
 
     // matrix pd_L
-    pd_l_space_ = orig_pd_l_space;
+    //pd_l_space_ = orig_pd_l_space;
+    pd_l_space_ = new CompoundMatrixSpace(1,1,orig_pd_l_space->NRows(),orig_pd_l_space->NCols());
+    pd_l_space_->SetBlockRows(0, orig_pd_l_space->NRows());
+    pd_l_space_->SetBlockCols(0, orig_pd_l_space->NCols());
+    pd_l_space_->SetCompSpace(0,0, *orig_pd_l_space);
 
     // matrix pd_U
-    pd_u_space_ = orig_pd_u_space;
+    //pd_u_space_ = orig_pd_u_space;
+    pd_u_space_ = new CompoundMatrixSpace(1,1,orig_pd_u_space->NRows(),orig_pd_u_space->NCols());
+    pd_u_space_->SetBlockRows(0, orig_pd_u_space->NRows());
+    pd_u_space_->SetBlockCols(0, orig_pd_u_space->NCols());
+    pd_u_space_->SetCompSpace(0,0, *orig_pd_u_space);
 
     DBG_PRINT((1, "Creating the jac_c_space_\n"));
     // matrix jac_c
@@ -326,13 +342,16 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2,"resto_x_L", *x_L_);
 
     // x_U
-    x_U_ = orig_ip_nlp_->x_U();
+    x_U_ = x_u_space_->MakeNewCompoundVector();
+    x_U_->SetComp(0, *orig_ip_nlp_->x_U());
 
     // d_L
-    d_L_ = orig_ip_nlp_->d_L();
+    d_L_ = d_l_space_->MakeNewCompoundVector();
+    d_L_->SetComp(0, *orig_ip_nlp_->d_L());
 
     // d_U
-    d_U_ = orig_ip_nlp_->d_U();
+    d_U_ = d_u_space_->MakeNewCompoundVector();
+    d_U_->SetComp(0, *orig_ip_nlp_->d_U());
 
     // Px_L
     Px_L_ = px_l_space_->MakeNewCompoundMatrix();
@@ -345,10 +364,14 @@ namespace Ipopt
     // Remaining matrices will be zero'ed out
 
     // Pd_L
-    Pd_L_ = orig_ip_nlp_->Pd_L();
+    //Pd_L_ = orig_ip_nlp_->Pd_L();
+    Pd_L_ = pd_l_space_->MakeNewCompoundMatrix();
+    Pd_L_->SetComp(0, 0, *orig_ip_nlp_->Pd_L());
 
     // Pd_U
-    Pd_U_ = orig_ip_nlp_->Pd_U();
+    //Pd_U_ = orig_ip_nlp_->Pd_U();
+    Pd_U_ = pd_u_space_->MakeNewCompoundMatrix();
+    Pd_U_->SetComp(0, 0, *orig_ip_nlp_->Pd_U());
 
     // Getting the NLP scaling
 
@@ -506,9 +529,13 @@ namespace Ipopt
 
     SmartPtr<const Vector> orig_c = orig_ip_nlp_->c(*x_only);
     SmartPtr<Vector> retPtr = c_space_->MakeNew();
-    retPtr->Copy(*orig_c);
-    retPtr->Axpy(1.0, *nc_only);
-    retPtr->Axpy(-1.0, *pc_only);
+    SmartPtr<CompoundVector> CretPtr = 
+      static_cast<CompoundVector*> (GetRawPtr(retPtr));
+    DBG_ASSERT(dynamic_cast<CompoundVector*> (GetRawPtr(retPtr)));
+    SmartPtr<Vector> CretPtr0 = CretPtr->GetCompNonConst(0);
+    CretPtr0->Copy(*orig_c);
+    CretPtr0->Axpy(1.0, *nc_only);
+    CretPtr0->Axpy(-1.0, *pc_only);
 
     return GetRawPtr(retPtr);
   }
@@ -528,9 +555,13 @@ namespace Ipopt
 
     SmartPtr<const Vector> orig_d = orig_ip_nlp_->d(*x_only);
     SmartPtr<Vector> retPtr = d_space_->MakeNew();
-    retPtr->Copy(*orig_d);
-    retPtr->Axpy(1., *nd_only);
-    retPtr->Axpy(-1., *pd_only);
+    SmartPtr<CompoundVector> CretPtr = 
+      static_cast<CompoundVector*> (GetRawPtr(retPtr));
+    DBG_ASSERT(dynamic_cast<CompoundVector*> (GetRawPtr(retPtr)));
+    SmartPtr<Vector> CretPtr0 = CretPtr->GetCompNonConst(0);
+    CretPtr0->Copy(*orig_d);
+    CretPtr0->Axpy(1., *nd_only);
+    CretPtr0->Axpy(-1., *pd_only);
 
     return GetRawPtr(retPtr);
   }
@@ -630,14 +661,25 @@ namespace Ipopt
     // All other blocks are zero'ed (NULL)
 
     // get the x_only part
-    const CompoundVector* c_vec = static_cast<const CompoundVector*>(&x);
-    DBG_ASSERT(c_vec);
+    const CompoundVector* c_vec = 
+      static_cast<const CompoundVector*>(&x);
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
     SmartPtr<const Vector> x_only = c_vec->GetComp(0);
 
-    // yc and yd should not be compound vectors
+    // yc and yd should be trivial compound vectors
+    const CompoundVector* Cyc = 
+      static_cast<const CompoundVector*>(&yc);
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&yc));
+    DBG_ASSERT(Cyc->NComps() == 1);
+    SmartPtr<const Vector> Cyc0 = Cyc->GetComp(0);
+    const CompoundVector* Cyd = 
+      static_cast<const CompoundVector*>(&yd);
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&yd));
+    DBG_ASSERT(Cyd->NComps() == 1);
+    SmartPtr<const Vector> Cyd0 = Cyd->GetComp(0);
 
     // calculate the original hessian
-    SmartPtr<const SymMatrix> h_con_orig = orig_ip_nlp_->h(*x_only, 0.0, yc, yd);
+    SmartPtr<const SymMatrix> h_con_orig = orig_ip_nlp_->h(*x_only, 0.0, *Cyc0, *Cyd0);
 
     // Create the new compound matrix
     // The SumSymMatrix is auto_allocated
@@ -712,12 +754,27 @@ namespace Ipopt
 
     const CompoundVector* comp_new_x_L =
       static_cast<const CompoundVector*>(&new_x_L);
-    DBG_ASSERT(comp_new_x_L);
-
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&new_x_L));
     SmartPtr<const Vector> new_orig_x_L = comp_new_x_L->GetComp(0);
 
+    const CompoundVector* comp_new_x_U =
+      static_cast<const CompoundVector*>(&new_x_U);
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&new_x_U));
+    SmartPtr<const Vector> new_orig_x_U = comp_new_x_U->GetComp(0);
+
+    const CompoundVector* comp_new_d_L =
+      static_cast<const CompoundVector*>(&new_d_L);
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&new_d_L));
+    SmartPtr<const Vector> new_orig_d_L = comp_new_d_L->GetComp(0);
+
+    const CompoundVector* comp_new_d_U =
+      static_cast<const CompoundVector*>(&new_d_U);
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&new_d_U));
+    SmartPtr<const Vector> new_orig_d_U = comp_new_d_U->GetComp(0);
+
+
     // adapt bounds for the original NLP
-    orig_ip_nlp_->AdjustVariableBounds(*new_orig_x_L, new_x_U, new_d_L, new_d_U);
+    orig_ip_nlp_->AdjustVariableBounds(*new_orig_x_L, *new_orig_x_U, *new_orig_d_L, *new_orig_d_U);
 
     // adapt bounds for the p and n variables
     SmartPtr<const Vector> new_nc_L = comp_new_x_L->GetComp(1);

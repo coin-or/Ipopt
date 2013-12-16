@@ -84,10 +84,15 @@ namespace Ipopt
     const CompoundVector* cx =
       static_cast<const CompoundVector*>(GetRawPtr(x));
     DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(x)));
+    SmartPtr<const Vector> s = IpData().curr()->s();
+    const CompoundVector* cs =
+      static_cast<const CompoundVector*>(GetRawPtr(s));
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(s)));
+    DBG_ASSERT(cs->NComps() == 1);
 
     SmartPtr<IteratesVector> trial = orig_ip_data->curr()->MakeNewContainer();
     trial->Set_x(*cx->GetComp(0));
-    trial->Set_s(*IpData().curr()->s());
+    trial->Set_s(*cs->GetComp(0));
     orig_ip_data->set_trial(trial);
 
     if (call_intermediate_callback) {

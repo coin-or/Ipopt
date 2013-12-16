@@ -91,24 +91,89 @@ namespace Ipopt
 
     SmartPtr<const CompoundSymMatrix> CW =
       static_cast<const CompoundSymMatrix*>(W);
-
-    SmartPtr<const CompoundVector> CD_x =
-      static_cast<const CompoundVector*>(D_x);
+    DBG_ASSERT(dynamic_cast<const CompoundSymMatrix*>(W));
+    SmartPtr<const CompoundVector> CD_x;
+    if (D_x) {
+      CD_x = static_cast<const CompoundVector*>(D_x);
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(D_x));
+    }
+    // Assume D_s is always present
+    SmartPtr<const CompoundVector> CD_s =
+      static_cast<const CompoundVector*>(D_s);
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(D_s));
+    DBG_ASSERT(CD_s->NComps() == 1);
+    SmartPtr<const Vector> CD_s0 = CD_s->GetComp(0);
 
     SmartPtr<const CompoundMatrix> CJ_c =
       static_cast<const CompoundMatrix*>(J_c);
-    DBG_ASSERT(IsValid(CJ_c));
+    DBG_ASSERT(dynamic_cast<const CompoundMatrix*>(J_c));
+    SmartPtr<const CompoundVector> CD_c;
+    SmartPtr<const Vector> CD_c0;
+    if (D_c) {
+      CD_c = static_cast<const CompoundVector*>(D_c);
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(D_c));
+      DBG_ASSERT(CD_c->NComps() == 1);
+      CD_c0 = CD_c->GetComp(0);
+    }
 
     SmartPtr<const CompoundMatrix> CJ_d =
       static_cast<const CompoundMatrix*>(J_d);
-    DBG_ASSERT(IsValid(CJ_d));
+    DBG_ASSERT(dynamic_cast<const CompoundMatrix*>(J_d));
+    SmartPtr<const CompoundVector> CD_d;
+    SmartPtr<const Vector> CD_d0;
+    if (D_d) {
+      CD_d = static_cast<const CompoundVector*>(D_d);
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(D_d));
+      DBG_ASSERT(CD_d->NComps() == 1);
+      CD_d0 = CD_d->GetComp(0);
+    }
+
 
     SmartPtr<const CompoundVector> Crhs_x =
       static_cast<const CompoundVector*>(&rhs_x);
-    DBG_ASSERT(IsValid(Crhs_x));
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&rhs_x));
 
-    SmartPtr<CompoundVector> Csol_x = static_cast<CompoundVector*>(&sol_x);
-    DBG_ASSERT(IsValid(Csol_x));
+    SmartPtr<const CompoundVector> Crhs_s =
+      static_cast<const CompoundVector*>(&rhs_s);
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&rhs_s));
+    DBG_ASSERT(Crhs_s->NComps() == 1);
+    SmartPtr<const Vector> Crhs_s0 = Crhs_s->GetComp(0);
+
+    SmartPtr<const CompoundVector> Crhs_c =
+      static_cast<const CompoundVector*>(&rhs_c);
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&rhs_c));
+    DBG_ASSERT(Crhs_c->NComps() == 1);
+    SmartPtr<const Vector> Crhs_c0 = Crhs_c->GetComp(0);
+
+    SmartPtr<const CompoundVector> Crhs_d =
+      static_cast<const CompoundVector*>(&rhs_d);
+    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&rhs_d));
+    DBG_ASSERT(Crhs_d->NComps() == 1);
+    SmartPtr<const Vector> Crhs_d0 = Crhs_d->GetComp(0);
+
+
+
+    SmartPtr<CompoundVector> Csol_x =
+      static_cast<CompoundVector*>(&sol_x);
+    DBG_ASSERT(dynamic_cast<CompoundVector*>(&sol_x));
+
+    SmartPtr<CompoundVector> Csol_s =
+      static_cast<CompoundVector*>(&sol_s);
+    DBG_ASSERT(dynamic_cast<CompoundVector*>(&sol_s));
+    DBG_ASSERT(Csol_s->NComps() == 1);
+    SmartPtr<Vector> Csol_s0 = Csol_s->GetCompNonConst(0);
+
+    SmartPtr<CompoundVector> Csol_c =
+      static_cast<CompoundVector*>(&sol_c);
+    DBG_ASSERT(dynamic_cast<CompoundVector*>(&sol_c));
+    DBG_ASSERT(Csol_c->NComps() == 1);
+    SmartPtr<Vector> Csol_c0 = Csol_c->GetCompNonConst(0);
+
+    SmartPtr<CompoundVector> Csol_d =
+      static_cast<CompoundVector*>(&sol_d);
+    DBG_ASSERT(dynamic_cast<CompoundVector*>(&sol_d));
+    DBG_ASSERT(Csol_d->NComps() == 1);
+    SmartPtr<Vector> Csol_d0 = Csol_d->GetCompNonConst(0);
 
     // Get the Sigma inverses
     SmartPtr<const Vector> sigma_n_c;
@@ -179,33 +244,33 @@ namespace Ipopt
     }
 
     Number delta_xR = delta_x;
-    SmartPtr<const Vector> D_sR = D_s;
+    SmartPtr<const Vector> D_sR = CD_s0;
     Number delta_sR = delta_s;
     SmartPtr<const Matrix> J_cR = CJ_c->GetComp(0,0);
     SmartPtr<const Vector> D_cR =
       Neg_Omega_c_plus_D_c(sigma_tilde_n_c_inv, sigma_tilde_p_c_inv,
-                           D_c, rhs_c);
+                           GetRawPtr(CD_c0), *Crhs_c0);
     DBG_PRINT((1,"D_cR tag = (%p,%d)\n", D_cR->GetTag().first, D_cR->GetTag().second));
     Number delta_cR = delta_c;
     SmartPtr<const Matrix> J_dR = CJ_d->GetComp(0,0);
     SmartPtr<const Vector> D_dR =
       Neg_Omega_d_plus_D_d(*pd_l, sigma_tilde_n_d_inv, *neg_pd_u,
-                           sigma_tilde_p_d_inv, D_d, rhs_d);
+                           sigma_tilde_p_d_inv, GetRawPtr(CD_d0), *Crhs_d0);
     Number delta_dR = delta_d;
     SmartPtr<const Vector> rhs_xR = Crhs_x->GetComp(0);
-    SmartPtr<const Vector> rhs_sR = &rhs_s;
-    SmartPtr<const Vector> rhs_cR = Rhs_cR(rhs_c, sigma_tilde_n_c_inv,
+    SmartPtr<const Vector> rhs_sR = Crhs_s0;
+    SmartPtr<const Vector> rhs_cR = Rhs_cR(*Crhs_c0, sigma_tilde_n_c_inv,
                                            *Crhs_x->GetComp(1),
                                            sigma_tilde_p_c_inv,
                                            *Crhs_x->GetComp(2));
-    SmartPtr<const Vector> rhs_dR = Rhs_dR(rhs_d, sigma_tilde_n_d_inv,
+    SmartPtr<const Vector> rhs_dR = Rhs_dR(*Crhs_d0, sigma_tilde_n_d_inv,
                                            *Crhs_x->GetComp(3), *pd_l,
                                            sigma_tilde_p_d_inv,
                                            *Crhs_x->GetComp(4), *neg_pd_u);
     SmartPtr<Vector> sol_xR = Csol_x->GetCompNonConst(0);
-    Vector& sol_sR = sol_s;
-    Vector& sol_cR = sol_c;
-    Vector& sol_dR = sol_d;
+    SmartPtr<Vector> sol_sR = Csol_s0;
+    SmartPtr<Vector> sol_cR = Csol_c0;
+    SmartPtr<Vector> sol_dR = Csol_d0;
 
     ESymSolverStatus status = orig_aug_solver_->Solve(GetRawPtr(h_orig),
                               orig_W_factor,
@@ -216,7 +281,7 @@ namespace Ipopt
                               GetRawPtr(J_dR), GetRawPtr(D_dR),
                               delta_dR,
                               *rhs_xR, *rhs_sR, *rhs_cR, *rhs_dR,
-                              *sol_xR, sol_sR, sol_cR, sol_dR,
+                              *sol_xR, *sol_sR, *sol_cR, *sol_dR,
                               check_NegEVals,
                               numberOfNegEVals);
 
@@ -225,7 +290,7 @@ namespace Ipopt
       SmartPtr<Vector> sol_n_c = Csol_x->GetCompNonConst(1);
       sol_n_c->Set(0.0);
       if (IsValid(sigma_tilde_n_c_inv)) {
-        sol_n_c->AddTwoVectors(1., *Crhs_x->GetComp(1), -1.0, sol_cR, 0.);
+        sol_n_c->AddTwoVectors(1., *Crhs_x->GetComp(1), -1.0, *sol_cR, 0.);
         sol_n_c->ElementWiseMultiply(*sigma_tilde_n_c_inv);
       }
 
@@ -233,16 +298,16 @@ namespace Ipopt
       sol_p_c->Set(0.0);
       if (IsValid(sigma_tilde_p_c_inv)) {
         DBG_PRINT_VECTOR(2, "rhs_pc", *Crhs_x->GetComp(2));
-        DBG_PRINT_VECTOR(2, "delta_y_c", sol_cR);
+        DBG_PRINT_VECTOR(2, "delta_y_c", *sol_cR);
         DBG_PRINT_VECTOR(2, "Sig~_{p_c}^{-1}", *sigma_tilde_p_c_inv);
-        sol_p_c->AddTwoVectors(1., *Crhs_x->GetComp(2), 1.0, sol_cR, 0.);
+        sol_p_c->AddTwoVectors(1., *Crhs_x->GetComp(2), 1.0, *sol_cR, 0.);
         sol_p_c->ElementWiseMultiply(*sigma_tilde_p_c_inv);
       }
 
       SmartPtr<Vector> sol_n_d = Csol_x->GetCompNonConst(3);
       sol_n_d->Set(0.0);
       if (IsValid(sigma_tilde_n_d_inv)) {
-        pd_l->TransMultVector(-1.0, sol_dR, 0.0, *sol_n_d);
+        pd_l->TransMultVector(-1.0, *sol_dR, 0.0, *sol_n_d);
         sol_n_d->Axpy(1.0, *Crhs_x->GetComp(3));
         sol_n_d->ElementWiseMultiply(*sigma_tilde_n_d_inv);
       }
@@ -250,7 +315,7 @@ namespace Ipopt
       SmartPtr<Vector> sol_p_d = Csol_x->GetCompNonConst(4);
       sol_p_d->Set(0.0);
       if (IsValid(sigma_tilde_p_d_inv)) {
-        neg_pd_u->TransMultVector(-1.0, sol_dR, 0.0, *sol_p_d);
+        neg_pd_u->TransMultVector(-1.0, *sol_dR, 0.0, *sol_p_d);
         sol_p_d->Axpy(1.0, *Crhs_x->GetComp(4));
         sol_p_d->ElementWiseMultiply(*sigma_tilde_p_d_inv);
       }

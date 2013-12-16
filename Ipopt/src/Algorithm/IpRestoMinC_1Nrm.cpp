@@ -185,20 +185,56 @@ namespace Ipopt
         // that they will be returned to the user
         SmartPtr<IteratesVector> trial = IpData().trial()->MakeNewContainer();
 
+        SmartPtr<const Vector> resto_curr_x = resto_curr->x();
         SmartPtr<const CompoundVector> cx =
-          static_cast<const CompoundVector*>(GetRawPtr(resto_curr->x()));
-        DBG_ASSERT(IsValid(cx));
-        trial->Set_primal(*cx->GetComp(0), *resto_ip_data->curr()->s());
+          static_cast<const CompoundVector*>(GetRawPtr(resto_curr_x));
+        DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(resto_curr_x)));
 
-        trial->Set_eq_mult(*resto_ip_data->curr()->y_c(),
-                           *resto_ip_data->curr()->y_d());
+        SmartPtr<const Vector> resto_curr_s = resto_curr->s();
+        SmartPtr<const CompoundVector> cs =
+          static_cast<const CompoundVector*>(GetRawPtr(resto_curr_s));
+        DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(resto_curr_s)));
 
-        cx = static_cast<const CompoundVector*>
-             (GetRawPtr(resto_ip_data->curr()->z_L()));
-        DBG_ASSERT(IsValid(cx));
-        trial->Set_bound_mult(*cx->GetComp(0), *resto_ip_data->curr()->z_U(),
-                              *resto_ip_data->curr()->v_L(),
-                              *resto_ip_data->curr()->v_U());
+        SmartPtr<const Vector> resto_curr_y_c = resto_curr->y_c();
+        SmartPtr<const CompoundVector> cy_c =
+          static_cast<const CompoundVector*>(GetRawPtr(resto_curr_y_c));
+        DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(resto_curr_y_c)));
+
+        SmartPtr<const Vector> resto_curr_y_d = resto_curr->y_d();
+        SmartPtr<const CompoundVector> cy_d =
+          static_cast<const CompoundVector*>(GetRawPtr(resto_curr_y_d));
+        DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(resto_curr_y_d)));
+
+        SmartPtr<const Vector> resto_curr_z_L = resto_curr->z_L();
+        SmartPtr<const CompoundVector> cz_L =
+          static_cast<const CompoundVector*>(GetRawPtr(resto_curr_z_L));
+        DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(resto_curr_z_L)));
+
+        SmartPtr<const Vector> resto_curr_z_U = resto_curr->z_U();
+        SmartPtr<const CompoundVector> cz_U =
+          static_cast<const CompoundVector*>(GetRawPtr(resto_curr_z_U));
+        DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(resto_curr_z_U)));
+
+        SmartPtr<const Vector> resto_curr_v_L = resto_curr->v_L();
+        SmartPtr<const CompoundVector> cv_L =
+          static_cast<const CompoundVector*>(GetRawPtr(resto_curr_v_L));
+        DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(resto_curr_v_L)));
+        
+        SmartPtr<const Vector> resto_curr_v_U = resto_curr->v_U();
+        SmartPtr<const CompoundVector> cv_U =
+          static_cast<const CompoundVector*>(GetRawPtr(resto_curr_v_U));
+        DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(resto_curr_v_U)));
+        
+
+        trial->Set_primal(*cx->GetComp(0), *cs->GetComp(0));
+
+        trial->Set_eq_mult(*cy_c->GetComp(0),
+                           *cy_d->GetComp(0));
+
+        trial->Set_bound_mult(*cz_L->GetComp(0),
+                              *cz_U->GetComp(0),
+                              *cv_L->GetComp(0),
+                              *cv_U->GetComp(0));
 
         IpData().set_trial(trial);
         IpData().AcceptTrialPoint();
@@ -267,11 +303,18 @@ namespace Ipopt
     if (retval == 0) {
       // Copy the results into the trial fields;. They will be
       // accepted later in the full algorithm
+      SmartPtr<const Vector> resto_curr_x = resto_ip_data->curr()->x();
       SmartPtr<const CompoundVector> cx =
-        static_cast<const CompoundVector*>(GetRawPtr(resto_ip_data->curr()->x()));
-      DBG_ASSERT(IsValid(cx));
+        static_cast<const CompoundVector*>(GetRawPtr(resto_curr_x));
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(resto_curr_x)));
+      
+      SmartPtr<const Vector> resto_curr_s = resto_ip_data->curr()->s();
+      SmartPtr<const CompoundVector> cs =
+        static_cast<const CompoundVector*>(GetRawPtr(resto_curr_s));
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(resto_curr_s)));
+
       SmartPtr<IteratesVector> trial = IpData().trial()->MakeNewContainer();
-      trial->Set_primal(*cx->GetComp(0), *resto_ip_data->curr()->s());
+      trial->Set_primal(*cx->GetComp(0), *cs->GetComp(0));
       IpData().set_trial(trial);
 
       // If this is a square problem, we are done because a

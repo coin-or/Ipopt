@@ -26,7 +26,7 @@ namespace Ipopt
     //@{
     /** Constructor.  If resto_orig_iteration_output is not NULL, the
      *  output will be done twice per iteration, first for the
-     *  restoration phase problem, and secondyl using the functions
+     *  restoration phase problem, and secondly using the functions
      *  for the original NLP. */
     RestoIterationOutput(const SmartPtr<OrigIterationOutput>& resto_orig_iteration_output);
 
