@@ -14,6 +14,11 @@ bin_PROGRAMS = ipopt
 libipoptamplinterface_la_SOURCES = \
 	AmplTNLP.cpp AmplTNLP.hpp
 
+if DEPENDENCY_LINKING
+libipoptamplinterface_la_LIBADD = ../../Interfaces/libipopt.la \
+	$(IPOPTAMPLINTERFACELIB_LIBS)
+endif
+
 libipoptamplinterface_la_LDFLAGS = $(LT_LDFLAGS)
 
 ipopt_SOURCES = \
