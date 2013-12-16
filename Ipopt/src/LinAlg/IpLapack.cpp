@@ -44,6 +44,11 @@ extern "C"
                                ipfint *nrhs, const double *A, ipfint *ldA,
                                ipfintarray *IPIV, double *B, ipfint *ldB,
                                ipfint *info, int trans_len);
+  
+  /** LAPACK Fortran subroutine DPPSV. */
+  void F77_FUNC(dppsv,DPPSV)(char *uplo, ipfint *n,
+                             ipfint *nrhs, const double *A,
+                             double *B, ipfint *ldB, ipfint *info);
 }
 
 namespace Ipopt
@@ -162,4 +167,24 @@ namespace Ipopt
 #endif
 
   }
+
+  /* Interface to FORTRAN routine DPPSV. */
+  void IpLapackDppsv(Index ndim, Index nrhs, const Number *a,
+                     Number *b, Index ldb, Index& info)
+  {
+#ifdef COIN_HAS_LAPACK
+    ipfint N=ndim, NRHS=nrhs, LDB=ldb, INFO;
+    char uplo = 'U';
+
+    F77_FUNC(dppsv,DPPSV)(&uplo, &N, &NRHS, a, b, &LDB, &INFO);
+
+    info = INFO;
+#else
+
+    std::string msg = "Ipopt has been compiled without LAPACK routine DPPSV, but options are chosen that require this dependency.  Abort.";
+    THROW_EXCEPTION(LAPACK_NOT_INCLUDED, msg);
+#endif
+
+  }
+
 }
