@@ -43,6 +43,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+@DEPENDENCY_LINKING_TRUE@am__append_1 = $(IPOPTLIB_LIBS)
 subdir = src/Interfaces
 DIST_COMMON = $(includeipopt_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -66,6 +67,7 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includeipoptdir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
+@DEPENDENCY_LINKING_TRUE@am__DEPENDENCIES_2 = $(am__DEPENDENCIES_1)
 am_libipopt_la_OBJECTS = IpInterfacesRegOp.lo IpIpoptApplication.lo \
 	IpSolveStatistics.lo IpStdCInterface.lo IpStdFInterface.lo \
 	IpStdInterfaceTNLP.lo IpTNLPAdapter.lo IpTNLPReducer.lo
@@ -384,7 +386,7 @@ libipopt_la_SOURCES = \
 	IpTNLPAdapter.cpp IpTNLPAdapter.hpp \
 	IpTNLPReducer.cpp IpTNLPReducer.hpp
 
-libipopt_la_LIBADD = $(IPALLLIBS)
+libipopt_la_LIBADD = $(IPALLLIBS) $(am__append_1)
 libipopt_la_DEPENDENCIES = $(IPALLLIBS)
 libipopt_la_LDFLAGS = $(LT_LDFLAGS)
 

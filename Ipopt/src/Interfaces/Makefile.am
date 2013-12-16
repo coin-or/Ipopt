@@ -41,6 +41,9 @@ libipopt_la_SOURCES = \
 	IpTNLPReducer.cpp IpTNLPReducer.hpp
 
 libipopt_la_LIBADD = $(IPALLLIBS)
+if DEPENDENCY_LINKING
+libipopt_la_LIBADD += $(IPOPTLIB_LIBS)
+endif
 
 libipopt_la_DEPENDENCIES = $(IPALLLIBS)
 
