@@ -77,6 +77,7 @@ namespace Ipopt
     SmartPtr<Vector> new_x = IpData().curr()->x()->MakeNew();
     SmartPtr<CompoundVector> Cnew_x =
       static_cast<CompoundVector*> (GetRawPtr(new_x));
+    DBG_ASSERT(dynamic_cast<CompoundVector*> (GetRawPtr(new_x)));
 
     // Set the trial x variables from the original NLP
     Cnew_x->GetCompNonConst(0)->Copy(*orig_ip_data->curr()->x());
@@ -121,7 +122,14 @@ namespace Ipopt
     DBG_PRINT_VECTOR(2, "pd", *pd);
 
     // Leave the slacks unchanged
-    SmartPtr<const Vector> new_s = orig_ip_data->curr()->s();
+    SmartPtr<Vector> new_s = IpData().curr()->s()->MakeNew();
+    SmartPtr<CompoundVector> Cnew_s =
+      static_cast<CompoundVector*> (GetRawPtr(new_s));
+    DBG_ASSERT(dynamic_cast<CompoundVector*> (GetRawPtr(new_s)));
+    DBG_ASSERT(Cnew_s->NComps() == 1);
+
+    // Set the trial s variables from the original NLP
+    Cnew_s->GetCompNonConst(0)->Copy(*orig_ip_data->curr()->s());
 
     // Now set the primal trial variables
     DBG_PRINT_VECTOR(2,"new_s",*new_s);
@@ -140,10 +148,22 @@ namespace Ipopt
     SmartPtr<Vector> new_z_L = IpData().curr()->z_L()->MakeNew();
     SmartPtr<CompoundVector> Cnew_z_L =
       static_cast<CompoundVector*> (GetRawPtr(new_z_L));
-    DBG_ASSERT(IsValid(Cnew_z_L));
+    DBG_ASSERT(dynamic_cast<CompoundVector*> (GetRawPtr(new_z_L)));
     SmartPtr<Vector> new_z_U = IpData().curr()->z_U()->MakeNew();
+    SmartPtr<CompoundVector> Cnew_z_U =
+      static_cast<CompoundVector*> (GetRawPtr(new_z_U));
+    DBG_ASSERT(dynamic_cast<CompoundVector*> (GetRawPtr(new_z_U)));
+    DBG_ASSERT(Cnew_z_U->NComps() == 1);
     SmartPtr<Vector> new_v_L = IpData().curr()->v_L()->MakeNew();
+    SmartPtr<CompoundVector> Cnew_v_L =
+      static_cast<CompoundVector*> (GetRawPtr(new_v_L));
+    DBG_ASSERT(dynamic_cast<CompoundVector*> (GetRawPtr(new_v_L)));
+    DBG_ASSERT(Cnew_v_L->NComps() == 1);
     SmartPtr<Vector> new_v_U = IpData().curr()->v_U()->MakeNew();
+    SmartPtr<CompoundVector> Cnew_v_U =
+      static_cast<CompoundVector*> (GetRawPtr(new_v_U));
+    DBG_ASSERT(dynamic_cast<CompoundVector*> (GetRawPtr(new_v_U)));
+    DBG_ASSERT(Cnew_v_U->NComps() == 1);
 
     // multipliers for the original bounds are
     SmartPtr<const Vector> orig_z_L = orig_ip_data->curr()->z_L();
@@ -156,12 +176,15 @@ namespace Ipopt
     SmartPtr<Vector> Cnew_z_L0 = Cnew_z_L->GetCompNonConst(0);
     Cnew_z_L0->Set(rho);
     Cnew_z_L0->ElementWiseMin(*orig_z_L);
-    new_z_U->Set(rho);
-    new_z_U->ElementWiseMin(*orig_z_U);
-    new_v_L->Set(rho);
-    new_v_L->ElementWiseMin(*orig_v_L);
-    new_v_U->Set(rho);
-    new_v_U->ElementWiseMin(*orig_v_U);
+    SmartPtr<Vector> Cnew_z_U0 = Cnew_z_U->GetCompNonConst(0);
+    Cnew_z_U0->Set(rho);
+    Cnew_z_U0->ElementWiseMin(*orig_z_U);
+    SmartPtr<Vector> Cnew_v_L0 = Cnew_v_L->GetCompNonConst(0);
+    Cnew_v_L0->Set(rho);
+    Cnew_v_L0->ElementWiseMin(*orig_v_L);
+    SmartPtr<Vector> Cnew_v_U0 = Cnew_v_U->GetCompNonConst(0);
+    Cnew_v_U0->Set(rho);
+    Cnew_v_U0->ElementWiseMin(*orig_v_U);
 
     // Set the multipliers for the p and n bounds to the "primal" multipliers
     SmartPtr<Vector> Cnew_z_L1 = Cnew_z_L->GetCompNonConst(1);

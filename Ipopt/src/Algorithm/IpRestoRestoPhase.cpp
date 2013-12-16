@@ -49,6 +49,11 @@ namespace Ipopt
     // Get the current point and create a new vector for the result
     SmartPtr<const CompoundVector> Ccurr_x =
       static_cast<const CompoundVector*> (GetRawPtr(IpData().curr()->x()));
+    DBG_ASSERT(dynamic_cast<const CompoundVector*> (GetRawPtr(IpData().curr()->x())));
+    SmartPtr<const CompoundVector> Ccurr_s = 
+      static_cast<const CompoundVector*> (GetRawPtr(IpData().curr()->s()));
+    DBG_ASSERT(dynamic_cast<const CompoundVector*> (GetRawPtr(IpData().curr()->s())));
+    DBG_ASSERT(Ccurr_s->NComps() == 1);
     SmartPtr<Vector> new_x = IpData().curr()->x()->MakeNew();
     SmartPtr<CompoundVector> Cnew_x =
       static_cast<CompoundVector*> (GetRawPtr(new_x));
@@ -84,7 +89,7 @@ namespace Ipopt
     SmartPtr<Vector> pd = Cnew_x->GetCompNonConst(4);
     SmartPtr<Vector> dvec = pd->MakeNew();
     dvec->Copy(*orig_ip_nlp->d(*Ccurr_x->GetComp(0)));
-    dvec->Axpy(-1., *IpData().curr()->s());
+    dvec->Axpy(-1., *Ccurr_s->GetComp(0));
     a = nd->MakeNew();
     b = nd->MakeNew();
     a->Set(mu/(2.*rho));

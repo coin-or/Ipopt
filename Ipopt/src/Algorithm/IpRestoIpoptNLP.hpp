@@ -312,25 +312,25 @@ namespace Ipopt
     //@{
     SmartPtr<CompoundVectorSpace> x_space_;
 
-    SmartPtr<const VectorSpace> c_space_;
+    SmartPtr<CompoundVectorSpace> c_space_;
 
-    SmartPtr<const VectorSpace> d_space_;
+    SmartPtr<CompoundVectorSpace> d_space_;
 
     SmartPtr<CompoundVectorSpace> x_l_space_;
 
     SmartPtr<CompoundMatrixSpace> px_l_space_;
 
-    SmartPtr<const VectorSpace> x_u_space_;
+    SmartPtr<CompoundVectorSpace> x_u_space_;
 
     SmartPtr<CompoundMatrixSpace> px_u_space_;
 
-    SmartPtr<const VectorSpace> d_l_space_;
+    SmartPtr<CompoundVectorSpace> d_l_space_;
 
-    SmartPtr<const MatrixSpace> pd_l_space_;
+    SmartPtr<CompoundMatrixSpace> pd_l_space_;
 
-    SmartPtr<const VectorSpace> d_u_space_;
+    SmartPtr<CompoundVectorSpace> d_u_space_;
 
-    SmartPtr<const MatrixSpace> pd_u_space_;
+    SmartPtr<CompoundMatrixSpace> pd_u_space_;
 
     SmartPtr<CompoundMatrixSpace> jac_c_space_;
 
@@ -348,22 +348,22 @@ namespace Ipopt
     SmartPtr<CompoundMatrix> Px_L_;
 
     /** Upper bounds on x */
-    SmartPtr<const Vector> x_U_;
+    SmartPtr<CompoundVector> x_U_;
 
     /** Permutation matrix (x_U_ -> x) */
     SmartPtr<CompoundMatrix> Px_U_;
 
     /** Lower bounds on d */
-    SmartPtr<const Vector> d_L_;
+    SmartPtr<CompoundVector> d_L_;
 
     /** Permutation matrix (d_L_ -> d) */
-    SmartPtr<const Matrix> Pd_L_;
+    SmartPtr<CompoundMatrix> Pd_L_;
 
     /** Upper bounds on d */
-    SmartPtr<const Vector> d_U_;
+    SmartPtr<CompoundVector> d_U_;
 
     /** Permutation matrix (d_U_ -> d */
-    SmartPtr<const Matrix> Pd_U_;
+    SmartPtr<CompoundMatrix> Pd_U_;
     //@}
 
     /** @name Values particular to the restoration phase problem statement */
