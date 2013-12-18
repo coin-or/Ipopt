@@ -327,56 +327,6 @@ namespace Ipopt
     }
     IpData().TimingStats().Task5().End();
 
-    // Some initializations
-    if (!initialized_) {
-      n_dual_ = IpData().curr()->x()->Dim() + IpData().curr()->s()->Dim();
-      n_pri_ = IpData().curr()->y_c()->Dim() + IpData().curr()->y_d()->Dim();
-      n_comp_ = IpData().curr()->z_L()->Dim() + IpData().curr()->z_U()->Dim() +
-                IpData().curr()->v_L()->Dim() + IpData().curr()->v_U()->Dim();
-      initialized_ = true;
-    }
-
-    count_qf_evals_ = 0;
-
-    // Compute some quantities used for the quality function evaluations
-    // (This way we try to avoid retrieving numbers from cache...
-
-    curr_slack_x_L_ = IpCq().curr_slack_x_L();
-    curr_slack_x_U_ = IpCq().curr_slack_x_U();
-    curr_slack_s_L_ = IpCq().curr_slack_s_L();
-    curr_slack_s_U_ = IpCq().curr_slack_s_U();
-
-    curr_z_L_ = IpData().curr()->z_L();
-    curr_z_U_ = IpData().curr()->z_U();
-    curr_v_L_ = IpData().curr()->v_L();
-    curr_v_U_ = IpData().curr()->v_U();
-
-    IpData().TimingStats().Task5().Start();
-    switch (quality_function_norm_) {
-    case NM_NORM_1:
-      curr_grad_lag_x_asum_ = IpCq().curr_grad_lag_x()->Asum();
-      curr_grad_lag_s_asum_ = IpCq().curr_grad_lag_s()->Asum();
-      curr_c_asum_ = IpCq().curr_c()->Asum();
-      curr_d_minus_s_asum_ = IpCq().curr_d_minus_s()->Asum();
-      break;
-    case NM_NORM_2_SQUARED:
-    case NM_NORM_2:
-      curr_grad_lag_x_nrm2_ = IpCq().curr_grad_lag_x()->Nrm2();
-      curr_grad_lag_s_nrm2_ = IpCq().curr_grad_lag_s()->Nrm2();
-      curr_c_nrm2_ = IpCq().curr_c()->Nrm2();
-      curr_d_minus_s_nrm2_ = IpCq().curr_d_minus_s()->Nrm2();
-      break;
-    case NM_NORM_MAX:
-      curr_grad_lag_x_amax_ = IpCq().curr_grad_lag_x()->Amax();
-      curr_grad_lag_s_amax_ = IpCq().curr_grad_lag_s()->Amax();
-      curr_c_amax_ = IpCq().curr_c()->Amax();
-      curr_d_minus_s_amax_ = IpCq().curr_d_minus_s()->Amax();
-      break;
-    default:
-      DBG_ASSERT(false && "Unknown value for quality_function_norm_");
-    }
-    IpData().TimingStats().Task5().End();
-
     // We now compute the step for the slack variables.  This safes
     // time, because we then don't have to do this any more for each
     // evaluation of the quality function
