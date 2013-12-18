@@ -2,12 +2,15 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
-2013-xx-xx releases/3.11.7
-        - adapted PARDISO parameters when using MKL PARDISO to be as close as
-          possible to using Basel PARDISO
+2013-12-18 releases/3.11.7
+        - adapted PARDISO parameters when using MKL PARDISO to be close
+          to using Basel PARDISO
         - added options pardiso_max_iterative_refinement_steps and
-          pardiso_order; alternating the former may help to on instances
-          where MKL PARDISO fails due to numerical issues
+          pardiso_order; the former defaults to 1 in case of MKL PARDISO,
+          which may help on instances that otherwise fail due to numerical issues
+        - removed duplicate code in IpQualityFunctionMuOracle.cpp [#225, r2445]
+        - fixed bug in triplet to csr converter [#226, r2446]
+        - minor changes in buildsystem
 
 2013-11-16 releases/3.11.6
         - updates to Matlab Interface build system (by T. Kelman)
