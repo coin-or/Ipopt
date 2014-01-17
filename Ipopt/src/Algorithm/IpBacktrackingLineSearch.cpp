@@ -556,7 +556,7 @@ namespace Ipopt
             }
             else {
               // ToDo does that happen too often?
-              Jnlst().Printf(J_ERROR, J_LINE_SEARCH,
+              Jnlst().Printf(J_STRONGWARNING, J_LINE_SEARCH,
                              "Restoration phase is called at point that is almost feasible,\n  with constraint violation %e. Abort.\n", IpCq().curr_constraint_violation());
               THROW_EXCEPTION(RESTORATION_FAILED,
                               "Restoration phase called, but point is almost feasible.");
