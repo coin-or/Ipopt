@@ -387,7 +387,6 @@ namespace Ipopt
         non_const_x_[i] = x[i];
       }
     }
-    DBG_ASSERT(non_const_x_ && "non_const_x is NULL after apply_new_x");
   }
 
 } // namespace Ipopt
