@@ -97,20 +97,23 @@ namespace Ipopt
       CD_x = static_cast<const CompoundVector*>(D_x);
       DBG_ASSERT(dynamic_cast<const CompoundVector*>(D_x));
     }
-    // Assume D_s is always present
-    SmartPtr<const CompoundVector> CD_s =
-      static_cast<const CompoundVector*>(D_s);
-    DBG_ASSERT(dynamic_cast<const CompoundVector*>(D_s));
-    DBG_ASSERT(CD_s->NComps() == 1);
-    SmartPtr<const Vector> CD_s0 = CD_s->GetComp(0);
+    
+    SmartPtr<const Vector> CD_s0;
+    if (D_s) {
+      SmartPtr<const CompoundVector> CD_s =
+        static_cast<const CompoundVector*>(D_s);
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(D_s));
+      DBG_ASSERT(CD_s->NComps() == 1);
+      CD_s0 = CD_s->GetComp(0);
+    }
 
     SmartPtr<const CompoundMatrix> CJ_c =
       static_cast<const CompoundMatrix*>(J_c);
     DBG_ASSERT(dynamic_cast<const CompoundMatrix*>(J_c));
-    SmartPtr<const CompoundVector> CD_c;
     SmartPtr<const Vector> CD_c0;
     if (D_c) {
-      CD_c = static_cast<const CompoundVector*>(D_c);
+      SmartPtr<const CompoundVector> CD_c = 
+        static_cast<const CompoundVector*>(D_c);
       DBG_ASSERT(dynamic_cast<const CompoundVector*>(D_c));
       DBG_ASSERT(CD_c->NComps() == 1);
       CD_c0 = CD_c->GetComp(0);
@@ -119,10 +122,10 @@ namespace Ipopt
     SmartPtr<const CompoundMatrix> CJ_d =
       static_cast<const CompoundMatrix*>(J_d);
     DBG_ASSERT(dynamic_cast<const CompoundMatrix*>(J_d));
-    SmartPtr<const CompoundVector> CD_d;
     SmartPtr<const Vector> CD_d0;
     if (D_d) {
-      CD_d = static_cast<const CompoundVector*>(D_d);
+      SmartPtr<const CompoundVector> CD_d = 
+        static_cast<const CompoundVector*>(D_d);
       DBG_ASSERT(dynamic_cast<const CompoundVector*>(D_d));
       DBG_ASSERT(CD_d->NComps() == 1);
       CD_d0 = CD_d->GetComp(0);
