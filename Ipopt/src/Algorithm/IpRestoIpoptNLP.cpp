@@ -272,9 +272,9 @@ namespace Ipopt
     jac_c_space_->SetBlockCols(4, orig_d_space->Dim());
 
     jac_c_space_->SetCompSpace(0, 0, *orig_jac_c_space);
-    // **NOTE: By placing a "flat" identity matrices here, we are creating
-    //         a potential issues for linalg operations that arise when the original
-    //         NLP has a "compound" c_space. To avoid problems like this
+    // **NOTE: By placing "flat" identity matrices here, we are creating
+    //         potential issues for linalg operations that arise when the original
+    //         NLP has a "compound" c_space. To avoid problems like this,
     //         we place all unmodified component spaces in trivial (size 1)
     //         "compound" spaces.
     jac_c_space_->SetCompSpace(0, 1, *identity_mat_space_nc, true);
@@ -297,9 +297,9 @@ namespace Ipopt
     jac_d_space_->SetCompSpace(0, 0, *orig_jac_d_space);
     DBG_PRINT((1, "orig_jac_d_space = %x\n", GetRawPtr(orig_jac_d_space)))
     // Blocks (0,1) and (0,2) are zero'ed out
-    // **NOTE: By placing a "flat" identity matrices here, we are creating
-    //         a potential issues for linalg operations that arise when the original
-    //         NLP has a "compound" d_space. To avoid problems like this
+    // **NOTE: By placing "flat" identity matrices here, we are creating
+    //         potential issues for linalg operations that arise when the original
+    //         NLP has a "compound" d_space. To avoid problems like this,
     //         we place all unmodified component spaces in trivial (size 1)
     //         "compound" spaces.
     jac_d_space_->SetCompSpace(0, 3, *identity_mat_space_nd, true);
