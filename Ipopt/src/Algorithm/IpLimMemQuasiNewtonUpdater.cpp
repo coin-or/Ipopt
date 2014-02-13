@@ -298,21 +298,36 @@ namespace Ipopt
     // y = grad_lag(x_k,y_k) - grad_lag(x_{k-1},y_k)
     SmartPtr<Vector> y_full_new = curr_x->MakeNew();
     if (update_for_resto_) {
-      curr_jac_c->TransMultVector(1., *IpData().curr()->y_c(),
+
+      SmartPtr<const CompoundVector> curr_y_c = 
+        static_cast<const CompoundVector*>(GetRawPtr(IpData().curr()->y_c()));
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(IpData().curr()->y_c())));
+      DBG_ASSERT(curr_y_c->NComps() == 1);
+
+      SmartPtr<const CompoundVector> curr_y_d = 
+        static_cast<const CompoundVector*>(GetRawPtr(IpData().curr()->y_d()));
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(IpData().curr()->y_d())));
+      DBG_ASSERT(curr_y_d->NComps() == 1);
+
+      curr_jac_c->TransMultVector(1., *curr_y_c->GetComp(0),
                                   0., *y_full_new);
-      curr_jac_d->TransMultVector(1., *IpData().curr()->y_d(),
+      curr_jac_d->TransMultVector(1., *curr_y_d->GetComp(0),
                                   1., *y_full_new);
+      last_jac_c_->TransMultVector(-1., *curr_y_c->GetComp(0),
+                                   1., *y_full_new);
+      last_jac_d_->TransMultVector(-1., *curr_y_d->GetComp(0),
+                                   1., *y_full_new);
     }
     else {
       y_full_new->AddTwoVectors(1., *IpCq().curr_grad_f(),
                                 -1, *last_grad_f_, 0.);
       y_full_new->AddTwoVectors(1., *IpCq().curr_jac_cT_times_curr_y_c(),
                                 1., *IpCq().curr_jac_dT_times_curr_y_d(), 1.);
+      last_jac_c_->TransMultVector(-1., *IpData().curr()->y_c(),
+                                   1., *y_full_new);
+      last_jac_d_->TransMultVector(-1., *IpData().curr()->y_d(),
+                                   1., *y_full_new);
     }
-    last_jac_c_->TransMultVector(-1., *IpData().curr()->y_c(),
-                                 1., *y_full_new);
-    last_jac_d_->TransMultVector(-1., *IpData().curr()->y_d(),
-                                 1., *y_full_new);
 
     SmartPtr<Vector> s_new;
     SmartPtr<Vector> y_new;
