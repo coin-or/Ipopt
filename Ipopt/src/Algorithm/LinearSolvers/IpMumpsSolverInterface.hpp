@@ -157,6 +157,11 @@ namespace Ipopt
      *  matrix again (SYMSOLVER_CALL_AGAIN) and have to factorize
      *  again. */
     bool refactorize_;
+    /** Counter on number of alive Mumps interface objects, if we have called MPI_Initialize.
+     *
+     * When the last object is destroyed, we will call MPI_Finalize.
+     */
+    static int instancecount_mpi;
     //@}
 
     /** @name Solver specific data/options */

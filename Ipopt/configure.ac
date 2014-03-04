@@ -398,6 +398,11 @@ if test "$have_ma27" != "yes" -a "$have_ma57" != "yes" -a "$have_ma77" != "yes" 
   AC_MSG_WARN("You are compiling Ipopt without any linear solver (such as MUMPS).  You will only be able to run Ipopt if you compile a shared library with a linear solver.")
 fi
 
+# Check whether MPI_Initialized is available
+#   we assume that MPI_Finalized is present if MPI_Initialized is present
+
+AC_CHECK_FUNCS([MPI_Initialized])
+
 ###################################################
 # Check if user wants inexact algorithm available #
 ###################################################
