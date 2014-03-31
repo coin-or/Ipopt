@@ -1036,7 +1036,7 @@ namespace Ipopt
       }
     }
     catch (TOO_FEW_DOF& exc) {
-      exc.ReportException(*jnlst_, J_ERROR);
+      exc.ReportException(*jnlst_, J_STRONGWARNING);
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Problem has too few degrees of freedom.\n");
       retValue = Not_Enough_Degrees_Of_Freedom;
       status = TOO_FEW_DEGREES_OF_FREEDOM;
