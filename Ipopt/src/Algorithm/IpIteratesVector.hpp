@@ -449,31 +449,32 @@ namespace Ipopt
      */
     TaggedObject::Tag GetTagSum() const
     {
-      TaggedObject::Tag tag;
+      TaggedObject::Tag tag = 0;
 
-      if (IsValid(x()))
-        tag = x()->GetTag() + tag;
-
-      if (IsValid(s()))
-        tag = s()->GetTag() + tag;
-
-      if (IsValid(y_c()))
-        tag = y_c()->GetTag() + tag;
-
-      if (IsValid(y_d()))
-        tag = y_d()->GetTag() + tag;
-
-      if (IsValid(z_L()))
-        tag = z_L()->GetTag() + tag;
-
-      if (IsValid(z_U()))
-        tag = z_U()->GetTag() + tag;
-
-      if (IsValid(v_L()))
-        tag = v_L()->GetTag() + tag;
-
-      if (IsValid(v_U()))
-        tag = v_U()->GetTag() + tag;
+      if (IsValid(x())) {
+        tag += x()->GetTag();
+      }
+      if (IsValid(s())) {
+        tag += s()->GetTag();
+      }
+      if (IsValid(y_c())) {
+        tag += y_c()->GetTag();
+      }
+      if (IsValid(y_d())) {
+        tag += y_d()->GetTag();
+      }
+      if (IsValid(z_L())) {
+        tag += z_L()->GetTag();
+      }
+      if (IsValid(z_U())) {
+        tag += z_U()->GetTag();
+      }
+      if (IsValid(v_L())) {
+        tag += v_L()->GetTag();
+      }
+      if (IsValid(v_U())) {
+        tag += v_U()->GetTag();
+      }
 
       return tag;
     }
