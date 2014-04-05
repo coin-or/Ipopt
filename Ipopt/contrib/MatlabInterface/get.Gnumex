@@ -2,7 +2,7 @@
 
 set -e
 
-gnumex_ver=2.05
+gnumex_ver=2.06
 
 wgetcmd=wget
 wgetcount=`which wget 2>/dev/null | wc -l`
@@ -26,7 +26,7 @@ echo " "
 rm -f gnumex*.zip
 
 echo "Downloading the source code from downloads.sourceforge.net..."
-$wgetcmd http://downloads.sourceforge.net/project/gnumex/gnumex-${gnumex_ver}.zip
+$wgetcmd http://sourceforge.net/projects/gnumex/files/Older-versions/gnumex${gnumex_ver}.zip
 
 if test -d gnumex ; then
   echo "Moving current gnumex to gnumex.OLD."
@@ -37,7 +37,8 @@ if test -d gnumex ; then
 fi
 
 echo "Uncompressing the zip..."
-unzip gnumex-${gnumex_ver}.zip -d gnumex
+unzip gnumex${gnumex_ver}.zip
+mv trunk gnumex
 
 echo " "
 echo "Done downloading the source code for gnumex."
