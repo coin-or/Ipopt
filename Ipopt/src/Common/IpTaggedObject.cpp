@@ -11,6 +11,6 @@
 namespace Ipopt
 {
 
-  TaggedObject::Tag TaggedObject::unique_tag_ = 1;
+  TaggedObject::Tag IPOPT_THREAD_LOCAL TaggedObject::unique_tag_ = 1;
 
 } // namespace Ipopt
