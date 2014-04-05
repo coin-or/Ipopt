@@ -15,6 +15,13 @@
 #include "IpObserver.hpp"
 #include <limits>
 
+/* keyword to declare a thread-local variable according to http://en.wikipedia.org/wiki/Thread-local_storage */
+#ifdef _MSC_VER
+#define IPOPT_THREAD_LOCAL __declspec(thread)
+#else
+#define IPOPT_THREAD_LOCAL __thread
+#endif
+
 namespace Ipopt
 {
 
@@ -126,7 +133,7 @@ namespace Ipopt
      *  time ANY TaggedObject changes. This allows us
      *  to obtain a unique Tag when the object changes
      */
-    static Tag unique_tag_;
+    static IPOPT_THREAD_LOCAL Tag unique_tag_;
 
     /** The tag indicating the current state of the object.
      *  We use this to compare against the comparison_tag
