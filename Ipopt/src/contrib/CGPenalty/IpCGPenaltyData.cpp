@@ -48,10 +48,10 @@ namespace Ipopt
     DBG_ASSERT(initialize_called_);
 #if COIN_IPOPT_CHECKLEVEL > 0
 
-    debug_delta_cgpen_tag_ = TaggedObject::Tag();
-    debug_delta_cgfast_tag_ = TaggedObject::Tag();
-    debug_delta_cgpen_tag_sum_ = TaggedObject::Tag();
-    debug_delta_cgfast_tag_sum_ = TaggedObject::Tag();
+    debug_delta_cgpen_tag_ = 0;
+    debug_delta_cgfast_tag_ = 0;
+    debug_delta_cgpen_tag_sum_ = 0;
+    debug_delta_cgfast_tag_sum_ = 0;
 #endif
 
     // Set the pointers for storing steps to NULL
