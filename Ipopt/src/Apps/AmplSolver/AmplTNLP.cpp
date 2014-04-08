@@ -1355,10 +1355,10 @@ namespace Ipopt
                                      "pardiso_matching_strategy",
                                      AmplOptionsList::String_Option,
                                      "Matching strategy for linear solver Pardiso");
-    ampl_options_list->AddAmplOption("pardiso_out_of_core_power",
-                                     "pardiso_out_of_core_power",
-                                     AmplOptionsList::Integer_Option,
-                                     "Enables out-of-core version of linear solver Pardiso");
+    //ampl_options_list->AddAmplOption("pardiso_out_of_core_power",
+    //                                 "pardiso_out_of_core_power",
+    //                                 AmplOptionsList::Integer_Option,
+    //                                 "Enables out-of-core version of linear solver Pardiso");
 
 #ifdef HAVE_WSMP
 
