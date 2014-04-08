@@ -146,7 +146,7 @@ namespace Ipopt
     SdotS_uptodate_ = false;
     STDRS_ = NULL;
     DRS_ = NULL;
-    curr_DR_x_tag_ = TaggedObject::Tag();
+    curr_DR_x_tag_ = 0;
 
     last_x_ = NULL;
     last_grad_f_ = NULL;
@@ -199,7 +199,7 @@ namespace Ipopt
       DBG_ASSERT(dynamic_cast<RestoIpoptNLP*>(&IpNLP()));
       curr_DR_x_ = resto_nlp->DR_x();
       DBG_ASSERT(IsValid(curr_DR_x_));
-      DBG_ASSERT(curr_DR_x_tag_==TaggedObject::Tag() || curr_DR_x_tag_==curr_DR_x_->GetTag());
+      DBG_ASSERT(curr_DR_x_tag_==0 || curr_DR_x_tag_==curr_DR_x_->GetTag());
       curr_DR_x_tag_ = curr_DR_x_->GetTag();
       if (IsNull(P_LM)) {
         curr_red_DR_x_ = curr_DR_x_;
