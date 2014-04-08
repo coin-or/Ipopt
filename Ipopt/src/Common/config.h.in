@@ -108,6 +108,9 @@
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
+/* Define to 1 if you have the `MPI_Initialized' function. */
+#undef HAVE_MPI_INITIALIZED
+
 /* Define to 1 if Pardiso is available */
 #undef HAVE_PARDISO
 

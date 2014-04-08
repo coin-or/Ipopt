@@ -48,17 +48,32 @@ namespace Ipopt
 
 #define USE_COMM_WORLD -987654
 
+  int MumpsSolverInterface::instancecount_mpi = 0;
+
   MumpsSolverInterface::MumpsSolverInterface()
   {
     DBG_START_METH("MumpsSolverInterface::MumpsSolverInterface()",
                    dbg_verbosity);
     //initialize mumps
     DMUMPS_STRUC_C* mumps_ = new DMUMPS_STRUC_C;
-    int argc=1;
-    char ** argv = 0;
+#ifndef MUMPS_MPI_H
+#if defined(HAVE_MPI_INITIALIZED)
+    int mpi_initialized;
+    MPI_Initialized(&mpi_initialized);
+    if( !mpi_initialized )
+    {
+       int argc = 1;
+       char** argv = NULL;
+       MPI_Init(&argc, &argv);
+       assert(instancecount_mpi == 0);
+       instancecount_mpi = 1;
+    }
+    else if( instancecount_mpi > 0 )
+       ++instancecount_mpi;
+#endif
     int myid;
-    MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &myid);
+#endif
     mumps_->n = 0;
     mumps_->nz = 0;
     mumps_->a = NULL;
@@ -84,7 +99,18 @@ namespace Ipopt
     DMUMPS_STRUC_C* mumps_ = (DMUMPS_STRUC_C*)mumps_ptr_;
     mumps_->job = -2; //terminate mumps
     dmumps_c(mumps_);
-    MPI_Finalize();
+#ifndef MUMPS_MPI_H
+#ifdef HAVE_MPI_INITIALIZED
+    if( instancecount_mpi == 1 )
+    {
+       int mpi_finalized;
+       MPI_Finalized(&mpi_finalized);
+       assert(!mpi_finalized);
+       MPI_Finalize();
+    }
+    --instancecount_mpi;
+#endif
+#endif
     delete [] mumps_->a;
     delete mumps_;
   }
