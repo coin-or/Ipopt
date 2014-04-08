@@ -2,6 +2,26 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
+2014-04-08 releases/3.11.8
+        - fixed a bug, introduced with Ipopt 3.11.0, where the tag in the
+          Ipopt's caching mechanism was not unique over time, which lead
+          ot failures of Ipopt that were difficult to debug or recognize
+          (e.g., Ipopt may have stopped with an restoration failure for
+          instances that solved fine with Ipopt 3.10) [r2472, r2473]
+          I'm very thankful to Gabriel Hackebeil and Kurt Majewski for
+          their debugging effort on this issue.
+        - building Mumps with pthreads is now disabled by default [#229]
+        - fixed setting of LD on Windows (now set to link only iff using
+          MS/Intel compilers) [#230]
+        - fixed download link for Gnumex [r2471]
+        - for some messages about too-few-degrees-of-freedom and restoration
+          failure, the message level changed from error to strong-warning
+          [r2460, r2469]
+        - revised calls to MPI_Init and MPI_Finalize in Mumps interface [r2467]
+          (MPI_Init is now called only if function MPI_Initialized is available
+          and MPI has not been initialized already; MPI_Finalize is only called
+          if Ipopt also called MPI_Init; ...)
+
 2013-12-18 releases/3.11.7
         - adapted PARDISO parameters when using MKL PARDISO to be close
           to using Basel PARDISO
