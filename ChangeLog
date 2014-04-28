@@ -2,6 +2,10 @@ This file contain the log of changes for Ipopt.
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
+2014-xx-yy releases/3.11.9
+        - fixed a bug in equilibration scaling where average values were
+          computed incorrectly (by V. Zverovich) [r2483]
+
 2014-04-08 releases/3.11.8
         - fixed a bug, introduced with Ipopt 3.11.0, where the tag in the
           Ipopt's caching mechanism was not unique over time, which lead

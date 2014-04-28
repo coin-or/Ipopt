@@ -132,7 +132,7 @@ namespace Ipopt
       }
       else {
         for (Index i=0; i<nnz_jac_c; i++) {
-          avrg_values[i] =+ fabs(val_buffer[i]);
+          avrg_values[i] += fabs(val_buffer[i]);
         }
       }
       TripletHelper::FillValues(nnz_jac_d, *jac_d, val_buffer);
@@ -143,7 +143,7 @@ namespace Ipopt
       }
       else {
         for (Index i=0; i<nnz_jac_d; i++) {
-          avrg_values[nnz_jac_c+i] =+ fabs(val_buffer[i]);
+          avrg_values[nnz_jac_c+i] += fabs(val_buffer[i]);
         }
       }
       TripletHelper::FillValuesFromVector(nx, *grad_f, val_buffer);
@@ -154,7 +154,7 @@ namespace Ipopt
       }
       else {
         for (Index i=0; i<nx; i++) {
-          avrg_values[nnz_jac_c+nnz_jac_d+i] =+ fabs(val_buffer[i]);
+          avrg_values[nnz_jac_c+nnz_jac_d+i] += fabs(val_buffer[i]);
         }
       }
     }
