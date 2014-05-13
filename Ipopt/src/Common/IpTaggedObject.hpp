@@ -16,10 +16,12 @@
 #include <limits>
 
 /* keyword to declare a thread-local variable according to http://en.wikipedia.org/wiki/Thread-local_storage */
+#ifndef IPOPT_THREAD_LOCAL
 #ifdef _MSC_VER
 #define IPOPT_THREAD_LOCAL __declspec(thread)
 #else
 #define IPOPT_THREAD_LOCAL __thread
+#endif
 #endif
 
 namespace Ipopt
