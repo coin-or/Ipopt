@@ -7,7 +7,8 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2005-03-13
 
 #include "IpTripletToCSRConverter.hpp"
-#include <list>
+#include <vector>
+#include <algorithm>
 
 #ifdef HAVE_CSTDDEF
 # include <cstddef>
@@ -72,8 +73,8 @@ namespace Ipopt
     nonzeros_triplet_ = nonzeros;
 
     // Create a list with all triplet entries
-    std::list<TripletEntry> entry_list(nonzeros);
-    std::list<TripletEntry>::iterator list_iterator = entry_list.begin();
+    std::vector<TripletEntry> entry_list(nonzeros);
+    std::vector<TripletEntry>::iterator list_iterator = entry_list.begin();
     for (Index i=0; i<nonzeros; i++) {
       list_iterator->Set(airn[i], ajcn[i], i);
       list_iterator++;
@@ -87,7 +88,7 @@ namespace Ipopt
     }
 
     // sort the list
-    entry_list.sort();
+    std::sort(entry_list.begin(), entry_list.end());
 
     // Now got through the list and compute ipos_ arrays and the
     // number of elements in the compressed format
@@ -112,7 +113,7 @@ namespace Ipopt
       }
     }
 
-    // Take care of possible emply rows
+    // Take care of possible empty rows
     list_iterator = entry_list.begin();
     while (cur_row < list_iterator->IRow()) {
       ia_[cur_row-1] = 0;
