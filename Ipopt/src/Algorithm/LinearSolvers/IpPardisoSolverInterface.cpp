@@ -62,7 +62,7 @@
 /* Prototypes for Pardiso's subroutines */
 extern "C"
 {
-#ifdef HAVE_PARDISO_OLDINTERFACE
+#if defined(HAVE_PARDISO_OLDINTERFACE) || defined(HAVE_PARDISO_MKL)
   void PARDISOINIT_FUNC(void* PT, const ipfint* MTYPE, ipfint* IPARM);
 #else
   // The following is a fix to allow linking with Pardiso library under Windows
@@ -400,7 +400,7 @@ namespace Ipopt
     // Call Pardiso's initialization routine
     IPARM_[0] = 0;  // Tell it to fill IPARM with default values(?)
 
-#ifndef HAVE_PARDISO_OLDINTERFACE
+#if ! defined(HAVE_PARDISO_OLDINTERFACE) && ! defined(HAVE_PARDISO_MKL)
     ipfint ERROR = 0;
     ipfint SOLVER = 0; // initialize only direct solver
 

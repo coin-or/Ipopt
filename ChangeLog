@@ -3,6 +3,8 @@ More detailed information about incremental changes can be found in the
 history management of subversion.
 
 2014-xx-yy releases/3.11.9
+        - fix call to MKL Pardiso init function [r2489]
+        - speed up Triplet to CSR converter [r2487, #234]
         - fixed a bug in equilibration scaling where average values were
           computed incorrectly (by V. Zverovich) [r2483]
 
