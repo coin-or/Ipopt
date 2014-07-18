@@ -179,7 +179,7 @@ namespace Ipopt
 #   if defined(__GNUC__) && __GNUC__ == 4 && __GNUC_MINOR__ == 8 && __GNUC_PATCHLEVEL__ == 3
       return Number(rand())/Number(RAND_MAX);
 #   else
-#     error "don't have function for random number generator"
+#    error "don't have function for random number generator"
 #   endif
 #  endif
 # endif
@@ -197,7 +197,11 @@ namespace Ipopt
 #  ifdef HAVE_STD__RAND
     std::srand(1);
 #  else
-#   error "don't have function for random number generator"
+#   if defined(__GNUC__) && __GNUC__ == 4 && __GNUC_MINOR__ == 8 && __GNUC_PATCHLEVEL__ == 3
+    srand(1);
+#   else
+#    error "don't have function for random number generator"
+#   endif
 #  endif
 # endif
 #endif
