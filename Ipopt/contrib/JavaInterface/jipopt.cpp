@@ -340,8 +340,25 @@ bool Jipopt::eval_jac_g(Index n, const Number* x, bool new_x,
 
    if( iRow != NULL && jCol != NULL )
    {
-      env->GetIntArrayRegion(iRowj, 0, nele_jac, iRow);
-      env->GetIntArrayRegion(jColj, 0, nele_jac, jCol);
+      if( sizeof(jint) == sizeof(Index) )
+      {
+         env->GetIntArrayRegion(iRowj, 0, nele_jac, reinterpret_cast<jint*>(iRow));
+         env->GetIntArrayRegion(jColj, 0, nele_jac, reinterpret_cast<jint*>(jCol));
+      }
+      else
+      {
+         jint* tmp = new jint[nele_jac];
+
+         env->GetIntArrayRegion(iRowj, 0, nele_jac, tmp);
+         for( int i = 0; i < nele_jac; ++i )
+            iRow[i] = (Index)tmp[i];
+
+         env->GetIntArrayRegion(jColj, 0, nele_jac, tmp);
+         for( int i = 0; i < nele_jac; ++i )
+            jCol[i] = (Index)tmp[i];
+
+         delete[] tmp;
+      }
    }
 
    return true;
@@ -381,8 +398,25 @@ bool Jipopt::eval_h(Index n, const Number* x, bool new_x,
 
    if( iRow != NULL && jCol != NULL )
    {
-      env->GetIntArrayRegion(iRowj, 0, nele_hess, iRow);
-      env->GetIntArrayRegion(jColj, 0, nele_hess, jCol);
+      if( sizeof(jint) == sizeof(Index) )
+      {
+         env->GetIntArrayRegion(iRowj, 0, nele_hess, reinterpret_cast<jint*>(iRow));
+         env->GetIntArrayRegion(jColj, 0, nele_hess, reinterpret_cast<jint*>(jCol));
+      }
+      else
+      {
+         jint* tmp = new jint[nele_hess];
+
+         env->GetIntArrayRegion(iRowj, 0, nele_hess, tmp);
+         for( int i = 0; i < nele_hess; ++i )
+            iRow[i] = (Index)tmp[i];
+
+         env->GetIntArrayRegion(jColj, 0, nele_hess, tmp);
+         for( int i = 0; i < nele_hess; ++i )
+            jCol[i] = (Index)tmp[i];
+
+         delete[] tmp;
+      }
    }
 
    return true;
@@ -494,7 +528,20 @@ bool Jipopt::get_list_of_nonlinear_variables(Index num_nonlin_vars,Index* pos_no
 
       if( pos_nonlin_vars != NULL )
       {
-         env->GetIntArrayRegion(pos_nonlin_vars_j, 0, num_nonlin_vars, pos_nonlin_vars);
+         if( sizeof(jint) == sizeof(Index) )
+         {
+            env->GetIntArrayRegion(pos_nonlin_vars_j, 0, num_nonlin_vars, reinterpret_cast<jint*>(pos_nonlin_vars));
+         }
+         else
+         {
+            jint* tmp = new int[num_nonlin_vars];
+
+            env->GetIntArrayRegion(pos_nonlin_vars_j, 0, num_nonlin_vars, tmp);
+            for( int i = 0; i < num_nonlin_vars; ++i )
+               pos_nonlin_vars[i] = (Index)tmp[i];
+
+            delete[] tmp;
+         }
       }
 
       return true;
