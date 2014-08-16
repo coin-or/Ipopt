@@ -2,7 +2,15 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
-2014-xx-yy releases/3.11.9
+2014-08-16 releases/3.11.9
+        - fix compilation issue of Java interface on systems where Index
+          and jint have different size [r2498, #241]
+        - work around failing check for random number generator with gcc
+          4.8.3 [r2495, r2496]
+        - readded IpTaggedObject.cpp to list of sources to compile in
+          MSVS v8-ifort project file [r2492]
+        - work around missing support for thread-local storage with gcc < 4.5
+          on MacOS X [r2491, #243]
         - fix call to MKL Pardiso init function [r2489]
         - speed up Triplet to CSR converter [r2487, #234]
         - fixed a bug in equilibration scaling where average values were
