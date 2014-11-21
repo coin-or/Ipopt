@@ -200,7 +200,7 @@ namespace Ipopt
     Factorization factorization_;
 
     /** Array for storing the pivot sequences if the matrix has been LU-factorized */
-    int* pivot_;
+    Index* pivot_;
   };
 
   /** This is the matrix space for DenseGenMatrix.
