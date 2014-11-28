@@ -84,7 +84,7 @@ namespace Ipopt
     roptions->AddLowerBoundedNumberOption(
       "neg_curv_test_tol",
       "Tolerance for heuristic to ignore wrong inertia.",
-      0.0, true, 0.0,
+      0.0, false, 0.0,
       "If positive, incorrect inertia in the augmented system is ignored, and "
       "we test if the direction is a direction of positive curvature.  This "
       "tolerance determines when the direction is considered to be "
