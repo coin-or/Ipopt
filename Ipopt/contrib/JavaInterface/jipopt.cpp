@@ -534,7 +534,7 @@ bool Jipopt::get_list_of_nonlinear_variables(Index num_nonlin_vars,Index* pos_no
          }
          else
          {
-            jint* tmp = new int[num_nonlin_vars];
+            jint* tmp = new jint[num_nonlin_vars];
 
             env->GetIntArrayRegion(pos_nonlin_vars_j, 0, num_nonlin_vars, tmp);
             for( int i = 0; i < num_nonlin_vars; ++i )
