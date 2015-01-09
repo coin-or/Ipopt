@@ -38,8 +38,8 @@ J.~Nocedal, A.~W{\"a}chter, and R.~A. Waltz.
 \newblock doi: \htmladdnormallink{10.1137/060649513}{http://dx.doi.org/10.1137/060649513}.
 \newblock preprint at \url{http://www.optimization-online.org/DB_HTML/2005/03/1089.html}
 
-\bibitem{PLNB:sIpopt} H.~Pirnay, R.~Lopez-Negrete, and L.~T.~Biegler.
-\newblock ​Optimal Sensitivity based on \Ipopt.
+\bibitem{PLNB:sIpopt} H.~Pirnay, R.~L\'opez-Negrete, and L.~T.~Biegler.
+\newblock Optimal Sensitivity based on \Ipopt.
 \newblock {\em Mathematical Programming Computations}, 4(4):307--331, 2012.
 \newblock doi: \htmladdnormallink{10.1007/s12532-012-0043-2}{http://dx.doi.org/10.1007/s12532-012-0043-2}.
 \newblock preprint at \url{http://www.optimization-online.org/DB_HTML/2011/04/3008.html}
