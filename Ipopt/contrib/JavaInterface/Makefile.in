@@ -40,6 +40,8 @@ CXX = @CXX@
 CXXFLAGS = `echo @CXXFLAGS@ | sed -e s'|-pedantic-errors||'`
 
 # additional C++ Compiler options for linking
+# NOTE: it has been reported, that adding -Wl,--add-stdcall-alias to the
+#       LINKFLAGS might be necessary with mingw/gcc
 LINKFLAGS = $(CXXFLAGS) @RPATH_FLAGS@ @SHARED_FLAGS@
 
 # Include directories (we use the CYGPATH_W variables to allow compilation with Windows compilers)
