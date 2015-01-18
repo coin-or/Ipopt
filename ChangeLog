@@ -2,9 +2,11 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
-2015-xx-yy releases/3.11.10
+2015-01-18 releases/3.11.10
         - fix a memory allocation in Java interface in cases where jint
           has a different size than int [r2513]
+        - the buildsystem now tries the Accelerate framework instead of
+          vecLib for finding Blas/Lapack on MacOS X 
 
 2014-08-16 releases/3.11.9
         - fix compilation issue of Java interface on systems where Index
