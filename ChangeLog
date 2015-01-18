@@ -2,13 +2,13 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
-2015-xx-xx releases/3.12.0
+2015-01-18 releases/3.12.0
         - Library dependencies are now recorded in shared library builds,
           which is intended to simplify linking against the Ipopt library.
           However, the pkg-config and ipopt_addlibs files do not reflect
-          this change yet (it is rather experimental, imho). To disable,
-          use the configure option --disable-dependency-linking. In case
-          of problems, please contact Ted Ralphs.
+          this change yet (it is rather experimental, imho). To restore
+          the previous behavior, use --disable-dependency-linking as
+          configure option. In case of problems, contact Ted Ralphs.
         - If linking against Intel MKL for Blas/lapack, use of Pardiso
           from MKL is now automatically enabled. Note, that this will
           change the default solver on Ipopt builds without any of the
