@@ -47,7 +47,6 @@ AC_COIN_MAIN_PACKAGEDIR([Blas],  [ThirdParty],[daxpy.f])
 AC_COIN_MAIN_PACKAGEDIR([Lapack],[ThirdParty],[LAPACK/SRC/dlarf.f])
 AC_COIN_MAIN_PACKAGEDIR([Metis], [ThirdParty],[metis-4.0/Lib/balance.c])
 AC_COIN_MAIN_PACKAGEDIR([HSL],   [ThirdParty],[coinhsl/common/deps.f])
-AC_COIN_MAIN_PACKAGEDIR([HSLold],[ThirdParty],[configure.ac])
 AC_COIN_MAIN_PACKAGEDIR([Mumps], [ThirdParty],[MUMPS/src/dmumps_part1.F])
 
 #############################################################################

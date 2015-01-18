@@ -2,6 +2,23 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
+2015-xx-xx releases/3.12.0
+        - Library dependencies are now recorded in shared library builds,
+          which is intended to simplify linking against the Ipopt library.
+          However, the pkg-config and ipopt_addlibs files do not reflect
+          this change yet (it is rather experimental, imho). To disable,
+          use the configure option --disable-dependency-linking. In case
+          of problems, please contact Ted Ralphs.
+        - If linking against Intel MKL for Blas/lapack, use of Pardiso
+          from MKL is now automatically enabled. Note, that this will
+          change the default solver on Ipopt builds without any of the
+          linear solvers MA27, MA57, MA97, and MA86 (these take preference
+          over Paradiso).
+        - dropped support for old HSL sources (<2013; ThirdParty/HSLold)
+        - updated ASL sources, now downloaded from AMPL-MP (github)
+        - some internal changes to data structures (more use of compound
+          vectors and matrices) and addition of IpLapackDppsv   
+
 2015-01-18 releases/3.11.10
         - fix a memory allocation in Java interface in cases where jint
           has a different size than int [r2513]
