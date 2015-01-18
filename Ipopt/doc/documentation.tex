@@ -1231,7 +1231,8 @@ issuing {\tt make}, e.g.,
 \end{verbatim}
 
 This will generate the Java class {\tt org/coinor/Ipopt.class}, which you will 
-need to add into your Java project and the shared object
+need to make available in your Java code (i.e., add {\tt \$IPOPTDIR/build/Ipopt/contrib/JavaInterface}
+to your {\tt CLASSPATH}) and the shared object
 {\tt lib/libjipopt.so} (on Linux/UNIX) or {\tt lib/libjipopt.dylib} (on Mac OS 
 X) or the DLL {\tt lib/jipopt.dll} (on Windows).
 In order to test your \JIpopt library you can run two example problems by 
