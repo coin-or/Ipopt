@@ -116,6 +116,9 @@ Contributors:
   
   Ipopt/contrib/MatlabInterface
 
+- Gabriel Hackebeil
+  improved use compound component spaces
+
 Contributors of code that is no longer included in Ipopt distribution:
 
 - Yifan Hu (Wolfram): Contributed TAUCS interface, implemented in the files
