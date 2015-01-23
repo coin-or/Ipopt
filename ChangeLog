@@ -2,7 +2,7 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
-2015-01-xx releases/3.12.0
+2015-01-23 releases/3.12.0
         - Library dependencies are now recorded in shared library builds,
           which is intended to simplify linking against the Ipopt library.
           However, the pkg-config and ipopt_addlibs files do not reflect
