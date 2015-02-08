@@ -13,7 +13,7 @@ history management of subversion.
           from MKL is now automatically enabled. Note, that this will
           change the default solver on Ipopt builds without any of the
           linear solvers MA27, MA57, MA97, and MA86 (these take preference
-          over Pardiso). [t:216]
+          over Pardiso). [#216]
         - dropped support for old HSL sources (<2013; ThirdParty/HSLold)
         - updated ASL sources, now downloaded from AMPL-MP (github)
         - some internal changes to data structures (improved use of compound
