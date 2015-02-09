@@ -524,7 +524,7 @@ namespace Ipopt
             delete [] d_map;
             delete [] d_l_map;
             delete [] d_u_map;
-            THROW_EXCEPTION(INVALID_TNLP, string);
+            THROW_EXCEPTION(INCONSISTENT_BOUNDS, string);
           }
           else {
             x_not_fixed_map[n_x_var] = i;
@@ -592,8 +592,8 @@ namespace Ipopt
             delete [] d_l_map;
             delete [] d_u_map;
             char string[128];
-            Snprintf(string, 127, "There are inconsistent bounds on constraint %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
-            THROW_EXCEPTION(INVALID_TNLP, string);
+            Snprintf(string, 127, "There are inconsistent bounds on constraint function %d: lower = %25.16e and upper = %25.16e.", i, lower_bound, upper_bound);
+            THROW_EXCEPTION(INCONSISTENT_BOUNDS, string);
           }
           else {
             // inequality constraint
@@ -2442,7 +2442,7 @@ namespace Ipopt
     delete [] ajcn;
     if (findiff_jac_nnz_ != nz_full_jac_g_) {
       THROW_EXCEPTION(INVALID_TNLP,
-                      "Sparsity structure of Jacobian has multiple occurances of the same position.  This is not allowed for finite differences.");
+                      "Sparsity structure of Jacobian has multiple occurrences of the same position.  This is not allowed for finite differences.");
     }
 
     // Finally, get the right numbers out of the converter object

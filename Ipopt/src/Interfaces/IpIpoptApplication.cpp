@@ -1061,6 +1061,13 @@ namespace Ipopt
       status = LOCAL_INFEASIBILITY;
       skip_finalize_solution_call = true; /* has already been called by TNLPAdapter (and we don't know the correct primal solution) */
     }
+    catch (INCONSISTENT_BOUNDS& exc) {
+      exc.ReportException(*jnlst_, J_MOREDETAILED);
+      jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Problem has inconsistent variable bounds or constraint sides.\n");
+      retValue = Infeasible_Problem_Detected;
+      status = LOCAL_INFEASIBILITY;
+      skip_finalize_solution_call = true; /* has already been called by TNLPAdapter (and we don't know the correct primal solution) */
+    }
     catch (IpoptException& exc) {
       exc.ReportException(*jnlst_, J_ERROR);
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Some uncaught Ipopt exception encountered.\n");
