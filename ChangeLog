@@ -2,7 +2,7 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
-2015-02-xx releases/3.12.1
+2015-02-13 releases/3.12.1
         - fixes to build system for dependency linking and library versioning
         - Ipopt will now report an NLP with inconsistent variable bounds
           or inconsistent constraints sides as infeasible instead of
