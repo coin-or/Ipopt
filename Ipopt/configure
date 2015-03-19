@@ -22345,32 +22345,28 @@ for proj in $tmp ; do
 echo $ECHO_N "checking for doxygen doc'n for $proj ... $ECHO_C" >&6
   doxytag=${lc_proj}_doxy.tag
   doxyfound=no
-  for chkProj in $coin_subdirs ; do
-    if test "$chkProj" = "$proj" ; then
-      # proj will be configured, hence doxydoc present in build tree
-      doxysrcdir="${srcdir}/${proj}"
-      # AC_MSG_NOTICE([Considering $doxysrcdir (base)])
-      if test -d "$doxysrcdir" ; then
-	# with a doxydoc directory?
-	doxydir="$doxysrcdir/doxydoc"
-	# AC_MSG_NOTICE([Considering $doxydir (base)])
-	# AC_MSG_NOTICE([Subdirs: $coin_subdirs)])
-	if test -d "$doxydir" ; then
-	  # use tag file; don't process source
-	  eval doxydir="`pwd`/${proj}/doxydoc"
-	  coin_doxy_tagfiles="$coin_doxy_tagfiles $doxydir/$doxytag=$doxydir/html"
-	  echo "$as_me:$LINENO: result: $doxydir (tag)" >&5
+  # proj will be configured, hence doxydoc present in build tree
+  doxysrcdir="${srcdir}/../${proj}"
+  # AC_MSG_NOTICE([Considering $doxysrcdir (base)])
+  if test -d "$doxysrcdir" ; then
+    # with a doxydoc directory?
+    doxydir="$doxysrcdir/doxydoc"
+    # AC_MSG_NOTICE([Considering $doxydir (base)])
+    # AC_MSG_NOTICE([Subdirs: $coin_subdirs)])
+    if test -d "$doxydir" ; then
+      # use tag file; don't process source
+      doxydir="../${proj}/doxydoc"
+      coin_doxy_tagfiles="$coin_doxy_tagfiles $doxydir/$doxytag=../../$doxydir/html"
+      echo "$as_me:$LINENO: result: $doxydir (tag)" >&5
 echo "${ECHO_T}$doxydir (tag)" >&6
-	  coin_doxy_excludes="$coin_doxy_excludes */${proj}"
-	else
-	  # will process the source -- nothing further to be done here
-	  echo "$as_me:$LINENO: result: $doxysrcdir (src)" >&5
+      coin_doxy_excludes="$coin_doxy_excludes */${proj}"
+    else
+      # will process the source -- nothing further to be done here
+      echo "$as_me:$LINENO: result: $doxysrcdir (src)" >&5
 echo "${ECHO_T}$doxysrcdir (src)" >&6
-	fi
-	doxyfound=yes
-      fi
     fi
-  done
+    doxyfound=yes
+  fi
   # Not built, fall back to installed tag file
   if test $doxyfound = no ; then
     eval doxydir="${datadir}/coin/doc/${proj}/doxydoc"
