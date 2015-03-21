@@ -1109,7 +1109,7 @@ doxygen-docs:
 	  if test -d "doxydoc/latex"; then \
        	    if test "$(COIN_HAS_LATEX)" = TRUE; then \
 	      cd doxydoc/latex;\
-	      make pdf;\
+	      $(MAKE) pdf;\
 	      cd -;\
 	    fi;\
 	  fi;\
@@ -1144,6 +1144,46 @@ uninstall-doxygen-docs:
 	if test -f "$(DESTDIR)$(DocInstallDir)/refman.pdf"; then \
 	  rm -f "$(DESTDIR)$(DocInstallDir)/refman.pdf"; \
 	fi
+
+all-doxygen-docs:
+	for dir in $(subdirs) ; do \
+	  do_project=true;\
+	  for proj in $(COIN_SKIP_DOXYGEN); do\
+	    if test $$dir = $$proj; then\
+	      do_project=false;\
+	    fi;\
+	  done;\
+	  if test -r $$dir/doxydoc & $$do_project = true; then \
+	    (cd $$dir ; $(MAKE) doxygen-docs) \
+	  fi ; \
+	done ; 
+
+clean-all-doxygen-docs:
+	for dir in $(subdirs) ; do \
+	  if test -r $$dir/doxydoc ; then \
+	    (cd $$dir ; $(MAKE) clean-doxygen-docs) \
+	  fi ; \
+	done ; 
+
+install-all-doxygen-docs: all-doxygen-docs
+	for dir in $(subdirs) ; do \
+	  do_project=true;\
+	  for proj in $(COIN_SKIP_DOXYGEN); do\
+	    if test $$dir = $$proj; then\
+	      do_project=false;\
+	    fi;\
+	  done;\
+	  if test -r $$dir/doxydoc & $$do_project = true; then \
+	    (cd $$dir ; $(MAKE) install-doxygen-docs) \
+	  fi ; \
+	done ; 
+
+uninstall-all-doxygen-docs:
+	for dir in $(subdirs) ; do \
+	  if test -r $$dir/doxydoc ; then \
+	    (cd $$dir ; $(MAKE) uninstall-doxygen-docs) \
+	  fi ; \
+	done ; 
 
 install-doc: $(DocFiles) 
 	test -z "$(DocInstallDir)" || $(mkdir_p) "$(DESTDIR)$(DocInstallDir)"
