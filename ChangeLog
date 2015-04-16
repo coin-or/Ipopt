@@ -2,7 +2,7 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
-2015-04-15 releases/3.12.3 and releases/3.11.10
+2015-04-15 releases/3.12.3 and releases/3.11.11
         - fixed bug in MA97 interface that lead to conversion issues
           (by J. Hogg) [r2566, #260]
 
