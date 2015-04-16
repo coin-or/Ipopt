@@ -542,7 +542,7 @@ namespace Ipopt
         IpData().TimingStats().LinearSystemFactorization().Start();
       }
       ma97_factor(4, ia, ja, val_, &akeep_, &fkeep_, &control_, &info, scaling_);
-      //ma97_factor_solve(4, ia, ja, val_, 1, rhs_vals, ndim_, &akeep_, &fkeep_,
+      //ma97_factor_solve(4, ia, ja, val_, nrhs, rhs_vals, ndim_, &akeep_, &fkeep_,
       //                  &control_, &info, scaling_);
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                     "HSL_MA97: delays %d, nfactor %d, nflops %ld, maxfront %d\n",
@@ -612,7 +612,7 @@ namespace Ipopt
       if (HaveIpData()) {
          IpData().TimingStats().LinearSystemBackSolve().Start();
       }
-      ma97_solve(0, 1, rhs_vals, ndim_, &akeep_, &fkeep_, &control_, &info);
+      ma97_solve(0, nrhs, rhs_vals, ndim_, &akeep_, &fkeep_, &control_, &info);
       if (HaveIpData()) {
          IpData().TimingStats().LinearSystemBackSolve().End();
       }
@@ -624,7 +624,7 @@ namespace Ipopt
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemBackSolve().Start();
       }
-      ma97_solve(0, 1, rhs_vals, ndim_, &akeep_, &fkeep_, &control_, &info);
+      ma97_solve(0, nrhs, rhs_vals, ndim_, &akeep_, &fkeep_, &control_, &info);
       if (HaveIpData()) {
         IpData().TimingStats().LinearSystemBackSolve().End();
       }
