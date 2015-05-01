@@ -2,6 +2,12 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
+2015-xx-yy releases/3.12.4
+        - fix to use regularized Hessian when doing a curvature test without
+          ineration information (neg_curv_test_tol > 0), new option 
+          neg_curv_test_reg to switch back to original behavior
+          (by N.-Y. Chang and V. Zavala Tejeda) [r2579]
+        
 2015-04-15 releases/3.12.3 and releases/3.11.11
         - fixed bug in MA97 interface that lead to conversion issues
           (by J. Hogg) [r2566, #260]
