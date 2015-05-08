@@ -748,7 +748,7 @@ AC_CHECK_LIB(dl,[dlopen],[
   IPOPTLIB_LIBS_INSTALLED="$IPOPTLIB_LIBS_INSTALLED -ldl"
  ],[])
 
-case $build in
+case $host in
   *-cygwin* |  *-mingw*)
      AC_DEFINE([SHAREDLIBEXT], ["dll"], [Set to extension for shared libraries in quotes.])
      # Take -pedantic-errors out of CFLAGS
