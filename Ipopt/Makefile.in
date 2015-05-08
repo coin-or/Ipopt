@@ -1106,6 +1106,10 @@ doxygen-docs:
 	  if test -d "doxydoc/"; then \
 	    doxygen doxydoc/doxygen.conf;\
 	  fi;\
+	fi
+
+pdf-doxygen-docs: doxygen-docs
+	if test "$(COIN_HAS_DOXYGEN)" = TRUE; then \
 	  if test -d "doxydoc/latex"; then \
        	    if test "$(COIN_HAS_LATEX)" = TRUE; then \
 	      cd doxydoc/latex;\
@@ -1124,13 +1128,13 @@ clean-doxygen-docs:
 install-doxygen-docs: doxygen-docs
 	if test "$(COIN_HAS_DOXYGEN)" = TRUE; then \
 	  if test -d "doxydoc/"; then \
+	    test -d "$(DESTDIR)$(DocInstallDir)/doxydoc" || $(mkdir_p) "$(DESTDIR)$(DocInstallDir)/doxydoc"; \
 	    $(INSTALL_DATA) @coin_doxy_tagname@ "$(DESTDIR)$(DocInstallDir)/@coin_doxy_tagname@";\
-	    test -d "$(DocInstallDir)/doxydoc" || $(mkdir_p) "$(DESTDIR)$(DocInstallDir)/doxydoc"; \
 	    if test -f "doxydoc/latex/refman.pdf"; then \
 	      $(INSTALL_DATA) doxydoc/latex/refman.pdf "$(DESTDIR)$(DocInstallDir)";\
 	    fi;\
 	    if test -d "doxydoc/html"; then \
-	      test -d "$(DocInstallDir)/doxydoc/search/" || $(mkdir_p) "$(DESTDIR)$(DocInstallDir)/doxydoc/search/"; \
+	      test -d "$(DESTDIR)$(DocInstallDir)/doxydoc/search/" || $(mkdir_p) "$(DESTDIR)$(DocInstallDir)/doxydoc/search/"; \
 	      $(INSTALL_DATA) doxydoc/html/*.* "$(DESTDIR)$(DocInstallDir)/doxydoc";\
 	      $(INSTALL_DATA) doxydoc/html/search/*.* "$(DESTDIR)$(DocInstallDir)/doxydoc/search";\
             fi;\

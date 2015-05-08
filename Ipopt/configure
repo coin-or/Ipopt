@@ -37051,7 +37051,7 @@ if test $ac_cv_lib_dl_dlopen = yes; then
 fi
 
 
-case $build in
+case $host in
   *-cygwin* |  *-mingw*)
 
 cat >>confdefs.h <<\_ACEOF
