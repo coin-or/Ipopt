@@ -10,10 +10,14 @@
 #include "IpReferenced.hpp"
 #include "SensUtils.hpp"
 #include "SensUtils.hpp"
+#include "SensAlgorithm.hpp"
 #include "IpRegOptions.hpp"
 
 #include "IpIpoptApplication.hpp"
 #include "IpPDSystemSolver.hpp"
+
+#include "IpSmartPtr.hpp"
+
 namespace Ipopt
 {
   /** Standard exception for wrong/inconsistent suffixes for sipopt */
@@ -55,6 +59,29 @@ namespace Ipopt
       return ConstPtr(options_);
     }
 
+    /** Copy over value of ds/dp */
+    void GetSensitivities(Number *SX, Number *SL, Number *SZL, Number *SZU) {
+      if (GetRawPtr(controller) != NULL && NULL != Sensitivity_X && NULL != Sensitivity_Z_L && NULL != Sensitivity_Z_U && NULL != Sensitivity_L) { 
+	
+	for (int i=0 ; i < controller->nx(); ++i) SX[i] = Sensitivity_X[i] ;
+	for (int i=0; i < controller->nzu(); ++i) SZU[i] = Sensitivity_Z_U[i] ;
+	for (int i=0; i < controller->nzl(); ++i) SZL[i] = Sensitivity_Z_L[i] ;
+	for (int i=0 ; i < controller->nl(); ++i) SL[i]  = Sensitivity_L[i] ;
+      
+      }
+    }
+
+    /** accessor methods to get sizing info */
+    Index nx()  {return (GetRawPtr(controller)!=NULL) ? controller->nx() : -1 ;} 
+    Index nl()  {return (GetRawPtr(controller)!=NULL) ? controller->nl() : -1 ;} 
+    Index nzu() {return (GetRawPtr(controller)!=NULL) ? controller->nzu(): -1 ;} 
+    Index nzl() {return (GetRawPtr(controller)!=NULL) ? controller->nzl(): -1 ;} 
+
+    /* place holders to keep the values of ds/dp for each type of variable */
+    Number *Sensitivity_X ;
+    Number *Sensitivity_L ;
+    Number *Sensitivity_Z_U ;
+    Number *Sensitivity_Z_L ;
 
   private:
 
@@ -70,6 +97,8 @@ namespace Ipopt
     SmartPtr<IpoptNLP> ip_nlp_;
     SmartPtr<RegisteredOptions> reg_options_;
     ApplicationReturnStatus ipopt_retval_;
+
+    SmartPtr<SensAlgorithm> controller ;
 
     /** storing options values */
     bool run_sens_;

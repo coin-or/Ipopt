@@ -28,7 +28,12 @@ namespace Ipopt
     jnlst_(jnlst),
     options_(options),
     reg_options_(reg_options),
-    ipopt_retval_(Internal_Error)
+    ipopt_retval_(Internal_Error),
+    controller(NULL),
+    Sensitivity_X(NULL),
+    Sensitivity_L(NULL),
+    Sensitivity_Z_L(NULL),
+    Sensitivity_Z_U(NULL)
   {
     DBG_START_METH("SensApplication::SensApplication", dbg_verbosity);
 
@@ -180,10 +185,10 @@ namespace Ipopt
 
       red_hess_calc->ComputeReducedHessian();
     }
-
     if (run_sens_ && n_sens_steps_>0 && !sens_internal_abort) {
       SmartPtr<SensBuilder> schur_builder = new SensBuilder();
       const std::string prefix = ""; // I should be getting this somewhere else...
+      /*
       SmartPtr<SensAlgorithm> controller = schur_builder->BuildSensAlg(*jnlst_,
 								       *options_,
 								       prefix,
@@ -191,8 +196,16 @@ namespace Ipopt
 								       *ip_data_,
 								       *ip_cq_,
 								       *pd_solver_);
-
+      */
+      controller = schur_builder->BuildSensAlg(*jnlst_,
+					       *options_,
+					       prefix,
+					       *ip_nlp_,
+					       *ip_data_,
+					       *ip_cq_,
+					       *pd_solver_);
       retval = controller->Run();
+      int yy=0;
     }
     else if (run_sens_) {
       if (n_sens_steps_<=0) {
@@ -205,6 +218,14 @@ namespace Ipopt
 
 
     if (IsValid(ip_data_->curr()) && IsValid(ip_data_->curr()->x())) {
+      // point pointers to sensitivity vectors...
+      // only if controller (sens_app) is created
+      if (NULL != GetRawPtr(controller)) {
+	Sensitivity_X = controller->Sensitivity_X_ ;
+	Sensitivity_L = controller->Sensitivity_L_ ;
+	Sensitivity_Z_L = controller->Sensitivity_Z_L_; 	
+	Sensitivity_Z_U = controller->Sensitivity_Z_U_ ;
+      }
       SmartPtr<const Vector> c;
       SmartPtr<const Vector> d;
       SmartPtr<const Vector> zL;
