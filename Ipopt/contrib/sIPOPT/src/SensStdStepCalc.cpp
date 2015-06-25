@@ -24,7 +24,8 @@ namespace Ipopt
     ift_data_(ift_data),
     backsolver_(backsolver),
     bound_eps_(1e-3),
-    kkt_residuals_(true)
+    kkt_residuals_(true),
+    SensitivityVector(NULL)
   {
     DBG_START_METH("StdStepCalculator::StdStepCalculator", dbg_verbosity);
   }
@@ -75,6 +76,12 @@ namespace Ipopt
     }
 
     backsolver_->Solve(&sol, ConstPtr(delta_u_long));
+
+    // make a copy of the sensitivites
+    SensitivityVector = (&sol)->MakeNewIteratesVectorCopy();
+
+    // print it out
+    SensitivityVector->Print(Jnlst(),J_VECTOR,J_USER1,"SensitivityVector stdcalc");
 
     SmartPtr<IteratesVector> Kr_s;
     if (Do_Boundcheck()) {

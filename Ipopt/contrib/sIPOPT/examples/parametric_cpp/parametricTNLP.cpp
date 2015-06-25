@@ -265,6 +265,12 @@ void ParametricTNLP::finalize_solution(SolverReturn status,
   for (Index k=0; k<(Index) sens_sol_vec.size(); ++k) {
     printf("x[%3d]   % .23f   % .23f\n", k, x[k], sens_sol_vec[k]);
   }
+
+  printf("\n**********\n");
+  for (Index k=0; k<m; ++k) {
+    printf("lambda[%3d] (nom)  % .23f \n", k, lambda[k]);
+  }
+
 }
 
 void ParametricTNLP::finalize_metadata(Index n,
@@ -291,7 +297,7 @@ void ParametricTNLP::finalize_metadata(Index n,
   NumericMetaDataMapType::const_iterator lambda_solution = con_numeric_md.find("sens_sol_state_1");
   if (lambda_solution!=con_numeric_md.end()) {
     for (Index k=0; k<m; ++k) {
-      printf("lambda[%d] = %f\n", k, lambda_solution->second[k]);
+      printf("lambda[%d] (upd) = %.14g\n", k, lambda_solution->second[k]);
     }
   }
 }

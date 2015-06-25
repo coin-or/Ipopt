@@ -6,7 +6,9 @@
 
 #include "SensAlgorithm.hpp"
 #include "SensUtils.hpp"
+#include "IpSmartPtr.hpp"
 
+#include "IpVector.hpp"
 
 namespace Ipopt
 {
@@ -22,21 +24,44 @@ namespace Ipopt
     driver_vec_(driver_vec),
     sens_step_calc_(sens_step_calc),
     measurement_(measurement),
-    n_sens_steps_(n_sens_steps) // why doesn't he get this from the options?
+    n_sens_steps_(n_sens_steps), // why doesn't he get this from the options?
+    Sensitivity_X_(NULL),
+    Sensitivity_L_(NULL),
+    Sensitivity_Z_L_(NULL),
+    Sensitivity_Z_U_(NULL)
   {
     DBG_START_METH("SensAlgorithm::SensAlgorithm", dbg_verbosity);
-
     DBG_ASSERT(n_sens_steps<=driver_vec.size());
   }
 
   SensAlgorithm::~SensAlgorithm()
   {
     DBG_START_METH("SensAlgorithm::~SensAlgorithm", dbg_verbosity);
+    if (NULL != Sensitivity_X_) delete [] Sensitivity_X_ ;
+    if (NULL != Sensitivity_L_) delete [] Sensitivity_L_ ;
+    if (NULL != Sensitivity_Z_U_) delete [] Sensitivity_Z_U_ ;
+    if (NULL != Sensitivity_Z_L_) delete [] Sensitivity_Z_L_ ;
   }
 
   bool SensAlgorithm::InitializeImpl(const OptionsList& options,
 				     const std::string& prefix)
   {
+    // initialize values for variable sizes, and allocate memory for sensitivity vectors
+    nx_ = dynamic_cast<const DenseVector*>( GetRawPtr( IpData().curr()->x() ) )->Dim() ;
+    nceq_ = dynamic_cast<const DenseVector*>( GetRawPtr( IpData().curr()->y_c() ) )->Dim() ;
+    ncineq_ = dynamic_cast<const DenseVector*>( GetRawPtr( IpData().curr()->y_d() ) )->Dim() ;
+    nzl_ = dynamic_cast<const DenseVector*>( GetRawPtr( IpData().curr()->z_L() ) )->Dim() ;
+    nzu_ = dynamic_cast<const DenseVector*>( GetRawPtr( IpData().curr()->z_U() ) )->Dim() ;    
+    nl_ = nceq_ + ncineq_ ;
+    
+    Sensitivity_X_ = new Number[nx_] ;
+    if (NULL == Sensitivity_X_) return false ;
+    Sensitivity_L_ = new Number[nceq_+ncineq_] ;
+    if (NULL == Sensitivity_L_) return false ;
+    Sensitivity_Z_L_ = new Number[nzl_] ;
+    if (NULL == Sensitivity_Z_L_) return false ;
+    Sensitivity_Z_U_ = new Number[nzu_] ;
+    if (NULL == Sensitivity_Z_U_) return false ;
     return true;
   }
 
@@ -53,6 +78,8 @@ namespace Ipopt
     SmartPtr<IteratesVector> sol = IpData().curr()->MakeNewIteratesVector();
     SmartPtr<DenseVector> delta_u;
     SmartPtr<const Vector> unscaled_x;
+    SmartPtr<const Vector> unscaled_yc;
+    
     SmartPtr<IteratesVector> trialcopy;
     for (Index step_i=0; step_i<n_sens_steps_; ++step_i) {
       sens_step_calc_->SetSchurDriver(driver_vec_[step_i]);
@@ -61,48 +88,127 @@ namespace Ipopt
       sens_step_calc_->Step(*delta_u, *sol);
       SmartPtr<IteratesVector> saved_sol = sol->MakeNewIteratesVectorCopy();
       saved_sol->Print(Jnlst(),J_VECTOR,J_USER1,"sol_vec");
+
       // unscale solution...
-      unscaled_x = IpNLP().NLP_scaling()->unapply_vector_scaling_x(saved_sol->x());
-      DBG_ASSERT(IsValid(unscaled_x));
-      saved_sol->Set_x(*unscaled_x);
-      unscaled_x = NULL;
+      UnScaleIteratesVector(&saved_sol) ;
+
+      // update variables
       measurement_->SetSolution(step_i+1, saved_sol);
 
-      //trialcopy = sol->MakeNewIteratesVectorCopy();
-      //IpData().set_trial(trialcopy);
-
-      /*// compute rhs (KKT evalutaion)
-	SmartPtr<IteratesVector> rhs_err = IpData().curr()->MakeNewIteratesVectorCopy();
-	rhs_err->Set_x(*IpCq().trial_grad_lag_x());
-	rhs_err->Set_s(*IpCq().trial_grad_lag_s());
-	rhs_err->Set_y_c(*IpCq().trial_c());
-	rhs_err->Set_y_d(*IpCq().trial_d_minus_s());
-	rhs_err->Set_z_L(*IpCq().trial_compl_x_L());
-	rhs_err->Set_z_U(*IpCq().trial_compl_x_U());
-	rhs_err->Set_v_L(*IpCq().trial_compl_s_L());
-	rhs_err->Set_v_U(*IpCq().trial_compl_s_U());
-
-	SmartPtr<IteratesVector> KKT_slacks;
-	KKT_slacks = rhs_err->MakeNewIteratesVectorCopy();
-	driver_vec_[step_i]->data_A()->TransMultiply(*delta_u, *KKT_slacks);
-	KKT_slacks->Print(Jnlst(),J_VECTOR,J_USER1,"KKT_slacks");
-	KKT_slacks->Axpy(1.0,*rhs_err);
-
-	KKT_slacks->Print(Jnlst(),J_VECTOR,J_USER1,"error");
-
-	printf("***********************************\n"
-	"Running sIPOPT my-formula\n"
-	"value of objective function:  %23.16e\n"
-	"Nrm2 of KKT residual:         %23.16e\n"
-	"Constraint violation:         %23.16e\n"
-	"***********************************\n",IpCq().unscaled_trial_f(), KKT_slacks->Nrm2(), KKT_slacks->y_c()->Nrm2());
-      */
-      //SmartPtr<IteratesVector> trialcopyvector = IpData().curr()->MakeNewIteratesVectorCopy();
-      //IpData().set_trial(trialcopyvector);
-      //IpData().curr()->x()->Print(Jnlst(),J_VECTOR,J_USER1,"curr");
+      // get sensitivity vector
+      GetSensitivities() ;
+      
     }
 
     return retval;
+  }
+
+  void SensAlgorithm::GetSensitivities(void) {
+
+    /*
+      Extract sensitivity vector for each vector type
+      primal, lagrange, and bound multipliers(zl,zu)
+    */
+    SmartPtr<IteratesVector> SV = sens_step_calc_->GetSensitivityVector() ;    
+    UnScaleIteratesVector(&SV) ;
+
+
+    const Number* X_ = dynamic_cast<const DenseVector*>( GetRawPtr( (*SV).x() ) )->Values();
+
+    for (int i = 0; i < nx_; ++i) { 
+      //printf(" ds/dp(X)[%3d] = %.14g\n", i+1, X_[i]);
+      Sensitivity_X_[i] = X_[i] ;
+    }
+
+    const Number* Z_L_ = dynamic_cast<const DenseVector*>( GetRawPtr( (*SV).z_L() ) )->Values();
+    for (int i = 0; i < nzl_; ++i) { 
+      //printf(" ds/dp(X)[%3d] = %.14g\n", i+1, X_[i]);
+      Sensitivity_Z_L_[i] = Z_L_[i] ;
+    }
+
+    const Number* Z_U_ = dynamic_cast<const DenseVector*>( GetRawPtr( (*SV).z_U() ) )->Values();
+    for (int i = 0; i < nzu_; ++i) { 
+      //printf(" ds/dp(X)[%3d] = %.14g\n", i+1, X_[i]);
+      Sensitivity_Z_U_[i] = Z_U_[i] ;
+    }
+
+    const Number* LE_  = dynamic_cast<const DenseVector*>( GetRawPtr( (*SV).y_c() ) )->Values();
+    for (int i = 0; i < nceq_; ++i) {
+      //printf(" ds/dp(LE)[%3d] = %.14g\n", i+1, LE_[i]);
+      Sensitivity_L_[i] = LE_[i] ;
+    }
+
+    const Number* LIE_ = dynamic_cast<const DenseVector*>( GetRawPtr( (*SV).y_d() ) )->Values();
+      for (int i = 0; i < ncineq_; ++i) {
+	//printf(" ds/dp(LIE)[%3d] = %.14g\n", i+1, LIE_[i]);
+	Sensitivity_L_[i+nceq_] = LIE_[i] ;
+      }
+
+  }
+
+  void SensAlgorithm::UnScaleIteratesVector(SmartPtr<IteratesVector> *V) {
+
+    // unscale the iterates vector
+    // pretty much a copy from IpOrigIpopt::finalize_solution
+    
+    SmartPtr<const Vector> unscaled_x;
+    unscaled_x = IpNLP().NLP_scaling()->unapply_vector_scaling_x((*V)->x());
+    DBG_ASSERT(IsValid(unscaled_x));
+    (*V)->Set_x(*unscaled_x);
+    unscaled_x = NULL ;
+
+    SmartPtr<const Matrix> Px_L = IpNLP().Px_L();
+    SmartPtr<const Matrix> Px_U = IpNLP().Px_U();
+    SmartPtr<const VectorSpace> x_space = IpNLP().x_space();
+
+    SmartPtr<const Vector> y_c = (*V)->y_c();
+    SmartPtr<const Vector> y_d = (*V)->y_d();
+    
+    SmartPtr<const Vector> z_L = (*V)->z_L();
+    SmartPtr<const Vector> z_U = (*V)->z_U();
+
+    
+    // unscale y_c
+    SmartPtr<const Vector> unscaled_yc;
+    SmartPtr<const Vector> unscaled_yd;
+    SmartPtr<const Vector> unscaled_z_L;
+    SmartPtr<const Vector> unscaled_z_U;
+
+
+    Number obj_unscale_factor = IpNLP().NLP_scaling()->unapply_obj_scaling(1.);
+    if (obj_unscale_factor!=1.) {
+      
+      SmartPtr<Vector> tmp = IpNLP().NLP_scaling()->apply_vector_scaling_x_LU_NonConst(*Px_L, z_L, *x_space);
+      tmp->Scal(obj_unscale_factor);
+      unscaled_z_L = ConstPtr(tmp);    
+      
+      tmp = IpNLP().NLP_scaling()->apply_vector_scaling_x_LU_NonConst(*Px_U, z_U, *x_space);
+      tmp->Scal(obj_unscale_factor);
+      unscaled_z_U = ConstPtr(tmp);
+
+      tmp = IpNLP().NLP_scaling()->apply_vector_scaling_c_NonConst(y_c);
+      tmp->Scal(obj_unscale_factor);
+      unscaled_yc = ConstPtr(tmp);
+      
+      tmp = IpNLP().NLP_scaling()->apply_vector_scaling_d_NonConst(y_d);
+      tmp->Scal(obj_unscale_factor);
+      unscaled_yd = ConstPtr(tmp);
+      
+    }
+    else {
+      
+      unscaled_z_L = IpNLP().NLP_scaling()->apply_vector_scaling_x_LU(*Px_L, z_L, *x_space);
+      unscaled_z_U = IpNLP().NLP_scaling()->apply_vector_scaling_x_LU(*Px_U, z_U, *x_space);
+      unscaled_yc = IpNLP().NLP_scaling()->apply_vector_scaling_c(y_c);
+      unscaled_yd = IpNLP().NLP_scaling()->apply_vector_scaling_d(y_d);
+      
+    }
+
+    (*V)->Set_z_U(*unscaled_z_U);
+    (*V)->Set_z_L(*unscaled_z_L);
+    (*V)->Set_y_c(*unscaled_yc);
+    (*V)->Set_y_d(*unscaled_yd);
+    
   }
 
 }

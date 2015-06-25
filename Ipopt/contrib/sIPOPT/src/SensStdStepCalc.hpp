@@ -9,7 +9,11 @@
 
 #include "SensBacksolver.hpp"
 #include "SensStepCalc.hpp"
+#include "IpDenseVector.hpp"
+#include "IpIteratesVector.hpp"
+
 #include <vector>
+
 
 
 namespace Ipopt
@@ -34,11 +38,16 @@ namespace Ipopt
 		    std::vector<Index>& x_bound_violations_idx,
 		    std::vector<Number>& x_bound_violations_du);
 
+    /** return the sensitivity vector */
+    virtual SmartPtr<IteratesVector> GetSensitivityVector(void) { return SensitivityVector ; } ;
+
   private:
     SmartPtr<SchurData> ift_data_;
     SmartPtr<SensBacksolver> backsolver_;
     Number bound_eps_;
     bool kkt_residuals_;
+    
+    SmartPtr<IteratesVector> SensitivityVector ;
   };
 }
 
