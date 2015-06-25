@@ -59,6 +59,7 @@ General
 - the measurement class should go outside the library so everyone can/must write their own measurement class
 
 Milestones
++ wrote method to deal with scaling that resembles IpOrigIpopt:finalize_solution
 + write a makefile.am and get it to compile as an add-on to ipopt with the new nlp structure.
 + write print functions and test schur calculation
 
