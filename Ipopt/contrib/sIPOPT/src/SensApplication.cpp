@@ -205,7 +205,6 @@ namespace Ipopt
 					       *ip_cq_,
 					       *pd_solver_);
       retval = controller->Run();
-      int yy=0;
     }
     else if (run_sens_) {
       if (n_sens_steps_<=0) {
