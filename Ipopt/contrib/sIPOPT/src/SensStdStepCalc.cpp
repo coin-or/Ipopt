@@ -132,6 +132,9 @@ namespace Ipopt
 	// solve with new data_B and delta_u
 	retval = Driver()->SchurSolve(&sol, ConstPtr(delta_u_long), dynamic_cast<Vector*>(GetRawPtr(new_delta_u)), Kr_s);
 
+	// make a copy of the sensitivites with bound checks
+	SensitivityVector = (&sol)->MakeNewIteratesVectorCopy();
+
 	sol.Axpy(1.0, *IpData().trial());
 
 	x_bound_violations_idx.clear();
