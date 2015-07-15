@@ -37,6 +37,7 @@ namespace Ipopt
      *  bounds,  see to it that everything happens in the required
      *  timeframe. */
     SensAlgorithmExitStatus Run();
+    SensAlgorithmExitStatus ComputeSensitivityMatrix(void);
 
 
     /** accessor methods to get access to variable sizes */
@@ -44,12 +45,20 @@ namespace Ipopt
     Index nx(void) { return nx_ ; }
     Index nzl(void) {return nzl_ ; }
     Index nzu(void) {return nzu_ ; }
+    Index ns(void) {return ns_ ; }
+    Index np(void) {return np_ ; }
     
     /** array place holders to store the vector of sensitivities */
-    Number *Sensitivity_X_ ;
-    Number *Sensitivity_L_ ;
-    Number *Sensitivity_Z_U_ ;
-    Number *Sensitivity_Z_L_ ;
+    Number *DirectionalD_X_ ;
+    Number *DirectionalD_L_ ;
+    Number *DirectionalD_Z_U_ ;
+    Number *DirectionalD_Z_L_ ;
+
+    /** array place holders for the sensitivity matrix */
+    Number *SensitivityM_X_ ;
+    Number *SensitivityM_L_ ;
+    Number *SensitivityM_Z_U_ ;
+    Number *SensitivityM_Z_L_ ;
 
   private:
     
@@ -59,6 +68,8 @@ namespace Ipopt
     Index nzu_ ; 
     Index nceq_ ;
     Index ncineq_ ;
+    Index ns_ ;
+    Index np_ ;
 
     std::vector< SmartPtr<SchurDriver> > driver_vec_;
     SmartPtr<SensitivityStepCalculator> sens_step_calc_;
@@ -66,7 +77,10 @@ namespace Ipopt
     Index n_sens_steps_; // I think it is useful to state this number explicitly in the constructor and here.
 
     /** method to extract sensitivity vectors */
-    void GetSensitivities(void) ;
+    void GetDirectionalDerivatives(void) ;
+
+    /** method to extract sensitivity matrix */
+    void GetSensitivityMatrix(Index col) ;
 
     /** private method used to uncale perturbed solution and sensitivities */
     void UnScaleIteratesVector(SmartPtr<IteratesVector> *V) ;

@@ -59,14 +59,25 @@ namespace Ipopt
       return ConstPtr(options_);
     }
 
-    /** Copy over value of ds/dp */
-    void GetSensitivities(Number *SX, Number *SL, Number *SZL, Number *SZU) {
-      if (GetRawPtr(controller) != NULL && NULL != Sensitivity_X && NULL != Sensitivity_Z_L && NULL != Sensitivity_Z_U && NULL != Sensitivity_L) { 
+    /** Copy over value of Directional Derivatives K^(-1)N_p(p-p0) */
+    void GetDirectionalDerivatives(Number *SX, Number *SL, Number *SZL, Number *SZU) {
+      if (GetRawPtr(controller) != NULL && NULL != DirectionalD_X && NULL != DirectionalD_Z_L && NULL != DirectionalD_Z_U && NULL != DirectionalD_L) { 
 	
-	for (int i=0 ; i < controller->nx(); ++i) SX[i] = Sensitivity_X[i] ;
-	for (int i=0; i < controller->nzu(); ++i) SZU[i] = Sensitivity_Z_U[i] ;
-	for (int i=0; i < controller->nzl(); ++i) SZL[i] = Sensitivity_Z_L[i] ;
-	for (int i=0 ; i < controller->nl(); ++i) SL[i]  = Sensitivity_L[i] ;
+	for (int i=0 ; i < controller->nx(); ++i) SX[i] = DirectionalD_X[i] ;
+	for (int i=0; i < controller->nzu(); ++i) SZU[i] = DirectionalD_Z_U[i] ;
+	for (int i=0; i < controller->nzl(); ++i) SZL[i] = DirectionalD_Z_L[i] ;
+	for (int i=0 ; i < controller->nl(); ++i) SL[i]  = DirectionalD_L[i] ;
+      
+      }
+    }
+
+    /** Copy over value of ds/dp */
+    void GetSensitivityMatrix(Number *SX, Number *SL, Number *SZL, Number *SZU) {
+      if (GetRawPtr(controller) != NULL && NULL != SensitivityM_X && NULL != SensitivityM_Z_L && NULL != SensitivityM_Z_U && NULL != SensitivityM_L) {
+	for (int i=0 ; i < controller->nx()*controller->np(); ++i) SX[i] = SensitivityM_X[i] ;
+	for (int i=0; i < controller->nzu()*controller->np(); ++i) SZU[i] = SensitivityM_Z_U[i] ;
+	for (int i=0; i < controller->nzl()*controller->np(); ++i) SZL[i] = SensitivityM_Z_L[i] ;
+	for (int i=0 ; i < controller->nl()*controller->np(); ++i) SL[i]  = SensitivityM_L[i] ;
       
       }
     }
@@ -76,12 +87,20 @@ namespace Ipopt
     Index nl()  {return (GetRawPtr(controller)!=NULL) ? controller->nl() : -1 ;} 
     Index nzu() {return (GetRawPtr(controller)!=NULL) ? controller->nzu(): -1 ;} 
     Index nzl() {return (GetRawPtr(controller)!=NULL) ? controller->nzl(): -1 ;} 
+    Index np() {return (GetRawPtr(controller)!=NULL) ? controller->np(): -1 ;} 
+
+    /* place holders to keep the values of the directional derivatives for each type of variable */
+    Number *DirectionalD_X ;
+    Number *DirectionalD_L ;
+    Number *DirectionalD_Z_U ;
+    Number *DirectionalD_Z_L ;
+
 
     /* place holders to keep the values of ds/dp for each type of variable */
-    Number *Sensitivity_X ;
-    Number *Sensitivity_L ;
-    Number *Sensitivity_Z_U ;
-    Number *Sensitivity_Z_L ;
+    Number *SensitivityM_X ;
+    Number *SensitivityM_L ;
+    Number *SensitivityM_Z_U ;
+    Number *SensitivityM_Z_L ;
 
   private:
 
@@ -103,6 +122,7 @@ namespace Ipopt
     /** storing options values */
     bool run_sens_;
     bool compute_red_hessian_;
+    bool compute_dsdp_ ;
     Index n_sens_steps_;
   };
 }
