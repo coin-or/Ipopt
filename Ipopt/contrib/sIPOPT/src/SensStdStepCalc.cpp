@@ -72,9 +72,11 @@ namespace Ipopt
       delta_u.Print(Jnlst(),J_VECTOR,J_USER1,"delta_u init");
       DBG_PRINT((dbg_verbosity,"r_s init Nrm2=%23.16e\n", r_s->Asum()));
 
+      delta_u_long->Print(Jnlst(),J_VECTOR,J_USER1,"delta_u_long before");
       delta_u_long->Axpy(-1.0, *r_s);
     }
 
+    delta_u_long->Print(Jnlst(),J_VECTOR,J_USER1,"delta_u_long");
     backsolver_->Solve(&sol, ConstPtr(delta_u_long));
 
     // make a copy of the sensitivites

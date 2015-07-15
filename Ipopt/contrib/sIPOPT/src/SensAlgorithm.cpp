@@ -25,10 +25,14 @@ namespace Ipopt
     sens_step_calc_(sens_step_calc),
     measurement_(measurement),
     n_sens_steps_(n_sens_steps), // why doesn't he get this from the options?
-    Sensitivity_X_(NULL),
-    Sensitivity_L_(NULL),
-    Sensitivity_Z_L_(NULL),
-    Sensitivity_Z_U_(NULL)
+    DirectionalD_X_(NULL),
+    DirectionalD_L_(NULL),
+    DirectionalD_Z_L_(NULL),
+    DirectionalD_Z_U_(NULL),
+    SensitivityM_X_(NULL),
+    SensitivityM_L_(NULL),
+    SensitivityM_Z_L_(NULL),
+    SensitivityM_Z_U_(NULL)
   {
     DBG_START_METH("SensAlgorithm::SensAlgorithm", dbg_verbosity);
     DBG_ASSERT(n_sens_steps<=driver_vec.size());
@@ -37,10 +41,14 @@ namespace Ipopt
   SensAlgorithm::~SensAlgorithm()
   {
     DBG_START_METH("SensAlgorithm::~SensAlgorithm", dbg_verbosity);
-    if (NULL != Sensitivity_X_) delete [] Sensitivity_X_ ;
-    if (NULL != Sensitivity_L_) delete [] Sensitivity_L_ ;
-    if (NULL != Sensitivity_Z_U_) delete [] Sensitivity_Z_U_ ;
-    if (NULL != Sensitivity_Z_L_) delete [] Sensitivity_Z_L_ ;
+    if (NULL != DirectionalD_X_) delete [] DirectionalD_X_ ;
+    if (NULL != DirectionalD_L_) delete [] DirectionalD_L_ ;
+    if (NULL != DirectionalD_Z_U_) delete [] DirectionalD_Z_U_ ;
+    if (NULL != DirectionalD_Z_L_) delete [] DirectionalD_Z_L_ ;
+    if (NULL != SensitivityM_X_) delete [] SensitivityM_X_ ;
+    if (NULL != SensitivityM_L_) delete [] SensitivityM_L_ ;
+    if (NULL != SensitivityM_Z_U_) delete [] SensitivityM_Z_U_ ;
+    if (NULL != SensitivityM_Z_L_) delete [] SensitivityM_Z_L_ ;
   }
 
   bool SensAlgorithm::InitializeImpl(const OptionsList& options,
@@ -53,15 +61,41 @@ namespace Ipopt
     nzl_ = dynamic_cast<const DenseVector*>( GetRawPtr( IpData().curr()->z_L() ) )->Dim() ;
     nzu_ = dynamic_cast<const DenseVector*>( GetRawPtr( IpData().curr()->z_U() ) )->Dim() ;    
     nl_ = nceq_ + ncineq_ ;
+
+    ns_ = nx_ + nl_ + nzl_ + nzu_ ;
     
-    Sensitivity_X_ = new Number[nx_] ;
-    if (NULL == Sensitivity_X_) return false ;
-    Sensitivity_L_ = new Number[nceq_+ncineq_] ;
-    if (NULL == Sensitivity_L_) return false ;
-    Sensitivity_Z_L_ = new Number[nzl_] ;
-    if (NULL == Sensitivity_Z_L_) return false ;
-    Sensitivity_Z_U_ = new Number[nzu_] ;
-    if (NULL == Sensitivity_Z_U_) return false ;
+    DirectionalD_X_ = new Number[nx_] ;
+    if (NULL == DirectionalD_X_) return false ;
+    DirectionalD_L_ = new Number[nceq_+ncineq_] ;
+    if (NULL == DirectionalD_L_) return false ;
+    DirectionalD_Z_L_ = new Number[nzl_] ;
+    if (NULL == DirectionalD_Z_L_) return false ;
+    DirectionalD_Z_U_ = new Number[nzu_] ;
+    if (NULL == DirectionalD_Z_U_) return false ;
+
+    std::string state;
+    std::string statevalue;
+
+    state      = "sens_init_constr";
+    statevalue = "sens_init_constr";
+
+    SmartPtr<const DenseVectorSpace> x_owner_space_ = dynamic_cast<const DenseVectorSpace*>(GetRawPtr(IpData().curr()->y_c()->OwnerSpace())) ;
+    const std::vector<Index> idx_ipopt = x_owner_space_->GetIntegerMetaData(state.c_str());
+
+    np_ = 0 ;
+    for (Index i=0; i < idx_ipopt.size(); ++i) {
+      if (idx_ipopt[i]>0) ++np_ ;
+    }
+
+
+    SensitivityM_X_ = new Number[nx_*np_] ;
+    if (NULL == SensitivityM_X_) return false ;
+    SensitivityM_L_ = new Number[nl_*np_] ;
+    if (NULL == SensitivityM_L_) return false ;
+    SensitivityM_Z_L_ = new Number[nzl_*np_] ;
+    if (NULL == SensitivityM_Z_L_) return false ;
+    SensitivityM_Z_U_ = new Number[nzu_*np_] ;
+    if (NULL == SensitivityM_Z_U_) return false ;
     return true;
   }
 
@@ -79,6 +113,8 @@ namespace Ipopt
     SmartPtr<DenseVector> delta_u;
     SmartPtr<const Vector> unscaled_x;
     SmartPtr<const Vector> unscaled_yc;
+
+    
     
     SmartPtr<IteratesVector> trialcopy;
     for (Index step_i=0; step_i<n_sens_steps_; ++step_i) {
@@ -96,17 +132,135 @@ namespace Ipopt
       measurement_->SetSolution(step_i+1, saved_sol);
 
       // get sensitivity vector
-      GetSensitivities() ;
+      GetDirectionalDerivatives() ;
       
     }
 
     return retval;
   }
 
-  void SensAlgorithm::GetSensitivities(void) {
+
+  SensAlgorithmExitStatus SensAlgorithm::ComputeSensitivityMatrix(void) {
+    
+    DBG_START_METH("SensAlgorithm::ComputeSensitivityMatrix", dbg_verbosity);
+
+    SensAlgorithmExitStatus retval = SOLVE_SUCCESS;
+
+    /* Loop through all steps */
+    SmartPtr<IteratesVector> sol = IpData().curr()->MakeNewIteratesVector();
+    SmartPtr<const Vector> unscaled_x;
+    SmartPtr<const Vector> unscaled_yc;
+    
+    SmartPtr<IteratesVector> trialcopy;
+
+    SmartPtr<DenseVectorSpace> delta_u_space;
+    delta_u_space = new DenseVectorSpace(2);
+
+    SmartPtr<DenseVector> delta_u = new DenseVector(GetRawPtr(ConstPtr(delta_u_space)));
+
+    Number* du_val = delta_u->Values();
+
+    std::string state;
+    std::string statevalue;
+
+    state      = "sens_init_constr";
+    statevalue = "sens_init_constr";
+
+    SmartPtr<const DenseVectorSpace> x_owner_space_ = dynamic_cast<const DenseVectorSpace*>(GetRawPtr(IpData().curr()->y_c()->OwnerSpace())) ;
+    //= dynamic_cast<const DenseVectorSpace*>(GetRawPtr(IpData().curr()->x()->OwnerSpace()));
+
+    const std::vector<Index> idx_ipopt = x_owner_space_->GetIntegerMetaData(state.c_str());
+
+    char buffer[250] ;
+
+    Index col = 0 ;
+    for (Index Scol =0; Scol < idx_ipopt.size(); ++Scol) {
+
+      if ( idx_ipopt[Scol] > 0 ) {
+
+	// reset rhs vector to zero
+	for (Index j = 0; j < idx_ipopt.size(); ++j) {
+	  if ( idx_ipopt[j] > 0 ) du_val[ idx_ipopt[j] - 1 ] = 0 ;
+	}
+
+	sprintf(buffer,"Column %i",idx_ipopt[Scol]) ;
+
+	sens_step_calc_->SetSchurDriver(driver_vec_[0]);
+
+	// set rhs to 1 (eq. 9-10)
+	du_val[idx_ipopt[Scol]-1] = 1;
+
+	delta_u->SetValues(du_val) ;
+	//delta_u->Print(Jnlst(),J_VECTOR,J_USER1,"delta_u 1234567");
+	sens_step_calc_->Step(*delta_u, *sol);
+	SmartPtr<IteratesVector> saved_sol = sol->MakeNewIteratesVectorCopy();
+	saved_sol->Print(Jnlst(),J_VECTOR,J_USER1,"sol_vec");
+
+	// unscale solution...
+	UnScaleIteratesVector(&saved_sol) ;
+
+	saved_sol->Print(Jnlst(),J_VECTOR,J_USER1,buffer);
+	
+	// Save column
+	GetSensitivityMatrix(col) ;
+	++col ; // increase column counter
+      }
+    }
+    return retval ;
+  }
+
+  void SensAlgorithm::GetSensitivityMatrix(Index col) {
 
     /*
-      Extract sensitivity vector for each vector type
+      Extract sensitivity vector for each vector type primal,
+      lagrange, and bound multipliers(zl,zu) of column col of S.
+    */
+    
+    Index offset ;
+
+    SmartPtr<IteratesVector> SV = sens_step_calc_->GetSensitivityVector() ;    
+    UnScaleIteratesVector(&SV) ;
+
+    const Number* X_ = dynamic_cast<const DenseVector*>( GetRawPtr( (*SV).x() ) )->Values();
+    offset = col*nx_ ;
+    for (int i = 0; i < nx_; ++i) { 
+      //printf(" ds/dp(X)[%3d] = %.14g\n", i+1, X_[i]);
+      SensitivityM_X_[i+offset] = X_[i] ;
+    }
+
+    const Number* Z_L_ = dynamic_cast<const DenseVector*>( GetRawPtr( (*SV).z_L() ) )->Values();
+    offset = col*nzl_ ;
+    for (int i = 0; i < nzl_; ++i) { 
+      //printf(" ds/dp(X)[%3d] = %.14g\n", i+1, X_[i]);
+      SensitivityM_Z_L_[i+offset] = Z_L_[i] ;
+    }
+
+    const Number* Z_U_ = dynamic_cast<const DenseVector*>( GetRawPtr( (*SV).z_U() ) )->Values();
+    offset = col*nzu_ ;
+    for (int i = 0; i < nzu_; ++i) { 
+      //printf(" ds/dp(X)[%3d] = %.14g\n", i+1, X_[i]);
+      SensitivityM_Z_U_[i+offset] = Z_U_[i] ;
+    }
+
+    const Number* LE_  = dynamic_cast<const DenseVector*>( GetRawPtr( (*SV).y_c() ) )->Values();
+    offset = col*nl_ ;
+    for (int i = 0; i < nceq_; ++i) {
+      //printf(" ds/dp(LE)[%3d] = %.14g\n", i+1, LE_[i]);
+      SensitivityM_L_[i+offset] = LE_[i] ;
+    }
+
+    const Number* LIE_ = dynamic_cast<const DenseVector*>( GetRawPtr( (*SV).y_d() ) )->Values();
+      for (int i = 0; i < ncineq_; ++i) {
+	//printf(" ds/dp(LIE)[%3d] = %.14g\n", i+1, LIE_[i]);
+	SensitivityM_L_[i+nceq_+offset] = LIE_[i] ;
+      }
+
+  }
+
+  void SensAlgorithm::GetDirectionalDerivatives(void) {
+
+    /*
+      Extract directional derivative vector for each vector type
       primal, lagrange, and bound multipliers(zl,zu)
     */
     SmartPtr<IteratesVector> SV = sens_step_calc_->GetSensitivityVector() ;    
@@ -117,31 +271,31 @@ namespace Ipopt
 
     for (int i = 0; i < nx_; ++i) { 
       //printf(" ds/dp(X)[%3d] = %.14g\n", i+1, X_[i]);
-      Sensitivity_X_[i] = X_[i] ;
+      DirectionalD_X_[i] = X_[i] ;
     }
 
     const Number* Z_L_ = dynamic_cast<const DenseVector*>( GetRawPtr( (*SV).z_L() ) )->Values();
     for (int i = 0; i < nzl_; ++i) { 
       //printf(" ds/dp(X)[%3d] = %.14g\n", i+1, X_[i]);
-      Sensitivity_Z_L_[i] = Z_L_[i] ;
+      DirectionalD_Z_L_[i] = Z_L_[i] ;
     }
 
     const Number* Z_U_ = dynamic_cast<const DenseVector*>( GetRawPtr( (*SV).z_U() ) )->Values();
     for (int i = 0; i < nzu_; ++i) { 
       //printf(" ds/dp(X)[%3d] = %.14g\n", i+1, X_[i]);
-      Sensitivity_Z_U_[i] = Z_U_[i] ;
+      DirectionalD_Z_U_[i] = Z_U_[i] ;
     }
 
     const Number* LE_  = dynamic_cast<const DenseVector*>( GetRawPtr( (*SV).y_c() ) )->Values();
     for (int i = 0; i < nceq_; ++i) {
       //printf(" ds/dp(LE)[%3d] = %.14g\n", i+1, LE_[i]);
-      Sensitivity_L_[i] = LE_[i] ;
+      DirectionalD_L_[i] = LE_[i] ;
     }
 
     const Number* LIE_ = dynamic_cast<const DenseVector*>( GetRawPtr( (*SV).y_d() ) )->Values();
       for (int i = 0; i < ncineq_; ++i) {
 	//printf(" ds/dp(LIE)[%3d] = %.14g\n", i+1, LIE_[i]);
-	Sensitivity_L_[i+nceq_] = LIE_[i] ;
+	DirectionalD_L_[i+nceq_] = LIE_[i] ;
       }
 
   }

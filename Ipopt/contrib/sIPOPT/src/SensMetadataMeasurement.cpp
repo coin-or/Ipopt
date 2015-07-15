@@ -57,7 +57,6 @@ namespace Ipopt
       std::vector<Index> tmp_idx = x_owner_space_->GetIntegerMetaData(sens_state_0);
 
       n_idx_ = AsIndexMax((Index)tmp_idx.size(), &tmp_idx[0], 1);
-
     }
 
     return true;

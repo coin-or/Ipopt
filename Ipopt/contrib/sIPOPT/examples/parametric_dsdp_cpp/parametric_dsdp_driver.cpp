@@ -41,6 +41,7 @@ int main(int argv, char**argc)
 
   app_ipopt->Options()->SetStringValueIfUnset("run_sens", "yes");
   app_ipopt->Options()->SetIntegerValueIfUnset("n_sens_steps", 1);
+  app_ipopt->Options()->SetStringValueIfUnset("compute_dsdp", "yes");
 
   app_sens->Initialize();
 
@@ -60,19 +61,33 @@ int main(int argv, char**argc)
   Index n = app_sens->nx() ;
   Index nzl = app_sens->nzl() ;
   Index nzu = app_sens->nzu() ;
-  Number *SX = new Number[n] ;
-  Number *SL = new Number[m] ;
-  Number *SZL = new Number[nzl] ;
-  Number *SZU = new Number[nzu] ;
+  Index np = app_sens->np() ;
 
-  app_sens->GetSensitivities(SX,SL,SZL,SZU) ;
+  Number *DDX = new Number[n] ;
+  Number *DDL = new Number[m] ;
+  Number *DDZL = new Number[nzl] ;
+  Number *DDZU = new Number[nzu] ;
 
-  printf("\n** Sensitivity vector (Eq. 9 of implementation paper) ** \n") ;
-  for (int i=0; i<n; ++i) printf("* ds/dp(x)[%i] = %.14g\n",i+1,SX[i]) ;
-  for (int i=0; i<m; ++i) printf("* ds/dp(l)[%i] = %.14g\n",i+1,SL[i]) ;
-  for (int i=0; i<nzl; ++i) printf("* ds/dp(zl)[%i] = %.14g\n",i+1,SZL[i]) ;
-  for (int i=0; i<nzu; ++i) printf("* ds/dp(zu)[%i] = %.14g\n",i+1,SZU[i]) ;
+  Number *SX = new Number[n*np] ;
+  Number *SL = new Number[m*np] ;
+  Number *SZL = new Number[nzl*np] ;
+  Number *SZU = new Number[nzu*np] ;
 
+  app_sens->GetDirectionalDerivatives(DDX,DDL,DDZL,DDZU) ;
+  app_sens->GetSensitivityMatrix(SX,SL,SZL,SZU) ;
+
+  printf("\n** Directional Derivative (Eq. 14 of implementation paper) ** \n") ;
+  for (int i=0; i<n; ++i) printf("* ds/dp(x)(p-p0)[%i] = %.14g\n",i+1,DDX[i]) ;
+  for (int i=0; i<m; ++i) printf("* ds/dp(l)(p-p0)[%i] = %.14g\n",i+1,DDL[i]) ;
+  for (int i=0; i<nzl; ++i) printf("* ds/dp(zl)(p-p0)[%i] = %.14g\n",i+1,DDZL[i]) ;
+  for (int i=0; i<nzu; ++i) printf("* ds/dp(zu)(p-p0)[%i] = %.14g\n",i+1,DDZU[i]) ;
+
+
+  printf("\n** Sensitivity Matrix (Eq. 9 of implementation paper) ** \n") ;
+  for (int i=0; i<n*np; ++i) printf("* ds/dp(x)[%i] = %.14g\n",i+1,SX[i]) ;
+  for (int i=0; i<m*np; ++i) printf("* ds/dp(l)[%i] = %.14g\n",i+1,SL[i]) ;
+  for (int i=0; i<nzl*np; ++i) printf("* ds/dp(zl)[%i] = %.14g\n",i+1,SZL[i]) ;
+  for (int i=0; i<nzu*np; ++i) printf("* ds/dp(zu)[%i] = %.14g\n",i+1,SZU[i]) ;
     
   
   printf("\n");
@@ -82,18 +97,29 @@ int main(int argv, char**argc)
   app_ipopt->Options()->SetStringValue("sens_boundcheck", "yes");
   app_sens->Run();
 
-  app_sens->GetSensitivities(SX,SL,SZL,SZU) ;
+  app_sens->GetDirectionalDerivatives(DDX,DDL,DDZL,DDZU) ;
+  app_sens->GetSensitivityMatrix(SX,SL,SZL,SZU) ;
 
-  printf("\n** Sensitivity vector (Eq. 9 of implementation paper) ** \n") ;
-  for (int i=0; i<n; ++i) printf("* ds/dp(x)[%i] = %.14g\n",i+1,SX[i]) ;
-  for (int i=0; i<m; ++i) printf("* ds/dp(l)[%i] = %.14g\n",i+1,SL[i]) ;
-  for (int i=0; i<nzl; ++i) printf("* ds/dp(zl)[%i] = %.14g\n",i+1,SZL[i]) ;
-  for (int i=0; i<nzu; ++i) printf("* ds/dp(zu)[%i] = %.14g\n",i+1,SZU[i]) ;
+  printf("\n** Directional Derivative (Eq. 14 of implementation paper) ** \n") ;
+  for (int i=0; i<n; ++i) printf("* ds/dp(x)(p-p0)[%i] = %.14g\n",i+1,DDX[i]) ;
+  for (int i=0; i<m; ++i) printf("* ds/dp(l)(p-p0)[%i] = %.14g\n",i+1,DDL[i]) ;
+  for (int i=0; i<nzl; ++i) printf("* ds/dp(zl)(p-p0)[%i] = %.14g\n",i+1,DDZL[i]) ;
+  for (int i=0; i<nzu; ++i) printf("* ds/dp(zu)(p-p0)[%i] = %.14g\n",i+1,DDZU[i]) ;
+
+  printf("\n** Sensitivity Matrix (Eq. 9 of implementation paper) ** \n") ;
+  for (int i=0; i<n*np; ++i) printf("* ds/dp(x)[%i] = %.14g\n",i+1,SX[i]) ;
+  for (int i=0; i<m*np; ++i) printf("* ds/dp(l)[%i] = %.14g\n",i+1,SL[i]) ;
+  for (int i=0; i<nzl*np; ++i) printf("* ds/dp(zl)[%i] = %.14g\n",i+1,SZL[i]) ;
+  for (int i=0; i<nzu*np; ++i) printf("* ds/dp(zu)[%i] = %.14g\n",i+1,SZU[i]) ;
 
 
   delete [] SX ;
   delete [] SL ;
   delete [] SZL ;
   delete [] SZU ;
+  delete [] DDX ;
+  delete [] DDL ;
+  delete [] DDZL ;
+  delete [] DDZU ;
 
 }
