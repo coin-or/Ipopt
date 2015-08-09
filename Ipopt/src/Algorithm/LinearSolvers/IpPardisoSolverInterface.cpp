@@ -397,7 +397,7 @@ namespace Ipopt
 #endif
 
     // Call Pardiso's initialization routine
-    memset(PT_, 0, 64);
+    memset(PT_, 0, 64); // needs to be initialized to 0 according to MKL Pardiso docu
     IPARM_[0] = 0;  // Tell it to fill IPARM with default values(?)
 
 #if ! defined(HAVE_PARDISO_OLDINTERFACE) && ! defined(HAVE_PARDISO_MKL)
