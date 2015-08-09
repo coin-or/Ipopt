@@ -262,7 +262,7 @@ namespace Ipopt
     }
 
     if (!isResto) {
-      Jnlst().Printf(J_ITERSUMMARY, J_MAIN, "This is Ipopt version "IPOPT_VERSION", running with linear solver %s.\n", linear_solver_.c_str());
+      Jnlst().Printf(J_ITERSUMMARY, J_MAIN, "This is Ipopt version " IPOPT_VERSION ", running with linear solver %s.\n", linear_solver_.c_str());
 
 #ifndef IPOPT_NOMUMPSNOTE
       if( linear_solver_ == "mumps" )

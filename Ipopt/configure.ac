@@ -748,7 +748,7 @@ AC_CHECK_LIB(dl,[dlopen],[
   IPOPTLIB_LIBS_INSTALLED="$IPOPTLIB_LIBS_INSTALLED -ldl"
  ],[])
 
-case $build in
+case $host in
   *-cygwin* |  *-mingw*)
      AC_DEFINE([SHAREDLIBEXT], ["dll"], [Set to extension for shared libraries in quotes.])
      # Take -pedantic-errors out of CFLAGS
@@ -853,6 +853,9 @@ AC_COIN_VPATH_LINK(tutorial/CodingExercise/Matlab/3-solution/TutorialMatlab.m)
 AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/parametric_cpp/parametric_driver.cpp)
 AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/parametric_cpp/parametricTNLP.cpp)
 AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/parametric_cpp/parametricTNLP.hpp)
+AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/parametric_dsdp_cpp/parametric_dsdp_driver.cpp)
+AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/parametric_dsdp_cpp/parametricTNLP.cpp)
+AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/parametric_dsdp_cpp/parametricTNLP.hpp)
 AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/redhess_cpp/MySensTNLP.cpp)
 AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/redhess_cpp/MySensTNLP.hpp)
 AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/redhess_cpp/redhess_cpp.cpp)
@@ -903,6 +906,7 @@ AC_CONFIG_FILES([Makefile
 		 contrib/sIPOPT/Makefile
 		 contrib/sIPOPT/AmplSolver/Makefile
 		 contrib/sIPOPT/examples/parametric_cpp/Makefile
+		 contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile	
 		 contrib/sIPOPT/examples/redhess_cpp/Makefile
 		 contrib/sIPOPT/src/Makefile
 		 ipopt.pc ipopt-uninstalled.pc

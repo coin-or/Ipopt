@@ -65,6 +65,8 @@ namespace Ipopt
      *  a step using its SchurDriver, checks bounds, and returns it */
     virtual bool Step(DenseVector& delta_u, IteratesVector& sol) =0;
 
+    /** return the sensitivity vector */
+    virtual SmartPtr<IteratesVector> GetSensitivityVector() = 0;
 
   private:
     SmartPtr<SchurDriver> driver_;

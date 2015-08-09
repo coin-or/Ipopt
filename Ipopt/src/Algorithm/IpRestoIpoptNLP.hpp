@@ -188,6 +188,11 @@ namespace Ipopt
     {
       return GetRawPtr(h_space_);
     }
+    
+    virtual SmartPtr<const VectorSpace> x_space() const
+    {
+      return GetRawPtr(x_space_);
+    }
     //@}
 
     /** Accessor method for vector/matrix spaces pointers */

@@ -33,9 +33,9 @@ bool ParametricTNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
   n = 5;
 
   // 2 constraints + 2 parametric initial value constraints
-  m = 4;
+  m = 4 ; //+2;
 
-  nnz_jac_g = 10;
+  nnz_jac_g = 10 ; //+2;
 
   nnz_h_lag = 5;
 
@@ -66,6 +66,14 @@ bool ParametricTNLP::get_bounds_info(Index n, Number* x_l, Number* x_u,
   g_u[2] = nominal_eta1_;
   g_l[3] = nominal_eta2_;
   g_u[3] = nominal_eta2_;
+
+  /*
+  g_l[4] = 0.0 ;
+  g_u[4] = 100.0 ;
+
+  g_l[5] = -100.0 ;
+  g_u[5] = 0.0 ;
+  */
 
   return true;
 }
@@ -115,6 +123,12 @@ bool ParametricTNLP::eval_g(Index n, const Number* x, bool new_x, Index m, Numbe
   g[1] = eta2*x1+x2-x3-1;
   g[2] = eta1;
   g[3] = eta2;
+
+  /*
+  g[4] = x1 + 10 ;
+  g[5] = -100 + x2 ;
+  */
+
   return true;
 }
 
@@ -143,6 +157,12 @@ bool ParametricTNLP::eval_jac_g(Index n, const Number* x, bool new_x,
     jCol[8] = 4;
     iRow[9] = 4;
     jCol[9] = 5;
+    /*
+    iRow[10] = 5;
+    jCol[10] = 1;
+    iRow[11] = 6;
+    jCol[11] = 2;
+    */
   }
   else {
     values[0] = 6.0;
@@ -155,6 +175,10 @@ bool ParametricTNLP::eval_jac_g(Index n, const Number* x, bool new_x,
     values[7] = x[0];
     values[8] = 1.0;
     values[9] = 1.0;
+    /*
+    values[10] = 1.0 ;
+    values[11] = 1.0 ;
+    */
   }
   return true;
 }
@@ -268,7 +292,7 @@ void ParametricTNLP::finalize_solution(SolverReturn status,
 
   printf("\n**********\n");
   for (Index k=0; k<m; ++k) {
-    printf("lambda[%3d] (nom)  % .23f \n", k, lambda[k]);
+    printf("L[%3d]   % .23f \n", k, lambda[k]);
   }
 
 }
@@ -297,7 +321,7 @@ void ParametricTNLP::finalize_metadata(Index n,
   NumericMetaDataMapType::const_iterator lambda_solution = con_numeric_md.find("sens_sol_state_1");
   if (lambda_solution!=con_numeric_md.end()) {
     for (Index k=0; k<m; ++k) {
-      printf("lambda[%d] (upd) = %.14g\n", k, lambda_solution->second[k]);
+      printf("lambda[%d] = %f\n", k, lambda_solution->second[k]);
     }
   }
 }
