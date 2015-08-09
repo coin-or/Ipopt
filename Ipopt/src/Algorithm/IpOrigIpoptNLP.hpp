@@ -174,6 +174,11 @@ namespace Ipopt
     {
       return h_space_;
     }
+
+    virtual SmartPtr<const VectorSpace> x_space() const
+    {
+      return x_space_;
+    }
     //@}
 
     /** Accessor method for vector/matrix spaces pointers */

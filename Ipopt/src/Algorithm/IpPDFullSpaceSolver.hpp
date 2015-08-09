@@ -112,6 +112,9 @@ namespace Ipopt
     Number residual_improvement_factor_;
     /** Tolernace for heuristic to ignore wrong inertia */
     Number neg_curv_test_tol_;
+    /** Do curvature test with primal regularization */
+    bool neg_curv_test_reg_;
+	
     //@}
 
     /** Internal function for a single backsolve (which will be used

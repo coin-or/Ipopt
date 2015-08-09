@@ -28,7 +28,16 @@ namespace Ipopt
     jnlst_(jnlst),
     options_(options),
     reg_options_(reg_options),
-    ipopt_retval_(Internal_Error)
+    ipopt_retval_(Internal_Error),
+    controller(NULL),
+    DirectionalD_X(NULL),
+    DirectionalD_L(NULL),
+    DirectionalD_Z_L(NULL),
+    DirectionalD_Z_U(NULL),
+    SensitivityM_X(NULL),
+    SensitivityM_L(NULL),
+    SensitivityM_Z_L(NULL),
+    SensitivityM_Z_U(NULL)
   {
     DBG_START_METH("SensApplication::SensApplication", dbg_verbosity);
 
@@ -71,6 +80,13 @@ namespace Ipopt
 			       "no",
 			       "yes", "compute reduced hessian",
 			       "no", "don't compute reduced hessian",
+			       "");
+    roptions->AddStringOption2(
+			       "compute_dsdp",
+			       "Determines if matrix of sensitivites should be computed",
+			       "no",
+			       "yes", "compute matrix of sensitivites",
+			       "no", "don't compute matrix of sensitivities",
 			       "");
     // This option must be in IpInterfacesRegOp.cpp
     roptions->AddStringOption2(
@@ -180,10 +196,10 @@ namespace Ipopt
 
       red_hess_calc->ComputeReducedHessian();
     }
-
     if (run_sens_ && n_sens_steps_>0 && !sens_internal_abort) {
       SmartPtr<SensBuilder> schur_builder = new SensBuilder();
       const std::string prefix = ""; // I should be getting this somewhere else...
+      /*
       SmartPtr<SensAlgorithm> controller = schur_builder->BuildSensAlg(*jnlst_,
 								       *options_,
 								       prefix,
@@ -191,8 +207,17 @@ namespace Ipopt
 								       *ip_data_,
 								       *ip_cq_,
 								       *pd_solver_);
-
+      */
+      controller = schur_builder->BuildSensAlg(*jnlst_,
+					       *options_,
+					       prefix,
+					       *ip_nlp_,
+					       *ip_data_,
+					       *ip_cq_,
+					       *pd_solver_);
       retval = controller->Run();
+
+      if (compute_dsdp_) controller->ComputeSensitivityMatrix();
     }
     else if (run_sens_) {
       if (n_sens_steps_<=0) {
@@ -205,6 +230,21 @@ namespace Ipopt
 
 
     if (IsValid(ip_data_->curr()) && IsValid(ip_data_->curr()->x())) {
+      // point pointers to sensitivity vectors...
+      // only if controller (sens_app) is created
+      if (NULL != GetRawPtr(controller)) {
+	DirectionalD_X = controller->DirectionalD_X_ ;
+	DirectionalD_L = controller->DirectionalD_L_ ;
+	DirectionalD_Z_L = controller->DirectionalD_Z_L_;
+	DirectionalD_Z_U = controller->DirectionalD_Z_U_ ;
+	
+	if (compute_dsdp_) {
+	  SensitivityM_X = controller->SensitivityM_X_ ;
+	  SensitivityM_L = controller->SensitivityM_L_ ;
+	  SensitivityM_Z_L = controller->SensitivityM_Z_L_;
+	  SensitivityM_Z_U = controller->SensitivityM_Z_U_ ;
+	}
+      }
       SmartPtr<const Vector> c;
       SmartPtr<const Vector> d;
       SmartPtr<const Vector> zL;
@@ -284,6 +324,14 @@ namespace Ipopt
     Options()->GetIntegerValue("n_sens_steps",n_sens_steps_, prefix.c_str());
     Options()->GetBoolValue("run_sens", run_sens_, prefix.c_str());
     Options()->GetBoolValue("compute_red_hessian", compute_red_hessian_, prefix.c_str());
+    Options()->GetBoolValue("compute_dsdp", compute_dsdp_, prefix.c_str());
+
+    if (compute_dsdp_ && !run_sens_) {
+      // cannot compute sensitivities if run_sens is not active.
+      jnlst_->Printf(J_WARNING, J_INITIALIZATION,
+		     "Compute sensitivity matrix was chosed but run_sens is set to no.\nReverting compute sensitivities to no.\n");
+      compute_dsdp_ = false ;
+    }
 
     // make sure run_sens and skip_finalize_solution_call are consistent
     if (run_sens_ || compute_red_hessian_) {

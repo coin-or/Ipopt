@@ -89,6 +89,13 @@ namespace Ipopt
       "we test if the direction is a direction of positive curvature.  This "
       "tolerance determines when the direction is considered to be "
       "sufficiently positive.");
+    roptions->AddStringOption2(
+      "neg_curv_test_reg",
+      "Whether to do the curvature test with the primal regularization.",
+      "yes", 
+      "yes", "use primal regularization with the curvature test",
+      "no",  "use original IPOPT approach, in which the primal regularization is ignored",
+      "");
   }
 
 
@@ -107,6 +114,7 @@ namespace Ipopt
                      "Option \"residual_ratio_singular\": This value must be not smaller than residual_ratio_max.");
     options.GetNumericValue("residual_improvement_factor", residual_improvement_factor_, prefix);
     options.GetNumericValue("neg_curv_test_tol", neg_curv_test_tol_, prefix);
+    options.GetBoolValue("neg_curv_test_reg", neg_curv_test_reg_, prefix);
 
     // Reset internal flags and data
     augsys_improved_ = false;
@@ -586,6 +594,15 @@ namespace Ipopt
             SmartPtr<Vector> s_tmp = sol->s()->MakeNewCopy();
             s_tmp->ElementWiseMultiply(sigma_s);
             xWx += s_tmp->Dot(*sol->s());
+            if (neg_curv_test_reg_) {
+              x_tmp->Copy(*sol->x());
+              x_tmp->Scal(delta_x);
+              xWx += x_tmp->Dot(*sol->x());
+
+              s_tmp->Copy(*sol->s());
+              s_tmp->Scal(delta_s);
+              xWx += s_tmp->Dot(*sol->s());
+            }
             Number xs_nrmsq = pow(sol->x()->Nrm2(),2) + pow(sol->s()->Nrm2(),2);
             Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                            "In inertia heuristic: xWx = %e xx = %e\n",

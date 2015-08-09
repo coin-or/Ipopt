@@ -24,7 +24,8 @@ namespace Ipopt
     ift_data_(ift_data),
     backsolver_(backsolver),
     bound_eps_(1e-3),
-    kkt_residuals_(true)
+    kkt_residuals_(true),
+    SensitivityVector(NULL)
   {
     DBG_START_METH("StdStepCalculator::StdStepCalculator", dbg_verbosity);
   }
@@ -71,10 +72,18 @@ namespace Ipopt
       delta_u.Print(Jnlst(),J_VECTOR,J_USER1,"delta_u init");
       DBG_PRINT((dbg_verbosity,"r_s init Nrm2=%23.16e\n", r_s->Asum()));
 
+      delta_u_long->Print(Jnlst(),J_VECTOR,J_USER1,"delta_u_long before");
       delta_u_long->Axpy(-1.0, *r_s);
     }
 
+    delta_u_long->Print(Jnlst(),J_VECTOR,J_USER1,"delta_u_long");
     backsolver_->Solve(&sol, ConstPtr(delta_u_long));
+
+    // make a copy of the sensitivites
+    SensitivityVector = (&sol)->MakeNewIteratesVectorCopy();
+
+    // print it out
+    SensitivityVector->Print(Jnlst(),J_VECTOR,J_USER1,"SensitivityVector stdcalc");
 
     SmartPtr<IteratesVector> Kr_s;
     if (Do_Boundcheck()) {
@@ -124,6 +133,9 @@ namespace Ipopt
 
 	// solve with new data_B and delta_u
 	retval = Driver()->SchurSolve(&sol, ConstPtr(delta_u_long), dynamic_cast<Vector*>(GetRawPtr(new_delta_u)), Kr_s);
+
+	// make a copy of the sensitivites with bound checks
+	SensitivityVector = (&sol)->MakeNewIteratesVectorCopy();
 
 	sol.Axpy(1.0, *IpData().trial());
 
