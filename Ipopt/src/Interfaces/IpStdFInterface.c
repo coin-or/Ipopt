@@ -17,7 +17,11 @@
 /* ToDo: The following needs to be adapted based on configuration */
 typedef FORTRAN_INTEGER_TYPE fint;
 typedef double fdouble;
-typedef long fptr;
+/* in configure, we checked whether an int* is 32 or 64bit long to decide how much space
+ * is needed to store a pointer
+ * thus, we can use a void* here to represent a pointer for Fortran
+ */
+typedef void* fptr;
 
 /** Return value for indicating that evaluation could be done without
     problem. */
