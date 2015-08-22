@@ -2,7 +2,7 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
-2015-07-15 releases/3.12.4
+2015-08-09 releases/3.12.4
         - fix to use regularized Hessian when doing a curvature test without
           ineration information (neg_curv_test_tol > 0), new option
           neg_curv_test_reg to switch back to original behavior
@@ -11,8 +11,9 @@ history management of subversion.
           vector (ds/dp*(p-p0) Eq. 14 sIpopt implementation paper). Also,
           added an option to compute the sensitivity matrix and provide
           access to it. Finally, added an example that shows how to
-          access the new information.
-          (by Lopez-Negrete, R)
+          access the new information. (by R. Lopez-Negrete)
+        - use workaround for failing check for random number generator
+          with any gcc 4.8.x (x >= 2)
 
 2015-04-15 releases/3.12.3 and releases/3.11.11
         - fixed bug in MA97 interface that lead to conversion issues
@@ -20,7 +21,7 @@ history management of subversion.
 
 2015-04-04 releases/3.12.2
         - revised integration of doxygen documentation into build system
-           (by Ted Ralphs)
+          (by T. Ralphs)
 
 2015-02-13 releases/3.12.1
         - fixes to build system for dependency linking and library versioning
