@@ -17,12 +17,13 @@
 
 /* keyword to declare a thread-local variable according to http://en.wikipedia.org/wiki/Thread-local_storage
  * GCC < 4.5 on MacOS X does not support TLS
+ * With Intel compiler on MacOS X, problems with TLS were reported.
  */
 #ifndef IPOPT_THREAD_LOCAL
 
 #if defined(_MSC_VER)
 #define IPOPT_THREAD_LOCAL __declspec(thread)
-#elif defined(__APPLE__) && defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__ < 405)
+#elif defined(__APPLE__) && ((defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__ < 405)) || defined(__INTEL_COMPILER))
 #define IPOPT_THREAD_LOCAL
 #else
 #define IPOPT_THREAD_LOCAL __thread
