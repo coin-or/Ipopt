@@ -324,6 +324,8 @@ namespace Ipopt
           options_to_print.push_back("linear_scaling_on_demand");
           options_to_print.push_back("max_refinement_steps");
           options_to_print.push_back("min_refinement_steps");
+          options_to_print.push_back("neg_curv_test_reg");
+          options_to_print.push_back("neg_curv_test_tol");
 
           options_to_print.push_back("#Hessian Perturbation");
           options_to_print.push_back("max_hessian_perturbation");

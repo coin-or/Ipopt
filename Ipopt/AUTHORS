@@ -118,6 +118,9 @@ Contributors:
 
 - Gabriel Hackebeil
   improved use compound component spaces
+  
+- Nai-Yuan Chiang and Victor M. Zavala Tejeda (Argonne National Laboratory)
+  inertia free curvature test in solution of primal-dual system (full approach)
 
 Contributors of code that is no longer included in Ipopt distribution:
 

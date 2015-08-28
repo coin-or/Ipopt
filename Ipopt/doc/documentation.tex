@@ -4269,6 +4269,46 @@ where we perturb the parameters $p_1$ and $p_2$ from $p_a = (p_1, p_2) = (5, 1)$
 Note, that \sIpopt has been developed under the constraint that it must work with the regular \Ipopt code. Due to this constraint, some compromises had to be made.
 However, there is an ongoing effort to develop \sIpopt 2, which is a fork of the \Ipopt code that allows for the explicit definition of parametric NLPs. This code can be found at \url{https://github.com/athrpf/sipopt2}. If you have questions about \sIpopt 2, please contact ​Hans Pirnay.
 
+
+\subsection{Inertia-Free Curvature Test}
+\hfill \textit{contributed by Nai-Yuan Chiang\footnote{Argonne National Laboratory, \url{http://www.mcs.anl.gov/person/naiyuan-chiang}} and Victor M. Zavala Tejeda\footnote{Argonne National Laboratory, \url{http://www.mcs.anl.gov/~vzavala/}}}
+\medskip
+
+In a filter line-search setting it is necessary to detect the presence of
+negative curvature and to regularize the Hessian of the Lagrangian when
+such is present. Regularization ensures that the computed step is a descent
+direction for the objective function when the constraint violation is
+sufficiently small, which in turn is necessary to guarantee global
+convergence.
+
+To detect the presence of negative curvature, the default method
+implemented in IPOPT requires inertia information of the augmented system.
+The inertia of the augmented system is the number of positive, negative,
+and zero eigenvalues. Inertia is currently estimated using symmetric
+indefinite factorization routines implemented in powerful packages such as
+MA27, MA57, or Pardiso. When more general linear
+algebra strategies/packages are used (e.g., iterative, parallel
+decomposition), however, inertia information is difficult (if not
+impossible) to obtain.
+
+In \cite{ChiangZavala2014}, we present acceptance tests for the search step
+that do not require inertia information of the linear system and prove that
+such tests are sufficient to ensure global convergence. Similar tests were
+proposed in the exact penalty framework reported in \cite{CouHubSchWae:inexact}.
+The inertia-free approach also enables the use of a wider range of linear
+algebra strategies and packages. We have performed significant benchmarks
+and found satisfactory performance compared to the inertia-based
+counterpart.  Moreover, we have found that this test can yield significant
+improvements in computing time because it provides more flexibility to
+accept steps. This flexibility is particularly beneficial in problems that
+are inherently ill-conditioned and require significant amounts of
+regularization.
+
+The inertia-free capability implemented in \Ipopt is controlled by the
+options \htmlref{\tt neg\_curv\_test\_tol}{opt:neg_curv_test_tol} and
+\htmlref{\tt neg\_curv\_test\_reg}{opt:neg_curv_test_reg}.
+
+
 \section{\Ipopt Options}\label{sec:options}
 \Ipopt has many (maybe too many) options that can be adjusted for the
 algorithm.  Options are all identified by a string name, and their
