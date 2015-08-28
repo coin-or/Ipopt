@@ -86,4 +86,9 @@ A.~W\"achter and L.~T. Biegler.
 \newblock doi: \htmladdnormallink{10.1007/s10107-004-0559-y}{http://dx.doi.org/10.1007/s10107-004-0559-y}.
 \newblock preprint at \url{http://www.optimization-online.org/DB_HTML/2004/03/836.html}
 
+\bibitem{ChiangZavala2014}
+V.~M.~Zavala and N.~Chiang.
+\newblock An Inertia-free Filter Line-search Algorithm for Large-scale Nonlinear Programming.
+\newblock \htmladdnormallink{Preprint ANL/MCS-P5197-0914}{http://www.mcs.anl.gov/papers/P5197-0914.pdf}, Argonne National Laboratory, 2014.
+
 \end{thebibliography}

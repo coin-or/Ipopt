@@ -88,7 +88,7 @@ Possible values:
 \subsection{Termination}
 
 \paragraph{tol:}\label{opt:tol} Desired convergence tolerance (relative). \\
- Determines the convergence tolerance for the algorithm.  The algorithm terminates successfully, if the (scaled) NLP error becomes smaller than this value, and if the (absolute) criteria according to "dual\_inf\_tol", "primal\_inf\_tol", and "compl\_inf\_tol" are met.  (This is epsilon\_tol in Eqn. (6) in implementation paper).  See also "acceptable\_tol" as a second termination criterion.  Note, some other algorithmic features also use this quantity to determine thresholds etc. The valid range for this real option is 
+ Determines the convergence tolerance for the algorithm.  The algorithm terminates successfully, if the (scaled) NLP error becomes smaller than this value, and if the (absolute) criteria according to "dual\_inf\_tol", "constr\_viol\_tol", and "compl\_inf\_tol" are met.  (This is epsilon\_tol in Eqn. (6) in implementation paper).  See also "acceptable\_tol" as a second termination criterion.  Note, some other algorithmic features also use this quantity to determine thresholds etc. The valid range for this real option is 
 $0 <  {\tt tol } <  {\tt +inf}$
 and its default value is $1 \cdot 10^{-08}$.
 
@@ -661,6 +661,21 @@ and its default value is $10$.
  Iterative refinement (on the full unsymmetric system) is performed for each right hand side.  This option determines the minimum number of iterative refinements (i.e. at least "min\_refinement\_steps" iterative refinement steps are enforced per right hand side.) The valid range for this integer option is
 $0 \le {\tt min\_refinement\_steps } <  {\tt +inf}$
 and its default value is $1$.
+
+
+\paragraph{neg\_curv\_test\_reg:}\label{opt:neg_curv_test_reg} Whether to do the curvature test with the primal regularization (see Zavala and Chiang, 2014). \\
+ The default value for this string option is "yes".
+\\ 
+Possible values:
+\begin{itemize}
+   \item yes: use primal regularization with the inertia-free curvature test
+   \item no: use original IPOPT approach, in which the primal regularization is ignored
+\end{itemize}
+
+\paragraph{neg\_curv\_test\_tol:}\label{opt:neg_curv_test_tol} Tolerance for heuristic to ignore wrong inertia. \\
+ If nonzero, incorrect inertia in the augmented system is ignored, and Ipopt tests if the direction is a direction of positive curvature.  This tolerance is alpha\_n in the paper by Zavala and Chiang (2014) and it determines when the direction is considered to be sufficiently positive. A value in the range of [1e-12, 1e-11] is recommended. The valid range for this real option is 
+$0 \le {\tt neg\_curv\_test\_tol } <  {\tt +inf}$
+and its default value is $0$.
 
 
 \subsection{Hessian Perturbation}
