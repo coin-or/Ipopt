@@ -324,9 +324,6 @@ namespace Ipopt
 		  x_soc->Scal(alpha_primal_soc);
 		  s_soc->Scal(alpha_primal_soc);
 
-		  c_soc->AddOneVector(1.0, *IpCq().trial_c(), alpha_primal_soc);
-		  dms_soc->AddOneVector(1.0, *IpCq().trial_d_minus_s(),
-					alpha_primal_soc);
 		  rhs->Set_x(*x_soc);
 		  rhs->Set_s(*s_soc);
 		  rhs->Set_y_c(*c_soc);
