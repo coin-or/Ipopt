@@ -29,6 +29,7 @@
 #endif
 
 #include <iostream>
+#include <limits>
 
 /** Prototypes for MA57's Fortran subroutines */
 extern "C"
@@ -650,10 +651,16 @@ namespace Ipopt
         ma57int ic = 0;
 
         wd_lfact_ = (ma57int)((Number)wd_info_[16] * ma57_pre_alloc_);
-        temp = new double[wd_lfact_];
-
         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                        "Reallocating memory for MA57: lfact (%d)\n", wd_lfact_);
+
+        if( wd_lfact_ > std::numeric_limits<size_t>::max() / sizeof(double) ) {
+          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                       "Cannot allocate memory of size %d exceeding SIZE_MAX = %u\n", wd_lfact_, std::numeric_limits<size_t>::max());
+          return SYMSOLVER_FATAL_ERROR;
+        }
+        
+        temp = new double[wd_lfact_];
 
         ma57int idmy;
         F77_FUNC (ma57ed, MA57ED)
