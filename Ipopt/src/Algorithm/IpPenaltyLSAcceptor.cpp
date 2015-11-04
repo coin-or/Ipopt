@@ -85,6 +85,7 @@ namespace Ipopt
                        "Option \"max_soc\": This option is non-negative, but no linear solver for computing the SOC given to PenaltyLSAcceptor object.");
     }
     options.GetNumericValue("kappa_soc", kappa_soc_, prefix);
+	options.GetIntegerValue("soc_method", soc_method_, prefix);
 
     Reset();
 
@@ -301,15 +302,38 @@ namespace Ipopt
       // Compute the SOC search direction
       SmartPtr<IteratesVector> delta_soc = actual_delta->MakeNewIteratesVector(true);
       SmartPtr<IteratesVector> rhs = actual_delta->MakeNewContainer();
-      rhs->Set_x(*IpCq().curr_grad_lag_with_damping_x());
-      rhs->Set_s(*IpCq().curr_grad_lag_with_damping_s());
-      rhs->Set_y_c(*c_soc);
-      rhs->Set_y_d(*dms_soc);
-      rhs->Set_z_L(*IpCq().curr_relaxed_compl_x_L());
-      rhs->Set_z_U(*IpCq().curr_relaxed_compl_x_U());
-      rhs->Set_v_L(*IpCq().curr_relaxed_compl_s_L());
-      rhs->Set_v_U(*IpCq().curr_relaxed_compl_s_U());
 
+	  switch (soc_method_) {
+	  case 0:
+		  rhs->Set_x(*IpCq().curr_grad_lag_with_damping_x());
+		  rhs->Set_s(*IpCq().curr_grad_lag_with_damping_s());
+		  rhs->Set_y_c(*c_soc);
+		  rhs->Set_y_d(*dms_soc);
+		  rhs->Set_z_L(*IpCq().curr_relaxed_compl_x_L());
+		  rhs->Set_z_U(*IpCq().curr_relaxed_compl_x_U());
+		  rhs->Set_v_L(*IpCq().curr_relaxed_compl_s_L());
+		  rhs->Set_v_U(*IpCq().curr_relaxed_compl_s_U());
+		  break;
+	  case 1:
+		  SmartPtr<Vector> x_soc =
+					IpCq().curr_grad_lag_with_damping_x()->MakeNew();
+		  SmartPtr<Vector> s_soc =
+					IpCq().curr_grad_lag_with_damping_s()->MakeNew();
+		  x_soc->Copy(*IpCq().curr_grad_lag_with_damping_x());
+		  s_soc->Copy(*IpCq().curr_grad_lag_with_damping_s());
+		  x_soc->Scal(alpha_primal_soc);
+		  s_soc->Scal(alpha_primal_soc);
+
+		  rhs->Set_x(*x_soc);
+		  rhs->Set_s(*s_soc);
+		  rhs->Set_y_c(*c_soc);
+		  rhs->Set_y_d(*dms_soc);
+		  rhs->Set_z_L(*IpCq().curr_relaxed_compl_x_L());
+		  rhs->Set_z_U(*IpCq().curr_relaxed_compl_x_U());
+		  rhs->Set_v_L(*IpCq().curr_relaxed_compl_s_L());
+		  rhs->Set_v_U(*IpCq().curr_relaxed_compl_s_U());
+		  break;
+	  }
       bool retval = pd_solver_->Solve(-1.0, 0.0, *rhs, *delta_soc, true);
       if (!retval) {
         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,

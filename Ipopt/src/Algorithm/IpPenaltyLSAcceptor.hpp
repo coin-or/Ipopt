@@ -157,6 +157,8 @@ namespace Ipopt
      *  multiple second order correction steps \f$ \kappa_{soc}\f$.
      */
     Number kappa_soc_;
+    /** Second method correction method */
+    Index soc_method_;
     //@}
 
     /** @name Information related to watchdog procedure */
