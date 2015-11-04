@@ -85,15 +85,16 @@ namespace Ipopt
       "neg_curv_test_tol",
       "Tolerance for heuristic to ignore wrong inertia.",
       0.0, false, 0.0,
-      "If positive, incorrect inertia in the augmented system is ignored, and "
-      "we test if the direction is a direction of positive curvature.  This "
-      "tolerance determines when the direction is considered to be "
-      "sufficiently positive.");
+      "If nonzero, incorrect inertia in the augmented system is ignored, and "
+      "Ipopt tests if the direction is a direction of positive curvature.  This "
+      "tolerance is alpha_n in the paper by Zavala and Chiang (2014) and it "
+      "determines when the direction is considered to be sufficiently positive. "
+      "A value in the range of [1e-12, 1e-11] is recommended.");
     roptions->AddStringOption2(
       "neg_curv_test_reg",
-      "Whether to do the curvature test with the primal regularization.",
+      "Whether to do the curvature test with the primal regularization (see Zavala and Chiang, 2014).",
       "yes", 
-      "yes", "use primal regularization with the curvature test",
+      "yes", "use primal regularization with the inertia-free curvature test",
       "no",  "use original IPOPT approach, in which the primal regularization is ignored",
       "");
   }

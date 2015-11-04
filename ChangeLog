@@ -6,12 +6,17 @@ history management of subversion.
         - changed fptr from long to void*: the Fortran side needs to
           make sure that it uses a big enough integer type to store a
           C pointer, thus void* can be used on the C side [r2599]
+        - added additional second-order-correction method, which can be
+          selected by setting the new option soc_method to 1 (by Wei Wan)
+          [r2606, r2607]
+        - added parameter allow_clobber with default value false to
+          IpoptApplication::Initialize and OptionsList::ReadFromStream
 
 2015-08-09 releases/3.12.4
-        - fix to use regularized Hessian when doing a curvature test without
-          ineration information (neg_curv_test_tol > 0), new option
-          neg_curv_test_reg to switch back to original behavior
-          (by N.-Y. Chang and V. Zavala Tejeda) [r2579]
+        - option to use regularized Hessian when doing a curvature test
+          without inertia information (neg_curv_test_tol > 0), new
+          option neg_curv_test_reg to switch back to original behavior
+          (by N.-Y. Chiang and V. Zavala Tejeda) [r2579]
         - sIpopt: Added access to sensitivity directional derivative
           vector (ds/dp*(p-p0) Eq. 14 sIpopt implementation paper). Also,
           added an option to compute the sensitivity matrix and provide

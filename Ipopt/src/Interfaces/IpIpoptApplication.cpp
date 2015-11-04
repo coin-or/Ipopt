@@ -137,13 +137,13 @@ namespace Ipopt
   }
 
   ApplicationReturnStatus
-  IpoptApplication::Initialize(std::istream& is)
+  IpoptApplication::Initialize(std::istream& is, bool allow_clobber)
   {
     try {
       // Get the options
       if (is.good()) {
         // stream exists, read the content
-        options_->ReadFromStream(*jnlst_, is);
+        options_->ReadFromStream(*jnlst_, is, allow_clobber);
       }
 
       bool no_output;
@@ -297,6 +297,7 @@ namespace Ipopt
           options_to_print.push_back("watchdog_trial_iter_max");
           options_to_print.push_back("accept_every_trial_step");
           options_to_print.push_back("corrector_type");
+          options_to_print.push_back("soc_method");
 
           options_to_print.push_back("#Warm Start");
           options_to_print.push_back("warm_start_init_point");
@@ -324,6 +325,8 @@ namespace Ipopt
           options_to_print.push_back("linear_scaling_on_demand");
           options_to_print.push_back("max_refinement_steps");
           options_to_print.push_back("min_refinement_steps");
+          options_to_print.push_back("neg_curv_test_reg");
+          options_to_print.push_back("neg_curv_test_tol");
 
           options_to_print.push_back("#Hessian Perturbation");
           options_to_print.push_back("max_hessian_perturbation");
@@ -535,7 +538,7 @@ namespace Ipopt
   }
 
   ApplicationReturnStatus
-  IpoptApplication::Initialize(std::string params_file)
+  IpoptApplication::Initialize(std::string params_file, bool allow_clobber)
   {
     std::ifstream is;
     if (params_file != "") {
@@ -559,7 +562,7 @@ namespace Ipopt
         }
       }
     }
-    ApplicationReturnStatus retval = Initialize(is);
+    ApplicationReturnStatus retval = Initialize(is, allow_clobber);
     if (is) {
       is.close();
     }
@@ -567,14 +570,14 @@ namespace Ipopt
   }
 
   ApplicationReturnStatus
-  IpoptApplication::Initialize()
+  IpoptApplication::Initialize(bool allow_clobber)
   {
      std::string option_file_name;
      options_->GetStringValue("option_file_name", option_file_name, "");
      if (option_file_name != "" && option_file_name != "ipopt.opt")
         jnlst_->Printf(J_SUMMARY, J_MAIN, "Using option file \"%s\".\n\n", option_file_name.c_str());
 
-     return Initialize(option_file_name);
+     return Initialize(option_file_name, allow_clobber);
   }
 
   IpoptApplication::~IpoptApplication()

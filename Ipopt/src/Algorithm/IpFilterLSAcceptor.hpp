@@ -194,6 +194,8 @@ namespace Ipopt
      *  increased more than this compared to the current point, the
      *  trial point is rejected. */
     Number obj_max_inc_;
+    /** Second method correction method */
+    Index soc_method_;
 
     /** enumeration for the corrector type */
     enum CorrectorTypeEnum

@@ -69,8 +69,10 @@ namespace Ipopt
      *  problem in the initialization (such as an invalid option).
      *  You should call one of the initialization methods at some
      *  point before the first optimize call.
+     *  Set @par allow_clobber to true if you want to allow
+     *  overwriting options that are set by the input stream.
      */
-    virtual ApplicationReturnStatus Initialize(std::istream& is);
+    virtual ApplicationReturnStatus Initialize(std::istream& is, bool allow_clobber = false);
     /** Initialization method. This method reads options from the
      *  params file and initializes the journalists. It returns
      *  something other than Solve_Succeeded if there was a
@@ -79,16 +81,20 @@ namespace Ipopt
      *  point before the first optimize call.
      *  Note: You can skip the processing of a params file by
      *  setting params_file to "".
+     *  Set @par allow_clobber to true if you want to allow
+     *  overwriting options that are set by the params file.
      */
-    virtual ApplicationReturnStatus Initialize(std::string params_file);
+    virtual ApplicationReturnStatus Initialize(std::string params_file, bool allow_clobber = false);
     /** Initialize method. This method reads the options file specified
      *  by the option_file_name option and initializes the journalists.
      *  You should call this method at some point before the first optimize
      *  call.
      *  It returns something other than Solve_Succeeded if there was a
      *  problem in the initialization (such as an invalid option).
+     *  Set @par allow_clobber to true if you want to allow
+     *  overwriting options that are set by the options file.
      */
-    virtual ApplicationReturnStatus Initialize();
+    virtual ApplicationReturnStatus Initialize(bool allow_clobber = false);
 
     /**@name Solve methods */
     //@{
