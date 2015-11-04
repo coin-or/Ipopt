@@ -297,6 +297,7 @@ namespace Ipopt
           options_to_print.push_back("watchdog_trial_iter_max");
           options_to_print.push_back("accept_every_trial_step");
           options_to_print.push_back("corrector_type");
+          options_to_print.push_back("soc_method");
 
           options_to_print.push_back("#Warm Start");
           options_to_print.push_back("warm_start_init_point");
