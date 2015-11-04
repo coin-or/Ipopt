@@ -232,7 +232,7 @@ namespace Ipopt
 
     /** Read options from the stream is.  Returns false if
      *  an error was encountered. */
-    virtual bool ReadFromStream(const Journalist& jnlst, std::istream& is);
+    virtual bool ReadFromStream(const Journalist& jnlst, std::istream& is, bool allow_clobber = false);
 
   private:
     /**@name Default Compiler Generated Methods

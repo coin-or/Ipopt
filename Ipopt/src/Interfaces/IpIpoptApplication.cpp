@@ -137,13 +137,13 @@ namespace Ipopt
   }
 
   ApplicationReturnStatus
-  IpoptApplication::Initialize(std::istream& is)
+  IpoptApplication::Initialize(std::istream& is, bool allow_clobber)
   {
     try {
       // Get the options
       if (is.good()) {
         // stream exists, read the content
-        options_->ReadFromStream(*jnlst_, is);
+        options_->ReadFromStream(*jnlst_, is, allow_clobber);
       }
 
       bool no_output;
@@ -537,7 +537,7 @@ namespace Ipopt
   }
 
   ApplicationReturnStatus
-  IpoptApplication::Initialize(std::string params_file)
+  IpoptApplication::Initialize(std::string params_file, bool allow_clobber)
   {
     std::ifstream is;
     if (params_file != "") {
@@ -561,7 +561,7 @@ namespace Ipopt
         }
       }
     }
-    ApplicationReturnStatus retval = Initialize(is);
+    ApplicationReturnStatus retval = Initialize(is, allow_clobber);
     if (is) {
       is.close();
     }
@@ -569,14 +569,14 @@ namespace Ipopt
   }
 
   ApplicationReturnStatus
-  IpoptApplication::Initialize()
+  IpoptApplication::Initialize(bool allow_clobber)
   {
      std::string option_file_name;
      options_->GetStringValue("option_file_name", option_file_name, "");
      if (option_file_name != "" && option_file_name != "ipopt.opt")
         jnlst_->Printf(J_SUMMARY, J_MAIN, "Using option file \"%s\".\n\n", option_file_name.c_str());
 
-     return Initialize(option_file_name);
+     return Initialize(option_file_name, allow_clobber);
   }
 
   IpoptApplication::~IpoptApplication()
