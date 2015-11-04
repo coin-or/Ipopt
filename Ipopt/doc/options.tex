@@ -502,6 +502,12 @@ Possible values:
    \item primal-dual: corrector step towards current mu
 \end{itemize}
 
+\paragraph{soc\_method:}\label{opt:soc_method} Ways to apply second order correction \\
+ This option determins the way to apply second order correction, 0 is the method described in the implementation paper. 1 is the modified way which adds alpha on the rhs of x and s rows. The valid range for this integer option is
+$0 \le {\tt soc\_method } \le 1$
+and its default value is $0$.
+
+
 \subsection{Warm Start}
 
 \paragraph{warm\_start\_init\_point:}\label{opt:warm_start_init_point} Warm-start for initial point \\

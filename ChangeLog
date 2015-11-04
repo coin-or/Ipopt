@@ -6,6 +6,9 @@ history management of subversion.
         - changed fptr from long to void*: the Fortran side needs to
           make sure that it uses a big enough integer type to store a
           C pointer, thus void* can be used on the C side [r2599]
+        - added additional second-order-correction method, which can be
+          selected by setting the new option soc_method to 1 (by Wei Wan)
+          [r2606, r2607]
         - added parameter allow_clobber with default value false to
           IpoptApplication::Initialize and OptionsList::ReadFromStream
 
