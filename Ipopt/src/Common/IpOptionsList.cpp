@@ -601,7 +601,8 @@ namespace Ipopt
   }
 
   bool OptionsList::ReadFromStream(const Journalist& jnlst,
-                                   std::istream& is)
+                                   std::istream& is,
+                                   bool allow_clobber)
   {
     jnlst.Printf(J_DETAILED, J_MAIN, "Start reading options from stream.\n");
 
@@ -639,7 +640,7 @@ namespace Ipopt
         }
 
         if (option->Type() == OT_String) {
-          bool result = SetStringValue(tag, value, false);
+          bool result = SetStringValue(tag, value, allow_clobber);
           ASSERT_EXCEPTION(result, OPTION_INVALID,
                            "Error setting string value read from option file.");
         }
@@ -663,7 +664,7 @@ namespace Ipopt
             THROW_EXCEPTION(OPTION_INVALID, msg);
           }
           delete [] buffer;
-          bool result = SetNumericValue(tag, retval, false);
+          bool result = SetNumericValue(tag, retval, allow_clobber);
           ASSERT_EXCEPTION(result, OPTION_INVALID,
                            "Error setting numeric value read from file.");
         }
@@ -679,7 +680,7 @@ namespace Ipopt
             }
             THROW_EXCEPTION(OPTION_INVALID, msg);
           }
-          bool result = SetIntegerValue(tag, static_cast<Index>(retval), false);
+          bool result = SetIntegerValue(tag, static_cast<Index>(retval), allow_clobber);
           ASSERT_EXCEPTION(result, OPTION_INVALID,
                            "Error setting integer value read from option file.");
         }
@@ -688,7 +689,7 @@ namespace Ipopt
         }
       }
       else {
-        bool result = SetStringValue(tag, value, false);
+        bool result = SetStringValue(tag, value, allow_clobber);
         ASSERT_EXCEPTION(result, OPTION_INVALID,
                          "Error setting value read from option file.");
       }
