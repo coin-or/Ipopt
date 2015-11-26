@@ -85,6 +85,21 @@ namespace Ipopt
      *  overwriting options that are set by the params file.
      */
     virtual ApplicationReturnStatus Initialize(std::string params_file, bool allow_clobber = false);
+    /** Initialization method. This method reads options from the
+     *  params file and initializes the journalists. It returns
+     *  something other than Solve_Succeeded if there was a
+     *  problem in the initialization (such as an invalid option).
+     *  You should call one of the initialization methods at some
+     *  point before the first optimize call.
+     *  Note: You can skip the processing of a params file by
+     *  setting params_file to "".
+     *  Set @par allow_clobber to true if you want to allow
+     *  overwriting options that are set by the params file.
+     */
+    virtual ApplicationReturnStatus Initialize(const char* params_file, bool allow_clobber = false)
+    {
+       return Initialize(std::string(params_file), allow_clobber);
+    }
     /** Initialize method. This method reads the options file specified
      *  by the option_file_name option and initializes the journalists.
      *  You should call this method at some point before the first optimize
