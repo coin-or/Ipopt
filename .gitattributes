@@ -1,4 +1,5 @@
 * text=auto !eol
+/.travis.yml -text
 /ChangeLog -text
 /Dependencies -text
 /INSTALL -text
