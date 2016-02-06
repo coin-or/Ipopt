@@ -7,7 +7,9 @@ environment:
     MSYS2_ARCH: x86_64
   matrix:
     - HOST_ARCH_ARG: --host=x86_64-w64-mingw32
+      ADD_PATH: /mingw64/bin
     - HOST_ARCH_ARG: --host=i686-w64-mingw32
+      ADD_PATH: /mingw32/bin
 
 install:
   - C:\"Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat"
@@ -15,11 +17,10 @@ install:
   - 7z x msys2.tar.xz
   - 7z x msys2.tar > NUL
   - msys64\usr\bin\bash -lc ""
-  - msys64\usr\bin\bash -lc "for i in {1..3}; do pacman --noconfirm -Suy make wget tar patch dos2unix diffutils mingw-w64-i686-gcc mingw-w64-i686-gcc-fortran mingw-w64-x86_64-gcc mingw-w64-x86_64-gcc-fortran && break || sleep 15; done"
+  - msys64\usr\bin\bash -lc "for i in {1..3}; do pacman --noconfirm -Suy make wget tar patch dos2unix diffutils ca-certificates mingw-w64-i686-gcc mingw-w64-i686-gcc-fortran mingw-w64-x86_64-gcc mingw-w64-x86_64-gcc-fortran && break || sleep 15; done"
 
 build_script:
-  - msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; git clone https://gist.github.com/tkralphs/13d4529b4d4e8889f3a6 scripts;
-  - msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; ./scripts/get.dependencies.sh fetch"
-  - msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; export PATH=$PATH:/mingw32/bin:/mingw64/bin; ./scripts/get.dependencies.sh build --monolithic --build=x86_64-w64-mingw32 $HOST_ARCH_ARG --test"
+  - msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; BuildTools/scripts/get.dependencies.sh fetch"
+  - msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; export PATH=$PATH:$ADD_PATH; BuildTools/scripts/get.dependencies.sh build --monolithic --build=x86_64-w64-mingw32 $HOST_ARCH_ARG --test"
 
 test: off
