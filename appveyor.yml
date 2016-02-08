@@ -10,6 +10,8 @@ environment:
       ADD_PATH: /mingw64/bin
     - HOST_ARCH_ARG: --host=i686-w64-mingw32
       ADD_PATH: /mingw32/bin
+    - HOST_ARCH_ARG: --enable-msvc
+      ADD_PATH: /mingw64/bin
 
 install:
   - C:\"Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat"
@@ -18,7 +20,6 @@ install:
   - 7z x msys2.tar > NUL
   - msys64\usr\bin\bash -lc ""
   - msys64\usr\bin\bash -lc "for i in {1..3}; do pacman --noconfirm -Suy make wget tar patch dos2unix diffutils ca-certificates mingw-w64-i686-ca-certificates mingw-w64-x86_64-ca-certificates mingw-w64-i686-gcc mingw-w64-i686-gcc-fortran mingw-w64-x86_64-gcc mingw-w64-x86_64-gcc-fortran && break || sleep 15; done"
-  - msys64\usr\bin\bash -lc "ln -sT /usr/ssl/ /etc/ssl"
 
 build_script:
   - msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; git clone --branch=stable/0.8 https://github.com/coin-or-tools/BuildTools"
