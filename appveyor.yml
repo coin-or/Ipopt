@@ -17,8 +17,8 @@ install:
   - C:\msys64\usr\bin\bash -lc "pacman --noconfirm -S make wget tar patch dos2unix diffutils ca-certificates mingw-w64-i686-ca-certificates mingw-w64-x86_64-ca-certificates mingw-w64-i686-gcc mingw-w64-i686-gcc-fortran mingw-w64-x86_64-gcc mingw-w64-x86_64-gcc-fortran"
 
 build_script:
-  - msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; git clone --branch=stable/0.8 https://github.com/coin-or-tools/BuildTools"
-  - msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; BuildTools/get.dependencies.sh fetch"
-  - msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; export PATH=$PATH:$ADD_PATH; BuildTools/get.dependencies.sh build --monolithic --build=x86_64-w64-mingw32 $HOST_ARCH_ARG --test"
+  - C:\msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; git clone --branch=stable/0.8 https://github.com/coin-or-tools/BuildTools"
+  - C:\msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; BuildTools/get.dependencies.sh fetch"
+  - C:\msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; export PATH=$PATH:$ADD_PATH; BuildTools/get.dependencies.sh build --monolithic --build=x86_64-w64-mingw32 $HOST_ARCH_ARG --test"
 
 test: off
