@@ -28,4 +28,4 @@ before_script:
   - git clone --branch=stable/0.8 https://github.com/coin-or-tools/BuildTools
   - bash BuildTools/get.dependencies.sh fetch > /dev/null
 
-script: bash scripts/get.dependencies.sh build --quiet --test 
+script: bash BuildTools/get.dependencies.sh build --quiet --test 
