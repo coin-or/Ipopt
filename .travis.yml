@@ -1,0 +1,31 @@
+language: cpp
+
+matrix:
+  include:
+    - os: osx
+      osx_image: osx10.11
+      env: OSX=10.11
+      compiler: clang
+    - os: osx
+      osx_image: xcode7
+      env: OSX=10.10
+      compiler: clang
+    - os: osx
+      osx_image: beta-xcode6.2
+      env: OSX=10.9
+      compiler: clang
+    - os: linux
+      addons:
+        apt:
+          packages:
+          - gfortran
+  allow_failures:
+    - os: osx
+
+before_script:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX" != "10.9" ]]; then brew update; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX" != "10.9" ]]; then brew install gcc; fi
+  - git clone --branch=stable/0.8 https://github.com/coin-or-tools/BuildTools
+  - bash BuildTools/get.dependencies.sh fetch > /dev/null
+
+script: bash BuildTools/get.dependencies.sh build --quiet --test 

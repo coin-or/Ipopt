@@ -2,7 +2,7 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
-2015-xx-yy releases/3.12.5
+2016-04-30 releases/3.12.5
         - changed fptr from long to void*: the Fortran side needs to
           make sure that it uses a big enough integer type to store a
           C pointer, thus void* can be used on the C side [r2599]
