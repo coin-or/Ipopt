@@ -4266,7 +4266,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 case $build in
   *-cygwin* | *-mingw*)
      if test "$enable_msvc" = yes ; then
-       coin_f77_comps="ifort fl32 compile_f2c gfortran g95 g77"
+       coin_f77_comps="ifort fl32 compile_f2c"
      else
        coin_f77_comps="gfortran ifort g95 g77 fl32 compile_f2c"
      fi ;;
@@ -21875,7 +21875,6 @@ echo "$as_me: Build is \"$build\"." >&6;}
   case $build in
     *-mingw*)
       CYGPATH_W=echo
-      mydos2unix=
       ;;
   esac
 
