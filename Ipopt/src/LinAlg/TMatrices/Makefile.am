@@ -8,6 +8,9 @@
 
 AUTOMAKE_OPTIONS = foreign
 
+includeipoptdir = $(includedir)/coin
+includeipopt_HEADERS = \
+	IpGenTMatrix.hpp
 noinst_LTLIBRARIES = libtmatrices.la
 
 libtmatrices_la_SOURCES = \

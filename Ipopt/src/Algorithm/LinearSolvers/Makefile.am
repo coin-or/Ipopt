@@ -8,6 +8,9 @@
 
 AUTOMAKE_OPTIONS = foreign
 
+includeipoptdir = $(includedir)/coin
+includeipopt_HEADERS = IpSymLinearSolver.hpp
+
 noinst_LTLIBRARIES = liblinsolvers.la
 
 liblinsolvers_la_SOURCES = \
