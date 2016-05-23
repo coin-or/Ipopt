@@ -19,6 +19,14 @@ history management of subversion.
           Also, included is a change to install a few more header files with Ipopt.
           Some of these are required to subclass AlgorithmBuilder, and the others
           are simply some matrix types that we require."
+        - extend build system to work without Fortran compiler [r2660]
+          If no Fortran compiler is available (F77=unavailable), then
+          the build system checks for functions in Blas, Lapack, and
+          Pardiso via C linkage. This seems to work when using the Intel MKL,
+          thus allowing to build Ipopt with C/C++ compilers and MKL only.
+          The linear solver loader and the CuteR interface are disabled when
+          no Fortran compiler is available. A user may have to adjust the
+          definition of F77_FUNC in Ipopt/src/Common/IpoptConfig.h.
 
 2016-04-30 releases/3.12.5
         - changed fptr from long to void*: the Fortran side needs to

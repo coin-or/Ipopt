@@ -91,6 +91,7 @@ fi
 rm -rf tmpfile
 
 # Fortran Example
+if test -e ./hs071_f ; then
 echo Testing Fortran Example...
 ./hs071_f >tmpfile 2>&1
 grep "EXIT: Optimal Solution Found." tmpfile 1>/dev/null 2>&1
@@ -108,7 +109,9 @@ else
 fi
 rm -rf tmpfile
 
-
+else
+echo "Skip testing Fortran Example (hs071_f not available)"
+fi
 
 
 # clean up
