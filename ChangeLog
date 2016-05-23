@@ -19,7 +19,7 @@ history management of subversion.
           Also, included is a change to install a few more header files with Ipopt.
           Some of these are required to subclass AlgorithmBuilder, and the others
           are simply some matrix types that we require."
-        - extend build system to work without Fortran compiler [r2660]
+        - extend build system to work without Fortran compiler [r2660,r2661]
           If no Fortran compiler is available (F77=unavailable), then
           the build system checks for functions in Blas, Lapack, and
           Pardiso via C linkage. This seems to work when using the Intel MKL,
