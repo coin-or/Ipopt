@@ -18,6 +18,14 @@ includeipopt_HEADERS = \
 	IpVector.hpp \
 	IpDenseVector.hpp \
 	IpCompoundVector.hpp \
+	IpCompoundMatrix.hpp \
+	IpCompoundSymMatrix.hpp \
+	IpSumSymMatrix.hpp \
+	IpDiagMatrix.hpp \
+	IpIdentityMatrix.hpp \
+	IpScaledMatrix.hpp \
+	IpSymScaledMatrix.hpp \
+	IpZeroSymMatrix.hpp \
 	IpBlas.hpp \
 	IpLapack.hpp
 

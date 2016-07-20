@@ -471,7 +471,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE have_svnversion IPOPT_SVN_REV MATLAB_CYGPATH_W EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COIN_CC_IS_CL_TRUE COIN_CC_IS_CL_FALSE MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX COIN_CXX_IS_CL_TRUE COIN_CXX_IS_CL_FALSE MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 ac_ct_F77 FFLAGS MPIF77 FLIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS DEPENDENCY_LINKING_TRUE DEPENDENCY_LINKING_FALSE LT_LDFLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE coin_have_doxygen coin_have_latex coin_doxy_usedot coin_doxy_tagname coin_doxy_logname COIN_HAS_DOXYGEN_TRUE COIN_HAS_DOXYGEN_FALSE COIN_HAS_LATEX_TRUE COIN_HAS_LATEX_FALSE coin_doxy_tagfiles coin_doxy_excludes PKG_CONFIG ac_ct_PKG_CONFIG COIN_HAS_PKGCONFIG_TRUE COIN_HAS_PKGCONFIG_FALSE COIN_PKG_CONFIG_PATH COIN_PKG_CONFIG_PATH_UNINSTALLED BLAS_LIBS BLAS_CFLAGS BLAS_DATA BLAS_DEPENDENCIES BLAS_LIBS_INSTALLED BLAS_CFLAGS_INSTALLED BLAS_DATA_INSTALLED IPOPTLIB_CFLAGS IPOPTLIB_LIBS IPOPTLIB_PCLIBS IPOPTLIB_PCREQUIRES IPOPTLIB_DEPENDENCIES IPOPTLIB_CFLAGS_INSTALLED IPOPTLIB_LIBS_INSTALLED COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE LAPACK_LIBS LAPACK_CFLAGS LAPACK_DATA LAPACK_DEPENDENCIES LAPACK_LIBS_INSTALLED LAPACK_CFLAGS_INSTALLED LAPACK_DATA_INSTALLED COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE ASL_LIBS ASL_CFLAGS ASL_DATA ASL_DEPENDENCIES ASL_LIBS_INSTALLED ASL_CFLAGS_INSTALLED ASL_DATA_INSTALLED IPOPTAMPLINTERFACELIB_CFLAGS IPOPTAMPLINTERFACELIB_LIBS IPOPTAMPLINTERFACELIB_PCLIBS IPOPTAMPLINTERFACELIB_PCREQUIRES IPOPTAMPLINTERFACELIB_DEPENDENCIES IPOPTAMPLINTERFACELIB_CFLAGS_INSTALLED IPOPTAMPLINTERFACELIB_LIBS_INSTALLED COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE HSL_LIBS HSL_CFLAGS HSL_DATA HSL_DEPENDENCIES HSL_LIBS_INSTALLED HSL_CFLAGS_INSTALLED HSL_DATA_INSTALLED COIN_HAS_HSL_TRUE COIN_HAS_HSL_FALSE MUMPS_LIBS MUMPS_CFLAGS MUMPS_DATA MUMPS_DEPENDENCIES MUMPS_LIBS_INSTALLED MUMPS_CFLAGS_INSTALLED MUMPS_DATA_INSTALLED COIN_HAS_MUMPS_TRUE COIN_HAS_MUMPS_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR HAVE_MA28_TRUE HAVE_MA28_FALSE JAVA_HOME JIPOPTDLL SHARED_FLAGS MEX_STATIC_TRUE MEX_STATIC_FALSE MEX_WINDOWS_TRUE MEX_WINDOWS_FALSE FRAMEWORK_VECLIB MATLAB_HOME MEXSUFFIX MWMA57PATH ASTYLE ASTYLEFLAGS IPALLLIBS HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILD_LINEARSOLVERLOADER_TRUE BUILD_LINEARSOLVERLOADER_FALSE BUILD_PARDISOLOADER_TRUE BUILD_PARDISOLOADER_FALSE BUILD_INEXACT_TRUE BUILD_INEXACT_FALSE LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE have_svnversion IPOPT_SVN_REV MATLAB_CYGPATH_W EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COIN_CC_IS_CL_TRUE COIN_CC_IS_CL_FALSE MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX COIN_CXX_IS_CL_TRUE COIN_CXX_IS_CL_FALSE MPICXX CXXLIBS ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 ac_ct_F77 FFLAGS MPIF77 COIN_HAS_F77_TRUE COIN_HAS_F77_FALSE FLIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS DEPENDENCY_LINKING_TRUE DEPENDENCY_LINKING_FALSE LT_LDFLAGS BLUEGENEEXTRA AIX_FIX_COMPILER_BUG_TRUE AIX_FIX_COMPILER_BUG_FALSE coin_have_doxygen coin_have_latex coin_doxy_usedot coin_doxy_tagname coin_doxy_logname COIN_HAS_DOXYGEN_TRUE COIN_HAS_DOXYGEN_FALSE COIN_HAS_LATEX_TRUE COIN_HAS_LATEX_FALSE coin_doxy_tagfiles coin_doxy_excludes PKG_CONFIG ac_ct_PKG_CONFIG COIN_HAS_PKGCONFIG_TRUE COIN_HAS_PKGCONFIG_FALSE COIN_PKG_CONFIG_PATH COIN_PKG_CONFIG_PATH_UNINSTALLED BLAS_LIBS BLAS_CFLAGS BLAS_DATA BLAS_DEPENDENCIES BLAS_LIBS_INSTALLED BLAS_CFLAGS_INSTALLED BLAS_DATA_INSTALLED IPOPTLIB_CFLAGS IPOPTLIB_LIBS IPOPTLIB_PCLIBS IPOPTLIB_PCREQUIRES IPOPTLIB_DEPENDENCIES IPOPTLIB_CFLAGS_INSTALLED IPOPTLIB_LIBS_INSTALLED COIN_HAS_BLAS_TRUE COIN_HAS_BLAS_FALSE LAPACK_LIBS LAPACK_CFLAGS LAPACK_DATA LAPACK_DEPENDENCIES LAPACK_LIBS_INSTALLED LAPACK_CFLAGS_INSTALLED LAPACK_DATA_INSTALLED COIN_HAS_LAPACK_TRUE COIN_HAS_LAPACK_FALSE ASL_LIBS ASL_CFLAGS ASL_DATA ASL_DEPENDENCIES ASL_LIBS_INSTALLED ASL_CFLAGS_INSTALLED ASL_DATA_INSTALLED IPOPTAMPLINTERFACELIB_CFLAGS IPOPTAMPLINTERFACELIB_LIBS IPOPTAMPLINTERFACELIB_PCLIBS IPOPTAMPLINTERFACELIB_PCREQUIRES IPOPTAMPLINTERFACELIB_DEPENDENCIES IPOPTAMPLINTERFACELIB_CFLAGS_INSTALLED IPOPTAMPLINTERFACELIB_LIBS_INSTALLED COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE HSL_LIBS HSL_CFLAGS HSL_DATA HSL_DEPENDENCIES HSL_LIBS_INSTALLED HSL_CFLAGS_INSTALLED HSL_DATA_INSTALLED COIN_HAS_HSL_TRUE COIN_HAS_HSL_FALSE MUMPS_LIBS MUMPS_CFLAGS MUMPS_DATA MUMPS_DEPENDENCIES MUMPS_LIBS_INSTALLED MUMPS_CFLAGS_INSTALLED MUMPS_DATA_INSTALLED COIN_HAS_MUMPS_TRUE COIN_HAS_MUMPS_FALSE BITS_PER_POINTER BIT32FCOMMENT BIT64FCOMMENT CXXAR HAVE_MA28_TRUE HAVE_MA28_FALSE JAVA_HOME JIPOPTDLL SHARED_FLAGS MEX_STATIC_TRUE MEX_STATIC_FALSE MEX_WINDOWS_TRUE MEX_WINDOWS_FALSE FRAMEWORK_VECLIB MATLAB_HOME MEXSUFFIX MWMA57PATH ASTYLE ASTYLEFLAGS IPALLLIBS HAVE_PARDISO_TRUE HAVE_PARDISO_FALSE HAVE_WSMP_TRUE HAVE_WSMP_FALSE BUILD_LINEARSOLVERLOADER_TRUE BUILD_LINEARSOLVERLOADER_FALSE BUILD_PARDISOLOADER_TRUE BUILD_PARDISOLOADER_FALSE BUILD_INEXACT_TRUE BUILD_INEXACT_FALSE LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1131,7 +1131,8 @@ Optional Features:
   --enable-matlab-ma57    enable linking against Matlab's MA57 library (if no
                           HSL library is available)
   --enable-linear-solver-loader
-                          compile linear solver loader (default: yes)
+                          compile linear solver loader (default: yes, if F77
+                          available, otherwise no)
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -4490,7 +4491,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:4493:" \
+echo "$as_me:4494:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -4950,7 +4951,18 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
+
+if test "$F77" != "unavailable"; then
+  COIN_HAS_F77_TRUE=
+  COIN_HAS_F77_FALSE='#'
+else
+  COIN_HAS_F77_TRUE='#'
+  COIN_HAS_F77_FALSE=
+fi
+
+
 # Find out how to call Fortran from C and determine Fortran runtime libraries
+if test "$F77" != "unavailable" ; then
 
 # get FLIBS
 ac_ext=f
@@ -5004,7 +5016,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_verb"
-(eval echo $as_me:5007: \"$ac_link\") >&5
+(eval echo $as_me:5019: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -5082,7 +5094,7 @@ _ACEOF
 # flags.
 ac_save_FFLAGS=$FFLAGS
 FFLAGS="$FFLAGS $ac_cv_prog_f77_v"
-(eval echo $as_me:5085: \"$ac_link\") >&5
+(eval echo $as_me:5097: \"$ac_link\") >&5
 ac_f77_v_output=`eval $ac_link 5>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_f77_v_output" >&5
 FFLAGS=$ac_save_FFLAGS
@@ -5839,6 +5851,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
+fi
 
 # Initialize automake and libtool
 {
@@ -7581,7 +7594,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 7584 "configure"' > conftest.$ac_ext
+  echo '#line 7597 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -9561,11 +9574,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9564: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9577: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:9568: \$? = $ac_status" >&5
+   echo "$as_me:9581: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -9829,11 +9842,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9832: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9845: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:9836: \$? = $ac_status" >&5
+   echo "$as_me:9849: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -9933,11 +9946,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:9936: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:9949: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:9940: \$? = $ac_status" >&5
+   echo "$as_me:9953: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -12350,7 +12363,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12353 "configure"
+#line 12366 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12450,7 +12463,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12453 "configure"
+#line 12466 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -14810,11 +14823,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14813: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14826: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:14817: \$? = $ac_status" >&5
+   echo "$as_me:14830: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -14914,11 +14927,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14917: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14930: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:14921: \$? = $ac_status" >&5
+   echo "$as_me:14934: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16484,11 +16497,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16487: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16500: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16491: \$? = $ac_status" >&5
+   echo "$as_me:16504: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16588,11 +16601,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16591: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16604: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16595: \$? = $ac_status" >&5
+   echo "$as_me:16608: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -18795,11 +18808,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18798: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18811: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:18802: \$? = $ac_status" >&5
+   echo "$as_me:18815: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -19063,11 +19076,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:19066: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:19079: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:19070: \$? = $ac_status" >&5
+   echo "$as_me:19083: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -19167,11 +19180,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:19170: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:19183: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:19174: \$? = $ac_status" >&5
+   echo "$as_me:19187: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -35699,12 +35712,75 @@ if test "$use_pardiso" = "no"; then
 else
   LIBS="$use_pardiso $LIBS $LAPACK_LIBS $BLAS_LIBS"
 fi
-echo "$as_me:$LINENO: checking whether MKL is being used" >&5
-echo $ECHO_N "checking whether MKL is being used... $ECHO_C" >&6
-cat >conftest.$ac_ext <<_ACEOF
-      program main
-      call mkl_get_version_string()
-      end
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+echo "$as_me:$LINENO: checking for mkl_get_version_string" >&5
+echo $ECHO_N "checking for mkl_get_version_string... $ECHO_C" >&6
+if test "${ac_cv_func_mkl_get_version_string+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+/* Define mkl_get_version_string to an innocuous variant, in case <limits.h> declares mkl_get_version_string.
+   For example, HP-UX 11i <limits.h> declares gettimeofday.  */
+#define mkl_get_version_string innocuous_mkl_get_version_string
+
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char mkl_get_version_string (); below.
+    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+    <limits.h> exists even on freestanding compilers.  */
+
+#ifdef __STDC__
+# include <limits.h>
+#else
+# include <assert.h>
+#endif
+
+#undef mkl_get_version_string
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char mkl_get_version_string ();
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_mkl_get_version_string) || defined (__stub___mkl_get_version_string)
+choke me
+#else
+char (*f) () = mkl_get_version_string;
+#endif
+#ifdef __cplusplus
+}
+#endif
+
+#ifdef F77_DUMMY_MAIN
+
+#  ifdef __cplusplus
+     extern "C"
+#  endif
+   int F77_DUMMY_MAIN() { return 1; }
+
+#endif
+int
+main ()
+{
+return f != mkl_get_version_string;
+  ;
+  return 0;
+}
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext
 if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
@@ -35715,7 +35791,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_f77_werror_flag"
+	 { ac_try='test -z "$ac_c_werror_flag"
 			 || test ! -s conftest.err'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
@@ -35728,18 +35804,27 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-             have_mkl=yes
+  ac_cv_func_mkl_get_version_string=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
+ac_cv_func_mkl_get_version_string=no
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: $ac_cv_func_mkl_get_version_string" >&5
+echo "${ECHO_T}$ac_cv_func_mkl_get_version_string" >&6
+if test $ac_cv_func_mkl_get_version_string = yes; then
+  have_mkl=yes
+fi
+
+ac_ext=f
+ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
+ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_f77_compiler_gnu
+
 # If using MKL, always enable Pardiso
 if test "$have_mkl" = "yes" -a "$use_pardiso" = "no"; then
   use_pardiso=""
@@ -35751,10 +35836,10 @@ if test "$use_pardiso" != "no"; then
   PARDISO_LIB="$use_pardiso"
   LIBS="$PARDISO_LIB $LIBS $LAPACK_LIBS $BLAS_LIBS"
 
-# ToDo put this back in
-  echo "$as_me:$LINENO: checking whether user-supplied Pardiso library \"$use_pardiso\" works" >&5
+  if test "$F77" != unavailable ; then
+    echo "$as_me:$LINENO: checking whether user-supplied Pardiso library \"$use_pardiso\" works" >&5
 echo $ECHO_N "checking whether user-supplied Pardiso library \"$use_pardiso\" works... $ECHO_C" >&6
-  cat >conftest.$ac_ext <<_ACEOF
+    cat >conftest.$ac_ext <<_ACEOF
       program main
       call PARDISO()
       end
@@ -35793,16 +35878,148 @@ echo "$as_me: error: Pardiso library $use_pardiso does not seem to work" >&2;}
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
+  else
+    ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+    { echo "$as_me:$LINENO: checking whether user-supplied Pardiso library \"$use_pardiso\" works using C linkage" >&5
+echo "$as_me: checking whether user-supplied Pardiso library \"$use_pardiso\" works using C linkage" >&6;}
+    echo "$as_me:$LINENO: checking for PARDISO" >&5
+echo $ECHO_N "checking for PARDISO... $ECHO_C" >&6
+if test "${ac_cv_func_PARDISO+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+/* Define PARDISO to an innocuous variant, in case <limits.h> declares PARDISO.
+   For example, HP-UX 11i <limits.h> declares gettimeofday.  */
+#define PARDISO innocuous_PARDISO
+
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char PARDISO (); below.
+    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+    <limits.h> exists even on freestanding compilers.  */
+
+#ifdef __STDC__
+# include <limits.h>
+#else
+# include <assert.h>
+#endif
+
+#undef PARDISO
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char PARDISO ();
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_PARDISO) || defined (__stub___PARDISO)
+choke me
+#else
+char (*f) () = PARDISO;
+#endif
+#ifdef __cplusplus
+}
+#endif
+
+#ifdef F77_DUMMY_MAIN
+
+#  ifdef __cplusplus
+     extern "C"
+#  endif
+   int F77_DUMMY_MAIN() { return 1; }
+
+#endif
+int
+main ()
+{
+return f != PARDISO;
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_func_PARDISO=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_func_PARDISO=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: $ac_cv_func_PARDISO" >&5
+echo "${ECHO_T}$ac_cv_func_PARDISO" >&6
+if test $ac_cv_func_PARDISO = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: Pardiso library $use_pardiso does not seem to work" >&5
+echo "$as_me: error: Pardiso library $use_pardiso does not seem to work" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+    ac_ext=f
+ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
+ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_f77_compiler_gnu
+
+  fi
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_PARDISO 1
 _ACEOF
 
 
-  echo "$as_me:$LINENO: checking whether Pardiso library is at least version 4.0" >&5
+  if test "$have_mkl" = "yes"; then
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_PARDISO_MKL 1
+_ACEOF
+
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_PARDISO_OLDINTERFACE 1
+_ACEOF
+
+  else
+    echo "$as_me:$LINENO: checking whether Pardiso library is at least version 4.0" >&5
 echo $ECHO_N "checking whether Pardiso library is at least version 4.0... $ECHO_C" >&6
-  cat >conftest.$ac_ext <<_ACEOF
+    cat >conftest.$ac_ext <<_ACEOF
       program main
       call pardiso_ipopt_newinterface()
       end
@@ -35842,18 +36059,11 @@ cat >>confdefs.h <<\_ACEOF
 #define HAVE_PARDISO_OLDINTERFACE 1
 _ACEOF
 
-               if test "$have_mkl" = "yes"; then
 
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_PARDISO_MKL 1
-_ACEOF
-
-               else
-                 have_mkl=no
-               fi
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
+  fi
 
 # Test if this is the parallel version of Pardiso
 # (MKL PARDISO is always parallel, even though it does not have this function implemented)
@@ -36592,7 +36802,7 @@ echo "$as_me: error: invalid argument for --enable-linear-solver-loader: $enable
    esac
    use_linearsolverloader=$enableval
 else
-  use_linearsolverloader=yes
+  if test "$F77" != unavailable ; then use_linearsolverloader=yes; else use_linearsolverloader=no; fi
 fi;
 
 echo "$as_me:$LINENO: checking whether the linear solver loader should be compiled" >&5
@@ -38278,6 +38488,13 @@ echo "$as_me: error: conditional \"COIN_CXX_IS_CL\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
+if test -z "${COIN_HAS_F77_TRUE}" && test -z "${COIN_HAS_F77_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_F77\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_F77\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
 if test -z "${AMDEP_TRUE}" && test -z "${AMDEP_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"AMDEP\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
@@ -39139,6 +39356,8 @@ s,@F77@,$F77,;t t
 s,@ac_ct_F77@,$ac_ct_F77,;t t
 s,@FFLAGS@,$FFLAGS,;t t
 s,@MPIF77@,$MPIF77,;t t
+s,@COIN_HAS_F77_TRUE@,$COIN_HAS_F77_TRUE,;t t
+s,@COIN_HAS_F77_FALSE@,$COIN_HAS_F77_FALSE,;t t
 s,@FLIBS@,$FLIBS,;t t
 s,@INSTALL_PROGRAM@,$INSTALL_PROGRAM,;t t
 s,@INSTALL_SCRIPT@,$INSTALL_SCRIPT,;t t

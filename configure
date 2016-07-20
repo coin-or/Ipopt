@@ -474,9 +474,9 @@ ac_includes_default="\
 #endif"
 
 ac_subdirs_all="$ac_subdirs_all ThirdParty/ASL"
+ac_subdirs_all="$ac_subdirs_all ThirdParty/Metis"
 ac_subdirs_all="$ac_subdirs_all ThirdParty/Blas"
 ac_subdirs_all="$ac_subdirs_all ThirdParty/Lapack"
-ac_subdirs_all="$ac_subdirs_all ThirdParty/Metis"
 ac_subdirs_all="$ac_subdirs_all ThirdParty/HSL"
 ac_subdirs_all="$ac_subdirs_all ThirdParty/Mumps"
 ac_subdirs_all="$ac_subdirs_all Ipopt"
@@ -1133,6 +1133,9 @@ Optional Packages:
   --with-asl-lib linker flags for using project ASL
   --with-asl-incdir directory with header files for using project ASL
   --with-asl-datadir directory with data files for using project ASL
+  --with-metis-lib linker flags for using project Metis
+  --with-metis-incdir directory with header files for using project Metis
+  --with-metis-datadir directory with data files for using project Metis
   --with-blas-lib linker flags for using project Blas
   --with-blas-incdir directory with header files for using project Blas
   --with-blas-datadir directory with data files for using project Blas
@@ -1143,9 +1146,6 @@ Optional Packages:
   --with-lapack-datadir directory with data files for using project Lapack
   --with-lapack           specify LAPACK library (or BUILD to enforce use of
                           ThirdParty/Lapack)
-  --with-metis-lib linker flags for using project Metis
-  --with-metis-incdir directory with header files for using project Metis
-  --with-metis-datadir directory with data files for using project Metis
   --with-hsl-lib linker flags for using project HSL
   --with-hsl-incdir directory with header files for using project HSL
   --with-hsl-datadir directory with data files for using project HSL
@@ -20945,6 +20945,131 @@ subdirs="$subdirs ThirdParty/ASL"
 fi
 
 
+echo "$as_me:$LINENO: checking whether source of project Metis is available and should be compiled" >&5
+echo $ECHO_N "checking whether source of project Metis is available and should be compiled... $ECHO_C" >&6
+
+coin_has_metis=notGiven
+coin_reason=
+
+# check if user wants to skip project in any case
+
+if test x"$COIN_SKIP_PROJECTS" != x; then
+  for dir in $COIN_SKIP_PROJECTS; do
+    if test $dir = "Metis"; then
+      coin_has_metis="no"
+      coin_reason="Metis has been specified in COIN_SKIP_PROJECTS"
+    fi
+
+    if test $dir = "ThirdParty/Metis"; then
+      coin_has_metis="no"
+      coin_reason="ThirdParty/Metis has been specified in COIN_SKIP_PROJECTS"
+    fi
+  done
+fi
+
+if test "$coin_has_metis" != no; then
+
+# Check whether --with-m4_tolower(Metis) or --without-m4_tolower(Metis) was given.
+if test "${with_metis+set}" = set; then
+  withval="$with_metis"
+  if test "$withval" = no ; then
+       coin_has_metis="no"
+       coin_reason="--without-metis has been specified"
+     fi
+
+fi;
+fi
+
+if test "$coin_has_metis" != no; then
+
+# Check whether --with-m4_tolower(Metis)-lib or --without-m4_tolower(Metis)-lib was given.
+if test "${with_metis_lib+set}" = set; then
+  withval="$with_metis_lib"
+  if test "$withval" = no ; then
+       coin_has_metis="no"
+       coin_reason="--without-metis-lib has been specified"
+     else
+       coin_has_metis="no"
+       coin_reason="--with-metis-lib has been specified"
+     fi
+fi;
+fi
+
+if test "$coin_has_metis" != no; then
+
+# Check whether --with-m4_tolower(Metis)-incdir or --without-m4_tolower(Metis)-incdir was given.
+if test "${with_metis_incdir+set}" = set; then
+  withval="$with_metis_incdir"
+  if test "$withval" = no ; then
+       coin_has_metis="no"
+       coin_reason="--without-metis-incdir has been specified"
+     else
+       coin_has_metis="no"
+       coin_reason="--with-metis-incdir has been specified"
+     fi
+fi;
+fi
+
+if test "$coin_has_metis" != no; then
+
+# Check whether --with-m4_tolower(Metis)-datadir or --without-m4_tolower(Metis)-datadir was given.
+if test "${with_metis_datadir+set}" = set; then
+  withval="$with_metis_datadir"
+  if test "$withval" = no ; then
+       coin_has_metis="no"
+       coin_reason="--without-metis-datadir has been specified"
+     else
+       coin_has_metis="no"
+       coin_reason="--with-metis-datadir has been specified"
+     fi
+fi;
+fi
+
+
+
+
+
+# check if project is available in present directory
+if test "$coin_has_metis" = notGiven; then
+  coin_has_metis=no
+  if test -d $srcdir/ThirdParty/Metis; then
+    coin_reason="source in ThirdParty/Metis"
+    # If a third argument is given, then we have to check if one one the files given in that third argument is present.
+    # If none of the files in the third argument is available, then we consider the project directory as non-existing.
+    # However, if no third argument is given, then this means that there should be no check, and existence of the directory is sufficient.
+    for i in $srcdir/ThirdParty/Metis/metis-4.0/Lib/balance.c; do
+         if test -r $i; then
+           coin_has_metis="yes"
+         else
+           coin_has_metis="no"
+           coin_reason="source file $i not available"
+           break
+         fi
+       done
+
+  fi
+fi
+
+if test -z "$coin_reason" ; then
+  echo "$as_me:$LINENO: result: $coin_has_metis" >&5
+echo "${ECHO_T}$coin_has_metis" >&6
+else
+  echo "$as_me:$LINENO: result: $coin_has_metis, $coin_reason" >&5
+echo "${ECHO_T}$coin_has_metis, $coin_reason" >&6
+fi
+
+if test "$coin_has_metis" = yes ; then
+  if test -r $srcdir/ThirdParty/Metis/configure; then
+    coin_subdirs="$coin_subdirs ThirdParty/Metis"
+
+
+subdirs="$subdirs ThirdParty/Metis"
+
+  fi
+fi
+
+if test "$F77" != unavailable ; then
+
 echo "$as_me:$LINENO: checking whether source of project Blas is available and should be compiled" >&5
 echo $ECHO_N "checking whether source of project Blas is available and should be compiled... $ECHO_C" >&6
 
@@ -21225,130 +21350,6 @@ subdirs="$subdirs ThirdParty/Lapack"
 fi
 
 
-echo "$as_me:$LINENO: checking whether source of project Metis is available and should be compiled" >&5
-echo $ECHO_N "checking whether source of project Metis is available and should be compiled... $ECHO_C" >&6
-
-coin_has_metis=notGiven
-coin_reason=
-
-# check if user wants to skip project in any case
-
-if test x"$COIN_SKIP_PROJECTS" != x; then
-  for dir in $COIN_SKIP_PROJECTS; do
-    if test $dir = "Metis"; then
-      coin_has_metis="no"
-      coin_reason="Metis has been specified in COIN_SKIP_PROJECTS"
-    fi
-
-    if test $dir = "ThirdParty/Metis"; then
-      coin_has_metis="no"
-      coin_reason="ThirdParty/Metis has been specified in COIN_SKIP_PROJECTS"
-    fi
-  done
-fi
-
-if test "$coin_has_metis" != no; then
-
-# Check whether --with-m4_tolower(Metis) or --without-m4_tolower(Metis) was given.
-if test "${with_metis+set}" = set; then
-  withval="$with_metis"
-  if test "$withval" = no ; then
-       coin_has_metis="no"
-       coin_reason="--without-metis has been specified"
-     fi
-
-fi;
-fi
-
-if test "$coin_has_metis" != no; then
-
-# Check whether --with-m4_tolower(Metis)-lib or --without-m4_tolower(Metis)-lib was given.
-if test "${with_metis_lib+set}" = set; then
-  withval="$with_metis_lib"
-  if test "$withval" = no ; then
-       coin_has_metis="no"
-       coin_reason="--without-metis-lib has been specified"
-     else
-       coin_has_metis="no"
-       coin_reason="--with-metis-lib has been specified"
-     fi
-fi;
-fi
-
-if test "$coin_has_metis" != no; then
-
-# Check whether --with-m4_tolower(Metis)-incdir or --without-m4_tolower(Metis)-incdir was given.
-if test "${with_metis_incdir+set}" = set; then
-  withval="$with_metis_incdir"
-  if test "$withval" = no ; then
-       coin_has_metis="no"
-       coin_reason="--without-metis-incdir has been specified"
-     else
-       coin_has_metis="no"
-       coin_reason="--with-metis-incdir has been specified"
-     fi
-fi;
-fi
-
-if test "$coin_has_metis" != no; then
-
-# Check whether --with-m4_tolower(Metis)-datadir or --without-m4_tolower(Metis)-datadir was given.
-if test "${with_metis_datadir+set}" = set; then
-  withval="$with_metis_datadir"
-  if test "$withval" = no ; then
-       coin_has_metis="no"
-       coin_reason="--without-metis-datadir has been specified"
-     else
-       coin_has_metis="no"
-       coin_reason="--with-metis-datadir has been specified"
-     fi
-fi;
-fi
-
-
-
-
-
-# check if project is available in present directory
-if test "$coin_has_metis" = notGiven; then
-  coin_has_metis=no
-  if test -d $srcdir/ThirdParty/Metis; then
-    coin_reason="source in ThirdParty/Metis"
-    # If a third argument is given, then we have to check if one one the files given in that third argument is present.
-    # If none of the files in the third argument is available, then we consider the project directory as non-existing.
-    # However, if no third argument is given, then this means that there should be no check, and existence of the directory is sufficient.
-    for i in $srcdir/ThirdParty/Metis/metis-4.0/Lib/balance.c; do
-         if test -r $i; then
-           coin_has_metis="yes"
-         else
-           coin_has_metis="no"
-           coin_reason="source file $i not available"
-           break
-         fi
-       done
-
-  fi
-fi
-
-if test -z "$coin_reason" ; then
-  echo "$as_me:$LINENO: result: $coin_has_metis" >&5
-echo "${ECHO_T}$coin_has_metis" >&6
-else
-  echo "$as_me:$LINENO: result: $coin_has_metis, $coin_reason" >&5
-echo "${ECHO_T}$coin_has_metis, $coin_reason" >&6
-fi
-
-if test "$coin_has_metis" = yes ; then
-  if test -r $srcdir/ThirdParty/Metis/configure; then
-    coin_subdirs="$coin_subdirs ThirdParty/Metis"
-
-
-subdirs="$subdirs ThirdParty/Metis"
-
-  fi
-fi
-
-
 echo "$as_me:$LINENO: checking whether source of project HSL is available and should be compiled" >&5
 echo $ECHO_N "checking whether source of project HSL is available and should be compiled... $ECHO_C" >&6
 
@@ -21596,6 +21597,7 @@ subdirs="$subdirs ThirdParty/Mumps"
   fi
 fi
 
+fi
 
 #############################################################################
 #                  Check which subprojects are there                        #
