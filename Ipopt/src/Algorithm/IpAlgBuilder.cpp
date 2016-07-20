@@ -88,55 +88,6 @@ namespace Ipopt
       custom_solver_(custom_solver)
   {}
 
-  void AlgorithmBuilder::BuildIpoptObjects(const Journalist& jnlst,
-      const OptionsList& options,
-      const std::string& prefix,
-      const SmartPtr<NLP>& nlp,
-      SmartPtr<IpoptNLP>& ip_nlp,
-      SmartPtr<IpoptData>& ip_data,
-      SmartPtr<IpoptCalculatedQuantities>& ip_cq)
-  {
-    DBG_ASSERT(prefix == "");
-
-    SmartPtr<NLPScalingObject> nlp_scaling ;
-    std::string nlp_scaling_method;
-    options.GetStringValue("nlp_scaling_method", nlp_scaling_method, "");
-    if (nlp_scaling_method == "user-scaling") {
-      nlp_scaling = new UserScaling(ConstPtr(nlp));
-    }
-    else if (nlp_scaling_method == "gradient-based") {
-      nlp_scaling = new GradientScaling(nlp);
-    }
-    else if (nlp_scaling_method == "equilibration-based") {
-      nlp_scaling = new EquilibrationScaling(nlp);
-    }
-    else {
-      nlp_scaling = new NoNLPScalingObject();
-    }
-
-    ip_nlp = new OrigIpoptNLP(&jnlst, GetRawPtr(nlp), nlp_scaling);
-
-    // Create the IpoptData.  Check if there is additional data that
-    // is needed
-    std::string lsmethod;
-    SmartPtr<IpoptAdditionalData> add_data;
-    options.GetStringValue("line_search_method", lsmethod, prefix);
-    if (lsmethod=="cg-penalty") {
-      add_data = new CGPenaltyData();
-    }
-    ip_data = new IpoptData(add_data);
-
-    // Create the IpoptCalculators.  Check if there are additional
-    // calcluated quantities that are needed
-    ip_cq = new IpoptCalculatedQuantities(ip_nlp, ip_data);
-    if (lsmethod=="cg-penalty") {
-      SmartPtr<IpoptAdditionalCq> add_cq =
-        new CGPenaltyCq(GetRawPtr(ip_nlp), GetRawPtr(ip_data),
-                        GetRawPtr(ip_cq));
-      ip_cq->SetAddCq(add_cq);
-    }
-  }
-
   void AlgorithmBuilder::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
   {
     roptions->SetRegisteringCategory("Linear Solver");
@@ -284,27 +235,26 @@ namespace Ipopt
       "EXPERIMENTAL!");
   }
 
-  SmartPtr<IpoptAlgorithm>
-  AlgorithmBuilder::BuildBasicAlgorithm(const Journalist& jnlst,
-                                        const OptionsList& options,
-                                        const std::string& prefix)
+  SmartPtr<SymLinearSolver>
+  AlgorithmBuilder::GetSymLinearSolver(const Journalist& jnlst,
+                                       const OptionsList& options,
+                                       const std::string& prefix)
   {
-    DBG_START_FUN("AlgorithmBuilder::BuildBasicAlgorithm",
-                  dbg_verbosity);
+    if (IsNull(SymSolver_)) {
+      SymSolver_ = SymLinearSolverFactory(jnlst, options, prefix);
+    }
+    DBG_ASSERT(IsValid(SymSolver_));
+    return SymSolver_;
+  }
 
-    bool mehrotra_algorithm;
-    options.GetBoolValue("mehrotra_algorithm", mehrotra_algorithm, prefix);
-
-    // Create the convergence check
-    SmartPtr<ConvergenceCheck> convCheck =
-      new OptimalityErrorConvergenceCheck();
-
-    // Create the solvers that will be used by the main algorithm
-
+  SmartPtr<SymLinearSolver>
+  AlgorithmBuilder::SymLinearSolverFactory(const Journalist& jnlst,
+                                           const OptionsList& options,
+                                           const std::string& prefix)
+  {
     SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
     std::string linear_solver;
     options.GetStringValue("linear_solver", linear_solver, prefix);
-    bool use_custom_solver = false;
     if (linear_solver=="ma27") {
 #ifndef COINHSL_HAS_MA27
 # ifdef HAVE_LINEARSOLVERLOADER
@@ -475,55 +425,76 @@ namespace Ipopt
 
     }
     else if (linear_solver=="custom") {
-      ASSERT_EXCEPTION(IsValid(custom_solver_), OPTION_INVALID,
-                       "Selected linear solver CUSTOM not available.");
-      use_custom_solver = true;
+      SolverInterface = NULL;
     }
 
+    SmartPtr<TSymScalingMethod> ScalingMethod;
+    std::string linear_system_scaling;
+    if (!options.GetStringValue("linear_system_scaling",
+                                linear_system_scaling, prefix)) {
+      // By default, don't use mc19 for non-HSL solvers, or HSL_MA97
+      if (linear_solver!="ma27" && linear_solver!="ma57" && linear_solver!="ma77" && linear_solver!="ma86") {
+        linear_system_scaling="none";
+      }
+    }
+    if (linear_system_scaling=="mc19") {
+#ifndef COINHSL_HAS_MC19
+# ifdef HAVE_LINEARSOLVERLOADER
+      ScalingMethod = new Mc19TSymScalingMethod();
+      if (!LSL_isMC19available()) {
+        char buf[256];
+        int rc = LSL_loadHSL(NULL, buf, 255);
+        if (rc) {
+          std::string errmsg;
+          errmsg = "Selected linear system scaling method MC19 not available.\n";
+          errmsg += buf;
+          THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
+        }
+      }
+# else
+      THROW_EXCEPTION(OPTION_INVALID, "Support for MC19 has not been compiled into Ipopt.");
+# endif
+#else
+      ScalingMethod = new Mc19TSymScalingMethod();
+#endif
+
+    }
+    else if (linear_system_scaling=="slack-based") {
+      ScalingMethod = new SlackBasedTSymScalingMethod();
+    }
+
+    SmartPtr<SymLinearSolver> ScaledSolver =
+      new TSymLinearSolver(SolverInterface, ScalingMethod);
+    return ScaledSolver;
+  }
+
+  SmartPtr<AugSystemSolver>
+  AlgorithmBuilder::GetAugSystemSolver(const Journalist& jnlst,
+                                       const OptionsList& options,
+                                       const std::string& prefix)
+  {
+    if (IsNull(AugSolver_)) {
+      AugSolver_ = AugSystemSolverFactory(jnlst, options, prefix);
+    }
+    DBG_ASSERT(IsValid(AugSolver_));
+    return AugSolver_;
+  }
+
+  SmartPtr<AugSystemSolver>
+  AlgorithmBuilder::AugSystemSolverFactory(const Journalist& jnlst,
+                                           const OptionsList& options,
+                                           const std::string& prefix)
+  {
     SmartPtr<AugSystemSolver> AugSolver;
-    if (use_custom_solver) {
+    std::string linear_solver;
+    options.GetStringValue("linear_solver", linear_solver, prefix);
+    if (linear_solver=="custom") {
+      ASSERT_EXCEPTION(IsValid(custom_solver_), OPTION_INVALID,
+                       "Selected linear solver CUSTOM not available.");
       AugSolver = custom_solver_;
     }
     else {
-      SmartPtr<TSymScalingMethod> ScalingMethod;
-      std::string linear_system_scaling;
-      if (!options.GetStringValue("linear_system_scaling",
-                                  linear_system_scaling, prefix)) {
-        // By default, don't use mc19 for non-HSL solvers, or HSL_MA97
-        if (linear_solver!="ma27" && linear_solver!="ma57" && linear_solver!="ma77" && linear_solver!="ma86") {
-          linear_system_scaling="none";
-        }
-      }
-      if (linear_system_scaling=="mc19") {
-#ifndef COINHSL_HAS_MC19
-# ifdef HAVE_LINEARSOLVERLOADER
-        ScalingMethod = new Mc19TSymScalingMethod();
-        if (!LSL_isMC19available()) {
-          char buf[256];
-          int rc = LSL_loadHSL(NULL, buf, 255);
-          if (rc) {
-            std::string errmsg;
-            errmsg = "Selected linear system scaling method MC19 not available.\n";
-            errmsg += buf;
-            THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
-          }
-        }
-# else
-        THROW_EXCEPTION(OPTION_INVALID, "Support for MC19 has not been compiled into Ipopt.");
-# endif
-#else
-        ScalingMethod = new Mc19TSymScalingMethod();
-#endif
-
-      }
-      else if (linear_system_scaling=="slack-based") {
-        ScalingMethod = new SlackBasedTSymScalingMethod();
-      }
-
-      SmartPtr<SymLinearSolver> ScaledSolver =
-        new TSymLinearSolver(SolverInterface, ScalingMethod);
-
-      AugSolver = new StdAugSystemSolver(*ScaledSolver);
+      AugSolver = new StdAugSystemSolver(*GetSymLinearSolver(jnlst, options, prefix));
     }
 
     Index enum_int;
@@ -559,7 +530,26 @@ namespace Ipopt
         THROW_EXCEPTION(OPTION_INVALID, "Unknown value for option \"limited_memory_aug_solver\".");
       }
     }
+    return AugSolver;
+  }
 
+  SmartPtr<PDSystemSolver>
+  AlgorithmBuilder::GetPDSystemSolver(const Journalist& jnlst,
+                                      const OptionsList& options,
+                                      const std::string& prefix)
+  {
+    if (IsNull(PDSolver_)) {
+      PDSolver_ = PDSystemSolverFactory(jnlst, options, prefix);
+    }
+    DBG_ASSERT(IsValid(PDSolver_));
+    return PDSolver_;
+  }
+
+  SmartPtr<PDSystemSolver>
+  AlgorithmBuilder::PDSystemSolverFactory(const Journalist& jnlst,
+                                          const OptionsList& options,
+                                          const std::string& prefix)
+  {
     SmartPtr<PDPerturbationHandler> pertHandler;
     std::string lsmethod;
     options.GetStringValue("line_search_method", lsmethod, prefix);
@@ -569,30 +559,225 @@ namespace Ipopt
     else {
       pertHandler = new PDPerturbationHandler();
     }
+
     SmartPtr<PDSystemSolver> PDSolver =
-      new PDFullSpaceSolver(*AugSolver, *pertHandler);
+      new PDFullSpaceSolver(*GetAugSystemSolver(jnlst, options, prefix),
+                            *pertHandler);
+    return PDSolver;
+  }
+
+  void AlgorithmBuilder::BuildIpoptObjects(const Journalist& jnlst,
+                                           const OptionsList& options,
+                                           const std::string& prefix,
+                                           const SmartPtr<NLP>& nlp,
+                                           SmartPtr<IpoptNLP>& ip_nlp,
+                                           SmartPtr<IpoptData>& ip_data,
+                                           SmartPtr<IpoptCalculatedQuantities>& ip_cq)
+  {
+    DBG_ASSERT(prefix == "");
+
+    SmartPtr<NLPScalingObject> nlp_scaling;
+    std::string nlp_scaling_method;
+    options.GetStringValue("nlp_scaling_method", nlp_scaling_method, "");
+    if (nlp_scaling_method == "user-scaling") {
+      nlp_scaling = new UserScaling(ConstPtr(nlp));
+    }
+    else if (nlp_scaling_method == "gradient-based") {
+      nlp_scaling = new GradientScaling(nlp);
+    }
+    else if (nlp_scaling_method == "equilibration-based") {
+      nlp_scaling = new EquilibrationScaling(nlp);
+    }
+    else {
+      nlp_scaling = new NoNLPScalingObject();
+    }
+
+    ip_nlp = new OrigIpoptNLP(&jnlst, GetRawPtr(nlp), nlp_scaling);
+
+    // Create the IpoptData.  Check if there is additional data that
+    // is needed
+    std::string lsmethod;
+    SmartPtr<IpoptAdditionalData> add_data;
+    options.GetStringValue("line_search_method", lsmethod, prefix);
+    if (lsmethod=="cg-penalty") {
+      add_data = new CGPenaltyData();
+    }
+    ip_data = new IpoptData(add_data);
+
+    // Create the IpoptCalculators.  Check if there are additional
+    // calcluated quantities that are needed
+    ip_cq = new IpoptCalculatedQuantities(ip_nlp, ip_data);
+    if (lsmethod=="cg-penalty") {
+      SmartPtr<IpoptAdditionalCq> add_cq =
+        new CGPenaltyCq(GetRawPtr(ip_nlp), GetRawPtr(ip_data),
+                        GetRawPtr(ip_cq));
+      ip_cq->SetAddCq(add_cq);
+    }
+  }
+
+  SmartPtr<IpoptAlgorithm>
+  AlgorithmBuilder::BuildBasicAlgorithm(const Journalist& jnlst,
+                                        const OptionsList& options,
+                                        const std::string& prefix)
+  {
+
+    /* These three objects don't have any dependencies on other
+     * other major components of the algorithm */
+    IterOutput_ = BuildIterationOutput(jnlst, options, prefix);
+    HessUpdater_ = BuildHessianUpdater(jnlst, options, prefix);
+    ConvCheck_ = BuildConvergenceCheck(jnlst, options, prefix);
+
+    /* All solver type factory methods are likely
+     * first invoked here */
+    SearchDirCalc_ = BuildSearchDirectionCalculator(jnlst, options, prefix);
+    EqMultCalculator_ = BuildEqMultiplierCalculator(jnlst, options, prefix);
+
+    /* Requires:
+     *   -> EqMultCalculator_
+     */
+    IterInitializer_ = BuildIterateInitializer(jnlst, options, prefix);
+
+    /* Requires:
+     *   -> ConvCheck_
+     *   -> EqMultCalculator_
+     */
+    LineSearch_ = BuildLineSearch(jnlst, options, prefix);
+
+    /* Requires:
+     *   -> LineSearch_
+     *      -> ConvCheck_
+     *      -> EqMultCalculator_
+     */
+    MuUpdate_ = BuildMuUpdate(jnlst, options, prefix);
+
+    SmartPtr<IpoptAlgorithm> alg =
+      new IpoptAlgorithm(SearchDirCalc_,
+                         LineSearch_,
+                         MuUpdate_,
+                         ConvCheck_,
+                         IterInitializer_,
+                         IterOutput_,
+                         HessUpdater_,
+                         EqMultCalculator_);
+
+    return alg;
+  }
+
+  SmartPtr<IterationOutput>
+  AlgorithmBuilder::BuildIterationOutput(const Journalist& jnlst,
+                                         const OptionsList& options,
+                                         const std::string& prefix)
+  {
+    // Create the object for the iteration output
+    SmartPtr<IterationOutput> IterOutput =
+      new OrigIterationOutput();
+    return IterOutput;
+  }
+
+  SmartPtr<HessianUpdater>
+  AlgorithmBuilder::BuildHessianUpdater(const Journalist& jnlst,
+                                        const OptionsList& options,
+                                        const std::string& prefix)
+  {
+    // Get the Hessian updater for the main algorithm
+    SmartPtr<HessianUpdater> HessUpdater;
+    Index enum_int;
+    options.GetEnumValue("hessian_approximation", enum_int, prefix);
+    HessianApproximationType hessian_approximation =
+      HessianApproximationType(enum_int);
+    switch (hessian_approximation) {
+    case EXACT:
+      HessUpdater = new ExactHessianUpdater();
+      break;
+    case LIMITED_MEMORY:
+      // ToDo This needs to be replaced!
+      HessUpdater  = new LimMemQuasiNewtonUpdater(false);
+      break;
+    }
+    return HessUpdater;
+  }
+
+  SmartPtr<ConvergenceCheck>
+  AlgorithmBuilder::BuildConvergenceCheck(const Journalist& jnlst,
+                                          const OptionsList& options,
+                                          const std::string& prefix)
+  {
+    SmartPtr<ConvergenceCheck> ConvCheck =
+      new OptimalityErrorConvergenceCheck();
+    return ConvCheck;
+  }
+
+  SmartPtr<SearchDirectionCalculator>
+  AlgorithmBuilder::BuildSearchDirectionCalculator(const Journalist& jnlst,
+                                                   const OptionsList& options,
+                                                   const std::string& prefix)
+  {
+    std::string lsmethod;
+    options.GetStringValue("line_search_method", lsmethod, prefix);
+    SmartPtr<SearchDirectionCalculator> SearchDirCalc;
+    if (lsmethod=="cg-penalty") {
+      SearchDirCalc = new CGSearchDirCalculator(GetRawPtr(GetPDSystemSolver(jnlst, options, prefix)));
+    }
+    else {
+      SearchDirCalc = new PDSearchDirCalculator(GetRawPtr(GetPDSystemSolver(jnlst, options, prefix)));
+    }
+    return SearchDirCalc;
+  }
+
+  SmartPtr<EqMultiplierCalculator>
+  AlgorithmBuilder::BuildEqMultiplierCalculator(const Journalist& jnlst,
+                                                const OptionsList& options,
+                                                const std::string& prefix)
+  {
+    SmartPtr<EqMultiplierCalculator> EqMultCalculator =
+      new LeastSquareMultipliers(*GetAugSystemSolver(jnlst, options, prefix));
+    return EqMultCalculator;
+  }
+
+  SmartPtr<IterateInitializer>
+  AlgorithmBuilder::BuildIterateInitializer(const Journalist& jnlst,
+                                            const OptionsList& options,
+                                            const std::string& prefix)
+  {
+    DBG_ASSERT(IsValid(EqMultCalculator_));
 
     // Create the object for initializing the iterates Initialization
-    // object.  We include both the warm start and the defaut
+    // object.  We include both the warm start and the default
     // initializer, so that the warm start options can be activated
     // without having to rebuild the algorithm
-    SmartPtr<EqMultiplierCalculator> EqMultCalculator =
-      new LeastSquareMultipliers(*AugSolver);
     SmartPtr<IterateInitializer> WarmStartInitializer =
       new WarmStartIterateInitializer();
+
     SmartPtr<IterateInitializer> IterInitializer =
-      new DefaultIterateInitializer(EqMultCalculator, WarmStartInitializer,
-                                    AugSolver);
+      new DefaultIterateInitializer(EqMultCalculator_, WarmStartInitializer,
+                                    GetAugSystemSolver(jnlst, options, prefix));
+    return IterInitializer;
+  }
+
+  SmartPtr<LineSearch>
+  AlgorithmBuilder::BuildLineSearch(const Journalist& jnlst,
+                                    const OptionsList& options,
+                                    const std::string& prefix)
+  {
+    DBG_ASSERT(IsValid(ConvCheck_));
+    DBG_ASSERT(IsValid(EqMultCalculator_));
+
+    Index enum_int;
+    options.GetEnumValue("hessian_approximation", enum_int, prefix);
+    HessianApproximationType hessian_approximation =
+      HessianApproximationType(enum_int);
 
     SmartPtr<RestorationPhase> resto_phase;
     SmartPtr<RestoConvergenceCheck> resto_convCheck;
 
     // We only need a restoration phase object if we use the filter
     // line search
+    std::string lsmethod;
+    options.GetStringValue("line_search_method", lsmethod, prefix);
     if (lsmethod=="filter" || lsmethod=="penalty") {
       // Solver for the restoration phase
       SmartPtr<AugSystemSolver> resto_AugSolver =
-        new AugRestoSystemSolver(*AugSolver);
+        new AugRestoSystemSolver(*GetAugSystemSolver(jnlst, options, prefix));
       SmartPtr<PDPerturbationHandler> resto_pertHandler =
         new PDPerturbationHandler();
       SmartPtr<PDSystemSolver> resto_PDSolver =
@@ -633,13 +818,8 @@ namespace Ipopt
       std::string resto_smuupdate;
       if (!options.GetStringValue("mu_strategy", resto_smuupdate, "resto."+prefix)) {
         // Change default for quasi-Newton option (then we use adaptive)
-        Index enum_int;
-        if (options.GetEnumValue("hessian_approximation", enum_int, prefix)) {
-          HessianApproximationType hessian_approximation =
-            HessianApproximationType(enum_int);
-          if (hessian_approximation==LIMITED_MEMORY) {
-            resto_smuupdate = "adaptive";
-          }
+        if (hessian_approximation==LIMITED_MEMORY) {
+          resto_smuupdate = "adaptive";
         }
       }
 
@@ -727,31 +907,44 @@ namespace Ipopt
 
       // Set the restoration phase
       resto_phase =
-        new MinC_1NrmRestorationPhase(*resto_alg, EqMultCalculator);
+        new MinC_1NrmRestorationPhase(*resto_alg, EqMultCalculator_);
     }
 
     // Create the line search to be used by the main algorithm
     SmartPtr<BacktrackingLSAcceptor> LSacceptor;
     if (lsmethod=="filter") {
-      LSacceptor = new FilterLSAcceptor(GetRawPtr(PDSolver));
+      LSacceptor = new FilterLSAcceptor(GetRawPtr(GetPDSystemSolver(jnlst, options, prefix)));
     }
     else if (lsmethod=="cg-penalty") {
-      LSacceptor = new CGPenaltyLSAcceptor(GetRawPtr(PDSolver));
+      LSacceptor = new CGPenaltyLSAcceptor(GetRawPtr(GetPDSystemSolver(jnlst, options, prefix)));
     }
     else if (lsmethod=="penalty") {
-      LSacceptor = new PenaltyLSAcceptor(GetRawPtr(PDSolver));
+      LSacceptor = new PenaltyLSAcceptor(GetRawPtr(GetPDSystemSolver(jnlst, options, prefix)));
     }
-    SmartPtr<LineSearch> lineSearch =
+    SmartPtr<LineSearch> LineSearch =
       new BacktrackingLineSearch(LSacceptor,
-                                 GetRawPtr(resto_phase), convCheck);
+                                 GetRawPtr(resto_phase), ConvCheck_);
 
     // The following cross reference is not good: We have to store a
-    // pointer to the lineSearch object in resto_convCheck as a
+    // pointer to the LineSearch_ object in resto_convCheck as a
     // non-SmartPtr to make sure that things are properly deleted when
-    // the IpoptAlgorithm return by the Builder is destructed.
+    // the IpoptAlgorithm returned by the Builder is destructed.
     if (IsValid(resto_convCheck)) {
       resto_convCheck->SetOrigLSAcceptor(*LSacceptor);
     }
+
+    return LineSearch;
+  }
+
+  SmartPtr<MuUpdate>
+  AlgorithmBuilder::BuildMuUpdate(const Journalist& jnlst,
+                                  const OptionsList& options,
+                                  const std::string& prefix)
+  {
+    DBG_ASSERT(IsValid(LineSearch_));
+
+    bool mehrotra_algorithm;
+    options.GetBoolValue("mehrotra_algorithm", mehrotra_algorithm, prefix);
 
     // Create the mu update that will be used by the main algorithm
     SmartPtr<MuUpdate> MuUpdate;
@@ -786,7 +979,7 @@ namespace Ipopt
     }
 
     if (smuupdate=="monotone" ) {
-      MuUpdate = new MonotoneMuUpdate(GetRawPtr(lineSearch));
+      MuUpdate = new MonotoneMuUpdate(GetRawPtr(LineSearch_));
     }
     else if (smuupdate=="adaptive") {
       SmartPtr<MuOracle> muOracle;
@@ -794,59 +987,28 @@ namespace Ipopt
         muOracle = new LoqoMuOracle();
       }
       else if (smuoracle=="probing") {
-        muOracle = new ProbingMuOracle(PDSolver);
+        muOracle = new ProbingMuOracle(GetPDSystemSolver(jnlst, options, prefix));
       }
       else if (smuoracle=="quality-function") {
-        muOracle = new QualityFunctionMuOracle(PDSolver);
+        muOracle = new QualityFunctionMuOracle(GetPDSystemSolver(jnlst, options, prefix));
       }
       SmartPtr<MuOracle> FixMuOracle;
       if (sfixmuoracle=="loqo") {
         FixMuOracle = new LoqoMuOracle();
       }
       else if (sfixmuoracle=="probing") {
-        FixMuOracle = new ProbingMuOracle(PDSolver);
+        FixMuOracle = new ProbingMuOracle(GetPDSystemSolver(jnlst, options, prefix));
       }
       else if (sfixmuoracle=="quality-function") {
-        FixMuOracle = new QualityFunctionMuOracle(PDSolver);
+        FixMuOracle = new QualityFunctionMuOracle(GetPDSystemSolver(jnlst, options, prefix));
       }
       else {
         FixMuOracle = NULL;
       }
-      MuUpdate = new AdaptiveMuUpdate(GetRawPtr(lineSearch),
+      MuUpdate = new AdaptiveMuUpdate(GetRawPtr(LineSearch_),
                                       muOracle, FixMuOracle);
     }
-
-    // Create the object for the iteration output
-    SmartPtr<IterationOutput> IterOutput =
-      new OrigIterationOutput();
-
-    // Get the Hessian updater for the main algorithm
-    SmartPtr<HessianUpdater> HessUpdater;
-    switch (hessian_approximation) {
-    case EXACT:
-      HessUpdater = new ExactHessianUpdater();
-      break;
-    case LIMITED_MEMORY:
-      // ToDo This needs to be replaced!
-      HessUpdater  = new LimMemQuasiNewtonUpdater(false);
-      break;
-    }
-
-    // Create the main algorithm
-    SmartPtr<SearchDirectionCalculator> SearchDirCalc;
-    if (lsmethod=="cg-penalty") {
-      SearchDirCalc = new CGSearchDirCalculator(GetRawPtr(PDSolver));
-    }
-    else {
-      SearchDirCalc = new PDSearchDirCalculator(GetRawPtr(PDSolver));
-    }
-    SmartPtr<IpoptAlgorithm> alg =
-      new IpoptAlgorithm(SearchDirCalc,
-                         GetRawPtr(lineSearch), MuUpdate,
-                         convCheck, IterInitializer, IterOutput,
-                         HessUpdater, EqMultCalculator);
-
-    return alg;
+    return MuUpdate;
   }
 
 } // namespace

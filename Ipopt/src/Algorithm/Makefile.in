@@ -184,6 +184,8 @@ COIN_HAS_BLAS_FALSE = @COIN_HAS_BLAS_FALSE@
 COIN_HAS_BLAS_TRUE = @COIN_HAS_BLAS_TRUE@
 COIN_HAS_DOXYGEN_FALSE = @COIN_HAS_DOXYGEN_FALSE@
 COIN_HAS_DOXYGEN_TRUE = @COIN_HAS_DOXYGEN_TRUE@
+COIN_HAS_F77_FALSE = @COIN_HAS_F77_FALSE@
+COIN_HAS_F77_TRUE = @COIN_HAS_F77_TRUE@
 COIN_HAS_HSL_FALSE = @COIN_HAS_HSL_FALSE@
 COIN_HAS_HSL_TRUE = @COIN_HAS_HSL_TRUE@
 COIN_HAS_LAPACK_FALSE = @COIN_HAS_LAPACK_FALSE@
@@ -385,7 +387,12 @@ SUBDIRS = LinearSolvers Inexact
 includeipoptdir = $(includedir)/coin
 includeipopt_HEADERS = IpIpoptCalculatedQuantities.hpp \
 	IpIpoptData.hpp IpIteratesVector.hpp IpTimingStatistics.hpp \
-	IpIpoptNLP.hpp IpOrigIpoptNLP.hpp IpNLPScaling.hpp
+	IpIpoptNLP.hpp IpOrigIpoptNLP.hpp IpNLPScaling.hpp \
+	IpAlgBuilder.hpp IpIpoptAlg.hpp IpAlgStrategy.hpp \
+	IpSearchDirCalculator.hpp IpLineSearch.hpp IpMuUpdate.hpp \
+	IpConvCheck.hpp IpIterateInitializer.hpp IpIterationOutput.hpp \
+	IpHessianUpdater.hpp IpEqMultCalculator.hpp IpAugSystemSolver.hpp \
+	IpPDSystemSolver.hpp
 
 noinst_LTLIBRARIES = libipoptalg.la
 libipoptalg_la_SOURCES = \

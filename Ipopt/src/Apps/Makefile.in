@@ -41,7 +41,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@COIN_HAS_ASL_TRUE@am__append_1 = AmplSolver
+@COIN_HAS_F77_TRUE@am__append_1 = CUTErInterface
+@COIN_HAS_ASL_TRUE@am__append_2 = AmplSolver
 subdir = src/Apps
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -125,6 +126,8 @@ COIN_HAS_BLAS_FALSE = @COIN_HAS_BLAS_FALSE@
 COIN_HAS_BLAS_TRUE = @COIN_HAS_BLAS_TRUE@
 COIN_HAS_DOXYGEN_FALSE = @COIN_HAS_DOXYGEN_FALSE@
 COIN_HAS_DOXYGEN_TRUE = @COIN_HAS_DOXYGEN_TRUE@
+COIN_HAS_F77_FALSE = @COIN_HAS_F77_FALSE@
+COIN_HAS_F77_TRUE = @COIN_HAS_F77_TRUE@
 COIN_HAS_HSL_FALSE = @COIN_HAS_HSL_FALSE@
 COIN_HAS_HSL_TRUE = @COIN_HAS_HSL_TRUE@
 COIN_HAS_LAPACK_FALSE = @COIN_HAS_LAPACK_FALSE@
@@ -322,7 +325,7 @@ sol_cc_compiler = @sol_cc_compiler@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
-SUBDIRS = CUTErInterface $(am__append_1)
+SUBDIRS = $(am__append_1) $(am__append_2)
 all: all-recursive
 
 .SUFFIXES:

@@ -166,6 +166,8 @@ COIN_HAS_BLAS_FALSE = @COIN_HAS_BLAS_FALSE@
 COIN_HAS_BLAS_TRUE = @COIN_HAS_BLAS_TRUE@
 COIN_HAS_DOXYGEN_FALSE = @COIN_HAS_DOXYGEN_FALSE@
 COIN_HAS_DOXYGEN_TRUE = @COIN_HAS_DOXYGEN_TRUE@
+COIN_HAS_F77_FALSE = @COIN_HAS_F77_FALSE@
+COIN_HAS_F77_TRUE = @COIN_HAS_F77_TRUE@
 COIN_HAS_HSL_FALSE = @COIN_HAS_HSL_FALSE@
 COIN_HAS_HSL_TRUE = @COIN_HAS_HSL_TRUE@
 COIN_HAS_LAPACK_FALSE = @COIN_HAS_LAPACK_FALSE@
@@ -372,6 +374,14 @@ includeipopt_HEADERS = \
 	IpVector.hpp \
 	IpDenseVector.hpp \
 	IpCompoundVector.hpp \
+	IpCompoundMatrix.hpp \
+	IpCompoundSymMatrix.hpp \
+	IpSumSymMatrix.hpp \
+	IpDiagMatrix.hpp \
+	IpIdentityMatrix.hpp \
+	IpScaledMatrix.hpp \
+	IpSymScaledMatrix.hpp \
+	IpZeroSymMatrix.hpp \
 	IpBlas.hpp \
 	IpLapack.hpp
 

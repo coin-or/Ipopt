@@ -42,7 +42,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-noinst_PROGRAMS = hs071_cpp$(EXEEXT) hs071_c$(EXEEXT) hs071_f$(EXEEXT)
+noinst_PROGRAMS = hs071_cpp$(EXEEXT) hs071_c$(EXEEXT) $(am__EXEEXT_1)
+@COIN_HAS_F77_TRUE@am__append_1 = hs071_f
 subdir = test
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(srcdir)/run_unitTests.in
@@ -57,6 +58,7 @@ CONFIG_HEADER = $(top_builddir)/src/Common/config.h \
 	$(top_builddir)/examples/ScalableProblems/config.h
 CONFIG_CLEAN_FILES = run_unitTests hs071_main.cpp hs071_nlp.cpp \
 	hs071_nlp.hpp hs071_c.c
+@COIN_HAS_F77_TRUE@am__EXEEXT_1 = hs071_f$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 nodist_hs071_c_OBJECTS = hs071_c.$(OBJEXT)
 hs071_c_OBJECTS = $(nodist_hs071_c_OBJECTS)
@@ -154,6 +156,8 @@ COIN_HAS_BLAS_FALSE = @COIN_HAS_BLAS_FALSE@
 COIN_HAS_BLAS_TRUE = @COIN_HAS_BLAS_TRUE@
 COIN_HAS_DOXYGEN_FALSE = @COIN_HAS_DOXYGEN_FALSE@
 COIN_HAS_DOXYGEN_TRUE = @COIN_HAS_DOXYGEN_TRUE@
+COIN_HAS_F77_FALSE = @COIN_HAS_F77_FALSE@
+COIN_HAS_F77_TRUE = @COIN_HAS_F77_TRUE@
 COIN_HAS_HSL_FALSE = @COIN_HAS_HSL_FALSE@
 COIN_HAS_HSL_TRUE = @COIN_HAS_HSL_TRUE@
 COIN_HAS_LAPACK_FALSE = @COIN_HAS_LAPACK_FALSE@
@@ -675,7 +679,8 @@ uninstall-am: uninstall-info-am
 hs071_f.f:
 	$(LN_S) ../examples/hs071_f/$@ $@
 
-test: hs071_cpp$(EXEEXT) hs071_c$(EXEEXT) hs071_f$(EXEEXT)
+@COIN_HAS_F77_TRUE@test: hs071_cpp$(EXEEXT) hs071_c$(EXEEXT) hs071_f$(EXEEXT)
+@COIN_HAS_F77_FALSE@test: hs071_cpp$(EXEEXT) hs071_c$(EXEEXT)
 	chmod u+x ./run_unitTests
 	./run_unitTests
 

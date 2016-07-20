@@ -2,6 +2,32 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
+2016-07-20 releases/3.12.6
+        - better support for custom algorithm development [r2659]
+          (by Gabriel Hackebeil) https://github.com/coin-or/Ipopt/pull/5:
+          "Reorganization of the AlgorithmBuilder class to allow easier
+          customization of the Ipopt algorithm. In particular, we wanted to
+          make use of the code that creates the SymLinearSolver object to
+          implement our own SymLinearSolver without copy-pasting everything
+          in AlgorithmBuilder.
+          AlgorithmBuilder::BuildBasicAlgorithm now consists of 8 method calls
+          that build the core components passed into the arguments of the
+          IpoptAlgorithm class. These calls are ordered based on any dependencies
+          they might have. In addition, all code for creating the PDSystemSolver,
+          AugSystemSolver, and SymLinearSolver has been moved into separate factory
+          methods.
+          Also, included is a change to install a few more header files with Ipopt.
+          Some of these are required to subclass AlgorithmBuilder, and the others
+          are simply some matrix types that we require."
+        - extend build system to work without Fortran compiler [r2660,r2661]
+          If no Fortran compiler is available (F77=unavailable), then
+          the build system checks for functions in Blas, Lapack, and
+          Pardiso via C linkage. This seems to work when using the Intel MKL,
+          thus allowing to build Ipopt with C/C++ compilers and MKL only.
+          The linear solver loader and the CuteR interface are disabled when
+          no Fortran compiler is available. A user may have to adjust the
+          definition of F77_FUNC in Ipopt/src/Common/IpoptConfig.h.
+
 2016-04-30 releases/3.12.5
         - changed fptr from long to void*: the Fortran side needs to
           make sure that it uses a big enough integer type to store a
