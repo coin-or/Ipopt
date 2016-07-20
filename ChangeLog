@@ -2,7 +2,7 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
-2016-xx-yy releases/3.12.6
+2016-07-20 releases/3.12.6
         - better support for custom algorithm development [r2659]
           (by Gabriel Hackebeil) https://github.com/coin-or/Ipopt/pull/5:
           "Reorganization of the AlgorithmBuilder class to allow easier
