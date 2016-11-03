@@ -324,7 +324,7 @@ namespace Ipopt
     Index rlen = maxrownamelen;
     Index clen = maxcolnamelen;
 
-    if (rlen > 0) {
+    if (clen > 0) {
       std::vector<std::string> var_names(n);
       for (Index i=0; i<n; i++) {
         var_names[i] = var_name(i);
@@ -332,7 +332,7 @@ namespace Ipopt
       var_string_md_["idx_names"] = var_names;
     }
 
-    if (clen > 0) {
+    if (rlen > 0) {
       std::vector<std::string> con_names(m);
       for (Index i=0; i<m; i++) {
         con_names[i] = con_name(i);
