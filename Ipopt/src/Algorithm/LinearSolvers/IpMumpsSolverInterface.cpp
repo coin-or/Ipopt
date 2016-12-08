@@ -14,7 +14,7 @@
 // (This would have to be taken out for a parallel MUMPS version!)
 #define MPI_COMM_WORLD IPOPT_MPI_COMM_WORLD
 // The first header to include is the one for MPI.  
-#include "mpi.h"
+#include "mumps_mpi.h"
 
 #include "IpMumpsSolverInterface.hpp"
 
