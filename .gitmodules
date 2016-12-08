@@ -21,7 +21,7 @@
 [submodule "ThirdParty/Metis"]
 	path = ThirdParty/Metis
 	url = git://github.com/coin-or-tools/ThirdParty-Metis.git
-	branch = stable/1.3
+	branch = master
 [submodule "ThirdParty/Mumps"]
 	path = ThirdParty/Mumps
 	url = git://github.com/coin-or-tools/ThirdParty-Mumps.git
