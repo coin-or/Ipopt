@@ -2,6 +2,16 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
+2017-02-25 releases/3.12.7
+        - removed compiler flag -pedantic-errors to avoid problems with some
+          configure tests when using recent GCC versions
+        - fixed rare bug in handling variable/constraint names in AmplTNLP
+          (by G. Hackebeil) [r2673]
+        - the get.Mumps script in ThirdParty/Mumps now renames libseq/mpi.h
+          to libseq/mumps_mpi.h to avoid conflicts when building in a MPI
+          environment (by T. Ralphs); note that if updating an existing
+          checkout/download of Ipopt, you may have to rerun get.Mumps
+
 2016-07-20 releases/3.12.6
         - better support for custom algorithm development [r2659]
           (by Gabriel Hackebeil) https://github.com/coin-or/Ipopt/pull/5:
