@@ -2,7 +2,7 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
-2017-02-xx releases/3.12.7
+2017-02-25 releases/3.12.7
         - removed compiler flag -pedantic-errors to avoid problems with some
           configure tests when using recent GCC versions
         - fixed rare bug in handling variable/constraint names in AmplTNLP
