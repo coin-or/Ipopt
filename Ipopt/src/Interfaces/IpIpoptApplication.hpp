@@ -197,10 +197,14 @@ namespace Ipopt
      * caught by Ipopts initialization and optimization methods
      * and the status NonIpopt_Exception_Thrown is returned.
      * This function allows to enable rethrowing of such exceptions.
+     * 
+     * @return Returns whether non-ipopt exceptions were rethrown before.
      */
-    void RethrowNonIpoptException(bool dorethrow)
+    bool RethrowNonIpoptException(bool dorethrow)
     {
+       bool oldval = rethrow_nonipoptexception_;
        rethrow_nonipoptexception_ = dorethrow;
+       return oldval;
     }
 
     /** @name Methods for IpoptTypeInfo */
