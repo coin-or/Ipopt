@@ -132,6 +132,7 @@ namespace Ipopt
     retval->read_params_dat_ = read_params_dat_;
     retval->inexact_algorithm_ = inexact_algorithm_;
     retval->replace_bounds_ = replace_bounds_;
+    retval->rethrow_nonipoptexception_ = rethrow_nonipoptexception_;
 
     return retval;
   }
