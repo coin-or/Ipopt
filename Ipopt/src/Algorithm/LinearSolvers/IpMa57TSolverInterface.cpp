@@ -654,7 +654,7 @@ namespace Ipopt
         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                        "Reallocating memory for MA57: lfact (%d)\n", wd_lfact_);
 
-        if( wd_lfact_ > std::numeric_limits<size_t>::max() / sizeof(double) ) {
+        if( (size_t)wd_lfact_ > std::numeric_limits<size_t>::max() / sizeof(double) ) {
           Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                        "Cannot allocate memory of size %d exceeding SIZE_MAX = %u\n", wd_lfact_, std::numeric_limits<size_t>::max());
           return SYMSOLVER_FATAL_ERROR;
