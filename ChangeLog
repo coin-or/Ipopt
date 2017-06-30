@@ -2,6 +2,9 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
+2017-xx-yy releases/3.12.9
+        - fixed memory leak in MA86 interface (by mhahn) [r2700,#283]
+
 2017-06-12 releases/3.12.8
         - add define for FORTRAN_INTEGER_TYPE to config_ipopt_default.h
         - IpoptApplication::RethrowNonIpoptException() now returns whether

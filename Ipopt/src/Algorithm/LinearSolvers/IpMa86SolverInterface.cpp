@@ -35,6 +35,7 @@ namespace Ipopt
   Ma86SolverInterface::~Ma86SolverInterface()
   {
     delete [] val_;
+    delete [] order_;
 
     if(keep_) ma86_finalise(&keep_, &control_);
   }
