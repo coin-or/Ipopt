@@ -850,6 +850,9 @@ namespace Ipopt
     ip_data_->TimingStats().ResetTimes();
     p2ip_nlp->ResetTimes();
 
+    // Reset Cpu start time (so doesn't carry over, on ReOptimize)
+    ip_data_->ResetCpuStartTime();
+
     ApplicationReturnStatus retValue = Internal_Error;
     SolverReturn status = INTERNAL_ERROR;
     /** Flag indicating if the NLP:FinalizeSolution method should not
