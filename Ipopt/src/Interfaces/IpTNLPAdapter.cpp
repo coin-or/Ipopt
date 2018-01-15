@@ -2393,7 +2393,9 @@ namespace Ipopt
               findiff_perturbation_*Max(1., fabs(full_x_[ivar]));
             full_x_pert[ivar] += this_perturbation;
             if (full_x_pert[ivar] > findiff_x_u_[ivar]) {
-              full_x_pert[ivar] = xorig - this_perturbation;
+              // if at upper bound, then change direction towards lower bound
+              this_perturbation = -this_perturbation;
+              full_x_pert[ivar] = xorig + this_perturbation;
             }
             retval = tnlp_->eval_g(n_full_x_, full_x_pert, true, n_full_g_,
                                    full_g_pert);
