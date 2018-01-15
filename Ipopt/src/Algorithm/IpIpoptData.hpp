@@ -373,7 +373,7 @@ namespace Ipopt
      *  Can only be called after beginning of optimization. */
     Number cpu_time_start() const
     {
-      assert(cpu_time_start_ >= 0);
+      DBG_ASSERT(cpu_time_start_ >= 0);
       return cpu_time_start_;
     }
 
