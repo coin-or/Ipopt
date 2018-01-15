@@ -2,7 +2,7 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
-2017-xx-yy releases/3.12.9
+2018-01-15 releases/3.12.9
         - fixed memory leak in MA86 interface (by mhahn) [r2700,#283]
         - fixed handling of time limit when reoptimizing: CPU time spend
           was accumulated when reoptimizing, while it should have been
