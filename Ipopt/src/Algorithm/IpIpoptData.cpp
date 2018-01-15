@@ -83,9 +83,8 @@ namespace Ipopt
 
     initialize_called_ = true;
 
-    if (cpu_time_start_==-1.) {
-      cpu_time_start_ = CpuTime();
-    }
+    // will be set to cputime in IpoptApplication::call_optimize()
+    cpu_time_start_ = -1.;
 
     bool retval = true;
 
