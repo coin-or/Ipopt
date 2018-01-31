@@ -447,7 +447,7 @@ namespace Ipopt
     IPARM_[12] = (int)match_strat_; // enable matching (recommended, as above)
     IPARM_[20] = 3; // bunch-kaufman pivoting
     IPARM_[23] = 1; // parallel fac
-    IPARM_[24] = 1; // parallel solve
+    IPARM_[24] = 0; // parallel solve
     //IPARM_[26] = 1; // matrix checker
 #else
     IPARM_[1] = order;
