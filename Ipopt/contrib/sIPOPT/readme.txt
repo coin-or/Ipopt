@@ -14,5 +14,4 @@ wiki as well as on the project documentation and website.
 
 Contact: The sIPOPT code was developed by Hans Pirnay (RWTH-Aachen), 
 Rodrigo Lopez-Negrete (CMU), and Prof. Lorenz Biegler (CMU). Any 
-questions / problems / bugs may be sent to the IPOPT mailing list, 
-or (hans.pirnay@rwth-aachen.de).
+questions / problems / bugs may be sent to the IPOPT mailing list.
