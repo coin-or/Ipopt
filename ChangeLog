@@ -2,6 +2,12 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
+2018-xx-yy releases/3.12.10
+        - fixed setting for parallel solve when using MKL Pardiso
+          (by t1393988511) [r2711]: parallel solve was disabled (which
+          is not the default); note, that the settng for parallel
+          factorization was not affected
+
 2018-01-15 releases/3.12.9
         - fixed memory leak in MA86 interface (by mhahn) [r2700,#283]
         - fixed handling of time limit when reoptimizing: CPU time spend
