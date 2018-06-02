@@ -7,6 +7,7 @@ history management of subversion.
           (by t1393988511) [r2711]: parallel solve was disabled (which
           is not the default); note, that the settng for parallel
           factorization was not affected
+        - updated ThirdParty/ASL to retrieve updated ASL (20180528) [#305]
 
 2018-01-15 releases/3.12.9
         - fixed memory leak in MA86 interface (by mhahn) [r2700,#283]
