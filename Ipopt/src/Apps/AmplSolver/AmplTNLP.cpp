@@ -226,7 +226,7 @@ namespace Ipopt
     }
 
     obj_sign_ = 1; // minimization
-    if (objtype[obj_no] != 0) {
+    if (n_obj > 0 && objtype[obj_no] != 0) {
       obj_sign_ = -1;
     }
 

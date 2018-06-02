@@ -257,6 +257,9 @@ namespace Ipopt
     // Start measuring CPU time
     IpData().TimingStats().OverallAlgorithm().Start();
 
+    // Reset Cpu start time (so doesn't carry over from previous Optimize)
+    IpData().ResetCpuStartTime();
+
     if (!copyright_message_printed) {
       print_copyright_message(Jnlst());
     }
