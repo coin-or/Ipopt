@@ -492,6 +492,9 @@ case $build in
   *-cygwin* | *-mingw*)
     JIPOPTDLL=jipopt.dll
     ;;
+  *-darwin* )
+    JIPOPTDLL=libjipopt.dylib
+    ;;  
   *)
     JIPOPTDLL=libjipopt.so
     ;;
