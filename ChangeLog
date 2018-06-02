@@ -10,6 +10,7 @@ history management of subversion.
         - fixed invalid read in AMPL interface for problems without
           objective function [r2715, #305]
         - updated ThirdParty/ASL to retrieve updated ASL (20180528) [#305]
+        - name JIpopt library libjipopt.dylib on Mac OS X [r2718, #275]
 
 2018-01-15 releases/3.12.9
         - fixed memory leak in MA86 interface (by mhahn) [r2700,#283]
