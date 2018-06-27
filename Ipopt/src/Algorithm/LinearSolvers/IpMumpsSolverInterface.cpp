@@ -61,7 +61,7 @@ namespace Ipopt
     DBG_START_METH("MumpsSolverInterface::MumpsSolverInterface()",
                    dbg_verbosity);
     //initialize mumps
-    DMUMPS_STRUC_C* mumps_ = new DMUMPS_STRUC_C;
+    DMUMPS_STRUC_C* mumps_ = (DMUMPS_STRUC_C*)calloc(1, sizeof(DMUMPS_STRUC_C));
 #ifndef MUMPS_MPI_H
 #if defined(HAVE_MPI_INITIALIZED)
     int mpi_initialized;
@@ -118,7 +118,7 @@ namespace Ipopt
 #endif
 #endif
     delete [] mumps_->a;
-    delete mumps_;
+    free(mumps_);
   }
 
   void MumpsSolverInterface::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
