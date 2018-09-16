@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #ifndef __IPOBSERVER_HPP__
@@ -23,10 +21,11 @@
 
 namespace Ipopt
 {
-/** Forward declarations */
+/* Forward declaration */
 class Subject;
 
 /** Slight Variation of the Observer Design Pattern.
+ *
  *  This class implements the Observer class of the
  *  Observer Design Pattern. An Observer "Attach"es
  *  to a Subject, indicating that it would like to
@@ -40,7 +39,6 @@ class Observer
 {
 public:
 #ifdef IP_DEBUG_OBSERVER
-
    static const Index dbg_verbosity;
 #endif
 
@@ -48,9 +46,9 @@ public:
    //@{
    /** Default Constructor */
    Observer()
-   {}
+   { }
 
-   /** Default destructor */
+   /** Destructor */
    inline
    virtual ~Observer();
    //@}
@@ -65,60 +63,82 @@ public:
 
 protected:
    /** Derived classes should call this method
-    * to request an "Attach" to a Subject. Do
-    * not call "Attach" explicitly on the Subject
+    * to request an "Attach" to a Subject.
+    *
+    * Do not call "Attach" explicitly on the Subject
     * since further processing is done here
     */
    inline
-   void RequestAttach(NotifyType notify_type, const Subject* subject);
+   void RequestAttach(
+      NotifyType     notify_type,
+      const Subject* subject
+   );
 
    /** Derived classes should call this method
-    * to request a "Detach" to a Subject. Do
-    * not call "Detach" explicitly on the Subject
+    * to request a "Detach" to a Subject.
+    *
+    * Do not call "Detach" explicitly on the Subject
     * since further processing is done here
     */
    inline
-   void RequestDetach(NotifyType notify_type, const Subject* subject);
+   void RequestDetach(
+      NotifyType     notify_type,
+      const Subject* subject
+   );
 
    /** Derived classes should overload this method to
-    * recieve the requested notification from
+    * receive the requested notification from
     * attached Subjects
     */
-   virtual void RecieveNotification(NotifyType notify_type, const Subject* subject) = 0;
+   virtual void RecieveNotification(
+      NotifyType     notify_type,
+      const Subject* subject
+   ) = 0;
 
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Copy Constructor */
-   Observer(const Observer&);
+   Observer(
+      const Observer&
+   );
 
    /** Overloaded Equals Operator */
-   void operator=(const Observer&);
+   void operator=(
+      const Observer&
+   );
    //@}
 
-   /** A list of the subjects currently being
-    *  observed. */
+   /** A list of the subjects currently being observed. */
    std::vector<const Subject*> subjects_;
 
-   /** Private Method for Recieving Notification
+   /** Private Method for Receiving Notification
     *  should only be called by the friend class
-    *  Subject. This method will, in turn, call
+    *  Subject.
+    *
+    *  This method will, in turn, call
     *  the overloaded RecieveNotification method
     *  for the derived class to process.
     */
    inline
-   void ProcessNotification(NotifyType notify_type, const Subject* subject);
+   void ProcessNotification(
+      NotifyType     notify_type,
+      const Subject* subject
+   );
 
    friend class Subject;
 };
 
 /** Slight Variation of the Observer Design Pattern (Subject part).
+ *
  *  This class implements the Subject class of the Observer Design
  *  Pattern. An Observer "Attach"es to a Subject, indicating that it
  *  would like to be notified of changes in the Subject.  Any
@@ -130,7 +150,6 @@ class Subject
 {
 public:
 #ifdef IP_DEBUG_OBSERVER
-
    static const Index dbg_verbosity;
 #endif
 
@@ -138,64 +157,77 @@ public:
    //@{
    /** Default Constructor */
    Subject()
-   {}
+   { }
 
-   /** Default destructor */
+   /** Destructor */
    inline
    virtual ~Subject();
    //@}
 
    /**@name Methods to Add and Remove Observers.
+    *
     *  Currently, the notify_type flags are not used,
     *  and Observers are attached in general and will
-    *  recieve all notifications (of the type requested
+    *  receive all notifications (of the type requested
     *  and possibly of types not requested). It is
     *  up to the observer to ignore the types they
     *  are not interested in. The NotifyType in the
     *  parameter list is so a more efficient mechanism
     *  depending on type could be implemented later if
-    *  necessary.*/
+    *  necessary.
+    */
    //@{
-
    /** Attach the specified observer
-    *  (i.e., begin recieving notifications). */
+    *  (i.e., begin receiving notifications). */
    inline
-   void AttachObserver(Observer::NotifyType notify_type, Observer* observer) const;
+   void AttachObserver(
+      Observer::NotifyType notify_type,
+      Observer*            observer
+   ) const;
 
    /** Detach the specified observer
-    *  (i.e., no longer recieve notifications). */
+    *  (i.e., no longer receive notifications). */
    inline
-   void DetachObserver(Observer::NotifyType notify_type, Observer* observer) const;
+   void DetachObserver(
+      Observer::NotifyType notify_type,
+      Observer*            observer
+   ) const;
    //@}
 
 protected:
 
    inline
-   void Notify(Observer::NotifyType notify_type) const;
+   void Notify(
+      Observer::NotifyType notify_type
+   ) const;
 
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Copy Constructor */
-   Subject(const Subject&);
+   Subject(
+      const Subject&
+   );
 
    /** Overloaded Equals Operator */
-   void operator=(const Subject&);
+   void operator=(
+      const Subject&
+   );
    //@}
 
    mutable std::vector<Observer*> observers_;
-
 };
 
 /* inline methods */
-inline
-Observer::~Observer()
+inline Observer::~Observer()
 {
 #ifdef IP_DEBUG_OBSERVER
    DBG_START_METH("Observer::~Observer", dbg_verbosity);
@@ -208,7 +240,7 @@ Observer::~Observer()
    }
 #endif
    // Detach all subjects
-   for (Int i = (Int)(subjects_.size() - 1); i >= 0; i--)
+   for( Int i = (Int) (subjects_.size() - 1); i >= 0; i-- )
    {
 #ifdef IP_DEBUG_OBSERVER
       DBG_PRINT((1, "About to detach subjects_[%d] = 0x%x\n", i, subjects_[i]));
@@ -219,7 +251,10 @@ Observer::~Observer()
 }
 
 inline
-void Observer::RequestAttach(NotifyType notify_type, const Subject* subject)
+void Observer::RequestAttach(
+   NotifyType     notify_type,
+   const Subject* subject
+)
 {
 #ifdef IP_DEBUG_OBSERVER
    DBG_START_METH("Observer::RequestAttach", dbg_verbosity);
@@ -238,7 +273,10 @@ void Observer::RequestAttach(NotifyType notify_type, const Subject* subject)
 }
 
 inline
-void Observer::RequestDetach(NotifyType notify_type, const Subject* subject)
+void Observer::RequestDetach(
+   NotifyType     notify_type,
+   const Subject* subject
+)
 {
 #ifdef IP_DEBUG_OBSERVER
    DBG_START_METH("Observer::RequestDetach", dbg_verbosity);
@@ -246,7 +284,7 @@ void Observer::RequestDetach(NotifyType notify_type, const Subject* subject)
    DBG_ASSERT(subject);
 #endif
 
-   if (subject)
+   if( subject )
    {
       std::vector<const Subject*>::iterator attached_subject;
       attached_subject = std::find(subjects_.begin(), subjects_.end(), subject);
@@ -255,7 +293,7 @@ void Observer::RequestDetach(NotifyType notify_type, const Subject* subject)
       DBG_ASSERT(attached_subject != subjects_.end());
 #endif
 
-      if (attached_subject != subjects_.end())
+      if( attached_subject != subjects_.end() )
       {
 #ifdef IP_DEBUG_OBSERVER
          DBG_PRINT((1, "Removing subject: 0x%x from the list\n", subject));
@@ -270,14 +308,17 @@ void Observer::RequestDetach(NotifyType notify_type, const Subject* subject)
 }
 
 inline
-void Observer::ProcessNotification(NotifyType notify_type, const Subject* subject)
+void Observer::ProcessNotification(
+   NotifyType     notify_type,
+   const Subject* subject
+)
 {
 #ifdef IP_DEBUG_OBSERVER
    DBG_START_METH("Observer::ProcessNotification", dbg_verbosity);
    DBG_ASSERT(subject);
 #endif
 
-   if (subject)
+   if( subject )
    {
       std::vector<const Subject*>::iterator attached_subject;
       attached_subject = std::find(subjects_.begin(), subjects_.end(), subject);
@@ -291,7 +332,7 @@ void Observer::ProcessNotification(NotifyType notify_type, const Subject* subjec
 
       this->RecieveNotification(notify_type, subject);
 
-      if (notify_type == NT_BeingDestroyed)
+      if( notify_type == NT_BeingDestroyed )
       {
          // the subject is going away, remove it from our list
          subjects_.erase(attached_subject);
@@ -299,22 +340,24 @@ void Observer::ProcessNotification(NotifyType notify_type, const Subject* subjec
    }
 }
 
-inline
-Subject::~Subject()
+inline Subject::~Subject()
 {
 #ifdef IP_DEBUG_OBSERVER
    DBG_START_METH("Subject::~Subject", dbg_verbosity);
 #endif
 
    std::vector<Observer*>::iterator iter;
-   for (iter = observers_.begin(); iter != observers_.end(); iter++)
+   for( iter = observers_.begin(); iter != observers_.end(); iter++ )
    {
       (*iter)->ProcessNotification(Observer::NT_BeingDestroyed, this);
    }
 }
 
 inline
-void Subject::AttachObserver(Observer::NotifyType notify_type, Observer* observer) const
+void Subject::AttachObserver(
+   Observer::NotifyType notify_type,
+   Observer*            observer
+) const
 {
 #ifdef IP_DEBUG_OBSERVER
    DBG_START_METH("Subject::AttachObserver", dbg_verbosity);
@@ -334,14 +377,17 @@ void Subject::AttachObserver(Observer::NotifyType notify_type, Observer* observe
 }
 
 inline
-void Subject::DetachObserver(Observer::NotifyType notify_type, Observer* observer) const
+void Subject::DetachObserver(
+   Observer::NotifyType notify_type,
+   Observer*            observer
+) const
 {
 #ifdef IP_DEBUG_OBSERVER
    DBG_START_METH("Subject::DetachObserver", dbg_verbosity);
    DBG_ASSERT(observer);
 #endif
 
-   if (observer)
+   if( observer )
    {
       std::vector<Observer*>::iterator attached_observer;
       attached_observer = std::find(observers_.begin(), observers_.end(), observer);
@@ -350,7 +396,7 @@ void Subject::DetachObserver(Observer::NotifyType notify_type, Observer* observe
       DBG_ASSERT(attached_observer != observers_.end());
 #endif
 
-      if (attached_observer != observers_.end())
+      if( attached_observer != observers_.end() )
       {
          observers_.erase(attached_observer);
       }
@@ -358,19 +404,20 @@ void Subject::DetachObserver(Observer::NotifyType notify_type, Observer* observe
 }
 
 inline
-void Subject::Notify(Observer::NotifyType notify_type) const
+void Subject::Notify(
+   Observer::NotifyType notify_type
+) const
 {
 #ifdef IP_DEBUG_OBSERVER
    DBG_START_METH("Subject::Notify", dbg_verbosity);
 #endif
 
    std::vector<Observer*>::iterator iter;
-   for (iter = observers_.begin(); iter != observers_.end(); iter++)
+   for( iter = observers_.begin(); iter != observers_.end(); iter++ )
    {
       (*iter)->ProcessNotification(notify_type, this);
    }
 }
-
 
 } // namespace Ipopt
 

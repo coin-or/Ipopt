@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpoptConfig.h"
@@ -21,11 +19,11 @@ Journalist* DebugJournalistWrapper::jrnl_ = NULL;
 
 DebugJournalistWrapper::DebugJournalistWrapper(
    std::string func_name,
-   Index verbose_level)
-   :
-   func_name_(func_name),
-   verbose_level_(verbose_level),
-   method_owner_(NULL)
+   Index       verbose_level
+)
+   : func_name_(func_name),
+     verbose_level_(verbose_level),
+     method_owner_(NULL)
 {
    if (jrnl_ == NULL)
    {
@@ -40,12 +38,13 @@ DebugJournalistWrapper::DebugJournalistWrapper(
 }
 
 DebugJournalistWrapper::DebugJournalistWrapper(
-   std::string func_name, Index verbose_level,
-   const void* const method_owner)
-   :
-   func_name_(func_name),
-   verbose_level_(verbose_level),
-   method_owner_(method_owner)
+   std::string       func_name,
+   Index             verbose_level,
+   const void* const method_owner
+)
+   : func_name_(func_name),
+     verbose_level_(verbose_level),
+     method_owner_(method_owner)
 {
    if (jrnl_ == NULL)
    {
@@ -80,8 +79,9 @@ DebugJournalistWrapper::~DebugJournalistWrapper()
    }
 }
 
-
-void DebugJournalistWrapper::SetJournalist(Journalist* jrnl)
+void DebugJournalistWrapper::SetJournalist(
+   Journalist* jrnl
+)
 {
 
    if (jrnl == NULL)
@@ -96,8 +96,11 @@ void DebugJournalistWrapper::SetJournalist(Journalist* jrnl)
    }
 }
 
-
-void DebugJournalistWrapper::DebugPrintf(Index verbosity, const char* pformat, ...)
+void DebugJournalistWrapper::DebugPrintf(
+   Index       verbosity,
+   const char* pformat,
+   ...
+)
 {
 
    if (Verbosity() >= verbosity)

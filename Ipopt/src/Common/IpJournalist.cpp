@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpoptConfig.h"
@@ -34,15 +32,19 @@ namespace Ipopt
 {
 
 Journalist::Journalist()
-{}
+{ }
 
 Journalist::~Journalist()
 {
    journals_.clear();
 }
 
-void Journalist::Printf( EJournalLevel level, EJournalCategory category,
-                         const char* pformat, ... ) const
+void Journalist::Printf(
+   EJournalLevel    level,
+   EJournalCategory category,
+   const char*      pformat,
+   ...
+) const
 {
    // wrap the arguments and pass to VPrintf
    va_list ap;
@@ -53,10 +55,13 @@ void Journalist::Printf( EJournalLevel level, EJournalCategory category,
    va_end(ap);
 }
 
-void Journalist::PrintStringOverLines(EJournalLevel level,
-                                      EJournalCategory category,
-                                      Index indent_spaces, Index max_length,
-                                      const std::string& line) const
+void Journalist::PrintStringOverLines(
+   EJournalLevel      level,
+   EJournalCategory   category,
+   Index              indent_spaces,
+   Index              max_length,
+   const std::string& line
+) const
 {
    DBG_ASSERT(indent_spaces + max_length + 1 < 1024);
    char buffer[1024];
@@ -65,14 +70,14 @@ void Journalist::PrintStringOverLines(EJournalLevel level,
    bool first_line = true;
    Index buffer_pos = 0;
 
-   while (last_line_pos < line.length())
+   while( last_line_pos < line.length() )
    {
       std::string::size_type line_pos = last_line_pos;
       Index curr_length = 0;
-      while (curr_length < max_length && line_pos < line.length())
+      while( curr_length < max_length && line_pos < line.length() )
       {
          buffer[buffer_pos] = line[line_pos];
-         if (line[line_pos] == ' ')
+         if( line[line_pos] == ' ' )
          {
             last_word_pos = line_pos + 1;
          }
@@ -80,16 +85,16 @@ void Journalist::PrintStringOverLines(EJournalLevel level,
          buffer_pos++;
          line_pos++;
       }
-      if (line_pos == line.length())
+      if( line_pos == line.length() )
       {
          // This is the last line to be printed.
          buffer[buffer_pos] = '\0';
          Printf(level, category, "%s", buffer);
          break;
       }
-      if (last_word_pos == last_line_pos)
+      if( last_word_pos == last_line_pos )
       {
-         if (line[line_pos] == ' ')
+         if( line[line_pos] == ' ' )
          {
             buffer[buffer_pos] = '\0';
             last_word_pos = line_pos + 1;
@@ -113,9 +118,9 @@ void Journalist::PrintStringOverLines(EJournalLevel level,
       }
 
       Printf(level, category, "%s\n", buffer);
-      if (first_line)
+      if( first_line )
       {
-         for (Index i = 0; i < indent_spaces; i++)
+         for( Index i = 0; i < indent_spaces; i++ )
          {
             buffer[i] = ' ';
          }
@@ -125,9 +130,13 @@ void Journalist::PrintStringOverLines(EJournalLevel level,
    }
 }
 
-void Journalist::PrintfIndented( EJournalLevel level,
-                                 EJournalCategory category, Index indent_level,
-                                 const char* pformat, ... ) const
+void Journalist::PrintfIndented(
+   EJournalLevel    level,
+   EJournalCategory category,
+   Index            indent_level,
+   const char*      pformat,
+   ...
+) const
 {
    // wrap the arguments and pass to VPrintfIndented
    va_list ap;
@@ -173,15 +182,17 @@ void Journalist::PrintfIndented( EJournalLevel level,
 //   }
 
 void Journalist::VPrintf(
-   EJournalLevel level,
+   EJournalLevel    level,
    EJournalCategory category,
-   const char* pformat, va_list ap) const
+   const char*      pformat,
+   va_list          ap
+) const
 {
    // print the msg on every journal that accepts
    // the category and output level
-   for (Index i = 0; i < (Index)journals_.size(); i++)
+   for( Index i = 0; i < (Index) journals_.size(); i++ )
    {
-      if (journals_[i]->IsAccepted(category, level))
+      if( journals_[i]->IsAccepted(category, level) )
       {
          // print the message
 #ifdef HAVE_VA_COPY
@@ -199,20 +210,22 @@ void Journalist::VPrintf(
 }
 
 void Journalist::VPrintfIndented(
-   EJournalLevel level,
+   EJournalLevel    level,
    EJournalCategory category,
-   Index indent_level,
-   const char* pformat, va_list ap) const
+   Index            indent_level,
+   const char*      pformat,
+   va_list          ap
+) const
 {
    // print the msg on every journal that accepts
    // the category and output level
-   for (Index i = 0; i < (Index)journals_.size(); i++)
+   for( Index i = 0; i < (Index) journals_.size(); i++ )
    {
-      if (journals_[i]->IsAccepted(category, level))
+      if( journals_[i]->IsAccepted(category, level) )
       {
 
          // indent the appropriate amount
-         for (Index s = 0; s < indent_level; s++)
+         for( Index s = 0; s < indent_level; s++ )
          {
             journals_[i]->Print(category, level, "  ");
          }
@@ -232,12 +245,14 @@ void Journalist::VPrintfIndented(
    }
 }
 
-bool Journalist::ProduceOutput(EJournalLevel level,
-                               EJournalCategory category) const
+bool Journalist::ProduceOutput(
+   EJournalLevel    level,
+   EJournalCategory category
+) const
 {
-   for (Index i = 0; i < (Index)journals_.size(); i++)
+   for( Index i = 0; i < (Index) journals_.size(); i++ )
    {
-      if (journals_[i]->IsAccepted(category, level))
+      if( journals_[i]->IsAccepted(category, level) )
       {
          return true;
       }
@@ -245,14 +260,16 @@ bool Journalist::ProduceOutput(EJournalLevel level,
    return false;
 }
 
-bool Journalist::AddJournal(const SmartPtr<Journal> jrnl)
+bool Journalist::AddJournal(
+   const SmartPtr<Journal> jrnl
+)
 {
    DBG_ASSERT(IsValid(jrnl));
    std::string name = jrnl->Name();
 
    SmartPtr<Journal> temp = GetJournal(name);
    DBG_ASSERT(IsNull(temp));
-   if (IsValid(temp))
+   if( IsValid(temp) )
    {
       return false;
    }
@@ -264,14 +281,14 @@ bool Journalist::AddJournal(const SmartPtr<Journal> jrnl)
 SmartPtr<Journal> Journalist::AddFileJournal(
    const std::string& journal_name,
    const std::string& fname,
-   EJournalLevel default_level
+   EJournalLevel      default_level
 )
 {
    SmartPtr<FileJournal> temp = new FileJournal(journal_name, default_level);
 
    // Open the file (Note:, a fname of "stdout" is handled by the
    // Journal class to mean stdout, etc.
-   if (temp->Open(fname.c_str()) && AddJournal(GetRawPtr(temp)))
+   if( temp->Open(fname.c_str()) && AddJournal(GetRawPtr(temp)) )
    {
       return GetRawPtr(temp);
    }
@@ -280,7 +297,7 @@ SmartPtr<Journal> Journalist::AddFileJournal(
 
 void Journalist::FlushBuffer() const
 {
-   for (Index i = 0; i < (Index)journals_.size(); i++)
+   for( Index i = 0; i < (Index) journals_.size(); i++ )
    {
       journals_[i]->FlushBuffer();
    }
@@ -293,10 +310,10 @@ SmartPtr<Journal> Journalist::GetJournal(
    SmartPtr<Journal> retValue = NULL;
 
    // try to find the journal
-   for (Index i = 0; i < (Index)journals_.size(); i++)
+   for( Index i = 0; i < (Index) journals_.size(); i++ )
    {
       SmartPtr<Journal> tmp = journals_[i];
-      if (tmp->Name() == journal_name)
+      if( tmp->Name() == journal_name )
       {
          retValue = tmp;
          break;
@@ -308,7 +325,7 @@ SmartPtr<Journal> Journalist::GetJournal(
 
 void Journalist::DeleteAllJournals()
 {
-   for (Index i = 0; i < (Index)journals_.size(); i++)
+   for( Index i = 0; i < (Index) journals_.size(); i++ )
    {
       journals_[i] = NULL;
    }
@@ -321,19 +338,18 @@ void Journalist::DeleteAllJournals()
 
 Journal::Journal(
    const std::string& name,
-   EJournalLevel default_level
+   EJournalLevel      default_level
 )
-   :
-   name_(name)
+   : name_(name)
 {
-   for (Index i = 0; i < J_LAST_CATEGORY; i++)
+   for( Index i = 0; i < J_LAST_CATEGORY; i++ )
    {
       print_levels_[i] = default_level;
    }
 }
 
 Journal::~Journal()
-{}
+{ }
 
 std::string Journal::Name()
 {
@@ -342,10 +358,10 @@ std::string Journal::Name()
 
 bool Journal::IsAccepted(
    EJournalCategory category,
-   EJournalLevel level
+   EJournalLevel    level
 ) const
 {
-   if (print_levels_[(Index)category] >= (Index) level)
+   if( print_levels_[(Index) category] >= (Index) level )
    {
       return true;
    }
@@ -355,22 +371,21 @@ bool Journal::IsAccepted(
 
 void Journal::SetPrintLevel(
    EJournalCategory category,
-   EJournalLevel level)
+   EJournalLevel    level
+)
 {
-   print_levels_[(Index)category] = (Index) level;
+   print_levels_[(Index) category] = (Index) level;
 }
 
 void Journal::SetAllPrintLevels(
-   EJournalLevel level)
+   EJournalLevel level
+)
 {
-   for (Index category = (Index)J_DBG;
-        category < (Index)J_USER_APPLICATION;
-        category++)
+   for( Index category = (Index) J_DBG; category < (Index) J_USER_APPLICATION; category++ )
    {
       print_levels_[category] = (Index) level;
    }
 }
-
 
 ///////////////////////////////////////////////////////////////////////////
 //                 Implementation of the FileJournal class               //
@@ -378,16 +393,15 @@ void Journal::SetAllPrintLevels(
 
 FileJournal::FileJournal(
    const std::string& name,
-   EJournalLevel default_level
+   EJournalLevel      default_level
 )
-   :
-   Journal(name, default_level),
-   file_(NULL)
-{}
+   : Journal(name, default_level),
+     file_(NULL)
+{ }
 
 FileJournal::~FileJournal()
 {
-   if (file_ && file_ != stdout && file_ != stderr)
+   if( file_ && file_ != stdout && file_ != stderr )
    {
       // close the file
       fclose(file_);
@@ -395,22 +409,21 @@ FileJournal::~FileJournal()
    file_ = NULL;
 }
 
-
 bool FileJournal::Open(const char* fname)
 {
-   if (file_ && file_ != stdout && file_ != stderr)
+   if( file_ && file_ != stdout && file_ != stderr )
    {
       // file already opened, close it
       fclose(file_);
    }
    file_ = NULL;
 
-   if (strcmp("stdout", fname) == 0)
+   if( strcmp("stdout", fname) == 0 )
    {
       file_ = stdout;
       return true;
    }
-   else if (strcmp("stderr", fname) == 0)
+   else if( strcmp("stderr", fname) == 0 )
    {
       file_ = stderr;
       return true;
@@ -419,7 +432,7 @@ bool FileJournal::Open(const char* fname)
    {
       // open the file on disk
       file_ = fopen(fname, "w+");
-      if (file_)
+      if( file_ )
       {
          return true;
       }
@@ -428,23 +441,29 @@ bool FileJournal::Open(const char* fname)
    return false;
 }
 
-
-void FileJournal::PrintImpl(EJournalCategory category, EJournalLevel level,
-                            const char* str)
+void FileJournal::PrintImpl(
+   EJournalCategory category,
+   EJournalLevel    level,
+   const char*      str
+)
 {
    DBG_START_METH("Journal::Print", 0);
-   if (file_)
+   if( file_ )
    {
       fprintf(file_, "%s", str);
       DBG_EXEC(0, fflush(file_));
    }
 }
 
-void FileJournal::PrintfImpl(EJournalCategory category, EJournalLevel level,
-                             const char* pformat, va_list ap)
+void FileJournal::PrintfImpl(
+   EJournalCategory category,
+   EJournalLevel    level,
+   const char*      pformat,
+   va_list          ap
+)
 {
    DBG_START_METH("Journal::Printf", 0);
-   if (file_)
+   if( file_ )
    {
       vfprintf(file_, pformat, ap);
       DBG_EXEC(0, fflush(file_));
@@ -453,12 +472,11 @@ void FileJournal::PrintfImpl(EJournalCategory category, EJournalLevel level,
 
 void FileJournal::FlushBufferImpl()
 {
-   if (file_)
+   if( file_ )
    {
       fflush(file_);
    }
 }
-
 
 ///////////////////////////////////////////////////////////////////////////
 //                 Implementation of the StreamJournal class               //
@@ -466,34 +484,43 @@ void FileJournal::FlushBufferImpl()
 
 StreamJournal::StreamJournal(
    const std::string& name,
-   EJournalLevel default_level
+   EJournalLevel      default_level
 )
-   :
-   Journal(name, default_level),
-   os_(NULL)
-{}
+   : Journal(name, default_level),
+     os_(NULL)
+{
+}
 
-void StreamJournal::SetOutputStream(std::ostream* os)
+void StreamJournal::SetOutputStream(
+   std::ostream* os
+)
 {
    os_ = os;
 }
 
-void StreamJournal::PrintImpl(EJournalCategory category, EJournalLevel level,
-                              const char* str)
+void StreamJournal::PrintImpl(
+   EJournalCategory category,
+   EJournalLevel    level,
+   const char*      str
+)
 {
    DBG_START_METH("StreamJournal::PrintImpl", 0);
-   if (os_)
+   if( os_ )
    {
       *os_ << str;
       DBG_EXEC(0, *os_ << std::flush);
    }
 }
 
-void StreamJournal::PrintfImpl(EJournalCategory category, EJournalLevel level,
-                               const char* pformat, va_list ap)
+void StreamJournal::PrintfImpl(
+   EJournalCategory category,
+   EJournalLevel    level,
+   const char*      pformat,
+   va_list          ap
+)
 {
    DBG_START_METH("StreamJournal::PrintfImpl", 0);
-   if (os_)
+   if( os_ )
    {
       vsprintf(buffer_, pformat, ap);
       *os_ << buffer_;
@@ -503,7 +530,7 @@ void StreamJournal::PrintfImpl(EJournalCategory category, EJournalLevel level,
 
 void StreamJournal::FlushBufferImpl()
 {
-   if (os_)
+   if( os_ )
    {
       *os_ << std::flush;
    }
