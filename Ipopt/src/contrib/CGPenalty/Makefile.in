@@ -637,12 +637,12 @@ astyle: $(ASTYLE_FILES)
 
 .hpp.hppbak:
 	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
+	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
 	touch $@
 
 .cpp.cppbak:
 	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
+	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
 	touch $@
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

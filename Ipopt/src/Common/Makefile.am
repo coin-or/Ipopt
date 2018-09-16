@@ -56,6 +56,7 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)`
 # Astyle stuff
 
 ASTYLE_FILES = \
+    IpoptConfig.hbak \
 	IpCachedResults.hppbak \
 	IpDebug.cppbak IpDebug.hppbak \
 	IpException.hppbak \
@@ -75,16 +76,21 @@ ASTYLEFLAGS = @ASTYLEFLAGS@
 
 DISTCLEANFILES = $(ASTYLE_FILES)
 
-SUFFIXES = .cppbak .hppbak
+SUFFIXES = .cppbak .hppbak .hbak
 
 astyle: $(ASTYLE_FILES)
 
+.h.hbak:
+	mv $< $@
+	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
+	touch $@
+
 .hpp.hppbak:
 	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
+	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
 	touch $@
 
 .cpp.cppbak:
 	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
+	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
 	touch $@

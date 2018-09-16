@@ -363,11 +363,18 @@ libLinearSolverLoader_la_DEPENDENCIES =
 includeipoptdir = $(includedir)/coin
 includeipopt_HEADERS = HSLLoader.h PardisoLoader.h
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
-DISTCLEANFILES = 
+
+# Astyle stuff
+ASTYLE_FILES = \
+    LibraryHandler.cbak LibraryHandler.hbak \
+    HSLLoader.cbak HSLLoader.hbak
+
+DISTCLEANFILES = $(ASTYLE_FILES)
+SUFFIXES = .cppbak .hppbak
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .c .lo .o .obj
+.SUFFIXES: .cppbak .hppbak .c .cbak .h .hbak .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -638,6 +645,18 @@ uninstall-am: uninstall-includeipoptHEADERS uninstall-info-am
 	tags uninstall uninstall-am uninstall-includeipoptHEADERS \
 	uninstall-info-am
 
+
+astyle: $(ASTYLE_FILES)
+
+.h.hbak:
+	mv $< $@
+	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
+	touch $@
+
+.c.cbak:
+	mv $< $@
+	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
+	touch $@
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

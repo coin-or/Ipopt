@@ -391,6 +391,7 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)`
 
 # Astyle stuff
 ASTYLE_FILES = \
+    IpoptConfig.hbak \
 	IpCachedResults.hppbak \
 	IpDebug.cppbak IpDebug.hppbak \
 	IpException.hppbak \
@@ -406,12 +407,12 @@ ASTYLE_FILES = \
 	IpUtils.cppbak IpUtils.hppbak
 
 DISTCLEANFILES = $(ASTYLE_FILES)
-SUFFIXES = .cppbak .hppbak
+SUFFIXES = .cppbak .hppbak .hbak
 all: config.h config_ipopt.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
-.SUFFIXES: .cppbak .hppbak .cpp .hpp .lo .o .obj
+.SUFFIXES: .cppbak .hppbak .hbak .cpp .h .hpp .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -724,14 +725,19 @@ uninstall-local:
 
 astyle: $(ASTYLE_FILES)
 
+.h.hbak:
+	mv $< $@
+	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
+	touch $@
+
 .hpp.hppbak:
 	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
+	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
 	touch $@
 
 .cpp.cppbak:
 	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
+	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
 	touch $@
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

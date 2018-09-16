@@ -698,8 +698,9 @@ AC_SUBST(MWMA57PATH)
 
 ASTYLE=astyle
 AC_SUBST(ASTYLE)
-ASTYLEFLAGS="--mode=c --indent=spaces=2 --indent-cases --indent-namespaces --min-conditional-indent=1 --brackets=linux --brackets=break-closing --convert-tabs"
+ASTYLEFLAGS="--mode=c -A1 --indent=spaces=3 --indent-switches --min-conditional-indent=1 --convert-tabs --align-pointer=type --pad-oper --add-brackets"
 AC_SUBST(ASTYLEFLAGS)
+
 
 #########################
 # Makefile conditionals #
