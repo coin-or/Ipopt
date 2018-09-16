@@ -16,81 +16,92 @@
 namespace Ipopt
 {
 
-  Index DebugJournalistWrapper::indentation_level_ = 0;
-  Journalist* DebugJournalistWrapper::jrnl_ = NULL;
+Index DebugJournalistWrapper::indentation_level_ = 0;
+Journalist* DebugJournalistWrapper::jrnl_ = NULL;
 
-  DebugJournalistWrapper::DebugJournalistWrapper(
-    std::string func_name,
-    Index verbose_level)
-      :
-      func_name_(func_name),
-      verbose_level_(verbose_level),
-      method_owner_(NULL)
-  {
-    if (jrnl_==NULL) {
+DebugJournalistWrapper::DebugJournalistWrapper(
+   std::string func_name,
+   Index verbose_level)
+   :
+   func_name_(func_name),
+   verbose_level_(verbose_level),
+   method_owner_(NULL)
+{
+   if (jrnl_ == NULL)
+   {
       verbose_level_ = 0;
       return;
-    }
-    DebugPrintf(1, "-> Calling to: %s\n", func_name_.c_str());
-    if (verbose_level_>0) {
+   }
+   DebugPrintf(1, "-> Calling to: %s\n", func_name_.c_str());
+   if (verbose_level_ > 0)
+   {
       indentation_level_++;
-    }
-  }
+   }
+}
 
-  DebugJournalistWrapper::DebugJournalistWrapper(
-    std::string func_name, Index verbose_level,
-    const void* const method_owner)
-      :
-      func_name_(func_name),
-      verbose_level_(verbose_level),
-      method_owner_(method_owner)
-  {
-    if (jrnl_==NULL) {
+DebugJournalistWrapper::DebugJournalistWrapper(
+   std::string func_name, Index verbose_level,
+   const void* const method_owner)
+   :
+   func_name_(func_name),
+   verbose_level_(verbose_level),
+   method_owner_(method_owner)
+{
+   if (jrnl_ == NULL)
+   {
       verbose_level_ = 0;
       return;
-    }
-    DebugPrintf(1, "-> Calling to: %s in obj: 0x%x\n", func_name_.c_str(),
-                method_owner_);
-    if (verbose_level_>0) {
+   }
+   DebugPrintf(1, "-> Calling to: %s in obj: 0x%x\n", func_name_.c_str(),
+               method_owner_);
+   if (verbose_level_ > 0)
+   {
       indentation_level_++;
-    }
-  }
+   }
+}
 
-  DebugJournalistWrapper::~DebugJournalistWrapper()
-  {
-    if (verbose_level_>0) {
+DebugJournalistWrapper::~DebugJournalistWrapper()
+{
+   if (verbose_level_ > 0)
+   {
       indentation_level_--;
-    }
-    if (jrnl_) {
-      if (method_owner_ == NULL) {
-        DebugPrintf(1, "<- Returning from : %s\n", func_name_.c_str());
+   }
+   if (jrnl_)
+   {
+      if (method_owner_ == NULL)
+      {
+         DebugPrintf(1, "<- Returning from : %s\n", func_name_.c_str());
       }
-      else {
-        DebugPrintf(1, "<- Returning from : %s in obj: 0x%x\n",
-                    func_name_.c_str(), method_owner_);
+      else
+      {
+         DebugPrintf(1, "<- Returning from : %s in obj: 0x%x\n",
+                     func_name_.c_str(), method_owner_);
       }
-    }
-  }
+   }
+}
 
 
-  void DebugJournalistWrapper::SetJournalist(Journalist* jrnl)
-  {
+void DebugJournalistWrapper::SetJournalist(Journalist* jrnl)
+{
 
-    if (jrnl == NULL) {
+   if (jrnl == NULL)
+   {
       jrnl_->Printf(J_ERROR, J_DBG,
                     "# Setting Journalist to NULL in DebugJournalistWrapper.\n");
       jrnl_ = NULL;
-    }
-    else if (!jrnl_) {
+   }
+   else if (!jrnl_)
+   {
       jrnl_ = jrnl;
-    }
-  }
+   }
+}
 
 
-  void DebugJournalistWrapper::DebugPrintf(Index verbosity, const char* pformat, ...)
-  {
+void DebugJournalistWrapper::DebugPrintf(Index verbosity, const char* pformat, ...)
+{
 
-    if (Verbosity() >= verbosity) {
+   if (Verbosity() >= verbosity)
+   {
       va_list(ap);
 
       va_start(ap, pformat);
@@ -100,8 +111,8 @@ namespace Ipopt
       jrnl_->VPrintf(J_ERROR, J_DBG, pformat, ap);
 
       va_end(ap);
-    }
-  }
+   }
+}
 
 } // namespace Ipopt
 

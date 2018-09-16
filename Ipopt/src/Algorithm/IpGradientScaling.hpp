@@ -14,38 +14,38 @@
 
 namespace Ipopt
 {
-  /** This class does problem scaling by setting the
-   *  scaling parameters based on the maximum of the
-   *  gradient at the user provided initial point.
-   */
-  class GradientScaling : public StandardScalingBase
-  {
-  public:
-    /**@name Constructors/Destructors */
-    //@{
-    GradientScaling(const SmartPtr<NLP>& nlp)
-        :
-        StandardScalingBase(),
-        nlp_(nlp)
-    {}
+/** This class does problem scaling by setting the
+ *  scaling parameters based on the maximum of the
+ *  gradient at the user provided initial point.
+ */
+class GradientScaling : public StandardScalingBase
+{
+public:
+   /**@name Constructors/Destructors */
+   //@{
+   GradientScaling(const SmartPtr<NLP>& nlp)
+      :
+      StandardScalingBase(),
+      nlp_(nlp)
+   {}
 
-    /** Default destructor */
-    virtual ~GradientScaling()
-    {}
-    //@}
+   /** Default destructor */
+   virtual ~GradientScaling()
+   {}
+   //@}
 
-    /** Methods for IpoptType */
-    //@{
-    /** Register the options for this class */
-    static void RegisterOptions(const SmartPtr<RegisteredOptions>& roptions);
-    //@}
+   /** Methods for IpoptType */
+   //@{
+   /** Register the options for this class */
+   static void RegisterOptions(const SmartPtr<RegisteredOptions>& roptions);
+   //@}
 
-  protected:
-    /** Initialize the object from the options */
-    bool InitializeImpl(const OptionsList& options,
-                        const std::string& prefix);
+protected:
+   /** Initialize the object from the options */
+   bool InitializeImpl(const OptionsList& options,
+                       const std::string& prefix);
 
-    virtual void DetermineScalingParametersImpl(
+   virtual void DetermineScalingParametersImpl(
       const SmartPtr<const VectorSpace> x_space,
       const SmartPtr<const VectorSpace> c_space,
       const SmartPtr<const VectorSpace> d_space,
@@ -59,38 +59,38 @@ namespace Ipopt
       SmartPtr<Vector>& dc,
       SmartPtr<Vector>& dd);
 
-  private:
+private:
 
-    /**@name Default Compiler Generated Methods
-     * (Hidden to avoid implicit creation/calling).
-     * These methods are not implemented and 
-     * we do not want the compiler to implement
-     * them for us, so we declare them private
-     * and do not define them. This ensures that
-     * they will not be implicitly created/called. */
-    //@{
+   /**@name Default Compiler Generated Methods
+    * (Hidden to avoid implicit creation/calling).
+    * These methods are not implemented and
+    * we do not want the compiler to implement
+    * them for us, so we declare them private
+    * and do not define them. This ensures that
+    * they will not be implicitly created/called. */
+   //@{
 
-    /** Copy Constructor */
-    GradientScaling(const GradientScaling&);
+   /** Copy Constructor */
+   GradientScaling(const GradientScaling&);
 
-    /** Overloaded Equals Operator */
-    void operator=(const GradientScaling&);
-    //@}
+   /** Overloaded Equals Operator */
+   void operator=(const GradientScaling&);
+   //@}
 
-    /** pointer to the NLP to get scaling parameters */
-    SmartPtr<NLP> nlp_;
+   /** pointer to the NLP to get scaling parameters */
+   SmartPtr<NLP> nlp_;
 
-    /** maximum allowed gradient before scaling is performed */
-    Number scaling_max_gradient_;
+   /** maximum allowed gradient before scaling is performed */
+   Number scaling_max_gradient_;
 
-    /** target size of norm for objective gradient */
-    Number scaling_obj_target_gradient_;
+   /** target size of norm for objective gradient */
+   Number scaling_obj_target_gradient_;
 
-    /** target size of norm for constraint gradients */
-    Number scaling_constr_target_gradient_;
+   /** target size of norm for constraint gradients */
+   Number scaling_constr_target_gradient_;
 
-    /** minimum value of a scaling parameter */
-    Number scaling_min_value_;
-  };
+   /** minimum value of a scaling parameter */
+   Number scaling_min_value_;
+};
 } // namespace Ipopt
 #endif

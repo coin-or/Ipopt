@@ -13,9 +13,9 @@
 
 namespace Ipopt
 {
-  class RegisteredOptions;
+class RegisteredOptions;
 
-  void RegisterOptions_Algorithm(const SmartPtr<RegisteredOptions>& roptions);
+void RegisterOptions_Algorithm(const SmartPtr<RegisteredOptions>& roptions);
 
 } // namespace Ipopt
 

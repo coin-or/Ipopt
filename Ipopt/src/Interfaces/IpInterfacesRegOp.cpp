@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2005-08-16
 
 #include "IpInterfacesRegOp.hpp"
@@ -14,13 +12,15 @@
 namespace Ipopt
 {
 
-  void RegisterOptions_Interfaces(const SmartPtr<RegisteredOptions>& roptions)
-  {
-    roptions->SetRegisteringCategory("Uncategorized");
-    IpoptApplication::RegisterOptions(roptions);
-    roptions->SetRegisteringCategory("Uncategorized");
-    TNLPAdapter::RegisterOptions(roptions);
-    roptions->SetRegisteringCategory("Uncategorized");
-  }
+void RegisterOptions_Interfaces(
+   const SmartPtr<RegisteredOptions>& roptions
+)
+{
+   roptions->SetRegisteringCategory("Uncategorized");
+   IpoptApplication::RegisterOptions(roptions);
+   roptions->SetRegisteringCategory("Uncategorized");
+   TNLPAdapter::RegisterOptions(roptions);
+   roptions->SetRegisteringCategory("Uncategorized");
+}
 
 } // namespace Ipopt

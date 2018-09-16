@@ -15,46 +15,46 @@
 namespace Ipopt
 {
 
-  /** Class for the method for computing scaling factors for symmetric
-   *  matrices in triplet format, using MC19.
-   */
-  class Mc19TSymScalingMethod: public TSymScalingMethod
-  {
-  public:
-    /** @name Constructor/Destructor */
-    //@{
-    Mc19TSymScalingMethod()
-    {}
+/** Class for the method for computing scaling factors for symmetric
+ *  matrices in triplet format, using MC19.
+ */
+class Mc19TSymScalingMethod: public TSymScalingMethod
+{
+public:
+   /** @name Constructor/Destructor */
+   //@{
+   Mc19TSymScalingMethod()
+   {}
 
-    virtual ~Mc19TSymScalingMethod()
-    {}
-    //@}
+   virtual ~Mc19TSymScalingMethod()
+   {}
+   //@}
 
-    /** overloaded from AlgorithmStrategyObject */
-    virtual bool InitializeImpl(const OptionsList& options,
-                                const std::string& prefix);
+   /** overloaded from AlgorithmStrategyObject */
+   virtual bool InitializeImpl(const OptionsList& options,
+                               const std::string& prefix);
 
-    /** Method for computing the symmetric scaling factors, given the
-     *  symmtric matrix in triplet (MA27) format. */
-    virtual bool ComputeSymTScalingFactors(Index n,
-                                           Index nnz,
-                                           const ipfint* airn,
-                                           const ipfint* ajcn,
-                                           const double* a,
-                                           double* scaling_factors);
-  private:
-    /**@name Default Compiler Generated Methods (Hidden to avoid
-     * implicit creation/calling).  These methods are not implemented
-     * and we do not want the compiler to implement them for us, so we
-     * declare them private and do not define them. This ensures that
-     * they will not be implicitly created/called. */
-    //@{
-    /** Copy Constructor */
-    Mc19TSymScalingMethod(const Mc19TSymScalingMethod&);
+   /** Method for computing the symmetric scaling factors, given the
+    *  symmtric matrix in triplet (MA27) format. */
+   virtual bool ComputeSymTScalingFactors(Index n,
+                                          Index nnz,
+                                          const ipfint* airn,
+                                          const ipfint* ajcn,
+                                          const double* a,
+                                          double* scaling_factors);
+private:
+   /**@name Default Compiler Generated Methods (Hidden to avoid
+    * implicit creation/calling).  These methods are not implemented
+    * and we do not want the compiler to implement them for us, so we
+    * declare them private and do not define them. This ensures that
+    * they will not be implicitly created/called. */
+   //@{
+   /** Copy Constructor */
+   Mc19TSymScalingMethod(const Mc19TSymScalingMethod&);
 
-    /** Overloaded Equals Operator */
-    void operator=(const Mc19TSymScalingMethod&);
-  };
+   /** Overloaded Equals Operator */
+   void operator=(const Mc19TSymScalingMethod&);
+};
 
 
 } // namespace Ipopt

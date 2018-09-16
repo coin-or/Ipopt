@@ -18,7 +18,7 @@ namespace Ipopt
 {
 
   /** Filter line search.  This class implements the filter line
-   *  search procedure. 
+   *  search procedure.
    */
   class FilterLSAcceptor : public BacktrackingLSAcceptor
   {
@@ -127,7 +127,7 @@ namespace Ipopt
   private:
     /**@name Default Compiler Generated Methods
      * (Hidden to avoid implicit creation/calling).
-     * These methods are not implemented and 
+     * These methods are not implemented and
      * we do not want the compiler to implement
      * them for us, so we declare them private
      * and do not define them. This ensures that
@@ -203,65 +203,65 @@ namespace Ipopt
       NO_CORRECTOR=0,
       AFFINE_CORRECTOR,
       PRIMAL_DUAL_CORRECTOR
-    };
-    /** Type of corrector steps that should be tried. */
-    CorrectorTypeEnum corrector_type_;
-    /** parameter in heurstic that determines whether corrector step
-    should be tried. */
-    Number corrector_compl_avrg_red_fact_;
-    /** Flag indicating whether the corrector should be skipped in an
-     *  iteration in which negative curvature is detected */
-    bool skip_corr_if_neg_curv_;
-    /** Flag indicating whether the corrector should be skipped during
-     *  the monotone mu mode. */
-    bool skip_corr_in_monotone_mode_;
-    /** maximal allowed number of filter resets. */
-    Index max_filter_resets_;
-    /** interation counter trigger for filter reset.  If the
-     *  successive number of iterations in which the last rejected
-     *  step was due to the filter, and max_filter_resets is non-zero,
-     *  then the filter is reset. */
-    Index filter_reset_trigger_;
-    //@}
+   };
+   /** Type of corrector steps that should be tried. */
+   CorrectorTypeEnum corrector_type_;
+   /** parameter in heurstic that determines whether corrector step
+   should be tried. */
+   Number corrector_compl_avrg_red_fact_;
+   /** Flag indicating whether the corrector should be skipped in an
+    *  iteration in which negative curvature is detected */
+   bool skip_corr_if_neg_curv_;
+   /** Flag indicating whether the corrector should be skipped during
+    *  the monotone mu mode. */
+   bool skip_corr_in_monotone_mode_;
+   /** maximal allowed number of filter resets. */
+   Index max_filter_resets_;
+   /** interation counter trigger for filter reset.  If the
+    *  successive number of iterations in which the last rejected
+    *  step was due to the filter, and max_filter_resets is non-zero,
+    *  then the filter is reset. */
+   Index filter_reset_trigger_;
+   //@}
 
-    /** @name Information related to watchdog procedure */
-    //@{
-    /** Constraint violation at the point with respect to which
-     *  progress is to be made */
-    Number reference_theta_;
-    /** Barrier objective function at the point with respect to which
-     *  progress is to be made */
-    Number reference_barr_;
-    /** Barrier gradient transpose search direction at the point with
-     *  respect to which progress is to be made */
-    Number reference_gradBarrTDelta_;
-    /** Constraint violation at reference point */
-    Number watchdog_theta_;
-    /** Barrier objective function at reference point */
-    Number watchdog_barr_;
-    /** Barrier gradient transpose search direction at reference point */
-    Number watchdog_gradBarrTDelta_;
-    //@}
+   /** @name Information related to watchdog procedure */
+   //@{
+   /** Constraint violation at the point with respect to which
+    *  progress is to be made */
+   Number reference_theta_;
+   /** Barrier objective function at the point with respect to which
+    *  progress is to be made */
+   Number reference_barr_;
+   /** Barrier gradient transpose search direction at the point with
+    *  respect to which progress is to be made */
+   Number reference_gradBarrTDelta_;
+   /** Constraint violation at reference point */
+   Number watchdog_theta_;
+   /** Barrier objective function at reference point */
+   Number watchdog_barr_;
+   /** Barrier gradient transpose search direction at reference point */
+   Number watchdog_gradBarrTDelta_;
+   //@}
 
-    /** Filter with entries */
-    Filter filter_;
+   /** Filter with entries */
+   Filter filter_;
 
-    /** @name Filter reset stuff */
-    //@{
-    /** True, if last rejected was due to the filter. */
-    Number last_rejection_due_to_filter_;
-    /** Counter of successive iterations in which filter was reason
-     *  for last rejection. */
-    Index count_successive_filter_rejections_;
-    /** Counter for the filter resets done so far. */
-    Index n_filter_resets_;
-    //@}
+   /** @name Filter reset stuff */
+   //@{
+   /** True, if last rejected was due to the filter. */
+   Number last_rejection_due_to_filter_;
+   /** Counter of successive iterations in which filter was reason
+    *  for last rejection. */
+   Index count_successive_filter_rejections_;
+   /** Counter for the filter resets done so far. */
+   Index n_filter_resets_;
+   //@}
 
-    /** @name Strategy objective that are used */
-    //@{
-    SmartPtr<PDSystemSolver> pd_solver_;
-    //@}
-  };
+   /** @name Strategy objective that are used */
+   //@{
+   SmartPtr<PDSystemSolver> pd_solver_;
+   //@}
+};
 
 } // namespace Ipopt
 

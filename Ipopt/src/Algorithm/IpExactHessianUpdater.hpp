@@ -14,48 +14,48 @@
 namespace Ipopt
 {
 
-  /** Implementation of the HessianUpdater for the use of exact second
-   *  derivatives.
-   */
-  class ExactHessianUpdater : public HessianUpdater
-  {
-  public:
-    /**@name Constructors/Destructors */
-    //@{
-    /** Default Constructor */
-    ExactHessianUpdater()
-    {}
+/** Implementation of the HessianUpdater for the use of exact second
+ *  derivatives.
+ */
+class ExactHessianUpdater : public HessianUpdater
+{
+public:
+   /**@name Constructors/Destructors */
+   //@{
+   /** Default Constructor */
+   ExactHessianUpdater()
+   {}
 
-    /** Default destructor */
-    virtual ~ExactHessianUpdater()
-    {}
-    //@}
+   /** Default destructor */
+   virtual ~ExactHessianUpdater()
+   {}
+   //@}
 
-    /** overloaded from AlgorithmStrategyObject */
-    virtual bool InitializeImpl(const OptionsList& options,
-                                const std::string& prefix);
+   /** overloaded from AlgorithmStrategyObject */
+   virtual bool InitializeImpl(const OptionsList& options,
+                               const std::string& prefix);
 
-    /** Update the Hessian based on the current information in IpData.
-     */
-    virtual void UpdateHessian();
+   /** Update the Hessian based on the current information in IpData.
+    */
+   virtual void UpdateHessian();
 
-  private:
-    /**@name Default Compiler Generated Methods
-     * (Hidden to avoid implicit creation/calling).
-     * These methods are not implemented and 
-     * we do not want the compiler to implement
-     * them for us, so we declare them private
-     * and do not define them. This ensures that
-     * they will not be implicitly created/called. */
-    //@{
-    /** Copy Constructor */
-    ExactHessianUpdater(const ExactHessianUpdater&);
+private:
+   /**@name Default Compiler Generated Methods
+    * (Hidden to avoid implicit creation/calling).
+    * These methods are not implemented and
+    * we do not want the compiler to implement
+    * them for us, so we declare them private
+    * and do not define them. This ensures that
+    * they will not be implicitly created/called. */
+   //@{
+   /** Copy Constructor */
+   ExactHessianUpdater(const ExactHessianUpdater&);
 
-    /** Overloaded Equals Operator */
-    void operator=(const ExactHessianUpdater&);
-    //@}
+   /** Overloaded Equals Operator */
+   void operator=(const ExactHessianUpdater&);
+   //@}
 
-  };
+};
 
 } // namespace Ipopt
 

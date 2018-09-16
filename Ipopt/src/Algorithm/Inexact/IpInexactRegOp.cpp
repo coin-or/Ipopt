@@ -23,19 +23,19 @@
 namespace Ipopt
 {
 
-  void RegisterOptions_Inexact(const SmartPtr<RegisteredOptions>& roptions)
-  {
-    roptions->SetRegisteringCategory("Inexact Step Computation");
-    InexactAlgorithmBuilder::RegisterOptions(roptions);
-    InexactSearchDirCalculator::RegisterOptions(roptions);
-    InexactDoglegNormalStep::RegisterOptions(roptions);
-    InexactNewtonNormalStep::RegisterOptions(roptions);
-    InexactPDSolver::RegisterOptions(roptions);
-    InexactLSAcceptor::RegisterOptions(roptions);
-    InexactCq::RegisterOptions(roptions);
-    IterativePardisoSolverInterface::RegisterOptions(roptions);
-    InexactNormalTerminationTester::RegisterOptions(roptions);
-    InexactPDTerminationTester::RegisterOptions(roptions);
-  }
+void RegisterOptions_Inexact(const SmartPtr<RegisteredOptions>& roptions)
+{
+   roptions->SetRegisteringCategory("Inexact Step Computation");
+   InexactAlgorithmBuilder::RegisterOptions(roptions);
+   InexactSearchDirCalculator::RegisterOptions(roptions);
+   InexactDoglegNormalStep::RegisterOptions(roptions);
+   InexactNewtonNormalStep::RegisterOptions(roptions);
+   InexactPDSolver::RegisterOptions(roptions);
+   InexactLSAcceptor::RegisterOptions(roptions);
+   InexactCq::RegisterOptions(roptions);
+   IterativePardisoSolverInterface::RegisterOptions(roptions);
+   InexactNormalTerminationTester::RegisterOptions(roptions);
+   InexactPDTerminationTester::RegisterOptions(roptions);
+}
 
 } // namespace Ipopt

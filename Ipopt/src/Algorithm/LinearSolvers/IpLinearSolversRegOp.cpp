@@ -32,53 +32,53 @@
 namespace Ipopt
 {
 
-  void RegisterOptions_LinearSolvers(const SmartPtr<RegisteredOptions>& roptions)
-  {
-    roptions->SetRegisteringCategory("Linear Solver");
-    TSymLinearSolver::RegisterOptions(roptions);
+void RegisterOptions_LinearSolvers(const SmartPtr<RegisteredOptions>& roptions)
+{
+   roptions->SetRegisteringCategory("Linear Solver");
+   TSymLinearSolver::RegisterOptions(roptions);
 #if defined(COINHSL_HAS_MA27) || defined(HAVE_LINEARSOLVERLOADER)
-    roptions->SetRegisteringCategory("MA27 Linear Solver");
-    Ma27TSolverInterface::RegisterOptions(roptions);
+   roptions->SetRegisteringCategory("MA27 Linear Solver");
+   Ma27TSolverInterface::RegisterOptions(roptions);
 #endif
 #if defined(COINHSL_HAS_MA57) || defined(HAVE_LINEARSOLVERLOADER)
-    roptions->SetRegisteringCategory("MA57 Linear Solver");
-    Ma57TSolverInterface::RegisterOptions(roptions);
+   roptions->SetRegisteringCategory("MA57 Linear Solver");
+   Ma57TSolverInterface::RegisterOptions(roptions);
 #endif
 #if defined(COINHSL_HAS_MA77) || defined(HAVE_LINEARSOLVERLOADER)
-    roptions->SetRegisteringCategory("MA77 Linear Solver");
-    Ma77SolverInterface::RegisterOptions(roptions);
+   roptions->SetRegisteringCategory("MA77 Linear Solver");
+   Ma77SolverInterface::RegisterOptions(roptions);
 #endif
 #if defined(COINHSL_HAS_MA86) || defined(HAVE_LINEARSOLVERLOADER)
-    roptions->SetRegisteringCategory("MA86 Linear Solver");
-    Ma86SolverInterface::RegisterOptions(roptions);
+   roptions->SetRegisteringCategory("MA86 Linear Solver");
+   Ma86SolverInterface::RegisterOptions(roptions);
 #endif
 #if defined(COINHSL_HAS_MA97) || defined(HAVE_LINEARSOLVERLOADER)
-    roptions->SetRegisteringCategory("MA97 Linear Solver");
-    Ma97SolverInterface::RegisterOptions(roptions);
+   roptions->SetRegisteringCategory("MA97 Linear Solver");
+   Ma97SolverInterface::RegisterOptions(roptions);
 #endif
 
 #ifdef COIN_HAS_MUMPS
-    roptions->SetRegisteringCategory("Mumps Linear Solver");
-    MumpsSolverInterface::RegisterOptions(roptions);
+   roptions->SetRegisteringCategory("Mumps Linear Solver");
+   MumpsSolverInterface::RegisterOptions(roptions);
 #endif
 
 #if defined(HAVE_PARDISO) || defined(HAVE_LINEARSOLVERLOADER)
-    roptions->SetRegisteringCategory("Pardiso Linear Solver");
-    PardisoSolverInterface::RegisterOptions(roptions);
+   roptions->SetRegisteringCategory("Pardiso Linear Solver");
+   PardisoSolverInterface::RegisterOptions(roptions);
 #endif
 
 #ifdef HAVE_WSMP
-    roptions->SetRegisteringCategory("WSMP Linear Solver");
-    WsmpSolverInterface::RegisterOptions(roptions);
-    IterativeWsmpSolverInterface::RegisterOptions(roptions);
+   roptions->SetRegisteringCategory("WSMP Linear Solver");
+   WsmpSolverInterface::RegisterOptions(roptions);
+   IterativeWsmpSolverInterface::RegisterOptions(roptions);
 #endif
 
 #if defined(COINHSL_HAS_MA28) || defined(HAVE_LINEARSOLVERLOADER)
-    roptions->SetRegisteringCategory("MA28 Linear Solver");
-    Ma28TDependencyDetector::RegisterOptions(roptions);
+   roptions->SetRegisteringCategory("MA28 Linear Solver");
+   Ma28TDependencyDetector::RegisterOptions(roptions);
 #endif
 
-    roptions->SetRegisteringCategory("Uncategorized");
-  }
+   roptions->SetRegisteringCategory("Uncategorized");
+}
 
 } // namespace Ipopt

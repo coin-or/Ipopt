@@ -19,104 +19,104 @@
 namespace Ipopt
 {
 
-  /** This is the base class for all exceptions.  The easiest way to
-   *   use this class is by means of the following macros:
-   *
-   * \verbatim
+/** This is the base class for all exceptions.  The easiest way to
+ *   use this class is by means of the following macros:
+ *
+ * \verbatim
 
-     DECLARE_STD_EXCEPTION(ExceptionType);
-     \endverbatim
-   *
-   * This macro defines a new class with the name ExceptionType,
-   * inherited from the base class IpoptException.  After this,
-   * exceptions of this type can be thrown using
-   *
-   * \verbatim
+   DECLARE_STD_EXCEPTION(ExceptionType);
+   \endverbatim
+ *
+ * This macro defines a new class with the name ExceptionType,
+ * inherited from the base class IpoptException.  After this,
+ * exceptions of this type can be thrown using
+ *
+ * \verbatim
 
-     THROW_EXCEPTION(ExceptionType, Message);
-     \endverbatim
-   *
-   * where Message is a std::string with a message that gives an
-   * indication of what caused the exception.  Exceptions can also be
-   * thrown using the macro
-   *
-   * \verbatim
+   THROW_EXCEPTION(ExceptionType, Message);
+   \endverbatim
+ *
+ * where Message is a std::string with a message that gives an
+ * indication of what caused the exception.  Exceptions can also be
+ * thrown using the macro
+ *
+ * \verbatim
 
-     ASSERT_EXCEPTION(Condition, ExceptionType, Message);
-     \endverbatim
-   *
-   * where Conditions is an expression.  If Condition evaluates to
-   * false, then the exception of the type ExceptionType is thrown
-   * with Message.
-   *
-   * When an exception is caught, the method ReportException can be
-   * used to write the information about the exception to the
-   * Journalist, using the level J_ERROR and the category J_MAIN.
-   *
-   */
-  class IpoptException
-  {
-  public:
-    /**@name Constructors/Destructors */
-    //@{
-    /** Constructor */
-    IpoptException(std::string msg, std::string file_name, Index line_number, std::string type="IpoptException")
-        :
-        msg_(msg),
-        file_name_(file_name),
-        line_number_(line_number),
-        type_(type)
-    {}
+   ASSERT_EXCEPTION(Condition, ExceptionType, Message);
+   \endverbatim
+ *
+ * where Conditions is an expression.  If Condition evaluates to
+ * false, then the exception of the type ExceptionType is thrown
+ * with Message.
+ *
+ * When an exception is caught, the method ReportException can be
+ * used to write the information about the exception to the
+ * Journalist, using the level J_ERROR and the category J_MAIN.
+ *
+ */
+class IpoptException
+{
+public:
+   /**@name Constructors/Destructors */
+   //@{
+   /** Constructor */
+   IpoptException(std::string msg, std::string file_name, Index line_number, std::string type = "IpoptException")
+      :
+      msg_(msg),
+      file_name_(file_name),
+      line_number_(line_number),
+      type_(type)
+   {}
 
-    /** Copy Constructor */
-    IpoptException(const IpoptException& copy)
-        :
-        msg_(copy.msg_),
-        file_name_(copy.file_name_),
-        line_number_(copy.line_number_),
-        type_(copy.type_)
-    {}
+   /** Copy Constructor */
+   IpoptException(const IpoptException& copy)
+      :
+      msg_(copy.msg_),
+      file_name_(copy.file_name_),
+      line_number_(copy.line_number_),
+      type_(copy.type_)
+   {}
 
-    /** Default destructor */
-    virtual ~IpoptException()
-    {}
-    //@}
+   /** Default destructor */
+   virtual ~IpoptException()
+   {}
+   //@}
 
-    /** Method to report the exception to a journalist */
-    void ReportException(const Journalist& jnlst,
-                         EJournalLevel level = J_ERROR) const
-    {
+   /** Method to report the exception to a journalist */
+   void ReportException(const Journalist& jnlst,
+                        EJournalLevel level = J_ERROR) const
+   {
       jnlst.Printf(level, J_MAIN,
                    "Exception of type: %s in file \"%s\" at line %d:\n Exception message: %s\n",
                    type_.c_str(), file_name_.c_str(),  line_number_, msg_.c_str());
-    }
+   }
 
-    const std::string& Message() const
-    {
+   const std::string& Message() const
+   {
       return msg_;
-    }
+   }
 
-  private:
-    /**@name Default Compiler Generated Methods
-     * (Hidden to avoid implicit creation/calling).
-     * These methods are not implemented and 
-     * we do not want the compiler to implement
-     * them for us, so we declare them private
-     * and do not define them. This ensures that
-     * they will not be implicitly created/called. */
-    //@{
-    /** Default Constructor */
-    IpoptException();
+private:
+   /**@name Default Compiler Generated Methods
+    * (Hidden to avoid implicit creation/calling).
+    * These methods are not implemented and
+    * we do not want the compiler to implement
+    * them for us, so we declare them private
+    * and do not define them. This ensures that
+    * they will not be implicitly created/called. */
+   //@{
+   /** Default Constructor */
+   IpoptException();
 
-    /** Overloaded Equals Operator */
-    void operator=(const IpoptException&);
-    //@}
+   /** Overloaded Equals Operator */
+   void operator=(const IpoptException&);
+   //@}
 
-    std::string msg_;
-    std::string file_name_;
-    Index line_number_;
-    std::string type_;
-  };
+   std::string msg_;
+   std::string file_name_;
+   Index line_number_;
+   std::string type_;
+};
 
 } // namespace Ipopt
 

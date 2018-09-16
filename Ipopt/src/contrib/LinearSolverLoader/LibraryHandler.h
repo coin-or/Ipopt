@@ -16,7 +16,7 @@
 
 #ifdef HAVE_WINDOWS_H
 # include <windows.h>
-  typedef HINSTANCE soHandle_t;
+typedef HINSTANCE soHandle_t;
 #ifdef small
 #undef small
 #endif
@@ -24,10 +24,10 @@
 # ifdef HAVE_DLFCN_H
 #  include <unistd.h>
 #  include <dlfcn.h>
-  typedef void *soHandle_t;
+typedef void* soHandle_t;
 # else
 #  define ERROR_LOADLIB
-  typedef void *soHandle_t;
+typedef void* soHandle_t;
 # endif
 #endif
 

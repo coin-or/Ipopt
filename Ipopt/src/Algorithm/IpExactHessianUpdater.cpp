@@ -14,22 +14,22 @@ namespace Ipopt
 {
 
 #if COIN_IPOPT_VERBOSITY > 0
-  static const Index dbg_verbosity = 0;
+static const Index dbg_verbosity = 0;
 #endif
 
-  bool ExactHessianUpdater::InitializeImpl(const OptionsList& options,
+bool ExactHessianUpdater::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
-  {
-    return true;
-  }
+{
+   return true;
+}
 
-  void ExactHessianUpdater::UpdateHessian()
-  {
-    DBG_START_METH("ExactHessianUpdater::UpdateHessian",
-                   dbg_verbosity);
+void ExactHessianUpdater::UpdateHessian()
+{
+   DBG_START_METH("ExactHessianUpdater::UpdateHessian",
+                  dbg_verbosity);
 
-    IpData().Set_W(IpCq().curr_exact_hessian());
-  }
+   IpData().Set_W(IpCq().curr_exact_hessian());
+}
 
 
 } // namespace Ipopt

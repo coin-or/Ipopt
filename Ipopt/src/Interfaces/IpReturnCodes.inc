@@ -2,8 +2,6 @@ C Copyright (C) 2005, 2009 International Business Machines and others.
 C All Rights Reserved.
 C This code is published under the Eclipse Public License.
 C
-C    $Id$
-C
 C Author:   Andreas Waechter    IBM      2005-08-11
 C
       INTEGER IP_SOLVE_SUCCEEDED

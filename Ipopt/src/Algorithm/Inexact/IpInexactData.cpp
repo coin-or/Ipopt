@@ -10,33 +10,33 @@
 
 namespace Ipopt
 {
-  InexactData::InexactData()
-  {}
+InexactData::InexactData()
+{}
 
-  InexactData::~InexactData()
-  {}
+InexactData::~InexactData()
+{}
 
-  bool
-  InexactData::Initialize(const Journalist& jnlst,
-                          const OptionsList& options,
-                          const std::string& prefix)
-  {
-    full_step_accepted_ = false;
-    return true;
-  }
+bool
+InexactData::Initialize(const Journalist& jnlst,
+                        const OptionsList& options,
+                        const std::string& prefix)
+{
+   full_step_accepted_ = false;
+   return true;
+}
 
-  bool
-  InexactData::InitializeDataStructures()
-  {
-    return true;
-  }
+bool
+InexactData::InitializeDataStructures()
+{
+   return true;
+}
 
-  void
-  InexactData::AcceptTrialPoint()
-  {
-    // delete data
-    normal_x_ = NULL;
-    normal_s_ = NULL;
-  }
+void
+InexactData::AcceptTrialPoint()
+{
+   // delete data
+   normal_x_ = NULL;
+   normal_s_ = NULL;
+}
 
 }

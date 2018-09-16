@@ -11,7 +11,7 @@
 namespace Ipopt
 {
 #ifdef IP_DEBUG_OBSERVER
-  const Index Observer::dbg_verbosity = 0;
-  const Index Subject::dbg_verbosity = 0;
+const Index Observer::dbg_verbosity = 0;
+const Index Subject::dbg_verbosity = 0;
 #endif
 } // namespace Ipopt

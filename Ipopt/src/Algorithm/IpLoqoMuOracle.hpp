@@ -14,47 +14,47 @@
 namespace Ipopt
 {
 
-  /** Implementation of the LOQO formula for computing the
-   *  barrier parameter.
-   */
-  class LoqoMuOracle : public MuOracle
-  {
-  public:
-    /**@name Constructors/Destructors */
-    //@{
-    /** Default Constructor */
-    LoqoMuOracle();
-    /** Default destructor */
-    virtual ~LoqoMuOracle();
-    //@}
+/** Implementation of the LOQO formula for computing the
+ *  barrier parameter.
+ */
+class LoqoMuOracle : public MuOracle
+{
+public:
+   /**@name Constructors/Destructors */
+   //@{
+   /** Default Constructor */
+   LoqoMuOracle();
+   /** Default destructor */
+   virtual ~LoqoMuOracle();
+   //@}
 
-    /** Initialize method - overloaded from AlgorithmStrategyObject */
-    virtual bool InitializeImpl(const OptionsList& options,
-                                const std::string& prefix);
+   /** Initialize method - overloaded from AlgorithmStrategyObject */
+   virtual bool InitializeImpl(const OptionsList& options,
+                               const std::string& prefix);
 
-    /** Method for computing the value of the barrier parameter that
-     *  could be used in the current iteration (using the LOQO formula).
-     */
-    virtual bool CalculateMu(Number mu_min, Number mu_max, Number& new_mu);
+   /** Method for computing the value of the barrier parameter that
+    *  could be used in the current iteration (using the LOQO formula).
+    */
+   virtual bool CalculateMu(Number mu_min, Number mu_max, Number& new_mu);
 
-  private:
-    /**@name Default Compiler Generated Methods
-     * (Hidden to avoid implicit creation/calling).
-     * These methods are not implemented and 
-     * we do not want the compiler to implement
-     * them for us, so we declare them private
-     * and do not define them. This ensures that
-     * they will not be implicitly created/called. */
-    //@{
+private:
+   /**@name Default Compiler Generated Methods
+    * (Hidden to avoid implicit creation/calling).
+    * These methods are not implemented and
+    * we do not want the compiler to implement
+    * them for us, so we declare them private
+    * and do not define them. This ensures that
+    * they will not be implicitly created/called. */
+   //@{
 
-    /** Copy Constructor */
-    LoqoMuOracle(const LoqoMuOracle&);
+   /** Copy Constructor */
+   LoqoMuOracle(const LoqoMuOracle&);
 
-    /** Overloaded Equals Operator */
-    void operator=(const LoqoMuOracle&);
-    //@}
+   /** Overloaded Equals Operator */
+   void operator=(const LoqoMuOracle&);
+   //@}
 
-  };
+};
 
 } // namespace Ipopt
 
