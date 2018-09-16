@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpVector.hpp"
@@ -21,56 +19,65 @@
 namespace Ipopt
 {
 
-void Vector::Print(SmartPtr<const Journalist> jnlst,
-                   EJournalLevel level,
-                   EJournalCategory category,
-                   const std::string& name,
-                   Index indent,
-                   const std::string& prefix) const
+void Vector::Print(
+   SmartPtr<const Journalist> jnlst,
+   EJournalLevel              level,
+   EJournalCategory           category,
+   const std::string&         name,
+   Index                      indent,
+   const std::string&         prefix
+   ) const
 {
-   if (IsValid(jnlst) && jnlst->ProduceOutput(level, category))
+   if( IsValid(jnlst) && jnlst->ProduceOutput(level, category) )
    {
       PrintImpl(*jnlst, level, category, name, indent, prefix);
    }
 }
 
-void Vector::Print(const Journalist& jnlst,
-                   EJournalLevel level,
-                   EJournalCategory category,
-                   const std::string& name,
-                   Index indent,
-                   const std::string& prefix) const
+void Vector::Print(
+   const Journalist&  jnlst,
+   EJournalLevel      level,
+   EJournalCategory   category,
+   const std::string& name,
+   Index              indent,
+   const std::string& prefix
+   ) const
 {
-   if (jnlst.ProduceOutput(level, category))
+   if( jnlst.ProduceOutput(level, category) )
    {
       PrintImpl(jnlst, level, category, name, indent, prefix);
    }
 }
 
 /* Prototype implementation for specialized functions */
-void Vector::AddTwoVectorsImpl(Number a, const Vector& v1,
-                               Number b, const Vector& v2, Number c)
+void Vector::AddTwoVectorsImpl(
+   Number        a,
+   const Vector& v1,
+   Number        b,
+   const Vector& v2,
+   Number        c
+   )
 {
-   if (c == 0.)
+   if( c == 0. )
    {
-      if (a == 1.)
+      if( a == 1. )
       {
          Copy(v1);
-         if (b != 0.)
+         if( b != 0. )
          {
             Axpy(b, v2);
          }
       }
-      else if (a == 0.)
+      else if( a == 0. )
       {
-         if (b == 0.)
+         if( b == 0. )
          {
             Set(0.);
          }
          else
          {
             Copy(v2);
-            if (b != 1.)
+            if( b != 1. )
             {
                Scal(b);
             }
@@ -78,12 +85,12 @@ void Vector::AddTwoVectorsImpl(Number a, const Vector& v1,
       }
       else
       {
-         if (b == 1.)
+         if( b == 1. )
          {
             Copy(v2);
             Axpy(a, v1);
          }
-         else if (b == 0.)
+         else if( b == 0. )
          {
             Copy(v1);
             Scal(a);
@@ -96,28 +103,30 @@ void Vector::AddTwoVectorsImpl(Number a, const Vector& v1,
          }
       }
    }
-   else   /* c==0. */
+   else /* c==0. */
    {
-      if (c != 1.)
+      if( c != 1. )
       {
          Scal(c);
       }
-      if (a != 0.)
+      if( a != 0. )
       {
          Axpy(a, v1);
       }
-      if (b != 0.)
+      if( b != 0. )
       {
          Axpy(b, v2);
       }
    }
 }
 
-Number Vector::FracToBoundImpl(const Vector& delta, Number tau) const
+Number Vector::FracToBoundImpl(
+   const Vector& delta,
+   Number        tau
+   ) const
 {
-   DBG_ASSERT(tau >= 0.);
-   DBG_ASSERT(Dim() == delta.Dim());
-   if (Dim() == 0 && delta.Dim() == 0)
+   DBG_ASSERT(tau >= 0.); DBG_ASSERT(Dim() == delta.Dim());
+   if( Dim() == 0 && delta.Dim() == 0 )
    {
       return 1.0;
    }
@@ -127,7 +136,7 @@ Number Vector::FracToBoundImpl(const Vector& delta, Number tau) const
    inv_alpha_bar->ElementWiseDivide(*this);
 
    Number alpha = inv_alpha_bar->Max();
-   if (alpha > 0)
+   if( alpha > 0 )
    {
       alpha = Ipopt::Min(1.0 / alpha, 1.0);
    }
@@ -141,74 +150,79 @@ Number Vector::FracToBoundImpl(const Vector& delta, Number tau) const
 
 // Need to put this here so that we don't need to include math.h in
 // the IpVector.hpp header file
-void Vector::Scal(Number alpha)
+void Vector::Scal(
+   Number alpha
+   )
 {
-   if (alpha != 1.)
+   if( alpha != 1. )
    {
       TaggedObject::Tag old_tag = GetTag();
       ScalImpl(alpha);
       ObjectChanged();
-      if (old_tag == nrm2_cache_tag_)
+      if( old_tag == nrm2_cache_tag_ )
       {
          nrm2_cache_tag_ = GetTag();
          cached_nrm2_ *= fabs(alpha);
       }
-      if (old_tag == asum_cache_tag_)
+      if( old_tag == asum_cache_tag_ )
       {
          asum_cache_tag_ = GetTag();
          cached_asum_ *= fabs(alpha);
       }
-      if (old_tag == amax_cache_tag_)
+      if( old_tag == amax_cache_tag_ )
       {
          amax_cache_tag_ = GetTag();
          cached_amax_ *= fabs(alpha);
       }
-      if (old_tag == max_cache_tag_)
+      if( old_tag == max_cache_tag_ )
       {
-         if (alpha >= 0.)
+         if( alpha >= 0. )
          {
             max_cache_tag_ = GetTag();
             cached_max_ *= alpha;
          }
-         else if (alpha < 0.)
+         else if( alpha < 0. )
          {
             min_cache_tag_ = GetTag();
             cached_min_ = cached_max_ * alpha;
          }
       }
-      if (old_tag == min_cache_tag_)
+      if( old_tag == min_cache_tag_ )
       {
-         if (alpha >= 0.)
+         if( alpha >= 0. )
          {
             min_cache_tag_ = GetTag();
             cached_min_ *= alpha;
          }
-         else if (alpha < 0.)
+         else if( alpha < 0. )
          {
             max_cache_tag_ = GetTag();
             cached_max_ = cached_min_ * alpha;
          }
       }
-      if (old_tag == sum_cache_tag_)
+      if( old_tag == sum_cache_tag_ )
       {
          sum_cache_tag_ = GetTag();
          cached_sum_ *= alpha;
       }
-      if (old_tag == sumlogs_cache_tag_)
+      if( old_tag == sumlogs_cache_tag_ )
       {
          sumlogs_cache_tag_ = GetTag();
-         cached_sumlogs_ += ((Number)Dim()) * log(alpha);
+         cached_sumlogs_ += ((Number) Dim()) * log(alpha);
       }
    }
 }
 
-void Vector::AddVectorQuotientImpl(Number a, const Vector& z,
-                                   const Vector& s, Number c)
+void Vector::AddVectorQuotientImpl(
+   Number        a,
+   const Vector& z,
+   const Vector& s,
+   Number        c
+   )
 {
-   DBG_ASSERT(Dim() == z.Dim());
-   DBG_ASSERT(Dim() == s.Dim());
+   DBG_ASSERT(Dim() == z.Dim()); DBG_ASSERT(Dim() == s.Dim());
 
-   if (c == 0.)
+   if( c == 0. )
    {
       AddOneVector(a, z, 0.);
       ElementWiseDivide(s);

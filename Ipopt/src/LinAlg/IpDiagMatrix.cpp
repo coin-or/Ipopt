@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpDiagMatrix.hpp"
@@ -11,16 +9,21 @@
 namespace Ipopt
 {
 
-DiagMatrix::DiagMatrix(const SymMatrixSpace* owner_space)
-   :
-   SymMatrix(owner_space)
-{}
+DiagMatrix::DiagMatrix(
+   const SymMatrixSpace* owner_space
+   )
+   : SymMatrix(owner_space)
+{ }
 
 DiagMatrix::~DiagMatrix()
-{}
+{ }
 
-void DiagMatrix::MultVectorImpl(Number alpha, const Vector& x,
-                                Number beta, Vector& y) const
+void DiagMatrix::MultVectorImpl(
+   Number        alpha,
+   const Vector& x,
+   Number        beta,
+   Vector&       y
+   ) const
 {
    //  A few sanity checks
    DBG_ASSERT(Dim() == x.Dim());
@@ -28,7 +31,7 @@ void DiagMatrix::MultVectorImpl(Number alpha, const Vector& x,
    DBG_ASSERT(IsValid(diag_));
 
    // Take care of the y part of the addition
-   if ( beta != 0.0 )
+   if( beta != 0.0 )
    {
       y.Scal(beta);
    }
@@ -49,10 +52,13 @@ bool DiagMatrix::HasValidNumbersImpl() const
    return diag_->HasValidNumbers();
 }
 
-void DiagMatrix::ComputeRowAMaxImpl(Vector& rows_norms, bool init) const
+void DiagMatrix::ComputeRowAMaxImpl(
+   Vector& rows_norms,
+   bool    init
+   ) const
 {
    DBG_ASSERT(IsValid(diag_));
-   if (init)
+   if( init )
    {
       rows_norms.Copy(*diag_);
       rows_norms.ElementWiseAbs();
@@ -65,25 +71,27 @@ void DiagMatrix::ComputeRowAMaxImpl(Vector& rows_norms, bool init) const
    }
 }
 
-void DiagMatrix::PrintImpl(const Journalist& jnlst,
-                           EJournalLevel level,
-                           EJournalCategory category,
-                           const std::string& name,
-                           Index indent,
-                           const std::string& prefix) const
+void DiagMatrix::PrintImpl(
+   const Journalist&  jnlst,
+   EJournalLevel      level,
+   EJournalCategory   category,
+   const std::string& name,
+   Index              indent,
+   const std::string& prefix
+   ) const
 {
    jnlst.Printf(level, category, "\n");
    jnlst.PrintfIndented(level, category, indent,
-                        "%sDiagMatrix \"%s\" with %d rows and columns, and with diagonal elements:\n",
-                        prefix.c_str(), name.c_str(), Dim());
-   if (IsValid(diag_))
+      "%sDiagMatrix \"%s\" with %d rows and columns, and with diagonal elements:\n", prefix.c_str(), name.c_str(),
+      Dim());
+   if( IsValid(diag_) )
    {
       diag_->Print(&jnlst, level, category, name, indent + 1, prefix);
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent,
-                           "%sDiagonal elements not set!\n", prefix.c_str());
+      jnlst.PrintfIndented(level, category, indent, "%sDiagonal elements not set!\n", prefix.c_str());
    }
 }
+
 } // namespace Ipopt

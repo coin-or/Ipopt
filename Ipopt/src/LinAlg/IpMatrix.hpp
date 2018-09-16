@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #ifndef __IPMATRIX_HPP__
@@ -17,110 +15,147 @@ namespace Ipopt
 /* forward declarations */
 class MatrixSpace;
 
-/** Matrix Base Class. This is the base class for all derived matrix
- *  types.  All Matrices, such as Jacobian and Hessian matrices, as
+/** Matrix Base Class.
+ *
+ *  This is the base class for all derived matrix types.
+ *  All Matrices, such as Jacobian and Hessian matrices, as
  *  well as possibly the iteration matrices needed for the step
  *  computation, are of this type.
  *
  *  Deriving from Matrix:  Overload the protected XXX_Impl method.
  */
-class Matrix : public TaggedObject
+class Matrix: public TaggedObject
 {
 public:
    /** @name Constructor/Destructor */
    //@{
-   /** Constructor.  It has to be given a pointer to the
-    *  corresponding MatrixSpace.
+   /** Constructor.
+    *
+    * It has to be given a pointer to the corresponding MatrixSpace.
     */
-   Matrix(const MatrixSpace* owner_space)
-      :
-      TaggedObject(),
-      owner_space_(owner_space),
-      valid_cache_tag_(0)
-   {}
+   Matrix(
+      const MatrixSpace* owner_space
+      )
+      : TaggedObject(),
+        owner_space_(owner_space),
+        valid_cache_tag_(0)
+   { }
 
    /** Destructor */
    virtual ~Matrix()
-   {}
+   { }
    //@}
 
    /**@name Operations of the Matrix on a Vector */
    //@{
-   /** Matrix-vector multiply.  Computes y = alpha * Matrix * x +
-    *  beta * y.  Do not overload.  Overload MultVectorImpl instead.
+   /** Matrix-vector multiply.
+    *
+    * Computes y = alpha * Matrix * x + beta * y.
+    *
+    * @attention Do not overload. Overload MultVectorImpl instead.
     */
-   void MultVector(Number alpha, const Vector& x, Number beta,
-                   Vector& y) const
+   void MultVector(
+      Number        alpha,
+      const Vector& x,
+      Number        beta,
+      Vector&       y
+      ) const
    {
       MultVectorImpl(alpha, x, beta, y);
    }
 
-   /** Matrix(transpose) vector multiply.  Computes y = alpha *
-    *  Matrix^T * x + beta * y.  Do not overload.  Overload
-    *  TransMultVectorImpl instead.
+   /** Matrix(transpose) vector multiply.
+    *
+    *  Computes y = alpha * Matrix^T * x + beta * y.
+    *
+    *  @attention Do not overload.  Overload TransMultVectorImpl instead.
     */
-   void TransMultVector(Number alpha, const Vector& x, Number beta,
-                        Vector& y) const
+   void TransMultVector(
+      Number        alpha,
+      const Vector& x,
+      Number        beta,
+      Vector&       y
+      ) const
    {
       TransMultVectorImpl(alpha, x, beta, y);
    }
    //@}
 
-   /** @name Methods for specialized operations.  A prototype
-    *  implementation is provided, but for efficient implementation
+   /** @name Methods for specialized operations.
+    *
+    *  A prototype implementation is provided, but for efficient implementation
     *  those should be specially implemented.
     */
    //@{
-   /** X = X + alpha*(Matrix S^{-1} Z).  Should be implemented
-    *  efficiently for the ExansionMatrix
+   /** X = X + alpha*(Matrix S^{-1} Z).
+    *
+    * Should be implemented efficiently for the ExpansionMatrix.
     */
-   void AddMSinvZ(Number alpha, const Vector& S, const Vector& Z,
-                  Vector& X) const;
+   void AddMSinvZ(
+      Number        alpha,
+      const Vector& S,
+      const Vector& Z,
+      Vector&       X
+      ) const;
 
-   /** X = S^{-1} (r + alpha*Z*M^Td).   Should be implemented
-    *  efficiently for the ExansionMatrix
+   /** X = S^{-1} (r + alpha*Z*M^Td).
+    *
+    * Should be implemented efficiently for the ExpansionMatrix.
     */
-   void SinvBlrmZMTdBr(Number alpha, const Vector& S,
-                       const Vector& R, const Vector& Z,
-                       const Vector& D, Vector& X) const;
+   void SinvBlrmZMTdBr(
+      Number        alpha,
+      const Vector& S,
+      const Vector& R,
+      const Vector& Z,
+      const Vector& D,
+      Vector&       X
+      ) const;
    //@}
 
-   /** Method for determining if all stored numbers are valid (i.e.,
-    *  no Inf or Nan). */
+   /** Method for determining if all stored numbers are valid (i.e., no Inf or Nan). */
    bool HasValidNumbers() const;
 
    /** @name Information about the size of the matrix */
    //@{
    /** Number of rows */
-   inline
-   Index  NRows() const;
+   inline Index NRows() const;
 
    /** Number of columns */
-   inline
-   Index  NCols() const;
+   inline Index NCols() const;
    //@}
 
    /** @name Norms of the individual rows and columns */
    //@{
-   /** Compute the max-norm of the rows in the matrix.  The result is
-    *  stored in rows_norms.  The vector is assumed to be initialized
-    *  of init is false. */
-   void ComputeRowAMax(Vector& rows_norms, bool init = true) const
+   /** Compute the max-norm of the rows in the matrix.
+    *
+    *  The result is stored in rows_norms.
+    *  The vector is assumed to be initialized if init is false.
+    */
+   void ComputeRowAMax(
+      Vector& rows_norms,
+      bool    init = true
+      ) const
    {
       DBG_ASSERT(NRows() == rows_norms.Dim());
-      if (init)
+      if( init )
       {
          rows_norms.Set(0.);
       }
       ComputeRowAMaxImpl(rows_norms, init);
    }
-   /** Compute the max-norm of the columns in the matrix.  The result
-    *  is stored in cols_norms  The vector is assumed to be initialized
-    *  of init is false. */
-   void ComputeColAMax(Vector& cols_norms, bool init = true) const
+
+   /** Compute the max-norm of the columns in the matrix.
+    *
+    *  The result is stored in cols_norms.
+    *  The vector is assumed to be initialized if init is false.
+    */
+   void ComputeColAMax(
+      Vector& cols_norms,
+      bool    init = true
+      ) const
    {
       DBG_ASSERT(NCols() == cols_norms.Dim());
-      if (init)
+      if( init )
       {
          cols_norms.Set(0.);
       }
@@ -128,81 +163,122 @@ public:
    }
    //@}
 
-   /** Print detailed information about the matrix. Do not overload.
-    *  Overload PrintImpl instead.
+   /** Print detailed information about the matrix.
+    *
+    * @attention Do not overload. Overload PrintImpl instead.
     */
    //@{
-   virtual void Print(SmartPtr<const Journalist> jnlst,
-                      EJournalLevel level,
-                      EJournalCategory category,
-                      const std::string& name,
-                      Index indent = 0,
-                      const std::string& prefix = "") const;
-   virtual void Print(const Journalist& jnlst,
-                      EJournalLevel level,
-                      EJournalCategory category,
-                      const std::string& name,
-                      Index indent = 0,
-                      const std::string& prefix = "") const;
+   virtual void Print(
+      SmartPtr<const Journalist> jnlst,
+      EJournalLevel              level,
+      EJournalCategory           category,
+      const std::string&         name,
+      Index                      indent = 0,
+      const std::string&         prefix = ""
+      ) const;
+
+   virtual void Print(
+      const Journalist&  jnlst,
+      EJournalLevel      level,
+      EJournalCategory   category,
+      const std::string& name,
+      Index              indent = 0,
+      const std::string& prefix = ""
+      ) const;
    //@}
 
-   /** Return the owner MatrixSpace*/
-   inline
-   SmartPtr<const MatrixSpace> OwnerSpace() const;
+   /** Return the owner MatrixSpace */
+   inline SmartPtr<const MatrixSpace> OwnerSpace() const;
 
 protected:
    /** @name implementation methods (derived classes MUST
-    *  overload these pure virtual protected methods.
+    *  overload these pure virtual protected methods).
     */
    //@{
-   /** Matrix-vector multiply.  Computes y = alpha * Matrix * x +
-    *  beta * y
+   /** Matrix-vector multiply.
+    *
+    * Computes y = alpha * Matrix * x + beta * y.
     */
-   virtual void MultVectorImpl(Number alpha, const Vector& x, Number beta, Vector& y) const = 0;
+   virtual void MultVectorImpl(
+      Number        alpha,
+      const Vector& x,
+      Number        beta,
+      Vector&       y
+      ) const = 0;
 
    /** Matrix(transpose) vector multiply.
-    * Computes y = alpha * Matrix^T * x  +  beta * y
+    *
+    * Computes y = alpha * Matrix^T * x  +  beta * y.
     */
-   virtual void TransMultVectorImpl(Number alpha, const Vector& x, Number beta, Vector& y) const = 0;
+   virtual void TransMultVectorImpl(
+      Number        alpha,
+      const Vector& x,
+      Number        beta,
+      Vector&       y
+      ) const = 0;
 
-   /** X = X + alpha*(Matrix S^{-1} Z).  Prototype for this
-    *  specialize method is provided, but for efficient
+   /** X = X + alpha*(Matrix S^{-1} Z).
+    *
+    *  Prototype for this specialize method is provided, but for efficient
     *  implementation it should be overloaded for the expansion matrix.
     */
-   virtual void AddMSinvZImpl(Number alpha, const Vector& S, const Vector& Z,
-                              Vector& X) const;
+   virtual void AddMSinvZImpl(
+      Number        alpha,
+      const Vector& S,
+      const Vector& Z,
+      Vector&       X
+      ) const;
 
-   /** X = S^{-1} (r + alpha*Z*M^Td).   Should be implemented
-    *  efficiently for the ExpansionMatrix.
+   /** X = S^{-1} (r + alpha*Z*M^Td).
+    *
+    *  Should be implemented efficiently for the ExpansionMatrix.
     */
-   virtual void SinvBlrmZMTdBrImpl(Number alpha, const Vector& S,
-                                   const Vector& R, const Vector& Z,
-                                   const Vector& D, Vector& X) const;
+   virtual void SinvBlrmZMTdBrImpl(
+      Number        alpha,
+      const Vector& S,
+      const Vector& R,
+      const Vector& Z,
+      const Vector& D,
+      Vector&       X
+      ) const;
 
-   /** Method for determining if all stored numbers are valid (i.e.,
-    *  no Inf or Nan). A default implementation always returning true
-    *  is provided, but if possible it should be implemented. */
+   /** Method for determining if all stored numbers are valid (i.e., no Inf or Nan).
+    *
+    *  A default implementation always returning true
+    *  is provided, but if possible it should be implemented.
+    */
    virtual bool HasValidNumbersImpl() const
    {
       return true;
    }
 
-   /** Compute the max-norm of the rows in the matrix.  The result is
-    *  stored in rows_norms.  The vector is assumed to be
-    *  initialized. */
-   virtual void ComputeRowAMaxImpl(Vector& rows_norms, bool init) const = 0;
-   /** Compute the max-norm of the columns in the matrix.  The result
-    *  is stored in cols_norms.  The vector is assumed to be
-    *  initialized. */
-   virtual void ComputeColAMaxImpl(Vector& cols_norms, bool init) const = 0;
+   /** Compute the max-norm of the rows in the matrix.
+    *
+    *  The result is stored in rows_norms.
+    *  The vector is assumed to be initialized if init is false. */
+   virtual void ComputeRowAMaxImpl(
+      Vector& rows_norms,
+      bool    init
+      ) const = 0;
+
+   /** Compute the max-norm of the columns in the matrix.
+    *
+    *  The result is stored in cols_norms.
+    *  The vector is assumed to be initialized if init is false. */
+   virtual void ComputeColAMaxImpl(
+      Vector& cols_norms,
+      bool    init
+      ) const = 0;
 
    /** Print detailed information about the matrix. */
-   virtual void PrintImpl(const Journalist& jnlst,
-                          EJournalLevel level,
-                          EJournalCategory category,
-                          const std::string& name,
-                          Index indent,
-                          const std::string& prefix) const = 0;
+   virtual void PrintImpl(
+      const Journalist&  jnlst,
+      EJournalLevel      level,
+      EJournalCategory   category,
+      const std::string& name,
+      Index              indent,
+      const std::string& prefix
+      ) const = 0;
    //@}
 
 private:
@@ -212,16 +288,21 @@ private:
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
-   /** default constructor */
+   /** Default constructor */
    Matrix();
 
    /** Copy constructor */
-   Matrix(const Matrix&);
+   Matrix(
+      const Matrix&
+      );
 
-   /** Overloaded Equals Operator */
-   Matrix& operator=(const Matrix&);
+   /** Default Assignment Operator */
+   Matrix& operator=(
+      const Matrix&
+      );
    //@}
 
    const SmartPtr<const MatrixSpace> owner_space_;
@@ -233,8 +314,8 @@ private:
    //@}
 };
 
-
 /** MatrixSpace base class, corresponding to the Matrix base class.
+ *
  *  For each Matrix implementation, a corresponding MatrixSpace has
  *  to be implemented.  A MatrixSpace is able to create new Matrices
  *  of a specific type.  The MatrixSpace should also store
@@ -242,7 +323,7 @@ private:
  *  example, the dimensions of a Matrix is stored in the MatrixSpace
  *  base class.
  */
-class MatrixSpace : public ReferencedObject
+class MatrixSpace: public ReferencedObject
 {
 public:
    /** @name Constructors/Destructors */
@@ -250,20 +331,19 @@ public:
    /** Constructor, given the number rows and columns of all matrices
     *  generated by this MatrixSpace.
     */
-   MatrixSpace(Index nRows, Index nCols)
-      :
-      nRows_(nRows),
-      nCols_(nCols)
-   {}
+   MatrixSpace(
+      Index nRows,
+      Index nCols)
+      : nRows_(nRows),
+        nCols_(nCols)
+   { }
 
    /** Destructor */
    virtual ~MatrixSpace()
-   {}
+   { }
    //@}
 
-   /** Pure virtual method for creating a new Matrix of the
-    *  corresponding type.
-    */
+   /** Pure virtual method for creating a new Matrix of the corresponding type. */
    virtual Matrix* MakeNew() const = 0;
 
    /** Accessor function for the number of rows. */
@@ -271,16 +351,17 @@ public:
    {
       return nRows_;
    }
+
    /** Accessor function for the number of columns. */
    Index NCols() const
    {
       return nCols_;
    }
 
-   /** Method to test if a given matrix belongs to a particular
-    *  matrix space.
-    */
-   bool IsMatrixFromSpace(const Matrix& matrix) const
+   /** Method to test if a given matrix belongs to a particular matrix space. */
+   bool IsMatrixFromSpace(
+      const Matrix& matrix
+      ) const
    {
       return (matrix.OwnerSpace() == this);
    }
@@ -292,40 +373,42 @@ private:
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
-   /** default constructor */
+   /** Default constructor */
    MatrixSpace();
 
    /** Copy constructor */
-   MatrixSpace(const MatrixSpace&);
+   MatrixSpace(
+      const MatrixSpace&
+      );
 
-   /** Overloaded Equals Operator */
-   MatrixSpace& operator=(const MatrixSpace&);
+   /** Default Assignment Operator */
+   MatrixSpace& operator=(
+      const MatrixSpace&
+      );
    //@}
 
    /** Number of rows for all matrices of this type. */
    const Index nRows_;
+
    /** Number of columns for all matrices of this type. */
    const Index nCols_;
 };
 
-
 /* Inline Methods */
-inline
-Index  Matrix::NRows() const
+inline Index Matrix::NRows() const
 {
    return owner_space_->NRows();
 }
 
-inline
-Index  Matrix::NCols() const
+inline Index Matrix::NCols() const
 {
    return owner_space_->NCols();
 }
 
-inline
-SmartPtr<const MatrixSpace> Matrix::OwnerSpace() const
+inline SmartPtr<const MatrixSpace> Matrix::OwnerSpace() const
 {
    return owner_space_;
 }

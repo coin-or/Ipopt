@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpSymScaledMatrix.hpp"
@@ -11,23 +9,27 @@
 namespace Ipopt
 {
 
-SymScaledMatrix::SymScaledMatrix(const SymScaledMatrixSpace* owner_space)
-   :
-   SymMatrix(owner_space),
-   owner_space_(owner_space)
-{}
-
+SymScaledMatrix::SymScaledMatrix(
+   const SymScaledMatrixSpace* owner_space
+   )
+   : SymMatrix(owner_space),
+     owner_space_(owner_space)
+{ }
 
 SymScaledMatrix::~SymScaledMatrix()
-{}
+{ }
 
-void SymScaledMatrix::MultVectorImpl(Number alpha, const Vector& x,
-                                     Number beta, Vector& y) const
+void SymScaledMatrix::MultVectorImpl(
+   Number        alpha,
+   const Vector& x,
+   Number        beta,
+   Vector&       y
+   ) const
 {
    DBG_ASSERT(IsValid(matrix_));
 
    // Take care of the y part of the addition
-   if ( beta != 0.0 )
+   if( beta != 0.0 )
    {
       y.Scal(beta);
    }
@@ -40,14 +42,14 @@ void SymScaledMatrix::MultVectorImpl(Number alpha, const Vector& x,
    SmartPtr<Vector> tmp_x = x.MakeNewCopy();
    SmartPtr<Vector> tmp_y = y.MakeNew();
 
-   if (IsValid(owner_space_->RowColScaling()))
+   if( IsValid(owner_space_->RowColScaling()) )
    {
       tmp_x->ElementWiseMultiply(*owner_space_->RowColScaling());
    }
 
    matrix_->MultVector(1.0, *tmp_x, 0.0, *tmp_y);
 
-   if (IsValid(owner_space_->RowColScaling()))
+   if( IsValid(owner_space_->RowColScaling()) )
    {
       tmp_y->ElementWiseMultiply(*owner_space_->RowColScaling());
    }
@@ -60,36 +62,34 @@ bool SymScaledMatrix::HasValidNumbersImpl() const
    return matrix_->HasValidNumbers();
 }
 
-void
-SymScaledMatrix::ComputeRowAMaxImpl(Vector& rows_norms, bool init) const
+void SymScaledMatrix::ComputeRowAMaxImpl(
+   Vector& rows_norms,
+   bool    init
+   ) const
 {
-   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED,
-                   "SymScaledMatrix::ComputeRowAMaxImpl not implemented");
+   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "SymScaledMatrix::ComputeRowAMaxImpl not implemented");
 }
 
-void SymScaledMatrix::PrintImpl(const Journalist& jnlst,
-                                EJournalLevel level,
-                                EJournalCategory category,
-                                const std::string& name,
-                                Index indent,
-                                const std::string& prefix) const
+void SymScaledMatrix::PrintImpl(
+   const Journalist&  jnlst,
+   EJournalLevel      level,
+   EJournalCategory   category,
+   const std::string& name,
+   Index              indent,
+   const std::string& prefix
+   ) const
 {
    jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent,
-                        "%sSymScaledMatrix \"%s\" of dimension %d x %d:\n",
-                        prefix.c_str(), name.c_str(), NRows(), NCols());
-   owner_space_->RowColScaling()->Print(&jnlst, level, category,
-                                        name + "_row_col_scaling",
-                                        indent + 1, prefix);
-   if (IsValid(matrix_))
+   jnlst.PrintfIndented(level, category, indent, "%sSymScaledMatrix \"%s\" of dimension %d x %d:\n", prefix.c_str(),
+      name.c_str(), NRows(), NCols());
+   owner_space_->RowColScaling()->Print(&jnlst, level, category, name + "_row_col_scaling", indent + 1, prefix);
+   if( IsValid(matrix_) )
    {
-      matrix_->Print(&jnlst, level, category, name + "_unscaled_matrix",
-                     indent + 1, prefix);
+      matrix_->Print(&jnlst, level, category, name + "_unscaled_matrix", indent + 1, prefix);
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent,
-                           "%sunscaled matrix is NULL\n", prefix.c_str());
+      jnlst.PrintfIndented(level, category, indent, "%sunscaled matrix is NULL\n", prefix.c_str());
    }
 }
 

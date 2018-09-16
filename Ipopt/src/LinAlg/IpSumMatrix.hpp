@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #ifndef __IPSUMMATRIX_HPP__
@@ -19,28 +17,39 @@ namespace Ipopt
 class SumMatrixSpace;
 
 /** Class for Matrices which are sum of matrices.
- *  For each term in the we store the matrix and a factor.
+ *
+ *  For each term in the sum we store the matrix and a factor.
  */
-class SumMatrix : public Matrix
+class SumMatrix: public Matrix
 {
 public:
-
    /**@name Constructors / Destructors */
    //@{
-   /** Constructor, taking the owner_space.
-    */
-   SumMatrix(const SumMatrixSpace* owner_space);
+   /** Constructor, taking the owner_space. */
+   SumMatrix(
+      const SumMatrixSpace* owner_space
+      );
 
    /** Destructor */
    virtual ~SumMatrix();
    //@}
 
    /** Method for setting term iterm for the sum. */
-   void SetTerm(Index iterm, Number factor, const Matrix& matrix);
+   void SetTerm(
+      Index         iterm,
+      Number        factor,
+      const Matrix& matrix
+      );
 
-   /** Method for getting term iterm for the sum.  Note that counting
-    *  of terms starts at 0. */
-   void GetTerm(Index iterm, Number& factor, SmartPtr<const Matrix>& matrix) const;
+   /** Method for getting term iterm for the sum.
+    *
+    * Note that counting of terms starts at 0.
+    */
+   void GetTerm(
+      Index                   iterm,
+      Number&                 factor,
+      SmartPtr<const Matrix>& matrix
+      ) const;
 
    /** Return the number of terms */
    Index NTerms() const;
@@ -48,26 +57,40 @@ public:
 protected:
    /**@name Methods overloaded from matrix */
    //@{
-   virtual void MultVectorImpl(Number alpha, const Vector& x,
-                               Number beta, Vector& y) const;
+   virtual void MultVectorImpl(
+      Number        alpha,
+      const Vector& x,
+      Number        beta,
+      Vector&       y
+      ) const;
 
-   virtual void TransMultVectorImpl(Number alpha, const Vector& x,
-                                    Number beta, Vector& y) const;
+   virtual void TransMultVectorImpl(
+      Number        alpha,
+      const Vector& x,
+      Number        beta,
+      Vector&       y
+      ) const;
 
-   /** Method for determining if all stored numbers are valid (i.e.,
-    *  no Inf or Nan). */
    virtual bool HasValidNumbersImpl() const;
 
-   virtual void ComputeRowAMaxImpl(Vector& rows_norms, bool init) const;
+   virtual void ComputeRowAMaxImpl(
+      Vector& rows_norms,
+      bool    init
+      ) const;
 
-   virtual void ComputeColAMaxImpl(Vector& cols_norms, bool init) const;
+   virtual void ComputeColAMaxImpl(
+      Vector& cols_norms,
+      bool    init
+      ) const;
 
-   virtual void PrintImpl(const Journalist& jnlst,
-                          EJournalLevel level,
-                          EJournalCategory category,
-                          const std::string& name,
-                          Index indent,
-                          const std::string& prefix) const;
+   virtual void PrintImpl(
+      const Journalist&  jnlst,
+      EJournalLevel      level,
+      EJournalCategory   category,
+      const std::string& name,
+      Index              indent,
+      const std::string& prefix
+      ) const;
    //@}
 
 private:
@@ -77,16 +100,21 @@ private:
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Default Constructor */
    SumMatrix();
 
    /** Copy Constructor */
-   SumMatrix(const SumMatrix&);
+   SumMatrix(
+      const SumMatrix&
+      );
 
-   /** Overloaded Equals Operator */
-   void operator=(const SumMatrix&);
+   /** Default Assignment Operator */
+   void operator=(
+      const SumMatrix&
+      );
    //@}
 
    /** std::vector storing the factors for each term. */
@@ -100,7 +128,7 @@ private:
 };
 
 /** Class for matrix space for SumMatrix. */
-class SumMatrixSpace : public MatrixSpace
+class SumMatrixSpace: public MatrixSpace
 {
 public:
    /** @name Constructors / Destructors */
@@ -108,15 +136,18 @@ public:
    /** Constructor, given the number of row and columns, as well as
     *  the number of terms in the sum.
     */
-   SumMatrixSpace(Index nrows, Index ncols, Index nterms)
-      :
-      MatrixSpace(nrows, ncols),
-      nterms_(nterms)
-   {}
+   SumMatrixSpace(
+      Index nrows,
+      Index ncols,
+      Index nterms
+      )
+      : MatrixSpace(nrows, ncols),
+        nterms_(nterms)
+   { }
 
    /** Destructor */
    virtual ~SumMatrixSpace()
-   {}
+   { }
    //@}
 
    /** Accessor functions to get the number of terms in the sum. */
@@ -125,18 +156,23 @@ public:
       return nterms_;
    }
 
-   /** Set the appropriate matrix space for each term. This must
-    *  be called for each term or a runtime error will occur */
-   void SetTermSpace(Index term_idx, const MatrixSpace& mat_space);
+   /** Set the appropriate matrix space for each term.
+    *
+    * This must be called for each term or a runtime error will occur.
+    */
+   void SetTermSpace(
+      Index              term_idx,
+      const MatrixSpace& mat_space
+      );
 
    /** Get the matrix space for a particular term */
-   SmartPtr<const MatrixSpace> GetTermSpace(Index term_idx) const;
+   SmartPtr<const MatrixSpace> GetTermSpace(
+      Index term_idx
+      ) const;
 
    /** Method for creating a new matrix of this specific type. */
    SumMatrix* MakeNewSumMatrix() const;
 
-   /** Overloaded MakeNew method for the MatrixSpace base class.
-    */
    virtual Matrix* MakeNew() const;
 
 private:
@@ -146,21 +182,26 @@ private:
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Default constructor */
    SumMatrixSpace();
 
    /** Copy Constructor */
-   SumMatrixSpace(const SumMatrixSpace&);
+   SumMatrixSpace(
+      const SumMatrixSpace&
+      );
 
-   /** Overloaded Equals Operator */
-   SumMatrixSpace& operator=(const SumMatrixSpace&);
+   /** Default Assignment Operator */
+   SumMatrixSpace& operator=(
+      const SumMatrixSpace&
+      );
    //@}
 
    const Index nterms_;
 
-   std::vector< SmartPtr<const MatrixSpace> > term_spaces_;
+   std::vector<SmartPtr<const MatrixSpace> > term_spaces_;
 };
 
 } // namespace Ipopt

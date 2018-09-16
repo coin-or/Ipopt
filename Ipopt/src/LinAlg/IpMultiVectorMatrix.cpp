@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Andreas Waechter             IBM    2005-12-24
 
 #include "IpMultiVectorMatrix.hpp"
@@ -27,15 +25,19 @@ namespace Ipopt
 static const Index dbg_verbosity = 0;
 #endif
 
-MultiVectorMatrix::MultiVectorMatrix(const MultiVectorMatrixSpace* owner_space)
-   :
-   Matrix(owner_space),
-   owner_space_(owner_space),
-   const_vecs_(owner_space->NCols()),
-   non_const_vecs_(owner_space->NCols())
-{}
+MultiVectorMatrix::MultiVectorMatrix(
+   const MultiVectorMatrixSpace* owner_space
+   )
+   : Matrix(owner_space),
+     owner_space_(owner_space),
+     const_vecs_(owner_space->NCols()),
+     non_const_vecs_(owner_space->NCols())
+{ }
 
-void MultiVectorMatrix::SetVector(Index i, const Vector& vec)
+void MultiVectorMatrix::SetVector(
+   Index         i,
+   const Vector& vec
+   )
 {
    DBG_ASSERT(i < NCols());
    non_const_vecs_[i] = NULL;
@@ -43,7 +45,10 @@ void MultiVectorMatrix::SetVector(Index i, const Vector& vec)
    ObjectChanged();
 }
 
-void MultiVectorMatrix::SetVectorNonConst(Index i, Vector& vec)
+void MultiVectorMatrix::SetVectorNonConst(
+   Index   i,
+   Vector& vec
+   )
 {
    DBG_ASSERT(i < NCols());
    const_vecs_[i] = NULL;
@@ -51,15 +56,18 @@ void MultiVectorMatrix::SetVectorNonConst(Index i, Vector& vec)
    ObjectChanged();
 }
 
-void MultiVectorMatrix::MultVectorImpl(Number alpha, const Vector& x,
-                                       Number beta, Vector& y) const
+void MultiVectorMatrix::MultVectorImpl(
+   Number        alpha,
+   const Vector& x,
+   Number        beta,
+   Vector&       y
+   ) const
 {
    //  A few sanity checks
-   DBG_ASSERT(NCols() == x.Dim());
-   DBG_ASSERT(NRows() == y.Dim());
+   DBG_ASSERT(NCols() == x.Dim()); DBG_ASSERT(NRows() == y.Dim());
 
    // Take care of the y part of the addition
-   if ( beta != 0.0 )
+   if( beta != 0.0 )
    {
       y.Scal(beta);
    }
@@ -73,10 +81,10 @@ void MultiVectorMatrix::MultVectorImpl(Number alpha, const Vector& x,
    DBG_ASSERT(dynamic_cast<const DenseVector*>(&x));
 
    // We simply add all the Vectors one after the other
-   if (dense_x->IsHomogeneous())
+   if( dense_x->IsHomogeneous() )
    {
       Number val = dense_x->Scalar();
-      for (Index i = 0; i < NCols(); i++)
+      for( Index i = 0; i < NCols(); i++ )
       {
          y.AddOneVector(alpha * val, *ConstVec(i), 1.);
       }
@@ -84,19 +92,22 @@ void MultiVectorMatrix::MultVectorImpl(Number alpha, const Vector& x,
    else
    {
       const Number* values = dense_x->Values();
-      for (Index i = 0; i < NCols(); i++)
+      for( Index i = 0; i < NCols(); i++ )
       {
          y.AddOneVector(alpha * values[i], *ConstVec(i), 1.);
       }
    }
 }
 
-void MultiVectorMatrix::TransMultVectorImpl(Number alpha, const Vector& x,
-      Number beta, Vector& y) const
+void MultiVectorMatrix::TransMultVectorImpl(
+   Number        alpha,
+   const Vector& x,
+   Number        beta,
+   Vector&       y
+   ) const
 {
    //  A few sanity checks
-   DBG_ASSERT(NCols() == y.Dim());
-   DBG_ASSERT(NRows() == x.Dim());
+   DBG_ASSERT(NCols() == y.Dim()); DBG_ASSERT(NRows() == x.Dim());
 
    // See if we can understand the data
    DenseVector* dense_y = static_cast<DenseVector*>(&y);
@@ -105,35 +116,37 @@ void MultiVectorMatrix::TransMultVectorImpl(Number alpha, const Vector& x,
    // Use the individual dot products to get the matrix (transpose)
    // vector product
    Number* yvals = dense_y->Values();
-   if ( beta != 0.0 )
+   if( beta != 0.0 )
    {
-      for (Index i = 0; i < NCols(); i++)
+      for( Index i = 0; i < NCols(); i++ )
       {
          yvals[i] = alpha * ConstVec(i)->Dot(x) + beta * yvals[i];
       }
    }
    else
    {
-      for (Index i = 0; i < NCols(); i++)
+      for( Index i = 0; i < NCols(); i++ )
       {
          yvals[i] = alpha * ConstVec(i)->Dot(x);
       }
    }
 }
 
-void MultiVectorMatrix::LRMultVector(Number alpha, const Vector& x,
-                                     Number beta, Vector& y) const
+void MultiVectorMatrix::LRMultVector(
+   Number        alpha,
+   const Vector& x,
+   Number        beta,
+   Vector&       y
+   ) const
 {
    DBG_START_METH("MultiVectorMatrix::LRMultVector(",
-                  dbg_verbosity);
+      dbg_verbosity);
 
-   DBG_ASSERT(NRows() == x.Dim());
-   DBG_ASSERT(NRows() == y.Dim());
+   DBG_ASSERT(NRows() == x.Dim()); DBG_ASSERT(NRows() == y.Dim());
 
-   DBG_PRINT((1, "alpha = %e beta = %e\n", alpha, beta));
-   DBG_PRINT_VECTOR(2, "x", x);
+   DBG_PRINT((1, "alpha = %e beta = %e\n", alpha, beta)); DBG_PRINT_VECTOR(2, "x", x);
 
-   if ( beta != 0.0 )
+   if( beta != 0.0 )
    {
       y.Scal(beta);
    }
@@ -143,7 +156,7 @@ void MultiVectorMatrix::LRMultVector(Number alpha, const Vector& x,
    }
 
    DBG_PRINT_VECTOR(2, "beta*y", y);
-   for (Index i = 0; i < NCols(); i++)
+   for( Index i = 0; i < NCols(); i++ )
    {
       DBG_PRINT_VECTOR(2, "ConstVec(i)", *ConstVec(i));
       y.AddOneVector(alpha * ConstVec(i)->Dot(x), *ConstVec(i), 1.);
@@ -154,7 +167,7 @@ void MultiVectorMatrix::LRMultVector(Number alpha, const Vector& x,
 void MultiVectorMatrix::FillWithNewVectors()
 {
    SmartPtr<const VectorSpace> vec_space = owner_space_->ColVectorSpace();
-   for (Index i = 0; i < NCols(); i++)
+   for( Index i = 0; i < NCols(); i++ )
    {
       non_const_vecs_[i] = vec_space->MakeNew();
       const_vecs_[i] = NULL;
@@ -162,32 +175,35 @@ void MultiVectorMatrix::FillWithNewVectors()
    ObjectChanged();
 }
 
-void MultiVectorMatrix::ScaleRows(const Vector& scal_vec)
+void MultiVectorMatrix::ScaleRows(
+   const Vector& scal_vec
+   )
 {
    // Santiy checks
    DBG_ASSERT(scal_vec.Dim() == NRows());
 
-   for (Index i = 0; i < NCols(); i++)
+   for( Index i = 0; i < NCols(); i++ )
    {
       Vec(i)->ElementWiseMultiply(scal_vec);
    }
    ObjectChanged();
 }
 
-void MultiVectorMatrix::ScaleColumns(const Vector& scal_vec)
+void MultiVectorMatrix::ScaleColumns(
+   const Vector& scal_vec
+   )
 {
    // Santiy checks
    DBG_ASSERT(scal_vec.Dim() == NCols());
 
    // See if we can understand the data
-   const DenseVector* dense_scal_vec =
-      static_cast<const DenseVector*>(&scal_vec);
+   const DenseVector* dense_scal_vec = static_cast<const DenseVector*>(&scal_vec);
    DBG_ASSERT(dynamic_cast<const DenseVector*>(&scal_vec));
 
-   if (dense_scal_vec->IsHomogeneous())
+   if( dense_scal_vec->IsHomogeneous() )
    {
       Number val = dense_scal_vec->Scalar();
-      for (Index i = 0; i < NCols(); i++)
+      for( Index i = 0; i < NCols(); i++ )
       {
          Vec(i)->Scal(val);
       }
@@ -195,7 +211,7 @@ void MultiVectorMatrix::ScaleColumns(const Vector& scal_vec)
    else
    {
       const Number* values = dense_scal_vec->Values();
-      for (Index i = 0; i < NCols(); i++)
+      for( Index i = 0; i < NCols(); i++ )
       {
          Vec(i)->Scal(values[i]);
       }
@@ -203,37 +219,36 @@ void MultiVectorMatrix::ScaleColumns(const Vector& scal_vec)
    ObjectChanged();
 }
 
-void
-MultiVectorMatrix::AddOneMultiVectorMatrix(Number a,
-      const MultiVectorMatrix& mv1,
-      Number c)
+void MultiVectorMatrix::AddOneMultiVectorMatrix(
+   Number                   a,
+   const MultiVectorMatrix& mv1,
+   Number                   c
+   )
 {
-   DBG_ASSERT(NRows() == mv1.NRows());
-   DBG_ASSERT(NCols() == mv1.NCols());
+   DBG_ASSERT(NRows() == mv1.NRows()); DBG_ASSERT(NCols() == mv1.NCols());
 
-   if (c == 0.)
+   if( c == 0. )
    {
       FillWithNewVectors();
    }
 
-   for (Index i = 0; i < NCols(); i++)
+   for( Index i = 0; i < NCols(); i++ )
    {
       Vec(i)->AddOneVector(a, *mv1.GetVector(i), c);
    }
    ObjectChanged();
 }
 
-void
-MultiVectorMatrix::AddRightMultMatrix(Number a,
-                                      const MultiVectorMatrix& U,
-                                      const Matrix& C,
-                                      Number b)
+void MultiVectorMatrix::AddRightMultMatrix(
+   Number                   a,
+   const MultiVectorMatrix& U,
+   const Matrix&            C,
+   Number                   b
+   )
 {
-   DBG_ASSERT(NRows() == U.NRows());
-   DBG_ASSERT(U.NCols() == C.NRows());
-   DBG_ASSERT(NCols() == C.NCols());
+   DBG_ASSERT(NRows() == U.NRows()); DBG_ASSERT(U.NCols() == C.NRows()); DBG_ASSERT(NCols() == C.NCols());
 
-   if (b == 0.)
+   if( b == 0. )
    {
       FillWithNewVectors();
    }
@@ -246,11 +261,11 @@ MultiVectorMatrix::AddRightMultMatrix(Number a,
 
    const DenseGenMatrix* dgm_C = static_cast<const DenseGenMatrix*>(&C);
    DBG_ASSERT(dynamic_cast<const DenseGenMatrix*>(&C));
-   for (Index i = 0; i < NCols(); i++)
+   for( Index i = 0; i < NCols(); i++ )
    {
       const Number* CValues = dgm_C->Values();
       Number* myvalues = mydvec->Values();
-      for (Index j = 0; j < U.NCols(); j++)
+      for( Index j = 0; j < U.NCols(); j++ )
       {
          myvalues[j] = CValues[i * C.NRows() + j];
       }
@@ -261,9 +276,9 @@ MultiVectorMatrix::AddRightMultMatrix(Number a,
 
 bool MultiVectorMatrix::HasValidNumbersImpl() const
 {
-   for (Index i = 0; i < NCols(); i++)
+   for( Index i = 0; i < NCols(); i++ )
    {
-      if (!ConstVec(i)->HasValidNumbers())
+      if( !ConstVec(i)->HasValidNumbers() )
       {
          return false;
       }
@@ -271,57 +286,58 @@ bool MultiVectorMatrix::HasValidNumbersImpl() const
    return true;
 }
 
-void
-MultiVectorMatrix::ComputeRowAMaxImpl(Vector& rows_norms, bool init) const
+void MultiVectorMatrix::ComputeRowAMaxImpl(
+   Vector& rows_norms,
+   bool    init
+   ) const
 {
-   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED,
-                   "MultiVectorMatrix::ComputeRowAMaxImpl not implemented");
+   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "MultiVectorMatrix::ComputeRowAMaxImpl not implemented");
 }
 
-void
-MultiVectorMatrix::ComputeColAMaxImpl(Vector& cols_norms, bool init) const
+void MultiVectorMatrix::ComputeColAMaxImpl(
+   Vector& cols_norms,
+   bool    init
+   ) const
 {
-   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED,
-                   "MultiVectorMatrix::ComputeColAMaxImpl not implemented");
+   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "MultiVectorMatrix::ComputeColAMaxImpl not implemented");
 }
 
-void MultiVectorMatrix::PrintImpl(const Journalist& jnlst,
-                                  EJournalLevel level,
-                                  EJournalCategory category,
-                                  const std::string& name,
-                                  Index indent,
-                                  const std::string& prefix) const
+void MultiVectorMatrix::PrintImpl(
+   const Journalist&  jnlst,
+   EJournalLevel      level,
+   EJournalCategory   category,
+   const std::string& name,
+   Index              indent,
+   const std::string& prefix
+   ) const
 {
    jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent,
-                        "%sMultiVectorMatrix \"%s\" with %d columns:\n",
-                        prefix.c_str(), name.c_str(), NCols());
+   jnlst.PrintfIndented(level, category, indent, "%sMultiVectorMatrix \"%s\" with %d columns:\n", prefix.c_str(),
+      name.c_str(), NCols());
 
-   for (Index i = 0; i < NCols(); i++)
+   for( Index i = 0; i < NCols(); i++ )
    {
-      if (ConstVec(i))
+      if( ConstVec(i) )
       {
          DBG_ASSERT(name.size() < 200);
          char buffer[256];
          Snprintf(buffer, 255, "%s[%2d]", name.c_str(), i);
          std::string term_name = buffer;
-         ConstVec(i)->Print(&jnlst, level, category, term_name,
-                            indent + 1, prefix);
+         ConstVec(i)->Print(&jnlst, level, category, term_name, indent + 1, prefix);
       }
       else
       {
-         jnlst.PrintfIndented(level, category, indent,
-                              "%sVector in column %d is not yet set!\n",
-                              prefix.c_str(), i);
+         jnlst.PrintfIndented(level, category, indent, "%sVector in column %d is not yet set!\n", prefix.c_str(), i);
       }
    }
 }
 
-MultiVectorMatrixSpace::MultiVectorMatrixSpace(Index ncols,
-      const VectorSpace& vec_space)
-   :
-   MatrixSpace(vec_space.Dim(), ncols),
-   vec_space_(&vec_space)
-{}
+MultiVectorMatrixSpace::MultiVectorMatrixSpace(
+   Index              ncols,
+   const VectorSpace& vec_space
+   )
+   : MatrixSpace(vec_space.Dim(), ncols),
+     vec_space_(&vec_space)
+{ }
 
 } // namespace Ipopt

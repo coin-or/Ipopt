@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #ifndef __IPDIAGMATRIX_HPP__
@@ -15,29 +13,34 @@
 namespace Ipopt
 {
 
-/** Class for diagonal matrices.  The diagonal is stored as a
- *  Vector. */
-class DiagMatrix : public SymMatrix
+/** Class for diagonal matrices.
+ *
+ *  The diagonal is stored as a Vector.
+ */
+class DiagMatrix: public SymMatrix
 {
 public:
 
    /**@name Constructors / Destructors */
    //@{
-
    /** Constructor, given the corresponding matrix space. */
-   DiagMatrix(const SymMatrixSpace* owner_space);
+   DiagMatrix(
+      const SymMatrixSpace* owner_space
+      );
 
    /** Destructor */
    ~DiagMatrix();
    //@}
 
-   /** Method for setting the diagonal elements (as a Vector). */
-   void SetDiag(const Vector& diag)
+   /** Set the diagonal elements (as a Vector). */
+   void SetDiag(
+      const Vector& diag
+      )
    {
       diag_ = &diag;
    }
 
-   /** Method for setting the diagonal elements. */
+   /** Get the diagonal elements. */
    SmartPtr<const Vector> GetDiag() const
    {
       return diag_;
@@ -46,21 +49,28 @@ public:
 protected:
    /**@name Methods overloaded from matrix */
    //@{
-   virtual void MultVectorImpl(Number alpha, const Vector& x,
-                               Number beta, Vector& y) const;
+   virtual void MultVectorImpl(
+      Number        alpha,
+      const Vector& x,
+      Number        beta,
+      Vector&       y
+      ) const;
 
-   /** Method for determining if all stored numbers are valid (i.e.,
-    *  no Inf or Nan). */
    virtual bool HasValidNumbersImpl() const;
 
-   virtual void ComputeRowAMaxImpl(Vector& rows_norms, bool init) const;
+   virtual void ComputeRowAMaxImpl(
+      Vector& rows_norms,
+      bool    init
+      ) const;
 
-   virtual void PrintImpl(const Journalist& jnlst,
-                          EJournalLevel level,
-                          EJournalCategory category,
-                          const std::string& name,
-                          Index indent,
-                          const std::string& prefix) const;
+   virtual void PrintImpl(
+      const Journalist&  jnlst,
+      EJournalLevel      level,
+      EJournalCategory   category,
+      const std::string& name,
+      Index              indent,
+      const std::string& prefix
+      ) const;
    //@}
 
 private:
@@ -76,10 +86,14 @@ private:
    DiagMatrix();
 
    /** Copy Constructor */
-   DiagMatrix(const DiagMatrix&);
+   DiagMatrix(
+      const DiagMatrix&
+      );
 
-   /** Overloaded Equals Operator */
-   void operator=(const DiagMatrix&);
+   /** Default Assignment Operator */
+   void operator=(
+      const DiagMatrix&
+      );
    //@}
 
    /** Vector storing the diagonal elements */
@@ -87,24 +101,23 @@ private:
 };
 
 /** This is the matrix space for DiagMatrix. */
-class DiagMatrixSpace : public SymMatrixSpace
+class DiagMatrixSpace: public SymMatrixSpace
 {
 public:
    /** @name Constructors / Destructors */
    //@{
    /** Constructor, given the dimension of the matrix. */
-   DiagMatrixSpace(Index dim)
-      :
-      SymMatrixSpace(dim)
-   {}
+   DiagMatrixSpace(
+      Index dim
+      )
+      : SymMatrixSpace(dim)
+   { }
 
    /** Destructor */
    virtual ~DiagMatrixSpace()
-   {}
+   { }
    //@}
 
-   /** Overloaded MakeNew method for the SymMatrixSpace base class.
-    */
    virtual SymMatrix* MakeNewSymMatrix() const
    {
       return MakeNewDiagMatrix();
@@ -129,10 +142,14 @@ private:
    DiagMatrixSpace();
 
    /** Copy Constructor */
-   DiagMatrixSpace(const DiagMatrixSpace&);
+   DiagMatrixSpace(
+      const DiagMatrixSpace&
+      );
 
-   /** Overloaded Equals Operator */
-   void operator=(const DiagMatrixSpace&);
+   /** Default Assignment Operator */
+   void operator=(
+      const DiagMatrixSpace&
+      );
    //@}
 
 };

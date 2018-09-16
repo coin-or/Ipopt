@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Andreas Waechter            IBM    2005-12-25
 
 #ifndef __IPLOWRANKUPDATESYMMATRIX_HPP__
@@ -20,6 +18,7 @@ namespace Ipopt
 class LowRankUpdateSymMatrixSpace;
 
 /** Class for symmetric matrices, represented as low-rank updates.
+ *
  *  The matrix M is represented as M = P_LR(D + V V^T - U U^T)P_LR^T
  *  (if reduced_diag is true), or M = D + P_LR(V V^T - U U^T)P_LR^T
  *  (if reduced_diag is false).  D is a diagonal matrix, and V and U
@@ -27,23 +26,26 @@ class LowRankUpdateSymMatrixSpace;
  *  vectors in the low-rank update (before expansion) live in the
  *  LowRankVectorSpace.  If P_LR is NULL, P_LR is assumed to be the
  *  identity matrix.  If V or U is NULL, it is assume to be a matrix
- *  of zero columns. */
-class LowRankUpdateSymMatrix : public SymMatrix
+ *  of zero columns.
+ */
+class LowRankUpdateSymMatrix: public SymMatrix
 {
 public:
-
    /**@name Constructors / Destructors */
    //@{
-
    /** Constructor, given the corresponding matrix space. */
-   LowRankUpdateSymMatrix(const LowRankUpdateSymMatrixSpace* owner_space);
+   LowRankUpdateSymMatrix(
+      const LowRankUpdateSymMatrixSpace* owner_space
+      );
 
    /** Destructor */
    ~LowRankUpdateSymMatrix();
    //@}
 
    /** Method for setting the diagonal elements (as a Vector). */
-   void SetDiag(const Vector& D)
+   void SetDiag(
+      const Vector& D
+      )
    {
       D_ = &D;
       ObjectChanged();
@@ -56,7 +58,9 @@ public:
    }
 
    /** Method for setting the positive low-rank update part. */
-   void SetV(const MultiVectorMatrix& V)
+   void SetV(
+      const MultiVectorMatrix& V
+      )
    {
       V_ = &V;
       ObjectChanged();
@@ -69,7 +73,9 @@ public:
    }
 
    /** Method for setting the negative low-rank update part. */
-   void SetU(const MultiVectorMatrix& U)
+   void SetU(
+      const MultiVectorMatrix& U
+      )
    {
       U_ = &U;
       ObjectChanged();
@@ -82,37 +88,48 @@ public:
    }
 
    /** Return the expansion matrix to lift the low-rank update to the
-    *  higher-dimensional space. */
+    *  higher-dimensional space.
+    */
    SmartPtr<const Matrix> P_LowRank() const;
 
-   /** Return the vector space in with the low-rank update vectors
-    *  live. */
+   /** Return the vector space in with the low-rank update vectors live. */
    SmartPtr<const VectorSpace> LowRankVectorSpace() const;
 
    /** Flag indicating whether the diagonal term lives in the smaller
-    *  space (from P_LowRank) or in the full space. */
+    *  space (from P_LowRank) or in the full space.
+    */
    bool ReducedDiag() const;
 
 protected:
    /**@name Methods overloaded from matrix */
    //@{
-   virtual void MultVectorImpl(Number alpha, const Vector& x,
-                               Number beta, Vector& y) const;
+   virtual void MultVectorImpl(
+      Number        alpha,
+      const Vector& x,
+      Number        beta,
+      Vector&       y
+      ) const;
 
-   /** Method for determining if all stored numbers are valid (i.e.,
-    *  no Inf or Nan). */
    virtual bool HasValidNumbersImpl() const;
 
-   virtual void ComputeRowAMaxImpl(Vector& rows_norms, bool init) const;
+   virtual void ComputeRowAMaxImpl(
+      Vector& rows_norms,
+      bool    init
+      ) const;
 
-   virtual void ComputeColAMaxImpl(Vector& cols_norms, bool init) const;
+   virtual void ComputeColAMaxImpl(
+      Vector& cols_norms,
+      bool    init
+      ) const;
 
-   virtual void PrintImpl(const Journalist& jnlst,
-                          EJournalLevel level,
-                          EJournalCategory category,
-                          const std::string& name,
-                          Index indent,
-                          const std::string& prefix) const;
+   virtual void PrintImpl(
+      const Journalist&  jnlst,
+      EJournalLevel      level,
+      EJournalCategory   category,
+      const std::string& name,
+      Index              indent,
+      const std::string& prefix
+      ) const;
    //@}
 
 private:
@@ -122,16 +139,21 @@ private:
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Default Constructor */
    LowRankUpdateSymMatrix();
 
    /** Copy Constructor */
-   LowRankUpdateSymMatrix(const LowRankUpdateSymMatrix&);
+   LowRankUpdateSymMatrix(
+      const LowRankUpdateSymMatrix&
+      );
 
-   /** Overloaded Equals Operator */
-   void operator=(const LowRankUpdateSymMatrix&);
+   /** Default Assignment Operator */
+   void operator=(
+      const LowRankUpdateSymMatrix&
+      );
    //@}
 
    /** corresponding matrix space */
@@ -148,32 +170,31 @@ private:
 };
 
 /** This is the matrix space for LowRankUpdateSymMatrix. */
-class LowRankUpdateSymMatrixSpace : public SymMatrixSpace
+class LowRankUpdateSymMatrixSpace: public SymMatrixSpace
 {
 public:
    /** @name Constructors / Destructors */
    //@{
    /** Constructor, given the dimension of the matrix. */
-   LowRankUpdateSymMatrixSpace(Index dim,
-                               SmartPtr<const Matrix> P_LowRank,
-                               SmartPtr<const VectorSpace> LowRankVectorSpace,
-                               bool reduced_diag)
-      :
-      SymMatrixSpace(dim),
-      P_LowRank_(P_LowRank),
-      lowrank_vector_space_(LowRankVectorSpace),
-      reduced_diag_(reduced_diag)
+   LowRankUpdateSymMatrixSpace(
+      Index                       dim,
+      SmartPtr<const Matrix>      P_LowRank,
+      SmartPtr<const VectorSpace> LowRankVectorSpace,
+      bool                        reduced_diag
+      )
+      : SymMatrixSpace(dim),
+        P_LowRank_(P_LowRank),
+        lowrank_vector_space_(LowRankVectorSpace),
+        reduced_diag_(reduced_diag)
    {
       DBG_ASSERT(IsValid(lowrank_vector_space_));
    }
 
    /** Destructor */
    virtual ~LowRankUpdateSymMatrixSpace()
-   {}
+   { }
    //@}
 
-   /** Overloaded MakeNew method for the SymMatrixSpace base class.
-    */
    virtual SymMatrix* MakeNewSymMatrix() const
    {
       return MakeNewLowRankUpdateSymMatrix();
@@ -207,46 +228,50 @@ private:
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Default Constructor */
    LowRankUpdateSymMatrixSpace();
 
    /** Copy Constructor */
-   LowRankUpdateSymMatrixSpace(const LowRankUpdateSymMatrixSpace&);
+   LowRankUpdateSymMatrixSpace(
+      const LowRankUpdateSymMatrixSpace&
+      );
 
-   /** Overloaded Equals Operator */
-   void operator=(const LowRankUpdateSymMatrixSpace&);
+   /** Default Assignment Operator */
+   void operator=(
+      const LowRankUpdateSymMatrixSpace&
+      );
    //@}
 
    /** Expansion matrix to lift the low-rank approximation into a
-    *  possibly higher-dimensional space.  If it is NULL, it is
-    *  assume that no lift is performed. */
+    *  possibly higher-dimensional space.
+    *
+    *  If it is NULL, it is assume that no lift is performed.
+    */
    SmartPtr<const Matrix> P_LowRank_;
 
-   /** Vector space for the space in which the low-rank approximation
-    *  lives. */
+   /** Vector space for the space in which the low-rank approximation lives. */
    SmartPtr<const VectorSpace> lowrank_vector_space_;
 
    /** Flag indicating whether the diagonal matrix is nonzero only in
-    *  the space of V or in the full space. */
+    *  the space of V or in the full space.
+    */
    bool reduced_diag_;
 };
 
-inline
-SmartPtr<const Matrix> LowRankUpdateSymMatrix::P_LowRank() const
+inline SmartPtr<const Matrix> LowRankUpdateSymMatrix::P_LowRank() const
 {
    return owner_space_->P_LowRank();
 }
 
-inline
-SmartPtr<const VectorSpace> LowRankUpdateSymMatrix::LowRankVectorSpace() const
+inline SmartPtr<const VectorSpace> LowRankUpdateSymMatrix::LowRankVectorSpace() const
 {
    return owner_space_->LowRankVectorSpace();
 }
 
-inline
-bool LowRankUpdateSymMatrix::ReducedDiag() const
+inline bool LowRankUpdateSymMatrix::ReducedDiag() const
 {
    return owner_space_->ReducedDiag();
 }
