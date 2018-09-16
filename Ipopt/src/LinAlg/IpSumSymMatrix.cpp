@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpoptConfig.h"
@@ -22,47 +20,57 @@
 namespace Ipopt
 {
 
-SumSymMatrix::SumSymMatrix(const SumSymMatrixSpace* owner_space)
-   :
-   SymMatrix(owner_space),
-   factors_(owner_space->NTerms(), 1.0),
-   matrices_(owner_space->NTerms()),
-   owner_space_(owner_space)
-{}
+SumSymMatrix::SumSymMatrix(
+   const SumSymMatrixSpace* owner_space
+   )
+   : SymMatrix(owner_space),
+     factors_(owner_space->NTerms(), 1.0),
+     matrices_(owner_space->NTerms()),
+     owner_space_(owner_space)
+{ }
 
 SumSymMatrix::~SumSymMatrix()
-{}
+{ }
 
-void SumSymMatrix::SetTerm(Index iterm, Number factor,
-                           const SymMatrix& matrix)
+void SumSymMatrix::SetTerm(
+   Index            iterm,
+   Number           factor,
+   const SymMatrix& matrix
+   )
 {
    DBG_ASSERT(iterm < owner_space_->NTerms());
    factors_[iterm] = factor;
    matrices_[iterm] = &matrix;
 }
 
-void SumSymMatrix::GetTerm(Index iterm, Number& factor, SmartPtr<const SymMatrix>& matrix) const
+void SumSymMatrix::GetTerm(
+   Index                      iterm,
+   Number&                    factor,
+   SmartPtr<const SymMatrix>& matrix
+   ) const
 {
    DBG_ASSERT(iterm < owner_space_->NTerms());
    factor = factors_[iterm];
    matrix = matrices_[iterm];
 }
 
-
 Index SumSymMatrix::NTerms() const
 {
    return owner_space_->NTerms();
 }
 
-void SumSymMatrix::MultVectorImpl(Number alpha, const Vector& x,
-                                  Number beta, Vector& y) const
+void SumSymMatrix::MultVectorImpl(
+   Number        alpha,
+   const Vector& x,
+   Number        beta,
+   Vector&       y
+   ) const
 {
    //  A few sanity checks
-   DBG_ASSERT(Dim() == x.Dim());
-   DBG_ASSERT(Dim() == y.Dim());
+   DBG_ASSERT(Dim() == x.Dim()); DBG_ASSERT(Dim() == y.Dim());
 
    // Take care of the y part of the addition
-   if ( beta != 0.0 )
+   if( beta != 0.0 )
    {
       y.Scal(beta);
    }
@@ -71,20 +79,19 @@ void SumSymMatrix::MultVectorImpl(Number alpha, const Vector& x,
       y.Set(0.0);  // In case y hasn't been initialized yet
    }
 
-   for (Index iterm = 0; iterm < NTerms(); iterm++)
+   for( Index iterm = 0; iterm < NTerms(); iterm++ )
    {
       DBG_ASSERT(IsValid(matrices_[iterm]));
-      matrices_[iterm]->MultVector(alpha * factors_[iterm], x,
-                                   1.0, y);
+      matrices_[iterm]->MultVector(alpha * factors_[iterm], x, 1.0, y);
    }
 }
 
 bool SumSymMatrix::HasValidNumbersImpl() const
 {
-   for (Index iterm = 0; iterm < NTerms(); iterm++)
+   for( Index iterm = 0; iterm < NTerms(); iterm++ )
    {
       DBG_ASSERT(IsValid(matrices_[iterm]));
-      if (!matrices_[iterm]->HasValidNumbers())
+      if( !matrices_[iterm]->HasValidNumbers() )
       {
          return false;
       }
@@ -92,36 +99,38 @@ bool SumSymMatrix::HasValidNumbersImpl() const
    return true;
 }
 
-void
-SumSymMatrix::ComputeRowAMaxImpl(Vector& rows_norms, bool init) const
+void SumSymMatrix::ComputeRowAMaxImpl(
+   Vector& rows_norms,
+   bool    init
+   ) const
 {
-   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED,
-                   "SumSymMatrix::ComputeRowAMaxImpl not implemented");
+   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "SumSymMatrix::ComputeRowAMaxImpl not implemented");
 }
 
-void
-SumSymMatrix::ComputeColAMaxImpl(Vector& cols_norms, bool init) const
+void SumSymMatrix::ComputeColAMaxImpl(
+   Vector& cols_norms,
+   bool    init
+   ) const
 {
-   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED,
-                   "SumSymMatrix::ComputeColAMaxImpl not implemented");
+   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "SumSymMatrix::ComputeColAMaxImpl not implemented");
 }
 
-void SumSymMatrix::PrintImpl(const Journalist& jnlst,
-                             EJournalLevel level,
-                             EJournalCategory category,
-                             const std::string& name,
-                             Index indent,
-                             const std::string& prefix) const
+void SumSymMatrix::PrintImpl(
+   const Journalist&  jnlst,
+   EJournalLevel      level,
+   EJournalCategory   category,
+   const std::string& name,
+   Index              indent,
+   const std::string& prefix
+   ) const
 {
    jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent,
-                        "%sSumSymMatrix \"%s\" of dimension %d with %d terms:\n",
-                        prefix.c_str(), name.c_str(), Dim(), NTerms());
-   for (Index iterm = 0; iterm < NTerms(); iterm++)
+   jnlst.PrintfIndented(level, category, indent, "%sSumSymMatrix \"%s\" of dimension %d with %d terms:\n",
+      prefix.c_str(), name.c_str(), Dim(), NTerms());
+   for( Index iterm = 0; iterm < NTerms(); iterm++ )
    {
-      jnlst.PrintfIndented(level, category, indent,
-                           "%sTerm %d with factor %23.16e and the following matrix:\n",
-                           prefix.c_str(), iterm, factors_[iterm]);
+      jnlst.PrintfIndented(level, category, indent, "%sTerm %d with factor %23.16e and the following matrix:\n",
+         prefix.c_str(), iterm, factors_[iterm]);
       char buffer[256];
       Snprintf(buffer, 255, "Term: %d", iterm);
       std::string name = buffer;
@@ -129,19 +138,23 @@ void SumSymMatrix::PrintImpl(const Journalist& jnlst,
    }
 }
 
-void SumSymMatrixSpace::SetTermSpace
-(Index term_idx, const SymMatrixSpace& space)
+void SumSymMatrixSpace::SetTermSpace(
+   Index                 term_idx,
+   const SymMatrixSpace& space
+   )
 {
-   while (term_idx >= (Index)term_spaces_.size())
+   while( term_idx >= (Index) term_spaces_.size() )
    {
       term_spaces_.push_back(NULL);
    }
    term_spaces_[term_idx] = &space;
 }
 
-SmartPtr<const SymMatrixSpace> SumSymMatrixSpace::GetTermSpace(Index term_idx) const
+SmartPtr<const SymMatrixSpace> SumSymMatrixSpace::GetTermSpace(
+   Index term_idx
+   ) const
 {
-   if (term_idx >= 0 && term_idx < (Index)term_spaces_.size())
+   if( term_idx >= 0 && term_idx < (Index) term_spaces_.size() )
    {
       return term_spaces_[term_idx];
    }
@@ -158,4 +171,5 @@ SymMatrix* SumSymMatrixSpace::MakeNewSymMatrix() const
 {
    return MakeNewSumSymMatrix();
 }
+
 } // namespace Ipopt

@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #ifndef __IPIDENTITYMATRIX_HPP__
@@ -15,27 +13,27 @@
 namespace Ipopt
 {
 
-/** Class for Matrices which are multiples of the identity matrix.
- *
- */
-class IdentityMatrix : public SymMatrix
+/** Class for Matrices which are multiples of the identity matrix. */
+class IdentityMatrix: public SymMatrix
 {
 public:
-
    /**@name Constructors / Destructors */
    //@{
-
    /** Constructor, initializing with dimensions of the matrix
     *  (true identity matrix).
     */
-   IdentityMatrix(const SymMatrixSpace* owner_space);
+   IdentityMatrix(
+      const SymMatrixSpace* owner_space
+      );
 
    /** Destructor */
    ~IdentityMatrix();
    //@}
 
    /** Method for setting the factor for the identity matrix. */
-   void SetFactor(Number factor)
+   void SetFactor(
+      Number factor
+      )
    {
       factor_ = factor;
    }
@@ -46,30 +44,41 @@ public:
       return factor_;
    }
 
-   /** Method for obtaining the dimention of the matrix. */
+   /** Method for obtaining the dimension of the matrix. */
    Index Dim() const;
 
 protected:
    /**@name Methods overloaded from matrix */
    //@{
-   virtual void MultVectorImpl(Number alpha, const Vector& x,
-                               Number beta, Vector& y) const;
+   virtual void MultVectorImpl(
+      Number        alpha,
+      const Vector& x,
+      Number        beta,
+      Vector&       y
+      ) const;
 
-   virtual void AddMSinvZImpl(Number alpha, const Vector& S,
-                              const Vector& Z, Vector& X) const;
+   virtual void AddMSinvZImpl(
+      Number        alpha,
+      const Vector& S,
+      const Vector& Z,
+      Vector&       X
+      ) const;
 
-   /** Method for determining if all stored numbers are valid (i.e.,
-    *  no Inf or Nan). */
    virtual bool HasValidNumbersImpl() const;
 
-   virtual void ComputeRowAMaxImpl(Vector& rows_norms, bool init) const;
+   virtual void ComputeRowAMaxImpl(
+      Vector& rows_norms,
+      bool    init
+      ) const;
 
-   virtual void PrintImpl(const Journalist& jnlst,
-                          EJournalLevel level,
-                          EJournalCategory category,
-                          const std::string& name,
-                          Index indent,
-                          const std::string& prefix) const;
+   virtual void PrintImpl(
+      const Journalist&  jnlst,
+      EJournalLevel      level,
+      EJournalCategory   category,
+      const std::string& name,
+      Index              indent,
+      const std::string& prefix
+      ) const;
    //@}
 
 private:
@@ -79,16 +88,21 @@ private:
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Default Constructor */
    IdentityMatrix();
 
    /** Copy Constructor */
-   IdentityMatrix(const IdentityMatrix&);
+   IdentityMatrix(
+      const IdentityMatrix&
+      );
 
-   /** Overloaded Equals Operator */
-   void operator=(const IdentityMatrix&);
+   /** Default Assignment Operator */
+   void operator=(
+      const IdentityMatrix&
+      );
    //@}
 
    /** Scaling factor for this identity matrix */
@@ -96,24 +110,23 @@ private:
 };
 
 /** This is the matrix space for IdentityMatrix. */
-class IdentityMatrixSpace : public SymMatrixSpace
+class IdentityMatrixSpace: public SymMatrixSpace
 {
 public:
    /** @name Constructors / Destructors */
    //@{
    /** Constructor, given the dimension of the matrix. */
-   IdentityMatrixSpace(Index dim)
-      :
-      SymMatrixSpace(dim)
-   {}
+   IdentityMatrixSpace(
+      Index dim
+      )
+      : SymMatrixSpace(dim)
+   { }
 
    /** Destructor */
    virtual ~IdentityMatrixSpace()
-   {}
+   { }
    //@}
 
-   /** Overloaded MakeNew method for the SymMatrixSpace base class.
-    */
    virtual SymMatrix* MakeNewSymMatrix() const
    {
       return MakeNewIdentityMatrix();
@@ -132,16 +145,21 @@ private:
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Default Constructor */
    IdentityMatrixSpace();
 
    /** Copy Constructor */
-   IdentityMatrixSpace(const IdentityMatrixSpace&);
+   IdentityMatrixSpace(
+      const IdentityMatrixSpace&
+      );
 
-   /** Overloaded Equals Operator */
-   void operator=(const IdentityMatrixSpace&);
+   /** Default Assignment Operator */
+   void operator=(
+      const IdentityMatrixSpace&
+      );
    //@}
 };
 

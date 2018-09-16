@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpoptConfig.h"
@@ -25,63 +23,70 @@
 namespace Ipopt
 {
 
-CompoundMatrix::CompoundMatrix(const CompoundMatrixSpace* owner_space)
-   :
-   Matrix(owner_space),
-   owner_space_(owner_space),
-   matrices_valid_(false)
+CompoundMatrix::CompoundMatrix(
+   const CompoundMatrixSpace* owner_space
+   )
+   : Matrix(owner_space),
+     owner_space_(owner_space),
+     matrices_valid_(false)
 {
    std::vector<SmartPtr<Matrix> > row(NComps_Cols());
    std::vector<SmartPtr<const Matrix> > const_row(NComps_Cols());
-   for (Index irow = 0; irow < NComps_Rows(); irow++)
+   for( Index irow = 0; irow < NComps_Rows(); irow++ )
    {
       const_comps_.push_back(const_row);
       comps_.push_back(row);
    }
 }
 
-
 CompoundMatrix::~CompoundMatrix()
-{}
+{ }
 
-void CompoundMatrix::SetComp(Index irow, Index jcol, const Matrix& matrix)
+void CompoundMatrix::SetComp(
+   Index         irow,
+   Index         jcol,
+   const Matrix& matrix
+   )
 {
-   DBG_ASSERT(irow < NComps_Rows());
-   DBG_ASSERT(jcol < NComps_Cols());
-   DBG_ASSERT(owner_space_->GetCompSpace(irow, jcol)->IsMatrixFromSpace(matrix));
+   DBG_ASSERT(irow < NComps_Rows()); DBG_ASSERT(jcol < NComps_Cols()); DBG_ASSERT(owner_space_->GetCompSpace(irow, jcol)->IsMatrixFromSpace(matrix));
 
    comps_[irow][jcol] = NULL;
    const_comps_[irow][jcol] = &matrix;
    ObjectChanged();
 }
 
-void CompoundMatrix::SetCompNonConst(Index irow, Index jcol, Matrix& matrix)
+void CompoundMatrix::SetCompNonConst(
+   Index irow,
+   Index jcol,
+   Matrix& matrix)
 {
-   DBG_ASSERT(irow < NComps_Rows());
-   DBG_ASSERT(jcol < NComps_Cols());
-   DBG_ASSERT(owner_space_->GetCompSpace(irow, jcol)->IsMatrixFromSpace(matrix));
+   DBG_ASSERT(irow < NComps_Rows()); DBG_ASSERT(jcol < NComps_Cols()); DBG_ASSERT(owner_space_->GetCompSpace(irow, jcol)->IsMatrixFromSpace(matrix));
 
    const_comps_[irow][jcol] = NULL;
    comps_[irow][jcol] = &matrix;
    ObjectChanged();
 }
 
-void CompoundMatrix::CreateBlockFromSpace(Index irow, Index jcol)
+void CompoundMatrix::CreateBlockFromSpace(
+   Index irow,
+   Index jcol
+   )
 {
-   DBG_ASSERT(irow < NComps_Rows());
-   DBG_ASSERT(jcol < NComps_Cols());
-   DBG_ASSERT(IsValid(owner_space_->GetCompSpace(irow, jcol)));
+   DBG_ASSERT(irow < NComps_Rows()); DBG_ASSERT(jcol < NComps_Cols()); DBG_ASSERT(IsValid(owner_space_->GetCompSpace(irow, jcol)));
    SetCompNonConst(irow, jcol, *owner_space_->GetCompSpace(irow, jcol)->MakeNew());
 }
 
-void CompoundMatrix::MultVectorImpl(Number alpha, const Vector& x,
-                                    Number beta, Vector& y) const
+void CompoundMatrix::MultVectorImpl(
+   Number        alpha,
+   const Vector& x,
+   Number        beta,
+   Vector&       y
+   ) const
 {
-   if (!matrices_valid_)
+   if( !matrices_valid_ )
    {
       matrices_valid_ = MatricesValid();
-   }
-   DBG_ASSERT(matrices_valid_);
+   } DBG_ASSERT(matrices_valid_);
 
    // The vectors are assumed to be compound Vectors as well
    const CompoundVector* comp_x = dynamic_cast<const CompoundVector*>(&x);
@@ -107,23 +112,23 @@ void CompoundMatrix::MultVectorImpl(Number alpha, const Vector& x,
       DBG_ASSERT(NComps_Rows() == 1);
    }
 #endif
-   if (comp_x)
+   if( comp_x )
    {
-      if (NComps_Cols() != comp_x->NComps())
+      if( NComps_Cols() != comp_x->NComps() )
       {
          comp_x = NULL;
       }
    }
-   if (comp_y)
+   if( comp_y )
    {
-      if (NComps_Rows() != comp_y->NComps())
+      if( NComps_Rows() != comp_y->NComps() )
       {
          comp_y = NULL;
       }
    }
 
    // Take care of the y part of the addition
-   if ( beta != 0.0 )
+   if( beta != 0.0 )
    {
       y.Scal(beta);
    }
@@ -132,50 +137,49 @@ void CompoundMatrix::MultVectorImpl(Number alpha, const Vector& x,
       y.Set(0.0);  // In case y hasn't been initialized yet
    }
 
-   for ( Index irow = 0; irow < NComps_Rows(); irow++ )
+   for( Index irow = 0; irow < NComps_Rows(); irow++ )
    {
       SmartPtr<Vector> y_i;
-      if (comp_y)
+      if( comp_y )
       {
          y_i = comp_y->GetCompNonConst(irow);
       }
       else
       {
          y_i = &y;
-      }
-      DBG_ASSERT(IsValid(y_i));
+      } DBG_ASSERT(IsValid(y_i));
 
-      for ( Index jcol = 0; jcol < NComps_Cols(); jcol++ )
+      for( Index jcol = 0; jcol < NComps_Cols(); jcol++ )
       {
-         if ( (owner_space_->Diagonal() && irow == jcol)
-              || (!owner_space_->Diagonal() && ConstComp(irow, jcol)) )
+         if( (owner_space_->Diagonal() && irow == jcol) || (!owner_space_->Diagonal() && ConstComp(irow, jcol)) )
          {
             SmartPtr<const Vector> x_j;
-            if (comp_x)
+            if( comp_x )
             {
                x_j = comp_x->GetComp(jcol);
             }
-            else if (NComps_Cols() == 1)
+            else if( NComps_Cols() == 1 )
             {
                x_j = &x;
-            }
-            DBG_ASSERT(IsValid(x_j));
+            } DBG_ASSERT(IsValid(x_j));
 
-            ConstComp(irow, jcol)->MultVector(alpha, *x_j,
-                                              1., *y_i);
+            ConstComp(irow, jcol)->MultVector(alpha, *x_j, 1., *y_i);
          }
       }
    }
 }
 
-void CompoundMatrix::TransMultVectorImpl(Number alpha, const Vector& x,
-      Number beta, Vector& y) const
+void CompoundMatrix::TransMultVectorImpl(
+   Number        alpha,
+   const Vector& x,
+   Number        beta,
+   Vector&       y
+   ) const
 {
-   if (!matrices_valid_)
+   if( !matrices_valid_ )
    {
       matrices_valid_ = MatricesValid();
-   }
-   DBG_ASSERT(matrices_valid_);
+   } DBG_ASSERT(matrices_valid_);
 
    // The vectors are assumed to be compound Vectors as well
    const CompoundVector* comp_x = dynamic_cast<const CompoundVector*>(&x);
@@ -201,23 +205,23 @@ void CompoundMatrix::TransMultVectorImpl(Number alpha, const Vector& x,
       DBG_ASSERT(NComps_Rows() == 1);
    }
 #endif
-   if (comp_y)
+   if( comp_y )
    {
-      if (NComps_Cols() != comp_y->NComps())
+      if( NComps_Cols() != comp_y->NComps() )
       {
          comp_y = NULL;
       }
    }
-   if (comp_x)
+   if( comp_x )
    {
-      if (NComps_Rows() != comp_x->NComps())
+      if( NComps_Rows() != comp_x->NComps() )
       {
          comp_x = NULL;
       }
    }
 
    // Take care of the y part of the addition
-   if ( beta != 0.0 )
+   if( beta != 0.0 )
    {
       y.Scal(beta);
    }
@@ -226,45 +230,45 @@ void CompoundMatrix::TransMultVectorImpl(Number alpha, const Vector& x,
       y.Set(0.0);  // In case y hasn't been initialized yet
    }
 
-   for ( Index irow = 0; irow < NComps_Cols(); irow++ )
+   for( Index irow = 0; irow < NComps_Cols(); irow++ )
    {
       SmartPtr<Vector> y_i;
-      if (comp_y)
+      if( comp_y )
       {
          y_i = comp_y->GetCompNonConst(irow);
       }
       else
       {
          y_i = &y;
-      }
-      DBG_ASSERT(IsValid(y_i));
+      } DBG_ASSERT(IsValid(y_i));
 
-      for ( Index jcol = 0; jcol < NComps_Rows(); jcol++ )
+      for( Index jcol = 0; jcol < NComps_Rows(); jcol++ )
       {
-         if ( (owner_space_->Diagonal() && irow == jcol)
-              || (!owner_space_->Diagonal() && ConstComp(jcol, irow)) )
+         if( (owner_space_->Diagonal() && irow == jcol) || (!owner_space_->Diagonal() && ConstComp(jcol, irow)) )
          {
             SmartPtr<const Vector> x_j;
-            if (comp_x)
+            if( comp_x )
             {
                x_j = comp_x->GetComp(jcol);
             }
             else
             {
                x_j = &x;
-            }
-            DBG_ASSERT(IsValid(x_j));
+            } DBG_ASSERT(IsValid(x_j));
 
-            ConstComp(jcol, irow)->TransMultVector(alpha, *x_j,
-                                                   1., *y_i);
+            ConstComp(jcol, irow)->TransMultVector(alpha, *x_j, 1., *y_i);
          }
       }
    }
 }
 
 // Specialized method (overloaded from IpMatrix)
-void CompoundMatrix::AddMSinvZImpl(Number alpha, const Vector& S,
-                                   const Vector& Z, Vector& X) const
+void CompoundMatrix::AddMSinvZImpl(
+   Number        alpha,
+   const Vector& S,
+   const Vector& Z,
+   Vector&       X
+   ) const
 {
    // The vectors are assumed to be compound Vectors as well (unless they
    // are assumed to consist of only one component
@@ -299,66 +303,62 @@ void CompoundMatrix::AddMSinvZImpl(Number alpha, const Vector& S,
       DBG_ASSERT(NComps_Rows() == 1);
    }
 #endif
-   if (comp_S)
+   if( comp_S )
    {
-      if (NComps_Cols() != comp_S->NComps())
+      if( NComps_Cols() != comp_S->NComps() )
       {
          comp_S = NULL;
       }
    }
-   if (comp_Z)
+   if( comp_Z )
    {
-      if (NComps_Cols() != comp_Z->NComps())
+      if( NComps_Cols() != comp_Z->NComps() )
       {
          comp_Z = NULL;
       }
    }
-   if (comp_X)
+   if( comp_X )
    {
-      if (NComps_Rows() != comp_X->NComps())
+      if( NComps_Rows() != comp_X->NComps() )
       {
          comp_X = NULL;
       }
    }
 
-   for ( Index irow = 0; irow < NComps_Rows(); irow++ )
+   for( Index irow = 0; irow < NComps_Rows(); irow++ )
    {
       SmartPtr<Vector> X_i;
-      if (comp_X)
+      if( comp_X )
       {
          X_i = comp_X->GetCompNonConst(irow);
       }
       else
       {
          X_i = &X;
-      }
-      DBG_ASSERT(IsValid(X_i));
+      } DBG_ASSERT(IsValid(X_i));
 
-      for ( Index jcol = 0; jcol < NComps_Cols(); jcol++ )
+      for( Index jcol = 0; jcol < NComps_Cols(); jcol++ )
       {
-         if ( (owner_space_->Diagonal() && irow == jcol)
-              || (!owner_space_->Diagonal() && ConstComp(irow, jcol)) )
+         if( (owner_space_->Diagonal() && irow == jcol) || (!owner_space_->Diagonal() && ConstComp(irow, jcol)) )
          {
             SmartPtr<const Vector> S_j;
-            if (comp_S)
+            if( comp_S )
             {
                S_j = comp_S->GetComp(jcol);
             }
             else
             {
                S_j = &S;
-            }
-            DBG_ASSERT(IsValid(S_j));
+            } DBG_ASSERT(IsValid(S_j));
             SmartPtr<const Vector> Z_j;
-            if (comp_Z)
+            if( comp_Z )
             {
                Z_j = comp_Z->GetComp(jcol);
             }
             else
             {
                Z_j = &Z;
-            }
-            DBG_ASSERT(IsValid(Z_j));
+            } DBG_ASSERT(IsValid(Z_j));
 
             ConstComp(irow, jcol)->AddMSinvZ(alpha, *S_j, *Z_j, *X_i);
          }
@@ -367,9 +367,14 @@ void CompoundMatrix::AddMSinvZImpl(Number alpha, const Vector& S,
 }
 
 // Specialized method (overloaded from IpMatrix)
-void CompoundMatrix::SinvBlrmZMTdBrImpl(Number alpha, const Vector& S,
-                                        const Vector& R, const Vector& Z,
-                                        const Vector& D, Vector& X) const
+void CompoundMatrix::SinvBlrmZMTdBrImpl(
+   Number        alpha,
+   const Vector& S,
+   const Vector& R,
+   const Vector& Z,
+   const Vector& D,
+   Vector&       X
+   ) const
 {
    // First check if the matrix is indeed such that we can use the
    // special methods from the component spaces (this only works if
@@ -377,24 +382,24 @@ void CompoundMatrix::SinvBlrmZMTdBrImpl(Number alpha, const Vector& S,
 
    bool fast_SinvBlrmZMTdBr = false;
 
-   if (!owner_space_->Diagonal())
+   if( !owner_space_->Diagonal() )
    {
       fast_SinvBlrmZMTdBr = true;
-      for (Index jcol = 0; jcol < NComps_Cols(); jcol++ )
+      for( Index jcol = 0; jcol < NComps_Cols(); jcol++ )
       {
          Index nblocks = 0;
-         for (Index irow = 0; irow < NComps_Rows(); irow++ )
+         for( Index irow = 0; irow < NComps_Rows(); irow++ )
          {
-            if (ConstComp(irow, jcol))
+            if( ConstComp(irow, jcol) )
             {
                nblocks++;
-               if (nblocks > 1)
+               if( nblocks > 1 )
                {
                   break;
                }
             }
          }
-         if (nblocks != 1)
+         if( nblocks != 1 )
          {
             fast_SinvBlrmZMTdBr = false;
             break;
@@ -402,7 +407,7 @@ void CompoundMatrix::SinvBlrmZMTdBrImpl(Number alpha, const Vector& S,
       }
    }
 
-   if (!owner_space_->Diagonal() && !fast_SinvBlrmZMTdBr)
+   if( !owner_space_->Diagonal() && !fast_SinvBlrmZMTdBr )
    {
       // Use the standard replacement implementation
       Matrix::SinvBlrmZMTdBrImpl(alpha, S, R, Z, D, X);
@@ -461,50 +466,50 @@ void CompoundMatrix::SinvBlrmZMTdBrImpl(Number alpha, const Vector& S,
          DBG_ASSERT(NComps_Cols() == 1);
       }
 #endif
-      if (comp_S)
+      if( comp_S )
       {
-         if (NComps_Cols() != comp_S->NComps())
+         if( NComps_Cols() != comp_S->NComps() )
          {
             comp_S = NULL;
          }
       }
-      if (comp_Z)
+      if( comp_Z )
       {
-         if (NComps_Cols() != comp_Z->NComps())
+         if( NComps_Cols() != comp_Z->NComps() )
          {
             comp_Z = NULL;
          }
       }
-      if (comp_R)
+      if( comp_R )
       {
-         if (NComps_Cols() != comp_R->NComps())
+         if( NComps_Cols() != comp_R->NComps() )
          {
             comp_R = NULL;
          }
       }
-      if (comp_D)
+      if( comp_D )
       {
-         if (NComps_Rows() != comp_D->NComps())
+         if( NComps_Rows() != comp_D->NComps() )
          {
             comp_D = NULL;
          }
       }
-      if (comp_X)
+      if( comp_X )
       {
-         if (NComps_Cols() != comp_X->NComps())
+         if( NComps_Cols() != comp_X->NComps() )
          {
             comp_X = NULL;
          }
       }
 
-      for (Index irow = 0; irow < NComps_Cols(); irow++)
+      for( Index irow = 0; irow < NComps_Cols(); irow++ )
       {
          Index jcol = irow;
-         if (!owner_space_->Diagonal())
+         if( !owner_space_->Diagonal() )
          {
-            for (Index j = 0; j < NComps_Rows(); j++)
+            for( Index j = 0; j < NComps_Rows(); j++ )
             {
-               if (ConstComp(j, irow))
+               if( ConstComp(j, irow) )
                {
                   jcol = j;
                   break;
@@ -512,7 +517,7 @@ void CompoundMatrix::SinvBlrmZMTdBrImpl(Number alpha, const Vector& S,
             }
          }
          SmartPtr<const Vector> S_i;
-         if (comp_S)
+         if( comp_S )
          {
             S_i = comp_S->GetComp(irow);
          }
@@ -522,7 +527,7 @@ void CompoundMatrix::SinvBlrmZMTdBrImpl(Number alpha, const Vector& S,
          }
          DBG_ASSERT(IsValid(S_i));
          SmartPtr<const Vector> Z_i;
-         if (comp_Z)
+         if( comp_Z )
          {
             Z_i = comp_Z->GetComp(irow);
          }
@@ -532,7 +537,7 @@ void CompoundMatrix::SinvBlrmZMTdBrImpl(Number alpha, const Vector& S,
          }
          DBG_ASSERT(IsValid(Z_i));
          SmartPtr<const Vector> R_i;
-         if (comp_R)
+         if( comp_R )
          {
             R_i = comp_R->GetComp(irow);
          }
@@ -542,7 +547,7 @@ void CompoundMatrix::SinvBlrmZMTdBrImpl(Number alpha, const Vector& S,
          }
          DBG_ASSERT(IsValid(R_i));
          SmartPtr<const Vector> D_i;
-         if (comp_D)
+         if( comp_D )
          {
             D_i = comp_D->GetComp(jcol);
          }
@@ -552,7 +557,7 @@ void CompoundMatrix::SinvBlrmZMTdBrImpl(Number alpha, const Vector& S,
          }
          DBG_ASSERT(IsValid(D_i));
          SmartPtr<Vector> X_i;
-         if (comp_X)
+         if( comp_X )
          {
             X_i = comp_X->GetCompNonConst(irow);
          }
@@ -562,28 +567,26 @@ void CompoundMatrix::SinvBlrmZMTdBrImpl(Number alpha, const Vector& S,
          }
          DBG_ASSERT(IsValid(X_i));
 
-         ConstComp(jcol, irow)->SinvBlrmZMTdBr(alpha, *S_i, *R_i, *Z_i,
-                                               *D_i, *X_i);
+         ConstComp(jcol, irow)->SinvBlrmZMTdBr(alpha, *S_i, *R_i, *Z_i, *D_i, *X_i);
       }
    }
 }
 
 bool CompoundMatrix::HasValidNumbersImpl() const
 {
-   if (!matrices_valid_)
+   if( !matrices_valid_ )
    {
       matrices_valid_ = MatricesValid();
    }
    DBG_ASSERT(matrices_valid_);
 
-   for ( Index irow = 0; irow < NComps_Rows(); irow++ )
+   for( Index irow = 0; irow < NComps_Rows(); irow++ )
    {
-      for ( Index jcol = 0; jcol < NComps_Cols(); jcol++ )
+      for( Index jcol = 0; jcol < NComps_Cols(); jcol++ )
       {
-         if ( (owner_space_->Diagonal() && irow == jcol)
-              || (!owner_space_->Diagonal() && ConstComp(irow, jcol)) )
+         if( (owner_space_->Diagonal() && irow == jcol) || (!owner_space_->Diagonal() && ConstComp(irow, jcol)) )
          {
-            if (!ConstComp(irow, jcol)->HasValidNumbers())
+            if( !ConstComp(irow, jcol)->HasValidNumbers() )
             {
                return false;
             }
@@ -593,13 +596,15 @@ bool CompoundMatrix::HasValidNumbersImpl() const
    return true;
 }
 
-void CompoundMatrix::ComputeRowAMaxImpl(Vector& rows_norms, bool init) const
+void CompoundMatrix::ComputeRowAMaxImpl(
+   Vector& rows_norms,
+   bool    init
+   ) const
 {
-   if (!matrices_valid_)
+   if( !matrices_valid_ )
    {
       matrices_valid_ = MatricesValid();
-   }
-   DBG_ASSERT(matrices_valid_);
+   } DBG_ASSERT(matrices_valid_);
 
    // The vector is assumed to be compound Vectors as well except if
    // there is only one component
@@ -616,43 +621,44 @@ void CompoundMatrix::ComputeRowAMaxImpl(Vector& rows_norms, bool init) const
       DBG_ASSERT(NComps_Rows() == 1);
    }
 #endif
-   if (comp_vec)
+   if( comp_vec )
    {
-      if (NComps_Rows() != comp_vec->NComps())
+      if( NComps_Rows() != comp_vec->NComps() )
       {
          comp_vec = NULL;
       }
    }
 
-   for (Index jcol = 0; jcol < NComps_Cols(); jcol++)
+   for( Index jcol = 0; jcol < NComps_Cols(); jcol++ )
    {
-      for (Index irow = 0; irow < NComps_Rows(); irow++)
+      for( Index irow = 0; irow < NComps_Rows(); irow++ )
       {
-         if (ConstComp(irow, jcol))
+         if( ConstComp(irow, jcol) )
          {
             SmartPtr<Vector> vec_i;
-            if (comp_vec)
+            if( comp_vec )
             {
                vec_i = comp_vec->GetCompNonConst(irow);
             }
             else
             {
                vec_i = &rows_norms;
-            }
-            DBG_ASSERT(IsValid(vec_i));
+            } DBG_ASSERT(IsValid(vec_i));
             ConstComp(irow, jcol)->ComputeRowAMax(*vec_i, false);
          }
       }
    }
 }
 
-void CompoundMatrix::ComputeColAMaxImpl(Vector& cols_norms, bool init) const
+void CompoundMatrix::ComputeColAMaxImpl(
+   Vector& cols_norms,
+   bool    init
+   ) const
 {
-   if (!matrices_valid_)
+   if( !matrices_valid_ )
    {
       matrices_valid_ = MatricesValid();
-   }
-   DBG_ASSERT(matrices_valid_);
+   } DBG_ASSERT(matrices_valid_);
 
    // The vector is assumed to be compound Vectors as well except if
    // there is only one component
@@ -669,69 +675,64 @@ void CompoundMatrix::ComputeColAMaxImpl(Vector& cols_norms, bool init) const
       DBG_ASSERT(NComps_Cols() == 1);
    }
 #endif
-   if (comp_vec)
+   if( comp_vec )
    {
-      if (NComps_Cols() != comp_vec->NComps())
+      if( NComps_Cols() != comp_vec->NComps() )
       {
          comp_vec = NULL;
       }
    }
 
-   for (Index irow = 0; irow < NComps_Rows(); irow++)
+   for( Index irow = 0; irow < NComps_Rows(); irow++ )
    {
-      for (Index jcol = 0; jcol < NComps_Cols(); jcol++)
+      for( Index jcol = 0; jcol < NComps_Cols(); jcol++ )
       {
-         if (ConstComp(irow, jcol))
+         if( ConstComp(irow, jcol) )
          {
             SmartPtr<Vector> vec_i;
-            if (comp_vec)
+            if( comp_vec )
             {
                vec_i = comp_vec->GetCompNonConst(irow);
             }
             else
             {
                vec_i = &cols_norms;
-            }
-            DBG_ASSERT(IsValid(vec_i));
+            } DBG_ASSERT(IsValid(vec_i));
             ConstComp(irow, jcol)->ComputeColAMax(*vec_i, false);
          }
       }
    }
 }
 
-void CompoundMatrix::PrintImpl(const Journalist& jnlst,
-                               EJournalLevel level,
-                               EJournalCategory category,
-                               const std::string& name,
-                               Index indent,
-                               const std::string& prefix) const
+void CompoundMatrix::PrintImpl(
+   const Journalist&  jnlst,
+   EJournalLevel      level,
+   EJournalCategory   category,
+   const std::string& name,
+   Index              indent,
+   const std::string& prefix
+   ) const
 {
    jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent,
-                        "%sCompoundMatrix \"%s\" with %d row and %d columns components:\n",
-                        prefix.c_str(), name.c_str(),
-                        NComps_Rows(), NComps_Cols());
-   for (Index irow = 0; irow < NComps_Rows(); irow++ )
+   jnlst.PrintfIndented(level, category, indent, "%sCompoundMatrix \"%s\" with %d row and %d columns components:\n",
+      prefix.c_str(), name.c_str(), NComps_Rows(), NComps_Cols());
+   for( Index irow = 0; irow < NComps_Rows(); irow++ )
    {
-      for (Index jcol = 0; jcol < NComps_Cols(); jcol++ )
+      for( Index jcol = 0; jcol < NComps_Cols(); jcol++ )
       {
-         jnlst.PrintfIndented(level, category, indent,
-                              "%sComponent for row %d and column %d:\n",
-                              prefix.c_str(), irow, jcol);
-         if (ConstComp(irow, jcol))
+         jnlst.PrintfIndented(level, category, indent, "%sComponent for row %d and column %d:\n", prefix.c_str(), irow,
+            jcol);
+         if( ConstComp(irow, jcol) )
          {
             DBG_ASSERT(name.size() < 200);
             char buffer[256];
             Snprintf(buffer, 255, "%s[%2d][%2d]", name.c_str(), irow, jcol);
             std::string term_name = buffer;
-            ConstComp(irow, jcol)->Print(&jnlst, level, category, term_name,
-                                         indent + 1, prefix);
+            ConstComp(irow, jcol)->Print(&jnlst, level, category, term_name, indent + 1, prefix);
          }
          else
          {
-            jnlst.PrintfIndented(level, category, indent,
-                                 "%sComponent has not been set.\n",
-                                 prefix.c_str());
+            jnlst.PrintfIndented(level, category, indent, "%sComponent has not been set.\n", prefix.c_str());
          }
       }
    }
@@ -743,14 +744,13 @@ bool CompoundMatrix::MatricesValid() const
    // We already check that the matrix agrees with the block space
    // in the SetComp methods
    bool retValue = true;
-   for (Index i = 0; i < NComps_Rows(); i++)
+   for( Index i = 0; i < NComps_Rows(); i++ )
    {
-      for (Index j = 0; j < NComps_Cols(); j++)
+      for( Index j = 0; j < NComps_Cols(); j++ )
       {
-         if ( (!ConstComp(i, j) && IsValid(owner_space_->GetCompSpace(i, j)) &&
-               owner_space_->GetCompSpace(i, j)->NRows() > 0 &&
-               owner_space_->GetCompSpace(i, j)->NCols() > 0)
-              || (ConstComp(i, j) && IsNull(owner_space_->GetCompSpace(i, j))) )
+         if( (!ConstComp(i, j) && IsValid(owner_space_->GetCompSpace(i, j))
+            && owner_space_->GetCompSpace(i, j)->NRows() > 0 && owner_space_->GetCompSpace(i, j)->NCols() > 0)
+            || (ConstComp(i, j) && IsNull(owner_space_->GetCompSpace(i, j))) )
          {
             retValue = false;
             break;
@@ -760,21 +760,24 @@ bool CompoundMatrix::MatricesValid() const
    return retValue;
 }
 
-
-CompoundMatrixSpace::CompoundMatrixSpace(Index ncomps_rows, Index ncomps_cols, Index total_nRows, Index total_nCols)
-   :
-   MatrixSpace(total_nRows, total_nCols),
-   ncomps_rows_(ncomps_rows),
-   ncomps_cols_(ncomps_cols),
-   dimensions_set_(false),
-   block_rows_(ncomps_rows, -1),
-   block_cols_(ncomps_cols, -1),
-   diagonal_(false)
+CompoundMatrixSpace::CompoundMatrixSpace(
+   Index ncomps_rows,
+   Index ncomps_cols,
+   Index total_nRows,
+   Index total_nCols
+   )
+   : MatrixSpace(total_nRows, total_nCols),
+     ncomps_rows_(ncomps_rows),
+     ncomps_cols_(ncomps_cols),
+     dimensions_set_(false),
+     block_rows_(ncomps_rows, -1),
+     block_cols_(ncomps_cols, -1),
+     diagonal_(false)
 {
    DBG_START_METH("CompoundMatrixSpace::CompoundMatrixSpace", 0);
    std::vector<SmartPtr<const MatrixSpace> > row(ncomps_cols_);
-   std::vector< bool > allocate_row(ncomps_cols_, false);
-   for (Index i = 0; i < ncomps_rows_; i++)
+   std::vector<bool> allocate_row(ncomps_cols_, false);
+   for( Index i = 0; i < ncomps_rows_; i++ )
    {
       DBG_PRINT((1, "block_rows_[%d] = %d\n", i, block_rows_[i]));
       comp_spaces_.push_back(row);
@@ -782,61 +785,61 @@ CompoundMatrixSpace::CompoundMatrixSpace(Index ncomps_rows, Index ncomps_cols, I
    }
 }
 
-void CompoundMatrixSpace::SetBlockCols(Index jcol, Index ncols)
+void CompoundMatrixSpace::SetBlockCols(
+   Index jcol,
+   Index ncols
+   )
 {
-   DBG_ASSERT(!dimensions_set_ && "for now, if the dimensions have all been set, they cannot be changed");
-   DBG_ASSERT(jcol < ncomps_cols_);
-   DBG_ASSERT(block_cols_[jcol] == -1 && "This dimension has already been set - sanity check");
+   DBG_ASSERT(!dimensions_set_ && "for now, if the dimensions have all been set, they cannot be changed"); DBG_ASSERT(jcol < ncomps_cols_); DBG_ASSERT(block_cols_[jcol] == -1 && "This dimension has already been set - sanity check");
    block_cols_[jcol] = ncols;
 }
 
-void CompoundMatrixSpace::SetBlockRows(Index irow, Index nrows)
+void CompoundMatrixSpace::SetBlockRows(
+   Index irow,
+   Index nrows
+   )
 {
-   DBG_ASSERT(!dimensions_set_ && "for now, if the dimensions have all been set, they cannot be changed");
-   DBG_ASSERT(irow < ncomps_rows_);
-   DBG_ASSERT(block_rows_[irow] == -1 && "This dimension has already been set - sanity check");
+   DBG_ASSERT(!dimensions_set_ && "for now, if the dimensions have all been set, they cannot be changed"); DBG_ASSERT(irow < ncomps_rows_); DBG_ASSERT(block_rows_[irow] == -1 && "This dimension has already been set - sanity check");
    block_rows_[irow] = nrows;
 }
 
-Index CompoundMatrixSpace::GetBlockRows(Index irow) const
+Index CompoundMatrixSpace::GetBlockRows(
+   Index irow
+   ) const
 {
-   DBG_ASSERT(dimensions_set_);
-   DBG_ASSERT(irow < ncomps_rows_);
+   DBG_ASSERT(dimensions_set_); DBG_ASSERT(irow < ncomps_rows_);
    return block_rows_[irow];
 }
 
-Index CompoundMatrixSpace::GetBlockCols(Index jcol) const
+Index CompoundMatrixSpace::GetBlockCols(
+   Index jcol
+   ) const
 {
-   DBG_ASSERT(dimensions_set_);
-   DBG_ASSERT(jcol < ncomps_cols_);
+   DBG_ASSERT(dimensions_set_); DBG_ASSERT(jcol < ncomps_cols_);
    return block_cols_[jcol];
 }
 
-void CompoundMatrixSpace::SetCompSpace(Index irow, Index jcol,
-                                       const MatrixSpace& mat_space,
-                                       bool auto_allocate /*=false*/)
+void CompoundMatrixSpace::SetCompSpace(
+   Index              irow,
+   Index              jcol,
+   const MatrixSpace& mat_space,
+   bool               auto_allocate /*=false*/
+   )
 {
-   if (!dimensions_set_)
+   if( !dimensions_set_ )
    {
       dimensions_set_ = DimensionsSet();
-   }
-   DBG_ASSERT(dimensions_set_);
-   DBG_ASSERT(irow < ncomps_rows_);
-   DBG_ASSERT(jcol < ncomps_cols_);
-   DBG_ASSERT(IsNull(comp_spaces_[irow][jcol]));
-   DBG_ASSERT(block_cols_[jcol] != -1 && block_cols_[jcol] == mat_space.NCols());
-   DBG_ASSERT(block_rows_[irow] != -1 && block_rows_[irow] == mat_space.NRows());
+   } DBG_ASSERT(dimensions_set_); DBG_ASSERT(irow < ncomps_rows_); DBG_ASSERT(jcol < ncomps_cols_); DBG_ASSERT(IsNull(comp_spaces_[irow][jcol])); DBG_ASSERT(block_cols_[jcol] != -1 && block_cols_[jcol] == mat_space.NCols()); DBG_ASSERT(block_rows_[irow] != -1 && block_rows_[irow] == mat_space.NRows());
 
    comp_spaces_[irow][jcol] = &mat_space;
    allocate_block_[irow][jcol] = auto_allocate;
 
    diagonal_ = true;
-   for (Index i = 0; i < NComps_Rows(); i++)
+   for( Index i = 0; i < NComps_Rows(); i++ )
    {
-      for (Index j = 0; j < NComps_Cols(); j++)
+      for( Index j = 0; j < NComps_Cols(); j++ )
       {
-         if ( (i == j && IsNull(GetCompSpace(i, j)))
-              || (i != j && IsValid(GetCompSpace(i, j))))
+         if( (i == j && IsNull(GetCompSpace(i, j))) || (i != j && IsValid(GetCompSpace(i, j))) )
          {
             diagonal_ = false;
             break;
@@ -847,18 +850,17 @@ void CompoundMatrixSpace::SetCompSpace(Index irow, Index jcol,
 
 CompoundMatrix* CompoundMatrixSpace::MakeNewCompoundMatrix() const
 {
-   if (!dimensions_set_)
+   if( !dimensions_set_ )
    {
       dimensions_set_ = DimensionsSet();
-   }
-   DBG_ASSERT(dimensions_set_);
+   } DBG_ASSERT(dimensions_set_);
 
    CompoundMatrix* mat = new CompoundMatrix(this);
-   for (Index i = 0; i < ncomps_rows_; i++)
+   for( Index i = 0; i < ncomps_rows_; i++ )
    {
-      for (Index j = 0; j < ncomps_cols_; j++)
+      for( Index j = 0; j < ncomps_cols_; j++ )
       {
-         if (allocate_block_[i][j])
+         if( allocate_block_[i][j] )
          {
             mat->SetCompNonConst(i, j, *GetCompSpace(i, j)->MakeNew());
          }
@@ -874,20 +876,20 @@ bool CompoundMatrixSpace::DimensionsSet() const
    Index total_nrows = 0;
    Index total_ncols = 0;
    bool valid = true;
-   for (Index i = 0; i < ncomps_rows_; i++)
+   for( Index i = 0; i < ncomps_rows_; i++ )
    {
-      if (block_rows_[i] == -1)
+      if( block_rows_[i] == -1 )
       {
          valid = false;
          break;
       }
       total_nrows += block_rows_[i];
    }
-   if (valid)
+   if( valid )
    {
-      for (Index j = 0; j < ncomps_cols_; j++)
+      for( Index j = 0; j < ncomps_cols_; j++ )
       {
-         if (block_cols_[j] == -1)
+         if( block_cols_[j] == -1 )
          {
             valid = false;
             break;
@@ -896,7 +898,7 @@ bool CompoundMatrixSpace::DimensionsSet() const
       }
    }
 
-   if (valid)
+   if( valid )
    {
       DBG_ASSERT(total_nrows == NRows() && total_ncols == NCols());
    }

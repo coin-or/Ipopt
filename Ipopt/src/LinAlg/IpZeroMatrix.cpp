@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpZeroMatrix.hpp"
@@ -11,23 +9,27 @@
 namespace Ipopt
 {
 
-ZeroMatrix::ZeroMatrix(const MatrixSpace* owner_space)
-   :
-   Matrix(owner_space)
-{}
+ZeroMatrix::ZeroMatrix(
+   const MatrixSpace* owner_space
+   )
+   : Matrix(owner_space)
+{ }
 
 ZeroMatrix::~ZeroMatrix()
-{}
+{ }
 
-void ZeroMatrix::MultVectorImpl(Number alpha, const Vector& x,
-                                Number beta, Vector& y) const
+void ZeroMatrix::MultVectorImpl(
+   Number        alpha,
+   const Vector& x,
+   Number        beta,
+   Vector&       y
+   ) const
 {
    //  A few sanity checks
-   DBG_ASSERT(NCols() == x.Dim());
-   DBG_ASSERT(NRows() == y.Dim());
+   DBG_ASSERT(NCols() == x.Dim()); DBG_ASSERT(NRows() == y.Dim());
 
    // Take care of the y part of the addition
-   if ( beta != 0.0 )
+   if( beta != 0.0 )
    {
       y.Scal(beta);
    }
@@ -37,15 +39,18 @@ void ZeroMatrix::MultVectorImpl(Number alpha, const Vector& x,
    }
 }
 
-void ZeroMatrix::TransMultVectorImpl(Number alpha, const Vector& x,
-                                     Number beta, Vector& y) const
+void ZeroMatrix::TransMultVectorImpl(
+   Number        alpha,
+   const Vector& x,
+   Number        beta,
+   Vector&       y
+   ) const
 {
    //  A few sanity checks
-   DBG_ASSERT(NCols() == y.Dim());
-   DBG_ASSERT(NRows() == x.Dim());
+   DBG_ASSERT(NCols() == y.Dim()); DBG_ASSERT(NRows() == x.Dim());
 
    // Take care of the y part of the addition
-   if ( beta != 0.0 )
+   if( beta != 0.0 )
    {
       y.Scal(beta);
    }
@@ -55,16 +60,18 @@ void ZeroMatrix::TransMultVectorImpl(Number alpha, const Vector& x,
    }
 }
 
-void ZeroMatrix::PrintImpl(const Journalist& jnlst,
-                           EJournalLevel level,
-                           EJournalCategory category,
-                           const std::string& name,
-                           Index indent,
-                           const std::string& prefix) const
+void ZeroMatrix::PrintImpl(
+   const Journalist&  jnlst,
+   EJournalLevel      level,
+   EJournalCategory   category,
+   const std::string& name,
+   Index              indent,
+   const std::string& prefix
+   ) const
 {
    jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent,
-                        "%sZeroMatrix \"%s\" with %d row and %d column components:\n",
-                        prefix.c_str(), name.c_str(), NRows(), NCols());
+   jnlst.PrintfIndented(level, category, indent, "%sZeroMatrix \"%s\" with %d row and %d column components:\n",
+      prefix.c_str(), name.c_str(), NRows(), NCols());
 }
+
 } // namespace Ipopt

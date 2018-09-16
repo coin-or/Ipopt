@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Andreas Waechter             IBM    2009-11-05
 
 #include "IpExpandedMultiVectorMatrix.hpp"
@@ -26,31 +24,39 @@ namespace Ipopt
 static const Index dbg_verbosity = 0;
 #endif
 
-ExpandedMultiVectorMatrix::ExpandedMultiVectorMatrix(const ExpandedMultiVectorMatrixSpace* owner_space)
-   :
-   Matrix(owner_space),
-   owner_space_(owner_space),
-   vecs_(owner_space->NRows())
-{}
+ExpandedMultiVectorMatrix::ExpandedMultiVectorMatrix(
+   const ExpandedMultiVectorMatrixSpace* owner_space
+   )
+   : Matrix(owner_space),
+     owner_space_(owner_space),
+     vecs_(owner_space->NRows())
+{
+}
 
-void ExpandedMultiVectorMatrix::SetVector(Index i, SmartPtr<const Vector> vec)
+void ExpandedMultiVectorMatrix::SetVector(
+   Index                  i,
+   SmartPtr<const Vector> vec
+   )
 {
    DBG_ASSERT(i < NRows());
    vecs_[i] = vec;
    ObjectChanged();
 }
 
-void ExpandedMultiVectorMatrix::TransMultVectorImpl(Number alpha, const Vector& x,
-      Number beta, Vector& y) const
+void ExpandedMultiVectorMatrix::TransMultVectorImpl(
+   Number        alpha,
+   const Vector& x,
+   Number        beta,
+   Vector&       y
+   ) const
 {
    //  A few sanity checks
-   DBG_ASSERT(NRows() == x.Dim());
-   DBG_ASSERT(NCols() == y.Dim());
+   DBG_ASSERT(NRows() == x.Dim()); DBG_ASSERT(NCols() == y.Dim());
 
    SmartPtr<const ExpansionMatrix> P = GetExpansionMatrix();
    SmartPtr<Vector> y_tmp;
 
-   if (IsValid(P))
+   if( IsValid(P) )
    {
       y_tmp = RowVectorSpace()->MakeNew();
       y_tmp->Set(0.);
@@ -58,7 +64,7 @@ void ExpandedMultiVectorMatrix::TransMultVectorImpl(Number alpha, const Vector& 
    else
    {
       // Take care of the y part of the addition
-      if ( beta != 0.0 )
+      if( beta != 0.0 )
       {
          y.Scal(beta);
       }
@@ -74,12 +80,12 @@ void ExpandedMultiVectorMatrix::TransMultVectorImpl(Number alpha, const Vector& 
    DBG_ASSERT(dynamic_cast<const DenseVector*>(&x));
 
    // We simply add all the Vectors one after the other
-   if (dense_x->IsHomogeneous())
+   if( dense_x->IsHomogeneous() )
    {
       Number val = dense_x->Scalar();
-      for (Index i = 0; i < NRows(); i++)
+      for( Index i = 0; i < NRows(); i++ )
       {
-         if (IsValid(vecs_[i]))
+         if( IsValid(vecs_[i]) )
          {
             y_tmp->AddOneVector(alpha * val, *vecs_[i], 1.);
          }
@@ -88,32 +94,35 @@ void ExpandedMultiVectorMatrix::TransMultVectorImpl(Number alpha, const Vector& 
    else
    {
       const Number* values = dense_x->Values();
-      for (Index i = 0; i < NRows(); i++)
+      for( Index i = 0; i < NRows(); i++ )
       {
-         if (IsValid(vecs_[i]))
+         if( IsValid(vecs_[i]) )
          {
             y_tmp->AddOneVector(alpha * values[i], *vecs_[i], 1.);
          }
       }
    }
 
-   if (IsValid(P))
+   if( IsValid(P) )
    {
       P->MultVector(1., *y_tmp, beta, y);
    }
 }
 
-void ExpandedMultiVectorMatrix::MultVectorImpl(Number alpha, const Vector& x,
-      Number beta, Vector& y) const
+void ExpandedMultiVectorMatrix::MultVectorImpl(
+   Number        alpha,
+   const Vector& x,
+   Number        beta,
+   Vector&       y
+   ) const
 {
    //  A few sanity checks
-   DBG_ASSERT(NRows() == y.Dim());
-   DBG_ASSERT(NCols() == x.Dim());
+   DBG_ASSERT(NRows() == y.Dim()); DBG_ASSERT(NCols() == x.Dim());
 
    // check if there is an expansion matrix
    SmartPtr<const ExpansionMatrix> P = GetExpansionMatrix();
    SmartPtr<const Vector> x_tmp;
-   if (IsValid(P))
+   if( IsValid(P) )
    {
       SmartPtr<Vector> exp_x = RowVectorSpace()->MakeNew();
       P->TransMultVector(1., x, 0., *exp_x);
@@ -131,11 +140,11 @@ void ExpandedMultiVectorMatrix::MultVectorImpl(Number alpha, const Vector& x,
    // Use the individual dot products to get the matrix (transpose)
    // vector product
    Number* yvals = dense_y->Values();
-   if ( beta != 0.0 )
+   if( beta != 0.0 )
    {
-      for (Index i = 0; i < NRows(); i++)
+      for( Index i = 0; i < NRows(); i++ )
       {
-         if (IsValid(vecs_[i]))
+         if( IsValid(vecs_[i]) )
          {
             yvals[i] = alpha * vecs_[i]->Dot(*x_tmp) + beta * yvals[i];
          }
@@ -147,9 +156,9 @@ void ExpandedMultiVectorMatrix::MultVectorImpl(Number alpha, const Vector& x,
    }
    else
    {
-      for (Index i = 0; i < NRows(); i++)
+      for( Index i = 0; i < NRows(); i++ )
       {
-         if (IsValid(vecs_[i]))
+         if( IsValid(vecs_[i]) )
          {
             yvals[i] = alpha * vecs_[i]->Dot(*x_tmp);
          }
@@ -163,9 +172,9 @@ void ExpandedMultiVectorMatrix::MultVectorImpl(Number alpha, const Vector& x,
 
 bool ExpandedMultiVectorMatrix::HasValidNumbersImpl() const
 {
-   for (Index i = 0; i < NRows(); i++)
+   for( Index i = 0; i < NRows(); i++ )
    {
-      if (IsValid(vecs_[i]) && vecs_[i]->HasValidNumbers())
+      if( IsValid(vecs_[i]) && vecs_[i]->HasValidNumbers() )
       {
          return false;
       }
@@ -173,74 +182,73 @@ bool ExpandedMultiVectorMatrix::HasValidNumbersImpl() const
    return true;
 }
 
-void
-ExpandedMultiVectorMatrix::ComputeRowAMaxImpl(Vector& rows_norms, bool init) const
+void ExpandedMultiVectorMatrix::ComputeRowAMaxImpl(
+   Vector& rows_norms,
+   bool    init
+   ) const
 {
-   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED,
-                   "ExpandedMultiVectorMatrix::ComputeRowAMaxImpl not implemented");
+   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "ExpandedMultiVectorMatrix::ComputeRowAMaxImpl not implemented");
 }
 
-void
-ExpandedMultiVectorMatrix::ComputeColAMaxImpl(Vector& cols_norms, bool init) const
+void ExpandedMultiVectorMatrix::ComputeColAMaxImpl(
+   Vector& cols_norms,
+   bool    init
+   ) const
 {
-   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED,
-                   "ExpandedMultiVectorMatrix::ComputeColAMaxImpl not implemented");
+   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "ExpandedMultiVectorMatrix::ComputeColAMaxImpl not implemented");
 }
 
-void ExpandedMultiVectorMatrix::PrintImpl(const Journalist& jnlst,
-      EJournalLevel level,
-      EJournalCategory category,
-      const std::string& name,
-      Index indent,
-      const std::string& prefix) const
+void ExpandedMultiVectorMatrix::PrintImpl(
+   const Journalist&  jnlst,
+   EJournalLevel      level,
+   EJournalCategory   category,
+   const std::string& name,
+   Index              indent,
+   const std::string& prefix
+   ) const
 {
    jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent,
-                        "%sExpandedMultiVectorMatrix \"%s\" with %d columns:\n",
-                        prefix.c_str(), name.c_str(), NRows());
+   jnlst.PrintfIndented(level, category, indent, "%sExpandedMultiVectorMatrix \"%s\" with %d columns:\n",
+      prefix.c_str(), name.c_str(), NRows());
 
-   for (Index i = 0; i < NRows(); i++)
+   for( Index i = 0; i < NRows(); i++ )
    {
-      if (IsValid(vecs_[i]))
+      if( IsValid(vecs_[i]) )
       {
          DBG_ASSERT(name.size() < 200);
          char buffer[256];
          Snprintf(buffer, 255, "%s[%2d]", name.c_str(), i);
          std::string term_name = buffer;
-         vecs_[i]->Print(&jnlst, level, category, term_name,
-                         indent + 1, prefix);
+         vecs_[i]->Print(&jnlst, level, category, term_name, indent + 1, prefix);
       }
       else
       {
-         jnlst.PrintfIndented(level, category, indent,
-                              "%sVector in column %d is not yet set!\n",
-                              prefix.c_str(), i);
+         jnlst.PrintfIndented(level, category, indent, "%sVector in column %d is not yet set!\n", prefix.c_str(), i);
       }
    }
    SmartPtr<const ExpansionMatrix> P = GetExpansionMatrix();
-   if (IsValid(P))
+   if( IsValid(P) )
    {
       char buffer[256];
       Snprintf(buffer, 255, "%s[ExpMat]", name.c_str());
       std::string term_name = buffer;
-      P->Print(&jnlst, level, category, term_name,
-               indent + 1, prefix);
+      P->Print(&jnlst, level, category, term_name, indent + 1, prefix);
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent,
-                           "%sExpandedMultiVectorMatrix \"%s\" has no ExpansionMatrix\n", prefix.c_str(), name.c_str());
+      jnlst.PrintfIndented(level, category, indent, "%sExpandedMultiVectorMatrix \"%s\" has no ExpansionMatrix\n",
+         prefix.c_str(), name.c_str());
    }
 }
 
-ExpandedMultiVectorMatrixSpace::
-ExpandedMultiVectorMatrixSpace(Index nrows,
-                               const VectorSpace& vec_space,
-                               SmartPtr<const ExpansionMatrix> exp_matrix)
-   :
-   MatrixSpace(nrows, IsValid(exp_matrix) ? exp_matrix->NRows() : vec_space.Dim()),
-   vec_space_(&vec_space),
-   exp_matrix_(exp_matrix)
-{}
+ExpandedMultiVectorMatrixSpace::ExpandedMultiVectorMatrixSpace(
+   Index                           nrows,
+   const VectorSpace&              vec_space,
+   SmartPtr<const ExpansionMatrix> exp_matrix
+   )
+   : MatrixSpace(nrows, IsValid(exp_matrix) ? exp_matrix->NRows() : vec_space.Dim()),
+     vec_space_(&vec_space),
+     exp_matrix_(exp_matrix)
+{ }
 
 } // namespace Ipopt

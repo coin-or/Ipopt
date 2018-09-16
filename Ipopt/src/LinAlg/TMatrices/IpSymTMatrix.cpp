@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpSymTMatrix.hpp"
@@ -23,16 +21,17 @@
 namespace Ipopt
 {
 
-SymTMatrix::SymTMatrix(const SymTMatrixSpace* owner_space)
-   :
-   SymMatrix(owner_space),
-   owner_space_(owner_space),
-   values_(NULL),
-   initialized_(false)
+SymTMatrix::SymTMatrix(
+   const SymTMatrixSpace* owner_space
+   )
+   : SymMatrix(owner_space),
+     owner_space_(owner_space),
+     values_(NULL),
+     initialized_(false)
 {
    values_ = owner_space_->AllocateInternalStorage();
 
-   if (Nonzeros() == 0)
+   if( Nonzeros() == 0 )
    {
       initialized_ = true; // I guess ?!? what does this mean ?!?
    }
@@ -40,27 +39,31 @@ SymTMatrix::SymTMatrix(const SymTMatrixSpace* owner_space)
 
 SymTMatrix::~SymTMatrix()
 {
-
    owner_space_->FreeInternalStorage(values_);
 }
 
-void SymTMatrix::SetValues(const Number* Values)
+void SymTMatrix::SetValues(
+   const Number* Values
+   )
 {
    IpBlasDcopy(Nonzeros(), Values, 1, values_, 1);
    initialized_ = true;
    ObjectChanged();
 }
 
-void SymTMatrix::MultVectorImpl(Number alpha, const Vector& x, Number beta,
-                                Vector& y) const
+void SymTMatrix::MultVectorImpl(
+   Number        alpha,
+   const Vector& x,
+   Number        beta,
+   Vector&       y
+   ) const
 {
    //  A few sanity checks
-   DBG_ASSERT(Dim() == x.Dim());
-   DBG_ASSERT(Dim() == y.Dim());
+   DBG_ASSERT(Dim() == x.Dim()); DBG_ASSERT(Dim() == y.Dim());
 
    // Take care of the y part of the addition
    DBG_ASSERT(initialized_);
-   if ( beta != 0.0 )
+   if( beta != 0.0 )
    {
       y.Scal(beta);
    }
@@ -75,20 +78,20 @@ void SymTMatrix::MultVectorImpl(Number alpha, const Vector& x, Number beta,
    DenseVector* dense_y = static_cast<DenseVector*>(&y);
    DBG_ASSERT(dynamic_cast<DenseVector*>(&y));
 
-   if (dense_x && dense_y)
+   if( dense_x && dense_y )
    {
       const Index* irn = Irows();
       const Index* jcn = Jcols();
       const Number* val = values_;
       Number* yvals = dense_y->Values();
 
-      if (dense_x->IsHomogeneous())
+      if( dense_x->IsHomogeneous() )
       {
-         Number as = alpha *  dense_x->Scalar();
-         for (Index i = 0; i < Nonzeros(); i++)
+         Number as = alpha * dense_x->Scalar();
+         for( Index i = 0; i < Nonzeros(); i++ )
          {
             yvals[*irn - 1] += as * (*val);
-            if (*irn != *jcn)
+            if( *irn != *jcn )
             {
                // this is not a diagonal element
                yvals[*jcn - 1] += as * (*val);
@@ -101,10 +104,10 @@ void SymTMatrix::MultVectorImpl(Number alpha, const Vector& x, Number beta,
       else
       {
          const Number* xvals = dense_x->Values();
-         for (Index i = 0; i < Nonzeros(); i++)
+         for( Index i = 0; i < Nonzeros(); i++ )
          {
             yvals[*irn - 1] += alpha * (*val) * xvals[*jcn - 1];
-            if (*irn != *jcn)
+            if( *irn != *jcn )
             {
                // this is not a diagonal element
                yvals[*jcn - 1] += alpha * (*val) * xvals[*irn - 1];
@@ -137,17 +140,22 @@ const Number* SymTMatrix::Values() const
    return values_;
 }
 
-void SymTMatrix::FillStruct(ipfint* Irn, ipfint* Jcn) const
+void SymTMatrix::FillStruct(
+   ipfint* Irn,
+   ipfint* Jcn
+   ) const
 {
    DBG_ASSERT(initialized_);
-   for (Index i = 0; i < Nonzeros(); i++)
+   for( Index i = 0; i < Nonzeros(); i++ )
    {
       Irn[i] = Irows()[i];
       Jcn[i] = Jcols()[i];
    }
 }
 
-void SymTMatrix::FillValues(Number* Values) const
+void SymTMatrix::FillValues(
+   Number* Values
+   ) const
 {
    DBG_ASSERT(initialized_);
    IpBlasDcopy(Nonzeros(), values_, 1, Values, 1);
@@ -160,7 +168,10 @@ bool SymTMatrix::HasValidNumbersImpl() const
    return IsFiniteNumber(sum);
 }
 
-void SymTMatrix::ComputeRowAMaxImpl(Vector& rows_norms, bool init) const
+void SymTMatrix::ComputeRowAMaxImpl(
+   Vector& rows_norms,
+   bool    init
+   ) const
 {
    DBG_ASSERT(initialized_);
 
@@ -176,7 +187,7 @@ void SymTMatrix::ComputeRowAMaxImpl(Vector& rows_norms, bool init) const
    const Number zero = 0.;
    IpBlasDcopy(NRows(), &zero, 0, vec_vals, 1);
 
-   for (Index i = 0; i < Nonzeros(); i++)
+   for( Index i = 0; i < Nonzeros(); i++ )
    {
       const double f = fabs(*val);
       vec_vals[*irn] = Max(vec_vals[*irn], f);
@@ -187,46 +198,46 @@ void SymTMatrix::ComputeRowAMaxImpl(Vector& rows_norms, bool init) const
    }
 }
 
-void SymTMatrix::PrintImpl(const Journalist& jnlst,
-                           EJournalLevel level,
-                           EJournalCategory category,
-                           const std::string& name,
-                           Index indent,
-                           const std::string& prefix) const
+void SymTMatrix::PrintImpl(
+   const Journalist&  jnlst,
+   EJournalLevel      level,
+   EJournalCategory   category,
+   const std::string& name,
+   Index              indent,
+   const std::string& prefix
+   ) const
 {
    jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent,
-                        "%sSymTMatrix \"%s\" of dimension %d with %d nonzero elements:\n",
-                        prefix.c_str(), name.c_str(), Dim(), Nonzeros());
-   if (initialized_)
+   jnlst.PrintfIndented(level, category, indent, "%sSymTMatrix \"%s\" of dimension %d with %d nonzero elements:\n",
+      prefix.c_str(), name.c_str(), Dim(), Nonzeros());
+   if( initialized_ )
    {
-      for (Index i = 0; i < Nonzeros(); i++)
+      for( Index i = 0; i < Nonzeros(); i++ )
       {
-         jnlst.PrintfIndented(level, category, indent,
-                              "%s%s[%5d,%5d]=%23.16e  (%d)\n",
-                              prefix.c_str(), name.c_str(), Irows()[i],
-                              Jcols()[i], values_[i], i);
+         jnlst.PrintfIndented(level, category, indent, "%s%s[%5d,%5d]=%23.16e  (%d)\n", prefix.c_str(), name.c_str(),
+            Irows()[i], Jcols()[i], values_[i], i);
       }
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent,
-                           "%sUninitialized!\n", prefix.c_str());
+      jnlst.PrintfIndented(level, category, indent, "%sUninitialized!\n", prefix.c_str());
    }
 }
 
-SymTMatrixSpace::SymTMatrixSpace(Index dim, Index nonZeros,
-                                 const Index* iRows,
-                                 const Index* jCols)
-   :
-   SymMatrixSpace(dim),
-   nonZeros_(nonZeros),
-   iRows_(NULL),
-   jCols_(NULL)
+SymTMatrixSpace::SymTMatrixSpace(
+   Index        dim,
+   Index        nonZeros,
+   const Index* iRows,
+   const Index* jCols
+   )
+   : SymMatrixSpace(dim),
+     nonZeros_(nonZeros),
+     iRows_(NULL),
+     jCols_(NULL)
 {
    iRows_ = new Index[nonZeros];
    jCols_ = new Index[nonZeros];
-   for (Index i = 0; i < nonZeros; i++)
+   for( Index i = 0; i < nonZeros; i++ )
    {
       iRows_[i] = iRows[i];
       jCols_[i] = jCols[i];
@@ -235,8 +246,8 @@ SymTMatrixSpace::SymTMatrixSpace(Index dim, Index nonZeros,
 
 SymTMatrixSpace::~SymTMatrixSpace()
 {
-   delete [] iRows_;
-   delete [] jCols_;
+   delete[] iRows_;
+   delete[] jCols_;
 }
 
 Number* SymTMatrixSpace::AllocateInternalStorage() const
@@ -244,9 +255,10 @@ Number* SymTMatrixSpace::AllocateInternalStorage() const
    return new Number[Nonzeros()];
 }
 
-void SymTMatrixSpace::FreeInternalStorage(Number* values) const
+void SymTMatrixSpace::FreeInternalStorage(
+   Number* values) const
 {
-   delete [] values;
+   delete[] values;
 }
 
 } // namespace Ipopt

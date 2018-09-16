@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #ifndef __IPSYMSCALEDMATRIX_HPP__
@@ -19,30 +17,36 @@ namespace Ipopt
 class SymScaledMatrixSpace;
 
 /** Class for a Matrix in conjunction with its scaling factors for
- *  row and column scaling. Operations on the matrix are performed using
+ *  row and column scaling.
+ *
+ *  Operations on the matrix are performed using
  *  the scaled matrix. You can pull out the pointer to the
  *  unscaled matrix for unscaled calculations.
  */
-class SymScaledMatrix : public SymMatrix
+class SymScaledMatrix: public SymMatrix
 {
 public:
-
    /**@name Constructors / Destructors */
    //@{
-
    /** Constructor, taking the owner_space.
     */
-   SymScaledMatrix(const SymScaledMatrixSpace* owner_space);
+   SymScaledMatrix(
+      const SymScaledMatrixSpace* owner_space
+      );
 
    /** Destructor */
    ~SymScaledMatrix();
    //@}
 
    /** Set the unscaled matrix */
-   void SetUnscaledMatrix(const SmartPtr<const SymMatrix> unscaled_matrix);
+   void SetUnscaledMatrix(
+      const SmartPtr<const SymMatrix> unscaled_matrix
+      );
 
    /** Set the unscaled matrix in a non-const version */
-   void SetUnscaledMatrixNonConst(const SmartPtr<SymMatrix>& unscaled_matrix);
+   void SetUnscaledMatrixNonConst(
+      const SmartPtr<SymMatrix>& unscaled_matrix
+      );
 
    /** Return the unscaled matrix in const form */
    SmartPtr<const SymMatrix> GetUnscaledMatrix() const;
@@ -56,22 +60,28 @@ public:
 protected:
    /**@name Methods overloaded from Matrix */
    //@{
-   virtual void MultVectorImpl(Number alpha, const Vector& x,
-                               Number beta, Vector& y) const;
+   virtual void MultVectorImpl(
+      Number        alpha,
+      const Vector& x,
+      Number        beta,
+      Vector&       y
+      ) const;
 
-   /** Method for determining if all stored numbers are valid (i.e.,
-    *  no Inf or Nan).  It is assumed here that the scaling factors
-    *  are always valid numbers. */
    virtual bool HasValidNumbersImpl() const;
 
-   virtual void ComputeRowAMaxImpl(Vector& rows_norms, bool init) const;
+   virtual void ComputeRowAMaxImpl(
+      Vector& rows_norms,
+      bool    init
+      ) const;
 
-   virtual void PrintImpl(const Journalist& jnlst,
-                          EJournalLevel level,
-                          EJournalCategory category,
-                          const std::string& name,
-                          Index indent,
-                          const std::string& prefix) const;
+   virtual void PrintImpl(
+      const Journalist&  jnlst,
+      EJournalLevel      level,
+      EJournalCategory   category,
+      const std::string& name,
+      Index              indent,
+      const std::string& prefix
+      ) const;
    //@}
 
 private:
@@ -81,20 +91,26 @@ private:
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Default Constructor */
    SymScaledMatrix();
 
    /** Copy Constructor */
-   SymScaledMatrix(const SymScaledMatrix&);
+   SymScaledMatrix(
+      const SymScaledMatrix&
+      );
 
-   /** Overloaded Equals Operator */
-   void operator=(const SymScaledMatrix&);
+   /** Default Assignment Operator */
+   void operator=(
+      const SymScaledMatrix&
+      );
    //@}
 
    /** const version of the unscaled matrix */
    SmartPtr<const SymMatrix> matrix_;
+
    /** non-const version of the unscaled matrix */
    SmartPtr<SymMatrix> nonconst_matrix_;
 
@@ -104,23 +120,24 @@ private:
 
 /** This is the matrix space for SymScaledMatrix.
  */
-class SymScaledMatrixSpace : public SymMatrixSpace
+class SymScaledMatrixSpace: public SymMatrixSpace
 {
 public:
    /** @name Constructors / Destructors */
    //@{
    /** Constructor, given the number of row and columns blocks, as
-    *  well as the totel number of rows and columns.
+    *  well as the total number of rows and columns.
     */
-   SymScaledMatrixSpace(const SmartPtr<const Vector>& row_col_scaling,
-                        bool row_col_scaling_reciprocal,
-                        const SmartPtr<const SymMatrixSpace>& unscaled_matrix_space)
-      :
-      SymMatrixSpace(unscaled_matrix_space->Dim()),
-      unscaled_matrix_space_(unscaled_matrix_space)
+   SymScaledMatrixSpace(
+      const SmartPtr<const Vector>&         row_col_scaling,
+      bool                                  row_col_scaling_reciprocal,
+      const SmartPtr<const SymMatrixSpace>& unscaled_matrix_space
+      )
+      : SymMatrixSpace(unscaled_matrix_space->Dim()),
+        unscaled_matrix_space_(unscaled_matrix_space)
    {
       scaling_ = row_col_scaling->MakeNewCopy();
-      if (row_col_scaling_reciprocal)
+      if( row_col_scaling_reciprocal )
       {
          scaling_->ElementWiseReciprocal();
       }
@@ -128,14 +145,16 @@ public:
 
    /** Destructor */
    ~SymScaledMatrixSpace()
-   {}
+   { }
    //@}
 
    /** Method for creating a new matrix of this specific type. */
-   SymScaledMatrix* MakeNewSymScaledMatrix(bool allocate_unscaled_matrix = false) const
+   SymScaledMatrix* MakeNewSymScaledMatrix(
+      bool allocate_unscaled_matrix = false
+      ) const
    {
       SymScaledMatrix* ret = new SymScaledMatrix(this);
-      if (allocate_unscaled_matrix)
+      if( allocate_unscaled_matrix )
       {
          SmartPtr<SymMatrix> unscaled_matrix = unscaled_matrix_space_->MakeNewSymMatrix();
          ret->SetUnscaledMatrixNonConst(unscaled_matrix);
@@ -143,13 +162,11 @@ public:
       return ret;
    }
 
-   /** Overloaded method from SymMatrixSpace */
    virtual SymMatrix* MakeNewSymMatrix() const
    {
       return MakeNewSymScaledMatrix();
    }
-   /** Overloaded MakeNew method for the MatrixSpace base class.
-    */
+
    virtual Matrix* MakeNew() const
    {
       return MakeNewSymScaledMatrix();
@@ -174,48 +191,54 @@ private:
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Default constructor */
    SymScaledMatrixSpace();
 
    /** Copy Constructor */
-   SymScaledMatrixSpace(const SymScaledMatrixSpace&);
+   SymScaledMatrixSpace(
+      const SymScaledMatrixSpace&
+      );
 
-   /** Overloaded Equals Operator */
-   SymScaledMatrixSpace& operator=(const SymScaledMatrixSpace&);
+   /** Default Assignment Operator */
+   SymScaledMatrixSpace& operator=(
+      const SymScaledMatrixSpace&
+      );
    //@}
 
    /** Row scaling vector */
    SmartPtr<Vector> scaling_;
+
    /** unscaled matrix space */
    SmartPtr<const SymMatrixSpace> unscaled_matrix_space_;
 };
 
-inline
-void SymScaledMatrix::SetUnscaledMatrix(const SmartPtr<const SymMatrix> unscaled_matrix)
+inline void SymScaledMatrix::SetUnscaledMatrix(
+   const SmartPtr<const SymMatrix> unscaled_matrix
+   )
 {
    matrix_ = unscaled_matrix;
    nonconst_matrix_ = NULL;
    ObjectChanged();
 }
 
-inline
-void SymScaledMatrix::SetUnscaledMatrixNonConst(const SmartPtr<SymMatrix>& unscaled_matrix)
+inline void SymScaledMatrix::SetUnscaledMatrixNonConst(
+   const SmartPtr<SymMatrix>& unscaled_matrix
+   )
 {
    nonconst_matrix_ = unscaled_matrix;
    matrix_ = GetRawPtr(unscaled_matrix);
    ObjectChanged();
 }
 
-inline
-SmartPtr<const SymMatrix> SymScaledMatrix::GetUnscaledMatrix() const
+inline SmartPtr<const SymMatrix> SymScaledMatrix::GetUnscaledMatrix() const
 {
    return matrix_;
 }
 
-inline
-SmartPtr<SymMatrix> SymScaledMatrix::GetUnscaledMatrixNonConst()
+inline SmartPtr<SymMatrix> SymScaledMatrix::GetUnscaledMatrixNonConst()
 {
    DBG_ASSERT(IsValid(nonconst_matrix_));
    ObjectChanged();
