@@ -30,13 +30,11 @@ public:
    //@{
    /** Default constructor */
    NLP()
-   {
-   }
+   { }
 
    /** Default destructor */
    virtual ~NLP()
-   {
-   }
+   { }
    //@}
 
    /** Exceptions */

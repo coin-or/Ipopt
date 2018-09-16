@@ -304,7 +304,8 @@ public:
     *  multipliers is stored in con_..._md.  The metadata associated
     *  with the bound multipliers is stored in var_..._md, with the
     *  suffixes "_z_L", and "_z_U", denoting lower and upper
-    *  bounds. */
+    *  bounds.
+    */
    virtual void finalize_metadata(
       Index                         n,
       const StringMetaDataMapType&  var_string_md,

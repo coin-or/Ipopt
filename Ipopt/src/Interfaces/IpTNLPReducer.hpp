@@ -18,7 +18,8 @@ namespace Ipopt
  *  problems that consist of only a subset of the constraints.  But
  *  keep in mind that this is not efficient, since behind the scenes
  *  we are still evaluation all functions and derivatives, and are
- *  making copies of the original data. */
+ *  making copies of the original data.
+ */
 class TNLPReducer: public TNLP
 {
 public:
@@ -202,7 +203,7 @@ private:
       const TNLPReducer&
    );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const TNLPReducer&
    );

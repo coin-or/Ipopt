@@ -12,6 +12,7 @@
 
 namespace Ipopt
 {
+
 // forward declaration (to avoid inclusion of too many header files)
 class IpoptNLP;
 class IpoptData;

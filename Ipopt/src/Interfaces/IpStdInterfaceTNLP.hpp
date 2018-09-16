@@ -34,7 +34,8 @@ public:
     *  for evaluation callback functions, and starting points.
     *
     *  Note that the constructor does not make a copy of any of the Number
-    *  arrays, i.e. it is up to the called to keep them around. */
+    *  arrays, i.e. it is up to the called to keep them around.
+    */
    StdInterfaceTNLP(
       Index           n_var,
       const Number*   x_L,
