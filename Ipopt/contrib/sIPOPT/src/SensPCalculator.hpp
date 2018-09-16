@@ -59,7 +59,7 @@ namespace Ipopt
 			   EJournalCategory category,
 			   const std::string& name,
 			   Index indent,
-			   const std::string& prefix) const =0;
+			   const std::string& prefix) const = 0;
 
     void Print(const Journalist& jnlst,
 	       EJournalLevel level,

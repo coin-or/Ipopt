@@ -199,7 +199,7 @@ protected:
    virtual Number y_d_cont(
       Number x1,
       Number x2
-      ) const =0;
+      ) const = 0;
 
    /** Integrant in objective function */
    virtual Number fint_cont(
@@ -207,7 +207,7 @@ protected:
       Number x2,
       Number y,
       Number u
-      ) const =0;
+      ) const = 0;
 
    /** First partial derivative of fint_cont w.r.t. y */
    virtual Number fint_cont_dy(
@@ -215,7 +215,7 @@ protected:
       Number x2,
       Number y,
       Number u
-      ) const =0;
+      ) const = 0;
 
    /** First partial derivative of fint_cont w.r.t. u */
    virtual Number fint_cont_du(
@@ -223,7 +223,7 @@ protected:
       Number x2,
       Number y,
       Number u
-      ) const =0;
+      ) const = 0;
 
    /** Second partial derivative of fint_cont w.r.t. y,y */
    virtual Number fint_cont_dydy(
@@ -231,12 +231,12 @@ protected:
       Number x2,
       Number y,
       Number u
-      ) const =0;
+      ) const = 0;
 
    /** returns true if second partial derivative of fint_cont
     *  w.r.t. y,y is always zero.
     */
-   virtual bool fint_cont_dydy_alwayszero() const =0;
+   virtual bool fint_cont_dydy_alwayszero() const = 0;
 
    /** Second partial derivative of fint_cont w.r.t. u,u */
    virtual Number fint_cont_dudu(
@@ -244,12 +244,12 @@ protected:
       Number x2,
       Number y,
       Number u
-      ) const =0;
+      ) const = 0;
 
    /** returns true if second partial derivative of fint_cont
     *  w.r.t. u,u is always zero.
     */
-   virtual bool fint_cont_dudu_alwayszero() const =0;
+   virtual bool fint_cont_dudu_alwayszero() const = 0;
 
    /** Second partial derivative of fint_cont w.r.t. y,u */
    virtual Number fint_cont_dydu(
@@ -257,12 +257,12 @@ protected:
       Number x2,
       Number y,
       Number u
-      ) const =0;
+      ) const = 0;
 
    /** returns true if second partial derivative of fint_cont
     *  w.r.t. y,u is always zero.
     */
-   virtual bool fint_cont_dydu_alwayszero() const =0;
+   virtual bool fint_cont_dydu_alwayszero() const = 0;
 
    /** Forcing function for the elliptic equation */
    virtual Number d_cont(
@@ -270,7 +270,7 @@ protected:
       Number x2,
       Number y,
       Number u
-      ) const =0;
+      ) const = 0;
 
    /** First partial derivative of forcing function w.r.t. y */
    virtual Number d_cont_dy(
@@ -278,7 +278,7 @@ protected:
       Number x2,
       Number y,
       Number u
-      ) const =0;
+      ) const = 0;
 
    /** First partial derivative of forcing function w.r.t. u */
    virtual Number d_cont_du(
@@ -286,7 +286,7 @@ protected:
       Number x2,
       Number y,
       Number u
-      ) const =0;
+      ) const = 0;
 
    /** Second partial derivative of forcing function w.r.t. y,y */
    virtual Number d_cont_dydy(
@@ -294,12 +294,12 @@ protected:
       Number x2,
       Number y,
       Number u
-      ) const =0;
+      ) const = 0;
 
    /** returns true if second partial derivative of d_cont
     *  w.r.t. y,y is always zero.
     */
-   virtual bool d_cont_dydy_alwayszero() const =0;
+   virtual bool d_cont_dydy_alwayszero() const = 0;
 
    /** Second partial derivative of forcing function w.r.t. u,u */
    virtual Number d_cont_dudu(
@@ -307,12 +307,12 @@ protected:
       Number x2,
       Number y,
       Number u
-      ) const =0;
+      ) const = 0;
 
    /** returns true if second partial derivative of d_cont
     *  w.r.t. y,y is always zero.
     */
-   virtual bool d_cont_dudu_alwayszero() const =0;
+   virtual bool d_cont_dudu_alwayszero() const = 0;
 
    /** Second partial derivative of forcing function w.r.t. y,u */
    virtual Number d_cont_dydu(
@@ -320,12 +320,12 @@ protected:
       Number x2,
       Number y,
       Number u
-      ) const =0;
+      ) const = 0;
 
    /** returns true if second partial derivative of d_cont
     *  w.r.t. y,u is always zero.
     */
-   virtual bool d_cont_dydu_alwayszero() const =0;
+   virtual bool d_cont_dydu_alwayszero() const = 0;
    //@}
 
 private:
