@@ -15,8 +15,7 @@ namespace Ipopt
 
 /**@name Enumerations */
 //@{
-/** enum for the return from the optimize algorithm
- *  (obviously we need to add more) */
+/** enum for the return from the optimize algorithm */
 enum SolverReturn
 {
    SUCCESS,
@@ -52,8 +51,9 @@ DECLARE_STD_EXCEPTION(NO_FREE_VARIABLES_BUT_FEASIBLE);
 DECLARE_STD_EXCEPTION(NO_FREE_VARIABLES_AND_INFEASIBLE);
 DECLARE_STD_EXCEPTION(INCONSISTENT_BOUNDS);
 /** Exception FAILED_INITIALIZATION for problem during
- *  initialization of a strategy object (or other problems).  This
- *  is thrown by a strategy object, if a problem arises during
+ *  initialization of a strategy object (or other problems).
+ *
+ *  This is thrown by a strategy object, if a problem arises during
  *  initialization, such as a value out of a feasible range.
  */
 DECLARE_STD_EXCEPTION(FAILED_INITIALIZATION);

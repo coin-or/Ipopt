@@ -11,6 +11,7 @@
 
 namespace Ipopt
 {
+
 TNLPReducer::TNLPReducer(
    TNLP&        tnlp,
    Index        n_g_skip,
