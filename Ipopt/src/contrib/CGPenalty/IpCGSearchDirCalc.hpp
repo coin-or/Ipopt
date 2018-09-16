@@ -74,7 +74,7 @@ private:
       const CGSearchDirCalculator&
    );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const CGSearchDirCalculator&
    );

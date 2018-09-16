@@ -54,7 +54,7 @@ private:
       const ExactHessianUpdater&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const ExactHessianUpdater&
       );

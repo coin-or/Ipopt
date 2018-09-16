@@ -96,7 +96,7 @@ private:
       const AmplSuffixHandler&
    );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const AmplSuffixHandler&
    );
@@ -179,7 +179,7 @@ public:
       AmplOption(
          const AmplOption&);
 
-      /** Overloaded Equals Operator */
+      /** Default Assignment Operator */
       void operator=(
          const AmplOption&);
       //@}
@@ -280,7 +280,7 @@ private:
       const AmplOptionsList&
    );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const AmplOptionsList&
    );
@@ -586,7 +586,7 @@ private:
       const AmplTNLP&
    );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const AmplTNLP&
    );

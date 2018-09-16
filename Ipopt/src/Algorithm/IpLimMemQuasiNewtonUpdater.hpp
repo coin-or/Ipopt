@@ -66,7 +66,7 @@ private:
       const LimMemQuasiNewtonUpdater&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const LimMemQuasiNewtonUpdater&
       );

@@ -173,7 +173,7 @@ public:
    virtual ~OptionsList()
    { }
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    virtual void operator=(
       const OptionsList& source
    )

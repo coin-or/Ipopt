@@ -618,7 +618,7 @@ private:
       const IteratesVector&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const IteratesVector&
       );
@@ -777,7 +777,7 @@ private:
       const IteratesVectorSpace&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    IteratesVectorSpace& operator=(
       const IteratesVectorSpace&
       );

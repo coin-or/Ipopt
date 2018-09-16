@@ -57,7 +57,7 @@ private:
       const WarmStartIterateInitializer&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const WarmStartIterateInitializer&
       );

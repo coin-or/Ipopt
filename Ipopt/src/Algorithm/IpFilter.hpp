@@ -113,7 +113,7 @@ private:
       const FilterEntry&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const FilterEntry&
       );
@@ -221,7 +221,7 @@ private:
       const Filter&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const Filter&
       );

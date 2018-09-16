@@ -192,7 +192,7 @@ private:
       const AugSystemSolver&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const AugSystemSolver&
       );

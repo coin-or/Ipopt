@@ -205,7 +205,7 @@ private:
       const BacktrackingLSAcceptor&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const BacktrackingLSAcceptor&
       );

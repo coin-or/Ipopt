@@ -125,7 +125,7 @@ private:
     * they will not be implicitly created/called.
     */
    //@{
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    PDSystemSolver& operator=(
       const PDSystemSolver&
       );

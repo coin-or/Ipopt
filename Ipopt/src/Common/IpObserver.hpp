@@ -111,7 +111,7 @@ private:
       const Observer&
    );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const Observer&
    );
@@ -217,7 +217,7 @@ private:
       const Subject&
    );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const Subject&
    );

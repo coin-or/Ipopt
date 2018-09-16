@@ -72,7 +72,7 @@ private:
       const AdaptiveMuUpdate&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const AdaptiveMuUpdate&
       );

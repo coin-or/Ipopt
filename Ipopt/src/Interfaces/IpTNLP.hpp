@@ -387,7 +387,7 @@ private:
       const TNLP&
    );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const TNLP&
    );

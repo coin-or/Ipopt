@@ -69,7 +69,7 @@ private:
       const MinC_1NrmRestorationPhase&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const MinC_1NrmRestorationPhase&
       );

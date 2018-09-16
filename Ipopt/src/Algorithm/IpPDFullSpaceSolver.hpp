@@ -82,7 +82,7 @@ private:
    /** Default Constructor */
    PDFullSpaceSolver();
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    PDFullSpaceSolver& operator=(
       const PDFullSpaceSolver&
       );

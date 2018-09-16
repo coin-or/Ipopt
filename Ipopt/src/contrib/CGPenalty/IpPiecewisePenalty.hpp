@@ -145,7 +145,7 @@ private:
       const PiecewisePenalty&
    );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const PiecewisePenalty&
    );
