@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #ifndef __IPSMARTPTR_HPP__
@@ -27,6 +25,7 @@ namespace Ipopt
 {
 
 /** Template class for Smart Pointers.
+ *
  * A SmartPtr behaves much like a raw pointer, but manages the lifetime
  * of an object, deleting the object automatically. This class implements
  * a reference-counting, intrusive smart pointer design, where all
@@ -169,7 +168,7 @@ namespace Ipopt
  * referenced.
  */
 template<class T>
-class SmartPtr : public Referencer
+class SmartPtr: public Referencer
 {
 public:
 #define ipopt_dbg_smartptr_verbosity 0
@@ -180,92 +179,138 @@ public:
    SmartPtr();
 
    /** Copy constructor, initialized from copy of type T */
-   SmartPtr(const SmartPtr<T>& copy);
+   SmartPtr(
+      const SmartPtr<T>& copy
+   );
 
    /** Copy constructor, initialized from copy of type U */
-   template <class U>
-   SmartPtr(const SmartPtr<U>& copy);
+   template<class U>
+   SmartPtr(
+      const SmartPtr<U>& copy
+   );
 
    /** Constructor, initialized from T* ptr */
-   SmartPtr(T* ptr);
+   SmartPtr(
+      T* ptr
+   );
 
    /** Destructor, automatically decrements the
-    * reference count, deletes the object if
-    * necessary.*/
+    * reference count and deletes the object if
+    * necessary.
+    */
    ~SmartPtr();
    //@}
 
    /**@name Overloaded operators. */
    //@{
    /** Overloaded arrow operator, allows the user to call
-    * methods using the contained pointer. */
+    * methods using the contained pointer.
+    */
    T* operator->() const;
 
    /** Overloaded dereference operator, allows the user
-    * to dereference the contained pointer. */
+    * to dereference the contained pointer.
+    */
    T& operator*() const;
 
    /** Overloaded equals operator, allows the user to
-    * set the value of the SmartPtr from a raw pointer */
-   SmartPtr<T>& operator=(T* rhs);
+    * set the value of the SmartPtr from a raw pointer
+    */
+   SmartPtr<T>& operator=(
+      T* rhs
+   );
 
    /** Overloaded equals operator, allows the user to
     * set the value of the SmartPtr from another
-    * SmartPtr */
-   SmartPtr<T>& operator=(const SmartPtr<T>& rhs);
+    * SmartPtr
+    */
+   SmartPtr<T>& operator=(
+      const SmartPtr<T>& rhs
+   );
 
    /** Overloaded equals operator, allows the user to
     * set the value of the SmartPtr from another
-    * SmartPtr of a different type */
-   template <class U>
-   SmartPtr<T>& operator=(const SmartPtr<U>& rhs);
+    * SmartPtr of a different type
+    */
+   template<class U>
+   SmartPtr<T>& operator=(
+      const SmartPtr<U>& rhs);
 
    /** Overloaded equality comparison operator, allows the
-    * user to compare the value of two SmartPtrs */
-   template <class U1, class U2>
+    * user to compare the value of two SmartPtrs
+    */
+   template<class U1, class U2>
    friend
-   bool operator==(const SmartPtr<U1>& lhs, const SmartPtr<U2>& rhs);
+   bool operator==(
+      const SmartPtr<U1>& lhs,
+      const SmartPtr<U2>& rhs
+   );
 
    /** Overloaded equality comparison operator, allows the
-    * user to compare the value of a SmartPtr with a raw pointer. */
-   template <class U1, class U2>
+    * user to compare the value of a SmartPtr with a raw pointer.
+    */
+   template<class U1, class U2>
    friend
-   bool operator==(const SmartPtr<U1>& lhs, U2* raw_rhs);
+   bool operator==(
+      const SmartPtr<U1>& lhs,
+      U2*                 raw_rhs
+   );
 
    /** Overloaded equality comparison operator, allows the
-    * user to compare the value of a raw pointer with a SmartPtr. */
-   template <class U1, class U2>
+    * user to compare the value of a raw pointer with a SmartPtr.
+    */
+   template<class U1, class U2>
    friend
-   bool operator==(U1* lhs, const SmartPtr<U2>& raw_rhs);
+   bool operator==(
+      U1*                 lhs,
+      const SmartPtr<U2>& raw_rhs
+   );
 
    /** Overloaded in-equality comparison operator, allows the
-    * user to compare the value of two SmartPtrs */
-   template <class U1, class U2>
+    * user to compare the value of two SmartPtrs
+    */
+   template<class U1, class U2>
    friend
-   bool operator!=(const SmartPtr<U1>& lhs, const SmartPtr<U2>& rhs);
+   bool operator!=(
+      const SmartPtr<U1>& lhs,
+      const SmartPtr<U2>& rhs
+   );
 
    /** Overloaded in-equality comparison operator, allows the
-    * user to compare the value of a SmartPtr with a raw pointer. */
-   template <class U1, class U2>
+    * user to compare the value of a SmartPtr with a raw pointer.
+    */
+   template<class U1, class U2>
    friend
-   bool operator!=(const SmartPtr<U1>& lhs, U2* raw_rhs);
+   bool operator!=(
+      const SmartPtr<U1>& lhs,
+      U2*                 raw_rhs
+   );
 
    /** Overloaded in-equality comparison operator, allows the
-    * user to compare the value of a SmartPtr with a raw pointer. */
-   template <class U1, class U2>
+    * user to compare the value of a SmartPtr with a raw pointer.
+    */
+   template<class U1, class U2>
    friend
-   bool operator!=(U1* lhs, const SmartPtr<U2>& raw_rhs);
+   bool operator!=(
+      U1*                 lhs,
+      const SmartPtr<U2>& raw_rhs
+   );
 
    /** Overloaded less-than comparison operator, allows the
-    * user to compare the value of two SmartPtrs */
-   template <class U>
+    * user to compare the value of two SmartPtrs
+    */
+   template<class U>
    friend
-   bool operator<(const SmartPtr<U>& lhs, const SmartPtr<U>& rhs);
+   bool operator<(
+      const SmartPtr<U>& lhs,
+      const SmartPtr<U>& rhs
+   );
    //@}
 
-   /**@name friend method declarations. */
+   /**@name friend method declarations */
    //@{
    /** Returns the raw pointer contained.
+    *
     * Use to get the value of
     * the raw ptr (i.e. to pass to other
     * methods/functions, etc.)
@@ -275,30 +320,38 @@ public:
     * contained by the SmartPtr,
     * NEVER delete this returned value.
     */
-   template <class U>
-   friend
-   U* GetRawPtr(const SmartPtr<U>& smart_ptr);
+   template<class U>
+   friend U* GetRawPtr(
+      const SmartPtr<U>& smart_ptr
+   );
 
    /** Returns a const pointer */
-   template <class U>
-   friend
-   SmartPtr<const U> ConstPtr(const SmartPtr<U>& smart_ptr);
+   template<class U>
+   friend SmartPtr<const U> ConstPtr(
+      const SmartPtr<U>& smart_ptr
+   );
 
    /** Returns true if the SmartPtr is NOT NULL.
-    * Use this to check if the SmartPtr is not null
+    *
+    * Use this to check if the SmartPtr is not NULL.
     * This is preferred to if(GetRawPtr(sp) != NULL)
     */
-   template <class U>
+   template<class U>
    friend
-   bool IsValid(const SmartPtr<U>& smart_ptr);
+   bool IsValid(
+      const SmartPtr<U>& smart_ptr
+   );
 
    /** Returns true if the SmartPtr is NULL.
-    * Use this to check if the SmartPtr IsNull.
+    *
+    * Use this to check if the SmartPtr is NULL.
     * This is preferred to if(GetRawPtr(sp) == NULL)
     */
-   template <class U>
+   template<class U>
    friend
-   bool IsNull(const SmartPtr<U>& smart_ptr);
+   bool IsNull(
+      const SmartPtr<U>& smart_ptr
+   );
    //@}
 
 private:
@@ -309,13 +362,19 @@ private:
 
    /** Set the value of the internal raw pointer
     * from another raw pointer, releasing the
-    * previously referenced object if necessary. */
-   SmartPtr<T>& SetFromRawPtr_(T* rhs);
+    * previously referenced object if necessary.
+    */
+   SmartPtr<T>& SetFromRawPtr_(
+      T* rhs
+   );
 
    /** Set the value of the internal raw pointer
     * from a SmartPtr, releasing the previously referenced
-    * object if necessary. */
-   SmartPtr<T>& SetFromSmartPtr_(const SmartPtr<T>& rhs);
+    * object if necessary.
+    */
+   SmartPtr<T>& SetFromSmartPtr_(
+      const SmartPtr<T>& rhs
+   );
 
    /** Release the currently referenced object. */
    void ReleasePointer_();
@@ -324,43 +383,66 @@ private:
 
 /**@name SmartPtr friend function declarations.*/
 //@{
-template <class U>
-U* GetRawPtr(const SmartPtr<U>& smart_ptr);
+template<class U>
+U* GetRawPtr(
+   const SmartPtr<U>& smart_ptr
+);
 
-template <class U>
-SmartPtr<const U> ConstPtr(const SmartPtr<U>& smart_ptr);
+template<class U>
+SmartPtr<const U> ConstPtr(
+   const SmartPtr<U>& smart_ptr
+);
 
-template <class U>
-bool IsNull(const SmartPtr<U>& smart_ptr);
+template<class U>
+bool IsNull(
+   const SmartPtr<U>& smart_ptr
+);
 
-template <class U>
-bool IsValid(const SmartPtr<U>& smart_ptr);
+template<class U>
+bool IsValid(
+   const SmartPtr<U>& smart_ptr
+);
 
-template <class U1, class U2>
-bool operator==(const SmartPtr<U1>& lhs, const SmartPtr<U2>& rhs);
+template<class U1, class U2>
+bool operator==(
+   const SmartPtr<U1>& lhs,
+   const SmartPtr<U2>& rhs
+);
 
-template <class U1, class U2>
-bool operator==(const SmartPtr<U1>& lhs, U2* raw_rhs);
+template<class U1, class U2>
+bool operator==(
+   const SmartPtr<U1>& lhs,
+   U2*                 raw_rhs
+);
 
-template <class U1, class U2>
-bool operator==(U1* lhs, const SmartPtr<U2>& raw_rhs);
+template<class U1, class U2>
+bool operator==(
+   U1*                 lhs,
+   const SmartPtr<U2>& raw_rhs
+);
 
-template <class U1, class U2>
-bool operator!=(const SmartPtr<U1>& lhs, const SmartPtr<U2>& rhs);
+template<class U1, class U2>
+bool operator!=(
+   const SmartPtr<U1>& lhs,
+   const SmartPtr<U2>& rhs);
 
-template <class U1, class U2>
-bool operator!=(const SmartPtr<U1>& lhs, U2* raw_rhs);
+template<class U1, class U2>
+bool operator!=(
+   const SmartPtr<U1>& lhs,
+   U2*                 raw_rhs
+);
 
-template <class U1, class U2>
-bool operator!=(U1* lhs, const SmartPtr<U2>& raw_rhs);
+template<class U1, class U2>
+bool operator!=(
+   U1*                 lhs,
+   const SmartPtr<U2>& raw_rhs
+);
 
 //@}
 
-
-template <class T>
+template<class T>
 SmartPtr<T>::SmartPtr()
-   :
-   ptr_(0)
+   : ptr_(0)
 {
 #ifdef IP_DEBUG_SMARTPTR
    DBG_START_METH("SmartPtr<T>::SmartPtr()", ipopt_dbg_smartptr_verbosity);
@@ -369,62 +451,64 @@ SmartPtr<T>::SmartPtr()
 #ifndef NDEBUG
    const ReferencedObject* IPOPT_UNUSED trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = ptr_;
 #endif
-
 }
 
-
-template <class T>
-SmartPtr<T>::SmartPtr(const SmartPtr<T>& copy)
-   :
-   ptr_(0)
+template<class T>
+SmartPtr<T>::SmartPtr(
+   const SmartPtr<T>& copy
+)
+   : ptr_(0)
 {
 #ifdef IP_DEBUG_SMARTPTR
    DBG_START_METH("SmartPtr<T>::SmartPtr(const SmartPtr<T>& copy)", ipopt_dbg_smartptr_verbosity);
 #endif
 
 #ifndef NDEBUG
-   const ReferencedObject* IPOPT_UNUSED trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = ptr_;
+   const ReferencedObject* IPOPT_UNUSED trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ =
+      ptr_;
 #endif
 
    (void) SetFromSmartPtr_(copy);
 }
 
-
-template <class T>
-template <class U>
-SmartPtr<T>::SmartPtr(const SmartPtr<U>& copy)
-   :
-   ptr_(0)
+template<class T>
+template<class U>
+SmartPtr<T>::SmartPtr(
+   const SmartPtr<U>& copy
+)
+   : ptr_(0)
 {
 #ifdef IP_DEBUG_SMARTPTR
    DBG_START_METH("SmartPtr<T>::SmartPtr(const SmartPtr<U>& copy)", ipopt_dbg_smartptr_verbosity);
 #endif
 
 #ifndef NDEBUG
-   const ReferencedObject* IPOPT_UNUSED trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = ptr_;
+   const ReferencedObject* IPOPT_UNUSED trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ =
+      ptr_;
 #endif
 
    (void) SetFromSmartPtr_(GetRawPtr(copy));
 }
 
-
-template <class T>
-SmartPtr<T>::SmartPtr(T* ptr)
-   :
-   ptr_(0)
+template<class T>
+SmartPtr<T>::SmartPtr(
+   T* ptr
+)
+   : ptr_(0)
 {
 #ifdef IP_DEBUG_SMARTPTR
    DBG_START_METH("SmartPtr<T>::SmartPtr(T* ptr)", ipopt_dbg_smartptr_verbosity);
 #endif
 
 #ifndef NDEBUG
-   const ReferencedObject* IPOPT_UNUSED trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = ptr_;
+   const ReferencedObject* IPOPT_UNUSED trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ =
+      ptr_;
 #endif
 
    (void) SetFromRawPtr_(ptr);
 }
 
-template <class T>
+template<class T>
 SmartPtr<T>::~SmartPtr()
 {
 #ifdef IP_DEBUG_SMARTPTR
@@ -434,8 +518,7 @@ SmartPtr<T>::~SmartPtr()
    ReleasePointer_();
 }
 
-
-template <class T>
+template<class T>
 T* SmartPtr<T>::operator->() const
 {
 #ifdef IP_DEBUG_SMARTPTR
@@ -450,8 +533,7 @@ T* SmartPtr<T>::operator->() const
    return ptr_;
 }
 
-
-template <class T>
+template<class T>
 T& SmartPtr<T>::operator*() const
 {
 #ifdef IP_DEBUG_SMARTPTR
@@ -466,9 +548,10 @@ T& SmartPtr<T>::operator*() const
    return *ptr_;
 }
 
-
-template <class T>
-SmartPtr<T>& SmartPtr<T>::operator=(T* rhs)
+template<class T>
+SmartPtr<T>& SmartPtr<T>::operator=(
+   T* rhs
+)
 {
 #ifdef IP_DEBUG_SMARTPTR
    DBG_START_METH("SmartPtr<T>& SmartPtr<T>::operator=(T* rhs)", ipopt_dbg_smartptr_verbosity);
@@ -477,9 +560,10 @@ SmartPtr<T>& SmartPtr<T>::operator=(T* rhs)
    return SetFromRawPtr_(rhs);
 }
 
-
-template <class T>
-SmartPtr<T>& SmartPtr<T>::operator=(const SmartPtr<T>& rhs)
+template<class T>
+SmartPtr<T>& SmartPtr<T>::operator=(
+   const SmartPtr<T>& rhs
+)
 {
 #ifdef IP_DEBUG_SMARTPTR
    DBG_START_METH(
@@ -490,10 +574,11 @@ SmartPtr<T>& SmartPtr<T>::operator=(const SmartPtr<T>& rhs)
    return SetFromSmartPtr_(rhs);
 }
 
-
-template <class T>
-template <class U>
-SmartPtr<T>& SmartPtr<T>::operator=(const SmartPtr<U>& rhs)
+template<class T>
+template<class U>
+SmartPtr<T>& SmartPtr<T>::operator=(
+   const SmartPtr<U>& rhs
+)
 {
 #ifdef IP_DEBUG_SMARTPTR
    DBG_START_METH(
@@ -504,16 +589,17 @@ SmartPtr<T>& SmartPtr<T>::operator=(const SmartPtr<U>& rhs)
    return SetFromSmartPtr_(GetRawPtr(rhs));
 }
 
-
-template <class T>
-SmartPtr<T>& SmartPtr<T>::SetFromRawPtr_(T* rhs)
+template<class T>
+SmartPtr<T>& SmartPtr<T>::SetFromRawPtr_(
+   T* rhs
+)
 {
 #ifdef IP_DEBUG_SMARTPTR
    DBG_START_METH(
       "SmartPtr<T>& SmartPtr<T>::SetFromRawPtr_(T* rhs)", ipopt_dbg_smartptr_verbosity);
 #endif
 
-   if (rhs != 0)
+   if( rhs != 0 )
    {
       rhs->AddRef(this);
    }
@@ -526,8 +612,10 @@ SmartPtr<T>& SmartPtr<T>::SetFromRawPtr_(T* rhs)
    return *this;
 }
 
-template <class T>
-SmartPtr<T>& SmartPtr<T>::SetFromSmartPtr_(const SmartPtr<T>& rhs)
+template<class T>
+SmartPtr<T>& SmartPtr<T>::SetFromSmartPtr_(
+   const SmartPtr<T>& rhs
+)
 {
 #ifdef IP_DEBUG_SMARTPTR
    DBG_START_METH(
@@ -540,8 +628,7 @@ SmartPtr<T>& SmartPtr<T>::SetFromSmartPtr_(const SmartPtr<T>& rhs)
    return (*this);
 }
 
-
-template <class T>
+template<class T>
 void SmartPtr<T>::ReleasePointer_()
 {
 #ifdef IP_DEBUG_SMARTPTR
@@ -550,19 +637,20 @@ void SmartPtr<T>::ReleasePointer_()
       ipopt_dbg_smartptr_verbosity);
 #endif
 
-   if (ptr_)
+   if( ptr_ )
    {
       ptr_->ReleaseRef(this);
-      if (ptr_->ReferenceCount() == 0)
+      if( ptr_->ReferenceCount() == 0 )
       {
          delete ptr_;
       }
    }
 }
 
-
-template <class U>
-U* GetRawPtr(const SmartPtr<U>& smart_ptr)
+template<class U>
+U* GetRawPtr(
+   const SmartPtr<U>& smart_ptr
+)
 {
 #ifdef IP_DEBUG_SMARTPTR
    DBG_START_FUN(
@@ -573,21 +661,27 @@ U* GetRawPtr(const SmartPtr<U>& smart_ptr)
    return smart_ptr.ptr_;
 }
 
-template <class U>
-SmartPtr<const U> ConstPtr(const SmartPtr<U>& smart_ptr)
+template<class U>
+SmartPtr<const U> ConstPtr(
+   const SmartPtr<U>& smart_ptr
+)
 {
    // compiler should implicitly cast
    return GetRawPtr(smart_ptr);
 }
 
-template <class U>
-bool IsValid(const SmartPtr<U>& smart_ptr)
+template<class U>
+bool IsValid(
+   const SmartPtr<U>& smart_ptr
+)
 {
    return !IsNull(smart_ptr);
 }
 
-template <class U>
-bool IsNull(const SmartPtr<U>& smart_ptr)
+template<class U>
+bool IsNull(
+   const SmartPtr<U>& smart_ptr
+)
 {
 #ifdef IP_DEBUG_SMARTPTR
    DBG_START_FUN(
@@ -598,9 +692,11 @@ bool IsNull(const SmartPtr<U>& smart_ptr)
    return (smart_ptr.ptr_ == 0);
 }
 
-
-template <class U1, class U2>
-bool ComparePointers(const U1* lhs, const U2* rhs)
+template<class U1, class U2>
+bool ComparePointers(
+   const U1* lhs,
+   const U2* rhs
+)
 {
 #ifdef IP_DEBUG_SMARTPTR
    DBG_START_FUN(
@@ -618,8 +714,11 @@ bool ComparePointers(const U1* lhs, const U2* rhs)
    return v_lhs == v_rhs;
 }
 
-template <class U1, class U2>
-bool operator==(const SmartPtr<U1>& lhs, const SmartPtr<U2>& rhs)
+template<class U1, class U2>
+bool operator==(
+   const SmartPtr<U1>& lhs,
+   const SmartPtr<U2>& rhs
+)
 {
 #ifdef IP_DEBUG_SMARTPTR
    DBG_START_FUN(
@@ -632,8 +731,11 @@ bool operator==(const SmartPtr<U1>& lhs, const SmartPtr<U2>& rhs)
    return ComparePointers(raw_lhs, raw_rhs);
 }
 
-template <class U1, class U2>
-bool operator==(const SmartPtr<U1>& lhs, U2* raw_rhs)
+template<class U1, class U2>
+bool operator==(
+   const SmartPtr<U1>& lhs,
+   U2*                 raw_rhs
+)
 {
 #ifdef IP_DEBUG_SMARTPTR
    DBG_START_FUN(
@@ -645,8 +747,11 @@ bool operator==(const SmartPtr<U1>& lhs, U2* raw_rhs)
    return ComparePointers(raw_lhs, raw_rhs);
 }
 
-template <class U1, class U2>
-bool operator==(U1* raw_lhs, const SmartPtr<U2>& rhs)
+template<class U1, class U2>
+bool operator==(
+   U1*                 raw_lhs,
+   const SmartPtr<U2>& rhs
+)
 {
 #ifdef IP_DEBUG_SMARTPTR
    DBG_START_FUN(
@@ -658,8 +763,11 @@ bool operator==(U1* raw_lhs, const SmartPtr<U2>& rhs)
    return ComparePointers(raw_lhs, raw_rhs);
 }
 
-template <class U1, class U2>
-bool operator!=(const SmartPtr<U1>& lhs, const SmartPtr<U2>& rhs)
+template<class U1, class U2>
+bool operator!=(
+   const SmartPtr<U1>& lhs,
+   const SmartPtr<U2>& rhs
+)
 {
 #ifdef IP_DEBUG_SMARTPTR
    DBG_START_FUN(
@@ -671,8 +779,11 @@ bool operator!=(const SmartPtr<U1>& lhs, const SmartPtr<U2>& rhs)
    return !retValue;
 }
 
-template <class U1, class U2>
-bool operator!=(const SmartPtr<U1>& lhs, U2* raw_rhs)
+template<class U1, class U2>
+bool operator!=(
+   const SmartPtr<U1>& lhs,
+   U2*                 raw_rhs
+)
 {
 #ifdef IP_DEBUG_SMARTPTR
    DBG_START_FUN(
@@ -684,8 +795,11 @@ bool operator!=(const SmartPtr<U1>& lhs, U2* raw_rhs)
    return !retValue;
 }
 
-template <class U1, class U2>
-bool operator!=(U1* raw_lhs, const SmartPtr<U2>& rhs)
+template<class U1, class U2>
+bool operator!=(
+   U1*                 raw_lhs,
+   const SmartPtr<U2>& rhs
+)
 {
 #ifdef IP_DEBUG_SMARTPTR
    DBG_START_FUN(
@@ -697,8 +811,11 @@ bool operator!=(U1* raw_lhs, const SmartPtr<U2>& rhs)
    return !retValue;
 }
 
-template <class T>
-void swap(SmartPtr<T>& a, SmartPtr<T>& b)
+template<class T>
+void swap(
+   SmartPtr<T>& a,
+   SmartPtr<T>& b
+)
 {
 #ifdef IP_DEBUG_REFERENCED
    SmartPtr<T> tmp(a);
@@ -709,29 +826,40 @@ void swap(SmartPtr<T>& a, SmartPtr<T>& b)
 #endif
 }
 
-template <class T>
-bool operator<(const SmartPtr<T>& lhs, const SmartPtr<T>& rhs)
+template<class T>
+bool operator<(
+   const SmartPtr<T>& lhs,
+   const SmartPtr<T>& rhs
+)
 {
    return lhs.ptr_ < rhs.ptr_;
 }
 
-template <class T>
-bool operator> (const SmartPtr<T>& lhs, const SmartPtr<T>& rhs)
+template<class T>
+bool operator>(
+   const SmartPtr<T>& lhs,
+   const SmartPtr<T>& rhs
+)
 {
    return rhs < lhs;
 }
 
-template <class T> bool
-operator<=(const SmartPtr<T>& lhs, const SmartPtr<T>& rhs)
+template<class T> bool operator<=(
+   const SmartPtr<T>& lhs,
+   const SmartPtr<T>& rhs
+)
 {
-   return !( rhs < lhs );
+   return !(rhs < lhs);
 }
 
-template <class T> bool
-operator>=(const SmartPtr<T>& lhs, const SmartPtr<T>& rhs)
+template<class T> bool operator>=(
+   const SmartPtr<T>& lhs,
+   const SmartPtr<T>& rhs
+)
 {
-   return !( lhs < rhs );
+   return !(lhs < rhs);
 }
+
 } // namespace Ipopt
 
 #undef ipopt_dbg_smartptr_verbosity

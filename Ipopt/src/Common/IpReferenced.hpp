@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #ifndef __IPREFERENCED_HPP__
@@ -21,18 +19,15 @@
 namespace Ipopt
 {
 
-/** Psydo-class, from which everything has to inherit that wants to
+/** Pseudo-class, from which everything has to inherit that wants to
  *  use be registered as a Referencer for a ReferencedObject.
  */
-class Referencer
-{}
-;
+class Referencer { };
 
-/** ReferencedObject class.
+/** Storing the reference count of all the smart pointers that currently reference it.
+ *
  * This is part of the implementation of an intrusive smart pointer
- * design. This class stores the reference count of all the smart
- * pointers that currently reference it. See the documentation for
- * the SmartPtr class for more details.
+ * design.  See the documentation for the SmartPtr class for more details.
  *
  * A SmartPtr behaves much like a raw pointer, but manages the lifetime
  * of an object, deleting the object automatically. This class implements
@@ -175,23 +170,25 @@ class ReferencedObject
 {
 public:
    ReferencedObject()
-      :
-      reference_count_(0)
-   {}
+      : reference_count_(0)
+   { }
 
    virtual ~ReferencedObject()
    {
       DBG_ASSERT(reference_count_ == 0);
    }
 
-   inline
-   Index ReferenceCount() const;
+   inline Index ReferenceCount() const;
 
    inline
-   void AddRef(const Referencer* referencer) const;
+   void AddRef(
+      const Referencer* referencer
+   ) const;
 
    inline
-   void ReleaseRef(const Referencer* referencer) const;
+   void ReleaseRef(
+      const Referencer* referencer
+   ) const;
 
 private:
    mutable Index reference_count_;
@@ -203,8 +200,7 @@ private:
 };
 
 /* inline methods */
-inline
-Index ReferencedObject::ReferenceCount() const
+inline Index ReferencedObject::ReferenceCount() const
 {
    //    DBG_START_METH("ReferencedObject::ReferenceCount()", 0);
    //    DBG_PRINT((1,"Returning reference_count_ = %d\n", reference_count_));
@@ -212,7 +208,9 @@ Index ReferencedObject::ReferenceCount() const
 }
 
 inline
-void ReferencedObject::AddRef(const Referencer* referencer) const
+void ReferencedObject::AddRef(
+   const Referencer* referencer
+) const
 {
    //    DBG_START_METH("ReferencedObject::AddRef(const Referencer* referencer)", 0);
    reference_count_++;
@@ -224,7 +222,9 @@ void ReferencedObject::AddRef(const Referencer* referencer) const
 }
 
 inline
-void ReferencedObject::ReleaseRef(const Referencer* referencer) const
+void ReferencedObject::ReleaseRef(
+   const Referencer* referencer
+) const
 {
    //    DBG_START_METH("ReferencedObject::ReleaseRef(const Referencer* referencer)",
    //                   0);
@@ -252,9 +252,7 @@ void ReferencedObject::ReleaseRef(const Referencer* referencer) const
       referencers_.erase(iter);
    }
 #   endif
-
 }
-
 
 } // namespace Ipopt
 

@@ -1,10 +1,9 @@
 /* Copyright (C) 2011
  * All Rights Reserved.
  * This code is published under the Eclipse Public License.
- *
- * $Id$
- *
- * Include file for the configuration of Ipopt.
+ */
+
+/** Include file for the configuration of Ipopt.
  *
  * On systems where the code is configured with the configure script
  * (i.e., compilation is always done with HAVE_CONFIG_H defined), this
@@ -19,7 +18,6 @@
  * by the files config_*default.h. The project maintainer needs to remember
  * to update these file and choose reasonable defines.
  * A user can modify the default setting by editing the config_*default.h files.
- *
  */
 
 #ifndef __IPOPTCONFIG_H__

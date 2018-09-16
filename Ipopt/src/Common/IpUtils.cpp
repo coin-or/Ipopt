@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter    IBM       2005-08-12
 
 #include "IpoptConfig.h"
@@ -153,12 +151,13 @@ inline double IpCoinGetTimeOfDay()
 namespace Ipopt
 {
 
-bool IsFiniteNumber(Number val)
+bool IsFiniteNumber(
+   Number val
+)
 {
 #ifdef COIN_C_FINITE
    return (bool)COIN_C_FINITE(val);
 #else
-
    return true;
 #endif
 
@@ -214,15 +213,14 @@ static double Wallclock_firstCall_ = -1.;
 Number CpuTime()
 {
    double cpu_temp;
-#if defined(_MSC_VER) || defined(__MSVCRT__)
 
+#if defined(_MSC_VER) || defined(__MSVCRT__)
    unsigned int ticksnow;        /* clock_t is same as int */
 
    ticksnow = (unsigned int)clock();
 
    cpu_temp = (double)((double)ticksnow / CLOCKS_PER_SEC);
 #else
-
    struct rusage usage;
    getrusage(RUSAGE_SELF, &usage);
    cpu_temp = (double)usage.ru_utime.tv_sec;
@@ -235,12 +233,11 @@ Number CpuTime()
 Number SysTime()
 {
    double sys_temp;
-#if defined(_MSC_VER) || defined(__MSVCRT__)
 
+#if defined(_MSC_VER) || defined(__MSVCRT__)
    // not yet implemented for Windows
    sys_temp = 0.;
 #else
-
    struct rusage usage;
    getrusage(RUSAGE_SELF, &usage);
    sys_temp = (double)usage.ru_stime.tv_sec;
@@ -253,20 +250,29 @@ Number SysTime()
 Number WallclockTime()
 {
    double callTime = IpCoinGetTimeOfDay();
-   if (Wallclock_firstCall_ == -1.)
+   if( Wallclock_firstCall_ == -1. )
    {
       Wallclock_firstCall_ = callTime;
    }
    return callTime - Wallclock_firstCall_;
 }
 
-bool Compare_le(Number lhs, Number rhs, Number BasVal)
+bool Compare_le(
+   Number lhs,
+   Number rhs,
+   Number BasVal
+)
 {
    Number mach_eps = std::numeric_limits<Number>::epsilon();
    return (lhs - rhs <= 10.*mach_eps * fabs(BasVal));
 }
 
-int Snprintf(char* str, long size, const char* format, ...)
+int Snprintf(
+   char*       str,
+   long        size,
+   const char* format,
+   ...
+)
 {
 #if defined(HAVE_VSNPRINTF) && defined(__SUNPRO_CC)
    std::va_list ap;

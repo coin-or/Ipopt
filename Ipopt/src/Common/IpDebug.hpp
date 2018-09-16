@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #ifndef __IPDEBUG_HPP__
@@ -61,17 +59,27 @@ namespace Ipopt
 class Journalist;
 
 /** Class that lives throughout the execution of a method or
-*  function for which debug output is to be generated.  The output
-*  is sent to the unique debug journalist that is set with
-*  SetJournalist at the beginning of program execution. */
+ *  function for which debug output is to be generated.
+ *
+ *  The output
+ *  is sent to the unique debug journalist that is set with
+ *  SetJournalist at the beginning of program execution.
+ */
 class DebugJournalistWrapper
 {
 public:
    /** @name Constructors/Destructors. */
    //@{
-   DebugJournalistWrapper(std::string func_name, Index verbose_level);
-   DebugJournalistWrapper(std::string func_name, Index verbose_level,
-                          const void* const method_owner);
+   DebugJournalistWrapper(
+      std::string func_name,
+      Index       verbose_level
+   );
+
+   DebugJournalistWrapper(
+      std::string       func_name,
+      Index             verbose_level,
+      const void* const method_owner
+   );
    ~DebugJournalistWrapper();
    //@}
 
@@ -92,30 +100,44 @@ public:
    //@}
 
    /** Printing */
-   void DebugPrintf(Index verbosity, const char* pformat, ...);
+   void DebugPrintf(
+      Index       verbosity,
+      const char* pformat,
+      ...
+   );
 
    /* Method for initialization of the static GLOBAL journalist,
-   * through with all debug printout is to be written.  This needs
-   * to be set before any debug printout can be done. */
-   static void SetJournalist(Journalist* jrnl);
+    * through with all debug printout is to be written.
+    *
+    * This needs to be set before any debug printout can be done.
+    */
+   static void SetJournalist(
+      Journalist* jrnl
+   );
 
 private:
    /**@name Default Compiler Generated Methods
-   * (Hidden to avoid implicit creation/calling).
-   * These methods are not implemented and
-   * we do not want the compiler to implement
-   * them for us, so we declare them private
-   * and do not define them. This ensures that
-   * they will not be implicitly created/called. */
+    * (Hidden to avoid implicit creation/calling).
+    *
+    * These methods are not implemented and
+    * we do not want the compiler to implement
+    * them for us, so we declare them private
+    * and do not define them. This ensures that
+    * they will not be implicitly created/called.
+    */
    //@{
    /** default constructor */
    DebugJournalistWrapper();
 
    /** copy contructor */
-   DebugJournalistWrapper(const DebugJournalistWrapper&);
+   DebugJournalistWrapper(
+      const DebugJournalistWrapper&
+   );
 
    /** Overloaded Equals Operator */
-   DebugJournalistWrapper& operator=(const DebugJournalistWrapper&);
+   DebugJournalistWrapper& operator=(
+      const DebugJournalistWrapper&
+   );
    //@}
 
    static Index indentation_level_;
@@ -145,6 +167,5 @@ private:
   dbg_jrnl.Verbosity()
 
 #endif
-
 
 #endif

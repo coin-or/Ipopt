@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2005-06-18
 
 #include "IpoptConfig.h"
@@ -34,30 +32,30 @@
 namespace Ipopt
 {
 
-void RegisteredOption::OutputDescription(const Journalist& jnlst) const
+void RegisteredOption::OutputDescription(
+   const Journalist& jnlst
+) const
 {
    std::string type_str = "Unknown";
-   if (type_ == OT_Number)
+   if( type_ == OT_Number )
    {
       type_str = "Real Number";
    }
-   else if (type_ == OT_Integer)
+   else if( type_ == OT_Integer )
    {
       type_str = "Integer";
    }
-   else if (type_ == OT_String)
+   else if( type_ == OT_String )
    {
       type_str = "String";
    }
 
-   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                "\n### %s (%s) ###\nCategory: %s\nDescription: %s\n",
-                name_.c_str(), type_str.c_str(),
-                registering_category_.c_str(), short_description_.c_str());
+   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n### %s (%s) ###\nCategory: %s\nDescription: %s\n", name_.c_str(),
+                type_str.c_str(), registering_category_.c_str(), short_description_.c_str());
 
-   if (type_ == OT_Number)
+   if( type_ == OT_Number )
    {
-      if (has_lower_)
+      if( has_lower_ )
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%g", lower_);
       }
@@ -66,7 +64,7 @@ void RegisteredOption::OutputDescription(const Journalist& jnlst) const
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "-inf");
       }
 
-      if (lower_strict_)
+      if( lower_strict_ )
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " < ");
       }
@@ -77,7 +75,7 @@ void RegisteredOption::OutputDescription(const Journalist& jnlst) const
 
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "(%g)", default_number_);
 
-      if (has_upper_ && upper_strict_)
+      if( has_upper_ && upper_strict_ )
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " < ");
       }
@@ -86,7 +84,7 @@ void RegisteredOption::OutputDescription(const Journalist& jnlst) const
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <= ");
       }
 
-      if (has_upper_)
+      if( has_upper_ )
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%g\n", upper_);
       }
@@ -95,52 +93,49 @@ void RegisteredOption::OutputDescription(const Journalist& jnlst) const
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "+inf\n");
       }
    }
-   else if (type_ == OT_Integer)
+   else if( type_ == OT_Integer )
    {
-      if (has_lower_)
+      if( has_lower_ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%d", (Index)lower_);
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%d", (Index) lower_);
       }
       else
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "-inf");
       }
 
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <= (%d) <= ", (Index)default_number_);
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <= (%d) <= ", (Index) default_number_);
 
-      if (has_upper_)
+      if( has_upper_ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%d\n", (Index)upper_);
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%d\n", (Index) upper_);
       }
       else
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "+inf\n");
       }
    }
-   else if (type_ == OT_String)
+   else if( type_ == OT_String )
    {
       std::vector<string_entry>::const_iterator i;
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "Valid Settings:\n");
-      for (i = valid_strings_.begin(); i != valid_strings_.end(); i++)
+      for( i = valid_strings_.begin(); i != valid_strings_.end(); i++ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\t%s (%s)\n",
-                      (*i).value_.c_str(), (*i).description_.c_str());
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\t%s (%s)\n", (*i).value_.c_str(), (*i).description_.c_str());
       }
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "Default: \"%s\"\n",
-                   default_string_.c_str());
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "Default: \"%s\"\n", default_string_.c_str());
    }
 }
 
-void RegisteredOption::OutputLatexDescription(const Journalist& jnlst) const
+void RegisteredOption::OutputLatexDescription(
+   const Journalist& jnlst
+) const
 {
    std::string latex_name;
    MakeValidLatexString(name_, latex_name);
    std::string latex_desc;
    MakeValidLatexString(short_description_, latex_desc);
-   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                "\\paragraph{%s:}\\label{opt:%s} ",
-                latex_name.c_str(),
-                name_.c_str());
+   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\paragraph{%s:}\\label{opt:%s} ", latex_name.c_str(), name_.c_str());
    if( short_description_.length() == 0 )
    {
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "~");
@@ -156,7 +151,7 @@ void RegisteredOption::OutputLatexDescription(const Journalist& jnlst) const
    //    jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 0, 50,
    //                               latex_desc.c_str());
 
-   if (long_description_ != "")
+   if( long_description_ != "" )
    {
       latex_desc = "";
       MakeValidLatexString(long_description_, latex_desc);
@@ -164,12 +159,11 @@ void RegisteredOption::OutputLatexDescription(const Journalist& jnlst) const
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, latex_desc.c_str());
    }
 
-   if (type_ == OT_Number)
+   if( type_ == OT_Number )
    {
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                   " The valid range for this real option is \n$");
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " The valid range for this real option is \n$");
       std::string buff;
-      if (has_lower_)
+      if( has_lower_ )
       {
          buff = MakeValidLatexNumber(lower_);
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%s", buff.c_str());
@@ -179,7 +173,7 @@ void RegisteredOption::OutputLatexDescription(const Journalist& jnlst) const
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%s", "{\\tt -inf}");
       }
 
-      if (has_lower_ && !lower_strict_)
+      if( has_lower_ && !lower_strict_ )
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " \\le ");
       }
@@ -190,7 +184,7 @@ void RegisteredOption::OutputLatexDescription(const Journalist& jnlst) const
 
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "{\\tt %s }", latex_name.c_str());
 
-      if (has_upper_ && !upper_strict_)
+      if( has_upper_ && !upper_strict_ )
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " \\le ");
       }
@@ -199,7 +193,7 @@ void RegisteredOption::OutputLatexDescription(const Journalist& jnlst) const
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <  ");
       }
 
-      if (has_upper_)
+      if( has_upper_ )
       {
          buff = MakeValidLatexNumber(upper_);
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%s", buff.c_str());
@@ -210,17 +204,15 @@ void RegisteredOption::OutputLatexDescription(const Journalist& jnlst) const
       }
 
       buff = MakeValidLatexNumber(default_number_);
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                   "$\nand its default value is $%s$.\n\n", buff.c_str());
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "$\nand its default value is $%s$.\n\n", buff.c_str());
 
    }
-   else if (type_ == OT_Integer)
+   else if( type_ == OT_Integer )
    {
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                   " The valid range for this integer option is\n$");
-      if (has_lower_)
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " The valid range for this integer option is\n$");
+      if( has_lower_ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%d \\le ", (Index)lower_);
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%d \\le ", (Index) lower_);
       }
       else
       {
@@ -229,37 +221,30 @@ void RegisteredOption::OutputLatexDescription(const Journalist& jnlst) const
 
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "{\\tt %s }", latex_name.c_str());
 
-      if (has_upper_)
+      if( has_upper_ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " \\le %d", (Index)upper_);
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " \\le %d", (Index) upper_);
       }
       else
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <  %s", "{\\tt +inf}");
       }
 
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                   "$\nand its default value is $%d$.\n\n",
-                   (Index)default_number_);
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "$\nand its default value is $%d$.\n\n", (Index) default_number_);
    }
-   else if (type_ == OT_String)
+   else if( type_ == OT_String )
    {
       std::string buff;
       MakeValidLatexString(default_string_, buff);
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                   " The default value for this string option is \"%s\".\n",
-                   buff.c_str());
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " The default value for this string option is \"%s\".\n", buff.c_str());
 
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\\\ \nPossible values:\n");
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\begin{itemize}\n");
-      for (std::vector<string_entry>::const_iterator
-           i = valid_strings_.begin();
-           i != valid_strings_.end(); i++)
+      for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end(); i++ )
       {
          std::string latex_value;
          MakeValidLatexString((*i).value_, latex_value);
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "   \\item %s",
-                      latex_value.c_str());
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "   \\item %s", latex_value.c_str());
 
          if( (*i).description_.length() > 0 )
          {
@@ -275,16 +260,19 @@ void RegisteredOption::OutputLatexDescription(const Journalist& jnlst) const
    jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
 }
 
-void RegisteredOption::MakeValidLatexString(std::string source, std::string& dest) const
+void RegisteredOption::MakeValidLatexString(
+   std::string source,
+   std::string& dest
+) const
 {
    std::string::iterator c;
-   for (c = source.begin(); c != source.end(); c++)
+   for( c = source.begin(); c != source.end(); c++ )
    {
-      if (*c == '_')
+      if( *c == '_' )
       {
          dest.append("\\_");
       }
-      else if (*c == '^')
+      else if( *c == '^' )
       {
          dest.append("\\^");
       }
@@ -295,7 +283,9 @@ void RegisteredOption::MakeValidLatexString(std::string source, std::string& des
    }
 }
 
-std::string RegisteredOption::MakeValidLatexNumber(Number value) const
+std::string RegisteredOption::MakeValidLatexNumber(
+   Number value
+) const
 {
    char buffer[256];
    Snprintf(buffer, 255, "%g", value);
@@ -304,9 +294,9 @@ std::string RegisteredOption::MakeValidLatexNumber(Number value) const
 
    std::string::iterator c;
    bool found_e = false;
-   for (c = source.begin(); c != source.end(); c++)
+   for( c = source.begin(); c != source.end(); c++ )
    {
-      if (*c == 'e')
+      if( *c == 'e' )
       {
          found_e = true;
          dest.append(" \\cdot 10^{");
@@ -316,7 +306,7 @@ std::string RegisteredOption::MakeValidLatexNumber(Number value) const
          dest += *c;
       }
    }
-   if (found_e)
+   if( found_e )
    {
       dest.append("}");
    }
@@ -324,14 +314,15 @@ std::string RegisteredOption::MakeValidLatexNumber(Number value) const
    return dest;
 }
 
-void RegisteredOption::OutputShortDescription(const Journalist& jnlst) const
+void RegisteredOption::OutputShortDescription(
+   const Journalist& jnlst
+) const
 {
-   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%-30s",  name_.c_str());
+   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%-30s", name_.c_str());
 
-
-   if (type_ == OT_Number)
+   if( type_ == OT_Number )
    {
-      if (has_lower_)
+      if( has_lower_ )
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%10g", lower_);
       }
@@ -340,7 +331,7 @@ void RegisteredOption::OutputShortDescription(const Journalist& jnlst) const
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%10s", "-inf");
       }
 
-      if (has_lower_ && !lower_strict_)
+      if( has_lower_ && !lower_strict_ )
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <= ");
       }
@@ -351,7 +342,7 @@ void RegisteredOption::OutputShortDescription(const Journalist& jnlst) const
 
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "(%11g)", default_number_);
 
-      if (has_upper_ && !upper_strict_)
+      if( has_upper_ && !upper_strict_ )
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <= ");
       }
@@ -360,7 +351,7 @@ void RegisteredOption::OutputShortDescription(const Journalist& jnlst) const
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <  ");
       }
 
-      if (has_upper_)
+      if( has_upper_ )
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%-10g\n", upper_);
       }
@@ -369,58 +360,50 @@ void RegisteredOption::OutputShortDescription(const Journalist& jnlst) const
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%-10s\n", "+inf");
       }
    }
-   else if (type_ == OT_Integer)
+   else if( type_ == OT_Integer )
    {
-      if (has_lower_)
+      if( has_lower_ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%10d <= ", (Index)lower_);
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%10d <= ", (Index) lower_);
       }
       else
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%10s <  ", "-inf");
       }
 
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "(%11d)",
-                   (Index)default_number_);
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "(%11d)", (Index) default_number_);
 
-      if (has_upper_)
+      if( has_upper_ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <= %-10d\n", (Index)upper_);
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <= %-10d\n", (Index) upper_);
       }
       else
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <  %-10s\n", "+inf");
       }
    }
-   else if (type_ == OT_String)
+   else if( type_ == OT_String )
    {
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "(\"%s\")\n",
-                   default_string_.c_str());
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "(\"%s\")\n", default_string_.c_str());
    }
    jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "   ");
-   jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 3, 76,
-                              short_description_.c_str());
-   if (long_description_ != "")
+   jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 3, 76, short_description_.c_str());
+   if( long_description_ != "" )
    {
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n     ");
-      jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 5, 74,
-                                 long_description_.c_str());
+      jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 5, 74, long_description_.c_str());
    }
-   if (type_ == OT_String)
+   if( type_ == OT_String )
    {
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n   Possible values:\n");
-      for (std::vector<string_entry>::const_iterator
-           i = valid_strings_.begin();
-           i != valid_strings_.end(); i++)
+      for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end(); i++ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "    - %-23s",
-                      (*i).value_.c_str());
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "    - %-23s", (*i).value_.c_str());
 
          if( (*i).description_.length() > 0 )
          {
             jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " [");
-            jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 31, 48,
-                                       (*i).description_.c_str());
+            jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 31, 48, (*i).description_.c_str());
             jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "]");
          }
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
@@ -433,14 +416,16 @@ void RegisteredOption::OutputShortDescription(const Journalist& jnlst) const
    jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
 }
 
-bool RegisteredOption::IsValidStringSetting(const std::string& value) const
+bool RegisteredOption::IsValidStringSetting(
+   const std::string& value
+) const
 {
    DBG_ASSERT(type_ == OT_String);
 
    std::vector<string_entry>::const_iterator i;
-   for (i = valid_strings_.begin(); i != valid_strings_.end(); i++)
+   for( i = valid_strings_.begin(); i != valid_strings_.end(); i++ )
    {
-      if (i->value_ == "*" || string_equal_insensitive(i->value_, value))
+      if( i->value_ == "*" || string_equal_insensitive(i->value_, value) )
       {
          return true;
       }
@@ -448,21 +433,22 @@ bool RegisteredOption::IsValidStringSetting(const std::string& value) const
    return false;
 }
 
-std::string
-RegisteredOption::MapStringSetting(const std::string& value) const
+std::string RegisteredOption::MapStringSetting(
+   const std::string& value
+) const
 {
    DBG_ASSERT(type_ == OT_String);
 
    std::string matched_setting = "";
 
    std::vector<string_entry>::const_iterator i;
-   for (i = valid_strings_.begin(); i != valid_strings_.end(); i++)
+   for( i = valid_strings_.begin(); i != valid_strings_.end(); i++ )
    {
-      if (i->value_ == "*")
+      if( i->value_ == "*" )
       {
          matched_setting = value;
       }
-      else if (string_equal_insensitive(i->value_, value))
+      else if( string_equal_insensitive(i->value_, value) )
       {
          matched_setting = i->value_;
       }
@@ -470,8 +456,9 @@ RegisteredOption::MapStringSetting(const std::string& value) const
    return matched_setting;
 }
 
-Index
-RegisteredOption::MapStringSettingToEnum(const std::string& value) const
+Index RegisteredOption::MapStringSettingToEnum(
+   const std::string& value
+) const
 {
    DBG_ASSERT(type_ == OT_String);
 
@@ -479,11 +466,10 @@ RegisteredOption::MapStringSettingToEnum(const std::string& value) const
 
    Index cnt = 0;
    std::vector<string_entry>::const_iterator i;
-   for (i = valid_strings_.begin(); i != valid_strings_.end(); i++)
+   for( i = valid_strings_.begin(); i != valid_strings_.end(); i++ )
    {
-      ASSERT_EXCEPTION(i->value_ != "*", IpoptException,
-                       "Cannot map a wildcard setting to an enumeration");
-      if (string_equal_insensitive(i->value_, value))
+      ASSERT_EXCEPTION(i->value_ != "*", IpoptException, "Cannot map a wildcard setting to an enumeration");
+      if( string_equal_insensitive(i->value_, value) )
       {
          matched_setting = cnt;
          break;
@@ -492,18 +478,18 @@ RegisteredOption::MapStringSettingToEnum(const std::string& value) const
    }
 
    ASSERT_EXCEPTION(matched_setting != -1, ERROR_CONVERTING_STRING_TO_ENUM,
-                    std::string("Could not find a match for setting ") + value +
-                    " in option: " + name_);
+                    std::string("Could not find a match for setting ") + value + " in option: " + name_);
    return matched_setting;
 }
 
-bool
-RegisteredOption::string_equal_insensitive(const std::string& s1,
-      const std::string& s2) const
+bool RegisteredOption::string_equal_insensitive(
+   const std::string& s1,
+   const std::string& s2
+) const
 {
    using namespace std;
 
-   if (s1.size() != s2.size())
+   if( s1.size() != s2.size() )
    {
       return false;
    }
@@ -511,9 +497,9 @@ RegisteredOption::string_equal_insensitive(const std::string& s1,
    string::const_iterator i1 = s1.begin();
    string::const_iterator i2 = s2.begin();
 
-   while (i1 != s1.end())
+   while( i1 != s1.end() )
    {
-      if (toupper(*i1) != toupper(*i2))
+      if( toupper(*i1) != toupper(*i2) )
       {
          return false;
       }
@@ -523,33 +509,33 @@ RegisteredOption::string_equal_insensitive(const std::string& s1,
    return true;
 }
 
-void
-RegisteredOptions::AddNumberOption(const std::string& name,
-                                   const std::string& short_description,
-                                   Number default_value,
-                                   const std::string& long_description)
+void RegisteredOptions::AddNumberOption(
+   const std::string& name,
+   const std::string& short_description,
+   Number             default_value,
+   const std::string& long_description
+)
 {
-   SmartPtr<RegisteredOption> option =
-      new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_, next_counter_++);
+   SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
+         current_registering_category_, next_counter_++);
    option->SetType(OT_Number);
    option->SetDefaultNumber(default_value);
-   ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(),
-                    OPTION_ALREADY_REGISTERED,
+   ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
                     std::string("The option: ") + option->Name() + " has already been registered by someone else");
    registered_options_[name] = option;
 }
 
-void
-RegisteredOptions::AddLowerBoundedNumberOption(const std::string& name,
-      const std::string& short_description,
-      Number lower, bool strict,
-      Number default_value,
-      const std::string& long_description)
+void RegisteredOptions::AddLowerBoundedNumberOption(
+   const std::string& name,
+   const std::string& short_description,
+   Number             lower,
+   bool               strict,
+   Number             default_value,
+   const std::string& long_description
+)
 {
-   SmartPtr<RegisteredOption> option =
-      new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_, next_counter_++);
+   SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
+         current_registering_category_, next_counter_++);
    option->SetType(OT_Number);
    option->SetDefaultNumber(default_value);
    option->SetLowerNumber(lower, strict);
@@ -558,16 +544,17 @@ RegisteredOptions::AddLowerBoundedNumberOption(const std::string& name,
    registered_options_[name] = option;
 }
 
-void
-RegisteredOptions::AddUpperBoundedNumberOption(const std::string& name,
-      const std::string& short_description,
-      Number upper, bool strict,
-      Number default_value,
-      const std::string& long_description)
+void RegisteredOptions::AddUpperBoundedNumberOption(
+   const std::string& name,
+   const std::string& short_description,
+   Number             upper,
+   bool               strict,
+   Number             default_value,
+   const std::string& long_description
+)
 {
-   SmartPtr<RegisteredOption> option =
-      new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_, next_counter_++);
+   SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
+         current_registering_category_, next_counter_++);
    option->SetType(OT_Number);
    option->SetDefaultNumber(default_value);
    option->SetUpperNumber(upper, strict);
@@ -576,17 +563,19 @@ RegisteredOptions::AddUpperBoundedNumberOption(const std::string& name,
    registered_options_[name] = option;
 }
 
-void
-RegisteredOptions::AddBoundedNumberOption(const std::string& name,
-      const std::string& short_description,
-      Number lower, bool lower_strict,
-      Number upper, bool upper_strict,
-      Number default_value,
-      const std::string& long_description)
+void RegisteredOptions::AddBoundedNumberOption(
+   const std::string& name,
+   const std::string& short_description,
+   Number             lower,
+   bool               lower_strict,
+   Number             upper,
+   bool               upper_strict,
+   Number             default_value,
+   const std::string& long_description
+)
 {
-   SmartPtr<RegisteredOption> option =
-      new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_, next_counter_++);
+   SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
+         current_registering_category_, next_counter_++);
    option->SetType(OT_Number);
    option->SetDefaultNumber(default_value);
    option->SetLowerNumber(lower, lower_strict);
@@ -596,15 +585,15 @@ RegisteredOptions::AddBoundedNumberOption(const std::string& name,
    registered_options_[name] = option;
 }
 
-void
-RegisteredOptions::AddIntegerOption(const std::string& name,
-                                    const std::string& short_description,
-                                    Index default_value,
-                                    const std::string& long_description)
+void RegisteredOptions::AddIntegerOption(
+   const std::string& name,
+   const std::string& short_description,
+   Index              default_value,
+   const std::string& long_description
+)
 {
-   SmartPtr<RegisteredOption> option =
-      new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_, next_counter_++);
+   SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
+         current_registering_category_, next_counter_++);
    option->SetType(OT_Integer);
    option->SetDefaultInteger(default_value);
    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
@@ -612,15 +601,16 @@ RegisteredOptions::AddIntegerOption(const std::string& name,
    registered_options_[name] = option;
 }
 
-void
-RegisteredOptions::AddLowerBoundedIntegerOption(const std::string& name,
-      const std::string& short_description,
-      Index lower, Index default_value,
-      const std::string& long_description)
+void RegisteredOptions::AddLowerBoundedIntegerOption(
+   const std::string& name,
+   const std::string& short_description,
+   Index              lower,
+   Index              default_value,
+   const std::string& long_description
+)
 {
-   SmartPtr<RegisteredOption> option =
-      new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_, next_counter_++);
+   SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
+         current_registering_category_, next_counter_++);
    option->SetType(OT_Integer);
    option->SetDefaultInteger(default_value);
    option->SetLowerInteger(lower);
@@ -629,15 +619,16 @@ RegisteredOptions::AddLowerBoundedIntegerOption(const std::string& name,
    registered_options_[name] = option;
 }
 
-void
-RegisteredOptions::AddUpperBoundedIntegerOption(const std::string& name,
-      const std::string& short_description,
-      Index upper, Index default_value,
-      const std::string& long_description)
+void RegisteredOptions::AddUpperBoundedIntegerOption(
+   const std::string& name,
+   const std::string& short_description,
+   Index              upper,
+   Index              default_value,
+   const std::string& long_description
+)
 {
-   SmartPtr<RegisteredOption> option =
-      new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_, next_counter_++);
+   SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
+         current_registering_category_, next_counter_++);
    option->SetType(OT_Integer);
    option->SetDefaultInteger(default_value);
    option->SetUpperInteger(upper);
@@ -646,16 +637,17 @@ RegisteredOptions::AddUpperBoundedIntegerOption(const std::string& name,
    registered_options_[name] = option;
 }
 
-void
-RegisteredOptions::AddBoundedIntegerOption(const std::string& name,
-      const std::string& short_description,
-      Index lower, Index upper,
-      Index default_value,
-      const std::string& long_description)
+void RegisteredOptions::AddBoundedIntegerOption(
+   const std::string& name,
+   const std::string& short_description,
+   Index              lower,
+   Index              upper,
+   Index              default_value,
+   const std::string& long_description
+)
 {
-   SmartPtr<RegisteredOption> option =
-      new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_, next_counter_++);
+   SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
+         current_registering_category_, next_counter_++);
    option->SetType(OT_Integer);
    option->SetDefaultInteger(default_value);
    option->SetLowerInteger(lower);
@@ -665,21 +657,21 @@ RegisteredOptions::AddBoundedIntegerOption(const std::string& name,
    registered_options_[name] = option;
 }
 
-void
-RegisteredOptions::AddStringOption(const std::string& name,
-                                   const std::string& short_description,
-                                   const std::string& default_value,
-                                   const std::vector<std::string>& settings,
-                                   const std::vector<std::string>& descriptions,
-                                   const std::string& long_description)
+void RegisteredOptions::AddStringOption(
+   const std::string&              name,
+   const std::string&              short_description,
+   const std::string&              default_value,
+   const std::vector<std::string>& settings,
+   const std::vector<std::string>& descriptions,
+   const std::string&              long_description
+)
 {
-   SmartPtr<RegisteredOption> option =
-      new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_, next_counter_++);
+   SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
+         current_registering_category_, next_counter_++);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    DBG_ASSERT(settings.size() == descriptions.size());
-   for (int i = 0; i < (int)settings.size(); i++)
+   for( int i = 0; i < (int) settings.size(); i++ )
    {
       option->AddValidStringSetting(settings[i], descriptions[i]);
    }
@@ -688,17 +680,17 @@ RegisteredOptions::AddStringOption(const std::string& name,
    registered_options_[name] = option;
 }
 
-void
-RegisteredOptions::AddStringOption1(const std::string& name,
-                                    const std::string& short_description,
-                                    const std::string& default_value,
-                                    const std::string& setting1,
-                                    const std::string& description1,
-                                    const std::string& long_description)
+void RegisteredOptions::AddStringOption1(
+   const std::string& name,
+   const std::string& short_description,
+   const std::string& default_value,
+   const std::string& setting1,
+   const std::string& description1,
+   const std::string& long_description
+)
 {
-   SmartPtr<RegisteredOption> option =
-      new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_, next_counter_++);
+   SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
+         current_registering_category_, next_counter_++);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -707,19 +699,19 @@ RegisteredOptions::AddStringOption1(const std::string& name,
    registered_options_[name] = option;
 }
 
-void
-RegisteredOptions::AddStringOption2(const std::string& name,
-                                    const std::string& short_description,
-                                    const std::string& default_value,
-                                    const std::string& setting1,
-                                    const std::string& description1,
-                                    const std::string& setting2,
-                                    const std::string& description2,
-                                    const std::string& long_description)
+void RegisteredOptions::AddStringOption2(
+   const std::string& name,
+   const std::string& short_description,
+   const std::string& default_value,
+   const std::string& setting1,
+   const std::string& description1,
+   const std::string& setting2,
+   const std::string& description2,
+   const std::string& long_description
+)
 {
-   SmartPtr<RegisteredOption> option =
-      new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_, next_counter_++);
+   SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
+         current_registering_category_, next_counter_++);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -729,21 +721,21 @@ RegisteredOptions::AddStringOption2(const std::string& name,
    registered_options_[name] = option;
 }
 
-void
-RegisteredOptions::AddStringOption3(const std::string& name,
-                                    const std::string& short_description,
-                                    const std::string& default_value,
-                                    const std::string& setting1,
-                                    const std::string& description1,
-                                    const std::string& setting2,
-                                    const std::string& description2,
-                                    const std::string& setting3,
-                                    const std::string& description3,
-                                    const std::string& long_description)
+void RegisteredOptions::AddStringOption3(
+   const std::string& name,
+   const std::string& short_description,
+   const std::string& default_value,
+   const std::string& setting1,
+   const std::string& description1,
+   const std::string& setting2,
+   const std::string& description2,
+   const std::string& setting3,
+   const std::string& description3,
+   const std::string& long_description
+)
 {
-   SmartPtr<RegisteredOption> option =
-      new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_, next_counter_++);
+   SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
+         current_registering_category_, next_counter_++);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -754,23 +746,23 @@ RegisteredOptions::AddStringOption3(const std::string& name,
    registered_options_[name] = option;
 }
 
-void
-RegisteredOptions::AddStringOption4(const std::string& name,
-                                    const std::string& short_description,
-                                    const std::string& default_value,
-                                    const std::string& setting1,
-                                    const std::string& description1,
-                                    const std::string& setting2,
-                                    const std::string& description2,
-                                    const std::string& setting3,
-                                    const std::string& description3,
-                                    const std::string& setting4,
-                                    const std::string& description4,
-                                    const std::string& long_description)
+void RegisteredOptions::AddStringOption4(
+   const std::string& name,
+   const std::string& short_description,
+   const std::string& default_value,
+   const std::string& setting1,
+   const std::string& description1,
+   const std::string& setting2,
+   const std::string& description2,
+   const std::string& setting3,
+   const std::string& description3,
+   const std::string& setting4,
+   const std::string& description4,
+   const std::string& long_description
+)
 {
-   SmartPtr<RegisteredOption> option =
-      new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_, next_counter_++);
+   SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
+         current_registering_category_, next_counter_++);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -782,25 +774,25 @@ RegisteredOptions::AddStringOption4(const std::string& name,
    registered_options_[name] = option;
 }
 
-void
-RegisteredOptions::AddStringOption5(const std::string& name,
-                                    const std::string& short_description,
-                                    const std::string& default_value,
-                                    const std::string& setting1,
-                                    const std::string& description1,
-                                    const std::string& setting2,
-                                    const std::string& description2,
-                                    const std::string& setting3,
-                                    const std::string& description3,
-                                    const std::string& setting4,
-                                    const std::string& description4,
-                                    const std::string& setting5,
-                                    const std::string& description5,
-                                    const std::string& long_description)
+void RegisteredOptions::AddStringOption5(
+   const std::string& name,
+   const std::string& short_description,
+   const std::string& default_value,
+   const std::string& setting1,
+   const std::string& description1,
+   const std::string& setting2,
+   const std::string& description2,
+   const std::string& setting3,
+   const std::string& description3,
+   const std::string& setting4,
+   const std::string& description4,
+   const std::string& setting5,
+   const std::string& description5,
+   const std::string& long_description
+)
 {
-   SmartPtr<RegisteredOption> option =
-      new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_, next_counter_++);
+   SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
+         current_registering_category_, next_counter_++);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -813,27 +805,27 @@ RegisteredOptions::AddStringOption5(const std::string& name,
    registered_options_[name] = option;
 }
 
-void
-RegisteredOptions::AddStringOption6(const std::string& name,
-                                    const std::string& short_description,
-                                    const std::string& default_value,
-                                    const std::string& setting1,
-                                    const std::string& description1,
-                                    const std::string& setting2,
-                                    const std::string& description2,
-                                    const std::string& setting3,
-                                    const std::string& description3,
-                                    const std::string& setting4,
-                                    const std::string& description4,
-                                    const std::string& setting5,
-                                    const std::string& description5,
-                                    const std::string& setting6,
-                                    const std::string& description6,
-                                    const std::string& long_description)
+void RegisteredOptions::AddStringOption6(
+   const std::string& name,
+   const std::string& short_description,
+   const std::string& default_value,
+   const std::string& setting1,
+   const std::string& description1,
+   const std::string& setting2,
+   const std::string& description2,
+   const std::string& setting3,
+   const std::string& description3,
+   const std::string& setting4,
+   const std::string& description4,
+   const std::string& setting5,
+   const std::string& description5,
+   const std::string& setting6,
+   const std::string& description6,
+   const std::string& long_description
+)
 {
-   SmartPtr<RegisteredOption> option =
-      new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_, next_counter_++);
+   SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
+         current_registering_category_, next_counter_++);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -847,29 +839,29 @@ RegisteredOptions::AddStringOption6(const std::string& name,
    registered_options_[name] = option;
 }
 
-void
-RegisteredOptions::AddStringOption7(const std::string& name,
-                                    const std::string& short_description,
-                                    const std::string& default_value,
-                                    const std::string& setting1,
-                                    const std::string& description1,
-                                    const std::string& setting2,
-                                    const std::string& description2,
-                                    const std::string& setting3,
-                                    const std::string& description3,
-                                    const std::string& setting4,
-                                    const std::string& description4,
-                                    const std::string& setting5,
-                                    const std::string& description5,
-                                    const std::string& setting6,
-                                    const std::string& description6,
-                                    const std::string& setting7,
-                                    const std::string& description7,
-                                    const std::string& long_description)
+void RegisteredOptions::AddStringOption7(
+   const std::string& name,
+   const std::string& short_description,
+   const std::string& default_value,
+   const std::string& setting1,
+   const std::string& description1,
+   const std::string& setting2,
+   const std::string& description2,
+   const std::string& setting3,
+   const std::string& description3,
+   const std::string& setting4,
+   const std::string& description4,
+   const std::string& setting5,
+   const std::string& description5,
+   const std::string& setting6,
+   const std::string& description6,
+   const std::string& setting7,
+   const std::string& description7,
+   const std::string& long_description
+)
 {
-   SmartPtr<RegisteredOption> option =
-      new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_, next_counter_++);
+   SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
+         current_registering_category_, next_counter_++);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -884,31 +876,31 @@ RegisteredOptions::AddStringOption7(const std::string& name,
    registered_options_[name] = option;
 }
 
-void
-RegisteredOptions::AddStringOption8(const std::string& name,
-                                    const std::string& short_description,
-                                    const std::string& default_value,
-                                    const std::string& setting1,
-                                    const std::string& description1,
-                                    const std::string& setting2,
-                                    const std::string& description2,
-                                    const std::string& setting3,
-                                    const std::string& description3,
-                                    const std::string& setting4,
-                                    const std::string& description4,
-                                    const std::string& setting5,
-                                    const std::string& description5,
-                                    const std::string& setting6,
-                                    const std::string& description6,
-                                    const std::string& setting7,
-                                    const std::string& description7,
-                                    const std::string& setting8,
-                                    const std::string& description8,
-                                    const std::string& long_description)
+void RegisteredOptions::AddStringOption8(
+   const std::string& name,
+   const std::string& short_description,
+   const std::string& default_value,
+   const std::string& setting1,
+   const std::string& description1,
+   const std::string& setting2,
+   const std::string& description2,
+   const std::string& setting3,
+   const std::string& description3,
+   const std::string& setting4,
+   const std::string& description4,
+   const std::string& setting5,
+   const std::string& description5,
+   const std::string& setting6,
+   const std::string& description6,
+   const std::string& setting7,
+   const std::string& description7,
+   const std::string& setting8,
+   const std::string& description8,
+   const std::string& long_description
+)
 {
-   SmartPtr<RegisteredOption> option =
-      new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_, next_counter_++);
+   SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
+         current_registering_category_, next_counter_++);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -924,33 +916,33 @@ RegisteredOptions::AddStringOption8(const std::string& name,
    registered_options_[name] = option;
 }
 
-void
-RegisteredOptions::AddStringOption9(const std::string& name,
-                                    const std::string& short_description,
-                                    const std::string& default_value,
-                                    const std::string& setting1,
-                                    const std::string& description1,
-                                    const std::string& setting2,
-                                    const std::string& description2,
-                                    const std::string& setting3,
-                                    const std::string& description3,
-                                    const std::string& setting4,
-                                    const std::string& description4,
-                                    const std::string& setting5,
-                                    const std::string& description5,
-                                    const std::string& setting6,
-                                    const std::string& description6,
-                                    const std::string& setting7,
-                                    const std::string& description7,
-                                    const std::string& setting8,
-                                    const std::string& description8,
-                                    const std::string& setting9,
-                                    const std::string& description9,
-                                    const std::string& long_description)
+void RegisteredOptions::AddStringOption9(
+   const std::string& name,
+   const std::string& short_description,
+   const std::string& default_value,
+   const std::string& setting1,
+   const std::string& description1,
+   const std::string& setting2,
+   const std::string& description2,
+   const std::string& setting3,
+   const std::string& description3,
+   const std::string& setting4,
+   const std::string& description4,
+   const std::string& setting5,
+   const std::string& description5,
+   const std::string& setting6,
+   const std::string& description6,
+   const std::string& setting7,
+   const std::string& description7,
+   const std::string& setting8,
+   const std::string& description8,
+   const std::string& setting9,
+   const std::string& description9,
+   const std::string& long_description
+)
 {
-   SmartPtr<RegisteredOption> option =
-      new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_, next_counter_++);
+   SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
+         current_registering_category_, next_counter_++);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -967,35 +959,35 @@ RegisteredOptions::AddStringOption9(const std::string& name,
    registered_options_[name] = option;
 }
 
-void
-RegisteredOptions::AddStringOption10(const std::string& name,
-                                     const std::string& short_description,
-                                     const std::string& default_value,
-                                     const std::string& setting1,
-                                     const std::string& description1,
-                                     const std::string& setting2,
-                                     const std::string& description2,
-                                     const std::string& setting3,
-                                     const std::string& description3,
-                                     const std::string& setting4,
-                                     const std::string& description4,
-                                     const std::string& setting5,
-                                     const std::string& description5,
-                                     const std::string& setting6,
-                                     const std::string& description6,
-                                     const std::string& setting7,
-                                     const std::string& description7,
-                                     const std::string& setting8,
-                                     const std::string& description8,
-                                     const std::string& setting9,
-                                     const std::string& description9,
-                                     const std::string& setting10,
-                                     const std::string& description10,
-                                     const std::string& long_description)
+void RegisteredOptions::AddStringOption10(
+   const std::string& name,
+   const std::string& short_description,
+   const std::string& default_value,
+   const std::string& setting1,
+   const std::string& description1,
+   const std::string& setting2,
+   const std::string& description2,
+   const std::string& setting3,
+   const std::string& description3,
+   const std::string& setting4,
+   const std::string& description4,
+   const std::string& setting5,
+   const std::string& description5,
+   const std::string& setting6,
+   const std::string& description6,
+   const std::string& setting7,
+   const std::string& description7,
+   const std::string& setting8,
+   const std::string& description8,
+   const std::string& setting9,
+   const std::string& description9,
+   const std::string& setting10,
+   const std::string& description10,
+   const std::string& long_description
+)
 {
-   SmartPtr<RegisteredOption> option =
-      new RegisteredOption(name, short_description, long_description,
-                           current_registering_category_, next_counter_++);
+   SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
+         current_registering_category_, next_counter_++);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -1013,17 +1005,19 @@ RegisteredOptions::AddStringOption10(const std::string& name,
    registered_options_[name] = option;
 }
 
-SmartPtr<const RegisteredOption> RegisteredOptions::GetOption(const std::string& name)
+SmartPtr<const RegisteredOption> RegisteredOptions::GetOption(
+   const std::string& name
+)
 {
    std::string tag_only = name;
    std::string::size_type pos = name.rfind(".", name.length());
-   if (pos != std::string::npos)
+   if( pos != std::string::npos )
    {
       tag_only = name.substr(pos + 1, name.length() - pos);
    }
    SmartPtr<const RegisteredOption> option;
-   std::map< std::string, SmartPtr<RegisteredOption> >::iterator reg_option = registered_options_.find(tag_only);
-   if (reg_option == registered_options_.end())
+   std::map<std::string, SmartPtr<RegisteredOption> >::iterator reg_option = registered_options_.find(tag_only);
+   if( reg_option == registered_options_.end() )
    {
       option = NULL;
    }
@@ -1035,7 +1029,10 @@ SmartPtr<const RegisteredOption> RegisteredOptions::GetOption(const std::string&
    return option;
 }
 
-void RegisteredOptions::OutputOptionDocumentation(const Journalist& jnlst, std::list<std::string>& categories)
+void RegisteredOptions::OutputOptionDocumentation(
+   const Journalist&       jnlst,
+   std::list<std::string>& categories
+)
 {
    // create a set to print sorted output
    //     std::set
@@ -1045,26 +1042,22 @@ void RegisteredOptions::OutputOptionDocumentation(const Journalist& jnlst, std::
    //       classes.insert(option->second->RegisteringCategory());
    //     }
 
-
-   std::list
-   <std::string>::iterator i;
-   for (i = categories.begin(); i != categories.end(); i++)
+   std::list<std::string>::iterator i;
+   for( i = categories.begin(); i != categories.end(); i++ )
    {
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                   "\n### %s ###\n\n", (*i).c_str());
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n### %s ###\n\n", (*i).c_str());
       std::map<Index, SmartPtr<RegisteredOption> > class_options;
-      std::map <std::string, SmartPtr<RegisteredOption> >::iterator option;
-      for (option = registered_options_.begin();
-           option != registered_options_.end(); option++)
+      std::map<std::string, SmartPtr<RegisteredOption> >::iterator option;
+      for( option = registered_options_.begin(); option != registered_options_.end(); option++ )
       {
-         if (option->second->RegisteringCategory() == (*i))
+         if( option->second->RegisteringCategory() == (*i) )
          {
 
             class_options[option->second->Counter()] = option->second;
          }
       }
       std::map<Index, SmartPtr<RegisteredOption> >::const_iterator co;
-      for (co = class_options.begin(); co != class_options.end(); co++)
+      for( co = class_options.begin(); co != class_options.end(); co++ )
       {
          co->second->OutputShortDescription(jnlst);
       }
@@ -1073,22 +1066,20 @@ void RegisteredOptions::OutputOptionDocumentation(const Journalist& jnlst, std::
 }
 
 void RegisteredOptions::OutputLatexOptionDocumentation(
-   const Journalist& jnlst,
-   std::list<std::string>& options_to_print)
+   const Journalist&       jnlst,
+   std::list<std::string>& options_to_print
+)
 {
 
-   if (!options_to_print.empty())
+   if( !options_to_print.empty() )
    {
       std::list<std::string>::iterator coption;
-      for (coption = options_to_print.begin();
-           coption != options_to_print.end();
-           coption++)
+      for( coption = options_to_print.begin(); coption != options_to_print.end(); coption++ )
       {
          // std::map <std::string, SmartPtr<RegisteredOption> >::iterator option;
-         if (coption->c_str()[0] == '#')
+         if( coption->c_str()[0] == '#' )
          {
-            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\subsection{%s}\n\n",
-                         &coption->c_str()[1]);
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\subsection{%s}\n\n", &coption->c_str()[1]);
          }
          else
          {
@@ -1100,10 +1091,8 @@ void RegisteredOptions::OutputLatexOptionDocumentation(
    }
    else
    {
-      std::map <std::string, SmartPtr<RegisteredOption> >::iterator option;
-      for (option = registered_options_.begin();
-           option != registered_options_.end();
-           option++)
+      std::map<std::string, SmartPtr<RegisteredOption> >::iterator option;
+      for( option = registered_options_.begin(); option != registered_options_.end(); option++ )
       {
          option->second->OutputLatexDescription(jnlst);
       }
