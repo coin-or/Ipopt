@@ -5,7 +5,7 @@ history management of subversion.
 2018-06-02 releases/3.12.10
         - fixed setting for parallel solve when using MKL Pardiso
           (by t1393988511) [r2711]: parallel solve was disabled (which
-          is not the default); note, that the settng for parallel
+          is not the default); note, that the setting for parallel
           factorization was not affected
         - fixed invalid read in AMPL interface for problems without
           objective function [r2715, #305]
