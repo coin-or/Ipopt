@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Andreas Waechter                 IBM    2008-09-11
 //               derived file from IpPenaltyLSAcceptor.hpp (rev 019)
 
@@ -19,25 +17,30 @@ namespace Ipopt
 /** Penalty function line search for the inexact step algorithm
  *  version.
  */
-class InexactLSAcceptor : public BacktrackingLSAcceptor
+class InexactLSAcceptor: public BacktrackingLSAcceptor
 {
 public:
    /**@name Constructors/Destructors */
    //@{
-   /** Constructor.  The PDSystemSolver object only needs to be
+   /** Constructor.
+    *
+    *  The PDSystemSolver object only needs to be
     *  provided (i.e. not NULL) if second order correction or
-    *  corrector steps are to be used. */
+    *  corrector steps are to be used.
+    */
    InexactLSAcceptor();
 
-   /** Default destructor */
+   /** Destructor */
    virtual ~InexactLSAcceptor();
    //@}
 
-   /** InitializeImpl - overloaded from AlgorithmStrategyObject */
-   virtual bool InitializeImpl(const OptionsList& options,
-                               const std::string& prefix);
+   virtual bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
    /** Reset the acceptor.
+    *
     *  This function should be called if all previous information
     *  should be discarded when the line search is performed the
     *  next time.  For example, this method should be called if
@@ -45,74 +48,105 @@ public:
     */
    virtual void Reset();
 
-   /** Initialization for the next line search.  The flag in_watchdog
-    *  indicates if we are currently in an active watchdog procedure.
-    *  Here is where the penalty parameter is updated. */
-   virtual void InitThisLineSearch(bool in_watchdog);
+   /** Initialization for the next line search.
+    *
+    *  Here is where the penalty parameter is updated.
+    *
+    *  @param in_watchdog indicates if we are currently in an active watchdog procedure
+    */
+   virtual void InitThisLineSearch(
+      bool in_watchdog
+      );
 
    /** Method that is called before the restoration phase is called.
-    *  For now, we just terminate if this is called. */
+    *
+    *  For now, we just terminate if this is called.
+    */
    virtual void PrepareRestoPhaseStart();
 
    /** Method returning the lower bound on the trial step sizes. */
    virtual Number CalculateAlphaMin();
 
    /** Method for checking if current trial point is acceptable.
+    *
     *  It is assumed that the delta information in ip_data is the
     *  search direction used in criteria.  The primal trial point has
     *  to be set before the call.
     */
-   virtual bool CheckAcceptabilityOfTrialPoint(Number alpha_primal);
+   virtual bool CheckAcceptabilityOfTrialPoint(
+      Number alpha_primal
+      );
 
-   /** Try a second order correction for the constraints.  For the
-    *  inexact version, this always returns false because a second
-    *  order step is too expensive.
+   /** Try a second order correction for the constraints.
+    *
+    *  For the inexact version, this always returns false because
+    *  a second order step is too expensive.
     */
-   virtual bool TrySecondOrderCorrection(Number alpha_primal_test,
-                                         Number& alpha_primal,
-                                         SmartPtr<IteratesVector>& actual_delta);
+   virtual bool TrySecondOrderCorrection(
+      Number                    alpha_primal_test,
+      Number&                   alpha_primal,
+      SmartPtr<IteratesVector>& actual_delta
+      );
 
-   /** Try higher order corrector (for fast local convergence).  In
-    *  contrast to a second order correction step, which tries to
+   /** Try higher order corrector (for fast local convergence).
+    *
+    *  In contrast to a second order correction step, which tries to
     *  make an unacceptable point acceptable by improving constraint
     *  violation, this corrector step is tried even if the regular
     *  primal-dual step is acceptable.
     */
-   virtual bool TryCorrector(Number alpha_primal_test,
-                             Number& alpha_primal,
-                             SmartPtr<IteratesVector>& actual_delta);
+   virtual bool TryCorrector(
+      Number                    alpha_primal_test,
+      Number&                   alpha_primal,
+      SmartPtr<IteratesVector>& actual_delta
+      );
 
-   /** Method for ending the current line search.  When it is called,
-    *  the internal data should be updates.  alpha_primal_test is the
-    *  value of alpha that has been used for in the acceptence test
-    *  ealier. */
-   virtual char UpdateForNextIteration(Number alpha_primal_test);
+   /** Method for ending the current line search.
+    *
+    *  When it is called, the internal data should be updates.
+    *
+    *  @param alpha_primal_test the value of alpha that has been used
+    *  for in the acceptance test earlier.
+    */
+   virtual char UpdateForNextIteration(
+      Number alpha_primal_test
+      );
 
    /** Method for setting internal data if the watchdog procedure is
-    *  started. */
+    *  started.
+    */
    virtual void StartWatchDog();
 
    /** Method for setting internal data if the watchdog procedure is
-    *  stopped. */
+    *  stopped.
+    */
    virtual void StopWatchDog();
 
-   /**@name Trial Point Accepting Methods. Used internally to check certain
+   /**@name Trial Point Accepting Methods.
+    *
+    * Used internally to check certain
     * acceptability criteria and used externally (by the restoration phase
     * convergence check object, for instance)
     */
    //@{
    /** Checks if a trial point is acceptable to the current iterate */
-   bool IsAcceptableToCurrentIterate(Number trial_barr, Number trial_theta,
-                                     bool called_from_restoration = false) const;
+   bool IsAcceptableToCurrentIterate(
+      Number trial_barr,
+      Number trial_theta,
+      bool   called_from_restoration = false
+      ) const;
    //@}
 
    /** Method for updating the equality constraint multipliers */
-   virtual Number ComputeAlphaForY(Number alpha_primal,
-                                   Number alpha_dual,
-                                   SmartPtr<IteratesVector>& delta);
+   virtual Number ComputeAlphaForY(
+      Number                    alpha_primal,
+      Number                    alpha_dual,
+      SmartPtr<IteratesVector>& delta
+      );
 
    /** Method returning true of ComputeAlphaForY is implemented for
-     *  this acceptor */
+    *  this acceptor.
+    */
    virtual bool HasComputeAlphaForY() const
    {
       return true;
@@ -120,15 +154,16 @@ public:
 
    /** Methods for OptionsList */
    //@{
-   static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+   static void RegisterOptions(
+      SmartPtr<RegisteredOptions> roptions
+      );
    //@}
 
 protected:
    /** Method to easily access Inexact data */
    InexactData& InexData()
    {
-      InexactData& inexact_data =
-         static_cast<InexactData&>(IpData().AdditionalData());
+      InexactData& inexact_data = static_cast<InexactData&>(IpData().AdditionalData());
       DBG_ASSERT(dynamic_cast<InexactData*>(&IpData().AdditionalData()));
       return inexact_data;
    }
@@ -136,8 +171,7 @@ protected:
    /** Method to easily access Inexact calculated quantities */
    InexactCq& InexCq()
    {
-      InexactCq& inexact_cq =
-         static_cast<InexactCq&>(IpCq().AdditionalCq());
+      InexactCq& inexact_cq = static_cast<InexactCq&>(IpCq().AdditionalCq());
       DBG_ASSERT(dynamic_cast<InexactCq*>(&IpCq().AdditionalCq()));
       return inexact_cq;
    }
@@ -145,25 +179,34 @@ protected:
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Copy Constructor */
-   InexactLSAcceptor(const InexactLSAcceptor&);
+   InexactLSAcceptor(
+      const InexactLSAcceptor&
+      );
 
-   /** Overloaded Equals Operator */
-   void operator=(const InexactLSAcceptor&);
+   /** Overloaded Assignment Operator */
+   void operator=(
+      const InexactLSAcceptor&
+      );
    //@}
 
    /** Compute predicted reduction for given step size */
-   Number CalcPred(Number alpha);
+   Number CalcPred(
+      Number alpha
+      );
 
    /** Method for resetting the slacks to be satisfying the slack
-   equality constraints without increasing the barrier
-   function */
+    * equality constraints without increasing the barrier
+    * function.
+    */
    void ResetSlacks();
 
    /** @name Parameters for the penalty function algorithm. */
@@ -174,7 +217,7 @@ private:
    Number nu_low_init_;
    /** Factor in update rule for lower penalty parameter */
    Number nu_low_fact_;
-   /** Incrememt for penalty parameter */
+   /** Increment for penalty parameter */
    Number nu_inc_;
    /** \f$ \eta_{\varphi} \f$ */
    Number eta_;
@@ -182,7 +225,7 @@ private:
    Number rho_;
    /** theta factor in Tangential Component Condition */
    Number tcc_theta_;
-   /** Lower feasiblity bound to skip penalty parameter update */
+   /** Lower feasibility bound to skip penalty parameter update */
    Number nu_update_inf_skip_tol_;
    /** Flag indicating whether the Curtis/Nocedal flexible penalty
     *  function should be used */
@@ -226,15 +269,20 @@ private:
 
    /** Flag indicating if this is a termination test 2 iteration in
     *  which we just update the multipliers and skip the line
-    *  search */
+    *  search.
+    */
    bool in_tt2_;
 
    /** When called from the restoration phase, this is the required
-    *  predicted reduction */
+    *  predicted reduction.
+    */
    Number resto_pred_;
 
    /** Flag indicating if the step was accepted only because of the lower
-    *  penalty parameter.  This is for output only. */
+    *  penalty parameter.
+    *
+    *  This is for output only.
+    */
    bool accepted_by_low_only_;
 };
 

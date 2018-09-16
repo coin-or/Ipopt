@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Andreas Waechter            IBM    2007-05-21
 
 #include "IpoptConfig.h"
@@ -27,12 +25,18 @@
 /** Prototypes for MA27's Fortran subroutines */
 extern "C"
 {
-   // here we assume that float corresponds to Fortran's single
-   // precision
-   void F77_FUNC(mc19ad, MC19AD)(const ipfint* N, const ipfint* NZ,
-                                 const double* A, const ipfint* IRN,
-                                 const ipfint* ICN, float* R, float* C,
-                                 float* W);
+// here we assume that float corresponds to Fortran's single
+// precision
+void F77_FUNC(mc19ad,MC19AD)(
+   const ipfint* N,
+   const ipfint* NZ,
+   const double* A,
+   const ipfint* IRN,
+   const ipfint* ICN,
+   float*        R,
+   float*        C,
+   float*        W
+   );
 }
 
 namespace Ipopt
@@ -41,45 +45,47 @@ namespace Ipopt
 static const Index dbg_verbosity = 0;
 #endif
 
-void EquilibrationScaling::
-RegisterOptions(const SmartPtr<RegisteredOptions>& roptions)
-{}
+void EquilibrationScaling::RegisterOptions(
+   const SmartPtr<RegisteredOptions>& roptions
+   )
+{ }
 
-bool EquilibrationScaling::
-InitializeImpl(const OptionsList& options,
-               const std::string& prefix)
+bool EquilibrationScaling::InitializeImpl(
+   const OptionsList& options,
+   const std::string& prefix
+   )
 {
-   options.GetNumericValue("point_perturbation_radius",
-                           point_perturbation_radius_, prefix);
+   options.GetNumericValue("point_perturbation_radius", point_perturbation_radius_, prefix);
    return StandardScalingBase::InitializeImpl(options, prefix);
 }
 
-
 void EquilibrationScaling::DetermineScalingParametersImpl(
-   const SmartPtr<const VectorSpace> x_space,
-   const SmartPtr<const VectorSpace> c_space,
-   const SmartPtr<const VectorSpace> d_space,
-   const SmartPtr<const MatrixSpace> jac_c_space,
-   const SmartPtr<const MatrixSpace> jac_d_space,
+   const SmartPtr<const VectorSpace>    x_space,
+   const SmartPtr<const VectorSpace>    c_space,
+   const SmartPtr<const VectorSpace>    d_space,
+   const SmartPtr<const MatrixSpace>    jac_c_space,
+   const SmartPtr<const MatrixSpace>    jac_d_space,
    const SmartPtr<const SymMatrixSpace> h_space,
-   const Matrix& Px_L, const Vector& x_L,
-   const Matrix& Px_U, const Vector& x_U,
-   Number& df,
-   SmartPtr<Vector>& dx,
-   SmartPtr<Vector>& dc,
-   SmartPtr<Vector>& dd)
+   const Matrix&                        Px_L,
+   const Vector&                        x_L,
+   const Matrix&                        Px_U,
+   const Vector&                        x_U,
+   Number&                              df,
+   SmartPtr<Vector>&                    dx,
+   SmartPtr<Vector>&                    dc,
+   SmartPtr<Vector>&                    dd
+   )
 {
    DBG_ASSERT(IsValid(nlp_));
 
    SmartPtr<Vector> x0 = x_space->MakeNew();
-   if (!nlp_->GetStartingPoint(GetRawPtr(x0), true,
-                               NULL, false,
-                               NULL, false,
-                               NULL, false,
-                               NULL, false))
+   if( !nlp_->GetStartingPoint(GetRawPtr(x0), true,
+      NULL, false,
+      NULL, false,
+      NULL, false,
+      NULL, false) )
    {
-      THROW_EXCEPTION(FAILED_INITIALIZATION,
-                      "Error getting initial point from NLP in EquilibrationScaling.\n");
+      THROW_EXCEPTION(FAILED_INITIALIZATION, "Error getting initial point from NLP in EquilibrationScaling.\n");
    }
 
    // We store the added absolute values of the Jacobian and
@@ -96,110 +102,105 @@ void EquilibrationScaling::DetermineScalingParametersImpl(
    Number* avrg_values = new Number[nnz_jac_c + nnz_jac_d + nx];
    Number* val_buffer = new Number[Max(nnz_jac_c, nnz_jac_d, nx)];
 
-   SmartPtr<PointPerturber> perturber =
-      new PointPerturber(*x0, point_perturbation_radius_,
-                         Px_L, x_L, Px_U, x_U);
+   SmartPtr<PointPerturber> perturber = new PointPerturber(*x0, point_perturbation_radius_, Px_L, x_L, Px_U, x_U);
 
    const Index num_evals = 4;
    const Index max_num_eval_errors = 10;
    Index num_eval_errors = 0;
-   for (Index ieval = 0; ieval < num_evals; ieval++)
+   for( Index ieval = 0; ieval < num_evals; ieval++ )
    {
       // Compute obj gradient and Jacobian at random perturbation point
       bool done = false;
-      while (!done)
+      while( !done )
       {
          SmartPtr<Vector> xpert = perturber->MakeNewPerturbedPoint();
-         done = (nlp_->Eval_grad_f(*xpert, *grad_f) &&
-                 nlp_->Eval_jac_c(*xpert, *jac_c) &&
-                 nlp_->Eval_jac_d(*xpert, *jac_d));
-         if (!done)
+         done =
+            (nlp_->Eval_grad_f(*xpert, *grad_f) && nlp_->Eval_jac_c(*xpert, *jac_c) && nlp_->Eval_jac_d(*xpert, *jac_d));
+         if( !done )
          {
             Jnlst().Printf(J_WARNING, J_INITIALIZATION,
-                           "Error evaluating first derivatives as at perturbed point for equilibration-based scaling.\n");
+               "Error evaluating first derivatives as at perturbed point for equilibration-based scaling.\n");
             num_eval_errors++;
          }
-         if (num_eval_errors > max_num_eval_errors)
+         if( num_eval_errors > max_num_eval_errors )
          {
-            delete [] val_buffer;
-            delete [] avrg_values;
-            THROW_EXCEPTION(FAILED_INITIALIZATION,
-                            "Too many evaluation failures during equilibiration-based scaling.");
+            delete[] val_buffer;
+            delete[] avrg_values;
+            THROW_EXCEPTION(FAILED_INITIALIZATION, "Too many evaluation failures during equilibiration-based scaling.");
          }
       }
       // Get the numbers out of the matrices and vectors, and add it
       // to avrg_values
       TripletHelper::FillValues(nnz_jac_c, *jac_c, val_buffer);
-      if (ieval == 0)
+      if( ieval == 0 )
       {
-         for (Index i = 0; i < nnz_jac_c; i++)
+         for( Index i = 0; i < nnz_jac_c; i++ )
          {
             avrg_values[i] = fabs(val_buffer[i]);
          }
       }
       else
       {
-         for (Index i = 0; i < nnz_jac_c; i++)
+         for( Index i = 0; i < nnz_jac_c; i++ )
          {
             avrg_values[i] += fabs(val_buffer[i]);
          }
       }
       TripletHelper::FillValues(nnz_jac_d, *jac_d, val_buffer);
-      if (ieval == 0)
+      if( ieval == 0 )
       {
-         for (Index i = 0; i < nnz_jac_d; i++)
+         for( Index i = 0; i < nnz_jac_d; i++ )
          {
             avrg_values[nnz_jac_c + i] = fabs(val_buffer[i]);
          }
       }
       else
       {
-         for (Index i = 0; i < nnz_jac_d; i++)
+         for( Index i = 0; i < nnz_jac_d; i++ )
          {
             avrg_values[nnz_jac_c + i] += fabs(val_buffer[i]);
          }
       }
       TripletHelper::FillValuesFromVector(nx, *grad_f, val_buffer);
-      if (ieval == 0)
+      if( ieval == 0 )
       {
-         for (Index i = 0; i < nx; i++)
+         for( Index i = 0; i < nx; i++ )
          {
             avrg_values[nnz_jac_c + nnz_jac_d + i] = fabs(val_buffer[i]);
          }
       }
       else
       {
-         for (Index i = 0; i < nx; i++)
+         for( Index i = 0; i < nx; i++ )
          {
             avrg_values[nnz_jac_c + nnz_jac_d + i] += fabs(val_buffer[i]);
          }
       }
    }
-   delete [] val_buffer;
-   for (Index i = 0; i < nnz_jac_c + nnz_jac_d + nx; i++)
+   delete[] val_buffer;
+   for( Index i = 0; i < nnz_jac_c + nnz_jac_d + nx; i++ )
    {
-      avrg_values[i] /= (Number)num_evals;
+      avrg_values[i] /= (Number) num_evals;
    }
 
    // Get the sparsity structure
    ipfint* AIRN = new ipfint[nnz_jac_c + nnz_jac_d + nx];
    ipfint* AJCN = new ipfint[nnz_jac_c + nnz_jac_d + nx];
-   if (sizeof(ipfint) == sizeof(Index))
+   if( sizeof(ipfint) == sizeof(Index) )
    {
       TripletHelper::FillRowCol(nnz_jac_c, *jac_c, &AIRN[0], &AJCN[0]);
       TripletHelper::FillRowCol(nnz_jac_d, *jac_d, &AIRN[nnz_jac_c], &AJCN[nnz_jac_c], nc);
    }
    else
    {
-      THROW_EXCEPTION(INTERNAL_ABORT,
-                      "Need to implement missing code in EquilibriationScaling.");
+      THROW_EXCEPTION(INTERNAL_ABORT, "Need to implement missing code in EquilibriationScaling.");
    }
    // sort out the zero entries in objective function gradient
    Index nnz_grad_f = 0;
    const Index idx = nnz_jac_c + nnz_jac_d;
-   for (Index i = 0; i < nx; i++)
+   for( Index i = 0; i < nx; i++ )
    {
-      if (avrg_values[idx + i] != 0.)
+      if( avrg_values[idx + i] != 0. )
       {
          AIRN[idx + nnz_grad_f] = nc + nd + 1;
          AJCN[idx + nnz_grad_f] = i + 1;
@@ -219,29 +220,28 @@ void EquilibrationScaling::DetermineScalingParametersImpl(
    F77_FUNC(mc19ad, MC19AD)(&N, &NZ, avrg_values, AJCN, AIRN, C, R, W);
 #else
 
-   THROW_EXCEPTION(OPTION_INVALID,
-                   "Currently cannot do equilibration-based NLP scaling if MC19 is not available.");
+   THROW_EXCEPTION(OPTION_INVALID, "Currently cannot do equilibration-based NLP scaling if MC19 is not available.");
 #endif
 
    delete[] W;
 
-   delete [] avrg_values;
-   delete [] AIRN;
-   delete [] AJCN;
+   delete[] avrg_values;
+   delete[] AIRN;
+   delete[] AJCN;
 
    // Correct the scaling values
    Number* row_scale = new Number[nc + nd + 1];
    Number* col_scale = new Number[nx];
-   for (Index i = 0; i < nc + nd + 1; i++)
+   for( Index i = 0; i < nc + nd + 1; i++ )
    {
-      row_scale[i] = exp((Number)R[i]);
+      row_scale[i] = exp((Number) R[i]);
    }
-   for (Index i = 0; i < nx; i++)
+   for( Index i = 0; i < nx; i++ )
    {
-      col_scale[i] = exp((Number)C[i]);
+      col_scale[i] = exp((Number) C[i]);
    }
-   delete [] R;
-   delete [] C;
+   delete[] R;
+   delete[] C;
 
    // get the scaling factors
    df = row_scale[nc + nd];
@@ -252,14 +252,18 @@ void EquilibrationScaling::DetermineScalingParametersImpl(
    dx = x_space->MakeNew();
    TripletHelper::PutValuesInVector(nx, col_scale, *dx);
 
-   delete [] row_scale;
-   delete [] col_scale;
+   delete[] row_scale;
+   delete[] col_scale;
 }
 
-PointPerturber::PointPerturber(const Vector& x0,
-                               Number random_pert_radius,
-                               const Matrix& Px_L, const Vector& x_L,
-                               const Matrix& Px_U, const Vector& x_U)
+PointPerturber::PointPerturber(
+   const Vector& x0,
+   Number        random_pert_radius,
+   const Matrix& Px_L,
+   const Vector& x_L,
+   const Matrix& Px_U,
+   const Vector& x_U
+   )
 {
    DBG_START_METH("PointPerturber::PointPerturber", dbg_verbosity);
    const Number very_large = 1e300;
@@ -298,8 +302,7 @@ PointPerturber::PointPerturber(const Vector& x0,
    DBG_PRINT_VECTOR(1, "ref_point3", *ref_point_);
 }
 
-SmartPtr<Vector> PointPerturber::
-MakeNewPerturbedPoint() const
+SmartPtr<Vector> PointPerturber::MakeNewPerturbedPoint() const
 {
    const Index nx = ref_point_->Dim();
    Number* vals = new Number[nx];
@@ -307,17 +310,17 @@ MakeNewPerturbedPoint() const
    Number* pert_vals = new Number[nx];
    TripletHelper::FillValuesFromVector(nx, *pert_dir_, pert_vals);
 
-   for (Index i = 0; i < nx; i++)
+   for( Index i = 0; i < nx; i++ )
    {
       Number random = IpRandom01();
-      vals[i] += 2.*(random - 0.5) * pert_vals[i];
+      vals[i] += 2. * (random - 0.5) * pert_vals[i];
    }
-   delete [] pert_vals;
+   delete[] pert_vals;
 
    SmartPtr<Vector> retval = ref_point_->MakeNew();
    TripletHelper::PutValuesInVector(nx, vals, *retval);
 
-   delete [] vals;
+   delete[] vals;
 
    return retval;
 }

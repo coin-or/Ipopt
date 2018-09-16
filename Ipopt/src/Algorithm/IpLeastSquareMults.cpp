@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter              IBM    2004-09-23
 
 #include "IpLeastSquareMults.hpp"
@@ -14,25 +12,28 @@ namespace Ipopt
 static const Index dbg_verbosity = 0;
 #endif
 
-LeastSquareMultipliers::LeastSquareMultipliers(AugSystemSolver& augSysSolver)
-   :
-   EqMultiplierCalculator(),
-   augsyssolver_(&augSysSolver)
-{}
+LeastSquareMultipliers::LeastSquareMultipliers(
+   AugSystemSolver& augSysSolver
+   )
+   : EqMultiplierCalculator(),
+     augsyssolver_(&augSysSolver)
+{ }
 
-bool LeastSquareMultipliers::InitializeImpl(const OptionsList& options,
-      const std::string& prefix)
+bool LeastSquareMultipliers::InitializeImpl(
+   const OptionsList& options,
+   const std::string& prefix
+   )
 {
-   return augsyssolver_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(),
-                                    options, prefix);
+   return augsyssolver_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(), options, prefix);
 }
 
-bool LeastSquareMultipliers::CalculateMultipliers
-(Vector& y_c,
- Vector& y_d)
+bool LeastSquareMultipliers::CalculateMultipliers(
+   Vector& y_c,
+   Vector& y_d
+   )
 {
    DBG_START_METH("LeastSquareMultipliers::CalculateMultipliers",
-                  dbg_verbosity);
+      dbg_verbosity);
 
    SmartPtr<const SymMatrix> zeroW = IpNLP().uninitialized_h();
    DBG_PRINT_MATRIX(2, "zeroW", *zeroW);
@@ -67,29 +68,20 @@ bool LeastSquareMultipliers::CalculateMultipliers
    SmartPtr<Vector> sol_x = rhs_x->MakeNew();
    SmartPtr<Vector> sol_s = rhs_s->MakeNew();
 
-   DBG_PRINT_VECTOR(2, "rhs_x", *rhs_x);
-   DBG_PRINT_VECTOR(2, "rhs_s", *rhs_s);
-   DBG_PRINT_VECTOR(2, "rhs_c", *rhs_c);
-   DBG_PRINT_VECTOR(2, "rhs_d", *rhs_d);
+   DBG_PRINT_VECTOR(2, "rhs_x", *rhs_x); DBG_PRINT_VECTOR(2, "rhs_s", *rhs_s); DBG_PRINT_VECTOR(2, "rhs_c", *rhs_c); DBG_PRINT_VECTOR(2, "rhs_d", *rhs_d);
 
    enum ESymSolverStatus retval;
    Index numberOfEVals = rhs_c->Dim() + rhs_d->Dim();
    // Only ask to check the inertia if the solver can actually provide it
    bool check_NegEVals = augsyssolver_->ProvidesInertia();
-   retval = augsyssolver_->Solve(GetRawPtr(zeroW), 0.0, NULL, 1.0, NULL,
-                                 1.0, GetRawPtr(J_c), NULL, 0.,
-                                 GetRawPtr(J_d), NULL, 0., *rhs_x, *rhs_s,
-                                 *rhs_c, *rhs_d, *sol_x, *sol_s,
-                                 y_c, y_d, check_NegEVals, numberOfEVals);
-   if (retval != SYMSOLVER_SUCCESS)
+   retval = augsyssolver_->Solve(GetRawPtr(zeroW), 0.0, NULL, 1.0, NULL, 1.0, GetRawPtr(J_c), NULL, 0., GetRawPtr(J_d),
+      NULL, 0., *rhs_x, *rhs_s, *rhs_c, *rhs_d, *sol_x, *sol_s, y_c, y_d, check_NegEVals, numberOfEVals);
+   if( retval != SYMSOLVER_SUCCESS )
    {
       return false;
    }
 
-   DBG_PRINT_VECTOR(2, "sol_x", *sol_x);
-   DBG_PRINT_VECTOR(2, "sol_s", *sol_s);
-   DBG_PRINT_VECTOR(2, "sol_c", y_c);
-   DBG_PRINT_VECTOR(2, "sol_d", y_d);
+   DBG_PRINT_VECTOR(2, "sol_x", *sol_x); DBG_PRINT_VECTOR(2, "sol_s", *sol_s); DBG_PRINT_VECTOR(2, "sol_c", y_c); DBG_PRINT_VECTOR(2, "sol_d", y_d);
 
    return true;
 }

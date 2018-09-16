@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Andreas Waechter            IBM    2008-09-19
 
 #include "IpIterativeSolverTerminationTester.hpp"
@@ -16,15 +14,17 @@ namespace Ipopt
 static const Index dbg_verbosity = 0;
 #endif
 
-void
-IterativeSolverTerminationTester::GetVectors(Index ndim, const Number* array,
-      SmartPtr<const Vector>& comp_x,
-      SmartPtr<const Vector>& comp_s,
-      SmartPtr<const Vector>& comp_c,
-      SmartPtr<const Vector>& comp_d)
+void IterativeSolverTerminationTester::GetVectors(
+   Index                   ndim,
+   const Number*           array,
+   SmartPtr<const Vector>& comp_x,
+   SmartPtr<const Vector>& comp_s,
+   SmartPtr<const Vector>& comp_c,
+   SmartPtr<const Vector>& comp_d
+   )
 {
    DBG_ASSERT(ndim == IpData().curr()->x()->Dim() + IpData().curr()->s()->Dim() +
-              IpData().curr()->y_c()->Dim() + IpData().curr()->y_d()->Dim());
+      IpData().curr()->y_c()->Dim() + IpData().curr()->y_d()->Dim());
 
    // x
    SmartPtr<Vector> sol_x = IpData().curr()->x()->MakeNew();

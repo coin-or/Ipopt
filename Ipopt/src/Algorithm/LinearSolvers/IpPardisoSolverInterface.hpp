@@ -2,10 +2,7 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2005-03-17
-
 
 #ifndef __IPPARDISOSOLVERINTERFACE_HPP__
 #define __IPPARDISOSOLVERINTERFACE_HPP__
@@ -18,8 +15,7 @@ namespace Ipopt
 {
 
 /** Interface to the linear solver Pardiso, derived from
- *  SparseSymLinearSolverInterface.  For details, see description of
- *  SparseSymLinearSolverInterface base class.
+ *  SparseSymLinearSolverInterface.
  */
 class PardisoSolverInterface: public SparseSymLinearSolverInterface
 {
@@ -33,62 +29,53 @@ public:
    virtual ~PardisoSolverInterface();
    //@}
 
-   /** overloaded from AlgorithmStrategyObject */
-   bool InitializeImpl(const OptionsList& options,
-                       const std::string& prefix);
-
+   bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
    /** @name Methods for requesting solution of the linear system. */
    //@{
-   /** Method for initializing internal stuctures. */
-   virtual ESymSolverStatus InitializeStructure(Index dim, Index nonzeros,
-         const Index* ia,
-         const Index* ja);
+   virtual ESymSolverStatus InitializeStructure(
+      Index        dim,
+      Index        nonzeros,
+      const Index* ia,
+      const Index* ja
+      );
 
-   /** Method returing an internal array into which the nonzero
-    *  elements are to be stored. */
    virtual double* GetValuesArrayPtr();
 
-   /** Solve operation for multiple right hand sides. */
-   virtual ESymSolverStatus MultiSolve(bool new_matrix,
-                                       const Index* ia,
-                                       const Index* ja,
-                                       Index nrhs,
-                                       double* rhs_vals,
-                                       bool check_NegEVals,
-                                       Index numberOfNegEVals);
+   virtual ESymSolverStatus MultiSolve(
+      bool         new_matrix,
+      const Index* ia,
+      const Index* ja,
+      Index        nrhs,
+      double*      rhs_vals,
+      bool         check_NegEVals,
+      Index        numberOfNegEVals);
 
-   /** Number of negative eigenvalues detected during last
-    *  factorization.
-    */
    virtual Index NumberOfNegEVals() const;
    //@}
 
    //* @name Options of Linear solver */
    //@{
-   /** Request to increase quality of solution for next solve.
-    */
    virtual bool IncreaseQuality();
 
-   /** Query whether inertia is computed by linear solver.
-    *  Returns true, if linear solver provides inertia.
-    */
    virtual bool ProvidesInertia() const
    {
       return true;
    }
-   /** Query of requested matrix type that the linear solver
-    *  understands.
-    */
+
    EMatrixFormat MatrixFormat() const
    {
       return CSR_Format_1_Offset;
    }
    //@}
 
-   /** Methods for IpoptType */
    //@{
-   static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+   static void RegisterOptions(
+      SmartPtr<RegisteredOptions> roptions
+      );
    //@}
 
 private:
@@ -101,10 +88,12 @@ private:
     * they will not be implicitly created/called. */
    //@{
    /** Copy Constructor */
-   PardisoSolverInterface(const PardisoSolverInterface&);
+   PardisoSolverInterface(
+      const PardisoSolverInterface&);
 
-   /** Overloaded Equals Operator */
-   void operator=(const PardisoSolverInterface&);
+   /** Default Assignment Operator */
+   void operator=(
+      const PardisoSolverInterface&);
    //@}
 
    /** @name Information about the matrix */
@@ -126,7 +115,6 @@ private:
    double* a2_;
    ipfint* perm2;
    double* scale2;
-
 #endif
 
    /** @name Information about most recent factorization/solve */
@@ -137,7 +125,7 @@ private:
 
    /** @name Solver specific options */
    //@{
-   /** Type for mathcing strategies */
+   /** Type for matching strategies */
    enum PardisoMatchingStrategy
    {
       COMPLETE,
@@ -146,21 +134,22 @@ private:
    };
    /** Option that controls the matching strategy. */
    PardisoMatchingStrategy match_strat_;
-   /** Flag indicating if symbolic factorization has already been
-    *  performed. */
+   /** Flag indicating if symbolic factorization has already been performed. */
    bool have_symbolic_factorization_;
    /** Flag indicating whether the symbolic factorization should only
-    *  be done after perturbed elements, if the inertia was wrong */
+    *  be done after perturbed elements, if the inertia was wrong
+    */
    bool pardiso_redo_symbolic_fact_only_if_inertia_wrong_;
    /** Flag indicating whether repeated perturbed elements even after
     *  a new symbolic factorization should be interpreted as a
-    *  singular matrix */
+    *  singular matrix
+    */
    bool pardiso_repeated_perturbation_means_singular_;
-   /** Flag indicating if the interia is always assumed to be
-     *  correct. */
+   /** Flag indicating if the inertia is always assumed to be
+    *  correct.
+    */
    bool skip_inertia_check_;
-   /** Flag indicating whether we are using the iterative solver in
-     * Pardiso. */
+   /** Flag indicating whether we are using the iterative solver in Pardiso. */
    bool pardiso_iterative_;
    /** Maximal number of decreases of drop tolerance during one solve. */
    Index pardiso_max_droptol_corrections_;
@@ -169,7 +158,8 @@ private:
    /** @name Initialization flags */
    //@{
    /** Flag indicating if internal data is initialized.
-    *  For initialization, this object needs to have seen a matrix */
+    *  For initialization, this object needs to have seen a matrix.
+    */
    bool initialized_;
    //@}
 
@@ -178,7 +168,8 @@ private:
    /** Internal data address pointers. */
    void** PT_;
    /** Maximal number of factors with identical nonzero
-    *  structure. Here, we only store one factorization. Is always 1.*/
+    *  structure. Here, we only store one factorization. Is always 1.
+    */
    ipfint MAXFCT_;
    /** Actual matrix for the solution phase. Is always 1.*/
    ipfint MNUM_;
@@ -200,24 +191,27 @@ private:
 
    /** @name Internal functions */
    //@{
-   /** Call Pardiso to do the analysis phase.
-    */
-   ESymSolverStatus SymbolicFactorization(const Index* ia,
-                                          const Index* ja);
+   /** Call Pardiso to do the analysis phase. */
+   ESymSolverStatus SymbolicFactorization(
+      const Index* ia,
+      const Index* ja
+      );
 
-   /** Call Pardiso to factorize the Matrix.
-    */
-   ESymSolverStatus Factorization(const Index* ia,
-                                  const Index* ja,
-                                  bool check_NegEVals,
-                                  Index numberOfNegEVals);
+   /** Call Pardiso to factorize the Matrix. */
+   ESymSolverStatus Factorization(
+      const Index* ia,
+      const Index* ja,
+      bool         check_NegEVals,
+      Index        numberOfNegEVals
+      );
 
-   /** Call Pardiso to do the Solve.
-    */
-   ESymSolverStatus Solve(const Index* ia,
-                          const Index* ja,
-                          Index nrhs,
-                          double* rhs_vals);
+   /** Call Pardiso to do the Solve. */
+   ESymSolverStatus Solve(
+      const Index* ia,
+      const Index* ja,
+      Index        nrhs,
+      double*      rhs_vals
+      );
    //@}
 };
 

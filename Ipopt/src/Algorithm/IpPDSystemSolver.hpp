@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #ifndef __IPPDSYSTEMSOLVER_HPP__
@@ -50,7 +48,7 @@ namespace Ipopt
  *  caller is \f$res = \alpha * sol + \beta * res\f$.
  *
  *  The solution of this linear system (in order to compute the search
- *  direction of the algorthim) usually requires a considerable amount of
+ *  direction of the algorithm) usually requires a considerable amount of
  *  computation time.  Therefore, it is important to tailor the solution
  *  of this system to the characteristics of the problem.  The purpose of
  *  this base class is to provide a generic interface to the algorithm
@@ -70,60 +68,69 @@ namespace Ipopt
  *
  *  Note that the Solve method might be called several times for different
  *  right hand sides, but with identical data.  Therefore, if possible,
- *  an implemetation of PDSystem should check whether the incoming data has
+ *  an implementation of PDSystem should check whether the incoming data has
  *  changed, and not redo factorization etc. unless necessary.
  */
 class PDSystemSolver: public AlgorithmStrategyObject
 {
 public:
-   /** @name /Destructor */
+   /** @name Constructor/Destructor */
    //@{
    /** Default Constructor */
    PDSystemSolver()
-   {}
+   { }
 
-   /** Default destructor */
+   /** Destructor */
    virtual ~PDSystemSolver()
-   {}
+   { }
    //@}
 
    /** overloaded from AlgorithmStrategyObject */
-   virtual bool InitializeImpl(const OptionsList& options,
-                               const std::string& prefix) = 0;
+   virtual bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+      ) = 0;
 
-   /** Solve the primal dual system, given one right hand side.  If
-    *  the flag allow_inexact is set to true, it is not necessary to
+   /** Solve the primal dual system, given one right hand side.
+    *
+    *  If the flag allow_inexact is set to true, it is not necessary to
     *  solve the system to best accuracy; for example, we don't want
     *  iterative refinement during the computation of the second
     *  order correction.  On the other hand, if improve_solution is
     *  true, the solution given in res should be improved (here beta
     *  has to be zero, and res is assume to be the solution for the
-    *  system using rhs, without the factor alpha...).  THe return
-    *  value is false, if a solution could not be computed (for
+    *  system using rhs, without the factor alpha...).
+    *
+    *  @return false, if a solution could not be computed (for
     *  example, when the Hessian regularization parameter becomes too
-    *  large.)
+    *  large)
     */
-   virtual bool Solve(Number alpha,
-                      Number beta,
-                      const IteratesVector& rhs,
-                      IteratesVector& res,
-                      bool allow_inexact = false,
-                      bool improve_solution = false) = 0;
+   virtual bool Solve(
+      Number                alpha,
+      Number                beta,
+      const IteratesVector& rhs,
+      IteratesVector&       res,
+      bool                  allow_inexact = false,
+      bool                  improve_solution = false
+      ) = 0;
 
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Overloaded Equals Operator */
-   PDSystemSolver& operator=(const PDSystemSolver&);
+   PDSystemSolver& operator=(
+      const PDSystemSolver&
+      );
    //@}
 };
-
 
 } // namespace Ipopt
 

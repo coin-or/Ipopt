@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter              IBM    2004-09-23
 
 #ifndef __IPEQMULTCALCULATOR_HPP__
@@ -15,9 +13,11 @@
 namespace Ipopt
 {
 /** Base Class for objects that compute estimates for the equality
- *  constraint multipliers y_c and y_d.  For example, this is the
- *  base class for objects for computing least square multipliers or
- *  coordinate multipliers. */
+ *  constraint multipliers y_c and y_d.
+ *
+ *  For example, this is the base class for objects for computing
+ *  least square multipliers or coordinate multipliers.
+ */
 class EqMultiplierCalculator: public AlgorithmStrategyObject
 {
 public:
@@ -25,37 +25,49 @@ public:
    //@{
    /** Default Constructor. */
    EqMultiplierCalculator()
-   {}
-   /** Default destructor */
+   { }
+   /** Destructor */
    virtual ~EqMultiplierCalculator()
-   {}
+   { }
    //@}
 
    /** overloaded from AlgorithmStrategyObject */
-   virtual bool InitializeImpl(const OptionsList& options,
-                               const std::string& prefix) = 0;
+   virtual bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+      ) = 0;
 
    /** This method computes the estimates for y_c and y_d at the
-    *  current point.  If the estimates cannot be computed (e.g. some
-    *  linear system is singular), the return value of this method is
-    *  false. */
-   virtual bool CalculateMultipliers(Vector& y_c,
-                                     Vector& y_d) = 0;
+    *  current point.
+    *
+    *  If the estimates cannot be computed (e.g. some linear system
+    *  is singular), the return value of this method is false.
+    */
+   virtual bool CalculateMultipliers(
+      Vector& y_c,
+      Vector& y_d
+      ) = 0;
 
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Copy Constructor */
-   EqMultiplierCalculator(const EqMultiplierCalculator&);
+   EqMultiplierCalculator(
+      const EqMultiplierCalculator&
+      );
 
    /** Overloaded Equals Operator */
-   void operator=(const EqMultiplierCalculator&);
+   void operator=(
+      const EqMultiplierCalculator&
+      );
    //@}
 };
 

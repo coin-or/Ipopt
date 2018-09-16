@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Andreas Waechter            IBM    2005-12-26
 
 #ifndef __IPEXACTHESSIANUPDATER_HPP__
@@ -17,42 +15,49 @@ namespace Ipopt
 /** Implementation of the HessianUpdater for the use of exact second
  *  derivatives.
  */
-class ExactHessianUpdater : public HessianUpdater
+class ExactHessianUpdater: public HessianUpdater
 {
 public:
    /**@name Constructors/Destructors */
    //@{
    /** Default Constructor */
    ExactHessianUpdater()
-   {}
+   { }
 
-   /** Default destructor */
+   /** Destructor */
    virtual ~ExactHessianUpdater()
-   {}
+   { }
    //@}
 
    /** overloaded from AlgorithmStrategyObject */
-   virtual bool InitializeImpl(const OptionsList& options,
-                               const std::string& prefix);
+   virtual bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
-   /** Update the Hessian based on the current information in IpData.
-    */
+   /** Update the Hessian based on the current information in IpData. */
    virtual void UpdateHessian();
 
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Copy Constructor */
-   ExactHessianUpdater(const ExactHessianUpdater&);
+   ExactHessianUpdater(
+      const ExactHessianUpdater&
+      );
 
    /** Overloaded Equals Operator */
-   void operator=(const ExactHessianUpdater&);
+   void operator=(
+      const ExactHessianUpdater&
+      );
    //@}
 
 };

@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2005-08-16
 
 #ifndef __IPLINEARSOLVERSREGOP_HPP__
@@ -15,7 +13,9 @@ namespace Ipopt
 {
 class RegisteredOptions;
 
-void RegisterOptions_LinearSolvers(const SmartPtr<RegisteredOptions>& roptions);
+void RegisterOptions_LinearSolvers(
+   const SmartPtr<RegisteredOptions>& roptions
+   );
 
 } // namespace Ipopt
 

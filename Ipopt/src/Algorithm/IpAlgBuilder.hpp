@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-09-29
 
 #ifndef __IPALGBUILDER_HPP__
@@ -27,10 +25,11 @@ class IterateInitializer;
 class LineSearch;
 class MuUpdate;
 
-/** Builder for creating a complete IpoptAlg object.  This object
- *  contains all subelements (such as line search objects etc).  How
- *  the resulting IpoptAlg object is built can be influenced by the
- *  options.
+/** Builder for creating a complete IpoptAlg object.
+ *
+ *  This object contains all subelements (such as line search objects
+ *  etc).  How the resulting IpoptAlg object is built can be influenced
+ *  by the options.
  *
  *  More advanced customization can be achieved by subclassing this
  *  class and overloading the virtual methods that build the
@@ -46,24 +45,28 @@ class MuUpdate;
  *  this process can be achieved by implementing a subclass of this
  *  AlgBuilder (e.g., by overloading the AugSystemSolverFactory method).
  */
-class AlgorithmBuilder : public ReferencedObject
+class AlgorithmBuilder: public ReferencedObject
 {
 public:
    /**@name Constructors/Destructors */
    //@{
    /** Constructor */
-   AlgorithmBuilder(SmartPtr<AugSystemSolver> custom_solver = NULL);
+   AlgorithmBuilder(
+      SmartPtr<AugSystemSolver> custom_solver = NULL
+      );
 
    /** Destructor */
    virtual ~AlgorithmBuilder()
-   {}
+   { }
 
    //@}
 
    /** Methods for IpoptTypeInfo */
    //@{
    /** register the options used by the algorithm builder */
-   static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+   static void RegisterOptions(
+      SmartPtr<RegisteredOptions> roptions
+      );
    //@}
 
    /** @name Convenience methods for building solvers without having
@@ -76,24 +79,26 @@ public:
     *  with a Getter method, which is called by all parts of this
     *  algorithm builder to ensure the Factory is only called once. */
    //@{
-
    /** Create a solver that can be used to solve a symmetric linear
     *  system.
     *  Dependencies: None
     */
-   virtual SmartPtr<SymLinearSolver>
-   SymLinearSolverFactory(const Journalist& jnlst,
-                          const OptionsList& options,
-                          const std::string& prefix);
+   virtual SmartPtr<SymLinearSolver> SymLinearSolverFactory(
+      const Journalist&  jnlst,
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
    /** Get the symmetric linear system solver for this
     *  algorithm. This method will call the SymLinearSolverFactory
     *  exactly once (the first time it is used), and store its
     *  instance on SymSolver_ for use in subsequent calls.
     */
-   SmartPtr<SymLinearSolver> GetSymLinearSolver(const Journalist& jnlst,
-         const OptionsList& options,
-         const std::string& prefix);
+   SmartPtr<SymLinearSolver> GetSymLinearSolver(
+      const Journalist&  jnlst,
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
    /** Create a solver that can be used to solve an
     *  augmented system.
@@ -102,19 +107,22 @@ public:
     *         -> SymLinearSolverFactory()
     *     -> custom_solver_
     */
-   virtual SmartPtr<AugSystemSolver>
-   AugSystemSolverFactory(const Journalist& jnlst,
-                          const OptionsList& options,
-                          const std::string& prefix);
+   virtual SmartPtr<AugSystemSolver> AugSystemSolverFactory(
+      const Journalist&  jnlst,
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
    /** Get the augmented system solver for this algorithm. This
     *  method will call the AugSystemSolverFactory exactly once (the
     *  first time it is used), and store its instance on AugSolver_
     *  for use in subsequent calls.
     */
-   SmartPtr<AugSystemSolver> GetAugSystemSolver(const Journalist& jnlst,
-         const OptionsList& options,
-         const std::string& prefix);
+   SmartPtr<AugSystemSolver> GetAugSystemSolver(
+      const Journalist&  jnlst,
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
    /** Create a solver that can be used to solve a
     *  primal-dual system.
@@ -125,19 +133,22 @@ public:
     *                 -> SymLinearSolverFactory()
     *             -> custom_solver_
     */
-   virtual SmartPtr<PDSystemSolver>
-   PDSystemSolverFactory(const Journalist& jnlst,
-                         const OptionsList& options,
-                         const std::string& prefix);
+   virtual SmartPtr<PDSystemSolver> PDSystemSolverFactory(
+      const Journalist&  jnlst,
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
    /** Get the primal-dual system solver for this algorithm. This
     *  method will call the PDSystemSolverFactory exactly once (the
     *  first time it is used), and store its instance on PDSolver_
     *  for use in subsequent calls.
     */
-   SmartPtr<PDSystemSolver> GetPDSystemSolver(const Journalist& jnlst,
-         const OptionsList& options,
-         const std::string& prefix);
+   SmartPtr<PDSystemSolver> GetPDSystemSolver(
+      const Journalist&  jnlst,
+      const OptionsList& options,
+      const std::string& prefix
+      );
    //@}
 
    /** @name Methods to build parts of the algorithm */
@@ -146,13 +157,15 @@ public:
     *  IpoptCalculatedQuanties arguments.
     *  Dependencies: None
     */
-   virtual void BuildIpoptObjects(const Journalist& jnlst,
-                                  const OptionsList& options,
-                                  const std::string& prefix,
-                                  const SmartPtr<NLP>& nlp,
-                                  SmartPtr<IpoptNLP>& ip_nlp,
-                                  SmartPtr<IpoptData>& ip_data,
-                                  SmartPtr<IpoptCalculatedQuantities>& ip_cq);
+   virtual void BuildIpoptObjects(
+      const Journalist&                    jnlst,
+      const OptionsList&                   options,
+      const std::string&                   prefix,
+      const SmartPtr<NLP>&                 nlp,
+      SmartPtr<IpoptNLP>&                  ip_nlp,
+      SmartPtr<IpoptData>&                 ip_data,
+      SmartPtr<IpoptCalculatedQuantities>& ip_cq
+      );
 
    /** Creates an instance of the IpoptAlgorithm class by building
     *  each of its required constructor arguments piece-by-piece. The
@@ -170,9 +183,11 @@ public:
     *     -> BuildLineSearch()
     *     -> BuildMuUpdate()
     */
-   virtual SmartPtr<IpoptAlgorithm> BuildBasicAlgorithm(const Journalist& jnlst,
-         const OptionsList& options,
-         const std::string& prefix);
+   virtual SmartPtr<IpoptAlgorithm> BuildBasicAlgorithm(
+      const Journalist&  jnlst,
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
    /** Creates an instance of the IterationOutput class. This method
     *  is called in the default implementation of
@@ -180,10 +195,11 @@ public:
     *  portion the default algorithm.
     *  Dependencies: None
     */
-   virtual SmartPtr<IterationOutput>
-   BuildIterationOutput(const Journalist& jnlst,
-                        const OptionsList& options,
-                        const std::string& prefix);
+   virtual SmartPtr<IterationOutput> BuildIterationOutput(
+      const Journalist&  jnlst,
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
    /** Creates an instance of the HessianUpdater class. This method
     *  is called in the default implementation of
@@ -191,10 +207,11 @@ public:
     *  portion the default algorithm.
     *  Dependencies: None
     */
-   virtual SmartPtr<HessianUpdater>
-   BuildHessianUpdater(const Journalist& jnlst,
-                       const OptionsList& options,
-                       const std::string& prefix);
+   virtual SmartPtr<HessianUpdater> BuildHessianUpdater(
+      const Journalist&  jnlst,
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
    /** Creates an instance of the ConvergenceCheck class. This method
     *  is called in the default implementation of
@@ -202,10 +219,11 @@ public:
     *  portion the default algorithm.
     *  Dependencies: None
     */
-   virtual SmartPtr<ConvergenceCheck>
-   BuildConvergenceCheck(const Journalist& jnlst,
-                         const OptionsList& options,
-                         const std::string& prefix);
+   virtual SmartPtr<ConvergenceCheck> BuildConvergenceCheck(
+      const Journalist&  jnlst,
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
    /** Creates an instance of the SearchDirectionCalculator
     *  class. This method is called in the default implementation of
@@ -220,10 +238,11 @@ public:
     *                         -> SymLinearSolverFactory()
     *                     -> custom_solver_
     */
-   virtual SmartPtr<SearchDirectionCalculator>
-   BuildSearchDirectionCalculator(const Journalist& jnlst,
-                                  const OptionsList& options,
-                                  const std::string& prefix);
+   virtual SmartPtr<SearchDirectionCalculator> BuildSearchDirectionCalculator(
+      const Journalist&  jnlst,
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
    /** Creates an instance of the EqMultiplierCalculator class. This
     *  method is called in the default implementation of
@@ -236,10 +255,11 @@ public:
     *                 -> SymLinearSolverFactory()
     *             -> custom_solver_
     */
-   virtual SmartPtr<EqMultiplierCalculator>
-   BuildEqMultiplierCalculator(const Journalist& jnlst,
-                               const OptionsList& options,
-                               const std::string& prefix);
+   virtual SmartPtr<EqMultiplierCalculator> BuildEqMultiplierCalculator(
+      const Journalist&  jnlst,
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
    /** Creates an instance of the IterateInitializer class. This
     *  method is called in the default implementation of
@@ -253,10 +273,11 @@ public:
     *                 -> SymLinearSolverFactory()
     *             -> custom_solver_
     */
-   virtual SmartPtr<IterateInitializer>
-   BuildIterateInitializer(const Journalist& jnlst,
-                           const OptionsList& options,
-                           const std::string& prefix);
+   virtual SmartPtr<IterateInitializer> BuildIterateInitializer(
+      const Journalist&  jnlst,
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
    /** Creates an instance of the LineSearch class. This method is
     *  called in the default implementation of BuildBasicAlgorithm.
@@ -278,9 +299,11 @@ public:
     *                         -> SymLinearSolverFactory()
     *                     -> custom_solver_
     */
-   virtual SmartPtr<LineSearch> BuildLineSearch(const Journalist& jnlst,
-         const OptionsList& options,
-         const std::string& prefix);
+   virtual SmartPtr<LineSearch> BuildLineSearch(
+      const Journalist&  jnlst,
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
    /** Creates an instance of the MuUpdate class. This method is
     *  called in the default implementation of BuildBasicAlgorithm.
@@ -298,9 +321,11 @@ public:
     *                         -> SymLinearSolverFactory()
     *                     -> custom_solver_
     */
-   virtual SmartPtr<MuUpdate> BuildMuUpdate(const Journalist& jnlst,
-         const OptionsList& options,
-         const std::string& prefix);
+   virtual SmartPtr<MuUpdate> BuildMuUpdate(
+      const Journalist&  jnlst,
+      const OptionsList& options,
+      const std::string& prefix
+      );
    //@}
 
 private:
@@ -316,10 +341,14 @@ private:
    //AlgorithmBuilder();
 
    /** Copy Constructor */
-   AlgorithmBuilder(const AlgorithmBuilder&);
+   AlgorithmBuilder(
+      const AlgorithmBuilder&
+      );
 
-   /** Overloaded Equals Operator */
-   void operator=(const AlgorithmBuilder&);
+   /** Default Assignment Operator */
+   void operator=(
+      const AlgorithmBuilder&
+      );
    //@}
 
    /** @name IpoptAlgorithm constructor arguments.

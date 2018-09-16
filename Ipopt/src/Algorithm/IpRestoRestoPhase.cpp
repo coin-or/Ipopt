@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2005-02-11
 
 #include "IpRestoRestoPhase.hpp"
@@ -16,47 +14,43 @@ static const Index dbg_verbosity = 0;
 #endif
 
 RestoRestorationPhase::RestoRestorationPhase()
-{}
+{ }
 
 RestoRestorationPhase::~RestoRestorationPhase()
-{}
+{ }
 
-bool RestoRestorationPhase::InitializeImpl(const OptionsList& options,
-      const std::string& prefix)
+bool RestoRestorationPhase::InitializeImpl(
+   const OptionsList& options,
+   const std::string& prefix
+   )
 {
    return true;
 }
 
-bool
-RestoRestorationPhase::PerformRestoration()
+bool RestoRestorationPhase::PerformRestoration()
 {
    DBG_START_METH("RestoRestorationPhase::PerformRestoration",
-                  dbg_verbosity);
+      dbg_verbosity);
    Jnlst().Printf(J_DETAILED, J_MAIN,
-                  "Performing second level restoration phase for current constriant violation %8.2e\n", IpCq().curr_constraint_violation());
+      "Performing second level restoration phase for current constriant violation %8.2e\n",
+      IpCq().curr_constraint_violation());
 
    DBG_ASSERT(IpCq().curr_constraint_violation() > 0.);
 
    // Get a grip on the restoration phase NLP and obtain the pointers
    // to the original NLP data
-   SmartPtr<RestoIpoptNLP> resto_ip_nlp =
-      static_cast<RestoIpoptNLP*> (&IpNLP());
+   SmartPtr<RestoIpoptNLP> resto_ip_nlp = static_cast<RestoIpoptNLP*>(&IpNLP());
    DBG_ASSERT(dynamic_cast<RestoIpoptNLP*> (&IpNLP()));
-   SmartPtr<IpoptNLP> orig_ip_nlp =
-      static_cast<IpoptNLP*> (&resto_ip_nlp->OrigIpNLP());
+   SmartPtr<IpoptNLP> orig_ip_nlp = static_cast<IpoptNLP*>(&resto_ip_nlp->OrigIpNLP());
    DBG_ASSERT(dynamic_cast<IpoptNLP*> (&resto_ip_nlp->OrigIpNLP()));
 
    // Get the current point and create a new vector for the result
-   SmartPtr<const CompoundVector> Ccurr_x =
-      static_cast<const CompoundVector*> (GetRawPtr(IpData().curr()->x()));
+   SmartPtr<const CompoundVector> Ccurr_x = static_cast<const CompoundVector*>(GetRawPtr(IpData().curr()->x()));
    DBG_ASSERT(dynamic_cast<const CompoundVector*> (GetRawPtr(IpData().curr()->x())));
-   SmartPtr<const CompoundVector> Ccurr_s =
-      static_cast<const CompoundVector*> (GetRawPtr(IpData().curr()->s()));
-   DBG_ASSERT(dynamic_cast<const CompoundVector*> (GetRawPtr(IpData().curr()->s())));
-   DBG_ASSERT(Ccurr_s->NComps() == 1);
+   SmartPtr<const CompoundVector> Ccurr_s = static_cast<const CompoundVector*>(GetRawPtr(IpData().curr()->s()));
+   DBG_ASSERT(dynamic_cast<const CompoundVector*> (GetRawPtr(IpData().curr()->s()))); DBG_ASSERT(Ccurr_s->NComps() == 1);
    SmartPtr<Vector> new_x = IpData().curr()->x()->MakeNew();
-   SmartPtr<CompoundVector> Cnew_x =
-      static_cast<CompoundVector*> (GetRawPtr(new_x));
+   SmartPtr<CompoundVector> Cnew_x = static_cast<CompoundVector*>(GetRawPtr(new_x));
 
    // The x values remain unchanged
    SmartPtr<Vector> x = Cnew_x->GetCompNonConst(0);
@@ -73,15 +67,14 @@ RestoRestorationPhase::PerformRestoration()
    SmartPtr<const Vector> cvec = orig_ip_nlp->c(*Ccurr_x->GetComp(0));
    SmartPtr<Vector> a = nc->MakeNew();
    SmartPtr<Vector> b = nc->MakeNew();
-   a->Set(mu / (2.*rho));
+   a->Set(mu / (2. * rho));
    a->Axpy(-0.5, *cvec);
    b->Copy(*cvec);
-   b->Scal(mu / (2.*rho));
+   b->Scal(mu / (2. * rho));
    solve_quadratic(*a, *b, *nc);
    pc->Copy(*cvec);
    pc->Axpy(1., *nc);
-   DBG_PRINT_VECTOR(2, "nc", *nc);
-   DBG_PRINT_VECTOR(2, "pc", *pc);
+   DBG_PRINT_VECTOR(2, "nc", *nc); DBG_PRINT_VECTOR(2, "pc", *pc);
 
    // initial values for the n and p variables for the inequality
    // constraints
@@ -92,15 +85,14 @@ RestoRestorationPhase::PerformRestoration()
    dvec->Axpy(-1., *Ccurr_s->GetComp(0));
    a = nd->MakeNew();
    b = nd->MakeNew();
-   a->Set(mu / (2.*rho));
+   a->Set(mu / (2. * rho));
    a->Axpy(-0.5, *dvec);
    b->Copy(*dvec);
-   b->Scal(mu / (2.*rho));
+   b->Scal(mu / (2. * rho));
    solve_quadratic(*a, *b, *nd);
    pd->Copy(*dvec);
    pd->Axpy(1., *nd);
-   DBG_PRINT_VECTOR(2, "nd", *nd);
-   DBG_PRINT_VECTOR(2, "pd", *pd);
+   DBG_PRINT_VECTOR(2, "nd", *nd); DBG_PRINT_VECTOR(2, "pd", *pd);
 
    // Now set the trial point to the solution of the restoration phase
    // s and all multipliers remain unchanged
@@ -113,9 +105,11 @@ RestoRestorationPhase::PerformRestoration()
    return true;
 }
 
-void RestoRestorationPhase::solve_quadratic(const Vector& a,
-      const Vector& b,
-      Vector& v)
+void RestoRestorationPhase::solve_quadratic(
+   const Vector& a,
+   const Vector& b,
+   Vector&       v
+   )
 {
    v.Copy(a);
    v.ElementWiseMultiply(a);

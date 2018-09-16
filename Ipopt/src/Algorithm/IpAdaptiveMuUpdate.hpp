@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #ifndef __IPADAPTIVEMUUPDATE_HPP__
@@ -18,24 +16,28 @@
 namespace Ipopt
 {
 
-/** Non-monotone mu update.
- */
-class AdaptiveMuUpdate : public MuUpdate
+/** Non-monotone mu update. */
+class AdaptiveMuUpdate: public MuUpdate
 {
 public:
    /**@name Constructors/Destructors */
    //@{
    /** Constructor */
-   AdaptiveMuUpdate(const SmartPtr<LineSearch>& linesearch,
-                    const SmartPtr<MuOracle>& free_mu_oracle,
-                    const SmartPtr<MuOracle>& fix_mu_oracle = NULL);
-   /** Default destructor */
+   AdaptiveMuUpdate(
+      const SmartPtr<LineSearch>& linesearch,
+      const SmartPtr<MuOracle>&   free_mu_oracle,
+      const SmartPtr<MuOracle>&   fix_mu_oracle = NULL
+      );
+
+   /** Destructor */
    virtual ~AdaptiveMuUpdate();
    //@}
 
    /** Initialize method - overloaded from AlgorithmStrategyObject */
-   virtual bool InitializeImpl(const OptionsList& options,
-                               const std::string& prefix);
+   virtual bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
    /** Method for determining the barrier parameter for the next
     *  iteration.  When the optimality error for the current barrier
@@ -46,27 +48,34 @@ public:
 
    /** Methods for IpoptType */
    //@{
-   static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+   static void RegisterOptions(
+      SmartPtr<RegisteredOptions> roptions
+      );
    //@}
 
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
-
    /** Default Constructor */
    AdaptiveMuUpdate();
 
    /** Copy Constructor */
-   AdaptiveMuUpdate(const AdaptiveMuUpdate&);
+   AdaptiveMuUpdate(
+      const AdaptiveMuUpdate&
+      );
 
    /** Overloaded Equals Operator */
-   void operator=(const AdaptiveMuUpdate&);
+   void operator=(
+      const AdaptiveMuUpdate&
+      );
    //@}
 
    /** @name Algorithmic parameters */
@@ -111,48 +120,66 @@ private:
     */
    SmartPtr<MuOracle> free_mu_oracle_;
    /** Pointer to strategy object that is to be used for computing a
-    *  suggested value for the fixed mu mode.  If NULL, the current
-    *  average complementarity is used.
+    *  suggested value for the fixed mu mode.
+    *
+    *  If NULL, the current average complementarity is used.
     */
    SmartPtr<MuOracle> fix_mu_oracle_;
    //@}
 
-   /** Dual infeasibility at initial point.  A negative value means
-    *  that this quantity has not yet been initialized. */
+   /** Dual infeasibility at initial point.
+    *
+    *  A negative value means
+    *  that this quantity has not yet been initialized.
+    */
    Number init_dual_inf_;
-   /** Primal infeasibility at initial point.  A negative value means
-    *  that this quantity has not yet been initialized. */
+   /** Primal infeasibility at initial point.
+    *
+    *  A negative value means
+    *  that this quantity has not yet been initialized.
+    */
    Number init_primal_inf_;
 
    /** @name Methods and data defining the outer globalization
-    *  strategy (might be a strategy object later). */
+    *  strategy (might be a strategy object later).
+    */
    //@{
    void InitializeFixedMuGlobalization();
    /** Check whether the point in the "current" fields offers
     *  sufficient reduction in order to remain in or switch to the
-    *  free mu mode. */
+    *  free mu mode.
+    */
    bool CheckSufficientProgress();
-   /** Include the current point in internal memory to as accepted
-    *  point */
+   /** Include the current point in internal memory to as accepted point */
    void RememberCurrentPointAsAccepted();
    /** Compute the value of the fixed mu that should be used in a new
-    *  fixed mu phase.  This method is called at the beginning of a
-    *  new fixed mu phase. */
+    *  fixed mu phase.
+    *
+    *  This method is called at the beginning of a new fixed mu phase.
+    */
    Number NewFixedMu();
    /** Compute value for the fraction-to-the-boundary parameter given
-    *  mu in the monotone phase */
-   Number Compute_tau_monotone(Number mu);
+    *  mu in the monotone phase
+    */
+   Number Compute_tau_monotone(
+      Number mu
+      );
 
    /** Method for computing the norm of the primal dual system at the
-    *  current point.  For consistency, this is computed in the same
+    *  current point.
+    *
+    *  For consistency, this is computed in the same
     *  way as the quality function is computed.  This is the
     *  quantities used in the nonmonontone KKT reduction
-    *  globalization. */
+    *  globalization.
+    */
    Number quality_function_pd_system();
 
    /** Method for computing a lower safeguard bound for the barrier
-    *  parameter.  For now, this is related to primal and dual
-    *  infeasibility. */
+    *  parameter.
+    *
+    *  For now, this is related to primal and dual infeasibility.
+    */
    Number lower_mu_safeguard();
 
    /** Computer the currently largest reference value. */
@@ -163,8 +190,7 @@ private:
 
    /** Maximal number of reference values (algorithmic parameter) */
    Index num_refs_max_;
-   /** Values of the currently stored reference values (norm of pd
-    *  equations) */
+   /** Values of the currently stored reference values (norm of pd equations) */
    std::list<Number> refs_vals_;
    /** Factor requested to reduce the reference values */
    Number refs_red_fact_;
@@ -172,7 +198,8 @@ private:
    /** Alternatively, we might also want to use a filter */
    Filter filter_;
    /** Flag indicating whether the most recent accepted step should
-    *  be restored, when switching to the fixed mode. */
+    *  be restored, when switching to the fixed mode.
+    */
    bool restore_accepted_iterate_;
    //@}
 

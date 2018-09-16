@@ -2,11 +2,8 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Andreas Waechter            IBM    2008-09-18
 //            based on IpPardisoSolverInterface.hpp rev 1119
-
 
 #ifndef __IPITERATIVEPARDISOSOLVERINTERFACE_HPP__
 #define __IPITERATIVEPARDISOSOLVERINTERFACE_HPP__
@@ -19,8 +16,7 @@ namespace Ipopt
 {
 
 /** Interface to the linear solver Pardiso, derived from
- *  SparseSymLinearSolverInterface.  For details, see description of
- *  SparseSymLinearSolverInterface base class.
+ *  SparseSymLinearSolverInterface.
  */
 class IterativePardisoSolverInterface: public SparseSymLinearSolverInterface
 {
@@ -28,37 +24,45 @@ public:
    /** @name Constructor/Destructor */
    //@{
    /** Constructor */
-   IterativePardisoSolverInterface(IterativeSolverTerminationTester& normal_tester,
-                                   IterativeSolverTerminationTester& pd_tester);
+   IterativePardisoSolverInterface(
+      IterativeSolverTerminationTester& normal_tester,
+      IterativeSolverTerminationTester& pd_tester
+      );
 
    /** Destructor */
    virtual ~IterativePardisoSolverInterface();
    //@}
 
-   /** overloaded from AlgorithmStrategyObject */
-   bool InitializeImpl(const OptionsList& options,
-                       const std::string& prefix);
-
+   bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
    /** @name Methods for requesting solution of the linear system. */
    //@{
-   /** Method for initializing internal stuctures. */
-   virtual ESymSolverStatus InitializeStructure(Index dim, Index nonzeros,
-         const Index* ia,
-         const Index* ja);
+   /** Method for initializing internal structures. */
+   virtual ESymSolverStatus InitializeStructure(
+      Index        dim,
+      Index        nonzeros,
+      const Index* ia,
+      const Index* ja
+      );
 
-   /** Method returing an internal array into which the nonzero
-    *  elements are to be stored. */
+   /** Method returning an internal array into which the nonzero
+    *  elements are to be stored.
+    */
    virtual double* GetValuesArrayPtr();
 
    /** Solve operation for multiple right hand sides. */
-   virtual ESymSolverStatus MultiSolve(bool new_matrix,
-                                       const Index* ia,
-                                       const Index* ja,
-                                       Index nrhs,
-                                       double* rhs_vals,
-                                       bool check_NegEVals,
-                                       Index numberOfNegEVals);
+   virtual ESymSolverStatus MultiSolve(
+      bool         new_matrix,
+      const Index* ia,
+      const Index* ja,
+      Index        nrhs,
+      double*      rhs_vals,
+      bool         check_NegEVals,
+      Index        numberOfNegEVals
+      );
 
    /** Number of negative eigenvalues detected during last
     *  factorization.
@@ -73,12 +77,14 @@ public:
    virtual bool IncreaseQuality();
 
    /** Query whether inertia is computed by linear solver.
-    *  Returns true, if linear solver provides inertia.
+    *
+    *  @return true, if linear solver provides inertia
     */
    virtual bool ProvidesInertia() const
    {
       return true;
    }
+
    /** Query of requested matrix type that the linear solver
     *  understands.
     */
@@ -88,28 +94,33 @@ public:
    }
    //@}
 
-   /** Methods for IpoptType */
-   //@{
-   static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
-   //@}
+   static void RegisterOptions(
+      SmartPtr<RegisteredOptions> roptions
+      );
 
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Default Constructor */
    IterativePardisoSolverInterface();
 
    /** Copy Constructor */
-   IterativePardisoSolverInterface(const IterativePardisoSolverInterface&);
+   IterativePardisoSolverInterface(
+      const IterativePardisoSolverInterface&
+      );
 
-   /** Overloaded Equals Operator */
-   void operator=(const IterativePardisoSolverInterface&);
+   /** Overloaded Assignment Operator */
+   void operator=(
+      const IterativePardisoSolverInterface&
+      );
    //@}
 
    /** @name Information about the matrix */
@@ -132,7 +143,7 @@ private:
 
    /** @name Solver specific options */
    //@{
-   /** Type for mathcing strategies */
+   /** Type for matching strategies */
    enum PardisoMatchingStrategy
    {
       COMPLETE,
@@ -142,17 +153,19 @@ private:
    /** Option that controls the matching strategy. */
    PardisoMatchingStrategy match_strat_;
    /** Flag indicating if symbolic factorization has already been
-    *  performed. */
+    *  performed.
+    */
    bool have_symbolic_factorization_;
    /** Flag indicating whether the symbolic factorization should only
-    *  be done after perturbed elements, if the inertia was wrong */
+    *  be done after perturbed elements, if the inertia was wrong.
+    */
    bool pardiso_redo_symbolic_fact_only_if_inertia_wrong_;
    /** Flag indicating whether repeated perturbed elements even after
     *  a new symbolic factorization should be interpreted as a
-    *  singular matrix */
+    *  singular matrix.
+    */
    bool pardiso_repeated_perturbation_means_singular_;
-   /** Flag indicating if the interia is always assumed to be
-     *  correct. */
+   /** Flag indicating if the inertia is always assumed to be correct. */
    bool skip_inertia_check_;
    /** Maximal number of decreases of drop tolerance during one solve. */
    Index pardiso_max_droptol_corrections_;
@@ -182,7 +195,7 @@ private:
    /** Decrease factor for dropping tolerances */
    Number decr_factor_;
 
-   /** Actualy used dropping tolerances */
+   /** Actually used dropping tolerances */
    //@{
    Number pardiso_iter_dropping_factor_used_;
    Number pardiso_iter_dropping_schur_used_;
@@ -193,7 +206,9 @@ private:
    /** @name Initialization flags */
    //@{
    /** Flag indicating if internal data is initialized.
-    *  For initialization, this object needs to have seen a matrix */
+    *
+    *  For initialization, this object needs to have seen a matrix.
+    */
    bool initialized_;
    //@}
 
@@ -201,12 +216,14 @@ private:
    //@{
    /** Internal data address pointers. */
    void** PT_;
-   /** Maximal number of factors with identical nonzero
-    *  structure. Here, we only store one factorization. Is always 1.*/
+   /** Maximal number of factors with identical nonzero structure.
+    *
+    * Here, we only store one factorization. Is always 1.
+    */
    ipfint MAXFCT_;
-   /** Actual matrix for the solution phase. Is always 1.*/
+   /** Actual matrix for the solution phase. Is always 1. */
    ipfint MNUM_;
-   /** Matrix type; real and symmetric indefinite.  Is always -2.*/
+   /** Matrix type; real and symmetric indefinite.  Is always -2. */
    ipfint MTYPE_;
    /** Parameter and info array for Pardiso. */
    ipfint* IPARM_;
@@ -224,31 +241,34 @@ private:
 
    /** @name Internal functions */
    //@{
-   /** Call Pardiso to do the analysis phase.
-    */
-   ESymSolverStatus SymbolicFactorization(const Index* ia,
-                                          const Index* ja);
+   /** Call Pardiso to do the analysis phase. */
+   ESymSolverStatus SymbolicFactorization(
+      const Index* ia,
+      const Index* ja
+      );
 
-   /** Call Pardiso to factorize the Matrix.
-    */
-   ESymSolverStatus Factorization(const Index* ia,
-                                  const Index* ja,
-                                  bool check_NegEVals,
-                                  Index numberOfNegEVals);
+   /** Call Pardiso to factorize the Matrix. */
+   ESymSolverStatus Factorization(
+      const Index* ia,
+      const Index* ja,
+      bool         check_NegEVals,
+      Index        numberOfNegEVals
+      );
 
    /** Call Pardiso to do the Solve.
     */
-   ESymSolverStatus Solve(const Index* ia,
-                          const Index* ja,
-                          Index nrhs,
-                          double* rhs_vals);
+   ESymSolverStatus Solve(
+      const Index* ia,
+      const Index* ja,
+      Index        nrhs,
+      double*      rhs_vals
+      );
    //@}
 
    /** Method to easily access Inexact data */
    InexactData& InexData()
    {
-      InexactData& inexact_data =
-         static_cast<InexactData&>(IpData().AdditionalData());
+      InexactData& inexact_data = static_cast<InexactData&>(IpData().AdditionalData());
       DBG_ASSERT(dynamic_cast<InexactData*>(&IpData().AdditionalData()));
       return inexact_data;
    }
@@ -256,8 +276,7 @@ private:
    /** Method to easily access Inexact calculated quantities */
    InexactCq& InexCq()
    {
-      InexactCq& inexact_cq =
-         static_cast<InexactCq&>(IpCq().AdditionalCq());
+      InexactCq& inexact_cq = static_cast<InexactCq&>(IpCq().AdditionalCq());
       DBG_ASSERT(dynamic_cast<InexactCq*>(&IpCq().AdditionalCq()));
       return inexact_cq;
    }
@@ -271,4 +290,5 @@ private:
 };
 
 } // namespace Ipopt
+
 #endif

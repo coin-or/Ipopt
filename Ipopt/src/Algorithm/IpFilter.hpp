@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #ifndef __IPFILTER_HPP__
@@ -24,25 +22,32 @@ public:
    /**@name Constructors/Destructors */
    //@{
    /** Constructor with the two components and the current iteration count */
-   FilterEntry(std::vector<Number> vals, Index iter);
+   FilterEntry(
+      std::vector<Number> vals,
+      Index               iter
+      );
 
-   /** Default Destructor */
+   /** Destructor */
    ~FilterEntry();
    //@}
 
    /** Check acceptability of pair (phi,theta) with respect
-    *  to this filter entry.  Returns true, if pair is acceptable.
+    *  to this filter entry.
+    *
+    *  @return true, if pair is acceptable
     */
-   bool Acceptable(std::vector<Number> vals) const
+   bool Acceptable(
+      std::vector<Number> vals
+      ) const
    {
-      Index ncoor = (Index)vals_.size();
+      Index ncoor = (Index) vals_.size();
       DBG_ASSERT((Index)vals.size() == ncoor);
 
       // ToDo decide if we need Compare_le
       bool retval = false;
-      for (Index i = 0; i < ncoor; i++)
+      for( Index i = 0; i < ncoor; i++ )
       {
-         if (vals[i] <= vals_[i])
+         if( vals[i] <= vals_[i] )
          {
             retval = true;
             break;
@@ -53,17 +58,20 @@ public:
    }
 
    /** Check if this entry is dominated by given coordinates.
-    *  Returns true, if this entry is dominated.
+    *
+    *  @return true, if this entry is dominated
     */
-   bool Dominated(std::vector<Number> vals) const
+   bool Dominated(
+      std::vector<Number> vals
+      ) const
    {
-      Index ncoor = (Index)vals_.size();
+      Index ncoor = (Index) vals_.size();
       DBG_ASSERT((Index)vals.size() == ncoor);
 
       bool retval = true;
-      for (Index i = 0; i < ncoor; i++)
+      for( Index i = 0; i < ncoor; i++ )
       {
-         if (vals[i] > vals_[i])
+         if( vals[i] > vals_[i] )
          {
             retval = false;
             break;
@@ -75,7 +83,9 @@ public:
 
    /** @name Accessor functions */
    //@{
-   Number val(Index i) const
+   Number val(
+      Index i
+      ) const
    {
       return vals_[i];
    }
@@ -88,19 +98,25 @@ public:
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Default Constructor */
    FilterEntry();
    /** Copy Constructor */
-   FilterEntry(const FilterEntry&);
+   FilterEntry(
+      const FilterEntry&
+      );
 
    /** Overloaded Equals Operator */
-   void operator=(const FilterEntry&);
+   void operator=(
+      const FilterEntry&
+      );
    //@}
 
    /** values defining the coordinates of the entry */
@@ -109,17 +125,22 @@ private:
    const Index iter_;
 };
 
-/** Class for the filter.  This class contains all filter entries.
+/** Class for the filter.
+ *
+ *  This class contains all filter entries.
  *  The entries are stored as the corner point, including the
- *  margin. */
+ *  margin.
+ */
 class Filter
 {
 public:
    /**@name Constructors/Destructors */
    //@{
    /** Default Constructor */
-   Filter(Index dim);
-   /** Default Destructor */
+   Filter(
+      Index dim
+      );
+   /** Destructor */
    ~Filter()
    {
       //ToDo figure out if that here is necessary
@@ -128,17 +149,30 @@ public:
    //@}
 
    /** Check acceptability of given coordinates with respect
-    *  to the filter.  Returns true, if pair is acceptable
+    *  to the filter.
+    *
+    *  @return true, if pair is acceptable
     */
-   bool Acceptable(std::vector<Number> vals) const;
+   bool Acceptable(
+      std::vector<Number> vals
+      ) const;
 
-   /** Add filter entry for given coordinates.  This will also
-    *  delete all dominated entries in the current filter. */
-   void AddEntry(std::vector<Number> vals, Index iteration);
+   /** Add filter entry for given coordinates.
+    *
+    *  This will also
+    *  delete all dominated entries in the current filter.
+    */
+   void AddEntry(
+      std::vector<Number> vals,
+      Index               iteration
+      );
 
    /** @name Wrappers for 2-dimensional filter. */
    //@{
-   bool Acceptable(Number val1, Number val2) const
+   bool Acceptable(
+      Number val1,
+      Number val2
+      ) const
    {
       std::vector<Number> vals(2);
       vals[0] = val1;
@@ -147,7 +181,11 @@ public:
       return Acceptable(vals);
    }
 
-   void AddEntry(Number val1, Number val2, Index iteration)
+   void AddEntry(
+      Number val1,
+      Number val2,
+      Index  iteration
+      )
    {
       std::vector<Number> vals(2);
       vals[0] = val1;
@@ -161,24 +199,32 @@ public:
    void Clear();
 
    /** Print current filter entries */
-   void Print(const Journalist& jnlst);
+   void Print(
+      const Journalist& jnlst
+      );
 
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Default Constructor */
    Filter();
    /** Copy Constructor */
-   Filter(const Filter&);
+   Filter(
+      const Filter&
+      );
 
    /** Overloaded Equals Operator */
-   void operator=(const Filter&);
+   void operator=(
+      const Filter&
+      );
    //@}
 
    /** Dimension of the filter (number of coordinates per entry) */

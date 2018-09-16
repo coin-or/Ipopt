@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter              IBM    2004-09-24
 
 #ifndef __IPITERATEINITIALIZER_HPP__
@@ -17,8 +15,7 @@
 namespace Ipopt
 {
 
-/** Base class for all methods for initializing the iterates.
- */
+/** Base class for all methods for initializing the iterates. */
 class IterateInitializer: public AlgorithmStrategyObject
 {
 public:
@@ -26,16 +23,17 @@ public:
    //@{
    /** Default Constructor */
    IterateInitializer()
-   {}
+   { }
 
    /** Default destructor */
    virtual ~IterateInitializer()
-   {}
+   { }
    //@}
 
-   /** overloaded from AlgorithmStrategyObject */
-   virtual bool InitializeImpl(const OptionsList& options,
-                               const std::string& prefix) = 0;
+   virtual bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+      ) = 0;
 
    /** Compute the initial iterates and set the into the curr field
     *  of the ip_data object. */
@@ -44,17 +42,23 @@ public:
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Copy Constructor */
-   IterateInitializer(const IterateInitializer&);
+   IterateInitializer(
+      const IterateInitializer&
+      );
 
    /** Overloaded Equals Operator */
-   void operator=(const IterateInitializer&);
+   void operator=(
+      const IterateInitializer&
+      );
    //@}
 
 };

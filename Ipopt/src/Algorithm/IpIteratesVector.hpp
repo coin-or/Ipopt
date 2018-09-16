@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-06-06
 
 #ifndef __IPITERATESVECTOR_HPP__
@@ -24,23 +22,29 @@ class IteratesVectorSpace;
  *  calculations, but it has fixed dimensions and cannot be
  *  customized
  */
-class IteratesVector : public CompoundVector
+class IteratesVector: public CompoundVector
 {
 public:
    /** Constructors / Destructors */
    //@{
-   IteratesVector(const IteratesVectorSpace* owner_space, bool create_new);
+   IteratesVector(
+      const IteratesVectorSpace* owner_space,
+      bool                       create_new
+      );
 
    virtual ~IteratesVector();
    //@}
 
    /** Make New methods */
    //@{
-   /** Use this method to create a new iterates vector. The MakeNew
-    *  method on the Vector class also works, but it does not give
+   /** Use this method to create a new iterates vector.
+    *
+    *  The MakeNew method on the Vector class also works, but it does not give
     *  the create_new option.
     */
-   SmartPtr<IteratesVector> MakeNewIteratesVector(bool create_new = true) const;
+   SmartPtr<IteratesVector> MakeNewIteratesVector(
+      bool create_new = true
+      ) const;
 
    /** Use this method to create a new iterates vector with a copy of
     *  all the data.
@@ -53,7 +57,9 @@ public:
    }
 
    /** Use this method to create a new iterates vector
-    *  container. This creates a new NonConst container, but the
+    *  container.
+    *
+    *  This creates a new NonConst container, but the
     *  elements inside the iterates vector may be const. Therefore,
     *  the container can be modified to point to new entries, but the
     *  existing entries may or may not be modifiable.
@@ -70,7 +76,7 @@ public:
    }
 
    /** Get the x iterate (non-const) - this can only be called if the
-    *  vector was created intenally, or the Set_x_NonConst method was
+    *  vector was created internally, or the Set_x_NonConst method was
     *  used. */
    SmartPtr<Vector> x_NonConst()
    {
@@ -78,11 +84,11 @@ public:
    }
 
    /** Create a new vector in the x entry */
-   inline
-   SmartPtr<Vector> create_new_x();
+   inline SmartPtr<Vector> create_new_x();
 
    /** Create a new vector in the x entry and copy the current values
-    *  into it. */
+    *  into it.
+    */
    SmartPtr<Vector> create_new_x_copy()
    {
       SmartPtr<const Vector> curr_x = GetComp(0);
@@ -91,16 +97,24 @@ public:
       return x_NonConst();
    }
 
-   /** Set the x iterate (const). Sets the pointer, does NOT copy
-    *  data. */
-   void Set_x(const Vector& vec)
+   /** Set the x iterate (const).
+    *
+    * Sets the pointer, does NOT copy data.
+    */
+   void Set_x(
+      const Vector& vec
+      )
    {
       SetComp(0, vec);
    }
 
-   /** Set the x iterate (non-const). Sets the pointer, does NOT copy
-    *  data. */
-   void Set_x_NonConst(Vector& vec)
+   /** Set the x iterate (non-const).
+    *
+    * Sets the pointer, does NOT copy data.
+    */
+   void Set_x_NonConst(
+      Vector& vec
+      )
    {
       SetCompNonConst(0, vec);
    }
@@ -112,16 +126,16 @@ public:
    }
 
    /** Get the s iterate (non-const) - this can only be called if the
-    *  vector was created intenally, or the Set_s_NonConst method was
-    *  used. */
+    *  vector was created internally, or the Set_s_NonConst method was
+    *  used.
+    */
    SmartPtr<Vector> s_NonConst()
    {
       return GetNonConstIterateFromComp(1);
    }
 
    /** Create a new vector in the s entry */
-   inline
-   SmartPtr<Vector> create_new_s();
+   inline SmartPtr<Vector> create_new_s();
 
    /** Create a new vector in the s entry and copy the current values
     *  into it. */
@@ -133,16 +147,24 @@ public:
       return s_NonConst();
    }
 
-   /** Set the s iterate (const). Sets the pointer, does NOT copy
-    *  data. */
-   void Set_s(const Vector& vec)
+   /** Set the s iterate (const).
+    *
+    * Sets the pointer, does NOT copy data.
+    */
+   void Set_s(
+      const Vector& vec
+      )
    {
       SetComp(1, vec);
    }
 
-   /** Set the s iterate (non-const). Sets the pointer, does NOT copy
-    *  data. */
-   void Set_s_NonConst(Vector& vec)
+   /** Set the s iterate (non-const).
+    *
+    * Sets the pointer, does NOT copy data.
+    */
+   void Set_s_NonConst(
+      Vector& vec
+      )
    {
       SetCompNonConst(1, vec);
    }
@@ -154,19 +176,20 @@ public:
    }
 
    /** Get the y_c iterate (non-const) - this can only be called if
-    *  the vector was created intenally, or the Set_y_c_NonConst
-    *  method was used. */
+    *  the vector was created internally, or the Set_y_c_NonConst
+    *  method was used.
+    */
    SmartPtr<Vector> y_c_NonConst()
    {
       return GetNonConstIterateFromComp(2);
    }
 
    /** Create a new vector in the y_c entry */
-   inline
-   SmartPtr<Vector> create_new_y_c();
+   inline SmartPtr<Vector> create_new_y_c();
 
    /** Create a new vector in the y_c entry and copy the current
-    *  values into it. */
+    *  values into it.
+    */
    SmartPtr<Vector> create_new_y_c_copy()
    {
       SmartPtr<const Vector> curr_y_c = GetComp(2);
@@ -175,16 +198,24 @@ public:
       return y_c_NonConst();
    }
 
-   /** Set the y_c iterate (const). Sets the pointer, does NOT copy
-    *  data. */
-   void Set_y_c(const Vector& vec)
+   /** Set the y_c iterate (const).
+    *
+    * Sets the pointer, does NOT copy data.
+    */
+   void Set_y_c(
+      const Vector& vec
+      )
    {
       SetComp(2, vec);
    }
 
-   /** Set the y_c iterate (non-const). Sets the pointer, does NOT
-    *  copy data. */
-   void Set_y_c_NonConst(Vector& vec)
+   /** Set the y_c iterate (non-const).
+    *
+    * Sets the pointer, does NOT copy data.
+    */
+   void Set_y_c_NonConst(
+      Vector& vec
+      )
    {
       SetCompNonConst(2, vec);
    }
@@ -196,7 +227,7 @@ public:
    }
 
    /** Get the y_d iterate (non-const) - this can only be called if
-    *  the vector was created intenally, or the Set_y_d_NonConst
+    *  the vector was created internally, or the Set_y_d_NonConst
     *  method was used. */
    SmartPtr<Vector> y_d_NonConst()
    {
@@ -204,11 +235,11 @@ public:
    }
 
    /** Create a new vector in the y_d entry */
-   inline
-   SmartPtr<Vector> create_new_y_d();
+   inline SmartPtr<Vector> create_new_y_d();
 
    /** Create a new vector in the y_d entry and copy the current
-    *  values into it. */
+    *  values into it.
+    */
    SmartPtr<Vector> create_new_y_d_copy()
    {
       SmartPtr<const Vector> curr_y_d = GetComp(3);
@@ -217,16 +248,24 @@ public:
       return y_d_NonConst();
    }
 
-   /** Set the y_d iterate (const). Sets the pointer, does NOT copy
-    *  data. */
-   void Set_y_d(const Vector& vec)
+   /** Set the y_d iterate (const).
+    *
+    * Sets the pointer, does NOT copy data.
+    */
+   void Set_y_d(
+      const Vector& vec
+      )
    {
       SetComp(3, vec);
    }
 
-   /** Set the y_d iterate (non-const). Sets the pointer, does NOT
-    *  copy data. */
-   void Set_y_d_NonConst(Vector& vec)
+   /** Set the y_d iterate (non-const).
+    *
+    * Sets the pointer, does NOT copy data.
+    */
+   void Set_y_d_NonConst(
+      Vector& vec
+      )
    {
       SetCompNonConst(3, vec);
    }
@@ -238,16 +277,16 @@ public:
    }
 
    /** Get the z_L iterate (non-const) - this can only be called if
-    *  the vector was created intenally, or the Set_z_L_NonConst
-    *  method was used. */
+    *  the vector was created internally, or the Set_z_L_NonConst
+    *  method was used.
+    */
    SmartPtr<Vector> z_L_NonConst()
    {
       return GetNonConstIterateFromComp(4);
    }
 
    /** Create a new vector in the z_L entry */
-   inline
-   SmartPtr<Vector> create_new_z_L();
+   inline SmartPtr<Vector> create_new_z_L();
 
    /** Create a new vector in the z_L entry and copy the current
     *  values into it. */
@@ -259,16 +298,24 @@ public:
       return z_L_NonConst();
    }
 
-   /** Set the z_L iterate (const). Sets the pointer, does NOT copy
-    *  data. */
-   void Set_z_L(const Vector& vec)
+   /** Set the z_L iterate (const).
+    *
+    * Sets the pointer, does NOT copy data.
+    */
+   void Set_z_L(
+      const Vector& vec
+      )
    {
       SetComp(4, vec);
    }
 
-   /** Set the z_L iterate (non-const). Sets the pointer, does NOT
-    *  copy data. */
-   void Set_z_L_NonConst(Vector& vec)
+   /** Set the z_L iterate (non-const).
+    *
+    * Sets the pointer, does NOT copy data.
+    */
+   void Set_z_L_NonConst(
+      Vector& vec
+      )
    {
       SetCompNonConst(4, vec);
    }
@@ -280,7 +327,7 @@ public:
    }
 
    /** Get the z_U iterate (non-const) - this can only be called if
-    *  the vector was created intenally, or the Set_z_U_NonConst
+    *  the vector was created internally, or the Set_z_U_NonConst
     *  method was used. */
    SmartPtr<Vector> z_U_NonConst()
    {
@@ -288,11 +335,11 @@ public:
    }
 
    /** Create a new vector in the z_U entry */
-   inline
-   SmartPtr<Vector> create_new_z_U();
+   inline SmartPtr<Vector> create_new_z_U();
 
    /** Create a new vector in the z_U entry and copy the current
-    *  values into it. */
+    *  values into it.
+    */
    SmartPtr<Vector> create_new_z_U_copy()
    {
       SmartPtr<const Vector> curr_z_U = GetComp(5);
@@ -301,16 +348,24 @@ public:
       return z_U_NonConst();
    }
 
-   /** Set the z_U iterate (const). Sets the pointer, does NOT copy
-    *  data. */
-   void Set_z_U(const Vector& vec)
+   /** Set the z_U iterate (const).
+    *
+    * Sets the pointer, does NOT copy data.
+    */
+   void Set_z_U(
+      const Vector& vec
+      )
    {
       SetComp(5, vec);
    }
 
-   /** Set the z_U iterate (non-const). Sets the pointer, does NOT
-    *  copy data. */
-   void Set_z_U_NonConst(Vector& vec)
+   /** Set the z_U iterate (non-const).
+    *
+    * Sets the pointer, does NOT copy data.
+    */
+   void Set_z_U_NonConst(
+      Vector& vec
+      )
    {
       SetCompNonConst(5, vec);
    }
@@ -322,19 +377,20 @@ public:
    }
 
    /** Get the v_L iterate (non-const) - this can only be called if
-    *  the vector was created intenally, or the Set_v_L_NonConst
-    *  method was used. */
+    *  the vector was created internally, or the Set_v_L_NonConst
+    *  method was used.
+    */
    SmartPtr<Vector> v_L_NonConst()
    {
       return GetNonConstIterateFromComp(6);
    }
 
    /** Create a new vector in the v_L entry */
-   inline
-   SmartPtr<Vector> create_new_v_L();
+   inline SmartPtr<Vector> create_new_v_L();
 
    /** Create a new vector in the v_L entry and copy the current
-    *  values into it. */
+    *  values into it.
+    */
    SmartPtr<Vector> create_new_v_L_copy()
    {
       SmartPtr<const Vector> curr_v_L = GetComp(6);
@@ -343,16 +399,23 @@ public:
       return v_L_NonConst();
    }
 
-   /** Set the v_L iterate (const). Sets the pointer, does NOT copy
-    *  data. */
-   void Set_v_L(const Vector& vec)
+   /** Set the v_L iterate (const).
+    *
+    * Sets the pointer, does NOT copy data.
+    */
+   void Set_v_L(
+      const Vector& vec
+      )
    {
       SetComp(6, vec);
    }
 
-   /** Set the v_L iterate (non-const). Sets the pointer, does NOT
-    *  copy data. */
-   void Set_v_L_NonConst(Vector& vec)
+   /** Set the v_L iterate (non-const).
+    * Sets the pointer, does NOT copy data.
+    */
+   void Set_v_L_NonConst(
+      Vector& vec
+      )
    {
       SetCompNonConst(6, vec);
    }
@@ -365,18 +428,19 @@ public:
 
    /** Get the v_U iterate (non-const) - this can only be called if
     *  the vector was created intenally, or the Set_v_U_NonConst
-    *  method was used. */
+    *  method was used.
+    */
    SmartPtr<Vector> v_U_NonConst()
    {
       return GetNonConstIterateFromComp(7);
    }
 
    /** Create a new vector in the v_U entry */
-   inline
-   SmartPtr<Vector> create_new_v_U();
+   inline SmartPtr<Vector> create_new_v_U();
 
    /** Create a new vector in the v_U entry and copy the current
-    *  values into it. */
+    *  values into it.
+    */
    SmartPtr<Vector> create_new_v_U_copy()
    {
       SmartPtr<const Vector> curr_v_U = GetComp(7);
@@ -385,56 +449,102 @@ public:
       return v_U_NonConst();
    }
 
-   /** Set the v_U iterate (const). Sets the pointer, does NOT copy
-    *  data. */
-   void Set_v_U(const Vector& vec)
+   /** Set the v_U iterate (const).
+    *
+    * Sets the pointer, does NOT copy data.
+    */
+   void Set_v_U(
+      const Vector& vec
+      )
    {
       SetComp(7, vec);
    }
 
-   /** Set the v_U iterate (non-const). Sets the pointer, does NOT
-    *  copy data. */
-   void Set_v_U_NonConst(Vector& vec)
+   /** Set the v_U iterate (non-const).
+    *
+    * Sets the pointer, does NOT copy data.
+    */
+   void Set_v_U_NonConst(
+      Vector& vec
+      )
    {
       SetCompNonConst(7, vec);
    }
 
-   /** Set the primal variables all in one shot. Sets the pointers,
-    *  does NOT copy data */
-   void Set_primal(const Vector& x, const Vector& s)
+   /** Set the primal variables all in one shot.
+    *
+    * Sets the pointers, does NOT copy data.
+    */
+   void Set_primal(
+      const Vector& x,
+      const Vector& s
+      )
    {
       SetComp(0, x);
       SetComp(1, s);
    }
-   void Set_primal_NonConst(Vector& x, Vector& s)
+   void Set_primal_NonConst(
+      Vector& x,
+      Vector& s
+      )
    {
       SetCompNonConst(0, x);
       SetCompNonConst(1, s);
    }
 
-   /** Set the eq multipliers all in one shot. Sets the pointers,
-    *  does not copy data. */
-   void Set_eq_mult(const Vector& y_c, const Vector& y_d)
+   /** Set the eq multipliers all in one shot.
+    *
+    * Sets the pointers, does not copy data.
+    */
+   void Set_eq_mult(
+      const Vector& y_c,
+      const Vector& y_d
+      )
    {
       SetComp(2, y_c);
       SetComp(3, y_d);
    }
-   void Set_eq_mult_NonConst(Vector& y_c, Vector& y_d)
+
+   /** Set the eq multipliers all in one shot.
+    *
+    * Sets the pointers, does not copy data.
+    */
+   void Set_eq_mult_NonConst(
+      Vector& y_c,
+      Vector& y_d
+      )
    {
       SetCompNonConst(2, y_c);
       SetCompNonConst(3, y_d);
    }
 
-   /** Set the bound multipliers all in one shot. Sets the pointers,
-    *  does not copy data. */
-   void Set_bound_mult(const Vector& z_L, const Vector& z_U, const Vector& v_L, const Vector& v_U)
+   /** Set the bound multipliers all in one shot.
+    *
+    *  Sets the pointers, does not copy data.
+    */
+   void Set_bound_mult(
+      const Vector& z_L,
+      const Vector& z_U,
+      const Vector& v_L,
+      const Vector& v_U
+      )
    {
       SetComp(4, z_L);
       SetComp(5, z_U);
       SetComp(6, v_L);
       SetComp(7, v_U);
    }
-   void Set_bound_mult_NonConst(Vector& z_L, Vector& z_U, Vector& v_L, Vector& v_U)
+
+   /** Set the bound multipliers all in one shot.
+    *
+    *  Sets the pointers, does not copy data.
+    */
+   void Set_bound_mult_NonConst(
+      Vector& z_L,
+      Vector& z_U,
+      Vector& v_L,
+      Vector& v_U
+      )
    {
       SetCompNonConst(4, z_L);
       SetCompNonConst(5, z_U);
@@ -442,7 +552,9 @@ public:
       SetCompNonConst(7, v_U);
    }
 
-   /** Get a sum of the tags of the contained items. There is no
+   /** Get a sum of the tags of the contained items.
+    *
+    *  There is no
     *  guarantee that this is unique, but there is a high chance it
     *  is unique and it can be used for debug checks relatively
     *  reliably.
@@ -451,35 +563,35 @@ public:
    {
       TaggedObject::Tag tag = 0;
 
-      if (IsValid(x()))
+      if( IsValid(x()) )
       {
          tag += x()->GetTag();
       }
-      if (IsValid(s()))
+      if( IsValid(s()) )
       {
          tag += s()->GetTag();
       }
-      if (IsValid(y_c()))
+      if( IsValid(y_c()) )
       {
          tag += y_c()->GetTag();
       }
-      if (IsValid(y_d()))
+      if( IsValid(y_d()) )
       {
          tag += y_d()->GetTag();
       }
-      if (IsValid(z_L()))
+      if( IsValid(z_L()) )
       {
          tag += z_L()->GetTag();
       }
-      if (IsValid(z_U()))
+      if( IsValid(z_U()) )
       {
          tag += z_U()->GetTag();
       }
-      if (IsValid(v_L()))
+      if( IsValid(v_L()) )
       {
          tag += v_L()->GetTag();
       }
-      if (IsValid(v_U()))
+      if( IsValid(v_U()) )
       {
          tag += v_U()->GetTag();
       }
@@ -490,7 +602,9 @@ public:
 
 private:
    /**@name Default Compiler Generated Methods (Hidden to avoid
-    * implicit creation/calling).  These methods are not implemented
+    * implicit creation/calling).
+    *
+    * These methods are not implemented
     * and we do not want the compiler to implement them for us, so we
     * declare them private and do not define them. This ensures that
     * they will not be implicitly created/called.
@@ -500,34 +614,42 @@ private:
    IteratesVector();
 
    /** Copy Constructor */
-   IteratesVector(const IteratesVector&);
+   IteratesVector(
+      const IteratesVector&
+      );
 
    /** Overloaded Equals Operator */
-   void operator=(const IteratesVector&);
+   void operator=(
+      const IteratesVector&
+      );
    //@}
 
    const IteratesVectorSpace* owner_space_;
 
-   /** private method to return the const element from the compound
-    *  vector.  This method will return NULL if none is currently
-    *  set.
+   /** private method to return the const element from the compound vector
+    *
+    *  @return NULL, if none is currently set
     */
-   SmartPtr<const Vector> GetIterateFromComp(Index i) const
+   SmartPtr<const Vector> GetIterateFromComp(
+      Index i
+      ) const
    {
-      if (IsCompNull(i))
+      if( IsCompNull(i) )
       {
          return NULL;
       }
       return GetComp(i);
    }
 
-   /** private method to return the non-const element from the
-    *  compound vector.  This method will return NULL if none is
-    *  currently set.
+   /** private method to return the non-const element from the compound vector
+    *
+    * @return NULL, if none is currently set
     */
-   SmartPtr<Vector> GetNonConstIterateFromComp(Index i)
+   SmartPtr<Vector> GetNonConstIterateFromComp(
+      Index i
+      )
    {
-      if (IsCompNull(i))
+      if( IsCompNull(i) )
       {
          return NULL;
       }
@@ -536,44 +658,62 @@ private:
 
 };
 
-/** Vector Space for the IteratesVector class.  This is a
- *  specialized vector space for the IteratesVector class.
+/** Vector Space for the IteratesVector class.
+ *
+ *  This is a specialized vector space for the IteratesVector class.
  */
-class IteratesVectorSpace : public CompoundVectorSpace
+class IteratesVectorSpace: public CompoundVectorSpace
 {
 public:
-   /** @name Constructors/Destructors. */
+   /** @name Constructors / Destructors */
    //@{
    /** Constructor that takes the spaces for each of the iterates.
-    *  Warning! None of these can be NULL !
+    *
+    *  @attention None of these can be NULL !
     */
-   IteratesVectorSpace(const VectorSpace& x_space, const VectorSpace& s_space,
-                       const VectorSpace& y_c_space, const VectorSpace& y_d_space,
-                       const VectorSpace& z_L_space, const VectorSpace& z_U_space,
-                       const VectorSpace& v_L_space, const VectorSpace& v_U_space
-                      );
+   IteratesVectorSpace(
+      const VectorSpace& x_space,
+      const VectorSpace& s_space,
+      const VectorSpace& y_c_space,
+      const VectorSpace& y_d_space,
+      const VectorSpace& z_L_space,
+      const VectorSpace& z_U_space,
+      const VectorSpace& v_L_space,
+      const VectorSpace& v_U_space
+      );
 
    virtual ~IteratesVectorSpace();
    //@}
 
    /** Method for creating vectors . */
    //@{
-   /** Use this to create a new IteratesVector. You can pass-in
+   /** Use this to create a new IteratesVector.
+    *
+    *  You can pass-in
     *  create_new = false if you only want a container and do not
     *  want vectors allocated.
     */
-   virtual IteratesVector* MakeNewIteratesVector(bool create_new = true) const
+   virtual IteratesVector* MakeNewIteratesVector(
+      bool create_new = true
+      ) const
    {
       return new IteratesVector(this, create_new);
    }
 
-   /** Use this method to create a new const IteratesVector. You must pass in
-    *  valid pointers for all of the entries.
+   /** Use this method to create a new const IteratesVector.
+    *
+    * You must pass in valid pointers for all of the entries.
     */
-   const SmartPtr<const IteratesVector> MakeNewIteratesVector(const Vector& x, const Vector& s,
-         const Vector& y_c, const Vector& y_d,
-         const Vector& z_L, const Vector& z_U,
-         const Vector& v_L, const Vector& v_U)
+   const SmartPtr<const IteratesVector> MakeNewIteratesVector(
+      const Vector& x,
+      const Vector& s,
+      const Vector& y_c,
+      const Vector& y_d,
+      const Vector& z_L,
+      const Vector& z_U,
+      const Vector& v_L,
+      const Vector& v_U
+      )
    {
       SmartPtr<IteratesVector> newvec = MakeNewIteratesVector(false);
       newvec->Set_x(x);
@@ -587,18 +727,17 @@ public:
       return ConstPtr(newvec);
    }
 
-
-   /** This method overloads
-    *  ComooundVectorSpace::MakeNewCompoundVector to make sure that
-    *  we get a vector of the correct type
-    */
-   virtual CompoundVector* MakeNewCompoundVector(bool create_new = true) const
+   virtual CompoundVector* MakeNewCompoundVector(
+      bool create_new = true
+      ) const
    {
       return MakeNewIteratesVector(create_new);
    }
 
    /** This method creates a new vector (and allocates space in all
-    *  the contained vectors. This is really only used for code that
+    *  the contained vectors.
+    *
+    *  This is really only used for code that
     *  does not know what type of vector it is dealing with - for
     *  example, this method is called from Vector::MakeNew()
     */
@@ -612,26 +751,36 @@ public:
     *  since the components of the Iterates are fixed at
     *  construction.
     */
-   virtual void SetCompSpace(Index icomp, const VectorSpace& vec_space)
+   virtual void SetCompSpace(
+      Index              icomp,
+      const VectorSpace& vec_space
+      )
    {
       DBG_ASSERT(false && "This is an IteratesVectorSpace - a special compound vector for Ipopt iterates. The contained spaces should not be modified.");
    }
 
 private:
    /**@name Default Compiler Generated Methods (Hidden to avoid
-   * implicit creation/calling).  These methods are not implemented
-   * and we do not want the compiler to implement them for us, so we
-   * declare them private and do not define them. This ensures that
-   * they will not be implicitly created/called. */
+    * implicit creation/calling).
+    *
+    * These methods are not implemented
+    * and we do not want the compiler to implement them for us, so we
+    * declare them private and do not define them. This ensures that
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Default constructor */
    IteratesVectorSpace();
 
    /** Copy Constructor */
-   IteratesVectorSpace(const IteratesVectorSpace&);
+   IteratesVectorSpace(
+      const IteratesVectorSpace&
+      );
 
    /** Overloaded Equals Operator */
-   IteratesVectorSpace& operator=(const IteratesVectorSpace&);
+   IteratesVectorSpace& operator=(
+      const IteratesVectorSpace&
+      );
    //@}
 
    /** Contained Spaces */
@@ -645,55 +794,47 @@ private:
    SmartPtr<const VectorSpace> v_U_space_;
 };
 
-
-inline
-SmartPtr<Vector> IteratesVector::create_new_x()
+inline SmartPtr<Vector> IteratesVector::create_new_x()
 {
    Set_x_NonConst(*owner_space_->GetCompSpace(0)->MakeNew());
    return x_NonConst();
 }
-inline
-SmartPtr<Vector> IteratesVector::create_new_s()
+inline SmartPtr<Vector> IteratesVector::create_new_s()
 {
    Set_s_NonConst(*owner_space_->GetCompSpace(1)->MakeNew());
    return s_NonConst();
 }
-inline
-SmartPtr<Vector> IteratesVector::create_new_y_c()
+inline SmartPtr<Vector> IteratesVector::create_new_y_c()
 {
    Set_y_c_NonConst(*owner_space_->GetCompSpace(2)->MakeNew());
    return y_c_NonConst();
 }
-inline
-SmartPtr<Vector> IteratesVector::create_new_y_d()
+inline SmartPtr<Vector> IteratesVector::create_new_y_d()
 {
    Set_y_d_NonConst(*owner_space_->GetCompSpace(3)->MakeNew());
    return y_d_NonConst();
 }
-inline
-SmartPtr<Vector> IteratesVector::create_new_z_L()
+inline SmartPtr<Vector> IteratesVector::create_new_z_L()
 {
    Set_z_L_NonConst(*owner_space_->GetCompSpace(4)->MakeNew());
    return z_L_NonConst();
 }
-inline
-SmartPtr<Vector> IteratesVector::create_new_z_U()
+inline SmartPtr<Vector> IteratesVector::create_new_z_U()
 {
    Set_z_U_NonConst(*owner_space_->GetCompSpace(5)->MakeNew());
    return z_U_NonConst();
 }
-inline
-SmartPtr<Vector> IteratesVector::create_new_v_L()
+inline SmartPtr<Vector> IteratesVector::create_new_v_L()
 {
    Set_v_L_NonConst(*owner_space_->GetCompSpace(6)->MakeNew());
    return v_L_NonConst();
 }
-inline
-SmartPtr<Vector> IteratesVector::create_new_v_U()
+inline SmartPtr<Vector> IteratesVector::create_new_v_U()
 {
    Set_v_U_NonConst(*owner_space_->GetCompSpace(7)->MakeNew());
    return v_U_NonConst();
 }
+
 } // namespace Ipopt
 
 #endif

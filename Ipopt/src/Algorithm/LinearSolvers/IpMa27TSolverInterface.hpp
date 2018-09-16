@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2005-03-17
 
 #ifndef __IPMA27TSOLVERINTERFACE_HPP__
@@ -28,77 +26,53 @@ public:
    virtual ~Ma27TSolverInterface();
    //@}
 
-   /** overloaded from AlgorithmStrategyObject */
-   bool InitializeImpl(const OptionsList& options,
-                       const std::string& prefix);
-
+   bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
    /** @name Methods for requesting solution of the linear system. */
    //@{
-   /** Method for initializing internal stuctures.  Here, ndim gives
-    *  the number of rows and columns of the matrix, nonzeros give
-    *  the number of nonzero elements, and airn and acjn give the
-    *  positions of the nonzero elements.
-    */
-   virtual ESymSolverStatus InitializeStructure(Index dim, Index nonzeros,
-         const Index* airn,
-         const Index* ajcn);
+   virtual ESymSolverStatus InitializeStructure(
+      Index        dim,
+      Index        nonzeros,
+      const Index* airn,
+      const Index* ajcn
+      );
 
-   /** Method returing an internal array into which the nonzero
-    *  elements (in the same order as airn and ajcn) are to be stored
-    *  by the calling routine before a call to MultiSolve with a
-    *  new_matrix=true.  The returned array must have space for at least
-    *  nonzero elements. */
    virtual double* GetValuesArrayPtr();
 
-   /** Solve operation for multiple right hand sides.  Overloaded
-    *  from SparseSymLinearSolverInterface.
-    */
-   virtual ESymSolverStatus MultiSolve(bool new_matrix,
-                                       const Index* airn,
-                                       const Index* ajcn,
-                                       Index nrhs,
-                                       double* rhs_vals,
-                                       bool check_NegEVals,
-                                       Index numberOfNegEVals);
+   virtual ESymSolverStatus MultiSolve(
+      bool         new_matrix,
+      const Index* airn,
+      const Index* ajcn,
+      Index        nrhs,
+      double*      rhs_vals,
+      bool         check_NegEVals,
+      Index        numberOfNegEVals);
 
-   /** Number of negative eigenvalues detected during last
-    *  factorization.  Returns the number of negative eigenvalues of
-    *  the most recent factorized matrix.  This must not be called if
-    *  the linear solver does not compute this quantities (see
-    *  ProvidesInertia).
-    */
    virtual Index NumberOfNegEVals() const;
    //@}
 
    //* @name Options of Linear solver */
    //@{
-   /** Request to increase quality of solution for next solve.
-    * Ask linear solver to increase quality of solution for the next
-    * solve (e.g. increase pivot tolerance).  Returns false, if this
-    * is not possible (e.g. maximal pivot tolerance already used.)
-    */
    virtual bool IncreaseQuality();
 
-   /** Query whether inertia is computed by linear solver.
-    * Returns true, if linear solver provides inertia.
-    */
    virtual bool ProvidesInertia() const
    {
       return true;
    }
-   /** Query of requested matrix type that the linear solver
-    *  understands.
-    */
+
    EMatrixFormat MatrixFormat() const
    {
       return Triplet_Format;
    }
    //@}
 
-   /** Methods for IpoptType */
    //@{
-   static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+   static void RegisterOptions(
+      SmartPtr<RegisteredOptions> roptions
+      );
    //@}
 
 private:
@@ -111,10 +85,14 @@ private:
     * they will not be implicitly created/called. */
    //@{
    /** Copy Constructor */
-   Ma27TSolverInterface(const Ma27TSolverInterface&);
+   Ma27TSolverInterface(
+      const Ma27TSolverInterface&
+      );
 
-   /** Overloaded Equals Operator */
-   void operator=(const Ma27TSolverInterface&);
+   /** Default Assignment Operator */
+   void operator=(
+      const Ma27TSolverInterface&
+      );
    //@}
 
    /** @name Information about the matrix */
@@ -135,20 +113,24 @@ private:
    /** @name Initialization flags */
    //@{
    /** Flag indicating if internal data is initialized.
-    *  For initialization, this object needs to have seen a matrix */
+    *
+    *  For initialization, this object needs to have seen a matrix.
+    */
    bool initialized_;
    /** Flag indicating if the matrix has to be refactorized because
-    *  the pivot tolerance has been changed. */
+    *  the pivot tolerance has been changed.
+    */
    bool pivtol_changed_;
    /** Flag that is true if we just requested the values of the
     *  matrix again (SYMSOLVER_CALL_AGAIN) and have to factorize
-    *  again. */
+    *  again.
+    */
    bool refactorize_;
    //@}
 
    /** @name Solver specific data/options */
    //@{
-   /** Pivol tolerance */
+   /** Pivot tolerance */
    Number pivtol_;
 
    /** Maximal pivot tolerance */
@@ -161,13 +143,14 @@ private:
    /** Factor for increaseing memory */
    Number meminc_factor_;
    /** Flag indicating whether the TNLP with identical structure has
-    *  already been solved before. */
+    *  already been solved before.
+    */
    bool warm_start_same_structure_;
-   /** Flag indicating if the interia is always assumed to be
-    *  correct. */
+   /** Flag indicating if the inertia is always assumed to be correct. */
    bool skip_inertia_check_;
    /** Flag indicating if MA27 should continue if a singular matrix
-   is detected, but right hands sides are still accepted. */
+    * is detected, but right hands sides are still accepted.
+    */
    bool ignore_singularity_;
    //@}
 
@@ -197,36 +180,41 @@ private:
    /** factor A of matrix */
    double* a_;
 
-   /** flag indicating that la should be increased before next factorization
-    */
+   /** flag indicating that la should be increased before next factorization */
    bool la_increase_;
-   /** flag indicating that liw should be increased before next factorization
-    */
+   /** flag indicating that liw should be increased before next factorization */
    bool liw_increase_;
    //@}
 
    /** @name Internal functions */
    //@{
    /** Call MA27AD and reserve memory for MA27 data.
+    *
     *  Reserve memory for iw_ and ikeep_, call MA27AD to perform
     *  symbolic manipulations, and reserve all the remaining data memory
     */
-   ESymSolverStatus SymbolicFactorization(const Index* airn,
-                                          const Index* ajcn);
+   ESymSolverStatus SymbolicFactorization(
+      const Index* airn,
+      const Index* ajcn
+      );
 
    /** Call MA27BD to factorize the Matrix.
+    *
     *  It is assumed that the first nonzeros_ element of a_ contain the values
     *  of the matrix to be factorized.
     */
-   ESymSolverStatus Factorization(const Index* airn,
-                                  const Index* ajcn,
-                                  bool check_NegEVals,
-                                  Index numberOfNegEVals);
+   ESymSolverStatus Factorization(
+      const Index* airn,
+      const Index* ajcn,
+      bool         check_NegEVals,
+      Index        numberOfNegEVals
+      );
 
-   /** Call MA27CD to do the backsolve.
-    */
-   ESymSolverStatus Backsolve(Index nrhs,
-                              double* rhs_vals);
+   /** Call MA27CD to do the backsolve. */
+   ESymSolverStatus Backsolve(
+      Index   nrhs,
+      double* rhs_vals
+      );
    //@}
 };
 

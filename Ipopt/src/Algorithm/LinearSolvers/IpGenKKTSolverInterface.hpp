@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Andreas Waechter     IBM    2007-03-01
 
 #ifndef __IPGENKKTSOLVERINTERFACE_HPP__
@@ -15,28 +13,30 @@
 
 namespace Ipopt
 {
-/** Base class for interfaces to symmetric indefinite linear solvers
- *  for generic matrices   */
+
+/** Base class for interfaces to symmetric indefinite linear solvers for generic matrices */
 class GenKKTSolverInterface: public AlgorithmStrategyObject
 {
 public:
    /** @name Constructor/Destructor */
    //@{
    GenKKTSolverInterface()
-   {}
+   { }
 
    virtual ~GenKKTSolverInterface()
-   {}
+   { }
    //@}
 
-   /** overloaded from AlgorithmStrategyObject */
-   virtual bool InitializeImpl(const OptionsList& options,
-                               const std::string& prefix) = 0;
+   virtual bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+      ) = 0;
 
    /** @name Methods for requesting solution of the linear system. */
    //@{
-   /** Solve operation for multiple right hand sides.  The linear
-    *  system is of the form
+   /** Solve operation for multiple right hand sides.
+    *
+    *  The linear system is of the form
     *
     *  \f$\left[\begin{array}{cccc}
     *  W + D_x + \delta_xI & 0 & J_c^T & J_d^T\\
@@ -71,48 +71,51 @@ public:
     *  returns false.
     */
    virtual ESymSolverStatus MultiSolve(
-      bool new_matrix /** If this flag is false, the same matrix as in the most recent call is given to the solver again */
-      , Index n_x  /** Dimension of D_x */
-      , Index n_c /** Dimension of D_s and D_c */
-      , Index n_d /** Dimension of D_d */
-      , SmartPtr<const SymMatrix> W /** Hessian of Lagrangian (as given by NLP) */
-      , SmartPtr<const Matrix> Jac_c /** Jacobian of equality constraints (as given by NLP) */
-      , SmartPtr<const Matrix> Jac_d /** Jacobian of inequality constraints (as given by NLP) */
-      , const Number* D_x /** Array with the elements D_x (if NULL, assume all zero) */
-      , const Number* D_s /** Array with the elements D_s (if NULL, assume all zero) */
-      , const Number* D_c /** Array with the elements D_c (if NULL, assume all zero) */
-      , const Number* D_d /** Array with the elements D_d (if NULL, assume all zero) */
-      , Number delta_x /** \f$ \delta_x\f$ */
-      , Number delta_s /** \f$ \delta_s\f$ */
-      , Number delta_c /** \f$ \delta_c\f$ */
-      , Number delta_d /** \f$ \delta_d\f$ */
-      , Index n_rhs  /** Number of right hand sides */
-      , Number* rhssol /** On input, this containts the right hand sides, and on successful termination of the solver, the solutions are expected in there on return. At the moment, the order is x,d,c,s, but this can be made flexible and chosen according to an option. */
-      , bool check_NegEVals /** if true, we want to ensure that the inertia is correct */
-      , Index numberOfNegEVals /** Required number of negative eigenvalues if check_NegEVals is true */
-   ) = 0;
+      bool                      new_matrix, /**< If this flag is false, the same matrix as in the most recent call is given to the solver again */
+      Index                     n_x,        /**< Dimension of D_x */
+      Index                     n_c,        /**< Dimension of D_s and D_c */
+      Index                     n_d,        /**< Dimension of D_d */
+      SmartPtr<const SymMatrix> W,          /**< Hessian of Lagrangian (as given by NLP) */
+      SmartPtr<const Matrix>    Jac_c,      /**< Jacobian of equality constraints (as given by NLP) */
+      SmartPtr<const Matrix>    Jac_d,      /**< Jacobian of inequality constraints (as given by NLP) */
+      const Number*             D_x,        /**< Array with the elements D_x (if NULL, assume all zero) */
+      const Number*             D_s,        /**< Array with the elements D_s (if NULL, assume all zero) */
+      const Number*             D_c,        /**< Array with the elements D_c (if NULL, assume all zero) */
+      const Number*             D_d,        /**< Array with the elements D_d (if NULL, assume all zero) */
+      Number                    delta_x,    /**< \f$ \delta_x\f$ */
+      Number                    delta_s,    /**< \f$ \delta_s\f$ */
+      Number                    delta_c,    /**< \f$ \delta_c\f$ */
+      Number                    delta_d,    /**< \f$ \delta_d\f$ */
+      Index                     n_rhs,      /**< Number of right hand sides */
+      Number*                   rhssol,     /**< On input, this contains the right hand sides, and on successful termination of the solver, the solutions are expected in there on return. At the moment, the order is x,d,c,s, but this can be made flexible and chosen according to an option. */
+      bool                      check_NegEVals,  /**< if true, we want to ensure that the inertia is correct */
+      Index                     numberOfNegEVals /**< Required number of negative eigenvalues if check_NegEVals is true */
+      ) = 0;
 
-   /** Number of negative eigenvalues detected during last
-    *  factorization.  Returns the number of negative eigenvalues of
-    *  the most recent factorized matrix.  This must not be called if
-    *  the linear solver does not compute this quantities (see
-    *  ProvidesInertia).
+   /** Number of negative eigenvalues detected during last factorization.
+    *
+    *  @return The number of negative eigenvalues of the most recent factorized matrix.
+    *
+    *  This must not be called if the linear solver does not compute this quantities
+    *  (see ProvidesInertia).
     */
    virtual Index NumberOfNegEVals() const = 0;
    //@}
 
    //* @name Options of Linear solver */
    //@{
-   /** Request to increase quality of solution for next solve.  The
-    *  calling class asks linear solver to increase quality of
+   /** Request to increase quality of solution for next solve.
+    *
+    *  The calling class asks linear solver to increase quality of
     *  solution for the next solve (e.g. increase pivot tolerance).
-    *  Returns false, if this is not possible (e.g. maximal pivot
-    *  tolerance already used.)
+    *
+    *  @return false, if this is not possible (e.g. maximal pivot tolerance already used.)
     */
    virtual bool IncreaseQuality() = 0;
 
-   /** Query whether inertia is computed by linear solver.  Returns
-    *  true, if linear solver provides inertia.
+   /** Query whether inertia is computed by linear solver.
+    *
+    * @return true, if linear solver provides inertia
     */
    virtual bool ProvidesInertia() const = 0;
    //@}
