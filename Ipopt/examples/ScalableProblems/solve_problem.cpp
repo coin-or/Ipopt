@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Andreas Waechter            IBM    2004-11-05
 
 #include "IpIpoptApplication.hpp"
@@ -55,22 +53,24 @@
 #include <unistd.h>
 #include <pthread.h>
 
-extern "C" void* killer_thread(void* arg)
+extern "C" void* killer_thread(
+   void* arg
+   )
 {
-  int runtime = *reinterpret_cast<int *>(arg);
-  if (runtime <= 0) {
-    printf("Invalid argument for run time (%d)\n", runtime);
-    exit(-100);
-  }
-  printf("Limiting wall clock time to %d seconds.\n", runtime);
-  sleep(runtime);
-  printf("EXIT: Exceeding wall clock time limit of %d seconds.\n", runtime);
-  exit(-999);
-  return NULL;
+   int runtime = *reinterpret_cast<int *>(arg);
+   if (runtime <= 0)
+   {
+      printf("Invalid argument for run time (%d)\n", runtime);
+      exit(-100);
+   }
+   printf("Limiting wall clock time to %d seconds.\n", runtime);
+   sleep(runtime);
+   printf("EXIT: Exceeding wall clock time limit of %d seconds.\n", runtime);
+   exit(-999);
+   return NULL;
 }
 #endif
 //**********************************************************************
-
 
 using namespace Ipopt;
 using namespace std;
@@ -99,7 +99,6 @@ REGISTER_TNLP(LuksanVlcek6(-1.,0.), LukVlI6)
 #include "LuksanVlcek7.hpp"
 REGISTER_TNLP(LuksanVlcek7(0,0), LukVlE7)
 REGISTER_TNLP(LuksanVlcek7(-1.,0.), LukVlI7)
-
 
 #include "MittelmannBndryCntrlDiri.hpp"
 REGISTER_TNLP(MittelmannBndryCntrlDiri1, MBndryCntrl1)
@@ -147,97 +146,114 @@ REGISTER_TNLP(MittelmannParaCntrlBase<MittelmannParaCntrl5_2_3>, MPara5_2_3)
 
 static void print_problems()
 {
-  printf("\nList of all registered problems:\n\n");
-  RegisteredTNLPs::PrintRegisteredProblems();
+   printf("\nList of all registered problems:\n\n");
+   RegisteredTNLPs::PrintRegisteredProblems();
 }
 
-int main(int argv, char* argc[])
+int main(
+   int   argv,
+   char* argc[]
+   )
 {
-  if (argv==2 && !strcmp(argc[1],"list")) {
-    print_problems();
-    return 0;
-  }
+   if( argv == 2 && !strcmp(argc[1], "list") )
+   {
+      print_problems();
+      return 0;
+   }
 
 #ifdef TIME_LIMIT
-  if (argv==4) {
-    int runtime = atoi(argc[3]);
-    pthread_t thread;
-    pthread_create(&thread, NULL, killer_thread, &runtime);
-  }
-  else
+   if (argv==4)
+   {
+      int runtime = atoi(argc[3]);
+      pthread_t thread;
+      pthread_create(&thread, NULL, killer_thread, &runtime);
+   }
+   else
 #endif
-    if (argv!=3 && argv!=1) {
+   if( argv != 3 && argv != 1 )
+   {
       printf("Usage: %s (this will ask for problem name)\n", argc[0]);
       printf("       %s ProblemName N\n", argc[0]);
       printf("          where N is a positive parameter determining problem size\n");
       printf("       %s list\n", argc[0]);
       printf("          to list all registered problems.\n");
       return -1;
-    }
+   }
 
-  SmartPtr<RegisteredTNLP> tnlp;
-  Index N;
+   SmartPtr<RegisteredTNLP> tnlp;
+   Index N;
 
-  if (argv!=1) {
-    // Create an instance of your nlp...
-    tnlp = RegisteredTNLPs::GetTNLP(argc[1]);
-    if (!IsValid(tnlp)) {
-      printf("Problem with name \"%s\" not known.\n", argc[1]);
-      print_problems();
-      return -2;
-    }
-
-    N = atoi(argc[2]);
-  }
-  else {
-    bool done = false;
-    while (!done) {
-      string inputword;
-      cout << "Enter problem name (or \"list\" for all available names):\n";
-      cin >> inputword;
-      if (inputword=="list") {
-        print_problems();
+   if( argv != 1 )
+   {
+      // Create an instance of your nlp...
+      tnlp = RegisteredTNLPs::GetTNLP(argc[1]);
+      if( !IsValid(tnlp) )
+      {
+         printf("Problem with name \"%s\" not known.\n", argc[1]);
+         print_problems();
+         return -2;
       }
-      else {
-        tnlp = RegisteredTNLPs::GetTNLP(inputword.c_str());
-        if (!IsValid(tnlp)) {
-          printf("Problem with name \"%s\" not known.\n", inputword.c_str());
-        }
-        else {
-          done = true;
-        }
+
+      N = atoi(argc[2]);
+   }
+   else
+   {
+      bool done = false;
+      while( !done )
+      {
+         string inputword;
+         cout << "Enter problem name (or \"list\" for all available names):\n";
+         cin >> inputword;
+         if( inputword == "list" )
+         {
+            print_problems();
+         }
+         else
+         {
+            tnlp = RegisteredTNLPs::GetTNLP(inputword.c_str());
+            if( !IsValid(tnlp) )
+            {
+               printf("Problem with name \"%s\" not known.\n", inputword.c_str());
+            }
+            else
+            {
+               done = true;
+            }
+         }
       }
-    }
-    cout << "Enter problem size:\n";
-    cin >> N;
-  }
+      cout << "Enter problem size:\n";
+      cin >> N;
+   }
 
-  if (N <= 0) {
-    printf("Given problem size is invalid.\n");
-    return -3;
-  }
+   if( N <= 0 )
+   {
+      printf("Given problem size is invalid.\n");
+      return -3;
+   }
 
-  bool retval = tnlp->InitializeProblem(N);
-  if (!retval) {
-    printf("Cannot initialize problem.  Abort.\n");
-    return -4;
-  }
+   bool retval = tnlp->InitializeProblem(N);
+   if( !retval )
+   {
+      printf("Cannot initialize problem.  Abort.\n");
+      return -4;
+   }
 
-  // Create an instance of the IpoptApplication
-  // We are using the factory, since this allows us to compile this
-  // example with an Ipopt Windows DLL
-  SmartPtr<IpoptApplication> app = IpoptApplicationFactory();
-  ApplicationReturnStatus status;
-  status = app->Initialize();
-  if (status != Solve_Succeeded) {
-    printf("\n\n*** Error during initialization!\n");
-    return (int) status;
-  }
-  // Set option to use internal scaling
-  // DOES NOT WORK FOR VLUKL* PROBLEMS:
-  // app->Options()->SetStringValueIfUnset("nlp_scaling_method", "user-scaling");
+   // Create an instance of the IpoptApplication
+   // We are using the factory, since this allows us to compile this
+   // example with an Ipopt Windows DLL
+   SmartPtr<IpoptApplication> app = IpoptApplicationFactory();
+   ApplicationReturnStatus status;
+   status = app->Initialize();
+   if( status != Solve_Succeeded )
+   {
+      printf("\n\n*** Error during initialization!\n");
+      return (int) status;
+   }
+   // Set option to use internal scaling
+   // DOES NOT WORK FOR VLUKL* PROBLEMS:
+   // app->Options()->SetStringValueIfUnset("nlp_scaling_method", "user-scaling");
 
-  status = app->OptimizeTNLP(GetRawPtr(tnlp));
+   status = app->OptimizeTNLP(GetRawPtr(tnlp));
 
-  return (int) status;
+   return (int) status;
 }
