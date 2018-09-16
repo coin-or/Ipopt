@@ -72,8 +72,10 @@ ASTYLE_FILES = \
 	IpInterfacesRegOp.cppbak IpInterfacesRegOp.hppbak \
 	IpIpoptApplication.cppbak IpIpoptApplication.hppbak \
 	IpNLP.hppbak \
+	IpReturnCodes_inc.hbak IpReturnCodes.hbak IpReturnCodes.hppbak \
 	IpSolveStatistics.cppbak IpSolveStatistics.hppbak \
-	IpStdCInterface.cppbak \
+	IpStdCInterface.cppbak IpStdCInterface.hbak \
+	IpStdFInterface.cbak \
 	IpStdInterfaceTNLP.cppbak IpStdInterfaceTNLP.hppbak \
 	IpTNLP.hppbak \
 	IpTNLPAdapter.cppbak IpTNLPAdapter.hppbak \
@@ -86,16 +88,26 @@ CLEANFILES =
 
 DISTCLEANFILES = $(ASTYLE_FILES)
 
-SUFFIXES = .cppbak .hppbak
+SUFFIXES = .cppbak .hppbak .cbak .hbak
 
 astyle: $(ASTYLE_FILES)
 
+.h.hbak:
+	mv $< $@
+	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
+	touch $@
+
 .hpp.hppbak:
 	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
+	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
+	touch $@
+
+.c.cbak:
+	mv $< $@
+	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
 	touch $@
 
 .cpp.cppbak:
 	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
+	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
 	touch $@

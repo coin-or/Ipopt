@@ -137,8 +137,8 @@ ASTYLE_FILES = \
 	IpLimMemQuasiNewtonUpdater.cppbak IpLimMemQuasiNewtonUpdater.hppbak \
 	IpLineSearch.hppbak \
 	IpLoqoMuOracle.cppbak IpLoqoMuOracle.hppbak \
-	IpLowRankAugSystemSolver.cppbak IpLowRankAugSystemSolver.cppbak \
-	IpLowRankSSAugSystemSolver.cppbak IpLowRankSSAugSystemSolver.cppbak \
+	IpLowRankAugSystemSolver.cppbak IpLowRankAugSystemSolver.hppbak \
+	IpLowRankSSAugSystemSolver.cppbak IpLowRankSSAugSystemSolver.hppbak \
 	IpMonotoneMuUpdate.cppbak IpMonotoneMuUpdate.hppbak \
 	IpMuOracle.hppbak \
 	IpMuUpdate.hppbak \
@@ -151,6 +151,7 @@ ASTYLE_FILES = \
 	IpPDPerturbationHandler.cppbak IpPDPerturbationHandler.hppbak \
 	IpPDSearchDirCalc.cppbak IpPDSearchDirCalc.hppbak \
 	IpPDSystemSolver.hppbak \
+	IpPenaltyLSAcceptor.cppbak IpPenaltyLSAcceptor.hppbak \
 	IpProbingMuOracle.cppbak IpProbingMuOracle.hppbak \
 	IpQualityFunctionMuOracle.cppbak IpQualityFunctionMuOracle.hppbak \
 	IpRestoConvCheck.cppbak IpRestoConvCheck.hppbak \
@@ -179,10 +180,10 @@ astyle: $(ASTYLE_FILES)
 
 .hpp.hppbak:
 	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
+	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
 	touch $@
 
 .cpp.cppbak:
 	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
+	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
 	touch $@

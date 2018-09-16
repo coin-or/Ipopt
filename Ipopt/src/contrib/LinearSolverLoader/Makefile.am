@@ -33,4 +33,27 @@ includeipopt_HEADERS = HSLLoader.h PardisoLoader.h
 
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
 
-DISTCLEANFILES = 
+# Astyle stuff
+
+ASTYLE_FILES = \
+    LibraryHandler.cbak LibraryHandler.hbak \
+    HSLLoader.cbak HSLLoader.hbak
+
+ASTYLE = @ASTYLE@
+ASTYLEFLAGS = @ASTYLEFLAGS@
+
+DISTCLEANFILES = $(ASTYLE_FILES)
+
+SUFFIXES = .cppbak .hppbak
+
+astyle: $(ASTYLE_FILES)
+
+.h.hbak:
+	mv $< $@
+	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
+	touch $@
+
+.c.cbak:
+	mv $< $@
+	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
+	touch $@

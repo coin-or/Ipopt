@@ -96,6 +96,7 @@ ASTYLE_FILES = \
 	IpMa27TSolverInterface.cppbak IpMa27TSolverInterface.hppbak \
 	IpMa28TDependencyDetector.cppbak IpMa28TDependencyDetector.hppbak \
 	IpMa57TSolverInterface.cppbak IpMa57TSolverInterface.hppbak \
+	IpMa77SolverInterface.cppbak IpMa77SolverInterface.hppbak \
 	IpMa86SolverInterface.cppbak IpMa86SolverInterface.hppbak \
 	IpMa97SolverInterface.cppbak IpMa97SolverInterface.hppbak \
 	IpMc19TSymScalingMethod.cppbak IpMc19TSymScalingMethod.hppbak \
@@ -123,10 +124,10 @@ astyle: $(ASTYLE_FILES)
 
 .hpp.hppbak:
 	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
+	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
 	touch $@
 
 .cpp.cppbak:
 	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
+	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
 	touch $@

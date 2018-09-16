@@ -46,10 +46,10 @@ astyle: $(ASTYLE_FILES)
 
 .hpp.hppbak:
 	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
+	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
 	touch $@
 
 .cpp.cppbak:
 	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
+	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
 	touch $@
