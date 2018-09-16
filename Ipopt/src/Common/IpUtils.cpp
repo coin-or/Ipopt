@@ -115,23 +115,23 @@ namespace std
 #define DELTA_EPOCH_IN_SECS  11644473600.0
 inline double IpCoinGetTimeOfDay()
 {
-  FILETIME ft;
+   FILETIME ft;
 
-  GetSystemTimeAsFileTime(&ft);
-  double t = ft.dwHighDateTime * TWO_TO_THE_THIRTYTWO + ft.dwLowDateTime;
-  t = t/10000000.0 - DELTA_EPOCH_IN_SECS;
-  return t;
+   GetSystemTimeAsFileTime(&ft);
+   double t = ft.dwHighDateTime * TWO_TO_THE_THIRTYTWO + ft.dwLowDateTime;
+   t = t / 10000000.0 - DELTA_EPOCH_IN_SECS;
+   return t;
 }
 #else
 #include <sys/types.h>
 #include <sys/timeb.h>
 inline double IpCoinGetTimeOfDay()
 {
-  struct _timeb timebuffer;
+   struct _timeb timebuffer;
 #pragma warning(disable:4996)
-  _ftime( &timebuffer ); // C4996
+   _ftime( &timebuffer ); // C4996
 #pragma warning(default:4996)
-  return timebuffer.time + timebuffer.millitm/1000.0;
+   return timebuffer.time + timebuffer.millitm / 1000.0;
 }
 #endif
 
@@ -141,9 +141,9 @@ inline double IpCoinGetTimeOfDay()
 
 inline double IpCoinGetTimeOfDay()
 {
-  struct timeval tv;
-  gettimeofday(&tv, NULL);
-  return static_cast<double>(tv.tv_sec) + static_cast<double>(tv.tv_usec)/1000000.0;
+   struct timeval tv;
+   gettimeofday(&tv, NULL);
+   return static_cast<double>(tv.tv_sec) + static_cast<double>(tv.tv_usec) / 1000000.0;
 }
 
 #endif // _MSC_VER
@@ -153,27 +153,27 @@ inline double IpCoinGetTimeOfDay()
 namespace Ipopt
 {
 
-  bool IsFiniteNumber(Number val)
-  {
+bool IsFiniteNumber(Number val)
+{
 #ifdef COIN_C_FINITE
-    return (bool)COIN_C_FINITE(val);
+   return (bool)COIN_C_FINITE(val);
 #else
 
-    return true;
+   return true;
 #endif
 
-  }
+}
 
-  Number IpRandom01()
-  {
+Number IpRandom01()
+{
 #ifdef HAVE_DRAND48
-    return Number(drand48());
+   return Number(drand48());
 #else
 # ifdef HAVE_RAND
-    return Number(rand())/Number(RAND_MAX);
+   return Number(rand()) / Number(RAND_MAX);
 # else
 #  ifdef HAVE_STD__RAND
-    return Number(std::rand())/Number(RAND_MAX);
+   return Number(std::rand()) / Number(RAND_MAX);
 #  else
     /* this is a workaround for gcc 4.8.x, x >= 2, for which the test for rand() in our old configure does not work */
 #   if defined(__GNUC__) && __GNUC__ == 4 && __GNUC_MINOR__ == 8 && __GNUC_PATCHLEVEL__ >= 2
@@ -184,18 +184,18 @@ namespace Ipopt
 #  endif
 # endif
 #endif
-  }
+}
 
-  void IpResetRandom01()
-  {
+void IpResetRandom01()
+{
 #ifdef HAVE_DRAND48
-    srand48(1);
+   srand48(1);
 #else
 # ifdef HAVE_RAND
-    srand(1);
+   srand(1);
 # else
 #  ifdef HAVE_STD__RAND
-    std::srand(1);
+   std::srand(1);
 #  else
 #   if defined(__GNUC__) && __GNUC__ == 4 && __GNUC_MINOR__ == 8 && __GNUC_PATCHLEVEL__ >= 2
     srand(1);
@@ -205,109 +205,110 @@ namespace Ipopt
 #  endif
 # endif
 #endif
-  }
+}
 
 
-  static double Wallclock_firstCall_ = -1.;
+static double Wallclock_firstCall_ = -1.;
 
-  // The following function were taken from CoinTime.hpp in COIN/Coin
-  Number CpuTime()
-  {
-    double cpu_temp;
+// The following function were taken from CoinTime.hpp in COIN/Coin
+Number CpuTime()
+{
+   double cpu_temp;
 #if defined(_MSC_VER) || defined(__MSVCRT__)
 
-    unsigned int ticksnow;        /* clock_t is same as int */
+   unsigned int ticksnow;        /* clock_t is same as int */
 
-    ticksnow = (unsigned int)clock();
+   ticksnow = (unsigned int)clock();
 
-    cpu_temp = (double)((double)ticksnow/CLOCKS_PER_SEC);
+   cpu_temp = (double)((double)ticksnow / CLOCKS_PER_SEC);
 #else
 
-    struct rusage usage;
-    getrusage(RUSAGE_SELF,&usage);
-    cpu_temp = (double)usage.ru_utime.tv_sec;
-    cpu_temp += 1.0e-6*((double) usage.ru_utime.tv_usec);
+   struct rusage usage;
+   getrusage(RUSAGE_SELF, &usage);
+   cpu_temp = (double)usage.ru_utime.tv_sec;
+   cpu_temp += 1.0e-6 * ((double) usage.ru_utime.tv_usec);
 #endif
 
-    return cpu_temp;
-  }
+   return cpu_temp;
+}
 
-  Number SysTime()
-  {
-    double sys_temp;
+Number SysTime()
+{
+   double sys_temp;
 #if defined(_MSC_VER) || defined(__MSVCRT__)
 
-    // not yet implemented for Windows
-    sys_temp = 0.;
+   // not yet implemented for Windows
+   sys_temp = 0.;
 #else
 
-    struct rusage usage;
-    getrusage(RUSAGE_SELF,&usage);
-    sys_temp = (double)usage.ru_stime.tv_sec;
-    sys_temp += 1.0e-6*((double) usage.ru_stime.tv_usec);
+   struct rusage usage;
+   getrusage(RUSAGE_SELF, &usage);
+   sys_temp = (double)usage.ru_stime.tv_sec;
+   sys_temp += 1.0e-6 * ((double) usage.ru_stime.tv_usec);
 #endif
 
-    return sys_temp;
-  }
+   return sys_temp;
+}
 
-  Number WallclockTime()
-  {
-    double callTime = IpCoinGetTimeOfDay();
-    if (Wallclock_firstCall_ == -1.) {
+Number WallclockTime()
+{
+   double callTime = IpCoinGetTimeOfDay();
+   if (Wallclock_firstCall_ == -1.)
+   {
       Wallclock_firstCall_ = callTime;
-    }
-    return callTime - Wallclock_firstCall_;
-  }
+   }
+   return callTime - Wallclock_firstCall_;
+}
 
-  bool Compare_le(Number lhs, Number rhs, Number BasVal)
-  {
-    Number mach_eps = std::numeric_limits<Number>::epsilon();
-    return (lhs - rhs <= 10.*mach_eps*fabs(BasVal));
-  }
+bool Compare_le(Number lhs, Number rhs, Number BasVal)
+{
+   Number mach_eps = std::numeric_limits<Number>::epsilon();
+   return (lhs - rhs <= 10.*mach_eps * fabs(BasVal));
+}
 
-  int Snprintf(char* str, long size, const char* format, ...)
-  {
+int Snprintf(char* str, long size, const char* format, ...)
+{
 #if defined(HAVE_VSNPRINTF) && defined(__SUNPRO_CC)
-    std::va_list ap;
+   std::va_list ap;
 #else
-    va_list ap;
+   va_list ap;
 #endif
-    va_start(ap, format);
-    int ret;
+   va_start(ap, format);
+   int ret;
 #ifdef HAVE_VA_COPY
-    va_list apcopy;
-    va_copy(apcopy, ap);
+   va_list apcopy;
+   va_copy(apcopy, ap);
 # ifdef HAVE_VSNPRINTF
 #  ifdef __SUNPRO_CC
-    ret = std::vsnprintf(str, size, format, apcopy);
+   ret = std::vsnprintf(str, size, format, apcopy);
 #  else
-    ret = vsnprintf(str, size, format, apcopy);
+   ret = vsnprintf(str, size, format, apcopy);
 #  endif
 # else
 #  ifdef HAVE__VSNPRINTF
-    ret = _vsnprintf(str, size, format, apcopy);
+   ret = _vsnprintf(str, size, format, apcopy);
 #  else
-    ret = vsprintf(str, format, apcopy);
+   ret = vsprintf(str, format, apcopy);
 #  endif
-    va_end(apcopy);
+   va_end(apcopy);
 # endif
 #else
 # ifdef HAVE_VSNPRINTF
 #  ifdef __SUNPRO_CC
-    ret = std::vsnprintf(str, size, format, ap);
+   ret = std::vsnprintf(str, size, format, ap);
 #  else
-    ret = vsnprintf(str, size, format, ap);
+   ret = vsnprintf(str, size, format, ap);
 #  endif
 # else
 #  ifdef HAVE__VSNPRINTF
-    ret = _vsnprintf(str, size, format, ap);
+   ret = _vsnprintf(str, size, format, ap);
 #  else
-    ret = vsprintf(str, format, ap);
+   ret = vsprintf(str, format, ap);
 #  endif
 # endif
 #endif
-    va_end(ap);
-    return ret;
-  }
+   va_end(ap);
+   return ret;
+}
 
 } //namespace Ipopt

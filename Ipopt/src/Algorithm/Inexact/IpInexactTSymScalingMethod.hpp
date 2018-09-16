@@ -17,57 +17,57 @@
 namespace Ipopt
 {
 
-  /** Class for the method for computing scaling factors for symmetric
-   *  matrices in triplet format, specifically for the inexaxct algorithm.
-   *  The scaling is only considering the current slacks.
-   */
-  class InexactTSymScalingMethod: public TSymScalingMethod
-  {
-  public:
-    /** @name Constructor/Destructor */
-    //@{
-    InexactTSymScalingMethod()
-    {}
+/** Class for the method for computing scaling factors for symmetric
+ *  matrices in triplet format, specifically for the inexaxct algorithm.
+ *  The scaling is only considering the current slacks.
+ */
+class InexactTSymScalingMethod: public TSymScalingMethod
+{
+public:
+   /** @name Constructor/Destructor */
+   //@{
+   InexactTSymScalingMethod()
+   {}
 
-    virtual ~InexactTSymScalingMethod()
-    {}
-    //@}
+   virtual ~InexactTSymScalingMethod()
+   {}
+   //@}
 
-    /** overloaded from AlgorithmStrategyObject */
-    virtual bool InitializeImpl(const OptionsList& options,
-                                const std::string& prefix);
+   /** overloaded from AlgorithmStrategyObject */
+   virtual bool InitializeImpl(const OptionsList& options,
+                               const std::string& prefix);
 
-    /** Method for computing the symmetric scaling factors, given the
-     *  symmtric matrix in triplet (MA27) format. */
-    virtual bool ComputeSymTScalingFactors(Index n,
-                                           Index nnz,
-                                           const ipfint* airn,
-                                           const ipfint* ajcn,
-                                           const double* a,
-                                           double* scaling_factors);
-  private:
-    /**@name Default Compiler Generated Methods (Hidden to avoid
-     * implicit creation/calling).  These methods are not implemented
-     * and we do not want the compiler to implement them for us, so we
-     * declare them private and do not define them. This ensures that
-     * they will not be implicitly created/called. */
-    //@{
-    /** Copy Constructor */
-    InexactTSymScalingMethod(const InexactTSymScalingMethod&);
+   /** Method for computing the symmetric scaling factors, given the
+    *  symmtric matrix in triplet (MA27) format. */
+   virtual bool ComputeSymTScalingFactors(Index n,
+                                          Index nnz,
+                                          const ipfint* airn,
+                                          const ipfint* ajcn,
+                                          const double* a,
+                                          double* scaling_factors);
+private:
+   /**@name Default Compiler Generated Methods (Hidden to avoid
+    * implicit creation/calling).  These methods are not implemented
+    * and we do not want the compiler to implement them for us, so we
+    * declare them private and do not define them. This ensures that
+    * they will not be implicitly created/called. */
+   //@{
+   /** Copy Constructor */
+   InexactTSymScalingMethod(const InexactTSymScalingMethod&);
 
-    /** Overloaded Equals Operator */
-    void operator=(const InexactTSymScalingMethod&);
+   /** Overloaded Equals Operator */
+   void operator=(const InexactTSymScalingMethod&);
 
-    /** Method to easily access Inexact calculated quantities */
-    InexactCq& InexCq()
-    {
+   /** Method to easily access Inexact calculated quantities */
+   InexactCq& InexCq()
+   {
       InexactCq& inexact_cq =
-        static_cast<InexactCq&>(IpCq().AdditionalCq());
+         static_cast<InexactCq&>(IpCq().AdditionalCq());
       DBG_ASSERT(dynamic_cast<InexactCq*>(&IpCq().AdditionalCq()));
       return inexact_cq;
-    }
+   }
 
-  };
+};
 
 
 } // namespace Ipopt

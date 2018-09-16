@@ -14,41 +14,41 @@
 
 namespace Ipopt
 {
-  DECLARE_STD_EXCEPTION(LAPACK_NOT_INCLUDED);
+DECLARE_STD_EXCEPTION(LAPACK_NOT_INCLUDED);
 
-  /** Wrapper for LAPACK subroutine DPOTRS.  Solving a linear system
-   *  given a Cholesky factorization.  We assume that the Cholesky
-   *  factor is lower traiangular. */
-  void IpLapackDpotrs(Index ndim, Index nrhs, const Number *a, Index lda,
-                      Number *b, Index ldb);
+/** Wrapper for LAPACK subroutine DPOTRS.  Solving a linear system
+ *  given a Cholesky factorization.  We assume that the Cholesky
+ *  factor is lower traiangular. */
+void IpLapackDpotrs(Index ndim, Index nrhs, const Number* a, Index lda,
+                    Number* b, Index ldb);
 
-  /** Wrapper for LAPACK subroutine DPOTRF.  Compute Cholesky
-   *  factorization (lower triangular factor).  info is the return
-   *  value from the LAPACK routine. */
-  void IpLapackDpotrf(Index ndim, Number *a, Index lda, Index& info);
+/** Wrapper for LAPACK subroutine DPOTRF.  Compute Cholesky
+ *  factorization (lower triangular factor).  info is the return
+ *  value from the LAPACK routine. */
+void IpLapackDpotrf(Index ndim, Number* a, Index lda, Index& info);
 
-  /** Wrapper for LAPACK subroutine DSYEV.  Compute the Eigenvalue
-   *  decomposition for a given matrix.  If compute_eigenvectors is
-   *  true, a will contain the eigenvectors in its columns on
-   *  return.  */
-  void IpLapackDsyev(bool compute_eigenvectors, Index ndim, Number *a,
-                     Index lda, Number *w, Index& info);
+/** Wrapper for LAPACK subroutine DSYEV.  Compute the Eigenvalue
+ *  decomposition for a given matrix.  If compute_eigenvectors is
+ *  true, a will contain the eigenvectors in its columns on
+ *  return.  */
+void IpLapackDsyev(bool compute_eigenvectors, Index ndim, Number* a,
+                   Index lda, Number* w, Index& info);
 
-  /** Wrapper for LAPACK subroutine DGETRF.  Compute LU factorization.
-   *  info is the return value from the LAPACK routine. */
-  void IpLapackDgetrf(Index ndim, Number *a, Index* pivot, Index lda,
-                      Index& info);
+/** Wrapper for LAPACK subroutine DGETRF.  Compute LU factorization.
+ *  info is the return value from the LAPACK routine. */
+void IpLapackDgetrf(Index ndim, Number* a, Index* pivot, Index lda,
+                    Index& info);
 
-  /** Wrapper for LAPACK subroutine DGETRS.  Solving a linear system
-   *  given a LU factorization. */
-  void IpLapackDgetrs(Index ndim, Index nrhs, const Number *a, Index lda,
-                      Index* ipiv, Number *b, Index ldb);
+/** Wrapper for LAPACK subroutine DGETRS.  Solving a linear system
+ *  given a LU factorization. */
+void IpLapackDgetrs(Index ndim, Index nrhs, const Number* a, Index lda,
+                    Index* ipiv, Number* b, Index ldb);
 
-  /** Wrapper for LAPACK subroutine DPPSV.  Solves a symmetric positive
-   *  definite linear system in packed storage format (upper triangular).
-   *  info is the return value from the LAPACK routine. */
-  void IpLapackDppsv(Index ndim, Index nrhs, const Number *a,
-                     Number *b, Index ldb, Index& info);
+/** Wrapper for LAPACK subroutine DPPSV.  Solves a symmetric positive
+ *  definite linear system in packed storage format (upper triangular).
+ *  info is the return value from the LAPACK routine. */
+void IpLapackDppsv(Index ndim, Index nrhs, const Number* a,
+                   Number* b, Index ldb, Index& info);
 
 } // namespace Ipopt
 

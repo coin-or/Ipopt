@@ -14,45 +14,47 @@
 namespace Ipopt
 {
 #if COIN_IPOPT_VERBOSITY > 0
-  static const Index dbg_verbosity = 0;
+static const Index dbg_verbosity = 0;
 #endif
 
 
-  bool InexactTSymScalingMethod::InitializeImpl(const OptionsList& options,
+bool InexactTSymScalingMethod::InitializeImpl(const OptionsList& options,
       const std::string& prefix)
-  {
-    return true;
-  }
+{
+   return true;
+}
 
-  bool InexactTSymScalingMethod::ComputeSymTScalingFactors(Index n,
+bool InexactTSymScalingMethod::ComputeSymTScalingFactors(Index n,
       Index nnz,
       const ipfint* airn,
       const ipfint* ajcn,
       const double* a,
       double* scaling_factors)
-  {
-    DBG_START_METH("InexactTSymScalingMethod::ComputeTSymScalingFactors",
-                   dbg_verbosity);
+{
+   DBG_START_METH("InexactTSymScalingMethod::ComputeTSymScalingFactors",
+                  dbg_verbosity);
 
-    const Index nx = IpData().curr()->x()->Dim();
-    const Index ns = IpData().curr()->s()->Dim();
-    const Index nc = IpData().curr()->y_c()->Dim();
-    const Index nd = IpData().curr()->y_d()->Dim();
+   const Index nx = IpData().curr()->x()->Dim();
+   const Index ns = IpData().curr()->s()->Dim();
+   const Index nc = IpData().curr()->y_c()->Dim();
+   const Index nd = IpData().curr()->y_d()->Dim();
 
-    for (Index i=0; i<nx; i++) {
+   for (Index i = 0; i < nx; i++)
+   {
       scaling_factors[i] = 1.;
-    }
-    scaling_factors += nx;
+   }
+   scaling_factors += nx;
 
-    SmartPtr<const Vector> scaling_vec = InexCq().curr_scaling_slacks();
-    TripletHelper::FillValuesFromVector(ns, *scaling_vec, scaling_factors);
-    scaling_factors += ns;
+   SmartPtr<const Vector> scaling_vec = InexCq().curr_scaling_slacks();
+   TripletHelper::FillValuesFromVector(ns, *scaling_vec, scaling_factors);
+   scaling_factors += ns;
 
-    for (Index i=0; i<nc+nd; i++) {
+   for (Index i = 0; i < nc + nd; i++)
+   {
       scaling_factors[i] = 1.;
-    }
+   }
 
-    return true;
-  }
+   return true;
+}
 
 } // namespace Ipopt

@@ -15,14 +15,15 @@
 namespace Ipopt
 {
 
-  /** This base class is for the termination tests for the iterative
-   *  linear solver in the inexact version of Ipopt.
-   */
-  class IterativeSolverTerminationTester: public AlgorithmStrategyObject
-  {
-  public:
-    /** Enum to report result of termination test */
-    enum ETerminationTest {
+/** This base class is for the termination tests for the iterative
+ *  linear solver in the inexact version of Ipopt.
+ */
+class IterativeSolverTerminationTester: public AlgorithmStrategyObject
+{
+public:
+   /** Enum to report result of termination test */
+   enum ETerminationTest
+   {
       /** The current solution is not yet good enough */
       CONTINUE,
       /** Termination Test 1 is satisfied */
@@ -35,94 +36,94 @@ namespace Ipopt
       MODIFY_HESSIAN,
       /** Some other termination criterion satisfied */
       OTHER_SATISFIED
-    };
+   };
 
-    /** @name /Destructor */
-    //@{
-    /** Default constructor
-     */
-    IterativeSolverTerminationTester()
-    {}
+   /** @name /Destructor */
+   //@{
+   /** Default constructor
+    */
+   IterativeSolverTerminationTester()
+   {}
 
-    /** Default destructor */
-    virtual ~IterativeSolverTerminationTester()
-    {}
-    //@}
+   /** Default destructor */
+   virtual ~IterativeSolverTerminationTester()
+   {}
+   //@}
 
-    /* overloaded from AlgorithmStrategyObject */
-    virtual bool InitializeImpl(const OptionsList& options,
-                                const std::string& prefix) = 0;
+   /* overloaded from AlgorithmStrategyObject */
+   virtual bool InitializeImpl(const OptionsList& options,
+                               const std::string& prefix) = 0;
 
 
-    /** Method for initializing for the next iterative solve.  This
-     *  must be call before the test methods are called. */
-    virtual bool InitializeSolve() = 0;
+   /** Method for initializing for the next iterative solve.  This
+    *  must be call before the test methods are called. */
+   virtual bool InitializeSolve() = 0;
 
-    /** This method checks if the current soltion of the iterative
-     *  linear solver is good enough (by returning the corresponding
-     *  satisfied termination test), or if the Hessian should be
-     *  modified.  The input is the dimension of the augmented system,
-     *  the current solution vector of the augmented system, the
-     *  current residual vector. */
-    virtual ETerminationTest TestTermination(Index ndim, const Number* sol,
-        const Number* resid, Index iter,
-        Number norm2_rhs) = 0;
+   /** This method checks if the current soltion of the iterative
+    *  linear solver is good enough (by returning the corresponding
+    *  satisfied termination test), or if the Hessian should be
+    *  modified.  The input is the dimension of the augmented system,
+    *  the current solution vector of the augmented system, the
+    *  current residual vector. */
+   virtual ETerminationTest TestTermination(Index ndim, const Number* sol,
+         const Number* resid, Index iter,
+         Number norm2_rhs) = 0;
 
-    /** This method can be called after the Solve is over and we can
-     *  delete anything that has been allocated to free memory. */
-    virtual void Clear() = 0;
+   /** This method can be called after the Solve is over and we can
+    *  delete anything that has been allocated to free memory. */
+   virtual void Clear() = 0;
 
-    /** An easy way to get the journalist if accessed from the outside */
-    const Journalist& GetJnlst() const
-    {
+   /** An easy way to get the journalist if accessed from the outside */
+   const Journalist& GetJnlst() const
+   {
       return Jnlst();
-    }
+   }
 
-    /** Return the number of iterative solver iteration from the most
-     *  recent solve */
-    virtual Index GetSolverIterations() const = 0;
+   /** Return the number of iterative solver iteration from the most
+    *  recent solve */
+   virtual Index GetSolverIterations() const = 0;
 
-  protected:
-    /** Method for copying a long augmented system array into Vectors
-     *  in Ipopt notation */
-    void GetVectors(Index ndim, const Number* array,
-                    SmartPtr<const Vector>& comp_x,
-                    SmartPtr<const Vector>& comp_s,
-                    SmartPtr<const Vector>& comp_c,
-                    SmartPtr<const Vector>& comp_d);
+protected:
+   /** Method for copying a long augmented system array into Vectors
+    *  in Ipopt notation */
+   void GetVectors(Index ndim, const Number* array,
+                   SmartPtr<const Vector>& comp_x,
+                   SmartPtr<const Vector>& comp_s,
+                   SmartPtr<const Vector>& comp_c,
+                   SmartPtr<const Vector>& comp_d);
 
-    /** Method to easily access Inexact data */
-    InexactData& InexData()
-    {
+   /** Method to easily access Inexact data */
+   InexactData& InexData()
+   {
       InexactData& inexact_data =
-        static_cast<InexactData&>(IpData().AdditionalData());
+         static_cast<InexactData&>(IpData().AdditionalData());
       DBG_ASSERT(dynamic_cast<InexactData*>(&IpData().AdditionalData()));
       return inexact_data;
-    }
+   }
 
-    /** Method to easily access Inexact calculated quantities */
-    InexactCq& InexCq()
-    {
+   /** Method to easily access Inexact calculated quantities */
+   InexactCq& InexCq()
+   {
       InexactCq& inexact_cq =
-        static_cast<InexactCq&>(IpCq().AdditionalCq());
+         static_cast<InexactCq&>(IpCq().AdditionalCq());
       DBG_ASSERT(dynamic_cast<InexactCq*>(&IpCq().AdditionalCq()));
       return inexact_cq;
-    }
+   }
 
-  private:
+private:
 
-    /**@name Default Compiler Generated Methods
-     * (Hidden to avoid implicit creation/calling).
-     * These methods are not implemented and 
-     * we do not want the compiler to implement
-     * them for us, so we declare them private
-     * and do not define them. This ensures that
-     * they will not be implicitly created/called. */
-    //@{
-    /** Overloaded Equals Operator */
-    IterativeSolverTerminationTester& operator=(const IterativeSolverTerminationTester&);
-    //@}
-  };
+   /**@name Default Compiler Generated Methods
+    * (Hidden to avoid implicit creation/calling).
+    * These methods are not implemented and
+    * we do not want the compiler to implement
+    * them for us, so we declare them private
+    * and do not define them. This ensures that
+    * they will not be implicitly created/called. */
+   //@{
+   /** Overloaded Equals Operator */
+   IterativeSolverTerminationTester& operator=(const IterativeSolverTerminationTester&);
+   //@}
+};
 
 } // namespace Ipopt
 

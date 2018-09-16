@@ -15,48 +15,48 @@
 namespace Ipopt
 {
 
-  DECLARE_STD_EXCEPTION(ERROR_IN_LINEAR_SCALING_METHOD);
+DECLARE_STD_EXCEPTION(ERROR_IN_LINEAR_SCALING_METHOD);
 
-  /** Base class for the method for computing scaling factors for symmetric
-   *  matrices in triplet format.
-   */
-  class TSymScalingMethod: public AlgorithmStrategyObject
-  {
-  public:
-    /** @name Constructor/Destructor */
-    //@{
-    TSymScalingMethod()
-    {}
+/** Base class for the method for computing scaling factors for symmetric
+ *  matrices in triplet format.
+ */
+class TSymScalingMethod: public AlgorithmStrategyObject
+{
+public:
+   /** @name Constructor/Destructor */
+   //@{
+   TSymScalingMethod()
+   {}
 
-    ~TSymScalingMethod()
-    {}
-    //@}
+   ~TSymScalingMethod()
+   {}
+   //@}
 
-    /** overloaded from AlgorithmStrategyObject */
-    virtual bool InitializeImpl(const OptionsList& options,
-                                const std::string& prefix) = 0;
+   /** overloaded from AlgorithmStrategyObject */
+   virtual bool InitializeImpl(const OptionsList& options,
+                               const std::string& prefix) = 0;
 
-    /** Method for computing the symmetric scaling factors, given the
-     *  symmtric matrix in triplet (MA27) format. */
-    virtual bool ComputeSymTScalingFactors(Index n,
-                                           Index nnz,
-                                           const Index* airn,
-                                           const Index* ajcn,
-                                           const double* a,
-                                           double* scaling_factors) = 0;
-  private:
-    /**@name Default Compiler Generated Methods (Hidden to avoid
-     * implicit creation/calling).  These methods are not implemented
-     * and we do not want the compiler to implement them for us, so we
-     * declare them private and do not define them. This ensures that
-     * they will not be implicitly created/called. */
-    //@{
-    /** Copy Constructor */
-    TSymScalingMethod(const TSymScalingMethod&);
+   /** Method for computing the symmetric scaling factors, given the
+    *  symmtric matrix in triplet (MA27) format. */
+   virtual bool ComputeSymTScalingFactors(Index n,
+                                          Index nnz,
+                                          const Index* airn,
+                                          const Index* ajcn,
+                                          const double* a,
+                                          double* scaling_factors) = 0;
+private:
+   /**@name Default Compiler Generated Methods (Hidden to avoid
+    * implicit creation/calling).  These methods are not implemented
+    * and we do not want the compiler to implement them for us, so we
+    * declare them private and do not define them. This ensures that
+    * they will not be implicitly created/called. */
+   //@{
+   /** Copy Constructor */
+   TSymScalingMethod(const TSymScalingMethod&);
 
-    /** Overloaded Equals Operator */
-    void operator=(const TSymScalingMethod&);
-  };
+   /** Overloaded Equals Operator */
+   void operator=(const TSymScalingMethod&);
+};
 
 } // namespace Ipopt
 

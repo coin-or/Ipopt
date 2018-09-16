@@ -15,12 +15,12 @@
 namespace Ipopt
 {
 
-  void RegisterOptions_CGPenalty(const SmartPtr<RegisteredOptions>& roptions)
-  {
-    roptions->SetRegisteringCategory("Undocumented");
-    CGSearchDirCalculator::RegisterOptions(roptions);
-    CGPenaltyLSAcceptor::RegisterOptions(roptions);
-    CGPenaltyCq::RegisterOptions(roptions);
-  }
+void RegisterOptions_CGPenalty(const SmartPtr<RegisteredOptions>& roptions)
+{
+   roptions->SetRegisteringCategory("Undocumented");
+   CGSearchDirCalculator::RegisterOptions(roptions);
+   CGPenaltyLSAcceptor::RegisterOptions(roptions);
+   CGPenaltyCq::RegisterOptions(roptions);
+}
 
 } // namespace Ipopt
