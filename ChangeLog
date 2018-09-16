@@ -2,6 +2,10 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
+2018-09-16 releases/3.12.11
+        - fill Mumps struct with zeros when allocating in Mumps interface [r2724]
+        - minor fix in build-system of ThirdParty/ASL
+
 2018-06-02 releases/3.12.10
         - fixed setting for parallel solve when using MKL Pardiso
           (by t1393988511) [r2711]: parallel solve was disabled (which
