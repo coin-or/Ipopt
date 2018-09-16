@@ -2,11 +2,8 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Andreas Waechter              IBM    2009-09-18
 //               based on IpWsmpSolverInterface.hpp (rev 1483)
-
 
 #ifndef __IPITERATIVEWSMPSOLVERINTERFACE_HPP__
 #define __IPITERATIVEWSMPSOLVERINTERFACE_HPP__
@@ -17,8 +14,7 @@ namespace Ipopt
 {
 
 /** Interface to the linear solver WISMP, derived from
- *  SparseSymLinearSolverInterface.  For details, see description of
- *  SparseSymLinearSolverInterface base class.
+ *  SparseSymLinearSolverInterface.
  */
 class IterativeWsmpSolverInterface: public SparseSymLinearSolverInterface
 {
@@ -32,63 +28,53 @@ public:
    virtual ~IterativeWsmpSolverInterface();
    //@}
 
-   /** overloaded from AlgorithmStrategyObject */
-   bool InitializeImpl(const OptionsList& options,
-                       const std::string& prefix);
-
+   bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
    /** @name Methods for requesting solution of the linear system. */
    //@{
-   /** Method for initializing internal stuctures. */
-   virtual ESymSolverStatus InitializeStructure(Index dim, Index nonzeros,
-         const Index* ia,
-         const Index* ja);
+   virtual ESymSolverStatus InitializeStructure(
+      Index        dim,
+      Index        nonzeros,
+      const Index* ia,
+      const Index* ja
+      );
 
-   /** Method returing an internal array into which the nonzero
-    *  elements are to be stored. */
    virtual double* GetValuesArrayPtr();
 
-   /** Solve operation for multiple right hand sides. */
-   virtual ESymSolverStatus MultiSolve(bool new_matrix,
-                                       const Index* ia,
-                                       const Index* ja,
-                                       Index nrhs,
-                                       double* rhs_vals,
-                                       bool check_NegEVals,
-                                       Index numberOfNegEVals);
+   virtual ESymSolverStatus MultiSolve(
+      bool         new_matrix,
+      const Index* ia,
+      const Index* ja,
+      Index        nrhs,
+      double*      rhs_vals,
+      bool         check_NegEVals,
+      Index        numberOfNegEVals
+      );
 
-   /** Number of negative eigenvalues detected during last
-    *  factorization.
-    */
    virtual Index NumberOfNegEVals() const;
    //@}
 
    //* @name Options of Linear solver */
    //@{
-   /** Request to increase quality of solution for next solve.
-    */
    virtual bool IncreaseQuality();
 
-   /** Query whether inertia is computed by linear solver.
-    *  Returns true, if linear solver provides inertia.
-    */
    virtual bool ProvidesInertia() const
    {
       return false;
    }
-   /** Query of requested matrix type that the linear solver
-    *  understands.
-    */
+
    EMatrixFormat MatrixFormat() const
    {
       return CSR_Format_1_Offset;
    }
    //@}
 
-   /** Methods for IpoptType */
-   //@{
-   static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
-   //@}
+   static void RegisterOptions(
+      SmartPtr<RegisteredOptions> roptions
+      );
 
 private:
    /**@name Default Compiler Generated Methods
@@ -97,13 +83,18 @@ private:
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Copy Constructor */
-   IterativeWsmpSolverInterface(const IterativeWsmpSolverInterface&);
+   IterativeWsmpSolverInterface(
+      const IterativeWsmpSolverInterface&
+      );
 
-   /** Overloaded Equals Operator */
-   void operator=(const IterativeWsmpSolverInterface&);
+   /** Default Assignment Operator */
+   void operator=(
+      const IterativeWsmpSolverInterface&
+      );
    //@}
 
    /** @name Information about the matrix */
@@ -119,7 +110,7 @@ private:
    //@{
    /** Option that controls the matching strategy. */
    Index wsmp_num_threads_;
-   /** Pivol tolerance */
+   /** Pivot tolerance */
    Number wsmp_pivtol_;
    /** Maximal pivot tolerance */
    Number wsmp_pivtolmax_;
@@ -145,13 +136,16 @@ private:
    /** @name Initialization flags */
    //@{
    /** Flag indicating if internal data is initialized.
-    *  For initialization, this object needs to have seen a matrix */
+    *  For initialization, this object needs to have seen a matrix
+    */
    bool initialized_;
    /** Flag indicating if the matrix has to be refactorized because
-    *  the pivot tolerance has been changed. */
+    *  the pivot tolerance has been changed.
+    */
    bool pivtol_changed_;
    /** Flag indicating whether symbolic factorization and order has
-    *  already been performed. */
+    *  already been performed.
+    */
    bool have_symbolic_factorization_;
    //@}
 
@@ -167,24 +161,32 @@ private:
    //@{
    /** Call Wsmp to do the analysis phase.
     */
-   ESymSolverStatus SymbolicFactorization(const Index* ia, const Index* ja);
+   ESymSolverStatus SymbolicFactorization(
+      const Index* ia,
+      const Index* ja
+      );
 
    /** Call Wsmp to really do the analysis phase. */
-   ESymSolverStatus InternalSymFact(const Index* ia, const Index* ja);
+   ESymSolverStatus InternalSymFact(
+      const Index* ia,
+      const Index* ja
+      );
 
-   /** Call Wsmp to factorize the Matrix.
-    */
-   ESymSolverStatus Factorization(const Index* ia,
-                                  const Index* ja,
-                                  bool check_NegEVals,
-                                  Index numberOfNegEVals);
+   /** Call Wsmp to factorize the Matrix. */
+   ESymSolverStatus Factorization(
+      const Index* ia,
+      const Index* ja,
+      bool         check_NegEVals,
+      Index        numberOfNegEVals
+      );
 
-   /** Call Wsmpx to do the Solve.
-    */
-   ESymSolverStatus Solve(const Index* ia,
-                          const Index* ja,
-                          Index nrhs,
-                          double* rhs_vals);
+   /** Call Wsmpx to do the Solve. */
+   ESymSolverStatus Solve(
+      const Index* ia,
+      const Index* ja,
+      Index        nrhs,
+      double*      rhs_vals
+      );
    //@}
 };
 

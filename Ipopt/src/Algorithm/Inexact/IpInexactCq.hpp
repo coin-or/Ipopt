@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Andreas Waechter           IBM    2008-08-31
 //               derived from IpIpoptCalculatedQuantities.hpp
 
@@ -19,37 +17,45 @@ namespace Ipopt
 /** Class for all Chen-Goldfarb penalty method specific calculated
  *  quantities.
  */
-class InexactCq : public IpoptAdditionalCq
+class InexactCq: public IpoptAdditionalCq
 {
 public:
 
    /**@name Constructors/Destructors */
    //@{
    /** Constructor */
-   InexactCq(IpoptNLP* ip_nlp,
-             IpoptData* ip_data,
-             IpoptCalculatedQuantities* ip_cq);
+   InexactCq(
+      IpoptNLP*                  ip_nlp,
+      IpoptData*                 ip_data,
+      IpoptCalculatedQuantities* ip_cq
+      );
 
-   /** Default destructor */
+   /** Destructor */
    virtual ~InexactCq();
    //@}
 
    /** This method must be called to initialize the global
-    *  algorithmic parameters.  The parameters are taken from the
-    *  OptionsList object. */
-   bool Initialize(const Journalist& jnlst,
-                   const OptionsList& options,
-                   const std::string& prefix);
+    *  algorithmic parameters.
+    *
+    *  The parameters are taken from the OptionsList object.
+    */
+   bool Initialize(
+      const Journalist&  jnlst,
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
-   /** Methods for IpoptType */
-   //@{
-   static void RegisterOptions(const SmartPtr<RegisteredOptions>& roptions);
-   //@}
+   static void RegisterOptions(
+      const SmartPtr<RegisteredOptions>& roptions
+      );
 
-   /** Gradient of infeasibility w.r.t. x.  Jacobian of equality
+   /** Gradient of infeasibility w.r.t. x.
+    *
+    *  Jacobian of equality
     *  constraints transpose times the equality constraints plus
     *  Jacobian of the inequality constraints transpose times the
-    *  inequality constraints (including slacks). */
+    *  inequality constraints (including slacks).
+    */
    SmartPtr<const Vector> curr_jac_cdT_times_curr_cdminuss();
 
    /** Vector of all inequality slacks for doing the slack-based scaling */
@@ -65,59 +71,83 @@ public:
    Number curr_scaled_A_norm2();
 
    /** Compute the 2-norm of a slack-scaled vector with x and s
-    *  component */
-   Number slack_scaled_norm(const Vector& x, const Vector& s);
+    *  component
+    */
+   Number slack_scaled_norm(
+      const Vector& x,
+      const Vector& s
+      );
 
    /** Compute x component of the W*vec product for the current
-    *  Hessian and a vector */
-   SmartPtr<const Vector> curr_W_times_vec_x(const Vector& vec_x);
+    *  Hessian and a vector.
+    */
+   SmartPtr<const Vector> curr_W_times_vec_x(
+      const Vector& vec_x
+      );
 
    /** Compute s component of the W*vec product for the current
-    *  Hessian and a vector */
-   SmartPtr<const Vector> curr_W_times_vec_s(const Vector& vec_s);
+    *  Hessian and a vector.
+    */
+   SmartPtr<const Vector> curr_W_times_vec_s(
+      const Vector& vec_s
+      );
 
    /** Compute x component of the W*u product for the current values.
-    *  u here is the tangential step. */
+    *  u here is the tangential step.
+    */
    SmartPtr<const Vector> curr_Wu_x();
 
    /** Compute s component of the W*u product for the current values.
-    *  u here is the tangential step. */
+    *  u here is the tangential step.
+    */
    SmartPtr<const Vector> curr_Wu_s();
 
-   /** Compute the u^T*W*u product for the current values.  u here is the
-   tangential step. */
+   /** Compute the u^T*W*u product for the current values.
+    *
+    * u here is the tangential step.
+    */
    Number curr_uWu();
 
    /** Compute the c-component of the product of the current
-    *  constraint Jacobian with the current normal step */
+    *  constraint Jacobian with the current normal step.
+    *
+    */
    SmartPtr<const Vector> curr_jac_times_normal_c();
 
    /** Compute the d-component of the product of the current
-    *  constraint Jacobian with the current normal step */
+    *  constraint Jacobian with the current normal step.
+    *
+    */
    SmartPtr<const Vector> curr_jac_times_normal_d();
 
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Default Constructor */
    InexactCq();
 
    /** Copy Constructor */
-   InexactCq(const InexactCq&);
+   InexactCq(
+      const InexactCq&);
 
-   /** Overloaded Equals Operator */
-   void operator=(const InexactCq&);
+   /** Overloaded Assignment Operator */
+   void operator=(
+      const InexactCq&);
    //@}
 
-   /** @name Pointers for easy access to data and NLP information. To
-    *  avoid circular references of Smart Pointers, we use a regular
-    *  pointer here. */
+   /** @name Pointers for easy access to data and NLP information.
+    *
+    *  To avoid circular references of Smart Pointers, we use a regular
+    *  pointer here.
+    */
    //@{
    IpoptNLP* ip_nlp_;
    IpoptData* ip_data_;
@@ -127,8 +157,7 @@ private:
    /** Method to easily access Inexact data */
    InexactData& InexData()
    {
-      InexactData& inexact_data =
-         static_cast<InexactData&>(ip_data_->AdditionalData());
+      InexactData& inexact_data = static_cast<InexactData&>(ip_data_->AdditionalData());
       DBG_ASSERT(dynamic_cast<InexactData*>(&ip_data_->AdditionalData()));
       return inexact_data;
    }

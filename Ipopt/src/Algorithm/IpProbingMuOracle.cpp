@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpProbingMuOracle.hpp"
@@ -34,42 +32,49 @@ namespace Ipopt
 static const Index dbg_verbosity = 0;
 #endif
 
-ProbingMuOracle::ProbingMuOracle(const SmartPtr<PDSystemSolver>& pd_solver)
-   :
-   MuOracle(),
-   pd_solver_(pd_solver)
+ProbingMuOracle::ProbingMuOracle(
+   const SmartPtr<PDSystemSolver>& pd_solver
+   )
+   : MuOracle(),
+     pd_solver_(pd_solver)
 {
    DBG_ASSERT(IsValid(pd_solver_));
 }
 
 ProbingMuOracle::~ProbingMuOracle()
-{}
+{ }
 
-void ProbingMuOracle::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+void ProbingMuOracle::RegisterOptions(
+   SmartPtr<RegisteredOptions> roptions
+   )
 {
    // None to register...
 }
 
-bool ProbingMuOracle::InitializeImpl(const OptionsList& options,
-                                     const std::string& prefix)
+bool ProbingMuOracle::InitializeImpl(
+   const OptionsList& options,
+   const std::string& prefix
+   )
 {
    options.GetNumericValue("sigma_max", sigma_max_, prefix);
 
    return true;
 }
 
-bool ProbingMuOracle::CalculateMu(Number mu_min, Number mu_max,
-                                  Number& new_mu)
+bool ProbingMuOracle::CalculateMu(
+   Number  mu_min,
+   Number  mu_max,
+   Number& new_mu
+   )
 {
    DBG_START_METH("ProbingMuOracle::CalculateMu",
-                  dbg_verbosity);
+      dbg_verbosity);
 
    /////////////////////////////////////
    // Compute the affine scaling step //
    /////////////////////////////////////
 
-   Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
-                  "Solving the Primal Dual System for the affine step\n");
+   Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "Solving the Primal Dual System for the affine step\n");
    // First get the right hand side
    SmartPtr<IteratesVector> rhs = IpData().curr()->MakeNewContainer();
 
@@ -88,15 +93,10 @@ bool ProbingMuOracle::CalculateMu(Number mu_min, Number mu_max,
    // Now solve the primal-dual system to get the affine step.  We
    // allow a somewhat inexact solution here
    bool allow_inexact = true;
-   bool retval = pd_solver_->Solve(-1.0, 0.0,
-                                   *rhs,
-                                   *step,
-                                   allow_inexact
-                                  );
-   if (!retval)
+   bool retval = pd_solver_->Solve(-1.0, 0.0, *rhs, *step, allow_inexact);
+   if( !retval )
    {
-      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
-                     "The linear system could not be solved for the affine step!\n");
+      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "The linear system could not be solved for the affine step!\n");
       return false;
    }
 
@@ -107,35 +107,23 @@ bool ProbingMuOracle::CalculateMu(Number mu_min, Number mu_max,
    /////////////////////////////////////////////////////////////
 
    // First compute the fraction-to-the-boundary step sizes
-   Number alpha_primal_aff = IpCq().primal_frac_to_the_bound(1.0,
-                             *step->x(),
-                             *step->s());
+   Number alpha_primal_aff = IpCq().primal_frac_to_the_bound(1.0, *step->x(), *step->s());
 
-   Number alpha_dual_aff = IpCq().dual_frac_to_the_bound(1.0,
-                           *step->z_L(),
-                           *step->z_U(),
-                           *step->v_L(),
-                           *step->v_U());
+   Number alpha_dual_aff = IpCq().dual_frac_to_the_bound(1.0, *step->z_L(), *step->z_U(), *step->v_L(), *step->v_U());
 
-   Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
-                  "  The affine maximal step sizes are\n"
-                  "   alpha_primal_aff = %23.16e\n"
-                  "   alpha_dual_aff = %23.16e\n",
-                  alpha_primal_aff,
-                  alpha_dual_aff);
+   Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "  The affine maximal step sizes are\n"
+      "   alpha_primal_aff = %23.16e\n"
+      "   alpha_dual_aff = %23.16e\n", alpha_primal_aff, alpha_dual_aff);
 
    // now compute the average complementarity at the affine step
    // ToDo shoot for mu_min instead of 0?
    Number mu_aff = CalculateAffineMu(alpha_primal_aff, alpha_dual_aff, *step);
-   Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
-                  "  The average complementariy at the affine step is %23.16e\n",
-                  mu_aff);
+   Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "  The average complementariy at the affine step is %23.16e\n", mu_aff);
 
    // get the current average complementarity
    Number mu_curr = IpCq().curr_avrg_compl();
-   Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
-                  "  The average complementariy at the current point is %23.16e\n",
-                  mu_curr);
+   Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "  The average complementariy at the current point is %23.16e\n",
+      mu_curr);
    DBG_ASSERT(mu_curr > 0.);
 
    // Apply Mehrotra's rule
@@ -160,11 +148,11 @@ bool ProbingMuOracle::CalculateMu(Number mu_min, Number mu_max,
    return true;
 }
 
-Number ProbingMuOracle::CalculateAffineMu
-(
-   Number alpha_primal,
-   Number alpha_dual,
-   const IteratesVector& step)
+Number ProbingMuOracle::CalculateAffineMu(
+   Number                alpha_primal,
+   Number                alpha_dual,
+   const IteratesVector& step
+   )
 {
    // Get the current values of the slack variables and bound multipliers
    SmartPtr<const Vector> slack_x_L = IpCq().curr_slack_x_L();
@@ -187,7 +175,7 @@ Number ProbingMuOracle::CalculateAffineMu
    // values and their dot products.
 
    // slack_x_L
-   if (slack_x_L->Dim() > 0)
+   if( slack_x_L->Dim() > 0 )
    {
       ncomp += slack_x_L->Dim();
 
@@ -204,7 +192,7 @@ Number ProbingMuOracle::CalculateAffineMu
    }
 
    // slack_x_U
-   if (slack_x_U->Dim() > 0)
+   if( slack_x_U->Dim() > 0 )
    {
       ncomp += slack_x_U->Dim();
 
@@ -221,7 +209,7 @@ Number ProbingMuOracle::CalculateAffineMu
    }
 
    // slack_s_L
-   if (slack_s_L->Dim() > 0)
+   if( slack_s_L->Dim() > 0 )
    {
       ncomp += slack_s_L->Dim();
 
@@ -238,7 +226,7 @@ Number ProbingMuOracle::CalculateAffineMu
    }
 
    // slack_s_U
-   if (slack_s_U->Dim() > 0)
+   if( slack_s_U->Dim() > 0 )
    {
       ncomp += slack_s_U->Dim();
 
@@ -256,7 +244,7 @@ Number ProbingMuOracle::CalculateAffineMu
 
    DBG_ASSERT(ncomp > 0);
 
-   return sum / ((Number)ncomp);
+   return sum / ((Number) ncomp);
 }
 
 } // namespace Ipopt

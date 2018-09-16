@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpFilter.hpp"
@@ -20,34 +18,37 @@ static const Index dbg_verbosity = 0;
 //                            Filter entries                             //
 ///////////////////////////////////////////////////////////////////////////
 
-FilterEntry::FilterEntry(std::vector<Number> vals, Index iter)
-   :
-   vals_(vals),
-   iter_(iter)
-{}
+FilterEntry::FilterEntry(
+   std::vector<Number> vals,
+   Index               iter
+   )
+   : vals_(vals),
+     iter_(iter)
+{ }
 
 FilterEntry::~FilterEntry()
-{}
+{ }
 
 ///////////////////////////////////////////////////////////////////////////
 //                                 Filter                                //
 ///////////////////////////////////////////////////////////////////////////
 
-Filter::Filter(Index dim)
-   :
-   dim_(dim)
-{}
+Filter::Filter(
+   Index dim
+   )
+   : dim_(dim)
+{ }
 
-bool Filter::Acceptable(std::vector<Number> vals) const
+bool Filter::Acceptable(
+   std::vector<Number> vals
+   ) const
 {
-   DBG_START_METH("FilterLineSearch::Filter::Acceptable", dbg_verbosity);
-   DBG_ASSERT((Index)vals.size() == dim_);
+   DBG_START_METH("FilterLineSearch::Filter::Acceptable", dbg_verbosity);DBG_ASSERT((Index)vals.size() == dim_);
    bool acceptable = true;
    std::list<FilterEntry*>::iterator iter;
-   for (iter = filter_list_.begin(); iter != filter_list_.end();
-        iter++)
+   for( iter = filter_list_.begin(); iter != filter_list_.end(); iter++ )
    {
-      if (!(*iter)->Acceptable(vals))
+      if( !(*iter)->Acceptable(vals) )
       {
          acceptable = false;
          break;
@@ -56,15 +57,17 @@ bool Filter::Acceptable(std::vector<Number> vals) const
    return acceptable;
 }
 
-void Filter::AddEntry(std::vector<Number> vals, Index iteration)
+void Filter::AddEntry(
+   std::vector<Number> vals,
+   Index               iteration
+   )
 {
-   DBG_START_METH("FilterLineSearch::Filter::AddEntry", dbg_verbosity);
-   DBG_ASSERT((Index)vals.size() == dim_);
+   DBG_START_METH("FilterLineSearch::Filter::AddEntry", dbg_verbosity);DBG_ASSERT((Index)vals.size() == dim_);
    std::list<FilterEntry*>::iterator iter;
    iter = filter_list_.begin();
-   while (iter != filter_list_.end())
+   while( iter != filter_list_.end() )
    {
-      if ((*iter)->Dominated(vals))
+      if( (*iter)->Dominated(vals) )
       {
          std::list<FilterEntry*>::iterator iter_to_remove = iter;
          iter++;
@@ -84,7 +87,7 @@ void Filter::AddEntry(std::vector<Number> vals, Index iteration)
 void Filter::Clear()
 {
    DBG_START_METH("FilterLineSearch::Filter::Clear", dbg_verbosity);
-   while (!filter_list_.empty())
+   while( !filter_list_.empty() )
    {
       FilterEntry* entry = filter_list_.back();
       filter_list_.pop_back();
@@ -92,28 +95,27 @@ void Filter::Clear()
    }
 }
 
-void Filter::Print(const Journalist& jnlst)
+void Filter::Print(
+   const Journalist& jnlst
+   )
 {
    DBG_START_METH("FilterLineSearch::Filter::Print", dbg_verbosity);
-   jnlst.Printf(J_DETAILED, J_LINE_SEARCH,
-                "The current filter has %d entries.\n", filter_list_.size());
-   if (!jnlst.ProduceOutput(J_VECTOR, J_LINE_SEARCH))
+   jnlst.Printf(J_DETAILED, J_LINE_SEARCH, "The current filter has %d entries.\n", filter_list_.size());
+   if( !jnlst.ProduceOutput(J_VECTOR, J_LINE_SEARCH) )
    {
       return;
    }
    std::list<FilterEntry*>::iterator iter;
    Index count = 0;
-   for (iter = filter_list_.begin(); iter != filter_list_.end();
-        iter++)
+   for( iter = filter_list_.begin(); iter != filter_list_.end(); iter++ )
    {
-      if (count % 10 == 0)
+      if( count % 10 == 0 )
       {
-         jnlst.Printf(J_VECTOR, J_LINE_SEARCH,
-                      "                phi                    theta            iter\n");
+         jnlst.Printf(J_VECTOR, J_LINE_SEARCH, "                phi                    theta            iter\n");
       }
       count++;
       jnlst.Printf(J_VECTOR, J_LINE_SEARCH, "%5d ", count);
-      for (Index i = 0; i < dim_; i++)
+      for( Index i = 0; i < dim_; i++ )
       {
          jnlst.Printf(J_VECTOR, J_LINE_SEARCH, "%23.16e ", (*iter)->val(i));
       }

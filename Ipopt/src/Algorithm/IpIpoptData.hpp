@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #ifndef __IPIPOPTDATA_HPP__
@@ -23,179 +21,220 @@ class IpoptNLP;
 
 /** Base class for additional data that is special to a particular
  *  type of algorithm, such as the CG penalty function, or using
- *  iterative linear solvers.  The regular IpoptData object should
- *  be given a derivation of this base class when it is created. */
-class IpoptAdditionalData : public ReferencedObject
+ *  iterative linear solvers.
+ *
+ *  The regular IpoptData object should
+ *  be given a derivation of this base class when it is created.
+ */
+class IpoptAdditionalData: public ReferencedObject
 {
 public:
    /**@name Constructors/Destructors */
    //@{
    /** Default Constructor */
    IpoptAdditionalData()
-   {}
+   { }
 
-   /** Default destructor */
+   /** Destructor */
    virtual ~IpoptAdditionalData()
-   {}
+   { }
    //@}
 
    /** This method is called to initialize the global algorithmic
-    *  parameters.  The parameters are taken from the OptionsList
-    *  object. */
-   virtual bool Initialize(const Journalist& jnlst,
-                           const OptionsList& options,
-                           const std::string& prefix) = 0;
+    *  parameters.
+    *
+    *  The parameters are taken from the OptionsList object.
+    */
+   virtual bool Initialize(
+      const Journalist&  jnlst,
+      const OptionsList& options,
+      const std::string& prefix
+      ) = 0;
 
    /** Initialize Data Structures at the beginning. */
    virtual bool InitializeDataStructures() = 0;
 
-   /** Do whatever is necessary to accept a trial point as current
-    *  iterate.  This is also used to finish an iteration, i.e., to
-    *  release memory, and to reset any flags for a new iteration. */
+   /** Do whatever is necessary to accept a trial point as current iterate.
+    *
+    *  This is also used to finish an iteration, i.e., to
+    *  release memory, and to reset any flags for a new iteration.
+    */
    virtual void AcceptTrialPoint() = 0;
 
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Copy Constructor */
-   IpoptAdditionalData(const IpoptAdditionalData&);
+   IpoptAdditionalData(
+      const IpoptAdditionalData&
+      );
 
    /** Overloaded Equals Operator */
-   void operator=(const IpoptAdditionalData&);
+   void operator=(
+      const IpoptAdditionalData&
+      );
    //@}
 };
 
 /** Class to organize all the data required by the algorithm.
+ *
  *  Internally, once this Data object has been initialized, all
- *  internal curr_ vectors must always be set (so that prototyes are
+ *  internal curr_ vectors must always be set (so that prototypes are
  *  available).  The current values can only be set from the trial
  *  values.  The trial values can be set by copying from a vector or
  *  by adding some fraction of a step to the current values.  This
  *  object also stores steps, which allows to easily communicate the
  *  step from the step computation object to the line search object.
  */
-class IpoptData : public ReferencedObject
+class IpoptData: public ReferencedObject
 {
 public:
    /**@name Constructors/Destructors */
    //@{
    /** Constructor */
-   IpoptData(SmartPtr<IpoptAdditionalData> add_data = NULL,
-             Number cpu_time_start = -1.);
+   IpoptData(
+      SmartPtr<IpoptAdditionalData> add_data = NULL,
+      Number                        cpu_time_start = -1.
+      );
 
-   /** Default destructor */
+   /** Destructor */
    virtual ~IpoptData();
    //@}
 
    /** Initialize Data Structures */
-   bool InitializeDataStructures(IpoptNLP& ip_nlp,
-                                 bool want_x,
-                                 bool want_y_c,
-                                 bool want_y_d,
-                                 bool want_z_L,
-                                 bool want_z_U);
+   bool InitializeDataStructures(
+      IpoptNLP& ip_nlp,
+      bool      want_x,
+      bool      want_y_c,
+      bool      want_y_d,
+      bool      want_z_L,
+      bool      want_z_U
+      );
 
    /** This method must be called to initialize the global
-    *  algorithmic parameters.  The parameters are taken from the
-    *  OptionsList object. */
-   bool Initialize(const Journalist& jnlst,
-                   const OptionsList& options,
-                   const std::string& prefix);
+    *  algorithmic parameters.
+    *
+    *  The parameters are taken from the OptionsList object.
+    */
+   bool Initialize(
+      const Journalist&  jnlst,
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
    /** @name Get Methods for Iterates */
    //@{
    /** Current point */
-   inline
-   SmartPtr<const IteratesVector> curr() const;
+   inline SmartPtr<const IteratesVector> curr() const;
 
    /** Get the current point in a copied container that is non-const.
-   The entries in the container cannot be modified, but
-   the container can be modified to point to new entries.
-   */
+    *
+    * The entries in the container cannot be modified, but
+    * the container can be modified to point to new entries.
+    */
    //    SmartPtr<IteratesVector> curr_container() const;
-
    /** Get Trial point */
-   inline
-   SmartPtr<const IteratesVector> trial() const;
+   inline SmartPtr<const IteratesVector> trial() const;
 
    /** Get Trial point in a copied container that is non-const.
+    *
     *  The entries in the container can not be modified, but
     *  the container can be modified to point to new entries.
     */
    //SmartPtr<IteratesVector> trial_container() const;
-
-   /** Set the trial point - this method copies the pointer for
+   /** Set the trial point.
+    *
+    *  This method copies the pointer for
     *  efficiency (no copy and to keep cache tags the same) so
-    *  after you call set you cannot modify the data again
+    *  after you call set you cannot modify the data again.
     */
    inline
-   void set_trial(SmartPtr<IteratesVector>& trial);
+   void set_trial(
+      SmartPtr<IteratesVector>& trial
+      );
 
    /** Set the values of the primal trial variables (x and s) from
     *  provided Step with step length alpha.
     */
-   void SetTrialPrimalVariablesFromStep(Number alpha,
-                                        const Vector& delta_x,
-                                        const Vector& delta_s);
+   void SetTrialPrimalVariablesFromStep(
+      Number        alpha,
+      const Vector& delta_x,
+      const Vector& delta_s
+      );
    /** Set the values of the trial values for the equality constraint
     *  multipliers (y_c and y_d) from provided step with step length
     *  alpha.
     */
-   void SetTrialEqMultipliersFromStep(Number alpha,
-                                      const Vector& delta_y_c,
-                                      const Vector& delta_y_d);
+   void SetTrialEqMultipliersFromStep(
+      Number        alpha,
+      const Vector& delta_y_c,
+      const Vector& delta_y_d
+      );
    /** Set the value of the trial values for the bound multipliers
     *  (z_L, z_U, v_L, v_U) from provided step with step length
     *  alpha.
     */
-   void SetTrialBoundMultipliersFromStep(Number alpha,
-                                         const Vector& delta_z_L,
-                                         const Vector& delta_z_U,
-                                         const Vector& delta_v_L,
-                                         const Vector& delta_v_U);
+   void SetTrialBoundMultipliersFromStep(
+      Number        alpha,
+      const Vector& delta_z_L,
+      const Vector& delta_z_U,
+      const Vector& delta_v_L,
+      const Vector& delta_v_U
+      );
 
    /** ToDo: I may need to add versions of set_trial like the
     *  following, but I am not sure
     */
    // void set_trial(const SmartPtr<IteratesVector>& trial_iterates);
    // void set_trial(SmartPtr<const IteratesVector>& trial_iterates);
-
    /** get the current delta */
-   inline
-   SmartPtr<const IteratesVector> delta() const;
+   inline SmartPtr<const IteratesVector> delta() const;
 
-   /** Set the current delta - like the trial point, this method copies
+   /** Set the current delta.
+    *
+    *  Like the trial point, this method copies
     *  the pointer for efficiency (no copy and to keep cache tags the
     *  same) so after you call set, you cannot modify the data
     */
    inline
-   void set_delta(SmartPtr<IteratesVector>& delta);
+   void set_delta(
+      SmartPtr<IteratesVector>& delta
+      );
 
-   /** Set the current delta - like the trial point, this method
+   /** Set the current delta.
+    *
+    *  Like the trial point, this method
     *  copies the pointer for efficiency (no copy and to keep cache
     *  tags the same) so after you call set, you cannot modify the
     *  data.  This is the version that is happy with a pointer to
     *  const IteratesVector.
     */
    inline
-   void set_delta(SmartPtr<const IteratesVector>& delta);
+   void set_delta(
+      SmartPtr<const IteratesVector>& delta
+      );
 
    /** Affine Delta */
-   inline
-   SmartPtr<const IteratesVector> delta_aff() const;
+   inline SmartPtr<const IteratesVector> delta_aff() const;
 
-   /** Set the affine delta - like the trial point, this method copies
+   /** Set the affine delta.
+    *
+    *  Like the trial point, this method copies
     *  the pointer for efficiency (no copy and to keep cache tags the
     *  same) so after you call set, you cannot modify the data
     */
    inline
-   void set_delta_aff(SmartPtr<IteratesVector>& delta_aff);
+   void set_delta_aff(
+      SmartPtr<IteratesVector>& delta_aff
+      );
 
    /** Hessian or Hessian approximation (do not hold on to it, it might be changed) */
    SmartPtr<const SymMatrix> W()
@@ -205,66 +244,88 @@ public:
    }
 
    /** Set Hessian approximation */
-   void Set_W(SmartPtr<const SymMatrix> W)
+   void Set_W(
+      SmartPtr<const SymMatrix> W
+      )
    {
       W_ = W;
    }
 
-   /** @name ("Main") Primal-dual search direction.  Those fields are
+   /** @name ("Main") Primal-dual search direction.
+    *
+    *  Those fields are
     *  used to store the search directions computed from solving the
     *  primal-dual system, and can be used in the line search.  They
     *  are overwritten in every iteration, so do not hold on to the
-    *  pointers (make copies instead) */
+    *  pointers (make copies instead)
+    */
    //@{
-
    /** Returns true, if the primal-dual step have been already
-    *  computed for the current iteration.  This flag is reset after
+    *  computed for the current iteration.
+    *
+    *  This flag is reset after
     *  every call of AcceptTrialPoint().  If the search direction is
     *  computed during the computation of the barrier parameter, the
     *  method computing the barrier parameter should call
     *  SetHaveDeltas(true) to tell the IpoptAlgorithm object that it
-    *  doesn't need to recompute the primal-dual step. */
+    *  doesn't need to recompute the primal-dual step.
+    */
    bool HaveDeltas() const
    {
       return have_deltas_;
    }
 
-   /** Method for setting the HaveDeltas flag.  This method should be
+   /** Method for setting the HaveDeltas flag.
+    *
+    *  This method should be
     *  called if some method computes the primal-dual step (and
     *  stores it in the delta_ fields of IpoptData) at an early part
     *  of the iteration.  If that flag is set to true, the
-    *  IpoptAlgorithm object will not recompute the step. */
-   void SetHaveDeltas(bool have_deltas)
+    *  IpoptAlgorithm object will not recompute the step.
+    */
+   void SetHaveDeltas(
+      bool have_deltas
+      )
    {
       have_deltas_ = have_deltas;
    }
    //@}
 
-   /** @name Affine-scaling step.  Those fields can be used to store
+   /** @name Affine-scaling step.
+    *
+    *  Those fields can be used to store
     *  the affine scaling step.  For example, if the method for
     *  computing the current barrier parameter computes the affine
     *  scaling steps, then the corrector step in the line search does
-    *  not have to recompute those solutions of the linear system. */
+    *  not have to recompute those solutions of the linear system.
+    */
    //@{
-
    /** Returns true, if the affine-scaling step have been already
-    *  computed for the current iteration.  This flag is reset after
+    *  computed for the current iteration.
+    *
+    *  This flag is reset after
     *  every call of AcceptTrialPoint().  If the search direction is
     *  computed during the computation of the barrier parameter, the
     *  method computing the barrier parameter should call
     *  SetHaveDeltas(true) to tell the line search does not have to
-    *  recompute them in case it wants to do a corrector step. */
+    *  recompute them in case it wants to do a corrector step.
+    */
    bool HaveAffineDeltas() const
    {
       return have_affine_deltas_;
    }
 
-   /** Method for setting the HaveDeltas flag.  This method should be
+   /** Method for setting the HaveDeltas flag.
+    *
+    *  This method should be
     *  called if some method computes the primal-dual step (and
     *  stores it in the delta_ fields of IpoptData) at an early part
     *  of the iteration.  If that flag is set to true, the
-    *  IpoptAlgorithm object will not recompute the step. */
-   void SetHaveAffineDeltas(bool have_affine_deltas)
+    *  IpoptAlgorithm object will not recompute the step.
+    */
+   void SetHaveAffineDeltas(
+      bool have_affine_deltas
+      )
    {
       have_affine_deltas_ = have_affine_deltas;
    }
@@ -276,8 +337,7 @@ public:
    inline
    void CopyTrialToCurrent();
 
-   /** Set the current iterate values from the
-    *  trial values. */
+   /** Set the current iterate values from the trial values. */
    void AcceptTrialPoint();
    //@}
 
@@ -287,7 +347,9 @@ public:
    {
       return iter_count_;
    }
-   void Set_iter_count(Index iter_count)
+   void Set_iter_count(
+      Index iter_count
+      )
    {
       iter_count_ = iter_count;
    }
@@ -297,7 +359,9 @@ public:
       DBG_ASSERT(mu_initialized_);
       return curr_mu_;
    }
-   void Set_mu(Number mu)
+   void Set_mu(
+      Number mu
+      )
    {
       curr_mu_ = mu;
       mu_initialized_ = true;
@@ -312,7 +376,9 @@ public:
       DBG_ASSERT(tau_initialized_);
       return curr_tau_;
    }
-   void Set_tau(Number tau)
+   void Set_tau(
+      Number tau
+      )
    {
       curr_tau_ = tau;
       tau_initialized_ = true;
@@ -322,7 +388,9 @@ public:
       return tau_initialized_;
    }
 
-   void SetFreeMuMode(bool free_mu_mode)
+   void SetFreeMuMode(
+      bool free_mu_mode
+      )
    {
       free_mu_mode_ = free_mu_mode;
    }
@@ -332,8 +400,11 @@ public:
    }
 
    /** Setting the flag that indicates if a tiny step (below machine
-    *  precision) has been detected */
-   void Set_tiny_step_flag(bool flag)
+    *  precision) has been detected
+    */
+   void Set_tiny_step_flag(
+      bool flag
+      )
    {
       tiny_step_flag_ = flag;
    }
@@ -343,10 +414,13 @@ public:
    }
    //@}
 
-   /** Overall convergence tolerance.  It is used in the convergence
+   /** Overall convergence tolerance.
+    *
+    *  It is used in the convergence
     *  test, but also in some other parts of the algorithm that
     *  depend on the specified tolerance, such as the minimum value
-    *  for the barrier parameter. */
+    *  for the barrier parameter.
+    */
    //@{
    /** Obtain the tolerance. */
    Number tol() const
@@ -354,23 +428,31 @@ public:
       DBG_ASSERT(initialize_called_);
       return tol_;
    }
-   /** Set a new value for the tolerance.  One should be very careful
+   /** Set a new value for the tolerance.
+    *
+    *  One should be very careful
     *  when using this, since changing the predefined tolerance might
     *  have unexpected consequences.  This method is for example used
     *  in the restoration convergence checker to tighten the
     *  restoration phase convergence tolerance, if the restoration
     *  phase converged to a point that has not a large value for the
-    *  constraint violation. */
-   void Set_tol(Number tol)
+    *  constraint violation.
+    */
+   void Set_tol(
+      Number tol
+      )
    {
       tol_ = tol;
    }
    //@}
 
-   /** Cpu time counter at the beginning of the optimization.  This
-    *  is useful to see how much CPU time has been spent in this
+   /** Cpu time counter at the beginning of the optimization.
+    *
+    *  This is useful to see how much CPU time has been spent in this
     *  optimization run.
-    *  Can only be called after beginning of optimization. */
+    *
+    *  Can only be called after beginning of optimization.
+    */
    Number cpu_time_start() const
    {
       DBG_ASSERT(cpu_time_start_ >= 0);
@@ -383,7 +465,9 @@ public:
    {
       return info_regu_x_;
    }
-   void Set_info_regu_x(Number regu_x)
+   void Set_info_regu_x(
+      Number regu_x
+      )
    {
       info_regu_x_ = regu_x;
    }
@@ -391,7 +475,9 @@ public:
    {
       return info_alpha_primal_;
    }
-   void Set_info_alpha_primal(Number alpha_primal)
+   void Set_info_alpha_primal(
+      Number alpha_primal
+      )
    {
       info_alpha_primal_ = alpha_primal;
    }
@@ -399,7 +485,9 @@ public:
    {
       return info_alpha_primal_char_;
    }
-   void Set_info_alpha_primal_char(char info_alpha_primal_char)
+   void Set_info_alpha_primal_char(
+      char info_alpha_primal_char
+      )
    {
       info_alpha_primal_char_ = info_alpha_primal_char;
    }
@@ -407,7 +495,9 @@ public:
    {
       return info_alpha_dual_;
    }
-   void Set_info_alpha_dual(Number alpha_dual)
+   void Set_info_alpha_dual(
+      Number alpha_dual
+      )
    {
       info_alpha_dual_ = alpha_dual;
    }
@@ -415,7 +505,9 @@ public:
    {
       return info_ls_count_;
    }
-   void Set_info_ls_count(Index ls_count)
+   void Set_info_ls_count(
+      Index ls_count
+      )
    {
       info_ls_count_ = ls_count;
    }
@@ -423,7 +515,9 @@ public:
    {
       return info_skip_output_;
    }
-   void Append_info_string(const std::string& add_str)
+   void Append_info_string(
+      const std::string& add_str
+      )
    {
       info_string_ += add_str;
    }
@@ -432,8 +526,11 @@ public:
       return info_string_;
    }
    /** Set this to true, if the next time when output is written, the
-    *  summary line should not be printed. */
-   void Set_info_skip_output(bool info_skip_output)
+    *  summary line should not be printed.
+    */
+   void Set_info_skip_output(
+      bool info_skip_output
+      )
    {
       info_skip_output_ = info_skip_output;
    }
@@ -444,26 +541,33 @@ public:
       return info_last_output_;
    }
    /** sets time when the last summary output line was printed */
-   void Set_info_last_output(Number info_last_output)
+   void Set_info_last_output(
+      Number info_last_output
+      )
    {
       info_last_output_ = info_last_output;
    }
 
    /** gives number of iteration summaries actually printed
-    * since last summary header was printed */
+    * since last summary header was printed
+    */
    int info_iters_since_header()
    {
       return info_iters_since_header_;
    }
    /** increases number of iteration summaries actually printed
-    * since last summary header was printed */
+    * since last summary header was printed
+    */
    void Inc_info_iters_since_header()
    {
       info_iters_since_header_++;
    }
    /** sets number of iteration summaries actually printed
-    * since last summary header was printed */
-   void Set_info_iters_since_header(int info_iters_since_header)
+    * since last summary header was printed
+    */
+   void Set_info_iters_since_header(
+      int info_iters_since_header
+      )
    {
       info_iters_since_header_ = info_iters_since_header;
    }
@@ -505,15 +609,21 @@ public:
    }
 
    /** Set a new pointer for additional Ipopt data */
-   void SetAddData(SmartPtr<IpoptAdditionalData> add_data)
+   void SetAddData(
+      SmartPtr<IpoptAdditionalData> add_data
+      )
    {
       DBG_ASSERT(!HaveAddData());
       add_data_ = add_data;
    }
 
    /** Set the perturbation of the primal-dual system */
-   void setPDPert(Number pd_pert_x, Number pd_pert_s,
-                  Number pd_pert_c, Number pd_pert_d)
+   void setPDPert(
+      Number pd_pert_x,
+      Number pd_pert_s,
+      Number pd_pert_c,
+      Number pd_pert_d
+      )
    {
       pd_pert_x_ = pd_pert_x;
       pd_pert_s_ = pd_pert_s;
@@ -522,8 +632,12 @@ public:
    }
 
    /** Get the current perturbation of the primal-dual system */
-   void getPDPert(Number& pd_pert_x, Number& pd_pert_s,
-                  Number& pd_pert_c, Number& pd_pert_d)
+   void getPDPert(
+      Number& pd_pert_x,
+      Number& pd_pert_s,
+      Number& pd_pert_c,
+      Number& pd_pert_d
+      )
    {
       pd_pert_x = pd_pert_x_;
       pd_pert_s = pd_pert_s_;
@@ -531,20 +645,17 @@ public:
       pd_pert_d = pd_pert_d_;
    }
 
-   /** Methods for IpoptType */
-   //@{
-   static void RegisterOptions(const SmartPtr<RegisteredOptions>& roptions);
-   //@}
+   static void RegisterOptions(
+      const SmartPtr<RegisteredOptions>& roptions
+      );
 
 private:
    /** @name Iterates */
    //@{
-   /** Main iteration variables
-    * (current iteration) */
+   /** Main iteration variables (current iteration) */
    SmartPtr<const IteratesVector> curr_;
 
-   /** Main iteration variables
-    *  (trial calculations) */
+   /** Main iteration variables (trial calculations) */
    SmartPtr<const IteratesVector> trial_;
 
    /** Hessian (approximation) - might be changed elsewhere! */
@@ -556,24 +667,29 @@ private:
    /** The following flag is set to true, if some other part of the
     *  algorithm (like the method for computing the barrier
     *  parameter) has already computed the primal-dual search
-    *  direction.  This flag is reset when the AcceptTrialPoint
-    *  method is called.
-    * ToDo: we could cue off of a null delta_;
+    *  direction.
+    *
+    *  This flag is reset when the AcceptTrialPoint method is called.
+    *  @todo we could cue off of a null delta_
     */
    bool have_deltas_;
    //@}
 
-   /** @name Affine-scaling step.  This used to transfer the
+   /** @name Affine-scaling step.
+    *
+    *  This used to transfer the
     *  information about the affine-scaling step from the computation
     *  of the barrier parameter to the corrector (in the line
-    *  search). */
+    *  search).
+    */
    //@{
    SmartPtr<const IteratesVector> delta_aff_;
    /** The following flag is set to true, if some other part of the
     *  algorithm (like the method for computing the barrier
-    *  parameter) has already computed the affine-scaling step.  This
-    *  flag is reset when the AcceptTrialPoint method is called.
-    * ToDo: we could cue off of a null delta_aff_;
+    *  parameter) has already computed the affine-scaling step.
+    *
+    *  This flag is reset when the AcceptTrialPoint method is called.
+    *  @todo we could cue off of a null delta_aff_
     */
    bool have_affine_deltas_;
    //@}
@@ -589,18 +705,21 @@ private:
    Number curr_tau_;
    bool tau_initialized_;
 
-   /** flag indicating if Initialize method has been called (for
-    *  debugging) */
+   /** flag indicating if Initialize method has been called (for debugging) */
    bool initialize_called_;
 
    /** flag for debugging whether we have already curr_ values
-    *  available (from which new Vectors can be generated */
+    *  available (from which new Vectors can be generated
+    */
    bool have_prototypes_;
 
-   /** @name Global algorithm parameters.  Those are options that can
+   /** @name Global algorithm parameters.
+    *
+    *  Those are options that can
     *  be modified by the user and appear at different places in the
     *  algorithm.  They are set using an OptionsList object in the
-    *  Initialize method.  */
+    *  Initialize method.
+    */
    //@{
    /** Overall convergence tolerance */
    Number tol_;
@@ -627,33 +746,34 @@ private:
    /** Number of backtracking trial steps */
    Index info_ls_count_;
    /** true, if next summary output line should not be printed (eg
-    *  after restoration phase. */
+    *  after restoration phase).
+    */
    bool info_skip_output_;
    /** any string of characters for the end of the output line */
    std::string info_string_;
    /** time when the last summary output line was printed */
    Number info_last_output_;
    /** number of iteration summaries actually printed since last
-    * summary header was printed */
+    * summary header was printed
+    */
    int info_iters_since_header_;
    //@}
 
    /** VectorSpace for all the iterates */
    SmartPtr<IteratesVectorSpace> iterates_space_;
 
-   /** TimingStatistics object collecting all Ipopt timing
-    *  statistics */
+   /** TimingStatistics object collecting all Ipopt timing statistics */
    TimingStatistics timing_statistics_;
 
    /** CPU time counter at begin of optimization. */
    Number cpu_time_start_;
 
    /** Object for the data specific for the Chen-Goldfarb penalty
-    *  method algorithm */
+    *  method algorithm
+    */
    SmartPtr<IpoptAdditionalData> add_data_;
 
-   /** @name Information about the perturbation of the primal-dual
-    *  system */
+   /** @name Information about the perturbation of the primal-dual system */
    //@{
    Number pd_pert_x_;
    Number pd_pert_s_;
@@ -663,17 +783,23 @@ private:
 
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Copy Constructor */
-   IpoptData(const IpoptData&);
+   IpoptData(
+      const IpoptData&
+      );
 
    /** Overloaded Equals Operator */
-   void operator=(const IpoptData&);
+   void operator=(
+      const IpoptData&
+      );
    //@}
 
 #if COIN_IPOPT_CHECKLEVEL > 0
@@ -694,32 +820,28 @@ private:
 
 };
 
-inline
-SmartPtr<const IteratesVector> IpoptData::curr() const
+inline SmartPtr<const IteratesVector> IpoptData::curr() const
 {
    DBG_ASSERT(IsNull(curr_) || (curr_->GetTag() == debug_curr_tag_ && curr_->GetTagSum() == debug_curr_tag_sum_) );
 
    return curr_;
 }
 
-inline
-SmartPtr<const IteratesVector> IpoptData::trial() const
+inline SmartPtr<const IteratesVector> IpoptData::trial() const
 {
    DBG_ASSERT(IsNull(trial_) || (trial_->GetTag() == debug_trial_tag_ && trial_->GetTagSum() == debug_trial_tag_sum_) );
 
    return trial_;
 }
 
-inline
-SmartPtr<const IteratesVector> IpoptData::delta() const
+inline SmartPtr<const IteratesVector> IpoptData::delta() const
 {
    DBG_ASSERT(IsNull(delta_) || (delta_->GetTag() == debug_delta_tag_ && delta_->GetTagSum() == debug_delta_tag_sum_) );
 
    return delta_;
 }
 
-inline
-SmartPtr<const IteratesVector> IpoptData::delta_aff() const
+inline SmartPtr<const IteratesVector> IpoptData::delta_aff() const
 {
    DBG_ASSERT(IsNull(delta_aff_) || (delta_aff_->GetTag() == debug_delta_aff_tag_ && delta_aff_->GetTagSum() == debug_delta_aff_tag_sum_) );
 
@@ -747,7 +869,9 @@ void IpoptData::CopyTrialToCurrent()
 }
 
 inline
-void IpoptData::set_trial(SmartPtr<IteratesVector>& trial)
+void IpoptData::set_trial(
+   SmartPtr<IteratesVector>& trial
+   )
 {
    trial_ = ConstPtr(trial);
 
@@ -770,7 +894,9 @@ void IpoptData::set_trial(SmartPtr<IteratesVector>& trial)
 }
 
 inline
-void IpoptData::set_delta(SmartPtr<IteratesVector>& delta)
+void IpoptData::set_delta(
+   SmartPtr<IteratesVector>& delta
+   )
 {
    delta_ = ConstPtr(delta);
 #if COIN_IPOPT_CHECKLEVEL > 0
@@ -791,7 +917,9 @@ void IpoptData::set_delta(SmartPtr<IteratesVector>& delta)
 }
 
 inline
-void IpoptData::set_delta(SmartPtr<const IteratesVector>& delta)
+void IpoptData::set_delta(
+   SmartPtr<const IteratesVector>& delta
+   )
 {
    delta_ = delta;
 #if COIN_IPOPT_CHECKLEVEL > 0
@@ -812,7 +940,9 @@ void IpoptData::set_delta(SmartPtr<const IteratesVector>& delta)
 }
 
 inline
-void IpoptData::set_delta_aff(SmartPtr<IteratesVector>& delta_aff)
+void IpoptData::set_delta_aff(
+   SmartPtr<IteratesVector>& delta_aff
+   )
 {
    delta_aff_ = ConstPtr(delta_aff);
 #if COIN_IPOPT_CHECKLEVEL > 0

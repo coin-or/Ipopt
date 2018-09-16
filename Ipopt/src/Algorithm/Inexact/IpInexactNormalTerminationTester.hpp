@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Andreas Waechter            IBM    2008-09-19
 
 #ifndef __IPINEXACTNORMALTERMINATIONTESTER_HPP__
@@ -20,55 +18,68 @@ namespace Ipopt
 class InexactNormalTerminationTester: public IterativeSolverTerminationTester
 {
 public:
-   /** @name /Destructor */
+   /** @name Constructor/Destructor */
    //@{
-   /** Default constructor
-    */
+   /** Default Constructor */
    InexactNormalTerminationTester();
 
-   /** Default destructor */
+   /** Destructor */
    virtual ~InexactNormalTerminationTester();
    //@}
 
-   /* overloaded from AlgorithmStrategyObject */
-   virtual bool InitializeImpl(const OptionsList& options,
-                               const std::string& prefix);
+   virtual bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
-   /** Methods for IpoptType */
-   //@{
-   static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
-   //@}
+   static void RegisterOptions(
+      SmartPtr<RegisteredOptions> roptions
+      );
 
-   /** Method for initializing for the next iterative solve.  This
-    *  must be call before the test methods are called. */
+   /** Method for initializing for the next iterative solve.
+    *
+    *  This must be call before the test methods are called.
+    */
    virtual bool InitializeSolve();
 
-   /** This method checks if the current soltion of the iterative
+   /** This method checks if the current solution of the iterative
     *  linear solver is good enough (by returning the corresponding
     *  satisfied termination test), or if the Hessian should be
-    *  modified.  The input is the dimension of the augmented system,
+    *  modified.
+    *
+    *  The input is the dimension of the augmented system,
     *  the current solution vector of the augmented system, the
-    *  current residual vector. */
-   virtual ETerminationTest TestTermination(Index ndim, const Number* sol,
-         const Number* resid, Index iter,
-         Number norm2_rhs);
+    *  current residual vector.
+    */
+   virtual ETerminationTest TestTermination(
+      Index         ndim,
+      const Number* sol,
+      const Number* resid,
+      Index         iter,
+      Number        norm2_rhs
+      );
 
    /** This method can be called after the Solve is over and we can
-    *  delete anything that has been allocated to free memory. */
+    *  delete anything that has been allocated to free memory.
+    */
    virtual void Clear();
 
-
    /** Return the number of iterative solver iteration from the most
-    *  recent solve */
+    *  recent solve.
+    */
    virtual Index GetSolverIterations() const
    {
       return last_iter_;
    }
 
    /** Method for setting the normal problem objective function value
-    *  at the Cauchy step.  This must be called by the Dogleg
-    *  object. */
-   void Set_c_Avc_norm_cauchy(Number c_Avc_norm_cauchy)
+    *  at the Cauchy step.
+    *
+    *  This must be called by the Dogleg object.
+    */
+   void Set_c_Avc_norm_cauchy(
+      Number c_Avc_norm_cauchy
+      )
    {
       c_Avc_norm_cauchy_ = c_Avc_norm_cauchy;
    }
@@ -76,14 +87,18 @@ public:
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
-   /** Overloaded Equals Operator */
-   InexactNormalTerminationTester& operator=(const InexactNormalTerminationTester&);
+   /** Overloaded Assignment Operator */
+   InexactNormalTerminationTester& operator=(
+      const InexactNormalTerminationTester&
+      );
    //@}
 
    /** @name Algorithmic options */
@@ -97,7 +112,10 @@ private:
    //@}
 
    /** Value of normal problem objective function achived by the
-    *  Cauchy step.  This must be set by the Dogleg step object. */
+    *  Cauchy step.
+    *
+    *  This must be set by the Dogleg step object.
+    */
    Number c_Avc_norm_cauchy_;
 
    /** Last iterative solver iteration counter */

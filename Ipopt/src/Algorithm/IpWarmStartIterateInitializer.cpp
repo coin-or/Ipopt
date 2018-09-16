@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter              IBM    2005-04-01
 
 #include "IpWarmStartIterateInitializer.hpp"
@@ -29,101 +27,68 @@ static const Index dbg_verbosity = 0;
 #endif
 
 WarmStartIterateInitializer::WarmStartIterateInitializer()
-   :
-   IterateInitializer()
-{}
+   : IterateInitializer()
+{ }
 
-void WarmStartIterateInitializer::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+void WarmStartIterateInitializer::RegisterOptions(
+   SmartPtr<RegisteredOptions> roptions
+   )
 {
-   roptions->AddLowerBoundedNumberOption(
-      "warm_start_bound_push",
-      "same as bound_push for the regular initializer.",
+   roptions->AddLowerBoundedNumberOption("warm_start_bound_push", "same as bound_push for the regular initializer.",
       0.0, true, 1e-3);
-   roptions->AddBoundedNumberOption(
-      "warm_start_bound_frac",
-      "same as bound_frac for the regular initializer.",
-      0.0, true, 0.5, false, 1e-3);
-   roptions->AddLowerBoundedNumberOption(
-      "warm_start_slack_bound_push",
-      "same as slack_bound_push for the regular initializer.",
-      0.0, true, 1e-3);
-   roptions->AddBoundedNumberOption(
-      "warm_start_slack_bound_frac",
-      "same as slack_bound_frac for the regular initializer.",
-      0.0, true, 0.5, false, 1e-3);
-   roptions->AddLowerBoundedNumberOption(
-      "warm_start_mult_bound_push",
-      "same as mult_bound_push for the regular initializer.",
-      0.0, true, 1e-3);
-   roptions->AddNumberOption(
-      "warm_start_mult_init_max",
-      "Maximum initial value for the equality multipliers.",
-      1e6);
-   roptions->AddStringOption2(
-      "warm_start_entire_iterate",
-      "Tells algorithm whether to use the GetWarmStartIterate method in the NLP.",
-      "no",
-      "no", "call GetStartingPoint in the NLP",
-      "yes", "call GetWarmStartIterate in the NLP",
-      "");
+   roptions->AddBoundedNumberOption("warm_start_bound_frac", "same as bound_frac for the regular initializer.", 0.0,
+      true, 0.5, false, 1e-3);
+   roptions->AddLowerBoundedNumberOption("warm_start_slack_bound_push",
+      "same as slack_bound_push for the regular initializer.", 0.0, true, 1e-3);
+   roptions->AddBoundedNumberOption("warm_start_slack_bound_frac",
+      "same as slack_bound_frac for the regular initializer.", 0.0, true, 0.5, false, 1e-3);
+   roptions->AddLowerBoundedNumberOption("warm_start_mult_bound_push",
+      "same as mult_bound_push for the regular initializer.", 0.0, true, 1e-3);
+   roptions->AddNumberOption("warm_start_mult_init_max", "Maximum initial value for the equality multipliers.", 1e6);
+   roptions->AddStringOption2("warm_start_entire_iterate",
+      "Tells algorithm whether to use the GetWarmStartIterate method in the NLP.", "no", "no",
+      "call GetStartingPoint in the NLP", "yes", "call GetWarmStartIterate in the NLP", "");
    roptions->SetRegisteringCategory("Uncategorized");
-   roptions->AddNumberOption(
-      "warm_start_target_mu",
-      "Unsupported!",
-      0e-3);
+   roptions->AddNumberOption("warm_start_target_mu", "Unsupported!", 0e-3);
 }
 
-bool WarmStartIterateInitializer::InitializeImpl(const OptionsList& options,
-      const std::string& prefix)
+bool WarmStartIterateInitializer::InitializeImpl(
+   const OptionsList& options,
+   const std::string& prefix
+   )
 {
-   if (!options.GetNumericValue("warm_start_bound_push",
-                                warm_start_bound_push_, prefix))
+   if( !options.GetNumericValue("warm_start_bound_push", warm_start_bound_push_, prefix) )
    {
-      options.GetNumericValue("bound_push",
-                              warm_start_bound_push_, prefix);
+      options.GetNumericValue("bound_push", warm_start_bound_push_, prefix);
    }
-   if (!options.GetNumericValue("warm_start_bound_frac",
-                                warm_start_bound_frac_, prefix))
+   if( !options.GetNumericValue("warm_start_bound_frac", warm_start_bound_frac_, prefix) )
    {
-      options.GetNumericValue("bound_frac",
-                              warm_start_bound_frac_, prefix);
+      options.GetNumericValue("bound_frac", warm_start_bound_frac_, prefix);
    }
-   if (!options.GetNumericValue("warm_start_slack_bound_push",
-                                warm_start_slack_bound_push_, prefix))
+   if( !options.GetNumericValue("warm_start_slack_bound_push", warm_start_slack_bound_push_, prefix) )
    {
-      if (!options.GetNumericValue("bound_push",
-                                   warm_start_slack_bound_push_, prefix))
+      if( !options.GetNumericValue("bound_push", warm_start_slack_bound_push_, prefix) )
       {
-         if (!options.GetNumericValue("warm_start_slack_bound_push",
-                                      warm_start_slack_bound_push_, prefix))
+         if( !options.GetNumericValue("warm_start_slack_bound_push", warm_start_slack_bound_push_, prefix) )
          {
-            options.GetNumericValue("bound_push",
-                                    warm_start_slack_bound_push_, prefix);
+            options.GetNumericValue("bound_push", warm_start_slack_bound_push_, prefix);
          }
       }
    }
-   if (!options.GetNumericValue("warm_start_slack_bound_frac",
-                                warm_start_slack_bound_frac_, prefix))
+   if( !options.GetNumericValue("warm_start_slack_bound_frac", warm_start_slack_bound_frac_, prefix) )
    {
-      if (!options.GetNumericValue("bound_frac",
-                                   warm_start_slack_bound_frac_, prefix))
+      if( !options.GetNumericValue("bound_frac", warm_start_slack_bound_frac_, prefix) )
       {
-         if (!options.GetNumericValue("warm_start_slack_bound_frac",
-                                      warm_start_slack_bound_frac_, prefix))
+         if( !options.GetNumericValue("warm_start_slack_bound_frac", warm_start_slack_bound_frac_, prefix) )
          {
-            options.GetNumericValue("bound_frac",
-                                    warm_start_slack_bound_frac_, prefix);
+            options.GetNumericValue("bound_frac", warm_start_slack_bound_frac_, prefix);
          }
       }
    }
-   options.GetNumericValue("warm_start_mult_bound_push",
-                           warm_start_mult_bound_push_, prefix);
-   options.GetNumericValue("warm_start_mult_init_max",
-                           warm_start_mult_init_max_, prefix);
-   options.GetNumericValue("warm_start_target_mu",
-                           warm_start_target_mu_, prefix);
-   options.GetBoolValue("warm_start_entire_iterate",
-                        warm_start_entire_iterate_, prefix);
+   options.GetNumericValue("warm_start_mult_bound_push", warm_start_mult_bound_push_, prefix);
+   options.GetNumericValue("warm_start_mult_init_max", warm_start_mult_init_max_, prefix);
+   options.GetNumericValue("warm_start_target_mu", warm_start_target_mu_, prefix);
+   options.GetBoolValue("warm_start_entire_iterate", warm_start_entire_iterate_, prefix);
 
    return true;
 }
@@ -131,7 +96,7 @@ bool WarmStartIterateInitializer::InitializeImpl(const OptionsList& options,
 bool WarmStartIterateInitializer::SetInitialIterates()
 {
    DBG_START_METH("WarmStartIterateInitializer::SetInitialIterates",
-                  dbg_verbosity);
+      dbg_verbosity);
 
    // Get the starting values provided by the NLP and store them
    // in the ip_data current fields.
@@ -139,10 +104,9 @@ bool WarmStartIterateInitializer::SetInitialIterates()
    SmartPtr<IteratesVector> init_vec;
    bool have_iterate = false;
 
-   if (warm_start_entire_iterate_)
+   if( warm_start_entire_iterate_ )
    {
-      if (!IpData().InitializeDataStructures(IpNLP(), false, false, false,
-                                             false, false))
+      if( !IpData().InitializeDataStructures(IpNLP(), false, false, false, false, false) )
       {
          return false;
       }
@@ -151,15 +115,15 @@ bool WarmStartIterateInitializer::SetInitialIterates()
 
       have_iterate = IpNLP().GetWarmStartIterate(*init_vec);
 
-      if (!have_iterate)
+      if( !have_iterate )
       {
          Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                        "Tried to obtain entire warm start iterate from NLP, but it returned false.\n");
+            "Tried to obtain entire warm start iterate from NLP, but it returned false.\n");
          IpData().Append_info_string("NW");
       }
 
       // Make sure given bounds are respected
-      if (have_iterate && warm_start_mult_init_max_ > 0.)
+      if( have_iterate && warm_start_mult_init_max_ > 0. )
       {
          SmartPtr<Vector> y_c = init_vec->create_new_y_c_copy();
          SmartPtr<Vector> tmp = y_c->MakeNew();
@@ -197,7 +161,7 @@ bool WarmStartIterateInitializer::SetInitialIterates()
       }
    }
 
-   if (!have_iterate)
+   if( !have_iterate )
    {
 
       /////////////////////////////////////////////////////////////////////
@@ -205,25 +169,19 @@ bool WarmStartIterateInitializer::SetInitialIterates()
       /////////////////////////////////////////////////////////////////////
 
       // Get the intial values for x, y_c, y_d, z_L, z_U,
-      if (!IpData().InitializeDataStructures(IpNLP(), true, true, true, true, true))
+      if( !IpData().InitializeDataStructures(IpNLP(), true, true, true, true, true) )
       {
          return false;
       }
 
-      IpData().curr()->x()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
-                                  "user-provided x");
-      IpData().curr()->y_c()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
-                                    "user-provided y_c");
-      IpData().curr()->y_d()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
-                                    "user-provided y_d");
-      IpData().curr()->z_L()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
-                                    "user-provided z_L");
-      IpData().curr()->z_U()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
-                                    "user-provided z_U");
-      if (Jnlst().ProduceOutput(J_MOREVECTOR, J_INITIALIZATION))
+      IpData().curr()->x()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "user-provided x");
+      IpData().curr()->y_c()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "user-provided y_c");
+      IpData().curr()->y_d()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "user-provided y_d");
+      IpData().curr()->z_L()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "user-provided z_L");
+      IpData().curr()->z_U()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "user-provided z_U");
+      if( Jnlst().ProduceOutput(J_MOREVECTOR, J_INITIALIZATION) )
       {
-         IpCq().curr_d()->Print(Jnlst(), J_MOREVECTOR, J_INITIALIZATION,
-                                "d at user-provided x");
+         IpCq().curr_d()->Print(Jnlst(), J_MOREVECTOR, J_INITIALIZATION, "d at user-provided x");
       }
 
       SmartPtr<Vector> tmp;
@@ -231,7 +189,7 @@ bool WarmStartIterateInitializer::SetInitialIterates()
       init_vec = IpData().curr()->MakeNewContainer();
 
       // If requested, make sure that the multipliers are not too large
-      if (warm_start_mult_init_max_ > 0.)
+      if( warm_start_mult_init_max_ > 0. )
       {
          SmartPtr<Vector> y_c = init_vec->create_new_y_c_copy();
          tmp = y_c->MakeNew();
@@ -280,20 +238,16 @@ bool WarmStartIterateInitializer::SetInitialIterates()
    IpData().AcceptTrialPoint();
 
    // Now apply the target mu heuristic if required
-   if (warm_start_target_mu_ > 0.)
+   if( warm_start_target_mu_ > 0. )
    {
       SmartPtr<const Vector> new_x;
       SmartPtr<const Vector> new_z_L;
 
       SmartPtr<const IteratesVector> curr = IpData().curr();
-      process_target_mu(1., *curr->x(), *IpCq().curr_slack_x_L(),
-                        *curr->z_L(), *IpNLP().Px_L(),
-                        new_x, new_z_L);
+      process_target_mu(1., *curr->x(), *IpCq().curr_slack_x_L(), *curr->z_L(), *IpNLP().Px_L(), new_x, new_z_L);
       SmartPtr<const Vector> new_s;
       SmartPtr<const Vector> new_v_L;
-      process_target_mu(1., *curr->s(), *IpCq().curr_slack_s_L(),
-                        *curr->v_L(), *IpNLP().Pd_L(),
-                        new_s, new_v_L);
+      process_target_mu(1., *curr->s(), *IpCq().curr_slack_s_L(), *curr->v_L(), *IpNLP().Pd_L(), new_s, new_v_L);
 
       // Set the trial pointers to new_x and new_s. The process_target_mu
       // methods below create new vectors in new_x and new_s and do not alter
@@ -303,13 +257,11 @@ bool WarmStartIterateInitializer::SetInitialIterates()
       IpData().set_trial(init_vec);
 
       SmartPtr<const Vector> new_z_U;
-      process_target_mu(-1., *IpData().trial()->x(), *IpCq().trial_slack_x_U(),
-                        *IpData().curr()->z_U(), *IpNLP().Px_U(),
-                        new_x, new_z_U);
+      process_target_mu(-1., *IpData().trial()->x(), *IpCq().trial_slack_x_U(), *IpData().curr()->z_U(),
+         *IpNLP().Px_U(), new_x, new_z_U);
       SmartPtr<const Vector> new_v_U;
-      process_target_mu(-1., *IpData().trial()->s(), *IpCq().trial_slack_s_U(),
-                        *IpData().curr()->v_U(), *IpNLP().Pd_U(),
-                        new_s, new_v_U);
+      process_target_mu(-1., *IpData().trial()->s(), *IpCq().trial_slack_s_U(), *IpData().curr()->v_U(),
+         *IpNLP().Pd_U(), new_s, new_v_U);
 
       // Now submit the full modified point
       init_vec->Set_x(*new_x);
@@ -333,28 +285,12 @@ bool WarmStartIterateInitializer::SetInitialIterates()
    SmartPtr<const Vector> new_x;
    SmartPtr<const Vector> new_s;
    // Push the primal x variables
-   DefaultIterateInitializer::push_variables(Jnlst(),
-         warm_start_bound_push_,
-         warm_start_bound_frac_,
-         "x",
-         *IpData().curr()->x(),
-         new_x,
-         *IpNLP().x_L(),
-         *IpNLP().x_U(),
-         *IpNLP().Px_L(),
-         *IpNLP().Px_U());
+   DefaultIterateInitializer::push_variables(Jnlst(), warm_start_bound_push_, warm_start_bound_frac_, "x",
+      *IpData().curr()->x(), new_x, *IpNLP().x_L(), *IpNLP().x_U(), *IpNLP().Px_L(), *IpNLP().Px_U());
 
    // Push the primal s variables
-   DefaultIterateInitializer::push_variables(Jnlst(),
-         warm_start_slack_bound_push_,
-         warm_start_slack_bound_frac_,
-         "s",
-         *IpData().curr()->s(),
-         new_s,
-         *IpNLP().d_L(),
-         *IpNLP().d_U(),
-         *IpNLP().Pd_L(),
-         *IpNLP().Pd_U());
+   DefaultIterateInitializer::push_variables(Jnlst(), warm_start_slack_bound_push_, warm_start_slack_bound_frac_, "s",
+      *IpData().curr()->s(), new_s, *IpNLP().d_L(), *IpNLP().d_U(), *IpNLP().Pd_L(), *IpNLP().Pd_U());
 
    // Push the multipliers
    SmartPtr<Vector> new_z_L = IpData().curr()->z_L()->MakeNewCopy();
@@ -388,44 +324,34 @@ bool WarmStartIterateInitializer::SetInitialIterates()
    IpData().set_trial(init_vec);
    IpData().AcceptTrialPoint();
 
-   IpData().curr()->x()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
-                               "initial x");
-   IpData().curr()->s()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
-                               "initial s");
-   IpData().curr()->y_c()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
-                                 "initial y_c");
-   IpData().curr()->y_d()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
-                                 "initial y_d");
-   IpData().curr()->z_L()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
-                                 "initial z_L");
-   IpData().curr()->z_U()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
-                                 "initial z_U");
-   IpData().curr()->v_L()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
-                                 "initial v_L");
-   IpData().curr()->v_U()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION,
-                                 "initial v_U");
-   if (Jnlst().ProduceOutput(J_MOREVECTOR, J_INITIALIZATION))
+   IpData().curr()->x()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "initial x");
+   IpData().curr()->s()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "initial s");
+   IpData().curr()->y_c()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "initial y_c");
+   IpData().curr()->y_d()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "initial y_d");
+   IpData().curr()->z_L()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "initial z_L");
+   IpData().curr()->z_U()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "initial z_U");
+   IpData().curr()->v_L()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "initial v_L");
+   IpData().curr()->v_U()->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "initial v_U");
+   if( Jnlst().ProduceOutput(J_MOREVECTOR, J_INITIALIZATION) )
    {
-      IpCq().curr_slack_x_L()->Print(Jnlst(), J_MOREVECTOR, J_INITIALIZATION,
-                                     "initial slack_x_L");
-      IpCq().curr_slack_x_U()->Print(Jnlst(), J_MOREVECTOR, J_INITIALIZATION,
-                                     "initial slack_x_U");
-      IpCq().curr_slack_s_L()->Print(Jnlst(), J_MOREVECTOR, J_INITIALIZATION,
-                                     "initial slack_s_L");
-      IpCq().curr_slack_s_U()->Print(Jnlst(), J_MOREVECTOR, J_INITIALIZATION,
-                                     "initial slack_s_U");
+      IpCq().curr_slack_x_L()->Print(Jnlst(), J_MOREVECTOR, J_INITIALIZATION, "initial slack_x_L");
+      IpCq().curr_slack_x_U()->Print(Jnlst(), J_MOREVECTOR, J_INITIALIZATION, "initial slack_x_U");
+      IpCq().curr_slack_s_L()->Print(Jnlst(), J_MOREVECTOR, J_INITIALIZATION, "initial slack_s_L");
+      IpCq().curr_slack_s_U()->Print(Jnlst(), J_MOREVECTOR, J_INITIALIZATION, "initial slack_s_U");
    }
 
    return true;
 }
 
-void WarmStartIterateInitializer::process_target_mu(Number factor,
-      const Vector& curr_vars,
-      const Vector& curr_slacks,
-      const Vector& curr_mults,
-      const Matrix& P,
-      SmartPtr<const Vector>& ret_vars,
-      SmartPtr<const Vector>& ret_mults)
+void WarmStartIterateInitializer::process_target_mu(
+   Number                  factor,
+   const Vector&           curr_vars,
+   const Vector&           curr_slacks,
+   const Vector&           curr_mults,
+   const Matrix&           P,
+   SmartPtr<const Vector>& ret_vars,
+   SmartPtr<const Vector>& ret_mults
+   )
 {
    SmartPtr<Vector> new_slacks = curr_slacks.MakeNewCopy();
    SmartPtr<Vector> new_mults = curr_mults.MakeNewCopy();
@@ -439,9 +365,11 @@ void WarmStartIterateInitializer::process_target_mu(Number factor,
    ret_mults = ConstPtr(new_mults);
 }
 
-void WarmStartIterateInitializer::adapt_to_target_mu(Vector& new_s,
-      Vector& new_z,
-      Number target_mu)
+void WarmStartIterateInitializer::adapt_to_target_mu(
+   Vector& new_s,
+   Vector& new_z,
+   Number  target_mu
+   )
 {
    DBG_ASSERT(new_s.Dim() == new_z.Dim());
 
@@ -452,20 +380,20 @@ void WarmStartIterateInitializer::adapt_to_target_mu(Vector& new_s,
    Number* values_s = dnew_s->Values();
    Number* values_z = dnew_z->Values();
 
-   for (Index i = 0; i < new_s.Dim(); i++)
+   for( Index i = 0; i < new_s.Dim(); i++ )
    {
-      if (values_s[i] > 1e4 * values_z[i])
+      if( values_s[i] > 1e4 * values_z[i] )
       {
          values_z[i] = target_mu / values_s[i];
-         if (values_z[i] > values_s[i])
+         if( values_z[i] > values_s[i] )
          {
             values_s[i] = values_z[i] = sqrt(target_mu);
          }
       }
-      else if (values_z[i] > 1e4 * values_s[i])
+      else if( values_z[i] > 1e4 * values_s[i] )
       {
          values_s[i] = target_mu / values_z[i];
-         if (values_s[i] > values_z[i])
+         if( values_s[i] > values_z[i] )
          {
             values_s[i] = values_z[i] = sqrt(target_mu);
          }

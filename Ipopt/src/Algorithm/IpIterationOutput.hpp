@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Andreas Waechter, Carl Laird       IBM    2004-09-27
 
 #ifndef __IPITERATIONOUTPUT_HPP__
@@ -26,20 +24,23 @@ public:
    //@{
    /** Default Constructor */
    IterationOutput()
-   {}
+   { }
 
-   /** Default destructor */
+   /** Destructor */
    virtual ~IterationOutput()
-   {}
+   { }
    //@}
 
-   /** overloaded from AlgorithmStrategyObject */
-   virtual bool InitializeImpl(const OptionsList& options,
-                               const std::string& prefix) = 0;
+   virtual bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+      ) = 0;
 
-   /** Method to do all the summary output per iteration.  This
-    *  include the one-line summary output as well as writing the
-    *  details about the iterates if desired */
+   /** Method to do all the summary output per iteration.
+    *
+    *  This include the one-line summary output as well as writing the
+    *  details about the iterates if desired.
+    */
    virtual void WriteOutput() = 0;
 
 protected:
@@ -52,16 +53,22 @@ protected:
 
 private:
    /**@name Default Compiler Generated Methods (Hidden to avoid
-    * implicit creation/calling).  These methods are not implemented
+    * implicit creation/calling).
+    *
+    * These methods are not implemented
     * and we do not want the compiler to implement them for us, so we
     * declare them private and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Copy Constructor */
-   IterationOutput(const IterationOutput&);
+   IterationOutput(
+      const IterationOutput&
+      );
 
-   /** Overloaded Equals Operator */
-   void operator=(const IterationOutput&);
+   void operator=(
+      const IterationOutput&
+      );
    //@}
 
 };

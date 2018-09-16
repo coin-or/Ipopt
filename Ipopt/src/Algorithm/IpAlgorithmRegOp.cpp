@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2005-08-16
 
 #include "IpAlgorithmRegOp.hpp"
@@ -38,11 +36,12 @@
 #include "IpRestoPenaltyConvCheck.hpp"
 #include "IpWarmStartIterateInitializer.hpp"
 
-
 namespace Ipopt
 {
 
-void RegisterOptions_Algorithm(const SmartPtr<RegisteredOptions>& roptions)
+void RegisterOptions_Algorithm(
+   const SmartPtr<RegisteredOptions>& roptions
+   )
 {
    roptions->SetRegisteringCategory("Barrier Parameter Update");
    AdaptiveMuUpdate::RegisterOptions(roptions);

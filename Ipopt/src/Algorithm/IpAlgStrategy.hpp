@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #ifndef __IPALGSTRATEGY_HPP__
@@ -18,8 +16,9 @@
 namespace Ipopt
 {
 
-/** This is the base class for all algorithm strategy objects.  The
- *  AlgorithmStrategyObject base class implements a common interface
+/** This is the base class for all algorithm strategy objects.
+ *
+ *  The AlgorithmStrategyObject base class implements a common interface
  *  for all algorithm strategy objects.  A strategy object is a
  *  component of the algorithm for which different alternatives or
  *  implementations exists.  It allows to compose the algorithm
@@ -32,27 +31,28 @@ namespace Ipopt
  *  things that are done to all strategy objects, like
  *  initialization and setting options.
  */
-class AlgorithmStrategyObject : public ReferencedObject
+class AlgorithmStrategyObject: public ReferencedObject
 {
 public:
    /**@name Constructors/Destructors */
    //@{
    /** Default Constructor */
    AlgorithmStrategyObject()
-      :
-      initialize_called_(false)
-   {}
+      : initialize_called_(false)
+   { }
 
-   /** Default Destructor */
+   /** Destructor */
    virtual ~AlgorithmStrategyObject()
-   {}
+   { }
    //@}
 
    /** This method is called every time the algorithm starts again -
-    *  it is used to reset any internal state.  The pointers to the
+    *  it is used to reset any internal state.
+    *
+    *  The pointers to the
     *  Journalist, as well as to the IpoptNLP, IpoptData, and
     *  IpoptCalculatedQuantities objects should be stored in the
-    *  instanciation of this base class.  This method is also used to
+    *  instantiation of this base class.  This method is also used to
     *  get all required user options from the OptionsList.  Here, if
     *  prefix is given, each tag (identifying the options) is first
     *  looked for with the prefix in front, and if not found, without
@@ -63,12 +63,14 @@ public:
     *  initialization that is common for all strategy objects.
     *  Overload the protected InitializeImpl method instead.
     */
-   bool Initialize(const Journalist& jnlst,
-                   IpoptNLP& ip_nlp,
-                   IpoptData& ip_data,
-                   IpoptCalculatedQuantities& ip_cq,
-                   const OptionsList& options,
-                   const std::string& prefix)
+   bool Initialize(
+      const Journalist&          jnlst,
+      IpoptNLP&                  ip_nlp,
+      IpoptData&                 ip_data,
+      IpoptCalculatedQuantities& ip_cq,
+      const OptionsList&         options,
+      const std::string&         prefix
+      )
    {
       initialize_called_ = true;
       // Copy the pointers for the problem defining objects
@@ -78,7 +80,7 @@ public:
       ip_cq_ = &ip_cq;
 
       bool retval = InitializeImpl(options, prefix);
-      if (!retval)
+      if( !retval )
       {
          initialize_called_ = false;
       }
@@ -87,12 +89,16 @@ public:
    }
 
    /** Reduced version of the Initialize method, which does not
-    *  require special Ipopt information.  This is useful for
-    *  algorithm objects that could be used outside Ipopt, such as
-    *  linear solvers. */
-   bool ReducedInitialize(const Journalist& jnlst,
-                          const OptionsList& options,
-                          const std::string& prefix)
+    *  require special Ipopt information.
+    *
+    *  This is useful for algorithm objects that could be used
+    *  outside Ipopt, such as linear solvers.
+    */
+   bool ReducedInitialize(
+      const Journalist&  jnlst,
+      const OptionsList& options,
+      const std::string& prefix
+      )
    {
       initialize_called_ = true;
       // Copy the pointers for the problem defining objects
@@ -102,7 +108,7 @@ public:
       ip_cq_ = NULL;
 
       bool retval = InitializeImpl(options, prefix);
-      if (!retval)
+      if( !retval )
       {
          initialize_called_ = false;
       }
@@ -112,12 +118,17 @@ public:
 
 protected:
    /** Implementation of the initialization method that has to be
-    *  overloaded by for each derived class. */
-   virtual bool InitializeImpl(const OptionsList& options,
-                               const std::string& prefix) = 0;
+    *  overloaded by for each derived class.
+    */
+   virtual bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+      ) = 0;
 
    /** @name Accessor methods for the problem defining objects.
-    *  Those should be used by the derived classes. */
+    *
+    *  Those should be used by the derived classes.
+    */
    //@{
    const Journalist& Jnlst() const
    {
@@ -126,20 +137,17 @@ protected:
    }
    IpoptNLP& IpNLP() const
    {
-      DBG_ASSERT(initialize_called_);
-      DBG_ASSERT(IsValid(ip_nlp_));
+      DBG_ASSERT(initialize_called_); DBG_ASSERT(IsValid(ip_nlp_));
       return *ip_nlp_;
    }
    IpoptData& IpData() const
    {
-      DBG_ASSERT(initialize_called_);
-      DBG_ASSERT(IsValid(ip_data_));
+      DBG_ASSERT(initialize_called_); DBG_ASSERT(IsValid(ip_data_));
       return *ip_data_;
    }
    IpoptCalculatedQuantities& IpCq() const
    {
-      DBG_ASSERT(initialize_called_);
-      DBG_ASSERT(IsValid(ip_cq_));
+      DBG_ASSERT(initialize_called_); DBG_ASSERT(IsValid(ip_cq_));
       return *ip_cq_;
    }
    bool HaveIpData() const
@@ -151,25 +159,29 @@ protected:
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Default Constructor */
    //AlgorithmStrategyObject();
 
-
    /** Copy Constructor */
-   AlgorithmStrategyObject(const AlgorithmStrategyObject&);
+   AlgorithmStrategyObject(
+      const AlgorithmStrategyObject&
+      );
 
    /** Overloaded Equals Operator */
-   void operator=(const AlgorithmStrategyObject&);
+   void operator=(
+      const AlgorithmStrategyObject&
+      );
    //@}
 
-   /** @name Pointers to objects defining a particular optimization
-    *  problem */
+   /** @name Pointers to objects defining a particular optimization problem */
    //@{
    SmartPtr<const Journalist> jnlst_;
    SmartPtr<IpoptNLP> ip_nlp_;
@@ -177,8 +189,7 @@ private:
    SmartPtr<IpoptCalculatedQuantities> ip_cq_;
    //@}
 
-   /** flag indicating if Initialize method has been called (for
-    *  debugging) */
+   /** flag indicating if Initialize method has been called (for debugging) */
    bool initialize_called_;
 };
 

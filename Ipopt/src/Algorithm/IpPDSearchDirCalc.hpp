@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Andreas Waechter            IBM    2005-10-13
 
 #ifndef __IPPDSEARCHDIRCALC_HPP__
@@ -18,32 +16,37 @@ namespace Ipopt
 /** Implementation of the search direction calculator that computes
  *  the pure primal dual step for the current barrier parameter.
  */
-class PDSearchDirCalculator : public SearchDirectionCalculator
+class PDSearchDirCalculator: public SearchDirectionCalculator
 {
 public:
    /**@name Constructors/Destructors */
    //@{
    /** Constructor */
-   PDSearchDirCalculator(const SmartPtr<PDSystemSolver>& pd_solver);
+   PDSearchDirCalculator(
+      const SmartPtr<PDSystemSolver>& pd_solver
+      );
 
-   /** Default destructor */
+   /** Destructor */
    virtual ~PDSearchDirCalculator();
    //@}
 
    /** overloaded from AlgorithmStrategyObject */
-   virtual bool InitializeImpl(const OptionsList& options,
-                               const std::string& prefix);
+   virtual bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
-   /** Method for computing the search direction.  The computed
-    *  direction is stored in IpData().delta(). */
+   /** Method for computing the search direction.
+    *
+    *  The computed direction is stored in IpData().delta().
+    */
    virtual bool ComputeSearchDirection();
 
-   /** Methods for IpoptType */
-   //@{
-   static void RegisterOptions(const SmartPtr<RegisteredOptions>& roptions);
-   //@}
+   static void RegisterOptions(
+      const SmartPtr<RegisteredOptions>& roptions
+      );
 
-   /** Method to return the pd_solver for additional processing */
+   /** Returns the pd_solver for additional processing. */
    SmartPtr<PDSystemSolver> PDSolver()
    {
       return pd_solver_;
@@ -52,20 +55,26 @@ public:
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Default Constructor */
    PDSearchDirCalculator();
 
    /** Copy Constructor */
-   PDSearchDirCalculator(const PDSearchDirCalculator&);
+   PDSearchDirCalculator(
+      const PDSearchDirCalculator&
+      );
 
    /** Overloaded Equals Operator */
-   void operator=(const PDSearchDirCalculator&);
+   void operator=(
+      const PDSearchDirCalculator&
+      );
    //@}
 
    /** @name Strategy objects */
@@ -77,11 +86,14 @@ private:
    //@{
    /** Flag indicating that we trust that the steps from the linear
     *  solver are very good and that we don't need any residual
-    *  checks */
+    *  checks. */
    bool fast_step_computation_;
-   /** Flag indicating if we want to do Mehrotras's algorithm.  This
-    *  means that a number of options are ignored, or have to be set
-    *  (or are automatically set) to certain values. */
+
+   /** Flag indicating if we want to do Mehrotras's algorithm.
+    *
+    *  This means that a number of options are ignored, or have
+    *  to be set (or are automatically set) to certain values.
+    */
    bool mehrotra_algorithm_;
    //@}
 

@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Andreas Waechter               IBM    2005-09-19
 
 #ifndef __IPTIMINGSTATISTICS_HPP__
@@ -17,27 +15,29 @@ namespace Ipopt
 {
 /** This class collects all timing statistics for Ipopt.
  */
-class TimingStatistics : public ReferencedObject
+class TimingStatistics: public ReferencedObject
 {
 public:
    /**@name Constructors/Destructors */
    //@{
    /** Default constructor. */
    TimingStatistics()
-   {}
+   { }
 
-   /** Default destructor */
+   /** Destructor */
    virtual ~TimingStatistics()
-   {}
+   { }
    //@}
 
    /** Method for resetting all times. */
    void ResetTimes();
 
    /** Method for printing all timing information */
-   void PrintAllTimingStatistics(Journalist& jnlst,
-                                 EJournalLevel level,
-                                 EJournalCategory category) const;
+   void PrintAllTimingStatistics(
+      Journalist&      jnlst,
+      EJournalLevel    level,
+      EJournalCategory category
+      ) const;
 
    /**@name Accessor methods to all timed tasks. */
    //@{
@@ -45,38 +45,47 @@ public:
    {
       return OverallAlgorithm_;
    }
+
    TimedTask& PrintProblemStatistics()
    {
       return PrintProblemStatistics_;
    }
+
    TimedTask& InitializeIterates()
    {
       return InitializeIterates_;
    }
+
    TimedTask& UpdateHessian()
    {
       return UpdateHessian_;
    }
+
    TimedTask& OutputIteration()
    {
       return OutputIteration_;
    }
+
    TimedTask& UpdateBarrierParameter()
    {
       return UpdateBarrierParameter_;
    }
+
    TimedTask& ComputeSearchDirection()
    {
       return ComputeSearchDirection_;
    }
+
    TimedTask& ComputeAcceptableTrialPoint()
    {
       return ComputeAcceptableTrialPoint_;
    }
+
    TimedTask& AcceptTrialPoint()
    {
       return AcceptTrialPoint_;
    }
+
    TimedTask& CheckConvergence()
    {
       return CheckConvergence_;
@@ -86,46 +95,57 @@ public:
    {
       return PDSystemSolverTotal_;
    }
+
    TimedTask& PDSystemSolverSolveOnce()
    {
       return PDSystemSolverSolveOnce_;
    }
+
    TimedTask& ComputeResiduals()
    {
       return ComputeResiduals_;
    }
+
    TimedTask& StdAugSystemSolverMultiSolve()
    {
       return StdAugSystemSolverMultiSolve_;
    }
+
    TimedTask& LinearSystemScaling()
    {
       return LinearSystemScaling_;
    }
+
    TimedTask& LinearSystemSymbolicFactorization()
    {
       return LinearSystemSymbolicFactorization_;
    }
+
    TimedTask& LinearSystemFactorization()
    {
       return LinearSystemFactorization_;
    }
+
    TimedTask& LinearSystemBackSolve()
    {
       return LinearSystemBackSolve_;
    }
+
    TimedTask& LinearSystemStructureConverter()
    {
       return LinearSystemStructureConverter_;
    }
+
    TimedTask& LinearSystemStructureConverterInit()
    {
       return LinearSystemStructureConverterInit_;
    }
+
    TimedTask& QualityFunctionSearch()
    {
       return QualityFunctionSearch_;
    }
+
    TimedTask& TryCorrector()
    {
       return TryCorrector_;
@@ -135,22 +155,27 @@ public:
    {
       return Task1_;
    }
+
    TimedTask& Task2()
    {
       return Task2_;
    }
+
    TimedTask& Task3()
    {
       return Task3_;
    }
+
    TimedTask& Task4()
    {
       return Task4_;
    }
+
    TimedTask& Task5()
    {
       return Task5_;
    }
+
    TimedTask& Task6()
    {
       return Task6_;
@@ -160,17 +185,23 @@ public:
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Copy Constructor */
-   TimingStatistics(const TimingStatistics&);
+   TimingStatistics(
+      const TimingStatistics&
+      );
 
    /** Overloaded Equals Operator */
-   void operator=(const TimingStatistics&);
+   void operator=(
+      const TimingStatistics&
+      );
    //@}
 
    /**@name All timed tasks. */

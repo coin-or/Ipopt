@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #ifndef __IPOPTERRORCONVCHECK_HPP__
@@ -14,37 +12,36 @@
 namespace Ipopt
 {
 
-/** Brief Class Description.
- *  Detailed Class Description.
- */
-class OptimalityErrorConvergenceCheck : public ConvergenceCheck
+class OptimalityErrorConvergenceCheck: public ConvergenceCheck
 {
 public:
-   /**@name Constructors/Destructors */
+   /**@name Constructors / Destructor */
    //@{
    /** Default Constructor */
    OptimalityErrorConvergenceCheck();
 
-   /** Default destructor */
+   /** Destructor */
    virtual ~OptimalityErrorConvergenceCheck();
    //@}
 
-   /** overloaded from AlgorithmStrategyObject */
-   virtual bool InitializeImpl(const OptionsList& options,
-                               const std::string& prefix);
+   virtual bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
-   /** Overloaded convergence check */
    virtual ConvergenceStatus
-   CheckConvergence(bool call_intermediate_callback = true);
+   CheckConvergence(
+      bool call_intermediate_callback = true
+      );
 
-   /** Auxilliary function for testing whether current iterate
-    *  satisfies the acceptable level of optimality */
+   /** Auxiliary function for testing whether current iterate
+    *  satisfies the acceptable level of optimality
+    */
    virtual bool CurrentIsAcceptable();
 
-   /** Methods for IpoptType */
-   //@{
-   static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
-   //@}
+   static void RegisterOptions(
+      SmartPtr<RegisteredOptions> roptions
+      );
 
 protected:
    /** @name Algorithmic parameters */
@@ -58,8 +55,10 @@ protected:
    /** Tolerance on unscaled complementarity */
    Number compl_inf_tol_;
    /** Number of iterations with acceptable level of accuracy, after
-    *  which the algorithm terminates.  If 0, this heuristic is
-    *  disabled. */
+    *  which the algorithm terminates.
+    *
+    *  If 0, this heuristic is disabled.
+    */
    Index acceptable_iter_;
    /** Acceptable tolerance for the problem to terminate earlier if
     *  algorithm seems stuck or cycling */
@@ -71,7 +70,7 @@ protected:
    /** Acceptable tolerance on unscaled complementarity */
    Number acceptable_compl_inf_tol_;
    /** Acceptable tolerance for relative objective function change
-    *  from iteratoin to iteration. */
+    *  from iteration to iteration. */
    Number acceptable_obj_change_tol_;
    /** Threshold for primal iterates for divergence test */
    Number diverging_iterates_tol_;
@@ -83,28 +82,40 @@ protected:
 
 private:
    /**@name Default Compiler Generated Methods (Hidden to avoid
-    * implicit creation/calling).  These methods are not implemented
+    * implicit creation/calling).
+    *
+    * These methods are not implemented
     * and we do not want the compiler to implement them for us, so we
     * declare them private and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Copy Constructor */
-   OptimalityErrorConvergenceCheck(const OptimalityErrorConvergenceCheck&);
+   OptimalityErrorConvergenceCheck(
+      const OptimalityErrorConvergenceCheck&
+      );
 
    /** Overloaded Equals Operator */
-   void operator=(const OptimalityErrorConvergenceCheck&);
+   void operator=(
+      const OptimalityErrorConvergenceCheck&
+      );
    //@}
 
    /** Counter for successive iterations in which acceptability
-    *  criteria are met. */
+    *  criteria are met.
+    */
    Index acceptable_counter_;
 
-   /** Value of the objective function from last iteration.  This is
-   for accpetable_obj_change_tol. */
+   /** Value of the objective function from last iteration.
+    *
+    * This is for accpetable_obj_change_tol.
+    */
    Number last_obj_val_;
 
-   /** Value of the objective function from current iteration.  This is
-   for accpetable_obj_change_tol. */
+   /** Value of the objective function from current iteration.
+    *
+    * This is for accpetable_obj_change_tol.
+    */
    Number curr_obj_val_;
 
    /** Iteration counter for which last_obj_val most recently updated. */

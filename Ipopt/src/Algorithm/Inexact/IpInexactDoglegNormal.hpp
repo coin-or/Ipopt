@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Andreas Waechter            IBM    2008-08-31
 
 #ifndef __IPINEXACTDOGLEGNORMAL_HPP__
@@ -17,63 +15,79 @@ namespace Ipopt
 {
 /** Compute the normal step using a dogleg approach.
  */
-class InexactDoglegNormalStep : public InexactNormalStepCalculator
+class InexactDoglegNormalStep: public InexactNormalStepCalculator
 {
 public:
    /**@name Constructors/Destructors */
    //@{
-   /** Default onstructor */
-   InexactDoglegNormalStep(SmartPtr<InexactNewtonNormalStep> newton_step,
-                           SmartPtr<InexactNormalTerminationTester> normal_tester = NULL);
+   /** Default Constructor */
+   InexactDoglegNormalStep(
+      SmartPtr<InexactNewtonNormalStep>        newton_step,
+      SmartPtr<InexactNormalTerminationTester> normal_tester = NULL
+      );
 
-   /** Default destructor */
+   /** Destructor */
    virtual ~InexactDoglegNormalStep();
    //@}
 
-   /** overloaded from AlgorithmStrategyObject */
-   virtual bool InitializeImpl(const OptionsList& options,
-                               const std::string& prefix);
+   virtual bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
-   /** Method for computing the normal step.  The computed step is
+   /** Method for computing the normal step.
+    *
+    *  The computed step is
     *  returned as normal_x and normal_s, for the x and s variables,
     *  respectively.  These quantities are not slack-scaled.  If the
-    *  step cannot be computed, this method returns false.  */
-   virtual bool ComputeNormalStep(SmartPtr<Vector>& normal_x,
-                                  SmartPtr<Vector>& normal_s);
+    *  step cannot be computed, this method returns false.
+    */
+   virtual bool ComputeNormalStep(
+      SmartPtr<Vector>& normal_x,
+      SmartPtr<Vector>& normal_s
+      );
 
-   /** Methods for IpoptType */
-   //@{
-   static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
-   //@}
+   static void RegisterOptions(
+      SmartPtr<RegisteredOptions> roptions
+      );
 
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
-   /** Default onstructor */
+   /** Default Constructor */
    InexactDoglegNormalStep();
 
    /** Copy Constructor */
-   InexactDoglegNormalStep(const InexactDoglegNormalStep&);
+   InexactDoglegNormalStep(
+      const InexactDoglegNormalStep&
+      );
 
-   /** Overloaded Equals Operator */
-   void operator=(const InexactDoglegNormalStep&);
+   /** Overloaded Assignment Operator */
+   void operator=(
+      const InexactDoglegNormalStep&
+      );
    //@}
 
    /** Pointer to object for computing the "Newton" step in the dogleg
-    *  method */
+    *  method
+    */
    SmartPtr<InexactNewtonNormalStep> newton_step_;
 
    /** Pointer to object that is used by the newton_step computation
-    *  object to determine if iterative solver is done.  This is
-    *  needed here because this dogleg object is setting the value of
-    *  the linearlized constraint violation at the cauchy point if
-    *  normal_tester is not NULL. */
+    *  object to determine if iterative solver is done.
+    *
+    *  This is needed here because this dogleg object is setting the
+    *  value of the linearized constraint violation at the cauchy point
+    *  if normal_tester is not NULL.
+    */
    SmartPtr<InexactNormalTerminationTester> normal_tester_;
 
    /** @name Algorithmic options */

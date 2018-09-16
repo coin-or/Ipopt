@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #ifndef __IPPROBINGMUORACLE_HPP__
@@ -18,49 +16,63 @@ namespace Ipopt
 /** Implementation of the probing strategy for computing the
  *  barrier parameter.
  */
-class ProbingMuOracle : public MuOracle
+class ProbingMuOracle: public MuOracle
 {
 public:
    /**@name Constructors/Destructors */
    //@{
    /** Constructor */
-   ProbingMuOracle(const SmartPtr<PDSystemSolver>& pd_solver);
-   /** Default destructor */
+   ProbingMuOracle(
+      const SmartPtr<PDSystemSolver>& pd_solver
+      );
+
+   /** Destructor */
    virtual ~ProbingMuOracle();
    //@}
 
    /** overloaded from AlgorithmStrategyObject */
-   virtual bool InitializeImpl(const OptionsList& options,
-                               const std::string& prefix);
+   virtual bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
    /** Method for computing the value of the barrier parameter that
     *  could be used in the current iteration (using Mehrotra's
     *  probing heuristic).
     */
-   virtual bool CalculateMu(Number mu_min, Number mu_max, Number& new_mu);
+   virtual bool CalculateMu(
+      Number  mu_min,
+      Number  mu_max,
+      Number& new_mu
+      );
 
-   /** Methods for IpoptType */
-   //@{
-   static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
-   //@}
+   static void RegisterOptions(
+      SmartPtr<RegisteredOptions> roptions
+      );
 
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
-
    /** Default Constructor */
    ProbingMuOracle();
+
    /** Copy Constructor */
-   ProbingMuOracle(const ProbingMuOracle&);
+   ProbingMuOracle(
+      const ProbingMuOracle&
+      );
 
    /** Overloaded Equals Operator */
-   void operator=(const ProbingMuOracle&);
+   void operator=(
+      const ProbingMuOracle&
+      );
    //@}
 
    /** Pointer to the object that should be used to solve the
@@ -68,12 +80,14 @@ private:
     */
    SmartPtr<PDSystemSolver> pd_solver_;
 
-   /** Auxilliary function for computing the average complementarity
+   /** Auxiliary function for computing the average complementarity
     *  at a point, given step sizes and step
     */
-   Number CalculateAffineMu(Number alpha_primal,
-                            Number alpha_dual,
-                            const IteratesVector& step);
+   Number CalculateAffineMu(
+      Number                alpha_primal,
+      Number                alpha_dual,
+      const IteratesVector& step
+      );
 
    /** @name Algorithmic parameters */
    //@{

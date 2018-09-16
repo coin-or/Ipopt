@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Andreas Waechter     IBM                  2008-09-05
 //            based on IpAlgBuilder.hpp (rev 913)
 
@@ -24,7 +22,7 @@ namespace Ipopt
  *       substantial amount code for generating the SymLinearSolver
  *       and AugSystemSolver is available for reuse.
  */
-class InexactAlgorithmBuilder : public AlgorithmBuilder
+class InexactAlgorithmBuilder: public AlgorithmBuilder
 {
 public:
    /**@name Constructors/Destructors */
@@ -34,63 +32,74 @@ public:
 
    /** Destructor */
    virtual ~InexactAlgorithmBuilder()
-   {}
-
+   { }
    //@}
 
    /** @name Methods to build parts of the algorithm */
    //@{
-   virtual void BuildIpoptObjects(const Journalist& jnlst,
-                                  const OptionsList& options,
-                                  const std::string& prefix,
-                                  const SmartPtr<NLP>& nlp,
-                                  SmartPtr<IpoptNLP>& ip_nlp,
-                                  SmartPtr<IpoptData>& ip_data,
-                                  SmartPtr<IpoptCalculatedQuantities>& ip_cq);
+   virtual void BuildIpoptObjects(
+      const Journalist&                    jnlst,
+      const OptionsList&                   options,
+      const std::string&                   prefix,
+      const SmartPtr<NLP>&                 nlp,
+      SmartPtr<IpoptNLP>&                  ip_nlp,
+      SmartPtr<IpoptData>&                 ip_data,
+      SmartPtr<IpoptCalculatedQuantities>& ip_cq
+      );
 
-   virtual SmartPtr<IpoptAlgorithm> BuildBasicAlgorithm(const Journalist& jnlst,
-         const OptionsList& options,
-         const std::string& prefix);
+   virtual SmartPtr<IpoptAlgorithm> BuildBasicAlgorithm(
+      const Journalist&  jnlst,
+      const OptionsList& options,
+      const std::string& prefix
+      );
    //@}
 
-   /** Methods for IpoptTypeInfo */
-   //@{
    /** register the options used by the algorithm builder */
-   static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
-   //@}
+   static void RegisterOptions(
+      SmartPtr<RegisteredOptions> roptions
+      );
 
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
-   /** Default Constructor */
-   //InexactAlgorithmBuilder();
-
    /** Copy Constructor */
-   InexactAlgorithmBuilder(const InexactAlgorithmBuilder&);
+   InexactAlgorithmBuilder(
+      const InexactAlgorithmBuilder&
+      );
 
-   /** Overloaded Equals Operator */
-   void operator=(const InexactAlgorithmBuilder&);
+   /** Overloaded Assignment Operator */
+   void operator=(
+      const InexactAlgorithmBuilder&
+      );
    //@}
 
-   /** Optional pointer to AugSystemSolver.  If this is set in the
-    *  contructor, we will use this to solver the linear systems if
-    *  the option linear_solver=custerm is chosen. */
+   /** Optional pointer to AugSystemSolver.
+    *
+    *  If this is set in the constructor, we will use this to solve
+    *  the linear systems if the option linear_solver=custom is chosen.
+    */
    SmartPtr<AugSystemSolver> custom_solver_;
 
 };
 
-/** Function for setting options whos default is different for the
+/** Function for setting options who's default is different for the
  *  inexact algorithm compared to the defaults for the regular Ipopt
- *  algorithm.  The options_list is augmented by the different
- *  default values, but only if the corresponding option has not yet
- *  been set.  */
-void AddInexactDefaultOptions(OptionsList& options_list);
+ *  algorithm.
+ *
+ *  The options_list is augmented by the different default values,
+ *  but only if the corresponding option has not yet been set.
+ */
+void AddInexactDefaultOptions(
+   OptionsList& options_list
+   );
 
 } // namespace Ipopt
 

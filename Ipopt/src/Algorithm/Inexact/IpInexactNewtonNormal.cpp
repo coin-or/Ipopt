@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Andreas Waechter            IBM    2008-08-31
 
 #include "IpInexactNewtonNormal.hpp"
@@ -16,33 +14,37 @@ namespace Ipopt
 static const Index dbg_verbosity = 0;
 #endif
 
-InexactNewtonNormalStep::InexactNewtonNormalStep(SmartPtr<AugSystemSolver> aug_solver)
-   :
-   aug_solver_(aug_solver)
-{}
+InexactNewtonNormalStep::InexactNewtonNormalStep(
+   SmartPtr<AugSystemSolver> aug_solver
+   )
+   : aug_solver_(aug_solver)
+{ }
 
 InexactNewtonNormalStep::~InexactNewtonNormalStep()
-{}
+{ }
 
-void InexactNewtonNormalStep::RegisterOptions(SmartPtr<RegisteredOptions> reg_options)
-{}
+void InexactNewtonNormalStep::RegisterOptions(
+   SmartPtr<RegisteredOptions> reg_options
+   )
+{ }
 
-bool InexactNewtonNormalStep::InitializeImpl(const OptionsList& options,
-      const std::string& prefix)
+bool InexactNewtonNormalStep::InitializeImpl(
+   const OptionsList& options,
+   const std::string& prefix
+   )
 {
-   return aug_solver_->Initialize(Jnlst(), IpNLP(), IpData(),
-                                  IpCq(), options, prefix);
+   return aug_solver_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(), options, prefix);
 }
 
-bool
-InexactNewtonNormalStep::ComputeNewtonNormalStep(Vector& newton_x,
-      Vector& newton_s)
-
+bool InexactNewtonNormalStep::ComputeNewtonNormalStep(
+   Vector& newton_x,
+   Vector& newton_s
+   )
 {
    DBG_START_METH("InexactNewtonNormalStep::ComputeNormalNewtonStep",
-                  dbg_verbosity);
+      dbg_verbosity);
 
-   // Get the entires for the augmented system matrix
+   // Get the entries for the augmented system matrix
 
    // TODO: Make it possible to provide no Hessian!!!
    SmartPtr<const SymMatrix> zeroW = IpNLP().uninitialized_h();
@@ -66,23 +68,19 @@ InexactNewtonNormalStep::ComputeNewtonNormalStep(Vector& newton_x,
    SmartPtr<Vector> sol_c = curr_c->MakeNew();
    SmartPtr<Vector> sol_d = curr_d_minus_s->MakeNew();
 
-   ESymSolverStatus retval =
-      aug_solver_->Solve(GetRawPtr(zeroW), 0., NULL, 1., GetRawPtr(D_s), 0.,
-                         GetRawPtr(J_c), NULL, 0., GetRawPtr(J_d), NULL, 0.,
-                         *rhs_x, *rhs_s, *curr_c, *curr_d_minus_s,
-                         newton_x, newton_s, *sol_c, *sol_d, false, 0);
+   ESymSolverStatus retval = aug_solver_->Solve(GetRawPtr(zeroW), 0., NULL, 1., GetRawPtr(D_s), 0., GetRawPtr(J_c),
+      NULL, 0., GetRawPtr(J_d), NULL, 0., *rhs_x, *rhs_s, *curr_c, *curr_d_minus_s, newton_x, newton_s, *sol_c, *sol_d,
+      false, 0);
 
-   if (retval == SYMSOLVER_SINGULAR)
+   if( retval == SYMSOLVER_SINGULAR )
    {
-      Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
-                     "Resolving Newton step system with c-d perturbation.\n");
-      retval = aug_solver_->Solve(GetRawPtr(zeroW), 0., NULL, 1., GetRawPtr(D_s), 0.,
-                                  GetRawPtr(J_c), NULL, 1e-8, GetRawPtr(J_d), NULL, 1e-8,
-                                  *rhs_x, *rhs_s, *curr_c, *curr_d_minus_s,
-                                  newton_x, newton_s, *sol_c, *sol_d, false, 0);
+      Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM, "Resolving Newton step system with c-d perturbation.\n");
+      retval = aug_solver_->Solve(GetRawPtr(zeroW), 0., NULL, 1., GetRawPtr(D_s), 0., GetRawPtr(J_c), NULL, 1e-8,
+         GetRawPtr(J_d), NULL, 1e-8, *rhs_x, *rhs_s, *curr_c, *curr_d_minus_s, newton_x, newton_s, *sol_c, *sol_d,
+         false, 0);
    }
 
-   if (retval != SYMSOLVER_SUCCESS)
+   if( retval != SYMSOLVER_SUCCESS )
    {
       return false;
    }

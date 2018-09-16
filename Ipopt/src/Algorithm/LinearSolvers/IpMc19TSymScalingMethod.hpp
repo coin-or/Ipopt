@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-03-17
 
 #ifndef __IPMC19TSYMSCALINGMETHOD_HPP__
@@ -24,24 +22,29 @@ public:
    /** @name Constructor/Destructor */
    //@{
    Mc19TSymScalingMethod()
-   {}
+   { }
 
    virtual ~Mc19TSymScalingMethod()
-   {}
+   { }
    //@}
 
-   /** overloaded from AlgorithmStrategyObject */
-   virtual bool InitializeImpl(const OptionsList& options,
-                               const std::string& prefix);
+   virtual bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+      );
 
    /** Method for computing the symmetric scaling factors, given the
-    *  symmtric matrix in triplet (MA27) format. */
-   virtual bool ComputeSymTScalingFactors(Index n,
-                                          Index nnz,
-                                          const ipfint* airn,
-                                          const ipfint* ajcn,
-                                          const double* a,
-                                          double* scaling_factors);
+    *  symmetric matrix in triplet (MA27) format.
+    */
+   virtual bool ComputeSymTScalingFactors(
+      Index         n,
+      Index         nnz,
+      const ipfint* airn,
+      const ipfint* ajcn,
+      const double* a,
+      double*       scaling_factors
+      );
+
 private:
    /**@name Default Compiler Generated Methods (Hidden to avoid
     * implicit creation/calling).  These methods are not implemented
@@ -50,12 +53,15 @@ private:
     * they will not be implicitly created/called. */
    //@{
    /** Copy Constructor */
-   Mc19TSymScalingMethod(const Mc19TSymScalingMethod&);
+   Mc19TSymScalingMethod(
+      const Mc19TSymScalingMethod&
+      );
 
-   /** Overloaded Equals Operator */
-   void operator=(const Mc19TSymScalingMethod&);
+   /** Default Assignment Operator */
+   void operator=(
+      const Mc19TSymScalingMethod&
+      );
 };
-
 
 } // namespace Ipopt
 

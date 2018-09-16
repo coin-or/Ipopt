@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-03-17
 
 #ifndef __IPTSYMSCALINGMETHOD_HPP__
@@ -26,24 +24,29 @@ public:
    /** @name Constructor/Destructor */
    //@{
    TSymScalingMethod()
-   {}
+   { }
 
    ~TSymScalingMethod()
-   {}
+   { }
    //@}
 
-   /** overloaded from AlgorithmStrategyObject */
-   virtual bool InitializeImpl(const OptionsList& options,
-                               const std::string& prefix) = 0;
+   virtual bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+      ) = 0;
 
    /** Method for computing the symmetric scaling factors, given the
-    *  symmtric matrix in triplet (MA27) format. */
-   virtual bool ComputeSymTScalingFactors(Index n,
-                                          Index nnz,
-                                          const Index* airn,
-                                          const Index* ajcn,
-                                          const double* a,
-                                          double* scaling_factors) = 0;
+    *  symmetric matrix in triplet (MA27) format.
+    */
+   virtual bool ComputeSymTScalingFactors(
+      Index         n,
+      Index         nnz,
+      const Index*  airn,
+      const Index*  ajcn,
+      const double* a,
+      double*       scaling_factors
+      ) = 0;
+
 private:
    /**@name Default Compiler Generated Methods (Hidden to avoid
     * implicit creation/calling).  These methods are not implemented
@@ -52,10 +55,14 @@ private:
     * they will not be implicitly created/called. */
    //@{
    /** Copy Constructor */
-   TSymScalingMethod(const TSymScalingMethod&);
+   TSymScalingMethod(
+      const TSymScalingMethod&
+      );
 
-   /** Overloaded Equals Operator */
-   void operator=(const TSymScalingMethod&);
+   /** Default Assignment Operator */
+   void operator=(
+      const TSymScalingMethod&
+      );
 };
 
 } // namespace Ipopt

@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2005-06-06
 
 #include "IpIteratesVector.hpp"
@@ -11,18 +9,22 @@
 namespace Ipopt
 {
 
-IteratesVector::IteratesVector(const IteratesVectorSpace* owner_space, bool create_new)
-   :
-   CompoundVector(owner_space, create_new),
-   owner_space_(owner_space)
+IteratesVector::IteratesVector(
+   const IteratesVectorSpace* owner_space,
+   bool                       create_new
+   )
+   : CompoundVector(owner_space, create_new),
+     owner_space_(owner_space)
 {
    DBG_ASSERT(owner_space_);
 }
 
 IteratesVector::~IteratesVector()
-{}
+{ }
 
-SmartPtr<IteratesVector> IteratesVector::MakeNewIteratesVector(bool create_new) const
+SmartPtr<IteratesVector> IteratesVector::MakeNewIteratesVector(
+   bool create_new
+   ) const
 {
    return owner_space_->MakeNewIteratesVector(create_new);
 }
@@ -31,35 +33,35 @@ SmartPtr<IteratesVector> IteratesVector::MakeNewContainer() const
 {
    SmartPtr<IteratesVector> ret = MakeNewIteratesVector(false);
 
-   if (IsValid(x()))
+   if( IsValid(x()) )
    {
       ret->Set_x(*x());
    }
-   if (IsValid(s()))
+   if( IsValid(s()) )
    {
       ret->Set_s(*s());
    }
-   if (IsValid(y_c()))
+   if( IsValid(y_c()) )
    {
       ret->Set_y_c(*y_c());
    }
-   if (IsValid(y_d()))
+   if( IsValid(y_d()) )
    {
       ret->Set_y_d(*y_d());
    }
-   if (IsValid(z_L()))
+   if( IsValid(z_L()) )
    {
       ret->Set_z_L(*z_L());
    }
-   if (IsValid(z_U()))
+   if( IsValid(z_U()) )
    {
       ret->Set_z_U(*z_U());
    }
-   if (IsValid(v_L()))
+   if( IsValid(v_L()) )
    {
       ret->Set_v_L(*v_L());
    }
-   if (IsValid(v_U()))
+   if( IsValid(v_U()) )
    {
       ret->Set_v_U(*v_U());
    }
@@ -126,17 +128,19 @@ SmartPtr<IteratesVector> IteratesVector::MakeNewContainer() const
    //    return ret;
 }
 
-IteratesVectorSpace::IteratesVectorSpace(const VectorSpace& x_space, const VectorSpace& s_space,
-      const VectorSpace& y_c_space, const VectorSpace& y_d_space,
-      const VectorSpace& z_L_space, const VectorSpace& z_U_space,
-      const VectorSpace& v_L_space, const VectorSpace& v_U_space
-                                        )
-   :
-   CompoundVectorSpace(8, x_space.Dim() + s_space.Dim()
-                      + y_c_space.Dim() + y_d_space.Dim()
-                      + z_L_space.Dim() + z_U_space.Dim()
-                      + v_L_space.Dim() + v_U_space.Dim()
-                     )
+IteratesVectorSpace::IteratesVectorSpace(
+   const VectorSpace& x_space,
+   const VectorSpace& s_space,
+   const VectorSpace& y_c_space,
+   const VectorSpace& y_d_space,
+   const VectorSpace& z_L_space,
+   const VectorSpace& z_U_space,
+   const VectorSpace& v_L_space,
+   const VectorSpace& v_U_space
+   )
+   : CompoundVectorSpace(8,
+      x_space.Dim() + s_space.Dim() + y_c_space.Dim() + y_d_space.Dim() + z_L_space.Dim() + z_U_space.Dim()
+         + v_L_space.Dim() + v_U_space.Dim())
 {
    x_space_ = &x_space;
    s_space_ = &s_space;
@@ -158,6 +162,6 @@ IteratesVectorSpace::IteratesVectorSpace(const VectorSpace& x_space, const Vecto
 }
 
 IteratesVectorSpace::~IteratesVectorSpace()
-{}
+{ }
 
-} // namespae Ipopt
+} // namespace Ipopt

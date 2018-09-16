@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-03-17
 
 #ifndef __IPSPARSESYMLINEARSOLVERINTERFACE_HPP__
@@ -25,7 +23,7 @@ namespace Ipopt
  *  in compressed sparse row (CSR) format for the lower triangular
  *  part of the symmetric matrix.
  *
- *  The solver should be able to compute the interia of the matrix,
+ *  The solver should be able to compute the inertia of the matrix,
  *  or more specifically, the number of negative eigenvalues in the
  *  factorized matrix.
  *
@@ -42,7 +40,7 @@ namespace Ipopt
  *  representation the linear solver requires.  The possible options
  *  are Triplet_Format, as well as CSR_Format_0_Offset and
  *  CSR_Format_1_Offset.  The difference between the last two is
- *  that for CSR_Format_0_Offset the couning of the element position
+ *  that for CSR_Format_0_Offset the counting of the element position
  *  in the ia and ja arrays starts are 0 (C-style numbering),
  *  whereas for the other one it starts at 1 (Fortran-style
  *  numbering).
@@ -60,9 +58,9 @@ namespace Ipopt
  *  method call).  After a call of this method, the calling class
  *  will fill this array with the actual values of the matrix.
  *
- *  5. Every time lateron, when actual solves of a linear system is
+ *  5. Every time later on, when actual solves of a linear system is
  *  requested, the calling class will call the MultiSolve to request
- *  the solve, possibly for mulitple right-hand sides.  The flag
+ *  the solve, possibly for multiple right-hand sides.  The flag
  *  new_matrix then indicates if the values of the matrix have
  *  changed and if a factorization is required, or if an old
  *  factorization can be used to do the solve.
@@ -85,7 +83,7 @@ namespace Ipopt
  *  also in the linear solver, should be released.
  *
  *  Note, if the matrix is given in triplet format, entries might be
- *  listed multiple times, in which case the corresponsing elements
+ *  listed multiple times, in which case the corresponding elements
  *  have to be added.
  *
  *  A note for warm starts: If the option
@@ -94,73 +92,79 @@ namespace Ipopt
  *  structure is solved for a repeated time.  In that case, the
  *  linear solver might reuse information from the previous
  *  optimization.  See Ma27TSolverInterface for an example.
-*/
+ */
 class SparseSymLinearSolverInterface: public AlgorithmStrategyObject
 {
 public:
    /** Enum to specify sparse matrix format. */
    enum EMatrixFormat
    {
-      /** Triplet (MA27) format. */
+      /** Triplet (MA27) format */
       Triplet_Format,
-      /** Compressed sparse row format for lower triangular part, with
-       *  0 offset. */
+      /** Compressed sparse row format for lower triangular part, with 0 offset */
       CSR_Format_0_Offset,
-      /** Compressed sparse row format for lower triangular part, with
-       *  1 offset. */
+      /** Compressed sparse row format for lower triangular part, with 1 offset */
       CSR_Format_1_Offset,
-      /** Compressed sparse row format for both lwr and upr parts, with
-       *  0 offset. */
+      /** Compressed sparse row format for both lwr and upr parts, with 0 offset */
       CSR_Full_Format_0_Offset,
-      /** Compressed sparse row format for both lwr and upr parts, with
-       *  1 offset. */
+      /** Compressed sparse row format for both lwr and upr parts, with 1 offset */
       CSR_Full_Format_1_Offset
    };
+
    /** @name Constructor/Destructor */
    //@{
    SparseSymLinearSolverInterface()
-   {}
+   { }
 
    virtual ~SparseSymLinearSolverInterface()
-   {}
+   { }
    //@}
 
-   /** overloaded from AlgorithmStrategyObject */
-   virtual bool InitializeImpl(const OptionsList& options,
-                               const std::string& prefix) = 0;
+   virtual bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+      ) = 0;
 
    /** @name Methods for requesting solution of the linear system. */
    //@{
-   /** Method for initializing internal stuctures.  Here, ndim gives
-    *  the number of rows and columns of the matrix, nonzeros give
-    *  the number of nonzero elements, and ia and ja give the
-    *  positions of the nonzero elements, given in the matrix format
+   /** Method for initializing internal structures.
+    *
+    *  Here, ndim gives the number of rows and columns of the matrix,
+    *  nonzeros give the number of nonzero elements, and ia and ja give
+    *  the positions of the nonzero elements, given in the matrix format
     *  determined by MatrixFormat.
     */
-   virtual ESymSolverStatus InitializeStructure(Index dim, Index nonzeros,
-         const Index* ia,
-         const Index* ja) = 0;
+   virtual ESymSolverStatus InitializeStructure(
+      Index        dim,
+      Index        nonzeros,
+      const Index* ia,
+      const Index* ja
+      ) = 0;
 
-   /** Method returing an internal array into which the nonzero
+   /** Method returning an internal array into which the nonzero
     *  elements (in the same order as ja) will be stored by the
     *  calling routine before a call to MultiSolve with a
     *  new_matrix=true (or after a return of MultiSolve with
-    *  SYMSOLV_CALL_AGAIN). The returned array must have space for at
-    *  least nonzero elements. */
+    *  SYMSOLV_CALL_AGAIN).
+    *
+    *  The returned array must have space for at
+    *  least nonzero elements.
+    */
    virtual double* GetValuesArrayPtr() = 0;
 
-   /** Solve operation for multiple right hand sides.  Solves the
-    *  linear system A * x = b with multiple right hand sides, where
-    *  A is the symmtric indefinite matrix.  Here, ia and ja give the
-    *  positions of the values (in the required matrix data format).
+   /** Solve operation for multiple right hand sides.
+    *
+    *  Solves the linear system A * x = b with multiple right hand sides,
+    *  where A is the symmetric indefinite matrix. Here, ia and ja give
+    *  the positions of the values (in the required matrix data format).
     *  The actual values of the matrix will have been given to this
     *  object by copying them into the array provided by
     *  GetValuesArrayPtr. ia and ja are identical to the ones given
     *  to InitializeStructure.  The flag new_matrix is set to true,
-    *  if the values of the matrix has changed, and a refactorzation
+    *  if the values of the matrix has changed, and a refactorization
     *  is required.
     *
-    *  The return code is SYMSOLV_SUCCESS if the factorization and
+    *  @return SYMSOLV_SUCCESS if the factorization and
     *  solves were successful, SYMSOLV_SINGULAR if the linear system
     *  is singular, and SYMSOLV_WRONG_INERTIA if check_NegEVals is
     *  true and the number of negative eigenvalues in the matrix does
@@ -181,35 +185,41 @@ public:
     *  check_NegEVals will not be chosen true, if ProvidesInertia()
     *  returns false.
     */
-   virtual ESymSolverStatus MultiSolve(bool new_matrix,
-                                       const Index* ia,
-                                       const Index* ja,
-                                       Index nrhs,
-                                       double* rhs_vals,
-                                       bool check_NegEVals,
-                                       Index numberOfNegEVals) = 0;
+   virtual ESymSolverStatus MultiSolve(
+      bool         new_matrix,
+      const Index* ia,
+      const Index* ja,
+      Index        nrhs,
+      double*      rhs_vals,
+      bool         check_NegEVals,
+      Index        numberOfNegEVals
+      ) = 0;
 
-   /** Number of negative eigenvalues detected during last
-    *  factorization.  Returns the number of negative eigenvalues of
-    *  the most recent factorized matrix.  This must not be called if
-    *  the linear solver does not compute this quantities (see
-    *  ProvidesInertia).
+   /** Number of negative eigenvalues detected during last factorization.
+    *
+    *  @return the number of negative eigenvalues of the most recent factorized matrix.
+    *
+    *  This must not be called if the linear solver does not compute this quantities
+    *  (see ProvidesInertia).
     */
    virtual Index NumberOfNegEVals() const = 0;
    //@}
 
    //* @name Options of Linear solver */
    //@{
-   /** Request to increase quality of solution for next solve.  The
-    *  calling class asks linear solver to increase quality of
+   /** Request to increase quality of solution for next solve.
+    *
+    *  The calling class asks linear solver to increase quality of
     *  solution for the next solve (e.g. increase pivot tolerance).
-    *  Returns false, if this is not possible (e.g. maximal pivot
+    *
+    *  @return false, if this is not possible (e.g. maximal pivot
     *  tolerance already used.)
     */
    virtual bool IncreaseQuality() = 0;
 
-   /** Query whether inertia is computed by linear solver.  Returns
-    *  true, if linear solver provides inertia.
+   /** Query whether inertia is computed by linear solver.
+    *
+    *  @return true, if linear solver provides inertia
     */
    virtual bool ProvidesInertia() const = 0;
 
@@ -223,16 +233,21 @@ public:
     *  rows in a matrix */
    //@{
    /** Query whether the indices of linearly dependent rows/columns
-    *  can be determined by this linear solver. */
+    *  can be determined by this linear solver.
+    */
    virtual bool ProvidesDegeneracyDetection() const
    {
       return false;
    }
+
    /** This method determines the list of row indices of the linearly
-    *  dependent rows. */
-   virtual ESymSolverStatus DetermineDependentRows(const Index* ia,
-         const Index* ja,
-         std::list<Index>& c_deps)
+    *  dependent rows.
+    */
+   virtual ESymSolverStatus DetermineDependentRows(
+      const Index*      ia,
+      const Index*      ja,
+      std::list<Index>& c_deps
+      )
    {
       return SYMSOLVER_FATAL_ERROR;
    }

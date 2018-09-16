@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter     IBM    2005-03-17
 //
 //           Olaf Schenk                      Univ of Basel 2005-09-20
@@ -57,35 +55,62 @@
 # define PARDISO_FUNC F77_FUNC(pardiso,PARDISO)
 #endif
 
-
 /* Prototypes for Pardiso's subroutines */
 extern "C"
 {
 #if defined(HAVE_PARDISO_OLDINTERFACE) || defined(HAVE_PARDISO_MKL)
-   void PARDISOINIT_FUNC(void* PT, const ipfint* MTYPE, ipfint* IPARM);
+void PARDISOINIT_FUNC(
+   void*         PT,
+   const ipfint* MTYPE,
+   ipfint*       IPARM
+   );
 #else
-   // The following is a fix to allow linking with Pardiso library under Windows
-   void PARDISOINIT_FUNC(void* PT, const ipfint* MTYPE,
-                         const ipfint* SOLVER,
-                         ipfint* IPARM,
-                         double* DPARM,
-                         ipfint* ERROR);
+// The following is a fix to allow linking with Pardiso library under Windows
+void PARDISOINIT_FUNC(
+   void*         PT,
+   const ipfint* MTYPE,
+   const ipfint* SOLVER,
+   ipfint*       IPARM,
+   double*       DPARM,
+   ipfint*       ERROR
+   );
 #endif
-   void PARDISO_FUNC(void** PT, const ipfint* MAXFCT,
-                     const ipfint* MNUM, const ipfint* MTYPE,
-                     const ipfint* PHASE, const ipfint* N,
-                     const double* A, const ipfint* IA,
-                     const ipfint* JA, const ipfint* PERM,
-                     const ipfint* NRHS, ipfint* IPARM,
-                     const ipfint* MSGLVL, double* B, double* X,
-                     ipfint* ERROR, double* DPARM);
 
+void PARDISO_FUNC(
+   void**        PT,
+   const ipfint* MAXFCT,
+   const ipfint* MNUM,
+   const ipfint* MTYPE,
+   const ipfint* PHASE,
+   const ipfint* N,
+   const double* A,
+   const ipfint* IA,
+   const ipfint* JA,
+   const ipfint* PERM,
+   const ipfint* NRHS,
+   ipfint*       IPARM,
+   const ipfint* MSGLVL,
+   double*       B,
+   double*       X,
+   ipfint*       ERROR,
+   double*       DPARM
+   );
 
 #ifdef PARDISO_MATCHING_PREPROCESS
-   void smat_reordering_pardiso_wsmp_(const ipfint* N, const ipfint* ia, const ipfint* ja, const double* a_, ipfint* a2, ipfint* ja2,  double* a2_,
-                                      ipfint* perm2,  double* scale2, ipfint* tmp2_, ipfint preprocess );
+void smat_reordering_pardiso_wsmp_(
+   const ipfint* N,
+   const ipfint* ia,
+   const ipfint* ja,
+   const double* a_,
+   ipfint*       a2,
+   ipfint*       ja2,
+   double*       a2_,
+   ipfint*       perm2,
+   double*       scale2,
+   ipfint*       tmp2_,
+   ipfint        preprocess
+   );
 #endif
-
 }
 
 namespace Ipopt
@@ -95,29 +120,25 @@ static const Index dbg_verbosity = 0;
 #endif
 
 PardisoSolverInterface::PardisoSolverInterface()
-   :
-   a_(NULL),
-
+: a_(NULL),
 #ifdef PARDISO_MATCHING_PREPROCESS
-   ia2(NULL),
-   ja2(NULL),
-   a2_(NULL),
-   perm2(NULL),
-   scale2(NULL),
+  ia2(NULL),
+  ja2(NULL),
+  a2_(NULL),
+  perm2(NULL),
+  scale2(NULL),
 #endif
-
-   negevals_(-1),
-   initialized_(false),
-
-   MAXFCT_(1),
-   MNUM_(1),
-   MTYPE_(-2),
-   MSGLVL_(0),
-   debug_last_iter_(-1)
+  negevals_(-1),
+  initialized_(false),
+  MAXFCT_(1),
+  MNUM_(1),
+  MTYPE_(-2),
+  MSGLVL_(0),
+  debug_last_iter_(-1)
 {
    DBG_START_METH("PardisoSolverInterface::PardisoSolverInterface()", dbg_verbosity);
 
-   PT_ = new void* [64];
+   PT_ = new void*[64];
    IPARM_ = new ipfint[64];
    DPARM_ = new double[64];
 }
@@ -125,10 +146,10 @@ PardisoSolverInterface::PardisoSolverInterface()
 PardisoSolverInterface::~PardisoSolverInterface()
 {
    DBG_START_METH("PardisoSolverInterface::~PardisoSolverInterface()",
-                  dbg_verbosity);
+      dbg_verbosity);
 
    // Tell Pardiso to release all memory
-   if (initialized_)
+   if( initialized_ )
    {
       ipfint PHASE = -1;
       ipfint N = dim_;
@@ -136,9 +157,8 @@ PardisoSolverInterface::~PardisoSolverInterface()
       ipfint ERROR;
       ipfint idmy;
       double ddmy;
-      PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N,
-                   &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_,
-                   &MSGLVL_, &ddmy, &ddmy, &ERROR, DPARM_);
+      PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
+         &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
    }
 
@@ -157,31 +177,21 @@ PardisoSolverInterface::~PardisoSolverInterface()
 
 }
 
-void PardisoSolverInterface::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
+void PardisoSolverInterface::RegisterOptions(
+   SmartPtr<RegisteredOptions> roptions
+   )
 {
    // Todo Use keywords instead of integer numbers
-   roptions->AddStringOption3(
-      "pardiso_matching_strategy",
-      "Matching strategy to be used by Pardiso",
-      "complete+2x2",
-      "complete", "Match complete (IPAR(13)=1)",
-      "complete+2x2", "Match complete+2x2 (IPAR(13)=2)",
-      "constraints", "Match constraints (IPAR(13)=3)",
-      "This is IPAR(13) in Pardiso manual.");
-   roptions->AddStringOption2(
-      "pardiso_redo_symbolic_fact_only_if_inertia_wrong",
-      "Toggle for handling case when elements were perturbed by Pardiso.",
-      "no",
-      "no", "Always redo symbolic factorization when elements were perturbed",
-      "yes", "Only redo symbolic factorization when elements were perturbed if also the inertia was wrong",
-      "");
-   roptions->AddStringOption2(
-      "pardiso_repeated_perturbation_means_singular",
-      "Interpretation of perturbed elements.",
-      "no",
-      "no", "Don't assume that matrix is singular if elements were perturbed after recent symbolic factorization",
-      "yes", "Assume that matrix is singular if elements were perturbed after recent symbolic factorization",
-      "");
+   roptions->AddStringOption3("pardiso_matching_strategy", "Matching strategy to be used by Pardiso", "complete+2x2",
+      "complete", "Match complete (IPAR(13)=1)", "complete+2x2", "Match complete+2x2 (IPAR(13)=2)", "constraints",
+      "Match constraints (IPAR(13)=3)", "This is IPAR(13) in Pardiso manual.");
+   roptions->AddStringOption2("pardiso_redo_symbolic_fact_only_if_inertia_wrong",
+      "Toggle for handling case when elements were perturbed by Pardiso.", "no", "no",
+      "Always redo symbolic factorization when elements were perturbed", "yes",
+      "Only redo symbolic factorization when elements were perturbed if also the inertia was wrong", "");
+   roptions->AddStringOption2("pardiso_repeated_perturbation_means_singular", "Interpretation of perturbed elements.",
+      "no", "no", "Don't assume that matrix is singular if elements were perturbed after recent symbolic factorization",
+      "yes", "Assume that matrix is singular if elements were perturbed after recent symbolic factorization", "");
    //roptions->AddLowerBoundedIntegerOption(
    //  "pardiso_out_of_core_power",
    //  "Enables out-of-core variant of Pardiso",
@@ -190,24 +200,14 @@ void PardisoSolverInterface::RegisterOptions(SmartPtr<RegisteredOptions> roption
    //  "out-of-core variant where the factor is split in 2^k subdomains.  This "
    //  "is IPARM(50) in the Pardiso manual.  This option is only available if "
    //  "Ipopt has been compiled with Pardiso.");
-   roptions->AddLowerBoundedIntegerOption(
-      "pardiso_msglvl",
-      "Pardiso message level",
-      0, 0,
+   roptions->AddLowerBoundedIntegerOption("pardiso_msglvl", "Pardiso message level", 0, 0,
       "This determines the amount of analysis output from the Pardiso solver. "
       "This is MSGLVL in the Pardiso manual.");
-   roptions->AddStringOption2(
-      "pardiso_skip_inertia_check",
-      "Always pretend inertia is correct.",
-      "no",
-      "no", "check inertia",
-      "yes", "skip inertia check",
-      "Setting this option to \"yes\" essentially disables inertia check. "
+   roptions->AddStringOption2("pardiso_skip_inertia_check", "Always pretend inertia is correct.", "no", "no",
+      "check inertia", "yes", "skip inertia check", "Setting this option to \"yes\" essentially disables inertia check. "
       "This option makes the algorithm non-robust and easily fail, but it "
       "might give some insight into the necessity of inertia control.");
-   roptions->AddIntegerOption(
-      "pardiso_max_iterative_refinement_steps",
-      "Limit on number of iterative refinement steps.",
+   roptions->AddIntegerOption("pardiso_max_iterative_refinement_steps", "Limit on number of iterative refinement steps.",
       // ToDo: Decide how many iterative refinement steps in Pardiso.
       //       For now, we keep the default (0) for Basel Pardiso.
       //       For MKL Pardiso, it seems that setting it to 1 makes it more
@@ -234,91 +234,50 @@ void PardisoSolverInterface::RegisterOptions(SmartPtr<RegisteredOptions> roption
       "pmetis", "parallel (OpenMP) version of MeTiS nested dissection algorithm",
       "");
 #else
-   roptions->AddStringOption6(
-      "pardiso_order",
-      "Controls the fill-in reduction ordering algorithm for the input matrix.",
-      "five",
-      "amd", "minimum degree algorithm",
-      "one", "undocumented",
-      "metis", "MeTiS nested dissection algorithm",
-      "pmetis", "parallel (OpenMP) version of MeTiS nested dissection algorithm",
-      "four", "undocumented",
-      "five", "undocumented"
+   roptions->AddStringOption6("pardiso_order", "Controls the fill-in reduction ordering algorithm for the input matrix.",
+      "five", "amd", "minimum degree algorithm", "one", "undocumented", "metis", "MeTiS nested dissection algorithm",
+      "pmetis", "parallel (OpenMP) version of MeTiS nested dissection algorithm", "four", "undocumented", "five",
+      "undocumented"
       "");
 #endif
 #if !defined(HAVE_PARDISO_OLDINTERFACE) && !defined(HAVE_PARDISO_MKL)
-   roptions->AddLowerBoundedIntegerOption(
-      "pardiso_max_iter",
-      "Maximum number of Krylov-Subspace Iteration",
-      1, 500,
+   roptions->AddLowerBoundedIntegerOption("pardiso_max_iter", "Maximum number of Krylov-Subspace Iteration", 1, 500,
       "DPARM(1)");
-   roptions->AddBoundedNumberOption(
-      "pardiso_iter_relative_tol",
-      "Relative Residual Convergence",
-      0.0, true, 1.0, true, 1e-6,
-      "DPARM(2)");
-   roptions->AddLowerBoundedIntegerOption(
-      "pardiso_iter_coarse_size",
-      "Maximum Size of Coarse Grid Matrix",
-      1, 5000,
+   roptions->AddBoundedNumberOption("pardiso_iter_relative_tol", "Relative Residual Convergence", 0.0, true, 1.0, true,
+      1e-6, "DPARM(2)");
+   roptions->AddLowerBoundedIntegerOption("pardiso_iter_coarse_size", "Maximum Size of Coarse Grid Matrix", 1, 5000,
       "DPARM(3)");
-   roptions->AddLowerBoundedIntegerOption(
-      "pardiso_iter_max_levels",
-      "Maximum Size of Grid Levels",
-      1, 10,
-      "DPARM(4)");
-   roptions->AddBoundedNumberOption(
-      "pardiso_iter_dropping_factor",
-      "dropping value for incomplete factor",
-      0.0, true, 1.0, true, 0.5,
-      "DPARM(5)");
-   roptions->AddBoundedNumberOption(
-      "pardiso_iter_dropping_schur",
-      "dropping value for sparsify schur complement factor",
-      0.0, true, 1.0, true, 1e-1,
-      "DPARM(6)");
-   roptions->AddLowerBoundedIntegerOption(
-      "pardiso_iter_max_row_fill",
-      "max fill for each row",
-      1, 10000000,
-      "DPARM(7)");
-   roptions->AddLowerBoundedNumberOption(
-      "pardiso_iter_inverse_norm_factor",
-      "",
-      1, true, 5000000,
-      "DPARM(8)");
-   roptions->AddStringOption2(
-      "pardiso_iterative",
-      "Switch on iterative solver in Pardiso library",
-      "no",
-      "no", "",
-      "yes", "",
-      "This option is not available for Pardiso < 4.0 or MKL Pardiso");
-   roptions->AddLowerBoundedIntegerOption(
-      "pardiso_max_droptol_corrections",
-      "Maximal number of decreases of drop tolerance during one solve.",
-      1, 4,
+   roptions->AddLowerBoundedIntegerOption("pardiso_iter_max_levels", "Maximum Size of Grid Levels", 1, 10, "DPARM(4)");
+   roptions->AddBoundedNumberOption("pardiso_iter_dropping_factor", "dropping value for incomplete factor", 0.0, true, 1.0,
+      true, 0.5, "DPARM(5)");
+   roptions->AddBoundedNumberOption("pardiso_iter_dropping_schur", "dropping value for sparsify schur complement factor",
+      0.0, true, 1.0, true, 1e-1, "DPARM(6)");
+   roptions->AddLowerBoundedIntegerOption("pardiso_iter_max_row_fill", "max fill for each row", 1, 10000000, "DPARM(7)");
+   roptions->AddLowerBoundedNumberOption("pardiso_iter_inverse_norm_factor", "", 1, true, 5000000, "DPARM(8)");
+   roptions->AddStringOption2("pardiso_iterative", "Switch on iterative solver in Pardiso library", "no", "no", "", "yes",
+      "", "This option is not available for Pardiso < 4.0 or MKL Pardiso");
+   roptions->AddLowerBoundedIntegerOption("pardiso_max_droptol_corrections",
+      "Maximal number of decreases of drop tolerance during one solve.", 1, 4,
       "This is relevant only for iterative Pardiso options.");
 #endif
 }
 
-bool PardisoSolverInterface::InitializeImpl(const OptionsList& options,
-      const std::string& prefix)
+bool PardisoSolverInterface::InitializeImpl(
+   const OptionsList& options,
+   const std::string& prefix
+   )
 {
    Index enum_int;
    options.GetEnumValue("pardiso_matching_strategy", enum_int, prefix);
    match_strat_ = PardisoMatchingStrategy(enum_int);
    options.GetBoolValue("pardiso_redo_symbolic_fact_only_if_inertia_wrong",
-                        pardiso_redo_symbolic_fact_only_if_inertia_wrong_,
-                        prefix);
-   options.GetBoolValue("pardiso_repeated_perturbation_means_singular",
-                        pardiso_repeated_perturbation_means_singular_,
-                        prefix);
+      pardiso_redo_symbolic_fact_only_if_inertia_wrong_, prefix);
+   options.GetBoolValue("pardiso_repeated_perturbation_means_singular", pardiso_repeated_perturbation_means_singular_,
+      prefix);
    //Index pardiso_out_of_core_power;
    //options.GetIntegerValue("pardiso_out_of_core_power",
    //                        pardiso_out_of_core_power, prefix);
-   options.GetBoolValue("pardiso_skip_inertia_check",
-                        skip_inertia_check_, prefix);
+   options.GetBoolValue("pardiso_skip_inertia_check", skip_inertia_check_, prefix);
    int pardiso_msglvl;
    options.GetIntegerValue("pardiso_msglvl", pardiso_msglvl, prefix);
    int max_iterref_steps;
@@ -330,28 +289,20 @@ bool PardisoSolverInterface::InitializeImpl(const OptionsList& options,
    int pardiso_max_iter;
    options.GetIntegerValue("pardiso_max_iter", pardiso_max_iter, prefix);
    Number pardiso_iter_relative_tol;
-   options.GetNumericValue("pardiso_iter_relative_tol",
-                           pardiso_iter_relative_tol, prefix);
+   options.GetNumericValue("pardiso_iter_relative_tol", pardiso_iter_relative_tol, prefix);
    Index pardiso_iter_coarse_size;
-   options.GetIntegerValue("pardiso_iter_coarse_size",
-                           pardiso_iter_coarse_size, prefix);
+   options.GetIntegerValue("pardiso_iter_coarse_size", pardiso_iter_coarse_size, prefix);
    Index pardiso_iter_max_levels;
-   options.GetIntegerValue("pardiso_iter_max_levels",
-                           pardiso_iter_max_levels, prefix);
+   options.GetIntegerValue("pardiso_iter_max_levels", pardiso_iter_max_levels, prefix);
    Number pardiso_iter_dropping_factor;
-   options.GetNumericValue("pardiso_iter_dropping_factor",
-                           pardiso_iter_dropping_factor, prefix);
+   options.GetNumericValue("pardiso_iter_dropping_factor", pardiso_iter_dropping_factor, prefix);
    Number pardiso_iter_dropping_schur;
-   options.GetNumericValue("pardiso_iter_dropping_schur",
-                           pardiso_iter_dropping_schur, prefix);
+   options.GetNumericValue("pardiso_iter_dropping_schur", pardiso_iter_dropping_schur, prefix);
    Index pardiso_iter_max_row_fill;
-   options.GetIntegerValue("pardiso_iter_max_row_fill",
-                           pardiso_iter_max_row_fill, prefix);
+   options.GetIntegerValue("pardiso_iter_max_row_fill", pardiso_iter_max_row_fill, prefix);
    Number pardiso_iter_inverse_norm_factor;
-   options.GetNumericValue("pardiso_iter_inverse_norm_factor",
-                           pardiso_iter_inverse_norm_factor, prefix);
-   options.GetIntegerValue("pardiso_max_droptol_corrections",
-                           pardiso_max_droptol_corrections_, prefix);
+   options.GetNumericValue("pardiso_iter_inverse_norm_factor", pardiso_iter_inverse_norm_factor, prefix);
+   options.GetIntegerValue("pardiso_max_droptol_corrections", pardiso_max_droptol_corrections_, prefix);
 #else
    pardiso_iterative_ = false;
 #endif
@@ -359,7 +310,7 @@ bool PardisoSolverInterface::InitializeImpl(const OptionsList& options,
    // Number value = 0.0;
 
    // Tell Pardiso to release all memory if it had been used before
-   if (initialized_)
+   if( initialized_ )
    {
       ipfint PHASE = -1;
       ipfint N = dim_;
@@ -367,9 +318,8 @@ bool PardisoSolverInterface::InitializeImpl(const OptionsList& options,
       ipfint ERROR;
       ipfint idmy;
       double ddmy;
-      PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N,
-                   &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_,
-                   &MSGLVL_, &ddmy, &ddmy, &ERROR, DPARM_);
+      PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
+         &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
    }
 
@@ -418,17 +368,16 @@ bool PardisoSolverInterface::InitializeImpl(const OptionsList& options,
 #if defined(HAVE_PARDISO_PARALLEL) || ! defined(HAVE_PARDISO)
    // Obtain the numbers of processors from the value of OMP_NUM_THREADS
    char* var = getenv("OMP_NUM_THREADS");
-   if (var != NULL)
+   if( var != NULL )
    {
-      sscanf( var, "%d", &num_procs );
-      if (num_procs < 1)
+      sscanf(var, "%d", &num_procs);
+      if( num_procs < 1 )
       {
-         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                        "Invalid value for OMP_NUM_THREADS (\"%s\").\n", var);
+         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Invalid value for OMP_NUM_THREADS (\"%s\").\n", var);
          return false;
       }
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "Using environment OMP_NUM_THREADS = %d as the number of processors for PARDISO.\n", num_procs);
+         "Using environment OMP_NUM_THREADS = %d as the number of processors for PARDISO.\n", num_procs);
    }
 #if defined(HAVE_PARDISO) && ! defined(HAVE_PARDISO_MKL)
    // If we run Pardiso through the linear solver loader,
@@ -437,7 +386,7 @@ bool PardisoSolverInterface::InitializeImpl(const OptionsList& options,
    else
    {
       Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                     "You should set the environment variable OMP_NUM_THREADS to the number of processors used in Pardiso (e.g., 1).\n\n");
+         "You should set the environment variable OMP_NUM_THREADS to the number of processors used in Pardiso (e.g., 1).\n\n");
    }
 #endif
 #endif
@@ -445,14 +394,14 @@ bool PardisoSolverInterface::InitializeImpl(const OptionsList& options,
 #ifdef HAVE_PARDISO_MKL
    IPARM_[1] = order;
    // For MKL PARDSIO, the documentation says, "iparm(3) Reserved. Set to zero.", so we don't set IPARM_[2]
-   IPARM_[5] = 1;  // Overwrite right-hand side
+   IPARM_[5] = 1;// Overwrite right-hand side
    IPARM_[7] = max_iterref_steps;
-   IPARM_[9] = 12; // pivot perturbation (as higher as less perturbation)
-   IPARM_[10] = 2; // enable scaling (recommended for interior-point indefinite matrices)
-   IPARM_[12] = (int)match_strat_; // enable matching (recommended, as above)
-   IPARM_[20] = 3; // bunch-kaufman pivoting
-   IPARM_[23] = 1; // parallel fac
-   IPARM_[24] = 0; // parallel solve
+   IPARM_[9] = 12;// pivot perturbation (as higher as less perturbation)
+   IPARM_[10] = 2;// enable scaling (recommended for interior-point indefinite matrices)
+   IPARM_[12] = (int)match_strat_;// enable matching (recommended, as above)
+   IPARM_[20] = 3;// bunch-kaufman pivoting
+   IPARM_[23] = 1;// parallel fac
+   IPARM_[24] = 0;// parallel solve
    //IPARM_[26] = 1; // matrix checker
 #else
    IPARM_[1] = order;
@@ -466,7 +415,7 @@ bool PardisoSolverInterface::InitializeImpl(const OptionsList& options,
    // Matching information:  IPARM_[12] = 1 seems ok, but results in a
    // large number of pivot perturbation
    // Matching information:  IPARM_[12] = 2 robust,  but more  expensive method
-   IPARM_[12] = (int)match_strat_;
+   IPARM_[12] = (int) match_strat_;
 
    IPARM_[20] = 3; // Results in better accuracy
    IPARM_[23] = 1; // parallel fac
@@ -476,53 +425,50 @@ bool PardisoSolverInterface::InitializeImpl(const OptionsList& options,
    //IPARM_[33] = 1; // bit-by-bit identical results in parallel run
 #endif
 
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                  "Pardiso matrix ordering     (IPARM(2)): %d\n", IPARM_[1]);
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                  "Pardiso max. iterref. steps (IPARM(8)): %d\n", IPARM_[7]);
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                  "Pardiso matching strategy  (IPARM(13)): %d\n", IPARM_[12]);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Pardiso matrix ordering     (IPARM(2)): %d\n", IPARM_[1]);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Pardiso max. iterref. steps (IPARM(8)): %d\n", IPARM_[7]);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Pardiso matching strategy  (IPARM(13)): %d\n", IPARM_[12]);
 
-   if (pardiso_iterative_)
+   if( pardiso_iterative_ )
    {
 #if defined(HAVE_PARDISO_OLDINTERFACE) || defined(HAVE_PARDISO_MKL)
       THROW_EXCEPTION(OPTION_INVALID,
-                      "You chose to use the iterative version of Pardiso, but you need to use a Pardiso version of at least 4.0.");
+         "You chose to use the iterative version of Pardiso, but you need to use a Pardiso version of at least 4.0.");
 #else
-      IPARM_[31] = 1 ;  // active direct solver
+      IPARM_[31] = 1;  // active direct solver
 
-      DPARM_[ 0] = pardiso_max_iter; // maximum number of Krylov-Subspace Iteration
+      DPARM_[0] = pardiso_max_iter; // maximum number of Krylov-Subspace Iteration
       // Default is 300
       // 1 <= value <= e.g. 1000
-      DPARM_[ 1] = pardiso_iter_relative_tol; // Relative Residual Convergence
+      DPARM_[1] = pardiso_iter_relative_tol; // Relative Residual Convergence
       // e.g.  pardiso_iter_tol
       // Default is 1e-6
       // 1e-16 <= value < 1
-      DPARM_[ 2] = pardiso_iter_coarse_size; // Maximum Size of Coarse Grid Matrix
+      DPARM_[2] = pardiso_iter_coarse_size; // Maximum Size of Coarse Grid Matrix
       // e.g.  pardiso_coarse_grid
       // Default is 5000
       // 1 <= value < number of equations
-      DPARM_[ 3] = pardiso_iter_max_levels; // Maximum Number of Grid Levels
+      DPARM_[3] = pardiso_iter_max_levels; // Maximum Number of Grid Levels
       // e.g.  pardiso_max_grid
       // Default is 10000
       // 1 <= value < number of equations
-      DPARM_[ 4] = pardiso_iter_dropping_factor;  // dropping value for incomplete factor
+      DPARM_[4] = pardiso_iter_dropping_factor;  // dropping value for incomplete factor
       // e.g.  pardiso_dropping_factor
       // Default is 0.5
       // 1e-16 <= value < 1
-      DPARM_[ 5] = pardiso_iter_dropping_schur;  // dropping value for sparsify schur complementfactor
+      DPARM_[5] = pardiso_iter_dropping_schur;  // dropping value for sparsify schur complementfactor
       // e.g.  pardiso_dropping_schur
       // Default is 0.1
       // 1e-16 <= value < 1
-      DPARM_[ 6] = pardiso_iter_max_row_fill;  // max fill for each row
+      DPARM_[6] = pardiso_iter_max_row_fill;  // max fill for each row
       // e.g.  pardiso_max_fill
       // Default is 1000
       // 1 <= value < 100000
-      DPARM_[ 7] = pardiso_iter_inverse_norm_factor;  // dropping value for sparsify schur complementfactor
+      DPARM_[7] = pardiso_iter_inverse_norm_factor;  // dropping value for sparsify schur complementfactor
       // e.g.  pardiso_inverse_norm_factor
       // Default is 500
       // 2 <= value < 50000
-      DPARM_[ 8] = 25; // maximum number of non-improvement steps
+      DPARM_[8] = 25; // maximum number of non-improvement steps
 #endif
    }
 
@@ -534,25 +480,25 @@ bool PardisoSolverInterface::InitializeImpl(const OptionsList& options,
    return true;
 }
 
-ESymSolverStatus PardisoSolverInterface::MultiSolve(bool new_matrix,
-      const Index* ia,
-      const Index* ja,
-      Index nrhs,
-      double* rhs_vals,
-      bool check_NegEVals,
-      Index numberOfNegEVals)
+ESymSolverStatus PardisoSolverInterface::MultiSolve(
+   bool         new_matrix,
+   const Index* ia,
+   const Index* ja,
+   Index        nrhs,
+   double*      rhs_vals,
+   bool         check_NegEVals,
+   Index        numberOfNegEVals
+   )
 {
-   DBG_START_METH("PardisoSolverInterface::MultiSolve", dbg_verbosity);
-   DBG_ASSERT(!check_NegEVals || ProvidesInertia());
-   DBG_ASSERT(initialized_);
+   DBG_START_METH("PardisoSolverInterface::MultiSolve", dbg_verbosity); DBG_ASSERT(!check_NegEVals || ProvidesInertia()); DBG_ASSERT(initialized_);
 
    // check if a factorization has to be done
-   if (new_matrix)
+   if( new_matrix )
    {
       // perform the factorization
       ESymSolverStatus retval;
       retval = Factorization(ia, ja, check_NegEVals, numberOfNegEVals);
-      if (retval != SYMSOLVER_SUCCESS)
+      if( retval != SYMSOLVER_SUCCESS )
       {
          DBG_PRINT((1, "FACTORIZATION FAILED!\n"));
          return retval;  // Matrix singular or error occurred
@@ -565,17 +511,16 @@ ESymSolverStatus PardisoSolverInterface::MultiSolve(bool new_matrix,
 
 double* PardisoSolverInterface::GetValuesArrayPtr()
 {
-   DBG_ASSERT(initialized_);
-   DBG_ASSERT(a_);
+   DBG_ASSERT(initialized_); DBG_ASSERT(a_);
    return a_;
 }
 
-/** Initialize the local copy of the positions of the nonzero
-    elements */
-ESymSolverStatus PardisoSolverInterface::InitializeStructure
-(Index dim, Index nonzeros,
- const Index* ia,
- const Index* ja)
+ESymSolverStatus PardisoSolverInterface::InitializeStructure(
+   Index        dim,
+   Index        nonzeros,
+   const Index* ia,
+   const Index* ja
+   )
 {
    DBG_START_METH("PardisoSolverInterface::InitializeStructure", dbg_verbosity);
    dim_ = dim;
@@ -588,7 +533,7 @@ ESymSolverStatus PardisoSolverInterface::InitializeStructure
 
    // Do the symbolic facotrization
    ESymSolverStatus retval = SymbolicFactorization(ia, ja);
-   if (retval != SYMSOLVER_SUCCESS)
+   if( retval != SYMSOLVER_SUCCESS )
    {
       return retval;
    }
@@ -598,12 +543,13 @@ ESymSolverStatus PardisoSolverInterface::InitializeStructure
    return retval;
 }
 
-ESymSolverStatus
-PardisoSolverInterface::SymbolicFactorization(const Index* ia,
-      const Index* ja)
+ESymSolverStatus PardisoSolverInterface::SymbolicFactorization(
+   const Index* ia,
+   const Index* ja
+   )
 {
    DBG_START_METH("PardisoSolverInterface::SymbolicFactorization",
-                  dbg_verbosity);
+      dbg_verbosity);
 
    // Since Pardiso requires the values of the nonzeros of the matrix
    // for an efficient symbolic factorization, we postpone that task
@@ -616,111 +562,112 @@ PardisoSolverInterface::SymbolicFactorization(const Index* ia,
    return SYMSOLVER_SUCCESS;
 }
 
-static void
-write_iajaa_matrix (int     N,
-                    const Index*  ia,
-                    const Index*  ja,
-                    double*      a_,
-                    double*      rhs_vals,
-                    int        iter_cnt,
-                    int        sol_cnt)
+static
+void write_iajaa_matrix(
+   int          N,
+   const Index* ia,
+   const Index* ja,
+   double*      a_,
+   double*      rhs_vals,
+   int          iter_cnt,
+   int          sol_cnt
+   )
 {
-   if (getenv ("IPOPT_WRITE_MAT"))
+   if( getenv("IPOPT_WRITE_MAT") )
    {
       /* Write header */
-      FILE*    mat_file;
-      char     mat_name[128];
-      char     mat_pref[32];
+      FILE* mat_file;
+      char mat_name[128];
+      char mat_pref[32];
 
-      ipfint   NNZ = ia[N] - 1;
-      ipfint   i;
+      ipfint NNZ = ia[N] - 1;
+      ipfint i;
 
-      if (getenv ("IPOPT_WRITE_PREFIX"))
+      if( getenv("IPOPT_WRITE_PREFIX") )
       {
-         strcpy (mat_pref, getenv ("IPOPT_WRITE_PREFIX"));
+         strcpy(mat_pref, getenv("IPOPT_WRITE_PREFIX"));
       }
       else
       {
-         strcpy (mat_pref, "mat-ipopt");
+         strcpy(mat_pref, "mat-ipopt");
       }
 
-      Snprintf (mat_name, 127, "%s_%03d-%02d.iajaa",
-                mat_pref, iter_cnt, sol_cnt);
+      Snprintf(mat_name, 127, "%s_%03d-%02d.iajaa", mat_pref, iter_cnt, sol_cnt);
 
       // Open and write matrix file.
-      mat_file = fopen (mat_name, "w");
+      mat_file = fopen(mat_name, "w");
 
-      fprintf (mat_file, "%d\n", N);
-      fprintf (mat_file, "%d\n", NNZ);
+      fprintf(mat_file, "%d\n", N);
+      fprintf(mat_file, "%d\n", NNZ);
 
-      for (i = 0; i < N + 1; i++)
+      for( i = 0; i < N + 1; i++ )
       {
-         fprintf (mat_file, "%d\n", ia[i]);
+         fprintf(mat_file, "%d\n", ia[i]);
       }
-      for (i = 0; i < NNZ; i++)
+      for( i = 0; i < NNZ; i++ )
       {
-         fprintf (mat_file, "%d\n", ja[i]);
+         fprintf(mat_file, "%d\n", ja[i]);
       }
-      for (i = 0; i < NNZ; i++)
+      for( i = 0; i < NNZ; i++ )
       {
-         fprintf (mat_file, "%32.24e\n", a_[i]);
+         fprintf(mat_file, "%32.24e\n", a_[i]);
       }
 
       /* Right hand side. */
-      if (rhs_vals)
-         for (i = 0; i < N; i++)
+      if( rhs_vals )
+         for( i = 0; i < N; i++ )
          {
-            fprintf (mat_file, "%32.24e\n", rhs_vals[i]);
+            fprintf(mat_file, "%32.24e\n", rhs_vals[i]);
          }
 
-      fclose (mat_file);
+      fclose(mat_file);
    }
    /* addtional matrix format */
-   if (getenv ("IPOPT_WRITE_MAT_MTX"))
+   if( getenv("IPOPT_WRITE_MAT_MTX") )
    {
       /* Write header */
-      FILE*    mat_file;
-      char     mat_name[128];
-      char     mat_pref[32];
+      FILE* mat_file;
+      char mat_name[128];
+      char mat_pref[32];
 
-      ipfint   i;
-      ipfint   j;
+      ipfint i;
+      ipfint j;
 
-      if (getenv ("IPOPT_WRITE_PREFIX"))
+      if( getenv("IPOPT_WRITE_PREFIX") )
       {
-         strcpy (mat_pref, getenv ("IPOPT_WRITE_PREFIX"));
+         strcpy(mat_pref, getenv("IPOPT_WRITE_PREFIX"));
       }
       else
       {
-         strcpy (mat_pref, "mat-ipopt");
+         strcpy(mat_pref, "mat-ipopt");
       }
 
-      Snprintf (mat_name, 127, "%s_%03d-%02d.mtx",
-                mat_pref, iter_cnt, sol_cnt);
+      Snprintf(mat_name, 127, "%s_%03d-%02d.mtx", mat_pref, iter_cnt, sol_cnt);
 
       // Open and write matrix file.
-      mat_file = fopen (mat_name, "w");
+      mat_file = fopen(mat_name, "w");
 
-      for (i = 0; i < N; i++)
-         for (j = ia[i]; j < ia[i + 1] - 1; j++)
+      for( i = 0; i < N; i++ )
+         for( j = ia[i]; j < ia[i + 1] - 1; j++ )
          {
-            fprintf (mat_file, " %d %d %32.24e \n", i + 1, ja[j - 1], a_[j - 1]);
+            fprintf(mat_file, " %d %d %32.24e \n", i + 1, ja[j - 1], a_[j - 1]);
          }
 
-      fclose (mat_file);
+      fclose(mat_file);
    }
 }
 
-ESymSolverStatus
-PardisoSolverInterface::Factorization(const Index* ia,
-                                      const Index* ja,
-                                      bool check_NegEVals,
-                                      Index numberOfNegEVals)
+ESymSolverStatus PardisoSolverInterface::Factorization(
+   const Index* ia,
+   const Index* ja,
+   bool         check_NegEVals,
+   Index        numberOfNegEVals
+   )
 {
    DBG_START_METH("PardisoSolverInterface::Factorization", dbg_verbosity);
 
    // Call Pardiso to do the factorization
-   ipfint PHASE ;
+   ipfint PHASE;
    ipfint N = dim_;
    ipfint PERM;   // This should not be accessed by Pardiso
    ipfint NRHS = 0;
@@ -733,11 +680,11 @@ PardisoSolverInterface::Factorization(const Index* ia,
    bool done = false;
    bool just_performed_symbolic_factorization = false;
 
-   while (!done)
+   while( !done )
    {
-      if (!have_symbolic_factorization_)
+      if( !have_symbolic_factorization_ )
       {
-         if (HaveIpData())
+         if( HaveIpData() )
          {
             IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
          }
@@ -759,12 +706,12 @@ PardisoSolverInterface::Factorization(const Index* ia,
          delete[] scale2;
          scale2 = NULL;
 
-         ia2    = new ipfint[N + 1];
-         ja2    = new ipfint[nonzeros_];
-         a2_    = new double[nonzeros_];
-         perm2  = new ipfint[N];
+         ia2 = new ipfint[N + 1];
+         ja2 = new ipfint[nonzeros_];
+         a2_ = new double[nonzeros_];
+         perm2 = new ipfint[N];
          scale2 = new double[N];
-         ipfint* tmp2_  = new ipfint[N];
+         ipfint* tmp2_ = new ipfint[N];
 
          smat_reordering_pardiso_wsmp_(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp2_, 0);
 
@@ -772,60 +719,57 @@ PardisoSolverInterface::Factorization(const Index* ia,
 
 #endif
 
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                        "Calling Pardiso for symbolic factorization.\n");
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Calling Pardiso for symbolic factorization.\n");
          PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
 #ifdef PARDISO_MATCHING_PREPROCESS
-                      &PHASE, &N, a2_, ia2, ja2, &PERM,
+            &PHASE, &N, a2_, ia2, ja2, &PERM,
 #else
-                      &PHASE, &N, a_, ia, ja, &PERM,
+            &PHASE, &N, a_, ia, ja, &PERM,
 #endif
-                      &NRHS, IPARM_, &MSGLVL_, &B, &X,
-                      &ERROR, DPARM_);
-         if (HaveIpData())
+            &NRHS, IPARM_, &MSGLVL_, &B, &X, &ERROR, DPARM_);
+         if( HaveIpData() )
          {
             IpData().TimingStats().LinearSystemSymbolicFactorization().End();
          }
-         if (ERROR == -7)
+         if( ERROR == -7 )
          {
             Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                           "Pardiso symbolic factorization returns ERROR = %d.  Matrix is singular.\n", ERROR);
+               "Pardiso symbolic factorization returns ERROR = %d.  Matrix is singular.\n", ERROR);
             return SYMSOLVER_SINGULAR;
          }
-         else if (ERROR != 0)
+         else if( ERROR != 0 )
          {
             Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                           "Error in Pardiso during symbolic factorization phase.  ERROR = %d.\n", ERROR);
+               "Error in Pardiso during symbolic factorization phase.  ERROR = %d.\n", ERROR);
             return SYMSOLVER_FATAL_ERROR;
          }
          have_symbolic_factorization_ = true;
          just_performed_symbolic_factorization = true;
 
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Memory in KB required for the symbolic factorization  = %d.\n",
+            IPARM_[14]);
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                        "Memory in KB required for the symbolic factorization  = %d.\n", IPARM_[14]);
+            "Integer memory in KB required for the numerical factorization  = %d.\n", IPARM_[15]);
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                        "Integer memory in KB required for the numerical factorization  = %d.\n", IPARM_[15]);
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                        "Double  memory in KB required for the numerical factorization  = %d.\n", IPARM_[16]);
+            "Double  memory in KB required for the numerical factorization  = %d.\n", IPARM_[16]);
       }
 
       PHASE = 22;
 
-      if (HaveIpData())
+      if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemFactorization().Start();
       }
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                     "Calling Pardiso for factorization.\n");
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "Calling Pardiso for factorization.\n");
       // Dump matrix to file, and count number of solution steps.
-      if (HaveIpData())
+      if( HaveIpData() )
       {
-         if (IpData().iter_count() != debug_last_iter_)
+         if( IpData().iter_count() != debug_last_iter_ )
          {
             debug_cnt_ = 0;
          }
          debug_last_iter_ = IpData().iter_count();
-         debug_cnt_ ++;
+         debug_cnt_++;
       }
       else
       {
@@ -834,52 +778,49 @@ PardisoSolverInterface::Factorization(const Index* ia,
       }
 
 #ifdef PARDISO_MATCHING_PREPROCESS
-      ipfint* tmp3_  = new ipfint[N];
+      ipfint* tmp3_ = new ipfint[N];
       smat_reordering_pardiso_wsmp_ (&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp3_, 1);
       delete[] tmp3_;
 #endif
 
       PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
 #ifdef PARDISO_MATCHING_PREPROCESS
-                   &PHASE, &N, a2_, ia2, ja2, &PERM,
+         &PHASE, &N, a2_, ia2, ja2, &PERM,
 #else
-                   &PHASE, &N, a_, ia, ja, &PERM,
+         &PHASE, &N, a_, ia, ja, &PERM,
 #endif
-                   &NRHS, IPARM_, &MSGLVL_, &B, &X,
-                   &ERROR, DPARM_);
-      if (HaveIpData())
+         &NRHS, IPARM_, &MSGLVL_, &B, &X, &ERROR, DPARM_);
+      if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemFactorization().End();
       }
 
-      if (ERROR == -7)
+      if( ERROR == -7 )
       {
          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                        "Pardiso factorization returns ERROR = %d.  Matrix is singular.\n", ERROR);
+            "Pardiso factorization returns ERROR = %d.  Matrix is singular.\n", ERROR);
          return SYMSOLVER_SINGULAR;
       }
-      else if (ERROR == -4)
+      else if( ERROR == -4 )
       {
          // I think this means that the matrix is singular
          // OLAF said that this will never happen (ToDo)
          return SYMSOLVER_SINGULAR;
       }
-      else if (ERROR != 0 )
+      else if( ERROR != 0 )
       {
-         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                        "Error in Pardiso during factorization phase.  ERROR = %d.\n", ERROR);
+         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Error in Pardiso during factorization phase.  ERROR = %d.\n", ERROR);
          return SYMSOLVER_FATAL_ERROR;
       }
 
       negevals_ = Max(IPARM_[22], numberOfNegEVals);
-      if (IPARM_[13] != 0)
+      if( IPARM_[13] != 0 )
       {
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                        "Number of perturbed pivots in factorization phase = %d.\n", IPARM_[13]);
-         if ( !pardiso_redo_symbolic_fact_only_if_inertia_wrong_ ||
-              (negevals_ != numberOfNegEVals) )
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Number of perturbed pivots in factorization phase = %d.\n",
+            IPARM_[13]);
+         if( !pardiso_redo_symbolic_fact_only_if_inertia_wrong_ || (negevals_ != numberOfNegEVals) )
          {
-            if (HaveIpData())
+            if( HaveIpData() )
             {
                IpData().Append_info_string("Pn");
             }
@@ -888,11 +829,11 @@ PardisoSolverInterface::Factorization(const Index* ia,
             // factorization and we still have perturbed pivots, that
             // the system is actually singular, if
             // pardiso_repeated_perturbation_means_singular_ is true
-            if (just_performed_symbolic_factorization)
+            if( just_performed_symbolic_factorization )
             {
-               if (pardiso_repeated_perturbation_means_singular_)
+               if( pardiso_repeated_perturbation_means_singular_ )
                {
-                  if (HaveIpData())
+                  if( HaveIpData() )
                   {
                      IpData().Append_info_string("Ps");
                   }
@@ -910,7 +851,7 @@ PardisoSolverInterface::Factorization(const Index* ia,
          }
          else
          {
-            if (HaveIpData())
+            if( HaveIpData() )
             {
                IpData().Append_info_string("Pp");
             }
@@ -927,30 +868,31 @@ PardisoSolverInterface::Factorization(const Index* ia,
 
    // Check whether the number of negative eigenvalues matches the requested
    // count
-   if (skip_inertia_check_)
+   if( skip_inertia_check_ )
    {
       numberOfNegEVals = negevals_;
    }
 
-   if (check_NegEVals && (numberOfNegEVals != negevals_))
+   if( check_NegEVals && (numberOfNegEVals != negevals_) )
    {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "Wrong inertia: required are %d, but we got %d.\n",
-                     numberOfNegEVals, negevals_);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Wrong inertia: required are %d, but we got %d.\n", numberOfNegEVals,
+         negevals_);
       return SYMSOLVER_WRONG_INERTIA;
    }
 
    return SYMSOLVER_SUCCESS;
 }
 
-ESymSolverStatus PardisoSolverInterface::Solve(const Index* ia,
-      const Index* ja,
-      Index nrhs,
-      double* rhs_vals)
+ESymSolverStatus PardisoSolverInterface::Solve(
+   const Index* ia,
+   const Index* ja,
+   Index        nrhs,
+   double*      rhs_vals
+   )
 {
    DBG_START_METH("PardisoSolverInterface::Solve", dbg_verbosity);
 
-   if (HaveIpData())
+   if( HaveIpData() )
    {
       IpData().TimingStats().LinearSystemBackSolve().Start();
    }
@@ -964,7 +906,7 @@ ESymSolverStatus PardisoSolverInterface::Solve(const Index* ia,
    double* ORIG_RHS = new double[nrhs * dim_];
    ipfint ERROR;
    // Initialize solution with zero and save right hand side
-   for (int i = 0; i < N; i++)
+   for( int i = 0; i < N; i++ )
    {
       X[i] = 0.;
       ORIG_RHS[i] = rhs_vals[i];
@@ -972,7 +914,7 @@ ESymSolverStatus PardisoSolverInterface::Solve(const Index* ia,
 
    // Dump matrix to file if requested
    Index iter_count = 0;
-   if (HaveIpData())
+   if( HaveIpData() )
    {
       iter_count = IpData().iter_count();
    }
@@ -980,58 +922,52 @@ ESymSolverStatus PardisoSolverInterface::Solve(const Index* ia,
 #ifdef PARDISO_MATCHING_PREPROCESS
    write_iajaa_matrix (N, ia2, ja2, a2_, rhs_vals, iter_count, debug_cnt_);
 #else
-   write_iajaa_matrix (N,  ia,  ja,  a_, rhs_vals, iter_count, debug_cnt_);
+   write_iajaa_matrix(N, ia, ja, a_, rhs_vals, iter_count, debug_cnt_);
 #endif
 
    int attempts = 0;
-   const int max_attempts =
-      pardiso_iterative_ ? pardiso_max_droptol_corrections_ + 1 : 1;
+   const int max_attempts = pardiso_iterative_ ? pardiso_max_droptol_corrections_ + 1 : 1;
 
-   while (attempts < max_attempts)
+   while( attempts < max_attempts )
    {
-
 
 #ifdef PARDISO_MATCHING_PREPROCESS
       for (int i = 0; i < N; i++)
       {
-         rhs_vals[perm2[i]] = scale2[i] * ORIG_RHS[ i  ];
+         rhs_vals[perm2[i]] = scale2[i] * ORIG_RHS[ i ];
       }
       PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
-                   &PHASE, &N, a2_, ia2, ja2, &PERM,
-                   &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
-                   &ERROR, DPARM_);
+         &PHASE, &N, a2_, ia2, ja2, &PERM,
+         &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
+         &ERROR, DPARM_);
       for (int i = 0; i < N; i++)
       {
          X[i] = rhs_vals[ perm2[i]];
       }
       for (int i = 0; i < N; i++)
       {
-         rhs_vals[i] =  scale2[i] * X[i];
+         rhs_vals[i] = scale2[i] * X[i];
       }
 
 #else
-      for (int i = 0; i < N; i++)
+      for( int i = 0; i < N; i++ )
       {
          rhs_vals[i] = ORIG_RHS[i];
       }
-      PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
-                   &PHASE, &N, a_, ia, ja, &PERM,
-                   &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
-                   &ERROR, DPARM_);
+      PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, a_, ia, ja, &PERM, &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
+         &ERROR, DPARM_);
 #endif
 
-
-      if (ERROR <= -100 && ERROR >= -102)
+      if( ERROR <= -100 && ERROR >= -102 )
       {
+         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA, "Iterative solver in Pardiso did not converge (ERROR = %d)\n", ERROR);
          Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                        "Iterative solver in Pardiso did not converge (ERROR = %d)\n", ERROR);
-         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                        "  Decreasing drop tolerances from DPARM_[41] = %e and DPARM_[44] = %e\n", DPARM_[41], DPARM_[44]);
+            "  Decreasing drop tolerances from DPARM_[41] = %e and DPARM_[44] = %e\n", DPARM_[41], DPARM_[44]);
          PHASE = 23;
-         DPARM_[4] /= 2.0 ;
-         DPARM_[5] /= 2.0 ;
+         DPARM_[4] /= 2.0;
+         DPARM_[5] /= 2.0;
          Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                        "                               to DPARM_[41] = %e and DPARM_[44] = %e\n", DPARM_[41], DPARM_[44]);
+            "                               to DPARM_[41] = %e and DPARM_[44] = %e\n", DPARM_[41], DPARM_[44]);
          attempts++;
          ERROR = 0;
       }
@@ -1042,27 +978,25 @@ ESymSolverStatus PardisoSolverInterface::Solve(const Index* ia,
       }
    }
 
-   delete [] X;
-   delete [] ORIG_RHS;
+   delete[] X;
+   delete[] ORIG_RHS;
 
-   if (IPARM_[6] != 0)
+   if( IPARM_[6] != 0 )
    {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "Number of iterative refinement steps = %d.\n", IPARM_[6]);
-      if (HaveIpData())
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Number of iterative refinement steps = %d.\n", IPARM_[6]);
+      if( HaveIpData() )
       {
          IpData().Append_info_string("Pi");
       }
    }
 
-   if (HaveIpData())
+   if( HaveIpData() )
    {
       IpData().TimingStats().LinearSystemBackSolve().End();
    }
-   if (ERROR != 0 )
+   if( ERROR != 0 )
    {
-      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                     "Error in Pardiso during solve phase.  ERROR = %d.\n", ERROR);
+      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Error in Pardiso during solve phase.  ERROR = %d.\n", ERROR);
       return SYMSOLVER_FATAL_ERROR;
    }
    return SYMSOLVER_SUCCESS;
