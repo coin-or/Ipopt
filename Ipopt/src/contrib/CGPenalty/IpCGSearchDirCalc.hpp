@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Andreas Waechter            IBM    2005-10-13
 //
 //           Lifeng Chen/Zaiwen Wen      Columbia Univ
@@ -22,56 +20,70 @@ namespace Ipopt
  *  the Chen-Goldfarb step for the current barrier and penalty
  *  parameter.
  */
-class CGSearchDirCalculator : public SearchDirectionCalculator
+class CGSearchDirCalculator: public SearchDirectionCalculator
 {
 public:
    /**@name Constructors/Destructors */
    //@{
    /** Constructor */
-   CGSearchDirCalculator(const SmartPtr<PDSystemSolver>& pd_solver);
+   CGSearchDirCalculator(
+      const SmartPtr<PDSystemSolver>& pd_solver
+   );
 
-   /** Default destructor */
+   /** Destructor */
    virtual ~CGSearchDirCalculator();
    //@}
 
    /** overloaded from AlgorithmStrategyObject */
-   virtual bool InitializeImpl(const OptionsList& options,
-                               const std::string& prefix);
+   virtual bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+   );
 
-   /** Method for computing the search direction.  If the penalty
-    *  paraemeter has not yet been initialized, it is initialized
-    *  now. The computed direction is stored in IpData().delta(). */
+   /** Method for computing the search direction.
+    *
+    *  If the penalty
+    *  parameter has not yet been initialized, it is initialized
+    *  now. The computed direction is stored in IpData().delta().
+    */
    virtual bool ComputeSearchDirection();
 
    /** Methods for IpoptType */
    //@{
-   static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+   static void RegisterOptions(
+      SmartPtr<RegisteredOptions> roptions
+   );
    //@}
 
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Default Constructor */
    CGSearchDirCalculator();
 
    /** Copy Constructor */
-   CGSearchDirCalculator(const CGSearchDirCalculator&);
+   CGSearchDirCalculator(
+      const CGSearchDirCalculator&
+   );
 
    /** Overloaded Equals Operator */
-   void operator=(const CGSearchDirCalculator&);
+   void operator=(
+      const CGSearchDirCalculator&
+   );
    //@}
 
    /** Method to easily access CGPenalty data */
    CGPenaltyData& CGPenData()
    {
-      CGPenaltyData& cg_pen_data =
-         static_cast<CGPenaltyData&>(IpData().AdditionalData());
+      CGPenaltyData& cg_pen_data = static_cast<CGPenaltyData&>(IpData().AdditionalData());
       DBG_ASSERT(dynamic_cast<CGPenaltyData*>(&IpData().AdditionalData()));
       return cg_pen_data;
    }
@@ -79,15 +91,16 @@ private:
    /** Method to easily access CGPenalty calculated quantities */
    CGPenaltyCq& CGPenCq()
    {
-      CGPenaltyCq& cg_pen_cq =
-         static_cast<CGPenaltyCq&>(IpCq().AdditionalCq());
+      CGPenaltyCq& cg_pen_cq = static_cast<CGPenaltyCq&>(IpCq().AdditionalCq());
       DBG_ASSERT(dynamic_cast<CGPenaltyCq*>(&IpCq().AdditionalCq()));
       return cg_pen_cq;
    }
 
    /** @name Algorithmic parameters */
    //@{
-   /** safeguard factor for bound multipliers.  If value >= 1, then
+   /** safeguard factor for bound multipliers.
+    *
+    *  If value >= 1, then
     *  the dual variables will never deviate from the primal estimate
     *  by more than the factors kappa_sigma and 1./kappa_sigma.
     */
@@ -97,17 +110,17 @@ private:
    /** Maximal value for penalty parameters */
    Number penalty_max_;
 
-
-
-   /**  parameters used in computation of line search penalty parameter and
-    *    KKT perturbation parameters  **/
+   /** parameters used in computation of line search penalty parameter and
+    *  KKT perturbation parameters
+    */
    Number pen_des_fact_;
 
    /** Algorithm type */
    bool penalty_backward_;
 
    /** parameters used to check if the fast direction can be
-    *  used as the line search direction **/
+    *  used as the line search direction
+    */
    Number kappa_x_dis_;
    Number kappa_y_dis_;
    Number vartheta_;
@@ -116,10 +129,11 @@ private:
    Number pen_init_fac_;
 
    /** Flag indicating whether the fast Chen-Goldfarb direction
-    *  should never be used */
+    *  should never be used
+    */
    bool never_use_fact_cgpen_direction_;
 
-   /** Counter for how many times the pen para is updated nonmonotonically*/
+   /** Counter for how many times the pen parameter is updated non-monotonically */
    Index nonmonotone_pen_update_counter_;
    //@}
 

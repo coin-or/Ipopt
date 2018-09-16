@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Andreas Waechter                 IBM    2005-10-13
 
 #ifndef __IPCGPENALTYLSACCEPTOR_HPP__
@@ -20,25 +18,31 @@ namespace Ipopt
 
 /** Line search acceptor, based on the Chen-Goldfarb penalty
  *  function approach. */
-class CGPenaltyLSAcceptor : public BacktrackingLSAcceptor
+class CGPenaltyLSAcceptor: public BacktrackingLSAcceptor
 {
 public:
    /**@name Constructors/Destructors */
    //@{
-   /** Constructor.  The PDSystemSolver object only needs to be
+   /** Constructor.
+    *
+    *  The PDSystemSolver object only needs to be
     *  provided (i.e. not NULL) if second order correction or
-    *  corrector steps are to be used. */
-   CGPenaltyLSAcceptor(const SmartPtr<PDSystemSolver>& pd_solver);
+    *  corrector steps are to be used.
+    */
+   CGPenaltyLSAcceptor(
+      const SmartPtr<PDSystemSolver>& pd_solver
+   );
 
-   /** Default destructor */
+   /** Destructor */
    virtual ~CGPenaltyLSAcceptor();
    //@}
 
-   /** InitializeImpl - overloaded from AlgorithmStrategyObject */
-   virtual bool InitializeImpl(const OptionsList& options,
-                               const std::string& prefix);
+   virtual bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix);
 
    /** Reset the acceptor.
+    *
     *  This function should be called if all previous information
     *  should be discarded when the line search is performed the
     *  next time.  For example, this method should be called if
@@ -46,30 +50,43 @@ public:
     */
    virtual void Reset();
 
-   /** Initialization for the next line search.  The flag in_watchdog
-    *  indicates if we are currently in an active watchdog
-    *  procedure. */
-   virtual void InitThisLineSearch(bool in_watchdog);
+   /** Initialization for the next line search.
+    *
+    *  The flag in_watchdog indicates if we are currently
+    *  in an active watchdog procedure.
+    */
+   virtual void InitThisLineSearch(
+      bool in_watchdog
+   );
 
    /** Method that is called before the restoration phase is called.
+    *
     *  Here, we can set up things that are required in the
-    *  termination test for the restoration phase. */
+    *  termination test for the restoration phase.
+    */
    virtual void PrepareRestoPhaseStart();
 
-   /** Method returning the lower bound on the trial step sizes.  If
-    *  the backtracking procedure encounters a trial step size below
+   /** Method returning the lower bound on the trial step sizes.
+    *
+    *  If the backtracking procedure encounters a trial step size below
     *  this value after the first trial set, it swtiches to the
-    *  (soft) restoration phase. */
+    *  (soft) restoration phase.
+    */
    virtual Number CalculateAlphaMin();
 
    /** Method for checking if current trial point is acceptable.
+    *
     *  It is assumed that the delta information in ip_data is the
     *  search direction used in criteria.  The primal trial point has
     *  to be set before the call.
     */
-   virtual bool CheckAcceptabilityOfTrialPoint(Number alpha_primal);
+   virtual bool CheckAcceptabilityOfTrialPoint(
+      Number alpha_primal
+   );
 
-   /** Try a second order correction for the constraints.  If the
+   /** Try a second order correction for the constraints.
+    *
+    *  If the
     *  first trial step (with incoming alpha_primal) has been reject,
     *  this tries up to max_soc_ second order corrections for the
     *  constraints.  Here, alpha_primal_test is the step size that
@@ -81,72 +98,92 @@ public:
     *  output.  The return value is true, if a SOC step has been
     *  accepted.
     */
-   virtual bool TrySecondOrderCorrection(Number alpha_primal_test,
-                                         Number& alpha_primal,
-                                         SmartPtr<IteratesVector>& actual_delta);
+   virtual bool TrySecondOrderCorrection(
+      Number                    alpha_primal_test,
+      Number&                   alpha_primal,
+      SmartPtr<IteratesVector>& actual_delta
+   );
 
-   /** Try higher order corrector (for fast local convergence).  In
-    *  contrast to a second order correction step, which tries to
+   /** Try higher order corrector (for fast local convergence).
+    *
+    *  In contrast to a second order correction step, which tries to
     *  make an unacceptable point acceptable by improving constraint
     *  violation, this corrector step is tried even if the regular
     *  primal-dual step is acceptable.
     */
-   virtual bool TryCorrector(Number alpha_primal_test,
-                             Number& alpha_primal,
-                             SmartPtr<IteratesVector>& actual_delta);
+   virtual bool TryCorrector(
+      Number                    alpha_primal_test,
+      Number&                   alpha_primal,
+      SmartPtr<IteratesVector>& actual_delta
+   );
 
-   /** Method for ending the current line search.  When it is called,
+   /** Method for ending the current line search.
+    *
+    *  When it is called,
     *  the internal data should be updates, e.g., the penalty
     *  parameter might be updated.  alpha_primal_test is the value of
-    *  alpha that has been used for in the acceptence test ealier. */
-   virtual char UpdateForNextIteration(Number alpha_primal_test);
+    *  alpha that has been used for in the acceptance test earlier.
+    */
+   virtual char UpdateForNextIteration(
+      Number alpha_primal_test
+   );
 
-   /** Method for setting internal data if the watchdog procedure is
-    *  started. */
+   /** Method for setting internal data if the watchdog procedure is started. */
    virtual void StartWatchDog();
 
-   /** Method for setting internal data if the watchdog procedure is
-    *  stopped. */
+   /** Method for setting internal data if the watchdog procedure is stopped. */
    virtual void StopWatchDog();
 
    /** Method for telling the BacktrackingLineSearch object that
-    *  a previous iterate has been restored. */
+    *  a previous iterate has been restored.
+    */
    virtual bool RestoredIterate();
+
    /** Method for telling the BacktrackingLineSearch object that the restoration
-   * is not needed */
+    * is not needed
+    */
    virtual bool NeverRestorationPhase();
 
    /** Method for doing a fallback approach in case no search
-    *  direction could be computed.  If no such fall back option is
-    *  available, return false. */
+    *  direction could be computed.
+    *
+    *  @return false, if no such fall back option is available
+    */
    virtual bool DoFallback();
 
    /** Methods for OptionsList */
    //@{
-   static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
+   static void RegisterOptions(
+      SmartPtr<RegisteredOptions> roptions
+   );
    //@}
 
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Copy Constructor */
-   CGPenaltyLSAcceptor(const CGPenaltyLSAcceptor&);
+   CGPenaltyLSAcceptor(
+      const CGPenaltyLSAcceptor&
+   );
 
    /** Overloaded Equals Operator */
-   void operator=(const CGPenaltyLSAcceptor&);
+   void operator=(
+      const CGPenaltyLSAcceptor&
+   );
    //@}
 
    /** Method to easily access CGPenalty data */
    CGPenaltyData& CGPenData()
    {
-      CGPenaltyData& cg_pen_data =
-         static_cast<CGPenaltyData&>(IpData().AdditionalData());
+      CGPenaltyData& cg_pen_data = static_cast<CGPenaltyData&>(IpData().AdditionalData());
       DBG_ASSERT(dynamic_cast<CGPenaltyData*>(&IpData().AdditionalData()));
       return cg_pen_data;
    }
@@ -154,22 +191,30 @@ private:
    /** Method to easily access CGPenalty calculated quantities */
    CGPenaltyCq& CGPenCq()
    {
-      CGPenaltyCq& cg_pen_cq =
-         static_cast<CGPenaltyCq&>(IpCq().AdditionalCq());
+      CGPenaltyCq& cg_pen_cq = static_cast<CGPenaltyCq&>(IpCq().AdditionalCq());
       DBG_ASSERT(dynamic_cast<CGPenaltyCq*>(&IpCq().AdditionalCq()));
       return cg_pen_cq;
    }
 
    /** Check if the trial point is acceptable to the piecewise penalty list */
-   bool IsAcceptableToPiecewisePenalty(Number alpha_primal_test);
+   bool IsAcceptableToPiecewisePenalty(
+      Number alpha_primal_test
+   );
 
    /** Check if the trial point is acceptable by the Armijo condition */
-   bool ArmijoHolds(Number alpha_primal_test);
+   bool ArmijoHolds(
+      Number alpha_primal_test
+   );
 
-   /** Check comparison "lhs <= rhs", using machine precision based on BasVal */
-   //ToDo This should probably not be a static member function if we want to
-   //     allow for different relaxation parameters values
-   static bool Compare_le(Number lhs, Number rhs, Number BasVal);
+   /** Check comparison "lhs <= rhs", using machine precision based on BasVal
+    *
+    * @todo This should probably not be a static member function if we want to allow for different relaxation parameters values
+    */
+   static bool Compare_le(
+      Number lhs,
+      Number rhs,
+      Number BasVal
+   );
 
    bool CurrentIsBest();
    void StoreBestPoint();
@@ -216,11 +261,11 @@ private:
     */
    bool accepted_by_Armijo_;
 
-   /** Min step size that triggers nonmonotone method */
+   /** Minimal step size that triggers non-monotone method */
    Number min_alpha_primal_;
 
    //@{
-   /*Initial constraint violation*/
+   /** Initial constraint violation */
    Number reference_theta_;
    //@}
    /** Maximal number of second order correction steps */
@@ -267,9 +312,9 @@ private:
    //@}
    /** Flag for whether or not use piecewise penalty line search */
    bool never_use_piecewise_penalty_ls_;
-   // piecewise penalty list
+   /** piecewise penalty list */
    PiecewisePenalty PiecewisePenalty_;
-   /** Flag indicating whether PiecewisePenalty has to be initiailized */
+   /** Flag indicating whether PiecewisePenalty has to be initialized */
    bool reset_piecewise_penalty_;
 
    Index jump_for_tiny_step_;
@@ -279,10 +324,6 @@ private:
    SmartPtr<PDSystemSolver> pd_solver_;
    //@}
 };
-
-
-
-
 
 } // namespace Ipopt
 

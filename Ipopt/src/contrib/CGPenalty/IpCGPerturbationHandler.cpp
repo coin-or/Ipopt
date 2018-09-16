@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter              IBM    2005-08-04
 
 #include "IpCGPerturbationHandler.hpp"
@@ -27,18 +25,20 @@ static const Index dbg_verbosity = 0;
 #endif
 
 CGPerturbationHandler::CGPerturbationHandler()
-   :
-   PDPerturbationHandler(),
-   reset_last_(false),
-   degen_iters_max_(3)
-{}
+   : PDPerturbationHandler(),
+     reset_last_(false),
+     degen_iters_max_(3)
+{ }
 
-void
-CGPerturbationHandler::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
-{}
+void CGPerturbationHandler::RegisterOptions(
+   SmartPtr<RegisteredOptions> roptions
+)
+{ }
 
-bool CGPerturbationHandler::InitializeImpl(const OptionsList& options,
-      const std::string& prefix)
+bool CGPerturbationHandler::InitializeImpl(
+   const OptionsList& options,
+   const std::string& prefix
+)
 {
    options.GetNumericValue("max_hessian_perturbation", delta_xs_max_, prefix);
    options.GetNumericValue("min_hessian_perturbation", delta_xs_min_, prefix);
@@ -54,7 +54,7 @@ bool CGPerturbationHandler::InitializeImpl(const OptionsList& options,
    // The following option has been registered from CGPenaltyLSAccepter
    options.GetNumericValue("mult_diverg_feasibility_tol", mult_diverg_feasibility_tol_, prefix);
    hess_degenerate_ = NOT_YET_DETERMINED;
-   if (!perturb_always_cd_)
+   if( !perturb_always_cd_ )
    {
       jac_degenerate_ = NOT_YET_DETERMINED;
    }
@@ -78,9 +78,12 @@ bool CGPerturbationHandler::InitializeImpl(const OptionsList& options,
    return PDPerturbationHandler::InitializeImpl(options, prefix);
 }
 
-bool
-CGPerturbationHandler::ConsiderNewSystem(Number& delta_x, Number& delta_s,
-      Number& delta_c, Number& delta_d)
+bool CGPerturbationHandler::ConsiderNewSystem(
+   Number& delta_x,
+   Number& delta_s,
+   Number& delta_c,
+   Number& delta_d
+)
 {
    DBG_START_METH("CGPerturbationHandler::ConsiderNewSystem", dbg_verbosity);
 
@@ -89,7 +92,7 @@ CGPerturbationHandler::ConsiderNewSystem(Number& delta_x, Number& delta_s,
    finalize_test();
    // If the current iterate is restored from a previous iteration,
    // initialize perturbationhandler data
-   if (CGPenData().restor_iter() == IpData().iter_count())
+   if( CGPenData().restor_iter() == IpData().iter_count() )
    {
       hess_degenerate_ = NOT_YET_DETERMINED;
       jac_degenerate_ = NOT_YET_DETERMINED;
@@ -108,7 +111,7 @@ CGPerturbationHandler::ConsiderNewSystem(Number& delta_x, Number& delta_s,
    }
 
    // Store the perturbation from the previous matrix
-   if (reset_last_)
+   if( reset_last_ )
    {
       delta_x_last_ = delta_x_curr_;
       delta_s_last_ = delta_s_curr_;
@@ -117,19 +120,19 @@ CGPerturbationHandler::ConsiderNewSystem(Number& delta_x, Number& delta_s,
    }
    else
    {
-      if (delta_x_curr_ > 0.)
+      if( delta_x_curr_ > 0. )
       {
          delta_x_last_ = delta_x_curr_;
       }
-      if (delta_s_curr_ > 0.)
+      if( delta_s_curr_ > 0. )
       {
          delta_s_last_ = delta_s_curr_;
       }
-      if (delta_c_curr_ > 0.)
+      if( delta_c_curr_ > 0. )
       {
          delta_c_last_ = delta_c_curr_;
       }
-      if (delta_d_curr_ > 0.)
+      if( delta_d_curr_ > 0. )
       {
          delta_d_last_ = delta_d_curr_;
       }
@@ -140,12 +143,9 @@ CGPerturbationHandler::ConsiderNewSystem(Number& delta_x, Number& delta_s,
               (jac_degenerate_ != NOT_YET_DETERMINED ||
                hess_degenerate_ != DEGENERATE));
 
-   if (hess_degenerate_ == NOT_YET_DETERMINED ||
-       jac_degenerate_ == NOT_YET_DETERMINED)
+   if( hess_degenerate_ == NOT_YET_DETERMINED || jac_degenerate_ == NOT_YET_DETERMINED )
    {
-      if (!perturb_always_cd_
-          || CGPenCq().curr_cg_pert_fact() < delta_cd()
-          || !CGPenData().NeverTryPureNewton())
+      if( !perturb_always_cd_ || CGPenCq().curr_cg_pert_fact() < delta_cd() || !CGPenData().NeverTryPureNewton() )
       {
          test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_EQ_0;
       }
@@ -160,15 +160,12 @@ CGPerturbationHandler::ConsiderNewSystem(Number& delta_x, Number& delta_s,
    }
 
    Number pert_fact = CGPenCq().curr_cg_pert_fact();
-   if (jac_degenerate_ == DEGENERATE
-       || CGPenData().NeverTryPureNewton()
-       || perturb_always_cd_)
+   if( jac_degenerate_ == DEGENERATE || CGPenData().NeverTryPureNewton() || perturb_always_cd_ )
    {
       Number mach_eps = std::numeric_limits<Number>::epsilon();
-      if (pert_fact < 100.*mach_eps
-          && jac_degenerate_ == DEGENERATE)
+      if( pert_fact < 100. * mach_eps && jac_degenerate_ == DEGENERATE )
       {
-         delta_c = delta_c_curr_ = 100.*mach_eps;
+         delta_c = delta_c_curr_ = 100. * mach_eps;
       }
       else
       {
@@ -183,13 +180,12 @@ CGPerturbationHandler::ConsiderNewSystem(Number& delta_x, Number& delta_s,
 
    delta_d = delta_d_curr_ = delta_c;
 
-   if (hess_degenerate_ == DEGENERATE)
+   if( hess_degenerate_ == DEGENERATE )
    {
       delta_x_curr_ = 0.;
       delta_s_curr_ = 0.;
-      bool retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
-                    delta_c, delta_d);
-      if (!retval)
+      bool retval = get_deltas_for_wrong_inertia(delta_x, delta_s, delta_c, delta_d);
+      if( !retval )
       {
          return false;
       }
@@ -212,10 +208,12 @@ CGPerturbationHandler::ConsiderNewSystem(Number& delta_x, Number& delta_s,
    return true;
 }
 
-bool
-CGPerturbationHandler::PerturbForSingularity(
-   Number& delta_x, Number& delta_s,
-   Number& delta_c, Number& delta_d)
+bool CGPerturbationHandler::PerturbForSingularity(
+   Number& delta_x,
+   Number& delta_s,
+   Number& delta_c,
+   Number& delta_d
+)
 {
    DBG_START_METH("CGPerturbationHandler::PerturbForSingularity",
                   dbg_verbosity);
@@ -223,18 +221,17 @@ CGPerturbationHandler::PerturbForSingularity(
    bool retval;
 
    // Check for structural degeneracy
-   if (hess_degenerate_ == NOT_YET_DETERMINED ||
-       jac_degenerate_ == NOT_YET_DETERMINED)
+   if( hess_degenerate_ == NOT_YET_DETERMINED || jac_degenerate_ == NOT_YET_DETERMINED )
    {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Degeneracy test for hess_degenerate_ = %d and jac_degenerate_ = %d\n       test_status_ = %d\n",
                      hess_degenerate_, jac_degenerate_, test_status_);
-      switch (test_status_)
+      switch( test_status_ )
       {
          case TEST_DELTA_C_EQ_0_DELTA_X_EQ_0:
             DBG_ASSERT(delta_x_curr_ == 0. && delta_c_curr_ == 0.);
             // in this case we haven't tried anything for this matrix yet
-            if (jac_degenerate_ == NOT_YET_DETERMINED)
+            if( jac_degenerate_ == NOT_YET_DETERMINED )
             {
                delta_d_curr_ = delta_c_curr_ = delta_cd();
                test_status_ = TEST_DELTA_C_GT_0_DELTA_X_EQ_0;
@@ -242,9 +239,8 @@ CGPerturbationHandler::PerturbForSingularity(
             else
             {
                DBG_ASSERT(hess_degenerate_ == NOT_YET_DETERMINED);
-               retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
-                                                     delta_c, delta_d);
-               if (!retval)
+               retval = get_deltas_for_wrong_inertia(delta_x, delta_s, delta_c, delta_d);
+               if( !retval )
                {
                   return false;
                }
@@ -256,11 +252,10 @@ CGPerturbationHandler::PerturbForSingularity(
             DBG_ASSERT(delta_x_curr_ == 0. && delta_c_curr_ > 0.);
             DBG_ASSERT(jac_degenerate_ == NOT_YET_DETERMINED);
             //if (!perturb_always_cd_) {
-            delta_d_curr_ = delta_c_curr_ =
-                               Max(delta_cd(), CGPenCq().curr_cg_pert_fact());
+            delta_d_curr_ = delta_c_curr_ = Max(delta_cd(), CGPenCq().curr_cg_pert_fact());
             //delta_d_curr_ = delta_c_curr_ =
             //                 Max(delta_cd(), CGPenCq().curr_cg_pert_fact());
-            if (delta_d_curr_ < delta_cd())
+            if( delta_d_curr_ < delta_cd() )
             {
                test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_GT_0;
             }
@@ -268,9 +263,8 @@ CGPerturbationHandler::PerturbForSingularity(
             {
                test_status_ = TEST_DELTA_C_GT_0_DELTA_X_GT_0;
             }
-            retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
-                                                  delta_c, delta_d);
-            if (!retval)
+            retval = get_deltas_for_wrong_inertia(delta_x, delta_s, delta_c, delta_d);
+            if( !retval )
             {
                return false;
             }
@@ -278,32 +272,30 @@ CGPerturbationHandler::PerturbForSingularity(
             test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_GT_0;
             //}
             /*
-            else {
-              retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
-                                                    delta_c, delta_d);
-              if (!retval) {
-                return false;
-              }
-              DBG_ASSERT(delta_c > 0. && delta_d > 0.);
-              test_status_ = TEST_DELTA_C_GT_0_DELTA_X_GT_0;
-            }*/
+             else {
+             retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
+             delta_c, delta_d);
+             if (!retval) {
+             return false;
+             }
+             DBG_ASSERT(delta_c > 0. && delta_d > 0.);
+             test_status_ = TEST_DELTA_C_GT_0_DELTA_X_GT_0;
+             }*/
             break;
          case TEST_DELTA_C_EQ_0_DELTA_X_GT_0:
             DBG_ASSERT(delta_x_curr_ > 0. && delta_c_curr_ == 0.);
             delta_d_curr_ = delta_c_curr_ = Max(delta_cd(), CGPenCq().curr_cg_pert_fact());
             //delta_d_curr_ = delta_c_curr_ = CGPenCq().curr_cg_pert_fact();
-            retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
-                                                  delta_c, delta_d);
-            if (!retval)
+            retval = get_deltas_for_wrong_inertia(delta_x, delta_s, delta_c, delta_d);
+            if( !retval )
             {
                return false;
             }
             test_status_ = TEST_DELTA_C_GT_0_DELTA_X_GT_0;
             break;
          case TEST_DELTA_C_GT_0_DELTA_X_GT_0:
-            retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
-                                                  delta_c, delta_d);
-            if (!retval)
+            retval = get_deltas_for_wrong_inertia(delta_x, delta_s, delta_c, delta_d);
+            if( !retval )
             {
                return false;
             }
@@ -314,17 +306,16 @@ CGPerturbationHandler::PerturbForSingularity(
    }
    else
    {
-      if (delta_c_curr_ > 0. || get_deltas_for_wrong_inertia_called_)
+      if( delta_c_curr_ > 0. || get_deltas_for_wrong_inertia_called_ )
       {
          // If we already used a perturbation for the constraints, we do
          // the same thing as if we were encountering negative curvature
-         retval = get_deltas_for_wrong_inertia(delta_x, delta_s,
-                                               delta_c, delta_d);
-         if (!retval)
+         retval = get_deltas_for_wrong_inertia(delta_x, delta_s, delta_c, delta_d);
+         if( !retval )
          {
             Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                           "Can't get_deltas_for_wrong_inertia for delta_x_curr_ = %e and delta_c_curr_ = %e\n",
-                           delta_x_curr_, delta_c_curr_);
+                           "Can't get_deltas_for_wrong_inertia for delta_x_curr_ = %e and delta_c_curr_ = %e\n", delta_x_curr_,
+                           delta_c_curr_);
             return false;
          }
       }
@@ -336,16 +327,13 @@ CGPerturbationHandler::PerturbForSingularity(
          // ToDo - also perturb Hessian?
          IpData().Append_info_string("L");
          Number curr_inf = IpCq().curr_primal_infeasibility(NORM_2);
-         if (!CGPenData().NeverTryPureNewton()
-             && curr_inf > mult_diverg_feasibility_tol_)
+         if( !CGPenData().NeverTryPureNewton() && curr_inf > mult_diverg_feasibility_tol_ )
          {
             Number penalty = CGPenCq().compute_curr_cg_penalty_scale();
-            penalty = Min(penalty_max_, Max(penalty,
-                                            CGPenData().curr_kkt_penalty()));
+            penalty = Min(penalty_max_, Max(penalty, CGPenData().curr_kkt_penalty()));
             CGPenData().Set_kkt_penalty(penalty);
             Number mach_pro = std::numeric_limits<Number>::epsilon();
-            delta_d_curr_ = delta_c_curr_ =
-                               Max(1e3 * mach_pro, Max(CGPenCq().curr_cg_pert_fact(), delta_cd()));
+            delta_d_curr_ = delta_c_curr_ = Max(1e3 * mach_pro, Max(CGPenCq().curr_cg_pert_fact(), delta_cd()));
             IpData().Append_info_string("u");
          }
       }
@@ -361,26 +349,27 @@ CGPerturbationHandler::PerturbForSingularity(
    return true;
 }
 
-bool
-CGPerturbationHandler::get_deltas_for_wrong_inertia(
-   Number& delta_x, Number& delta_s,
-   Number& delta_c, Number& delta_d)
+bool CGPerturbationHandler::get_deltas_for_wrong_inertia(
+   Number& delta_x,
+   Number& delta_s,
+   Number& delta_c,
+   Number& delta_d
+)
 {
-   if (delta_x_curr_ == 0.)
+   if( delta_x_curr_ == 0. )
    {
-      if (delta_x_last_ == 0.)
+      if( delta_x_last_ == 0. )
       {
          delta_x_curr_ = delta_xs_init_;
       }
       else
       {
-         delta_x_curr_ = Max(delta_xs_min_,
-                             delta_x_last_ * delta_xs_dec_fact_);
+         delta_x_curr_ = Max(delta_xs_min_, delta_x_last_ * delta_xs_dec_fact_);
       }
    }
    else
    {
-      if (delta_x_last_ == 0. || 1e5 * delta_x_last_ < delta_x_curr_)
+      if( delta_x_last_ == 0. || 1e5 * delta_x_last_ < delta_x_curr_ )
       {
          delta_x_curr_ = delta_xs_first_inc_fact_ * delta_x_curr_;
       }
@@ -389,11 +378,9 @@ CGPerturbationHandler::get_deltas_for_wrong_inertia(
          delta_x_curr_ = delta_xs_inc_fact_ * delta_x_curr_;
       }
    }
-   if (delta_x_curr_ > delta_xs_max_)
+   if( delta_x_curr_ > delta_xs_max_ )
    {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "delta_x perturbation is becoming too large: %e\n",
-                     delta_x_curr_);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "delta_x perturbation is becoming too large: %e\n", delta_x_curr_);
       delta_x_last_ = 0.;
       delta_s_last_ = 0.;
       IpData().Append_info_string("dx");
@@ -414,10 +401,12 @@ CGPerturbationHandler::get_deltas_for_wrong_inertia(
    return true;
 }
 
-bool
-CGPerturbationHandler::PerturbForWrongInertia(
-   Number& delta_x, Number& delta_s,
-   Number& delta_c, Number& delta_d)
+bool CGPerturbationHandler::PerturbForWrongInertia(
+   Number& delta_x,
+   Number& delta_s,
+   Number& delta_c,
+   Number& delta_d
+)
 {
    DBG_START_METH("CGPerturbationHandler::PerturbForWrongInertia",
                   dbg_verbosity);
@@ -428,7 +417,7 @@ CGPerturbationHandler::PerturbForWrongInertia(
    finalize_test();
 
    bool retval = get_deltas_for_wrong_inertia(delta_x, delta_s, delta_c, delta_d);
-   if (!retval && delta_c == 0.)
+   if( !retval && delta_c == 0. )
    {
       DBG_ASSERT(delta_d == 0.);
       delta_c_curr_ = delta_cd();
@@ -436,7 +425,7 @@ CGPerturbationHandler::PerturbForWrongInertia(
       delta_x_curr_ = 0.;
       delta_s_curr_ = 0.;
       test_status_ = NO_TEST;
-      if (hess_degenerate_ == DEGENERATE)
+      if( hess_degenerate_ == DEGENERATE )
       {
          hess_degenerate_ = NOT_YET_DETERMINED;
       }
@@ -445,10 +434,12 @@ CGPerturbationHandler::PerturbForWrongInertia(
    return retval;
 }
 
-void
-CGPerturbationHandler::CurrentPerturbation(
-   Number& delta_x, Number& delta_s,
-   Number& delta_c, Number& delta_d)
+void CGPerturbationHandler::CurrentPerturbation(
+   Number& delta_x,
+   Number& delta_s,
+   Number& delta_c,
+   Number& delta_d
+)
 {
    delta_x = delta_x_curr_;
    delta_s = delta_s_curr_;
@@ -456,48 +447,45 @@ CGPerturbationHandler::CurrentPerturbation(
    delta_d = delta_d_curr_;
 }
 
-Number
-CGPerturbationHandler::delta_cd()
+Number CGPerturbationHandler::delta_cd()
 {
    return delta_cd_val_ * pow(IpData().curr_mu(), delta_cd_exp_);
 }
 
-void
-CGPerturbationHandler::finalize_test()
+void CGPerturbationHandler::finalize_test()
 {
-   switch (test_status_)
+   switch( test_status_ )
    {
       case NO_TEST:
          return;
       case TEST_DELTA_C_EQ_0_DELTA_X_EQ_0:
-         if (hess_degenerate_ == NOT_YET_DETERMINED &&
-             jac_degenerate_ == NOT_YET_DETERMINED)
+         if( hess_degenerate_ == NOT_YET_DETERMINED && jac_degenerate_ == NOT_YET_DETERMINED )
          {
             hess_degenerate_ = NOT_DEGENERATE;
             jac_degenerate_ = NOT_DEGENERATE;
             IpData().Append_info_string("Nhj ");
          }
-         else if (hess_degenerate_ == NOT_YET_DETERMINED)
+         else if( hess_degenerate_ == NOT_YET_DETERMINED )
          {
             hess_degenerate_ = NOT_DEGENERATE;
             IpData().Append_info_string("Nh ");
          }
-         else if (jac_degenerate_ == NOT_YET_DETERMINED)
+         else if( jac_degenerate_ == NOT_YET_DETERMINED )
          {
             jac_degenerate_ = NOT_DEGENERATE;
             IpData().Append_info_string("Nj ");
          }
          break;
       case TEST_DELTA_C_GT_0_DELTA_X_EQ_0:
-         if (hess_degenerate_ == NOT_YET_DETERMINED)
+         if( hess_degenerate_ == NOT_YET_DETERMINED )
          {
             hess_degenerate_ = NOT_DEGENERATE;
             IpData().Append_info_string("Nh ");
          }
-         if (jac_degenerate_ == NOT_YET_DETERMINED)
+         if( jac_degenerate_ == NOT_YET_DETERMINED )
          {
             degen_iters_++;
-            if (degen_iters_ >= degen_iters_max_)
+            if( degen_iters_ >= degen_iters_max_ )
             {
                jac_degenerate_ = DEGENERATE;
                IpData().Append_info_string("Dj ");
@@ -506,15 +494,15 @@ CGPerturbationHandler::finalize_test()
          }
          break;
       case TEST_DELTA_C_EQ_0_DELTA_X_GT_0:
-         if (jac_degenerate_ == NOT_YET_DETERMINED)
+         if( jac_degenerate_ == NOT_YET_DETERMINED )
          {
             jac_degenerate_ = NOT_DEGENERATE;
             IpData().Append_info_string("Nj ");
          }
-         if (hess_degenerate_ == NOT_YET_DETERMINED)
+         if( hess_degenerate_ == NOT_YET_DETERMINED )
          {
             degen_iters_++;
-            if (degen_iters_ >= degen_iters_max_)
+            if( degen_iters_ >= degen_iters_max_ )
             {
                hess_degenerate_ = DEGENERATE;
                IpData().Append_info_string("Dh ");
@@ -523,7 +511,7 @@ CGPerturbationHandler::finalize_test()
          break;
       case TEST_DELTA_C_GT_0_DELTA_X_GT_0:
          degen_iters_++;
-         if (degen_iters_ >= degen_iters_max_)
+         if( degen_iters_ >= degen_iters_max_ )
          {
             hess_degenerate_ = DEGENERATE;
             jac_degenerate_ = DEGENERATE;
