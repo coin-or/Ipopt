@@ -71,13 +71,13 @@ namespace Ipopt
 
     /**@name methods to gather information about the NLP */
     //@{
+    enum IndexStyleEnum { C_STYLE=0, FORTRAN_STYLE=1 };
     /** overload this method to return the number of variables
      *  and constraints, and the number of non-zeros in the jacobian and
      *  the hessian. The index_style parameter lets you specify C or Fortran
      *  style indexing for the sparse matrix iRow and jCol parameters.
      *  C_STYLE is 0-based, and FORTRAN_STYLE is 1-based.
      */
-    enum IndexStyleEnum { C_STYLE=0, FORTRAN_STYLE=1 };
     virtual bool get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
                               Index& nnz_h_lag, IndexStyleEnum& index_style)=0;
 
