@@ -299,7 +299,7 @@ private:
       const NLPScalingObject&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const NLPScalingObject&
       );
@@ -484,7 +484,7 @@ private:
       const StandardScalingBase&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const StandardScalingBase&
       );
@@ -570,7 +570,7 @@ private:
       const NoNLPScalingObject&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const NoNLPScalingObject&
       );

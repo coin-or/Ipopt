@@ -78,7 +78,7 @@ private:
    IpoptAdditionalCq(
       const IpoptAdditionalCq&);
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const IpoptAdditionalCq&);
    //@}
@@ -601,7 +601,7 @@ private:
       const IpoptCalculatedQuantities&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const IpoptCalculatedQuantities&
       );

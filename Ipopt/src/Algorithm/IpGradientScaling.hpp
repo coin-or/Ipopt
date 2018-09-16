@@ -81,7 +81,7 @@ private:
       const GradientScaling&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const GradientScaling&
       );

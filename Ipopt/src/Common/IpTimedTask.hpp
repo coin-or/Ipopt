@@ -118,7 +118,7 @@ private:
    /** Copy Constructor */
    TimedTask(const TimedTask&);
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(const TimedTask&);
    //@}
 

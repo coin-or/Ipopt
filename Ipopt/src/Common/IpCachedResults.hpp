@@ -270,7 +270,7 @@ private:
       const CachedResults&
    );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const CachedResults&
    );
@@ -378,7 +378,7 @@ private:
       const DependentResult&
    );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const DependentResult&
    );

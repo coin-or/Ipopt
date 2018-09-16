@@ -70,7 +70,7 @@ private:
       const RestorationPhase&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const RestorationPhase&
       );

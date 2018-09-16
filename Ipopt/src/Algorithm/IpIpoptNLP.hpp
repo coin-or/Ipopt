@@ -306,7 +306,7 @@ private:
       const IpoptNLP&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const IpoptNLP&
       );

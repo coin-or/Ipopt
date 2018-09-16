@@ -115,7 +115,7 @@ private:
    /** Default Constructor */
    IpoptException();
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const IpoptException&
    );

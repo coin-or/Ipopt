@@ -298,7 +298,7 @@ private:
       const CGPenaltyData&
    );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const CGPenaltyData&
    );

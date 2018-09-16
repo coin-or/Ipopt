@@ -95,7 +95,7 @@ private:
       const OptimalityErrorConvergenceCheck&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const OptimalityErrorConvergenceCheck&
       );

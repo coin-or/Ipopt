@@ -65,7 +65,7 @@ private:
       const RestoPenaltyConvergenceCheck&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const RestoPenaltyConvergenceCheck&
       );

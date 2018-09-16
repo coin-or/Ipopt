@@ -71,7 +71,7 @@ private:
       const RestoIterateInitializer&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const RestoIterateInitializer&
       );

@@ -112,7 +112,7 @@ private:
       const CGPerturbationHandler&
    );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const CGPerturbationHandler&
    );

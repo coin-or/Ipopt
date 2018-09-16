@@ -77,7 +77,7 @@ private:
       const IpoptAdditionalData&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const IpoptAdditionalData&
       );
@@ -796,7 +796,7 @@ private:
       const IpoptData&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const IpoptData&
       );

@@ -83,7 +83,7 @@ private:
       const ConvergenceCheck&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const ConvergenceCheck&
       );

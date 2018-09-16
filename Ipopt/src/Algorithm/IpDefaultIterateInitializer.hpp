@@ -124,7 +124,7 @@ private:
       const DefaultIterateInitializer&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const DefaultIterateInitializer&
       );

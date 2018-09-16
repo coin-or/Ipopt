@@ -56,7 +56,7 @@ private:
       const RestoRestorationPhase&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const RestoRestorationPhase&
       );

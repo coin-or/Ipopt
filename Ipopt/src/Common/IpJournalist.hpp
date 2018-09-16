@@ -274,7 +274,7 @@ private:
       const Journalist&
    );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const Journalist&
    );
@@ -405,7 +405,7 @@ private:
       const Journal&
    );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const Journal&
    );
@@ -491,7 +491,7 @@ private:
       const FileJournal&
    );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const FileJournal&
    );
@@ -567,7 +567,7 @@ private:
       const StreamJournal&
    );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const StreamJournal&
    );

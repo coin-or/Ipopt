@@ -81,7 +81,7 @@ private:
       const EquilibrationScaling&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const EquilibrationScaling&
       );
@@ -139,7 +139,7 @@ private:
       const PointPerturber&
       );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(
       const PointPerturber&
       );

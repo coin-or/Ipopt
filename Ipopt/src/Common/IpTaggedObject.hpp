@@ -134,7 +134,7 @@ private:
    /** Copy Constructor */
    TaggedObject(const TaggedObject&);
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    void operator=(const TaggedObject&);
    //@}
 

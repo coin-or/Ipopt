@@ -134,7 +134,7 @@ private:
       const DebugJournalistWrapper&
    );
 
-   /** Overloaded Equals Operator */
+   /** Default Assignment Operator */
    DebugJournalistWrapper& operator=(
       const DebugJournalistWrapper&
    );
