@@ -1,13 +1,11 @@
 /* Copyright (C) 2008 GAMS Development and others
- All Rights Reserved.
- This code is published under the Eclipse Public License.
-
- $Id$
-
- Author: Stefan Vigerske
-
- inspired by optcc.c in gams i/o libs
-*/
+ * All Rights Reserved.
+ * This code is published under the Eclipse Public License.
+ *
+ * Author: Stefan Vigerske
+ *
+ * inspired by optcc.c in GAMS I/O libraries
+ */
 
 #include "LibraryHandler.h"
 
@@ -26,7 +24,11 @@
 # endif
 #endif
 
-soHandle_t LSL_loadLib(const char* libName, char* msgBuf, int msgLen)
+soHandle_t LSL_loadLib(
+   const char* libName,
+   char*       msgBuf,
+   int         msgLen
+)
 {
    soHandle_t h = NULL;
 
@@ -35,21 +37,21 @@ soHandle_t LSL_loadLib(const char* libName, char* msgBuf, int msgLen)
    return h;
 #else
 
-   if (libName == NULL)
+   if( libName == NULL )
    {
       mysnprintf(msgBuf, msgLen, "loadLib error: no library name given (libName is NULL)");
       return NULL;
    }
 
 # ifdef HAVE_WINDOWS_H
-   h = LoadLibrary (libName);
-   if (NULL == h)
+   h = LoadLibrary(libName);
+   if( NULL == h )
    {
       mysnprintf(msgBuf, msgLen, "Windows error while loading dynamic library %s, error = %d.\n(see http://msdn.microsoft.com/en-us/library/ms681381%%28v=vs.85%%29.aspx)\n", libName, GetLastError());
    }
 # else
-   h = dlopen (libName, RTLD_NOW);
-   if (NULL == h)
+   h = dlopen(libName, RTLD_NOW);
+   if( NULL == h )
    {
       strncpy(msgBuf, dlerror(), msgLen);
       msgBuf[msgLen - 1] = 0;
@@ -60,7 +62,9 @@ soHandle_t LSL_loadLib(const char* libName, char* msgBuf, int msgLen)
 #endif
 } /* LSL_loadLib */
 
-int LSL_unloadLib (soHandle_t h)
+int LSL_unloadLib(
+   soHandle_t h
+)
 {
    int rc = 1;
 
@@ -80,7 +84,9 @@ typedef FARPROC symtype;
 #else
 typedef void* symtype;
 #endif
+
 /** Loads a symbol from a dynamically linked library.
+ *
  * This function is not defined in the header to allow a workaround for the problem that dlsym returns an object instead of a function pointer.
  * However, Windows also needs special care.
  *
@@ -91,7 +97,12 @@ typedef void* symtype;
  * @param msgLen Length of message buffer.
  * @return A pointer to the symbol, or NULL if not found.
  */
-symtype LSL_loadSym (soHandle_t h, const char* symName, char* msgBuf, int msgLen)
+symtype LSL_loadSym(
+   soHandle_t  h,
+   const char* symName,
+   char*       msgBuf,
+   int         msgLen
+)
 {
    symtype s;
    const char* from;
@@ -117,15 +128,15 @@ symtype LSL_loadSym (soHandle_t h, const char* symName, char* msgBuf, int msgLen
     */
 
    symLen = 0;
-   for (trip = 1;  trip <= 6;  trip++)
+   for( trip = 1; trip <= 6; trip++ )
    {
-      switch (trip)
+      switch( trip )
       {
-         case 1:                             /* original */
+         case 1: /* original */
             tripSym = symName;
             break;
-         case 2:                             /* lower_ */
-            for (from = symName, to = lcbuf;  *from;  from++, to++)
+         case 2: /* lower_ */
+            for( from = symName, to = lcbuf; *from; from++, to++ )
             {
                *to = tolower(*from);
             }
@@ -134,8 +145,8 @@ symtype LSL_loadSym (soHandle_t h, const char* symName, char* msgBuf, int msgLen
             *to = '\0';
             tripSym = lcbuf;
             break;
-         case 3:                             /* upper_ */
-            for (from = symName, to = ucbuf;  *from;  from++, to++)
+         case 3: /* upper_ */
+            for( from = symName, to = ucbuf; *from; from++, to++ )
             {
                *to = toupper(*from);
             }
@@ -143,17 +154,17 @@ symtype LSL_loadSym (soHandle_t h, const char* symName, char* msgBuf, int msgLen
             *to = '\0';
             tripSym = ucbuf;
             break;
-         case 4:                             /* original_ */
-            memcpy (ocbuf, symName, symLen);
+         case 4: /* original_ */
+            memcpy(ocbuf, symName, symLen);
             ocbuf[symLen] = '_';
             ocbuf[symLen + 1] = '\0';
             tripSym = ocbuf;
             break;
-         case 5:                             /* lower */
+         case 5: /* lower */
             lcbuf[symLen] = '\0';
             tripSym = lcbuf;
             break;
-         case 6:                             /* upper */
+         case 6: /* upper */
             ucbuf[symLen] = '\0';
             tripSym = ucbuf;
             break;
@@ -173,7 +184,7 @@ symtype LSL_loadSym (soHandle_t h, const char* symName, char* msgBuf, int msgLen
 #else
 # ifdef HAVE_DLFCN_H
       s = dlsym (h, tripSym);
-      err = dlerror();  /* we have only one chance; a successive call to dlerror() returns NULL */
+      err = dlerror(); /* we have only one chance; a successive call to dlerror() returns NULL */
       if (err)
       {
          strncpy(msgBuf, err, msgLen);
