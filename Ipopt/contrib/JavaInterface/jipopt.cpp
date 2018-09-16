@@ -1,9 +1,7 @@
-/** Copyright (C) 2007 VRTech Industrial Technologies - www.vrtech.com.br.
+/* Copyright (C) 2007 VRTech Industrial Technologies - www.vrtech.com.br.
  * Copyright (C) 2007 Tong Kewei, BeiHang University - www.buaa.edu.cn.
  * All Rights Reserved.
  * This code is published under the Eclipse Public License.
- *
- * $Id$
  */
 
 #include <cassert>
@@ -16,107 +14,158 @@ using namespace std;
 using namespace Ipopt;
 
 /** Main structure for Ipopt JNI implementation.
- * 
+ *
  * All functions will receive a pointer to this structure as
  * an integer argument (the address in memory of the structure).
  */
-class Jipopt : public TNLP
+class Jipopt: public TNLP
 {
 public:
-   /**  constructor */
-   Jipopt(JNIEnv *env, jobject solver, jint n, jint m, jint nele_jac, jint nele_hess, jint index_style);
+   /** constructor */
+   Jipopt(
+      JNIEnv* env,        /**< JNI environment */
+      jobject solver,     /**< Java Ipopt solver object */
+      jint    n,          /**< number of variables */
+      jint    m,          /**< number of constraints */
+      jint    nele_jac,   /**< number of nonzero elements in Jacobian */
+      jint    nele_hess,  /**< number of nonzero elements in Hessian */
+      jint    index_style /**< whether to use C or Fortran index style (0 for C, 1 for Fortran) */
+   );
 
    /** default destructor */
-   virtual ~Jipopt() { }
+   virtual ~Jipopt()
+   {
+   }
 
    /**@name Overloaded from TNLP */
    //@{
-   /** Method to return some info about the nlp */
-   virtual bool get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
-      Index& nnz_h_lag, IndexStyleEnum& index_style);
+   /* Method to return some info about the NLP */
+   virtual bool get_nlp_info(
+      Index&          n,
+      Index&          m,
+      Index&          nnz_jac_g,
+      Index&          nnz_h_lag,
+      IndexStyleEnum& index_style
+   );
 
-   /** Method to return the bounds for my problem */
-   virtual bool get_bounds_info(Index n, Number* x_l, Number* x_u,
-      Index m, Number* g_l, Number* g_u);
+   /* Method to return the bounds for my problem */
+   virtual bool get_bounds_info(
+      Index   n,
+      Number* x_l,
+      Number* x_u,
+      Index   m,
+      Number* g_l,
+      Number* g_u
+   );
 
-   /** Method to return the starting point for the algorithm */
-   virtual bool get_starting_point(Index n, bool init_x, Number* x,
-      bool init_z, Number* z_L, Number* z_U,
-      Index m, bool init_lambda,
-      Number* lambda);
+   /* Method to return the starting point for the algorithm */
+   virtual bool get_starting_point(
+      Index   n,
+      bool    init_x,
+      Number* x,
+      bool    init_z,
+      Number* z_L,
+      Number* z_U,
+      Index   m,
+      bool    init_lambda,
+      Number* lambda
+   );
 
-   /** Method to return the objective value */
-   virtual bool eval_f(Index n, const Number* x, bool new_x, Number& obj_value);
+   /* Method to return the objective value */
+   virtual bool eval_f(
+      Index         n,
+      const Number* x,
+      bool          new_x,
+      Number&       obj_value
+   );
 
-   /** Method to return the gradient of the objective */
-   virtual bool eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f);
+   /* Method to return the gradient of the objective */
+   virtual bool eval_grad_f(
+      Index         n,
+      const Number* x,
+      bool          new_x,
+      Number*       grad_f
+   );
 
-   /** Method to return the constraint residuals */
-   virtual bool eval_g(Index n, const Number* x, bool new_x, Index m, Number* g);
+   /* Method to return the constraint activities */
+   virtual bool eval_g(
+      Index         n,
+      const Number* x,
+      bool          new_x,
+      Index         m,
+      Number*       g
+   );
 
-   /** Method to return:
-    *   1) The structure of the jacobian (if "values" is NULL)
-    *   2) The values of the jacobian (if "values" is not NULL)
+   /* Method to return:
+    *  1) The structure of the Jacobian (if "values" is NULL)
+    *  2) The values of the Jacobian (if "values" is not NULL)
     */
-   virtual bool eval_jac_g(Index n, const Number* x, bool new_x,
-      Index m, Index nele_jac, Index* iRow, Index *jCol,
-      Number* values);
+   virtual bool eval_jac_g(
+      Index         n,
+      const Number* x,
+      bool          new_x,
+      Index         m,
+      Index         nele_jac,
+      Index*        iRow,
+      Index*        jCol,
+      Number*       values
+   );
 
-   /** Method to return:
-    *   1) The structure of the hessian of the lagrangian (if "values" is NULL)
-    *   2) The values of the hessian of the lagrangian (if "values" is not NULL)
+   /* Method to return:
+    *  1) The structure of the Hessian of the Lagrangian (if "values" is NULL)
+    *  2) The values of the Hessian of the Lagrangian (if "values" is not NULL)
     */
-   virtual bool eval_h(Index n, const Number* x, bool new_x,
-      Number obj_factor, Index m, const Number* lambda,
-      bool new_lambda, Index nele_hess, Index* iRow,
-      Index* jCol, Number* values);
+   virtual bool eval_h(
+      Index         n,
+      const Number* x,
+      bool          new_x,
+      Number        obj_factor,
+      Index         m,
+      const Number* lambda,
+      bool          new_lambda,
+      Index         nele_hess,
+      Index*        iRow,
+      Index*        jCol,
+      Number*       values
+   );
 
-   //@}
+   /* This method is called when the algorithm is complete so the TNLP can store/write the solution */
+   virtual void finalize_solution(
+      SolverReturn               status,
+      Index                      n,
+      const Number*              x,
+      const Number*              z_L,
+      const Number*              z_U,
+      Index                      m,
+      const Number*              g,
+      const Number*              lambda,
+      Number                     obj_value,
+      const IpoptData*           ip_data,
+      IpoptCalculatedQuantities* ip_cq
+   );
 
-   /** @name Solution Methods */
-   //@{
-   /** This method is called when the algorithm is complete so the TNLP can store/write the solution */
-   virtual void finalize_solution(SolverReturn status,
-      Index n, const Number* x, const Number* z_L, const Number* z_U,
-      Index m, const Number* g, const Number* lambda,
-      Number obj_value,
-      const IpoptData* ip_data,
-      IpoptCalculatedQuantities* ip_cq);
-   //@}
+   /* Method to return scaling parameters. */
+   virtual bool get_scaling_parameters(
+      Number&  obj_scaling,
+      bool&    use_x_scaling,
+      Index    n,
+      Number*  x_scaling,
+      bool&    use_g_scaling,
+      Index    m,
+      Number*  g_scaling
+   );
 
-   /** overload this method to return scaling parameters. This is
-    *  only called if the options are set to retrieve user scaling.
-    *  There, use_x_scaling (or use_g_scaling) should get set to true
-    *  only if the variables (or constraints) are to be scaled.  This
-    *  method should return true only if the scaling parameters could
-    *  be provided.
-    */
-   virtual bool get_scaling_parameters(Number& obj_scaling,
-      bool& use_x_scaling, Index n,
-      Number* x_scaling,
-      bool& use_g_scaling, Index m,
-      Number* g_scaling);
-
-   /** @name Methods for quasi-Newton approximation.  If the second
-    *  derivatives are approximated by Ipopt, it is better to do this
-    *  only in the space of nonlinear variables.  The following
-    *  methods are call by Ipopt if the quasi-Newton approximation is
-    *  selected.  If -1 is returned as number of nonlinear variables,
-    *  Ipopt assumes that all variables are nonlinear.  Otherwise, it
-    *  calls get_list_of_nonlinear_variables with an array into which
-    *  the indices of the nonlinear variables should be written - the
-    *  array has the lengths num_nonlin_vars, which is identical with
-    *  the return value of get_number_of_nonlinear_variables().  It
-    *  is assumed that the indices are counted starting with 1 in the
-    *  FORTRAN_STYLE, and 0 for the C_STYLE. */
-   //@{
+   /* Method for quasi-Newton approximation. */
    virtual Index get_number_of_nonlinear_variables();
 
-   virtual bool get_list_of_nonlinear_variables(Index num_nonlin_vars,Index* pos_nonlin_vars);
+   virtual bool get_list_of_nonlinear_variables(
+      Index  num_nonlin_vars,
+      Index* pos_nonlin_vars
+   );
    //@}
 
 public:
-   // The JNI Environment
+   /// The JNI Environment
    JNIEnv *env;
    jobject solver;
 
@@ -162,11 +211,19 @@ private:
    Jipopt& operator=(const Jipopt&);
 };
 
-Jipopt::Jipopt(JNIEnv *env_, jobject solver_, jint n_, jint m_, jint nele_jac_, jint nele_hess_, jint index_style_)
-: env(env_), solver(solver_), n(n_), m(m_), nele_jac(nele_jac_), nele_hess(nele_hess_), index_style(index_style_),
-  mult_gj(NULL), mult_x_Lj(NULL), mult_x_Uj(NULL),
-  xj(NULL), fj(NULL), grad_fj(NULL), gj(NULL), jac_gj(NULL), hessj(NULL),
-  using_scaling_parameters(false), using_LBFGS(false)
+Jipopt::Jipopt(
+   JNIEnv* env_,
+   jobject solver_,
+   jint    n_,
+   jint    m_,
+   jint    nele_jac_,
+   jint    nele_hess_,
+   jint    index_style_
+ )
+ : env(env_), solver(solver_), n(n_), m(m_), nele_jac(nele_jac_), nele_hess(nele_hess_), index_style(index_style_),
+   mult_gj(NULL), mult_x_Lj(NULL), mult_x_Uj(NULL), xj(NULL), fj(NULL), grad_fj(NULL),
+   gj(NULL), jac_gj(NULL), hessj(NULL),
+   using_scaling_parameters(false), using_LBFGS(false)
 {
    application = new IpoptApplication();
    application->RethrowNonIpoptException(false);
@@ -175,37 +232,59 @@ Jipopt::Jipopt(JNIEnv *env_, jobject solver_, jint n_, jint m_, jint nele_jac_, 
    jclass solverCls = env->GetObjectClass(solver);
 
    // get the methods
-   get_bounds_info_ = env->GetMethodID(solverCls,"get_bounds_info","(I[D[DI[D[D)Z");
-   get_starting_point_ = env->GetMethodID(solverCls,"get_starting_point","(IZ[DZ[D[DIZ[D)Z");
-   eval_f_ = env->GetMethodID(solverCls, "eval_f", "(I[DZ[D)Z");
-   eval_grad_f_ = env->GetMethodID(solverCls, "eval_grad_f", "(I[DZ[D)Z");
-   eval_g_ = env->GetMethodID(solverCls, "eval_g", "(I[DZI[D)Z");
-   eval_jac_g_ = env->GetMethodID(solverCls, "eval_jac_g", "(I[DZII[I[I[D)Z");
-   eval_h_ = env->GetMethodID(solverCls, "eval_h", "(I[DZDI[DZI[I[I[D)Z");
-   get_scaling_parameters_ = env->GetMethodID(solverCls,"get_scaling_parameters","([DI[DI[D[Z)Z");
-   get_number_of_nonlinear_variables_ = env->GetMethodID(solverCls,"get_number_of_nonlinear_variables","()I");
-   get_list_of_nonlinear_variables_ = env->GetMethodID(solverCls,"get_list_of_nonlinear_variables","(I[I)Z");
+   get_bounds_info_    = env->GetMethodID(solverCls, "get_bounds_info", "(I[D[DI[D[D)Z");
+   get_starting_point_ = env->GetMethodID(solverCls, "get_starting_point", "(IZ[DZ[D[DIZ[D)Z");
+   eval_f_             = env->GetMethodID(solverCls, "eval_f", "(I[DZ[D)Z");
+   eval_grad_f_        = env->GetMethodID(solverCls, "eval_grad_f", "(I[DZ[D)Z");
+   eval_g_             = env->GetMethodID(solverCls, "eval_g", "(I[DZI[D)Z");
+   eval_jac_g_         = env->GetMethodID(solverCls, "eval_jac_g", "(I[DZII[I[I[D)Z");
+   eval_h_             = env->GetMethodID(solverCls, "eval_h", "(I[DZDI[DZI[I[I[D)Z");
+   get_scaling_parameters_            = env->GetMethodID(solverCls, "get_scaling_parameters", "([DI[DI[D[Z)Z");
+   get_number_of_nonlinear_variables_ = env->GetMethodID(solverCls, "get_number_of_nonlinear_variables", "()I");
+   get_list_of_nonlinear_variables_   = env->GetMethodID(solverCls, "get_list_of_nonlinear_variables", "(I[I)Z");
 
-   if( get_bounds_info_ == 0 || get_starting_point_ == 0 ||
-      eval_f_ == 0 || eval_grad_f_ == 0 || eval_g_ == 0 || eval_jac_g_ == 0 || eval_h_ == 0 ||
-      get_scaling_parameters_ == 0 || get_number_of_nonlinear_variables_ == 0 || get_list_of_nonlinear_variables_ == 0 )
+   if( get_bounds_info_ == 0 || get_starting_point_ == 0 || eval_f_ == 0
+      || eval_grad_f_ == 0 || eval_g_ == 0 || eval_jac_g_ == 0 || eval_h_ == 0
+      || get_scaling_parameters_ == 0 || get_number_of_nonlinear_variables_ == 0
+      || get_list_of_nonlinear_variables_ == 0 )
       std::cerr << "Expected callback methods missing on JIpopt.java" << std::endl;
+
+   assert(get_bounds_info_    != 0);
+   assert(get_starting_point_ != 0);
+   assert(eval_f_      != 0);
+   assert(eval_grad_f_ != 0);
+   assert(eval_g_      != 0);
+   assert(eval_jac_g_  != 0);
+   assert(eval_h_      != 0);
+   assert(get_scaling_parameters_ != 0);
+   assert(get_number_of_nonlinear_variables_ != 0);
+   assert(get_list_of_nonlinear_variables_   != 0);
 }
 
-bool Jipopt::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
-   Index& nnz_h_lag, IndexStyleEnum& index_style)
+bool Jipopt::get_nlp_info(
+   Index&          n,
+   Index&          m,
+   Index&          nnz_jac_g,
+   Index&          nnz_h_lag,
+   IndexStyleEnum& index_style)
 {
    n = this->n;
    m = this->m;
    nnz_jac_g = this->nele_jac;
    nnz_h_lag = this->nele_hess;
 
-   index_style = (IndexStyleEnum)this->index_style;
+   index_style = (IndexStyleEnum) this->index_style;
 
    return true;
 }
 
-bool Jipopt::get_bounds_info(Index n, Number *x_l, Number *x_u, Index m, Number *g_l, Number *g_u)
+bool Jipopt::get_bounds_info(
+   Index   n,
+   Number* x_l,
+   Number* x_u,
+   Index   m,
+   Number* g_l,
+   Number* g_u)
 {
    jdoubleArray x_lj = NULL;
    jdoubleArray x_uj = NULL;
@@ -234,9 +313,16 @@ bool Jipopt::get_bounds_info(Index n, Number *x_l, Number *x_u, Index m, Number 
    return true;
 }
 
-bool Jipopt::get_starting_point(Index n, bool init_x, Number* x,
-   bool init_z, Number* z_L, Number* z_U,
-   Index m, bool init_lambda, Number* lambda)
+bool Jipopt::get_starting_point(
+   Index   n,
+   bool    init_x,
+   Number* x,
+   bool    init_z,
+   Number* z_L,
+   Number* z_U,
+   Index   m,
+   bool    init_lambda,
+   Number* lambda)
 {
    jdoubleArray xj      = this->xj;
    jdoubleArray z_lj    = this->mult_x_Lj;
@@ -262,7 +348,11 @@ bool Jipopt::get_starting_point(Index n, bool init_x, Number* x,
    return true;
 }
 
-bool Jipopt::eval_f(Index n, const Number* x, bool new_x, Number& obj_value)
+bool Jipopt::eval_f(
+   Index         n,
+   const Number* x,
+   bool          new_x,
+   Number&       obj_value)
 {
    /* Copy the native double x to the Java double array xj, if new values */
    if( new_x )
@@ -279,7 +369,11 @@ bool Jipopt::eval_f(Index n, const Number* x, bool new_x, Number& obj_value)
    return true;
 }
 
-bool Jipopt::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f)
+bool Jipopt::eval_grad_f(
+   Index         n,
+   const Number* x,
+   bool          new_x,
+   Number*       grad_f)
 {
    /* Copy the native double x to the Java double array xj, if new values */
    if( new_x )
@@ -295,7 +389,12 @@ bool Jipopt::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f)
    return true;
 }
 
-bool Jipopt::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g)
+bool Jipopt::eval_g(
+   Index         n,
+   const Number* x,
+   bool          new_x,
+   Index         m,
+   Number*       g)
 {
    /* Copy the native double x to the Java double array xj, if new values */
    if( new_x )
@@ -312,9 +411,15 @@ bool Jipopt::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g)
    return true;
 }
 
-bool Jipopt::eval_jac_g(Index n, const Number* x, bool new_x,
-   Index m, Index nele_jac, Index* iRow,
-   Index *jCol, Number* jac_g)
+bool Jipopt::eval_jac_g(
+   Index         n,
+   const Number* x,
+   bool          new_x,
+   Index         m,
+   Index         nele_jac,
+   Index*        iRow,
+   Index*        jCol,
+   Number*       jac_g)
 {
    // Copy the native double x to the Java double array xj, if new values
    if( new_x && x != NULL )
@@ -351,11 +456,11 @@ bool Jipopt::eval_jac_g(Index n, const Number* x, bool new_x,
 
          env->GetIntArrayRegion(iRowj, 0, nele_jac, tmp);
          for( int i = 0; i < nele_jac; ++i )
-            iRow[i] = (Index)tmp[i];
+            iRow[i] = (Index) tmp[i];
 
          env->GetIntArrayRegion(jColj, 0, nele_jac, tmp);
          for( int i = 0; i < nele_jac; ++i )
-            jCol[i] = (Index)tmp[i];
+            jCol[i] = (Index) tmp[i];
 
          delete[] tmp;
       }
@@ -364,10 +469,18 @@ bool Jipopt::eval_jac_g(Index n, const Number* x, bool new_x,
    return true;
 }
 
-bool Jipopt::eval_h(Index n, const Number* x, bool new_x,
-   Number obj_factor, Index m, const Number* lambda,
-   bool new_lambda, Index nele_hess,
-   Index* iRow, Index* jCol, Number* hess)
+bool Jipopt::eval_h(
+   Index         n,
+   const Number* x,
+   bool          new_x,
+   Number        obj_factor,
+   Index         m,
+   const Number* lambda,
+   bool          new_lambda,
+   Index         nele_hess,
+   Index*        iRow,
+   Index*        jCol,
+   Number*       hess)
 {
    /* Copy the native double x to the Java double array xj, if new values */
    if( new_x && x != NULL )
@@ -409,11 +522,11 @@ bool Jipopt::eval_h(Index n, const Number* x, bool new_x,
 
          env->GetIntArrayRegion(iRowj, 0, nele_hess, tmp);
          for( int i = 0; i < nele_hess; ++i )
-            iRow[i] = (Index)tmp[i];
+            iRow[i] = (Index) tmp[i];
 
          env->GetIntArrayRegion(jColj, 0, nele_hess, tmp);
          for( int i = 0; i < nele_hess; ++i )
-            jCol[i] = (Index)tmp[i];
+            jCol[i] = (Index) tmp[i];
 
          delete[] tmp;
       }
@@ -422,10 +535,18 @@ bool Jipopt::eval_h(Index n, const Number* x, bool new_x,
    return true;
 }
 
-void Jipopt::finalize_solution(SolverReturn status, Index n, const Number *x, 
-   const Number *z_L, const Number *z_U, Index m,
-   const Number *g, const Number *lambda, Number obj_value,
-   const IpoptData *ip_data, IpoptCalculatedQuantities *ip_cq)
+void Jipopt::finalize_solution(
+   SolverReturn               status,
+   Index                      n,
+   const Number*              x,
+   const Number*              z_L,
+   const Number*              z_U,
+   Index                      m,
+   const Number*              g,
+   const Number*              lambda,
+   Number                     obj_value,
+   const IpoptData*           ip_data,
+   IpoptCalculatedQuantities* ip_cq)
 {
    /* Copy the native arrays to Java double arrays */
 
@@ -447,66 +568,56 @@ void Jipopt::finalize_solution(SolverReturn status, Index n, const Number *x,
    env->GetDoubleArrayRegion(fj, 0, 1, &obj_value);
 }
 
-/** overload this method to return scaling parameters. This is
- *  only called if the options are set to retrieve user scaling.
- *  There, use_x_scaling (or use_g_scaling) should get set to true
- *  only if the variables (or constraints) are to be scaled.  This
- *  method should return true only if the scaling parameters could
- *  be provided.
- */
-bool Jipopt::get_scaling_parameters(Number& obj_scaling,
-   bool& use_x_scaling, Index n,
+bool Jipopt::get_scaling_parameters(
+   Number& obj_scaling,
+   bool&   use_x_scaling,
+   Index   n,
    Number* x_scaling,
-   bool& use_g_scaling, Index m,
+   bool&   use_g_scaling,
+   Index   m,
    Number* g_scaling)
 {
-   if( using_scaling_parameters )
+   if( !using_scaling_parameters )
+      return false;
+
+   jdoubleArray obj_scaling_j = env->NewDoubleArray(1);
+   jdoubleArray x_scaling_j   = env->NewDoubleArray(n);
+   jdoubleArray g_scaling_j   = env->NewDoubleArray(m);
+
+   jbooleanArray use_x_g_scaling_j = env->NewBooleanArray(2);
+
+   env->CallBooleanMethod(solver, get_scaling_parameters_, obj_scaling_j, n, x_scaling_j, m, g_scaling_j, use_x_g_scaling_j);
+
+   jboolean* use_x_g_scaling = env->GetBooleanArrayElements(use_x_g_scaling_j, 0);
+
+   /* Copy from Java to native value */
+   env->GetDoubleArrayRegion(obj_scaling_j, 0, 1, &obj_scaling);
+
+   /* Copy from Java to native value */
+   if( use_x_g_scaling[0] )
    {
-      jdoubleArray obj_scaling_j = env->NewDoubleArray(1);
-      jdoubleArray x_scaling_j   = env->NewDoubleArray(n);
-      jdoubleArray g_scaling_j   = env->NewDoubleArray(m);
-
-      jbooleanArray use_x_g_scaling_j = env->NewBooleanArray(2);
-
-      env->CallBooleanMethod(solver, get_scaling_parameters_,
-         obj_scaling_j,
-         n, x_scaling_j,
-         m, g_scaling_j,
-         use_x_g_scaling_j);
-
-      jboolean* use_x_g_scaling = env->GetBooleanArrayElements(use_x_g_scaling_j,0);
-
-      /* Copy from Java to native value */
-      env->GetDoubleArrayRegion(obj_scaling_j, 0, 1, &obj_scaling);
-
-      /* Copy from Java to native value */
-      if( use_x_g_scaling[0] )
-      {
-         env->GetDoubleArrayRegion(x_scaling_j, 0, n, x_scaling);
-         use_x_scaling = true;
-      }
-      else
-      {
-         use_x_scaling = false;
-      }
-
-      /* Copy from Java to native value */
-      if( use_x_g_scaling[1] )
-      {
-         env->GetDoubleArrayRegion(g_scaling_j, 0, n, g_scaling);
-         use_g_scaling = true;
-      }
-      else
-      {
-         use_g_scaling=false;
-      }
-
-      env->ReleaseBooleanArrayElements(use_x_g_scaling_j, use_x_g_scaling, 0);
-
-      return true;
+      env->GetDoubleArrayRegion(x_scaling_j, 0, n, x_scaling);
+      use_x_scaling = true;
+   }
+   else
+   {
+      use_x_scaling = false;
    }
 
-   return false;
+   /* Copy from Java to native value */
+   if( use_x_g_scaling[1] )
+   {
+      env->GetDoubleArrayRegion(g_scaling_j, 0, n, g_scaling);
+      use_g_scaling = true;
+   }
+   else
+   {
+      use_g_scaling = false;
+   }
+
+   env->ReleaseBooleanArrayElements(use_x_g_scaling_j, use_x_g_scaling, 0);
+
+   return true;
 }
 
 Index Jipopt::get_number_of_nonlinear_variables()
@@ -517,46 +628,50 @@ Index Jipopt::get_number_of_nonlinear_variables()
    return -1;
 }
 
-bool Jipopt::get_list_of_nonlinear_variables(Index num_nonlin_vars,Index* pos_nonlin_vars)
+bool Jipopt::get_list_of_nonlinear_variables(
+   Index  num_nonlin_vars,
+   Index* pos_nonlin_vars)
 {
-   if( using_LBFGS )
+   if( !using_LBFGS )
+      return false;
+
+   jintArray pos_nonlin_vars_j = env->NewIntArray(num_nonlin_vars);
+
+   if( !env->CallBooleanMethod(solver, get_list_of_nonlinear_variables_, num_nonlin_vars, pos_nonlin_vars_j) )
+      return false;
+
+   if( pos_nonlin_vars != NULL )
    {
-      jintArray pos_nonlin_vars_j = env->NewIntArray(num_nonlin_vars);
-
-      if( !env->CallBooleanMethod(solver, get_list_of_nonlinear_variables_, num_nonlin_vars, pos_nonlin_vars_j) )
-         return false;
-
-      if( pos_nonlin_vars != NULL )
+      if( sizeof(jint) == sizeof(Index) )
       {
-         if( sizeof(jint) == sizeof(Index) )
-         {
-            env->GetIntArrayRegion(pos_nonlin_vars_j, 0, num_nonlin_vars, reinterpret_cast<jint*>(pos_nonlin_vars));
-         }
-         else
-         {
-            jint* tmp = new jint[num_nonlin_vars];
-
-            env->GetIntArrayRegion(pos_nonlin_vars_j, 0, num_nonlin_vars, tmp);
-            for( int i = 0; i < num_nonlin_vars; ++i )
-               pos_nonlin_vars[i] = (Index)tmp[i];
-
-            delete[] tmp;
-         }
+         env->GetIntArrayRegion(pos_nonlin_vars_j, 0, num_nonlin_vars, reinterpret_cast<jint*>(pos_nonlin_vars));
       }
+      else
+      {
+         jint* tmp = new jint[num_nonlin_vars];
 
-      return true;
+         env->GetIntArrayRegion(pos_nonlin_vars_j, 0, num_nonlin_vars, tmp);
+         for( int i = 0; i < num_nonlin_vars; ++i )
+            pos_nonlin_vars[i] = (Index) tmp[i];
+
+         delete[] tmp;
+      }
    }
 
-   return false;
+   return true;
 }
 
-extern "C" {
+extern "C"
+{
 
 JNIEXPORT jlong JNICALL Java_org_coinor_Ipopt_CreateIpoptProblem(
-   JNIEnv *env, jobject obj_this,
-   jint n,  jint m,
-   jint nele_jac, jint nele_hess,
-   jint index_style)
+   JNIEnv* env,
+   jobject obj_this,
+   jint    n,
+   jint    m,
+   jint    nele_jac,
+   jint    nele_hess,
+   jint    index_style)
 {
    /* create the smart pointer to the Ipopt problem */
    SmartPtr<Jipopt>* pproblem = new SmartPtr<Jipopt>;
@@ -565,11 +680,13 @@ JNIEXPORT jlong JNICALL Java_org_coinor_Ipopt_CreateIpoptProblem(
    *pproblem = new Jipopt(env, obj_this, n, m, nele_jac, nele_hess, index_style);
 
    /* return the smart pointer to our class */
-   return (jlong)pproblem;
+   return (jlong) pproblem;
 }
 
 JNIEXPORT jint JNICALL Java_org_coinor_Ipopt_OptimizeTNLP(
-   JNIEnv *env, jobject obj_this, jlong pipopt,
+   JNIEnv*      env,
+   jobject      obj_this,
+   jlong        pipopt,
    jdoubleArray xj,
    jdoubleArray gj,
    jdoubleArray obj_valj,
@@ -580,23 +697,22 @@ JNIEXPORT jint JNICALL Java_org_coinor_Ipopt_OptimizeTNLP(
    jdoubleArray callback_jac_g,
    jdoubleArray callback_hess)
 {
-   Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*)pipopt);
+   Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);
 
-   problem->env = env;
-   problem->solver = obj_this;
+   problem->env       = env;
+   problem->solver    = obj_this;
 
-   problem->xj = xj;
-   problem->gj = gj;
-   problem->fj = obj_valj;
-   problem->mult_gj = mult_gj;
+   problem->xj        = xj;
+   problem->gj        = gj;
+   problem->fj        = obj_valj;
+   problem->mult_gj   = mult_gj;
    problem->mult_x_Lj = mult_x_Lj;
    problem->mult_x_Uj = mult_x_Uj;
 
-   problem->grad_fj = callback_grad_f;
-   problem->jac_gj = callback_jac_g;
-   problem->hessj = callback_hess;
+   problem->grad_fj   = callback_grad_f;
+   problem->jac_gj    = callback_jac_g;
+   problem->hessj     = callback_hess;
 
-   //  (use a SmartPtr, not raw)
    ApplicationReturnStatus status;
 
    status = problem->application->Initialize();
@@ -613,7 +729,10 @@ JNIEXPORT jint JNICALL Java_org_coinor_Ipopt_OptimizeTNLP(
    return (jint) status;
 }
 
-JNIEXPORT void JNICALL Java_org_coinor_Ipopt_FreeIpoptProblem(JNIEnv *env,  jobject obj_this, jlong pipopt)
+JNIEXPORT void JNICALL Java_org_coinor_Ipopt_FreeIpoptProblem(
+   JNIEnv* env,
+   jobject obj_this,
+   jlong   pipopt)
 {
    SmartPtr<Jipopt>* pproblem = (SmartPtr<Jipopt>*)pipopt;
 
@@ -630,9 +749,13 @@ JNIEXPORT void JNICALL Java_org_coinor_Ipopt_FreeIpoptProblem(JNIEnv *env,  jobj
 }
 
 JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptIntOption(
-   JNIEnv * env, jobject obj_this, jlong pipopt, jstring jparname, jint jparvalue)
+   JNIEnv*  env,
+   jobject  obj_this,
+   jlong    pipopt,
+   jstring  jparname,
+   jint     jparvalue)
 {
-   Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*)pipopt);
+   Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);
 
    const char* pparameterName = env->GetStringUTFChars(jparname, 0);
    string parameterName = pparameterName;
@@ -646,15 +769,19 @@ JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptIntOption(
 }
 
 JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptNumOption(
-   JNIEnv * env, jobject obj_this, jlong pipopt, jstring jparname, jdouble jparvalue)
+   JNIEnv* env,
+   jobject obj_this,
+   jlong   pipopt,
+   jstring jparname,
+   jdouble jparvalue)
 {
-   Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*)pipopt);
+   Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);
 
    const char* pparameterName = env->GetStringUTFChars(jparname, 0);
-   string parameterName=pparameterName;
+   string parameterName = pparameterName;
 
    // Try to set the real option
-   jboolean ret = problem->application->Options()->SetNumericValue(parameterName,jparvalue);
+   jboolean ret = problem->application->Options()->SetNumericValue(parameterName, jparvalue);
 
    env->ReleaseStringUTFChars(jparname, pparameterName);
 
@@ -662,9 +789,13 @@ JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptNumOption(
 }
 
 JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptStrOption(
-   JNIEnv * env, jobject obj_this, jlong pipopt, jstring jparname, jstring jparvalue)
+   JNIEnv* env,
+   jobject obj_this,
+   jlong   pipopt,
+   jstring jparname,
+   jstring jparvalue)
 {
-   Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*)pipopt);
+   Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);
 
    const char* pparameterName = env->GetStringUTFChars(jparname, NULL);
    string parameterName = pparameterName;
@@ -672,9 +803,9 @@ JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptStrOption(
    string parameterValue = pparameterValue;
 
    // parameterValue has been changed to LowerCase in Java!
-   if( parameterName == "hessian_approximation" && (parameterValue == "limited-memory") )
+   if( parameterName == "hessian_approximation" && parameterValue == "limited-memory" )
       problem->using_LBFGS = true;
-   else if( parameterName == "nlp_scaling_method" && (parameterValue == "user-scaling") )
+   else if( parameterName == "nlp_scaling_method" && parameterValue == "user-scaling" )
       problem->using_scaling_parameters = true;
 
    // Try to apply the string option
