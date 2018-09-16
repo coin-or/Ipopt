@@ -30,10 +30,10 @@ class Subject;
  *  Observer Design Pattern. An Observer "Attach"es
  *  to a Subject, indicating that it would like to
  *  be notified of changes in the Subject.
- *  Any derived class wishing to recieve notifications
+ *  Any derived class wishing to receive notifications
  *  from a Subject should inherit off of
  *  Observer and overload the protected method,
- *  RecieveNotification_(...).
+ *  ReceiveNotification_(...).
  */
 class Observer
 {
@@ -90,7 +90,7 @@ protected:
     * receive the requested notification from
     * attached Subjects
     */
-   virtual void RecieveNotification(
+   virtual void ReceiveNotification(
       NotifyType     notify_type,
       const Subject* subject
    ) = 0;
@@ -125,7 +125,7 @@ private:
     *  Subject.
     *
     *  This method will, in turn, call
-    *  the overloaded RecieveNotification method
+    *  the overloaded ReceiveNotification method
     *  for the derived class to process.
     */
    inline
@@ -330,7 +330,7 @@ void Observer::ProcessNotification(
       DBG_ASSERT(attached_subject != subjects_.end());
 #endif
 
-      this->RecieveNotification(notify_type, subject);
+      this->ReceiveNotification(notify_type, subject);
 
       if( notify_type == NT_BeingDestroyed )
       {
