@@ -7,7 +7,7 @@
 // Author:  Andreas Waechter               IBM    2009-04-02
 
 // This file is part of the Ipopt tutorial.  It is a correct version
-// of a C++ implemention of the coding exercise problem (in AMPL
+// of a C++ implementation of the coding exercise problem (in AMPL
 // formulation):
 //
 // param n := 4;
@@ -30,52 +30,58 @@
 
 using namespace Ipopt;
 
-int main(int argv, char* argc[])
+int main(
+   int argv,
+   char* argc[]
+   )
 {
-  // Set the data:
+   // Set the data:
 
-  // Number of variables
-  Index N = 100;
+   // Number of variables
+   Index N = 100;
 
-  // constant terms in the constraints
-  Number* a = new double[N-2];
-  for (Index i=0; i<N-2; i++) {
-    a[i] = (double(i+2))/(double)N;
-  }
+   // constant terms in the constraints
+   Number* a = new double[N - 2];
+   for( Index i = 0; i < N - 2; i++ )
+   {
+      a[i] = (double(i + 2)) / (double) N;
+   }
 
-  // Create a new instance of your nlp
-  //  (use a SmartPtr, not raw)
-  SmartPtr<TNLP> mynlp = new TutorialCpp_NLP(N, a);
+   // Create a new instance of your nlp
+   //  (use a SmartPtr, not raw)
+   SmartPtr<TNLP> mynlp = new TutorialCpp_NLP(N, a);
 
-  // Create a new instance of IpoptApplication
-  //  (use a SmartPtr, not raw)
-  SmartPtr<IpoptApplication> app = new IpoptApplication();
+   // Create a new instance of IpoptApplication
+   //  (use a SmartPtr, not raw)
+   SmartPtr<IpoptApplication> app = new IpoptApplication();
 
-  // Change some options
-  // Note: The following choices are only examples, they might not be
-  //       suitable for your optimization problem.
-  app->Options()->SetNumericValue("tol", 1e-10);
-  app->Options()->SetStringValue("mu_strategy", "adaptive");
+   // Change some options
+   // Note: The following choices are only examples, they might not be
+   //       suitable for your optimization problem.
+   app->Options()->SetNumericValue("tol", 1e-10);
+   app->Options()->SetStringValue("mu_strategy", "adaptive");
 
-  // Intialize the IpoptApplication and process the options
-  app->Initialize();
+   // Intialize the IpoptApplication and process the options
+   app->Initialize();
 
-  // Ask Ipopt to solve the problem
-  ApplicationReturnStatus status = app->OptimizeTNLP(mynlp);
+   // Ask Ipopt to solve the problem
+   ApplicationReturnStatus status = app->OptimizeTNLP(mynlp);
 
-  if (status == Solve_Succeeded) {
-    printf("\n\n*** The problem solved!\n");
-  }
-  else {
-    printf("\n\n*** The problem FAILED!\n");
-  }
+   if( status == Solve_Succeeded )
+   {
+      printf("\n\n*** The problem solved!\n");
+   }
+   else
+   {
+      printf("\n\n*** The problem FAILED!\n");
+   }
 
-  // As the SmartPtrs go out of scope, the reference count
-  // will be decremented and the objects will automatically
-  // be deleted.
+   // As the SmartPtrs go out of scope, the reference count
+   // will be decremented and the objects will automatically
+   // be deleted.
 
-  // However, we created the Number array for a here and have to delete it
-  delete [] a;
+   // However, we created the Number array for a here and have to delete it
+   delete[] a;
 
-  return (int) status;
+   return (int) status;
 }
