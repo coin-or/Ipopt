@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Carl Laird, Andreas Waechter              IBM    2005-08-04
 
 #ifndef __IPCGPERTURBATIONHANDLER_HPP__
@@ -16,7 +14,9 @@ namespace Ipopt
 {
 
 /** Class for handling the perturbation factors delta_x, delta_s,
- *  delta_c, and delta_d in the primal dual system.  This class is
+ *  delta_c, and delta_d in the primal dual system.
+ *
+ *  This class is
  *  used by the PDFullSpaceSolver to handle the cases where the
  *  primal-dual system is singular or has the wrong inertia.  The
  *  perturbation factors are obtained based on simple heuristics,
@@ -29,69 +29,99 @@ public:
    //@{
    /** Default Constructor */
    CGPerturbationHandler();
-   /** Default destructor */
+
+   /** Destructor */
    virtual ~CGPerturbationHandler()
-   {}
+   { }
    //@}
 
    /* overloaded from AlgorithmStrategyObject */
-   virtual bool InitializeImpl(const OptionsList& options,
-                               const std::string& prefix);
+   virtual bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+   );
 
    /** This method must be called for each new matrix, and before any
-    *  other method for generating perturbation factors.  Usually,
+    *  other method for generating perturbation factors.
+    *
+    *  Usually,
     *  the returned perturbation factors are zero, but if the system
     *  is thought to be structurally singular, they might be
     *  positive.  If the return value is false, no suitable
-    *  perturbation could be found. */
-   bool ConsiderNewSystem(Number& delta_x, Number& delta_s,
-                          Number& delta_c, Number& delta_d);
+    *  perturbation could be found.
+    */
+   bool ConsiderNewSystem(
+      Number& delta_x,
+      Number& delta_s,
+      Number& delta_c,
+      Number& delta_d
+   );
 
-   /** This method returns pertubation factors for the case when the
-    *  most recent factorization resulted in a singular matrix. If
-    *  the return value is false, no suitable perturbation could be
-    *  found. */
-   bool PerturbForSingularity(Number& delta_x, Number& delta_s,
-                              Number& delta_c, Number& delta_d);
+   /** This method returns perturbation factors for the case when the
+    *  most recent factorization resulted in a singular matrix.
+    *
+    *  @return false, if no suitable perturbation could be found
+    */
+   bool PerturbForSingularity(
+      Number& delta_x,
+      Number& delta_s,
+      Number& delta_c,
+      Number& delta_d
+   );
 
-   /** This method returns pertubation factors for the case when the
+   /** This method returns perturbation factors for the case when the
     *  most recent factorization resulted in a matrix with an
-    *  incorrect number of negative eigenvalues. If the return value
-    *  is false, no suitable perturbation could be found. */
-   bool PerturbForWrongInertia(Number& delta_x, Number& delta_s,
-                               Number& delta_c, Number& delta_d);
+    *  incorrect number of negative eigenvalues.
+    *
+    *  @return false, if no suitable perturbation could be found
+    */
+   bool PerturbForWrongInertia(
+      Number& delta_x,
+      Number& delta_s,
+      Number& delta_c,
+      Number& delta_d
+   );
 
    /** Just return the perturbation values that have been determined
-    *  most recently */
-   void CurrentPerturbation(Number& delta_x, Number& delta_s,
-                            Number& delta_c, Number& delta_d);
+    *  most recently
+    */
+   void CurrentPerturbation(
+      Number& delta_x,
+      Number& delta_s,
+      Number& delta_c,
+      Number& delta_d
+   );
 
-   /** Methods for IpoptType */
-   //@{
-   static void RegisterOptions(SmartPtr<RegisteredOptions> roptions);
-   //@}
+   static void RegisterOptions(
+      SmartPtr<RegisteredOptions> roptions
+   );
 
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Copy Constructor */
-   CGPerturbationHandler(const CGPerturbationHandler&);
+   CGPerturbationHandler(
+      const CGPerturbationHandler&
+   );
 
    /** Overloaded Equals Operator */
-   void operator=(const CGPerturbationHandler&);
+   void operator=(
+      const CGPerturbationHandler&
+   );
    //@}
 
    /** Method to easily access CGPenalty data */
    CGPenaltyData& CGPenData()
    {
-      CGPenaltyData& cg_pen_data =
-         static_cast<CGPenaltyData&>(IpData().AdditionalData());
+      CGPenaltyData& cg_pen_data = static_cast<CGPenaltyData&>(IpData().AdditionalData());
       DBG_ASSERT(dynamic_cast<CGPenaltyData*>(&IpData().AdditionalData()));
       return cg_pen_data;
    }
@@ -99,8 +129,7 @@ private:
    /** Method to easily access CGPenalty calculated quantities */
    CGPenaltyCq& CGPenCq()
    {
-      CGPenaltyCq& cg_pen_cq =
-         static_cast<CGPenaltyCq&>(IpCq().AdditionalCq());
+      CGPenaltyCq& cg_pen_cq = static_cast<CGPenaltyCq&>(IpCq().AdditionalCq());
       DBG_ASSERT(dynamic_cast<CGPenaltyCq*>(&IpCq().AdditionalCq()));
       return cg_pen_cq;
    }
@@ -130,7 +159,7 @@ private:
    Number delta_d_curr_;
    //@}
 
-   /** Flag indicating if for the given matrix the perturb for wrong
+   /** Flag indicating if for the given matrix the perturbation for wrong
     *  inertia method has already been called. */
    bool get_deltas_for_wrong_inertia_called_;
 
@@ -145,16 +174,21 @@ private:
    };
 
    /** Flag indicating whether the reduced Hessian matrix is thought
-    *  to be structurally singular. */
+    *  to be structurally singular.
+    */
    DegenType hess_degenerate_;
 
    /** Flag indicating whether the Jacobian of the constraints is
-    *  thought to be structurally rank-deficient. */
+    *  thought to be structurally rank-deficient.
+    */
    DegenType jac_degenerate_;
 
    /** Flag counting matrices in which degeneracy was observed in the
-    *  first successive iterations.  -1 means that there was a
-    *  non-degenerate (unperturbed) matrix at some point. */
+    *  first successive iterations.
+    *
+    *  A value of -1 means that there was a
+    *  non-degenerate (unperturbed) matrix at some point.
+    */
    Index degen_iters_;
 
    /** Status of current trial configuration */
@@ -191,7 +225,8 @@ private:
    Number delta_cd_exp_;
    /** Flag indicating whether the new values are based on the
     *  perturbations in the last iteration or in the more recent
-    *  iteration in which a perturbation was done. */
+    *  iteration in which a perturbation was done.
+    */
    bool reset_last_;
    /** Required number of iterations for degeneracy conclusions. */
    Index degen_iters_max_;
@@ -205,18 +240,27 @@ private:
    /** Feasibility for perturbation in pure Newton method*/
    Number mult_diverg_feasibility_tol_;
 
-   /** @name Auxilliary methods */
+   /** @name Auxiliary methods */
    //@{
    /** Internal version of PerturbForWrongInertia with the
-    *  difference, that finalize_test is not called.  Returns false
-    *  if the delta_x and delta_s parameters become too large. */
-   bool get_deltas_for_wrong_inertia(Number& delta_x, Number& delta_s,
-                                     Number& delta_c, Number& delta_d);
+    *  difference, that finalize_test is not called.
+    *
+    *  @return false, if the delta_x and delta_s parameters become too large
+    */
+   bool get_deltas_for_wrong_inertia(
+      Number& delta_x,
+      Number& delta_s,
+      Number& delta_c,
+      Number& delta_d
+   );
 
    /** This method is call whenever a matrix had been factorization
-    *  and is not singular.  In here, we can evaluate the outcome of
-    *  the deneracy test heuristics. */
+    *  and is not singular.
+    *
+    *  In here, we can evaluate the outcome of the degeneracy test heuristics.
+    */
    void finalize_test();
+
    /** Compute perturbation value for constraints */
    Number delta_cd();
    //@}

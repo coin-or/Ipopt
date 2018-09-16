@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Andreas Waechter           IBM    2007-06-04
 //               derived from IpIpoptCalculatedQuantities.hpp
 
@@ -19,33 +17,40 @@ namespace Ipopt
 /** Class for all Chen-Goldfarb penalty method specific calculated
  *  quantities.
  */
-class CGPenaltyCq : public IpoptAdditionalCq
+class CGPenaltyCq: public IpoptAdditionalCq
 {
 public:
 
    /**@name Constructors/Destructors */
    //@{
    /** Constructor */
-   CGPenaltyCq(IpoptNLP* ip_nlp,
-               IpoptData* ip_data,
-               IpoptCalculatedQuantities* ip_cg);
+   CGPenaltyCq(
+      IpoptNLP*                  ip_nlp,
+      IpoptData*                 ip_data,
+      IpoptCalculatedQuantities* ip_cg
+   );
 
    /** Default destructor */
    virtual ~CGPenaltyCq();
    //@}
 
    /** This method must be called to initialize the global
-    *  algorithmic parameters.  The parameters are taken from the
-    *  OptionsList object. */
-   bool Initialize(const Journalist& jnlst,
-                   const OptionsList& options,
-                   const std::string& prefix);
+    *  algorithmic parameters.
+    *
+    *  The parameters are taken from the OptionsList object.
+    */
+   bool Initialize(
+      const Journalist&  jnlst,
+      const OptionsList& options,
+      const std::string& prefix
+   );
 
    /**@name Methods for the Chen-Goldfarb line search */
    //@{
-
    /** Compute ||delta_c, delta_d||_infty */
-   Number curr_jac_cd_norm(Index nrm_type);
+   Number curr_jac_cd_norm(
+      Index nrm_type
+   );
    /** Compute gradient scaling based y->Amax */
    Number curr_scaled_y_Amax();
    /** Compute the 2-norm of y plus delta y */
@@ -65,14 +70,15 @@ public:
    /** Quality of d^T Aug(H) d */
    Number dT_times_barH_times_d();
 
-
    /** Method for the current value for the perturbation factor for
     *  the Chen-Goldfarb method.  The factor is computed as 2-norm of
     *  the constraints devided by the current penbalty parameter */
    Number curr_cg_pert_fact();
 
    /** Method for choose line search penalty parameter */
-   Number compute_curr_cg_penalty(const Number );
+   Number compute_curr_cg_penalty(
+      const Number
+   );
 
    /** Method for choose penalty parameters for scaling the KKT system  */
    Number compute_curr_cg_penalty_scale();
@@ -80,26 +86,34 @@ public:
 
    /** Methods for IpoptType */
    //@{
-   static void RegisterOptions(const SmartPtr<RegisteredOptions>& roptions);
+   static void RegisterOptions(
+      const SmartPtr<RegisteredOptions>& roptions
+   );
    //@}
 
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
+    *
     * These methods are not implemented and
     * we do not want the compiler to implement
     * them for us, so we declare them private
     * and do not define them. This ensures that
-    * they will not be implicitly created/called. */
+    * they will not be implicitly created/called.
+    */
    //@{
    /** Default Constructor */
    CGPenaltyCq();
 
    /** Copy Constructor */
-   CGPenaltyCq(const CGPenaltyCq&);
+   CGPenaltyCq(
+      const CGPenaltyCq&
+   );
 
    /** Overloaded Equals Operator */
-   void operator=(const CGPenaltyCq&);
+   void operator=(
+      const CGPenaltyCq&
+   );
    //@}
 
    /** @name Pointers for easy access to data and NLP information. To
@@ -114,8 +128,7 @@ private:
    /** Method to easily access CGPenalty data */
    CGPenaltyData& CGPenData()
    {
-      CGPenaltyData& cg_pen_data =
-         static_cast<CGPenaltyData&>(ip_data_->AdditionalData());
+      CGPenaltyData& cg_pen_data = static_cast<CGPenaltyData&>(ip_data_->AdditionalData());
       DBG_ASSERT(dynamic_cast<CGPenaltyData*>(&ip_data_->AdditionalData()));
       return cg_pen_data;
    }

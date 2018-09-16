@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Andreas Waechter        IBM       2007-06-01
 
 #ifndef __IPCGPENALTYREGOP_HPP__
@@ -15,7 +13,9 @@ namespace Ipopt
 {
 class RegisteredOptions;
 
-void RegisterOptions_CGPenalty(const SmartPtr<RegisteredOptions>& roptions);
+void RegisterOptions_CGPenalty(
+   const SmartPtr<RegisteredOptions>& roptions
+);
 
 } // namespace Ipopt
 

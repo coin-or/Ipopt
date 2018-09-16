@@ -2,8 +2,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id$
-//
 // Authors:  Andreas Waechter           IBM     2007-06-04
 //                   based on IpIpoptData.hpp
 
@@ -13,16 +11,17 @@ namespace Ipopt
 {
 
 CGPenaltyData::CGPenaltyData()
-{}
+{ }
 
 CGPenaltyData::~CGPenaltyData()
-{}
+{ }
 
-bool CGPenaltyData::Initialize(const Journalist& jnlst,
-                               const OptionsList& options,
-                               const std::string& prefix)
+bool CGPenaltyData::Initialize(
+   const Journalist&  jnlst,
+   const OptionsList& options,
+   const std::string& prefix
+)
 {
-
    have_cgpen_deltas_ = false;
    have_cgfast_deltas_ = false;
 
@@ -37,8 +36,6 @@ bool CGPenaltyData::Initialize(const Journalist& jnlst,
    never_try_pure_Newton_ = false;
    restor_iter_ = -1;
    restor_counter_ = 0.;
-
-
 
    return true;
 }
