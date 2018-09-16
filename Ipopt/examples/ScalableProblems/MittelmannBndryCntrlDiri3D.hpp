@@ -201,7 +201,7 @@ protected:
       Number x1,
       Number x2,
       Number x3
-      ) const =0;
+      ) const = 0;
    //@}
 
 private:

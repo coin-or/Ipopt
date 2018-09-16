@@ -198,7 +198,7 @@ protected:
    virtual Number y_d_cont(
       Number x1,
       Number x2
-      ) const =0;
+      ) const = 0;
    //@}
 
 private:

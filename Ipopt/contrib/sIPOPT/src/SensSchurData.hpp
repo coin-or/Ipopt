@@ -37,7 +37,7 @@ namespace Ipopt
     {
     }
 
-    virtual SmartPtr<SchurData> MakeNewSchurDataCopy() const =0;
+    virtual SmartPtr<SchurData> MakeNewSchurDataCopy() const = 0;
 
     /** Functions to set the Schurdata. At least one must be overloaded */
 
@@ -73,20 +73,20 @@ namespace Ipopt
      *  The index is the row, the first vector are the indices
      *  of non-zero components, in this row of B,
      *  the second vector gives the numbers in B(row,indices) */
-    virtual void GetMultiplyingVectors(Index row, std::vector<Index>& indices, std::vector<Number>& factors) const =0;
+    virtual void GetMultiplyingVectors(Index row, std::vector<Index>& indices, std::vector<Number>& factors) const = 0;
 
     /** Computes B*v with B in R(mxn) */
-    virtual void Multiply(const IteratesVector& v, Vector& u) const =0;
+    virtual void Multiply(const IteratesVector& v, Vector& u) const = 0;
 
     /** Computes A*u with A in R(nxm), KKT in R(n,n) */
-    virtual void TransMultiply(const Vector& u, IteratesVector& v) const =0;
+    virtual void TransMultiply(const Vector& u, IteratesVector& v) const = 0;
 
     virtual void PrintImpl(const Journalist& jnlst,
 			   EJournalLevel level,
 			   EJournalCategory category,
 			   const std::string& name,
 			   Index indent,
-			   const std::string& prefix) const =0;
+			   const std::string& prefix) const = 0;
 
     void Print(const Journalist& jnlst,
 	       EJournalLevel level,
