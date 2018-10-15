@@ -962,12 +962,12 @@ ESymSolverStatus PardisoSolverInterface::Solve(
       {
          Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA, "Iterative solver in Pardiso did not converge (ERROR = %d)\n", ERROR);
          Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-            "  Decreasing drop tolerances from DPARM_[41] = %e and DPARM_[44] = %e\n", DPARM_[41], DPARM_[44]);
+            "  Decreasing drop tolerances from DPARM_[4] = %e and DPARM_[5] = %e\n", DPARM_[4], DPARM_[5]);
          PHASE = 23;
          DPARM_[4] /= 2.0;
          DPARM_[5] /= 2.0;
          Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-            "                               to DPARM_[41] = %e and DPARM_[44] = %e\n", DPARM_[41], DPARM_[44]);
+            "                               to DPARM_[4] = %e and DPARM_[5] = %e\n", DPARM_[4], DPARM_[5]);
          attempts++;
          ERROR = 0;
       }
