@@ -37205,6 +37205,11 @@ echo "${ECHO_T}no" >&6
     echo "$as_me:$LINENO: result: $MATLAB_HOME" >&5
 echo "${ECHO_T}$MATLAB_HOME" >&6
   fi
+elif test x"$use_matlab_home" = xno; then
+  # Matlab interface disabled by user
+  MATLAB_HOME=""
+  echo "$as_me:$LINENO: result: disabled" >&5
+echo "${ECHO_T}disabled" >&6
 else
   MATLAB_HOME="$use_matlab_home"
   echo "$as_me:$LINENO: result: $MATLAB_HOME" >&5
