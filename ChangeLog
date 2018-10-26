@@ -2,6 +2,9 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
+2018-xx-xx releases/3.12.11
+        - allow for --without-matlab-home to disable check for Matlab [r2748]
+
 2018-09-16 releases/3.12.11
         - fill Mumps struct with zeros when allocating in Mumps interface [r2724]
         - minor fix in build-system of ThirdParty/ASL
