@@ -564,6 +564,10 @@ if test x"$use_matlab_home" = x; then
     MATLAB_HOME=`echo $mexpath | sed -e "s=/bin/matlab$EXEEXT$=="`
     AC_MSG_RESULT([$MATLAB_HOME])
   fi
+elif test x"$use_matlab_home" = xno; then
+  # Matlab interface disabled by user
+  MATLAB_HOME=""
+  AC_MSG_RESULT([disabled])
 else
   MATLAB_HOME="$use_matlab_home"
   AC_MSG_RESULT([$MATLAB_HOME])
