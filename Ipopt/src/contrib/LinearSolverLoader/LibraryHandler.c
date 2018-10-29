@@ -20,7 +20,7 @@
 # define mysnprintf _snprintf
 # else
 #  define mysnprintf snprintf
-#  error "Do not have function for save printing into a C-string (snprintf or _snprintf)"
+/*#  error "Do not have function for save printing into a C-string (snprintf or _snprintf)" */
 # endif
 #endif
 
