@@ -2,30 +2,32 @@ language: cpp
 
 matrix:
   include:
-    - os: osx
-      osx_image: osx10.11
-      env: OSX=10.11
-      compiler: clang
-    - os: osx
-      osx_image: xcode7
-      env: OSX=10.10
-      compiler: clang
-    - os: osx
-      osx_image: beta-xcode6.2
-      env: OSX=10.9
-      compiler: clang
     - os: linux
       addons:
         apt:
           packages:
-          - gfortran
+            - gfortran
+    - os: osx 
+      osx_image: xcode10
+      env: OSX=10.13
+      compiler: clang
+    - os: osx 
+      osx_image: xcode9.2
+      env: OSX=10.12
+      compiler: clang
+    - os: osx
+      osx_image: xcode8
+      env: OSX=10.11
+      compiler: clang
   allow_failures:
     - os: osx
 
 before_script:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX" != "10.9" ]]; then brew update; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ "$OSX" != "10.9" ]]; then brew install gcc; fi
-  - git clone --branch=stable/0.8 https://github.com/coin-or-tools/BuildTools
-  - bash BuildTools/get.dependencies.sh fetch > /dev/null
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; brew install bash gcc; brew link --overwrite gcc; gfortran --version; fi
+  - git clone https://github.com/coin-or/COIN-OR-OptimizationSuite COIN
+  - cd COIN
+  - export PROJECT=`echo $TRAVIS_REPO_SLUG | cut -d "/" -f 2`
+  - bash ./coin.install.sh fetch --no-prompt --main-proj=$PROJECT > /dev/null
 
-script: bash BuildTools/get.dependencies.sh build --quiet --test 
+script:
+  - bash ./coin.install.sh build --no-prompt --main-proj=$PROJECT --verbosity=2 --test
