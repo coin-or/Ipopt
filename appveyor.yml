@@ -22,7 +22,7 @@ install:
 
 build_script:
   - C:\msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; git clone https://github.com/coin-or/COIN-OR-OptimizationSuite COIN"
-  - C:\msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER/COIN; ./coin.install.sh fetch --no-prompt --main-proj=%APPVEYOR_PROJECT_NAME% --no-third-party"
-  - C:\msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER/COIN; export PATH=$ADD_PATH:$PATH; ./coin.install.sh build --no-prompt --main-proj=%APPVEYOR_PROJECT_NAME% --no-third-party --build=x86_64-w64-mingw32 $HOST_ARCH_ARG --verbosity=2 --test"
+  - C:\msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER/COIN; ./coin.install.sh fetch --no-prompt --main-proj=%APPVEYOR_PROJECT_NAME%"
+  - C:\msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER/COIN; export PATH=$ADD_PATH:$PATH; ./coin.install.sh build --no-prompt --main-proj=%APPVEYOR_PROJECT_NAME% --build=x86_64-w64-mingw32 $HOST_ARCH_ARG --verbosity=2 --test"
 
 test: off
