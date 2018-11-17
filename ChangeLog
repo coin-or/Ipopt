@@ -2,7 +2,7 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
-2018-11-17 releases/3.12.11
+2018-11-17 releases/3.12.12
         - allow for --without-matlab-home to disable check for Matlab [r2748]
         - add dppsv to v8-ifort [r2746]
         - disable error in LibraryHandler.c if snprintf detection failed [r2751]
