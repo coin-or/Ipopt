@@ -4,6 +4,8 @@ history management of subversion.
 
 2018-11-17 releases/3.12.11
         - allow for --without-matlab-home to disable check for Matlab [r2748]
+        - add dppsv to v8-ifort [r2746]
+        - disable error in LibraryHandler.c if snprintf detection failed [r2751]
 
 2018-09-16 releases/3.12.11
         - fill Mumps struct with zeros when allocating in Mumps interface [r2724]
