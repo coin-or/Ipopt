@@ -152,6 +152,9 @@
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dorgtr.f">
 			<FileConfiguration Name="ReleaseMKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="ReleaseMKL|Win32" ExcludedFromBuild="true"/></File>
+		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dppsv.f">
+			<FileConfiguration Name="ReleaseMKL|x64" ExcludedFromBuild="true"/>
+			<FileConfiguration Name="ReleaseMKL|Win32" ExcludedFromBuild="true"/></File>
 		<File RelativePath="..\..\..\..\ThirdParty\Lapack\LAPACK\SRC\dpotf2.f">
 			<FileConfiguration Name="ReleaseMKL|x64" ExcludedFromBuild="true"/>
 			<FileConfiguration Name="ReleaseMKL|Win32" ExcludedFromBuild="true"/></File>

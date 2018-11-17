@@ -2,23 +2,27 @@ platform:
   - x64
 
 environment:
-  global:
-    MSYS2_BASEVER: 20150512
-    MSYS2_ARCH: x86_64
   matrix:
-    - HOST_ARCH_ARG: --host=x86_64-w64-mingw32
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      ARCH: x86_64-w64-mingw32
+      HOST_ARCH_ARG: --host=x86_64-w64-mingw32
       ADD_PATH: /mingw64/bin
-    - HOST_ARCH_ARG: --host=i686-w64-mingw32
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      ARCH: i686-w64-mingw32
+      HOST_ARCH_ARG: --host=i686-w64-mingw32
       ADD_PATH: /mingw32/bin
 
 install:
-  - C:\"Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat"
+  - IF %ARCH%==win32-msvc9 (CALL C:\"Program Files (x86)\Microsoft Visual Studio 9.0\VC\vcvarsall.bat")
+  - IF %ARCH%==win32-msvc14 (CALL C:\"Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat")
+  - IF %ARCH%==win32-msvc15 (CALL C:\"Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x64 8.1)
+  - IF %ARCH%==x86_64-w64-mingw32 (CALL C:\msys64\usr\bin\bash -lc "pacman -S mingw-w64-x86_64-lapack --noconfirm")
+  - IF %ARCH%==i686-w64-mingw32 (CALL C:\msys64\usr\bin\bash -lc "pacman -S mingw-w64-i686-lapack --noconfirm")
   - C:\msys64\usr\bin\bash -lc ""
-  - C:\msys64\usr\bin\bash -lc "pacman --noconfirm -S make wget tar patch dos2unix diffutils ca-certificates mingw-w64-i686-ca-certificates mingw-w64-x86_64-ca-certificates mingw-w64-i686-gcc mingw-w64-i686-gcc-fortran mingw-w64-x86_64-gcc mingw-w64-x86_64-gcc-fortran"
 
 build_script:
-  - C:\msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; git clone --branch=stable/0.8 https://github.com/coin-or-tools/BuildTools"
-  - C:\msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; BuildTools/get.dependencies.sh fetch"
-  - C:\msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; export PATH=$PATH:$ADD_PATH; BuildTools/get.dependencies.sh build --monolithic --build=x86_64-w64-mingw32 $HOST_ARCH_ARG --test"
+  - C:\msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; git clone https://github.com/coin-or/COIN-OR-OptimizationSuite COIN"
+  - C:\msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER/COIN; ./coin.install.sh fetch --no-prompt --main-proj=%APPVEYOR_PROJECT_NAME%"
+  - C:\msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER/COIN; export PATH=$ADD_PATH:$PATH; ./coin.install.sh build --no-prompt --main-proj=%APPVEYOR_PROJECT_NAME% --build=x86_64-w64-mingw32 $HOST_ARCH_ARG --verbosity=2 --test"
 
 test: off
