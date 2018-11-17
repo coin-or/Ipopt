@@ -32,6 +32,7 @@ extern int DGEMV();
 extern int DPOTRS();
 extern int DGETRS();
 extern int DGETRF();
+extern int DPPSV();
 extern int DPOTRF();
 extern int DSYEV();
 
@@ -57,6 +58,7 @@ void dummy_call()
 	DPOTRS();
 	DGETRS();
 	DGETRF();
+	DPPSV();
 	DPOTRF();
 	DSYEV();
 }
