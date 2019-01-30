@@ -139,7 +139,7 @@ In order to build \Ipopt, some third party components are required:
   get the source code for a simple reference implementation from {\tt
     www.netlib.org} and have the \Ipopt distribution compile it
   automatically.  However, it is strongly recommended to use some
-  optimized BLAS implemetion, for large problems this can make a
+  optimized BLAS implementation, for large problems this can make a
   runtime difference of an order of magnitude!
 
   Examples for efficient BLAS implementations are:
@@ -1062,7 +1062,7 @@ to choose some connection settings differently):
 
   in the correct directories, and hopefully that will work.  The
   \Ipopt AMPL solver executable will be in the subdirectory
-  \texttt{bin} (called ``\texttt{ipopt.exe}'').  If you want to set
+  \texttt{bin} (called ``\texttt{ipopt.exe}'').  If you want to test
   the installation, type
 
   \texttt{make test}
@@ -1290,7 +1290,7 @@ issuing the command {\tt make test} inside the \JIpopt directory.
 \textbf{NOTE}: The \JIpopt build procedure currently cannot deal with spaces 
 in the path to the JDK. If you are on Windows and have Java in a path like 
 \verb|C:\Program Files\Java|, try setting {\tt JAVA\_HOME} to the DOS 
-equivalent \verb|C:\Progra~1| (or similar).
+equivalent \verb|C:\Progra~1\Java| (or similar).
 
 \textbf{NOTE}: \JIpopt needs to be able to load the \Ipopt library dynamically 
 at runtime. Therefore, \Ipopt must have been compiled with the {\tt -fPIC} 
@@ -1319,8 +1319,8 @@ e.g.,
 at runtime. Therefore, \Ipopt must have been compiled with the {\tt -fPIC} 
 compiler flag. While per default, an Ipopt shared library is compiled with 
 this flag, for a configuration of \Ipopt in debug mode ({\tt --enable-debug}) 
-or as static library ({\tt --disable-shared}), the configure flag {\tt --with-
-pic} need to be used to enable compilation with {\tt -fPIC}.
+or as static library ({\tt --disable-shared}), the configure flag {\tt --with-pic}
+need to be used to enable compilation with {\tt -fPIC}.
 
 After installation of the \ipoptr package, it should be possible to load the 
 package in R and to view the help page:
@@ -1368,7 +1368,7 @@ For Mac OS X, the following procedure has been reported: First, one executes a c
 \begin{verbatim}
 /Applications/MATLAB_R2012.app/bin/mex -setup
 \end{verbatim}
-This creates a {\tt mexopts.sh} file in the {\tt ~/.matlab/R2010} directory. 
+This creates a {\tt mexopts.sh} file in the {\tt \~/.matlab/R2010} directory. 
 Copy that file to the directory {\tt \$IPOPTDIR/build/Ipopt/contrib/MatlabInterface/src}
 and modify it as follows.
 \begin{itemize}
