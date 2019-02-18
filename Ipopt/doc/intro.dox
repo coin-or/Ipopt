@@ -315,7 +315,7 @@ maintained by other people, among them are:
     incl. \Ipopt, in a distributed environment using Web
     Services.
 
--   [PyIpopt](https://github.com/xuy/pyipopt)
+-   [PyIpopt](https://github.com/g-braeunlich/IPyOpt)
 
     An interface to the python language.
 
