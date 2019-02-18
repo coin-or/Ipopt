@@ -140,7 +140,7 @@ Related Projects
 
 **[OPTI Toolbox](http://www.i2c2.aut.ac.nz/Wiki/OPTI/)**: Windows x86 + x64 **MATLAB** Interface, including binaries
 
-**[pyipopt](http://code.google.com/p/pyipopt/)**: Interfacing Ipopt from **Python**
+**[pyipopt](https://github.com/g-braeunlich/IPyOpt)**: Interfacing Ipopt from **Python**
 
 **[sci-ipopt](http://forge.scilab.org/index.php/p/sci-ipopt)**: Interfacing Ipopt from **Scilab** (a free MATLAB-like environment)
 
