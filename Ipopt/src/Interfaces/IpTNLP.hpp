@@ -528,11 +528,11 @@ public:
     * Additionally, information about scaled violation of constraint
     * and violation of complementarity constraints can be obtained via
     * \code
-    * tnlp_adapter->ResortG(*ip_data->curr_c(), *ip_data->curr_d_minus_s(), ...)
-    * tnlp_adapter->ResortBnds(*ip_data->curr_compl_x_L(), ...,
-    *                          *ip_data->curr_compl_x_U(), ...)
-    * tnlp_adapter->ResortG(*ip_data->curr_compl_s_L(), ...)
-    * tnlp_adapter->ResortG(*ip_data->curr_compl_s_U(), ...)
+    * tnlp_adapter->ResortG(*ip_cq->curr_c(), *ip_cq->curr_d_minus_s(), ...)
+    * tnlp_adapter->ResortBnds(*ip_cq->curr_compl_x_L(), ...,
+    *                          *ip_cq->curr_compl_x_U(), ...)
+    * tnlp_adapter->ResortG(*ip_cq->curr_compl_s_L(), ...)
+    * tnlp_adapter->ResortG(*ip_cq->curr_compl_s_U(), ...)
     * \endcode
     */
    // [TNLP_intermediate_callback]
