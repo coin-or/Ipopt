@@ -3084,7 +3084,7 @@ correspond to what \Ipopt prints in the iteration summary (see also
 Section~\ref{sec:output}).  Further information can be obtained from
 the {\tt ip\_data} and {\tt ip\_cq} objects (in the C++ interface and for experts only :)).
 
-You you let this method return {\tt false}, \Ipopt will terminate
+If you let this method return {\tt false}, \Ipopt will terminate
 with the {\tt User\_Requested\_Stop} status.  If you do not implement
 this method (as we do in this example), the default implementation
 always returns {\tt true}.
