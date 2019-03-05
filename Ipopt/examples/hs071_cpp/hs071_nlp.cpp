@@ -19,6 +19,7 @@ HS071_NLP::HS071_NLP()
 HS071_NLP::~HS071_NLP()
 { }
 
+// [TNLP_get_nlp_info]
 // returns the size of the problem
 bool HS071_NLP::get_nlp_info(
    Index&          n,
@@ -37,7 +38,7 @@ bool HS071_NLP::get_nlp_info(
    // in this example the jacobian is dense and contains 8 nonzeros
    nnz_jac_g = 8;
 
-   // the hessian is also dense and has 16 total nonzeros, but we
+   // the Hessian is also dense and has 16 total nonzeros, but we
    // only need the lower left corner (since it is symmetric)
    nnz_h_lag = 10;
 
@@ -46,7 +47,9 @@ bool HS071_NLP::get_nlp_info(
 
    return true;
 }
+// [TNLP_get_nlp_info]
 
+// [TNLP_get_bounds_info]
 // returns the variable bounds
 bool HS071_NLP::get_bounds_info(
    Index   n,
@@ -88,7 +91,9 @@ bool HS071_NLP::get_bounds_info(
 
    return true;
 }
+// [TNLP_get_bounds_info]
 
+// [TNLP_get_starting_point]
 // returns the initial point for the problem
 bool HS071_NLP::get_starting_point(
    Index   n,
@@ -117,7 +122,9 @@ bool HS071_NLP::get_starting_point(
 
    return true;
 }
+// [TNLP_get_starting_point]
 
+// [TNLP_eval_f]
 // returns the value of the objective function
 bool HS071_NLP::eval_f(
    Index         n,
@@ -132,7 +139,9 @@ bool HS071_NLP::eval_f(
 
    return true;
 }
+// [TNLP_eval_f]
 
+// [TNLP_eval_grad_f]
 // return the gradient of the objective function grad_{x} f(x)
 bool HS071_NLP::eval_grad_f(
    Index         n,
@@ -150,7 +159,9 @@ bool HS071_NLP::eval_grad_f(
 
    return true;
 }
+// [TNLP_eval_grad_f]
 
+// [TNLP_eval_g]
 // return the value of the constraints: g(x)
 bool HS071_NLP::eval_g(
    Index         n,
@@ -168,7 +179,9 @@ bool HS071_NLP::eval_g(
 
    return true;
 }
+// [TNLP_eval_g]
 
+// [TNLP_eval_jac_g]
 // return the structure or values of the Jacobian
 bool HS071_NLP::eval_jac_g(
    Index         n,
@@ -186,22 +199,14 @@ bool HS071_NLP::eval_jac_g(
       // return the structure of the Jacobian
 
       // this particular Jacobian is dense
-      iRow[0] = 0;
-      jCol[0] = 0;
-      iRow[1] = 0;
-      jCol[1] = 1;
-      iRow[2] = 0;
-      jCol[2] = 2;
-      iRow[3] = 0;
-      jCol[3] = 3;
-      iRow[4] = 1;
-      jCol[4] = 0;
-      iRow[5] = 1;
-      jCol[5] = 1;
-      iRow[6] = 1;
-      jCol[6] = 2;
-      iRow[7] = 1;
-      jCol[7] = 3;
+      iRow[0] = 0;  jCol[0] = 0;
+      iRow[1] = 0;  jCol[1] = 1;
+      iRow[2] = 0;  jCol[2] = 2;
+      iRow[3] = 0;  jCol[3] = 3;
+      iRow[4] = 1;  jCol[4] = 0;
+      iRow[5] = 1;  jCol[5] = 1;
+      iRow[6] = 1;  jCol[6] = 2;
+      iRow[7] = 1;  jCol[7] = 3;
    }
    else
    {
@@ -220,7 +225,9 @@ bool HS071_NLP::eval_jac_g(
 
    return true;
 }
+// [TNLP_eval_jac_g]
 
+// [TNLP_eval_h]
 //return the structure or values of the Hessian
 bool HS071_NLP::eval_h(
    Index         n,
@@ -263,17 +270,17 @@ bool HS071_NLP::eval_h(
       // fill the objective portion
       values[0] = obj_factor * (2 * x[3]); // 0,0
 
-      values[1] = obj_factor * (x[3]);   // 1,0
-      values[2] = 0.;                    // 1,1
+      values[1] = obj_factor * (x[3]);     // 1,0
+      values[2] = 0.;                      // 1,1
 
-      values[3] = obj_factor * (x[3]);   // 2,0
-      values[4] = 0.;                    // 2,1
-      values[5] = 0.;                    // 2,2
+      values[3] = obj_factor * (x[3]);     // 2,0
+      values[4] = 0.;                      // 2,1
+      values[5] = 0.;                      // 2,2
 
       values[6] = obj_factor * (2 * x[0] + x[1] + x[2]); // 3,0
-      values[7] = obj_factor * (x[0]);                 // 3,1
-      values[8] = obj_factor * (x[0]);                 // 3,2
-      values[9] = 0.;                                  // 3,3
+      values[7] = obj_factor * (x[0]);                   // 3,1
+      values[8] = obj_factor * (x[0]);                   // 3,2
+      values[9] = 0.;                                    // 3,3
 
       // add the portion for the first constraint
       values[1] += lambda[0] * (x[2] * x[3]); // 1,0
@@ -297,7 +304,9 @@ bool HS071_NLP::eval_h(
 
    return true;
 }
+// [TNLP_eval_h]
 
+// [TNLP_finalize_solution]
 void HS071_NLP::finalize_solution(
    SolverReturn               status,
    Index                      n,
@@ -341,3 +350,4 @@ void HS071_NLP::finalize_solution(
       std::cout << "g(" << i << ") = " << g[i] << std::endl;
    }
 }
+// [TNLP_finalize_solution]
