@@ -470,9 +470,72 @@ public:
 
    /** Intermediate Callback method for the user.
     *
-    *  Providing dummy default implementation.
-    *  For details see IntermediateCallBack in IpNLP.hpp.
+    * This method is called once per iteration (during the convergence check),
+    * and can be used to obtain information about the optimization status while
+    * Ipopt solves the problem, and also to request a premature termination.
+    *
+    * The information provided by the entities in the argument list correspond
+    * to what Ipopt prints in the iteration summary (see also \ref OUTPUT).
+    * Further information can be obtained from the ip_data and ip_cq objects.
+    *
+    * @return If this method returns false, Ipopt will terminate with the
+    *   User_Requested_Stop status.
+    *
+    * It is not required to implement (overload) this method.
+    * The default implementation always returns true.
+    *
+    * A frequently asked question is how to access the values of the primal
+    * and dual variables in this callback. The values are stored in the `ip_cq`
+    * object for the *internal representation* of the problem. To access the
+    * values in a form that corresponds to those used in the evaluation
+    * routines, the user has to request Ipopt's TNLPAdapter
+    * object to "resort" the data vectors and to fill in information about
+    * possibly filtered out fixed variables. The TNLPAdapter can be accessed
+    * as follows. First, add the following includes to your TNLP
+    * implementation:
+    * \code
+    * #include "IpIpoptCalculatedQuantities.hpp"
+    * #include "IpIpoptData.hpp"
+    * #include "IpTNLPAdapter.hpp"
+    * #include "IpOrigIpoptNLP.hpp"
+    * \endcode
+    * Next, add the following code to your implementation of this function:
+    * \code
+    * Ipopt::TNLPAdapter* tnlp_adapter = NULL;
+    * if( ip_cq != NULL )
+    * {
+    *   Ipopt::OrigIpoptNLP* orignlp;
+    *   orignlp = dynamic_cast<OrigIpoptNLP*>(GetRawPtr(ip_cq->GetIpoptNLP()));
+    *   if( orignlp != NULL )
+    *     tnlp_adapter = dynamic_cast<TNLPAdapter*>(GetRawPtr(orignlp->nlp()));
+    * }
+    * \endcode
+    * Note, that retrieving the TNLPAdapter will fail (i.e., `orignlp` will be NULL)
+    * if Ipopt is currently in restoration mode. If, however,
+    * `tnlp_adapter` is not NULL, then it can be used to obtain primal variable
+    * values \f$x\f$ and the dual values for the constraints and the variable
+    * bounds as follows:
+    * \code
+    * double* primals = new double[n];
+    * double* dualeqs = new double[m];
+    * double* duallbs = new double[n];
+    * double* dualubs = new double[n];
+    * tnlp_adapter->ResortX(*ip_data->curr()->x(), primals);
+    * tnlp_adapter->ResortG(*ip_data->curr()->y_c(), *ip_data->curr()->y_d(), dualeqs);
+    * tnlp_adapter->ResortBnds(*ip_data->curr()->z_L(), duallbs,
+    *                          *ip_data->curr()->z_U(), dualubs);
+    * \endcode
+    * Additionally, information about scaled violation of constraint
+    * and violation of complementarity constraints can be obtained via
+    * \code
+    * tnlp_adapter->ResortG(*ip_data->curr_c(), *ip_data->curr_d_minus_s(), ...)
+    * tnlp_adapter->ResortBnds(*ip_data->curr_compl_x_L(), ...,
+    *                          *ip_data->curr_compl_x_U(), ...)
+    * tnlp_adapter->ResortG(*ip_data->curr_compl_s_L(), ...)
+    * tnlp_adapter->ResortG(*ip_data->curr_compl_s_U(), ...)
+    * \endcode
     */
+   // [TNLP_intermediate_callback]
    virtual bool intermediate_callback(
       AlgorithmMode              mode,
       Index                      iter,
@@ -488,6 +551,7 @@ public:
       const IpoptData*           ip_data,
       IpoptCalculatedQuantities* ip_cq
    )
+   // [TNLP_intermediate_callback]
    {
       return true;
    }

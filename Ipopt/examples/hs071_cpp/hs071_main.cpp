@@ -4,6 +4,7 @@
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2005-08-10
 
+// [MAIN]
 #include "IpIpoptApplication.hpp"
 #include "hs071_nlp.hpp"
 
@@ -25,7 +26,6 @@ int main(
    // We are using the factory, since this allows us to compile this
    // example with an Ipopt Windows DLL
    SmartPtr<IpoptApplication> app = IpoptApplicationFactory();
-   app->RethrowNonIpoptException(true);
 
    // Change some options
    // Note: The following choices are only examples, they might not be
@@ -33,8 +33,7 @@ int main(
    app->Options()->SetNumericValue("tol", 1e-7);
    app->Options()->SetStringValue("mu_strategy", "adaptive");
    app->Options()->SetStringValue("output_file", "ipopt.out");
-   // The following overwrites the default name (ipopt.opt) of the
-   // options file
+   // The following overwrites the default name (ipopt.opt) of the options file
    // app->Options()->SetStringValue("option_file_name", "hs071.opt");
 
    // Initialize the IpoptApplication and process the options
@@ -64,3 +63,4 @@ int main(
 
    return (int) status;
 }
+// [MAIN]
