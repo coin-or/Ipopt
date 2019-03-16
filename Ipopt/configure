@@ -36598,7 +36598,8 @@ cat >>confdefs.h <<\_ACEOF
 _ACEOF
 
 
-  if test "$have_mkl" = "yes"; then
+  # if we have MKL but also --with-pardiso is set, then assume that non-MKL Pardiso is used
+  if test "$have_mkl" = "yes" && test -z "$use_pardiso" ; then
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_PARDISO_MKL 1
