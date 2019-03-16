@@ -336,7 +336,8 @@ if test "$use_pardiso" != "no"; then
   fi
   AC_DEFINE(HAVE_PARDISO,1,[Define to 1 if Pardiso is available])
 
-  if test "$have_mkl" = "yes"; then
+  # if we have MKL but also --with-pardiso is set, then assume that non-MKL Pardiso is used
+  if test "$have_mkl" = "yes" && test -z "$use_pardiso" ; then
      AC_DEFINE(HAVE_PARDISO_MKL,1,[Define to 1 if you are using Pardiso from MKL])
      AC_DEFINE(HAVE_PARDISO_OLDINTERFACE,1,[Define to 1 if you are not using at least a 4.0 version of Pardiso])
   else
