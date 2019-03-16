@@ -151,12 +151,35 @@ public:
 
    /** Method to request scaling parameters.
     *
-    *  This is only called if the options are set to retrieve user scaling.
-    *  There, use_x_scaling (or use_g_scaling) should get set to true
-    *  only if the variables (or constraints) are to be scaled.
-    *  This method should return true only if the scaling parameters could
-    *  be provided.
+    * This is only called if the options are set to retrieve user scaling,
+    * that is, if nlp_scaling_method is chosen as "user-scaling".
+    * The method should provide scaling factors for the objective
+    * function as well as for the optimization variables and/or constraints.
+    * The return value should be true, unless an error occurred, and the
+    * program is to be aborted.
+    *
+    * The value returned in obj_scaling determines, how Ipopt
+    * should internally scale the objective function. For example, if this
+    * number is chosen to be 10, then Ipopt solves internally an
+    * optimization problem that has 10 times the value of the original
+    * objective function provided by the TNLP. In particular, if this value
+    * is negative, then Ipopt will maximize the objective function instead
+    * of minimizing it.
+    *
+    * The scaling factors for the variables can be returned in x_scaling,
+    * which has the same length as x in the other TNLP methods, and the
+    * factors are ordered like x. use_x_scaling needs to be set to true,
+    * if Ipopt should scale the variables. If it is false, no internal
+    * scaling of the variables is done. Similarly, the scaling factors
+    * for the constraints can be returned in g_scaling, and this
+    * scaling is activated by setting use_g_scaling to true.
+    *
+    * As a guideline, we suggest to scale the optimization problem (either
+    * directly in the original formulation, or after using scaling factors)
+    * so that all sensitivities, i.e., all non-zero first partial derivatives,
+    * are typically of the order 0.1-10.
     */
+   // [TNLP_get_scaling_parameters]
    virtual bool get_scaling_parameters(
       Number& obj_scaling,
       bool&   use_x_scaling,
@@ -166,6 +189,7 @@ public:
       Index   m,
       Number* g_scaling
    )
+   // [TNLP_get_scaling_parameters]
    {
       return false;
    }
@@ -559,28 +583,51 @@ public:
 
    /** @name Methods for quasi-Newton approximation.
     *
-    *  If the second
-    *  derivatives are approximated by Ipopt, it is better to do this
-    *  only in the space of nonlinear variables.  The following
-    *  methods are call by Ipopt if the quasi-Newton approximation is
-    *  selected.  If -1 is returned as number of nonlinear variables,
+    *  If the second derivatives are approximated by Ipopt, it is better
+    *  to do this only in the space of nonlinear variables. The following
+    *  methods are call by Ipopt if the \ref QUASI_NEWTON "quasi-Newton approximation"
+    *  is selected.
+    *
+    * @{
+    */
+
+   /** Return the number of variables that appear nonlinearly in the objective function or in at least one constraint function
+    *
+    *  If -1 is returned as number of nonlinear variables,
     *  Ipopt assumes that all variables are nonlinear.  Otherwise, it
     *  calls get_list_of_nonlinear_variables with an array into which
     *  the indices of the nonlinear variables should be written - the
-    *  array has the lengths num_nonlin_vars, which is identical with
+    *  array has the length num_nonlin_vars, which is identical with
     *  the return value of get_number_of_nonlinear_variables().  It
     *  is assumed that the indices are counted starting with 1 in the
-    *  FORTRAN_STYLE, and 0 for the C_STYLE. */
-   //@{
+    *  FORTRAN_STYLE, and 0 for the C_STYLE.
+    *
+    *  The default implementation returns -1, i.e.,
+    *  all variables are assumed to be nonlinear.
+    */
+   // [TNLP_get_number_of_nonlinear_variables]
    virtual Index get_number_of_nonlinear_variables()
+   // [TNLP_get_number_of_nonlinear_variables]
    {
       return -1;
    }
 
+   /** Return the indices of all nonlinear variables.
+    *
+    * This method is called only if limited-memory quasi-Newton option
+    * is used and get_number_of_nonlinear_variables() returned a positive
+    * number. This number is provided in parameter num_nonlin_var.
+    *
+    * The method must store the indices of all nonlinear variables in
+    * pos_nonlin_vars, where the numbering starts with 0 order 1,
+    * depending on the numbering style determined in get_nlp_info.
+    */
+   // [TNLP_get_list_of_nonlinear_variables]
    virtual bool get_list_of_nonlinear_variables(
       Index  num_nonlin_vars,
       Index* pos_nonlin_vars
    )
+   // [TNLP_get_list_of_nonlinear_variables]
    {
       return false;
    }
