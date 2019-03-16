@@ -2,6 +2,12 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
+2019-xx-yy releases/3.12.13
+        - fixed Pardiso settings when using Pardiso from Pardiso project
+          website (by Olaf Schenk): the new settings should provide much
+          better performance; the default for option pardiso_order changed
+          from five to metis
+
 2018-11-17 releases/3.12.12
         - allow for --without-matlab-home to disable check for Matlab [r2748]
         - add dppsv to v8-ifort [r2746]

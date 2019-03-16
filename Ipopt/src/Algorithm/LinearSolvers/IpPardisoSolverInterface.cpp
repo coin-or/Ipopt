@@ -236,7 +236,7 @@ namespace Ipopt
     roptions->AddStringOption6(
       "pardiso_order",
       "Controls the fill-in reduction ordering algorithm for the input matrix.",
-      "five",
+      "metis",
       "amd", "minimum degree algorithm",
       "one", "undocumented",
       "metis", "MeTiS nested dissection algorithm",
@@ -467,7 +467,7 @@ namespace Ipopt
     IPARM_[23] = 1; // parallel fac
     IPARM_[24] = 1; // parallel solve
     IPARM_[28] = 0; // 32-bit factorization
-    IPARM_[29] = 1; //we need this for IPOPT interface
+    IPARM_[29] = 80; // we need this for IPOPT interface
     //IPARM_[33] = 1; // bit-by-bit identical results in parallel run
 #endif
 
