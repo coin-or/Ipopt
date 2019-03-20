@@ -30,14 +30,16 @@ public class HS071 extends Ipopt
     int count_bounds = 0;
     int dcount_start = 0;
 
-    /** Creates a new instance of HS071cpp */
+    /** Creates a new instance of HS071 */
+    // [HS071]
     public HS071()
     {
         /* Number of nonzeros in the Jacobian of the constraints */
         nele_jac = 8;
 
         /* Number of nonzeros in the Hessian of the Lagrangian (lower or
-         * upper triangual part only) */
+         * upper triangual part only)
+         */
         nele_hess = 10;
 
         /* Number of variables */
@@ -52,8 +54,10 @@ public class HS071 extends Ipopt
         /* create the IpoptProblem */
         create(n, m, nele_jac, nele_hess, index_style);
     }
+    // [HS071]
 
     /** Callback function for variable bounds and constraint sides. */
+    // [get_bounds_info]
     protected boolean get_bounds_info(
        int      n,
        double[] x_L,
@@ -78,8 +82,10 @@ public class HS071 extends Ipopt
 
         return true;
     }
+    // [get_bounds_info]
 
     /** Callback function for the starting point. */
+    // [get_starting_point]
     protected boolean get_starting_point(
        int      n,
        boolean  init_x,
@@ -102,29 +108,11 @@ public class HS071 extends Ipopt
           x[3] = 1.0;
        }
 
-       /*
-       x[0] = 0.9999999923240762;
-       x[1] = 4.742999641809297;
-       x[2] = 3.8211499817883072;
-       x[3] = 1.3794082897556983;
-
-       z_L[0] = 1.0878712258676539e+00;
-       z_L[1] = 0;
-       z_L[2] = 0;
-       z_L[3] = 0;
-
-       z_U[0] = 0;
-       z_U[1] = 0;
-       z_U[2] = 0;
-       z_U[3] = 0;
-
-       lambda[0] = -0.552293195627571;
-       lambda[1] = 0.16146777361782;
-       */
-
-        return true;
+       return true;
     }
+    // [get_starting_point]
 
+    // [eval]
     protected boolean eval_f(
        int      n,
        double[] x,
@@ -214,10 +202,10 @@ public class HS071 extends Ipopt
           values[2] = x[0] * x[1] * x[3]; /* 0,2 */
           values[3] = x[0] * x[1] * x[2]; /* 0,3 */
 
-          values[4] = 2 * x[0]; /* 1,0 */
-          values[5] = 2 * x[1]; /* 1,1 */
-          values[6] = 2 * x[2]; /* 1,2 */
-          values[7] = 2 * x[3]; /* 1,3 */
+          values[4] = 2 * x[0];           /* 1,0 */
+          values[5] = 2 * x[1];           /* 1,1 */
+          values[6] = 2 * x[2];           /* 1,2 */
+          values[7] = 2 * x[3];           /* 1,3 */
        }
 
        return true;
@@ -268,34 +256,35 @@ public class HS071 extends Ipopt
            */
 
           /* fill the objective portion */
-          values[0] = obj_factor * (2 * x[3]); /* 0,0 */
-          values[1] = obj_factor * (x[3]); /* 1,0 */
-          values[2] = 0.0; /* 1,1 */
-          values[3] = obj_factor * (x[3]); /* 2,0 */
-          values[4] = 0.0; /* 2,1 */
-          values[5] = 0.0; /* 2,2 */
+          values[0] = obj_factor * (2 * x[3]);               /* 0,0 */
+          values[1] = obj_factor * (x[3]);                   /* 1,0 */
+          values[2] = 0.0;                                   /* 1,1 */
+          values[3] = obj_factor * (x[3]);                   /* 2,0 */
+          values[4] = 0.0;                                   /* 2,1 */
+          values[5] = 0.0;                                   /* 2,2 */
           values[6] = obj_factor * (2 * x[0] + x[1] + x[2]); /* 3,0 */
-          values[7] = obj_factor * (x[0]); /* 3,1 */
-          values[8] = obj_factor * (x[0]); /* 3,2 */
-          values[9] = 0.0; /* 3,3 */
+          values[7] = obj_factor * (x[0]);                   /* 3,1 */
+          values[8] = obj_factor * (x[0]);                   /* 3,2 */
+          values[9] = 0.0;                                   /* 3,3 */
 
           /* add the portion for the first constraint */
-          values[1] += lambda[0] * (x[2] * x[3]); /* 1,0 */
-          values[3] += lambda[0] * (x[1] * x[3]); /* 2,0 */
-          values[4] += lambda[0] * (x[0] * x[3]); /* 2,1 */
-          values[6] += lambda[0] * (x[1] * x[2]); /* 3,0 */
-          values[7] += lambda[0] * (x[0] * x[2]); /* 3,1 */
-          values[8] += lambda[0] * (x[0] * x[1]); /* 3,2 */
+          values[1] += lambda[0] * (x[2] * x[3]);            /* 1,0 */
+          values[3] += lambda[0] * (x[1] * x[3]);            /* 2,0 */
+          values[4] += lambda[0] * (x[0] * x[3]);            /* 2,1 */
+          values[6] += lambda[0] * (x[1] * x[2]);            /* 3,0 */
+          values[7] += lambda[0] * (x[0] * x[2]);            /* 3,1 */
+          values[8] += lambda[0] * (x[0] * x[1]);            /* 3,2 */
 
           /* add the portion for the second constraint */
-          values[0] += lambda[1] * 2.0; /* 0,0 */
-          values[2] += lambda[1] * 2.0; /* 1,1 */
-          values[5] += lambda[1] * 2.0; /* 2,2 */
-          values[9] += lambda[1] * 2.0; /* 3,3 */
+          values[0] += lambda[1] * 2.0;                      /* 0,0 */
+          values[2] += lambda[1] * 2.0;                      /* 1,1 */
+          values[5] += lambda[1] * 2.0;                      /* 2,2 */
+          values[9] += lambda[1] * 2.0;                      /* 3,3 */
        }
 
        return true;
     }
+    // [eval]
 
     private void print(
        double[] x,
@@ -308,6 +297,7 @@ public class HS071 extends Ipopt
     }
 
     /** Main function for running this example. */
+    // [main]
     public static void main(String[] args)
     {
        // Create the problem
@@ -351,4 +341,5 @@ public class HS071 extends Ipopt
        double lam[] = hs071.getConstraintMultipliers();
        hs071.print(lam, "Dual Multipliers for Constraints:");
     }
+    // [main]
 }
