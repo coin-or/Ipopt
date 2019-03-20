@@ -254,7 +254,7 @@ public:
    /** Method to set whether non-ipopt non-bad_alloc exceptions
     * are rethrown by Ipopt.
     *
-    * By default, non-Ipopt and non-std::bad_alloc exceptions are
+    * By default, non-Ipopt and non-bad_alloc exceptions are
     * caught by Ipopts initialization and optimization methods
     * and the status NonIpopt_Exception_Thrown is returned.
     * This function allows to enable rethrowing of such exceptions.

@@ -31,7 +31,7 @@ public:
    //@{
    /** Constructor using an existing augmented system solver. */
    LowRankSSAugSystemSolver(
-      AugSystemSolver& aug_system_solver,
+      AugSystemSolver& aug_system_solver,  /**< augmented system solver to copy */
       Index            max_rank            /**< maximal rank that can appear */
       );
 
