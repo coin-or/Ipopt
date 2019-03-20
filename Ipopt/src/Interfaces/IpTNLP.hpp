@@ -105,7 +105,24 @@ public:
    typedef std::map<std::string, std::vector<Index> > IntegerMetaDataMapType;
    typedef std::map<std::string, std::vector<Number> > NumericMetaDataMapType;
 
-   /** Method to request meta data for the variables and the constraints. */
+   /** Method to request meta data for the variables and the constraints.
+    *
+    * This method is used to pass meta data about variables or constraints to
+    * Ipopt. The data can be either of integer, numeric, or string type.
+    * Ipopt passes this data on to its internal problem representation.
+    * The meta data type is a std::map with std::string as key type and
+    * a std::vector as value type. So far, Ipopt itself makes only use of
+    * string meta data under the key idx_names. With this key, variable
+    * and constraint names can be passed to Ipopt, which are shown when
+    * printing internal vector or matrix data structures if Ipopt is run
+    * with a high value for the option. This allows a user to identify
+    * the original variables and constraints corresponding to Ipopt's
+    * internal problem representation.
+    *
+    * If this method is not overloaded, the default implementation does
+    * not set any meta data and returns false.
+    */
+   // [TNLP_get_var_con_metadata]
    virtual bool get_var_con_metadata(
       Index                   n,
       StringMetaDataMapType&  var_string_md,
@@ -116,6 +133,7 @@ public:
       IntegerMetaDataMapType& con_integer_md,
       NumericMetaDataMapType& con_numeric_md
    )
+   // [TNLP_get_var_con_metadata]
    {
       return false;
    }
@@ -196,26 +214,40 @@ public:
 
    /** Method to request the variables linearity.
     *
-    * The var_types array has been allocated with length at least n.
+    * This method is never called by Ipopt, but is used by Bonmin
+    * to get information about which variables occur only in linear terms.
+    * Ipopt passes the array var_types of length at least n, which should
+    * be filled with the appropriate linearity type of the variables
+    * (TNLP::LINEAR or TNLP::NON_LINEAR).
+    *
     * The default implementation just returns false and does not fill the array.
     */
+   // [TNLP_get_variables_linearity]
    virtual bool get_variables_linearity(
       Index          n,
       LinearityType* var_types
    )
+   // [TNLP_get_variables_linearity]
    {
       return false;
    }
 
    /** Method to request the constraints linearity.
     *
-    *  The const_types array has been allocated with length at least m.
-    *  The default implementation just returns false and does not fill the array.
+    * This method is never called by Ipopt, but is used by Bonmin
+    * to get information about which constraints are linear.
+    * Ipopt passes the array const_types of size m, which should be filled
+    * with the appropriate linearity type of the constraints
+    * (TNLP::LINEAR or TNLP::NON_LINEAR).
+    *
+    * The default implementation just returns false and does not fill the array.
     */
+   // [TNLP_get_constraints_linearity]
    virtual bool get_constraints_linearity(
       Index          m,
       LinearityType* const_types
    )
+   // [TNLP_get_constraints_linearity]
    {
       return false;
    }
@@ -256,17 +288,21 @@ public:
    ) = 0;
    // [TNLP_get_starting_point]
 
-   /** Method to request an Ipopt warm start iterate.
+   /** Method to provide an Ipopt warm start iterate which is already in the
+    * form Ipopt requires it internally for warm starts.
     *
-    *  Since this is only for expert users, a default dummy
-    *  implementation is provided and returns false.
+    * This method is only for expert users.
+    * The default implementation does not provide a warm start iterate
+    * and returns false.
     */
+   // [TNLP_get_warm_start_iterate]
    virtual bool get_warm_start_iterate(
       IteratesVector& warm_start_iterate /**< storage for warm start iterate in the form Ipopt requires it internally */
    )
    {
       return false;
    }
+   // [TNLP_get_warm_start_iterate]
 
    /** Method to request the value of the objective function.
     *
@@ -467,19 +503,22 @@ public:
    ) = 0;
    // [TNLP_finalize_solution]
 
-   /** This method is called just before finalize_solution.  With
-    *  this method, the algorithm returns any metadata collected
-    *  during its run, including the metadata provided by the user
-    *  with the above get_var_con_metadata.  Each metadata can be of
-    *  type string, integer, and numeric. It can be associated to
-    *  either the variables or the constraints.  The metadata that
-    *  was associated with the primal variable vector is stored in
-    *  var_..._md.  The metadata associated with the constraint
-    *  multipliers is stored in con_..._md.  The metadata associated
-    *  with the bound multipliers is stored in var_..._md, with the
-    *  suffixes "_z_L", and "_z_U", denoting lower and upper
-    *  bounds.
+   /** This method returns any metadata collected during the run of the algorithm.
+    *
+    * This method is called just before finalize_solution is called.
+    * The returned data includes the metadata provided by TNLP::get_var_con_metadata.
+    * Each metadata can be of type string, integer, or numeric.
+    * It can be associated to either the variables or the constraints.
+    * The metadata that was associated with the primal variable vector
+    * is stored in `var_..._md`.  The metadata associated with the constraint
+    * multipliers is stored in `con_..._md`.  The metadata associated
+    * with the bound multipliers is stored in `var_..._md`, with the
+    * suffixes "_z_L", and "_z_U", denoting lower and upper bounds.
+    *
+    * If the user doesn't overload this method in her implementation of the
+    * class derived from TNLP, the default implementation does nothing.
     */
+   // [TNLP_finalize_metadata]
    virtual void finalize_metadata(
       Index                         n,
       const StringMetaDataMapType&  var_string_md,
@@ -490,6 +529,7 @@ public:
       const IntegerMetaDataMapType& con_integer_md,
       const NumericMetaDataMapType& con_numeric_md
    )
+   // [TNLP_finalize_metadata]
    { }
 
    /** Intermediate Callback method for the user.
