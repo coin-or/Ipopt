@@ -2077,6 +2077,7 @@ PREDEFINED             = COIN_HAS_ASL \
                          HAVE_VA_COPY \
                          HAVE_VSNPRINTF \
                          HAVE_WSMP \
+                         IPOPT_EXPORT(x)=x \
                          __cplusplus
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then this
