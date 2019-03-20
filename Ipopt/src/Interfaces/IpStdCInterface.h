@@ -67,6 +67,8 @@ typedef void* UserDataPtr;
 /** Type defining the callback function for evaluating the value of the objective function.
  *
  *  Return value should be set to false if there was a problem doing the evaluation.
+ *
+ *  See also Ipopt::TNLP::eval_f.
  */
 typedef Bool (*Eval_F_CB)(
    Index       n,
@@ -79,6 +81,8 @@ typedef Bool (*Eval_F_CB)(
 /** Type defining the callback function for evaluating the gradient of the objective function.
  *
  *  Return value should be set to false if there was a problem doing the evaluation.
+ *
+ *  See also Ipopt::TNLP::eval_grad_f.
  */
 typedef Bool (*Eval_Grad_F_CB)(
    Index       n,
@@ -91,6 +95,8 @@ typedef Bool (*Eval_Grad_F_CB)(
 /** Type defining the callback function for evaluating the value of the constraint functions.
  *
  *  Return value should be set to false if there was a problem doing the evaluation.
+ *
+ *  See also Ipopt::TNLP::eval_g.
  */
 typedef Bool (*Eval_G_CB)(
    Index       n,
@@ -104,6 +110,8 @@ typedef Bool (*Eval_G_CB)(
 /** Type defining the callback function for evaluating the Jacobian of the constrant functions.
  *
  *  Return value should be set to false if there was a problem doing the evaluation.
+ *
+ *  See also Ipopt::TNLP::eval_jac_g.
  */
 typedef Bool (*Eval_Jac_G_CB)(
    Index       n,
@@ -120,6 +128,8 @@ typedef Bool (*Eval_Jac_G_CB)(
 /** Type defining the callback function for evaluating the Hessian of the Lagrangian function.
  *
  *  Return value should be set to false if there was a problem doing the evaluation.
+ *
+ *  See also Ipopt::TNLP::eval_h.
  */
 typedef Bool (*Eval_H_CB)(
    Index       n,
@@ -143,6 +153,8 @@ typedef Bool (*Eval_H_CB)(
  *  This can be used to print some user-defined output.
  *  It also gives the user a way to terminate the optimization prematurely.
  *  If this method returns false, Ipopt will terminate the optimization.
+ *
+ *  See also Ipopt::TNLP::intermediate_callback.
  */
 typedef Bool (*Intermediate_CB)(
    Index       alg_mod,   /**< algorithm mode: 0 is regular, 1 is restoration */
@@ -161,9 +173,8 @@ typedef Bool (*Intermediate_CB)(
 
 /** Function for creating a new Ipopt Problem object.
  *
- *  This function
- *  returns an object that can be passed to the IpoptSolve call.  It
- *  contains the basic definition of the optimization problem, such
+ *  This function returns an object that can be passed to the IpoptSolve call.
+ *  It contains the basic definition of the optimization problem, such
  *  as number of variables and constraints, bounds on variables and
  *  constraints, information about the derivatives, and the callback
  *  function for the computation of the optimization problem
@@ -172,6 +183,8 @@ typedef Bool (*Intermediate_CB)(
  *
  *  If NULL is returned, there was a problem with one of the inputs
  *  or reading the options file.
+ *
+ *  See also Ipopt::TNLP::get_nlp_info and Ipopt::TNLP::get_bounds_info.
  */
 IPOPT_EXPORT(IpoptProblem) CreateIpoptProblem(
    Index         n,           /**< Number of optimization variables */
