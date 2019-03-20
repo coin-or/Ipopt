@@ -85,37 +85,27 @@ struct MyUserData
 };
 
 /** Main Program */
+/* [MAIN] */
 int main()
 {
-   Index n = -1; /* number of variables */
-   Index m = -1; /* number of constraints */
-   Number* x_L = NULL; /* lower bounds on x */
-   Number* x_U = NULL; /* upper bounds on x */
-   Number* g_L = NULL; /* lower bounds on g */
-   Number* g_U = NULL; /* upper bounds on g */
-   IpoptProblem nlp = NULL; /* IpoptProblem */
+   Index n = -1;                        /* number of variables */
+   Index m = -1;                        /* number of constraints */
+   Index nele_jac;                      /* number of nonzeros in the Jacobian of the constraints */
+   Index nele_hess;                     /* number of nonzeros in the Hessian of the Lagrangian (lower or upper triangular part only) */
+   Index index_style;                   /* indexing style for matrices */
+   Number* x_L = NULL;                  /* lower bounds on x */
+   Number* x_U = NULL;                  /* upper bounds on x */
+   Number* g_L = NULL;                  /* lower bounds on g */
+   Number* g_U = NULL;                  /* upper bounds on g */
+   IpoptProblem nlp = NULL;             /* IpoptProblem */
    enum ApplicationReturnStatus status; /* Solve return code */
-   Number* x = NULL; /* starting point and solution vector */
-   Number* mult_g = NULL; /* constraint multipliers
-    at the solution */
-   Number* mult_x_L = NULL; /* lower bound multipliers
-    at the solution */
-   Number* mult_x_U = NULL; /* upper bound multipliers
-    at the solution */
-   Number obj; /* objective value */
-   Index i; /* generic counter */
-
-   /* Number of nonzeros in the Jacobian of the constraints */
-   Index nele_jac = 8;
-   /* Number of nonzeros in the Hessian of the Lagrangian (lower or
-    upper triangual part only) */
-   Index nele_hess = 10;
-   /* indexing style for matrices */
-   Index index_style = 0; /* C-style; start counting of rows and column
-    indices at 0 */
-
-   /* our user data for the function evalutions. */
-   struct MyUserData user_data;
+   Number* x = NULL;                    /* starting point and solution vector */
+   Number* mult_g = NULL;               /* constraint multipliers at the solution */
+   Number* mult_x_L = NULL;             /* lower bound multipliers at the solution */
+   Number* mult_x_U = NULL;             /* upper bound multipliers at the solution */
+   Number obj;                          /* objective value */
+   struct MyUserData user_data;         /* our user data for the function evaluations */
+   Index i;                             /* generic counter */
 
    /* set the number of variables and allocate space for the bounds */
    n = 4;
@@ -138,19 +128,29 @@ int main()
    g_L[1] = 40;
    g_U[1] = 40;
 
+   /* set the number of nonzeros in the Jacobian and Hessian */
+   nele_jac = 8;
+   nele_hess = 10;
+
+   /* set the indexing style to C-style (start counting of rows and column indices at 0) */
+   index_style = 0;
+
    /* create the IpoptProblem */
-   nlp = CreateIpoptProblem(n, x_L, x_U, m, g_L, g_U, nele_jac, nele_hess, index_style, &eval_f, &eval_g, &eval_grad_f,
+   nlp = CreateIpoptProblem(n, x_L, x_U, m, g_L, g_U, nele_jac, nele_hess, index_style,
+      &eval_f, &eval_g, &eval_grad_f,
       &eval_jac_g, &eval_h);
 
    /* We can free the memory now - the values for the bounds have been
-    copied internally in CreateIpoptProblem */
+    * copied internally in CreateIpoptProblem
+    */
    free(x_L);
    free(x_U);
    free(g_L);
    free(g_U);
 
    /* Set some options.  Note the following ones are only examples,
-    they might not be suitable for your problem. */
+    * they might not be suitable for your problem.
+    */
    AddIpoptNumOption(nlp, "tol", 1e-7);
    AddIpoptStrOption(nlp, "mu_strategy", "adaptive");
    AddIpoptStrOption(nlp, "output_file", "ipopt.out");
@@ -171,9 +171,10 @@ int main()
    user_data.g_offset[0] = 0.;
    user_data.g_offset[1] = 0.;
 
-   /* Set the callback method for intermediate user-control.  This is
-    * not required, just gives you some intermediate control in case
-    * you need it. */
+   /* Set the callback method for intermediate user-control.
+    * This is not required, just gives you some intermediate control in
+    * case you need it.
+    */
    /* SetIntermediateCallback(nlp, intermediate_cb); */
 
    /* solve the problem */
@@ -183,27 +184,18 @@ int main()
    {
       printf("\n\nSolution of the primal variables, x\n");
       for( i = 0; i < n; i++ )
-      {
          printf("x[%d] = %e\n", i, x[i]);
-      }
 
-      printf("\n\nSolution of the ccnstraint multipliers, lambda\n");
+      printf("\n\nSolution of the constraint multipliers, lambda\n");
       for( i = 0; i < m; i++ )
-      {
          printf("lambda[%d] = %e\n", i, mult_g[i]);
-      }
       printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
       for( i = 0; i < n; i++ )
-      {
          printf("z_L[%d] = %e\n", i, mult_x_L[i]);
-      }
       for( i = 0; i < n; i++ )
-      {
          printf("z_U[%d] = %e\n", i, mult_x_U[i]);
-      }
 
-      printf("\n\nObjective value\n");
-      printf("f(x*) = %e\n", obj);
+      printf("\n\nObjective value\nf(x*) = %e\n", obj);
    }
    else
    {
@@ -211,9 +203,10 @@ int main()
    }
 
    /* Now we are going to solve this problem again, but with slightly
-    modified constraints.  We change the constraint offset of the
-    first constraint a bit, and resolve the problem using the warm
-    start option. */
+    * modified constraints.  We change the constraint offset of the
+    * first constraint a bit, and resolve the problem using the warm
+    * start option.
+    */
    user_data.g_offset[0] = 0.2;
 
    if( status == Solve_Succeeded )
@@ -221,7 +214,8 @@ int main()
       /* Now resolve with a warmstart. */
       AddIpoptStrOption(nlp, "warm_start_init_point", "yes");
       /* The following option reduce the automatic modification of the
-       starting point done my Ipopt. */
+       * starting point done my Ipopt.
+       */
       AddIpoptNumOption(nlp, "bound_push", 1e-5);
       AddIpoptNumOption(nlp, "bound_frac", 1e-5);
       status = IpoptSolve(nlp, x, NULL, &obj, mult_g, mult_x_L, mult_x_U, &user_data);
@@ -230,27 +224,18 @@ int main()
       {
          printf("\n\nSolution of the primal variables, x\n");
          for( i = 0; i < n; i++ )
-         {
             printf("x[%d] = %e\n", i, x[i]);
-         }
 
-         printf("\n\nSolution of the ccnstraint multipliers, lambda\n");
+         printf("\n\nSolution of the constraint multipliers, lambda\n");
          for( i = 0; i < m; i++ )
-         {
             printf("lambda[%d] = %e\n", i, mult_g[i]);
-         }
          printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
          for( i = 0; i < n; i++ )
-         {
             printf("z_L[%d] = %e\n", i, mult_x_L[i]);
-         }
          for( i = 0; i < n; i++ )
-         {
             printf("z_U[%d] = %e\n", i, mult_x_U[i]);
-         }
 
-         printf("\n\nObjective value\n");
-         printf("f(x*) = %e\n", obj);
+         printf("\n\nObjective value\nf(x*) = %e\n", obj);
       }
       else
       {
@@ -265,8 +250,9 @@ int main()
    free(mult_x_L);
    free(mult_x_U);
 
-   return (int) status;
+   return (status == Solve_Succeeded) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
+/* [MAIN] */
 
 /* Function Implementations */
 Bool eval_f(
