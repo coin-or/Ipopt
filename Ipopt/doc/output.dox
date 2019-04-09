@@ -1,0 +1,301 @@
+/**
+\page OUTPUT Ipopt Output
+
+This pages describes the standard \Ipopt console output
+with the default setting for option `print_level`. The output is designed
+to provide a quick summary of each iteration as \Ipopt solves the problem.
+
+Before \Ipopt starts to solve the problem, it displays the
+problem statistics (number of nonzero-elements in the matrices, number
+of variables, etc.). Note that if you have fixed variables (both upper
+and lower bounds are equal), \Ipopt may remove these
+variables from the problem internally and not include them in the
+problem statistics.
+
+Following the problem statistics, \Ipopt will begin to
+solve the problem and you will see output resembling the following,
+
+    iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+       0  1.6109693e+01 1.12e+01 5.28e-01   0.0 0.00e+00    -  0.00e+00 0.00e+00   0
+       1  1.8029749e+01 9.90e-01 6.62e+01   0.1 2.05e+00    -  2.14e-01 1.00e+00f  1
+       2  1.8719906e+01 1.25e-02 9.04e+00  -2.2 5.94e-02   2.0 8.04e-01 1.00e+00h  1
+
+and the columns of output are defined as,
+
+- iter: The current iteration count. This includes regular iterations and
+    iterations during the restoration phase. If the algorithm is in the
+    restoration phase, the letter "r" will be appended to the iteration
+    number.
+
+- objective: The unscaled objective value at the current point. During the
+    restoration phase, this value remains the unscaled objective value
+    for the original problem.
+
+- inf_pr: The unscaled constraint violation at the current point. This
+    quantity is the infinity-norm (max) of the (unscaled) constraints
+    (\f$g^L \leq g(x) \leq g^U\f$ in (NLP)). During the restoration phase, this
+    value remains the constraint violation of the original problem at
+    the current point. The option `inf_pr_output` can be used to switch to the printing
+    of a different quantity.
+
+- inf_du: The scaled dual infeasibility at the current point. This quantity
+    measure the infinity-norm (max) of the internal dual infeasibility,
+    Eq. (4a) in the implementation paper \cite WaecBieg06:mp, including
+    inequality constraints reformulated using slack variables and
+    problem scaling. During the restoration phase, this is the value of
+    the dual infeasibility for the restoration phase problem.
+
+- lg(mu): log<sub>10</sub> of the value of the barrier parameter &mu;.
+
+- ||d||: The infinity norm (max) of the primal step (for the original
+    variables \f$x\f$ and the internal slack variables \f$s\f$). During the
+    restoration phase, this value includes the values of additional
+    variables, \f$p\f$ and \f$n\f$ (see Eq. (30) in \cite WaecBieg06:mp).
+
+- lg(rg): log<sub>10</sub> of the value of the regularization term for the Hessian
+    of the Lagrangian in the augmented system (\f$\delta_w\f$ in Eq. (26)
+    and Section 3.1 in \cite WaecBieg06:mp). A dash ("-") indicates that
+    no regularization was done.
+
+- alpha_du: The stepsize for the dual variables (\f$\alpha^z_k\f$ in Eq. (14c) in
+    \cite WaecBieg06:mp).
+
+- alpha_pr: The stepsize for the primal variables (\f$\alpha_k\f$ in Eq. (14a) in
+    \cite WaecBieg06:mp). The number is usually followed by a character for
+    additional diagnostic information regarding the step acceptance
+    criterion:
+    | Tag |  Description |
+    |-----|--------------|
+    | f   | f-type iteration in the filter method w/o second order correction |
+    | F   | f-type iteration in the filter method w/ second order correction |
+    | h   | h-type iteration in the filter method w/o second order correction |
+    | H   | h-type iteration in the filter method w/ second order correction |
+    | k   | penalty value unchanged in merit function method w/o second order correction |
+    | K   | penalty value unchanged in merit function method w/ second order correction |
+    | n   | penalty value updated in merit function method w/o second order correction |
+    | N   | penalty value updated in merit function method w/ second order correction |
+    | R   | Restoration phase just started |
+    | w   | in watchdog procedure |
+    | s   | step accepted in soft restoration phase |
+    | t/T | tiny step accepted without line search |
+    | r   | some previous iterate restored |
+
+- ls:  The number of backtracking line search steps (does not include
+    second-order correction steps).
+
+Note that the step acceptance mechanisms in \Ipopt consider
+the barrier objective function (Eq (3a) in \cite WaecBieg06:mp) which is
+usually different from the value reported in the `objective` column.
+Similarly, for the purposes of the step acceptance, the constraint
+violation is measured for the internal problem formulation, which
+includes slack variables for inequality constraints and potentially
+scaling of the constraint functions. This value, too, is usually
+different from the value reported in `inf_pr`. As a consequence, a new
+iterate might have worse values both for the objective function and the
+constraint violation as reported in the iteration output, seemingly
+contradicting globalization procedure.
+
+When the algorithm terminates, \Ipopt will output a message
+to the screen based on the return status of the call to Optimize. The
+following is a list of the possible return codes, their corresponding
+output message to the console, and a brief description.
+
+- `Solve_Succeeded`:
+
+   Console Message: `EXIT: Optimal Solution Found.`
+
+   This message indicates that \Ipopt found a (locally)
+   optimal point within the desired tolerances.
+
+- `Solved_To_Acceptable_Level`:
+
+   Console Message: `EXIT: Solved To Acceptable Level.`
+   
+   This indicates that the algorithm did not converge to the "desired"
+   tolerances, but that it was able to obtain a point satisfying the
+   "acceptable" tolerance level as specified by the `acceptable_tol` options.
+   This may happen if the desired tolerances are too small for the current
+   problem.
+
+- `Feasible_Point_Found`:
+
+   Console Message: `EXIT: Feasible point for square problem found.`
+
+   This message is printed if the problem is "square" (i.e., it has as
+   many equality constraints as free variables) and \Ipopt
+   found a feasible point.
+
+- `Infeasible_Problem_Detected`:
+
+   Console Message: `EXIT: Converged to a point of local infeasibility.
+   Problem may be infeasible.`
+   
+   The restoration phase converged to a point that is a minimizer for
+   the constraint violation (in the \f$\ell_1\f$-norm), but is not feasible
+   for the original problem. This indicates that the problem may be
+   infeasible (or at least that the algorithm is stuck at a locally
+   infeasible point). The returned point (the minimizer of the
+   constraint violation) might help you to find which constraint is
+   causing the problem. If you believe that the NLP is feasible, it
+   might help to start the optimization from a different point.
+
+- `Search_Direction_Becomes_Too_Small`:
+
+   Console Message: `EXIT: Search Direction is becoming Too Small.`
+   
+   This indicates that \Ipopt is calculating very small
+   step sizes and is making very little progress. This could happen if
+   the problem has been solved to the best numerical accuracy possible
+   given the current scaling.
+
+- `Diverging_Iterates`:
+
+   Console Message: `EXIT: Iterates divering; problem might be unbounded.`
+   
+   This message is printed if the max-norm of the iterates becomes
+   larger than the value of the option `diverging_iterates_tol`. This can
+   happen if the problem is unbounded below and the iterates are diverging.
+   
+- `User_Requested_Stop`:
+
+   Console Message: `EXIT: Stopping optimization at current point as requested by user.`
+   
+   This message is printed if the user call-back method
+   Ipopt::TNLP::intermediate_callback returned false.
+
+- `Maximum_Iterations_Exceeded`:
+
+   Console Message: `EXIT: Maximum Number of Iterations Exceeded.`
+   
+   This indicates that \Ipopt has exceeded the maximum
+   number of iterations as specified by the option `max_iter`.
+
+- `Maximum_CpuTime_Exceeded`:
+
+   Console Message: `EXIT: Maximum CPU time exceeded.`
+   
+   This indicates that \Ipopt has exceeded the maximum
+   number of CPU seconds as specified by the option `max_cpu_time`.
+
+- `Restoration_Failed`:
+
+   Console Message: `EXIT: Restoration Failed!`
+   
+   This indicates that the restoration phase failed to find a feasible
+   point that was acceptable to the filter line search for the original
+   problem. This could happen if the problem is highly degenerate, does
+   not satisfy the constraint qualification, or if your NLP code
+   provides incorrect derivative information.
+
+- `Error_In_Step_Computation`:
+
+   Console Output: `EXIT: Error in step computation (regularization becomes too large?)!`
+   
+   This messages is printed if \Ipopt is unable to compute
+   a search direction, despite several attempts to modify the iteration
+   matrix. Usually, the value of the regularization parameter then
+   becomes too large. One situation where this can happen is when
+   values in the Hessian are invalid (NaN or Inf). You can check
+   whether this is true by using the option `check_derivatives_for_naninf`.
+
+- `Invalid_Option`:
+
+   Console Message: (details about the particular error will be output to the console)
+   
+   This indicates that there was some problem specifying the options.
+   See the specific message for details.
+
+- `Not_Enough_Degrees_Of_Freedom`:
+
+   Console Message: `EXIT: Problem has too few degrees of freedom.`
+   
+   This indicates that your problem, as specified, has too few degrees
+   of freedom. This can happen if you have too many equality
+   constraints, or if you fix too many variables (\Ipopt
+   removes fixed variables by default, see also the option `fixed_variable_treatment`).
+
+- `Invalid_Problem_Definition`:
+
+   Console Message: (no console message, this is a return code for the C and Fortran interfaces only.)
+   
+   This indicates that there was an exception of some sort when
+   building the \ref IpoptProblem structure in the C or Fortran interface.
+   Likely there is an error in your model or the main routine.
+
+- `Unrecoverable_Exception`:
+
+   Console Message: (details about the particular error will be output to the console)
+   
+   This indicates that \Ipopt has thrown an exception that
+   does not have an internal return code. See the specific message for
+   details.
+
+- `NonIpopt_Exception_Thrown`:
+
+   Console Message: `Unknown Exception caught in Ipopt`
+   
+   An unknown exception was caught in \Ipopt. This exception could have
+   originated from your model or any linked in third party code.
+   See also Ipopt::IpoptApplication::RethrowNonIpoptException.
+
+- `Insufficient_Memory`:
+
+   Console Message: `EXIT: Not enough memory`.
+   
+   An error occurred while trying to allocate memory. The problem may
+   be too large for your current memory and swap configuration.
+
+- `Internal_Error`:
+
+   Console: `EXIT: INTERNAL ERROR: Unknown SolverReturn value - Notify IPOPT Authors.`
+   
+   An unknown internal error has occurred. Please notify the authors of
+   \Ipopt via the mailing list.
+
+<!--\section DIAGTAGS Diagnostic Tags for Ipopt -->
+
+To print additional diagnostic tags for each iteration of
+\Ipopt, set the option `print_info_string` to `yes`. With this, a tag will
+appear at the end of an iteration line with the following diagnostic
+meaning that are useful to flag difficulties for a particular
+\Ipopt run.
+
+ |Tag   |Description                                                  |Reference                                     |
+ |:-----|:------------------------------------------------------------|:---------------------------------------------|
+ |!     |Tighten resto tolerance if only slightly infeasible          |Section 3.3 in \cite WaecBieg06:mp            |
+ |A     |Current iteration is acceptable                              |Alternate termination                         |
+ |a     |Perturbation for PD singularity impossible, assume singular  |Section 3.1 in \cite WaecBieg06:mp            |
+ |C     |Second Order Correction taken                                |Section 2.4 in \cite WaecBieg06:mp            |
+ |Dh    |Hessian degenerate based on multiple iterations              |Section 3.1 in \cite WaecBieg06:mp            |
+ |Dhj   |Hessian/Jacobian degenerate based on multiple iterations     |Section 3.1 in \cite WaecBieg06:mp            |
+ |Dj    |Jacobian degenerate based on multiple iterations             |Section 3.1 in \cite WaecBieg06:mp            |
+ |dx    |$\delta_x$ perturbation too large                            |Section 3.1 in \cite WaecBieg06:mp            |
+ |e     |Cutting back $\alpha$ due to evaluation error                |in backtracking line search                   |
+ |F-    |Filter should be reset, but maximal resets exceeded          |Section 2.3 in \cite WaecBieg06:mp            |
+ |F+    |Resetting filter due to last few rejections of filter        |Section 2.3 in \cite WaecBieg06:mp            |
+ |L     |Degenerate Jacobian, $\delta_c$ already perturbed            |Section 3.1 in \cite WaecBieg06:mp            |
+ |l     |Degenerate Jacobian, $\delta_c$ perturbed                    |Section 3.1 in \cite WaecBieg06:mp            |
+ |M     |Magic step taken for slack variables                         |in backtracking line search                   |
+ |Nh    |Hessian not yet degenerate                                   |Section 3.1 in \cite WaecBieg06:mp            |
+ |Nhj   |Hessian/Jacobian not yet degenerate                          |Section 3.1 in \cite WaecBieg06:mp            |
+ |Nj    |Jacobian not yet degenerate                                  |Section 3.1 in \cite WaecBieg06:mp            |
+ |NW    |Warm start initialization failed                             |in Warm Start Initialization                  |
+ |q     |PD system possibly singular, attempt improving sol. quality  |Section 3.1 in \cite WaecBieg06:mp            |
+ |R     |Solution of restoration phase                                |Section 3.3 in \cite WaecBieg06:mp            |
+ |S     |PD system possibly singular, accept current solution         |Section 3.1 in \cite WaecBieg06:mp            |
+ |s     |PD system singular                                           |Section 3.1 in \cite WaecBieg06:mp            |
+ |s     |Square Problem. Set multipliers to zero                      |Default initialization routine                |
+ |Tmax  |Trial $\theta$ is larger than $\theta_{max}$                 |filter parameter, see (21) in \cite WaecBieg06:mp|
+ |W     |Watchdog line search procedure successful                    |Section 3.2 in \cite WaecBieg06:mp            |
+ |w     |Watchdog line search procedure unsuccessful, stopped         |Section 3.2 in \cite WaecBieg06:mp            |
+ |Wb    |Undoing most recent SR1 update                               |Section 5.4.1 in \cite Biegler:nlpbook        |
+ |We    |Skip Limited-Memory Update in restoration phase              |Section 5.4.1 in \cite Biegler:nlpbook        |
+ |Wp    |Safeguard $B^0 = \sigma I$ for Limited-Memory Update         |Section 5.4.1 in \cite Biegler:nlpbook        |
+ |Wr    |Resetting Limited-Memory Update                              |Section 5.4.1 in \cite Biegler:nlpbook        |
+ |Ws    |Skip Limited-Memory Update since $s^Ty$ is not positive      |Section 5.4.1 in \cite Biegler:nlpbook        |
+ |WS    |Skip Limited-Memory Update since $\Delta x$ is too small     |Section 5.4.1 in \cite Biegler:nlpbook        |
+ |y     |Dual infeasibility, use least square multiplier update       |during ipopt algorithm                        |
+ |z     |Apply correction to bound multiplier if too large            |during ipopt algorithm                        |
+
+
+*/
