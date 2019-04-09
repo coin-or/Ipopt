@@ -1110,6 +1110,17 @@ ADD_CFLAGS=-fopenmp ADD_FFLAGS=-fopenmp ADD_CXXFLAGS=-fopenmp
     looking for Blas. On other systems, one has to specify the MKL
     libraries with the `--with-blas` option.
 
+    For best performance on Linux, use Pardiso from the Pardiso project website
+    together with linear algebra from Intel MKL. The configure command would
+    be something like the following (all in one line):
+    \verbatim
+MKL_LIBS="-L${MKLROOT}/lib/intel64 -Wl,--no-as-needed -lmkl_intel_lp64 -lmkl_lapack95_lp64 -lmkl_sequential -lmkl_core -lgfortran -fopenmp -lpthread -lm -ldl"
+ADD_CFLAGS="-fopenmp -fno-common -fexceptions"
+ADD_CXXFLAGS="-fopenmp -fno-common -fexceptions"
+ADD_FFLAGS="-fopenmp -fexceptions"
+./configure -C F77=gfortran CC=gcc CXX=g++ --with-blas-lib="${MKL_LIBS}" --with-lapack-lib="${MKL_LIBS}" --with-pardiso="libpardiso600-GNU720-X86-64.so -lgfortran -lquadmath"
+    \endverbatim
+
 -   If you want to compile \Ipopt with the linear solver
     WSMP (see \ref DOWNLOAD_WSMP), you need to specify the link flags for
     the library with the `--with-wsmp` flag, including required additional
