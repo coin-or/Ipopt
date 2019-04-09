@@ -1,0 +1,59 @@
+/**
+\page OPTIONS Ipopt Options
+
+\Ipopt has many (maybe too many) options that can be adjusted for the
+algorithm. Options are all identified by a string name,
+and their values can be of one of three types: Number (real), Integer,
+or String. Number options are used for things like tolerances, integer
+options are used for things like maximum number of iterations, and
+string options are used for setting algorithm details, like the NLP
+scaling method. Options can be set through code, through the AMPL
+interface if you are using AMPL, or by creating a `ipopt.opt` file in the
+directory you are executing \Ipopt.
+
+The `ipopt.opt` file is read line by line and each line should contain the
+option name, followed by whitespace, and then the value. Comments can be
+included with the `#` symbol. For example,
+
+    # This is a comment
+
+    # Turn off the NLP scaling
+    nlp_scaling_method none
+
+    # Change the initial barrier parameter
+    mu_init 1e-2
+
+    # Set the max number of iterations
+    max_iter 500
+
+is a valid `ipopt.opt` file.
+
+Options can also be set in code. Have a look at the examples to see how
+this is done.
+
+A subset of \Ipopt options are available through AMPL. To
+set options through AMPL, use the internal AMPL command options. For
+example,
+\verbatim
+options ipopt_options "nlp_scaling_method=none mu_init=1e-2 max_iter=500"
+\endverbatim
+is a valid options command in AMPL. The most important options are
+referenced in \ref OPTIONS_REF. To see which options are available through
+AMPL, you can run the AMPL solver executable with the "-=" flag from the
+command prompt. To specify other options when using AMPL, you can always
+create `ipopt.opt`. Note, the `ipopt.opt` file is given preference when
+setting options. This way, you can easily override any options set in a
+particular executable or AMPL model by specifying new values in
+`ipopt.opt`.
+
+For a list of the most important valid options, see \ref OPTIONS_REF.
+You can print the documentation for all \Ipopt options by
+using the option
+\verbatim
+print_options_documentation yes
+\endverbatim
+and running \Ipopt (like the AMPL solver executable, for
+instance). This will output the documentation of almost all options to
+the console.
+
+*/
