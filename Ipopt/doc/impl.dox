@@ -1,0 +1,159 @@
+/**
+\page IMPL Implementation Details
+
+\section TRIPLET Triplet Format for Sparse Matrices
+
+\Ipopt was designed for optimizing large sparse nonlinear
+programs. Because of problem sparsity, the required matrices (like the
+constraints Jacobian or Lagrangian Hessian) are not stored as dense
+matrices, but rather in a sparse matrix format. For the tutorials in
+this document, we use the triplet format. Consider the matrix
+\f[
+\left[
+\begin{array}{ccccccc}
+1.1     & 0     & 0     & 0     & 0     & 0     & 0.5 \\
+0       & 1.9   & 0     & 0     & 0     & 0     & 0.5 \\
+0       & 0     & 2.6   & 0     & 0     & 0     & 0.5 \\
+0       & 0     & 7.8   & 0.6   & 0     & 0     & 0   \\
+0       & 0     & 0     & 1.5   & 2.7   & 0     & 0   \\
+1.6     & 0     & 0     & 0     & 0.4   & 0     & 0   \\
+0       & 0     & 0     & 0     & 0     & 0.9   & 1.7 \\
+\end{array}
+\right]
+\f]
+
+A standard dense matrix representation would need to store 7 * 7 = 49
+floating point numbers, where many entries would be zero. In
+triplet format, however, only the nonzero entries are stored. The
+triplet format records the row number, the column number, and the value
+of all nonzero entries in the matrix. For the matrix above, this means
+storing 14 integers for the rows, 14 integers for the columns, and
+14 floating point numbers for the values. While this does not seem
+like a huge space saving over the 49 floating point numbers stored in
+the dense representation, for larger matrices, the space savings are
+very dramatic. (For an \f$n \times n\f$ matrix, the dense representation
+grows with the the square of \f$n\f$, while the sparse representation grows
+linearly in the number of nonzeros.)
+
+The parameter `index_style` in Ipopt::TNLP::get_nlp_info tells \Ipopt
+if you prefer to use C style indexing (0-based, i.e., starting the
+counting at 0) for the row and column indices or Fortran style
+(1-based). The following table shows the triplet format for the
+above example matrix when using the Fortran indexing style.
+
+ |      row     |      col     |      value       |
+ |:-------------|:-------------|:-----------------|
+ | iRow[0] = 1  | jCol[0] = 1  | values[0] = 1.1  |
+ | iRow[1] = 1  | jCol[1] = 7  | values[1] = 0.5  |
+ | iRow[2] = 2  | jCol[2] = 2  | values[2] = 1.9  |
+ | iRow[3] = 2  | jCol[3] = 7  | values[3] = 0.5  |
+ | iRow[4] = 3  | jCol[4] = 3  | values[4] = 2.6  |
+ | iRow[5] = 3  | jCol[5] = 7  | values[5] = 0.5  |
+ | iRow[6] = 4  | jCol[6] = 3  | values[6] = 7.8  |
+ | iRow[7] = 4  | jCol[7] = 4  | values[7] = 0.6  |
+ | iRow[8] = 5  | jCol[8] = 4  | values[8] = 1.5  |
+ | iRow[9] = 5  | jCol[9] = 5  | values[9] = 2.7  |
+ | iRow[10] = 6 | jCol[10] = 1 | values[10] = 1.6 |
+ | iRow[11] = 6 | jCol[11] = 5 | values[11] = 0.4 |
+ | iRow[12] = 7 | jCol[12] = 6 | values[12] = 0.9 |
+ | iRow[13] = 7 | jCol[13] = 7 | values[13] = 1.7 |
+
+When using the C indexing style, the above example matrix in triplet
+format is the following:
+
+ |      row     |       col    |      value       |
+ |--------------|--------------|------------------|
+ | iRow[0] = 0  | jCol[0] = 0  | values[0] = 1.1  |
+ | iRow[1] = 0  | jCol[1] = 6  | values[1] = 0.5  |
+ | iRow[2] = 1  | jCol[2] = 1  | values[2] = 1.9  |
+ | iRow[3] = 1  | jCol[3] = 6  | values[3] = 0.5  |
+ | iRow[4] = 2  | jCol[4] = 2  | values[4] = 2.6  |
+ | iRow[5] = 2  | jCol[5] = 6  | values[5] = 0.5  |
+ | iRow[6] = 3  | jCol[6] = 2  | values[6] = 7.8  |
+ | iRow[7] = 3  | jCol[7] = 3  | values[7] = 0.6  |
+ | iRow[8] = 4  | jCol[8] = 3  | values[8] = 1.5  |
+ | iRow[9] = 4  | jCol[9] = 4  | values[9] = 2.7  |
+ | iRow[10] = 5 | jCol[10] = 0 | values[10] = 1.6 |
+ | iRow[11] = 5 | jCol[11] = 4 | values[11] = 0.4 |
+ | iRow[12] = 6 | jCol[12] = 5 | values[12] = 0.9 |
+ | iRow[13] = 6 | jCol[13] = 6 | values[13] = 1.7 |
+
+
+The individual elements of the matrix can be listed in any order, and if
+there are multiple items for the same nonzero position, the values
+provided for those positions are added.
+
+The Hessian of the Lagrangian is a symmetric matrix. In the case of a
+symmetric matrix, you only need to specify the lower left triangular
+part (or, alternatively, the upper right triangular part). For example,
+given the matrix
+\f[
+\left[
+\begin{array}{ccccccc}
+1.0 & 0 & 3.0   & 0 & 2.0   \\
+0   & 1.1   & 0 & 0 & 5.0   \\
+3.0 & 0 & 1.2   & 6.0 & 0   \\
+0   & 0 & 6.0   & 1.3 & 9.0 \\
+2.0 & 5.0   & 0 & 9.0 & 1.4
+\end{array}
+\right],
+\f]
+the triplet format is shown in the following tables for the Fortran
+and C index styles, respectively:
+
+ |      row    |        col  |      value      |
+ |:------------|:------------|:--------------- |
+ | iRow[0] = 1 | jCol[0] = 1 | values[0] = 1.0 |
+ | iRow[1] = 2 | jCol[1] = 1 | values[1] = 1.1 |
+ | iRow[2] = 3 | jCol[2] = 1 | values[2] = 3.0 |
+ | iRow[3] = 3 | jCol[3] = 3 | values[3] = 1.2 |
+ | iRow[4] = 4 | jCol[4] = 3 | values[4] = 6.0 |
+ | iRow[5] = 4 | jCol[5] = 4 | values[5] = 1.3 |
+ | iRow[6] = 5 | jCol[6] = 1 | values[6] = 2.0 |
+ | iRow[7] = 5 | jCol[7] = 2 | values[7] = 5.0 |
+ | iRow[8] = 5 | jCol[8] = 4 | values[8] = 9.0 |
+ | iRow[9] = 5 | jCol[9] = 5 | values[9] = 1.4 |
+
+ |      row    |        col  |      value      |
+ |:------------|:------------|:----------------|
+ | iRow[0] = 0 | jCol[0] = 0 | values[0] = 1.0 |
+ | iRow[1] = 1 | jCol[1] = 0 | values[1] = 1.1 |
+ | iRow[2] = 2 | jCol[2] = 0 | values[2] = 3.0 |
+ | iRow[3] = 2 | jCol[3] = 2 | values[3] = 1.2 |
+ | iRow[4] = 3 | jCol[4] = 2 | values[4] = 6.0 |
+ | iRow[5] = 3 | jCol[5] = 3 | values[5] = 1.3 |
+ | iRow[6] = 4 | jCol[6] = 0 | values[6] = 2.0 |
+ | iRow[7] = 4 | jCol[7] = 1 | values[7] = 5.0 |
+ | iRow[8] = 4 | jCol[8] = 3 | values[8] = 9.0 |
+ | iRow[9] = 4 | jCol[9] = 4 | values[9] = 1.4 |
+
+\section SMARTPTR The Smart Pointer Implementation: SmartPtr<T>
+
+The Ipopt::SmartPtr class is described in IpSmartPtr.hpp. It is a template
+class that takes care of counting references to objects and deleting
+them when there are no references anymore. Instead of pointing to an object with
+a raw C++ pointer (e.g. `HS071_NLP*`), we use a Ipopt::SmartPtr. Every time a
+`SmartPtr` is set to reference an object, it increments a counter in that
+object (see the Ipopt::ReferencedObject base class if you are interested).
+If a `SmartPtr` is done with the object, either by leaving scope or being set
+to point to another object, the counter is decremented. When the count
+of the object goes to zero, the object is automatically deleted.
+`SmartPtr`'s are very simple, just use them as you would use a standard
+pointer.
+
+It is very important to use `SmartPtr`'s instead of raw pointers when
+passing objects to \Ipopt. Internally, \Ipopt
+uses smart pointers for referencing objects. If you use a raw pointer in
+your executable, the object's counter will NOT get incremented. Then,
+when \Ipopt uses smart pointers inside its own code, the
+counter will get incremented. However, before \Ipopt
+returns control to your code, it will decrement as many times as it
+incremented earlier, and the counter will return to zero. Therefore,
+\Ipopt will delete the object. When control returns to you,
+you now have a raw pointer that points to a deleted object.
+
+This might sound difficult to anyone not familiar with the use of smart
+pointers, but just follow one simple rule; always use a Ipopt::SmartPtr when
+creating or passing an \Ipopt object.
+
+*/
