@@ -220,7 +220,7 @@ for the modeling environment AMPL. As well, you can link your problem
 statement with \Ipopt using interfaces for C++, C, or
 Fortran. \Ipopt can be used with most Linux/Unix
 environments, and on Windows using Visual Studio .NET, Cygwin or
-MSYS/MinGW. In \ref TUTORIAL_EXAMPLE this document demonstrates how to
+MSYS/MinGW. In \ref INTERFACES this document demonstrates how to
 solve problems using \Ipopt. This includes installation and
 compilation of \Ipopt for use with AMPL as well as linking
 with your own code.
@@ -311,9 +311,8 @@ maintained by other people, among them are:
 
     The Optimization Services (OS) project provides a set of standards
     for representing optimization instances, results, solver options,
-    and communication between clients and solvers,
-    incl. \Ipopt, in a distributed environment using Web
-    Services.
+    and communication between clients and solvers, including \Ipopt, in a
+    distributed environment using Web Services.
 
 -   [PyIpopt](https://github.com/g-braeunlich/IPyOpt)
 

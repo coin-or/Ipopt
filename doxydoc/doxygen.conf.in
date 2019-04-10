@@ -228,7 +228,8 @@ TAB_SIZE               = 4
 # "Side Effects:". You can put \n's in the value part of an alias to insert
 # newlines.
 
-ALIASES                = "Ipopt=`Ipopt`" "sIpopt=`sIpopt`"
+# the "value=" is to suppress a warning due to javadoc commands in the JIpopt comments
+ALIASES                = "Ipopt=`Ipopt`" "sIpopt=`sIpopt`" "value="
 
 # This tag can be used to specify a number of word-keyword mappings (TCL only).
 # A mapping has the form "name=value". For example adding "class=itcl::class"

@@ -269,12 +269,12 @@ meaning that are useful to flag difficulties for a particular
  |Dh    |Hessian degenerate based on multiple iterations              |Section 3.1 in \cite WaecBieg06:mp            |
  |Dhj   |Hessian/Jacobian degenerate based on multiple iterations     |Section 3.1 in \cite WaecBieg06:mp            |
  |Dj    |Jacobian degenerate based on multiple iterations             |Section 3.1 in \cite WaecBieg06:mp            |
- |dx    |$\delta_x$ perturbation too large                            |Section 3.1 in \cite WaecBieg06:mp            |
- |e     |Cutting back $\alpha$ due to evaluation error                |in backtracking line search                   |
+ |dx    |&delta;<sub>x</sub> perturbation too large                   |Section 3.1 in \cite WaecBieg06:mp            |
+ |e     |Cutting back &alpha; due to evaluation error                 |in backtracking line search                   |
  |F-    |Filter should be reset, but maximal resets exceeded          |Section 2.3 in \cite WaecBieg06:mp            |
  |F+    |Resetting filter due to last few rejections of filter        |Section 2.3 in \cite WaecBieg06:mp            |
- |L     |Degenerate Jacobian, $\delta_c$ already perturbed            |Section 3.1 in \cite WaecBieg06:mp            |
- |l     |Degenerate Jacobian, $\delta_c$ perturbed                    |Section 3.1 in \cite WaecBieg06:mp            |
+ |L     |Degenerate Jacobian, &delta;<sub>c</sub> already perturbed   |Section 3.1 in \cite WaecBieg06:mp            |
+ |l     |Degenerate Jacobian, &delta;<sub>c</sub> perturbed           |Section 3.1 in \cite WaecBieg06:mp            |
  |M     |Magic step taken for slack variables                         |in backtracking line search                   |
  |Nh    |Hessian not yet degenerate                                   |Section 3.1 in \cite WaecBieg06:mp            |
  |Nhj   |Hessian/Jacobian not yet degenerate                          |Section 3.1 in \cite WaecBieg06:mp            |
@@ -285,17 +285,16 @@ meaning that are useful to flag difficulties for a particular
  |S     |PD system possibly singular, accept current solution         |Section 3.1 in \cite WaecBieg06:mp            |
  |s     |PD system singular                                           |Section 3.1 in \cite WaecBieg06:mp            |
  |s     |Square Problem. Set multipliers to zero                      |Default initialization routine                |
- |Tmax  |Trial $\theta$ is larger than $\theta_{max}$                 |filter parameter, see (21) in \cite WaecBieg06:mp|
+ |Tmax  |Trial &theta; is larger than &theta;<sub>max</sub>           |filter parameter, see (21) in \cite WaecBieg06:mp|
  |W     |Watchdog line search procedure successful                    |Section 3.2 in \cite WaecBieg06:mp            |
  |w     |Watchdog line search procedure unsuccessful, stopped         |Section 3.2 in \cite WaecBieg06:mp            |
  |Wb    |Undoing most recent SR1 update                               |Section 5.4.1 in \cite Biegler:nlpbook        |
  |We    |Skip Limited-Memory Update in restoration phase              |Section 5.4.1 in \cite Biegler:nlpbook        |
- |Wp    |Safeguard $B^0 = \sigma I$ for Limited-Memory Update         |Section 5.4.1 in \cite Biegler:nlpbook        |
+ |Wp    |Safeguard \f$B^0 = \sigma I\f$ for Limited-Memory Update     |Section 5.4.1 in \cite Biegler:nlpbook        |
  |Wr    |Resetting Limited-Memory Update                              |Section 5.4.1 in \cite Biegler:nlpbook        |
- |Ws    |Skip Limited-Memory Update since $s^Ty$ is not positive      |Section 5.4.1 in \cite Biegler:nlpbook        |
- |WS    |Skip Limited-Memory Update since $\Delta x$ is too small     |Section 5.4.1 in \cite Biegler:nlpbook        |
+ |Ws    |Skip Limited-Memory Update since \f$s^Ty\f$ is not positive  |Section 5.4.1 in \cite Biegler:nlpbook        |
+ |WS    |Skip Limited-Memory Update since &Delta;x is too small       |Section 5.4.1 in \cite Biegler:nlpbook        |
  |y     |Dual infeasibility, use least square multiplier update       |during ipopt algorithm                        |
  |z     |Apply correction to bound multiplier if too large            |during ipopt algorithm                        |
-
 
 */
