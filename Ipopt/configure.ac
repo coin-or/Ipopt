@@ -926,7 +926,7 @@ AC_CONFIG_FILES([Makefile
 		 contrib/sIPOPT/examples/redhess_cpp/Makefile
 		 contrib/sIPOPT/src/Makefile
 		 ipopt.pc ipopt-uninstalled.pc
-		 doxydoc/doxygen.conf])
+		 doc/Doxyfile])
 
 # under Windows, the Makevars file for the R Interface need to be named Makevars.win
 case $build in 

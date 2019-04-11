@@ -67,7 +67,7 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(top_srcdir)/contrib/sIPOPT/examples/parametric_cpp/Makefile.in \
 	$(top_srcdir)/contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile.in \
 	$(top_srcdir)/contrib/sIPOPT/examples/redhess_cpp/Makefile.in \
-	$(top_srcdir)/doxydoc/doxygen.conf.in \
+	$(top_srcdir)/doc/Doxyfile.in \
 	$(top_srcdir)/examples/Cpp_example/Makefile.in \
 	$(top_srcdir)/examples/ScalableProblems/Makefile.in \
 	$(top_srcdir)/examples/ScalableProblems/config.h.in \
@@ -138,7 +138,7 @@ CONFIG_CLEAN_FILES = examples/hs071_f/Makefile \
 	contrib/sIPOPT/examples/parametric_cpp/Makefile \
 	contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile \
 	contrib/sIPOPT/examples/redhess_cpp/Makefile ipopt.pc \
-	ipopt-uninstalled.pc doxydoc/doxygen.conf \
+	ipopt-uninstalled.pc doc/Doxyfile \
 	contrib/RInterface/src/Makevars.win \
 	contrib/RInterface/src/Makevars ipoptamplinterface.pc \
 	ipoptamplinterface-uninstalled.pc
@@ -631,7 +631,7 @@ ipopt.pc: $(top_builddir)/config.status $(srcdir)/ipopt.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 ipopt-uninstalled.pc: $(top_builddir)/config.status $(srcdir)/ipopt-uninstalled.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
-doxydoc/doxygen.conf: $(top_builddir)/config.status $(top_srcdir)/doxydoc/doxygen.conf.in
+doc/Doxyfile: $(top_builddir)/config.status $(top_srcdir)/doc/Doxyfile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 contrib/RInterface/src/Makevars.win: $(top_builddir)/config.status $(top_srcdir)/contrib/RInterface/src/Makevars.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
@@ -804,7 +804,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/. $(distdir)/BuildTools $(distdir)/Windows/VisualStudio_dotNET $(distdir)/Windows/VisualStudio_dotNET/CppExample $(distdir)/Windows/VisualStudio_dotNET/FortranLinAlg $(distdir)/Windows/VisualStudio_dotNET/Ipopt $(distdir)/Windows/VisualStudio_dotNET/ScalableProblems $(distdir)/Windows/VisualStudio_dotNET/hs071_c $(distdir)/Windows/VisualStudio_dotNET/hs071_cpp $(distdir)/Windows/VisualStudio_dotNET/hs071_f $(distdir)/contrib/JavaInterface $(distdir)/contrib/MatlabInterface/examples $(distdir)/contrib/MatlabInterface/src $(distdir)/contrib/RInterface/src $(distdir)/contrib/sIPOPT $(distdir)/contrib/sIPOPT/AmplSolver $(distdir)/contrib/sIPOPT/examples/parametric_cpp $(distdir)/contrib/sIPOPT/examples/parametric_dsdp_cpp $(distdir)/contrib/sIPOPT/examples/redhess_cpp $(distdir)/doc $(distdir)/doxydoc $(distdir)/examples/Cpp_example $(distdir)/examples/ScalableProblems $(distdir)/examples/hs071_c $(distdir)/examples/hs071_cpp $(distdir)/examples/hs071_f $(distdir)/src/Apps/AmplSolver $(distdir)/test $(distdir)/tutorial/CodingExercise/C/1-skeleton $(distdir)/tutorial/CodingExercise/C/2-mistake $(distdir)/tutorial/CodingExercise/C/3-solution $(distdir)/tutorial/CodingExercise/Cpp/1-skeleton $(distdir)/tutorial/CodingExercise/Cpp/2-mistake $(distdir)/tutorial/CodingExercise/Cpp/3-solution $(distdir)/tutorial/CodingExercise/Fortran/1-skeleton $(distdir)/tutorial/CodingExercise/Fortran/2-mistake $(distdir)/tutorial/CodingExercise/Fortran/3-solution $(distdir)/tutorial/CodingExercise/Matlab/1-skeleton $(distdir)/tutorial/CodingExercise/Matlab/2-mistake $(distdir)/tutorial/CodingExercise/Matlab/3-solution
+	$(mkdir_p) $(distdir)/. $(distdir)/BuildTools $(distdir)/Windows/VisualStudio_dotNET $(distdir)/Windows/VisualStudio_dotNET/CppExample $(distdir)/Windows/VisualStudio_dotNET/FortranLinAlg $(distdir)/Windows/VisualStudio_dotNET/Ipopt $(distdir)/Windows/VisualStudio_dotNET/ScalableProblems $(distdir)/Windows/VisualStudio_dotNET/hs071_c $(distdir)/Windows/VisualStudio_dotNET/hs071_cpp $(distdir)/Windows/VisualStudio_dotNET/hs071_f $(distdir)/contrib/JavaInterface $(distdir)/contrib/MatlabInterface/examples $(distdir)/contrib/MatlabInterface/src $(distdir)/contrib/RInterface/src $(distdir)/contrib/sIPOPT $(distdir)/contrib/sIPOPT/AmplSolver $(distdir)/contrib/sIPOPT/examples/parametric_cpp $(distdir)/contrib/sIPOPT/examples/parametric_dsdp_cpp $(distdir)/contrib/sIPOPT/examples/redhess_cpp $(distdir)/doc $(distdir)/examples/Cpp_example $(distdir)/examples/ScalableProblems $(distdir)/examples/hs071_c $(distdir)/examples/hs071_cpp $(distdir)/examples/hs071_f $(distdir)/src/Apps/AmplSolver $(distdir)/test $(distdir)/tutorial/CodingExercise/C/1-skeleton $(distdir)/tutorial/CodingExercise/C/2-mistake $(distdir)/tutorial/CodingExercise/C/3-solution $(distdir)/tutorial/CodingExercise/Cpp/1-skeleton $(distdir)/tutorial/CodingExercise/Cpp/2-mistake $(distdir)/tutorial/CodingExercise/Cpp/3-solution $(distdir)/tutorial/CodingExercise/Fortran/1-skeleton $(distdir)/tutorial/CodingExercise/Fortran/2-mistake $(distdir)/tutorial/CodingExercise/Fortran/3-solution $(distdir)/tutorial/CodingExercise/Matlab/1-skeleton $(distdir)/tutorial/CodingExercise/Matlab/2-mistake $(distdir)/tutorial/CodingExercise/Matlab/3-solution
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -1052,7 +1052,7 @@ uninstall-info: uninstall-info-recursive
 	uninstall-local uninstall-pkgconfiglibDATA
 
 
-.PHONY: cuter test unitTest astyle doxydoc
+.PHONY: cuter test unitTest astyle doc
 
 cuter: install
 	cd src/Apps/CUTErInterface; $(MAKE) cuter
@@ -1062,17 +1062,17 @@ test: unitTest
 unitTest: all
 	cd test; $(MAKE) test
 
-doxydoc :
-	doxygen doxydoc/doxygen.conf
+doc :
+	cd doc && doxygen
 
-clean-doxydoc:
-	cd doxydoc && rm -rf html *.log *.tag
+clean-doc:
+	cd doc && rm -rf html *.log *.tag
 
 install-exec-local: install-doc
 
 uninstall-local: uninstall-doc
 
-clean-local : clean-doxydoc
+clean-local : clean-doc
 
 astyle:
 	cd src/Algorithm; $(MAKE) astyle
