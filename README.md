@@ -111,39 +111,6 @@ Getting Help:
  * **[Issue tracking system](https://github.com/coin-or/Ipopt/issues/)**: If you believe you found a **bug** in the code, please use the issue tracking system.
    Please include as much information as possible, and if possible some (ideally simple) example code so that we can reproduce the error.
 
-Related Projects
-----------------
-
-**[COIN-OR/ADOL-C](https://projects.coin-or.org/ADOL-C)**: Using Ipopt via **C++** and automatic differentiation ([examples](https://projects.coin-or.org/ADOL-C/browser/stable/2.4/ADOL-C/examples/additional_examples/ipopt)).
-
-**[COIN-OR/AIMMSlinks](https://projects.coin-or.org/AIMMSlinks)**: Using Ipopt via **AIMMS**
-
-**[COIN-OR/CppAD](https://projects.coin-or.org/CppAD)**: Using Ipopt via **C++** and automatic differentiation ([example](http://www.coin-or.org/CppAD/Doc/ipopt_solve.htm)).
-
-**[COIN-OR/GAMSlinks](https://projects.coin-or.org/GAMSlinks)**: Using Ipopt via **GAMS**
-
-**[COIN-OR/Optimization Services](https://projects.coin-or.org/OS)**: Using Ipopt via  **OS**
-
-**[APMonitor](http://apmonitor.com)**: MATLAB, Python, and Web Interface to Ipopt with **APMonitor** for Android, Linux, Mac OS X, and Windows
-
-**[CasADi](https://github.com/casadi/casadi/wiki)**: Using Ipopt in a symbolic framework for automatic differentiation and numeric optimization.
-
-**[csipopt](https://github.com/cureos/csipopt)**: Interfacing Ipopt from .NET languages such as **C#**, **F#** and **Visual Basic.NET**.
-
-**[ifopt](https://github.com/ethz-adrl/ifopt)**: Modern, light-weight (~1k loc), **Eigen**-based **C++** interface to Ipopt and Snopt   
-
-**[JuMP](https://github.com/JuliaOpt/JuMP.jl)**: Algebraic modeling with automatic differentiation in **Julia** ([low-level interface](https://github.com/JuliaOpt/Ipopt.jl) also available)
-
-**[MADOPT](https://github.com/stanle/madopt)**: Light-weight C++ and Python modelling interfaces implementing expression building using operator overloading and automatic differentiation.
-
-**[mexIPOPT](https://github.com/ebertolazzi/mexIPOPT)**: a rewrite of the **MATLAB** interface that is contained in Ipopt
-
-**[OPTI Toolbox](http://www.i2c2.aut.ac.nz/Wiki/OPTI/)**: Windows x86 + x64 **MATLAB** Interface, including binaries
-
-**[IPyOpt](https://github.com/g-braeunlich/IPyOpt)**: Interfacing Ipopt from **Python**
-
-**[sci-ipopt](http://forge.scilab.org/index.php/p/sci-ipopt)**: Interfacing Ipopt from **Scilab** (a free MATLAB-like environment)
-
 Please Cite Us
 --------------
 

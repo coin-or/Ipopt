@@ -247,8 +247,8 @@ maintained by other people, among them are:
 
     ADOL-C facilitates the evaluation of first and higher derivatives of
     vector functions that are defined by computer programs written in C
-    or C++. It comes with examples that show how to use it in connection
-    with \Ipopt.
+    or C++. It comes with [examples](https://projects.coin-or.org/ADOL-C/browser/stable/2.4/ADOL-C/examples/additional_examples/ipopt)
+    that show how to use it in connection with \Ipopt.
 
 -   AIMMS (modeling environment)
 
@@ -271,12 +271,25 @@ maintained by other people, among them are:
     Given a C++ algorithm that computes function values, CppAD generates
     an algorithm that computes corresponding derivative values (of
     arbitrary order using either forward or reverse mode). It comes with
-    an example that shows how to use it in connection with \Ipopt.
+    an [example](http://www.coin-or.org/CppAD/Doc/ipopt_solve.htm) that
+    shows how to use it in connection with \Ipopt.
+
+-   [csipopt](https://github.com/cureos/csipopt)
+
+    Interfacing Ipopt from .NET languages such as **C#**, **F#** and **Visual Basic.NET**.
 
 -   GAMS (modeling environment)
 
     The [GAMSlinks project](https://projects.coin-or.org/GAMSlinks) on
     COIN-OR includes a GAMS interface for \Ipopt.
+
+-   [ifopt](https://github.com/ethz-adrl/ifopt)
+
+    Modern, light-weight (~1k loc), **Eigen**-based **C++** interface to Ipopt and Snopt
+
+-   [IPyOpt](https://github.com/g-braeunlich/IPyOpt)
+
+    Interfacing Ipopt from **Python**
 
 -   [JuliaOpt](http://juliaopt.org)
 
@@ -286,26 +299,21 @@ maintained by other people, among them are:
     includes the algebraic modeling language [JuMP](https://github.com/JuliaOpt/JuMP.jl)
     and an [interface to \Ipopt](https://github.com/JuliaOpt/Ipopt.jl).
 
--   [mexIPOPT](https://github.com/ebertolazzi/mexIPOPT)
-
-    A rewrite of the above mentioned MATLAB Interface.
-
 -   [MADOPT](https://github.com/stanle/madopt) (Modelling and Automatic Differentiation for Optimisation)
 
     Light-weight C++ and Python modelling interfaces implementing
     expression building using operator overloading and automatic
     differentiation.
 
--   .NET
+-   [mexIPOPT](https://github.com/ebertolazzi/mexIPOPT)
 
-    An interface to the C# language is available at
-    https://github.com/cureos/csipopt.
+    A rewrite of the above mentioned MATLAB Interface.
 
--   OPTimization Interface (OPTI) Toolbox
+-   [OPTimization Interface (OPTI) Toolbox](http://www.i2c2.aut.ac.nz/Wiki/OPTI/)
 
-    OPTI is a free Matlab toolbox for constructing and solving linear,
+    OPTI is a free **Matlab** toolbox for constructing and solving linear,
     nonlinear, continuous and discrete optimization problem and comes
-    with \Ipopt.
+    with \Ipopt, including binaries.
 
 -   [Optimization Services](https://projects.coin-or.org/OS)
 
