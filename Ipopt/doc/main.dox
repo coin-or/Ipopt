@@ -14,6 +14,7 @@ The documentation consists of the following pages:
 - \subpage OPTIONS
 - \subpage OUTPUT
 - \subpage IMPL
+- \subpage FAQ
 
 The Ipopt project website is <https://github.com/coin-or/Ipopt>.
 
