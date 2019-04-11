@@ -1211,6 +1211,7 @@ void* AmplOptionsList::Keywords(
    }
 
    /* PrintLatex(jnlst); */
+   /* PrintDoxygen(jnlst); */
 
    Index n_options = NumberOfAmplOptions();
    keyword* keywords = new keyword[n_options];
@@ -1326,6 +1327,36 @@ void AmplOptionsList::PrintLatex(
       jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, " %s\n", descr.c_str());
    }
    jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, "\\end{description}\n");
+}
+
+void AmplOptionsList::PrintDoxygen(
+   SmartPtr<const Journalist> jnlst
+)
+{
+   jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, "| Option | Description |\n");
+   jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, "|:-------|:------------|\n");
+   for( std::map<std::string, SmartPtr<const AmplOption> >::iterator iter = ampl_options_map_.begin();
+        iter != ampl_options_map_.end(); ++iter )
+   {
+      if( iter->second->IpoptOptionName().length() > 0 )
+      {
+         jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, "| \\ref OPT_%s \"%s\"", iter->second->IpoptOptionName().c_str(), iter->first.c_str());
+
+         if( iter->first != iter->second->IpoptOptionName() )
+            jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, " (Ipopt name: %s)", iter->second->IpoptOptionName().c_str());
+      }
+      else
+      {
+         jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, "| %s", iter->first.c_str());
+      }
+
+      std::string descr = iter->second->Description();
+      for( std::string::iterator it = descr.begin(); it != descr.end(); ++it )
+         if( *it == '\n' )
+            *it = ';';
+
+      jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, " | %s |\n", descr.c_str());
+   }
 }
 
 char*

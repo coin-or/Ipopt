@@ -295,6 +295,10 @@ private:
       SmartPtr<const Journalist> jnlst
    );
 
+   void PrintDoxygen(
+      SmartPtr<const Journalist> jnlst
+   );
+
    /** map for storing registered AMPL options */
    std::map<std::string, SmartPtr<const AmplOption> > ampl_options_map_;
    // AW: I think it should be with const like in the following line
