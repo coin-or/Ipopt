@@ -1,7 +1,23 @@
 /**
-\mainpage Introduction
+\mainpage Overview
+
+This document is a guide to using \Ipopt.  It includes
+instructions on how to obtain and compile \Ipopt, a description of
+the interface, user options, etc., as well as a tutorial on how to
+solve a nonlinear optimization problem with \Ipopt.
+The documentation consists of the following pages:
+
+- \ref Overview
+- \subpage INSTALL
+- \subpage INTERFACES
+- \subpage SPECIALS
+- \subpage OPTIONS
+- \subpage OUTPUT
+- \subpage IMPL
 
 \tableofcontents
+
+\section Overview
 
 \Ipopt (<b>I</b>nterior <b>P</b>oint <b>O</b>imizer, pronounced "Eye-Pea-Opt") is
 an open source software package for large-scale nonlinear optimization.
@@ -25,23 +41,7 @@ differentiable). The constraints, \f$g(x)\f$, have lower and upper bounds,
 the form \f$g_i(x)=\bar g_i\f$ can be specified by setting
 \f$g^L_{i}=g^U_{i}=\bar g_i\f$.
 
-\section HISTORY_DOC History of this document
-
-The initial version of this document was created by Yoshiaki Kawajir
-(then Department of Chemical Engineering, Carnegie Mellon University, Pittsburgh PA)
-as a course project for *47852 Open Source Software for Optimization*,
-taught by Prof. François Margot at Tepper School of Business, Carnegie
-Mellon University. After this, Carl Laird (then Department of Chemical Engineering,
-Carnegie Mellon University, Pittsburgh PA) has added significant
-portions, including the very nice tutorials. The current version is
-maintained by Stefan Vigerske (GAMS Software GmbH) and Andreas Wächter
-(Department of Industrial Engineering and Management Sciences, Northwestern University).
-
-The following names used in this document are trademarks or registered
-trademarks: AMPL, IBM, Intel, Matlab, Microsoft, MKL, Visual Studio C++,
-Visual Studio C++ .NET
-
-\section MATHBACKGROUND Mathematical Background
+\subsection MATHBACKGROUND Mathematical Background
 
 \Ipopt implements an interior point line search filter
 method that aims to find a local solution of \ref NLP "(NLP)". The mathematical details of the algorithm can
@@ -52,7 +52,7 @@ be found in several publications
 \cite WaeBie05:filterglobal,
 \cite WaeBie05:filterlocal.
 
-\section AVAILABILITY Availability
+\subsection AVAILABILITY Availability
 
 The \Ipopt package is available from [COIN-OR](http://www.coin-or.org)
 under the EPL (Eclipse Public License)
@@ -77,7 +77,7 @@ the \Ipopt project home page where we list publications,
 projects, etc., in which \Ipopt has been used. We would be
 very happy to hear about your experiences. -->
 
-\section PREREQUISITES Prerequisites
+\subsection PREREQUISITES Prerequisites
 
 In order to build \Ipopt, some third party components are
 required:
@@ -213,7 +213,7 @@ versions newer than 4.5.2 (versions 4.5.1, 4.5.2, and before 4.2.0 are
 known to have bugs that caused issues with some of the newer Fortran 90
 HSL linear solvers).
 
-\section HOWTOUSE How to use Ipopt
+\subsection HOWTOUSE How to use Ipopt
 
 If desired, the \Ipopt distribution generates an executable
 for the modeling environment AMPL. As well, you can link your problem
@@ -322,7 +322,7 @@ maintained by other people, among them are:
 
     A Scilab interface is available at http://forge.scilab.org/index.php/p/sci-ipopt.
 
-\section MOREINFO More Information and Contributions
+\subsection MOREINFO More Information and Contributions
 
 More and up-to-date information can be found at the \Ipopt
 homepage,
@@ -375,7 +375,7 @@ debug your particular optimization problem.
 A short tutorial on getting started with \Ipopt is also
 available \cite Waechter90Minutes.
 
-\section HISTORY_IPOPT History of Ipopt
+\subsection HISTORY_IPOPT History of Ipopt
 
 The original \Ipopt(Fortran version) was a product of the
 dissertation research of Andreas Wächter \cite WaechterPhD, under the
@@ -397,4 +397,21 @@ The new C++ version of the \Ipopt optimization code
 remains part of the COIN-OR initiative. The development on the Fortran
 version has ceased, but the source code can still be downloaded from
 <https://www.coin-or.org/Ipopt/ipopt-fortran.html>.
+
+\subsection HISTORY_DOC History of this document
+
+The initial version of this document was created by Yoshiaki Kawajir
+(then Department of Chemical Engineering, Carnegie Mellon University, Pittsburgh PA)
+as a course project for *47852 Open Source Software for Optimization*,
+taught by Prof. François Margot at Tepper School of Business, Carnegie
+Mellon University. After this, Carl Laird (then Department of Chemical Engineering,
+Carnegie Mellon University, Pittsburgh PA) has added significant
+portions, including the very nice tutorials. The current version is
+maintained by Stefan Vigerske (GAMS Software GmbH) and Andreas Wächter
+(Department of Industrial Engineering and Management Sciences, Northwestern University).
+
+The following names used in this document are trademarks or registered
+trademarks: AMPL, IBM, Intel, Matlab, Microsoft, MKL, Visual Studio C++,
+Visual Studio C++ .NET
+
 */
