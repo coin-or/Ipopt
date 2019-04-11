@@ -1,5 +1,5 @@
 /**
-\page INSTALL Installing Ipopt
+\page INSTALL Installing %Ipopt
 
 \tableofcontents
 
@@ -24,7 +24,7 @@ should need to do is check the compiler versions. On a Debian-based
 distribution, you can obtain all necessary tools with the following
 command:
 
-      sudo apt-get install gcc g++ gfortran git patch wget
+    sudo apt-get install gcc g++ gfortran git patch wget
 
 Replace apt-get with your relevant package manager, e.g. yum for Red
 Hat-based distributions, zypper for SUSE, etc. The g++ and gfortran

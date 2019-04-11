@@ -1,5 +1,5 @@
 /**
-\page INTERFACES Interfacing your NLP to Ipopt
+\page INTERFACES Interfacing your NLP to %Ipopt
 
 \tableofcontents
 
@@ -368,9 +368,11 @@ function could not be evaluated at the required point.
 
 \ref Ipopt::TNLP::get_nlp_info
 
+<blockquote>
 \snippet IpTNLP.hpp TNLP_get_nlp_info
 
 \copydoc Ipopt::TNLP::get_nlp_info
+</blockquote>
 
 Our example problem has 4 variables (n), and 2 constraints (m). The
 constraint Jacobian for this small problem is actually dense and has 8
@@ -386,9 +388,11 @@ point. This information is set once for the entire problem.
 
 \ref Ipopt::TNLP::get_bounds_info
 
+<blockquote>
 \snippet IpTNLP.hpp TNLP_get_bounds_info
 
 \copydoc Ipopt::TNLP::get_bounds_info
+</blockquote>
 
 In our example, the first constraint has a lower bound of 25 and no
 upper bound, so we set the lower bound of constraint to 25 and the
@@ -402,9 +406,11 @@ not treat it as two inequalities.
 
 \ref Ipopt::TNLP::get_starting_point
 
+<blockquote>
 \snippet IpTNLP.hpp TNLP_get_starting_point
 
 \copydoc Ipopt::TNLP::get_starting_point
+</blockquote>
 
 In our example, we provide initial values for \f$x\f$ as specified in the
 example problem. We do not provide any initial values for the dual
@@ -416,9 +422,11 @@ asked for them.
 
 \ref Ipopt::TNLP::eval_f
 
+<blockquote>
 \snippet IpTNLP.hpp TNLP_eval_f
 
 \copydoc Ipopt::TNLP::eval_f
+</blockquote>
 
 For our example, we ignore the `new_x` flag and calculate the objective.
 
@@ -427,9 +435,11 @@ For our example, we ignore the `new_x` flag and calculate the objective.
 
 \ref Ipopt::TNLP::eval_grad_f
 
+<blockquote>
 \snippet IpTNLP.hpp TNLP_eval_grad_f
 
 \copydoc Ipopt::TNLP::eval_grad_f
+</blockquote>
 
 In our example, we ignore the new\_x flag and calculate the values for
 the gradient of the objective.
@@ -439,9 +449,11 @@ the gradient of the objective.
 
 \ref Ipopt::TNLP::eval_g
 
+<blockquote>
 \snippet IpTNLP.hpp TNLP_eval_g
 
 \copydoc Ipopt::TNLP::eval_g
+</blockquote>
 
 In our example, we ignore the new_x flag and calculate the values of
 constraint functions.
@@ -451,9 +463,11 @@ constraint functions.
 
 \ref Ipopt::TNLP::eval_jac_g
 
+<blockquote>
 \snippet IpTNLP.hpp TNLP_eval_jac_g
 
 \copydoc Ipopt::TNLP::eval_jac_g
+</blockquote>
 
 In our example, the Jacobian is actually dense, but we still specify it
 using the sparse format.
@@ -463,9 +477,11 @@ using the sparse format.
 
 \ref Ipopt::TNLP::eval_h
 
+<blockquote>
 \snippet IpTNLP.hpp TNLP_eval_h
 
 \copydoc Ipopt::TNLP::eval_h
+</blockquote>
 
 In our example, the Hessian is dense, but we still specify it using the
 sparse matrix format. Because the Hessian is symmetric, we only need to
@@ -476,11 +492,13 @@ specify the lower left corner.
 
 \ref Ipopt::TNLP::finalize_solution
 
+<blockquote>
 This is the only method that is not mentioned in the beginning of this section.
 
 \snippet IpTNLP.hpp TNLP_finalize_solution
 
 \copydoc Ipopt::TNLP::finalize_solution
+</blockquote>
 
 In our example, we will print the values of some of the variables to the
 screen.
@@ -639,69 +657,87 @@ callback is already available in the C and Fortran interfaces.
 
 \ref Ipopt::TNLP::intermediate_callback
 
+<blockquote>
 \snippet IpTNLP.hpp TNLP_intermediate_callback
 
 \copydoc Ipopt::TNLP::intermediate_callback
+</blockquote>
 
 
 \ref Ipopt::TNLP::get_scaling_parameters
 
+<blockquote>
 \snippet IpTNLP.hpp TNLP_get_scaling_parameters
 
 \copydoc Ipopt::TNLP::get_scaling_parameters
+</blockquote>
 
 
 \ref Ipopt::TNLP::get_number_of_nonlinear_variables
 
+<blockquote>
 This method is called only if the \ref QUASI_NEWTON "quasi-Newton approximation" is selected.
 
 \snippet IpTNLP.hpp TNLP_get_number_of_nonlinear_variables
 
 \copydoc Ipopt::TNLP::get_number_of_nonlinear_variables
+</blockquote>
 
 
 \ref Ipopt::TNLP::get_list_of_nonlinear_variables
 
+<blockquote>
 This method is called only if the \ref QUASI_NEWTON "quasi-Newton approximation" is selected.
 
 \snippet IpTNLP.hpp TNLP_get_list_of_nonlinear_variables
 
 \copydoc Ipopt::TNLP::get_list_of_nonlinear_variables
+</blockquote>
 
 
 \ref Ipopt::TNLP::get_variables_linearity
 
+<blockquote>
 \snippet IpTNLP.hpp TNLP_get_variables_linearity
 
 \copydoc Ipopt::TNLP::get_variables_linearity
+</blockquote>
 
 
 \ref Ipopt::TNLP::get_constraints_linearity
 
+<blockquote>
 \snippet IpTNLP.hpp TNLP_get_constraints_linearity
 
 \copydoc Ipopt::TNLP::get_constraints_linearity
+</blockquote>
 
 
 \ref Ipopt::TNLP::get_var_con_metadata
 
+<blockquote>
 \snippet IpTNLP.hpp TNLP_get_var_con_metadata
 
 \copydoc Ipopt::TNLP::get_var_con_metadata
+</blockquote>
 
 
 \ref Ipopt::TNLP::finalize_metadata
 
+<blockquote>
 \snippet IpTNLP.hpp TNLP_finalize_metadata
 
 \copydoc Ipopt::TNLP::finalize_metadata
+</blockquote>
 
 
 \ref Ipopt::TNLP::get_warm_start_iterate
 
+<blockquote>
 \snippet IpTNLP.hpp TNLP_get_warm_start_iterate
 
 \copydoc Ipopt::TNLP::get_warm_start_iterate
+</blockquote>
 
 
 \subsection INTERFACE_C The C Interface
@@ -788,7 +824,7 @@ constraint bounds. The first constraint has a lower bound of 25 and no
 upper bound. Here we set the upper bound to `2e19`. \Ipopt interprets any
 number greater than or equal to the value of option \ref OPT_nlp_upper_bound_inf "nlp_upper_bound_inf"
 as infinity. The default value of \ref OPT_nlp_lower_bound_inf "nlp_lower_bound_inf"
-\ref OPT_nlp_upper_bound_inf "nlp_upper_bound_inf" is `-1e19` and `1e19`,
+and \ref OPT_nlp_upper_bound_inf "nlp_upper_bound_inf" is `-1e19` and `1e19`,
 respectively, and can be changed through \Ipopt options.
 The second constraint is an equality with right hand side 40,
 so we set both the upper and the lower bound to 40.
@@ -897,12 +933,12 @@ The only special things to consider are:
 This section is based on documentation by Rafael de Pelegrini Soares
 (VRTech Industrial Technologies).
 
-The Java interface offers an abstract base class Ipopt with basic
-methods to specify an NLP, set a number of \Ipopt options,
+The Java interface offers an abstract base class \ref org.coinor.Ipopt "Ipopt"
+with basic methods to specify an NLP, set a number of \Ipopt options,
 to request \Ipopt to solve the NLP, and to retrieve a found
 solution, if any. A HTML documentation of all available interface
-methods of the Ipopt class can be generated via javadoc by executing
-make doc in the `JIpopt` build directory.
+methods of the \ref org.coinor.Ipopt "Ipopt" class can be generated via
+javadoc by executing make doc in the `JIpopt` build directory.
 
 In the following, we discuss necessary steps to implement example (HS071)
 with `JIpopt`.
@@ -1058,7 +1094,7 @@ After the hard part is done, we only have to define the initial values,
 the lower and upper bounds of the control variables, and the lower and
 upper bounds of the constraints. If a variable or a constraint does not
 have lower or upper bounds, the values `-Inf` or `Inf` can be used. If
-the upper and lower bounds of a constraint are equal, Ipopt recognizes
+the upper and lower bounds of a constraint are equal, \Ipopt recognizes
 this as an equality constraint and acts accordingly.
 \code{.unparsed}
 > # initial values

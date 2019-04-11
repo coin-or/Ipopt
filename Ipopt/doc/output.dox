@@ -1,5 +1,5 @@
 /**
-\page OUTPUT Ipopt Output
+\page OUTPUT %Ipopt Output
 
 This pages describes the standard \Ipopt console output
 with the default setting for option \ref OPT_print_level "print_level".
@@ -232,7 +232,7 @@ output message to the console, and a brief description.
 
 - `NonIpopt_Exception_Thrown`:
 
-   Console Message: `Unknown Exception caught in Ipopt`
+   Console Message: `Unknown Exception caught in %Ipopt`
    
    An unknown exception was caught in \Ipopt. This exception could have
    originated from your model or any linked in third party code.

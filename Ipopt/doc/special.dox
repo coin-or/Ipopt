@@ -204,7 +204,7 @@ of the warm-start feature on the HS071 problem, see also \ref INTERFACE_AMPL.
 This section is based on documentation by Hans Pirnay (RWTH Aachen) and
 Rodrigo López-Negrete (Carnegie Mellon University).
 
-The \sIpopt project provides a toolbox that uses NLP sensitivity theory
+The `sIpopt` project provides a toolbox that uses NLP sensitivity theory
 to generate fast approximations to solutions when parameters in the
 problem change. It has been developed primarily by
 Hans Pirnay (RWTH-Aachen), Rodrigo López-Negrete (CMU), and Lorenz
@@ -223,22 +223,22 @@ and approximate perturbed solutions with them.
 
 The basic sensitivity strategy implemented here is based on the
 application of the Implicit Function Theorem (IFT) to the KKT conditions
-of the NLP. As shown by Fiacco (1983) <-- TODO add cite-->, sensitivities can be obtained
+of the NLP. As shown by Fiacco \cite Fiacco1983, sensitivities can be obtained
 from a solution with suitable regularity conditions merely by solving a
 linearization of the KKT conditions. More details can be found in
-\cite PLNB:sIpopt. If you are using \sIpopt for your research,
+\cite PLNB:sIpopt. If you are using `sIpopt` for your research,
 please cite \cite PLNB:sIpopt.
 
-The \sIpopt project is available in the \Ipopt repository under
+The `sIpopt` project is available in the \Ipopt repository under
 `$IPOPTDIR/Ipopt/contrib/sIPOPT`. After having installed
-\Ipopt successfully, \sIpopt can be build and
+\Ipopt successfully, `sIpopt` can be build and
 installed by changing to the directory
 `$IPOPTDIR/build/Ipopt/contrib/sIPOPT` and executing make install. This
 should copy the generated libraries `libsipopt.*` to `$IPOPTDIR/build/lib`
 and an AMPL executable `ipopt_sens` to `$IPOPTDIR/build/bin`.
 
 The files `$IPOPTDIR/Ipopt/contrib/sIPOPT/examples/parametric_ampl/parametric.{mod,run}`
-are an example that shows how to use \sIpopt to solve the NLP
+are an example that shows how to use `sIpopt` to solve the NLP
 \f{align*}{
 \min\quad & x_1^2 + x_2^2 + x_3^2, \\
 \text{such that}\quad & 6x_1 + 3x_2 + 2x_3 = p_1, \\
@@ -247,14 +247,14 @@ are an example that shows how to use \sIpopt to solve the NLP
 \f} where we perturb the parameters
 \f$p_1\f$ and \f$p_2\f$ from \f$p_a = (p_1, p_2) = (5, 1)\f$ to \f$p_b = (4.5, 1)\f$.
 
-Note, that \sIpopt has been developed under the constraint
+Note, that `sIpopt` has been developed under the constraint
 that it must work with the regular \Ipopt code. Due to this
 constraint, some compromises had to be made. However, there is an
-<!--ongoing--> effort to develop \sIpopt 2, which is a fork of the
+<!--ongoing--> effort to develop `sIpopt` 2, which is a fork of the
 \Ipopt code that allows for the explicit definition of
 parametric NLPs. This code can be found at
 <https://github.com/athrpf/sipopt2>. If you have questions about
-\sIpopt 2, please contact ​Hans Pirnay.
+`sIpopt` 2, please contact ​Hans Pirnay.
 
 \section INERTIAFREE_CURVTEST Inertia-Free Curvature Test
 

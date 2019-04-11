@@ -229,7 +229,7 @@ TAB_SIZE               = 3
 # newlines.
 
 # the "value=" is to suppress a warning due to javadoc commands in the JIpopt comments
-ALIASES                = "Ipopt=`%Ipopt`" "sIpopt=`sIpopt`" "value="
+ALIASES                = "Ipopt=`%Ipopt`" "value="
 
 # This tag can be used to specify a number of word-keyword mappings (TCL only).
 # A mapping has the form "name=value". For example adding "class=itcl::class"
