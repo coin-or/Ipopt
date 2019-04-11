@@ -2,8 +2,8 @@
 \page OUTPUT Ipopt Output
 
 This pages describes the standard \Ipopt console output
-with the default setting for option `print_level`. The output is designed
-to provide a quick summary of each iteration as \Ipopt solves the problem.
+with the default setting for option \ref OPT_print_level "print_level".
+The output is designed to provide a quick summary of each iteration as \Ipopt solves the problem.
 
 Before \Ipopt starts to solve the problem, it displays the
 problem statistics (number of nonzero-elements in the matrices, number
@@ -35,8 +35,8 @@ and the columns of output are defined as,
     quantity is the infinity-norm (max) of the (unscaled) constraints
     (\f$g^L \leq g(x) \leq g^U\f$ in (NLP)). During the restoration phase, this
     value remains the constraint violation of the original problem at
-    the current point. The option `inf_pr_output` can be used to switch to the printing
-    of a different quantity.
+    the current point. The option \ref OPT_inf_pr_output "inf_pr_output"
+    can be used to switch to the printing of a different quantity.
 
 - inf_du: The scaled dual infeasibility at the current point. This quantity
     measure the infinity-norm (max) of the internal dual infeasibility,
@@ -113,9 +113,9 @@ output message to the console, and a brief description.
    
    This indicates that the algorithm did not converge to the "desired"
    tolerances, but that it was able to obtain a point satisfying the
-   "acceptable" tolerance level as specified by the `acceptable_tol` options.
-   This may happen if the desired tolerances are too small for the current
-   problem.
+   "acceptable" tolerance level as specified by the \ref OPT_acceptable_tol "acceptable_tol"
+   options. This may happen if the desired tolerances are too small for
+   the current problem.
 
 - `Feasible_Point_Found`:
 
@@ -153,8 +153,8 @@ output message to the console, and a brief description.
    Console Message: `EXIT: Iterates divering; problem might be unbounded.`
    
    This message is printed if the max-norm of the iterates becomes
-   larger than the value of the option `diverging_iterates_tol`. This can
-   happen if the problem is unbounded below and the iterates are diverging.
+   larger than the value of the option \ref OPT_diverging_iterates_tol "diverging_iterates_tol".
+   This can happen if the problem is unbounded below and the iterates are diverging.
    
 - `User_Requested_Stop`:
 
@@ -168,14 +168,14 @@ output message to the console, and a brief description.
    Console Message: `EXIT: Maximum Number of Iterations Exceeded.`
    
    This indicates that \Ipopt has exceeded the maximum
-   number of iterations as specified by the option `max_iter`.
+   number of iterations as specified by the option \ref OPT_max_iter "max_iter".
 
 - `Maximum_CpuTime_Exceeded`:
 
    Console Message: `EXIT: Maximum CPU time exceeded.`
    
    This indicates that \Ipopt has exceeded the maximum
-   number of CPU seconds as specified by the option `max_cpu_time`.
+   number of CPU seconds as specified by the option \ref OPT_max_cpu_time "max_cpu_time".
 
 - `Restoration_Failed`:
 
@@ -196,7 +196,7 @@ output message to the console, and a brief description.
    matrix. Usually, the value of the regularization parameter then
    becomes too large. One situation where this can happen is when
    values in the Hessian are invalid (NaN or Inf). You can check
-   whether this is true by using the option `check_derivatives_for_naninf`.
+   whether this is true by using the option \ref OPT_check_derivatives_for_naninf "check_derivatives_for_naninf".
 
 - `Invalid_Option`:
 
@@ -212,7 +212,7 @@ output message to the console, and a brief description.
    This indicates that your problem, as specified, has too few degrees
    of freedom. This can happen if you have too many equality
    constraints, or if you fix too many variables (\Ipopt
-   removes fixed variables by default, see also the option `fixed_variable_treatment`).
+   removes fixed variables by default, see also the option \ref OPT_fixed_variable_treatment "fixed_variable_treatment").
 
 - `Invalid_Problem_Definition`:
 
@@ -255,7 +255,7 @@ output message to the console, and a brief description.
 <!--\section DIAGTAGS Diagnostic Tags for Ipopt -->
 
 To print additional diagnostic tags for each iteration of
-\Ipopt, set the option `print_info_string` to `yes`. With this, a tag will
+\Ipopt, set the option \ref OPT_print_info_string "print_info_string" to `yes`. With this, a tag will
 appear at the end of an iteration line with the following diagnostic
 meaning that are useful to flag difficulties for a particular
 \Ipopt run.

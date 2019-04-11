@@ -41,7 +41,7 @@ options ipopt_options "nlp_scaling_method=none mu_init=1e-2 max_iter=500"
 \endverbatim
 is a valid options command in AMPL. The most important options are
 referenced in \ref OPTIONS_REF. To see which options are available through
-AMPL, you can run the AMPL solver executable with the "-=" flag from the
+AMPL, see \ref OPTIONS_AMPL, or run the AMPL solver executable with the "-=" flag from the
 command prompt. To specify other options when using AMPL, you can always
 create `ipopt.opt`. Note, the `ipopt.opt` file is given preference when
 setting options. This way, you can easily override any options set in a

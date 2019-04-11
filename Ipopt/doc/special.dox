@@ -11,7 +11,7 @@ As a convenient feature, \Ipopt provides the option to run
 a simple derivative checker, based on finite differences, before the
 optimization is started.
 
-To use the derivative checker, you need to use the option `derivative_test`.
+To use the derivative checker, you need to use the option \ref OPT_derivative_test "derivative_test".
 By default, this option is set to `none`, i.e., no finite difference test
 is performed. If it is set to `first-order`, then the first derivatives of the
 objective function and the constraints are verified, and for the setting
@@ -20,7 +20,7 @@ objective function and the constraints are verified, and for the setting
 The verification is done by a simple finite differences approximation,
 where each component of the user-provided starting point is perturbed
 one of the other. The relative size of the perturbation is determined by
-the option `derivative_test_perturbation`. The default value
+the option \ref OPT_derivative_test_perturbation "derivative_test_perturbation". The default value
 (10<sup>-8</sup>, about the square root of the machine precision)
 is probably fine in most cases, but if you believe
 that you see wrong warnings, you might want to play with this parameter.
@@ -28,9 +28,9 @@ When the test is performed, \Ipopt prints out a line for
 every partial derivative, for which the user-provided derivative value
 deviates too much from the finite difference approximation. The relative
 tolerance for deciding when a warning should be issued, is determined by
-the option `derivative_test_tol`. If you want to see the user-provided and estimated
+the option \ref OPT_derivative_test_tol "derivative_test_tol". If you want to see the user-provided and estimated
 derivative values with the relative deviation for each single partial
-derivative, you can switch the option `derivative_test_print_all` to `yes`.
+derivative, you can switch the option \ref OPT_derivative_test_print_all "derivative_test_print_all" to `yes`.
 
 A typical output is:
 \verbatim
@@ -87,16 +87,17 @@ derivatives. Also, since the finite difference approximations are quite
 expensive, you should try to debug a small instance of your problem if
 you can.
 
-Another useful option is `derivative_test_first_index` which allows your to start the derivative test
-with variables with a larger index. Finally, it is of course always a
-good idea to run your code through some memory checker, such as valgrind
-on Linux.
+Another useful option is \ref OPT_derivative_test_first_index "derivative_test_first_index"
+which allows your to start the derivative test with variables with a
+larger index. Finally, it is of course always a good idea to run your
+code through some memory checker, such as valgrind on Linux.
 
 \section QUASI_NEWTON Quasi-Newton Approximation of Second Derivatives
 
 \Ipopt has an option to approximate the Hessian of the
 Lagrangian by a limited-memory quasi-Newton method (L-BFGS). You can use
-this feature by setting the option `hessian_approximation` to the value `limited-memory`.
+this feature by setting the option \ref OPT_hessian_approximation "hessian_approximation"
+to the value `limited-memory`.
 In this case, it is not necessary to implement the Hessian computation method
 Ipopt::TNLP::eval_h. If you are using the C or Fortran interface, you still
 need to implement these functions, but they should return `false` or
@@ -168,9 +169,9 @@ If the user does not specify some of these values, \Ipopt
 will set these multipliers to 1.0 (as before). In order to make the
 warm-start effective, the user has control over the following options
 from AMPL:
-- `warm_start_init_point`
-- `warm_start_bound_push`
-- `warm_start_mult_bound_push`
+- \ref OPT_warm_start_init_point "warm_start_init_point"
+- \ref OPT_warm_start_bound_push "warm_start_bound_push"
+- \ref OPT_warm_start_mult_bound_push "warm_start_mult_bound_push"
 
 Note, that the use of this feature is far from solving the complicated
 issue of warm-starting interior-point algorithms. As a general advice,
@@ -190,7 +191,8 @@ increase the number of iterations).
 You might also want to try the adaptive barrier update (instead of the
 default monotone one where above we chose the initial value 10<sup>-6</sup>)
 when doing the warm start. This can be activated by setting the option
-`mu_strategy` to `adaptive`. Also the option `mu_oracle` gives some alternative choices.
+\ref OPT_mu_strategy "mu_strategy" to `adaptive`. Also the option
+\ref OPT_mu_oracle "mu_oracle" gives some alternative choices.
 In general, the adaptive choice often leads to less iterations, but the
 computational cost per iteration might be higher.
 
@@ -291,6 +293,7 @@ particularly beneficial in problems that are inherently ill-conditioned
 and require significant amounts of regularization.
 
 The inertia-free capability implemented in \Ipopt is
-controlled by the options `neg_curv_test_tol` and `neg_curv_test_reg`.
+controlled by the options \ref OPT_neg_curv_test_tol "neg_curv_test_tol"
+and \ref OPT_neg_curv_test_reg "neg_curv_test_reg".
 
 */
