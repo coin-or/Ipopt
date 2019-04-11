@@ -433,6 +433,16 @@ void RegisteredOption::OutputDoxygenDescription(
          }
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
       }
+
+      /*
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "Possible values:\n");
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "|Value|Description|\n");
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "|:----|:----------|\n");
+      for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end(); i++ )
+      {
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "|%s|%s|\n", i->value_.c_str(), i->description_.c_str());
+      }
+      */
    }
    jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "</blockquote>\n\n");
 }
