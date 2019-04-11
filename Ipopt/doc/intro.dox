@@ -1,5 +1,5 @@
 /**
-\mainpage Overview
+\mainpage Documentation
 
 This document is a guide to using \Ipopt.  It includes
 instructions on how to obtain and compile \Ipopt, a description of
@@ -15,11 +15,13 @@ The documentation consists of the following pages:
 - \subpage OUTPUT
 - \subpage IMPL
 
+The Ipopt project website is <https://github.com/coin-or/Ipopt>.
+
 \tableofcontents
 
 \section Overview
 
-\Ipopt (<b>I</b>nterior <b>P</b>oint <b>O</b>imizer, pronounced "Eye-Pea-Opt") is
+\Ipopt (<b>I</b>nterior <b>P</b>oint <b>O</b>ptimizer, pronounced "Eye-Pea-Opt") is
 an open source software package for large-scale nonlinear optimization.
 It can be used to solve general nonlinear programming problems of the
 form \anchor NLP
