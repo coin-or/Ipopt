@@ -314,6 +314,166 @@ std::string RegisteredOption::MakeValidLatexNumber(
    return dest;
 }
 
+void RegisteredOption::OutputDoxygenDescription(
+   const Journalist& jnlst
+) const
+{
+   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\anchor OPT_%s\n <strong>%s</strong>", name_.c_str(), name_.c_str());
+   if( short_description_.length() > 0 )
+   {
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, ": %s", short_description_.c_str());
+   }
+   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n<blockquote>\n");
+
+   if( long_description_ != "" )
+   {
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " ");
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, long_description_.c_str());
+   }
+
+   if( type_ == OT_Number )
+   {
+      std::string buff;
+      if( has_lower_ || has_upper_ )
+      {
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " The valid range for this real option is ");
+         if( has_lower_ )
+         {
+            buff = MakeValidHTMLNumber(lower_);
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, buff.c_str());
+
+            if( !lower_strict_ )
+            {
+               jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " &le; ");
+            }
+            else
+            {
+               jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " < ");
+            }
+         }
+         //else
+         //{
+         //   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "-&infin; < ");
+         //}
+
+
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, name_.c_str());
+
+         if( has_upper_ )
+         {
+            if( !upper_strict_ )
+            {
+               jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " &le; ");
+            }
+            else
+            {
+               jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " < ");
+            }
+
+            buff = MakeValidHTMLNumber(upper_);
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, buff.c_str());
+         }
+         // else
+         // {
+         //   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "< &infin;");
+         //}
+      }
+      else
+      {
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " The valid range for this real option is unrestricted");
+      }
+
+      buff = MakeValidHTMLNumber(default_number_);
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " and its default value is %s.\n\n", buff.c_str());
+
+   }
+   else if( type_ == OT_Integer )
+   {
+      if( has_lower_ || has_upper_ )
+      {
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " The valid range for this integer option is ");
+         if( has_lower_ )
+         {
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%d &le; ", (Index) lower_);
+         }
+         //else
+         //{
+         //   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "-&infin; < ");
+         //}
+
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, name_.c_str());
+
+         if( has_upper_ )
+         {
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " &le; %d", (Index) upper_);
+         }
+         //else
+         //{
+         //   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " < &infin;");
+         //}
+      }
+      else
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " The valid range for this integer option is unrestricted");
+
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " and its default value is %d.\n\n", (Index) default_number_);
+   }
+   else if( type_ == OT_String )
+   {
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " The default value for this string option is \"%s\".\n", default_string_.c_str());
+
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\nPossible values:\n");
+      for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end(); i++ )
+      {
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " - %s", i->value_.c_str());
+
+         if( (*i).description_.length() > 0 )
+         {
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, ": ");
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, i->description_.c_str());
+         }
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
+      }
+   }
+   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "</blockquote>\n\n");
+}
+
+std::string RegisteredOption::MakeValidHTMLNumber(
+   Number value
+) const
+{
+   char buffer[256];
+   Snprintf(buffer, 255, "%g", value);
+   std::string source = buffer;
+   std::string dest;
+
+   std::string::iterator c;
+   bool found_e = false;
+   for( c = source.begin(); c != source.end(); c++ )
+   {
+      if( *c == 'e' )
+      {
+         found_e = true;
+         if( dest == "1" )
+            dest = "";
+         else if( dest == "-1" )
+            dest = "-";
+         else
+            dest.append(" &middot; ");
+         dest += "10<sup>";
+      }
+      else
+      {
+         dest += *c;
+      }
+   }
+   if( found_e )
+   {
+      dest.append("</sup>");
+   }
+
+   return dest;
+}
+
 void RegisteredOption::OutputShortDescription(
    const Journalist& jnlst
 ) const
@@ -1098,4 +1258,43 @@ void RegisteredOptions::OutputLatexOptionDocumentation(
       }
    }
 }
+
+void RegisteredOptions::OutputDoxygenOptionDocumentation(
+   const Journalist&       jnlst,
+   std::list<std::string>& options_to_print
+)
+{
+
+   if( !options_to_print.empty() )
+   {
+      std::list<std::string>::iterator coption;
+      for( coption = options_to_print.begin(); coption != options_to_print.end(); coption++ )
+      {
+         // std::map <std::string, SmartPtr<RegisteredOption> >::iterator option;
+         if( (*coption)[0] == '#' )
+         {
+            std::string anchorname = &coption->c_str()[1];
+            for( std::string::iterator it = anchorname.begin(); it != anchorname.end(); ++it )
+               if( *it == ' ' )
+                  *it = '_';
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\subsection OPT_%s %s\n\n", anchorname.c_str(), &coption->c_str()[1]);
+         }
+         else
+         {
+            SmartPtr<RegisteredOption> option = registered_options_[*coption];
+            DBG_ASSERT(IsValid(option));
+            option->OutputDoxygenDescription(jnlst);
+         }
+      }
+   }
+   else
+   {
+      std::map<std::string, SmartPtr<RegisteredOption> >::iterator option;
+      for( option = registered_options_.begin(); option != registered_options_.end(); option++ )
+      {
+         option->second->OutputDoxygenDescription(jnlst);
+      }
+   }
+}
+
 } // namespace Ipopt

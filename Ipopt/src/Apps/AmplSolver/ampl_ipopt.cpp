@@ -42,24 +42,31 @@ int main(
    if( argc == 2 )
    {
       bool print_options = false;
-      bool print_latex_options = false;
-      if( !strcmp(args[1], "--print-options") )
+      std::string print_options_mode("text");
+      if( !strcmp(args[1], "--print-options=latex") )
+      {
+         print_options = true;
+         print_options_mode = "latex";
+      }
+      else if( !strcmp(args[1], "--print-options=doxygen") )
+      {
+         print_options = true;
+         print_options_mode = "doxygen";
+      }
+      else if( !strcmp(args[1], "--print-options") )
       {
          print_options = true;
       }
       else if( !strcmp(args[1], "--print-latex-options") )
       {
-         print_options = true;
-         print_latex_options = true;
+         fprintf(stderr, "ampl_ipopt.cpp: Options --print-latex-options has been replaced by --print-options=latex. Please adjust your call.\n");
+         exit(-200);
       }
       if( print_options )
       {
          SmartPtr<OptionsList> options = app->Options();
          options->SetStringValue("print_options_documentation", "yes");
-         if( print_latex_options )
-         {
-            options->SetStringValue("print_options_latex_mode", "yes");
-         }
+         options->SetStringValue("print_options_mode", print_options_mode);
          app->Initialize("");
          return 0;
       }

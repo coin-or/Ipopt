@@ -225,9 +225,9 @@ ApplicationReturnStatus IpoptApplication::Initialize(
       options_->GetBoolValue("print_options_documentation", print_options_documentation, "");
       if( print_options_documentation )
       {
-         bool latex;
-         options_->GetBoolValue("print_options_latex_mode", latex, "");
-         if( latex )
+         std::string printmode;
+         options_->GetStringValue("print_options_mode", printmode, "");
+         if( printmode != "text" )
          {
             std::list<std::string> options_to_print;
             options_to_print.push_back("#Output");
@@ -477,7 +477,10 @@ ApplicationReturnStatus IpoptApplication::Initialize(
             options_to_print.push_back("wsmp_singularity_threshold");
 #endif
 
-            reg_options_->OutputLatexOptionDocumentation(*jnlst_, options_to_print);
+            if( printmode == "latex" )
+               reg_options_->OutputLatexOptionDocumentation(*jnlst_, options_to_print);
+            else
+               reg_options_->OutputDoxygenOptionDocumentation(*jnlst_, options_to_print);
          }
          else
          {
@@ -687,8 +690,9 @@ void IpoptApplication::RegisterOptions(
          "that method.");
 
    roptions->SetRegisteringCategory("Undocumented");
-   roptions->AddStringOption2("print_options_latex_mode", "Undocumented", "no", "no", "Undocumented", "yes",
-      "Undocumented", "Undocumented");
+   roptions->AddStringOption3("print_options_mode", "Undocumented", "text", "text", "Ordinary text",
+      "latex", "LaTeX formatted",
+      "doxygen", "Doxygen (markdown) formatted");
    roptions->AddStringOption2("suppress_all_output", "Undocumented", "no", "no", "Undocumented", "yes", "Undocumented",
       "Undocumented");
 #ifdef BUILD_INEXACT

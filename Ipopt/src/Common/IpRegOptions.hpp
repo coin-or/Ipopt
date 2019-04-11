@@ -500,6 +500,11 @@ public:
       const Journalist& jnlst
    ) const;
 
+   /** output a doxygen version */
+   virtual void OutputDoxygenDescription(
+      const Journalist& jnlst
+   ) const;
+
 private:
    std::string name_;
    std::string short_description_;
@@ -521,6 +526,10 @@ private:
    ) const;
 
    std::string MakeValidLatexNumber(
+      Number value
+   ) const;
+
+   std::string MakeValidHTMLNumber(
       Number value
    ) const;
 
@@ -863,6 +872,12 @@ public:
 
    /** Output documentation in Latex format to include in a latex file */
    virtual void OutputLatexOptionDocumentation(
+      const Journalist&       jnlst,
+      std::list<std::string>& categories
+   );
+
+   /** Output documentation in Doxygen format to include in doxygen documentation */
+   virtual void OutputDoxygenOptionDocumentation(
       const Journalist&       jnlst,
       std::list<std::string>& categories
    );
