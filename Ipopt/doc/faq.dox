@@ -37,7 +37,7 @@ The \Ipopt documentation gives detailed instructions on how to obtain and compil
 
 Convenient configuration scripts and Makefiles are provided and have been tested for several flavors of UNIX (Mac OS X, AIX, IRIX, Linux, OSF1, SunOS).
 The code has also been successfully compiled with the Developer Studio under Windows.
-A native win32 compilation can also be done using MinGW/MSYS [see Hints and Tricks](http://projects.coin-or.org/Ipopt/wiki/HintsAndTricks).
+A native win32 compilation can also be done using MinGW/MSYS [see Hints and Tricks](https://github.com/coin-or/Ipopt/wiki/HintsAndTricks).
 IPOPT had also been run on an old iPod, as well as BlueGene.
 
 ## Is \Ipopt thread-safe?

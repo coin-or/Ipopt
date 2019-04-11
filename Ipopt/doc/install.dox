@@ -12,7 +12,7 @@ interfaces is available on the \Ipopt and CoinHelp wiki
 pages, in particular
 
 - \Ipopt compilation hints:
-    <https://projects.coin-or.org/Ipopt/wiki/CompilationHints>
+    <https://github.com/coin-or/Ipopt/wiki/CompilationHints>
 
 - Current configuration and installation issues for COIN-OR projects:
     <https://projects.coin-or.org/BuildTools/wiki/current-issues>
