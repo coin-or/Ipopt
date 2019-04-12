@@ -32,7 +32,7 @@ The COIN-OR project managers for Ipopt are [Andreas Wächter](http://users.iems.
 For a list of **all contributors**, see the [AUTHORS file](Ipopt/AUTHORS).
 
 The C++ version has first been [released on Aug 26, 2005](http://list.coin-or.org/pipermail/ipopt/2005-August/000331.html) as version 3.0.0.
-The previously released [pre-3.0 Fortran version](http://www.coin-or.org/Ipopt/ipopt-fortran.html) is no longer maintained.
+The previously released [pre-3.0 Fortran version](https://github.com/coin-or/Ipopt/tree/stable/2.3) is no longer maintained.
 
 
 The Ipopt distribution can be used to generate a library that can be linked to one's own C++, C, Fortran, or Java code, as well as a solver executable for the [AMPL](http://www.ampl.com) modeling environment.
@@ -62,7 +62,7 @@ Please refer to the [documentation](https://coin-or.github.io/Ipopt) and the [Ge
 
 **Please make sure you read the [current issues page](https://projects.coin-or.org/CoinHelp/wiki/current-issues) before you try to install Ipopt.**
 
-Also still available is the no longer maintained older [Fortran version](http://www.coin-or.org/Ipopt/ipopt-fortran.html).
+Also still available is the no longer maintained older [Fortran version](https://github.com/coin-or/Ipopt/tree/stable/2.3).
 
 Additionally, **[JuliaOpt provides Ipopt binaries](https://github.com/JuliaOpt/IpoptBuilder/releases)**,
 **[AMPL provides binaries](http://ampl.com/products/solvers/open-source/#ipopt)** for using Ipopt through AMPL,
