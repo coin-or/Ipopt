@@ -20,6 +20,8 @@ The functions `f(x)` and `g(x)` can be nonlinear and nonconvex, but should be tw
 Note that equality constraints can be formulated in the above formulation by setting the corresponding components of `g_L` and `g_U` to the same value.
 
 Ipopt is part of the [COIN-OR Initiative](http://www.coin-or.org).
+The Ipopt project webpage is <https://github.com/coin-or/Ipopt>.
+
 
 Background
 ----------
@@ -45,7 +47,7 @@ And we are certainly very keen on feedback from users, including contributions!
 In order to compile Ipopt, certain third party code is required (such as some linear algebra routines).
 Those are available under different conditions/licenses.
 
-If you want to learn more about Ipopt, you can find references in the [bibliography of the documentation](http://www.coin-or.org/Ipopt/documentation/node64.html) and this ["Papers about Ipopt" page](https://github.com/coin-or/Ipopt/wiki/IpoptPapers).
+If you want to learn more about Ipopt, you can find references in the [bibliography of the documentation](https://coin-or.github.io/Ipopt/citelist.html) and this ["Papers about Ipopt" page](https://github.com/coin-or/Ipopt/wiki/IpoptPapers).
 
 For information on projects that use Ipopt, refer to the [Success Stories page](https://github.com/coin-or/Ipopt/wiki/SuccessStories).
 
@@ -56,7 +58,7 @@ Download
 **[Download Ipopt source as tarballs.](http://www.coin-or.org/download/source/Ipopt)**
 
 You can also obtain the Ipopt code via Git.
-Please refer to the [documentation](http://www.coin-or.org/Ipopt/documentation/) and the [General Configuration and Installation Instructions for COIN-OR projects](https://projects.coin-or.org/CoinHelp/).
+Please refer to the [documentation](https://coin-or.github.io/Ipopt) and the [General Configuration and Installation Instructions for COIN-OR projects](https://projects.coin-or.org/CoinHelp/).
 
 **Please make sure you read the [current issues page](https://projects.coin-or.org/CoinHelp/wiki/current-issues) before you try to install Ipopt.**
 
@@ -67,49 +69,23 @@ Additionally, **[JuliaOpt provides Ipopt binaries](https://github.com/JuliaOpt/I
 and the **[Pardiso project provides binaries](https://pardiso-project.org/index.html#binaries)** for using Ipopt with Pardiso through Matlab.
 
 
-Documentation and Support
--------------------------
+Documentation
+-------------
 
-The [main Ipopt documentation](http://www.coin-or.org/Ipopt/documentation/) contains
- * **[Installation Instructions](http://www.coin-or.org/Ipopt/documentation/node10.html)**
-   * [Getting Ipopt code](http://www.coin-or.org/Ipopt/documentation/node12.html) and [3rd party code](http://www.coin-or.org/Ipopt/documentation/node13.html)
-   * **[Compiling Ipopt](http://www.coin-or.org/Ipopt/documentation/node14.html)** ([under Windows](http://www.coin-or.org/Ipopt/documentation/node15.html))
-   * **[Java Interface](http://www.coin-or.org/Ipopt/documentation/node16.html)**
-   * **[R Interface](http://www.coin-or.org/Ipopt/documentation/node17.html)**
-   * **[MATLAB Interface](http://www.coin-or.org/Ipopt/documentation/node18.html)**
-   * [Expert Installation Options](http://www.coin-or.org/Ipopt/documentation/node19.html)
- * **[Interfacing Ipopt](http://www.coin-or.org/Ipopt/documentation/node20.html)**
-   * [AMPL](http://www.coin-or.org/Ipopt/documentation/node21.html)
-   * [Code](http://www.coin-or.org/Ipopt/documentation/node22.html):
-     [C++](http://www.coin-or.org/Ipopt/documentation/node23.html),
-     [C](http://www.coin-or.org/Ipopt/documentation/node24.html),
-     [Fortran](http://www.coin-or.org/Ipopt/documentation/node25.html),
-     [Java](http://www.coin-or.org/Ipopt/documentation/node26.html)
-   * [R](http://www.coin-or.org/Ipopt/documentation/node27.html)
-   * [MATLAB](http://www.coin-or.org/Ipopt/documentation/node28.html)
- * **Special Features**:
-   * [Derivative Checker](http://www.coin-or.org/Ipopt/documentation/node30.html)
-   * [Hessian Approximation](http://www.coin-or.org/Ipopt/documentation/node31.html)
-   * [Warm starts via AMPL](http://www.coin-or.org/Ipopt/documentation/node32.html)
-   * [sIpopt: Optimal Sensitivity Based on AMPL/Ipopt](http://www.coin-or.org/Ipopt/documentation/node33.html)
- * **[Output](http://www.coin-or.org/Ipopt/documentation/node36.html)**
- * [Option Files](http://www.coin-or.org/Ipopt/documentation/node35.html),
-   **[Options Reference](http://www.coin-or.org/Ipopt/documentation/node40.html)**, [Options available via AMPL](http://www.coin-or.org/Ipopt/documentation/node63.html)
- * **[FAQ](https://projects.coin-or.org/Ipopt/wiki/FAQ)** (Frequently Asked Questions)
- * Source code docu
-
-Further Information:
+ * **[Ipopt Documentation](https://coin-or.github.io/Ipopt/)** with installation instructions, options reference, and more
+ * **[Ipopt Wiki](https://github.com/coin-or/Ipopt/wiki)** with more compilation hints, current issues, and hints and tricks
  * **[Mailing list archive](http://list.coin-or.org/pipermail/ipopt/)**
- * **[Compilation hints](https://github.com/coin-or/Ipopt/wiki/CompilationHints)** collected by users (partly outdated)
- * **[Current configuration and installation issues](https://projects.coin-or.org/CoinHelp/wiki/current-issues)** for COIN-OR projects
  * [General Configuration and Installation Instructions](https://projects.coin-or.org/CoinHelp/) for COIN-OR projects
  * [short Ipopt tutorial](http://drops.dagstuhl.de/volltexte/2009/2089/pdf/09061.WaechterAndreas.Paper.2089.pdf)
- * [Hints and tricks](https://github.com/coin-or/Ipopt/wiki/HintsAndTricks) on using Ipopt
 
-Getting Help:
+
+Getting Help
+------------
+
  * **[Mailing list](http://list.coin-or.org/mailman/listinfo/ipopt)**: subscribe to get notifications about updates and to post questions and comments regarding Ipopt
  * **[Issue tracking system](https://github.com/coin-or/Ipopt/issues/)**: If you believe you found a **bug** in the code, please use the issue tracking system.
    Please include as much information as possible, and if possible some (ideally simple) example code so that we can reproduce the error.
+
 
 Please Cite Us
 --------------
