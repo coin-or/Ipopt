@@ -75,6 +75,7 @@ Documentation
  * **[Ipopt Documentation](https://coin-or.github.io/Ipopt/)** with installation instructions, options reference, and more
  * **[Ipopt Wiki](https://github.com/coin-or/Ipopt/wiki)** with more compilation hints, current issues, and hints and tricks
  * **[Mailing list archive](http://list.coin-or.org/pipermail/ipopt/)**
+ * [Changelog](ChangeLog)
  * [General Configuration and Installation Instructions](https://projects.coin-or.org/CoinHelp/) for COIN-OR projects
  * [short Ipopt tutorial](http://drops.dagstuhl.de/volltexte/2009/2089/pdf/09061.WaechterAndreas.Paper.2089.pdf)
 
