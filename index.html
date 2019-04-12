@@ -28,7 +28,7 @@
     extensions: ["tex2jax.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js"></script>
 <link href="stylesheet.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -200,7 +200,7 @@ How to use Ipopt</h2>
 <p>There is also software that facilitates use of <code>Ipopt</code> maintained by other people, among them are:</p>
 <ul>
 <li><p class="startli"><a href="https://projects.coin-or.org/ADOL-C">ADOL-C</a> (automatic differentiation)</p>
-<p class="startli">ADOL-C facilitates the evaluation of first and higher derivatives of vector functions that are defined by computer programs written in C or C++. It comes with examples that show how to use it in connection with <code>Ipopt</code>.</p>
+<p class="startli">ADOL-C facilitates the evaluation of first and higher derivatives of vector functions that are defined by computer programs written in C or C++. It comes with <a href="https://projects.coin-or.org/ADOL-C/browser/stable/2.4/ADOL-C/examples/additional_examples/ipopt">examples</a> that show how to use it in connection with <code>Ipopt</code>.</p>
 </li>
 <li><p class="startli">AIMMS (modeling environment)</p>
 <p class="startli">The <a href="https://projects.coin-or.org/AIMMSlinks">AIMMSlinks project</a> on COIN-OR, maintained by Marcel Hunting, provides an interface for <code>Ipopt</code> within the AIMMS modeling tool.</p>
@@ -212,25 +212,31 @@ How to use Ipopt</h2>
 <p class="startli">CasADi is a symbolic framework for automatic differentiation and numeric optimization and comes with <code>Ipopt</code>.</p>
 </li>
 <li><p class="startli"><a href="https://projects.coin-or.org/CppAD">CppAD</a> (automatic differentiation)</p>
-<p class="startli">Given a C++ algorithm that computes function values, CppAD generates an algorithm that computes corresponding derivative values (of arbitrary order using either forward or reverse mode). It comes with an example that shows how to use it in connection with <code>Ipopt</code>.</p>
+<p class="startli">Given a C++ algorithm that computes function values, CppAD generates an algorithm that computes corresponding derivative values (of arbitrary order using either forward or reverse mode). It comes with an <a href="http://www.coin-or.org/CppAD/Doc/ipopt_solve.htm">example</a> that shows how to use it in connection with <code>Ipopt</code>.</p>
+</li>
+<li><p class="startli"><a href="https://github.com/cureos/csipopt">csipopt</a></p>
+<p class="startli">Interfacing <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions...">Ipopt</a> from .NET languages such as <b>C#</b>, <b>F#</b> and <b>Visual Basic.NET</b>.</p>
 </li>
 <li><p class="startli">GAMS (modeling environment)</p>
 <p class="startli">The <a href="https://projects.coin-or.org/GAMSlinks">GAMSlinks project</a> on COIN-OR includes a GAMS interface for <code>Ipopt</code>.</p>
 </li>
+<li><p class="startli"><a href="https://github.com/ethz-adrl/ifopt">ifopt</a></p>
+<p class="startli">Modern, light-weight (~1k loc), <b>Eigen</b>-based **C++** interface to <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions...">Ipopt</a> and Snopt</p>
+</li>
+<li><p class="startli"><a href="https://github.com/g-braeunlich/IPyOpt">IPyOpt</a></p>
+<p class="startli">Interfacing <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions...">Ipopt</a> from <b>Python</b></p>
+</li>
 <li><p class="startli"><a href="http://juliaopt.org">JuliaOpt</a></p>
 <p class="startli">Julia is a high-level, high-performance dynamic programming language for technical computing. JuliaOpt, is an umbrella group for Julia-based optimization-related projects. It includes the algebraic modeling language <a href="https://github.com/JuliaOpt/JuMP.jl">JuMP</a> and an <a href="https://github.com/JuliaOpt/Ipopt.jl">interface to <code>Ipopt</code></a>.</p>
-</li>
-<li><p class="startli"><a href="https://github.com/ebertolazzi/mexIPOPT">mexIPOPT</a></p>
-<p class="startli">A rewrite of the above mentioned MATLAB Interface.</p>
 </li>
 <li><p class="startli"><a href="https://github.com/stanle/madopt">MADOPT</a> (Modelling and Automatic Differentiation for Optimisation)</p>
 <p class="startli">Light-weight C++ and Python modelling interfaces implementing expression building using operator overloading and automatic differentiation.</p>
 </li>
-<li><p class="startli">.NET</p>
-<p class="startli">An interface to the C# language is available at <a href="https://github.com/cureos/csipopt">https://github.com/cureos/csipopt</a>.</p>
+<li><p class="startli"><a href="https://github.com/ebertolazzi/mexIPOPT">mexIPOPT</a></p>
+<p class="startli">A rewrite of the above mentioned MATLAB Interface.</p>
 </li>
-<li><p class="startli">OPTimization Interface (OPTI) Toolbox</p>
-<p class="startli">OPTI is a free Matlab toolbox for constructing and solving linear, nonlinear, continuous and discrete optimization problem and comes with <code>Ipopt</code>.</p>
+<li><p class="startli"><a href="http://www.i2c2.aut.ac.nz/Wiki/OPTI/">OPTimization Interface (OPTI) Toolbox</a></p>
+<p class="startli">OPTI is a free <b>Matlab</b> toolbox for constructing and solving linear, nonlinear, continuous and discrete optimization problem and comes with <code>Ipopt</code>, including binaries.</p>
 </li>
 <li><p class="startli"><a href="https://projects.coin-or.org/OS">Optimization Services</a></p>
 <p class="startli">The Optimization Services (OS) project provides a set of standards for representing optimization instances, results, solver options, and communication between clients and solvers, including <code>Ipopt</code>, in a distributed environment using Web Services.</p>
