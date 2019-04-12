@@ -1,0 +1,5 @@
+*.md5
+*.map
+*.js
+!search/*.js
+!jquery.js
