@@ -96,8 +96,8 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(top_srcdir)/tutorial/CodingExercise/Matlab/1-skeleton/startup.m.in \
 	$(top_srcdir)/tutorial/CodingExercise/Matlab/2-mistake/startup.m.in \
 	$(top_srcdir)/tutorial/CodingExercise/Matlab/3-solution/startup.m.in \
-	AUTHORS INSTALL config.guess config.sub depcomp install-sh \
-	ltmain.sh missing
+	AUTHORS config.guess config.sub depcomp install-sh ltmain.sh \
+	missing
 @HAVE_EXTERNALS_TRUE@am__append_3 = Dependencies
 @HAVE_EXTERNALS_TRUE@am__append_4 = .Dependencies-stamp
 subdir = .
@@ -473,8 +473,8 @@ EXTRA_DIST = examples/Cpp_example/cpp_example.cpp \
 	examples/ScalableProblems/README \
 	examples/ScalableProblems/RegisteredTNLP.cpp \
 	examples/ScalableProblems/RegisteredTNLP.hpp \
-	examples/ScalableProblems/solve_problem.cpp README INSTALL \
-	LICENSE AUTHORS doc/documentation.bbl doc/documentation.tex \
+	examples/ScalableProblems/solve_problem.cpp README LICENSE \
+	AUTHORS doc/documentation.bbl doc/documentation.tex \
 	doc/documentation.pdf doc/options.tex test/run_unitTests.in \
 	test/mytoy.nl Windows/VisualStudio_dotNET/README \
 	Windows/VisualStudio_dotNET/CppExample/CppExample.vcproj \

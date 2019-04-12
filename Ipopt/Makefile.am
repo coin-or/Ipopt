@@ -64,7 +64,6 @@ EXTRA_DIST = \
 	examples/ScalableProblems/RegisteredTNLP.hpp \
 	examples/ScalableProblems/solve_problem.cpp \
 	README \
-	INSTALL \
 	LICENSE \
 	AUTHORS \
 	doc/documentation.bbl \

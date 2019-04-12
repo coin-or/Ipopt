@@ -1,14 +1,10 @@
 These directories contain the C++ reimplementation of the interior
 point NLP solver Ipopt.
 
-For more inforamation, see
+For more information, see
 
-Docs/documentation.pdf
-
-or see the online version of it at
-
-http://www.coin-or.org/Ipopt/documentation/
+https://coin-or.github.io/Ipopt
 
 The project's website is at
 
-http://projects.coin-or.org/Ipopt
+https://github.com/coin-or/Ipopt
