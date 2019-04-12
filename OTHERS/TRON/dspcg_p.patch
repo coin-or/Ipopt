@@ -1,0 +1,165 @@
+5c5,50
+<      +                 indfree,gfree,w,wa,iwa)
+---
+>      +                 indfree,gfree,w,wa,iwa,
+>      1     IPITER, IPN, NIND, M, NORIG, XORIG, CSCALE, IVAR,
+>      1     NFIX, IFIX, SOFLAG, C,
+>      1     NLB, ILB, NUB, IUB, S_L, S_U,
+>      1     KCONSTR, LRS, RS, LIS, IS, LRW, RW, LIW, IW, IERR, EV_F,
+>      1     EV_C, EV_G, EV_A, EV_H, EV_HLV, EV_HOV, EV_HCV, DAT, IDAT)
+>       IMPLICIT NONE
+>       integer IPITER
+>       integer IPN
+>       integer NIND
+>       integer M
+>       integer NORIG
+>       double precision XORIG(NORIG)
+>       double precision CSCALE(*)
+>       integer IVAR(IPN)
+>       integer NFIX
+>       integer IFIX(NFIX)
+>       logical SOFLAG
+>       double precision C(M)
+>       integer NLB
+>       integer ILB(NLB)
+>       integer NUB
+>       integer IUB(NUB)
+>       double precision S_L(NLB)
+>       double precision S_U(NUB)
+>       integer KCONSTR(6)
+>       integer LRS
+>       double precision RS(LRS)
+>       integer LIS
+>       integer IS(LIS)
+>       integer LRW
+>       double precision RW(LRW)
+>       integer LIW
+>       integer IW(LIW)
+>       integer IERR
+>       external EV_F
+>       external EV_C
+>       external EV_G
+>       external EV_A
+>       external EV_H
+>       external EV_HLV
+>       external EV_HOV
+>       external EV_HCV
+>       double precision DAT(*)
+>       integer IDAT(*)
+> 
+230a276,280
+>       include 'IPOPT.INC'
+> CTRY
+>       integer infotr_store
+>       common /wnrm_max/ infotr_store
+> 
+232,233c282,293
+<    
+<       call dssyax(n,a,adiag,acol_ptr,arow_ind,s,w)
+---
+> 
+>       
+>       if( QTRONHESS.eq.0 ) then
+>          call RES_HV(IPITER, IPN, NIND, M, NORIG, XORIG, CSCALE,
+>      1        IVAR, NFIX, IFIX, SOFLAG, C, s, w,
+>      1        NLB, ILB, NUB, IUB, S_L, S_U,
+>      1        KCONSTR, LRS, RS, LIS, IS, LRW, RW, LIW, IW, IERR, EV_F,
+>      1        EV_C, EV_G, EV_A, EV_H, EV_HLV, EV_HOV, EV_HCV, DAT, IDAT)
+>          if( IERR.ne.0 ) return
+>       else
+>          call dssyax(n,a,adiag,acol_ptr,arow_ind,s,w)
+>       endif
+270a331
+>          if( QTRONHESS.ne.0 ) then
+274,284c335,347
+<          bcol_ptr(1) = 1 
+<          nnz = 0
+<          do j = 1, nfree
+<             jfree = indfree(j)
+<             bdiag(j) = adiag(jfree)
+<             do ip = acol_ptr(jfree), acol_ptr(jfree+1)-1
+<                if (iwa(arow_ind(ip)) .gt. 0) then
+<                   nnz = nnz + 1
+<                   brow_ind(nnz) = iwa(arow_ind(ip))
+<                   b(nnz) = a(ip)
+<                end if
+---
+>             bcol_ptr(1) = 1 
+>             nnz = 0
+>             do j = 1, nfree
+>                jfree = indfree(j)
+>                bdiag(j) = adiag(jfree)
+>                do ip = acol_ptr(jfree), acol_ptr(jfree+1)-1
+>                   if (iwa(arow_ind(ip)) .gt. 0) then
+>                      nnz = nnz + 1
+>                      brow_ind(nnz) = iwa(arow_ind(ip))
+>                      b(nnz) = a(ip)
+>                   end if
+>                end do
+>                bcol_ptr(j+1) = nnz + 1
+286,288c349,351
+<             bcol_ptr(j+1) = nnz + 1
+<          end do
+<         
+---
+>          endif
+> 
+>          if( QTRONHESS.eq.2 ) then
+291,294c354,358
+<          alpha = zero
+<          call dicfs(nfree,nnz,b,bdiag,bcol_ptr,brow_ind,
+<      +              l,ldiag,lcol_ptr,lrow_ind,nv,alpha,
+<      +              iwa,wa(1),wa(n+1)) 
+---
+>             alpha = zero
+>             call dicfs(nfree,nnz,b,bdiag,bcol_ptr,brow_ind,
+>      +           l,ldiag,lcol_ptr,lrow_ind,nv,alpha,
+>      +           iwa,wa(1),wa(n+1))
+>          endif
+316c380,389
+<      +               wa(1),wa(n+1),wa(2*n+1),wa(3*n+1),wa(4*n+1))
+---
+>      +               wa(1),wa(n+1),wa(2*n+1),wa(3*n+1),wa(4*n+1),
+>      1        indfree,
+>      1        IPITER, IPN, NIND, M, NORIG, XORIG, CSCALE, IVAR,
+>      1        NFIX, IFIX, SOFLAG, C,
+>      1        NLB, ILB, NUB, IUB, S_L, S_U,
+>      1        KCONSTR, LRS, RS, LIS, IS, LRW, RW, LIW, IW, IERR, EV_F,
+>      1        EV_C, EV_G, EV_A, EV_H, EV_HLV, EV_HOV, EV_HCV, DAT, IDAT)
+>          if( IERR.ne.0 ) return
+> CTRY
+>          infotr_store = infotr
+319c392,394
+<          call dstrsol(nfree,l,ldiag,lcol_ptr,lrow_ind,w,'T')
+---
+>          if( QTRONHESS.eq.2 ) then
+>             call dstrsol(nfree,l,ldiag,lcol_ptr,lrow_ind,w,'T')
+>          endif
+332c407,414
+<      +                wa(3*n+1),wa(4*n+1))
+---
+>      +                wa(3*n+1),wa(4*n+1),
+>      1        indfree,
+>      1        IPITER, IPN, NIND, M, NORIG, XORIG, CSCALE, IVAR,
+>      1        NFIX, IFIX, SOFLAG, C,
+>      1        NLB, ILB, NUB, IUB, S_L, S_U,
+>      1        KCONSTR, LRS, RS, LIS, IS, LRW, RW, LIW, IW, IERR, EV_F,
+>      1        EV_C, EV_G, EV_A, EV_H, EV_HLV, EV_HOV, EV_HCV, DAT, IDAT)
+>          if( IERR.ne.0 ) return
+344c426,436
+<          call dssyax(n,a,adiag,acol_ptr,arow_ind,s,w)
+---
+>          if( QTRONHESS.eq.0 ) then
+>             call RES_HV(IPITER, IPN, NIND, M, NORIG, XORIG, CSCALE,
+>      1           IVAR, NFIX, IFIX, SOFLAG, C, s, w,
+>      1           NLB, ILB, NUB, IUB, S_L, S_U,
+>      1           KCONSTR, LRS, RS, LIS, IS, LRW, RW, LIW, IW, IERR,
+>      1           EV_F, EV_C, EV_G, EV_A, EV_H, EV_HLV, EV_HOV, EV_HCV,
+>      1           DAT, IDAT)
+>             if( IERR.ne.0 ) return
+>          else
+>             call dssyax(n,a,adiag,acol_ptr,arow_ind,s,w)
+>          endif
+375,376d466
+< 
+<       

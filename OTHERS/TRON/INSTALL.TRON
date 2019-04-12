@@ -1,0 +1,37 @@
+Installation of TRON for IPOPT
+
+Note:  It is YOUR RESPONSIBILITY to ensure that you are entitled to
+       download and use this third party package.
+
+Note:  At least on our (old) OSF1 Dec Alpha, the patch files provided
+       to perform the necessary changes to TRON's source code do not
+       work (the output of 'diff' are not compatible).  You might want
+       to try to compile the code [who knows, it might work on your
+       system], but watch out for message from patch stating no patch
+       is performed (e.g. "Hmm...  I can't seem to find a patch in
+       there anywhere.").  If it does not work for you (or also if it
+       works), we would very much appreciate if you could let us
+       know.  If it does not work for you, we will try to fix it (but
+       only if you let us know that there is indeed interest.)
+
+
+1. Obtain the source code for TRON (written by Jorge More and Chih-Jen
+   Lin) from
+
+   http://www-unix.mcs.anl.gov/~more/tron/ 
+
+   The patch files within this IPOPT distribution assume that this
+   will be version 1.2 of TRON.
+
+2. Uncompress and unpack the tarball in this directory, i.e. you will
+   then have directories
+
+   $SRCROOTDIR/OTHERS/TRON/tron/src/tron    and
+   $SRCROOTDIR/OTHERS/TRON/tron/src/icf
+
+   which contain the source code necessary for IPOPT.
+
+   For example:
+
+   gunzip tron-1.2.tar.gz
+   tar xvf tron-1.2.tar

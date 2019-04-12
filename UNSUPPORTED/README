@@ -1,0 +1,10 @@
+The files in this subtree were part of an earlier distribution of IPOPT.  
+They implement routines for solving optimal control problems, where the 
+differential-algebraic equations are discretized via orthogonal 
+collocation on finite elements.
+
+The support of this section has been discontinued, and the Makefile are 
+broken.
+
+You may feel free to use those files, which are available under the Common
+Public License.

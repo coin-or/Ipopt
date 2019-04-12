@@ -1,0 +1,72 @@
+This is a step by step description on how to install Cygwin with the
+components necessary to compile the Ipopt AMPL executable (except from
+an email from the coin-ipopt mailing list):
+
+
+What you have to do is to install Cygwin from www.cygwin.com.  This is
+pretty straight forward; you simply download the "setup" program and start
+it.
+
+Then you do the following steps (assuming here that you don't have any
+complications with firewall settings etc - in that case you might have
+to choose some connection settings differently):
+
+- click next
+
+- select "install from the internet" (default) and click next
+
+- select a directory where Cygwin is to be installed (I left the default)
+  and choose all other things to your liking, then click next
+
+- select a temp dir for Cygwin setup to store some files (I left the
+  default)
+
+- select "direct connection" (default) and click next
+
+- select some mirror site that seems close by to you and click next
+
+- OK, now comes the complicated part:
+  you need to select the packages that you want to have installed.  By
+  default, there are already selections, but I think the compilers are
+  usually not pre-chosen.  You need to make sure that you select the GNU
+  compilers (for Fortran and C - together with the MinGW options), and the
+  GNU Make.  For this, click on the "Devel" branch (which opens a subtree)
+  and select:
+   - gcc
+   - gcc-core
+   - gcc-g77
+   - gcc-mingw
+   - gcc-mingw-core
+   - gcc-mingw-g77
+   - make
+
+  Then, in the "Web" branch, please select "wget" (which will make the
+  installation of third party dependencies for Ipopt easier)
+
+  This will automatically also select some other packages.  (I hope I
+  didn't forget anything)
+
+- Then you click on next, and Cygwin will be installed (follow the
+  rest of the instructions and choose everything else to your liking).  At
+  a later point you can easily add/remove packages with the setup program.
+
+- Now that you have Cygwin, you can open a Cygwin window, which is like a
+  UNIX shell window.  (I assume that you have some basic knowledge of
+  UNIX/Linux...).
+
+- Now you just follow the instructions of COIN/Ipopt/doc/QUICKINSTALL
+  (i.e., you download the Ipopt tarball and put it into your Cygwin home
+  directory - from the Windows explorer that is for me at
+  C:\Cygwin\home\andreasw )
+  and you can unpack the package in your Cygwin home directory.  After
+  that you obtain the third party code (like on Linux/UNIX), type
+
+  ./configure CC=gcc F77=g77
+
+  and
+
+  make install
+
+  in the right directories, and hopefully that will work.  The AMPL
+  Ipopt executable will be in the directory COIN/Ipopt/bin (called
+  'ipopt').

@@ -1,0 +1,216 @@
+6c6,51
+<      +                 isave,dsave,wa,iwa)
+---
+>      +                 isave,dsave,wa,iwa,TRflag,
+>      1     IPITER, IPN, NIND, M, NORIG, XORIG, CSCALE, IVAR,
+>      1     NFIX, IFIX, SOFLAG, C,
+>      1     NLB, ILB, NUB, IUB, S_L, S_U,
+>      1     KCONSTR, LRS, RS, LIS, IS, LRW, RW, LIW, IW, IERR, EV_F,
+>      1     EV_C, EV_G, EV_A, EV_H, EV_HLV, EV_HOV, EV_HCV, DAT, IDAT)
+>       IMPLICIT NONE
+>       integer IPITER
+>       integer IPN
+>       integer NIND
+>       integer M
+>       integer NORIG
+>       double precision XORIG(NORIG)
+>       double precision CSCALE(*)
+>       integer IVAR(IPN)
+>       integer NFIX
+>       integer IFIX(NFIX)
+>       logical SOFLAG
+>       double precision C(M)
+>       integer NLB
+>       integer ILB(NLB)
+>       integer NUB
+>       integer IUB(NUB)
+>       double precision S_L(NLB)
+>       double precision S_U(NUB)
+>       integer KCONSTR(6)
+>       integer LRS
+>       double precision RS(LRS)
+>       integer LIS
+>       integer IS(LIS)
+>       integer LRW
+>       double precision RW(LRW)
+>       integer LIW
+>       integer IW(LIW)
+>       integer IERR
+>       external EV_F
+>       external EV_C
+>       external EV_G
+>       external EV_A
+>       external EV_H
+>       external EV_HLV
+>       external EV_HOV
+>       external EV_HCV
+>       double precision DAT(*)
+>       integer IDAT(*)
+> 
+19a65,66
+> CAWAE
+>       character*1 TRflag
+246c293
+<       integer iter, iters, iterscg
+---
+>       integer iter, iters, iterscg, info
+249c296
+<       double precision ddot, dnrm2
+---
+>       double precision ddot, dnrm2, d1mach
+251c298,315
+<       external dcopy, ddot, dnrm2
+---
+>       external dcopy, ddot, dnrm2, d1mach
+> 
+>       double precision macheps, precfact
+>       parameter( precfact = 1.d1 )
+> 
+>       integer FFINITE
+> 
+>       include 'IPOPT.INC'
+>       include 'TIMER.INC'
+> CTRY
+>       integer infotr_store
+>       common /wnrm_max/ infotr_store
+>       logical rejected
+>       save    rejected
+> 
+>       IERR = 0
+> 
+>       macheps = d1mach(4)
+262a327,328
+> CTRY
+>          rejected = .false.
+299c365,372
+<      +                   alphac,s,wa)
+---
+>      +                   alphac,s,wa,
+>      1           IPITER, IPN, NIND, M, NORIG, XORIG, CSCALE, IVAR,
+>      1           NFIX, IFIX, SOFLAG, C,
+>      1           NLB, ILB, NUB, IUB, S_L, S_U,
+>      1           KCONSTR, LRS, RS, LIS, IS, LRW, RW, LIW, IW, IERR,
+>      1           EV_F, EV_C, EV_G, EV_A, EV_H, EV_HLV, EV_HOV, EV_HCV,
+>      1           DAT, IDAT)
+>             if( IERR.ne.0 ) return
+308c381,390
+<      +                 wa(n+1),wa(2*n+1),iwa)
+---
+>      +                 wa(n+1),wa(2*n+1),iwa,
+>      1           IPITER, IPN, NIND, M, NORIG, XORIG, CSCALE, IVAR,
+>      1           NFIX, IFIX, SOFLAG, C,
+>      1           NLB, ILB, NUB, IUB, S_L, S_U,
+>      1           KCONSTR, LRS, RS, LIS, IS, LRW, RW, LIW, IW, IERR,
+>      1           EV_F, EV_C, EV_G, EV_A, EV_H, EV_HLV, EV_HOV, EV_HCV,
+>      1           DAT, IDAT)
+>             COUNT_TRON_CG = COUNT_TRON_CG + iters
+>             if( IERR.ne.0 ) return
+> 
+312c394,406
+<             call dssyax(n,a,adiag,acol_ptr,arow_ind,s,wa)
+---
+> CAWAE
+>             if( QTRONHESS.eq.0 ) then
+>                call RES_HV(IPITER, IPN, NIND, M, NORIG, XORIG, CSCALE,
+>      1              IVAR, NFIX, IFIX, SOFLAG, C, s, wa,
+>      1              NLB, ILB, NUB, IUB, S_L, S_U,
+>      1              KCONSTR, LRS, RS, LIS, IS, LRW, RW, LIW, IW, IERR,
+>      1              EV_F, EV_C, EV_G, EV_A, EV_H, EV_HLV, EV_HOV,
+>      1              EV_HCV, DAT, IDAT)
+>                if( IERR.ne.0 ) return
+>             else
+>                call dssyax(n,a,adiag,acol_ptr,arow_ind,s,wa)
+>             endif
+> 
+314c408,411
+<             iterscg = iterscg + iters
+---
+>             if( FFINITE(prered).eq.0 ) then
+>                task = 'NAN of INF in predicted reduction'
+>             else
+>                iterscg = iterscg + iters
+318c415,416
+<             task = 'F'
+---
+>                task = 'F'
+>             endif
+328a427
+>      1           - precfact*macheps*abs(fc) ! for roundoff error
+331a431
+> CTODO
+333c433
+<             if (iter .eq. 1)  delta = min(delta,snorm)
+---
+> C            if (iter .eq. 1)  delta = min(delta,snorm)
+346,347c446,451
+<          
+<             if (actred .lt. eta0*prered) then
+---
+> 
+>             if( FFINITE(actred).eq.0 ) then
+>                delta = min(max(alpha,sigma1)*snorm,sigma2*delta)
+>                TRflag = 'i'
+>                rejected = .true.
+>             else if (actred .lt. eta0*prered) then
+348a453,455
+> CAWAE
+>                TRflag = 'r'
+>                rejected = .true.
+350a458,460
+> CAWAE
+>                TRflag = '-'
+>                rejected = .false.
+352a463,465
+> CAWAE
+>                TRflag = '='
+>                rejected = .false.
+354c467,480
+<                delta = max(delta,min(alpha*snorm,sigma3*delta))
+---
+> CORIG               delta = max(delta,min(alpha*snorm,sigma3*delta))
+> CTRY
+>                if( infotr_store.ne.4 .or. rejected ) then
+> CORIG               if( infotr_store.ne.4 ) then
+>                   delta = max(delta,min(alpha*snorm,sigma3*delta))
+> CAWAE
+>                   TRflag = '+'
+>                else
+>                   delta = sigma3*delta
+> CAWAE
+>                   TRflag = 'j'
+>                endif
+>                rejected = .false.
+> CTRYENDE
+428a555,586
+> 
+> C ==============================================================================
+> C
+> C     Work space demand computation
+> C
+> C ==============================================================================
+> 
+>       subroutine DTRON_WS(N, M, NLB, NUB, NZA, LRW, LIW, DAT, IDAT)
+>       implicit none
+>       include 'IPOPT.INC'
+>       integer N, M, NLB, NUB, NZA, LRW, LIW
+>       double precision DAT(*)
+>       integer IDAT(*)
+>       character*80 line
+> 
+>       if( QTRONHESS.eq.0 ) then
+>          call RES_HV_WS(N, M, NLB, NUB, NZA, LRW, LIW, DAT, IDAT)
+>          LRW = LRW + 2*N
+>       else
+>          LRW = 0
+>          LIW = 0
+>       endif
+> 
+>       if( QPRINT.ge.4 ) then
+>          write(line,1000)'dtron_ws', LRW,LIW
+>  1000    format(a20,': LRW = ',i12,' LIW = ',i12)
+>          call C_OUT(1,0,1,line)
+>       endif
+> 
+>       return
+>       end
+> 

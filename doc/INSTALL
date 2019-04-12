@@ -1,0 +1,414 @@
+Copyright (C) 2003, Carnegie Mellon University and others.
+All Rights Reserved.
+This code is published under the Common Public License.
+
+This file describes what to do in order to build individual parts of
+the IPOPT package under UNIX and UNIX-like environments (including
+Cygwin).
+
+Contents
+========
+
+1.      General remarks
+  1.1   Content of the package
+2.      Getting the source code
+ 2.1    Getting the source code for IPOPT
+ 2.2    Preparing third party components
+  2.2.1 BLAS and LAPACK
+  2.2.2 Harwell Subroutine Library
+  2.2.3 TRON
+  2.2.4 AMPL Solver Library
+3.      Compiling and installing IPOPT
+ 3.1    Running the configure script
+ 3.2    Compiling the libraries and the executables
+ 3.3    Installing IPOPT
+ 3.4    Preparing IPOPT for CUTEr
+ 3.5    Using the AMPL solver `ipopt'
+4.      Linking your own programs with IPOPT
+5.      Bug reports
+
+1. General Remarks:
+===================
+
+With the release of the 2.2 version of IPOPT, the configuration of the
+package has been simplified by using GNU's autoconf.  So, essentially,
+all you have to do in order to install IPOPT (i.e. the AMPL executable
+and the IPOPT libraries) is to
+
+- download missing third party component
+- use the `configure' script to set up the makefiles
+- type `make install' to compile and install the package
+
+Of course, if the code is to be compiled on a new system or with
+compilers it hasn't been test on before, the compilation might fail.
+In that case please contact andreasw@watson.ibm.com with a detail
+description of what is going wrong, which system and compiler
+(incl. options) you are using etc.
+
+Also under Windows, the package has been successfully built using
+Cygwin with MINGW (Makefile provided), as well as using the Microsoft
+Developer Studio (but projects files and the like are not included in
+this package).  See README.Windows for details.
+
+
+1.1  Content of the package:
+----------------------------
+
+This package contains the source code for IPOPT, an interior point
+algorithm for large-scale nonlinear optimization, with the following
+components:
+
+- IPOPT library (libipopt.a): The library containing the IPOPT core
+           code and possibly additional third party components.  You
+           can use this library to link the optimization code to your
+           own program.
+
+- AMPL solver executable (ipopt):  This executable can be used as
+           the solver within AMPL (A Modeling Programming Language).
+
+- CUTEr interface: This is an interface that allows you to use IPOPT
+           as a solver in the CUTEr test/modeling environment.
+
+- Fortran and C examples:  Simple example programs and Makefiles to
+           show you how to use IPOPT within your own program.
+
+Previously included components DYNOPT and DYNOPC are no longer
+supported.
+
+2. Getting the source code
+==========================
+
+2.1 Getting the source code for IPOPT
+-------------------------------------
+
+The files of this package are available from the COIN-OR web page at
+http://www.coin-or.org .  They can be obtained via CVS or as tarballs
+(see http://www.coin-or.org/download.html).  If you downloaded the
+files as a tarball ("Ipopt_*.tgz"), you may unpack it by typing
+
+  gunzip Ipopt_*.tgz
+  tar xvf Ipopt_*.tar
+
+In the following directory names are relative to the IPOPT base
+directory (i.e. the on in which you can find this INSTALL file).
+
+The documentation files are located in the `doc' directory.
+
+2.2 Preparing third party components
+------------------------------------
+
+Some of the following third party software components are required for
+building the IPOPT package components, depending which ones you want
+to build.  You may either download the source code for those
+components as described, in which case they will be automatically
+compiled, or you can tell the configuration script where it can find
+the compiled version of those libraries (except for TRON which has to
+be compiled together with IPOPT).
+
+2.2.1 BLAS and LAPACK
+---------------------
+
+This is required for ALL components.
+
+Many vendors of compilers and operating systems provide precompiled
+and optimized libraries for these dense linear algebra subroutines.
+The configuration script attempts to find such precompiled libraries.
+However, if the script does not find the libraries, you may either
+specify the precompiled libraries directly, or have the IPOPT
+makefiles compile the code.
+
+If you have the BLAS libraries installed on your system, please use
+the `--with-blas' flag to tell the configuration script where to find
+them, e.g. by
+
+ ./configure --with-blas='-L/path/to/lib -lblas' [other options]
+
+or
+
+ ./configure --with-blas=/path/to/lib/libblas.a  [other options]
+
+Similarly, use the --with-lapack flag to specify the location of a
+precompiled LAPACK library if available.
+
+If you do not have precompiled version of the libraries, or prefer to
+compile them here, please follow the instructions in
+OTHERS/blas/INSTALL.BLAS and OTHERS/lapack/INSTALL.LAPACK to download
+the source files, before running the `configure' script.  Even if the
+configure script automatically detects precompiled libraries, you can
+force a compilation within IPOPT by specifying --with-blas=BUILD or
+--with-lapack=BUILD.
+
+In some cases, the subroutine `d1mach' is not included in precompiled
+libraries; in that case you need to download the `d1mach.f' from
+netlib and put it into the OTHERS/blas directory (see
+OTHERS/blas/INSTALL.BLAS).
+
+2.2.2 Harwell Subroutine Library
+--------------------------------
+
+IPOPT requires some subroutines from the Harwell Subroutine Library
+(HSL), e.g. for the solution of sparse linear systems.  Which of the
+subroutines are required depends on what IPOPT options you are
+intending to use.  Some of those routines are available in the 'HSL
+Archive' and might be accessible to you without charge (see
+http://hsl.rl.ac.uk/archive/hslarchive.html for details).
+
+Please refer to the file OTHERS/HSL/INSTALL.HSL for detailed
+instructions on what files are required and where to get them.
+
+Below is a list of the different HSL packages that might be necessary
+for the installation of IPOPT.
+
+For example: If you want to use IPOPT with the default options, you
+need as minimal requirement at least one of the routines MA27, MA47,
+MA57.  In addition, it might increase the numerical accuracy to use
+one of the scaling routines MC19, MC29, or MC30.  Note that if you can
+use only files from the HSL archive, we recommend to use at least MA27
+and MC19.
+
+MA27:   This is required if you want to use the full space option of
+        IPOPT (IFULL.eq.1) and choose MA27 as the solver for the
+        symmetric linear system.  This routine is available in the HSL
+        archive.
+
+MA47:   This is required if you want to use the full space option of
+        IPOPT (IFULL.eq.1) and choose MA47 as the solver for the
+        symmetric linear system.  This routine is available in the HSL
+        archive.
+
+MA57:   This is required if you want to use the full space option of
+        IPOPT (IFULL.eq.1) and choose MA57 as the solver for the
+        symmetric linear system.  This routine is not available in the HSL
+        archive.
+
+MA28:   This is required if you want to use the reduced space option of
+        IPOPT (IFULL.eq.0) and choose MA28 to solve the arising linear
+        systems (i.e. if you don't include MA48 into your code).
+        This routine (and its dependencies MA30, MC13, MC20, MC21,
+        MC22, MC23, MC24) are available in the HSL archive.
+        Note: If MA48 is also included into the code, MA48 will used
+        instead.
+
+MA48:   This is required if you want to use the reduced space option of
+        IPOPT (IFULL.eq.0) and choose MA48 to solve the arising linear
+        systems.  This routine is not available in the HSL archive.
+	Note that also the routine MA51 is required if you choose MA48.
+
+MC30:   This is required if you want to scale the KKT system with MC30
+        before factorization (i.e. IKKTSCALE.eq.1).  This routine is
+        not available in the HSL archive.
+
+MC29:   This is required if you want to scale the KKT
+        (i.e. IKKTSCALE.eq.1) but don't use MC30.  This routine is not
+        available in the HSL archive.
+
+MC19:   This is required if you don't include MC30 or MC29 into your
+        build but still want to scale the KKT system with MC19 before
+        factorization (i.e. IKKTSCALE.eq.1).  This routine is
+        available in the HSL archive.  We highly recommend to
+        use this routine if MC30 or MC29 are not available to you.
+
+MC35 and MC39:
+        This is required if you want to use the filter line search option
+        (abs(IMERIT).ge.4) and choose the IPOPT option ITRONHESS.ge.1 .
+        If you do not have those routines, you can still use the
+        filter line search options with ITRONHESS.eq.0 for the
+        restoration phase.
+        These routines are not available in the HSL archive.  However, we
+        recommend to use these routines if they are available to you.
+
+If you want to specify a particular location of a precompiled HSL
+library, you can use configure's `--with-hsl' flag.
+
+2.2.3 TRON
+----------
+
+TRON (written by Jorge More and Chih-Jen Lin) is an implementation of
+an algorithm for bound constrained optimization, and it can be used
+for the restoration phase in the filter line search procedure.  With
+the release of IPOPT 2.2, an alternative (and more robust) restoration
+phase approach has been implemented for the full space option.
+However, if you are using the reduced-space option and the filter line
+search, you will still require TRON.
+
+Since the source code for TRON had to be adapted in order to be called
+from IPOPT, the distribution of the IPOPT source files include patch
+files for some of TRON's source files.  THIS MEANS THAT YOU CANNOT USE
+YOUR OWN COMPILATION OF TRON!  Instead, you will have to download the
+TRON source files and put them into the correct IPOPT subdirectory -
+see OTHERS/TRON/INSTALL.TRON for information on where to obtain TRON,
+and where to put the source code.
+
+2.2.4 AMPL Solver Library (ASL)
+-------------------------------
+
+If you are intending to build the IPOPT solver executable for the
+AMPL modeling language (see www.ampl.com), you need to obtain and
+compile the AMPL Solver Library.  You may compile the ASL library
+independently, in which case you can specify the directory in which
+the library file `amplsolver.a' and the ASL header files reside by
+using --with-asldir, e.g.
+
+ ./configure --with-asldir=$HOME/myasldir
+
+Alternatively, you can have the IPOPT Makefiles compile the ASL for
+you.  For this, you need to download the ASL source code.  Please
+refer to the file OTHERS/ASL/INSTALL.ASL for instructions where to
+obtain and put the source code.
+
+3. Compiling and installing IPOPT
+=================================
+
+3.1 Running the configure script
+--------------------------------
+
+Once you have all the necessary third party code in place, you need to
+run the configuration script in order to prepare the makefiles.
+
+Under ideal circumstances, all you have to do is type
+
+./configure
+
+If the configuration script terminates successfully, the last line of
+the output will read `configure: Configuration successful'.  Otherwise
+the last line should give some indication of the problem.
+
+NOTE: If you want to compile the `IPOPT-C' option of the code which
+      is able to handle complementarity constraints, you need to
+      specify the option `--enable-mpcc' for the configure script.  In
+      that case, the compiled code only works with AMPL (not with
+      problems specified in Fortran or C or others).
+
+However, if you want to specify the location of certain precompiled
+libraries (see Section 2), then you will need to give some flags (such
+as `--with-blas=...') to configure.
+
+In addition, you might want to tell the configuration script that you
+want to use non-default compilers and/or compiler options.  This can
+be done by setting appropriate environment variables (such as F77 and
+FFLAGS).
+
+Finally, you might to change the destination of the compiled
+executables and libraries.  By default, the IPOPT library will be
+`installed' in the subdirectory lib of the directory where you run
+`configure'.  If you want to install the executables and libraries
+system-wide in the subdirectories /usr/local/bin, /usr/local/lib etc
+(as root), you need to specify `--prefix=/usr/local' .
+
+A detailed description of the flags and environment variables that
+`configure' understands, type
+
+./configure --help
+
+In general, it is a good idea to look over the output of the configure
+script and see if any warnings are issued, or something looks weird.
+If the configuration process does not work properly, a look into the
+output file 'config.log' might give some idea of what is going wrong.
+
+Example:
+--------
+
+Let's say that you want to use a fancy BLAS library, which is in
+/home/me/lib/libmyblas.a .  Also, let's say that you want to compile a
+64 Bit version of the executable on the Unix flavor AIX, which means
+that you need to use the Fortran compiler `xlf -q64', the C compiler
+`xlc -q64' and the archive command `ar -X64'.  In that case, you
+should issue the command
+
+./configure --with-blas='-L/home/me/lib -lmyblas' F77='xlf -q64' \
+  CC='xlc -q64' AR='ar -X64'
+
+
+Note: You have to run the configuration script every time after you
+      add additional source code into OTHERS/... or want to change the
+      compiler options etc.
+
+3.2 Compiling the libraries and the executables
+-----------------------------------------------
+
+Since the configuration script sets up all the makefiles, all you have
+to do now is to type
+
+make
+
+3.3 Installing IPOPT
+--------------------
+
+Once the compilation has been performed successfully, you can finally
+install the binaries:
+
+make install
+
+This is install the following files ($PREFIX here is usually the
+directory where you executed the configuration script, unless you
+specified the --prefix option):
+
+- $PREFIX/lib/libipopt.a
+
+  This library contains the compiled IPOPT code, together with all
+  third party code that was compiled with the IPOPT makefiles (see
+  Section 2).
+
+- $PREFIX/bin/ipopt
+
+  This is the AMPL solver executable, which can be used to optimize
+  problems modeled in AMPL.
+
+- $PREFIX/include/Ipopt_Interface.h
+
+  This is the header files for the C interface.
+
+3.4 Preparing IPOPT for CUTEr
+-----------------------------
+
+If you want to use IPOPT within the CUTEr testing environment, type
+
+make cuter
+
+This assumes, that you have the environment variable MYCUTER set.
+
+3.5 Using the AMPL solver `ipopt'
+---------------------------------
+
+If you want to use IPOPT as a solver for AMPL, make sure that the
+executable
+  $PREFIX/bin/ipopt
+is in your path.  Then, choose `ipopt' to be your solver in AMPL
+by
+  option solver ipopt;
+in AMPL.
+
+4. Linking your own programs with IPOPT
+=======================================
+
+You can write your own code to model the optimization problem
+(i.e. functions that compute the objective and constraint function as
+well as derivatives, see README.IPOPT).  The directories
+
+EXAMPLES/Fortran_example
+EXAMPLES/C_example
+
+provide a simple example (Fortran and C, respectively), together with
+the makefiles.
+
+5. Bug reports
+==============
+
+If you are not able to install or compile IPOPT, please send me an
+email message.  The preferred way for this is to sign up to the IPOPT
+mailing list coin-ipopt at
+
+http://list.coin-or.org/mailman/listinfo/coin-ipopt
+
+(if that link doesn't work, you can locate the mailing list webpage
+from http://www.coin-or.org)
+
+and send an email to coin-ipopt@list.coin-or.org (you need to sign up
+before posting a message).  Please make sure that you include detailed
+information about your configuration (operating system, compilers,
+version numbers, which third party code did you include etc).
+
+
+
+=======================================================================
+$Id: INSTALL 669 2005-03-02 22:56:28Z andreasw $

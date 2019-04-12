@@ -1,0 +1,15 @@
+#
+# This is an example for PARAMS.DAT as input file for
+# IPOPT's algorithmic parameters
+#
+
+# Comments starting with '#' can be added
+
+# For each parameters that you want to specify, first
+# write the name and then its value separated by spaces
+# or a comma.  The parameter name is case insensitive.
+
+dtoL , 1d-5   # just specify a relaxed tolerance
+
+imerit 0      # use no line search
+              # (default is the filter method)

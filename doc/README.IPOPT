@@ -1,0 +1,1216 @@
+Copyright (C) 2002, Carnegie Mellon University and others.
+All Rights Reserved.
+This code is published under the Common Public License.
+
+=============================================================================
+
+
+                  ###   ######  ####### ######  #######
+                   #    #     # #     # #     #    #
+                   #    #     # #     # #     #    #
+                   #    ######  #     # ######     #
+                   #    #       #     # #          #
+                   #    #       #     # #          #
+                  ###   #       ####### #          #
+
+
+=============================================================================
+
+Contents:
+=========
+
+1. General Remarks
+2. Problem Statement
+3. Algorithmic Parameters for IPOPT
+4. Brief Explanation of IPOPT's screen output
+5. Definition of the problem statement by the user
+ 5.1 IPOPT entry function
+ 5.2 Initialization of user parameters via PARAMS.DAT
+ 5.3 Subroutines provided by the user
+ 5.4 Subroutine for checking derivatives
+ 5.5 Calling IPOPT from C
+6. Additional Remarks
+ 6.1 Expert options
+ 6.2 Screen Output during Restoration phase with TRON
+
+
+1. General Remarks:
+===================
+
+This package contains the the source code for IPOPT, an interior point
+algorithm for large-scale nonlinear optimization.
+
+You can use this software package:
+
+- to build a solver executable for the modeling language AMPL
+    (see QUICKINSTALL for quick installation instructions)
+- to build a solver for nonlinear optimization problems modeled in SIF
+    within CUTEr
+    (see QUICKINSTALL for quick installation instructions)
+- to solve optimization problems whose function definitions you have
+    modeled in Fortran or C (see Section 5)
+
+In this file (README.IPOPT), the algorithmic user parameters for IPOPT
+(that can be adapted to particular needs) are described (Section 3),
+as well as IPOPT's output (Section 4).
+
+In Section 5 you can see how you can call IPOPT within your own
+program, and what subroutines/function you have to provide in order to
+define the optimization problem.
+
+Please refer to the INSTALL file (or QUICKINSTALL) for instructions on
+how to install and compile the source code.
+
+We politely ask you to cite the following paper if you use IPOPT for
+your own work:
+
+A. Waechter and L. T. Biegler,
+"On the Implementation of an Interior-Point Filter-Line Search
+Algorithm for Large-Scale Nonlinear Programming,"
+Research Report RC 23149, IBM T.J. Watson  Research Center, Yorktown,
+NY, USA
+
+
+2. Problem Statement
+====================
+
+IPOPT is an implementation of a primal-dual interior point algorithm
+for solving NonLinear optimization Problems (NLPs) of the form
+
+min    f(x)                   (1)
+s.t.   c(x) = 0               (2)
+       x_L <= x <= x_U        (3)
+
+The objective function f: R^n ---> R and the equality constraints
+c: R^n ---> R^m (m <=n) are assumed to be twice continuously
+differentiable and can be nonlinear and nonconvex.  In (3), not all
+variables need to have lower and upper bounds.
+
+
+3. Algorithmic Parameters for IPOPT:
+====================================
+
+If you are calling the IPOPT library from your own code, the options
+for IPOPT can be passed to the IPOPT main subroutine.  For the AMPL
+interface you may pass values for those options in the usual way, i.e.
+use
+
+option ipopt_options "....";
+
+within AMPL (type 'ipopt -=' to see a list of available options).
+Note, that the AMPL interface expects the names of the options in
+lower case letters.  (Note: Even if you rename your AMPL solver
+executable to something other than `ipopt', you will still need to use
+the keyword `ipopt_options'.)
+
+In addition, if the file "PARAMS.DAT" exists (see Section 5.2) in the
+directory in which IPOPT is run (within your own code, within CUTEr,
+or as the AMPL solver), the parameter values given in the file
+overwrite the other values.
+
+If options are not set, they assume default values.  You can see the
+values of all parameters, including those that you have not set
+explicitly, by looking at the beginning of IPOPT's output file
+'IPOPT.OUT' for a print level (IPRINT) of at least 1.  The default
+values may differ depending on how the package was compiled.
+
+IPOPT offers many (maybe too many) options that a user can play around
+with, and some options are better supported and tested than others.
+It follows a description of those options that could be relevant for a
+regular use of IPOPT.  The remaining options are described in Section
+6.1 of this file.
+
+Not all options can be manipulated from AMPL, but they can still be
+changed using the options file PARAMS.DAT.
+
+List of parameters:
+===================
+
+Output:
+-------
+
+IPRINT     Determines amount of output information.  Fewest
+           output is obtained for 0, most with 10.  If you
+           choose a negative number, no output is written at all
+           (except for the "I'm IPOPT" message).
+         **Default is 1.
+            (Integer)
+IOUTPUT    Determines width of regular iteration output to the screen:
+         **0:  Fit into 80 columns  (Default)
+           1:  Wider output with more details
+            (Integer, =0,1)
+IFILE      If set to 1, IPOPT writes some logging information into a
+           file (standard is 'IPOPT.OUT' - you can change the name of
+           this file by modifying the file c_out.f in the
+           Ipopt/IPOPT/auxil directory).
+         **Default is 0.
+            (Integer, =0,1)
+
+Termination:
+------------
+
+IMAXITER   Maximal number of iterations allowed.  If IPOPT exceeds this
+           number, the optimization is aborted with error code IERR = 1. 
+         **Default is 1000.
+            (Integer, >=0)
+DTOL       Desired error tolerance.  If the current error estimate is
+           less than DTOL (and the conditions for DINFMAXTOL and DCMAXTOL
+           are satisfied), the problem is considered to be solved.
+         **Default is 1.d-8.
+            (Double Precision, >0d0)
+ISCALERR   The current error estimate is computed as the maximum of
+           the dual infeasibility, the constraint violation, and the
+           violation of the complementarity condition.  This parameter
+           determines whether those error components should be scaled
+         **(for ISCALERR = 1; default) or not (ISCALERR = 0)
+            (Integer, 0,1)
+DINFMAXTOL Absolute tolerance for unscaled dual infeasibility.
+           Successful termination only if the unscaled dual
+           infeasibility is below this number.
+         **Default is 1.d300  (switched off)
+            (Double Precision, >0.d0)
+DCMAXTOL   Absolute tolerance for unscaled primal infeasibility.
+           Successful termination only if the unscaled constraint
+           violation is below this number.
+         **Default is 1.d300  (switched off)
+            (Double Precision, >0.d0)
+IMAXCPUSEC Maximal number of CPU seconds.  The algorithm tests a certain
+           check points, if the computation takes more than the specified
+           time.  If so, it stops with IERR=3.
+           Note, since this test is only performed at certain points in the
+           computation, it is possible that the actual computation takes
+           somewhat longer.
+         **Default is 999999999  (i.e. switched off)
+            (Integer, >0 )
+
+Scaling of the problem:
+-----------------------
+
+ISCALE     Automatic scaling of constraints and objective function
+           based on gradients (possibly objective Hessian) at initial point.
+           0: No automatic scaling
+           1: Compute one scaling factor for the objective function and one
+              scaling factor for all constraints, so that no first derivative
+              is larger than DSCALECUT
+           2: Compute one scaling factor for the objective function and one
+              for EACH constraint, so that no first derivative is larger than
+         **   DSCALECUT (default)
+           3: Compute scaling factors for the objective function, each
+              constraint, and each variable, trying to equilibrate the
+              gradients of the objective function and of the constraints
+              (here, absolute values <= DSCALECUT in the gradients are
+              ignored)
+           4: Compute scaling factors for each constraint, and each variable,
+              trying to equilibrate the Hessian of the objective function
+              and the gradients of the constraints (here, absolute
+              values <= DSCALECUT in the gradients are ignored)
+           5: Read scaling factors from the file SCALE.DAT (must exist).
+              The first M entries are for all constraints, and the next N
+              entries for the variables.
+            (Integer, =0,1,2,3,4,5)
+DSCALECUT  Tolerance for automatic scaling procedures (see ISCALE)
+         **Default is 1.d2, except for ISCALE.ge.3 (then it is 1.d-8)
+            (Double Precision, >0.d0) 
+DFSCALE    Factor by which objective function is scaled internally.
+           For example, DFSCALE = 1.d0 provides no scaling, DFSCALE = 1.d1
+           scales the objective function internally by a factor of 10,
+           and DFSCALE = -1d.0 will actually lead to a maximization of
+           the objective function.  Playing with this value can sometimes
+           improve convergence behavior, in particular if problem is badly
+           scaled.
+           Note, the overall scaling factor for the objective function is
+           obtained by applying first the chosen ISCALE procedure above, and
+           then by multiplying with QFSCALE.
+         **Default value is 1.d0.
+            (Double Precision)
+
+Line Search:
+------------
+
+IMERIT     Defines type of line search used.
+              0: Don't do a line search, i.e. always accept largest
+                 possible step (satisfying the fraction to the
+                 boundary rule)
+           -1,1: Use primal-dual merit function (has additional term
+                 compared to IMERIT=-2,2 which measures violation of
+                 perturbed complementarity condition.)
+           -2,2: Traditional exact penalty function
+              3: Augmented Lagrangian (requires ILAMBDA.ne.0)
+         **   4: Filter method using objective function (Default)
+              5: Filter method using Lagrangian function
+           NOTE: The supported option is IMERIT = 4 !
+           For IMERIT = -2,-1, the penalty parameters are chosen for each
+           constraint individually (need ILAMBDA.ne.0 for this)
+           Very good results are obtained by the filter method
+           (IMERIT=4) and also for IMERIT = 3; for the latter there
+           exists no global convergence proof (the penalty parameters
+           is not chosen monotonically).  If those choices fail,
+           IMERIT = -2 or 2 might be better.  And if you feel
+           courageous, you can try IMERIT = 0.
+            (Integer, -2,-1,0,...,5)
+ISOC       Second order correction for line search (not for IMERIT=3,5)
+             0: no second order correction
+            >0: maximal number of SOC trial steps per iteration
+         **The default is ISOC = 4.
+            (Integer, =0,1)
+ICNRM      Determines what norm is used to measure constraint
+           violation during the line search.
+         ** 1: l-1 norm (Default)
+            2: l-2 norm
+            3: max-norm
+            (Integer, =1,2,3)
+
+Initialization:
+---------------
+
+As interior point method, IPOPT requires all iterates (particularly
+the starting point) to strictly satisfy the bound constraints.
+Therefore, the user-provided starting point is modified if necessary:
+
+DBNDFRAC   If a variable has a lower and upper bound, this parameter
+           determines the minimal distance of the starting point from
+           each bound as a fraction of the difference between the bounds. 
+         **A good value is problem dependent; default is 1.d-2.
+           Small values might be better if the starting point is close
+           to the solution.
+            (Double Precision, >0d0, <0.5d0)
+DBNDPUSH   Minimal distance of variable to bounds (in absolute terms).
+           (If a variable has a lower and upper bound, the minimal
+           distance is computed as the minimum of DBNDPUSH and the value 
+           resulting from DBNDFRAC).
+           Again, good value depends on scaling of problem;
+         **default is 1.d-2.  Small values might be better if the
+           starting point is close to the solution.
+            (Double Precision, >0d0)
+
+DMOVEBOUNDS
+           In order to avoid situations where the problem does not
+           have feasible point that strictly satisfy the bound
+           constraints (which might cause problems for IPOPT), the
+           bounds are slightly relaxed before the solution of the
+           problem.  This value determines the relative degree of the
+           relaxation (for 0.d0, no modification of the bounds is
+           performed).
+         **Default is 1.d-8
+            (Double precision, >= 0.d0)
+
+DMU0       Initial barrier parameter.  Default is 0.1d0.
+           (This value is overwritten for IMUINIT = 2)
+         **The default 0.1d0 is probably good in many cases, but it might
+           be worth trying different values.  For example, if the
+           starting point is believed to be close to the optimal
+           solution in which case a smaller value (e.g. DMU0 = 1.d-4)
+           might be more efficient.  On the other hand, if the step sizes
+           (ALFA(V) and ALFA(X)) are very small in the first few
+           iterations, a large value for DMU0 might lead to a better start.
+            (Double Precision, >0d0)
+IMUINIT	   Initialization of dual variables and MU
+           -1: MU initialized as DMU0; dual variables so that
+               relaxed complementarity (V*S = MU e) is satisfied.
+            0: MU initialized as DMU0; initial values for bound and
+               equality constraint multipliers provided by the user.
+               (useful for warm start)
+         ** 1: MU initialized as DMU0; dual variables set to 1.d0. 
+               (This is the default)
+            2: MU and dual variables initialized based on gradient
+               info at starting point (similar to Yamashita, Yabe,
+               Tanabe)
+            (Integer, =-1,0,1,2)
+
+DLAMINITMAX  (Only for ILAMBDA=2)
+           The initial values for the equality constraint
+           multipliers are obtained as least square estimate for the
+           dual infeasibility.  If the max-norm of this estimate is
+           larger than DLAMINITMAX, then this estimate is discarded and
+           the equality constraint multipliers are initialized to
+           zero.  (No least square estimate is computed if
+           DLAMINITMAX=0.d0.)
+         **Default is 1.d3.
+            (Double Precision, >=0.d0)
+
+Step computation:
+-----------------
+
+IFULL      Decides, whether the search direction is computed by solving a
+           large symmetric system (IFULL = 1) or by decomposition into a
+           range and null space component (IFULL = 0).  The default is
+         **IFULL = 1.
+           (Note, the reduced-space options is less supported)
+            (Integer, 0 or 1)
+DPIVTOL    Pivot tolerance for the linear solvers MA27, MA47, and MA57.
+           The larger this value is chosen, the more accurate is the
+           computation of the search directions, but this may also take
+           more time.  If this value seems too small, the algorithm tries
+           to adjust it (see DPIVTOLMAX).  (IFULL=1 only)
+         **Default: 1.d-8
+            (Double Precision, <= 0.5, >0.0)
+DPIVTOLMAX If the value of this parameter is larger than DPIVTOL,
+           IPOPT will increase the value of the pivot tolerance, if
+           a computed solution of the linear system seems inaccurate.
+           This parameter determines the upper bound allowed for the pivot
+           tolerance.
+         **Default: set to DPIVTOL  (IFULL=1 only)
+            (Double Precision, <= 0.5 >=DPIVTOL)
+DDEPCONDIAG  If the gradients of the equality constraints are linearly
+           dependent, the iteration matrix is singular.  In order to
+           proceed with the optimization, a small multiple of the
+           (negative) identity matrix is placed in the lower right
+           corner of the KKT matrix.  This parameter determines the
+           size of this multiple.  (IFULL=1 only)
+         **Default is 1d-8.
+            (Double Precision, >=0d0)
+IREFINEITER  Minimal number of iterative refinement steps for the
+           linear system. (IFULL=1 only)
+         **Default is 1.
+            (Integer, >=0)
+DFILLINFACT This value is used to estimate the amount of memory
+           required by the linear solver (MA27, MA47, or MA57).  If
+           you get the error message that IPOPT cannot allocate enough
+           memory, you might want to try to choose a smaller value.
+         **Default if 5.d0.
+            (Double Precision, >= 1.d0)
+
+Quasi-Newton Variants:
+----------------------
+
+IQUASI     Choice of second order information:
+                0: Use exact second order information (as provided by
+                   EV_H*...)
+           The next choices require the algorithm to perform a step
+           decomposition (as for IFULL=0), even if the steps are
+           computed using the full-space approach (IFULL=1).  They all
+           approximate a dense estimate of the reduced Hessian and
+           will be inefficient if the reduced space (n-m) is large.
+             -1,1: Use BFGS to approximate reduced Hessian
+             -2,2: Use SR1 to approximate reduced Hessian
+             -3,3: First use BFGS to approximate reduced Hessian until
+                   the current error estimate gets below DSR1TOL, then
+                   switch to SR1.
+             -4,4: Like IQUASI=-2,2, but modifications to ensure
+                   decrease directions (see ICORRECT) are also made to
+                   the Quasi-Newton estimate.
+             -5,5: BFGS update with Powell-damping
+             If IQUASI > 0: use multiplier-free Quasi-Newton update
+             If IQUASI < 0: use multipliers in Quasi-Newton updates
+                            (need ILAMBDA <> 0)
+           For the full-space approach, a limited memory BFGS options
+           has been implemented, which can be activated with
+                6: L-BFGS for full-space Hessian with skipping of the
+                   update, if s^T y in the BFGS formula is
+                   non-positive.
+               -6: L-BFGS for full-space Hessian with Powell-damping.
+                   (see also ILMLEN)
+         **If second order information is available, IQUASI = 0 should 
+           be the best choice (this is the default).  In most other cases,
+           IQUASI = -2 or 6 seems pretty good.
+            (Integer, -6,-5,...,5,6)
+
+Partition of Variables (for reduced space options)
+-------------------------------------------------
+
+ISELBAS    For IFULL = 0 and IQUASI.ne.0 it is necessary to determine a
+           submatrix ('basis matrix') of the Jacobian of the constraints 
+           which in nonsingular.  This parameter determines, how this
+           is done.
+           0: Use the Harwell routine MA28 or MA48 to automatically determine
+              something that looks like a well-conditioned basis
+              matrix.  However, if you know that some of columns
+              in the Jacobian should be part of the basis matrix
+              (e.g. columns belonging to slack variables), you should
+              write the indices of these columns into a file
+              'SLACKS.DAT' (one per line), and those will usually be
+              chosen as part of the basis.
+           1: Use the last columns of the Jacobian as basis matrix.
+           2: Use the first columns of the Jacobian as basis matrix.
+           3: Read the indices of those columns NOT in the basis from
+              the file 'BASIS.DAT'.
+           4: Read the indices of the columns in the basis from the
+              file 'BASIS.DAT'.
+           (The files are read with 'FORMAT(I16)' per line.)
+           You might want to try '0' first, but the more information
+           you can provide, the better (e.g. in form of the
+         **'SLACKS.DAT' file)  Default is ISELBAS = 0.
+            (Integer, 0,1,..,4)
+
+4. Brief Explanation of IPOPT's screen output
+=============================================
+
+During regular iterations:
+--------------------------
+
+Depending on your choice of the parameter 'IOUTPUT', only some of the
+columns will be displayed.
+
+Column   Meaning
+
+ITER     Iteration counter
+ERR      Current error estimate, followed by single letter which shows
+         which of the following error components is the largest:
+           'd':  dual infeasibility [max norm] (optimality)
+           'p':  primal infeasiblity [max norm] (constraint violation)
+           'c':  perturbed complementarity condition [max norm]
+         If ISCALERR = 1, all these entities are scaled.
+MU       Value of barrier parameter
+||C||    Constraint violation (measured according to ICNRM)
+||YPY||  Size of range space component of step (2-norm)
+||PZ||   Size of null space step (in null space)
+            If followed by '*' or '+', the Quasi-Newton update has
+            been skipped in this iteration
+||D||    2-norm of overall step
+ALFA(V)  Step size for the dual variables (from
+           'fraction-to-the-boundary rule').
+            If followed by the letter 'r', the algorithm is currently
+            in the restoration phase.  If followed by 'p' or 'd', then
+            the step size from the fraction-to-the-boundary rule is smaller
+            for the primal or dual step, respectively.
+ALFA(X)  Step size for primal variables after line search.
+            If followed by 'h' or 'H', the filter has been augmented in
+            this iteration, and if 'f' or 'F', the filter has not been
+            augmented.  Here, the capital letter is used if a step with
+            a second-order correction has been accepted.
+            If followed by 'K', a step in the 'KKT-reduction restoration
+            phase' has been taken.  A '-' (dash) indicates that the
+            iteration has been aborted and the regular restoration phase
+            has been activated.
+NU       Value of penalty parameter for merit function (if applicable)
+#LS      Number of trial step sizes during line search (not counting
+            second-order corrections)
+F        Current value of objective function
+#cor     Number of refactorizations to obtain correct inertia
+Regu     multiple of inertia added to Hessian for correct inertia
+            (size of regularization)
+
+
+5. Definition of the problem statement by a user program
+========================================================
+
+The user needs to write a driver routine which calls IPOPT.  The
+nonlinear optimization problem itself is formulated as a set of
+subroutines that compute values and gradients of the objective
+function and the constraints, and - if available - the Hessian of the
+Lagrangian.
+
+An example is provided in the file EXAMPLES/Fortran_example/example.f
+which implements problem 71 from the Hock-Schittkowski test
+collection.
+
+There is also an interface to call IPOPT from C, see Section 5.5
+below.
+
+It follows a detailed description of the Fortran subroutine interfaces:
+
+5.1. IPOPT entry function (is called from user-provided driver routine)
+-----------------------------------------------------------------------
+
+      double precision function IPOPT(N, X, M, NLB, ILB, BNDS_L, NUB,
+     1     IUB, BNDS_U, V_L, V_U, LAM, C, LRW, RW, LIW, IW, ITER,
+     2     IERR, EV_F, EV_C, EV_G, EV_A, EV_H, EV_HLV, EV_HOV, EV_HCV,
+     3     DAT, IDAT, NARGS, ARGS, CARGS)
+ 
+where
+
+Return value:                 Final (optimal) value of objective function
+
+Parameters:
+
+integer           N           Input: number of variables
+double precision  X(N)        variables in problem statement
+                                Input:  user-provided initial point
+                                Output: solution (or last iterate in
+                                        case of failure)
+integer           M           Input: number of equality constraints
+                                 (restriction: M <= N)
+integer           NLB         Input: number of variables with lower bounds
+integer           ILB(NLB)    Input: indices of variables with lower
+                                bounds
+                                (i.e. BNDS_L(i) is bound for X(ILB(i))
+double precision  BNDS_L(NLB) Input: values of lower bounds
+integer           NUB         Input: number of variables with upper bounds
+integer           IUB(NUB)    Input: indices of variables with upper
+                                bounds
+                                (i.e. BNDS_U(i) is bound for X(IUB(i))
+double precision  BNDS_U(NUB) Input: values of upper bounds
+double precision  V_L(NLB)    Output: multipliers belonging to lower bounds
+                                (ordered like BNDS_L)
+double precision  V_U(NUB)    Output: multipliers belonging to upper bounds
+                                (ordered like BNDS_U)
+double precision  LAM(M)      Output: multipliers belonging to
+                                equality constraints
+                                (ordered like C in EVAL_C)
+double precision  C(M)        Output: values of equality constraints at
+                                final point (might be helpful detect
+                                problematic constraints in infeasible
+                                problems)
+integer           LRW         (Only used if IPOPT cannot allocate memory
+                                dynamically, i.e. usually not required!)
+                              Input: size of double precision work space
+                                (at this point there is no convenient
+                                 way to compute sufficient size
+                                 beforehand)
+double precision  RW(LRW)     (Only used if IPOPT cannot allocate memory
+                                dynamically, i.e. usually not required!)
+                              double precision work space
+integer           LIW         (Only used if IPOPT cannot allocate memory
+                                dynamically, i.e. usually not required!)
+                              Input: size of integer work space
+                                (at this point there is no convenient
+                                 way to compute sufficient size
+                                 beforehand)
+integer           IW(LIW)     (Only used if IPOPT cannot allocate memory
+                                dynamically, i.e. usually not required!)
+                              integer work space
+integer           ITER        Output: number of iterations performed
+integer           IERR        Output: Error code
+                              =0: optimal solution found
+                              =1: maximal number of iterations exceeded
+                                  (increase IMAXITER)
+                              =2: step size becomes too small
+                              =3: CPU time exceeded
+                              =4: some algorithmic parameters wrong
+                              =5: too few degrees of freedom
+                              =6: it seems we have linear dependent
+                                  equality constraints
+                              =7: some of the bounds are inconsistent
+                              =8: error opening or reading a file
+                              =9: Search direction getting too small
+                             =10: Linear system becomes too ill-conditioned
+                             =11: NaN or Inf occurred
+                             =13: Iterates becomes very large, seem to diverge
+                             =15: Index in ILB or IUB out of range
+                             =16: Point is (almost) feasible, but filter
+                                  reverts to restoration phase.
+                             =17: Convergence to stationary point for
+                                  infeasibility
+                                  (Problem locally infeasible?)
+                             =18: Restoration phase cannot further improve
+                                  feasibility
+                             =20: The file 'STOP' has been detected in current
+                                  directory and caused IPOPT to abort
+                             =96: Error during dynamic memory allocation
+                             =97: An option was chosen for which a third party
+                                  component has not been compiled into
+                                  executable
+                             =98: LRW too small
+                             =99: LIW too small
+                             other: Look at output... ;-)
+external          EV_F       Subroutine for objective function (see 5.3.1)
+external          EV_C       Subroutine for constraint functions (see 5.3.2)
+external          EV_G       Subroutine for gradient of objective function
+                                    (see 5.3.3)
+external          EV_A       Subroutine for constraint Jacobian (see 5.3.4)
+external          EV_H       Subroutine for Lagrangian Hessian (see 5.3.5)
+external          EV_HLV     Subroutine for Lagrangian Hessian-vector products
+                                    (see 5.3.6)
+external          EV_HOV     Subroutine for objective Hessian-vector products
+                                    (see 5.3.7)
+external          EV_HCV     Subroutine for constraint Hessian-vector products
+                                    (see 5.3.8)
+double precision  DAT(*)     double precision array passed unmodified to EVAL_*
+                               subroutines (can be used to store information
+                               for function and gradient computations)
+integer           IDAT(*)    integer array passed unmodified to EVAL_*
+                               subroutines (can be used to store information
+                               for function and gradient computations)
+integer           NARGS      Input:  The absolute value of this variable is
+                               the number of parameters specified in ARGS and
+                               CARGS.
+                             =0:  Only read the PARAMS.DAT file
+                             >0:  If the PARAMS.DAT file is present in the
+                                  current directory, read its content
+                                  (value specified in PARAMS.DAT overwrite
+                                   values in ARGS)
+                             <0:  Ignore the PARAMS.DAT file, even if it
+                                  exists in the current directory.
+double precision  ARGS(NARGS) Input: ARGS(i) is the value specified for the
+                                parameter CARGS(i)
+                                (cast INTEGER values to DOUBLE PRECISION)
+character*(*)     CARGS(NARGS) Input:  Names of specified parameters
+                                (case-insensitive).  See Section 3 for list of
+                                 possible names.
+
+5.2. Initialization of user parameters via PARAMS.DAT:
+------------------------------------------------------
+
+Values for the algorithmic parameters can be specified as input
+arguments to the IPOPT function, and they can be read from a file
+called PARAMS.DAT in the current directory.  In this file, you may
+specify the name of a parameter (case insensitive) followed by its
+value.  The file does not require a fixed format, and comments can be
+included (everything after a '#' symbol in a line is ignored).  See
+the files 'PARAMS.DAT.*' in the 'doc' directory for a examples.
+
+
+5.3. Subroutines provided by the user:
+--------------------------------------
+
+These subroutines define the problem statement and are called from IPOPT.
+The user has to provide them to the IPOPT call, and may choose different
+names.
+
+Note: For all subroutines, the output double precision arrays (such as
+'G' for EV_G) are not initialized before the call, so it is up to the
+user to set each single element of these arrays, even when the value
+is zero.
+
+5.3.1 Evaluation of the objective function:
+
+      subroutine EV_F(N, X, F, DAT, IDAT)
+      integer N
+      double precision F, X(N)
+      double precision DAT(*)
+      integer IDAT(*)
+
+      N: Input:  number of variables
+      X: Input:  point at which objective function is to be evaluated
+      F: Output: value of objective function at X
+      DAT, IDAT: private user work space
+                   (can be used to communicate between IPOPT and the
+                    EV_* subroutines)
+
+5.3.2 Evaluation of equality constraints
+
+      subroutine EV_C(N, X, M, C, DAT, IDAT)
+      integer N, M
+      double precision C(M), X(N)
+      double precision DAT(*)
+      integer IDAT(*)
+
+      N: Input:  number of variables
+      X: Input:  point at which constraints are to be evaluated
+      M: Input:  number of equality constraints
+      C: Output: value of equality constraints at X
+      DAT, IDAT: private user work space
+                   (can be used to communicate between IPOPT and the
+                    EV_* subroutines)
+
+5.3.3 Evaluation of gradient of objective function
+
+      subroutine EV_G(N, X, G, DAT, IDAT)
+      integer N
+      double precision G(N), X(N)
+      double precision DAT(*)
+      integer IDAT(*)
+
+      N: Input:  number of variables
+      X: Input:  point at which gradient is to be evaluated
+      G: Output: gradient of objective function at X
+                   (entries are ordered like X, i.e. G(i) is derivative of
+                    F with respect to X(i) )
+      DAT, IDAT: private user work space
+                   (can be used to communicate between IPOPT and the
+                    EV_* subroutines)
+
+5.3.4 Evaluation of Jacobian of constraints:
+
+      subroutine EV_A(TASK, N, X, NZ, A, ACON, AVAR, DAT, IDAT)
+      integer TASK, N, NZ
+      double precision X(N), A(NZ)
+      integer ACON(NZ), AVAR(NZ)
+      double precision DAT(*)
+      integer IDAT(*)
+
+      TASK is input and can have the values 0 and 1.
+
+      For TASK = 0:
+      NZ: Output: number of nonzero elements in Jacobian of C
+          (don't access the other variables!)
+
+      For TASK = 1:
+      N:    Input:  number of variables
+      X:    Input:  point at which constraints are to be evaluated
+      NZ:   Input:  size of A, ACON, AVAR
+      A:    Output: nonzero elements of Jacobian in sparse notation
+      ACON: Output: row indices of nonzero elements
+      AVAR: Output: column indices of nonzero elements
+                    (for each i=1,..,NZ the derivative of constraint
+                     number ACON(i) with respect to variable number
+                     AVAR(i) is stored in A(i) )
+      DAT, IDAT:  private user work space
+                   (can be used to communicate between IPOPT and the
+                    EV_* subroutines)
+
+      NOTE: It is assumed that the structure of the nonzeros (ACON and AVAR)
+            does not change throughout the optimization process!
+
+5.3.5 Evaluation of Hessian of Lagrangian
+
+      subroutine EV_H(TASK, N, X, M, LAM, NNZH, HESS, IRNH, ICNH,
+     1      DAT, IDAT)
+      integer TASK, N, M, NNZH
+      double precision X(N), LAM(M), HESS(NNZH)
+      integer IRNH(NNZH), ICNH(NNZH)
+      double precision DAT(*)
+      integer IDAT(*)
+
+      TASK is input and can have the values 0 and 1.
+
+      For TASK = 0:
+      NNZH: Output: number of nonzero elements in Hessian
+            (only lower or upper triangular part, see below)
+            (don't access the other variables!)
+
+      For TASK = 1:
+      N:    Input:  number of variables
+      X:    Input:  point at which constraints are to be evaluated
+      M:    Input:  number of equality constraints
+      LAM:  Input:  vector of Lagrangian multipliers
+      NNZH: Input:  size of HESS, IRNH, ICNH
+      HESS: Output: nonzero elements of Hessian
+      IRNH: Output: row indices of nonzero elements
+      ICNH: Output: column indices of nonzero elements
+                    (for each i=1,..,NNZH the nonzero element HESS(i)
+                     is the element of Hessian in row IRNH(i) and column
+                     ICNH(i) as well as in row ICNH(i) and column IRNH(i).
+                     For non-diagonal elements provide only one of them.)
+      DAT, IDAT:  private user work space
+                   (can be used to communicate between IPOPT and the
+                    EV_* subroutines)
+
+      NOTE: It is assumed that the structure of the nonzeros (IRNH and ICNH)
+            does not change throughout the optimization process!
+
+Note: You only need to provide this subroutine if you want to run
+      IPOPT
+      a) with exact second derivatives (IQUASI=0) in the full-space
+         option (IFULL=1).
+      b) with the filter line search (IMERIT=-4,-5,4,5) and don't want
+         to use only Hessian-Vector products in the restoration phase
+         (ITRONHESS>0).
+      In other cases, you can pass to IPOPT the subroutine EV_H_DUMMY which
+      is in the IPOPT library.
+
+5.3.6 Evaluation of products of the Hessian of the Lagrangian with
+      vectors.
+
+      subroutine EV_HLV(TASK, N, X, M, LAM, VIN, VOUT, DAT, IDAT)
+      integer TASK, N, M
+      double precision LAM(M), VIN(N), X(N), VOUT(N)
+      double precision DAT(*)
+      integer IDAT(*)
+
+      TASK: Input:  Ignore for now...
+      N:    Input:  number of variables
+      X:    Input:  point at which constraints are to be evaluated
+      M:    Input:  number of equality constraints
+      LAM:  Input:  vector of Lagrangian multipliers
+      VIN:  Input:  vector to be multiplied with Hessian
+      VOUT: Input:  resulting product
+      DAT, IDAT:  private user work space
+                   (can be used to communicate between IPOPT and the
+                    EV_* subroutines)
+
+Note: You only need to provide this subroutine if you want to run
+      IPOPT
+      a) with exact second derivatives (IQUASI=0) in the reduced space
+         option (IFULL=0) and choice IHESSVECT=0.
+      In other cases, you can pass to IPOPT the subroutine EV_HLV_DUMMY which
+      is in the IPOPT library.
+
+5.3.7 Evaluation of products of the Hessian of the objective function
+      with vectors.
+
+      subroutine EV_HOV(TASK, N, X, M, VIN, VOUT, DAT, IDAT)
+      integer TASK, N, M
+      double precision VIN(N), X(N), VOUT(N)
+      double precision DAT(*)
+      integer IDAT(*)
+
+      TASK: Input:  Ignore for now...
+      X:    Input:  point at which constraints are to be evaluated
+      M:    Input:  number of equality constraints
+      VIN:  Input:  vector to be multiplied with Hessian
+      VOUT: Input:  resulting product
+      DAT, IDAT:  private user work space
+                   (can be used to communicate between IPOPT and the
+                    EV_* subroutines)
+
+Note: You only need to provide this subroutine if you want to run
+      IPOPT
+      a) with exact second derivatives (IQUASI=0) in the reduced space
+         option (IFULL=0) and choice IHESSVECT=1.
+      In other cases, you can pass to IPOPT the subroutine EV_HOV_DUMMY which
+      is in the IPOPT library.
+
+5.3.8 Evaluation of products of the Hessians of the constraint
+      functions with vectors.
+
+      subroutine EV_HCV(TASK, N, X, M, VIN, VOUT, DAT, IDAT)
+      integer TASK, N, M
+      double precision LAM(M), VIN(N), X(N), VOUT(N)
+      double precision DAT(*)
+      integer IDAT(*)
+
+      TASK: Input:  Ignore for now...
+      X:    Input:  point at which constraints are to be evaluated
+      M:    Input:  number of equality constraints
+      LAM:  Input:  vector of weights for the individual constraint
+                    Hessians
+      VIN:  Input:  vector to be multiplied with Hessian
+      VOUT: Input:  resulting product
+      DAT, IDAT:  private user work space
+                   (can be used to communicate between IPOPT and the
+                    EV_* subroutines)
+
+Note: You only need to provide this subroutine if you want to run
+      IPOPT
+      a) with exact second derivatives (IQUASI=0) in the reduced space
+         option (IFULL=0) and choice IHESSVECT=1, or
+      b) with the filter line search (IMERIT=-4,-5,4,5) and specified
+         IHESSVECT=1 and ITRONHESS<>0.
+      In other cases, you can pass to IPOPT the subroutine EV_HCV_DUMMY which
+      is in the IPOPT library.
+
+5.4 Subroutine for checking derivatives
+---------------------------------------
+
+This options is currently not implemented.
+
+5.5. Calling IPOPT from C
+=========================
+
+The distribution also includes a C wrapper for the above Fortran
+interface.
+
+The header file
+
+INCDIR/Ipopt_Interface.h
+
+lists the prototypes, where INCDIR is the directory where the includes
+files are installed for `make install' (usually just `include' in the
+main Ipopt directory, or $PREFIX/include, if you gave to configure the
+option `--prefix=$PREFIX'.
+
+An example is provided in
+
+EXMAPLES/C_interface/example.c
+
+
+6. Additional Remarks
+=====================
+
+6.1. Expert options
+===================
+
+Output:
+-------
+
+ICNR       The number ICNR is used internally as Fortran
+           file unit number, so that you can avoid overlapping with
+           unit number in the remainder of your code.
+         **Default is 42.
+            (Integer, > 0)
+
+Termination:
+------------
+
+DSCALMULTMAX  Threshold for scaling of the error components.  If
+           average size of multipliers is larger than this, the error
+           component is scaled. (Parameter $s_{\max}$ in paper.)
+         **Default is 1.d2.
+            (Double Precision, >=0d0)
+Line Search:
+------------
+
+IALPHA     Determines how primal and dual step sizes relate.
+            0: choose same step size for primal and dual step
+            1: choose step size for dual step as minimum of primal
+               step and maximal dual step
+            2: choose step size for primal and dual variables
+         **    independently (Default)
+            (Integer, 0,1,2)
+IITERBLOCKMAX
+           If the number of successive iterations in which full step is
+           rejected, exceeds this value, an "anti-blocking" heuristic
+           (deletion of the filter or waking up watchdog procedure) is
+           activated.  This is a heuristic trying to overcome situations
+           where IPOPT is stuck.
+         **Default: 4
+           (Integer, >0)
+DLS_SAFE   (only for IMERIT = -2,2,-1,1)
+	   If the current error estimate gets below this tolerance, no
+           decrease of the penalty parameters is allowed.
+           In order to ensure global convergence theoretically, this value
+           should be infinity, but in some cases the penalty parameter 
+           becomes very large at the beginning of the optimization, which
+           leads to a poor performance later on.  In such a case, a
+           smaller value (like 1.d0) might help.
+         **Default value is 1.d20.
+            (Double Precision, >=0d0)
+DWATCHTOL  (only for IMERIT = -2,2,-1,1)
+	   Since the line searches (except IMERIT = 3) can suffer from
+           the Maratos effect, a (one step) watchdog technique has
+           been implemented.  This parameters decides when the
+           watchdog wakes up, i.e. when the current error estimate gets
+           below DWATCHTOL, the watchdog technique becomes active.
+           (If DWATCHTOL<0d0, the watchdog becomes active, as soon as
+           the constraint violation is less than -DWATCHTOL.)
+         **Default is 0.d0 (watchdog asleep all the time)
+            (Double Precision)
+DTAU       Parameter in fraction to boundary rule (between 0 and 1,
+         **close to 1).  Default 0.99d0 works fine.
+            (Double Precision, >0d0, <1d0)
+DS_F       Parameter $s_f$ (or $s_{\varphi})$ in filter switching rule.
+         **Default is 2.3d0.
+            (Double Precision, >= 1.d0)
+DS_THETA   Parameter $s_{\theta}$ in filter switching rule.
+         **Default is 1.1d0.
+            (Double Precision, > 1.d0)
+DDELTA     Parameter $\delta$ in filter switching rule.
+         **Default is 1.1d0.
+            (Double Precision, > 0.d0)
+DGAMMA_F   Parameter $\gamma_f$ (or $\gamma_{\varphi}$) in filter
+           margin definition.
+         **Default is 1.d-5.
+            (Double Precision, >0.d0, <1.d0)
+DGAMMA_THETA   Parameter $\gamma_{\theta}$ in filter margin definition.
+         **Default is 1.d-5.
+            (Double Precision, >0.d0, <1.d0)
+DRHO       Parameter $\rho$ in penalty parameter update.
+         **Default: 1.d-1
+            (Double Precision, >0.d0, <1.d0)
+IRESTO     Determines which algorithm is used for the feasibility
+           restoration phase (for IMERIT=4,5).
+            1: Use restoration phase based on a filter barrier method
+               (not implemented for IMERIT=5 or IFULL=0).
+            2: Use TRON (assumes that code has been compiled with TRON
+               included) 
+         **Default: 1 for IFULL=1, 2 for IFULL=0.
+            (Integer, =1,2)
+DRESTOKKTRED  Required reduction (fraction) in KKT error per iteration
+           in KKT error reduction restoration phase.
+           ($\kappa_F$ in the paper)
+         **Default: 0.999d0
+            (Double Precision >= 0.d0, <1.d0)
+DALPHAMINFRAC  "Safety factor" in formula for trigger for restoration
+           phase (Parameter $\gamma_{\alpha}$ in the paper)
+         **Default: 5.d-2
+            (Double Precision, > 0.d0)
+
+Step computation:
+-----------------
+
+ILAMBDA    Determines how the Lagrangian multipliers for the equality
+           constraints are computed.
+           0: Don't compute multipliers. (Not possible for all options)
+           1: Compute (first order) 'coordinate' multipliers.
+           2: (only IFULL = 1): Obtain multipliers from same system
+              from which the search direction is computed (second
+              order multipliers)
+         **Default is ILAMBDA = 1 for IFULL = 0, and ILAMBDA = 2 for
+           IFULL = 1.
+            (Integer, 0,1,2)
+IKKTSCALE  Decides (for the full-space approach IFULL=1 only), if you
+           want to scale for KKT matrix:
+           0: No scaling
+           1: Use the Harwell routine MC30, MC29, or MC19 to find the
+              scaling parameters (this requires that the executable has
+                been compiled with MC30, MC29, or MC19)
+         **Default depends on whether the executable has been compiled
+           with one of the routines MC30, MC29, or MC19.
+            (Integer, 0,1,2)
+ISYMSOLV   Decides (for the full-space approach IFULL=1 only) which
+           routine should be used to solve the symmetric linear
+           systems:
+	   0: Harwell routine MA47  (this requires that the executable
+                has been compiled with MA47)
+	   1: Harwell routine MA27  (this requires that the executable
+	        has been compiled with MA27)
+	   2: Harwell routine MA57  (this requires that the executable
+	        has been compiled with MA57)
+         **Default depends on which Harwell routine is included in the
+           executable.
+            (Integer, 0,1,2)
+IHESSVECT  For the reduced space version, determines how the products
+           of vectors with the exact Hessian of the Lagrangian are
+           computed:
+         **0: Compute product with overall Lagrangian Hessian (default
+              for IFULL=1)
+              (using EVAL_HLV)
+           1: Compute products with objective function and constraint
+         **   Hessians separately (default for IFULL=0)
+              (using EVAL_HOV and EVAL_HCV)
+           2: Approximate Hessian-Vector products by finite
+              differences (don't need any EV_H*... subroutines)
+            (Integer, 0,1,2)
+ICG        Conjugate gradient option for reduced space problem (if
+           IFULL = 0).
+         ** 0: Solve reduced system with direct linear solver (default)
+            1: use BFGS-updates on overall reduced primal-dual Hessian
+               to obtain preconditioner
+            2: use (damped) BFGS on reduced Hessian of original
+               Lagrangian only and compute primal-dual Hessian or
+               barrier term explicitly to obtain preconditioner.
+             (Still under development.)
+            (Integer, =-2,...,2)
+DMUDEPEXP  Exponent for MU in the lower right block correction.
+           (Parameter $\kappa_c$ in paper)
+         **Default is 0.25d0
+           (Double Precision, >=0.d0)
+DVCORRECTFACT
+           Parameter $\kappa_{\Sigma}$ in bound multiplier correction
+         **Default: 1.d10
+           (Double Precision, >=1.d0)
+DLINDAMP   Factor for the linear damping term (introduced to handle
+           problems with unbounded solution set).
+           (Parameter $\kappa_d$ in the paper)
+         **Default: 1.d-4
+           (Double Precision, >=0.d0)
+
+Update of Barrier Parameter:
+----------------------------
+
+DMULIN     Parameter for linear decrease of MU.
+         **Default is 0.2d0, but this can sometimes be too aggressive,
+           i.e. then a larger values (but below 1) might be better.
+            (Double Precision, >0d0, <1d0)
+DMUSUPER   Parameter for superlinear decrease of MU.
+         **(Default of 1.5d0 should do OK - if this seems to
+           aggressive, change to a smaller value )
+            (Double Precision, >=1d0)
+DMUERRFAC  Factor weighting current error versus current MU in update
+         **formula for MU.  Default is 10.
+            (Double Precision, >0d0)
+DMAXERR    Minimum error tolerance to be satisfied for each barrier
+         **problem before barrier parameter MU is decreased.  Default
+           is 1.d3.
+            (Double Precision, >DTOL)
+
+Quasi-Newton Variants:
+----------------------
+
+ICORRECT:  Since for SR1 estimates or exact second derivatives the
+           reduced Hessian can become indefinite, we need to perform
+           modifications of the reduced Hessian in order to ensure to
+           obtain a descent direction. This parameter determines, how
+           this is done (and is ignored for IFULL=1).
+           1: Do modified Cholesky factorization (cheap)
+           2: Do eigenvalue decomposition and make eigenvalues
+              sufficiently positive (expensive, but maybe better?)
+         **3: Do Cholesky factorization; if indefinite, add multiple
+              of identity to reduced Hessian (default)
+           4: Do Cholesky factorization; if indefinite, add multiple
+              of identity to FULL Hessian (can be very expensive)
+           If you specify ICORRECT<0, the method will first use a
+           usual LU factorization, and only if the matrix is singular
+           or the step itself is a direction of negative curvature, a
+           regularization as above (now with -ICORRECT) will be
+           performed.
+           In most cases, 3 seems a pretty robust and efficient
+           choice; in case of failure, you want to try other options,
+           such as 1 or 2.
+            (Integer, 0,1,..,4)
+IINITB:    For IQUASI.ne.-6,0,6, this determines how the initial
+           estimate of the reduced Hessian is obtained.
+         ** 0: Use identity matrix (default)
+            1: Use 1d-6 * identity matrix
+            2-4: obtain estimate of diagonal entries ('bdiag') by
+                 perturbing the reduced gradient of the objective
+                 function.
+            2: (minimum of all absolute values of bdiag) * identity matrix
+            3: Use diagonal matrix with absolute values of bdiag
+            4: Use bdiag (not for BFGS!)
+            5: Try identity matrix in first iteration, then re-scale
+               after first step (see e.g. p.200 in Nocedal/Wright)
+           In many cases, IINITB = 0 is doing the job, but it might
+           also be worth trying the other options, in particular 2 and 5.
+            (Integer, 0,1,...,5)
+IBWARMSTART: For IQUASI <> 0, determines whether a warm start for the
+           quasi-Newton matrix is to be performed:
+         ** 0: Initialize reduced Hessian as indicated by IINITB (default)
+            1: If file 'BWARM.DAT' exists in current directory, read
+               elements of initial quasi-Newton estimate from that
+               file (note that this matrix has to be positive definite
+               for BFGS choices of IQUASI).  If this file doesn't
+               exist, initialize according to IINITB. After last
+               iteration (successful or not), write current estimate
+               into file BWARM.DAT (note, this is overwrite the
+               current content of BWARM.DAT).
+            (Integer, 0,1)
+ILMLEN:    For IQUASI.eq.-6,6:  Determines, how many (s,y)-pairs are
+           stored to compute the limited memory BFGS estimate of the
+         **Hessian.  Default is 6.
+           The larger this number is chosen, the more accurate is the
+           estimate, but the computation time is increased.  A too
+           small, however, might increase the overall number of
+           iterations and even compromise robustness.
+            (Integer, >0)
+DSR1TOL:   Defines switching tolerance for IQUASI = 3.
+         ** (Double Precision, >= 0d0 - default is 1.d0)
+
+Partition of Variables (for reduced space options)
+-------------------------------------------------
+
+DMAXCOND   If the estimated condition number of the basis matrix
+           exceeds this value, a new basis is chosen by MA28 (like
+           ISELBAS=0, but for any choice of ISELBAS.)
+           It seems that if the user cannot provide a good choice derived 
+           from the problem statement, a relatively small number (like 
+           50d0) is good.  If you don't want any changes of the basis
+           choose a very large number.
+         **Default is 50.d0 for ISELBAS = 0, and 1.d20 otherwise.
+            (Double Precision, >1d0)
+
+TRON Restoration Phase (within Filter Line Search):
+---------------------------------------------------
+
+Note: Unless you have to use the reduced space option, you should use
+the regular restoration phase option (not using TRON), as it is more
+robust, and better supported.
+
+DTRONCGTOL Relative tolerance for conjugate gradients within TRON. (<1d0)
+           The smaller this value is, the more accurate are the trial
+           steps in restoration phase (if abs(IMERIT)>=4) and it might
+           take overall less iterations in the restoration phase. 
+           However, a small value also means more computation time.
+         **Default is 1.d-3.
+            (Double Precision, >0d0, <1d0)
+DTRONGTOL  Termination tolerance for TRON to decide when the
+           feasibility problem is solved (e.g. for detection
+         **infeasibility).  Default is 1.d-3*DTOL.
+            (Double Precision, >0d0)
+ITRONHESS  Determines how Hessian information are treated in
+           TRON:
+           0: Use only Hessian-vector products (using EVAL_HESSCON_V)
+           1: Construct Hessian explicitly (using EVAL_H),
+              but don't compute a preconditioner for TRON-internal CG)
+	        (this requires that the executable has been compiled
+                 with the Harwell routines MC35 and MC39)
+           2: Construct Hessian explicitly (using EVAL_H),
+              and use preconditioner in TRON-internal CG based on
+              incomplete Cholesky factorization.
+                (this requires that the executable has been compiled
+                 with the Harwell routines MC35 and MC39)
+         **Default depends on whether executable has been compiled
+           with MC35 and MC39.
+            (Integer, 0,1,2)
+ITRON2DERIVS  If this is set to 0, the Hessian-vector products
+           required by TRON (if ITRONHESS = 0) will be approximated by
+           finite differences of the Jacobian.  If in the other case,
+           ITRON2DERIVS is set to 1, the user has to provide the
+           routine EVAL_HESSCON_V (or set QHESS to 2).
+         **Default is 1.
+
+6.2. Screen Output during Restoration phase with TRON
+=====================================================
+
+Column    Meaning
+
+ITER      Iteration counter
+||C||     Constraint violation (2-norm)
+||p-grd|| Norm of projected gradient of objective function of
+          feasibility problem
+Delta     Current trust region radius.  A character following this
+          number indicates quality of step:
+            '-': Poor (but sufficient) agreement of actual and
+                 predicted reduction
+            '=': Satisfactory agreement of actual and predicted
+                 reduction
+            '+': Very good agreement of actual and predicted reduction
+            'j': TR radius increased, since subproblems seem to be
+                 prematurely stopped due to trust region.
+#rej      Number of rejected trial steps
+F         Value of objective function
+
+
+
+$Id: README.IPOPT 662 2004-10-26 21:21:24Z andreasw $

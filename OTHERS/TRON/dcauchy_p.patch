@@ -1,0 +1,126 @@
+2c2,47
+<      +                   alpha,s,wa)
+---
+>      +                   alpha,s,wa,
+>      1     IPITER, IPN, NIND, M, NORIG, XORIG, CSCALE, IVAR,
+>      1     NFIX, IFIX, SOFLAG, C,
+>      1     NLB, ILB, NUB, IUB, S_L, S_U,
+>      1     KCONSTR, LRS, RS, LIS, IS, LRW, RW, LIW, IW, IERR, EV_F,
+>      1     EV_C, EV_G, EV_A, EV_H, EV_HLV, EV_HOV, EV_HCV, DAT, IDAT)
+>       IMPLICIT NONE
+>       integer IPITER
+>       integer IPN
+>       integer NIND
+>       integer M
+>       integer NORIG
+>       double precision XORIG(NORIG)
+>       double precision CSCALE(*)
+>       integer IVAR(IPN)
+>       integer NFIX
+>       integer IFIX(NFIX)
+>       logical SOFLAG
+>       double precision C(M)
+>       integer NLB
+>       integer ILB(NLB)
+>       integer NUB
+>       integer IUB(NUB)
+>       double precision S_L(NLB)
+>       double precision S_U(NUB)
+>       integer KCONSTR(6)
+>       integer LRS
+>       double precision RS(LRS)
+>       integer LIS
+>       integer IS(LIS)
+>       integer LRW
+>       double precision RW(LRW)
+>       integer LIW
+>       integer IW(LIW)
+>       integer IERR
+>       external EV_F
+>       external EV_C
+>       external EV_G
+>       external EV_A
+>       external EV_H
+>       external EV_HLV
+>       external EV_HOV
+>       external EV_HCV
+>       double precision DAT(*)
+>       integer IDAT(*)
+> 
+127a173,179
+>       double precision snrm, gnrm, macheps, precfact
+>       parameter( precfact = 1.d1 )
+> 
+>       double precision dnrm2, ddot, d1mach
+>       external dnrm2, ddot, d1mach
+> 
+>       include 'IPOPT.INC'
+129,130c181
+<       double precision dnrm2, ddot
+<       external dnrm2, ddot
+---
+>       macheps = d1mach(4)
+144,145c195,206
+<       else 
+<          call dssyax(n,a,diag,col_ptr,row_ind,s,wa)
+---
+>       else
+>          if( QTRONHESS.eq.0 ) then
+>             call RES_HV(IPITER, IPN, NIND, M, NORIG, XORIG, CSCALE,
+>      1           IVAR, NFIX, IFIX, SOFLAG, C, s, wa,
+>      1           NLB, ILB, NUB, IUB, S_L, S_U,
+>      1           KCONSTR, LRS, RS, LIS, IS, LRW, RW, LIW, IW, IERR,
+>      1           EV_F, EV_C, EV_G, EV_A, EV_H, EV_HLV, EV_HOV, EV_HCV,
+>      1           DAT, IDAT)
+>             if( IERR.ne.0 ) return
+>          else
+>             call dssyax(n,a,diag,col_ptr,row_ind,s,wa)
+>          endif
+162d222
+< 
+163a224,228
+>             if( alpha.eq.0.d0 ) then
+>                call C_OUT(2,0,1,'dcauchy(tron): alpha is 0.d0')
+>                IERR = 572
+>                return
+>             endif
+165,166c230,243
+<             if (dnrm2(n,s,1) .le. delta) then
+<                call dssyax(n,a,diag,col_ptr,row_ind,s,wa)
+---
+>             snrm = dnrm2(n,s,1)
+>             if (snrm .le. delta) then
+>                if( QTRONHESS.eq.0 ) then
+>                   call RES_HV(IPITER, IPN, NIND, M, NORIG, XORIG,
+>      1                 CSCALE, IVAR, NFIX, IFIX, SOFLAG, C, s, wa,
+>      1                 NLB, ILB, NUB, IUB, S_L, S_U,
+>      1                 KCONSTR, LRS, RS, LIS, IS, LRW, RW, LIW, IW,
+>      1                 IERR, EV_F, EV_C, EV_G, EV_A, EV_H, EV_HLV,
+>      1                 EV_HOV, EV_HCV, DAT, IDAT)
+>                   if( IERR.ne.0 ) return
+>                else
+>                   call dssyax(n,a,diag,col_ptr,row_ind,s,wa)
+>                endif
+>                gnrm = dnrm2(n,g,1)
+167a245
+>      1              - precfact*macheps*max(snrm,gnrm) ! for round off error
+186,187c264,277
+<             if (dnrm2(n,s,1) .le. delta) then
+<                call dssyax(n,a,diag,col_ptr,row_ind,s,wa)
+---
+>             snrm = dnrm2(n,s,1)
+>             if (snrm .le. delta) then
+>                if( QTRONHESS.eq.0 ) then
+>                   call RES_HV(IPITER, IPN, NIND, M, NORIG, XORIG,
+>      1                 CSCALE, IVAR, NFIX, IFIX, SOFLAG, C, s, wa,
+>      1                 NLB, ILB, NUB, IUB, S_L, S_U,
+>      1                 KCONSTR, LRS, RS, LIS, IS, LRW, RW, LIW, IW,
+>      1                 IERR, EV_F, EV_C, EV_G, EV_A, EV_H, EV_HLV,
+>      1                 EV_HOV, EV_HCV, DAT, IDAT)
+>                   if( IERR.ne.0 ) return
+>                else
+>                   call dssyax(n,a,diag,col_ptr,row_ind,s,wa)
+>                endif
+>                gnrm = dnrm2(n,g,1)
+188a279
+>      1              + precfact*macheps*max(snrm,gnrm) ! for round off error

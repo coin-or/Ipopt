@@ -1,0 +1,10 @@
+60c60,61
+<          if (x(i) + alpha*w(i) .lt. xl(i)) then
+---
+> CORIG         if (x(i) + alpha*w(i) .lt. xl(i)) then
+>          if (x(i) + alpha*w(i) .le. xl(i)) then
+62c63,64
+<          else if (x(i) + alpha*w(i) .gt. xu(i)) then
+---
+> CORIG         else if (x(i) + alpha*w(i) .gt. xu(i)) then
+>          else if (x(i) + alpha*w(i) .ge. xu(i)) then

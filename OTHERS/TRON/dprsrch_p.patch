@@ -1,0 +1,117 @@
+2c2,9
+<      +                   wa1,wa2)
+---
+>      +                   wa1,wa2,
+>      1     indfree,
+>      1     IPITER, IPN, NIND, M, NORIG, XORIG, CSCALE, IVAR,
+>      1     NFIX, IFIX, SOFLAG, C,
+>      1     NLB, ILB, NUB, IUB, S_L, S_U,
+>      1     KCONSTR, LRS, RS, LIS, IS, LRW, RW, LIW, IW, IERR, EV_F,
+>      1     EV_C, EV_G, EV_A, EV_H, EV_HLV, EV_HOV, EV_HCV, DAT, IDAT)
+>       IMPLICIT NONE
+3a11,51
+>       integer indfree(n)
+>       integer IPITER
+>       integer IPN
+>       integer NIND
+>       integer M
+>       integer NORIG
+>       double precision XORIG(NORIG)
+>       double precision CSCALE(*)
+>       integer IVAR(IPN)
+>       integer NFIX
+>       integer IFIX(NFIX)
+>       logical SOFLAG
+>       double precision C(M)
+>       integer NLB
+>       integer ILB(NLB)
+>       integer NUB
+>       integer IUB(NUB)
+>       double precision S_L(NLB)
+>       double precision S_U(NUB)
+>       integer KCONSTR(6)
+>       integer LRS
+>       double precision RS(LRS)
+>       integer LIS
+>       integer IS(LIS)
+>       integer LRW
+>       double precision RW(LRW)
+>       integer LIW
+>       integer IW(LIW)
+>       integer IERR
+>       external EV_F
+>       external EV_C
+>       external EV_G
+>       external EV_A
+>       external EV_H
+>       external EV_HLV
+>       external EV_HOV
+>       external EV_HCV
+>       double precision DAT(*)
+>       integer IDAT(*)
+> 
+> c      integer n
+114a163,168
+>       double precision macheps, precfact
+>       parameter( precfact = 1.d1 )
+> 
+> CAWAE
+>       integer p_rwend, p_iwend
+>       integer p_vin, p_vout, i
+116,117c170,173
+<       double precision ddot
+<       external daxpy, dcopy, ddot
+---
+>       include 'IPOPT.INC'
+> 
+>       double precision ddot, dnrm2, d1mach
+>       external daxpy, dcopy, ddot, dnrm2, d1mach
+119a176,192
+>       macheps = d1mach(4)
+> 
+>       p_rwend = 0
+>       p_iwend = 0
+>       if( QTRONHESS.eq.0 ) then
+>          p_vin   = p_rwend
+>          p_vout  = p_vin + IPN
+>          p_rwend = p_vout + IPN
+>          if( p_rwend.gt.LRW ) then
+>             IERR = 98
+>             return
+>          endif
+>       else
+>          p_vin   = 0
+>          p_vout  = 0
+>       endif
+> 
+141c214,233
+<          call dssyax(n,a,diag,col_ptr,row_ind,wa1,wa2)
+---
+> 
+>          if( QTRONHESS.eq.0 ) then
+>             call DCOPY(IPN, 0.d0, 0, RW(p_vin+1), 1)
+>             do i = 1, n
+>                RW(p_vin+indfree(i)) = wa1(i)
+>             enddo
+>             call RES_HV(IPITER, IPN, NIND, M, NORIG, XORIG, CSCALE,
+>      1           IVAR, NFIX, IFIX, SOFLAG, C, RW(p_vin+1), RW(p_vout+1),
+>      1           NLB, ILB, NUB, IUB, S_L, S_U,
+>      1           KCONSTR, LRS, RS, LIS, IS, LRW-p_rwend, RW(p_rwend+1),
+>      1           LIW-p_iwend, IW(p_iwend+1), IERR, EV_F, EV_C, EV_G,
+>      1           EV_A, EV_H, EV_HLV, EV_HOV, EV_HCV, DAT, IDAT)
+>             if( IERR.ne.0 ) return
+>             do i = 1, n
+>                wa2(i) = RW(p_vout+indfree(i))
+>             enddo
+>          else
+>             call dssyax(n,a,diag,col_ptr,row_ind,wa1,wa2)
+>          endif
+> 
+142a235
+>      1        + precfact*macheps*dnrm2(n,g,1)*dnrm2(n,wa1,1)!for round off error
+151a245,249
+>             if( alpha.eq.0.d0 ) then
+>                call C_OUT(2,0,1,'dprsrch(tron): alpha becomes 0.d0')
+>                IERR = 573
+>                return
+>             endif

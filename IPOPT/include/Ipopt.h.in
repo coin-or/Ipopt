@@ -1,0 +1,23 @@
+/*
+  Copyright (C) 2003, International Business Machines and others.
+  All Rights Reserved.
+  This code is published under the Common Public License.
+*/
+
+#ifndef IPOPT_H
+#define IPOPT_H
+
+/* Here define the C-types for Fortran types */
+
+#ifndef FTYPES_DEFINED
+
+typedef INTEGER_TYPE fint;
+
+typedef double real;
+typedef long fintptr;
+#endif
+
+#define IPMALLOC_DOUBLE 1
+#define IPMALLOC_INT 2
+
+#endif

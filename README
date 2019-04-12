@@ -1,0 +1,68 @@
+=============================================================================
+
+
+                  ###   ######  ####### ######  #######
+                   #    #     # #     # #     #    #
+                   #    #     # #     # #     #    #
+                   #    ######  #     # ######     #
+                   #    #       #     # #          #
+                   #    #       #     # #          #
+                  ###   #       ####### #          #
+
+
+=============================================================================
+
+This package contains the the source code for IPOPT, an interior point
+algorithm for large-scale nonlinear optimization (with interfaces to
+AMPL and CUTEr).
+
+Homepage: http://www.coin-or.org/Ipopt
+
+The files of this package are available from the COIN-OR web page at
+http://www.coin-or.org .  They can be obtained via CVS or as tarballs
+(see http://www.coin-or.org/download.html).
+
+The package is released under the Common Public License (CPL); see
+http://www.opensource.org/licenses/cpl.html or the enclosed LICENSE
+file in the doc subdirectory.
+
+For detailed information on how to install and compile components of
+the IPOPT package see the doc/INSTALL file.  Here, also the
+dependencies to third party software components are described.  For
+information on compiling under Windows, read the doc/README.Windows
+file.  If you just want to quickly build a solver executable for AMPL
+or CUTEr, read the doc/QUICKINSTALL file.
+
+More details on IPOPT (including algorithmic parameters and how to
+hook up your own program to IPOPT) can be found in doc/README.IPOPT.
+
+As stated in the license, you can use the provided code without
+charge, but if you modify the code and you distribute your
+modifications in any way (as source code or as binaries), you must
+make those modifications public, indicating which changes you made.
+For details, see the LICENSE file in the doc directory.
+
+
+MAIN AUTHORS:
+=============
+
+Andreas Waechter
+IBM T.J. Watson Research Center
+P.O. Box 218
+Yorktown Heights, NY 10598, USA
+
+Lorenz T. Biegler, Yi-Dong Lang, Arvind Raghunathan
+Department of Chemical Engineering
+Carnegie Mellon University
+5000 Forbes Avenue
+Pittsburgh, PA 15213, USA
+
+
+COPYRIGHT:
+==========
+
+Copyright (C) 2002, 2003, Carnegie Mellon University and others.
+All Rights Reserved.
+This code is published under the Common Public License.
+
+$Id: README 531 2004-03-11 01:31:07Z andreasw $

@@ -1,0 +1,50 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "Ipopt", "Ipopt\Ipopt.vfproj", "{886D640A-20E5-4675-B603-AB56DC6195C6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FDBA4610-5CFF-4279-8013-1F91903CD612} = {FDBA4610-5CFF-4279-8013-1F91903CD612}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Ipopt-C", "Ipopt-C\Ipopt-C.vcproj", "{FDBA4610-5CFF-4279-8013-1F91903CD612}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "Fortran_example", "Fortran_example\Fortran_example.vfproj", "{31B34BAA-4A16-4A13-BF5D-33569C1DECBD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{886D640A-20E5-4675-B603-AB56DC6195C6} = {886D640A-20E5-4675-B603-AB56DC6195C6}
+		{FDBA4610-5CFF-4279-8013-1F91903CD612} = {FDBA4610-5CFF-4279-8013-1F91903CD612}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "C_example", "C_example\C_example.vcproj", "{F0415AA6-F3EB-4D90-9EE3-1CFEC742501F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{886D640A-20E5-4675-B603-AB56DC6195C6} = {886D640A-20E5-4675-B603-AB56DC6195C6}
+		{FDBA4610-5CFF-4279-8013-1F91903CD612} = {FDBA4610-5CFF-4279-8013-1F91903CD612}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{886D640A-20E5-4675-B603-AB56DC6195C6}.Debug.ActiveCfg = Debug|Win32
+		{886D640A-20E5-4675-B603-AB56DC6195C6}.Debug.Build.0 = Debug|Win32
+		{886D640A-20E5-4675-B603-AB56DC6195C6}.Release.ActiveCfg = Release|Win32
+		{886D640A-20E5-4675-B603-AB56DC6195C6}.Release.Build.0 = Release|Win32
+		{FDBA4610-5CFF-4279-8013-1F91903CD612}.Debug.ActiveCfg = Debug|Win32
+		{FDBA4610-5CFF-4279-8013-1F91903CD612}.Debug.Build.0 = Debug|Win32
+		{FDBA4610-5CFF-4279-8013-1F91903CD612}.Release.ActiveCfg = Release|Win32
+		{FDBA4610-5CFF-4279-8013-1F91903CD612}.Release.Build.0 = Release|Win32
+		{31B34BAA-4A16-4A13-BF5D-33569C1DECBD}.Debug.ActiveCfg = Debug|Win32
+		{31B34BAA-4A16-4A13-BF5D-33569C1DECBD}.Debug.Build.0 = Debug|Win32
+		{31B34BAA-4A16-4A13-BF5D-33569C1DECBD}.Release.ActiveCfg = Release|Win32
+		{31B34BAA-4A16-4A13-BF5D-33569C1DECBD}.Release.Build.0 = Release|Win32
+		{F0415AA6-F3EB-4D90-9EE3-1CFEC742501F}.Debug.ActiveCfg = Debug|Win32
+		{F0415AA6-F3EB-4D90-9EE3-1CFEC742501F}.Debug.Build.0 = Debug|Win32
+		{F0415AA6-F3EB-4D90-9EE3-1CFEC742501F}.Release.ActiveCfg = Release|Win32
+		{F0415AA6-F3EB-4D90-9EE3-1CFEC742501F}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

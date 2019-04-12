@@ -1,0 +1,28 @@
+#!/bin/sh
+
+echo " "
+echo "Running script for downloading the source code for BLAS"
+echo " "
+
+rm -f blas.tgz
+
+echo "Downloading the source code from www.netlib.org..."
+wget ftp://www.netlib.org/blas/blas.tgz
+
+echo "Uncompressing the tarball..."
+gunzip -f blas.tgz
+
+echo "Unpacking the source code..."
+tar xf blas.tar
+
+echo "Deleting the tar file..."
+rm blas.tar
+
+rm -f d1mach.f
+echo "Downloading d1mach.f from www.netlib.org..."
+wget ftp://www.netlib.org/blas/d1mach.f
+
+echo " "
+echo "Done downloading the source code for BLAS."
+echo " "
+

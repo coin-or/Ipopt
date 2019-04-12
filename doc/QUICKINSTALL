@@ -1,0 +1,111 @@
+Copyright (C) 2002, 2003, Carnegie Mellon University and others.
+All Rights Reserved.
+This code is published under the Common Public License.
+
+
+This file (QUICKINSTALL) describes, how to compile the IPOPT AMPL
+solver executable and the IPOPT libraries (e.g. for the use in CUTEr).
+More detailed information regarding installation can be found in the
+INSTALL file.
+
+1. Get the source code for IPOPT from the COIN-OR webpage
+
+   http://www.coin-or.org/Tarballs
+
+   as tarball (Ipopt*.tgz - whatever the latest one is) and copy it
+   into a directory where you want to build the executable.
+
+2. Uncompress and unpack the tarball:
+
+   gunzip Ipopt*.tgz
+   tar xf Ipopt*.tar
+
+3. Change to the main directory for the installation:
+
+   cd COIN/Ipopt
+
+   Among other things you should find here the `configure' script. 
+
+4. Get the required third party source code:
+
+   The configure script will try to figure out if certain required
+   components already exist on your system or if they have to be
+   compiled yet.  To be on the safe side, we recommend you get the
+   source for the following components in any case (even though they
+   will not be compiled if precompile versions are found by the
+   configuration script.)
+
+   - BLAS and LAPACK:  Follow the instructions in
+
+       OTHERS/blas/INSTALL.BLAS         and
+       OTHERS/lapack/INSTALL.LAPACK
+
+     (for details see Section 2.2.1 in the INSTALL file)
+
+   - HSL subroutines:  Follow the instructions in
+
+       OTHERS/HSL/INSTALL.HSL
+
+     You will need at least one of the routines MA27, MA47, MA57.  If
+     you have only access to the subroutines provided in the HSL
+     Archive, we recommend that you obtain ma27ad.f and mc19.ad.f
+
+     NOTE: *** YOU WILL HAVE TO GET AT LEAST ONE OF MA27, MA47, MA57 ***
+
+     (for details see Section 2.2.2 in the INSTALL file)
+
+   - AMPL Solver Library (only required if you want to build the IPOPT
+     AMPL solver executable):  Follow the instructions in
+
+     OTHERS/ASL/INSTALL.ASL
+
+   Note:  If you want to install the necessary components to use IPOPT
+          as a solver in CUTEr, it is assume that you already have
+          installed CUTEr, and that your environment variables CUTER
+          and MYCUTER are set accordingly.
+
+5. Run the configuration script:
+
+   In the main IPOPT directory (the one where the configuration script
+   is located), type
+
+   ./configure
+
+   Make sure the last line of the output reads
+
+   `configure: Configuration successful'
+
+   If you want to specify nonstandard compilation flags etc, please
+   read the INSTALL file.
+
+   NOTE: If you want to compile the `IPOPT-C' option of the code which
+         is able to handle complementarity constraints, you need to
+         specify the option `--enable-mpcc' for the configure script.  In
+         that case, the compiled code only works with AMPL (not with
+         problems specified in Fortran or C or others).
+
+6. Compile and install the code:
+
+   In the main IPOPT directory type
+
+   make install
+
+   This will install the AMPL solver executable `ipopt' in the
+   subdirectory `bin', from where you might want to copy it to any
+   location in your path.  (If you didn't download the ASL source
+   files, this executable will not be build.)
+
+   If you want to use the AMPL solver `ipopt', let AMPL know by
+
+   option solver ipopt;
+
+   in AMPL.
+
+   If you want to prepare CUTEr to use IPOPT, type
+
+   make cuter
+
+7. Enjoy, and if there are problems (or if it is working great and you
+   are happy), let us know.
+
+$Id: QUICKINSTALL 669 2005-03-02 22:56:28Z andreasw $
