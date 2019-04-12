@@ -57,19 +57,13 @@ fi
 
 AC_COIN_MAIN_PACKAGEDIR(Ipopt)
 
-#############################################################################
-#                             Doxygen setup                                 #
-#############################################################################
-
-AC_COIN_DOXYGEN()
-
 ##############################################################################
 #                   Finishing up by writing all the output                   #
 ##############################################################################
 
 # Here list all the files that configure should create (except for the
 # configuration header file)
-AC_CONFIG_FILES([Makefile doxydoc/doxygen.conf])
+AC_CONFIG_FILES([Makefile])
 
 # Finally, we let configure write all the output...
 AC_COIN_FINALIZE

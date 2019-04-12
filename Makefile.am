@@ -8,7 +8,7 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-EXTRA_DIST = doxydoc/doxygen.conf
+EXTRA_DIST =
 
 ########################################################################
 #                          Subdirectories                              #
@@ -36,32 +36,10 @@ tests: all
 
 unitTests: tests
 
-doxydoc:
-	doxygen doxydoc/doxygen.conf
-
-clean-doxydoc :
-	cd doxydoc && rm -rf html *.log *.tag
-	
-install-doxydoc : doxydoc
-	$(mkdir_p) $(DocInstallDir)/doxydoc
-	cp -R doxydoc/html doxydoc/ipopt_doxy.tag $(DocInstallDir)/doxydoc
-
-uninstall-doxydoc:
-	if test -e $(DocInstallDir)/doxydoc ; then rm -rf $(DocInstallDir)/doxydoc ; fi
-
 cuter:
 	cd Ipopt; $(MAKE) cuter
 
-.PHONY: test unitTest tests unitTests doxydoc cuter
-
-clean-local: clean-doxydoc
-uninstall-local: uninstall-doxydoc
-install-exec-local:
-	@if test -e doxydoc/html ; then \
-	  $(MAKE) install-doxydoc ; \
-	else \
-	  echo "Run make install-doxydoc to generate and install Doxygen documentation." ; \
-	fi
+.PHONY: test unitTest tests unitTests cuter
 
 ########################################################################
 #                         Maintainer Stuff                             #
