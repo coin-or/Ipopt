@@ -16,10 +16,10 @@ This package contains the the source code for IPOPT, an interior point
 algorithm for large-scale nonlinear optimization (with interfaces to
 AMPL and CUTEr).
 
-Homepage: http://www.coin-or.org/Ipopt
+Homepage: https://github.com/coin-or/Ipopt/tree/stable/2.3
 
 The files of this package are available from the COIN-OR web page at
-http://www.coin-or.org .  They can be obtained via CVS or as tarballs
+http://www.coin-or.org.  They can be obtained via Git or as tarballs
 (see http://www.coin-or.org/download.html).
 
 The package is released under the Common Public License (CPL); see
@@ -42,6 +42,7 @@ modifications in any way (as source code or as binaries), you must
 make those modifications public, indicating which changes you made.
 For details, see the LICENSE file in the doc directory.
 
+See also README.md.
 
 MAIN AUTHORS:
 =============
