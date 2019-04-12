@@ -1,0 +1,27 @@
+var classIpopt_1_1CGSearchDirCalculator =
+[
+    [ "CGSearchDirCalculator", "classIpopt_1_1CGSearchDirCalculator.html#ab3b4d973d0fb74fcdb3f442447484afd", null ],
+    [ "~CGSearchDirCalculator", "classIpopt_1_1CGSearchDirCalculator.html#ae44bccf394d21db36fb3797ffa55e651", null ],
+    [ "CGSearchDirCalculator", "classIpopt_1_1CGSearchDirCalculator.html#abff3a646fed0015db609a3b3e85eed0d", null ],
+    [ "CGSearchDirCalculator", "classIpopt_1_1CGSearchDirCalculator.html#a6dbd6039167c78f1a5f4784f555190de", null ],
+    [ "InitializeImpl", "classIpopt_1_1CGSearchDirCalculator.html#a613c1fea7676890a6fa952feeef8d3ea", null ],
+    [ "ComputeSearchDirection", "classIpopt_1_1CGSearchDirCalculator.html#ac3dff9e26bb64b8fbe0600f1e5508f9f", null ],
+    [ "RegisterOptions", "classIpopt_1_1CGSearchDirCalculator.html#a3b83859027473244f84045313a18c1e5", null ],
+    [ "operator=", "classIpopt_1_1CGSearchDirCalculator.html#a6aed287a2460e8974c72b721a85612c9", null ],
+    [ "CGPenData", "classIpopt_1_1CGSearchDirCalculator.html#a0b0c25133daf686cfe9aeef999c499ce", null ],
+    [ "CGPenCq", "classIpopt_1_1CGSearchDirCalculator.html#a4f038451c65eec1fe5031ec3970bda5c", null ],
+    [ "penalty_init_min_", "classIpopt_1_1CGSearchDirCalculator.html#a3d372a99309ce0afd961f6005d8bedd7", null ],
+    [ "penalty_init_max_", "classIpopt_1_1CGSearchDirCalculator.html#ac0e3f3969cdee521d4e9d390a4fe3d99", null ],
+    [ "penalty_max_", "classIpopt_1_1CGSearchDirCalculator.html#ad0d56f581777564a0751100509db85b8", null ],
+    [ "pen_des_fact_", "classIpopt_1_1CGSearchDirCalculator.html#a1894a6f523ac4154c0686f735976c946", null ],
+    [ "penalty_backward_", "classIpopt_1_1CGSearchDirCalculator.html#a74b9dfe916fd8230aad9a93207fb0316", null ],
+    [ "kappa_x_dis_", "classIpopt_1_1CGSearchDirCalculator.html#ad60bd81adf0860caba64b1597cffa245", null ],
+    [ "kappa_y_dis_", "classIpopt_1_1CGSearchDirCalculator.html#a9009c0222bf11796607c28156c78d805", null ],
+    [ "vartheta_", "classIpopt_1_1CGSearchDirCalculator.html#a0179ceb4335a97e25442ea7ada27b85c", null ],
+    [ "delta_y_max_", "classIpopt_1_1CGSearchDirCalculator.html#a01d0a572def9175b2374b80007c6f895", null ],
+    [ "fast_des_fact_", "classIpopt_1_1CGSearchDirCalculator.html#a246a77e0e7c85ccec69942a2bd619df4", null ],
+    [ "pen_init_fac_", "classIpopt_1_1CGSearchDirCalculator.html#ac8f4c11367a4f265fe46d64d6a96c39c", null ],
+    [ "never_use_fact_cgpen_direction_", "classIpopt_1_1CGSearchDirCalculator.html#a92629b83d68abf3f22ab6d6055425123", null ],
+    [ "nonmonotone_pen_update_counter_", "classIpopt_1_1CGSearchDirCalculator.html#a74fdfaf5dc53c89193248dbc90b4fed1", null ],
+    [ "pd_solver_", "classIpopt_1_1CGSearchDirCalculator.html#aa4b0a03b68d0ba572f45661024fa0517", null ]
+];

@@ -1,0 +1,28 @@
+var classIpopt_1_1OptimalityErrorConvergenceCheck =
+[
+    [ "OptimalityErrorConvergenceCheck", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#ae5dfcbc9d77d783339a000534024c72b", null ],
+    [ "~OptimalityErrorConvergenceCheck", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#ab66e4765875b093abeff306b0d4b1162", null ],
+    [ "OptimalityErrorConvergenceCheck", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#a92717337b9d9da4e4d70d09ad84edc06", null ],
+    [ "InitializeImpl", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#ab8402c4dc24e07747e3d0427182aea0b", null ],
+    [ "CheckConvergence", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#a795b7780740f7ad2622ffaaec3ced1ec", null ],
+    [ "CurrentIsAcceptable", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#aab7893e5eaf9e21119e77c1bdb855af4", null ],
+    [ "RegisterOptions", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#ac0b719e6525a8ebfef6bbf3ed26712f6", null ],
+    [ "operator=", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#a4f6e5d5f3ba17622b1b87b6b0e0e856b", null ],
+    [ "max_iterations_", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#ae04878dbd402fb0ef75ee3846593c2e9", null ],
+    [ "dual_inf_tol_", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#a0878487ff42cba8ab1724d195d0a7f4c", null ],
+    [ "constr_viol_tol_", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#af47a923f7b244f795fab367a7dfa089e", null ],
+    [ "compl_inf_tol_", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#a62c241f4b9e248f10dada6e721f50570", null ],
+    [ "acceptable_iter_", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#a9c85c36c61aa69b6c43b073c58f8e173", null ],
+    [ "acceptable_tol_", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#a12a94a3025c212838288b1148edbcc86", null ],
+    [ "acceptable_dual_inf_tol_", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#a36cbfcd3bdeda4c34f840d0d675cd6c8", null ],
+    [ "acceptable_constr_viol_tol_", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#a31373cd7747a7625db797a1e1420b239", null ],
+    [ "acceptable_compl_inf_tol_", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#ace1fa983faba3139aff05ee45c120284", null ],
+    [ "acceptable_obj_change_tol_", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#a2a35c9abe9499d9d157964cda4b45b33", null ],
+    [ "diverging_iterates_tol_", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#aefcd697225e4324b7c2b14f0ee299001", null ],
+    [ "mu_target_", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#af939526a4e316237664b083709157f3f", null ],
+    [ "max_cpu_time_", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#ad2e9545cff58214b9ab7e18abac79918", null ],
+    [ "acceptable_counter_", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#a8bc01bc6427849e4683005e66e625c24", null ],
+    [ "last_obj_val_", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#a91188cedd60d7a5f3ce83cb7662e7f4e", null ],
+    [ "curr_obj_val_", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#af8adfd264e51395eb9d1f9801f2283fd", null ],
+    [ "last_obj_val_iter_", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#af77951b6a74393393196291da1547cf6", null ]
+];

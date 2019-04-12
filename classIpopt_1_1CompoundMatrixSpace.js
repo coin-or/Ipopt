@@ -1,0 +1,28 @@
+var classIpopt_1_1CompoundMatrixSpace =
+[
+    [ "CompoundMatrixSpace", "classIpopt_1_1CompoundMatrixSpace.html#a5ed02d042058051fc9852a24e9162e2a", null ],
+    [ "~CompoundMatrixSpace", "classIpopt_1_1CompoundMatrixSpace.html#ae3442a929817369294168b33de93103e", null ],
+    [ "CompoundMatrixSpace", "classIpopt_1_1CompoundMatrixSpace.html#a0bf3dbb6b8e9430e4dd1bb5512f90541", null ],
+    [ "CompoundMatrixSpace", "classIpopt_1_1CompoundMatrixSpace.html#a7f353fc5bdbc163d5e93ab03b44f6459", null ],
+    [ "SetBlockRows", "classIpopt_1_1CompoundMatrixSpace.html#a4539012b8d807489d970d8123a55a73f", null ],
+    [ "SetBlockCols", "classIpopt_1_1CompoundMatrixSpace.html#ada85152baf01c202a37bfe0840d4afaa", null ],
+    [ "GetBlockRows", "classIpopt_1_1CompoundMatrixSpace.html#a160a9fe5438439e1a55d4b4a9acdce1d", null ],
+    [ "GetBlockCols", "classIpopt_1_1CompoundMatrixSpace.html#a4f2419830d4f02e869f14e66930b2646", null ],
+    [ "SetCompSpace", "classIpopt_1_1CompoundMatrixSpace.html#a4c65538d80bae7f0cc63d571feaa67ba", null ],
+    [ "GetCompSpace", "classIpopt_1_1CompoundMatrixSpace.html#ad3cffb15bb2930d4be6d0492c13248c2", null ],
+    [ "NComps_Rows", "classIpopt_1_1CompoundMatrixSpace.html#a07c47d6857638b12ab418f0ca4a0ba4f", null ],
+    [ "NComps_Cols", "classIpopt_1_1CompoundMatrixSpace.html#a41a0193a04498e27ede9da3cc3eaa9cd", null ],
+    [ "Diagonal", "classIpopt_1_1CompoundMatrixSpace.html#a0229b412d375ecb62872ed56a45dd82d", null ],
+    [ "MakeNewCompoundMatrix", "classIpopt_1_1CompoundMatrixSpace.html#a562565773364c1d85c6b6ba92a80a9ad", null ],
+    [ "MakeNew", "classIpopt_1_1CompoundMatrixSpace.html#adbe70c40b5d563923c9cac4eb828ff1a", null ],
+    [ "operator=", "classIpopt_1_1CompoundMatrixSpace.html#a6916678bdbe95b706c58d60450805e14", null ],
+    [ "DimensionsSet", "classIpopt_1_1CompoundMatrixSpace.html#adcebb51feb8bb4339116d12f2af5d3b2", null ],
+    [ "ncomps_rows_", "classIpopt_1_1CompoundMatrixSpace.html#aa191fed67c9c9318dc3a18e242589a81", null ],
+    [ "ncomps_cols_", "classIpopt_1_1CompoundMatrixSpace.html#a13ded8259d81e44783eb908446041bd0", null ],
+    [ "dimensions_set_", "classIpopt_1_1CompoundMatrixSpace.html#ae39a096d5512cea9bc0fdd90794fb1e7", null ],
+    [ "comp_spaces_", "classIpopt_1_1CompoundMatrixSpace.html#a9be1b58db439754df9dfd23acd6a5ca7", null ],
+    [ "allocate_block_", "classIpopt_1_1CompoundMatrixSpace.html#a0b27023f631bb532611d37918328cb97", null ],
+    [ "block_rows_", "classIpopt_1_1CompoundMatrixSpace.html#a8d7bc638422922937d1265dfda75ca33", null ],
+    [ "block_cols_", "classIpopt_1_1CompoundMatrixSpace.html#a72b7d85aeba3cd9027692aafdd3c354d", null ],
+    [ "diagonal_", "classIpopt_1_1CompoundMatrixSpace.html#a926289ce0376047003af66b258e52837", null ]
+];
