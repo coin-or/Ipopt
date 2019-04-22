@@ -26,7 +26,7 @@ SmartPtr<Vector> NLPScalingObject::apply_vector_scaling_x_LU_NonConst(
    const Matrix&                 Px_LU,
    const SmartPtr<const Vector>& lu,
    const VectorSpace&            x_space
-   )
+)
 {
    DBG_START_METH("NLPScalingObject::apply_vector_scaling_x_LU_NonConst", dbg_verbosity);
    SmartPtr<Vector> scaled_x_LU = lu->MakeNew();
@@ -55,7 +55,7 @@ SmartPtr<const Vector> NLPScalingObject::apply_vector_scaling_x_LU(
    const Matrix&                 Px_LU,
    const SmartPtr<const Vector>& lu,
    const VectorSpace&            x_space
-   )
+)
 {
    DBG_START_METH("NLPScalingObject::apply_vector_scaling_x_LU", dbg_verbosity);
    if( have_x_scaling() )
@@ -72,7 +72,7 @@ SmartPtr<Vector> NLPScalingObject::apply_vector_scaling_d_LU_NonConst(
    const Matrix&                 Pd_LU,
    const SmartPtr<const Vector>& lu,
    const VectorSpace&            d_space
-   )
+)
 {
    DBG_START_METH("NLPScalingObject::apply_vector_scaling_d_LU_NonConst", dbg_verbosity);
    SmartPtr<Vector> scaled_d_LU = lu->MakeNew();
@@ -101,7 +101,7 @@ SmartPtr<const Vector> NLPScalingObject::apply_vector_scaling_d_LU(
    const Matrix&                 Pd_LU,
    const SmartPtr<const Vector>& lu,
    const VectorSpace&            d_space
-   )
+)
 {
    DBG_START_METH("NLPScalingObject::apply_vector_scaling_d_LU", dbg_verbosity);
    if( have_d_scaling() )
@@ -118,7 +118,7 @@ SmartPtr<Vector> NLPScalingObject::unapply_vector_scaling_d_LU_NonConst(
    const Matrix&                 Pd_LU,
    const SmartPtr<const Vector>& lu,
    const VectorSpace&            d_space
-   )
+)
 {
    DBG_START_METH("NLPScalingObject::unapply_vector_scaling_d_LU_NonConst", dbg_verbosity);
    SmartPtr<Vector> unscaled_d_LU = lu->MakeNew();
@@ -147,7 +147,7 @@ SmartPtr<const Vector> NLPScalingObject::unapply_vector_scaling_d_LU(
    const Matrix&                 Pd_LU,
    const SmartPtr<const Vector>& lu,
    const VectorSpace&            d_space
-   )
+)
 {
    DBG_START_METH("NLPScalingObject::unapply_vector_scaling_d_LU", dbg_verbosity);
    if( have_d_scaling() )
@@ -162,7 +162,7 @@ SmartPtr<const Vector> NLPScalingObject::unapply_vector_scaling_d_LU(
 
 SmartPtr<Vector> NLPScalingObject::apply_grad_obj_scaling_NonConst(
    const SmartPtr<const Vector>& v
-   )
+)
 {
    DBG_START_METH("NLPScalingObject::apply_grad_obj_scaling_NonConst", dbg_verbosity);
    SmartPtr<Vector> scaled_v = unapply_vector_scaling_x_NonConst(v);
@@ -176,7 +176,7 @@ SmartPtr<Vector> NLPScalingObject::apply_grad_obj_scaling_NonConst(
 
 SmartPtr<const Vector> NLPScalingObject::apply_grad_obj_scaling(
    const SmartPtr<const Vector>& v
-   )
+)
 {
    DBG_START_METH("NLPScalingObject::apply_grad_obj_scaling", dbg_verbosity);
    Number df = apply_obj_scaling(1.);
@@ -194,7 +194,7 @@ SmartPtr<const Vector> NLPScalingObject::apply_grad_obj_scaling(
 
 SmartPtr<Vector> NLPScalingObject::unapply_grad_obj_scaling_NonConst(
    const SmartPtr<const Vector>& v
-   )
+)
 {
    DBG_START_METH("NLPScalingObject::unapply_grad_obj_scaling_NonConst", dbg_verbosity);
    SmartPtr<Vector> unscaled_v = apply_vector_scaling_x_NonConst(v);
@@ -208,7 +208,7 @@ SmartPtr<Vector> NLPScalingObject::unapply_grad_obj_scaling_NonConst(
 
 SmartPtr<const Vector> NLPScalingObject::unapply_grad_obj_scaling(
    const SmartPtr<const Vector>& v
-   )
+)
 {
    DBG_START_METH("NLPScalingObject::unapply_grad_obj_scaling", dbg_verbosity);
    Number df = unapply_obj_scaling(1.);
@@ -234,19 +234,19 @@ void StandardScalingBase::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions)
 {
    roptions->AddNumberOption("obj_scaling_factor", "Scaling factor for the objective function.", 1.,
-      "This option sets a scaling factor for the objective function. "
-         "The scaling is seen internally by Ipopt but the unscaled objective is "
-         "reported in the console output. "
-         "If additional scaling parameters are computed "
-         "(e.g. user-scaling or gradient-based), both factors are multiplied. "
-         "If this value is chosen to be negative, Ipopt will "
-         "maximize the objective function instead of minimizing it.");
+                             "This option sets a scaling factor for the objective function. "
+                             "The scaling is seen internally by Ipopt but the unscaled objective is "
+                             "reported in the console output. "
+                             "If additional scaling parameters are computed "
+                             "(e.g. user-scaling or gradient-based), both factors are multiplied. "
+                             "If this value is chosen to be negative, Ipopt will "
+                             "maximize the objective function instead of minimizing it.");
 }
 
 bool StandardScalingBase::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    options.GetNumericValue("obj_scaling_factor", obj_scaling_factor_, prefix);
    return true;
@@ -266,12 +266,12 @@ void StandardScalingBase::DetermineScaling(
    const Vector&                        x_L,
    const Matrix&                        Px_U,
    const Vector&                        x_U
-   )
+)
 {
    SmartPtr<Vector> dc;
    SmartPtr<Vector> dd;
    DetermineScalingParametersImpl(x_space, c_space, d_space, jac_c_space, jac_d_space, h_space, Px_L, x_L, Px_U, x_U,
-      df_, dx_, dc, dd);
+                                  df_, dx_, dc, dd);
 
    df_ *= obj_scaling_factor_;
 
@@ -364,7 +364,7 @@ void StandardScalingBase::DetermineScaling(
 
 Number StandardScalingBase::apply_obj_scaling(
    const Number& f
-   )
+)
 {
    DBG_START_METH("NLPScalingObject::apply_obj_scaling", dbg_verbosity);
    return df_ * f;
@@ -372,7 +372,7 @@ Number StandardScalingBase::apply_obj_scaling(
 
 Number StandardScalingBase::unapply_obj_scaling(
    const Number& f
-   )
+)
 {
    DBG_START_METH("NLPScalingObject::unapply_obj_scaling", dbg_verbosity);
    return f / df_;
@@ -380,10 +380,10 @@ Number StandardScalingBase::unapply_obj_scaling(
 
 SmartPtr<Vector> StandardScalingBase::apply_vector_scaling_x_NonConst(
    const SmartPtr<const Vector>& v
-   )
+)
 {
    DBG_START_METH("StandardScalingBase::apply_vector_scaling_x_NonConst",
-      dbg_verbosity);
+                  dbg_verbosity);
    SmartPtr<Vector> scaled_x = v->MakeNewCopy();
    if( IsValid(dx_) )
    {
@@ -398,7 +398,7 @@ SmartPtr<Vector> StandardScalingBase::apply_vector_scaling_x_NonConst(
 
 SmartPtr<const Vector> StandardScalingBase::apply_vector_scaling_x(
    const SmartPtr<const Vector>& v
-   )
+)
 {
    DBG_START_METH("NLPScalingObject::apply_vector_scaling_x", dbg_verbosity);
    if( IsValid(dx_) )
@@ -413,10 +413,10 @@ SmartPtr<const Vector> StandardScalingBase::apply_vector_scaling_x(
 
 SmartPtr<Vector> StandardScalingBase::unapply_vector_scaling_x_NonConst(
    const SmartPtr<const Vector>& v
-   )
+)
 {
    DBG_START_METH("StandardScalingBase::unapply_vector_scaling_x_NonConst",
-      dbg_verbosity);
+                  dbg_verbosity);
    SmartPtr<Vector> unscaled_x = v->MakeNewCopy();
    if( IsValid(dx_) )
    {
@@ -431,7 +431,7 @@ SmartPtr<Vector> StandardScalingBase::unapply_vector_scaling_x_NonConst(
 
 SmartPtr<const Vector> StandardScalingBase::unapply_vector_scaling_x(
    const SmartPtr<const Vector>& v
-   )
+)
 {
    DBG_START_METH("NLPScalingObject::unapply_vector_scaling_x", dbg_verbosity);
    if( IsValid(dx_) )
@@ -446,10 +446,10 @@ SmartPtr<const Vector> StandardScalingBase::unapply_vector_scaling_x(
 
 SmartPtr<Vector> StandardScalingBase::apply_vector_scaling_c_NonConst(
    const SmartPtr<const Vector>& v
-   )
+)
 {
    DBG_START_METH("StandardScalingBase::apply_vector_scaling_c_NonConst",
-      dbg_verbosity);
+                  dbg_verbosity);
    SmartPtr<Vector> scaled_c = v->MakeNewCopy();
    if( IsValid(scaled_jac_c_space_) && IsValid(scaled_jac_c_space_->RowScaling()) )
    {
@@ -464,7 +464,7 @@ SmartPtr<Vector> StandardScalingBase::apply_vector_scaling_c_NonConst(
 
 SmartPtr<const Vector> StandardScalingBase::apply_vector_scaling_c(
    const SmartPtr<const Vector>& v
-   )
+)
 {
    DBG_START_METH("NLPScalingObject::apply_vector_scaling_c", dbg_verbosity);
    if( IsValid(scaled_jac_c_space_) && IsValid(scaled_jac_c_space_->RowScaling()) )
@@ -479,10 +479,10 @@ SmartPtr<const Vector> StandardScalingBase::apply_vector_scaling_c(
 
 SmartPtr<Vector> StandardScalingBase::unapply_vector_scaling_c_NonConst(
    const SmartPtr<const Vector>& v
-   )
+)
 {
    DBG_START_METH("StandardScalingBase::unapply_vector_scaling_c_NonConst",
-      dbg_verbosity);
+                  dbg_verbosity);
    SmartPtr<Vector> scaled_c = v->MakeNewCopy();
    if( IsValid(scaled_jac_c_space_) && IsValid(scaled_jac_c_space_->RowScaling()) )
    {
@@ -497,7 +497,7 @@ SmartPtr<Vector> StandardScalingBase::unapply_vector_scaling_c_NonConst(
 
 SmartPtr<const Vector> StandardScalingBase::unapply_vector_scaling_c(
    const SmartPtr<const Vector>& v
-   )
+)
 {
    DBG_START_METH("NLPScalingObject::unapply_vector_scaling_c", dbg_verbosity);
    if( IsValid(scaled_jac_c_space_) && IsValid(scaled_jac_c_space_->RowScaling()) )
@@ -512,10 +512,10 @@ SmartPtr<const Vector> StandardScalingBase::unapply_vector_scaling_c(
 
 SmartPtr<Vector> StandardScalingBase::apply_vector_scaling_d_NonConst(
    const SmartPtr<const Vector>& v
-   )
+)
 {
    DBG_START_METH("StandardScalingBase::apply_vector_scaling_d_NonConst",
-      dbg_verbosity);
+                  dbg_verbosity);
    SmartPtr<Vector> scaled_d = v->MakeNewCopy();
    if( IsValid(scaled_jac_d_space_) && IsValid(scaled_jac_d_space_->RowScaling()) )
    {
@@ -530,7 +530,7 @@ SmartPtr<Vector> StandardScalingBase::apply_vector_scaling_d_NonConst(
 
 SmartPtr<const Vector> StandardScalingBase::apply_vector_scaling_d(
    const SmartPtr<const Vector>& v
-   )
+)
 {
    DBG_START_METH("NLPScalingObject::apply_vector_scaling_d", dbg_verbosity);
    if( IsValid(scaled_jac_d_space_) && IsValid(scaled_jac_d_space_->RowScaling()) )
@@ -545,10 +545,10 @@ SmartPtr<const Vector> StandardScalingBase::apply_vector_scaling_d(
 
 SmartPtr<Vector> StandardScalingBase::unapply_vector_scaling_d_NonConst(
    const SmartPtr<const Vector>& v
-   )
+)
 {
    DBG_START_METH("StandardScalingBase::unapply_vector_scaling_d_NonConst",
-      dbg_verbosity);
+                  dbg_verbosity);
    SmartPtr<Vector> scaled_d = v->MakeNewCopy();
    if( IsValid(scaled_jac_d_space_) && IsValid(scaled_jac_d_space_->RowScaling()) )
    {
@@ -563,7 +563,7 @@ SmartPtr<Vector> StandardScalingBase::unapply_vector_scaling_d_NonConst(
 
 SmartPtr<const Vector> StandardScalingBase::unapply_vector_scaling_d(
    const SmartPtr<const Vector>& v
-   )
+)
 {
    DBG_START_METH("NLPScalingObject::unapply_vector_scaling_d", dbg_verbosity);
    if( IsValid(scaled_jac_d_space_) && IsValid(scaled_jac_d_space_->RowScaling()) )
@@ -579,7 +579,7 @@ SmartPtr<const Vector> StandardScalingBase::unapply_vector_scaling_d(
 // ToDo: matrix not passed by reference, so setting to NULL doesn't make difference
 SmartPtr<const Matrix> StandardScalingBase::apply_jac_c_scaling(
    SmartPtr<const Matrix> matrix
-   )
+)
 {
    DBG_START_METH("NLPScalingObject::apply_jac_c_scaling", dbg_verbosity);
    if( IsValid(scaled_jac_c_space_) )
@@ -598,7 +598,7 @@ SmartPtr<const Matrix> StandardScalingBase::apply_jac_c_scaling(
 
 SmartPtr<const Matrix> StandardScalingBase::apply_jac_d_scaling(
    SmartPtr<const Matrix> matrix
-   )
+)
 {
    DBG_START_METH("NLPScalingObject::apply_jac_d_scaling", dbg_verbosity);
    if( IsValid(scaled_jac_d_space_) )
@@ -617,7 +617,7 @@ SmartPtr<const Matrix> StandardScalingBase::apply_jac_d_scaling(
 
 SmartPtr<const SymMatrix> StandardScalingBase::apply_hessian_scaling(
    SmartPtr<const SymMatrix> matrix
-   )
+)
 {
    DBG_START_METH("NLPScalingObject::apply_hessian_scaling", dbg_verbosity);
    if( IsValid(scaled_h_space_) )
@@ -664,7 +664,7 @@ void NoNLPScalingObject::DetermineScalingParametersImpl(
    SmartPtr<Vector>&                    dx,
    SmartPtr<Vector>&                    dc,
    SmartPtr<Vector>&                    dd
-   )
+)
 {
    df = 1.;
    dx = NULL;

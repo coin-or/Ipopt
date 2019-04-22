@@ -28,7 +28,7 @@ public:
    /** Default Constructor */
    LimMemQuasiNewtonUpdater(
       bool update_for_resto
-      );
+   );
 
    /** Destructor */
    virtual ~LimMemQuasiNewtonUpdater()
@@ -38,7 +38,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Update the Hessian based on the current information in IpData. */
    virtual void UpdateHessian();
@@ -47,7 +47,7 @@ public:
    //@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
    //@}
 
 private:
@@ -64,12 +64,12 @@ private:
    /** Copy Constructor */
    LimMemQuasiNewtonUpdater(
       const LimMemQuasiNewtonUpdater&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const LimMemQuasiNewtonUpdater&
-      );
+   );
    //@}
 
    /** Matrix space for the low-rank Hessian approximation. */
@@ -310,7 +310,7 @@ private:
    bool CheckSkippingBFGS(
       Vector& s_new,
       Vector& y_new
-      );
+   );
 
    /** Update the internal data, such as the S, Y, L, D etc matrices
     *  and vectors that are required for computing the compact
@@ -322,7 +322,7 @@ private:
       const Vector&    s_new,
       const Vector&    y_new,
       SmartPtr<Vector> ypart_new
-      );
+   );
 
    /** Given a MutliVector V, create a new MultiVectorSpace with one
     *  more column, and return V as a member of that space,
@@ -334,7 +334,7 @@ private:
    void AugmentMultiVector(
       SmartPtr<MultiVectorMatrix>& V,
       const Vector&                v_new
-      );
+   );
 
    /** Given a DenseVector V, create a new DenseVectorSpace with one
     *  more row, and return V as a member of that space,
@@ -346,7 +346,7 @@ private:
    void AugmentDenseVector(
       SmartPtr<DenseVector>& V,
       Number                 v_new
-      );
+   );
 
    /** Given a strictly-lower triangular square DenseGenMatrix V,
     *  create a new DenseGenMatrixSpace with one more dimension, and
@@ -361,7 +361,7 @@ private:
       SmartPtr<DenseGenMatrix>& V,
       const MultiVectorMatrix&  S,
       const MultiVectorMatrix&  Y
-      );
+   );
 
    /** Given a DenseSymMatrix V, create a new DenseGenMatrixSpace
     *  with one more dimension, and return V as a member of that
@@ -375,7 +375,7 @@ private:
    void AugmentSdotSMatrix(
       SmartPtr<DenseSymMatrix>& V,
       const MultiVectorMatrix&  S
-      );
+   );
 
    /** Given a DenseSymMatrix V, create a new DenseGenMatrixSpace
     *  with one more dimension, and return V as a member of that
@@ -390,7 +390,7 @@ private:
       SmartPtr<DenseSymMatrix>& V,
       const MultiVectorMatrix&  S,
       const MultiVectorMatrix&  DRS
-      );
+   );
 
    /** Given a MutliVector V, get rid of the first column, shift all
     *  other columns to the left, and make v_new the last column.
@@ -401,7 +401,7 @@ private:
    void ShiftMultiVector(
       SmartPtr<MultiVectorMatrix>& V,
       const Vector&                v_new
-      );
+   );
 
    /** Given a DenseVector V, get rid of the first element, shift all
     *  other elements one position to the top, and make v_new the
@@ -413,7 +413,7 @@ private:
    void ShiftDenseVector(
       SmartPtr<DenseVector>& V,
       Number                 v_new
-      );
+   );
 
    /** Given a strictly-lower triangular square DenseGenMatrix V,
     *  shift everything one row and column up, and fill the new
@@ -427,7 +427,7 @@ private:
       SmartPtr<DenseGenMatrix>& V,
       const MultiVectorMatrix&  S,
       const MultiVectorMatrix&  Y
-      );
+   );
 
    /** Given a DenseSymMatrix V, shift everything up one row and
     *  column, and fill the new entries as s_i^Ts_j, where s are the
@@ -439,7 +439,7 @@ private:
    void ShiftSdotSMatrix(
       SmartPtr<DenseSymMatrix>& V,
       const MultiVectorMatrix&  S
-      );
+   );
 
    /** Given a DenseSymMatrix V, shift everything up one row and
     *  column, and fill the new entries as s_i^TDRs_j, where s are
@@ -452,7 +452,7 @@ private:
       SmartPtr<DenseSymMatrix>& V,
       const MultiVectorMatrix&  S,
       const MultiVectorMatrix&  DRS
-      );
+   );
 
    /** Method for recomputing Y from scratch, using Ypart (only for
     *  restoration phase)
@@ -463,21 +463,21 @@ private:
       MultiVectorMatrix&           S,
       MultiVectorMatrix&           Ypart,
       SmartPtr<MultiVectorMatrix>& Y
-      );
+   );
 
    /** Method for recomputing D from S and Y */
    void RecalcD(
       MultiVectorMatrix&     S,
       MultiVectorMatrix&     Y,
       SmartPtr<DenseVector>& D
-      );
+   );
 
    /** Method for recomputing L from S and Y */
    void RecalcL(
       MultiVectorMatrix&        S,
       MultiVectorMatrix&        Y,
       SmartPtr<DenseGenMatrix>& L
-      );
+   );
 
    /** Split the eigenvectors into negative and positive ones.
     *
@@ -497,7 +497,7 @@ private:
       const DenseVector&        E,
       SmartPtr<DenseGenMatrix>& Qminus,
       SmartPtr<DenseGenMatrix>& Qplus
-      );
+   );
 
    /** Store a copy of the pointers to the internal data (S, Y, D, L,
     *  SdotS, curr_lm_memory).

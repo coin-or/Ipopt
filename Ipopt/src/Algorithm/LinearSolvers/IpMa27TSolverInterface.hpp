@@ -29,7 +29,7 @@ public:
    bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** @name Methods for requesting solution of the linear system. */
    //@{
@@ -38,7 +38,7 @@ public:
       Index        nonzeros,
       const Index* airn,
       const Index* ajcn
-      );
+   );
 
    virtual double* GetValuesArrayPtr();
 
@@ -72,7 +72,7 @@ public:
    //@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
    //@}
 
 private:
@@ -87,12 +87,12 @@ private:
    /** Copy Constructor */
    Ma27TSolverInterface(
       const Ma27TSolverInterface&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const Ma27TSolverInterface&
-      );
+   );
    //@}
 
    /** @name Information about the matrix */
@@ -196,7 +196,7 @@ private:
    ESymSolverStatus SymbolicFactorization(
       const Index* airn,
       const Index* ajcn
-      );
+   );
 
    /** Call MA27BD to factorize the Matrix.
     *
@@ -208,13 +208,13 @@ private:
       const Index* ajcn,
       bool         check_NegEVals,
       Index        numberOfNegEVals
-      );
+   );
 
    /** Call MA27CD to do the backsolve. */
    ESymSolverStatus Backsolve(
       Index   nrhs,
       double* rhs_vals
-      );
+   );
    //@}
 };
 

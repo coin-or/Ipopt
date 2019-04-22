@@ -28,69 +28,69 @@ static const Index dbg_verbosity = 0;
 
 LimMemQuasiNewtonUpdater::LimMemQuasiNewtonUpdater(
    bool update_for_resto
-   )
+)
    : update_for_resto_(update_for_resto)
 { }
 
 void LimMemQuasiNewtonUpdater::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
-   )
+)
 {
    roptions->AddLowerBoundedIntegerOption("limited_memory_max_history",
-      "Maximum size of the history for the limited quasi-Newton Hessian approximation.", 0, 6,
-      "This option determines the number of most recent iterations that are "
-         "taken into account for the limited-memory quasi-Newton approximation.");
+                                          "Maximum size of the history for the limited quasi-Newton Hessian approximation.", 0, 6,
+                                          "This option determines the number of most recent iterations that are "
+                                          "taken into account for the limited-memory quasi-Newton approximation.");
 
    roptions->AddStringOption2("limited_memory_update_type",
-      "Quasi-Newton update formula for the limited memory approximation.", "bfgs", "bfgs",
-      "BFGS update (with skipping)", "sr1", "SR1 (not working well)",
-      "Determines which update formula is to be used for the limited-memory "
-         "quasi-Newton approximation.");
+                              "Quasi-Newton update formula for the limited memory approximation.", "bfgs", "bfgs",
+                              "BFGS update (with skipping)", "sr1", "SR1 (not working well)",
+                              "Determines which update formula is to be used for the limited-memory "
+                              "quasi-Newton approximation.");
 
    roptions->AddStringOption5("limited_memory_initialization",
-      "Initialization strategy for the limited memory quasi-Newton approximation.", "scalar1", "scalar1",
-      "sigma = s^Ty/s^Ts", "scalar2", "sigma = y^Ty/s^Ty", "scalar3", "arithmetic average of scalar1 and scalar2",
-      "scalar4", "geometric average of scalar1 and scalar2", "constant", "sigma = limited_memory_init_val",
-      "Determines how the diagonal Matrix B_0 as the first term in the "
-         "limited memory approximation should be computed.");
+                              "Initialization strategy for the limited memory quasi-Newton approximation.", "scalar1", "scalar1",
+                              "sigma = s^Ty/s^Ts", "scalar2", "sigma = y^Ty/s^Ty", "scalar3", "arithmetic average of scalar1 and scalar2",
+                              "scalar4", "geometric average of scalar1 and scalar2", "constant", "sigma = limited_memory_init_val",
+                              "Determines how the diagonal Matrix B_0 as the first term in the "
+                              "limited memory approximation should be computed.");
 
    roptions->AddLowerBoundedNumberOption("limited_memory_init_val", "Value for B0 in low-rank update.", 0, true, 1.,
-      "The starting matrix in the low rank update, B0, is chosen to be this "
-         "multiple of the identity in the first iteration (when no updates have "
-         "been performed yet), and is constantly chosen as this value, if "
-         "\"limited_memory_initialization\" is \"constant\".");
+                                         "The starting matrix in the low rank update, B0, is chosen to be this "
+                                         "multiple of the identity in the first iteration (when no updates have "
+                                         "been performed yet), and is constantly chosen as this value, if "
+                                         "\"limited_memory_initialization\" is \"constant\".");
    roptions->AddLowerBoundedNumberOption("limited_memory_init_val_max",
-      "Upper bound on value for B0 in low-rank update.", 0, true, 1e8,
-      "The starting matrix in the low rank update, B0, is chosen to be this "
-         "multiple of the identity in the first iteration (when no updates have "
-         "been performed yet), and is constantly chosen as this value, if "
-         "\"limited_memory_initialization\" is \"constant\".");
+                                         "Upper bound on value for B0 in low-rank update.", 0, true, 1e8,
+                                         "The starting matrix in the low rank update, B0, is chosen to be this "
+                                         "multiple of the identity in the first iteration (when no updates have "
+                                         "been performed yet), and is constantly chosen as this value, if "
+                                         "\"limited_memory_initialization\" is \"constant\".");
    roptions->AddLowerBoundedNumberOption("limited_memory_init_val_min",
-      "Lower bound on value for B0 in low-rank update.", 0, true, 1e-8,
-      "The starting matrix in the low rank update, B0, is chosen to be this "
-         "multiple of the identity in the first iteration (when no updates have "
-         "been performed yet), and is constantly chosen as this value, if "
-         "\"limited_memory_initialization\" is \"constant\".");
+                                         "Lower bound on value for B0 in low-rank update.", 0, true, 1e-8,
+                                         "The starting matrix in the low rank update, B0, is chosen to be this "
+                                         "multiple of the identity in the first iteration (when no updates have "
+                                         "been performed yet), and is constantly chosen as this value, if "
+                                         "\"limited_memory_initialization\" is \"constant\".");
 
    roptions->AddLowerBoundedIntegerOption("limited_memory_max_skipping",
-      "Threshold for successive iterations where update is skipped.", 1, 2,
-      "If the update is skipped more than this number of successive "
-         "iterations, we quasi-Newton approximation is reset.");
+                                          "Threshold for successive iterations where update is skipped.", 1, 2,
+                                          "If the update is skipped more than this number of successive "
+                                          "iterations, we quasi-Newton approximation is reset.");
 
    roptions->AddStringOption2("limited_memory_special_for_resto",
-      "Determines if the quasi-Newton updates should be special during the restoration phase.", "no", "no",
-      "use the same update as in regular iterations", "yes", "use the a special update during restoration phase",
-      "Until Nov 2010, Ipopt used a special update during the restoration "
-         "phase, but it turned out that this does not work well.  The new "
-         "default uses the regular update procedure and it improves results.  If "
-         "for some reason you want to get back to the original update, set this "
-         "option to \"yes\".");
+                              "Determines if the quasi-Newton updates should be special during the restoration phase.", "no", "no",
+                              "use the same update as in regular iterations", "yes", "use the a special update during restoration phase",
+                              "Until Nov 2010, Ipopt used a special update during the restoration "
+                              "phase, but it turned out that this does not work well.  The new "
+                              "default uses the regular update procedure and it improves results.  If "
+                              "for some reason you want to get back to the original update, set this "
+                              "option to \"yes\".");
 }
 
 bool LimMemQuasiNewtonUpdater::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    options.GetIntegerValue("limited_memory_max_history", limited_memory_max_history_, prefix);
    Index enum_int;
@@ -134,7 +134,7 @@ bool LimMemQuasiNewtonUpdater::InitializeImpl(
 void LimMemQuasiNewtonUpdater::UpdateHessian()
 {
    DBG_START_METH("LimMemQuasiNewtonUpdater::UpdateHessian",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    // First check if this is the first call - it is if the h_space_
    // has not been set yet.
@@ -153,9 +153,10 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
          SmartPtr<const SymMatrixSpace> sp = IpNLP().HessianMatrixSpace();
          h_space_ = static_cast<const LowRankUpdateSymMatrixSpace*>(GetRawPtr(sp));
          ASSERT_EXCEPTION(IsValid(h_space_), OPTION_INVALID,
-            "Limited-memory quasi-Newton option chosen, but NLP doesn't provide LowRankUpdateSymMatrixSpace.");
-      } DBG_ASSERT((h_space_->ReducedDiag() && !update_for_resto_) ||
-         (!h_space_->ReducedDiag() && update_for_resto_));
+                          "Limited-memory quasi-Newton option chosen, but NLP doesn't provide LowRankUpdateSymMatrixSpace.");
+      }
+      DBG_ASSERT((h_space_->ReducedDiag() && !update_for_resto_) ||
+                 (!h_space_->ReducedDiag() && update_for_resto_));
    }
 
    SmartPtr<const Matrix> P_LM = h_space_->P_LowRank();
@@ -170,7 +171,8 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
       RestoIpoptNLP* resto_nlp = static_cast<RestoIpoptNLP*>(&IpNLP());
       DBG_ASSERT(dynamic_cast<RestoIpoptNLP*>(&IpNLP()));
       curr_DR_x_ = resto_nlp->DR_x();
-      DBG_ASSERT(IsValid(curr_DR_x_)); DBG_ASSERT(curr_DR_x_tag_ == 0 || curr_DR_x_tag_ == curr_DR_x_->GetTag());
+      DBG_ASSERT(IsValid(curr_DR_x_));
+      DBG_ASSERT(curr_DR_x_tag_ == 0 || curr_DR_x_tag_ == curr_DR_x_->GetTag());
       curr_DR_x_tag_ = curr_DR_x_->GetTag();
       if( IsNull(P_LM) )
       {
@@ -217,9 +219,11 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
    {
       if( IsNull(last_x_) )
       {
-         DBG_ASSERT(IsNull(last_grad_f_)); DBG_ASSERT(IsNull(last_jac_c_)); DBG_ASSERT(IsNull(last_jac_d_));
+         DBG_ASSERT(IsNull(last_grad_f_));
+         DBG_ASSERT(IsNull(last_jac_c_));
+         DBG_ASSERT(IsNull(last_jac_d_));
          Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
-            "Limited-Memory approximation started; store data at current iterate.\n");
+                        "Limited-Memory approximation started; store data at current iterate.\n");
       }
       else
       {
@@ -264,7 +268,8 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
 
    // s = x_k - x_{k-1}
    SmartPtr<Vector> s_full_new = curr_x->MakeNew();
-   DBG_PRINT_VECTOR(2, "last_x", *last_x_); DBG_PRINT_VECTOR(2, "curr_x", *curr_x);
+   DBG_PRINT_VECTOR(2, "last_x", *last_x_);
+   DBG_PRINT_VECTOR(2, "curr_x", *curr_x);
    s_full_new->AddTwoVectors(1, *curr_x, -1, *last_x_, 0.);
 
    // y = grad_lag(x_k,y_k) - grad_lag(x_{k-1},y_k)
@@ -273,10 +278,12 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
    {
 
       SmartPtr<const CompoundVector> curr_y_c = static_cast<const CompoundVector*>(GetRawPtr(IpData().curr()->y_c()));
-      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(IpData().curr()->y_c()))); DBG_ASSERT(curr_y_c->NComps() == 1);
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(IpData().curr()->y_c())));
+      DBG_ASSERT(curr_y_c->NComps() == 1);
 
       SmartPtr<const CompoundVector> curr_y_d = static_cast<const CompoundVector*>(GetRawPtr(IpData().curr()->y_d()));
-      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(IpData().curr()->y_d()))); DBG_ASSERT(curr_y_d->NComps() == 1);
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(IpData().curr()->y_d())));
+      DBG_ASSERT(curr_y_d->NComps() == 1);
 
       curr_jac_c->TransMultVector(1., *curr_y_c->GetComp(0), 0., *y_full_new);
       curr_jac_d->TransMultVector(1., *curr_y_d->GetComp(0), 1., *y_full_new);
@@ -309,7 +316,8 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
    }
    s_full_new = NULL;
    y_full_new = NULL;
-   DBG_PRINT_VECTOR(2, "s_new", *s_new); DBG_PRINT_VECTOR(2, "ypart_new", *y_new);
+   DBG_PRINT_VECTOR(2, "s_new", *s_new);
+   DBG_PRINT_VECTOR(2, "ypart_new", *y_new);
 
    // In the restoration phase case, y_new is only the y without the
    // objective part, so now we add the explicitly known objective
@@ -372,7 +380,7 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
                if( dmin <= 0. )
                {
                   Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
-                     "Skipping BFGS update in restoration phase because Dmin is %e\n", dmin);
+                                 "Skipping BFGS update in restoration phase because Dmin is %e\n", dmin);
                   // Check if any of the s^Ty pairs are non-positive.  If so, skip
                   IpData().Append_info_string("We");
                   skipping = true;
@@ -409,7 +417,7 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
                   sigma_ = Max(Min(sigma_safe_max_, sigma_), sigma_safe_min_);
                   IpData().Append_info_string("Wp");
                   Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION, "Projecting sigma into safeguards to be %e!\n",
-                     sigma_);
+                                 sigma_);
                }
             }
 
@@ -437,7 +445,8 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
             Dtilde->ElementWiseSqrt();
             Dtilde->ElementWiseReciprocal();
             SmartPtr<DenseGenMatrix> Ltilde = L_->MakeNewDenseGenMatrix();
-            DBG_PRINT_MATRIX(3, "D", *D_); DBG_PRINT_MATRIX(3, "L", *L_);
+            DBG_PRINT_MATRIX(3, "D", *D_);
+            DBG_PRINT_MATRIX(3, "L", *L_);
             Ltilde->Copy(*L_);
             Ltilde->ScaleColumns(*Dtilde);
             DBG_PRINT_MATRIX(3, "Ltilde", *Ltilde);
@@ -451,7 +460,8 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
             if( !update_for_resto_ || !limited_memory_special_for_resto_ )
             {
                // For now, we assume that B_0 is sigma*I
-               DBG_ASSERT(SdotS_uptodate_); DBG_PRINT_MATRIX(3, "SdotS", *SdotS_);
+               DBG_ASSERT(SdotS_uptodate_);
+               DBG_PRINT_MATRIX(3, "SdotS", *SdotS_);
                M->AddMatrix(sigma_, *SdotS_, 1.);
             }
             else
@@ -468,7 +478,7 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
             if( !cholesky_retval )
             {
                Jnlst().Printf(J_WARNING, J_HESSIAN_APPROXIMATION,
-                  "Cholesky factorization failed for LBFGS update! Skipping update.\n");
+                              "Cholesky factorization failed for LBFGS update! Skipping update.\n");
                skipping = true;
                break;
             }
@@ -572,7 +582,8 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
             if( !update_for_resto_ || !limited_memory_special_for_resto_ )
             {
                Z = SdotS_->MakeNewDenseSymMatrix();
-               DBG_PRINT_MATRIX(3, "SdotS", *SdotS_); DBG_PRINT((1, "sigma_ = %e\n", sigma_));
+               DBG_PRINT_MATRIX(3, "SdotS", *SdotS_);
+               DBG_PRINT((1, "sigma_ = %e\n", sigma_));
                Z->AddMatrix(-sigma_, *SdotS_, 0.);
             }
             else
@@ -620,7 +631,7 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
             if( IsValid(Qminus) )
             {
                SmartPtr<MultiVectorMatrixSpace> U_space = new MultiVectorMatrixSpace(Qminus->NCols(),
-                  *s_new->OwnerSpace());
+                     *s_new->OwnerSpace());
                U_ = U_space->MakeNewMultiVectorMatrix();
                U_->AddRightMultMatrix(1., *Vtilde, *Qminus, 0.);
                DBG_PRINT_MATRIX(3, "U", *U_);
@@ -634,7 +645,7 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
             if( IsValid(Qplus) )
             {
                SmartPtr<MultiVectorMatrixSpace> V_space = new MultiVectorMatrixSpace(Qplus->NCols(),
-                  *s_new->OwnerSpace());
+                     *s_new->OwnerSpace());
                V_ = V_space->MakeNewMultiVectorMatrix();
                V_->AddRightMultMatrix(1., *Vtilde, *Qplus, 0.);
                DBG_PRINT_MATRIX(3, "V", *V_);
@@ -666,7 +677,7 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
       lm_skipped_iter_++;
    }
    Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION, "Number of successive iterations with skipping: %d\n",
-      lm_skipped_iter_);
+                  lm_skipped_iter_);
 
    // Keep stuff around in case we want to skip SR1 retroactively
    // because of negative curvature!
@@ -688,7 +699,7 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
 void LimMemQuasiNewtonUpdater::StoreInternalDataBackup()
 {
    DBG_START_METH("LimMemQuasiNewtonUpdater::StoreInternalDataBackup",
-      dbg_verbosity);
+                  dbg_verbosity);
    curr_lm_memory_old_ = curr_lm_memory_;
    S_old_ = S_;
    Y_old_ = Y_;
@@ -707,7 +718,7 @@ void LimMemQuasiNewtonUpdater::StoreInternalDataBackup()
 void LimMemQuasiNewtonUpdater::RestoreInternalDataBackup()
 {
    DBG_START_METH("LimMemQuasiNewtonUpdater::RestoreInternalDataBackup",
-      dbg_verbosity);
+                  dbg_verbosity);
    curr_lm_memory_ = curr_lm_memory_old_;
    S_ = S_old_;
    Y_ = Y_old_;
@@ -726,7 +737,7 @@ void LimMemQuasiNewtonUpdater::RestoreInternalDataBackup()
 void LimMemQuasiNewtonUpdater::ReleaseInternalDataBackup()
 {
    DBG_START_METH("LimMemQuasiNewtonUpdater::ReleaseInternalDataBackup",
-      dbg_verbosity);
+                  dbg_verbosity);
    S_old_ = NULL;
    Y_old_ = NULL;
    Ypart_old_ = NULL;
@@ -744,10 +755,10 @@ bool LimMemQuasiNewtonUpdater::UpdateInternalData(
    const Vector&    s_new,
    const Vector&    y_new,
    SmartPtr<Vector> ypart_new
-   )
+)
 {
    DBG_START_METH("LimMemQuasiNewtonUpdater::UpdateInternalData",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    if( limited_memory_max_history_ == 0 )
    {
@@ -830,7 +841,11 @@ bool LimMemQuasiNewtonUpdater::UpdateInternalData(
             DBG_ASSERT(SdotS_uptodate_);
             ShiftSdotSMatrix(SdotS_, *S_);
          }
-      } DBG_PRINT((1, "curr_eta = %e\n", curr_eta_)); DBG_PRINT_VECTOR(2, "curr_red_DR_x", *curr_red_DR_x_); DBG_PRINT_VECTOR(2, "S", *S_); DBG_PRINT_VECTOR(2, "Ypart", *Ypart_);
+      }
+      DBG_PRINT((1, "curr_eta = %e\n", curr_eta_));
+      DBG_PRINT_VECTOR(2, "curr_red_DR_x", *curr_red_DR_x_);
+      DBG_PRINT_VECTOR(2, "S", *S_);
+      DBG_PRINT_VECTOR(2, "Ypart", *Ypart_);
       RecalcY(curr_eta_, *curr_red_DR_x_, *S_, *Ypart_, Y_);
       DBG_PRINT_VECTOR(2, "Y", *Y_);
       RecalcD(*S_, *Y_, D_);
@@ -845,13 +860,14 @@ bool LimMemQuasiNewtonUpdater::SplitEigenvalues(
    const DenseVector&        E,
    SmartPtr<DenseGenMatrix>& Qminus,
    SmartPtr<DenseGenMatrix>& Qplus
-   )
+)
 {
    DBG_START_METH("LimMemQuasiNewtonUpdater::SplitEigenvalues",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    Index dim = E.Dim();
-   DBG_ASSERT(dim == Q.NCols()); DBG_ASSERT(dim == Q.NRows());
+   DBG_ASSERT(dim == Q.NCols());
+   DBG_ASSERT(dim == Q.NRows());
 
    const Number* Evals = E.Values();
    const Number* Qvals = Q.Values();
@@ -887,7 +903,7 @@ bool LimMemQuasiNewtonUpdater::SplitEigenvalues(
    }
    Number ratio = emin / emax;
    Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION, "Eigenvalues in SR1 update: emin=%e emax=%e ratio=%e\n", emin,
-      emax, ratio);
+                  emax, ratio);
    DBG_ASSERT(ratio >= 0.);
    // ToDo make the following an option?
    const Number tol = 1e-12;
@@ -954,7 +970,7 @@ bool LimMemQuasiNewtonUpdater::SplitEigenvalues(
 bool LimMemQuasiNewtonUpdater::CheckSkippingBFGS(
    Vector& s_new,
    Vector& y_new
-   )
+)
 {
    Number sTy = s_new.Dot(y_new);
    Number snrm = s_new.Nrm2();
@@ -986,7 +1002,7 @@ bool LimMemQuasiNewtonUpdater::CheckSkippingBFGS(
 void LimMemQuasiNewtonUpdater::AugmentMultiVector(
    SmartPtr<MultiVectorMatrix>& V,
    const Vector&                v_new
-   )
+)
 {
    Index ncols;
    if( IsValid(V) )
@@ -1013,7 +1029,7 @@ void LimMemQuasiNewtonUpdater::AugmentMultiVector(
 void LimMemQuasiNewtonUpdater::AugmentDenseVector(
    SmartPtr<DenseVector>& V,
    Number                 v_new
-   )
+)
 {
    Index ndim;
    if( IsValid(V) )
@@ -1046,7 +1062,7 @@ void LimMemQuasiNewtonUpdater::AugmentLMatrix(
    SmartPtr<DenseGenMatrix>& V,
    const MultiVectorMatrix&  S,
    const MultiVectorMatrix&  Y
-   )
+)
 {
    Index ndim;
    if( IsValid(V) )
@@ -1057,7 +1073,9 @@ void LimMemQuasiNewtonUpdater::AugmentLMatrix(
    else
    {
       ndim = 0;
-   } DBG_ASSERT(S.NCols() == ndim + 1); DBG_ASSERT(Y.NCols() == ndim + 1);
+   }
+   DBG_ASSERT(S.NCols() == ndim + 1);
+   DBG_ASSERT(Y.NCols() == ndim + 1);
 
    SmartPtr<DenseGenMatrixSpace> new_Vspace = new DenseGenMatrixSpace(ndim + 1, ndim + 1);
    SmartPtr<DenseGenMatrix> new_V = new_Vspace->MakeNewDenseGenMatrix();
@@ -1090,7 +1108,7 @@ void LimMemQuasiNewtonUpdater::AugmentLMatrix(
 void LimMemQuasiNewtonUpdater::AugmentSdotSMatrix(
    SmartPtr<DenseSymMatrix>& V,
    const MultiVectorMatrix&  S
-   )
+)
 {
    Index ndim;
    if( IsValid(V) )
@@ -1100,7 +1118,8 @@ void LimMemQuasiNewtonUpdater::AugmentSdotSMatrix(
    else
    {
       ndim = 0;
-   } DBG_ASSERT(S.NCols() == ndim + 1);
+   }
+   DBG_ASSERT(S.NCols() == ndim + 1);
 
    SmartPtr<DenseSymMatrixSpace> new_Vspace = new DenseSymMatrixSpace(ndim + 1);
    SmartPtr<DenseSymMatrix> new_V = new_Vspace->MakeNewDenseSymMatrix();
@@ -1129,7 +1148,7 @@ void LimMemQuasiNewtonUpdater::AugmentSTDRSMatrix(
    SmartPtr<DenseSymMatrix>& V,
    const MultiVectorMatrix&  S,
    const MultiVectorMatrix&  DRS
-   )
+)
 {
    Index ndim;
    if( IsValid(V) )
@@ -1139,7 +1158,8 @@ void LimMemQuasiNewtonUpdater::AugmentSTDRSMatrix(
    else
    {
       ndim = 0;
-   } DBG_ASSERT(S.NCols() == ndim + 1);
+   }
+   DBG_ASSERT(S.NCols() == ndim + 1);
 
    SmartPtr<DenseSymMatrixSpace> new_Vspace = new DenseSymMatrixSpace(ndim + 1);
    SmartPtr<DenseSymMatrix> new_V = new_Vspace->MakeNewDenseSymMatrix();
@@ -1167,7 +1187,7 @@ void LimMemQuasiNewtonUpdater::AugmentSTDRSMatrix(
 void LimMemQuasiNewtonUpdater::ShiftMultiVector(
    SmartPtr<MultiVectorMatrix>& V,
    const Vector&                v_new
-   )
+)
 {
    Index ncols = V->NCols();
 
@@ -1185,7 +1205,7 @@ void LimMemQuasiNewtonUpdater::ShiftMultiVector(
 void LimMemQuasiNewtonUpdater::ShiftDenseVector(
    SmartPtr<DenseVector>& V,
    Number                 v_new
-   )
+)
 {
    Index ndim = V->Dim();
 
@@ -1207,10 +1227,12 @@ void LimMemQuasiNewtonUpdater::ShiftLMatrix(
    SmartPtr<DenseGenMatrix>& V,
    const MultiVectorMatrix&  S,
    const MultiVectorMatrix&  Y
-   )
+)
 {
    Index ndim = V->NCols();
-   DBG_ASSERT(ndim == V->NRows()); DBG_ASSERT(S.NCols() == ndim); DBG_ASSERT(Y.NCols() == ndim);
+   DBG_ASSERT(ndim == V->NRows());
+   DBG_ASSERT(S.NCols() == ndim);
+   DBG_ASSERT(Y.NCols() == ndim);
 
    SmartPtr<DenseGenMatrix> new_V = V->MakeNewDenseGenMatrix();
 
@@ -1240,7 +1262,7 @@ void LimMemQuasiNewtonUpdater::ShiftLMatrix(
 void LimMemQuasiNewtonUpdater::ShiftSdotSMatrix(
    SmartPtr<DenseSymMatrix>& V,
    const MultiVectorMatrix&  S
-   )
+)
 {
    Index ndim = V->Dim();
    DBG_ASSERT(S.NCols() == ndim);
@@ -1269,7 +1291,7 @@ void LimMemQuasiNewtonUpdater::ShiftSTDRSMatrix(
    SmartPtr<DenseSymMatrix>& V,
    const MultiVectorMatrix&  S,
    const MultiVectorMatrix&  DRS
-   )
+)
 {
    Index ndim = V->Dim();
    DBG_ASSERT(S.NCols() == ndim);
@@ -1297,7 +1319,7 @@ void LimMemQuasiNewtonUpdater::ShiftSTDRSMatrix(
 void LimMemQuasiNewtonUpdater::SetW()
 {
    DBG_START_METH("LimMemQuasiNewtonUpdater::SetW",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    SmartPtr<Vector> B0;
    if( update_for_resto_ && limited_memory_special_for_resto_ )
@@ -1311,7 +1333,8 @@ void LimMemQuasiNewtonUpdater::SetW()
       DBG_ASSERT(IsValid(LM_vecspace));
       B0 = LM_vecspace->MakeNew();
       B0->Set(sigma_);
-   } DBG_PRINT_VECTOR(2, "B0", *B0);
+   }
+   DBG_PRINT_VECTOR(2, "B0", *B0);
 
    SmartPtr<LowRankUpdateSymMatrix> W = h_space_->MakeNewLowRankUpdateSymMatrix();
    W->SetDiag(*B0);
@@ -1339,7 +1362,7 @@ void LimMemQuasiNewtonUpdater::SetW()
 #ifdef PRINT_W
    // DELETEME
    const DenseVector* dx = static_cast<const DenseVector*>
-   (GetRawPtr(IpData().curr()->x()));
+                           (GetRawPtr(IpData().curr()->x()));
    DBG_ASSERT(dynamic_cast<const DenseVector*>(GetRawPtr(IpData().curr()->x())));
    SmartPtr<DenseVector> tmpx = dx->MakeNewDenseVector();
    SmartPtr<DenseVector> tmpy = dx->MakeNewDenseVector();
@@ -1366,7 +1389,7 @@ void LimMemQuasiNewtonUpdater::RecalcY(
    MultiVectorMatrix&           DRS,
    MultiVectorMatrix&           Ypart,
    SmartPtr<MultiVectorMatrix>& Y
-   )
+)
 {
    SmartPtr<const MultiVectorMatrixSpace> mvspace = Ypart.MultiVectorMatrixOwnerSpace();
    Y = mvspace->MakeNewMultiVectorMatrix();
@@ -1378,7 +1401,7 @@ void LimMemQuasiNewtonUpdater::RecalcD(
    MultiVectorMatrix&     S,
    MultiVectorMatrix&     Y,
    SmartPtr<DenseVector>& D
-   )
+)
 {
    SmartPtr<DenseVectorSpace> space = new DenseVectorSpace(S.NCols());
    D = space->MakeNewDenseVector();
@@ -1393,7 +1416,7 @@ void LimMemQuasiNewtonUpdater::RecalcL(
    MultiVectorMatrix&        S,
    MultiVectorMatrix&        Y,
    SmartPtr<DenseGenMatrix>& L
-   )
+)
 {
    Index dim = S.NCols();
    SmartPtr<DenseGenMatrixSpace> space = new DenseGenMatrixSpace(dim, dim);

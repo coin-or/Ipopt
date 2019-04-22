@@ -39,7 +39,7 @@ static const Index dbg_verbosity = 0;
 CompoundVector::CompoundVector(
    const CompoundVectorSpace* owner_space,
    bool                       create_new
-   )
+)
    : Vector(owner_space),
      comps_(owner_space->NCompSpaces()),
      const_comps_(owner_space->NCompSpaces()),
@@ -75,7 +75,7 @@ CompoundVector::~CompoundVector()
 void CompoundVector::SetComp(
    Index         icomp,
    const Vector& vec
-   )
+)
 {
    DBG_ASSERT(icomp < NComps());
    comps_[icomp] = NULL;
@@ -88,7 +88,7 @@ void CompoundVector::SetComp(
 void CompoundVector::SetCompNonConst(
    Index   icomp,
    Vector& vec
-   )
+)
 {
    DBG_ASSERT(icomp < NComps());
    comps_[icomp] = &vec;
@@ -100,9 +100,10 @@ void CompoundVector::SetCompNonConst(
 
 void CompoundVector::CopyImpl(
    const Vector& x
-   )
+)
 {
-   DBG_START_METH("CompoundVector::CopyImpl(const Vector& x)", dbg_verbosity); DBG_ASSERT(vectors_valid_);
+   DBG_START_METH("CompoundVector::CopyImpl(const Vector& x)", dbg_verbosity);
+   DBG_ASSERT(vectors_valid_);
    const CompoundVector* comp_x = static_cast<const CompoundVector*>(&x);
    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
 
@@ -115,9 +116,10 @@ void CompoundVector::CopyImpl(
 
 void CompoundVector::ScalImpl(
    Number alpha
-   )
+)
 {
-   DBG_START_METH("CompoundVector::ScalImpl", dbg_verbosity); DBG_ASSERT(vectors_valid_);
+   DBG_START_METH("CompoundVector::ScalImpl", dbg_verbosity);
+   DBG_ASSERT(vectors_valid_);
    for( Index i = 0; i < NComps(); i++ )
    {
       DBG_ASSERT(Comp(i));
@@ -128,9 +130,10 @@ void CompoundVector::ScalImpl(
 void CompoundVector::AxpyImpl(
    Number        alpha,
    const Vector& x
-   )
+)
 {
-   DBG_START_METH("CompoundVector::AxpyImpl", dbg_verbosity); DBG_ASSERT(vectors_valid_);
+   DBG_START_METH("CompoundVector::AxpyImpl", dbg_verbosity);
+   DBG_ASSERT(vectors_valid_);
    const CompoundVector* comp_x = static_cast<const CompoundVector*>(&x);
    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
 
@@ -144,11 +147,13 @@ void CompoundVector::AxpyImpl(
 
 Number CompoundVector::DotImpl(
    const Vector& x
-   ) const
+) const
 {
-   DBG_START_METH("CompoundVector::DotImpl", dbg_verbosity); DBG_ASSERT(vectors_valid_);
+   DBG_START_METH("CompoundVector::DotImpl", dbg_verbosity);
+   DBG_ASSERT(vectors_valid_);
    const CompoundVector* comp_x = static_cast<const CompoundVector*>(&x);
-   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x)); DBG_ASSERT(NComps() == comp_x->NComps());
+   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
+   DBG_ASSERT(NComps() == comp_x->NComps());
    Number dot = 0.;
    for( Index i = 0; i < NComps(); i++ )
    {
@@ -160,7 +165,8 @@ Number CompoundVector::DotImpl(
 
 Number CompoundVector::Nrm2Impl() const
 {
-   DBG_START_METH("CompoundVector::Nrm2Impl", dbg_verbosity); DBG_ASSERT(vectors_valid_);
+   DBG_START_METH("CompoundVector::Nrm2Impl", dbg_verbosity);
+   DBG_ASSERT(vectors_valid_);
    Number sum = 0.;
    for( Index i = 0; i < NComps(); i++ )
    {
@@ -172,7 +178,8 @@ Number CompoundVector::Nrm2Impl() const
 
 Number CompoundVector::AsumImpl() const
 {
-   DBG_START_METH("CompoundVector::AsumImpl", dbg_verbosity); DBG_ASSERT(vectors_valid_);
+   DBG_START_METH("CompoundVector::AsumImpl", dbg_verbosity);
+   DBG_ASSERT(vectors_valid_);
    Number sum = 0.;
    for( Index i = 0; i < NComps(); i++ )
    {
@@ -183,7 +190,8 @@ Number CompoundVector::AsumImpl() const
 
 Number CompoundVector::AmaxImpl() const
 {
-   DBG_START_METH("CompoundVector::AmaxImpl", dbg_verbosity); DBG_ASSERT(vectors_valid_);
+   DBG_START_METH("CompoundVector::AmaxImpl", dbg_verbosity);
+   DBG_ASSERT(vectors_valid_);
    Number max = 0.;
    for( Index i = 0; i < NComps(); i++ )
    {
@@ -194,9 +202,10 @@ Number CompoundVector::AmaxImpl() const
 
 void CompoundVector::SetImpl(
    Number value
-   )
+)
 {
-   DBG_START_METH("CompoundVector::SetImpl", dbg_verbosity); DBG_ASSERT(vectors_valid_);
+   DBG_START_METH("CompoundVector::SetImpl", dbg_verbosity);
+   DBG_ASSERT(vectors_valid_);
    for( Index i = 0; i < NComps(); i++ )
    {
       Comp(i)->Set(value);
@@ -205,11 +214,13 @@ void CompoundVector::SetImpl(
 
 void CompoundVector::ElementWiseDivideImpl(
    const Vector& x
-   )
+)
 {
-   DBG_START_METH("CompoundVector::ElementWiseDivideImpl", dbg_verbosity); DBG_ASSERT(vectors_valid_);
+   DBG_START_METH("CompoundVector::ElementWiseDivideImpl", dbg_verbosity);
+   DBG_ASSERT(vectors_valid_);
    const CompoundVector* comp_x = static_cast<const CompoundVector*>(&x);
-   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x)); DBG_ASSERT(NComps() == comp_x->NComps());
+   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
+   DBG_ASSERT(NComps() == comp_x->NComps());
    for( Index i = 0; i < NComps(); i++ )
    {
       Comp(i)->ElementWiseDivide(*comp_x->GetComp(i));
@@ -218,11 +229,13 @@ void CompoundVector::ElementWiseDivideImpl(
 
 void CompoundVector::ElementWiseMultiplyImpl(
    const Vector& x
-   )
+)
 {
-   DBG_START_METH("CompoundVector::ElementWiseMultiplyImpl", dbg_verbosity); DBG_ASSERT(vectors_valid_);
+   DBG_START_METH("CompoundVector::ElementWiseMultiplyImpl", dbg_verbosity);
+   DBG_ASSERT(vectors_valid_);
    const CompoundVector* comp_x = static_cast<const CompoundVector*>(&x);
-   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x)); DBG_ASSERT(NComps() == comp_x->NComps());
+   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
+   DBG_ASSERT(NComps() == comp_x->NComps());
    for( Index i = 0; i < NComps(); i++ )
    {
       Comp(i)->ElementWiseMultiply(*comp_x->GetComp(i));
@@ -231,11 +244,13 @@ void CompoundVector::ElementWiseMultiplyImpl(
 
 void CompoundVector::ElementWiseMaxImpl(
    const Vector& x
-   )
+)
 {
-   DBG_START_METH("CompoundVector::ElementWiseMaxImpl", dbg_verbosity); DBG_ASSERT(vectors_valid_);
+   DBG_START_METH("CompoundVector::ElementWiseMaxImpl", dbg_verbosity);
+   DBG_ASSERT(vectors_valid_);
    const CompoundVector* comp_x = static_cast<const CompoundVector*>(&x);
-   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x)); DBG_ASSERT(NComps() == comp_x->NComps());
+   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
+   DBG_ASSERT(NComps() == comp_x->NComps());
    for( Index i = 0; i < NComps(); i++ )
    {
       Comp(i)->ElementWiseMax(*comp_x->GetComp(i));
@@ -244,11 +259,13 @@ void CompoundVector::ElementWiseMaxImpl(
 
 void CompoundVector::ElementWiseMinImpl(
    const Vector& x
-   )
+)
 {
-   DBG_START_METH("CompoundVector::ElementWiseMinImpl", dbg_verbosity); DBG_ASSERT(vectors_valid_);
+   DBG_START_METH("CompoundVector::ElementWiseMinImpl", dbg_verbosity);
+   DBG_ASSERT(vectors_valid_);
    const CompoundVector* comp_x = static_cast<const CompoundVector*>(&x);
-   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x)); DBG_ASSERT(NComps() == comp_x->NComps());
+   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
+   DBG_ASSERT(NComps() == comp_x->NComps());
    for( Index i = 0; i < NComps(); i++ )
    {
       Comp(i)->ElementWiseMin(*comp_x->GetComp(i));
@@ -257,7 +274,8 @@ void CompoundVector::ElementWiseMinImpl(
 
 void CompoundVector::ElementWiseReciprocalImpl()
 {
-   DBG_START_METH("CompoundVector::ElementWiseReciprocalImpl", dbg_verbosity); DBG_ASSERT(vectors_valid_);
+   DBG_START_METH("CompoundVector::ElementWiseReciprocalImpl", dbg_verbosity);
+   DBG_ASSERT(vectors_valid_);
    for( Index i = 0; i < NComps(); i++ )
    {
       Comp(i)->ElementWiseReciprocal();
@@ -266,7 +284,8 @@ void CompoundVector::ElementWiseReciprocalImpl()
 
 void CompoundVector::ElementWiseAbsImpl()
 {
-   DBG_START_METH("CompoundVector::ElementWiseAbsImpl", dbg_verbosity); DBG_ASSERT(vectors_valid_);
+   DBG_START_METH("CompoundVector::ElementWiseAbsImpl", dbg_verbosity);
+   DBG_ASSERT(vectors_valid_);
    for( Index i = 0; i < NComps(); i++ )
    {
       Comp(i)->ElementWiseAbs();
@@ -275,7 +294,8 @@ void CompoundVector::ElementWiseAbsImpl()
 
 void CompoundVector::ElementWiseSqrtImpl()
 {
-   DBG_START_METH("CompoundVector::ElementWiseSqrtImpl", dbg_verbosity); DBG_ASSERT(vectors_valid_);
+   DBG_START_METH("CompoundVector::ElementWiseSqrtImpl", dbg_verbosity);
+   DBG_ASSERT(vectors_valid_);
    for( Index i = 0; i < NComps(); i++ )
    {
       Comp(i)->ElementWiseSqrt();
@@ -284,9 +304,10 @@ void CompoundVector::ElementWiseSqrtImpl()
 
 void CompoundVector::AddScalarImpl(
    Number scalar
-   )
+)
 {
-   DBG_START_METH("CompoundVector::AddScalarImpl", dbg_verbosity); DBG_ASSERT(vectors_valid_);
+   DBG_START_METH("CompoundVector::AddScalarImpl", dbg_verbosity);
+   DBG_ASSERT(vectors_valid_);
    for( Index i = 0; i < NComps(); i++ )
    {
       Comp(i)->AddScalar(scalar);
@@ -295,7 +316,9 @@ void CompoundVector::AddScalarImpl(
 
 Number CompoundVector::MaxImpl() const
 {
-   DBG_START_METH("CompoundVector::MaxImpl", dbg_verbosity); DBG_ASSERT(vectors_valid_); DBG_ASSERT(NComps() > 0 && Dim() > 0 && "There is no Max of a zero length vector (no reasonable default can be returned)");
+   DBG_START_METH("CompoundVector::MaxImpl", dbg_verbosity);
+   DBG_ASSERT(vectors_valid_);
+   DBG_ASSERT(NComps() > 0 && Dim() > 0 && "There is no Max of a zero length vector (no reasonable default can be returned)");
    Number max = -std::numeric_limits<Number>::max();
    for( Index i = 0; i < NComps(); i++ )
    {
@@ -309,7 +332,9 @@ Number CompoundVector::MaxImpl() const
 
 Number CompoundVector::MinImpl() const
 {
-   DBG_START_METH("CompoundVector::MinImpl", dbg_verbosity); DBG_ASSERT(vectors_valid_); DBG_ASSERT(NComps() > 0 && Dim() > 0 && "There is no Min of a zero length vector (no reasonable default can be returned)");
+   DBG_START_METH("CompoundVector::MinImpl", dbg_verbosity);
+   DBG_ASSERT(vectors_valid_);
+   DBG_ASSERT(NComps() > 0 && Dim() > 0 && "There is no Min of a zero length vector (no reasonable default can be returned)");
    Number min = std::numeric_limits<Number>::max();
    for( Index i = 0; i < NComps(); i++ )
    {
@@ -323,7 +348,8 @@ Number CompoundVector::MinImpl() const
 
 Number CompoundVector::SumImpl() const
 {
-   DBG_START_METH("CompoundVector::SumImpl", dbg_verbosity); DBG_ASSERT(vectors_valid_);
+   DBG_START_METH("CompoundVector::SumImpl", dbg_verbosity);
+   DBG_ASSERT(vectors_valid_);
    Number sum = 0.;
    for( Index i = 0; i < NComps(); i++ )
    {
@@ -334,7 +360,8 @@ Number CompoundVector::SumImpl() const
 
 Number CompoundVector::SumLogsImpl() const
 {
-   DBG_START_METH("CompoundVector::SumLogsImpl", dbg_verbosity); DBG_ASSERT(vectors_valid_);
+   DBG_START_METH("CompoundVector::SumLogsImpl", dbg_verbosity);
+   DBG_ASSERT(vectors_valid_);
    Number sum = 0.;
    for( Index i = 0; i < NComps(); i++ )
    {
@@ -345,7 +372,8 @@ Number CompoundVector::SumLogsImpl() const
 
 void CompoundVector::ElementWiseSgnImpl()
 {
-   DBG_START_METH("CompoundVector::ElementWiseSgnImpl", dbg_verbosity); DBG_ASSERT(vectors_valid_);
+   DBG_START_METH("CompoundVector::ElementWiseSgnImpl", dbg_verbosity);
+   DBG_ASSERT(vectors_valid_);
    for( Index i = 0; i < NComps(); i++ )
    {
       Comp(i)->ElementWiseSgn();
@@ -359,13 +387,15 @@ void CompoundVector::AddTwoVectorsImpl(
    Number        b,
    const Vector& v2,
    Number        c
-   )
+)
 {
    DBG_ASSERT(vectors_valid_);
    const CompoundVector* comp_v1 = static_cast<const CompoundVector*>(&v1);
-   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&v1)); DBG_ASSERT(NComps() == comp_v1->NComps());
+   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&v1));
+   DBG_ASSERT(NComps() == comp_v1->NComps());
    const CompoundVector* comp_v2 = static_cast<const CompoundVector*>(&v2);
-   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&v2)); DBG_ASSERT(NComps() == comp_v2->NComps());
+   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&v2));
+   DBG_ASSERT(NComps() == comp_v2->NComps());
 
    for( Index i = 0; i < NComps(); i++ )
    {
@@ -376,11 +406,12 @@ void CompoundVector::AddTwoVectorsImpl(
 Number CompoundVector::FracToBoundImpl(
    const Vector& delta,
    Number        tau
-   ) const
+) const
 {
    DBG_ASSERT(vectors_valid_);
    const CompoundVector* comp_delta = static_cast<const CompoundVector*>(&delta);
-   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&delta)); DBG_ASSERT(NComps() == comp_delta->NComps());
+   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&delta));
+   DBG_ASSERT(NComps() == comp_delta->NComps());
 
    Number alpha = 1.;
    for( Index i = 0; i < NComps(); i++ )
@@ -395,13 +426,15 @@ void CompoundVector::AddVectorQuotientImpl(
    const Vector& z,
    const Vector& s,
    Number        c
-   )
+)
 {
    DBG_ASSERT(vectors_valid_);
    const CompoundVector* comp_z = static_cast<const CompoundVector*>(&z);
-   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&z)); DBG_ASSERT(NComps() == comp_z->NComps());
+   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&z));
+   DBG_ASSERT(NComps() == comp_z->NComps());
    const CompoundVector* comp_s = static_cast<const CompoundVector*>(&s);
-   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&s)); DBG_ASSERT(NComps() == comp_s->NComps());
+   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&s));
+   DBG_ASSERT(NComps() == comp_s->NComps());
 
    for( Index i = 0; i < NComps(); i++ )
    {
@@ -429,12 +462,12 @@ void CompoundVector::PrintImpl(
    const std::string& name,
    Index              indent,
    const std::string& prefix
-   ) const
+) const
 {
    DBG_START_METH("CompoundVector::PrintImpl", dbg_verbosity);
    jnlst.Printf(level, category, "\n");
    jnlst.PrintfIndented(level, category, indent, "%sCompoundVector \"%s\" with %d components:\n", prefix.c_str(),
-      name.c_str(), NComps());
+                        name.c_str(), NComps());
    for( Index i = 0; i < NComps(); i++ )
    {
       jnlst.Printf(level, category, "\n");
@@ -473,7 +506,7 @@ bool CompoundVector::VectorsValid()
 CompoundVectorSpace::CompoundVectorSpace(
    Index ncomp_spaces,
    Index total_dim
-   )
+)
    : VectorSpace(total_dim),
      ncomp_spaces_(ncomp_spaces),
      comp_spaces_(ncomp_spaces)
@@ -483,15 +516,16 @@ CompoundVectorSpace::CompoundVectorSpace(
 void CompoundVectorSpace::SetCompSpace(
    Index              icomp,
    const VectorSpace& vec_space
-   )
+)
 {
-   DBG_ASSERT(icomp < ncomp_spaces_); DBG_ASSERT(IsNull(comp_spaces_[icomp]));
+   DBG_ASSERT(icomp < ncomp_spaces_);
+   DBG_ASSERT(IsNull(comp_spaces_[icomp]));
    comp_spaces_[icomp] = &vec_space;
 }
 
 SmartPtr<const VectorSpace> CompoundVectorSpace::GetCompSpace(
    Index icomp
-   ) const
+) const
 {
    DBG_ASSERT(icomp < ncomp_spaces_);
    return comp_spaces_[icomp];

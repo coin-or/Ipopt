@@ -32,7 +32,7 @@ namespace Ipopt
 
 RestoIterationOutput::RestoIterationOutput(
    const SmartPtr<OrigIterationOutput>& resto_orig_iteration_output
-   )
+)
    : resto_orig_iteration_output_(resto_orig_iteration_output)
 { }
 
@@ -42,7 +42,7 @@ RestoIterationOutput::~RestoIterationOutput()
 bool RestoIterationOutput::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    options.GetBoolValue("print_info_string", print_info_string_, prefix);
    Index enum_int;
@@ -164,10 +164,10 @@ void RestoIterationOutput::WriteOutput()
    Number current_time = 0.0;
    Number last_output = IpData().info_last_output();
    if( (iter % print_frequency_iter_) == 0 && (print_frequency_time_ == 0.0 || last_output < (current_time =
-      WallclockTime()) - print_frequency_time_ || last_output < 0.0) )
+            WallclockTime()) - print_frequency_time_ || last_output < 0.0) )
    {
       Jnlst().Printf(J_ITERSUMMARY, J_MAIN, "%4d%c%14.7e %7.2e %7.2e %5.1f %7.2e %5s %7.2e %7.2e%c%3d", iter, info_iter,
-         f, inf_pr, inf_du, log10(mu), dnrm, regu_x_ptr, alpha_dual, alpha_primal, alpha_primal_char, ls_count);
+                     f, inf_pr, inf_du, log10(mu), dnrm, regu_x_ptr, alpha_dual, alpha_primal, alpha_primal_char, ls_count);
       if( print_info_string_ )
       {
          Jnlst().Printf(J_ITERSUMMARY, J_MAIN, " %s", info_string.c_str());
@@ -193,9 +193,9 @@ void RestoIterationOutput::WriteOutput()
       Jnlst().Printf(J_DETAILED, J_MAIN, "\n**************************************************\n\n");
 
       Jnlst().Printf(J_DETAILED, J_MAIN, "Primal infeasibility for restoration phase problem = %.16e\n",
-         IpCq().curr_primal_infeasibility(NORM_MAX));
+                     IpCq().curr_primal_infeasibility(NORM_MAX));
       Jnlst().Printf(J_DETAILED, J_MAIN, "Dual infeasibility for restoration phase problem   = %.16e\n",
-         IpCq().curr_dual_infeasibility(NORM_MAX));
+                     IpCq().curr_dual_infeasibility(NORM_MAX));
 
       Jnlst().Printf(J_DETAILED, J_MAIN, "||curr_x||_inf   = %.16e\n", IpData().curr()->x()->Amax());
       Jnlst().Printf(J_DETAILED, J_MAIN, "||curr_s||_inf   = %.16e\n", IpData().curr()->s()->Amax());
@@ -255,18 +255,18 @@ void RestoIterationOutput::WriteOutput()
    if( Jnlst().ProduceOutput(J_DETAILED, J_MAIN) )
    {
       Jnlst().Printf(J_DETAILED, J_MAIN, "\n\n***Current NLP Values for Iteration (Restoration phase problem) %d:\n",
-         IpData().iter_count());
+                     IpData().iter_count());
       Jnlst().Printf(J_DETAILED, J_MAIN, "\n                                   (scaled)                 (unscaled)\n");
       Jnlst().Printf(J_DETAILED, J_MAIN, "Objective...............: %24.16e  %24.16e\n", IpCq().curr_f(),
-         IpCq().unscaled_curr_f());
+                     IpCq().unscaled_curr_f());
       Jnlst().Printf(J_DETAILED, J_MAIN, "Dual infeasibility......: %24.16e  %24.16e\n",
-         IpCq().curr_dual_infeasibility(NORM_MAX), IpCq().unscaled_curr_dual_infeasibility(NORM_MAX));
+                     IpCq().curr_dual_infeasibility(NORM_MAX), IpCq().unscaled_curr_dual_infeasibility(NORM_MAX));
       Jnlst().Printf(J_DETAILED, J_MAIN, "Constraint violation....: %24.16e  %24.16e\n",
-         IpCq().curr_nlp_constraint_violation(NORM_MAX), IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX));
+                     IpCq().curr_nlp_constraint_violation(NORM_MAX), IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX));
       Jnlst().Printf(J_DETAILED, J_MAIN, "Complementarity.........: %24.16e  %24.16e\n",
-         IpCq().curr_complementarity(0., NORM_MAX), IpCq().unscaled_curr_complementarity(0., NORM_MAX));
+                     IpCq().curr_complementarity(0., NORM_MAX), IpCq().unscaled_curr_complementarity(0., NORM_MAX));
       Jnlst().Printf(J_DETAILED, J_MAIN, "Overall NLP error.......: %24.16e  %24.16e\n\n", IpCq().curr_nlp_error(),
-         IpCq().unscaled_curr_nlp_error());
+                     IpCq().unscaled_curr_nlp_error());
    }
    if( Jnlst().ProduceOutput(J_VECTOR, J_MAIN) )
    {

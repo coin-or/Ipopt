@@ -45,7 +45,7 @@ public:
       const SmartPtr<const Journalist>& jnlst,
       const SmartPtr<NLP>&              nlp,
       const SmartPtr<NLPScalingObject>& nlp_scaling
-      );
+   );
 
    /** Destructor */
    virtual ~OrigIpoptNLP();
@@ -55,7 +55,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Initialize (create) structures for the iteration data */
    virtual bool InitializeStructures(
@@ -71,12 +71,12 @@ public:
       bool              init_z_U,
       SmartPtr<Vector>& v_L,
       SmartPtr<Vector>& v_U
-      );
+   );
 
    /** Method accessing the GetWarmStartIterate of the NLP */
    virtual bool GetWarmStartIterate(
       IteratesVector& warm_start_iterate
-      )
+   )
    {
       return nlp_->GetWarmStartIterate(warm_start_iterate);
    }
@@ -86,7 +86,7 @@ public:
    /** Objective value */
    virtual Number f(
       const Vector& x
-      );
+   );
 
    /** Objective value (depending in mu) - incorrect version for
     *  OrigIpoptNLP
@@ -94,12 +94,12 @@ public:
    virtual Number f(
       const Vector& x,
       Number mu
-      );
+   );
 
    /** Gradient of the objective */
    virtual SmartPtr<const Vector> grad_f(
       const Vector& x
-      );
+   );
 
    /** Gradient of the objective (depending in mu) - incorrect
     *  version for OrigIpoptNLP
@@ -107,29 +107,29 @@ public:
    virtual SmartPtr<const Vector> grad_f(
       const Vector& x,
       Number        mu
-      );
+   );
 
    /** Equality constraint residual */
    virtual SmartPtr<const Vector> c(
       const Vector& x
-      );
+   );
 
    /** Jacobian Matrix for equality constraints */
    virtual SmartPtr<const Matrix> jac_c(
       const Vector& x
-      );
+   );
 
    /** Inequality constraint residual (reformulated
     *  as equalities with slacks)
     */
    virtual SmartPtr<const Vector> d(
       const Vector& x
-      );
+   );
 
    /** Jacobian Matrix for inequality constraints */
    virtual SmartPtr<const Matrix> jac_d(
       const Vector& x
-      );
+   );
 
    /** Hessian of the Lagrangian */
    virtual SmartPtr<const SymMatrix> h(
@@ -137,7 +137,7 @@ public:
       Number        obj_factor,
       const Vector& yc,
       const Vector& yd
-      );
+   );
 
    /** Hessian of the Lagrangian (depending in mu) - incorrect
     *  version for OrigIpoptNLP
@@ -148,7 +148,7 @@ public:
       const Vector& yc,
       const Vector& yd,
       Number        mu
-      );
+   );
 
    /** Provides a Hessian matrix from the correct matrix space with
     *  uninitialized values.
@@ -289,7 +289,7 @@ public:
       Number                     obj_value,
       const IpoptData*           ip_data,
       IpoptCalculatedQuantities* ip_cq
-      );
+   );
 
    bool IntermediateCallBack(
       AlgorithmMode                       mode,
@@ -305,13 +305,13 @@ public:
       Index                               ls_trials,
       SmartPtr<const IpoptData>           ip_data,
       SmartPtr<IpoptCalculatedQuantities> ip_cq
-      );
+   );
    //@}
 
    /** Called to register the options */
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
 
    /** Accessor method to the underlying NLP */
    SmartPtr<NLP> nlp()
@@ -328,7 +328,7 @@ public:
       Journalist&      jnlst,
       EJournalLevel    level,
       EJournalCategory category
-      ) const;
+   ) const;
 
    const TimedTask& f_eval_time() const
    {
@@ -474,12 +474,12 @@ private:
    /** Copy Constructor */
    OrigIpoptNLP(
       const OrigIpoptNLP&
-      );
+   );
 
    /** Overloaded Assignment Operator */
    void operator=(
       const OrigIpoptNLP&
-      );
+   );
    //@}
 
    /** @name auxiliary functions */
@@ -492,12 +492,12 @@ private:
    void relax_bounds(
       Number  bound_relax_factor,
       Vector& bounds
-      );
+   );
 
    /** Method for getting the unscaled version of the x vector */
    SmartPtr<const Vector> get_unscaled_x(
       const Vector& x
-      );
+   );
    //@}
 
    /** @name Algorithmic parameters */

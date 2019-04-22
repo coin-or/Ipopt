@@ -32,7 +32,7 @@ public:
     */
    ScaledMatrix(
       const ScaledMatrixSpace* owner_space
-      );
+   );
 
    /** Destructor */
    ~ScaledMatrix();
@@ -41,12 +41,12 @@ public:
    /** Set the unscaled matrix */
    void SetUnscaledMatrix(
       const SmartPtr<const Matrix> unscaled_matrix
-      );
+   );
 
    /** Set the unscaled matrix in a non-const version */
    void SetUnscaledMatrixNonConst(
       const SmartPtr<Matrix>& unscaled_matrix
-      );
+   );
 
    /** Return the unscaled matrix in const form */
    SmartPtr<const Matrix> GetUnscaledMatrix() const;
@@ -68,26 +68,26 @@ protected:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual void TransMultVectorImpl(
       Number        alpha,
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual bool HasValidNumbersImpl() const;
 
    virtual void ComputeRowAMaxImpl(
       Vector& rows_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void ComputeColAMaxImpl(
       Vector& cols_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void PrintImpl(
       const Journalist&  jnlst,
@@ -96,7 +96,7 @@ protected:
       const std::string& name,
       Index              indent,
       const std::string& prefix
-      ) const;
+   ) const;
 
    /** X = beta*X + alpha*(Matrix S^{-1} Z).
     *
@@ -107,7 +107,7 @@ protected:
       const Vector& S,
       const Vector& Z,
       Vector&       X
-      ) const;
+   ) const;
 
    /** X = S^{-1} (r + alpha*Z*M^Td).
     *
@@ -120,7 +120,7 @@ protected:
       const Vector& Z,
       const Vector& D,
       Vector&       X
-      ) const;
+   ) const;
    //@}
 
 private:
@@ -139,12 +139,12 @@ private:
    /** Copy Constructor */
    ScaledMatrix(
       const ScaledMatrix&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const ScaledMatrix&
-      );
+   );
    //@}
 
    /** const version of the unscaled matrix */
@@ -172,7 +172,7 @@ public:
       const SmartPtr<const MatrixSpace>& unscaled_matrix_space,
       const SmartPtr<const Vector>&      column_scaling,
       bool                               column_scaling_reciprocal
-      );
+   );
 
    /** Destructor */
    ~ScaledMatrixSpace()
@@ -182,7 +182,7 @@ public:
    /** Method for creating a new matrix of this specific type. */
    ScaledMatrix* MakeNewScaledMatrix(
       bool allocate_unscaled_matrix = false
-      ) const
+   ) const
    {
       ScaledMatrix* ret = new ScaledMatrix(this);
       if( allocate_unscaled_matrix )
@@ -232,12 +232,12 @@ private:
    /** Copy Constructor */
    ScaledMatrixSpace(
       const ScaledMatrixSpace&
-      );
+   );
 
    /** Default Assignment Operator */
    ScaledMatrixSpace& operator=(
       const ScaledMatrixSpace&
-      );
+   );
    //@}
 
    /** Row scaling vector */
@@ -252,7 +252,7 @@ private:
 
 inline void ScaledMatrix::SetUnscaledMatrix(
    const SmartPtr<const Matrix> unscaled_matrix
-   )
+)
 {
    matrix_ = unscaled_matrix;
    nonconst_matrix_ = NULL;
@@ -261,7 +261,7 @@ inline void ScaledMatrix::SetUnscaledMatrix(
 
 inline void ScaledMatrix::SetUnscaledMatrixNonConst(
    const SmartPtr<Matrix>& unscaled_matrix
-   )
+)
 {
    nonconst_matrix_ = unscaled_matrix;
    matrix_ = GetRawPtr(unscaled_matrix);

@@ -26,7 +26,7 @@ void Vector::Print(
    const std::string&         name,
    Index                      indent,
    const std::string&         prefix
-   ) const
+) const
 {
    if( IsValid(jnlst) && jnlst->ProduceOutput(level, category) )
    {
@@ -41,7 +41,7 @@ void Vector::Print(
    const std::string& name,
    Index              indent,
    const std::string& prefix
-   ) const
+) const
 {
    if( jnlst.ProduceOutput(level, category) )
    {
@@ -56,7 +56,7 @@ void Vector::AddTwoVectorsImpl(
    Number        b,
    const Vector& v2,
    Number        c
-   )
+)
 {
    if( c == 0. )
    {
@@ -123,9 +123,10 @@ void Vector::AddTwoVectorsImpl(
 Number Vector::FracToBoundImpl(
    const Vector& delta,
    Number        tau
-   ) const
+) const
 {
-   DBG_ASSERT(tau >= 0.); DBG_ASSERT(Dim() == delta.Dim());
+   DBG_ASSERT(tau >= 0.);
+   DBG_ASSERT(Dim() == delta.Dim());
    if( Dim() == 0 && delta.Dim() == 0 )
    {
       return 1.0;
@@ -152,7 +153,7 @@ Number Vector::FracToBoundImpl(
 // the IpVector.hpp header file
 void Vector::Scal(
    Number alpha
-   )
+)
 {
    if( alpha != 1. )
    {
@@ -218,9 +219,10 @@ void Vector::AddVectorQuotientImpl(
    const Vector& z,
    const Vector& s,
    Number        c
-   )
+)
 {
-   DBG_ASSERT(Dim() == z.Dim()); DBG_ASSERT(Dim() == s.Dim());
+   DBG_ASSERT(Dim() == z.Dim());
+   DBG_ASSERT(Dim() == s.Dim());
 
    if( c == 0. )
    {

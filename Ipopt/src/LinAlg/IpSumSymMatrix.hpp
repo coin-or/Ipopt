@@ -30,7 +30,7 @@ public:
     */
    SumSymMatrix(
       const SumSymMatrixSpace* owner_space
-      );
+   );
 
    /** Destructor */
    ~SumSymMatrix();
@@ -44,7 +44,7 @@ public:
       Index            iterm,
       Number           factor,
       const SymMatrix& matrix
-      );
+   );
 
    /** Method for getting term iterm for the sum.
     *
@@ -54,7 +54,7 @@ public:
       Index                      iterm,
       Number&                    factor,
       SmartPtr<const SymMatrix>& matrix
-      ) const;
+   ) const;
 
    /** Return the number of terms */
    Index NTerms() const;
@@ -67,19 +67,19 @@ protected:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual bool HasValidNumbersImpl() const;
 
    virtual void ComputeRowAMaxImpl(
       Vector& rows_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void ComputeColAMaxImpl(
       Vector& cols_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void PrintImpl(
       const Journalist&  jnlst,
@@ -88,7 +88,7 @@ protected:
       const std::string& name,
       Index              indent,
       const std::string& prefix
-      ) const;
+   ) const;
    //@}
 
 private:
@@ -107,12 +107,12 @@ private:
    /** Copy Constructor */
    SumSymMatrix(
       const SumSymMatrix&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const SumSymMatrix&
-      );
+   );
    //@}
 
    /** std::vector storing the factors for each term. */
@@ -137,7 +137,7 @@ public:
    SumSymMatrixSpace(
       Index ndim,
       Index nterms
-      )
+   )
       : SymMatrixSpace(ndim),
         nterms_(nterms)
    { }
@@ -164,12 +164,12 @@ public:
    void SetTermSpace(
       Index                 term_idx,
       const SymMatrixSpace& space
-      );
+   );
 
    /** Get the matrix space for a particular term */
    SmartPtr<const SymMatrixSpace> GetTermSpace(
       Index term_idx
-      ) const;
+   ) const;
 
    /** Method for creating a new matrix of this specific type. */
    SumSymMatrix* MakeNewSumSymMatrix() const;

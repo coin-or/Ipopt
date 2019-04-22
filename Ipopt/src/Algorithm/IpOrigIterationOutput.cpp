@@ -37,38 +37,38 @@ OrigIterationOutput::~OrigIterationOutput()
 
 void OrigIterationOutput::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
-   )
+)
 {
    std::string prev_cat = roptions->RegisteringCategory();
    roptions->SetRegisteringCategory("Output");
    roptions->AddStringOption2("print_info_string",
-      "Enables printing of additional info string at end of iteration output.", "no", "no", "don't print string", "yes",
-      "print string at end of each iteration output", "This string contains some insider information about the current "
-         "iteration.  For details, look for \"Diagnostic Tags\" in the Ipopt "
-         "documentation.");
+                              "Enables printing of additional info string at end of iteration output.", "no", "no", "don't print string", "yes",
+                              "print string at end of each iteration output", "This string contains some insider information about the current "
+                              "iteration.  For details, look for \"Diagnostic Tags\" in the Ipopt "
+                              "documentation.");
    roptions->AddStringOption2("inf_pr_output", "Determines what value is printed in the \"inf_pr\" output column.",
-      "original", "internal", "max-norm of violation of internal equality constraints", "original",
-      "maximal constraint violation in original NLP",
-      "Ipopt works with a reformulation of the original problem, where slacks "
-         "are introduced and the problem might have been scaled.  The choice "
-         "\"internal\" prints out the constraint violation of this formulation. "
-         "With \"original\" the true constraint violation in the original NLP is "
-         "printed.");
+                              "original", "internal", "max-norm of violation of internal equality constraints", "original",
+                              "maximal constraint violation in original NLP",
+                              "Ipopt works with a reformulation of the original problem, where slacks "
+                              "are introduced and the problem might have been scaled.  The choice "
+                              "\"internal\" prints out the constraint violation of this formulation. "
+                              "With \"original\" the true constraint violation in the original NLP is "
+                              "printed.");
    roptions->AddLowerBoundedIntegerOption("print_frequency_iter",
-      "Determines at which iteration frequency the summarizing iteration output line should be printed.", 1, 1,
-      "Summarizing iteration output is printed every print_frequency_iter iterations, "
-         "if at least print_frequency_time seconds have passed since last output.");
+                                          "Determines at which iteration frequency the summarizing iteration output line should be printed.", 1, 1,
+                                          "Summarizing iteration output is printed every print_frequency_iter iterations, "
+                                          "if at least print_frequency_time seconds have passed since last output.");
    roptions->AddLowerBoundedNumberOption("print_frequency_time",
-      "Determines at which time frequency the summarizing iteration output line should be printed.", 0.0, false, 0.0,
-      "Summarizing iteration output is printed if at least print_frequency_time seconds have "
-         "passed since last output and the iteration number is a multiple of print_frequency_iter.");
+                                         "Determines at which time frequency the summarizing iteration output line should be printed.", 0.0, false, 0.0,
+                                         "Summarizing iteration output is printed if at least print_frequency_time seconds have "
+                                         "passed since last output and the iteration number is a multiple of print_frequency_iter.");
    roptions->SetRegisteringCategory(prev_cat);
 }
 
 bool OrigIterationOutput::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    options.GetBoolValue("print_info_string", print_info_string_, prefix);
    Index enum_int;
@@ -150,12 +150,12 @@ void OrigIterationOutput::WriteOutput()
    Number current_time = 0.0;
    Number last_output = IpData().info_last_output();
    if( !IpData().info_skip_output() && (iter % print_frequency_iter_) == 0
-      && (print_frequency_time_ == 0.0 || last_output < (current_time = WallclockTime()) - print_frequency_time_
-         || last_output < 0.0) )
+       && (print_frequency_time_ == 0.0 || last_output < (current_time = WallclockTime()) - print_frequency_time_
+           || last_output < 0.0) )
    {
       Jnlst().Printf(J_ITERSUMMARY, J_MAIN, "%4d%c%14.7e %7.2e %7.2e %5.1f %7.2e %5s %7.2e %7.2e%c%3d", iter, info_iter,
-         unscaled_f, inf_pr, inf_du, log10(mu), dnrm, regu_x_ptr, alpha_dual, alpha_primal, alpha_primal_char,
-         ls_count);
+                     unscaled_f, inf_pr, inf_du, log10(mu), dnrm, regu_x_ptr, alpha_dual, alpha_primal, alpha_primal_char,
+                     ls_count);
       if( print_info_string_ )
       {
          Jnlst().Printf(J_ITERSUMMARY, J_MAIN, " %s", info_string.c_str());
@@ -182,7 +182,7 @@ void OrigIterationOutput::WriteOutput()
 
       Jnlst().Printf(J_DETAILED, J_MAIN, "Current barrier parameter mu = %21.16e\n", IpData().curr_mu());
       Jnlst().Printf(J_DETAILED, J_MAIN, "Current fraction-to-the-boundary parameter tau = %21.16e\n\n",
-         IpData().curr_tau());
+                     IpData().curr_tau());
       Jnlst().Printf(J_DETAILED, J_MAIN, "||curr_x||_inf   = %.16e\n", IpData().curr()->x()->Amax());
       Jnlst().Printf(J_DETAILED, J_MAIN, "||curr_s||_inf   = %.16e\n", IpData().curr()->s()->Amax());
       Jnlst().Printf(J_DETAILED, J_MAIN, "||curr_y_c||_inf = %.16e\n", IpData().curr()->y_c()->Amax());
@@ -243,15 +243,15 @@ void OrigIterationOutput::WriteOutput()
       Jnlst().Printf(J_DETAILED, J_MAIN, "\n\n***Current NLP Values for Iteration %d:\n", IpData().iter_count());
       Jnlst().Printf(J_DETAILED, J_MAIN, "\n                                   (scaled)                 (unscaled)\n");
       Jnlst().Printf(J_DETAILED, J_MAIN, "Objective...............: %24.16e  %24.16e\n", IpCq().curr_f(),
-         IpCq().unscaled_curr_f());
+                     IpCq().unscaled_curr_f());
       Jnlst().Printf(J_DETAILED, J_MAIN, "Dual infeasibility......: %24.16e  %24.16e\n",
-         IpCq().curr_dual_infeasibility(NORM_MAX), IpCq().unscaled_curr_dual_infeasibility(NORM_MAX));
+                     IpCq().curr_dual_infeasibility(NORM_MAX), IpCq().unscaled_curr_dual_infeasibility(NORM_MAX));
       Jnlst().Printf(J_DETAILED, J_MAIN, "Constraint violation....: %24.16e  %24.16e\n",
-         IpCq().curr_nlp_constraint_violation(NORM_MAX), IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX));
+                     IpCq().curr_nlp_constraint_violation(NORM_MAX), IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX));
       Jnlst().Printf(J_DETAILED, J_MAIN, "Complementarity.........: %24.16e  %24.16e\n",
-         IpCq().curr_complementarity(0., NORM_MAX), IpCq().unscaled_curr_complementarity(0., NORM_MAX));
+                     IpCq().curr_complementarity(0., NORM_MAX), IpCq().unscaled_curr_complementarity(0., NORM_MAX));
       Jnlst().Printf(J_DETAILED, J_MAIN, "Overall NLP error.......: %24.16e  %24.16e\n\n", IpCq().curr_nlp_error(),
-         IpCq().unscaled_curr_nlp_error());
+                     IpCq().unscaled_curr_nlp_error());
    }
    if( Jnlst().ProduceOutput(J_VECTOR, J_MAIN) )
    {

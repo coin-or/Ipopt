@@ -33,7 +33,7 @@ public:
    MinC_1NrmRestorationPhase(
       IpoptAlgorithm&                         resto_alg,
       const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator
-      );
+   );
 
    /** Destructor */
    virtual ~MinC_1NrmRestorationPhase();
@@ -42,11 +42,11 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
 
 protected:
    virtual bool PerformRestoration();
@@ -67,12 +67,12 @@ private:
    /** Copy Constructor */
    MinC_1NrmRestorationPhase(
       const MinC_1NrmRestorationPhase&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const MinC_1NrmRestorationPhase&
-      );
+   );
    //@}
 
    /** @name Strategy objects */
@@ -128,7 +128,7 @@ private:
       const Vector& curr_z,
       const Vector& curr_slack,
       const Vector& trial_slack
-      );
+   );
    //@}
 };
 

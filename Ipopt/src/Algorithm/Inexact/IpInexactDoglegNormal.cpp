@@ -26,7 +26,7 @@ static const Index dbg_verbosity = 0;
 InexactDoglegNormalStep::InexactDoglegNormalStep(
    SmartPtr<InexactNewtonNormalStep>        newton_step,
    SmartPtr<InexactNormalTerminationTester> normal_tester /* = NULL */
-   )
+)
    : InexactNormalStepCalculator(),
      newton_step_(newton_step),
      normal_tester_(normal_tester)
@@ -37,18 +37,18 @@ InexactDoglegNormalStep::~InexactDoglegNormalStep()
 
 void InexactDoglegNormalStep::RegisterOptions(
    SmartPtr<RegisteredOptions> reg_options
-   )
+)
 {
    reg_options->AddLowerBoundedNumberOption("omega_init", "Initial trust region factor for normal problem.", 0.0, true,
-      100.);
+         100.);
    reg_options->AddLowerBoundedNumberOption("omega_max", "Maximal trust region factor for normal problem.", 0.0, true,
-      1e20);
+         1e20);
 }
 
 bool InexactDoglegNormalStep::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    options.GetNumericValue("omega_init", curr_omega_, prefix);
    options.GetNumericValue("omega_max", omega_max_, prefix);
@@ -64,11 +64,11 @@ bool InexactDoglegNormalStep::InitializeImpl(
 bool InexactDoglegNormalStep::ComputeNormalStep(
    SmartPtr<Vector>& normal_x,
    SmartPtr<Vector>& normal_s
-   )
+)
 
 {
    DBG_START_METH("InexactDoglegNormalStep::ComputeNormalStep",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    // test if we should increase the trust region factor
    if( !last_tr_inactive_ && InexData().full_step_accepted() )
@@ -76,7 +76,7 @@ bool InexactDoglegNormalStep::ComputeNormalStep(
       if( curr_omega_ >= omega_max_ )
       {
          Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
-            "Trust region radius factor would be increased, but it is already at its upper limit %e.\n", curr_omega_);
+                        "Trust region radius factor would be increased, but it is already at its upper limit %e.\n", curr_omega_);
          IpData().Append_info_string("O");
       }
       else
@@ -84,7 +84,7 @@ bool InexactDoglegNormalStep::ComputeNormalStep(
          Number omega_old = curr_omega_;
          curr_omega_ = Min(omega_max_, 10. * curr_omega_);
          Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM, "Increasing trust region factor from %e to %e\n.", omega_old,
-            curr_omega_);
+                        curr_omega_);
          IpData().Append_info_string("o");
       }
    }
@@ -94,7 +94,7 @@ bool InexactDoglegNormalStep::ComputeNormalStep(
    if( IpCq().curr_primal_infeasibility(NORM_2) <= 1e-12 )
    {
       Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
-         "Dogleg step:  We are at a feasible point, the normal step is set to zero.\n");
+                     "Dogleg step:  We are at a feasible point, the normal step is set to zero.\n");
       normal_x = IpData().curr()->x()->MakeNew();
       normal_s = IpData().curr()->s()->MakeNew();
       normal_x->Set(0.);
@@ -110,7 +110,8 @@ bool InexactDoglegNormalStep::ComputeNormalStep(
    SmartPtr<const Vector> curr_jac_cdT_times_curr_cdminuss = InexCq().curr_jac_cdT_times_curr_cdminuss();
    SmartPtr<const Vector> curr_slack_scaled_d_minus_s = InexCq().curr_slack_scaled_d_minus_s();
 
-   DBG_PRINT_VECTOR(1, "curr_jac_cdT_times_curr_cdminuss", *curr_jac_cdT_times_curr_cdminuss); DBG_PRINT_VECTOR(1, "curr_slack_scaled_d_minus_s", *curr_slack_scaled_d_minus_s);
+   DBG_PRINT_VECTOR(1, "curr_jac_cdT_times_curr_cdminuss", *curr_jac_cdT_times_curr_cdminuss);
+   DBG_PRINT_VECTOR(1, "curr_slack_scaled_d_minus_s", *curr_slack_scaled_d_minus_s);
 
    // Compute the norm of the (scaled) gradient of the objective
    // function (A^T c)
@@ -120,9 +121,12 @@ bool InexactDoglegNormalStep::ComputeNormalStep(
    SmartPtr<const Vector> vec_AATc_c = IpCq().curr_jac_c_times_vec(*curr_jac_cdT_times_curr_cdminuss);
    SmartPtr<Vector> vec_AATc_d = curr_slack_scaled_d_minus_s->MakeNewCopy();
    vec_AATc_d->ElementWiseMultiply(*InexCq().curr_scaling_slacks());
-   DBG_PRINT_VECTOR(1, "curr_scaling_slacks", *InexCq().curr_scaling_slacks()); DBG_PRINT_VECTOR(1, "vec_AATc_d", *vec_AATc_d);
+   DBG_PRINT_VECTOR(1, "curr_scaling_slacks", *InexCq().curr_scaling_slacks());
+   DBG_PRINT_VECTOR(1, "vec_AATc_d", *vec_AATc_d);
    vec_AATc_d->AddOneVector(1., *IpCq().curr_jac_d_times_vec(*curr_jac_cdT_times_curr_cdminuss), 1.);
-   DBG_PRINT_VECTOR(1, "IpCq().curr_jac_d_times_vec(*curr_jac_cdT_times_curr_cdminuss)", *IpCq().curr_jac_d_times_vec(*curr_jac_cdT_times_curr_cdminuss)); DBG_PRINT_VECTOR(1, "vec_AATc_c", *vec_AATc_c); DBG_PRINT_VECTOR(1, "vec_AATc_d", *vec_AATc_d);
+   DBG_PRINT_VECTOR(1, "IpCq().curr_jac_d_times_vec(*curr_jac_cdT_times_curr_cdminuss)", *IpCq().curr_jac_d_times_vec(*curr_jac_cdT_times_curr_cdminuss));
+   DBG_PRINT_VECTOR(1, "vec_AATc_c", *vec_AATc_c);
+   DBG_PRINT_VECTOR(1, "vec_AATc_d", *vec_AATc_d);
    Number AATc_norm = IpCq().CalcNormOfType(NORM_2, *vec_AATc_c, *vec_AATc_d);
 
    // Compute the step size for the Cauchy step
@@ -159,7 +163,7 @@ bool InexactDoglegNormalStep::ComputeNormalStep(
    }
    Number objred_normal_cs = 0.5 * (IpCq().CalcNormOfType(NORM_2, *curr_c, *curr_d_minus_s) - c_Avc_norm_cauchy);
    Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
-      "Dogleg: Reduction of normal problem objective function by Cauchy step = %23.16e\n", objred_normal_cs);
+                  "Dogleg: Reduction of normal problem objective function by Cauchy step = %23.16e\n", objred_normal_cs);
 
    // If the Cauchy step already hits the trust region, we are done
    if( alpha_cs == curr_omega_ )
@@ -184,7 +188,7 @@ bool InexactDoglegNormalStep::ComputeNormalStep(
    if( !retval )
    {
       Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
-         "Dogleg step: Newton step could not be calculated, return Cauchy step.\n");
+                     "Dogleg step: Newton step could not be calculated, return Cauchy step.\n");
       normal_x = v_cauchy_x_bak;
       normal_s = v_cauchy_s_bak;
       // unscale the slack-based scaling
@@ -208,7 +212,7 @@ bool InexactDoglegNormalStep::ComputeNormalStep(
    // norm of the Newton step
    Number v_newton_norm = IpCq().CalcNormOfType(NORM_2, *v_newton_x, *v_newton_s);
    Jnlst().Printf(J_MOREDETAILED, J_SOLVE_PD_SYSTEM, "Norm of Newton step = %e, trust region radius = %e\n",
-      v_newton_norm, tr_radius);
+                  v_newton_norm, tr_radius);
    if( v_newton_norm <= tr_radius )
    {
       Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM, "Dogleg step:  Newton step is within trust region.\n");
@@ -229,7 +233,7 @@ bool InexactDoglegNormalStep::ComputeNormalStep(
       DBG_PRINT((1, "v_cauchy_norm = %e v_cs_dot_n = %e v_newton_norm = %e\n", v_cauchy_norm, v_cs_dot_n, v_newton_norm));
 
       Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
-         "Dogleg step:  Using convex combination of Cauchy and Newton step with factor lambda = %e\n", lambda);
+                     "Dogleg step:  Using convex combination of Cauchy and Newton step with factor lambda = %e\n", lambda);
       v_cauchy_x->AddOneVector(1. - lambda, *v_newton_x, lambda);
       v_cauchy_s->AddOneVector(1. - lambda, *v_newton_s, lambda);
       normal_x = v_cauchy_x;
@@ -239,7 +243,8 @@ bool InexactDoglegNormalStep::ComputeNormalStep(
       DBG_PRINT((1, "v_normal^2  = %e\n", normal_x->Dot(*normal_x) + normal_s->Dot(*normal_s)));
    }
 
-   DBG_PRINT_VECTOR(1, "normal_x scaled", *normal_x); DBG_PRINT_VECTOR(1, "normal_s scaled", *normal_s);
+   DBG_PRINT_VECTOR(1, "normal_x scaled", *normal_x);
+   DBG_PRINT_VECTOR(1, "normal_s scaled", *normal_s);
 
    // Compute the unscaled steps
    normal_s->ElementWiseMultiply(*InexCq().curr_scaling_slacks());
@@ -255,27 +260,27 @@ bool InexactDoglegNormalStep::ComputeNormalStep(
    const Number tau = IpData().curr_tau();
    Number ftb_cauchy = IpCq().primal_frac_to_the_bound(tau, *v_cauchy_x_bak, *v_cauchy_s_bak);
    Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
-      "Dogleg: Fraction-to-the-bounary step size for Cauchy step = %23.16e\n", ftb_cauchy);
+                  "Dogleg: Fraction-to-the-bounary step size for Cauchy step = %23.16e\n", ftb_cauchy);
    inf_c = IpCq().curr_jac_c_times_vec(*v_cauchy_x_bak)->MakeNewCopy();
    inf_c->AddOneVector(1., *curr_c, ftb_cauchy);
    inf_d = curr_d_minus_s->MakeNewCopy();
    inf_d->AddTwoVectors(-ftb_cauchy, *v_cauchy_s_bak, ftb_cauchy, *IpCq().curr_jac_d_times_vec(*v_cauchy_x_bak), 1.);
    Number objred_ftb_cauchy = 0.5
-      * (IpCq().CalcNormOfType(NORM_2, *curr_c, *curr_d_minus_s) - IpCq().CalcNormOfType(NORM_2, *inf_c, *inf_d));
+                              * (IpCq().CalcNormOfType(NORM_2, *curr_c, *curr_d_minus_s) - IpCq().CalcNormOfType(NORM_2, *inf_c, *inf_d));
    Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
-      "Dogleg: Reduction of normal problem objective function by ftb cauchy step = %23.16e\n", objred_ftb_cauchy);
+                  "Dogleg: Reduction of normal problem objective function by ftb cauchy step = %23.16e\n", objred_ftb_cauchy);
 
    Number ftb_dogleg = IpCq().primal_frac_to_the_bound(tau, *normal_x, *normal_s);
    Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
-      "Dogleg: Fraction-to-the-bounary step size for Dogleg step = %23.16e\n", ftb_dogleg);
+                  "Dogleg: Fraction-to-the-bounary step size for Dogleg step = %23.16e\n", ftb_dogleg);
    inf_c = IpCq().curr_jac_c_times_vec(*normal_x)->MakeNewCopy();
    inf_c->AddOneVector(1., *curr_c, ftb_dogleg);
    inf_d = curr_d_minus_s->MakeNewCopy();
    inf_d->AddTwoVectors(-ftb_dogleg, *normal_s, ftb_dogleg, *IpCq().curr_jac_d_times_vec(*normal_x), 1.);
    Number objred_ftb_dogleg = 0.5
-      * (IpCq().CalcNormOfType(NORM_2, *curr_c, *curr_d_minus_s) - IpCq().CalcNormOfType(NORM_2, *inf_c, *inf_d));
+                              * (IpCq().CalcNormOfType(NORM_2, *curr_c, *curr_d_minus_s) - IpCq().CalcNormOfType(NORM_2, *inf_c, *inf_d));
    Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
-      "Dogleg: Reduction of normal problem objective function by ftb dogleg step = %23.16e\n", objred_ftb_dogleg);
+                  "Dogleg: Reduction of normal problem objective function by ftb dogleg step = %23.16e\n", objred_ftb_dogleg);
 
    Number rhs = 10. * objred_ftb_dogleg;
    Number lhs = objred_ftb_cauchy;
@@ -284,7 +289,7 @@ bool InexactDoglegNormalStep::ComputeNormalStep(
    if( !ok )
    {
       Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
-         "Dogleg step: Dogleg step makes less progress than Cauchy step, resetting to Cauchy step.\n");
+                     "Dogleg step: Dogleg step makes less progress than Cauchy step, resetting to Cauchy step.\n");
       normal_x = v_cauchy_x_bak;
       normal_s = v_cauchy_s_bak;
       IpData().Append_info_string("NR ");

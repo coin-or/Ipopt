@@ -11,7 +11,7 @@ namespace Ipopt
 
 DiagMatrix::DiagMatrix(
    const SymMatrixSpace* owner_space
-   )
+)
    : SymMatrix(owner_space)
 { }
 
@@ -23,7 +23,7 @@ void DiagMatrix::MultVectorImpl(
    const Vector& x,
    Number        beta,
    Vector&       y
-   ) const
+) const
 {
    //  A few sanity checks
    DBG_ASSERT(Dim() == x.Dim());
@@ -55,7 +55,7 @@ bool DiagMatrix::HasValidNumbersImpl() const
 void DiagMatrix::ComputeRowAMaxImpl(
    Vector& rows_norms,
    bool    init
-   ) const
+) const
 {
    DBG_ASSERT(IsValid(diag_));
    if( init )
@@ -78,12 +78,12 @@ void DiagMatrix::PrintImpl(
    const std::string& name,
    Index              indent,
    const std::string& prefix
-   ) const
+) const
 {
    jnlst.Printf(level, category, "\n");
    jnlst.PrintfIndented(level, category, indent,
-      "%sDiagMatrix \"%s\" with %d rows and columns, and with diagonal elements:\n", prefix.c_str(), name.c_str(),
-      Dim());
+                        "%sDiagMatrix \"%s\" with %d rows and columns, and with diagonal elements:\n", prefix.c_str(), name.c_str(),
+                        Dim());
    if( IsValid(diag_) )
    {
       diag_->Print(&jnlst, level, category, name, indent + 1, prefix);

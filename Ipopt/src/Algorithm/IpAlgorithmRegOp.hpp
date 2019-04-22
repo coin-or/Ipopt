@@ -15,7 +15,7 @@ class RegisteredOptions;
 
 void RegisterOptions_Algorithm(
    const SmartPtr<RegisteredOptions>& roptions
-   );
+);
 
 } // namespace Ipopt
 

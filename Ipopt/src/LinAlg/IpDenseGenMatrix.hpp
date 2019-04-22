@@ -31,7 +31,7 @@ public:
    /** Constructor, taking the owner_space. */
    DenseGenMatrix(
       const DenseGenMatrixSpace* owner_space
-      );
+   );
 
    /** Destructor */
    ~DenseGenMatrix();
@@ -67,7 +67,7 @@ public:
    /** Method for copying the content of another matrix into this matrix */
    void Copy(
       const DenseGenMatrix& M
-      );
+   );
 
    /** Set this matrix to be a multiple of the identity matrix.
     *
@@ -75,7 +75,7 @@ public:
     */
    void FillIdentity(
       Number factor = 1.
-      );
+   );
 
    /** Method for scaling the columns of the matrix.
     *
@@ -83,7 +83,7 @@ public:
     */
    void ScaleColumns(
       const DenseVector& scal_vec
-      );
+   );
 
    /** Method for adding the product of two matrices to this matrix. */
    void AddMatrixProduct(
@@ -93,7 +93,7 @@ public:
       const DenseGenMatrix& B,
       bool                  transB,
       Number                beta
-      );
+   );
 
    /** Method for adding a high-rank update to this matrix.
     *
@@ -105,7 +105,7 @@ public:
       const MultiVectorMatrix& V1,
       const MultiVectorMatrix& V2,
       Number                   beta
-      );
+   );
 
    /** Method for computing the Cholesky factorization of a positive
     *  definite matrix.
@@ -118,7 +118,7 @@ public:
     */
    bool ComputeCholeskyFactor(
       const DenseSymMatrix& M
-      );
+   );
 
    /** Method for computing an eigenvalue decomposition of the given
     *  symmetrix matrix M.
@@ -132,7 +132,7 @@ public:
    bool ComputeEigenVectors(
       const DenseSymMatrix& M,
       DenseVector&          Evalues
-      );
+   );
 
    /** Method for performing one backsolve with an entire matrix on
     *  the right hand side, assuming that the this matrix is square
@@ -145,7 +145,7 @@ public:
       bool            trans,
       Number          alpha,
       DenseGenMatrix& B
-      ) const;
+   ) const;
 
    /** Method for performing a solve of a linear system for one
     *  vector, assuming that this matrix contains the Cholesky factor
@@ -156,7 +156,7 @@ public:
     */
    void CholeskySolveVector(
       DenseVector& b
-      ) const;
+   ) const;
 
    /** Method for performing a solve of a linear system for one
     *  right-hand-side matrix, assuming that this matrix contains the
@@ -167,7 +167,7 @@ public:
     */
    void CholeskySolveMatrix(
       DenseGenMatrix& B
-      ) const;
+   ) const;
 
    /** Method for computing the LU factorization of an unsymmetric matrix.
     *
@@ -179,14 +179,14 @@ public:
     */
    void LUSolveMatrix(
       DenseGenMatrix& B
-      ) const;
+   ) const;
 
    /** Method for using a previously computed LU fatorization for a
     *  backsolve with a single vector.
     */
    void LUSolveVector(
       DenseVector& b
-      ) const;
+   ) const;
 
 protected:
    /**@name Overloaded methods from Matrix base class*/
@@ -196,26 +196,26 @@ protected:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual void TransMultVectorImpl(
       Number        alpha,
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual bool HasValidNumbersImpl() const;
 
    virtual void ComputeRowAMaxImpl(
       Vector& rows_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void ComputeColAMaxImpl(
       Vector& cols_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void PrintImpl(
       const Journalist&  jnlst,
@@ -224,7 +224,7 @@ protected:
       const std::string& name,
       Index              indent,
       const std::string& prefix
-      ) const;
+   ) const;
    //@}
 
 private:
@@ -242,12 +242,12 @@ private:
    /** Copy Constructor */
    DenseGenMatrix(
       const DenseGenMatrix&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const DenseGenMatrix&
-      );
+   );
    //@}
 
    const DenseGenMatrixSpace* owner_space_;
@@ -287,7 +287,7 @@ public:
    DenseGenMatrixSpace(
       Index nRows,
       Index nCols
-      );
+   );
 
    /** Destructor */
    ~DenseGenMatrixSpace()

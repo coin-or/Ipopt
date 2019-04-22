@@ -28,7 +28,7 @@ public:
    /** Constructor, taking the owner_space. */
    SumMatrix(
       const SumMatrixSpace* owner_space
-      );
+   );
 
    /** Destructor */
    virtual ~SumMatrix();
@@ -39,7 +39,7 @@ public:
       Index         iterm,
       Number        factor,
       const Matrix& matrix
-      );
+   );
 
    /** Method for getting term iterm for the sum.
     *
@@ -49,7 +49,7 @@ public:
       Index                   iterm,
       Number&                 factor,
       SmartPtr<const Matrix>& matrix
-      ) const;
+   ) const;
 
    /** Return the number of terms */
    Index NTerms() const;
@@ -62,26 +62,26 @@ protected:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual void TransMultVectorImpl(
       Number        alpha,
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual bool HasValidNumbersImpl() const;
 
    virtual void ComputeRowAMaxImpl(
       Vector& rows_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void ComputeColAMaxImpl(
       Vector& cols_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void PrintImpl(
       const Journalist&  jnlst,
@@ -90,7 +90,7 @@ protected:
       const std::string& name,
       Index              indent,
       const std::string& prefix
-      ) const;
+   ) const;
    //@}
 
 private:
@@ -109,12 +109,12 @@ private:
    /** Copy Constructor */
    SumMatrix(
       const SumMatrix&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const SumMatrix&
-      );
+   );
    //@}
 
    /** std::vector storing the factors for each term. */
@@ -140,7 +140,7 @@ public:
       Index nrows,
       Index ncols,
       Index nterms
-      )
+   )
       : MatrixSpace(nrows, ncols),
         nterms_(nterms)
    { }
@@ -163,12 +163,12 @@ public:
    void SetTermSpace(
       Index              term_idx,
       const MatrixSpace& mat_space
-      );
+   );
 
    /** Get the matrix space for a particular term */
    SmartPtr<const MatrixSpace> GetTermSpace(
       Index term_idx
-      ) const;
+   ) const;
 
    /** Method for creating a new matrix of this specific type. */
    SumMatrix* MakeNewSumMatrix() const;
@@ -191,12 +191,12 @@ private:
    /** Copy Constructor */
    SumMatrixSpace(
       const SumMatrixSpace&
-      );
+   );
 
    /** Default Assignment Operator */
    SumMatrixSpace& operator=(
       const SumMatrixSpace&
-      );
+   );
    //@}
 
    const Index nterms_;

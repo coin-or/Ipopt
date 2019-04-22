@@ -17,7 +17,7 @@ InexactCq::InexactCq(
    IpoptNLP*                  ip_nlp,
    IpoptData*                 ip_data,
    IpoptCalculatedQuantities* ip_cq
-   )
+)
    : ip_nlp_(ip_nlp),
      ip_data_(ip_data),
      ip_cq_(ip_cq),
@@ -34,7 +34,10 @@ InexactCq::InexactCq(
      curr_jac_times_normal_c_cache_(1),
      curr_jac_times_normal_d_cache_(1)
 {
-   DBG_START_METH("InexactCq::InexactCq", dbg_verbosity); DBG_ASSERT(ip_nlp_); DBG_ASSERT(ip_data_); DBG_ASSERT(ip_cq_);
+   DBG_START_METH("InexactCq::InexactCq", dbg_verbosity);
+   DBG_ASSERT(ip_nlp_);
+   DBG_ASSERT(ip_data_);
+   DBG_ASSERT(ip_cq_);
 }
 
 InexactCq::~InexactCq()
@@ -42,17 +45,17 @@ InexactCq::~InexactCq()
 
 void InexactCq::RegisterOptions(
    const SmartPtr<RegisteredOptions>& roptions
-   )
+)
 {
    roptions->AddLowerBoundedNumberOption("slack_scale_max", "Upper bound on slack-based scaling parameters.", 0.0, true,
-      1., "");
+                                         1., "");
 }
 
 bool InexactCq::Initialize(
    const Journalist&  jnlst,
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    options.GetNumericValue("slack_scale_max", slack_scale_max_, prefix);
    return true;
@@ -87,7 +90,7 @@ SmartPtr<const Vector> InexactCq::curr_jac_cdT_times_curr_cdminuss()
 SmartPtr<const Vector> InexactCq::curr_scaling_slacks()
 {
    DBG_START_METH("InexactCq::curr_scaling_slacks()",
-      dbg_verbosity);
+                  dbg_verbosity);
    SmartPtr<const Vector> result;
    SmartPtr<const Vector> s = ip_data_->curr()->s();
 
@@ -98,13 +101,15 @@ SmartPtr<const Vector> InexactCq::curr_scaling_slacks()
       // Lower bounds
       SmartPtr<const Matrix> Pd_L = ip_nlp_->Pd_L();
       SmartPtr<const Vector> curr_slack_s_L = ip_cq_->curr_slack_s_L();
-      DBG_PRINT_MATRIX(1, "Pd_L", *Pd_L); DBG_PRINT_VECTOR(1, "curr_slack_s_L", *curr_slack_s_L);
+      DBG_PRINT_MATRIX(1, "Pd_L", *Pd_L);
+      DBG_PRINT_VECTOR(1, "curr_slack_s_L", *curr_slack_s_L);
       Pd_L->MultVector(1., *curr_slack_s_L, 0., *tmp);
 
       // Upper bounds
       SmartPtr<const Matrix> Pd_U = ip_nlp_->Pd_U();
       SmartPtr<const Vector> curr_slack_s_U = ip_cq_->curr_slack_s_U();
-      DBG_PRINT_MATRIX(1, "Pd_U", *Pd_U); DBG_PRINT_VECTOR(1, "curr_slack_s_U", *curr_slack_s_U);
+      DBG_PRINT_MATRIX(1, "Pd_U", *Pd_U);
+      DBG_PRINT_VECTOR(1, "curr_slack_s_U", *curr_slack_s_U);
       Pd_U->MultVector(1., *curr_slack_s_U, 1., *tmp);
 
       SmartPtr<Vector> tmp2 = tmp->MakeNew();
@@ -141,7 +146,7 @@ SmartPtr<const Vector> InexactCq::curr_slack_scaled_d_minus_s()
 Number InexactCq::curr_scaled_Ac_norm()
 {
    DBG_START_METH("InexactCq::curr_scaled_Ac_norm",
-      dbg_verbosity);
+                  dbg_verbosity);
    Number result;
 
    SmartPtr<const Vector> x = ip_data_->curr()->x();
@@ -151,10 +156,10 @@ Number InexactCq::curr_scaled_Ac_norm()
    {
       SmartPtr<const Vector> jac_cdT_times_curr_cdminuss = curr_jac_cdT_times_curr_cdminuss();
       DBG_PRINT_VECTOR(2, "jac_cdT_times_curr_cdminuss",
-         *jac_cdT_times_curr_cdminuss);
+                       *jac_cdT_times_curr_cdminuss);
       SmartPtr<const Vector> slack_scaled_d_minus_s = curr_slack_scaled_d_minus_s();
       DBG_PRINT_VECTOR(2, "slack_scaled_d_minus_s",
-         *slack_scaled_d_minus_s);
+                       *slack_scaled_d_minus_s);
       result = ip_cq_->CalcNormOfType(NORM_2, *jac_cdT_times_curr_cdminuss, *slack_scaled_d_minus_s);
 
       curr_scaled_Ac_norm_cache_.AddCachedResult2Dep(result, *x, *s);
@@ -167,7 +172,7 @@ Number InexactCq::curr_scaled_Ac_norm()
 Number InexactCq::curr_scaled_A_norm2()
 {
    DBG_START_METH("InexactCq::curr_scaled_A_norm",
-      dbg_verbosity);
+                  dbg_verbosity);
    Number result;
 
    //if (!curr_scaled_A_norm_cache_.GetCachedResult(...)) {
@@ -181,7 +186,7 @@ Number InexactCq::curr_scaled_A_norm2()
 Number InexactCq::slack_scaled_norm(
    const Vector& x,
    const Vector& s
-   )
+)
 {
    SmartPtr<const Vector> scaling_slacks = curr_scaling_slacks();
 
@@ -199,10 +204,10 @@ Number InexactCq::slack_scaled_norm(
 
 SmartPtr<const Vector> InexactCq::curr_W_times_vec_x(
    const Vector& vec_x
-   )
+)
 {
    DBG_START_METH("InexactCq::curr_W_times_vec_x",
-      dbg_verbosity);
+                  dbg_verbosity);
    SmartPtr<const Vector> result;
 
    SmartPtr<const SymMatrix> W = ip_data_->W();
@@ -220,7 +225,9 @@ SmartPtr<const Vector> InexactCq::curr_W_times_vec_x(
 
    if( !curr_W_times_vec_x_cache_.GetCachedResult(result, tdeps, sdeps) )
    {
-      DBG_PRINT_VECTOR(2, "vec_x", vec_x); DBG_PRINT_MATRIX(2, "W", *W); DBG_PRINT((2, "pd_pert_x = %e\n", pd_pert_x));
+      DBG_PRINT_VECTOR(2, "vec_x", vec_x);
+      DBG_PRINT_MATRIX(2, "W", *W);
+      DBG_PRINT((2, "pd_pert_x = %e\n", pd_pert_x));
       SmartPtr<Vector> tmp = vec_x.MakeNewCopy();
       W->MultVector(1., vec_x, pd_pert_x, *tmp);
       result = ConstPtr(tmp);
@@ -232,7 +239,7 @@ SmartPtr<const Vector> InexactCq::curr_W_times_vec_x(
 
 SmartPtr<const Vector> InexactCq::curr_W_times_vec_s(
    const Vector& vec_s
-   )
+)
 {
    SmartPtr<const Vector> result;
 

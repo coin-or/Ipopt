@@ -47,7 +47,7 @@ public:
     */
    CompoundMatrix(
       const CompoundMatrixSpace* owner_space
-      );
+   );
 
    /** Destructor */
    virtual ~CompoundMatrix();
@@ -62,20 +62,20 @@ public:
       Index         irow,
       Index         jcol,
       const Matrix& matrix
-      );
+   );
 
    /** Method to set a non-const Matrix entry */
    void SetCompNonConst(
       Index   irow,
       Index   jcol,
       Matrix& matrix
-      );
+   );
 
    /** Method to create a new matrix from the space for this block */
    void CreateBlockFromSpace(
       Index irow,
       Index jcol
-      );
+   );
 
    /** Method for retrieving one block from the compound matrix as a
     *  const Matrix.
@@ -83,7 +83,7 @@ public:
    SmartPtr<const Matrix> GetComp(
       Index irow,
       Index jcol
-      ) const
+   ) const
    {
       return ConstComp(irow, jcol);
    }
@@ -98,7 +98,7 @@ public:
    SmartPtr<Matrix> GetCompNonConst(
       Index irow,
       Index jcol
-      )
+   )
    {
       ObjectChanged();
       return Comp(irow, jcol);
@@ -118,21 +118,21 @@ protected:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual void TransMultVectorImpl(
       Number        alpha,
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual void AddMSinvZImpl(
       Number        alpha,
       const Vector& S,
       const Vector& Z,
       Vector&       X
-      ) const;
+   ) const;
 
    virtual void SinvBlrmZMTdBrImpl(
       Number        alpha,
@@ -141,19 +141,19 @@ protected:
       const Vector& Z,
       const Vector& D,
       Vector&       X
-      ) const;
+   ) const;
 
    virtual bool HasValidNumbersImpl() const;
 
    virtual void ComputeRowAMaxImpl(
       Vector& rows_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void ComputeColAMaxImpl(
       Vector& cols_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void PrintImpl(
       const Journalist&  jnlst,
@@ -162,7 +162,7 @@ protected:
       const std::string& name,
       Index              indent,
       const std::string& prefix
-      ) const;
+   ) const;
    //@}
 
 private:
@@ -206,12 +206,12 @@ private:
    inline const Matrix* ConstComp(
       Index irow,
       Index jcol
-      ) const;
+   ) const;
 
    inline Matrix* Comp(
       Index irow,
       Index jcol
-      );
+   );
 };
 
 /** This is the matrix space for CompoundMatrix.  Before a CompoundMatrix
@@ -232,7 +232,7 @@ public:
       Index ncomps_cols,
       Index total_nRows,
       Index total_nCols
-      );
+   );
 
    /** Destructor */
    ~CompoundMatrixSpace()
@@ -245,23 +245,23 @@ public:
    void SetBlockRows(
       Index irow,
       Index nrows
-      );
+   );
 
    /** Set the number ncols of columns in column-block number jcol. */
    void SetBlockCols(
       Index jcol,
       Index ncols
-      );
+   );
 
    /** Get the number nrows of rows in row-block number irow. */
    Index GetBlockRows(
       Index irow
-      ) const;
+   ) const;
 
    /** Set the number ncols of columns in column-block number jcol. */
    Index GetBlockCols(
       Index jcol
-      ) const;
+   ) const;
 
    /** Set the component MatrixSpace.
     *
@@ -276,7 +276,7 @@ public:
       Index              jcol,
       const MatrixSpace& mat_space,
       bool               auto_allocate = false
-      );
+   );
    //@}
 
    /** Obtain the component MatrixSpace in block row irow and block
@@ -285,9 +285,10 @@ public:
    SmartPtr<const MatrixSpace> GetCompSpace(
       Index irow,
       Index jcol
-      ) const
+   ) const
    {
-      DBG_ASSERT(irow < NComps_Rows()); DBG_ASSERT(jcol < NComps_Cols());
+      DBG_ASSERT(irow < NComps_Rows());
+      DBG_ASSERT(jcol < NComps_Cols());
       return comp_spaces_[irow][jcol];
    }
 
@@ -339,7 +340,7 @@ private:
    /** Default Assignment Operator */
    CompoundMatrixSpace& operator=(
       const CompoundMatrixSpace&
-      );
+   );
    //@}
 
    /** Number of block rows */
@@ -392,9 +393,10 @@ inline Index CompoundMatrix::NComps_Cols() const
 inline const Matrix* CompoundMatrix::ConstComp(
    Index irow,
    Index jcol
-   ) const
+) const
 {
-   DBG_ASSERT(irow < NComps_Rows()); DBG_ASSERT(jcol < NComps_Cols());
+   DBG_ASSERT(irow < NComps_Rows());
+   DBG_ASSERT(jcol < NComps_Cols());
    if( IsValid(comps_[irow][jcol]) )
    {
       return GetRawPtr(comps_[irow][jcol]);
@@ -410,9 +412,10 @@ inline const Matrix* CompoundMatrix::ConstComp(
 inline Matrix* CompoundMatrix::Comp(
    Index irow,
    Index jcol
-   )
+)
 {
-   DBG_ASSERT(irow < NComps_Rows()); DBG_ASSERT(jcol < NComps_Cols());
+   DBG_ASSERT(irow < NComps_Rows());
+   DBG_ASSERT(jcol < NComps_Cols());
    return GetRawPtr(comps_[irow][jcol]);
 }
 

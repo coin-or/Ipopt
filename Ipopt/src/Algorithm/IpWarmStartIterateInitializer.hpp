@@ -30,7 +30,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Compute the initial iterates and set the into the curr field
     *  of the ip_data object.
@@ -39,7 +39,7 @@ public:
 
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
 
 private:
    /**@name Default Compiler Generated Methods
@@ -55,12 +55,12 @@ private:
    /** Copy Constructor */
    WarmStartIterateInitializer(
       const WarmStartIterateInitializer&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const WarmStartIterateInitializer&
-      );
+   );
    //@}
 
    /**@name Algorithmic Parameters */
@@ -108,13 +108,13 @@ private:
       const Matrix&           P,
       SmartPtr<const Vector>& ret_vars,
       SmartPtr<const Vector>& ret_mults
-      );
+   );
 
    void adapt_to_target_mu(
       Vector& new_s,
       Vector& new_z,
       Number  target_mu
-      );
+   );
    //@}
 };
 

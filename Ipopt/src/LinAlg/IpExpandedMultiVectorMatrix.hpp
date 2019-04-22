@@ -33,7 +33,7 @@ public:
    /** Constructor, taking the owner_space. */
    ExpandedMultiVectorMatrix(
       const ExpandedMultiVectorMatrixSpace* owner_space
-      );
+   );
 
    /** Destructor */
    virtual ~ExpandedMultiVectorMatrix()
@@ -48,12 +48,12 @@ public:
    void SetVector(
       Index                  i,
       SmartPtr<const Vector> vec
-      );
+   );
 
    /** Get a Vector in a particular row as a const Vector */
    inline SmartPtr<const Vector> GetVector(
       Index i
-      ) const
+   ) const
    {
       DBG_ASSERT(i < NRows());
       return vecs_[i];
@@ -79,14 +79,14 @@ protected:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual void TransMultVectorImpl(
       Number        alpha,
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    /** Method for determining if all stored numbers are valid (i.e., no Inf or Nan). */
    virtual bool HasValidNumbersImpl() const;
@@ -94,12 +94,12 @@ protected:
    virtual void ComputeRowAMaxImpl(
       Vector& rows_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void ComputeColAMaxImpl(
       Vector& cols_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void PrintImpl(
       const Journalist&  jnlst,
@@ -108,7 +108,7 @@ protected:
       const std::string& name,
       Index              indent,
       const std::string& prefix
-      ) const;
+   ) const;
    //@}
 
 private:
@@ -127,12 +127,12 @@ private:
    /** Copy Constructor */
    ExpandedMultiVectorMatrix(
       const ExpandedMultiVectorMatrix&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const ExpandedMultiVectorMatrix&
-      );
+   );
    //@}
 
    const ExpandedMultiVectorMatrixSpace* owner_space_;
@@ -155,7 +155,7 @@ public:
       Index                           nrows,
       const VectorSpace&              vec_space,
       SmartPtr<const ExpansionMatrix> exp_matrix
-      );
+   );
 
    /** Destructor */
    virtual ~ExpandedMultiVectorMatrixSpace()

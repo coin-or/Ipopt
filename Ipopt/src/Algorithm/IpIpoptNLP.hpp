@@ -31,7 +31,7 @@ public:
    //@{
    IpoptNLP(
       const SmartPtr<NLPScalingObject> nlp_scaling
-      )
+   )
       : nlp_scaling_(nlp_scaling)
    { }
 
@@ -48,7 +48,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      )
+   )
    {
       bool ret = true;
       if( IsValid(nlp_scaling_) )
@@ -90,34 +90,34 @@ public:
    /** Objective value */
    virtual Number f(
       const Vector& x
-      ) = 0;
+   ) = 0;
 
    /** Gradient of the objective */
    virtual SmartPtr<const Vector> grad_f(
       const Vector& x
-      ) = 0;
+   ) = 0;
 
    /** Equality constraint residual */
    virtual SmartPtr<const Vector> c(
       const Vector& x
-      ) = 0;
+   ) = 0;
 
    /** Jacobian Matrix for equality constraints */
    virtual SmartPtr<const Matrix> jac_c(
       const Vector& x
-      ) = 0;
+   ) = 0;
 
    /** Inequality constraint residual (reformulated
     *  as equalities with slacks
     */
    virtual SmartPtr<const Vector> d(
       const Vector& x
-      ) = 0;
+   ) = 0;
 
    /** Jacobian Matrix for inequality constraints */
    virtual SmartPtr<const Matrix> jac_d(
       const Vector& x
-      ) = 0;
+   ) = 0;
 
    /** Hessian of the Lagrangian */
    virtual SmartPtr<const SymMatrix> h(
@@ -220,7 +220,7 @@ public:
    virtual Number f(
       const Vector& x,
       Number        mu
-      ) = 0;
+   ) = 0;
 
    /** Replacement for the default objective gradient method which
     *  knows about the barrier parameter
@@ -228,7 +228,7 @@ public:
    virtual SmartPtr<const Vector> grad_f(
       const Vector& x,
       Number        mu
-      ) = 0;
+   ) = 0;
 
    /** Replacement for the default Lagrangian Hessian method which
     *  knows about the barrier parameter
@@ -239,7 +239,7 @@ public:
       const Vector& yc,
       const Vector& yd,
       Number        mu
-      ) = 0;
+   ) = 0;
 
    /** Provides a Hessian matrix from the correct matrix space with
     *  uninitialized values.
@@ -263,7 +263,7 @@ public:
       Number                     obj_value,
       const IpoptData*           ip_data,
       IpoptCalculatedQuantities* ip_cq
-      ) = 0;
+   ) = 0;
 
    virtual bool IntermediateCallBack(
       AlgorithmMode                       mode,
@@ -279,7 +279,7 @@ public:
       Index                               ls_trials,
       SmartPtr<const IpoptData>           ip_data,
       SmartPtr<IpoptCalculatedQuantities> ip_cq
-      ) = 0;
+   ) = 0;
    //@}
 
    /** Returns the scaling strategy object */
@@ -304,12 +304,12 @@ private:
    /** Copy Constructor */
    IpoptNLP(
       const IpoptNLP&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const IpoptNLP&
-      );
+   );
    //@}
 
    SmartPtr<NLPScalingObject> nlp_scaling_;

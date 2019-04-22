@@ -55,7 +55,7 @@ public:
     */
    inline Vector(
       const VectorSpace* owner_space
-      );
+   );
 
    /** Destructor */
    inline virtual ~Vector();
@@ -76,23 +76,23 @@ public:
    /** Copy the data of the vector x into this vector (DCOPY). */
    inline void Copy(
       const Vector& x
-      );
+   );
 
    /** Scales the vector by scalar alpha (DSCAL) */
    void Scal(
       Number alpha
-      );
+   );
 
    /** Add the multiple alpha of vector x to this vector (DAXPY) */
    inline void Axpy(
       Number        alpha,
       const Vector& x
-      );
+   );
 
    /** Computes inner product of vector x with this (DDOT) */
    inline Number Dot(
       const Vector& x
-      ) const;
+   ) const;
 
    /** Computes the 2-norm of this vector (DNRM2) */
    inline Number Nrm2() const;
@@ -113,27 +113,27 @@ public:
    /** Set each element in the vector to the scalar alpha. */
    inline void Set(
       Number alpha
-      );
+   );
 
    /** Element-wise division  \f$y_i \gets y_i/x_i\f$ */
    inline void ElementWiseDivide(
       const Vector& x
-      );
+   );
 
    /** Element-wise multiplication \f$y_i \gets y_i*x_i\f$ */
    inline void ElementWiseMultiply(
       const Vector& x
-      );
+   );
 
    /** Element-wise max against entries in x */
    inline void ElementWiseMax(
       const Vector& x
-      );
+   );
 
    /** Element-wise min against entries in x */
    inline void ElementWiseMin(
       const Vector& x
-      );
+   );
 
    /** Reciprocates the entries in the vector */
    inline void ElementWiseReciprocal();
@@ -152,7 +152,7 @@ public:
    /** Add scalar to every vector component */
    inline void AddScalar(
       Number scalar
-      );
+   );
 
    /** Returns the maximum value in the vector */
    inline Number Max() const;
@@ -181,7 +181,7 @@ public:
       Number        a,
       const Vector& v1,
       Number        c
-      );
+   );
 
    /** Add two vectors, y = a * v1 + b * v2 + c * y.
     *
@@ -193,7 +193,7 @@ public:
       Number        b,
       const Vector& v2,
       Number        c
-      );
+   );
 
    /** Fraction to the boundary parameter.
     *
@@ -202,7 +202,7 @@ public:
    inline Number FracToBound(
       const Vector& delta,
       Number        tau
-      ) const;
+   ) const;
 
    /** Add the quotient of two vectors, y = a * z/s + c * y. */
    inline void AddVectorQuotient(
@@ -210,7 +210,7 @@ public:
       const Vector& z,
       const Vector& s,
       Number        c
-      );
+   );
    //@}
 
    /** Method for determining if all stored numbers are valid (i.e., no Inf or Nan). */
@@ -239,7 +239,7 @@ public:
       const std::string&         name,
       Index                      indent = 0,
       const std::string&         prefix = ""
-      ) const;
+   ) const;
 
    void Print(
       const Journalist&  jnlst,
@@ -248,7 +248,7 @@ public:
       const std::string& name,
       Index              indent = 0,
       const std::string& prefix = ""
-      ) const;
+   ) const;
    //@}
 
 protected:
@@ -259,23 +259,23 @@ protected:
    /** Copy the data of the vector x into this vector (DCOPY). */
    virtual void CopyImpl(
       const Vector& x
-      ) = 0;
+   ) = 0;
 
    /** Scales the vector by scalar alpha (DSCAL) */
    virtual void ScalImpl(
       Number alpha
-      ) = 0;
+   ) = 0;
 
    /** Add the multiple alpha of vector x to this vector (DAXPY) */
    virtual void AxpyImpl(
       Number        alpha,
       const Vector& x
-      ) = 0;
+   ) = 0;
 
    /** Computes inner product of vector x with this (DDOT) */
    virtual Number DotImpl(
       const Vector& x
-      ) const = 0;
+   ) const = 0;
 
    /** Computes the 2-norm of this vector (DNRM2) */
    virtual Number Nrm2Impl() const = 0;
@@ -289,27 +289,27 @@ protected:
    /** Set each element in the vector to the scalar alpha. */
    virtual void SetImpl(
       Number alpha
-      ) = 0;
+   ) = 0;
 
    /** Element-wise division  \f$y_i \gets y_i/x_i\f$ */
    virtual void ElementWiseDivideImpl(
       const Vector& x
-      ) = 0;
+   ) = 0;
 
    /** Element-wise multiplication \f$y_i \gets y_i*x_i\f$ */
    virtual void ElementWiseMultiplyImpl(
       const Vector& x
-      ) = 0;
+   ) = 0;
 
    /** Element-wise max against entries in x */
    virtual void ElementWiseMaxImpl(
       const Vector& x
-      ) = 0;
+   ) = 0;
 
    /** Element-wise min against entries in x */
    virtual void ElementWiseMinImpl(
       const Vector& x
-      ) = 0;
+   ) = 0;
 
    /** Reciprocates the elements of the vector */
    virtual void ElementWiseReciprocalImpl() = 0;
@@ -326,7 +326,7 @@ protected:
    /** Add scalar to every component of vector */
    virtual void AddScalarImpl(
       Number scalar
-      ) = 0;
+   ) = 0;
 
    /** Max value in the vector */
    virtual Number MaxImpl() const = 0;
@@ -350,13 +350,13 @@ protected:
       Number        b,
       const Vector& v2,
       Number        c
-      );
+   );
 
    /** Fraction to boundary parameter. */
    virtual Number FracToBoundImpl(
       const Vector& delta,
       Number        tau
-      ) const;
+   ) const;
 
    /** Add the quotient of two vectors */
    virtual void AddVectorQuotientImpl(
@@ -364,7 +364,7 @@ protected:
       const Vector& z,
       const Vector& s,
       Number        c
-      );
+   );
 
    /** Method for determining if all stored numbers are valid (i.e., no Inf or Nan).
     *
@@ -379,7 +379,7 @@ protected:
       const std::string& name,
       Index              indent,
       const std::string& prefix
-      ) const = 0;
+   ) const = 0;
    //@}
 
 private:
@@ -398,12 +398,12 @@ private:
    /** Copy constructor */
    Vector(
       const Vector&
-      );
+   );
 
    /** Default Assignment Operator */
    Vector& operator=(
       const Vector&
-      );
+   );
    //@}
 
    /** Vector Space */
@@ -465,7 +465,7 @@ public:
     */
    VectorSpace(
       Index dim
-      );
+   );
 
    /** Destructor */
    virtual ~VectorSpace()
@@ -499,12 +499,12 @@ private:
    /** Copy constructor */
    VectorSpace(
       const VectorSpace&
-      );
+   );
 
    /** Default Assignment Operator */
    VectorSpace& operator=(
       const VectorSpace&
-      );
+   );
    //@}
 
    /** Dimension of the vectors in this vector space. */
@@ -517,7 +517,7 @@ inline Vector::~Vector()
 
 inline Vector::Vector(
    const VectorSpace* owner_space
-   )
+)
    : TaggedObject(),
      owner_space_(owner_space),
      dot_cache_(10),
@@ -548,7 +548,7 @@ inline Vector* Vector::MakeNewCopy() const
 
 inline void Vector::Copy(
    const Vector& x
-   )
+)
 {
    CopyImpl(x);
    ObjectChanged();
@@ -595,7 +595,7 @@ inline void Vector::Copy(
 inline void Vector::Axpy(
    Number        alpha,
    const Vector& x
-   )
+)
 {
    AxpyImpl(alpha, x);
    ObjectChanged();
@@ -603,7 +603,7 @@ inline void Vector::Axpy(
 
 inline Number Vector::Dot(
    const Vector& x
-   ) const
+) const
 {
    // The current implementation of the caching doesn't allow to have
    // a dependency of something with itself.  Therefore, we use the
@@ -681,7 +681,7 @@ inline void Vector::ElementWiseSgn()
 
 inline void Vector::Set(
    Number alpha
-   )
+)
 {
    // Could initialize caches here
    SetImpl(alpha);
@@ -690,7 +690,7 @@ inline void Vector::Set(
 
 inline void Vector::ElementWiseDivide(
    const Vector& x
-   )
+)
 {
    ElementWiseDivideImpl(x);
    ObjectChanged();
@@ -698,7 +698,7 @@ inline void Vector::ElementWiseDivide(
 
 inline void Vector::ElementWiseMultiply(
    const Vector& x
-   )
+)
 {
    ElementWiseMultiplyImpl(x);
    ObjectChanged();
@@ -712,7 +712,7 @@ inline void Vector::ElementWiseReciprocal()
 
 inline void Vector::ElementWiseMax(
    const Vector& x
-   )
+)
 {
    // Could initialize some caches here
    ElementWiseMaxImpl(x);
@@ -721,7 +721,7 @@ inline void Vector::ElementWiseMax(
 
 inline void Vector::ElementWiseMin(
    const Vector& x
-   )
+)
 {
    // Could initialize some caches here
    ElementWiseMinImpl(x);
@@ -773,7 +773,7 @@ inline void Vector::AddOneVector(
    Number        a,
    const Vector& v1,
    Number        c
-   )
+)
 {
    AddTwoVectors(a, v1, 0., v1, c);
 }
@@ -784,7 +784,7 @@ inline void Vector::AddTwoVectors(
    Number        b,
    const Vector& v2,
    Number        c
-   )
+)
 {
    AddTwoVectorsImpl(a, v1, b, v2, c);
    ObjectChanged();
@@ -793,7 +793,7 @@ inline void Vector::AddTwoVectors(
 inline Number Vector::FracToBound(
    const Vector& delta,
    Number        tau
-   ) const
+) const
 {
    /* AW: I avoid the caching here, since it leads to overhead in the
     quality function search.  Caches for this are in
@@ -817,7 +817,7 @@ inline void Vector::AddVectorQuotient(
    const Vector& z,
    const Vector& s,
    Number        c
-   )
+)
 {
    AddVectorQuotientImpl(a, z, s, c);
    ObjectChanged();
@@ -845,7 +845,7 @@ inline SmartPtr<const VectorSpace> Vector::OwnerSpace() const
 
 inline VectorSpace::VectorSpace(
    Index dim
-   )
+)
    : dim_(dim)
 { }
 

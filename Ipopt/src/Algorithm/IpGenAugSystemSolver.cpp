@@ -16,7 +16,7 @@ static const Index dbg_verbosity = 0;
 
 GenAugSystemSolver::GenAugSystemSolver(
    GenKKTSolverInterface& SolverInterface
-   )
+)
    : AugSystemSolver(),
      solver_interface_(&SolverInterface),
      w_tag_(0),
@@ -35,7 +35,8 @@ GenAugSystemSolver::GenAugSystemSolver(
      dc_vals_copy_(NULL),
      dd_vals_copy_(NULL)
 {
-   DBG_START_METH("GenAugSystemSolver::GenAugSystemSolver()", dbg_verbosity); DBG_ASSERT(IsValid(solver_interface_));
+   DBG_START_METH("GenAugSystemSolver::GenAugSystemSolver()", dbg_verbosity);
+   DBG_ASSERT(IsValid(solver_interface_));
 }
 
 GenAugSystemSolver::~GenAugSystemSolver()
@@ -50,7 +51,7 @@ GenAugSystemSolver::~GenAugSystemSolver()
 bool GenAugSystemSolver::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    // This option is registered by OrigIpoptNLP
    options.GetBoolValue("warm_start_same_structure", warm_start_same_structure_, prefix);
@@ -89,18 +90,26 @@ ESymSolverStatus GenAugSystemSolver::MultiSolve(
    std::vector<SmartPtr<Vector> >&       sol_dV,
    bool                                  check_NegEVals,
    Index                                 numberOfNegEVals
-   )
+)
 {
-   DBG_START_METH("GenAugSystemSolver::MultiSolve", dbg_verbosity); DBG_ASSERT(J_c && J_d && "Currently, you MUST specify J_c and J_d in the augmented system");
+   DBG_START_METH("GenAugSystemSolver::MultiSolve", dbg_verbosity);
+   DBG_ASSERT(J_c && J_d && "Currently, you MUST specify J_c and J_d in the augmented system");
 
    DBG_ASSERT(W_factor == 0.0 || W_factor == 1.0);
 
    const Index nrhs = (Index) rhs_xV.size();
-   DBG_ASSERT(nrhs > 0); DBG_ASSERT(nrhs == (Index)rhs_sV.size()); DBG_ASSERT(nrhs == (Index)rhs_cV.size()); DBG_ASSERT(nrhs == (Index)rhs_dV.size()); DBG_ASSERT(nrhs == (Index)sol_xV.size()); DBG_ASSERT(nrhs == (Index)sol_sV.size()); DBG_ASSERT(nrhs == (Index)sol_cV.size()); DBG_ASSERT(nrhs == (Index)sol_dV.size());
+   DBG_ASSERT(nrhs > 0);
+   DBG_ASSERT(nrhs == (Index)rhs_sV.size());
+   DBG_ASSERT(nrhs == (Index)rhs_cV.size());
+   DBG_ASSERT(nrhs == (Index)rhs_dV.size());
+   DBG_ASSERT(nrhs == (Index)sol_xV.size());
+   DBG_ASSERT(nrhs == (Index)sol_sV.size());
+   DBG_ASSERT(nrhs == (Index)sol_cV.size());
+   DBG_ASSERT(nrhs == (Index)sol_dV.size());
 
    // Check if the input data has changed:
    bool new_matrix = AugmentedSystemChanged(W, W_factor, D_x, delta_x, D_s, delta_s, *J_c, D_c, delta_c, *J_d, D_d,
-      delta_d);
+                     delta_d);
 
    // Get the individual arrays to be given to the
    // GenKKTSolverInterface
@@ -193,7 +202,7 @@ ESymSolverStatus GenAugSystemSolver::MultiSolve(
    while( !done )
    {
       retval = solver_interface_->MultiSolve(new_matrix, n_x, n_c, n_d, Wgive, J_c, J_d, dx_vals, ds_vals, dc_vals,
-         dd_vals, delta_x, delta_s, delta_c, delta_d, nrhs, rhssol, check_NegEVals, numberOfNegEVals);
+                                             dd_vals, delta_x, delta_s, delta_c, delta_d, nrhs, rhssol, check_NegEVals, numberOfNegEVals);
       if( retval == SYMSOLVER_CALL_AGAIN )
       {
          DBG_PRINT((1, "Solver interface asks to be called again.  Don't really se why...?\n"));
@@ -243,7 +252,7 @@ void GenAugSystemSolver::UpdateTags(
    const Matrix&    J_d,
    const Vector*    D_d,
    double           delta_d
-   )
+)
 {
    if( W )
    {
@@ -308,7 +317,7 @@ bool GenAugSystemSolver::AugmentedSystemChanged(
    const Matrix&    J_d,
    const Vector*    D_d,
    double           delta_d
-   )
+)
 {
    DBG_START_METH("GenAugSystemSolver::AugmentedSystemRequiresChange", dbg_verbosity);
 
@@ -333,14 +342,30 @@ bool GenAugSystemSolver::AugmentedSystemChanged(
    bool delta_dtest = (delta_d != delta_d_);
 #endif
 
-   DBG_PRINT((2, "Wtest = %d\n", Wtest)); DBG_PRINT((2, "iWtest = %d\n", iWtest)); DBG_PRINT((2, "wfactor_test = %d\n", wfactor_test)); DBG_PRINT((2, "D_xtest = %d\n", D_xtest)); DBG_PRINT((2, "iD_xtest = %d\n", iD_xtest)); DBG_PRINT((2, "delta_xtest = %d\n", delta_xtest)); DBG_PRINT((2, "D_stest = %d\n", D_stest)); DBG_PRINT((2, "iD_stest = %d\n", iD_stest)); DBG_PRINT((2, "delta_stest = %d\n", delta_stest)); DBG_PRINT((2, "J_ctest = %d\n", J_ctest)); DBG_PRINT((2, "D_ctest = %d\n", D_ctest)); DBG_PRINT((2, "iD_ctest = %d\n", iD_ctest)); DBG_PRINT((2, "delta_ctest = %d\n", delta_ctest)); DBG_PRINT((2, "J_dtest = %d\n", J_dtest)); DBG_PRINT((2, "D_dtest = %d\n", D_dtest)); DBG_PRINT((2, "iD_dtest = %d\n", iD_dtest)); DBG_PRINT((2, "delta_dtest = %d\n", delta_dtest));
+   DBG_PRINT((2, "Wtest = %d\n", Wtest));
+   DBG_PRINT((2, "iWtest = %d\n", iWtest));
+   DBG_PRINT((2, "wfactor_test = %d\n", wfactor_test));
+   DBG_PRINT((2, "D_xtest = %d\n", D_xtest));
+   DBG_PRINT((2, "iD_xtest = %d\n", iD_xtest));
+   DBG_PRINT((2, "delta_xtest = %d\n", delta_xtest));
+   DBG_PRINT((2, "D_stest = %d\n", D_stest));
+   DBG_PRINT((2, "iD_stest = %d\n", iD_stest));
+   DBG_PRINT((2, "delta_stest = %d\n", delta_stest));
+   DBG_PRINT((2, "J_ctest = %d\n", J_ctest));
+   DBG_PRINT((2, "D_ctest = %d\n", D_ctest));
+   DBG_PRINT((2, "iD_ctest = %d\n", iD_ctest));
+   DBG_PRINT((2, "delta_ctest = %d\n", delta_ctest));
+   DBG_PRINT((2, "J_dtest = %d\n", J_dtest));
+   DBG_PRINT((2, "D_dtest = %d\n", D_dtest));
+   DBG_PRINT((2, "iD_dtest = %d\n", iD_dtest));
+   DBG_PRINT((2, "delta_dtest = %d\n", delta_dtest));
 
    if( (W && W->GetTag() != w_tag_) || (!W && w_tag_ != 0) || (W_factor != w_factor_)
-      || (D_x && D_x->GetTag() != d_x_tag_) || (!D_x && d_x_tag_ != 0) || (delta_x != delta_x_)
-      || (D_s && D_s->GetTag() != d_s_tag_) || (!D_s && d_s_tag_ != 0) || (delta_s != delta_s_)
-      || (J_c.GetTag() != j_c_tag_) || (D_c && D_c->GetTag() != d_c_tag_) || (!D_c && d_c_tag_ != 0)
-      || (delta_c != delta_c_) || (J_d.GetTag() != j_d_tag_) || (D_d && D_d->GetTag() != d_d_tag_)
-      || (!D_d && d_d_tag_ != 0) || (delta_d != delta_d_) )
+       || (D_x && D_x->GetTag() != d_x_tag_) || (!D_x && d_x_tag_ != 0) || (delta_x != delta_x_)
+       || (D_s && D_s->GetTag() != d_s_tag_) || (!D_s && d_s_tag_ != 0) || (delta_s != delta_s_)
+       || (J_c.GetTag() != j_c_tag_) || (D_c && D_c->GetTag() != d_c_tag_) || (!D_c && d_c_tag_ != 0)
+       || (delta_c != delta_c_) || (J_d.GetTag() != j_d_tag_) || (D_d && D_d->GetTag() != d_d_tag_)
+       || (!D_d && d_d_tag_ != 0) || (delta_d != delta_d_) )
    {
       return true;
    }

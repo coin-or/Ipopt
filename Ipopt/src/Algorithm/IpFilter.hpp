@@ -25,7 +25,7 @@ public:
    FilterEntry(
       std::vector<Number> vals,
       Index               iter
-      );
+   );
 
    /** Destructor */
    ~FilterEntry();
@@ -38,7 +38,7 @@ public:
     */
    bool Acceptable(
       std::vector<Number> vals
-      ) const
+   ) const
    {
       Index ncoor = (Index) vals_.size();
       DBG_ASSERT((Index)vals.size() == ncoor);
@@ -63,7 +63,7 @@ public:
     */
    bool Dominated(
       std::vector<Number> vals
-      ) const
+   ) const
    {
       Index ncoor = (Index) vals_.size();
       DBG_ASSERT((Index)vals.size() == ncoor);
@@ -85,7 +85,7 @@ public:
    //@{
    Number val(
       Index i
-      ) const
+   ) const
    {
       return vals_[i];
    }
@@ -111,12 +111,12 @@ private:
    /** Copy Constructor */
    FilterEntry(
       const FilterEntry&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const FilterEntry&
-      );
+   );
    //@}
 
    /** values defining the coordinates of the entry */
@@ -139,7 +139,7 @@ public:
    /** Default Constructor */
    Filter(
       Index dim
-      );
+   );
    /** Destructor */
    ~Filter()
    {
@@ -155,7 +155,7 @@ public:
     */
    bool Acceptable(
       std::vector<Number> vals
-      ) const;
+   ) const;
 
    /** Add filter entry for given coordinates.
     *
@@ -165,14 +165,14 @@ public:
    void AddEntry(
       std::vector<Number> vals,
       Index               iteration
-      );
+   );
 
    /** @name Wrappers for 2-dimensional filter. */
    //@{
    bool Acceptable(
       Number val1,
       Number val2
-      ) const
+   ) const
    {
       std::vector<Number> vals(2);
       vals[0] = val1;
@@ -185,7 +185,7 @@ public:
       Number val1,
       Number val2,
       Index  iteration
-      )
+   )
    {
       std::vector<Number> vals(2);
       vals[0] = val1;
@@ -201,7 +201,7 @@ public:
    /** Print current filter entries */
    void Print(
       const Journalist& jnlst
-      );
+   );
 
 private:
    /**@name Default Compiler Generated Methods
@@ -219,12 +219,12 @@ private:
    /** Copy Constructor */
    Filter(
       const Filter&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const Filter&
-      );
+   );
    //@}
 
    /** Dimension of the filter (number of coordinates per entry) */

@@ -21,7 +21,7 @@ static const Index dbg_verbosity = 0;
 FilterEntry::FilterEntry(
    std::vector<Number> vals,
    Index               iter
-   )
+)
    : vals_(vals),
      iter_(iter)
 { }
@@ -35,15 +35,16 @@ FilterEntry::~FilterEntry()
 
 Filter::Filter(
    Index dim
-   )
+)
    : dim_(dim)
 { }
 
 bool Filter::Acceptable(
    std::vector<Number> vals
-   ) const
+) const
 {
-   DBG_START_METH("FilterLineSearch::Filter::Acceptable", dbg_verbosity);DBG_ASSERT((Index)vals.size() == dim_);
+   DBG_START_METH("FilterLineSearch::Filter::Acceptable", dbg_verbosity);
+   DBG_ASSERT((Index)vals.size() == dim_);
    bool acceptable = true;
    std::list<FilterEntry*>::iterator iter;
    for( iter = filter_list_.begin(); iter != filter_list_.end(); iter++ )
@@ -60,9 +61,10 @@ bool Filter::Acceptable(
 void Filter::AddEntry(
    std::vector<Number> vals,
    Index               iteration
-   )
+)
 {
-   DBG_START_METH("FilterLineSearch::Filter::AddEntry", dbg_verbosity);DBG_ASSERT((Index)vals.size() == dim_);
+   DBG_START_METH("FilterLineSearch::Filter::AddEntry", dbg_verbosity);
+   DBG_ASSERT((Index)vals.size() == dim_);
    std::list<FilterEntry*>::iterator iter;
    iter = filter_list_.begin();
    while( iter != filter_list_.end() )
@@ -97,7 +99,7 @@ void Filter::Clear()
 
 void Filter::Print(
    const Journalist& jnlst
-   )
+)
 {
    DBG_START_METH("FilterLineSearch::Filter::Print", dbg_verbosity);
    jnlst.Printf(J_DETAILED, J_LINE_SEARCH, "The current filter has %d entries.\n", filter_list_.size());

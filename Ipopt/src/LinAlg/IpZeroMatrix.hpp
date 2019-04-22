@@ -23,7 +23,7 @@ public:
    /** Constructor, taking the corresponding matrix space. */
    ZeroMatrix(
       const MatrixSpace* owner_space
-      );
+   );
 
    /** Destructor */
    ~ZeroMatrix();
@@ -37,25 +37,25 @@ protected:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual void TransMultVectorImpl(
       Number        alpha,
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual void ComputeRowAMaxImpl(
       Vector& rows_norms,
       bool    init
-      ) const
+   ) const
    { }
 
    virtual void ComputeColAMaxImpl(
       Vector& cols_norms,
       bool    init
-      ) const
+   ) const
    { }
 
    virtual void PrintImpl(
@@ -65,7 +65,7 @@ protected:
       const std::string& name,
       Index              indent,
       const std::string& prefix
-      ) const;
+   ) const;
    //@}
 
 private:
@@ -84,12 +84,12 @@ private:
    /** Copy Constructor */
    ZeroMatrix(
       const ZeroMatrix&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const ZeroMatrix&
-      );
+   );
    //@}
 };
 
@@ -103,7 +103,7 @@ public:
    ZeroMatrixSpace(
       Index nrows,
       Index ncols
-      )
+   )
       : MatrixSpace(nrows, ncols)
    { }
 
@@ -139,12 +139,12 @@ private:
    /** Copy Constructor */
    ZeroMatrixSpace(
       const ZeroMatrixSpace&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const ZeroMatrixSpace&
-      );
+   );
    //@}
 };
 } // namespace Ipopt

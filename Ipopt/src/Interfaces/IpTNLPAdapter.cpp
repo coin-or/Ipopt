@@ -62,7 +62,7 @@ static const Index dbg_verbosity = 0;
 TNLPAdapter::TNLPAdapter(
    const SmartPtr<TNLP>             tnlp,
    const SmartPtr<const Journalist> jnlst /* = NULL */
-   )
+)
    : tnlp_(tnlp),
      jnlst_(jnlst),
      full_x_(NULL),
@@ -106,88 +106,88 @@ TNLPAdapter::~TNLPAdapter()
 
 void TNLPAdapter::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
-   )
+)
 {
    roptions->SetRegisteringCategory("NLP");
    roptions->AddNumberOption("nlp_lower_bound_inf",
-      "any bound less or equal this value will be considered -inf (i.e. not lower bounded).", -1e19);
+                             "any bound less or equal this value will be considered -inf (i.e. not lower bounded).", -1e19);
    roptions->AddNumberOption("nlp_upper_bound_inf",
-      "any bound greater or this value will be considered +inf (i.e. not upper bounded).", 1e19);
+                             "any bound greater or this value will be considered +inf (i.e. not upper bounded).", 1e19);
    roptions->AddStringOption3("fixed_variable_treatment", "Determines how fixed variables should be handled.",
-      "make_parameter", "make_parameter", "Remove fixed variable from optimization variables", "make_constraint",
-      "Add equality constraints fixing variables", "relax_bounds", "Relax fixing bound constraints",
-      "The main difference between those options is that the starting "
-         "point in the \"make_constraint\" case still has the fixed variables at "
-         "their given values, whereas in the case \"make_parameter\" the "
-         "functions are always evaluated with the fixed values for those "
-         "variables.  Also, for \"relax_bounds\", the fixing bound "
-         "constraints are relaxed (according to\" bound_relax_factor\"). For "
-         "both \"make_constraints\" and \"relax_bounds\", bound multipliers are "
-         "computed for the fixed variables.");
+                              "make_parameter", "make_parameter", "Remove fixed variable from optimization variables", "make_constraint",
+                              "Add equality constraints fixing variables", "relax_bounds", "Relax fixing bound constraints",
+                              "The main difference between those options is that the starting "
+                              "point in the \"make_constraint\" case still has the fixed variables at "
+                              "their given values, whereas in the case \"make_parameter\" the "
+                              "functions are always evaluated with the fixed values for those "
+                              "variables.  Also, for \"relax_bounds\", the fixing bound "
+                              "constraints are relaxed (according to\" bound_relax_factor\"). For "
+                              "both \"make_constraints\" and \"relax_bounds\", bound multipliers are "
+                              "computed for the fixed variables.");
    roptions->AddStringOption4("dependency_detector",
-      "Indicates which linear solver should be used to detect linearly dependent equality constraints.", "none", "none",
-      "don't check; no extra work at beginning", "mumps", "use MUMPS", "wsmp", "use WSMP", "ma28", "use MA28",
-      "The default and available choices depend on how Ipopt has been "
-         "compiled.  This is experimental and does not work well.");
+                              "Indicates which linear solver should be used to detect linearly dependent equality constraints.", "none", "none",
+                              "don't check; no extra work at beginning", "mumps", "use MUMPS", "wsmp", "use WSMP", "ma28", "use MA28",
+                              "The default and available choices depend on how Ipopt has been "
+                              "compiled.  This is experimental and does not work well.");
    roptions->AddStringOption2("dependency_detection_with_rhs",
-      "Indicates if the right hand sides of the constraints should be considered during dependency detection", "no",
-      "no", "only look at gradients", "yes", "also consider right hand side", "");
+                              "Indicates if the right hand sides of the constraints should be considered during dependency detection", "no",
+                              "no", "only look at gradients", "yes", "also consider right hand side", "");
    roptions->AddLowerBoundedIntegerOption("num_linear_variables", "Number of linear variables", 0, 0,
-      "When the Hessian is approximated, it is assumed that the first "
-         "num_linear_variables variables are linear.  The Hessian is then not "
-         "approximated in this space.  If the get_number_of_nonlinear_variables "
-         "method in the TNLP is implemented, this option is ignored.");
+                                          "When the Hessian is approximated, it is assumed that the first "
+                                          "num_linear_variables variables are linear.  The Hessian is then not "
+                                          "approximated in this space.  If the get_number_of_nonlinear_variables "
+                                          "method in the TNLP is implemented, this option is ignored.");
 
    roptions->SetRegisteringCategory("Derivative Checker");
    roptions->AddStringOption4("derivative_test", "Enable derivative checker", "none", "none",
-      "do not perform derivative test", "first-order", "perform test of first derivatives at starting point",
-      "second-order", "perform test of first and second derivatives at starting point", "only-second-order",
-      "perform test of second derivatives at starting point",
-      "If this option is enabled, a (slow!) derivative test will be performed "
-         "before the optimization.  The test is performed at the user provided "
-         "starting point and marks derivative values that seem suspicious");
+                              "do not perform derivative test", "first-order", "perform test of first derivatives at starting point",
+                              "second-order", "perform test of first and second derivatives at starting point", "only-second-order",
+                              "perform test of second derivatives at starting point",
+                              "If this option is enabled, a (slow!) derivative test will be performed "
+                              "before the optimization.  The test is performed at the user provided "
+                              "starting point and marks derivative values that seem suspicious");
    roptions->AddLowerBoundedIntegerOption("derivative_test_first_index",
-      "Index of first quantity to be checked by derivative checker", -2, -2,
-      "If this is set to -2, then all derivatives are checked.  Otherwise, "
-         "for the first derivative test it specifies the first variable for "
-         "which the test is done (counting starts at 0).  For second "
-         "derivatives, it specifies the first constraint for which the test is "
-         "done; counting of constraint indices starts at 0, and -1 refers to the "
-         "objective function Hessian.");
+                                          "Index of first quantity to be checked by derivative checker", -2, -2,
+                                          "If this is set to -2, then all derivatives are checked.  Otherwise, "
+                                          "for the first derivative test it specifies the first variable for "
+                                          "which the test is done (counting starts at 0).  For second "
+                                          "derivatives, it specifies the first constraint for which the test is "
+                                          "done; counting of constraint indices starts at 0, and -1 refers to the "
+                                          "objective function Hessian.");
    roptions->AddLowerBoundedNumberOption("derivative_test_perturbation",
-      "Size of the finite difference perturbation in derivative test.", 0., true, 1e-8,
-      "This determines the relative perturbation of the variable entries.");
+                                         "Size of the finite difference perturbation in derivative test.", 0., true, 1e-8,
+                                         "This determines the relative perturbation of the variable entries.");
    roptions->AddLowerBoundedNumberOption("derivative_test_tol", "Threshold for indicating wrong derivative.", 0., true,
-      1e-4, "If the relative deviation of the estimated derivative from the given "
-         "one is larger than this value, the corresponding derivative is marked "
-         "as wrong.");
+                                         1e-4, "If the relative deviation of the estimated derivative from the given "
+                                         "one is larger than this value, the corresponding derivative is marked "
+                                         "as wrong.");
    roptions->AddStringOption2("derivative_test_print_all",
-      "Indicates whether information for all estimated derivatives should be printed.", "no", "no",
-      "Print only suspect derivatives", "yes", "Print all derivatives", "Determines verbosity of derivative checker.");
+                              "Indicates whether information for all estimated derivatives should be printed.", "no", "no",
+                              "Print only suspect derivatives", "yes", "Print all derivatives", "Determines verbosity of derivative checker.");
    roptions->AddStringOption2("jacobian_approximation", "Specifies technique to compute constraint Jacobian", "exact",
-      "exact", "user-provided derivatives", "finite-difference-values",
-      "user-provided structure, values by finite differences");
+                              "exact", "user-provided derivatives", "finite-difference-values",
+                              "user-provided structure, values by finite differences");
    roptions->AddLowerBoundedNumberOption("findiff_perturbation",
-      "Size of the finite difference perturbation for derivative approximation.", 0., true, 1e-7,
-      "This determines the relative perturbation of the variable entries.");
+                                         "Size of the finite difference perturbation for derivative approximation.", 0., true, 1e-7,
+                                         "This determines the relative perturbation of the variable entries.");
    roptions->AddLowerBoundedNumberOption("point_perturbation_radius", "Maximal perturbation of an evaluation point.",
-      0., false, 10., "If a random perturbation of a points is required, this number "
-         "indicates the maximal perturbation.  This is for example used when "
-         "determining the center point at which the finite difference derivative "
-         "test is executed.");
+                                         0., false, 10., "If a random perturbation of a points is required, this number "
+                                         "indicates the maximal perturbation.  This is for example used when "
+                                         "determining the center point at which the finite difference derivative "
+                                         "test is executed.");
 }
 
 bool TNLPAdapter::ProcessOptions(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    DBG_START_METH("TNLPAdapter::ProcessOptions", dbg_verbosity);
    options.GetNumericValue("nlp_lower_bound_inf", nlp_lower_bound_inf_, prefix);
    options.GetNumericValue("nlp_upper_bound_inf", nlp_upper_bound_inf_, prefix);
 
    ASSERT_EXCEPTION(nlp_lower_bound_inf_ < nlp_upper_bound_inf_, OPTION_INVALID,
-      "Option \"nlp_lower_bound_inf\" must be smaller than \"nlp_upper_bound_inf\".");
+                    "Option \"nlp_lower_bound_inf\" must be smaller than \"nlp_upper_bound_inf\".");
 
    // Registered in IpOrigIpoptNLP
    options.GetNumericValue("bound_relax_factor", bound_relax_factor_, prefix);
@@ -228,12 +228,12 @@ bool TNLPAdapter::ProcessOptions(
          SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
          SolverInterface = new MumpsSolverInterface();
          SmartPtr<TSymLinearSolver> ScaledSolver =
-         new TSymLinearSolver(SolverInterface, NULL);
+            new TSymLinearSolver(SolverInterface, NULL);
          dependency_detector_ = new TSymDependencyDetector(*ScaledSolver);
 #else
 
          THROW_EXCEPTION(OPTION_INVALID,
-            "Ipopt has not been compiled with MUMPS.  You cannot choose \"mumps\" for \"dependency_detector\".");
+                         "Ipopt has not been compiled with MUMPS.  You cannot choose \"mumps\" for \"dependency_detector\".");
 #endif
 
       }
@@ -243,12 +243,12 @@ bool TNLPAdapter::ProcessOptions(
          SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
          SolverInterface = new WsmpSolverInterface();
          SmartPtr<TSymLinearSolver> ScaledSolver =
-         new TSymLinearSolver(SolverInterface, NULL);
+            new TSymLinearSolver(SolverInterface, NULL);
          dependency_detector_ = new TSymDependencyDetector(*ScaledSolver);
 #else
 
          THROW_EXCEPTION(OPTION_INVALID,
-            "Ipopt has not been compiled with WSMP.  You cannot choose \"wsmp\" for \"dependency_detector\".");
+                         "Ipopt has not been compiled with WSMP.  You cannot choose \"wsmp\" for \"dependency_detector\".");
 #endif
 
       }
@@ -306,7 +306,7 @@ bool TNLPAdapter::GetSpaces(
    SmartPtr<const MatrixSpace>&    Jac_c_space,
    SmartPtr<const MatrixSpace>&    Jac_d_space,
    SmartPtr<const SymMatrixSpace>& Hess_lagrangian_space
-   )
+)
 {
    DBG_START_METH("TNLPAdapter::GetSpaces", dbg_verbosity);
 
@@ -323,7 +323,7 @@ bool TNLPAdapter::GetSpaces(
    if( warm_start_same_structure_ )
    {
       ASSERT_EXCEPTION(full_x_, INVALID_WARMSTART,
-         "warm_start_same_structure chosen, but TNLPAdapter is called for the first time.");
+                       "warm_start_same_structure chosen, but TNLPAdapter is called for the first time.");
       if( IsValid(jnlst_) )
       {
          jnlst_->Printf(J_DETAILED, J_INITIALIZATION, "Reusing previous information for warm start in TNLPAdapter.\n");
@@ -358,8 +358,8 @@ bool TNLPAdapter::GetSpaces(
    ASSERT_EXCEPTION(retval, INVALID_TNLP, "get_nlp_info returned false");
    ASSERT_EXCEPTION(
       !warm_start_same_structure_
-         || (n_full_x == n_full_x_ && n_full_g == n_full_g_ && nz_full_jac_g == nz_full_jac_g_
-            && nz_full_h == nz_full_h_), INVALID_WARMSTART,
+      || (n_full_x == n_full_x_ && n_full_g == n_full_g_ && nz_full_jac_g == nz_full_jac_g_
+          && nz_full_h == nz_full_h_), INVALID_WARMSTART,
       "warm_start_same_structure chosen, but problem dimensions are different.");
    n_full_x_ = n_full_x;
    n_full_g_ = n_full_g;
@@ -384,7 +384,7 @@ bool TNLPAdapter::GetSpaces(
       IntegerMetaDataMapType con_integer_md;
       NumericMetaDataMapType con_numeric_md;
       if( !tnlp_->get_var_con_metadata(n_full_x_, var_string_md, var_integer_md, var_numeric_md, n_full_g_,
-         con_string_md, con_integer_md, con_numeric_md) )
+                                       con_string_md, con_integer_md, con_numeric_md) )
       {
          var_string_md.clear();
          var_integer_md.clear();
@@ -474,8 +474,8 @@ bool TNLPAdapter::GetSpaces(
             {
                char string[128];
                Snprintf(string, 127,
-                  "There are inconsistent bounds on variable %d: lower = %25.16e and upper = %25.16e.", i, lower_bound,
-                  upper_bound);
+                        "There are inconsistent bounds on variable %d: lower = %25.16e and upper = %25.16e.", i, lower_bound,
+                        upper_bound);
                delete[] x_l;
                delete[] x_u;
                delete[] g_l;
@@ -566,8 +566,8 @@ bool TNLPAdapter::GetSpaces(
                delete[] d_u_map;
                char string[128];
                Snprintf(string, 127,
-                  "There are inconsistent bounds on constraint function %d: lower = %25.16e and upper = %25.16e.", i,
-                  lower_bound, upper_bound);
+                        "There are inconsistent bounds on constraint function %d: lower = %25.16e and upper = %25.16e.", i,
+                        lower_bound, upper_bound);
                THROW_EXCEPTION(INCONSISTENT_BOUNDS, string);
             }
             else
@@ -596,8 +596,8 @@ bool TNLPAdapter::GetSpaces(
          {
             fixed_variable_treatment_ = RELAX_BOUNDS;
             jnlst_->Printf(J_WARNING, J_INITIALIZATION,
-               "Too few degrees of freedom (n_x = %d, n_c = %d).\n  Trying fixed_variable_treatment = RELAX_BOUNDS\n\n",
-               n_x_var, n_c);
+                           "Too few degrees of freedom (n_x = %d, n_c = %d).\n  Trying fixed_variable_treatment = RELAX_BOUNDS\n\n",
+                           n_x_var, n_c);
          }
       } // while (!done)
 
@@ -611,7 +611,7 @@ bool TNLPAdapter::GetSpaces(
          }
          bool retval = tnlp_->eval_g(n_full_x_, full_x_, true, n_full_g_, full_g_);
          ASSERT_EXCEPTION(retval, IpoptNLP::Eval_Error,
-            "All variables are fixed, but constraints cannot be evaluated at fixed point.");
+                          "All variables are fixed, but constraints cannot be evaluated at fixed point.");
          Number max_viol = 0.;
          for( Index i = 0; i < n_full_g_; i++ )
          {
@@ -632,7 +632,7 @@ bool TNLPAdapter::GetSpaces(
          Number obj_value;
          retval = tnlp_->eval_f(n_full_x_, full_x_, false, obj_value);
          ASSERT_EXCEPTION(retval, IpoptNLP::Eval_Error,
-            "All variables are fixed, but objective cannot be evaluated at fixed point.");
+                          "All variables are fixed, but objective cannot be evaluated at fixed point.");
          // Call finalize_solution so that user has required information
          Number* full_z_L = new Number[n_full_x_];
          Number* full_z_U = new Number[n_full_x_];
@@ -643,7 +643,7 @@ bool TNLPAdapter::GetSpaces(
          IpBlasDcopy(n_full_x_, &zero, 0, full_z_U, 1);
          IpBlasDcopy(n_full_g_, &zero, 0, full_lambda, 1);
          tnlp_->finalize_solution(status, n_full_x_, full_x_, full_z_L, full_z_U, n_full_g_, full_g_, full_lambda,
-            obj_value, NULL, NULL);
+                                  obj_value, NULL, NULL);
          delete[] full_z_L;
          delete[] full_z_U;
          delete[] full_lambda;
@@ -670,15 +670,15 @@ bool TNLPAdapter::GetSpaces(
          if( status == SUCCESS )
          {
             jnlst_->Printf(J_WARNING, J_INITIALIZATION,
-               "All variables are fixed and constraint violation %e\n   is below tolerance %e. Declaring success.\n",
-               max_viol, tol_);
+                           "All variables are fixed and constraint violation %e\n   is below tolerance %e. Declaring success.\n",
+                           max_viol, tol_);
             THROW_EXCEPTION(NO_FREE_VARIABLES_BUT_FEASIBLE, string);
          }
          else
          {
             jnlst_->Printf(J_WARNING, J_INITIALIZATION,
-               "All variables are fixed and constraint violation %e\n  is above tolerance %e. Declaring that problem is infeasible.\n",
-               max_viol, tol_);
+                           "All variables are fixed and constraint violation %e\n  is above tolerance %e. Declaring that problem is infeasible.\n",
+                           max_viol, tol_);
             THROW_EXCEPTION(NO_FREE_VARIABLES_AND_INFEASIBLE, string);
          }
       }
@@ -691,13 +691,13 @@ bool TNLPAdapter::GetSpaces(
          if( !DetermineDependentConstraints(n_x_var, x_not_fixed_map, x_l, x_u, g_l, g_u, n_c, c_map, c_deps) )
          {
             jnlst_->Printf(J_WARNING, J_INITIALIZATION,
-               "Dependent constraint detector had a problem, assume full rank.\n");
+                           "Dependent constraint detector had a problem, assume full rank.\n");
          }
          c_deps.sort();
          if( c_deps.size() > 0 )
          {
             jnlst_->Printf(J_WARNING, J_INITIALIZATION,
-               "\nDetected %d linearly dependent equality constraints; taking those out.\n\n", c_deps.size());
+                           "\nDetected %d linearly dependent equality constraints; taking those out.\n\n", c_deps.size());
          }
          else
          {
@@ -1251,7 +1251,7 @@ bool TNLPAdapter::GetSpaces(
          Index* h_iRow = new Index[nz_full_h_];
          Index* h_jCol = new Index[nz_full_h_];
          bool retval = tnlp_->eval_h(n_full_x_, NULL, false, 0, n_full_g_,
-         NULL, false, nz_full_h_, full_h_iRow, full_h_jCol, NULL);
+                                     NULL, false, nz_full_h_, full_h_iRow, full_h_jCol, NULL);
          if( !retval )
          {
             delete[] full_h_iRow;
@@ -1259,7 +1259,7 @@ bool TNLPAdapter::GetSpaces(
             delete[] h_iRow;
             delete[] h_jCol;
             jnlst_->Printf(J_ERROR, J_INITIALIZATION,
-               "Option \"hessian_approximation\" is not chosen as \"limited-memory\", but eval_h returns false.\n");
+                           "Option \"hessian_approximation\" is not chosen as \"limited-memory\", but eval_h returns false.\n");
             THROW_EXCEPTION(OPTION_INVALID, "eval_h is called but has not been implemented");
          }
 
@@ -1340,11 +1340,11 @@ bool TNLPAdapter::GetSpaces(
    if( IsValid(jnlst_) )
    {
       jnlst_->Printf(J_ITERSUMMARY, J_STATISTICS, "Number of nonzeros in equality constraint Jacobian...:%9d\n",
-         nz_jac_c_);
+                     nz_jac_c_);
       jnlst_->Printf(J_ITERSUMMARY, J_STATISTICS, "Number of nonzeros in inequality constraint Jacobian.:%9d\n",
-         nz_jac_d_);
+                     nz_jac_d_);
       jnlst_->Printf(J_ITERSUMMARY, J_STATISTICS, "Number of nonzeros in Lagrangian Hessian.............:%9d\n\n",
-         nz_h_);
+                     nz_h_);
    }
 
    return true;
@@ -1359,7 +1359,7 @@ bool TNLPAdapter::GetBoundsInformation(
    Vector&       d_L,
    const Matrix& Pd_U,
    Vector&       d_U
-   )
+)
 {
    // This could be done more efficiently, I have already called this method
    // once to setup the structure for the problem, I could store the values
@@ -1527,7 +1527,7 @@ bool TNLPAdapter::GetStartingPoint(
    bool             need_z_L,
    SmartPtr<Vector> z_U,
    bool             need_z_U
-   )
+)
 {
    Number* full_x = new Number[n_full_x_];
    Number* full_z_l = new Number[n_full_x_];
@@ -1538,7 +1538,7 @@ bool TNLPAdapter::GetStartingPoint(
    bool init_lambda = need_y_c || need_y_d;
 
    bool retvalue = tnlp_->get_starting_point(n_full_x_, init_x, full_x, init_z, full_z_l, full_z_u, n_full_g_,
-      init_lambda, full_lambda);
+                   init_lambda, full_lambda);
 
    if( !retvalue )
    {
@@ -1666,7 +1666,7 @@ bool TNLPAdapter::GetStartingPoint(
 
 bool TNLPAdapter::GetWarmStartIterate(
    IteratesVector& warm_start_iterate
-   )
+)
 {
    return tnlp_->get_warm_start_iterate(warm_start_iterate);
 }
@@ -1674,7 +1674,7 @@ bool TNLPAdapter::GetWarmStartIterate(
 bool TNLPAdapter::Eval_f(
    const Vector& x,
    Number&       f
-   )
+)
 {
    bool new_x = false;
    if( update_local_x(x) )
@@ -1687,7 +1687,7 @@ bool TNLPAdapter::Eval_f(
 bool TNLPAdapter::Eval_grad_f(
    const Vector& x,
    Vector&       g_f
-   )
+)
 {
    bool retvalue = false;
    bool new_x = false;
@@ -1724,7 +1724,7 @@ bool TNLPAdapter::Eval_grad_f(
 bool TNLPAdapter::Eval_c(
    const Vector& x,
    Vector&       c
-   )
+)
 {
    bool new_x = false;
    if( update_local_x(x) )
@@ -1760,7 +1760,7 @@ bool TNLPAdapter::Eval_c(
 bool TNLPAdapter::Eval_jac_c(
    const Vector& x,
    Matrix&       jac_c
-   )
+)
 {
    bool new_x = false;
    if( update_local_x(x) )
@@ -1792,7 +1792,7 @@ bool TNLPAdapter::Eval_jac_c(
 bool TNLPAdapter::Eval_d(
    const Vector& x,
    Vector&       d
-   )
+)
 {
    bool new_x = false;
    if( update_local_x(x) )
@@ -1819,7 +1819,7 @@ bool TNLPAdapter::Eval_d(
 bool TNLPAdapter::Eval_jac_d(
    const Vector& x,
    Matrix&       jac_d
-   )
+)
 {
    bool new_x = false;
    if( update_local_x(x) )
@@ -1849,7 +1849,7 @@ bool TNLPAdapter::Eval_h(
    const Vector& yc,
    const Vector& yd,
    SymMatrix&    h
-   )
+)
 {
    // First see if all weights are set to zero (for example, when
    // computing the least square multiplier estimates, this is what
@@ -1888,7 +1888,7 @@ bool TNLPAdapter::Eval_h(
       Number* full_h = new Number[nz_full_h_];
 
       if( tnlp_->eval_h(n_full_x_, full_x_, new_x, obj_factor, n_full_g_, full_lambda_, new_y, nz_full_h_, NULL, NULL,
-         full_h) )
+                        full_h) )
       {
          for( Index i = 0; i < nz_h_; i++ )
          {
@@ -1901,7 +1901,7 @@ bool TNLPAdapter::Eval_h(
    else
    {
       retval = tnlp_->eval_h(n_full_x_, full_x_, new_x, obj_factor, n_full_g_, full_lambda_, new_y, nz_full_h_, NULL,
-         NULL, values);
+                             NULL, values);
    }
 
    return retval;
@@ -1915,7 +1915,7 @@ void TNLPAdapter::GetScalingParameters(
    SmartPtr<Vector>&                 x_scaling,
    SmartPtr<Vector>&                 c_scaling,
    SmartPtr<Vector>&                 d_scaling
-   ) const
+) const
 {
    x_scaling = x_space->MakeNew();
    c_scaling = c_space->MakeNew();
@@ -1940,12 +1940,12 @@ void TNLPAdapter::GetScalingParameters(
    {
       Number* full_x_scaling = new Number[n_full_x_];
       bool retval = tnlp_->get_scaling_parameters(obj_scaling, use_x_scaling, n_full_x_, full_x_scaling, use_g_scaling,
-         n_full_g_, full_g_scaling);
+                    n_full_g_, full_g_scaling);
       if( !retval )
       {
          delete[] full_x_scaling;
          jnlst_->Printf(J_ERROR, J_INITIALIZATION,
-            "Option nlp_scaling_method selected as user-scaling, but no user-scaling available, or it cannot be computed.\n");
+                        "Option nlp_scaling_method selected as user-scaling, but no user-scaling available, or it cannot be computed.\n");
          THROW_EXCEPTION(OPTION_INVALID, "User scaling chosen, but get_scaling_parameters returned false.");
       }
 
@@ -1962,11 +1962,11 @@ void TNLPAdapter::GetScalingParameters(
    else
    {
       bool retval = tnlp_->get_scaling_parameters(obj_scaling, use_x_scaling, n_full_x_, dx_values, use_g_scaling,
-         n_full_g_, full_g_scaling);
+                    n_full_g_, full_g_scaling);
       if( !retval )
       {
          jnlst_->Printf(J_ERROR, J_INITIALIZATION,
-            "Option nlp_scaling_method selected as user-scaling, but no user-scaling available, or it cannot be computed.\n");
+                        "Option nlp_scaling_method selected as user-scaling, but no user-scaling available, or it cannot be computed.\n");
          THROW_EXCEPTION(OPTION_INVALID, "User scaling chosen, but get_scaling_parameters returned false.");
       }
    }
@@ -2016,7 +2016,7 @@ void TNLPAdapter::FinalizeSolution(
    Number                     obj_value,
    const IpoptData*           ip_data,
    IpoptCalculatedQuantities* ip_cq
-   )
+)
 {
    DBG_START_METH("TNLPAdapter::FinalizeSolution", dbg_verbosity);
 
@@ -2060,7 +2060,7 @@ void TNLPAdapter::FinalizeSolution(
       if( (Index) y_c_meta_iter->second.size() == y_c.Dim() )
       {
          if( y_d_space->HasNumericMetaData(y_c_meta_iter->first.c_str())    // There exists a corresponding y_d metadata
-         && ((Index) (y_d_meta.find(y_c_meta_iter->first)->second).size()) == y_d.Dim() ) // and y_d metadata vector has size y_d.Dim()
+             && ((Index) (y_d_meta.find(y_c_meta_iter->first)->second).size()) == y_d.Dim() ) // and y_d metadata vector has size y_d.Dim()
          {
             std::vector<Number> y_d_second = y_d_space->GetNumericMetaData(y_c_meta_iter->first);
             std::vector<Number> new_g_meta_data;
@@ -2111,7 +2111,7 @@ void TNLPAdapter::FinalizeSolution(
       if( (Index) z_L_meta_iter->second.size() == z_L.Dim() )
       {
          if( z_U_space->HasNumericMetaData(z_L_meta_iter->first.c_str())
-            && (Index) z_U_meta.find(z_L_meta_iter->first.c_str())->second.size() == z_U.Dim() )
+             && (Index) z_U_meta.find(z_L_meta_iter->first.c_str())->second.size() == z_U.Dim() )
          {
             std::vector<Number> z_U_second = z_U_space->GetNumericMetaData(z_L_meta_iter->first);
             SmartPtr<DenseVector> z_L_meta_vector = z_L_space->MakeNewDenseVector();
@@ -2159,10 +2159,10 @@ void TNLPAdapter::FinalizeSolution(
    }
 
    tnlp_->finalize_metadata(n_full_x_, var_string_md, var_integer_md, var_numeric_md, n_full_g_, con_string_md,
-      con_integer_md, con_numeric_md);
+                            con_integer_md, con_numeric_md);
 
    tnlp_->finalize_solution(status, n_full_x_, full_x_, full_z_L, full_z_U, n_full_g_, full_g, full_lambda_, obj_value,
-      ip_data, ip_cq);
+                            ip_data, ip_cq);
 
    delete[] full_z_L;
    full_z_L = NULL;
@@ -2207,16 +2207,16 @@ bool TNLPAdapter::IntermediateCallBack(
    Index                      ls_trials,
    const IpoptData*           ip_data,
    IpoptCalculatedQuantities* ip_cq
-   )
+)
 {
    return tnlp_->intermediate_callback(mode, iter, obj_value, inf_pr, inf_du, mu, d_norm, regularization_size, alpha_du,
-      alpha_pr, ls_trials, ip_data, ip_cq);
+                                       alpha_pr, ls_trials, ip_data, ip_cq);
 }
 
 void TNLPAdapter::GetQuasiNewtonApproximationSpaces(
    SmartPtr<VectorSpace>& approx_space,
    SmartPtr<Matrix>&      P_approx
-   )
+)
 {
    Index num_nonlin_vars = tnlp_->get_number_of_nonlinear_variables();
 
@@ -2246,7 +2246,7 @@ void TNLPAdapter::GetQuasiNewtonApproximationSpaces(
       {
          delete[] pos_nonlin_vars;
          jnlst_->Printf(J_ERROR, J_INITIALIZATION,
-            "TNLP's get_number_of_nonlinear_variables returns non-negative number, but get_list_of_nonlinear_variables returns false.\n");
+                        "TNLP's get_number_of_nonlinear_variables returns non-negative number, but get_list_of_nonlinear_variables returns false.\n");
          THROW_EXCEPTION(INVALID_TNLP, "get_list_of_nonlinear_variables has not been overwritten");
       }
       // Correct indices in case user starts counting variables at 1
@@ -2300,7 +2300,7 @@ void TNLPAdapter::GetQuasiNewtonApproximationSpaces(
       else
       {
          SmartPtr<ExpansionMatrixSpace> ex_sp = new ExpansionMatrixSpace(n_x_free, nonfixed_nonlin_vars,
-            nonfixed_pos_nonlin_vars);
+               nonfixed_pos_nonlin_vars);
          P_approx = ex_sp->MakeNew();
          approx_space = new DenseVectorSpace(nonfixed_nonlin_vars);
       }
@@ -2313,7 +2313,7 @@ void TNLPAdapter::GetQuasiNewtonApproximationSpaces(
 void TNLPAdapter::ResortX(
    const Vector& x,
    Number*       x_orig
-   )
+)
 {
    const DenseVector* dx = static_cast<const DenseVector*>(&x);
    DBG_ASSERT(dynamic_cast<const DenseVector*>(&x));
@@ -2373,7 +2373,7 @@ void TNLPAdapter::ResortG(
    const Vector& c,
    const Vector& d,
    Number*       g_orig
-   )
+)
 {
    const DenseVector* dc = static_cast<const DenseVector*>(&c);
    DBG_ASSERT(dynamic_cast<const DenseVector*>(&c));
@@ -2423,7 +2423,7 @@ void TNLPAdapter::ResortBnds(
    Number*       x_L_orig,
    const Vector& x_U,
    Number*       x_U_orig
-   )
+)
 {
    if( x_L_orig )
    {
@@ -2537,7 +2537,7 @@ void TNLPAdapter::ResortBnds(
 
 bool TNLPAdapter::update_local_x(
    const Vector& x
-   )
+)
 {
    if( x.GetTag() == x_tag_for_iterates_ )
    {
@@ -2554,7 +2554,7 @@ bool TNLPAdapter::update_local_x(
 bool TNLPAdapter::update_local_lambda(
    const Vector& y_c,
    const Vector& y_d
-   )
+)
 {
    if( y_c.GetTag() == y_c_tag_for_iterates_ && y_d.GetTag() == y_d_tag_for_iterates_ )
    {
@@ -2571,7 +2571,7 @@ bool TNLPAdapter::update_local_lambda(
 
 bool TNLPAdapter::internal_eval_g(
    bool new_x
-   )
+)
 {
    if( x_tag_for_g_ == x_tag_for_iterates_ )
    {
@@ -2593,7 +2593,7 @@ bool TNLPAdapter::internal_eval_g(
 
 bool TNLPAdapter::internal_eval_jac_g(
    bool new_x
-   )
+)
 {
    if( x_tag_for_jac_g_ == x_tag_for_iterates_ )
    {
@@ -2661,7 +2661,7 @@ bool TNLPAdapter::internal_eval_jac_g(
 void TNLPAdapter::initialize_findiff_jac(
    const Index* iRow,
    const Index* jCol
-   )
+)
 {
 
    SmartPtr<TripletToCSRConverter> findiff_jac_converter = new TripletToCSRConverter(0);
@@ -2682,7 +2682,7 @@ void TNLPAdapter::initialize_findiff_jac(
    if( findiff_jac_nnz_ != nz_full_jac_g_ )
    {
       THROW_EXCEPTION(INVALID_TNLP,
-         "Sparsity structure of Jacobian has multiple occurrences of the same position.  This is not allowed for finite differences.");
+                      "Sparsity structure of Jacobian has multiple occurrences of the same position.  This is not allowed for finite differences.");
    }
 
    // Finally, get the right numbers out of the converter object
@@ -2716,7 +2716,7 @@ void TNLPAdapter::initialize_findiff_jac(
 bool TNLPAdapter::CheckDerivatives(
    TNLPAdapter::DerivativeTestEnum deriv_test,
    Index                           deriv_test_start_index
-   )
+)
 {
    if( deriv_test == NO_TEST )
    {
@@ -2726,7 +2726,7 @@ bool TNLPAdapter::CheckDerivatives(
    Index nerrors = 0;
 
    ASSERT_EXCEPTION(IsValid(jnlst_), ERROR_IN_TNLP_DERIVATIVE_TEST,
-      "No Journalist given to TNLPAdapter.  Need Journalist, otherwise can't produce any output in DerivativeChecker!");
+                    "No Journalist given to TNLPAdapter.  Need Journalist, otherwise can't produce any output in DerivativeChecker!");
 
    bool retval = true;
    // Since this method should be independent of all other internal
@@ -2779,20 +2779,20 @@ bool TNLPAdapter::CheckDerivatives(
    }
    retval = tnlp_->eval_f(nx, xref, new_x, fref);
    ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
-      "In TNLP derivative test: f could not be evaluated at reference point.");
+                    "In TNLP derivative test: f could not be evaluated at reference point.");
    new_x = false;
    if( ng > 0 )
    {
       retval = tnlp_->eval_g(nx, xref, new_x, ng, gref);
       ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
-         "In TNLP derivative test: g could not be evaluated at reference point.");
+                       "In TNLP derivative test: g could not be evaluated at reference point.");
    }
 
    // Obtain gradient of objective function at reference pont
    Number* grad_f = new Number[nx];
    retval = tnlp_->eval_grad_f(nx, xref, true, grad_f);
    ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
-      "In TNLP derivative test: grad_f could not be evaluated at reference point.");
+                    "In TNLP derivative test: grad_f could not be evaluated at reference point.");
 
    Index* g_iRow = NULL;
    Index* g_jCol = NULL;
@@ -2804,7 +2804,7 @@ bool TNLPAdapter::CheckDerivatives(
       g_jCol = new Index[nz_jac_g];
       retval = tnlp_->eval_jac_g(nx, NULL, false, ng, nz_jac_g, g_iRow, g_jCol, NULL);
       ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
-         "In TNLP derivative test: Jacobian structure could not be evaluated.");
+                       "In TNLP derivative test: Jacobian structure could not be evaluated.");
       // Correct counting if required to C-style
       if( index_style == TNLP::FORTRAN_STYLE )
       {
@@ -2818,7 +2818,7 @@ bool TNLPAdapter::CheckDerivatives(
       jac_g = new Number[nz_jac_g];
       retval = tnlp_->eval_jac_g(nx, xref, new_x, ng, nz_jac_g, NULL, NULL, jac_g);
       ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
-         "In TNLP derivative test: Jacobian values could not be evaluated at reference point.");
+                       "In TNLP derivative test: Jacobian values could not be evaluated at reference point.");
    }
 
    // Space for the perturbed point
@@ -2853,7 +2853,7 @@ bool TNLPAdapter::CheckDerivatives(
          new_x = true;
          retval = tnlp_->eval_f(nx, xpert, new_x, fpert);
          ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
-            "In TNLP derivative test: f could not be evaluated at perturbed point.");
+                          "In TNLP derivative test: f could not be evaluated at perturbed point.");
          new_x = false;
 
          Number deriv_approx = (fpert - fref) / this_perturbation;
@@ -2868,14 +2868,14 @@ bool TNLPAdapter::CheckDerivatives(
          if( cflag != ' ' || derivative_test_print_all_ )
          {
             jnlst_->Printf(J_WARNING, J_NLP, "%c grad_f[      %5d] = %23.16e    ~ %23.16e  [%10.3e]\n", cflag,
-               ivar + index_correction, deriv_exact, deriv_approx, rel_error);
+                           ivar + index_correction, deriv_exact, deriv_approx, rel_error);
          }
 
          if( ng > 0 )
          {
             retval = tnlp_->eval_g(nx, xpert, new_x, ng, gpert);
             ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
-               "In TNLP derivative test: g could not be evaluated at reference point.");
+                             "In TNLP derivative test: g could not be evaluated at reference point.");
             for( Index icon = 0; icon < ng; icon++ )
             {
                deriv_approx = (gpert[icon] - gref[icon]) / this_perturbation;
@@ -2905,7 +2905,7 @@ bool TNLPAdapter::CheckDerivatives(
                if( cflag != ' ' || derivative_test_print_all_ )
                {
                   jnlst_->Printf(J_WARNING, J_NLP, "%c jac_g [%5d,%5d] = %23.16e %c  ~ %23.16e  [%10.3e]\n", cflag,
-                     icon + index_correction, ivar + index_correction, deriv_exact, sflag, deriv_approx, rel_error);
+                                 icon + index_correction, ivar + index_correction, deriv_exact, sflag, deriv_approx, rel_error);
                }
             }
          }
@@ -2924,7 +2924,7 @@ bool TNLPAdapter::CheckDerivatives(
       Index* h_jCol = new Index[nz_hess_lag];
       retval = tnlp_->eval_h(nx, NULL, false, 0., ng, NULL, false, nz_hess_lag, h_iRow, h_jCol, NULL);
       ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
-         "In TNLP derivative test: Hessian structure could not be evaluated.");
+                       "In TNLP derivative test: Hessian structure could not be evaluated.");
 
       if( index_style == TNLP::FORTRAN_STYLE )
       {
@@ -2975,7 +2975,7 @@ bool TNLPAdapter::CheckDerivatives(
          new_x = false;
          new_y = false;
          ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
-            "In TNLP derivative test: Hessian could not be evaluated at reference point.");
+                          "In TNLP derivative test: Hessian could not be evaluated at reference point.");
 
          for( Index ivar = 0; ivar < nx; ivar++ )
          {
@@ -2988,14 +2988,14 @@ bool TNLPAdapter::CheckDerivatives(
                // we are looking at the objective function
                retval = tnlp_->eval_grad_f(nx, xpert, new_x, gradpert);
                ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
-                  "In TNLP derivative test: grad_f could not be evaluated at perturbed point.");
+                                "In TNLP derivative test: grad_f could not be evaluated at perturbed point.");
             }
             else
             {
                // this is the icon-th constraint
                retval = tnlp_->eval_jac_g(nx, xpert, new_x, ng, nz_jac_g, NULL, NULL, jacpert);
                ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
-                  "In TNLP derivative test: Jacobian values could not be evaluated at reference point.");
+                                "In TNLP derivative test: Jacobian values could not be evaluated at reference point.");
                // ok, now we need to filter the gradient of the icon-th constraint
                IpBlasDcopy(nx, &zero, 0, gradpert, 1);
                IpBlasDcopy(nx, &zero, 0, gradref, 1);
@@ -3040,15 +3040,15 @@ bool TNLPAdapter::CheckDerivatives(
                   if( icon == -1 )
                   {
                      jnlst_->Printf(J_WARNING, J_NLP,
-                        "%c             obj_hess[%5d,%5d] = %23.16e %c  ~ %23.16e  [%10.3e]\n", cflag,
-                        ivar + index_correction, ivar2 + index_correction, deriv_exact, sflag, deriv_approx, rel_error);
+                                    "%c             obj_hess[%5d,%5d] = %23.16e %c  ~ %23.16e  [%10.3e]\n", cflag,
+                                    ivar + index_correction, ivar2 + index_correction, deriv_exact, sflag, deriv_approx, rel_error);
                   }
                   else
                   {
                      jnlst_->Printf(J_WARNING, J_NLP,
-                        "%c %5d-th constr_hess[%5d,%5d] = %23.16e %c  ~ %23.16e  [%10.3e]\n", cflag,
-                        icon + index_correction, ivar + index_correction, ivar2 + index_correction, deriv_exact, sflag,
-                        deriv_approx, rel_error);
+                                    "%c %5d-th constr_hess[%5d,%5d] = %23.16e %c  ~ %23.16e  [%10.3e]\n", cflag,
+                                    icon + index_correction, ivar + index_correction, ivar2 + index_correction, deriv_exact, sflag,
+                                    deriv_approx, rel_error);
                   }
                }
 
@@ -3103,7 +3103,7 @@ bool TNLPAdapter::DetermineDependentConstraints(
    Index             n_c,
    const Index*      c_map,
    std::list<Index>& c_deps
-   )
+)
 {
    // First get a temporary expansion matrix for getting the equality
    // constraints
@@ -3184,7 +3184,7 @@ bool TNLPAdapter::DetermineDependentConstraints(
    // First we evaluate the equality constraint Jacobian at the
    // starting point with some random perturbation (projected into bounds)
    if( !tnlp_->get_starting_point(n_full_x_, true, full_x_, false, NULL,
-   NULL, n_full_g_, false, NULL) )
+                                  NULL, n_full_g_, false, NULL) )
    {
       delete[] jac_c_iRow;
       delete[] jac_c_jCol;
@@ -3215,7 +3215,7 @@ bool TNLPAdapter::DetermineDependentConstraints(
       }
    }
    if( !tnlp_->eval_jac_g(n_full_x_, full_x_, !dependency_detection_with_rhs_, n_full_g_, nz_full_jac_g_, NULL, NULL,
-      jac_g_) )
+                          jac_g_) )
    {
       delete[] jac_c_iRow;
       delete[] jac_c_jCol;
@@ -3245,10 +3245,10 @@ bool TNLPAdapter::DetermineDependentConstraints(
    }
 
    ASSERT_EXCEPTION(IsValid(dependency_detector_), OPTION_INVALID,
-      "No dependency_detector_ object available in TNLPAdapter::DetermineDependentConstraints");
+                    "No dependency_detector_ object available in TNLPAdapter::DetermineDependentConstraints");
 
    bool retval = dependency_detector_->DetermineDependentRows(n_c, n_x_var, nz_jac_c, jac_c_vals, jac_c_iRow,
-      jac_c_jCol, c_deps);
+                 jac_c_jCol, c_deps);
 
    // For now, we just get rid of the dependency_detector_ object, in
    // order to save memory.  Maybe we need to add a clean method at

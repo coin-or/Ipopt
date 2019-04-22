@@ -22,7 +22,7 @@ public:
    /** Constructor, taking the corresponding matrix space. */
    ZeroSymMatrix(
       const SymMatrixSpace* owner_space
-      );
+   );
 
    /** Destructor */
    ~ZeroSymMatrix();
@@ -36,25 +36,25 @@ protected:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual void TransMultVectorImpl(
       Number        alpha,
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual void ComputeRowAMaxImpl(
       Vector& rows_norms,
       bool    init
-      ) const
+   ) const
    { }
 
    virtual void ComputeColAMaxImpl(
       Vector& cols_norms,
       bool    init
-      ) const
+   ) const
    { }
 
    virtual void PrintImpl(
@@ -64,7 +64,7 @@ protected:
       const std::string& name,
       Index              indent,
       const std::string& prefix
-      ) const;
+   ) const;
    //@}
 
 private:
@@ -83,12 +83,12 @@ private:
    /** Copy Constructor */
    ZeroSymMatrix(
       const ZeroSymMatrix&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const ZeroSymMatrix&
-      );
+   );
    //@}
 };
 
@@ -101,7 +101,7 @@ public:
    /** Constructor, given the number of row and columns. */
    ZeroSymMatrixSpace(
       Index dim
-      )
+   )
       : SymMatrixSpace(dim)
    { }
 
@@ -142,12 +142,12 @@ private:
    /** Copy Constructor */
    ZeroSymMatrixSpace(
       const ZeroSymMatrixSpace&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const ZeroSymMatrixSpace&
-      );
+   );
    //@}
 };
 

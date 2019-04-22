@@ -16,7 +16,7 @@ static const Index dbg_verbosity = 0;
 InexactSearchDirCalculator::InexactSearchDirCalculator(
    SmartPtr<InexactNormalStepCalculator> normal_step_calculator,
    SmartPtr<InexactPDSolver>             inexact_pd_solver
-   )
+)
    : normal_step_calculator_(normal_step_calculator),
      inexact_pd_solver_(inexact_pd_solver)
 { }
@@ -26,21 +26,21 @@ InexactSearchDirCalculator::~InexactSearchDirCalculator()
 
 void InexactSearchDirCalculator::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
-   )
+)
 {
    roptions->AddLowerBoundedNumberOption("local_inf_Ac_tol",
-      "Termination tolerance for local infeasibility (scaled ||Ac||).", 0.0, true, 1e-8, "");
+                                         "Termination tolerance for local infeasibility (scaled ||Ac||).", 0.0, true, 1e-8, "");
    roptions->AddStringOption3("inexact_step_decomposition",
-      "Determines if the steps should be decomposed into normal and tangential components.", "adaptive", "always",
-      "always compute the step as two components", "adaptive", "try to use undecomposed steps if possible",
-      "switch-once", "try to use undecomposed steps, but if decomposition is necessary, always keep it",
-      "TO BE WRITTEN");
+                              "Determines if the steps should be decomposed into normal and tangential components.", "adaptive", "always",
+                              "always compute the step as two components", "adaptive", "try to use undecomposed steps if possible",
+                              "switch-once", "try to use undecomposed steps, but if decomposition is necessary, always keep it",
+                              "TO BE WRITTEN");
 }
 
 bool InexactSearchDirCalculator::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    options.GetNumericValue("local_inf_Ac_tol", local_inf_Ac_tol_, prefix);
    Index enum_int;
@@ -73,7 +73,7 @@ bool InexactSearchDirCalculator::InitializeImpl(
 bool InexactSearchDirCalculator::ComputeSearchDirection()
 {
    DBG_START_METH("InexactSearchDirCalculator::ComputeSearchDirection",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    // First check if the iterates have converged to a locally
    // infeasible point

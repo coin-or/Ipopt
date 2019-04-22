@@ -24,7 +24,7 @@ public:
    InexactDoglegNormalStep(
       SmartPtr<InexactNewtonNormalStep>        newton_step,
       SmartPtr<InexactNormalTerminationTester> normal_tester = NULL
-      );
+   );
 
    /** Destructor */
    virtual ~InexactDoglegNormalStep();
@@ -33,7 +33,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Method for computing the normal step.
     *
@@ -45,11 +45,11 @@ public:
    virtual bool ComputeNormalStep(
       SmartPtr<Vector>& normal_x,
       SmartPtr<Vector>& normal_s
-      );
+   );
 
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
 
 private:
    /**@name Default Compiler Generated Methods
@@ -68,12 +68,12 @@ private:
    /** Copy Constructor */
    InexactDoglegNormalStep(
       const InexactDoglegNormalStep&
-      );
+   );
 
    /** Overloaded Assignment Operator */
    void operator=(
       const InexactDoglegNormalStep&
-      );
+   );
    //@}
 
    /** Pointer to object for computing the "Newton" step in the dogleg

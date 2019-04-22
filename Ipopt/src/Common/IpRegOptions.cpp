@@ -413,7 +413,9 @@ void RegisteredOption::OutputDoxygenDescription(
          //}
       }
       else
+      {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " The valid range for this integer option is unrestricted");
+      }
 
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " and its default value is %d.\n\n", (Index) default_number_);
    }
@@ -464,11 +466,17 @@ std::string RegisteredOption::MakeValidHTMLNumber(
       {
          found_e = true;
          if( dest == "1" )
+         {
             dest = "";
+         }
          else if( dest == "-1" )
+         {
             dest = "-";
+         }
          else
+         {
             dest.append(" &middot; ");
+         }
          dest += "10<sup>";
       }
       else
@@ -1286,7 +1294,9 @@ void RegisteredOptions::OutputDoxygenOptionDocumentation(
             std::string anchorname = &coption->c_str()[1];
             for( std::string::iterator it = anchorname.begin(); it != anchorname.end(); ++it )
                if( *it == ' ' )
+               {
                   *it = '_';
+               }
             jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\subsection OPT_%s %s\n\n", anchorname.c_str(), &coption->c_str()[1]);
          }
          else

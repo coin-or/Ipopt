@@ -25,7 +25,7 @@ namespace Ipopt
 
 CompoundMatrix::CompoundMatrix(
    const CompoundMatrixSpace* owner_space
-   )
+)
    : Matrix(owner_space),
      owner_space_(owner_space),
      matrices_valid_(false)
@@ -46,9 +46,11 @@ void CompoundMatrix::SetComp(
    Index         irow,
    Index         jcol,
    const Matrix& matrix
-   )
+)
 {
-   DBG_ASSERT(irow < NComps_Rows()); DBG_ASSERT(jcol < NComps_Cols()); DBG_ASSERT(owner_space_->GetCompSpace(irow, jcol)->IsMatrixFromSpace(matrix));
+   DBG_ASSERT(irow < NComps_Rows());
+   DBG_ASSERT(jcol < NComps_Cols());
+   DBG_ASSERT(owner_space_->GetCompSpace(irow, jcol)->IsMatrixFromSpace(matrix));
 
    comps_[irow][jcol] = NULL;
    const_comps_[irow][jcol] = &matrix;
@@ -60,7 +62,9 @@ void CompoundMatrix::SetCompNonConst(
    Index jcol,
    Matrix& matrix)
 {
-   DBG_ASSERT(irow < NComps_Rows()); DBG_ASSERT(jcol < NComps_Cols()); DBG_ASSERT(owner_space_->GetCompSpace(irow, jcol)->IsMatrixFromSpace(matrix));
+   DBG_ASSERT(irow < NComps_Rows());
+   DBG_ASSERT(jcol < NComps_Cols());
+   DBG_ASSERT(owner_space_->GetCompSpace(irow, jcol)->IsMatrixFromSpace(matrix));
 
    const_comps_[irow][jcol] = NULL;
    comps_[irow][jcol] = &matrix;
@@ -70,9 +74,11 @@ void CompoundMatrix::SetCompNonConst(
 void CompoundMatrix::CreateBlockFromSpace(
    Index irow,
    Index jcol
-   )
+)
 {
-   DBG_ASSERT(irow < NComps_Rows()); DBG_ASSERT(jcol < NComps_Cols()); DBG_ASSERT(IsValid(owner_space_->GetCompSpace(irow, jcol)));
+   DBG_ASSERT(irow < NComps_Rows());
+   DBG_ASSERT(jcol < NComps_Cols());
+   DBG_ASSERT(IsValid(owner_space_->GetCompSpace(irow, jcol)));
    SetCompNonConst(irow, jcol, *owner_space_->GetCompSpace(irow, jcol)->MakeNew());
 }
 
@@ -81,12 +87,13 @@ void CompoundMatrix::MultVectorImpl(
    const Vector& x,
    Number        beta,
    Vector&       y
-   ) const
+) const
 {
    if( !matrices_valid_ )
    {
       matrices_valid_ = MatricesValid();
-   } DBG_ASSERT(matrices_valid_);
+   }
+   DBG_ASSERT(matrices_valid_);
 
    // The vectors are assumed to be compound Vectors as well
    const CompoundVector* comp_x = dynamic_cast<const CompoundVector*>(&x);
@@ -147,7 +154,8 @@ void CompoundMatrix::MultVectorImpl(
       else
       {
          y_i = &y;
-      } DBG_ASSERT(IsValid(y_i));
+      }
+      DBG_ASSERT(IsValid(y_i));
 
       for( Index jcol = 0; jcol < NComps_Cols(); jcol++ )
       {
@@ -161,7 +169,8 @@ void CompoundMatrix::MultVectorImpl(
             else if( NComps_Cols() == 1 )
             {
                x_j = &x;
-            } DBG_ASSERT(IsValid(x_j));
+            }
+            DBG_ASSERT(IsValid(x_j));
 
             ConstComp(irow, jcol)->MultVector(alpha, *x_j, 1., *y_i);
          }
@@ -174,12 +183,13 @@ void CompoundMatrix::TransMultVectorImpl(
    const Vector& x,
    Number        beta,
    Vector&       y
-   ) const
+) const
 {
    if( !matrices_valid_ )
    {
       matrices_valid_ = MatricesValid();
-   } DBG_ASSERT(matrices_valid_);
+   }
+   DBG_ASSERT(matrices_valid_);
 
    // The vectors are assumed to be compound Vectors as well
    const CompoundVector* comp_x = dynamic_cast<const CompoundVector*>(&x);
@@ -240,7 +250,8 @@ void CompoundMatrix::TransMultVectorImpl(
       else
       {
          y_i = &y;
-      } DBG_ASSERT(IsValid(y_i));
+      }
+      DBG_ASSERT(IsValid(y_i));
 
       for( Index jcol = 0; jcol < NComps_Rows(); jcol++ )
       {
@@ -254,7 +265,8 @@ void CompoundMatrix::TransMultVectorImpl(
             else
             {
                x_j = &x;
-            } DBG_ASSERT(IsValid(x_j));
+            }
+            DBG_ASSERT(IsValid(x_j));
 
             ConstComp(jcol, irow)->TransMultVector(alpha, *x_j, 1., *y_i);
          }
@@ -268,7 +280,7 @@ void CompoundMatrix::AddMSinvZImpl(
    const Vector& S,
    const Vector& Z,
    Vector&       X
-   ) const
+) const
 {
    // The vectors are assumed to be compound Vectors as well (unless they
    // are assumed to consist of only one component
@@ -335,7 +347,8 @@ void CompoundMatrix::AddMSinvZImpl(
       else
       {
          X_i = &X;
-      } DBG_ASSERT(IsValid(X_i));
+      }
+      DBG_ASSERT(IsValid(X_i));
 
       for( Index jcol = 0; jcol < NComps_Cols(); jcol++ )
       {
@@ -349,7 +362,8 @@ void CompoundMatrix::AddMSinvZImpl(
             else
             {
                S_j = &S;
-            } DBG_ASSERT(IsValid(S_j));
+            }
+            DBG_ASSERT(IsValid(S_j));
             SmartPtr<const Vector> Z_j;
             if( comp_Z )
             {
@@ -358,7 +372,8 @@ void CompoundMatrix::AddMSinvZImpl(
             else
             {
                Z_j = &Z;
-            } DBG_ASSERT(IsValid(Z_j));
+            }
+            DBG_ASSERT(IsValid(Z_j));
 
             ConstComp(irow, jcol)->AddMSinvZ(alpha, *S_j, *Z_j, *X_i);
          }
@@ -374,7 +389,7 @@ void CompoundMatrix::SinvBlrmZMTdBrImpl(
    const Vector& Z,
    const Vector& D,
    Vector&       X
-   ) const
+) const
 {
    // First check if the matrix is indeed such that we can use the
    // special methods from the component spaces (this only works if
@@ -599,12 +614,13 @@ bool CompoundMatrix::HasValidNumbersImpl() const
 void CompoundMatrix::ComputeRowAMaxImpl(
    Vector& rows_norms,
    bool    init
-   ) const
+) const
 {
    if( !matrices_valid_ )
    {
       matrices_valid_ = MatricesValid();
-   } DBG_ASSERT(matrices_valid_);
+   }
+   DBG_ASSERT(matrices_valid_);
 
    // The vector is assumed to be compound Vectors as well except if
    // there is only one component
@@ -643,7 +659,8 @@ void CompoundMatrix::ComputeRowAMaxImpl(
             else
             {
                vec_i = &rows_norms;
-            } DBG_ASSERT(IsValid(vec_i));
+            }
+            DBG_ASSERT(IsValid(vec_i));
             ConstComp(irow, jcol)->ComputeRowAMax(*vec_i, false);
          }
       }
@@ -653,12 +670,13 @@ void CompoundMatrix::ComputeRowAMaxImpl(
 void CompoundMatrix::ComputeColAMaxImpl(
    Vector& cols_norms,
    bool    init
-   ) const
+) const
 {
    if( !matrices_valid_ )
    {
       matrices_valid_ = MatricesValid();
-   } DBG_ASSERT(matrices_valid_);
+   }
+   DBG_ASSERT(matrices_valid_);
 
    // The vector is assumed to be compound Vectors as well except if
    // there is only one component
@@ -697,7 +715,8 @@ void CompoundMatrix::ComputeColAMaxImpl(
             else
             {
                vec_i = &cols_norms;
-            } DBG_ASSERT(IsValid(vec_i));
+            }
+            DBG_ASSERT(IsValid(vec_i));
             ConstComp(irow, jcol)->ComputeColAMax(*vec_i, false);
          }
       }
@@ -711,17 +730,17 @@ void CompoundMatrix::PrintImpl(
    const std::string& name,
    Index              indent,
    const std::string& prefix
-   ) const
+) const
 {
    jnlst.Printf(level, category, "\n");
    jnlst.PrintfIndented(level, category, indent, "%sCompoundMatrix \"%s\" with %d row and %d columns components:\n",
-      prefix.c_str(), name.c_str(), NComps_Rows(), NComps_Cols());
+                        prefix.c_str(), name.c_str(), NComps_Rows(), NComps_Cols());
    for( Index irow = 0; irow < NComps_Rows(); irow++ )
    {
       for( Index jcol = 0; jcol < NComps_Cols(); jcol++ )
       {
          jnlst.PrintfIndented(level, category, indent, "%sComponent for row %d and column %d:\n", prefix.c_str(), irow,
-            jcol);
+                              jcol);
          if( ConstComp(irow, jcol) )
          {
             DBG_ASSERT(name.size() < 200);
@@ -749,8 +768,8 @@ bool CompoundMatrix::MatricesValid() const
       for( Index j = 0; j < NComps_Cols(); j++ )
       {
          if( (!ConstComp(i, j) && IsValid(owner_space_->GetCompSpace(i, j))
-            && owner_space_->GetCompSpace(i, j)->NRows() > 0 && owner_space_->GetCompSpace(i, j)->NCols() > 0)
-            || (ConstComp(i, j) && IsNull(owner_space_->GetCompSpace(i, j))) )
+              && owner_space_->GetCompSpace(i, j)->NRows() > 0 && owner_space_->GetCompSpace(i, j)->NCols() > 0)
+             || (ConstComp(i, j) && IsNull(owner_space_->GetCompSpace(i, j))) )
          {
             retValue = false;
             break;
@@ -765,7 +784,7 @@ CompoundMatrixSpace::CompoundMatrixSpace(
    Index ncomps_cols,
    Index total_nRows,
    Index total_nCols
-   )
+)
    : MatrixSpace(total_nRows, total_nCols),
      ncomps_rows_(ncomps_rows),
      ncomps_cols_(ncomps_cols),
@@ -788,34 +807,40 @@ CompoundMatrixSpace::CompoundMatrixSpace(
 void CompoundMatrixSpace::SetBlockCols(
    Index jcol,
    Index ncols
-   )
+)
 {
-   DBG_ASSERT(!dimensions_set_ && "for now, if the dimensions have all been set, they cannot be changed"); DBG_ASSERT(jcol < ncomps_cols_); DBG_ASSERT(block_cols_[jcol] == -1 && "This dimension has already been set - sanity check");
+   DBG_ASSERT(!dimensions_set_ && "for now, if the dimensions have all been set, they cannot be changed");
+   DBG_ASSERT(jcol < ncomps_cols_);
+   DBG_ASSERT(block_cols_[jcol] == -1 && "This dimension has already been set - sanity check");
    block_cols_[jcol] = ncols;
 }
 
 void CompoundMatrixSpace::SetBlockRows(
    Index irow,
    Index nrows
-   )
+)
 {
-   DBG_ASSERT(!dimensions_set_ && "for now, if the dimensions have all been set, they cannot be changed"); DBG_ASSERT(irow < ncomps_rows_); DBG_ASSERT(block_rows_[irow] == -1 && "This dimension has already been set - sanity check");
+   DBG_ASSERT(!dimensions_set_ && "for now, if the dimensions have all been set, they cannot be changed");
+   DBG_ASSERT(irow < ncomps_rows_);
+   DBG_ASSERT(block_rows_[irow] == -1 && "This dimension has already been set - sanity check");
    block_rows_[irow] = nrows;
 }
 
 Index CompoundMatrixSpace::GetBlockRows(
    Index irow
-   ) const
+) const
 {
-   DBG_ASSERT(dimensions_set_); DBG_ASSERT(irow < ncomps_rows_);
+   DBG_ASSERT(dimensions_set_);
+   DBG_ASSERT(irow < ncomps_rows_);
    return block_rows_[irow];
 }
 
 Index CompoundMatrixSpace::GetBlockCols(
    Index jcol
-   ) const
+) const
 {
-   DBG_ASSERT(dimensions_set_); DBG_ASSERT(jcol < ncomps_cols_);
+   DBG_ASSERT(dimensions_set_);
+   DBG_ASSERT(jcol < ncomps_cols_);
    return block_cols_[jcol];
 }
 
@@ -824,12 +849,18 @@ void CompoundMatrixSpace::SetCompSpace(
    Index              jcol,
    const MatrixSpace& mat_space,
    bool               auto_allocate /*=false*/
-   )
+)
 {
    if( !dimensions_set_ )
    {
       dimensions_set_ = DimensionsSet();
-   } DBG_ASSERT(dimensions_set_); DBG_ASSERT(irow < ncomps_rows_); DBG_ASSERT(jcol < ncomps_cols_); DBG_ASSERT(IsNull(comp_spaces_[irow][jcol])); DBG_ASSERT(block_cols_[jcol] != -1 && block_cols_[jcol] == mat_space.NCols()); DBG_ASSERT(block_rows_[irow] != -1 && block_rows_[irow] == mat_space.NRows());
+   }
+   DBG_ASSERT(dimensions_set_);
+   DBG_ASSERT(irow < ncomps_rows_);
+   DBG_ASSERT(jcol < ncomps_cols_);
+   DBG_ASSERT(IsNull(comp_spaces_[irow][jcol]));
+   DBG_ASSERT(block_cols_[jcol] != -1 && block_cols_[jcol] == mat_space.NCols());
+   DBG_ASSERT(block_rows_[irow] != -1 && block_rows_[irow] == mat_space.NRows());
 
    comp_spaces_[irow][jcol] = &mat_space;
    allocate_block_[irow][jcol] = auto_allocate;
@@ -853,7 +884,8 @@ CompoundMatrix* CompoundMatrixSpace::MakeNewCompoundMatrix() const
    if( !dimensions_set_ )
    {
       dimensions_set_ = DimensionsSet();
-   } DBG_ASSERT(dimensions_set_);
+   }
+   DBG_ASSERT(dimensions_set_);
 
    CompoundMatrix* mat = new CompoundMatrix(this);
    for( Index i = 0; i < ncomps_rows_; i++ )

@@ -33,7 +33,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      ) = 0;
+   ) = 0;
 
    /** Compute the initial iterates and set the into the curr field
     *  of the ip_data object. */
@@ -53,12 +53,12 @@ private:
    /** Copy Constructor */
    IterateInitializer(
       const IterateInitializer&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const IterateInitializer&
-      );
+   );
    //@}
 
 };

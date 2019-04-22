@@ -33,7 +33,7 @@ public:
     */
    ExpansionMatrix(
       const ExpansionMatrixSpace* owner_space
-      );
+   );
 
    /** Destructor */
    ~ExpansionMatrix();
@@ -68,21 +68,21 @@ protected:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual void TransMultVectorImpl(
       Number        alpha,
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual void AddMSinvZImpl(
       Number        alpha,
       const Vector& S,
       const Vector& Z,
       Vector&       X
-      ) const;
+   ) const;
 
    virtual void SinvBlrmZMTdBrImpl(
       Number        alpha,
@@ -91,17 +91,17 @@ protected:
       const Vector& Z,
       const Vector& D,
       Vector&       X
-      ) const;
+   ) const;
 
    virtual void ComputeRowAMaxImpl(
       Vector& rows_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void ComputeColAMaxImpl(
       Vector& cols_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void PrintImpl(
       const Journalist&  jnlst,
@@ -110,7 +110,7 @@ protected:
       const std::string& name,
       Index              indent,
       const std::string& prefix
-      ) const
+   ) const
    {
       PrintImplOffset(jnlst, level, category, name, indent, prefix, 1, 1);
    }
@@ -125,7 +125,7 @@ protected:
       const std::string& prefix,
       Index              row_offset,
       Index              col_offset
-      ) const;
+   ) const;
 
    friend class ParExpansionMatrix;
 
@@ -145,12 +145,12 @@ private:
    /** Copy Constructor */
    ExpansionMatrix(
       const ExpansionMatrix&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const ExpansionMatrix&
-      );
+   );
    //@}
 
    const ExpansionMatrixSpace* owner_space_;
@@ -177,7 +177,7 @@ public:
       Index        NSmallVec,
       const Index* ExpPos,
       const int    offset = 0
-      );
+   );
 
    /** Destructor */
    ~ExpansionMatrixSpace()

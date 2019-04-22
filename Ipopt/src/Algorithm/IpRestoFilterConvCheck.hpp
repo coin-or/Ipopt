@@ -40,12 +40,12 @@ public:
     */
    void SetOrigLSAcceptor(
       const BacktrackingLSAcceptor& orig_ls_acceptor
-      );
+   );
 
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions);
@@ -63,12 +63,12 @@ private:
    /** Copy Constructor */
    RestoFilterConvergenceCheck(
       const RestoFilterConvergenceCheck&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const RestoFilterConvergenceCheck&
-      );
+   );
    //@}
 
    /** Method for checking progress with original filter
@@ -77,7 +77,7 @@ private:
    virtual ConvergenceStatus TestOrigProgress(
       Number orig_trial_barr,
       Number orig_trial_theta
-      );
+   );
 
    /** Strategy object for the filter line search method for the
     *  original NLP.

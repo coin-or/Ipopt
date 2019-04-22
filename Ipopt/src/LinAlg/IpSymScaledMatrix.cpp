@@ -11,7 +11,7 @@ namespace Ipopt
 
 SymScaledMatrix::SymScaledMatrix(
    const SymScaledMatrixSpace* owner_space
-   )
+)
    : SymMatrix(owner_space),
      owner_space_(owner_space)
 { }
@@ -24,7 +24,7 @@ void SymScaledMatrix::MultVectorImpl(
    const Vector& x,
    Number        beta,
    Vector&       y
-   ) const
+) const
 {
    DBG_ASSERT(IsValid(matrix_));
 
@@ -65,7 +65,7 @@ bool SymScaledMatrix::HasValidNumbersImpl() const
 void SymScaledMatrix::ComputeRowAMaxImpl(
    Vector& rows_norms,
    bool    init
-   ) const
+) const
 {
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "SymScaledMatrix::ComputeRowAMaxImpl not implemented");
 }
@@ -77,11 +77,11 @@ void SymScaledMatrix::PrintImpl(
    const std::string& name,
    Index              indent,
    const std::string& prefix
-   ) const
+) const
 {
    jnlst.Printf(level, category, "\n");
    jnlst.PrintfIndented(level, category, indent, "%sSymScaledMatrix \"%s\" of dimension %d x %d:\n", prefix.c_str(),
-      name.c_str(), NRows(), NCols());
+                        name.c_str(), NRows(), NCols());
    owner_space_->RowColScaling()->Print(&jnlst, level, category, name + "_row_col_scaling", indent + 1, prefix);
    if( IsValid(matrix_) )
    {

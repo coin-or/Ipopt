@@ -31,7 +31,7 @@ public:
    InexactPDSolver(
       AugSystemSolver&       augSysSolver,
       PDPerturbationHandler& perturbHandler
-      );
+   );
 
    /** Destructor */
    virtual ~InexactPDSolver();
@@ -40,18 +40,18 @@ public:
    bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Solve the primal dual system, given one right hand side.
     */
    virtual bool Solve(
       const IteratesVector& rhs,
       IteratesVector&       sol
-      );
+   );
 
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
 
 private:
    /**@name Default Compiler Generated Methods
@@ -69,7 +69,7 @@ private:
    /** Overloaded Assignment Operator */
    InexactPDSolver& operator=(
       const InexactPDSolver&
-      );
+   );
    //@}
 
    /** Method to easily access Inexact data */
@@ -113,7 +113,7 @@ private:
       const IteratesVector& rhs,
       const IteratesVector& res,
       IteratesVector&       resid
-      );
+   );
 
    /** Method for checking if the Hessian matrix has to be modified.
     *

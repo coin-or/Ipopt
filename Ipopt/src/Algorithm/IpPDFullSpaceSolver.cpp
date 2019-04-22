@@ -27,7 +27,7 @@ static const Index dbg_verbosity = 0;
 PDFullSpaceSolver::PDFullSpaceSolver(
    AugSystemSolver&       augSysSolver,
    PDPerturbationHandler& perturbHandler
-   )
+)
    : PDSystemSolver(),
      augSysSolver_(&augSysSolver),
      perturbHandler_(&perturbHandler),
@@ -43,34 +43,34 @@ PDFullSpaceSolver::~PDFullSpaceSolver()
 
 void PDFullSpaceSolver::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
-   )
+)
 {
    roptions->AddLowerBoundedIntegerOption("min_refinement_steps",
-      "Minimum number of iterative refinement steps per linear system solve.", 0, 1,
-      "Iterative refinement (on the full unsymmetric system) is performed for "
-         "each right hand side.  This option determines the minimum number "
-         "of iterative refinements (i.e. at least \"min_refinement_steps\" "
-         "iterative refinement steps are enforced per right hand side.)");
+                                          "Minimum number of iterative refinement steps per linear system solve.", 0, 1,
+                                          "Iterative refinement (on the full unsymmetric system) is performed for "
+                                          "each right hand side.  This option determines the minimum number "
+                                          "of iterative refinements (i.e. at least \"min_refinement_steps\" "
+                                          "iterative refinement steps are enforced per right hand side.)");
    roptions->AddLowerBoundedIntegerOption("max_refinement_steps",
-      "Maximum number of iterative refinement steps per linear system solve.", 0, 10,
-      "Iterative refinement (on the full unsymmetric system) is performed for "
-         "each right hand side.  This option determines the maximum number "
-         "of iterative refinement steps.");
+                                          "Maximum number of iterative refinement steps per linear system solve.", 0, 10,
+                                          "Iterative refinement (on the full unsymmetric system) is performed for "
+                                          "each right hand side.  This option determines the maximum number "
+                                          "of iterative refinement steps.");
    roptions->AddLowerBoundedNumberOption("residual_ratio_max", "Iterative refinement tolerance", 0.0, true, 1e-10,
-      "Iterative refinement is performed until the residual test ratio is "
-         "less than this tolerance (or until \"max_refinement_steps\" refinement "
-         "steps are performed).");
+                                         "Iterative refinement is performed until the residual test ratio is "
+                                         "less than this tolerance (or until \"max_refinement_steps\" refinement "
+                                         "steps are performed).");
    roptions->AddLowerBoundedNumberOption("residual_ratio_singular",
-      "Threshold for declaring linear system singular after failed iterative refinement.", 0.0, true, 1e-5,
-      "If the residual test ratio is larger than this value after failed "
-         "iterative refinement, the algorithm pretends that the linear system is "
-         "singular.");
+                                         "Threshold for declaring linear system singular after failed iterative refinement.", 0.0, true, 1e-5,
+                                         "If the residual test ratio is larger than this value after failed "
+                                         "iterative refinement, the algorithm pretends that the linear system is "
+                                         "singular.");
    // ToDo Think about following option - are the correct norms used?
    roptions->AddLowerBoundedNumberOption("residual_improvement_factor",
-      "Minimal required reduction of residual test ratio in iterative refinement.", 0.0, true, 0.999999999,
-      "If the improvement of the residual test ratio made by one iterative "
-      "refinement step is not better than this factor, iterative refinement "
-      "is aborted.");
+                                         "Minimal required reduction of residual test ratio in iterative refinement.", 0.0, true, 0.999999999,
+                                         "If the improvement of the residual test ratio made by one iterative "
+                                         "refinement step is not better than this factor, iterative refinement "
+                                         "is aborted.");
    roptions->AddLowerBoundedNumberOption(
       "neg_curv_test_tol",
       "Tolerance for heuristic to ignore wrong inertia.",
@@ -80,10 +80,10 @@ void PDFullSpaceSolver::RegisterOptions(
       "tolerance is alpha_n in the paper by Zavala and Chiang (2014) and it "
       "determines when the direction is considered to be sufficiently positive. "
       "A value in the range of [1e-12, 1e-11] is recommended.");
-    roptions->AddStringOption2(
+   roptions->AddStringOption2(
       "neg_curv_test_reg",
       "Whether to do the curvature test with the primal regularization (see Zavala and Chiang, 2014).",
-      "yes", 
+      "yes",
       "yes", "use primal regularization with the inertia-free curvature test",
       "no",  "use original IPOPT approach, in which the primal regularization is ignored",
       "");
@@ -93,18 +93,18 @@ void PDFullSpaceSolver::RegisterOptions(
 bool PDFullSpaceSolver::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    // Check for the algorithm options
    options.GetIntegerValue("min_refinement_steps", min_refinement_steps_, prefix);
    options.GetIntegerValue("max_refinement_steps", max_refinement_steps_, prefix);
    ASSERT_EXCEPTION(max_refinement_steps_ >= min_refinement_steps_, OPTION_INVALID,
-      "Option \"max_refinement_steps\": This value must be larger than or equal to min_refinement_steps (default 1)");
+                    "Option \"max_refinement_steps\": This value must be larger than or equal to min_refinement_steps (default 1)");
 
    options.GetNumericValue("residual_ratio_max", residual_ratio_max_, prefix);
    options.GetNumericValue("residual_ratio_singular", residual_ratio_singular_, prefix);
    ASSERT_EXCEPTION(residual_ratio_singular_ >= residual_ratio_max_, OPTION_INVALID,
-      "Option \"residual_ratio_singular\": This value must be not smaller than residual_ratio_max.");
+                    "Option \"residual_ratio_singular\": This value must be not smaller than residual_ratio_max.");
    options.GetNumericValue("residual_improvement_factor", residual_improvement_factor_, prefix);
    options.GetNumericValue("neg_curv_test_tol", neg_curv_test_tol_, prefix);
    options.GetBoolValue("neg_curv_test_reg", neg_curv_test_reg_, prefix);
@@ -127,14 +127,31 @@ bool PDFullSpaceSolver::Solve(
    IteratesVector&       res,
    bool                  allow_inexact,
    bool                  improve_solution /* = false */
-   )
+)
 {
-   DBG_START_METH("PDFullSpaceSolver::Solve", dbg_verbosity); DBG_ASSERT(!allow_inexact || !improve_solution); DBG_ASSERT(!improve_solution || beta == 0.);
+   DBG_START_METH("PDFullSpaceSolver::Solve", dbg_verbosity);
+   DBG_ASSERT(!allow_inexact || !improve_solution);
+   DBG_ASSERT(!improve_solution || beta == 0.);
 
    // Timing of PDSystem solver starts here
    IpData().TimingStats().PDSystemSolverTotal().Start();
 
-   DBG_PRINT_VECTOR(2, "rhs_x", *rhs.x()); DBG_PRINT_VECTOR(2, "rhs_s", *rhs.s()); DBG_PRINT_VECTOR(2, "rhs_c", *rhs.y_c()); DBG_PRINT_VECTOR(2, "rhs_d", *rhs.y_d()); DBG_PRINT_VECTOR(2, "rhs_zL", *rhs.z_L()); DBG_PRINT_VECTOR(2, "rhs_zU", *rhs.z_U()); DBG_PRINT_VECTOR(2, "rhs_vL", *rhs.v_L()); DBG_PRINT_VECTOR(2, "rhs_vU", *rhs.v_U()); DBG_PRINT_VECTOR(2, "res_x in", *res.x()); DBG_PRINT_VECTOR(2, "res_s in", *res.s()); DBG_PRINT_VECTOR(2, "res_c in", *res.y_c()); DBG_PRINT_VECTOR(2, "res_d in", *res.y_d()); DBG_PRINT_VECTOR(2, "res_zL in", *res.z_L()); DBG_PRINT_VECTOR(2, "res_zU in", *res.z_U()); DBG_PRINT_VECTOR(2, "res_vL in", *res.v_L()); DBG_PRINT_VECTOR(2, "res_vU in", *res.v_U());
+   DBG_PRINT_VECTOR(2, "rhs_x", *rhs.x());
+   DBG_PRINT_VECTOR(2, "rhs_s", *rhs.s());
+   DBG_PRINT_VECTOR(2, "rhs_c", *rhs.y_c());
+   DBG_PRINT_VECTOR(2, "rhs_d", *rhs.y_d());
+   DBG_PRINT_VECTOR(2, "rhs_zL", *rhs.z_L());
+   DBG_PRINT_VECTOR(2, "rhs_zU", *rhs.z_U());
+   DBG_PRINT_VECTOR(2, "rhs_vL", *rhs.v_L());
+   DBG_PRINT_VECTOR(2, "rhs_vU", *rhs.v_U());
+   DBG_PRINT_VECTOR(2, "res_x in", *res.x());
+   DBG_PRINT_VECTOR(2, "res_s in", *res.s());
+   DBG_PRINT_VECTOR(2, "res_c in", *res.y_c());
+   DBG_PRINT_VECTOR(2, "res_d in", *res.y_d());
+   DBG_PRINT_VECTOR(2, "res_zL in", *res.z_L());
+   DBG_PRINT_VECTOR(2, "res_zU in", *res.z_U());
+   DBG_PRINT_VECTOR(2, "res_vL in", *res.v_L());
+   DBG_PRINT_VECTOR(2, "res_vU in", *res.v_U());
 
    // if beta is nonzero, keep a copy of the incoming values in res_ */
    SmartPtr<IteratesVector> copy_res;
@@ -163,7 +180,8 @@ bool PDFullSpaceSolver::Solve(
    SmartPtr<const Vector> slack_s_U = IpCq().curr_slack_s_U();
    SmartPtr<const Vector> sigma_x = IpCq().curr_sigma_x();
    SmartPtr<const Vector> sigma_s = IpCq().curr_sigma_s();
-   DBG_PRINT_VECTOR(2, "Sigma_x", *sigma_x); DBG_PRINT_VECTOR(2, "Sigma_s", *sigma_s);
+   DBG_PRINT_VECTOR(2, "Sigma_x", *sigma_x);
+   DBG_PRINT_VECTOR(2, "Sigma_s", *sigma_s);
 
    bool done = false;
    // The following flag is set to true, if we asked the linear
@@ -188,8 +206,8 @@ bool PDFullSpaceSolver::Solve(
       if( !improve_solution )
       {
          solve_retval = SolveOnce(resolve_with_better_quality, pretend_singular, *W, *J_c, *J_d, *Px_L, *Px_U, *Pd_L,
-            *Pd_U, *z_L, *z_U, *v_L, *v_U, *slack_x_L, *slack_x_U, *slack_s_L, *slack_s_U, *sigma_x, *sigma_s, 1., 0.,
-            rhs, res);
+                                  *Pd_U, *z_L, *z_U, *v_L, *v_U, *slack_x_L, *slack_x_U, *slack_s_L, *slack_s_U, *sigma_x, *sigma_s, 1., 0.,
+                                  rhs, res);
          resolve_with_better_quality = false;
          pretend_singular = false;
       }
@@ -210,7 +228,7 @@ bool PDFullSpaceSolver::Solve(
          {
             SmartPtr<IteratesVector> resid = res.MakeNewIteratesVector(true);
             ComputeResiduals(*W, *J_c, *J_d, *Px_L, *Px_U, *Pd_L, *Pd_U, *z_L, *z_U, *v_L, *v_U, *slack_x_L, *slack_x_U,
-               *slack_s_L, *slack_s_U, *sigma_x, *sigma_s, alpha, beta, rhs, res, *resid);
+                             *slack_s_L, *slack_s_U, *sigma_x, *sigma_s, alpha, beta, rhs, res, *resid);
          }
          break;
       }
@@ -220,7 +238,7 @@ bool PDFullSpaceSolver::Solve(
 
       // ToDo don't to that after max refinement?
       ComputeResiduals(*W, *J_c, *J_d, *Px_L, *Px_U, *Pd_L, *Pd_U, *z_L, *z_U, *v_L, *v_U, *slack_x_L, *slack_x_U,
-         *slack_s_L, *slack_s_U, *sigma_x, *sigma_s, alpha, beta, rhs, res, *resid);
+                       *slack_s_L, *slack_s_U, *sigma_x, *sigma_s, alpha, beta, rhs, res, *resid);
 
       Number residual_ratio = ComputeResidualRatio(rhs, res, *resid);
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "residual_ratio = %e\n", residual_ratio);
@@ -230,16 +248,16 @@ bool PDFullSpaceSolver::Solve(
       Index num_iter_ref = 0;
       bool quit_refinement = false;
       while( !allow_inexact && !quit_refinement
-         && (num_iter_ref < min_refinement_steps_ || residual_ratio > residual_ratio_max_) )
+             && (num_iter_ref < min_refinement_steps_ || residual_ratio > residual_ratio_max_) )
       {
 
          // To the next back solve
          solve_retval = SolveOnce(resolve_with_better_quality, false, *W, *J_c, *J_d, *Px_L, *Px_U, *Pd_L, *Pd_U, *z_L,
-            *z_U, *v_L, *v_U, *slack_x_L, *slack_x_U, *slack_s_L, *slack_s_U, *sigma_x, *sigma_s, -1., 1., *resid, res);
+                                  *z_U, *v_L, *v_U, *slack_x_L, *slack_x_U, *slack_s_L, *slack_s_U, *sigma_x, *sigma_s, -1., 1., *resid, res);
          ASSERT_EXCEPTION(solve_retval, INTERNAL_ABORT, "SolveOnce returns false during iterative refinement.");
 
          ComputeResiduals(*W, *J_c, *J_d, *Px_L, *Px_U, *Pd_L, *Pd_U, *z_L, *z_U, *v_L, *v_U, *slack_x_L, *slack_x_U,
-            *slack_s_L, *slack_s_U, *sigma_x, *sigma_s, alpha, beta, rhs, res, *resid);
+                          *slack_s_L, *slack_s_U, *sigma_x, *sigma_s, alpha, beta, rhs, res, *resid);
 
          residual_ratio = ComputeResidualRatio(rhs, res, *resid);
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "residual_ratio = %e\n", residual_ratio);
@@ -247,12 +265,12 @@ bool PDFullSpaceSolver::Solve(
          num_iter_ref++;
          // Check if we have to give up on iterative refinement
          if( residual_ratio > residual_ratio_max_ && num_iter_ref > min_refinement_steps_
-            && (num_iter_ref > max_refinement_steps_
-               || residual_ratio > residual_improvement_factor_ * residual_ratio_old) )
+             && (num_iter_ref > max_refinement_steps_
+                 || residual_ratio > residual_improvement_factor_ * residual_ratio_old) )
          {
 
             Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Iterative refinement failed with residual_ratio = %e\n",
-               residual_ratio);
+                           residual_ratio);
             quit_refinement = true;
 
             // Pretend singularity only once - if it didn't help, we
@@ -267,7 +285,7 @@ bool PDFullSpaceSolver::Solve(
                if( !augsys_improved_ )
                {
                   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "Asking augmented system solver to improve quality of its solutions.\n");
+                                 "Asking augmented system solver to improve quality of its solutions.\n");
                   augsys_improved_ = augSysSolver_->IncreaseQuality();
                   if( augsys_improved_ )
                   {
@@ -305,7 +323,7 @@ bool PDFullSpaceSolver::Solve(
                   {
                      IpData().Append_info_string("s");
                      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                        "Pretend that the current system (including modifications) is singular.\n");
+                                    "Pretend that the current system (including modifications) is singular.\n");
                   }
                }
             }
@@ -334,7 +352,14 @@ bool PDFullSpaceSolver::Solve(
       res.Axpy(beta, *copy_res);
    }
 
-   DBG_PRINT_VECTOR(2, "res_x", *res.x()); DBG_PRINT_VECTOR(2, "res_s", *res.s()); DBG_PRINT_VECTOR(2, "res_c", *res.y_c()); DBG_PRINT_VECTOR(2, "res_d", *res.y_d()); DBG_PRINT_VECTOR(2, "res_zL", *res.z_L()); DBG_PRINT_VECTOR(2, "res_zU", *res.z_U()); DBG_PRINT_VECTOR(2, "res_vL", *res.v_L()); DBG_PRINT_VECTOR(2, "res_vU", *res.v_U());
+   DBG_PRINT_VECTOR(2, "res_x", *res.x());
+   DBG_PRINT_VECTOR(2, "res_s", *res.s());
+   DBG_PRINT_VECTOR(2, "res_c", *res.y_c());
+   DBG_PRINT_VECTOR(2, "res_d", *res.y_d());
+   DBG_PRINT_VECTOR(2, "res_zL", *res.z_L());
+   DBG_PRINT_VECTOR(2, "res_zU", *res.z_U());
+   DBG_PRINT_VECTOR(2, "res_vL", *res.v_L());
+   DBG_PRINT_VECTOR(2, "res_vU", *res.v_U());
 
    IpData().TimingStats().PDSystemSolverTotal().End();
 
@@ -365,7 +390,7 @@ bool PDFullSpaceSolver::SolveOnce(
    Number                beta,
    const IteratesVector& rhs,
    IteratesVector&       res
-   )
+)
 {
    // TO DO LIST:
    //
@@ -439,8 +464,8 @@ bool PDFullSpaceSolver::SolveOnce(
       // quality at the end solve, and we are now getting the solution
       // with that better quality
       retval = augSysSolver_->Solve(&W, 1.0, &sigma_x, delta_x, &sigma_s, delta_s, &J_c, NULL, delta_c, &J_d, NULL,
-         delta_d, *augRhs_x, *augRhs_s, *rhs.y_c(), *rhs.y_d(), *sol->x_NonConst(), *sol->s_NonConst(),
-         *sol->y_c_NonConst(), *sol->y_d_NonConst(), false, 0);
+                                    delta_d, *augRhs_x, *augRhs_s, *rhs.y_c(), *rhs.y_d(), *sol->x_NonConst(), *sol->s_NonConst(),
+                                    *sol->y_c_NonConst(), *sol->y_d_NonConst(), false, 0);
       if( retval != SYMSOLVER_SUCCESS )
       {
          IpData().TimingStats().PDSystemSolverSolveOnce().End();
@@ -477,16 +502,16 @@ bool PDFullSpaceSolver::SolveOnce(
          {
             count++;
             Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-               "Solving system with delta_x=%e delta_s=%e\n                    delta_c=%e delta_d=%e\n", delta_x,
-               delta_s, delta_c, delta_d);
+                           "Solving system with delta_x=%e delta_s=%e\n                    delta_c=%e delta_d=%e\n", delta_x,
+                           delta_s, delta_c, delta_d);
             bool check_inertia = true;
             if( neg_curv_test_tol_ > 0. )
             {
                check_inertia = false;
             }
             retval = augSysSolver_->Solve(&W, 1.0, &sigma_x, delta_x, &sigma_s, delta_s, &J_c, NULL, delta_c, &J_d,
-               NULL, delta_d, *augRhs_x, *augRhs_s, *rhs.y_c(), *rhs.y_d(), *sol->x_NonConst(), *sol->s_NonConst(),
-               *sol->y_c_NonConst(), *sol->y_d_NonConst(), check_inertia, numberOfEVals);
+                                          NULL, delta_d, *augRhs_x, *augRhs_s, *rhs.y_c(), *rhs.y_d(), *sol->x_NonConst(), *sol->s_NonConst(),
+                                          *sol->y_c_NonConst(), *sol->y_d_NonConst(), check_inertia, numberOfEVals);
          }
          if( retval == SYMSOLVER_FATAL_ERROR )
          {
@@ -516,7 +541,7 @@ bool PDFullSpaceSolver::SolveOnce(
             if( !augsys_improved_ )
             {
                Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                  "Asking augmented system solver to improve quality of its solutions.\n");
+                              "Asking augmented system solver to improve quality of its solutions.\n");
                augsys_improved_ = augSysSolver_->IncreaseQuality();
                if( augsys_improved_ )
                {
@@ -534,7 +559,7 @@ bool PDFullSpaceSolver::SolveOnce(
                if( !pert_return )
                {
                   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "PerturbForSingularity can't be done for assume singular.\n");
+                                 "PerturbForSingularity can't be done for assume singular.\n");
                   IpData().TimingStats().PDSystemSolverSolveOnce().End();
                   return false;
                }
@@ -549,62 +574,66 @@ bool PDFullSpaceSolver::SolveOnce(
             if( !pert_return )
             {
                Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                  "PerturbForWrongInertia can't be done for wrong interia or singular.\n");
+                              "PerturbForWrongInertia can't be done for wrong interia or singular.\n");
                IpData().TimingStats().PDSystemSolverSolveOnce().End();
                return false;
             }
-          }
-        else if (neg_curv_test_tol_ > 0.)
-        {
-           DBG_ASSERT(augSysSolver_->ProvidesInertia());
-           // we now check if the inertia is possible wrong
-           Index neg_values = augSysSolver_->NumberOfNegEVals();
-           if (neg_values != numberOfEVals) {
-              // check if we have a direction of sufficient positive curvature
-              SmartPtr<Vector> x_tmp = sol->x()->MakeNew();
-              W.MultVector(1., *sol->x(), 0., *x_tmp);
-              Number xWx = x_tmp->Dot(*sol->x());
-              x_tmp->Copy(*sol->x());
-              x_tmp->ElementWiseMultiply(sigma_x);
-              xWx += x_tmp->Dot(*sol->x());
-              SmartPtr<Vector> s_tmp = sol->s()->MakeNewCopy();
-              s_tmp->ElementWiseMultiply(sigma_s);
-              xWx += s_tmp->Dot(*sol->s());
-              if (neg_curv_test_reg_) {
-                 x_tmp->Copy(*sol->x());
-                 x_tmp->Scal(delta_x);
-                 xWx += x_tmp->Dot(*sol->x());
+         }
+         else if (neg_curv_test_tol_ > 0.)
+         {
+            DBG_ASSERT(augSysSolver_->ProvidesInertia());
+            // we now check if the inertia is possible wrong
+            Index neg_values = augSysSolver_->NumberOfNegEVals();
+            if (neg_values != numberOfEVals)
+            {
+               // check if we have a direction of sufficient positive curvature
+               SmartPtr<Vector> x_tmp = sol->x()->MakeNew();
+               W.MultVector(1., *sol->x(), 0., *x_tmp);
+               Number xWx = x_tmp->Dot(*sol->x());
+               x_tmp->Copy(*sol->x());
+               x_tmp->ElementWiseMultiply(sigma_x);
+               xWx += x_tmp->Dot(*sol->x());
+               SmartPtr<Vector> s_tmp = sol->s()->MakeNewCopy();
+               s_tmp->ElementWiseMultiply(sigma_s);
+               xWx += s_tmp->Dot(*sol->s());
+               if (neg_curv_test_reg_)
+               {
+                  x_tmp->Copy(*sol->x());
+                  x_tmp->Scal(delta_x);
+                  xWx += x_tmp->Dot(*sol->x());
 
-                 s_tmp->Copy(*sol->s());
-                 s_tmp->Scal(delta_s);
-                 xWx += s_tmp->Dot(*sol->s());
-              }
-              Number xs_nrmsq = pow(sol->x()->Nrm2(),2) + pow(sol->s()->Nrm2(),2);
-              Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                 "In inertia heuristic: xWx = %e xx = %e\n",
-                 xWx, xs_nrmsq);
-              if (xWx < neg_curv_test_tol_*xs_nrmsq) {
-                 Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                    "    -> Redo with modified matrix.\n");
-                 bool pert_return = perturbHandler_->PerturbForWrongInertia(delta_x, delta_s,
-                    delta_c, delta_d);
-                 if (!pert_return) {
-                    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                       "PerturbForWrongInertia can't be done for inertia heuristic.\n");
-                    IpData().TimingStats().PDSystemSolverSolveOnce().End();
-                    return false;
-                 }
-                 retval = SYMSOLVER_WRONG_INERTIA;
-              }
-           }
-        }
+                  s_tmp->Copy(*sol->s());
+                  s_tmp->Scal(delta_s);
+                  xWx += s_tmp->Dot(*sol->s());
+               }
+               Number xs_nrmsq = pow(sol->x()->Nrm2(), 2) + pow(sol->s()->Nrm2(), 2);
+               Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                              "In inertia heuristic: xWx = %e xx = %e\n",
+                              xWx, xs_nrmsq);
+               if (xWx < neg_curv_test_tol_ * xs_nrmsq)
+               {
+                  Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                                 "    -> Redo with modified matrix.\n");
+                  bool pert_return = perturbHandler_->PerturbForWrongInertia(delta_x, delta_s,
+                                     delta_c, delta_d);
+                  if (!pert_return)
+                  {
+                     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                                    "PerturbForWrongInertia can't be done for inertia heuristic.\n");
+                     IpData().TimingStats().PDSystemSolverSolveOnce().End();
+                     return false;
+                  }
+                  retval = SYMSOLVER_WRONG_INERTIA;
+               }
+            }
+         }
       } // while (retval!=SYMSOLVER_SUCCESS && !fail) {
 
       // Some output
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Number of trial factorizations performed: %d\n", count);
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-         "Perturbation parameters: delta_x=%e delta_s=%e\n                         delta_c=%e delta_d=%e\n", delta_x,
-         delta_s, delta_c, delta_d);
+                     "Perturbation parameters: delta_x=%e delta_s=%e\n                         delta_c=%e delta_d=%e\n", delta_x,
+                     delta_s, delta_c, delta_d);
       // Set the perturbation values in the Data object
       IpData().setPDPert(delta_x, delta_s, delta_c, delta_d);
    }
@@ -646,7 +675,7 @@ void PDFullSpaceSolver::ComputeResiduals(
    const IteratesVector& rhs,
    const IteratesVector& res,
    IteratesVector&       resid
-   )
+)
 {
    DBG_START_METH("PDFullSpaceSolver::ComputeResiduals", dbg_verbosity);
 
@@ -748,7 +777,7 @@ Number PDFullSpaceSolver::ComputeResidualRatio(
    const IteratesVector& rhs,
    const IteratesVector& res,
    const IteratesVector& resid
-   )
+)
 {
    DBG_START_METH("PDFullSpaceSolver::ComputeResidualRatio", dbg_verbosity);
 
@@ -756,7 +785,7 @@ Number PDFullSpaceSolver::ComputeResidualRatio(
    Number nrm_res = res.Amax();
    Number nrm_resid = resid.Amax();
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "nrm_rhs = %8.2e nrm_sol = %8.2e nrm_resid = %8.2e\n", nrm_rhs,
-      nrm_res, nrm_resid);
+                  nrm_res, nrm_resid);
 
    if( nrm_rhs + nrm_res == 0. )
    {

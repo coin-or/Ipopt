@@ -31,7 +31,7 @@ public:
    NLPBoundsRemover(
       NLP& nlp,
       bool allow_twosided_inequalities = false
-      );
+   );
 
    /** Destructor */
    virtual ~NLPBoundsRemover()
@@ -46,7 +46,7 @@ public:
    virtual bool ProcessOptions(
       const OptionsList& options,
       const std::string& prefix
-      )
+   )
    {
       return nlp_->ProcessOptions(options, prefix);
    }
@@ -70,7 +70,7 @@ public:
       SmartPtr<const MatrixSpace>&    Jac_c_space,
       SmartPtr<const MatrixSpace>&    Jac_d_space,
       SmartPtr<const SymMatrixSpace>& Hess_lagrangian_space
-      );
+   );
 
    /** Method for obtaining the bounds information */
    virtual bool GetBoundsInformation(
@@ -82,7 +82,7 @@ public:
       Vector&       d_L,
       const Matrix& Pd_U,
       Vector&       d_U
-      );
+   );
 
    /** Method for obtaining the starting point for all the iterates.
     *
@@ -99,7 +99,7 @@ public:
       bool             need_z_L,
       SmartPtr<Vector> z_U,
       bool             need_z_U
-      );
+   );
 
    /** Method for obtaining an entire iterate as a warmstart point.
     *
@@ -108,7 +108,7 @@ public:
     */
    virtual bool GetWarmStartIterate(
       IteratesVector& warm_start_iterate
-      )
+   )
    {
       return nlp_->GetWarmStartIterate(warm_start_iterate);
    }
@@ -119,7 +119,7 @@ public:
    virtual bool Eval_f(
       const Vector& x,
       Number&       f
-      )
+   )
    {
       return nlp_->Eval_f(x, f);
    }
@@ -127,7 +127,7 @@ public:
    virtual bool Eval_grad_f(
       const Vector& x,
       Vector&       g_f
-      )
+   )
    {
       return nlp_->Eval_grad_f(x, g_f);
    }
@@ -135,7 +135,7 @@ public:
    virtual bool Eval_c(
       const Vector& x,
       Vector&       c
-      )
+   )
    {
       return nlp_->Eval_c(x, c);
    }
@@ -143,7 +143,7 @@ public:
    virtual bool Eval_jac_c(
       const Vector& x,
       Matrix&       jac_c
-      )
+   )
    {
       return nlp_->Eval_jac_c(x, jac_c);
    }
@@ -151,12 +151,12 @@ public:
    virtual bool Eval_d(
       const Vector& x,
       Vector&       d
-      );
+   );
 
    virtual bool Eval_jac_d(
       const Vector& x,
       Matrix&       jac_d
-      );
+   );
 
    virtual bool Eval_h(
       const Vector& x,
@@ -164,7 +164,7 @@ public:
       const Vector& yc,
       const Vector& yd,
       SymMatrix&    h
-      );
+   );
    //@}
 
    /** @name NLP solution routines. */
@@ -181,7 +181,7 @@ public:
       Number                     obj_value,
       const IpoptData*           ip_data,
       IpoptCalculatedQuantities* ip_cq
-      );
+   );
 
    virtual bool IntermediateCallBack(
       AlgorithmMode              mode,
@@ -197,10 +197,10 @@ public:
       Index                      ls_trials,
       const IpoptData*           ip_data,
       IpoptCalculatedQuantities* ip_cq
-      )
+   )
    {
       return nlp_->IntermediateCallBack(mode, iter, obj_value, inf_pr, inf_du, mu, d_norm, regularization_size,
-         alpha_du, alpha_pr, ls_trials, ip_data, ip_cq);
+                                        alpha_du, alpha_pr, ls_trials, ip_data, ip_cq);
    }
    //@}
 
@@ -214,13 +214,13 @@ public:
       SmartPtr<Vector>&                 x_scaling,
       SmartPtr<Vector>&                 c_scaling,
       SmartPtr<Vector>&                 d_scaling
-      ) const;
+   ) const;
    //@}
 
    virtual void GetQuasiNewtonApproximationSpaces(
       SmartPtr<VectorSpace>& approx_space,
       SmartPtr<Matrix>&      P_approx
-      )
+   )
    {
       nlp_->GetQuasiNewtonApproximationSpaces(approx_space, P_approx);
    }
@@ -247,12 +247,12 @@ private:
    /** Copy Constructor */
    NLPBoundsRemover(
       const NLPBoundsRemover&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const NLPBoundsRemover&
-      );
+   );
    //@}
 
    /** Pointer to the original NLP */

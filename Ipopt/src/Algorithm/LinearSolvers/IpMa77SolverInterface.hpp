@@ -52,12 +52,12 @@ public:
 
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
 
    bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** @name Methods for requesting solution of the linear system. */
    //@{
@@ -66,7 +66,7 @@ public:
       Index        nonzeros,
       const Index* ia,
       const Index* ja
-      );
+   );
 
    double* GetValuesArrayPtr()
    {
@@ -81,7 +81,7 @@ public:
       double*      rhs_vals,
       bool         check_NegEVals,
       Index        numberOfNegEVals
-      );
+   );
 
    Index NumberOfNegEVals() const
    {
@@ -116,7 +116,7 @@ public:
       const Index*      ia,
       const Index*      ja,
       std::list<Index>& c_deps
-      )
+   )
    {
       return SYMSOLVER_FATAL_ERROR;
    }

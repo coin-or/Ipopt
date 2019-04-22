@@ -21,35 +21,35 @@ static const Index dbg_verbosity = 0;
 RestoConvergenceCheck::RestoConvergenceCheck()
 {
    DBG_START_FUN("RestoConvergenceCheck::RestoConvergenceCheck()",
-      dbg_verbosity);
+                 dbg_verbosity);
 }
 
 RestoConvergenceCheck::~RestoConvergenceCheck()
 {
    DBG_START_FUN("~RestoConvergenceCheck::RestoConvergenceCheck()",
-      dbg_verbosity);
+                 dbg_verbosity);
 }
 
 void RestoConvergenceCheck::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
-   )
+)
 {
    roptions->AddBoundedNumberOption("required_infeasibility_reduction",
-      "Required reduction of infeasibility before leaving restoration phase.", 0.0, false, 1.0, true, 0.9,
-      "The restoration phase algorithm is performed, until a point is found "
-         "that is acceptable to the filter and the infeasibility has been "
-         "reduced by at least the fraction given by this option.");
+                                    "Required reduction of infeasibility before leaving restoration phase.", 0.0, false, 1.0, true, 0.9,
+                                    "The restoration phase algorithm is performed, until a point is found "
+                                    "that is acceptable to the filter and the infeasibility has been "
+                                    "reduced by at least the fraction given by this option.");
    roptions->AddLowerBoundedIntegerOption("max_resto_iter",
-      "Maximum number of successive iterations in restoration phase.", 0, 3000000,
-      "The algorithm terminates with an error message if the number of "
-         "iterations successively taken in the restoration phase exceeds this "
-         "number.");
+                                          "Maximum number of successive iterations in restoration phase.", 0, 3000000,
+                                          "The algorithm terminates with an error message if the number of "
+                                          "iterations successively taken in the restoration phase exceeds this "
+                                          "number.");
 }
 
 bool RestoConvergenceCheck::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    options.GetNumericValue("required_infeasibility_reduction", kappa_resto_, prefix);
    options.GetIntegerValue("max_iter", maximum_iters_, prefix);
@@ -66,7 +66,7 @@ bool RestoConvergenceCheck::InitializeImpl(
 
 ConvergenceCheck::ConvergenceStatus RestoConvergenceCheck::CheckConvergence(
    bool call_intermediate_callback /*= true*/
-   )
+)
 {
    // Get pointers to the Original NLP objects
    const RestoIpoptNLP* resto_ipopt_nlp = static_cast<const RestoIpoptNLP*>(&IpNLP());
@@ -81,7 +81,8 @@ ConvergenceCheck::ConvergenceStatus RestoConvergenceCheck::CheckConvergence(
    DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(x)));
    SmartPtr<const Vector> s = IpData().curr()->s();
    const CompoundVector* cs = static_cast<const CompoundVector*>(GetRawPtr(s));
-   DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(s))); DBG_ASSERT(cs->NComps() == 1);
+   DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(s)));
+   DBG_ASSERT(cs->NComps() == 1);
 
    SmartPtr<IteratesVector> trial = orig_ip_data->curr()->MakeNewContainer();
    trial->Set_x(*cx->GetComp(0));
@@ -115,7 +116,7 @@ ConvergenceCheck::ConvergenceStatus RestoConvergenceCheck::CheckConvergence(
       Number unscaled_f = orig_ip_cq->unscaled_trial_f();
       Index ls_count = IpData().info_ls_count();
       bool request_stop = !IpNLP().IntermediateCallBack(mode, iter, unscaled_f, inf_pr, inf_du, mu, dnrm, regu_x,
-         alpha_dual, alpha_primal, ls_count, &IpData(), &IpCq());
+                          alpha_dual, alpha_primal, ls_count, &IpData(), &IpCq());
 
       if( request_stop )
       {
@@ -131,7 +132,7 @@ ConvergenceCheck::ConvergenceStatus RestoConvergenceCheck::CheckConvergence(
    if( successive_resto_iter_ > maximum_resto_iters_ )
    {
       Jnlst().Printf(J_WARNING, J_MAIN, "More than %d successive iterations taken in restoration phase.\n",
-         maximum_resto_iters_);
+                     maximum_resto_iters_);
       return ConvergenceCheck::MAXITER_EXCEEDED;
    }
    successive_resto_iter_++;
@@ -145,14 +146,14 @@ ConvergenceCheck::ConvergenceStatus RestoConvergenceCheck::CheckConvergence(
 
    // check acceptability to the filter
    Jnlst().Printf(J_DETAILED, J_MAIN, "orig_curr_theta = %8.2e, orig_trial_theta = %8.2e\n", orig_curr_theta,
-      orig_trial_theta);
+                  orig_trial_theta);
 
    // ToDo: In the following we might want to be more careful with the lower bound
 
    Number orig_curr_inf_pr = orig_ip_cq->curr_primal_infeasibility(NORM_MAX);
    Number orig_trial_inf_pr = orig_ip_cq->trial_primal_infeasibility(NORM_MAX);
    Jnlst().Printf(J_DETAILED, J_MAIN, "orig_curr_inf_pr = %8.2e, orig_trial_inf_pr = %8.2e\n", orig_curr_inf_pr,
-      orig_trial_inf_pr);
+                  orig_trial_inf_pr);
 
    Number orig_inf_pr_max = Max(kappa_resto_ * orig_curr_inf_pr, Min(orig_ip_data->tol(), orig_constr_viol_tol_));
    if( kappa_resto_ == 0. )
@@ -168,14 +169,14 @@ ConvergenceCheck::ConvergenceStatus RestoConvergenceCheck::CheckConvergence(
    else if( orig_ip_cq->IsSquareProblem() && orig_trial_inf_pr <= Min(orig_ip_data->tol(), orig_constr_viol_tol_) )
    {
       Jnlst().Printf(J_DETAILED, J_MAIN,
-         "Restoration phase found points satisfying feasibility tolerance in square problem.\n");
+                     "Restoration phase found points satisfying feasibility tolerance in square problem.\n");
       status = CONVERGED;
    }
    else if( orig_trial_inf_pr > orig_inf_pr_max )
    {
       Jnlst().Printf(J_DETAILED, J_MAIN,
-         "Point does not provide sufficient reduction w.r.t the original constraint violation (orig_inf_pr_max=%e).\n",
-         orig_inf_pr_max);
+                     "Point does not provide sufficient reduction w.r.t the original constraint violation (orig_inf_pr_max=%e).\n",
+                     orig_inf_pr_max);
       status = CONTINUE;
    }
    else
@@ -208,16 +209,16 @@ ConvergenceCheck::ConvergenceStatus RestoConvergenceCheck::CheckConvergence(
                IpData().Set_tol(1e-2 * IpData().tol());
                status = CONTINUE;
                Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Tightening restoration phase tolerance to %e.\n",
-                  IpData().tol());
+                              IpData().tol());
                IpData().Append_info_string("!");
             }
             else
             {
                Jnlst().Printf(J_WARNING, J_LINE_SEARCH, "Restoration phase converged to a feasible point that is\n"
-                  "unacceptable to the filter for the original problem.\n");
+                              "unacceptable to the filter for the original problem.\n");
                THROW_EXCEPTION(RESTORATION_CONVERGED_TO_FEASIBLE_POINT,
-                  "Restoration phase converged to a feasible point that is "
-                     "unacceptable to the filter for the original problem.");
+                               "Restoration phase converged to a feasible point that is "
+                               "unacceptable to the filter for the original problem.");
             }
          }
          else

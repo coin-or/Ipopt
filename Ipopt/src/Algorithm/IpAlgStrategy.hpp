@@ -70,7 +70,7 @@ public:
       IpoptCalculatedQuantities& ip_cq,
       const OptionsList&         options,
       const std::string&         prefix
-      )
+   )
    {
       initialize_called_ = true;
       // Copy the pointers for the problem defining objects
@@ -98,7 +98,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      )
+   )
    {
       initialize_called_ = true;
       // Copy the pointers for the problem defining objects
@@ -123,7 +123,7 @@ protected:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      ) = 0;
+   ) = 0;
 
    /** @name Accessor methods for the problem defining objects.
     *
@@ -137,17 +137,20 @@ protected:
    }
    IpoptNLP& IpNLP() const
    {
-      DBG_ASSERT(initialize_called_); DBG_ASSERT(IsValid(ip_nlp_));
+      DBG_ASSERT(initialize_called_);
+      DBG_ASSERT(IsValid(ip_nlp_));
       return *ip_nlp_;
    }
    IpoptData& IpData() const
    {
-      DBG_ASSERT(initialize_called_); DBG_ASSERT(IsValid(ip_data_));
+      DBG_ASSERT(initialize_called_);
+      DBG_ASSERT(IsValid(ip_data_));
       return *ip_data_;
    }
    IpoptCalculatedQuantities& IpCq() const
    {
-      DBG_ASSERT(initialize_called_); DBG_ASSERT(IsValid(ip_cq_));
+      DBG_ASSERT(initialize_called_);
+      DBG_ASSERT(IsValid(ip_cq_));
       return *ip_cq_;
    }
    bool HaveIpData() const
@@ -173,12 +176,12 @@ private:
    /** Copy Constructor */
    AlgorithmStrategyObject(
       const AlgorithmStrategyObject&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const AlgorithmStrategyObject&
-      );
+   );
    //@}
 
    /** @name Pointers to objects defining a particular optimization problem */

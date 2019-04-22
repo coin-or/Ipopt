@@ -45,19 +45,19 @@ public:
       SmartPtr<IpoptNLP>&                  ip_nlp,
       SmartPtr<IpoptData>&                 ip_data,
       SmartPtr<IpoptCalculatedQuantities>& ip_cq
-      );
+   );
 
    virtual SmartPtr<IpoptAlgorithm> BuildBasicAlgorithm(
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
    //@}
 
    /** register the options used by the algorithm builder */
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
 
 private:
    /**@name Default Compiler Generated Methods
@@ -73,12 +73,12 @@ private:
    /** Copy Constructor */
    InexactAlgorithmBuilder(
       const InexactAlgorithmBuilder&
-      );
+   );
 
    /** Overloaded Assignment Operator */
    void operator=(
       const InexactAlgorithmBuilder&
-      );
+   );
    //@}
 
    /** Optional pointer to AugSystemSolver.
@@ -99,7 +99,7 @@ private:
  */
 void AddInexactDefaultOptions(
    OptionsList& options_list
-   );
+);
 
 } // namespace Ipopt
 

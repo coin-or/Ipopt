@@ -28,7 +28,7 @@ public:
       IpoptNLP*                  ip_nlp,
       IpoptData*                 ip_data,
       IpoptCalculatedQuantities* ip_cq
-      );
+   );
 
    /** Destructor */
    virtual ~InexactCq();
@@ -43,11 +43,11 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    static void RegisterOptions(
       const SmartPtr<RegisteredOptions>& roptions
-      );
+   );
 
    /** Gradient of infeasibility w.r.t. x.
     *
@@ -76,21 +76,21 @@ public:
    Number slack_scaled_norm(
       const Vector& x,
       const Vector& s
-      );
+   );
 
    /** Compute x component of the W*vec product for the current
     *  Hessian and a vector.
     */
    SmartPtr<const Vector> curr_W_times_vec_x(
       const Vector& vec_x
-      );
+   );
 
    /** Compute s component of the W*vec product for the current
     *  Hessian and a vector.
     */
    SmartPtr<const Vector> curr_W_times_vec_s(
       const Vector& vec_s
-      );
+   );
 
    /** Compute x component of the W*u product for the current values.
     *  u here is the tangential step.

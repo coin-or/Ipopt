@@ -30,7 +30,7 @@ static const Index dbg_verbosity = 0;
 InexactPDSolver::InexactPDSolver(
    AugSystemSolver&       augSysSolver,
    PDPerturbationHandler& perturbHandler
-   )
+)
    : augSysSolver_(&augSysSolver),
      perturbHandler_(&perturbHandler)
 {
@@ -44,20 +44,20 @@ InexactPDSolver::~InexactPDSolver()
 
 void InexactPDSolver::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
-   )
+)
 {
    roptions->AddStringOption2("modify_hessian_with_slacks", "Hessian modification strategy for slack part", "no", "no",
-      "add multiple of identity", "yes", "add multiple of slacks squared inverse", "");
+                              "add multiple of identity", "yes", "add multiple of slacks squared inverse", "");
    roptions->AddLowerBoundedIntegerOption("inexact_regularization_ls_count_trigger",
-      "Threshold on line search count in previous iteration to trigger "
-         "Hessian regularization.", 1, 1, "If the ls count in the previous iteration is larger than this value, "
-         "the Hessian will be regularized.");
+                                          "Threshold on line search count in previous iteration to trigger "
+                                          "Hessian regularization.", 1, 1, "If the ls count in the previous iteration is larger than this value, "
+                                          "the Hessian will be regularized.");
 }
 
 bool InexactPDSolver::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    options.GetNumericValue("tcc_psi", tcc_psi_, prefix);
    options.GetNumericValue("tcc_theta", tcc_theta_, prefix);
@@ -82,14 +82,25 @@ bool InexactPDSolver::InitializeImpl(
 bool InexactPDSolver::Solve(
    const IteratesVector& rhs,
    IteratesVector&       sol
-   )
+)
 {
    DBG_START_METH("InexactPDSolver::Solve", dbg_verbosity);
 
    // Timing of PDSystem solver starts here
    IpData().TimingStats().PDSystemSolverTotal().Start();
 
-   DBG_PRINT_VECTOR(2, "rhs_x", *rhs.x()); DBG_PRINT_VECTOR(2, "rhs_s", *rhs.s()); DBG_PRINT_VECTOR(2, "rhs_c", *rhs.y_c()); DBG_PRINT_VECTOR(2, "rhs_d", *rhs.y_d()); DBG_PRINT_VECTOR(2, "rhs_vL", *rhs.v_L()); DBG_PRINT_VECTOR(2, "rhs_vU", *rhs.v_U()); DBG_PRINT_VECTOR(2, "sol_x in", *sol.x()); DBG_PRINT_VECTOR(2, "sol_s in", *sol.s()); DBG_PRINT_VECTOR(2, "sol_c in", *sol.y_c()); DBG_PRINT_VECTOR(2, "sol_d in", *sol.y_d()); DBG_PRINT_VECTOR(2, "sol_vL in", *sol.v_L()); DBG_PRINT_VECTOR(2, "sol_vU in", *sol.v_U());
+   DBG_PRINT_VECTOR(2, "rhs_x", *rhs.x());
+   DBG_PRINT_VECTOR(2, "rhs_s", *rhs.s());
+   DBG_PRINT_VECTOR(2, "rhs_c", *rhs.y_c());
+   DBG_PRINT_VECTOR(2, "rhs_d", *rhs.y_d());
+   DBG_PRINT_VECTOR(2, "rhs_vL", *rhs.v_L());
+   DBG_PRINT_VECTOR(2, "rhs_vU", *rhs.v_U());
+   DBG_PRINT_VECTOR(2, "sol_x in", *sol.x());
+   DBG_PRINT_VECTOR(2, "sol_s in", *sol.s());
+   DBG_PRINT_VECTOR(2, "sol_c in", *sol.y_c());
+   DBG_PRINT_VECTOR(2, "sol_d in", *sol.y_d());
+   DBG_PRINT_VECTOR(2, "sol_vL in", *sol.v_L());
+   DBG_PRINT_VECTOR(2, "sol_vU in", *sol.v_U());
 
    // Receive data about matrix
    SmartPtr<const Vector> x = IpData().curr()->x();
@@ -145,8 +156,8 @@ bool InexactPDSolver::Solve(
       IpData().setPDPert(delta_x, delta_s, delta_c, delta_d);
 
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-         "Doing solve with perturbation parameters: delta_x=%e delta_s=%e\n                         delta_c=%e delta_d=%e\n",
-         delta_x, delta_s, delta_c, delta_d);
+                     "Doing solve with perturbation parameters: delta_x=%e delta_s=%e\n                         delta_c=%e delta_d=%e\n",
+                     delta_x, delta_s, delta_c, delta_d);
       if( delta_s > 0. && modify_hessian_with_slacks_ )
       {
          SmartPtr<const Vector> curr_scaling_slacks = InexCq().curr_scaling_slacks();
@@ -156,14 +167,14 @@ bool InexactPDSolver::Solve(
          const Number curr_mu = IpData().curr_mu();
          shifted_slacks->AddOneVector(1., *sigma_s, curr_mu * delta_s);
          retval = augSysSolver_->Solve(GetRawPtr(W), 1.0, NULL, delta_x, GetRawPtr(shifted_slacks), 0., GetRawPtr(J_c),
-            NULL, delta_c, GetRawPtr(J_d), NULL, delta_d, *rhs.x(), *augRhs_s, *rhs.y_c(), *rhs.y_d(),
-            *sol.x_NonConst(), *sol.s_NonConst(), *sol.y_c_NonConst(), *sol.y_d_NonConst(), false, 0);
+                                       NULL, delta_c, GetRawPtr(J_d), NULL, delta_d, *rhs.x(), *augRhs_s, *rhs.y_c(), *rhs.y_d(),
+                                       *sol.x_NonConst(), *sol.s_NonConst(), *sol.y_c_NonConst(), *sol.y_d_NonConst(), false, 0);
       }
       else
       {
          retval = augSysSolver_->Solve(GetRawPtr(W), 1.0, NULL, delta_x, GetRawPtr(sigma_s), delta_s, GetRawPtr(J_c),
-            NULL, delta_c, GetRawPtr(J_d), NULL, delta_d, *rhs.x(), *augRhs_s, *rhs.y_c(), *rhs.y_d(),
-            *sol.x_NonConst(), *sol.s_NonConst(), *sol.y_c_NonConst(), *sol.y_d_NonConst(), false, 0);
+                                       NULL, delta_c, GetRawPtr(J_d), NULL, delta_d, *rhs.x(), *augRhs_s, *rhs.y_c(), *rhs.y_d(),
+                                       *sol.x_NonConst(), *sol.s_NonConst(), *sol.y_c_NonConst(), *sol.y_d_NonConst(), false, 0);
       }
       if( retval == SYMSOLVER_SINGULAR )
       {
@@ -171,7 +182,7 @@ bool InexactPDSolver::Solve(
          if( InexData().compute_normal() )
          {
             Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-               "  We are already using the decomposition, now perturb the system.\n");
+                           "  We are already using the decomposition, now perturb the system.\n");
             bool pert_return = perturbHandler_->PerturbForSingularity(delta_x, delta_s, delta_c, delta_d);
             if( !pert_return )
             {
@@ -193,7 +204,7 @@ bool InexactPDSolver::Solve(
          if( !pert_return )
          {
             Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-               "PerturbForWrongInertia can't be done for Hessian modification.\n");
+                           "PerturbForWrongInertia can't be done for Hessian modification.\n");
             IpData().TimingStats().PDSystemSolverTotal().End();
             return false;
          }
@@ -239,7 +250,7 @@ bool InexactPDSolver::Solve(
                if( !pert_return )
                {
                   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "PerturbForWrongInertia can't be done for Hessian modification.\n");
+                                 "PerturbForWrongInertia can't be done for Hessian modification.\n");
                   IpData().TimingStats().PDSystemSolverTotal().End();
                   return false;
                }
@@ -256,12 +267,12 @@ bool InexactPDSolver::Solve(
                if( InexData().compute_normal() )
                {
                   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "Termination tester not satisfied!!! Pretend singular\n");
+                                 "Termination tester not satisfied!!! Pretend singular\n");
                   bool pert_return = perturbHandler_->PerturbForSingularity(delta_x, delta_s, delta_c, delta_d);
                   if( !pert_return )
                   {
                      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                        "PerturbForWrongInertia can't be done for singular.\n");
+                                    "PerturbForWrongInertia can't be done for singular.\n");
                      IpData().TimingStats().PDSystemSolverTotal().End();
                      return false;
                   }
@@ -290,8 +301,8 @@ bool InexactPDSolver::Solve(
    // Some output
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Number of trial factorizations performed: %d\n", count);
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-      "Final perturbation parameters: delta_x=%e delta_s=%e\n                         delta_c=%e delta_d=%e\n", delta_x,
-      delta_s, delta_c, delta_d);
+                  "Final perturbation parameters: delta_x=%e delta_s=%e\n                         delta_c=%e delta_d=%e\n", delta_x,
+                  delta_s, delta_c, delta_d);
 
    // TODO: FRANK, how should we handle the multiplier updates for the slack duals??
 #if 1
@@ -331,7 +342,7 @@ void InexactPDSolver::ComputeResiduals(
    const IteratesVector& rhs,
    const IteratesVector& res,
    IteratesVector&       resid
-   )
+)
 {
    DBG_START_METH("InexactPDSolver::ComputeResiduals", dbg_verbosity);
 
@@ -437,7 +448,7 @@ bool InexactPDSolver::HessianRequiresChange()
       // Compute Upsilon = ||u||^2 - Nu
       Upsilon = u_norm_scaled - Nu;
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT: Upsilon = ||u||^2 - ||A*u||^2/||A||^2 = %23.16e\n",
-         Upsilon);
+                     Upsilon);
    }
 
    Number BasVal = Max(IpData().curr()->x()->Amax(), IpData().curr()->s()->Amax());
@@ -449,14 +460,14 @@ bool InexactPDSolver::HessianRequiresChange()
       lhs = Upsilon;
       rhs = pow(tcc_psi_, 2) * Nu;
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-         "TCC1 testing Upsilon(=%23.16e) <= (tcc_psi_^2)*Nu(=%23.16e) --> ", lhs, rhs);
+                     "TCC1 testing Upsilon(=%23.16e) <= (tcc_psi_^2)*Nu(=%23.16e) --> ", lhs, rhs);
    }
    else
    {
       lhs = u_norm_scaled;
       rhs = tcc_psi_ * v_norm_scaled;
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-         "TCC1 testing u_norm_scaled(=%23.16e) <= tcc_psi_*v_norm_scaled(=%23.16e) --> ", lhs, rhs);
+                     "TCC1 testing u_norm_scaled(=%23.16e) <= tcc_psi_*v_norm_scaled(=%23.16e) --> ", lhs, rhs);
    }
    bool tcc1 = Compare_le(lhs, rhs, BasVal);
    if( tcc1 )
@@ -481,15 +492,15 @@ bool InexactPDSolver::HessianRequiresChange()
    {
       lhs = tcc_theta_ * pow(mu, tcc_theta_mu_exponent_) * Upsilon;
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-         "TCC2a testing 0.5*uWu(=%23.16e) >= tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*Upsilon(=%23.16e) -->", rhs,
-         lhs);
+                     "TCC2a testing 0.5*uWu(=%23.16e) >= tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*Upsilon(=%23.16e) -->", rhs,
+                     lhs);
    }
    else
    {
       lhs = tcc_theta_ * pow(mu, tcc_theta_mu_exponent_) * pow(u_norm_scaled, 2);
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-         "TCC2a testing 0.5*uWu(=%23.16e) >= tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*u_norm^2(=%23.16e) -->", rhs,
-         lhs);
+                     "TCC2a testing 0.5*uWu(=%23.16e) >= tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*u_norm^2(=%23.16e) -->", rhs,
+                     lhs);
    }
    bool tcc2a = Compare_le(lhs, rhs, BasVal);
    if( tcc2a )

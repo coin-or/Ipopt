@@ -18,7 +18,7 @@ static const Index dbg_verbosity = 0;
 bool InexactTSymScalingMethod::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    return true;
 }
@@ -30,10 +30,10 @@ bool InexactTSymScalingMethod::ComputeSymTScalingFactors(
    const ipfint* ajcn,
    const double* a,
    double*       scaling_factors
-   )
+)
 {
    DBG_START_METH("InexactTSymScalingMethod::ComputeTSymScalingFactors",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    const Index nx = IpData().curr()->x()->Dim();
    const Index ns = IpData().curr()->s()->Dim();

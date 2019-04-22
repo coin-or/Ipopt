@@ -24,7 +24,7 @@ void UserScaling::DetermineScalingParametersImpl(
    SmartPtr<Vector>&                    dx,
    SmartPtr<Vector>&                    dc,
    SmartPtr<Vector>&                    dd
-   )
+)
 {
    DBG_ASSERT(IsValid(nlp_));
    nlp_->GetScalingParameters(x_space, c_space, d_space, df, dx, dc, dd);

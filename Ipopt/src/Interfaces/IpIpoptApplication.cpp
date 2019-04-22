@@ -56,7 +56,7 @@ static const Index dbg_verbosity = 0;
 IpoptApplication::IpoptApplication(
    bool create_console_out /* = true */,
    bool create_empty /* = false */
-   )
+)
    : read_params_dat_(true),
      rethrow_nonipoptexception_(false),
      inexact_algorithm_(false),
@@ -64,7 +64,9 @@ IpoptApplication::IpoptApplication(
 {
    options_ = new OptionsList();
    if( create_empty )
+   {
       return;
+   }
 
    jnlst_ = new Journalist();
    try
@@ -76,7 +78,7 @@ IpoptApplication::IpoptApplication(
 # endif
 
       DBG_START_METH("IpoptApplication::IpoptApplication()",
-         dbg_verbosity);
+                     dbg_verbosity);
 
       if( create_console_out )
       {
@@ -113,7 +115,7 @@ IpoptApplication::IpoptApplication(
    SmartPtr<RegisteredOptions> reg_options,
    SmartPtr<OptionsList>       options,
    SmartPtr<Journalist>        jnlst
-   )
+)
    : read_params_dat_(true),
      rethrow_nonipoptexception_(false),
      jnlst_(jnlst),
@@ -141,7 +143,7 @@ SmartPtr<IpoptApplication> IpoptApplication::clone()
 ApplicationReturnStatus IpoptApplication::Initialize(
    std::istream& is,
    bool          allow_clobber
-   )
+)
 {
    try
    {
@@ -177,7 +179,7 @@ ApplicationReturnStatus IpoptApplication::Initialize(
 #if COIN_IPOPT_VERBOSITY > 0
          // Set printlevel for debug
          option_set = options_->GetIntegerValue("debug_print_level",
-            ivalue, "");
+                                                ivalue, "");
          EJournalLevel debug_print_level;
          if (option_set)
          {
@@ -478,9 +480,13 @@ ApplicationReturnStatus IpoptApplication::Initialize(
 #endif
 
             if( printmode == "latex" )
+            {
                reg_options_->OutputLatexOptionDocumentation(*jnlst_, options_to_print);
+            }
             else
+            {
                reg_options_->OutputDoxygenOptionDocumentation(*jnlst_, options_to_print);
+            }
          }
          else
          {
@@ -564,7 +570,7 @@ ApplicationReturnStatus IpoptApplication::Initialize(
 ApplicationReturnStatus IpoptApplication::Initialize(
    std::string params_file,
    bool        allow_clobber
-   )
+)
 {
    std::ifstream is;
    if( params_file != "" )
@@ -602,7 +608,7 @@ ApplicationReturnStatus IpoptApplication::Initialize(
 
 ApplicationReturnStatus IpoptApplication::Initialize(
    bool allow_clobber
-   )
+)
 {
    std::string option_file_name;
    options_->GetStringValue("option_file_name", option_file_name, "");
@@ -617,39 +623,39 @@ ApplicationReturnStatus IpoptApplication::Initialize(
 IpoptApplication::~IpoptApplication()
 {
    DBG_START_METH("IpoptApplication::~IpoptApplication()",
-      dbg_verbosity);
+                  dbg_verbosity);
 }
 
 void IpoptApplication::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
-   )
+)
 {
    roptions->SetRegisteringCategory("Output");
    roptions->AddBoundedIntegerOption("print_level", "Output verbosity level.", 0, J_LAST_LEVEL - 1, J_ITERSUMMARY,
-      "Sets the default verbosity level for console output. The "
-         "larger this value the more detailed is the output.");
+                                     "Sets the default verbosity level for console output. The "
+                                     "larger this value the more detailed is the output.");
 
    roptions->AddStringOption1("output_file", "File name of desired output file (leave unset for no file output).", "",
-      "*", "Any acceptable standard file name",
-      "NOTE: This option only works when read from the ipopt.opt options file! "
-         "An output file with this name will be written (leave unset for no "
-         "file output).  The verbosity level is by default set to \"print_level\", "
-         "but can be overridden with \"file_print_level\".  The file name is "
-         "changed to use only small letters.");
+                              "*", "Any acceptable standard file name",
+                              "NOTE: This option only works when read from the ipopt.opt options file! "
+                              "An output file with this name will be written (leave unset for no "
+                              "file output).  The verbosity level is by default set to \"print_level\", "
+                              "but can be overridden with \"file_print_level\".  The file name is "
+                              "changed to use only small letters.");
    roptions->AddBoundedIntegerOption("file_print_level", "Verbosity level for output file.", 0, J_LAST_LEVEL - 1,
-      J_ITERSUMMARY, "NOTE: This option only works when read from the ipopt.opt options file! "
-         "Determines the verbosity level for the file specified by "
-         "\"output_file\".  By default it is the same as \"print_level\".");
+                                     J_ITERSUMMARY, "NOTE: This option only works when read from the ipopt.opt options file! "
+                                     "Determines the verbosity level for the file specified by "
+                                     "\"output_file\".  By default it is the same as \"print_level\".");
    roptions->AddStringOption2("print_user_options", "Print all options set by the user.", "no", "no",
-      "don't print options", "yes", "print options",
-      "If selected, the algorithm will print the list of all options set by "
-         "the user including their values and whether they have been used.  In "
-         "some cases this information might be incorrect, due to the internal "
-         "program flow.");
+                              "don't print options", "yes", "print options",
+                              "If selected, the algorithm will print the list of all options set by "
+                              "the user including their values and whether they have been used.  In "
+                              "some cases this information might be incorrect, due to the internal "
+                              "program flow.");
    roptions->AddStringOption2("print_options_documentation", "Switch to print all algorithmic options.", "no", "no",
-      "don't print list", "yes", "print list", "If selected, the algorithm will print the list of all available "
-         "algorithmic options with some documentation before solving the "
-         "optimization problem.");
+                              "don't print list", "yes", "print list", "If selected, the algorithm will print the list of all available "
+                              "algorithmic options with some documentation before solving the "
+                              "optimization problem.");
 
 #if COIN_IPOPT_VERBOSITY > 0
 
@@ -665,36 +671,36 @@ void IpoptApplication::RegisterOptions(
 #endif
 
    roptions->AddStringOption2("print_timing_statistics", "Switch to print timing statistics.", "no", "no",
-      "don't print statistics", "yes", "print all timing statistics",
-      "If selected, the program will print the CPU usage (user time) for "
-         "selected tasks.");
+                              "don't print statistics", "yes", "print all timing statistics",
+                              "If selected, the program will print the CPU usage (user time) for "
+                              "selected tasks.");
 
    roptions->AddStringOption1("option_file_name", "File name of options file.", "ipopt.opt", "*",
-      "Any acceptable standard file name", "By default, the name of the Ipopt options file is \"ipopt.opt\" - or "
-         "something else if specified in the IpoptApplication::Initialize call. "
-         "If this option is set by SetStringValue BEFORE the options file is "
-         "read, it specifies the name of the options file.  It does not make any "
-         "sense to specify this option within the options file. "
-         "Setting this option to an empty string disables reading of an options file.");
+                              "Any acceptable standard file name", "By default, the name of the Ipopt options file is \"ipopt.opt\" - or "
+                              "something else if specified in the IpoptApplication::Initialize call. "
+                              "If this option is set by SetStringValue BEFORE the options file is "
+                              "read, it specifies the name of the options file.  It does not make any "
+                              "sense to specify this option within the options file. "
+                              "Setting this option to an empty string disables reading of an options file.");
 
    roptions->AddStringOption2("replace_bounds",
-      "Indicates if all variable bounds should be replaced by inequality constraints", "no", "no",
-      "leave bounds on variables", "yes", "replace variable bounds by inequality constraints",
-      "This option must be set for the inexact algorithm");
+                              "Indicates if all variable bounds should be replaced by inequality constraints", "no", "no",
+                              "leave bounds on variables", "yes", "replace variable bounds by inequality constraints",
+                              "This option must be set for the inexact algorithm");
    roptions->AddStringOption2("skip_finalize_solution_call",
-      "Indicates if call to NLP::FinalizeSolution after optimization should be suppressed", "no", "no",
-      "call FinalizeSolution", "yes", "do not call FinalizeSolution",
-      "In some Ipopt applications, the user might want to call the "
-         "FinalizeSolution method separately.  Setting this option to \"yes\" "
-         "will cause the IpoptApplication object to suppress the default call to "
-         "that method.");
+                              "Indicates if call to NLP::FinalizeSolution after optimization should be suppressed", "no", "no",
+                              "call FinalizeSolution", "yes", "do not call FinalizeSolution",
+                              "In some Ipopt applications, the user might want to call the "
+                              "FinalizeSolution method separately.  Setting this option to \"yes\" "
+                              "will cause the IpoptApplication object to suppress the default call to "
+                              "that method.");
 
    roptions->SetRegisteringCategory("Undocumented");
    roptions->AddStringOption3("print_options_mode", "Undocumented", "text", "text", "Ordinary text",
-      "latex", "LaTeX formatted",
-      "doxygen", "Doxygen (markdown) formatted");
+                              "latex", "LaTeX formatted",
+                              "doxygen", "Doxygen (markdown) formatted");
    roptions->AddStringOption2("suppress_all_output", "Undocumented", "no", "no", "Undocumented", "yes", "Undocumented",
-      "Undocumented");
+                              "Undocumented");
 #ifdef BUILD_INEXACT
    roptions->AddStringOption2(
       "inexact_algorithm",
@@ -708,7 +714,7 @@ void IpoptApplication::RegisterOptions(
 
 ApplicationReturnStatus IpoptApplication::OptimizeTNLP(
    const SmartPtr<TNLP>& tnlp
-   )
+)
 {
    nlp_adapter_ = new TNLPAdapter(GetRawPtr(tnlp), ConstPtr(jnlst_));
    return OptimizeNLP(nlp_adapter_);
@@ -716,7 +722,7 @@ ApplicationReturnStatus IpoptApplication::OptimizeTNLP(
 
 ApplicationReturnStatus IpoptApplication::ReOptimizeTNLP(
    const SmartPtr<TNLP>& tnlp
-   )
+)
 {
    ASSERT_EXCEPTION(IsValid(nlp_adapter_), INVALID_WARMSTART, "ReOptimizeTNLP called before OptimizeTNLP.");
    TNLPAdapter* adapter = static_cast<TNLPAdapter*>(GetRawPtr(nlp_adapter_));
@@ -728,7 +734,7 @@ ApplicationReturnStatus IpoptApplication::ReOptimizeTNLP(
 
 ApplicationReturnStatus IpoptApplication::OptimizeNLP(
    const SmartPtr<NLP>& nlp
-   )
+)
 {
    SmartPtr<AlgorithmBuilder> alg_builder = NULL;
    return OptimizeNLP(nlp, alg_builder);
@@ -737,7 +743,7 @@ ApplicationReturnStatus IpoptApplication::OptimizeNLP(
 ApplicationReturnStatus IpoptApplication::OptimizeNLP(
    const SmartPtr<NLP>&        nlp,
    SmartPtr<AlgorithmBuilder>& alg_builder
-   )
+)
 {
    ApplicationReturnStatus retValue = Internal_Error;
 
@@ -755,9 +761,9 @@ ApplicationReturnStatus IpoptApplication::OptimizeNLP(
          else
          {
 #endif
-         alg_builder = new AlgorithmBuilder();
+            alg_builder = new AlgorithmBuilder();
 #ifdef BUILD_INEXACT
-      }
+         }
 #endif
       }
 
@@ -815,7 +821,7 @@ ApplicationReturnStatus IpoptApplication::OptimizeNLP(
 
 ApplicationReturnStatus IpoptApplication::ReOptimizeNLP(
    const SmartPtr<NLP>& nlp
-   )
+)
 {
    ASSERT_EXCEPTION(IsValid(alg_), INVALID_WARMSTART, "ReOptimizeNLP called before OptimizeNLP.");
    OrigIpoptNLP* orig_nlp = static_cast<OrigIpoptNLP*>(GetRawPtr(ip_nlp_));
@@ -904,18 +910,18 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
          try
          {
             jnlst_->Printf(J_SUMMARY, J_SOLUTION,
-               "\n                                   (scaled)                 (unscaled)\n");
+                           "\n                                   (scaled)                 (unscaled)\n");
             jnlst_->Printf(J_SUMMARY, J_SOLUTION, "Objective...............: %24.16e  %24.16e\n", p2ip_cq->curr_f(),
-               p2ip_cq->unscaled_curr_f());
+                           p2ip_cq->unscaled_curr_f());
             jnlst_->Printf(J_SUMMARY, J_SOLUTION, "Dual infeasibility......: %24.16e  %24.16e\n",
-               p2ip_cq->curr_dual_infeasibility(NORM_MAX), p2ip_cq->unscaled_curr_dual_infeasibility(NORM_MAX));
+                           p2ip_cq->curr_dual_infeasibility(NORM_MAX), p2ip_cq->unscaled_curr_dual_infeasibility(NORM_MAX));
             jnlst_->Printf(J_SUMMARY, J_SOLUTION, "Constraint violation....: %24.16e  %24.16e\n",
-               p2ip_cq->curr_nlp_constraint_violation(NORM_MAX),
-               p2ip_cq->unscaled_curr_nlp_constraint_violation(NORM_MAX));
+                           p2ip_cq->curr_nlp_constraint_violation(NORM_MAX),
+                           p2ip_cq->unscaled_curr_nlp_constraint_violation(NORM_MAX));
             jnlst_->Printf(J_SUMMARY, J_SOLUTION, "Complementarity.........: %24.16e  %24.16e\n",
-               p2ip_cq->curr_complementarity(0., NORM_MAX), p2ip_cq->unscaled_curr_complementarity(0., NORM_MAX));
+                           p2ip_cq->curr_complementarity(0., NORM_MAX), p2ip_cq->unscaled_curr_complementarity(0., NORM_MAX));
             jnlst_->Printf(J_SUMMARY, J_SOLUTION, "Overall NLP error.......: %24.16e  %24.16e\n\n",
-               p2ip_cq->curr_nlp_error(), p2ip_cq->unscaled_curr_nlp_error());
+                           p2ip_cq->curr_nlp_error(), p2ip_cq->unscaled_curr_nlp_error());
          }
          catch( IpoptNLP::Eval_Error& exc )
          {
@@ -939,25 +945,25 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
       }
 
       jnlst_->Printf(J_SUMMARY, J_STATISTICS, "\nNumber of objective function evaluations             = %d\n",
-         p2ip_nlp->f_evals());
+                     p2ip_nlp->f_evals());
       jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Number of objective gradient evaluations             = %d\n",
-         p2ip_nlp->grad_f_evals());
+                     p2ip_nlp->grad_f_evals());
       jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Number of equality constraint evaluations            = %d\n",
-         p2ip_nlp->c_evals());
+                     p2ip_nlp->c_evals());
       jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Number of inequality constraint evaluations          = %d\n",
-         p2ip_nlp->d_evals());
+                     p2ip_nlp->d_evals());
       jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Number of equality constraint Jacobian evaluations   = %d\n",
-         p2ip_nlp->jac_c_evals());
+                     p2ip_nlp->jac_c_evals());
       jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Number of inequality constraint Jacobian evaluations = %d\n",
-         p2ip_nlp->jac_d_evals());
+                     p2ip_nlp->jac_d_evals());
       jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Number of Lagrangian Hessian evaluations             = %d\n",
-         p2ip_nlp->h_evals());
+                     p2ip_nlp->h_evals());
       Number cpu_time_overall_alg = p2ip_data->TimingStats().OverallAlgorithm().TotalCpuTime();
       Number cpu_time_funcs = p2ip_nlp->TotalFunctionEvaluationCpuTime();
       jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Total CPU secs in IPOPT (w/o function evaluations)   = %10.3f\n",
-         cpu_time_overall_alg - cpu_time_funcs);
+                     cpu_time_overall_alg - cpu_time_funcs);
       jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Total CPU secs in NLP function evaluations           = %10.3f\n",
-         cpu_time_funcs);
+                     cpu_time_funcs);
 
       // Write timing statistics information
       if( print_timing_statistics )
@@ -1017,7 +1023,7 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
       {
          retValue = Infeasible_Problem_Detected;
          jnlst_->Printf(J_SUMMARY, J_MAIN,
-            "\nEXIT: Converged to a point of local infeasibility. Problem may be infeasible.\n");
+                        "\nEXIT: Converged to a point of local infeasibility. Problem may be infeasible.\n");
       }
       else if( status == USER_REQUESTED_STOP )
       {
@@ -1033,7 +1039,7 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
       {
          retValue = Internal_Error;
          jnlst_->Printf(J_SUMMARY, J_MAIN,
-            "\nEXIT: INTERNAL ERROR: Unknown SolverReturn value - Notify IPOPT Authors.\n");
+                        "\nEXIT: INTERNAL ERROR: Unknown SolverReturn value - Notify IPOPT Authors.\n");
          return retValue;
       }
 
@@ -1173,7 +1179,7 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
 bool IpoptApplication::OpenOutputFile(
    std::string   file_name,
    EJournalLevel print_level
-   )
+)
 {
    SmartPtr<Journal> file_jrnl = jnlst_->GetJournal("OutputFile:" + file_name);
 
@@ -1195,7 +1201,7 @@ bool IpoptApplication::OpenOutputFile(
 
 void IpoptApplication::RegisterAllIpoptOptions(
    const SmartPtr<RegisteredOptions>& roptions
-   )
+)
 {
    RegisterOptions_Interfaces(roptions);
    RegisterOptions_Algorithm(roptions);

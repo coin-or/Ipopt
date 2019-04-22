@@ -37,23 +37,23 @@ void InexactPDTerminationTester::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions)
 {
    roptions->AddLowerBoundedNumberOption("tcc_psi", "Psi factor in Tangential Component Condition.", 0.0, true, 1e-1,
-      "");
+                                         "");
    roptions->AddLowerBoundedNumberOption("tcc_theta", "theta factor in Tangential Component Condition.", 0.0, true,
-      1e-12, "");
+                                         1e-12, "");
    roptions->AddLowerBoundedNumberOption("tcc_theta_mu_exponent",
-      "exponent for mu when multiplied with tcc_theta in Tangential Component Condition.", 0., false, 0., "");
+                                         "exponent for mu when multiplied with tcc_theta in Tangential Component Condition.", 0., false, 0., "");
    roptions->AddLowerBoundedNumberOption("tcc_zeta", "zeta factor in Tangential Component Condition.", 0.0, true, 1e-1,
-      "");
+                                         "");
    roptions->AddLowerBoundedNumberOption("tt_kappa1", "kappa1 factor in Termination Test 1 and 3.", 0.0, true, 1e-3,
-      "");
+                                         "");
    roptions->AddLowerBoundedNumberOption("tt_kappa2", "kappa2 factor in Termination Test 2.", 0.0, true, 1e-1, "");
    roptions->AddLowerBoundedNumberOption("tt_eps2", "eps2 factor in Termination Test 2.", 0.0, true, 1., "");
    roptions->AddLowerBoundedNumberOption("tt_eps3", "eps3 factor in Termination Test 3.", 0.0, true, 1. - 1e-1, "");
    roptions->AddLowerBoundedNumberOption("inexact_desired_pd_residual",
-      "Desired relative residual tolerance for iterative solver during primal-dual step computation.", 0.0, true, 1e-3,
-      "");
+                                         "Desired relative residual tolerance for iterative solver during primal-dual step computation.", 0.0, true, 1e-3,
+                                         "");
    roptions->AddLowerBoundedIntegerOption("inexact_desired_pd_residual_iter",
-      "Number of iterations willing to be spent in obtaining desired primal-dual ration.", 0, 1, "");
+                                          "Number of iterations willing to be spent in obtaining desired primal-dual ration.", 0, 1, "");
 }
 
 bool InexactPDTerminationTester::InitializeImpl(
@@ -89,7 +89,7 @@ bool InexactPDTerminationTester::InitializeImpl(
 bool InexactPDTerminationTester::InitializeSolve()
 {
    DBG_START_METH("InexactPDTerminationTester::InitializeSolve",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    bool compute_normal = InexData().compute_normal();
 
@@ -206,10 +206,10 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
    const Number* resid,
    Index         iter,
    Number        norm2_rhs
-   )
+)
 {
    DBG_START_METH("InexactPDTerminationTester::TestTermination",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    bool compute_normal = InexData().compute_normal();
 
@@ -228,12 +228,12 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
    Number norm2_resid = IpBlasDnrm2(ndim, resid, 1);
    Number test_ratio = norm2_resid / norm2_rhs; // Min(norm2_resid/norm2_rhs, norm2_resid);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT: test ratio %e (norm2_rhs = %e norm2_resid = %e).\n",
-      test_ratio, norm2_rhs, norm2_resid);
+                  test_ratio, norm2_rhs, norm2_resid);
    if( iter < inexact_desired_pd_residual_iter_ && test_ratio > inexact_desired_pd_residual_ )
    {
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-         "TT: immediately leaving tester with test ratio %e (norm2_rhs = %e norm2_resid = %e).\n", test_ratio,
-         norm2_rhs, norm2_resid);
+                     "TT: immediately leaving tester with test ratio %e (norm2_rhs = %e norm2_resid = %e).\n", test_ratio,
+                     norm2_rhs, norm2_resid);
       return retval;
    }
 
@@ -243,7 +243,10 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
    SmartPtr<const Vector> sol_d;
    GetVectors(ndim, sol, sol_x, sol_s, sol_c, sol_d);
 
-   DBG_PRINT_VECTOR(2, "sol_x", *sol_x); DBG_PRINT_VECTOR(2, "sol_s", *sol_s); DBG_PRINT_VECTOR(2, "sol_c", *sol_c); DBG_PRINT_VECTOR(2, "sol_d", *sol_d);
+   DBG_PRINT_VECTOR(2, "sol_x", *sol_x);
+   DBG_PRINT_VECTOR(2, "sol_s", *sol_s);
+   DBG_PRINT_VECTOR(2, "sol_c", *sol_c);
+   DBG_PRINT_VECTOR(2, "sol_d", *sol_d);
 
    SmartPtr<const Vector> resid_x;
    SmartPtr<const Vector> resid_s;
@@ -266,7 +269,7 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
    if( !compute_normal )
    {
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-         "RUNNING TERMINATION TESTS FOR INEXACT NEWTON (which means u=d)\n");
+                     "RUNNING TERMINATION TESTS FOR INEXACT NEWTON (which means u=d)\n");
    }
    else
    {
@@ -296,10 +299,12 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT: u_norm_scaled = %23.16e\n", u_norm_scaled);
 
    // Compute u^TWu
-   DBG_PRINT_VECTOR(2, "tangential_x", *tangential_x); DBG_PRINT_VECTOR(2, "tangential_s", *tangential_s);
+   DBG_PRINT_VECTOR(2, "tangential_x", *tangential_x);
+   DBG_PRINT_VECTOR(2, "tangential_s", *tangential_s);
    SmartPtr<const Vector> Wu_x = InexCq().curr_W_times_vec_x(*tangential_x);
    SmartPtr<const Vector> Wu_s = InexCq().curr_W_times_vec_s(*tangential_s);
-   DBG_PRINT_VECTOR(2, "Wu_x", *Wu_x); DBG_PRINT_VECTOR(2, "Wu_s", *Wu_s);
+   DBG_PRINT_VECTOR(2, "Wu_x", *Wu_x);
+   DBG_PRINT_VECTOR(2, "Wu_s", *Wu_s);
    Number uWu = Wu_x->Dot(*tangential_x) + Wu_s->Dot(*tangential_s);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT: uWu = %23.16e\n", uWu);
 
@@ -342,7 +347,7 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
       // Compute Upsilon = ||u||^2 - Nu
       Upsilon = u_norm_scaled * u_norm_scaled - Nu;
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT: Upsilon = ||u||^2 - ||A*u||^2/||A||^2 = %23.16e\n",
-         Upsilon);
+                     Upsilon);
    }
 
    // Base value, something on the order of square root of machine epsilon; TODO: find a better base value
@@ -356,14 +361,14 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
       lhs = Upsilon;
       rhs = pow(tcc_psi_, 2) * Nu;
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-         "TCC1 testing Upsilon(=%23.16e) <= (tcc_psi_^2)*Nu(=%23.16e) --> ", lhs, rhs);
+                     "TCC1 testing Upsilon(=%23.16e) <= (tcc_psi_^2)*Nu(=%23.16e) --> ", lhs, rhs);
    }
    else
    {
       lhs = u_norm_scaled;
       rhs = tcc_psi_ * v_norm_scaled_;
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-         "TCC1 testing u_norm_scaled(=%23.16e) <= tcc_psi_*v_norm_scaled(=%23.16e) --> ", lhs, rhs);
+                     "TCC1 testing u_norm_scaled(=%23.16e) <= tcc_psi_*v_norm_scaled(=%23.16e) --> ", lhs, rhs);
    }
    bool tcc1 = Compare_le(lhs, rhs, BasVal);
    if( tcc1 )
@@ -382,15 +387,15 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
    {
       lhs = tcc_theta_ * pow(mu, tcc_theta_mu_exponent_) * Upsilon;
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-         "TCC2a testing 0.5*uWu(=%23.16e) >= tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*Upsilon(=%23.16e) -->", rhs,
-         lhs);
+                     "TCC2a testing 0.5*uWu(=%23.16e) >= tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*Upsilon(=%23.16e) -->", rhs,
+                     lhs);
    }
    else
    {
       lhs = tcc_theta_ * pow(mu, tcc_theta_mu_exponent_) * pow(u_norm_scaled, 2);
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-         "TCC2a testing 0.5*uWu(=%23.16e) >= tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*u_norm^2(=%23.16e) -->", rhs,
-         lhs);
+                     "TCC2a testing 0.5*uWu(=%23.16e) >= tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*u_norm^2(=%23.16e) -->", rhs,
+                     lhs);
    }
    bool tcc2a = Compare_le(lhs, rhs, BasVal);
    if( tcc2a )
@@ -413,10 +418,10 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
       else
       {
          lhs = 0.5 * uWu + curr_grad_barrier_obj_x_->Dot(*tangential_x) + curr_grad_barrier_obj_s_->Dot(*tangential_s)
-            + curr_Wv_x_->Dot(*tangential_x) + curr_Wv_s_->Dot(*tangential_s);
+               + curr_Wv_x_->Dot(*tangential_x) + curr_Wv_s_->Dot(*tangential_s);
          rhs = tcc_zeta_ * v_norm_scaled_;
          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-            "TCC2b testing (grad_barr^Tu + v^TWu + 0.5*uWu)(=%23.16e) <= tcc_zeta_*v_norm(=%23.16e) -->", lhs, rhs);
+                        "TCC2b testing (grad_barr^Tu + v^TWu + 0.5*uWu)(=%23.16e) <= tcc_zeta_*v_norm(=%23.16e) -->", lhs, rhs);
          tcc = Compare_le(lhs, rhs, BasVal);
          if( tcc )
          {
@@ -452,7 +457,7 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
       lhs = resid_norm;
       rhs = tt_kappa1_ * curr_tt1_norm_;
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-         "TT1 testing resid_norm(=%23.16e) <= tt_kappa1_*curr_tt1_norm_(=%23.16e) --> ", lhs, rhs);
+                     "TT1 testing resid_norm(=%23.16e) <= tt_kappa1_*curr_tt1_norm_(=%23.16e) --> ", lhs, rhs);
       tt1 = Compare_le(lhs, rhs, BasVal);
    }
    else if( tt1 )
@@ -460,7 +465,7 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
       lhs = rho_norm;
       rhs = tt_kappa1_ * Min(curr_tt1_norm_, last_tt1_norm_);
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-         "TT1 testing rho_norm(=%23.16e) <= kappa1*min(curr_tt1_norm_, last_tt1_norm_)(=%23.16e) -->", lhs, rhs);
+                     "TT1 testing rho_norm(=%23.16e) <= kappa1*min(curr_tt1_norm_, last_tt1_norm_)(=%23.16e) -->", lhs, rhs);
       tt1_kappa1 = Compare_le(lhs, rhs, BasVal);
       tt1 = tt1_kappa1;
    }
@@ -489,8 +494,8 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
       {
          lhs = Max(0.5 * uWu, tcc_theta_ * Upsilon) + sigma * curr_nu * Max(c_norm_, c_plus_Ad_norm - c_norm_);
          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-            "MRC testing delta_m(=%23.16e) >= max(0.5*uWu,tcc_theta_*Upsilon) + sigma*nu*max(c_norm_, c_plus_Ad_norm - c_norm_)(=%23.16e) -->",
-            rhs, lhs);
+                        "MRC testing delta_m(=%23.16e) >= max(0.5*uWu,tcc_theta_*Upsilon) + sigma*nu*max(c_norm_, c_plus_Ad_norm - c_norm_)(=%23.16e) -->",
+                        rhs, lhs);
          model_reduction = Compare_le(lhs, rhs, BasVal);
          if( model_reduction )
          {
@@ -509,8 +514,8 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
       {
          lhs = Max(0.5 * uWu, tcc_theta_ * pow(u_norm_scaled, 2)) + sigma * curr_nu * (c_norm_ - c_plus_Av_norm_);
          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-            "MRC testing delta_m(=%23.16e) >= max(0.5*uWu,tcc_theta_*u_norm^2) + sigma*nu*(c_norm_ - c_plus_Av_norm_)(=%23.16e) -->",
-            rhs, lhs);
+                        "MRC testing delta_m(=%23.16e) >= max(0.5*uWu,tcc_theta_*u_norm^2) + sigma*nu*(c_norm_ - c_plus_Av_norm_)(=%23.16e) -->",
+                        rhs, lhs);
          tt1 = Compare_le(lhs, rhs, BasVal);
          if( tt1 )
          {
@@ -543,7 +548,7 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
          lhs = rho_norm;
          rhs = tt_kappa1_ * c_norm_;
          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-            "TT3 testing rho_norm(=%23.16e) <= tt_kappa1_*c_norm_(=%23.16e) -->", lhs, rhs);
+                        "TT3 testing rho_norm(=%23.16e) <= tt_kappa1_*c_norm_(=%23.16e) -->", lhs, rhs);
          tt3 = Compare_le(lhs, rhs, BasVal);
       }
       else
@@ -569,7 +574,7 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
          lhs = c_plus_Ad_norm;
          rhs = tt_kappa1_ * c_norm_;
          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-            "TT3 testing c_plus_Ad_norm(=%23.16e) <= tt_kappa1_*c_norm(=%23.16e) -->", lhs, rhs);
+                        "TT3 testing c_plus_Ad_norm(=%23.16e) <= tt_kappa1_*c_norm(=%23.16e) -->", lhs, rhs);
          tt3 = Compare_le(lhs, rhs, BasVal);
       }
       else
@@ -577,7 +582,7 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
          lhs = tt_eps3_ * (c_norm_ - c_plus_Av_norm_);
          rhs = c_norm_ - c_plus_Ad_norm;
          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-            "TT3 testing (c_norm_-c_plus_Ad_norm)(=%23.16e) >= eps3*(c_norm_-c_plus_Av_norm_)(=%23.16e) -->", rhs, lhs);
+                        "TT3 testing (c_norm_-c_plus_Ad_norm)(=%23.16e) >= eps3*(c_norm_-c_plus_Av_norm_)(=%23.16e) -->", rhs, lhs);
          tt3 = Compare_le(lhs, rhs, BasVal);
       }
       if( tt3 )
@@ -605,7 +610,10 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
    bool tt2 = try_tt2_;
    if( tt2 )
    {
-      DBG_PRINT_VECTOR(2, "curr_nabla_phi_plus_ATy_x_", *curr_nabla_phi_plus_ATy_x_); DBG_PRINT_VECTOR(2, "curr_nabla_phi_plus_ATy_s_", *curr_nabla_phi_plus_ATy_s_); DBG_PRINT_VECTOR(2, "sol_c", *sol_c); DBG_PRINT_VECTOR(2, "sol_d", *sol_d);
+      DBG_PRINT_VECTOR(2, "curr_nabla_phi_plus_ATy_x_", *curr_nabla_phi_plus_ATy_x_);
+      DBG_PRINT_VECTOR(2, "curr_nabla_phi_plus_ATy_s_", *curr_nabla_phi_plus_ATy_s_);
+      DBG_PRINT_VECTOR(2, "sol_c", *sol_c);
+      DBG_PRINT_VECTOR(2, "sol_d", *sol_d);
       SmartPtr<Vector> sol_d_scaled = sol_d->MakeNewCopy();
       sol_d_scaled->ElementWiseMultiply(*curr_scaling_slacks_);
       DBG_PRINT_VECTOR(2, "sol_d_scaled", *sol_d_scaled);
@@ -615,20 +623,20 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
       SmartPtr<Vector> nabla_phi_plus_ATydelta_s = curr_nabla_phi_plus_ATy_s_->MakeNew();
       nabla_phi_plus_ATydelta_s->AddTwoVectors(1., *curr_nabla_phi_plus_ATy_s_, -1., *sol_d_scaled, 0.);
       Number nabla_phi_plus_ATydelta_norm = IpCq().CalcNormOfType(NORM_2, *nabla_phi_plus_ATydelta_x,
-         *nabla_phi_plus_ATydelta_s);
+                                            *nabla_phi_plus_ATydelta_s);
       lhs = nabla_phi_plus_ATydelta_norm;
       if( !compute_normal )
       {
          rhs = tt_kappa2_ * curr_tt2_norm_;
          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-            "TT2 testing ||gamma+A^T(y+delta)||(=%23.16e) <= kappa2*curr_tt2_norm_(=%23.16e) -->", lhs, rhs);
+                        "TT2 testing ||gamma+A^T(y+delta)||(=%23.16e) <= kappa2*curr_tt2_norm_(=%23.16e) -->", lhs, rhs);
       }
       else
       {
          rhs = tt_kappa2_ * Min(curr_tt2_norm_, last_tt1_norm_);
          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-            "TT2 testing ||gamma+A^T(y+delta)||(=%23.16e) <= kappa2*min(curr_tt2_norm_, last_tt1_norm_)(=%23.16e) -->",
-            lhs, rhs);
+                        "TT2 testing ||gamma+A^T(y+delta)||(=%23.16e) <= kappa2*min(curr_tt2_norm_, last_tt1_norm_)(=%23.16e) -->",
+                        lhs, rhs);
       }
       tt2 = Compare_le(lhs, rhs, BasVal);
       if( tt2 )
@@ -669,7 +677,7 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
 void InexactPDTerminationTester::Clear()
 {
    DBG_START_METH("InexactPDTerminationTester::Clear",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    curr_Av_c_ = NULL;
    curr_Av_d_ = NULL;

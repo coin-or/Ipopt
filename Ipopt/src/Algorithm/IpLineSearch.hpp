@@ -58,7 +58,7 @@ public:
     */
    virtual void SetRigorousLineSearch(
       bool rigorous
-      ) = 0;
+   ) = 0;
 
    /** Check if the line search procedure didn't accept a new iterate
     *  during the last call of FindAcceptableTrialPoint().
@@ -92,11 +92,11 @@ private:
    /** Copy Constructor */
    LineSearch(
       const LineSearch&
-      );
+   );
 
    void operator=(
       const LineSearch&
-      );
+   );
    //@}
 
 };

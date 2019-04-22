@@ -11,7 +11,7 @@ namespace Ipopt
 
 ZeroMatrix::ZeroMatrix(
    const MatrixSpace* owner_space
-   )
+)
    : Matrix(owner_space)
 { }
 
@@ -23,10 +23,11 @@ void ZeroMatrix::MultVectorImpl(
    const Vector& x,
    Number        beta,
    Vector&       y
-   ) const
+) const
 {
    //  A few sanity checks
-   DBG_ASSERT(NCols() == x.Dim()); DBG_ASSERT(NRows() == y.Dim());
+   DBG_ASSERT(NCols() == x.Dim());
+   DBG_ASSERT(NRows() == y.Dim());
 
    // Take care of the y part of the addition
    if( beta != 0.0 )
@@ -44,10 +45,11 @@ void ZeroMatrix::TransMultVectorImpl(
    const Vector& x,
    Number        beta,
    Vector&       y
-   ) const
+) const
 {
    //  A few sanity checks
-   DBG_ASSERT(NCols() == y.Dim()); DBG_ASSERT(NRows() == x.Dim());
+   DBG_ASSERT(NCols() == y.Dim());
+   DBG_ASSERT(NRows() == x.Dim());
 
    // Take care of the y part of the addition
    if( beta != 0.0 )
@@ -67,11 +69,11 @@ void ZeroMatrix::PrintImpl(
    const std::string& name,
    Index              indent,
    const std::string& prefix
-   ) const
+) const
 {
    jnlst.Printf(level, category, "\n");
    jnlst.PrintfIndented(level, category, indent, "%sZeroMatrix \"%s\" with %d row and %d column components:\n",
-      prefix.c_str(), name.c_str(), NRows(), NCols());
+                        prefix.c_str(), name.c_str(), NRows(), NCols());
 }
 
 } // namespace Ipopt

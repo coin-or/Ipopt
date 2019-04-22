@@ -37,7 +37,7 @@ public:
       IpoptNLP&                  orig_ip_nlp,
       IpoptData&                 orig_ip_data,
       IpoptCalculatedQuantities& orig_ip_cq
-      );
+   );
 
    /** Destructor */
    ~RestoIpoptNLP();
@@ -47,7 +47,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Initialize (create) structures for the iteration data */
    virtual bool InitializeStructures(
@@ -67,7 +67,7 @@ public:
    /** Method accessing the GetWarmStartIterate of the NLP */
    virtual bool GetWarmStartIterate(
       IteratesVector& warm_start_iterate
-      )
+   )
    {
       return false;
    }
@@ -84,7 +84,7 @@ public:
       Number                     obj_value,
       const IpoptData*           ip_data,
       IpoptCalculatedQuantities* ip_cq
-      )
+   )
    { }
 
    /** Accessor methods for model data */
@@ -101,45 +101,45 @@ public:
    /** Objective value (incorrect version for restoration phase) */
    virtual Number f(
       const Vector& x
-      );
+   );
 
    /** Objective value */
    virtual Number f(
       const Vector& x,
       Number mu
-      );
+   );
 
    /** Gradient of the objective (incorrect version for restoration phase) */
    virtual SmartPtr<const Vector> grad_f(
       const Vector& x
-      );
+   );
 
    /** Gradient of the objective */
    virtual SmartPtr<const Vector> grad_f(
       const Vector& x,
       Number        mu
-      );
+   );
 
    /** Equality constraint residual */
    virtual SmartPtr<const Vector> c(
       const Vector& x
-      );
+   );
 
    /** Jacobian Matrix for equality constraints */
    virtual SmartPtr<const Matrix> jac_c(
       const Vector& x
-      );
+   );
 
    /** Inequality constraint residual (reformulated
     *  as equalities with slacks */
    virtual SmartPtr<const Vector> d(
       const Vector& x
-      );
+   );
 
    /** Jacobian Matrix for inequality constraints */
    virtual SmartPtr<const Matrix> jac_d(
       const Vector& x
-      );
+   );
 
    /** Hessian of the Lagrangian (incorrect version for restoration phase) */
    virtual SmartPtr<const SymMatrix> h(
@@ -147,7 +147,7 @@ public:
       Number        obj_factor,
       const Vector& yc,
       const Vector& yd
-      );
+   );
 
    /** Hessian of the Lagrangian */
    virtual SmartPtr<const SymMatrix> h(
@@ -156,7 +156,7 @@ public:
       const Vector& yc,
       const Vector& yd,
       Number        mu
-      );
+   );
 
    /** Provides a Hessian matrix from the correct matrix space with
     *  uninitialized values.
@@ -250,7 +250,7 @@ public:
       const Vector& new_x_U,
       const Vector& new_d_L,
       const Vector& new_d_U
-      );
+   );
 
    /** User callback method */
    bool IntermediateCallBack(
@@ -267,7 +267,7 @@ public:
       Index                               ls_trials,
       SmartPtr<const IpoptData>           ip_data,
       SmartPtr<IpoptCalculatedQuantities> ip_cq
-      );
+   );
 
    /** @name Accessor method for the information of the original NLP.
     *
@@ -332,7 +332,7 @@ public:
    /** Method to calculate eta, the factor for the regularization term */
    Number Eta(
       Number mu
-      ) const;
+   ) const;
 
    /** Method returning the scaling factors for the 2-norm
     *  penalization term.
@@ -344,7 +344,7 @@ public:
 
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
 
 private:
    /** @name Pointers for the original NLP information. */
@@ -455,12 +455,12 @@ private:
    /** Copy Constructor */
    RestoIpoptNLP(
       const RestoIpoptNLP&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const RestoIpoptNLP&
-      );
+   );
    //@}
 
    /** @name Algorithmic parameter */

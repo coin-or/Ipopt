@@ -43,7 +43,7 @@ LoqoMuOracle::~LoqoMuOracle()
 bool LoqoMuOracle::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    return true;
 }
@@ -52,10 +52,10 @@ bool LoqoMuOracle::CalculateMu(
    Number  mu_min,
    Number  mu_max,
    Number& new_mu
-   )
+)
 {
    DBG_START_METH("LoqoMuOracle::CalculateMu",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    Number avrg_compl = IpCq().curr_avrg_compl();
    Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "  Average complementarity is %lf\n", avrg_compl);

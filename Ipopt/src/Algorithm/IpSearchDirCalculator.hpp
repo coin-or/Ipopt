@@ -32,7 +32,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      ) = 0;
+   ) = 0;
 
    /** Pure virtual method for computing the search direction.
     *
@@ -57,12 +57,12 @@ private:
    /** Copy Constructor */
    SearchDirectionCalculator(
       const SearchDirectionCalculator&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const SearchDirectionCalculator&
-      );
+   );
    //@}
 
 };

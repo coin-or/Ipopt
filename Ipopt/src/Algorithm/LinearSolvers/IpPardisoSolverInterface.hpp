@@ -32,7 +32,7 @@ public:
    bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** @name Methods for requesting solution of the linear system. */
    //@{
@@ -41,7 +41,7 @@ public:
       Index        nonzeros,
       const Index* ia,
       const Index* ja
-      );
+   );
 
    virtual double* GetValuesArrayPtr();
 
@@ -75,7 +75,7 @@ public:
    //@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
    //@}
 
 private:
@@ -195,7 +195,7 @@ private:
    ESymSolverStatus SymbolicFactorization(
       const Index* ia,
       const Index* ja
-      );
+   );
 
    /** Call Pardiso to factorize the Matrix. */
    ESymSolverStatus Factorization(
@@ -203,7 +203,7 @@ private:
       const Index* ja,
       bool         check_NegEVals,
       Index        numberOfNegEVals
-      );
+   );
 
    /** Call Pardiso to do the Solve. */
    ESymSolverStatus Solve(
@@ -211,7 +211,7 @@ private:
       const Index* ja,
       Index        nrhs,
       double*      rhs_vals
-      );
+   );
    //@}
 };
 

@@ -29,7 +29,7 @@ OrigIpoptNLP::OrigIpoptNLP(
    const SmartPtr<const Journalist>& jnlst,
    const SmartPtr<NLP>&              nlp,
    const SmartPtr<NLPScalingObject>& nlp_scaling
-   )
+)
    : IpoptNLP(nlp_scaling),
      jnlst_(jnlst),
      nlp_(nlp),
@@ -52,72 +52,72 @@ OrigIpoptNLP::~OrigIpoptNLP()
 
 void OrigIpoptNLP::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
-   )
+)
 {
    roptions->AddLowerBoundedNumberOption("bound_relax_factor", "Factor for initial relaxation of the bounds.", 0, false,
-      1e-8, "Before start of the optimization, the bounds given by the user are "
-         "relaxed.  This option sets the factor for this relaxation.  If it "
-         "is set to zero, then then bounds relaxation is disabled. "
-         "(See Eqn.(35) in implementation paper.)");
+                                         1e-8, "Before start of the optimization, the bounds given by the user are "
+                                         "relaxed.  This option sets the factor for this relaxation.  If it "
+                                         "is set to zero, then then bounds relaxation is disabled. "
+                                         "(See Eqn.(35) in implementation paper.)");
    roptions->AddStringOption2("honor_original_bounds",
-      "Indicates whether final points should be projected into original bounds.", "yes", "no",
-      "Leave final point unchanged", "yes", "Project final point back into original bounds",
-      "Ipopt might relax the bounds during the optimization (see, e.g., option "
-         "\"bound_relax_factor\").  This option determines whether the final "
-         "point should be projected back into the user-provide original bounds "
-         "after the optimization.");
+                              "Indicates whether final points should be projected into original bounds.", "yes", "no",
+                              "Leave final point unchanged", "yes", "Project final point back into original bounds",
+                              "Ipopt might relax the bounds during the optimization (see, e.g., option "
+                              "\"bound_relax_factor\").  This option determines whether the final "
+                              "point should be projected back into the user-provide original bounds "
+                              "after the optimization.");
    roptions->SetRegisteringCategory("Warm Start");
    roptions->AddStringOption2("warm_start_same_structure",
-      "Indicates whether a problem with a structure identical to the previous one is to be solved.", "no", "no",
-      "Assume this is a new problem.", "yes", "Assume this is problem has known structure",
-      "If \"yes\" is chosen, then the algorithm assumes that an NLP is now to "
-         "be solved, whose structure is identical to one that already was "
-         "considered (with the same NLP object).");
+                              "Indicates whether a problem with a structure identical to the previous one is to be solved.", "no", "no",
+                              "Assume this is a new problem.", "yes", "Assume this is problem has known structure",
+                              "If \"yes\" is chosen, then the algorithm assumes that an NLP is now to "
+                              "be solved, whose structure is identical to one that already was "
+                              "considered (with the same NLP object).");
    roptions->SetRegisteringCategory("NLP");
    roptions->AddStringOption2("check_derivatives_for_naninf",
-      "Indicates whether it is desired to check for Nan/Inf in derivative matrices", "no", "no",
-      "Don't check (faster).", "yes", "Check Jacobians and Hessian for Nan and Inf.",
-      "Activating this option will cause an error if an invalid number is "
-         "detected in the constraint Jacobians or the Lagrangian Hessian.  If "
-         "this is not activated, the test is skipped, and the algorithm might "
-         "proceed with invalid numbers and fail.  If test is activated and an "
-         "invalid number is detected, the matrix is written to output with "
-         "print_level corresponding to J_MORE_DETAILED; so beware of large "
-         "output!");
+                              "Indicates whether it is desired to check for Nan/Inf in derivative matrices", "no", "no",
+                              "Don't check (faster).", "yes", "Check Jacobians and Hessian for Nan and Inf.",
+                              "Activating this option will cause an error if an invalid number is "
+                              "detected in the constraint Jacobians or the Lagrangian Hessian.  If "
+                              "this is not activated, the test is skipped, and the algorithm might "
+                              "proceed with invalid numbers and fail.  If test is activated and an "
+                              "invalid number is detected, the matrix is written to output with "
+                              "print_level corresponding to J_MORE_DETAILED; so beware of large "
+                              "output!");
    roptions->AddStringOption2("jac_c_constant", "Indicates whether all equality constraints are linear", "no", "no",
-      "Don't assume that all equality constraints are linear", "yes",
-      "Assume that equality constraints Jacobian are constant",
-      "Activating this option will cause Ipopt to ask for the Jacobian of the "
-         "equality constraints only once from the NLP and reuse this information "
-         "later.");
+                              "Don't assume that all equality constraints are linear", "yes",
+                              "Assume that equality constraints Jacobian are constant",
+                              "Activating this option will cause Ipopt to ask for the Jacobian of the "
+                              "equality constraints only once from the NLP and reuse this information "
+                              "later.");
    roptions->AddStringOption2("jac_d_constant", "Indicates whether all inequality constraints are linear", "no", "no",
-      "Don't assume that all inequality constraints are linear", "yes",
-      "Assume that equality constraints Jacobian are constant",
-      "Activating this option will cause Ipopt to ask for the Jacobian of the "
-         "inequality constraints only once from the NLP and reuse this information "
-         "later.");
+                              "Don't assume that all inequality constraints are linear", "yes",
+                              "Assume that equality constraints Jacobian are constant",
+                              "Activating this option will cause Ipopt to ask for the Jacobian of the "
+                              "inequality constraints only once from the NLP and reuse this information "
+                              "later.");
    roptions->AddStringOption2("hessian_constant", "Indicates whether the problem is a quadratic problem", "no", "no",
-      "Assume that Hessian changes", "yes", "Assume that Hessian is constant",
-      "Activating this option will cause Ipopt to ask for the Hessian of the "
-         "Lagrangian function only once from the NLP and reuse this information "
-         "later.");
+                              "Assume that Hessian changes", "yes", "Assume that Hessian is constant",
+                              "Activating this option will cause Ipopt to ask for the Hessian of the "
+                              "Lagrangian function only once from the NLP and reuse this information "
+                              "later.");
    roptions->SetRegisteringCategory("Hessian Approximation");
    roptions->AddStringOption2("hessian_approximation", "Indicates what Hessian information is to be used.", "exact",
-      "exact", "Use second derivatives provided by the NLP.", "limited-memory",
-      "Perform a limited-memory quasi-Newton approximation",
-      "This determines which kind of information for the Hessian of the "
-         "Lagrangian function is used by the algorithm.");
+                              "exact", "Use second derivatives provided by the NLP.", "limited-memory",
+                              "Perform a limited-memory quasi-Newton approximation",
+                              "This determines which kind of information for the Hessian of the "
+                              "Lagrangian function is used by the algorithm.");
    roptions->AddStringOption2("hessian_approximation_space",
-      "Indicates in which subspace the Hessian information is to be approximated.", "nonlinear-variables",
-      "nonlinear-variables", "only in space of nonlinear variables.", "all-variables",
-      "in space of all variables (without slacks)");
+                              "Indicates in which subspace the Hessian information is to be approximated.", "nonlinear-variables",
+                              "nonlinear-variables", "only in space of nonlinear variables.", "all-variables",
+                              "in space of all variables (without slacks)");
 }
 
 bool OrigIpoptNLP::Initialize(
    const Journalist&  jnlst,
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    options.GetNumericValue("bound_relax_factor", bound_relax_factor_, prefix);
    options.GetBoolValue("honor_original_bounds", honor_original_bounds_, prefix);
@@ -199,9 +199,10 @@ bool OrigIpoptNLP::InitializeStructures(
    bool              init_z_U,
    SmartPtr<Vector>& v_L,
    SmartPtr<Vector>& v_U
-   )
+)
 {
-   DBG_START_METH("OrigIpoptNLP::InitializeStructures", dbg_verbosity); DBG_ASSERT(initialized_);
+   DBG_START_METH("OrigIpoptNLP::InitializeStructures", dbg_verbosity);
+   DBG_ASSERT(initialized_);
    bool retValue;
 
    SmartPtr<Vector> x_L;
@@ -217,7 +218,7 @@ bool OrigIpoptNLP::InitializeStructures(
    {
 
       retValue = nlp_->GetSpaces(x_space_, c_space_, d_space_, x_l_space_, px_l_space_, x_u_space_, px_u_space_,
-         d_l_space_, pd_l_space_, d_u_space_, pd_u_space_, jac_c_space_, jac_d_space_, h_space_);
+                                 d_l_space_, pd_l_space_, d_u_space_, pd_u_space_, jac_c_space_, jac_d_space_, h_space_);
 
       if( !retValue )
       {
@@ -240,17 +241,17 @@ bool OrigIpoptNLP::InitializeStructures(
          {
             DBG_ASSERT(IsValid(P_approx));
             h_space_ = new LowRankUpdateSymMatrixSpace(x_space_->Dim(), ConstPtr(P_approx), ConstPtr(approx_vecspace),
-               true);
+                  true);
             jnlst_->Printf(J_DETAILED, J_INITIALIZATION,
-               "Hessian approximation will be done in smaller space of dimension %d (instead of %d)\n\n",
-               P_approx->NCols(), P_approx->NRows());
+                           "Hessian approximation will be done in smaller space of dimension %d (instead of %d)\n\n",
+                           P_approx->NCols(), P_approx->NRows());
          }
          else
          {
             DBG_ASSERT(IsNull(P_approx));
             h_space_ = new LowRankUpdateSymMatrixSpace(x_space_->Dim(), ConstPtr(P_approx), ConstPtr(x_space_), true);
             jnlst_->Printf(J_DETAILED, J_INITIALIZATION,
-               "Hessian approximation will be done in the space of all %d x variables.\n\n", x_space_->Dim());
+                           "Hessian approximation will be done in the space of all %d x variables.\n\n", x_space_->Dim());
          }
       }
 
@@ -271,13 +272,13 @@ bool OrigIpoptNLP::InitializeStructures(
       }
 
       NLP_scaling()->DetermineScaling(x_space_, c_space_, d_space_, jac_c_space_, jac_d_space_, h_space_,
-         scaled_jac_c_space_, scaled_jac_d_space_, scaled_h_space_, *Px_L, *x_L, *Px_U, *x_U);
+                                      scaled_jac_c_space_, scaled_jac_d_space_, scaled_h_space_, *Px_L, *x_L, *Px_U, *x_U);
 
       if( x_space_->Dim() < c_space_->Dim() )
       {
          char msg[128];
          Snprintf(msg, 127, "Too few degrees of freedom: %d equality constriants but only %d variables",
-            c_space_->Dim(), x_space_->Dim());
+                  c_space_->Dim(), x_space_->Dim());
          THROW_EXCEPTION(TOO_FEW_DOF, msg);
       }
       ASSERT_EXCEPTION(x_space_->Dim() > 0, TOO_FEW_DOF, "Too few degrees of freedom (no free variables)!");
@@ -285,18 +286,18 @@ bool OrigIpoptNLP::InitializeStructures(
       // cannot have any null pointers, want zero length vectors
       // instead of null - this will later need to be changed for _h;
       retValue = (IsValid(x_space_) && IsValid(c_space_) && IsValid(d_space_) && IsValid(x_l_space_)
-         && IsValid(px_l_space_) && IsValid(x_u_space_) && IsValid(px_u_space_) && IsValid(d_u_space_)
-         && IsValid(pd_u_space_) && IsValid(d_l_space_) && IsValid(pd_l_space_) && IsValid(jac_c_space_)
-         && IsValid(jac_d_space_) && IsValid(h_space_) && IsValid(scaled_jac_c_space_) && IsValid(scaled_jac_d_space_)
-         && IsValid(scaled_h_space_));
+                  && IsValid(px_l_space_) && IsValid(x_u_space_) && IsValid(px_u_space_) && IsValid(d_u_space_)
+                  && IsValid(pd_u_space_) && IsValid(d_l_space_) && IsValid(pd_l_space_) && IsValid(jac_c_space_)
+                  && IsValid(jac_d_space_) && IsValid(h_space_) && IsValid(scaled_jac_c_space_) && IsValid(scaled_jac_d_space_)
+                  && IsValid(scaled_h_space_));
 
       DBG_ASSERT(retValue && "Model cannot return null vector or matrix prototypes or spaces,"
-         " please return zero length vectors instead");
+                 " please return zero length vectors instead");
    }
    else
    {
       ASSERT_EXCEPTION(IsValid(x_space_), INVALID_WARMSTART,
-         "OrigIpoptNLP called with warm_start_same_structure, but the problem is solved for the first time.");
+                       "OrigIpoptNLP called with warm_start_same_structure, but the problem is solved for the first time.");
       // Create the bounds structures
       x_L = x_l_space_->MakeNew();
       Px_L = px_l_space_->MakeNew();
@@ -363,7 +364,7 @@ bool OrigIpoptNLP::InitializeStructures(
    v_U = d_u_space_->MakeNew();
 
    retValue = nlp_->GetStartingPoint(GetRawPtr(x), init_x, GetRawPtr(y_c), init_y_c, GetRawPtr(y_d), init_y_d,
-      GetRawPtr(z_L), init_z_L, GetRawPtr(z_U), init_z_U);
+                                     GetRawPtr(z_L), init_z_L, GetRawPtr(z_U), init_z_U);
 
    if( !retValue )
    {
@@ -434,7 +435,7 @@ bool OrigIpoptNLP::InitializeStructures(
 void OrigIpoptNLP::relax_bounds(
    Number  bound_relax_factor,
    Vector& bounds
-   )
+)
 {
    DBG_START_METH("OrigIpoptNLP::relax_bounds", dbg_verbosity);
    if( bound_relax_factor != 0. )
@@ -445,7 +446,9 @@ void OrigIpoptNLP::relax_bounds(
       SmartPtr<Vector> ones = bounds.MakeNew();
       ones->Set(1.);
       tmp->ElementWiseMax(*ones);
-      DBG_PRINT((1, "bound_relax_factor = %e", bound_relax_factor)); DBG_PRINT_VECTOR(2, "tmp", *tmp); DBG_PRINT_VECTOR(2, "bounds before", bounds);
+      DBG_PRINT((1, "bound_relax_factor = %e", bound_relax_factor));
+      DBG_PRINT_VECTOR(2, "tmp", *tmp);
+      DBG_PRINT_VECTOR(2, "bounds before", bounds);
       bounds.Axpy(bound_relax_factor, *tmp);
       DBG_PRINT_VECTOR(2, "bounds after", bounds);
    }
@@ -453,7 +456,7 @@ void OrigIpoptNLP::relax_bounds(
 
 Number OrigIpoptNLP::f(
    const Vector& x
-   )
+)
 {
    DBG_START_METH("OrigIpoptNLP::f", dbg_verbosity);
    Number ret = 0.0;
@@ -477,7 +480,7 @@ Number OrigIpoptNLP::f(
 Number OrigIpoptNLP::f(
    const Vector& x,
    Number        mu
-   )
+)
 {
    assert(false && "ERROR: This method is only a placeholder for f(mu) and should not be called");
    return 0.;
@@ -485,7 +488,7 @@ Number OrigIpoptNLP::f(
 
 SmartPtr<const Vector> OrigIpoptNLP::grad_f(
    const Vector& x
-   )
+)
 {
    SmartPtr<Vector> unscaled_grad_f;
    SmartPtr<const Vector> retValue;
@@ -499,7 +502,7 @@ SmartPtr<const Vector> OrigIpoptNLP::grad_f(
       bool success = nlp_->Eval_grad_f(*unscaled_x, *unscaled_grad_f);
       grad_f_eval_time_.End();
       ASSERT_EXCEPTION(success && IsFiniteNumber(unscaled_grad_f->Nrm2()), Eval_Error,
-         "Error evaluating the gradient of the objective function");
+                       "Error evaluating the gradient of the objective function");
       retValue = NLP_scaling()->apply_grad_obj_scaling(ConstPtr(unscaled_grad_f));
       grad_f_cache_.AddCachedResult1Dep(retValue, &x);
    }
@@ -510,7 +513,7 @@ SmartPtr<const Vector> OrigIpoptNLP::grad_f(
 SmartPtr<const Vector> OrigIpoptNLP::grad_f(
    const Vector& x,
    Number mu
-   )
+)
 {
    THROW_EXCEPTION(INTERNAL_ABORT, "ERROR: This method is only a placeholder for grad_f(mu) and should not be called");
    return NULL;
@@ -518,7 +521,7 @@ SmartPtr<const Vector> OrigIpoptNLP::grad_f(
 
 SmartPtr<const Vector> OrigIpoptNLP::c(
    const Vector& x
-   )
+)
 {
    SmartPtr<const Vector> retValue;
    if( c_space_->Dim() == 0 )
@@ -563,7 +566,7 @@ SmartPtr<const Vector> OrigIpoptNLP::c(
 
 SmartPtr<const Vector> OrigIpoptNLP::d(
    const Vector& x
-   )
+)
 {
    DBG_START_METH("OrigIpoptNLP::d", dbg_verbosity);
    SmartPtr<const Vector> retValue;
@@ -612,7 +615,7 @@ SmartPtr<const Vector> OrigIpoptNLP::d(
 
 SmartPtr<const Matrix> OrigIpoptNLP::jac_c(
    const Vector& x
-   )
+)
 {
    SmartPtr<const Matrix> retValue;
    if( c_space_->Dim() == 0 )
@@ -649,7 +652,7 @@ SmartPtr<const Matrix> OrigIpoptNLP::jac_c(
             if( !unscaled_jac_c->HasValidNumbers() )
             {
                jnlst_->Printf(J_WARNING, J_NLP,
-                  "The Jacobian for the equality constraints contains an invalid number\n");
+                              "The Jacobian for the equality constraints contains an invalid number\n");
                unscaled_jac_c->Print(*jnlst_, J_MOREDETAILED, J_MAIN, "unscaled_jac_c");
                jnlst_->FlushBuffer();
                THROW_EXCEPTION(Eval_Error, "The Jacobian for the equality constraints contains an invalid number");
@@ -665,7 +668,7 @@ SmartPtr<const Matrix> OrigIpoptNLP::jac_c(
 
 SmartPtr<const Matrix> OrigIpoptNLP::jac_d(
    const Vector& x
-   )
+)
 {
    SmartPtr<const Matrix> retValue;
    if( d_space_->Dim() == 0 )
@@ -703,7 +706,7 @@ SmartPtr<const Matrix> OrigIpoptNLP::jac_d(
             if( !unscaled_jac_d->HasValidNumbers() )
             {
                jnlst_->Printf(J_WARNING, J_NLP,
-                  "The Jacobian for the inequality constraints contains an invalid number\n");
+                              "The Jacobian for the inequality constraints contains an invalid number\n");
 
                unscaled_jac_d->Print(*jnlst_, J_MOREDETAILED, J_MAIN, "unscaled_jac_d");
                jnlst_->FlushBuffer();
@@ -728,7 +731,7 @@ SmartPtr<const SymMatrix> OrigIpoptNLP::h(
    Number        obj_factor,
    const Vector& yc,
    const Vector& yd
-   )
+)
 {
    SmartPtr<SymMatrix> unscaled_h;
    SmartPtr<const SymMatrix> retValue;
@@ -786,7 +789,7 @@ SmartPtr<const SymMatrix> OrigIpoptNLP::h(
    const Vector& yc,
    const Vector& yd,
    Number        mu
-   )
+)
 {
    THROW_EXCEPTION(INTERNAL_ABORT, "ERROR: This method is only a for h(mu) and should not be called");
    return NULL;
@@ -807,23 +810,23 @@ void OrigIpoptNLP::GetSpaces(
    SmartPtr<const MatrixSpace>&    Jac_c_space,
    SmartPtr<const MatrixSpace>&    Jac_d_space,
    SmartPtr<const SymMatrixSpace>& Hess_lagrangian_space
-   )
+)
 {
    // Make sure that we already have all the pointers
    DBG_ASSERT(IsValid(x_space_) &&
-      IsValid(c_space_) &&
-      IsValid(d_space_) &&
-      IsValid(x_l_space_) &&
-      IsValid(px_l_space_) &&
-      IsValid(x_u_space_) &&
-      IsValid(px_u_space_) &&
-      IsValid(d_l_space_) &&
-      IsValid(pd_l_space_) &&
-      IsValid(d_u_space_) &&
-      IsValid(pd_u_space_) &&
-      IsValid(scaled_jac_c_space_) &&
-      IsValid(scaled_jac_d_space_) &&
-      IsValid(scaled_h_space_));
+              IsValid(c_space_) &&
+              IsValid(d_space_) &&
+              IsValid(x_l_space_) &&
+              IsValid(px_l_space_) &&
+              IsValid(x_u_space_) &&
+              IsValid(px_u_space_) &&
+              IsValid(d_l_space_) &&
+              IsValid(pd_l_space_) &&
+              IsValid(d_u_space_) &&
+              IsValid(pd_u_space_) &&
+              IsValid(scaled_jac_c_space_) &&
+              IsValid(scaled_jac_d_space_) &&
+              IsValid(scaled_h_space_));
 
    DBG_ASSERT(IsValid(NLP_scaling()));
 
@@ -855,7 +858,7 @@ void OrigIpoptNLP::FinalizeSolution(
    Number                     obj_value,
    const IpoptData*           ip_data,
    IpoptCalculatedQuantities* ip_cq
-   )
+)
 {
    DBG_START_METH("OrigIpoptNLP::FinalizeSolution", dbg_verbosity);
    // need to submit the unscaled solution back to the nlp
@@ -928,7 +931,7 @@ void OrigIpoptNLP::FinalizeSolution(
    unscaled_z_U->Print(*jnlst_, J_VECTOR, J_SOLUTION, "final z_U unscaled");
 
    nlp_->FinalizeSolution(status, *unscaled_x, *unscaled_z_L, *unscaled_z_U, *unscaled_c, *unscaled_d, *unscaled_y_c,
-      *unscaled_y_d, unscaled_obj, ip_data, ip_cq);
+                          *unscaled_y_d, unscaled_obj, ip_data, ip_cq);
 }
 
 bool OrigIpoptNLP::IntermediateCallBack(
@@ -945,10 +948,10 @@ bool OrigIpoptNLP::IntermediateCallBack(
    Index                               ls_trials,
    SmartPtr<const IpoptData>           ip_data,
    SmartPtr<IpoptCalculatedQuantities> ip_cq
-   )
+)
 {
    return nlp_->IntermediateCallBack(mode, iter, obj_value, inf_pr, inf_du, mu, d_norm, regularization_size, alpha_du,
-      alpha_pr, ls_trials, GetRawPtr(ip_data), GetRawPtr(ip_cq));
+                                     alpha_pr, ls_trials, GetRawPtr(ip_data), GetRawPtr(ip_cq));
 }
 
 void OrigIpoptNLP::AdjustVariableBounds(
@@ -956,7 +959,7 @@ void OrigIpoptNLP::AdjustVariableBounds(
    const Vector& new_x_U,
    const Vector& new_d_L,
    const Vector& new_d_U
-   )
+)
 {
    x_L_ = new_x_L.MakeNewCopy();
    x_U_ = new_x_U.MakeNewCopy();
@@ -968,7 +971,7 @@ void OrigIpoptNLP::PrintTimingStatistics(
    Journalist&      jnlst,
    EJournalLevel    level,
    EJournalCategory category
-   ) const
+) const
 {
    if( !jnlst.ProduceOutput(level, category) )
    {
@@ -976,42 +979,42 @@ void OrigIpoptNLP::PrintTimingStatistics(
    }
 
    jnlst.Printf(level, category, "Function Evaluations................: %10.3f (sys: %10.3f wall: %10.3f)\n",
-      TotalFunctionEvaluationCpuTime(), TotalFunctionEvaluationSysTime(), TotalFunctionEvaluationWallclockTime());
+                TotalFunctionEvaluationCpuTime(), TotalFunctionEvaluationSysTime(), TotalFunctionEvaluationWallclockTime());
    jnlst.Printf(level, category, " Objective function.................: %10.3f (sys: %10.3f wall: %10.3f)\n",
-      f_eval_time_.TotalCpuTime(), f_eval_time_.TotalSysTime(), f_eval_time_.TotalWallclockTime());
+                f_eval_time_.TotalCpuTime(), f_eval_time_.TotalSysTime(), f_eval_time_.TotalWallclockTime());
    jnlst.Printf(level, category, " Objective function gradient........: %10.3f (sys: %10.3f wall: %10.3f)\n",
-      grad_f_eval_time_.TotalCpuTime(), grad_f_eval_time_.TotalSysTime(), grad_f_eval_time_.TotalWallclockTime());
+                grad_f_eval_time_.TotalCpuTime(), grad_f_eval_time_.TotalSysTime(), grad_f_eval_time_.TotalWallclockTime());
    jnlst.Printf(level, category, " Equality constraints...............: %10.3f (sys: %10.3f wall: %10.3f)\n",
-      c_eval_time_.TotalCpuTime(), c_eval_time_.TotalSysTime(), c_eval_time_.TotalWallclockTime());
+                c_eval_time_.TotalCpuTime(), c_eval_time_.TotalSysTime(), c_eval_time_.TotalWallclockTime());
    jnlst.Printf(level, category, " Inequality constraints.............: %10.3f (sys: %10.3f wall: %10.3f)\n",
-      d_eval_time_.TotalCpuTime(), d_eval_time_.TotalSysTime(), d_eval_time_.TotalWallclockTime());
+                d_eval_time_.TotalCpuTime(), d_eval_time_.TotalSysTime(), d_eval_time_.TotalWallclockTime());
    jnlst.Printf(level, category, " Equality constraint Jacobian.......: %10.3f (sys: %10.3f wall: %10.3f)\n",
-      jac_c_eval_time_.TotalCpuTime(), jac_c_eval_time_.TotalSysTime(), jac_c_eval_time_.TotalWallclockTime());
+                jac_c_eval_time_.TotalCpuTime(), jac_c_eval_time_.TotalSysTime(), jac_c_eval_time_.TotalWallclockTime());
    jnlst.Printf(level, category, " Inequality constraint Jacobian.....: %10.3f (sys: %10.3f wall: %10.3f)\n",
-      jac_d_eval_time_.TotalCpuTime(), jac_d_eval_time_.TotalSysTime(), jac_d_eval_time_.TotalWallclockTime());
+                jac_d_eval_time_.TotalCpuTime(), jac_d_eval_time_.TotalSysTime(), jac_d_eval_time_.TotalWallclockTime());
    jnlst.Printf(level, category, " Lagrangian Hessian.................: %10.3f (sys: %10.3f wall: %10.3f)\n",
-      h_eval_time_.TotalCpuTime(), h_eval_time_.TotalSysTime(), h_eval_time_.TotalWallclockTime());
+                h_eval_time_.TotalCpuTime(), h_eval_time_.TotalSysTime(), h_eval_time_.TotalWallclockTime());
 }
 
 Number OrigIpoptNLP::TotalFunctionEvaluationCpuTime() const
 {
    return f_eval_time_.TotalCpuTime() + grad_f_eval_time_.TotalCpuTime() + c_eval_time_.TotalCpuTime()
-      + d_eval_time_.TotalCpuTime() + jac_c_eval_time_.TotalCpuTime() + jac_d_eval_time_.TotalCpuTime()
-      + h_eval_time_.TotalCpuTime();
+          + d_eval_time_.TotalCpuTime() + jac_c_eval_time_.TotalCpuTime() + jac_d_eval_time_.TotalCpuTime()
+          + h_eval_time_.TotalCpuTime();
 }
 
 Number OrigIpoptNLP::TotalFunctionEvaluationSysTime() const
 {
    return f_eval_time_.TotalSysTime() + grad_f_eval_time_.TotalSysTime() + c_eval_time_.TotalSysTime()
-      + d_eval_time_.TotalSysTime() + jac_c_eval_time_.TotalSysTime() + jac_d_eval_time_.TotalSysTime()
-      + h_eval_time_.TotalSysTime();
+          + d_eval_time_.TotalSysTime() + jac_c_eval_time_.TotalSysTime() + jac_d_eval_time_.TotalSysTime()
+          + h_eval_time_.TotalSysTime();
 }
 
 Number OrigIpoptNLP::TotalFunctionEvaluationWallclockTime() const
 {
    return f_eval_time_.TotalWallclockTime() + grad_f_eval_time_.TotalWallclockTime() + c_eval_time_.TotalWallclockTime()
-      + d_eval_time_.TotalWallclockTime() + jac_c_eval_time_.TotalWallclockTime()
-      + jac_d_eval_time_.TotalWallclockTime() + h_eval_time_.TotalWallclockTime();
+          + d_eval_time_.TotalWallclockTime() + jac_c_eval_time_.TotalWallclockTime()
+          + jac_d_eval_time_.TotalWallclockTime() + h_eval_time_.TotalWallclockTime();
 }
 
 void OrigIpoptNLP::ResetTimes()
@@ -1027,7 +1030,7 @@ void OrigIpoptNLP::ResetTimes()
 
 SmartPtr<const Vector> OrigIpoptNLP::get_unscaled_x(
    const Vector& x
-   )
+)
 {
    SmartPtr<const Vector> ret;
    if( !unscaled_x_cache_.GetCachedResult1Dep(ret, &x) )

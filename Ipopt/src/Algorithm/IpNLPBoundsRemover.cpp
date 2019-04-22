@@ -22,7 +22,7 @@ static const Index dbg_verbosity = 0;
 NLPBoundsRemover::NLPBoundsRemover(
    NLP& nlp,
    bool allow_twosided_inequalities /* = false */
-   )
+)
    : nlp_(&nlp),
      allow_twosided_inequalities_(allow_twosided_inequalities)
 { }
@@ -42,7 +42,7 @@ bool NLPBoundsRemover::GetSpaces(
    SmartPtr<const MatrixSpace>&    Jac_c_space,
    SmartPtr<const MatrixSpace>&    Jac_d_space,
    SmartPtr<const SymMatrixSpace>& Hess_lagrangian_space
-   )
+)
 {
    DBG_START_METH("NLPBoundsRemover::GetSpaces", dbg_verbosity);
    SmartPtr<const VectorSpace> d_space_orig;
@@ -57,8 +57,8 @@ bool NLPBoundsRemover::GetSpaces(
    SmartPtr<const MatrixSpace> Jac_d_space_orig;
 
    bool retval = nlp_->GetSpaces(x_space, c_space, d_space_orig, x_l_space_orig, px_l_space_orig, x_u_space_orig,
-      px_u_space_orig, d_l_space_orig, pd_l_space_orig, d_u_space_orig, pd_u_space_orig, Jac_c_space, Jac_d_space_orig,
-      Hess_lagrangian_space);
+                                 px_u_space_orig, d_l_space_orig, pd_l_space_orig, d_u_space_orig, pd_u_space_orig, Jac_c_space, Jac_d_space_orig,
+                                 Hess_lagrangian_space);
    if( !retval )
    {
       return retval;
@@ -151,7 +151,7 @@ bool NLPBoundsRemover::GetBoundsInformation(
    Vector&       d_L,
    const Matrix& Pd_U,
    Vector&       d_U
-   )
+)
 {
    const CompoundMatrix* comp_pd_l = static_cast<const CompoundMatrix*>(&Pd_L);
    DBG_ASSERT(dynamic_cast<const CompoundMatrix*>(&Pd_L));
@@ -184,13 +184,13 @@ bool NLPBoundsRemover::GetBoundsInformation(
       pd_u_orig->MultVector(1., *tmp, 1., *d);
       Number dmax = d->Amax();
       ASSERT_EXCEPTION(dmax == 1., INVALID_NLP,
-         "In NLPBoundRemover, an inequality with both lower and upper bounds was detected");
+                       "In NLPBoundRemover, an inequality with both lower and upper bounds was detected");
       Number dmin = d->Min();
       ASSERT_EXCEPTION(dmin == 1., INVALID_NLP, "In NLPBoundRemover, an inequality with without bounds was detected.");
    }
 
    bool retval = nlp_->GetBoundsInformation(*Px_l_orig_, *x_l_orig, *Px_u_orig_, *x_u_orig, *pd_l_orig, *d_l_orig,
-      *pd_u_orig, *d_u_orig);
+                 *pd_u_orig, *d_u_orig);
    return retval;
 }
 
@@ -205,7 +205,7 @@ bool NLPBoundsRemover::GetStartingPoint(
    bool             need_z_L,
    SmartPtr<Vector> z_U,
    bool             need_z_U
-   )
+)
 {
    SmartPtr<Vector> y_d_orig;
    SmartPtr<Vector> z_L_orig;
@@ -219,14 +219,14 @@ bool NLPBoundsRemover::GetStartingPoint(
       z_U_orig = comp_y_d->GetCompNonConst(2);
    }
    bool retval = nlp_->GetStartingPoint(x, need_x, y_c, need_y_c, y_d_orig, need_y_d, z_L_orig, need_y_d, z_U_orig,
-      need_y_d);
+                                        need_y_d);
    return retval;
 }
 
 bool NLPBoundsRemover::Eval_d(
    const Vector& x,
    Vector&       d
-   )
+)
 {
    CompoundVector* comp_d = static_cast<CompoundVector*>(&d);
    DBG_ASSERT(dynamic_cast<CompoundVector*>(&d));
@@ -246,7 +246,7 @@ bool NLPBoundsRemover::Eval_d(
 bool NLPBoundsRemover::Eval_jac_d(
    const Vector& x,
    Matrix&       jac_d
-   )
+)
 {
    CompoundMatrix* comp_jac_d = static_cast<CompoundMatrix*>(&jac_d);
    DBG_ASSERT(dynamic_cast<CompoundMatrix*>(&jac_d));
@@ -268,7 +268,7 @@ bool NLPBoundsRemover::Eval_h(
    const Vector& yc,
    const Vector& yd,
    SymMatrix&    h
-   )
+)
 {
    const CompoundVector* comp_yd = static_cast<const CompoundVector*>(&yd);
    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&yd));
@@ -290,7 +290,7 @@ void NLPBoundsRemover::FinalizeSolution(
    Number                     obj_value,
    const IpoptData*           ip_data,
    IpoptCalculatedQuantities* ip_cq
-   )
+)
 {
    const CompoundVector* comp_d = static_cast<const CompoundVector*>(&d);
    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&d));
@@ -316,7 +316,7 @@ void NLPBoundsRemover::GetScalingParameters(
    SmartPtr<Vector>&                 x_scaling,
    SmartPtr<Vector>&                 c_scaling,
    SmartPtr<Vector>&                 d_scaling
-   ) const
+) const
 {
    const CompoundVectorSpace* comp_d_space = static_cast<const CompoundVectorSpace*>(GetRawPtr(d_space));
    DBG_ASSERT(dynamic_cast<const CompoundVectorSpace*>(GetRawPtr(d_space)));

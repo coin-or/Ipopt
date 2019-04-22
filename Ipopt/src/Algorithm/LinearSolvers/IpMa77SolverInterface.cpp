@@ -43,7 +43,7 @@ Ma77SolverInterface::~Ma77SolverInterface()
 
 void Ma77SolverInterface::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
-   )
+)
 {
    roptions->AddIntegerOption("ma77_print_level", "Debug printing level for the linear solver MA77", -1, "");
    /*
@@ -53,46 +53,46 @@ void Ma77SolverInterface::RegisterOptions(
     ">1 Additional diagnostic printing.");
     */
    roptions->AddLowerBoundedIntegerOption("ma77_buffer_lpage", "Number of scalars per MA77 buffer page", 1, 4096,
-      "Number of scalars per an in-core buffer in the out-of-core solver "
-         "MA77. Must be at most ma77_file_size.");
+                                          "Number of scalars per an in-core buffer in the out-of-core solver "
+                                          "MA77. Must be at most ma77_file_size.");
    roptions->AddLowerBoundedIntegerOption("ma77_buffer_npage", "Number of pages that make up MA77 buffer", 1, 1600,
-      "Number of pages of size buffer_lpage that exist in-core for the "
-         "out-of-core solver MA77.");
+                                          "Number of pages of size buffer_lpage that exist in-core for the "
+                                          "out-of-core solver MA77.");
    roptions->AddLowerBoundedIntegerOption("ma77_file_size",
-      "Target size of each temporary file for MA77, scalars per type", 1, 2097152,
-      "MA77 uses many temporary files, this option controls the size of "
-         "each one. It is measured in the number of entries (int or double), "
-         "NOT bytes.");
+                                          "Target size of each temporary file for MA77, scalars per type", 1, 2097152,
+                                          "MA77 uses many temporary files, this option controls the size of "
+                                          "each one. It is measured in the number of entries (int or double), "
+                                          "NOT bytes.");
    roptions->AddLowerBoundedIntegerOption("ma77_maxstore", "Maximum storage size for MA77 in-core mode", 0, 0,
-      "If greater than zero, the maximum size of factors stored in core "
-         "before out-of-core mode is invoked.");
+                                          "If greater than zero, the maximum size of factors stored in core "
+                                          "before out-of-core mode is invoked.");
    roptions->AddLowerBoundedIntegerOption("ma77_nemin", "Node Amalgamation parameter", 1, 8,
-      "Two nodes in elimination tree are merged if result has fewer than "
-         "ma77_nemin variables.");
+                                          "Two nodes in elimination tree are merged if result has fewer than "
+                                          "ma77_nemin variables.");
    roptions->AddLowerBoundedNumberOption("ma77_small", "Zero Pivot Threshold", 0.0, false, 1e-20,
-      "Any pivot less than ma77_small is treated as zero.");
+                                         "Any pivot less than ma77_small is treated as zero.");
    roptions->AddLowerBoundedNumberOption("ma77_static", "Static Pivoting Threshold", 0.0, false, 0.0,
-      "See MA77 documentation. Either ma77_static=0.0 or "
-         "ma77_static>ma77_small. ma77_static=0.0 disables static pivoting.");
+                                         "See MA77 documentation. Either ma77_static=0.0 or "
+                                         "ma77_static>ma77_small. ma77_static=0.0 disables static pivoting.");
    roptions->AddBoundedNumberOption("ma77_u", "Pivoting Threshold", 0.0, false, 0.5, false, 1e-8,
-      "See MA77 documentation.");
+                                    "See MA77 documentation.");
    roptions->AddBoundedNumberOption("ma77_umax", "Maximum Pivoting Threshold", 0.0, false, 0.5, false, 1e-4,
-      "Maximum value to which u will be increased to improve quality.");
+                                    "Maximum value to which u will be increased to improve quality.");
    roptions->AddStringOption2("ma77_order", "Controls type of ordering used by HSL_MA77",
 #ifdef COINHSL_HAS_METIS
-      "metis",
+                              "metis",
 #else
-      "amd",
+                              "amd",
 #endif
-      "amd", "Use the HSL_MC68 approximate minimum degree algorithm", "metis",
-      "Use the MeTiS nested dissection algorithm (if available)",
-      "This option controls ordering for the solver HSL_MA77.");
+                              "amd", "Use the HSL_MC68 approximate minimum degree algorithm", "metis",
+                              "Use the MeTiS nested dissection algorithm (if available)",
+                              "This option controls ordering for the solver HSL_MA77.");
 }
 
 bool Ma77SolverInterface::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    ma77_default_control(&control_);
    control_.f_arrays = 1; // Use Fortran numbering (faster)
@@ -120,9 +120,13 @@ bool Ma77SolverInterface::InitializeImpl(
    std::string order_method;
    options.GetStringValue("ma77_order", order_method, prefix);
    if( order_method == "metis" )
+   {
       ordering_ = ORDER_METIS;
+   }
    else
+   {
       ordering_ = ORDER_AMD;
+   }
 
    return true; // All is well
 }
@@ -132,7 +136,7 @@ ESymSolverStatus Ma77SolverInterface::InitializeStructure(
    Index        nonzeros,
    const Index* ia,
    const Index* ja
-   )
+)
 {
    struct ma77_info info;
    struct mc68_control control68;
@@ -248,7 +252,7 @@ ESymSolverStatus Ma77SolverInterface::MultiSolve(
    double*      rhs_vals,
    bool         check_NegEVals,
    Index        numberOfNegEVals
-   )
+)
 {
    struct ma77_info info;
 

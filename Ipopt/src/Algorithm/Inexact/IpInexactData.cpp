@@ -19,7 +19,7 @@ bool InexactData::Initialize(
    const Journalist&  jnlst,
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    full_step_accepted_ = false;
    return true;

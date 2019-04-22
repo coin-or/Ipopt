@@ -26,7 +26,7 @@ public:
    /** Constructor using only a linear solver object */
    GenAugSystemSolver(
       GenKKTSolverInterface& SolverInterface
-      );
+   );
 
    /** Destructor */
    virtual ~GenAugSystemSolver();
@@ -36,7 +36,7 @@ public:
    bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Set up the augmented system and solve it for a set of given
     *  right hand side - implementation for GenTMatrices and
@@ -65,7 +65,7 @@ public:
       std::vector<SmartPtr<Vector> >&       sol_dV,
       bool                                  check_NegEVals,
       Index                                 numberOfNegEVals
-      );
+   );
 
    /** Number of negative eigenvalues detected during last solve.
     *
@@ -108,12 +108,12 @@ private:
    /** Copy Constructor */
    GenAugSystemSolver(
       const GenAugSystemSolver&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const GenAugSystemSolver&
-      );
+   );
    //@}
 
    /** Check the internal tags and decide if the passed variables are
@@ -132,7 +132,7 @@ private:
       const Matrix&    J_d,
       const Vector*    D_d,
       double           delta_d
-      );
+   );
 
    void UpdateTags(
       const SymMatrix* W,
@@ -147,7 +147,7 @@ private:
       const Matrix&    J_d,
       const Vector*    D_d,
       double           delta_d
-      );
+   );
 
    /** The linear solver object that is to be used to solve the
     *  linear systems.

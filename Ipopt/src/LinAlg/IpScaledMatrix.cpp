@@ -11,7 +11,7 @@ namespace Ipopt
 
 ScaledMatrix::ScaledMatrix(
    const ScaledMatrixSpace* owner_space
-   )
+)
    : Matrix(owner_space),
      owner_space_(owner_space)
 { }
@@ -24,7 +24,7 @@ void ScaledMatrix::MultVectorImpl(
    const Vector& x,
    Number        beta,
    Vector&       y
-   ) const
+) const
 {
    DBG_ASSERT(IsValid(matrix_));
 
@@ -62,7 +62,7 @@ void ScaledMatrix::TransMultVectorImpl(
    const Vector& x,
    Number        beta,
    Vector&       y
-   ) const
+) const
 {
    DBG_ASSERT(IsValid(matrix_));
 
@@ -104,7 +104,7 @@ bool ScaledMatrix::HasValidNumbersImpl() const
 void ScaledMatrix::ComputeRowAMaxImpl(
    Vector& rows_norms,
    bool    init
-   ) const
+) const
 {
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "ScaledMatrix::ComputeRowAMaxImpl not implemented");
 }
@@ -112,7 +112,7 @@ void ScaledMatrix::ComputeRowAMaxImpl(
 void ScaledMatrix::ComputeColAMaxImpl(
    Vector& cols_norms,
    bool    init
-   ) const
+) const
 {
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "ScaledMatrix::ComputeColAMaxImpl not implemented");
 }
@@ -124,11 +124,11 @@ void ScaledMatrix::PrintImpl(
    const std::string& name,
    Index              indent,
    const std::string& prefix
-   ) const
+) const
 {
    jnlst.Printf(level, category, "\n");
    jnlst.PrintfIndented(level, category, indent, "%sScaledMatrix \"%s\" of dimension %d x %d:\n", prefix.c_str(),
-      name.c_str(), NRows(), NCols());
+                        name.c_str(), NRows(), NCols());
    if( IsValid(owner_space_->RowScaling()) )
    {
       owner_space_->RowScaling()->Print(&jnlst, level, category, name + "_row_scaling", indent + 1, prefix);
@@ -160,7 +160,7 @@ void ScaledMatrix::AddMSinvZImpl(
    const Vector& S,
    const Vector& Z,
    Vector&       X
-   ) const
+) const
 {
    DBG_ASSERT(false && "Got the ScaledMatrix::AddMSinvZImpl.  Should implement specialized method!");
 
@@ -176,7 +176,7 @@ void ScaledMatrix::SinvBlrmZMTdBrImpl(
    const Vector& Z,
    const Vector& D,
    Vector&       X
-   ) const
+) const
 {
    DBG_ASSERT(false && "Got the ScaledMatrix::SinvBlrmZMTdBrImpl.  Should implement specialized method!");
 
@@ -192,7 +192,7 @@ ScaledMatrixSpace::ScaledMatrixSpace(
    const SmartPtr<const MatrixSpace>& unscaled_matrix_space,
    const SmartPtr<const Vector>&      column_scaling,
    bool                               column_scaling_reciprocal
-   )
+)
    : MatrixSpace(unscaled_matrix_space->NRows(), unscaled_matrix_space->NCols()),
      unscaled_matrix_space_(unscaled_matrix_space)
 {

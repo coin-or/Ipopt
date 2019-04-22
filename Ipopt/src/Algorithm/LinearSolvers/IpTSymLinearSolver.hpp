@@ -45,7 +45,7 @@ public:
    TSymLinearSolver(
       SmartPtr<SparseSymLinearSolverInterface> solver_interface,
       SmartPtr<TSymScalingMethod>              scaling_method
-      );
+   );
 
    /** Destructor */
    virtual ~TSymLinearSolver();
@@ -63,7 +63,7 @@ public:
       std::vector<SmartPtr<Vector> >&       solV,
       bool                                  check_NegEVals,
       Index                                 numberOfNegEVals
-      );
+   );
 
    virtual Index NumberOfNegEVals() const;
    //@}
@@ -89,14 +89,14 @@ public:
       Index*            jac_c_iRow,
       Index*            jac_c_jCol,
       std::list<Index>& c_deps
-      );
+   );
    //@}
 
    /** Methods for OptionsList */
    //@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
    //@}
 
 private:
@@ -114,12 +114,12 @@ private:
    /** Copy Constructor */
    TSymLinearSolver(
       const TSymLinearSolver&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const TSymLinearSolver&
-      );
+   );
    //@}
 
    /** @name Information about the matrix */
@@ -212,7 +212,7 @@ private:
     */
    ESymSolverStatus InitializeStructure(
       const SymMatrix& symT_A
-      );
+   );
 
    /** Copy the elements of the matrix in the required format into
     *  the array that is provided by the solver interface.
@@ -220,7 +220,7 @@ private:
    void GiveMatrixToSolver(
       bool             new_matrix,
       const SymMatrix& sym_A
-      );
+   );
    //@}
 };
 

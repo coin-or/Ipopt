@@ -36,34 +36,34 @@ static const Index dbg_verbosity = 0;
 
 PenaltyLSAcceptor::PenaltyLSAcceptor(
    const SmartPtr<PDSystemSolver>& pd_solver
-   )
+)
    : pd_solver_(pd_solver)
 {
    DBG_START_FUN("PenaltyLSAcceptor::PenaltyLSAcceptor",
-      dbg_verbosity);
+                 dbg_verbosity);
 }
 
 PenaltyLSAcceptor::~PenaltyLSAcceptor()
 {
    DBG_START_FUN("PenaltyLSAcceptor::~PenaltyLSAcceptor()",
-      dbg_verbosity);
+                 dbg_verbosity);
 }
 
 void PenaltyLSAcceptor::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
-   )
+)
 {
    roptions->AddLowerBoundedNumberOption("nu_init", "Initial value of the penalty parameter.", 0.0, true, 1e-6, "");
    roptions->AddLowerBoundedNumberOption("nu_inc", "Increment of the penalty parameter.", 0.0, true, 1e-4, "");
    roptions->AddBoundedNumberOption("rho", "Value in penalty parameter update formula.", 0.0, true, 1.0, true, 1e-1,
-      "");
+                                    "");
 
 }
 
 bool PenaltyLSAcceptor::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    options.GetNumericValue("nu_init", nu_init_, prefix);
    options.GetNumericValue("nu_inc", nu_inc_, prefix);
@@ -75,10 +75,10 @@ bool PenaltyLSAcceptor::InitializeImpl(
    if( max_soc_ > 0 )
    {
       ASSERT_EXCEPTION(IsValid(pd_solver_), OPTION_INVALID,
-         "Option \"max_soc\": This option is non-negative, but no linear solver for computing the SOC given to PenaltyLSAcceptor object.");
+                       "Option \"max_soc\": This option is non-negative, but no linear solver for computing the SOC given to PenaltyLSAcceptor object.");
    }
    options.GetNumericValue("kappa_soc", kappa_soc_, prefix);
-	options.GetIntegerValue("soc_method", soc_method_, prefix);
+   options.GetIntegerValue("soc_method", soc_method_, prefix);
 
    Reset();
 
@@ -87,10 +87,10 @@ bool PenaltyLSAcceptor::InitializeImpl(
 
 void PenaltyLSAcceptor::InitThisLineSearch(
    bool in_watchdog
-   )
+)
 {
    DBG_START_METH("PenaltyLSAcceptor::InitThisLineSearch",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    // Set the values for the reference point
    if( !in_watchdog )
@@ -167,10 +167,10 @@ void PenaltyLSAcceptor::InitThisLineSearch(
 
 Number PenaltyLSAcceptor::CalcPred(
    Number alpha
-   )
+)
 {
    DBG_START_METH("PenaltyLSAcceptor::CalcPred",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    SmartPtr<const Vector> curr_c = IpCq().curr_c();
    SmartPtr<const Vector> curr_d_minus_s = IpCq().curr_d_minus_s();
@@ -183,7 +183,7 @@ Number PenaltyLSAcceptor::CalcPred(
    Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH, "  theta2 = %23.16e\n", theta2);
 
    Number pred = -alpha * reference_gradBarrTDelta_ - alpha * alpha / 2. * reference_dWd_
-      + nu_ * (reference_theta_ - theta2);
+                 + nu_ * (reference_theta_ - theta2);
 
    if( pred < 0. )
    {
@@ -196,10 +196,10 @@ Number PenaltyLSAcceptor::CalcPred(
 
 bool PenaltyLSAcceptor::CheckAcceptabilityOfTrialPoint(
    Number alpha_primal_test
-   )
+)
 {
    DBG_START_METH("PenaltyLSAcceptor::CheckAcceptabilityOfTrialPoint",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    // First compute the barrier function and constraint violation at the
    // current iterate and the trial point
@@ -209,11 +209,11 @@ bool PenaltyLSAcceptor::CheckAcceptabilityOfTrialPoint(
    DBG_ASSERT(IsFiniteNumber(trial_barr));
 
    Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Checking acceptability for trial step size alpha_primal_test=%13.6e:\n",
-      alpha_primal_test);
+                  alpha_primal_test);
    Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "  New values of barrier function     = %23.16e  (reference %23.16e):\n",
-      trial_barr, reference_barr_);
+                  trial_barr, reference_barr_);
    Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "  New values of constraint violation = %23.16e  (reference %23.16e):\n",
-      trial_theta, reference_theta_);
+                  trial_theta, reference_theta_);
 
    Number pred;
    if( reference_pred_ < 0. )
@@ -227,7 +227,7 @@ bool PenaltyLSAcceptor::CheckAcceptabilityOfTrialPoint(
    resto_pred_ = pred;
    Number ared = reference_barr_ + nu_ * (reference_theta_) - (trial_barr + nu_ * trial_theta);
    Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "  Checking Armijo Condition with pred = %23.16e and ared = %23.16e\n",
-      pred, ared);
+                  pred, ared);
 
    bool accept;
    if( Compare_le(eta_ * pred, ared, reference_barr_ + nu_ * (reference_theta_)) )
@@ -253,14 +253,14 @@ void PenaltyLSAcceptor::StartWatchDog()
 {
    DBG_START_FUN("PenaltyLSAcceptor::StartWatchDog", dbg_verbosity);
    THROW_EXCEPTION(OPTION_INVALID,
-      "Watchdog not implemented for penalty function line search.  Set watchdog_shortened_iter_trigger to 0.");
+                   "Watchdog not implemented for penalty function line search.  Set watchdog_shortened_iter_trigger to 0.");
 }
 
 void PenaltyLSAcceptor::StopWatchDog()
 {
    DBG_START_FUN("PenaltyLSAcceptor::StopWatchDog", dbg_verbosity);
    THROW_EXCEPTION(OPTION_INVALID,
-      "Watchdog not implemented for penalty function line search.  Set watchdog_shortened_iter_trigger to 0.");
+                   "Watchdog not implemented for penalty function line search.  Set watchdog_shortened_iter_trigger to 0.");
 }
 
 void PenaltyLSAcceptor::Reset()
@@ -274,10 +274,10 @@ bool PenaltyLSAcceptor::TrySecondOrderCorrection(
    Number                    alpha_primal_test,
    Number&                   alpha_primal,
    SmartPtr<IteratesVector>& actual_delta
-   )
+)
 {
    DBG_START_METH("PenaltyLSAcceptor::TrySecondOrderCorrection",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    if( max_soc_ == 0 )
    {
@@ -309,37 +309,38 @@ bool PenaltyLSAcceptor::TrySecondOrderCorrection(
       SmartPtr<IteratesVector> delta_soc = actual_delta->MakeNewIteratesVector(true);
       SmartPtr<IteratesVector> rhs = actual_delta->MakeNewContainer();
 
-	  switch (soc_method_) {
-	  case 0:
-		  rhs->Set_x(*IpCq().curr_grad_lag_with_damping_x());
-		  rhs->Set_s(*IpCq().curr_grad_lag_with_damping_s());
-		  rhs->Set_y_c(*c_soc);
-		  rhs->Set_y_d(*dms_soc);
-		  rhs->Set_z_L(*IpCq().curr_relaxed_compl_x_L());
-		  rhs->Set_z_U(*IpCq().curr_relaxed_compl_x_U());
-		  rhs->Set_v_L(*IpCq().curr_relaxed_compl_s_L());
-		  rhs->Set_v_U(*IpCq().curr_relaxed_compl_s_U());
-		  break;
-	  case 1:
-		  SmartPtr<Vector> x_soc =
-					IpCq().curr_grad_lag_with_damping_x()->MakeNew();
-		  SmartPtr<Vector> s_soc =
-					IpCq().curr_grad_lag_with_damping_s()->MakeNew();
-		  x_soc->Copy(*IpCq().curr_grad_lag_with_damping_x());
-		  s_soc->Copy(*IpCq().curr_grad_lag_with_damping_s());
-		  x_soc->Scal(alpha_primal_soc);
-		  s_soc->Scal(alpha_primal_soc);
+      switch (soc_method_)
+      {
+         case 0:
+            rhs->Set_x(*IpCq().curr_grad_lag_with_damping_x());
+            rhs->Set_s(*IpCq().curr_grad_lag_with_damping_s());
+            rhs->Set_y_c(*c_soc);
+            rhs->Set_y_d(*dms_soc);
+            rhs->Set_z_L(*IpCq().curr_relaxed_compl_x_L());
+            rhs->Set_z_U(*IpCq().curr_relaxed_compl_x_U());
+            rhs->Set_v_L(*IpCq().curr_relaxed_compl_s_L());
+            rhs->Set_v_U(*IpCq().curr_relaxed_compl_s_U());
+            break;
+         case 1:
+            SmartPtr<Vector> x_soc =
+               IpCq().curr_grad_lag_with_damping_x()->MakeNew();
+            SmartPtr<Vector> s_soc =
+               IpCq().curr_grad_lag_with_damping_s()->MakeNew();
+            x_soc->Copy(*IpCq().curr_grad_lag_with_damping_x());
+            s_soc->Copy(*IpCq().curr_grad_lag_with_damping_s());
+            x_soc->Scal(alpha_primal_soc);
+            s_soc->Scal(alpha_primal_soc);
 
-		  rhs->Set_x(*x_soc);
-		  rhs->Set_s(*s_soc);
-		  rhs->Set_y_c(*c_soc);
-		  rhs->Set_y_d(*dms_soc);
-		  rhs->Set_z_L(*IpCq().curr_relaxed_compl_x_L());
-		  rhs->Set_z_U(*IpCq().curr_relaxed_compl_x_U());
-		  rhs->Set_v_L(*IpCq().curr_relaxed_compl_s_L());
-		  rhs->Set_v_U(*IpCq().curr_relaxed_compl_s_U());
-		  break;
-	  }
+            rhs->Set_x(*x_soc);
+            rhs->Set_s(*s_soc);
+            rhs->Set_y_c(*c_soc);
+            rhs->Set_y_d(*dms_soc);
+            rhs->Set_z_L(*IpCq().curr_relaxed_compl_x_L());
+            rhs->Set_z_U(*IpCq().curr_relaxed_compl_x_U());
+            rhs->Set_v_L(*IpCq().curr_relaxed_compl_s_L());
+            rhs->Set_v_U(*IpCq().curr_relaxed_compl_s_U());
+            break;
+      }
       bool retval = pd_solver_->Solve(-1.0, 0.0, *rhs, *delta_soc, true);
       if( !retval )
       {
@@ -372,7 +373,7 @@ bool PenaltyLSAcceptor::TrySecondOrderCorrection(
       if( accept )
       {
          Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Second order correction step accepted with %d corrections.\n",
-            count_soc + 1);
+                        count_soc + 1);
          // Accept all SOC quantities
          alpha_primal = alpha_primal_soc;
          actual_delta = delta_soc;
@@ -390,14 +391,14 @@ bool PenaltyLSAcceptor::TryCorrector(
    Number                    alpha_primal_test,
    Number&                   alpha_primal,
    SmartPtr<IteratesVector>& actual_delta
-   )
+)
 {
    return false;
 }
 
 char PenaltyLSAcceptor::UpdateForNextIteration(
    Number alpha_primal_test
-   )
+)
 {
    // delete some stuff
    reference_JacC_delta_ = NULL;
@@ -426,15 +427,15 @@ bool PenaltyLSAcceptor::IsAcceptableToCurrentIterate(
    Number trial_barr,
    Number trial_theta,
    bool   called_from_restoration /*=false*/
-   ) const
+) const
 {
    DBG_START_METH("PenaltyLSAcceptor::IsAcceptableToCurrentIterate",
-      dbg_verbosity);
+                  dbg_verbosity);
    ASSERT_EXCEPTION(resto_pred_ >= 0., INTERNAL_ABORT, "resto_pred_ not set for check from restoration phase.");
 
    Number ared = reference_barr_ + nu_ * (reference_theta_) - (trial_barr + nu_ * trial_theta);
    Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-      "  Checking Armijo Condition (for resto) with pred = %23.16e and ared = %23.16e\n", resto_pred_, ared);
+                  "  Checking Armijo Condition (for resto) with pred = %23.16e and ared = %23.16e\n", resto_pred_, ared);
 
    bool accept;
    if( Compare_le(eta_ * resto_pred_, ared, reference_barr_ + nu_ * (reference_theta_)) )

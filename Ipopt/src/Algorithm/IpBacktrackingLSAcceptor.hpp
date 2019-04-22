@@ -32,7 +32,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      ) = 0;
+   ) = 0;
 
    /** Reset the acceptor.
     *
@@ -50,7 +50,7 @@ public:
     */
    virtual void InitThisLineSearch(
       bool in_watchdog
-      ) = 0;
+   ) = 0;
 
    /** Method that is called before the restoration phase is called.
     *
@@ -78,7 +78,7 @@ public:
     */
    virtual bool CheckAcceptabilityOfTrialPoint(
       Number alpha_primal
-      ) = 0;
+   ) = 0;
 
    /** Try a second order correction for the constraints.
     *
@@ -97,7 +97,7 @@ public:
       Number                    alpha_primal_test,
       Number&                   alpha_primal,
       SmartPtr<IteratesVector>& actual_delta
-      ) = 0;
+   ) = 0;
 
    /** Try higher order corrector (for fast local convergence).
     *
@@ -110,7 +110,7 @@ public:
       Number                    alpha_primal_test,
       Number&                   alpha_primal,
       SmartPtr<IteratesVector>& actual_delta
-      ) = 0;
+   ) = 0;
 
    /** Method for ending the current line search.
     *
@@ -123,7 +123,7 @@ public:
     */
    virtual char UpdateForNextIteration(
       Number alpha_primal_test
-      ) = 0;
+   ) = 0;
 
    /** Method for setting internal data if the watchdog procedure is started. */
    virtual void StartWatchDog() = 0;
@@ -168,7 +168,7 @@ public:
       Number                    alpha_primal,
       Number                    alpha_dual,
       SmartPtr<IteratesVector>& delta
-      )
+   )
    {
       THROW_EXCEPTION(OPTION_INVALID, "Value \"acceptor\" for option \"alpha_for_y\" not valid for this line search.");
       return -1.;
@@ -186,7 +186,7 @@ public:
    //@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
    //@}
 
 private:
@@ -203,12 +203,12 @@ private:
    /** Copy Constructor */
    BacktrackingLSAcceptor(
       const BacktrackingLSAcceptor&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const BacktrackingLSAcceptor&
-      );
+   );
    //@}
 };
 

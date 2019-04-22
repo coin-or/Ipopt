@@ -33,7 +33,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Method for computing the symmetric scaling factors, given the
     *  symmetric matrix in triplet (MA27) format.
@@ -45,7 +45,7 @@ public:
       const ipfint* ajcn,
       const double* a,
       double*       scaling_factors
-      );
+   );
 
 private:
    /**@name Default Compiler Generated Methods (Hidden to avoid
@@ -57,12 +57,12 @@ private:
    /** Copy Constructor */
    SlackBasedTSymScalingMethod(
       const SlackBasedTSymScalingMethod&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const SlackBasedTSymScalingMethod&
-      );
+   );
 };
 
 } // namespace Ipopt

@@ -26,7 +26,7 @@ public:
    /** Default Constructor */
    MonotoneMuUpdate(
       const SmartPtr<LineSearch>& linesearch
-      );
+   );
 
    /** Destructor */
    virtual ~MonotoneMuUpdate();
@@ -35,7 +35,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Method for determining the barrier parameter for the next
     *  iteration.
@@ -49,7 +49,7 @@ public:
 
    static void RegisterOptions(
       const SmartPtr<RegisteredOptions>& roptions
-      );
+   );
 
 private:
    /**@name Default Compiler Generated Methods
@@ -67,7 +67,7 @@ private:
    /** Copy Constructor */
    MonotoneMuUpdate(
       const MonotoneMuUpdate&
-      );
+   );
 
    void operator=(
       const MonotoneMuUpdate&);
@@ -77,7 +77,7 @@ private:
    void CalcNewMuAndTau(
       Number& new_mu,
       Number& new_tau
-      );
+   );
 
    /** @name Algorithmic parameters */
    //@{

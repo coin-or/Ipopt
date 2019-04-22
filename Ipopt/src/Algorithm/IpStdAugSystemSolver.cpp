@@ -34,7 +34,7 @@ static const Index dbg_verbosity = 0;
 
 StdAugSystemSolver::StdAugSystemSolver(
    SymLinearSolver& linSolver
-   )
+)
    : AugSystemSolver(),
      linsolver_(&linSolver),
      augmented_system_space_(NULL),
@@ -57,7 +57,8 @@ StdAugSystemSolver::StdAugSystemSolver(
      delta_d_(0.),
      old_w_(NULL)
 {
-   DBG_START_METH("StdAugSystemSolver::StdAugSystemSolver()", dbg_verbosity); DBG_ASSERT(IsValid(linsolver_));
+   DBG_START_METH("StdAugSystemSolver::StdAugSystemSolver()", dbg_verbosity);
+   DBG_ASSERT(IsValid(linsolver_));
 }
 
 StdAugSystemSolver::~StdAugSystemSolver()
@@ -68,7 +69,7 @@ StdAugSystemSolver::~StdAugSystemSolver()
 bool StdAugSystemSolver::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    // This option is registered by OrigIpoptNLP
    options.GetBoolValue("warm_start_same_structure", warm_start_same_structure_, prefix);
@@ -81,7 +82,7 @@ bool StdAugSystemSolver::InitializeImpl(
    else
    {
       ASSERT_EXCEPTION(IsValid(augmented_system_), INVALID_WARMSTART,
-         "StdAugSystemSolver called with warm_start_same_structure, but augmented system is not initialized.");
+                       "StdAugSystemSolver called with warm_start_same_structure, but augmented system is not initialized.");
    }
 
    return linsolver_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(), options, prefix);
@@ -110,16 +111,24 @@ ESymSolverStatus StdAugSystemSolver::MultiSolve(
    std::vector<SmartPtr<Vector> >&       sol_dV,
    bool                                  check_NegEVals,
    Index                                 numberOfNegEVals
-   )
+)
 {
-   DBG_START_METH("StdAugSystemSolver::MultiSolve", dbg_verbosity); DBG_ASSERT(J_c && J_d && "Currently, you MUST specify J_c and J_d in the augmented system");
+   DBG_START_METH("StdAugSystemSolver::MultiSolve", dbg_verbosity);
+   DBG_ASSERT(J_c && J_d && "Currently, you MUST specify J_c and J_d in the augmented system");
 
    IpData().TimingStats().StdAugSystemSolverMultiSolve().Start();
 
    DBG_ASSERT(W_factor == 0.0 || W_factor == 1.0);
 
    Index nrhs = (Index) rhs_xV.size();
-   DBG_ASSERT(nrhs > 0); DBG_ASSERT(nrhs == (Index)rhs_sV.size()); DBG_ASSERT(nrhs == (Index)rhs_cV.size()); DBG_ASSERT(nrhs == (Index)rhs_dV.size()); DBG_ASSERT(nrhs == (Index)sol_xV.size()); DBG_ASSERT(nrhs == (Index)sol_sV.size()); DBG_ASSERT(nrhs == (Index)sol_cV.size()); DBG_ASSERT(nrhs == (Index)sol_dV.size());
+   DBG_ASSERT(nrhs > 0);
+   DBG_ASSERT(nrhs == (Index)rhs_sV.size());
+   DBG_ASSERT(nrhs == (Index)rhs_cV.size());
+   DBG_ASSERT(nrhs == (Index)rhs_dV.size());
+   DBG_ASSERT(nrhs == (Index)sol_xV.size());
+   DBG_ASSERT(nrhs == (Index)sol_sV.size());
+   DBG_ASSERT(nrhs == (Index)sol_cV.size());
+   DBG_ASSERT(nrhs == (Index)sol_dV.size());
 
    // Create the compound matrix of the augmented system if it has not
    // yet been created - It is assumed that the structure will not change
@@ -133,7 +142,7 @@ ESymSolverStatus StdAugSystemSolver::MultiSolve(
       DBG_ASSERT(W && J_c && J_d);// W must exist during the first call to setup the structure!
       CreateAugmentedSpace(*W, *J_c, *J_d, *rhs_xV[0], *rhs_sV[0], *rhs_cV[0], *rhs_dV[0]);
       CreateAugmentedSystem(W, W_factor, D_x, delta_x, D_s, delta_s, *J_c, D_c, delta_c, *J_d, D_d, delta_d, *rhs_xV[0],
-         *rhs_sV[0], *rhs_cV[0], *rhs_dV[0]);
+                            *rhs_sV[0], *rhs_cV[0], *rhs_dV[0]);
       DBG_DO(debug_first_time_through = true;)
    }
 
@@ -145,11 +154,14 @@ ESymSolverStatus StdAugSystemSolver::MultiSolve(
    {
       DBG_ASSERT(!debug_first_time_through);
       CreateAugmentedSystem(W, W_factor, D_x, delta_x, D_s, delta_s, *J_c, D_c, delta_c, *J_d, D_d, delta_d, *rhs_xV[0],
-         *rhs_sV[0], *rhs_cV[0], *rhs_dV[0]);
+                            *rhs_sV[0], *rhs_cV[0], *rhs_dV[0]);
    }
 
    // Sanity checks
-   DBG_ASSERT(rhs_xV[0]->Dim() == sol_xV[0]->Dim()); DBG_ASSERT(rhs_sV[0]->Dim() == sol_sV[0]->Dim()); DBG_ASSERT(rhs_cV[0]->Dim() == sol_cV[0]->Dim()); DBG_ASSERT(rhs_dV[0]->Dim() == sol_dV[0]->Dim());
+   DBG_ASSERT(rhs_xV[0]->Dim() == sol_xV[0]->Dim());
+   DBG_ASSERT(rhs_sV[0]->Dim() == sol_sV[0]->Dim());
+   DBG_ASSERT(rhs_cV[0]->Dim() == sol_cV[0]->Dim());
+   DBG_ASSERT(rhs_dV[0]->Dim() == sol_dV[0]->Dim());
 
    // Now construct the overall right hand side vector that will be passed
    // to the linear solver
@@ -182,7 +194,7 @@ ESymSolverStatus StdAugSystemSolver::MultiSolve(
       for( Index dbg_i = 0; dbg_i < dbg_nz; dbg_i++ )
       {
          Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "(%d) KKT[%d][%d] = %23.15e\n", dbg_i, dbg_iRows[dbg_i],
-            dbg_jCols[dbg_i], dbg_values[dbg_i]);
+                        dbg_jCols[dbg_i], dbg_values[dbg_i]);
       }
       delete[] dbg_iRows;
       dbg_iRows = NULL;
@@ -234,7 +246,7 @@ void StdAugSystemSolver::CreateAugmentedSpace(
    const Vector&    proto_s,
    const Vector&    proto_c,
    const Vector&    proto_d
-   )
+)
 {
    DBG_ASSERT(!IsValid(augmented_system_));
 
@@ -320,7 +332,7 @@ void StdAugSystemSolver::CreateAugmentedSystem(
    const Vector&    proto_s,
    const Vector&    proto_c,
    const Vector&    proto_d
-   )
+)
 {
    augmented_system_ = augmented_system_space_->MakeNewCompoundSymMatrix();
 
@@ -477,9 +489,10 @@ bool StdAugSystemSolver::AugmentedSystemRequiresChange(
    const Matrix&    J_d,
    const Vector*    D_d,
    double           delta_d
-   )
+)
 {
-   DBG_START_METH("StdAugSystemSolver::AugmentedSystemRequiresChange", dbg_verbosity);DBG_ASSERT(augsys_tag_ == augmented_system_->GetTag() && "Someone has changed the augmented system outside of the AugSystemSolver. This should NOT happen.");
+   DBG_START_METH("StdAugSystemSolver::AugmentedSystemRequiresChange", dbg_verbosity);
+   DBG_ASSERT(augsys_tag_ == augmented_system_->GetTag() && "Someone has changed the augmented system outside of the AugSystemSolver. This should NOT happen.");
 
 #if COIN_IPOPT_VERBOSITY > 0
 
@@ -502,13 +515,29 @@ bool StdAugSystemSolver::AugmentedSystemRequiresChange(
    bool delta_dtest = (delta_d != delta_d_);
 #endif
 
-   DBG_PRINT((2, "Wtest = %d\n", Wtest));DBG_PRINT((2, "iWtest = %d\n", iWtest));DBG_PRINT((2, "wfactor_test = %d\n", wfactor_test));DBG_PRINT((2, "D_xtest = %d\n", D_xtest));DBG_PRINT((2, "iD_xtest = %d\n", iD_xtest));DBG_PRINT((2, "delta_xtest = %d\n", delta_xtest));DBG_PRINT((2, "D_stest = %d\n", D_stest));DBG_PRINT((2, "iD_stest = %d\n", iD_stest));DBG_PRINT((2, "delta_stest = %d\n", delta_stest));DBG_PRINT((2, "J_ctest = %d\n", J_ctest));DBG_PRINT((2, "D_ctest = %d\n", D_ctest));DBG_PRINT((2, "iD_ctest = %d\n", iD_ctest));DBG_PRINT((2, "delta_ctest = %d\n", delta_ctest));DBG_PRINT((2, "J_dtest = %d\n", J_dtest));DBG_PRINT((2, "D_dtest = %d\n", D_dtest));DBG_PRINT((2, "iD_dtest = %d\n", iD_dtest));DBG_PRINT((2, "delta_dtest = %d\n", delta_dtest));
+   DBG_PRINT((2, "Wtest = %d\n", Wtest));
+   DBG_PRINT((2, "iWtest = %d\n", iWtest));
+   DBG_PRINT((2, "wfactor_test = %d\n", wfactor_test));
+   DBG_PRINT((2, "D_xtest = %d\n", D_xtest));
+   DBG_PRINT((2, "iD_xtest = %d\n", iD_xtest));
+   DBG_PRINT((2, "delta_xtest = %d\n", delta_xtest));
+   DBG_PRINT((2, "D_stest = %d\n", D_stest));
+   DBG_PRINT((2, "iD_stest = %d\n", iD_stest));
+   DBG_PRINT((2, "delta_stest = %d\n", delta_stest));
+   DBG_PRINT((2, "J_ctest = %d\n", J_ctest));
+   DBG_PRINT((2, "D_ctest = %d\n", D_ctest));
+   DBG_PRINT((2, "iD_ctest = %d\n", iD_ctest));
+   DBG_PRINT((2, "delta_ctest = %d\n", delta_ctest));
+   DBG_PRINT((2, "J_dtest = %d\n", J_dtest));
+   DBG_PRINT((2, "D_dtest = %d\n", D_dtest));
+   DBG_PRINT((2, "iD_dtest = %d\n", iD_dtest));
+   DBG_PRINT((2, "delta_dtest = %d\n", delta_dtest));
 
    if( (W && W->GetTag() != w_tag_) || (!W && w_tag_ != 0) || (W_factor != w_factor_) || (D_x && D_x->GetTag() != d_x_tag_)
-      || (!D_x && d_x_tag_ != 0) || (delta_x != delta_x_) || (D_s && D_s->GetTag() != d_s_tag_) || (!D_s && d_s_tag_ != 0)
-      || (delta_s != delta_s_) || (J_c.GetTag() != j_c_tag_) || (D_c && D_c->GetTag() != d_c_tag_)
-      || (!D_c && d_c_tag_ != 0) || (delta_c != delta_c_) || (J_d.GetTag() != j_d_tag_)
-      || (D_d && D_d->GetTag() != d_d_tag_) || (!D_d && d_d_tag_ != 0) || (delta_d != delta_d_) )
+       || (!D_x && d_x_tag_ != 0) || (delta_x != delta_x_) || (D_s && D_s->GetTag() != d_s_tag_) || (!D_s && d_s_tag_ != 0)
+       || (delta_s != delta_s_) || (J_c.GetTag() != j_c_tag_) || (D_c && D_c->GetTag() != d_c_tag_)
+       || (!D_c && d_c_tag_ != 0) || (delta_c != delta_c_) || (J_d.GetTag() != j_d_tag_)
+       || (D_d && D_d->GetTag() != d_d_tag_) || (!D_d && d_d_tag_ != 0) || (delta_d != delta_d_) )
    {
       return true;
    }

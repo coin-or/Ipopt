@@ -37,7 +37,7 @@ public:
    /** Register the options for this class */
    static void RegisterOptions(
       const SmartPtr<RegisteredOptions>& roptions
-      );
+   );
    //@}
 
 protected:
@@ -45,7 +45,7 @@ protected:
    bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    virtual void DetermineScalingParametersImpl(
       const SmartPtr<const VectorSpace>    x_space,
@@ -62,7 +62,7 @@ protected:
       SmartPtr<Vector>&                    dx,
       SmartPtr<Vector>&                    dc,
       SmartPtr<Vector>&                    dd
-      );
+   );
 
 private:
 
@@ -79,12 +79,12 @@ private:
    /** Copy Constructor */
    EquilibrationScaling(
       const EquilibrationScaling&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const EquilibrationScaling&
-      );
+   );
    //@}
 
    /** pointer to the NLP to get scaling parameters */
@@ -112,7 +112,7 @@ public:
       const Vector& x_L,
       const Matrix& Px_U,
       const Vector& x_U
-      );
+   );
 
    /** Destructor */
    virtual ~PointPerturber()
@@ -137,12 +137,12 @@ private:
    /** Copy Constructor */
    PointPerturber(
       const PointPerturber&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const PointPerturber&
-      );
+   );
    //@}
 
    /** pointer to the midpoint of the perturbation */

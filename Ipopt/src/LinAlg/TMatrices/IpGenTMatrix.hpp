@@ -39,7 +39,7 @@ public:
    /** Constructor, taking the owner_space. */
    GenTMatrix(
       const GenTMatrixSpace* owner_space
-      );
+   );
 
    /** Destructor */
    ~GenTMatrix();
@@ -57,7 +57,7 @@ public:
     */
    void SetValues(
       const Number* Values
-      );
+   );
    //@}
 
    /** @name Accessor Methods */
@@ -98,26 +98,26 @@ protected:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual void TransMultVectorImpl(
       Number        alpha,
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual bool HasValidNumbersImpl() const;
 
    virtual void ComputeRowAMaxImpl(
       Vector& rows_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void ComputeColAMaxImpl(
       Vector& cols_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void PrintImpl(
       const Journalist&  jnlst,
@@ -126,7 +126,7 @@ protected:
       const std::string& name,
       Index              indent,
       const std::string& prefix
-      ) const
+   ) const
    {
       PrintImplOffset(jnlst, level, category, name, indent, prefix, 0);
    }
@@ -140,7 +140,7 @@ protected:
       Index              indent,
       const std::string& prefix,
       Index              offset
-      ) const;
+   ) const;
 
    friend class ParGenMatrix;
 
@@ -160,12 +160,12 @@ private:
    /** Copy Constructor */
    GenTMatrix(
       const GenTMatrix&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const GenTMatrix&
-      );
+   );
    //@}
 
    /** Copy of the owner space as a GenTMatrixSpace instead of
@@ -205,7 +205,7 @@ public:
       Index        nonZeros,
       const Index* iRows,
       const Index* jCols
-      );
+   );
 
    /** Destructor */
    ~GenTMatrixSpace()
@@ -265,7 +265,7 @@ private:
     */
    void FreeInternalStorage(
       Number* values
-      ) const;
+   ) const;
 
    friend class GenTMatrix;
 };

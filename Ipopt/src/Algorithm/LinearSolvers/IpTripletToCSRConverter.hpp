@@ -31,7 +31,7 @@ class TripletToCSRConverter: public ReferencedObject
          Index i_row,
          Index j_col,
          Index i_pos_triplet
-         )
+      )
       {
          if( i_row > j_col )
          {
@@ -73,7 +73,7 @@ class TripletToCSRConverter: public ReferencedObject
        */
       bool operator<(
          const TripletEntry& Tentry
-         ) const
+      ) const
       {
          return ((i_row_ < Tentry.i_row_) || (i_row_ == Tentry.i_row_ && j_col_ < Tentry.j_col_));
       }
@@ -108,7 +108,7 @@ public:
    TripletToCSRConverter(
       Index    offset,
       ETriFull hf = Triangular_Format
-      );
+   );
 
    /** Destructor */
    virtual ~TripletToCSRConverter();
@@ -132,7 +132,7 @@ public:
       Index        nonzeros,
       const Index* airn,
       const Index* ajcn
-      );
+   );
 
    /** @name Accessor methods */
    //@{
@@ -169,7 +169,7 @@ public:
       const Number* a_triplet,
       Index         nonzeros_compressed,
       Number*       a_compressed
-      );
+   );
 
 private:
    /**@name Default Compiler Generated Methods
@@ -186,12 +186,12 @@ private:
    /** Copy Constructor */
    TripletToCSRConverter(
       const TripletToCSRConverter&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const TripletToCSRConverter&
-      );
+   );
    //@}
 
    /** Offset for CSR numbering. */

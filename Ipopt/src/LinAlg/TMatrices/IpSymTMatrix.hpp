@@ -44,7 +44,7 @@ public:
    /** Constructor, taking the corresponding matrix space. */
    SymTMatrix(
       const SymTMatrixSpace* owner_space
-      );
+   );
 
    /** Destructor */
    ~SymTMatrix();
@@ -61,7 +61,7 @@ public:
     */
    void SetValues(
       const Number* Values
-      );
+   );
    //@}
 
    /** @name Accessor Methods */
@@ -104,12 +104,12 @@ public:
    void FillStruct(
       ipfint* Irn,
       ipfint* Jcn
-      ) const;
+   ) const;
 
    /** Copy the value data into provided space */
    void FillValues(
       Number* Values
-      ) const;
+   ) const;
    //@}
 
 protected:
@@ -120,14 +120,14 @@ protected:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual bool HasValidNumbersImpl() const;
 
    virtual void ComputeRowAMaxImpl(
       Vector& rows_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void PrintImpl(
       const Journalist&  jnlst,
@@ -136,7 +136,7 @@ protected:
       const std::string& name,
       Index              indent,
       const std::string& prefix
-      ) const;
+   ) const;
    //@}
 
 private:
@@ -155,12 +155,12 @@ private:
    /** Copy Constructor */
    SymTMatrix(
       const SymTMatrix&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const SymTMatrix&
-      );
+   );
    //@}
 
    /** Copy of the owner_space ptr as a SymTMatrixSpace instead
@@ -198,7 +198,7 @@ public:
       Index        nonZeros,
       const Index* iRows,
       const Index* jCols
-      );
+   );
 
    /** Destructor */
    ~SymTMatrixSpace();
@@ -245,7 +245,7 @@ private:
    /** Deallocate internal storage for the SymTMatrix values */
    void FreeInternalStorage(
       Number* values
-      ) const;
+   ) const;
    //@}
 
    const Index nonZeros_;

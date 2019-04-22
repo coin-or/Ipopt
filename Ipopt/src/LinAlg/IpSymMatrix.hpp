@@ -26,7 +26,7 @@ public:
     */
    inline SymMatrix(
       const SymMatrixSpace* owner_space
-      );
+   );
 
    /** Destructor */
    virtual ~SymMatrix()
@@ -55,7 +55,7 @@ protected:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const
+   ) const
    {
       // Since this matrix is symmetric, this is the same operation as MultVector
       MultVector(alpha, x, beta, y);
@@ -68,7 +68,7 @@ protected:
    virtual void ComputeColAMaxImpl(
       Vector& cols_norms,
       bool    init
-      ) const
+   ) const
    {
       ComputeRowAMaxImpl(cols_norms, init);
    }
@@ -92,7 +92,7 @@ public:
     */
    SymMatrixSpace(
       Index dim
-      )
+   )
       : MatrixSpace(dim, dim)
    { }
 
@@ -134,12 +134,12 @@ private:
    /* Copy constructor */
    SymMatrixSpace(
       const SymMatrixSpace&
-      );
+   );
 
    /** Default Assignment Operator */
    SymMatrixSpace& operator=(
       const SymMatrixSpace&
-      );
+   );
    //@}
 
 };
@@ -147,7 +147,7 @@ private:
 /* inline methods */
 inline SymMatrix::SymMatrix(
    const SymMatrixSpace* owner_space
-   )
+)
    : Matrix(owner_space),
      owner_space_(owner_space)
 { }

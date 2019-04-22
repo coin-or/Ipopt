@@ -29,7 +29,7 @@ public:
     */
    FilterLSAcceptor(
       const SmartPtr<PDSystemSolver>& pd_solver
-      );
+   );
 
    virtual ~FilterLSAcceptor();
    //@}
@@ -37,7 +37,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Reset the acceptor.
     *
@@ -54,7 +54,7 @@ public:
     */
    virtual void InitThisLineSearch(
       bool in_watchdog
-      );
+   );
 
    /** Method that is called before the restoration phase is called.
     *
@@ -74,7 +74,7 @@ public:
     */
    virtual bool CheckAcceptabilityOfTrialPoint(
       Number alpha_primal
-      );
+   );
 
    /** Try a second order correction for the constraints.
     *
@@ -92,7 +92,7 @@ public:
       Number                    alpha_primal_test,
       Number&                   alpha_primal,
       SmartPtr<IteratesVector>& actual_delta
-      );
+   );
 
    /** Try higher order corrector (for fast local convergence).
     *
@@ -105,7 +105,7 @@ public:
       Number                    alpha_primal_test,
       Number&                   alpha_primal,
       SmartPtr<IteratesVector>& actual_delta
-      );
+   );
 
    /** Method for ending the current line search.
     *
@@ -116,7 +116,7 @@ public:
     */
    virtual char UpdateForNextIteration(
       Number alpha_primal_test
-      );
+   );
 
    /** Method for setting internal data if the watchdog procedure is
     *  started.
@@ -140,20 +140,20 @@ public:
       Number trial_barr,
       Number trial_theta,
       bool   called_from_restoration = false
-      ) const;
+   ) const;
 
    /** Checks if a trial point is acceptable to the current filter */
    bool IsAcceptableToCurrentFilter(
       Number trial_barr,
       Number trial_theta
-      ) const;
+   ) const;
    //@}
 
    /** Methods for OptionsList */
    //@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
    //@}
 
 private:
@@ -170,12 +170,12 @@ private:
    /** Copy Constructor */
    FilterLSAcceptor(
       const FilterLSAcceptor&
-      );
+   );
 
    /** Overloaded Assignment Operator */
    void operator=(
       const FilterLSAcceptor&
-      );
+   );
    //@}
 
    /** @name Filter information */
@@ -196,7 +196,7 @@ private:
     */
    bool IsFtype(
       Number alpha_primal_test
-      );
+   );
 
    /** Method for checking the Armijo condition, given a trial step
     *  size.
@@ -206,7 +206,7 @@ private:
     */
    bool ArmijoHolds(
       Number alpha_primal_test
-      );
+   );
 
    /** Augment the filter used on the current values of the barrier
     *  objective function and the constraint violation.

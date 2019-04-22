@@ -48,7 +48,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      ) = 0;
+   ) = 0;
 
    /** Method called to perform restoration for the filter line
     *  search method.
@@ -68,12 +68,12 @@ private:
    /** Copy Constructor */
    RestorationPhase(
       const RestorationPhase&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const RestorationPhase&
-      );
+   );
    //@}
 };
 

@@ -33,7 +33,7 @@ RestoIpoptNLP::RestoIpoptNLP(
    IpoptNLP&                  orig_ip_nlp,
    IpoptData&                 orig_ip_data,
    IpoptCalculatedQuantities& orig_ip_cq
-   )
+)
    : IpoptNLP(new NoNLPScalingObject()),
      orig_ip_nlp_(&orig_ip_nlp),
      orig_ip_data_(&orig_ip_data),
@@ -46,38 +46,38 @@ RestoIpoptNLP::~RestoIpoptNLP()
 
 void RestoIpoptNLP::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
-   )
+)
 {
    roptions->AddStringOption2("evaluate_orig_obj_at_resto_trial",
-      "Determines if the original objective function should be evaluated at restoration phase trial points.", "yes",
-      "no", "skip evaluation", "yes", "evaluate at every trial point",
-      "Setting this option to \"yes\" makes the restoration phase algorithm "
-         "evaluate the objective function of the original problem at every trial "
-         "point encountered during the restoration phase, even if this value is "
-         "not required.  In this way, it is guaranteed that the original "
-         "objective function can be evaluated without error at all accepted "
-         "iterates; otherwise the algorithm might fail at a point where the "
-         "restoration phase accepts an iterate that is good for the restoration "
-         "phase problem, but not the original problem.  On the other hand, if "
-         "the evaluation of the original objective is expensive, this might be "
-         "costly.");
+                              "Determines if the original objective function should be evaluated at restoration phase trial points.", "yes",
+                              "no", "skip evaluation", "yes", "evaluate at every trial point",
+                              "Setting this option to \"yes\" makes the restoration phase algorithm "
+                              "evaluate the objective function of the original problem at every trial "
+                              "point encountered during the restoration phase, even if this value is "
+                              "not required.  In this way, it is guaranteed that the original "
+                              "objective function can be evaluated without error at all accepted "
+                              "iterates; otherwise the algorithm might fail at a point where the "
+                              "restoration phase accepts an iterate that is good for the restoration "
+                              "phase problem, but not the original problem.  On the other hand, if "
+                              "the evaluation of the original objective is expensive, this might be "
+                              "costly.");
    roptions->AddLowerBoundedNumberOption("resto_penalty_parameter",
-      "Penalty parameter in the restoration phase objective function.", 0.0, true, 1e3,
-      "This is the parameter rho in equation (31a) in the Ipopt "
-         "implementation paper.");
+                                         "Penalty parameter in the restoration phase objective function.", 0.0, true, 1e3,
+                                         "This is the parameter rho in equation (31a) in the Ipopt "
+                                         "implementation paper.");
    roptions->AddLowerBoundedNumberOption("resto_proximity_weight",
-      "Weighting factor for the proximity term in restoration phase objective.", 0.0, false, 1.,
-      "This determines how the parameter zera in equation (29a) in the "
-         "implementation paper is computed.  zeta here is "
-         "resto_proximity_weight*sqrt(mu), where mu is the current barrier "
-         "parameter.");
+                                         "Weighting factor for the proximity term in restoration phase objective.", 0.0, false, 1.,
+                                         "This determines how the parameter zera in equation (29a) in the "
+                                         "implementation paper is computed.  zeta here is "
+                                         "resto_proximity_weight*sqrt(mu), where mu is the current barrier "
+                                         "parameter.");
 }
 
 bool RestoIpoptNLP::Initialize(
    const Journalist&  jnlst,
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    options.GetBoolValue("evaluate_orig_obj_at_resto_trial", evaluate_orig_obj_at_resto_trial_, prefix);
    options.GetNumericValue("resto_penalty_parameter", rho_, prefix);
@@ -104,7 +104,8 @@ bool RestoIpoptNLP::InitializeStructures(
    SmartPtr<Vector>& v_L,
    SmartPtr<Vector>& v_U)
 {
-   DBG_START_METH("RestoIpoptNLP::InitializeStructures", 0); DBG_ASSERT(initialized_);
+   DBG_START_METH("RestoIpoptNLP::InitializeStructures", 0);
+   DBG_ASSERT(initialized_);
    ///////////////////////////////////////////////////////////
    // Get the vector/matrix spaces for the original problem //
    ///////////////////////////////////////////////////////////
@@ -125,8 +126,8 @@ bool RestoIpoptNLP::InitializeStructures(
    SmartPtr<const SymMatrixSpace> orig_h_space;
 
    orig_ip_nlp_->GetSpaces(orig_x_space, orig_c_space, orig_d_space, orig_x_l_space, orig_px_l_space, orig_x_u_space,
-      orig_px_u_space, orig_d_l_space, orig_pd_l_space, orig_d_u_space, orig_pd_u_space, orig_jac_c_space,
-      orig_jac_d_space, orig_h_space);
+                           orig_px_u_space, orig_d_l_space, orig_pd_l_space, orig_d_u_space, orig_pd_u_space, orig_jac_c_space,
+                           orig_jac_d_space, orig_h_space);
 
    // Create the restoration phase problem vector/matrix spaces, based
    // on the original spaces (pretty inconvenient with all the
@@ -300,10 +301,10 @@ bool RestoIpoptNLP::InitializeStructures(
    if( hessian_approximation_ == LIMITED_MEMORY )
    {
       const LowRankUpdateSymMatrixSpace* LR_h_space = static_cast<const LowRankUpdateSymMatrixSpace*>(GetRawPtr(
-         orig_h_space));
+               orig_h_space));
       DBG_ASSERT(LR_h_space);
       SmartPtr<LowRankUpdateSymMatrixSpace> new_orig_h_space = new LowRankUpdateSymMatrixSpace(LR_h_space->Dim(),
-      NULL, orig_x_space, false);
+            NULL, orig_x_space, false);
       h_space_->SetCompSpace(0, 0, *new_orig_h_space, true);
    }
    else
@@ -366,10 +367,12 @@ bool RestoIpoptNLP::InitializeStructures(
    SmartPtr<const MatrixSpace> scaled_jac_d_space;
    SmartPtr<const SymMatrixSpace> scaled_h_space;
    NLP_scaling()->DetermineScaling(GetRawPtr(x_space_), c_space_, d_space_, GetRawPtr(jac_c_space_),
-      GetRawPtr(jac_d_space_), GetRawPtr(h_space_), scaled_jac_c_space, scaled_jac_d_space, scaled_h_space, *Px_L_,
-      *x_L_, *Px_U_, *x_U_);
+                                   GetRawPtr(jac_d_space_), GetRawPtr(h_space_), scaled_jac_c_space, scaled_jac_d_space, scaled_h_space, *Px_L_,
+                                   *x_L_, *Px_U_, *x_U_);
    // For now we assume that no scaling is done inside the NLP_Scaling
-   DBG_ASSERT(scaled_jac_c_space == jac_c_space_); DBG_ASSERT(scaled_jac_d_space == jac_d_space_); DBG_ASSERT(scaled_h_space == h_space_);
+   DBG_ASSERT(scaled_jac_c_space == jac_c_space_);
+   DBG_ASSERT(scaled_jac_d_space == jac_d_space_);
+   DBG_ASSERT(scaled_h_space == h_space_);
 
    /////////////////////////////////////////////////////////////////////////
    // Create and initialize the vectors for the restoration phase problem //
@@ -444,7 +447,7 @@ bool RestoIpoptNLP::InitializeStructures(
 
 Number RestoIpoptNLP::f(
    const Vector& x
-   )
+)
 {
    THROW_EXCEPTION(INTERNAL_ABORT, "ERROR: In RestoIpoptNLP f() is called without mu!");
    return 0.;
@@ -453,10 +456,10 @@ Number RestoIpoptNLP::f(
 Number RestoIpoptNLP::f(
    const Vector& x,
    Number        mu
-   )
+)
 {
    DBG_START_METH("RestoIpoptNLP::f",
-      dbg_verbosity);
+                  dbg_verbosity);
    Number ret = 0.0;
    // rho*(pcTe + ncTe + pdT*e + ndT*e) + eta/2*||Dr*(x-xr)||_2^2
    const CompoundVector* c_vec = static_cast<const CompoundVector*>(&x);
@@ -493,7 +496,7 @@ Number RestoIpoptNLP::f(
 SmartPtr<const Vector> RestoIpoptNLP::grad_f(
    const Vector& x,
    Number        mu
-   )
+)
 {
    SmartPtr<Vector> retPtr = x.MakeNew();
    // Scale the p's and n's by rho (Scale all, take out the x part later)
@@ -515,7 +518,7 @@ SmartPtr<const Vector> RestoIpoptNLP::grad_f(
 
 SmartPtr<const Vector> RestoIpoptNLP::c(
    const Vector& x
-   )
+)
 {
    const CompoundVector* c_vec = static_cast<const CompoundVector*>(&x);
    SmartPtr<const Vector> x_only = c_vec->GetComp(0);
@@ -536,14 +539,14 @@ SmartPtr<const Vector> RestoIpoptNLP::c(
 
 SmartPtr<const Vector> RestoIpoptNLP::grad_f(
    const Vector& x
-   )
+)
 {
    THROW_EXCEPTION(INTERNAL_ABORT, "ERROR: In RestoIpoptNLP grad_f() is called without mu!");
 }
 
 SmartPtr<const Vector> RestoIpoptNLP::d(
    const Vector& x
-   )
+)
 {
    const CompoundVector* c_vec = static_cast<const CompoundVector*>(&x);
    SmartPtr<const Vector> x_only = c_vec->GetComp(0);
@@ -564,7 +567,7 @@ SmartPtr<const Vector> RestoIpoptNLP::d(
 
 SmartPtr<const Matrix> RestoIpoptNLP::jac_c(
    const Vector& x
-   )
+)
 {
 
    // Here, we set the (0,0) block with the values from the
@@ -601,7 +604,7 @@ SmartPtr<const Matrix> RestoIpoptNLP::jac_c(
 
 SmartPtr<const Matrix> RestoIpoptNLP::jac_d(
    const Vector& x
-   )
+)
 {
    DBG_START_METH("RestoIpoptNLP::jac_d", dbg_verbosity);
 
@@ -642,7 +645,7 @@ SmartPtr<const SymMatrix> RestoIpoptNLP::h(
    Number        obj_factor,
    const Vector& yc,
    const Vector& yd
-   )
+)
 {
    assert(false && "ERROR: In RestoIpoptNLP h() is called without mu!");
    return NULL;
@@ -654,7 +657,7 @@ SmartPtr<const SymMatrix> RestoIpoptNLP::h(
    const Vector& yc,
    const Vector& yd,
    Number        mu
-   )
+)
 {
    // Here, we use a SumSymMatrix for the (0,0) block of the
    // Hessian. We need to set this to the hessian of the restoration
@@ -670,10 +673,12 @@ SmartPtr<const SymMatrix> RestoIpoptNLP::h(
 
    // yc and yd should be trivial compound vectors
    const CompoundVector* Cyc = static_cast<const CompoundVector*>(&yc);
-   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&yc)); DBG_ASSERT(Cyc->NComps() == 1);
+   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&yc));
+   DBG_ASSERT(Cyc->NComps() == 1);
    SmartPtr<const Vector> Cyc0 = Cyc->GetComp(0);
    const CompoundVector* Cyd = static_cast<const CompoundVector*>(&yd);
-   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&yd)); DBG_ASSERT(Cyd->NComps() == 1);
+   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&yd));
+   DBG_ASSERT(Cyd->NComps() == 1);
    SmartPtr<const Vector> Cyd0 = Cyd->GetComp(0);
 
    // calculate the original hessian
@@ -727,7 +732,7 @@ void RestoIpoptNLP::GetSpaces(
    SmartPtr<const MatrixSpace>&    Jac_c_space,
    SmartPtr<const MatrixSpace>&    Jac_d_space,
    SmartPtr<const SymMatrixSpace>& Hess_lagrangian_space
-   )
+)
 {
    x_space = GetRawPtr(x_space_);
    c_space = GetRawPtr(c_space_);
@@ -747,7 +752,7 @@ void RestoIpoptNLP::GetSpaces(
 
 Number RestoIpoptNLP::Eta(
    Number mu
-   ) const
+) const
 {
    return eta_factor_ * pow(mu, eta_mu_exponent_);
 }
@@ -757,7 +762,7 @@ void RestoIpoptNLP::AdjustVariableBounds(
    const Vector& new_x_U,
    const Vector& new_d_L,
    const Vector& new_d_U
-   )
+)
 {
 
    const CompoundVector* comp_new_x_L = static_cast<const CompoundVector*>(&new_x_L);
@@ -805,10 +810,10 @@ bool RestoIpoptNLP::IntermediateCallBack(
    Index                               ls_trials,
    SmartPtr<const IpoptData>           ip_data,
    SmartPtr<IpoptCalculatedQuantities> ip_cq
-   )
+)
 {
    return orig_ip_nlp_->IntermediateCallBack(mode, iter, obj_value, inf_pr, inf_du, mu, d_norm, regularization_size,
-      alpha_du, alpha_pr, ls_trials, ip_data, ip_cq);
+          alpha_du, alpha_pr, ls_trials, ip_data, ip_cq);
 }
 
 } // namespace Ipopt

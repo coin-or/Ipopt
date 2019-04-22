@@ -27,15 +27,15 @@ extern "C"
 {
 // here we assume that float corresponds to Fortran's single
 // precision
-void F77_FUNC(mc19ad,MC19AD)(
-   const ipfint* N,
-   const ipfint* NZ,
-   const double* A,
-   const ipfint* IRN,
-   const ipfint* ICN,
-   float*        R,
-   float*        C,
-   float*        W
+   void F77_FUNC(mc19ad, MC19AD)(
+      const ipfint* N,
+      const ipfint* NZ,
+      const double* A,
+      const ipfint* IRN,
+      const ipfint* ICN,
+      float*        R,
+      float*        C,
+      float*        W
    );
 }
 
@@ -47,13 +47,13 @@ static const Index dbg_verbosity = 0;
 
 void EquilibrationScaling::RegisterOptions(
    const SmartPtr<RegisteredOptions>& roptions
-   )
+)
 { }
 
 bool EquilibrationScaling::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    options.GetNumericValue("point_perturbation_radius", point_perturbation_radius_, prefix);
    return StandardScalingBase::InitializeImpl(options, prefix);
@@ -74,16 +74,16 @@ void EquilibrationScaling::DetermineScalingParametersImpl(
    SmartPtr<Vector>&                    dx,
    SmartPtr<Vector>&                    dc,
    SmartPtr<Vector>&                    dd
-   )
+)
 {
    DBG_ASSERT(IsValid(nlp_));
 
    SmartPtr<Vector> x0 = x_space->MakeNew();
    if( !nlp_->GetStartingPoint(GetRawPtr(x0), true,
-      NULL, false,
-      NULL, false,
-      NULL, false,
-      NULL, false) )
+                               NULL, false,
+                               NULL, false,
+                               NULL, false,
+                               NULL, false) )
    {
       THROW_EXCEPTION(FAILED_INITIALIZATION, "Error getting initial point from NLP in EquilibrationScaling.\n");
    }
@@ -119,7 +119,7 @@ void EquilibrationScaling::DetermineScalingParametersImpl(
          if( !done )
          {
             Jnlst().Printf(J_WARNING, J_INITIALIZATION,
-               "Error evaluating first derivatives as at perturbed point for equilibration-based scaling.\n");
+                           "Error evaluating first derivatives as at perturbed point for equilibration-based scaling.\n");
             num_eval_errors++;
          }
          if( num_eval_errors > max_num_eval_errors )
@@ -263,7 +263,7 @@ PointPerturber::PointPerturber(
    const Vector& x_L,
    const Matrix& Px_U,
    const Vector& x_U
-   )
+)
 {
    DBG_START_METH("PointPerturber::PointPerturber", dbg_verbosity);
    const Number very_large = 1e300;

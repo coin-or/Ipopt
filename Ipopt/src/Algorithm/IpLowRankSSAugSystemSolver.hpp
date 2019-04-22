@@ -33,7 +33,7 @@ public:
    LowRankSSAugSystemSolver(
       AugSystemSolver& aug_system_solver,  /**< augmented system solver to copy */
       Index            max_rank            /**< maximal rank that can appear */
-      );
+   );
 
    /** Destructor */
    virtual ~LowRankSSAugSystemSolver();
@@ -42,7 +42,7 @@ public:
    bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Set up the augmented system and solve it for a given right hand side. */
    virtual ESymSolverStatus Solve(
@@ -68,7 +68,7 @@ public:
       Vector&          sol_d,
       bool             check_NegEVals,
       Index            numberOfNegEVals
-      );
+   );
 
    /** Number of negative eigenvalues detected during last
     * solve.
@@ -112,11 +112,11 @@ private:
    /** Copy Constructor */
    LowRankSSAugSystemSolver(
       const LowRankSSAugSystemSolver&
-      );
+   );
 
    void operator=(
       const LowRankSSAugSystemSolver&
-      );
+   );
    //@}
 
    /** The augmented system solver object that should be used for the
@@ -252,7 +252,7 @@ private:
       const Vector&    proto_rhs_s,
       const Vector&    proto_rhs_c,
       const Vector&    proto_rhs_d
-      );
+   );
 
    /** Method that compares the tags of the data for the matrix with
     *  those from the previous call.
@@ -272,7 +272,7 @@ private:
       const Matrix&    J_d,
       const Vector*    D_d,
       double           delta_d
-      );
+   );
    //@}
 };
 

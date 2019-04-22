@@ -16,7 +16,7 @@ DefaultIterateInitializer::DefaultIterateInitializer(
    const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator,
    const SmartPtr<IterateInitializer>&     warm_start_initializer,
    const SmartPtr<AugSystemSolver>         aug_system_solver /*= NULL*/
-   )
+)
    : IterateInitializer(),
      eq_mult_calculator_(eq_mult_calculator),
      warm_start_initializer_(warm_start_initializer),
@@ -26,81 +26,81 @@ DefaultIterateInitializer::DefaultIterateInitializer(
 
 void DefaultIterateInitializer::RegisterOptions(
    SmartPtr<RegisteredOptions> reg_options
-   )
+)
 {
    reg_options->AddLowerBoundedNumberOption("bound_push",
-      "Desired minimum absolute distance from the initial point to bound.", 0.0, true, 0.01,
-      "Determines how much the initial point might have to "
+         "Desired minimum absolute distance from the initial point to bound.", 0.0, true, 0.01,
+         "Determines how much the initial point might have to "
          "be modified in order to be sufficiently inside "
          "the bounds (together with \"bound_frac\").  (This is kappa_1 in "
          "Section 3.6 of implementation paper.)");
    reg_options->AddBoundedNumberOption("bound_frac",
-      "Desired minimum relative distance from the initial point to bound.", 0, true, 0.5, false, 0.01,
-      "Determines how much the initial point might have to "
-         "be modified in order to be sufficiently inside "
-         "the bounds (together with \"bound_push\").  (This is kappa_2 in "
-         "Section 3.6 of implementation paper.)");
+                                       "Desired minimum relative distance from the initial point to bound.", 0, true, 0.5, false, 0.01,
+                                       "Determines how much the initial point might have to "
+                                       "be modified in order to be sufficiently inside "
+                                       "the bounds (together with \"bound_push\").  (This is kappa_2 in "
+                                       "Section 3.6 of implementation paper.)");
    reg_options->AddLowerBoundedNumberOption("slack_bound_push",
-      "Desired minimum absolute distance from the initial slack to bound.", 0.0, true, 0.01,
-      "Determines how much the initial slack variables might have to "
+         "Desired minimum absolute distance from the initial slack to bound.", 0.0, true, 0.01,
+         "Determines how much the initial slack variables might have to "
          "be modified in order to be sufficiently inside "
          "the inequality bounds (together with \"slack_bound_frac\").  (This is kappa_1 in "
          "Section 3.6 of implementation paper.)");
    reg_options->AddBoundedNumberOption("slack_bound_frac",
-      "Desired minimum relative distance from the initial slack to bound.", 0, true, 0.5, false, 0.01,
-      "Determines how much the initial slack variables might have to "
-         "be modified in order to be sufficiently inside "
-         "the inequality bounds (together with \"slack_bound_push\").  (This is kappa_2 in "
-         "Section 3.6 of implementation paper.)");
+                                       "Desired minimum relative distance from the initial slack to bound.", 0, true, 0.5, false, 0.01,
+                                       "Determines how much the initial slack variables might have to "
+                                       "be modified in order to be sufficiently inside "
+                                       "the inequality bounds (together with \"slack_bound_push\").  (This is kappa_2 in "
+                                       "Section 3.6 of implementation paper.)");
    reg_options->AddLowerBoundedNumberOption("constr_mult_init_max",
-      "Maximum allowed least-square guess of constraint multipliers.", 0, false, 1e3,
-      "Determines how large the initial least-square guesses of the constraint "
+         "Maximum allowed least-square guess of constraint multipliers.", 0, false, 1e3,
+         "Determines how large the initial least-square guesses of the constraint "
          "multipliers are allowed to be (in max-norm). If the guess is larger "
          "than this value, it is discarded and all constraint multipliers are "
          "set to zero.  This options is also used when initializing the "
          "restoration phase. By default, \"resto.constr_mult_init_max\" (the one "
          "used in RestoIterateInitializer) is set to zero.");
    reg_options->AddLowerBoundedNumberOption("bound_mult_init_val", "Initial value for the bound multipliers.", 0, true,
-      1.0, "All dual variables corresponding to bound constraints are "
+         1.0, "All dual variables corresponding to bound constraints are "
          "initialized to this value.");
    reg_options->AddStringOption2("bound_mult_init_method", "Initialization method for bound multipliers", "constant",
-      "constant", "set all bound multipliers to the value of bound_mult_init_val", "mu-based",
-      "initialize to mu_init/x_slack", "This option defines how the iterates for the bound multipliers are "
-         "initialized.  If \"constant\" is chosen, then all bound multipliers "
-         "are initialized to the value of \"bound_mult_init_val\".  If "
-         "\"mu-based\" is chosen, the each value is initialized to the the value "
-         "of \"mu_init\" divided by the corresponding slack variable.  This "
-         "latter option might be useful if the starting point is close to the "
-         "optimal solution.");
+                                 "constant", "set all bound multipliers to the value of bound_mult_init_val", "mu-based",
+                                 "initialize to mu_init/x_slack", "This option defines how the iterates for the bound multipliers are "
+                                 "initialized.  If \"constant\" is chosen, then all bound multipliers "
+                                 "are initialized to the value of \"bound_mult_init_val\".  If "
+                                 "\"mu-based\" is chosen, the each value is initialized to the the value "
+                                 "of \"mu_init\" divided by the corresponding slack variable.  This "
+                                 "latter option might be useful if the starting point is close to the "
+                                 "optimal solution.");
    reg_options->AddStringOption2("least_square_init_primal", "Least square initialization of the primal variables",
-      "no", "no", "take user-provided point", "yes", "overwrite user-provided point with least-square estimates",
-      "If set to yes, Ipopt ignores the user provided point and solves a "
-         "least square problem for the primal variables (x and s), to fit the "
-         "linearized equality and inequality constraints.  This might be useful "
-         "if the user doesn't know anything about the starting point, or for "
-         "solving an LP or QP.");
+                                 "no", "no", "take user-provided point", "yes", "overwrite user-provided point with least-square estimates",
+                                 "If set to yes, Ipopt ignores the user provided point and solves a "
+                                 "least square problem for the primal variables (x and s), to fit the "
+                                 "linearized equality and inequality constraints.  This might be useful "
+                                 "if the user doesn't know anything about the starting point, or for "
+                                 "solving an LP or QP.");
    reg_options->AddStringOption2("least_square_init_duals", "Least square initialization of all dual variables", "no",
-      "no", "use bound_mult_init_val and least-square equality constraint multipliers", "yes",
-      "overwrite user-provided point with least-square estimates",
-      "If set to yes, Ipopt tries to compute least-square multipliers "
-         "(considering ALL dual variables).  If successful, the bound "
-         "multipliers are possibly corrected to be at least bound_mult_init_val. "
-         "This might be useful "
-         "if the user doesn't know anything about the starting point, or for "
-         "solving an LP or QP.  This overwrites option "
-         "\"bound_mult_init_method\".");
+                                 "no", "use bound_mult_init_val and least-square equality constraint multipliers", "yes",
+                                 "overwrite user-provided point with least-square estimates",
+                                 "If set to yes, Ipopt tries to compute least-square multipliers "
+                                 "(considering ALL dual variables).  If successful, the bound "
+                                 "multipliers are possibly corrected to be at least bound_mult_init_val. "
+                                 "This might be useful "
+                                 "if the user doesn't know anything about the starting point, or for "
+                                 "solving an LP or QP.  This overwrites option "
+                                 "\"bound_mult_init_method\".");
    reg_options->SetRegisteringCategory("Warm Start");
    reg_options->AddStringOption2("warm_start_init_point", "Warm-start for initial point", "no", "no",
-      "do not use the warm start initialization", "yes", "use the warm start initialization",
-      "Indicates whether this optimization should use a warm start "
-         "initialization, where values of primal and dual variables are "
-         "given (e.g., from a previous optimization of a related problem.)");
+                                 "do not use the warm start initialization", "yes", "use the warm start initialization",
+                                 "Indicates whether this optimization should use a warm start "
+                                 "initialization, where values of primal and dual variables are "
+                                 "given (e.g., from a previous optimization of a related problem.)");
 }
 
 bool DefaultIterateInitializer::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    // Check for the algorithm options
    options.GetNumericValue("bound_push", bound_push_, prefix);
@@ -118,10 +118,10 @@ bool DefaultIterateInitializer::InitializeImpl(
    options.GetBoolValue("warm_start_init_point", warm_start_init_point_, prefix);
    options.GetBoolValue("least_square_init_primal", least_square_init_primal_, prefix);
    ASSERT_EXCEPTION(!least_square_init_primal_ || IsValid(aug_system_solver_), OPTION_INVALID,
-      "The least_square_init_primal can only be chosen if the DefaultInitializer object has an AugSystemSolver.\n");
+                    "The least_square_init_primal can only be chosen if the DefaultInitializer object has an AugSystemSolver.\n");
    options.GetBoolValue("least_square_init_duals", least_square_init_duals_, prefix);
    ASSERT_EXCEPTION(!least_square_init_duals_ || IsValid(aug_system_solver_), OPTION_INVALID,
-      "The least_square_init_duals can only be chosen if the DefaultInitializer object has an AugSystemSolver.\n");
+                    "The least_square_init_duals can only be chosen if the DefaultInitializer object has an AugSystemSolver.\n");
    int enum_int;
    options.GetEnumValue("bound_mult_init_method", enum_int, prefix);
    bound_mult_init_method_ = BoundMultInitMethod(enum_int);
@@ -149,7 +149,7 @@ bool DefaultIterateInitializer::InitializeImpl(
 bool DefaultIterateInitializer::SetInitialIterates()
 {
    DBG_START_METH("DefaultIterateInitializer::SetInitialIterates",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    if( warm_start_init_point_ )
    {
@@ -194,7 +194,8 @@ bool DefaultIterateInitializer::SetInitialIterates()
       {
          Jnlst().Printf(J_WARNING, J_INITIALIZATION, "Least square initialization of x and s failed!\n");
       }
-   } DBG_PRINT_VECTOR(2, "curr_x", *iterates->x());
+   }
+   DBG_PRINT_VECTOR(2, "curr_x", *iterates->x());
 
    // Now we compute the initial values that the algorithm is going to
    // actually use.  We first store them in the trial fields in ip_data.
@@ -204,7 +205,7 @@ bool DefaultIterateInitializer::SetInitialIterates()
 
    SmartPtr<const Vector> new_x;
    push_variables(Jnlst(), bound_push_, bound_frac_, "x", *iterates->x(), new_x, *IpNLP().x_L(), *IpNLP().x_U(),
-      *IpNLP().Px_L(), *IpNLP().Px_U());
+                  *IpNLP().Px_L(), *IpNLP().Px_U());
 
    iterates->Set_x(*new_x);
    IpData().set_trial(iterates);
@@ -215,7 +216,7 @@ bool DefaultIterateInitializer::SetInitialIterates()
 
    SmartPtr<const Vector> new_s;
    push_variables(Jnlst(), slack_bound_push_, slack_bound_frac_, "s", *s, new_s, *IpNLP().d_L(), *IpNLP().d_U(),
-      *IpNLP().Pd_L(), *IpNLP().Pd_U());
+                  *IpNLP().Pd_L(), *IpNLP().Pd_U());
 
    iterates = IpData().trial()->MakeNewContainer();
    iterates->Set_s(*new_s);
@@ -290,7 +291,7 @@ bool DefaultIterateInitializer::SetInitialIterates()
          IpData().set_trial(iterates);
 
          Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
-            "Least square intial values for z_L, z_U,v_L, v_U, y_c, y_d computed.\n");
+                        "Least square intial values for z_L, z_U,v_L, v_U, y_c, y_d computed.\n");
          zL_new->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "zL_new");
          zU_new->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "zU_new");
          vL_new->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "vL_new");
@@ -302,7 +303,7 @@ bool DefaultIterateInitializer::SetInitialIterates()
       else
       {
          Jnlst().Printf(J_WARNING, J_INITIALIZATION,
-            "Least square initialization of z_L, z_U,v_L, v_U, y_c, y_d failed!\n");
+                        "Least square initialization of z_L, z_U,v_L, v_U, y_c, y_d failed!\n");
       }
    }
    if( call_least_square_mults )
@@ -323,10 +324,10 @@ bool DefaultIterateInitializer::SetInitialIterates()
 bool DefaultIterateInitializer::CalculateLeastSquarePrimals(
    Vector& x_ls,
    Vector& s_ls
-   )
+)
 {
    DBG_START_METH("DefaultIterateInitializer::CalculateLeastSquarePrimals",
-      dbg_verbosity);
+                  dbg_verbosity);
    SmartPtr<const SymMatrix> zeroW = IpNLP().uninitialized_h();
    DBG_PRINT_MATRIX(2, "zeroW", *zeroW);
    SmartPtr<const Matrix> J_c = IpCq().curr_jac_c();
@@ -344,12 +345,15 @@ bool DefaultIterateInitializer::CalculateLeastSquarePrimals(
    SmartPtr<Vector> sol_c = rhs_c->MakeNew();
    SmartPtr<Vector> sol_d = rhs_d->MakeNew();
 
-   DBG_PRINT_VECTOR(2, "rhs_x", *rhs_x); DBG_PRINT_VECTOR(2, "rhs_s", *rhs_s); DBG_PRINT_VECTOR(2, "rhs_c", *rhs_c); DBG_PRINT_VECTOR(2, "rhs_d", *rhs_d);
+   DBG_PRINT_VECTOR(2, "rhs_x", *rhs_x);
+   DBG_PRINT_VECTOR(2, "rhs_s", *rhs_s);
+   DBG_PRINT_VECTOR(2, "rhs_c", *rhs_c);
+   DBG_PRINT_VECTOR(2, "rhs_d", *rhs_d);
 
    enum ESymSolverStatus retval;
    Index numberOfEVals = rhs_c->Dim() + rhs_d->Dim();
    retval = aug_system_solver_->Solve(GetRawPtr(zeroW), 0.0, NULL, 1.0, NULL, 1.0, GetRawPtr(J_c), NULL, 0.,
-      GetRawPtr(J_d), NULL, 0., *rhs_x, *rhs_s, *rhs_c, *rhs_d, x_ls, s_ls, *sol_c, *sol_d, true, numberOfEVals);
+                                      GetRawPtr(J_d), NULL, 0., *rhs_x, *rhs_s, *rhs_c, *rhs_d, x_ls, s_ls, *sol_c, *sol_d, true, numberOfEVals);
    if( retval != SYMSOLVER_SUCCESS )
    {
       return false;
@@ -357,7 +361,10 @@ bool DefaultIterateInitializer::CalculateLeastSquarePrimals(
    x_ls.Scal(-1.);
    s_ls.Scal(-1.);
 
-   DBG_PRINT_VECTOR(2, "sol_x", x_ls); DBG_PRINT_VECTOR(2, "sol_s", s_ls); DBG_PRINT_VECTOR(2, "sol_c", *sol_c); DBG_PRINT_VECTOR(2, "sol_d", *sol_d);
+   DBG_PRINT_VECTOR(2, "sol_x", x_ls);
+   DBG_PRINT_VECTOR(2, "sol_s", s_ls);
+   DBG_PRINT_VECTOR(2, "sol_c", *sol_c);
+   DBG_PRINT_VECTOR(2, "sol_d", *sol_d);
 
    return true;
 }
@@ -369,10 +376,10 @@ bool DefaultIterateInitializer::CalculateLeastSquareDuals(
    Vector& vU_new,
    Vector& yc_new,
    Vector& yd_new
-   )
+)
 {
    DBG_START_METH("DefaultIterateInitializer::CalculateLeastSquarePrimals",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    SmartPtr<const SymMatrix> zeroW = IpNLP().uninitialized_h();
    DBG_PRINT_MATRIX(2, "zeroW", *zeroW);
@@ -408,17 +415,24 @@ bool DefaultIterateInitializer::CalculateLeastSquareDuals(
    SmartPtr<Vector> sol_x = rhs_x->MakeNew();
    SmartPtr<Vector> sol_s = rhs_s->MakeNew();
 
-   DBG_PRINT_VECTOR(2, "rhs_x", *rhs_x); DBG_PRINT_VECTOR(2, "rhs_s", *rhs_s); DBG_PRINT_VECTOR(2, "rhs_c", *rhs_c); DBG_PRINT_VECTOR(2, "rhs_d", *rhs_d);
+   DBG_PRINT_VECTOR(2, "rhs_x", *rhs_x);
+   DBG_PRINT_VECTOR(2, "rhs_s", *rhs_s);
+   DBG_PRINT_VECTOR(2, "rhs_c", *rhs_c);
+   DBG_PRINT_VECTOR(2, "rhs_d", *rhs_d);
 
    enum ESymSolverStatus retval;
    Index numberOfEVals = rhs_x->Dim() + rhs_s->Dim();
    retval = aug_system_solver_->Solve(GetRawPtr(zeroW), 0.0, GetRawPtr(Dx), 0.0, GetRawPtr(Ds), 0.0, GetRawPtr(J_c),
-      NULL, 0., GetRawPtr(J_d), NULL, 0., *rhs_x, *rhs_s, *rhs_c, *rhs_d, *sol_x, *sol_s, yc_new, yd_new, true,
-      numberOfEVals);
+                                      NULL, 0., GetRawPtr(J_d), NULL, 0., *rhs_x, *rhs_s, *rhs_c, *rhs_d, *sol_x, *sol_s, yc_new, yd_new, true,
+                                      numberOfEVals);
    if( retval != SYMSOLVER_SUCCESS )
    {
       return false;
-   } DBG_PRINT_VECTOR(2, "sol_x", *sol_x); DBG_PRINT_VECTOR(2, "sol_s", *sol_s); DBG_PRINT_VECTOR(2, "sol_c", yc_new); DBG_PRINT_VECTOR(2, "sol_d", yd_new);
+   }
+   DBG_PRINT_VECTOR(2, "sol_x", *sol_x);
+   DBG_PRINT_VECTOR(2, "sol_s", *sol_s);
+   DBG_PRINT_VECTOR(2, "sol_c", yc_new);
+   DBG_PRINT_VECTOR(2, "sol_d", yd_new);
 
    // Get the output right
    yc_new.Scal(-1.0);
@@ -442,10 +456,10 @@ void DefaultIterateInitializer::push_variables(
    const Vector&           x_U,
    const Matrix&           Px_L,
    const Matrix&           Px_U
-   )
+)
 {
    DBG_START_FUN("DefaultIterateInitializer::push_variables",
-      dbg_verbosity);
+                 dbg_verbosity);
 
    SmartPtr<const Vector> my_orig_x = &orig_x;
    // ToDo: Make this more efficient...?
@@ -457,7 +471,11 @@ void DefaultIterateInitializer::push_variables(
       my_orig_x = new_x;
    }
 
-   DBG_PRINT_VECTOR(2, "orig_x", *my_orig_x); DBG_PRINT_MATRIX(2, "Px_L", Px_L); DBG_PRINT_VECTOR(2, "x_L", x_L); DBG_PRINT_MATRIX(2, "Px_U", Px_U); DBG_PRINT_VECTOR(2, "x_U", x_U);
+   DBG_PRINT_VECTOR(2, "orig_x", *my_orig_x);
+   DBG_PRINT_MATRIX(2, "Px_L", Px_L);
+   DBG_PRINT_VECTOR(2, "x_L", x_L);
+   DBG_PRINT_MATRIX(2, "Px_U", Px_U);
+   DBG_PRINT_VECTOR(2, "x_U", x_U);
 
    SmartPtr<Vector> tmp_l = x_L.MakeNew();
    SmartPtr<Vector> tmp_u = x_U.MakeNew();
@@ -604,7 +622,7 @@ void DefaultIterateInitializer::push_variables(
       if( bound_push > 0. )
       {
          jnlst.Printf(J_DETAILED, J_INITIALIZATION, "Moved initial values of %s sufficiently inside the bounds.\n",
-            name.c_str());
+                      name.c_str());
          my_orig_x->Print(jnlst, J_VECTOR, J_INITIALIZATION, "original vars");
          new_x->Print(jnlst, J_VECTOR, J_INITIALIZATION, "new vars");
       }
@@ -615,7 +633,7 @@ void DefaultIterateInitializer::push_variables(
       if( bound_push > 0. )
       {
          jnlst.Printf(J_DETAILED, J_INITIALIZATION, "Initial values of %s sufficiently inside the bounds.\n",
-            name.c_str());
+                      name.c_str());
       }
    }
 }
@@ -627,10 +645,10 @@ void DefaultIterateInitializer::least_square_mults(
    IpoptCalculatedQuantities&              ip_cq,
    const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator,
    Number                                  constr_mult_init_max
-   )
+)
 {
    DBG_START_FUN("DefaultIterateInitializer::least_square_mults",
-      dbg_verbosity);
+                 dbg_verbosity);
 
    SmartPtr<IteratesVector> iterates = ip_data.trial()->MakeNewContainer();
    iterates->create_new_y_c();
@@ -644,7 +662,7 @@ void DefaultIterateInitializer::least_square_mults(
       ip_data.Append_info_string("s");
    }
    else if( IsValid(eq_mult_calculator) && constr_mult_init_max > 0.
-      && iterates->y_c_NonConst()->Dim() + iterates->y_d_NonConst()->Dim() > 0 )
+            && iterates->y_c_NonConst()->Dim() + iterates->y_d_NonConst()->Dim() > 0 )
    {
       // First move all the trial data into the current fields, since
       // those values are needed to compute the initial values for
@@ -672,7 +690,7 @@ void DefaultIterateInitializer::least_square_mults(
           }
           */
          jnlst.Printf(J_DETAILED, J_INITIALIZATION, "Least square estimates max(y_c) = %e, max(y_d) = %e\n",
-            y_c->Amax(), y_d->Amax());
+                      y_c->Amax(), y_d->Amax());
          Number yinitnrm = Max(y_c->Amax(), y_d->Amax());
          if( yinitnrm > constr_mult_init_max )
          {
@@ -692,7 +710,8 @@ void DefaultIterateInitializer::least_square_mults(
    }
    ip_data.set_trial(iterates);
 
-   DBG_PRINT_VECTOR(2, "y_c", *ip_data.trial()->y_c()); DBG_PRINT_VECTOR(2, "y_d", *ip_data.trial()->y_d());
+   DBG_PRINT_VECTOR(2, "y_c", *ip_data.trial()->y_c());
+   DBG_PRINT_VECTOR(2, "y_d", *ip_data.trial()->y_d());
 }
 
 } // namespace Ipopt

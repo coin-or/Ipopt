@@ -29,7 +29,7 @@ public:
    InexactSearchDirCalculator(
       SmartPtr<InexactNormalStepCalculator> normal_step_calculator,
       SmartPtr<InexactPDSolver>             inexact_pd_solver
-      );
+   );
 
    /** Destructor */
    virtual ~InexactSearchDirCalculator();
@@ -38,7 +38,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Method for computing the search direction.
     *
@@ -70,12 +70,12 @@ private:
    /** Copy Constructor */
    InexactSearchDirCalculator(
       const InexactSearchDirCalculator&
-      );
+   );
 
    /** Overloaded Assignment Operator */
    void operator=(
       const InexactSearchDirCalculator&
-      );
+   );
    //@}
 
    /** Method to easily access Inexact data */

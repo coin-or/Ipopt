@@ -89,7 +89,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      ) = 0;
+   ) = 0;
 
    /** Solve the primal dual system, given one right hand side.
     *
@@ -112,7 +112,7 @@ public:
       IteratesVector&       res,
       bool                  allow_inexact = false,
       bool                  improve_solution = false
-      ) = 0;
+   ) = 0;
 
 private:
    /**@name Default Compiler Generated Methods
@@ -128,7 +128,7 @@ private:
    /** Default Assignment Operator */
    PDSystemSolver& operator=(
       const PDSystemSolver&
-      );
+   );
    //@}
 };
 

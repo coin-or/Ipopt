@@ -32,22 +32,22 @@ WarmStartIterateInitializer::WarmStartIterateInitializer()
 
 void WarmStartIterateInitializer::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
-   )
+)
 {
    roptions->AddLowerBoundedNumberOption("warm_start_bound_push", "same as bound_push for the regular initializer.",
-      0.0, true, 1e-3);
+                                         0.0, true, 1e-3);
    roptions->AddBoundedNumberOption("warm_start_bound_frac", "same as bound_frac for the regular initializer.", 0.0,
-      true, 0.5, false, 1e-3);
+                                    true, 0.5, false, 1e-3);
    roptions->AddLowerBoundedNumberOption("warm_start_slack_bound_push",
-      "same as slack_bound_push for the regular initializer.", 0.0, true, 1e-3);
+                                         "same as slack_bound_push for the regular initializer.", 0.0, true, 1e-3);
    roptions->AddBoundedNumberOption("warm_start_slack_bound_frac",
-      "same as slack_bound_frac for the regular initializer.", 0.0, true, 0.5, false, 1e-3);
+                                    "same as slack_bound_frac for the regular initializer.", 0.0, true, 0.5, false, 1e-3);
    roptions->AddLowerBoundedNumberOption("warm_start_mult_bound_push",
-      "same as mult_bound_push for the regular initializer.", 0.0, true, 1e-3);
+                                         "same as mult_bound_push for the regular initializer.", 0.0, true, 1e-3);
    roptions->AddNumberOption("warm_start_mult_init_max", "Maximum initial value for the equality multipliers.", 1e6);
    roptions->AddStringOption2("warm_start_entire_iterate",
-      "Tells algorithm whether to use the GetWarmStartIterate method in the NLP.", "no", "no",
-      "call GetStartingPoint in the NLP", "yes", "call GetWarmStartIterate in the NLP", "");
+                              "Tells algorithm whether to use the GetWarmStartIterate method in the NLP.", "no", "no",
+                              "call GetStartingPoint in the NLP", "yes", "call GetWarmStartIterate in the NLP", "");
    roptions->SetRegisteringCategory("Uncategorized");
    roptions->AddNumberOption("warm_start_target_mu", "Unsupported!", 0e-3);
 }
@@ -55,7 +55,7 @@ void WarmStartIterateInitializer::RegisterOptions(
 bool WarmStartIterateInitializer::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    if( !options.GetNumericValue("warm_start_bound_push", warm_start_bound_push_, prefix) )
    {
@@ -96,7 +96,7 @@ bool WarmStartIterateInitializer::InitializeImpl(
 bool WarmStartIterateInitializer::SetInitialIterates()
 {
    DBG_START_METH("WarmStartIterateInitializer::SetInitialIterates",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    // Get the starting values provided by the NLP and store them
    // in the ip_data current fields.
@@ -118,7 +118,7 @@ bool WarmStartIterateInitializer::SetInitialIterates()
       if( !have_iterate )
       {
          Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-            "Tried to obtain entire warm start iterate from NLP, but it returned false.\n");
+                        "Tried to obtain entire warm start iterate from NLP, but it returned false.\n");
          IpData().Append_info_string("NW");
       }
 
@@ -258,10 +258,10 @@ bool WarmStartIterateInitializer::SetInitialIterates()
 
       SmartPtr<const Vector> new_z_U;
       process_target_mu(-1., *IpData().trial()->x(), *IpCq().trial_slack_x_U(), *IpData().curr()->z_U(),
-         *IpNLP().Px_U(), new_x, new_z_U);
+                        *IpNLP().Px_U(), new_x, new_z_U);
       SmartPtr<const Vector> new_v_U;
       process_target_mu(-1., *IpData().trial()->s(), *IpCq().trial_slack_s_U(), *IpData().curr()->v_U(),
-         *IpNLP().Pd_U(), new_s, new_v_U);
+                        *IpNLP().Pd_U(), new_s, new_v_U);
 
       // Now submit the full modified point
       init_vec->Set_x(*new_x);
@@ -286,11 +286,11 @@ bool WarmStartIterateInitializer::SetInitialIterates()
    SmartPtr<const Vector> new_s;
    // Push the primal x variables
    DefaultIterateInitializer::push_variables(Jnlst(), warm_start_bound_push_, warm_start_bound_frac_, "x",
-      *IpData().curr()->x(), new_x, *IpNLP().x_L(), *IpNLP().x_U(), *IpNLP().Px_L(), *IpNLP().Px_U());
+         *IpData().curr()->x(), new_x, *IpNLP().x_L(), *IpNLP().x_U(), *IpNLP().Px_L(), *IpNLP().Px_U());
 
    // Push the primal s variables
    DefaultIterateInitializer::push_variables(Jnlst(), warm_start_slack_bound_push_, warm_start_slack_bound_frac_, "s",
-      *IpData().curr()->s(), new_s, *IpNLP().d_L(), *IpNLP().d_U(), *IpNLP().Pd_L(), *IpNLP().Pd_U());
+         *IpData().curr()->s(), new_s, *IpNLP().d_L(), *IpNLP().d_U(), *IpNLP().Pd_L(), *IpNLP().Pd_U());
 
    // Push the multipliers
    SmartPtr<Vector> new_z_L = IpData().curr()->z_L()->MakeNewCopy();
@@ -351,7 +351,7 @@ void WarmStartIterateInitializer::process_target_mu(
    const Matrix&           P,
    SmartPtr<const Vector>& ret_vars,
    SmartPtr<const Vector>& ret_mults
-   )
+)
 {
    SmartPtr<Vector> new_slacks = curr_slacks.MakeNewCopy();
    SmartPtr<Vector> new_mults = curr_mults.MakeNewCopy();
@@ -369,7 +369,7 @@ void WarmStartIterateInitializer::adapt_to_target_mu(
    Vector& new_s,
    Vector& new_z,
    Number  target_mu
-   )
+)
 {
    DBG_ASSERT(new_s.Dim() == new_z.Dim());
 
