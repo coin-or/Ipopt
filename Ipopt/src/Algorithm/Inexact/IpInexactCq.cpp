@@ -47,8 +47,11 @@ void InexactCq::RegisterOptions(
    const SmartPtr<RegisteredOptions>& roptions
 )
 {
-   roptions->AddLowerBoundedNumberOption("slack_scale_max", "Upper bound on slack-based scaling parameters.", 0.0, true,
-                                         1., "");
+   roptions->AddLowerBoundedNumberOption(
+      "slack_scale_max",
+      "Upper bound on slack-based scaling parameters.",
+      0.0, true,
+      1.);
 }
 
 bool InexactCq::Initialize(

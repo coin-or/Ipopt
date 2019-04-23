@@ -34,22 +34,48 @@ void WarmStartIterateInitializer::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->AddLowerBoundedNumberOption("warm_start_bound_push", "same as bound_push for the regular initializer.",
-                                         0.0, true, 1e-3);
-   roptions->AddBoundedNumberOption("warm_start_bound_frac", "same as bound_frac for the regular initializer.", 0.0,
-                                    true, 0.5, false, 1e-3);
-   roptions->AddLowerBoundedNumberOption("warm_start_slack_bound_push",
-                                         "same as slack_bound_push for the regular initializer.", 0.0, true, 1e-3);
-   roptions->AddBoundedNumberOption("warm_start_slack_bound_frac",
-                                    "same as slack_bound_frac for the regular initializer.", 0.0, true, 0.5, false, 1e-3);
-   roptions->AddLowerBoundedNumberOption("warm_start_mult_bound_push",
-                                         "same as mult_bound_push for the regular initializer.", 0.0, true, 1e-3);
-   roptions->AddNumberOption("warm_start_mult_init_max", "Maximum initial value for the equality multipliers.", 1e6);
-   roptions->AddStringOption2("warm_start_entire_iterate",
-                              "Tells algorithm whether to use the GetWarmStartIterate method in the NLP.", "no", "no",
-                              "call GetStartingPoint in the NLP", "yes", "call GetWarmStartIterate in the NLP", "");
+   roptions->AddLowerBoundedNumberOption(
+      "warm_start_bound_push",
+      "same as bound_push for the regular initializer.",
+      0., true,
+      1e-3);
+   roptions->AddBoundedNumberOption(
+      "warm_start_bound_frac",
+      "same as bound_frac for the regular initializer.",
+      0., true,
+      0.5, false,
+      1e-3);
+   roptions->AddLowerBoundedNumberOption(
+      "warm_start_slack_bound_push",
+      "same as slack_bound_push for the regular initializer.",
+      0., true,
+      1e-3);
+   roptions->AddBoundedNumberOption(
+      "warm_start_slack_bound_frac",
+      "same as slack_bound_frac for the regular initializer.",
+      0., true,
+      0.5, false,
+      1e-3);
+   roptions->AddLowerBoundedNumberOption(
+      "warm_start_mult_bound_push",
+      "same as mult_bound_push for the regular initializer.",
+      0., true,
+      1e-3);
+   roptions->AddNumberOption(
+      "warm_start_mult_init_max",
+      "Maximum initial value for the equality multipliers.",
+      1e6);
+   roptions->AddStringOption2(
+      "warm_start_entire_iterate",
+      "Tells algorithm whether to use the GetWarmStartIterate method in the NLP.",
+      "no",
+      "no", "call GetStartingPoint in the NLP",
+      "yes", "call GetWarmStartIterate in the NLP");
    roptions->SetRegisteringCategory("Uncategorized");
-   roptions->AddNumberOption("warm_start_target_mu", "Unsupported!", 0e-3);
+   roptions->AddNumberOption(
+      "warm_start_target_mu",
+      "Unsupported!",
+      0.);
 }
 
 bool WarmStartIterateInitializer::InitializeImpl(

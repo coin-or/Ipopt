@@ -51,37 +51,104 @@ void CGPenaltyLSAcceptor::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->AddStringOption2("never_use_piecewise_penalty_ls", "Toggle to switch off the piecewise penalty method",
-                              "no", "no", "always use the piecewise penalty method", "yes", "never use the piecewise penalty method", "");
-   roptions->AddBoundedNumberOption("eta_penalty",
-                                    "Relaxation factor in the Armijo condition for the penalty function.", 0.0, true, 0.5, true, 1e-8);
-   roptions->AddLowerBoundedNumberOption("penalty_update_infeasibility_tol",
-                                         "Threshold for infeasibility in penalty parameter update test.", 0.0, true, 1e-9,
-                                         "If the new constraint violation is smaller than this tolerance, the "
-                                         "penalty parameter is not increased.");
-   roptions->AddLowerBoundedNumberOption("eta_min", "LIFENG WRITES THIS.", 0.0, true, 1e1, "");
-   roptions->AddLowerBoundedNumberOption("pen_theta_max_fact",
-                                         "Determines upper bound for constraint violation in the filter.", 0.0, true, 1e4,
-                                         "The algorithmic parameter theta_max is determined as theta_max_fact "
-                                         "times the maximum of 1 and the constraint violation at initial point.  "
-                                         "Any point with a constraint violation larger than theta_max is "
-                                         "unacceptable to the filter (see Eqn. (21) in implementation paper).");
-   roptions->AddLowerBoundedNumberOption("penalty_update_compl_tol", "LIFENG WRITES THIS.", 0.0, true, 1e1, "");
-   roptions->AddLowerBoundedNumberOption("chi_hat", "LIFENG WRITES THIS.", 0.0, true, 2., "");
-   roptions->AddLowerBoundedNumberOption("chi_tilde", "LIFENG WRITES THIS.", 0.0, true, 5., "");
-   roptions->AddLowerBoundedNumberOption("chi_cup", "LIFENG WRITES THIS.", 0.0, true, 1.5, "");
-   roptions->AddLowerBoundedNumberOption("gamma_hat", "LIFENG WRITES THIS.", 0.0, true, 0.04, "");
-   roptions->AddLowerBoundedNumberOption("gamma_tilde", "LIFENG WRITES THIS.", 0.0, true, 4., "");
+   roptions->AddStringOption2(
+      "never_use_piecewise_penalty_ls",
+      "Toggle to switch off the piecewise penalty method",
+      "no",
+      "no", "always use the piecewise penalty method",
+      "yes", "never use the piecewise penalty method");
+   roptions->AddBoundedNumberOption(
+      "eta_penalty",
+      "Relaxation factor in the Armijo condition for the penalty function.",
+      0., true,
+      0.5, true,
+      1e-8);
+   roptions->AddLowerBoundedNumberOption(
+      "penalty_update_infeasibility_tol",
+      "Threshold for infeasibility in penalty parameter update test.",
+      0., true,
+      1e-9,
+      "If the new constraint violation is smaller than this tolerance, the penalty parameter is not increased.");
+   roptions->AddLowerBoundedNumberOption(
+      "eta_min",
+      "LIFENG WRITES THIS.",
+      0., true,
+      1e1);
+   roptions->AddLowerBoundedNumberOption(
+      "pen_theta_max_fact",
+      "Determines upper bound for constraint violation in the filter.",
+      0., true,
+      1e4,
+      "The algorithmic parameter theta_max is determined as theta_max_fact times the maximum of 1 and "
+      "the constraint violation at initial point. "
+      "Any point with a constraint violation larger than theta_max is unacceptable to the filter "
+      "(see Eqn. (21) in implementation paper).");
+   roptions->AddLowerBoundedNumberOption(
+      "penalty_update_compl_tol",
+      "LIFENG WRITES THIS.",
+      0., true,
+      1e1);
+   roptions->AddLowerBoundedNumberOption(
+      "chi_hat",
+      "LIFENG WRITES THIS.",
+      0., true,
+      2.);
+   roptions->AddLowerBoundedNumberOption(
+      "chi_tilde",
+      "LIFENG WRITES THIS.",
+      0., true,
+      5.);
+   roptions->AddLowerBoundedNumberOption(
+      "chi_cup",
+      "LIFENG WRITES THIS.",
+      0., true,
+      1.5);
+   roptions->AddLowerBoundedNumberOption(
+      "gamma_hat",
+      "LIFENG WRITES THIS.",
+      0., true,
+      0.04);
+   roptions->AddLowerBoundedNumberOption(
+      "gamma_tilde",
+      "LIFENG WRITES THIS.",
+      0., true,
+      4.);
 
-   roptions->AddLowerBoundedNumberOption("epsilon_c", "LIFENG WRITES THIS.", 0.0, true, 1e-2, "");
-   roptions->AddLowerBoundedNumberOption("piecewisepenalty_gamma_obj", "LIFENG WRITES THIS.", 0.0, true, 1e-13, "");
-   roptions->AddLowerBoundedNumberOption("piecewisepenalty_gamma_infeasi", "LIFENG WRITES THIS.", 0.0, true, 1e-13, "");
-   roptions->AddLowerBoundedNumberOption("min_alpha_primal", "LIFENG WRITES THIS.", 0.0, true, 1e-13, "");
-   roptions->AddLowerBoundedNumberOption("theta_min", "LIFENG WRITES THIS.", 0.0, true, 1e-6, "");
-   roptions->AddLowerBoundedNumberOption("mult_diverg_feasibility_tol",
-                                         "tolerance for deciding if the multipliers are diverging", 0, true, 1e-7, "");
-   roptions->AddLowerBoundedNumberOption("mult_diverg_y_tol", "tolerance for deciding if the multipliers are diverging",
-                                         0, true, 1e8, "");
+   roptions->AddLowerBoundedNumberOption(
+      "epsilon_c",
+      "LIFENG WRITES THIS.",
+      0., true,
+      1e-2);
+   roptions->AddLowerBoundedNumberOption(
+      "piecewisepenalty_gamma_obj",
+      "LIFENG WRITES THIS.",
+      0., true,
+      1e-13);
+   roptions->AddLowerBoundedNumberOption(
+      "piecewisepenalty_gamma_infeasi",
+      "LIFENG WRITES THIS.",
+      0., true,
+      1e-13);
+   roptions->AddLowerBoundedNumberOption(
+      "min_alpha_primal",
+      "LIFENG WRITES THIS.",
+      0., true,
+      1e-13);
+   roptions->AddLowerBoundedNumberOption(
+      "theta_min",
+      "LIFENG WRITES THIS.",
+      0., true,
+      1e-6);
+   roptions->AddLowerBoundedNumberOption(
+      "mult_diverg_feasibility_tol",
+      "tolerance for deciding if the multipliers are diverging",
+      0., true,
+      1e-7);
+   roptions->AddLowerBoundedNumberOption(
+      "mult_diverg_y_tol",
+      "tolerance for deciding if the multipliers are diverging",
+      0., true,
+      1e8);
 
 }
 

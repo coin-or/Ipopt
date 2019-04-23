@@ -251,45 +251,74 @@ void Ma57TSolverInterface::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->AddBoundedNumberOption("ma57_pivtol", "Pivot tolerance for the linear solver MA57.", 0.0, true, 1.0, true,
-                                    1e-8, "A smaller number pivots for sparsity, a larger number pivots for "
-                                    "stability. This option is only available if Ipopt has been compiled "
-                                    "with MA57.");
-   roptions->AddBoundedNumberOption("ma57_pivtolmax", "Maximum pivot tolerance for the linear solver MA57.", 0.0, true,
-                                    1.0, true, 1e-4, "Ipopt may increase pivtol as high as ma57_pivtolmax to get a more "
-                                    "accurate solution to the linear system.  This option is only available "
-                                    "if Ipopt has been compiled with MA57.");
-   roptions->AddLowerBoundedNumberOption("ma57_pre_alloc",
-                                         "Safety factor for work space memory allocation for the linear solver MA57.", 1., false, 1.05,
-                                         "If 1 is chosen, the suggested amount of work space is used.  However, "
-                                         "choosing a larger number might avoid reallocation if the suggest values "
-                                         "do not suffice.  This option is only available if Ipopt has been "
-                                         "compiled with MA57.");
-   roptions->AddBoundedIntegerOption("ma57_pivot_order", "Controls pivot order in MA57",
+   roptions->AddBoundedNumberOption(
+      "ma57_pivtol",
+      "Pivot tolerance for the linear solver MA57.",
+      0.0, true,
+      1.0, true,
+      1e-8,
+      "A smaller number pivots for sparsity, a larger number pivots for stability. "
+      "This option is only available if Ipopt has been compiled with MA57.");
+   roptions->AddBoundedNumberOption(
+      "ma57_pivtolmax",
+      "Maximum pivot tolerance for the linear solver MA57.",
+      0.0, true,
+      1.0, true,
+      1e-4,
+      "Ipopt may increase pivtol as high as ma57_pivtolmax to get a more accurate solution to the linear system. "
+      "This option is only available if Ipopt has been compiled with MA57.");
+   roptions->AddLowerBoundedNumberOption(
+      "ma57_pre_alloc",
+      "Safety factor for work space memory allocation for the linear solver MA57.",
+      1., false,
+      1.05,
+      "If 1 is chosen, the suggested amount of work space is used. "
+      "However, choosing a larger number might avoid reallocation if the suggest values do not suffice. "
+      "This option is only available if Ipopt has been compiled with MA57.");
+   roptions->AddBoundedIntegerOption(
+      "ma57_pivot_order",
+      "Controls pivot order in MA57",
+      0, 5,
 #ifdef FUNNY_MA57_FINT
-                                     0, 5, 2, // Matlab's MA57 can crash if you try to use Metis
+      2, // Matlab's MA57 can crash if you try to use Metis
 #else
-                                     0, 5, 5,
+      5,
 #endif
-                                     "This is ICNTL(6) in MA57.");
-   roptions->AddStringOption2("ma57_automatic_scaling", "Controls MA57 automatic scaling", "no", "no",
-                              "Do not scale the linear system matrix", "yes", "Scale the linear system matrix",
-                              "This option controls the internal scaling option of MA57. "
-                              "For higher reliability of the MA57 solver, you may want to set this option to yes. "
-                              "This is ICNTL(15) in MA57.");
+      "This is ICNTL(6) in MA57.");
+   roptions->AddStringOption2(
+      "ma57_automatic_scaling",
+      "Controls MA57 automatic scaling",
+      "no",
+      "no", "Do not scale the linear system matrix",
+      "yes", "Scale the linear system matrix",
+      "This option controls the internal scaling option of MA57. "
+      "For higher reliability of the MA57 solver, you may want to set this option to yes. "
+      "This is ICNTL(15) in MA57.");
 
    // CET: 04-29-2010
-   roptions->AddLowerBoundedIntegerOption("ma57_block_size", "Controls block size used by Level 3 BLAS in MA57BD", 1,
-                                          16, "This is ICNTL(11) in MA57.");
+   roptions->AddLowerBoundedIntegerOption(
+      "ma57_block_size",
+      "Controls block size used by Level 3 BLAS in MA57BD",
+      1,
+      16,
+      "This is ICNTL(11) in MA57.");
 
-   roptions->AddLowerBoundedIntegerOption("ma57_node_amalgamation", "Node amalgamation parameter", 1, 16,
-                                          "This is ICNTL(12) in MA57.");
+   roptions->AddLowerBoundedIntegerOption(
+      "ma57_node_amalgamation",
+      "Node amalgamation parameter",
+      1,
+      16,
+      "This is ICNTL(12) in MA57.");
 
-   roptions->AddBoundedIntegerOption("ma57_small_pivot_flag",
-                                     "If set to 1, then when small entries defined by CNTL(2) are detected "
-                                     "they are removed and the corresponding pivots placed at the end of the "
-                                     "factorization.  This can be particularly efficient if the matrix is "
-                                     "highly rank deficient.", 0, 1, 0, "This is ICNTL(16) in MA57.");
+   roptions->AddBoundedIntegerOption(
+      "ma57_small_pivot_flag",
+      "Handling of small pivots",
+      0, 1,
+      0,
+      "If set to 1, then when small entries defined by CNTL(2) are detected they are removed and "
+      "the corresponding pivots placed at the end of the factorization. "
+      "This can be particularly efficient if the matrix is highly rank deficient. "
+      "This is ICNTL(16) in MA57.");
    // CET 04-29-2010
 
 }

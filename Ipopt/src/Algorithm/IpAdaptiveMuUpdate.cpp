@@ -46,85 +46,109 @@ void AdaptiveMuUpdate::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->AddLowerBoundedNumberOption("mu_max_fact",
-                                         "Factor for initialization of maximum value for barrier parameter.", 0.0, true, 1e3,
-                                         "This option determines the upper bound on the barrier parameter.  This "
-                                         "upper bound is computed as the average complementarity at the initial "
-                                         "point times the value of this option. (Only used if option "
-                                         "\"mu_strategy\" is chosen as \"adaptive\".)");
-   roptions->AddLowerBoundedNumberOption("mu_max", "Maximum value for barrier parameter.", 0.0, true, 1e5,
-                                         "This option specifies an upper bound on the barrier parameter in the "
-                                         "adaptive mu selection mode.  If this option is set, it overwrites the "
-                                         "effect of mu_max_fact. (Only used if option "
-                                         "\"mu_strategy\" is chosen as \"adaptive\".)");
-   roptions->AddLowerBoundedNumberOption("mu_min", "Minimum value for barrier parameter.", 0.0, true, 1e-11,
-                                         "This option specifies the lower bound on the barrier parameter in the "
-                                         "adaptive mu selection mode. By default, it is set to the minimum of 1e-11 and "
-                                         "min(\"tol\",\"compl_inf_tol\")/(\"barrier_tol_factor\"+1), which "
-                                         "should be a reasonable value. (Only used if option "
-                                         "\"mu_strategy\" is chosen as \"adaptive\".)");
+   roptions->AddLowerBoundedNumberOption(
+      "mu_max_fact",
+      "Factor for initialization of maximum value for barrier parameter.",
+      0.0, true,
+      1e3,
+      "This option determines the upper bound on the barrier parameter. "
+      "This upper bound is computed as the average complementarity at the initial point times the value of this option. "
+      "(Only used if option \"mu_strategy\" is chosen as \"adaptive\".)");
+   roptions->AddLowerBoundedNumberOption(
+      "mu_max",
+      "Maximum value for barrier parameter.",
+      0.0, true,
+      1e5,
+      "This option specifies an upper bound on the barrier parameter in the adaptive mu selection mode. "
+      "If this option is set, it overwrites the effect of mu_max_fact. "
+      "(Only used if option \"mu_strategy\" is chosen as \"adaptive\".)");
+   roptions->AddLowerBoundedNumberOption(
+      "mu_min",
+      "Minimum value for barrier parameter.",
+      0.0, true,
+      1e-11,
+      "This option specifies the lower bound on the barrier parameter in the adaptive mu selection mode. "
+      "By default, it is set to the minimum of 1e-11 and min(\"tol\",\"compl_inf_tol\")/(\"barrier_tol_factor\"+1), "
+      "which should be a reasonable value. "
+      "(Only used if option \"mu_strategy\" is chosen as \"adaptive\".)");
    std::string prev_cat = roptions->RegisteringCategory();
    roptions->SetRegisteringCategory("Undocumented");
-   roptions->AddLowerBoundedNumberOption("adaptive_mu_safeguard_factor", "", 0.0, false, 0.0);
+   roptions->AddLowerBoundedNumberOption(
+      "adaptive_mu_safeguard_factor",
+      "",
+      0.0, false,
+      0.0);
    roptions->SetRegisteringCategory(prev_cat);
 
-   roptions->AddStringOption3("adaptive_mu_globalization", "Globalization strategy for the adaptive mu selection mode.",
-                              "obj-constr-filter", "kkt-error", "nonmonotone decrease of kkt-error", "obj-constr-filter",
-                              "2-dim filter for objective and constraint violation", "never-monotone-mode", "disables globalization",
-                              "To achieve global convergence of the adaptive version, the algorithm "
-                              "has to switch to the monotone mode (Fiacco-McCormick approach) when "
-                              "convergence does not seem to appear.  This option sets the "
-                              "criterion used to decide when to do this switch. (Only used if option "
-                              "\"mu_strategy\" is chosen as \"adaptive\".)");
+   roptions->AddStringOption3(
+      "adaptive_mu_globalization",
+      "Globalization strategy for the adaptive mu selection mode.",
+      "obj-constr-filter",
+      "kkt-error", "nonmonotone decrease of kkt-error",
+      "obj-constr-filter", "2-dim filter for objective and constraint violation",
+      "never-monotone-mode", "disables globalization",
+      "To achieve global convergence of the adaptive version, "
+      "the algorithm has to switch to the monotone mode (Fiacco-McCormick approach) when convergence does not seem to appear. "
+      "This option sets the criterion used to decide when to do this switch. "
+      "(Only used if option \"mu_strategy\" is chosen as \"adaptive\".)");
 
-   roptions->AddLowerBoundedIntegerOption("adaptive_mu_kkterror_red_iters",
-                                          "Maximum number of iterations requiring sufficient progress.", 0, 4,
-                                          "For the \"kkt-error\" based globalization strategy, sufficient "
-                                          "progress must be made for \"adaptive_mu_kkterror_red_iters\" "
-                                          "iterations. If this number of iterations is exceeded, the "
-                                          "globalization strategy switches to the monotone mode.");
+   roptions->AddLowerBoundedIntegerOption(
+      "adaptive_mu_kkterror_red_iters",
+      "Maximum number of iterations requiring sufficient progress.",
+      0,
+      4,
+      "For the \"kkt-error\" based globalization strategy, sufficient progress must be made for \"adaptive_mu_kkterror_red_iters\" iterations. "
+      "If this number of iterations is exceeded, the globalization strategy switches to the monotone mode.");
 
-   roptions->AddBoundedNumberOption("adaptive_mu_kkterror_red_fact",
-                                    "Sufficient decrease factor for \"kkt-error\" globalization strategy.", 0.0, true, 1.0, true, 0.9999,
-                                    "For the \"kkt-error\" based globalization strategy, the error "
-                                    "must decrease by this factor to be deemed sufficient decrease.");
+   roptions->AddBoundedNumberOption(
+      "adaptive_mu_kkterror_red_fact",
+      "Sufficient decrease factor for \"kkt-error\" globalization strategy.",
+      0.0, true,
+      1.0, true,
+      0.9999,
+      "For the \"kkt-error\" based globalization strategy, the error must decrease by this factor to be deemed sufficient decrease.");
 
-   roptions->AddBoundedNumberOption("filter_margin_fact",
-                                    "Factor determining width of margin for obj-constr-filter adaptive globalization strategy.", 0.0, true, 1.0, true,
-                                    1e-5, "When using the adaptive globalization strategy, \"obj-constr-filter\", "
-                                    "sufficient progress for a filter entry is defined as "
-                                    "follows: (new obj) < (filter obj) - filter_margin_fact*(new "
-                                    "constr-viol) OR (new constr-viol) < (filter constr-viol) - "
-                                    "filter_margin_fact*(new constr-viol).  For the description of "
-                                    "the \"kkt-error-filter\" option see \"filter_max_margin\".");
-   roptions->AddLowerBoundedNumberOption("filter_max_margin",
-                                         "Maximum width of margin in obj-constr-filter adaptive globalization strategy.", 0.0, true, 1.0,
-                                         // ToDo Detailed description later
-                                         "");
-   roptions->AddStringOption2("adaptive_mu_restore_previous_iterate",
-                              "Indicates if the previous iterate should be restored if the monotone mode is entered.", "no", "no",
-                              "don't restore accepted iterate", "yes", "restore accepted iterate",
-                              "When the globalization strategy for the adaptive barrier algorithm "
-                              "switches to the monotone mode, it can either start "
-                              "from the most recent iterate (no), or from the last "
-                              "iterate that was accepted (yes).");
-
-   roptions->AddLowerBoundedNumberOption("adaptive_mu_monotone_init_factor",
-                                         "Determines the initial value of the barrier parameter when switching to the monotone mode.", 0.0, true, 0.8,
-                                         "When the globalization strategy for the adaptive barrier algorithm "
-                                         "switches to the monotone mode and fixed_mu_oracle is chosen as "
-                                         "\"average_compl\", the barrier parameter is set to the "
-                                         "current average complementarity times the value of "
-                                         "\"adaptive_mu_monotone_init_factor\".");
-
-   roptions->AddStringOption4("adaptive_mu_kkt_norm_type",
-                              "Norm used for the KKT error in the adaptive mu globalization strategies.", "2-norm-squared", "1-norm",
-                              "use the 1-norm (abs sum)", "2-norm-squared", "use the 2-norm squared (sum of squares)", "max-norm",
-                              "use the infinity norm (max)", "2-norm", "use 2-norm",
-                              "When computing the KKT error for the globalization strategies, the "
-                              "norm to be used is specified with this option. Note, this options is also used "
-                              "in the QualityFunctionMuOracle.");
-
+   roptions->AddBoundedNumberOption(
+      "filter_margin_fact",
+      "Factor determining width of margin for obj-constr-filter adaptive globalization strategy.",
+      0.0, true,
+      1.0, true,
+      1e-5,
+      "When using the adaptive globalization strategy, \"obj-constr-filter\", "
+      "sufficient progress for a filter entry is defined as follows:"
+      "(new obj) < (filter obj) - filter_margin_fact*(new constr-viol) OR "
+      "(new constr-viol) < (filter constr-viol) - filter_margin_fact*(new constr-viol). "
+      "For the description of the \"kkt-error-filter\" option see \"filter_max_margin\".");
+   roptions->AddLowerBoundedNumberOption(
+      "filter_max_margin",
+      "Maximum width of margin in obj-constr-filter adaptive globalization strategy.",
+      0.0, true,
+      1.0); // ToDo Detailed description later
+   roptions->AddStringOption2(
+      "adaptive_mu_restore_previous_iterate",
+      "Indicates if the previous iterate should be restored if the monotone mode is entered.",
+      "no",
+      "no", "don't restore accepted iterate",
+      "yes", "restore accepted iterate",
+      "When the globalization strategy for the adaptive barrier algorithm switches to the monotone mode, "
+      "it can either start from the most recent iterate (no), or from the last iterate that was accepted (yes).");
+   roptions->AddLowerBoundedNumberOption(
+      "adaptive_mu_monotone_init_factor",
+      "Determines the initial value of the barrier parameter when switching to the monotone mode.",
+      0.0, true,
+      0.8,
+      "When the globalization strategy for the adaptive barrier algorithm switches to the monotone mode and fixed_mu_oracle is chosen as \"average_compl\", "
+      "the barrier parameter is set to the current average complementarity times the value of \"adaptive_mu_monotone_init_factor\".");
+   roptions->AddStringOption4(
+      "adaptive_mu_kkt_norm_type",
+      "Norm used for the KKT error in the adaptive mu globalization strategies.",
+      "2-norm-squared",
+      "1-norm", "use the 1-norm (abs sum)",
+      "2-norm-squared", "use the 2-norm squared (sum of squares)",
+      "max-norm", "use the infinity norm (max)",
+      "2-norm", "use 2-norm",
+      "When computing the KKT error for the globalization strategies, the norm to be used is specified with this option. "
+      "Note, this option is also used in the QualityFunctionMuOracle.");
 }
 
 bool AdaptiveMuUpdate::InitializeImpl(

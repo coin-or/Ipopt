@@ -39,10 +39,16 @@ void InexactDoglegNormalStep::RegisterOptions(
    SmartPtr<RegisteredOptions> reg_options
 )
 {
-   reg_options->AddLowerBoundedNumberOption("omega_init", "Initial trust region factor for normal problem.", 0.0, true,
-         100.);
-   reg_options->AddLowerBoundedNumberOption("omega_max", "Maximal trust region factor for normal problem.", 0.0, true,
-         1e20);
+   reg_options->AddLowerBoundedNumberOption(
+      "omega_init",
+      "Initial trust region factor for normal problem.",
+      0.0, true,
+      100.);
+   reg_options->AddLowerBoundedNumberOption(
+      "omega_max",
+      "Maximal trust region factor for normal problem.",
+      0.0, true,
+      1e20);
 }
 
 bool InexactDoglegNormalStep::InitializeImpl(

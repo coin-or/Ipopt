@@ -36,55 +36,74 @@ void LimMemQuasiNewtonUpdater::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->AddLowerBoundedIntegerOption("limited_memory_max_history",
-                                          "Maximum size of the history for the limited quasi-Newton Hessian approximation.", 0, 6,
-                                          "This option determines the number of most recent iterations that are "
-                                          "taken into account for the limited-memory quasi-Newton approximation.");
+   roptions->AddLowerBoundedIntegerOption(
+      "limited_memory_max_history",
+      "Maximum size of the history for the limited quasi-Newton Hessian approximation.",
+      0,
+      6,
+      "This option determines the number of most recent iterations that are "
+      "taken into account for the limited-memory quasi-Newton approximation.");
 
-   roptions->AddStringOption2("limited_memory_update_type",
-                              "Quasi-Newton update formula for the limited memory approximation.", "bfgs", "bfgs",
-                              "BFGS update (with skipping)", "sr1", "SR1 (not working well)",
-                              "Determines which update formula is to be used for the limited-memory "
-                              "quasi-Newton approximation.");
+   roptions->AddStringOption2(
+      "limited_memory_update_type",
+      "Quasi-Newton update formula for the limited memory approximation.",
+      "bfgs",
+      "bfgs", "BFGS update (with skipping)",
+      "sr1", "SR1 (not working well)",
+      "Determines which update formula is to be used for the limited-memory quasi-Newton approximation.");
 
-   roptions->AddStringOption5("limited_memory_initialization",
-                              "Initialization strategy for the limited memory quasi-Newton approximation.", "scalar1", "scalar1",
-                              "sigma = s^Ty/s^Ts", "scalar2", "sigma = y^Ty/s^Ty", "scalar3", "arithmetic average of scalar1 and scalar2",
-                              "scalar4", "geometric average of scalar1 and scalar2", "constant", "sigma = limited_memory_init_val",
-                              "Determines how the diagonal Matrix B_0 as the first term in the "
-                              "limited memory approximation should be computed.");
+   roptions->AddStringOption5(
+      "limited_memory_initialization",
+      "Initialization strategy for the limited memory quasi-Newton approximation.",
+      "scalar1",
+      "scalar1", "sigma = s^Ty/s^Ts",
+      "scalar2", "sigma = y^Ty/s^Ty",
+      "scalar3", "arithmetic average of scalar1 and scalar2",
+      "scalar4", "geometric average of scalar1 and scalar2",
+      "constant", "sigma = limited_memory_init_val",
+      "Determines how the diagonal Matrix B_0 as the first term in the limited memory approximation should be computed.");
 
-   roptions->AddLowerBoundedNumberOption("limited_memory_init_val", "Value for B0 in low-rank update.", 0, true, 1.,
-                                         "The starting matrix in the low rank update, B0, is chosen to be this "
-                                         "multiple of the identity in the first iteration (when no updates have "
-                                         "been performed yet), and is constantly chosen as this value, if "
-                                         "\"limited_memory_initialization\" is \"constant\".");
-   roptions->AddLowerBoundedNumberOption("limited_memory_init_val_max",
-                                         "Upper bound on value for B0 in low-rank update.", 0, true, 1e8,
-                                         "The starting matrix in the low rank update, B0, is chosen to be this "
-                                         "multiple of the identity in the first iteration (when no updates have "
-                                         "been performed yet), and is constantly chosen as this value, if "
-                                         "\"limited_memory_initialization\" is \"constant\".");
-   roptions->AddLowerBoundedNumberOption("limited_memory_init_val_min",
-                                         "Lower bound on value for B0 in low-rank update.", 0, true, 1e-8,
-                                         "The starting matrix in the low rank update, B0, is chosen to be this "
-                                         "multiple of the identity in the first iteration (when no updates have "
-                                         "been performed yet), and is constantly chosen as this value, if "
-                                         "\"limited_memory_initialization\" is \"constant\".");
+   roptions->AddLowerBoundedNumberOption(
+      "limited_memory_init_val",
+      "Value for B0 in low-rank update.",
+      0., true,
+      1.,
+      "The starting matrix in the low rank update, B0, is chosen to be this multiple of the identity "
+      "in the first iteration (when no updates have been performed yet), and "
+      "is constantly chosen as this value, if \"limited_memory_initialization\" is \"constant\".");
+   roptions->AddLowerBoundedNumberOption(
+      "limited_memory_init_val_max",
+      "Upper bound on value for B0 in low-rank update.",
+      0., true,
+      1e8,
+      "The starting matrix in the low rank update, B0, is chosen to be this multiple of the identity "
+      "in the first iteration (when no updates have been performed yet), and "
+      "is constantly chosen as this value, if \"limited_memory_initialization\" is \"constant\".");
+   roptions->AddLowerBoundedNumberOption(
+      "limited_memory_init_val_min",
+      "Lower bound on value for B0 in low-rank update.",
+      0., true,
+      1e-8,
+      "The starting matrix in the low rank update, B0, is chosen to be this multiple of the identity "
+      "in the first iteration (when no updates have been performed yet), and "
+      "is constantly chosen as this value, if \"limited_memory_initialization\" is \"constant\".");
 
-   roptions->AddLowerBoundedIntegerOption("limited_memory_max_skipping",
-                                          "Threshold for successive iterations where update is skipped.", 1, 2,
-                                          "If the update is skipped more than this number of successive "
-                                          "iterations, we quasi-Newton approximation is reset.");
+   roptions->AddLowerBoundedIntegerOption(
+      "limited_memory_max_skipping",
+      "Threshold for successive iterations where update is skipped.",
+      1,
+      2,
+      "If the update is skipped more than this number of successive iterations, the quasi-Newton approximation is reset.");
 
-   roptions->AddStringOption2("limited_memory_special_for_resto",
-                              "Determines if the quasi-Newton updates should be special during the restoration phase.", "no", "no",
-                              "use the same update as in regular iterations", "yes", "use the a special update during restoration phase",
-                              "Until Nov 2010, Ipopt used a special update during the restoration "
-                              "phase, but it turned out that this does not work well.  The new "
-                              "default uses the regular update procedure and it improves results.  If "
-                              "for some reason you want to get back to the original update, set this "
-                              "option to \"yes\".");
+   roptions->AddStringOption2(
+      "limited_memory_special_for_resto",
+      "Determines if the quasi-Newton updates should be special during the restoration phase.",
+      "no",
+      "no", "use the same update as in regular iterations",
+      "yes", "use the a special update during restoration phase",
+      "Until Nov 2010, Ipopt used a special update during the restoration phase, but it turned out that this does not work well. "
+      "The new default uses the regular update procedure and it improves results. "
+      "If for some reason you want to get back to the original update, set this option to \"yes\".");
 }
 
 bool LimMemQuasiNewtonUpdater::InitializeImpl(

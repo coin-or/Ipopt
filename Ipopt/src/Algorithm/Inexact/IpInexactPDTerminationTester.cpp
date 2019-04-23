@@ -36,24 +36,56 @@ InexactPDTerminationTester::~InexactPDTerminationTester()
 void InexactPDTerminationTester::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions)
 {
-   roptions->AddLowerBoundedNumberOption("tcc_psi", "Psi factor in Tangential Component Condition.", 0.0, true, 1e-1,
-                                         "");
-   roptions->AddLowerBoundedNumberOption("tcc_theta", "theta factor in Tangential Component Condition.", 0.0, true,
-                                         1e-12, "");
-   roptions->AddLowerBoundedNumberOption("tcc_theta_mu_exponent",
-                                         "exponent for mu when multiplied with tcc_theta in Tangential Component Condition.", 0., false, 0., "");
-   roptions->AddLowerBoundedNumberOption("tcc_zeta", "zeta factor in Tangential Component Condition.", 0.0, true, 1e-1,
-                                         "");
-   roptions->AddLowerBoundedNumberOption("tt_kappa1", "kappa1 factor in Termination Test 1 and 3.", 0.0, true, 1e-3,
-                                         "");
-   roptions->AddLowerBoundedNumberOption("tt_kappa2", "kappa2 factor in Termination Test 2.", 0.0, true, 1e-1, "");
-   roptions->AddLowerBoundedNumberOption("tt_eps2", "eps2 factor in Termination Test 2.", 0.0, true, 1., "");
-   roptions->AddLowerBoundedNumberOption("tt_eps3", "eps3 factor in Termination Test 3.", 0.0, true, 1. - 1e-1, "");
-   roptions->AddLowerBoundedNumberOption("inexact_desired_pd_residual",
-                                         "Desired relative residual tolerance for iterative solver during primal-dual step computation.", 0.0, true, 1e-3,
-                                         "");
-   roptions->AddLowerBoundedIntegerOption("inexact_desired_pd_residual_iter",
-                                          "Number of iterations willing to be spent in obtaining desired primal-dual ration.", 0, 1, "");
+   roptions->AddLowerBoundedNumberOption(
+      "tcc_psi",
+      "Psi factor in Tangential Component Condition.",
+      0.0, true,
+      1e-1);
+   roptions->AddLowerBoundedNumberOption(
+      "tcc_theta",
+      "theta factor in Tangential Component Condition.",
+      0.0, true,
+      1e-12);
+   roptions->AddLowerBoundedNumberOption(
+      "tcc_theta_mu_exponent",
+      "exponent for mu when multiplied with tcc_theta in Tangential Component Condition.",
+      0., false,
+      0.);
+   roptions->AddLowerBoundedNumberOption(
+      "tcc_zeta",
+      "zeta factor in Tangential Component Condition.",
+      0.0, true,
+      1e-1);
+   roptions->AddLowerBoundedNumberOption(
+      "tt_kappa1",
+      "kappa1 factor in Termination Test 1 and 3.",
+      0.0, true,
+      1e-3);
+   roptions->AddLowerBoundedNumberOption(
+      "tt_kappa2",
+      "kappa2 factor in Termination Test 2.",
+      0.0, true,
+      1e-1);
+   roptions->AddLowerBoundedNumberOption(
+      "tt_eps2",
+      "eps2 factor in Termination Test 2.",
+      0.0, true,
+      1.);
+   roptions->AddLowerBoundedNumberOption(
+      "tt_eps3",
+      "eps3 factor in Termination Test 3.",
+      0.0, true,
+      1. - 1e-1);
+   roptions->AddLowerBoundedNumberOption(
+      "inexact_desired_pd_residual",
+      "Desired relative residual tolerance for iterative solver during primal-dual step computation.",
+      0.0, true,
+      1e-3);
+   roptions->AddLowerBoundedIntegerOption(
+      "inexact_desired_pd_residual_iter",
+      "Number of iterations willing to be spent in obtaining desired primal-dual ration.",
+      0,
+      1);
 }
 
 bool InexactPDTerminationTester::InitializeImpl(

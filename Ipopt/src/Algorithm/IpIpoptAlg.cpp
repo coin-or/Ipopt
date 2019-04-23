@@ -61,35 +61,44 @@ void IpoptAlgorithm::RegisterOptions(
 )
 {
    roptions->SetRegisteringCategory("Line Search");
-   roptions->AddLowerBoundedNumberOption("kappa_sigma",
-                                         "Factor limiting the deviation of dual variables from primal estimates.", 0, true, 1e10,
-                                         "If the dual variables deviate from their primal estimates, a correction "
-                                         "is performed. (See Eqn. (16) in the implementation paper.) "
-                                         "Setting the value to less than 1 disables the correction.");
-   roptions->AddStringOption2("recalc_y",
-                              "Tells the algorithm to recalculate the equality and inequality multipliers as least square estimates.", "no",
-                              "no", "use the Newton step to update the multipliers", "yes", "use least-square multiplier estimates",
-                              "This asks the algorithm to recompute the multipliers, whenever the "
-                              "current infeasibility is less than recalc_y_feas_tol. "
-                              "Choosing yes might be helpful in the quasi-Newton option.  However, "
-                              "each recalculation requires an extra factorization of the linear "
-                              "system.  If a limited memory quasi-Newton option is chosen, this is "
-                              "used by default.");
-   roptions->AddLowerBoundedNumberOption("recalc_y_feas_tol", "Feasibility threshold for recomputation of multipliers.",
-                                         0, true, 1e-6, "If recalc_y is chosen and the current infeasibility is less than this "
-                                         "value, then the multipliers are recomputed.");
+   roptions->AddLowerBoundedNumberOption(
+      "kappa_sigma",
+      "Factor limiting the deviation of dual variables from primal estimates.",
+      0., true,
+      1e10,
+      "If the dual variables deviate from their primal estimates, a correction is performed. "
+      "(See Eqn. (16) in the implementation paper.) "
+      "Setting the value to less than 1 disables the correction.");
+   roptions->AddStringOption2(
+      "recalc_y",
+      "Tells the algorithm to recalculate the equality and inequality multipliers as least square estimates.",
+      "no",
+      "no", "use the Newton step to update the multipliers",
+      "yes", "use least-square multiplier estimates",
+      "This asks the algorithm to recompute the multipliers, whenever the current infeasibility is less than recalc_y_feas_tol. "
+      "Choosing yes might be helpful in the quasi-Newton option. "
+      "However, each recalculation requires an extra factorization of the linear system. "
+      "If a limited memory quasi-Newton option is chosen, this is used by default.");
+   roptions->AddLowerBoundedNumberOption(
+      "recalc_y_feas_tol",
+      "Feasibility threshold for recomputation of multipliers.",
+      0., true,
+      1e-6,
+      "If recalc_y is chosen and the current infeasibility is less than this value, then the multipliers are recomputed.");
    roptions->SetRegisteringCategory("Step Calculation");
-   roptions->AddStringOption2("mehrotra_algorithm", "Indicates if we want to do Mehrotra's algorithm.", "no", "no",
-                              "Do the usual Ipopt algorithm.", "yes", "Do Mehrotra's predictor-corrector algorithm.",
-                              "If set to yes, Ipopt runs as Mehrotra's predictor-corrector algorithm. "
-                              "This works usually very well for LPs and convex QPs.  This "
-                              "automatically disables the line search, and chooses the (unglobalized) "
-                              "adaptive mu strategy with the \"probing\" oracle, and uses "
-                              "\"corrector_type=affine\" without any safeguards; you should not set "
-                              "any of those options explicitly in addition.  Also, unless "
-                              "otherwise specified, the values of \"bound_push\", \"bound_frac\", and "
-                              "\"bound_mult_init_val\" are set more aggressive, and sets "
-                              "\"alpha_for_y=bound_mult\".");
+   roptions->AddStringOption2(
+      "mehrotra_algorithm",
+      "Indicates if we want to do Mehrotra's algorithm.",
+      "no",
+      "no", "Do the usual Ipopt algorithm.",
+      "yes", "Do Mehrotra's predictor-corrector algorithm.",
+      "If set to yes, Ipopt runs as Mehrotra's predictor-corrector algorithm. "
+      "This works usually very well for LPs and convex QPs. "
+      "This automatically disables the line search, and chooses the (unglobalized) adaptive mu strategy "
+      "with the \"probing\" oracle, and uses \"corrector_type=affine\" without any safeguards; "
+      "you should not set any of those options explicitly in addition. "
+      "Also, unless otherwise specified, the values of \"bound_push\", \"bound_frac\", and "
+      "\"bound_mult_init_val\" are set more aggressive, and sets \"alpha_for_y=bound_mult\".");
    roptions->SetRegisteringCategory("");
    roptions->AddStringOption2("sb", "", "no", "no", "", "yes", "");
 }

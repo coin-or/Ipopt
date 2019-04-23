@@ -37,10 +37,16 @@ void InexactNormalTerminationTester::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->AddLowerBoundedNumberOption("inexact_normal_tol",
-                                         "Desired relative residual tolerance for iterative solver during normal step computation.", 0.0, true, 1e-3, "");
-   roptions->AddLowerBoundedIntegerOption("inexact_normal_max_iter",
-                                          "Maximal number of iterative solver iterations during normal step computation", 0, 200, "");
+   roptions->AddLowerBoundedNumberOption(
+      "inexact_normal_tol",
+      "Desired relative residual tolerance for iterative solver during normal step computation.",
+      0.0, true,
+      1e-3);
+   roptions->AddLowerBoundedIntegerOption(
+      "inexact_normal_max_iter",
+      "Maximal number of iterative solver iterations during normal step computation",
+      0,
+      200);
 }
 
 bool InexactNormalTerminationTester::InitializeImpl(

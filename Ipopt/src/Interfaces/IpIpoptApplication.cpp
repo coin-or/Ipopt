@@ -631,84 +631,117 @@ void IpoptApplication::RegisterOptions(
 )
 {
    roptions->SetRegisteringCategory("Output");
-   roptions->AddBoundedIntegerOption("print_level", "Output verbosity level.", 0, J_LAST_LEVEL - 1, J_ITERSUMMARY,
-                                     "Sets the default verbosity level for console output. The "
-                                     "larger this value the more detailed is the output.");
+   roptions->AddBoundedIntegerOption(
+      "print_level",
+      "Output verbosity level.",
+      0, J_LAST_LEVEL - 1,
+      J_ITERSUMMARY,
+      "Sets the default verbosity level for console output. "
+      "The larger this value the more detailed is the output.");
 
-   roptions->AddStringOption1("output_file", "File name of desired output file (leave unset for no file output).", "",
-                              "*", "Any acceptable standard file name",
-                              "NOTE: This option only works when read from the ipopt.opt options file! "
-                              "An output file with this name will be written (leave unset for no "
-                              "file output).  The verbosity level is by default set to \"print_level\", "
-                              "but can be overridden with \"file_print_level\".  The file name is "
-                              "changed to use only small letters.");
-   roptions->AddBoundedIntegerOption("file_print_level", "Verbosity level for output file.", 0, J_LAST_LEVEL - 1,
-                                     J_ITERSUMMARY, "NOTE: This option only works when read from the ipopt.opt options file! "
-                                     "Determines the verbosity level for the file specified by "
-                                     "\"output_file\".  By default it is the same as \"print_level\".");
-   roptions->AddStringOption2("print_user_options", "Print all options set by the user.", "no", "no",
-                              "don't print options", "yes", "print options",
-                              "If selected, the algorithm will print the list of all options set by "
-                              "the user including their values and whether they have been used.  In "
-                              "some cases this information might be incorrect, due to the internal "
-                              "program flow.");
-   roptions->AddStringOption2("print_options_documentation", "Switch to print all algorithmic options.", "no", "no",
-                              "don't print list", "yes", "print list", "If selected, the algorithm will print the list of all available "
-                              "algorithmic options with some documentation before solving the "
-                              "optimization problem.");
+   roptions->AddStringOption1(
+      "output_file",
+      "File name of desired output file (leave unset for no file output).",
+      "",
+      "*", "Any acceptable standard file name",
+      "NOTE: This option only works when read from the ipopt.opt options file! "
+      "An output file with this name will be written (leave unset for no file output). "
+      "The verbosity level is by default set to \"print_level\", but can be overridden with \"file_print_level\". "
+      "The file name is changed to use only small letters.");
+   roptions->AddBoundedIntegerOption(
+      "file_print_level",
+      "Verbosity level for output file.",
+      0, J_LAST_LEVEL - 1,
+      J_ITERSUMMARY,
+      "NOTE: This option only works when read from the ipopt.opt options file! "
+      "Determines the verbosity level for the file specified by \"output_file\". "
+      "By default it is the same as \"print_level\".");
+   roptions->AddStringOption2(
+      "print_user_options",
+      "Print all options set by the user.",
+      "no",
+      "no", "don't print options",
+      "yes", "print options",
+      "If selected, the algorithm will print the list of all options set by the user including their values and whether they have been used. "
+      "In some cases this information might be incorrect, due to the internal program flow.");
+   roptions->AddStringOption2(
+      "print_options_documentation",
+      "Switch to print all algorithmic options.",
+      "no",
+      "no", "don't print list",
+      "yes", "print list",
+      "If selected, the algorithm will print the list of all available algorithmic options with some documentation "
+      "before solving the optimization problem.");
 
 #if COIN_IPOPT_VERBOSITY > 0
 
    roptions->AddBoundedIntegerOption(
       "debug_print_level",
       "Verbosity level for debug file.",
-      0, J_LAST_LEVEL - 1, J_ITERSUMMARY,
-      "This Ipopt library has been compiled in debug mode, and a file "
-      "\"debug.out\" is produced for every run.  This option determines "
-      "the verbosity level for this file.  By default it is the same as "
-      "\"print_level\".");
-
+      0, J_LAST_LEVEL - 1,
+      J_ITERSUMMARY,
+      "This Ipopt library has been compiled in debug mode, and a file \"debug.out\" is produced for every run."
+      "This option determines the verbosity level for this file. "
+      "By default it is the same as \"print_level\".");
 #endif
 
-   roptions->AddStringOption2("print_timing_statistics", "Switch to print timing statistics.", "no", "no",
-                              "don't print statistics", "yes", "print all timing statistics",
-                              "If selected, the program will print the CPU usage (user time) for "
-                              "selected tasks.");
+   roptions->AddStringOption2(
+      "print_timing_statistics",
+      "Switch to print timing statistics.",
+      "no",
+      "no", "don't print statistics",
+      "yes", "print all timing statistics",
+      "If selected, the program will print the CPU usage (user time) for selected tasks.");
 
-   roptions->AddStringOption1("option_file_name", "File name of options file.", "ipopt.opt", "*",
-                              "Any acceptable standard file name", "By default, the name of the Ipopt options file is \"ipopt.opt\" - or "
-                              "something else if specified in the IpoptApplication::Initialize call. "
-                              "If this option is set by SetStringValue BEFORE the options file is "
-                              "read, it specifies the name of the options file.  It does not make any "
-                              "sense to specify this option within the options file. "
-                              "Setting this option to an empty string disables reading of an options file.");
+   roptions->AddStringOption1(
+      "option_file_name",
+      "File name of options file.",
+      "ipopt.opt",
+      "*", "Any acceptable standard file name",
+      "By default, the name of the Ipopt options file is \"ipopt.opt\" - "
+      "or something else if specified in the IpoptApplication::Initialize call. "
+      "If this option is set by SetStringValue BEFORE the options file is read, it specifies the name of the options file. "
+      "It does not make any sense to specify this option within the options file. "
+      "Setting this option to an empty string disables reading of an options file.");
 
-   roptions->AddStringOption2("replace_bounds",
-                              "Indicates if all variable bounds should be replaced by inequality constraints", "no", "no",
-                              "leave bounds on variables", "yes", "replace variable bounds by inequality constraints",
-                              "This option must be set for the inexact algorithm");
-   roptions->AddStringOption2("skip_finalize_solution_call",
-                              "Indicates if call to NLP::FinalizeSolution after optimization should be suppressed", "no", "no",
-                              "call FinalizeSolution", "yes", "do not call FinalizeSolution",
-                              "In some Ipopt applications, the user might want to call the "
-                              "FinalizeSolution method separately.  Setting this option to \"yes\" "
-                              "will cause the IpoptApplication object to suppress the default call to "
-                              "that method.");
+   roptions->AddStringOption2(
+      "replace_bounds",
+      "Indicates if all variable bounds should be replaced by inequality constraints",
+      "no",
+      "no", "leave bounds on variables",
+      "yes", "replace variable bounds by inequality constraints",
+      "This option must be set for the inexact algorithm");
+   roptions->AddStringOption2(
+      "skip_finalize_solution_call",
+      "Indicates if call to NLP::FinalizeSolution after optimization should be suppressed",
+      "no",
+      "no", "call FinalizeSolution",
+      "yes", "do not call FinalizeSolution",
+      "In some Ipopt applications, the user might want to call the FinalizeSolution method separately. "
+      "Setting this option to \"yes\" will cause the IpoptApplication object to suppress the default call to that method.");
 
    roptions->SetRegisteringCategory("Undocumented");
-   roptions->AddStringOption3("print_options_mode", "Undocumented", "text", "text", "Ordinary text",
-                              "latex", "LaTeX formatted",
-                              "doxygen", "Doxygen (markdown) formatted");
-   roptions->AddStringOption2("suppress_all_output", "Undocumented", "no", "no", "Undocumented", "yes", "Undocumented",
-                              "Undocumented");
+   roptions->AddStringOption3(
+      "print_options_mode",
+      "Undocumented",
+      "text",
+      "text", "Ordinary text",
+      "latex", "LaTeX formatted",
+      "doxygen", "Doxygen (markdown) formatted");
+   roptions->AddStringOption2(
+      "suppress_all_output",
+      "Undocumented",
+      "no",
+      "no", "Undocumented",
+      "yes", "Undocumented",
+      "Undocumented");
 #ifdef BUILD_INEXACT
    roptions->AddStringOption2(
       "inexact_algorithm",
       "Activate the version of Ipopt that allows iterative linear solvers.",
       "no",
       "no", "use default algorithm with direct linear solvers",
-      "yes", "use the EXPERIMENTAL iterative linear solver option",
-      "");
+      "yes", "use the EXPERIMENTAL iterative linear solver option");
 #endif
 }
 

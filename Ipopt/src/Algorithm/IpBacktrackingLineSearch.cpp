@@ -53,105 +53,147 @@ void BacktrackingLineSearch::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->AddBoundedNumberOption("alpha_red_factor",
-                                    "Fractional reduction of the trial step size in the backtracking line search.", 0.0, true, 1.0, true, 0.5,
-                                    "At every step of the backtracking line search, the trial step size is "
-                                    "reduced by this factor.");
+   roptions->AddBoundedNumberOption(
+      "alpha_red_factor",
+      "Fractional reduction of the trial step size in the backtracking line search.",
+      0.0, true,
+      1.0, true,
+      0.5,
+      "At every step of the backtracking line search, the trial step size is reduced by this factor.");
 
    std::string prev_category = roptions->RegisteringCategory();
    roptions->SetRegisteringCategory("Undocumented");
-   roptions->AddStringOption2("magic_steps", "Enables magic steps.", "no", "no", "don't take magic steps", "yes",
-                              "take magic steps", "DOESN'T REALLY WORK YET!");
+   roptions->AddStringOption2(
+      "magic_steps",
+      "Enables magic steps.",
+      "no",
+      "no", "don't take magic steps",
+      "yes", "take magic steps",
+      "DOESN'T REALLY WORK YET!");
    roptions->SetRegisteringCategory(prev_category);
 
-   roptions->AddStringOption2("accept_every_trial_step", "Always accept the first trial step.", "no", "no",
-                              "don't arbitrarily accept the full step", "yes", "always accept the full step",
-                              "Setting this option to \"yes\" essentially disables the line search "
-                              "and makes the algorithm take aggressive steps, without global "
-                              "convergence guarantees.");
-   roptions->AddLowerBoundedIntegerOption("accept_after_max_steps",
-                                          "Accept a trial point after maximal this number of steps.", -1, -1,
-                                          "Even if it does not satisfy line search conditions.");
+   roptions->AddStringOption2(
+      "accept_every_trial_step",
+      "Always accept the first trial step.",
+      "no",
+      "no", "don't arbitrarily accept the full step",
+      "yes", "always accept the full step",
+      "Setting this option to \"yes\" essentially disables the line search and "
+      "makes the algorithm take aggressive steps, without global convergence guarantees.");
+   roptions->AddLowerBoundedIntegerOption(
+      "accept_after_max_steps",
+      "Accept a trial point after maximal this number of steps.",
+      -1,
+      -1,
+      "Even if it does not satisfy line search conditions.");
 
-   roptions->AddStringOption10("alpha_for_y", "Method to determine the step size for constraint multipliers.", "primal",
-                               "primal", "use primal step size", "bound-mult", "use step size for the bound multipliers (good for LPs)", "min",
-                               "use the min of primal and bound multipliers", "max", "use the max of primal and bound multipliers", "full",
-                               "take a full step of size one", "min-dual-infeas", "choose step size minimizing new dual infeasibility",
-                               "safer-min-dual-infeas", "like \"min_dual_infeas\", but safeguarded by \"min\" and \"max\"", "primal-and-full",
-                               "use the primal step size, and full step if delta_x <= alpha_for_y_tol", "dual-and-full",
-                               "use the dual step size, and full step if delta_x <= alpha_for_y_tol", "acceptor",
-                               "Call LSAcceptor to get step size for y",
-                               "This option determines how the step size (alpha_y) will be calculated when updating the "
-                               "constraint multipliers.");
-   roptions->AddLowerBoundedNumberOption("alpha_for_y_tol",
-                                         "Tolerance for switching to full equality multiplier steps.", 0.0, false, 10.,
-                                         "This is only relevant if \"alpha_for_y\" is chosen \"primal-and-full\" "
-                                         "or \"dual-and-full\".  The step size for the equality constraint "
-                                         "multipliers is taken to be one if the max-norm of the primal step is "
-                                         "less than this tolerance.");
+   roptions->AddStringOption10(
+      "alpha_for_y",
+      "Method to determine the step size for constraint multipliers.",
+      "primal",
+      "primal", "use primal step size",
+      "bound-mult", "use step size for the bound multipliers (good for LPs)",
+      "min", "use the min of primal and bound multipliers",
+      "max", "use the max of primal and bound multipliers",
+      "full", "take a full step of size one",
+      "min-dual-infeas", "choose step size minimizing new dual infeasibility",
+      "safer-min-dual-infeas", "like \"min_dual_infeas\", but safeguarded by \"min\" and \"max\"",
+      "primal-and-full", "use the primal step size, and full step if delta_x <= alpha_for_y_tol",
+      "dual-and-full", "use the dual step size, and full step if delta_x <= alpha_for_y_tol",
+      "acceptor", "Call LSAcceptor to get step size for y",
+      "This option determines how the step size (alpha_y) will be calculated when updating the constraint multipliers.");
+   roptions->AddLowerBoundedNumberOption(
+      "alpha_for_y_tol",
+      "Tolerance for switching to full equality multiplier steps.",
+      0.0, false,
+      10.,
+      "This is only relevant if \"alpha_for_y\" is chosen \"primal-and-full\" or \"dual-and-full\". "
+      "The step size for the equality constraint multipliers is taken to be one if the max-norm of the primal step is less than this tolerance.");
 
-   roptions->AddLowerBoundedNumberOption("tiny_step_tol", "Tolerance for detecting numerically insignificant steps.",
-                                         0.0, false, 10.0 * std::numeric_limits<double>::epsilon(),
-                                         "If the search direction in the primal variables (x and s) is, in "
-                                         "relative terms for each component, less than this value, the "
-                                         "algorithm accepts the full step without line search.  If this happens "
-                                         "repeatedly, the algorithm will terminate with a corresponding exit "
-                                         "message. The default value is 10 times machine precision.");
-   roptions->AddLowerBoundedNumberOption("tiny_step_y_tol",
-                                         "Tolerance for quitting because of numerically insignificant steps.", 0.0, false, 1e-2,
-                                         "If the search direction in the primal variables (x and s) is, in "
-                                         "relative terms for each component, repeatedly less than tiny_step_tol, "
-                                         "and the step in the y variables is smaller than this threshold, the "
-                                         "algorithm will terminate.");
-   roptions->AddLowerBoundedIntegerOption("watchdog_shortened_iter_trigger",
-                                          "Number of shortened iterations that trigger the watchdog.", 0, 10,
-                                          "If the number of successive iterations in which the backtracking line search "
-                                          "did not accept the first trial point exceeds this number, the "
-                                          "watchdog procedure is activated.  Choosing \"0\" here disables the "
-                                          "watchdog procedure.");
-   roptions->AddLowerBoundedIntegerOption("watchdog_trial_iter_max", "Maximum number of watchdog iterations.", 1, 3,
-                                          "This option determines the number of trial iterations "
-                                          "allowed before the watchdog "
-                                          "procedure is aborted and the algorithm returns to the stored point.");
+   roptions->AddLowerBoundedNumberOption(
+      "tiny_step_tol",
+      "Tolerance for detecting numerically insignificant steps.",
+      0.0, false,
+      10.0 * std::numeric_limits<double>::epsilon(),
+      "If the search direction in the primal variables (x and s) is, in relative terms for each component, "
+      "less than this value, the algorithm accepts the full step without line search. "
+      "If this happens repeatedly, the algorithm will terminate with a corresponding exit message. "
+      "The default value is 10 times machine precision.");
+   roptions->AddLowerBoundedNumberOption(
+      "tiny_step_y_tol",
+      "Tolerance for quitting because of numerically insignificant steps.",
+      0.0, false,
+      1e-2,
+      "If the search direction in the primal variables (x and s) is, "
+      "in relative terms for each component, repeatedly less than tiny_step_tol, and "
+      "the step in the y variables is smaller than this threshold, the algorithm will terminate.");
+   roptions->AddLowerBoundedIntegerOption(
+      "watchdog_shortened_iter_trigger",
+      "Number of shortened iterations that trigger the watchdog.",
+      0,
+      10,
+      "If the number of successive iterations in which the backtracking line search did not accept "
+      "the first trial point exceeds this number, the watchdog procedure is activated. "
+      "Choosing \"0\" here disables the watchdog procedure.");
+   roptions->AddLowerBoundedIntegerOption(
+      "watchdog_trial_iter_max",
+      "Maximum number of watchdog iterations.",
+      1,
+      3,
+      "This option determines the number of trial iterations allowed before the watchdog "
+      "procedure is aborted and the algorithm returns to the stored point.");
 
    roptions->SetRegisteringCategory("Restoration Phase");
-   roptions->AddStringOption2("expect_infeasible_problem", "Enable heuristics to quickly detect an infeasible problem.",
-                              "no", "no", "the problem probably be feasible", "yes", "the problem has a good chance to be infeasible",
-                              "This options is meant to activate heuristics that may speed up the "
-                              "infeasibility determination if you expect that there is a good chance for the problem to be "
-                              "infeasible.  In the filter line search procedure, the restoration "
-                              "phase is called more quickly than usually, and more reduction in "
-                              "the constraint violation is enforced before the restoration phase is "
-                              "left. If the problem is square, this option is enabled automatically.");
-   roptions->AddLowerBoundedNumberOption("expect_infeasible_problem_ctol",
-                                         "Threshold for disabling \"expect_infeasible_problem\" option.", 0.0, false, 1e-3,
-                                         "If the constraint violation becomes smaller than this threshold, "
-                                         "the \"expect_infeasible_problem\" heuristics in the filter line "
-                                         "search are disabled. If the problem is square, this options is set to "
-                                         "0.");
-   roptions->AddLowerBoundedNumberOption("expect_infeasible_problem_ytol",
-                                         "Multiplier threshold for activating \"expect_infeasible_problem\" option.", 0.0, true, 1e8,
-                                         "If the max norm of the constraint multipliers becomes larger than this "
-                                         "value and \"expect_infeasible_problem\" is chosen, then the "
-                                         "restoration phase is entered.");
-   roptions->AddStringOption2("start_with_resto", "Tells algorithm to switch to restoration phase in first iteration.",
-                              "no", "no", "don't force start in restoration phase", "yes", "force start in restoration phase",
-                              "Setting this option to \"yes\" forces the algorithm to switch to the "
-                              "feasibility restoration phase in the first iteration. If the initial "
-                              "point is feasible, the algorithm will abort with a failure.");
-   roptions->AddLowerBoundedNumberOption("soft_resto_pderror_reduction_factor",
-                                         "Required reduction in primal-dual error in the soft restoration phase.", 0.0, false, (1.0 - 1e-4),
-                                         "The soft restoration phase attempts to reduce the "
-                                         "primal-dual error with regular steps. If the damped "
-                                         "primal-dual step (damped only to satisfy the "
-                                         "fraction-to-the-boundary rule) is not decreasing the primal-dual error "
-                                         "by at least this factor, then the regular restoration phase is called. "
-                                         "Choosing \"0\" here disables the soft "
-                                         "restoration phase.");
-   roptions->AddLowerBoundedIntegerOption("max_soft_resto_iters",
-                                          "Maximum number of iterations performed successively in soft restoration phase.", 0, 10,
-                                          "If the soft restoration phase is performed for more than so many "
-                                          "iterations in a row, the regular restoration phase is called.");
+   roptions->AddStringOption2(
+      "expect_infeasible_problem",
+      "Enable heuristics to quickly detect an infeasible problem.",
+      "no",
+      "no", "the problem probably be feasible",
+      "yes", "the problem has a good chance to be infeasible",
+      "This options is meant to activate heuristics that may speed up the infeasibility determination "
+      "if you expect that there is a good chance for the problem to be infeasible. "
+      "In the filter line search procedure, the restoration phase is called more quickly than usually, "
+      "and more reduction in the constraint violation is enforced before the restoration phase is left. "
+      "If the problem is square, this option is enabled automatically.");
+   roptions->AddLowerBoundedNumberOption(
+      "expect_infeasible_problem_ctol",
+      "Threshold for disabling \"expect_infeasible_problem\" option.",
+      0.0, false,
+      1e-3,
+      "If the constraint violation becomes smaller than this threshold, "
+      "the \"expect_infeasible_problem\" heuristics in the filter line search are disabled. "
+      "If the problem is square, this options is set to 0.");
+   roptions->AddLowerBoundedNumberOption(
+      "expect_infeasible_problem_ytol",
+      "Multiplier threshold for activating \"expect_infeasible_problem\" option.",
+      0.0, true,
+      1e8,
+      "If the max norm of the constraint multipliers becomes larger than this value and "
+      "\"expect_infeasible_problem\" is chosen, then the restoration phase is entered.");
+   roptions->AddStringOption2(
+      "start_with_resto",
+      "Tells algorithm to switch to restoration phase in first iteration.",
+      "no",
+      "no", "don't force start in restoration phase",
+      "yes", "force start in restoration phase",
+      "Setting this option to \"yes\" forces the algorithm to switch to the feasibility restoration phase in the first iteration. "
+      "If the initial point is feasible, the algorithm will abort with a failure.");
+   roptions->AddLowerBoundedNumberOption(
+      "soft_resto_pderror_reduction_factor",
+      "Required reduction in primal-dual error in the soft restoration phase.",
+      0.0, false,
+      1.0 - 1e-4,
+      "The soft restoration phase attempts to reduce the primal-dual error with regular steps. "
+      "If the damped primal-dual step (damped only to satisfy the fraction-to-the-boundary rule) "
+      "is not decreasing the primal-dual error by at least this factor, then the regular restoration phase is called. "
+      "Choosing \"0\" here disables the soft restoration phase.");
+   roptions->AddLowerBoundedIntegerOption(
+      "max_soft_resto_iters",
+      "Maximum number of iterations performed successively in soft restoration phase.",
+      0,
+      10,
+      "If the soft restoration phase is performed for more than so many iterations in a row, "
+      "the regular restoration phase is called.");
 }
 
 bool BacktrackingLineSearch::InitializeImpl(

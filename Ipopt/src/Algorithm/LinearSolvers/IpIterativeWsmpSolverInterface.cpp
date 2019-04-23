@@ -87,11 +87,22 @@ IterativeWsmpSolverInterface::~IterativeWsmpSolverInterface()
 void IterativeWsmpSolverInterface::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions)
 {
-   roptions->AddLowerBoundedIntegerOption("wsmp_max_iter", "Maximal number of iterations in iterative WISMP", 1, 1000, "");
-   roptions->AddLowerBoundedNumberOption("wsmp_inexact_droptol",
-                                         "Drop tolerance for inexact factorization preconditioner in WISMP.", 0.0, false, 0.0, "DPARM(14) in WISMP");
-   roptions->AddLowerBoundedNumberOption("wsmp_inexact_fillin_limit",
-                                         "Fill-in limit for inexact factorization preconditioner in WISMP.", 0.0, false, 0.0, "DPARM(15) in WISMP");
+   roptions->AddLowerBoundedIntegerOption(
+      "wsmp_max_iter",
+      "Maximal number of iterations in iterative WISMP", 1,
+      1000);
+   roptions->AddLowerBoundedNumberOption(
+      "wsmp_inexact_droptol",
+      "Drop tolerance for inexact factorization preconditioner in WISMP.",
+      0.0, false,
+      0.0,
+      "DPARM(14) in WISMP");
+   roptions->AddLowerBoundedNumberOption(
+      "wsmp_inexact_fillin_limit",
+      "Fill-in limit for inexact factorization preconditioner in WISMP.",
+      0.0, false,
+      0.0,
+      "DPARM(15) in WISMP");
 }
 
 bool IterativeWsmpSolverInterface::InitializeImpl(

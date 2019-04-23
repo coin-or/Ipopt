@@ -182,16 +182,26 @@ void PardisoSolverInterface::RegisterOptions(
 )
 {
    // Todo Use keywords instead of integer numbers
-   roptions->AddStringOption3("pardiso_matching_strategy", "Matching strategy to be used by Pardiso", "complete+2x2",
-                              "complete", "Match complete (IPAR(13)=1)", "complete+2x2", "Match complete+2x2 (IPAR(13)=2)", "constraints",
-                              "Match constraints (IPAR(13)=3)", "This is IPAR(13) in Pardiso manual.");
-   roptions->AddStringOption2("pardiso_redo_symbolic_fact_only_if_inertia_wrong",
-                              "Toggle for handling case when elements were perturbed by Pardiso.", "no", "no",
-                              "Always redo symbolic factorization when elements were perturbed", "yes",
-                              "Only redo symbolic factorization when elements were perturbed if also the inertia was wrong", "");
-   roptions->AddStringOption2("pardiso_repeated_perturbation_means_singular", "Interpretation of perturbed elements.",
-                              "no", "no", "Don't assume that matrix is singular if elements were perturbed after recent symbolic factorization",
-                              "yes", "Assume that matrix is singular if elements were perturbed after recent symbolic factorization", "");
+   roptions->AddStringOption3(
+      "pardiso_matching_strategy",
+      "Matching strategy to be used by Pardiso",
+      "complete+2x2",
+      "complete", "Match complete (IPAR(13)=1)",
+      "complete+2x2", "Match complete+2x2 (IPAR(13)=2)",
+      "constraints", "Match constraints (IPAR(13)=3)",
+      "This is IPAR(13) in Pardiso manual.");
+   roptions->AddStringOption2(
+      "pardiso_redo_symbolic_fact_only_if_inertia_wrong",
+      "Toggle for handling case when elements were perturbed by Pardiso.",
+      "no",
+      "no", "Always redo symbolic factorization when elements were perturbed",
+      "yes", "Only redo symbolic factorization when elements were perturbed if also the inertia was wrong");
+   roptions->AddStringOption2(
+      "pardiso_repeated_perturbation_means_singular",
+      "Interpretation of perturbed elements.",
+      "no",
+      "no", "Don't assume that matrix is singular if elements were perturbed after recent symbolic factorization",
+      "yes", "Assume that matrix is singular if elements were perturbed after recent symbolic factorization");
    //roptions->AddLowerBoundedIntegerOption(
    //  "pardiso_out_of_core_power",
    //  "Enables out-of-core variant of Pardiso",
@@ -200,29 +210,41 @@ void PardisoSolverInterface::RegisterOptions(
    //  "out-of-core variant where the factor is split in 2^k subdomains.  This "
    //  "is IPARM(50) in the Pardiso manual.  This option is only available if "
    //  "Ipopt has been compiled with Pardiso.");
-   roptions->AddLowerBoundedIntegerOption("pardiso_msglvl", "Pardiso message level", 0, 0,
-                                          "This determines the amount of analysis output from the Pardiso solver. "
-                                          "This is MSGLVL in the Pardiso manual.");
-   roptions->AddStringOption2("pardiso_skip_inertia_check", "Always pretend inertia is correct.", "no", "no",
-                              "check inertia", "yes", "skip inertia check", "Setting this option to \"yes\" essentially disables inertia check. "
-                              "This option makes the algorithm non-robust and easily fail, but it "
-                              "might give some insight into the necessity of inertia control.");
-   roptions->AddIntegerOption("pardiso_max_iterative_refinement_steps", "Limit on number of iterative refinement steps.",
-                              // ToDo: Decide how many iterative refinement steps in Pardiso.
-                              //       For now, we keep the default (0) for Basel Pardiso.
-                              //       For MKL Pardiso, it seems that setting it to 1 makes it more
-                              //       robust and just a little bit slower.
-                              //       Setting it to 1 should decrease the number of iterative refinement
-                              //       steps by 1 in case that perturbed pivots have been used, and increase
-                              //       it by 1 otherwise.
+   roptions->AddLowerBoundedIntegerOption(
+      "pardiso_msglvl",
+      "Pardiso message level",
+      0,
+      0,
+      "This determines the amount of analysis output from the Pardiso solver. "
+      "This is MSGLVL in the Pardiso manual.");
+   roptions->AddStringOption2(
+      "pardiso_skip_inertia_check",
+      "Always pretend inertia is correct.",
+      "no",
+      "no", "check inertia",
+      "yes", "skip inertia check",
+      "Setting this option to \"yes\" essentially disables inertia check. "
+      "This option makes the algorithm non-robust and easily fail, but it might give some insight into the necessity of inertia control.");
+   roptions->AddIntegerOption(
+      "pardiso_max_iterative_refinement_steps",
+      "Limit on number of iterative refinement steps.",
+      // ToDo: Decide how many iterative refinement steps in Pardiso.
+      //       For now, we keep the default (0) for Basel Pardiso.
+      //       For MKL Pardiso, it seems that setting it to 1 makes it more
+      //       robust and just a little bit slower.
+      //       Setting it to 1 should decrease the number of iterative refinement
+      //       steps by 1 in case that perturbed pivots have been used, and increase
+      //       it by 1 otherwise.
 #ifdef HAVE_PARDISO_MKL
-                              1,
+      1,
 #else
-                              0,
+      0,
 #endif
-                              "The solver does not perform more than the absolute value of this value steps of iterative refinement and stops the process if a satisfactory level of accuracy of the solution in terms of backward error is achieved. "
-                              "If negative, the accumulation of the residue uses extended precision real and complex data types. Perturbed pivots result in iterative refinement. "
-                              "The solver automatically performs two steps of iterative refinements when perturbed pivots are obtained during the numerical factorization and this option is set to 0.");
+      "The solver does not perform more than the absolute value of this value steps of iterative refinement and "
+      "stops the process if a satisfactory level of accuracy of the solution in terms of backward error is achieved. "
+      "If negative, the accumulation of the residue uses extended precision real and complex data types. "
+      "Perturbed pivots result in iterative refinement. "
+      "The solver automatically performs two steps of iterative refinements when perturbed pivots are obtained during the numerical factorization and this option is set to 0.");
 #ifdef HAVE_PARDISO_MKL
    roptions->AddStringOption4(
       "pardiso_order",
@@ -231,34 +253,84 @@ void PardisoSolverInterface::RegisterOptions(
       "amd", "minimum degree algorithm",
       "one", "undocumented",
       "metis", "MeTiS nested dissection algorithm",
-      "pmetis", "parallel (OpenMP) version of MeTiS nested dissection algorithm",
-      "");
+      "pmetis", "parallel (OpenMP) version of MeTiS nested dissection algorithm");
 #else
-   roptions->AddStringOption6("pardiso_order", "Controls the fill-in reduction ordering algorithm for the input matrix.",
-                              "metis", "amd", "minimum degree algorithm", "one", "undocumented", "metis", "MeTiS nested dissection algorithm",
-                              "pmetis", "parallel (OpenMP) version of MeTiS nested dissection algorithm", "four", "undocumented", "five",
-                              "undocumented"
-                              "");
+   roptions->AddStringOption6(
+      "pardiso_order",
+      "Controls the fill-in reduction ordering algorithm for the input matrix.",
+      "metis",
+      "amd", "minimum degree algorithm",
+      "one", "undocumented",
+      "metis", "MeTiS nested dissection algorithm",
+      "pmetis", "parallel (OpenMP) version of MeTiS nested dissection algorithm",
+      "four", "undocumented",
+      "five", "undocumented");
 #endif
 #if !defined(HAVE_PARDISO_OLDINTERFACE) && !defined(HAVE_PARDISO_MKL)
-   roptions->AddLowerBoundedIntegerOption("pardiso_max_iter", "Maximum number of Krylov-Subspace Iteration", 1, 500,
-                                          "DPARM(1)");
-   roptions->AddBoundedNumberOption("pardiso_iter_relative_tol", "Relative Residual Convergence", 0.0, true, 1.0, true,
-                                    1e-6, "DPARM(2)");
-   roptions->AddLowerBoundedIntegerOption("pardiso_iter_coarse_size", "Maximum Size of Coarse Grid Matrix", 1, 5000,
-                                          "DPARM(3)");
-   roptions->AddLowerBoundedIntegerOption("pardiso_iter_max_levels", "Maximum Size of Grid Levels", 1, 10, "DPARM(4)");
-   roptions->AddBoundedNumberOption("pardiso_iter_dropping_factor", "dropping value for incomplete factor", 0.0, true, 1.0,
-                                    true, 0.5, "DPARM(5)");
-   roptions->AddBoundedNumberOption("pardiso_iter_dropping_schur", "dropping value for sparsify schur complement factor",
-                                    0.0, true, 1.0, true, 1e-1, "DPARM(6)");
-   roptions->AddLowerBoundedIntegerOption("pardiso_iter_max_row_fill", "max fill for each row", 1, 10000000, "DPARM(7)");
-   roptions->AddLowerBoundedNumberOption("pardiso_iter_inverse_norm_factor", "", 1, true, 5000000, "DPARM(8)");
-   roptions->AddStringOption2("pardiso_iterative", "Switch on iterative solver in Pardiso library", "no", "no", "", "yes",
-                              "", "This option is not available for Pardiso < 4.0 or MKL Pardiso");
-   roptions->AddLowerBoundedIntegerOption("pardiso_max_droptol_corrections",
-                                          "Maximal number of decreases of drop tolerance during one solve.", 1, 4,
-                                          "This is relevant only for iterative Pardiso options.");
+   roptions->AddLowerBoundedIntegerOption(
+      "pardiso_max_iter",
+      "Maximum number of Krylov-Subspace Iteration",
+      1,
+      500,
+      "DPARM(1)");
+   roptions->AddBoundedNumberOption(
+      "pardiso_iter_relative_tol",
+      "Relative Residual Convergence",
+      0.0, true,
+      1.0, true,
+      1e-6,
+      "DPARM(2)");
+   roptions->AddLowerBoundedIntegerOption(
+      "pardiso_iter_coarse_size",
+      "Maximum Size of Coarse Grid Matrix",
+      1,
+      5000,
+      "DPARM(3)");
+   roptions->AddLowerBoundedIntegerOption(
+      "pardiso_iter_max_levels",
+      "Maximum Size of Grid Levels",
+      1,
+      10,
+      "DPARM(4)");
+   roptions->AddBoundedNumberOption(
+      "pardiso_iter_dropping_factor",
+      "dropping value for incomplete factor",
+      0.0, true,
+      1.0, true,
+      0.5,
+      "DPARM(5)");
+   roptions->AddBoundedNumberOption(
+      "pardiso_iter_dropping_schur",
+      "dropping value for sparsify schur complement factor",
+      0.0, true,
+      1.0, true,
+      1e-1,
+      "DPARM(6)");
+   roptions->AddLowerBoundedIntegerOption(
+      "pardiso_iter_max_row_fill",
+      "max fill for each row",
+      1,
+      10000000,
+      "DPARM(7)");
+   roptions->AddLowerBoundedNumberOption(
+      "pardiso_iter_inverse_norm_factor",
+      "",
+      1, true,
+      5000000,
+      "DPARM(8)");
+   roptions->AddStringOption2(
+      "pardiso_iterative",
+      "Switch on iterative solver in Pardiso library",
+      "no",
+      "no", "do not switch on iterative solver",
+      "yes", "switch on iterative solver"
+      "This option is not available for Pardiso < 4.0 or MKL Pardiso");
+   roptions->AddLowerBoundedIntegerOption(
+      "pardiso_max_droptol_corrections",
+      "Maximal number of decreases of drop tolerance during one solve.",
+      1,
+      4,
+      "This is relevant only for iterative Pardiso options.");
 #endif
 }
 

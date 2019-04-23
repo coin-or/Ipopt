@@ -28,13 +28,19 @@ void InexactSearchDirCalculator::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->AddLowerBoundedNumberOption("local_inf_Ac_tol",
-                                         "Termination tolerance for local infeasibility (scaled ||Ac||).", 0.0, true, 1e-8, "");
-   roptions->AddStringOption3("inexact_step_decomposition",
-                              "Determines if the steps should be decomposed into normal and tangential components.", "adaptive", "always",
-                              "always compute the step as two components", "adaptive", "try to use undecomposed steps if possible",
-                              "switch-once", "try to use undecomposed steps, but if decomposition is necessary, always keep it",
-                              "TO BE WRITTEN");
+   roptions->AddLowerBoundedNumberOption(
+      "local_inf_Ac_tol",
+      "Termination tolerance for local infeasibility (scaled ||Ac||).",
+      0.0, true,
+      1e-8);
+   roptions->AddStringOption3(
+      "inexact_step_decomposition",
+      "Determines if the steps should be decomposed into normal and tangential components.",
+      "adaptive",
+      "always", "always compute the step as two components",
+      "adaptive", "try to use undecomposed steps if possible",
+      "switch-once", "try to use undecomposed steps, but if decomposition is necessary, always keep it"
+      /*, "TO BE WRITTEN" */);
 }
 
 bool InexactSearchDirCalculator::InitializeImpl(

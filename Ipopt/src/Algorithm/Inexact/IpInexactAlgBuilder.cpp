@@ -107,9 +107,11 @@ void InexactAlgorithmBuilder::RegisterOptions(
 )
 {
    roptions->SetRegisteringCategory("Linear Solver");
-   roptions->AddStringOption2("inexact_linear_system_scaling",
-                              "Method for scaling the linear system for the inexact approach", "slack-based", "none",
-                              "no scaling will be performed", "slack-based", "scale the linear system as in paper", "");
+   roptions->AddStringOption2(
+      "inexact_linear_system_scaling",
+      "Method for scaling the linear system for the inexact approach", "slack-based",
+      "none", "no scaling will be performed",
+      "slack-based", "scale the linear system as in paper");
 }
 
 SmartPtr<IpoptAlgorithm> InexactAlgorithmBuilder::BuildBasicAlgorithm(

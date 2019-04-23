@@ -92,32 +92,34 @@ void AlgorithmBuilder::RegisterOptions(
 )
 {
    roptions->SetRegisteringCategory("Linear Solver");
-   roptions->AddStringOption9("linear_solver", "Linear solver used for step computations.",
+   roptions->AddStringOption9(
+      "linear_solver",
+      "Linear solver used for step computations.",
 #ifdef COINHSL_HAS_MA27
-                              "ma27",
+      "ma27",
 #else
 # ifdef COINHSL_HAS_MA57
-                              "ma57",
+      "ma57",
 # else
 # ifdef COINHSL_HAS_MA97
-                              "ma97",
+      "ma97",
 #else
 #   ifdef COINHSL_HAS_MA86
-                              "ma86",
+      "ma86",
 #   else
 #    ifdef HAVE_PARDISO
-                              "pardiso",
+      "pardiso",
 #    else
 #     ifdef HAVE_WSMP
-                              "wsmp",
+      "wsmp",
 #     else
 #      ifdef COIN_HAS_MUMPS
-                              "mumps",
+      "mumps",
 #      else
 #       ifdef COINHSL_HAS_MA77
-                              "ma77",
+      "ma77",
 #       else
-                              "ma27",
+      "ma27",
 #       endif
 #      endif
 #     endif
@@ -126,72 +128,102 @@ void AlgorithmBuilder::RegisterOptions(
 #  endif
 # endif
 #endif
-                              "ma27", "use the Harwell routine MA27", "ma57", "use the Harwell routine MA57", "ma77",
-                              "use the Harwell routine HSL_MA77", "ma86", "use the Harwell routine HSL_MA86", "ma97",
-                              "use the Harwell routine HSL_MA97", "pardiso", "use the Pardiso package", "wsmp", "use WSMP package", "mumps",
-                              "use MUMPS package", "custom", "use custom linear solver",
-                              "Determines which linear algebra package is to be used for the "
-                              "solution of the augmented linear system (for obtaining the search "
-                              "directions). "
-                              "Note, the code must have been compiled with the linear solver you want "
-                              "to choose. Depending on your Ipopt installation, not all options are "
-                              "available.");
+      "ma27", "use the Harwell routine MA27",
+      "ma57", "use the Harwell routine MA57",
+      "ma77", "use the Harwell routine HSL_MA77",
+      "ma86", "use the Harwell routine HSL_MA86",
+      "ma97", "use the Harwell routine HSL_MA97",
+      "pardiso", "use the Pardiso package",
+      "wsmp", "use WSMP package",
+      "mumps", "use MUMPS package",
+      "custom", "use custom linear solver",
+      "Determines which linear algebra package is to be used for the solution of the augmented linear system (for obtaining the search directions). "
+      "Note, the code must have been compiled with the linear solver you want to choose. "
+      "Depending on your Ipopt installation, not all options are available.");
    roptions->SetRegisteringCategory("Linear Solver");
-   roptions->AddStringOption3("linear_system_scaling", "Method for scaling the linear system.",
+   roptions->AddStringOption3(
+      "linear_system_scaling", "Method for scaling the linear system.",
 #ifdef COINHSL_HAS_MC19
-                              "mc19",
+      "mc19",
 #else
-                              "none",
+      "none",
 #endif
-                              "none", "no scaling will be performed", "mc19", "use the Harwell routine MC19", "slack-based",
-                              "use the slack values", "Determines the method used to compute symmetric scaling "
-                              "factors for the augmented system (see also the "
-                              "\"linear_scaling_on_demand\" option).  This scaling is independent "
-                              "of the NLP problem scaling.  By default, MC19 is only used if MA27 or "
-                              "MA57 are selected as linear solvers. This value is only available if "
-                              "Ipopt has been compiled with MC19.");
+      "none", "no scaling will be performed",
+      "mc19", "use the Harwell routine MC19",
+      "slack-based", "use the slack values",
+      "Determines the method used to compute symmetric scaling factors for the augmented system "
+      "(see also the \"linear_scaling_on_demand\" option). "
+      "This scaling is independent of the NLP problem scaling. "
+      "By default, MC19 is only used if MA27 or MA57 are selected as linear solvers. "
+      "This value is only available if Ipopt has been compiled with MC19.");
 
    roptions->SetRegisteringCategory("NLP Scaling");
-   roptions->AddStringOption4("nlp_scaling_method", "Select the technique used for scaling the NLP.", "gradient-based",
-                              "none", "no problem scaling will be performed", "user-scaling", "scaling parameters will come from the user",
-                              "gradient-based", "scale the problem so the maximum gradient at the starting point is scaling_max_gradient",
-                              "equilibration-based",
-                              "scale the problem so that first derivatives are of order 1 at random points (only available with MC19)",
-                              "Selects the technique used for scaling the problem internally before it is solved."
-                              " For user-scaling, the parameters come from the NLP. If you are using "
-                              "AMPL, they can be specified through suffixes (\"scaling_factor\")");
+   roptions->AddStringOption4(
+      "nlp_scaling_method",
+      "Select the technique used for scaling the NLP.",
+      "gradient-based",
+      "none", "no problem scaling will be performed",
+      "user-scaling", "scaling parameters will come from the user",
+      "gradient-based", "scale the problem so the maximum gradient at the starting point is scaling_max_gradient",
+      "equilibration-based", "scale the problem so that first derivatives are of order 1 at random points (only available with MC19)",
+      "Selects the technique used for scaling the problem internally before it is solved. "
+      "For user-scaling, the parameters come from the NLP. "
+      "If you are using AMPL, they can be specified through suffixes (\"scaling_factor\")");
 
    roptions->SetRegisteringCategory("Barrier Parameter Update");
-   roptions->AddStringOption2("mu_strategy", "Update strategy for barrier parameter.", "monotone", "monotone",
-                              "use the monotone (Fiacco-McCormick) strategy", "adaptive", "use the adaptive update strategy",
-                              "Determines which barrier parameter update strategy is to be used.");
-   roptions->AddStringOption3("mu_oracle", "Oracle for a new barrier parameter in the adaptive strategy.",
-                              "quality-function", "probing", "Mehrotra's probing heuristic", "loqo", "LOQO's centrality rule",
-                              "quality-function", "minimize a quality function", "Determines how a new barrier parameter is computed in each "
-                              "\"free-mode\" iteration of the adaptive barrier parameter "
-                              "strategy. (Only considered if \"adaptive\" is selected for "
-                              "option \"mu_strategy\").");
-   roptions->AddStringOption4("fixed_mu_oracle", "Oracle for the barrier parameter when switching to fixed mode.",
-                              "average_compl", "probing", "Mehrotra's probing heuristic", "loqo", "LOQO's centrality rule", "quality-function",
-                              "minimize a quality function", "average_compl", "base on current average complementarity",
-                              "Determines how the first value of the barrier parameter should be "
-                              "computed when switching to the \"monotone mode\" in the adaptive "
-                              "strategy. (Only considered if \"adaptive\" is selected for option "
-                              "\"mu_strategy\".)");
+   roptions->AddStringOption2(
+      "mu_strategy",
+      "Update strategy for barrier parameter.",
+      "monotone",
+      "monotone", "use the monotone (Fiacco-McCormick) strategy",
+      "adaptive", "use the adaptive update strategy",
+      "Determines which barrier parameter update strategy is to be used.");
+   roptions->AddStringOption3(
+      "mu_oracle",
+      "Oracle for a new barrier parameter in the adaptive strategy.",
+      "quality-function",
+      "probing", "Mehrotra's probing heuristic",
+      "loqo", "LOQO's centrality rule",
+      "quality-function", "minimize a quality function",
+      "Determines how a new barrier parameter is computed in each \"free-mode\" iteration of the adaptive barrier parameter strategy. "
+      "(Only considered if \"adaptive\" is selected for option \"mu_strategy\").");
+   roptions->AddStringOption4(
+      "fixed_mu_oracle",
+      "Oracle for the barrier parameter when switching to fixed mode.",
+      "average_compl",
+      "probing", "Mehrotra's probing heuristic",
+      "loqo", "LOQO's centrality rule",
+      "quality-function", "minimize a quality function",
+      "average_compl", "base on current average complementarity",
+      "Determines how the first value of the barrier parameter should be computed when switching to the \"monotone mode\" in the adaptive strategy. "
+      "(Only considered if \"adaptive\" is selected for option \"mu_strategy\".)");
 
    roptions->SetRegisteringCategory("Hessian Approximation");
-   roptions->AddStringOption2("limited_memory_aug_solver",
-                              "Strategy for solving the augmented system for low-rank Hessian.", "sherman-morrison", "sherman-morrison",
-                              "use Sherman-Morrison formula", "extended", "use an extended augmented system", "");
+   roptions->AddStringOption2(
+      "limited_memory_aug_solver",
+      "Strategy for solving the augmented system for low-rank Hessian.",
+      "sherman-morrison",
+      "sherman-morrison", "use Sherman-Morrison formula",
+      "extended", "use an extended augmented system");
 
    roptions->SetRegisteringCategory("Line Search");
-   roptions->AddStringOption3("line_search_method", "Globalization method used in backtracking line search", "filter",
-                              "filter", "Filter method", "cg-penalty", "Chen-Goldfarb penalty function", "penalty", "Standard penalty function",
-                              "Only the \"filter\" choice is officially supported.  But sometimes, "
-                              "good results might be obtained with the other choices.");
+   roptions->AddStringOption3(
+      "line_search_method",
+      "Globalization method used in backtracking line search",
+      "filter",
+      "filter", "Filter method",
+      "cg-penalty", "Chen-Goldfarb penalty function",
+      "penalty", "Standard penalty function",
+      "Only the \"filter\" choice is officially supported. "
+      "But sometimes, good results might be obtained with the other choices.");
    roptions->SetRegisteringCategory("Undocumented");
-   roptions->AddStringOption2("wsmp_iterative", "Switches to iterative solver in WSMP.", "no", "no",
-                              "use direct solver", "yes", "use iterative solver", "EXPERIMENTAL!");
+   roptions->AddStringOption2(
+      "wsmp_iterative",
+      "Switches to iterative solver in WSMP.",
+      "no",
+      "no", "use direct solver",
+      "yes", "use iterative solver",
+      "EXPERIMENTAL!");
 }
 
 SmartPtr<SymLinearSolver> AlgorithmBuilder::GetSymLinearSolver(

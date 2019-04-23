@@ -35,13 +35,15 @@ void PDSearchDirCalculator::RegisterOptions(
 )
 {
    roptions->SetRegisteringCategory("Step Calculation");
-   roptions->AddStringOption2("fast_step_computation", "Indicates if the linear system should be solved quickly.", "no",
-                              "no", "Verify solution of linear system by computing residuals.", "yes",
-                              "Trust that linear systems are solved well.",
-                              "If set to yes, the algorithm assumes that the linear system that is "
-                              "solved to obtain the search direction, is solved sufficiently well. "
-                              "In that case, no residuals are computed, and the computation of the "
-                              "search direction is a little faster.");
+   roptions->AddStringOption2(
+      "fast_step_computation",
+      "Indicates if the linear system should be solved quickly.",
+      "no",
+      "no", "Verify solution of linear system by computing residuals.",
+      "yes", "Trust that linear systems are solved well.",
+      "If set to yes, the algorithm assumes that the linear system that is solved to obtain the search direction, "
+      "is solved sufficiently well. "
+      "In that case, no residuals are computed, and the computation of the search direction is a little faster.");
 }
 
 bool PDSearchDirCalculator::InitializeImpl(

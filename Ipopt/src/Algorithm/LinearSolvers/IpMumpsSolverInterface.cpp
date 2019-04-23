@@ -126,33 +126,56 @@ void MumpsSolverInterface::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->AddBoundedNumberOption("mumps_pivtol", "Pivot tolerance for the linear solver MUMPS.", 0, false, 1, false,
-                                    1e-6, "A smaller number pivots for sparsity, a larger number pivots for "
-                                    "stability.  This option is only available if Ipopt has been compiled "
-                                    "with MUMPS.");
-   roptions->AddBoundedNumberOption("mumps_pivtolmax", "Maximum pivot tolerance for the linear solver MUMPS.", 0, false,
-                                    1, false, 0.1, "Ipopt may increase pivtol as high as pivtolmax to get a more accurate "
-                                    "solution to the linear system.  This option is only available if "
-                                    "Ipopt has been compiled with MUMPS.");
-   roptions->AddLowerBoundedIntegerOption("mumps_mem_percent",
-                                          "Percentage increase in the estimated working space for MUMPS.", 0, 1000,
-                                          "In MUMPS when significant extra fill-in is caused by numerical "
-                                          "pivoting, larger values of mumps_mem_percent may help use the "
-                                          "workspace more efficiently.  On the other hand, if memory requirement "
-                                          "are too large at the very beginning of the optimization, choosing a "
-                                          "much smaller value for this option, such as 5, might reduce memory "
-                                          "requirements.");
-   roptions->AddBoundedIntegerOption("mumps_permuting_scaling", "Controls permuting and scaling in MUMPS", 0, 7, 7,
-                                     "This is ICNTL(6) in MUMPS.");
-   roptions->AddBoundedIntegerOption("mumps_pivot_order", "Controls pivot order in MUMPS", 0, 7, 7,
-                                     "This is ICNTL(7) in MUMPS.");
-   roptions->AddBoundedIntegerOption("mumps_scaling", "Controls scaling in MUMPS", -2, 77, 77,
-                                     "This is ICNTL(8) in MUMPS.");
-   roptions->AddNumberOption("mumps_dep_tol",
-                             "Pivot threshold for detection of linearly dependent constraints in MUMPS.", 0.0,
-                             "When MUMPS is used to determine linearly dependent constraints, this "
-                             "is determines the threshold for a pivot to be considered zero.  This "
-                             "is CNTL(3) in MUMPS.");
+   roptions->AddBoundedNumberOption(
+      "mumps_pivtol",
+      "Pivot tolerance for the linear solver MUMPS.",
+      0.0, false,
+      1.0, false,
+      1e-6,
+      "A smaller number pivots for sparsity, a larger number pivots for stability. "
+      "This option is only available if Ipopt has been compiled with MUMPS.");
+   roptions->AddBoundedNumberOption(
+      "mumps_pivtolmax",
+      "Maximum pivot tolerance for the linear solver MUMPS.",
+      0, false,
+      1, false,
+      0.1,
+      "Ipopt may increase pivtol as high as pivtolmax to get a more accurate solution to the linear system. "
+      "This option is only available if Ipopt has been compiled with MUMPS.");
+   roptions->AddLowerBoundedIntegerOption(
+      "mumps_mem_percent",
+      "Percentage increase in the estimated working space for MUMPS.",
+      0,
+      1000,
+      "In MUMPS when significant extra fill-in is caused by numerical pivoting, "
+      "larger values of mumps_mem_percent may help use the workspace more efficiently. "
+      "On the other hand, if memory requirement are too large at the very beginning of the optimization, "
+      "choosing a much smaller value for this option, such as 5, might reduce memory requirements.");
+   roptions->AddBoundedIntegerOption(
+      "mumps_permuting_scaling",
+      "Controls permuting and scaling in MUMPS",
+      0, 7,
+      7,
+      "This is ICNTL(6) in MUMPS.");
+   roptions->AddBoundedIntegerOption(
+      "mumps_pivot_order",
+      "Controls pivot order in MUMPS",
+      0, 7,
+      7,
+      "This is ICNTL(7) in MUMPS.");
+   roptions->AddBoundedIntegerOption(
+      "mumps_scaling",
+      "Controls scaling in MUMPS",
+      -2, 77,
+      77,
+      "This is ICNTL(8) in MUMPS.");
+   roptions->AddNumberOption(
+      "mumps_dep_tol",
+      "Pivot threshold for detection of linearly dependent constraints in MUMPS.",
+      0.0,
+      "When MUMPS is used to determine linearly dependent constraints, "
+      "this is determines the threshold for a pivot to be considered zero. "
+      "This is CNTL(3) in MUMPS.");
 }
 
 bool MumpsSolverInterface::InitializeImpl(

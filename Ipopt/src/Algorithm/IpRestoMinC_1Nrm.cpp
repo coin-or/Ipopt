@@ -33,26 +33,30 @@ void MinC_1NrmRestorationPhase::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->AddLowerBoundedNumberOption("bound_mult_reset_threshold",
-                                         "Threshold for resetting bound multipliers after the restoration phase.", 0.0, false, 1e3,
-                                         "After returning from the restoration phase, the bound multipliers are "
-                                         "updated with a Newton step for complementarity.  Here, the "
-                                         "change in the primal variables during the entire restoration "
-                                         "phase is taken to be the corresponding primal Newton step. "
-                                         "However, if after the update the largest bound multiplier "
-                                         "exceeds the threshold specified by this option, the multipliers "
-                                         "are all reset to 1.");
-   roptions->AddLowerBoundedNumberOption("constr_mult_reset_threshold",
-                                         "Threshold for resetting equality and inequality multipliers after restoration phase.", 0.0, false, 0e3,
-                                         "After returning from the restoration phase, the constraint multipliers "
-                                         "are recomputed by a least square estimate.  This option triggers when "
-                                         "those least-square estimates should be ignored.");
-   roptions->AddLowerBoundedNumberOption("resto_failure_feasibility_threshold",
-                                         "Threshold for primal infeasibility to declare failure of restoration phase.", 0.0, false, 0e3,
-                                         "If the restoration phase is terminated because of the \"acceptable\" "
-                                         "termination criteria and the primal infeasibility is smaller than this "
-                                         "value, the restoration phase is declared to have failed.  The default "
-                                         "value is 1e2*tol, where tol is the general termination tolerance.");
+   roptions->AddLowerBoundedNumberOption(
+      "bound_mult_reset_threshold",
+      "Threshold for resetting bound multipliers after the restoration phase.",
+      0., false,
+      1e3,
+      "After returning from the restoration phase, the bound multipliers are updated with a Newton step for complementarity. "
+      "Here, the change in the primal variables during the entire restoration phase is taken to be the corresponding primal Newton step. "
+      "However, if after the update the largest bound multiplier exceeds the threshold specified by this option, "
+      "the multipliers are all reset to 1.");
+   roptions->AddLowerBoundedNumberOption(
+      "constr_mult_reset_threshold",
+      "Threshold for resetting equality and inequality multipliers after restoration phase.",
+      0., false,
+      0.,
+      "After returning from the restoration phase, the constraint multipliers are recomputed by a least square estimate. "
+      "This option triggers when those least-square estimates should be ignored.");
+   roptions->AddLowerBoundedNumberOption(
+      "resto_failure_feasibility_threshold",
+      "Threshold for primal infeasibility to declare failure of restoration phase.",
+      0., false,
+      0.,
+      "If the restoration phase is terminated because of the \"acceptable\" termination criteria and "
+      "the primal infeasibility is smaller than this value, the restoration phase is declared to have failed. "
+      "The default value is actually 1e2*tol, where tol is the general termination tolerance.");
 }
 
 bool MinC_1NrmRestorationPhase::InitializeImpl(

@@ -41,27 +41,37 @@ void OrigIterationOutput::RegisterOptions(
 {
    std::string prev_cat = roptions->RegisteringCategory();
    roptions->SetRegisteringCategory("Output");
-   roptions->AddStringOption2("print_info_string",
-                              "Enables printing of additional info string at end of iteration output.", "no", "no", "don't print string", "yes",
-                              "print string at end of each iteration output", "This string contains some insider information about the current "
-                              "iteration.  For details, look for \"Diagnostic Tags\" in the Ipopt "
-                              "documentation.");
-   roptions->AddStringOption2("inf_pr_output", "Determines what value is printed in the \"inf_pr\" output column.",
-                              "original", "internal", "max-norm of violation of internal equality constraints", "original",
-                              "maximal constraint violation in original NLP",
-                              "Ipopt works with a reformulation of the original problem, where slacks "
-                              "are introduced and the problem might have been scaled.  The choice "
-                              "\"internal\" prints out the constraint violation of this formulation. "
-                              "With \"original\" the true constraint violation in the original NLP is "
-                              "printed.");
-   roptions->AddLowerBoundedIntegerOption("print_frequency_iter",
-                                          "Determines at which iteration frequency the summarizing iteration output line should be printed.", 1, 1,
-                                          "Summarizing iteration output is printed every print_frequency_iter iterations, "
-                                          "if at least print_frequency_time seconds have passed since last output.");
-   roptions->AddLowerBoundedNumberOption("print_frequency_time",
-                                         "Determines at which time frequency the summarizing iteration output line should be printed.", 0.0, false, 0.0,
-                                         "Summarizing iteration output is printed if at least print_frequency_time seconds have "
-                                         "passed since last output and the iteration number is a multiple of print_frequency_iter.");
+   roptions->AddStringOption2(
+      "print_info_string",
+      "Enables printing of additional info string at end of iteration output.",
+      "no",
+      "no", "don't print string",
+      "yes", "print string at end of each iteration output",
+      "This string contains some insider information about the current iteration. "
+      "For details, look for \"Diagnostic Tags\" in the Ipopt documentation.");
+   roptions->AddStringOption2(
+      "inf_pr_output",
+      "Determines what value is printed in the \"inf_pr\" output column.",
+      "original",
+      "internal", "max-norm of violation of internal equality constraints",
+      "original", "maximal constraint violation in original NLP",
+      "Ipopt works with a reformulation of the original problem, where slacks are introduced and the problem might have been scaled. "
+      "The choice \"internal\" prints out the constraint violation of this formulation. "
+      "With \"original\" the true constraint violation in the original NLP is printed.");
+   roptions->AddLowerBoundedIntegerOption(
+      "print_frequency_iter",
+      "Determines at which iteration frequency the summarizing iteration output line should be printed.",
+      1,
+      1,
+      "Summarizing iteration output is printed every print_frequency_iter iterations, "
+      "if at least print_frequency_time seconds have passed since last output.");
+   roptions->AddLowerBoundedNumberOption(
+      "print_frequency_time",
+      "Determines at which time frequency the summarizing iteration output line should be printed.",
+      0., false,
+      0.,
+      "Summarizing iteration output is printed if at least print_frequency_time seconds have "
+      "passed since last output and the iteration number is a multiple of print_frequency_iter.");
    roptions->SetRegisteringCategory(prev_cat);
 }
 

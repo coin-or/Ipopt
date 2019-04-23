@@ -60,88 +60,148 @@ void Ma97SolverInterface::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->AddIntegerOption("ma97_print_level", "Debug printing level for the linear solver MA97", 0, ""
-                              /*
-                               "<0 no printing.\n"
-                               "0  Error and warning messages only.\n"
-                               "=1 Limited diagnostic printing.\n"
-                               ">1 Additional diagnostic printing."*/);
-   roptions->AddLowerBoundedIntegerOption("ma97_nemin", "Node Amalgamation parameter", 1, 8,
-                                          "Two nodes in elimination tree are merged if result has fewer than "
-                                          "ma97_nemin variables.");
-   roptions->AddLowerBoundedNumberOption("ma97_small", "Zero Pivot Threshold", 0.0, false, 1e-20,
-                                         "Any pivot less than ma97_small is treated as zero.");
-   roptions->AddBoundedNumberOption("ma97_u", "Pivoting Threshold", 0.0, false, 0.5, false, 1e-8,
-                                    "See MA97 documentation.");
-   roptions->AddBoundedNumberOption("ma97_umax", "Maximum Pivoting Threshold", 0.0, false, 0.5, false, 1e-4,
-                                    "See MA97 documentation.");
-   roptions->AddStringOption5("ma97_scaling", "Specifies strategy for scaling in HSL_MA97 linear solver", "dynamic",
-                              "none", "Do not scale the linear system matrix", "mc30", "Scale all linear system matrices using MC30", "mc64",
-                              "Scale all linear system matrices using MC64", "mc77", "Scale all linear system matrices using MC77 [1,3,0]",
-                              "dynamic", "Dynamically select scaling according to rules specified by ma97_scalingX and ma97_switchX options.",
-                              "");
-   roptions->AddStringOption4("ma97_scaling1", "First scaling.", "mc64", "none", "No scaling", "mc30",
-                              "Scale linear system matrix using MC30", "mc64", "Scale linear system matrix using MC64", "mc77",
-                              "Scale linear system matrix using MC77 [1,3,0]",
-                              "If ma97_scaling=dynamic, this scaling is used according to the trigger "
-                              "ma97_switch1. If ma97_switch2 is triggered it is disabled.");
-   roptions->AddStringOption9("ma97_switch1", "First switch, determine when ma97_scaling1 is enabled.", "od_hd_reuse",
-                              "never", "Scaling is never enabled.", "at_start", "Scaling to be used from the very start.", "at_start_reuse",
-                              "Scaling to be used on first iteration, then reused thereafter.", "on_demand",
-                              "Scaling to be used after Ipopt request improved solution (i.e. iterative refinement has failed).",
-                              "on_demand_reuse", "As on_demand, but reuse scaling from previous itr", "high_delay",
-                              "Scaling to be used after more than 0.05*n delays are present", "high_delay_reuse",
-                              "Scaling to be used only when previous itr created more that 0.05*n additional delays, otherwise reuse scaling from previous itr",
-                              "od_hd", "Combination of on_demand and high_delay", "od_hd_reuse",
-                              "Combination of on_demand_reuse and high_delay_reuse",
-                              "If ma97_scaling=dynamic, ma97_scaling1 is enabled according to this condition. If ma97_switch2 occurs this option is henceforth ignored.");
-   roptions->AddStringOption4("ma97_scaling2", "Second scaling.", "mc64", "none", "No scaling", "mc30",
-                              "Scale linear system matrix using MC30", "mc64", "Scale linear system matrix using MC64", "mc77",
-                              "Scale linear system matrix using MC77 [1,3,0]",
-                              "If ma97_scaling=dynamic, this scaling is used according to the trigger "
-                              "ma97_switch2. If ma97_switch3 is triggered it is disabled.");
-   roptions->AddStringOption9("ma97_switch2", "Second switch, determine when ma97_scaling2 is enabled.", "never",
-                              "never", "Scaling is never enabled.", "at_start", "Scaling to be used from the very start.", "at_start_reuse",
-                              "Scaling to be used on first iteration, then reused thereafter.", "on_demand",
-                              "Scaling to be used after Ipopt request improved solution (i.e. iterative refinement has failed).",
-                              "on_demand_reuse", "As on_demand, but reuse scaling from previous itr", "high_delay",
-                              "Scaling to be used after more than 0.05*n delays are present", "high_delay_reuse",
-                              "Scaling to be used only when previous itr created more that 0.05*n additional delays, otherwise reuse scaling from previous itr",
-                              "od_hd", "Combination of on_demand and high_delay", "od_hd_reuse",
-                              "Combination of on_demand_reuse and high_delay_reuse",
-                              "If ma97_scaling=dynamic, ma97_scaling2 is enabled according to this condition. If ma97_switch3 occurs this option is henceforth ignored.");
-   roptions->AddStringOption4("ma97_scaling3", "Third scaling.", "mc64", "none", "No scaling", "mc30",
-                              "Scale linear system matrix using MC30", "mc64", "Scale linear system matrix using MC64", "mc77",
-                              "Scale linear system matrix using MC77 [1,3,0]",
-                              "If ma97_scaling=dynamic, this scaling is used according to the trigger "
-                              "ma97_switch3.");
-   roptions->AddStringOption9("ma97_switch3", "Third switch, determine when ma97_scaling3 is enabled.", "never",
-                              "never", "Scaling is never enabled.", "at_start", "Scaling to be used from the very start.", "at_start_reuse",
-                              "Scaling to be used on first iteration, then reused thereafter.", "on_demand",
-                              "Scaling to be used after Ipopt request improved solution (i.e. iterative refinement has failed).",
-                              "on_demand_reuse", "As on_demand, but reuse scaling from previous itr", "high_delay",
-                              "Scaling to be used after more than 0.05*n delays are present", "high_delay_reuse",
-                              "Scaling to be used only when previous itr created more that 0.05*n additional delays, otherwise reuse scaling from previous itr",
-                              "od_hd", "Combination of on_demand and high_delay", "od_hd_reuse",
-                              "Combination of on_demand_reuse and high_delay_reuse",
-                              "If ma97_scaling=dynamic, ma97_scaling3 is enabled according to this condition.");
-   roptions->AddStringOption7("ma97_order", "Controls type of ordering used by HSL_MA97", "auto", "auto",
-                              "Use HSL_MA97 heuristic to guess best of AMD and METIS", "best", "Try both AMD and MeTiS, pick best", "amd",
-                              "Use the HSL_MC68 approximate minimum degree algorithm", "metis", "Use the MeTiS nested dissection algorithm",
-                              "matched-auto", "Use the HSL_MC80 matching with heuristic choice of AMD or METIS", "matched-metis",
-                              "Use the HSL_MC80 matching based ordering with METIS", "matched-amd",
-                              "Use the HSL_MC80 matching based ordering with AMD", "");
+   roptions->AddIntegerOption(
+      "ma97_print_level",
+      "Debug printing level",
+      0
+      /*
+      "<0 no printing.\n"
+      "0  Error and warning messages only.\n"
+      "=1 Limited diagnostic printing.\n"
+      ">1 Additional diagnostic printing."*/);
+   roptions->AddLowerBoundedIntegerOption(
+      "ma97_nemin",
+      "Node Amalgamation parameter",
+      1,
+      8,
+      "Two nodes in elimination tree are merged if result has fewer than ma97_nemin variables.");
+   roptions->AddLowerBoundedNumberOption(
+      "ma97_small",
+      "Zero Pivot Threshold",
+      0.0, false,
+      1e-20,
+      "Any pivot less than ma97_small is treated as zero.");
+   roptions->AddBoundedNumberOption(
+      "ma97_u",
+      "Pivoting Threshold",
+      0.0, false,
+      0.5, false,
+      1e-8,
+      "See MA97 documentation.");
+   roptions->AddBoundedNumberOption(
+      "ma97_umax",
+      "Maximum Pivoting Threshold",
+      0.0, false,
+      0.5, false,
+      1e-4,
+      "See MA97 documentation.");
+   roptions->AddStringOption5(
+      "ma97_scaling",
+      "Specifies strategy for scaling",
+      "dynamic",
+      "none", "Do not scale the linear system matrix",
+      "mc30", "Scale all linear system matrices using MC30",
+      "mc64", "Scale all linear system matrices using MC64",
+      "mc77", "Scale all linear system matrices using MC77 [1,3,0]",
+      "dynamic", "Dynamically select scaling according to rules specified by ma97_scalingX and ma97_switchX options.");
+   roptions->AddStringOption4(
+      "ma97_scaling1",
+      "First scaling.",
+      "mc64",
+      "none", "No scaling",
+      "mc30", "Scale linear system matrix using MC30",
+      "mc64", "Scale linear system matrix using MC64",
+      "mc77", "Scale linear system matrix using MC77 [1,3,0]",
+      "If ma97_scaling=dynamic, this scaling is used according to the trigger ma97_switch1. "
+      "If ma97_switch2 is triggered it is disabled.");
+   roptions->AddStringOption9(
+      "ma97_switch1",
+      "First switch, determine when ma97_scaling1 is enabled.",
+      "od_hd_reuse",
+      "never", "Scaling is never enabled.",
+      "at_start", "Scaling to be used from the very start.",
+      "at_start_reuse", "Scaling to be used on first iteration, then reused thereafter.",
+      "on_demand", "Scaling to be used after Ipopt request improved solution (i.e. iterative refinement has failed).",
+      "on_demand_reuse", "As on_demand, but reuse scaling from previous itr",
+      "high_delay", "Scaling to be used after more than 0.05*n delays are present",
+      "high_delay_reuse", "Scaling to be used only when previous itr created more that 0.05*n additional delays, otherwise reuse scaling from previous itr",
+      "od_hd", "Combination of on_demand and high_delay",
+      "od_hd_reuse", "Combination of on_demand_reuse and high_delay_reuse",
+      "If ma97_scaling=dynamic, ma97_scaling1 is enabled according to this condition. "
+      "If ma97_switch2 occurs this option is henceforth ignored.");
+   roptions->AddStringOption4(
+      "ma97_scaling2",
+      "Second scaling.",
+      "mc64",
+      "none", "No scaling",
+      "mc30", "Scale linear system matrix using MC30",
+      "mc64", "Scale linear system matrix using MC64",
+      "mc77", "Scale linear system matrix using MC77 [1,3,0]",
+      "If ma97_scaling=dynamic, this scaling is used according to the trigger ma97_switch2. "
+      "If ma97_switch3 is triggered it is disabled.");
+   roptions->AddStringOption9(
+      "ma97_switch2",
+      "Second switch, determine when ma97_scaling2 is enabled.",
+      "never",
+      "never", "Scaling is never enabled.",
+      "at_start", "Scaling to be used from the very start.",
+      "at_start_reuse", "Scaling to be used on first iteration, then reused thereafter.",
+      "on_demand", "Scaling to be used after Ipopt request improved solution (i.e. iterative refinement has failed).",
+      "on_demand_reuse", "As on_demand, but reuse scaling from previous itr",
+      "high_delay", "Scaling to be used after more than 0.05*n delays are present",
+      "high_delay_reuse", "Scaling to be used only when previous itr created more that 0.05*n additional delays, otherwise reuse scaling from previous itr",
+      "od_hd", "Combination of on_demand and high_delay",
+      "od_hd_reuse", "Combination of on_demand_reuse and high_delay_reuse",
+      "If ma97_scaling=dynamic, ma97_scaling2 is enabled according to this condition. "
+      "If ma97_switch3 occurs this option is henceforth ignored.");
+   roptions->AddStringOption4(
+      "ma97_scaling3",
+      "Third scaling.",
+      "mc64",
+      "none", "No scaling",
+      "mc30", "Scale linear system matrix using MC30",
+      "mc64", "Scale linear system matrix using MC64",
+      "mc77", "Scale linear system matrix using MC77 [1,3,0]",
+      "If ma97_scaling=dynamic, this scaling is used according to the trigger ma97_switch3.");
+   roptions->AddStringOption9(
+      "ma97_switch3",
+      "Third switch, determine when ma97_scaling3 is enabled.",
+      "never",
+      "never", "Scaling is never enabled.",
+      "at_start", "Scaling to be used from the very start.",
+      "at_start_reuse", "Scaling to be used on first iteration, then reused thereafter.",
+      "on_demand", "Scaling to be used after Ipopt request improved solution (i.e. iterative refinement has failed).",
+      "on_demand_reuse", "As on_demand, but reuse scaling from previous itr",
+      "high_delay", "Scaling to be used after more than 0.05*n delays are present",
+      "high_delay_reuse", "Scaling to be used only when previous itr created more that 0.05*n additional delays, otherwise reuse scaling from previous itr",
+      "od_hd", "Combination of on_demand and high_delay",
+      "od_hd_reuse", "Combination of on_demand_reuse and high_delay_reuse",
+      "If ma97_scaling=dynamic, ma97_scaling3 is enabled according to this condition.");
+   roptions->AddStringOption7(
+      "ma97_order",
+      "Controls type of ordering",
+      "auto",
+      "auto", "Use HSL_MA97 heuristic to guess best of AMD and METIS",
+      "best", "Try both AMD and MeTiS, pick best",
+      "amd", "Use the HSL_MC68 approximate minimum degree algorithm",
+      "metis", "Use the MeTiS nested dissection algorithm",
+      "matched-auto", "Use the HSL_MC80 matching with heuristic choice of AMD or METIS",
+      "matched-metis", "Use the HSL_MC80 matching based ordering with METIS",
+      "matched-amd", "Use the HSL_MC80 matching based ordering with AMD");
 #ifdef MA97_DUMP_MATRIX
    roptions->AddStringOption2(
       "ma97_dump_matrix",
       "Controls whether HSL_MA97 dumps each matrix to a file",
       "no",
       "no", "Do not dump matrix",
-      "yes", "Do dump matrix",
-      "");
+      "yes", "Do dump matrix");
 #endif
-   roptions->AddStringOption2("ma97_solve_blas3", "Controls if blas2 or blas3 routines are used for solve", "no", "no",
-                              "Use BLAS2 (faster, some implementations bit incompatible)", "yes", "Use BLAS3 (slower)", "");
+   roptions->AddStringOption2(
+      "ma97_solve_blas3",
+      "Controls if blas2 or blas3 routines are used for solve",
+      "no",
+      "no", "Use BLAS2 (faster, some implementations bit incompatible)",
+      "yes", "Use BLAS3 (slower)");
 }
 
 int Ma97SolverInterface::ScaleNameToNum(

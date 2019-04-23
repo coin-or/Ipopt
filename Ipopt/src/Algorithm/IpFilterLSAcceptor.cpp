@@ -48,89 +48,105 @@ void FilterLSAcceptor::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
    roptions->AddLowerBoundedNumberOption(
       "theta_max_fact",
       "Determines upper bound for constraint violation in the filter.",
-      0.0, true, 1e4,
+      0.0, true,
+      1e4,
       "The algorithmic parameter theta_max is determined as theta_max_fact "
-      "times the maximum of 1 and the constraint violation at initial point.  "
+      "times the maximum of 1 and the constraint violation at initial point. "
       "Any point with a constraint violation larger than theta_max is "
       "unacceptable to the filter (see Eqn. (21) in the implementation paper).");
    roptions->AddLowerBoundedNumberOption(
       "theta_min_fact",
       "Determines constraint violation threshold in the switching rule.",
-      0.0, true, 1e-4,
+      0.0, true,
+      1e-4,
       "The algorithmic parameter theta_min is determined as theta_min_fact "
-      "times the maximum of 1 and the constraint violation at initial point.  "
+      "times the maximum of 1 and the constraint violation at initial point. "
       "The switching rules treats an iteration as an h-type iteration whenever "
       "the current constraint violation is larger than theta_min (see "
       "paragraph before Eqn. (19) in the implementation paper).");
    roptions->AddBoundedNumberOption(
       "eta_phi",
       "Relaxation factor in the Armijo condition.",
-      0.0, true, 0.5, true, 1e-8,
+      0.0, true,
+      0.5, true,
+      1e-8,
       "(See Eqn. (20) in the implementation paper)");
    roptions->AddLowerBoundedNumberOption(
-      "delta", "Multiplier for constraint violation in the switching rule.",
-      0.0, true, 1.0,
+      "delta",
+      "Multiplier for constraint violation in the switching rule.",
+      0.0, true,
+      1.0,
       "(See Eqn. (19) in the implementation paper.)");
    roptions->AddLowerBoundedNumberOption(
       "s_phi",
       "Exponent for linear barrier function model in the switching rule.",
-      1.0, true, 2.3,
+      1.0, true,
+      2.3,
       "(See Eqn. (19) in the implementation paper.)");
    roptions->AddLowerBoundedNumberOption(
       "s_theta",
       "Exponent for current constraint violation in the switching rule.",
-      1.0, true, 1.1,
+      1.0, true,
+      1.1,
       "(See Eqn. (19) in the implementation paper.)");
    roptions->AddBoundedNumberOption(
       "gamma_phi",
       "Relaxation factor in the filter margin for the barrier function.",
-      0.0, true, 1.0, true, 1e-8,
+      0.0, true,
+      1.0, true,
+      1e-8,
       "(See Eqn. (18a) in the implementation paper.)");
    roptions->AddBoundedNumberOption(
       "gamma_theta",
       "Relaxation factor in the filter margin for the constraint violation.",
-      0.0, true, 1.0, true, 1e-5,
+      0.0, true,
+      1.0, true,
+      1e-5,
       "(See Eqn. (18b) in the implementation paper.)");
    roptions->AddBoundedNumberOption(
       "alpha_min_frac",
       "Safety factor for the minimal step size (before switching to restoration phase).",
-      0.0, true, 1.0, true, 0.05,
+      0.0, true,
+      1.0, true,
+      0.05,
       "(This is gamma_alpha in Eqn. (20) in the implementation paper.)");
    roptions->AddLowerBoundedIntegerOption(
       "max_soc",
       "Maximum number of second order correction trial steps at each iteration.",
-      0, 4,
-      "Choosing 0 disables the second order "
-      "corrections. (This is p^{max} of Step A-5.9 of "
-      "Algorithm A in the implementation paper.)");
+      0,
+      4,
+      "Choosing 0 disables the second order corrections. "
+      "(This is p^{max} of Step A-5.9 of Algorithm A in the implementation paper.)");
    roptions->AddLowerBoundedNumberOption(
       "kappa_soc",
       "Factor in the sufficient reduction rule for second order correction.",
-      0.0, true, 0.99,
+      0.0, true,
+      0.99,
       "This option determines how much a second order correction step must reduce the "
-      "constraint violation so that further correction steps are attempted.  "
+      "constraint violation so that further correction steps are attempted. "
       "(See Step A-5.9 of Algorithm A in the implementation paper.)");
    roptions->AddLowerBoundedNumberOption(
       "obj_max_inc",
       "Determines the upper bound on the acceptable increase of barrier objective function.",
-      1.0, true, 5.0,
+      1.0, true,
+      5.0,
       "Trial points are rejected if they lead to an increase in the "
-      "barrier objective function by more than obj_max_inc orders "
-      "of magnitude.");
+      "barrier objective function by more than obj_max_inc orders of magnitude.");
 
    roptions->AddLowerBoundedIntegerOption(
       "max_filter_resets",
       "Maximal allowed number of filter resets",
-      0, 5,
+      0,
+      5,
       "A positive number enables a heuristic that resets the filter, whenever "
       "in more than \"filter_reset_trigger\" successive iterations the last "
-      "rejected trial steps size was rejected because of the filter.  This "
-      "option determine the maximal number of resets that are allowed to take "
-      "place.");
+      "rejected trial steps size was rejected because of the filter. "
+      "This option determine the maximal number of resets that are allowed to take place.");
    roptions->AddLowerBoundedIntegerOption(
       "filter_reset_trigger",
       "Number of iterations that trigger the filter reset.",
-      1, 5,
+      1,
+      5,
       "If the filter reset heuristic is active and the number of successive "
       "iterations in which the last rejected trial step size was rejected "
       "because of the filter, the filter is reset.");
@@ -142,9 +158,8 @@ void FilterLSAcceptor::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
       "none", "no corrector",
       "affine", "corrector step towards mu=0",
       "primal-dual", "corrector step towards current mu",
-      "If \"mu_strategy\" is \"adaptive\", this option determines "
-      "what kind of corrector steps should be tried. Changing this "
-      "option is experimental.");
+      "If \"mu_strategy\" is \"adaptive\", this option determines what kind of corrector steps should be tried. "
+      "Changing this option is experimental.");
 
    roptions->AddStringOption2(
       "skip_corr_if_neg_curv",
@@ -153,9 +168,9 @@ void FilterLSAcceptor::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
       "no", "don't skip",
       "yes", "skip",
       "The corrector step is not tried if negative curvature has been "
-      "encountered during the computation of the search direction in "
-      "the current iteration. This option is only used if \"mu_strategy\" is "
-      "\"adaptive\". Changing this option is experimental.");
+      "encountered during the computation of the search direction in the current iteration. "
+      "This option is only used if \"mu_strategy\" is \"adaptive\". "
+      "Changing this option is experimental.");
 
    roptions->AddStringOption2(
       "skip_corr_in_monotone_mode",
@@ -163,24 +178,25 @@ void FilterLSAcceptor::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
       "yes",
       "no", "don't skip",
       "yes", "skip",
-      "The corrector step is not tried if the algorithm is currently in the "
-      "monotone mode (see also option \"barrier_strategy\")."
+      "The corrector step is not tried if the algorithm is currently in the monotone mode (see also option \"barrier_strategy\"). "
       "This option is only used if \"mu_strategy\" is \"adaptive\". "
       "Changing this option is experimental.");
 
    roptions->AddLowerBoundedNumberOption(
       "corrector_compl_avrg_red_fact",
       "Complementarity tolerance factor for accepting corrector step.",
-      0.0, true, 1.0,
+      0.0, true,
+      1.0,
       "This option determines the factor by which complementarity is allowed to increase "
       "for a corrector step to be accepted. Changing this option is experimental.");
 
    roptions->AddBoundedIntegerOption(
       "soc_method",
       "Ways to apply second order correction",
-      0, 1, 0, "This option determins the way to apply second order correction, 0 is the"
-      " method described in the implementation paper. 1 is the modified way which adds "
-      "alpha on the rhs of x and s rows.");
+      0, 1,
+      0,
+      "This option determins the way to apply second order correction, 0 is the method described in the implementation paper. "
+      "1 is the modified way which adds alpha on the rhs of x and s rows.");
 }
 
 bool FilterLSAcceptor::InitializeImpl(const OptionsList& options,

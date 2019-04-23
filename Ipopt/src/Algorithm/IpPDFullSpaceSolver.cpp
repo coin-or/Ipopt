@@ -45,48 +45,59 @@ void PDFullSpaceSolver::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->AddLowerBoundedIntegerOption("min_refinement_steps",
-                                          "Minimum number of iterative refinement steps per linear system solve.", 0, 1,
-                                          "Iterative refinement (on the full unsymmetric system) is performed for "
-                                          "each right hand side.  This option determines the minimum number "
-                                          "of iterative refinements (i.e. at least \"min_refinement_steps\" "
-                                          "iterative refinement steps are enforced per right hand side.)");
-   roptions->AddLowerBoundedIntegerOption("max_refinement_steps",
-                                          "Maximum number of iterative refinement steps per linear system solve.", 0, 10,
-                                          "Iterative refinement (on the full unsymmetric system) is performed for "
-                                          "each right hand side.  This option determines the maximum number "
-                                          "of iterative refinement steps.");
-   roptions->AddLowerBoundedNumberOption("residual_ratio_max", "Iterative refinement tolerance", 0.0, true, 1e-10,
-                                         "Iterative refinement is performed until the residual test ratio is "
-                                         "less than this tolerance (or until \"max_refinement_steps\" refinement "
-                                         "steps are performed).");
-   roptions->AddLowerBoundedNumberOption("residual_ratio_singular",
-                                         "Threshold for declaring linear system singular after failed iterative refinement.", 0.0, true, 1e-5,
-                                         "If the residual test ratio is larger than this value after failed "
-                                         "iterative refinement, the algorithm pretends that the linear system is "
-                                         "singular.");
+   roptions->AddLowerBoundedIntegerOption(
+      "min_refinement_steps",
+      "Minimum number of iterative refinement steps per linear system solve.",
+      0,
+      1,
+      "Iterative refinement (on the full unsymmetric system) is performed for each right hand side. "
+      "This option determines the minimum number of iterative refinements "
+      "(i.e. at least \"min_refinement_steps\" iterative refinement steps are enforced per right hand side.)");
+   roptions->AddLowerBoundedIntegerOption(
+      "max_refinement_steps",
+      "Maximum number of iterative refinement steps per linear system solve.",
+      0,
+      10,
+      "Iterative refinement (on the full unsymmetric system) is performed for each right hand side. "
+      "This option determines the maximum number of iterative refinement steps.");
+   roptions->AddLowerBoundedNumberOption(
+      "residual_ratio_max",
+      "Iterative refinement tolerance",
+      0., true,
+      1e-10,
+      "Iterative refinement is performed until the residual test ratio is less than this tolerance "
+      "(or until \"max_refinement_steps\" refinement steps are performed).");
+   roptions->AddLowerBoundedNumberOption(
+      "residual_ratio_singular",
+      "Threshold for declaring linear system singular after failed iterative refinement.",
+      0., true,
+      1e-5,
+      "If the residual test ratio is larger than this value after failed iterative refinement, "
+      "the algorithm pretends that the linear system is singular.");
    // ToDo Think about following option - are the correct norms used?
-   roptions->AddLowerBoundedNumberOption("residual_improvement_factor",
-                                         "Minimal required reduction of residual test ratio in iterative refinement.", 0.0, true, 0.999999999,
-                                         "If the improvement of the residual test ratio made by one iterative "
-                                         "refinement step is not better than this factor, iterative refinement "
-                                         "is aborted.");
+   roptions->AddLowerBoundedNumberOption(
+      "residual_improvement_factor",
+      "Minimal required reduction of residual test ratio in iterative refinement.",
+      0., true,
+      0.999999999,
+      "If the improvement of the residual test ratio made by one iterative refinement step is not better than this factor, "
+      "iterative refinement is aborted.");
    roptions->AddLowerBoundedNumberOption(
       "neg_curv_test_tol",
       "Tolerance for heuristic to ignore wrong inertia.",
-      0.0, false, 0.0,
+      0.0, false,
+      0.0,
       "If nonzero, incorrect inertia in the augmented system is ignored, and "
-      "Ipopt tests if the direction is a direction of positive curvature.  This "
-      "tolerance is alpha_n in the paper by Zavala and Chiang (2014) and it "
-      "determines when the direction is considered to be sufficiently positive. "
+      "Ipopt tests if the direction is a direction of positive curvature. "
+      "This tolerance is alpha_n in the paper by Zavala and Chiang (2014) and "
+      "it determines when the direction is considered to be sufficiently positive. "
       "A value in the range of [1e-12, 1e-11] is recommended.");
    roptions->AddStringOption2(
       "neg_curv_test_reg",
       "Whether to do the curvature test with the primal regularization (see Zavala and Chiang, 2014).",
       "yes",
       "yes", "use primal regularization with the inertia-free curvature test",
-      "no",  "use original IPOPT approach, in which the primal regularization is ignored",
-      "");
+      "no",  "use original IPOPT approach, in which the primal regularization is ignored");
 }
 
 

@@ -48,30 +48,62 @@ void CGSearchDirCalculator::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->AddLowerBoundedNumberOption("penalty_init_max",
-                                         "Maximal value for the intial penalty parameter (for Chen-Goldfarb line search).", 0, true, 1e5, "");
-   roptions->AddLowerBoundedNumberOption("penalty_init_min",
-                                         "Minimal value for the intial penalty parameter for line search(for Chen-Goldfarb line search).", 0., true, 1.,
-                                         "");
-   roptions->AddLowerBoundedNumberOption("penalty_max",
-                                         "Maximal value for the penalty parameter (for Chen-Goldfarb line search).", 0, true, 1e30, "");
-   roptions->AddLowerBoundedNumberOption("pen_des_fact",
-                                         "a parameter used in penalty parameter computation (for Chen-Goldfarb line search).", 0.0, true, 2e-1, "");
-   roptions->AddLowerBoundedNumberOption("kappa_x_dis", "a parameter used to check if the fast direction can be used as"
-                                         "the line search direction (for Chen-Goldfarb line search).", 0.0, true, 1e2, "");
-   roptions->AddLowerBoundedNumberOption("kappa_y_dis", "a parameter used to check if the fast direction can be used as"
-                                         "the line search direction (for Chen-Goldfarb line search).", 0.0, true, 1e4, "");
-   roptions->AddLowerBoundedNumberOption("vartheta", "a parameter used to check if the fast direction can be used as"
-                                         "the line search direction (for Chen-Goldfarb line search).", 0.0, true, 0.5, "");
-   roptions->AddLowerBoundedNumberOption("delta_y_max", "a parameter used to check if the fast direction can be used as"
-                                         "the line search direction (for Chen-Goldfarb line search).", 0.0, true, 1e12, "");
-   roptions->AddLowerBoundedNumberOption("fast_des_fact",
-                                         "a parameter used to check if the fast direction can be used as"
-                                         "the line search direction (for Chen-Goldfarb line search).", 0.0, true, 1e-1, "");
-   roptions->AddLowerBoundedNumberOption("pen_init_fac", "a parameter used to choose initial penalty parameters"
-                                         "when the regularized Newton method is used.", 0.0, true, 5e1, "");
-   roptions->AddStringOption2("never_use_fact_cgpen_direction", "Toggle to switch off the fast Chen-Goldfarb direction",
-                              "no", "no", "always compute the fast direction", "yes", "never compute the fast direction", "");
+   roptions->AddLowerBoundedNumberOption(
+      "penalty_init_max",
+      "Maximal value for the initial penalty parameter (for Chen-Goldfarb line search).",
+      0., true,
+      1e5);
+   roptions->AddLowerBoundedNumberOption(
+      "penalty_init_min",
+      "Minimal value for the initial penalty parameter for line search (for Chen-Goldfarb line search).",
+      0., true,
+      1.);
+   roptions->AddLowerBoundedNumberOption(
+      "penalty_max",
+      "Maximal value for the penalty parameter (for Chen-Goldfarb line search).",
+      0., true,
+      1e30);
+   roptions->AddLowerBoundedNumberOption(
+      "pen_des_fact",
+      "a parameter used in penalty parameter computation (for Chen-Goldfarb line search).",
+      0., true,
+      2e-1);
+   roptions->AddLowerBoundedNumberOption(
+      "kappa_x_dis",
+      "a parameter used to check if the fast direction can be used as the line search direction (for Chen-Goldfarb line search).",
+      0., true,
+      1e2);
+   roptions->AddLowerBoundedNumberOption(
+      "kappa_y_dis",
+      "a parameter used to check if the fast direction can be used as the line search direction (for Chen-Goldfarb line search).",
+      0., true,
+      1e4);
+   roptions->AddLowerBoundedNumberOption(
+      "vartheta",
+      "a parameter used to check if the fast direction can be used as the line search direction (for Chen-Goldfarb line search).",
+      0., true,
+      0.5);
+   roptions->AddLowerBoundedNumberOption(
+      "delta_y_max",
+      "a parameter used to check if the fast direction can be used as the line search direction (for Chen-Goldfarb line search).",
+      0., true,
+      1e12);
+   roptions->AddLowerBoundedNumberOption(
+      "fast_des_fact",
+      "a parameter used to check if the fast direction can be used as the line search direction (for Chen-Goldfarb line search).",
+      0., true,
+      1e-1);
+   roptions->AddLowerBoundedNumberOption(
+      "pen_init_fac",
+      "a parameter used to choose initial penalty parameters when the regularized Newton method is used.",
+      0., true,
+      5e1);
+   roptions->AddStringOption2(
+      "never_use_fact_cgpen_direction",
+      "Toggle to switch off the fast Chen-Goldfarb direction",
+      "no",
+      "no", "always compute the fast direction",
+      "yes", "never compute the fast direction");
 }
 
 bool CGSearchDirCalculator::InitializeImpl(

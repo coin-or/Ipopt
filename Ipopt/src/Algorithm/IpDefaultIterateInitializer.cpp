@@ -28,73 +28,94 @@ void DefaultIterateInitializer::RegisterOptions(
    SmartPtr<RegisteredOptions> reg_options
 )
 {
-   reg_options->AddLowerBoundedNumberOption("bound_push",
-         "Desired minimum absolute distance from the initial point to bound.", 0.0, true, 0.01,
-         "Determines how much the initial point might have to "
-         "be modified in order to be sufficiently inside "
-         "the bounds (together with \"bound_frac\").  (This is kappa_1 in "
-         "Section 3.6 of implementation paper.)");
-   reg_options->AddBoundedNumberOption("bound_frac",
-                                       "Desired minimum relative distance from the initial point to bound.", 0, true, 0.5, false, 0.01,
-                                       "Determines how much the initial point might have to "
-                                       "be modified in order to be sufficiently inside "
-                                       "the bounds (together with \"bound_push\").  (This is kappa_2 in "
-                                       "Section 3.6 of implementation paper.)");
-   reg_options->AddLowerBoundedNumberOption("slack_bound_push",
-         "Desired minimum absolute distance from the initial slack to bound.", 0.0, true, 0.01,
-         "Determines how much the initial slack variables might have to "
-         "be modified in order to be sufficiently inside "
-         "the inequality bounds (together with \"slack_bound_frac\").  (This is kappa_1 in "
-         "Section 3.6 of implementation paper.)");
-   reg_options->AddBoundedNumberOption("slack_bound_frac",
-                                       "Desired minimum relative distance from the initial slack to bound.", 0, true, 0.5, false, 0.01,
-                                       "Determines how much the initial slack variables might have to "
-                                       "be modified in order to be sufficiently inside "
-                                       "the inequality bounds (together with \"slack_bound_push\").  (This is kappa_2 in "
-                                       "Section 3.6 of implementation paper.)");
-   reg_options->AddLowerBoundedNumberOption("constr_mult_init_max",
-         "Maximum allowed least-square guess of constraint multipliers.", 0, false, 1e3,
-         "Determines how large the initial least-square guesses of the constraint "
-         "multipliers are allowed to be (in max-norm). If the guess is larger "
-         "than this value, it is discarded and all constraint multipliers are "
-         "set to zero.  This options is also used when initializing the "
-         "restoration phase. By default, \"resto.constr_mult_init_max\" (the one "
-         "used in RestoIterateInitializer) is set to zero.");
-   reg_options->AddLowerBoundedNumberOption("bound_mult_init_val", "Initial value for the bound multipliers.", 0, true,
-         1.0, "All dual variables corresponding to bound constraints are "
-         "initialized to this value.");
-   reg_options->AddStringOption2("bound_mult_init_method", "Initialization method for bound multipliers", "constant",
-                                 "constant", "set all bound multipliers to the value of bound_mult_init_val", "mu-based",
-                                 "initialize to mu_init/x_slack", "This option defines how the iterates for the bound multipliers are "
-                                 "initialized.  If \"constant\" is chosen, then all bound multipliers "
-                                 "are initialized to the value of \"bound_mult_init_val\".  If "
-                                 "\"mu-based\" is chosen, the each value is initialized to the the value "
-                                 "of \"mu_init\" divided by the corresponding slack variable.  This "
-                                 "latter option might be useful if the starting point is close to the "
-                                 "optimal solution.");
-   reg_options->AddStringOption2("least_square_init_primal", "Least square initialization of the primal variables",
-                                 "no", "no", "take user-provided point", "yes", "overwrite user-provided point with least-square estimates",
-                                 "If set to yes, Ipopt ignores the user provided point and solves a "
-                                 "least square problem for the primal variables (x and s), to fit the "
-                                 "linearized equality and inequality constraints.  This might be useful "
-                                 "if the user doesn't know anything about the starting point, or for "
-                                 "solving an LP or QP.");
-   reg_options->AddStringOption2("least_square_init_duals", "Least square initialization of all dual variables", "no",
-                                 "no", "use bound_mult_init_val and least-square equality constraint multipliers", "yes",
-                                 "overwrite user-provided point with least-square estimates",
-                                 "If set to yes, Ipopt tries to compute least-square multipliers "
-                                 "(considering ALL dual variables).  If successful, the bound "
-                                 "multipliers are possibly corrected to be at least bound_mult_init_val. "
-                                 "This might be useful "
-                                 "if the user doesn't know anything about the starting point, or for "
-                                 "solving an LP or QP.  This overwrites option "
-                                 "\"bound_mult_init_method\".");
+   reg_options->AddLowerBoundedNumberOption(
+      "bound_push",
+      "Desired minimum absolute distance from the initial point to bound.",
+      0.0, true,
+      0.01,
+      "Determines how much the initial point might have to be modified "
+      "in order to be sufficiently inside the bounds (together with \"bound_frac\"). "
+      "(This is kappa_1 in Section 3.6 of implementation paper.)");
+   reg_options->AddBoundedNumberOption(
+      "bound_frac",
+      "Desired minimum relative distance from the initial point to bound.",
+      0, true,
+      0.5, false,
+      0.01,
+      "Determines how much the initial point might have to be modified "
+      "in order to be sufficiently inside the bounds (together with \"bound_push\"). "
+      "(This is kappa_2 in Section 3.6 of implementation paper.)");
+   reg_options->AddLowerBoundedNumberOption(
+      "slack_bound_push",
+      "Desired minimum absolute distance from the initial slack to bound.",
+      0.0, true,
+      0.01,
+      "Determines how much the initial slack variables might have to be modified "
+      "in order to be sufficiently inside the inequality bounds (together with \"slack_bound_frac\"). "
+      "(This is kappa_1 in Section 3.6 of implementation paper.)");
+   reg_options->AddBoundedNumberOption(
+      "slack_bound_frac",
+      "Desired minimum relative distance from the initial slack to bound.",
+      0, true,
+      0.5, false,
+      0.01,
+      "Determines how much the initial slack variables might have to be modified "
+      "in order to be sufficiently inside the inequality bounds (together with \"slack_bound_push\"). "
+      "(This is kappa_2 in Section 3.6 of implementation paper.)");
+   reg_options->AddLowerBoundedNumberOption(
+      "constr_mult_init_max",
+      "Maximum allowed least-square guess of constraint multipliers.",
+      0, false,
+      1e3,
+      "Determines how large the initial least-square guesses of the constraint multipliers are allowed to be (in max-norm). "
+      "If the guess is larger than this value, it is discarded and all constraint multipliers are set to zero. "
+      "This options is also used when initializing the restoration phase. "
+      "By default, \"resto.constr_mult_init_max\" (the one used in RestoIterateInitializer) is set to zero.");
+   reg_options->AddLowerBoundedNumberOption(
+      "bound_mult_init_val",
+      "Initial value for the bound multipliers.",
+      0, true,
+      1.0,
+      "All dual variables corresponding to bound constraints are initialized to this value.");
+   reg_options->AddStringOption2(
+      "bound_mult_init_method",
+      "Initialization method for bound multipliers",
+      "constant",
+      "constant", "set all bound multipliers to the value of bound_mult_init_val",
+      "mu-based", "initialize to mu_init/x_slack",
+      "This option defines how the iterates for the bound multipliers are initialized. "
+      "If \"constant\" is chosen, then all bound multipliers are initialized to the value of \"bound_mult_init_val\". "
+      "If \"mu-based\" is chosen, the each value is initialized to the the value of \"mu_init\" "
+      "divided by the corresponding slack variable. "
+      "This latter option might be useful if the starting point is close to the optimal solution.");
+   reg_options->AddStringOption2(
+      "least_square_init_primal",
+      "Least square initialization of the primal variables",
+      "no",
+      "no", "take user-provided point",
+      "yes", "overwrite user-provided point with least-square estimates",
+      "If set to yes, Ipopt ignores the user provided point and solves a least square problem for the primal variables (x and s) "
+      "to fit the linearized equality and inequality constraints."
+      "This might be useful if the user doesn't know anything about the starting point, or for solving an LP or QP.");
+   reg_options->AddStringOption2(
+      "least_square_init_duals",
+      "Least square initialization of all dual variables",
+      "no",
+      "no", "use bound_mult_init_val and least-square equality constraint multipliers",
+      "yes", "overwrite user-provided point with least-square estimates",
+      "If set to yes, Ipopt tries to compute least-square multipliers (considering ALL dual variables). "
+      "If successful, the bound multipliers are possibly corrected to be at least bound_mult_init_val. "
+      "This might be useful if the user doesn't know anything about the starting point, or for solving an LP or QP. "
+      "This overwrites option \"bound_mult_init_method\".");
    reg_options->SetRegisteringCategory("Warm Start");
-   reg_options->AddStringOption2("warm_start_init_point", "Warm-start for initial point", "no", "no",
-                                 "do not use the warm start initialization", "yes", "use the warm start initialization",
-                                 "Indicates whether this optimization should use a warm start "
-                                 "initialization, where values of primal and dual variables are "
-                                 "given (e.g., from a previous optimization of a related problem.)");
+   reg_options->AddStringOption2(
+      "warm_start_init_point",
+      "Warm-start for initial point",
+      "no",
+      "no", "do not use the warm start initialization",
+      "yes", "use the warm start initialization",
+      "Indicates whether this optimization should use a warm start initialization, "
+      "where values of primal and dual variables are given (e.g., from a previous optimization of a related problem.)");
 }
 
 bool DefaultIterateInitializer::InitializeImpl(

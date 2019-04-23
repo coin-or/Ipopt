@@ -32,76 +32,109 @@ void OptimalityErrorConvergenceCheck::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->AddLowerBoundedIntegerOption("max_iter", "Maximum number of iterations.", 0, 3000,
-                                          "The algorithm terminates with an error message if the number of "
-                                          "iterations exceeded this number.");
-   roptions->AddLowerBoundedNumberOption("max_cpu_time", "Maximum number of CPU seconds.", 0.0, true, 1e6,
-                                         "A limit on CPU seconds that Ipopt can use to solve one problem.  If "
-                                         "during the convergence check this limit is exceeded, Ipopt will "
-                                         "terminate with a corresponding error message.");
-   roptions->AddLowerBoundedNumberOption("dual_inf_tol", "Desired threshold for the dual infeasibility.", 0.0, true, 1.,
-                                         "Absolute tolerance on the dual infeasibility. Successful termination "
-                                         "requires that the max-norm of the (unscaled) dual infeasibility is less than this "
-                                         "threshold.");
-   roptions->AddLowerBoundedNumberOption("constr_viol_tol", "Desired threshold for the constraint violation.", 0.0,
-                                         true, 1e-4, "Absolute tolerance on the constraint violation. Successful termination "
-                                         "requires that the max-norm of the (unscaled) constraint violation is less than this "
-                                         "threshold.");
-   roptions->AddLowerBoundedNumberOption("compl_inf_tol", "Desired threshold for the complementarity conditions.", 0.0,
-                                         true, 1e-4, "Absolute tolerance on the complementarity. Successful termination "
-                                         "requires that the max-norm of the (unscaled) complementarity is less than this "
-                                         "threshold.");
-   roptions->AddLowerBoundedNumberOption("acceptable_tol", "\"Acceptable\" convergence tolerance (relative).", 0.0,
-                                         true, 1e-6, "Determines which (scaled) overall optimality error is considered to be"
-                                         " \"acceptable.\" There are two levels of termination criteria.  If the "
-                                         "usual \"desired\" tolerances (see tol, dual_inf_tol etc) are satisfied "
-                                         "at an iteration, the algorithm immediately terminates with a success "
-                                         "message.  On the other hand, if the algorithm encounters "
-                                         "\"acceptable_iter\" many iterations in a row that are considered "
-                                         "\"acceptable\", it will terminate before the desired convergence "
-                                         "tolerance is met. This is useful in cases where the algorithm might "
-                                         "not be able to achieve the \"desired\" level of accuracy.");
-   roptions->AddLowerBoundedIntegerOption("acceptable_iter",
-                                          "Number of \"acceptable\" iterates before triggering termination.", 0, 15,
-                                          "If the algorithm encounters this many successive \"acceptable\" iterates "
-                                          "(see \"acceptable_tol\"), it terminates, assuming that the problem "
-                                          "has been solved to best possible accuracy given round-off.  If it is "
-                                          "set to zero, this heuristic is disabled.");
-   roptions->AddLowerBoundedNumberOption("acceptable_dual_inf_tol",
-                                         "\"Acceptance\" threshold for the dual infeasibility.", 0.0, true, 1e10,
-                                         "Absolute tolerance on the dual infeasibility. \"Acceptable\" termination "
-                                         "requires that the (max-norm of the unscaled) dual infeasibility is less than this "
-                                         "threshold; see also acceptable_tol.");
-   roptions->AddLowerBoundedNumberOption("acceptable_constr_viol_tol",
-                                         "\"Acceptance\" threshold for the constraint violation.", 0.0, true, 1e-2,
-                                         "Absolute tolerance on the constraint violation. \"Acceptable\" termination "
-                                         "requires that the max-norm of the (unscaled) constraint violation is less than this "
-                                         "threshold; see also acceptable_tol.");
-   roptions->AddLowerBoundedNumberOption("acceptable_compl_inf_tol",
-                                         "\"Acceptance\" threshold for the complementarity conditions.", 0.0, true, 1e-2,
-                                         "Absolute tolerance on the complementarity. \"Acceptable\" termination "
-                                         "requires that the max-norm of the (unscaled) complementarity is less than this "
-                                         "threshold; see also acceptable_tol.");
-   roptions->AddLowerBoundedNumberOption("acceptable_obj_change_tol",
-                                         "\"Acceptance\" stopping criterion based on objective function change.", 0.0, false, 1e20,
-                                         "If the relative change of the objective function (scaled by "
-                                         "Max(1,|f(x)|)) is less than this value, this part of the acceptable "
-                                         "tolerance termination is satisfied; see also acceptable_tol.  This is "
-                                         "useful for the quasi-Newton option, which has trouble to bring down "
-                                         "the dual infeasibility.");
-   roptions->AddLowerBoundedNumberOption("diverging_iterates_tol", "Threshold for maximal value of primal iterates.",
-                                         0.0, true, 1e20, "If any component of the primal iterates exceeded this value (in "
-                                         "absolute terms), the optimization is aborted with the exit message "
-                                         "that the iterates seem to be diverging.");
-   roptions->AddLowerBoundedNumberOption("mu_target", "Desired value of complementarity.", 0.0, false, 0.0,
-                                         "Usually, the barrier parameter is driven to zero and the termination "
-                                         "test for complementarity is measured with respect to zero "
-                                         "complementarity.  However, in some cases it might be desired to have "
-                                         "Ipopt solve barrier problem for strictly positive value of the barrier "
-                                         "parameter.  In this case, the value of \"mu_target\" specifies the "
-                                         "final value of the barrier parameter, and the termination tests are "
-                                         "then defined with respect to the barrier problem for this value of the "
-                                         "barrier parameter.");
+   roptions->AddLowerBoundedIntegerOption(
+      "max_iter",
+      "Maximum number of iterations.",
+      0,
+      3000,
+      "The algorithm terminates with an error message if the number of iterations exceeded this number.");
+   roptions->AddLowerBoundedNumberOption(
+      "max_cpu_time",
+      "Maximum number of CPU seconds.",
+      0.0, true,
+      1e6,
+      "A limit on CPU seconds that Ipopt can use to solve one problem. "
+      "If during the convergence check this limit is exceeded, Ipopt will terminate with a corresponding error message.");
+   roptions->AddLowerBoundedNumberOption(
+      "dual_inf_tol",
+      "Desired threshold for the dual infeasibility.",
+      0., true,
+      1.,
+      "Absolute tolerance on the dual infeasibility. "
+      "Successful termination requires that the max-norm of the (unscaled) dual infeasibility is less than this threshold.");
+   roptions->AddLowerBoundedNumberOption(
+      "constr_viol_tol",
+      "Desired threshold for the constraint violation.",
+      0.0, true,
+      1e-4,
+      "Absolute tolerance on the constraint violation. "
+      "Successful termination requires that the max-norm of the (unscaled) constraint violation is less than this threshold.");
+   roptions->AddLowerBoundedNumberOption(
+      "compl_inf_tol",
+      "Desired threshold for the complementarity conditions.",
+      0., true,
+      1e-4,
+      "Absolute tolerance on the complementarity. "
+      "Successful termination requires that the max-norm of the (unscaled) complementarity is less than this threshold.");
+   roptions->AddLowerBoundedNumberOption(
+      "acceptable_tol",
+      "\"Acceptable\" convergence tolerance (relative).",
+      0., true,
+      1e-6,
+      "Determines which (scaled) overall optimality error is considered to be \"acceptable\". "
+      "There are two levels of termination criteria. "
+      "If the usual \"desired\" tolerances (see tol, dual_inf_tol etc) are satisfied at an iteration, "
+      "the algorithm immediately terminates with a success message. "
+      "On the other hand, if the algorithm encounters \"acceptable_iter\" many iterations in a row that are considered \"acceptable\", "
+      "it will terminate before the desired convergence tolerance is met. "
+      "This is useful in cases where the algorithm might not be able to achieve the \"desired\" level of accuracy.");
+   roptions->AddLowerBoundedIntegerOption(
+      "acceptable_iter",
+      "Number of \"acceptable\" iterates before triggering termination.",
+      0,
+      15,
+      "If the algorithm encounters this many successive \"acceptable\" iterates (see \"acceptable_tol\"), "
+      "it terminates, assuming that the problem has been solved to best possible accuracy given round-off. "
+      "If it is set to zero, this heuristic is disabled.");
+   roptions->AddLowerBoundedNumberOption(
+      "acceptable_dual_inf_tol",
+      "\"Acceptance\" threshold for the dual infeasibility.",
+      0., true,
+      1e10,
+      "Absolute tolerance on the dual infeasibility. "
+      "\"Acceptable\" termination requires that the (max-norm of the unscaled) dual infeasibility is less than this threshold; "
+      "see also acceptable_tol.");
+   roptions->AddLowerBoundedNumberOption(
+      "acceptable_constr_viol_tol",
+      "\"Acceptance\" threshold for the constraint violation.",
+      0., true,
+      1e-2,
+      "Absolute tolerance on the constraint violation. "
+      "\"Acceptable\" termination requires that the max-norm of the (unscaled) constraint violation is less than this threshold; "
+      "see also acceptable_tol.");
+   roptions->AddLowerBoundedNumberOption(
+      "acceptable_compl_inf_tol",
+      "\"Acceptance\" threshold for the complementarity conditions.",
+      0., true,
+      1e-2,
+      "Absolute tolerance on the complementarity. "
+      "\"Acceptable\" termination requires that the max-norm of the (unscaled) complementarity is less than this threshold; "
+      "see also acceptable_tol.");
+   roptions->AddLowerBoundedNumberOption(
+      "acceptable_obj_change_tol",
+      "\"Acceptance\" stopping criterion based on objective function change.",
+      0., false,
+      1e20,
+      "If the relative change of the objective function (scaled by Max(1,|f(x)|)) is less than this value, "
+      "this part of the acceptable tolerance termination is satisfied; see also acceptable_tol. "
+      "This is useful for the quasi-Newton option, which has trouble to bring down the dual infeasibility.");
+   roptions->AddLowerBoundedNumberOption(
+      "diverging_iterates_tol",
+      "Threshold for maximal value of primal iterates.",
+      0., true,
+      1e20,
+      "If any component of the primal iterates exceeded this value (in absolute terms), "
+      "the optimization is aborted with the exit message that the iterates seem to be diverging.");
+   roptions->AddLowerBoundedNumberOption(
+      "mu_target",
+      "Desired value of complementarity.",
+      0., false,
+      0.,
+      "Usually, the barrier parameter is driven to zero and "
+      "the termination test for complementarity is measured with respect to zero complementarity. "
+      "However, in some cases it might be desired to have Ipopt solve barrier problem for strictly positive value of the barrier parameter. "
+      "In this case, the value of \"mu_target\" specifies the final value of the barrier parameter, and "
+      "the termination tests are then defined with respect to the barrier problem for this value of the barrier parameter.");
 }
 
 bool OptimalityErrorConvergenceCheck::InitializeImpl(

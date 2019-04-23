@@ -45,37 +45,68 @@ void Ma86SolverInterface::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->AddIntegerOption("ma86_print_level", "Debug printing level for the linear solver MA86", -1, "");
+   roptions->AddIntegerOption(
+      "ma86_print_level",
+      "Debug printing level",
+      -1);
    /*
     "<0 no printing.\n"
     "0  Error and warning messages only.\n"
     "=1 Limited diagnostic printing.\n"
     ">1 Additional diagnostic printing.");
     */
-   roptions->AddLowerBoundedIntegerOption("ma86_nemin", "Node Amalgamation parameter", 1, 32,
-                                          "Two nodes in elimination tree are merged if result has fewer than "
-                                          "ma86_nemin variables.");
-   roptions->AddLowerBoundedNumberOption("ma86_small", "Zero Pivot Threshold", 0.0, false, 1e-20,
-                                         "Any pivot less than ma86_small is treated as zero.");
-   roptions->AddLowerBoundedNumberOption("ma86_static", "Static Pivoting Threshold", 0.0, false, 0.0,
-                                         "See MA86 documentation. Either ma86_static=0.0 or "
-                                         "ma86_static>ma86_small. ma86_static=0.0 disables static pivoting.");
-   roptions->AddBoundedNumberOption("ma86_u", "Pivoting Threshold", 0.0, false, 0.5, false, 1e-8,
-                                    "See MA86 documentation.");
-   roptions->AddBoundedNumberOption("ma86_umax", "Maximum Pivoting Threshold", 0.0, false, 0.5, false, 1e-4,
-                                    "Maximum value to which u will be increased to improve quality.");
-   roptions->AddStringOption3("ma86_scaling", "Controls scaling of matrix", "mc64", "none",
-                              "Do not scale the linear system matrix", "mc64", "Scale linear system matrix using MC64", "mc77",
-                              "Scale linear system matrix using MC77 [1,3,0]", "This option controls scaling for the solver HSL_MA86.");
-   roptions->AddStringOption3("ma86_order", "Controls type of ordering used by HSL_MA86",
+   roptions->AddLowerBoundedIntegerOption(
+      "ma86_nemin",
+      "Node Amalgamation parameter",
+      1,
+      32,
+      "Two nodes in elimination tree are merged if result has fewer than ma86_nemin variables.");
+   roptions->AddLowerBoundedNumberOption(
+      "ma86_small",
+      "Zero Pivot Threshold",
+      0.0, false,
+      1e-20,
+      "Any pivot less than ma86_small is treated as zero.");
+   roptions->AddLowerBoundedNumberOption(
+      "ma86_static",
+      "Static Pivoting Threshold",
+      0.0, false,
+      0.0,
+      "See MA86 documentation. "
+      "Either ma86_static=0.0 or ma86_static>ma86_small. "
+      "ma86_static=0.0 disables static pivoting.");
+   roptions->AddBoundedNumberOption(
+      "ma86_u",
+      "Pivoting Threshold",
+      0.0, false,
+      0.5, false,
+      1e-8,
+      "See MA86 documentation.");
+   roptions->AddBoundedNumberOption(
+      "ma86_umax",
+      "Maximum Pivoting Threshold",
+      0.0, false,
+      0.5, false,
+      1e-4,
+      "Maximum value to which u will be increased to improve quality.");
+   roptions->AddStringOption3(
+      "ma86_scaling",
+      "Controls scaling of matrix",
+      "mc64",
+      "none", "Do not scale the linear system matrix",
+      "mc64", "Scale linear system matrix using MC64",
+      "mc77", "Scale linear system matrix using MC77 [1,3,0]");
+   roptions->AddStringOption3(
+      "ma86_order",
+      "Controls type of ordering",
 #ifdef COINHSL_HAS_METIS
-                              "auto",
+      "auto",
 #else
-                              "amd",
+      "amd",
 #endif
-                              "auto", "Try both AMD and MeTiS, pick best", "amd", "Use the HSL_MC68 approximate minimum degree algorithm",
-                              "metis", "Use the MeTiS nested dissection algorithm (if available)",
-                              "This option controls ordering for the solver HSL_MA86.");
+      "auto", "Try both AMD and MeTiS, pick best",
+      "amd", "Use the HSL_MC68 approximate minimum degree algorithm",
+      "metis", "Use the MeTiS nested dissection algorithm (if available)");
 }
 
 bool Ma86SolverInterface::InitializeImpl(

@@ -54,63 +54,83 @@ void OrigIpoptNLP::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->AddLowerBoundedNumberOption("bound_relax_factor", "Factor for initial relaxation of the bounds.", 0, false,
-                                         1e-8, "Before start of the optimization, the bounds given by the user are "
-                                         "relaxed.  This option sets the factor for this relaxation.  If it "
-                                         "is set to zero, then then bounds relaxation is disabled. "
-                                         "(See Eqn.(35) in implementation paper.)");
-   roptions->AddStringOption2("honor_original_bounds",
-                              "Indicates whether final points should be projected into original bounds.", "yes", "no",
-                              "Leave final point unchanged", "yes", "Project final point back into original bounds",
-                              "Ipopt might relax the bounds during the optimization (see, e.g., option "
-                              "\"bound_relax_factor\").  This option determines whether the final "
-                              "point should be projected back into the user-provide original bounds "
-                              "after the optimization.");
+   roptions->AddLowerBoundedNumberOption(
+      "bound_relax_factor",
+      "Factor for initial relaxation of the bounds.",
+      0., false,
+      1e-8,
+      "Before start of the optimization, the bounds given by the user are relaxed. "
+      "This option sets the factor for this relaxation. "
+      "If it is set to zero, then then bounds relaxation is disabled. "
+      "(See Eqn.(35) in implementation paper.)");
+   roptions->AddStringOption2(
+      "honor_original_bounds",
+      "Indicates whether final points should be projected into original bounds.",
+      "yes",
+      "no", "Leave final point unchanged",
+      "yes", "Project final point back into original bounds",
+      "Ipopt might relax the bounds during the optimization (see, e.g., option \"bound_relax_factor\"). "
+      "This option determines whether the final point should be projected back into the user-provide original bounds after the optimization.");
    roptions->SetRegisteringCategory("Warm Start");
-   roptions->AddStringOption2("warm_start_same_structure",
-                              "Indicates whether a problem with a structure identical to the previous one is to be solved.", "no", "no",
-                              "Assume this is a new problem.", "yes", "Assume this is problem has known structure",
-                              "If \"yes\" is chosen, then the algorithm assumes that an NLP is now to "
-                              "be solved, whose structure is identical to one that already was "
-                              "considered (with the same NLP object).");
+   roptions->AddStringOption2(
+      "warm_start_same_structure",
+      "Indicates whether a problem with a structure identical to the previous one is to be solved.",
+      "no",
+      "no", "Assume this is a new problem.",
+      "yes", "Assume this is problem has known structure",
+      "If \"yes\" is chosen, then the algorithm assumes that an NLP is now to be solved, "
+      "whose structure is identical to one that already was considered (with the same NLP object).");
    roptions->SetRegisteringCategory("NLP");
-   roptions->AddStringOption2("check_derivatives_for_naninf",
-                              "Indicates whether it is desired to check for Nan/Inf in derivative matrices", "no", "no",
-                              "Don't check (faster).", "yes", "Check Jacobians and Hessian for Nan and Inf.",
-                              "Activating this option will cause an error if an invalid number is "
-                              "detected in the constraint Jacobians or the Lagrangian Hessian.  If "
-                              "this is not activated, the test is skipped, and the algorithm might "
-                              "proceed with invalid numbers and fail.  If test is activated and an "
-                              "invalid number is detected, the matrix is written to output with "
-                              "print_level corresponding to J_MORE_DETAILED; so beware of large "
-                              "output!");
-   roptions->AddStringOption2("jac_c_constant", "Indicates whether all equality constraints are linear", "no", "no",
-                              "Don't assume that all equality constraints are linear", "yes",
-                              "Assume that equality constraints Jacobian are constant",
-                              "Activating this option will cause Ipopt to ask for the Jacobian of the "
-                              "equality constraints only once from the NLP and reuse this information "
-                              "later.");
-   roptions->AddStringOption2("jac_d_constant", "Indicates whether all inequality constraints are linear", "no", "no",
-                              "Don't assume that all inequality constraints are linear", "yes",
-                              "Assume that equality constraints Jacobian are constant",
-                              "Activating this option will cause Ipopt to ask for the Jacobian of the "
-                              "inequality constraints only once from the NLP and reuse this information "
-                              "later.");
-   roptions->AddStringOption2("hessian_constant", "Indicates whether the problem is a quadratic problem", "no", "no",
-                              "Assume that Hessian changes", "yes", "Assume that Hessian is constant",
-                              "Activating this option will cause Ipopt to ask for the Hessian of the "
-                              "Lagrangian function only once from the NLP and reuse this information "
-                              "later.");
+   roptions->AddStringOption2(
+      "check_derivatives_for_naninf",
+      "Indicates whether it is desired to check for Nan/Inf in derivative matrices",
+      "no",
+      "no", "Don't check (faster).",
+      "yes", "Check Jacobians and Hessian for Nan and Inf.",
+      "Activating this option will cause an error if an invalid number is detected "
+      "in the constraint Jacobians or the Lagrangian Hessian. "
+      "If this is not activated, the test is skipped, and the algorithm might proceed with invalid numbers and fail. "
+      "If test is activated and an invalid number is detected, "
+      "the matrix is written to output with print_level corresponding to J_MORE_DETAILED; "
+      "so beware of large output!");
+   roptions->AddStringOption2(
+      "jac_c_constant",
+      "Indicates whether all equality constraints are linear",
+      "no",
+      "no", "Don't assume that all equality constraints are linear",
+      "yes", "Assume that equality constraints Jacobian are constant",
+      "Activating this option will cause Ipopt to ask for the Jacobian of the equality constraints "
+      "only once from the NLP and reuse this information later.");
+   roptions->AddStringOption2(
+      "jac_d_constant",
+      "Indicates whether all inequality constraints are linear",
+      "no",
+      "no", "Don't assume that all inequality constraints are linear",
+      "yes", "Assume that equality constraints Jacobian are constant",
+      "Activating this option will cause Ipopt to ask for the Jacobian of the inequality constraints "
+      "only once from the NLP and reuse this information later.");
+   roptions->AddStringOption2(
+      "hessian_constant",
+      "Indicates whether the problem is a quadratic problem",
+      "no",
+      "no", "Assume that Hessian changes",
+      "yes", "Assume that Hessian is constant",
+      "Activating this option will cause Ipopt to ask for the Hessian of the Lagrangian function "
+      "only once from the NLP and reuse this information later.");
    roptions->SetRegisteringCategory("Hessian Approximation");
-   roptions->AddStringOption2("hessian_approximation", "Indicates what Hessian information is to be used.", "exact",
-                              "exact", "Use second derivatives provided by the NLP.", "limited-memory",
-                              "Perform a limited-memory quasi-Newton approximation",
-                              "This determines which kind of information for the Hessian of the "
-                              "Lagrangian function is used by the algorithm.");
-   roptions->AddStringOption2("hessian_approximation_space",
-                              "Indicates in which subspace the Hessian information is to be approximated.", "nonlinear-variables",
-                              "nonlinear-variables", "only in space of nonlinear variables.", "all-variables",
-                              "in space of all variables (without slacks)");
+   roptions->AddStringOption2(
+      "hessian_approximation",
+      "Indicates what Hessian information is to be used.",
+      "exact",
+      "exact", "Use second derivatives provided by the NLP.",
+      "limited-memory", "Perform a limited-memory quasi-Newton approximation",
+      "This determines which kind of information for the Hessian of the Lagrangian function is used by the algorithm.");
+   roptions->AddStringOption2(
+      "hessian_approximation_space",
+      "Indicates in which subspace the Hessian information is to be approximated.",
+      "nonlinear-variables",
+      "nonlinear-variables", "only in space of nonlinear variables.",
+      "all-variables", "in space of all variables (without slacks)");
 }
 
 bool OrigIpoptNLP::Initialize(

@@ -145,28 +145,41 @@ void IpoptCalculatedQuantities::RegisterOptions(
 )
 {
    roptions->SetRegisteringCategory("Convergence");
-   roptions->AddLowerBoundedNumberOption("s_max", "Scaling threshold for the NLP error.", 0.0, true, 100.0,
-                                         "(See paragraph after Eqn. (6) in the implementation paper.)");
+   roptions->AddLowerBoundedNumberOption(
+      "s_max",
+      "Scaling threshold for the NLP error.",
+      0., true,
+      100.,
+      "(See paragraph after Eqn. (6) in the implementation paper.)");
 
    roptions->SetRegisteringCategory("NLP");
-   roptions->AddLowerBoundedNumberOption("kappa_d", "Weight for linear damping term (to handle one-sided bounds).", 0.0,
-                                         false, 1e-5, "(see Section 3.7 in implementation paper.)");
+   roptions->AddLowerBoundedNumberOption(
+      "kappa_d",
+      "Weight for linear damping term (to handle one-sided bounds).",
+      0., false,
+      1e-5,
+      "(see Section 3.7 in implementation paper.)");
 
    roptions->SetRegisteringCategory("Line Search");
-   roptions->AddLowerBoundedNumberOption("slack_move", "Correction size for very small slacks.", 0.0, false,
-                                         pow(std::numeric_limits<double>::epsilon(), 0.75),
-                                         "Due to numerical issues or the lack of an interior, the slack variables might "
-                                         "become very small.  If a slack becomes very small compared to machine "
-                                         "precision, the corresponding bound is moved slightly.  This parameter "
-                                         "determines how large the move should be.  Its default value is "
-                                         "mach_eps^{3/4}.  (See also end of Section 3.5 in implementation paper "
-                                         "- but actual implementation might be somewhat different.)");
+   roptions->AddLowerBoundedNumberOption(
+      "slack_move",
+      "Correction size for very small slacks.",
+      0.0, false,
+      pow(std::numeric_limits<double>::epsilon(), 0.75),
+      "Due to numerical issues or the lack of an interior, the slack variables might become very small. "
+      "If a slack becomes very small compared to machine precision, the corresponding bound is moved slightly. "
+      "This parameter determines how large the move should be. "
+      "Its default value is mach_eps^{3/4}. "
+      "(See also end of Section 3.5 in implementation paper - but actual implementation might be somewhat different.)");
    roptions->SetRegisteringCategory("Line Search");
-   roptions->AddStringOption3("constraint_violation_norm_type",
-                              "Norm to be used for the constraint violation in the line search.", "1-norm", "1-norm", "use the 1-norm",
-                              "2-norm", "use the 2-norm", "max-norm", "use the infinity norm",
-                              "Determines which norm should be used when the algorithm computes the "
-                              "constraint violation in the line search.");
+   roptions->AddStringOption3(
+      "constraint_violation_norm_type",
+      "Norm to be used for the constraint violation in the line search.",
+      "1-norm",
+      "1-norm", "use the 1-norm",
+      "2-norm", "use the 2-norm",
+      "max-norm", "use the infinity norm",
+      "Determines which norm should be used when the algorithm computes the constraint violation in the line search.");
 }
 
 bool IpoptCalculatedQuantities::Initialize(

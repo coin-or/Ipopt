@@ -51,26 +51,42 @@ void InexactLSAcceptor::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->AddLowerBoundedNumberOption("nu_update_inf_skip_tol",
-                                         "Lower bound on infeasibility to perform penalty parameter update.", 0.0, true, 1e-9,
-                                         "If the current infeasibility is less than this value, the penalty "
-                                         "parameter update is skipped");
-   roptions->AddStringOption2("flexible_penalty_function", "Switch to use Curtis/Nocedal flexible penalty function",
-                              "yes", "no", "do not use the flexible penalty function procedure", "yes",
-                              "use the flexible penalty function procedure", "This determines if the flexible penalty function procedure by "
-                              "Curtis/Nocedal should be used in the line search.  For now, this only "
-                              "is implemented for the inexact algorithm.");
-   roptions->AddLowerBoundedNumberOption("nu_low_init", "Initial value for the lower penalty parameter.", 0.0, true,
-                                         1e-6, "This is the initial value for the lower penalty parameter in the "
-                                         "Curtis/Nocedal flexible penalty function line search procedure.  This "
-                                         "must be smaller or equal to the intial value of the upper penalty "
-                                         "parameter, see option \"nu_init\".");
-   roptions->AddLowerBoundedNumberOption("nu_low_fact",
-                                         "Factor in update rule for nu_low in flexible penalty function.", 0.0, true, 1e-4, "");
-   roptions->AddBoundedNumberOption("inexact_decomposition_activate_tol",
-                                    "Line search stepsize threshold for activating step decomposition.", 0.0, true, 1.0, false, 1e-3, "");
-   roptions->AddBoundedNumberOption("inexact_decomposition_inactivate_tol",
-                                    "Line search stepsize threshold for inactivating step decomposition.", 0.0, true, 1.0, false, 1e-3, "");
+   roptions->AddLowerBoundedNumberOption(
+      "nu_update_inf_skip_tol",
+      "Lower bound on infeasibility to perform penalty parameter update.", 0.0, true, 1e-9,
+      "If the current infeasibility is less than this value, the penalty parameter update is skipped");
+   roptions->AddStringOption2(
+      "flexible_penalty_function",
+      "Switch to use Curtis/Nocedal flexible penalty function",
+      "yes",
+      "no", "do not use the flexible penalty function procedure",
+      "yes", "use the flexible penalty function procedure",
+      "This determines if the flexible penalty function procedure by Curtis/Nocedal should be used in the line search. "
+      "For now, this only is implemented for the inexact algorithm.");
+   roptions->AddLowerBoundedNumberOption(
+      "nu_low_init",
+      "Initial value for the lower penalty parameter.",
+      0.0, true,
+      1e-6,
+      "This is the initial value for the lower penalty parameter in the Curtis/Nocedal flexible penalty function line search procedure. "
+      "This must be smaller or equal to the intial value of the upper penalty parameter, see option \"nu_init\".");
+   roptions->AddLowerBoundedNumberOption(
+      "nu_low_fact",
+      "Factor in update rule for nu_low in flexible penalty function.",
+      0.0, true,
+      1e-4);
+   roptions->AddBoundedNumberOption(
+      "inexact_decomposition_activate_tol",
+      "Line search stepsize threshold for activating step decomposition.",
+      0.0, true,
+      1.0, false,
+      1e-3);
+   roptions->AddBoundedNumberOption(
+      "inexact_decomposition_inactivate_tol",
+      "Line search stepsize threshold for inactivating step decomposition.",
+      0.0, true,
+      1.0, false,
+      1e-3);
 }
 
 bool InexactLSAcceptor::InitializeImpl(

@@ -53,10 +53,20 @@ void PenaltyLSAcceptor::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->AddLowerBoundedNumberOption("nu_init", "Initial value of the penalty parameter.", 0.0, true, 1e-6, "");
-   roptions->AddLowerBoundedNumberOption("nu_inc", "Increment of the penalty parameter.", 0.0, true, 1e-4, "");
-   roptions->AddBoundedNumberOption("rho", "Value in penalty parameter update formula.", 0.0, true, 1.0, true, 1e-1,
-                                    "");
+   roptions->AddLowerBoundedNumberOption(
+      "nu_init",
+      "Initial value of the penalty parameter.",
+      0., true,
+      1e-6);
+   roptions->AddLowerBoundedNumberOption(
+      "nu_inc", "Increment of the penalty parameter.",
+      0., true,
+      1e-4);
+   roptions->AddBoundedNumberOption(
+      "rho", "Value in penalty parameter update formula.",
+      0., true,
+      1., true,
+      1e-1);
 
 }
 

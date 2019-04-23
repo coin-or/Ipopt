@@ -233,14 +233,14 @@ StandardScalingBase::~StandardScalingBase()
 void StandardScalingBase::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions)
 {
-   roptions->AddNumberOption("obj_scaling_factor", "Scaling factor for the objective function.", 1.,
-                             "This option sets a scaling factor for the objective function. "
-                             "The scaling is seen internally by Ipopt but the unscaled objective is "
-                             "reported in the console output. "
-                             "If additional scaling parameters are computed "
-                             "(e.g. user-scaling or gradient-based), both factors are multiplied. "
-                             "If this value is chosen to be negative, Ipopt will "
-                             "maximize the objective function instead of minimizing it.");
+   roptions->AddNumberOption(
+      "obj_scaling_factor",
+      "Scaling factor for the objective function.",
+      1.,
+      "This option sets a scaling factor for the objective function. "
+      "The scaling is seen internally by Ipopt but the unscaled objective is reported in the console output. "
+      "If additional scaling parameters are computed (e.g. user-scaling or gradient-based), both factors are multiplied. "
+      "If this value is chosen to be negative, Ipopt will maximize the objective function instead of minimizing it.");
 }
 
 bool StandardScalingBase::InitializeImpl(

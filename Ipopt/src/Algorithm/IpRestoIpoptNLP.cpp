@@ -48,29 +48,33 @@ void RestoIpoptNLP::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->AddStringOption2("evaluate_orig_obj_at_resto_trial",
-                              "Determines if the original objective function should be evaluated at restoration phase trial points.", "yes",
-                              "no", "skip evaluation", "yes", "evaluate at every trial point",
-                              "Setting this option to \"yes\" makes the restoration phase algorithm "
-                              "evaluate the objective function of the original problem at every trial "
-                              "point encountered during the restoration phase, even if this value is "
-                              "not required.  In this way, it is guaranteed that the original "
-                              "objective function can be evaluated without error at all accepted "
-                              "iterates; otherwise the algorithm might fail at a point where the "
-                              "restoration phase accepts an iterate that is good for the restoration "
-                              "phase problem, but not the original problem.  On the other hand, if "
-                              "the evaluation of the original objective is expensive, this might be "
-                              "costly.");
-   roptions->AddLowerBoundedNumberOption("resto_penalty_parameter",
-                                         "Penalty parameter in the restoration phase objective function.", 0.0, true, 1e3,
-                                         "This is the parameter rho in equation (31a) in the Ipopt "
-                                         "implementation paper.");
-   roptions->AddLowerBoundedNumberOption("resto_proximity_weight",
-                                         "Weighting factor for the proximity term in restoration phase objective.", 0.0, false, 1.,
-                                         "This determines how the parameter zera in equation (29a) in the "
-                                         "implementation paper is computed.  zeta here is "
-                                         "resto_proximity_weight*sqrt(mu), where mu is the current barrier "
-                                         "parameter.");
+   roptions->AddStringOption2(
+      "evaluate_orig_obj_at_resto_trial",
+      "Determines if the original objective function should be evaluated at restoration phase trial points.",
+      "yes",
+      "no", "skip evaluation",
+      "yes", "evaluate at every trial point",
+      "Setting this option to \"yes\" makes the restoration phase algorithm evaluate the objective function "
+      "of the original problem at every trial point encountered during the restoration phase, "
+      "even if this value is not required.  "
+      "In this way, it is guaranteed that the original objective function can be evaluated without error "
+      "at all accepted iterates; "
+      "otherwise the algorithm might fail at a point where the restoration phase accepts an iterate that is good "
+      "for the restoration phase problem, but not the original problem. "
+      "On the other hand, if the evaluation of the original objective is expensive, this might be costly.");
+   roptions->AddLowerBoundedNumberOption(
+      "resto_penalty_parameter",
+      "Penalty parameter in the restoration phase objective function.",
+      0., true,
+      1e3,
+      "This is the parameter rho in equation (31a) in the Ipopt implementation paper.");
+   roptions->AddLowerBoundedNumberOption(
+      "resto_proximity_weight",
+      "Weighting factor for the proximity term in restoration phase objective.",
+      0., false,
+      1.,
+      "This determines how the parameter zeta in equation (29a) in the implementation paper is computed. "
+      "zeta here is resto_proximity_weight*sqrt(mu), where mu is the current barrier parameter.");
 }
 
 bool RestoIpoptNLP::Initialize(

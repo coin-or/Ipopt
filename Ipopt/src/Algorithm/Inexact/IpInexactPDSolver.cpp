@@ -46,12 +46,18 @@ void InexactPDSolver::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->AddStringOption2("modify_hessian_with_slacks", "Hessian modification strategy for slack part", "no", "no",
-                              "add multiple of identity", "yes", "add multiple of slacks squared inverse", "");
-   roptions->AddLowerBoundedIntegerOption("inexact_regularization_ls_count_trigger",
-                                          "Threshold on line search count in previous iteration to trigger "
-                                          "Hessian regularization.", 1, 1, "If the ls count in the previous iteration is larger than this value, "
-                                          "the Hessian will be regularized.");
+   roptions->AddStringOption2(
+      "modify_hessian_with_slacks",
+      "Hessian modification strategy for slack part",
+      "no",
+      "no", "add multiple of identity",
+      "yes", "add multiple of slacks squared inverse");
+   roptions->AddLowerBoundedIntegerOption(
+      "inexact_regularization_ls_count_trigger",
+      "Threshold on line search count in previous iteration to trigger Hessian regularization.",
+      1,
+      1,
+      "If the ls count in the previous iteration is larger than this value the Hessian will be regularized.");
 }
 
 bool InexactPDSolver::InitializeImpl(
