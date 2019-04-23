@@ -252,7 +252,8 @@ bool PDFullSpaceSolver::Solve(
                        *slack_s_L, *slack_s_U, *sigma_x, *sigma_s, alpha, beta, rhs, res, *resid);
 
       Number residual_ratio = ComputeResidualRatio(rhs, res, *resid);
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "residual_ratio = %e\n", residual_ratio);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "residual_ratio = %e\n", residual_ratio);
       Number residual_ratio_old = residual_ratio;
 
       // Beginning of loop for iterative refinement
@@ -271,7 +272,8 @@ bool PDFullSpaceSolver::Solve(
                           *slack_s_L, *slack_s_U, *sigma_x, *sigma_s, alpha, beta, rhs, res, *resid);
 
          residual_ratio = ComputeResidualRatio(rhs, res, *resid);
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "residual_ratio = %e\n", residual_ratio);
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "residual_ratio = %e\n", residual_ratio);
 
          num_iter_ref++;
          // Check if we have to give up on iterative refinement
@@ -280,8 +282,8 @@ bool PDFullSpaceSolver::Solve(
                  || residual_ratio > residual_improvement_factor_ * residual_ratio_old) )
          {
 
-            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Iterative refinement failed with residual_ratio = %e\n",
-                           residual_ratio);
+            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                           "Iterative refinement failed with residual_ratio = %e\n", residual_ratio);
             quit_refinement = true;
 
             // Pretend singularity only once - if it didn't help, we
@@ -328,7 +330,8 @@ bool PDFullSpaceSolver::Solve(
                   {
                      pretend_singular = false;
                      IpData().Append_info_string("S");
-                     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Just accept current solution.\n");
+                     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                                    "Just accept current solution.\n");
                   }
                   else
                   {
@@ -536,14 +539,16 @@ bool PDFullSpaceSolver::SolveOnce(
             bool pert_return = perturbHandler_->PerturbForSingularity(delta_x, delta_s, delta_c, delta_d);
             if( !pert_return )
             {
-               Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "PerturbForSingularity can't be done\n");
+               Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                              "PerturbForSingularity can't be done\n");
                IpData().TimingStats().PDSystemSolverSolveOnce().End();
                return false;
             }
          }
          else if( retval == SYMSOLVER_WRONG_INERTIA && augSysSolver_->NumberOfNegEVals() < numberOfEVals )
          {
-            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Number of negative eigenvalues too small!\n");
+            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                           "Number of negative eigenvalues too small!\n");
             // If the number of negative eigenvalues is too small, then
             // we first try to remedy this by asking for better quality
             // solution (e.g. increasing pivot tolerance), and if that
@@ -561,7 +566,8 @@ bool PDFullSpaceSolver::SolveOnce(
                }
                else
                {
-                  Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Quality could not be improved\n");
+                  Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                                 "Quality could not be improved\n");
                }
             }
             if( assume_singular )
@@ -641,7 +647,8 @@ bool PDFullSpaceSolver::SolveOnce(
       } // while (retval!=SYMSOLVER_SUCCESS && !fail) {
 
       // Some output
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Number of trial factorizations performed: %d\n", count);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Number of trial factorizations performed: %d\n", count);
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Perturbation parameters: delta_x=%e delta_s=%e\n                         delta_c=%e delta_d=%e\n", delta_x,
                      delta_s, delta_c, delta_d);
@@ -772,14 +779,22 @@ void PDFullSpaceSolver::ComputeResiduals(
 
    if( Jnlst().ProduceOutput(J_MOREDETAILED, J_LINEAR_ALGEBRA) )
    {
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "max-norm resid_x  %e\n", resid.x()->Amax());
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "max-norm resid_s  %e\n", resid.s()->Amax());
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "max-norm resid_c  %e\n", resid.y_c()->Amax());
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "max-norm resid_d  %e\n", resid.y_d()->Amax());
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "max-norm resid_zL %e\n", resid.z_L()->Amax());
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "max-norm resid_zU %e\n", resid.z_U()->Amax());
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "max-norm resid_vL %e\n", resid.v_L()->Amax());
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "max-norm resid_vU %e\n", resid.v_U()->Amax());
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "max-norm resid_x  %e\n", resid.x()->Amax());
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "max-norm resid_s  %e\n", resid.s()->Amax());
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "max-norm resid_c  %e\n", resid.y_c()->Amax());
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "max-norm resid_d  %e\n", resid.y_d()->Amax());
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "max-norm resid_zL %e\n", resid.z_L()->Amax());
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "max-norm resid_zU %e\n", resid.z_U()->Amax());
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "max-norm resid_vL %e\n", resid.v_L()->Amax());
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "max-norm resid_vU %e\n", resid.v_U()->Amax());
    }
    IpData().TimingStats().ComputeResiduals().End();
 }
@@ -795,8 +810,8 @@ Number PDFullSpaceSolver::ComputeResidualRatio(
    Number nrm_rhs = rhs.Amax();
    Number nrm_res = res.Amax();
    Number nrm_resid = resid.Amax();
-   Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "nrm_rhs = %8.2e nrm_sol = %8.2e nrm_resid = %8.2e\n", nrm_rhs,
-                  nrm_res, nrm_resid);
+   Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                  "nrm_rhs = %8.2e nrm_sol = %8.2e nrm_resid = %8.2e\n", nrm_rhs, nrm_res, nrm_resid);
 
    if( nrm_rhs + nrm_res == 0. )
    {

@@ -72,7 +72,8 @@ void IdentityMatrix::PrintImpl(
 ) const
 {
    DBG_ASSERT(NRows() == NCols());
-   jnlst.Printf(level, category, "\n");
+   jnlst.Printf(level, category,
+                "\n");
    jnlst.PrintfIndented(level, category, indent,
                         "%sIdentityMatrix \"%s\" with %d rows and columns and the factor %23.16e.\n", prefix.c_str(), name.c_str(),
                         NRows(), factor_);

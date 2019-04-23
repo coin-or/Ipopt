@@ -196,7 +196,8 @@ bool QualityFunctionMuOracle::CalculateMu(
    // Compute the affine scaling step //
    /////////////////////////////////////
 
-   Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "Solving the Primal Dual System for the affine step\n");
+   Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                  "Solving the Primal Dual System for the affine step\n");
    // First get the right hand side
    SmartPtr<IteratesVector> rhs_aff = IpData().curr()->MakeNewIteratesVector(false);
    rhs_aff->Set_x(*IpCq().curr_grad_lag_x());
@@ -218,7 +219,8 @@ bool QualityFunctionMuOracle::CalculateMu(
    bool retval = pd_solver_->Solve(-1.0, 0.0, *rhs_aff, *step_aff, allow_inexact);
    if( !retval )
    {
-      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "The linear system could not be solved for the affine step!\n");
+      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                     "The linear system could not be solved for the affine step!\n");
       return false;
    }
 
@@ -230,7 +232,8 @@ bool QualityFunctionMuOracle::CalculateMu(
 
    Number avrg_compl = IpCq().curr_avrg_compl();
 
-   Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "Solving the Primal Dual System for the centering step\n");
+   Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                  "Solving the Primal Dual System for the centering step\n");
    // First get the right hand side
    SmartPtr<IteratesVector> rhs_cen = IpData().curr()->MakeNewIteratesVector(true);
    rhs_cen->x_NonConst()->AddOneVector(-avrg_compl, *IpCq().grad_kappa_times_damping_x(), 0.);
@@ -251,7 +254,8 @@ bool QualityFunctionMuOracle::CalculateMu(
    retval = pd_solver_->Solve(1.0, 0.0, *rhs_cen, *step_cen, allow_inexact);
    if( !retval )
    {
-      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "The linear system could not be solved for the centering step!\n");
+      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                     "The linear system could not be solved for the centering step!\n");
       return false;
    }
 
@@ -431,7 +435,8 @@ bool QualityFunctionMuOracle::CalculateMu(
    // End timing of quality function search
    IpData().TimingStats().QualityFunctionSearch().End();
 
-   Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "Sigma = %e\n", sigma);
+   Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                  "Sigma = %e\n", sigma);
    Number mu = sigma * avrg_compl;
 
    // Store the affine search direction (in case it is needed in the

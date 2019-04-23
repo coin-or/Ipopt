@@ -79,9 +79,10 @@ void SymScaledMatrix::PrintImpl(
    const std::string& prefix
 ) const
 {
-   jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent, "%sSymScaledMatrix \"%s\" of dimension %d x %d:\n", prefix.c_str(),
-                        name.c_str(), NRows(), NCols());
+   jnlst.Printf(level, category,
+                "\n");
+   jnlst.PrintfIndented(level, category, indent,
+                        "%sSymScaledMatrix \"%s\" of dimension %d x %d:\n", prefix.c_str(), name.c_str(), NRows(), NCols());
    owner_space_->RowColScaling()->Print(&jnlst, level, category, name + "_row_col_scaling", indent + 1, prefix);
    if( IsValid(matrix_) )
    {
@@ -89,7 +90,8 @@ void SymScaledMatrix::PrintImpl(
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent, "%sunscaled matrix is NULL\n", prefix.c_str());
+      jnlst.PrintfIndented(level, category, indent,
+                           "%sunscaled matrix is NULL\n", prefix.c_str());
    }
 }
 

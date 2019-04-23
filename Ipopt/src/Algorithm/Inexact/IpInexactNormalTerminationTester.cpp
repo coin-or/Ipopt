@@ -98,8 +98,8 @@ InexactNormalTerminationTester::ETerminationTest InexactNormalTerminationTester:
    ETerminationTest retval = CONTINUE;
 
    double norm2_resid = IpBlasDnrm2(ndim, resid, 1);
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "TTNormal: iter = %d ||resid|| = %23.16e ||rhs|| = %23.16e\n", iter,
-                  norm2_resid, norm2_rhs);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "TTNormal: iter = %d ||resid|| = %23.16e ||rhs|| = %23.16e\n", iter,  norm2_resid, norm2_rhs);
 
    if( iter > inexact_normal_max_iter_ )
    {
@@ -139,8 +139,8 @@ InexactNormalTerminationTester::ETerminationTest InexactNormalTerminationTester:
 
    Number trial_c_Av_norm = IpCq().CalcNormOfType(NORM_2, *inf_c, *inf_d);
 
-   Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TTNormal: c_Avc_norm_cauchy = %23.16e trial_c_Av_norm = %23.16e\n",
-                  c_Avc_norm_cauchy_, trial_c_Av_norm);
+   Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                  "TTNormal: c_Avc_norm_cauchy = %23.16e trial_c_Av_norm = %23.16e\n", c_Avc_norm_cauchy_, trial_c_Av_norm);
    Number BasVal = Max(1., IpCq().curr_primal_infeasibility(NORM_2));
 
    if( Compare_le(trial_c_Av_norm, c_Avc_norm_cauchy_, BasVal) )

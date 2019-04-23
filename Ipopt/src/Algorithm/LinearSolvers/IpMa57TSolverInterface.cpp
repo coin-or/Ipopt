@@ -578,7 +578,8 @@ ESymSolverStatus Ma57TSolverInterface::SymbolicFactorization(
 
    if( wd_info_[0] < 0 )
    {
-      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "*** Error from MA57AD *** INFO(0) = %d\n", wd_info_[0]);
+      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                     "*** Error from MA57AD *** INFO(0) = %d\n", wd_info_[0]);
    }
 
    wd_lfact_ = (ma57int) ((Number) wd_info_[8] * ma57_pre_alloc_);
@@ -600,8 +601,10 @@ ESymSolverStatus Ma57TSolverInterface::SymbolicFactorization(
    wd_fact_ = new double[wd_lfact_];
    wd_ifact_ = new ma57int[wd_lifact_];
 
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Suggested lfact  (*%e):  %d\n", ma57_pre_alloc_, wd_lfact_);
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Suggested lifact (*%e):  %d\n", ma57_pre_alloc_, wd_lifact_);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "Suggested lfact  (*%e):  %d\n", ma57_pre_alloc_, wd_lfact_);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "Suggested lifact (*%e):  %d\n", ma57_pre_alloc_, wd_lifact_);
 
    if( HaveIpData() )
    {
@@ -653,12 +656,13 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
          ma57int ic = 0;
 
          wd_lfact_ = (ma57int) ((Number) wd_info_[16] * ma57_pre_alloc_);
-         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA, "Reallocating memory for MA57: lfact (%d)\n", wd_lfact_);
+         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                        "Reallocating memory for MA57: lfact (%d)\n", wd_lfact_);
 
          if( (size_t) wd_lfact_ > std::numeric_limits<size_t>::max() / sizeof(double) )
          {
-            Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Cannot allocate memory of size %d exceeding SIZE_MAX = %u\n",
-                           wd_lfact_, std::numeric_limits<size_t>::max());
+            Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                           "Cannot allocate memory of size %d exceeding SIZE_MAX = %u\n", wd_lfact_, std::numeric_limits<size_t>::max());
             return SYMSOLVER_FATAL_ERROR;
          }
 
@@ -686,7 +690,8 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
          wd_lifact_ = (ma57int) ((Number) wd_info_[17] * ma57_pre_alloc_);
          temp = new ma57int[wd_lifact_];
 
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Reallocating lifact (%d)\n", wd_lifact_);
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "Reallocating lifact (%d)\n", wd_lifact_);
 
          double ddmy;
          F77_FUNC (ma57ed, MA57ED)(&n, &ic, wd_keep_, wd_fact_, &wd_info_[1], &ddmy, &wd_lifact_, wd_ifact_,
@@ -697,8 +702,10 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
       }
       else if( wd_info_[0] < 0 )
       {
-         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Error in MA57BD:  %d\n", wd_info_[0]);
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "MA57 Error message: %s\n", ma57_err_msg[-wd_info_[1 - 1]]);
+         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                        "Error in MA57BD:  %d\n", wd_info_[0]);
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "MA57 Error message: %s\n", ma57_err_msg[-wd_info_[1 - 1]]);
          return SYMSOLVER_FATAL_ERROR;
       }
       // Check if the system is singular.
@@ -708,20 +715,24 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
          {
             IpData().TimingStats().LinearSystemFactorization().End();
          }
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "System singular, rank = %d\n", wd_info_[25 - 1]);
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "System singular, rank = %d\n", wd_info_[25 - 1]);
          return SYMSOLVER_SINGULAR;
       }
       else if( wd_info_[0] > 0 )
       {
-         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Warning in MA57BD:  %d\n", wd_info_[0]);
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "MA57 Warning message: %s\n", ma57_wrn_msg[wd_info_[1 - 1]]);
+         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                        "Warning in MA57BD:  %d\n", wd_info_[0]);
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "MA57 Warning message: %s\n", ma57_wrn_msg[wd_info_[1 - 1]]);
          // For now, abort the process so that we don't miss any problems
          return SYMSOLVER_FATAL_ERROR;
       }
    }
 
    double peak_mem = 1.0e-3 * ((double) wd_lfact_ * 8.0 + (double) wd_lifact_ * 4.0 + (double) wd_lkeep_ * 4.0);
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "MA57 peak memory use: %dKB\n", (ma57int) (peak_mem));
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "MA57 peak memory use: %dKB\n", (ma57int) (peak_mem));
 
    // Check whether the number of negative eigenvalues matches the
    // requested count.
@@ -731,8 +742,8 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
    }
    if( check_NegEVals && (numberOfNegEVals != negevals_) )
    {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "In Ma57TSolverInterface::Factorization: "
-                     "negevals_ = %d, but numberOfNegEVals = %d\n", negevals_, numberOfNegEVals);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "In Ma57TSolverInterface::Factorization: negevals_ = %d, but numberOfNegEVals = %d\n", negevals_, numberOfNegEVals);
       return SYMSOLVER_WRONG_INERTIA;
    }
 
@@ -781,7 +792,8 @@ ESymSolverStatus Ma57TSolverInterface::Backsolve(
 
    if( wd_info_[0] != 0 )
    {
-      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Error in MA57CD:  %d.\n", wd_info_[0]);
+      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                     "Error in MA57CD:  %d.\n", wd_info_[0]);
    }
 
    if( DBG_VERBOSITY() >= 2 )
@@ -821,9 +833,11 @@ bool Ma57TSolverInterface::IncreaseQuality()
    }
    pivtol_changed_ = true;
 
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Indreasing pivot tolerance for MA57 from %7.2e ", pivtol_);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "Increasing pivot tolerance for MA57 from %7.2e ", pivtol_);
    pivtol_ = Min(pivtolmax_, pow(pivtol_, 0.75));
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "to %7.2e.\n", pivtol_);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "to %7.2e.\n", pivtol_);
    return true;
 }
 

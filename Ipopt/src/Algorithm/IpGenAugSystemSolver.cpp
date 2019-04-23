@@ -231,7 +231,8 @@ ESymSolverStatus GenAugSystemSolver::MultiSolve(
    }
    else
    {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Factorization failed with retval = %d\n", retval);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Factorization failed with retval = %d\n", retval);
    }
 
    delete[] rhssol;

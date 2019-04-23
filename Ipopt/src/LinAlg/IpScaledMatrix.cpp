@@ -126,16 +126,18 @@ void ScaledMatrix::PrintImpl(
    const std::string& prefix
 ) const
 {
-   jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent, "%sScaledMatrix \"%s\" of dimension %d x %d:\n", prefix.c_str(),
-                        name.c_str(), NRows(), NCols());
+   jnlst.Printf(level, category,
+                "\n");
+   jnlst.PrintfIndented(level, category, indent,
+                        "%sScaledMatrix \"%s\" of dimension %d x %d:\n", prefix.c_str(), name.c_str(), NRows(), NCols());
    if( IsValid(owner_space_->RowScaling()) )
    {
       owner_space_->RowScaling()->Print(&jnlst, level, category, name + "_row_scaling", indent + 1, prefix);
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent + 1, "RowScaling is NULL\n");
+      jnlst.PrintfIndented(level, category, indent + 1,
+                           "RowScaling is NULL\n");
    }
    if( IsValid(matrix_) )
    {
@@ -143,7 +145,8 @@ void ScaledMatrix::PrintImpl(
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent + 1, "%sunscaled matrix is NULL\n", prefix.c_str());
+      jnlst.PrintfIndented(level, category, indent + 1,
+                           "%sunscaled matrix is NULL\n", prefix.c_str());
    }
    if( IsValid(owner_space_->ColumnScaling()) )
    {
@@ -151,7 +154,8 @@ void ScaledMatrix::PrintImpl(
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent + 1, "%sColumnScaling is NULL\n", prefix.c_str());
+      jnlst.PrintfIndented(level, category, indent + 1,
+                           "%sColumnScaling is NULL\n", prefix.c_str());
    }
 }
 

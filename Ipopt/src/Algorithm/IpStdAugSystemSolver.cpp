@@ -190,11 +190,12 @@ ESymSolverStatus StdAugSystemSolver::MultiSolve(
       Number* dbg_values = new Number[dbg_nz];
       TripletHelper::FillRowCol(dbg_nz, *augmented_system_, dbg_iRows, dbg_jCols);
       TripletHelper::FillValues(dbg_nz, *augmented_system_, dbg_values);
-      Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "******* KKT SYSTEM *******\n");
+      Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
+                     "******* KKT SYSTEM *******\n");
       for( Index dbg_i = 0; dbg_i < dbg_nz; dbg_i++ )
       {
-         Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "(%d) KKT[%d][%d] = %23.15e\n", dbg_i, dbg_iRows[dbg_i],
-                        dbg_jCols[dbg_i], dbg_values[dbg_i]);
+         Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
+                        "(%d) KKT[%d][%d] = %23.15e\n", dbg_i, dbg_iRows[dbg_i], dbg_jCols[dbg_i], dbg_values[dbg_i]);
       }
       delete[] dbg_iRows;
       dbg_iRows = NULL;
@@ -221,7 +222,8 @@ ESymSolverStatus StdAugSystemSolver::MultiSolve(
    retval = linsolver_->MultiSolve(*augmented_system_, augmented_rhsV, augmented_solV, check_NegEVals, numberOfNegEVals);
    if( retval == SYMSOLVER_SUCCESS )
    {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Factorization successful.\n");
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Factorization successful.\n");
       for( Index i = 0; i < nrhs; i++ )
       {
          char buffer[16];
@@ -231,7 +233,8 @@ ESymSolverStatus StdAugSystemSolver::MultiSolve(
    }
    else
    {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Factorization failed with retval = %d\n", retval);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Factorization failed with retval = %d\n", retval);
    }
 
    IpData().TimingStats().StdAugSystemSolverMultiSolve().End();

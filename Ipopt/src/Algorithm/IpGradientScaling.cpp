@@ -119,7 +119,8 @@ void GradientScaling::DetermineScalingParametersImpl(
          }
       }
       df = Max(df, scaling_min_value_);
-      Jnlst().Printf(J_DETAILED, J_INITIALIZATION, "Scaling parameter for objective function = %e\n", df);
+      Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+                     "Scaling parameter for objective function = %e\n", df);
    }
    else
    {

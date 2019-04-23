@@ -254,15 +254,16 @@ void CompoundSymMatrix::PrintImpl(
    const std::string& prefix
 ) const
 {
-   jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent, "%sCompoundSymMatrix \"%s\" with %d rows and columns components:\n",
-                        prefix.c_str(), name.c_str(), NComps_Dim());
+   jnlst.Printf(level, category,
+                "\n");
+   jnlst.PrintfIndented(level, category, indent,
+                        "%sCompoundSymMatrix \"%s\" with %d rows and columns components:\n", prefix.c_str(), name.c_str(), NComps_Dim());
    for( Index irow = 0; irow < NComps_Dim(); irow++ )
    {
       for( Index jcol = 0; jcol <= irow; jcol++ )
       {
-         jnlst.PrintfIndented(level, category, indent, "%sComponent for row %d and column %d:\n", prefix.c_str(), irow,
-                              jcol);
+         jnlst.PrintfIndented(level, category, indent,
+                              "%sComponent for row %d and column %d:\n", prefix.c_str(), irow, jcol);
          if( ConstComp(irow, jcol) )
          {
             DBG_ASSERT(name.size() < 200);
@@ -273,7 +274,8 @@ void CompoundSymMatrix::PrintImpl(
          }
          else
          {
-            jnlst.PrintfIndented(level, category, indent, "%sThis component has not been set.\n", prefix.c_str());
+            jnlst.PrintfIndented(level, category, indent,
+                                 "%sThis component has not been set.\n", prefix.c_str());
          }
       }
    }

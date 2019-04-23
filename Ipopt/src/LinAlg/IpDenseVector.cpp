@@ -1464,14 +1464,16 @@ void DenseVector::PrintImplOffset(
    Index              offset /* = 1 */
 ) const
 {
-   jnlst.PrintfIndented(level, category, indent, "%sDenseVector \"%s\" with %d elements:\n", prefix.c_str(),
+   jnlst.PrintfIndented(level, category, indent,
+                        "%sDenseVector \"%s\" with %d elements:\n", prefix.c_str(),
                         name.c_str(), Dim());
 
    if( initialized_ )
    {
       if( homogeneous_ )
       {
-         jnlst.PrintfIndented(level, category, indent, "%sHomogeneous vector, all elements have value %23.16e\n",
+         jnlst.PrintfIndented(level, category, indent,
+                              "%sHomogeneous vector, all elements have value %23.16e\n",
                               prefix.c_str(), scalar_);
       }
       else
@@ -1481,7 +1483,8 @@ void DenseVector::PrintImplOffset(
             const std::vector<std::string>& idx_names = owner_space_->GetStringMetaData("idx_names");
             for( Index i = 0; i < Dim(); i++ )
             {
-               jnlst.PrintfIndented(level, category, indent, "%s%s[%5d]{%s}=%23.16e\n", prefix.c_str(), name.c_str(),
+               jnlst.PrintfIndented(level, category, indent,
+                                    "%s%s[%5d]{%s}=%23.16e\n", prefix.c_str(), name.c_str(),
                                     i + offset, idx_names[i].c_str(), values_[i]);
             }
          }
@@ -1489,7 +1492,8 @@ void DenseVector::PrintImplOffset(
          {
             for( Index i = 0; i < Dim(); i++ )
             {
-               jnlst.PrintfIndented(level, category, indent, "%s%s[%5d]=%23.16e\n", prefix.c_str(), name.c_str(),
+               jnlst.PrintfIndented(level, category, indent,
+                                    "%s%s[%5d]=%23.16e\n", prefix.c_str(), name.c_str(),
                                     i + offset, values_[i]);
             }
          }
@@ -1497,7 +1501,8 @@ void DenseVector::PrintImplOffset(
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent, "%sUninitialized!\n", prefix.c_str());
+      jnlst.PrintfIndented(level, category, indent,
+                           "%sUninitialized!\n", prefix.c_str());
    }
 }
 

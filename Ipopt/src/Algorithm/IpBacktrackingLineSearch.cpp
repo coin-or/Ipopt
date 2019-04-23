@@ -260,12 +260,14 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
 {
    DBG_START_METH("BacktrackingLineSearch::FindAcceptableTrialPoint",
                   dbg_verbosity);
-   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "--> Starting line search in iteration %d <--\n", IpData().iter_count());
+   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                  "--> Starting line search in iteration %d <--\n", IpData().iter_count());
 
    Number curr_mu = IpData().curr_mu();
    if( last_mu_ != curr_mu )
    {
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Mu has changed in line search - resetting watchdog counters.\n");
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "Mu has changed in line search - resetting watchdog counters.\n");
       // Inactivate the watchdog and release all stored data
       in_watchdog_ = false;
       watchdog_iterate_ = NULL;
@@ -288,7 +290,8 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
    // level to restored if things fail later
    if( CurrentIsAcceptable() )
    {
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Storing current iterate as backup acceptable point.\n");
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "Storing current iterate as backup acceptable point.\n");
       StoreAcceptablePoint();
    }
 
@@ -381,8 +384,8 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
    if( tiny_step )
    {
       alpha_primal = IpCq().curr_primal_frac_to_the_bound(IpData().curr_tau());
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Tiny step detected. Use step size alpha = %e unchecked\n",
-                     alpha_primal);
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "Tiny step detected. Use step size alpha = %e unchecked\n", alpha_primal);
       IpData().SetTrialPrimalVariablesFromStep(alpha_primal, *IpData().delta()->x(), *IpData().delta()->s());
 
       // Evaluate functions at trial point - if that fails, don't use
@@ -479,7 +482,8 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
                {
                   in_watchdog_ = false;
                   IpData().Append_info_string("W");
-                  Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Watch dog procedure successful!\n");
+                  Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                                 "Watch dog procedure successful!\n");
                   done = true;
                }
                else
@@ -514,7 +518,8 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
       // the restoration phase.
       if( !rigorous_ )
       {
-         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Skipping call of restoration phase...\n");
+         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                        "Skipping call of restoration phase...\n");
          skipped_line_search_ = true;
       }
       else
@@ -522,7 +527,8 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
          // Check if we should start the soft restoration phase
          if( !in_soft_resto_phase_ && !goto_resto && !expect_infeasible_problem_ )
          {
-            Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "--> Starting soft restoration phase <--\n");
+            Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                           "--> Starting soft restoration phase <--\n");
             // Prepare the restoration phase, e.g., augment the filter
             // with the current point.
             acceptor_->PrepareRestoPhaseStart();
@@ -692,7 +698,8 @@ bool BacktrackingLineSearch::DoBacktrackingLineSearch(
    {
       alpha_min = acceptor_->CalculateAlphaMin();
    }
-   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "minimal step size ALPHA_MIN = %E\n", alpha_min);
+   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                  "minimal step size ALPHA_MIN = %E\n", alpha_min);
 
    // Start line search from maximal step size
    alpha_primal = alpha_primal_max;
@@ -730,7 +737,8 @@ bool BacktrackingLineSearch::DoBacktrackingLineSearch(
       {
          // always allow the "full" step if it is
          // acceptable (even if alpha_primal<=alpha_min)
-         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Starting checks for alpha (primal) = %8.2e\n", alpha_primal);
+         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                        "Starting checks for alpha (primal) = %8.2e\n", alpha_primal);
 
          try
          {
@@ -764,7 +772,8 @@ bool BacktrackingLineSearch::DoBacktrackingLineSearch(
          catch( IpoptNLP::Eval_Error& e )
          {
             e.ReportException(Jnlst(), J_DETAILED);
-            Jnlst().Printf(J_WARNING, J_LINE_SEARCH, "Warning: Cutting back alpha due to evaluation error\n");
+            Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+                           "Warning: Cutting back alpha due to evaluation error\n");
             IpData().Append_info_string("e");
             accept = false;
             evaluation_error = true;
@@ -843,7 +852,8 @@ void BacktrackingLineSearch::StartWatchDog()
 {
    DBG_START_FUN("BacktrackingLineSearch::StartWatchDog", dbg_verbosity);
 
-   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Starting Watch Dog\n");
+   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                  "Starting Watch Dog\n");
 
    in_watchdog_ = true;
    watchdog_iterate_ = IpData().curr();
@@ -860,7 +870,8 @@ void BacktrackingLineSearch::StopWatchDog(
 {
    DBG_START_FUN("BacktrackingLineSearch::StopWatchDog", dbg_verbosity);
 
-   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Stopping Watch Dog\n");
+   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                  "Stopping Watch Dog\n");
 
    IpData().Append_info_string("w");
 
@@ -1064,7 +1075,8 @@ void BacktrackingLineSearch::PerformMagicStep()
       if( delta_s_magic_max > 10 * mach_eps * IpData().trial()->s()->Amax() )
       {
          IpData().Append_info_string("M");
-         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Magic step with max-norm %.6e taken.\n", delta_s_magic->Amax());
+         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                        "Magic step with max-norm %.6e taken.\n", delta_s_magic->Amax());
          delta_s_magic->Print(Jnlst(), J_MOREVECTOR, J_LINE_SEARCH, "delta_s_magic");
       }
 
@@ -1109,7 +1121,8 @@ bool BacktrackingLineSearch::TrySoftRestoStep(
                            *actual_delta->z_U(), *actual_delta->v_L(), *actual_delta->v_U());
    Number alpha = Min(alpha_primal_max, alpha_dual_max);
 
-   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Trying soft restoration phase step with step length %13.6e\n", alpha);
+   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                  "Trying soft restoration phase step with step length %13.6e\n", alpha);
 
    // We allow up to three trials in case there is an evaluation
    // error for the functions
@@ -1132,7 +1145,8 @@ bool BacktrackingLineSearch::TrySoftRestoStep(
       catch( IpoptNLP::Eval_Error& e )
       {
          e.ReportException(Jnlst(), J_DETAILED);
-         Jnlst().Printf(J_WARNING, J_LINE_SEARCH, "Warning: Evaluation error during soft restoration phase step.\n");
+         Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+                        "Warning: Evaluation error during soft restoration phase step.\n");
          IpData().Append_info_string("e");
          count--;
       }
@@ -1166,21 +1180,26 @@ bool BacktrackingLineSearch::TrySoftRestoStep(
    catch( IpoptNLP::Eval_Error& e )
    {
       e.ReportException(Jnlst(), J_DETAILED);
-      Jnlst().Printf(J_WARNING, J_LINE_SEARCH, "Warning: Evaluation error during soft restoration phase step.\n");
+      Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+                     "Warning: Evaluation error during soft restoration phase step.\n");
       IpData().Append_info_string("e");
       return false;
    }
 
-   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "  Primal-dual error at current point:  %23.16e\n", curr_pderror);
-   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "  Primal-dual error at trial point  :  %23.16e\n", trial_pderror);
+   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                  "  Primal-dual error at current point:  %23.16e\n", curr_pderror);
+   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                  "  Primal-dual error at trial point  :  %23.16e\n", trial_pderror);
    // Check if there is sufficient reduction in the optimality error
    if( trial_pderror <= soft_resto_pderror_reduction_factor_ * curr_pderror )
    {
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "  Trial step accepted.\n");
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "  Trial step accepted.\n");
       return true;
    }
 
-   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "  Trial step rejected.\n");
+   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                  "  Trial step rejected.\n");
    return false;
 }
 
@@ -1208,7 +1227,8 @@ bool BacktrackingLineSearch::DetectTinyStep()
    SmartPtr<Vector> tmp2 = IpData().delta()->x()->MakeNewCopy();
    tmp2->ElementWiseDivide(*tmp);
    max_step_x = tmp2->Amax();
-   Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH, "Relative step size for delta_x = %e\n", max_step_x);
+   Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                  "Relative step size for delta_x = %e\n", max_step_x);
    if( max_step_x > tiny_step_tol_ )
    {
       return false;
@@ -1223,7 +1243,8 @@ bool BacktrackingLineSearch::DetectTinyStep()
    tmp2->Copy(*IpData().delta()->s());
    tmp2->ElementWiseDivide(*tmp);
    max_step_s = tmp2->Amax();
-   Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH, "Relative step size for delta_s = %e\n", max_step_s);
+   Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                  "Relative step size for delta_s = %e\n", max_step_s);
    if( max_step_s > tiny_step_tol_ )
    {
       return false;
@@ -1238,7 +1259,8 @@ bool BacktrackingLineSearch::DetectTinyStep()
       return false;
    }
 
-   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Tiny step of relative size %e detected.\n", Max(max_step_x, max_step_s));
+   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                  "Tiny step of relative size %e detected.\n", Max(max_step_x, max_step_s));
 
    return true;
 }
@@ -1286,7 +1308,8 @@ bool BacktrackingLineSearch::ActivateFallbackMechanism()
    fallback_activated_ = true;
    rigorous_ = true;
 
-   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Fallback option activated in BacktrackingLineSearch!\n");
+   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                  "Fallback option activated in BacktrackingLineSearch!\n");
 
    return true;
 }

@@ -271,7 +271,8 @@ void DenseSymMatrix::PrintImpl(
    const std::string& prefix
 ) const
 {
-   jnlst.Printf(level, category, "\n");
+   jnlst.Printf(level, category,
+                "\n");
    jnlst.PrintfIndented(level, category, indent,
                         "%sDenseSymMatrix \"%s\" of dimension %d (only lower triangular part printed):\n", prefix.c_str(), name.c_str(),
                         Dim());
@@ -282,14 +283,15 @@ void DenseSymMatrix::PrintImpl(
       {
          for( Index i = j; i < NRows(); i++ )
          {
-            jnlst.PrintfIndented(level, category, indent, "%s%s[%5d,%5d]=%23.16e\n", prefix.c_str(), name.c_str(), i, j,
-                                 values_[i + NRows() * j]);
+            jnlst.PrintfIndented(level, category, indent,
+                                 "%s%s[%5d,%5d]=%23.16e\n", prefix.c_str(), name.c_str(), i, j, values_[i + NRows() * j]);
          }
       }
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent, "The matrix has not yet been initialized!\n");
+      jnlst.PrintfIndented(level, category, indent,
+                           "The matrix has not yet been initialized!\n");
    }
 }
 

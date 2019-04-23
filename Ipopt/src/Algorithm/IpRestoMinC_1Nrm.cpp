@@ -109,7 +109,8 @@ bool MinC_1NrmRestorationPhase::PerformRestoration()
 
    // Increase counter for restoration phase calls
    count_restorations_++;
-   Jnlst().Printf(J_DETAILED, J_MAIN, "Starting Restoration Phase for the %d. time\n", count_restorations_);
+   Jnlst().Printf(J_DETAILED, J_MAIN,
+                  "Starting Restoration Phase for the %d. time\n", count_restorations_);
 
    DBG_ASSERT(IpCq().curr_constraint_violation() > 0.);
 
@@ -221,10 +222,14 @@ bool MinC_1NrmRestorationPhase::PerformRestoration()
    {
       if( Jnlst().ProduceOutput(J_DETAILED, J_LINE_SEARCH) )
       {
-         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "\nRESTORATION PHASE RESULTS\n");
-         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "\n\nOptimal solution found! \n");
-         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Optimal Objective Value = %.16E\n", resto_ip_cq->curr_f());
-         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Number of Iterations = %d\n", resto_ip_data->iter_count());
+         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                        "\nRESTORATION PHASE RESULTS\n");
+         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                        "\n\nOptimal solution found! \n");
+         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                        "Optimal Objective Value = %.16E\n", resto_ip_cq->curr_f());
+         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                        "Number of Iterations = %d\n", resto_ip_data->iter_count());
       }
       if( Jnlst().ProduceOutput(J_VECTOR, J_LINE_SEARCH) )
       {
@@ -264,7 +269,8 @@ bool MinC_1NrmRestorationPhase::PerformRestoration()
    }
    else if( resto_status == RESTORATION_FAILURE )
    {
-      Jnlst().Printf(J_WARNING, J_LINE_SEARCH, "Restoration phase in the restoration phase failed.\n");
+      Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+                     "Restoration phase in the restoration phase failed.\n");
       THROW_EXCEPTION(RESTORATION_FAILED, "Restoration phase in the restoration phase failed.");
    }
    else if( resto_status == USER_REQUESTED_STOP )
@@ -274,7 +280,8 @@ bool MinC_1NrmRestorationPhase::PerformRestoration()
    }
    else
    {
-      Jnlst().Printf(J_ERROR, J_MAIN, "Sorry, things failed ?!?!\n");
+      Jnlst().Printf(J_ERROR, J_MAIN,
+                     "Sorry, things failed ?!?!\n");
       retval = 1;
    }
 
@@ -332,7 +339,8 @@ bool MinC_1NrmRestorationPhase::PerformRestoration()
 
       Number alpha_dual = IpCq().dual_frac_to_the_bound(IpData().curr_tau(), *delta->z_L_NonConst(),
                           *delta->z_U_NonConst(), *delta->v_L_NonConst(), *delta->v_U_NonConst());
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Step size for bound multipliers: %8.2e\n", alpha_dual);
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "Step size for bound multipliers: %8.2e\n", alpha_dual);
 
       IpData().SetTrialBoundMultipliersFromStep(alpha_dual, *delta->z_L(), *delta->z_U(), *delta->v_L(), *delta->v_U());
 

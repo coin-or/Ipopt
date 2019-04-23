@@ -134,8 +134,8 @@ ConvergenceCheck::ConvergenceStatus RestoConvergenceCheck::CheckConvergence(
 
    if( successive_resto_iter_ > maximum_resto_iters_ )
    {
-      Jnlst().Printf(J_WARNING, J_MAIN, "More than %d successive iterations taken in restoration phase.\n",
-                     maximum_resto_iters_);
+      Jnlst().Printf(J_WARNING, J_MAIN,
+                     "More than %d successive iterations taken in restoration phase.\n", maximum_resto_iters_);
       return ConvergenceCheck::MAXITER_EXCEEDED;
    }
    successive_resto_iter_++;
@@ -148,15 +148,15 @@ ConvergenceCheck::ConvergenceStatus RestoConvergenceCheck::CheckConvergence(
    Number orig_curr_theta = orig_ip_cq->curr_constraint_violation();
 
    // check acceptability to the filter
-   Jnlst().Printf(J_DETAILED, J_MAIN, "orig_curr_theta = %8.2e, orig_trial_theta = %8.2e\n", orig_curr_theta,
-                  orig_trial_theta);
+   Jnlst().Printf(J_DETAILED, J_MAIN,
+                  "orig_curr_theta = %8.2e, orig_trial_theta = %8.2e\n", orig_curr_theta, orig_trial_theta);
 
    // ToDo: In the following we might want to be more careful with the lower bound
 
    Number orig_curr_inf_pr = orig_ip_cq->curr_primal_infeasibility(NORM_MAX);
    Number orig_trial_inf_pr = orig_ip_cq->trial_primal_infeasibility(NORM_MAX);
-   Jnlst().Printf(J_DETAILED, J_MAIN, "orig_curr_inf_pr = %8.2e, orig_trial_inf_pr = %8.2e\n", orig_curr_inf_pr,
-                  orig_trial_inf_pr);
+   Jnlst().Printf(J_DETAILED, J_MAIN,
+                  "orig_curr_inf_pr = %8.2e, orig_trial_inf_pr = %8.2e\n", orig_curr_inf_pr, orig_trial_inf_pr);
 
    Number orig_inf_pr_max = Max(kappa_resto_ * orig_curr_inf_pr, Min(orig_ip_data->tol(), orig_constr_viol_tol_));
    if( kappa_resto_ == 0. )
@@ -166,7 +166,8 @@ ConvergenceCheck::ConvergenceStatus RestoConvergenceCheck::CheckConvergence(
 
    if( first_resto_iter_ )
    {
-      Jnlst().Printf(J_DETAILED, J_MAIN, "This is the first iteration - continue to take at least one step.\n");
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "This is the first iteration - continue to take at least one step.\n");
       status = CONTINUE;
    }
    else if( orig_ip_cq->IsSquareProblem() && orig_trial_inf_pr <= Min(orig_ip_data->tol(), orig_constr_viol_tol_) )
@@ -186,7 +187,8 @@ ConvergenceCheck::ConvergenceStatus RestoConvergenceCheck::CheckConvergence(
    {
       Number orig_trial_barr = orig_ip_cq->trial_barrier_obj();
 
-      Jnlst().Printf(J_DETAILED, J_MAIN, "orig_trial_barr = %8.2e\n", orig_trial_barr);
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "orig_trial_barr = %8.2e\n", orig_trial_barr);
       status = TestOrigProgress(orig_trial_barr, orig_trial_theta);
    }
 
@@ -195,7 +197,8 @@ ConvergenceCheck::ConvergenceStatus RestoConvergenceCheck::CheckConvergence(
 
    if( status == CONTINUE )
    {
-      Jnlst().Printf(J_DETAILED, J_MAIN, "Checking convergence for restoration phase problem...\n");
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "Checking convergence for restoration phase problem...\n");
       status = OptimalityErrorConvergenceCheck::CheckConvergence(false);
       if( status == CONVERGED || status == CONVERGED_TO_ACCEPTABLE_POINT )
       {
@@ -211,13 +214,14 @@ ConvergenceCheck::ConvergenceStatus RestoConvergenceCheck::CheckConvergence(
                // very slightly infeasible.
                IpData().Set_tol(1e-2 * IpData().tol());
                status = CONTINUE;
-               Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Tightening restoration phase tolerance to %e.\n",
-                              IpData().tol());
+               Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                              "Tightening restoration phase tolerance to %e.\n", IpData().tol());
                IpData().Append_info_string("!");
             }
             else
             {
-               Jnlst().Printf(J_WARNING, J_LINE_SEARCH, "Restoration phase converged to a feasible point that is\n"
+               Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+                              "Restoration phase converged to a feasible point that is\n"
                               "unacceptable to the filter for the original problem.\n");
                THROW_EXCEPTION(RESTORATION_CONVERGED_TO_FEASIBLE_POINT,
                                "Restoration phase converged to a feasible point that is "

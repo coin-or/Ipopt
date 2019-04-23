@@ -321,7 +321,8 @@ ESymSolverStatus LowRankAugSystemSolver::UpdateFactorization(
       //DBG_ASSERT(retchol);
       if( !retchol )
       {
-         Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM, "LowRankAugSystemSolver: Cholesky for M1 returned error!\n");
+         Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
+                        "LowRankAugSystemSolver: Cholesky for M1 returned error!\n");
          retval = SYMSOLVER_WRONG_INERTIA;
          num_neg_evals_++;
          return retval;
@@ -382,7 +383,8 @@ ESymSolverStatus LowRankAugSystemSolver::UpdateFactorization(
       bool retchol = J2_->ComputeCholeskyFactor(*M2);
       if( !retchol )
       {
-         Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM, "LowRankAugSystemSolver: Cholesky for M2 returned error.\n");
+         Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
+                        "LowRankAugSystemSolver: Cholesky for M2 returned error.\n");
          retval = SYMSOLVER_WRONG_INERTIA;
          num_neg_evals_++;
          return retval;

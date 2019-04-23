@@ -209,9 +209,10 @@ void ExpandedMultiVectorMatrix::PrintImpl(
    const std::string& prefix
 ) const
 {
-   jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent, "%sExpandedMultiVectorMatrix \"%s\" with %d columns:\n",
-                        prefix.c_str(), name.c_str(), NRows());
+   jnlst.Printf(level, category,
+                "\n");
+   jnlst.PrintfIndented(level, category, indent,
+                        "%sExpandedMultiVectorMatrix \"%s\" with %d columns:\n", prefix.c_str(), name.c_str(), NRows());
 
    for( Index i = 0; i < NRows(); i++ )
    {
@@ -225,7 +226,8 @@ void ExpandedMultiVectorMatrix::PrintImpl(
       }
       else
       {
-         jnlst.PrintfIndented(level, category, indent, "%sVector in column %d is not yet set!\n", prefix.c_str(), i);
+         jnlst.PrintfIndented(level, category, indent,
+                              "%sVector in column %d is not yet set!\n", prefix.c_str(), i);
       }
    }
    SmartPtr<const ExpansionMatrix> P = GetExpansionMatrix();
@@ -238,8 +240,8 @@ void ExpandedMultiVectorMatrix::PrintImpl(
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent, "%sExpandedMultiVectorMatrix \"%s\" has no ExpansionMatrix\n",
-                           prefix.c_str(), name.c_str());
+      jnlst.PrintfIndented(level, category, indent,
+                           "%sExpandedMultiVectorMatrix \"%s\" has no ExpansionMatrix\n", prefix.c_str(), name.c_str());
    }
 }
 

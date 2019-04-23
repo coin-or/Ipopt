@@ -84,7 +84,8 @@ bool InexactSearchDirCalculator::ComputeSearchDirection()
    // First check if the iterates have converged to a locally
    // infeasible point
    Number curr_scaled_Ac_norm = InexCq().curr_scaled_Ac_norm();
-   Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM, "curr_scaled_Ac_norm = %e\n", curr_scaled_Ac_norm);
+   Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
+                  "curr_scaled_Ac_norm = %e\n", curr_scaled_Ac_norm);
    Number curr_inf = IpCq().curr_primal_infeasibility(NORM_2);
    // ToDo work on termination criteria
    if( curr_scaled_Ac_norm <= local_inf_Ac_tol_ && curr_inf > 1e-4 )
@@ -157,9 +158,12 @@ bool InexactSearchDirCalculator::ComputeSearchDirection()
          // output
          if( Jnlst().ProduceOutput(J_VECTOR, J_SOLVE_PD_SYSTEM) )
          {
-            Jnlst().Printf(J_VECTOR, J_SOLVE_PD_SYSTEM, "Normal step (without slack scaling):\n");
-            normal_x->Print(Jnlst(), J_VECTOR, J_SOLVE_PD_SYSTEM, "normal_x");
-            normal_s->Print(Jnlst(), J_VECTOR, J_SOLVE_PD_SYSTEM, "normal_s");
+            Jnlst().Printf(J_VECTOR, J_SOLVE_PD_SYSTEM,
+                           "Normal step (without slack scaling):\n");
+            normal_x->Print(Jnlst(), J_VECTOR, J_SOLVE_PD_SYSTEM,
+                            "normal_x");
+            normal_s->Print(Jnlst(), J_VECTOR, J_SOLVE_PD_SYSTEM,
+                            "normal_s");
          }
       }
 

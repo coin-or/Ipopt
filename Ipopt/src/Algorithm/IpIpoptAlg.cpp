@@ -259,7 +259,8 @@ SolverReturn IpoptAlgorithm::Optimize(
 
    if( !isResto )
    {
-      Jnlst().Printf(J_ITERSUMMARY, J_MAIN, "This is Ipopt version " IPOPT_VERSION ", running with linear solver %s.\n", linear_solver_.c_str());
+      Jnlst().Printf(J_ITERSUMMARY, J_MAIN,
+                     "This is Ipopt version " IPOPT_VERSION ", running with linear solver %s.\n", linear_solver_.c_str());
 
 #ifndef IPOPT_NOMUMPSNOTE
       if( linear_solver_ == "mumps" )
@@ -268,7 +269,8 @@ SolverReturn IpoptAlgorithm::Optimize(
                         "NOTE: Other linear solvers might be more efficient (see Ipopt documentation).\n");
       }
 #endif
-      Jnlst().Printf(J_ITERSUMMARY, J_MAIN, "\n");
+      Jnlst().Printf(J_ITERSUMMARY, J_MAIN,
+                     "\n");
    }
 
    SolverReturn retval = UNASSIGNED;
@@ -494,26 +496,34 @@ SolverReturn IpoptAlgorithm::Optimize(
 
 void IpoptAlgorithm::UpdateHessian()
 {
-   Jnlst().Printf(J_DETAILED, J_MAIN, "\n**************************************************\n");
-   Jnlst().Printf(J_DETAILED, J_MAIN, "*** Update HessianMatrix for Iteration %d:", IpData().iter_count());
-   Jnlst().Printf(J_DETAILED, J_MAIN, "\n**************************************************\n\n");
+   Jnlst().Printf(J_DETAILED, J_MAIN,
+                  "\n**************************************************\n");
+   Jnlst().Printf(J_DETAILED, J_MAIN,
+                  "*** Update HessianMatrix for Iteration %d:", IpData().iter_count());
+   Jnlst().Printf(J_DETAILED, J_MAIN,
+                  "\n**************************************************\n\n");
    hessian_updater_->UpdateHessian();
 }
 
 bool IpoptAlgorithm::UpdateBarrierParameter()
 {
-   Jnlst().Printf(J_DETAILED, J_MAIN, "\n**************************************************\n");
-   Jnlst().Printf(J_DETAILED, J_MAIN, "*** Update Barrier Parameter for Iteration %d:", IpData().iter_count());
-   Jnlst().Printf(J_DETAILED, J_MAIN, "\n**************************************************\n\n");
+   Jnlst().Printf(J_DETAILED, J_MAIN,
+                  "\n**************************************************\n");
+   Jnlst().Printf(J_DETAILED, J_MAIN,
+                  "*** Update Barrier Parameter for Iteration %d:", IpData().iter_count());
+   Jnlst().Printf(J_DETAILED, J_MAIN,
+                  "\n**************************************************\n\n");
    bool retval = mu_update_->UpdateBarrierParameter();
 
    if( retval )
    {
-      Jnlst().Printf(J_DETAILED, J_MAIN, "Barrier Parameter: %e\n", IpData().curr_mu());
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "Barrier Parameter: %e\n", IpData().curr_mu());
    }
    else
    {
-      Jnlst().Printf(J_DETAILED, J_MAIN, "Barrier parameter could not be updated!\n");
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "Barrier parameter could not be updated!\n");
    }
 
    return retval;
@@ -523,20 +533,25 @@ bool IpoptAlgorithm::ComputeSearchDirection()
 {
    DBG_START_METH("IpoptAlgorithm::ComputeSearchDirection", dbg_verbosity);
 
-   Jnlst().Printf(J_DETAILED, J_MAIN, "\n**************************************************\n");
-   Jnlst().Printf(J_DETAILED, J_MAIN, "*** Solving the Primal Dual System for Iteration %d:", IpData().iter_count());
-   Jnlst().Printf(J_DETAILED, J_MAIN, "\n**************************************************\n\n");
+   Jnlst().Printf(J_DETAILED, J_MAIN,
+                  "\n**************************************************\n");
+   Jnlst().Printf(J_DETAILED, J_MAIN,
+                  "*** Solving the Primal Dual System for Iteration %d:", IpData().iter_count());
+   Jnlst().Printf(J_DETAILED, J_MAIN,
+                  "\n**************************************************\n\n");
 
    bool retval = search_dir_calculator_->ComputeSearchDirection();
 
    if( retval )
    {
-      Jnlst().Printf(J_MOREVECTOR, J_MAIN, "*** Step Calculated for Iteration: %d\n", IpData().iter_count());
+      Jnlst().Printf(J_MOREVECTOR, J_MAIN,
+                     "*** Step Calculated for Iteration: %d\n", IpData().iter_count());
       IpData().delta()->Print(Jnlst(), J_MOREVECTOR, J_MAIN, "delta");
    }
    else
    {
-      Jnlst().Printf(J_DETAILED, J_MAIN, "*** Step could not be computed in iteration %d!\n", IpData().iter_count());
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "*** Step could not be computed in iteration %d!\n", IpData().iter_count());
    }
 
    return retval;
@@ -544,9 +559,12 @@ bool IpoptAlgorithm::ComputeSearchDirection()
 
 void IpoptAlgorithm::ComputeAcceptableTrialPoint()
 {
-   Jnlst().Printf(J_DETAILED, J_MAIN, "\n**************************************************\n");
-   Jnlst().Printf(J_DETAILED, J_MAIN, "*** Finding Acceptable Trial Point for Iteration %d:", IpData().iter_count());
-   Jnlst().Printf(J_DETAILED, J_MAIN, "\n**************************************************\n\n");
+   Jnlst().Printf(J_DETAILED, J_MAIN,
+                  "\n**************************************************\n");
+   Jnlst().Printf(J_DETAILED, J_MAIN,
+                  "*** Finding Acceptable Trial Point for Iteration %d:", IpData().iter_count());
+   Jnlst().Printf(J_DETAILED, J_MAIN,
+                  "\n**************************************************\n\n");
    line_search_->FindAcceptableTrialPoint();
 }
 
@@ -570,7 +588,8 @@ void IpoptAlgorithm::AcceptTrialPoint()
    // point, do not accept a new iterate
    if( line_search_->CheckSkippedLineSearch() )
    {
-      Jnlst().Printf(J_SUMMARY, J_MAIN, "Line search didn't find acceptable trial point.\n");
+      Jnlst().Printf(J_SUMMARY, J_MAIN,
+                     "Line search didn't find acceptable trial point.\n");
       return;
    }
 
@@ -582,13 +601,13 @@ void IpoptAlgorithm::AcceptTrialPoint()
       IpCq().ResetAdjustedTrialSlacks();
       if( adjusted_slacks == 1 )
       {
-         Jnlst().Printf(J_WARNING, J_MAIN, "In iteration %d, %d Slack too small, adjusting variable bound\n",
-                        IpData().iter_count(), adjusted_slacks);
+         Jnlst().Printf(J_WARNING, J_MAIN,
+                        "In iteration %d, %d Slack too small, adjusting variable bound\n", IpData().iter_count(), adjusted_slacks);
       }
       else
       {
-         Jnlst().Printf(J_WARNING, J_MAIN, "In iteration %d, %d Slacks too small, adjusting variable bounds\n",
-                        IpData().iter_count(), adjusted_slacks);
+         Jnlst().Printf(J_WARNING, J_MAIN,
+                        "In iteration %d, %d Slacks too small, adjusting variable bounds\n", IpData().iter_count(), adjusted_slacks);
       }
       if( Jnlst().ProduceOutput(J_VECTOR, J_MAIN) )
       {
@@ -635,7 +654,8 @@ void IpoptAlgorithm::AcceptTrialPoint()
                     *IpCq().trial_compl_x_L(), new_z_L);
    if( max_correction > 0. )
    {
-      Jnlst().Printf(J_DETAILED, J_MAIN, "Some value in z_L becomes too large - maximal correction = %8.2e\n",
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "Some value in z_L becomes too large - maximal correction = %8.2e\n",
                      max_correction);
       corrected = true;
    }
@@ -644,7 +664,8 @@ void IpoptAlgorithm::AcceptTrialPoint()
                     *IpCq().trial_compl_x_U(), new_z_U);
    if( max_correction > 0. )
    {
-      Jnlst().Printf(J_DETAILED, J_MAIN, "Some value in z_U becomes too large - maximal correction = %8.2e\n",
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "Some value in z_U becomes too large - maximal correction = %8.2e\n",
                      max_correction);
       corrected = true;
    }
@@ -653,7 +674,8 @@ void IpoptAlgorithm::AcceptTrialPoint()
                     *IpCq().trial_compl_s_L(), new_v_L);
    if( max_correction > 0. )
    {
-      Jnlst().Printf(J_DETAILED, J_MAIN, "Some value in v_L becomes too large - maximal correction = %8.2e\n",
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "Some value in v_L becomes too large - maximal correction = %8.2e\n",
                      max_correction);
       corrected = true;
    }
@@ -662,7 +684,8 @@ void IpoptAlgorithm::AcceptTrialPoint()
                     *IpCq().trial_compl_s_U(), new_v_U);
    if( max_correction > 0. )
    {
-      Jnlst().Printf(J_DETAILED, J_MAIN, "Some value in v_U becomes too large - maximal correction = %8.2e\n",
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "Some value in v_U becomes too large - maximal correction = %8.2e\n",
                      max_correction);
       corrected = true;
    }
@@ -692,7 +715,8 @@ void IpoptAlgorithm::AcceptTrialPoint()
    {
       if( Jnlst().ProduceOutput(J_MOREDETAILED, J_MAIN) )
       {
-         Jnlst().Printf(J_MOREDETAILED, J_MAIN, "dual infeasisibility before least square multiplier update = %e\n",
+         Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                        "dual infeasibility before least square multiplier update = %e\n",
                         IpCq().curr_dual_infeasibility(NORM_MAX));
       }
       IpData().Append_info_string("y ");
@@ -748,20 +772,24 @@ void IpoptAlgorithm::PrintProblemStatistics()
    calc_number_of_bounds(*IpData().curr()->s(), *IpNLP().d_L(), *IpNLP().d_U(), *IpNLP().Pd_L(), *IpNLP().Pd_U(),
                          ns_tot, ns_only_lower, ns_both, ns_only_upper);
 
-   Jnlst().Printf(J_SUMMARY, J_STATISTICS, "Total number of variables............................: %8d\n", nx_tot);
-   Jnlst().Printf(J_SUMMARY, J_STATISTICS, "                     variables with only lower bounds: %8d\n",
-                  nx_only_lower);
-   Jnlst().Printf(J_SUMMARY, J_STATISTICS, "                variables with lower and upper bounds: %8d\n", nx_both);
-   Jnlst().Printf(J_SUMMARY, J_STATISTICS, "                     variables with only upper bounds: %8d\n",
-                  nx_only_upper);
-   Jnlst().Printf(J_SUMMARY, J_STATISTICS, "Total number of equality constraints.................: %8d\n",
-                  IpData().curr()->y_c()->Dim());
-   Jnlst().Printf(J_SUMMARY, J_STATISTICS, "Total number of inequality constraints...............: %8d\n", ns_tot);
-   Jnlst().Printf(J_SUMMARY, J_STATISTICS, "        inequality constraints with only lower bounds: %8d\n",
-                  ns_only_lower);
-   Jnlst().Printf(J_SUMMARY, J_STATISTICS, "   inequality constraints with lower and upper bounds: %8d\n", ns_both);
-   Jnlst().Printf(J_SUMMARY, J_STATISTICS, "        inequality constraints with only upper bounds: %8d\n\n",
-                  ns_only_upper);
+   Jnlst().Printf(J_SUMMARY, J_STATISTICS,
+                  "Total number of variables............................: %8d\n", nx_tot);
+   Jnlst().Printf(J_SUMMARY, J_STATISTICS,
+                  "                     variables with only lower bounds: %8d\n", nx_only_lower);
+   Jnlst().Printf(J_SUMMARY, J_STATISTICS,
+                  "                variables with lower and upper bounds: %8d\n", nx_both);
+   Jnlst().Printf(J_SUMMARY, J_STATISTICS,
+                  "                     variables with only upper bounds: %8d\n", nx_only_upper);
+   Jnlst().Printf(J_SUMMARY, J_STATISTICS,
+                  "Total number of equality constraints.................: %8d\n", IpData().curr()->y_c()->Dim());
+   Jnlst().Printf(J_SUMMARY, J_STATISTICS,
+                  "Total number of inequality constraints...............: %8d\n", ns_tot);
+   Jnlst().Printf(J_SUMMARY, J_STATISTICS,
+                  "        inequality constraints with only lower bounds: %8d\n", ns_only_lower);
+   Jnlst().Printf(J_SUMMARY, J_STATISTICS,
+                  "   inequality constraints with lower and upper bounds: %8d\n", ns_both);
+   Jnlst().Printf(J_SUMMARY, J_STATISTICS,
+                  "        inequality constraints with only upper bounds: %8d\n\n", ns_only_upper);
 }
 
 void IpoptAlgorithm::ComputeFeasibilityMultipliers()

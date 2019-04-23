@@ -268,7 +268,8 @@ bool WsmpSolverInterface::InitializeImpl(
    // Set the number of threads
    ipfint NTHREADS = wsmp_num_threads_;
    F77_FUNC(wsetmaxthrds, WSETMAXTHRDS)(&NTHREADS);
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "WSMP will use %d threads.\n", wsmp_num_threads_);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "WSMP will use %d threads.\n", wsmp_num_threads_);
 
    // Get WSMP's default parameters and set the ones we want differently
    IPARM_[0] = 0;
@@ -324,8 +325,8 @@ ESymSolverStatus WsmpSolverInterface::MultiSolve(
 
    if( !printed_num_threads_ )
    {
-      Jnlst().Printf(J_ITERSUMMARY, J_LINEAR_ALGEBRA, "  -- WSMP is working with %d thread%s.\n", IPARM_[32],
-                     IPARM_[32] == 1 ? "" : "s");
+      Jnlst().Printf(J_ITERSUMMARY, J_LINEAR_ALGEBRA,
+                     "  -- WSMP is working with %d thread%s.\n", IPARM_[32], IPARM_[32] == 1 ? "" : "s");
       printed_num_threads_ = true;
    }
    // check if a factorization has to be done
@@ -468,8 +469,8 @@ ESymSolverStatus WsmpSolverInterface::InternalSymFact(
    if( wsmp_no_pivoting_ )
    {
       IPARM_[14] = dim_ - numberOfNegEVals; // CHECK
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "Restricting WSMP static pivot sequence with IPARM(15) = %d\n",
-                     IPARM_[14]);
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "Restricting WSMP static pivot sequence with IPARM(15) = %d\n", IPARM_[14]);
    }
 
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
@@ -495,7 +496,8 @@ ESymSolverStatus WsmpSolverInterface::InternalSymFact(
       }
       else if( ierror > 0 )
       {
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Matrix appears to be singular (with ierror = %d).\n", ierror);
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "Matrix appears to be singular (with ierror = %d).\n", ierror);
          if( HaveIpData() )
          {
             IpData().TimingStats().LinearSystemSymbolicFactorization().End();
@@ -546,7 +548,8 @@ ESymSolverStatus WsmpSolverInterface::Factorization(
       matrix_file_number_++;
       char buf[256];
       Snprintf(buf, 255, "wsmp_matrix_%d_%d.dat", iter_count, matrix_file_number_);
-      Jnlst().Printf(J_SUMMARY, J_LINEAR_ALGEBRA, "Writing WSMP matrix into file %s.\n", buf);
+      Jnlst().Printf(J_SUMMARY, J_LINEAR_ALGEBRA,
+                     "Writing WSMP matrix into file %s.\n", buf);
       FILE* fp = fopen(buf, "w");
       fprintf(fp, "%d\n", dim_); // N
       for( Index icol = 0; icol < dim_; icol++ )
@@ -637,10 +640,10 @@ ESymSolverStatus WsmpSolverInterface::Factorization(
       }
       return SYMSOLVER_FATAL_ERROR;
    }
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Memory usage for WSSMP after factorization IPARM(23) = %d\n",
-                  IPARM_[22]);
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Number of nonzeros in WSSMP after factorization IPARM(24) = %d\n",
-                  IPARM_[23]);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "Memory usage for WSSMP after factorization IPARM(23) = %d\n", IPARM_[22]);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "Number of nonzeros in WSSMP after factorization IPARM(24) = %d\n", IPARM_[23]);
 
    if( factorizations_since_recomputed_ordering_ != -1 )
    {
@@ -653,11 +656,12 @@ ESymSolverStatus WsmpSolverInterface::Factorization(
    // count
    if( check_NegEVals && (numberOfNegEVals != negevals_) )
    {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Wrong inertia: required are %d, but we got %d.\n",
-                     numberOfNegEVals, negevals_);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Wrong inertia: required are %d, but we got %d.\n", numberOfNegEVals, negevals_);
       if( skip_inertia_check_ )
       {
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "  But wsmp_skip_inertia_check is set.  Ignore inertia.\n");
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "  But wsmp_skip_inertia_check is set.  Ignore inertia.\n");
          IpData().Append_info_string("IC ");
          negevals_ = numberOfNegEVals;
       }
@@ -750,7 +754,8 @@ ESymSolverStatus WsmpSolverInterface::Solve(
       }
       return SYMSOLVER_FATAL_ERROR;
    }
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Number of iterative refinement steps in WSSMP: %d\n", IPARM_[5]);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "Number of iterative refinement steps in WSSMP: %d\n", IPARM_[5]);
 
 #ifdef PARDISO_MATCHING_PREPROCESS
    delete [] X;
@@ -786,9 +791,11 @@ bool WsmpSolverInterface::IncreaseQuality()
    }
    pivtol_changed_ = true;
 
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Increasing pivot tolerance for WSMP from %7.2e ", wsmp_pivtol_);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "Increasing pivot tolerance for WSMP from %7.2e ", wsmp_pivtol_);
    wsmp_pivtol_ = Min(wsmp_pivtolmax_, pow(wsmp_pivtol_, 0.75));
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "to %7.2e.\n", wsmp_pivtol_);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "to %7.2e.\n", wsmp_pivtol_);
    return true;
 }
 

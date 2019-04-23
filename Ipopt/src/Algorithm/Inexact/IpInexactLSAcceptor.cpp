@@ -172,12 +172,15 @@ void InexactLSAcceptor::InitThisLineSearch(
          curr_Au_d->AddTwoVectors(1., *IpCq().curr_jac_d_times_vec(*tangential_x), -1., *tangential_s, 0.);
          Number Nu = IpCq().CalcNormOfType(NORM_2, *curr_Au_c, *curr_Au_d);
          Nu = pow(Nu, 2);
-         Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "nu update: ||A*u||^2 = %23.16e\n", Nu);
+         Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                        "nu update: ||A*u||^2 = %23.16e\n", Nu);
          Number A_norm2 = InexCq().curr_scaled_A_norm2();
-         Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "nu update: ||A||^2 = %23.16e\n", A_norm2);
+         Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                        "nu update: ||A||^2 = %23.16e\n", A_norm2);
 #endif
          Nu = 0; //Nu/A_norm2;
-         Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "nu update: Nu = ||A*u||^2/||A||^2 = %23.16e\n", Nu);
+         Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                        "nu update: Nu = ||A*u||^2/||A||^2 = %23.16e\n", Nu);
 
          // Compute Upsilon = ||u||^2 - Nu
          Upsilon = scaled_tangential_norm - Nu;
@@ -198,7 +201,8 @@ void InexactLSAcceptor::InitThisLineSearch(
       in_tt2_ = false;
       if( norm_delta_xs == 0. )
       {
-         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "  Zero step, skipping line search\n");
+         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                        "  Zero step, skipping line search\n");
          in_tt2_ = true;
       }
       // TODO: We need to find a proper cut-off value
@@ -243,7 +247,8 @@ void InexactLSAcceptor::InitThisLineSearch(
          if( flexible_penalty_function_ )
          {
             nu_mid = Max(nu_low_, nu_trial);
-            Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH, "   nu_low = %8.2e\n", nu_low_);
+            Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                           "   nu_low = %8.2e\n", nu_low_);
          }
       }
       else
@@ -254,7 +259,8 @@ void InexactLSAcceptor::InitThisLineSearch(
          IpData().Append_info_string("nS");
       }
       InexData().set_curr_nu(nu_);
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "  using nu = %23.16e (nu_mid = %23.16e)\n", nu_, nu_mid);
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "  using nu = %23.16e (nu_mid = %23.16e)\n", nu_, nu_mid);
 
       // Compute the linear model reduction prediction
       DBG_PRINT((1, "gradBarrTDelta=%e reference_theta_=%e norm_cplusAd=%e\n", gradBarrTDelta, reference_theta_, norm_cplusAd));
@@ -281,7 +287,8 @@ Number InexactLSAcceptor::CalcPred(
 
    if( pred < 0. )
    {
-      Jnlst().Printf(J_WARNING, J_LINE_SEARCH, "  pred = %23.16e is negative.  Setting to zero.\n", pred);
+      Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+                     "  pred = %23.16e is negative.  Setting to zero.\n", pred);
       pred = 0.;
    }
 
@@ -308,19 +315,22 @@ bool InexactLSAcceptor::CheckAcceptabilityOfTrialPoint(
    Number trial_barr = IpCq().trial_barrier_obj();
    DBG_ASSERT(IsFiniteNumber(trial_barr));
 
-   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Checking acceptability for trial step size alpha_primal_test=%13.6e:\n",
+   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                  "Checking acceptability for trial step size alpha_primal_test=%13.6e:\n",
                   alpha_primal_test);
-   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "  New values of barrier function     = %23.16e  (reference %23.16e):\n",
+   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                  "  New values of barrier function     = %23.16e  (reference %23.16e):\n",
                   trial_barr, reference_barr_);
-   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "  New values of constraint violation = %23.16e  (reference %23.16e):\n",
+   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                  "  New values of constraint violation = %23.16e  (reference %23.16e):\n",
                   trial_theta, reference_theta_);
 
    Number pred = CalcPred(alpha_primal_test);
    resto_pred_ = pred;
    DBG_PRINT((1, "nu_ = %e reference_barr_ + nu_*(reference_theta_)=%e trial_barr + nu_*trial_theta=%e\n", nu_, reference_barr_ + nu_ * (reference_theta_), trial_barr + nu_ * trial_theta));
    Number ared = reference_barr_ + nu_ * (reference_theta_) - (trial_barr + nu_ * trial_theta);
-   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "  Checking Armijo Condition with pred = %23.16e and ared = %23.16e\n",
-                  pred, ared);
+   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                  "  Checking Armijo Condition with pred = %23.16e and ared = %23.16e\n", pred, ared);
 
    bool accept = Compare_le(eta_ * pred, ared, reference_barr_ + nu_ * (reference_theta_));
    bool accept_low = false;
@@ -336,17 +346,20 @@ bool InexactLSAcceptor::CheckAcceptabilityOfTrialPoint(
    accepted_by_low_only_ = false;
    if( accept )
    {
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "   Success...\n");
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "   Success...\n");
    }
    else if( flexible_penalty_function_ && accept_low )
    {
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "   Success with nu_low...\n");
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "   Success with nu_low...\n");
       accept = true;
       accepted_by_low_only_ = true;
    }
    else
    {
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "   Failed...\n");
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "   Failed...\n");
    }
    if( accept )
    {
@@ -362,8 +375,8 @@ bool InexactLSAcceptor::CheckAcceptabilityOfTrialPoint(
             Number nu_real = -(trial_barr - reference_barr_) / (trial_theta - reference_theta_);
             nu_low_ = Min(nu_, nu_low_ + Max(nu_low_fact_ * (nu_real - nu_low_), nu_inc_));
 
-            Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH, "Updating nu_low to %8.2e with nu_real = %8.2e\n", nu_low_,
-                           nu_real);
+            Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                           "Updating nu_low to %8.2e with nu_real = %8.2e\n", nu_low_, nu_real);
          }
       }
    }
@@ -515,7 +528,8 @@ char InexactLSAcceptor::UpdateForNextIteration(
 void InexactLSAcceptor::PrepareRestoPhaseStart()
 {
    //THROW_EXCEPTION(INTERNAL_ABORT, "Restoration phase called");
-   Jnlst().Printf(J_WARNING, J_LINE_SEARCH, "  Restoration Phase Preparation method called for InexactLSAcceptor!\n");
+   Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+                  "  Restoration Phase Preparation method called for InexactLSAcceptor!\n");
 }
 
 bool InexactLSAcceptor::IsAcceptableToCurrentIterate(
@@ -536,12 +550,14 @@ bool InexactLSAcceptor::IsAcceptableToCurrentIterate(
    bool accept;
    if( Compare_le(eta_ * resto_pred_, ared, reference_barr_ + nu_ * (reference_theta_)) )
    {
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "   Success...\n");
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "   Success...\n");
       accept = true;
    }
    else
    {
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "   Failed...\n");
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "   Failed...\n");
       accept = false;
    }
    return accept;
@@ -589,21 +605,25 @@ Number InexactLSAcceptor::ComputeAlphaForY(
 
    if( val_ap <= val_1 )
    {
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "  Step size for y: using alpha_primal\n.");
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "  Step size for y: using alpha_primal\n.");
    }
    else
    {
       Number alpha_2 = -b / a - 1.;
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "  Step size for y candidate: %8.2e - ", alpha_2);
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "  Step size for y candidate: %8.2e - ", alpha_2);
       if( alpha_2 > alpha_primal && alpha_2 < 1. )
       {
          alpha_y = alpha_2;
-         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "using that one\n.");
+         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                        "using that one\n.");
       }
       else
       {
          alpha_y = 1.;
-         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "using 1 instead\n");
+         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                        "using 1 instead\n");
       }
    }
 

@@ -445,7 +445,8 @@ bool PardisoSolverInterface::InitializeImpl(
       sscanf(var, "%d", &num_procs);
       if( num_procs < 1 )
       {
-         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Invalid value for OMP_NUM_THREADS (\"%s\").\n", var);
+         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                        "Invalid value for OMP_NUM_THREADS (\"%s\").\n", var);
          return false;
       }
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
@@ -497,9 +498,12 @@ bool PardisoSolverInterface::InitializeImpl(
    //IPARM_[33] = 1; // bit-by-bit identical results in parallel run
 #endif
 
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Pardiso matrix ordering     (IPARM(2)): %d\n", IPARM_[1]);
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Pardiso max. iterref. steps (IPARM(8)): %d\n", IPARM_[7]);
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Pardiso matching strategy  (IPARM(13)): %d\n", IPARM_[12]);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "Pardiso matrix ordering     (IPARM(2)): %d\n", IPARM_[1]);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "Pardiso max. iterref. steps (IPARM(8)): %d\n", IPARM_[7]);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "Pardiso matching strategy  (IPARM(13)): %d\n", IPARM_[12]);
 
    if( pardiso_iterative_ )
    {
@@ -794,7 +798,8 @@ ESymSolverStatus PardisoSolverInterface::Factorization(
 
 #endif
 
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Calling Pardiso for symbolic factorization.\n");
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "Calling Pardiso for symbolic factorization.\n");
          PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
 #ifdef PARDISO_MATCHING_PREPROCESS
                       &PHASE, &N, a2_, ia2, ja2, &PERM,
@@ -821,8 +826,8 @@ ESymSolverStatus PardisoSolverInterface::Factorization(
          have_symbolic_factorization_ = true;
          just_performed_symbolic_factorization = true;
 
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Memory in KB required for the symbolic factorization  = %d.\n",
-                        IPARM_[14]);
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "Memory in KB required for the symbolic factorization  = %d.\n", IPARM_[14]);
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                         "Integer memory in KB required for the numerical factorization  = %d.\n", IPARM_[15]);
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
@@ -835,7 +840,8 @@ ESymSolverStatus PardisoSolverInterface::Factorization(
       {
          IpData().TimingStats().LinearSystemFactorization().Start();
       }
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "Calling Pardiso for factorization.\n");
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "Calling Pardiso for factorization.\n");
       // Dump matrix to file, and count number of solution steps.
       if( HaveIpData() )
       {
@@ -884,15 +890,16 @@ ESymSolverStatus PardisoSolverInterface::Factorization(
       }
       else if( ERROR != 0 )
       {
-         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Error in Pardiso during factorization phase.  ERROR = %d.\n", ERROR);
+         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                        "Error in Pardiso during factorization phase.  ERROR = %d.\n", ERROR);
          return SYMSOLVER_FATAL_ERROR;
       }
 
       negevals_ = Max(IPARM_[22], numberOfNegEVals);
       if( IPARM_[13] != 0 )
       {
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Number of perturbed pivots in factorization phase = %d.\n",
-                        IPARM_[13]);
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "Number of perturbed pivots in factorization phase = %d.\n", IPARM_[13]);
          if( !pardiso_redo_symbolic_fact_only_if_inertia_wrong_ || (negevals_ != numberOfNegEVals) )
          {
             if( HaveIpData() )
@@ -950,8 +957,8 @@ ESymSolverStatus PardisoSolverInterface::Factorization(
 
    if( check_NegEVals && (numberOfNegEVals != negevals_) )
    {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Wrong inertia: required are %d, but we got %d.\n", numberOfNegEVals,
-                     negevals_);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Wrong inertia: required are %d, but we got %d.\n", numberOfNegEVals, negevals_);
       return SYMSOLVER_WRONG_INERTIA;
    }
 
@@ -1035,7 +1042,8 @@ ESymSolverStatus PardisoSolverInterface::Solve(
 
       if( ERROR <= -100 && ERROR >= -102 )
       {
-         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA, "Iterative solver in Pardiso did not converge (ERROR = %d)\n", ERROR);
+         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                        "Iterative solver in Pardiso did not converge (ERROR = %d)\n", ERROR);
          Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                         "  Decreasing drop tolerances from DPARM_[4] = %e and DPARM_[5] = %e\n", DPARM_[4], DPARM_[5]);
          PHASE = 23;
@@ -1058,7 +1066,8 @@ ESymSolverStatus PardisoSolverInterface::Solve(
 
    if( IPARM_[6] != 0 )
    {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Number of iterative refinement steps = %d.\n", IPARM_[6]);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Number of iterative refinement steps = %d.\n", IPARM_[6]);
       if( HaveIpData() )
       {
          IpData().Append_info_string("Pi");
@@ -1071,7 +1080,8 @@ ESymSolverStatus PardisoSolverInterface::Solve(
    }
    if( ERROR != 0 )
    {
-      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Error in Pardiso during solve phase.  ERROR = %d.\n", ERROR);
+      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                     "Error in Pardiso during solve phase.  ERROR = %d.\n", ERROR);
       return SYMSOLVER_FATAL_ERROR;
    }
    return SYMSOLVER_SUCCESS;

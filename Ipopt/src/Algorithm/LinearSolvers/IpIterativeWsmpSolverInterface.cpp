@@ -163,7 +163,8 @@ bool IterativeWsmpSolverInterface::InitializeImpl(
    // Set the number of threads
    ipfint NTHREADS = wsmp_num_threads_;
    F77_FUNC(wsetmaxthrds, WSETMAXTHRDS)(&NTHREADS);
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "WSMP will use %d threads.\n", wsmp_num_threads_);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "WSMP will use %d threads.\n", wsmp_num_threads_);
 #else
    Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                   "Not setting WISMP threads at the moment.\n");
@@ -312,7 +313,8 @@ ESymSolverStatus IterativeWsmpSolverInterface::InternalSymFact(
       }
       else if( ierror > 0 )
       {
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Matrix appears to be singular (with ierror = %d).\n", ierror);
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "Matrix appears to be singular (with ierror = %d).\n", ierror);
          if( HaveIpData() )
          {
             IpData().TimingStats().LinearSystemSymbolicFactorization().End();
@@ -361,7 +363,8 @@ ESymSolverStatus IterativeWsmpSolverInterface::Factorization(
       matrix_file_number_++;
       char buf[256];
       Snprintf(buf, 255, "wsmp_matrix_%d_%d.dat", iter_count, matrix_file_number_);
-      Jnlst().Printf(J_SUMMARY, J_LINEAR_ALGEBRA, "Writing WSMP matrix into file %s.\n", buf);
+      Jnlst().Printf(J_SUMMARY, J_LINEAR_ALGEBRA,
+                     "Writing WSMP matrix into file %s.\n", buf);
       FILE* fp = fopen(buf, "w");
       fprintf(fp, "%d\n", dim_); // N
       for( Index icol = 0; icol < dim_; icol++ )
@@ -412,8 +415,8 @@ ESymSolverStatus IterativeWsmpSolverInterface::Factorization(
       DPARM_[14] = wsmp_inexact_fillin_limit_;
    }
 
-   Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "Calling WISMP-2-3 with DPARM(14) = %8.2e and DPARM(15) = %8.2e.\n",
-                  DPARM_[13], DPARM_[14]);
+   Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                  "Calling WISMP-2-3 with DPARM(14) = %8.2e and DPARM(15) = %8.2e.\n", DPARM_[13], DPARM_[14]);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                   "Calling WISMP-2-3 for value analysis and preconditioner computation at cpu time %10.3f (wall %10.3f).\n", CpuTime(),
                   WallclockTime());
@@ -421,8 +424,8 @@ ESymSolverStatus IterativeWsmpSolverInterface::Factorization(
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                   "Done with WISMP-2-3 for value analysis and preconditioner computation at cpu time %10.3f (wall %10.3f).\n",
                   CpuTime(), WallclockTime());
-   Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "Done with WISMP-2-3 with DPARM(14) = %8.2e and DPARM(15) = %8.2e.\n",
-                  DPARM_[13], DPARM_[14]);
+   Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                  "Done with WISMP-2-3 with DPARM(14) = %8.2e and DPARM(15) = %8.2e.\n", DPARM_[13], DPARM_[14]);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                   "                         DPARM(4) = %8.2e and DPARM(5) = %8.2e and ratio = %8.2e.\n", DPARM_[3], DPARM_[4],
                   DPARM_[3] / DPARM_[4]);
@@ -447,8 +450,8 @@ ESymSolverStatus IterativeWsmpSolverInterface::Factorization(
       }
       else
       {
-         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Error in WSMP during factorization phase.\n     Error code is %d.\n",
-                        ierror);
+         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                        "Error in WSMP during factorization phase.\n     Error code is %d.\n", ierror);
       }
       if( HaveIpData() )
       {
@@ -456,7 +459,8 @@ ESymSolverStatus IterativeWsmpSolverInterface::Factorization(
       }
       return SYMSOLVER_FATAL_ERROR;
    }
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Memory usage for WISMP after factorization IPARM(23) = %d\n", IPARM_[22]);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "Memory usage for WISMP after factorization IPARM(23) = %d\n", IPARM_[22]);
 
 #if 0
    // Check whether the number of negative eigenvalues matches the requested
@@ -519,8 +523,8 @@ ESymSolverStatus IterativeWsmpSolverInterface::Solve(
    }
 
    double ddmy;
-   Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "Calling WISMP-4-4 for backsolve at cpu time %10.3f (wall %10.3f).\n",
-                  CpuTime(), WallclockTime());
+   Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                  "Calling WISMP-4-4 for backsolve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
    F77_FUNC(wismp, WISMP)(&N, ia, ja, a_, RHS, &LDB, rhs_vals, &LDX, &NRHS, &ddmy, CVGH, IPARM_, DPARM_);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                   "Done with WISMP-4-4 for backsolve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
@@ -544,13 +548,16 @@ ESymSolverStatus IterativeWsmpSolverInterface::Solve(
       }
       return SYMSOLVER_FATAL_ERROR;
    }
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Number of itertive solver steps in WISMP: %d\n", IPARM_[25]);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "Number of iterative solver steps in WISMP: %d\n", IPARM_[25]);
    if( Jnlst().ProduceOutput(J_MOREDETAILED, J_LINEAR_ALGEBRA) )
    {
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "WISMP congergence history:\n");
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "WISMP congergence history:\n");
       for( Index i = 0; i <= IPARM_[25]; ++i )
       {
-         Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, " Resid[%3d] = %13.6e\n", i, CVGH[i]);
+         Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                        " Resid[%3d] = %13.6e\n", i, CVGH[i]);
       }
       delete[] CVGH;
    }
@@ -578,24 +585,29 @@ bool IterativeWsmpSolverInterface::IncreaseQuality()
 
    if( wsmp_inexact_droptol_ != 0. )
    {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Increasing dropotol for WISMP from %7.2e ", wsmp_inexact_droptol_);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Increasing dropotol for WISMP from %7.2e ", wsmp_inexact_droptol_);
       wsmp_inexact_droptol_ = DPARM_[13];
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "to %7.2e (suggested value).\n", wsmp_inexact_droptol_);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "to %7.2e (suggested value).\n", wsmp_inexact_droptol_);
    }
    else
    {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Not increasing dropotol for WISMP, it is just reusing new value");
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Not increasing dropotol for WISMP, it is just reusing new value");
    }
    if( wsmp_inexact_fillin_limit_ != 0. )
    {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Increasing fillin limit for WISMP from %7.2e ",
-                     wsmp_inexact_fillin_limit_);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Increasing fillin limit for WISMP from %7.2e ", wsmp_inexact_fillin_limit_);
       wsmp_inexact_fillin_limit_ = DPARM_[14];
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "to %7.2e (suggested value).\n", wsmp_inexact_fillin_limit_);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "to %7.2e (suggested value).\n", wsmp_inexact_fillin_limit_);
    }
    else
    {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Not increasing fillin limit for WISMP, it is just reusing new value");
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Not increasing fillin limit for WISMP, it is just reusing new value");
    }
 
    return true;

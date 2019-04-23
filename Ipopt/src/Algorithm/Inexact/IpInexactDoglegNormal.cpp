@@ -89,7 +89,8 @@ bool InexactDoglegNormalStep::ComputeNormalStep(
       {
          Number omega_old = curr_omega_;
          curr_omega_ = Min(omega_max_, 10. * curr_omega_);
-         Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM, "Increasing trust region factor from %e to %e\n.", omega_old,
+         Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
+                        "Increasing trust region factor from %e to %e\n.", omega_old,
                         curr_omega_);
          IpData().Append_info_string("o");
       }
@@ -137,7 +138,8 @@ bool InexactDoglegNormalStep::ComputeNormalStep(
 
    // Compute the step size for the Cauchy step
    Number alpha_cs = Min(curr_omega_, v_ATc_norm * v_ATc_norm / (AATc_norm * AATc_norm));
-   Jnlst().Printf(J_MOREDETAILED, J_SOLVE_PD_SYSTEM, "Dogleg step: Cauchy step size alpha_cs = %e\n", alpha_cs);
+   Jnlst().Printf(J_MOREDETAILED, J_SOLVE_PD_SYSTEM,
+                  "Dogleg step: Cauchy step size alpha_cs = %e\n", alpha_cs);
    DBG_PRINT((1, "alpha_cs = %e v_ATc_norm = %e AATc_norm = %e\n", alpha_cs, v_ATc_norm, AATc_norm));
 
    // Finally get the Cauchy step
@@ -149,7 +151,8 @@ bool InexactDoglegNormalStep::ComputeNormalStep(
    // output
    if( Jnlst().ProduceOutput(J_MOREVECTOR, J_SOLVE_PD_SYSTEM) )
    {
-      Jnlst().Printf(J_MOREVECTOR, J_SOLVE_PD_SYSTEM, "Dogleg step: Cauchy step:\n");
+      Jnlst().Printf(J_MOREVECTOR, J_SOLVE_PD_SYSTEM,
+                     "Dogleg step: Cauchy step:\n");
       v_cauchy_x->Print(Jnlst(), J_MOREVECTOR, J_SOLVE_PD_SYSTEM, "v_cauchy_x");
       v_cauchy_s->Print(Jnlst(), J_MOREVECTOR, J_SOLVE_PD_SYSTEM, "v_cauchy_s");
    }
@@ -174,7 +177,8 @@ bool InexactDoglegNormalStep::ComputeNormalStep(
    // If the Cauchy step already hits the trust region, we are done
    if( alpha_cs == curr_omega_ )
    {
-      Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM, "Dogleg step:  Cauchy step already hits trust region.\n");
+      Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
+                     "Dogleg step:  Cauchy step already hits trust region.\n");
       normal_x = v_cauchy_x;
       normal_s = v_cauchy_s;
       // unscale the slack-based scaling
@@ -205,7 +209,8 @@ bool InexactDoglegNormalStep::ComputeNormalStep(
    // output
    if( Jnlst().ProduceOutput(J_MOREVECTOR, J_SOLVE_PD_SYSTEM) )
    {
-      Jnlst().Printf(J_MOREVECTOR, J_SOLVE_PD_SYSTEM, "Dogleg step: Newton step:\n");
+      Jnlst().Printf(J_MOREVECTOR, J_SOLVE_PD_SYSTEM,
+                     "Dogleg step: Newton step:\n");
       v_newton_x->Print(Jnlst(), J_MOREVECTOR, J_SOLVE_PD_SYSTEM, "v_newton_x");
       v_newton_s->Print(Jnlst(), J_MOREVECTOR, J_SOLVE_PD_SYSTEM, "v_newton_s");
    }
@@ -217,11 +222,13 @@ bool InexactDoglegNormalStep::ComputeNormalStep(
 
    // norm of the Newton step
    Number v_newton_norm = IpCq().CalcNormOfType(NORM_2, *v_newton_x, *v_newton_s);
-   Jnlst().Printf(J_MOREDETAILED, J_SOLVE_PD_SYSTEM, "Norm of Newton step = %e, trust region radius = %e\n",
+   Jnlst().Printf(J_MOREDETAILED, J_SOLVE_PD_SYSTEM,
+                  "Norm of Newton step = %e, trust region radius = %e\n",
                   v_newton_norm, tr_radius);
    if( v_newton_norm <= tr_radius )
    {
-      Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM, "Dogleg step:  Newton step is within trust region.\n");
+      Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
+                     "Dogleg step:  Newton step is within trust region.\n");
       normal_x = v_newton_x;
       normal_s = v_newton_s;
       last_tr_inactive_ = true;

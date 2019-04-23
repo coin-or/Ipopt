@@ -732,15 +732,16 @@ void CompoundMatrix::PrintImpl(
    const std::string& prefix
 ) const
 {
-   jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent, "%sCompoundMatrix \"%s\" with %d row and %d columns components:\n",
-                        prefix.c_str(), name.c_str(), NComps_Rows(), NComps_Cols());
+   jnlst.Printf(level, category,
+                "\n");
+   jnlst.PrintfIndented(level, category, indent,
+                        "%sCompoundMatrix \"%s\" with %d row and %d columns components:\n", prefix.c_str(), name.c_str(), NComps_Rows(), NComps_Cols());
    for( Index irow = 0; irow < NComps_Rows(); irow++ )
    {
       for( Index jcol = 0; jcol < NComps_Cols(); jcol++ )
       {
-         jnlst.PrintfIndented(level, category, indent, "%sComponent for row %d and column %d:\n", prefix.c_str(), irow,
-                              jcol);
+         jnlst.PrintfIndented(level, category, indent,
+                              "%sComponent for row %d and column %d:\n", prefix.c_str(), irow, jcol);
          if( ConstComp(irow, jcol) )
          {
             DBG_ASSERT(name.size() < 200);
@@ -751,7 +752,8 @@ void CompoundMatrix::PrintImpl(
          }
          else
          {
-            jnlst.PrintfIndented(level, category, indent, "%sComponent has not been set.\n", prefix.c_str());
+            jnlst.PrintfIndented(level, category, indent,
+                                 "%sComponent has not been set.\n", prefix.c_str());
          }
       }
    }

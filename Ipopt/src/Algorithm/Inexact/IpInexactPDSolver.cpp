@@ -184,7 +184,8 @@ bool InexactPDSolver::Solve(
       }
       if( retval == SYMSOLVER_SINGULAR )
       {
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "System seems singular.\n");
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "System seems singular.\n");
          if( InexData().compute_normal() )
          {
             Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
@@ -192,14 +193,16 @@ bool InexactPDSolver::Solve(
             bool pert_return = perturbHandler_->PerturbForSingularity(delta_x, delta_s, delta_c, delta_d);
             if( !pert_return )
             {
-               Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "PerturbForWrongInertia can't be done for singular.\n");
+               Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                              "PerturbForWrongInertia can't be done for singular.\n");
                IpData().TimingStats().PDSystemSolverTotal().End();
                return false;
             }
          }
          else
          {
-            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "  Switch to using the decomposition.\n");
+            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                           "  Switch to using the decomposition.\n");
             InexData().set_next_compute_normal(true);
             IpData().Append_info_string("@");
          }
@@ -233,7 +236,8 @@ bool InexactPDSolver::Solve(
             // output
             if( Jnlst().ProduceOutput(J_MOREVECTOR, J_SOLVE_PD_SYSTEM) )
             {
-               Jnlst().Printf(J_MOREVECTOR, J_SOLVE_PD_SYSTEM, "Trial tangential step (without slack scaling):\n");
+               Jnlst().Printf(J_MOREVECTOR, J_SOLVE_PD_SYSTEM,
+                              "Trial tangential step (without slack scaling):\n");
                tangential_x->Print(Jnlst(), J_MOREVECTOR, J_SOLVE_PD_SYSTEM, "tangential_x");
                tangential_s->Print(Jnlst(), J_MOREVECTOR, J_SOLVE_PD_SYSTEM, "tangential_s");
             }
@@ -297,7 +301,8 @@ bool InexactPDSolver::Solve(
       }
       else
       {
-         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Bad return code from augmented system solver = %d.\n", retval);
+         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                        "Bad return code from augmented system solver = %d.\n", retval);
          IpData().TimingStats().PDSystemSolverTotal().End();
          return false;
       }
@@ -305,7 +310,8 @@ bool InexactPDSolver::Solve(
    } // while (notDone)
 
    // Some output
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Number of trial factorizations performed: %d\n", count);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "Number of trial factorizations performed: %d\n", count);
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "Final perturbation parameters: delta_x=%e delta_s=%e\n                         delta_c=%e delta_d=%e\n", delta_x,
                   delta_s, delta_c, delta_d);
@@ -416,12 +422,18 @@ void InexactPDSolver::ComputeResiduals(
 
    if( Jnlst().ProduceOutput(J_MOREDETAILED, J_LINEAR_ALGEBRA) )
    {
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "max-norm resid_x  %e\n", resid.x()->Amax());
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "max-norm resid_s  %e\n", resid.s()->Amax());
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "max-norm resid_c  %e\n", resid.y_c()->Amax());
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "max-norm resid_d  %e\n", resid.y_d()->Amax());
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "max-norm resid_vL %e\n", resid.v_L()->Amax());
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "max-norm resid_vU %e\n", resid.v_U()->Amax());
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "max-norm resid_x  %e\n", resid.x()->Amax());
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "max-norm resid_s  %e\n", resid.s()->Amax());
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "max-norm resid_c  %e\n", resid.y_c()->Amax());
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "max-norm resid_d  %e\n", resid.y_d()->Amax());
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "max-norm resid_vL %e\n", resid.v_L()->Amax());
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "max-norm resid_vU %e\n", resid.v_U()->Amax());
    }
    IpData().TimingStats().ComputeResiduals().End();
 }
@@ -437,7 +449,8 @@ bool InexactPDSolver::HessianRequiresChange()
    SmartPtr<const Vector> tangential_s = InexData().tangential_s();
 
    Number u_norm_scaled = InexCq().slack_scaled_norm(*tangential_x, *tangential_s);
-   Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT: u_norm_scaled = %23.16e\n", u_norm_scaled);
+   Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                  "TT: u_norm_scaled = %23.16e\n", u_norm_scaled);
 
    Number Upsilon;
    Number Nu;
@@ -449,11 +462,13 @@ bool InexactPDSolver::HessianRequiresChange()
    else
    {
       Nu = 0;   //Nu/A_norm2;
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT: Nu = ||A*u||^2/||A||^2 = %23.16e\n", Nu);
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "TT: Nu = ||A*u||^2/||A||^2 = %23.16e\n", Nu);
 
       // Compute Upsilon = ||u||^2 - Nu
       Upsilon = u_norm_scaled - Nu;
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT: Upsilon = ||u||^2 - ||A*u||^2/||A||^2 = %23.16e\n",
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "TT: Upsilon = ||u||^2 - ||A*u||^2/||A||^2 = %23.16e\n",
                      Upsilon);
    }
 
@@ -478,19 +493,22 @@ bool InexactPDSolver::HessianRequiresChange()
    bool tcc1 = Compare_le(lhs, rhs, BasVal);
    if( tcc1 )
    {
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "satisfied\n");
       return false;
    }
    else
    {
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "violated\n");
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "violated\n");
    }
 
    // Compute u^TWu
    SmartPtr<const Vector> Wu_x = InexCq().curr_W_times_vec_x(*tangential_x);
    SmartPtr<const Vector> Wu_s = InexCq().curr_W_times_vec_s(*tangential_s);
    Number uWu = Wu_x->Dot(*tangential_x) + Wu_s->Dot(*tangential_s);
-   Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TT: uWu = %23.16e\n", uWu);
+   Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                  "TT: uWu = %23.16e\n", uWu);
    // Check tangential component condition, part 2a
    const Number mu = IpData().curr_mu();
    rhs = 0.5 * uWu;
@@ -511,12 +529,14 @@ bool InexactPDSolver::HessianRequiresChange()
    bool tcc2a = Compare_le(lhs, rhs, BasVal);
    if( tcc2a )
    {
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "satisfied\n");
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "satisfied\n");
       return false;
    }
    else
    {
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "violated\n");
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "violated\n");
    }
 
    return true;

@@ -269,7 +269,8 @@ bool AdaptiveMuUpdate::UpdateBarrierParameter()
    if( mu_max_ < 0. )
    {
       mu_max_ = mu_max_fact_ * IpCq().curr_avrg_compl();
-      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "Setting mu_max to %e.\n", mu_max_);
+      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                     "Setting mu_max to %e.\n", mu_max_);
    }
 
    // if there are not bounds, we always return the minimum MU value
@@ -302,14 +303,16 @@ bool AdaptiveMuUpdate::UpdateBarrierParameter()
       bool sufficient_progress = CheckSufficientProgress();
       if( sufficient_progress && !tiny_step_flag )
       {
-         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "Switching back to free mu mode.\n");
+         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                        "Switching back to free mu mode.\n");
          IpData().SetFreeMuMode(true);
          // Skipping Restoration phase?
          RememberCurrentPointAsAccepted();
       }
       else
       {
-         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "Remaining in fixed mu mode.\n");
+         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                        "Remaining in fixed mu mode.\n");
 
          // ToDo decide whether we want this for all options
          Number sub_problem_error = IpCq().curr_barrier_error();
@@ -349,7 +352,8 @@ bool AdaptiveMuUpdate::UpdateBarrierParameter()
       }
       if( sufficient_progress )
       {
-         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "Staying in free mu mode.\n");
+         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                        "Staying in free mu mode.\n");
          RememberCurrentPointAsAccepted();
       }
       else
@@ -359,7 +363,8 @@ bool AdaptiveMuUpdate::UpdateBarrierParameter()
          if( restore_accepted_iterate_ )
          {
             // Restore most recent accepted iterate to start fixed mode from
-            Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "Restoring most recent accepted point.\n");
+            Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                           "Restoring most recent accepted point.\n");
             SmartPtr<IteratesVector> prev_iter = accepted_point_->MakeNewContainer();
             IpData().set_trial(prev_iter);
             IpData().AcceptTrialPoint();
@@ -407,17 +412,19 @@ bool AdaptiveMuUpdate::UpdateBarrierParameter()
       Number mu_lower_safe = lower_mu_safeguard();
       if( mu < mu_lower_safe )
       {
-         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "mu = %e smaller than safeguard = %e. Increasing mu.\n", mu,
-                        mu_lower_safe);
+         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                        "mu = %e smaller than safeguard = %e. Increasing mu.\n", mu, mu_lower_safe);
          mu = mu_lower_safe;
          IpData().Append_info_string("m");
       }
 
-      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "Barrier parameter mu computed by oracle is %e\n", mu);
+      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                     "Barrier parameter mu computed by oracle is %e\n", mu);
 
       // Apply safeguards if appropriate
       mu = Min(mu, mu_max_);
-      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "Barrier parameter mu after safeguards is %e\n", mu);
+      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                     "Barrier parameter mu after safeguards is %e\n", mu);
 
       // Set the new values
       IpData().Set_mu(mu);
@@ -504,7 +511,8 @@ void AdaptiveMuUpdate::RememberCurrentPointAsAccepted()
             for( iter = refs_vals_.begin(); iter != refs_vals_.end(); iter++ )
             {
                num_refs++;
-               Jnlst().Printf(J_MOREDETAILED, J_BARRIER_UPDATE, "pd system reference[%2d] = %.6e\n", num_refs, *iter);
+               Jnlst().Printf(J_MOREDETAILED, J_BARRIER_UPDATE,
+                              "pd system reference[%2d] = %.6e\n", num_refs, *iter);
             }
          }
       }
@@ -730,7 +738,8 @@ Number AdaptiveMuUpdate::quality_function_pd_system()
    DBG_ASSERT(balancing_term >= 0);
    Number kkt_error = primal_inf + dual_inf + complty + centrality + balancing_term;
 
-   Jnlst().Printf(J_MOREDETAILED, J_BARRIER_UPDATE, "KKT error in barrier update check:\n"
+   Jnlst().Printf(J_MOREDETAILED, J_BARRIER_UPDATE,
+                  "KKT error in barrier update check:\n"
                   "  primal infeasibility: %15.6e\n"
                   "    dual infeasibility: %15.6e\n"
                   "       complementarity: %15.6e\n"

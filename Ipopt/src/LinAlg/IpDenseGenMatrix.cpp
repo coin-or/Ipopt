@@ -444,9 +444,10 @@ void DenseGenMatrix::PrintImpl(
    const std::string& prefix
 ) const
 {
-   jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent, "%sDenseGenMatrix \"%s\" with %d rows and %d columns:\n",
-                        prefix.c_str(), name.c_str(), NRows(), NCols());
+   jnlst.Printf(level, category,
+                "\n");
+   jnlst.PrintfIndented(level, category, indent,
+                        "%sDenseGenMatrix \"%s\" with %d rows and %d columns:\n", prefix.c_str(), name.c_str(), NRows(), NCols());
 
    if( initialized_ )
    {
@@ -454,14 +455,15 @@ void DenseGenMatrix::PrintImpl(
       {
          for( Index i = 0; i < NRows(); i++ )
          {
-            jnlst.PrintfIndented(level, category, indent, "%s%s[%5d,%5d]=%23.16e\n", prefix.c_str(), name.c_str(), i, j,
-                                 values_[i + NRows() * j]);
+            jnlst.PrintfIndented(level, category, indent,
+                                 "%s%s[%5d,%5d]=%23.16e\n", prefix.c_str(), name.c_str(), i, j, values_[i + NRows() * j]);
          }
       }
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent, "The matrix has not yet been initialized!\n");
+      jnlst.PrintfIndented(level, category, indent,
+                           "The matrix has not yet been initialized!\n");
    }
 }
 

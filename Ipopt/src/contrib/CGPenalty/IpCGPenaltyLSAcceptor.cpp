@@ -298,8 +298,8 @@ bool CGPenaltyLSAcceptor::CheckAcceptabilityOfTrialPoint(
    // is bigger than pen_theta_max_, the trial point is rejected.
    if( pen_theta_max_ > 0 && trial_infeasi > pen_theta_max_ )
    {
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "trial_infeasi = %e is larger than theta_max = %e\n", trial_infeasi,
-                     pen_theta_max_);
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "trial_infeasi = %e is larger than theta_max = %e\n", trial_infeasi, pen_theta_max_);
       return false;
    }
    // Check Armijo conditions.
@@ -383,16 +383,16 @@ bool CGPenaltyLSAcceptor::ArmijoHolds(
    bool accept = false;
    Number trial_penalty_function = CGPenCq().trial_penalty_function();
    DBG_ASSERT(IsFiniteNumber(trial_penalty_function));
-   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Checking acceptability for trial step size alpha_primal_test=%13.6e:\n",
-                  alpha_primal_test);
-   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, " New values of penalty function     = %23.16e  (reference %23.16e):\n",
-                  trial_penalty_function, reference_penalty_function_);
+   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                  "Checking acceptability for trial step size alpha_primal_test=%13.6e:\n", alpha_primal_test);
+   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                  " New values of penalty function     = %23.16e  (reference %23.16e):\n", trial_penalty_function, reference_penalty_function_);
    if( Jnlst().ProduceOutput(J_DETAILED, J_LINE_SEARCH) )
    {
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "curr_barr  = %23.16e curr_inf  = %23.16e\n", IpCq().curr_barrier_obj(),
-                     IpCq().curr_constraint_violation());
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "trial_barr = %23.16e trial_inf = %23.16e\n",
-                     IpCq().trial_barrier_obj(), IpCq().trial_constraint_violation());
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "curr_barr  = %23.16e curr_inf  = %23.16e\n", IpCq().curr_barrier_obj(), IpCq().curr_constraint_violation());
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "trial_barr = %23.16e trial_inf = %23.16e\n", IpCq().trial_barrier_obj(), IpCq().trial_constraint_violation());
    }
    // Now check the Armijo condition
    accept = Compare_le(trial_penalty_function - reference_penalty_function_,
@@ -469,7 +469,8 @@ bool CGPenaltyLSAcceptor::TrySecondOrderCorrection(
    {
       theta_soc_old = theta_trial;
       theta_soc_old2 = theta_trial2;
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Trying second order correction number %d\n", count_soc + 1);
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "Trying second order correction number %d\n", count_soc + 1);
       // Compute SOC constraint violation
       /*
        Number c_over_r = 0.;
@@ -509,7 +510,8 @@ bool CGPenaltyLSAcceptor::TrySecondOrderCorrection(
       catch( IpoptNLP::Eval_Error& e )
       {
          e.ReportException(Jnlst(), J_DETAILED);
-         Jnlst().Printf(J_WARNING, J_MAIN, "Warning: SOC step rejected due to evaluation error\n");
+         Jnlst().Printf(J_WARNING, J_MAIN,
+                        "Warning: SOC step rejected due to evaluation error\n");
          IpData().Append_info_string("e");
          accept = false;
          // There is no point in continuing SOC procedure
@@ -517,8 +519,8 @@ bool CGPenaltyLSAcceptor::TrySecondOrderCorrection(
       }
       if( accept )
       {
-         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Second order correction step accepted with %d corrections.\n",
-                        count_soc + 1);
+         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                        "Second order correction step accepted with %d corrections.\n", count_soc + 1);
          // Accept all SOC quantities
          alpha_primal = alpha_primal_soc;
          actual_delta = delta_soc;
@@ -698,14 +700,16 @@ char CGPenaltyLSAcceptor::UpdatePenaltyParameter()
    char info_alpha_primal_char = 'n';
    // We use the new infeasibility here...
    Number trial_inf = IpCq().trial_primal_infeasibility(NORM_2);
-   Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH, "trial infeasibility = %8.2\n", trial_inf);
+   Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                  "trial infeasibility = %8.2\n", trial_inf);
    if( curr_eta_ < 0. )
    {
       // We need to initialize the eta tolerance
       curr_eta_ = Max(eta_min_, Min(gamma_tilde_, gamma_hat_ * IpCq().curr_nlp_error()));
    }
    // Check if the penalty parameter is to be increased
-   Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH, "Starting tests for penalty parameter update:\n");
+   Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                  "Starting tests for penalty parameter update:\n");
    bool increase = (trial_inf >= penalty_update_infeasibility_tol_);
    if( !increase )
    {
@@ -714,7 +718,8 @@ char CGPenaltyLSAcceptor::UpdatePenaltyParameter()
    if( increase )
    {
       Number max_step = Max(CGPenData().delta_cgpen()->x()->Amax(), CGPenData().delta_cgpen()->s()->Amax());
-      Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH, "Max norm of step = %8.2\n", max_step);
+      Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                     "Max norm of step = %8.2\n", max_step);
       increase = (max_step <= curr_eta_);
       if( !increase )
       {
@@ -752,8 +757,10 @@ char CGPenaltyLSAcceptor::UpdatePenaltyParameter()
          min_compl = Min(min_compl, compl_s_U->Min());
          max_compl = Max(max_compl, compl_s_U->Max());
       }
-      Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH, "Minimal compl = %8.2\n", min_compl);
-      Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH, "Maximal compl = %8.2\n", max_compl);
+      Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                     "Minimal compl = %8.2\n", min_compl);
+      Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                     "Maximal compl = %8.2\n", max_compl);
       increase = (min_compl >= mu * penalty_update_compl_tol_ && max_compl <= mu / penalty_update_compl_tol_);
       if( !increase )
       {
@@ -768,7 +775,8 @@ char CGPenaltyLSAcceptor::UpdatePenaltyParameter()
       vec->AddTwoVectors(1., *CGPenData().delta_cgpen()->y_c(), -1. / CGPenCq().curr_cg_pert_fact(), *IpCq().curr_c(),
                          1.);
       Number omega_test = vec->Amax();
-      Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH, "omega_test for c = %8.2\n", omega_test);
+      Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                     "omega_test for c = %8.2\n", omega_test);
       increase = (omega_test < curr_eta_);
       if( increase )
       {
@@ -776,7 +784,8 @@ char CGPenaltyLSAcceptor::UpdatePenaltyParameter()
          vec->AddTwoVectors(1., *IpData().delta()->y_d(), -1. / CGPenCq().curr_cg_pert_fact(), *IpCq().curr_d_minus_s(),
                             1.);
          omega_test = vec->Amax();
-         Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH, "omega_test for d = %8.2\n", omega_test);
+         Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                        "omega_test for d = %8.2\n", omega_test);
          increase = (omega_test < curr_eta_);
       }
       if( !increase )
@@ -790,7 +799,8 @@ char CGPenaltyLSAcceptor::UpdatePenaltyParameter()
       counter_first_type_penalty_updates_++;
       // Update the eta tolerance
       curr_eta_ = Max(eta_min_, curr_eta_ / 2.);
-      Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH, "Updating eta to = %8.2\n", curr_eta_);
+      Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                     "Updating eta to = %8.2\n", curr_eta_);
       Number penalty = CGPenData().curr_kkt_penalty();
       Number y_full_step_max;
       SmartPtr<Vector> vec = IpData().curr()->y_c()->MakeNew();

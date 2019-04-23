@@ -394,9 +394,10 @@ ESymSolverStatus MumpsSolverInterface::SymbolicFactorization()
    int error = mumps_data->info[0];
    const int& mumps_permuting_scaling_used = mumps_data->infog[22];
    const int& mumps_pivot_order_used = mumps_data->infog[6];
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "MUMPS used permuting_scaling %d and pivot_order %d.\n",
-                  mumps_permuting_scaling_used, mumps_pivot_order_used);
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "           scaling will be %d.\n", mumps_data->icntl[7]);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "MUMPS used permuting_scaling %d and pivot_order %d.\n", mumps_permuting_scaling_used, mumps_pivot_order_used);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "           scaling will be %d.\n", mumps_data->icntl[7]);
 
    if( HaveIpData() )
    {
@@ -406,12 +407,14 @@ ESymSolverStatus MumpsSolverInterface::SymbolicFactorization()
    //return appropriat value
    if( error == -6 )  //system is singular
    {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "MUMPS returned INFO(1) = %d matrix is singular.\n", error);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "MUMPS returned INFO(1) = %d matrix is singular.\n", error);
       return SYMSOLVER_SINGULAR;
    }
    if( error < 0 )
    {
-      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Error=%d returned from MUMPS in Factorization.\n", error);
+      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                     "Error=%d returned from MUMPS in Factorization.\n", error);
       return SYMSOLVER_FATAL_ERROR;
    }
 
@@ -444,10 +447,12 @@ ESymSolverStatus MumpsSolverInterface::Factorization(
       {
          Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                         "MUMPS returned INFO(1) = %d and requires more memory, reallocating.  Attempt %d\n", error, trycount + 1);
-         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA, "  Increasing icntl[13] from %d to ", mumps_data->icntl[13]);
+         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                        "  Increasing icntl[13] from %d to ", mumps_data->icntl[13]);
          double mem_percent = mumps_data->icntl[13];
          mumps_data->icntl[13] = (Index) (2.0 * mem_percent);
-         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA, "%d.\n", mumps_data->icntl[13]);
+         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                        "%d.\n", mumps_data->icntl[13]);
 
          dump_matrix(mumps_data);
          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
@@ -465,19 +470,21 @@ ESymSolverStatus MumpsSolverInterface::Factorization(
       }
       if( error == -8 || error == -9 )
       {
-         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "MUMPS was not able to obtain enough memory.\n");
+         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                        "MUMPS was not able to obtain enough memory.\n");
          return SYMSOLVER_FATAL_ERROR;
       }
    }
 
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Number of doubles for MUMPS to hold factorization (INFO(9)) = %d\n",
-                  mumps_data->info[8]);
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Number of integers for MUMPS to hold factorization (INFO(10)) = %d\n",
-                  mumps_data->info[9]);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "Number of doubles for MUMPS to hold factorization (INFO(9)) = %d\n", mumps_data->info[8]);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "Number of integers for MUMPS to hold factorization (INFO(10)) = %d\n", mumps_data->info[9]);
 
    if( error == -10 )  //system is singular
    {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "MUMPS returned INFO(1) = %d matrix is singular.\n", error);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "MUMPS returned INFO(1) = %d matrix is singular.\n", error);
       return SYMSOLVER_SINGULAR;
    }
 
@@ -493,7 +500,8 @@ ESymSolverStatus MumpsSolverInterface::Factorization(
    }
    if( error < 0 )  //some other error
    {
-      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "MUMPS returned INFO(1) =%d MUMPS failure.\n", error);
+      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                     "MUMPS returned INFO(1) =%d MUMPS failure.\n", error);
       return SYMSOLVER_FATAL_ERROR;
    }
 
@@ -525,15 +533,16 @@ ESymSolverStatus MumpsSolverInterface::Solve(
       Index offset = i * mumps_data->n;
       mumps_data->rhs = &(rhs_vals[offset]);
       mumps_data->job = 3;  //solve
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "Calling MUMPS-3 for solve at cpu time %10.3f (wall %10.3f).\n",
-                     CpuTime(), WallclockTime());
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "Calling MUMPS-3 for solve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
       dmumps_c(mumps_data);
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "Done with MUMPS-3 for solve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
       int error = mumps_data->info[0];
       if( error < 0 )
       {
-         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Error=%d returned from MUMPS in Solve.\n", error);
+         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                        "Error=%d returned from MUMPS in Solve.\n", error);
          retval = SYMSOLVER_FATAL_ERROR;
       }
    }
@@ -560,12 +569,14 @@ bool MumpsSolverInterface::IncreaseQuality()
    }
    pivtol_changed_ = true;
 
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Increasing pivot tolerance for MUMPS from %7.2e ", pivtol_);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "Increasing pivot tolerance for MUMPS from %7.2e ", pivtol_);
 
    //this is a more aggresive update then MA27
    //this should be tuned
    pivtol_ = Min(pivtolmax_, pow(pivtol_, 0.5));
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "to %7.2e.\n", pivtol_);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "to %7.2e.\n", pivtol_);
    return true;
 }
 
@@ -622,10 +633,12 @@ ESymSolverStatus MumpsSolverInterface::DetermineDependentRows(
       {
          Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                         "MUMPS returned INFO(1) = %d and requires more memory, reallocating.  Attempt %d\n", error, trycount + 1);
-         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA, "  Increasing icntl[13] from %d to ", mumps_data->icntl[13]);
+         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                        "  Increasing icntl[13] from %d to ", mumps_data->icntl[13]);
          double mem_percent = mumps_data->icntl[13];
          mumps_data->icntl[13] = (Index) (2.0 * mem_percent);
-         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA, "%d.\n", mumps_data->icntl[13]);
+         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                        "%d.\n", mumps_data->icntl[13]);
 
          dump_matrix(mumps_data);
          dmumps_c(mumps_data);
@@ -637,7 +650,8 @@ ESymSolverStatus MumpsSolverInterface::DetermineDependentRows(
       }
       if( error == -8 || error == -9 )
       {
-         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "MUMPS was not able to obtain enough memory.\n");
+         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                        "MUMPS was not able to obtain enough memory.\n");
          // Reset flags
          mumps_data->icntl[23] = 0;
          return SYMSOLVER_FATAL_ERROR;
@@ -649,7 +663,8 @@ ESymSolverStatus MumpsSolverInterface::DetermineDependentRows(
 
    if( error < 0 )  //some other error
    {
-      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "MUMPS returned INFO(1) =%d MUMPS failure.\n", error);
+      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                     "MUMPS returned INFO(1) =%d MUMPS failure.\n", error);
       return SYMSOLVER_FATAL_ERROR;
    }
 

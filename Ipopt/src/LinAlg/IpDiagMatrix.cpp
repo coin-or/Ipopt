@@ -80,7 +80,8 @@ void DiagMatrix::PrintImpl(
    const std::string& prefix
 ) const
 {
-   jnlst.Printf(level, category, "\n");
+   jnlst.Printf(level, category,
+                "\n");
    jnlst.PrintfIndented(level, category, indent,
                         "%sDiagMatrix \"%s\" with %d rows and columns, and with diagonal elements:\n", prefix.c_str(), name.c_str(),
                         Dim());
@@ -90,7 +91,8 @@ void DiagMatrix::PrintImpl(
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent, "%sDiagonal elements not set!\n", prefix.c_str());
+      jnlst.PrintfIndented(level, category, indent,
+                           "%sDiagonal elements not set!\n", prefix.c_str());
    }
 }
 

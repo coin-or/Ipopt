@@ -170,7 +170,8 @@ bool Mc19TSymScalingMethod::ComputeSymTScalingFactors(
    }
    if( !IsFiniteNumber(sum) || smax > 1e40 )
    {
-      Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA, "Scaling factors are invalid - setting them all to 1.\n");
+      Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                     "Scaling factors are invalid - setting them all to 1.\n");
       for( Index i = 0; i < n; i++ )
       {
          scaling_factors[i] = 1.;

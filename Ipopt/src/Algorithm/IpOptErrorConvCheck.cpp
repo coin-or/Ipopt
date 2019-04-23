@@ -218,15 +218,16 @@ ConvergenceCheck::ConvergenceStatus OptimalityErrorConvergenceCheck::CheckConver
 
    if( Jnlst().ProduceOutput(J_MOREDETAILED, J_MAIN) )
    {
-      Jnlst().Printf(J_MOREDETAILED, J_MAIN, "Convergence Check:\n");
-      Jnlst().Printf(J_MOREDETAILED, J_MAIN, "  overall_error = %23.16e   IpData().tol()   = %23.16e\n", overall_error,
-                     IpData().tol());
-      Jnlst().Printf(J_MOREDETAILED, J_MAIN, "  dual_inf      = %23.16e   dual_inf_tol_    = %23.16e\n", dual_inf,
-                     dual_inf_tol_);
-      Jnlst().Printf(J_MOREDETAILED, J_MAIN, "  constr_viol   = %23.16e   constr_viol_tol_ = %23.16e\n", constr_viol,
-                     constr_viol_tol_);
-      Jnlst().Printf(J_MOREDETAILED, J_MAIN, "  compl_inf     = %23.16e   compl_inf_tol_   = %23.16e\n", compl_inf,
-                     compl_inf_tol_);
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "Convergence Check:\n");
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "  overall_error = %23.16e   IpData().tol()   = %23.16e\n", overall_error, IpData().tol());
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "  dual_inf      = %23.16e   dual_inf_tol_    = %23.16e\n", dual_inf, dual_inf_tol_);
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "  constr_viol   = %23.16e   constr_viol_tol_ = %23.16e\n", constr_viol, constr_viol_tol_);
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "  compl_inf     = %23.16e   compl_inf_tol_   = %23.16e\n", compl_inf,  compl_inf_tol_);
    }
    if( overall_error <= IpData().tol() && dual_inf <= dual_inf_tol_ && constr_viol <= constr_viol_tol_
        && compl_inf <= compl_inf_tol_ )
@@ -280,7 +281,8 @@ bool OptimalityErrorConvergenceCheck::CurrentIsAcceptable()
    if( IpData().iter_count() != last_obj_val_iter_ )
    {
       // DELETEME
-      Jnlst().Printf(J_MOREDETAILED, J_MAIN, "obj val update iter = %d\n", IpData().iter_count());
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "obj val update iter = %d\n", IpData().iter_count());
       last_obj_val_ = curr_obj_val_;
       curr_obj_val_ = IpCq().curr_f();
       last_obj_val_iter_ = IpData().iter_count();
@@ -306,22 +308,24 @@ bool OptimalityErrorConvergenceCheck::CurrentIsAcceptable()
 
    if( Jnlst().ProduceOutput(J_MOREDETAILED, J_MAIN) )
    {
-      Jnlst().Printf(J_MOREDETAILED, J_MAIN, "Acceptable Check:\n");
-      Jnlst().Printf(J_MOREDETAILED, J_MAIN, "  overall_error = %23.16e   acceptable_tol_             = %23.16e\n",
-                     overall_error, acceptable_tol_);
-      Jnlst().Printf(J_MOREDETAILED, J_MAIN, "  dual_inf      = %23.16e   acceptable_dual_inf_tol_    = %23.16e\n",
-                     dual_inf, acceptable_dual_inf_tol_);
-      Jnlst().Printf(J_MOREDETAILED, J_MAIN, "  constr_viol   = %23.16e   acceptable_constr_viol_tol_ = %23.16e\n",
-                     constr_viol, acceptable_constr_viol_tol_);
-      Jnlst().Printf(J_MOREDETAILED, J_MAIN, "  compl_inf     = %23.16e   acceptable_compl_inf_tol_   = %23.16e\n",
-                     compl_inf, acceptable_compl_inf_tol_);
-      Jnlst().Printf(J_MOREDETAILED, J_MAIN, "  curr_obj_val_ = %23.16e   last_obj_val                = %23.16e\n",
-                     curr_obj_val_, last_obj_val_);
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "Acceptable Check:\n");
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "  overall_error = %23.16e   acceptable_tol_             = %23.16e\n", overall_error, acceptable_tol_);
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "  dual_inf      = %23.16e   acceptable_dual_inf_tol_    = %23.16e\n", dual_inf, acceptable_dual_inf_tol_);
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "  constr_viol   = %23.16e   acceptable_constr_viol_tol_ = %23.16e\n", constr_viol, acceptable_constr_viol_tol_);
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "  compl_inf     = %23.16e   acceptable_compl_inf_tol_   = %23.16e\n", compl_inf, acceptable_compl_inf_tol_);
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "  curr_obj_val_ = %23.16e   last_obj_val                = %23.16e\n", curr_obj_val_, last_obj_val_);
       Jnlst().Printf(J_MOREDETAILED, J_MAIN,
                      "  fabs(curr_obj_val_-last_obj_val_)/Max(1., fabs(curr_obj_val_)) = %23.16e acceptable_obj_change_tol_ = %23.16e\n",
                      fabs(curr_obj_val_ - last_obj_val_) / Max(1., fabs(curr_obj_val_)), acceptable_obj_change_tol_);
       // DELETEME
-      Jnlst().Printf(J_MOREDETAILED, J_MAIN, "test iter = %d\n", IpData().iter_count());
+      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                     "test iter = %d\n", IpData().iter_count());
    }
 
    return (overall_error <= acceptable_tol_ && dual_inf <= acceptable_dual_inf_tol_

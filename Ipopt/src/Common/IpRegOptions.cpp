@@ -50,80 +50,97 @@ void RegisteredOption::OutputDescription(
       type_str = "String";
    }
 
-   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n### %s (%s) ###\nCategory: %s\nDescription: %s\n", name_.c_str(),
-                type_str.c_str(), registering_category_.c_str(), short_description_.c_str());
+   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                "\n### %s (%s) ###\nCategory: %s\nDescription: %s\n", name_.c_str(), type_str.c_str(), registering_category_.c_str(), short_description_.c_str());
 
    if( type_ == OT_Number )
    {
       if( has_lower_ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%g", lower_);
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "%g", lower_);
       }
       else
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "-inf");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "-inf");
       }
 
       if( lower_strict_ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " < ");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      " < ");
       }
       else
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <= ");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      " <= ");
       }
 
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "(%g)", default_number_);
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   "(%g)", default_number_);
 
       if( has_upper_ && upper_strict_ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " < ");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      " < ");
       }
       else
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <= ");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      " <= ");
       }
 
       if( has_upper_ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%g\n", upper_);
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "%g\n", upper_);
       }
       else
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "+inf\n");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "+inf\n");
       }
    }
    else if( type_ == OT_Integer )
    {
       if( has_lower_ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%d", (Index) lower_);
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "%d", (Index) lower_);
       }
       else
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "-inf");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "-inf");
       }
 
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <= (%d) <= ", (Index) default_number_);
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   " <= (%d) <= ", (Index) default_number_);
 
       if( has_upper_ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%d\n", (Index) upper_);
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "%d\n", (Index) upper_);
       }
       else
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "+inf\n");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "+inf\n");
       }
    }
    else if( type_ == OT_String )
    {
       std::vector<string_entry>::const_iterator i;
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "Valid Settings:\n");
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   "Valid Settings:\n");
       for( i = valid_strings_.begin(); i != valid_strings_.end(); i++ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\t%s (%s)\n", (*i).value_.c_str(), (*i).description_.c_str());
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "\t%s (%s)\n", (*i).value_.c_str(), (*i).description_.c_str());
       }
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "Default: \"%s\"\n", default_string_.c_str());
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   "Default: \"%s\"\n", default_string_.c_str());
    }
 }
 
@@ -135,16 +152,20 @@ void RegisteredOption::OutputLatexDescription(
    MakeValidLatexString(name_, latex_name);
    std::string latex_desc;
    MakeValidLatexString(short_description_, latex_desc);
-   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\paragraph{%s:}\\label{opt:%s} ", latex_name.c_str(), name_.c_str());
+   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                "\\paragraph{%s:}\\label{opt:%s} ", latex_name.c_str(), name_.c_str());
    if( short_description_.length() == 0 )
    {
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "~");
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   "~");
    }
    else
    {
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, latex_desc.c_str());
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   latex_desc.c_str());
    }
-   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " \\\\\n");
+   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                " \\\\\n");
 
    //    Index length = name_.length() + short_description_.length();
    //    DBG_ASSERT(length <= 80);
@@ -154,110 +175,140 @@ void RegisteredOption::OutputLatexDescription(
    if( long_description_ != "" )
    {
       latex_desc = "";
-      MakeValidLatexString(long_description_, latex_desc);
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " ");
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, latex_desc.c_str());
+      MakeValidLatexString(long_description_,
+                           latex_desc);
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   " ");
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   latex_desc.c_str());
    }
 
    if( type_ == OT_Number )
    {
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " The valid range for this real option is \n$");
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   " The valid range for this real option is \n$");
       std::string buff;
       if( has_lower_ )
       {
          buff = MakeValidLatexNumber(lower_);
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%s", buff.c_str());
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "%s", buff.c_str());
       }
       else
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%s", "{\\tt -inf}");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "%s", "{\\tt -inf}");
       }
 
       if( has_lower_ && !lower_strict_ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " \\le ");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      " \\le ");
       }
       else
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <  ");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      " <  ");
       }
 
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "{\\tt %s }", latex_name.c_str());
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   "{\\tt %s }", latex_name.c_str());
 
       if( has_upper_ && !upper_strict_ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " \\le ");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      " \\le ");
       }
       else
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <  ");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      " <  ");
       }
 
       if( has_upper_ )
       {
          buff = MakeValidLatexNumber(upper_);
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%s", buff.c_str());
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "%s", buff.c_str());
       }
       else
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%s", "{\\tt +inf}");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "%s", "{\\tt +inf}");
       }
 
       buff = MakeValidLatexNumber(default_number_);
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "$\nand its default value is $%s$.\n\n", buff.c_str());
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   "$\nand its default value is $%s$.\n\n", buff.c_str());
 
    }
    else if( type_ == OT_Integer )
    {
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " The valid range for this integer option is\n$");
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   " The valid range for this integer option is\n$");
       if( has_lower_ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%d \\le ", (Index) lower_);
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "%d \\le ", (Index) lower_);
       }
       else
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%s <  ", "{\\tt -inf}");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "%s <  ", "{\\tt -inf}");
       }
 
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "{\\tt %s }", latex_name.c_str());
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   "{\\tt %s }", latex_name.c_str());
 
       if( has_upper_ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " \\le %d", (Index) upper_);
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      " \\le %d", (Index) upper_);
       }
       else
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <  %s", "{\\tt +inf}");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      " <  %s", "{\\tt +inf}");
       }
 
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "$\nand its default value is $%d$.\n\n", (Index) default_number_);
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   "$\nand its default value is $%d$.\n\n", (Index) default_number_);
    }
    else if( type_ == OT_String )
    {
       std::string buff;
       MakeValidLatexString(default_string_, buff);
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " The default value for this string option is \"%s\".\n", buff.c_str());
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   " The default value for this string option is \"%s\".\n", buff.c_str());
 
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\\\ \nPossible values:\n");
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\begin{itemize}\n");
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   "\\\\ \nPossible values:\n");
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   "\\begin{itemize}\n");
       for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end(); i++ )
       {
          std::string latex_value;
          MakeValidLatexString((*i).value_, latex_value);
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "   \\item %s", latex_value.c_str());
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "   \\item %s", latex_value.c_str());
 
          if( (*i).description_.length() > 0 )
          {
             std::string latex_desc;
             MakeValidLatexString((*i).description_, latex_desc);
-            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, ": ");
-            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, latex_desc.c_str());
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                         ": ");
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                         latex_desc.c_str());
          }
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "\n");
       }
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\end{itemize}\n");
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   "\\end{itemize}\n");
    }
-   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
+   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, ""
+                "\n");
 }
 
 void RegisteredOption::MakeValidLatexString(
@@ -318,17 +369,20 @@ void RegisteredOption::OutputDoxygenDescription(
    const Journalist& jnlst
 ) const
 {
-   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\anchor OPT_%s\n <strong>%s</strong>", name_.c_str(), name_.c_str());
+   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                "\\anchor OPT_%s\n <strong>%s</strong>", name_.c_str(), name_.c_str());
    if( short_description_.length() > 0 )
    {
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, ": %s", short_description_.c_str());
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   ": %s", short_description_.c_str());
    }
-   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n<blockquote>\n");
+   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                "\n<blockquote>\n");
 
    if( long_description_ != "" )
    {
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " ");
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, long_description_.c_str());
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   " %s", long_description_.c_str());
    }
 
    if( type_ == OT_Number )
@@ -336,117 +390,146 @@ void RegisteredOption::OutputDoxygenDescription(
       std::string buff;
       if( has_lower_ || has_upper_ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " The valid range for this real option is ");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      " The valid range for this real option is ");
          if( has_lower_ )
          {
             buff = MakeValidHTMLNumber(lower_);
-            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, buff.c_str());
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                         buff.c_str());
 
             if( !lower_strict_ )
             {
-               jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " &le; ");
+               jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                            " &le; ");
             }
             else
             {
-               jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " < ");
+               jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                            " < ");
             }
          }
          //else
          //{
-         //   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "-&infin; < ");
+         //   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+         //       "-&infin; < ");
          //}
 
 
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, name_.c_str());
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      name_.c_str());
 
          if( has_upper_ )
          {
             if( !upper_strict_ )
             {
-               jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " &le; ");
+               jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                            " &le; ");
             }
             else
             {
-               jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " < ");
+               jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                            " < ");
             }
 
             buff = MakeValidHTMLNumber(upper_);
-            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, buff.c_str());
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                         buff.c_str());
          }
          // else
          // {
-         //   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "< &infin;");
+         //   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+         //       "< &infin;");
          //}
       }
       else
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " The valid range for this real option is unrestricted");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      " The valid range for this real option is unrestricted");
       }
 
       buff = MakeValidHTMLNumber(default_number_);
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " and its default value is %s.\n\n", buff.c_str());
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   " and its default value is %s.\n\n", buff.c_str());
 
    }
    else if( type_ == OT_Integer )
    {
       if( has_lower_ || has_upper_ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " The valid range for this integer option is ");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      " The valid range for this integer option is ");
          if( has_lower_ )
          {
-            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%d &le; ", (Index) lower_);
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                         "%d &le; ", (Index) lower_);
          }
          //else
          //{
-         //   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "-&infin; < ");
+         //   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+         //        "-&infin; < ");
          //}
 
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, name_.c_str());
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      name_.c_str());
 
          if( has_upper_ )
          {
-            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " &le; %d", (Index) upper_);
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                         " &le; %d", (Index) upper_);
          }
          //else
          //{
-         //   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " < &infin;");
+         //   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+         //       " < &infin;");
          //}
       }
       else
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " The valid range for this integer option is unrestricted");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      " The valid range for this integer option is unrestricted");
       }
 
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " and its default value is %d.\n\n", (Index) default_number_);
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   " and its default value is %d.\n\n", (Index) default_number_);
    }
    else if( type_ == OT_String )
    {
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " The default value for this string option is \"%s\".\n", default_string_.c_str());
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   " The default value for this string option is \"%s\".\n", default_string_.c_str());
 
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\nPossible values:\n");
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   "\nPossible values:\n");
       for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end(); i++ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " - %s", i->value_.c_str());
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      " - %s", i->value_.c_str());
 
          if( (*i).description_.length() > 0 )
          {
-            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, ": ");
-            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, i->description_.c_str());
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                         ": %s", i->description_.c_str());
          }
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "\n");
       }
 
       /*
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "Possible values:\n");
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "|Value|Description|\n");
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "|:----|:----------|\n");
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+          "Possible values:\n");
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+           "|Value|Description|\n");
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+           "|:----|:----------|\n");
       for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end(); i++ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "|%s|%s|\n", i->value_.c_str(), i->description_.c_str());
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+              "|%s|%s|\n", i->value_.c_str(), i->description_.c_str());
       }
       */
    }
-   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "</blockquote>\n\n");
+   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                "</blockquote>\n\n");
 }
 
 std::string RegisteredOption::MakeValidHTMLNumber(
@@ -496,102 +579,127 @@ void RegisteredOption::OutputShortDescription(
    const Journalist& jnlst
 ) const
 {
-   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%-30s", name_.c_str());
+   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                "%-30s", name_.c_str());
 
    if( type_ == OT_Number )
    {
       if( has_lower_ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%10g", lower_);
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "%10g", lower_);
       }
       else
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%10s", "-inf");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "%10s", "-inf");
       }
 
       if( has_lower_ && !lower_strict_ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <= ");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      " <= ");
       }
       else
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <  ");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      " <  ");
       }
 
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "(%11g)", default_number_);
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   "(%11g)", default_number_);
 
       if( has_upper_ && !upper_strict_ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <= ");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      " <= ");
       }
       else
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <  ");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      " <  ");
       }
 
       if( has_upper_ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%-10g\n", upper_);
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "%-10g\n", upper_);
       }
       else
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%-10s\n", "+inf");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "%-10s\n", "+inf");
       }
    }
    else if( type_ == OT_Integer )
    {
       if( has_lower_ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%10d <= ", (Index) lower_);
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "%10d <= ", (Index) lower_);
       }
       else
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%10s <  ", "-inf");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "%10s <  ", "-inf");
       }
 
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "(%11d)", (Index) default_number_);
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   "(%11d)", (Index) default_number_);
 
       if( has_upper_ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <= %-10d\n", (Index) upper_);
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      " <= %-10d\n", (Index) upper_);
       }
       else
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " <  %-10s\n", "+inf");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      " <  %-10s\n", "+inf");
       }
    }
    else if( type_ == OT_String )
    {
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "(\"%s\")\n", default_string_.c_str());
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   "(\"%s\")\n", default_string_.c_str());
    }
-   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "   ");
+   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                "   ");
    jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 3, 76, short_description_.c_str());
    if( long_description_ != "" )
    {
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n     ");
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   "\n     ");
       jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 5, 74, long_description_.c_str());
    }
    if( type_ == OT_String )
    {
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n   Possible values:\n");
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   "\n   Possible values:\n");
       for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end(); i++ )
       {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "    - %-23s", (*i).value_.c_str());
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "    - %-23s", (*i).value_.c_str());
 
          if( (*i).description_.length() > 0 )
          {
-            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " [");
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                         " [");
             jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 31, 48, (*i).description_.c_str());
-            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "]");
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                         "]");
          }
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                      "\n");
       }
    }
    else
    {
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   "\n");
    }
-   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
+   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                "\n");
 }
 
 bool RegisteredOption::IsValidStringSetting(
@@ -1223,7 +1331,8 @@ void RegisteredOptions::OutputOptionDocumentation(
    std::list<std::string>::iterator i;
    for( i = categories.begin(); i != categories.end(); i++ )
    {
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n### %s ###\n\n", (*i).c_str());
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   "\n### %s ###\n\n", (*i).c_str());
       std::map<Index, SmartPtr<RegisteredOption> > class_options;
       std::map<std::string, SmartPtr<RegisteredOption> >::iterator option;
       for( option = registered_options_.begin(); option != registered_options_.end(); option++ )
@@ -1239,7 +1348,8 @@ void RegisteredOptions::OutputOptionDocumentation(
       {
          co->second->OutputShortDescription(jnlst);
       }
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                   "\n");
    }
 }
 
@@ -1257,7 +1367,8 @@ void RegisteredOptions::OutputLatexOptionDocumentation(
          // std::map <std::string, SmartPtr<RegisteredOption> >::iterator option;
          if( coption->c_str()[0] == '#' )
          {
-            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\subsection{%s}\n\n", &coption->c_str()[1]);
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                         "\\subsection{%s}\n\n", &coption->c_str()[1]);
          }
          else
          {
@@ -1297,7 +1408,8 @@ void RegisteredOptions::OutputDoxygenOptionDocumentation(
                {
                   *it = '_';
                }
-            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\subsection OPT_%s %s\n\n", anchorname.c_str(), &coption->c_str()[1]);
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+                         "\\subsection OPT_%s %s\n\n", anchorname.c_str(), &coption->c_str()[1]);
          }
          else
          {

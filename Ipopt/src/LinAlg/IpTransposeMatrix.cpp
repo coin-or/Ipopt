@@ -26,9 +26,10 @@ void TransposeMatrix::PrintImpl(
    const std::string& prefix
 ) const
 {
-   jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent, "%sTransposeMatrix \"%s\" of the following matrix\n", prefix.c_str(),
-                        name.c_str());
+   jnlst.Printf(level, category,
+                "\n");
+   jnlst.PrintfIndented(level, category, indent,
+                        "%sTransposeMatrix \"%s\" of the following matrix\n", prefix.c_str(), name.c_str());
    std::string new_name = name + "^T";
    orig_matrix_->Print(&jnlst, level, category, new_name, indent + 1, prefix);
 }

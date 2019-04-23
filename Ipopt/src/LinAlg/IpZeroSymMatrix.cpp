@@ -71,9 +71,10 @@ void ZeroSymMatrix::PrintImpl(
    const std::string& prefix
 ) const
 {
-   jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent, "%sZeroSymMatrix \"%s\" with %d row and %d column components:\n",
-                        prefix.c_str(), name.c_str(), NRows(), NCols());
+   jnlst.Printf(level, category,
+                "\n");
+   jnlst.PrintfIndented(level, category, indent,
+                        "%sZeroSymMatrix \"%s\" with %d row and %d column components:\n", prefix.c_str(), name.c_str(), NRows(), NCols());
 }
 
 } // namespace Ipopt

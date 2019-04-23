@@ -204,7 +204,8 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
          curr_red_DR_x_ = ConstPtr(tmp);
       }
       curr_eta_ = resto_nlp->Eta(IpData().curr_mu());
-      Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION, "curr_eta (for B0) is %e\n", curr_eta_);
+      Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
+                     "curr_eta (for B0) is %e\n", curr_eta_);
    }
 
    // Get the current values
@@ -246,7 +247,8 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
       }
       else
       {
-         Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION, "Resetting Limited-Memory Update.\n");
+         Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
+                        "Resetting Limited-Memory Update.\n");
          IpData().Append_info_string("Wr");
       }
 
@@ -358,7 +360,8 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
    // we should then skip the update...
    // ToDo: Find good number or do relative test?
    Number s_new_max = s_new->Amax();
-   Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION, "In limited-memory update, s_new_max is %e\n", s_new_max);
+   Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
+                  "In limited-memory update, s_new_max is %e\n", s_new_max);
    if( s_new_max < 100. * std::numeric_limits<Number>::epsilon() )
    {
       skipping = true;
@@ -430,13 +433,14 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
                      sigma_ = limited_memory_init_val_;
                      break;
                }
-               Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION, "sigma (for B0) is %e\n", sigma_);
+               Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
+                              "sigma (for B0) is %e\n", sigma_);
                if( sigma_ < sigma_safe_min_ || sigma_ > sigma_safe_max_ )
                {
                   sigma_ = Max(Min(sigma_safe_max_, sigma_), sigma_safe_min_);
                   IpData().Append_info_string("Wp");
-                  Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION, "Projecting sigma into safeguards to be %e!\n",
-                                 sigma_);
+                  Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
+                                 "Projecting sigma into safeguards to be %e!\n", sigma_);
                }
             }
 
@@ -533,7 +537,8 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
             if( IpData().info_regu_x() > 0. )
             {
                RestoreInternalDataBackup();
-               Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION, "Undoing most recent SR1 update.\n");
+               Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
+                              "Undoing most recent SR1 update.\n");
                IpData().Append_info_string("Wb");
                retroactive_skip = true;
             }
@@ -583,7 +588,8 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
                         break;
                   }
                }
-               Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION, "sigma (for B0) is %e\n", sigma_);
+               Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
+                              "sigma (for B0) is %e\n", sigma_);
                // ToDo Decide what to use for SR1 - or at least use different
                // skipping rule
             }
@@ -695,8 +701,8 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
       IpData().Append_info_string("Ws");
       lm_skipped_iter_++;
    }
-   Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION, "Number of successive iterations with skipping: %d\n",
-                  lm_skipped_iter_);
+   Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
+                  "Number of successive iterations with skipping: %d\n", lm_skipped_iter_);
 
    // Keep stuff around in case we want to skip SR1 retroactively
    // because of negative curvature!
@@ -921,8 +927,8 @@ bool LimMemQuasiNewtonUpdater::SplitEigenvalues(
       emin = Min(-Evals[nneg - 1], Evals[nneg]);
    }
    Number ratio = emin / emax;
-   Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION, "Eigenvalues in SR1 update: emin=%e emax=%e ratio=%e\n", emin,
-                  emax, ratio);
+   Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
+                  "Eigenvalues in SR1 update: emin=%e emax=%e ratio=%e\n", emin, emax, ratio);
    DBG_ASSERT(ratio >= 0.);
    // ToDo make the following an option?
    const Number tol = 1e-12;
@@ -998,8 +1004,10 @@ bool LimMemQuasiNewtonUpdater::CheckSkippingBFGS(
    // ToDo make a parameter?
    Number tol = sqrt(std::numeric_limits<Number>::epsilon());
 
-   Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION, "Limited-Memory test for skipping:\n");
-   Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION, "     s^Ty = %e snrm = %e ynrm = %e\n", sTy, snrm, ynrm);
+   Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
+                  "Limited-Memory test for skipping:\n");
+   Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
+                  "     s^Ty = %e snrm = %e ynrm = %e\n", sTy, snrm, ynrm);
 
    bool skipping;
 
@@ -1008,11 +1016,13 @@ bool LimMemQuasiNewtonUpdater::CheckSkippingBFGS(
 
    if( skipping )
    {
-      Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION, "     Skip the update.\n");
+      Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
+                     "     Skip the update.\n");
    }
    else
    {
-      Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION, "     Perform the update.\n");
+      Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
+                     "     Perform the update.\n");
    }
 
    return skipping;

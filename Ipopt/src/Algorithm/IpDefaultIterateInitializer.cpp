@@ -205,7 +205,8 @@ bool DefaultIterateInitializer::SetInitialIterates()
       bool retval = CalculateLeastSquarePrimals(*x_ls, *s_ls);
       if( retval )
       {
-         Jnlst().Printf(J_DETAILED, J_INITIALIZATION, "Least square intial values for x and s computed.\n");
+         Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+                        "Least square intial values for x and s computed.\n");
          x_ls->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "x_ls");
          s_ls->Print(Jnlst(), J_VECTOR, J_INITIALIZATION, "s_ls");
          iterates->Set_x(*x_ls);
@@ -213,7 +214,8 @@ bool DefaultIterateInitializer::SetInitialIterates()
       }
       else
       {
-         Jnlst().Printf(J_WARNING, J_INITIALIZATION, "Least square initialization of x and s failed!\n");
+         Jnlst().Printf(J_WARNING, J_INITIALIZATION,
+                        "Least square initialization of x and s failed!\n");
       }
    }
    DBG_PRINT_VECTOR(2, "curr_x", *iterates->x());
@@ -642,8 +644,8 @@ void DefaultIterateInitializer::push_variables(
       new_x = ConstPtr(delta_x);
       if( bound_push > 0. )
       {
-         jnlst.Printf(J_DETAILED, J_INITIALIZATION, "Moved initial values of %s sufficiently inside the bounds.\n",
-                      name.c_str());
+         jnlst.Printf(J_DETAILED, J_INITIALIZATION,
+                      "Moved initial values of %s sufficiently inside the bounds.\n", name.c_str());
          my_orig_x->Print(jnlst, J_VECTOR, J_INITIALIZATION, "original vars");
          new_x->Print(jnlst, J_VECTOR, J_INITIALIZATION, "new vars");
       }
@@ -653,8 +655,8 @@ void DefaultIterateInitializer::push_variables(
       new_x = my_orig_x;
       if( bound_push > 0. )
       {
-         jnlst.Printf(J_DETAILED, J_INITIALIZATION, "Initial values of %s sufficiently inside the bounds.\n",
-                      name.c_str());
+         jnlst.Printf(J_DETAILED, J_INITIALIZATION,
+                      "Initial values of %s sufficiently inside the bounds.\n", name.c_str());
       }
    }
 }
@@ -710,8 +712,8 @@ void DefaultIterateInitializer::least_square_mults(
           iterates = ip_data.trial()->MakeNewContainer();
           }
           */
-         jnlst.Printf(J_DETAILED, J_INITIALIZATION, "Least square estimates max(y_c) = %e, max(y_d) = %e\n",
-                      y_c->Amax(), y_d->Amax());
+         jnlst.Printf(J_DETAILED, J_INITIALIZATION,
+                      "Least square estimates max(y_c) = %e, max(y_d) = %e\n", y_c->Amax(), y_d->Amax());
          Number yinitnrm = Max(y_c->Amax(), y_d->Amax());
          if( yinitnrm > constr_mult_init_max )
          {

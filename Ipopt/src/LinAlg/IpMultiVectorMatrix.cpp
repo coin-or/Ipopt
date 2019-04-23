@@ -318,9 +318,10 @@ void MultiVectorMatrix::PrintImpl(
    const std::string& prefix
 ) const
 {
-   jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent, "%sMultiVectorMatrix \"%s\" with %d columns:\n", prefix.c_str(),
-                        name.c_str(), NCols());
+   jnlst.Printf(level, category,
+                "\n");
+   jnlst.PrintfIndented(level, category, indent,
+                        "%sMultiVectorMatrix \"%s\" with %d columns:\n", prefix.c_str(), name.c_str(), NCols());
 
    for( Index i = 0; i < NCols(); i++ )
    {
@@ -334,7 +335,8 @@ void MultiVectorMatrix::PrintImpl(
       }
       else
       {
-         jnlst.PrintfIndented(level, category, indent, "%sVector in column %d is not yet set!\n", prefix.c_str(), i);
+         jnlst.PrintfIndented(level, category, indent,
+                              "%sVector in column %d is not yet set!\n", prefix.c_str(), i);
       }
    }
 }

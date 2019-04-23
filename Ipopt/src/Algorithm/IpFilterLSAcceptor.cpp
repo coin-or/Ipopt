@@ -349,38 +349,45 @@ FilterLSAcceptor::CheckAcceptabilityOfTrialPoint(Number alpha_primal_test)
        reference_theta_ <= theta_min_)
    {
       // Armijo condition for the barrier function has to be satisfied
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Checking Armijo Condition...\n");
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "Checking Armijo Condition...\n");
       accept = ArmijoHolds(alpha_primal_test);
    }
    else
    {
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Checking sufficient reduction...\n");
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "Checking sufficient reduction...\n");
       accept = IsAcceptableToCurrentIterate(trial_barr, trial_theta);
    }
 
    if (!accept)
    {
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Failed...\n");
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "Failed...\n");
       last_rejection_due_to_filter_ = false;
       return accept;
    }
    else
    {
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Succeeded...\n");
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "Succeeded...\n");
    }
 
    // Now check if that pair is acceptable to the filter
-   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Checking filter acceptability...\n");
+   Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                  "Checking filter acceptability...\n");
    accept = IsAcceptableToCurrentFilter(trial_barr, trial_theta);
    if (!accept)
    {
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Failed...\n");
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "Failed...\n");
       last_rejection_due_to_filter_ = true;
       return accept;
    }
    else
    {
-      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Succeeded...\n");
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "Succeeded...\n");
    }
 
    // Filter reset heuristic
@@ -466,7 +473,8 @@ bool FilterLSAcceptor::IsAcceptableToCurrentIterate(Number trial_barr,
       }
       if (log10(trial_barr - reference_barr_) > obj_max_inc_ + basval)
       {
-         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Rejecting trial point because barrier objective function increasing too rapidly (from %27.15e to %27.15e)\n", reference_barr_, trial_barr);
+         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                        "Rejecting trial point because barrier objective function increasing too rapidly (from %27.15e to %27.15e)\n", reference_barr_, trial_barr);
          return false;
       }
    }
@@ -611,7 +619,8 @@ FilterLSAcceptor::TrySecondOrderCorrection(
       catch (IpoptNLP::Eval_Error& e)
       {
          e.ReportException(Jnlst(), J_DETAILED);
-         Jnlst().Printf(J_WARNING, J_MAIN, "Warning: SOC step rejected due to evaluation error\n");
+         Jnlst().Printf(J_WARNING, J_MAIN,
+                        "Warning: SOC step rejected due to evaluation error\n");
          IpData().Append_info_string("e");
          accept = false;
          // There is no point in continuing SOC procedure
@@ -620,7 +629,8 @@ FilterLSAcceptor::TrySecondOrderCorrection(
 
       if (accept)
       {
-         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH, "Second order correction step accepted with %d corrections.\n", count_soc + 1);
+         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                        "Second order correction step accepted with %d corrections.\n", count_soc + 1);
          // Accept all SOC quantities
          alpha_primal = alpha_primal_soc;
          actual_delta = delta_soc;

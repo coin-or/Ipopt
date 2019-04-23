@@ -206,11 +206,12 @@ ESymSolverStatus TSymLinearSolver::MultiSolve(
       TripletHelper::FillValuesFromVector(dim_, *rhsV[irhs], &rhs_vals[irhs * (dim_)]);
       if( Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA) )
       {
-         Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "Right hand side %d in TSymLinearSolver:\n", irhs);
+         Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
+                        "Right hand side %d in TSymLinearSolver:\n", irhs);
          for( Index i = 0; i < dim_; i++ )
          {
-            Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "Trhs[%5d,%5d] = %23.16e\n", irhs, i,
-                           rhs_vals[irhs * (dim_) + i]);
+            Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
+                           "Trhs[%5d,%5d] = %23.16e\n", irhs, i, rhs_vals[irhs * (dim_) + i]);
          }
       }
       if( use_scaling_ )
@@ -295,11 +296,12 @@ ESymSolverStatus TSymLinearSolver::MultiSolve(
          }
          if( Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA) )
          {
-            Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "Solution %d in TSymLinearSolver:\n", irhs);
+            Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
+                           "Solution %d in TSymLinearSolver:\n", irhs);
             for( Index i = 0; i < dim_; i++ )
             {
-               Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "Tsol[%5d,%5d] = %23.16e\n", irhs, i,
-                              rhs_vals[irhs * (dim_) + i]);
+               Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
+                              "Tsol[%5d,%5d] = %23.16e\n", irhs, i, rhs_vals[irhs * (dim_) + i]);
             }
          }
          TripletHelper::PutValuesInVector(dim_, &rhs_vals[irhs * (dim_)], *solV[irhs]);
@@ -432,7 +434,8 @@ bool TSymLinearSolver::IncreaseQuality()
 
    if( IsValid(scaling_method_) && !use_scaling_ && linear_scaling_on_demand_ )
    {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Switching on scaling of the linear system (on demand).\n");
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Switching on scaling of the linear system (on demand).\n");
       IpData().Append_info_string("Mc");
       use_scaling_ = true;
       just_switched_on_scaling_ = true;
@@ -491,7 +494,8 @@ void TSymLinearSolver::GiveMatrixToSolver(
                        scaling_factors_);
          if( !retval )
          {
-            Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Error during computation of scaling factors.\n");
+            Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                           "Error during computation of scaling factors.\n");
             THROW_EXCEPTION(ERROR_IN_LINEAR_SCALING_METHOD,
                             "scaling_method_->ComputeSymTScalingFactors returned false.")
          }
@@ -500,8 +504,8 @@ void TSymLinearSolver::GiveMatrixToSolver(
          {
             for( Index i = 0; i < dim_; i++ )
             {
-               Jnlst().Printf(J_MOREVECTOR, J_LINEAR_ALGEBRA, "scaling factor[%6d] = %22.17e\n", i,
-                              scaling_factors_[i]);
+               Jnlst().Printf(J_MOREVECTOR, J_LINEAR_ALGEBRA,
+                              "scaling factor[%6d] = %22.17e\n", i, scaling_factors_[i]);
             }
          }
          just_switched_on_scaling_ = false;
@@ -658,7 +662,8 @@ ESymSolverStatus TSymLinearSolver::DetermineDependentRows(
                      scaling_factors_);
       if( !retval2 )
       {
-         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Error during computation of scaling factors.\n");
+         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                        "Error during computation of scaling factors.\n");
          THROW_EXCEPTION(ERROR_IN_LINEAR_SCALING_METHOD, "scaling_method_->ComputeSymTScalingFactors returned false.")
       }
       // complain if not in debug mode
@@ -666,7 +671,8 @@ ESymSolverStatus TSymLinearSolver::DetermineDependentRows(
       {
          for( Index i = 0; i < dim_; i++ )
          {
-            Jnlst().Printf(J_MOREVECTOR, J_LINEAR_ALGEBRA, "scaling factor[%6d] = %22.17e\n", i, scaling_factors_[i]);
+            Jnlst().Printf(J_MOREVECTOR, J_LINEAR_ALGEBRA,
+                           "scaling factor[%6d] = %22.17e\n", i, scaling_factors_[i]);
          }
       }
       for( Index i = 0; i < nonzeros_triplet_; i++ )

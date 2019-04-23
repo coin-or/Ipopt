@@ -102,7 +102,8 @@ void Filter::Print(
 )
 {
    DBG_START_METH("FilterLineSearch::Filter::Print", dbg_verbosity);
-   jnlst.Printf(J_DETAILED, J_LINE_SEARCH, "The current filter has %d entries.\n", filter_list_.size());
+   jnlst.Printf(J_DETAILED, J_LINE_SEARCH,
+                "The current filter has %d entries.\n", filter_list_.size());
    if( !jnlst.ProduceOutput(J_VECTOR, J_LINE_SEARCH) )
    {
       return;
@@ -113,15 +114,19 @@ void Filter::Print(
    {
       if( count % 10 == 0 )
       {
-         jnlst.Printf(J_VECTOR, J_LINE_SEARCH, "                phi                    theta            iter\n");
+         jnlst.Printf(J_VECTOR, J_LINE_SEARCH,
+                      "                phi                    theta            iter\n");
       }
       count++;
-      jnlst.Printf(J_VECTOR, J_LINE_SEARCH, "%5d ", count);
+      jnlst.Printf(J_VECTOR, J_LINE_SEARCH,
+                   "%5d ", count);
       for( Index i = 0; i < dim_; i++ )
       {
-         jnlst.Printf(J_VECTOR, J_LINE_SEARCH, "%23.16e ", (*iter)->val(i));
+         jnlst.Printf(J_VECTOR, J_LINE_SEARCH,
+                      "%23.16e ", (*iter)->val(i));
       }
-      jnlst.Printf(J_VECTOR, J_LINE_SEARCH, "%5d\n", (*iter)->iter());
+      jnlst.Printf(J_VECTOR, J_LINE_SEARCH,
+                   "%5d\n", (*iter)->iter());
    }
 }
 

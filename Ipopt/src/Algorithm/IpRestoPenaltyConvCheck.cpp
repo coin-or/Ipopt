@@ -58,13 +58,14 @@ ConvergenceCheck::ConvergenceStatus RestoPenaltyConvergenceCheck::TestOrigProgre
 
    if( !orig_penalty_ls_acceptor_->IsAcceptableToCurrentIterate(orig_trial_barr, orig_trial_theta, true) )
    {
-      Jnlst().Printf(J_DETAILED, J_MAIN, "Point is not acceptable to the original current point.\n");
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "Point is not acceptable to the original current point.\n");
       status = CONTINUE;
    }
    else
    {
-      Jnlst().Printf(J_DETAILED, J_MAIN, "Restoration found a point that provides sufficient reduction in"
-                     " theta and is acceptable to the current penalty function.\n");
+      Jnlst().Printf(J_DETAILED, J_MAIN,
+                     "Restoration found a point that provides sufficient reduction in theta and is acceptable to the current penalty function.\n");
       status = CONVERGED;
    }
 

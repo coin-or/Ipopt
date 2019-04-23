@@ -465,13 +465,16 @@ void CompoundVector::PrintImpl(
 ) const
 {
    DBG_START_METH("CompoundVector::PrintImpl", dbg_verbosity);
-   jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent, "%sCompoundVector \"%s\" with %d components:\n", prefix.c_str(),
-                        name.c_str(), NComps());
+   jnlst.Printf(level, category,
+                "\n");
+   jnlst.PrintfIndented(level, category, indent,
+                        "%sCompoundVector \"%s\" with %d components:\n", prefix.c_str(), name.c_str(), NComps());
    for( Index i = 0; i < NComps(); i++ )
    {
-      jnlst.Printf(level, category, "\n");
-      jnlst.PrintfIndented(level, category, indent, "%sComponent %d:\n", prefix.c_str(), i + 1);
+      jnlst.Printf(level, category,
+                   "\n");
+      jnlst.PrintfIndented(level, category, indent,
+                           "%sComponent %d:\n", prefix.c_str(), i + 1);
       if( ConstComp(i) )
       {
          DBG_ASSERT(name.size() < 200);
@@ -482,7 +485,8 @@ void CompoundVector::PrintImpl(
       }
       else
       {
-         jnlst.PrintfIndented(level, category, indent, "%sComponent %d is not yet set!\n", prefix.c_str(), i + 1);
+         jnlst.PrintfIndented(level, category, indent,
+                              "%sComponent %d is not yet set!\n", prefix.c_str(), i + 1);
       }
    }
 }

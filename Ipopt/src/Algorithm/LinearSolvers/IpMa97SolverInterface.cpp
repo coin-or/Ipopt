@@ -297,16 +297,16 @@ bool Ma97SolverInterface::InitializeImpl(
             switch_[i] = SWITCH_AT_START;
             scaling_type_ = scaling_val_[i];
             current_level_ = i;
-            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: Enabled scaling level %d on initialization\n",
-                           current_level_);
+            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                           "HSL_MA97: Enabled scaling level %d on initialization\n", current_level_);
          }
          else if( switch_val[i] == "at_start_reuse" )
          {
             switch_[i] = SWITCH_AT_START_REUSE;
             scaling_type_ = scaling_val_[i];
             current_level_ = i;
-            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: Enabled scaling level %d on initialization\n",
-                           current_level_);
+            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                           "HSL_MA97: Enabled scaling level %d on initialization\n", current_level_);
          }
          else if( switch_val[i] == "on_demand" )
          {
@@ -395,7 +395,8 @@ ESymSolverStatus Ma97SolverInterface::InitializeStructure(
    if( ordering_ == ORDER_MATCHED_AMD || ordering_ == ORDER_MATCHED_METIS )
    {
       // Ordering requires values. Just signal success and return
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: Delaying analyse until values are available\n");
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "HSL_MA97: Delaying analyse until values are available\n");
       switch( ordering_ )
       {
          case ORDER_MATCHED_AMD:
@@ -416,27 +417,29 @@ ESymSolverStatus Ma97SolverInterface::InitializeStructure(
    // perform analyse
    if( ordering_ == ORDER_BEST )
    {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: Use best of AMD or MeTiS:\n");
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "HSL_MA97: Use best of AMD or MeTiS:\n");
       control_.ordering = 1; // AMD
       ma97_analyse(0, dim, ia, ja, NULL, &akeep_amd, &control_, &info2, NULL);
       if( info2.flag < 0 )
       {
          return SYMSOLVER_FATAL_ERROR;
       }
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "AMD   nfactor = %d, nflops = %d:\n", info2.num_factor,
-                     info2.num_flops);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "AMD   nfactor = %d, nflops = %d:\n", info2.num_factor, info2.num_flops);
       control_.ordering = 3; // METIS
       ma97_analyse(0, dim, ia, ja, NULL, &akeep_metis, &control_, &info, NULL);
       if( info.flag < 0 )
       {
          return SYMSOLVER_FATAL_ERROR;
       }
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "MeTiS nfactor = %d, nflops = %d:\n", info.num_factor,
-                     info.num_flops);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "MeTiS nfactor = %d, nflops = %d:\n", info.num_factor, info.num_flops);
       if( info.num_flops > info2.num_flops )
       {
          // Use AMD
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: Choose AMD\n");
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "HSL_MA97: Choose AMD\n");
          akeep_ = akeep_amd;
          ma97_free_akeep(&akeep_metis);
          info = info2;
@@ -444,7 +447,8 @@ ESymSolverStatus Ma97SolverInterface::InitializeStructure(
       else
       {
          // Use MeTiS
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: Choose MeTiS\n");
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "HSL_MA97: Choose MeTiS\n");
          akeep_ = akeep_metis;
          ma97_free_akeep(&akeep_amd);
       }
@@ -463,34 +467,38 @@ ESymSolverStatus Ma97SolverInterface::InitializeStructure(
             break;
          case ORDER_AUTO:
          case ORDER_MATCHED_AUTO:
-            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: Make heuristic choice of AMD or MeTiS\n");
+            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                           "HSL_MA97: Make heuristic choice of AMD or MeTiS\n");
             control_.ordering = 5; // Use heuristic to pick which to use
       }
       ma97_analyse(0, dim, ia, ja, NULL, &akeep_, &control_, &info, NULL);
       switch( info.ordering )
       {
          case 1:
-            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: Used AMD\n");
+            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                           "HSL_MA97: Used AMD\n");
             if( ordering_ == ORDER_MATCHED_AUTO )
             {
                ordering_ = ORDER_MATCHED_AMD;
             }
             break;
          case 3:
-            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: Used MeTiS\n");
+            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                           "HSL_MA97: Used MeTiS\n");
             if( ordering_ == ORDER_MATCHED_AUTO )
             {
                ordering_ = ORDER_MATCHED_METIS;
             }
             break;
          default:
-            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: Used ordering %d\n", info.ordering);
+            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                           "HSL_MA97: Used ordering %d\n", info.ordering);
             break;
       }
    }
 
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: PREDICTED nfactor %d, maxfront %d\n", info.num_factor,
-                  info.maxfront);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "HSL_MA97: PREDICTED nfactor %d, maxfront %d\n", info.num_factor, info.maxfront);
 
    if( HaveIpData() )
    {
@@ -574,8 +582,8 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
             control_.scaling = 3;   // use mc64 from ordering
          }
 
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: PREDICTED nfactor %d, maxfront %d\n", info.num_factor,
-                        info.maxfront);
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "HSL_MA97: PREDICTED nfactor %d, maxfront %d\n", info.num_factor, info.maxfront);
 
          if( HaveIpData() )
          {
@@ -584,8 +592,8 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
 
          if( info.flag == 6 || info.flag == -7 )
          {
-            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "In Ma97SolverInterface::Factorization: "
-                           "Singular system, estimated rank %d of %d\n", info.matrix_rank, ndim_);
+            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                           "In Ma97SolverInterface::Factorization: Singular system, estimated rank %d of %d\n", info.matrix_rank, ndim_);
             return SYMSOLVER_SINGULAR;
          }
          if( info.flag < 0 )
@@ -603,19 +611,19 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
       ma97_factor(4, ia, ja, val_, &akeep_, &fkeep_, &control_, &info, scaling_);
       //ma97_factor_solve(4, ia, ja, val_, nrhs, rhs_vals, ndim_, &akeep_, &fkeep_,
       //                  &control_, &info, scaling_);
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: delays %d, nfactor %d, nflops %ld, maxfront %d\n",
-                     info.num_delay, info.num_factor, info.num_flops, info.maxfront);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "HSL_MA97: delays %d, nfactor %d, nflops %ld, maxfront %d\n", info.num_delay, info.num_factor, info.num_flops, info.maxfront);
       if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemFactorization().End();
          t2 = IpData().TimingStats().LinearSystemFactorization().TotalWallclockTime();
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Ma97SolverInterface::Factorization: "
-                        "ma97_factor_solve took %10.3f\n", t2 - t1);
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "Ma97SolverInterface::Factorization: ma97_factor_solve took %10.3f\n", t2 - t1);
       }
       if( info.flag == 7 || info.flag == -7 )
       {
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "In Ma97SolverInterface::Factorization: "
-                        "Singular system, estimated rank %d of %d\n", info.matrix_rank, ndim_);
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "In Ma97SolverInterface::Factorization: Singular system, estimated rank %d of %d\n", info.matrix_rank, ndim_);
          return SYMSOLVER_SINGULAR;
       }
       for( int i = current_level_; i < 3; i++ )
@@ -658,8 +666,8 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
                   // number of delays has signficantly increased, so trigger
                   current_level_ = i;
                   scaling_type_ = scaling_val_[i];
-                  Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: Enabling scaling %d due to excess delays\n",
-                                 i);
+                  Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                                 "HSL_MA97: Enabling scaling %d due to excess delays\n", i);
                   rescale_ = true;
                }
                break;
@@ -667,14 +675,14 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
       }
       if( info.flag < 0 )
       {
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "In Ma97SolverInterface::Factorization: "
-                        "Unhandled error. info.flag = %d\n", info.flag);
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "In Ma97SolverInterface::Factorization: Unhandled error. info.flag = %d\n", info.flag);
          return SYMSOLVER_FATAL_ERROR;
       }
       if( check_NegEVals && info.num_neg != numberOfNegEVals )
       {
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "In Ma97SolverInterface::Factorization: "
-                        "info.num_neg = %d, but numberOfNegEVals = %d\n", info.num_neg, numberOfNegEVals);
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "In Ma97SolverInterface::Factorization: info.num_neg = %d, but numberOfNegEVals = %d\n", info.num_neg, numberOfNegEVals);
          return SYMSOLVER_WRONG_INERTIA;
       }
 
@@ -733,9 +741,11 @@ bool Ma97SolverInterface::IncreaseQuality()
       return false;
    }
    pivtol_changed_ = true;
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Indreasing pivot tolerance for HSL_MA97 from %7.2e ", control_.u);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "Increasing pivot tolerance for HSL_MA97 from %7.2e ", control_.u);
    control_.u = Min(umax_, pow(control_.u, 0.75));
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "to %7.2e.\n", control_.u);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "to %7.2e.\n", control_.u);
    return true;
 }
 

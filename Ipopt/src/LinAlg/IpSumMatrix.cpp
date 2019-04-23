@@ -153,13 +153,14 @@ void SumMatrix::PrintImpl(
    const std::string& prefix
 ) const
 {
-   jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent, "%sSumMatrix \"%s\" of dimension %d x %d with %d terms:\n",
-                        prefix.c_str(), name.c_str(), NRows(), NCols(), NTerms());
+   jnlst.Printf(level, category,
+                "\n");
+   jnlst.PrintfIndented(level, category, indent,
+                        "%sSumMatrix \"%s\" of dimension %d x %d with %d terms:\n", prefix.c_str(), name.c_str(), NRows(), NCols(), NTerms());
    for( Index iterm = 0; iterm < NTerms(); iterm++ )
    {
-      jnlst.PrintfIndented(level, category, indent, "%sTerm %d with factor %23.16e and the following matrix:\n",
-                           prefix.c_str(), iterm, factors_[iterm]);
+      jnlst.PrintfIndented(level, category, indent,
+                           "%sTerm %d with factor %23.16e and the following matrix:\n", prefix.c_str(), iterm, factors_[iterm]);
       char buffer[256];
       Snprintf(buffer, 255, "Term: %d", iterm);
       std::string name = buffer;

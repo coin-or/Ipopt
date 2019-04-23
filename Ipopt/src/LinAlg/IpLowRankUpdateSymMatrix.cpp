@@ -179,46 +179,55 @@ void LowRankUpdateSymMatrix::PrintImpl(
    const std::string& prefix
 ) const
 {
-   jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent, "%sLowRankUpdateSymMatrix \"%s\" with %d rows and columns:\n",
-                        prefix.c_str(), name.c_str(), Dim());
+   jnlst.Printf(level, category,
+                "\n");
+   jnlst.PrintfIndented(level, category, indent,
+                        "%sLowRankUpdateSymMatrix \"%s\" with %d rows and columns:\n", prefix.c_str(), name.c_str(), Dim());
 
    if( ReducedDiag() )
    {
-      jnlst.PrintfIndented(level, category, indent + 1, "%sThis matrix has reduced diagonal.\n", prefix.c_str());
+      jnlst.PrintfIndented(level, category, indent + 1,
+                           "%sThis matrix has reduced diagonal.\n", prefix.c_str());
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent + 1, "%sThis matrix has full diagonal.\n", prefix.c_str());
+      jnlst.PrintfIndented(level, category, indent + 1,
+                           "%sThis matrix has full diagonal.\n", prefix.c_str());
    }
-   jnlst.PrintfIndented(level, category, indent + 1, "%sDiagonal matrix:\n", prefix.c_str());
+   jnlst.PrintfIndented(level, category, indent + 1,
+                        "%sDiagonal matrix:\n", prefix.c_str());
    if( IsValid(D_) )
    {
       D_->Print(&jnlst, level, category, name + "-D", indent + 1, prefix);
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent, "%sDiagonal matrix not set!\n", prefix.c_str());
+      jnlst.PrintfIndented(level, category, indent,
+                           "%sDiagonal matrix not set!\n", prefix.c_str());
    }
 
-   jnlst.PrintfIndented(level, category, indent + 1, "%sMultiVectorMatrix V for positive update:\n", prefix.c_str());
+   jnlst.PrintfIndented(level, category, indent + 1,
+                        "%sMultiVectorMatrix V for positive update:\n", prefix.c_str());
    if( IsValid(V_) )
    {
       V_->Print(&jnlst, level, category, name + "-V", indent + 1, prefix);
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent, "%sV matrix not set!\n", prefix.c_str());
+      jnlst.PrintfIndented(level, category, indent,
+                           "%sV matrix not set!\n", prefix.c_str());
    }
 
-   jnlst.PrintfIndented(level, category, indent + 1, "%sMultiVectorMatrix U for positive update:\n", prefix.c_str());
+   jnlst.PrintfIndented(level, category, indent + 1,
+                        "%sMultiVectorMatrix U for positive update:\n", prefix.c_str());
    if( IsValid(U_) )
    {
       U_->Print(&jnlst, level, category, name + "-U", indent + 1, prefix);
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent, "%sU matrix not set!\n", prefix.c_str());
+      jnlst.PrintfIndented(level, category, indent,
+                           "%sU matrix not set!\n", prefix.c_str());
    }
 }
 

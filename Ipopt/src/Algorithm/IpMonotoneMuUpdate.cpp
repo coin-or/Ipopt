@@ -141,7 +141,8 @@ bool MonotoneMuUpdate::UpdateBarrierParameter()
 
    Number sub_problem_error = IpCq().curr_barrier_error();
 
-   Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "Optimality Error for Barrier Sub-problem = %e\n", sub_problem_error);
+   Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                  "Optimality Error for Barrier Sub-problem = %e\n", sub_problem_error);
    Number kappa_eps_mu = barrier_tol_factor_ * mu;
 
    bool done = false;
@@ -149,14 +150,17 @@ bool MonotoneMuUpdate::UpdateBarrierParameter()
    IpData().Set_tiny_step_flag(false);
    while( (sub_problem_error <= kappa_eps_mu || tiny_step_flag) && !done && !first_iter_resto_ )
    {
-      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "  sub_problem_error < kappa_eps * mu (%e)\n", kappa_eps_mu);
+      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                     "  sub_problem_error < kappa_eps * mu (%e)\n", kappa_eps_mu);
 
       // Compute the new values for mu and tau
       Number new_mu;
       Number new_tau;
-      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "Updating mu=%25.16e and tau=%25.16e to ", mu, tau);
+      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                     "Updating mu=%25.16e and tau=%25.16e to ", mu, tau);
       CalcNewMuAndTau(new_mu, new_tau);
-      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "new_mu=%25.16e and new_tau=%25.16e\n", new_mu, new_tau);
+      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                     "new_mu=%25.16e and new_tau=%25.16e\n", new_mu, new_tau);
       bool mu_changed = (mu != new_mu);
       if( !mu_changed && tiny_step_flag )
       {

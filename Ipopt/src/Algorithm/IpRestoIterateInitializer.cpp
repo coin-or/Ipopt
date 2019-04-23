@@ -58,7 +58,8 @@ bool RestoIterateInitializer::SetInitialIterates()
    Number resto_mu;
    resto_mu = Max(orig_ip_data->curr_mu(), orig_ip_cq->curr_c()->Amax(), orig_ip_cq->curr_d_minus_s()->Amax());
    IpData().Set_mu(resto_mu);
-   Jnlst().Printf(J_DETAILED, J_INITIALIZATION, "Initial barrier parameter resto_mu = %e\n", resto_mu);
+   Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+                  "Initial barrier parameter resto_mu = %e\n", resto_mu);
 
    /////////////////////////////////////////////////////////////////////
    //                   Initialize primal variables                   //

@@ -722,7 +722,8 @@ bool OptionsList::ReadFromStream(
    bool              allow_clobber
 )
 {
-   jnlst.Printf(J_DETAILED, J_MAIN, "Start reading options from stream.\n");
+   jnlst.Printf(J_DETAILED, J_MAIN,
+                "Start reading options from stream.\n");
 
    while( true )
    {
@@ -732,20 +733,22 @@ bool OptionsList::ReadFromStream(
       if( !readnexttoken(is, tag) )
       {
          // That's it - end of file reached.
-         jnlst.Printf(J_DETAILED, J_MAIN, "Finished reading options from file.\n");
+         jnlst.Printf(J_DETAILED, J_MAIN,
+                      "Finished reading options from file.\n");
          return true;
       }
 
       if( !readnexttoken(is, value) )
       {
          // Can't read value for a given tag
-         jnlst.Printf(J_ERROR, J_MAIN, "Error reading value for tag %s from file.\n", tag.c_str());
+         jnlst.Printf(J_ERROR, J_MAIN,
+                      "Error reading value for tag %s from file.\n", tag.c_str());
          return false;
       }
 
       // Now add the value for the options list
-      jnlst.Printf(J_DETAILED, J_MAIN, "Adding option \"%s\" with value \"%s\" to OptionsList.\n", tag.c_str(),
-                   value.c_str());
+      jnlst.Printf(J_DETAILED, J_MAIN,
+                   "Adding option \"%s\" with value \"%s\" to OptionsList.\n", tag.c_str(), value.c_str());
 
       if( IsValid(reg_options_) )
       {

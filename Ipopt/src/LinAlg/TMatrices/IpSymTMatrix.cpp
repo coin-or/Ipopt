@@ -208,20 +208,22 @@ void SymTMatrix::PrintImpl(
    const std::string& prefix
 ) const
 {
-   jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent, "%sSymTMatrix \"%s\" of dimension %d with %d nonzero elements:\n",
-                        prefix.c_str(), name.c_str(), Dim(), Nonzeros());
+   jnlst.Printf(level, category,
+                "\n");
+   jnlst.PrintfIndented(level, category, indent,
+                        "%sSymTMatrix \"%s\" of dimension %d with %d nonzero elements:\n", prefix.c_str(), name.c_str(), Dim(), Nonzeros());
    if( initialized_ )
    {
       for( Index i = 0; i < Nonzeros(); i++ )
       {
-         jnlst.PrintfIndented(level, category, indent, "%s%s[%5d,%5d]=%23.16e  (%d)\n", prefix.c_str(), name.c_str(),
-                              Irows()[i], Jcols()[i], values_[i], i);
+         jnlst.PrintfIndented(level, category, indent,
+                              "%s%s[%5d,%5d]=%23.16e  (%d)\n", prefix.c_str(), name.c_str(), Irows()[i], Jcols()[i], values_[i], i);
       }
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent, "%sUninitialized!\n", prefix.c_str());
+      jnlst.PrintfIndented(level, category, indent,
+                           "%sUninitialized!\n", prefix.c_str());
    }
 }
 
