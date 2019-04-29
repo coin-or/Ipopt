@@ -66,10 +66,6 @@ EXTRA_DIST = \
 	README \
 	LICENSE \
 	AUTHORS \
-	doc/documentation.bbl \
-	doc/documentation.tex \
-	doc/documentation.pdf \
-	doc/options.tex \
 	test/run_unitTests.in \
 	test/mytoy.nl \
 	Windows/VisualStudio_dotNET/README \
