@@ -41,13 +41,13 @@ doxydoc:
 
 clean-doxydoc :
 	cd doxydoc && rm -rf html *.log *.tag
-	
+
 install-doxydoc : doxydoc
-	$(mkdir_p) $(DocInstallDir)/doxydoc
-	cp -R doxydoc/html doxydoc/ipopt_doxy.tag $(DocInstallDir)/doxydoc
+	$(mkdir_p) $(DESTDIR)$(DocInstallDir)/doxydoc
+	cp -R doxydoc/html doxydoc/ipopt_doxy.tag $(DESTDIR)$(DocInstallDir)/doxydoc
 
 uninstall-doxydoc:
-	if test -e $(DocInstallDir)/doxydoc ; then rm -rf $(DocInstallDir)/doxydoc ; fi
+	if test -e $(DESTDIR)$(DocInstallDir)/doxydoc ; then rm -rf $(DESTDIR)$(DocInstallDir)/doxydoc ; fi
 
 cuter:
 	cd Ipopt; $(MAKE) cuter
