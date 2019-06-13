@@ -51,7 +51,7 @@ public:
       const SmartPtr<BacktrackingLSAcceptor>& acceptor,
       const SmartPtr<RestorationPhase>&       resto_phase,
       const SmartPtr<ConvergenceCheck>&       conv_check
-      );
+   );
 
    /** Destructor */
    virtual ~BacktrackingLineSearch();
@@ -61,7 +61,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Perform the line search.
     *
@@ -93,7 +93,7 @@ public:
     */
    virtual void SetRigorousLineSearch(
       bool rigorous
-      )
+   )
    {
       rigorous_ = rigorous;
    }
@@ -116,7 +116,7 @@ public:
    //@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
    //@}
 
 private:
@@ -133,12 +133,12 @@ private:
    /** Copy Constructor */
    BacktrackingLineSearch(
       const BacktrackingLineSearch&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const BacktrackingLineSearch&
-      );
+   );
    //@}
 
    /** Method performing the backtracking line search.
@@ -156,7 +156,7 @@ private:
       Index&                    n_steps,
       bool&                     evaluation_error,
       SmartPtr<IteratesVector>& actual_delta
-      );
+   );
 
    /** Method for starting the watch dog.
     *
@@ -170,7 +170,7 @@ private:
     */
    void StopWatchDog(
       SmartPtr<IteratesVector>& actual_delta
-      );
+   );
 
    /** Method for checking if current trial point is acceptable.
     *
@@ -180,7 +180,7 @@ private:
     */
    bool CheckAcceptabilityOfTrialPoint(
       Number alpha_primal
-      );
+   );
 
    /** Method for setting the dual variables in the trial fields in
     *  IpData, given the search direction.
@@ -194,7 +194,7 @@ private:
       Number                    alpha_primal,
       Number                    alpha_dual,
       SmartPtr<IteratesVector>& delta
-      );
+   );
 
    /** Try a step for the soft restoration phase and check if it is
     *  acceptable.
@@ -211,7 +211,7 @@ private:
    bool TrySoftRestoStep(
       SmartPtr<IteratesVector>& actual_delta,
       bool&                     satisfies_original_criterion
-      );
+   );
 
    /** Try a second order correction for the constraints.
     *
@@ -230,7 +230,7 @@ private:
       Number                    alpha_primal_test,
       Number&                   alpha_primal,
       SmartPtr<IteratesVector>& actual_delta
-      );
+   );
 
    /** Try higher order corrector (for fast local convergence).
     *
@@ -243,7 +243,7 @@ private:
       Number                    alpha_primal_test,
       Number&                   alpha_primal,
       SmartPtr<IteratesVector>& actual_delta
-      );
+   );
 
    /** Perform magic steps.
     *

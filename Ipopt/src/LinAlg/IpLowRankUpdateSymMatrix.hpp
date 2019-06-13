@@ -36,7 +36,7 @@ public:
    /** Constructor, given the corresponding matrix space. */
    LowRankUpdateSymMatrix(
       const LowRankUpdateSymMatrixSpace* owner_space
-      );
+   );
 
    /** Destructor */
    ~LowRankUpdateSymMatrix();
@@ -45,7 +45,7 @@ public:
    /** Method for setting the diagonal elements (as a Vector). */
    void SetDiag(
       const Vector& D
-      )
+   )
    {
       D_ = &D;
       ObjectChanged();
@@ -60,7 +60,7 @@ public:
    /** Method for setting the positive low-rank update part. */
    void SetV(
       const MultiVectorMatrix& V
-      )
+   )
    {
       V_ = &V;
       ObjectChanged();
@@ -75,7 +75,7 @@ public:
    /** Method for setting the negative low-rank update part. */
    void SetU(
       const MultiVectorMatrix& U
-      )
+   )
    {
       U_ = &U;
       ObjectChanged();
@@ -108,19 +108,19 @@ protected:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual bool HasValidNumbersImpl() const;
 
    virtual void ComputeRowAMaxImpl(
       Vector& rows_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void ComputeColAMaxImpl(
       Vector& cols_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void PrintImpl(
       const Journalist&  jnlst,
@@ -129,7 +129,7 @@ protected:
       const std::string& name,
       Index              indent,
       const std::string& prefix
-      ) const;
+   ) const;
    //@}
 
 private:
@@ -148,12 +148,12 @@ private:
    /** Copy Constructor */
    LowRankUpdateSymMatrix(
       const LowRankUpdateSymMatrix&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const LowRankUpdateSymMatrix&
-      );
+   );
    //@}
 
    /** corresponding matrix space */
@@ -181,7 +181,7 @@ public:
       SmartPtr<const Matrix>      P_LowRank,
       SmartPtr<const VectorSpace> LowRankVectorSpace,
       bool                        reduced_diag
-      )
+   )
       : SymMatrixSpace(dim),
         P_LowRank_(P_LowRank),
         lowrank_vector_space_(LowRankVectorSpace),
@@ -237,12 +237,12 @@ private:
    /** Copy Constructor */
    LowRankUpdateSymMatrixSpace(
       const LowRankUpdateSymMatrixSpace&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const LowRankUpdateSymMatrixSpace&
-      );
+   );
    //@}
 
    /** Expansion matrix to lift the low-rank approximation into a

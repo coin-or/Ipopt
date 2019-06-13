@@ -30,7 +30,7 @@ public:
    IteratesVector(
       const IteratesVectorSpace* owner_space,
       bool                       create_new
-      );
+   );
 
    virtual ~IteratesVector();
    //@}
@@ -44,7 +44,7 @@ public:
     */
    SmartPtr<IteratesVector> MakeNewIteratesVector(
       bool create_new = true
-      ) const;
+   ) const;
 
    /** Use this method to create a new iterates vector with a copy of
     *  all the data.
@@ -103,7 +103,7 @@ public:
     */
    void Set_x(
       const Vector& vec
-      )
+   )
    {
       SetComp(0, vec);
    }
@@ -114,7 +114,7 @@ public:
     */
    void Set_x_NonConst(
       Vector& vec
-      )
+   )
    {
       SetCompNonConst(0, vec);
    }
@@ -153,7 +153,7 @@ public:
     */
    void Set_s(
       const Vector& vec
-      )
+   )
    {
       SetComp(1, vec);
    }
@@ -164,7 +164,7 @@ public:
     */
    void Set_s_NonConst(
       Vector& vec
-      )
+   )
    {
       SetCompNonConst(1, vec);
    }
@@ -204,7 +204,7 @@ public:
     */
    void Set_y_c(
       const Vector& vec
-      )
+   )
    {
       SetComp(2, vec);
    }
@@ -215,7 +215,7 @@ public:
     */
    void Set_y_c_NonConst(
       Vector& vec
-      )
+   )
    {
       SetCompNonConst(2, vec);
    }
@@ -254,7 +254,7 @@ public:
     */
    void Set_y_d(
       const Vector& vec
-      )
+   )
    {
       SetComp(3, vec);
    }
@@ -265,7 +265,7 @@ public:
     */
    void Set_y_d_NonConst(
       Vector& vec
-      )
+   )
    {
       SetCompNonConst(3, vec);
    }
@@ -304,7 +304,7 @@ public:
     */
    void Set_z_L(
       const Vector& vec
-      )
+   )
    {
       SetComp(4, vec);
    }
@@ -315,7 +315,7 @@ public:
     */
    void Set_z_L_NonConst(
       Vector& vec
-      )
+   )
    {
       SetCompNonConst(4, vec);
    }
@@ -354,7 +354,7 @@ public:
     */
    void Set_z_U(
       const Vector& vec
-      )
+   )
    {
       SetComp(5, vec);
    }
@@ -365,7 +365,7 @@ public:
     */
    void Set_z_U_NonConst(
       Vector& vec
-      )
+   )
    {
       SetCompNonConst(5, vec);
    }
@@ -405,7 +405,7 @@ public:
     */
    void Set_v_L(
       const Vector& vec
-      )
+   )
    {
       SetComp(6, vec);
    }
@@ -415,7 +415,7 @@ public:
     */
    void Set_v_L_NonConst(
       Vector& vec
-      )
+   )
    {
       SetCompNonConst(6, vec);
    }
@@ -455,7 +455,7 @@ public:
     */
    void Set_v_U(
       const Vector& vec
-      )
+   )
    {
       SetComp(7, vec);
    }
@@ -466,7 +466,7 @@ public:
     */
    void Set_v_U_NonConst(
       Vector& vec
-      )
+   )
    {
       SetCompNonConst(7, vec);
    }
@@ -478,7 +478,7 @@ public:
    void Set_primal(
       const Vector& x,
       const Vector& s
-      )
+   )
    {
       SetComp(0, x);
       SetComp(1, s);
@@ -486,7 +486,7 @@ public:
    void Set_primal_NonConst(
       Vector& x,
       Vector& s
-      )
+   )
    {
       SetCompNonConst(0, x);
       SetCompNonConst(1, s);
@@ -499,7 +499,7 @@ public:
    void Set_eq_mult(
       const Vector& y_c,
       const Vector& y_d
-      )
+   )
    {
       SetComp(2, y_c);
       SetComp(3, y_d);
@@ -512,7 +512,7 @@ public:
    void Set_eq_mult_NonConst(
       Vector& y_c,
       Vector& y_d
-      )
+   )
    {
       SetCompNonConst(2, y_c);
       SetCompNonConst(3, y_d);
@@ -527,7 +527,7 @@ public:
       const Vector& z_U,
       const Vector& v_L,
       const Vector& v_U
-      )
+   )
    {
       SetComp(4, z_L);
       SetComp(5, z_U);
@@ -544,7 +544,7 @@ public:
       Vector& z_U,
       Vector& v_L,
       Vector& v_U
-      )
+   )
    {
       SetCompNonConst(4, z_L);
       SetCompNonConst(5, z_U);
@@ -616,12 +616,12 @@ private:
    /** Copy Constructor */
    IteratesVector(
       const IteratesVector&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const IteratesVector&
-      );
+   );
    //@}
 
    const IteratesVectorSpace* owner_space_;
@@ -632,7 +632,7 @@ private:
     */
    SmartPtr<const Vector> GetIterateFromComp(
       Index i
-      ) const
+   ) const
    {
       if( IsCompNull(i) )
       {
@@ -647,7 +647,7 @@ private:
     */
    SmartPtr<Vector> GetNonConstIterateFromComp(
       Index i
-      )
+   )
    {
       if( IsCompNull(i) )
       {
@@ -680,7 +680,7 @@ public:
       const VectorSpace& z_U_space,
       const VectorSpace& v_L_space,
       const VectorSpace& v_U_space
-      );
+   );
 
    virtual ~IteratesVectorSpace();
    //@}
@@ -695,7 +695,7 @@ public:
     */
    virtual IteratesVector* MakeNewIteratesVector(
       bool create_new = true
-      ) const
+   ) const
    {
       return new IteratesVector(this, create_new);
    }
@@ -713,7 +713,7 @@ public:
       const Vector& z_U,
       const Vector& v_L,
       const Vector& v_U
-      )
+   )
    {
       SmartPtr<IteratesVector> newvec = MakeNewIteratesVector(false);
       newvec->Set_x(x);
@@ -729,7 +729,7 @@ public:
 
    virtual CompoundVector* MakeNewCompoundVector(
       bool create_new = true
-      ) const
+   ) const
    {
       return MakeNewIteratesVector(create_new);
    }
@@ -754,7 +754,7 @@ public:
    virtual void SetCompSpace(
       Index              icomp,
       const VectorSpace& vec_space
-      )
+   )
    {
       DBG_ASSERT(false && "This is an IteratesVectorSpace - a special compound vector for Ipopt iterates. The contained spaces should not be modified.");
    }
@@ -775,12 +775,12 @@ private:
    /** Copy Constructor */
    IteratesVectorSpace(
       const IteratesVectorSpace&
-      );
+   );
 
    /** Default Assignment Operator */
    IteratesVectorSpace& operator=(
       const IteratesVectorSpace&
-      );
+   );
    //@}
 
    /** Contained Spaces */

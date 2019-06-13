@@ -24,7 +24,7 @@ public:
    //@{
    GradientScaling(
       const SmartPtr<NLP>& nlp
-      )
+   )
       : StandardScalingBase(),
         nlp_(nlp)
    {
@@ -38,14 +38,14 @@ public:
    /** Register the options for this class */
    static void RegisterOptions(
       const SmartPtr<RegisteredOptions>& roptions
-      );
+   );
 
 protected:
    /** Initialize the object from the options */
    bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    virtual void DetermineScalingParametersImpl(
       const SmartPtr<const VectorSpace>    x_space,
@@ -62,7 +62,7 @@ protected:
       SmartPtr<Vector>&                    dx,
       SmartPtr<Vector>&                    dc,
       SmartPtr<Vector>&                    dd
-      );
+   );
 
 private:
 
@@ -79,12 +79,12 @@ private:
    /** Copy Constructor */
    GradientScaling(
       const GradientScaling&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const GradientScaling&
-      );
+   );
    //@}
 
    /** pointer to the NLP to get scaling parameters */

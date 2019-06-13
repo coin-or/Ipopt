@@ -35,7 +35,7 @@ public:
 
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
 
    /** Method for initializing for the next iterative solve.
     *
@@ -58,7 +58,7 @@ public:
       const Number* resid,
       Index         iter,
       Number        norm2_rhs
-      );
+   );
 
    /** This method can be called after the Solve is over and we can
     *  delete anything that has been allocated to free memory.
@@ -87,7 +87,7 @@ private:
    /** Overloaded Assignment Operator */
    InexactPDTerminationTester& operator=(
       const InexactPDTerminationTester&
-      );
+   );
    //@}
 
    /** @name Algorithmic options */

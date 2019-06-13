@@ -43,7 +43,7 @@ public:
    /** find the total number of triplet entries of a Matrix */
    static Index GetNumberEntries(
       const Matrix& matrix
-      );
+   );
 
    /** fill the irows, jcols structure for the triplet format from the matrix */
    static void FillRowCol(
@@ -53,60 +53,60 @@ public:
       Index*        jCol,
       Index         row_offset = 0,
       Index         col_offset = 0
-      );
+   );
 
    /** fill the values for the triplet format from the matrix */
    static void FillValues(
       Index         n_entries,
       const Matrix& matrix,
       Number*       values
-      );
+   );
 
    /** fill the values from the vector into a dense double* structure */
    static void FillValuesFromVector(
       Index         dim,
       const Vector& vector,
       Number*       values
-      );
+   );
 
    /** put the values from the double* back into the vector */
    static void PutValuesInVector(
       Index         dim,
       const double* values,
       Vector&       vector
-      );
+   );
    //@}
 
 private:
    /** find the total number of triplet entries for the SumMatrix */
    static Index GetNumberEntries_(
       const SumMatrix& matrix
-      );
+   );
 
    /** find the total number of triplet entries for the SumSymMatrix */
    static Index GetNumberEntries_(
       const SumSymMatrix& matrix
-      );
+   );
 
    /** find the total number of triplet entries for the CompoundMatrix */
    static Index GetNumberEntries_(
       const CompoundMatrix& matrix
-      );
+   );
 
    /** find the total number of triplet entries for the CompoundSymMatrix */
    static Index GetNumberEntries_(
       const CompoundSymMatrix& matrix
-      );
+   );
 
    /** find the total number of triplet entries for the TransposeMatrix */
    static Index GetNumberEntries_(
       const TransposeMatrix& matrix
-      );
+   );
 
    /** find the total number of triplet entries for the TransposeMatrix */
    static Index GetNumberEntries_(
       const ExpandedMultiVectorMatrix& matrix
-      );
+   );
 
    static void FillRowCol_(
       Index             n_entries,
@@ -115,13 +115,13 @@ private:
       Index             col_offset,
       Index*            iRow,
       Index*            jCol
-      );
+   );
 
    static void FillValues_(
       Index             n_entries,
       const GenTMatrix& matrix,
       Number*           values
-      );
+   );
 
    static void FillRowCol_(
       Index             n_entries,
@@ -130,13 +130,13 @@ private:
       Index             col_offset,
       Index*            iRow,
       Index*            jCol
-      );
+   );
 
    static void FillValues_(
       Index             n_entries,
       const SymTMatrix& matrix,
       Number*           values
-      );
+   );
 
    static void FillRowCol_(
       Index             n_entries,
@@ -145,13 +145,13 @@ private:
       Index             col_offset,
       Index*            iRow,
       Index*            jCol
-      );
+   );
 
    static void FillValues_(
       Index             n_entries,
       const DiagMatrix& matrix,
       Number*           values
-      );
+   );
 
    static void FillRowCol_(
       Index                 n_entries,
@@ -160,13 +160,13 @@ private:
       Index                 col_offset,
       Index*                iRow,
       Index*                jCol
-      );
+   );
 
    static void FillValues_(
       Index                 n_entries,
       const IdentityMatrix& matrix,
       Number*               values
-      );
+   );
 
    static void FillRowCol_(
       Index                  n_entries,
@@ -175,13 +175,13 @@ private:
       Index                  col_offset,
       Index*                 iRow,
       Index*                 jCol
-      );
+   );
 
    static void FillValues_(
       Index                  n_entries,
       const ExpansionMatrix& matrix,
       Number*                values
-      );
+   );
 
    static void FillRowCol_(
       Index            n_entries,
@@ -190,13 +190,13 @@ private:
       Index            col_offset,
       Index*           iRow,
       Index*           jCol
-      );
+   );
 
    static void FillValues_(
       Index            n_entries,
       const SumMatrix& matrix,
       Number*          values
-      );
+   );
 
    static void FillRowCol_(
       Index               n_entries,
@@ -205,13 +205,13 @@ private:
       Index               col_offset,
       Index*              iRow,
       Index*              jCol
-      );
+   );
 
    static void FillValues_(
       Index               n_entries,
       const SumSymMatrix& matrix,
       Number*             values
-      );
+   );
 
    static void FillRowCol_(
       Index                 n_entries,
@@ -220,13 +220,13 @@ private:
       Index                 col_offset,
       Index*                iRow,
       Index*                jCol
-      );
+   );
 
    static void FillValues_(
       Index                 n_entries,
       const CompoundMatrix& matrix,
       Number*               values
-      );
+   );
 
    static void FillRowCol_(
       Index                    n_entries,
@@ -235,13 +235,13 @@ private:
       Index                    col_offset,
       Index*                   iRow,
       Index*                   jCol
-      );
+   );
 
    static void FillValues_(
       Index                    n_entries,
       const CompoundSymMatrix& matrix,
       Number*                  values
-      );
+   );
 
    static void FillRowCol_(
       Index               n_entries,
@@ -250,13 +250,13 @@ private:
       Index               col_offset,
       Index*              iRow,
       Index*              jCol
-      );
+   );
 
    static void FillValues_(
       Index               n_entries,
       const ScaledMatrix& matrix,
       Number*             values
-      );
+   );
 
    static void FillRowCol_(
       Index                  n_entries,
@@ -265,13 +265,13 @@ private:
       Index                  col_offset,
       Index*                 iRow,
       Index*                 jCol
-      );
+   );
 
    static void FillValues_(
       Index                  n_entries,
       const SymScaledMatrix& matrix,
       Number*                values
-      );
+   );
 
    static void FillRowCol_(
       Index                  n_entries,
@@ -280,13 +280,13 @@ private:
       Index                  col_offset,
       Index*                 iRow,
       Index*                 jCol
-      );
+   );
 
    static void FillValues_(
       Index                  n_entries,
       const TransposeMatrix& matrix,
       Number*                values
-      );
+   );
 
    static void FillRowCol_(
       Index                            n_entries,
@@ -295,13 +295,13 @@ private:
       Index                            col_offset,
       Index*                           iRow,
       Index*                           jCol
-      );
+   );
 
    static void FillValues_(
       Index                            n_entries,
       const ExpandedMultiVectorMatrix& matrix,
       Number*                          values
-      );
+   );
 };
 
 } // namespace Ipopt

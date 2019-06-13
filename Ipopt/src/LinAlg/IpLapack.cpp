@@ -17,77 +17,77 @@
 // Prototypes for the LAPACK routines
 extern "C"
 {
-/** LAPACK Fortran subroutine DPOTRS. */
-void F77_FUNC(dpotrs, DPOTRS)(
-   char*         uplo,
-   ipfint*       n,
-   ipfint*       nrhs,
-   const double* A,
-   ipfint*       ldA,
-   double*       B,
-   ipfint*       ldB,
-   ipfint*       info,
-   int           uplo_len
+   /** LAPACK Fortran subroutine DPOTRS. */
+   void F77_FUNC(dpotrs, DPOTRS)(
+      char*         uplo,
+      ipfint*       n,
+      ipfint*       nrhs,
+      const double* A,
+      ipfint*       ldA,
+      double*       B,
+      ipfint*       ldB,
+      ipfint*       info,
+      int           uplo_len
    );
 
-/** LAPACK Fortran subroutine DPOTRF. */
-void F77_FUNC(dpotrf, DPOTRF)(
-   char*   uplo,
-   ipfint* n,
-   double* A,
-   ipfint* ldA,
-   ipfint* info,
-   int     uplo_len
+   /** LAPACK Fortran subroutine DPOTRF. */
+   void F77_FUNC(dpotrf, DPOTRF)(
+      char*   uplo,
+      ipfint* n,
+      double* A,
+      ipfint* ldA,
+      ipfint* info,
+      int     uplo_len
    );
 
-/** LAPACK Fortran subroutine DSYEV */
-void F77_FUNC(dsyev, DSYEV)(
-   char*   jobz,
-   char*   uplo,
-   ipfint* n,
-   double* A,
-   ipfint* ldA,
-   double* W,
-   double* WORK,
-   ipfint* LWORK,
-   ipfint* info,
-   int     jobz_len,
-   int     uplo_len
+   /** LAPACK Fortran subroutine DSYEV */
+   void F77_FUNC(dsyev, DSYEV)(
+      char*   jobz,
+      char*   uplo,
+      ipfint* n,
+      double* A,
+      ipfint* ldA,
+      double* W,
+      double* WORK,
+      ipfint* LWORK,
+      ipfint* info,
+      int     jobz_len,
+      int     uplo_len
    );
 
-/** LAPACK Fortran subroutine DGETRF. */
-void F77_FUNC(dgetrf, DGETRF)(
-   ipfint*      m,
-   ipfint*      n,
-   double*      A,
-   ipfint*      ldA,
-   ipfintarray* IPIV,
-   ipfint*      info
+   /** LAPACK Fortran subroutine DGETRF. */
+   void F77_FUNC(dgetrf, DGETRF)(
+      ipfint*      m,
+      ipfint*      n,
+      double*      A,
+      ipfint*      ldA,
+      ipfintarray* IPIV,
+      ipfint*      info
    );
 
-/** LAPACK Fortran subroutine DGETRS. */
-void F77_FUNC(dgetrs, DGETRS)(
-   char*         trans,
-   ipfint*       n,
-   ipfint*       nrhs,
-   const double* A,
-   ipfint*       ldA,
-   ipfintarray*  IPIV,
-   double*       B,
-   ipfint*       ldB,
-   ipfint*       info,
-   int           trans_len
+   /** LAPACK Fortran subroutine DGETRS. */
+   void F77_FUNC(dgetrs, DGETRS)(
+      char*         trans,
+      ipfint*       n,
+      ipfint*       nrhs,
+      const double* A,
+      ipfint*       ldA,
+      ipfintarray*  IPIV,
+      double*       B,
+      ipfint*       ldB,
+      ipfint*       info,
+      int           trans_len
    );
 
-/** LAPACK Fortran subroutine DPPSV. */
-void F77_FUNC(dppsv, DPPSV)(
-   char*         uplo,
-   ipfint*       n,
-   ipfint*       nrhs,
-   const double* A,
-   double*       B,
-   ipfint*       ldB,
-   ipfint*       info
+   /** LAPACK Fortran subroutine DPPSV. */
+   void F77_FUNC(dppsv, DPPSV)(
+      char*         uplo,
+      ipfint*       n,
+      ipfint*       nrhs,
+      const double* A,
+      double*       B,
+      ipfint*       ldB,
+      ipfint*       info
    );
 }
 
@@ -100,7 +100,7 @@ void IpLapackDpotrs(
    Index         lda,
    Number*       b,
    Index         ldb
-   )
+)
 {
 #ifdef COIN_HAS_LAPACK
    ipfint N = ndim, NRHS = nrhs, LDA = lda, LDB = ldb, INFO;
@@ -121,7 +121,7 @@ void IpLapackDpotrf(
    Number* a,
    Index   lda,
    Index&  info
-   )
+)
 {
 #ifdef COIN_HAS_LAPACK
    ipfint N = ndim, LDA = lda, INFO;
@@ -147,7 +147,7 @@ void IpLapackDsyev(
    Index   lda,
    Number* w,
    Index&  info
-   )
+)
 {
 #ifdef COIN_HAS_LAPACK
    ipfint N = ndim, LDA = lda, INFO;
@@ -167,7 +167,7 @@ void IpLapackDsyev(
    ipfint LWORK = -1;
    double WORK_PROBE;
    F77_FUNC(dsyev, DSYEV)(&JOBZ, &UPLO, &N, a, &LDA, w,
-      &WORK_PROBE, &LWORK, &INFO, 1, 1);
+                          &WORK_PROBE, &LWORK, &INFO, 1, 1);
    DBG_ASSERT(INFO == 0);
 
    LWORK = (ipfint) WORK_PROBE;
@@ -179,7 +179,7 @@ void IpLapackDsyev(
       WORK[i] = i;
    }
    F77_FUNC(dsyev, DSYEV)(&JOBZ, &UPLO, &N, a, &LDA, w,
-      WORK, &LWORK, &INFO, 1, 1);
+                          WORK, &LWORK, &INFO, 1, 1);
 
    DBG_ASSERT(INFO >= 0);
    info = INFO;
@@ -200,7 +200,7 @@ void IpLapackDgetrf(
    Index*  ipiv,
    Index   lda,
    Index&  info
-   )
+)
 {
 #ifdef COIN_HAS_LAPACK
    ipfint M = ndim, N = ndim, LDA = lda, INFO;
@@ -225,14 +225,14 @@ void IpLapackDgetrs(
    Index*        ipiv,
    Number*       b,
    Index         ldb
-   )
+)
 {
 #ifdef COIN_HAS_LAPACK
    ipfint N = ndim, NRHS = nrhs, LDA = lda, LDB = ldb, INFO;
    char trans = 'N';
 
    F77_FUNC(dgetrs, DGETRS)(&trans, &N, &NRHS, a, &LDA, ipiv, b, &LDB,
-      &INFO, 1);
+                            &INFO, 1);
    DBG_ASSERT(INFO == 0);
 #else
 
@@ -250,7 +250,7 @@ void IpLapackDppsv(
    Number*       b,
    Index         ldb,
    Index&        info
-   )
+)
 {
 #ifdef COIN_HAS_LAPACK
    ipfint N = ndim, NRHS = nrhs, LDB = ldb, INFO;

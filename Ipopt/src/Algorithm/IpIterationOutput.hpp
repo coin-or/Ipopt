@@ -34,7 +34,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      ) = 0;
+   ) = 0;
 
    /** Method to do all the summary output per iteration.
     *
@@ -64,11 +64,11 @@ private:
    /** Copy Constructor */
    IterationOutput(
       const IterationOutput&
-      );
+   );
 
    void operator=(
       const IterationOutput&
-      );
+   );
    //@}
 
 };

@@ -23,7 +23,7 @@ namespace Ipopt
 
 SymTMatrix::SymTMatrix(
    const SymTMatrixSpace* owner_space
-   )
+)
    : SymMatrix(owner_space),
      owner_space_(owner_space),
      values_(NULL),
@@ -44,7 +44,7 @@ SymTMatrix::~SymTMatrix()
 
 void SymTMatrix::SetValues(
    const Number* Values
-   )
+)
 {
    IpBlasDcopy(Nonzeros(), Values, 1, values_, 1);
    initialized_ = true;
@@ -56,10 +56,11 @@ void SymTMatrix::MultVectorImpl(
    const Vector& x,
    Number        beta,
    Vector&       y
-   ) const
+) const
 {
    //  A few sanity checks
-   DBG_ASSERT(Dim() == x.Dim()); DBG_ASSERT(Dim() == y.Dim());
+   DBG_ASSERT(Dim() == x.Dim());
+   DBG_ASSERT(Dim() == y.Dim());
 
    // Take care of the y part of the addition
    DBG_ASSERT(initialized_);
@@ -143,7 +144,7 @@ const Number* SymTMatrix::Values() const
 void SymTMatrix::FillStruct(
    ipfint* Irn,
    ipfint* Jcn
-   ) const
+) const
 {
    DBG_ASSERT(initialized_);
    for( Index i = 0; i < Nonzeros(); i++ )
@@ -155,7 +156,7 @@ void SymTMatrix::FillStruct(
 
 void SymTMatrix::FillValues(
    Number* Values
-   ) const
+) const
 {
    DBG_ASSERT(initialized_);
    IpBlasDcopy(Nonzeros(), values_, 1, Values, 1);
@@ -171,7 +172,7 @@ bool SymTMatrix::HasValidNumbersImpl() const
 void SymTMatrix::ComputeRowAMaxImpl(
    Vector& rows_norms,
    bool    init
-   ) const
+) const
 {
    DBG_ASSERT(initialized_);
 
@@ -205,22 +206,24 @@ void SymTMatrix::PrintImpl(
    const std::string& name,
    Index              indent,
    const std::string& prefix
-   ) const
+) const
 {
-   jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent, "%sSymTMatrix \"%s\" of dimension %d with %d nonzero elements:\n",
-      prefix.c_str(), name.c_str(), Dim(), Nonzeros());
+   jnlst.Printf(level, category,
+                "\n");
+   jnlst.PrintfIndented(level, category, indent,
+                        "%sSymTMatrix \"%s\" of dimension %d with %d nonzero elements:\n", prefix.c_str(), name.c_str(), Dim(), Nonzeros());
    if( initialized_ )
    {
       for( Index i = 0; i < Nonzeros(); i++ )
       {
-         jnlst.PrintfIndented(level, category, indent, "%s%s[%5d,%5d]=%23.16e  (%d)\n", prefix.c_str(), name.c_str(),
-            Irows()[i], Jcols()[i], values_[i], i);
+         jnlst.PrintfIndented(level, category, indent,
+                              "%s%s[%5d,%5d]=%23.16e  (%d)\n", prefix.c_str(), name.c_str(), Irows()[i], Jcols()[i], values_[i], i);
       }
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent, "%sUninitialized!\n", prefix.c_str());
+      jnlst.PrintfIndented(level, category, indent,
+                           "%sUninitialized!\n", prefix.c_str());
    }
 }
 
@@ -229,7 +232,7 @@ SymTMatrixSpace::SymTMatrixSpace(
    Index        nonZeros,
    const Index* iRows,
    const Index* jCols
-   )
+)
    : SymMatrixSpace(dim),
      nonZeros_(nonZeros),
      iRows_(NULL),

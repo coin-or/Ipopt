@@ -26,7 +26,7 @@ void IpLapackDpotrs(
    Index         lda,
    Number*       b,
    Index         ldb
-   );
+);
 
 /** Wrapper for LAPACK subroutine DPOTRF.
  *
@@ -38,7 +38,7 @@ void IpLapackDpotrf(
    Number* a,
    Index   lda,
    Index&  info
-   );
+);
 
 /** Wrapper for LAPACK subroutine DSYEV.
  *
@@ -53,7 +53,7 @@ void IpLapackDsyev(
    Index   lda,
    Number* w,
    Index&  info
-   );
+);
 
 /** Wrapper for LAPACK subroutine DGETRF.
  *
@@ -66,7 +66,7 @@ void IpLapackDgetrf(
    Index*  ipiv,
    Index   lda,
    Index&  info
-   );
+);
 
 /** Wrapper for LAPACK subroutine DGETRS.
  *
@@ -80,7 +80,7 @@ void IpLapackDgetrs(
    Index*        ipiv,
    Number*       b,
    Index         ldb
-   );
+);
 
 /** Wrapper for LAPACK subroutine DPPSV.
  *
@@ -95,7 +95,7 @@ void IpLapackDppsv(
    Number*       b,
    Index         ldb,
    Index&        info
-   );
+);
 
 } // namespace Ipopt
 

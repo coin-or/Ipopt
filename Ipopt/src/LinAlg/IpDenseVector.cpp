@@ -30,7 +30,7 @@ static const Index dbg_verbosity = 0;
 
 DenseVector::DenseVector(
    const DenseVectorSpace* owner_space
-   )
+)
    : Vector(owner_space),
      owner_space_(owner_space),
      values_(NULL),
@@ -60,7 +60,7 @@ DenseVector::~DenseVector()
 
 void DenseVector::SetValues(
    const Number* x
-   )
+)
 {
    initialized_ = true;
    IpBlasDcopy(Dim(), x, 1, values_allocated(), 1);
@@ -99,13 +99,14 @@ void DenseVector::set_values_from_scalar()
 
 void DenseVector::CopyImpl(
    const Vector& x
-   )
+)
 {
    DBG_START_METH("DenseVector::CopyImpl(const Vector& x)", dbg_verbosity);
    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
    DBG_ASSERT(dynamic_cast<const DenseVector*>(&x));
 
-   DBG_ASSERT(dense_x->initialized_); DBG_ASSERT(Dim() == dense_x->Dim());
+   DBG_ASSERT(dense_x->initialized_);
+   DBG_ASSERT(Dim() == dense_x->Dim());
    homogeneous_ = dense_x->homogeneous_;
    if( homogeneous_ )
    {
@@ -120,7 +121,7 @@ void DenseVector::CopyImpl(
 
 void DenseVector::ScalImpl(
    Number alpha
-   )
+)
 {
    DBG_ASSERT(initialized_);
    if( homogeneous_ )
@@ -136,13 +137,14 @@ void DenseVector::ScalImpl(
 void DenseVector::AxpyImpl(
    Number        alpha,
    const Vector& x
-   )
+)
 {
    DBG_ASSERT(initialized_);
    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
    DBG_ASSERT(dynamic_cast<const DenseVector*>(&x));
 
-   DBG_ASSERT(dense_x->initialized_); DBG_ASSERT(Dim() == dense_x->Dim());
+   DBG_ASSERT(dense_x->initialized_);
+   DBG_ASSERT(Dim() == dense_x->Dim());
    if( homogeneous_ )
    {
       if( dense_x->homogeneous_ )
@@ -177,14 +179,15 @@ void DenseVector::AxpyImpl(
 
 Number DenseVector::DotImpl(
    const Vector& x
-   ) const
+) const
 {
    DBG_ASSERT(initialized_);
    Number retValue;
    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
    DBG_ASSERT(dynamic_cast<const DenseVector*>(&x));
 
-   DBG_ASSERT(dense_x->initialized_); DBG_ASSERT(Dim() == dense_x->Dim());
+   DBG_ASSERT(dense_x->initialized_);
+   DBG_ASSERT(Dim() == dense_x->Dim());
    if( homogeneous_ )
    {
       if( dense_x->homogeneous_ )
@@ -258,7 +261,7 @@ Number DenseVector::AmaxImpl() const
 
 void DenseVector::SetImpl(
    Number value
-   )
+)
 {
    initialized_ = true;
    homogeneous_ = true;
@@ -273,7 +276,7 @@ void DenseVector::SetImpl(
 
 void DenseVector::ElementWiseDivideImpl(
    const Vector& x
-   )
+)
 {
    DBG_ASSERT(initialized_);
    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
@@ -319,7 +322,7 @@ void DenseVector::ElementWiseDivideImpl(
 
 void DenseVector::ElementWiseMultiplyImpl(
    const Vector& x
-   )
+)
 {
    DBG_ASSERT(initialized_);
    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
@@ -368,7 +371,7 @@ void DenseVector::ElementWiseMultiplyImpl(
 
 void DenseVector::ElementWiseMaxImpl(
    const Vector& x
-   )
+)
 {
    DBG_ASSERT(initialized_);
    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
@@ -414,7 +417,7 @@ void DenseVector::ElementWiseMaxImpl(
 
 void DenseVector::ElementWiseMinImpl(
    const Vector& x
-   )
+)
 {
    DBG_ASSERT(initialized_);
    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
@@ -508,7 +511,7 @@ void DenseVector::ElementWiseSqrtImpl()
 
 void DenseVector::AddScalarImpl(
    Number scalar
-   )
+)
 {
    DBG_ASSERT(initialized_);
    if( homogeneous_ )
@@ -652,7 +655,7 @@ void DenseVector::AddTwoVectorsImpl(
    Number        b,
    const Vector& v2,
    Number        c
-   )
+)
 {
    const Number* values_v1 = NULL;
    bool homogeneous_v1 = false;
@@ -662,7 +665,8 @@ void DenseVector::AddTwoVectorsImpl(
       const DenseVector* dense_v1 = static_cast<const DenseVector*>(&v1);
       DBG_ASSERT(dynamic_cast<const DenseVector*>(&v1));
 
-      DBG_ASSERT(dense_v1->initialized_); DBG_ASSERT(Dim() == dense_v1->Dim());
+      DBG_ASSERT(dense_v1->initialized_);
+      DBG_ASSERT(Dim() == dense_v1->Dim());
       values_v1 = dense_v1->values_;
       homogeneous_v1 = dense_v1->homogeneous_;
       if( homogeneous_v1 )
@@ -678,7 +682,8 @@ void DenseVector::AddTwoVectorsImpl(
       const DenseVector* dense_v2 = static_cast<const DenseVector*>(&v2);
       DBG_ASSERT(dynamic_cast<const DenseVector*>(&v2));
 
-      DBG_ASSERT(dense_v2->initialized_); DBG_ASSERT(Dim() == dense_v2->Dim());
+      DBG_ASSERT(dense_v2->initialized_);
+      DBG_ASSERT(Dim() == dense_v2->Dim());
       values_v2 = dense_v2->values_;
       homogeneous_v2 = dense_v2->homogeneous_;
       if( homogeneous_v2 )
@@ -1201,7 +1206,7 @@ void DenseVector::AddTwoVectorsImpl(
 Number DenseVector::FracToBoundImpl(
    const Vector& delta,
    Number        tau
-   ) const
+) const
 {
    DBG_ASSERT(Dim() == delta.Dim());
    DBG_ASSERT(tau >= 0.);
@@ -1264,15 +1269,17 @@ void DenseVector::AddVectorQuotientImpl(
    const Vector& z,
    const Vector& s,
    Number        c
-   )
+)
 {
-   DBG_ASSERT(Dim() == z.Dim()); DBG_ASSERT(Dim() == s.Dim());
+   DBG_ASSERT(Dim() == z.Dim());
+   DBG_ASSERT(Dim() == s.Dim());
    const DenseVector* dense_z = static_cast<const DenseVector*>(&z);
    DBG_ASSERT(dynamic_cast<const DenseVector*>(&z));
    const DenseVector* dense_s = static_cast<const DenseVector*>(&s);
    DBG_ASSERT(dynamic_cast<const DenseVector*>(&s));
 
-   DBG_ASSERT(dense_z->initialized_); DBG_ASSERT(dense_s->initialized_);
+   DBG_ASSERT(dense_z->initialized_);
+   DBG_ASSERT(dense_s->initialized_);
 
    DBG_ASSERT(c == 0. || initialized_);
    bool homogeneous_z = dense_z->homogeneous_;
@@ -1404,7 +1411,7 @@ void DenseVector::AddVectorQuotientImpl(
 void DenseVector::CopyToPos(
    Index         Pos,
    const Vector& x
-   )
+)
 {
    Index dim_x = x.Dim();
    DBG_ASSERT(dim_x + Pos <= Dim());
@@ -1429,7 +1436,7 @@ void DenseVector::CopyToPos(
 void DenseVector::CopyFromPos(
    Index         Pos,
    const Vector& x
-   )
+)
 {
    DBG_ASSERT(Dim() + Pos <= x.Dim());
    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
@@ -1455,17 +1462,19 @@ void DenseVector::PrintImplOffset(
    Index              indent,
    const std::string& prefix,
    Index              offset /* = 1 */
-   ) const
+) const
 {
-   jnlst.PrintfIndented(level, category, indent, "%sDenseVector \"%s\" with %d elements:\n", prefix.c_str(),
-      name.c_str(), Dim());
+   jnlst.PrintfIndented(level, category, indent,
+                        "%sDenseVector \"%s\" with %d elements:\n", prefix.c_str(),
+                        name.c_str(), Dim());
 
    if( initialized_ )
    {
       if( homogeneous_ )
       {
-         jnlst.PrintfIndented(level, category, indent, "%sHomogeneous vector, all elements have value %23.16e\n",
-            prefix.c_str(), scalar_);
+         jnlst.PrintfIndented(level, category, indent,
+                              "%sHomogeneous vector, all elements have value %23.16e\n",
+                              prefix.c_str(), scalar_);
       }
       else
       {
@@ -1474,23 +1483,26 @@ void DenseVector::PrintImplOffset(
             const std::vector<std::string>& idx_names = owner_space_->GetStringMetaData("idx_names");
             for( Index i = 0; i < Dim(); i++ )
             {
-               jnlst.PrintfIndented(level, category, indent, "%s%s[%5d]{%s}=%23.16e\n", prefix.c_str(), name.c_str(),
-                  i + offset, idx_names[i].c_str(), values_[i]);
+               jnlst.PrintfIndented(level, category, indent,
+                                    "%s%s[%5d]{%s}=%23.16e\n", prefix.c_str(), name.c_str(),
+                                    i + offset, idx_names[i].c_str(), values_[i]);
             }
          }
          else
          {
             for( Index i = 0; i < Dim(); i++ )
             {
-               jnlst.PrintfIndented(level, category, indent, "%s%s[%5d]=%23.16e\n", prefix.c_str(), name.c_str(),
-                  i + offset, values_[i]);
+               jnlst.PrintfIndented(level, category, indent,
+                                    "%s%s[%5d]=%23.16e\n", prefix.c_str(), name.c_str(),
+                                    i + offset, values_[i]);
             }
          }
       }
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent, "%sUninitialized!\n", prefix.c_str());
+      jnlst.PrintfIndented(level, category, indent,
+                           "%sUninitialized!\n", prefix.c_str());
    }
 }
 

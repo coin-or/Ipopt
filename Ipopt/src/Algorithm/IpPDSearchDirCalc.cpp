@@ -16,37 +16,40 @@ static const Index dbg_verbosity = 0;
 
 PDSearchDirCalculator::PDSearchDirCalculator(
    const SmartPtr<PDSystemSolver>& pd_solver
-   )
+)
    : pd_solver_(pd_solver)
 {
    DBG_START_FUN("PDSearchDirCalculator::PDSearchDirCalculator",
-      dbg_verbosity); DBG_ASSERT(IsValid(pd_solver_));
+                 dbg_verbosity);
+   DBG_ASSERT(IsValid(pd_solver_));
 }
 
 PDSearchDirCalculator::~PDSearchDirCalculator()
 {
    DBG_START_FUN("PDSearchDirCalculator::~PDSearchDirCalculator()",
-      dbg_verbosity);
+                 dbg_verbosity);
 }
 
 void PDSearchDirCalculator::RegisterOptions(
    const SmartPtr<RegisteredOptions>& roptions
-   )
+)
 {
    roptions->SetRegisteringCategory("Step Calculation");
-   roptions->AddStringOption2("fast_step_computation", "Indicates if the linear system should be solved quickly.", "no",
-      "no", "Verify solution of linear system by computing residuals.", "yes",
-      "Trust that linear systems are solved well.",
-      "If set to yes, the algorithm assumes that the linear system that is "
-         "solved to obtain the search direction, is solved sufficiently well. "
-         "In that case, no residuals are computed, and the computation of the "
-         "search direction is a little faster.");
+   roptions->AddStringOption2(
+      "fast_step_computation",
+      "Indicates if the linear system should be solved quickly.",
+      "no",
+      "no", "Verify solution of linear system by computing residuals.",
+      "yes", "Trust that linear systems are solved well.",
+      "If set to yes, the algorithm assumes that the linear system that is solved to obtain the search direction, "
+      "is solved sufficiently well. "
+      "In that case, no residuals are computed, and the computation of the search direction is a little faster.");
 }
 
 bool PDSearchDirCalculator::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    options.GetBoolValue("fast_step_computation", fast_step_computation_, prefix);
    options.GetBoolValue("mehrotra_algorithm", mehrotra_algorithm_, prefix);
@@ -56,7 +59,7 @@ bool PDSearchDirCalculator::InitializeImpl(
 bool PDSearchDirCalculator::ComputeSearchDirection()
 {
    DBG_START_METH("PDSearchDirCalculator::ComputeSearchDirection",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    bool improve_solution = false;
    if( IpData().HaveDeltas() )
@@ -80,7 +83,8 @@ bool PDSearchDirCalculator::ComputeSearchDirection()
       if( nbounds > 0 && mehrotra_algorithm_ )
       {
          // set up the right hand side a la Mehrotra
-         DBG_ASSERT(IpData().HaveAffineDeltas()); DBG_ASSERT(!IpData().HaveDeltas());
+         DBG_ASSERT(IpData().HaveAffineDeltas());
+         DBG_ASSERT(!IpData().HaveDeltas());
          const SmartPtr<const IteratesVector> delta_aff = IpData().delta_aff();
 
          SmartPtr<Vector> tmpvec = delta_aff->z_L()->MakeNew();

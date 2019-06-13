@@ -48,30 +48,62 @@ void CGSearchDirCalculator::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->AddLowerBoundedNumberOption("penalty_init_max",
-                                         "Maximal value for the intial penalty parameter (for Chen-Goldfarb line search).", 0, true, 1e5, "");
-   roptions->AddLowerBoundedNumberOption("penalty_init_min",
-                                         "Minimal value for the intial penalty parameter for line search(for Chen-Goldfarb line search).", 0., true, 1.,
-                                         "");
-   roptions->AddLowerBoundedNumberOption("penalty_max",
-                                         "Maximal value for the penalty parameter (for Chen-Goldfarb line search).", 0, true, 1e30, "");
-   roptions->AddLowerBoundedNumberOption("pen_des_fact",
-                                         "a parameter used in penalty parameter computation (for Chen-Goldfarb line search).", 0.0, true, 2e-1, "");
-   roptions->AddLowerBoundedNumberOption("kappa_x_dis", "a parameter used to check if the fast direction can be used as"
-                                         "the line search direction (for Chen-Goldfarb line search).", 0.0, true, 1e2, "");
-   roptions->AddLowerBoundedNumberOption("kappa_y_dis", "a parameter used to check if the fast direction can be used as"
-                                         "the line search direction (for Chen-Goldfarb line search).", 0.0, true, 1e4, "");
-   roptions->AddLowerBoundedNumberOption("vartheta", "a parameter used to check if the fast direction can be used as"
-                                         "the line search direction (for Chen-Goldfarb line search).", 0.0, true, 0.5, "");
-   roptions->AddLowerBoundedNumberOption("delta_y_max", "a parameter used to check if the fast direction can be used as"
-                                         "the line search direction (for Chen-Goldfarb line search).", 0.0, true, 1e12, "");
-   roptions->AddLowerBoundedNumberOption("fast_des_fact",
-                                         "a parameter used to check if the fast direction can be used as"
-                                         "the line search direction (for Chen-Goldfarb line search).", 0.0, true, 1e-1, "");
-   roptions->AddLowerBoundedNumberOption("pen_init_fac", "a parameter used to choose initial penalty parameters"
-                                         "when the regularized Newton method is used.", 0.0, true, 5e1, "");
-   roptions->AddStringOption2("never_use_fact_cgpen_direction", "Toggle to switch off the fast Chen-Goldfarb direction",
-                              "no", "no", "always compute the fast direction", "yes", "never compute the fast direction", "");
+   roptions->AddLowerBoundedNumberOption(
+      "penalty_init_max",
+      "Maximal value for the initial penalty parameter (for Chen-Goldfarb line search).",
+      0., true,
+      1e5);
+   roptions->AddLowerBoundedNumberOption(
+      "penalty_init_min",
+      "Minimal value for the initial penalty parameter for line search (for Chen-Goldfarb line search).",
+      0., true,
+      1.);
+   roptions->AddLowerBoundedNumberOption(
+      "penalty_max",
+      "Maximal value for the penalty parameter (for Chen-Goldfarb line search).",
+      0., true,
+      1e30);
+   roptions->AddLowerBoundedNumberOption(
+      "pen_des_fact",
+      "a parameter used in penalty parameter computation (for Chen-Goldfarb line search).",
+      0., true,
+      2e-1);
+   roptions->AddLowerBoundedNumberOption(
+      "kappa_x_dis",
+      "a parameter used to check if the fast direction can be used as the line search direction (for Chen-Goldfarb line search).",
+      0., true,
+      1e2);
+   roptions->AddLowerBoundedNumberOption(
+      "kappa_y_dis",
+      "a parameter used to check if the fast direction can be used as the line search direction (for Chen-Goldfarb line search).",
+      0., true,
+      1e4);
+   roptions->AddLowerBoundedNumberOption(
+      "vartheta",
+      "a parameter used to check if the fast direction can be used as the line search direction (for Chen-Goldfarb line search).",
+      0., true,
+      0.5);
+   roptions->AddLowerBoundedNumberOption(
+      "delta_y_max",
+      "a parameter used to check if the fast direction can be used as the line search direction (for Chen-Goldfarb line search).",
+      0., true,
+      1e12);
+   roptions->AddLowerBoundedNumberOption(
+      "fast_des_fact",
+      "a parameter used to check if the fast direction can be used as the line search direction (for Chen-Goldfarb line search).",
+      0., true,
+      1e-1);
+   roptions->AddLowerBoundedNumberOption(
+      "pen_init_fac",
+      "a parameter used to choose initial penalty parameters when the regularized Newton method is used.",
+      0., true,
+      5e1);
+   roptions->AddStringOption2(
+      "never_use_fact_cgpen_direction",
+      "Toggle to switch off the fast Chen-Goldfarb direction",
+      "no",
+      "no", "always compute the fast direction",
+      "yes", "never compute the fast direction");
 }
 
 bool CGSearchDirCalculator::InitializeImpl(
@@ -123,8 +155,10 @@ bool CGSearchDirCalculator::ComputeSearchDirection()
       if( !CGPenData().NeverTryPureNewton() )
       {
          Number y_max = Max(IpData().curr()->y_c()->Amax(), IpData().curr()->y_d()->Amax());
-         Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH, "Initializing penalty parameter for KKT matrix...\n");
-         Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH, "Max(||y_c||_inf,||y_d||_inf = %8.2e\n", y_max);
+         Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                        "Initializing penalty parameter for KKT matrix...\n");
+         Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                        "Max(||y_c||_inf,||y_d||_inf = %8.2e\n", y_max);
          penalty_init = Max(penalty_init_min_, Min(y_max, penalty_init_max_));
       }
       else
@@ -138,8 +172,8 @@ bool CGSearchDirCalculator::ComputeSearchDirection()
       }
       CGPenData().Set_penalty(penalty_init);
       CGPenData().Set_kkt_penalty(kkt_penalty_init);
-      Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH, "Initial value of the penalty parameter for line search = %8.2e\n",
-                     penalty_init);
+      Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                     "Initial value of the penalty parameter for line search = %8.2e\n", penalty_init);
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
                      "Initial value of the kkt penalty parameter for scaling the linear system = %8.2e\n", kkt_penalty_init);
    }
@@ -239,7 +273,8 @@ bool CGSearchDirCalculator::ComputeSearchDirection()
       Number diff_dx_nrm = sqrt(
                               pow(delta_fast_x->Nrm2(), 2.) + pow(delta_fast_s->Nrm2(), 2.) - 2. * delta_x->Dot(*delta_fast_x)
                               - 2. * delta_s->Dot(*delta_fast_s) + pow(delta_x->Nrm2(), 2.) + pow(delta_s->Nrm2(), 2.));
-      Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH, "Testing if fast direction can be used.\n"
+      Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                     "Testing if fast direction can be used.\n"
                      "  diff_dx_nrm = %8.2e tilde_dx_norm = %8.2e\n", diff_dx_nrm, tilde_dx_nrm);
       tilde_dx_nrm = Max(tilde_dx_nrm, pow(tilde_dx_nrm, vartheta_));
       if( diff_dx_nrm > kappa_x_dis_ * tilde_dx_nrm )
@@ -259,7 +294,8 @@ bool CGSearchDirCalculator::ComputeSearchDirection()
          Number bar_y_nrm = sqrt(
                                pow(y_c->Nrm2(), 2.) + pow(y_d->Nrm2(), 2.) + 2. * y_c->Dot(*delta_y_c) + 2. * y_d->Dot(*delta_y_d)
                                + pow(delta_y_c->Nrm2(), 2.) + pow(delta_y_d->Nrm2(), 2.));
-         Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH, "Testing if fast direction can be used.\n"
+         Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                        "Testing if fast direction can be used.\n"
                         "  tilde_dy_nrm = %8.2e bar_y_nrm = %8.2e\n", tilde_dy_nrm, bar_y_nrm);
          if( tilde_dy_nrm > Max(delta_y_max_, kappa_y_dis_ * bar_y_nrm) )
          {
@@ -272,8 +308,8 @@ bool CGSearchDirCalculator::ComputeSearchDirection()
          // penalty functions are not too much off
          Number dT_times_BarH_times_d = CGPenCq().dT_times_barH_times_d();
          Number fast_direct_deriv = CGPenCq().curr_fast_direct_deriv_penalty_function();
-         Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH, "dT_times_BarH_times_d = %23.15e  fast_direct_deriv = %23.15e\n",
-                        dT_times_BarH_times_d, fast_direct_deriv);
+         Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
+                        "dT_times_BarH_times_d = %23.15e  fast_direct_deriv = %23.15e\n", dT_times_BarH_times_d, fast_direct_deriv);
          if( fast_direct_deriv > fast_des_fact_ * dT_times_BarH_times_d )
          {
             keep_fast_delta = false;

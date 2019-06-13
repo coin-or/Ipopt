@@ -21,10 +21,10 @@ void IterativeSolverTerminationTester::GetVectors(
    SmartPtr<const Vector>& comp_s,
    SmartPtr<const Vector>& comp_c,
    SmartPtr<const Vector>& comp_d
-   )
+)
 {
    DBG_ASSERT(ndim == IpData().curr()->x()->Dim() + IpData().curr()->s()->Dim() +
-      IpData().curr()->y_c()->Dim() + IpData().curr()->y_d()->Dim());
+              IpData().curr()->y_c()->Dim() + IpData().curr()->y_d()->Dim());
 
    // x
    SmartPtr<Vector> sol_x = IpData().curr()->x()->MakeNew();

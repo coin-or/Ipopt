@@ -37,7 +37,7 @@ public:
    bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** @name Methods for requesting solution of the linear system. */
    //@{
@@ -46,7 +46,7 @@ public:
       Index        nonzeros,
       const Index* airn,
       const Index* ajcn
-      );
+   );
 
    virtual double* GetValuesArrayPtr();
 
@@ -58,7 +58,7 @@ public:
       double*      rhs_vals,
       bool         check_NegEVals,
       Index        numberOfNegEVals
-      );
+   );
 
    virtual Index NumberOfNegEVals() const;
    //@}
@@ -81,7 +81,7 @@ public:
    //@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
    //@}
 
 private:
@@ -96,12 +96,12 @@ private:
    /** Copy Constructor */
    Ma57TSolverInterface(
       const Ma57TSolverInterface&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const Ma57TSolverInterface&
-      );
+   );
    //@}
 
    /** @name Information about the matrix */
@@ -185,7 +185,7 @@ private:
    ESymSolverStatus SymbolicFactorization(
       const Index* airn,
       const Index* ajcn
-      );
+   );
 
    /** Call MA57BD to factorize the Matrix.
     *
@@ -197,13 +197,13 @@ private:
       const Index* ajcn,
       bool         check_NegEVals,
       Index        numberOfNegEVals
-      );
+   );
 
    /** Call MA57CD to do the backsolve. */
    ESymSolverStatus Backsolve(
       Index   nrhs,
       double* rhs_vals
-      );
+   );
    //@}
 };
 

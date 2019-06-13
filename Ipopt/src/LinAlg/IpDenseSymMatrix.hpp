@@ -32,7 +32,7 @@ public:
    /** Constructor, taking the owner_space. */
    DenseSymMatrix(
       const DenseSymMatrixSpace* owner_space
-      );
+   );
 
    /** Destructor */
    ~DenseSymMatrix();
@@ -68,7 +68,7 @@ public:
    /** Set this matrix to be a multiple of the identity matrix. */
    void FillIdentity(
       Number factor = 1.
-      );
+   );
 
    /** Method for adding another matrix to this one.
     *
@@ -78,7 +78,7 @@ public:
       Number                alpha,
       const DenseSymMatrix& A,
       Number                beta
-      );
+   );
 
    /** Method for adding a high-rank update to this matrix.
     *
@@ -90,7 +90,7 @@ public:
       Number                alpha,
       const DenseGenMatrix& V,
       Number                beta
-      );
+   );
 
    /** Method for adding a high-rank update to this matrix.
     *
@@ -102,7 +102,7 @@ public:
       const MultiVectorMatrix& V1,
       const MultiVectorMatrix& V2,
       Number                   beta
-      );
+   );
 
    /** Method for doing a specialized Add operation, required in the
     *  limited memory SR1 update.
@@ -114,7 +114,7 @@ public:
    void SpecialAddForLMSR1(
       const DenseVector&    D,
       const DenseGenMatrix& L
-      );
+   );
 
 protected:
    /**@name Overloaded methods from Matrix base class*/
@@ -124,14 +124,14 @@ protected:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual bool HasValidNumbersImpl() const;
 
    virtual void ComputeRowAMaxImpl(
       Vector& rows_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void PrintImpl(
       const Journalist&  jnlst,
@@ -140,7 +140,7 @@ protected:
       const std::string& name,
       Index              indent,
       const std::string& prefix
-      ) const;
+   ) const;
    //@}
 
 private:
@@ -158,12 +158,12 @@ private:
    /** Copy Constructor */
    DenseSymMatrix(
       const DenseSymMatrix&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const DenseSymMatrix&
-      );
+   );
    //@}
 
    const DenseSymMatrixSpace* owner_space_;
@@ -187,7 +187,7 @@ public:
     */
    DenseSymMatrixSpace(
       Index nDim
-      );
+   );
 
    /** Destructor */
    ~DenseSymMatrixSpace()

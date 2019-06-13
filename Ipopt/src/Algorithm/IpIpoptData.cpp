@@ -13,7 +13,7 @@ namespace Ipopt
 IpoptData::IpoptData(
    SmartPtr<IpoptAdditionalData> add_data /*= NULL*/,
    Number                        cpu_time_start /*= -1.*/
-   )
+)
    : cpu_time_start_(cpu_time_start),
      add_data_(add_data)
 { }
@@ -23,25 +23,27 @@ IpoptData::~IpoptData()
 
 void IpoptData::RegisterOptions(
    const SmartPtr<RegisteredOptions>& roptions
-   )
+)
 {
    roptions->SetRegisteringCategory("Convergence");
-   roptions->AddLowerBoundedNumberOption("tol", "Desired convergence tolerance (relative).", 0.0, true, 1e-8,
-      "Determines the convergence tolerance for the algorithm.  The "
-         "algorithm terminates successfully, if the (scaled) NLP error "
-         "becomes smaller than this value, and if the (absolute) criteria "
-         "according to \"dual_inf_tol\", \"constr_viol_tol\", and "
-         "\"compl_inf_tol\" are met.  (This is epsilon_tol in Eqn. (6) in "
-         "implementation paper).  See also \"acceptable_tol\" as a second "
-         "termination criterion.  Note, some other algorithmic features also use "
-         "this quantity to determine thresholds etc.");
+   roptions->AddLowerBoundedNumberOption(
+      "tol",
+      "Desired convergence tolerance (relative).",
+      0., true,
+      1e-8,
+      "Determines the convergence tolerance for the algorithm. "
+      "The algorithm terminates successfully, if the (scaled) NLP error becomes smaller than this value, and "
+      "if the (absolute) criteria according to \"dual_inf_tol\", \"constr_viol_tol\", and \"compl_inf_tol\" are met. "
+      "(This is epsilon_tol in Eqn. (6) in implementation paper). "
+      "See also \"acceptable_tol\" as a second termination criterion. "
+      "Note, some other algorithmic features also use this quantity to determine thresholds etc.");
 }
 
 bool IpoptData::Initialize(
    const Journalist&  jnlst,
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
 #if 0
    // I (AW) took the following heuristic out again, since it seemed
@@ -106,7 +108,7 @@ bool IpoptData::InitializeDataStructures(
    bool      want_y_d,
    bool      want_z_L,
    bool      want_z_U
-   )
+)
 {
    DBG_ASSERT(initialize_called_);
    /*
@@ -125,7 +127,7 @@ bool IpoptData::InitializeDataStructures(
 
    // Get the required linear algebra structures from the model
    bool retValue = ip_nlp.InitializeStructures(new_x, want_x, new_y_c, want_y_c, new_y_d, want_y_d, new_z_L, want_z_L,
-      new_z_U, want_z_U, new_v_L, new_v_U);
+                   new_z_U, want_z_U, new_v_L, new_v_U);
    if( !retValue )
    {
       return false;
@@ -134,11 +136,11 @@ bool IpoptData::InitializeDataStructures(
    new_s = new_y_d->MakeNew(); // same dimension as d
 
    iterates_space_ = new IteratesVectorSpace(*(new_x->OwnerSpace()), *(new_s->OwnerSpace()), *(new_y_c->OwnerSpace()),
-      *(new_y_d->OwnerSpace()), *(new_z_L->OwnerSpace()), *(new_z_U->OwnerSpace()), *(new_v_L->OwnerSpace()),
-      *(new_v_U->OwnerSpace()));
+         *(new_y_d->OwnerSpace()), *(new_z_L->OwnerSpace()), *(new_z_U->OwnerSpace()), *(new_v_L->OwnerSpace()),
+         *(new_v_U->OwnerSpace()));
 
    curr_ = iterates_space_->MakeNewIteratesVector(*new_x, *new_s, *new_y_c, *new_y_d, *new_z_L, *new_z_U, *new_v_L,
-      *new_v_U);
+           *new_v_U);
 #if COIN_IPOPT_CHECKLEVEL > 0
 
    debug_curr_tag_ = curr_->GetTag();
@@ -174,7 +176,7 @@ void IpoptData::SetTrialPrimalVariablesFromStep(
    Number        alpha,
    const Vector& delta_x,
    const Vector& delta_s
-   )
+)
 {
    DBG_ASSERT(have_prototypes_);
 
@@ -197,7 +199,7 @@ void IpoptData::SetTrialEqMultipliersFromStep(
    Number        alpha,
    const Vector& delta_y_c,
    const Vector& delta_y_d
-   )
+)
 {
    DBG_ASSERT(have_prototypes_);
 
@@ -217,7 +219,7 @@ void IpoptData::SetTrialBoundMultipliersFromStep(
    const Vector& delta_z_U,
    const Vector& delta_v_L,
    const Vector& delta_v_U
-   )
+)
 {
    DBG_ASSERT(have_prototypes_);
 
@@ -239,7 +241,15 @@ void IpoptData::SetTrialBoundMultipliersFromStep(
 
 void IpoptData::AcceptTrialPoint()
 {
-   DBG_ASSERT(IsValid(trial_)); DBG_ASSERT(IsValid(trial_->x())); DBG_ASSERT(IsValid(trial_->s())); DBG_ASSERT(IsValid(trial_->y_c())); DBG_ASSERT(IsValid(trial_->y_d())); DBG_ASSERT(IsValid(trial_->z_L())); DBG_ASSERT(IsValid(trial_->z_U())); DBG_ASSERT(IsValid(trial_->v_L())); DBG_ASSERT(IsValid(trial_->v_U()));
+   DBG_ASSERT(IsValid(trial_));
+   DBG_ASSERT(IsValid(trial_->x()));
+   DBG_ASSERT(IsValid(trial_->s()));
+   DBG_ASSERT(IsValid(trial_->y_c()));
+   DBG_ASSERT(IsValid(trial_->y_d()));
+   DBG_ASSERT(IsValid(trial_->z_L()));
+   DBG_ASSERT(IsValid(trial_->z_U()));
+   DBG_ASSERT(IsValid(trial_->v_L()));
+   DBG_ASSERT(IsValid(trial_->v_U()));
 
    CopyTrialToCurrent();
 

@@ -34,7 +34,7 @@ static const Index dbg_verbosity = 0;
 
 ProbingMuOracle::ProbingMuOracle(
    const SmartPtr<PDSystemSolver>& pd_solver
-   )
+)
    : MuOracle(),
      pd_solver_(pd_solver)
 {
@@ -46,7 +46,7 @@ ProbingMuOracle::~ProbingMuOracle()
 
 void ProbingMuOracle::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
-   )
+)
 {
    // None to register...
 }
@@ -54,7 +54,7 @@ void ProbingMuOracle::RegisterOptions(
 bool ProbingMuOracle::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    options.GetNumericValue("sigma_max", sigma_max_, prefix);
 
@@ -65,16 +65,17 @@ bool ProbingMuOracle::CalculateMu(
    Number  mu_min,
    Number  mu_max,
    Number& new_mu
-   )
+)
 {
    DBG_START_METH("ProbingMuOracle::CalculateMu",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    /////////////////////////////////////
    // Compute the affine scaling step //
    /////////////////////////////////////
 
-   Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "Solving the Primal Dual System for the affine step\n");
+   Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                  "Solving the Primal Dual System for the affine step\n");
    // First get the right hand side
    SmartPtr<IteratesVector> rhs = IpData().curr()->MakeNewContainer();
 
@@ -96,7 +97,8 @@ bool ProbingMuOracle::CalculateMu(
    bool retval = pd_solver_->Solve(-1.0, 0.0, *rhs, *step, allow_inexact);
    if( !retval )
    {
-      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "The linear system could not be solved for the affine step!\n");
+      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                     "The linear system could not be solved for the affine step!\n");
       return false;
    }
 
@@ -111,19 +113,21 @@ bool ProbingMuOracle::CalculateMu(
 
    Number alpha_dual_aff = IpCq().dual_frac_to_the_bound(1.0, *step->z_L(), *step->z_U(), *step->v_L(), *step->v_U());
 
-   Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "  The affine maximal step sizes are\n"
-      "   alpha_primal_aff = %23.16e\n"
-      "   alpha_dual_aff = %23.16e\n", alpha_primal_aff, alpha_dual_aff);
+   Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                  "  The affine maximal step sizes are\n"
+                  "   alpha_primal_aff = %23.16e\n"
+                  "   alpha_dual_aff = %23.16e\n", alpha_primal_aff, alpha_dual_aff);
 
    // now compute the average complementarity at the affine step
    // ToDo shoot for mu_min instead of 0?
    Number mu_aff = CalculateAffineMu(alpha_primal_aff, alpha_dual_aff, *step);
-   Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "  The average complementariy at the affine step is %23.16e\n", mu_aff);
+   Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                  "  The average complementarity at the affine step is %23.16e\n", mu_aff);
 
    // get the current average complementarity
    Number mu_curr = IpCq().curr_avrg_compl();
-   Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "  The average complementariy at the current point is %23.16e\n",
-      mu_curr);
+   Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                  "  The average complementarity at the current point is %23.16e\n", mu_curr);
    DBG_ASSERT(mu_curr > 0.);
 
    // Apply Mehrotra's rule
@@ -152,7 +156,7 @@ Number ProbingMuOracle::CalculateAffineMu(
    Number                alpha_primal,
    Number                alpha_dual,
    const IteratesVector& step
-   )
+)
 {
    // Get the current values of the slack variables and bound multipliers
    SmartPtr<const Vector> slack_x_L = IpCq().curr_slack_x_L();

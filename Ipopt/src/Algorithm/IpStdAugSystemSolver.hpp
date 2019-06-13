@@ -30,7 +30,7 @@ public:
    /** Constructor using only a linear solver object */
    StdAugSystemSolver(
       SymLinearSolver& LinSolver
-      );
+   );
 
    /** Destructor */
    virtual ~StdAugSystemSolver();
@@ -39,7 +39,7 @@ public:
    bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Set up the augmented system and solve it for a set of given
     *  right hand side - implementation for GenTMatrices and
@@ -68,7 +68,7 @@ public:
       std::vector<SmartPtr<Vector> >&       sol_dV,
       bool                                  check_NegEVals,
       Index                                 numberOfNegEVals
-      );
+   );
 
    /** Number of negative eigenvalues detected during last solve.
     *
@@ -113,12 +113,12 @@ private:
    /** Copy Constructor */
    StdAugSystemSolver(
       const StdAugSystemSolver&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const StdAugSystemSolver&
-      );
+   );
    //@}
 
    /** Create the matrix space for the Compound Sym Matrix that
@@ -135,7 +135,7 @@ private:
       const Vector&    proto_s,
       const Vector&    proto_c,
       const Vector&    proto_d
-      );
+   );
 
    /** Create the new compound sym matrix that represents the
     *  augmented system.
@@ -160,7 +160,7 @@ private:
       const Vector&    proto_s,
       const Vector&    proto_c,
       const Vector&    proto_d
-      );
+   );
 
    /** Check the internal tags and decide if the passed variables are
     *  different from what is in the augmented_system_.
@@ -178,7 +178,7 @@ private:
       const Matrix&    J_d,
       const Vector*    D_d,
       double           delta_d
-      );
+   );
 
    /** The linear solver object that is to be used to solve the
     *  linear systems.

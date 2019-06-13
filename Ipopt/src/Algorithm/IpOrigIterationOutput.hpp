@@ -29,7 +29,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Method to do all the summary output per iteration.
     *
@@ -42,7 +42,7 @@ public:
    //@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
    //@}
 
 private:
@@ -58,12 +58,12 @@ private:
    /** Copy Constructor */
    OrigIterationOutput(
       const OrigIterationOutput&
-      );
+   );
 
    /** Overloaded Assignment Operator */
    void operator=(
       const OrigIterationOutput&
-      );
+   );
    //@}
 
    /** Flag indicating weather info string should be printed at end

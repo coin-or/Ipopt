@@ -15,7 +15,7 @@ static const Index dbg_verbosity = 0;
 
 LowRankAugSystemSolver::LowRankAugSystemSolver(
    AugSystemSolver& aug_system_solver
-   )
+)
    : AugSystemSolver(),
      aug_system_solver_(&aug_system_solver),
      w_tag_(0),
@@ -31,7 +31,8 @@ LowRankAugSystemSolver::LowRankAugSystemSolver(
      d_d_tag_(0),
      delta_d_(0.)
 {
-   DBG_START_METH("LowRankAugSystemSolver::LowRankAugSystemSolver()", dbg_verbosity); DBG_ASSERT(IsValid(aug_system_solver_));
+   DBG_START_METH("LowRankAugSystemSolver::LowRankAugSystemSolver()", dbg_verbosity);
+   DBG_ASSERT(IsValid(aug_system_solver_));
 }
 
 LowRankAugSystemSolver::~LowRankAugSystemSolver()
@@ -42,7 +43,7 @@ LowRankAugSystemSolver::~LowRankAugSystemSolver()
 bool LowRankAugSystemSolver::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    first_call_ = true;
    J1_ = NULL;
@@ -78,7 +79,7 @@ ESymSolverStatus LowRankAugSystemSolver::Solve(
    Vector&          sol_d,
    bool             check_NegEVals,
    Index            numberOfNegEVals
-   )
+)
 {
    DBG_START_METH("LowRankAugSystemSolver::Solve", dbg_verbosity);
 
@@ -102,11 +103,11 @@ ESymSolverStatus LowRankAugSystemSolver::Solve(
    }
 
    if( first_call_
-      || AugmentedSystemRequiresChange(W, W_factor, D_x, delta_x, D_s, delta_s, *J_c, D_c, delta_c, *J_d, D_d,
-         delta_d) )
+       || AugmentedSystemRequiresChange(W, W_factor, D_x, delta_x, D_s, delta_s, *J_c, D_c, delta_c, *J_d, D_d,
+                                        delta_d) )
    {
       retval = UpdateFactorization(W, W_factor, D_x, delta_x, D_s, delta_s, *J_c, D_c, delta_c, *J_d, D_d, delta_d,
-         rhs_x, rhs_s, rhs_c, rhs_d, check_NegEVals, numberOfNegEVals);
+                                   rhs_x, rhs_s, rhs_c, rhs_d, check_NegEVals, numberOfNegEVals);
       if( retval != SYMSOLVER_SUCCESS )
       {
          return retval;
@@ -175,7 +176,7 @@ ESymSolverStatus LowRankAugSystemSolver::Solve(
    // Sherman-Morrison formula with factorization information already
    // computed.
    retval = aug_system_solver_->Solve(GetRawPtr(Wdiag_), W_factor, D_x, delta_x, D_s, delta_s, J_c, D_c, delta_c, J_d,
-      D_d, delta_d, rhs_x, rhs_s, rhs_c, rhs_d, sol_x, sol_s, sol_c, sol_d, check_NegEVals, numberOfNegEVals);
+                                      D_d, delta_d, rhs_x, rhs_s, rhs_c, rhs_d, sol_x, sol_s, sol_c, sol_d, check_NegEVals, numberOfNegEVals);
    if( aug_system_solver_->ProvidesInertia() )
    {
       num_neg_evals_ = aug_system_solver_->NumberOfNegEVals();
@@ -183,7 +184,7 @@ ESymSolverStatus LowRankAugSystemSolver::Solve(
    if( retval != SYMSOLVER_SUCCESS )
    {
       Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
-         "LowRankAugSystemSolver: AugSystemSolver returned retval = %d for right hand side.\n", retval);
+                     "LowRankAugSystemSolver: AugSystemSolver returned retval = %d for right hand side.\n", retval);
       return retval;
    }
 
@@ -244,17 +245,18 @@ ESymSolverStatus LowRankAugSystemSolver::UpdateFactorization(
    const Vector&    proto_rhs_d,
    bool             check_NegEVals,
    Index            numberOfNegEVals
-   )
+)
 {
    DBG_START_METH("LowRankAugSystemSolver::UpdateFactorization",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    DBG_ASSERT(W_factor == 0.0 || W_factor == 1.0);
    ESymSolverStatus retval = SYMSOLVER_SUCCESS;
 
    // Get the low update information out of W
    const LowRankUpdateSymMatrix* LR_W = static_cast<const LowRankUpdateSymMatrix*>(W);
-   DBG_ASSERT(LR_W); DBG_PRINT_MATRIX(2, "LR_W", *LR_W);
+   DBG_ASSERT(LR_W);
+   DBG_PRINT_MATRIX(2, "LR_W", *LR_W);
 
    SmartPtr<const Vector> B0;
    SmartPtr<const MultiVectorMatrix> V;
@@ -298,11 +300,11 @@ ESymSolverStatus LowRankAugSystemSolver::UpdateFactorization(
       //DBG_PRINT((1, "delta_x  = %e\n", delta_x));
       //DBG_PRINT_MATRIX(2, "V", *V);
       retval = SolveMultiVector(D_x, delta_x, D_s, delta_s, J_c, D_c, delta_c, J_d, D_d, delta_d, proto_rhs_x,
-         proto_rhs_s, proto_rhs_c, proto_rhs_d, *V, P_LM, V_x, Vtilde1_, Vtilde1_x, check_NegEVals, numberOfNegEVals);
+                                proto_rhs_s, proto_rhs_c, proto_rhs_d, *V, P_LM, V_x, Vtilde1_, Vtilde1_x, check_NegEVals, numberOfNegEVals);
       if( retval != SYMSOLVER_SUCCESS )
       {
          Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
-            "LowRankAugSystemSolver: SolveMultiVector returned retval = %d for V.\n", retval);
+                        "LowRankAugSystemSolver: SolveMultiVector returned retval = %d for V.\n", retval);
          return retval;
       }
       //DBG_PRINT_MATRIX(2, "Vtilde1_x", *Vtilde1_x);
@@ -319,7 +321,8 @@ ESymSolverStatus LowRankAugSystemSolver::UpdateFactorization(
       //DBG_ASSERT(retchol);
       if( !retchol )
       {
-         Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM, "LowRankAugSystemSolver: Cholesky for M1 returned error!\n");
+         Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
+                        "LowRankAugSystemSolver: Cholesky for M1 returned error!\n");
          retval = SYMSOLVER_WRONG_INERTIA;
          num_neg_evals_++;
          return retval;
@@ -339,11 +342,11 @@ ESymSolverStatus LowRankAugSystemSolver::UpdateFactorization(
       SmartPtr<MultiVectorMatrix> Utilde1_x;
       SmartPtr<MultiVectorMatrix> Utilde2_x;
       retval = SolveMultiVector(D_x, delta_x, D_s, delta_s, J_c, D_c, delta_c, J_d, D_d, delta_d, proto_rhs_x,
-         proto_rhs_s, proto_rhs_c, proto_rhs_d, *U, P_LM, U_x, Utilde1, Utilde1_x, check_NegEVals, numberOfNegEVals);
+                                proto_rhs_s, proto_rhs_c, proto_rhs_d, *U, P_LM, U_x, Utilde1, Utilde1_x, check_NegEVals, numberOfNegEVals);
       if( retval != SYMSOLVER_SUCCESS )
       {
          Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
-            "LowRankAugSystemSolver: SolveMultiVector returned retval = %d for U.\n", retval);
+                        "LowRankAugSystemSolver: SolveMultiVector returned retval = %d for U.\n", retval);
          return retval;
       }
 
@@ -380,7 +383,8 @@ ESymSolverStatus LowRankAugSystemSolver::UpdateFactorization(
       bool retchol = J2_->ComputeCholeskyFactor(*M2);
       if( !retchol )
       {
-         Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM, "LowRankAugSystemSolver: Cholesky for M2 returned error.\n");
+         Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
+                        "LowRankAugSystemSolver: Cholesky for M2 returned error.\n");
          retval = SYMSOLVER_WRONG_INERTIA;
          num_neg_evals_++;
          return retval;
@@ -417,10 +421,10 @@ ESymSolverStatus LowRankAugSystemSolver::SolveMultiVector(
    SmartPtr<MultiVectorMatrix>&  Vtilde_x,
    bool                          check_NegEVals,
    Index                         numberOfNegEVals
-   )
+)
 {
    DBG_START_METH("LowRankAugSystemSolver::SolveMultiVector",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    ESymSolverStatus retval;
 
@@ -477,7 +481,7 @@ ESymSolverStatus LowRankAugSystemSolver::SolveMultiVector(
 
    // Call the actual augmented system solver to obtain Vtilde
    retval = aug_system_solver_->MultiSolve(GetRawPtr(Wdiag_), 1.0, D_x, delta_x, D_s, delta_s, &J_c, D_c, delta_c, &J_d,
-      D_d, delta_d, rhs_xV, rhs_sV, rhs_cV, rhs_dV, sol_xV, sol_sV, sol_cV, sol_dV, check_NegEVals, numberOfNegEVals);
+                                           D_d, delta_d, rhs_xV, rhs_sV, rhs_cV, rhs_dV, sol_xV, sol_sV, sol_cV, sol_dV, check_NegEVals, numberOfNegEVals);
 
    if( aug_system_solver_->ProvidesInertia() )
    {
@@ -533,10 +537,10 @@ bool LowRankAugSystemSolver::AugmentedSystemRequiresChange(
    const Matrix&    J_d,
    const Vector*    D_d,
    double           delta_d
-   )
+)
 {
    DBG_START_METH("LowRankAugSystemSolver::AugmentedSystemRequiresChange",
-      dbg_verbosity);
+                  dbg_verbosity);
 
 #if COIN_IPOPT_VERBOSITY > 0
 
@@ -559,14 +563,30 @@ bool LowRankAugSystemSolver::AugmentedSystemRequiresChange(
    bool delta_dtest = (delta_d != delta_d_);
 #endif
 
-   DBG_PRINT((2, "Wtest = %d\n", Wtest)); DBG_PRINT((2, "iWtest = %d\n", iWtest)); DBG_PRINT((2, "wfactor_test = %d\n", wfactor_test)); DBG_PRINT((2, "D_xtest = %d\n", D_xtest)); DBG_PRINT((2, "iD_xtest = %d\n", iD_xtest)); DBG_PRINT((2, "delta_xtest = %d\n", delta_xtest)); DBG_PRINT((2, "D_stest = %d\n", D_stest)); DBG_PRINT((2, "iD_stest = %d\n", iD_stest)); DBG_PRINT((2, "delta_stest = %d\n", delta_stest)); DBG_PRINT((2, "J_ctest = %d\n", J_ctest)); DBG_PRINT((2, "D_ctest = %d\n", D_ctest)); DBG_PRINT((2, "iD_ctest = %d\n", iD_ctest)); DBG_PRINT((2, "delta_ctest = %d\n", delta_ctest)); DBG_PRINT((2, "J_dtest = %d\n", J_dtest)); DBG_PRINT((2, "D_dtest = %d\n", D_dtest)); DBG_PRINT((2, "iD_dtest = %d\n", iD_dtest)); DBG_PRINT((2, "delta_dtest = %d\n", delta_dtest));
+   DBG_PRINT((2, "Wtest = %d\n", Wtest));
+   DBG_PRINT((2, "iWtest = %d\n", iWtest));
+   DBG_PRINT((2, "wfactor_test = %d\n", wfactor_test));
+   DBG_PRINT((2, "D_xtest = %d\n", D_xtest));
+   DBG_PRINT((2, "iD_xtest = %d\n", iD_xtest));
+   DBG_PRINT((2, "delta_xtest = %d\n", delta_xtest));
+   DBG_PRINT((2, "D_stest = %d\n", D_stest));
+   DBG_PRINT((2, "iD_stest = %d\n", iD_stest));
+   DBG_PRINT((2, "delta_stest = %d\n", delta_stest));
+   DBG_PRINT((2, "J_ctest = %d\n", J_ctest));
+   DBG_PRINT((2, "D_ctest = %d\n", D_ctest));
+   DBG_PRINT((2, "iD_ctest = %d\n", iD_ctest));
+   DBG_PRINT((2, "delta_ctest = %d\n", delta_ctest));
+   DBG_PRINT((2, "J_dtest = %d\n", J_dtest));
+   DBG_PRINT((2, "D_dtest = %d\n", D_dtest));
+   DBG_PRINT((2, "iD_dtest = %d\n", iD_dtest));
+   DBG_PRINT((2, "delta_dtest = %d\n", delta_dtest));
 
    if( (W && W->GetTag() != w_tag_) || (!W && w_tag_ != 0) || (W_factor != w_factor_)
-      || (D_x && D_x->GetTag() != d_x_tag_) || (!D_x && d_x_tag_ != 0) || (delta_x != delta_x_)
-      || (D_s && D_s->GetTag() != d_s_tag_) || (!D_s && d_s_tag_ != 0) || (delta_s != delta_s_)
-      || (J_c.GetTag() != j_c_tag_) || (D_c && D_c->GetTag() != d_c_tag_) || (!D_c && d_c_tag_ != 0)
-      || (delta_c != delta_c_) || (J_d.GetTag() != j_d_tag_) || (D_d && D_d->GetTag() != d_d_tag_)
-      || (!D_d && d_d_tag_ != 0) || (delta_d != delta_d_) )
+       || (D_x && D_x->GetTag() != d_x_tag_) || (!D_x && d_x_tag_ != 0) || (delta_x != delta_x_)
+       || (D_s && D_s->GetTag() != d_s_tag_) || (!D_s && d_s_tag_ != 0) || (delta_s != delta_s_)
+       || (J_c.GetTag() != j_c_tag_) || (D_c && D_c->GetTag() != d_c_tag_) || (!D_c && d_c_tag_ != 0)
+       || (delta_c != delta_c_) || (J_d.GetTag() != j_d_tag_) || (D_d && D_d->GetTag() != d_d_tag_)
+       || (!D_d && d_d_tag_ != 0) || (delta_d != delta_d_) )
    {
       return true;
    }

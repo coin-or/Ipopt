@@ -35,7 +35,7 @@ public:
     */
    Matrix(
       const MatrixSpace* owner_space
-      )
+   )
       : TaggedObject(),
         owner_space_(owner_space),
         valid_cache_tag_(0)
@@ -59,7 +59,7 @@ public:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const
+   ) const
    {
       MultVectorImpl(alpha, x, beta, y);
    }
@@ -75,7 +75,7 @@ public:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const
+   ) const
    {
       TransMultVectorImpl(alpha, x, beta, y);
    }
@@ -96,7 +96,7 @@ public:
       const Vector& S,
       const Vector& Z,
       Vector&       X
-      ) const;
+   ) const;
 
    /** X = S^{-1} (r + alpha*Z*M^Td).
     *
@@ -109,7 +109,7 @@ public:
       const Vector& Z,
       const Vector& D,
       Vector&       X
-      ) const;
+   ) const;
    //@}
 
    /** Method for determining if all stored numbers are valid (i.e., no Inf or Nan). */
@@ -134,7 +134,7 @@ public:
    void ComputeRowAMax(
       Vector& rows_norms,
       bool    init = true
-      ) const
+   ) const
    {
       DBG_ASSERT(NRows() == rows_norms.Dim());
       if( init )
@@ -152,7 +152,7 @@ public:
    void ComputeColAMax(
       Vector& cols_norms,
       bool    init = true
-      ) const
+   ) const
    {
       DBG_ASSERT(NCols() == cols_norms.Dim());
       if( init )
@@ -175,7 +175,7 @@ public:
       const std::string&         name,
       Index                      indent = 0,
       const std::string&         prefix = ""
-      ) const;
+   ) const;
 
    virtual void Print(
       const Journalist&  jnlst,
@@ -184,7 +184,7 @@ public:
       const std::string& name,
       Index              indent = 0,
       const std::string& prefix = ""
-      ) const;
+   ) const;
    //@}
 
    /** Return the owner MatrixSpace */
@@ -204,7 +204,7 @@ protected:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const = 0;
+   ) const = 0;
 
    /** Matrix(transpose) vector multiply.
     *
@@ -215,7 +215,7 @@ protected:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const = 0;
+   ) const = 0;
 
    /** X = X + alpha*(Matrix S^{-1} Z).
     *
@@ -227,7 +227,7 @@ protected:
       const Vector& S,
       const Vector& Z,
       Vector&       X
-      ) const;
+   ) const;
 
    /** X = S^{-1} (r + alpha*Z*M^Td).
     *
@@ -240,7 +240,7 @@ protected:
       const Vector& Z,
       const Vector& D,
       Vector&       X
-      ) const;
+   ) const;
 
    /** Method for determining if all stored numbers are valid (i.e., no Inf or Nan).
     *
@@ -259,7 +259,7 @@ protected:
    virtual void ComputeRowAMaxImpl(
       Vector& rows_norms,
       bool    init
-      ) const = 0;
+   ) const = 0;
 
    /** Compute the max-norm of the columns in the matrix.
     *
@@ -268,7 +268,7 @@ protected:
    virtual void ComputeColAMaxImpl(
       Vector& cols_norms,
       bool    init
-      ) const = 0;
+   ) const = 0;
 
    /** Print detailed information about the matrix. */
    virtual void PrintImpl(
@@ -278,7 +278,7 @@ protected:
       const std::string& name,
       Index              indent,
       const std::string& prefix
-      ) const = 0;
+   ) const = 0;
    //@}
 
 private:
@@ -297,12 +297,12 @@ private:
    /** Copy constructor */
    Matrix(
       const Matrix&
-      );
+   );
 
    /** Default Assignment Operator */
    Matrix& operator=(
       const Matrix&
-      );
+   );
    //@}
 
    const SmartPtr<const MatrixSpace> owner_space_;
@@ -361,7 +361,7 @@ public:
    /** Method to test if a given matrix belongs to a particular matrix space. */
    bool IsMatrixFromSpace(
       const Matrix& matrix
-      ) const
+   ) const
    {
       return (matrix.OwnerSpace() == this);
    }
@@ -382,12 +382,12 @@ private:
    /** Copy constructor */
    MatrixSpace(
       const MatrixSpace&
-      );
+   );
 
    /** Default Assignment Operator */
    MatrixSpace& operator=(
       const MatrixSpace&
-      );
+   );
    //@}
 
    /** Number of rows for all matrices of this type. */

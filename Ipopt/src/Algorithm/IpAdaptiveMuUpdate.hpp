@@ -27,7 +27,7 @@ public:
       const SmartPtr<LineSearch>& linesearch,
       const SmartPtr<MuOracle>&   free_mu_oracle,
       const SmartPtr<MuOracle>&   fix_mu_oracle = NULL
-      );
+   );
 
    /** Destructor */
    virtual ~AdaptiveMuUpdate();
@@ -37,7 +37,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Method for determining the barrier parameter for the next
     *  iteration.  When the optimality error for the current barrier
@@ -50,7 +50,7 @@ public:
    //@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
    //@}
 
 private:
@@ -70,12 +70,12 @@ private:
    /** Copy Constructor */
    AdaptiveMuUpdate(
       const AdaptiveMuUpdate&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const AdaptiveMuUpdate&
-      );
+   );
    //@}
 
    /** @name Algorithmic parameters */
@@ -163,7 +163,7 @@ private:
     */
    Number Compute_tau_monotone(
       Number mu
-      );
+   );
 
    /** Method for computing the norm of the primal dual system at the
     *  current point.

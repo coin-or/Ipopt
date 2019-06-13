@@ -44,7 +44,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      )
+   )
    {
       jnlst_ = &jnlst;
       return InitializeImpl(options, prefix);
@@ -55,84 +55,84 @@ public:
    /** Returns an obj-scaled version of the given scalar */
    virtual Number apply_obj_scaling(
       const Number& f
-      ) = 0;
+   ) = 0;
 
    /** Returns an obj-unscaled version of the given scalar */
    virtual Number unapply_obj_scaling(
       const Number& f
-      ) = 0;
+   ) = 0;
 
    /** Returns an x-scaled version of the given vector */
    virtual SmartPtr<Vector>
    apply_vector_scaling_x_NonConst(
       const SmartPtr<const Vector>& v
-      ) = 0;
+   ) = 0;
 
    /** Returns an x-scaled version of the given vector */
    virtual SmartPtr<const Vector>
    apply_vector_scaling_x(
       const SmartPtr<const Vector>& v
-      ) = 0;
+   ) = 0;
 
    /** Returns an x-unscaled version of the given vector */
    virtual SmartPtr<Vector>
    unapply_vector_scaling_x_NonConst(
       const SmartPtr<const Vector>& v
-      ) = 0;
+   ) = 0;
 
    /** Returns an x-unscaled version of the given vector */
    virtual SmartPtr<const Vector>
    unapply_vector_scaling_x(
       const SmartPtr<const Vector>& v
-      ) = 0;
+   ) = 0;
 
    /** Returns an c-scaled version of the given vector */
    virtual SmartPtr<const Vector>
    apply_vector_scaling_c(
       const SmartPtr<const Vector>& v
-      ) = 0;
+   ) = 0;
 
    /** Returns an c-unscaled version of the given vector */
    virtual SmartPtr<const Vector>
    unapply_vector_scaling_c(
       const SmartPtr<const Vector>& v
-      ) = 0;
+   ) = 0;
 
    /** Returns an c-scaled version of the given vector */
    virtual SmartPtr<Vector>
    apply_vector_scaling_c_NonConst(
       const SmartPtr<const Vector>& v
-      ) = 0;
+   ) = 0;
 
    /** Returns an c-unscaled version of the given vector */
    virtual SmartPtr<Vector>
    unapply_vector_scaling_c_NonConst(
       const SmartPtr<const Vector>& v
-      ) = 0;
+   ) = 0;
 
    /** Returns an d-scaled version of the given vector */
    virtual SmartPtr<const Vector>
    apply_vector_scaling_d(
       const SmartPtr<const Vector>& v
-      ) = 0;
+   ) = 0;
 
    /** Returns an d-unscaled version of the given vector */
    virtual SmartPtr<const Vector>
    unapply_vector_scaling_d(
       const SmartPtr<const Vector>& v
-      ) = 0;
+   ) = 0;
 
    /** Returns an d-scaled version of the given vector */
    virtual SmartPtr<Vector>
    apply_vector_scaling_d_NonConst(
       const SmartPtr<const Vector>& v
-      ) = 0;
+   ) = 0;
 
    /** Returns an d-unscaled version of the given vector */
    virtual SmartPtr<Vector>
    unapply_vector_scaling_d_NonConst(
       const SmartPtr<const Vector>& v
-      ) = 0;
+   ) = 0;
 
    /** Returns a scaled version of the Jacobian for c.
     *
@@ -142,7 +142,7 @@ public:
    virtual SmartPtr<const Matrix>
    apply_jac_c_scaling(
       SmartPtr<const Matrix> matrix
-      ) = 0;
+   ) = 0;
 
    /** Returns a scaled version of the Jacobian for d
     *
@@ -152,7 +152,7 @@ public:
    virtual SmartPtr<const Matrix>
    apply_jac_d_scaling(
       SmartPtr<const Matrix> matrix
-      ) = 0;
+   ) = 0;
 
    /** Returns a scaled version of the Hessian of the Lagrangian.
     *
@@ -162,7 +162,7 @@ public:
    virtual SmartPtr<const SymMatrix>
    apply_hessian_scaling(
       SmartPtr<const SymMatrix> matrix
-      ) = 0;
+   ) = 0;
    //@}
 
    /** Methods for scaling bounds - these wrap those above */
@@ -172,42 +172,42 @@ public:
       const Matrix&                 Px_LU,
       const SmartPtr<const Vector>& lu,
       const VectorSpace&            x_space
-      );
+   );
 
    /** Returns an x-scaled vector in the x_L or x_U space */
    SmartPtr<const Vector> apply_vector_scaling_x_LU(
       const Matrix&                 Px_LU,
       const SmartPtr<const Vector>& lu,
       const VectorSpace&            x_space
-      );
+   );
 
    /** Returns an d-scaled vector in the d_L or d_U space */
    SmartPtr<Vector> apply_vector_scaling_d_LU_NonConst(
       const Matrix&                 Pd_LU,
       const SmartPtr<const Vector>& lu,
       const VectorSpace&            d_space
-      );
+   );
 
    /** Returns an d-scaled vector in the d_L or d_U space */
    SmartPtr<const Vector> apply_vector_scaling_d_LU(
       const Matrix&                 Pd_LU,
       const SmartPtr<const Vector>& lu,
       const VectorSpace&            d_space
-      );
+   );
 
    /** Returns an d-unscaled vector in the d_L or d_U space */
    SmartPtr<Vector> unapply_vector_scaling_d_LU_NonConst(
       const Matrix&                 Pd_LU,
       const SmartPtr<const Vector>& lu,
       const VectorSpace&            d_space
-      );
+   );
 
    /** Returns an d-unscaled vector in the d_L or d_U space */
    SmartPtr<const Vector> unapply_vector_scaling_d_LU(
       const Matrix&                 Pd_LU,
       const SmartPtr<const Vector>& lu,
       const VectorSpace&            d_space
-      );
+   );
    //@}
 
    /** Methods for scaling the gradient of the objective - wraps the
@@ -218,27 +218,27 @@ public:
    virtual SmartPtr<Vector>
    apply_grad_obj_scaling_NonConst(
       const SmartPtr<const Vector>& v
-      );
+   );
 
    /** Returns a grad_f scaled version (d_f * D_x^{-1}) of the given vector */
    virtual SmartPtr<const Vector>
    apply_grad_obj_scaling(
       const SmartPtr<const Vector>& v
-      );
+   );
 
    /** Returns a grad_f unscaled version (d_f * D_x^{-1}) of the
     *  given vector */
    virtual SmartPtr<Vector>
    unapply_grad_obj_scaling_NonConst(
       const SmartPtr<const Vector>& v
-      );
+   );
 
    /** Returns a grad_f unscaled version (d_f * D_x^{-1}) of the
     *  given vector */
    virtual SmartPtr<const Vector>
    unapply_grad_obj_scaling(
       const SmartPtr<const Vector>& v
-      );
+   );
    //@}
 
    /** @name Methods for determining whether scaling for entities is done */
@@ -268,14 +268,14 @@ public:
       const Vector&                        x_L,
       const Matrix&                        Px_U,
       const Vector&                        x_U
-      ) = 0;
+   ) = 0;
 
 protected:
    /** Initialization method that has to be overloaded by for each derived class. */
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      ) = 0;
+   ) = 0;
 
    /** Accessor method for the journalist */
    const Journalist& Jnlst() const
@@ -297,12 +297,12 @@ private:
    /** Copy Constructor */
    NLPScalingObject(
       const NLPScalingObject&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const NLPScalingObject&
-      );
+   );
    //@}
 
    SmartPtr<const Journalist> jnlst_;
@@ -327,81 +327,81 @@ public:
    //@{
    virtual Number apply_obj_scaling(
       const Number& f
-      );
+   );
 
    virtual Number unapply_obj_scaling(
       const Number& f
-      );
+   );
 
    virtual SmartPtr<Vector>
    apply_vector_scaling_x_NonConst(
       const SmartPtr<const Vector>& v
-      );
+   );
 
    virtual SmartPtr<const Vector>
    apply_vector_scaling_x(
       const SmartPtr<const Vector>& v
-      );
+   );
 
    virtual SmartPtr<Vector>
    unapply_vector_scaling_x_NonConst(
       const SmartPtr<const Vector>& v
-      );
+   );
 
    virtual SmartPtr<const Vector>
    unapply_vector_scaling_x(
       const SmartPtr<const Vector>& v
-      );
+   );
 
    virtual SmartPtr<const Vector>
    apply_vector_scaling_c(
       const SmartPtr<const Vector>& v
-      );
+   );
 
    virtual SmartPtr<const Vector>
    unapply_vector_scaling_c(
       const SmartPtr<const Vector>& v
-      );
+   );
 
    virtual SmartPtr<Vector>
    apply_vector_scaling_c_NonConst(
       const SmartPtr<const Vector>& v
-      );
+   );
 
    virtual SmartPtr<Vector>
    unapply_vector_scaling_c_NonConst(
       const SmartPtr<const Vector>& v
-      );
+   );
 
    virtual SmartPtr<const Vector>
    apply_vector_scaling_d(
       const SmartPtr<const Vector>& v
-      );
+   );
 
    virtual SmartPtr<const Vector>
    unapply_vector_scaling_d(
       const SmartPtr<const Vector>& v
-      );
+   );
 
    virtual SmartPtr<Vector>
    apply_vector_scaling_d_NonConst(
       const SmartPtr<const Vector>& v
-      );
+   );
 
    virtual SmartPtr<Vector>
    unapply_vector_scaling_d_NonConst(
       const SmartPtr<const Vector>& v
-      );
+   );
 
    virtual SmartPtr<const Matrix>
    apply_jac_c_scaling(
       SmartPtr<const Matrix> matrix
-      );
+   );
 
    virtual SmartPtr<const Matrix>
    apply_jac_d_scaling(
       SmartPtr<const Matrix> matrix
-      );
+   );
 
    virtual SmartPtr<const SymMatrix>
    apply_hessian_scaling(
@@ -432,17 +432,17 @@ public:
       const Vector&                        x_L,
       const Matrix&                        Px_U,
       const Vector&                        x_U
-      );
+   );
 
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
 
 protected:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** This is the method that has to be overloaded by a particular
     *  scaling method that somehow computes the scaling vectors dx,
@@ -466,7 +466,7 @@ protected:
       SmartPtr<Vector>&                    dx,
       SmartPtr<Vector>&                    dc,
       SmartPtr<Vector>&                    dd
-      ) = 0;
+   ) = 0;
 
 private:
    /**@name Default Compiler Generated Methods
@@ -482,12 +482,12 @@ private:
    /** Copy Constructor */
    StandardScalingBase(
       const StandardScalingBase&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const StandardScalingBase&
-      );
+   );
    //@}
 
    /** Scaling parameters - we only need to keep copies of
@@ -552,7 +552,7 @@ protected:
       SmartPtr<Vector>&                    dx,
       SmartPtr<Vector>&                    dc,
       SmartPtr<Vector>&                    dd
-      );
+   );
 
 private:
    /**@name Default Compiler Generated Methods
@@ -568,12 +568,12 @@ private:
    /** Copy Constructor */
    NoNLPScalingObject(
       const NoNLPScalingObject&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const NoNLPScalingObject&
-      );
+   );
    //@}
 };
 

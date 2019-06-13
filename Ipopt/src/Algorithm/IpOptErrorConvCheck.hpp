@@ -27,12 +27,12 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    virtual ConvergenceStatus
    CheckConvergence(
       bool call_intermediate_callback = true
-      );
+   );
 
    /** Auxiliary function for testing whether current iterate
     *  satisfies the acceptable level of optimality
@@ -41,7 +41,7 @@ public:
 
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
 
 protected:
    /** @name Algorithmic parameters */
@@ -93,12 +93,12 @@ private:
    /** Copy Constructor */
    OptimalityErrorConvergenceCheck(
       const OptimalityErrorConvergenceCheck&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const OptimalityErrorConvergenceCheck&
-      );
+   );
    //@}
 
    /** Counter for successive iterations in which acceptability

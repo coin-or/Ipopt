@@ -31,7 +31,7 @@ public:
     */
    RestoIterateInitializer(
       const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator
-      );
+   );
 
    /** Destructor */
    virtual ~RestoIterateInitializer()
@@ -41,7 +41,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Compute the initial iterates and set the into the curr field
     *  of the ip_data object.
@@ -50,7 +50,7 @@ public:
 
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
 
 private:
    /**@name Default Compiler Generated Methods
@@ -69,12 +69,12 @@ private:
    /** Copy Constructor */
    RestoIterateInitializer(
       const RestoIterateInitializer&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const RestoIterateInitializer&
-      );
+   );
    //@}
 
    /**@name Parameters for bumping x0 */
@@ -98,7 +98,7 @@ private:
       const Vector& a,
       const Vector& b,
       Vector&     v
-      );
+   );
    //@}
 };
 

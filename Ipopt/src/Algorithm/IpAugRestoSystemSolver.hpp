@@ -37,7 +37,7 @@ public:
    AugRestoSystemSolver(
       AugSystemSolver& orig_aug_solver,
       bool             skip_orig_aug_solver_init = true
-      );
+   );
 
    /** Destructor */
    virtual ~AugRestoSystemSolver();
@@ -47,7 +47,7 @@ public:
    bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Translate the augmented system (in the full space of the
     *  restoration variables) into the smaller space of the original
@@ -76,7 +76,7 @@ public:
       Vector&          sol_d,
       bool             check_NegEVals,
       Index            numberOfNegEVals
-      );
+   );
 
    /** Returns the number of negative eigenvalues from the original
     *  augmented system call
@@ -124,12 +124,12 @@ private:
    /** Copy Constructor */
    AugRestoSystemSolver(
       const AugRestoSystemSolver&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const AugRestoSystemSolver&
-      );
+   );
    //@}
 
    /**@name Caches for some of the necessary calculated quantities */
@@ -152,7 +152,7 @@ private:
       const SmartPtr<const Vector>& sigma_tilde_p_c_inv,
       const Vector*                 D_c,
       const Vector&                 any_vec_in_c
-      );
+   );
 
    SmartPtr<const Vector> Neg_Omega_d_plus_D_d(
       const Matrix&                 Pd_L,
@@ -161,38 +161,38 @@ private:
       const SmartPtr<const Vector>& sigma_tilde_p_d_inv,
       const Vector*                 D_d,
       const Vector&                 any_vec_in_d
-      );
+   );
 
    /** Sigma tilde is the sum of Sigma and delta_x times the identity */
    SmartPtr<const Vector> Sigma_tilde_n_c_inv(
       const SmartPtr<const Vector>& sigma_tilde_n_c,
       Number                        delta_x,
       const Vector&                 any_vec_in_n_c
-      );
+   );
 
    SmartPtr<const Vector> Sigma_tilde_p_c_inv(
       const SmartPtr<const Vector>& sigma_tilde_p_c,
       Number                        delta_x,
       const Vector&                 any_vec_in_p_c
-      );
+   );
 
    SmartPtr<const Vector> Sigma_tilde_n_d_inv(
       const SmartPtr<const Vector>& sigma_tilde_n_d,
       Number                        delta_x,
       const Vector&                 any_vec_in_n_d
-      );
+   );
 
    SmartPtr<const Vector> Sigma_tilde_p_d_inv(
       const SmartPtr<const Vector>& sigma_tilde_p_d,
       Number                        delta_x,
       const Vector&                 any_vec_in_p_d
-      );
+   );
 
    SmartPtr<const Vector> D_x_plus_wr_d(
       const SmartPtr<const Vector>& CD_x0,
       Number                        factor,
       const Vector&                 wr_d
-      );
+   );
 
    SmartPtr<const Vector> Rhs_cR(
       const Vector&                 rhs_c,
@@ -200,7 +200,7 @@ private:
       const Vector&                 rhs_n_c,
       const SmartPtr<const Vector>& sigma_tilde_p_c_inv,
       const Vector&                 rhs_p_c
-      );
+   );
 
    SmartPtr<const Vector> Rhs_dR(
       const Vector&                 rhs_d,
@@ -210,7 +210,7 @@ private:
       const SmartPtr<const Vector>& sigma_tilde_p_d_inv,
       const Vector&                 rhs_p_d,
       const Matrix&                 pd_U
-      );
+   );
    //@}
 
    SmartPtr<AugSystemSolver> orig_aug_solver_;

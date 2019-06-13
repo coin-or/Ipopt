@@ -32,7 +32,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      ) = 0;
+   ) = 0;
 
    /** Method for computing the normal step.
     *
@@ -44,7 +44,7 @@ public:
    virtual bool ComputeNormalStep(
       SmartPtr<Vector>& normal_x,
       SmartPtr<Vector>& normal_s
-      ) = 0;
+   ) = 0;
 
 protected:
    /** Method to easily access Inexact data */
@@ -77,12 +77,12 @@ private:
    /** Copy Constructor */
    InexactNormalStepCalculator(
       const InexactNormalStepCalculator&
-      );
+   );
 
    /** Overloaded Assignment Operator */
    void operator=(
       const InexactNormalStepCalculator&
-      );
+   );
    //@}
 };
 

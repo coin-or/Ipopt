@@ -23,7 +23,7 @@ namespace Ipopt
 
 GenTMatrix::GenTMatrix(
    const GenTMatrixSpace* owner_space
-   )
+)
    : Matrix(owner_space),
      owner_space_(owner_space),
      values_(NULL),
@@ -44,7 +44,7 @@ GenTMatrix::~GenTMatrix()
 
 void GenTMatrix::SetValues(
    const Number* Values
-   )
+)
 {
    IpBlasDcopy(Nonzeros(), Values, 1, values_, 1);
    initialized_ = true;
@@ -56,10 +56,11 @@ void GenTMatrix::MultVectorImpl(
    const Vector& x,
    Number        beta,
    Vector&       y
-   ) const
+) const
 {
    //  A few sanity checks
-   DBG_ASSERT(NCols() == x.Dim()); DBG_ASSERT(NRows() == y.Dim());
+   DBG_ASSERT(NCols() == x.Dim());
+   DBG_ASSERT(NRows() == y.Dim());
 
    // Take care of the y part of the addition
    DBG_ASSERT(initialized_);
@@ -115,10 +116,11 @@ void GenTMatrix::TransMultVectorImpl(
    const Vector& x,
    Number        beta,
    Vector&       y
-   ) const
+) const
 {
    //  A few sanity checks
-   DBG_ASSERT(NCols() == y.Dim()); DBG_ASSERT(NRows() == x.Dim());
+   DBG_ASSERT(NCols() == y.Dim());
+   DBG_ASSERT(NRows() == x.Dim());
 
    // Take care of the y part of the addition
    DBG_ASSERT(initialized_);
@@ -180,7 +182,7 @@ bool GenTMatrix::HasValidNumbersImpl() const
 void GenTMatrix::ComputeRowAMaxImpl(
    Vector& rows_norms,
    bool    init
-   ) const
+) const
 {
    DBG_ASSERT(initialized_);
 
@@ -201,7 +203,7 @@ void GenTMatrix::ComputeRowAMaxImpl(
 void GenTMatrix::ComputeColAMaxImpl(
    Vector& cols_norms,
    bool    init
-   ) const
+) const
 {
    DBG_ASSERT(initialized_);
 
@@ -227,23 +229,25 @@ void GenTMatrix::PrintImplOffset(
    Index              indent,
    const std::string& prefix,
    Index              offset
-   ) const
+) const
 {
-   jnlst.Printf(level, category, "\n");
+   jnlst.Printf(level, category,
+                "\n");
    jnlst.PrintfIndented(level, category, indent,
-      "%sGenTMatrix \"%s\" of dimension %d by %d with %d nonzero elements:\n", prefix.c_str(), name.c_str(), NRows(),
-      NCols(), Nonzeros());
+                        "%sGenTMatrix \"%s\" of dimension %d by %d with %d nonzero elements:\n", prefix.c_str(), name.c_str(), NRows(),
+                        NCols(), Nonzeros());
    if( initialized_ )
    {
       for( Index i = 0; i < Nonzeros(); i++ )
       {
-         jnlst.PrintfIndented(level, category, indent, "%s%s[%5d,%5d]=%23.16e  (%d)\n", prefix.c_str(), name.c_str(),
-            Irows()[i] + offset, Jcols()[i], values_[i], i);
+         jnlst.PrintfIndented(level, category, indent,
+                              "%s%s[%5d,%5d]=%23.16e  (%d)\n", prefix.c_str(), name.c_str(), Irows()[i] + offset, Jcols()[i], values_[i], i);
       }
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent, "%sUninitialized!\n", prefix.c_str());
+      jnlst.PrintfIndented(level, category, indent,
+                           "%sUninitialized!\n", prefix.c_str());
    }
 }
 
@@ -253,7 +257,7 @@ GenTMatrixSpace::GenTMatrixSpace(
    Index        nonZeros,
    const Index* iRows,
    const Index* jCols
-   )
+)
    : MatrixSpace(nRows, nCols),
      nonZeros_(nonZeros),
      jCols_(NULL),
@@ -275,7 +279,7 @@ Number* GenTMatrixSpace::AllocateInternalStorage() const
 
 void GenTMatrixSpace::FreeInternalStorage(
    Number* values
-   ) const
+) const
 {
    delete[] values;
 }

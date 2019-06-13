@@ -38,7 +38,7 @@ extern "C"
       const ipfint* ptr,
       const ipfint* row,
       const double* a
-      );
+   );
 }
 #endif
 
@@ -58,104 +58,172 @@ Ma97SolverInterface::~Ma97SolverInterface()
 
 void Ma97SolverInterface::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
-   )
+)
 {
-   roptions->AddIntegerOption("ma97_print_level", "Debug printing level for the linear solver MA97", 0, ""
-   /*
-    "<0 no printing.\n"
-    "0  Error and warning messages only.\n"
-    "=1 Limited diagnostic printing.\n"
-    ">1 Additional diagnostic printing."*/);
-   roptions->AddLowerBoundedIntegerOption("ma97_nemin", "Node Amalgamation parameter", 1, 8,
-      "Two nodes in elimination tree are merged if result has fewer than "
-         "ma97_nemin variables.");
-   roptions->AddLowerBoundedNumberOption("ma97_small", "Zero Pivot Threshold", 0.0, false, 1e-20,
+   roptions->AddIntegerOption(
+      "ma97_print_level",
+      "Debug printing level",
+      0
+      /*
+      "<0 no printing.\n"
+      "0  Error and warning messages only.\n"
+      "=1 Limited diagnostic printing.\n"
+      ">1 Additional diagnostic printing."*/);
+   roptions->AddLowerBoundedIntegerOption(
+      "ma97_nemin",
+      "Node Amalgamation parameter",
+      1,
+      8,
+      "Two nodes in elimination tree are merged if result has fewer than ma97_nemin variables.");
+   roptions->AddLowerBoundedNumberOption(
+      "ma97_small",
+      "Zero Pivot Threshold",
+      0.0, false,
+      1e-20,
       "Any pivot less than ma97_small is treated as zero.");
-   roptions->AddBoundedNumberOption("ma97_u", "Pivoting Threshold", 0.0, false, 0.5, false, 1e-8,
+   roptions->AddBoundedNumberOption(
+      "ma97_u",
+      "Pivoting Threshold",
+      0.0, false,
+      0.5, false,
+      1e-8,
       "See MA97 documentation.");
-   roptions->AddBoundedNumberOption("ma97_umax", "Maximum Pivoting Threshold", 0.0, false, 0.5, false, 1e-4,
+   roptions->AddBoundedNumberOption(
+      "ma97_umax",
+      "Maximum Pivoting Threshold",
+      0.0, false,
+      0.5, false,
+      1e-4,
       "See MA97 documentation.");
-   roptions->AddStringOption5("ma97_scaling", "Specifies strategy for scaling in HSL_MA97 linear solver", "dynamic",
-      "none", "Do not scale the linear system matrix", "mc30", "Scale all linear system matrices using MC30", "mc64",
-      "Scale all linear system matrices using MC64", "mc77", "Scale all linear system matrices using MC77 [1,3,0]",
-      "dynamic", "Dynamically select scaling according to rules specified by ma97_scalingX and ma97_switchX options.",
-      "");
-   roptions->AddStringOption4("ma97_scaling1", "First scaling.", "mc64", "none", "No scaling", "mc30",
-      "Scale linear system matrix using MC30", "mc64", "Scale linear system matrix using MC64", "mc77",
-      "Scale linear system matrix using MC77 [1,3,0]",
-      "If ma97_scaling=dynamic, this scaling is used according to the trigger "
-         "ma97_switch1. If ma97_switch2 is triggered it is disabled.");
-   roptions->AddStringOption9("ma97_switch1", "First switch, determine when ma97_scaling1 is enabled.", "od_hd_reuse",
-      "never", "Scaling is never enabled.", "at_start", "Scaling to be used from the very start.", "at_start_reuse",
-      "Scaling to be used on first iteration, then reused thereafter.", "on_demand",
-      "Scaling to be used after Ipopt request improved solution (i.e. iterative refinement has failed).",
-      "on_demand_reuse", "As on_demand, but reuse scaling from previous itr", "high_delay",
-      "Scaling to be used after more than 0.05*n delays are present", "high_delay_reuse",
-      "Scaling to be used only when previous itr created more that 0.05*n additional delays, otherwise reuse scaling from previous itr",
-      "od_hd", "Combination of on_demand and high_delay", "od_hd_reuse",
-      "Combination of on_demand_reuse and high_delay_reuse",
-      "If ma97_scaling=dynamic, ma97_scaling1 is enabled according to this condition. If ma97_switch2 occurs this option is henceforth ignored.");
-   roptions->AddStringOption4("ma97_scaling2", "Second scaling.", "mc64", "none", "No scaling", "mc30",
-      "Scale linear system matrix using MC30", "mc64", "Scale linear system matrix using MC64", "mc77",
-      "Scale linear system matrix using MC77 [1,3,0]",
-      "If ma97_scaling=dynamic, this scaling is used according to the trigger "
-         "ma97_switch2. If ma97_switch3 is triggered it is disabled.");
-   roptions->AddStringOption9("ma97_switch2", "Second switch, determine when ma97_scaling2 is enabled.", "never",
-      "never", "Scaling is never enabled.", "at_start", "Scaling to be used from the very start.", "at_start_reuse",
-      "Scaling to be used on first iteration, then reused thereafter.", "on_demand",
-      "Scaling to be used after Ipopt request improved solution (i.e. iterative refinement has failed).",
-      "on_demand_reuse", "As on_demand, but reuse scaling from previous itr", "high_delay",
-      "Scaling to be used after more than 0.05*n delays are present", "high_delay_reuse",
-      "Scaling to be used only when previous itr created more that 0.05*n additional delays, otherwise reuse scaling from previous itr",
-      "od_hd", "Combination of on_demand and high_delay", "od_hd_reuse",
-      "Combination of on_demand_reuse and high_delay_reuse",
-      "If ma97_scaling=dynamic, ma97_scaling2 is enabled according to this condition. If ma97_switch3 occurs this option is henceforth ignored.");
-   roptions->AddStringOption4("ma97_scaling3", "Third scaling.", "mc64", "none", "No scaling", "mc30",
-      "Scale linear system matrix using MC30", "mc64", "Scale linear system matrix using MC64", "mc77",
-      "Scale linear system matrix using MC77 [1,3,0]",
-      "If ma97_scaling=dynamic, this scaling is used according to the trigger "
-         "ma97_switch3.");
-   roptions->AddStringOption9("ma97_switch3", "Third switch, determine when ma97_scaling3 is enabled.", "never",
-      "never", "Scaling is never enabled.", "at_start", "Scaling to be used from the very start.", "at_start_reuse",
-      "Scaling to be used on first iteration, then reused thereafter.", "on_demand",
-      "Scaling to be used after Ipopt request improved solution (i.e. iterative refinement has failed).",
-      "on_demand_reuse", "As on_demand, but reuse scaling from previous itr", "high_delay",
-      "Scaling to be used after more than 0.05*n delays are present", "high_delay_reuse",
-      "Scaling to be used only when previous itr created more that 0.05*n additional delays, otherwise reuse scaling from previous itr",
-      "od_hd", "Combination of on_demand and high_delay", "od_hd_reuse",
-      "Combination of on_demand_reuse and high_delay_reuse",
+   roptions->AddStringOption5(
+      "ma97_scaling",
+      "Specifies strategy for scaling",
+      "dynamic",
+      "none", "Do not scale the linear system matrix",
+      "mc30", "Scale all linear system matrices using MC30",
+      "mc64", "Scale all linear system matrices using MC64",
+      "mc77", "Scale all linear system matrices using MC77 [1,3,0]",
+      "dynamic", "Dynamically select scaling according to rules specified by ma97_scalingX and ma97_switchX options.");
+   roptions->AddStringOption4(
+      "ma97_scaling1",
+      "First scaling.",
+      "mc64",
+      "none", "No scaling",
+      "mc30", "Scale linear system matrix using MC30",
+      "mc64", "Scale linear system matrix using MC64",
+      "mc77", "Scale linear system matrix using MC77 [1,3,0]",
+      "If ma97_scaling=dynamic, this scaling is used according to the trigger ma97_switch1. "
+      "If ma97_switch2 is triggered it is disabled.");
+   roptions->AddStringOption9(
+      "ma97_switch1",
+      "First switch, determine when ma97_scaling1 is enabled.",
+      "od_hd_reuse",
+      "never", "Scaling is never enabled.",
+      "at_start", "Scaling to be used from the very start.",
+      "at_start_reuse", "Scaling to be used on first iteration, then reused thereafter.",
+      "on_demand", "Scaling to be used after Ipopt request improved solution (i.e. iterative refinement has failed).",
+      "on_demand_reuse", "As on_demand, but reuse scaling from previous itr",
+      "high_delay", "Scaling to be used after more than 0.05*n delays are present",
+      "high_delay_reuse", "Scaling to be used only when previous itr created more that 0.05*n additional delays, otherwise reuse scaling from previous itr",
+      "od_hd", "Combination of on_demand and high_delay",
+      "od_hd_reuse", "Combination of on_demand_reuse and high_delay_reuse",
+      "If ma97_scaling=dynamic, ma97_scaling1 is enabled according to this condition. "
+      "If ma97_switch2 occurs this option is henceforth ignored.");
+   roptions->AddStringOption4(
+      "ma97_scaling2",
+      "Second scaling.",
+      "mc64",
+      "none", "No scaling",
+      "mc30", "Scale linear system matrix using MC30",
+      "mc64", "Scale linear system matrix using MC64",
+      "mc77", "Scale linear system matrix using MC77 [1,3,0]",
+      "If ma97_scaling=dynamic, this scaling is used according to the trigger ma97_switch2. "
+      "If ma97_switch3 is triggered it is disabled.");
+   roptions->AddStringOption9(
+      "ma97_switch2",
+      "Second switch, determine when ma97_scaling2 is enabled.",
+      "never",
+      "never", "Scaling is never enabled.",
+      "at_start", "Scaling to be used from the very start.",
+      "at_start_reuse", "Scaling to be used on first iteration, then reused thereafter.",
+      "on_demand", "Scaling to be used after Ipopt request improved solution (i.e. iterative refinement has failed).",
+      "on_demand_reuse", "As on_demand, but reuse scaling from previous itr",
+      "high_delay", "Scaling to be used after more than 0.05*n delays are present",
+      "high_delay_reuse", "Scaling to be used only when previous itr created more that 0.05*n additional delays, otherwise reuse scaling from previous itr",
+      "od_hd", "Combination of on_demand and high_delay",
+      "od_hd_reuse", "Combination of on_demand_reuse and high_delay_reuse",
+      "If ma97_scaling=dynamic, ma97_scaling2 is enabled according to this condition. "
+      "If ma97_switch3 occurs this option is henceforth ignored.");
+   roptions->AddStringOption4(
+      "ma97_scaling3",
+      "Third scaling.",
+      "mc64",
+      "none", "No scaling",
+      "mc30", "Scale linear system matrix using MC30",
+      "mc64", "Scale linear system matrix using MC64",
+      "mc77", "Scale linear system matrix using MC77 [1,3,0]",
+      "If ma97_scaling=dynamic, this scaling is used according to the trigger ma97_switch3.");
+   roptions->AddStringOption9(
+      "ma97_switch3",
+      "Third switch, determine when ma97_scaling3 is enabled.",
+      "never",
+      "never", "Scaling is never enabled.",
+      "at_start", "Scaling to be used from the very start.",
+      "at_start_reuse", "Scaling to be used on first iteration, then reused thereafter.",
+      "on_demand", "Scaling to be used after Ipopt request improved solution (i.e. iterative refinement has failed).",
+      "on_demand_reuse", "As on_demand, but reuse scaling from previous itr",
+      "high_delay", "Scaling to be used after more than 0.05*n delays are present",
+      "high_delay_reuse", "Scaling to be used only when previous itr created more that 0.05*n additional delays, otherwise reuse scaling from previous itr",
+      "od_hd", "Combination of on_demand and high_delay",
+      "od_hd_reuse", "Combination of on_demand_reuse and high_delay_reuse",
       "If ma97_scaling=dynamic, ma97_scaling3 is enabled according to this condition.");
-   roptions->AddStringOption7("ma97_order", "Controls type of ordering used by HSL_MA97", "auto", "auto",
-      "Use HSL_MA97 heuristic to guess best of AMD and METIS", "best", "Try both AMD and MeTiS, pick best", "amd",
-      "Use the HSL_MC68 approximate minimum degree algorithm", "metis", "Use the MeTiS nested dissection algorithm",
-      "matched-auto", "Use the HSL_MC80 matching with heuristic choice of AMD or METIS", "matched-metis",
-      "Use the HSL_MC80 matching based ordering with METIS", "matched-amd",
-      "Use the HSL_MC80 matching based ordering with AMD", "");
+   roptions->AddStringOption7(
+      "ma97_order",
+      "Controls type of ordering",
+      "auto",
+      "auto", "Use HSL_MA97 heuristic to guess best of AMD and METIS",
+      "best", "Try both AMD and MeTiS, pick best",
+      "amd", "Use the HSL_MC68 approximate minimum degree algorithm",
+      "metis", "Use the MeTiS nested dissection algorithm",
+      "matched-auto", "Use the HSL_MC80 matching with heuristic choice of AMD or METIS",
+      "matched-metis", "Use the HSL_MC80 matching based ordering with METIS",
+      "matched-amd", "Use the HSL_MC80 matching based ordering with AMD");
 #ifdef MA97_DUMP_MATRIX
    roptions->AddStringOption2(
       "ma97_dump_matrix",
       "Controls whether HSL_MA97 dumps each matrix to a file",
       "no",
       "no", "Do not dump matrix",
-      "yes", "Do dump matrix",
-      "");
+      "yes", "Do dump matrix");
 #endif
-   roptions->AddStringOption2("ma97_solve_blas3", "Controls if blas2 or blas3 routines are used for solve", "no", "no",
-      "Use BLAS2 (faster, some implementations bit incompatible)", "yes", "Use BLAS3 (slower)", "");
+   roptions->AddStringOption2(
+      "ma97_solve_blas3",
+      "Controls if blas2 or blas3 routines are used for solve",
+      "no",
+      "no", "Use BLAS2 (faster, some implementations bit incompatible)",
+      "yes", "Use BLAS3 (slower)");
 }
 
 int Ma97SolverInterface::ScaleNameToNum(
    const std::string& name
-   )
+)
 {
    if( name == "none" )
+   {
       return 0;
+   }
    if( name == "mc64" )
+   {
       return 1;
+   }
    if( name == "mc77" )
+   {
       return 2;
+   }
    if( name == "mc30" )
+   {
       return 4;
+   }
 
    assert(0);
    return -1;
@@ -164,7 +232,7 @@ int Ma97SolverInterface::ScaleNameToNum(
 bool Ma97SolverInterface::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    ma97_default_control(&control_);
    control_.f_arrays = 1; // Use Fortran numbering (faster)
@@ -229,16 +297,16 @@ bool Ma97SolverInterface::InitializeImpl(
             switch_[i] = SWITCH_AT_START;
             scaling_type_ = scaling_val_[i];
             current_level_ = i;
-            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: Enabled scaling level %d on initialization\n",
-               current_level_);
+            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                           "HSL_MA97: Enabled scaling level %d on initialization\n", current_level_);
          }
          else if( switch_val[i] == "at_start_reuse" )
          {
             switch_[i] = SWITCH_AT_START_REUSE;
             scaling_type_ = scaling_val_[i];
             current_level_ = i;
-            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: Enabled scaling level %d on initialization\n",
-               current_level_);
+            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                           "HSL_MA97: Enabled scaling level %d on initialization\n", current_level_);
          }
          else if( switch_val[i] == "on_demand" )
          {
@@ -308,7 +376,7 @@ ESymSolverStatus Ma97SolverInterface::InitializeStructure(
    Index        nonzeros,
    const Index* ia,
    const Index* ja
-   )
+)
 {
    struct ma97_info info, info2;
    void* akeep_amd, *akeep_metis;
@@ -327,7 +395,8 @@ ESymSolverStatus Ma97SolverInterface::InitializeStructure(
    if( ordering_ == ORDER_MATCHED_AMD || ordering_ == ORDER_MATCHED_METIS )
    {
       // Ordering requires values. Just signal success and return
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: Delaying analyse until values are available\n");
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "HSL_MA97: Delaying analyse until values are available\n");
       switch( ordering_ )
       {
          case ORDER_MATCHED_AMD:
@@ -348,27 +417,29 @@ ESymSolverStatus Ma97SolverInterface::InitializeStructure(
    // perform analyse
    if( ordering_ == ORDER_BEST )
    {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: Use best of AMD or MeTiS:\n");
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "HSL_MA97: Use best of AMD or MeTiS:\n");
       control_.ordering = 1; // AMD
       ma97_analyse(0, dim, ia, ja, NULL, &akeep_amd, &control_, &info2, NULL);
       if( info2.flag < 0 )
       {
          return SYMSOLVER_FATAL_ERROR;
       }
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "AMD   nfactor = %d, nflops = %d:\n", info2.num_factor,
-         info2.num_flops);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "AMD   nfactor = %d, nflops = %d:\n", info2.num_factor, info2.num_flops);
       control_.ordering = 3; // METIS
       ma97_analyse(0, dim, ia, ja, NULL, &akeep_metis, &control_, &info, NULL);
       if( info.flag < 0 )
       {
          return SYMSOLVER_FATAL_ERROR;
       }
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "MeTiS nfactor = %d, nflops = %d:\n", info.num_factor,
-         info.num_flops);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "MeTiS nfactor = %d, nflops = %d:\n", info.num_factor, info.num_flops);
       if( info.num_flops > info2.num_flops )
       {
          // Use AMD
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: Choose AMD\n");
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "HSL_MA97: Choose AMD\n");
          akeep_ = akeep_amd;
          ma97_free_akeep(&akeep_metis);
          info = info2;
@@ -376,7 +447,8 @@ ESymSolverStatus Ma97SolverInterface::InitializeStructure(
       else
       {
          // Use MeTiS
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: Choose MeTiS\n");
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "HSL_MA97: Choose MeTiS\n");
          akeep_ = akeep_metis;
          ma97_free_akeep(&akeep_amd);
       }
@@ -395,34 +467,38 @@ ESymSolverStatus Ma97SolverInterface::InitializeStructure(
             break;
          case ORDER_AUTO:
          case ORDER_MATCHED_AUTO:
-            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: Make heuristic choice of AMD or MeTiS\n");
+            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                           "HSL_MA97: Make heuristic choice of AMD or MeTiS\n");
             control_.ordering = 5; // Use heuristic to pick which to use
       }
       ma97_analyse(0, dim, ia, ja, NULL, &akeep_, &control_, &info, NULL);
       switch( info.ordering )
       {
          case 1:
-            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: Used AMD\n");
+            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                           "HSL_MA97: Used AMD\n");
             if( ordering_ == ORDER_MATCHED_AUTO )
             {
                ordering_ = ORDER_MATCHED_AMD;
             }
             break;
          case 3:
-            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: Used MeTiS\n");
+            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                           "HSL_MA97: Used MeTiS\n");
             if( ordering_ == ORDER_MATCHED_AUTO )
             {
                ordering_ = ORDER_MATCHED_METIS;
             }
             break;
          default:
-            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: Used ordering %d\n", info.ordering);
+            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                           "HSL_MA97: Used ordering %d\n", info.ordering);
             break;
       }
    }
 
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: PREDICTED nfactor %d, maxfront %d\n", info.num_factor,
-      info.maxfront);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "HSL_MA97: PREDICTED nfactor %d, maxfront %d\n", info.num_factor, info.maxfront);
 
    if( HaveIpData() )
    {
@@ -447,7 +523,7 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
    double*      rhs_vals,
    bool         check_NegEVals,
    Index        numberOfNegEVals
-   )
+)
 {
    struct ma97_info info;
    Number t1 = 0, t2;
@@ -459,7 +535,7 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
       if(dump_)
       {
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-            "Dumping matrix %d\n", fctidx_);
+                        "Dumping matrix %d\n", fctidx_);
          F77_FUNC (dump_mat_csc, DUMP_MAT_CSC)
          (&fctidx_, &ndim_, ia, ja, val_);
          fctidx_++;
@@ -506,8 +582,8 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
             control_.scaling = 3;   // use mc64 from ordering
          }
 
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: PREDICTED nfactor %d, maxfront %d\n", info.num_factor,
-            info.maxfront);
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "HSL_MA97: PREDICTED nfactor %d, maxfront %d\n", info.num_factor, info.maxfront);
 
          if( HaveIpData() )
          {
@@ -516,8 +592,8 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
 
          if( info.flag == 6 || info.flag == -7 )
          {
-            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "In Ma97SolverInterface::Factorization: "
-               "Singular system, estimated rank %d of %d\n", info.matrix_rank, ndim_);
+            Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                           "In Ma97SolverInterface::Factorization: Singular system, estimated rank %d of %d\n", info.matrix_rank, ndim_);
             return SYMSOLVER_SINGULAR;
          }
          if( info.flag < 0 )
@@ -535,19 +611,19 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
       ma97_factor(4, ia, ja, val_, &akeep_, &fkeep_, &control_, &info, scaling_);
       //ma97_factor_solve(4, ia, ja, val_, nrhs, rhs_vals, ndim_, &akeep_, &fkeep_,
       //                  &control_, &info, scaling_);
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: delays %d, nfactor %d, nflops %ld, maxfront %d\n",
-         info.num_delay, info.num_factor, info.num_flops, info.maxfront);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "HSL_MA97: delays %d, nfactor %d, nflops %ld, maxfront %d\n", info.num_delay, info.num_factor, info.num_flops, info.maxfront);
       if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemFactorization().End();
          t2 = IpData().TimingStats().LinearSystemFactorization().TotalWallclockTime();
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Ma97SolverInterface::Factorization: "
-            "ma97_factor_solve took %10.3f\n", t2 - t1);
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "Ma97SolverInterface::Factorization: ma97_factor_solve took %10.3f\n", t2 - t1);
       }
       if( info.flag == 7 || info.flag == -7 )
       {
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "In Ma97SolverInterface::Factorization: "
-            "Singular system, estimated rank %d of %d\n", info.matrix_rank, ndim_);
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "In Ma97SolverInterface::Factorization: Singular system, estimated rank %d of %d\n", info.matrix_rank, ndim_);
          return SYMSOLVER_SINGULAR;
       }
       for( int i = current_level_; i < 3; i++ )
@@ -578,7 +654,7 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
                {
                   rescale_ = false;
                }
-               // Falls through to:
+            // Falls through to:
             case SWITCH_NDELAY:
             case SWITCH_OD_ND:
                if( rescale_ )
@@ -590,8 +666,8 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
                   // number of delays has signficantly increased, so trigger
                   current_level_ = i;
                   scaling_type_ = scaling_val_[i];
-                  Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "HSL_MA97: Enabling scaling %d due to excess delays\n",
-                     i);
+                  Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                                 "HSL_MA97: Enabling scaling %d due to excess delays\n", i);
                   rescale_ = true;
                }
                break;
@@ -599,14 +675,14 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
       }
       if( info.flag < 0 )
       {
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "In Ma97SolverInterface::Factorization: "
-            "Unhandled error. info.flag = %d\n", info.flag);
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "In Ma97SolverInterface::Factorization: Unhandled error. info.flag = %d\n", info.flag);
          return SYMSOLVER_FATAL_ERROR;
       }
       if( check_NegEVals && info.num_neg != numberOfNegEVals )
       {
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "In Ma97SolverInterface::Factorization: "
-            "info.num_neg = %d, but numberOfNegEVals = %d\n", info.num_neg, numberOfNegEVals);
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "In Ma97SolverInterface::Factorization: info.num_neg = %d, but numberOfNegEVals = %d\n", info.num_neg, numberOfNegEVals);
          return SYMSOLVER_WRONG_INERTIA;
       }
 
@@ -653,7 +729,7 @@ bool Ma97SolverInterface::IncreaseQuality()
             current_level_ = i;
             scaling_type_ = scaling_val_[i];
             Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-               "HSL_MA97: Enabling scaling %d due to failure of iterative refinement\n", current_level_);
+                           "HSL_MA97: Enabling scaling %d due to failure of iterative refinement\n", current_level_);
             break;
          default:
             ;
@@ -665,9 +741,11 @@ bool Ma97SolverInterface::IncreaseQuality()
       return false;
    }
    pivtol_changed_ = true;
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Indreasing pivot tolerance for HSL_MA97 from %7.2e ", control_.u);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "Increasing pivot tolerance for HSL_MA97 from %7.2e ", control_.u);
    control_.u = Min(umax_, pow(control_.u, 0.75));
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "to %7.2e.\n", control_.u);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "to %7.2e.\n", control_.u);
    return true;
 }
 

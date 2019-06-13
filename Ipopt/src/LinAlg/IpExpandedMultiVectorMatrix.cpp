@@ -26,7 +26,7 @@ static const Index dbg_verbosity = 0;
 
 ExpandedMultiVectorMatrix::ExpandedMultiVectorMatrix(
    const ExpandedMultiVectorMatrixSpace* owner_space
-   )
+)
    : Matrix(owner_space),
      owner_space_(owner_space),
      vecs_(owner_space->NRows())
@@ -36,7 +36,7 @@ ExpandedMultiVectorMatrix::ExpandedMultiVectorMatrix(
 void ExpandedMultiVectorMatrix::SetVector(
    Index                  i,
    SmartPtr<const Vector> vec
-   )
+)
 {
    DBG_ASSERT(i < NRows());
    vecs_[i] = vec;
@@ -48,10 +48,11 @@ void ExpandedMultiVectorMatrix::TransMultVectorImpl(
    const Vector& x,
    Number        beta,
    Vector&       y
-   ) const
+) const
 {
    //  A few sanity checks
-   DBG_ASSERT(NRows() == x.Dim()); DBG_ASSERT(NCols() == y.Dim());
+   DBG_ASSERT(NRows() == x.Dim());
+   DBG_ASSERT(NCols() == y.Dim());
 
    SmartPtr<const ExpansionMatrix> P = GetExpansionMatrix();
    SmartPtr<Vector> y_tmp;
@@ -114,10 +115,11 @@ void ExpandedMultiVectorMatrix::MultVectorImpl(
    const Vector& x,
    Number        beta,
    Vector&       y
-   ) const
+) const
 {
    //  A few sanity checks
-   DBG_ASSERT(NRows() == y.Dim()); DBG_ASSERT(NCols() == x.Dim());
+   DBG_ASSERT(NRows() == y.Dim());
+   DBG_ASSERT(NCols() == x.Dim());
 
    // check if there is an expansion matrix
    SmartPtr<const ExpansionMatrix> P = GetExpansionMatrix();
@@ -185,7 +187,7 @@ bool ExpandedMultiVectorMatrix::HasValidNumbersImpl() const
 void ExpandedMultiVectorMatrix::ComputeRowAMaxImpl(
    Vector& rows_norms,
    bool    init
-   ) const
+) const
 {
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "ExpandedMultiVectorMatrix::ComputeRowAMaxImpl not implemented");
 }
@@ -193,7 +195,7 @@ void ExpandedMultiVectorMatrix::ComputeRowAMaxImpl(
 void ExpandedMultiVectorMatrix::ComputeColAMaxImpl(
    Vector& cols_norms,
    bool    init
-   ) const
+) const
 {
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "ExpandedMultiVectorMatrix::ComputeColAMaxImpl not implemented");
 }
@@ -205,11 +207,12 @@ void ExpandedMultiVectorMatrix::PrintImpl(
    const std::string& name,
    Index              indent,
    const std::string& prefix
-   ) const
+) const
 {
-   jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent, "%sExpandedMultiVectorMatrix \"%s\" with %d columns:\n",
-      prefix.c_str(), name.c_str(), NRows());
+   jnlst.Printf(level, category,
+                "\n");
+   jnlst.PrintfIndented(level, category, indent,
+                        "%sExpandedMultiVectorMatrix \"%s\" with %d columns:\n", prefix.c_str(), name.c_str(), NRows());
 
    for( Index i = 0; i < NRows(); i++ )
    {
@@ -223,7 +226,8 @@ void ExpandedMultiVectorMatrix::PrintImpl(
       }
       else
       {
-         jnlst.PrintfIndented(level, category, indent, "%sVector in column %d is not yet set!\n", prefix.c_str(), i);
+         jnlst.PrintfIndented(level, category, indent,
+                              "%sVector in column %d is not yet set!\n", prefix.c_str(), i);
       }
    }
    SmartPtr<const ExpansionMatrix> P = GetExpansionMatrix();
@@ -236,8 +240,8 @@ void ExpandedMultiVectorMatrix::PrintImpl(
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent, "%sExpandedMultiVectorMatrix \"%s\" has no ExpansionMatrix\n",
-         prefix.c_str(), name.c_str());
+      jnlst.PrintfIndented(level, category, indent,
+                           "%sExpandedMultiVectorMatrix \"%s\" has no ExpansionMatrix\n", prefix.c_str(), name.c_str());
    }
 }
 
@@ -245,7 +249,7 @@ ExpandedMultiVectorMatrixSpace::ExpandedMultiVectorMatrixSpace(
    Index                           nrows,
    const VectorSpace&              vec_space,
    SmartPtr<const ExpansionMatrix> exp_matrix
-   )
+)
    : MatrixSpace(nrows, IsValid(exp_matrix) ? exp_matrix->NRows() : vec_space.Dim()),
      vec_space_(&vec_space),
      exp_matrix_(exp_matrix)

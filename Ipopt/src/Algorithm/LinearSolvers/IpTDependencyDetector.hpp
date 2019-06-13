@@ -32,7 +32,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      ) = 0;
+   ) = 0;
 
    /** Method determining the number of linearly dependent rows in
     *  the matrix and the indices of those rows.
@@ -53,7 +53,7 @@ public:
       Index*            jac_c_iRow,
       Index*            jac_c_jCol,
       std::list<Index>& c_deps
-      ) = 0;
+   ) = 0;
 
 private:
    /**@name Default Compiler Generated Methods
@@ -67,12 +67,12 @@ private:
    /** Copy Constructor */
    TDependencyDetector(
       const TDependencyDetector&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const TDependencyDetector&
-      );
+   );
    //@}
 
 };

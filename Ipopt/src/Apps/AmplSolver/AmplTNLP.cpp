@@ -1343,7 +1343,9 @@ void AmplOptionsList::PrintDoxygen(
          jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, "| \\ref OPT_%s \"%s\"", iter->second->IpoptOptionName().c_str(), iter->first.c_str());
 
          if( iter->first != iter->second->IpoptOptionName() )
+         {
             jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, " (Ipopt name: %s)", iter->second->IpoptOptionName().c_str());
+         }
       }
       else
       {
@@ -1353,7 +1355,9 @@ void AmplOptionsList::PrintDoxygen(
       std::string descr = iter->second->Description();
       for( std::string::iterator it = descr.begin(); it != descr.end(); ++it )
          if( *it == '\n' )
+         {
             *it = ';';
+         }
 
       jnlst->Printf(J_SUMMARY, J_DOCUMENTATION, " | %s |\n", descr.c_str());
    }

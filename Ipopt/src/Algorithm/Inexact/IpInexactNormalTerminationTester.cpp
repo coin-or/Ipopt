@@ -35,18 +35,24 @@ InexactNormalTerminationTester::~InexactNormalTerminationTester()
 
 void InexactNormalTerminationTester::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
-   )
+)
 {
-   roptions->AddLowerBoundedNumberOption("inexact_normal_tol",
-      "Desired relative residual tolerance for iterative solver during normal step computation.", 0.0, true, 1e-3, "");
-   roptions->AddLowerBoundedIntegerOption("inexact_normal_max_iter",
-      "Maximal number of iterative solver iterations during normal step computation", 0, 200, "");
+   roptions->AddLowerBoundedNumberOption(
+      "inexact_normal_tol",
+      "Desired relative residual tolerance for iterative solver during normal step computation.",
+      0.0, true,
+      1e-3);
+   roptions->AddLowerBoundedIntegerOption(
+      "inexact_normal_max_iter",
+      "Maximal number of iterative solver iterations during normal step computation",
+      0,
+      200);
 }
 
 bool InexactNormalTerminationTester::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    options.GetNumericValue("inexact_normal_tol", inexact_normal_tol_, prefix);
    options.GetIntegerValue("inexact_normal_max_iter", inexact_normal_max_iter_, prefix);
@@ -69,7 +75,7 @@ bool InexactNormalTerminationTester::InitializeImpl(
 bool InexactNormalTerminationTester::InitializeSolve()
 {
    DBG_START_METH("InexactNormalTerminationTester::InitializeSolve",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    return true;
 }
@@ -80,10 +86,10 @@ InexactNormalTerminationTester::ETerminationTest InexactNormalTerminationTester:
    const Number* resid,
    Index         iter,
    Number        norm2_rhs
-   )
+)
 {
    DBG_START_METH("InexactNormalTerminationTester::TestTermination",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    last_iter_ = iter;
 
@@ -92,8 +98,8 @@ InexactNormalTerminationTester::ETerminationTest InexactNormalTerminationTester:
    ETerminationTest retval = CONTINUE;
 
    double norm2_resid = IpBlasDnrm2(ndim, resid, 1);
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "TTNormal: iter = %d ||resid|| = %23.16e ||rhs|| = %23.16e\n", iter,
-      norm2_resid, norm2_rhs);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "TTNormal: iter = %d ||resid|| = %23.16e ||rhs|| = %23.16e\n", iter,  norm2_resid, norm2_rhs);
 
    if( iter > inexact_normal_max_iter_ )
    {
@@ -133,8 +139,8 @@ InexactNormalTerminationTester::ETerminationTest InexactNormalTerminationTester:
 
    Number trial_c_Av_norm = IpCq().CalcNormOfType(NORM_2, *inf_c, *inf_d);
 
-   Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "TTNormal: c_Avc_norm_cauchy = %23.16e trial_c_Av_norm = %23.16e\n",
-      c_Avc_norm_cauchy_, trial_c_Av_norm);
+   Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                  "TTNormal: c_Avc_norm_cauchy = %23.16e trial_c_Av_norm = %23.16e\n", c_Avc_norm_cauchy_, trial_c_Av_norm);
    Number BasVal = Max(1., IpCq().curr_primal_infeasibility(NORM_2));
 
    if( Compare_le(trial_c_Av_norm, c_Avc_norm_cauchy_, BasVal) )
@@ -148,7 +154,7 @@ InexactNormalTerminationTester::ETerminationTest InexactNormalTerminationTester:
 void InexactNormalTerminationTester::Clear()
 {
    DBG_START_METH("InexactNormalTerminationTester::Clear",
-      dbg_verbosity);
+                  dbg_verbosity);
 }
 
 } // namespace Ipopt

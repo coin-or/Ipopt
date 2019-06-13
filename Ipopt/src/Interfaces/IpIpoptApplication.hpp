@@ -48,7 +48,7 @@ public:
    IpoptApplication(
       bool create_console_out = true,
       bool create_empty = false
-      );
+   );
 
    /** Another constructor that assumes that the code in the
     *  (default) constructor has already been executed
@@ -57,7 +57,7 @@ public:
       SmartPtr<RegisteredOptions> reg_options,
       SmartPtr<OptionsList>       options,
       SmartPtr<Journalist>        jnlst
-      );
+   );
 
    virtual ~IpoptApplication();
 
@@ -82,7 +82,7 @@ public:
    virtual ApplicationReturnStatus Initialize(
       std::istream& is,
       bool          allow_clobber = false
-      );
+   );
 
    /** Initialization method.
     *
@@ -104,7 +104,7 @@ public:
    virtual ApplicationReturnStatus Initialize(
       std::string params_file,
       bool        allow_clobber = false
-      );
+   );
 
    /** Initialization method.
     *
@@ -126,7 +126,7 @@ public:
    virtual ApplicationReturnStatus Initialize(
       const char* params_file,
       bool        allow_clobber = false
-      )
+   )
    {
       return Initialize(std::string(params_file), allow_clobber);
    }
@@ -147,25 +147,25 @@ public:
     */
    virtual ApplicationReturnStatus Initialize(
       bool allow_clobber = false
-      );
+   );
 
    /**@name Solve methods */
    //@{
    /** Solve a problem that inherits from TNLP */
    virtual ApplicationReturnStatus OptimizeTNLP(
       const SmartPtr<TNLP>& tnlp
-      );
+   );
 
    /** Solve a problem that inherits from NLP */
    virtual ApplicationReturnStatus OptimizeNLP(
       const SmartPtr<NLP>& nlp
-      );
+   );
 
    /** Solve a problem that inherits from NLP */
    virtual ApplicationReturnStatus OptimizeNLP(
       const SmartPtr<NLP>&        nlp,
       SmartPtr<AlgorithmBuilder>& alg_builder
-      );
+   );
 
    /** Solve a problem (that inherits from TNLP) for a repeated time.
     *
@@ -176,7 +176,7 @@ public:
     */
    virtual ApplicationReturnStatus ReOptimizeTNLP(
       const SmartPtr<TNLP>& tnlp
-      );
+   );
 
    /** Solve a problem (that inherits from NLP) for a repeated time.
     *
@@ -187,7 +187,7 @@ public:
     */
    virtual ApplicationReturnStatus ReOptimizeNLP(
       const SmartPtr<NLP>& nlp
-      );
+   );
    //@}
 
    /** Method for opening an output file with given print_level.
@@ -197,7 +197,7 @@ public:
    virtual bool OpenOutputFile(
       std::string  file_name,
       EJournalLevel print_level
-      );
+   );
 
    /**@name Accessor methods */
    //@{
@@ -263,7 +263,7 @@ public:
     */
    bool RethrowNonIpoptException(
       bool dorethrow
-      )
+   )
    {
       bool oldval = rethrow_nonipoptexception_;
       rethrow_nonipoptexception_ = dorethrow;
@@ -272,13 +272,13 @@ public:
 
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
 
    /** Method to register all Ipopt options. */
    static void
    RegisterAllIpoptOptions(
       const SmartPtr<RegisteredOptions>& roptions
-      );
+   );
 
 private:
    /**@name Default Compiler Generated Methods
@@ -292,12 +292,12 @@ private:
    /** Copy Constructor */
    IpoptApplication(
       const IpoptApplication&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const IpoptApplication&
-      );
+   );
    //@}
 
    /** Method for the actual optimize call of the Ipopt algorithm.

@@ -27,7 +27,7 @@ public:
    /** Constructor using only a linear solver object */
    LowRankAugSystemSolver(
       AugSystemSolver& aug_system_solver
-      );
+   );
 
    /** Destructor */
    virtual ~LowRankAugSystemSolver();
@@ -37,7 +37,7 @@ public:
    bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Set up the augmented system and solve it for a given right hand side. */
    virtual ESymSolverStatus Solve(
@@ -63,7 +63,7 @@ public:
       Vector&          sol_d,
       bool             check_NegEVals,
       Index            numberOfNegEVals
-      );
+   );
 
    /** Number of negative eigenvalues detected during last solve.
     *
@@ -106,11 +106,11 @@ private:
    /** Copy Constructor */
    LowRankAugSystemSolver(
       const LowRankAugSystemSolver&
-      );
+   );
 
    void operator=(
       const LowRankAugSystemSolver&
-      );
+   );
    //@}
 
    /** The augmented system solver object that should be used for the
@@ -234,7 +234,7 @@ private:
       const Vector&    proto_rhs_d,
       bool             check_NegEVals,
       Index            numberOfNegEVals
-      );
+   );
 
    /** Method for solving the augmented system without low-rank
     *  update for multiple right hand sides that are provided as
@@ -265,7 +265,7 @@ private:
       SmartPtr<MultiVectorMatrix>&  Vtilde1_x,
       bool                          check_NegEVals,
       Index                         numberOfNegEVals
-      );
+   );
 
    /** Method that compares the tags of the data for the matrix with
     *  those from the previous call.
@@ -285,7 +285,7 @@ private:
       const Matrix&    J_d,
       const Vector*    D_d,
       double           delta_d
-      );
+   );
    //@}
 };
 

@@ -18,7 +18,7 @@ static const Index dbg_verbosity = 0;
 LowRankSSAugSystemSolver::LowRankSSAugSystemSolver(
    AugSystemSolver& aug_system_solver,
    Index            max_rank
-   )
+)
    : AugSystemSolver(),
      aug_system_solver_(&aug_system_solver),
      max_rank_(max_rank),
@@ -35,7 +35,8 @@ LowRankSSAugSystemSolver::LowRankSSAugSystemSolver(
      d_d_tag_(0),
      delta_d_(0.)
 {
-   DBG_START_METH("LowRankSSAugSystemSolver::LowRankSSAugSystemSolver()", dbg_verbosity); DBG_ASSERT(IsValid(aug_system_solver_));
+   DBG_START_METH("LowRankSSAugSystemSolver::LowRankSSAugSystemSolver()", dbg_verbosity);
+   DBG_ASSERT(IsValid(aug_system_solver_));
 }
 
 LowRankSSAugSystemSolver::~LowRankSSAugSystemSolver()
@@ -46,7 +47,7 @@ LowRankSSAugSystemSolver::~LowRankSSAugSystemSolver()
 bool LowRankSSAugSystemSolver::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    first_call_ = true;
    Wdiag_ = NULL;
@@ -105,11 +106,11 @@ ESymSolverStatus LowRankSSAugSystemSolver::Solve(
    }
 
    if( first_call_
-      || AugmentedSystemRequiresChange(W, W_factor, D_x, delta_x, D_s, delta_s, *J_c, D_c, delta_c, *J_d, D_d,
-         delta_d) )
+       || AugmentedSystemRequiresChange(W, W_factor, D_x, delta_x, D_s, delta_s, *J_c, D_c, delta_c, *J_d, D_d,
+                                        delta_d) )
    {
       retval = UpdateExtendedData(W, W_factor, D_x, delta_x, D_s, delta_s, *J_c, D_c, delta_c, *J_d, D_d, delta_d,
-         rhs_x, rhs_s, rhs_c, rhs_d);
+                                  rhs_x, rhs_s, rhs_c, rhs_d);
       if( retval != SYMSOLVER_SUCCESS )
       {
          return retval;
@@ -185,8 +186,8 @@ ESymSolverStatus LowRankSSAugSystemSolver::Solve(
    // extended Jacobian_c and y_c data.
    numberOfNegEVals += negEvalsCorrection_;
    retval = aug_system_solver_->Solve(GetRawPtr(Wdiag_), W_factor, D_x, delta_x, D_s, delta_s, GetRawPtr(J_c_ext_),
-      GetRawPtr(D_c_ext_), delta_c, J_d, D_d, delta_d, rhs_x, rhs_s, *rhs_c_ext, rhs_d, sol_x, sol_s, *sol_c_ext, sol_d,
-      check_NegEVals, numberOfNegEVals);
+                                      GetRawPtr(D_c_ext_), delta_c, J_d, D_d, delta_d, rhs_x, rhs_s, *rhs_c_ext, rhs_d, sol_x, sol_s, *sol_c_ext, sol_d,
+                                      check_NegEVals, numberOfNegEVals);
    if( aug_system_solver_->ProvidesInertia() )
    {
       num_neg_evals_ = aug_system_solver_->NumberOfNegEVals() - negEvalsCorrection_;
@@ -194,7 +195,7 @@ ESymSolverStatus LowRankSSAugSystemSolver::Solve(
    if( retval != SYMSOLVER_SUCCESS )
    {
       Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
-         "LowRankSSAugSystemSolver: AugSystemSolver returned retval = %d for right hand side.\n", retval);
+                     "LowRankSSAugSystemSolver: AugSystemSolver returned retval = %d for right hand side.\n", retval);
       return retval;
    }
 
@@ -218,17 +219,18 @@ ESymSolverStatus LowRankSSAugSystemSolver::UpdateExtendedData(
    const Vector&    proto_rhs_s,
    const Vector&    proto_rhs_c,
    const Vector&    proto_rhs_d
-   )
+)
 {
    DBG_START_METH("LowRankSSAugSystemSolver::UpdateExtendedData",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    DBG_ASSERT(W_factor == 0.0 || W_factor == 1.0);
    ESymSolverStatus retval = SYMSOLVER_SUCCESS;
 
    // Get the low update information out of W
    const LowRankUpdateSymMatrix* LR_W = static_cast<const LowRankUpdateSymMatrix*>(W);
-   DBG_ASSERT(dynamic_cast<const LowRankUpdateSymMatrix*>(W)); DBG_PRINT_MATRIX(2, "LR_W", *LR_W);
+   DBG_ASSERT(dynamic_cast<const LowRankUpdateSymMatrix*>(W));
+   DBG_PRINT_MATRIX(2, "LR_W", *LR_W);
 
    // If we don't have it yet, create the ExpandedMultiVectorMatrix
    SmartPtr<const Matrix> P_LM = LR_W->P_LowRank();
@@ -242,13 +244,13 @@ ESymSolverStatus LowRankSSAugSystemSolver::UpdateExtendedData(
          DBG_ASSERT(dynamic_cast<const ExpansionMatrix*>(GetRawPtr(P_LM)));
       }
       SmartPtr<ExpandedMultiVectorMatrixSpace> expanded_vu_space = new ExpandedMultiVectorMatrixSpace(max_rank_,
-         *LR_VecSpace, exp_matrix);
+            *LR_VecSpace, exp_matrix);
       expanded_vu_ = expanded_vu_space->MakeNewExpandedMultiVectorMatrix();
 
       // Create extended y_c quantities to include the V and U matrices
       DBG_ASSERT(IsNull(J_c_ext_));
       SmartPtr<CompoundMatrixSpace> J_c_ext_space = new CompoundMatrixSpace(2, 1, proto_rhs_c.Dim() + max_rank_,
-         proto_rhs_x.Dim());
+            proto_rhs_x.Dim());
       J_c_ext_space->SetBlockRows(0, proto_rhs_c.Dim());
       J_c_ext_space->SetBlockRows(1, max_rank_);
       J_c_ext_space->SetBlockCols(0, proto_rhs_x.Dim());
@@ -257,7 +259,8 @@ ESymSolverStatus LowRankSSAugSystemSolver::UpdateExtendedData(
 
       J_c_ext_ = J_c_ext_space->MakeNewCompoundMatrix();
 
-      DBG_ASSERT(IsNull(D_c_ext_)); DBG_ASSERT(IsNull(y_c_ext_space_));
+      DBG_ASSERT(IsNull(D_c_ext_));
+      DBG_ASSERT(IsNull(y_c_ext_space_));
       y_c_ext_space_ = new CompoundVectorSpace(2, proto_rhs_c.Dim() + max_rank_);
       y_c_ext_space_->SetCompSpace(0, *proto_rhs_c.OwnerSpace());
       SmartPtr<DenseVectorSpace> D_c_rank_space = new DenseVectorSpace(max_rank_);
@@ -365,10 +368,10 @@ bool LowRankSSAugSystemSolver::AugmentedSystemRequiresChange(
    const Matrix&    J_d,
    const Vector*    D_d,
    double           delta_d
-   )
+)
 {
    DBG_START_METH("LowRankSSAugSystemSolver::AugmentedSystemRequiresChange",
-      dbg_verbosity);
+                  dbg_verbosity);
 
 #if COIN_IPOPT_VERBOSITY > 0
 
@@ -391,14 +394,30 @@ bool LowRankSSAugSystemSolver::AugmentedSystemRequiresChange(
    bool delta_dtest = (delta_d != delta_d_);
 #endif
 
-   DBG_PRINT((2, "Wtest = %d\n", Wtest)); DBG_PRINT((2, "iWtest = %d\n", iWtest)); DBG_PRINT((2, "wfactor_test = %d\n", wfactor_test)); DBG_PRINT((2, "D_xtest = %d\n", D_xtest)); DBG_PRINT((2, "iD_xtest = %d\n", iD_xtest)); DBG_PRINT((2, "delta_xtest = %d\n", delta_xtest)); DBG_PRINT((2, "D_stest = %d\n", D_stest)); DBG_PRINT((2, "iD_stest = %d\n", iD_stest)); DBG_PRINT((2, "delta_stest = %d\n", delta_stest)); DBG_PRINT((2, "J_ctest = %d\n", J_ctest)); DBG_PRINT((2, "D_ctest = %d\n", D_ctest)); DBG_PRINT((2, "iD_ctest = %d\n", iD_ctest)); DBG_PRINT((2, "delta_ctest = %d\n", delta_ctest)); DBG_PRINT((2, "J_dtest = %d\n", J_dtest)); DBG_PRINT((2, "D_dtest = %d\n", D_dtest)); DBG_PRINT((2, "iD_dtest = %d\n", iD_dtest)); DBG_PRINT((2, "delta_dtest = %d\n", delta_dtest));
+   DBG_PRINT((2, "Wtest = %d\n", Wtest));
+   DBG_PRINT((2, "iWtest = %d\n", iWtest));
+   DBG_PRINT((2, "wfactor_test = %d\n", wfactor_test));
+   DBG_PRINT((2, "D_xtest = %d\n", D_xtest));
+   DBG_PRINT((2, "iD_xtest = %d\n", iD_xtest));
+   DBG_PRINT((2, "delta_xtest = %d\n", delta_xtest));
+   DBG_PRINT((2, "D_stest = %d\n", D_stest));
+   DBG_PRINT((2, "iD_stest = %d\n", iD_stest));
+   DBG_PRINT((2, "delta_stest = %d\n", delta_stest));
+   DBG_PRINT((2, "J_ctest = %d\n", J_ctest));
+   DBG_PRINT((2, "D_ctest = %d\n", D_ctest));
+   DBG_PRINT((2, "iD_ctest = %d\n", iD_ctest));
+   DBG_PRINT((2, "delta_ctest = %d\n", delta_ctest));
+   DBG_PRINT((2, "J_dtest = %d\n", J_dtest));
+   DBG_PRINT((2, "D_dtest = %d\n", D_dtest));
+   DBG_PRINT((2, "iD_dtest = %d\n", iD_dtest));
+   DBG_PRINT((2, "delta_dtest = %d\n", delta_dtest));
 
    if( (W && W->GetTag() != w_tag_) || (!W && w_tag_ != 0) || (W_factor != w_factor_)
-      || (D_x && D_x->GetTag() != d_x_tag_) || (!D_x && d_x_tag_ != 0) || (delta_x != delta_x_)
-      || (D_s && D_s->GetTag() != d_s_tag_) || (!D_s && d_s_tag_ != 0) || (delta_s != delta_s_)
-      || (J_c.GetTag() != j_c_tag_) || (D_c && D_c->GetTag() != d_c_tag_) || (!D_c && d_c_tag_ != 0)
-      || (delta_c != delta_c_) || (J_d.GetTag() != j_d_tag_) || (D_d && D_d->GetTag() != d_d_tag_)
-      || (!D_d && d_d_tag_ != 0) || (delta_d != delta_d_) )
+       || (D_x && D_x->GetTag() != d_x_tag_) || (!D_x && d_x_tag_ != 0) || (delta_x != delta_x_)
+       || (D_s && D_s->GetTag() != d_s_tag_) || (!D_s && d_s_tag_ != 0) || (delta_s != delta_s_)
+       || (J_c.GetTag() != j_c_tag_) || (D_c && D_c->GetTag() != d_c_tag_) || (!D_c && d_c_tag_ != 0)
+       || (delta_c != delta_c_) || (J_d.GetTag() != j_d_tag_) || (D_d && D_d->GetTag() != d_d_tag_)
+       || (!D_d && d_d_tag_ != 0) || (delta_d != delta_d_) )
    {
       return true;
    }

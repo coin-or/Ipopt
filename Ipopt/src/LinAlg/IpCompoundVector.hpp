@@ -46,7 +46,7 @@ public:
    CompoundVector(
       const CompoundVectorSpace* owner_space,
       bool                       create_new
-      );
+   );
 
    /** Default destructor */
    virtual ~CompoundVector();
@@ -56,13 +56,13 @@ public:
    void SetComp(
       Index         icomp,
       const Vector& vec
-      );
+   );
 
    /** Method for setting the pointer for a component that is a non-const Vector */
    void SetCompNonConst(
       Index   icomp,
       Vector& vec
-      );
+   );
 
    /** Number of components of this compound vector */
    inline Index NComps() const;
@@ -70,9 +70,10 @@ public:
    /** Check if a particular component is const or not */
    bool IsCompConst(
       Index i
-      ) const
+   ) const
    {
-      DBG_ASSERT(i > 0 && i < NComps()); DBG_ASSERT(IsValid(comps_[i]) || IsValid(const_comps_[i]));
+      DBG_ASSERT(i > 0 && i < NComps());
+      DBG_ASSERT(IsValid(comps_[i]) || IsValid(const_comps_[i]));
       if( IsValid(const_comps_[i]) )
       {
          return true;
@@ -83,7 +84,7 @@ public:
    /** Check if a particular component is null or not */
    bool IsCompNull(
       Index i
-      ) const
+   ) const
    {
       DBG_ASSERT(i >= 0 && i < NComps());
       if( IsValid(comps_[i]) || IsValid(const_comps_[i]) )
@@ -96,7 +97,7 @@ public:
    /** Return a particular component (const version) */
    SmartPtr<const Vector> GetComp(
       Index i
-      ) const
+   ) const
    {
       return ConstComp(i);
    }
@@ -109,7 +110,7 @@ public:
     */
    SmartPtr<Vector> GetCompNonConst(
       Index i
-      )
+   )
    {
       ObjectChanged();
       return Comp(i);
@@ -120,20 +121,20 @@ protected:
    //@{
    virtual void CopyImpl(
       const Vector& x
-      );
+   );
 
    virtual void ScalImpl(
       Number alpha
-      );
+   );
 
    virtual void AxpyImpl(
       Number        alpha,
       const Vector& x
-      );
+   );
 
    virtual Number DotImpl(
       const Vector& x
-      ) const;
+   ) const;
 
    virtual Number Nrm2Impl() const;
 
@@ -143,23 +144,23 @@ protected:
 
    virtual void SetImpl(
       Number value
-      );
+   );
 
    virtual void ElementWiseDivideImpl(
       const Vector& x
-      );
+   );
 
    virtual void ElementWiseMultiplyImpl(
       const Vector& x
-      );
+   );
 
    virtual void ElementWiseMaxImpl(
       const Vector& x
-      );
+   );
 
    virtual void ElementWiseMinImpl(
       const Vector& x
-      );
+   );
 
    virtual void ElementWiseReciprocalImpl();
 
@@ -171,7 +172,7 @@ protected:
 
    virtual void AddScalarImpl(
       Number scalar
-      );
+   );
 
    virtual Number MaxImpl() const;
 
@@ -190,19 +191,19 @@ protected:
       Number        b,
       const Vector& v2,
       Number        c
-      );
+   );
 
    Number FracToBoundImpl(
       const Vector& delta,
       Number        tau
-      ) const;
+   ) const;
 
    void AddVectorQuotientImpl(
       Number        a,
       const Vector& z,
       const Vector& s,
       Number        c
-      );
+   );
    //@}
 
    /** Method for determining if all stored numbers are valid (i.e., no Inf or Nan). */
@@ -217,7 +218,7 @@ protected:
       const std::string& name,
       Index              indent,
       const std::string& prefix
-      ) const;
+   ) const;
    //@}
 
 private:
@@ -236,12 +237,12 @@ private:
    /** Copy Constructor */
    CompoundVector(
       const CompoundVector&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const CompoundVector&
-      );
+   );
    //@}
 
    /** Components of the compound vector.
@@ -259,11 +260,11 @@ private:
 
    inline const Vector* ConstComp(
       Index i
-      ) const;
+   ) const;
 
    inline Vector* Comp(
       Index i
-      );
+   );
 };
 
 /** This vectors space is the vector space for CompoundVector.
@@ -284,7 +285,7 @@ public:
    CompoundVectorSpace(
       Index ncomp_spaces,
       Index total_dim
-      );
+   );
 
    /** Destructor */
    ~CompoundVectorSpace()
@@ -295,12 +296,12 @@ public:
    virtual void SetCompSpace(
       Index              icomp,    /**< Number of the component to be set */
       const VectorSpace& vec_space /**< VectorSpace for component icomp */
-      );
+   );
 
    /** Method for obtaining an individual component VectorSpace */
    SmartPtr<const VectorSpace> GetCompSpace(
       Index icomp
-      ) const;
+   ) const;
 
    /** Accessor method to obtain the number of components */
    Index NCompSpaces() const
@@ -311,7 +312,7 @@ public:
    /** Method for creating a new vector of this specific type. */
    virtual CompoundVector* MakeNewCompoundVector(
       bool create_new = true
-      ) const
+   ) const
    {
       return new CompoundVector(this, create_new);
    }
@@ -336,12 +337,12 @@ private:
    /** Copy Constructor */
    CompoundVectorSpace(
       const CompoundVectorSpace&
-      );
+   );
 
    /** Default Assignment Operator */
    CompoundVectorSpace& operator=(
       const CompoundVectorSpace&
-      );
+   );
    //@}
 
    /** Number of components */
@@ -359,9 +360,10 @@ inline Index CompoundVector::NComps() const
 
 inline const Vector* CompoundVector::ConstComp(
    Index i
-   ) const
+) const
 {
-   DBG_ASSERT(i < NComps()); DBG_ASSERT(IsValid(comps_[i]) || IsValid(const_comps_[i]));
+   DBG_ASSERT(i < NComps());
+   DBG_ASSERT(IsValid(comps_[i]) || IsValid(const_comps_[i]));
    if( IsValid(comps_[i]) )
    {
       return GetRawPtr(comps_[i]);
@@ -377,9 +379,10 @@ inline const Vector* CompoundVector::ConstComp(
 
 inline Vector* CompoundVector::Comp(
    Index i
-   )
+)
 {
-   DBG_ASSERT(i < NComps()); DBG_ASSERT(IsValid(comps_[i]));
+   DBG_ASSERT(i < NComps());
+   DBG_ASSERT(IsValid(comps_[i]));
    return GetRawPtr(comps_[i]);
 }
 

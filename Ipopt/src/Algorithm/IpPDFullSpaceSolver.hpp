@@ -38,7 +38,7 @@ public:
    PDFullSpaceSolver(
       AugSystemSolver&       augSysSolver,
       PDPerturbationHandler& perturbHandler
-      );
+   );
 
    /** Default destructor */
    virtual ~PDFullSpaceSolver();
@@ -48,7 +48,7 @@ public:
    bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Solve the primal dual system, given one right hand side.
     */
@@ -59,13 +59,13 @@ public:
       IteratesVector&       res,
       bool                  allow_inexact = false,
       bool                  improve_solution = false
-      );
+   );
 
    /** Methods for IpoptType */
    //@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
    //@}
 
 private:
@@ -85,7 +85,7 @@ private:
    /** Default Assignment Operator */
    PDFullSpaceSolver& operator=(
       const PDFullSpaceSolver&
-      );
+   );
    //@}
 
    /** @name Strategy objects to hold on to. */
@@ -170,7 +170,7 @@ private:
       Number                beta,
       const IteratesVector& rhs,
       IteratesVector&       res
-      );
+   );
 
    /** Internal function for computing the residual (resid) given the
     * right hand side (rhs) and the solution of the system (res).
@@ -198,7 +198,7 @@ private:
       const IteratesVector& rhs,
       const IteratesVector& res,
       IteratesVector&       resid
-      );
+   );
 
    /** Internal function for computing the ratio of the residual
     *  compared to the right hand side and solution.
@@ -209,7 +209,7 @@ private:
       const IteratesVector& rhs,
       const IteratesVector& res,
       const IteratesVector& resid
-      );
+   );
 
    /** @name Auxiliary functions */
    //@{
@@ -222,7 +222,7 @@ private:
       const Matrix& P,
       const Vector& g,
       Vector&       X
-      );
+   );
    //@}
 };
 

@@ -64,13 +64,16 @@ namespace Ipopt
 		     "-------------------------------------------------------------------------------\n"
 		     "You are using the reduced hessian feature with scaling of\n");
       if (have_x_scaling) {
-	Jnlst().Printf(J_WARNING, J_MAIN, "*** variables\n");
+	Jnlst().Printf(J_WARNING, J_MAIN,
+	   "*** variables\n");
       }
       if (have_c_scaling) {
-	Jnlst().Printf(J_WARNING, J_MAIN, "*** equality constraints\n");
+	Jnlst().Printf(J_WARNING, J_MAIN,
+	   "*** equality constraints\n");
       }
       if (have_d_scaling) {
-	Jnlst().Printf(J_WARNING, J_MAIN, "*** inequality constraints\n");
+	Jnlst().Printf(J_WARNING, J_MAIN,
+	   "*** inequality constraints\n");
       }
       Jnlst().Printf(J_WARNING, J_MAIN,
 		     "enabled.\n"

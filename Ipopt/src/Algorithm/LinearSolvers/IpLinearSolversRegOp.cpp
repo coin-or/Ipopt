@@ -32,7 +32,7 @@ namespace Ipopt
 
 void RegisterOptions_LinearSolvers(
    const SmartPtr<RegisteredOptions>& roptions
-   )
+)
 {
    roptions->SetRegisteringCategory("Linear Solver");
    TSymLinearSolver::RegisterOptions(roptions);

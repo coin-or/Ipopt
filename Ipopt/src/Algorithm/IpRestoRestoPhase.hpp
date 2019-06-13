@@ -36,7 +36,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
 protected:
    virtual bool PerformRestoration();
@@ -54,12 +54,12 @@ private:
    /** Copy Constructor */
    RestoRestorationPhase(
       const RestoRestorationPhase&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const RestoRestorationPhase&
-      );
+   );
    //@}
 
    /** @name Auxiliary methods */
@@ -69,7 +69,7 @@ private:
       const Vector& a,
       const Vector& b,
       Vector&       v
-      );
+   );
    //@}
 };
 

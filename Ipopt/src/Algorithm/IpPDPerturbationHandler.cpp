@@ -30,63 +30,89 @@ PDPerturbationHandler::PDPerturbationHandler()
 
 void PDPerturbationHandler::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
-   )
+)
 {
-   roptions->AddLowerBoundedNumberOption("max_hessian_perturbation",
-      "Maximum value of regularization parameter for handling negative curvature.", 0, true, 1e20,
-      "In order to guarantee that the search directions are indeed proper "
-         "descent directions, Ipopt requires that the inertia of the "
-         "(augmented) linear system for the step computation has the "
-         "correct number of negative and positive eigenvalues. The idea "
-         "is that this guides the algorithm away from maximizers and makes "
-         "Ipopt more likely converge to first order optimal points that "
-         "are minimizers. If the inertia is not correct, a multiple of the "
-         "identity matrix is added to the Hessian of the Lagrangian in the "
-         "augmented system. This parameter gives the maximum value of the "
-         "regularization parameter. If a regularization of that size is "
-         "not enough, the algorithm skips this iteration and goes to the "
-         "restoration phase. (This is delta_w^max in the implementation paper.)");
-   roptions->AddLowerBoundedNumberOption("min_hessian_perturbation", "Smallest perturbation of the Hessian block.", 0.,
-      false, 1e-20, "The size of the perturbation of the Hessian block is never selected "
-         "smaller than this value, unless no perturbation is necessary. (This "
-         "is delta_w^min in implementation paper.)");
-   roptions->AddLowerBoundedNumberOption("perturb_inc_fact_first",
-      "Increase factor for x-s perturbation for very first perturbation.", 1., true, 100.,
-      "The factor by which the perturbation is increased when a trial value "
-         "was not sufficient - this value is used for the computation of the "
-         "very first perturbation and allows a different value for for the first "
-         "perturbation than that used for the remaining perturbations. "
-         "(This is bar_kappa_w^+ in the implementation paper.)");
-   roptions->AddLowerBoundedNumberOption("perturb_inc_fact", "Increase factor for x-s perturbation.", 1., true, 8.,
-      "The factor by which the perturbation is increased when a trial value "
-         "was not sufficient - this value is used for the computation of "
-         "all perturbations except for the first. "
-         "(This is kappa_w^+ in the implementation paper.)");
-   roptions->AddBoundedNumberOption("perturb_dec_fact", "Decrease factor for x-s perturbation.", 0., true, 1., true,
-      1. / 3., "The factor by which the perturbation is decreased when a trial value "
-         "is deduced from the size of the most recent successful perturbation. "
-         "(This is kappa_w^- in the implementation paper.)");
-   roptions->AddLowerBoundedNumberOption("first_hessian_perturbation", "Size of first x-s perturbation tried.", 0.,
-      true, 1e-4, "The first value tried for the x-s perturbation in the inertia "
-         "correction scheme."
-         "(This is delta_0 in the implementation paper.)");
-   roptions->AddLowerBoundedNumberOption("jacobian_regularization_value",
-      "Size of the regularization for rank-deficient constraint Jacobians.", 0., false, 1e-8,
+   roptions->AddLowerBoundedNumberOption(
+      "max_hessian_perturbation",
+      "Maximum value of regularization parameter for handling negative curvature.",
+      0., true,
+      1e20,
+      "In order to guarantee that the search directions are indeed proper descent directions, "
+      "Ipopt requires that the inertia of the (augmented) linear system for the step computation has "
+      "the correct number of negative and positive eigenvalues. "
+      "The idea is that this guides the algorithm away from maximizers and makes Ipopt more likely "
+      "converge to first order optimal points that are minimizers. "
+      "If the inertia is not correct, a multiple of the identity matrix is added to the Hessian of the Lagrangian in the augmented system. "
+      "This parameter gives the maximum value of the regularization parameter. "
+      "If a regularization of that size is not enough, the algorithm skips this iteration and goes to the restoration phase. "
+      "(This is delta_w^max in the implementation paper.)");
+   roptions->AddLowerBoundedNumberOption(
+      "min_hessian_perturbation",
+      "Smallest perturbation of the Hessian block.",
+      0., false,
+      1e-20,
+      "The size of the perturbation of the Hessian block is never selected smaller than this value, "
+      "unless no perturbation is necessary. "
+      "(This is delta_w^min in implementation paper.)");
+   roptions->AddLowerBoundedNumberOption(
+      "perturb_inc_fact_first",
+      "Increase factor for x-s perturbation for very first perturbation.",
+      1., true,
+      100.,
+      "The factor by which the perturbation is increased when a trial value was not sufficient - "
+      "this value is used for the computation of the very first perturbation and allows a different value for "
+      "the first perturbation than that used for the remaining perturbations. "
+      "(This is bar_kappa_w^+ in the implementation paper.)");
+   roptions->AddLowerBoundedNumberOption(
+      "perturb_inc_fact",
+      "Increase factor for x-s perturbation.",
+      1., true,
+      8.,
+      "The factor by which the perturbation is increased when a trial value was not sufficient - "
+      "this value is used for the computation of all perturbations except for the first. "
+      "(This is kappa_w^+ in the implementation paper.)");
+   roptions->AddBoundedNumberOption(
+      "perturb_dec_fact",
+      "Decrease factor for x-s perturbation.",
+      0., true,
+      1., true,
+      1. / 3.,
+      "The factor by which the perturbation is decreased when a trial value is deduced from "
+      "the size of the most recent successful perturbation. "
+      "(This is kappa_w^- in the implementation paper.)");
+   roptions->AddLowerBoundedNumberOption(
+      "first_hessian_perturbation",
+      "Size of first x-s perturbation tried.",
+      0., true,
+      1e-4,
+      "The first value tried for the x-s perturbation in the inertia correction scheme."
+      "(This is delta_0 in the implementation paper.)");
+   roptions->AddLowerBoundedNumberOption(
+      "jacobian_regularization_value",
+      "Size of the regularization for rank-deficient constraint Jacobians.",
+      0., false,
+      1e-8,
       "(This is bar delta_c in the implementation paper.)");
-   roptions->AddLowerBoundedNumberOption("jacobian_regularization_exponent",
-      "Exponent for mu in the regularization for rank-deficient constraint Jacobians.", 0., false, 0.25,
+   roptions->AddLowerBoundedNumberOption(
+      "jacobian_regularization_exponent",
+      "Exponent for mu in the regularization for rank-deficient constraint Jacobians.",
+      0., false,
+      0.25,
       "(This is kappa_c in the implementation paper.)");
-   roptions->AddStringOption2("perturb_always_cd", "Active permanent perturbation of constraint linearization.", "no",
-      "no", "perturbation only used when required", "yes", "always use perturbation",
-      "This options makes the delta_c and delta_d perturbation be used for "
-         "the computation of every search direction.  Usually, it is only used "
-         "when the iteration matrix is singular.");
+   roptions->AddStringOption2(
+      "perturb_always_cd",
+      "Active permanent perturbation of constraint linearization.",
+      "no",
+      "no", "perturbation only used when required",
+      "yes", "always use perturbation",
+      "This options makes the delta_c and delta_d perturbation be used for the computation of every search direction. "
+      "Usually, it is only used when the iteration matrix is singular.");
 }
 
 bool PDPerturbationHandler::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    options.GetNumericValue("max_hessian_perturbation", delta_xs_max_, prefix);
    options.GetNumericValue("min_hessian_perturbation", delta_xs_min_, prefix);
@@ -128,7 +154,7 @@ bool PDPerturbationHandler::ConsiderNewSystem(
    Number& delta_s,
    Number& delta_c,
    Number& delta_d
-   )
+)
 {
    DBG_START_METH("PDPerturbationHandler::ConsiderNewSystem", dbg_verbosity);
 
@@ -165,7 +191,7 @@ bool PDPerturbationHandler::ConsiderNewSystem(
    }
 
    DBG_ASSERT((hess_degenerate_ != NOT_YET_DETERMINED || jac_degenerate_ != DEGENERATE) &&
-      (jac_degenerate_ != NOT_YET_DETERMINED || hess_degenerate_ != DEGENERATE));
+              (jac_degenerate_ != NOT_YET_DETERMINED || hess_degenerate_ != DEGENERATE));
 
    if( hess_degenerate_ == NOT_YET_DETERMINED || jac_degenerate_ == NOT_YET_DETERMINED )
    {
@@ -231,10 +257,10 @@ bool PDPerturbationHandler::PerturbForSingularity(
    Number& delta_s,
    Number& delta_c,
    Number& delta_d
-   )
+)
 {
    DBG_START_METH("PDPerturbationHandler::PerturbForSingularity",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    bool retval;
 
@@ -242,8 +268,8 @@ bool PDPerturbationHandler::PerturbForSingularity(
    if( hess_degenerate_ == NOT_YET_DETERMINED || jac_degenerate_ == NOT_YET_DETERMINED )
    {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-         "Degeneracy test for hess_degenerate_ = %d and jac_degenerate_ = %d\n       test_status_ = %d\n",
-         hess_degenerate_, jac_degenerate_, test_status_);
+                     "Degeneracy test for hess_degenerate_ = %d and jac_degenerate_ = %d\n       test_status_ = %d\n",
+                     hess_degenerate_, jac_degenerate_, test_status_);
       switch( test_status_ )
       {
          case TEST_DELTA_C_EQ_0_DELTA_X_EQ_0:
@@ -261,7 +287,8 @@ bool PDPerturbationHandler::PerturbForSingularity(
                if( !retval )
                {
                   return false;
-               } DBG_ASSERT(delta_c == 0. && delta_d == 0.);
+               }
+               DBG_ASSERT(delta_c == 0. && delta_d == 0.);
                test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_GT_0;
             }
             break;
@@ -275,7 +302,8 @@ bool PDPerturbationHandler::PerturbForSingularity(
                if( !retval )
                {
                   return false;
-               } DBG_ASSERT(delta_c == 0. && delta_d == 0.);
+               }
+               DBG_ASSERT(delta_c == 0. && delta_d == 0.);
                test_status_ = TEST_DELTA_C_EQ_0_DELTA_X_GT_0;
             }
             else
@@ -284,7 +312,8 @@ bool PDPerturbationHandler::PerturbForSingularity(
                if( !retval )
                {
                   return false;
-               } DBG_ASSERT(delta_c > 0. && delta_d > 0.);
+               }
+               DBG_ASSERT(delta_c > 0. && delta_d > 0.);
                test_status_ = TEST_DELTA_C_GT_0_DELTA_X_GT_0;
             }
             break;
@@ -319,8 +348,8 @@ bool PDPerturbationHandler::PerturbForSingularity(
          if( !retval )
          {
             Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-               "Can't get_deltas_for_wrong_inertia for delta_x_curr_ = %e and delta_c_curr_ = %e\n", delta_x_curr_,
-               delta_c_curr_);
+                           "Can't get_deltas_for_wrong_inertia for delta_x_curr_ = %e and delta_c_curr_ = %e\n", delta_x_curr_,
+                           delta_c_curr_);
             return false;
          }
       }
@@ -349,7 +378,7 @@ bool PDPerturbationHandler::get_deltas_for_wrong_inertia(
    Number& delta_s,
    Number& delta_c,
    Number& delta_d
-   )
+)
 {
    if( delta_x_curr_ == 0. )
    {
@@ -375,7 +404,8 @@ bool PDPerturbationHandler::get_deltas_for_wrong_inertia(
    }
    if( delta_x_curr_ > delta_xs_max_ )
    {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "delta_x perturbation is becoming too large: %e\n", delta_x_curr_);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "delta_x perturbation is becoming too large: %e\n", delta_x_curr_);
       delta_x_last_ = 0.;
       delta_s_last_ = 0.;
       IpData().Append_info_string("dx");
@@ -401,10 +431,10 @@ bool PDPerturbationHandler::PerturbForWrongInertia(
    Number& delta_s,
    Number& delta_c,
    Number& delta_d
-   )
+)
 {
    DBG_START_METH("PDPerturbationHandler::PerturbForWrongInertia",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    // Check if we can conclude that components of the system are
    // structurally degenerate (we only get here if the most recent
@@ -434,7 +464,7 @@ void PDPerturbationHandler::CurrentPerturbation(
    Number& delta_s,
    Number& delta_c,
    Number& delta_d
-   )
+)
 {
    delta_x = delta_x_curr_;
    delta_s = delta_s_curr_;

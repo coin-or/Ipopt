@@ -37,7 +37,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** This method must be called for each new matrix, and before any
     *  other method for generating perturbation factors.
@@ -53,7 +53,7 @@ public:
       Number& delta_s,
       Number& delta_c,
       Number& delta_d
-      );
+   );
 
    /** This method returns perturbation factors for the case when the
     *  most recent factorization resulted in a singular matrix.
@@ -65,7 +65,7 @@ public:
       Number& delta_s,
       Number& delta_c,
       Number& delta_d
-      );
+   );
 
    /** This method returns perturbation factors for the case when the
     *  most recent factorization resulted in a matrix with an
@@ -87,11 +87,11 @@ public:
       Number& delta_s,
       Number& delta_c,
       Number& delta_d
-      );
+   );
 
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
 
 protected:
    /**@name Default Compiler Generated Methods
@@ -107,12 +107,12 @@ protected:
    /** Copy Constructor */
    PDPerturbationHandler(
       const PDPerturbationHandler&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const PDPerturbationHandler&
-      );
+   );
    //@}
 
    /** @name Size of the most recent non-zero perturbation. */
@@ -231,7 +231,7 @@ protected:
       Number& delta_s,
       Number& delta_c,
       Number& delta_d
-      );
+   );
 
    /** This method is call whenever a matrix had been factorization
     *  and is not singular.

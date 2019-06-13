@@ -62,7 +62,7 @@ public:
       const SmartPtr<IterationOutput>&           iter_output,
       const SmartPtr<HessianUpdater>&            hessian_updater,
       const SmartPtr<EqMultiplierCalculator>&    eq_multiplier_calculator = NULL
-      );
+   );
 
    /** Destructor */
    virtual ~IpoptAlgorithm();
@@ -72,18 +72,18 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Main solve method. */
    SolverReturn Optimize(
       bool isResto = false
-      );
+   );
 
    /** Methods for IpoptType */
    //@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
    //@}
 
    /**@name Access to internal strategy objects */
@@ -96,7 +96,7 @@ public:
 
    static void print_copyright_message(
       const Journalist& jnlst
-      );
+   );
 
 private:
    /**@name Default Compiler Generated Methods
@@ -115,12 +115,12 @@ private:
    /** Copy Constructor */
    IpoptAlgorithm(
       const IpoptAlgorithm&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const IpoptAlgorithm&
-      );
+   );
    //@}
 
    /** @name Strategy objects */
@@ -234,7 +234,7 @@ private:
       Index&        n_only_lower,
       Index&        n_both,
       Index&        n_only_upper
-      );
+   );
 
    /** Method for ensuring that the trial multipliers are not too far
     *  from the primal estime.
@@ -250,7 +250,7 @@ private:
       const Vector&           trial_slack,
       const Vector&           trial_compl,
       SmartPtr<const Vector>& new_trial_z
-      );
+   );
    //@}
 };
 

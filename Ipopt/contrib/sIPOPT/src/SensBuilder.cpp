@@ -161,9 +161,9 @@ namespace Ipopt
 
     Index setdata_error = E_0->SetData_Index(hessian_suff.size(), &hessian_suff[0], 1.0);
     if ( setdata_error ){
-      jnlst.Printf(J_ERROR, J_MAIN, "\nEXIT: An Error Occured while processing "
-		   "the Indices for the reduced hessian computation: Something "
-		   "is wrong with index %d\n",setdata_error);
+      jnlst.Printf(J_ERROR, J_MAIN,
+         "\nEXIT: An Error Occured while processing the Indices for the reduced Hessian computation: "
+         "Something is wrong with index %d\n",setdata_error);
       THROW_EXCEPTION(SENS_BUILDER_ERROR,
                       "Reduced Hessian Index Error");
     }

@@ -60,7 +60,7 @@ public:
     */
    Number TotalCPUTime() const
    {
-     return TotalCpuTime();
+      return TotalCpuTime();
    }
 
    /** Total System time, including function evaluations. */

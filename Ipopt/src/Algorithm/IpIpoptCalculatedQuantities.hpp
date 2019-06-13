@@ -61,7 +61,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      ) = 0;
+   ) = 0;
 
 private:
    /**@name Default Compiler Generated Methods
@@ -95,7 +95,7 @@ public:
    IpoptCalculatedQuantities(
       const SmartPtr<IpoptNLP>&  ip_nlp,
       const SmartPtr<IpoptData>& ip_data
-      );
+   );
    /** Destructor */
    virtual ~IpoptCalculatedQuantities();
    //@}
@@ -107,7 +107,7 @@ public:
     */
    void SetAddCq(
       SmartPtr<IpoptAdditionalCq> add_cq
-      )
+   )
    {
       DBG_ASSERT(!HaveAddCq());
       add_cq_ = add_cq;
@@ -130,7 +130,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** @name Slacks */
    //@{
@@ -231,25 +231,25 @@ public:
     */
    SmartPtr<const Vector> curr_jac_cT_times_vec(
       const Vector& vec
-      );
+   );
    /** Product of Jacobian (evaluated at trial point) of C
     *  transpose with general vector
     */
    SmartPtr<const Vector> trial_jac_cT_times_vec(
       const Vector& vec
-      );
+   );
    /** Product of Jacobian (evaluated at current point) of D
     *  transpose with general vector
     */
    SmartPtr<const Vector> curr_jac_dT_times_vec(
       const Vector& vec
-      );
+   );
    /** Product of Jacobian (evaluated at trial point) of D
     *  transpose with general vector
     */
    SmartPtr<const Vector> trial_jac_dT_times_vec(
       const Vector& vec
-      );
+   );
    /** Product of Jacobian (evaluated at current point) of C
     *  transpose with current y_c
     */
@@ -271,13 +271,13 @@ public:
     */
    SmartPtr<const Vector> curr_jac_c_times_vec(
       const Vector& vec
-      );
+   );
    /** Product of Jacobian (evaluated at current point) of D
     *  with general vector
     */
    SmartPtr<const Vector> curr_jac_d_times_vec(
       const Vector& vec
-      );
+   );
    /** Constraint Violation (at current iterate).
     *
     *  This value should
@@ -298,21 +298,21 @@ public:
     */
    virtual Number curr_nlp_constraint_violation(
       ENormType NormType
-      );
+   );
    /** Unscaled real constraint violation in a given norm (at current iterate).
     *
     *  This considers the inequality constraints without slacks.
     */
    virtual Number unscaled_curr_nlp_constraint_violation(
       ENormType NormType
-      );
+   );
    /** Unscaled real constraint violation in a given norm (at trial iterate).
     *
     *  This considers the inequality constraints without slacks.
     */
    virtual Number unscaled_trial_nlp_constraint_violation(
       ENormType NormType
-      );
+   );
    //@}
 
    /** @name Hessian matrices */
@@ -367,24 +367,24 @@ public:
    /** Primal infeasibility in a given norm (at current iterate). */
    virtual Number curr_primal_infeasibility(
       ENormType NormType
-      );
+   );
    /** Primal infeasibility in a given norm (at trial point) */
    virtual Number trial_primal_infeasibility(
       ENormType NormType
-      );
+   );
 
    /** Dual infeasibility in a given norm (at current iterate) */
    virtual Number curr_dual_infeasibility(
       ENormType NormType
-      );
+   );
    /** Dual infeasibility in a given norm (at trial iterate) */
    virtual Number trial_dual_infeasibility(
       ENormType NormType
-      );
+   );
    /** Unscaled dual infeasibility in a given norm (at current iterate) */
    virtual Number unscaled_curr_dual_infeasibility(
       ENormType NormType
-      );
+   );
 
    /** Complementarity (for all complementarity conditions together)
     *  in a given norm (at current iterate)
@@ -392,21 +392,21 @@ public:
    virtual Number curr_complementarity(
       Number    mu,
       ENormType NormType
-      );
+   );
    /** Complementarity (for all complementarity conditions together)
     *  in a given norm (at trial iterate)
     */
    virtual Number trial_complementarity(
       Number    mu,
       ENormType NormType
-      );
+   );
    /** Complementarity (for all complementarity conditions together)
     *  in a given norm (at current iterate) without NLP scaling.
     */
    virtual Number unscaled_curr_complementarity(
       Number    mu,
       ENormType NormType
-      );
+   );
 
    /** Centrality measure (in spirit of the -infinity-neighborhood. */
    Number CalcCentralityMeasure(
@@ -414,7 +414,7 @@ public:
       const Vector& compl_x_U,
       const Vector& compl_s_L,
       const Vector& compl_s_U
-      );
+   );
    /** Centrality measure at current point */
    virtual Number curr_centrality_measure();
 
@@ -448,7 +448,7 @@ public:
     */
    virtual Number curr_primal_dual_system_error(
       Number mu
-      );
+   );
    /** Norm of the primal-dual system for a given mu (at trial iterate).
     *
     *  The norm is defined as the sum of the 1-norms of
@@ -458,7 +458,7 @@ public:
     */
    virtual Number trial_primal_dual_system_error(
       Number mu
-      );
+   );
    //@}
 
    /** @name Computing fraction-to-the-boundary step sizes */
@@ -470,13 +470,13 @@ public:
       Number        tau,
       const Vector& delta_x,
       const Vector& delta_s
-      );
+   );
    /** Fraction to the boundary from (current) primal variables x and s
     *  for internal (current) step
     */
    Number curr_primal_frac_to_the_bound(
       Number tau
-      );
+   );
    /** Fraction to the boundary from (current) dual variables z and v
     *  for a given step
     */
@@ -486,7 +486,7 @@ public:
       const Vector& delta_z_U,
       const Vector& delta_v_L,
       const Vector& delta_v_U
-      );
+   );
    /** Fraction to the boundary from (current) dual variables z and v
     *  for a given step, without caching
     */
@@ -496,13 +496,13 @@ public:
       const Vector& delta_z_U,
       const Vector& delta_v_L,
       const Vector& delta_v_U
-      );
+   );
    /** Fraction to the boundary from (current) dual variables z and v
     *  for internal (current) step
     */
    Number curr_dual_frac_to_the_bound(
       Number tau
-      );
+   );
    /** Fraction to the boundary from (current) slacks for a given
     *  step in the slacks.
     *
@@ -519,7 +519,7 @@ public:
       const Vector& delta_x_U,
       const Vector& delta_s_L,
       const Vector& delta_s_U
-      );
+   );
    //@}
 
    /** @name Sigma matrices */
@@ -543,7 +543,7 @@ public:
    CalcNormOfType(
       ENormType                            NormType,
       std::vector<SmartPtr<const Vector> > vecs
-      );
+   );
 
    /** Compute the norm of a specific type of two vectors (uncached) */
    Number
@@ -551,7 +551,7 @@ public:
       ENormType     NormType,
       const Vector& vec1,
       const Vector& vec2
-      );
+   );
 
    /** Norm type used for calculating constraint violation */
    ENormType constr_viol_normtype() const
@@ -580,7 +580,7 @@ public:
    /** Called by IpoptType to register the options */
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
 
 private:
    /**@name Default Compiler Generated Methods
@@ -599,12 +599,12 @@ private:
    /** Copy Constructor */
    IpoptCalculatedQuantities(
       const IpoptCalculatedQuantities&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const IpoptCalculatedQuantities&
-      );
+   );
    //@}
 
    /** @name Pointers for easy access to data and NLP information */
@@ -821,7 +821,7 @@ private:
       const Matrix& P,
       const Vector& x,
       const Vector& x_bound
-      );
+   );
    /** Compute new vector containing the slack to a upper bound
     *  (uncached)
     */
@@ -829,7 +829,7 @@ private:
       const Matrix& P,
       const Vector& x,
       const Vector& x_bound
-      );
+   );
    /** Compute barrier term at given point
     *  (uncached)
     */
@@ -839,13 +839,13 @@ private:
       const Vector& slack_x_U,
       const Vector& slack_s_L,
       const Vector& slack_s_U
-      );
+   );
 
    /** Compute complementarity for slack / multiplier pair */
    SmartPtr<const Vector> CalcCompl(
       const Vector& slack,
       const Vector& mult
-      );
+   );
 
    /** Compute fraction to the boundary parameter for lower and upper bounds */
    Number CalcFracToBound(
@@ -857,7 +857,7 @@ private:
       const Matrix& P_U,
       const Vector& delta,
       Number        tau
-      );
+   );
 
    /** Compute the scaling factors for the optimality error. */
    void ComputeOptimalityErrorScaling(
@@ -870,7 +870,7 @@ private:
       Number        s_max,
       Number&       s_d,
       Number&       s_c
-      );
+   );
 
    /** Check if slacks are becoming too small.
     *
@@ -883,7 +883,7 @@ private:
       const SmartPtr<const Vector>& bound,
       const SmartPtr<const Vector>& curr_point,
       const SmartPtr<const Vector>& multiplier
-      );
+   );
 
    /** Computes the indicator vectors that can be used to filter out
     *  those entries in the slack_... variables, that correspond to
@@ -897,7 +897,7 @@ private:
       SmartPtr<const Vector>& dampind_x_U,
       SmartPtr<const Vector>& dampind_s_L,
       SmartPtr<const Vector>& dampind_s_U
-      );
+   );
 
    /** Check if we are in the restoration phase.
     *

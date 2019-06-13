@@ -37,7 +37,7 @@ public:
       const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator,
       const SmartPtr<IterateInitializer>&     warm_start_initializer,
       const SmartPtr<AugSystemSolver>         aug_system_solver = NULL
-      );
+   );
 
    /** Destructor */
    virtual ~DefaultIterateInitializer()
@@ -48,7 +48,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Compute the initial iterates and set the into the curr field
     *  of the ip_data object.
@@ -71,7 +71,7 @@ public:
       const Vector&           x_U,
       const Matrix&           Px_L,
       const Matrix&           Px_U
-      );
+   );
 
    /** Auxiliary function for computing least_square multipliers.
     *
@@ -89,12 +89,12 @@ public:
       IpoptCalculatedQuantities&              ip_cq,
       const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator,
       Number                                  constr_mult_init_max
-      );
+   );
 
    //@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> reg_options
-      );
+   );
    //@}
 
    /** @name Enums of option values */
@@ -122,12 +122,12 @@ private:
    /** Copy Constructor */
    DefaultIterateInitializer(
       const DefaultIterateInitializer&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const DefaultIterateInitializer&
-      );
+   );
    //@}
 
    /**@name Algorithmic Parameters */
@@ -183,7 +183,7 @@ private:
    bool CalculateLeastSquarePrimals(
       Vector& x_ls,
       Vector& s_ls
-      );
+   );
 
    /** Auxiliary method for computing least square dual variables */
    bool CalculateLeastSquareDuals(
@@ -193,7 +193,7 @@ private:
       Vector& vU_new,
       Vector& yc_new,
       Vector& yd_new
-      );
+   );
 };
 
 } // namespace Ipopt

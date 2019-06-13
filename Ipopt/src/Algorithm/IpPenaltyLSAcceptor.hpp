@@ -32,7 +32,7 @@ public:
     */
    PenaltyLSAcceptor(
       const SmartPtr<PDSystemSolver>& pd_solver
-      );
+   );
 
    /** Destructor */
    virtual ~PenaltyLSAcceptor();
@@ -41,7 +41,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Reset the acceptor.
     *
@@ -59,7 +59,7 @@ public:
     */
    virtual void InitThisLineSearch(
       bool in_watchdog
-      );
+   );
 
    /** Method that is called before the restoration phase is called.
     *
@@ -97,7 +97,7 @@ public:
       Number                    alpha_primal_test,
       Number&                   alpha_primal,
       SmartPtr<IteratesVector>& actual_delta
-      );
+   );
 
    /** Try higher order corrector (for fast local convergence).
     *
@@ -110,7 +110,7 @@ public:
       Number                    alpha_primal_test,
       Number&                   alpha_primal,
       SmartPtr<IteratesVector>& actual_delta
-      );
+   );
 
    /** Method for ending the current line search.
     *
@@ -120,7 +120,7 @@ public:
     */
    virtual char UpdateForNextIteration(
       Number alpha_primal_test
-      );
+   );
 
    /** Method for setting internal data if the watchdog procedure is started. */
    virtual void StartWatchDog();
@@ -140,14 +140,14 @@ public:
       Number trial_barr,
       Number trial_theta,
       bool   called_from_restoration = false
-      ) const;
+   ) const;
    //@}
 
    /** Methods for OptionsList */
    //@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
    //@}
 
 private:
@@ -164,18 +164,18 @@ private:
    /** Copy Constructor */
    PenaltyLSAcceptor(
       const PenaltyLSAcceptor&
-      );
+   );
 
    /** Overloaded Assignment Operator */
    void operator=(
       const PenaltyLSAcceptor&
-      );
+   );
    //@}
 
    /** Compute predicted reduction for given step size */
    Number CalcPred(
       Number alpha
-      );
+   );
 
    /** @name Parameters for the penalty function line search
     *  algorithm.  Names as in the filter paper */

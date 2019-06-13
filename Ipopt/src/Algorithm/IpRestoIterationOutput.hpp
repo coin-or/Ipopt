@@ -32,7 +32,7 @@ public:
     */
    RestoIterationOutput(
       const SmartPtr<OrigIterationOutput>& resto_orig_iteration_output
-      );
+   );
 
    /** Destructor */
    virtual ~RestoIterationOutput();
@@ -41,7 +41,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Method to do all the summary output per iteration.
     *
@@ -66,12 +66,12 @@ private:
    /** Copy Constructor */
    RestoIterationOutput(
       const RestoIterationOutput&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const RestoIterationOutput&
-      );
+   );
    //@}
 
    /** Pointer to output strategy object during regular iterations. */

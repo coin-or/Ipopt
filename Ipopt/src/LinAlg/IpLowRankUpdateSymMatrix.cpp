@@ -15,7 +15,7 @@ static const Index dbg_verbosity = 0;
 
 LowRankUpdateSymMatrix::LowRankUpdateSymMatrix(
    const LowRankUpdateSymMatrixSpace* owner_space
-   )
+)
    : SymMatrix(owner_space),
      owner_space_(owner_space)
 { }
@@ -28,11 +28,13 @@ void LowRankUpdateSymMatrix::MultVectorImpl(
    const Vector& x,
    Number        beta,
    Vector&       y
-   ) const
+) const
 {
    DBG_START_METH("LowRankUpdateSymMatrix::MultVectorImpl", dbg_verbosity);
    //  A few sanity checks
-   DBG_ASSERT(Dim() == x.Dim()); DBG_ASSERT(Dim() == y.Dim()); DBG_ASSERT(IsValid(D_));
+   DBG_ASSERT(Dim() == x.Dim());
+   DBG_ASSERT(Dim() == y.Dim());
+   DBG_ASSERT(IsValid(D_));
 
    SmartPtr<const Matrix> P_LR = P_LowRank();
    if( IsNull(P_LR) )
@@ -49,7 +51,8 @@ void LowRankUpdateSymMatrix::MultVectorImpl(
       {
          y.AddOneVector(alpha, x, 0.);
          y.ElementWiseMultiply(*D_);
-      } DBG_PRINT_VECTOR(2, "y = D*alpha*x", y);
+      }
+      DBG_PRINT_VECTOR(2, "y = D*alpha*x", y);
 
       if( IsValid(V_) )
       {
@@ -154,7 +157,7 @@ bool LowRankUpdateSymMatrix::HasValidNumbersImpl() const
 void LowRankUpdateSymMatrix::ComputeRowAMaxImpl(
    Vector& rows_norms,
    bool    init
-   ) const
+) const
 {
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "LowRankUpdateSymMatrix::ComputeRowAMaxImpl not implemented");
 }
@@ -162,7 +165,7 @@ void LowRankUpdateSymMatrix::ComputeRowAMaxImpl(
 void LowRankUpdateSymMatrix::ComputeColAMaxImpl(
    Vector& cols_norms,
    bool    init
-   ) const
+) const
 {
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "LowRankUpdateSymMatrix::ComputeColAMaxImpl not implemented");
 }
@@ -174,48 +177,57 @@ void LowRankUpdateSymMatrix::PrintImpl(
    const std::string& name,
    Index              indent,
    const std::string& prefix
-   ) const
+) const
 {
-   jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent, "%sLowRankUpdateSymMatrix \"%s\" with %d rows and columns:\n",
-      prefix.c_str(), name.c_str(), Dim());
+   jnlst.Printf(level, category,
+                "\n");
+   jnlst.PrintfIndented(level, category, indent,
+                        "%sLowRankUpdateSymMatrix \"%s\" with %d rows and columns:\n", prefix.c_str(), name.c_str(), Dim());
 
    if( ReducedDiag() )
    {
-      jnlst.PrintfIndented(level, category, indent + 1, "%sThis matrix has reduced diagonal.\n", prefix.c_str());
+      jnlst.PrintfIndented(level, category, indent + 1,
+                           "%sThis matrix has reduced diagonal.\n", prefix.c_str());
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent + 1, "%sThis matrix has full diagonal.\n", prefix.c_str());
+      jnlst.PrintfIndented(level, category, indent + 1,
+                           "%sThis matrix has full diagonal.\n", prefix.c_str());
    }
-   jnlst.PrintfIndented(level, category, indent + 1, "%sDiagonal matrix:\n", prefix.c_str());
+   jnlst.PrintfIndented(level, category, indent + 1,
+                        "%sDiagonal matrix:\n", prefix.c_str());
    if( IsValid(D_) )
    {
       D_->Print(&jnlst, level, category, name + "-D", indent + 1, prefix);
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent, "%sDiagonal matrix not set!\n", prefix.c_str());
+      jnlst.PrintfIndented(level, category, indent,
+                           "%sDiagonal matrix not set!\n", prefix.c_str());
    }
 
-   jnlst.PrintfIndented(level, category, indent + 1, "%sMultiVectorMatrix V for positive update:\n", prefix.c_str());
+   jnlst.PrintfIndented(level, category, indent + 1,
+                        "%sMultiVectorMatrix V for positive update:\n", prefix.c_str());
    if( IsValid(V_) )
    {
       V_->Print(&jnlst, level, category, name + "-V", indent + 1, prefix);
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent, "%sV matrix not set!\n", prefix.c_str());
+      jnlst.PrintfIndented(level, category, indent,
+                           "%sV matrix not set!\n", prefix.c_str());
    }
 
-   jnlst.PrintfIndented(level, category, indent + 1, "%sMultiVectorMatrix U for positive update:\n", prefix.c_str());
+   jnlst.PrintfIndented(level, category, indent + 1,
+                        "%sMultiVectorMatrix U for positive update:\n", prefix.c_str());
    if( IsValid(U_) )
    {
       U_->Print(&jnlst, level, category, name + "-U", indent + 1, prefix);
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent, "%sU matrix not set!\n", prefix.c_str());
+      jnlst.PrintfIndented(level, category, indent,
+                           "%sU matrix not set!\n", prefix.c_str());
    }
 }
 

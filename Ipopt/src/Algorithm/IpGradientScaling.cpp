@@ -11,41 +11,49 @@ namespace Ipopt
 
 void GradientScaling::RegisterOptions(
    const SmartPtr<RegisteredOptions>& roptions
-   )
+)
 {
-   roptions->AddLowerBoundedNumberOption("nlp_scaling_max_gradient", "Maximum gradient after NLP scaling.", 0, true,
-      100.0, "This is the gradient scaling cut-off. If the maximum"
-         " gradient is above this value, then gradient based scaling"
-         " will be performed. Scaling parameters are calculated to"
-         " scale the maximum gradient back to this value. (This is g_max in "
-         "Section 3.8 of the implementation paper.) Note: This"
-         " option is only used if \"nlp_scaling_method\" is chosen as"
-         " \"gradient-based\".");
-   roptions->AddLowerBoundedNumberOption("nlp_scaling_obj_target_gradient",
-      "Target value for objective function gradient size.", 0, false, 0.,
-      "If a positive number is chosen, the scaling factor the objective "
-         "function is computed so that the gradient has the max norm of the given "
-         "size at the starting point.  This overrides nlp_scaling_max_gradient "
-         "for the objective function.");
-   roptions->AddLowerBoundedNumberOption("nlp_scaling_constr_target_gradient",
-      "Target value for constraint function gradient size.", 0, false, 0.,
-      "If a positive number is chosen, the scaling factor the constraint "
-         "functions is computed so that the gradient has the max norm of the given "
-         "size at the starting point.  This overrides nlp_scaling_max_gradient "
-         "for the constraint functions.");
-   roptions->AddLowerBoundedNumberOption("nlp_scaling_min_value", "Minimum value of gradient-based scaling values.", 0,
-      false, 1e-8, "This is the lower bound for the scaling factors computed by "
-         "gradient-based scaling method.  If some derivatives of some functions "
-         "are huge, the scaling factors will otherwise become very small, and "
-         "the (unscaled) final constraint violation, for example, might then be "
-         "significant.  Note: This option is only used if \"nlp_scaling_method\" "
-         "is chosen as \"gradient-based\".");
+   roptions->AddLowerBoundedNumberOption(
+      "nlp_scaling_max_gradient",
+      "Maximum gradient after NLP scaling.",
+      0, true,
+      100.0,
+      "This is the gradient scaling cut-off. "
+      "If the maximum gradient is above this value, then gradient based scaling will be performed. "
+      "Scaling parameters are calculated to scale the maximum gradient back to this value. "
+      "(This is g_max in Section 3.8 of the implementation paper.) "
+      "Note: This option is only used if \"nlp_scaling_method\" is chosen as \"gradient-based\".");
+   roptions->AddLowerBoundedNumberOption(
+      "nlp_scaling_obj_target_gradient",
+      "Target value for objective function gradient size.",
+      0., false,
+      0.,
+      "If a positive number is chosen, the scaling factor the objective function is computed "
+      "so that the gradient has the max norm of the given size at the starting point. "
+      "This overrides nlp_scaling_max_gradient for the objective function.");
+   roptions->AddLowerBoundedNumberOption(
+      "nlp_scaling_constr_target_gradient",
+      "Target value for constraint function gradient size.",
+      0., false,
+      0.,
+      "If a positive number is chosen, the scaling factor the constraint functions is computed "
+      "so that the gradient has the max norm of the given size at the starting point. "
+      "This overrides nlp_scaling_max_gradient for the constraint functions.");
+   roptions->AddLowerBoundedNumberOption(
+      "nlp_scaling_min_value",
+      "Minimum value of gradient-based scaling values.",
+      0., false,
+      1e-8,
+      "This is the lower bound for the scaling factors computed by gradient-based scaling method. "
+      "If some derivatives of some functions are huge, the scaling factors will otherwise become very small, "
+      "and the (unscaled) final constraint violation, for example, might then be significant. "
+      "Note: This option is only used if \"nlp_scaling_method\" is chosen as \"gradient-based\".");
 }
 
 bool GradientScaling::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    options.GetNumericValue("nlp_scaling_max_gradient", scaling_max_gradient_, prefix);
    options.GetNumericValue("nlp_scaling_obj_target_gradient", scaling_obj_target_gradient_, prefix);
@@ -69,16 +77,16 @@ void GradientScaling::DetermineScalingParametersImpl(
    SmartPtr<Vector>&                    dx,
    SmartPtr<Vector>&                    dc,
    SmartPtr<Vector>&                    dd
-   )
+)
 {
    DBG_ASSERT(IsValid(nlp_));
 
    SmartPtr<Vector> x = x_space->MakeNew();
    if( !nlp_->GetStartingPoint(GetRawPtr(x), true,
-   NULL, false,
-   NULL, false,
-   NULL, false,
-   NULL, false) )
+                               NULL, false,
+                               NULL, false,
+                               NULL, false,
+                               NULL, false) )
    {
       THROW_EXCEPTION(FAILED_INITIALIZATION, "Error getting initial point from NLP in GradientScaling.\n");
    }
@@ -103,7 +111,7 @@ void GradientScaling::DetermineScalingParametersImpl(
          if( max_grad_f == 0. )
          {
             Jnlst().Printf(J_WARNING, J_INITIALIZATION,
-               "Gradient of objective function is zero at starting point.  Cannot determine scaling factor based on scaling_obj_target_gradient option.\n");
+                           "Gradient of objective function is zero at starting point.  Cannot determine scaling factor based on scaling_obj_target_gradient option.\n");
          }
          else
          {
@@ -111,12 +119,13 @@ void GradientScaling::DetermineScalingParametersImpl(
          }
       }
       df = Max(df, scaling_min_value_);
-      Jnlst().Printf(J_DETAILED, J_INITIALIZATION, "Scaling parameter for objective function = %e\n", df);
+      Jnlst().Printf(J_DETAILED, J_INITIALIZATION,
+                     "Scaling parameter for objective function = %e\n", df);
    }
    else
    {
       Jnlst().Printf(J_WARNING, J_INITIALIZATION,
-         "Error evaluating objective gradient at user provided starting point.\n  No scaling factor for objective function computed!\n");
+                     "Error evaluating objective gradient at user provided starting point.\n  No scaling factor for objective function computed!\n");
       df = 1.;
    }
    //
@@ -167,7 +176,7 @@ void GradientScaling::DetermineScalingParametersImpl(
       else
       {
          Jnlst().Printf(J_WARNING, J_INITIALIZATION,
-            "Error evaluating Jacobian of equality constraints at user provided starting point.\n  No scaling factors for equality constraints computed!\n");
+                        "Error evaluating Jacobian of equality constraints at user provided starting point.\n  No scaling factors for equality constraints computed!\n");
       }
    }
 
@@ -214,7 +223,7 @@ void GradientScaling::DetermineScalingParametersImpl(
       else
       {
          Jnlst().Printf(J_WARNING, J_INITIALIZATION,
-            "Error evaluating Jacobian of inequality constraints at user provided starting point.\n  No scaling factors for inequality constraints computed!\n");
+                        "Error evaluating Jacobian of inequality constraints at user provided starting point.\n  No scaling factors for inequality constraints computed!\n");
       }
    }
 }

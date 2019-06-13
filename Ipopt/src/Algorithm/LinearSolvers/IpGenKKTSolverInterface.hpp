@@ -30,7 +30,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      ) = 0;
+   ) = 0;
 
    /** @name Methods for requesting solution of the linear system. */
    //@{
@@ -90,7 +90,7 @@ public:
       Number*                   rhssol,     /**< On input, this contains the right hand sides, and on successful termination of the solver, the solutions are expected in there on return. At the moment, the order is x,d,c,s, but this can be made flexible and chosen according to an option. */
       bool                      check_NegEVals,  /**< if true, we want to ensure that the inertia is correct */
       Index                     numberOfNegEVals /**< Required number of negative eigenvalues if check_NegEVals is true */
-      ) = 0;
+   ) = 0;
 
    /** Number of negative eigenvalues detected during last factorization.
     *

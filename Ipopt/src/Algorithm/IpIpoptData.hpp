@@ -49,7 +49,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      ) = 0;
+   ) = 0;
 
    /** Initialize Data Structures at the beginning. */
    virtual bool InitializeDataStructures() = 0;
@@ -75,12 +75,12 @@ private:
    /** Copy Constructor */
    IpoptAdditionalData(
       const IpoptAdditionalData&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const IpoptAdditionalData&
-      );
+   );
    //@}
 };
 
@@ -103,7 +103,7 @@ public:
    IpoptData(
       SmartPtr<IpoptAdditionalData> add_data = NULL,
       Number                        cpu_time_start = -1.
-      );
+   );
 
    /** Destructor */
    virtual ~IpoptData();
@@ -117,7 +117,7 @@ public:
       bool      want_y_d,
       bool      want_z_L,
       bool      want_z_U
-      );
+   );
 
    /** This method must be called to initialize the global
     *  algorithmic parameters.
@@ -128,7 +128,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** @name Get Methods for Iterates */
    //@{
@@ -159,7 +159,7 @@ public:
    inline
    void set_trial(
       SmartPtr<IteratesVector>& trial
-      );
+   );
 
    /** Set the values of the primal trial variables (x and s) from
     *  provided Step with step length alpha.
@@ -168,7 +168,7 @@ public:
       Number        alpha,
       const Vector& delta_x,
       const Vector& delta_s
-      );
+   );
    /** Set the values of the trial values for the equality constraint
     *  multipliers (y_c and y_d) from provided step with step length
     *  alpha.
@@ -177,7 +177,7 @@ public:
       Number        alpha,
       const Vector& delta_y_c,
       const Vector& delta_y_d
-      );
+   );
    /** Set the value of the trial values for the bound multipliers
     *  (z_L, z_U, v_L, v_U) from provided step with step length
     *  alpha.
@@ -188,7 +188,7 @@ public:
       const Vector& delta_z_U,
       const Vector& delta_v_L,
       const Vector& delta_v_U
-      );
+   );
 
    /** ToDo: I may need to add versions of set_trial like the
     *  following, but I am not sure
@@ -207,7 +207,7 @@ public:
    inline
    void set_delta(
       SmartPtr<IteratesVector>& delta
-      );
+   );
 
    /** Set the current delta.
     *
@@ -220,7 +220,7 @@ public:
    inline
    void set_delta(
       SmartPtr<const IteratesVector>& delta
-      );
+   );
 
    /** Affine Delta */
    inline SmartPtr<const IteratesVector> delta_aff() const;
@@ -234,7 +234,7 @@ public:
    inline
    void set_delta_aff(
       SmartPtr<IteratesVector>& delta_aff
-      );
+   );
 
    /** Hessian or Hessian approximation (do not hold on to it, it might be changed) */
    SmartPtr<const SymMatrix> W()
@@ -246,7 +246,7 @@ public:
    /** Set Hessian approximation */
    void Set_W(
       SmartPtr<const SymMatrix> W
-      )
+   )
    {
       W_ = W;
    }
@@ -285,7 +285,7 @@ public:
     */
    void SetHaveDeltas(
       bool have_deltas
-      )
+   )
    {
       have_deltas_ = have_deltas;
    }
@@ -325,7 +325,7 @@ public:
     */
    void SetHaveAffineDeltas(
       bool have_affine_deltas
-      )
+   )
    {
       have_affine_deltas_ = have_affine_deltas;
    }
@@ -349,7 +349,7 @@ public:
    }
    void Set_iter_count(
       Index iter_count
-      )
+   )
    {
       iter_count_ = iter_count;
    }
@@ -361,7 +361,7 @@ public:
    }
    void Set_mu(
       Number mu
-      )
+   )
    {
       curr_mu_ = mu;
       mu_initialized_ = true;
@@ -378,7 +378,7 @@ public:
    }
    void Set_tau(
       Number tau
-      )
+   )
    {
       curr_tau_ = tau;
       tau_initialized_ = true;
@@ -390,7 +390,7 @@ public:
 
    void SetFreeMuMode(
       bool free_mu_mode
-      )
+   )
    {
       free_mu_mode_ = free_mu_mode;
    }
@@ -404,7 +404,7 @@ public:
     */
    void Set_tiny_step_flag(
       bool flag
-      )
+   )
    {
       tiny_step_flag_ = flag;
    }
@@ -440,7 +440,7 @@ public:
     */
    void Set_tol(
       Number tol
-      )
+   )
    {
       tol_ = tol;
    }
@@ -467,7 +467,7 @@ public:
    }
    void Set_info_regu_x(
       Number regu_x
-      )
+   )
    {
       info_regu_x_ = regu_x;
    }
@@ -477,7 +477,7 @@ public:
    }
    void Set_info_alpha_primal(
       Number alpha_primal
-      )
+   )
    {
       info_alpha_primal_ = alpha_primal;
    }
@@ -487,7 +487,7 @@ public:
    }
    void Set_info_alpha_primal_char(
       char info_alpha_primal_char
-      )
+   )
    {
       info_alpha_primal_char_ = info_alpha_primal_char;
    }
@@ -497,7 +497,7 @@ public:
    }
    void Set_info_alpha_dual(
       Number alpha_dual
-      )
+   )
    {
       info_alpha_dual_ = alpha_dual;
    }
@@ -507,7 +507,7 @@ public:
    }
    void Set_info_ls_count(
       Index ls_count
-      )
+   )
    {
       info_ls_count_ = ls_count;
    }
@@ -517,7 +517,7 @@ public:
    }
    void Append_info_string(
       const std::string& add_str
-      )
+   )
    {
       info_string_ += add_str;
    }
@@ -530,7 +530,7 @@ public:
     */
    void Set_info_skip_output(
       bool info_skip_output
-      )
+   )
    {
       info_skip_output_ = info_skip_output;
    }
@@ -543,7 +543,7 @@ public:
    /** sets time when the last summary output line was printed */
    void Set_info_last_output(
       Number info_last_output
-      )
+   )
    {
       info_last_output_ = info_last_output;
    }
@@ -567,7 +567,7 @@ public:
     */
    void Set_info_iters_since_header(
       int info_iters_since_header
-      )
+   )
    {
       info_iters_since_header_ = info_iters_since_header;
    }
@@ -611,7 +611,7 @@ public:
    /** Set a new pointer for additional Ipopt data */
    void SetAddData(
       SmartPtr<IpoptAdditionalData> add_data
-      )
+   )
    {
       DBG_ASSERT(!HaveAddData());
       add_data_ = add_data;
@@ -623,7 +623,7 @@ public:
       Number pd_pert_s,
       Number pd_pert_c,
       Number pd_pert_d
-      )
+   )
    {
       pd_pert_x_ = pd_pert_x;
       pd_pert_s_ = pd_pert_s;
@@ -637,7 +637,7 @@ public:
       Number& pd_pert_s,
       Number& pd_pert_c,
       Number& pd_pert_d
-      )
+   )
    {
       pd_pert_x = pd_pert_x_;
       pd_pert_s = pd_pert_s_;
@@ -647,7 +647,7 @@ public:
 
    static void RegisterOptions(
       const SmartPtr<RegisteredOptions>& roptions
-      );
+   );
 
 private:
    /** @name Iterates */
@@ -794,12 +794,12 @@ private:
    /** Copy Constructor */
    IpoptData(
       const IpoptData&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const IpoptData&
-      );
+   );
    //@}
 
 #if COIN_IPOPT_CHECKLEVEL > 0
@@ -871,7 +871,7 @@ void IpoptData::CopyTrialToCurrent()
 inline
 void IpoptData::set_trial(
    SmartPtr<IteratesVector>& trial
-   )
+)
 {
    trial_ = ConstPtr(trial);
 
@@ -896,7 +896,7 @@ void IpoptData::set_trial(
 inline
 void IpoptData::set_delta(
    SmartPtr<IteratesVector>& delta
-   )
+)
 {
    delta_ = ConstPtr(delta);
 #if COIN_IPOPT_CHECKLEVEL > 0
@@ -919,7 +919,7 @@ void IpoptData::set_delta(
 inline
 void IpoptData::set_delta(
    SmartPtr<const IteratesVector>& delta
-   )
+)
 {
    delta_ = delta;
 #if COIN_IPOPT_CHECKLEVEL > 0
@@ -942,7 +942,7 @@ void IpoptData::set_delta(
 inline
 void IpoptData::set_delta_aff(
    SmartPtr<IteratesVector>& delta_aff
-   )
+)
 {
    delta_aff_ = ConstPtr(delta_aff);
 #if COIN_IPOPT_CHECKLEVEL > 0

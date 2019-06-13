@@ -53,7 +53,7 @@ public:
    /** Constructor */
    AlgorithmBuilder(
       SmartPtr<AugSystemSolver> custom_solver = NULL
-      );
+   );
 
    /** Destructor */
    virtual ~AlgorithmBuilder()
@@ -66,7 +66,7 @@ public:
    /** register the options used by the algorithm builder */
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
    //@}
 
    /** @name Convenience methods for building solvers without having
@@ -87,7 +87,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Get the symmetric linear system solver for this
     *  algorithm. This method will call the SymLinearSolverFactory
@@ -98,7 +98,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Create a solver that can be used to solve an
     *  augmented system.
@@ -111,7 +111,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Get the augmented system solver for this algorithm. This
     *  method will call the AugSystemSolverFactory exactly once (the
@@ -122,7 +122,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Create a solver that can be used to solve a
     *  primal-dual system.
@@ -137,7 +137,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Get the primal-dual system solver for this algorithm. This
     *  method will call the PDSystemSolverFactory exactly once (the
@@ -148,7 +148,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
    //@}
 
    /** @name Methods to build parts of the algorithm */
@@ -165,7 +165,7 @@ public:
       SmartPtr<IpoptNLP>&                  ip_nlp,
       SmartPtr<IpoptData>&                 ip_data,
       SmartPtr<IpoptCalculatedQuantities>& ip_cq
-      );
+   );
 
    /** Creates an instance of the IpoptAlgorithm class by building
     *  each of its required constructor arguments piece-by-piece. The
@@ -187,7 +187,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Creates an instance of the IterationOutput class. This method
     *  is called in the default implementation of
@@ -199,7 +199,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Creates an instance of the HessianUpdater class. This method
     *  is called in the default implementation of
@@ -211,7 +211,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Creates an instance of the ConvergenceCheck class. This method
     *  is called in the default implementation of
@@ -223,7 +223,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Creates an instance of the SearchDirectionCalculator
     *  class. This method is called in the default implementation of
@@ -242,7 +242,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Creates an instance of the EqMultiplierCalculator class. This
     *  method is called in the default implementation of
@@ -259,7 +259,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Creates an instance of the IterateInitializer class. This
     *  method is called in the default implementation of
@@ -277,7 +277,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Creates an instance of the LineSearch class. This method is
     *  called in the default implementation of BuildBasicAlgorithm.
@@ -303,7 +303,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Creates an instance of the MuUpdate class. This method is
     *  called in the default implementation of BuildBasicAlgorithm.
@@ -325,7 +325,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
    //@}
 
 private:
@@ -343,12 +343,12 @@ private:
    /** Copy Constructor */
    AlgorithmBuilder(
       const AlgorithmBuilder&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const AlgorithmBuilder&
-      );
+   );
    //@}
 
    /** @name IpoptAlgorithm constructor arguments.

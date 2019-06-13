@@ -15,7 +15,7 @@ class RegisteredOptions;
 
 void RegisterOptions_LinearSolvers(
    const SmartPtr<RegisteredOptions>& roptions
-   );
+);
 
 } // namespace Ipopt
 

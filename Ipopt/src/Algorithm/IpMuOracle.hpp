@@ -33,7 +33,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      ) = 0;
+   ) = 0;
 
    /** Method for computing the value of the barrier parameter that
     *  could be used in the current iteration.
@@ -49,7 +49,7 @@ public:
       Number  mu_min,
       Number  mu_max,
       Number& new_mu
-      ) = 0;
+   ) = 0;
 
 private:
    /**@name Default Compiler Generated Methods
@@ -65,11 +65,11 @@ private:
    /** Copy Constructor */
    MuOracle(
       const MuOracle&
-      );
+   );
 
    void operator=(
       const MuOracle&
-      );
+   );
    //@}
 
 };

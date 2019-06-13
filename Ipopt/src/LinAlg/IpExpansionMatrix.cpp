@@ -16,7 +16,7 @@ static const Index dbg_verbosity = 0;
 
 ExpansionMatrix::ExpansionMatrix(
    const ExpansionMatrixSpace* owner_space
-   )
+)
    : Matrix(owner_space),
      owner_space_(owner_space)
 { }
@@ -29,10 +29,11 @@ void ExpansionMatrix::MultVectorImpl(
    const Vector& x,
    Number        beta,
    Vector&       y
-   ) const
+) const
 {
    //  A few sanity checks
-   DBG_ASSERT(NCols() == x.Dim()); DBG_ASSERT(NRows() == y.Dim());
+   DBG_ASSERT(NCols() == x.Dim());
+   DBG_ASSERT(NRows() == y.Dim());
 
    // Take care of the y part of the addition
    if( beta != 0.0 )
@@ -99,10 +100,11 @@ void ExpansionMatrix::TransMultVectorImpl(
    const Vector& x,
    Number        beta,
    Vector&       y
-   ) const
+) const
 {
    //  A few sanity checks
-   DBG_ASSERT(NCols() == y.Dim()); DBG_ASSERT(NRows() == x.Dim());
+   DBG_ASSERT(NCols() == y.Dim());
+   DBG_ASSERT(NRows() == x.Dim());
 
    // Take care of the y part of the addition
    if( beta != 0.0 )
@@ -170,9 +172,11 @@ void ExpansionMatrix::AddMSinvZImpl(
    const Vector& S,
    const Vector& Z,
    Vector&       X
-   ) const
+) const
 {
-   DBG_ASSERT(NCols() == S.Dim()); DBG_ASSERT(NCols() == Z.Dim()); DBG_ASSERT(NRows() == X.Dim());
+   DBG_ASSERT(NCols() == S.Dim());
+   DBG_ASSERT(NCols() == Z.Dim());
+   DBG_ASSERT(NRows() == X.Dim());
 
    const DenseVector* dense_S = static_cast<const DenseVector*>(&S);
    DBG_ASSERT(dynamic_cast<const DenseVector*>(&S));
@@ -241,12 +245,16 @@ void ExpansionMatrix::SinvBlrmZMTdBrImpl(
    const Vector& Z,
    const Vector& D,
    Vector&       X
-   ) const
+) const
 {
    DBG_START_METH("ExpansionMatrix::SinvBlrmZMTdBrImpl",
-      dbg_verbosity);
+                  dbg_verbosity);
 
-   DBG_ASSERT(NCols() == S.Dim()); DBG_ASSERT(NCols() == R.Dim()); DBG_ASSERT(NCols() == Z.Dim()); DBG_ASSERT(NRows() == D.Dim()); DBG_ASSERT(NCols() == X.Dim());
+   DBG_ASSERT(NCols() == S.Dim());
+   DBG_ASSERT(NCols() == R.Dim());
+   DBG_ASSERT(NCols() == Z.Dim());
+   DBG_ASSERT(NRows() == D.Dim());
+   DBG_ASSERT(NCols() == X.Dim());
 
    const DenseVector* dense_S = static_cast<const DenseVector*>(&S);
    DBG_ASSERT(dynamic_cast<const DenseVector*>(&S));
@@ -368,7 +376,7 @@ void ExpansionMatrix::SinvBlrmZMTdBrImpl(
 void ExpansionMatrix::ComputeRowAMaxImpl(
    Vector& rows_norms,
    bool    init
-   ) const
+) const
 {
    DenseVector* dense_vec = static_cast<DenseVector*>(&rows_norms);
    DBG_ASSERT(dynamic_cast<DenseVector*>(&rows_norms));
@@ -385,7 +393,7 @@ void ExpansionMatrix::ComputeRowAMaxImpl(
 void ExpansionMatrix::ComputeColAMaxImpl(
    Vector& cols_norms,
    bool    init
-   ) const
+) const
 {
    if( init )
    {
@@ -408,18 +416,19 @@ void ExpansionMatrix::PrintImplOffset(
    const std::string& prefix,
    Index              row_offset,
    Index              col_offset
-   ) const
+) const
 {
-   jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent, "%sExpansionMatrix \"%s\" with %d rows and %d columns:\n",
-      prefix.c_str(), name.c_str(), NRows(), NCols());
+   jnlst.Printf(level, category,
+                "\n");
+   jnlst.PrintfIndented(level, category, indent,
+                        "%sExpansionMatrix \"%s\" with %d rows and %d columns:\n", prefix.c_str(), name.c_str(), NRows(), NCols());
 
    const Index* exp_pos = ExpandedPosIndices();
 
    for( Index i = 0; i < NCols(); i++ )
    {
-      jnlst.PrintfIndented(level, category, indent, "%s%s[%5d,%5d]=%23.16e  (%d)\n", prefix.c_str(), name.c_str(),
-         exp_pos[i] + row_offset, i + col_offset, 1., i);
+      jnlst.PrintfIndented(level, category, indent,
+                           "%s%s[%5d,%5d]=%23.16e  (%d)\n", prefix.c_str(), name.c_str(), exp_pos[i] + row_offset, i + col_offset, 1., i);
    }
 }
 
@@ -428,7 +437,7 @@ ExpansionMatrixSpace::ExpansionMatrixSpace(
    Index        NSmallVec,
    const Index* ExpPos,
    const int    offset /*= 0*/
-   )
+)
    : MatrixSpace(NLargeVec, NSmallVec),
      expanded_pos_(NULL),
      compressed_pos_(NULL)

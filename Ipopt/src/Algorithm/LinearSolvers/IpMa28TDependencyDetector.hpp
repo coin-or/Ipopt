@@ -27,7 +27,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Method determining the number of linearly dependent rows in
     *  the matrix and the indices of those rows.
@@ -48,12 +48,12 @@ public:
       Index*            jac_c_iRow,
       Index*            jac_c_jCol,
       std::list<Index>& c_deps
-      );
+   );
 
    /** This must be called to make the options for this class known */
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
 
 private:
    /**@name Default Compiler Generated Methods
@@ -67,12 +67,12 @@ private:
    /** Copy Constructor */
    Ma28TDependencyDetector(
       const Ma28TDependencyDetector&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const Ma28TDependencyDetector&
-      );
+   );
    //@}
 
    SmartPtr<const Journalist> jnlst_;

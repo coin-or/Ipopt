@@ -38,7 +38,7 @@ public:
       const Journalist&  jnlst,
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Initialize Data Structures at the beginning. */
    bool InitializeDataStructures();
@@ -56,7 +56,7 @@ public:
    //@{
    void set_normal_x(
       SmartPtr<Vector>& normal_x
-      )
+   )
    {
       normal_x_ = ConstPtr(normal_x);
       normal_x = NULL;
@@ -64,7 +64,7 @@ public:
 
    void set_normal_s(
       SmartPtr<Vector>& normal_s
-      )
+   )
    {
       normal_s_ = ConstPtr(normal_s);
       normal_s = NULL;
@@ -85,7 +85,7 @@ public:
    //@{
    void set_tangential_x(
       SmartPtr<const Vector>& tangential_x
-      )
+   )
    {
       tangential_x_ = tangential_x;
       tangential_x = NULL;
@@ -93,7 +93,7 @@ public:
 
    void set_tangential_s(
       SmartPtr<const Vector>& tangential_s
-      )
+   )
    {
       tangential_s_ = tangential_s;
       tangential_s = NULL;
@@ -118,7 +118,7 @@ public:
    //@{
    void set_full_step_accepted(
       bool full_step_accepted
-      )
+   )
    {
       full_step_accepted_ = full_step_accepted;
    }
@@ -133,7 +133,7 @@ public:
    //@{
    void set_curr_nu(
       Number nu
-      )
+   )
    {
       curr_nu_ = nu;
    }
@@ -148,7 +148,7 @@ public:
    //@{
    void set_compute_normal(
       bool compute_normal
-      )
+   )
    {
       compute_normal_ = compute_normal;
    }
@@ -163,7 +163,7 @@ public:
    //@{
    void set_next_compute_normal(
       bool next_compute_normal
-      )
+   )
    {
       next_compute_normal_ = next_compute_normal;
    }
@@ -188,12 +188,12 @@ private:
    /** Copy Constructor */
    InexactData(
       const InexactData&
-      );
+   );
 
    /** Overloaded Assignment Operator */
    void operator=(
       const InexactData&
-      );
+   );
    //@}
 
    /** @name Normal step */

@@ -21,7 +21,7 @@ static const Index dbg_verbosity = 0;
 AugRestoSystemSolver::AugRestoSystemSolver(
    AugSystemSolver& orig_aug_solver,
    bool             skip_orig_aug_solver_init
-   )
+)
    : AugSystemSolver(),
      neg_omega_c_plus_D_c_cache_(1),
      neg_omega_d_plus_D_d_cache_(1),
@@ -46,7 +46,7 @@ AugRestoSystemSolver::~AugRestoSystemSolver()
 bool AugRestoSystemSolver::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    bool retval = true;
    if( !skip_orig_aug_solver_init_ )
@@ -80,9 +80,10 @@ ESymSolverStatus AugRestoSystemSolver::Solve(
    Vector&          sol_d,
    bool             check_NegEVals,
    Index            numberOfNegEVals
-   )
+)
 {
-   DBG_START_METH("AugRestoSystemSolver::Solve", dbg_verbosity); DBG_ASSERT(J_c && J_d); // should pass these by ref
+   DBG_START_METH("AugRestoSystemSolver::Solve", dbg_verbosity);
+   DBG_ASSERT(J_c && J_d); // should pass these by ref
 
    // I think the comment below is incorrect
    // Remember, W and the D's may be NULL!
@@ -102,7 +103,8 @@ ESymSolverStatus AugRestoSystemSolver::Solve(
    if( D_s )
    {
       SmartPtr<const CompoundVector> CD_s = static_cast<const CompoundVector*>(D_s);
-      DBG_ASSERT(dynamic_cast<const CompoundVector*>(D_s)); DBG_ASSERT(CD_s->NComps() == 1);
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(D_s));
+      DBG_ASSERT(CD_s->NComps() == 1);
       CD_s0 = CD_s->GetComp(0);
    }
 
@@ -112,7 +114,8 @@ ESymSolverStatus AugRestoSystemSolver::Solve(
    if( D_c )
    {
       SmartPtr<const CompoundVector> CD_c = static_cast<const CompoundVector*>(D_c);
-      DBG_ASSERT(dynamic_cast<const CompoundVector*>(D_c)); DBG_ASSERT(CD_c->NComps() == 1);
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(D_c));
+      DBG_ASSERT(CD_c->NComps() == 1);
       CD_c0 = CD_c->GetComp(0);
    }
 
@@ -122,7 +125,8 @@ ESymSolverStatus AugRestoSystemSolver::Solve(
    if( D_d )
    {
       SmartPtr<const CompoundVector> CD_d = static_cast<const CompoundVector*>(D_d);
-      DBG_ASSERT(dynamic_cast<const CompoundVector*>(D_d)); DBG_ASSERT(CD_d->NComps() == 1);
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(D_d));
+      DBG_ASSERT(CD_d->NComps() == 1);
       CD_d0 = CD_d->GetComp(0);
    }
 
@@ -130,30 +134,36 @@ ESymSolverStatus AugRestoSystemSolver::Solve(
    DBG_ASSERT(dynamic_cast<const CompoundVector*>(&rhs_x));
 
    SmartPtr<const CompoundVector> Crhs_s = static_cast<const CompoundVector*>(&rhs_s);
-   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&rhs_s)); DBG_ASSERT(Crhs_s->NComps() == 1);
+   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&rhs_s));
+   DBG_ASSERT(Crhs_s->NComps() == 1);
    SmartPtr<const Vector> Crhs_s0 = Crhs_s->GetComp(0);
 
    SmartPtr<const CompoundVector> Crhs_c = static_cast<const CompoundVector*>(&rhs_c);
-   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&rhs_c)); DBG_ASSERT(Crhs_c->NComps() == 1);
+   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&rhs_c));
+   DBG_ASSERT(Crhs_c->NComps() == 1);
    SmartPtr<const Vector> Crhs_c0 = Crhs_c->GetComp(0);
 
    SmartPtr<const CompoundVector> Crhs_d = static_cast<const CompoundVector*>(&rhs_d);
-   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&rhs_d)); DBG_ASSERT(Crhs_d->NComps() == 1);
+   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&rhs_d));
+   DBG_ASSERT(Crhs_d->NComps() == 1);
    SmartPtr<const Vector> Crhs_d0 = Crhs_d->GetComp(0);
 
    SmartPtr<CompoundVector> Csol_x = static_cast<CompoundVector*>(&sol_x);
    DBG_ASSERT(dynamic_cast<CompoundVector*>(&sol_x));
 
    SmartPtr<CompoundVector> Csol_s = static_cast<CompoundVector*>(&sol_s);
-   DBG_ASSERT(dynamic_cast<CompoundVector*>(&sol_s)); DBG_ASSERT(Csol_s->NComps() == 1);
+   DBG_ASSERT(dynamic_cast<CompoundVector*>(&sol_s));
+   DBG_ASSERT(Csol_s->NComps() == 1);
    SmartPtr<Vector> Csol_s0 = Csol_s->GetCompNonConst(0);
 
    SmartPtr<CompoundVector> Csol_c = static_cast<CompoundVector*>(&sol_c);
-   DBG_ASSERT(dynamic_cast<CompoundVector*>(&sol_c)); DBG_ASSERT(Csol_c->NComps() == 1);
+   DBG_ASSERT(dynamic_cast<CompoundVector*>(&sol_c));
+   DBG_ASSERT(Csol_c->NComps() == 1);
    SmartPtr<Vector> Csol_c0 = Csol_c->GetCompNonConst(0);
 
    SmartPtr<CompoundVector> Csol_d = static_cast<CompoundVector*>(&sol_d);
-   DBG_ASSERT(dynamic_cast<CompoundVector*>(&sol_d)); DBG_ASSERT(Csol_d->NComps() == 1);
+   DBG_ASSERT(dynamic_cast<CompoundVector*>(&sol_d));
+   DBG_ASSERT(Csol_d->NComps() == 1);
    SmartPtr<Vector> Csol_d0 = Csol_d->GetCompNonConst(0);
 
    // Get the Sigma inverses
@@ -229,27 +239,27 @@ ESymSolverStatus AugRestoSystemSolver::Solve(
    Number delta_sR = delta_s;
    SmartPtr<const Matrix> J_cR = CJ_c->GetComp(0, 0);
    SmartPtr<const Vector> D_cR = Neg_Omega_c_plus_D_c(sigma_tilde_n_c_inv, sigma_tilde_p_c_inv, GetRawPtr(CD_c0),
-      *Crhs_c0);
+                                 *Crhs_c0);
    DBG_PRINT((1, "D_cR tag = %u\n", D_cR->GetTag()));
    Number delta_cR = delta_c;
    SmartPtr<const Matrix> J_dR = CJ_d->GetComp(0, 0);
    SmartPtr<const Vector> D_dR = Neg_Omega_d_plus_D_d(*pd_l, sigma_tilde_n_d_inv, *neg_pd_u, sigma_tilde_p_d_inv,
-      GetRawPtr(CD_d0), *Crhs_d0);
+                                 GetRawPtr(CD_d0), *Crhs_d0);
    Number delta_dR = delta_d;
    SmartPtr<const Vector> rhs_xR = Crhs_x->GetComp(0);
    SmartPtr<const Vector> rhs_sR = Crhs_s0;
    SmartPtr<const Vector> rhs_cR = Rhs_cR(*Crhs_c0, sigma_tilde_n_c_inv, *Crhs_x->GetComp(1), sigma_tilde_p_c_inv,
-      *Crhs_x->GetComp(2));
+                                          *Crhs_x->GetComp(2));
    SmartPtr<const Vector> rhs_dR = Rhs_dR(*Crhs_d0, sigma_tilde_n_d_inv, *Crhs_x->GetComp(3), *pd_l,
-      sigma_tilde_p_d_inv, *Crhs_x->GetComp(4), *neg_pd_u);
+                                          sigma_tilde_p_d_inv, *Crhs_x->GetComp(4), *neg_pd_u);
    SmartPtr<Vector> sol_xR = Csol_x->GetCompNonConst(0);
    SmartPtr<Vector> sol_sR = Csol_s0;
    SmartPtr<Vector> sol_cR = Csol_c0;
    SmartPtr<Vector> sol_dR = Csol_d0;
 
    ESymSolverStatus status = orig_aug_solver_->Solve(GetRawPtr(h_orig), orig_W_factor, GetRawPtr(D_xR), delta_xR,
-      GetRawPtr(D_sR), delta_sR, GetRawPtr(J_cR), GetRawPtr(D_cR), delta_cR, GetRawPtr(J_dR), GetRawPtr(D_dR), delta_dR,
-      *rhs_xR, *rhs_sR, *rhs_cR, *rhs_dR, *sol_xR, *sol_sR, *sol_cR, *sol_dR, check_NegEVals, numberOfNegEVals);
+                             GetRawPtr(D_sR), delta_sR, GetRawPtr(J_cR), GetRawPtr(D_cR), delta_cR, GetRawPtr(J_dR), GetRawPtr(D_dR), delta_dR,
+                             *rhs_xR, *rhs_sR, *rhs_cR, *rhs_dR, *sol_xR, *sol_sR, *sol_cR, *sol_dR, check_NegEVals, numberOfNegEVals);
 
    if( status == SYMSOLVER_SUCCESS )
    {
@@ -266,7 +276,9 @@ ESymSolverStatus AugRestoSystemSolver::Solve(
       sol_p_c->Set(0.0);
       if( IsValid(sigma_tilde_p_c_inv) )
       {
-         DBG_PRINT_VECTOR(2, "rhs_pc", *Crhs_x->GetComp(2)); DBG_PRINT_VECTOR(2, "delta_y_c", *sol_cR); DBG_PRINT_VECTOR(2, "Sig~_{p_c}^{-1}", *sigma_tilde_p_c_inv);
+         DBG_PRINT_VECTOR(2, "rhs_pc", *Crhs_x->GetComp(2));
+         DBG_PRINT_VECTOR(2, "delta_y_c", *sol_cR);
+         DBG_PRINT_VECTOR(2, "Sig~_{p_c}^{-1}", *sigma_tilde_p_c_inv);
          sol_p_c->AddTwoVectors(1., *Crhs_x->GetComp(2), 1.0, *sol_cR, 0.);
          sol_p_c->ElementWiseMultiply(*sigma_tilde_p_c_inv);
       }
@@ -299,14 +311,14 @@ SmartPtr<const Vector> AugRestoSystemSolver::Neg_Omega_c_plus_D_c(
    const SmartPtr<const Vector>& sigma_tilde_p_c_inv,
    const Vector*                 D_c,
    const Vector&                 any_vec_in_c
-   )
+)
 {
    DBG_START_METH("AugRestoSystemSolver::Neg_Omega_c_plus_D_c", dbg_verbosity);
    SmartPtr<Vector> retVec;
    if( IsValid(sigma_tilde_n_c_inv) || IsValid(sigma_tilde_p_c_inv) || D_c )
    {
       if( !neg_omega_c_plus_D_c_cache_.GetCachedResult3Dep(retVec, GetRawPtr(sigma_tilde_n_c_inv),
-         GetRawPtr(sigma_tilde_p_c_inv), D_c) )
+            GetRawPtr(sigma_tilde_p_c_inv), D_c) )
       {
          DBG_PRINT((1, "Not found in cache\n"));
          retVec = any_vec_in_c.MakeNew();
@@ -343,7 +355,7 @@ SmartPtr<const Vector> AugRestoSystemSolver::Neg_Omega_c_plus_D_c(
          }
 
          neg_omega_c_plus_D_c_cache_.AddCachedResult3Dep(retVec, GetRawPtr(sigma_tilde_n_c_inv),
-            GetRawPtr(sigma_tilde_p_c_inv), D_c);
+               GetRawPtr(sigma_tilde_p_c_inv), D_c);
       }
    }
    return ConstPtr(retVec);
@@ -356,7 +368,7 @@ SmartPtr<const Vector> AugRestoSystemSolver::Neg_Omega_d_plus_D_d(
    const SmartPtr<const Vector>& sigma_tilde_p_d_inv,
    const Vector*                 D_d,
    const Vector&                 any_vec_in_d
-   )
+)
 {
    DBG_START_METH("AugRestoSystemSolver::Neg_Omega_d_plus_D_d", dbg_verbosity);
    SmartPtr<Vector> retVec;
@@ -396,7 +408,7 @@ SmartPtr<const Vector> AugRestoSystemSolver::Sigma_tilde_n_c_inv(
    const SmartPtr<const Vector>& sigma_n_c,
    Number                        delta_x,
    const Vector&                 any_vec_in_c
-   )
+)
 {
    DBG_START_METH("AugRestoSystemSolver::Sigma_tilde_n_c_inv", dbg_verbosity);
    SmartPtr<Vector> retVec;
@@ -442,7 +454,7 @@ SmartPtr<const Vector> AugRestoSystemSolver::Sigma_tilde_p_c_inv(
    const SmartPtr<const Vector>& sigma_p_c,
    Number                        delta_x,
    const Vector&                 any_vec_in_c
-   )
+)
 {
    DBG_START_METH("AugRestoSystemSolver::Sigma_tilde_p_c_inv", dbg_verbosity);
    SmartPtr<Vector> retVec;
@@ -486,7 +498,7 @@ SmartPtr<const Vector> AugRestoSystemSolver::Sigma_tilde_n_d_inv(
    const SmartPtr<const Vector>& sigma_n_d,
    Number                        delta_x,
    const Vector&                 any_vec_in_n_d
-   )
+)
 {
    DBG_START_METH("AugRestoSystemSolver::Sigma_tilde_n_d_inv", dbg_verbosity);
    SmartPtr<Vector> retVec;
@@ -530,7 +542,7 @@ SmartPtr<const Vector> AugRestoSystemSolver::Sigma_tilde_p_d_inv(
    const SmartPtr<const Vector>& sigma_p_d,
    Number                        delta_x,
    const Vector&                 any_vec_in_p_d
-   )
+)
 {
    DBG_START_METH("AugRestoSystemSolver::Sigma_tilde_p_d_inv", dbg_verbosity);
    SmartPtr<Vector> retVec;
@@ -575,7 +587,7 @@ SmartPtr<const Vector> AugRestoSystemSolver::D_x_plus_wr_d(
    const SmartPtr<const Vector>& CD_x0,
    Number                        factor,
    const Vector&                 wr_d
-   )
+)
 {
    DBG_START_METH("AugRestoSystemSolver::D_x_plus_wr_d", dbg_verbosity);
    SmartPtr<Vector> retVec;
@@ -613,7 +625,8 @@ SmartPtr<const Vector> AugRestoSystemSolver::D_x_plus_wr_d(
       retVec->AddTwoVectors(factor, wr_d, fact, *v, 0.);
 
       d_x_plus_wr_d_cache_.AddCachedResult(retVec, deps, scalar_deps);
-   } DBG_PRINT_VECTOR(2, "retVec", *retVec);
+   }
+   DBG_PRINT_VECTOR(2, "retVec", *retVec);
    return ConstPtr(retVec);
 }
 
@@ -623,7 +636,7 @@ SmartPtr<const Vector> AugRestoSystemSolver::Rhs_cR(
    const Vector&                 rhs_n_c,
    const SmartPtr<const Vector>& sigma_tilde_p_c_inv,
    const Vector&                 rhs_p_c
-   )
+)
 {
    DBG_START_METH("AugRestoSystemSolver::Rhs_cR", dbg_verbosity);
    SmartPtr<Vector> retVec;
@@ -667,7 +680,7 @@ SmartPtr<const Vector> AugRestoSystemSolver::Rhs_dR(
    const SmartPtr<const Vector>& sigma_tilde_p_d_inv,
    const Vector&                 rhs_p_d,
    const Matrix&                 neg_pd_U
-   )
+)
 {
    DBG_START_METH("AugRestoSystemSolver::Rhs_dR", dbg_verbosity);
    SmartPtr<Vector> retVec;

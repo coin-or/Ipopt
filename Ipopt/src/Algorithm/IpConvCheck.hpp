@@ -44,7 +44,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      ) = 0;
+   ) = 0;
 
    /** Pure virtual method for performing the convergence test.
     *
@@ -54,7 +54,7 @@ public:
     */
    virtual ConvergenceStatus CheckConvergence(
       bool call_intermediate_callback = true
-      ) = 0;
+   ) = 0;
 
    /** Method for testing if the current iterate is considered to
     *  satisfy the "acceptable level" of accuracy.
@@ -81,12 +81,12 @@ private:
    /** Copy Constructor */
    ConvergenceCheck(
       const ConvergenceCheck&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const ConvergenceCheck&
-      );
+   );
    //@}
 
 };

@@ -24,7 +24,7 @@ public:
     */
    IdentityMatrix(
       const SymMatrixSpace* owner_space
-      );
+   );
 
    /** Destructor */
    ~IdentityMatrix();
@@ -33,7 +33,7 @@ public:
    /** Method for setting the factor for the identity matrix. */
    void SetFactor(
       Number factor
-      )
+   )
    {
       factor_ = factor;
    }
@@ -55,21 +55,21 @@ protected:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual void AddMSinvZImpl(
       Number        alpha,
       const Vector& S,
       const Vector& Z,
       Vector&       X
-      ) const;
+   ) const;
 
    virtual bool HasValidNumbersImpl() const;
 
    virtual void ComputeRowAMaxImpl(
       Vector& rows_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void PrintImpl(
       const Journalist&  jnlst,
@@ -78,7 +78,7 @@ protected:
       const std::string& name,
       Index              indent,
       const std::string& prefix
-      ) const;
+   ) const;
    //@}
 
 private:
@@ -97,12 +97,12 @@ private:
    /** Copy Constructor */
    IdentityMatrix(
       const IdentityMatrix&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const IdentityMatrix&
-      );
+   );
    //@}
 
    /** Scaling factor for this identity matrix */
@@ -118,7 +118,7 @@ public:
    /** Constructor, given the dimension of the matrix. */
    IdentityMatrixSpace(
       Index dim
-      )
+   )
       : SymMatrixSpace(dim)
    { }
 
@@ -154,12 +154,12 @@ private:
    /** Copy Constructor */
    IdentityMatrixSpace(
       const IdentityMatrixSpace&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const IdentityMatrixSpace&
-      );
+   );
    //@}
 };
 

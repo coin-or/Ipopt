@@ -28,7 +28,7 @@ static const Index dbg_verbosity = 0;
 
 DenseSymMatrix::DenseSymMatrix(
    const DenseSymMatrixSpace* owner_space
-   )
+)
    : SymMatrix(owner_space),
      owner_space_(owner_space),
      values_(new Number[NCols() * NRows()]),
@@ -46,10 +46,12 @@ void DenseSymMatrix::MultVectorImpl(
    const Vector& x,
    Number        beta,
    Vector&       y
-   ) const
+) const
 {
    //  A few sanity checks
-   DBG_ASSERT(NCols() == x.Dim()); DBG_ASSERT(NRows() == y.Dim()); DBG_ASSERT(initialized_);
+   DBG_ASSERT(NCols() == x.Dim());
+   DBG_ASSERT(NRows() == y.Dim());
+   DBG_ASSERT(initialized_);
 
    // See if we can understand the data
    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
@@ -62,7 +64,7 @@ void DenseSymMatrix::MultVectorImpl(
 
 void DenseSymMatrix::FillIdentity(
    Number factor /*=1.*/
-   )
+)
 {
    const Index dim = Dim();
    for( Index j = 0; j < dim; j++ )
@@ -81,9 +83,10 @@ void DenseSymMatrix::AddMatrix(
    Number                alpha,
    const DenseSymMatrix& A,
    Number                beta
-   )
+)
 {
-   DBG_ASSERT(beta == 0. || initialized_); DBG_ASSERT(Dim() == A.Dim());
+   DBG_ASSERT(beta == 0. || initialized_);
+   DBG_ASSERT(Dim() == A.Dim());
 
    if( alpha == 0. )
    {
@@ -131,9 +134,11 @@ void DenseSymMatrix::HighRankUpdateTranspose(
    const MultiVectorMatrix& V1,
    const MultiVectorMatrix& V2,
    Number                   beta
-   )
+)
 {
-   DBG_ASSERT(Dim() == V1.NCols()); DBG_ASSERT(Dim() == V2.NCols()); DBG_ASSERT(beta == 0. || initialized_);
+   DBG_ASSERT(Dim() == V1.NCols());
+   DBG_ASSERT(Dim() == V2.NCols());
+   DBG_ASSERT(beta == 0. || initialized_);
 
    const Index dim = Dim();
    if( beta == 0. )
@@ -165,7 +170,7 @@ void DenseSymMatrix::HighRankUpdate(
    Number                alpha,
    const DenseGenMatrix& V,
    Number                beta
-   )
+)
 {
    DBG_ASSERT((!trans && Dim() == V.NRows()) || (trans && Dim() == V.NCols()));
    DBG_ASSERT(beta == 0. || initialized_);
@@ -189,7 +194,7 @@ void DenseSymMatrix::HighRankUpdate(
 void DenseSymMatrix::SpecialAddForLMSR1(
    const DenseVector&    D,
    const DenseGenMatrix& L
-   )
+)
 {
    const Index dim = Dim();
    DBG_ASSERT(initialized_);
@@ -235,7 +240,7 @@ bool DenseSymMatrix::HasValidNumbersImpl() const
 void DenseSymMatrix::ComputeRowAMaxImpl(
    Vector& rows_norms,
    bool    init
-   ) const
+) const
 {
    //  A few sanity checks
    DBG_ASSERT(initialized_);
@@ -264,12 +269,13 @@ void DenseSymMatrix::PrintImpl(
    const std::string& name,
    Index              indent,
    const std::string& prefix
-   ) const
+) const
 {
-   jnlst.Printf(level, category, "\n");
+   jnlst.Printf(level, category,
+                "\n");
    jnlst.PrintfIndented(level, category, indent,
-      "%sDenseSymMatrix \"%s\" of dimension %d (only lower triangular part printed):\n", prefix.c_str(), name.c_str(),
-      Dim());
+                        "%sDenseSymMatrix \"%s\" of dimension %d (only lower triangular part printed):\n", prefix.c_str(), name.c_str(),
+                        Dim());
 
    if( initialized_ )
    {
@@ -277,20 +283,21 @@ void DenseSymMatrix::PrintImpl(
       {
          for( Index i = j; i < NRows(); i++ )
          {
-            jnlst.PrintfIndented(level, category, indent, "%s%s[%5d,%5d]=%23.16e\n", prefix.c_str(), name.c_str(), i, j,
-               values_[i + NRows() * j]);
+            jnlst.PrintfIndented(level, category, indent,
+                                 "%s%s[%5d,%5d]=%23.16e\n", prefix.c_str(), name.c_str(), i, j, values_[i + NRows() * j]);
          }
       }
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent, "The matrix has not yet been initialized!\n");
+      jnlst.PrintfIndented(level, category, indent,
+                           "The matrix has not yet been initialized!\n");
    }
 }
 
 DenseSymMatrixSpace::DenseSymMatrixSpace(
    Index nDim
-   )
+)
    : SymMatrixSpace(nDim)
 {
 }

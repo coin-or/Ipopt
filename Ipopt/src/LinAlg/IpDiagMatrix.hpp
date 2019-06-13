@@ -26,7 +26,7 @@ public:
    /** Constructor, given the corresponding matrix space. */
    DiagMatrix(
       const SymMatrixSpace* owner_space
-      );
+   );
 
    /** Destructor */
    ~DiagMatrix();
@@ -35,7 +35,7 @@ public:
    /** Set the diagonal elements (as a Vector). */
    void SetDiag(
       const Vector& diag
-      )
+   )
    {
       diag_ = &diag;
    }
@@ -54,14 +54,14 @@ protected:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual bool HasValidNumbersImpl() const;
 
    virtual void ComputeRowAMaxImpl(
       Vector& rows_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void PrintImpl(
       const Journalist&  jnlst,
@@ -70,7 +70,7 @@ protected:
       const std::string& name,
       Index              indent,
       const std::string& prefix
-      ) const;
+   ) const;
    //@}
 
 private:
@@ -88,12 +88,12 @@ private:
    /** Copy Constructor */
    DiagMatrix(
       const DiagMatrix&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const DiagMatrix&
-      );
+   );
    //@}
 
    /** Vector storing the diagonal elements */
@@ -109,7 +109,7 @@ public:
    /** Constructor, given the dimension of the matrix. */
    DiagMatrixSpace(
       Index dim
-      )
+   )
       : SymMatrixSpace(dim)
    { }
 
@@ -144,12 +144,12 @@ private:
    /** Copy Constructor */
    DiagMatrixSpace(
       const DiagMatrixSpace&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const DiagMatrixSpace&
-      );
+   );
    //@}
 
 };

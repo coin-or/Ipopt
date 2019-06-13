@@ -24,7 +24,7 @@ public:
    /** Constructor, initializing with dimensions of the matrix. */
    TransposeMatrix(
       const TransposeMatrixSpace* owner_space
-      );
+   );
 
    /** Destructor */
    ~TransposeMatrix()
@@ -44,7 +44,7 @@ protected:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const
+   ) const
    {
       DBG_ASSERT(IsValid(orig_matrix_));
       orig_matrix_->TransMultVector(alpha, x, beta, y);
@@ -55,7 +55,7 @@ protected:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const
+   ) const
    {
       DBG_ASSERT(IsValid(orig_matrix_));
       orig_matrix_->MultVector(alpha, x, beta, y);
@@ -70,7 +70,7 @@ protected:
    virtual void ComputeRowAMaxImpl(
       Vector& rows_norms,
       bool    init
-      ) const
+   ) const
    {
       DBG_ASSERT(IsValid(orig_matrix_));
       orig_matrix_->ComputeColAMax(rows_norms, init);
@@ -79,7 +79,7 @@ protected:
    virtual void ComputeColAMaxImpl(
       Vector& rows_norms,
       bool    init
-      ) const
+   ) const
    {
       DBG_ASSERT(IsValid(orig_matrix_));
       orig_matrix_->ComputeRowAMax(rows_norms, init);
@@ -92,7 +92,7 @@ protected:
       const std::string& name,
       Index              indent,
       const std::string& prefix
-      ) const;
+   ) const;
    //@}
 
 private:
@@ -111,12 +111,12 @@ private:
    /** Copy Constructor */
    TransposeMatrix(
       const TransposeMatrix&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const TransposeMatrix&
-      );
+   );
    //@}
 
    /** Pointer to original matrix */
@@ -132,7 +132,7 @@ public:
    /** Constructor, given the dimension of the matrix. */
    TransposeMatrixSpace(
       const MatrixSpace* orig_matrix_space
-      )
+   )
       : MatrixSpace(orig_matrix_space->NCols(), orig_matrix_space->NRows()),
         orig_matrix_space_(orig_matrix_space)
    { }
@@ -174,12 +174,12 @@ private:
    /** Copy Constructor */
    TransposeMatrixSpace(
       const TransposeMatrixSpace&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const TransposeMatrixSpace&
-      );
+   );
    //@}
 
    /** Matrix space of the original matrix */

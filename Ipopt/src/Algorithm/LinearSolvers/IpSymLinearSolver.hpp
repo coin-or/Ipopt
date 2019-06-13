@@ -62,7 +62,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      ) = 0;
+   ) = 0;
 
    /** @name Methods for requesting solution of the linear system. */
    //@{
@@ -85,7 +85,7 @@ public:
       std::vector<SmartPtr<Vector> >&       solV,
       bool                                  check_NegEVals,
       Index                                 numberOfNegEVals
-      ) = 0;
+   ) = 0;
 
    /** Solve operation for a single right hand side.
     *
@@ -98,7 +98,7 @@ public:
       Vector&          sol,
       bool             check_NegEVals,
       Index            numberOfNegEVals
-      )
+   )
    {
       std::vector<SmartPtr<const Vector> > rhsV(1);
       rhsV[0] = &rhs;

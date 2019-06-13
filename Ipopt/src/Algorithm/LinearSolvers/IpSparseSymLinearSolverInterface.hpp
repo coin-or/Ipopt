@@ -123,7 +123,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      ) = 0;
+   ) = 0;
 
    /** @name Methods for requesting solution of the linear system. */
    //@{
@@ -139,7 +139,7 @@ public:
       Index        nonzeros,
       const Index* ia,
       const Index* ja
-      ) = 0;
+   ) = 0;
 
    /** Method returning an internal array into which the nonzero
     *  elements (in the same order as ja) will be stored by the
@@ -193,7 +193,7 @@ public:
       double*      rhs_vals,
       bool         check_NegEVals,
       Index        numberOfNegEVals
-      ) = 0;
+   ) = 0;
 
    /** Number of negative eigenvalues detected during last factorization.
     *
@@ -247,7 +247,7 @@ public:
       const Index*      ia,
       const Index*      ja,
       std::list<Index>& c_deps
-      )
+   )
    {
       return SYMSOLVER_FATAL_ERROR;
    }

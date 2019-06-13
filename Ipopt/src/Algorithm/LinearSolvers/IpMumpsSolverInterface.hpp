@@ -36,7 +36,7 @@ public:
    bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** @name Methods for requesting solution of the linear system. */
    //@{
@@ -45,7 +45,7 @@ public:
       Index        nonzeros,
       const Index* airn,
       const Index* ajcn
-      );
+   );
 
    virtual double* GetValuesArrayPtr();
 
@@ -57,7 +57,7 @@ public:
       double*      rhs_vals,
       bool         check_NegEVals,
       Index        numberOfNegEVals
-      );
+   );
 
    virtual Index NumberOfNegEVals() const;
    //@}
@@ -79,7 +79,7 @@ public:
 
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
 
    virtual bool ProvidesDegeneracyDetection() const;
 
@@ -87,7 +87,7 @@ public:
       const Index*      ia,
       const Index*      ja,
       std::list<Index>& c_deps
-      );
+   );
 
 private:
    /**@name Default Compiler Generated Methods
@@ -101,12 +101,12 @@ private:
    /** Copy Constructor */
    MumpsSolverInterface(
       const MumpsSolverInterface&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const MumpsSolverInterface&
-      );
+   );
    //@}
 
    /** @name Information about the matrix */
@@ -189,13 +189,13 @@ private:
    ESymSolverStatus Factorization(
       bool  check_NegEVals,
       Index numberOfNegEVals
-      );
+   );
 
    /** Call MUMPS (job=3) to do the solve. */
    ESymSolverStatus Solve(
       Index   nrhs,
       double* rhs_vals
-      );
+   );
    //@}
 };
 

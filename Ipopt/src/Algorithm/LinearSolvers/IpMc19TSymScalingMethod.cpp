@@ -29,15 +29,15 @@
 extern "C"
 {
 // here we assume that float corresponds to Fortran's single precision
-void F77_FUNC(mc19ad, MC19AD)(
-   ipfint* N,
-   ipfint* NZ,
-   double* A,
-   ipfint* IRN,
-   ipfint* ICN,
-   float*  R,
-   float*  C,
-   float*  W
+   void F77_FUNC(mc19ad, MC19AD)(
+      ipfint* N,
+      ipfint* NZ,
+      double* A,
+      ipfint* IRN,
+      ipfint* ICN,
+      float*  R,
+      float*  C,
+      float*  W
    );
 }
 
@@ -50,7 +50,7 @@ static const Index dbg_verbosity = 0;
 bool Mc19TSymScalingMethod::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    return true;
 }
@@ -62,10 +62,10 @@ bool Mc19TSymScalingMethod::ComputeSymTScalingFactors(
    const ipfint* ajcn,
    const double* a,
    double*       scaling_factors
-   )
+)
 {
    DBG_START_METH("Mc19TSymScalingMethod::ComputeSymTScalingFactors",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    if( DBG_VERBOSITY() >= 2 )
    {
@@ -152,7 +152,7 @@ bool Mc19TSymScalingMethod::ComputeSymTScalingFactors(
       for( Index i = 0; i < n; i++ )
       {
          DBG_PRINT((3, "R[%5d] = %23.15e  C[%5d] = %23.15e\n",
-               i, R[i], i, C[i]));
+                    i, R[i], i, C[i]));
       }
    }
 
@@ -170,7 +170,8 @@ bool Mc19TSymScalingMethod::ComputeSymTScalingFactors(
    }
    if( !IsFiniteNumber(sum) || smax > 1e40 )
    {
-      Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA, "Scaling factors are invalid - setting them all to 1.\n");
+      Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+                     "Scaling factors are invalid - setting them all to 1.\n");
       for( Index i = 0; i < n; i++ )
       {
          scaling_factors[i] = 1.;
@@ -182,7 +183,7 @@ bool Mc19TSymScalingMethod::ComputeSymTScalingFactors(
       for( Index i = 0; i < n; i++ )
       {
          DBG_PRINT((2, "scaling_factors[%5d] = %23.15e\n",
-               i, scaling_factors[i]));
+                    i, scaling_factors[i]));
       }
    }
 

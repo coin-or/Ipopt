@@ -18,7 +18,7 @@ static const Index dbg_verbosity = 0;
 bool SlackBasedTSymScalingMethod::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    return true;
 }
@@ -30,10 +30,10 @@ bool SlackBasedTSymScalingMethod::ComputeSymTScalingFactors(
    const ipfint* ajcn,
    const double* a,
    double*       scaling_factors
-   )
+)
 {
    DBG_START_METH("SlackBasedTSymScalingMethod::ComputeTSymScalingFactors",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    const Index nx = IpData().curr()->x()->Dim();
    const Index ns = IpData().curr()->s()->Dim();
@@ -51,13 +51,15 @@ bool SlackBasedTSymScalingMethod::ComputeSymTScalingFactors(
    // Lower bounds
    SmartPtr<const Matrix> Pd_L = IpNLP().Pd_L();
    SmartPtr<const Vector> curr_slack_s_L = IpCq().curr_slack_s_L();
-   DBG_PRINT_MATRIX(1, "Pd_L", *Pd_L); DBG_PRINT_VECTOR(1, "curr_slack_s_L", *curr_slack_s_L);
+   DBG_PRINT_MATRIX(1, "Pd_L", *Pd_L);
+   DBG_PRINT_VECTOR(1, "curr_slack_s_L", *curr_slack_s_L);
    Pd_L->MultVector(1., *curr_slack_s_L, 0., *tmp);
 
    // Upper bounds
    SmartPtr<const Matrix> Pd_U = IpNLP().Pd_U();
    SmartPtr<const Vector> curr_slack_s_U = IpCq().curr_slack_s_U();
-   DBG_PRINT_MATRIX(1, "Pd_U", *Pd_U); DBG_PRINT_VECTOR(1, "curr_slack_s_U", *curr_slack_s_U);
+   DBG_PRINT_MATRIX(1, "Pd_U", *Pd_U);
+   DBG_PRINT_VECTOR(1, "curr_slack_s_U", *curr_slack_s_U);
    Pd_U->MultVector(1., *curr_slack_s_U, 1., *tmp);
 
    SmartPtr<Vector> tmp2 = tmp->MakeNew();

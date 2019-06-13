@@ -33,7 +33,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      ) = 0;
+   ) = 0;
 
    /** Method for determining the barrier parameter for the next
     *  iteration.
@@ -62,12 +62,12 @@ private:
    /** Copy Constructor */
    MuUpdate(
       const MuUpdate&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const MuUpdate&
-      );
+   );
    //@}
 
 };

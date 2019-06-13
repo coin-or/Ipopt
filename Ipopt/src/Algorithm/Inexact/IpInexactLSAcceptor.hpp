@@ -37,7 +37,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Reset the acceptor.
     *
@@ -56,7 +56,7 @@ public:
     */
    virtual void InitThisLineSearch(
       bool in_watchdog
-      );
+   );
 
    /** Method that is called before the restoration phase is called.
     *
@@ -75,7 +75,7 @@ public:
     */
    virtual bool CheckAcceptabilityOfTrialPoint(
       Number alpha_primal
-      );
+   );
 
    /** Try a second order correction for the constraints.
     *
@@ -86,7 +86,7 @@ public:
       Number                    alpha_primal_test,
       Number&                   alpha_primal,
       SmartPtr<IteratesVector>& actual_delta
-      );
+   );
 
    /** Try higher order corrector (for fast local convergence).
     *
@@ -99,7 +99,7 @@ public:
       Number                    alpha_primal_test,
       Number&                   alpha_primal,
       SmartPtr<IteratesVector>& actual_delta
-      );
+   );
 
    /** Method for ending the current line search.
     *
@@ -110,7 +110,7 @@ public:
     */
    virtual char UpdateForNextIteration(
       Number alpha_primal_test
-      );
+   );
 
    /** Method for setting internal data if the watchdog procedure is
     *  started.
@@ -134,7 +134,7 @@ public:
       Number trial_barr,
       Number trial_theta,
       bool   called_from_restoration = false
-      ) const;
+   ) const;
    //@}
 
    /** Method for updating the equality constraint multipliers */
@@ -142,7 +142,7 @@ public:
       Number                    alpha_primal,
       Number                    alpha_dual,
       SmartPtr<IteratesVector>& delta
-      );
+   );
 
    /** Method returning true of ComputeAlphaForY is implemented for
     *  this acceptor.
@@ -156,7 +156,7 @@ public:
    //@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
    //@}
 
 protected:
@@ -190,18 +190,18 @@ private:
    /** Copy Constructor */
    InexactLSAcceptor(
       const InexactLSAcceptor&
-      );
+   );
 
    /** Overloaded Assignment Operator */
    void operator=(
       const InexactLSAcceptor&
-      );
+   );
    //@}
 
    /** Compute predicted reduction for given step size */
    Number CalcPred(
       Number alpha
-      );
+   );
 
    /** Method for resetting the slacks to be satisfying the slack
     * equality constraints without increasing the barrier

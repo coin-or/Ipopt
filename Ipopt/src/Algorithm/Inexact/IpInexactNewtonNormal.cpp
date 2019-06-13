@@ -16,7 +16,7 @@ static const Index dbg_verbosity = 0;
 
 InexactNewtonNormalStep::InexactNewtonNormalStep(
    SmartPtr<AugSystemSolver> aug_solver
-   )
+)
    : aug_solver_(aug_solver)
 { }
 
@@ -25,13 +25,13 @@ InexactNewtonNormalStep::~InexactNewtonNormalStep()
 
 void InexactNewtonNormalStep::RegisterOptions(
    SmartPtr<RegisteredOptions> reg_options
-   )
+)
 { }
 
 bool InexactNewtonNormalStep::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    return aug_solver_->Initialize(Jnlst(), IpNLP(), IpData(), IpCq(), options, prefix);
 }
@@ -39,10 +39,10 @@ bool InexactNewtonNormalStep::InitializeImpl(
 bool InexactNewtonNormalStep::ComputeNewtonNormalStep(
    Vector& newton_x,
    Vector& newton_s
-   )
+)
 {
    DBG_START_METH("InexactNewtonNormalStep::ComputeNormalNewtonStep",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    // Get the entries for the augmented system matrix
 
@@ -69,15 +69,16 @@ bool InexactNewtonNormalStep::ComputeNewtonNormalStep(
    SmartPtr<Vector> sol_d = curr_d_minus_s->MakeNew();
 
    ESymSolverStatus retval = aug_solver_->Solve(GetRawPtr(zeroW), 0., NULL, 1., GetRawPtr(D_s), 0., GetRawPtr(J_c),
-      NULL, 0., GetRawPtr(J_d), NULL, 0., *rhs_x, *rhs_s, *curr_c, *curr_d_minus_s, newton_x, newton_s, *sol_c, *sol_d,
-      false, 0);
+                             NULL, 0., GetRawPtr(J_d), NULL, 0., *rhs_x, *rhs_s, *curr_c, *curr_d_minus_s, newton_x, newton_s, *sol_c, *sol_d,
+                             false, 0);
 
    if( retval == SYMSOLVER_SINGULAR )
    {
-      Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM, "Resolving Newton step system with c-d perturbation.\n");
+      Jnlst().Printf(J_DETAILED, J_SOLVE_PD_SYSTEM,
+                     "Resolving Newton step system with c-d perturbation.\n");
       retval = aug_solver_->Solve(GetRawPtr(zeroW), 0., NULL, 1., GetRawPtr(D_s), 0., GetRawPtr(J_c), NULL, 1e-8,
-         GetRawPtr(J_d), NULL, 1e-8, *rhs_x, *rhs_s, *curr_c, *curr_d_minus_s, newton_x, newton_s, *sol_c, *sol_d,
-         false, 0);
+                                  GetRawPtr(J_d), NULL, 1e-8, *rhs_x, *rhs_s, *curr_c, *curr_d_minus_s, newton_x, newton_s, *sol_c, *sol_d,
+                                  false, 0);
    }
 
    if( retval != SYMSOLVER_SUCCESS )

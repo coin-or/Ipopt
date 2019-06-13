@@ -41,7 +41,7 @@ namespace Ipopt
 
 void RegisterOptions_Algorithm(
    const SmartPtr<RegisteredOptions>& roptions
-   )
+)
 {
    roptions->SetRegisteringCategory("Barrier Parameter Update");
    AdaptiveMuUpdate::RegisterOptions(roptions);

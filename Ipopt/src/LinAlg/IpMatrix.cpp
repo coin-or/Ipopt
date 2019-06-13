@@ -13,7 +13,7 @@ void Matrix::AddMSinvZ(
    const Vector& S,
    const Vector& Z,
    Vector&       X
-   ) const
+) const
 {
    AddMSinvZImpl(alpha, S, Z, X);
 }
@@ -25,7 +25,7 @@ void Matrix::SinvBlrmZMTdBr(
    const Vector& Z,
    const Vector& D,
    Vector&       X
-   ) const
+) const
 {
    SinvBlrmZMTdBrImpl(alpha, S, R, Z, D, X);
 }
@@ -36,7 +36,7 @@ void Matrix::AddMSinvZImpl(
    const Vector& S,
    const Vector& Z,
    Vector&       X
-   ) const
+) const
 {
    SmartPtr<Vector> tmp = S.MakeNew();
    tmp->AddVectorQuotient(1., Z, S, 0.);
@@ -50,7 +50,7 @@ void Matrix::SinvBlrmZMTdBrImpl(
    const Vector& Z,
    const Vector& D,
    Vector&       X
-   ) const
+) const
 {
    TransMultVector(alpha, D, 0., X);
    X.ElementWiseMultiply(Z);
@@ -75,7 +75,7 @@ void Matrix::Print(
    const std::string&         name,
    Index                      indent,
    const std::string&         prefix
-   ) const
+) const
 {
    if( IsValid(jnlst) && jnlst->ProduceOutput(level, category) )
    {
@@ -90,7 +90,7 @@ void Matrix::Print(
    const std::string& name,
    Index              indent,
    const std::string& prefix
-   ) const
+) const
 {
    if( jnlst.ProduceOutput(level, category) )
    {

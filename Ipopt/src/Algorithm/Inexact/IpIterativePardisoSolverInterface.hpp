@@ -27,7 +27,7 @@ public:
    IterativePardisoSolverInterface(
       IterativeSolverTerminationTester& normal_tester,
       IterativeSolverTerminationTester& pd_tester
-      );
+   );
 
    /** Destructor */
    virtual ~IterativePardisoSolverInterface();
@@ -36,7 +36,7 @@ public:
    bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** @name Methods for requesting solution of the linear system. */
    //@{
@@ -46,7 +46,7 @@ public:
       Index        nonzeros,
       const Index* ia,
       const Index* ja
-      );
+   );
 
    /** Method returning an internal array into which the nonzero
     *  elements are to be stored.
@@ -62,7 +62,7 @@ public:
       double*      rhs_vals,
       bool         check_NegEVals,
       Index        numberOfNegEVals
-      );
+   );
 
    /** Number of negative eigenvalues detected during last
     *  factorization.
@@ -96,7 +96,7 @@ public:
 
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
 
 private:
    /**@name Default Compiler Generated Methods
@@ -115,12 +115,12 @@ private:
    /** Copy Constructor */
    IterativePardisoSolverInterface(
       const IterativePardisoSolverInterface&
-      );
+   );
 
    /** Overloaded Assignment Operator */
    void operator=(
       const IterativePardisoSolverInterface&
-      );
+   );
    //@}
 
    /** @name Information about the matrix */
@@ -245,7 +245,7 @@ private:
    ESymSolverStatus SymbolicFactorization(
       const Index* ia,
       const Index* ja
-      );
+   );
 
    /** Call Pardiso to factorize the Matrix. */
    ESymSolverStatus Factorization(
@@ -253,7 +253,7 @@ private:
       const Index* ja,
       bool         check_NegEVals,
       Index        numberOfNegEVals
-      );
+   );
 
    /** Call Pardiso to do the Solve.
     */
@@ -262,7 +262,7 @@ private:
       const Index* ja,
       Index        nrhs,
       double*      rhs_vals
-      );
+   );
    //@}
 
    /** Method to easily access Inexact data */

@@ -50,7 +50,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      ) = 0;
+   ) = 0;
 
    /** Set up the augmented system and solve it for a given right hand side.
     *
@@ -83,7 +83,7 @@ public:
       Vector&          sol_d,
       bool             check_NegEVals,
       Index            numberOfNegEVals
-      )
+   )
    {
       std::vector<SmartPtr<const Vector> > rhs_xV(1);
       rhs_xV[0] = &rhs_x;
@@ -102,7 +102,7 @@ public:
       std::vector<SmartPtr<Vector> > sol_dV(1);
       sol_dV[0] = &sol_d;
       return MultiSolve(W, W_factor, D_x, delta_x, D_s, delta_s, J_c, D_c, delta_c, J_d, D_d, delta_d, rhs_xV, rhs_sV,
-         rhs_cV, rhs_dV, sol_xV, sol_sV, sol_cV, sol_dV, check_NegEVals, numberOfNegEVals);
+                        rhs_cV, rhs_dV, sol_xV, sol_sV, sol_cV, sol_dV, check_NegEVals, numberOfNegEVals);
    }
 
    /** Like Solve, but for multiple right hand sides.
@@ -133,18 +133,25 @@ public:
       std::vector<SmartPtr<Vector> >&       sol_dV,
       bool                                  check_NegEVals,
       Index                                 numberOfNegEVals
-      )
+   )
    {
       // Solve for one right hand side after the other
       Index nrhs = (Index) rhs_xV.size();
-      DBG_ASSERT(nrhs > 0); DBG_ASSERT(nrhs == (Index)rhs_sV.size()); DBG_ASSERT(nrhs == (Index)rhs_cV.size()); DBG_ASSERT(nrhs == (Index)rhs_dV.size()); DBG_ASSERT(nrhs == (Index)sol_xV.size()); DBG_ASSERT(nrhs == (Index)sol_sV.size()); DBG_ASSERT(nrhs == (Index)sol_cV.size()); DBG_ASSERT(nrhs == (Index)sol_dV.size());
+      DBG_ASSERT(nrhs > 0);
+      DBG_ASSERT(nrhs == (Index)rhs_sV.size());
+      DBG_ASSERT(nrhs == (Index)rhs_cV.size());
+      DBG_ASSERT(nrhs == (Index)rhs_dV.size());
+      DBG_ASSERT(nrhs == (Index)sol_xV.size());
+      DBG_ASSERT(nrhs == (Index)sol_sV.size());
+      DBG_ASSERT(nrhs == (Index)sol_cV.size());
+      DBG_ASSERT(nrhs == (Index)sol_dV.size());
 
       ESymSolverStatus retval = SYMSOLVER_SUCCESS;
       for( Index i = 0; i < nrhs; i++ )
       {
          retval = Solve(W, W_factor, D_x, delta_x, D_s, delta_s, J_c, D_c, delta_c, J_d, D_d, delta_d, *rhs_xV[i],
-            *rhs_sV[i], *rhs_cV[i], *rhs_dV[i], *sol_xV[i], *sol_sV[i], *sol_cV[i], *sol_dV[i], check_NegEVals,
-            numberOfNegEVals);
+                        *rhs_sV[i], *rhs_cV[i], *rhs_dV[i], *sol_xV[i], *sol_sV[i], *sol_cV[i], *sol_dV[i], check_NegEVals,
+                        numberOfNegEVals);
          if( retval != SYMSOLVER_SUCCESS )
          {
             break;
@@ -190,12 +197,12 @@ private:
    /** Copy Constructor */
    AugSystemSolver(
       const AugSystemSolver&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const AugSystemSolver&
-      );
+   );
    //@}
 
 };

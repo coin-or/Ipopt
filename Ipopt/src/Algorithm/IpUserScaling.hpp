@@ -47,7 +47,7 @@ protected:
       SmartPtr<Vector>&                    dx,
       SmartPtr<Vector>&                    dc,
       SmartPtr<Vector>&                    dd
-      );
+   );
 
 private:
 
@@ -64,12 +64,12 @@ private:
    /** Copy Constructor */
    UserScaling(
       const UserScaling&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const UserScaling&
-      );
+   );
    //@}
 
    /** pointer to the NLP to get scaling parameters */

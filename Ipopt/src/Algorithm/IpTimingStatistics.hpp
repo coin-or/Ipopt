@@ -37,7 +37,7 @@ public:
       Journalist&      jnlst,
       EJournalLevel    level,
       EJournalCategory category
-      ) const;
+   ) const;
 
    /**@name Accessor methods to all timed tasks. */
    //@{
@@ -196,12 +196,12 @@ private:
    /** Copy Constructor */
    TimingStatistics(
       const TimingStatistics&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const TimingStatistics&
-      );
+   );
    //@}
 
    /**@name All timed tasks. */

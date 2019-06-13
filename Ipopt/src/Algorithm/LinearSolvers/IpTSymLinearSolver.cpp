@@ -17,7 +17,7 @@ static const Index dbg_verbosity = 0;
 TSymLinearSolver::TSymLinearSolver(
    SmartPtr<SparseSymLinearSolverInterface> solver_interface,
    SmartPtr<TSymScalingMethod>              scaling_method
-   )
+)
    : SymLinearSolver(),
      atag_(0),
      dim_(0),
@@ -38,7 +38,7 @@ TSymLinearSolver::TSymLinearSolver(
 TSymLinearSolver::~TSymLinearSolver()
 {
    DBG_START_METH("TSymLinearSolver::~TSymLinearSolver()",
-      dbg_verbosity);
+                  dbg_verbosity);
    delete[] airn_;
    delete[] ajcn_;
    delete[] scaling_factors_;
@@ -47,21 +47,23 @@ TSymLinearSolver::~TSymLinearSolver()
 void TSymLinearSolver::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions)
 {
-   roptions->AddStringOption2("linear_scaling_on_demand",
-      "Flag indicating that linear scaling is only done if it seems required.", "yes", "no",
-      "Always scale the linear system.", "yes", "Start using linear system scaling if solutions seem not good.",
-      "This option is only important if a linear scaling method (e.g., mc19) "
-         "is used.  If you choose \"no\", then the scaling factors are computed "
-         "for every linear system from the start.  This can be quite expensive. "
-         "Choosing \"yes\" means that the algorithm will start the scaling "
-         "method only when the solutions to the linear system seem not good, and "
-         "then use it until the end.");
+   roptions->AddStringOption2(
+      "linear_scaling_on_demand",
+      "Flag indicating that linear scaling is only done if it seems required.",
+      "yes",
+      "no", "Always scale the linear system.",
+      "yes", "Start using linear system scaling if solutions seem not good.",
+      "This option is only important if a linear scaling method (e.g., mc19) is used. "
+      "If you choose \"no\", then the scaling factors are computed for every linear system from the start. "
+      "This can be quite expensive. "
+      "Choosing \"yes\" means that the algorithm will start the scaling method only "
+      "when the solutions to the linear system seem not good, and then use it until the end.");
 }
 
 bool TSymLinearSolver::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    if( IsValid(scaling_method_) )
    {
@@ -123,7 +125,7 @@ bool TSymLinearSolver::InitializeImpl(
    else
    {
       ASSERT_EXCEPTION(have_structure_, INVALID_WARMSTART,
-         "TSymLinearSolver called with warm_start_same_structure, but the internal structures are not initialized.");
+                       "TSymLinearSolver called with warm_start_same_structure, but the internal structures are not initialized.");
    }
 
    // reset the initialize flag to make sure that InitializeStructure
@@ -162,7 +164,7 @@ ESymSolverStatus TSymLinearSolver::MultiSolve(
    std::vector<SmartPtr<Vector> >&       solV,
    bool                                  check_NegEVals,
    Index                                 numberOfNegEVals
-   )
+)
 {
    DBG_START_METH("TSymLinearSolver::MultiSolve", dbg_verbosity);
    DBG_ASSERT(!check_NegEVals || ProvidesInertia());
@@ -204,11 +206,12 @@ ESymSolverStatus TSymLinearSolver::MultiSolve(
       TripletHelper::FillValuesFromVector(dim_, *rhsV[irhs], &rhs_vals[irhs * (dim_)]);
       if( Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA) )
       {
-         Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "Right hand side %d in TSymLinearSolver:\n", irhs);
+         Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
+                        "Right hand side %d in TSymLinearSolver:\n", irhs);
          for( Index i = 0; i < dim_; i++ )
          {
-            Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "Trhs[%5d,%5d] = %23.16e\n", irhs, i,
-               rhs_vals[irhs * (dim_) + i]);
+            Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
+                           "Trhs[%5d,%5d] = %23.16e\n", irhs, i, rhs_vals[irhs * (dim_) + i]);
          }
       }
       if( use_scaling_ )
@@ -293,11 +296,12 @@ ESymSolverStatus TSymLinearSolver::MultiSolve(
          }
          if( Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA) )
          {
-            Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "Solution %d in TSymLinearSolver:\n", irhs);
+            Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
+                           "Solution %d in TSymLinearSolver:\n", irhs);
             for( Index i = 0; i < dim_; i++ )
             {
-               Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA, "Tsol[%5d,%5d] = %23.16e\n", irhs, i,
-                  rhs_vals[irhs * (dim_) + i]);
+               Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
+                              "Tsol[%5d,%5d] = %23.16e\n", irhs, i, rhs_vals[irhs * (dim_) + i]);
             }
          }
          TripletHelper::PutValuesInVector(dim_, &rhs_vals[irhs * (dim_)], *solV[irhs]);
@@ -311,10 +315,11 @@ ESymSolverStatus TSymLinearSolver::MultiSolve(
 
 ESymSolverStatus TSymLinearSolver::InitializeStructure(
    const SymMatrix& sym_A
-   )
+)
 {
    DBG_START_METH("TSymLinearSolver::InitializeStructure",
-      dbg_verbosity); DBG_ASSERT(!initialized_);
+                  dbg_verbosity);
+   DBG_ASSERT(!initialized_);
 
    ESymSolverStatus retval;
 
@@ -391,7 +396,7 @@ ESymSolverStatus TSymLinearSolver::InitializeStructure(
    else
    {
       ASSERT_EXCEPTION(dim_ == sym_A.Dim(), INVALID_WARMSTART,
-         "TSymLinearSolver called with warm_start_same_structure, but the problem is solved for the first time.");
+                       "TSymLinearSolver called with warm_start_same_structure, but the problem is solved for the first time.");
       // This is a warm start for identical structure, so we don't need to
       // recompute the nonzeros location arrays
       const Index* ia;
@@ -429,7 +434,8 @@ bool TSymLinearSolver::IncreaseQuality()
 
    if( IsValid(scaling_method_) && !use_scaling_ && linear_scaling_on_demand_ )
    {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Switching on scaling of the linear system (on demand).\n");
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Switching on scaling of the linear system (on demand).\n");
       IpData().Append_info_string("Mc");
       use_scaling_ = true;
       just_switched_on_scaling_ = true;
@@ -449,9 +455,10 @@ bool TSymLinearSolver::ProvidesInertia() const
 void TSymLinearSolver::GiveMatrixToSolver(
    bool             new_matrix,
    const SymMatrix& sym_A
-   )
+)
 {
-   DBG_START_METH("TSymLinearSolver::GiveMatrixToSolver", dbg_verbosity); DBG_PRINT((1, "new_matrix = %d\n", new_matrix));
+   DBG_START_METH("TSymLinearSolver::GiveMatrixToSolver", dbg_verbosity);
+   DBG_PRINT((1, "new_matrix = %d\n", new_matrix));
 
    double* pa = solver_interface_->GetValuesArrayPtr();
    double* atriplet;
@@ -484,20 +491,21 @@ void TSymLinearSolver::GiveMatrixToSolver(
          // only compute scaling factors if the matrix has not been
          // changed since the last call to this method
          bool retval = scaling_method_->ComputeSymTScalingFactors(dim_, nonzeros_triplet_, airn_, ajcn_, atriplet,
-            scaling_factors_);
+                       scaling_factors_);
          if( !retval )
          {
-            Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Error during computation of scaling factors.\n");
+            Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                           "Error during computation of scaling factors.\n");
             THROW_EXCEPTION(ERROR_IN_LINEAR_SCALING_METHOD,
-               "scaling_method_->ComputeSymTScalingFactors returned false.")
+                            "scaling_method_->ComputeSymTScalingFactors returned false.")
          }
          // complain if not in debug mode
          if( Jnlst().ProduceOutput(J_MOREVECTOR, J_LINEAR_ALGEBRA) )
          {
             for( Index i = 0; i < dim_; i++ )
             {
-               Jnlst().Printf(J_MOREVECTOR, J_LINEAR_ALGEBRA, "scaling factor[%6d] = %22.17e\n", i,
-                  scaling_factors_[i]);
+               Jnlst().Printf(J_MOREVECTOR, J_LINEAR_ALGEBRA,
+                              "scaling factor[%6d] = %22.17e\n", i, scaling_factors_[i]);
             }
          }
          just_switched_on_scaling_ = false;
@@ -539,7 +547,7 @@ ESymSolverStatus TSymLinearSolver::DetermineDependentRows(
    Index*            jac_c_iRow,
    Index*            jac_c_jCol,
    std::list<Index>& c_deps
-   )
+)
 {
    DBG_START_METH("TSymLinearSolver::DetermineDependentRows", dbg_verbosity);
 
@@ -651,10 +659,11 @@ ESymSolverStatus TSymLinearSolver::DetermineDependentRows(
       // only compute scaling factors if the matrix has not been
       // changed since the last call to this method
       bool retval2 = scaling_method_->ComputeSymTScalingFactors(dim_, nonzeros_triplet_, airn_, ajcn_, atriplet,
-         scaling_factors_);
+                     scaling_factors_);
       if( !retval2 )
       {
-         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Error during computation of scaling factors.\n");
+         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+                        "Error during computation of scaling factors.\n");
          THROW_EXCEPTION(ERROR_IN_LINEAR_SCALING_METHOD, "scaling_method_->ComputeSymTScalingFactors returned false.")
       }
       // complain if not in debug mode
@@ -662,7 +671,8 @@ ESymSolverStatus TSymLinearSolver::DetermineDependentRows(
       {
          for( Index i = 0; i < dim_; i++ )
          {
-            Jnlst().Printf(J_MOREVECTOR, J_LINEAR_ALGEBRA, "scaling factor[%6d] = %22.17e\n", i, scaling_factors_[i]);
+            Jnlst().Printf(J_MOREVECTOR, J_LINEAR_ALGEBRA,
+                           "scaling factor[%6d] = %22.17e\n", i, scaling_factors_[i]);
          }
       }
       for( Index i = 0; i < nonzeros_triplet_; i++ )

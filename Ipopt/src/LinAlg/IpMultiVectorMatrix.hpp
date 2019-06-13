@@ -30,7 +30,7 @@ public:
     */
    MultiVectorMatrix(
       const MultiVectorMatrixSpace* owner_space
-      );
+   );
 
    /** Destructor */
    ~MultiVectorMatrix();
@@ -48,7 +48,7 @@ public:
    void SetVector(
       Index         i,
       const Vector& vec
-      );
+   );
 
    /* For the non-const version, keep in mind that operations that
     * change this matrix also change the Vector that has been given
@@ -57,13 +57,13 @@ public:
    void SetVectorNonConst(
       Index   i,
       Vector& vec
-      );
+   );
    //@}
 
    /** Get a Vector in a particular column as a const Vector */
    inline SmartPtr<const Vector> GetVector(
       Index i
-      ) const
+   ) const
    {
       return ConstVec(i);
    }
@@ -75,7 +75,7 @@ public:
     */
    inline SmartPtr<Vector> GetVectorNonConst(
       Index i
-      )
+   )
    {
       ObjectChanged();
       return Vec(i);
@@ -86,7 +86,7 @@ public:
     */
    void ScaleRows(
       const Vector& scal_vec
-      );
+   );
 
    /** Method for scaling the columns of the matrix, using the Scale
     *  method for each column vector.
@@ -101,7 +101,7 @@ public:
       Number                   a,
       const MultiVectorMatrix& mv1,
       Number                   c
-      );
+   );
 
    /** Multiplying a Matrix C (for now assumed to be a DenseGenMatrix)
     *  from the right to a MultiVectorMatrix U and adding the result
@@ -112,7 +112,7 @@ public:
       const MultiVectorMatrix& U,
       const Matrix&            C,
       Number                   b
-      );
+   );
 
    /** Method for initializing all Vectors with new (uninitialized) Vectors. */
    void FillWithNewVectors();
@@ -128,7 +128,7 @@ public:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    /** Vector space for the columns */
    SmartPtr<const VectorSpace> ColVectorSpace() const;
@@ -144,26 +144,26 @@ protected:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual void TransMultVectorImpl(
       Number        alpha,
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual bool HasValidNumbersImpl() const;
 
    virtual void ComputeRowAMaxImpl(
       Vector& rows_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void ComputeColAMaxImpl(
       Vector& cols_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void PrintImpl(
       const Journalist&  jnlst,
@@ -172,7 +172,7 @@ protected:
       const std::string& name,
       Index              indent,
       const std::string& prefix
-      ) const;
+   ) const;
    //@}
 
 private:
@@ -191,12 +191,12 @@ private:
    /** Copy Constructor */
    MultiVectorMatrix(
       const MultiVectorMatrix&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const MultiVectorMatrix&
-      );
+   );
    //@}
 
    const MultiVectorMatrixSpace* owner_space_;
@@ -211,9 +211,10 @@ private:
    //@{
    inline const Vector* ConstVec(
       Index i
-      ) const
+   ) const
    {
-      DBG_ASSERT(i < NCols()); DBG_ASSERT(IsValid(const_vecs_[i]) || IsValid(non_const_vecs_[i]));
+      DBG_ASSERT(i < NCols());
+      DBG_ASSERT(IsValid(const_vecs_[i]) || IsValid(non_const_vecs_[i]));
       if( IsValid(non_const_vecs_[i]) )
       {
          return GetRawPtr(non_const_vecs_[i]);
@@ -226,9 +227,10 @@ private:
 
    inline Vector* Vec(
       Index i
-      )
+   )
    {
-      DBG_ASSERT(i < NCols()); DBG_ASSERT(IsValid(non_const_vecs_[i]));
+      DBG_ASSERT(i < NCols());
+      DBG_ASSERT(IsValid(non_const_vecs_[i]));
       return GetRawPtr(non_const_vecs_[i]);
    }
    //@}
@@ -246,7 +248,7 @@ public:
    MultiVectorMatrixSpace(
       Index              ncols,
       const VectorSpace& vec_space
-      );
+   );
 
    /** Destructor */
    ~MultiVectorMatrixSpace()

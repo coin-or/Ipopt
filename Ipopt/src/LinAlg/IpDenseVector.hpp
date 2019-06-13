@@ -46,7 +46,7 @@ public:
     */
    DenseVector(
       const DenseVectorSpace* owner_space
-      );
+   );
 
    /** Destructor
     */
@@ -61,7 +61,7 @@ public:
    /** Set elements in the vector to the Number array x. */
    void SetValues(
       const Number* x
-      );
+   );
 
    /** Obtain pointer to the internal Number array with vector
     *  elements with the intention to change the vector data.
@@ -123,7 +123,7 @@ public:
    void CopyToPos(
       Index         Pos,
       const Vector& x
-      );
+   );
 
    /** Copy a subrange of x, starting at Pos, into the full data of
     *  this vector.
@@ -133,7 +133,7 @@ public:
    void CopyFromPos(
       Index         Pos,
       const Vector& x
-      );
+   );
    //@}
 
 protected:
@@ -141,20 +141,20 @@ protected:
    //@{
    virtual void CopyImpl(
       const Vector& x
-      );
+   );
 
    virtual void ScalImpl(
       Number alpha
-      );
+   );
 
    virtual void AxpyImpl(
       Number        alpha,
       const Vector& x
-      );
+   );
 
    virtual Number DotImpl(
       const Vector& x
-      ) const;
+   ) const;
 
    virtual Number Nrm2Impl() const;
 
@@ -164,23 +164,23 @@ protected:
 
    virtual void SetImpl(
       Number value
-      );
+   );
 
    virtual void ElementWiseDivideImpl(
       const Vector& x
-      );
+   );
 
    virtual void ElementWiseMultiplyImpl(
       const Vector& x
-      );
+   );
 
    virtual void ElementWiseMaxImpl(
       const Vector& x
-      );
+   );
 
    virtual void ElementWiseMinImpl(
       const Vector& x
-      );
+   );
 
    virtual void ElementWiseReciprocalImpl();
 
@@ -192,7 +192,7 @@ protected:
 
    virtual void AddScalarImpl(
       Number scalar
-      );
+   );
 
    virtual Number MaxImpl() const;
 
@@ -215,13 +215,13 @@ protected:
       Number        b,
       const Vector& v2,
       Number        c
-      );
+   );
 
    /** Fraction to the boundary parameter. */
    Number FracToBoundImpl(
       const Vector& delta,
       Number        tau
-      ) const;
+   ) const;
 
    /** Add the quotient of two vectors, y = a * z/s + c * y. */
    void AddVectorQuotientImpl(
@@ -229,7 +229,7 @@ protected:
       const Vector& z,
       const Vector& s,
       Number        c
-      );
+   );
    //@}
 
    /** @name Output methods */
@@ -241,7 +241,7 @@ protected:
       const std::string& name,
       Index              indent,
       const std::string& prefix
-      ) const
+   ) const
    {
       PrintImplOffset(jnlst, level, category, name, indent, prefix, 1);
    }
@@ -255,7 +255,7 @@ protected:
       Index              indent,
       const std::string& prefix,
       Index              offset
-      ) const;
+   ) const;
    //@}
 
    friend class ParVector;
@@ -275,12 +275,12 @@ private:
    /** Copy Constructor */
    DenseVector(
       const DenseVector&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const DenseVector&
-      );
+   );
    //@}
 
    /** Copy of the owner_space ptr as a DenseVectorSpace instead of a VectorSpace. */
@@ -334,7 +334,7 @@ public:
    /** Constructor, requires dimension of all vector for this VectorSpace */
    DenseVectorSpace(
       Index dim
-      )
+   )
       : VectorSpace(dim)
    { }
 
@@ -366,7 +366,7 @@ public:
    /** Deallocate internal storage for the DenseVector */
    inline void FreeInternalStorage(
       Number* values
-      ) const;
+   ) const;
    //@}
 
    /**@name Methods for dealing with meta data on the vector
@@ -376,52 +376,52 @@ public:
    inline
    bool HasStringMetaData(
       const std::string tag
-      ) const;
+   ) const;
 
    /** Check if Integer meta exists for tag */
    inline
    bool HasIntegerMetaData(
       const std::string tag
-      ) const;
+   ) const;
 
    /** Check if Numeric meta exists for tag */
    inline
    bool HasNumericMetaData(
       const std::string tag
-      ) const;
+   ) const;
 
    /** Get meta data of type std::string by tag */
    inline const std::vector<std::string>& GetStringMetaData(
       const std::string& tag
-      ) const;
+   ) const;
 
    /** Get meta data of type Index by tag */
    inline const std::vector<Index>& GetIntegerMetaData(
       const std::string& tag
-      ) const;
+   ) const;
 
    /** Get meta data of type Number by tag */
    inline const std::vector<Number>& GetNumericMetaData(
       const std::string& tag
-      ) const;
+   ) const;
 
    /** Set meta data of type std::string by tag */
    inline void SetStringMetaData(
       std::string              tag,
       std::vector<std::string> meta_data
-      );
+   );
 
    /** Set meta data of type Index by tag */
    inline void SetIntegerMetaData(
       std::string        tag,
       std::vector<Index> meta_data
-      );
+   );
 
    /** Set meta data of type Number by tag */
    inline void SetNumericMetaData(
       std::string         tag,
       std::vector<Number> meta_data
-      );
+   );
 
    /** Get map of meta data of type Number */
    inline const StringMetaDataMapType& GetStringMetaData() const;
@@ -489,7 +489,7 @@ inline Number* DenseVectorSpace::AllocateInternalStorage() const
 inline
 void DenseVectorSpace::FreeInternalStorage(
    Number* values
-   ) const
+) const
 {
    delete[] values;
 }
@@ -502,7 +502,7 @@ inline SmartPtr<DenseVector> DenseVector::MakeNewDenseVector() const
 inline
 bool DenseVectorSpace::HasStringMetaData(
    const std::string tag
-   ) const
+) const
 {
    StringMetaDataMapType::const_iterator iter;
    iter = string_meta_data_.find(tag);
@@ -518,7 +518,7 @@ bool DenseVectorSpace::HasStringMetaData(
 inline
 bool DenseVectorSpace::HasIntegerMetaData(
    const std::string tag
-   ) const
+) const
 {
    IntegerMetaDataMapType::const_iterator iter;
    iter = integer_meta_data_.find(tag);
@@ -534,7 +534,7 @@ bool DenseVectorSpace::HasIntegerMetaData(
 inline
 bool DenseVectorSpace::HasNumericMetaData(
    const std::string tag
-   ) const
+) const
 {
    NumericMetaDataMapType::const_iterator iter;
    iter = numeric_meta_data_.find(tag);
@@ -549,7 +549,7 @@ bool DenseVectorSpace::HasNumericMetaData(
 
 inline const std::vector<std::string>& DenseVectorSpace::GetStringMetaData(
    const std::string& tag
-   ) const
+) const
 {
    DBG_ASSERT(HasStringMetaData(tag));
    StringMetaDataMapType::const_iterator iter;
@@ -559,7 +559,7 @@ inline const std::vector<std::string>& DenseVectorSpace::GetStringMetaData(
 
 inline const std::vector<Index>& DenseVectorSpace::GetIntegerMetaData(
    const std::string& tag
-   ) const
+) const
 {
    DBG_ASSERT(HasIntegerMetaData(tag));
    IntegerMetaDataMapType::const_iterator iter;
@@ -569,7 +569,7 @@ inline const std::vector<Index>& DenseVectorSpace::GetIntegerMetaData(
 
 inline const std::vector<Number>& DenseVectorSpace::GetNumericMetaData(
    const std::string& tag
-   ) const
+) const
 {
    DBG_ASSERT(HasNumericMetaData(tag));
    NumericMetaDataMapType::const_iterator iter;
@@ -580,7 +580,7 @@ inline const std::vector<Number>& DenseVectorSpace::GetNumericMetaData(
 inline void DenseVectorSpace::SetStringMetaData(
    std::string              tag,
    std::vector<std::string> meta_data
-   )
+)
 {
    string_meta_data_[tag] = meta_data;
 }
@@ -588,7 +588,7 @@ inline void DenseVectorSpace::SetStringMetaData(
 inline void DenseVectorSpace::SetIntegerMetaData(
    std::string        tag,
    std::vector<Index> meta_data
-   )
+)
 {
    integer_meta_data_[tag] = meta_data;
 }
@@ -596,7 +596,7 @@ inline void DenseVectorSpace::SetIntegerMetaData(
 inline void DenseVectorSpace::SetNumericMetaData(
    std::string         tag,
    std::vector<Number> meta_data
-   )
+)
 {
    numeric_meta_data_[tag] = meta_data;
 }

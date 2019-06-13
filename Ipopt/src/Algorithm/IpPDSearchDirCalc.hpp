@@ -24,7 +24,7 @@ public:
    /** Constructor */
    PDSearchDirCalculator(
       const SmartPtr<PDSystemSolver>& pd_solver
-      );
+   );
 
    /** Destructor */
    virtual ~PDSearchDirCalculator();
@@ -34,7 +34,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Method for computing the search direction.
     *
@@ -44,7 +44,7 @@ public:
 
    static void RegisterOptions(
       const SmartPtr<RegisteredOptions>& roptions
-      );
+   );
 
    /** Returns the pd_solver for additional processing. */
    SmartPtr<PDSystemSolver> PDSolver()
@@ -69,12 +69,12 @@ private:
    /** Copy Constructor */
    PDSearchDirCalculator(
       const PDSearchDirCalculator&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const PDSearchDirCalculator&
-      );
+   );
    //@}
 
    /** @name Strategy objects */

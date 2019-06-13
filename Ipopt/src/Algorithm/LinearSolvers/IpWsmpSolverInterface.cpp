@@ -31,43 +31,43 @@
 /** Prototypes for WSMP's subroutines */
 extern "C"
 {
-void F77_FUNC(wsetmaxthrds, WSETMAXTHRDS)(
-   const ipfint* NTHREADS
+   void F77_FUNC(wsetmaxthrds, WSETMAXTHRDS)(
+      const ipfint* NTHREADS
    );
 
-void F77_FUNC(wssmp, WSSMP)(
-   const ipfint* N,
-   const ipfint* IA,
-   const ipfint* JA,
-   const double* AVALS,
-   double*       DIAG,
-   ipfint*       PERM,
-   ipfint*       INVP,
-   double*       B,
-   const ipfint* LDB,
-   const ipfint* NRHS,
-   double*       AUX,
-   const ipfint* NAUX,
-   ipfint*       MRP,
-   ipfint*       IPARM,
-   double*       DPARM
+   void F77_FUNC(wssmp, WSSMP)(
+      const ipfint* N,
+      const ipfint* IA,
+      const ipfint* JA,
+      const double* AVALS,
+      double*       DIAG,
+      ipfint*       PERM,
+      ipfint*       INVP,
+      double*       B,
+      const ipfint* LDB,
+      const ipfint* NRHS,
+      double*       AUX,
+      const ipfint* NAUX,
+      ipfint*       MRP,
+      ipfint*       IPARM,
+      double*       DPARM
    );
 
-void F77_FUNC_(wsmp_clear,WSMP_CLEAR)(void);
+   void F77_FUNC_(wsmp_clear, WSMP_CLEAR)(void);
 
 #ifdef PARDISO_MATCHING_PREPROCESS
-void smat_reordering_pardiso_wsmp_(
-   const ipfint* N,
-   const ipfint* ia,
-   const ipfint* ja,
-   const double* a_,
-   ipfint*       a2,
-   ipfint*       ja2,
-   double*       a2_,
-   ipfint*       perm2,
-   double*       scale2,
-   ipfint*       tmp2_,
-   ipfint        preprocess
+   void smat_reordering_pardiso_wsmp_(
+      const ipfint* N,
+      const ipfint* ia,
+      const ipfint* ja,
+      const double* a_,
+      ipfint*       a2,
+      ipfint*       ja2,
+      double*       a2_,
+      ipfint*       perm2,
+      double*       scale2,
+      ipfint*       tmp2_,
+      ipfint        preprocess
    );
 #endif
 }
@@ -79,19 +79,19 @@ static const Index dbg_verbosity = 3;
 #endif
 
 WsmpSolverInterface::WsmpSolverInterface()
-: a_(NULL),
+   : a_(NULL),
 #ifdef PARDISO_MATCHING_PREPROCESS
-  ia2(NULL),
-  ja2(NULL),
-  a2_(NULL),
-  perm2(NULL),
-  scale2(NULL),
+     ia2(NULL),
+     ja2(NULL),
+     a2_(NULL),
+     perm2(NULL),
+     scale2(NULL),
 #endif
-  negevals_(-1),
-  initialized_(false),
-  PERM_(NULL),
-  INVP_(NULL),
-  MRP_(NULL)
+     negevals_(-1),
+     initialized_(false),
+     PERM_(NULL),
+     INVP_(NULL),
+     MRP_(NULL)
 {
    DBG_START_METH("WsmpSolverInterface::WsmpSolverInterface()", dbg_verbosity);
 
@@ -102,7 +102,7 @@ WsmpSolverInterface::WsmpSolverInterface()
 WsmpSolverInterface::~WsmpSolverInterface()
 {
    DBG_START_METH("WsmpSolverInterface::~WsmpSolverInterface()",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    // Clear WSMP's memory
    F77_FUNC_(wsmp_clear, WSMP_CLEAR)();
@@ -125,55 +125,90 @@ WsmpSolverInterface::~WsmpSolverInterface()
 
 void WsmpSolverInterface::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
-   )
+)
 {
-   roptions->AddIntegerOption("wsmp_num_threads", "Number of threads to be used in WSMP", 1,
-      "This determines on how many processors WSMP is running on.  This option "
-      "is only available if Ipopt has been compiled with WSMP.");
-   roptions->AddBoundedIntegerOption("wsmp_ordering_option", "Determines how ordering is done in WSMP (IPARM(16)", -2, 3,
-      1, "This corresponds to the value of WSSMP's IPARM(16).  This option is "
-      "only available if Ipopt has been compiled with WSMP.");
-   roptions->AddBoundedIntegerOption("wsmp_ordering_option2", "Determines how ordering is done in WSMP (IPARM(20)", 0, 3,
-      1, "This corresponds to the value of WSSMP's IPARM(20).  This option is "
-      "only available if Ipopt has been compiled with WSMP.");
-   roptions->AddBoundedNumberOption("wsmp_pivtol", "Pivot tolerance for the linear solver WSMP.", 0.0, true, 1.0, true,
-      1e-4, "A smaller number pivots for sparsity, a larger number pivots for "
-      "stability.  This option is only available if Ipopt has been compiled "
-      "with WSMP.");
-   roptions->AddBoundedNumberOption("wsmp_pivtolmax", "Maximum pivot tolerance for the linear solver WSMP.", 0.0, true,
-      1.0, true, 1e-1, "Ipopt may increase pivtol as high as pivtolmax to get a more accurate "
-      "solution to the linear system.  This option is only available if Ipopt "
-      "has been compiled with WSMP.");
-   roptions->AddBoundedIntegerOption("wsmp_scaling", "Determines how the matrix is scaled by WSMP.", 0, 3, 0,
+   roptions->AddIntegerOption(
+      "wsmp_num_threads",
+      "Number of threads to be used in WSMP",
+      1,
+      "This option is only available if Ipopt has been compiled with WSMP.");
+   roptions->AddBoundedIntegerOption(
+      "wsmp_ordering_option",
+      "Determines how ordering is done in WSMP",
+      -2, 3,
+      1,
+      "This corresponds to the value of WSSMP's IPARM(16)."
+      "This option is only available if Ipopt has been compiled with WSMP.");
+   roptions->AddBoundedIntegerOption(
+      "wsmp_ordering_option2",
+      "Determines how ordering is done in WSMP",
+      0, 3,
+      1,
+      "This corresponds to the value of WSSMP's IPARM(20)."
+      "This option is only available if Ipopt has been compiled with WSMP.");
+   roptions->AddBoundedNumberOption(
+      "wsmp_pivtol",
+      "Pivot tolerance for the linear solver WSMP.",
+      0.0, true,
+      1.0, true,
+      1e-4,
+      "A smaller number pivots for sparsity, a larger number pivots for stability. "
+      "This option is only available if Ipopt has been compiled with WSMP.");
+   roptions->AddBoundedNumberOption(
+      "wsmp_pivtolmax",
+      "Maximum pivot tolerance for the linear solver WSMP.",
+      0.0, true,
+      1.0, true,
+      1e-1,
+      "Ipopt may increase pivtol as high as pivtolmax to get a more accurate solution to the linear system. "
+      "This option is only available if Ipopt has been compiled with WSMP.");
+   roptions->AddBoundedIntegerOption(
+      "wsmp_scaling",
+      "Determines how the matrix is scaled by WSMP.",
+      0, 3,
+      0,
       "This corresponds to the value of WSSMP's IPARM(10). "
-      "This option is only available if Ipopt has been compiled "
-      "with WSMP.");
-   roptions->AddBoundedNumberOption("wsmp_singularity_threshold", "WSMP's singularity threshold.", 0.0, true, 1.0, true,
-      1e-18, "WSMP's DPARM(10) parameter.  The smaller this value the less likely "
-      "a matrix is declared singular.  This option is only available if Ipopt "
-      "has been compiled with WSMP.");
-   roptions->SetRegisteringCategory("Uncategorized");
-   roptions->AddLowerBoundedIntegerOption("wsmp_write_matrix_iteration",
-      "Iteration in which the matrices are written to files.", -1, -1,
-      "If non-negative, this option determines the iteration in which all "
-      "matrices given to WSMP are written to files.  This option is only "
-      "available if Ipopt has been compiled with WSMP.");
-   roptions->AddStringOption2("wsmp_skip_inertia_check", "Always pretent inertia is correct.", "no", "no", "check inertia",
-      "yes", "skip inertia check", "Setting this option to \"yes\" essentially disables inertia check. "
-      "This option makes the algorithm non-robust and easily fail, but it "
-      "might give some insight into the necessity of inertia control.");
-   roptions->AddStringOption2("wsmp_no_pivoting", "Use the static pivoting option of WSMP.", "no", "no",
-      "use the regular version", "yes", "use static pivoting",
-      "Setting this option to \"yes\" means that WSMP instructed not to do "
-      "pivoting.  This works only in certain situations (when the Hessian "
-      "block is known to be positive definite or when we are using L-BFGS). "
+      "This option is only available if Ipopt has been compiled with WSMP.");
+   roptions->AddBoundedNumberOption(
+      "wsmp_singularity_threshold",
+      "WSMP's singularity threshold.",
+      0.0, true,
+      1.0, true,
+      1e-18,
+      "WSMP's DPARM(10) parameter. "
+      "The smaller this value the less likely a matrix is declared singular. "
+      "This option is only available if Ipopt has been compiled with WSMP.");
+   roptions->SetRegisteringCategory("Uncategorized"); // ????
+   roptions->AddLowerBoundedIntegerOption(
+      "wsmp_write_matrix_iteration",
+      "Iteration in which the matrices are written to files.",
+      -1,
+      -1,
+      "If non-negative, this option determines the iteration in which all matrices given to WSMP are written to files. "
+      "This option is only available if Ipopt has been compiled with WSMP.");
+   roptions->AddStringOption2(
+      "wsmp_skip_inertia_check",
+      "Always pretend inertia is correct.",
+      "no",
+      "no", "check inertia",
+      "yes", "skip inertia check",
+      "Setting this option to \"yes\" essentially disables inertia check. "
+      "This option makes the algorithm non-robust and easily fail, but it might give some insight into the necessity of inertia control.");
+   roptions->AddStringOption2(
+      "wsmp_no_pivoting",
+      "Use the static pivoting option of WSMP.",
+      "no",
+      "no", "use the regular version",
+      "yes", "use static pivoting",
+      "Setting this option to \"yes\" means that WSMP instructed not to do pivoting. "
+      "This works only in certain situations (when the Hessian block is known to be positive definite or when we are using L-BFGS). "
       "It can also lead to a lot of fill-in.");
 }
 
 bool WsmpSolverInterface::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    options.GetIntegerValue("wsmp_num_threads", wsmp_num_threads_, prefix);
    Index wsmp_ordering_option;
@@ -184,8 +219,8 @@ bool WsmpSolverInterface::InitializeImpl(
    if( options.GetNumericValue("wsmp_pivtolmax", wsmp_pivtolmax_, prefix) )
    {
       ASSERT_EXCEPTION(wsmp_pivtolmax_ >= wsmp_pivtol_, OPTION_INVALID,
-         "Option \"wsmp_pivtolmax\": This value must be between "
-         "wsmp_pivtol and 1.");
+                       "Option \"wsmp_pivtolmax\": This value must be between "
+                       "wsmp_pivtol and 1.");
    }
    else
    {
@@ -233,7 +268,8 @@ bool WsmpSolverInterface::InitializeImpl(
    // Set the number of threads
    ipfint NTHREADS = wsmp_num_threads_;
    F77_FUNC(wsetmaxthrds, WSETMAXTHRDS)(&NTHREADS);
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "WSMP will use %d threads.\n", wsmp_num_threads_);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "WSMP will use %d threads.\n", wsmp_num_threads_);
 
    // Get WSMP's default parameters and set the ones we want differently
    IPARM_[0] = 0;
@@ -242,7 +278,7 @@ bool WsmpSolverInterface::InitializeImpl(
    ipfint idmy;
    double ddmy;
    F77_FUNC(wssmp, WSSMP)(&idmy, &idmy, &idmy, &ddmy, &ddmy, &idmy, &idmy, &ddmy, &idmy, &idmy, &ddmy, &idmy, &idmy,
-      IPARM_, DPARM_);
+                          IPARM_, DPARM_);
    IPARM_[15] = wsmp_ordering_option; // ordering option
    IPARM_[17] = 0; // use local minimum fill-in ordering
    IPARM_[19] = wsmp_ordering_option2; // for ordering in IP methods?
@@ -281,7 +317,7 @@ ESymSolverStatus WsmpSolverInterface::MultiSolve(
    double*      rhs_vals,
    bool         check_NegEVals,
    Index        numberOfNegEVals
-   )
+)
 {
    DBG_START_METH("WsmpSolverInterface::MultiSolve", dbg_verbosity);
    DBG_ASSERT(!check_NegEVals || ProvidesInertia());
@@ -289,8 +325,8 @@ ESymSolverStatus WsmpSolverInterface::MultiSolve(
 
    if( !printed_num_threads_ )
    {
-      Jnlst().Printf(J_ITERSUMMARY, J_LINEAR_ALGEBRA, "  -- WSMP is working with %d thread%s.\n", IPARM_[32],
-         IPARM_[32] == 1 ? "" : "s");
+      Jnlst().Printf(J_ITERSUMMARY, J_LINEAR_ALGEBRA,
+                     "  -- WSMP is working with %d thread%s.\n", IPARM_[32], IPARM_[32] == 1 ? "" : "s");
       printed_num_threads_ = true;
    }
    // check if a factorization has to be done
@@ -323,7 +359,7 @@ ESymSolverStatus WsmpSolverInterface::InitializeStructure(
    Index        nonzeros,
    const Index* ia,
    const Index* ja
-   )
+)
 {
    DBG_START_METH("WsmpSolverInterface::InitializeStructure", dbg_verbosity);
    dim_ = dim;
@@ -349,10 +385,10 @@ ESymSolverStatus WsmpSolverInterface::InitializeStructure(
 ESymSolverStatus WsmpSolverInterface::SymbolicFactorization(
    const Index* ia,
    const Index* ja
-   )
+)
 {
    DBG_START_METH("WsmpSolverInterface::SymbolicFactorization",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    // This is postponed until the first factorization call, since
    // then the values in the matrix are known
@@ -363,7 +399,7 @@ ESymSolverStatus WsmpSolverInterface::InternalSymFact(
    const Index* ia,
    const Index* ja,
    Index        numberOfNegEVals
-   )
+)
 {
    if( HaveIpData() )
    {
@@ -408,7 +444,7 @@ ESymSolverStatus WsmpSolverInterface::InternalSymFact(
    ipfint* tmp2_ = new ipfint[N];
 
    smat_reordering_pardiso_wsmp_(&N, ia, ja, a_, ia2, ja2, a2_, perm2,
-      scale2, tmp2_, 0);
+                                 scale2, tmp2_, 0);
 
    delete[] tmp2_;
 
@@ -433,22 +469,22 @@ ESymSolverStatus WsmpSolverInterface::InternalSymFact(
    if( wsmp_no_pivoting_ )
    {
       IPARM_[14] = dim_ - numberOfNegEVals; // CHECK
-      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA, "Restricting WSMP static pivot sequence with IPARM(15) = %d\n",
-         IPARM_[14]);
+      Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
+                     "Restricting WSMP static pivot sequence with IPARM(15) = %d\n", IPARM_[14]);
    }
 
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-      "Calling WSSMP-1-2 for ordering and symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(),
-      WallclockTime());
+                  "Calling WSSMP-1-2 for ordering and symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(),
+                  WallclockTime());
 #ifdef PARDISO_MATCHING_PREPROCESS
    F77_FUNC(wssmp, WSSMP)(&N, ia2, ja2, a2_, &ddmy, PERM_, INVP_,
 #else
-      F77_FUNC(wssmp, WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
+   F77_FUNC(wssmp, WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
 #endif
-         &ddmy, &idmy, &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
+                          &ddmy, &idmy, &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-      "Done with WSSMP-1-2 for ordering and symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(),
-      WallclockTime());
+                  "Done with WSSMP-1-2 for ordering and symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(),
+                  WallclockTime());
 
    Index ierror = IPARM_[63];
    if( ierror != 0 )
@@ -456,11 +492,12 @@ ESymSolverStatus WsmpSolverInterface::InternalSymFact(
       if( ierror == -102 )
       {
          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-            "Error: WSMP is not able to allocate sufficient amount of memory during ordering/symbolic factorization.\n");
+                        "Error: WSMP is not able to allocate sufficient amount of memory during ordering/symbolic factorization.\n");
       }
       else if( ierror > 0 )
       {
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Matrix appears to be singular (with ierror = %d).\n", ierror);
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "Matrix appears to be singular (with ierror = %d).\n", ierror);
          if( HaveIpData() )
          {
             IpData().TimingStats().LinearSystemSymbolicFactorization().End();
@@ -470,7 +507,7 @@ ESymSolverStatus WsmpSolverInterface::InternalSymFact(
       else
       {
          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-            "Error in WSMP during ordering/symbolic factorization phase.\n     Error code is %d.\n", ierror);
+                        "Error in WSMP during ordering/symbolic factorization phase.\n     Error code is %d.\n", ierror);
       }
       if( HaveIpData() )
       {
@@ -479,9 +516,9 @@ ESymSolverStatus WsmpSolverInterface::InternalSymFact(
       return SYMSOLVER_FATAL_ERROR;
    }
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-      "Predicted memory usage for WSSMP after symbolic factorization IPARM(23)= %d.\n", IPARM_[22]);
+                  "Predicted memory usage for WSSMP after symbolic factorization IPARM(23)= %d.\n", IPARM_[22]);
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-      "Predicted number of nonzeros in factor for WSSMP after symbolic factorization IPARM(23)= %d.\n", IPARM_[23]);
+                  "Predicted number of nonzeros in factor for WSSMP after symbolic factorization IPARM(23)= %d.\n", IPARM_[23]);
 
    if( HaveIpData() )
    {
@@ -496,7 +533,7 @@ ESymSolverStatus WsmpSolverInterface::Factorization(
    const Index* ja,
    bool         check_NegEVals,
    Index        numberOfNegEVals
-   )
+)
 {
    DBG_START_METH("WsmpSolverInterface::Factorization", dbg_verbosity);
 
@@ -511,7 +548,8 @@ ESymSolverStatus WsmpSolverInterface::Factorization(
       matrix_file_number_++;
       char buf[256];
       Snprintf(buf, 255, "wsmp_matrix_%d_%d.dat", iter_count, matrix_file_number_);
-      Jnlst().Printf(J_SUMMARY, J_LINEAR_ALGEBRA, "Writing WSMP matrix into file %s.\n", buf);
+      Jnlst().Printf(J_SUMMARY, J_LINEAR_ALGEBRA,
+                     "Writing WSMP matrix into file %s.\n", buf);
       FILE* fp = fopen(buf, "w");
       fprintf(fp, "%d\n", dim_); // N
       for( Index icol = 0; icol < dim_; icol++ )
@@ -562,22 +600,22 @@ ESymSolverStatus WsmpSolverInterface::Factorization(
 #endif
 
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-      "Calling WSSMP-3-3 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+                  "Calling WSSMP-3-3 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
 #ifdef PARDISO_MATCHING_PREPROCESS
    F77_FUNC(wssmp, WSSMP)(&N, ia2, ja2, a2_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
 #else
-      F77_FUNC(wssmp, WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
+   F77_FUNC(wssmp, WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
 #endif
-         &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
+                          &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-      "Done with WSSMP-3-3 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(),
-      WallclockTime());
+                  "Done with WSSMP-3-3 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(),
+                  WallclockTime());
 
    const Index ierror = IPARM_[63];
    if( ierror > 0 )
    {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-         "WSMP detected that the matrix is singular and encountered %d zero pivots.\n", dim_ + 1 - ierror);
+                     "WSMP detected that the matrix is singular and encountered %d zero pivots.\n", dim_ + 1 - ierror);
       if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemFactorization().End();
@@ -589,12 +627,12 @@ ESymSolverStatus WsmpSolverInterface::Factorization(
       if( ierror == -102 )
       {
          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-            "Error: WSMP is not able to allocate sufficient amount of memory during factorization.\n");
+                        "Error: WSMP is not able to allocate sufficient amount of memory during factorization.\n");
       }
       else
       {
          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-            "Error in WSMP during factorization phase.\n     Error code is %d.\n", ierror);
+                        "Error in WSMP during factorization phase.\n     Error code is %d.\n", ierror);
       }
       if( HaveIpData() )
       {
@@ -602,10 +640,10 @@ ESymSolverStatus WsmpSolverInterface::Factorization(
       }
       return SYMSOLVER_FATAL_ERROR;
    }
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Memory usage for WSSMP after factorization IPARM(23) = %d\n",
-      IPARM_[22]);
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Number of nonzeros in WSSMP after factorization IPARM(24) = %d\n",
-      IPARM_[23]);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "Memory usage for WSSMP after factorization IPARM(23) = %d\n", IPARM_[22]);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "Number of nonzeros in WSSMP after factorization IPARM(24) = %d\n", IPARM_[23]);
 
    if( factorizations_since_recomputed_ordering_ != -1 )
    {
@@ -618,11 +656,12 @@ ESymSolverStatus WsmpSolverInterface::Factorization(
    // count
    if( check_NegEVals && (numberOfNegEVals != negevals_) )
    {
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Wrong inertia: required are %d, but we got %d.\n",
-         numberOfNegEVals, negevals_);
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Wrong inertia: required are %d, but we got %d.\n", numberOfNegEVals, negevals_);
       if( skip_inertia_check_ )
       {
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "  But wsmp_skip_inertia_check is set.  Ignore inertia.\n");
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                        "  But wsmp_skip_inertia_check is set.  Ignore inertia.\n");
          IpData().Append_info_string("IC ");
          negevals_ = numberOfNegEVals;
       }
@@ -648,7 +687,7 @@ ESymSolverStatus WsmpSolverInterface::Solve(
    const Index* ja,
    Index        nrhs,
    double*      rhs_vals
-   )
+)
 {
    DBG_START_METH("WsmpSolverInterface::Solve", dbg_verbosity);
 
@@ -671,7 +710,7 @@ ESymSolverStatus WsmpSolverInterface::Solve(
 
    double ddmy;
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-      "Calling WSSMP-4-5 for backsolve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+                  "Calling WSSMP-4-5 for backsolve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
 
 #ifdef PARDISO_MATCHING_PREPROCESS
    double* X = new double[nrhs * N];
@@ -682,19 +721,19 @@ ESymSolverStatus WsmpSolverInterface::Solve(
       X[perm2[i]] = scale2[i] * rhs_vals[i];
    }
    F77_FUNC(wssmp, WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
-      X, &LDB, &NRHS, &ddmy, &NAUX,
-      MRP_, IPARM_, DPARM_);
+                          X, &LDB, &NRHS, &ddmy, &NAUX,
+                          MRP_, IPARM_, DPARM_);
    for (int i = 0; i < N; i++)
    {
       rhs_vals[i] = scale2[i] * X[perm2[i]];
    }
 #else
    F77_FUNC(wssmp, WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_, rhs_vals, &LDB, &NRHS, &ddmy, &NAUX, MRP_, IPARM_,
-      DPARM_);
+                          DPARM_);
 #endif
 
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-      "Done with WSSMP-4-5 for backsolve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+                  "Done with WSSMP-4-5 for backsolve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
    if( HaveIpData() )
    {
       IpData().TimingStats().LinearSystemBackSolve().End();
@@ -706,16 +745,17 @@ ESymSolverStatus WsmpSolverInterface::Solve(
       if( ierror == -102 )
       {
          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-            "Error: WSMP is not able to allocate sufficient amount of memory during ordering/symbolic factorization.\n");
+                        "Error: WSMP is not able to allocate sufficient amount of memory during ordering/symbolic factorization.\n");
       }
       else
       {
          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-            "Error in WSMP during ordering/symbolic factorization phase.\n     Error code is %d.\n", ierror);
+                        "Error in WSMP during ordering/symbolic factorization phase.\n     Error code is %d.\n", ierror);
       }
       return SYMSOLVER_FATAL_ERROR;
    }
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Number of iterative refinement steps in WSSMP: %d\n", IPARM_[5]);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "Number of iterative refinement steps in WSSMP: %d\n", IPARM_[5]);
 
 #ifdef PARDISO_MATCHING_PREPROCESS
    delete [] X;
@@ -726,7 +766,8 @@ ESymSolverStatus WsmpSolverInterface::Solve(
 
 Index WsmpSolverInterface::NumberOfNegEVals() const
 {
-   DBG_START_METH("WsmpSolverInterface::NumberOfNegEVals", dbg_verbosity); DBG_ASSERT(negevals_ >= 0);
+   DBG_START_METH("WsmpSolverInterface::NumberOfNegEVals", dbg_verbosity);
+   DBG_ASSERT(negevals_ >= 0);
    return negevals_;
 }
 
@@ -741,7 +782,7 @@ bool WsmpSolverInterface::IncreaseQuality()
       IpData().Append_info_string("RO ");
       factorizations_since_recomputed_ordering_ = 0;
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-         "Triggering WSMP's recomputation of the ordering for next factorization.\n");
+                     "Triggering WSMP's recomputation of the ordering for next factorization.\n");
       return true;
    }
    if( wsmp_pivtol_ == wsmp_pivtolmax_ )
@@ -750,9 +791,11 @@ bool WsmpSolverInterface::IncreaseQuality()
    }
    pivtol_changed_ = true;
 
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "Increasing pivot tolerance for WSMP from %7.2e ", wsmp_pivtol_);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "Increasing pivot tolerance for WSMP from %7.2e ", wsmp_pivtol_);
    wsmp_pivtol_ = Min(wsmp_pivtolmax_, pow(wsmp_pivtol_, 0.75));
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "to %7.2e.\n", wsmp_pivtol_);
+   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                  "to %7.2e.\n", wsmp_pivtol_);
    return true;
 }
 
@@ -765,10 +808,10 @@ ESymSolverStatus WsmpSolverInterface::DetermineDependentRows(
    const Index*      ia,
    const Index*      ja,
    std::list<Index>& c_deps
-   )
+)
 {
    DBG_START_METH("WsmpSolverInterface::DetermineDependentRows",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    c_deps.clear();
 
@@ -796,10 +839,10 @@ ESymSolverStatus WsmpSolverInterface::DetermineDependentRows(
 
 #ifdef PARDISO_MATCHING_PREPROCESS
    F77_FUNC(wssmp, WSSMP)(&N, ia2, ja2, a2_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
-      &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
+                          &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
 #else
    F77_FUNC(wssmp, WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_, &ddmy, &idmy, &idmy, &ddmy, &NAUX, MRP_, IPARM_,
-      DPARM_);
+                          DPARM_);
 #endif
 
    const Index ierror = IPARM_[63];
@@ -813,12 +856,13 @@ ESymSolverStatus WsmpSolverInterface::DetermineDependentRows(
             c_deps.push_back(i);
             ii++;
          }
-      } DBG_ASSERT(ii == IPARM_[20]);
+      }
+      DBG_ASSERT(ii == IPARM_[20]);
    }
    if( ierror > 0 )
    {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-         "WSMP detected that the matrix is singular and encountered %d zero pivots.\n", dim_ + 1 - ierror);
+                     "WSMP detected that the matrix is singular and encountered %d zero pivots.\n", dim_ + 1 - ierror);
       if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemFactorization().End();
@@ -830,12 +874,12 @@ ESymSolverStatus WsmpSolverInterface::DetermineDependentRows(
       if( ierror == -102 )
       {
          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-            "Error: WSMP is not able to allocate sufficient amount of memory during factorization.\n");
+                        "Error: WSMP is not able to allocate sufficient amount of memory during factorization.\n");
       }
       else
       {
          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-            "Error in WSMP during factorization phase.\n     Error code is %d.\n", ierror);
+                        "Error in WSMP during factorization phase.\n     Error code is %d.\n", ierror);
       }
       if( HaveIpData() )
       {

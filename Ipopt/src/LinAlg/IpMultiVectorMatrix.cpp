@@ -27,7 +27,7 @@ static const Index dbg_verbosity = 0;
 
 MultiVectorMatrix::MultiVectorMatrix(
    const MultiVectorMatrixSpace* owner_space
-   )
+)
    : Matrix(owner_space),
      owner_space_(owner_space),
      const_vecs_(owner_space->NCols()),
@@ -37,7 +37,7 @@ MultiVectorMatrix::MultiVectorMatrix(
 void MultiVectorMatrix::SetVector(
    Index         i,
    const Vector& vec
-   )
+)
 {
    DBG_ASSERT(i < NCols());
    non_const_vecs_[i] = NULL;
@@ -48,7 +48,7 @@ void MultiVectorMatrix::SetVector(
 void MultiVectorMatrix::SetVectorNonConst(
    Index   i,
    Vector& vec
-   )
+)
 {
    DBG_ASSERT(i < NCols());
    const_vecs_[i] = NULL;
@@ -61,10 +61,11 @@ void MultiVectorMatrix::MultVectorImpl(
    const Vector& x,
    Number        beta,
    Vector&       y
-   ) const
+) const
 {
    //  A few sanity checks
-   DBG_ASSERT(NCols() == x.Dim()); DBG_ASSERT(NRows() == y.Dim());
+   DBG_ASSERT(NCols() == x.Dim());
+   DBG_ASSERT(NRows() == y.Dim());
 
    // Take care of the y part of the addition
    if( beta != 0.0 )
@@ -104,10 +105,11 @@ void MultiVectorMatrix::TransMultVectorImpl(
    const Vector& x,
    Number        beta,
    Vector&       y
-   ) const
+) const
 {
    //  A few sanity checks
-   DBG_ASSERT(NCols() == y.Dim()); DBG_ASSERT(NRows() == x.Dim());
+   DBG_ASSERT(NCols() == y.Dim());
+   DBG_ASSERT(NRows() == x.Dim());
 
    // See if we can understand the data
    DenseVector* dense_y = static_cast<DenseVector*>(&y);
@@ -137,14 +139,16 @@ void MultiVectorMatrix::LRMultVector(
    const Vector& x,
    Number        beta,
    Vector&       y
-   ) const
+) const
 {
    DBG_START_METH("MultiVectorMatrix::LRMultVector(",
-      dbg_verbosity);
+                  dbg_verbosity);
 
-   DBG_ASSERT(NRows() == x.Dim()); DBG_ASSERT(NRows() == y.Dim());
+   DBG_ASSERT(NRows() == x.Dim());
+   DBG_ASSERT(NRows() == y.Dim());
 
-   DBG_PRINT((1, "alpha = %e beta = %e\n", alpha, beta)); DBG_PRINT_VECTOR(2, "x", x);
+   DBG_PRINT((1, "alpha = %e beta = %e\n", alpha, beta));
+   DBG_PRINT_VECTOR(2, "x", x);
 
    if( beta != 0.0 )
    {
@@ -177,7 +181,7 @@ void MultiVectorMatrix::FillWithNewVectors()
 
 void MultiVectorMatrix::ScaleRows(
    const Vector& scal_vec
-   )
+)
 {
    // Santiy checks
    DBG_ASSERT(scal_vec.Dim() == NRows());
@@ -191,7 +195,7 @@ void MultiVectorMatrix::ScaleRows(
 
 void MultiVectorMatrix::ScaleColumns(
    const Vector& scal_vec
-   )
+)
 {
    // Santiy checks
    DBG_ASSERT(scal_vec.Dim() == NCols());
@@ -223,9 +227,10 @@ void MultiVectorMatrix::AddOneMultiVectorMatrix(
    Number                   a,
    const MultiVectorMatrix& mv1,
    Number                   c
-   )
+)
 {
-   DBG_ASSERT(NRows() == mv1.NRows()); DBG_ASSERT(NCols() == mv1.NCols());
+   DBG_ASSERT(NRows() == mv1.NRows());
+   DBG_ASSERT(NCols() == mv1.NCols());
 
    if( c == 0. )
    {
@@ -244,9 +249,11 @@ void MultiVectorMatrix::AddRightMultMatrix(
    const MultiVectorMatrix& U,
    const Matrix&            C,
    Number                   b
-   )
+)
 {
-   DBG_ASSERT(NRows() == U.NRows()); DBG_ASSERT(U.NCols() == C.NRows()); DBG_ASSERT(NCols() == C.NCols());
+   DBG_ASSERT(NRows() == U.NRows());
+   DBG_ASSERT(U.NCols() == C.NRows());
+   DBG_ASSERT(NCols() == C.NCols());
 
    if( b == 0. )
    {
@@ -289,7 +296,7 @@ bool MultiVectorMatrix::HasValidNumbersImpl() const
 void MultiVectorMatrix::ComputeRowAMaxImpl(
    Vector& rows_norms,
    bool    init
-   ) const
+) const
 {
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "MultiVectorMatrix::ComputeRowAMaxImpl not implemented");
 }
@@ -297,7 +304,7 @@ void MultiVectorMatrix::ComputeRowAMaxImpl(
 void MultiVectorMatrix::ComputeColAMaxImpl(
    Vector& cols_norms,
    bool    init
-   ) const
+) const
 {
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "MultiVectorMatrix::ComputeColAMaxImpl not implemented");
 }
@@ -309,11 +316,12 @@ void MultiVectorMatrix::PrintImpl(
    const std::string& name,
    Index              indent,
    const std::string& prefix
-   ) const
+) const
 {
-   jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent, "%sMultiVectorMatrix \"%s\" with %d columns:\n", prefix.c_str(),
-      name.c_str(), NCols());
+   jnlst.Printf(level, category,
+                "\n");
+   jnlst.PrintfIndented(level, category, indent,
+                        "%sMultiVectorMatrix \"%s\" with %d columns:\n", prefix.c_str(), name.c_str(), NCols());
 
    for( Index i = 0; i < NCols(); i++ )
    {
@@ -327,7 +335,8 @@ void MultiVectorMatrix::PrintImpl(
       }
       else
       {
-         jnlst.PrintfIndented(level, category, indent, "%sVector in column %d is not yet set!\n", prefix.c_str(), i);
+         jnlst.PrintfIndented(level, category, indent,
+                              "%sVector in column %d is not yet set!\n", prefix.c_str(), i);
       }
    }
 }
@@ -335,7 +344,7 @@ void MultiVectorMatrix::PrintImpl(
 MultiVectorMatrixSpace::MultiVectorMatrixSpace(
    Index              ncols,
    const VectorSpace& vec_space
-   )
+)
    : MatrixSpace(vec_space.Dim(), ncols),
      vec_space_(&vec_space)
 { }

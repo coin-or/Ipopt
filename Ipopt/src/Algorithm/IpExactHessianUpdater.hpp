@@ -33,7 +33,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Update the Hessian based on the current information in IpData. */
    virtual void UpdateHessian();
@@ -52,12 +52,12 @@ private:
    /** Copy Constructor */
    ExactHessianUpdater(
       const ExactHessianUpdater&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const ExactHessianUpdater&
-      );
+   );
    //@}
 
 };

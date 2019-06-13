@@ -24,7 +24,7 @@ public:
    /** Constructor */
    InexactNewtonNormalStep(
       SmartPtr<AugSystemSolver> aug_solver
-      );
+   );
 
    /** Destructor */
    virtual ~InexactNewtonNormalStep();
@@ -33,7 +33,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Method for computing the normal step.
     *
@@ -46,11 +46,11 @@ public:
    virtual bool ComputeNewtonNormalStep(
       Vector& newton_x,
       Vector& newton_s
-      );
+   );
 
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
 
 protected:
    /** Method to easily access Inexact data */
@@ -90,7 +90,7 @@ private:
    /** Overloaded Assignment Operator */
    void operator=(
       const InexactNewtonNormalStep&
-      );
+   );
    //@}
 
    /** Object to be used to solve the augmented system */

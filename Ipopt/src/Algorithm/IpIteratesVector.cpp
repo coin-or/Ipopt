@@ -12,7 +12,7 @@ namespace Ipopt
 IteratesVector::IteratesVector(
    const IteratesVectorSpace* owner_space,
    bool                       create_new
-   )
+)
    : CompoundVector(owner_space, create_new),
      owner_space_(owner_space)
 {
@@ -24,7 +24,7 @@ IteratesVector::~IteratesVector()
 
 SmartPtr<IteratesVector> IteratesVector::MakeNewIteratesVector(
    bool create_new
-   ) const
+) const
 {
    return owner_space_->MakeNewIteratesVector(create_new);
 }
@@ -137,10 +137,10 @@ IteratesVectorSpace::IteratesVectorSpace(
    const VectorSpace& z_U_space,
    const VectorSpace& v_L_space,
    const VectorSpace& v_U_space
-   )
+)
    : CompoundVectorSpace(8,
-      x_space.Dim() + s_space.Dim() + y_c_space.Dim() + y_d_space.Dim() + z_L_space.Dim() + z_U_space.Dim()
-         + v_L_space.Dim() + v_U_space.Dim())
+                         x_space.Dim() + s_space.Dim() + y_c_space.Dim() + y_d_space.Dim() + z_L_space.Dim() + z_U_space.Dim()
+                         + v_L_space.Dim() + v_U_space.Dim())
 {
    x_space_ = &x_space;
    s_space_ = &s_space;

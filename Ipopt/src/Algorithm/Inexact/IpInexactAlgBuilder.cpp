@@ -77,7 +77,7 @@ void InexactAlgorithmBuilder::BuildIpoptObjects(
    SmartPtr<IpoptNLP>&                  ip_nlp,
    SmartPtr<IpoptData>&                 ip_data,
    SmartPtr<IpoptCalculatedQuantities>& ip_cq
-   )
+)
 {
    DBG_ASSERT(prefix == "");
 
@@ -90,36 +90,38 @@ void InexactAlgorithmBuilder::BuildIpoptObjects(
    if( ip_data->HaveAddData() )
    {
       THROW_EXCEPTION(OPTION_INVALID,
-         "The Inexact step computation of Ipopt has been chosen, but some option has been set that requires additional Ipopt data beside the one for the chosen inexact step computation");
+                      "The Inexact step computation of Ipopt has been chosen, but some option has been set that requires additional Ipopt data beside the one for the chosen inexact step computation");
    }
    ip_data->SetAddData(new InexactData());
 
    if( ip_cq->HaveAddCq() )
    {
       THROW_EXCEPTION(OPTION_INVALID,
-         "The Inexact step computation of Ipopt has been chosen, but some option has been set that requires additional Ipopt calculated quantities beside the one for the chosen inexact step computation");
+                      "The Inexact step computation of Ipopt has been chosen, but some option has been set that requires additional Ipopt calculated quantities beside the one for the chosen inexact step computation");
    }
    ip_cq->SetAddCq(new InexactCq(GetRawPtr(ip_nlp), GetRawPtr(ip_data), GetRawPtr(ip_cq)));
 }
 
 void InexactAlgorithmBuilder::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
-   )
+)
 {
    roptions->SetRegisteringCategory("Linear Solver");
-   roptions->AddStringOption2("inexact_linear_system_scaling",
-      "Method for scaling the linear system for the inexact approach", "slack-based", "none",
-      "no scaling will be performed", "slack-based", "scale the linear system as in paper", "");
+   roptions->AddStringOption2(
+      "inexact_linear_system_scaling",
+      "Method for scaling the linear system for the inexact approach", "slack-based",
+      "none", "no scaling will be performed",
+      "slack-based", "scale the linear system as in paper");
 }
 
 SmartPtr<IpoptAlgorithm> InexactAlgorithmBuilder::BuildBasicAlgorithm(
    const Journalist&  jnlst,
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    DBG_START_FUN("InexactAlgorithmBuilder::BuildBasicAlgorithm",
-      dbg_verbosity);
+                 dbg_verbosity);
 
    // Create the convergence check
    SmartPtr<ConvergenceCheck> convCheck = new OptimalityErrorConvergenceCheck();
@@ -277,25 +279,25 @@ SmartPtr<IpoptAlgorithm> InexactAlgorithmBuilder::BuildBasicAlgorithm(
    SmartPtr<InexactNewtonNormalStep> NewtonNormalStep = new InexactNewtonNormalStep(AugSolver);
 
    SmartPtr<InexactNormalStepCalculator> normal_step_calculator = new InexactDoglegNormalStep(NewtonNormalStep,
-      NormalTester);
+         NormalTester);
 
    SmartPtr<PDPerturbationHandler> perturbHandler = new PDPerturbationHandler();
 
    SmartPtr<InexactPDSolver> inexact_pd_solver = new InexactPDSolver(*AugSolver, *perturbHandler);
 
    SmartPtr<SearchDirectionCalculator> SearchDirCalc = new InexactSearchDirCalculator(normal_step_calculator,
-      inexact_pd_solver);
+         inexact_pd_solver);
 
    // Create the main algorithm
    SmartPtr<IpoptAlgorithm> alg = new IpoptAlgorithm(SearchDirCalc, GetRawPtr(lineSearch), MuUpdate, convCheck,
-      IterInitializer, IterOutput, HessUpdater);
+         IterInitializer, IterOutput, HessUpdater);
 
    return alg;
 }
 
 void AddInexactDefaultOptions(
    OptionsList& options_list
-   )
+)
 {
    options_list.SetIntegerValueIfUnset("max_soc", 0);
    options_list.SetStringValueIfUnset("constraint_violation_norm_type", "2-norm");

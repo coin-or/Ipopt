@@ -32,7 +32,7 @@ public:
     */
    SymScaledMatrix(
       const SymScaledMatrixSpace* owner_space
-      );
+   );
 
    /** Destructor */
    ~SymScaledMatrix();
@@ -41,12 +41,12 @@ public:
    /** Set the unscaled matrix */
    void SetUnscaledMatrix(
       const SmartPtr<const SymMatrix> unscaled_matrix
-      );
+   );
 
    /** Set the unscaled matrix in a non-const version */
    void SetUnscaledMatrixNonConst(
       const SmartPtr<SymMatrix>& unscaled_matrix
-      );
+   );
 
    /** Return the unscaled matrix in const form */
    SmartPtr<const SymMatrix> GetUnscaledMatrix() const;
@@ -65,14 +65,14 @@ protected:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual bool HasValidNumbersImpl() const;
 
    virtual void ComputeRowAMaxImpl(
       Vector& rows_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void PrintImpl(
       const Journalist&  jnlst,
@@ -81,7 +81,7 @@ protected:
       const std::string& name,
       Index              indent,
       const std::string& prefix
-      ) const;
+   ) const;
    //@}
 
 private:
@@ -100,12 +100,12 @@ private:
    /** Copy Constructor */
    SymScaledMatrix(
       const SymScaledMatrix&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const SymScaledMatrix&
-      );
+   );
    //@}
 
    /** const version of the unscaled matrix */
@@ -132,7 +132,7 @@ public:
       const SmartPtr<const Vector>&         row_col_scaling,
       bool                                  row_col_scaling_reciprocal,
       const SmartPtr<const SymMatrixSpace>& unscaled_matrix_space
-      )
+   )
       : SymMatrixSpace(unscaled_matrix_space->Dim()),
         unscaled_matrix_space_(unscaled_matrix_space)
    {
@@ -151,7 +151,7 @@ public:
    /** Method for creating a new matrix of this specific type. */
    SymScaledMatrix* MakeNewSymScaledMatrix(
       bool allocate_unscaled_matrix = false
-      ) const
+   ) const
    {
       SymScaledMatrix* ret = new SymScaledMatrix(this);
       if( allocate_unscaled_matrix )
@@ -200,12 +200,12 @@ private:
    /** Copy Constructor */
    SymScaledMatrixSpace(
       const SymScaledMatrixSpace&
-      );
+   );
 
    /** Default Assignment Operator */
    SymScaledMatrixSpace& operator=(
       const SymScaledMatrixSpace&
-      );
+   );
    //@}
 
    /** Row scaling vector */
@@ -217,7 +217,7 @@ private:
 
 inline void SymScaledMatrix::SetUnscaledMatrix(
    const SmartPtr<const SymMatrix> unscaled_matrix
-   )
+)
 {
    matrix_ = unscaled_matrix;
    nonconst_matrix_ = NULL;
@@ -226,7 +226,7 @@ inline void SymScaledMatrix::SetUnscaledMatrix(
 
 inline void SymScaledMatrix::SetUnscaledMatrixNonConst(
    const SmartPtr<SymMatrix>& unscaled_matrix
-   )
+)
 {
    nonconst_matrix_ = unscaled_matrix;
    matrix_ = GetRawPtr(unscaled_matrix);

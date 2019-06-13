@@ -34,7 +34,7 @@ public:
     */
    CompoundSymMatrix(
       const CompoundSymMatrixSpace* owner_space
-      );
+   );
 
    /** Destructor */
    ~CompoundSymMatrix();
@@ -51,14 +51,14 @@ public:
       Index         irow,
       Index         jcol,
       const Matrix& matrix
-      );
+   );
 
    /** Non const version of the same method */
    void SetCompNonConst(
       Index   irow,
       Index   jcol,
       Matrix& matrix
-      );
+   );
 
    /** Method for retrieving one block from the compound matrix.
     *
@@ -68,7 +68,7 @@ public:
    SmartPtr<const Matrix> GetComp(
       Index irow,
       Index jcol
-      ) const
+   ) const
    {
       return ConstComp(irow, jcol);
    }
@@ -82,7 +82,7 @@ public:
    SmartPtr<Matrix> GetCompNonConst(
       Index irow,
       Index jcol
-      )
+   )
    {
       ObjectChanged();
       return Comp(irow, jcol);
@@ -108,14 +108,14 @@ protected:
       const Vector& x,
       Number        beta,
       Vector&       y
-      ) const;
+   ) const;
 
    virtual bool HasValidNumbersImpl() const;
 
    virtual void ComputeRowAMaxImpl(
       Vector& rows_norms,
       bool    init
-      ) const;
+   ) const;
 
    virtual void PrintImpl(
       const Journalist&  jnlst,
@@ -124,7 +124,7 @@ protected:
       const std::string& name,
       Index              indent,
       const std::string& prefix
-      ) const;
+   ) const;
    //@}
 
 private:
@@ -142,12 +142,12 @@ private:
    /** Copy Constructor */
    CompoundSymMatrix(
       const CompoundSymMatrix&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const CompoundSymMatrix&
-      );
+   );
    //@}
 
    /** Vector of vectors containing the components */
@@ -169,9 +169,10 @@ private:
    const Matrix* ConstComp(
       Index irow,
       Index jcol
-      ) const
+   ) const
    {
-      DBG_ASSERT(irow < NComps_Dim()); DBG_ASSERT(jcol <= irow);
+      DBG_ASSERT(irow < NComps_Dim());
+      DBG_ASSERT(jcol <= irow);
       if( IsValid(comps_[irow][jcol]) )
       {
          return GetRawPtr(comps_[irow][jcol]);
@@ -188,9 +189,10 @@ private:
    Matrix* Comp(
       Index irow,
       Index jcol
-      )
+   )
    {
-      DBG_ASSERT(irow < NComps_Dim()); DBG_ASSERT(jcol <= irow);
+      DBG_ASSERT(irow < NComps_Dim());
+      DBG_ASSERT(jcol <= irow);
       // We shouldn't be asking for a non-const if this entry holds a
       // const one...
       DBG_ASSERT(IsNull(const_comps_[irow][jcol]));
@@ -220,7 +222,7 @@ public:
    CompoundSymMatrixSpace(
       Index ncomp_spaces,
       Index total_dim
-      );
+   );
 
    /** Destructor */
    ~CompoundSymMatrixSpace()
@@ -233,12 +235,12 @@ public:
    void SetBlockDim(
       Index irow_jcol,
       Index dim
-      );
+   );
 
    /** Get the dimension dim for block row (or column) irow_jcol */
    Index GetBlockDim(
       Index irow_jcol
-      ) const;
+   ) const;
 
    /** Set the component SymMatrixSpace.
     *
@@ -253,7 +255,7 @@ public:
       Index              jcol,
       const MatrixSpace& mat_space,
       bool               auto_allocate = false
-      );
+   );
    //@}
 
    /** Obtain the component MatrixSpace in block row irow and block
@@ -262,9 +264,10 @@ public:
    SmartPtr<const MatrixSpace> GetCompSpace(
       Index irow,
       Index jcol
-      ) const
+   ) const
    {
-      DBG_ASSERT(irow < ncomp_spaces_); DBG_ASSERT(jcol <= irow);
+      DBG_ASSERT(irow < ncomp_spaces_);
+      DBG_ASSERT(jcol <= irow);
       return comp_spaces_[irow][jcol];
    }
 
@@ -299,12 +302,12 @@ private:
    /** Copy Constructor */
    CompoundSymMatrixSpace(
       const CompoundSymMatrix&
-      );
+   );
 
    /** Default Assignment Operator */
    CompoundSymMatrixSpace& operator=(
       const CompoundSymMatrixSpace&
-      );
+   );
    //@}
 
    /** Number of components per row and column */

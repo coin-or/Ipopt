@@ -27,14 +27,15 @@ AdaptiveMuUpdate::AdaptiveMuUpdate(
    const SmartPtr<LineSearch>& line_search,
    const SmartPtr<MuOracle>&   free_mu_oracle,
    const SmartPtr<MuOracle>&   fix_mu_oracle
-   )
+)
    : MuUpdate(),
      linesearch_(line_search),
      free_mu_oracle_(free_mu_oracle),
      fix_mu_oracle_(fix_mu_oracle),
      filter_(2)
 {
-   DBG_ASSERT(IsValid(linesearch_)); DBG_ASSERT(IsValid(free_mu_oracle_));
+   DBG_ASSERT(IsValid(linesearch_));
+   DBG_ASSERT(IsValid(free_mu_oracle_));
    // fix_mu_oracle may be NULL
 }
 
@@ -43,93 +44,117 @@ AdaptiveMuUpdate::~AdaptiveMuUpdate()
 
 void AdaptiveMuUpdate::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
-   )
+)
 {
-   roptions->AddLowerBoundedNumberOption("mu_max_fact",
-      "Factor for initialization of maximum value for barrier parameter.", 0.0, true, 1e3,
-      "This option determines the upper bound on the barrier parameter.  This "
-         "upper bound is computed as the average complementarity at the initial "
-         "point times the value of this option. (Only used if option "
-         "\"mu_strategy\" is chosen as \"adaptive\".)");
-   roptions->AddLowerBoundedNumberOption("mu_max", "Maximum value for barrier parameter.", 0.0, true, 1e5,
-      "This option specifies an upper bound on the barrier parameter in the "
-         "adaptive mu selection mode.  If this option is set, it overwrites the "
-         "effect of mu_max_fact. (Only used if option "
-         "\"mu_strategy\" is chosen as \"adaptive\".)");
-   roptions->AddLowerBoundedNumberOption("mu_min", "Minimum value for barrier parameter.", 0.0, true, 1e-11,
-      "This option specifies the lower bound on the barrier parameter in the "
-         "adaptive mu selection mode. By default, it is set to the minimum of 1e-11 and "
-         "min(\"tol\",\"compl_inf_tol\")/(\"barrier_tol_factor\"+1), which "
-         "should be a reasonable value. (Only used if option "
-         "\"mu_strategy\" is chosen as \"adaptive\".)");
+   roptions->AddLowerBoundedNumberOption(
+      "mu_max_fact",
+      "Factor for initialization of maximum value for barrier parameter.",
+      0.0, true,
+      1e3,
+      "This option determines the upper bound on the barrier parameter. "
+      "This upper bound is computed as the average complementarity at the initial point times the value of this option. "
+      "(Only used if option \"mu_strategy\" is chosen as \"adaptive\".)");
+   roptions->AddLowerBoundedNumberOption(
+      "mu_max",
+      "Maximum value for barrier parameter.",
+      0.0, true,
+      1e5,
+      "This option specifies an upper bound on the barrier parameter in the adaptive mu selection mode. "
+      "If this option is set, it overwrites the effect of mu_max_fact. "
+      "(Only used if option \"mu_strategy\" is chosen as \"adaptive\".)");
+   roptions->AddLowerBoundedNumberOption(
+      "mu_min",
+      "Minimum value for barrier parameter.",
+      0.0, true,
+      1e-11,
+      "This option specifies the lower bound on the barrier parameter in the adaptive mu selection mode. "
+      "By default, it is set to the minimum of 1e-11 and min(\"tol\",\"compl_inf_tol\")/(\"barrier_tol_factor\"+1), "
+      "which should be a reasonable value. "
+      "(Only used if option \"mu_strategy\" is chosen as \"adaptive\".)");
    std::string prev_cat = roptions->RegisteringCategory();
    roptions->SetRegisteringCategory("Undocumented");
-   roptions->AddLowerBoundedNumberOption("adaptive_mu_safeguard_factor", "", 0.0, false, 0.0);
+   roptions->AddLowerBoundedNumberOption(
+      "adaptive_mu_safeguard_factor",
+      "",
+      0.0, false,
+      0.0);
    roptions->SetRegisteringCategory(prev_cat);
 
-   roptions->AddStringOption3("adaptive_mu_globalization", "Globalization strategy for the adaptive mu selection mode.",
-      "obj-constr-filter", "kkt-error", "nonmonotone decrease of kkt-error", "obj-constr-filter",
-      "2-dim filter for objective and constraint violation", "never-monotone-mode", "disables globalization",
-      "To achieve global convergence of the adaptive version, the algorithm "
-         "has to switch to the monotone mode (Fiacco-McCormick approach) when "
-         "convergence does not seem to appear.  This option sets the "
-         "criterion used to decide when to do this switch. (Only used if option "
-         "\"mu_strategy\" is chosen as \"adaptive\".)");
+   roptions->AddStringOption3(
+      "adaptive_mu_globalization",
+      "Globalization strategy for the adaptive mu selection mode.",
+      "obj-constr-filter",
+      "kkt-error", "nonmonotone decrease of kkt-error",
+      "obj-constr-filter", "2-dim filter for objective and constraint violation",
+      "never-monotone-mode", "disables globalization",
+      "To achieve global convergence of the adaptive version, "
+      "the algorithm has to switch to the monotone mode (Fiacco-McCormick approach) when convergence does not seem to appear. "
+      "This option sets the criterion used to decide when to do this switch. "
+      "(Only used if option \"mu_strategy\" is chosen as \"adaptive\".)");
 
-   roptions->AddLowerBoundedIntegerOption("adaptive_mu_kkterror_red_iters",
-      "Maximum number of iterations requiring sufficient progress.", 0, 4,
-      "For the \"kkt-error\" based globalization strategy, sufficient "
-         "progress must be made for \"adaptive_mu_kkterror_red_iters\" "
-         "iterations. If this number of iterations is exceeded, the "
-         "globalization strategy switches to the monotone mode.");
+   roptions->AddLowerBoundedIntegerOption(
+      "adaptive_mu_kkterror_red_iters",
+      "Maximum number of iterations requiring sufficient progress.",
+      0,
+      4,
+      "For the \"kkt-error\" based globalization strategy, sufficient progress must be made for \"adaptive_mu_kkterror_red_iters\" iterations. "
+      "If this number of iterations is exceeded, the globalization strategy switches to the monotone mode.");
 
-   roptions->AddBoundedNumberOption("adaptive_mu_kkterror_red_fact",
-      "Sufficient decrease factor for \"kkt-error\" globalization strategy.", 0.0, true, 1.0, true, 0.9999,
-      "For the \"kkt-error\" based globalization strategy, the error "
-         "must decrease by this factor to be deemed sufficient decrease.");
+   roptions->AddBoundedNumberOption(
+      "adaptive_mu_kkterror_red_fact",
+      "Sufficient decrease factor for \"kkt-error\" globalization strategy.",
+      0.0, true,
+      1.0, true,
+      0.9999,
+      "For the \"kkt-error\" based globalization strategy, the error must decrease by this factor to be deemed sufficient decrease.");
 
-   roptions->AddBoundedNumberOption("filter_margin_fact",
-      "Factor determining width of margin for obj-constr-filter adaptive globalization strategy.", 0.0, true, 1.0, true,
-      1e-5, "When using the adaptive globalization strategy, \"obj-constr-filter\", "
-         "sufficient progress for a filter entry is defined as "
-         "follows: (new obj) < (filter obj) - filter_margin_fact*(new "
-         "constr-viol) OR (new constr-viol) < (filter constr-viol) - "
-         "filter_margin_fact*(new constr-viol).  For the description of "
-         "the \"kkt-error-filter\" option see \"filter_max_margin\".");
-   roptions->AddLowerBoundedNumberOption("filter_max_margin",
-      "Maximum width of margin in obj-constr-filter adaptive globalization strategy.", 0.0, true, 1.0,
-      // ToDo Detailed description later
-      "");
-   roptions->AddStringOption2("adaptive_mu_restore_previous_iterate",
-      "Indicates if the previous iterate should be restored if the monotone mode is entered.", "no", "no",
-      "don't restore accepted iterate", "yes", "restore accepted iterate",
-      "When the globalization strategy for the adaptive barrier algorithm "
-         "switches to the monotone mode, it can either start "
-         "from the most recent iterate (no), or from the last "
-         "iterate that was accepted (yes).");
-
-   roptions->AddLowerBoundedNumberOption("adaptive_mu_monotone_init_factor",
-      "Determines the initial value of the barrier parameter when switching to the monotone mode.", 0.0, true, 0.8,
-      "When the globalization strategy for the adaptive barrier algorithm "
-         "switches to the monotone mode and fixed_mu_oracle is chosen as "
-         "\"average_compl\", the barrier parameter is set to the "
-         "current average complementarity times the value of "
-         "\"adaptive_mu_monotone_init_factor\".");
-
-   roptions->AddStringOption4("adaptive_mu_kkt_norm_type",
-      "Norm used for the KKT error in the adaptive mu globalization strategies.", "2-norm-squared", "1-norm",
-      "use the 1-norm (abs sum)", "2-norm-squared", "use the 2-norm squared (sum of squares)", "max-norm",
-      "use the infinity norm (max)", "2-norm", "use 2-norm",
-      "When computing the KKT error for the globalization strategies, the "
-         "norm to be used is specified with this option. Note, this options is also used "
-         "in the QualityFunctionMuOracle.");
-
+   roptions->AddBoundedNumberOption(
+      "filter_margin_fact",
+      "Factor determining width of margin for obj-constr-filter adaptive globalization strategy.",
+      0.0, true,
+      1.0, true,
+      1e-5,
+      "When using the adaptive globalization strategy, \"obj-constr-filter\", "
+      "sufficient progress for a filter entry is defined as follows:"
+      "(new obj) < (filter obj) - filter_margin_fact*(new constr-viol) OR "
+      "(new constr-viol) < (filter constr-viol) - filter_margin_fact*(new constr-viol). "
+      "For the description of the \"kkt-error-filter\" option see \"filter_max_margin\".");
+   roptions->AddLowerBoundedNumberOption(
+      "filter_max_margin",
+      "Maximum width of margin in obj-constr-filter adaptive globalization strategy.",
+      0.0, true,
+      1.0); // ToDo Detailed description later
+   roptions->AddStringOption2(
+      "adaptive_mu_restore_previous_iterate",
+      "Indicates if the previous iterate should be restored if the monotone mode is entered.",
+      "no",
+      "no", "don't restore accepted iterate",
+      "yes", "restore accepted iterate",
+      "When the globalization strategy for the adaptive barrier algorithm switches to the monotone mode, "
+      "it can either start from the most recent iterate (no), or from the last iterate that was accepted (yes).");
+   roptions->AddLowerBoundedNumberOption(
+      "adaptive_mu_monotone_init_factor",
+      "Determines the initial value of the barrier parameter when switching to the monotone mode.",
+      0.0, true,
+      0.8,
+      "When the globalization strategy for the adaptive barrier algorithm switches to the monotone mode and fixed_mu_oracle is chosen as \"average_compl\", "
+      "the barrier parameter is set to the current average complementarity times the value of \"adaptive_mu_monotone_init_factor\".");
+   roptions->AddStringOption4(
+      "adaptive_mu_kkt_norm_type",
+      "Norm used for the KKT error in the adaptive mu globalization strategies.",
+      "2-norm-squared",
+      "1-norm", "use the 1-norm (abs sum)",
+      "2-norm-squared", "use the 2-norm squared (sum of squares)",
+      "max-norm", "use the infinity norm (max)",
+      "2-norm", "use 2-norm",
+      "When computing the KKT error for the globalization strategies, the norm to be used is specified with this option. "
+      "Note, this option is also used in the QualityFunctionMuOracle.");
 }
 
 bool AdaptiveMuUpdate::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    options.GetNumericValue("mu_max_fact", mu_max_fact_, prefix);
    if( !options.GetNumericValue("mu_max", mu_max_, prefix) )
@@ -227,7 +252,7 @@ bool AdaptiveMuUpdate::InitializeImpl(
 bool AdaptiveMuUpdate::UpdateBarrierParameter()
 {
    DBG_START_METH("AdaptiveMuUpdate::UpdateBarrierParameter",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    // if min_mu_ has not been given, we now set the default (can't do
    // that earlier, because during call of InitializeImpl, the
@@ -244,14 +269,15 @@ bool AdaptiveMuUpdate::UpdateBarrierParameter()
    if( mu_max_ < 0. )
    {
       mu_max_ = mu_max_fact_ * IpCq().curr_avrg_compl();
-      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "Setting mu_max to %e.\n", mu_max_);
+      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                     "Setting mu_max to %e.\n", mu_max_);
    }
 
    // if there are not bounds, we always return the minimum MU value
    if( !check_if_no_bounds_ )
    {
       Index n_bounds = IpData().curr()->z_L()->Dim() + IpData().curr()->z_U()->Dim() + IpData().curr()->v_L()->Dim()
-         + IpData().curr()->v_U()->Dim();
+                       + IpData().curr()->v_U()->Dim();
 
       if( n_bounds == 0 )
       {
@@ -277,14 +303,16 @@ bool AdaptiveMuUpdate::UpdateBarrierParameter()
       bool sufficient_progress = CheckSufficientProgress();
       if( sufficient_progress && !tiny_step_flag )
       {
-         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "Switching back to free mu mode.\n");
+         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                        "Switching back to free mu mode.\n");
          IpData().SetFreeMuMode(true);
          // Skipping Restoration phase?
          RememberCurrentPointAsAccepted();
       }
       else
       {
-         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "Remaining in fixed mu mode.\n");
+         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                        "Remaining in fixed mu mode.\n");
 
          // ToDo decide whether we want this for all options
          Number sub_problem_error = IpCq().curr_barrier_error();
@@ -308,7 +336,7 @@ bool AdaptiveMuUpdate::UpdateBarrierParameter()
             IpData().Set_mu(new_mu);
             IpData().Set_tau(new_tau);
             Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
-               "Reducing mu to %24.16e in fixed mu mode. Tau becomes %24.16e\n", new_mu, new_tau);
+                           "Reducing mu to %24.16e in fixed mu mode. Tau becomes %24.16e\n", new_mu, new_tau);
             linesearch_->Reset();
          }
       }
@@ -318,13 +346,14 @@ bool AdaptiveMuUpdate::UpdateBarrierParameter()
       // Here we are in the free mu mode.
       bool sufficient_progress = CheckSufficientProgress();
       if( adaptive_mu_globalization_ != NEVER_MONOTONE_MODE
-         && (linesearch_->CheckSkippedLineSearch() || tiny_step_flag) )
+          && (linesearch_->CheckSkippedLineSearch() || tiny_step_flag) )
       {
          sufficient_progress = false;
       }
       if( sufficient_progress )
       {
-         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "Staying in free mu mode.\n");
+         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                        "Staying in free mu mode.\n");
          RememberCurrentPointAsAccepted();
       }
       else
@@ -334,7 +363,8 @@ bool AdaptiveMuUpdate::UpdateBarrierParameter()
          if( restore_accepted_iterate_ )
          {
             // Restore most recent accepted iterate to start fixed mode from
-            Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "Restoring most recent accepted point.\n");
+            Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                           "Restoring most recent accepted point.\n");
             SmartPtr<IteratesVector> prev_iter = accepted_point_->MakeNewContainer();
             IpData().set_trial(prev_iter);
             IpData().AcceptTrialPoint();
@@ -353,7 +383,7 @@ bool AdaptiveMuUpdate::UpdateBarrierParameter()
          IpData().Set_mu(mu);
          IpData().Set_tau(tau);
          Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
-            "Switching to fixed mu mode with mu = %24.16e and tau = %24.16e.\n", mu, tau);
+                        "Switching to fixed mu mode with mu = %24.16e and tau = %24.16e.\n", mu, tau);
          linesearch_->Reset();
          // Skipping Restoration phase?
       }
@@ -374,7 +404,7 @@ bool AdaptiveMuUpdate::UpdateBarrierParameter()
       if( !retval )
       {
          Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
-            "The mu oracle could not compute a new value of the barrier parameter.\n");
+                        "The mu oracle could not compute a new value of the barrier parameter.\n");
          return false;
       }
 
@@ -382,17 +412,19 @@ bool AdaptiveMuUpdate::UpdateBarrierParameter()
       Number mu_lower_safe = lower_mu_safeguard();
       if( mu < mu_lower_safe )
       {
-         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "mu = %e smaller than safeguard = %e. Increasing mu.\n", mu,
-            mu_lower_safe);
+         Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                        "mu = %e smaller than safeguard = %e. Increasing mu.\n", mu, mu_lower_safe);
          mu = mu_lower_safe;
          IpData().Append_info_string("m");
       }
 
-      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "Barrier parameter mu computed by oracle is %e\n", mu);
+      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                     "Barrier parameter mu computed by oracle is %e\n", mu);
 
       // Apply safeguards if appropriate
       mu = Min(mu, mu_max_);
-      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE, "Barrier parameter mu after safeguards is %e\n", mu);
+      Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
+                     "Barrier parameter mu after safeguards is %e\n", mu);
 
       // Set the new values
       IpData().Set_mu(mu);
@@ -435,7 +467,7 @@ bool AdaptiveMuUpdate::CheckSufficientProgress()
             }
          }
       }
-         break;
+      break;
       case FILTER_OBJ_CONSTR:
       {
          /*
@@ -447,7 +479,7 @@ bool AdaptiveMuUpdate::CheckSufficientProgress()
          Number margin = filter_margin_fact_ * Min(filter_max_margin_, curr_error);
          retval = filter_.Acceptable(IpCq().curr_f() + margin, IpCq().curr_constraint_violation() + margin);
       }
-         break;
+      break;
       case NEVER_MONOTONE_MODE:
          retval = true;
          break;
@@ -479,11 +511,12 @@ void AdaptiveMuUpdate::RememberCurrentPointAsAccepted()
             for( iter = refs_vals_.begin(); iter != refs_vals_.end(); iter++ )
             {
                num_refs++;
-               Jnlst().Printf(J_MOREDETAILED, J_BARRIER_UPDATE, "pd system reference[%2d] = %.6e\n", num_refs, *iter);
+               Jnlst().Printf(J_MOREDETAILED, J_BARRIER_UPDATE,
+                              "pd system reference[%2d] = %.6e\n", num_refs, *iter);
             }
          }
       }
-         break;
+      break;
       case FILTER_OBJ_CONSTR:
       {
          /*
@@ -496,12 +529,12 @@ void AdaptiveMuUpdate::RememberCurrentPointAsAccepted()
          filter_.AddEntry(IpCq().curr_f(), IpCq().curr_constraint_violation(), IpData().iter_count());
          filter_.Print(Jnlst());
       }
-         break;
+      break;
       case NEVER_MONOTONE_MODE:
       {
          // Nothing to be done
       }
-         break;
+      break;
       default:
          DBG_ASSERT(false && "Unknown corrector_type value.");
    }
@@ -515,7 +548,7 @@ void AdaptiveMuUpdate::RememberCurrentPointAsAccepted()
 
 Number AdaptiveMuUpdate::Compute_tau_monotone(
    Number mu
-   )
+)
 {
    return Max(tau_min_, 1. - mu);
 }
@@ -582,7 +615,7 @@ Number AdaptiveMuUpdate::NewFixedMu()
       if( !have_mu )
       {
          Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-            "New fixed value for mu could not be computed from the mu_oracle.\n");
+                        "New fixed value for mu could not be computed from the mu_oracle.\n");
       }
    }
    if( !have_mu )
@@ -603,7 +636,7 @@ Number AdaptiveMuUpdate::quality_function_pd_system()
    Index n_dual = IpData().curr()->x()->Dim() + IpData().curr()->s()->Dim();
    Index n_pri = IpData().curr()->y_c()->Dim() + IpData().curr()->y_d()->Dim();
    Index n_comp = IpData().curr()->z_L()->Dim() + IpData().curr()->z_U()->Dim() + IpData().curr()->v_L()->Dim()
-      + IpData().curr()->v_U()->Dim();
+                  + IpData().curr()->v_U()->Dim();
 
    Number dual_inf = 0.;
    Number primal_inf = 0.;
@@ -701,15 +734,17 @@ Number AdaptiveMuUpdate::quality_function_pd_system()
          DBG_ASSERT(false && "Unknown value for adaptive_mu_kkt_balancing_term");
    }
 
-   DBG_ASSERT(centrality >= 0.); DBG_ASSERT(balancing_term >= 0);
+   DBG_ASSERT(centrality >= 0.);
+   DBG_ASSERT(balancing_term >= 0);
    Number kkt_error = primal_inf + dual_inf + complty + centrality + balancing_term;
 
-   Jnlst().Printf(J_MOREDETAILED, J_BARRIER_UPDATE, "KKT error in barrier update check:\n"
-      "  primal infeasibility: %15.6e\n"
-      "    dual infeasibility: %15.6e\n"
-      "       complementarity: %15.6e\n"
-      "            centrality: %15.6e\n"
-      "             kkt error: %15.6e\n", primal_inf, dual_inf, complty, centrality, kkt_error);
+   Jnlst().Printf(J_MOREDETAILED, J_BARRIER_UPDATE,
+                  "KKT error in barrier update check:\n"
+                  "  primal infeasibility: %15.6e\n"
+                  "    dual infeasibility: %15.6e\n"
+                  "       complementarity: %15.6e\n"
+                  "            centrality: %15.6e\n"
+                  "             kkt error: %15.6e\n", primal_inf, dual_inf, complty, centrality, kkt_error);
 
    return kkt_error;
 }
@@ -717,7 +752,7 @@ Number AdaptiveMuUpdate::quality_function_pd_system()
 Number AdaptiveMuUpdate::lower_mu_safeguard()
 {
    DBG_START_METH("AdaptiveMuUpdate::lower_mu_safeguard",
-      dbg_verbosity);
+                  dbg_verbosity);
    if( adaptive_mu_safeguard_factor_ == 0. )
    {
       return 0.;
@@ -744,7 +779,7 @@ Number AdaptiveMuUpdate::lower_mu_safeguard()
    }
 
    Number lower_mu_safeguard = Max(adaptive_mu_safeguard_factor_ * (dual_inf / init_dual_inf_),
-      adaptive_mu_safeguard_factor_ * (primal_inf / init_primal_inf_));
+                                   adaptive_mu_safeguard_factor_ * (primal_inf / init_primal_inf_));
    DBG_PRINT((1, "dual_inf=%e init_dual_inf_=%e primal_inf=%e init_primal_inf_=%e\n", dual_inf, init_dual_inf_, primal_inf, init_primal_inf_));
 
    if( adaptive_mu_globalization_ == KKT_ERROR )

@@ -16,7 +16,7 @@ class RegisteredOptions;
 
 void RegisterOptions_Inexact(
    const SmartPtr<RegisteredOptions>& roptions
-   );
+);
 
 } // namespace Ipopt
 

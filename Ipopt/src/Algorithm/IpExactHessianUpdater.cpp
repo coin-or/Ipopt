@@ -18,7 +18,7 @@ static const Index dbg_verbosity = 0;
 bool ExactHessianUpdater::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
-   )
+)
 {
    return true;
 }
@@ -26,7 +26,7 @@ bool ExactHessianUpdater::InitializeImpl(
 void ExactHessianUpdater::UpdateHessian()
 {
    DBG_START_METH("ExactHessianUpdater::UpdateHessian",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    IpData().Set_W(IpCq().curr_exact_hessian());
 }

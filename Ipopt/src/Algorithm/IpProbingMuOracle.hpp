@@ -24,7 +24,7 @@ public:
    /** Constructor */
    ProbingMuOracle(
       const SmartPtr<PDSystemSolver>& pd_solver
-      );
+   );
 
    /** Destructor */
    virtual ~ProbingMuOracle();
@@ -34,7 +34,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Method for computing the value of the barrier parameter that
     *  could be used in the current iteration (using Mehrotra's
@@ -44,11 +44,11 @@ public:
       Number  mu_min,
       Number  mu_max,
       Number& new_mu
-      );
+   );
 
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
 
 private:
    /**@name Default Compiler Generated Methods
@@ -67,12 +67,12 @@ private:
    /** Copy Constructor */
    ProbingMuOracle(
       const ProbingMuOracle&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const ProbingMuOracle&
-      );
+   );
    //@}
 
    /** Pointer to the object that should be used to solve the
@@ -87,7 +87,7 @@ private:
       Number                alpha_primal,
       Number                alpha_dual,
       const IteratesVector& step
-      );
+   );
 
    /** @name Algorithmic parameters */
    //@{

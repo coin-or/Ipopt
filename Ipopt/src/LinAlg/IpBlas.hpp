@@ -21,7 +21,7 @@ Number IpBlasDdot(
    Index         incX,
    const Number* y,
    Index         incY
-   );
+);
 
 /** Wrapper for BLAS function DNRM2.
  *
@@ -31,7 +31,7 @@ Number IpBlasDnrm2(
    Index         size,
    const Number* x,
    Index         incX
-   );
+);
 
 /** Wrapper for BLAS function DASUM.
  *
@@ -41,7 +41,7 @@ Number IpBlasDasum(
    Index         size,
    const Number* x,
    Index         incX
-   );
+);
 
 /** Wrapper for BLAS function IDAMAX.
  *
@@ -51,7 +51,7 @@ Index IpBlasIdamax(
    Index         size,
    const Number* x,
    Index         incX
-   );
+);
 
 /** Wrapper for BLAS subroutine DCOPY.
  *
@@ -63,7 +63,7 @@ void IpBlasDcopy(
    Index         incX,
    Number*       y,
    Index         incY
-   );
+);
 
 /** Wrapper for BLAS subroutine DAXPY.
  *
@@ -76,7 +76,7 @@ void IpBlasDaxpy(
    Index         incX,
    Number*       y,
    Index         incY
-   );
+);
 
 /** Wrapper for BLAS subroutine DSCAL.
  *
@@ -87,7 +87,7 @@ void IpBlasDscal(
    Number  alpha,
    Number* x,
    Index   incX
-   );
+);
 
 /** Wrapper for BLAS subroutine DGEMV.
  *
@@ -105,7 +105,7 @@ void IpBlasDgemv(
    Number        beta,
    Number*       y,
    Index         incY
-   );
+);
 
 /** Wrapper for BLAS subroutine DSYMV.
  *
@@ -121,7 +121,7 @@ void IpBlasDsymv(
    Number        beta,
    Number*       y,
    Index         incY
-   );
+);
 
 /** Wrapper for BLAS subroutine DGEMM.
  *
@@ -141,7 +141,7 @@ void IpBlasDgemm(
    Number        beta,
    Number*       C,
    Index         ldC
-   );
+);
 
 /** Wrapper for BLAS subroutine DSYRK.
  *
@@ -157,7 +157,7 @@ void IpBlasDsyrk(
    Number        beta,
    Number*       C,
    Index         ldC
-   );
+);
 
 /** Wrapper for BLAS subroutine DTRSM.
  *
@@ -172,7 +172,7 @@ void IpBlasDtrsm(
    Index         ldA,
    Number*       B,
    Index         ldB
-   );
+);
 
 } // namespace Ipopt
 

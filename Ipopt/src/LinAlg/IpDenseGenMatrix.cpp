@@ -27,7 +27,7 @@ static const Index dbg_verbosity = 0;
 
 DenseGenMatrix::DenseGenMatrix(
    const DenseGenMatrixSpace* owner_space
-   )
+)
    : Matrix(owner_space),
      owner_space_(owner_space),
      values_(new Number[NCols() * NRows()]),
@@ -46,9 +46,10 @@ DenseGenMatrix::~DenseGenMatrix()
 
 void DenseGenMatrix::ScaleColumns(
    const DenseVector& scal_vec
-   )
+)
 {
-   DBG_ASSERT(scal_vec.Dim() == NCols()); DBG_ASSERT(initialized_);
+   DBG_ASSERT(scal_vec.Dim() == NCols());
+   DBG_ASSERT(initialized_);
 
    const Number* scal_values = scal_vec.Values();
 
@@ -61,9 +62,10 @@ void DenseGenMatrix::ScaleColumns(
 
 void DenseGenMatrix::Copy(
    const DenseGenMatrix& M
-   )
+)
 {
-   DBG_ASSERT(NCols() == M.NCols()); DBG_ASSERT(NRows() == M.NRows());
+   DBG_ASSERT(NCols() == M.NCols());
+   DBG_ASSERT(NRows() == M.NRows());
 
    IpBlasDcopy(NCols() * NRows(), M.Values(), 1, values_, 1);
    initialized_ = true;
@@ -72,7 +74,7 @@ void DenseGenMatrix::Copy(
 
 void DenseGenMatrix::FillIdentity(
    Number factor /*=1.*/
-   )
+)
 {
    DBG_ASSERT(NCols() == NRows());
 
@@ -97,7 +99,7 @@ void DenseGenMatrix::AddMatrixProduct(
    const DenseGenMatrix& B,
    bool                  transB,
    Number                beta
-   )
+)
 {
    Index m = NRows();
    DBG_ASSERT((transA && A.NCols() == m) || (!transA && A.NRows() == m));
@@ -111,7 +113,9 @@ void DenseGenMatrix::AddMatrixProduct(
    else
    {
       k = A.NCols();
-   } DBG_ASSERT((transB && B.NCols() == k) || (!transB && B.NRows() == k)); DBG_ASSERT(beta == 0. || initialized_);
+   }
+   DBG_ASSERT((transB && B.NCols() == k) || (!transB && B.NRows() == k));
+   DBG_ASSERT(beta == 0. || initialized_);
 
    IpBlasDgemm(transA, transB, m, n, k, alpha, A.Values(), A.NRows(), B.Values(), B.NRows(), beta, values_, NRows());
    initialized_ = true;
@@ -123,9 +127,11 @@ void DenseGenMatrix::HighRankUpdateTranspose(
    const MultiVectorMatrix& V1,
    const MultiVectorMatrix& V2,
    Number                   beta
-   )
+)
 {
-   DBG_ASSERT(NRows() == V1.NCols()); DBG_ASSERT(NCols() == V2.NCols()); DBG_ASSERT(beta == 0. || initialized_);
+   DBG_ASSERT(NRows() == V1.NCols());
+   DBG_ASSERT(NCols() == V2.NCols());
+   DBG_ASSERT(beta == 0. || initialized_);
 
    if( beta == 0. )
    {
@@ -153,10 +159,11 @@ void DenseGenMatrix::HighRankUpdateTranspose(
 
 bool DenseGenMatrix::ComputeCholeskyFactor(
    const DenseSymMatrix& M
-   )
+)
 {
    Index dim = M.Dim();
-   DBG_ASSERT(dim == NCols()); DBG_ASSERT(dim == NRows());
+   DBG_ASSERT(dim == NCols());
+   DBG_ASSERT(dim == NRows());
 
    ObjectChanged();
 
@@ -199,10 +206,12 @@ bool DenseGenMatrix::ComputeCholeskyFactor(
 bool DenseGenMatrix::ComputeEigenVectors(
    const DenseSymMatrix& M,
    DenseVector&          Evalues
-   )
+)
 {
    Index dim = M.Dim();
-   DBG_ASSERT(Evalues.Dim() == dim); DBG_ASSERT(NRows() == dim); DBG_ASSERT(NCols() == dim);
+   DBG_ASSERT(Evalues.Dim() == dim);
+   DBG_ASSERT(NRows() == dim);
+   DBG_ASSERT(NCols() == dim);
 
    // First we copy the content of the matrix into Q
    const Number* Mvalues = M.Values();
@@ -228,9 +237,11 @@ void DenseGenMatrix::CholeskyBackSolveMatrix(
    bool            trans,
    Number          alpha,
    DenseGenMatrix& B
-   ) const
+) const
 {
-   DBG_ASSERT(NRows() == NCols()); DBG_ASSERT(B.NRows() == NRows()); DBG_ASSERT(initialized_);
+   DBG_ASSERT(NRows() == NCols());
+   DBG_ASSERT(B.NRows() == NRows());
+   DBG_ASSERT(initialized_);
 
    Number* Bvalues = B.Values();
 
@@ -239,9 +250,12 @@ void DenseGenMatrix::CholeskyBackSolveMatrix(
 
 void DenseGenMatrix::CholeskySolveVector(
    DenseVector& b
-   ) const
+) const
 {
-   DBG_ASSERT(NRows() == NCols()); DBG_ASSERT(b.Dim() == NRows()); DBG_ASSERT(initialized_); DBG_ASSERT(factorization_ == CHOL);
+   DBG_ASSERT(NRows() == NCols());
+   DBG_ASSERT(b.Dim() == NRows());
+   DBG_ASSERT(initialized_);
+   DBG_ASSERT(factorization_ == CHOL);
 
    Number* bvalues = b.Values();
 
@@ -250,9 +264,12 @@ void DenseGenMatrix::CholeskySolveVector(
 
 void DenseGenMatrix::CholeskySolveMatrix(
    DenseGenMatrix& B
-   ) const
+) const
 {
-   DBG_ASSERT(NRows() == NCols()); DBG_ASSERT(B.NRows() == NRows()); DBG_ASSERT(initialized_); DBG_ASSERT(factorization_ == CHOL);
+   DBG_ASSERT(NRows() == NCols());
+   DBG_ASSERT(B.NRows() == NRows());
+   DBG_ASSERT(initialized_);
+   DBG_ASSERT(factorization_ == CHOL);
 
    Number* Bvalues = B.Values();
 
@@ -297,9 +314,12 @@ bool DenseGenMatrix::ComputeLUFactorInPlace()
 
 void DenseGenMatrix::LUSolveMatrix(
    DenseGenMatrix& B
-   ) const
+) const
 {
-   DBG_ASSERT(NRows() == NCols()); DBG_ASSERT(B.NRows() == NRows()); DBG_ASSERT(initialized_); DBG_ASSERT(factorization_ == LU);
+   DBG_ASSERT(NRows() == NCols());
+   DBG_ASSERT(B.NRows() == NRows());
+   DBG_ASSERT(initialized_);
+   DBG_ASSERT(factorization_ == LU);
 
    Number* Bvalues = B.Values();
 
@@ -308,9 +328,12 @@ void DenseGenMatrix::LUSolveMatrix(
 
 void DenseGenMatrix::LUSolveVector(
    DenseVector& b
-   ) const
+) const
 {
-   DBG_ASSERT(NRows() == NCols()); DBG_ASSERT(b.Dim() == NRows()); DBG_ASSERT(initialized_); DBG_ASSERT(factorization_ == LU);
+   DBG_ASSERT(NRows() == NCols());
+   DBG_ASSERT(b.Dim() == NRows());
+   DBG_ASSERT(initialized_);
+   DBG_ASSERT(factorization_ == LU);
 
    Number* bvalues = b.Values();
 
@@ -322,10 +345,12 @@ void DenseGenMatrix::MultVectorImpl(
    const Vector& x,
    Number        beta,
    Vector&       y
-   ) const
+) const
 {
    //  A few sanity checks
-   DBG_ASSERT(NCols() == x.Dim()); DBG_ASSERT(NRows() == y.Dim()); DBG_ASSERT(initialized_);
+   DBG_ASSERT(NCols() == x.Dim());
+   DBG_ASSERT(NRows() == y.Dim());
+   DBG_ASSERT(initialized_);
 
    // See if we can understand the data
    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
@@ -342,10 +367,12 @@ void DenseGenMatrix::TransMultVectorImpl(
    const Vector& x,
    Number        beta,
    Vector&       y
-   ) const
+) const
 {
    //  A few sanity checks
-   DBG_ASSERT(NCols() == y.Dim()); DBG_ASSERT(NRows() == x.Dim()); DBG_ASSERT(initialized_);
+   DBG_ASSERT(NCols() == y.Dim());
+   DBG_ASSERT(NRows() == x.Dim());
+   DBG_ASSERT(initialized_);
 
    // See if we can understand the data
    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
@@ -360,7 +387,7 @@ void DenseGenMatrix::TransMultVectorImpl(
 void DenseGenMatrix::ComputeRowAMaxImpl(
    Vector& rows_norms,
    bool    init
-   ) const
+) const
 {
    //  A few sanity checks
    DBG_ASSERT(initialized_);
@@ -383,7 +410,7 @@ void DenseGenMatrix::ComputeRowAMaxImpl(
 void DenseGenMatrix::ComputeColAMaxImpl(
    Vector& cols_norms,
    bool    init
-   ) const
+) const
 {
    //  A few sanity checks
    DBG_ASSERT(initialized_);
@@ -415,11 +442,12 @@ void DenseGenMatrix::PrintImpl(
    const std::string& name,
    Index              indent,
    const std::string& prefix
-   ) const
+) const
 {
-   jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent, "%sDenseGenMatrix \"%s\" with %d rows and %d columns:\n",
-      prefix.c_str(), name.c_str(), NRows(), NCols());
+   jnlst.Printf(level, category,
+                "\n");
+   jnlst.PrintfIndented(level, category, indent,
+                        "%sDenseGenMatrix \"%s\" with %d rows and %d columns:\n", prefix.c_str(), name.c_str(), NRows(), NCols());
 
    if( initialized_ )
    {
@@ -427,21 +455,22 @@ void DenseGenMatrix::PrintImpl(
       {
          for( Index i = 0; i < NRows(); i++ )
          {
-            jnlst.PrintfIndented(level, category, indent, "%s%s[%5d,%5d]=%23.16e\n", prefix.c_str(), name.c_str(), i, j,
-               values_[i + NRows() * j]);
+            jnlst.PrintfIndented(level, category, indent,
+                                 "%s%s[%5d,%5d]=%23.16e\n", prefix.c_str(), name.c_str(), i, j, values_[i + NRows() * j]);
          }
       }
    }
    else
    {
-      jnlst.PrintfIndented(level, category, indent, "The matrix has not yet been initialized!\n");
+      jnlst.PrintfIndented(level, category, indent,
+                           "The matrix has not yet been initialized!\n");
    }
 }
 
 DenseGenMatrixSpace::DenseGenMatrixSpace(
    Index nRows,
    Index nCols
-   )
+)
    : MatrixSpace(nRows, nCols)
 { }
 

@@ -35,7 +35,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      ) = 0;
+   ) = 0;
 
    /** This method computes the estimates for y_c and y_d at the
     *  current point.
@@ -46,7 +46,7 @@ public:
    virtual bool CalculateMultipliers(
       Vector& y_c,
       Vector& y_d
-      ) = 0;
+   ) = 0;
 
 private:
    /**@name Default Compiler Generated Methods
@@ -62,12 +62,12 @@ private:
    /** Copy Constructor */
    EqMultiplierCalculator(
       const EqMultiplierCalculator&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const EqMultiplierCalculator&
-      );
+   );
    //@}
 };
 

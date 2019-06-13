@@ -56,12 +56,13 @@ Index TripletToCSRConverter::InitializeConverter(
    Index        nonzeros,
    const Index* airn,
    const Index* ajcn
-   )
+)
 {
    DBG_START_METH("TSymLinearSolver::InitializeStructure",
-      dbg_verbosity);
+                  dbg_verbosity);
 
-   DBG_ASSERT(dim > 0); DBG_ASSERT(nonzeros > 0);
+   DBG_ASSERT(dim > 0);
+   DBG_ASSERT(nonzeros > 0);
 
    delete[] ia_;
    delete[] ja_;
@@ -79,7 +80,8 @@ Index TripletToCSRConverter::InitializeConverter(
    {
       list_iterator->Set(airn[i], ajcn[i], i);
       list_iterator++;
-   } DBG_ASSERT(list_iterator == entry_list.end());
+   }
+   DBG_ASSERT(list_iterator == entry_list.end());
 
    if( DBG_VERBOSITY() >= 2 )
    {
@@ -191,7 +193,8 @@ Index TripletToCSRConverter::InitializeConverter(
    for( Index i = cur_row; i <= dim_; i++ )
    {
       ia_[i] = nonzeros_compressed_;
-   } DBG_ASSERT(idouble == nonzeros_triplet_ - nonzeros_compressed_);
+   }
+   DBG_ASSERT(idouble == nonzeros_triplet_ - nonzeros_compressed_);
 
    // Now copy the ja_tmp array to the (shorter) final one and make
    // sure that the correct offset is used
@@ -330,14 +333,15 @@ void TripletToCSRConverter::ConvertValues(
    const Number* a_triplet,
    Index         nonzeros_compressed,
    Number*       a_compressed
-   )
+)
 {
    DBG_START_METH("TSymLinearSolver::ConvertValues",
-      dbg_verbosity);
+                  dbg_verbosity);
 
    DBG_ASSERT(initialized_);
 
-   DBG_ASSERT(nonzeros_triplet_ == nonzeros_triplet); DBG_ASSERT(nonzeros_compressed_ == nonzeros_compressed);
+   DBG_ASSERT(nonzeros_triplet_ == nonzeros_triplet);
+   DBG_ASSERT(nonzeros_compressed_ == nonzeros_compressed);
 
    for( Index i = 0; i < nonzeros_compressed_; i++ )
    {

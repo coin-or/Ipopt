@@ -50,7 +50,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      ) = 0;
+   ) = 0;
 
    /** Method for initializing for the next iterative solve.
     *
@@ -73,7 +73,7 @@ public:
       const Number* resid,
       Index         iter,
       Number        norm2_rhs
-      ) = 0;
+   ) = 0;
 
    /** This method can be called after the Solve is over and we can
     *  delete anything that has been allocated to free memory.
@@ -102,7 +102,7 @@ protected:
       SmartPtr<const Vector>& comp_s,
       SmartPtr<const Vector>& comp_c,
       SmartPtr<const Vector>& comp_d
-      );
+   );
 
    /** Method to easily access Inexact data */
    InexactData& InexData()
@@ -134,7 +134,7 @@ private:
    /** Overloaded Assignment Operator */
    IterativeSolverTerminationTester& operator=(
       const IterativeSolverTerminationTester&
-      );
+   );
    //@}
 };
 

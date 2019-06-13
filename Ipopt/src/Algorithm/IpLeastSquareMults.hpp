@@ -31,7 +31,7 @@ public:
     */
    LeastSquareMultipliers(
       AugSystemSolver& augSysSolver
-      );
+   );
 
    /** Destructor */
    virtual ~LeastSquareMultipliers()
@@ -41,7 +41,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** This method computes the least-square estimates for y_c and
     *  y_d at the current point.
@@ -51,7 +51,7 @@ public:
    virtual bool CalculateMultipliers(
       Vector& y_c,
       Vector& y_d
-      );
+   );
 
 private:
    /**@name Default Compiler Generated Methods
@@ -70,11 +70,11 @@ private:
    /** Copy Constructor */
    LeastSquareMultipliers(
       const LeastSquareMultipliers&
-      );
+   );
 
    void operator=(
       const LeastSquareMultipliers&
-      );
+   );
    //@}
 
    /** augmented system solver to be used for solving the linear system */

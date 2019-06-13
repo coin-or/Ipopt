@@ -32,7 +32,7 @@ public:
    bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** @name Methods for requesting solution of the linear system. */
    //@{
@@ -41,7 +41,7 @@ public:
       Index        nonzeros,
       const Index* ia,
       const Index* ja
-      );
+   );
 
    virtual double* GetValuesArrayPtr();
 
@@ -53,7 +53,7 @@ public:
       double*      rhs_vals,
       bool         check_NegEVals,
       Index        numberOfNegEVals
-      );
+   );
 
    virtual Index NumberOfNegEVals() const;
    //@}
@@ -76,7 +76,7 @@ public:
    //@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
    //@}
 
    virtual bool ProvidesDegeneracyDetection() const;
@@ -85,7 +85,7 @@ public:
       const Index*      ia,
       const Index*      ja,
       std::list<Index>& c_deps
-      );
+   );
 
 private:
    /**@name Default Compiler Generated Methods
@@ -99,12 +99,12 @@ private:
    /** Copy Constructor */
    WsmpSolverInterface(
       const WsmpSolverInterface&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const WsmpSolverInterface&
-      );
+   );
    //@}
 
    /** @name Information about the matrix */
@@ -207,14 +207,14 @@ private:
    ESymSolverStatus SymbolicFactorization(
       const Index* ia,
       const Index* ja
-      );
+   );
 
    /** Call Wsmp to really do the analysis phase. */
    ESymSolverStatus InternalSymFact(
       const Index* ia,
       const Index* ja,
       Index        numberOfNegEVals
-      );
+   );
 
    /** Call Wsmp to factorize the Matrix. */
    ESymSolverStatus Factorization(
@@ -222,7 +222,7 @@ private:
       const Index* ja,
       bool         check_NegEVals,
       Index        numberOfNegEVals
-      );
+   );
 
    /** Call Wsmp to do the Solve. */
    ESymSolverStatus Solve(
@@ -230,7 +230,7 @@ private:
       const Index* ja,
       Index        nrhs,
       double*      rhs_vals
-      );
+   );
    //@}
 };
 

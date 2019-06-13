@@ -39,16 +39,16 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    virtual ConvergenceStatus CheckConvergence(
       bool call_intermediate_callback = true
-      );
+   );
 
    /** Method for setting the LS acceptor from the main algorithm */
    virtual void SetOrigLSAcceptor(
       const BacktrackingLSAcceptor& orig_ls_acceptor
-      ) = 0;
+   ) = 0;
 
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions);
@@ -66,19 +66,19 @@ private:
    /** Copy Constructor */
    RestoConvergenceCheck(
       const RestoConvergenceCheck&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const RestoConvergenceCheck&
-      );
+   );
    //@}
 
    /** Method for checking progress with original globalization mechanism. */
    virtual ConvergenceStatus TestOrigProgress(
       Number orig_trial_barr,
       Number orig_trial_theta
-      ) = 0;
+   ) = 0;
 
    /** @name Algorithmic parameters */
    //@{

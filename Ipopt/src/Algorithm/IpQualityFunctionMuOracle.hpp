@@ -25,7 +25,7 @@ public:
    /** Constructor */
    QualityFunctionMuOracle(
       const SmartPtr<PDSystemSolver>& pd_solver
-      );
+   );
 
    /** Destructor */
    virtual ~QualityFunctionMuOracle();
@@ -35,7 +35,7 @@ public:
    virtual bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix
-      );
+   );
 
    /** Method for computing the value of the barrier parameter that
     *  could be used in the current iteration (using the LOQO formula).
@@ -44,11 +44,11 @@ public:
       Number  mu_min,
       Number  mu_max,
       Number& new_mu
-      );
+   );
 
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
-      );
+   );
 
    /** @name Public enums.
     *  Some of those are also used for the quality function.
@@ -97,12 +97,12 @@ private:
    /** Copy Constructor */
    QualityFunctionMuOracle(
       const QualityFunctionMuOracle&
-      );
+   );
 
    /** Default Assignment Operator */
    void operator=(
       const QualityFunctionMuOracle&
-      );
+   );
    //@}
 
    /** Pointer to the object that should be used to solve the
@@ -136,7 +136,7 @@ private:
       const Vector& step_cen_z_U,
       const Vector& step_cen_v_L,
       const Vector& step_cen_v_U
-      );
+   );
 
    /** Auxiliary function performing the golden section */
    Number PerformGoldenSection(
@@ -166,7 +166,7 @@ private:
       const Vector& step_cen_z_U,
       const Vector& step_cen_v_L,
       const Vector& step_cen_v_U
-      );
+   );
 
    /** Auxiliary functions for scaling the sigma axis in the golden
     *  section procedure
@@ -174,11 +174,11 @@ private:
    //@{
    Number ScaleSigma(
       Number sigma
-      );
+   );
 
    Number UnscaleSigma(
       Number scaled_sigma
-      );
+   );
    //@}
 
    /** Auxiliary function performing the golden section in the

@@ -23,7 +23,7 @@ namespace Ipopt
 
 CompoundSymMatrix::CompoundSymMatrix(
    const CompoundSymMatrixSpace* owner_space
-   )
+)
    : SymMatrix(owner_space),
      owner_space_(owner_space),
      matrices_valid_(false)
@@ -44,11 +44,14 @@ void CompoundSymMatrix::SetComp(
    Index         irow,
    Index         jcol,
    const Matrix& matrix
-   )
+)
 {
-   DBG_ASSERT(!matrices_valid_); DBG_ASSERT(irow < NComps_Dim()); DBG_ASSERT(jcol <= irow);
+   DBG_ASSERT(!matrices_valid_);
+   DBG_ASSERT(irow < NComps_Dim());
+   DBG_ASSERT(jcol <= irow);
    // Matrices on the diagonal must be symmetric
-   DBG_ASSERT(irow != jcol || dynamic_cast<const SymMatrix*>(&matrix)); DBG_ASSERT(owner_space_->GetCompSpace(irow, jcol)->IsMatrixFromSpace(matrix));
+   DBG_ASSERT(irow != jcol || dynamic_cast<const SymMatrix*>(&matrix));
+   DBG_ASSERT(owner_space_->GetCompSpace(irow, jcol)->IsMatrixFromSpace(matrix));
 
    comps_[irow][jcol] = NULL;
    const_comps_[irow][jcol] = &matrix;
@@ -59,11 +62,14 @@ void CompoundSymMatrix::SetCompNonConst(
    Index   irow,
    Index   jcol,
    Matrix& matrix
-   )
+)
 {
-   DBG_ASSERT(!matrices_valid_); DBG_ASSERT(irow < NComps_Dim()); DBG_ASSERT(jcol <= irow);
+   DBG_ASSERT(!matrices_valid_);
+   DBG_ASSERT(irow < NComps_Dim());
+   DBG_ASSERT(jcol <= irow);
    // Matrices on the diagonal must be symmetric
-   DBG_ASSERT( irow != jcol || dynamic_cast<SymMatrix*>(&matrix)); DBG_ASSERT(owner_space_->GetCompSpace(irow, jcol)->IsMatrixFromSpace(matrix));
+   DBG_ASSERT( irow != jcol || dynamic_cast<SymMatrix*>(&matrix));
+   DBG_ASSERT(owner_space_->GetCompSpace(irow, jcol)->IsMatrixFromSpace(matrix));
 
    const_comps_[irow][jcol] = NULL;
    comps_[irow][jcol] = &matrix;
@@ -80,7 +86,7 @@ void CompoundSymMatrix::MultVectorImpl(
    const Vector& x,
    Number        beta,
    Vector&       y
-   ) const
+) const
 {
    if( !matrices_valid_ )
    {
@@ -169,7 +175,8 @@ bool CompoundSymMatrix::HasValidNumbersImpl() const
    if( !matrices_valid_ )
    {
       matrices_valid_ = MatricesValid();
-   } DBG_ASSERT(matrices_valid_);
+   }
+   DBG_ASSERT(matrices_valid_);
 
    for( Index irow = 0; irow < NComps_Dim(); irow++ )
    {
@@ -190,12 +197,13 @@ bool CompoundSymMatrix::HasValidNumbersImpl() const
 void CompoundSymMatrix::ComputeRowAMaxImpl(
    Vector& rows_norms,
    bool    init
-   ) const
+) const
 {
    if( !matrices_valid_ )
    {
       matrices_valid_ = MatricesValid();
-   } DBG_ASSERT(matrices_valid_);
+   }
+   DBG_ASSERT(matrices_valid_);
 
    // The vector is assumed to be compound Vectors as well except if
    // there is only one component
@@ -223,7 +231,8 @@ void CompoundSymMatrix::ComputeRowAMaxImpl(
          else
          {
             vec_i = &rows_norms;
-         } DBG_ASSERT(IsValid(vec_i));
+         }
+         DBG_ASSERT(IsValid(vec_i));
          if( jcol <= irow && ConstComp(irow, jcol) )
          {
             ConstComp(irow, jcol)->ComputeRowAMax(*vec_i, false);
@@ -243,17 +252,18 @@ void CompoundSymMatrix::PrintImpl(
    const std::string& name,
    Index              indent,
    const std::string& prefix
-   ) const
+) const
 {
-   jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent, "%sCompoundSymMatrix \"%s\" with %d rows and columns components:\n",
-      prefix.c_str(), name.c_str(), NComps_Dim());
+   jnlst.Printf(level, category,
+                "\n");
+   jnlst.PrintfIndented(level, category, indent,
+                        "%sCompoundSymMatrix \"%s\" with %d rows and columns components:\n", prefix.c_str(), name.c_str(), NComps_Dim());
    for( Index irow = 0; irow < NComps_Dim(); irow++ )
    {
       for( Index jcol = 0; jcol <= irow; jcol++ )
       {
-         jnlst.PrintfIndented(level, category, indent, "%sComponent for row %d and column %d:\n", prefix.c_str(), irow,
-            jcol);
+         jnlst.PrintfIndented(level, category, indent,
+                              "%sComponent for row %d and column %d:\n", prefix.c_str(), irow, jcol);
          if( ConstComp(irow, jcol) )
          {
             DBG_ASSERT(name.size() < 200);
@@ -264,7 +274,8 @@ void CompoundSymMatrix::PrintImpl(
          }
          else
          {
-            jnlst.PrintfIndented(level, category, indent, "%sThis component has not been set.\n", prefix.c_str());
+            jnlst.PrintfIndented(level, category, indent,
+                                 "%sThis component has not been set.\n", prefix.c_str());
          }
       }
    }
@@ -281,7 +292,7 @@ bool CompoundSymMatrix::MatricesValid() const
       for( Index j = 0; j <= i; j++ )
       {
          if( (!ConstComp(i, j) && IsValid(owner_space_->GetCompSpace(i, j)))
-            || (ConstComp(i, j) && IsNull(owner_space_->GetCompSpace(i, j))) )
+             || (ConstComp(i, j) && IsNull(owner_space_->GetCompSpace(i, j))) )
          {
             retValue = false;
             break;
@@ -295,7 +306,7 @@ bool CompoundSymMatrix::MatricesValid() const
 CompoundSymMatrixSpace::CompoundSymMatrixSpace(
    Index ncomp_spaces,
    Index total_dim
-   )
+)
    : SymMatrixSpace(total_dim),
      ncomp_spaces_(ncomp_spaces),
      block_dim_(ncomp_spaces, -1),
@@ -313,17 +324,20 @@ CompoundSymMatrixSpace::CompoundSymMatrixSpace(
 void CompoundSymMatrixSpace::SetBlockDim(
    Index irow_jcol,
    Index dim
-   )
+)
 {
-   DBG_ASSERT(!dimensions_set_ && "for now, if dimensions are set, they cannot be changed"); DBG_ASSERT(block_dim_[irow_jcol] == -1 && "This dimension has already been set - sanity check"); DBG_ASSERT(irow_jcol < ncomp_spaces_);
+   DBG_ASSERT(!dimensions_set_ && "for now, if dimensions are set, they cannot be changed");
+   DBG_ASSERT(block_dim_[irow_jcol] == -1 && "This dimension has already been set - sanity check");
+   DBG_ASSERT(irow_jcol < ncomp_spaces_);
    block_dim_[irow_jcol] = dim;
 }
 
 Index CompoundSymMatrixSpace::GetBlockDim(
    Index irow_jcol
-   ) const
+) const
 {
-   DBG_ASSERT(dimensions_set_ && "Cannot get block dimensions before all dimensions are set."); DBG_ASSERT(irow_jcol < ncomp_spaces_);
+   DBG_ASSERT(dimensions_set_ && "Cannot get block dimensions before all dimensions are set.");
+   DBG_ASSERT(irow_jcol < ncomp_spaces_);
    return block_dim_[irow_jcol];
 }
 
@@ -332,12 +346,19 @@ void CompoundSymMatrixSpace::SetCompSpace(
    Index              jcol,
    const MatrixSpace& mat_space,
    bool               auto_allocate /*=false*/
-   )
+)
 {
    if( !dimensions_set_ )
    {
       dimensions_set_ = DimensionsSet();
-   } DBG_ASSERT(dimensions_set_); DBG_ASSERT(irow < ncomp_spaces_); DBG_ASSERT(jcol <= irow); DBG_ASSERT(IsNull(comp_spaces_[irow][jcol])); DBG_ASSERT(irow != jcol || dynamic_cast<const SymMatrixSpace*> (&mat_space)); DBG_ASSERT(block_dim_[jcol] != -1 && block_dim_[jcol] == mat_space.NCols()); DBG_ASSERT(block_dim_[irow] != -1 && block_dim_[irow] == mat_space.NRows());
+   }
+   DBG_ASSERT(dimensions_set_);
+   DBG_ASSERT(irow < ncomp_spaces_);
+   DBG_ASSERT(jcol <= irow);
+   DBG_ASSERT(IsNull(comp_spaces_[irow][jcol]));
+   DBG_ASSERT(irow != jcol || dynamic_cast<const SymMatrixSpace*> (&mat_space));
+   DBG_ASSERT(block_dim_[jcol] != -1 && block_dim_[jcol] == mat_space.NCols());
+   DBG_ASSERT(block_dim_[irow] != -1 && block_dim_[irow] == mat_space.NRows());
 
    comp_spaces_[irow][jcol] = &mat_space;
    allocate_block_[irow][jcol] = auto_allocate;
@@ -348,7 +369,8 @@ CompoundSymMatrix* CompoundSymMatrixSpace::MakeNewCompoundSymMatrix() const
    if( !dimensions_set_ )
    {
       dimensions_set_ = DimensionsSet();
-   } DBG_ASSERT(dimensions_set_);
+   }
+   DBG_ASSERT(dimensions_set_);
 
    CompoundSymMatrix* mat = new CompoundSymMatrix(this);
    for( Index i = 0; i < NComps_Dim(); i++ )

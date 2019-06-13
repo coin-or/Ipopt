@@ -22,7 +22,7 @@ namespace Ipopt
 
 SumSymMatrix::SumSymMatrix(
    const SumSymMatrixSpace* owner_space
-   )
+)
    : SymMatrix(owner_space),
      factors_(owner_space->NTerms(), 1.0),
      matrices_(owner_space->NTerms()),
@@ -36,7 +36,7 @@ void SumSymMatrix::SetTerm(
    Index            iterm,
    Number           factor,
    const SymMatrix& matrix
-   )
+)
 {
    DBG_ASSERT(iterm < owner_space_->NTerms());
    factors_[iterm] = factor;
@@ -47,7 +47,7 @@ void SumSymMatrix::GetTerm(
    Index                      iterm,
    Number&                    factor,
    SmartPtr<const SymMatrix>& matrix
-   ) const
+) const
 {
    DBG_ASSERT(iterm < owner_space_->NTerms());
    factor = factors_[iterm];
@@ -64,10 +64,11 @@ void SumSymMatrix::MultVectorImpl(
    const Vector& x,
    Number        beta,
    Vector&       y
-   ) const
+) const
 {
    //  A few sanity checks
-   DBG_ASSERT(Dim() == x.Dim()); DBG_ASSERT(Dim() == y.Dim());
+   DBG_ASSERT(Dim() == x.Dim());
+   DBG_ASSERT(Dim() == y.Dim());
 
    // Take care of the y part of the addition
    if( beta != 0.0 )
@@ -102,7 +103,7 @@ bool SumSymMatrix::HasValidNumbersImpl() const
 void SumSymMatrix::ComputeRowAMaxImpl(
    Vector& rows_norms,
    bool    init
-   ) const
+) const
 {
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "SumSymMatrix::ComputeRowAMaxImpl not implemented");
 }
@@ -110,7 +111,7 @@ void SumSymMatrix::ComputeRowAMaxImpl(
 void SumSymMatrix::ComputeColAMaxImpl(
    Vector& cols_norms,
    bool    init
-   ) const
+) const
 {
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "SumSymMatrix::ComputeColAMaxImpl not implemented");
 }
@@ -122,15 +123,16 @@ void SumSymMatrix::PrintImpl(
    const std::string& name,
    Index              indent,
    const std::string& prefix
-   ) const
+) const
 {
-   jnlst.Printf(level, category, "\n");
-   jnlst.PrintfIndented(level, category, indent, "%sSumSymMatrix \"%s\" of dimension %d with %d terms:\n",
-      prefix.c_str(), name.c_str(), Dim(), NTerms());
+   jnlst.Printf(level, category,
+                "\n");
+   jnlst.PrintfIndented(level, category, indent,
+                        "%sSumSymMatrix \"%s\" of dimension %d with %d terms:\n", prefix.c_str(), name.c_str(), Dim(), NTerms());
    for( Index iterm = 0; iterm < NTerms(); iterm++ )
    {
-      jnlst.PrintfIndented(level, category, indent, "%sTerm %d with factor %23.16e and the following matrix:\n",
-         prefix.c_str(), iterm, factors_[iterm]);
+      jnlst.PrintfIndented(level, category, indent,
+                           "%sTerm %d with factor %23.16e and the following matrix:\n", prefix.c_str(), iterm, factors_[iterm]);
       char buffer[256];
       Snprintf(buffer, 255, "Term: %d", iterm);
       std::string name = buffer;
@@ -141,7 +143,7 @@ void SumSymMatrix::PrintImpl(
 void SumSymMatrixSpace::SetTermSpace(
    Index                 term_idx,
    const SymMatrixSpace& space
-   )
+)
 {
    while( term_idx >= (Index) term_spaces_.size() )
    {
@@ -152,7 +154,7 @@ void SumSymMatrixSpace::SetTermSpace(
 
 SmartPtr<const SymMatrixSpace> SumSymMatrixSpace::GetTermSpace(
    Index term_idx
-   ) const
+) const
 {
    if( term_idx >= 0 && term_idx < (Index) term_spaces_.size() )
    {
