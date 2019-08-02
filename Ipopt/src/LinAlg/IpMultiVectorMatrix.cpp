@@ -8,15 +8,7 @@
 #include "IpDenseVector.hpp"
 #include "IpDenseGenMatrix.hpp"
 
-#ifdef HAVE_CSTDIO
-# include <cstdio>
-#else
-# ifdef HAVE_STDIO_H
-#  include <stdio.h>
-# else
-#  error "don't have header file for stdio"
-# endif
-#endif
+#include <cstdio>
 
 namespace Ipopt
 {

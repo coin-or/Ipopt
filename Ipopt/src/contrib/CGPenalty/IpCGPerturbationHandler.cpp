@@ -8,15 +8,7 @@
 #include "IpCGPenaltyData.hpp"
 #include "IpCGPenaltyCq.hpp"
 
-#ifdef HAVE_CMATH
-# include <cmath>
-#else
-# ifdef HAVE_MATH_H
-#  include <math.h>
-# else
-#  error "don't have header file for math"
-# endif
-#endif
+#include <cmath>
 
 namespace Ipopt
 {

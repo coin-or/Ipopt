@@ -12,26 +12,8 @@
 #include "IpReferenced.hpp"
 #include "IpSmartPtr.hpp"
 
-#ifdef HAVE_CSTDARG
-# include <cstdarg>
-#else
-# ifdef HAVE_STDARG_H
-#  include <stdarg.h>
-# else
-#  include <cstdarg>  // if this header is included by someone who does not define HAVE_CSTDARG or HAVE_STDARG, let's hope that cstdarg is available
-# endif
-#endif
-
-#ifdef HAVE_CSTDIO
-# include <cstdio>
-#else
-# ifdef HAVE_STDIO_H
-#  include <stdio.h>
-# else
-#  include <cstdio>  // if this header is included by someone who does not define HAVE_CSTDIO or HAVE_STDIO, let's hope that cstdio is available
-# endif
-#endif
-
+#include <cstdarg>
+#include <cstdio>
 #include <string>
 #include <vector>
 #include <ostream>

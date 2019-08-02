@@ -8,15 +8,7 @@
 #include <vector>
 #include <algorithm>
 
-#ifdef HAVE_CSTDDEF
-# include <cstddef>
-#else
-# ifdef HAVE_STDDEF_H
-#  include <stddef.h>
-# else
-#  error "don't have header file for stddef"
-# endif
-#endif
+#include <cstddef>
 
 namespace Ipopt
 {

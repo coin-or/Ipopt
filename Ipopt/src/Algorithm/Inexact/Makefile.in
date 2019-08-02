@@ -385,8 +385,8 @@ libinexact_la_SOURCES = \
 	IpIterativeSolverTerminationTester.cpp IpIterativeSolverTerminationTester.hpp
 
 libinexact_la_LDFLAGS = $(LT_LDFLAGS)
-AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` -I`$(CYGPATH_W) \
-	$(srcdir)/../../LinAlg` -I`$(CYGPATH_W) \
+AM_CPPFLAGS = -DIPOPT_BUILD -I`$(CYGPATH_W) $(srcdir)/../../Common` \
+	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` -I`$(CYGPATH_W) \
 	$(srcdir)/../../LinAlg/TMatrices` -I`$(CYGPATH_W) \
 	$(srcdir)/../../Interfaces` -I`$(CYGPATH_W) $(srcdir)/../` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinearSolvers` -I`$(CYGPATH_W) \

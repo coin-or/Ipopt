@@ -16,7 +16,7 @@ libLinearSolverLoader_la_SOURCES = \
   LibraryHandler.c LibraryHandler.h \
   HSLLoader.c HSLLoader.h
 
-AM_CPPFLAGS = \
+AM_CPPFLAGS = -DIPOPT_BUILD \
   -I`$(CYGPATH_W) $(srcdir)/../../Common` \
   -I`$(CYGPATH_W) $(srcdir)/../../Algorithm/LinearSolvers` \
   $(HSL_CFLAGS)

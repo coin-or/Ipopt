@@ -44,6 +44,8 @@ libcommon_la_SOURCES = \
 
 libcommon_la_LDFLAGS = $(LT_LDFLAGS)
 
+AM_CPPFLAGS = -DIPOPT_BUILD
+
 install-exec-local:
 	$(install_sh_DATA) config_ipopt.h $(DESTDIR)$(includeipoptdir)/IpoptConfig.h
 

@@ -11,15 +11,7 @@
 #include "IpTypes.hpp"
 
 #ifdef COIN_IPOPT_CHECKLEVEL
-#ifdef HAVE_CASSERT
-# include <cassert>
-#else
-# ifdef HAVE_ASSERT_H
-#  include <assert.h>
-# else
-#  error "don't have header file for assert"
-# endif
-#endif
+#include <cassert>
 #else
 #define COIN_IPOPT_CHECKLEVEL 0
 #endif

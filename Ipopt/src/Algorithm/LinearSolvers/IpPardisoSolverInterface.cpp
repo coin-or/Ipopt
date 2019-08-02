@@ -14,37 +14,11 @@
 
 #include "IpoptConfig.h"
 #include "IpPardisoSolverInterface.hpp"
-# include <math.h>
 
-#ifdef HAVE_CSTDIO
-# include <cstdio>
-#else
-# ifdef HAVE_STDIO_H
-#  include <stdio.h>
-# else
-#  error "don't have header file for stdio"
-# endif
-#endif
-
-#ifdef HAVE_CSTDLIB
-# include <cstdlib>
-#else
-# ifdef HAVE_STDLIB_H
-#  include <stdlib.h>
-# else
-#  error "don't have header file for stdlib"
-# endif
-#endif
-
-#ifdef HAVE_CSTRING
-# include <cstring>
-#else
-# ifdef HAVE_STRING_H
-#  include <string.h>
-# else
-#  error "don't have header file for string"
-# endif
-#endif
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 
 // determine the correct name of the Pardiso function
 #if defined(_MSC_VER) && defined(HAVE_PARDISO)

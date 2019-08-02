@@ -8,25 +8,8 @@
 #include "IpoptConfig.h"
 #include "IpWsmpSolverInterface.hpp"
 
-#ifdef HAVE_CMATH
-# include <cmath>
-#else
-# ifdef HAVE_MATH_H
-#  include <math.h>
-# else
-#  error "don't have header file for math"
-# endif
-#endif
-
-#ifdef HAVE_CSTDIO
-# include <cstdio>
-#else
-# ifdef HAVE_STDIO_H
-#  include <stdio.h>
-# else
-#  error "don't have header file for stdio"
-# endif
-#endif
+#include <cmath>
+#include <cstdio>
 
 /** Prototypes for WSMP's subroutines */
 extern "C"

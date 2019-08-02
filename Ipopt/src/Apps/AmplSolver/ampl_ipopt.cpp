@@ -6,28 +6,10 @@
 
 #include "AmplTNLP.hpp"
 #include "IpIpoptApplication.hpp"
-
 #include "IpoptConfig.h"
-#ifdef HAVE_CSTRING
-# include <cstring>
-#else
-# ifdef HAVE_STRING_H
-#  include <string.h>
-# else
-#  error "don't have header file for string"
-# endif
-#endif
 
-// for printf
-#ifdef HAVE_CSTDIO
-# include <cstdio>
-#else
-# ifdef HAVE_STDIO_H
-#  include <stdio.h>
-# else
-#  error "don't have header file for stdio"
-# endif
-#endif
+#include <cstring>
+#include <cstdio>
 
 int main(
    int argc,

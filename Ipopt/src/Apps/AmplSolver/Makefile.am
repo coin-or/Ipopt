@@ -34,7 +34,7 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../Algorithm` \
 	-I`$(CYGPATH_W) $(srcdir)/../../Interfaces`
 
-AM_CPPFLAGS += $(ASL_CFLAGS)
+AM_CPPFLAGS += -DIPOPT_BUILD $(ASL_CFLAGS)
 
 includeipoptdir = $(includedir)/coin
 includeipopt_HEADERS = AmplTNLP.hpp

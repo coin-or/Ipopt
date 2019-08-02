@@ -47,7 +47,7 @@ libipopt_la_DEPENDENCIES = $(IPALLLIBS)
 
 libipopt_la_LDFLAGS = $(LT_LDFLAGS)
 
-CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
+CXXFLAGS += -DIPOPT_BUILD -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg` \
 	-I`$(CYGPATH_W) $(srcdir)/../Algorithm/LinearSolvers` \
 	-I`$(CYGPATH_W) $(srcdir)/../LinAlg/TMatrices` \

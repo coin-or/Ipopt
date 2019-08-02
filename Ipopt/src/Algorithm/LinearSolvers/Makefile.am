@@ -56,7 +56,7 @@ endif
 
 liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)
 
-AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
+AM_CPPFLAGS = -DIPOPT_BUILD -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg/TMatrices` \
 	-I`$(CYGPATH_W) $(srcdir)/..` \

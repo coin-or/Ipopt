@@ -412,6 +412,7 @@ libcommon_la_SOURCES = \
 	IpUtils.cpp IpUtils.hpp
 
 libcommon_la_LDFLAGS = $(LT_LDFLAGS)
+AM_CPPFLAGS = -DIPOPT_BUILD
 
 # This line is necessary to allow VPATH compilation
 #DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)`

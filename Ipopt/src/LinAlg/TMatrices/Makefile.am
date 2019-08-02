@@ -22,7 +22,7 @@ libtmatrices_la_SOURCES = \
 
 libtmatrices_la_LDFLAGS = $(LT_LDFLAGS)
 
-AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
+AM_CPPFLAGS = -DIPOPT_BUILD -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/..`
 
 # This line is necessary to allow VPATH compilation

@@ -12,15 +12,7 @@
 #include "IpSymTMatrix.hpp"
 #include "IpBlas.hpp"
 
-#ifdef HAVE_CSTRING
-# include <cstring>
-#else
-# ifdef HAVE_STRING_H
-#  include <string.h>
-# else
-#  error "don't have header file for string"
-# endif
-#endif
+#include <cstring>
 
 /* AMPL includes */
 #include "asl.h"

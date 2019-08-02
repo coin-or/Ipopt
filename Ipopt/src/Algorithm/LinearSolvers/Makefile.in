@@ -436,7 +436,7 @@ liblinsolvers_la_SOURCES = IpGenKKTSolverInterface.hpp \
 	$(am__append_1) $(am__append_2) $(am__append_3) \
 	$(am__append_4)
 liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)
-AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
+AM_CPPFLAGS = -DIPOPT_BUILD -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \
 	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg/TMatrices` \
 	-I`$(CYGPATH_W) $(srcdir)/..` \

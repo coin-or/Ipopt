@@ -7,79 +7,22 @@
 #include "IpoptConfig.h"
 #include "IpUtils.hpp"
 
-#ifdef HAVE_CSTDLIB
-# include <cstdlib>
-#else
-# ifdef HAVE_STDLIB_H
-#  include <stdlib.h>
-# endif
-#endif
+#include <cstdlib>
+#include <cmath>
+#include <cfloat>
+/* #include <ieeefp.h> */
+#include <ctime>
+#include <cstdio>
+#include <cstdarg>
+#include <limits>
 
-#ifdef HAVE_CMATH
-# include <cmath>
-#else
-# ifdef HAVE_MATH_H
-#  include <math.h>
-# else
-#  error "don't have header file for math"
-# endif
-#endif
-
-#ifdef HAVE_CFLOAT
-# include <cfloat>
-#else
-# ifdef HAVE_FLOAT_H
-#  include <float.h>
-# endif
-#endif
-
-#ifdef HAVE_CIEEEFP
-# include <cieeefp>
-#else
-# ifdef HAVE_IEEEFP_H
-#  include <ieeefp.h>
-# endif
-#endif
-
-#ifdef HAVE_CTIME
-# include <ctime>
-#else
-# ifdef HAVE_TIME_H
-#  include <time.h>
-# else
-#  error "don't have header file for time"
-# endif
-#endif
-
-#ifdef HAVE_CSTDIO
-# include <cstdio>
-//  The special treatment of vsnprintf on SUN has been suggsted by Lou
-//  Hafer 2010/07/04
-# if defined(HAVE_VSNPRINTF) && defined(__SUNPRO_CC)
+// The special treatment of vsnprintf on SUN has been suggsted by Lou Hafer 2010/07/04
+#if defined(HAVE_VSNPRINTF) && defined(__SUNPRO_CC)
 namespace std
 {
-#  include <iso/stdio_c99.h>
+#include <iso/stdio_c99.h>
 }
-# endif
-#else
-# ifdef HAVE_STDIO_H
-#  include <stdio.h>
-# else
-#  error "don't have header file for stdio"
-# endif
 #endif
-
-#ifdef HAVE_CSTDARG
-# include <cstdarg>
-#else
-# ifdef HAVE_STDARG_H
-#  include <stdarg.h>
-# else
-#  error "don't have header file for stdarg"
-# endif
-#endif
-
-#include <limits>
 
 // The following code has been copied from CoinUtils' CoinTime
 

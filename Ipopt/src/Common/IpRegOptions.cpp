@@ -8,26 +8,8 @@
 #include "IpRegOptions.hpp"
 
 #include <set>
-
-#ifdef HAVE_CSTDIO
-# include <cstdio>
-#else
-# ifdef HAVE_STDIO_H
-#  include <stdio.h>
-# else
-#  error "don't have header file for stdio"
-# endif
-#endif
-
-#ifdef HAVE_CCTYPE
-# include <cctype>
-#else
-# ifdef HAVE_CTYPE_H
-#  include <ctype.h>
-# else
-#  error "don't have header file for ctype"
-# endif
-#endif
+#include <cstdio>
+#include <cctype>
 
 namespace Ipopt
 {

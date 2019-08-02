@@ -21,8 +21,10 @@
 
 #include "IpMa97SolverInterface.hpp"
 #include <iostream>
-#include <stdio.h>
+#include <cstdio>
 #include <cmath>
+#include <cassert>
+
 using namespace std;
 
 /* Uncomment the following line to enable the ma97_dump_matrix option.
