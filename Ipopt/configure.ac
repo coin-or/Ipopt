@@ -76,26 +76,30 @@ AC_COIN_DOXYGEN
 
 AC_COIN_CHK_LIBM(IpoptLib)
 
-#AC_COIN_CHECK_PACKAGE_BLAS(IpoptLib)
+#AC_COIN_CHK_BLAS(IpoptLib)
 #if test $coin_has_blas != yes; then
 #  AC_MSG_ERROR([Required package BLAS not found.])
 #fi
 
 AC_COIN_CHK_LAPACK(IpoptLib)
-#if test $coin_has_lapack != yes; then
+if test $coin_has_lapack != yes; then
+  AC_MSG_ERROR([Required package LAPACK not found.])
 #  AC_MSG_WARN([Compiling code without LAPACK.  Certain options (e.g., quasi-Newton) will not work.])
-#fi
+fi
 
 AC_COIN_CHK_PKG(ASL,[IpoptAmplInterfaceLib],[coinasl],[build])
-#AC_COIN_CHECK_PACKAGE(HSL,   [coinhsl >= 1.3],   [IpoptLib])
-#AC_COIN_CHECK_PACKAGE(Mumps, [coinmumps], [IpoptLib])
+AC_COIN_CHK_PKG(HSL,[IpoptLib HSLLib],[coinhsl],[build])   # TODO >= 1.3
+AC_COIN_CHK_PKG(Mumps,[IpoptLib],[coinmumps],[build])
 
-AM_CONDITIONAL([COIN_HAS_HSL],[false])
-AM_CONDITIONAL([COIN_HAS_MUMPS],[false])
 AM_CONDITIONAL([HAVE_PARDISO],[false])
+use_pardiso=no
 AM_CONDITIONAL([HAVE_MA28],[false])
 AM_CONDITIONAL([HAVE_WSMP],[false])
 
+if test "$coin_has_hsl" = yes ; then
+  AC_COIN_FINALIZE_FLAGS([HSLLib])
+  AC_COIN_NAMEMANGLING([HSL],[ma27ad],[$HSLLIB_LFLAGS])
+fi
 
 #############################################################################
 #                             Stuff for examples                            #
@@ -454,6 +458,8 @@ AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/redhess_cpp/redhess_cpp.cpp)
 ########################################################################
 ##          Create Makefiles and other stuff                          ##
 ########################################################################
+
+AC_COIN_FINALIZE_FLAGS([IpoptLib IpoptAmplInterfaceLib])
 
 AC_CONFIG_FILES([Makefile
 		 src/Common/Makefile

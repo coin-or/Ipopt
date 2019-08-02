@@ -8,6 +8,9 @@
 
 #ifdef COIN_HAS_HSL
 #include "CoinHslConfig.h"
+#else
+/* if we build for the Linear Solver loader, then use normal C-naming style */
+#define HSL_FUNC(name,NAME) name
 #endif
 
 // if we do not have MA27 in HSL or the linear solver loader, then we want to build the MA27 interface
@@ -20,12 +23,12 @@
 /** Prototypes for MA27's Fortran subroutines */
 extern "C"
 {
-   void F77_FUNC(ma27id, MA27ID)(
+   void HSL_FUNC(ma27id, MA27ID)(
       ipfint* ICNTL,
       double* CNTL
    );
 
-   void F77_FUNC(ma27ad, MA27AD)(
+   void HSL_FUNC(ma27ad, MA27AD)(
       ipfint*       N,
       ipfint*       NZ,
       const ipfint* IRN,
@@ -42,7 +45,7 @@ extern "C"
       double*       OPS
    );
 
-   void F77_FUNC(ma27bd, MA27BD)(
+   void HSL_FUNC(ma27bd, MA27BD)(
       ipfint*       N,
       ipfint*       NZ,
       const ipfint* IRN,
@@ -60,7 +63,7 @@ extern "C"
       ipfint*       INFO
    );
 
-   void F77_FUNC(ma27cd, MA27CD)(
+   void HSL_FUNC(ma27cd, MA27CD)(
       ipfint* N,
       double* A,
       ipfint* LA,
@@ -195,7 +198,7 @@ bool Ma27TSolverInterface::InitializeImpl(
    options.GetBoolValue("warm_start_same_structure", warm_start_same_structure_, prefix);
 
    /* Set the default options for MA27 */
-   F77_FUNC(ma27id, MA27ID)(icntl_, cntl_);
+   HSL_FUNC(ma27id, MA27ID)(icntl_, cntl_);
 #if COIN_IPOPT_VERBOSITY == 0
 
    icntl_[0] = 0;       // Suppress error messages
@@ -372,7 +375,7 @@ ESymSolverStatus Ma27TSolverInterface::SymbolicFactorization(
    double OPS;
    ipfint INFO[20];
    ipfint* IW1 = new ipfint[2 * dim_];      // Get memory for IW1 (only local)
-   F77_FUNC(ma27ad, MA27AD)(&N, &NZ, airn, ajcn, iw_, &liw_, ikeep_, IW1, &nsteps_, &IFLAG, icntl_, cntl_, INFO, &OPS);
+   HSL_FUNC(ma27ad, MA27AD)(&N, &NZ, airn, ajcn, iw_, &liw_, ikeep_, IW1, &nsteps_, &IFLAG, icntl_, cntl_, INFO, &OPS);
    delete[] IW1;      // No longer required
 
    // Receive several information
@@ -483,7 +486,7 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
    ipfint INFO[20];
    cntl_[0] = pivtol_;  // Set pivot tolerance
 
-   F77_FUNC(ma27bd, MA27BD)(&N, &NZ, airn, ajcn, a_, &la_, iw_, &liw_, ikeep_, &nsteps_, &maxfrt_, IW1, icntl_, cntl_,
+   HSL_FUNC(ma27bd, MA27BD)(&N, &NZ, airn, ajcn, a_, &la_, iw_, &liw_, ikeep_, &nsteps_, &maxfrt_, IW1, icntl_, cntl_,
                             INFO);
    delete[] IW1;
 
@@ -626,7 +629,7 @@ ESymSolverStatus Ma27TSolverInterface::Backsolve(
          }
       }
 
-      F77_FUNC(ma27cd, MA27CD)(&N, a_, &la_, iw_, &liw_, W, &maxfrt_, &rhs_vals[irhs * dim_], IW1, &nsteps_, icntl_,
+      HSL_FUNC(ma27cd, MA27CD)(&N, a_, &la_, iw_, &liw_, W, &maxfrt_, &rhs_vals[irhs * dim_], IW1, &nsteps_, icntl_,
                                cntl_);
 
       if( DBG_VERBOSITY() >= 2 )

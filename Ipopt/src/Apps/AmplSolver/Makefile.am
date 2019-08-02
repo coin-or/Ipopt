@@ -21,7 +21,7 @@ ipopt_SOURCES = \
 	ampl_ipopt.cpp
 
 ipopt_LDADD = libipoptamplinterface.la ../../Interfaces/libipopt.la \
-	$(IPOPTAMPLINTERFACELIB_LIBS) $(IPOPTLIB_LIBS)
+	$(IPOPTAMPLINTERFACELIB_LIBS)
 
 AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../../Common \

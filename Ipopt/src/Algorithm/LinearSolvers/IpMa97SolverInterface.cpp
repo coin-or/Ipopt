@@ -14,6 +14,9 @@
 
 #ifdef COIN_HAS_HSL
 #include "CoinHslConfig.h"
+#else
+/* if we build for the Linear Solver loader, then use normal C-naming style */
+#define HSL_FUNC(name,NAME) name
 #endif
 
 // if we have MA97 in HSL or the linear solver loader, then we want to build the MA97 interface
@@ -34,7 +37,7 @@ using namespace std;
 #ifdef MA97_DUMP_MATRIX
 extern "C"
 {
-   extern void F77_FUNC(dump_mat_csc, DUMP_MAT_CSC) (
+   extern void HSL_FUNC(dump_mat_csc, DUMP_MAT_CSC) (
       const ipfint* factidx,
       const ipfint* n,
       const ipfint* ptr,
@@ -538,7 +541,7 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
       {
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                         "Dumping matrix %d\n", fctidx_);
-         F77_FUNC (dump_mat_csc, DUMP_MAT_CSC)
+         HSL_FUNC (dump_mat_csc, DUMP_MAT_CSC)
          (&fctidx_, &ndim_, ia, ja, val_);
          fctidx_++;
       }

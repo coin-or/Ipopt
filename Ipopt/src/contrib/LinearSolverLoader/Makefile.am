@@ -17,7 +17,7 @@ libLinearSolverLoader_la_SOURCES = \
 AM_CPPFLAGS = -DIPOPT_BUILD \
   -I$(srcdir)/../../Common \
   -I$(srcdir)/../../Algorithm/LinearSolvers \
-  $(HSL_CFLAGS)
+  $(IPOPTLIB_CFLAGS)
 
 if BUILD_PARDISOLOADER
   libLinearSolverLoader_la_SOURCES += PardisoLoader.c PardisoLoader.h

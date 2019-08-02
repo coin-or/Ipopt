@@ -36,11 +36,8 @@ AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../../Interfaces \
 	-I$(srcdir)/.. \
 	-I$(srcdir)/../LinearSolvers \
-	-I$(srcdir)/../../contrib/LinearSolverLoader
-
-if COIN_HAS_HSL
-  AM_CPPFLAGS += $(HSL_CFLAGS)
-endif
+	-I$(srcdir)/../../contrib/LinearSolverLoader \
+	$(IPOPTLIB_CFLAGS)
 
 # Astyle stuff
 

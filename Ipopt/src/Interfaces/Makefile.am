@@ -39,8 +39,7 @@ libipopt_la_SOURCES = \
 
 #	IpStdFInterface.c
 
-libipopt_la_LIBADD = $(IPALLLIBS)
-libipopt_la_LIBADD += $(IPOPTLIB_LIBS)
+libipopt_la_LIBADD = $(IPALLLIBS) $(IPOPTLIB_LFLAGS)
 
 libipopt_la_LDFLAGS = $(LT_LDFLAGS)
 
@@ -53,7 +52,7 @@ AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../Algorithm/Inexact \
 	-I$(srcdir)/../contrib/CGPenalty \
 	-I$(srcdir)/../contrib/LinearSolverLoader \
-	$(HSL_CFLAGS)
+	$(IPOPTLIB_CFLAGS)
 
 # Astyle stuff
 

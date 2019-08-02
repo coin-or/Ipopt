@@ -6,8 +6,14 @@
 /* Define to 1 if ASL is available. */
 #undef COIN_HAS_ASL
 
+/* Define to 1 if HSL is available. */
+#undef COIN_HAS_HSL
+
 /* Define to 1 if the LAPACK package is available */
 #undef COIN_HAS_LAPACK
+
+/* Define to 1 if Mumps is available. */
+#undef COIN_HAS_MUMPS
 
 /* Define to a macro mangling the given C identifier (in lower and upper
    case). */
@@ -79,6 +85,22 @@
 
 /* Define to 1 if you have the `_vsnprintf' function. */
 #undef HAVE__VSNPRINTF
+
+/* Library Visibility Attribute */
+#undef HSLLIB_EXPORT
+
+/* Define to a macro mangling the given C identifier (in lower and upper
+   case). */
+#undef HSL_FUNC
+
+/* As m4_toupper(HSL)_FUNC, but for C identifiers containing underscores. */
+#undef HSL_FUNC_
+
+/* Library Visibility Attribute */
+#undef IPOPTAMPLINTERFACELIB_EXPORT
+
+/* Library Visibility Attribute */
+#undef IPOPTLIB_EXPORT
 
 /* SVN revision number of project */
 #undef IPOPT_SVN_REV

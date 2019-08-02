@@ -94,7 +94,6 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@COIN_HAS_HSL_TRUE@am__append_1 = $(HSL_CFLAGS)
 subdir = src/Algorithm/Inexact
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -254,6 +253,11 @@ EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 FGREP = @FGREP@
 GREP = @GREP@
+HSLLIB_CFLAGS = @HSLLIB_CFLAGS@
+HSLLIB_CFLAGS_NOPC = @HSLLIB_CFLAGS_NOPC@
+HSLLIB_LFLAGS = @HSLLIB_LFLAGS@
+HSLLIB_LFLAGS_NOPC = @HSLLIB_LFLAGS_NOPC@
+HSLLIB_PCFILES = @HSLLIB_PCFILES@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -261,10 +265,14 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 IPALLLIBS = @IPALLLIBS@
 IPOPTAMPLINTERFACELIB_CFLAGS = @IPOPTAMPLINTERFACELIB_CFLAGS@
+IPOPTAMPLINTERFACELIB_CFLAGS_NOPC = @IPOPTAMPLINTERFACELIB_CFLAGS_NOPC@
 IPOPTAMPLINTERFACELIB_LFLAGS = @IPOPTAMPLINTERFACELIB_LFLAGS@
+IPOPTAMPLINTERFACELIB_LFLAGS_NOPC = @IPOPTAMPLINTERFACELIB_LFLAGS_NOPC@
 IPOPTAMPLINTERFACELIB_PCFILES = @IPOPTAMPLINTERFACELIB_PCFILES@
 IPOPTLIB_CFLAGS = @IPOPTLIB_CFLAGS@
+IPOPTLIB_CFLAGS_NOPC = @IPOPTLIB_CFLAGS_NOPC@
 IPOPTLIB_LFLAGS = @IPOPTLIB_LFLAGS@
+IPOPTLIB_LFLAGS_NOPC = @IPOPTLIB_LFLAGS_NOPC@
 IPOPTLIB_PCFILES = @IPOPTLIB_PCFILES@
 IPOPT_SVN_REV = @IPOPT_SVN_REV@
 JAVA_HOME = @JAVA_HOME@
@@ -385,11 +393,16 @@ libinexact_la_SOURCES = \
 	IpIterativeSolverTerminationTester.cpp IpIterativeSolverTerminationTester.hpp
 
 libinexact_la_LDFLAGS = $(LT_LDFLAGS)
-AM_CPPFLAGS = -DIPOPT_BUILD -I$(srcdir)/../../Common \
-	-I$(srcdir)/../../LinAlg -I$(srcdir)/../../LinAlg/TMatrices \
-	-I$(srcdir)/../../Interfaces -I$(srcdir)/.. \
+AM_CPPFLAGS = -DIPOPT_BUILD \
+	-I$(srcdir)/../../Common \
+	-I$(srcdir)/../../LinAlg \
+	-I$(srcdir)/../../LinAlg/TMatrices \
+	-I$(srcdir)/../../Interfaces \
+	-I$(srcdir)/.. \
 	-I$(srcdir)/../LinearSolvers \
-	-I$(srcdir)/../../contrib/LinearSolverLoader $(am__append_1)
+	-I$(srcdir)/../../contrib/LinearSolverLoader \
+	$(IPOPTLIB_CFLAGS)
+
 
 # Astyle stuff
 ASTYLE_FILES = \

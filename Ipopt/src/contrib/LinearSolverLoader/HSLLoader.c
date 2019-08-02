@@ -37,7 +37,7 @@ static ma27bd_t func_ma27bd = NULL;
 static ma27cd_t func_ma27cd = NULL;
 static ma27id_t func_ma27id = NULL;
 
-void F77_FUNC(ma27ad, MA27AD)(
+void ma27ad(
    ipfint*       N,
    ipfint*       NZ,
    const ipfint* IRN,
@@ -66,7 +66,7 @@ void F77_FUNC(ma27ad, MA27AD)(
    func_ma27ad(N, NZ, IRN, ICN, IW, LIW, IKEEP, IW1, NSTEPS, IFLAG, ICNTL, CNTL, INFO, OPS);
 }
 
-void F77_FUNC(ma27bd, MA27BD)(
+void ma27bd(
    ipfint*       N,
    ipfint*       NZ,
    const ipfint* IRN,
@@ -96,7 +96,7 @@ void F77_FUNC(ma27bd, MA27BD)(
    func_ma27bd(N, NZ, IRN, ICN, A, LA, IW, LIW, IKEEP, NSTEPS, MAXFRT, IW1, ICNTL, CNTL, INFO);
 }
 
-void F77_FUNC(ma27cd, MA27CD)(
+void ma27cd(
    ipfint* N,
    double* A,
    ipfint* LA,
@@ -123,7 +123,7 @@ void F77_FUNC(ma27cd, MA27CD)(
    func_ma27cd(N, A, LA, IW, LIW, W, MAXFRT, RHS, IW1, NSTEPS, ICNTL, CNTL);
 }
 
-void F77_FUNC(ma27id, MA27ID)(
+void ma27id(
    ipfint* ICNTL,
    double* CNTL
 )
@@ -146,7 +146,7 @@ void F77_FUNC(ma27id, MA27ID)(
 
 static ma28ad_t func_ma28ad = NULL;
 
-void F77_FUNC(ma28ad, MA28AD)(
+void ma28ad(
    void* nsize,
    void* nz,
    void* rw,
@@ -182,7 +182,7 @@ static ma57bd_t func_ma57bd = NULL;
 static ma57cd_t func_ma57cd = NULL;
 static ma57ed_t func_ma57ed = NULL;
 
-void  F77_FUNC(ma57id, MA57ID)(
+void ma57id(
    double* cntl,
    ipfint* icntl
 )
@@ -199,7 +199,7 @@ void  F77_FUNC(ma57id, MA57ID)(
    func_ma57id(cntl, icntl);
 }
 
-void  F77_FUNC(ma57ad, MA57AD)(
+void ma57ad(
    ipfint*       n,       /**< Order of matrix. */
    ipfint*       ne,      /**< Number of entries. */
    const ipfint* irn,     /**< Matrix nonzero row structure */
@@ -224,7 +224,7 @@ void  F77_FUNC(ma57ad, MA57AD)(
    func_ma57ad(n, ne, irn, jcn, lkeep, keep, iwork, icntl, info, rinfo);
 }
 
-void  F77_FUNC(ma57bd, MA57BD)(
+void ma57bd(
    ipfint*    n,         /**< Order of matrix. */
    ipfint*    ne,        /**< Number of entries. */
    double*    a,         /**< Numerical values. */
@@ -253,7 +253,7 @@ void  F77_FUNC(ma57bd, MA57BD)(
    func_ma57bd(n, ne, a, fact, lfact, ifact, lifact, lkeep, keep, iwork, icntl, cntl, info, rinfo);
 }
 
-void  F77_FUNC(ma57cd, MA57CD)(
+void ma57cd(
    ipfint*    job,       /**< Solution job.  Solve for... */
    ipfint*    n,         /**< Order of matrix. */
    double*    fact,      /**< Entries of factors. */
@@ -282,7 +282,7 @@ void  F77_FUNC(ma57cd, MA57CD)(
    func_ma57cd(job, n, fact, lfact, ifact, lifact, nrhs, rhs, lrhs, work, lwork, iwork, icntl, info);
 }
 
-void  F77_FUNC(ma57ed, MA57ED)(
+void ma57ed(
    ipfint*    n,
    ipfint*    ic,        /**< 0: copy real array.  >=1:  copy integer array. */
    ipfint*    keep,
@@ -970,7 +970,7 @@ void ma97_free_akeep(
 
 static mc19ad_t func_mc19ad = NULL;
 
-void F77_FUNC(mc19ad, MC19AD)(
+void mc19ad(
    ipfint* N,
    ipfint* NZ,
    double* A,

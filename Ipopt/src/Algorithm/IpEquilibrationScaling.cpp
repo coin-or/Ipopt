@@ -10,6 +10,9 @@
 
 #ifdef COIN_HAS_HSL
 #include "CoinHslConfig.h"
+#else
+/* if we build for the Linear Solver loader, then use normal C-naming style */
+#define HSL_FUNC(name,NAME) name
 #endif
 
 #include <cmath>
@@ -19,7 +22,7 @@ extern "C"
 {
 // here we assume that float corresponds to Fortran's single
 // precision
-   void F77_FUNC(mc19ad, MC19AD)(
+   void HSL_FUNC(mc19ad, MC19AD)(
       const ipfint* N,
       const ipfint* NZ,
       const double* A,
@@ -208,8 +211,8 @@ void EquilibrationScaling::DetermineScalingParametersImpl(
    float* W = new float[5 * N];
 #if defined(COINHSL_HAS_MC19) || defined(HAVE_LINEARSOLVERLOADER)
    const ipfint NZ = nnz_jac_c + nnz_jac_d + nnz_grad_f;
-   //F77_FUNC(mc19ad,MC19AD)(&N, &NZ, avrg_values, AIRN, AJCN, R, C, W);
-   F77_FUNC(mc19ad, MC19AD)(&N, &NZ, avrg_values, AJCN, AIRN, C, R, W);
+   //HSL_FUNC(mc19ad,MC19AD)(&N, &NZ, avrg_values, AIRN, AJCN, R, C, W);
+   HSL_FUNC(mc19ad, MC19AD)(&N, &NZ, avrg_values, AJCN, AIRN, C, R, W);
 #else
 
    THROW_EXCEPTION(OPTION_INVALID, "Currently cannot do equilibration-based NLP scaling if MC19 is not available.");

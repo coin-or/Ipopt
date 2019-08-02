@@ -63,7 +63,7 @@ AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/.. \
 	-I$(srcdir)/../../Interfaces \
 	-I$(srcdir)/../../contrib/CGPenalty \
-	$(MUMPS_CFLAGS) $(HSL_CFLAGS)
+	$(IPOPTLIB_CFLAGS)
 
 # Need to overwrite automake definition since otherwise libtool does not
 # understand the fortran file (need to add --tag=F77)

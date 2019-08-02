@@ -641,6 +641,10 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
+IPOPTAMPLINTERFACELIB_CFLAGS_NOPC
+IPOPTAMPLINTERFACELIB_LFLAGS_NOPC
+IPOPTLIB_CFLAGS_NOPC
+IPOPTLIB_LFLAGS_NOPC
 BUILD_INEXACT_FALSE
 BUILD_INEXACT_TRUE
 BUILD_PARDISOLOADER_FALSE
@@ -655,6 +659,8 @@ JAVA_HOME
 BIT64FCOMMENT
 BIT32FCOMMENT
 BITS_PER_POINTER
+HSLLIB_CFLAGS_NOPC
+HSLLIB_LFLAGS_NOPC
 HAVE_WSMP_FALSE
 HAVE_WSMP_TRUE
 HAVE_MA28_FALSE
@@ -665,6 +671,9 @@ COIN_HAS_MUMPS_FALSE
 COIN_HAS_MUMPS_TRUE
 COIN_HAS_HSL_FALSE
 COIN_HAS_HSL_TRUE
+HSLLIB_PCFILES
+HSLLIB_CFLAGS
+HSLLIB_LFLAGS
 COIN_HAS_ASL_FALSE
 COIN_HAS_ASL_TRUE
 IPOPTAMPLINTERFACELIB_PCFILES
@@ -843,6 +852,12 @@ with_lapack_cflags
 with_asl
 with_asl_lflags
 with_asl_cflags
+with_hsl
+with_hsl_lflags
+with_hsl_cflags
+with_mumps
+with_mumps_lflags
+with_mumps_cflags
 enable_inexact_solver
 enable_linear_solver_loader
 '
@@ -1531,6 +1546,26 @@ Optional Packages:
   --with-asl-lflags       Linker flags for ASL appropriate for your
                           environment. (Most often, -l specs for libraries.)
   --with-asl-cflags       Compiler flags for ASL appropriate for your
+                          environment. (Most often, -I specs for header file
+                          directories.)
+  --with-hsl              Use HSL. If an argument is given, 'yes' is
+                          equivalent to --with-hsl, 'no' is
+                          equivalent to --without-hsl, 'build' will look for a
+                          COIN ThirdParty package. Any other argument is
+                          applied as for --with-hsl-lflags
+  --with-hsl-lflags       Linker flags for HSL appropriate for your
+                          environment. (Most often, -l specs for libraries.)
+  --with-hsl-cflags       Compiler flags for HSL appropriate for your
+                          environment. (Most often, -I specs for header file
+                          directories.)
+  --with-mumps            Use Mumps. If an argument is given, 'yes' is
+                          equivalent to --with-mumps, 'no' is
+                          equivalent to --without-mumps, 'build' will look for
+                          a COIN ThirdParty package. Any other argument is
+                          applied as for --with-mumps-lflags
+  --with-mumps-lflags     Linker flags for Mumps appropriate for your
+                          environment. (Most often, -l specs for libraries.)
+  --with-mumps-cflags     Compiler flags for Mumps appropriate for your
                           environment. (Most often, -I specs for header file
                           directories.)
 
@@ -16872,7 +16907,7 @@ fi
   LIBS="$coin_save_LIBS"
 
 
-#AC_COIN_CHECK_PACKAGE_BLAS(IpoptLib)
+#AC_COIN_CHK_BLAS(IpoptLib)
 #if test $coin_has_blas != yes; then
 #  AC_MSG_ERROR([Required package BLAS not found.])
 #fi
@@ -18067,9 +18102,10 @@ $as_echo "$as_me: WARNING: Unsupported or unknown name-mangling scheme: ${dsyev_
 
   fi
 
-#if test $coin_has_lapack != yes; then
+if test $coin_has_lapack != yes; then
+  as_fn_error $? "Required package LAPACK not found." "$LINENO" 5
 #  AC_MSG_WARN([Compiling code without LAPACK.  Certain options (e.g., quasi-Newton) will not work.])
-#fi
+fi
 
 
 
@@ -18325,10 +18361,238 @@ $as_echo "#define COIN_HAS_ASL 1" >>confdefs.h
 
   fi
 
-#AC_COIN_CHECK_PACKAGE(HSL,   [coinhsl >= 1.3],   [IpoptLib])
-#AC_COIN_CHECK_PACKAGE(Mumps, [coinmumps], [IpoptLib])
 
- if false; then
+
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for package HSL" >&5
+$as_echo_n "checking for package HSL... " >&6; }
+
+# Make sure the necessary variables exist for each client package.
+
+
+
+
+
+
+
+
+
+# Check to see if the user has set an override to skip this primary.
+
+  coin_has_hsl=noInfo
+  if test x"$COIN_SKIP_PROJECTS" != x ; then
+    for pkg in $COIN_SKIP_PROJECTS ; do
+      if test "$pkg" = "$hsl" ; then
+        coin_has_hsl=skipping
+      fi
+    done
+  fi
+
+# If we're not skipping this primary, define and process the command line
+# options according to the cmdopts parameter. Then invoke FIND_PRIM_PKG to do
+# the heavy lifting.
+
+  if test "$coin_has_hsl" != skipping ; then
+
+
+
+
+# Check whether --with-hsl was given.
+if test "${with_hsl+set}" = set; then :
+  withval=$with_hsl;
+fi
+
+
+
+# Check whether --with-hsl-lflags was given.
+if test "${with_hsl_lflags+set}" = set; then :
+  withval=$with_hsl_lflags;
+fi
+
+
+
+# Check whether --with-hsl-cflags was given.
+if test "${with_hsl_cflags+set}" = set; then :
+  withval=$with_hsl_cflags;
+fi
+
+
+
+
+
+
+
+  dflt_action=build
+
+# Initialize variables for the primary package.
+
+  coin_has_hsl=noInfo
+  hsl_lflags=
+  hsl_cflags=
+  hsl_data=
+  hsl_pcfiles=
+
+# --with-prim is always present. If the client specified dataonly, its value
+# is assigned to prim_data.
+
+  withval=$with_hsl
+  if test -n "$withval" ; then
+    case "$withval" in
+      no )
+        coin_has_hsl=skipping
+        ;;
+      yes )
+        coin_has_hsl=requested
+        ;;
+      build )
+        coin_has_hsl=build
+        ;;
+      * )
+        coin_has_hsl=yes
+        hsl_lflags=$withval
+        ;;
+    esac
+  fi
+
+# --with-prim-libs and --with-prim-cflags are present unless the client
+# specified dataonly. Specifying --with-prim=no overrides the individual
+# options for libs and cflags.
+
+  if test "$coin_has_hsl" != skipping ; then
+       withval=$with_hsl_lflags
+       if test -n "$withval" ; then
+         case "$withval" in
+           build | no | yes )
+             as_fn_error $? "\"$withval\" is not valid here; please specify linker flags appropriate for your environment." "$LINENO" 5
+             ;;
+           * )
+             coin_has_hsl=yes
+             hsl_lflags=$withval
+             ;;
+         esac
+       fi
+
+       withval=$with_hsl_cflags
+       if test -n "$withval" ; then
+         case "$withval" in
+           build | no | yes )
+             as_fn_error $? "\"$withval\" is not valid here; please specify compiler flags appropriate for your environment." "$LINENO" 5
+             ;;
+           * )
+             coin_has_hsl=yes
+             hsl_cflags="$withval"
+             ;;
+         esac
+       fi
+     fi
+
+# --with-prim-data will be present unless the client specified nodata.
+# Specifying --with-prim=no overrides the individual option for data.
+
+
+
+# At this point, coin_has_prim can be one of noInfo (no user options
+# specified), skipping (user said no), requested or build (user said yes
+# or build and gave no further guidance), or yes (user specified one or
+# more --with-prim options). If we're already at yes or skipping, we're
+# done looking.
+
+# If there are no user options (noInfo) and the default is no, we're skipping.
+# Otherwise, the default must be yes or build; consider the package requested.
+# A default action we don't recognise defaults to yes.
+
+  if test "$coin_has_hsl" = noInfo ; then
+    case $dflt_action in
+      no )
+        coin_has_hsl=skipping
+        ;;
+      build )
+        coin_has_hsl=build
+        ;;
+      * )
+        coin_has_hsl=requested
+        ;;
+    esac
+  fi
+
+# Now coin_has_prim can be one of skipping, yes, requested, or build. For
+# requested or build, try pkgconf, if it's available. If it's not available,
+# well, hope that the user knows their system and prim can be used with no
+# additional flags.
+
+  case $coin_has_hsl in
+    requested | build )
+      if test -n "$PKG_CONFIG" -a "coinhsl" != skip ; then
+        pcfile="coinhsl"
+
+
+
+  if test -n "$PKG_CONFIG" ; then
+    if PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --exists "$pcfile" ; then
+      HSL_VERSIONS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --modversion "$pcfile" 2>/dev/null | tr '\n' ' '`
+      coin_has_hsl=yes
+           hsl_data=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --variable=datadir "$pcfile" 2>/dev/null`
+           hsl_pcfiles="$pcfile"
+    else
+      HSL_PKG_ERRORS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "$pcfile"`
+      coin_has_hsl=no
+    fi
+  else
+    as_fn_error $? "\"Cannot check for existence of module hsl without pkgconf\"" "$LINENO" 5
+  fi
+
+      else
+        coin_has_hsl=no
+        # AC_MSG_WARN([skipped check via pkgconf as no pkgconf available])
+      fi
+      ;;
+    skipping | yes )
+      ;;
+    * )
+      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Unexpected status \"$coin_has_hsl\" in COIN_FIND_PRIM_PKG" >&5
+$as_echo "$as_me: WARNING: Unexpected status \"$coin_has_hsl\" in COIN_FIND_PRIM_PKG" >&2;}
+      ;;
+  esac
+
+# The final value of coin_has_prim will be yes, no, or skipping. No means
+# we looked (with pkgconfig) and didn't find anything. Skipping means the
+# user said `don't use.' Yes means we have something, from the user or
+# from pkgconfig. Note that we haven't run a useability test!
+
+# Define BUILDTOOLS_DEBUG to enable debugging output
+
+    if test "$BUILDTOOLS_DEBUG" = 1 ; then
+      { $as_echo "$as_me:${as_lineno-$LINENO}: FIND_PRIM_PKG result for hsl: \"$coin_has_hsl\"" >&5
+$as_echo "$as_me: FIND_PRIM_PKG result for hsl: \"$coin_has_hsl\"" >&6;}
+      { $as_echo "$as_me:${as_lineno-$LINENO}: Collected values for package 'hsl'" >&5
+$as_echo "$as_me: Collected values for package 'hsl'" >&6;}
+      { $as_echo "$as_me:${as_lineno-$LINENO}: hsl_lflags is \"$hsl_lflags\"" >&5
+$as_echo "$as_me: hsl_lflags is \"$hsl_lflags\"" >&6;}
+      { $as_echo "$as_me:${as_lineno-$LINENO}: hsl_cflags is \"$hsl_cflags\"" >&5
+$as_echo "$as_me: hsl_cflags is \"$hsl_cflags\"" >&6;}
+      { $as_echo "$as_me:${as_lineno-$LINENO}: hsl_data is \"$hsl_data\"" >&5
+$as_echo "$as_me: hsl_data is \"$hsl_data\"" >&6;}
+      { $as_echo "$as_me:${as_lineno-$LINENO}: hsl_pcfiles is \"$hsl_pcfiles\"" >&5
+$as_echo "$as_me: hsl_pcfiles is \"$hsl_pcfiles\"" >&6;}
+    fi
+
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $coin_has_hsl" >&5
+$as_echo "$coin_has_hsl" >&6; }
+  else
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $coin_has_hsl due to COIN_SKIP_PROJECTS" >&5
+$as_echo "$coin_has_hsl due to COIN_SKIP_PROJECTS" >&6; }
+  fi
+
+# Possibilities are `yes', 'no', or `skipping'. Normalise to `yes' or `no'.
+
+  if test "$coin_has_hsl" != yes ; then
+    coin_has_hsl=no
+  fi
+
+# Create an automake conditional COIN_HAS_PRIM.
+
+   if test $coin_has_hsl = yes; then
   COIN_HAS_HSL_TRUE=
   COIN_HAS_HSL_FALSE='#'
 else
@@ -18336,13 +18600,281 @@ else
   COIN_HAS_HSL_FALSE=
 fi
 
- if false; then
+
+# If we've located the package, define preprocessor symbol COIN_HAS_PRIM and
+# augment the necessary variables for the client packages.
+
+  if test $coin_has_hsl = yes ; then
+
+$as_echo "#define COIN_HAS_HSL 1" >>confdefs.h
+
+    IPOPTLIB_PCFILES="$hsl_pcfiles $IPOPTLIB_PCFILES"
+       IPOPTLIB_LFLAGS="$hsl_lflags $IPOPTLIB_LFLAGS"
+       IPOPTLIB_CFLAGS="$hsl_cflags $IPOPTLIB_CFLAGS"
+      HSLLIB_PCFILES="$hsl_pcfiles $HSLLIB_PCFILES"
+       HSLLIB_LFLAGS="$hsl_lflags $HSLLIB_LFLAGS"
+       HSLLIB_CFLAGS="$hsl_cflags $HSLLIB_CFLAGS"
+
+
+# Finally, set up PRIM_DATA, unless the user specified nodata.
+
+
+  fi
+   # TODO >= 1.3
+
+
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for package Mumps" >&5
+$as_echo_n "checking for package Mumps... " >&6; }
+
+# Make sure the necessary variables exist for each client package.
+
+
+
+
+
+
+# Check to see if the user has set an override to skip this primary.
+
+  coin_has_mumps=noInfo
+  if test x"$COIN_SKIP_PROJECTS" != x ; then
+    for pkg in $COIN_SKIP_PROJECTS ; do
+      if test "$pkg" = "$mumps" ; then
+        coin_has_mumps=skipping
+      fi
+    done
+  fi
+
+# If we're not skipping this primary, define and process the command line
+# options according to the cmdopts parameter. Then invoke FIND_PRIM_PKG to do
+# the heavy lifting.
+
+  if test "$coin_has_mumps" != skipping ; then
+
+
+
+
+# Check whether --with-mumps was given.
+if test "${with_mumps+set}" = set; then :
+  withval=$with_mumps;
+fi
+
+
+
+# Check whether --with-mumps-lflags was given.
+if test "${with_mumps_lflags+set}" = set; then :
+  withval=$with_mumps_lflags;
+fi
+
+
+
+# Check whether --with-mumps-cflags was given.
+if test "${with_mumps_cflags+set}" = set; then :
+  withval=$with_mumps_cflags;
+fi
+
+
+
+
+
+
+
+  dflt_action=build
+
+# Initialize variables for the primary package.
+
+  coin_has_mumps=noInfo
+  mumps_lflags=
+  mumps_cflags=
+  mumps_data=
+  mumps_pcfiles=
+
+# --with-prim is always present. If the client specified dataonly, its value
+# is assigned to prim_data.
+
+  withval=$with_mumps
+  if test -n "$withval" ; then
+    case "$withval" in
+      no )
+        coin_has_mumps=skipping
+        ;;
+      yes )
+        coin_has_mumps=requested
+        ;;
+      build )
+        coin_has_mumps=build
+        ;;
+      * )
+        coin_has_mumps=yes
+        mumps_lflags=$withval
+        ;;
+    esac
+  fi
+
+# --with-prim-libs and --with-prim-cflags are present unless the client
+# specified dataonly. Specifying --with-prim=no overrides the individual
+# options for libs and cflags.
+
+  if test "$coin_has_mumps" != skipping ; then
+       withval=$with_mumps_lflags
+       if test -n "$withval" ; then
+         case "$withval" in
+           build | no | yes )
+             as_fn_error $? "\"$withval\" is not valid here; please specify linker flags appropriate for your environment." "$LINENO" 5
+             ;;
+           * )
+             coin_has_mumps=yes
+             mumps_lflags=$withval
+             ;;
+         esac
+       fi
+
+       withval=$with_mumps_cflags
+       if test -n "$withval" ; then
+         case "$withval" in
+           build | no | yes )
+             as_fn_error $? "\"$withval\" is not valid here; please specify compiler flags appropriate for your environment." "$LINENO" 5
+             ;;
+           * )
+             coin_has_mumps=yes
+             mumps_cflags="$withval"
+             ;;
+         esac
+       fi
+     fi
+
+# --with-prim-data will be present unless the client specified nodata.
+# Specifying --with-prim=no overrides the individual option for data.
+
+
+
+# At this point, coin_has_prim can be one of noInfo (no user options
+# specified), skipping (user said no), requested or build (user said yes
+# or build and gave no further guidance), or yes (user specified one or
+# more --with-prim options). If we're already at yes or skipping, we're
+# done looking.
+
+# If there are no user options (noInfo) and the default is no, we're skipping.
+# Otherwise, the default must be yes or build; consider the package requested.
+# A default action we don't recognise defaults to yes.
+
+  if test "$coin_has_mumps" = noInfo ; then
+    case $dflt_action in
+      no )
+        coin_has_mumps=skipping
+        ;;
+      build )
+        coin_has_mumps=build
+        ;;
+      * )
+        coin_has_mumps=requested
+        ;;
+    esac
+  fi
+
+# Now coin_has_prim can be one of skipping, yes, requested, or build. For
+# requested or build, try pkgconf, if it's available. If it's not available,
+# well, hope that the user knows their system and prim can be used with no
+# additional flags.
+
+  case $coin_has_mumps in
+    requested | build )
+      if test -n "$PKG_CONFIG" -a "coinmumps" != skip ; then
+        pcfile="coinmumps"
+
+
+
+  if test -n "$PKG_CONFIG" ; then
+    if PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --exists "$pcfile" ; then
+      MUMPS_VERSIONS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --modversion "$pcfile" 2>/dev/null | tr '\n' ' '`
+      coin_has_mumps=yes
+           mumps_data=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --variable=datadir "$pcfile" 2>/dev/null`
+           mumps_pcfiles="$pcfile"
+    else
+      MUMPS_PKG_ERRORS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "$pcfile"`
+      coin_has_mumps=no
+    fi
+  else
+    as_fn_error $? "\"Cannot check for existence of module mumps without pkgconf\"" "$LINENO" 5
+  fi
+
+      else
+        coin_has_mumps=no
+        # AC_MSG_WARN([skipped check via pkgconf as no pkgconf available])
+      fi
+      ;;
+    skipping | yes )
+      ;;
+    * )
+      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Unexpected status \"$coin_has_mumps\" in COIN_FIND_PRIM_PKG" >&5
+$as_echo "$as_me: WARNING: Unexpected status \"$coin_has_mumps\" in COIN_FIND_PRIM_PKG" >&2;}
+      ;;
+  esac
+
+# The final value of coin_has_prim will be yes, no, or skipping. No means
+# we looked (with pkgconfig) and didn't find anything. Skipping means the
+# user said `don't use.' Yes means we have something, from the user or
+# from pkgconfig. Note that we haven't run a useability test!
+
+# Define BUILDTOOLS_DEBUG to enable debugging output
+
+    if test "$BUILDTOOLS_DEBUG" = 1 ; then
+      { $as_echo "$as_me:${as_lineno-$LINENO}: FIND_PRIM_PKG result for mumps: \"$coin_has_mumps\"" >&5
+$as_echo "$as_me: FIND_PRIM_PKG result for mumps: \"$coin_has_mumps\"" >&6;}
+      { $as_echo "$as_me:${as_lineno-$LINENO}: Collected values for package 'mumps'" >&5
+$as_echo "$as_me: Collected values for package 'mumps'" >&6;}
+      { $as_echo "$as_me:${as_lineno-$LINENO}: mumps_lflags is \"$mumps_lflags\"" >&5
+$as_echo "$as_me: mumps_lflags is \"$mumps_lflags\"" >&6;}
+      { $as_echo "$as_me:${as_lineno-$LINENO}: mumps_cflags is \"$mumps_cflags\"" >&5
+$as_echo "$as_me: mumps_cflags is \"$mumps_cflags\"" >&6;}
+      { $as_echo "$as_me:${as_lineno-$LINENO}: mumps_data is \"$mumps_data\"" >&5
+$as_echo "$as_me: mumps_data is \"$mumps_data\"" >&6;}
+      { $as_echo "$as_me:${as_lineno-$LINENO}: mumps_pcfiles is \"$mumps_pcfiles\"" >&5
+$as_echo "$as_me: mumps_pcfiles is \"$mumps_pcfiles\"" >&6;}
+    fi
+
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $coin_has_mumps" >&5
+$as_echo "$coin_has_mumps" >&6; }
+  else
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $coin_has_mumps due to COIN_SKIP_PROJECTS" >&5
+$as_echo "$coin_has_mumps due to COIN_SKIP_PROJECTS" >&6; }
+  fi
+
+# Possibilities are `yes', 'no', or `skipping'. Normalise to `yes' or `no'.
+
+  if test "$coin_has_mumps" != yes ; then
+    coin_has_mumps=no
+  fi
+
+# Create an automake conditional COIN_HAS_PRIM.
+
+   if test $coin_has_mumps = yes; then
   COIN_HAS_MUMPS_TRUE=
   COIN_HAS_MUMPS_FALSE='#'
 else
   COIN_HAS_MUMPS_TRUE='#'
   COIN_HAS_MUMPS_FALSE=
 fi
+
+
+# If we've located the package, define preprocessor symbol COIN_HAS_PRIM and
+# augment the necessary variables for the client packages.
+
+  if test $coin_has_mumps = yes ; then
+
+$as_echo "#define COIN_HAS_MUMPS 1" >>confdefs.h
+
+    IPOPTLIB_PCFILES="$mumps_pcfiles $IPOPTLIB_PCFILES"
+       IPOPTLIB_LFLAGS="$mumps_lflags $IPOPTLIB_LFLAGS"
+       IPOPTLIB_CFLAGS="$mumps_cflags $IPOPTLIB_CFLAGS"
+
+
+# Finally, set up PRIM_DATA, unless the user specified nodata.
+
+
+  fi
+
 
  if false; then
   HAVE_PARDISO_TRUE=
@@ -18352,6 +18884,7 @@ else
   HAVE_PARDISO_FALSE=
 fi
 
+use_pardiso=no
  if false; then
   HAVE_MA28_TRUE=
   HAVE_MA28_FALSE='#'
@@ -18369,6 +18902,173 @@ else
 fi
 
 
+if test "$coin_has_hsl" = yes ; then
+
+   if test "$BUILDTOOLS_DEBUG" = 1 ; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: FINALIZE_FLAGS for HSLLib:" >&5
+$as_echo "$as_me: FINALIZE_FLAGS for HSLLib:" >&6;}
+      fi
+      HSLLIB_LFLAGS_NOPC=$HSLLIB_LFLAGS
+
+      HSLLIB_CFLAGS_NOPC=$HSLLIB_CFLAGS
+
+      if test -n "${HSLLIB_PCFILES}" ; then
+        temp_CFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --cflags ${HSLLIB_PCFILES}`
+        temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs ${HSLLIB_PCFILES}`
+        HSLLIB_CFLAGS="$temp_CFLAGS ${HSLLIB_CFLAGS}"
+        HSLLIB_LFLAGS="$temp_LFLAGS ${HSLLIB_LFLAGS}"
+      fi
+
+      # setup XYZ_EXPORT symbol for library users
+      libexport_attribute=
+      if test "$enable_shared" = yes ; then
+        # TODO better check for this? we essentially want to know whether we're building DLLs
+        # or do we also need this for GCC on Windows?
+        case $CC in */compile\ cl | cl | */cl | */compile\ icl | icl | */icl )
+          libexport_attribute="__declspec(dllimport)"
+          if test "$enable_static" = yes ; then
+            as_fn_error $? "Cannot do DLL and static LIB builds simultaneously. Do not add --enable-static without --disable-shared." "$LINENO" 5
+          fi
+        esac
+      fi
+
+cat >>confdefs.h <<_ACEOF
+#define HSLLIB_EXPORT $libexport_attribute
+_ACEOF
+
+
+# Define BUILDTOOLS_DEBUG to enable debugging output
+
+      if test "$BUILDTOOLS_DEBUG" = 1 ; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: HSLLIB_LFLAGS_NOPC: \"${HSLLIB_LFLAGS_NOPC}\"" >&5
+$as_echo "$as_me: HSLLIB_LFLAGS_NOPC: \"${HSLLIB_LFLAGS_NOPC}\"" >&6;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: HSLLIB_CFLAGS_NOPC: \"${HSLLIB_CFLAGS_NOPC}\"" >&5
+$as_echo "$as_me: HSLLIB_CFLAGS_NOPC: \"${HSLLIB_CFLAGS_NOPC}\"" >&6;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: adding \"${HSLLIB_PCFILES}\"" >&5
+$as_echo "$as_me: adding \"${HSLLIB_PCFILES}\"" >&6;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: HSLLIB_LFLAGS: \"${HSLLIB_LFLAGS}\"" >&5
+$as_echo "$as_me: HSLLIB_LFLAGS: \"${HSLLIB_LFLAGS}\"" >&6;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: HSLLIB_CFLAGS: \"${HSLLIB_CFLAGS}\"" >&5
+$as_echo "$as_me: HSLLIB_CFLAGS: \"${HSLLIB_CFLAGS}\"" >&6;}
+      fi
+
+
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking HSL name mangling scheme" >&5
+$as_echo_n "checking HSL name mangling scheme... " >&6; }
+if ${ac_cv_hsl_namemangling+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_save_LIBS=$LIBS
+     LIBS="$HSLLIB_LFLAGS"
+     for ac_case in "lower case" "upper case" ; do
+       for ac_trail in "underscore" "no underscore" ; do
+         for ac_extra in "no extra underscore" "extra underscore" ; do
+           ac_cv_hsl_namemangling="${ac_case}, ${ac_trail}, ${ac_extra}"
+           # AC_MSG_NOTICE([Attempting link for m4_tolower(ac_cv_HSL_namemangling)])
+           case $ac_case in
+             "lower case")
+               ac_name=ma27ad
+               ;;
+             "upper case")
+               ac_name=MA27AD
+               ;;
+           esac
+           if test "$ac_trail" = underscore ; then
+             ac_name=${ac_name}_
+           fi
+           # AC_MSG_CHECKING([ma27ad -> $ac_name])
+           cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef __cplusplus
+                  extern "C"
+                 #endif
+                 void $ac_name();
+int
+main ()
+{
+$ac_name()
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_success=yes
+else
+  ac_success=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+           # AC_MSG_RESULT([$result])
+           if test $ac_success = yes ; then
+             break 3
+           fi
+         done
+       done
+     done
+     if test "$ac_success" = "no" ; then
+       ac_cv_hsl_namemangling=unknown
+     fi
+     LIBS=$ac_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_hsl_namemangling" >&5
+$as_echo "$ac_cv_hsl_namemangling" >&6; }
+
+  # setup the m4_toupper(HSL)_FUNC and m4_toupper(HSL)_FUNC_ macros
+
+
+
+  case "$ac_cv_hsl_namemangling" in
+   "lower case, no underscore, no extra underscore")
+      $as_echo "#define HSL_FUNC(name,NAME) name" >>confdefs.h
+
+      $as_echo "#define HSL_FUNC_(name,NAME) name" >>confdefs.h
+ ;;
+   "lower case, no underscore, extra underscore")
+      $as_echo "#define HSL_FUNC(name,NAME) name" >>confdefs.h
+
+      $as_echo "#define HSL_FUNC_(name,NAME) name ## _" >>confdefs.h
+ ;;
+   "lower case, underscore, no extra underscore")
+      $as_echo "#define HSL_FUNC(name,NAME) name ## _" >>confdefs.h
+
+      $as_echo "#define HSL_FUNC_(name,NAME) name ## _" >>confdefs.h
+ ;;
+   "lower case, underscore, extra underscore")
+      $as_echo "#define HSL_FUNC(name,NAME) name ## _" >>confdefs.h
+
+      $as_echo "#define HSL_FUNC_(name,NAME) name ## __" >>confdefs.h
+ ;;
+   "upper case, no underscore, no extra underscore")
+      $as_echo "#define HSL_FUNC(name,NAME) NAME" >>confdefs.h
+
+      $as_echo "#define HSL_FUNC_(name,NAME) NAME" >>confdefs.h
+ ;;
+   "upper case, no underscore, extra underscore")
+      $as_echo "#define HSL_FUNC(name,NAME) NAME" >>confdefs.h
+
+      $as_echo "#define HSL_FUNC_(name,NAME) NAME ## _" >>confdefs.h
+ ;;
+   "upper case, underscore, no extra underscore")
+      $as_echo "#define HSL_FUNC(name,NAME) NAME ## _" >>confdefs.h
+
+      $as_echo "#define HSL_FUNC_(name,NAME) NAME ## _" >>confdefs.h
+ ;;
+   "upper case, underscore, extra underscore")
+      $as_echo "#define HSL_FUNC(name,NAME) NAME ## _" >>confdefs.h
+
+      $as_echo "#define HSL_FUNC_(name,NAME) NAME ## __" >>confdefs.h
+ ;;
+   *)
+      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Unsupported or unknown name-mangling scheme: $ac_cv_hsl_namemangling" >&5
+$as_echo "$as_me: WARNING: Unsupported or unknown name-mangling scheme: $ac_cv_hsl_namemangling" >&2;}
+      ;;
+  esac
+
+
+  # AC_MSG_NOTICE([Done COIN_NAMEMANGLING])
+
+fi
 
 #############################################################################
 #                             Stuff for examples                            #
@@ -19196,6 +19896,104 @@ ac_config_links="$ac_config_links test/hs071_main.cpp:examples/hs071_cpp/hs071_m
 ########################################################################
 ##          Create Makefiles and other stuff                          ##
 ########################################################################
+
+
+   if test "$BUILDTOOLS_DEBUG" = 1 ; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: FINALIZE_FLAGS for IpoptLib:" >&5
+$as_echo "$as_me: FINALIZE_FLAGS for IpoptLib:" >&6;}
+      fi
+      IPOPTLIB_LFLAGS_NOPC=$IPOPTLIB_LFLAGS
+
+      IPOPTLIB_CFLAGS_NOPC=$IPOPTLIB_CFLAGS
+
+      if test -n "${IPOPTLIB_PCFILES}" ; then
+        temp_CFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --cflags ${IPOPTLIB_PCFILES}`
+        temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs ${IPOPTLIB_PCFILES}`
+        IPOPTLIB_CFLAGS="$temp_CFLAGS ${IPOPTLIB_CFLAGS}"
+        IPOPTLIB_LFLAGS="$temp_LFLAGS ${IPOPTLIB_LFLAGS}"
+      fi
+
+      # setup XYZ_EXPORT symbol for library users
+      libexport_attribute=
+      if test "$enable_shared" = yes ; then
+        # TODO better check for this? we essentially want to know whether we're building DLLs
+        # or do we also need this for GCC on Windows?
+        case $CC in */compile\ cl | cl | */cl | */compile\ icl | icl | */icl )
+          libexport_attribute="__declspec(dllimport)"
+          if test "$enable_static" = yes ; then
+            as_fn_error $? "Cannot do DLL and static LIB builds simultaneously. Do not add --enable-static without --disable-shared." "$LINENO" 5
+          fi
+        esac
+      fi
+
+cat >>confdefs.h <<_ACEOF
+#define IPOPTLIB_EXPORT $libexport_attribute
+_ACEOF
+
+
+# Define BUILDTOOLS_DEBUG to enable debugging output
+
+      if test "$BUILDTOOLS_DEBUG" = 1 ; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: IPOPTLIB_LFLAGS_NOPC: \"${IPOPTLIB_LFLAGS_NOPC}\"" >&5
+$as_echo "$as_me: IPOPTLIB_LFLAGS_NOPC: \"${IPOPTLIB_LFLAGS_NOPC}\"" >&6;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: IPOPTLIB_CFLAGS_NOPC: \"${IPOPTLIB_CFLAGS_NOPC}\"" >&5
+$as_echo "$as_me: IPOPTLIB_CFLAGS_NOPC: \"${IPOPTLIB_CFLAGS_NOPC}\"" >&6;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: adding \"${IPOPTLIB_PCFILES}\"" >&5
+$as_echo "$as_me: adding \"${IPOPTLIB_PCFILES}\"" >&6;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: IPOPTLIB_LFLAGS: \"${IPOPTLIB_LFLAGS}\"" >&5
+$as_echo "$as_me: IPOPTLIB_LFLAGS: \"${IPOPTLIB_LFLAGS}\"" >&6;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: IPOPTLIB_CFLAGS: \"${IPOPTLIB_CFLAGS}\"" >&5
+$as_echo "$as_me: IPOPTLIB_CFLAGS: \"${IPOPTLIB_CFLAGS}\"" >&6;}
+      fi
+     if test "$BUILDTOOLS_DEBUG" = 1 ; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: FINALIZE_FLAGS for IpoptAmplInterfaceLib:" >&5
+$as_echo "$as_me: FINALIZE_FLAGS for IpoptAmplInterfaceLib:" >&6;}
+      fi
+      IPOPTAMPLINTERFACELIB_LFLAGS_NOPC=$IPOPTAMPLINTERFACELIB_LFLAGS
+
+      IPOPTAMPLINTERFACELIB_CFLAGS_NOPC=$IPOPTAMPLINTERFACELIB_CFLAGS
+
+      if test -n "${IPOPTAMPLINTERFACELIB_PCFILES}" ; then
+        temp_CFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --cflags ${IPOPTAMPLINTERFACELIB_PCFILES}`
+        temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs ${IPOPTAMPLINTERFACELIB_PCFILES}`
+        IPOPTAMPLINTERFACELIB_CFLAGS="$temp_CFLAGS ${IPOPTAMPLINTERFACELIB_CFLAGS}"
+        IPOPTAMPLINTERFACELIB_LFLAGS="$temp_LFLAGS ${IPOPTAMPLINTERFACELIB_LFLAGS}"
+      fi
+
+      # setup XYZ_EXPORT symbol for library users
+      libexport_attribute=
+      if test "$enable_shared" = yes ; then
+        # TODO better check for this? we essentially want to know whether we're building DLLs
+        # or do we also need this for GCC on Windows?
+        case $CC in */compile\ cl | cl | */cl | */compile\ icl | icl | */icl )
+          libexport_attribute="__declspec(dllimport)"
+          if test "$enable_static" = yes ; then
+            as_fn_error $? "Cannot do DLL and static LIB builds simultaneously. Do not add --enable-static without --disable-shared." "$LINENO" 5
+          fi
+        esac
+      fi
+
+cat >>confdefs.h <<_ACEOF
+#define IPOPTAMPLINTERFACELIB_EXPORT $libexport_attribute
+_ACEOF
+
+
+# Define BUILDTOOLS_DEBUG to enable debugging output
+
+      if test "$BUILDTOOLS_DEBUG" = 1 ; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: IPOPTAMPLINTERFACELIB_LFLAGS_NOPC: \"${IPOPTAMPLINTERFACELIB_LFLAGS_NOPC}\"" >&5
+$as_echo "$as_me: IPOPTAMPLINTERFACELIB_LFLAGS_NOPC: \"${IPOPTAMPLINTERFACELIB_LFLAGS_NOPC}\"" >&6;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: IPOPTAMPLINTERFACELIB_CFLAGS_NOPC: \"${IPOPTAMPLINTERFACELIB_CFLAGS_NOPC}\"" >&5
+$as_echo "$as_me: IPOPTAMPLINTERFACELIB_CFLAGS_NOPC: \"${IPOPTAMPLINTERFACELIB_CFLAGS_NOPC}\"" >&6;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: adding \"${IPOPTAMPLINTERFACELIB_PCFILES}\"" >&5
+$as_echo "$as_me: adding \"${IPOPTAMPLINTERFACELIB_PCFILES}\"" >&6;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: IPOPTAMPLINTERFACELIB_LFLAGS: \"${IPOPTAMPLINTERFACELIB_LFLAGS}\"" >&5
+$as_echo "$as_me: IPOPTAMPLINTERFACELIB_LFLAGS: \"${IPOPTAMPLINTERFACELIB_LFLAGS}\"" >&6;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: IPOPTAMPLINTERFACELIB_CFLAGS: \"${IPOPTAMPLINTERFACELIB_CFLAGS}\"" >&5
+$as_echo "$as_me: IPOPTAMPLINTERFACELIB_CFLAGS: \"${IPOPTAMPLINTERFACELIB_CFLAGS}\"" >&6;}
+      fi
+
+
 
 ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Algorithm/Inexact/Makefile src/contrib/CGPenalty/Makefile src/contrib/LinearSolverLoader/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile test/Makefile test/run_unitTests ipopt.pc ipopt-uninstalled.pc doc/Doxyfile"
 

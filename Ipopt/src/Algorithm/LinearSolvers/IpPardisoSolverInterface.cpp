@@ -21,12 +21,18 @@
 #include <cstring>
 
 // determine the correct name of the Pardiso function
-#if defined(_MSC_VER) && defined(HAVE_PARDISO)
+#ifdef HAVE_PARDISO
+#if defined(_MSC_VER)
 # define PARDISOINIT_FUNC PARDISOINIT
 # define PARDISO_FUNC PARDISO
 #else
 # define PARDISOINIT_FUNC F77_FUNC(pardisoinit,PARDISOINIT)
 # define PARDISO_FUNC F77_FUNC(pardiso,PARDISO)
+#endif
+#else
+// if we build for the Linear Solver loader, then use normal C-naming style
+# define PARDISOINIT_FUNC pardisoinit
+# define PARDISO_FUNC pardiso
 #endif
 
 /* Prototypes for Pardiso's subroutines */

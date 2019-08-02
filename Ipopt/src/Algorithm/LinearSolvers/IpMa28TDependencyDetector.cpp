@@ -10,8 +10,8 @@
 #include "CoinHslConfig.h"
 #endif
 
-// if we do not have MA28 in HSL or the linear solver loader, then we want to build the MA28 interface
-#if defined(COINHSL_HAS_MA28) || defined(HAVE_LINEARSOLVERLOADER)
+// if we have MA28 in HSL or the linear solver loader, then we want to build the MA28 interface
+#if 0 //FIXME defined(COINHSL_HAS_MA28) || defined(HAVE_LINEARSOLVERLOADER)
 
 #include "IpMa28TDependencyDetector.hpp"
 
@@ -107,14 +107,14 @@ bool Ma28TDependencyDetector::DetermineDependentRows(
    // First determine how much work space we need to allocate
    IVAR = new ipfint[N];
    IDEGEN = new ipfint[M];
-   F77_FUNC(ma28part, MA28PART)(&TASK, &N, &M, &NZ, &ddummy, jac_c_iRow, jac_c_jCol, &PIVTOL, &FILLFACT, IVAR, &NDEGEN,
+   HSL_FUNC(ma28part, MA28PART)(&TASK, &N, &M, &NZ, &ddummy, jac_c_iRow, jac_c_jCol, &PIVTOL, &FILLFACT, IVAR, &NDEGEN,
                                 IDEGEN, &LIW, &idummy, &LRW, &ddummy, &IERR);
    ipfint* IW = new ipfint[LIW];
    double* RW = new double[LRW];
 
    // Now do the actual factorization and determine dependent constraints
    TASK = 1;
-   F77_FUNC(ma28part, MA28PART)(&TASK, &N, &M, &NZ, jac_c_vals, jac_c_iRow, jac_c_jCol, &PIVTOL, &FILLFACT, IVAR,
+   HSL_FUNC(ma28part, MA28PART)(&TASK, &N, &M, &NZ, jac_c_vals, jac_c_iRow, jac_c_jCol, &PIVTOL, &FILLFACT, IVAR,
                                 &NDEGEN, IDEGEN, &LIW, IW, &LRW, RW, &IERR);
    delete[] IVAR;
    delete[] IW;

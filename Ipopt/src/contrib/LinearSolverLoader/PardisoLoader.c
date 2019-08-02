@@ -139,7 +139,7 @@ void wrap_old_pardiso(
    func_pardiso(PT, MAXFCT, MNUM, MTYPE, PHASE, N, A, IA, JA, PERM, NRHS, IPARM, MSGLVL, B, X, E);
 }
 
-void F77_FUNC(pardisoinit,PARDISOINIT)(
+void pardisoinit(
    void*         PT,
    const ipfint* MTYPE,
    const ipfint* SOLVER,
@@ -155,7 +155,7 @@ void F77_FUNC(pardisoinit,PARDISOINIT)(
    func_new_pardisoinit(PT, MTYPE, SOLVER, IPARM, DPARM, E);
 }
 
-void F77_FUNC(pardiso,PARDISO)(
+void pardiso(
    void**        PT,
    const ipfint* MAXFCT,
    const ipfint* MNUM,

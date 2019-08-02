@@ -8,6 +8,9 @@
 
 #ifdef COIN_HAS_HSL
 #include "CoinHslConfig.h"
+#else
+/* if we build for the Linear Solver loader, then use normal C-naming style */
+#define HSL_FUNC(name,NAME) name
 #endif
 
 // if we do not have MC19 in HSL or the linear solver loader, then we want to build the MC19 interface
@@ -21,7 +24,7 @@
 extern "C"
 {
 // here we assume that float corresponds to Fortran's single precision
-   void F77_FUNC(mc19ad, MC19AD)(
+   void HSL_FUNC(mc19ad, MC19AD)(
       ipfint* N,
       ipfint* NZ,
       double* A,
@@ -136,7 +139,7 @@ bool Mc19TSymScalingMethod::ComputeSymTScalingFactors(
    float* R = new float[n];
    float* C = new float[n];
    float* W = new float[5 * n];
-   F77_FUNC(mc19ad, MC19AD)(&n, &nnz2, A2, AIRN2, AJCN2, R, C, W);
+   HSL_FUNC(mc19ad, MC19AD)(&n, &nnz2, A2, AIRN2, AJCN2, R, C, W);
    delete[] W;
 
    if( DBG_VERBOSITY() >= 3 )

@@ -275,10 +275,10 @@ bool TNLPAdapter::ProcessOptions(
       }
       else if( dependency_detector == "ma28" )
       {
-#ifdef COINHSL_HAS_MA28
+#if 0 //FIXME def COINHSL_HAS_MA28
          dependency_detector_ = new Ma28TDependencyDetector();
 #else
-# ifdef HAVE_LINEARSOLVERLOADER
+# if 0 //FIXME def HAVE_LINEARSOLVERLOADER
          dependency_detector_ = new Ma28TDependencyDetector();
          if( !LSL_isMA28available() )
          {
