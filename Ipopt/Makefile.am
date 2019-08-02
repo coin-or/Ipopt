@@ -2,11 +2,11 @@
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
 
-## $Id$
-
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 AUTOMAKE_OPTIONS = foreign
+
+include $(top_srcdir)/BuildTools/Makemain.inc
 
 SUBDIRS = src/Common src/LinAlg src/Algorithm src/contrib/CGPenalty
 
@@ -19,65 +19,6 @@ SUBDIRS += src/Interfaces src/Apps
 if ALWAYS_FALSE
   SUBDIRS += test
 endif
-
-EXTRA_DIST = \
-	examples/Cpp_example/cpp_example.cpp \
-	examples/Cpp_example/Makefile.in \
-	examples/Cpp_example/MyNLP.cpp \
-	examples/Cpp_example/MyNLP.hpp \
-	examples/hs071_f/Makefile.in \
-	examples/hs071_f/hs071_f.f.in \
-	examples/hs071_c/Makefile.in \
-	examples/hs071_c/hs071_c.c \
-	examples/hs071_cpp/Makefile.in \
-	examples/hs071_cpp/hs071_main.cpp \
-	examples/hs071_cpp/hs071_nlp.cpp \
-	examples/hs071_cpp/hs071_nlp.hpp \
-	examples/ScalableProblems/LuksanVlcek1.cpp \
-	examples/ScalableProblems/LuksanVlcek1.hpp \
-	examples/ScalableProblems/LuksanVlcek2.cpp \
-	examples/ScalableProblems/LuksanVlcek2.hpp \
-	examples/ScalableProblems/LuksanVlcek3.cpp \
-	examples/ScalableProblems/LuksanVlcek3.hpp \
-	examples/ScalableProblems/LuksanVlcek4.cpp \
-	examples/ScalableProblems/LuksanVlcek4.hpp \
-	examples/ScalableProblems/LuksanVlcek5.cpp \
-	examples/ScalableProblems/LuksanVlcek5.hpp \
-	examples/ScalableProblems/LuksanVlcek6.cpp \
-	examples/ScalableProblems/LuksanVlcek6.hpp \
-	examples/ScalableProblems/LuksanVlcek7.cpp \
-	examples/ScalableProblems/LuksanVlcek7.hpp \
-	examples/ScalableProblems/Makefile.in \
-	examples/ScalableProblems/MittelmannBndryCntrlDiri.cpp \
-	examples/ScalableProblems/MittelmannBndryCntrlDiri.hpp \
-	examples/ScalableProblems/MittelmannBndryCntrlNeum.cpp \
-	examples/ScalableProblems/MittelmannBndryCntrlNeum.hpp \
-	examples/ScalableProblems/MittelmannDistCntrlDiri.cpp \
-	examples/ScalableProblems/MittelmannDistCntrlDiri.hpp \
-	examples/ScalableProblems/MittelmannDistCntrlNeumA.cpp \
-	examples/ScalableProblems/MittelmannDistCntrlNeumA.hpp \
-	examples/ScalableProblems/MittelmannDistCntrlNeumB.cpp \
-	examples/ScalableProblems/MittelmannDistCntrlNeumB.hpp \
-	examples/ScalableProblems/MittelmannParaCntrl.hpp \
-	examples/ScalableProblems/README \
-	examples/ScalableProblems/RegisteredTNLP.cpp \
-	examples/ScalableProblems/RegisteredTNLP.hpp \
-	examples/ScalableProblems/solve_problem.cpp \
-	README \
-	LICENSE \
-	AUTHORS \
-	test/run_unitTests.in \
-	test/mytoy.nl \
-	Windows/VisualStudio_dotNET/README \
-	Windows/VisualStudio_dotNET/CppExample/CppExample.vcproj \
-	Windows/VisualStudio_dotNET/hs071_cpp/hs071_cpp.vcproj \
-	Windows/VisualStudio_dotNET/hs071_c/hs071_c.vcproj \
-	Windows/VisualStudio_dotNET/hs071_f/hs071_f.vfproj \
-	Windows/VisualStudio_dotNET/hs071_f/hs071_f.f \
-	Windows/VisualStudio_dotNET/FortranLinAlg/FortranLinAlg.vfproj \
-	Windows/VisualStudio_dotNET/Ipopt/Ipopt.sln \
-	Windows/VisualStudio_dotNET/Ipopt/Ipopt.vcproj \
-	Windows/VisualStudio_dotNET/ScalableProblems/ScalableProblems.vcproj
 
 .PHONY: cuter test unitTest astyle doc
 
@@ -142,35 +83,3 @@ astyle:
 
 pkgconfiglibdir = $(libdir)/pkgconfig
 pkgconfiglib_DATA = ipopt.pc
-
-addlibsdir = $(DESTDIR)$(datadir)/coin/doc/Ipopt
-
-# setup addlibs files
-# the addlibs_cpp file is created by running pkg-config on the installed ipopt.pc, if pkg-config available,
-#   or by using variables setup in configure
-# the addlibs_c file is created by adding @CXXLIBS@ to the content of the addlibs_cpp file
-# the addlibs_f file is creating by taking the content of the addlibs_cpp file and removing the FLIBS
-#   since pkg-config may have reordered the flags from FLIBS, we take them out one by one
-install-data-hook:
-	@$(mkdir_p) "$(addlibsdir)"
-if COIN_HAS_PKGCONFIG
-	PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@:$(DESTDIR)$(pkgconfiglibdir) \
-	$(PKG_CONFIG) --libs ipopt > $(addlibsdir)/ipopt_addlibs_cpp.txt
-else
-if COIN_CXX_IS_CL
-	echo "-libpath:`$(CYGPATH_W) @abs_lib_dir@` libipopt.lib @IPOPTLIB_LIBS_INSTALLED@" > $(addlibsdir)/ipopt_addlibs_cpp.txt
-else
-	echo "-L@abs_lib_dir@ -lipopt @IPOPTLIB_LIBS_INSTALLED@" > $(addlibsdir)/ipopt_addlibs_cpp.txt
-endif
-endif
-	addlibs=`cat $(addlibsdir)/ipopt_addlibs_cpp.txt` ; \
-	echo "$$addlibs @CXXLIBS@" > $(addlibsdir)/ipopt_addlibs_c.txt ; \
-	for i in @FLIBS@ coin_dummy ; do \
-		addlibs=`echo -n " $$addlibs " | sed -e "s! $$i ! !g"` ; \
-	done ; \
-	echo "$$addlibs @CXXLIBS@" > $(addlibsdir)/ipopt_addlibs_f.txt
-
-uninstall-hook:
-	rm -f $(addlibsdir)/ipopt_addlibs_{cpp,c,f}.txt
-
-include BuildTools/Makemain.inc

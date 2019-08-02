@@ -14,10 +14,8 @@ bin_PROGRAMS = ipopt
 libipoptamplinterface_la_SOURCES = \
 	AmplTNLP.cpp AmplTNLP.hpp
 
-if DEPENDENCY_LINKING
 libipoptamplinterface_la_LIBADD = ../../Interfaces/libipopt.la \
 	$(IPOPTAMPLINTERFACELIB_LIBS)
-endif
 
 libipoptamplinterface_la_LDFLAGS = $(LT_LDFLAGS)
 
@@ -45,14 +43,14 @@ pkgconfiglibdir = $(libdir)/pkgconfig
 pkgconfiglib_DATA = ../../../ipoptamplinterface.pc
 
 # This line is necessary to allow VPATH compilation
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
+#DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
 
-if COIN_CXX_IS_CL
-install-exec-hook:
-	test -s ipopt.exe.manifest && \
-	mt -manifest ipopt.exe.manifest -outputresource:ipopt.exe;\
-	cp ipopt.exe $(bindir)/ipopt.exe
-endif
+#if COIN_CXX_IS_CL
+#install-exec-hook:
+#	test -s ipopt.exe.manifest && \
+#	mt -manifest ipopt.exe.manifest -outputresource:ipopt.exe;\
+#	cp ipopt.exe $(bindir)/ipopt.exe
+#endif
 
 # Astyle stuff
 

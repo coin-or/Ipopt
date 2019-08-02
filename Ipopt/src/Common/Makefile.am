@@ -51,7 +51,7 @@ uninstall-local:
 	rm -f $(DESTDIR)$(includeipoptdir)/IpoptConfig.h
 
 # This line is necessary to allow VPATH compilation
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)`
+#DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)`
 
 # Astyle stuff
 

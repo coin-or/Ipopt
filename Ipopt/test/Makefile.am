@@ -26,9 +26,9 @@ nodist_hs071_c_SOURCES = hs071_c.c
 hs071_c_LDADD = ../src/Interfaces/libipopt.la $(IPOPTLIB_LIBS) $(CXXLIBS)
 hs071_c_DEPENDENCIES = ../src/Interfaces/libipopt.la $(IPOPTLIB_DEPENDENCIES)
 
-nodist_hs071_f_SOURCES = hs071_f.f
-hs071_f_LDADD = ../src/Interfaces/libipopt.la $(IPOPTLIB_LIBS) $(CXXLIBS)
-hs071_f_DEPENDENCIES = ../src/Interfaces/libipopt.la $(IPOPTLIB_DEPENDENCIES)
+#nodist_hs071_f_SOURCES = hs071_f.f
+#hs071_f_LDADD = ../src/Interfaces/libipopt.la $(IPOPTLIB_LIBS) $(CXXLIBS)
+#hs071_f_DEPENDENCIES = ../src/Interfaces/libipopt.la $(IPOPTLIB_DEPENDENCIES)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Cygwin
@@ -41,7 +41,7 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../src/Common` \
 AM_FFLAGS = -I`$(CYGPATH_W) $(srcdir)/../src/Interfaces`
 
 # This line is necessary to allow VPATH compilation
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
+#DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
 
 hs071_f.f:
 	$(LN_S) ../examples/hs071_f/$@ $@

@@ -2,8 +2,6 @@
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
 
-## $Id$
-
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 AUTOMAKE_OPTIONS = foreign
@@ -35,17 +33,15 @@ liblinsolvers_la_SOURCES += \
 	IpMa77SolverInterface.cpp IpMa77SolverInterface.hpp
 
 if BUILD_LINEARSOLVERLOADER
-  liblinsolvers_la_SOURCES += \
-	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp \
-	IpMa28Partition.F
+  liblinsolvers_la_SOURCES += IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
+#liblinsolvers_la_SOURCES += IpMa28Partition.F
 else
 if HAVE_PARDISO
-  liblinsolvers_la_SOURCES += \
-	IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
+  liblinsolvers_la_SOURCES += IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
 endif
-if HAVE_MA28
-  liblinsolvers_la_SOURCES += IpMa28Partition.F
-endif
+#if HAVE_MA28
+#  liblinsolvers_la_SOURCES += IpMa28Partition.F
+#endif
 endif # BUILD_LINEARSOLVERLOADER
 
 if HAVE_WSMP
@@ -69,22 +65,12 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` \
 	$(MUMPS_CFLAGS) $(HSL_CFLAGS)
 
 # This line is necessary to allow VPATH compilation
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
-
-# Workaround a bug in the AIX C++ compiler
-if AIX_FIX_COMPILER_BUG
-IpTSymLinearSolver.lo: IpTSymLinearSolver.cpp
-@am__fastdepCXX_TRUE@	if $(LTCXXCOMPILE) -qnooptimize -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Plo"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -qnooptimize -c -o $@ $<
-endif
+#DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
 
 # Need to overwrite automake definition since otherwise libtool does not
 # understand the fortran file (need to add --tag=F77)
-AM_FCFLAGS = $(HSL_F90_INCFLAGS)
-LTFCCOMPILE = $(LIBTOOL) --tag=F77 --mode=compile $(FC) $(AM_FCFLAGS) $(FCFLAGS)
+#AM_FCFLAGS = $(HSL_F90_INCFLAGS)
+#LTFCCOMPILE = $(LIBTOOL) --tag=F77 --mode=compile $(FC) $(AM_FCFLAGS) $(FCFLAGS)
 
 # Astyle stuff
 

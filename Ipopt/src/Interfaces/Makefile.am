@@ -41,9 +41,7 @@ libipopt_la_SOURCES = \
 	IpTNLPReducer.cpp IpTNLPReducer.hpp
 
 libipopt_la_LIBADD = $(IPALLLIBS)
-if DEPENDENCY_LINKING
 libipopt_la_LIBADD += $(IPOPTLIB_LIBS)
-endif
 
 libipopt_la_DEPENDENCIES = $(IPALLLIBS)
 
@@ -63,7 +61,7 @@ CFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
 	$(HSL_CFLAGS)
 
 # This line is necessary to allow VPATH compilation
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
+#DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
 
 # Astyle stuff
 
