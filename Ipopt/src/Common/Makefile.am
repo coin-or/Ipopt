@@ -2,8 +2,6 @@
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
 
-## $Id$
-
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 AUTOMAKE_OPTIONS = foreign
@@ -52,13 +50,10 @@ install-exec-local:
 uninstall-local:
 	rm -f $(DESTDIR)$(includeipoptdir)/IpoptConfig.h
 
-# This line is necessary to allow VPATH compilation
-#DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)`
-
 # Astyle stuff
 
 ASTYLE_FILES = \
-    IpoptConfig.hbak \
+	IpoptConfig.hbak \
 	IpCachedResults.hppbak \
 	IpDebug.cppbak IpDebug.hppbak \
 	IpException.hppbak \

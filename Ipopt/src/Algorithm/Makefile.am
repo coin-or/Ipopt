@@ -84,24 +84,22 @@ libipoptalg_la_SOURCES = \
 
 libipoptalg_la_LDFLAGS = $(LT_LDFLAGS)
 
-AM_CPPFLAGS = -DIPOPT_BUILD -I`$(CYGPATH_W) $(srcdir)/../Common` \
-	-I`$(CYGPATH_W) $(srcdir)/../LinAlg` \
-	-I`$(CYGPATH_W) $(srcdir)/../LinAlg/TMatrices` \
-	-I`$(CYGPATH_W) $(srcdir)/../Interfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/LinearSolvers` \
-	-I`$(CYGPATH_W) $(srcdir)/../contrib/CGPenalty` \
-	-I`$(CYGPATH_W) $(srcdir)/../contrib/LinearSolverLoader`
+AM_CPPFLAGS = -DIPOPT_BUILD \
+	-I$(srcdir)/../Common \
+	-I$(srcdir)/../LinAlg \
+	-I$(srcdir)/../LinAlg/TMatrices \
+	-I$(srcdir)/../Interfaces \
+	-I$(srcdir)/LinearSolvers \
+	-I$(srcdir)/../contrib/CGPenalty \
+	-I$(srcdir)/../contrib/LinearSolverLoader
 
-#if COIN_HAS_MUMPS
-#  AM_CPPFLAGS += $(MUMPS_CFLAGS)
-#endif
-
-if COIN_HAS_HSL
-AM_CPPFLAGS += $(HSL_CFLAGS)
+if COIN_HAS_MUMPS
+  AM_CPPFLAGS += $(MUMPS_CFLAGS)
 endif
 
-# This line is necessary to allow VPATH compilation
-#DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
+if COIN_HAS_HSL
+  AM_CPPFLAGS += $(HSL_CFLAGS)
+endif
 
 # Astyle stuff
 

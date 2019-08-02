@@ -414,12 +414,9 @@ libcommon_la_SOURCES = \
 libcommon_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -DIPOPT_BUILD
 
-# This line is necessary to allow VPATH compilation
-#DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)`
-
 # Astyle stuff
 ASTYLE_FILES = \
-    IpoptConfig.hbak \
+	IpoptConfig.hbak \
 	IpCachedResults.hppbak \
 	IpDebug.cppbak IpDebug.hppbak \
 	IpException.hppbak \

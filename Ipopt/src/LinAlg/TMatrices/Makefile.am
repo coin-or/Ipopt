@@ -2,8 +2,6 @@
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
 
-## $Id$
-
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 AUTOMAKE_OPTIONS = foreign
@@ -22,11 +20,9 @@ libtmatrices_la_SOURCES = \
 
 libtmatrices_la_LDFLAGS = $(LT_LDFLAGS)
 
-AM_CPPFLAGS = -DIPOPT_BUILD -I`$(CYGPATH_W) $(srcdir)/../../Common` \
-	-I`$(CYGPATH_W) $(srcdir)/..`
-
-# This line is necessary to allow VPATH compilation
-#DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
+AM_CPPFLAGS = -DIPOPT_BUILD \
+	-I$(srcdir)/../../Common \
+	-I$(srcdir)/..
 
 # Astyle stuff
 

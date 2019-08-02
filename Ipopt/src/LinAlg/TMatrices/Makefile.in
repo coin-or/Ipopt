@@ -390,12 +390,10 @@ libtmatrices_la_SOURCES = \
 	IpTripletHelper.cpp IpTripletHelper.hpp
 
 libtmatrices_la_LDFLAGS = $(LT_LDFLAGS)
-AM_CPPFLAGS = -DIPOPT_BUILD -I`$(CYGPATH_W) $(srcdir)/../../Common` \
-	-I`$(CYGPATH_W) $(srcdir)/..`
+AM_CPPFLAGS = -DIPOPT_BUILD \
+	-I$(srcdir)/../../Common \
+	-I$(srcdir)/..
 
-
-# This line is necessary to allow VPATH compilation
-#DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
 
 # Astyle stuff
 ASTYLE_FILES = \

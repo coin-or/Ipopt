@@ -95,11 +95,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-
-#if COIN_HAS_MUMPS
-#  AM_CPPFLAGS += $(MUMPS_CFLAGS)
-#endif
-@COIN_HAS_HSL_TRUE@am__append_1 = $(HSL_CFLAGS)
+@COIN_HAS_MUMPS_TRUE@am__append_1 = $(MUMPS_CFLAGS)
+@COIN_HAS_HSL_TRUE@am__append_2 = $(HSL_CFLAGS)
 subdir = src/Algorithm
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -532,16 +529,12 @@ libipoptalg_la_SOURCES = \
 	IpWarmStartIterateInitializer.cpp IpWarmStartIterateInitializer.hpp
 
 libipoptalg_la_LDFLAGS = $(LT_LDFLAGS)
-AM_CPPFLAGS = -DIPOPT_BUILD -I`$(CYGPATH_W) $(srcdir)/../Common` \
-	-I`$(CYGPATH_W) $(srcdir)/../LinAlg` -I`$(CYGPATH_W) \
-	$(srcdir)/../LinAlg/TMatrices` -I`$(CYGPATH_W) \
-	$(srcdir)/../Interfaces` -I`$(CYGPATH_W) \
-	$(srcdir)/LinearSolvers` -I`$(CYGPATH_W) \
-	$(srcdir)/../contrib/CGPenalty` -I`$(CYGPATH_W) \
-	$(srcdir)/../contrib/LinearSolverLoader` $(am__append_1)
-
-# This line is necessary to allow VPATH compilation
-#DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
+AM_CPPFLAGS = -DIPOPT_BUILD -I$(srcdir)/../Common \
+	-I$(srcdir)/../LinAlg -I$(srcdir)/../LinAlg/TMatrices \
+	-I$(srcdir)/../Interfaces -I$(srcdir)/LinearSolvers \
+	-I$(srcdir)/../contrib/CGPenalty \
+	-I$(srcdir)/../contrib/LinearSolverLoader $(am__append_1) \
+	$(am__append_2)
 
 # Astyle stuff
 ASTYLE_FILES = \

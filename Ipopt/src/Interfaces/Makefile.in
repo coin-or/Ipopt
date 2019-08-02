@@ -137,6 +137,7 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includeipoptdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
+libipopt_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
 am_libipopt_la_OBJECTS = IpInterfacesRegOp.lo IpIpoptApplication.lo \
 	IpSolveStatistics.lo IpStdCInterface.lo IpStdInterfaceTNLP.lo \
 	IpTNLPAdapter.lo IpTNLPReducer.lo
@@ -248,21 +249,14 @@ BIT64FCOMMENT = @BIT64FCOMMENT@
 BITS_PER_POINTER = @BITS_PER_POINTER@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
-CFLAGS = @CFLAGS@ -I`$(CYGPATH_W) $(srcdir)/../Common` $(HSL_CFLAGS)
+CFLAGS = @CFLAGS@
 COIN_PKG_CONFIG_PATH = @COIN_PKG_CONFIG_PATH@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXCPP = @CXXCPP@
 CXXDEPMODE = @CXXDEPMODE@
-CXXFLAGS = @CXXFLAGS@ -DIPOPT_BUILD -I`$(CYGPATH_W) \
-	$(srcdir)/../Common` -I`$(CYGPATH_W) $(srcdir)/../LinAlg` \
-	-I`$(CYGPATH_W) $(srcdir)/../Algorithm/LinearSolvers` \
-	-I`$(CYGPATH_W) $(srcdir)/../LinAlg/TMatrices` -I`$(CYGPATH_W) \
-	$(srcdir)/../Algorithm` -I`$(CYGPATH_W) \
-	$(srcdir)/../Algorithm/Inexact` -I`$(CYGPATH_W) \
-	$(srcdir)/../contrib/CGPenalty` -I`$(CYGPATH_W) \
-	$(srcdir)/../contrib/LinearSolverLoader` $(HSL_CFLAGS)
+CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
@@ -421,11 +415,18 @@ libipopt_la_SOURCES = \
 
 #	IpStdFInterface.c
 libipopt_la_LIBADD = $(IPALLLIBS) $(IPOPTLIB_LIBS)
-libipopt_la_DEPENDENCIES = $(IPALLLIBS)
 libipopt_la_LDFLAGS = $(LT_LDFLAGS)
+AM_CPPFLAGS = -DIPOPT_BUILD \
+	-I$(srcdir)/../Common \
+	-I$(srcdir)/../LinAlg \
+	-I$(srcdir)/../Algorithm/LinearSolvers \
+	-I$(srcdir)/../LinAlg/TMatrices \
+	-I$(srcdir)/../Algorithm \
+	-I$(srcdir)/../Algorithm/Inexact \
+	-I$(srcdir)/../contrib/CGPenalty \
+	-I$(srcdir)/../contrib/LinearSolverLoader \
+	$(HSL_CFLAGS)
 
-# This line is necessary to allow VPATH compilation
-#DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
 
 # Astyle stuff
 ASTYLE_FILES = \
@@ -442,7 +443,6 @@ ASTYLE_FILES = \
 	IpTNLPAdapter.cppbak IpTNLPAdapter.hppbak \
 	IpTNLPReducer.cppbak IpTNLPReducer.hppbak
 
-CLEANFILES = 
 DISTCLEANFILES = $(ASTYLE_FILES)
 SUFFIXES = .cppbak .hppbak .cbak .hbak
 all: all-am
@@ -665,7 +665,6 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
-	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)

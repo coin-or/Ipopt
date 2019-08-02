@@ -96,7 +96,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 @BUILD_LINEARSOLVERLOADER_TRUE@am__append_1 = IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
-#liblinsolvers_la_SOURCES += IpMa28Partition.F
+#  liblinsolvers_la_SOURCES += IpMa28Partition.F
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__append_2 = IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
 #if HAVE_MA28
 #  liblinsolvers_la_SOURCES += IpMa28Partition.F
@@ -436,17 +436,15 @@ liblinsolvers_la_SOURCES = IpGenKKTSolverInterface.hpp \
 	$(am__append_1) $(am__append_2) $(am__append_3) \
 	$(am__append_4)
 liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)
-AM_CPPFLAGS = -DIPOPT_BUILD -I`$(CYGPATH_W) $(srcdir)/../../Common` \
-	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \
-	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg/TMatrices` \
-	-I`$(CYGPATH_W) $(srcdir)/..` \
-	-I`$(CYGPATH_W) $(srcdir)/../../Interfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/../../contrib/CGPenalty` \
+AM_CPPFLAGS = -DIPOPT_BUILD \
+	-I$(srcdir)/../../Common \
+	-I$(srcdir)/../../LinAlg \
+	-I$(srcdir)/../../LinAlg/TMatrices \
+	-I$(srcdir)/.. \
+	-I$(srcdir)/../../Interfaces \
+	-I$(srcdir)/../../contrib/CGPenalty \
 	$(MUMPS_CFLAGS) $(HSL_CFLAGS)
 
-
-# This line is necessary to allow VPATH compilation
-#DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
 
 # Need to overwrite automake definition since otherwise libtool does not
 # understand the fortran file (need to add --tag=F77)

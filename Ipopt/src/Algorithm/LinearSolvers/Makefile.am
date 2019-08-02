@@ -34,7 +34,7 @@ liblinsolvers_la_SOURCES += \
 
 if BUILD_LINEARSOLVERLOADER
   liblinsolvers_la_SOURCES += IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
-#liblinsolvers_la_SOURCES += IpMa28Partition.F
+#  liblinsolvers_la_SOURCES += IpMa28Partition.F
 else
 if HAVE_PARDISO
   liblinsolvers_la_SOURCES += IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
@@ -51,21 +51,19 @@ if HAVE_WSMP
 endif
 
 if COIN_HAS_MUMPS
-liblinsolvers_la_SOURCES += IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
+  liblinsolvers_la_SOURCES += IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
 endif
 
 liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)
 
-AM_CPPFLAGS = -DIPOPT_BUILD -I`$(CYGPATH_W) $(srcdir)/../../Common` \
-	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \
-	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg/TMatrices` \
-	-I`$(CYGPATH_W) $(srcdir)/..` \
-	-I`$(CYGPATH_W) $(srcdir)/../../Interfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/../../contrib/CGPenalty` \
+AM_CPPFLAGS = -DIPOPT_BUILD \
+	-I$(srcdir)/../../Common \
+	-I$(srcdir)/../../LinAlg \
+	-I$(srcdir)/../../LinAlg/TMatrices \
+	-I$(srcdir)/.. \
+	-I$(srcdir)/../../Interfaces \
+	-I$(srcdir)/../../contrib/CGPenalty \
 	$(MUMPS_CFLAGS) $(HSL_CFLAGS)
-
-# This line is necessary to allow VPATH compilation
-#DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
 
 # Need to overwrite automake definition since otherwise libtool does not
 # understand the fortran file (need to add --tag=F77)

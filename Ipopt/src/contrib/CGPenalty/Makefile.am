@@ -2,8 +2,6 @@
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
 
-## $Id$
-
 # Authors:  Andreas Waechter        IBM       2007-06-01
 
 AUTOMAKE_OPTIONS = foreign
@@ -21,14 +19,12 @@ libcgpenalty_la_SOURCES = \
 
 libcgpenalty_la_LDFLAGS = $(LT_LDFLAGS)
 
-AM_CPPFLAGS = -DIPOPT_BUILD -I`$(CYGPATH_W) $(srcdir)/../../Common` \
-	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \
-	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg/TMatrices` \
-	-I`$(CYGPATH_W) $(srcdir)/../../Interfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/../../Algorithm`
-
-# This line is necessary to allow VPATH compilation
-#DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
+AM_CPPFLAGS = -DIPOPT_BUILD \
+	-I$(srcdir)/../../Common \
+	-I$(srcdir)/../../LinAlg \
+	-I$(srcdir)/../../LinAlg/TMatrices \
+	-I$(srcdir)/../../Interfaces \
+	-I$(srcdir)/../../Algorithm
 
 # Astyle stuff
 

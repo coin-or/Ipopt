@@ -2,8 +2,6 @@
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
 
-## $Id$
-
 # Authors:  Andreas Waechter        IBM       2008-08-31
 
 AUTOMAKE_OPTIONS = foreign
@@ -31,20 +29,18 @@ libinexact_la_SOURCES = \
 
 libinexact_la_LDFLAGS = $(LT_LDFLAGS)
 
-AM_CPPFLAGS = -DIPOPT_BUILD -I`$(CYGPATH_W) $(srcdir)/../../Common` \
-	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg` \
-	-I`$(CYGPATH_W) $(srcdir)/../../LinAlg/TMatrices` \
-	-I`$(CYGPATH_W) $(srcdir)/../../Interfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/../` \
-	-I`$(CYGPATH_W) $(srcdir)/../LinearSolvers` \
-	-I`$(CYGPATH_W) $(srcdir)/../../contrib/LinearSolverLoader`
+AM_CPPFLAGS = -DIPOPT_BUILD \
+	-I$(srcdir)/../../Common \
+	-I$(srcdir)/../../LinAlg \
+	-I$(srcdir)/../../LinAlg/TMatrices \
+	-I$(srcdir)/../../Interfaces \
+	-I$(srcdir)/.. \
+	-I$(srcdir)/../LinearSolvers \
+	-I$(srcdir)/../../contrib/LinearSolverLoader
 
 if COIN_HAS_HSL
-AM_CPPFLAGS += $(HSL_CFLAGS)
+  AM_CPPFLAGS += $(HSL_CFLAGS)
 endif
-
-# This line is necessary to allow VPATH compilation
-#DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
 
 # Astyle stuff
 

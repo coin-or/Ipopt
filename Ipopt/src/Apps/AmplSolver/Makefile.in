@@ -155,6 +155,8 @@ libipoptamplinterface_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
 	$(LDFLAGS) -o $@
 am_ipopt_OBJECTS = ampl_ipopt.$(OBJEXT)
 ipopt_OBJECTS = $(am_ipopt_OBJECTS)
+ipopt_DEPENDENCIES = libipoptamplinterface.la \
+	../../Interfaces/libipopt.la
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -399,28 +401,18 @@ ipopt_SOURCES = \
 ipopt_LDADD = libipoptamplinterface.la ../../Interfaces/libipopt.la \
 	$(IPOPTAMPLINTERFACELIB_LIBS) $(IPOPTLIB_LIBS)
 
-ipopt_DEPENDENCIES = libipoptamplinterface.la ../../Interfaces/libipopt.la \
-	$(IPOPTAMPLINTERFACELIB_DEPENDENCIES) $(IPOPTLIB_DEPENDENCIES)
+AM_CPPFLAGS = -DIPOPT_BUILD \
+	-I$(srcdir)/../../Common \
+	-I$(srcdir)/../../LinAlg \
+	-I$(srcdir)/../../LinAlg/TMatrices \
+	-I$(srcdir)/../../Algorithm \
+	-I$(srcdir)/../../Interfaces \
+	$(ASL_CFLAGS)
 
-AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../../Common` -I`$(CYGPATH_W) \
-	$(srcdir)/../../LinAlg` -I`$(CYGPATH_W) \
-	$(srcdir)/../../LinAlg/TMatrices` -I`$(CYGPATH_W) \
-	$(srcdir)/../../Algorithm` -I`$(CYGPATH_W) \
-	$(srcdir)/../../Interfaces` -DIPOPT_BUILD $(ASL_CFLAGS)
 includeipoptdir = $(includedir)/coin
 includeipopt_HEADERS = AmplTNLP.hpp
 pkgconfiglibdir = $(libdir)/pkgconfig
 pkgconfiglib_DATA = ../../../ipoptamplinterface.pc
-
-# This line is necessary to allow VPATH compilation
-#DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
-
-#if COIN_CXX_IS_CL
-#install-exec-hook:
-#	test -s ipopt.exe.manifest && \
-#	mt -manifest ipopt.exe.manifest -outputresource:ipopt.exe;\
-#	cp ipopt.exe $(bindir)/ipopt.exe
-#endif
 
 # Astyle stuff
 ASTYLE_FILES = \

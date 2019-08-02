@@ -2,8 +2,6 @@
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
 
-## $Id$
-
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 AUTOMAKE_OPTIONS = foreign
@@ -44,25 +42,18 @@ libipopt_la_SOURCES = \
 libipopt_la_LIBADD = $(IPALLLIBS)
 libipopt_la_LIBADD += $(IPOPTLIB_LIBS)
 
-libipopt_la_DEPENDENCIES = $(IPALLLIBS)
-
 libipopt_la_LDFLAGS = $(LT_LDFLAGS)
 
-CXXFLAGS += -DIPOPT_BUILD -I`$(CYGPATH_W) $(srcdir)/../Common` \
-	-I`$(CYGPATH_W) $(srcdir)/../LinAlg` \
-	-I`$(CYGPATH_W) $(srcdir)/../Algorithm/LinearSolvers` \
-	-I`$(CYGPATH_W) $(srcdir)/../LinAlg/TMatrices` \
-	-I`$(CYGPATH_W) $(srcdir)/../Algorithm` \
-	-I`$(CYGPATH_W) $(srcdir)/../Algorithm/Inexact` \
-	-I`$(CYGPATH_W) $(srcdir)/../contrib/CGPenalty` \
-	-I`$(CYGPATH_W) $(srcdir)/../contrib/LinearSolverLoader` \
+AM_CPPFLAGS = -DIPOPT_BUILD \
+	-I$(srcdir)/../Common \
+	-I$(srcdir)/../LinAlg \
+	-I$(srcdir)/../Algorithm/LinearSolvers \
+	-I$(srcdir)/../LinAlg/TMatrices \
+	-I$(srcdir)/../Algorithm \
+	-I$(srcdir)/../Algorithm/Inexact \
+	-I$(srcdir)/../contrib/CGPenalty \
+	-I$(srcdir)/../contrib/LinearSolverLoader \
 	$(HSL_CFLAGS)
-
-CFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common` \
-	$(HSL_CFLAGS)
-
-# This line is necessary to allow VPATH compilation
-#DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
 
 # Astyle stuff
 
@@ -82,8 +73,6 @@ ASTYLE_FILES = \
 
 ASTYLE = @ASTYLE@
 ASTYLEFLAGS = @ASTYLEFLAGS@
-
-CLEANFILES =
 
 DISTCLEANFILES = $(ASTYLE_FILES)
 

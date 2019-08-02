@@ -2,8 +2,6 @@
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
 #
-## $Id$
-#
 # Author: Stefan Vigerske
 
 AUTOMAKE_OPTIONS = foreign
@@ -17,8 +15,8 @@ libLinearSolverLoader_la_SOURCES = \
   HSLLoader.c HSLLoader.h
 
 AM_CPPFLAGS = -DIPOPT_BUILD \
-  -I`$(CYGPATH_W) $(srcdir)/../../Common` \
-  -I`$(CYGPATH_W) $(srcdir)/../../Algorithm/LinearSolvers` \
+  -I$(srcdir)/../../Common \
+  -I$(srcdir)/../../Algorithm/LinearSolvers \
   $(HSL_CFLAGS)
 
 if BUILD_PARDISOLOADER
@@ -26,12 +24,9 @@ if BUILD_PARDISOLOADER
 endif
 
 libLinearSolverLoader_la_LIBADD = 
-libLinearSolverLoader_la_DEPENDENCIES =  
 
 includeipoptdir = $(includedir)/coin
 includeipopt_HEADERS = HSLLoader.h PardisoLoader.h
-
-#DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
 
 # Astyle stuff
 
