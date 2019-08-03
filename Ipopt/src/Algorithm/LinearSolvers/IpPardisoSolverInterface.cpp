@@ -68,7 +68,7 @@ extern "C"
    );
 
 #ifdef PARDISO_MATCHING_PREPROCESS
-   void smat_reordering_pardiso_wsmp_(
+   void PARDISO_FUNC(smat_reordering_pardiso_wsmp,SMAT_REORDERING_PARDISO_WSMP)(
       const ipfint* N,
       const ipfint* ia,
       const ipfint* ja,
@@ -763,7 +763,7 @@ ESymSolverStatus PardisoSolverInterface::Factorization(
          scale2 = new double[N];
          ipfint* tmp2_ = new ipfint[N];
 
-         smat_reordering_pardiso_wsmp_(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp2_, 0);
+         PARDISO_FUNC(smat_reordering_pardiso_wsmp,SMAT_REORDERING_PARDISO_WSMP)(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp2_, 0);
 
          delete[] tmp2_;
 
@@ -831,7 +831,7 @@ ESymSolverStatus PardisoSolverInterface::Factorization(
 
 #ifdef PARDISO_MATCHING_PREPROCESS
       ipfint* tmp3_ = new ipfint[N];
-      smat_reordering_pardiso_wsmp_ (&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp3_, 1);
+      PARDISO_FUNC(smat_reordering_pardiso_wsmp,SMAT_REORDERING_PARDISO_WSMP)(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp3_, 1);
       delete[] tmp3_;
 #endif
 
