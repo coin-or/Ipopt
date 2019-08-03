@@ -2241,6 +2241,97 @@ rm -f conftest.val
 
 } # ac_fn_c_compute_int
 
+# ac_fn_cxx_check_header_mongrel LINENO HEADER VAR INCLUDES
+# ---------------------------------------------------------
+# Tests whether HEADER exists, giving a warning if it cannot be compiled using
+# the include files in INCLUDES and setting the cache variable VAR
+# accordingly.
+ac_fn_cxx_check_header_mongrel ()
+{
+  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
+  if eval \${$3+:} false; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $2" >&5
+$as_echo_n "checking for $2... " >&6; }
+if eval \${$3+:} false; then :
+  $as_echo_n "(cached) " >&6
+fi
+eval ac_res=\$$3
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+else
+  # Is the header compilable?
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking $2 usability" >&5
+$as_echo_n "checking $2 usability... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+$4
+#include <$2>
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  ac_header_compiler=yes
+else
+  ac_header_compiler=no
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_header_compiler" >&5
+$as_echo "$ac_header_compiler" >&6; }
+
+# Is the header present?
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking $2 presence" >&5
+$as_echo_n "checking $2 presence... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <$2>
+_ACEOF
+if ac_fn_cxx_try_cpp "$LINENO"; then :
+  ac_header_preproc=yes
+else
+  ac_header_preproc=no
+fi
+rm -f conftest.err conftest.i conftest.$ac_ext
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_header_preproc" >&5
+$as_echo "$ac_header_preproc" >&6; }
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc:$ac_cxx_preproc_warn_flag in #((
+  yes:no: )
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: accepted by the compiler, rejected by the preprocessor!" >&5
+$as_echo "$as_me: WARNING: $2: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: proceeding with the compiler's result" >&5
+$as_echo "$as_me: WARNING: $2: proceeding with the compiler's result" >&2;}
+    ;;
+  no:yes:* )
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: present but cannot be compiled" >&5
+$as_echo "$as_me: WARNING: $2: present but cannot be compiled" >&2;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2:     check for missing prerequisite headers?" >&5
+$as_echo "$as_me: WARNING: $2:     check for missing prerequisite headers?" >&2;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: see the Autoconf documentation" >&5
+$as_echo "$as_me: WARNING: $2: see the Autoconf documentation" >&2;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2:     section \"Present But Cannot Be Compiled\"" >&5
+$as_echo "$as_me: WARNING: $2:     section \"Present But Cannot Be Compiled\"" >&2;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: proceeding with the compiler's result" >&5
+$as_echo "$as_me: WARNING: $2: proceeding with the compiler's result" >&2;}
+( $as_echo "## ---------------------------------------------------------- ##
+## Report this to https://github.com/coin-or/Ipopt/issues/new ##
+## ---------------------------------------------------------- ##"
+     ) | sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+esac
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $2" >&5
+$as_echo_n "checking for $2... " >&6; }
+if eval \${$3+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  eval "$3=\$ac_header_compiler"
+fi
+eval ac_res=\$$3
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+fi
+  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
+
+} # ac_fn_cxx_check_header_mongrel
+
 # ac_fn_cxx_check_decl LINENO SYMBOL VAR INCLUDES
 # -----------------------------------------------
 # Tests whether SYMBOL is declared in INCLUDES, setting cache variable VAR
@@ -19674,26 +19765,152 @@ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ex
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
-################
-# Header Files #
-################
+#####################
+# Function isfinite #
+#####################
 
-#AC_COIN_CHECK_CXX_CHEADER(math)
-#AC_COIN_CHECK_CXX_CHEADER(ctype)
-#AC_COIN_CHECK_CXX_CHEADER(assert)
-#AC_COIN_CHECK_CXX_CHEADER(stdio)
-#AC_COIN_CHECK_CXX_CHEADER(stdlib)
-#AC_COIN_CHECK_CXX_CHEADER(stdarg)
-#AC_COIN_CHECK_CXX_CHEADER(string)
-#AC_COIN_CHECK_CXX_CHEADER(float)
-#AC_COIN_CHECK_CXX_CHEADER(time)
-#AC_COIN_CHECK_CXX_CHEADER(stddef)
 
-###################
-# Function finite #
-###################
 
-#AC_COIN_CHECK_ISFINITE
+  for ac_header in cmath math.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_cxx_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+ break
+fi
+
+done
+
+  for ac_header in cfloat float.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_cxx_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+ break
+fi
+
+done
+
+  for ac_header in cieeefp ieeefp.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_cxx_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+ break
+fi
+
+done
+
+
+
+
+
+  COIN_C_FINITE=
+
+
+
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for std::isfinite" >&5
+$as_echo_n "checking for std::isfinite... " >&6; }
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+  #ifdef HAVE_CMATH
+  # include <cmath>
+  #else
+  # ifdef HAVE_MATH_H
+  #  include <math.h>
+  # endif
+  #endif
+  #ifdef HAVE_CFLOAT
+  # include <cfloat>
+  #else
+  # ifdef HAVE_FLOAT_H
+  #  include <float.h>
+  # endif
+  #endif
+  #ifdef HAVE_CIEEEFP
+  # include <cieeefp>
+  #else
+  # ifdef HAVE_IEEEFP_H
+  #  include <ieeefp.h>
+  # endif
+  #endif
+
+      int main ()
+      { (void) std::isfinite(1.0) ;
+        return 0 ; }
+
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  COIN_C_FINITE=std::isfinite
+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+
+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+
+  if test -z "$COIN_C_FINITE"; then
+    for fname in isfinite finite _finite ; do
+      as_ac_Symbol=`$as_echo "ac_cv_have_decl_$fname" | $as_tr_sh`
+ac_fn_cxx_check_decl "$LINENO" "$fname" "$as_ac_Symbol" "
+  #ifdef HAVE_CMATH
+  # include <cmath>
+  #else
+  # ifdef HAVE_MATH_H
+  #  include <math.h>
+  # endif
+  #endif
+  #ifdef HAVE_CFLOAT
+  # include <cfloat>
+  #else
+  # ifdef HAVE_FLOAT_H
+  #  include <float.h>
+  # endif
+  #endif
+  #ifdef HAVE_CIEEEFP
+  # include <cieeefp>
+  #else
+  # ifdef HAVE_IEEEFP_H
+  #  include <ieeefp.h>
+  # endif
+  #endif
+
+"
+if eval test \"x\$"$as_ac_Symbol"\" = x"yes"; then :
+  COIN_C_FINITE=$fname
+fi
+
+      if test -n "$COIN_C_FINITE" ; then
+        break
+      fi
+    done
+  fi
+
+  if test -z "$COIN_C_FINITE"; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Cannot find C-function for checking Inf." >&5
+$as_echo "$as_me: WARNING: Cannot find C-function for checking Inf." >&2;}
+  else
+
+cat >>confdefs.h <<_ACEOF
+#define COIN_C_FINITE $COIN_C_FINITE
+_ACEOF
+
+  fi
+
 
 ###########
 # va_copy #
@@ -19730,15 +19947,31 @@ $as_echo "#define HAVE_RAND 1" >>confdefs.h
 fi
 
 
-ac_fn_cxx_check_decl "$LINENO" "srand" "ac_cv_have_decl_srand" "
+
+
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for std::srand" >&5
+$as_echo_n "checking for std::srand... " >&6; }
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
 #include <cstdlib>
-using namespace std;
-"
-if test "x$ac_cv_have_decl_srand" = xyes; then :
+      int main ()
+      { (void) std::srand(1) ;
+        return 0 ; }
+
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
 
 $as_echo "#define HAVE_STD__RAND 1" >>confdefs.h
 
+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+
+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
 fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 ##########################################################################

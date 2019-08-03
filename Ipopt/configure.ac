@@ -207,26 +207,11 @@ esac
 
 AC_LANG_PUSH(C++)
 
-################
-# Header Files #
-################
+#####################
+# Function isfinite #
+#####################
 
-#AC_COIN_CHECK_CXX_CHEADER(math)
-#AC_COIN_CHECK_CXX_CHEADER(ctype)
-#AC_COIN_CHECK_CXX_CHEADER(assert)
-#AC_COIN_CHECK_CXX_CHEADER(stdio)
-#AC_COIN_CHECK_CXX_CHEADER(stdlib)
-#AC_COIN_CHECK_CXX_CHEADER(stdarg)
-#AC_COIN_CHECK_CXX_CHEADER(string)
-#AC_COIN_CHECK_CXX_CHEADER(float)
-#AC_COIN_CHECK_CXX_CHEADER(time)
-#AC_COIN_CHECK_CXX_CHEADER(stddef)
-
-###################
-# Function finite #
-###################
-
-#AC_COIN_CHECK_ISFINITE
+AC_COIN_CHECK_ISFINITE
 
 ###########
 # va_copy #
@@ -245,10 +230,9 @@ AC_CHECK_DECL([drand48],[AC_DEFINE([HAVE_DRAND48],[1],
 AC_CHECK_DECL([rand],[AC_DEFINE([HAVE_RAND],[1],
                                 [Define to 1 if function rand is available])],,[#include <cstdlib>])
 
-AC_CHECK_DECL([srand],[AC_DEFINE([HAVE_STD__RAND],[1],
-                                 [Define to 1 if function std::rand is available])],,[
-#include <cstdlib>
-using namespace std;])
+AC_COIN_CHECK_NAMESPACE_DECL([std::srand],[1],
+  [AC_DEFINE([HAVE_STD__RAND],[1],[Define to 1 if function std::rand is available])],[],
+  [#include <cstdlib>])
 
 ##########################################################################
 

@@ -10,7 +10,9 @@
 #include <cstdlib>
 #include <cmath>
 #include <cfloat>
-/* #include <ieeefp.h> */
+#ifdef HAVE_IEEFP_H
+#include <ieeefp.h>
+#endif
 #include <ctime>
 #include <cstdio>
 #include <cstdarg>

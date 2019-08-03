@@ -3,6 +3,9 @@
 /* Define to 1 if the inexact linear solver option is included */
 #undef BUILD_INEXACT
 
+/* Define to be the name of C-function for Inf check */
+#undef COIN_C_FINITE
+
 /* Define to 1 if ASL is available. */
 #undef COIN_HAS_ASL
 
@@ -28,11 +31,26 @@
 /* Define to the C type corresponding to Fortran INTEGER */
 #undef FORTRAN_INTEGER_TYPE
 
+/* Define to 1 if you have the <cfloat> header file. */
+#undef HAVE_CFLOAT
+
+/* Define to 1 if you have the <cieeefp> header file. */
+#undef HAVE_CIEEEFP
+
+/* Define to 1 if you have the <cmath> header file. */
+#undef HAVE_CMATH
+
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 
 /* Define to 1 if function drand48 is available */
 #undef HAVE_DRAND48
+
+/* Define to 1 if you have the <float.h> header file. */
+#undef HAVE_FLOAT_H
+
+/* Define to 1 if you have the <ieeefp.h> header file. */
+#undef HAVE_IEEEFP_H
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
@@ -40,6 +58,9 @@
 /* Define to 1 if the linear solver loader should be compiled to allow dynamic
    loading of shared libraries with linear solvers */
 #undef HAVE_LINEARSOLVERLOADER
+
+/* Define to 1 if you have the <math.h> header file. */
+#undef HAVE_MATH_H
 
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
