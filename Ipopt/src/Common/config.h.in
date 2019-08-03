@@ -44,6 +44,9 @@
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
+/* Define to 1 if you have the `MPI_Initialized' function. */
+#undef HAVE_MPI_INITIALIZED
+
 /* Define to 1 if Pardiso is available */
 #undef HAVE_PARDISO
 
@@ -91,6 +94,9 @@
 
 /* Define to 1 if you have the `vsnprintf' function. */
 #undef HAVE_VSNPRINTF
+
+/* Define to 1 if WSMP is available */
+#undef HAVE_WSMP
 
 /* Define to 1 if you have the `_snprintf' function. */
 #undef HAVE__SNPRINTF
@@ -165,3 +171,10 @@
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
+
+/* Define to a macro mangling the given C identifier (in lower and upper
+   case). */
+#undef WSMP_FUNC
+
+/* As WSMP_FUNC, but for C identifiers containing underscores. */
+#undef WSMP_FUNC_

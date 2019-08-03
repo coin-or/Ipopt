@@ -85,10 +85,16 @@ if test $coin_has_lapack != yes; then
 fi
 
 AC_COIN_CHK_PKG(ASL,[IpoptAmplInterfaceLib],[coinasl],[build])
+
+#########
+# MUMPS #
+#########
+
 AC_COIN_CHK_PKG(Mumps,[IpoptLib],[coinmumps],[build])
 
-AM_CONDITIONAL([HAVE_MA28],[false])
-AM_CONDITIONAL([HAVE_WSMP],[false])
+# Check whether MPI_Initialized is available
+#   we assume that MPI_Finalized is present if MPI_Initialized is present
+AC_CHECK_FUNCS([MPI_Initialized])
 
 #######
 # HSL #
@@ -100,6 +106,9 @@ if test "$coin_has_hsl" = yes ; then
   AC_COIN_FINALIZE_FLAGS([HSLLib])
   AC_COIN_NAMEMANGLING([HSL],[ma27ad],[$HSLLIB_LFLAGS])
 fi
+
+#TODO
+AM_CONDITIONAL([HAVE_MA28],[false])
 
 ###########
 # PARDISO #
@@ -142,6 +151,25 @@ fi
 AM_CONDITIONAL([HAVE_PARDISO],[test "$have_pardiso_mkl$have_pardiso_project" != nono])
 AM_CONDITIONAL([BUILD_PARDISOLOADER],[test "$have_pardiso_mkl$have_pardiso_project" = nono])  # TODO seems redundant
 
+########
+# WSMP #
+########
+
+AC_ARG_WITH([wsmp],
+            AC_HELP_STRING([--with-wsmp],[specify WSMP library]),
+            [have_wsmp=yes; wsmp_lflags=$withval],
+            [have_wsmp=no])
+
+if test "$have_wsmp" = "yes"; then
+  AC_COIN_TRY_LINK([wssmp],[$wsmp_lflags],[],
+    [AC_COIN_DEFINENAMEMANGLING([WSMP],[$wssmp_namemangling])
+     IPOPTLIB_LFLAGS="$wsmp_lflags $IPOPTLIB_LFLAGS"
+     AC_DEFINE(HAVE_WSMP,1,[Define to 1 if WSMP is available])
+    ],
+    [AC_MSG_ERROR([Symbol wssmp not found with WSMP flags $wsmp_lflags.])])
+fi
+
+AM_CONDITIONAL([HAVE_WSMP],[test $have_wsmp = yes])
 
 #############################################################################
 #                             Stuff for examples                            #
@@ -328,8 +356,6 @@ AC_SUBST(ASTYLEFLAGS)
 
 AC_SUBST(IPALLLIBS)
 IPALLLIBS="../contrib/CGPenalty/libcgpenalty.la ../Algorithm/libipoptalg.la ../Algorithm/LinearSolvers/liblinsolvers.la ../Common/libcommon.la ../LinAlg/liblinalg.la ../LinAlg/TMatrices/libtmatrices.la"
-
-#AM_CONDITIONAL([HAVE_WSMP],[test ! "$use_wsmp" = no])
 
 AC_ARG_ENABLE([linear-solver-loader],
   [AC_HELP_STRING([--enable-linear-solver-loader],

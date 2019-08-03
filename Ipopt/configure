@@ -657,10 +657,14 @@ JAVA_HOME
 BIT64FCOMMENT
 BIT32FCOMMENT
 BITS_PER_POINTER
+HAVE_WSMP_FALSE
+HAVE_WSMP_TRUE
 BUILD_PARDISOLOADER_FALSE
 BUILD_PARDISOLOADER_TRUE
 HAVE_PARDISO_FALSE
 HAVE_PARDISO_TRUE
+HAVE_MA28_FALSE
+HAVE_MA28_TRUE
 HSLLIB_CFLAGS_NOPC
 HSLLIB_LFLAGS_NOPC
 COIN_HAS_HSL_FALSE
@@ -668,10 +672,6 @@ COIN_HAS_HSL_TRUE
 HSLLIB_PCFILES
 HSLLIB_CFLAGS
 HSLLIB_LFLAGS
-HAVE_WSMP_FALSE
-HAVE_WSMP_TRUE
-HAVE_MA28_FALSE
-HAVE_MA28_TRUE
 COIN_HAS_MUMPS_FALSE
 COIN_HAS_MUMPS_TRUE
 COIN_HAS_ASL_FALSE
@@ -859,6 +859,7 @@ with_hsl
 with_hsl_lflags
 with_hsl_cflags
 with_pardiso
+with_wsmp
 enable_inexact_solver
 enable_linear_solver_loader
 '
@@ -1571,6 +1572,7 @@ Optional Packages:
                           directories.)
   --with-pardiso          specify Pardiso library (>= 4.0) from
                           pardiso-project.org
+  --with-wsmp             specify WSMP library
 
 Some influential environment variables:
   CC          C compiler command
@@ -18364,6 +18366,11 @@ $as_echo "#define COIN_HAS_ASL 1" >>confdefs.h
   fi
 
 
+#########
+# MUMPS #
+#########
+
+
 
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for package Mumps" >&5
@@ -18618,21 +18625,18 @@ $as_echo "#define COIN_HAS_MUMPS 1" >>confdefs.h
   fi
 
 
- if false; then
-  HAVE_MA28_TRUE=
-  HAVE_MA28_FALSE='#'
-else
-  HAVE_MA28_TRUE='#'
-  HAVE_MA28_FALSE=
-fi
+# Check whether MPI_Initialized is available
+#   we assume that MPI_Finalized is present if MPI_Initialized is present
+for ac_func in MPI_Initialized
+do :
+  ac_fn_c_check_func "$LINENO" "MPI_Initialized" "ac_cv_func_MPI_Initialized"
+if test "x$ac_cv_func_MPI_Initialized" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_MPI_INITIALIZED 1
+_ACEOF
 
- if false; then
-  HAVE_WSMP_TRUE=
-  HAVE_WSMP_FALSE='#'
-else
-  HAVE_WSMP_TRUE='#'
-  HAVE_WSMP_FALSE=
 fi
+done
 
 
 #######
@@ -19068,6 +19072,16 @@ $as_echo "$as_me: WARNING: Unsupported or unknown name-mangling scheme: $ac_cv_h
 
 fi
 
+#TODO
+ if false; then
+  HAVE_MA28_TRUE=
+  HAVE_MA28_FALSE='#'
+else
+  HAVE_MA28_TRUE='#'
+  HAVE_MA28_FALSE=
+fi
+
+
 ###########
 # PARDISO #
 ###########
@@ -19434,6 +19448,148 @@ else
 fi
   # TODO seems redundant
 
+########
+# WSMP #
+########
+
+
+# Check whether --with-wsmp was given.
+if test "${with_wsmp+set}" = set; then :
+  withval=$with_wsmp; have_wsmp=yes; wsmp_lflags=$withval
+else
+  have_wsmp=no
+fi
+
+
+if test "$have_wsmp" = "yes"; then
+
+  # setup LIBS by adding $wsmp_lflags and those from
+  ac_save_LIBS="$LIBS"
+  LIBS="$wsmp_lflags $LIBS"
+
+
+  wssmp_namemangling=unknown
+
+  # FIXME we had "extra underscore" as additional option for ac_extra
+  #   but since there is no use for ac_extra below, was there any use for it?
+  for ac_extra in "no extra underscore" ; do
+    for ac_case in "lower case" "upper case" ; do
+      for ac_trail in "underscore" "no underscore" ; do
+        #AC_MSG_NOTICE([Attempting link for ${ac_case}, ${ac_trail}, ${ac_extra}])
+        case $ac_case in
+          "lower case")
+            ac_name=wssmp
+            ;;
+          "upper case")
+            ac_name=WSSMP
+            ;;
+        esac
+        if test "$ac_trail" = underscore ; then
+          ac_name=${ac_name}_
+        fi
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for function $ac_name in $LIBS" >&5
+$as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef __cplusplus
+             extern "C"
+             #endif
+             void $ac_name();
+int
+main ()
+{
+$ac_name()
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  wssmp_namemangling="${ac_case}, ${ac_trail}, ${ac_extra}"
+           ac_success=yes
+else
+  ac_success=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_success" >&5
+$as_echo "$ac_success" >&6; }
+        if test $ac_success = yes ; then
+          break 3
+        fi
+      done
+    done
+  done
+  LIBS=$ac_save_LIBS
+
+  if test $ac_success = yes ; then
+
+
+
+  case "$wssmp_namemangling" in
+   "lower case, no underscore, no extra underscore")
+      $as_echo "#define WSMP_FUNC(name,NAME) name" >>confdefs.h
+
+      $as_echo "#define WSMP_FUNC_(name,NAME) name" >>confdefs.h
+ ;;
+   "lower case, no underscore, extra underscore")
+      $as_echo "#define WSMP_FUNC(name,NAME) name" >>confdefs.h
+
+      $as_echo "#define WSMP_FUNC_(name,NAME) name ## _" >>confdefs.h
+ ;;
+   "lower case, underscore, no extra underscore")
+      $as_echo "#define WSMP_FUNC(name,NAME) name ## _" >>confdefs.h
+
+      $as_echo "#define WSMP_FUNC_(name,NAME) name ## _" >>confdefs.h
+ ;;
+   "lower case, underscore, extra underscore")
+      $as_echo "#define WSMP_FUNC(name,NAME) name ## _" >>confdefs.h
+
+      $as_echo "#define WSMP_FUNC_(name,NAME) name ## __" >>confdefs.h
+ ;;
+   "upper case, no underscore, no extra underscore")
+      $as_echo "#define WSMP_FUNC(name,NAME) NAME" >>confdefs.h
+
+      $as_echo "#define WSMP_FUNC_(name,NAME) NAME" >>confdefs.h
+ ;;
+   "upper case, no underscore, extra underscore")
+      $as_echo "#define WSMP_FUNC(name,NAME) NAME" >>confdefs.h
+
+      $as_echo "#define WSMP_FUNC_(name,NAME) NAME ## _" >>confdefs.h
+ ;;
+   "upper case, underscore, no extra underscore")
+      $as_echo "#define WSMP_FUNC(name,NAME) NAME ## _" >>confdefs.h
+
+      $as_echo "#define WSMP_FUNC_(name,NAME) NAME ## _" >>confdefs.h
+ ;;
+   "upper case, underscore, extra underscore")
+      $as_echo "#define WSMP_FUNC(name,NAME) NAME ## _" >>confdefs.h
+
+      $as_echo "#define WSMP_FUNC_(name,NAME) NAME ## __" >>confdefs.h
+ ;;
+   *)
+      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Unsupported or unknown name-mangling scheme: $wssmp_namemangling" >&5
+$as_echo "$as_me: WARNING: Unsupported or unknown name-mangling scheme: $wssmp_namemangling" >&2;}
+      ;;
+  esac
+
+     IPOPTLIB_LFLAGS="$wsmp_lflags $IPOPTLIB_LFLAGS"
+
+$as_echo "#define HAVE_WSMP 1" >>confdefs.h
+
+
+    else as_fn_error $? "Symbol wssmp not found with WSMP flags $wsmp_lflags." "$LINENO" 5
+  fi
+
+fi
+
+ if test $have_wsmp = yes; then
+  HAVE_WSMP_TRUE=
+  HAVE_WSMP_FALSE='#'
+else
+  HAVE_WSMP_TRUE='#'
+  HAVE_WSMP_FALSE=
+fi
+
 
 #############################################################################
 #                             Stuff for examples                            #
@@ -19726,8 +19882,6 @@ ASTYLEFLAGS="--mode=c -A1 --indent=spaces=3 --indent-switches --min-conditional-
 
 
 IPALLLIBS="../contrib/CGPenalty/libcgpenalty.la ../Algorithm/libipoptalg.la ../Algorithm/LinearSolvers/liblinsolvers.la ../Common/libcommon.la ../LinAlg/liblinalg.la ../LinAlg/TMatrices/libtmatrices.la"
-
-#AM_CONDITIONAL([HAVE_WSMP],[test ! "$use_wsmp" = no])
 
 # Check whether --enable-linear-solver-loader was given.
 if test "${enable_linear_solver_loader+set}" = set; then :
@@ -20540,16 +20694,12 @@ if test -z "${COIN_HAS_MUMPS_TRUE}" && test -z "${COIN_HAS_MUMPS_FALSE}"; then
   as_fn_error $? "conditional \"COIN_HAS_MUMPS\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
-if test -z "${HAVE_MA28_TRUE}" && test -z "${HAVE_MA28_FALSE}"; then
-  as_fn_error $? "conditional \"HAVE_MA28\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
-if test -z "${HAVE_WSMP_TRUE}" && test -z "${HAVE_WSMP_FALSE}"; then
-  as_fn_error $? "conditional \"HAVE_WSMP\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
 if test -z "${COIN_HAS_HSL_TRUE}" && test -z "${COIN_HAS_HSL_FALSE}"; then
   as_fn_error $? "conditional \"COIN_HAS_HSL\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${HAVE_MA28_TRUE}" && test -z "${HAVE_MA28_FALSE}"; then
+  as_fn_error $? "conditional \"HAVE_MA28\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${HAVE_PARDISO_TRUE}" && test -z "${HAVE_PARDISO_FALSE}"; then
@@ -20558,6 +20708,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${BUILD_PARDISOLOADER_TRUE}" && test -z "${BUILD_PARDISOLOADER_FALSE}"; then
   as_fn_error $? "conditional \"BUILD_PARDISOLOADER\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${HAVE_WSMP_TRUE}" && test -z "${HAVE_WSMP_FALSE}"; then
+  as_fn_error $? "conditional \"HAVE_WSMP\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${BUILD_LINEARSOLVERLOADER_TRUE}" && test -z "${BUILD_LINEARSOLVERLOADER_FALSE}"; then

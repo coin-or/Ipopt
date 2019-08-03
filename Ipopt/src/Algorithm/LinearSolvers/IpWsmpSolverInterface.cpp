@@ -14,11 +14,11 @@
 /** Prototypes for WSMP's subroutines */
 extern "C"
 {
-   void F77_FUNC(wsetmaxthrds, WSETMAXTHRDS)(
+   void WSMP_FUNC(wsetmaxthrds, WSETMAXTHRDS)(
       const ipfint* NTHREADS
    );
 
-   void F77_FUNC(wssmp, WSSMP)(
+   void WSMP_FUNC(wssmp, WSSMP)(
       const ipfint* N,
       const ipfint* IA,
       const ipfint* JA,
@@ -36,7 +36,7 @@ extern "C"
       double*       DPARM
    );
 
-   void F77_FUNC_(wsmp_clear, WSMP_CLEAR)(void);
+   void WSMP_FUNC_(wsmp_clear, WSMP_CLEAR)(void);
 
 #ifdef PARDISO_MATCHING_PREPROCESS
    void smat_reordering_pardiso_wsmp_(
@@ -88,7 +88,7 @@ WsmpSolverInterface::~WsmpSolverInterface()
                   dbg_verbosity);
 
    // Clear WSMP's memory
-   F77_FUNC_(wsmp_clear, WSMP_CLEAR)();
+   WSMP_FUNC_(wsmp_clear, WSMP_CLEAR)();
 
 #ifdef PARDISO_MATCHING_PREPROCESS
    delete[] ia2;
@@ -250,7 +250,7 @@ bool WsmpSolverInterface::InitializeImpl(
 
    // Set the number of threads
    ipfint NTHREADS = wsmp_num_threads_;
-   F77_FUNC(wsetmaxthrds, WSETMAXTHRDS)(&NTHREADS);
+   WSMP_FUNC(wsetmaxthrds, WSETMAXTHRDS)(&NTHREADS);
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "WSMP will use %d threads.\n", wsmp_num_threads_);
 
@@ -260,7 +260,7 @@ bool WsmpSolverInterface::InitializeImpl(
    IPARM_[2] = 0;
    ipfint idmy;
    double ddmy;
-   F77_FUNC(wssmp, WSSMP)(&idmy, &idmy, &idmy, &ddmy, &ddmy, &idmy, &idmy, &ddmy, &idmy, &idmy, &ddmy, &idmy, &idmy,
+   WSMP_FUNC(wssmp, WSSMP)(&idmy, &idmy, &idmy, &ddmy, &ddmy, &idmy, &idmy, &ddmy, &idmy, &idmy, &ddmy, &idmy, &idmy,
                           IPARM_, DPARM_);
    IPARM_[15] = wsmp_ordering_option; // ordering option
    IPARM_[17] = 0; // use local minimum fill-in ordering
@@ -460,9 +460,9 @@ ESymSolverStatus WsmpSolverInterface::InternalSymFact(
                   "Calling WSSMP-1-2 for ordering and symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(),
                   WallclockTime());
 #ifdef PARDISO_MATCHING_PREPROCESS
-   F77_FUNC(wssmp, WSSMP)(&N, ia2, ja2, a2_, &ddmy, PERM_, INVP_,
+   WSMP_FUNC(wssmp, WSSMP)(&N, ia2, ja2, a2_, &ddmy, PERM_, INVP_,
 #else
-   F77_FUNC(wssmp, WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
+   WSMP_FUNC(wssmp, WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
 #endif
                           &ddmy, &idmy, &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
@@ -585,9 +585,9 @@ ESymSolverStatus WsmpSolverInterface::Factorization(
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                   "Calling WSSMP-3-3 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
 #ifdef PARDISO_MATCHING_PREPROCESS
-   F77_FUNC(wssmp, WSSMP)(&N, ia2, ja2, a2_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
+   WSMP_FUNC(wssmp, WSSMP)(&N, ia2, ja2, a2_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
 #else
-   F77_FUNC(wssmp, WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
+   WSMP_FUNC(wssmp, WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
 #endif
                           &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
@@ -703,7 +703,7 @@ ESymSolverStatus WsmpSolverInterface::Solve(
    {
       X[perm2[i]] = scale2[i] * rhs_vals[i];
    }
-   F77_FUNC(wssmp, WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
+   WSMP_FUNC(wssmp, WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
                           X, &LDB, &NRHS, &ddmy, &NAUX,
                           MRP_, IPARM_, DPARM_);
    for (int i = 0; i < N; i++)
@@ -711,7 +711,7 @@ ESymSolverStatus WsmpSolverInterface::Solve(
       rhs_vals[i] = scale2[i] * X[perm2[i]];
    }
 #else
-   F77_FUNC(wssmp, WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_, rhs_vals, &LDB, &NRHS, &ddmy, &NAUX, MRP_, IPARM_,
+   WSMP_FUNC(wssmp, WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_, rhs_vals, &LDB, &NRHS, &ddmy, &NAUX, MRP_, IPARM_,
                           DPARM_);
 #endif
 
@@ -821,10 +821,10 @@ ESymSolverStatus WsmpSolverInterface::DetermineDependentRows(
    double ddmy;
 
 #ifdef PARDISO_MATCHING_PREPROCESS
-   F77_FUNC(wssmp, WSSMP)(&N, ia2, ja2, a2_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
+   WSMP_FUNC(wssmp, WSSMP)(&N, ia2, ja2, a2_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
                           &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
 #else
-   F77_FUNC(wssmp, WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_, &ddmy, &idmy, &idmy, &ddmy, &NAUX, MRP_, IPARM_,
+   WSMP_FUNC(wssmp, WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_, &ddmy, &idmy, &idmy, &ddmy, &NAUX, MRP_, IPARM_,
                           DPARM_);
 #endif
 
