@@ -21,32 +21,23 @@
 #include <cstring>
 
 // determine the correct name of the Pardiso function
-#ifdef HAVE_PARDISO
-#if defined(_MSC_VER)
-# define PARDISOINIT_FUNC PARDISOINIT
-# define PARDISO_FUNC PARDISO
-#else
-# define PARDISOINIT_FUNC F77_FUNC(pardisoinit,PARDISOINIT)
-# define PARDISO_FUNC F77_FUNC(pardiso,PARDISO)
-#endif
-#else
+#ifndef HAVE_PARDISO
 // if we build for the Linear Solver loader, then use normal C-naming style
-# define PARDISOINIT_FUNC pardisoinit
-# define PARDISO_FUNC pardiso
+# define PARDISO_FUNC(name,NAME) name
 #endif
 
 /* Prototypes for Pardiso's subroutines */
 extern "C"
 {
 #if defined(HAVE_PARDISO_OLDINTERFACE) || defined(HAVE_PARDISO_MKL)
-   void PARDISOINIT_FUNC(
+   void PARDISO_FUNC(pardisoinit,PARDISOINIT)(
       void*         PT,
       const ipfint* MTYPE,
       ipfint*       IPARM
    );
 #else
 // The following is a fix to allow linking with Pardiso library under Windows
-   void PARDISOINIT_FUNC(
+   void PARDISO_FUNC(pardisoinit,PARDISOINIT)(
       void*         PT,
       const ipfint* MTYPE,
       const ipfint* SOLVER,
@@ -56,7 +47,7 @@ extern "C"
    );
 #endif
 
-   void PARDISO_FUNC(
+   void PARDISO_FUNC(pardiso,PARDISO)(
       void**        PT,
       const ipfint* MAXFCT,
       const ipfint* MNUM,
@@ -137,7 +128,7 @@ PardisoSolverInterface::~PardisoSolverInterface()
       ipfint ERROR;
       ipfint idmy;
       double ddmy;
-      PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
+      PARDISO_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
                    &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
    }
@@ -370,7 +361,7 @@ bool PardisoSolverInterface::InitializeImpl(
       ipfint ERROR;
       ipfint idmy;
       double ddmy;
-      PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
+      PARDISO_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
                    &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
    }
@@ -408,9 +399,9 @@ bool PardisoSolverInterface::InitializeImpl(
    ipfint ERROR = 0;
    ipfint SOLVER = 0; // initialize only direct solver
 
-   PARDISOINIT_FUNC(PT_, &MTYPE_, &SOLVER, IPARM_, DPARM_, &ERROR);
+   PARDISO_FUNC(pardisoinit,PARDISOINIT)(PT_, &MTYPE_, &SOLVER, IPARM_, DPARM_, &ERROR);
 #else
-   PARDISOINIT_FUNC(PT_, &MTYPE_, IPARM_);
+   PARDISO_FUNC(pardisoinit,PARDISOINIT)(PT_, &MTYPE_, IPARM_);
 #endif
 
    // Set some parameters for Pardiso
@@ -780,7 +771,7 @@ ESymSolverStatus PardisoSolverInterface::Factorization(
 
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                         "Calling Pardiso for symbolic factorization.\n");
-         PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+         PARDISO_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
 #ifdef PARDISO_MATCHING_PREPROCESS
                       &PHASE, &N, a2_, ia2, ja2, &PERM,
 #else
@@ -844,7 +835,7 @@ ESymSolverStatus PardisoSolverInterface::Factorization(
       delete[] tmp3_;
 #endif
 
-      PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+      PARDISO_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
 #ifdef PARDISO_MATCHING_PREPROCESS
                    &PHASE, &N, a2_, ia2, ja2, &PERM,
 #else
@@ -998,7 +989,7 @@ ESymSolverStatus PardisoSolverInterface::Solve(
       {
          rhs_vals[perm2[i]] = scale2[i] * ORIG_RHS[ i ];
       }
-      PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+      PARDISO_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
                    &PHASE, &N, a2_, ia2, ja2, &PERM,
                    &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
                    &ERROR, DPARM_);
@@ -1016,7 +1007,7 @@ ESymSolverStatus PardisoSolverInterface::Solve(
       {
          rhs_vals[i] = ORIG_RHS[i];
       }
-      PARDISO_FUNC(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, a_, ia, ja, &PERM, &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
+      PARDISO_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, a_, ia, ja, &PERM, &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
                    &ERROR, DPARM_);
 #endif
 

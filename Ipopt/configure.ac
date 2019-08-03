@@ -63,15 +63,12 @@ AC_COIN_PROG_LIBTOOL
 # Initialize automake and libtool
 #AC_COIN_INIT_AUTO_TOOLS
 
-# A Fix for the AIX compiler
-#AM_CONDITIONAL([AIX_FIX_COMPILER_BUG], test "x$AIX_FIX_COMPILER_BUG" != x)
-
 # Doxygen
 AC_COIN_DOXYGEN
 
 
 #############################################################################
-#                              COIN-OR components                           #
+#                                 Dependencies                              #
 #############################################################################
 
 AC_COIN_CHK_LIBM(IpoptLib)
@@ -88,18 +85,63 @@ if test $coin_has_lapack != yes; then
 fi
 
 AC_COIN_CHK_PKG(ASL,[IpoptAmplInterfaceLib],[coinasl],[build])
-AC_COIN_CHK_PKG(HSL,[IpoptLib HSLLib],[coinhsl],[build])   # TODO >= 1.3
 AC_COIN_CHK_PKG(Mumps,[IpoptLib],[coinmumps],[build])
 
-AM_CONDITIONAL([HAVE_PARDISO],[false])
-use_pardiso=no
 AM_CONDITIONAL([HAVE_MA28],[false])
 AM_CONDITIONAL([HAVE_WSMP],[false])
+
+#######
+# HSL #
+#######
+
+AC_COIN_CHK_PKG(HSL,[IpoptLib HSLLib],[coinhsl],[build])   # TODO >= 1.3
 
 if test "$coin_has_hsl" = yes ; then
   AC_COIN_FINALIZE_FLAGS([HSLLib])
   AC_COIN_NAMEMANGLING([HSL],[ma27ad],[$HSLLIB_LFLAGS])
 fi
+
+###########
+# PARDISO #
+###########
+
+AC_ARG_WITH([pardiso],
+            AC_HELP_STRING([--with-pardiso],[specify Pardiso library (>= 4.0) from pardiso-project.org]),
+            [have_pardiso_project=yes; pardiso_lflags=$withval],
+            [have_pardiso_project=no])
+
+have_pardiso_mkl=no
+if test "$have_pardiso_project" = yes ; then
+  # check whether flags from --with-pardiso work and figure out name mangling
+  # if so, define PARDISO_FUNC and keep lflags
+  AC_COIN_TRY_LINK([pardiso_ipopt_newinterface],[$pardiso_lflags $lapack_lflags],[$lapack_pcfiles],
+    [AC_COIN_DEFINENAMEMANGLING([PARDISO],[$pardiso_ipopt_newinterface_namemangling])
+     IPOPTLIB_LFLAGS="$pardiso_lflags $IPOPTLIB_LFLAGS"
+     AC_DEFINE(HAVE_PARDISO,1,[Define to 1 if Pardiso is available])
+    ],
+    [AC_MSG_ERROR([Symbol pardiso_ipopt_newinterface not found with Pardiso flags $pardiso_lflags and Lapack. Require Pardiso >= 4.0.])])
+
+  AC_COIN_TRY_LINK([pardiso_exist_parallel],[$pardiso_lflags $lapack_lflags],[$lapack_pcfiles],
+    [AC_DEFINE(HAVE_PARDISO_PARALLEL,1,[Define to 1 if you are using the parallel version of Pardiso])])
+
+else
+  # check whether Pardiso is available via Lapack, which should then be MKL
+  # figure out name mangling and define PARDISO_FUNC
+  AC_COIN_TRY_LINK([pardiso],[$lapack_lflags],[$lapack_pcfiles],
+    [AC_COIN_DEFINENAMEMANGLING([PARDISO],[$pardiso_namemangling])
+     have_pardiso_mkl=yes
+     AC_DEFINE(HAVE_PARDISO,1,[Define to 1 if Pardiso is available])
+     # assume MKL Pardiso is parallel (it never has pardiso_exist_parallel)
+     # TODO does sequential MKL also have a parallel Pardiso? do we need some check here?
+     AC_DEFINE(HAVE_PARDISO_PARALLEL,1,[Define to 1 if you are using the parallel version of Pardiso])
+     AC_DEFINE(HAVE_PARDISO_MKL,1,[Define to 1 if you are using Pardiso from MKL])
+     AC_DEFINE(HAVE_PARDISO_OLDINTERFACE,1,[Define to 1 if you are not using at least a 4.0 version of Pardiso])  # TODO remove as equiv. to MKL
+    ])
+fi
+
+AM_CONDITIONAL([HAVE_PARDISO],[test "$have_pardiso_mkl$have_pardiso_project" != nono])
+AM_CONDITIONAL([BUILD_PARDISOLOADER],[test "$have_pardiso_mkl$have_pardiso_project" = nono])  # TODO seems redundant
+
 
 #############################################################################
 #                             Stuff for examples                            #
@@ -198,22 +240,9 @@ AC_ARG_ENABLE([inexact-solver],
   [use_inexact=no])
 
 if test $use_inexact = yes; then
-  if test "$use_pardiso" = "no"; then
-    AC_MSG_ERROR([The inexact solver option is currently only available with Pardiso])
+  if test $have_pardiso_project = no; then
+    AC_MSG_ERROR([The inexact solver option is currently only available with Pardiso from pardiso-project.org])
   fi
-  # Check if the global function pointer variable is defined in the Pardiso library
-  SAVE_LIBS="$LIBS"
-  LIBS="$LIBS $PARDISO_LIB $LAPACK_LIBS $BLAS_LIBS $FLIBS"
-  AC_LANG_PUSH(C)
-  AC_MSG_CHECKING([if Pardiso library has global variable IpoptFunction])
-  AC_LINK_IFELSE([AC_LANG_PROGRAM(
-      [extern int (*IpoptFunction)(int n, double* x,  double* r, int k, double b);],
-      [IpoptFunction = 0;])],
-    [AC_MSG_RESULT(yes)],
-    [AC_MSG_RESULT(no)
-     AC_MSG_ERROR([Pardiso library not recent enough for the inexact solver option])])
-  AC_LANG_POP(C)
-  LIBS="$SAVE_LIBS"
 fi
 
 AC_LANG_POP(C++)
@@ -300,7 +329,6 @@ AC_SUBST(ASTYLEFLAGS)
 AC_SUBST(IPALLLIBS)
 IPALLLIBS="../contrib/CGPenalty/libcgpenalty.la ../Algorithm/libipoptalg.la ../Algorithm/LinearSolvers/liblinsolvers.la ../Common/libcommon.la ../LinAlg/liblinalg.la ../LinAlg/TMatrices/libtmatrices.la"
 
-#AM_CONDITIONAL([HAVE_PARDISO],[test ! "$use_pardiso" = no])
 #AM_CONDITIONAL([HAVE_WSMP],[test ! "$use_wsmp" = no])
 
 AC_ARG_ENABLE([linear-solver-loader],
@@ -324,7 +352,6 @@ if test $use_linearsolverloader = yes; then
 fi
 
 AM_CONDITIONAL([BUILD_LINEARSOLVERLOADER],[test $use_linearsolverloader = yes])
-AM_CONDITIONAL([BUILD_PARDISOLOADER],[test "$use_pardiso" = no])
 
 AM_CONDITIONAL([BUILD_INEXACT], [test $use_inexact = yes])
 if test $use_inexact = yes; then

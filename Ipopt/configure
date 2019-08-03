@@ -647,8 +647,6 @@ IPOPTLIB_CFLAGS_NOPC
 IPOPTLIB_LFLAGS_NOPC
 BUILD_INEXACT_FALSE
 BUILD_INEXACT_TRUE
-BUILD_PARDISOLOADER_FALSE
-BUILD_PARDISOLOADER_TRUE
 BUILD_LINEARSOLVERLOADER_FALSE
 BUILD_LINEARSOLVERLOADER_TRUE
 IPALLLIBS
@@ -659,21 +657,23 @@ JAVA_HOME
 BIT64FCOMMENT
 BIT32FCOMMENT
 BITS_PER_POINTER
-HSLLIB_CFLAGS_NOPC
-HSLLIB_LFLAGS_NOPC
-HAVE_WSMP_FALSE
-HAVE_WSMP_TRUE
-HAVE_MA28_FALSE
-HAVE_MA28_TRUE
+BUILD_PARDISOLOADER_FALSE
+BUILD_PARDISOLOADER_TRUE
 HAVE_PARDISO_FALSE
 HAVE_PARDISO_TRUE
-COIN_HAS_MUMPS_FALSE
-COIN_HAS_MUMPS_TRUE
+HSLLIB_CFLAGS_NOPC
+HSLLIB_LFLAGS_NOPC
 COIN_HAS_HSL_FALSE
 COIN_HAS_HSL_TRUE
 HSLLIB_PCFILES
 HSLLIB_CFLAGS
 HSLLIB_LFLAGS
+HAVE_WSMP_FALSE
+HAVE_WSMP_TRUE
+HAVE_MA28_FALSE
+HAVE_MA28_TRUE
+COIN_HAS_MUMPS_FALSE
+COIN_HAS_MUMPS_TRUE
 COIN_HAS_ASL_FALSE
 COIN_HAS_ASL_TRUE
 IPOPTAMPLINTERFACELIB_PCFILES
@@ -852,12 +852,13 @@ with_lapack_cflags
 with_asl
 with_asl_lflags
 with_asl_cflags
-with_hsl
-with_hsl_lflags
-with_hsl_cflags
 with_mumps
 with_mumps_lflags
 with_mumps_cflags
+with_hsl
+with_hsl_lflags
+with_hsl_cflags
+with_pardiso
 enable_inexact_solver
 enable_linear_solver_loader
 '
@@ -1548,16 +1549,6 @@ Optional Packages:
   --with-asl-cflags       Compiler flags for ASL appropriate for your
                           environment. (Most often, -I specs for header file
                           directories.)
-  --with-hsl              Use HSL. If an argument is given, 'yes' is
-                          equivalent to --with-hsl, 'no' is
-                          equivalent to --without-hsl, 'build' will look for a
-                          COIN ThirdParty package. Any other argument is
-                          applied as for --with-hsl-lflags
-  --with-hsl-lflags       Linker flags for HSL appropriate for your
-                          environment. (Most often, -l specs for libraries.)
-  --with-hsl-cflags       Compiler flags for HSL appropriate for your
-                          environment. (Most often, -I specs for header file
-                          directories.)
   --with-mumps            Use Mumps. If an argument is given, 'yes' is
                           equivalent to --with-mumps, 'no' is
                           equivalent to --without-mumps, 'build' will look for
@@ -1568,6 +1559,18 @@ Optional Packages:
   --with-mumps-cflags     Compiler flags for Mumps appropriate for your
                           environment. (Most often, -I specs for header file
                           directories.)
+  --with-hsl              Use HSL. If an argument is given, 'yes' is
+                          equivalent to --with-hsl, 'no' is
+                          equivalent to --without-hsl, 'build' will look for a
+                          COIN ThirdParty package. Any other argument is
+                          applied as for --with-hsl-lflags
+  --with-hsl-lflags       Linker flags for HSL appropriate for your
+                          environment. (Most often, -l specs for libraries.)
+  --with-hsl-cflags       Compiler flags for HSL appropriate for your
+                          environment. (Most often, -I specs for header file
+                          directories.)
+  --with-pardiso          specify Pardiso library (>= 4.0) from
+                          pardiso-project.org
 
 Some influential environment variables:
   CC          C compiler command
@@ -16646,9 +16649,6 @@ $as_echo "no" >&6; }
 # Initialize automake and libtool
 #AC_COIN_INIT_AUTO_TOOLS
 
-# A Fix for the AIX compiler
-#AM_CONDITIONAL([AIX_FIX_COMPILER_BUG], test "x$AIX_FIX_COMPILER_BUG" != x)
-
 # Doxygen
 
 
@@ -16835,7 +16835,7 @@ done
 
 
 #############################################################################
-#                              COIN-OR components                           #
+#                                 Dependencies                              #
 #############################################################################
 
 
@@ -17300,10 +17300,11 @@ $as_echo "$as_me: lapack_pcfiles is \"$lapack_pcfiles\"" >&6;}
   # setup LIBS by adding $lapack_lflags and those from $lapack_pcfiles
   ac_save_LIBS="$LIBS"
   LIBS="$lapack_lflags $LIBS"
+  if test -n "$lapack_pcfiles" ; then
 
-     temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs $lapack_pcfiles`
-     LIBS="$temp_LFLAGS $LIBS"
-
+      temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs $lapack_pcfiles`
+      LIBS="$temp_LFLAGS $LIBS"
+    fi
 
   dsyev_namemangling=unknown
 
@@ -17879,10 +17880,11 @@ $as_echo "yes" >&6; }
   # setup LIBS by adding  and those from lapack
   ac_save_LIBS="$LIBS"
 
+  if test -n "lapack" ; then
 
-     temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs lapack`
-     LIBS="$temp_LFLAGS $LIBS"
-
+      temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs lapack`
+      LIBS="$temp_LFLAGS $LIBS"
+    fi
 
   dsyev_namemangling=unknown
 
@@ -18364,6 +18366,282 @@ $as_echo "#define COIN_HAS_ASL 1" >>confdefs.h
 
 
 
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for package Mumps" >&5
+$as_echo_n "checking for package Mumps... " >&6; }
+
+# Make sure the necessary variables exist for each client package.
+
+
+
+
+
+
+# Check to see if the user has set an override to skip this primary.
+
+  coin_has_mumps=noInfo
+  if test x"$COIN_SKIP_PROJECTS" != x ; then
+    for pkg in $COIN_SKIP_PROJECTS ; do
+      if test "$pkg" = "$mumps" ; then
+        coin_has_mumps=skipping
+      fi
+    done
+  fi
+
+# If we're not skipping this primary, define and process the command line
+# options according to the cmdopts parameter. Then invoke FIND_PRIM_PKG to do
+# the heavy lifting.
+
+  if test "$coin_has_mumps" != skipping ; then
+
+
+
+
+# Check whether --with-mumps was given.
+if test "${with_mumps+set}" = set; then :
+  withval=$with_mumps;
+fi
+
+
+
+# Check whether --with-mumps-lflags was given.
+if test "${with_mumps_lflags+set}" = set; then :
+  withval=$with_mumps_lflags;
+fi
+
+
+
+# Check whether --with-mumps-cflags was given.
+if test "${with_mumps_cflags+set}" = set; then :
+  withval=$with_mumps_cflags;
+fi
+
+
+
+
+
+
+
+  dflt_action=build
+
+# Initialize variables for the primary package.
+
+  coin_has_mumps=noInfo
+  mumps_lflags=
+  mumps_cflags=
+  mumps_data=
+  mumps_pcfiles=
+
+# --with-prim is always present. If the client specified dataonly, its value
+# is assigned to prim_data.
+
+  withval=$with_mumps
+  if test -n "$withval" ; then
+    case "$withval" in
+      no )
+        coin_has_mumps=skipping
+        ;;
+      yes )
+        coin_has_mumps=requested
+        ;;
+      build )
+        coin_has_mumps=build
+        ;;
+      * )
+        coin_has_mumps=yes
+        mumps_lflags=$withval
+        ;;
+    esac
+  fi
+
+# --with-prim-libs and --with-prim-cflags are present unless the client
+# specified dataonly. Specifying --with-prim=no overrides the individual
+# options for libs and cflags.
+
+  if test "$coin_has_mumps" != skipping ; then
+       withval=$with_mumps_lflags
+       if test -n "$withval" ; then
+         case "$withval" in
+           build | no | yes )
+             as_fn_error $? "\"$withval\" is not valid here; please specify linker flags appropriate for your environment." "$LINENO" 5
+             ;;
+           * )
+             coin_has_mumps=yes
+             mumps_lflags=$withval
+             ;;
+         esac
+       fi
+
+       withval=$with_mumps_cflags
+       if test -n "$withval" ; then
+         case "$withval" in
+           build | no | yes )
+             as_fn_error $? "\"$withval\" is not valid here; please specify compiler flags appropriate for your environment." "$LINENO" 5
+             ;;
+           * )
+             coin_has_mumps=yes
+             mumps_cflags="$withval"
+             ;;
+         esac
+       fi
+     fi
+
+# --with-prim-data will be present unless the client specified nodata.
+# Specifying --with-prim=no overrides the individual option for data.
+
+
+
+# At this point, coin_has_prim can be one of noInfo (no user options
+# specified), skipping (user said no), requested or build (user said yes
+# or build and gave no further guidance), or yes (user specified one or
+# more --with-prim options). If we're already at yes or skipping, we're
+# done looking.
+
+# If there are no user options (noInfo) and the default is no, we're skipping.
+# Otherwise, the default must be yes or build; consider the package requested.
+# A default action we don't recognise defaults to yes.
+
+  if test "$coin_has_mumps" = noInfo ; then
+    case $dflt_action in
+      no )
+        coin_has_mumps=skipping
+        ;;
+      build )
+        coin_has_mumps=build
+        ;;
+      * )
+        coin_has_mumps=requested
+        ;;
+    esac
+  fi
+
+# Now coin_has_prim can be one of skipping, yes, requested, or build. For
+# requested or build, try pkgconf, if it's available. If it's not available,
+# well, hope that the user knows their system and prim can be used with no
+# additional flags.
+
+  case $coin_has_mumps in
+    requested | build )
+      if test -n "$PKG_CONFIG" -a "coinmumps" != skip ; then
+        pcfile="coinmumps"
+
+
+
+  if test -n "$PKG_CONFIG" ; then
+    if PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --exists "$pcfile" ; then
+      MUMPS_VERSIONS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --modversion "$pcfile" 2>/dev/null | tr '\n' ' '`
+      coin_has_mumps=yes
+           mumps_data=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --variable=datadir "$pcfile" 2>/dev/null`
+           mumps_pcfiles="$pcfile"
+    else
+      MUMPS_PKG_ERRORS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "$pcfile"`
+      coin_has_mumps=no
+    fi
+  else
+    as_fn_error $? "\"Cannot check for existence of module mumps without pkgconf\"" "$LINENO" 5
+  fi
+
+      else
+        coin_has_mumps=no
+        # AC_MSG_WARN([skipped check via pkgconf as no pkgconf available])
+      fi
+      ;;
+    skipping | yes )
+      ;;
+    * )
+      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Unexpected status \"$coin_has_mumps\" in COIN_FIND_PRIM_PKG" >&5
+$as_echo "$as_me: WARNING: Unexpected status \"$coin_has_mumps\" in COIN_FIND_PRIM_PKG" >&2;}
+      ;;
+  esac
+
+# The final value of coin_has_prim will be yes, no, or skipping. No means
+# we looked (with pkgconfig) and didn't find anything. Skipping means the
+# user said `don't use.' Yes means we have something, from the user or
+# from pkgconfig. Note that we haven't run a useability test!
+
+# Define BUILDTOOLS_DEBUG to enable debugging output
+
+    if test "$BUILDTOOLS_DEBUG" = 1 ; then
+      { $as_echo "$as_me:${as_lineno-$LINENO}: FIND_PRIM_PKG result for mumps: \"$coin_has_mumps\"" >&5
+$as_echo "$as_me: FIND_PRIM_PKG result for mumps: \"$coin_has_mumps\"" >&6;}
+      { $as_echo "$as_me:${as_lineno-$LINENO}: Collected values for package 'mumps'" >&5
+$as_echo "$as_me: Collected values for package 'mumps'" >&6;}
+      { $as_echo "$as_me:${as_lineno-$LINENO}: mumps_lflags is \"$mumps_lflags\"" >&5
+$as_echo "$as_me: mumps_lflags is \"$mumps_lflags\"" >&6;}
+      { $as_echo "$as_me:${as_lineno-$LINENO}: mumps_cflags is \"$mumps_cflags\"" >&5
+$as_echo "$as_me: mumps_cflags is \"$mumps_cflags\"" >&6;}
+      { $as_echo "$as_me:${as_lineno-$LINENO}: mumps_data is \"$mumps_data\"" >&5
+$as_echo "$as_me: mumps_data is \"$mumps_data\"" >&6;}
+      { $as_echo "$as_me:${as_lineno-$LINENO}: mumps_pcfiles is \"$mumps_pcfiles\"" >&5
+$as_echo "$as_me: mumps_pcfiles is \"$mumps_pcfiles\"" >&6;}
+    fi
+
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $coin_has_mumps" >&5
+$as_echo "$coin_has_mumps" >&6; }
+  else
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $coin_has_mumps due to COIN_SKIP_PROJECTS" >&5
+$as_echo "$coin_has_mumps due to COIN_SKIP_PROJECTS" >&6; }
+  fi
+
+# Possibilities are `yes', 'no', or `skipping'. Normalise to `yes' or `no'.
+
+  if test "$coin_has_mumps" != yes ; then
+    coin_has_mumps=no
+  fi
+
+# Create an automake conditional COIN_HAS_PRIM.
+
+   if test $coin_has_mumps = yes; then
+  COIN_HAS_MUMPS_TRUE=
+  COIN_HAS_MUMPS_FALSE='#'
+else
+  COIN_HAS_MUMPS_TRUE='#'
+  COIN_HAS_MUMPS_FALSE=
+fi
+
+
+# If we've located the package, define preprocessor symbol COIN_HAS_PRIM and
+# augment the necessary variables for the client packages.
+
+  if test $coin_has_mumps = yes ; then
+
+$as_echo "#define COIN_HAS_MUMPS 1" >>confdefs.h
+
+    IPOPTLIB_PCFILES="$mumps_pcfiles $IPOPTLIB_PCFILES"
+       IPOPTLIB_LFLAGS="$mumps_lflags $IPOPTLIB_LFLAGS"
+       IPOPTLIB_CFLAGS="$mumps_cflags $IPOPTLIB_CFLAGS"
+
+
+# Finally, set up PRIM_DATA, unless the user specified nodata.
+
+
+  fi
+
+
+ if false; then
+  HAVE_MA28_TRUE=
+  HAVE_MA28_FALSE='#'
+else
+  HAVE_MA28_TRUE='#'
+  HAVE_MA28_FALSE=
+fi
+
+ if false; then
+  HAVE_WSMP_TRUE=
+  HAVE_WSMP_FALSE='#'
+else
+  HAVE_WSMP_TRUE='#'
+  HAVE_WSMP_FALSE=
+fi
+
+
+#######
+# HSL #
+#######
+
+
+
+
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for package HSL" >&5
 $as_echo_n "checking for package HSL... " >&6; }
 
@@ -18622,286 +18900,6 @@ $as_echo "#define COIN_HAS_HSL 1" >>confdefs.h
   fi
    # TODO >= 1.3
 
-
-
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for package Mumps" >&5
-$as_echo_n "checking for package Mumps... " >&6; }
-
-# Make sure the necessary variables exist for each client package.
-
-
-
-
-
-
-# Check to see if the user has set an override to skip this primary.
-
-  coin_has_mumps=noInfo
-  if test x"$COIN_SKIP_PROJECTS" != x ; then
-    for pkg in $COIN_SKIP_PROJECTS ; do
-      if test "$pkg" = "$mumps" ; then
-        coin_has_mumps=skipping
-      fi
-    done
-  fi
-
-# If we're not skipping this primary, define and process the command line
-# options according to the cmdopts parameter. Then invoke FIND_PRIM_PKG to do
-# the heavy lifting.
-
-  if test "$coin_has_mumps" != skipping ; then
-
-
-
-
-# Check whether --with-mumps was given.
-if test "${with_mumps+set}" = set; then :
-  withval=$with_mumps;
-fi
-
-
-
-# Check whether --with-mumps-lflags was given.
-if test "${with_mumps_lflags+set}" = set; then :
-  withval=$with_mumps_lflags;
-fi
-
-
-
-# Check whether --with-mumps-cflags was given.
-if test "${with_mumps_cflags+set}" = set; then :
-  withval=$with_mumps_cflags;
-fi
-
-
-
-
-
-
-
-  dflt_action=build
-
-# Initialize variables for the primary package.
-
-  coin_has_mumps=noInfo
-  mumps_lflags=
-  mumps_cflags=
-  mumps_data=
-  mumps_pcfiles=
-
-# --with-prim is always present. If the client specified dataonly, its value
-# is assigned to prim_data.
-
-  withval=$with_mumps
-  if test -n "$withval" ; then
-    case "$withval" in
-      no )
-        coin_has_mumps=skipping
-        ;;
-      yes )
-        coin_has_mumps=requested
-        ;;
-      build )
-        coin_has_mumps=build
-        ;;
-      * )
-        coin_has_mumps=yes
-        mumps_lflags=$withval
-        ;;
-    esac
-  fi
-
-# --with-prim-libs and --with-prim-cflags are present unless the client
-# specified dataonly. Specifying --with-prim=no overrides the individual
-# options for libs and cflags.
-
-  if test "$coin_has_mumps" != skipping ; then
-       withval=$with_mumps_lflags
-       if test -n "$withval" ; then
-         case "$withval" in
-           build | no | yes )
-             as_fn_error $? "\"$withval\" is not valid here; please specify linker flags appropriate for your environment." "$LINENO" 5
-             ;;
-           * )
-             coin_has_mumps=yes
-             mumps_lflags=$withval
-             ;;
-         esac
-       fi
-
-       withval=$with_mumps_cflags
-       if test -n "$withval" ; then
-         case "$withval" in
-           build | no | yes )
-             as_fn_error $? "\"$withval\" is not valid here; please specify compiler flags appropriate for your environment." "$LINENO" 5
-             ;;
-           * )
-             coin_has_mumps=yes
-             mumps_cflags="$withval"
-             ;;
-         esac
-       fi
-     fi
-
-# --with-prim-data will be present unless the client specified nodata.
-# Specifying --with-prim=no overrides the individual option for data.
-
-
-
-# At this point, coin_has_prim can be one of noInfo (no user options
-# specified), skipping (user said no), requested or build (user said yes
-# or build and gave no further guidance), or yes (user specified one or
-# more --with-prim options). If we're already at yes or skipping, we're
-# done looking.
-
-# If there are no user options (noInfo) and the default is no, we're skipping.
-# Otherwise, the default must be yes or build; consider the package requested.
-# A default action we don't recognise defaults to yes.
-
-  if test "$coin_has_mumps" = noInfo ; then
-    case $dflt_action in
-      no )
-        coin_has_mumps=skipping
-        ;;
-      build )
-        coin_has_mumps=build
-        ;;
-      * )
-        coin_has_mumps=requested
-        ;;
-    esac
-  fi
-
-# Now coin_has_prim can be one of skipping, yes, requested, or build. For
-# requested or build, try pkgconf, if it's available. If it's not available,
-# well, hope that the user knows their system and prim can be used with no
-# additional flags.
-
-  case $coin_has_mumps in
-    requested | build )
-      if test -n "$PKG_CONFIG" -a "coinmumps" != skip ; then
-        pcfile="coinmumps"
-
-
-
-  if test -n "$PKG_CONFIG" ; then
-    if PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --exists "$pcfile" ; then
-      MUMPS_VERSIONS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --modversion "$pcfile" 2>/dev/null | tr '\n' ' '`
-      coin_has_mumps=yes
-           mumps_data=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --variable=datadir "$pcfile" 2>/dev/null`
-           mumps_pcfiles="$pcfile"
-    else
-      MUMPS_PKG_ERRORS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "$pcfile"`
-      coin_has_mumps=no
-    fi
-  else
-    as_fn_error $? "\"Cannot check for existence of module mumps without pkgconf\"" "$LINENO" 5
-  fi
-
-      else
-        coin_has_mumps=no
-        # AC_MSG_WARN([skipped check via pkgconf as no pkgconf available])
-      fi
-      ;;
-    skipping | yes )
-      ;;
-    * )
-      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Unexpected status \"$coin_has_mumps\" in COIN_FIND_PRIM_PKG" >&5
-$as_echo "$as_me: WARNING: Unexpected status \"$coin_has_mumps\" in COIN_FIND_PRIM_PKG" >&2;}
-      ;;
-  esac
-
-# The final value of coin_has_prim will be yes, no, or skipping. No means
-# we looked (with pkgconfig) and didn't find anything. Skipping means the
-# user said `don't use.' Yes means we have something, from the user or
-# from pkgconfig. Note that we haven't run a useability test!
-
-# Define BUILDTOOLS_DEBUG to enable debugging output
-
-    if test "$BUILDTOOLS_DEBUG" = 1 ; then
-      { $as_echo "$as_me:${as_lineno-$LINENO}: FIND_PRIM_PKG result for mumps: \"$coin_has_mumps\"" >&5
-$as_echo "$as_me: FIND_PRIM_PKG result for mumps: \"$coin_has_mumps\"" >&6;}
-      { $as_echo "$as_me:${as_lineno-$LINENO}: Collected values for package 'mumps'" >&5
-$as_echo "$as_me: Collected values for package 'mumps'" >&6;}
-      { $as_echo "$as_me:${as_lineno-$LINENO}: mumps_lflags is \"$mumps_lflags\"" >&5
-$as_echo "$as_me: mumps_lflags is \"$mumps_lflags\"" >&6;}
-      { $as_echo "$as_me:${as_lineno-$LINENO}: mumps_cflags is \"$mumps_cflags\"" >&5
-$as_echo "$as_me: mumps_cflags is \"$mumps_cflags\"" >&6;}
-      { $as_echo "$as_me:${as_lineno-$LINENO}: mumps_data is \"$mumps_data\"" >&5
-$as_echo "$as_me: mumps_data is \"$mumps_data\"" >&6;}
-      { $as_echo "$as_me:${as_lineno-$LINENO}: mumps_pcfiles is \"$mumps_pcfiles\"" >&5
-$as_echo "$as_me: mumps_pcfiles is \"$mumps_pcfiles\"" >&6;}
-    fi
-
-
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $coin_has_mumps" >&5
-$as_echo "$coin_has_mumps" >&6; }
-  else
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $coin_has_mumps due to COIN_SKIP_PROJECTS" >&5
-$as_echo "$coin_has_mumps due to COIN_SKIP_PROJECTS" >&6; }
-  fi
-
-# Possibilities are `yes', 'no', or `skipping'. Normalise to `yes' or `no'.
-
-  if test "$coin_has_mumps" != yes ; then
-    coin_has_mumps=no
-  fi
-
-# Create an automake conditional COIN_HAS_PRIM.
-
-   if test $coin_has_mumps = yes; then
-  COIN_HAS_MUMPS_TRUE=
-  COIN_HAS_MUMPS_FALSE='#'
-else
-  COIN_HAS_MUMPS_TRUE='#'
-  COIN_HAS_MUMPS_FALSE=
-fi
-
-
-# If we've located the package, define preprocessor symbol COIN_HAS_PRIM and
-# augment the necessary variables for the client packages.
-
-  if test $coin_has_mumps = yes ; then
-
-$as_echo "#define COIN_HAS_MUMPS 1" >>confdefs.h
-
-    IPOPTLIB_PCFILES="$mumps_pcfiles $IPOPTLIB_PCFILES"
-       IPOPTLIB_LFLAGS="$mumps_lflags $IPOPTLIB_LFLAGS"
-       IPOPTLIB_CFLAGS="$mumps_cflags $IPOPTLIB_CFLAGS"
-
-
-# Finally, set up PRIM_DATA, unless the user specified nodata.
-
-
-  fi
-
-
- if false; then
-  HAVE_PARDISO_TRUE=
-  HAVE_PARDISO_FALSE='#'
-else
-  HAVE_PARDISO_TRUE='#'
-  HAVE_PARDISO_FALSE=
-fi
-
-use_pardiso=no
- if false; then
-  HAVE_MA28_TRUE=
-  HAVE_MA28_FALSE='#'
-else
-  HAVE_MA28_TRUE='#'
-  HAVE_MA28_FALSE=
-fi
-
- if false; then
-  HAVE_WSMP_TRUE=
-  HAVE_WSMP_FALSE='#'
-else
-  HAVE_WSMP_TRUE='#'
-  HAVE_WSMP_FALSE=
-fi
-
-
 if test "$coin_has_hsl" = yes ; then
 
    if test "$BUILDTOOLS_DEBUG" = 1 ; then
@@ -19069,6 +19067,373 @@ $as_echo "$as_me: WARNING: Unsupported or unknown name-mangling scheme: $ac_cv_h
   # AC_MSG_NOTICE([Done COIN_NAMEMANGLING])
 
 fi
+
+###########
+# PARDISO #
+###########
+
+
+# Check whether --with-pardiso was given.
+if test "${with_pardiso+set}" = set; then :
+  withval=$with_pardiso; have_pardiso_project=yes; pardiso_lflags=$withval
+else
+  have_pardiso_project=no
+fi
+
+
+have_pardiso_mkl=no
+if test "$have_pardiso_project" = yes ; then
+  # check whether flags from --with-pardiso work and figure out name mangling
+  # if so, define PARDISO_FUNC and keep lflags
+
+  # setup LIBS by adding $pardiso_lflags $lapack_lflags and those from $lapack_pcfiles
+  ac_save_LIBS="$LIBS"
+  LIBS="$pardiso_lflags $lapack_lflags $LIBS"
+  if test -n "$lapack_pcfiles" ; then
+
+      temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs $lapack_pcfiles`
+      LIBS="$temp_LFLAGS $LIBS"
+    fi
+
+  pardiso_ipopt_newinterface_namemangling=unknown
+
+  # FIXME we had "extra underscore" as additional option for ac_extra
+  #   but since there is no use for ac_extra below, was there any use for it?
+  for ac_extra in "no extra underscore" ; do
+    for ac_case in "lower case" "upper case" ; do
+      for ac_trail in "underscore" "no underscore" ; do
+        #AC_MSG_NOTICE([Attempting link for ${ac_case}, ${ac_trail}, ${ac_extra}])
+        case $ac_case in
+          "lower case")
+            ac_name=pardiso_ipopt_newinterface
+            ;;
+          "upper case")
+            ac_name=PARDISO_IPOPT_NEWINTERFACE
+            ;;
+        esac
+        if test "$ac_trail" = underscore ; then
+          ac_name=${ac_name}_
+        fi
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for function $ac_name in $LIBS" >&5
+$as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef __cplusplus
+             extern "C"
+             #endif
+             void $ac_name();
+int
+main ()
+{
+$ac_name()
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  pardiso_ipopt_newinterface_namemangling="${ac_case}, ${ac_trail}, ${ac_extra}"
+           ac_success=yes
+else
+  ac_success=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_success" >&5
+$as_echo "$ac_success" >&6; }
+        if test $ac_success = yes ; then
+          break 3
+        fi
+      done
+    done
+  done
+  LIBS=$ac_save_LIBS
+
+  if test $ac_success = yes ; then
+
+
+
+  case "$pardiso_ipopt_newinterface_namemangling" in
+   "lower case, no underscore, no extra underscore")
+      $as_echo "#define PARDISO_FUNC(name,NAME) name" >>confdefs.h
+
+      $as_echo "#define PARDISO_FUNC_(name,NAME) name" >>confdefs.h
+ ;;
+   "lower case, no underscore, extra underscore")
+      $as_echo "#define PARDISO_FUNC(name,NAME) name" >>confdefs.h
+
+      $as_echo "#define PARDISO_FUNC_(name,NAME) name ## _" >>confdefs.h
+ ;;
+   "lower case, underscore, no extra underscore")
+      $as_echo "#define PARDISO_FUNC(name,NAME) name ## _" >>confdefs.h
+
+      $as_echo "#define PARDISO_FUNC_(name,NAME) name ## _" >>confdefs.h
+ ;;
+   "lower case, underscore, extra underscore")
+      $as_echo "#define PARDISO_FUNC(name,NAME) name ## _" >>confdefs.h
+
+      $as_echo "#define PARDISO_FUNC_(name,NAME) name ## __" >>confdefs.h
+ ;;
+   "upper case, no underscore, no extra underscore")
+      $as_echo "#define PARDISO_FUNC(name,NAME) NAME" >>confdefs.h
+
+      $as_echo "#define PARDISO_FUNC_(name,NAME) NAME" >>confdefs.h
+ ;;
+   "upper case, no underscore, extra underscore")
+      $as_echo "#define PARDISO_FUNC(name,NAME) NAME" >>confdefs.h
+
+      $as_echo "#define PARDISO_FUNC_(name,NAME) NAME ## _" >>confdefs.h
+ ;;
+   "upper case, underscore, no extra underscore")
+      $as_echo "#define PARDISO_FUNC(name,NAME) NAME ## _" >>confdefs.h
+
+      $as_echo "#define PARDISO_FUNC_(name,NAME) NAME ## _" >>confdefs.h
+ ;;
+   "upper case, underscore, extra underscore")
+      $as_echo "#define PARDISO_FUNC(name,NAME) NAME ## _" >>confdefs.h
+
+      $as_echo "#define PARDISO_FUNC_(name,NAME) NAME ## __" >>confdefs.h
+ ;;
+   *)
+      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Unsupported or unknown name-mangling scheme: $pardiso_ipopt_newinterface_namemangling" >&5
+$as_echo "$as_me: WARNING: Unsupported or unknown name-mangling scheme: $pardiso_ipopt_newinterface_namemangling" >&2;}
+      ;;
+  esac
+
+     IPOPTLIB_LFLAGS="$pardiso_lflags $IPOPTLIB_LFLAGS"
+
+$as_echo "#define HAVE_PARDISO 1" >>confdefs.h
+
+
+    else as_fn_error $? "Symbol pardiso_ipopt_newinterface not found with Pardiso flags $pardiso_lflags and Lapack. Require Pardiso >= 4.0." "$LINENO" 5
+  fi
+
+
+
+  # setup LIBS by adding $pardiso_lflags $lapack_lflags and those from $lapack_pcfiles
+  ac_save_LIBS="$LIBS"
+  LIBS="$pardiso_lflags $lapack_lflags $LIBS"
+  if test -n "$lapack_pcfiles" ; then
+
+      temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs $lapack_pcfiles`
+      LIBS="$temp_LFLAGS $LIBS"
+    fi
+
+  pardiso_exist_parallel_namemangling=unknown
+
+  # FIXME we had "extra underscore" as additional option for ac_extra
+  #   but since there is no use for ac_extra below, was there any use for it?
+  for ac_extra in "no extra underscore" ; do
+    for ac_case in "lower case" "upper case" ; do
+      for ac_trail in "underscore" "no underscore" ; do
+        #AC_MSG_NOTICE([Attempting link for ${ac_case}, ${ac_trail}, ${ac_extra}])
+        case $ac_case in
+          "lower case")
+            ac_name=pardiso_exist_parallel
+            ;;
+          "upper case")
+            ac_name=PARDISO_EXIST_PARALLEL
+            ;;
+        esac
+        if test "$ac_trail" = underscore ; then
+          ac_name=${ac_name}_
+        fi
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for function $ac_name in $LIBS" >&5
+$as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef __cplusplus
+             extern "C"
+             #endif
+             void $ac_name();
+int
+main ()
+{
+$ac_name()
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  pardiso_exist_parallel_namemangling="${ac_case}, ${ac_trail}, ${ac_extra}"
+           ac_success=yes
+else
+  ac_success=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_success" >&5
+$as_echo "$ac_success" >&6; }
+        if test $ac_success = yes ; then
+          break 3
+        fi
+      done
+    done
+  done
+  LIBS=$ac_save_LIBS
+
+  if test $ac_success = yes ; then
+
+$as_echo "#define HAVE_PARDISO_PARALLEL 1" >>confdefs.h
+
+
+  fi
+
+
+else
+  # check whether Pardiso is available via Lapack, which should then be MKL
+  # figure out name mangling and define PARDISO_FUNC
+
+  # setup LIBS by adding $lapack_lflags and those from $lapack_pcfiles
+  ac_save_LIBS="$LIBS"
+  LIBS="$lapack_lflags $LIBS"
+  if test -n "$lapack_pcfiles" ; then
+
+      temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs $lapack_pcfiles`
+      LIBS="$temp_LFLAGS $LIBS"
+    fi
+
+  pardiso_namemangling=unknown
+
+  # FIXME we had "extra underscore" as additional option for ac_extra
+  #   but since there is no use for ac_extra below, was there any use for it?
+  for ac_extra in "no extra underscore" ; do
+    for ac_case in "lower case" "upper case" ; do
+      for ac_trail in "underscore" "no underscore" ; do
+        #AC_MSG_NOTICE([Attempting link for ${ac_case}, ${ac_trail}, ${ac_extra}])
+        case $ac_case in
+          "lower case")
+            ac_name=pardiso
+            ;;
+          "upper case")
+            ac_name=PARDISO
+            ;;
+        esac
+        if test "$ac_trail" = underscore ; then
+          ac_name=${ac_name}_
+        fi
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for function $ac_name in $LIBS" >&5
+$as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef __cplusplus
+             extern "C"
+             #endif
+             void $ac_name();
+int
+main ()
+{
+$ac_name()
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  pardiso_namemangling="${ac_case}, ${ac_trail}, ${ac_extra}"
+           ac_success=yes
+else
+  ac_success=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_success" >&5
+$as_echo "$ac_success" >&6; }
+        if test $ac_success = yes ; then
+          break 3
+        fi
+      done
+    done
+  done
+  LIBS=$ac_save_LIBS
+
+  if test $ac_success = yes ; then
+
+
+
+  case "$pardiso_namemangling" in
+   "lower case, no underscore, no extra underscore")
+      $as_echo "#define PARDISO_FUNC(name,NAME) name" >>confdefs.h
+
+      $as_echo "#define PARDISO_FUNC_(name,NAME) name" >>confdefs.h
+ ;;
+   "lower case, no underscore, extra underscore")
+      $as_echo "#define PARDISO_FUNC(name,NAME) name" >>confdefs.h
+
+      $as_echo "#define PARDISO_FUNC_(name,NAME) name ## _" >>confdefs.h
+ ;;
+   "lower case, underscore, no extra underscore")
+      $as_echo "#define PARDISO_FUNC(name,NAME) name ## _" >>confdefs.h
+
+      $as_echo "#define PARDISO_FUNC_(name,NAME) name ## _" >>confdefs.h
+ ;;
+   "lower case, underscore, extra underscore")
+      $as_echo "#define PARDISO_FUNC(name,NAME) name ## _" >>confdefs.h
+
+      $as_echo "#define PARDISO_FUNC_(name,NAME) name ## __" >>confdefs.h
+ ;;
+   "upper case, no underscore, no extra underscore")
+      $as_echo "#define PARDISO_FUNC(name,NAME) NAME" >>confdefs.h
+
+      $as_echo "#define PARDISO_FUNC_(name,NAME) NAME" >>confdefs.h
+ ;;
+   "upper case, no underscore, extra underscore")
+      $as_echo "#define PARDISO_FUNC(name,NAME) NAME" >>confdefs.h
+
+      $as_echo "#define PARDISO_FUNC_(name,NAME) NAME ## _" >>confdefs.h
+ ;;
+   "upper case, underscore, no extra underscore")
+      $as_echo "#define PARDISO_FUNC(name,NAME) NAME ## _" >>confdefs.h
+
+      $as_echo "#define PARDISO_FUNC_(name,NAME) NAME ## _" >>confdefs.h
+ ;;
+   "upper case, underscore, extra underscore")
+      $as_echo "#define PARDISO_FUNC(name,NAME) NAME ## _" >>confdefs.h
+
+      $as_echo "#define PARDISO_FUNC_(name,NAME) NAME ## __" >>confdefs.h
+ ;;
+   *)
+      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Unsupported or unknown name-mangling scheme: $pardiso_namemangling" >&5
+$as_echo "$as_me: WARNING: Unsupported or unknown name-mangling scheme: $pardiso_namemangling" >&2;}
+      ;;
+  esac
+
+     have_pardiso_mkl=yes
+
+$as_echo "#define HAVE_PARDISO 1" >>confdefs.h
+
+     # assume MKL Pardiso is parallel (it never has pardiso_exist_parallel)
+     # TODO does sequential MKL also have a parallel Pardiso? do we need some check here?
+
+$as_echo "#define HAVE_PARDISO_PARALLEL 1" >>confdefs.h
+
+
+$as_echo "#define HAVE_PARDISO_MKL 1" >>confdefs.h
+
+
+$as_echo "#define HAVE_PARDISO_OLDINTERFACE 1" >>confdefs.h
+  # TODO remove as equiv. to MKL
+
+
+  fi
+
+fi
+
+ if test "$have_pardiso_mkl$have_pardiso_project" != nono; then
+  HAVE_PARDISO_TRUE=
+  HAVE_PARDISO_FALSE='#'
+else
+  HAVE_PARDISO_TRUE='#'
+  HAVE_PARDISO_FALSE=
+fi
+
+ if test "$have_pardiso_mkl$have_pardiso_project" = nono; then
+  BUILD_PARDISOLOADER_TRUE=
+  BUILD_PARDISOLOADER_FALSE='#'
+else
+  BUILD_PARDISOLOADER_TRUE='#'
+  BUILD_PARDISOLOADER_FALSE=
+fi
+  # TODO seems redundant
+
 
 #############################################################################
 #                             Stuff for examples                            #
@@ -19240,48 +19605,9 @@ fi
 
 
 if test $use_inexact = yes; then
-  if test "$use_pardiso" = "no"; then
-    as_fn_error $? "The inexact solver option is currently only available with Pardiso" "$LINENO" 5
+  if test $have_pardiso_project = no; then
+    as_fn_error $? "The inexact solver option is currently only available with Pardiso from pardiso-project.org" "$LINENO" 5
   fi
-  # Check if the global function pointer variable is defined in the Pardiso library
-  SAVE_LIBS="$LIBS"
-  LIBS="$LIBS $PARDISO_LIB $LAPACK_LIBS $BLAS_LIBS $FLIBS"
-  ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking if Pardiso library has global variable IpoptFunction" >&5
-$as_echo_n "checking if Pardiso library has global variable IpoptFunction... " >&6; }
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-extern int (*IpoptFunction)(int n, double* x,  double* r, int k, double b);
-int
-main ()
-{
-IpoptFunction = 0;
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-     as_fn_error $? "Pardiso library not recent enough for the inexact solver option" "$LINENO" 5
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-  ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-  LIBS="$SAVE_LIBS"
 fi
 
 ac_ext=c
@@ -19401,7 +19727,6 @@ ASTYLEFLAGS="--mode=c -A1 --indent=spaces=3 --indent-switches --min-conditional-
 
 IPALLLIBS="../contrib/CGPenalty/libcgpenalty.la ../Algorithm/libipoptalg.la ../Algorithm/LinearSolvers/liblinsolvers.la ../Common/libcommon.la ../LinAlg/liblinalg.la ../LinAlg/TMatrices/libtmatrices.la"
 
-#AM_CONDITIONAL([HAVE_PARDISO],[test ! "$use_pardiso" = no])
 #AM_CONDITIONAL([HAVE_WSMP],[test ! "$use_wsmp" = no])
 
 # Check whether --enable-linear-solver-loader was given.
@@ -19435,14 +19760,6 @@ fi
 else
   BUILD_LINEARSOLVERLOADER_TRUE='#'
   BUILD_LINEARSOLVERLOADER_FALSE=
-fi
-
- if test "$use_pardiso" = no; then
-  BUILD_PARDISOLOADER_TRUE=
-  BUILD_PARDISOLOADER_FALSE='#'
-else
-  BUILD_PARDISOLOADER_TRUE='#'
-  BUILD_PARDISOLOADER_FALSE=
 fi
 
 
@@ -20219,16 +20536,8 @@ if test -z "${COIN_HAS_ASL_TRUE}" && test -z "${COIN_HAS_ASL_FALSE}"; then
   as_fn_error $? "conditional \"COIN_HAS_ASL\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
-if test -z "${COIN_HAS_HSL_TRUE}" && test -z "${COIN_HAS_HSL_FALSE}"; then
-  as_fn_error $? "conditional \"COIN_HAS_HSL\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
 if test -z "${COIN_HAS_MUMPS_TRUE}" && test -z "${COIN_HAS_MUMPS_FALSE}"; then
   as_fn_error $? "conditional \"COIN_HAS_MUMPS\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
-if test -z "${HAVE_PARDISO_TRUE}" && test -z "${HAVE_PARDISO_FALSE}"; then
-  as_fn_error $? "conditional \"HAVE_PARDISO\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${HAVE_MA28_TRUE}" && test -z "${HAVE_MA28_FALSE}"; then
@@ -20239,12 +20548,20 @@ if test -z "${HAVE_WSMP_TRUE}" && test -z "${HAVE_WSMP_FALSE}"; then
   as_fn_error $? "conditional \"HAVE_WSMP\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
-if test -z "${BUILD_LINEARSOLVERLOADER_TRUE}" && test -z "${BUILD_LINEARSOLVERLOADER_FALSE}"; then
-  as_fn_error $? "conditional \"BUILD_LINEARSOLVERLOADER\" was never defined.
+if test -z "${COIN_HAS_HSL_TRUE}" && test -z "${COIN_HAS_HSL_FALSE}"; then
+  as_fn_error $? "conditional \"COIN_HAS_HSL\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${HAVE_PARDISO_TRUE}" && test -z "${HAVE_PARDISO_FALSE}"; then
+  as_fn_error $? "conditional \"HAVE_PARDISO\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${BUILD_PARDISOLOADER_TRUE}" && test -z "${BUILD_PARDISOLOADER_FALSE}"; then
   as_fn_error $? "conditional \"BUILD_PARDISOLOADER\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${BUILD_LINEARSOLVERLOADER_TRUE}" && test -z "${BUILD_LINEARSOLVERLOADER_FALSE}"; then
+  as_fn_error $? "conditional \"BUILD_LINEARSOLVERLOADER\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${BUILD_INEXACT_TRUE}" && test -z "${BUILD_INEXACT_FALSE}"; then
