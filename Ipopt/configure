@@ -645,8 +645,6 @@ IPOPTAMPLINTERFACELIB_CFLAGS_NOPC
 IPOPTAMPLINTERFACELIB_LFLAGS_NOPC
 IPOPTLIB_CFLAGS_NOPC
 IPOPTLIB_LFLAGS_NOPC
-BUILD_INEXACT_FALSE
-BUILD_INEXACT_TRUE
 BUILD_LINEARSOLVERLOADER_FALSE
 BUILD_LINEARSOLVERLOADER_TRUE
 IPALLLIBS
@@ -654,6 +652,8 @@ ASTYLEFLAGS
 ASTYLE
 JIPOPTDLL
 JAVA_HOME
+BUILD_INEXACT_FALSE
+BUILD_INEXACT_TRUE
 BIT64FCOMMENT
 BIT32FCOMMENT
 BITS_PER_POINTER
@@ -19764,7 +19764,18 @@ if test $use_inexact = yes; then
   if test $have_pardiso_project = no; then
     as_fn_error $? "The inexact solver option is currently only available with Pardiso from pardiso-project.org" "$LINENO" 5
   fi
+
+$as_echo "#define BUILD_INEXACT 1" >>confdefs.h
+
 fi
+ if test $use_inexact = yes; then
+  BUILD_INEXACT_TRUE=
+  BUILD_INEXACT_FALSE='#'
+else
+  BUILD_INEXACT_TRUE='#'
+  BUILD_INEXACT_FALSE=
+fi
+
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -19927,9 +19938,6 @@ fi
 
 if test $use_inexact = yes; then
   IPALLLIBS="../Algorithm/Inexact/libinexact.la $IPALLLIBS"
-
-$as_echo "#define BUILD_INEXACT 1" >>confdefs.h
-
 fi
 
 ########################################################################
@@ -20000,7 +20008,7 @@ fi
 
 
 case $host in
-  *-cygwin* |  *-mingw*)
+  *-cygwin* |  *-mingw* |  *-msys*)
 
 $as_echo "#define SHAREDLIBEXT \"dll\"" >>confdefs.h
 
@@ -20502,7 +20510,7 @@ ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefi
 
 # under Windows, the Makevars file for the R Interface need to be named Makevars.win
 case $build in
-  *-cygwin* | *-mingw*)
+  *-cygwin* | *-mingw* | *-msys* )
     ac_config_files="$ac_config_files contrib/RInterface/src/Makevars.win:contrib/RInterface/src/Makevars.in"
 
     ;;
@@ -20712,6 +20720,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${HAVE_WSMP_TRUE}" && test -z "${HAVE_WSMP_FALSE}"; then
   as_fn_error $? "conditional \"HAVE_WSMP\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${BUILD_INEXACT_TRUE}" && test -z "${BUILD_INEXACT_FALSE}"; then
+  as_fn_error $? "conditional \"BUILD_INEXACT\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${BUILD_LINEARSOLVERLOADER_TRUE}" && test -z "${BUILD_LINEARSOLVERLOADER_FALSE}"; then

@@ -271,7 +271,9 @@ if test $use_inexact = yes; then
   if test $have_pardiso_project = no; then
     AC_MSG_ERROR([The inexact solver option is currently only available with Pardiso from pardiso-project.org])
   fi
+  AC_DEFINE([BUILD_INEXACT],[1],[Define to 1 if the inexact linear solver option is included])
 fi
+AM_CONDITIONAL([BUILD_INEXACT], [test $use_inexact = yes])
 
 AC_LANG_POP(C++)
 
@@ -382,8 +384,6 @@ AM_CONDITIONAL([BUILD_LINEARSOLVERLOADER],[test $use_linearsolverloader = yes])
 AM_CONDITIONAL([BUILD_INEXACT], [test $use_inexact = yes])
 if test $use_inexact = yes; then
   IPALLLIBS="../Algorithm/Inexact/libinexact.la $IPALLLIBS"
-  AC_DEFINE([BUILD_INEXACT],[1],
-            [Define to 1 if the inexact linear solver option is included])
 fi
 
 ########################################################################
@@ -400,7 +400,7 @@ AC_CHECK_LIB(dl,[dlopen],[
  ],[])
 
 case $host in
-  *-cygwin* |  *-mingw*)
+  *-cygwin* |  *-mingw* |  *-msys*)
      AC_DEFINE([SHAREDLIBEXT], ["dll"], [Set to extension for shared libraries in quotes.])
      ;;
   *-darwin*)
@@ -564,7 +564,7 @@ AC_CONFIG_FILES([Makefile
 
 # under Windows, the Makevars file for the R Interface need to be named Makevars.win
 case $build in 
-  *-cygwin* | *-mingw*)
+  *-cygwin* | *-mingw* | *-msys* )
     AC_CONFIG_FILES([contrib/RInterface/src/Makevars.win:contrib/RInterface/src/Makevars.in])
     ;;
   *)
