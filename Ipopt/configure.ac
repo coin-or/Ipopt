@@ -41,15 +41,9 @@ AC_COIN_PROG_F77
 # Initialize libtool
 AC_COIN_PROG_LIBTOOL
 
-
-
-# We need egrep and ln -s somewherw
-#AC_PROG_EGREP
-#AC_PROG_LN_S
-
-# Get the C++ runtime libraries in case we want to link with a C or
-# Fortran compiler
-#AC_COIN_CXXLIBS
+# Get the C++ runtime libraries in case we want to link a static Ipopt library
+# with a C or Fortran compiler
+AC_COIN_CXXLIBS
 
 # Find out how to call Fortran from C and determine Fortran runtime libraries
 if test "$F77" != "unavailable" ; then

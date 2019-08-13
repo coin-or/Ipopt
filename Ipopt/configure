@@ -700,6 +700,7 @@ coin_doxy_usedot
 coin_have_latex
 coin_have_doxygen
 FLIBS
+CXXLIBS
 LT_LDFLAGS
 CXXCPP
 CPP
@@ -883,6 +884,7 @@ FFLAGS
 LT_SYS_LIBRARY_PATH
 CPP
 CXXCPP
+CXXLIBS
 PKG_CONFIG'
 
 
@@ -1596,6 +1598,7 @@ Some influential environment variables:
               User-defined run-time library search path.
   CPP         C preprocessor
   CXXCPP      C++ preprocessor
+  CXXLIBS     Libraries necessary for linking C++ code with non-C++ compiler
   PKG_CONFIG  path to pkg-config utility
 
 Use these variables to override the choices made by `configure' or to help
@@ -20044,15 +20047,92 @@ $as_echo "no" >&6; }
   LT_LDFLAGS="$LT_LDFLAGS -no-undefined"
 
 
+# Get the C++ runtime libraries in case we want to link a static Ipopt library
+# with a C or Fortran compiler
+ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
-# We need egrep and ln -s somewherw
-#AC_PROG_EGREP
-#AC_PROG_LN_S
+if test -z "$CXXLIBS"; then
+  if test "$GXX" = "yes"; then
+    case "$CXX" in
+      icpc* | */icpc*)
+        CXXLIBS="-lstdc++"
+        ;;
+      *)
+        # clang uses libc++ as the default standard C++ library, not libstdc++
+        # this test is supposed to recognize whether the compiler is clang
+        #
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <ciso646>
+int
+main ()
+{
 
-# Get the C++ runtime libraries in case we want to link with a C or
-# Fortran compiler
-#AC_COIN_CXXLIBS
+#ifndef _LIBCPP_VERSION
+       choke me
+#endif
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  CXXLIBS="-lc++"
+else
+  CXXLIBS="-lstdc++ -lm"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext          ;;
+    esac
+  else
+    case $build in
+     *-mingw* | *-cygwin* | *-msys* )
+      case "$CXX" in
+      clang* ) ;;
+      cl* | */cl* | CL* | */CL*)
+        CXXLIBS=nothing;;
+      esac;;
+     *-linux-*)
+      case "$CXX" in
+      icpc* | */icpc*)
+        CXXLIBS="-lstdc++"
+             ;;
+      pgCC* | */pgCC*)
+        CXXLIBS="-lstd -lC -lc"
+             ;;
+      esac;;
+    *-ibm-*)
+      CXXLIBS="-lC -lc"
+      ;;
+    *-hp-*)
+      CXXLIBS="-L/opt/aCC/lib -l++ -lstd_v2 -lCsup_v2 -lm -lcl -lc"
+      ;;
+    *-*-solaris*)
+      CXXLIBS="-lCstd -lCrun"
+    esac
+  fi
+fi
+if test -z "$CXXLIBS"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Could not automatically determine CXXLIBS (C++ link libraries; necessary if main program is in Fortran or C)." >&5
+$as_echo "$as_me: WARNING: Could not automatically determine CXXLIBS (C++ link libraries; necessary if main program is in Fortran or C)." >&2;}
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: Assuming that CXXLIBS is \"$CXXLIBS\"." >&5
+$as_echo "$as_me: Assuming that CXXLIBS is \"$CXXLIBS\"." >&6;}
+fi
+if test x"$CXXLIBS" = xnothing; then
+  CXXLIBS=
+fi
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
 
 # Find out how to call Fortran from C and determine Fortran runtime libraries
 if test "$F77" != "unavailable" ; then
