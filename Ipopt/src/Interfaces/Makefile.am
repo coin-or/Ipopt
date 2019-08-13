@@ -33,11 +33,10 @@ libipopt_la_SOURCES = \
 	IpSolveStatistics.cpp IpSolveStatistics.hpp \
 	IpStdCInterface.cpp IpStdCInterface.h \
 	IpStdInterfaceTNLP.cpp IpStdInterfaceTNLP.hpp \
+	IpStdFInterface.c \
 	IpTNLP.hpp \
 	IpTNLPAdapter.cpp IpTNLPAdapter.hpp \
 	IpTNLPReducer.cpp IpTNLPReducer.hpp
-
-#	IpStdFInterface.c
 
 libipopt_la_LIBADD = $(IPALLLIBS) $(IPOPTLIB_LFLAGS)
 

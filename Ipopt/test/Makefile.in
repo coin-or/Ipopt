@@ -121,9 +121,9 @@ am__v_lt_1 =
 nodist_hs071_cpp_OBJECTS = hs071_main.$(OBJEXT) hs071_nlp.$(OBJEXT)
 hs071_cpp_OBJECTS = $(nodist_hs071_cpp_OBJECTS)
 hs071_cpp_DEPENDENCIES = ../src/Interfaces/libipopt.la
-hs071_f_SOURCES = hs071_f.c
-hs071_f_OBJECTS = hs071_f.$(OBJEXT)
-hs071_f_LDADD = $(LDADD)
+nodist_hs071_f_OBJECTS = hs071_f.$(OBJEXT)
+hs071_f_OBJECTS = $(nodist_hs071_f_OBJECTS)
+hs071_f_DEPENDENCIES = ../src/Interfaces/libipopt.la
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -139,8 +139,8 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src/Common -I$(top_builddir)/examples/ScalableProblems
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/hs071_c.Po ./$(DEPDIR)/hs071_f.Po \
-	./$(DEPDIR)/hs071_main.Po ./$(DEPDIR)/hs071_nlp.Po
+am__depfiles_remade = ./$(DEPDIR)/hs071_c.Po ./$(DEPDIR)/hs071_main.Po \
+	./$(DEPDIR)/hs071_nlp.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -178,8 +178,23 @@ AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
 am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
+F77COMPILE = $(F77) $(AM_FFLAGS) $(FFLAGS)
+LTF77COMPILE = $(LIBTOOL) $(AM_V_lt) --tag=F77 $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=compile $(F77) $(AM_FFLAGS) $(FFLAGS)
+AM_V_F77 = $(am__v_F77_@AM_V@)
+am__v_F77_ = $(am__v_F77_@AM_DEFAULT_V@)
+am__v_F77_0 = @echo "  F77     " $@;
+am__v_F77_1 = 
+F77LD = $(F77)
+F77LINK = $(LIBTOOL) $(AM_V_lt) --tag=F77 $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(F77LD) $(AM_FFLAGS) $(FFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+AM_V_F77LD = $(am__v_F77LD_@AM_V@)
+am__v_F77LD_ = $(am__v_F77LD_@AM_DEFAULT_V@)
+am__v_F77LD_0 = @echo "  F77LD   " $@;
+am__v_F77LD_1 = 
 SOURCES = $(nodist_hs071_c_SOURCES) $(nodist_hs071_cpp_SOURCES) \
-	hs071_f.c
+	$(nodist_hs071_f_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -239,7 +254,10 @@ ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
+F77 = @F77@
+FFLAGS = @FFLAGS@
 FGREP = @FGREP@
+FLIBS = @FLIBS@
 GREP = @GREP@
 HSLLIB_CFLAGS = @HSLLIB_CFLAGS@
 HSLLIB_CFLAGS_NOPC = @HSLLIB_CFLAGS_NOPC@
@@ -308,6 +326,7 @@ ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
+ac_ct_F77 = @ac_ct_F77@
 ac_ct_PKG_CONFIG = @ac_ct_PKG_CONFIG@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
@@ -366,9 +385,8 @@ nodist_hs071_cpp_SOURCES = hs071_main.cpp hs071_nlp.cpp hs071_nlp.hpp
 hs071_cpp_LDADD = ../src/Interfaces/libipopt.la
 nodist_hs071_c_SOURCES = hs071_c.c
 hs071_c_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
-
-#nodist_hs071_f_SOURCES = hs071_f.f
-#hs071_f_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
+nodist_hs071_f_SOURCES = hs071_f.f
+hs071_f_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
 
 # Here list all include flags, relative to this "srcdir" directory.
 AM_CPPFLAGS = -DIPOPT_BUILD \
@@ -378,7 +396,7 @@ AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../src/Algorithm \
 	-I$(srcdir)/../src/Interfaces
 
-AM_FFLAGS = -I$(CYGPATH_W) $(srcdir)/../src/Interfaces
+AM_FFLAGS = -I$(srcdir)/../src/Interfaces
 
 ########################################################################
 #                          Cleaning stuff                              #
@@ -390,7 +408,7 @@ DISTCLEANFILES = hs071_f.f
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .c .cpp .lo .o .obj
+.SUFFIXES: .c .cpp .f .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -442,7 +460,7 @@ hs071_cpp$(EXEEXT): $(hs071_cpp_OBJECTS) $(hs071_cpp_DEPENDENCIES) $(EXTRA_hs071
 
 hs071_f$(EXEEXT): $(hs071_f_OBJECTS) $(hs071_f_DEPENDENCIES) $(EXTRA_hs071_f_DEPENDENCIES) 
 	@rm -f hs071_f$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(hs071_f_OBJECTS) $(hs071_f_LDADD) $(LIBS)
+	$(AM_V_F77LD)$(F77LINK) $(hs071_f_OBJECTS) $(hs071_f_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -451,7 +469,6 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hs071_c.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hs071_f.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hs071_main.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hs071_nlp.Po@am__quote@ # am--include-marker
 
@@ -502,6 +519,15 @@ am--depfiles: $(am__depfiles_remade)
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LTCXXCOMPILE) -c -o $@ $<
+
+.f.o:
+	$(AM_V_F77)$(F77COMPILE) -c -o $@ $<
+
+.f.obj:
+	$(AM_V_F77)$(F77COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+.f.lo:
+	$(AM_V_F77)$(LTF77COMPILE) -c -o $@ $<
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -602,7 +628,6 @@ clean-am: clean-generic clean-libtool clean-noinstPROGRAMS \
 
 distclean: distclean-am
 		-rm -f ./$(DEPDIR)/hs071_c.Po
-	-rm -f ./$(DEPDIR)/hs071_f.Po
 	-rm -f ./$(DEPDIR)/hs071_main.Po
 	-rm -f ./$(DEPDIR)/hs071_nlp.Po
 	-rm -f Makefile
@@ -651,7 +676,6 @@ installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/hs071_c.Po
-	-rm -f ./$(DEPDIR)/hs071_f.Po
 	-rm -f ./$(DEPDIR)/hs071_main.Po
 	-rm -f ./$(DEPDIR)/hs071_nlp.Po
 	-rm -f Makefile

@@ -123,7 +123,7 @@ CONFIG_HEADER = $(top_builddir)/src/Common/config.h \
 	$(top_builddir)/src/Common/config_ipopt.h \
 	$(top_builddir)/examples/ScalableProblems/config.h
 CONFIG_CLEAN_FILES = ipopt.pc ipopt-uninstalled.pc doc/Doxyfile \
-	contrib/RInterface/src/Makevars.win \
+	examples/hs071_f/hs071_f.f contrib/RInterface/src/Makevars.win \
 	contrib/RInterface/src/Makevars ipoptamplinterface.pc \
 	ipoptamplinterface-uninstalled.pc
 CONFIG_CLEAN_VPATH_FILES =  \
@@ -320,7 +320,10 @@ ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
+F77 = @F77@
+FFLAGS = @FFLAGS@
 FGREP = @FGREP@
+FLIBS = @FLIBS@
 GREP = @GREP@
 HSLLIB_CFLAGS = @HSLLIB_CFLAGS@
 HSLLIB_CFLAGS_NOPC = @HSLLIB_CFLAGS_NOPC@
@@ -389,6 +392,7 @@ ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
+ac_ct_F77 = @ac_ct_F77@
 ac_ct_PKG_CONFIG = @ac_ct_PKG_CONFIG@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
@@ -545,6 +549,8 @@ ipopt.pc: $(top_builddir)/config.status $(srcdir)/ipopt.pc.in
 ipopt-uninstalled.pc: $(top_builddir)/config.status $(srcdir)/ipopt-uninstalled.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 doc/Doxyfile: $(top_builddir)/config.status $(top_srcdir)/doc/Doxyfile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+examples/hs071_f/hs071_f.f: $(top_builddir)/config.status $(top_srcdir)/examples/hs071_f/hs071_f.f.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 contrib/RInterface/src/Makevars.win: $(top_builddir)/config.status $(top_srcdir)/contrib/RInterface/src/Makevars.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@

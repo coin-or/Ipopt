@@ -30,10 +30,10 @@ AC_COIN_INITIALIZE(Ipopt)
 #                         Standard build tool stuff                         #
 #############################################################################
 
-# Get the name of the C and C++ compilers and appropriate compiler options.
+# Get the name of the C, C++, and Fortran compilers and appropriate compiler options.
 AC_COIN_PROG_CC
 AC_COIN_PROG_CXX
-AM_CONDITIONAL([COIN_HAS_F77],false)
+AC_COIN_PROG_F77
 
 # This is a C++ package, set the language accordingly.
 #AC_LANG_PUSH(C++)
@@ -51,14 +51,10 @@ AC_COIN_PROG_LIBTOOL
 # Fortran compiler
 #AC_COIN_CXXLIBS
 
-# Get the name of the Fortran compiler and appropriate compiler options
-#AC_COIN_PROG_F77
-#AM_CONDITIONAL(COIN_HAS_F77, test "$F77" != "unavailable")
-
 # Find out how to call Fortran from C and determine Fortran runtime libraries
-#if test "$F77" != "unavailable" ; then
-#  AC_COIN_F77_WRAPPERS
-#fi
+if test "$F77" != "unavailable" ; then
+  AC_F77_WRAPPERS
+fi
 
 # Initialize automake and libtool
 #AC_COIN_INIT_AUTO_TOOLS
@@ -177,15 +173,9 @@ AM_CONDITIONAL([HAVE_WSMP],[test $have_wsmp = yes])
 
 # find out how long an int pointer is to know if we need INTEGER*4 or
 # INTEGER*8 in Fortran to capture pointers.
-#
-# This test doesn't work on BlueGene
-if test "$is_bg" = no; then
-  AC_LANG_PUSH(C)
-  AC_CHECK_SIZEOF(int *)
-  AC_LANG_POP(C)
-else
-  ac_cv_sizeof_int_p=4
-fi
+AC_LANG_PUSH(C)
+AC_CHECK_SIZEOF(int *)
+AC_LANG_POP(C)
 AC_SUBST(BITS_PER_POINTER)
 AC_SUBST(BIT32FCOMMENT)
 AC_SUBST(BIT64FCOMMENT)
@@ -265,7 +255,7 @@ AC_LANG_POP(C++)
 # Equivalent int Fortran and C types #
 ######################################
 
-# FIXME: The following test should be active, but this requires chance in
+# FIXME: The following test should be active, but this requires change in
 #        code to copy Index* to ipfint* arrays...
 if test "$cross_compiling" = no && test "$is_bg" != yes; then
   AC_LANG_PUSH(C)
@@ -513,10 +503,11 @@ AC_CONFIG_FILES([Makefile
 		 test/Makefile
 		 test/run_unitTests
 		 ipopt.pc ipopt-uninstalled.pc
-		 doc/Doxyfile])
+		 doc/Doxyfile
+		 examples/hs071_f/hs071_f.f
+       ])
 #		 src/Apps/CUTErInterface/Makefile
 #		 examples/hs071_f/Makefile
-#		 examples/hs071_f/hs071_f.f
 #		 examples/Cpp_example/Makefile
 #		 examples/hs071_cpp/Makefile
 #		 examples/hs071_c/Makefile

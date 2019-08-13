@@ -22,8 +22,8 @@ hs071_cpp_LDADD = ../src/Interfaces/libipopt.la
 nodist_hs071_c_SOURCES = hs071_c.c
 hs071_c_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
 
-#nodist_hs071_f_SOURCES = hs071_f.f
-#hs071_f_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
+nodist_hs071_f_SOURCES = hs071_f.f
+hs071_f_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
 
 # Here list all include flags, relative to this "srcdir" directory.
 AM_CPPFLAGS = -DIPOPT_BUILD \
@@ -33,7 +33,7 @@ AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../src/Algorithm \
 	-I$(srcdir)/../src/Interfaces
 
-AM_FFLAGS = -I$(CYGPATH_W) $(srcdir)/../src/Interfaces
+AM_FFLAGS = -I$(srcdir)/../src/Interfaces
 
 hs071_f.f:
 	$(LN_S) ../examples/hs071_f/$@ $@
