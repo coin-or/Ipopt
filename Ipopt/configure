@@ -21564,9 +21564,9 @@ $as_echo "$ac_success" >&6; }
     case $build in
       *-linux*)
 
-  # setup LIBS by adding -Wl,--start-group -lmkl_core -lmkl_intel_lp64 -lmkl_sequential --Wl,--end-group and those from
+  # setup LIBS by adding -lmkl_core -lmkl_intel_lp64 -lmkl_sequential -lm and those from
   ac_save_LIBS="$LIBS"
-  LIBS="-Wl,--start-group -lmkl_core -lmkl_intel_lp64 -lmkl_sequential --Wl,--end-group $LIBS"
+  LIBS="-lmkl_core -lmkl_intel_lp64 -lmkl_sequential -lm $LIBS"
 
 
   dsyev_namemangling=unknown
@@ -21633,7 +21633,7 @@ $as_echo "$ac_success" >&6; }
   if test $ac_success = yes ; then
 
            coin_has_lapack=yes
-           lapack_lflags="-Wl,--start-group -lmkl_core -lmkl_intel_lp64 -lmkl_sequential --Wl,--end-group"
+           lapack_lflags="-lmkl_core -lmkl_intel_lp64 -lmkl_sequential -lm"
 
   fi
 
@@ -21957,9 +21957,9 @@ $as_echo "$ac_success" >&6; }
 
       *-darwin*)
 
-  # setup LIBS by adding -Wl,--start-group -lmkl_core -lmkl_intel_lp64 -lmkl_sequential -Wl,--end-group and those from
+  # setup LIBS by adding -lmkl_core -lmkl_intel_lp64 -lmkl_sequential -lm and those from
   ac_save_LIBS="$LIBS"
-  LIBS="-Wl,--start-group -lmkl_core -lmkl_intel_lp64 -lmkl_sequential -Wl,--end-group $LIBS"
+  LIBS="-lmkl_core -lmkl_intel_lp64 -lmkl_sequential -lm $LIBS"
 
 
   dsyev_namemangling=unknown
@@ -22026,7 +22026,7 @@ $as_echo "$ac_success" >&6; }
   if test $ac_success = yes ; then
 
           coin_has_lapack=yes
-          lapack_lflags="-Wl,--start-group -lmkl_core -lmkl_intel_lp64 -lmkl_sequential -Wl,--end-group"
+          lapack_lflags="-lmkl_core -lmkl_intel_lp64 -lmkl_sequential -lm"
 
   fi
 
@@ -22362,7 +22362,7 @@ $as_echo "$as_me: WARNING: Unsupported or unknown name-mangling scheme: ${dsyev_
       ;;
   esac
 
-    IPOPTLIB_PCFILES="$lapack_pcfiles $IPOPTLIB_PCFILES"
+    if test -n "$lapack_pcfiles" ; then IPOPTLIB_PCFILES="$lapack_pcfiles $IPOPTLIB_PCFILES" ; fi
        IPOPTLIB_LFLAGS="$lapack_lflags $IPOPTLIB_LFLAGS"
        IPOPTLIB_CFLAGS="$lapack_cflags $IPOPTLIB_CFLAGS"
 
@@ -22617,7 +22617,7 @@ fi
 
 $as_echo "#define COIN_HAS_ASL 1" >>confdefs.h
 
-    IPOPTAMPLINTERFACELIB_PCFILES="$asl_pcfiles $IPOPTAMPLINTERFACELIB_PCFILES"
+    if test -n "$asl_pcfiles" ; then IPOPTAMPLINTERFACELIB_PCFILES="$asl_pcfiles $IPOPTAMPLINTERFACELIB_PCFILES" ; fi
        IPOPTAMPLINTERFACELIB_LFLAGS="$asl_lflags $IPOPTAMPLINTERFACELIB_LFLAGS"
        IPOPTAMPLINTERFACELIB_CFLAGS="$asl_cflags $IPOPTAMPLINTERFACELIB_CFLAGS"
 
@@ -22876,7 +22876,7 @@ fi
 
 $as_echo "#define COIN_HAS_MUMPS 1" >>confdefs.h
 
-    IPOPTLIB_PCFILES="$mumps_pcfiles $IPOPTLIB_PCFILES"
+    if test -n "$mumps_pcfiles" ; then IPOPTLIB_PCFILES="$mumps_pcfiles $IPOPTLIB_PCFILES" ; fi
        IPOPTLIB_LFLAGS="$mumps_lflags $IPOPTLIB_LFLAGS"
        IPOPTLIB_CFLAGS="$mumps_cflags $IPOPTLIB_CFLAGS"
 
@@ -23152,10 +23152,10 @@ fi
 
 $as_echo "#define COIN_HAS_HSL 1" >>confdefs.h
 
-    IPOPTLIB_PCFILES="$hsl_pcfiles $IPOPTLIB_PCFILES"
+    if test -n "$hsl_pcfiles" ; then IPOPTLIB_PCFILES="$hsl_pcfiles $IPOPTLIB_PCFILES" ; fi
        IPOPTLIB_LFLAGS="$hsl_lflags $IPOPTLIB_LFLAGS"
        IPOPTLIB_CFLAGS="$hsl_cflags $IPOPTLIB_CFLAGS"
-      HSLLIB_PCFILES="$hsl_pcfiles $HSLLIB_PCFILES"
+      if test -n "$hsl_pcfiles" ; then HSLLIB_PCFILES="$hsl_pcfiles $HSLLIB_PCFILES" ; fi
        HSLLIB_LFLAGS="$hsl_lflags $HSLLIB_LFLAGS"
        HSLLIB_CFLAGS="$hsl_cflags $HSLLIB_CFLAGS"
 
