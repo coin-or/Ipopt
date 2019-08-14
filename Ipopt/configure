@@ -23343,7 +23343,7 @@ $as_echo "$as_me: WARNING: Unsupported or unknown name-mangling scheme: $ac_cv_h
 fi
 
 #TODO
- if false; then
+ if test "$coin_has_hsl" = yes; then
   HAVE_MA28_TRUE=
   HAVE_MA28_FALSE='#'
 else

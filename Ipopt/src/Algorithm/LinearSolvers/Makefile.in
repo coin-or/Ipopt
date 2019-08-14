@@ -96,16 +96,15 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 @BUILD_LINEARSOLVERLOADER_TRUE@am__append_1 = IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
-#  liblinsolvers_la_SOURCES += IpMa28Partition.F
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__append_2 = IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
-#if HAVE_MA28
-#  liblinsolvers_la_SOURCES += IpMa28Partition.F
-#endif
-@HAVE_WSMP_TRUE@am__append_3 = \
+@HAVE_MA28_TRUE@am__append_3 = IpMa28TDependencyDetector.cpp \
+@HAVE_MA28_TRUE@	IpMa28TDependencyDetector.hpp \
+@HAVE_MA28_TRUE@	IpMa28Partition.F
+@HAVE_WSMP_TRUE@am__append_4 = \
 @HAVE_WSMP_TRUE@	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp \
 @HAVE_WSMP_TRUE@	IpIterativeWsmpSolverInterface.cpp IpIterativeWsmpSolverInterface.hpp
 
-@COIN_HAS_MUMPS_TRUE@am__append_4 = IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
+@COIN_HAS_MUMPS_TRUE@am__append_5 = IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
 subdir = src/Algorithm/LinearSolvers
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -123,17 +122,19 @@ liblinsolvers_la_LIBADD =
 @BUILD_LINEARSOLVERLOADER_TRUE@am__objects_1 =  \
 @BUILD_LINEARSOLVERLOADER_TRUE@	IpPardisoSolverInterface.lo
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__objects_2 = IpPardisoSolverInterface.lo
-@HAVE_WSMP_TRUE@am__objects_3 = IpWsmpSolverInterface.lo \
+@HAVE_MA28_TRUE@am__objects_3 = IpMa28TDependencyDetector.lo \
+@HAVE_MA28_TRUE@	IpMa28Partition.lo
+@HAVE_WSMP_TRUE@am__objects_4 = IpWsmpSolverInterface.lo \
 @HAVE_WSMP_TRUE@	IpIterativeWsmpSolverInterface.lo
-@COIN_HAS_MUMPS_TRUE@am__objects_4 = IpMumpsSolverInterface.lo
+@COIN_HAS_MUMPS_TRUE@am__objects_5 = IpMumpsSolverInterface.lo
 am_liblinsolvers_la_OBJECTS = IpLinearSolversRegOp.lo \
 	IpSlackBasedTSymScalingMethod.lo IpTripletToCSRConverter.lo \
 	IpTSymDependencyDetector.lo IpTSymLinearSolver.lo \
 	IpMa27TSolverInterface.lo IpMa57TSolverInterface.lo \
 	IpMa86SolverInterface.lo IpMa97SolverInterface.lo \
-	IpMc19TSymScalingMethod.lo IpMa28TDependencyDetector.lo \
-	IpMa77SolverInterface.lo $(am__objects_1) $(am__objects_2) \
-	$(am__objects_3) $(am__objects_4)
+	IpMc19TSymScalingMethod.lo IpMa77SolverInterface.lo \
+	$(am__objects_1) $(am__objects_2) $(am__objects_3) \
+	$(am__objects_4) $(am__objects_5)
 liblinsolvers_la_OBJECTS = $(am_liblinsolvers_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -175,6 +176,24 @@ am__depfiles_remade = ./$(DEPDIR)/IpIterativeWsmpSolverInterface.Plo \
 	./$(DEPDIR)/IpTripletToCSRConverter.Plo \
 	./$(DEPDIR)/IpWsmpSolverInterface.Plo
 am__mv = mv -f
+PPF77COMPILE = $(F77) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_FFLAGS) $(FFLAGS)
+LTPPF77COMPILE = $(LIBTOOL) $(AM_V_lt) --tag=F77 $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=compile $(F77) $(DEFS) \
+	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+	$(AM_FFLAGS) $(FFLAGS)
+AM_V_PPF77 = $(am__v_PPF77_@AM_V@)
+am__v_PPF77_ = $(am__v_PPF77_@AM_DEFAULT_V@)
+am__v_PPF77_0 = @echo "  PPF77   " $@;
+am__v_PPF77_1 = 
+F77LD = $(F77)
+F77LINK = $(LIBTOOL) $(AM_V_lt) --tag=F77 $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(F77LD) $(AM_FFLAGS) $(FFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+AM_V_F77LD = $(am__v_F77LD_@AM_V@)
+am__v_F77LD_ = $(am__v_F77LD_@AM_DEFAULT_V@)
+am__v_F77LD_0 = @echo "  F77LD   " $@;
+am__v_F77LD_1 = 
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
@@ -445,10 +464,9 @@ liblinsolvers_la_SOURCES = IpGenKKTSolverInterface.hpp \
 	IpMa86SolverInterface.cpp IpMa86SolverInterface.hpp \
 	IpMa97SolverInterface.cpp IpMa97SolverInterface.hpp \
 	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
-	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp \
 	IpMa77SolverInterface.cpp IpMa77SolverInterface.hpp \
 	$(am__append_1) $(am__append_2) $(am__append_3) \
-	$(am__append_4)
+	$(am__append_4) $(am__append_5)
 liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../../Common \
@@ -459,11 +477,6 @@ AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../../contrib/CGPenalty \
 	$(IPOPTLIB_CFLAGS)
 
-
-# Need to overwrite automake definition since otherwise libtool does not
-# understand the fortran file (need to add --tag=F77)
-#AM_FCFLAGS = $(HSL_F90_INCFLAGS)
-#LTFCCOMPILE = $(LIBTOOL) --tag=F77 --mode=compile $(FC) $(AM_FCFLAGS) $(FCFLAGS)
 
 # Astyle stuff
 ASTYLE_FILES = \
@@ -495,7 +508,7 @@ SUFFIXES = .cppbak .hppbak
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .cppbak .hppbak .cpp .hpp .lo .o .obj
+.SUFFIXES: .cppbak .hppbak .F .cpp .f .hpp .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -568,6 +581,17 @@ $(am__depfiles_remade):
 	@echo '# dummy' >$@-t && $(am__mv) $@-t $@
 
 am--depfiles: $(am__depfiles_remade)
+
+.F.o:
+	$(AM_V_PPF77)$(PPF77COMPILE) -c -o $@ $<
+
+.F.obj:
+	$(AM_V_PPF77)$(PPF77COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+.F.lo:
+	$(AM_V_PPF77)$(LTPPF77COMPILE) -c -o $@ $<
+.F.f:
+	$(F77COMPILE) -F $<
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

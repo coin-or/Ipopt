@@ -29,20 +29,20 @@ liblinsolvers_la_SOURCES += \
 	IpMa86SolverInterface.cpp IpMa86SolverInterface.hpp \
 	IpMa97SolverInterface.cpp IpMa97SolverInterface.hpp \
 	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
-	IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp \
 	IpMa77SolverInterface.cpp IpMa77SolverInterface.hpp
 
 if BUILD_LINEARSOLVERLOADER
   liblinsolvers_la_SOURCES += IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
-#  liblinsolvers_la_SOURCES += IpMa28Partition.F
 else
 if HAVE_PARDISO
   liblinsolvers_la_SOURCES += IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
 endif
-#if HAVE_MA28
-#  liblinsolvers_la_SOURCES += IpMa28Partition.F
-#endif
 endif # BUILD_LINEARSOLVERLOADER
+
+if HAVE_MA28
+  liblinsolvers_la_SOURCES += IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp
+  liblinsolvers_la_SOURCES += IpMa28Partition.F
+endif
 
 if HAVE_WSMP
   liblinsolvers_la_SOURCES += \
@@ -64,11 +64,6 @@ AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../../Interfaces \
 	-I$(srcdir)/../../contrib/CGPenalty \
 	$(IPOPTLIB_CFLAGS)
-
-# Need to overwrite automake definition since otherwise libtool does not
-# understand the fortran file (need to add --tag=F77)
-#AM_FCFLAGS = $(HSL_F90_INCFLAGS)
-#LTFCCOMPILE = $(LIBTOOL) --tag=F77 --mode=compile $(FC) $(AM_FCFLAGS) $(FCFLAGS)
 
 # Astyle stuff
 

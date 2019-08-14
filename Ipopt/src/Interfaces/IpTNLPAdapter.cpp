@@ -19,8 +19,8 @@
 
 #ifdef COIN_HAS_HSL
 #include "CoinHslConfig.h"
-#endif
 #include "IpMa28TDependencyDetector.hpp"
+#endif
 
 #ifdef COIN_HAS_MUMPS
 # include "IpMumpsSolverInterface.hpp"
@@ -275,28 +275,10 @@ bool TNLPAdapter::ProcessOptions(
       }
       else if( dependency_detector == "ma28" )
       {
-#if 0 //FIXME def COINHSL_HAS_MA28
+#ifdef COINHSL_HAS_MA28
          dependency_detector_ = new Ma28TDependencyDetector();
 #else
-# if 0 //FIXME def HAVE_LINEARSOLVERLOADER
-         dependency_detector_ = new Ma28TDependencyDetector();
-         if( !LSL_isMA28available() )
-         {
-            char buf[256];
-            int rc = LSL_loadHSL(NULL, buf, 255);
-            if( rc )
-            {
-               std::string errmsg;
-               errmsg = "Selected dependency detector MA28 not available.\nTried to obtain MA28 from shared library \"";
-               errmsg += LSL_HSLLibraryName();
-               errmsg += "\", but the following error occured:\n";
-               errmsg += buf;
-               THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
-            }
-         }
-# else
          THROW_EXCEPTION(OPTION_INVALID, "Ipopt has not been compiled with MA28.  You cannot choose \"ma28\" for \"dependency_detector\".");
-# endif
 #endif
       }
       else

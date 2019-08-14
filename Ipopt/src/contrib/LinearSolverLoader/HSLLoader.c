@@ -142,38 +142,6 @@ void ma27id(
 
 #endif
 
-#ifndef COINHSL_HAS_MA28
-
-static ma28ad_t func_ma28ad = NULL;
-
-void ma28ad(
-   void* nsize,
-   void* nz,
-   void* rw,
-   void* licn,
-   void* iw,
-   void* lirn,
-   void* iw2,
-   void* pivtol,
-   void* iw3,
-   void* iw4,
-   void* rw2,
-   void* iflag
-)
-{
-   if( func_ma28ad == NULL )
-   {
-      LSL_lateHSLLoad();
-   }
-   if( func_ma28ad == NULL )
-   {
-      fprintf(stderr, "HSL routine MA28AD not found in " HSLLIBNAME ".\nAbort...\n");
-      exit(EXIT_FAILURE);
-   }
-   func_ma28ad(nsize, nz, rw, licn, iw, lirn, iw2, pivtol, iw3, iw4, rw2, iflag);
-}
-#endif
-
 #ifndef COINHSL_HAS_MA57
 
 static ma57id_t func_ma57id = NULL;
@@ -1067,10 +1035,6 @@ int LSL_loadHSL(
    func_ma27cd = (ma27cd_t)LSL_loadSym(HSL_handle, "ma27cd", msgbuf, msglen);
 #endif
 
-#ifndef COINHSL_HAS_MA28
-   func_ma28ad = (ma28ad_t)LSL_loadSym(HSL_handle, "ma28ad", msgbuf, msglen);
-#endif
-
 #ifndef COINHSL_HAS_MA57
    func_ma57id = (ma57id_t)LSL_loadSym(HSL_handle, "ma57id", msgbuf, msglen);
    func_ma57ad = (ma57ad_t)LSL_loadSym(HSL_handle, "ma57ad", msgbuf, msglen);
@@ -1151,10 +1115,6 @@ int LSL_unloadHSL()
    func_ma27cd = NULL;
 #endif
 
-#ifndef COINHSL_HAS_MA28
-   func_ma28ad = NULL;
-#endif
-
 #ifndef COINHSL_HAS_MA57
    func_ma57id = NULL;
    func_ma57ad = NULL;
@@ -1221,15 +1181,6 @@ int LSL_isMA27available()
 {
 #ifndef COINHSL_HAS_MA27
    return func_ma27id != NULL && func_ma27ad != NULL && func_ma27bd != NULL && func_ma27cd != NULL;
-#else
-   return 1;
-#endif
-}
-
-int LSL_isMA28available()
-{
-#ifndef COINHSL_HAS_MA28
-   return func_ma28ad != NULL;
 #else
    return 1;
 #endif
@@ -1321,15 +1272,6 @@ void LSL_setMA27(
    func_ma27bd = ma27bd;
    func_ma27cd = ma27cd;
    func_ma27id = ma27id;
-#endif
-}
-
-void LSL_setMA28(
-   ma28ad_t ma28ad
-)
-{
-#ifndef COINHSL_HAS_MA28
-   func_ma28ad = ma28ad;
 #endif
 }
 

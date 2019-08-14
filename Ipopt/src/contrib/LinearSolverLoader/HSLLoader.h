@@ -136,21 +136,6 @@ typedef void (*ma27id_t)(
    double* CNTL
 );
 
-typedef void (*ma28ad_t)(
-   void* nsize,
-   void* nz,
-   void* rw,
-   void* licn,
-   void* iw,
-   void* lirn,
-   void* iw2,
-   void* pivtol,
-   void* iw3,
-   void* iw4,
-   void* rw2,
-   void* iflag
-);
-
 typedef void (*ma57ad_t)(
    ipfint*       n,     /**< Order of matrix. */
    ipfint*       ne,    /**< Number of entries. */
@@ -511,7 +496,6 @@ typedef void (*mc68_order_t)(
  * Also tries to load symbols for those HSL routines that are not linked into Ipopt, i.e., HAVE_... is not defined.
  * Returns a failure if the library cannot be loaded, but not if a symbol is not found.
  * @see LSL_isMA27available
- * @see LSL_isMA28available
  * @see LSL_isMA57available
  * @see LSL_isMA77available
  * @see LSL_isMA86available
@@ -545,12 +529,6 @@ int LSL_isHSLLoaded();
  * @return Zero if not available, nonzero if MA27 is available in the loaded library.
  */
 int LSL_isMA27available();
-
-/** Indicates whether a HSL library is loaded and all symbols necessary to use MA28 have been found.
- *
- * @return Zero if not available, nonzero if MA28 is available in the loaded library.
- */
-int LSL_isMA28available();
 
 /** Indicates whether a HSL library is loaded and all symbols necessary to use MA57 have been found.
  *
@@ -597,11 +575,6 @@ void LSL_setMA27(
    ma27bd_t ma27bd,
    ma27cd_t ma27cd,
    ma27id_t ma27id
-);
-
-/** sets pointers to MA28 functions */
-void LSL_setMA28(
-   ma28ad_t ma28ad
 );
 
 /** sets pointers to MA57 functions */
