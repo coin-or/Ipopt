@@ -98,7 +98,7 @@ if test "$coin_has_hsl" = yes ; then
 fi
 
 #TODO
-AM_CONDITIONAL([HAVE_MA28],[test "$coin_has_hsl" = yes])
+AM_CONDITIONAL([HAVE_MA28],[test "$coin_has_hsl" = yes && test "$F77" != "unavailable"])
 
 ###########
 # PARDISO #

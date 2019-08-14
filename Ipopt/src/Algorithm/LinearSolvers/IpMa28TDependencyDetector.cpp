@@ -11,7 +11,7 @@
 #endif
 
 // if we have MA28 in HSL or the linear solver loader, then we want to build the MA28 interface
-#if defined(COINHSL_HAS_MA28)
+#if defined(COINHSL_HAS_MA28) && defined(F77_FUNC)
 
 #include "IpMa28TDependencyDetector.hpp"
 

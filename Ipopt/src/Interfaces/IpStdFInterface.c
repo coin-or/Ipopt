@@ -11,6 +11,11 @@
 #include <stdio.h>
 #include <string.h>
 
+/* if we build without Fortran compiler around, then make up a Fortran name mangling scheme that often works */
+#ifndef F77_FUNC
+#define F77_FUNC(name,NAME) name ## _
+#endif
+
 /* ToDo: The following needs to be adapted based on configuration */
 typedef FORTRAN_INTEGER_TYPE fint;
 typedef double fdouble;

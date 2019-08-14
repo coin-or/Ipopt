@@ -275,7 +275,7 @@ bool TNLPAdapter::ProcessOptions(
       }
       else if( dependency_detector == "ma28" )
       {
-#ifdef COINHSL_HAS_MA28
+#if defined(COINHSL_HAS_MA28) && defined(F77_FUNC)
          dependency_detector_ = new Ma28TDependencyDetector();
 #else
          THROW_EXCEPTION(OPTION_INVALID, "Ipopt has not been compiled with MA28.  You cannot choose \"ma28\" for \"dependency_detector\".");
