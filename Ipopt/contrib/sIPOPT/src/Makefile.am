@@ -1,8 +1,7 @@
 # Copyright (C) 2004, 2008 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
-
-
+#
 # Authors:  Carl Laird, Andreas Waechter, Hans Pirnay     IBM    2009-12-19
 
 AUTOMAKE_OPTIONS = foreign
@@ -48,19 +47,16 @@ libsipopt_la_LDFLAGS = $(LT_LDFLAGS)
 
 addlibsdir = $(datadir)/coin/doc/Ipopt
 
-CXXFLAGS += -I`$(CYGPATH_W) $(srcdir)/../../../src/Common` \
--I`$(CYGPATH_W) $(srcdir)/../../../src/Interfaces` \
--I`$(CYGPATH_W) $(srcdir)/../../../src/LinAlg` \
--I`$(CYGPATH_W) $(srcdir)/../../../src/Algorithm/LinearSolvers` \
--I`$(CYGPATH_W) $(srcdir)/../../../src/LinAlg/TMatrices` \
--I`$(CYGPATH_W) $(srcdir)/../../../src/Algorithm` \
--I`$(CYGPATH_W) $(srcdir)/../../../src/Algorithm/Inexact` \
--I`$(CYGPATH_W) $(srcdir)/../../../src/contrib/CGPenalty`
+CXXFLAGS += -I$(srcdir)/../../../src/Common \
+  -I$(srcdir)/../../../src/Interfaces \
+  -I$(srcdir)/../../../src/LinAlg \
+  -I$(srcdir)/../../../src/Algorithm/LinearSolvers \
+  -I$(srcdir)/../../../src/LinAlg/TMatrices \
+  -I$(srcdir)/../../../src/Algorithm \
+  -I$(srcdir)/../../../src/Algorithm/Inexact \
+  -I$(srcdir)/../../../src/contrib/CGPenalty
 
-CFLAGS += -I`$(CYGPATH_W) $(srcdir)/../Common`
-
-# This line is necessary to allow VPATH compilation
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
+CFLAGS += -I$(srcdir)/../Common
 
 # Astyle stuff
 

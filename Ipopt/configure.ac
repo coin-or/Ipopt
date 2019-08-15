@@ -526,6 +526,12 @@ AC_CONFIG_FILES([Makefile
 		 tutorial/CodingExercise/Fortran/1-skeleton/Makefile
 		 tutorial/CodingExercise/Fortran/2-mistake/Makefile
 		 tutorial/CodingExercise/Fortran/3-solution/Makefile
+		 contrib/sIPOPT/Makefile
+		 contrib/sIPOPT/src/Makefile
+		 contrib/sIPOPT/AmplSolver/Makefile
+		 contrib/sIPOPT/examples/parametric_cpp/Makefile
+		 contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile
+		 contrib/sIPOPT/examples/redhess_cpp/Makefile
        ])
 #		 src/Apps/CUTErInterface/Makefile
 #		 tutorial/CodingExercise/Matlab/1-skeleton/startup.m
@@ -534,12 +540,6 @@ AC_CONFIG_FILES([Makefile
 #		 contrib/MatlabInterface/src/Makefile
 #		 contrib/MatlabInterface/examples/startup.m
 #		 contrib/JavaInterface/Makefile
-#		 contrib/sIPOPT/Makefile
-#		 contrib/sIPOPT/AmplSolver/Makefile
-#		 contrib/sIPOPT/examples/parametric_cpp/Makefile
-#		 contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile	
-#		 contrib/sIPOPT/examples/redhess_cpp/Makefile
-#		 contrib/sIPOPT/src/Makefile
 
 # under Windows, the Makevars file for the R Interface need to be named Makevars.win
 case $build in 

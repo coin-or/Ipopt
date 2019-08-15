@@ -17,7 +17,7 @@
 # Copyright (C) 2004, 2008 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
-
+#
 # Authors:  Carl Laird, Andreas Waechter, Hans Pirnay     IBM    2009-12-19
 
 VPATH = @srcdir@
@@ -102,8 +102,7 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 DIST_COMMON = $(srcdir)/Makefile.am
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/src/Common/config.h \
-	$(top_builddir)/src/Common/config_ipopt.h \
-	$(top_builddir)/examples/ScalableProblems/config.h
+	$(top_builddir)/src/Common/config_ipopt.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
@@ -162,6 +161,7 @@ AM_V_at = $(am__v_at_@AM_V@)
 am__v_at_ = $(am__v_at_@AM_DEFAULT_V@)
 am__v_at_0 = @
 am__v_at_1 = 
+DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src/Common
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/SensAlgorithm.Plo \
@@ -251,21 +251,22 @@ BIT64FCOMMENT = @BIT64FCOMMENT@
 BITS_PER_POINTER = @BITS_PER_POINTER@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
-CFLAGS = @CFLAGS@ -I`$(CYGPATH_W) $(srcdir)/../Common`
+CFLAGS = @CFLAGS@ -I$(srcdir)/../Common
 COIN_PKG_CONFIG_PATH = @COIN_PKG_CONFIG_PATH@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXCPP = @CXXCPP@
 CXXDEPMODE = @CXXDEPMODE@
-CXXFLAGS = @CXXFLAGS@ -I`$(CYGPATH_W) $(srcdir)/../../../src/Common` \
-	-I`$(CYGPATH_W) $(srcdir)/../../../src/Interfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/../../../src/LinAlg` -I`$(CYGPATH_W) \
-	$(srcdir)/../../../src/Algorithm/LinearSolvers` \
-	-I`$(CYGPATH_W) $(srcdir)/../../../src/LinAlg/TMatrices` \
-	-I`$(CYGPATH_W) $(srcdir)/../../../src/Algorithm` \
-	-I`$(CYGPATH_W) $(srcdir)/../../../src/Algorithm/Inexact` \
-	-I`$(CYGPATH_W) $(srcdir)/../../../src/contrib/CGPenalty`
+CXXFLAGS = @CXXFLAGS@ -I$(srcdir)/../../../src/Common \
+	-I$(srcdir)/../../../src/Interfaces \
+	-I$(srcdir)/../../../src/LinAlg \
+	-I$(srcdir)/../../../src/Algorithm/LinearSolvers \
+	-I$(srcdir)/../../../src/LinAlg/TMatrices \
+	-I$(srcdir)/../../../src/Algorithm \
+	-I$(srcdir)/../../../src/Algorithm/Inexact \
+	-I$(srcdir)/../../../src/contrib/CGPenalty
+CXXLIBS = @CXXLIBS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
@@ -277,8 +278,16 @@ ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
+F77 = @F77@
+FFLAGS = @FFLAGS@
 FGREP = @FGREP@
+FLIBS = @FLIBS@
 GREP = @GREP@
+HSLLIB_CFLAGS = @HSLLIB_CFLAGS@
+HSLLIB_CFLAGS_NOPC = @HSLLIB_CFLAGS_NOPC@
+HSLLIB_LFLAGS = @HSLLIB_LFLAGS@
+HSLLIB_LFLAGS_NOPC = @HSLLIB_LFLAGS_NOPC@
+HSLLIB_PCFILES = @HSLLIB_PCFILES@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -286,10 +295,14 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 IPALLLIBS = @IPALLLIBS@
 IPOPTAMPLINTERFACELIB_CFLAGS = @IPOPTAMPLINTERFACELIB_CFLAGS@
+IPOPTAMPLINTERFACELIB_CFLAGS_NOPC = @IPOPTAMPLINTERFACELIB_CFLAGS_NOPC@
 IPOPTAMPLINTERFACELIB_LFLAGS = @IPOPTAMPLINTERFACELIB_LFLAGS@
+IPOPTAMPLINTERFACELIB_LFLAGS_NOPC = @IPOPTAMPLINTERFACELIB_LFLAGS_NOPC@
 IPOPTAMPLINTERFACELIB_PCFILES = @IPOPTAMPLINTERFACELIB_PCFILES@
 IPOPTLIB_CFLAGS = @IPOPTLIB_CFLAGS@
+IPOPTLIB_CFLAGS_NOPC = @IPOPTLIB_CFLAGS_NOPC@
 IPOPTLIB_LFLAGS = @IPOPTLIB_LFLAGS@
+IPOPTLIB_LFLAGS_NOPC = @IPOPTLIB_LFLAGS_NOPC@
 IPOPTLIB_PCFILES = @IPOPTLIB_PCFILES@
 IPOPT_SVN_REV = @IPOPT_SVN_REV@
 JAVA_HOME = @JAVA_HOME@
@@ -324,6 +337,7 @@ PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
 RANLIB = @RANLIB@
+RPATH_FLAGS = @RPATH_FLAGS@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
@@ -337,6 +351,7 @@ ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
+ac_ct_F77 = @ac_ct_F77@
 ac_ct_PKG_CONFIG = @ac_ct_PKG_CONFIG@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
@@ -428,9 +443,6 @@ libsipopt_la_SOURCES = \
 
 libsipopt_la_LDFLAGS = $(LT_LDFLAGS)
 addlibsdir = $(datadir)/coin/doc/Ipopt
-
-# This line is necessary to allow VPATH compilation
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src/Common
 
 # Astyle stuff
 ASTYLE_FILES = \
