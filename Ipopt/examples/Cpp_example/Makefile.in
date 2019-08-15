@@ -2,11 +2,9 @@
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
 
-# $Id$
-
 ##########################################################################
 #    You can modify this example makefile to fit for your own program.   #
-#    Usually, you only need to change the five CHANGEME entries below.   #
+#    Usually, you only need to change the four CHANGEME entries below.   #
 ##########################################################################
 
 # CHANGEME: This should be the name of your executable
@@ -37,33 +35,24 @@ CXXFLAGS = @CXXFLAGS@
 # additional C++ Compiler options for linking
 CXXLINKFLAGS = @RPATH_FLAGS@
 
-# Include directories (we use the CYGPATH_W variables to allow compilation with Windows compilers)
+# Include directories
 @COIN_HAS_PKGCONFIG_TRUE@INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipopt` $(ADDINCFLAGS)
-@COIN_HAS_PKGCONFIG_FALSE@INCL = -I`$(CYGPATH_W) @abs_include_dir@/coin` @IPOPTLIB_CFLAGS_INSTALLED@ $(ADDINCFLAGS)
+@COIN_HAS_PKGCONFIG_FALSE@INCL = -I@abs_include_dir@/coin @IPOPTLIB_CFLAGS@ $(ADDINCFLAGS)
 
 # Linker flags
 @COIN_HAS_PKGCONFIG_TRUE@LIBS = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt`
-@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_TRUE@LIBS = -link -libpath:`$(CYGPATH_W) @abs_lib_dir@` libipopt.lib @IPOPTLIB_LIBS_INSTALLED@
-@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_FALSE@LIBS = -L@abs_lib_dir@ -lipopt @IPOPTLIB_LIBS_INSTALLED@
+@COIN_HAS_PKGCONFIG_FALSE@LIBS = -L@abs_lib_dir@ -lipopt @IPOPTLIB_LFLAGS@
 
-# The following is necessary under cygwin, if native compilers are used
-CYGPATH_W = @CYGPATH_W@
 
 all: $(EXE)
 
-.SUFFIXES: .cpp .c .o .obj
+.SUFFIXES: .cpp .@OBJEXT@
 
 $(EXE): $(OBJS)
-	bla=;\
-	for file in $(OBJS); do bla="$$bla `$(CYGPATH_W) $$file`"; done; \
-	$(CXX) $(CXXLINKFLAGS) $(CXXFLAGS) -o $@ $$bla $(LIBS) $(ADDLIBS)
+	$(CXX) $(CXXLINKFLAGS) $(CXXFLAGS) -o $@ $(OBJS) $(LIBS) $(ADDLIBS)
 
 clean:
 	rm -rf $(EXE) $(OBJS)
 
-.cpp.o:
+.cpp.@OBJEXT@:
 	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ $<
-
-
-.cpp.obj:
-	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `$(CYGPATH_W) '$<'`

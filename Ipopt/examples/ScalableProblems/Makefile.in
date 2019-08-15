@@ -2,8 +2,6 @@
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
 
-# $Id$
-
 # Directory to the sources for the (example) problem definition files
 SRCDIR = @srcdir@
 VPATH = @srcdir@
@@ -12,33 +10,23 @@ VPATH = @srcdir@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
 
-# Archiver for C++ object files (e.g., needed to build a library on AIX to
-# avoid multiply defined symbols for templates)
-CXXAR = @CXXAR@
-
 # additional C++ Compiler options for linking
 CXXLINKFLAGS = @RPATH_FLAGS@
 
-# Include directories (we use the CYGPATH_W variables to allow compilation with Windows compilers)
-@COIN_HAS_PKGCONFIG_TRUE@INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipopt` $(ADDINCFLAGS) -I. -DHAVE_CONFIG_H
-@COIN_HAS_PKGCONFIG_FALSE@INCL = -I`$(CYGPATH_W) @abs_include_dir@/coin` @IPOPTLIB_CFLAGS_INSTALLED@ $(ADDINCFLAGS) -I. -DHAVE_CONFIG_H
-
-LIB = libscalexamples.@LIBEXT@
+# Include directories
+@COIN_HAS_PKGCONFIG_TRUE@INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipopt`
+@COIN_HAS_PKGCONFIG_FALSE@INCL = -I@abs_include_dir@/coin @IPOPTLIB_CFLAGS@ $(ADDINCFLAGS)
 
 # Linker flags
-@COIN_HAS_PKGCONFIG_TRUE@LIBS = $(LIB) `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt`
-@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_TRUE@LIBS = $(LIB) -link -libpath:`$(CYGPATH_W) @abs_lib_dir@` libipopt.lib @IPOPTLIB_LIBS_INSTALLED@
-@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_FALSE@LIBS = $(LIB) -L@abs_lib_dir@ -lipopt @IPOPTLIB_LIBS_INSTALLED@
+@COIN_HAS_PKGCONFIG_TRUE@LIBS = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt`
+@COIN_HAS_PKGCONFIG_FALSE@LIBS = -L@abs_lib_dir@ -lipopt @IPOPTLIB_LFLAGS@
 
 # Name of the executable
 EXE = solve_problem@EXEEXT@
 
 # List of all object files
-MAINOBJ =  solve_problem.@OBJEXT@
-
-# List of all object files
-LIBOBJS =  \
-	MittelmannDistCntrlNeumA.@OBJEXT@ \
+MAINOBJ =  solve_problem.@OBJEXT@ \
+        MittelmannDistCntrlNeumA.@OBJEXT@ \
         MittelmannDistCntrlNeumB.@OBJEXT@ \
         MittelmannDistCntrlDiri.@OBJEXT@ \
         MittelmannBndryCntrlDiri.@OBJEXT@ \
@@ -92,23 +80,13 @@ solve_problem.@OBJEXT@: \
 	MittelmannBndryCntrlNeum.hpp \
 	MittelmannParaCntrl.hpp
 
-# The following is necessary under cygwin, if native compilers are used
-CYGPATH_W = @CYGPATH_W@
-
-.SUFFIXES: .cpp .c .o .obj
+.SUFFIXES: .cpp .@OBJEXT@
 
 $(EXE): $(MAINOBJ) $(LIB)
 	$(CXX) $(CXXFLAGS) $(CXXLINKFLAGS) -o $@ $(MAINOBJ) $(LIBS)
 
-$(LIB): $(LIBOBJS)
-	$(CXXAR) $(LIB) $(LIBOBJS)
-
 clean:
-	rm -rf $(EXE) $(MAINOBJ) $(LIBOBJS) $(LIB)
+	rm -rf $(EXE) $(MAINOBJ)
 
-.cpp.o:
+.cpp.@OBJEXT@:
 	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `test -f '$<' || echo '$(SRCDIR)/'`$<
-
-
-.cpp.obj:
-	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `if test -f '$<'; then $(CYGPATH_W) '$<'; else $(CYGPATH_W) '$(SRCDIR)/$<'; fi`

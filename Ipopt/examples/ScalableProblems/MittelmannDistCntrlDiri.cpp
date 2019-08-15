@@ -6,15 +6,7 @@
 
 #include "MittelmannDistCntrlDiri.hpp"
 
-#ifdef HAVE_CASSERT
-# include <cassert>
-#else
-# ifdef HAVE_ASSERT_H
-#  include <assert.h>
-# else
-#  error "don't have header file for assert"
-# endif
-#endif
+#include <cassert>
 
 using namespace Ipopt;
 

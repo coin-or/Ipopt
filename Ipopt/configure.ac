@@ -509,13 +509,13 @@ AC_CONFIG_FILES([Makefile
 		 ipopt.pc
 		 doc/Doxyfile
 		 examples/hs071_f/hs071_f.f
+		 examples/hs071_f/Makefile
+		 examples/Cpp_example/Makefile
+		 examples/hs071_cpp/Makefile
+		 examples/hs071_c/Makefile
+		 examples/ScalableProblems/Makefile
        ])
 #		 src/Apps/CUTErInterface/Makefile
-#		 examples/hs071_f/Makefile
-#		 examples/Cpp_example/Makefile
-#		 examples/hs071_cpp/Makefile
-#		 examples/hs071_c/Makefile
-#		 examples/ScalableProblems/Makefile
 #		 tutorial/CodingExercise/C/1-skeleton/Makefile
 #		 tutorial/CodingExercise/C/2-mistake/Makefile
 #		 tutorial/CodingExercise/C/3-solution/Makefile
@@ -557,6 +557,6 @@ if test $coin_has_asl = yes ; then
                   ])
 fi
 
-AC_CONFIG_HEADER([src/Common/config.h src/Common/config_ipopt.h examples/ScalableProblems/config.h])
+AC_CONFIG_HEADER([src/Common/config.h src/Common/config_ipopt.h])
 
 AC_COIN_FINALIZE

@@ -6,31 +6,8 @@
 
 #include "LuksanVlcek4.hpp"
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#else
-#include "configall_system.h"
-#endif
-
-#ifdef HAVE_CMATH
-# include <cmath>
-#else
-# ifdef HAVE_MATH_H
-#  include <math.h>
-# else
-#  error "don't have header file for math"
-# endif
-#endif
-
-#ifdef HAVE_CSTDIO
-# include <cstdio>
-#else
-# ifdef HAVE_STDIO_H
-#  include <stdio.h>
-# else
-#  error "don't have header file for stdio"
-# endif
-#endif
+#include <cmath>
+#include <cstdio>
 
 using namespace Ipopt;
 

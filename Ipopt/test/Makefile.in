@@ -104,8 +104,7 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 DIST_COMMON = $(srcdir)/Makefile.am
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/src/Common/config.h \
-	$(top_builddir)/src/Common/config_ipopt.h \
-	$(top_builddir)/examples/ScalableProblems/config.h
+	$(top_builddir)/src/Common/config_ipopt.h
 CONFIG_CLEAN_FILES = run_unitTests hs071_main.cpp hs071_nlp.cpp \
 	hs071_nlp.hpp hs071_c.c
 CONFIG_CLEAN_VPATH_FILES =
@@ -139,7 +138,7 @@ AM_V_at = $(am__v_at_@AM_V@)
 am__v_at_ = $(am__v_at_@AM_DEFAULT_V@)
 am__v_at_0 = @
 am__v_at_1 = 
-DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src/Common -I$(top_builddir)/examples/ScalableProblems
+DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src/Common
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/hs071_c.Po ./$(DEPDIR)/hs071_main.Po \
@@ -317,6 +316,7 @@ PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
 RANLIB = @RANLIB@
+RPATH_FLAGS = @RPATH_FLAGS@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
