@@ -92,13 +92,23 @@ AC_CHECK_FUNCS([MPI_Initialized])
 
 AC_COIN_CHK_PKG(HSL,[IpoptLib HSLLib],[coinhsl],[build])   # TODO >= 1.3
 
+have_ma28=no
 if test "$coin_has_hsl" = yes ; then
   AC_COIN_FINALIZE_FLAGS([HSLLib])
   AC_COIN_NAMEMANGLING([HSL],[ma27ad],[$HSLLIB_LFLAGS])
-fi
 
-#TODO
-AM_CONDITIONAL([HAVE_MA28],[test "$coin_has_hsl" = yes && test "$F77" != "unavailable"])
+  # extra check for MA28, since that decides whether we have to build IpMa28Partition.F
+  if test "$F77" != "unavailable" ; then
+    AC_COIN_TRY_LINK([ma28ad],[$HSLLIB_LFLAGS],,[
+      if test "$ma28ad_namemangling" != "$ac_cv_f77_mangling" ; then
+        AC_MSG_WARN([Name mangling of MA28 different than Fortran. This will not link. Disabling MA28])
+      else
+        have_ma28=yes
+      fi
+    ])
+  fi
+fi
+AM_CONDITIONAL([HAVE_MA28],[test "$have_ma28" = yes])
 
 ###########
 # PARDISO #
