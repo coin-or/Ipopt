@@ -7,6 +7,8 @@ Name: IPOPT
 Description: Interior Point Optimizer
 URL: https://projects.coin-or.org/Ipopt
 Version: @PACKAGE_VERSION@
-Libs: -L${libdir} -lipopt @IPOPTLIB_PCLIBS@
+Libs: -L${libdir} -lipopt
+Libs.private: @IPOPTLIB_LFLAGS_NOPC@
 Cflags: -I${includedir}
-Requires: @IPOPTLIB_PCREQUIRES@
+Requires:
+Requires.private: @IPOPTLIB_PCFILES@

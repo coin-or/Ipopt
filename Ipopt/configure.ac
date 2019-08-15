@@ -506,7 +506,7 @@ AC_CONFIG_FILES([Makefile
 		 src/Apps/AmplSolver/Makefile
 		 test/Makefile
 		 test/run_unitTests
-		 ipopt.pc ipopt-uninstalled.pc
+		 ipopt.pc
 		 doc/Doxyfile
 		 examples/hs071_f/hs071_f.f
        ])

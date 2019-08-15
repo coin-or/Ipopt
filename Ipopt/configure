@@ -25002,7 +25002,7 @@ $as_echo "$as_me: IPOPTAMPLINTERFACELIB_CFLAGS: \"${IPOPTAMPLINTERFACELIB_CFLAGS
 
 
 
-ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Algorithm/Inexact/Makefile src/contrib/CGPenalty/Makefile src/contrib/LinearSolverLoader/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile test/Makefile test/run_unitTests ipopt.pc ipopt-uninstalled.pc doc/Doxyfile examples/hs071_f/hs071_f.f"
+ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Algorithm/Inexact/Makefile src/contrib/CGPenalty/Makefile src/contrib/LinearSolverLoader/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile test/Makefile test/run_unitTests ipopt.pc doc/Doxyfile examples/hs071_f/hs071_f.f"
 
 #		 src/Apps/CUTErInterface/Makefile
 #		 examples/hs071_f/Makefile
@@ -26425,7 +26425,6 @@ do
     "test/Makefile") CONFIG_FILES="$CONFIG_FILES test/Makefile" ;;
     "test/run_unitTests") CONFIG_FILES="$CONFIG_FILES test/run_unitTests" ;;
     "ipopt.pc") CONFIG_FILES="$CONFIG_FILES ipopt.pc" ;;
-    "ipopt-uninstalled.pc") CONFIG_FILES="$CONFIG_FILES ipopt-uninstalled.pc" ;;
     "doc/Doxyfile") CONFIG_FILES="$CONFIG_FILES doc/Doxyfile" ;;
     "examples/hs071_f/hs071_f.f") CONFIG_FILES="$CONFIG_FILES examples/hs071_f/hs071_f.f" ;;
     "contrib/RInterface/src/Makevars.win") CONFIG_FILES="$CONFIG_FILES contrib/RInterface/src/Makevars.win:contrib/RInterface/src/Makevars.in" ;;

@@ -122,8 +122,8 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/src/Common/config.h \
 	$(top_builddir)/src/Common/config_ipopt.h \
 	$(top_builddir)/examples/ScalableProblems/config.h
-CONFIG_CLEAN_FILES = ipopt.pc ipopt-uninstalled.pc doc/Doxyfile \
-	examples/hs071_f/hs071_f.f contrib/RInterface/src/Makevars.win \
+CONFIG_CLEAN_FILES = ipopt.pc doc/Doxyfile examples/hs071_f/hs071_f.f \
+	contrib/RInterface/src/Makevars.win \
 	contrib/RInterface/src/Makevars ipoptamplinterface.pc \
 	ipoptamplinterface-uninstalled.pc
 CONFIG_CLEAN_VPATH_FILES =  \
@@ -546,8 +546,6 @@ examples/ScalableProblems/stamp-h3: $(top_srcdir)/examples/ScalableProblems/conf
 distclean-hdr:
 	-rm -f examples/ScalableProblems/config.h examples/ScalableProblems/stamp-h3
 ipopt.pc: $(top_builddir)/config.status $(srcdir)/ipopt.pc.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-ipopt-uninstalled.pc: $(top_builddir)/config.status $(srcdir)/ipopt-uninstalled.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 doc/Doxyfile: $(top_builddir)/config.status $(top_srcdir)/doc/Doxyfile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
