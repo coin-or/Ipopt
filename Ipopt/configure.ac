@@ -514,23 +514,23 @@ AC_CONFIG_FILES([Makefile
 		 examples/hs071_cpp/Makefile
 		 examples/hs071_c/Makefile
 		 examples/ScalableProblems/Makefile
+		 tutorial/CodingExercise/C/1-skeleton/Makefile
+		 tutorial/CodingExercise/C/2-mistake/Makefile
+		 tutorial/CodingExercise/C/3-solution/Makefile
+		 tutorial/CodingExercise/Cpp/1-skeleton/Makefile
+		 tutorial/CodingExercise/Cpp/2-mistake/Makefile
+		 tutorial/CodingExercise/Cpp/3-solution/Makefile
+		 tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f
+		 tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f
+		 tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f
+		 tutorial/CodingExercise/Fortran/1-skeleton/Makefile
+		 tutorial/CodingExercise/Fortran/2-mistake/Makefile
+		 tutorial/CodingExercise/Fortran/3-solution/Makefile
        ])
 #		 src/Apps/CUTErInterface/Makefile
-#		 tutorial/CodingExercise/C/1-skeleton/Makefile
-#		 tutorial/CodingExercise/C/2-mistake/Makefile
-#		 tutorial/CodingExercise/C/3-solution/Makefile
-#		 tutorial/CodingExercise/Cpp/1-skeleton/Makefile
-#		 tutorial/CodingExercise/Cpp/2-mistake/Makefile
-#		 tutorial/CodingExercise/Cpp/3-solution/Makefile
 #		 tutorial/CodingExercise/Matlab/1-skeleton/startup.m
 #		 tutorial/CodingExercise/Matlab/2-mistake/startup.m
 #		 tutorial/CodingExercise/Matlab/3-solution/startup.m
-#		 tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f
-#		 tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f
-#		 tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f
-#		 tutorial/CodingExercise/Fortran/1-skeleton/Makefile
-#		 tutorial/CodingExercise/Fortran/2-mistake/Makefile
-#		 tutorial/CodingExercise/Fortran/3-solution/Makefile
 #		 contrib/MatlabInterface/src/Makefile
 #		 contrib/MatlabInterface/examples/startup.m
 #		 contrib/JavaInterface/Makefile
