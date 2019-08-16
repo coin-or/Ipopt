@@ -337,6 +337,15 @@ AC_SUBST(ASTYLEFLAGS)
 AC_SUBST(IPALLLIBS)
 IPALLLIBS="../contrib/CGPenalty/libcgpenalty.la ../Algorithm/libipoptalg.la ../Algorithm/LinearSolvers/liblinsolvers.la ../Common/libcommon.la ../LinAlg/liblinalg.la ../LinAlg/TMatrices/libtmatrices.la"
 
+AM_CONDITIONAL([BUILD_INEXACT], [test $use_inexact = yes])
+if test $use_inexact = yes; then
+  IPALLLIBS="../Algorithm/Inexact/libinexact.la $IPALLLIBS"
+fi
+
+########################################################################
+##                      Linear solver loader                          ##
+########################################################################
+
 AC_ARG_ENABLE([linear-solver-loader],
   [AC_HELP_STRING([--enable-linear-solver-loader],
      [compile linear solver loader (default: yes, if F77 available, otherwise no)])],
@@ -346,7 +355,7 @@ AC_ARG_ENABLE([linear-solver-loader],
        AC_MSG_ERROR([invalid argument for --enable-linear-solver-loader: $enableval]);;
    esac
    use_linearsolverloader=$enableval],
-  [if test "$F77" != unavailable ; then use_linearsolverloader=yes; else use_linearsolverloader=no; fi])
+  [use_linearsolverloader=yes])
 
 AC_MSG_CHECKING([whether the linear solver loader should be compiled])
 AC_MSG_RESULT([$use_linearsolverloader])
@@ -359,23 +368,10 @@ fi
 
 AM_CONDITIONAL([BUILD_LINEARSOLVERLOADER],[test $use_linearsolverloader = yes])
 
-AM_CONDITIONAL([BUILD_INEXACT], [test $use_inexact = yes])
-if test $use_inexact = yes; then
-  IPALLLIBS="../Algorithm/Inexact/libinexact.la $IPALLLIBS"
-fi
-
-########################################################################
-##                 Linear solver loader stuff                         ##
-########################################################################
-
 AC_LANG_PUSH(C)
 AC_CHECK_HEADER([windows.h])
 AC_CHECK_HEADER([dlfcn.h])
-AC_CHECK_LIB(dl,[dlopen],[
-  IPOPTLIB_LIBS="$IPOPTLIB_LIBS -ldl"
-  IPOPTLIB_PCLIBS="$IPOPTLIB_PCLIBS -ldl"
-  IPOPTLIB_LIBS_INSTALLED="$IPOPTLIB_LIBS_INSTALLED -ldl"
- ],[])
+AC_CHECK_LIB(dl,[dlopen],[IPOPTLIB_LFLAGS="$IPOPTLIB_LFLAGS -ldl"],[])
 
 case $host in
   *-cygwin* |  *-mingw* |  *-msys*)
