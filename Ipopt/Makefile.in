@@ -137,7 +137,6 @@ CONFIG_CLEAN_FILES = ipopt.pc doc/Doxyfile examples/hs071_f/hs071_f.f \
 	tutorial/CodingExercise/Fortran/1-skeleton/Makefile \
 	tutorial/CodingExercise/Fortran/2-mistake/Makefile \
 	tutorial/CodingExercise/Fortran/3-solution/Makefile \
-	contrib/sIPOPT/Makefile contrib/sIPOPT/AmplSolver/Makefile \
 	contrib/sIPOPT/examples/parametric_cpp/Makefile \
 	contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile \
 	contrib/sIPOPT/examples/redhess_cpp/Makefile \
@@ -300,7 +299,7 @@ CTAGS = ctags
 CSCOPE = cscope
 DIST_SUBDIRS = src/Common src/LinAlg src/Algorithm \
 	src/contrib/CGPenalty src/contrib/LinearSolverLoader \
-	src/Interfaces src/Apps test
+	src/Interfaces src/Apps contrib/sIPOPT test
 pkgdatadir = $(datadir)/$(PACKAGE_TARNAME)
 pkgincludedir = $(includedir)/coin-or
 ACLOCAL = @ACLOCAL@
@@ -487,7 +486,8 @@ COIN_HAS_LATEX = @COIN_HAS_LATEX_TRUE@TRUE
 # autoconf substitution.
 DOXYTAG_EDIT = sed -e 's|@baredocdir_nosub@|$(datarootdir)/doc|g'
 SUBDIRS = src/Common src/LinAlg src/Algorithm src/contrib/CGPenalty \
-	$(am__append_1) src/Interfaces src/Apps $(am__append_2)
+	$(am__append_1) src/Interfaces src/Apps contrib/sIPOPT \
+	$(am__append_2)
 
 # Stuff to clean up from "make test"
 DISTCLEANFILES = \
@@ -592,10 +592,6 @@ tutorial/CodingExercise/Fortran/1-skeleton/Makefile: $(top_builddir)/config.stat
 tutorial/CodingExercise/Fortran/2-mistake/Makefile: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Fortran/2-mistake/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 tutorial/CodingExercise/Fortran/3-solution/Makefile: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Fortran/3-solution/Makefile.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-contrib/sIPOPT/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/sIPOPT/Makefile.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-contrib/sIPOPT/AmplSolver/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/sIPOPT/AmplSolver/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 contrib/sIPOPT/examples/parametric_cpp/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/sIPOPT/examples/parametric_cpp/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
@@ -1016,6 +1012,8 @@ astyle:
 	cd src/LinAlg; $(MAKE) astyle
 	cd src/LinAlg/TMatrices; $(MAKE) astyle
 	cd src/Interfaces; $(MAKE) astyle
+	cd contrib/sIPOPT/src; $(MAKE) astyle
+	cd contrib/sIPOPT/AmplSolver; $(MAKE) astyle
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

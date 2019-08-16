@@ -251,21 +251,14 @@ BIT64FCOMMENT = @BIT64FCOMMENT@
 BITS_PER_POINTER = @BITS_PER_POINTER@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
-CFLAGS = @CFLAGS@ -I$(srcdir)/../Common
+CFLAGS = @CFLAGS@
 COIN_PKG_CONFIG_PATH = @COIN_PKG_CONFIG_PATH@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXCPP = @CXXCPP@
 CXXDEPMODE = @CXXDEPMODE@
-CXXFLAGS = @CXXFLAGS@ -I$(srcdir)/../../../src/Common \
-	-I$(srcdir)/../../../src/Interfaces \
-	-I$(srcdir)/../../../src/LinAlg \
-	-I$(srcdir)/../../../src/Algorithm/LinearSolvers \
-	-I$(srcdir)/../../../src/LinAlg/TMatrices \
-	-I$(srcdir)/../../../src/Algorithm \
-	-I$(srcdir)/../../../src/Algorithm/Inexact \
-	-I$(srcdir)/../../../src/contrib/CGPenalty
+CXXFLAGS = @CXXFLAGS@
 CXXLIBS = @CXXLIBS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
@@ -443,6 +436,16 @@ libsipopt_la_SOURCES = \
 
 libsipopt_la_LDFLAGS = $(LT_LDFLAGS)
 addlibsdir = $(datadir)/coin/doc/Ipopt
+AM_CPPFLAGS = -DIPOPT_BUILD \
+  -I$(srcdir)/../../../src/Common \
+  -I$(srcdir)/../../../src/Interfaces \
+  -I$(srcdir)/../../../src/LinAlg \
+  -I$(srcdir)/../../../src/Algorithm/LinearSolvers \
+  -I$(srcdir)/../../../src/LinAlg/TMatrices \
+  -I$(srcdir)/../../../src/Algorithm \
+  -I$(srcdir)/../../../src/Algorithm/Inexact \
+  -I$(srcdir)/../../../src/contrib/CGPenalty
+
 
 # Astyle stuff
 ASTYLE_FILES = \

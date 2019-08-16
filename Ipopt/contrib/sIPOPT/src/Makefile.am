@@ -47,7 +47,8 @@ libsipopt_la_LDFLAGS = $(LT_LDFLAGS)
 
 addlibsdir = $(datadir)/coin/doc/Ipopt
 
-CXXFLAGS += -I$(srcdir)/../../../src/Common \
+AM_CPPFLAGS = -DIPOPT_BUILD \
+  -I$(srcdir)/../../../src/Common \
   -I$(srcdir)/../../../src/Interfaces \
   -I$(srcdir)/../../../src/LinAlg \
   -I$(srcdir)/../../../src/Algorithm/LinearSolvers \
@@ -55,8 +56,6 @@ CXXFLAGS += -I$(srcdir)/../../../src/Common \
   -I$(srcdir)/../../../src/Algorithm \
   -I$(srcdir)/../../../src/Algorithm/Inexact \
   -I$(srcdir)/../../../src/contrib/CGPenalty
-
-CFLAGS += -I$(srcdir)/../Common
 
 # Astyle stuff
 
@@ -111,4 +110,3 @@ astyle: $(ASTYLE_FILES)
 	mv $< $@
 	$(ASTYLE) $(ASTYLEFLAGS) < $@ > $<
 	touch $@
-

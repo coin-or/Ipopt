@@ -16,6 +16,8 @@ endif
 
 SUBDIRS += src/Interfaces src/Apps
 
+SUBDIRS += contrib/sIPOPT
+
 if ALWAYS_FALSE
   SUBDIRS += test
 endif
@@ -80,6 +82,8 @@ astyle:
 	cd src/LinAlg; $(MAKE) astyle
 	cd src/LinAlg/TMatrices; $(MAKE) astyle
 	cd src/Interfaces; $(MAKE) astyle
+	cd contrib/sIPOPT/src; $(MAKE) astyle
+	cd contrib/sIPOPT/AmplSolver; $(MAKE) astyle
 
 pkgconfiglibdir = $(libdir)/pkgconfig
 pkgconfiglib_DATA = ipopt.pc
