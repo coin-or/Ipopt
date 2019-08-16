@@ -36,14 +36,16 @@ CXXFLAGS = @CXXFLAGS@
 # additional C++ Compiler options for linking
 CXXLINKFLAGS = @RPATH_FLAGS@
 
+prefix=@prefix@
+exec_prefix=@exec_prefix@
 
 # Include directories
 @COIN_HAS_PKGCONFIG_TRUE@INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipopt` $(ADDINCFLAGS)
-@COIN_HAS_PKGCONFIG_FALSE@INCL = -I@abs_include_dir@/coin @IPOPTLIB_CFLAGS@ $(ADDINCFLAGS)
+@COIN_HAS_PKGCONFIG_FALSE@INCL = -I@includedir@/coin @IPOPTLIB_CFLAGS@ $(ADDINCFLAGS)
 
 # Linker flags
 @COIN_HAS_PKGCONFIG_TRUE@LIBS = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt`
-@COIN_HAS_PKGCONFIG_FALSE@LIBS = -L@abs_lib_dir@ -lipopt @IPOPTLIB_LFLAGS@
+@COIN_HAS_PKGCONFIG_FALSE@LIBS = -L@libdir@ -lipopt @IPOPTLIB_LFLAGS@
 
 all: $(EXE)
 
