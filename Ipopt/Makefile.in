@@ -145,11 +145,6 @@ CONFIG_CLEAN_FILES = ipopt.pc doc/Doxyfile examples/hs071_f/hs071_f.f \
 	contrib/RInterface/src/Makevars ipoptamplinterface.pc \
 	ipoptamplinterface-uninstalled.pc
 CONFIG_CLEAN_VPATH_FILES =  \
-	contrib/MatlabInterface/examples/examplehs038.m \
-	contrib/MatlabInterface/examples/examplehs051.m \
-	contrib/MatlabInterface/examples/examplehs071.m \
-	contrib/MatlabInterface/examples/examplelasso.m \
-	contrib/MatlabInterface/examples/lasso.m \
 	contrib/JavaInterface/org/coinor/Ipopt.java \
 	contrib/JavaInterface/org/coinor/examples/HS071.java \
 	contrib/JavaInterface/org/coinor/examples/scalable/SolveProblem.java \
@@ -208,9 +203,6 @@ CONFIG_CLEAN_VPATH_FILES =  \
 	tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_main.cpp \
 	tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_nlp.hpp \
 	tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_nlp.cpp \
-	tutorial/CodingExercise/Matlab/1-skeleton/TutorialMatlab.m \
-	tutorial/CodingExercise/Matlab/2-mistake/TutorialMatlab.m \
-	tutorial/CodingExercise/Matlab/3-solution/TutorialMatlab.m \
 	contrib/sIPOPT/examples/parametric_cpp/parametric_driver.cpp \
 	contrib/sIPOPT/examples/parametric_cpp/parametricTNLP.cpp \
 	contrib/sIPOPT/examples/parametric_cpp/parametricTNLP.hpp \

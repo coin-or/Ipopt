@@ -372,11 +372,11 @@ AC_CONFIG_LINKS([test/hs071_main.cpp:examples/hs071_cpp/hs071_main.cpp
 ##          Create links for VPATH config of certain files            ##
 ########################################################################
 
-AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/examplehs038.m)
-AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/examplehs051.m)
-AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/examplehs071.m)
-AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/examplelasso.m)
-AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/lasso.m)
+#AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/examplehs038.m)
+#AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/examplehs051.m)
+#AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/examplehs071.m)
+#AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/examplelasso.m)
+#AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/lasso.m)
 
 AC_COIN_VPATH_LINK(contrib/JavaInterface/org/coinor/Ipopt.java)
 AC_COIN_VPATH_LINK(contrib/JavaInterface/org/coinor/examples/HS071.java)
@@ -446,9 +446,9 @@ AC_COIN_VPATH_LINK(tutorial/CodingExercise/Cpp/2-mistake/TutorialCpp_nlp.cpp)
 AC_COIN_VPATH_LINK(tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_main.cpp)
 AC_COIN_VPATH_LINK(tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_nlp.hpp)
 AC_COIN_VPATH_LINK(tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_nlp.cpp)
-AC_COIN_VPATH_LINK(tutorial/CodingExercise/Matlab/1-skeleton/TutorialMatlab.m)
-AC_COIN_VPATH_LINK(tutorial/CodingExercise/Matlab/2-mistake/TutorialMatlab.m)
-AC_COIN_VPATH_LINK(tutorial/CodingExercise/Matlab/3-solution/TutorialMatlab.m)
+#AC_COIN_VPATH_LINK(tutorial/CodingExercise/Matlab/1-skeleton/TutorialMatlab.m)
+#AC_COIN_VPATH_LINK(tutorial/CodingExercise/Matlab/2-mistake/TutorialMatlab.m)
+#AC_COIN_VPATH_LINK(tutorial/CodingExercise/Matlab/3-solution/TutorialMatlab.m)
 
 AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/parametric_cpp/parametric_driver.cpp)
 AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/parametric_cpp/parametricTNLP.cpp)
