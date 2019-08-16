@@ -7,6 +7,18 @@
 AUTOMAKE_OPTIONS = foreign
 
 includesipoptdir = $(includedir)/coin
+includesipopt_HEADERS = \
+	SensBacksolver.hpp \
+	SensAlgorithm.hpp \
+	SensRegOp.hpp \
+	SensMeasurement.hpp \
+	SensApplication.hpp \
+	SensUtils.hpp \
+	SensPCalculator.hpp \
+	SensSchurData.hpp \
+	SensSchurDriver.hpp \
+	SensStepCalc.hpp \
+	SensSimpleBacksolver.hpp
 
 lib_LTLIBRARIES = libsipopt.la
 

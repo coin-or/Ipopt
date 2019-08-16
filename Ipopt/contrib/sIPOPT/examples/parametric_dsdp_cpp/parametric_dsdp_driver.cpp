@@ -8,7 +8,6 @@
 
 #include "IpIpoptApplication.hpp"
 #include "SensApplication.hpp"
-#include "IpPDSearchDirCalc.hpp"
 #include "IpIpoptAlg.hpp"
 #include "SensRegOp.hpp"
 
