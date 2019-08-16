@@ -2,6 +2,10 @@ This file contain the log of changes for the main development branch (trunk).
 More detailed information about incremental changes can be found in the
 history management of subversion.
 
+3.13
+- dropped support for Pardiso < 4.0 from pardiso-project.org
+- dropped support for MA28 in linear solver loader
+
 2019-04-08 releases/3.12.13
         - fixed Pardiso settings when using Pardiso from Pardiso project
           website (by Olaf Schenk): the new settings should provide much
