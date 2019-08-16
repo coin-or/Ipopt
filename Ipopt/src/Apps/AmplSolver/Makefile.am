@@ -13,15 +13,14 @@ libipoptamplinterface_la_SOURCES = \
 	AmplTNLP.cpp AmplTNLP.hpp
 
 libipoptamplinterface_la_LIBADD = ../../Interfaces/libipopt.la \
-	$(IPOPTAMPLINTERFACELIB_LIBS)
+	$(IPOPTAMPLINTERFACELIB_LFLAGS)
 
 libipoptamplinterface_la_LDFLAGS = $(LT_LDFLAGS)
 
 ipopt_SOURCES = \
 	ampl_ipopt.cpp
 
-ipopt_LDADD = libipoptamplinterface.la ../../Interfaces/libipopt.la \
-	$(IPOPTAMPLINTERFACELIB_LIBS)
+ipopt_LDADD = libipoptamplinterface.la ../../Interfaces/libipopt.la
 
 AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../../Common \
@@ -29,7 +28,7 @@ AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../../LinAlg/TMatrices \
 	-I$(srcdir)/../../Algorithm \
 	-I$(srcdir)/../../Interfaces \
-	$(ASL_CFLAGS)
+	$(IPOPTAMPLINTERFACELIB_CFLAGS)
 
 includeipoptdir = $(includedir)/coin
 includeipopt_HEADERS = AmplTNLP.hpp

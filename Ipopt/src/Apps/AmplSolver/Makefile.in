@@ -140,7 +140,9 @@ am__uninstall_files_from_dir = { \
          $(am__cd) "$$dir" && rm -f $$files; }; \
   }
 LTLIBRARIES = $(lib_LTLIBRARIES)
-libipoptamplinterface_la_DEPENDENCIES = ../../Interfaces/libipopt.la
+am__DEPENDENCIES_1 =
+libipoptamplinterface_la_DEPENDENCIES = ../../Interfaces/libipopt.la \
+	$(am__DEPENDENCIES_1)
 am_libipoptamplinterface_la_OBJECTS = AmplTNLP.lo
 libipoptamplinterface_la_OBJECTS =  \
 	$(am_libipoptamplinterface_la_OBJECTS)
@@ -406,22 +408,20 @@ libipoptamplinterface_la_SOURCES = \
 	AmplTNLP.cpp AmplTNLP.hpp
 
 libipoptamplinterface_la_LIBADD = ../../Interfaces/libipopt.la \
-	$(IPOPTAMPLINTERFACELIB_LIBS)
+	$(IPOPTAMPLINTERFACELIB_LFLAGS)
 
 libipoptamplinterface_la_LDFLAGS = $(LT_LDFLAGS)
 ipopt_SOURCES = \
 	ampl_ipopt.cpp
 
-ipopt_LDADD = libipoptamplinterface.la ../../Interfaces/libipopt.la \
-	$(IPOPTAMPLINTERFACELIB_LIBS)
-
+ipopt_LDADD = libipoptamplinterface.la ../../Interfaces/libipopt.la
 AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../../Common \
 	-I$(srcdir)/../../LinAlg \
 	-I$(srcdir)/../../LinAlg/TMatrices \
 	-I$(srcdir)/../../Algorithm \
 	-I$(srcdir)/../../Interfaces \
-	$(ASL_CFLAGS)
+	$(IPOPTAMPLINTERFACELIB_CFLAGS)
 
 includeipoptdir = $(includedir)/coin
 includeipopt_HEADERS = AmplTNLP.hpp
