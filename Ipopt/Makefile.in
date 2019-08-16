@@ -142,8 +142,7 @@ CONFIG_CLEAN_FILES = ipopt.pc doc/Doxyfile examples/hs071_f/hs071_f.f \
 	contrib/sIPOPT/examples/redhess_cpp/Makefile \
 	contrib/JavaInterface/Makefile \
 	contrib/RInterface/src/Makevars.win \
-	contrib/RInterface/src/Makevars ipoptamplinterface.pc \
-	ipoptamplinterface-uninstalled.pc
+	contrib/RInterface/src/Makevars ipoptamplinterface.pc
 CONFIG_CLEAN_VPATH_FILES =  \
 	contrib/JavaInterface/org/coinor/Ipopt.java \
 	contrib/JavaInterface/org/coinor/examples/HS071.java \
@@ -603,8 +602,6 @@ contrib/RInterface/src/Makevars.win: $(top_builddir)/config.status $(top_srcdir)
 contrib/RInterface/src/Makevars: $(top_builddir)/config.status $(top_srcdir)/contrib/RInterface/src/Makevars.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 ipoptamplinterface.pc: $(top_builddir)/config.status $(top_srcdir)/src/Apps/AmplSolver/ipoptamplinterface.pc.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-ipoptamplinterface-uninstalled.pc: $(top_builddir)/config.status $(top_srcdir)/src/Apps/AmplSolver/ipoptamplinterface-uninstalled.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 mostlyclean-libtool:

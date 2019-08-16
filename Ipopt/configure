@@ -25021,7 +25021,7 @@ case $build in
 esac
 
 if test $coin_has_asl = yes ; then
-  ac_config_files="$ac_config_files ipoptamplinterface.pc:src/Apps/AmplSolver/ipoptamplinterface.pc.in ipoptamplinterface-uninstalled.pc:src/Apps/AmplSolver/ipoptamplinterface-uninstalled.pc.in"
+  ac_config_files="$ac_config_files ipoptamplinterface.pc:src/Apps/AmplSolver/ipoptamplinterface.pc.in"
 
 fi
 
@@ -26423,7 +26423,6 @@ do
     "contrib/RInterface/src/Makevars.win") CONFIG_FILES="$CONFIG_FILES contrib/RInterface/src/Makevars.win:contrib/RInterface/src/Makevars.in" ;;
     "contrib/RInterface/src/Makevars") CONFIG_FILES="$CONFIG_FILES contrib/RInterface/src/Makevars" ;;
     "ipoptamplinterface.pc") CONFIG_FILES="$CONFIG_FILES ipoptamplinterface.pc:src/Apps/AmplSolver/ipoptamplinterface.pc.in" ;;
-    "ipoptamplinterface-uninstalled.pc") CONFIG_FILES="$CONFIG_FILES ipoptamplinterface-uninstalled.pc:src/Apps/AmplSolver/ipoptamplinterface-uninstalled.pc.in" ;;
     "src/Common/config.h") CONFIG_HEADERS="$CONFIG_HEADERS src/Common/config.h" ;;
     "src/Common/config_ipopt.h") CONFIG_HEADERS="$CONFIG_HEADERS src/Common/config_ipopt.h" ;;
 

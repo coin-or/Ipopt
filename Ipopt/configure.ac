@@ -526,9 +526,7 @@ case $build in
 esac
 
 if test $coin_has_asl = yes ; then
-  AC_CONFIG_FILES([ipoptamplinterface.pc:src/Apps/AmplSolver/ipoptamplinterface.pc.in
-                   ipoptamplinterface-uninstalled.pc:src/Apps/AmplSolver/ipoptamplinterface-uninstalled.pc.in
-                  ])
+  AC_CONFIG_FILES([ipoptamplinterface.pc:src/Apps/AmplSolver/ipoptamplinterface.pc.in])
 fi
 
 AC_CONFIG_HEADER([src/Common/config.h src/Common/config_ipopt.h])

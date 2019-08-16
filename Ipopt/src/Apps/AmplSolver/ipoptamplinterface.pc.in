@@ -3,10 +3,12 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@/coin
 
-Name: IPOPT
+Name: IPOPT-AMPL
 Description: Ampl Interface TNLP to Ipopt
-URL: https://projects.coin-or.org/Ipopt
+URL: https://github.com/coin-or/Ipopt
 Version: @PACKAGE_VERSION@
-Libs: -L${libdir} -lipoptamplinterface @IPOPTAMPLINTERFACELIB_PCLIBS@
+Libs: -L${libdir} -lipoptamplinterface
+Libs.private: @IPOPTAMPLINTERFACELIB_LFLAGS_NOPC@
 Cflags: -I${includedir}
-Requires: ipopt @IPOPTAMPLINTERFACELIB_PCREQUIRES@
+Requires: ipopt
+Requires.private: @IPOPTAMPLINTERFACELIB_PCFILES@
