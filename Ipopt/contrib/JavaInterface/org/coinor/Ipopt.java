@@ -96,7 +96,7 @@ public abstract class Ipopt
    public static final String DLLNAME = "jipopt";
 
    /** The relative path where the native DLL is found */
-   public static final String DLLPATH = "lib";
+   public static final String DLLPATH = ".libs";
 
    /** Use C index style for iRow and jCol vectors */
    public final static int C_STYLE = 0;

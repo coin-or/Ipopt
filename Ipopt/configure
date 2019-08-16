@@ -650,7 +650,6 @@ BUILD_LINEARSOLVERLOADER_TRUE
 IPALLLIBS
 ASTYLEFLAGS
 ASTYLE
-JIPOPTDLL
 JAVA_HOME
 BUILD_INEXACT_FALSE
 BUILD_INEXACT_TRUE
@@ -24397,47 +24396,6 @@ if test "${JAVA_HOME+set}" = set; then
 $as_echo "$as_me: JAVA_HOME = $JAVA_HOME" >&6;}
 fi
 
-case $build in
-  *-cygwin* | *-mingw*)
-    JIPOPTDLL=jipopt.dll
-    ;;
-  *-darwin* )
-    JIPOPTDLL=libjipopt.dylib
-    ;;
-  *)
-    JIPOPTDLL=libjipopt.so
-    ;;
-esac
-
-
-# Compiler flag for linking DLLs/shared objects (not yet portable!)
-#if test $coin_cxx_is_cl = true; then
-#  SHARED_FLAGS=-LD
-#else
-#  SHARED_FLAGS=-shared
-#fi
-#AC_SUBST(SHARED_FLAGS)
-
-#doing this check here avoids its repetition for each file in the following loop
-
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether this is a VPATH configuration" >&5
-$as_echo_n "checking whether this is a VPATH configuration... " >&6; }
-  if test `cd $srcdir ; pwd` != `pwd`; then
-    coin_vpath_config=yes
-  else
-    coin_vpath_config=no
-  fi
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $coin_vpath_config" >&5
-$as_echo "$coin_vpath_config" >&6; }
-
-for file in `cat $srcdir/contrib/JavaInterface/javafiles.lst`
-do
-
-  ac_config_links="$ac_config_links contrib/JavaInterface/$file:contrib/JavaInterface/$file"
-
-
-done
-
 
 ##########
 # ASTYLE #
@@ -24653,6 +24611,27 @@ ac_config_links="$ac_config_links test/hs071_main.cpp:examples/hs071_cpp/hs071_m
 
 
   ac_config_links="$ac_config_links contrib/MatlabInterface/examples/lasso.m:contrib/MatlabInterface/examples/lasso.m"
+
+
+
+
+  ac_config_links="$ac_config_links contrib/JavaInterface/org/coinor/Ipopt.java:contrib/JavaInterface/org/coinor/Ipopt.java"
+
+
+
+  ac_config_links="$ac_config_links contrib/JavaInterface/org/coinor/examples/HS071.java:contrib/JavaInterface/org/coinor/examples/HS071.java"
+
+
+
+  ac_config_links="$ac_config_links contrib/JavaInterface/org/coinor/examples/scalable/SolveProblem.java:contrib/JavaInterface/org/coinor/examples/scalable/SolveProblem.java"
+
+
+
+  ac_config_links="$ac_config_links contrib/JavaInterface/org/coinor/examples/scalable/Scalable.java:contrib/JavaInterface/org/coinor/examples/scalable/Scalable.java"
+
+
+
+  ac_config_links="$ac_config_links contrib/JavaInterface/org/coinor/examples/scalable/LuksanVlcek1.java:contrib/JavaInterface/org/coinor/examples/scalable/LuksanVlcek1.java"
 
 
 
@@ -25044,7 +25023,7 @@ $as_echo "$as_me: IPOPTAMPLINTERFACELIB_CFLAGS: \"${IPOPTAMPLINTERFACELIB_CFLAGS
 
 
 
-ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Algorithm/Inexact/Makefile src/contrib/CGPenalty/Makefile src/contrib/LinearSolverLoader/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile test/Makefile test/run_unitTests ipopt.pc doc/Doxyfile examples/hs071_f/hs071_f.f examples/hs071_f/Makefile examples/Cpp_example/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile tutorial/CodingExercise/C/1-skeleton/Makefile tutorial/CodingExercise/C/2-mistake/Makefile tutorial/CodingExercise/C/3-solution/Makefile tutorial/CodingExercise/Cpp/1-skeleton/Makefile tutorial/CodingExercise/Cpp/2-mistake/Makefile tutorial/CodingExercise/Cpp/3-solution/Makefile tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f tutorial/CodingExercise/Fortran/1-skeleton/Makefile tutorial/CodingExercise/Fortran/2-mistake/Makefile tutorial/CodingExercise/Fortran/3-solution/Makefile contrib/sIPOPT/Makefile contrib/sIPOPT/src/Makefile contrib/sIPOPT/AmplSolver/Makefile contrib/sIPOPT/examples/parametric_cpp/Makefile contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile contrib/sIPOPT/examples/redhess_cpp/Makefile"
+ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Algorithm/Inexact/Makefile src/contrib/CGPenalty/Makefile src/contrib/LinearSolverLoader/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile test/Makefile test/run_unitTests ipopt.pc doc/Doxyfile examples/hs071_f/hs071_f.f examples/hs071_f/Makefile examples/Cpp_example/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile tutorial/CodingExercise/C/1-skeleton/Makefile tutorial/CodingExercise/C/2-mistake/Makefile tutorial/CodingExercise/C/3-solution/Makefile tutorial/CodingExercise/Cpp/1-skeleton/Makefile tutorial/CodingExercise/Cpp/2-mistake/Makefile tutorial/CodingExercise/Cpp/3-solution/Makefile tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f tutorial/CodingExercise/Fortran/1-skeleton/Makefile tutorial/CodingExercise/Fortran/2-mistake/Makefile tutorial/CodingExercise/Fortran/3-solution/Makefile contrib/sIPOPT/Makefile contrib/sIPOPT/src/Makefile contrib/sIPOPT/AmplSolver/Makefile contrib/sIPOPT/examples/parametric_cpp/Makefile contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile contrib/sIPOPT/examples/redhess_cpp/Makefile contrib/JavaInterface/Makefile"
 
 #		 src/Apps/CUTErInterface/Makefile
 #		 tutorial/CodingExercise/Matlab/1-skeleton/startup.m
@@ -25052,7 +25031,6 @@ ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefi
 #		 tutorial/CodingExercise/Matlab/3-solution/startup.m
 #		 contrib/MatlabInterface/src/Makefile
 #		 contrib/MatlabInterface/examples/startup.m
-#		 contrib/JavaInterface/Makefile
 
 # under Windows, the Makevars file for the R Interface need to be named Makevars.win
 case $build in
@@ -26349,7 +26327,6 @@ do
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "libtool") CONFIG_COMMANDS="$CONFIG_COMMANDS libtool" ;;
     "libtoolpatch") CONFIG_COMMANDS="$CONFIG_COMMANDS libtoolpatch" ;;
-    "contrib/JavaInterface/$file") CONFIG_LINKS="$CONFIG_LINKS contrib/JavaInterface/$file:contrib/JavaInterface/$file" ;;
     "test/hs071_main.cpp") CONFIG_LINKS="$CONFIG_LINKS test/hs071_main.cpp:examples/hs071_cpp/hs071_main.cpp" ;;
     "test/hs071_nlp.cpp") CONFIG_LINKS="$CONFIG_LINKS test/hs071_nlp.cpp:examples/hs071_cpp/hs071_nlp.cpp" ;;
     "test/hs071_nlp.hpp") CONFIG_LINKS="$CONFIG_LINKS test/hs071_nlp.hpp:examples/hs071_cpp/hs071_nlp.hpp" ;;
@@ -26359,6 +26336,11 @@ do
     "contrib/MatlabInterface/examples/examplehs071.m") CONFIG_LINKS="$CONFIG_LINKS contrib/MatlabInterface/examples/examplehs071.m:contrib/MatlabInterface/examples/examplehs071.m" ;;
     "contrib/MatlabInterface/examples/examplelasso.m") CONFIG_LINKS="$CONFIG_LINKS contrib/MatlabInterface/examples/examplelasso.m:contrib/MatlabInterface/examples/examplelasso.m" ;;
     "contrib/MatlabInterface/examples/lasso.m") CONFIG_LINKS="$CONFIG_LINKS contrib/MatlabInterface/examples/lasso.m:contrib/MatlabInterface/examples/lasso.m" ;;
+    "contrib/JavaInterface/org/coinor/Ipopt.java") CONFIG_LINKS="$CONFIG_LINKS contrib/JavaInterface/org/coinor/Ipopt.java:contrib/JavaInterface/org/coinor/Ipopt.java" ;;
+    "contrib/JavaInterface/org/coinor/examples/HS071.java") CONFIG_LINKS="$CONFIG_LINKS contrib/JavaInterface/org/coinor/examples/HS071.java:contrib/JavaInterface/org/coinor/examples/HS071.java" ;;
+    "contrib/JavaInterface/org/coinor/examples/scalable/SolveProblem.java") CONFIG_LINKS="$CONFIG_LINKS contrib/JavaInterface/org/coinor/examples/scalable/SolveProblem.java:contrib/JavaInterface/org/coinor/examples/scalable/SolveProblem.java" ;;
+    "contrib/JavaInterface/org/coinor/examples/scalable/Scalable.java") CONFIG_LINKS="$CONFIG_LINKS contrib/JavaInterface/org/coinor/examples/scalable/Scalable.java:contrib/JavaInterface/org/coinor/examples/scalable/Scalable.java" ;;
+    "contrib/JavaInterface/org/coinor/examples/scalable/LuksanVlcek1.java") CONFIG_LINKS="$CONFIG_LINKS contrib/JavaInterface/org/coinor/examples/scalable/LuksanVlcek1.java:contrib/JavaInterface/org/coinor/examples/scalable/LuksanVlcek1.java" ;;
     "contrib/RInterface/DESCRIPTION") CONFIG_LINKS="$CONFIG_LINKS contrib/RInterface/DESCRIPTION:contrib/RInterface/DESCRIPTION" ;;
     "contrib/RInterface/NAMESPACE") CONFIG_LINKS="$CONFIG_LINKS contrib/RInterface/NAMESPACE:contrib/RInterface/NAMESPACE" ;;
     "contrib/RInterface/inst/CITATION") CONFIG_LINKS="$CONFIG_LINKS contrib/RInterface/inst/CITATION:contrib/RInterface/inst/CITATION" ;;
@@ -26469,6 +26451,7 @@ do
     "contrib/sIPOPT/examples/parametric_cpp/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/sIPOPT/examples/parametric_cpp/Makefile" ;;
     "contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile" ;;
     "contrib/sIPOPT/examples/redhess_cpp/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/sIPOPT/examples/redhess_cpp/Makefile" ;;
+    "contrib/JavaInterface/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/JavaInterface/Makefile" ;;
     "contrib/RInterface/src/Makevars.win") CONFIG_FILES="$CONFIG_FILES contrib/RInterface/src/Makevars.win:contrib/RInterface/src/Makevars.in" ;;
     "contrib/RInterface/src/Makevars") CONFIG_FILES="$CONFIG_FILES contrib/RInterface/src/Makevars" ;;
     "ipoptamplinterface.pc") CONFIG_FILES="$CONFIG_FILES ipoptamplinterface.pc:src/Apps/AmplSolver/ipoptamplinterface.pc.in" ;;

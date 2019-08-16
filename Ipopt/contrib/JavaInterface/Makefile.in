@@ -4,8 +4,6 @@
 #
 # Author: Andreas Waechter     2007-10-08     IBM
 
-# $Id$
-
 ## Installation of JDK
 #JAVA_HOME = @JAVA_HOME@
 
@@ -28,6 +26,9 @@ JAVA = $(JAVA_HOME)/bin/java
 # Java documentation utility
 JAVADOC = $(JAVA_HOME)/bin/javadoc
 
+# JNI header paths
+JNIINCL = -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux -I$(JAVA_HOME)/include/win32
+
 # libtool
 top_builddir = ../..
 SHELL = @SHELL@
@@ -37,36 +38,33 @@ LIBTOOL = @LIBTOOL@
 CXX = @CXX@
 
 # C++ Compiler options
-CXXFLAGS = `echo @CXXFLAGS@ | sed -e s'|-pedantic-errors||'`
+CXXFLAGS = @CXXFLAGS@
+
+# get some directories, so we can expand @libdir@ for -rpath arg for libtool
+prefix=@prefix@
+exec_prefix=@exec_prefix@
 
 # additional C++ Compiler options for linking
 # NOTE: it has been reported, that adding -Wl,--add-stdcall-alias to the
 #       LINKFLAGS might be necessary with mingw/gcc
-LINKFLAGS = $(CXXFLAGS) @RPATH_FLAGS@ @SHARED_FLAGS@
+LINKFLAGS = $(CXXFLAGS) @LT_LDFLAGS@ -rpath @libdir@
 
-# Include directories (we use the CYGPATH_W variables to allow compilation with Windows compilers)
-@COIN_HAS_PKGCONFIG_TRUE@INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipopt` -I`$(CYGPATH_W) $(JAVA_HOME)/include` -I`$(CYGPATH_W) $(JAVA_HOME)/include/win32` -I.
-@COIN_HAS_PKGCONFIG_FALSE@INCL = -I`$(CYGPATH_W) @abs_include_dir@/coin` @IPOPTLIB_CFLAGS_INSTALLED@ -I`$(CYGPATH_W) $(JAVA_HOME)/include` -I`$(CYGPATH_W) $(JAVA_HOME)/include/win32` -I.
+# Include directories
+@COIN_HAS_PKGCONFIG_TRUE@INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipopt` $(JNIINCL) -I.
+@COIN_HAS_PKGCONFIG_FALSE@INCL = -I@abs_include_dir@/coin @IPOPTLIB_CFLAGS@ $(JNIINCL) -I.
 
 # Linker flags
 @COIN_HAS_PKGCONFIG_TRUE@LIBS = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt`
-@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_TRUE@LIBS = -link -libpath:`$(CYGPATH_W) @abs_lib_dir@` libipopt.lib @IPOPTLIB_LIBS_INSTALLED@
-@COIN_HAS_PKGCONFIG_FALSE@@COIN_CXX_IS_CL_FALSE@LIBS = -L@abs_lib_dir@ -lipopt @IPOPTLIB_LIBS_INSTALLED@
-
-# The following is necessary under cygwin, if native compilers are used
-CYGPATH_W = @CYGPATH_W@
-
-SRCDIR = @srcdir@
-VPATH = @srcdir@
+@COIN_HAS_PKGCONFIG_FALSE@LIBS = -L@abs_lib_dir@ -lipopt @IPOPTLIB_LFLAGS@
 
 ##########################################################################
 
+SRCDIR = @srcdir@
 ORGDIR = org/coinor
 JNIHEADER = org_coinor_Ipopt.h
 
 JIPOPTOBJ = jipopt.lo
-JIPOPTDLL = @JIPOPTDLL@
-LIBJIPOPT = lib/$(JIPOPTDLL)
+LIBJIPOPT = libjipopt.la
 
 IPOPTCLASS = $(ORGDIR)/Ipopt.class
 HS071 = $(ORGDIR)/examples/HS071
@@ -81,21 +79,19 @@ SCALCLASSES = \
 
 SCALJAR = ScalableProblems.jar
 
-$(LIBJIPOPT): $(JIPOPTOBJ) lib
+$(LIBJIPOPT): $(JIPOPTOBJ)
 	$(LIBTOOL) --tag=CXX --mode=link $(CXX) $(LINKFLAGS) -o $(LIBJIPOPT) $(JIPOPTOBJ) $(LIBS)
 
 $(JNIHEADER): $(IPOPTCLASS)
-	$(JAVAH) `echo $(IPOPTCLASS) | sed -e 's|/|.|g' -e 's|.class||'`
+	$(JAVAH) org.coinor.Ipopt
 
-$(JIPOPTOBJ): $(JNIHEADER) 
+$(JIPOPTOBJ): $(SRCDIR)/jipopt.cpp $(JNIHEADER) 
+	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(CXXFLAGS) $(INCL) -c -o $@ $<
 
-lib:
-	mkdir lib
+.SUFFIXES: .java .class
 
 .java.class:
 	$(JAVAC) $<
-
-.SUFFIXES: .cpp .lo .obj .java .class
 
 $(SCALJAR): $(SCALCLASSES)
 	$(JAR) cfm $(SCALJAR) $(SRCDIR)/manifest.txt $(IPOPTCLASS) $(SCALCLASSES)
@@ -106,13 +102,7 @@ test: $(LIBJIPOPT) $(HS071CLASSES) $(SCALJAR)
 	$(JAVA) -jar $(SCALJAR) LukVlE1 101
 
 clean:
-	rm -rf $(LIBJIPOPT) $(JIPOPTOBJ) $(JNIHEADER) $(IPOPTCLASS) $(HS071CLASSES) $(SCALCLASSES) $(SCALJAR)
+	rm -rf $(LIBJIPOPT) $(JIPOPTOBJ) $(JNIHEADER) $(IPOPTCLASS) $(HS071CLASSES) $(SCALCLASSES) $(SCALJAR) .libs
 
 doc:
 	$(JAVADOC) -d javadoc -windowtitle "JIpopt API documentation" org/coinor/Ipopt.java
-
-.cpp.lo:
-	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `test -f '$<' || echo '$(SRCDIR)/'`$<
-
-.cpp.obj:
-	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `if test -f '$<'; then $(CYGPATH_W) '$<'; else $(CYGPATH_W) '$(SRCDIR)/$<'; fi`

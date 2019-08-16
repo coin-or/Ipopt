@@ -287,34 +287,6 @@ if test "${JAVA_HOME+set}" = set; then
   AC_MSG_NOTICE([JAVA_HOME = $JAVA_HOME])
 fi
 AC_SUBST(JAVA_HOME)
-case $build in
-  *-cygwin* | *-mingw*)
-    JIPOPTDLL=jipopt.dll
-    ;;
-  *-darwin* )
-    JIPOPTDLL=libjipopt.dylib
-    ;;  
-  *)
-    JIPOPTDLL=libjipopt.so
-    ;;
-esac
-AC_SUBST(JIPOPTDLL)
-
-# Compiler flag for linking DLLs/shared objects (not yet portable!)
-#if test $coin_cxx_is_cl = true; then
-#  SHARED_FLAGS=-LD
-#else 
-#  SHARED_FLAGS=-shared
-#fi
-#AC_SUBST(SHARED_FLAGS)
-
-#doing this check here avoids its repetition for each file in the following loop
-AC_COIN_CHECK_VPATH
-for file in `cat $srcdir/contrib/JavaInterface/javafiles.lst`
-do
-  AC_COIN_VPATH_LINK(contrib/JavaInterface/$file)
-done
-
 
 ##########
 # ASTYLE #
@@ -405,6 +377,12 @@ AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/examplehs051.m)
 AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/examplehs071.m)
 AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/examplelasso.m)
 AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/lasso.m)
+
+AC_COIN_VPATH_LINK(contrib/JavaInterface/org/coinor/Ipopt.java)
+AC_COIN_VPATH_LINK(contrib/JavaInterface/org/coinor/examples/HS071.java)
+AC_COIN_VPATH_LINK(contrib/JavaInterface/org/coinor/examples/scalable/SolveProblem.java)
+AC_COIN_VPATH_LINK(contrib/JavaInterface/org/coinor/examples/scalable/Scalable.java)
+AC_COIN_VPATH_LINK(contrib/JavaInterface/org/coinor/examples/scalable/LuksanVlcek1.java)
 
 AC_COIN_VPATH_LINK(contrib/RInterface/DESCRIPTION)
 AC_COIN_VPATH_LINK(contrib/RInterface/NAMESPACE)
@@ -528,6 +506,7 @@ AC_CONFIG_FILES([Makefile
 		 contrib/sIPOPT/examples/parametric_cpp/Makefile
 		 contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile
 		 contrib/sIPOPT/examples/redhess_cpp/Makefile
+		 contrib/JavaInterface/Makefile
        ])
 #		 src/Apps/CUTErInterface/Makefile
 #		 tutorial/CodingExercise/Matlab/1-skeleton/startup.m
@@ -535,7 +514,6 @@ AC_CONFIG_FILES([Makefile
 #		 tutorial/CodingExercise/Matlab/3-solution/startup.m
 #		 contrib/MatlabInterface/src/Makefile
 #		 contrib/MatlabInterface/examples/startup.m
-#		 contrib/JavaInterface/Makefile
 
 # under Windows, the Makevars file for the R Interface need to be named Makevars.win
 case $build in 
