@@ -1504,7 +1504,7 @@ Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --enable-msvc           Allow only Intel/Microsoft compilers on
+  --enable-msvc           Look for and allow only Intel/Microsoft compilers on
                           MinGW/MSys/Cygwin.
   --enable-silent-rules   less verbose build output (undo: "make V=1")
   --disable-silent-rules  verbose build output (undo: "make V=0")
@@ -20827,7 +20827,13 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
-ac_ext=f
+
+  # AC_MSG_NOTICE([In COIN_F77_SETUP])
+
+# F77_WRAPPERS will trigger the necessary F77 setup macros (F77_MAIN,
+# F77_LIBRARY_LDFLAGS, etc.)
+
+  ac_ext=f
 ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
 ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_f77_compiler_gnu
@@ -20883,6 +20889,208 @@ ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+  ac_ext=f
+ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
+ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_f77_compiler_gnu
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether $F77 understands -c and -o together" >&5
+$as_echo_n "checking whether $F77 understands -c and -o together... " >&6; }
+if ${ac_cv_prog_f77_c_o+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  cat > conftest.$ac_ext <<_ACEOF
+      program main
+
+      end
+_ACEOF
+# We test twice because some compilers refuse to overwrite an existing
+# `.o' file with `-o', although they will create one.
+ac_try='$F77 $FFLAGS -c conftest.$ac_ext -o conftest2.$ac_objext >&5'
+rm -f conftest2.*
+if { { case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+$as_echo "$ac_try_echo"; } >&5
+  (eval "$ac_try") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } &&
+     test -f conftest2.$ac_objext &&
+     { { case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+$as_echo "$ac_try_echo"; } >&5
+  (eval "$ac_try") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  ac_cv_prog_f77_c_o=yes
+else
+  ac_cv_prog_f77_c_o=no
+fi
+rm -f conftest*
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_prog_f77_c_o" >&5
+$as_echo "$ac_cv_prog_f77_c_o" >&6; }
+if test $ac_cv_prog_f77_c_o = no; then
+
+$as_echo "#define F77_NO_MINUS_C_MINUS_O 1" >>confdefs.h
+
+fi
+
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+  if test $ac_cv_prog_f77_c_o = no ; then
+    F77="$am_aux_dir/compile $F77"
+  fi
+  # AC_MSG_NOTICE([Leaving COIN_F77_SETUP])
+
+else
+
+  # AC_MSG_NOTICE([In COIN_F77_WRAPPERS])
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking Fortran name mangling scheme" >&5
+$as_echo_n "checking Fortran name mangling scheme... " >&6; }
+if ${ac_cv_f77_mangling+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_save_LIBS=$LIBS
+     LIBS="-l"
+     for ac_case in "lower case" "upper case" ; do
+       for ac_trail in "underscore" "no underscore" ; do
+         for ac_extra in "no extra underscore" "extra underscore" ; do
+           ac_cv_f77_mangling="${ac_case}, ${ac_trail}, ${ac_extra}"
+           # AC_MSG_NOTICE([Attempting link for $ac_cv_f77_mangling])
+           case $ac_case in
+             "lower case")
+               ac_name=
+               ;;
+             "upper case")
+               ac_name=
+               ;;
+           esac
+           if test "$ac_trail" = underscore ; then
+             ac_name=${ac_name}_
+           fi
+           # AC_MSG_CHECKING([ -> $ac_name])
+           cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef __cplusplus
+                  extern "C"
+                 #endif
+                 void $ac_name();
+#ifdef F77_DUMMY_MAIN
+
+#  ifdef __cplusplus
+     extern "C"
+#  endif
+   int F77_DUMMY_MAIN() { return 1; }
+
+#endif
+int
+main ()
+{
+$ac_name()
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_result=success
+else
+  ac_result=failure
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+           # AC_MSG_RESULT([$result])
+           if test $ac_result = success ; then
+             break 3
+           fi
+         done
+       done
+     done
+     if test "$ac_result" = "failure" ; then
+       ac_cv_f77_mangling=unknown
+       { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Unable to determine correct Fortran name mangling scheme" >&5
+$as_echo "$as_me: WARNING: Unable to determine correct Fortran name mangling scheme" >&2;}
+     fi
+     LIBS=$ac_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_f77_mangling" >&5
+$as_echo "$ac_cv_f77_mangling" >&6; }
+
+# Invoke the second-level internal autoconf macro _AC_FC_WRAPPERS to give the
+# functionality of AC_F77_WRAPPERS.
+
+  if test "$ac_cv_f77_mangling" != unknown ; then
+    ac_ext=f
+ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
+ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_f77_compiler_gnu
+
+    case $ac_cv_f77_mangling in
+  "lower case, no underscore, no extra underscore")
+	  $as_echo "#define F77_FUNC(name,NAME) name" >>confdefs.h
+
+	  $as_echo "#define F77_FUNC_(name,NAME) name" >>confdefs.h
+ ;;
+  "lower case, no underscore, extra underscore")
+	  $as_echo "#define F77_FUNC(name,NAME) name" >>confdefs.h
+
+	  $as_echo "#define F77_FUNC_(name,NAME) name ## _" >>confdefs.h
+ ;;
+  "lower case, underscore, no extra underscore")
+	  $as_echo "#define F77_FUNC(name,NAME) name ## _" >>confdefs.h
+
+	  $as_echo "#define F77_FUNC_(name,NAME) name ## _" >>confdefs.h
+ ;;
+  "lower case, underscore, extra underscore")
+	  $as_echo "#define F77_FUNC(name,NAME) name ## _" >>confdefs.h
+
+	  $as_echo "#define F77_FUNC_(name,NAME) name ## __" >>confdefs.h
+ ;;
+  "upper case, no underscore, no extra underscore")
+	  $as_echo "#define F77_FUNC(name,NAME) NAME" >>confdefs.h
+
+	  $as_echo "#define F77_FUNC_(name,NAME) NAME" >>confdefs.h
+ ;;
+  "upper case, no underscore, extra underscore")
+	  $as_echo "#define F77_FUNC(name,NAME) NAME" >>confdefs.h
+
+	  $as_echo "#define F77_FUNC_(name,NAME) NAME ## _" >>confdefs.h
+ ;;
+  "upper case, underscore, no extra underscore")
+	  $as_echo "#define F77_FUNC(name,NAME) NAME ## _" >>confdefs.h
+
+	  $as_echo "#define F77_FUNC_(name,NAME) NAME ## _" >>confdefs.h
+ ;;
+  "upper case, underscore, extra underscore")
+	  $as_echo "#define F77_FUNC(name,NAME) NAME ## _" >>confdefs.h
+
+	  $as_echo "#define F77_FUNC_(name,NAME) NAME ## __" >>confdefs.h
+ ;;
+  *)
+	  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unknown Fortran name-mangling scheme" >&5
+$as_echo "$as_me: WARNING: unknown Fortran name-mangling scheme" >&2;}
+	  ;;
+esac
+
+    ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+  fi
+  # AC_MSG_NOTICE([Done COIN_F77_WRAPPERS])
 
 fi
 

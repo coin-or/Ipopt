@@ -47,11 +47,10 @@ AC_COIN_CXXLIBS
 
 # Find out how to call Fortran from C and determine Fortran runtime libraries
 if test "$F77" != "unavailable" ; then
-  AC_F77_WRAPPERS
+  AC_COIN_F77_SETUP
+else
+  AC_COIN_F77_WRAPPERS
 fi
-
-# Initialize automake and libtool
-#AC_COIN_INIT_AUTO_TOOLS
 
 # Doxygen
 AC_COIN_DOXYGEN
