@@ -1,6 +1,11 @@
 
 /* include the COIN-OR-wide system specific configure header */
-#include "configall_system.h"
+/* this file lives in BuildTools/headers, which may not be around
+ * however, with the normal autotools-based build system, we should
+ * never get into a situation where this code should be compiled
+ */
+#warning "Ipopt-internal config_default.h is compiled. This is likely going to fail."
+/* #include "configall_system.h" */
 
 /* include the public project specific macros */
 #include "config_ipopt_default.h"
