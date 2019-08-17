@@ -136,7 +136,7 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(libdir)" \
 	"$(DESTDIR)$(includesipoptdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
-libsipopt_la_LIBADD =
+libsipopt_la_DEPENDENCIES = ../../../src/Interfaces/libipopt.la
 am_libsipopt_la_OBJECTS = SensAlgorithm.lo SensRegOp.lo \
 	SensDenseGenSchurDriver.lo SensIndexPCalculator.lo \
 	SensIndexSchurData.lo SensMetadataMeasurement.lo \
@@ -450,7 +450,7 @@ libsipopt_la_SOURCES = \
 	SensSuffixHandler.hpp
 
 libsipopt_la_LDFLAGS = $(LT_LDFLAGS)
-addlibsdir = $(datadir)/coin/doc/Ipopt
+libsipopt_la_LIBADD = ../../../src/Interfaces/libipopt.la
 AM_CPPFLAGS = \
   -I$(srcdir)/../../../src/Common \
   -I$(srcdir)/../../../src/Interfaces \

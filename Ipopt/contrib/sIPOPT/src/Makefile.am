@@ -56,8 +56,7 @@ libsipopt_la_SOURCES = \
 	SensSuffixHandler.hpp
 
 libsipopt_la_LDFLAGS = $(LT_LDFLAGS)
-
-addlibsdir = $(datadir)/coin/doc/Ipopt
+libsipopt_la_LIBADD = ../../../src/Interfaces/libipopt.la
 
 AM_CPPFLAGS = \
   -I$(srcdir)/../../../src/Common \
