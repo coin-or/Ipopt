@@ -22,7 +22,7 @@ if ALWAYS_FALSE
   SUBDIRS += test
 endif
 
-.PHONY: cuter test unitTest astyle doc
+.PHONY: test unitTest astyle doc
 
 # Stuff to clean up from "make test"
 
@@ -51,9 +51,6 @@ DISTCLEANFILES = \
 tmpdir = tmpdir
 
 libipopt = libipopt.a
-
-cuter: install
-	cd src/Apps/CUTErInterface; $(MAKE) cuter
 
 test: unitTest
 

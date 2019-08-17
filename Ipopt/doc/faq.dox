@@ -16,7 +16,7 @@ Please see the [Ipopt project page](https://github.com/coin-or/Ipopt) for a more
 ## How do I use \Ipopt?
 
 You can use \Ipopt directly from your own computer code (C++, C, Fortran, Matlab, R).
-You can also use Ipopt from optimization modeling environments such as [AMPL](http://www.ampl.com/), [GAMS](http://www.gams.com/), [CUTEr](http://www.hsl.rl.ac.uk/cuter-www/index.html), as well as on the [NEOS Server](http://www-neos.mcs.anl.gov/neos/solvers/nco:Ipopt/AMPL.html).
+You can also use Ipopt from optimization modeling environments such as [AMPL](http://www.ampl.com/), [GAMS](http://www.gams.com/), [CUTEst](https://github.com/ralna/CUTEst), as well as on the [NEOS Server](http://www-neos.mcs.anl.gov/neos/solvers/nco:Ipopt/AMPL.html).
 
 ## What license is \Ipopt released under?
 

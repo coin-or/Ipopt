@@ -231,8 +231,6 @@ with your own code.
 Additionally, the \Ipopt distribution includes interfaces
 for
 
--   [CUTEr](http://cuter.rl.ac.uk/cuter-www) (for solving problems modeled in SIF),
-
 -   Java, which allows you to use \Ipopt from Java, see \ref INTERFACE_JAVA,
 
 -   Matlab (mex interface), which allows you to use \Ipopt

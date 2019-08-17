@@ -508,7 +508,6 @@ AC_CONFIG_FILES([Makefile
 		 contrib/sIPOPT/examples/redhess_cpp/Makefile
 		 contrib/JavaInterface/Makefile
        ])
-#		 src/Apps/CUTErInterface/Makefile
 #		 tutorial/CodingExercise/Matlab/1-skeleton/startup.m
 #		 tutorial/CodingExercise/Matlab/2-mistake/startup.m
 #		 tutorial/CodingExercise/Matlab/3-solution/startup.m

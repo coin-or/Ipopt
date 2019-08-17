@@ -458,16 +458,6 @@ make install
     `$IPOPTDIR/build`) to something else (such as `/usr/local`) by using
     the `--prefix` switch for `configure`.
 
-6.  (Optional) Install \Ipopt for use with CUTEr:
-    If you have CUTEr already installed on your system and you want to
-    use \Ipopt as a solver for problems modeled in SIF, type
-    \verbatim
-make cuter
-    \endverbatim
-    This assumes that you have the environment variable `MYCUTER` defined
-    according to the CUTEr instructions. After this, you can use the
-    script `sdipo` as the CUTEr script to solve a SIF model.
-
 Note: The above procedures show how to compile the code in directories
 separate from the source files. This comes in handy when you want to
 compile the code with different compilers, compiler options, or

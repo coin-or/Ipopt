@@ -93,10 +93,6 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-
-#if COIN_HAS_F77
-#  SUBDIRS += CUTErInterface
-#endif
 @COIN_HAS_ASL_TRUE@am__append_1 = AmplSolver
 subdir = src/Apps
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4

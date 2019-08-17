@@ -976,10 +976,7 @@ uninstall-doc:
 	doxygen-docs pdf-doxygen-docs clean-doxygen-docs \
 	install-doxygen-docs uninstall-doxygen-docs
 
-.PHONY: cuter test unitTest astyle doc
-
-cuter: install
-	cd src/Apps/CUTErInterface; $(MAKE) cuter
+.PHONY: test unitTest astyle doc
 
 test: unitTest
 
