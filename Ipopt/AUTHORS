@@ -77,7 +77,7 @@ Contributors:
 - Marcel Roelofs (AIMMS)
   MSVC project files for Intel Fortran compiler, creating a DLL
 
-  MSVisualStudio/v8-ifort
+  [removed from Ipopt source as unmaintained]
 
 - Jonathan Hogg (STFC Rutherford Appleton Laboratory)
   MA77 interface

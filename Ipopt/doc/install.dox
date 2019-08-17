@@ -483,14 +483,8 @@ and want to use those to compile \Ipopt, please see
 UNIX-like environment for Windows), please consider the notes in
 \ref INSTALL_MINGW.
 
-Note: Some binaries for \Ipopt are available on the COIN-OR
-website at <http://www.coin-or.org/download/binary/Ipopt>. There, also
-precompiled versions of \Ipopt as DLLs (generated from the
-MSVS solution in \Ipopt's subdirectory
-`$IPOPTDIR/Ipopt/MSVisualStudio/v8-ifort`) are available. Look at the
-`README` files for details. An example how to use these DLLs from your
-own MSVS project is in
-`$IPOPTDIR/Ipopt/MSVisualStudio/BinaryDLL-Link-Example`.
+Note: Some binaries for old version of \Ipopt are available on the COIN-OR
+website at <http://www.coin-or.org/download/binary/Ipopt>.
 
 \subsection INSTALL_CYGWIN Installation with Cygwin using GNU compilers
 
