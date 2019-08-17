@@ -451,7 +451,7 @@ libsipopt_la_SOURCES = \
 
 libsipopt_la_LDFLAGS = $(LT_LDFLAGS)
 addlibsdir = $(datadir)/coin/doc/Ipopt
-AM_CPPFLAGS = -DIPOPT_BUILD \
+AM_CPPFLAGS = \
   -I$(srcdir)/../../../src/Common \
   -I$(srcdir)/../../../src/Interfaces \
   -I$(srcdir)/../../../src/LinAlg \

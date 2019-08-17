@@ -392,7 +392,7 @@ nodist_hs071_f_SOURCES = hs071_f.f
 hs071_f_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
 
 # Here list all include flags, relative to this "srcdir" directory.
-AM_CPPFLAGS = -DIPOPT_BUILD \
+AM_CPPFLAGS = \
 	-I$(srcdir)/../src/Common \
 	-I$(srcdir)/../src/LinAlg \
 	-I$(srcdir)/../src/LinAlg/TMatrices \
