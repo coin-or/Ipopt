@@ -10,14 +10,15 @@
  * header file includes the automatically generated header file, and
  * undefines macros that might configure with other Config.h files.
  *
- * On systems that are compiled in other ways (e.g., with the
- * Developer Studio), a header files is included to define those
- * macros that depend on the operating system and the compiler.  The
- * macros that define the configuration of the particular user setting
- * (e.g., presence of other COIN-OR packages or third party code) are set
- * by the files config_*default.h. The project maintainer needs to remember
- * to update these file and choose reasonable defines.
- * A user can modify the default setting by editing the config_*default.h files.
+ * #This isn't support for Ipopt at the moment:
+ * #On systems that are compiled in other ways (e.g., with the
+ * #Developer Studio), a header files is included to define those
+ * #macros that depend on the operating system and the compiler.  The
+ * #macros that define the configuration of the particular user setting
+ * #(e.g., presence of other COIN-OR packages or third party code) are set
+ * #by the files config_*default.h. The project maintainer needs to remember
+ * #to update these file and choose reasonable defines.
+ * #A user can modify the default setting by editing the config_*default.h files.
  */
 
 #ifndef __IPOPTCONFIG_H__
@@ -29,6 +30,14 @@
 #include "config.h"
 #else
 #include "config_ipopt.h"
+#endif
+
+/* overwrite IPOPTLIB_EXPORT from config.h
+ * we want it to be __declspec(dllexport) when building a DLL on Windows
+ */
+#ifdef DLL_EXPORT
+#undef IPOPTLIB_EXPORT
+#define IPOPTLIB_EXPORT __declspec(dllexport)
 #endif
 
 #else /* HAVE_CONFIG_H */
