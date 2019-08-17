@@ -20,3 +20,11 @@
 #ifndef FORTRAN_INTEGER_TYPE
 #define FORTRAN_INTEGER_TYPE int
 #endif
+
+#ifndef IPOPTLIB_EXPORT
+#ifdef _WIN32
+/* assuming we link against an Ipopt DLL */
+#define IPOPTLIB_EXPORT __declspec(dllimport)
+#else
+#define IPOPTLIB_EXPORT
+#endif

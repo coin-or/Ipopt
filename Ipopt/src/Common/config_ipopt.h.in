@@ -18,4 +18,10 @@
 /* Define to the C type corresponding to Fortran INTEGER */
 #undef FORTRAN_INTEGER_TYPE
 
+/* Library Visibility Attribute */
+#undef IPOPTAMPLINTERFACELIB_EXPORT
+
+/* Library Visibility Attribute */
+#undef IPOPTLIB_EXPORT
+
 #endif

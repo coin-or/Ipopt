@@ -7,6 +7,16 @@
 #warning "Ipopt-internal config_default.h is compiled. This is likely going to fail."
 /* #include "configall_system.h" */
 
+/* this needs to come before the include of config_ipopt_default.h */
+#ifndef IPOPTLIB_EXPORT
+#ifdef _WIN32
+/* assuming we build an Ipopt DLL */
+#define IPOPTLIB_EXPORT __declspec(dllexport)
+#else
+#define IPOPTLIB_EXPORT
+#endif
+#endif
+
 /* include the public project specific macros */
 #include "config_ipopt_default.h"
 

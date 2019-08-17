@@ -28,9 +28,6 @@
 
 #ifdef IPOPT_BUILD
 #include "config.h"
-#else
-#include "config_ipopt.h"
-#endif
 
 /* overwrite IPOPTLIB_EXPORT from config.h
  * we want it to be __declspec(dllexport) when building a DLL on Windows
@@ -38,6 +35,10 @@
 #ifdef DLL_EXPORT
 #undef IPOPTLIB_EXPORT
 #define IPOPTLIB_EXPORT __declspec(dllexport)
+#endif
+
+#else
+#include "config_ipopt.h"
 #endif
 
 #else /* HAVE_CONFIG_H */
