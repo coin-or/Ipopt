@@ -7,27 +7,33 @@ matrix:
         apt:
           packages:
             - gfortran
-    - os: osx 
+            - liblapack-dev
+    - os: osx
+      osx_image: xcode11
+      env: OSX=10.14 CC=gcc CXX=g++
+      compiler: clang
+    - os: osx
+      osx_image: xcode11
+      env: OSX=10.14 F77=unavailable
+      compiler: clang
+    - os: osx
       osx_image: xcode10
-      env: OSX=10.13
+      env: OSX=10.13 CC=gcc CXX=g++
       compiler: clang
-    - os: osx 
+    - os: osx
       osx_image: xcode9.2
-      env: OSX=10.12
+      env: OSX=10.12 CC=gcc CXX=g++
       compiler: clang
-    - os: osx
-      osx_image: xcode8
-      env: OSX=10.11
-      compiler: clang
-  allow_failures:
-    - os: osx
 
 before_script:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; brew install bash gcc; brew link --overwrite gcc; gfortran --version; fi
-  - git clone https://github.com/coin-or/COIN-OR-OptimizationSuite COIN
-  - cd COIN
-  - export PROJECT=`echo $TRAVIS_REPO_SLUG | cut -d "/" -f 2`
-  - bash ./coin.install.sh fetch --no-prompt --main-proj=$PROJECT > /dev/null
+  - if [[ "$TRAVIS_OS_NAME $CC" == "osx gcc" ]]; then brew update; brew install bash gcc; brew link --overwrite gcc; gfortran --version; fi
 
 script:
-  - bash ./coin.install.sh build --no-prompt --main-proj=$PROJECT --verbosity=2 --test
+  - if [[ "$F77" != "unavailable" ]] ; then git clone https://github.com/coin-or-tools/ThirdParty-Mumps ; fi
+  - if [[ "$F77" != "unavailable" ]] ; then pushd ThirdParty-Mumps && ./get.Mumps && ./configure --prefix=$HOME/install && make -s && make -s install && popd ; fi
+  - mkdir build
+  - pushd build
+  - ../Ipopt/configure --prefix=$HOME/install
+  - make
+  - if [[ "$F77" != "unavailable" ]] ; then make test ; fi
+  - make install
