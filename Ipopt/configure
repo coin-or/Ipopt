@@ -24593,12 +24593,6 @@ ac_config_links="$ac_config_links test/hs071_main.cpp:examples/hs071_cpp/hs071_m
 ##          Create links for VPATH config of certain files            ##
 ########################################################################
 
-#AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/examplehs038.m)
-#AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/examplehs051.m)
-#AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/examplehs071.m)
-#AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/examplelasso.m)
-#AC_COIN_VPATH_LINK(contrib/MatlabInterface/examples/lasso.m)
-
 
   ac_config_links="$ac_config_links contrib/JavaInterface/org/coinor/Ipopt.java:contrib/JavaInterface/org/coinor/Ipopt.java"
 
@@ -24856,9 +24850,18 @@ ac_config_links="$ac_config_links test/hs071_main.cpp:examples/hs071_cpp/hs071_m
   ac_config_links="$ac_config_links tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_nlp.cpp:tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_nlp.cpp"
 
 
-#AC_COIN_VPATH_LINK(tutorial/CodingExercise/Matlab/1-skeleton/TutorialMatlab.m)
-#AC_COIN_VPATH_LINK(tutorial/CodingExercise/Matlab/2-mistake/TutorialMatlab.m)
-#AC_COIN_VPATH_LINK(tutorial/CodingExercise/Matlab/3-solution/TutorialMatlab.m)
+
+  ac_config_links="$ac_config_links tutorial/CodingExercise/Matlab/1-skeleton/TutorialMatlab.m:tutorial/CodingExercise/Matlab/1-skeleton/TutorialMatlab.m"
+
+
+
+  ac_config_links="$ac_config_links tutorial/CodingExercise/Matlab/2-mistake/TutorialMatlab.m:tutorial/CodingExercise/Matlab/2-mistake/TutorialMatlab.m"
+
+
+
+  ac_config_links="$ac_config_links tutorial/CodingExercise/Matlab/3-solution/TutorialMatlab.m:tutorial/CodingExercise/Matlab/3-solution/TutorialMatlab.m"
+
+
 
 
   ac_config_links="$ac_config_links contrib/sIPOPT/examples/parametric_cpp/parametric_driver.cpp:contrib/sIPOPT/examples/parametric_cpp/parametric_driver.cpp"
@@ -24999,13 +25002,8 @@ $as_echo "$as_me: IPOPTAMPLINTERFACELIB_CFLAGS: \"${IPOPTAMPLINTERFACELIB_CFLAGS
 
 
 
-ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Algorithm/Inexact/Makefile src/contrib/CGPenalty/Makefile src/contrib/LinearSolverLoader/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile test/Makefile test/run_unitTests ipopt.pc doc/Doxyfile examples/hs071_f/hs071_f.f examples/hs071_f/Makefile examples/Cpp_example/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile tutorial/CodingExercise/C/1-skeleton/Makefile tutorial/CodingExercise/C/2-mistake/Makefile tutorial/CodingExercise/C/3-solution/Makefile tutorial/CodingExercise/Cpp/1-skeleton/Makefile tutorial/CodingExercise/Cpp/2-mistake/Makefile tutorial/CodingExercise/Cpp/3-solution/Makefile tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f tutorial/CodingExercise/Fortran/1-skeleton/Makefile tutorial/CodingExercise/Fortran/2-mistake/Makefile tutorial/CodingExercise/Fortran/3-solution/Makefile contrib/sIPOPT/Makefile contrib/sIPOPT/src/Makefile contrib/sIPOPT/AmplSolver/Makefile contrib/sIPOPT/examples/parametric_cpp/Makefile contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile contrib/sIPOPT/examples/redhess_cpp/Makefile contrib/JavaInterface/Makefile"
+ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Algorithm/Inexact/Makefile src/contrib/CGPenalty/Makefile src/contrib/LinearSolverLoader/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile test/Makefile test/run_unitTests ipopt.pc doc/Doxyfile examples/hs071_f/hs071_f.f examples/hs071_f/Makefile examples/Cpp_example/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile tutorial/CodingExercise/C/1-skeleton/Makefile tutorial/CodingExercise/C/2-mistake/Makefile tutorial/CodingExercise/C/3-solution/Makefile tutorial/CodingExercise/Cpp/1-skeleton/Makefile tutorial/CodingExercise/Cpp/2-mistake/Makefile tutorial/CodingExercise/Cpp/3-solution/Makefile tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f tutorial/CodingExercise/Fortran/1-skeleton/Makefile tutorial/CodingExercise/Fortran/2-mistake/Makefile tutorial/CodingExercise/Fortran/3-solution/Makefile tutorial/CodingExercise/Matlab/1-skeleton/startup.m tutorial/CodingExercise/Matlab/2-mistake/startup.m tutorial/CodingExercise/Matlab/3-solution/startup.m contrib/sIPOPT/Makefile contrib/sIPOPT/src/Makefile contrib/sIPOPT/AmplSolver/Makefile contrib/sIPOPT/examples/parametric_cpp/Makefile contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile contrib/sIPOPT/examples/redhess_cpp/Makefile contrib/JavaInterface/Makefile"
 
-#		 tutorial/CodingExercise/Matlab/1-skeleton/startup.m
-#		 tutorial/CodingExercise/Matlab/2-mistake/startup.m
-#		 tutorial/CodingExercise/Matlab/3-solution/startup.m
-#		 contrib/MatlabInterface/src/Makefile
-#		 contrib/MatlabInterface/examples/startup.m
 
 # under Windows, the Makevars file for the R Interface need to be named Makevars.win
 case $build in
@@ -26369,6 +26367,9 @@ do
     "tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_main.cpp") CONFIG_LINKS="$CONFIG_LINKS tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_main.cpp:tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_main.cpp" ;;
     "tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_nlp.hpp") CONFIG_LINKS="$CONFIG_LINKS tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_nlp.hpp:tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_nlp.hpp" ;;
     "tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_nlp.cpp") CONFIG_LINKS="$CONFIG_LINKS tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_nlp.cpp:tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_nlp.cpp" ;;
+    "tutorial/CodingExercise/Matlab/1-skeleton/TutorialMatlab.m") CONFIG_LINKS="$CONFIG_LINKS tutorial/CodingExercise/Matlab/1-skeleton/TutorialMatlab.m:tutorial/CodingExercise/Matlab/1-skeleton/TutorialMatlab.m" ;;
+    "tutorial/CodingExercise/Matlab/2-mistake/TutorialMatlab.m") CONFIG_LINKS="$CONFIG_LINKS tutorial/CodingExercise/Matlab/2-mistake/TutorialMatlab.m:tutorial/CodingExercise/Matlab/2-mistake/TutorialMatlab.m" ;;
+    "tutorial/CodingExercise/Matlab/3-solution/TutorialMatlab.m") CONFIG_LINKS="$CONFIG_LINKS tutorial/CodingExercise/Matlab/3-solution/TutorialMatlab.m:tutorial/CodingExercise/Matlab/3-solution/TutorialMatlab.m" ;;
     "contrib/sIPOPT/examples/parametric_cpp/parametric_driver.cpp") CONFIG_LINKS="$CONFIG_LINKS contrib/sIPOPT/examples/parametric_cpp/parametric_driver.cpp:contrib/sIPOPT/examples/parametric_cpp/parametric_driver.cpp" ;;
     "contrib/sIPOPT/examples/parametric_cpp/parametricTNLP.cpp") CONFIG_LINKS="$CONFIG_LINKS contrib/sIPOPT/examples/parametric_cpp/parametricTNLP.cpp:contrib/sIPOPT/examples/parametric_cpp/parametricTNLP.cpp" ;;
     "contrib/sIPOPT/examples/parametric_cpp/parametricTNLP.hpp") CONFIG_LINKS="$CONFIG_LINKS contrib/sIPOPT/examples/parametric_cpp/parametricTNLP.hpp:contrib/sIPOPT/examples/parametric_cpp/parametricTNLP.hpp" ;;
@@ -26412,6 +26413,9 @@ do
     "tutorial/CodingExercise/Fortran/1-skeleton/Makefile") CONFIG_FILES="$CONFIG_FILES tutorial/CodingExercise/Fortran/1-skeleton/Makefile" ;;
     "tutorial/CodingExercise/Fortran/2-mistake/Makefile") CONFIG_FILES="$CONFIG_FILES tutorial/CodingExercise/Fortran/2-mistake/Makefile" ;;
     "tutorial/CodingExercise/Fortran/3-solution/Makefile") CONFIG_FILES="$CONFIG_FILES tutorial/CodingExercise/Fortran/3-solution/Makefile" ;;
+    "tutorial/CodingExercise/Matlab/1-skeleton/startup.m") CONFIG_FILES="$CONFIG_FILES tutorial/CodingExercise/Matlab/1-skeleton/startup.m" ;;
+    "tutorial/CodingExercise/Matlab/2-mistake/startup.m") CONFIG_FILES="$CONFIG_FILES tutorial/CodingExercise/Matlab/2-mistake/startup.m" ;;
+    "tutorial/CodingExercise/Matlab/3-solution/startup.m") CONFIG_FILES="$CONFIG_FILES tutorial/CodingExercise/Matlab/3-solution/startup.m" ;;
     "contrib/sIPOPT/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/sIPOPT/Makefile" ;;
     "contrib/sIPOPT/src/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/sIPOPT/src/Makefile" ;;
     "contrib/sIPOPT/AmplSolver/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/sIPOPT/AmplSolver/Makefile" ;;

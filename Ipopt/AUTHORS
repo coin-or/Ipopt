@@ -35,9 +35,9 @@ Contributors:
   Test/mytoy.nl
 
 - Peter Carbonetto (University of British Columbia)
-  Matlab interface files in directory (and subdirectories of)
+  Matlab interface
 
-  contrib/MatlabInterface
+  [removed from Ipopt source as unmaintained]
 
 - Rafael de Pelegrini Soares (VRTech Industrial Technologies)
   and Tong Kewei (Beihang University, Beijing)

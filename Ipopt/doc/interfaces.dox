@@ -1241,31 +1241,4 @@ Optimal value of objective function:  2
 Optimal value of controls: -1
 \endcode
 
-\subsection INTERFACE_MATLAB The MATLAB Interface
-
-This section is based on documentation by Peter Carbonetto
-(University of British Columbia).
-
-See \ref INSTALL_MATLAB for instructions on how to build a `mex` file of
-the MATLAB interface for \Ipopt and how to make it known to MATLAB.
-
-The `$IPOPTDIR/contrib/MatlabInterface/examples` directory contains
-several illustrative examples on how to use the MATLAB
-interface. The best way to understand how to use the interface is to
-carefully go over these examples.
-
-For more information, type `help ipopt` in the MATLAB prompt.
-
-<!-- dead link
-Further, Jonas Asprion assembled information about the
-MATLAB ipopt function and its arguments:
-<http://www.idsc.ethz.ch/Downloads/IPOPT_InstallMatlab/IPOPT_MatlabInterface_V0p1.pdf>
-
-Note, that this document refers to \Ipopt versions before
-3.11. With 3.11, the `auxdata` option has been removed from the mex code.
-The new wrapper function `ipopt_auxdata` implements the same
-functionality as the previous `ipopt` function, but uses
-MATLAB function handles to do so.
--->
-
 */

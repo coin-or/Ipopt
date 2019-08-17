@@ -137,6 +137,9 @@ CONFIG_CLEAN_FILES = ipopt.pc doc/Doxyfile examples/hs071_f/hs071_f.f \
 	tutorial/CodingExercise/Fortran/1-skeleton/Makefile \
 	tutorial/CodingExercise/Fortran/2-mistake/Makefile \
 	tutorial/CodingExercise/Fortran/3-solution/Makefile \
+	tutorial/CodingExercise/Matlab/1-skeleton/startup.m \
+	tutorial/CodingExercise/Matlab/2-mistake/startup.m \
+	tutorial/CodingExercise/Matlab/3-solution/startup.m \
 	contrib/sIPOPT/examples/parametric_cpp/Makefile \
 	contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile \
 	contrib/sIPOPT/examples/redhess_cpp/Makefile \
@@ -202,6 +205,9 @@ CONFIG_CLEAN_VPATH_FILES =  \
 	tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_main.cpp \
 	tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_nlp.hpp \
 	tutorial/CodingExercise/Cpp/3-solution/TutorialCpp_nlp.cpp \
+	tutorial/CodingExercise/Matlab/1-skeleton/TutorialMatlab.m \
+	tutorial/CodingExercise/Matlab/2-mistake/TutorialMatlab.m \
+	tutorial/CodingExercise/Matlab/3-solution/TutorialMatlab.m \
 	contrib/sIPOPT/examples/parametric_cpp/parametric_driver.cpp \
 	contrib/sIPOPT/examples/parametric_cpp/parametricTNLP.cpp \
 	contrib/sIPOPT/examples/parametric_cpp/parametricTNLP.hpp \
@@ -588,6 +594,12 @@ tutorial/CodingExercise/Fortran/1-skeleton/Makefile: $(top_builddir)/config.stat
 tutorial/CodingExercise/Fortran/2-mistake/Makefile: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Fortran/2-mistake/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 tutorial/CodingExercise/Fortran/3-solution/Makefile: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Fortran/3-solution/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tutorial/CodingExercise/Matlab/1-skeleton/startup.m: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Matlab/1-skeleton/startup.m.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tutorial/CodingExercise/Matlab/2-mistake/startup.m: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Matlab/2-mistake/startup.m.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tutorial/CodingExercise/Matlab/3-solution/startup.m: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Matlab/3-solution/startup.m.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 contrib/sIPOPT/examples/parametric_cpp/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/sIPOPT/examples/parametric_cpp/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@

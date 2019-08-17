@@ -233,9 +233,6 @@ for
 
 -   Java, which allows you to use \Ipopt from Java, see \ref INTERFACE_JAVA,
 
--   Matlab (mex interface), which allows you to use \Ipopt
-    from Matlab, see \ref INTERFACE_MATLAB,
-
 -   and the R project for statistical computing, see \ref INTERFACE_R.
 
 There is also software that facilitates use of \Ipopt
@@ -305,7 +302,7 @@ maintained by other people, among them are:
 
 -   [mexIPOPT](https://github.com/ebertolazzi/mexIPOPT)
 
-    A rewrite of the above mentioned MATLAB Interface.
+    Matlab (mex) interface to you use \Ipopt from Matlab.
 
 -   [OPTimization Interface (OPTI) Toolbox](http://www.i2c2.aut.ac.nz/Wiki/OPTI/)
 

@@ -11,14 +11,6 @@ srcdir="@srcdir@"
 
 retval=0
 
-# add path for Matlab's MA57 library, if we use it
-# for some reasons, the path could not be stored in the Ipopt
-# library via -rpath
-if test -n "@MWMA57PATH@" ; then
-  export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:@MWMA57PATH@"
-  export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:@MWMA57PATH@"
-fi
-
 echo " "
 echo Running unitTests...
 echo " "
