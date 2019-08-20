@@ -20928,9 +20928,21 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-# Patch libtool to eliminate a trailing space after AR_FLAGS. This needs to be
-# run after config.status has created libtool. Apparently necessary on
-# Windows when lib.exe is the archive tool.
+# Patch libtool to circumvent some issues when using MSVC and MS lib.
+# This needs to be run after config.status has created libtool.
+# 1. Eliminate a trailing space after AR_FLAGS. Apparently necessary on
+#    Windows when AR=lib.exe.
+# 2. Patch libtool's func_extract_an_archive in case of $AR=lib. The current
+#    libtool implementation assumes that it can do $AR x to extract an archive.
+#    We replace this two-liner in func_extract_an_archive by replacing the first
+#    line by something clunky that works with lib and making sure that the following
+#    line is ignored (by finishing with ": \"). We completely disregard running the
+#    command through func_show_eval and do not stop if it fails.
+# 3. Relax check which libraries can be used when linking a DLL.
+#    libtool's func_mode_link() would reject linking a .lib file when building a DLL,
+#    even though this .lib file may just be the one that eventually loads a depending DLL,
+#    e.g., mkl_core_dll.lib. Setting deplibs_check_method=pass_all will still print a
+#    warning, but the .lib is still passed to the linker.
 
   case "$AR" in
     *lib* | *LIB* )
@@ -22056,7 +22068,83 @@ $as_echo "$ac_success" >&6; }
       *-cygwin* | *-mingw* | *-msys*)
         case "$CC" in
           */compile\ cl | cl | */cl | */compile\ icl | icl | */icl )
-            # check first for 64-bit MKL, then for 32-bit MKL
+            # check for 64-bit sequential MKL
+            if test "$enable_shared" = yes ; then
+
+  # setup LIBS by adding mkl_intel_lp64_dll.lib mkl_sequential_dll.lib mkl_core_dll.lib and those from
+  ac_save_LIBS="$LIBS"
+  LIBS="mkl_intel_lp64_dll.lib mkl_sequential_dll.lib mkl_core_dll.lib $LIBS"
+
+
+  dsyev_namemangling=unknown
+
+  # FIXME we had "extra underscore" as additional option for ac_extra
+  #   but since there is no use for ac_extra below, was there any use for it?
+  for ac_extra in "no extra underscore" ; do
+    for ac_case in "lower case" "upper case" ; do
+      for ac_trail in "underscore" "no underscore" ; do
+        #AC_MSG_NOTICE([Attempting link for ${ac_case}, ${ac_trail}, ${ac_extra}])
+        case $ac_case in
+          "lower case")
+            ac_name=dsyev
+            ;;
+          "upper case")
+            ac_name=DSYEV
+            ;;
+        esac
+        if test "$ac_trail" = underscore ; then
+          ac_name=${ac_name}_
+        fi
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for function $ac_name in $LIBS" >&5
+$as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef __cplusplus
+             extern "C"
+             #endif
+             void $ac_name();
+#ifdef F77_DUMMY_MAIN
+
+#  ifdef __cplusplus
+     extern "C"
+#  endif
+   int F77_DUMMY_MAIN() { return 1; }
+
+#endif
+int
+main ()
+{
+$ac_name()
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  dsyev_namemangling="${ac_case}, ${ac_trail}, ${ac_extra}"
+           ac_success=yes
+else
+  ac_success=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_success" >&5
+$as_echo "$ac_success" >&6; }
+        if test $ac_success = yes ; then
+          break 3
+        fi
+      done
+    done
+  done
+  LIBS=$ac_save_LIBS
+
+  if test $ac_success = yes ; then
+
+                coin_has_lapack=yes
+                lapack_lflags="mkl_intel_lp64_dll.lib mkl_sequential_dll.lib mkl_core_dll.lib"
+
+  fi
+
+            else
 
   # setup LIBS by adding mkl_intel_lp64.lib mkl_sequential.lib mkl_core.lib and those from
   ac_save_LIBS="$LIBS"
@@ -22126,84 +22214,12 @@ $as_echo "$ac_success" >&6; }
 
   if test $ac_success = yes ; then
 
-              coin_has_lapack=yes
-              lapack_lflags="mkl_intel_lp64.lib mkl_sequential.lib mkl_core.lib"
-    else
-  # setup LIBS by adding mkl_intel_c.lib mkl_sequential.lib mkl_core.lib and those from
-  ac_save_LIBS="$LIBS"
-  LIBS="mkl_intel_c.lib mkl_sequential.lib mkl_core.lib $LIBS"
-
-
-  dsyev_namemangling=unknown
-
-  # FIXME we had "extra underscore" as additional option for ac_extra
-  #   but since there is no use for ac_extra below, was there any use for it?
-  for ac_extra in "no extra underscore" ; do
-    for ac_case in "lower case" "upper case" ; do
-      for ac_trail in "underscore" "no underscore" ; do
-        #AC_MSG_NOTICE([Attempting link for ${ac_case}, ${ac_trail}, ${ac_extra}])
-        case $ac_case in
-          "lower case")
-            ac_name=dsyev
-            ;;
-          "upper case")
-            ac_name=DSYEV
-            ;;
-        esac
-        if test "$ac_trail" = underscore ; then
-          ac_name=${ac_name}_
-        fi
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for function $ac_name in $LIBS" >&5
-$as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
-        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef __cplusplus
-             extern "C"
-             #endif
-             void $ac_name();
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-$ac_name()
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  dsyev_namemangling="${ac_case}, ${ac_trail}, ${ac_extra}"
-           ac_success=yes
-else
-  ac_success=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_success" >&5
-$as_echo "$ac_success" >&6; }
-        if test $ac_success = yes ; then
-          break 3
-        fi
-      done
-    done
-  done
-  LIBS=$ac_save_LIBS
-
-  if test $ac_success = yes ; then
-
-                 coin_has_lapack=yes
-                 lapack_lflags="mkl_intel_c.lib mkl_sequential.lib mkl_core.lib"
+                coin_has_lapack=yes
+                lapack_lflags="mkl_intel_lp64.lib mkl_sequential.lib mkl_core.lib"
 
   fi
 
-  fi
-
+            fi
           ;;
         esac
       ;;
@@ -28223,7 +28239,10 @@ compiler_lib_search_path=$lt_compiler_lib_search_path_F77
 _LT_EOF
 
  ;;
-    "libtoolpatch":C) sed -e 's|AR_FLAGS |AR_FLAGS|g' libtool > libtool.tmp
+    "libtoolpatch":C) sed -e 's|AR_FLAGS |AR_FLAGS|g' \
+             -e '/$AR x/s/.*/( cd $f_ex_an_ar_dir ; for f in `$AR -nologo -list "$f_ex_an_ar_oldlib" | tr "\\r" " "` ; do lib -nologo -extract:$f "$f_ex_an_ar_oldlib"; done ); : \\/g' \
+             -e '/^deplibs_check_method/s/.*/deplibs_check_method="pass_all"/g' \
+         libtool > libtool.tmp
          mv libtool.tmp libtool
          chmod 755 libtool ;;
 
