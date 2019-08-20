@@ -35,6 +35,11 @@ AC_COIN_PROG_CC
 AC_COIN_PROG_CXX
 AC_COIN_PROG_F77
 
+# If there is a Fortran compiler, then setup everything to use it, including F77_FUNC
+if test -n "$F77" ; then
+  AC_COIN_F77_SETUP
+fi
+
 # This is a C++ package, set the language accordingly.
 #AC_LANG_PUSH(C++)
 
@@ -44,13 +49,6 @@ AC_COIN_PROG_LIBTOOL
 # Get the C++ runtime libraries in case we want to link a static Ipopt library
 # with a C or Fortran compiler
 AC_COIN_CXXLIBS
-
-# Find out how to call Fortran from C and determine Fortran runtime libraries
-if test "$F77" != "unavailable" ; then
-  AC_COIN_F77_SETUP
-else
-  AC_COIN_F77_WRAPPERS
-fi
 
 # Doxygen
 AC_COIN_DOXYGEN
@@ -97,7 +95,7 @@ if test "$coin_has_hsl" = yes ; then
   AC_COIN_NAMEMANGLING([HSL],[ma27ad],[$HSLLIB_LFLAGS])
 
   # extra check for MA28, since that decides whether we have to build IpMa28Partition.F
-  if test "$F77" != "unavailable" ; then
+  if test -n "$F77" ; then
     AC_COIN_TRY_LINK([ma28ad],[$HSLLIB_LFLAGS],,[
       if test "$ma28ad_namemangling" != "$ac_cv_f77_mangling" ; then
         AC_MSG_WARN([Name mangling of MA28 different than Fortran. This will not link. Disabling MA28])
