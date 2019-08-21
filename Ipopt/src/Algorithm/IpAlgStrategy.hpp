@@ -31,7 +31,7 @@ namespace Ipopt
  *  things that are done to all strategy objects, like
  *  initialization and setting options.
  */
-class AlgorithmStrategyObject: public ReferencedObject
+class IPOPTLIB_EXPORT AlgorithmStrategyObject: public ReferencedObject
 {
 public:
    /**@name Constructors/Destructors */

@@ -23,7 +23,7 @@ struct SufDesc;
 namespace Ipopt
 {
 
-class AmplSuffixHandler: public ReferencedObject
+class IPOPTAMPLINTERFACELIB_EXPORT AmplSuffixHandler: public ReferencedObject
 {
 public:
    AmplSuffixHandler();
@@ -123,7 +123,7 @@ private:
 /** Class for storing a number of AMPL options that should be
  *  registered to the AMPL Solver library interface
  */
-class AmplOptionsList: public ReferencedObject
+class IPOPTAMPLINTERFACELIB_EXPORT AmplOptionsList: public ReferencedObject
 {
 public:
    enum AmplOptionType
@@ -313,7 +313,7 @@ private:
 };
 
 /** Ampl Interface, implemented as a TNLP. */
-class AmplTNLP: public TNLP
+class IPOPTAMPLINTERFACELIB_EXPORT AmplTNLP: public TNLP
 {
 public:
    /**@name Constructors/Destructors */

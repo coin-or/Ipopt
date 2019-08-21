@@ -23,7 +23,7 @@ class IpoptData;
 class IpoptCalculatedQuantities;
 class IteratesVector;
 
-class NLP: public ReferencedObject
+class IPOPTLIB_EXPORT NLP: public ReferencedObject
 {
 public:
    /**@name Constructors/Destructors */

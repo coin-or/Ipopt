@@ -455,7 +455,7 @@ AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/redhess_cpp/redhess_cpp.cpp)
 ##          Create Makefiles and other stuff                          ##
 ########################################################################
 
-AC_COIN_FINALIZE_FLAGS([IpoptLib IpoptAmplInterfaceLib])
+AC_COIN_FINALIZE_FLAGS([IpoptLib IpoptAmplInterfaceLib sIpoptLib])
 
 AC_CONFIG_FILES([Makefile
 		 src/Common/Makefile

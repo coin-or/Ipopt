@@ -16,7 +16,7 @@ namespace Ipopt
 {
 
 /** Base class for all methods for initializing the iterates. */
-class IterateInitializer: public AlgorithmStrategyObject
+class IPOPTLIB_EXPORT IterateInitializer: public AlgorithmStrategyObject
 {
 public:
    /**@name Constructors/Destructors */

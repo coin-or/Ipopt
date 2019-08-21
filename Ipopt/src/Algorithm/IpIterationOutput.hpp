@@ -17,7 +17,7 @@ namespace Ipopt
 
 /** Base class for objects that do the output summary per iteration.
  */
-class IterationOutput: public AlgorithmStrategyObject
+class IPOPTLIB_EXPORT IterationOutput: public AlgorithmStrategyObject
 {
 public:
    /**@name Constructors/Destructors */

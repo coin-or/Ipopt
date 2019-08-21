@@ -14,7 +14,7 @@
 namespace Ipopt
 {
 
-  class SensBacksolver : public AlgorithmStrategyObject
+  class SIPOPTLIB_EXPORT SensBacksolver : public AlgorithmStrategyObject
   {
 
     /** This class is the interface to all backsolvers that may

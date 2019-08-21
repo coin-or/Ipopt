@@ -22,7 +22,7 @@ class DenseGenMatrixSpace;
  *
  * Matrix elements are stored in one array in "Fortran" format.
  */
-class DenseGenMatrix: public Matrix
+class IPOPTLIB_EXPORT DenseGenMatrix: public Matrix
 {
 public:
 
@@ -275,7 +275,7 @@ private:
 
 /** This is the matrix space for DenseGenMatrix.
  */
-class DenseGenMatrixSpace: public MatrixSpace
+class IPOPTLIB_EXPORT DenseGenMatrixSpace: public MatrixSpace
 {
 public:
    /** @name Constructors / Destructors */

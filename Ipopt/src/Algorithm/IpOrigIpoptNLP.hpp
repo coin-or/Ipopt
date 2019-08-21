@@ -35,7 +35,7 @@ enum HessianApproximationSpace
  *  calculated model results, handles caching,
  *  and (some day) takes care of addition of slacks.
  */
-class OrigIpoptNLP: public IpoptNLP
+class IPOPTLIB_EXPORT OrigIpoptNLP: public IpoptNLP
 {
 public:
    /**@name Constructors / Destructor */

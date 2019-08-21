@@ -166,7 +166,7 @@ class Referencer { };
  * technique where the reference count is stored in the object being
  * referenced.
  */
-class ReferencedObject
+class IPOPTLIB_EXPORT ReferencedObject
 {
 public:
    ReferencedObject()

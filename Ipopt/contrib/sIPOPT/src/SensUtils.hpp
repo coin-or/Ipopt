@@ -9,9 +9,10 @@
 #define __SENSCUTILS_HPP__
 
 #include "IpUtils.hpp"
-#include <string>
 #include "IpAlgTypes.hpp"
 #include "IpReturnCodes.hpp"
+
+#include <string>
 
 namespace Ipopt
 {
@@ -24,13 +25,13 @@ namespace Ipopt
     FATAL_ERROR
   };
 
-  Index AsIndexMax(Index length, const Index* x, Index Incr);
+  SIPOPTLIB_EXPORT Index AsIndexMax(Index length, const Index* x, Index Incr);
 
-  Index AsIndexSum(Index length, const Index* x, Index Incr);
+  SIPOPTLIB_EXPORT Index AsIndexSum(Index length, const Index* x, Index Incr);
 
-  void append_Index(std::string& str, Index idx);
+  SIPOPTLIB_EXPORT void append_Index(std::string& str, Index idx);
 
-  SolverReturn AppReturn2SolverReturn(ApplicationReturnStatus ipopt_retval);
+  SIPOPTLIB_EXPORT SolverReturn AppReturn2SolverReturn(ApplicationReturnStatus ipopt_retval);
 }
 
 #endif

@@ -319,6 +319,8 @@ RPATH_FLAGS = @RPATH_FLAGS@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
+SIPOPTLIB_CFLAGS_NOPC = @SIPOPTLIB_CFLAGS_NOPC@
+SIPOPTLIB_LFLAGS_NOPC = @SIPOPTLIB_LFLAGS_NOPC@
 STRIP = @STRIP@
 VERSION = @VERSION@
 abs_builddir = @abs_builddir@
@@ -396,7 +398,7 @@ ipopt_SOURCES = \
 	ampl_ipopt.cpp
 
 ipopt_LDADD = libipoptamplinterface.la ../../Interfaces/libipopt.la
-AM_CPPFLAGS = -DIPOPT_BUILD \
+AM_CPPFLAGS = -DIPOPTAMPL_BUILD \
 	-I$(srcdir)/../../Common \
 	-I$(srcdir)/../../LinAlg \
 	-I$(srcdir)/../../LinAlg/TMatrices \

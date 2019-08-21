@@ -16,7 +16,7 @@ namespace Ipopt
  *  the barrier and fraction-to-the-boundary rule parameter for the
  *  current iteration.
  */
-class MuUpdate: public AlgorithmStrategyObject
+class IPOPTLIB_EXPORT MuUpdate: public AlgorithmStrategyObject
 {
 public:
    /**@name Constructors / Destructor */

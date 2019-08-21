@@ -8,15 +8,11 @@
 #define __IPIPOPTAPPLICATION_HPP__
 
 #ifndef IPOPT_EXPORT
-#ifdef _MSC_VER
-#ifdef IPOPT_DLL
-#define IPOPT_EXPORT(type) __declspec(dllexport) type __cdecl
-#else
-#define IPOPT_EXPORT(type) type __cdecl
-#endif
-#else
-#define IPOPT_EXPORT(type) type
-#endif
+ #ifdef _MSC_VER
+  #define IPOPT_EXPORT(type) type __cdecl
+ #else
+  #define IPOPT_EXPORT(type) type
+ #endif
 #endif
 
 #include <iostream>
@@ -42,7 +38,7 @@ class OptionsList;
 class SolveStatistics;
 
 /** This is the main application class for making calls to Ipopt. */
-class IpoptApplication: public ReferencedObject
+class IPOPTLIB_EXPORT IpoptApplication: public ReferencedObject
 {
 public:
    IpoptApplication(
@@ -373,6 +369,6 @@ private:
 
 } // namespace Ipopt
 
-extern "C" IPOPT_EXPORT(class Ipopt::IpoptApplication*)IpoptApplicationFactory();
+extern "C" IPOPTLIB_EXPORT IPOPT_EXPORT(class Ipopt::IpoptApplication*) IpoptApplicationFactory();
 
 #endif

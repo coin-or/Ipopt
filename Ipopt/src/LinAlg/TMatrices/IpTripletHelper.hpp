@@ -35,7 +35,7 @@ class TransposeMatrix;
 class ExpandedMultiVectorMatrix;
 class Vector;
 
-class TripletHelper
+class IPOPTLIB_EXPORT TripletHelper
 {
 public:
    /**@name A set of recursive routines that help with the Triplet format. */

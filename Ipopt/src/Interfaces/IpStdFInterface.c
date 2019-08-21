@@ -321,7 +321,7 @@ static Bool intermediate_cb(
    return (Bool) (ISTOP == OKRetVal);
 }
 
-fptr F77_FUNC(ipcreate, IPCREATE)(
+IPOPTLIB_EXPORT fptr F77_FUNC(ipcreate, IPCREATE)(
    fint*           N,
    fdouble*        X_L,
    fdouble*        X_U,
@@ -368,7 +368,7 @@ fptr F77_FUNC(ipcreate, IPCREATE)(
    return (fptr)fuser_data;
 }
 
-void F77_FUNC(ipfree, IPFREE)(
+IPOPTLIB_EXPORT void F77_FUNC(ipfree, IPFREE)(
    fptr* FProblem
 )
 {
@@ -380,7 +380,7 @@ void F77_FUNC(ipfree, IPFREE)(
    *FProblem = (fptr)NULL;
 }
 
-fint F77_FUNC(ipsolve, IPSOLVE)(
+IPOPTLIB_EXPORT fint F77_FUNC(ipsolve, IPSOLVE)(
    fptr*    FProblem,
    fdouble* X,
    fdouble* G,
@@ -424,7 +424,7 @@ static char* f2cstr(
 }
 
 /* ToDo make sure position of vlen and klen are at the right place */
-fint F77_FUNC(ipaddstroption, IPADDSTROPTION)(
+IPOPTLIB_EXPORT fint F77_FUNC(ipaddstroption, IPADDSTROPTION)(
    fptr* FProblem,
    char* KEYWORD,
    char* VALUE,
@@ -448,7 +448,7 @@ fint F77_FUNC(ipaddstroption, IPADDSTROPTION)(
    return retval ? OKRetVal : NotOKRetVal;
 }
 
-fint F77_FUNC(ipaddnumoption, IPADDNUMOPTION)(
+IPOPTLIB_EXPORT fint F77_FUNC(ipaddnumoption, IPADDNUMOPTION)(
    fptr*    FProblem,
    char*    KEYWORD,
    fdouble* VALUE,
@@ -468,7 +468,7 @@ fint F77_FUNC(ipaddnumoption, IPADDNUMOPTION)(
    return retval ? OKRetVal : NotOKRetVal;
 }
 
-fint F77_FUNC(ipaddintoption, IPADDINTOPTION)(
+IPOPTLIB_EXPORT fint F77_FUNC(ipaddintoption, IPADDINTOPTION)(
    fptr* FProblem,
    char* KEYWORD,
    fint* VALUE,
@@ -489,7 +489,7 @@ fint F77_FUNC(ipaddintoption, IPADDINTOPTION)(
    return retval ? OKRetVal : NotOKRetVal;
 }
 
-fint F77_FUNC(ipopenoutputfile, IPOPENOUTPUTFILE)(
+IPOPTLIB_EXPORT fint F77_FUNC(ipopenoutputfile, IPOPENOUTPUTFILE)(
    fptr* FProblem,
    char* FILENAME,
    fint* PRINTLEVEL,
@@ -510,7 +510,7 @@ fint F77_FUNC(ipopenoutputfile, IPOPENOUTPUTFILE)(
    return retval ? OKRetVal : NotOKRetVal;
 }
 
-void F77_FUNC(ipsetcallback, IPSETCALLBACK)(
+IPOPTLIB_EXPORT void F77_FUNC(ipsetcallback, IPSETCALLBACK)(
    fptr*         FProblem,
    FIntermediate_CB inter_cb
 )
@@ -520,7 +520,7 @@ void F77_FUNC(ipsetcallback, IPSETCALLBACK)(
    SetIntermediateCallback(fuser_data->Problem, intermediate_cb);
 }
 
-void F77_FUNC(ipunsetcallback, IPUNSETCALLBACK)(
+IPOPTLIB_EXPORT void F77_FUNC(ipunsetcallback, IPUNSETCALLBACK)(
    fptr* FProblem
 )
 {

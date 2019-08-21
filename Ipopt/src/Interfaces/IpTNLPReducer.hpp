@@ -20,7 +20,7 @@ namespace Ipopt
  *  we are still evaluation all functions and derivatives, and are
  *  making copies of the original data.
  */
-class TNLPReducer: public TNLP
+class IPOPTLIB_EXPORT TNLPReducer: public TNLP
 {
 public:
    /**@name Constructors/Destructors */

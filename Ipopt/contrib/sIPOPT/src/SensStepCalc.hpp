@@ -17,7 +17,7 @@ namespace Ipopt
   class DenseVector;
   class IteratesVector;
 
-  class SensitivityStepCalculator : public AlgorithmStrategyObject
+  class SIPOPTLIB_EXPORT SensitivityStepCalculator : public AlgorithmStrategyObject
   {
     /* This is the interface for the classes that perform the actual step. */
 

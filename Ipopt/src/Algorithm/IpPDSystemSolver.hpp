@@ -71,7 +71,7 @@ namespace Ipopt
  *  an implementation of PDSystem should check whether the incoming data has
  *  changed, and not redo factorization etc. unless necessary.
  */
-class PDSystemSolver: public AlgorithmStrategyObject
+class IPOPTLIB_EXPORT PDSystemSolver: public AlgorithmStrategyObject
 {
 public:
    /** @name Constructor/Destructor */

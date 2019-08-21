@@ -22,7 +22,7 @@ ipopt_SOURCES = \
 
 ipopt_LDADD = libipoptamplinterface.la ../../Interfaces/libipopt.la
 
-AM_CPPFLAGS = -DIPOPT_BUILD \
+AM_CPPFLAGS = -DIPOPTAMPL_BUILD \
 	-I$(srcdir)/../../Common \
 	-I$(srcdir)/../../LinAlg \
 	-I$(srcdir)/../../LinAlg/TMatrices \

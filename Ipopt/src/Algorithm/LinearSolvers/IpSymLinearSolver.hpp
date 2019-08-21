@@ -47,7 +47,7 @@ enum ESymSolverStatus
  *  if the system is nonsingular, and if the number of negative
  *  eigenvalues matches a given number.
  */
-class SymLinearSolver: public AlgorithmStrategyObject
+class IPOPTLIB_EXPORT SymLinearSolver: public AlgorithmStrategyObject
 {
 public:
    /** @name Constructor/Destructor */

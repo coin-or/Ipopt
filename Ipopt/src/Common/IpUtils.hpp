@@ -142,24 +142,24 @@ inline Number Min(
 
 /** Function returning true iff the argument is a valid double number
  *  (not NaN or Inf). */
-bool IsFiniteNumber(
+IPOPTLIB_EXPORT bool IsFiniteNumber(
    Number val
 );
 
 /** Function returning a random number between 0 and 1 */
-Number IpRandom01();
+IPOPTLIB_EXPORT Number IpRandom01();
 
 /** Function resetting the random number generator */
-void IpResetRandom01();
+IPOPTLIB_EXPORT void IpResetRandom01();
 
 /** method determining CPU time */
-Number CpuTime();
+IPOPTLIB_EXPORT Number CpuTime();
 
 /** method determining system time */
-Number SysTime();
+IPOPTLIB_EXPORT Number SysTime();
 
 /** method determining wallclock time since first call */
-Number WallclockTime();
+IPOPTLIB_EXPORT Number WallclockTime();
 
 /** Method for comparing two numbers within machine precision.
  *
@@ -167,14 +167,14 @@ Number WallclockTime();
  *  this inequality by something a little larger than machine
  *  precision relative to the absolute value of BasVal
  */
-bool Compare_le(
+IPOPTLIB_EXPORT bool Compare_le(
    Number lhs,
    Number rhs,
    Number BasVal
 );
 
 /** Method for printing a formatted output to a string with given size. */
-int Snprintf(
+IPOPTLIB_EXPORT int Snprintf(
    char*       str,
    long        size,
    const char* format,

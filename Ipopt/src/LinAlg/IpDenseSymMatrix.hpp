@@ -24,7 +24,7 @@ class DenseGenMatrix;
  *  Matrix elements are stored in one array in "Fortran" format,
  *  using BLAS "lower triangular" storage (not packed).
  */
-class DenseSymMatrix: public SymMatrix
+class IPOPTLIB_EXPORT DenseSymMatrix: public SymMatrix
 {
 public:
    /**@name Constructors / Destructors */
@@ -176,7 +176,7 @@ private:
 };
 
 /** This is the matrix space for DenseSymMatrix. */
-class DenseSymMatrixSpace: public SymMatrixSpace
+class IPOPTLIB_EXPORT DenseSymMatrixSpace: public SymMatrixSpace
 {
 public:
    /** @name Constructors / Destructors */

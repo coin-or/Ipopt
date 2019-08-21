@@ -21,7 +21,7 @@ class MultiVectorMatrixSpace;
  *  Those matrices are for example useful in the implementation of
  *  limited memory quasi-Newton methods.
  */
-class MultiVectorMatrix: public Matrix
+class IPOPTLIB_EXPORT MultiVectorMatrix: public Matrix
 {
 public:
    /**@name Constructors / Destructors */
@@ -237,7 +237,7 @@ private:
 };
 
 /** This is the matrix space for MultiVectorMatrix. */
-class MultiVectorMatrixSpace: public MatrixSpace
+class IPOPTLIB_EXPORT MultiVectorMatrixSpace: public MatrixSpace
 {
 public:
    /** @name Constructors / Destructors */

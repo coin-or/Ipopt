@@ -20,7 +20,7 @@ class CompoundSymMatrixSpace;
  *
  *  Here, the lower left block of the matrix is stored.
  */
-class CompoundSymMatrix: public SymMatrix
+class IPOPTLIB_EXPORT CompoundSymMatrix: public SymMatrix
 {
 public:
 
@@ -211,7 +211,7 @@ private:
  *  has to be set per block row and column.  Individual component
  *  SymMatrixSpace's can be set with the SetComp method.
  */
-class CompoundSymMatrixSpace: public SymMatrixSpace
+class IPOPTLIB_EXPORT CompoundSymMatrixSpace: public SymMatrixSpace
 {
 public:
    /** @name Constructors / Destructors */

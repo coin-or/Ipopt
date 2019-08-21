@@ -204,6 +204,9 @@
 /* Set to extension for shared libraries in quotes. */
 #undef SHAREDLIBEXT
 
+/* Library Visibility Attribute */
+#undef SIPOPTLIB_EXPORT
+
 /* The size of `int *', as computed by sizeof. */
 #undef SIZEOF_INT_P
 

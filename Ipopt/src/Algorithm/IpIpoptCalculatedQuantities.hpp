@@ -38,7 +38,7 @@ enum ENormType
  *  The regular IpoptCalculatedQuantities object should be given
  *  a derivation of this base class when it is created.
  */
-class IpoptAdditionalCq: public ReferencedObject
+class IPOPTLIB_EXPORT IpoptAdditionalCq: public ReferencedObject
 {
 public:
    /**@name Constructors/Destructors */
@@ -85,7 +85,7 @@ private:
 };
 
 /** Class for all IPOPT specific calculated quantities. */
-class IpoptCalculatedQuantities: public ReferencedObject
+class IPOPTLIB_EXPORT IpoptCalculatedQuantities: public ReferencedObject
 {
 public:
 

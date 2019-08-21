@@ -8,16 +8,14 @@
 #ifndef __IPSTDCINTERFACE_H__
 #define __IPSTDCINTERFACE_H__
 
+#include "IpoptConfig.h"
+
 #ifndef IPOPT_EXPORT
-#ifdef _MSC_VER
-#ifdef IPOPT_DLL
-#define IPOPT_EXPORT(type) __declspec(dllexport) type __cdecl
-#else
-#define IPOPT_EXPORT(type) type __cdecl
-#endif
-#else
-#define IPOPT_EXPORT(type) type
-#endif
+ #ifdef _MSC_VER
+  #define IPOPT_EXPORT(type) type __cdecl
+ #else
+  #define IPOPT_EXPORT(type) type
+ #endif
 #endif
 
 #ifdef __cplusplus
@@ -186,7 +184,7 @@ typedef Bool (*Intermediate_CB)(
  *
  *  See also Ipopt::TNLP::get_nlp_info and Ipopt::TNLP::get_bounds_info.
  */
-IPOPT_EXPORT(IpoptProblem) CreateIpoptProblem(
+IPOPTLIB_EXPORT IPOPT_EXPORT(IpoptProblem) CreateIpoptProblem(
    Index         n,           /**< Number of optimization variables */
    Number*       x_L,         /**< Lower bounds on variables
                                *
@@ -235,7 +233,7 @@ IPOPT_EXPORT(IpoptProblem) CreateIpoptProblem(
  *
  * After freeing an IpoptProblem, it cannot be used anymore.
  */
-IPOPT_EXPORT(void) FreeIpoptProblem(
+IPOPTLIB_EXPORT IPOPT_EXPORT(void) FreeIpoptProblem(
    IpoptProblem ipopt_problem
 );
 
@@ -243,7 +241,7 @@ IPOPT_EXPORT(void) FreeIpoptProblem(
  *
  * @return FALSE, if the option could not be set (e.g., if keyword is unknown)
  */
-IPOPT_EXPORT(Bool) AddIpoptStrOption(
+IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) AddIpoptStrOption(
    IpoptProblem ipopt_problem,
    char*        keyword,
    char*        val
@@ -253,7 +251,7 @@ IPOPT_EXPORT(Bool) AddIpoptStrOption(
  *
  * @return FALSE, if the option could not be set (e.g., if keyword is unknown)
  */
-IPOPT_EXPORT(Bool) AddIpoptNumOption(
+IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) AddIpoptNumOption(
    IpoptProblem ipopt_problem,
    char*        keyword,
    Number       val
@@ -263,7 +261,7 @@ IPOPT_EXPORT(Bool) AddIpoptNumOption(
  *
  * @return FALSE, if the option  could not be set (e.g., if keyword is unknown)
  @*/
-IPOPT_EXPORT(Bool) AddIpoptIntOption(
+IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) AddIpoptIntOption(
    IpoptProblem ipopt_problem,
    char*        keyword,
    Int          val
@@ -273,7 +271,7 @@ IPOPT_EXPORT(Bool) AddIpoptIntOption(
  *
  * @return FALSE, if there was a problem opening the file.
  */
-IPOPT_EXPORT(Bool) OpenIpoptOutputFile(
+IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) OpenIpoptOutputFile(
    IpoptProblem ipopt_problem,
    char*        file_name,
    Int          print_level
@@ -285,7 +283,7 @@ IPOPT_EXPORT(Bool) OpenIpoptOutputFile(
  *  If the pointers x_scaling or g_scaling are NULL, then no scaling
  *  for x resp. g is done.
  */
-IPOPT_EXPORT(Bool) SetIpoptProblemScaling(
+IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) SetIpoptProblemScaling(
    IpoptProblem ipopt_problem,
    Number       obj_scaling,
    Number*      x_scaling,
@@ -302,7 +300,7 @@ IPOPT_EXPORT(Bool) SetIpoptProblemScaling(
  *  method returns false, Ipopt will terminate the optimization.
  *  Calling this set method to set the CB pointer to NULL disables
  *  the intermediate callback functionality. */
-IPOPT_EXPORT(Bool) SetIntermediateCallback(
+IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) SetIntermediateCallback(
    IpoptProblem    ipopt_problem,
    Intermediate_CB intermediate_cb
 );
@@ -312,7 +310,7 @@ IPOPT_EXPORT(Bool) SetIntermediateCallback(
  *
  * @return outcome of the optimization procedure (e.g., success, failure etc).
  */
-IPOPT_EXPORT(enum ApplicationReturnStatus) IpoptSolve(
+IPOPTLIB_EXPORT IPOPT_EXPORT(enum ApplicationReturnStatus) IpoptSolve(
    IpoptProblem ipopt_problem, /**< Problem that is to be optimized.
                                 *
                                 * Ipopt will use the options previously specified with

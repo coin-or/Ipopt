@@ -16,7 +16,7 @@
 namespace Ipopt
 {
 
-  class Measurement : public ReferencedObject
+  class SIPOPTLIB_EXPORT Measurement : public ReferencedObject
   {
     /** This class provides an abstraction for the measurements of the states coming in
      *  and the solutions of the controller. It basicall acts as the "plant" of the controller. */

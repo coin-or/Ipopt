@@ -14,7 +14,7 @@ namespace Ipopt
 {
 
 /** Base class for line search objects. */
-class LineSearch: public AlgorithmStrategyObject
+class IPOPTLIB_EXPORT LineSearch: public AlgorithmStrategyObject
 {
 public:
    /**@name Constructors/Destructors */

@@ -24,7 +24,7 @@ class ExpansionMatrixSpace;
  *  by the MultVector operation.  The transpose operation then
  *  filters some elements from a large vector into a smaller vector.
  */
-class ExpansionMatrix: public Matrix
+class IPOPTLIB_EXPORT ExpansionMatrix: public Matrix
 {
 public:
    /**@name Constructors / Destructors */
@@ -158,7 +158,7 @@ private:
 };
 
 /** This is the matrix space for ExpansionMatrix. */
-class ExpansionMatrixSpace: public MatrixSpace
+class IPOPTLIB_EXPORT ExpansionMatrixSpace: public MatrixSpace
 {
 public:
    /** @name Constructors / Destructors */

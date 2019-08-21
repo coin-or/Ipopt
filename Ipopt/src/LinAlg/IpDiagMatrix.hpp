@@ -17,7 +17,7 @@ namespace Ipopt
  *
  *  The diagonal is stored as a Vector.
  */
-class DiagMatrix: public SymMatrix
+class IPOPTLIB_EXPORT DiagMatrix: public SymMatrix
 {
 public:
 
@@ -101,7 +101,7 @@ private:
 };
 
 /** This is the matrix space for DiagMatrix. */
-class DiagMatrixSpace: public SymMatrixSpace
+class IPOPTLIB_EXPORT DiagMatrixSpace: public SymMatrixSpace
 {
 public:
    /** @name Constructors / Destructors */

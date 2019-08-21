@@ -30,7 +30,7 @@ enum RegisteredOptionType
  *  The derived types are more
  *  specific to a string option or a Number (real) option, etc.
  */
-class RegisteredOption: public ReferencedObject
+class IPOPTLIB_EXPORT RegisteredOption: public ReferencedObject
 {
 public:
    /** class to hold the valid string settings for a string option */
@@ -551,7 +551,7 @@ private:
  *
  * Used for validation and documentation.
  */
-class RegisteredOptions: public ReferencedObject
+class IPOPTLIB_EXPORT RegisteredOptions: public ReferencedObject
 {
 public:
    /** Constructors / Destructors */

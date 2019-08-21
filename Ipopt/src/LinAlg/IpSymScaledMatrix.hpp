@@ -23,7 +23,7 @@ class SymScaledMatrixSpace;
  *  the scaled matrix. You can pull out the pointer to the
  *  unscaled matrix for unscaled calculations.
  */
-class SymScaledMatrix: public SymMatrix
+class IPOPTLIB_EXPORT SymScaledMatrix: public SymMatrix
 {
 public:
    /**@name Constructors / Destructors */
@@ -120,7 +120,7 @@ private:
 
 /** This is the matrix space for SymScaledMatrix.
  */
-class SymScaledMatrixSpace: public SymMatrixSpace
+class IPOPTLIB_EXPORT SymScaledMatrixSpace: public SymMatrixSpace
 {
 public:
    /** @name Constructors / Destructors */

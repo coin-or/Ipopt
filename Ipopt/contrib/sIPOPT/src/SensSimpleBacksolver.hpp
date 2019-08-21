@@ -15,7 +15,7 @@
 #include "SensBacksolver.hpp"
 
 namespace Ipopt {
-  class SimpleBacksolver : public SensBacksolver
+  class SIPOPTLIB_EXPORT SimpleBacksolver : public SensBacksolver
   {
   public:
 

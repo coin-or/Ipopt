@@ -23,7 +23,7 @@ class ScaledMatrixSpace;
  *  the scaled matrix. You can pull out the pointer to the
  *  unscaled matrix for unscaled calculations.
  */
-class ScaledMatrix: public Matrix
+class IPOPTLIB_EXPORT ScaledMatrix: public Matrix
 {
 public:
    /**@name Constructors / Destructors */
@@ -158,7 +158,7 @@ private:
 };
 
 /** This is the matrix space for ScaledMatrix. */
-class ScaledMatrixSpace: public MatrixSpace
+class IPOPTLIB_EXPORT ScaledMatrixSpace: public MatrixSpace
 {
 public:
    /** @name Constructors / Destructors */

@@ -21,7 +21,7 @@ extern "C"
  * @param msglen Length of the message buffer.
  * @return Zero on success, nonzero on failure.
  */
-int LSL_loadPardisoLib(
+IPOPTLIB_EXPORT int LSL_loadPardisoLib(
    const char* libname,
    char*       msgbuf,
    int         msglen
@@ -30,15 +30,15 @@ int LSL_loadPardisoLib(
 /** Unloads a loaded Pardiso library.
  * @return Zero on success, nonzero on failure.
  */
-int LSL_unloadPardisoLib();
+IPOPTLIB_EXPORT int LSL_unloadPardisoLib();
 
 /** Indicates whether a Pardiso library has been successfully loaded.
  * @return Zero if not loaded, nonzero if handle is loaded
  */
-int LSL_isPardisoLoaded();
+IPOPTLIB_EXPORT int LSL_isPardisoLoaded();
 
 /** Returns name of the shared library that should contain Pardiso */
-char* LSL_PardisoLibraryName();
+IPOPTLIB_EXPORT char* LSL_PardisoLibraryName();
 
 #ifdef __cplusplus
 }

@@ -17,7 +17,7 @@ namespace Ipopt
 class SymMatrixSpace;
 
 /** This is the base class for all derived symmetric matrix types. */
-class SymMatrix: public Matrix
+class IPOPTLIB_EXPORT SymMatrix: public Matrix
 {
 public:
    /** @name Constructor/Destructor */
@@ -82,7 +82,7 @@ private:
 };
 
 /** SymMatrixSpace base class, corresponding to the SymMatrix base class. */
-class SymMatrixSpace: public MatrixSpace
+class IPOPTLIB_EXPORT SymMatrixSpace: public MatrixSpace
 {
 public:
    /** @name Constructors/Destructors */

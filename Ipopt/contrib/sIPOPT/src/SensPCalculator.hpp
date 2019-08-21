@@ -14,7 +14,7 @@
 namespace Ipopt
 {
 
-  class PCalculator : public AlgorithmStrategyObject
+  class SIPOPTLIB_EXPORT PCalculator : public AlgorithmStrategyObject
   {
     /** This class is the interface for implementations of any class that calculates the matrix \f$P =K^{-1}A\f$
      *  of the following matrix:

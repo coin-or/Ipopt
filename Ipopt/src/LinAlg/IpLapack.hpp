@@ -19,7 +19,7 @@ DECLARE_STD_EXCEPTION(LAPACK_NOT_INCLUDED);
  *  Solving a linear system given a Cholesky factorization.
  *  We assume that the Cholesky factor is lower traiangular.
  */
-void IpLapackDpotrs(
+IPOPTLIB_EXPORT void IpLapackDpotrs(
    Index         ndim,
    Index         nrhs,
    const Number* a,
@@ -33,7 +33,7 @@ void IpLapackDpotrs(
  *  Compute Cholesky factorization (lower triangular factor).
  *  info is the return value from the LAPACK routine.
  */
-void IpLapackDpotrf(
+IPOPTLIB_EXPORT void IpLapackDpotrf(
    Index   ndim,
    Number* a,
    Index   lda,
@@ -46,7 +46,7 @@ void IpLapackDpotrf(
  *  If compute_eigenvectors is true, a will contain the eigenvectors
  *  in its columns on return.
  */
-void IpLapackDsyev(
+IPOPTLIB_EXPORT void IpLapackDsyev(
    bool    compute_eigenvectors,
    Index   ndim,
    Number* a,
@@ -60,7 +60,7 @@ void IpLapackDsyev(
  *  Compute LU factorization.
  *  info is the return value from the LAPACK routine.
  */
-void IpLapackDgetrf(
+IPOPTLIB_EXPORT void IpLapackDgetrf(
    Index   ndim,
    Number* a,
    Index*  ipiv,
@@ -72,7 +72,7 @@ void IpLapackDgetrf(
  *
  * Solving a linear system given a LU factorization.
  */
-void IpLapackDgetrs(
+IPOPTLIB_EXPORT void IpLapackDgetrs(
    Index         ndim,
    Index         nrhs,
    const Number* a,
@@ -88,7 +88,7 @@ void IpLapackDgetrs(
  *  definite linear system in packed storage format (upper triangular).
  *  info is the return value from the LAPACK routine.
  */
-void IpLapackDppsv(
+IPOPTLIB_EXPORT void IpLapackDppsv(
    Index         ndim,
    Index         nrhs,
    const Number* a,

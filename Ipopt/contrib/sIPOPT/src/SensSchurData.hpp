@@ -14,8 +14,7 @@
 namespace Ipopt
 {
 
-
-  class SchurData : public ReferencedObject
+  class SIPOPTLIB_EXPORT SchurData : public ReferencedObject
   {
     /** This interface serves as a reference point for multiple classes
      *  that need to use SchurData (PCalculator, SchurDriver). It

@@ -13,7 +13,7 @@ namespace Ipopt
 {
 
 /** Base class for checking the algorithm termination criteria. */
-class ConvergenceCheck: public AlgorithmStrategyObject
+class IPOPTLIB_EXPORT ConvergenceCheck: public AlgorithmStrategyObject
 {
 public:
    /**@name Constructors/Destructors */

@@ -54,7 +54,7 @@ namespace Ipopt
  * Journalist, using the level J_ERROR and the category J_MAIN.
  *
  */
-class IpoptException
+class IPOPTLIB_EXPORT IpoptException
 {
 public:
    /**@name Constructors/Destructors */
@@ -141,7 +141,7 @@ private:
   }
 
 #define DECLARE_STD_EXCEPTION(__except_type) \
-    class __except_type : public Ipopt::IpoptException \
+    class IPOPTLIB_EXPORT  __except_type : public Ipopt::IpoptException \
     { \
     public: \
       __except_type(std::string msg, std::string fname, Ipopt::Index line) \

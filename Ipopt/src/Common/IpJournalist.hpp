@@ -113,7 +113,7 @@ enum EJournalCategory
  * (if successful) so you can set Acceptance criteria for that
  * particular location.
  */
-class Journalist: public ReferencedObject
+class IPOPTLIB_EXPORT Journalist: public ReferencedObject
 {
 public:
    /**@name Constructor / Desructor. */
@@ -273,7 +273,7 @@ private:
  *  acceptance criteria for print statements etc. Derived classes
  *  like the FileJournal - output those messages to specific locations
  */
-class Journal: public ReferencedObject
+class IPOPTLIB_EXPORT Journal: public ReferencedObject
 {
 public:
    /** Constructor. */
@@ -406,7 +406,7 @@ private:
  *  writes to a file for output. It can write to (stdout, stderr, or disk)
  *  by using "stdout" and "stderr" as filenames.
  */
-class FileJournal: public Journal
+class IPOPTLIB_EXPORT FileJournal: public Journal
 {
 public:
    /** Constructor. */
@@ -487,7 +487,7 @@ private:
  *
  * This is a particular Journal implementation that writes to a stream for output.
  */
-class StreamJournal: public Journal
+class IPOPTLIB_EXPORT StreamJournal: public Journal
 {
 public:
    /** Constructor. */

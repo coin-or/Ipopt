@@ -506,7 +506,7 @@ typedef void (*mc68_order_t)(
  * @param msglen Length of the message buffer.
  * @return Zero on success, nonzero on failure.
  */
-int LSL_loadHSL(
+IPOPTLIB_EXPORT int LSL_loadHSL(
    const char* libname,
    char*       msgbuf,
    int         msglen
@@ -516,61 +516,61 @@ int LSL_loadHSL(
  *
  * @return Zero on success, nonzero on failure.
  */
-int LSL_unloadHSL();
+IPOPTLIB_EXPORT int LSL_unloadHSL();
 
 /** Indicates whether a HSL library has been loaded.
  *
  * @return Zero if not loaded, nonzero if handle is loaded
  */
-int LSL_isHSLLoaded();
+IPOPTLIB_EXPORT int LSL_isHSLLoaded();
 
 /** Indicates whether a HSL library is loaded and all symbols necessary to use MA27 have been found.
  *
  * @return Zero if not available, nonzero if MA27 is available in the loaded library.
  */
-int LSL_isMA27available();
+IPOPTLIB_EXPORT int LSL_isMA27available();
 
 /** Indicates whether a HSL library is loaded and all symbols necessary to use MA57 have been found.
  *
  * @return Zero if not available, nonzero if MA57 is available in the loaded library.
  */
-int LSL_isMA57available();
+IPOPTLIB_EXPORT int LSL_isMA57available();
 
 /** Indicates whether a HSL library is loaded and all symbols necessary to use MA77 have been found.
  *
  * @return Zero if not available, nonzero if HSL_MA77 is available in the loaded library.
  */
-int LSL_isMA77available();
+IPOPTLIB_EXPORT int LSL_isMA77available();
 
 /** Indicates whether a HSL library is loaded and all symbols necessary to use HSL_MA86 have been found.
  *
  * @return Zero if not available, nonzero if HSL_MA86 is available in the loaded library.
  */
-int LSL_isMA86available();
+IPOPTLIB_EXPORT int LSL_isMA86available();
 
 /** Indicates whether a HSL library is loaded and all symbols necessary to use HSL_MA97 have been found.
  *
  * @return Zero if not available, nonzero if HSL_MA97 is available in the loaded library.
  */
-int LSL_isMA97available();
+IPOPTLIB_EXPORT int LSL_isMA97available();
 
 /** Indicates whether a HSL library is loaded and all symbols necessary to use MA57 have been found.
  *
  * @return Zero if not available, nonzero if MC19 is available in the loaded library.
  */
-int LSL_isMC19available();
+IPOPTLIB_EXPORT int LSL_isMC19available();
 
 /** Indicates whether a HSL library is loaded and all symbols necessary to use HSL_MC68 have been found.
  *
  * @return Zero if not available, nonzero if MC68 is available in the loaded library.
  */
-int LSL_isMC68available();
+IPOPTLIB_EXPORT int LSL_isMC68available();
 
 /** Returns name of the shared library that should contain HSL */
-char* LSL_HSLLibraryName();
+IPOPTLIB_EXPORT char* LSL_HSLLibraryName();
 
 /** sets pointers to MA27 functions */
-void LSL_setMA27(
+IPOPTLIB_EXPORT void LSL_setMA27(
    ma27ad_t ma27ad,
    ma27bd_t ma27bd,
    ma27cd_t ma27cd,
@@ -578,7 +578,7 @@ void LSL_setMA27(
 );
 
 /** sets pointers to MA57 functions */
-void LSL_setMA57(
+IPOPTLIB_EXPORT void LSL_setMA57(
    ma57ad_t ma57ad,
    ma57bd_t ma57bd,
    ma57cd_t ma57cd,
@@ -587,7 +587,7 @@ void LSL_setMA57(
 );
 
 /** sets pointers to MA77 functions */
-void LSL_setMA77(
+IPOPTLIB_EXPORT void LSL_setMA77(
    ma77_default_control_t ma77_default_control,
    ma77_open_nelt_t       ma77_open_nelt,
    ma77_open_t            ma77_open,
@@ -607,7 +607,7 @@ void LSL_setMA77(
 );
 
 /** sets pointers to MA86 functions */
-void LSL_setMA86(
+IPOPTLIB_EXPORT void LSL_setMA86(
    ma86_default_control_t ma86_default_control,
    ma86_analyse_t         ma86_analyse,
    ma86_factor_t          ma86_factor,
@@ -617,7 +617,7 @@ void LSL_setMA86(
 );
 
 /** sets pointers to MA97 functions */
-void LSL_setMA97(
+IPOPTLIB_EXPORT void LSL_setMA97(
    ma97_default_control_t ma97_default_control,
    ma97_analyse_t         ma97_analyse,
    ma97_factor_t          ma97_factor,
@@ -628,12 +628,12 @@ void LSL_setMA97(
 );
 
 /** sets pointer to MC19 function */
-void LSL_setMC19(
+IPOPTLIB_EXPORT void LSL_setMC19(
    mc19ad_t mc19ad
 );
 
 /** sets pointers to MC68 functions */
-void LSL_setMC68(
+IPOPTLIB_EXPORT void LSL_setMC68(
    mc68_default_control_t mc68_default_control,
    mc68_order_t           mc68_order
 );

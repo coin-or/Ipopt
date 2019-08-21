@@ -44,7 +44,7 @@ class VectorSpace;
  * underlying data (vector values), you MUST remember to call
  * ObjectChanged() AFTER making the change!
  */
-class Vector: public TaggedObject
+class IPOPTLIB_EXPORT Vector: public TaggedObject
 {
 public:
    /** @name Constructor/Destructor */
@@ -455,7 +455,7 @@ private:
  *  example, the dimension of a Vector is stored in the VectorSpace
  *  base class.
  */
-class VectorSpace: public ReferencedObject
+class IPOPTLIB_EXPORT VectorSpace: public ReferencedObject
 {
 public:
    /** @name Constructors/Destructors */

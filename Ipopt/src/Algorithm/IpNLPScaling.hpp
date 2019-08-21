@@ -28,7 +28,7 @@ class SymScaledMatrixSpace;
  *  and mapping quantities in and out of scaled and unscaled
  *  versions.
  */
-class NLPScalingObject: public ReferencedObject
+class IPOPTLIB_EXPORT NLPScalingObject: public ReferencedObject
 {
 public:
    /**@name Constructors / Destructor */
@@ -312,7 +312,7 @@ private:
  *
  *  The overloaded classes only need to provide the scaling parameters.
  */
-class StandardScalingBase: public NLPScalingObject
+class IPOPTLIB_EXPORT StandardScalingBase: public NLPScalingObject
 {
 public:
    /**@name Constructors / Destructor */
@@ -522,7 +522,7 @@ private:
 };
 
 /** Class implementing the scaling object that doesn't to any scaling */
-class NoNLPScalingObject: public StandardScalingBase
+class IPOPTLIB_EXPORT NoNLPScalingObject: public StandardScalingBase
 {
 public:
    /**@name Constructors / Destructor */

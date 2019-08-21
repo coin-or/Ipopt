@@ -31,7 +31,7 @@ class GenTMatrixSpace;
  *
  *  Note that the first row and column of a matrix has index 1, not 0.
  */
-class GenTMatrix: public Matrix
+class IPOPTLIB_EXPORT GenTMatrix: public Matrix
 {
 public:
    /**@name Constructors / Destructors */
@@ -185,7 +185,7 @@ private:
  *
  *  The sparsity structure is stored here in the matrix space.
  */
-class GenTMatrixSpace: public MatrixSpace
+class IPOPTLIB_EXPORT GenTMatrixSpace: public MatrixSpace
 {
 public:
    /** @name Constructors / Destructors */

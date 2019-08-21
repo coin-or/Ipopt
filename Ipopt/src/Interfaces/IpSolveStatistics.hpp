@@ -23,7 +23,7 @@ class IpoptCalculatedQuantities;
  *  provide such information to a user of Ipopt during the
  *  finalize_solution call.
  */
-class SolveStatistics : public ReferencedObject
+class IPOPTLIB_EXPORT SolveStatistics : public ReferencedObject
 {
 public:
    /**@name Constructors/Destructors */

@@ -36,7 +36,7 @@ class SymTMatrixSpace;
  *
  *  Note that the first row and column of a matrix has index 1, not 0.
  */
-class SymTMatrix: public SymMatrix
+class IPOPTLIB_EXPORT SymTMatrix: public SymMatrix
 {
 public:
    /**@name Constructors / Destructors */
@@ -180,7 +180,7 @@ private:
  *
  *  The sparsity structure is stored here in the matrix space.
  */
-class SymTMatrixSpace: public SymMatrixSpace
+class IPOPTLIB_EXPORT SymTMatrixSpace: public SymMatrixSpace
 {
 public:
    /** @name Constructors / Destructors */

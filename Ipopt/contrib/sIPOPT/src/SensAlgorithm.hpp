@@ -16,7 +16,7 @@
 namespace Ipopt
 {
 
-  class SensAlgorithm : public AlgorithmStrategyObject
+  class SIPOPTLIB_EXPORT SensAlgorithm : public AlgorithmStrategyObject
   {
     /** This is the interface for the actual controller. It handles
      *  Data input to the controller (measurement) and returns controls */

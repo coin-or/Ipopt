@@ -641,6 +641,8 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
+SIPOPTLIB_CFLAGS_NOPC
+SIPOPTLIB_LFLAGS_NOPC
 IPOPTAMPLINTERFACELIB_CFLAGS_NOPC
 IPOPTAMPLINTERFACELIB_LFLAGS_NOPC
 IPOPTLIB_CFLAGS_NOPC
@@ -25228,6 +25230,53 @@ $as_echo "$as_me: adding \"${IPOPTAMPLINTERFACELIB_PCFILES}\"" >&6;}
 $as_echo "$as_me: IPOPTAMPLINTERFACELIB_LFLAGS: \"${IPOPTAMPLINTERFACELIB_LFLAGS}\"" >&6;}
         { $as_echo "$as_me:${as_lineno-$LINENO}: IPOPTAMPLINTERFACELIB_CFLAGS: \"${IPOPTAMPLINTERFACELIB_CFLAGS}\"" >&5
 $as_echo "$as_me: IPOPTAMPLINTERFACELIB_CFLAGS: \"${IPOPTAMPLINTERFACELIB_CFLAGS}\"" >&6;}
+      fi
+     if test "$BUILDTOOLS_DEBUG" = 1 ; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: FINALIZE_FLAGS for sIpoptLib:" >&5
+$as_echo "$as_me: FINALIZE_FLAGS for sIpoptLib:" >&6;}
+      fi
+      SIPOPTLIB_LFLAGS_NOPC=$SIPOPTLIB_LFLAGS
+
+      SIPOPTLIB_CFLAGS_NOPC=$SIPOPTLIB_CFLAGS
+
+      if test -n "${SIPOPTLIB_PCFILES}" ; then
+        temp_CFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --cflags ${SIPOPTLIB_PCFILES}`
+        temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs ${SIPOPTLIB_PCFILES}`
+        SIPOPTLIB_CFLAGS="$temp_CFLAGS ${SIPOPTLIB_CFLAGS}"
+        SIPOPTLIB_LFLAGS="$temp_LFLAGS ${SIPOPTLIB_LFLAGS}"
+      fi
+
+      # setup XYZ_EXPORT symbol for library users
+      libexport_attribute=
+      if test "$enable_shared" = yes ; then
+        # TODO better check for this? we essentially want to know whether we're building DLLs
+        # or do we also need this for GCC on Windows?
+        case $CC in */compile\ cl | cl | */cl | */compile\ icl | icl | */icl )
+          libexport_attribute="__declspec(dllimport)"
+          if test "$enable_static" = yes ; then
+            as_fn_error $? "Cannot do DLL and static LIB builds simultaneously. Do not add --enable-static without --disable-shared." "$LINENO" 5
+          fi
+        esac
+      fi
+
+cat >>confdefs.h <<_ACEOF
+#define SIPOPTLIB_EXPORT $libexport_attribute
+_ACEOF
+
+
+# Define BUILDTOOLS_DEBUG to enable debugging output
+
+      if test "$BUILDTOOLS_DEBUG" = 1 ; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: SIPOPTLIB_LFLAGS_NOPC: \"${SIPOPTLIB_LFLAGS_NOPC}\"" >&5
+$as_echo "$as_me: SIPOPTLIB_LFLAGS_NOPC: \"${SIPOPTLIB_LFLAGS_NOPC}\"" >&6;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: SIPOPTLIB_CFLAGS_NOPC: \"${SIPOPTLIB_CFLAGS_NOPC}\"" >&5
+$as_echo "$as_me: SIPOPTLIB_CFLAGS_NOPC: \"${SIPOPTLIB_CFLAGS_NOPC}\"" >&6;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: adding \"${SIPOPTLIB_PCFILES}\"" >&5
+$as_echo "$as_me: adding \"${SIPOPTLIB_PCFILES}\"" >&6;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: SIPOPTLIB_LFLAGS: \"${SIPOPTLIB_LFLAGS}\"" >&5
+$as_echo "$as_me: SIPOPTLIB_LFLAGS: \"${SIPOPTLIB_LFLAGS}\"" >&6;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: SIPOPTLIB_CFLAGS: \"${SIPOPTLIB_CFLAGS}\"" >&5
+$as_echo "$as_me: SIPOPTLIB_CFLAGS: \"${SIPOPTLIB_CFLAGS}\"" >&6;}
       fi
 
 

@@ -45,7 +45,7 @@ class MuUpdate;
  *  this process can be achieved by implementing a subclass of this
  *  AlgBuilder (e.g., by overloading the AugSystemSolverFactory method).
  */
-class AlgorithmBuilder: public ReferencedObject
+class IPOPTLIB_EXPORT AlgorithmBuilder: public ReferencedObject
 {
 public:
    /**@name Constructors/Destructors */

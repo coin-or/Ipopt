@@ -37,7 +37,7 @@ DECLARE_STD_EXCEPTION(METADATA_ERROR);
  *  the non-const Values method to get an array that you can
  *  overwrite.  In the latter case, storage is ensured.
  */
-class DenseVector: public Vector
+class IPOPTLIB_EXPORT DenseVector: public Vector
 {
 public:
    /**@name Constructors / Destructors */
@@ -326,7 +326,7 @@ typedef std::map<std::string, std::vector<Number> > NumericMetaDataMapType;
 //@}
 
 /** This vectors space is the vector space for DenseVector. */
-class DenseVectorSpace: public VectorSpace
+class IPOPTLIB_EXPORT DenseVectorSpace: public VectorSpace
 {
 public:
    /** @name Constructors/Destructors. */

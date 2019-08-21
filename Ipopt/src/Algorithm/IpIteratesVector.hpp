@@ -22,7 +22,7 @@ class IteratesVectorSpace;
  *  calculations, but it has fixed dimensions and cannot be
  *  customized
  */
-class IteratesVector: public CompoundVector
+class IPOPTLIB_EXPORT IteratesVector: public CompoundVector
 {
 public:
    /** Constructors / Destructors */
@@ -662,7 +662,7 @@ private:
  *
  *  This is a specialized vector space for the IteratesVector class.
  */
-class IteratesVectorSpace: public CompoundVectorSpace
+class IPOPTLIB_EXPORT IteratesVectorSpace: public CompoundVectorSpace
 {
 public:
    /** @name Constructors / Destructors */

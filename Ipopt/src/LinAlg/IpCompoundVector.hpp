@@ -27,7 +27,7 @@ class CompoundVectorSpace;
  *  associated to different VectorSpaces.  The individual components
  *  can also be const and non-const Vectors.
  */
-class CompoundVector: public Vector
+class IPOPTLIB_EXPORT CompoundVector: public Vector
 {
 public:
    /**@name Constructors/Destructors */
@@ -274,7 +274,7 @@ private:
  *  the number of component has to be specified.  The individual
  *  VectorSpaces can be set with the SetComp method.
  */
-class CompoundVectorSpace: public VectorSpace
+class IPOPTLIB_EXPORT CompoundVectorSpace: public VectorSpace
 {
 public:
    /** @name Constructors/Destructors. */

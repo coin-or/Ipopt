@@ -19,7 +19,7 @@ namespace Ipopt
  *  derivatives from the NLP, or by a quasi-Newton Option.  The
  *  result is put into the W field in IpData.
  */
-class HessianUpdater: public AlgorithmStrategyObject
+class IPOPTLIB_EXPORT HessianUpdater: public AlgorithmStrategyObject
 {
 public:
    /**@name Constructors/Destructors */

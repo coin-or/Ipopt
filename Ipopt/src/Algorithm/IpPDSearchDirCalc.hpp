@@ -16,7 +16,7 @@ namespace Ipopt
 /** Implementation of the search direction calculator that computes
  *  the pure primal dual step for the current barrier parameter.
  */
-class PDSearchDirCalculator: public SearchDirectionCalculator
+class IPOPTLIB_EXPORT PDSearchDirCalculator: public SearchDirectionCalculator
 {
 public:
    /**@name Constructors/Destructors */

@@ -9,6 +9,7 @@
 
 #include "IpRegOptions.hpp"
 #include "SensApplication.hpp"
+#include "SensRegOp.hpp"
 
 namespace Ipopt
 {

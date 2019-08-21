@@ -15,7 +15,7 @@ namespace Ipopt
 {
 /** This class collects all timing statistics for Ipopt.
  */
-class TimingStatistics: public ReferencedObject
+class IPOPTLIB_EXPORT TimingStatistics: public ReferencedObject
 {
 public:
    /**@name Constructors/Destructors */

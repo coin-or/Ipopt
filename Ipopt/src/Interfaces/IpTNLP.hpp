@@ -44,7 +44,7 @@ class IteratesVector;
  *  To indicate that a variable has no upper or lower bound, set the bound to
  *  -ipopt_inf or +ipopt_inf, respectively.
  */
-class TNLP : public ReferencedObject
+class IPOPTLIB_EXPORT TNLP : public ReferencedObject
 {
 public:
 

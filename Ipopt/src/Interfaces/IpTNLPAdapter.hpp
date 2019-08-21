@@ -26,7 +26,7 @@ class TDependencyDetector;
  *  This is an Adapter class (Design Patterns) that converts a TNLP to an NLP.
  *  This allows users to write to the "more convenient" TNLP interface.
  */
-class TNLPAdapter : public NLP
+class IPOPTLIB_EXPORT TNLPAdapter : public NLP
 {
 public:
    /**@name Constructors/Destructors */

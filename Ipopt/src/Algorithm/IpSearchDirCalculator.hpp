@@ -15,7 +15,7 @@ namespace Ipopt
 /** Base class for computing the search direction for the line
  *  search.
  */
-class SearchDirectionCalculator: public AlgorithmStrategyObject
+class IPOPTLIB_EXPORT SearchDirectionCalculator: public AlgorithmStrategyObject
 {
 public:
    /**@name Constructors/Destructors */

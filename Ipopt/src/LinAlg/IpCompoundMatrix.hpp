@@ -31,7 +31,7 @@ class CompoundMatrixSpace;
  *  components is treated like a zero-matrix of appropriate
  *  dimensions.
  */
-class CompoundMatrix: public Matrix
+class IPOPTLIB_EXPORT CompoundMatrix: public Matrix
 {
 public:
 
@@ -219,7 +219,7 @@ private:
  *  row and column.  Individual component MatrixSpace's can be set
  *  with the SetComp method.
  */
-class CompoundMatrixSpace: public MatrixSpace
+class IPOPTLIB_EXPORT CompoundMatrixSpace: public MatrixSpace
 {
 public:
    /** @name Constructors / Destructors */

@@ -29,7 +29,7 @@ DECLARE_STD_EXCEPTION(OPTION_INVALID);
  *  Number type values.  For each keyword we also keep track of how
  *  often the value of an option has been requested by a get method.
  */
-class OptionsList: public ReferencedObject
+class IPOPTLIB_EXPORT OptionsList: public ReferencedObject
 {
    /** Class for storing the value and counter for each option in OptionsList. */
    class OptionValue

@@ -15,7 +15,7 @@ namespace Ipopt
  *
  * Compute dot product of vector x and vector y.
  */
-Number IpBlasDdot(
+IPOPTLIB_EXPORT Number IpBlasDdot(
    Index         size,
    const Number* x,
    Index         incX,
@@ -27,7 +27,7 @@ Number IpBlasDdot(
  *
  * Compute 2-norm of vector x.
  */
-Number IpBlasDnrm2(
+IPOPTLIB_EXPORT Number IpBlasDnrm2(
    Index         size,
    const Number* x,
    Index         incX
@@ -37,7 +37,7 @@ Number IpBlasDnrm2(
  *
  * Compute 1-norm of vector x.
  */
-Number IpBlasDasum(
+IPOPTLIB_EXPORT Number IpBlasDasum(
    Index         size,
    const Number* x,
    Index         incX
@@ -47,7 +47,7 @@ Number IpBlasDasum(
  *
  * Compute index for largest absolute element of vector x.
  */
-Index IpBlasIdamax(
+IPOPTLIB_EXPORT int IpBlasIdamax(
    Index         size,
    const Number* x,
    Index         incX
@@ -57,7 +57,7 @@ Index IpBlasIdamax(
  *
  * Copying vector x into vector y.
  */
-void IpBlasDcopy(
+IPOPTLIB_EXPORT void IpBlasDcopy(
    Index         size,
    const Number* x,
    Index         incX,
@@ -69,7 +69,7 @@ void IpBlasDcopy(
  *
  * Adding the alpha multiple of vector x to vector y.
  */
-void IpBlasDaxpy(
+IPOPTLIB_EXPORT void IpBlasDaxpy(
    Index         size,
    Number        alpha,
    const Number* x,
@@ -82,7 +82,7 @@ void IpBlasDaxpy(
  *
  * Scaling vector x by scalar alpha.
  */
-void IpBlasDscal(
+IPOPTLIB_EXPORT void IpBlasDscal(
    Index   size,
    Number  alpha,
    Number* x,
@@ -93,7 +93,7 @@ void IpBlasDscal(
  *
  * Multiplying a matrix with a vector.
  */
-void IpBlasDgemv(
+IPOPTLIB_EXPORT void IpBlasDgemv(
    bool          trans,
    Index         nRows,
    Index         nCols,
@@ -111,7 +111,7 @@ void IpBlasDgemv(
  *
  * Multiplying a symmetric matrix with a vector.
  */
-void IpBlasDsymv(
+IPOPTLIB_EXPORT void IpBlasDsymv(
    Index         n,
    Number        alpha,
    const Number* A,
@@ -127,7 +127,7 @@ void IpBlasDsymv(
  *
  * Multiplying two matrices.
  */
-void IpBlasDgemm(
+IPOPTLIB_EXPORT void IpBlasDgemm(
    bool          transa,
    bool          transb,
    Index         m,
@@ -147,7 +147,7 @@ void IpBlasDgemm(
  *
  * Adding a high-rank update to a matrix.
  */
-void IpBlasDsyrk(
+IPOPTLIB_EXPORT void IpBlasDsyrk(
    bool          trans,
    Index         ndim,
    Index         nrank,
@@ -163,7 +163,7 @@ void IpBlasDsyrk(
  *
  * Backsolve for a lower triangular matrix.
  */
-void IpBlasDtrsm(
+IPOPTLIB_EXPORT void IpBlasDtrsm(
    bool          trans,
    Index         ndim,
    Index         nrhs,

@@ -33,7 +33,7 @@ DECLARE_STD_EXCEPTION(FATAL_ERROR_IN_LINEAR_SOLVER);
  *  hand sides, it is desirable to step the factorization of a
  *  direct linear solver if possible.
  */
-class AugSystemSolver: public AlgorithmStrategyObject
+class IPOPTLIB_EXPORT AugSystemSolver: public AlgorithmStrategyObject
 {
 public:
    /**@name Constructors/Destructors */

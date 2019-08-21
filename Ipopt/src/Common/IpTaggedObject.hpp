@@ -73,7 +73,7 @@ namespace Ipopt
  *  example, a Vector class, inside its own set method, MUST call
  *  ObjectChanged() to update the internally stored tag for comparison.
  */
-class TaggedObject : public ReferencedObject, public Subject
+class IPOPTLIB_EXPORT TaggedObject : public ReferencedObject, public Subject
 {
 public:
    /** Type for the Tag values */

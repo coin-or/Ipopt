@@ -23,7 +23,7 @@ namespace Ipopt
   /** Standard exception for wrong/inconsistent suffixes for sipopt */
   DECLARE_STD_EXCEPTION(SENS_SUFFIX_ERROR);
 
-  class SensApplication : public ReferencedObject
+  class SIPOPTLIB_EXPORT SensApplication : public ReferencedObject
   {
   public:
     // constructor

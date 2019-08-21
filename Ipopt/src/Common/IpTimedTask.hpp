@@ -15,7 +15,7 @@ namespace Ipopt
 {
 /** This class is used to collect timing information for a
  *  particular task. */
-class TimedTask
+class IPOPTLIB_EXPORT TimedTask
 {
 public:
    /**@name Constructors/Destructors */

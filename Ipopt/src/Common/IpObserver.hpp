@@ -35,7 +35,7 @@ class Subject;
  *  Observer and overload the protected method,
  *  ReceiveNotification_(...).
  */
-class Observer
+class IPOPTLIB_EXPORT Observer
 {
 public:
 #ifdef IP_DEBUG_OBSERVER
@@ -146,7 +146,7 @@ private:
  *  Subject base class.  If the subject needs to notify the
  *  Observer, it calls the Notify method.
  */
-class Subject
+class IPOPTLIB_EXPORT Subject
 {
 public:
 #ifdef IP_DEBUG_OBSERVER

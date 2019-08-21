@@ -14,7 +14,7 @@ namespace Ipopt
 {
 
 /** Class for Matrices which are multiples of the identity matrix. */
-class IdentityMatrix: public SymMatrix
+class IPOPTLIB_EXPORT IdentityMatrix: public SymMatrix
 {
 public:
    /**@name Constructors / Destructors */
@@ -110,7 +110,7 @@ private:
 };
 
 /** This is the matrix space for IdentityMatrix. */
-class IdentityMatrixSpace: public SymMatrixSpace
+class IPOPTLIB_EXPORT IdentityMatrixSpace: public SymMatrixSpace
 {
 public:
    /** @name Constructors / Destructors */

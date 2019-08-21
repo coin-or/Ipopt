@@ -12,7 +12,7 @@ namespace Ipopt
 {
   class RegisteredOptions;
 
-  void RegisterOptions_sIPOPT(const SmartPtr<RegisteredOptions>& roptions);
+  SIPOPTLIB_EXPORT void RegisterOptions_sIPOPT(const SmartPtr<RegisteredOptions>& roptions);
 
 } // namespace Ipopt
 

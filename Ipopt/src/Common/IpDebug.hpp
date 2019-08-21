@@ -57,7 +57,7 @@ class Journalist;
  *  is sent to the unique debug journalist that is set with
  *  SetJournalist at the beginning of program execution.
  */
-class DebugJournalistWrapper
+class IPOPTLIB_EXPORT DebugJournalistWrapper
 {
 public:
    /** @name Constructors/Destructors. */

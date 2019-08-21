@@ -15,7 +15,7 @@
 namespace Ipopt
 {
 
-  class SchurDriver : public AlgorithmStrategyObject
+  class SIPOPTLIB_EXPORT SchurDriver : public AlgorithmStrategyObject
   {
     /** This class is the interface for any class that deals with the Schur matrix
      *  from the point when it is constructed by the PCalculator to the solution

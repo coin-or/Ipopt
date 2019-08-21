@@ -20,7 +20,7 @@ class SumSymMatrixSpace;
  *
  *  For each term in the we store the matrix and a factor.
  */
-class SumSymMatrix: public SymMatrix
+class IPOPTLIB_EXPORT SumSymMatrix: public SymMatrix
 {
 public:
    /**@name Constructors / Destructors */
@@ -126,7 +126,7 @@ private:
 };
 
 /** Class for matrix space for SumSymMatrix */
-class SumSymMatrixSpace: public SymMatrixSpace
+class IPOPTLIB_EXPORT SumSymMatrixSpace: public SymMatrixSpace
 {
 public:
    /** @name Constructors / Destructors */

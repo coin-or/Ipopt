@@ -14,7 +14,7 @@ namespace Ipopt
 {
 
 /** Class for Symmetric Matrices with only zero entries. */
-class ZeroSymMatrix: public SymMatrix
+class IPOPTLIB_EXPORT ZeroSymMatrix: public SymMatrix
 {
 public:
    /**@name Constructors / Destructors */
@@ -93,7 +93,7 @@ private:
 };
 
 /** Class for matrix space for ZeroSymMatrix. */
-class ZeroSymMatrixSpace: public SymMatrixSpace
+class IPOPTLIB_EXPORT ZeroSymMatrixSpace: public SymMatrixSpace
 {
 public:
    /** @name Constructors / Destructors */

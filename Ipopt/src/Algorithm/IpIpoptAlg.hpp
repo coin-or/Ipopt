@@ -41,7 +41,7 @@ DECLARE_STD_EXCEPTION(STEP_COMPUTATION_FAILED);
  *  structure of the problem remains the same (i.e. starting point
  *  or nlp parameter changes only).
  */
-class IpoptAlgorithm: public AlgorithmStrategyObject
+class IPOPTLIB_EXPORT IpoptAlgorithm: public AlgorithmStrategyObject
 {
 public:
 

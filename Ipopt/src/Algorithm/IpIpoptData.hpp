@@ -26,7 +26,7 @@ class IpoptNLP;
  *  The regular IpoptData object should
  *  be given a derivation of this base class when it is created.
  */
-class IpoptAdditionalData: public ReferencedObject
+class IPOPTLIB_EXPORT IpoptAdditionalData: public ReferencedObject
 {
 public:
    /**@name Constructors/Destructors */
@@ -94,7 +94,7 @@ private:
  *  object also stores steps, which allows to easily communicate the
  *  step from the step computation object to the line search object.
  */
-class IpoptData: public ReferencedObject
+class IPOPTLIB_EXPORT IpoptData: public ReferencedObject
 {
 public:
    /**@name Constructors/Destructors */

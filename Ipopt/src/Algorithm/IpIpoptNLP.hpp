@@ -24,7 +24,7 @@ class IteratesVector;
  *  calculated model results, handles caching,
  *  and (some day) takes care of addition of slacks.
  */
-class IpoptNLP: public ReferencedObject
+class IPOPTLIB_EXPORT IpoptNLP: public ReferencedObject
 {
 public:
    /**@name Constructors/Destructors */

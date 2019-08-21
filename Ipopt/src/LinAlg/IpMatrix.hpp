@@ -24,7 +24,7 @@ class MatrixSpace;
  *
  *  Deriving from Matrix:  Overload the protected XXX_Impl method.
  */
-class Matrix: public TaggedObject
+class IPOPTLIB_EXPORT Matrix: public TaggedObject
 {
 public:
    /** @name Constructor/Destructor */
@@ -323,7 +323,7 @@ private:
  *  example, the dimensions of a Matrix is stored in the MatrixSpace
  *  base class.
  */
-class MatrixSpace: public ReferencedObject
+class IPOPTLIB_EXPORT MatrixSpace: public ReferencedObject
 {
 public:
    /** @name Constructors/Destructors */
