@@ -15,13 +15,14 @@ matrix:
           packages:
             - gfortran
             - liblapack-dev
+      env: VISHIDDEN=true
     - os: osx
       osx_image: xcode11
-      env: OSX=10.14 CC=gcc CXX=g++
+      env: OSX=10.14 CC=gcc CXX=g++ VISHIDDEN=true
       compiler: clang
     - os: osx
       osx_image: xcode11
-      env: OSX=10.14 F77=unavailable
+      env: OSX=10.14 VISHIDDEN=true NOF77=true
       compiler: clang
     - os: osx
       osx_image: xcode10
@@ -34,13 +35,18 @@ matrix:
 
 before_script:
   - if [[ "$TRAVIS_OS_NAME $CC" == "osx gcc" ]]; then brew update; brew install bash gcc; brew link --overwrite gcc; gfortran --version; fi
+  - export VISHIDDEN=${VISHIDDEN:-false}
+  - export NOF77=${NOF77:-false}
 
 script:
-  - if [[ "$F77" != "unavailable" ]] ; then git clone https://github.com/coin-or-tools/ThirdParty-Mumps ; fi
-  - if [[ "$F77" != "unavailable" ]] ; then pushd ThirdParty-Mumps && ./get.Mumps && ./configure --prefix=$HOME/install && make -s && make -s install && popd ; fi
+  - if $NOF77 ; then echo "Skipping Mumps build." ; else git clone https://github.com/coin-or-tools/ThirdParty-Mumps ; pushd ThirdParty-Mumps && ./get.Mumps && ./configure --prefix=$HOME/install && make -s && make -s install && popd ; fi
   - mkdir build
   - pushd build
-  - if [[ "$F77" != "unavailable" ]] ; then ../Ipopt/configure --prefix=$HOME/install ; else ../Ipopt/configure --prefix=$HOME/install --disable-f77 ; fi
+  - if $VISHIDDEN ; then export CFLAGS="-fvisibility=hidden -DNDEBUG" ; fi
+  - if $VISHIDDEN ; then export CXXFLAGS="-fvisibility=hidden -DNDEBUG" ; fi
+  - export CFGFLAGS=""
+  - if $NOF77 ; then CFGFLAGS="$CFGFLAGS --disable-f77" ; fi
+  - ../Ipopt/configure --prefix=$HOME/install $CFGFLAGS
   - make
-  - if [[ "$F77" != "unavailable" ]] ; then make test ; fi
+  - if $NOF77 ; then echo "skip test as no linear solver" ; else make test ; fi
   - make install
