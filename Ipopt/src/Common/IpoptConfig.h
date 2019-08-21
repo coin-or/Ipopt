@@ -31,10 +31,15 @@
 
 /* overwrite IPOPTLIB_EXPORT from config.h
  * we want it to be __declspec(dllexport) when building a DLL on Windows
+ * we want it to be __attribute__((__visibility__("default"))) when building with GCC,
+ *   so user can compile with -fvisibility=hidden
  */
 #ifdef DLL_EXPORT
-#undef IPOPTLIB_EXPORT
-#define IPOPTLIB_EXPORT __declspec(dllexport)
+ #undef IPOPTLIB_EXPORT
+ #define IPOPTLIB_EXPORT __declspec(dllexport)
+#elif defined(__GNUC__) && __GNUC__ >= 4
+ #undef IPOPTLIB_EXPORT
+ #define IPOPTLIB_EXPORT __attribute__((__visibility__("default")))
 #endif
 
 #else
