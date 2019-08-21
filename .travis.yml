@@ -8,6 +8,13 @@ matrix:
           packages:
             - gfortran
             - liblapack-dev
+    - os: linux
+      dist: bionic
+      addons:
+        apt:
+          packages:
+            - gfortran
+            - liblapack-dev
     - os: osx
       osx_image: xcode11
       env: OSX=10.14 CC=gcc CXX=g++
