@@ -25,20 +25,13 @@ includeipopt_HEADERS = \
 noinst_LTLIBRARIES = libcommon.la
 
 libcommon_la_SOURCES = \
-	IpoptConfig.h \
-	IpCachedResults.hpp \
-	IpDebug.cpp IpDebug.hpp \
-	IpException.hpp \
-	IpJournalist.cpp IpJournalist.hpp \
-	IpObserver.cpp IpObserver.hpp \
-	IpOptionsList.cpp IpOptionsList.hpp \
-	IpRegOptions.cpp IpRegOptions.hpp \
-	IpReferenced.hpp \
-	IpSmartPtr.hpp \
-	IpTaggedObject.cpp IpTaggedObject.hpp \
-	IpTimedTask.hpp \
-	IpTypes.hpp \
-	IpUtils.cpp IpUtils.hpp
+	IpDebug.cpp \
+	IpJournalist.cpp \
+	IpObserver.cpp \
+	IpOptionsList.cpp \
+	IpRegOptions.cpp \
+	IpTaggedObject.cpp \
+	IpUtils.cpp
 
 libcommon_la_LDFLAGS = $(LT_LDFLAGS)
 

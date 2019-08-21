@@ -194,24 +194,6 @@ AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
 am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-LTCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) \
-	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
-	$(AM_CFLAGS) $(CFLAGS)
-AM_V_CC = $(am__v_CC_@AM_V@)
-am__v_CC_ = $(am__v_CC_@AM_DEFAULT_V@)
-am__v_CC_0 = @echo "  CC      " $@;
-am__v_CC_1 = 
-CCLD = $(CC)
-LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-AM_V_CCLD = $(am__v_CCLD_@AM_V@)
-am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
-am__v_CCLD_0 = @echo "  CCLD    " $@;
-am__v_CCLD_1 = 
 SOURCES = $(libsipopt_la_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
@@ -403,51 +385,32 @@ top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = foreign
 includesipoptdir = $(includedir)/coin
 includesipopt_HEADERS = \
-	SensBacksolver.hpp \
 	SensAlgorithm.hpp \
-	SensRegOp.hpp \
-	SensMeasurement.hpp \
 	SensApplication.hpp \
-	SensUtils.hpp \
+	SensBacksolver.hpp \
+	SensMeasurement.hpp \
 	SensPCalculator.hpp \
+	SensRegOp.hpp \
 	SensSchurData.hpp \
 	SensSchurDriver.hpp \
+	SensSimpleBacksolver.hpp \
 	SensStepCalc.hpp \
-	SensSimpleBacksolver.hpp
+	SensUtils.hpp
 
 lib_LTLIBRARIES = libsipopt.la
 libsipopt_la_SOURCES = \
-	SensBacksolver.hpp \
 	SensAlgorithm.cpp \
-	SensAlgorithm.hpp \
 	SensRegOp.cpp \
-	SensRegOp.hpp \
 	SensDenseGenSchurDriver.cpp \
-	SensDenseGenSchurDriver.hpp \
 	SensIndexPCalculator.cpp \
-	SensIndexPCalculator.hpp \
 	SensIndexSchurData.cpp \
-	SensIndexSchurData.hpp \
-	SensMeasurement.hpp \
 	SensMetadataMeasurement.cpp \
-	SensMetadataMeasurement.hpp \
 	SensApplication.cpp \
-	SensApplication.hpp \
 	SensUtils.cpp \
-	SensUtils.hpp \
-	SensPCalculator.hpp \
 	SensReducedHessianCalculator.cpp \
-	SensReducedHessianCalculator.hpp \
 	SensBuilder.cpp \
-	SensBuilder.hpp \
-	SensSchurData.hpp \
-	SensSchurDriver.hpp \
-	SensStepCalc.hpp \
 	SensSimpleBacksolver.cpp \
-	SensSimpleBacksolver.hpp \
-	SensStdStepCalc.cpp \
-	SensStdStepCalc.hpp \
-	SensSuffixHandler.hpp
+	SensStdStepCalc.cpp
 
 libsipopt_la_LDFLAGS = $(LT_LDFLAGS)
 libsipopt_la_LIBADD = ../../../src/Interfaces/libipopt.la

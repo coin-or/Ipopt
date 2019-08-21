@@ -172,24 +172,6 @@ AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
 am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-LTCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) \
-	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
-	$(AM_CFLAGS) $(CFLAGS)
-AM_V_CC = $(am__v_CC_@AM_V@)
-am__v_CC_ = $(am__v_CC_@AM_DEFAULT_V@)
-am__v_CC_0 = @echo "  CC      " $@;
-am__v_CC_1 = 
-CCLD = $(CC)
-LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-AM_V_CCLD = $(am__v_CCLD_@AM_V@)
-am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
-am__v_CCLD_0 = @echo "  CCLD    " $@;
-am__v_CCLD_1 = 
 SOURCES = $(libinexact_la_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
@@ -380,21 +362,20 @@ top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = foreign
 @BUILD_INEXACT_TRUE@noinst_LTLIBRARIES = libinexact.la
 libinexact_la_SOURCES = \
-	IpInexactAlgBuilder.cpp IpInexactAlgBuilder.hpp \
-	IpInexactCq.cpp IpInexactCq.hpp \
-	IpInexactData.cpp IpInexactData.hpp \
-	IpInexactDoglegNormal.cpp IpInexactDoglegNormal.hpp \
-	IpInexactLSAcceptor.cpp IpInexactLSAcceptor.hpp \
-	IpInexactNewtonNormal.cpp IpInexactNewtonNormal.hpp \
-	IpInexactNormalStepCalc.hpp \
-	IpInexactNormalTerminationTester.cpp IpInexactNormalTerminationTester.hpp \
-	IpInexactPDSolver.cpp IpInexactPDSolver.hpp \
-	IpInexactPDTerminationTester.cpp IpInexactPDTerminationTester.hpp \
-	IpInexactRegOp.cpp IpInexactRegOp.hpp \
-	IpInexactSearchDirCalc.cpp IpInexactSearchDirCalc.hpp \
-	IpInexactTSymScalingMethod.cpp IpInexactTSymScalingMethod.hpp \
-	IpIterativePardisoSolverInterface.cpp IpIterativePardisoSolverInterface.hpp \
-	IpIterativeSolverTerminationTester.cpp IpIterativeSolverTerminationTester.hpp
+	IpInexactAlgBuilder.cpp \
+	IpInexactCq.cpp \
+	IpInexactData.cpp \
+	IpInexactDoglegNormal.cpp \
+	IpInexactLSAcceptor.cpp \
+	IpInexactNewtonNormal.cpp \
+	IpInexactNormalTerminationTester.cpp \
+	IpInexactPDSolver.cpp \
+	IpInexactPDTerminationTester.cpp \
+	IpInexactRegOp.cpp \
+	IpInexactSearchDirCalc.cpp \
+	IpInexactTSymScalingMethod.cpp \
+	IpIterativePardisoSolverInterface.cpp \
+	IpIterativeSolverTerminationTester.cpp
 
 libinexact_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -DIPOPT_BUILD \

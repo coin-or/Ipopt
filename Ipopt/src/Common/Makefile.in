@@ -155,24 +155,6 @@ AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
 am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-LTCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) \
-	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
-	$(AM_CFLAGS) $(CFLAGS)
-AM_V_CC = $(am__v_CC_@AM_V@)
-am__v_CC_ = $(am__v_CC_@AM_DEFAULT_V@)
-am__v_CC_0 = @echo "  CC      " $@;
-am__v_CC_1 = 
-CCLD = $(CC)
-LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-AM_V_CCLD = $(am__v_CCLD_@AM_V@)
-am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
-am__v_CCLD_0 = @echo "  CCLD    " $@;
-am__v_CCLD_1 = 
 SOURCES = $(libcommon_la_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
@@ -409,20 +391,13 @@ includeipopt_HEADERS = \
 
 noinst_LTLIBRARIES = libcommon.la
 libcommon_la_SOURCES = \
-	IpoptConfig.h \
-	IpCachedResults.hpp \
-	IpDebug.cpp IpDebug.hpp \
-	IpException.hpp \
-	IpJournalist.cpp IpJournalist.hpp \
-	IpObserver.cpp IpObserver.hpp \
-	IpOptionsList.cpp IpOptionsList.hpp \
-	IpRegOptions.cpp IpRegOptions.hpp \
-	IpReferenced.hpp \
-	IpSmartPtr.hpp \
-	IpTaggedObject.cpp IpTaggedObject.hpp \
-	IpTimedTask.hpp \
-	IpTypes.hpp \
-	IpUtils.cpp IpUtils.hpp
+	IpDebug.cpp \
+	IpJournalist.cpp \
+	IpObserver.cpp \
+	IpOptionsList.cpp \
+	IpRegOptions.cpp \
+	IpTaggedObject.cpp \
+	IpUtils.cpp
 
 libcommon_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -DIPOPT_BUILD

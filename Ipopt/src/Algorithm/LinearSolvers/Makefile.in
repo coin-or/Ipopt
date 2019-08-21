@@ -95,16 +95,12 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@BUILD_LINEARSOLVERLOADER_TRUE@am__append_1 = IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__append_2 = IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
+@BUILD_LINEARSOLVERLOADER_TRUE@am__append_1 = IpPardisoSolverInterface.cpp
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__append_2 = IpPardisoSolverInterface.cpp
 @HAVE_MA28_TRUE@am__append_3 = IpMa28TDependencyDetector.cpp \
-@HAVE_MA28_TRUE@	IpMa28TDependencyDetector.hpp \
 @HAVE_MA28_TRUE@	IpMa28Partition.F
-@HAVE_WSMP_TRUE@am__append_4 = \
-@HAVE_WSMP_TRUE@	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp \
-@HAVE_WSMP_TRUE@	IpIterativeWsmpSolverInterface.cpp IpIterativeWsmpSolverInterface.hpp
-
-@COIN_HAS_MUMPS_TRUE@am__append_5 = IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
+@HAVE_WSMP_TRUE@am__append_4 = IpWsmpSolverInterface.cpp IpIterativeWsmpSolverInterface.cpp
+@COIN_HAS_MUMPS_TRUE@am__append_5 = IpMumpsSolverInterface.cpp
 subdir = src/Algorithm/LinearSolvers
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -449,21 +445,12 @@ AUTOMAKE_OPTIONS = foreign
 includeipoptdir = $(includedir)/coin
 includeipopt_HEADERS = IpSymLinearSolver.hpp
 noinst_LTLIBRARIES = liblinsolvers.la
-liblinsolvers_la_SOURCES = IpGenKKTSolverInterface.hpp \
-	IpLinearSolversRegOp.cpp IpLinearSolversRegOp.hpp \
-	IpSlackBasedTSymScalingMethod.cpp \
-	IpSlackBasedTSymScalingMethod.hpp \
-	IpSparseSymLinearSolverInterface.hpp IpSymLinearSolver.hpp \
-	IpTDependencyDetector.hpp IpTripletToCSRConverter.cpp \
-	IpTripletToCSRConverter.hpp IpTSymDependencyDetector.cpp \
-	IpTSymDependencyDetector.hpp IpTSymLinearSolver.cpp \
-	IpTSymLinearSolver.hpp IpTSymScalingMethod.hpp \
-	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp \
-	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp \
-	IpMa86SolverInterface.cpp IpMa86SolverInterface.hpp \
-	IpMa97SolverInterface.cpp IpMa97SolverInterface.hpp \
-	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
-	IpMa77SolverInterface.cpp IpMa77SolverInterface.hpp \
+liblinsolvers_la_SOURCES = IpLinearSolversRegOp.cpp \
+	IpSlackBasedTSymScalingMethod.cpp IpTripletToCSRConverter.cpp \
+	IpTSymDependencyDetector.cpp IpTSymLinearSolver.cpp \
+	IpMa27TSolverInterface.cpp IpMa57TSolverInterface.cpp \
+	IpMa86SolverInterface.cpp IpMa97SolverInterface.cpp \
+	IpMc19TSymScalingMethod.cpp IpMa77SolverInterface.cpp \
 	$(am__append_1) $(am__append_2) $(am__append_3) \
 	$(am__append_4) $(am__append_5)
 liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)

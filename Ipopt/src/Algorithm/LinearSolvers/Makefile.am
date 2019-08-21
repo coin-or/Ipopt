@@ -12,46 +12,39 @@ includeipopt_HEADERS = IpSymLinearSolver.hpp
 noinst_LTLIBRARIES = liblinsolvers.la
 
 liblinsolvers_la_SOURCES = \
-	IpGenKKTSolverInterface.hpp \
-	IpLinearSolversRegOp.cpp IpLinearSolversRegOp.hpp \
-	IpSlackBasedTSymScalingMethod.cpp IpSlackBasedTSymScalingMethod.hpp \
-	IpSparseSymLinearSolverInterface.hpp \
-	IpSymLinearSolver.hpp \
-	IpTDependencyDetector.hpp \
-	IpTripletToCSRConverter.cpp IpTripletToCSRConverter.hpp \
-	IpTSymDependencyDetector.cpp IpTSymDependencyDetector.hpp \
-	IpTSymLinearSolver.cpp IpTSymLinearSolver.hpp \
-	IpTSymScalingMethod.hpp
+	IpLinearSolversRegOp.cpp \
+	IpSlackBasedTSymScalingMethod.cpp \
+	IpTripletToCSRConverter.cpp \
+	IpTSymDependencyDetector.cpp \
+	IpTSymLinearSolver.cpp
 
 liblinsolvers_la_SOURCES += \
-	IpMa27TSolverInterface.cpp IpMa27TSolverInterface.hpp \
-	IpMa57TSolverInterface.cpp IpMa57TSolverInterface.hpp \
-	IpMa86SolverInterface.cpp IpMa86SolverInterface.hpp \
-	IpMa97SolverInterface.cpp IpMa97SolverInterface.hpp \
-	IpMc19TSymScalingMethod.cpp IpMc19TSymScalingMethod.hpp \
-	IpMa77SolverInterface.cpp IpMa77SolverInterface.hpp
+	IpMa27TSolverInterface.cpp \
+	IpMa57TSolverInterface.cpp \
+	IpMa86SolverInterface.cpp \
+	IpMa97SolverInterface.cpp \
+	IpMc19TSymScalingMethod.cpp \
+	IpMa77SolverInterface.cpp
 
 if BUILD_LINEARSOLVERLOADER
-  liblinsolvers_la_SOURCES += IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
+  liblinsolvers_la_SOURCES += IpPardisoSolverInterface.cpp
 else
 if HAVE_PARDISO
-  liblinsolvers_la_SOURCES += IpPardisoSolverInterface.cpp IpPardisoSolverInterface.hpp
+  liblinsolvers_la_SOURCES += IpPardisoSolverInterface.cpp
 endif
 endif # BUILD_LINEARSOLVERLOADER
 
 if HAVE_MA28
-  liblinsolvers_la_SOURCES += IpMa28TDependencyDetector.cpp IpMa28TDependencyDetector.hpp
+  liblinsolvers_la_SOURCES += IpMa28TDependencyDetector.cpp
   liblinsolvers_la_SOURCES += IpMa28Partition.F
 endif
 
 if HAVE_WSMP
-  liblinsolvers_la_SOURCES += \
-	IpWsmpSolverInterface.cpp IpWsmpSolverInterface.hpp \
-	IpIterativeWsmpSolverInterface.cpp IpIterativeWsmpSolverInterface.hpp
+  liblinsolvers_la_SOURCES += IpWsmpSolverInterface.cpp IpIterativeWsmpSolverInterface.cpp
 endif
 
 if COIN_HAS_MUMPS
-  liblinsolvers_la_SOURCES += IpMumpsSolverInterface.cpp IpMumpsSolverInterface.hpp
+  liblinsolvers_la_SOURCES += IpMumpsSolverInterface.cpp
 endif
 
 liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)

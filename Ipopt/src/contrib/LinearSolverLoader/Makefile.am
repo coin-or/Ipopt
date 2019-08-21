@@ -11,8 +11,11 @@ EXTRA_DIST =
 noinst_LTLIBRARIES = libLinearSolverLoader.la
 
 libLinearSolverLoader_la_SOURCES = \
-  LibraryHandler.c LibraryHandler.h \
-  HSLLoader.c HSLLoader.h
+  LibraryHandler.c \
+  HSLLoader.c
+
+includeipoptdir = $(includedir)/coin
+includeipopt_HEADERS = HSLLoader.h
 
 AM_CPPFLAGS = -DIPOPT_BUILD \
   -I$(srcdir)/../../Common \
@@ -20,13 +23,9 @@ AM_CPPFLAGS = -DIPOPT_BUILD \
   $(IPOPTLIB_CFLAGS)
 
 if BUILD_PARDISOLOADER
-  libLinearSolverLoader_la_SOURCES += PardisoLoader.c PardisoLoader.h
+  libLinearSolverLoader_la_SOURCES += PardisoLoader.c
+  includeipopt_HEADERS += PardisoLoader.h
 endif
-
-libLinearSolverLoader_la_LIBADD = 
-
-includeipoptdir = $(includedir)/coin
-includeipopt_HEADERS = HSLLoader.h PardisoLoader.h
 
 # Astyle stuff
 

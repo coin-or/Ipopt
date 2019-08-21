@@ -10,7 +10,7 @@ lib_LTLIBRARIES = libipoptamplinterface.la
 bin_PROGRAMS = ipopt
 
 libipoptamplinterface_la_SOURCES = \
-	AmplTNLP.cpp AmplTNLP.hpp
+	AmplTNLP.cpp
 
 libipoptamplinterface_la_LIBADD = ../../Interfaces/libipopt.la \
 	$(IPOPTAMPLINTERFACELIB_LFLAGS)

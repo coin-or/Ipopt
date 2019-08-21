@@ -8,52 +8,33 @@ AUTOMAKE_OPTIONS = foreign
 
 includesipoptdir = $(includedir)/coin
 includesipopt_HEADERS = \
-	SensBacksolver.hpp \
 	SensAlgorithm.hpp \
-	SensRegOp.hpp \
-	SensMeasurement.hpp \
 	SensApplication.hpp \
-	SensUtils.hpp \
+	SensBacksolver.hpp \
+	SensMeasurement.hpp \
 	SensPCalculator.hpp \
+	SensRegOp.hpp \
 	SensSchurData.hpp \
 	SensSchurDriver.hpp \
+	SensSimpleBacksolver.hpp \
 	SensStepCalc.hpp \
-	SensSimpleBacksolver.hpp
+	SensUtils.hpp
 
 lib_LTLIBRARIES = libsipopt.la
 
 libsipopt_la_SOURCES = \
-	SensBacksolver.hpp \
 	SensAlgorithm.cpp \
-	SensAlgorithm.hpp \
 	SensRegOp.cpp \
-	SensRegOp.hpp \
 	SensDenseGenSchurDriver.cpp \
-	SensDenseGenSchurDriver.hpp \
 	SensIndexPCalculator.cpp \
-	SensIndexPCalculator.hpp \
 	SensIndexSchurData.cpp \
-	SensIndexSchurData.hpp \
-	SensMeasurement.hpp \
 	SensMetadataMeasurement.cpp \
-	SensMetadataMeasurement.hpp \
 	SensApplication.cpp \
-	SensApplication.hpp \
 	SensUtils.cpp \
-	SensUtils.hpp \
-	SensPCalculator.hpp \
 	SensReducedHessianCalculator.cpp \
-	SensReducedHessianCalculator.hpp \
 	SensBuilder.cpp \
-	SensBuilder.hpp \
-	SensSchurData.hpp \
-	SensSchurDriver.hpp \
-	SensStepCalc.hpp \
 	SensSimpleBacksolver.cpp \
-	SensSimpleBacksolver.hpp \
-	SensStdStepCalc.cpp \
-	SensStdStepCalc.hpp \
-	SensSuffixHandler.hpp
+	SensStdStepCalc.cpp
 
 libsipopt_la_LDFLAGS = $(LT_LDFLAGS)
 libsipopt_la_LIBADD = ../../../src/Interfaces/libipopt.la

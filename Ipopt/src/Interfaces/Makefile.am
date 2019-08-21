@@ -24,19 +24,14 @@ includeipopt_HEADERS = \
 lib_LTLIBRARIES = libipopt.la
 
 libipopt_la_SOURCES = \
-	IpAlgTypes.hpp \
-	IpInterfacesRegOp.cpp IpInterfacesRegOp.hpp \
-	IpIpoptApplication.cpp IpIpoptApplication.hpp \
-	IpNLP.hpp \
-	IpReturnCodes.h \
-	IpReturnCodes.hpp \
-	IpSolveStatistics.cpp IpSolveStatistics.hpp \
-	IpStdCInterface.cpp IpStdCInterface.h \
-	IpStdInterfaceTNLP.cpp IpStdInterfaceTNLP.hpp \
+	IpInterfacesRegOp.cpp \
+	IpIpoptApplication.cpp \
+	IpSolveStatistics.cpp \
+	IpStdCInterface.cpp \
+	IpStdInterfaceTNLP.cpp \
 	IpStdFInterface.c \
-	IpTNLP.hpp \
-	IpTNLPAdapter.cpp IpTNLPAdapter.hpp \
-	IpTNLPReducer.cpp IpTNLPReducer.hpp
+	IpTNLPAdapter.cpp \
+	IpTNLPReducer.cpp
 
 libipopt_la_LIBADD = $(IPALLLIBS) $(IPOPTLIB_LFLAGS)
 

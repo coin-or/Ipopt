@@ -11,21 +11,20 @@ if BUILD_INEXACT
 endif
 
 libinexact_la_SOURCES = \
-	IpInexactAlgBuilder.cpp IpInexactAlgBuilder.hpp \
-	IpInexactCq.cpp IpInexactCq.hpp \
-	IpInexactData.cpp IpInexactData.hpp \
-	IpInexactDoglegNormal.cpp IpInexactDoglegNormal.hpp \
-	IpInexactLSAcceptor.cpp IpInexactLSAcceptor.hpp \
-	IpInexactNewtonNormal.cpp IpInexactNewtonNormal.hpp \
-	IpInexactNormalStepCalc.hpp \
-	IpInexactNormalTerminationTester.cpp IpInexactNormalTerminationTester.hpp \
-	IpInexactPDSolver.cpp IpInexactPDSolver.hpp \
-	IpInexactPDTerminationTester.cpp IpInexactPDTerminationTester.hpp \
-	IpInexactRegOp.cpp IpInexactRegOp.hpp \
-	IpInexactSearchDirCalc.cpp IpInexactSearchDirCalc.hpp \
-	IpInexactTSymScalingMethod.cpp IpInexactTSymScalingMethod.hpp \
-	IpIterativePardisoSolverInterface.cpp IpIterativePardisoSolverInterface.hpp \
-	IpIterativeSolverTerminationTester.cpp IpIterativeSolverTerminationTester.hpp
+	IpInexactAlgBuilder.cpp \
+	IpInexactCq.cpp \
+	IpInexactData.cpp \
+	IpInexactDoglegNormal.cpp \
+	IpInexactLSAcceptor.cpp \
+	IpInexactNewtonNormal.cpp \
+	IpInexactNormalTerminationTester.cpp \
+	IpInexactPDSolver.cpp \
+	IpInexactPDTerminationTester.cpp \
+	IpInexactRegOp.cpp \
+	IpInexactSearchDirCalc.cpp \
+	IpInexactTSymScalingMethod.cpp \
+	IpIterativePardisoSolverInterface.cpp \
+	IpIterativeSolverTerminationTester.cpp
 
 libinexact_la_LDFLAGS = $(LT_LDFLAGS)
 

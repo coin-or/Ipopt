@@ -161,24 +161,6 @@ AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
 am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-LTCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) \
-	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
-	$(AM_CFLAGS) $(CFLAGS)
-AM_V_CC = $(am__v_CC_@AM_V@)
-am__v_CC_ = $(am__v_CC_@AM_DEFAULT_V@)
-am__v_CC_0 = @echo "  CC      " $@;
-am__v_CC_1 = 
-CCLD = $(CC)
-LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-AM_V_CCLD = $(am__v_CCLD_@AM_V@)
-am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
-am__v_CCLD_0 = @echo "  CCLD    " $@;
-am__v_CCLD_1 = 
 SOURCES = $(libcgpenalty_la_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
@@ -369,13 +351,13 @@ top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = foreign
 noinst_LTLIBRARIES = libcgpenalty.la
 libcgpenalty_la_SOURCES = \
-	IpCGPenaltyCq.cpp IpCGPenaltyCq.hpp \
-	IpCGPenaltyData.cpp IpCGPenaltyData.hpp \
-	IpCGPenaltyLSAcceptor.cpp IpCGPenaltyLSAcceptor.hpp \
-	IpCGPenaltyRegOp.cpp IpCGPenaltyRegOp.hpp \
-	IpCGPerturbationHandler.cpp IpCGPerturbationHandler.hpp \
-	IpCGSearchDirCalc.cpp IpCGSearchDirCalc.hpp \
-	IpPiecewisePenalty.cpp IpPiecewisePenalty.hpp
+	IpCGPenaltyCq.cpp \
+	IpCGPenaltyData.cpp \
+	IpCGPenaltyLSAcceptor.cpp \
+	IpCGPenaltyRegOp.cpp \
+	IpCGPerturbationHandler.cpp \
+	IpCGSearchDirCalc.cpp \
+	IpPiecewisePenalty.cpp
 
 libcgpenalty_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -DIPOPT_BUILD \

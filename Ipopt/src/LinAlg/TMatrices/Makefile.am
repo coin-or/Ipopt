@@ -14,9 +14,9 @@ includeipopt_HEADERS = \
 noinst_LTLIBRARIES = libtmatrices.la
 
 libtmatrices_la_SOURCES = \
-	IpGenTMatrix.cpp IpGenTMatrix.hpp \
-	IpSymTMatrix.cpp IpSymTMatrix.hpp \
-	IpTripletHelper.cpp IpTripletHelper.hpp
+	IpGenTMatrix.cpp \
+	IpSymTMatrix.cpp \
+	IpTripletHelper.cpp
 
 libtmatrices_la_LDFLAGS = $(LT_LDFLAGS)
 

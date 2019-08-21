@@ -10,50 +10,49 @@ SUBDIRS = TMatrices
 
 includeipoptdir = $(includedir)/coin
 includeipopt_HEADERS = \
-	IpMatrix.hpp \
-	IpSymMatrix.hpp \
-	IpExpansionMatrix.hpp \
-	IpVector.hpp \
-	IpDenseVector.hpp \
-	IpCompoundVector.hpp \
+	IpBlas.hpp \
 	IpCompoundMatrix.hpp \
 	IpCompoundSymMatrix.hpp \
-	IpSumSymMatrix.hpp \
+	IpCompoundVector.hpp \
+	IpDenseVector.hpp \
 	IpDiagMatrix.hpp \
+	IpExpansionMatrix.hpp \
 	IpIdentityMatrix.hpp \
+	IpLapack.hpp \
+	IpMatrix.hpp \
 	IpScaledMatrix.hpp \
+	IpSumSymMatrix.hpp \
+	IpSymMatrix.hpp \
 	IpSymScaledMatrix.hpp \
-	IpZeroSymMatrix.hpp \
-	IpBlas.hpp \
-	IpLapack.hpp
+	IpVector.hpp \
+	IpZeroSymMatrix.hpp
 
 noinst_LTLIBRARIES = liblinalg.la
 
 liblinalg_la_SOURCES = \
-	IpBlas.cpp IpBlas.hpp \
-	IpCompoundMatrix.cpp IpCompoundMatrix.hpp \
-	IpCompoundSymMatrix.cpp IpCompoundSymMatrix.hpp \
-	IpCompoundVector.cpp IpCompoundVector.hpp \
-	IpDenseGenMatrix.cpp IpDenseGenMatrix.hpp \
-	IpDenseSymMatrix.cpp IpDenseSymMatrix.hpp \
-	IpDenseVector.cpp IpDenseVector.hpp \
-	IpDiagMatrix.cpp IpDiagMatrix.hpp \
-	IpExpandedMultiVectorMatrix.cpp IpExpandedMultiVectorMatrix.hpp \
-	IpExpansionMatrix.cpp IpExpansionMatrix.hpp \
-	IpIdentityMatrix.cpp IpIdentityMatrix.hpp \
-	IpLapack.cpp IpLapack.hpp \
-	IpLowRankUpdateSymMatrix.cpp IpLowRankUpdateSymMatrix.hpp \
-	IpMatrix.cpp IpMatrix.hpp \
-	IpMultiVectorMatrix.cpp IpMultiVectorMatrix.hpp \
-	IpScaledMatrix.cpp IpScaledMatrix.hpp \
-	IpSumMatrix.cpp IpSumMatrix.hpp \
-	IpSumSymMatrix.cpp IpSumSymMatrix.hpp \
-	IpSymMatrix.hpp \
-	IpSymScaledMatrix.cpp IpSymScaledMatrix.hpp \
-	IpTransposeMatrix.cpp IpTransposeMatrix.hpp \
-	IpVector.cpp IpVector.hpp \
-	IpZeroMatrix.cpp IpZeroMatrix.hpp \
-	IpZeroSymMatrix.cpp IpZeroSymMatrix.hpp
+	IpBlas.cpp \
+	IpCompoundMatrix.cpp \
+	IpCompoundSymMatrix.cpp \
+	IpCompoundVector.cpp \
+	IpDenseGenMatrix.cpp \
+	IpDenseSymMatrix.cpp \
+	IpDenseVector.cpp \
+	IpDiagMatrix.cpp \
+	IpExpandedMultiVectorMatrix.cpp \
+	IpExpansionMatrix.cpp \
+	IpIdentityMatrix.cpp \
+	IpLapack.cpp \
+	IpLowRankUpdateSymMatrix.cpp \
+	IpMatrix.cpp \
+	IpMultiVectorMatrix.cpp \
+	IpScaledMatrix.cpp \
+	IpSumMatrix.cpp \
+	IpSumSymMatrix.cpp \
+	IpSymScaledMatrix.cpp \
+	IpTransposeMatrix.cpp \
+	IpVector.cpp \
+	IpZeroMatrix.cpp \
+	IpZeroSymMatrix.cpp
 
 liblinalg_la_LDFLAGS = $(LT_LDFLAGS)
 

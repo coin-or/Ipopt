@@ -95,20 +95,21 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@BUILD_PARDISOLOADER_TRUE@am__append_1 = PardisoLoader.c PardisoLoader.h
+@BUILD_PARDISOLOADER_TRUE@am__append_1 = PardisoLoader.c
+@BUILD_PARDISOLOADER_TRUE@am__append_2 = PardisoLoader.h
 subdir = src/contrib/LinearSolverLoader
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
-DIST_COMMON = $(srcdir)/Makefile.am $(includeipopt_HEADERS)
+DIST_COMMON = $(srcdir)/Makefile.am $(am__includeipopt_HEADERS_DIST)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/src/Common/config.h \
 	$(top_builddir)/src/Common/config_ipopt.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
-libLinearSolverLoader_la_DEPENDENCIES =
+libLinearSolverLoader_la_LIBADD =
 @BUILD_PARDISOLOADER_TRUE@am__objects_1 = PardisoLoader.lo
 am_libLinearSolverLoader_la_OBJECTS = LibraryHandler.lo HSLLoader.lo \
 	$(am__objects_1)
@@ -160,6 +161,7 @@ am__can_run_installinfo = \
     n|no|NO) false;; \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
+am__includeipopt_HEADERS_DIST = HSLLoader.h PardisoLoader.h
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
     $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
@@ -373,16 +375,15 @@ top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = foreign
 EXTRA_DIST = 
 noinst_LTLIBRARIES = libLinearSolverLoader.la
-libLinearSolverLoader_la_SOURCES = LibraryHandler.c LibraryHandler.h \
-	HSLLoader.c HSLLoader.h $(am__append_1)
+libLinearSolverLoader_la_SOURCES = LibraryHandler.c HSLLoader.c \
+	$(am__append_1)
+includeipoptdir = $(includedir)/coin
+includeipopt_HEADERS = HSLLoader.h $(am__append_2)
 AM_CPPFLAGS = -DIPOPT_BUILD \
   -I$(srcdir)/../../Common \
   -I$(srcdir)/../../Algorithm/LinearSolvers \
   $(IPOPTLIB_CFLAGS)
 
-libLinearSolverLoader_la_LIBADD = 
-includeipoptdir = $(includedir)/coin
-includeipopt_HEADERS = HSLLoader.h PardisoLoader.h
 
 # Astyle stuff
 ASTYLE_FILES = \

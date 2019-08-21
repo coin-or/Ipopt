@@ -9,13 +9,13 @@ AUTOMAKE_OPTIONS = foreign
 noinst_LTLIBRARIES = libcgpenalty.la
 
 libcgpenalty_la_SOURCES = \
-	IpCGPenaltyCq.cpp IpCGPenaltyCq.hpp \
-	IpCGPenaltyData.cpp IpCGPenaltyData.hpp \
-	IpCGPenaltyLSAcceptor.cpp IpCGPenaltyLSAcceptor.hpp \
-	IpCGPenaltyRegOp.cpp IpCGPenaltyRegOp.hpp \
-	IpCGPerturbationHandler.cpp IpCGPerturbationHandler.hpp \
-	IpCGSearchDirCalc.cpp IpCGSearchDirCalc.hpp \
-	IpPiecewisePenalty.cpp IpPiecewisePenalty.hpp
+	IpCGPenaltyCq.cpp \
+	IpCGPenaltyData.cpp \
+	IpCGPenaltyLSAcceptor.cpp \
+	IpCGPenaltyRegOp.cpp \
+	IpCGPerturbationHandler.cpp \
+	IpCGSearchDirCalc.cpp \
+	IpPiecewisePenalty.cpp
 
 libcgpenalty_la_LDFLAGS = $(LT_LDFLAGS)
 
