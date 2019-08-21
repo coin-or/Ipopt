@@ -842,6 +842,7 @@ enable_msvc
 enable_silent_rules
 enable_maintainer_mode
 enable_dependency_tracking
+enable_f77
 enable_static
 with_pic
 enable_shared
@@ -1515,6 +1516,7 @@ Optional Features:
                           do not reject slow dependency extractors
   --disable-dependency-tracking
                           speeds up one-time build
+  --disable-f77           disable checking for F77 compiler
   --enable-static[=PKGS]  build static libraries [default=no]
   --enable-shared[=PKGS]  build shared libraries [default=yes]
   --enable-fast-install[=PKGS]
@@ -5244,13 +5246,19 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
   # AC_MSG_NOTICE([In COIN_PROG_F77])
 
 
-# If enable-msvc, then test only for Intel (on Windows) Fortran compiler
-# Allow user to set F77 to "unavailable", but then continue with F77 unset
-# and skip check for compilers
+  # Check whether --enable-f77 was given.
+if test "${enable_f77+set}" = set; then :
+  enableval=$enable_f77; enable_f77=$enableval
+else
+  enable_f77=yes
+fi
 
-  if test "$F77" = unavailable ; then
+
+  if test "$enable_f77" = no ; then
+    # make sure F77 is not set
     unset F77
   else
+    # if enable-msvc, then test only for Intel (on Windows) Fortran compiler
     if test $enable_msvc = yes ; then
       comps="ifort"
     else

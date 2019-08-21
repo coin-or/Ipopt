@@ -40,7 +40,7 @@ script:
   - if [[ "$F77" != "unavailable" ]] ; then pushd ThirdParty-Mumps && ./get.Mumps && ./configure --prefix=$HOME/install && make -s && make -s install && popd ; fi
   - mkdir build
   - pushd build
-  - ../Ipopt/configure --prefix=$HOME/install
+  - if [[ "$F77" != "unavailable" ]] ; then ../Ipopt/configure --prefix=$HOME/install ; else ../Ipopt/configure --prefix=$HOME/install --disable-f77 ; fi
   - make
   - if [[ "$F77" != "unavailable" ]] ; then make test ; fi
   - make install
