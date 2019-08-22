@@ -6,6 +6,8 @@
 
 #include "IpGradientScaling.hpp"
 
+#include <limits>
+
 namespace Ipopt
 {
 

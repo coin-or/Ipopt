@@ -13,7 +13,6 @@
 #include "IpDebug.hpp"
 #include "IpReferenced.hpp"
 #include "IpObserver.hpp"
-#include <limits>
 
 /* keyword to declare a thread-local variable according to http://en.wikipedia.org/wiki/Thread-local_storage
  * GCC < 4.5 on MacOS X does not support TLS
@@ -73,14 +72,14 @@ namespace Ipopt
  *  example, a Vector class, inside its own set method, MUST call
  *  ObjectChanged() to update the internally stored tag for comparison.
  */
-class IPOPTLIB_EXPORT TaggedObject : public ReferencedObject, public Subject
+class TaggedObject : public ReferencedObject, public Subject
 {
 public:
    /** Type for the Tag values */
    typedef unsigned int Tag;
 
    /** Constructor. */
-   TaggedObject()
+   IPOPTLIB_EXPORT TaggedObject()
       :
       Subject()
    {
@@ -88,14 +87,14 @@ public:
    }
 
    /** Destructor. */
-   virtual ~TaggedObject()
+   IPOPTLIB_EXPORT virtual ~TaggedObject()
    {}
 
    /** Users of TaggedObjects call this to
     *  update their own internal tags every time
     *  they perform the expensive operation.
     */
-   Tag GetTag() const
+   IPOPTLIB_EXPORT Tag GetTag() const
    {
       return tag_;
    }
@@ -105,7 +104,7 @@ public:
     *  they last updated their own internal
     *  tag.
     */
-   bool HasChanged(const Tag comparison_tag) const
+   IPOPTLIB_EXPORT bool HasChanged(const Tag comparison_tag) const
    {
       return (comparison_tag == tag_) ? false : true;
    }
@@ -114,16 +113,7 @@ protected:
     *  method every time their internal state changes to
     *  update the internal tag for comparison
     */
-   void ObjectChanged()
-   {
-      DBG_START_METH("TaggedObject::ObjectChanged()", 0);
-      tag_ = unique_tag_;
-      unique_tag_++;
-      DBG_ASSERT(unique_tag_ < std::numeric_limits<Tag>::max());
-      // The Notify method from the Subject base class notifies all
-      // registered Observers that this subject has changed.
-      Notify(Observer::NT_Changed);
-   }
+   IPOPTLIB_EXPORT void ObjectChanged();
 private:
    /**@name Default Compiler Generated Methods (Hidden to avoid
     * implicit creation/calling).  These methods are not implemented

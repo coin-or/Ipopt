@@ -15,6 +15,7 @@
 #include "IpIpoptAlg.hpp"
 
 #include <cmath>
+#include <limits>
 
 namespace Ipopt
 {

@@ -9,6 +9,7 @@
 #include "IpCGPenaltyCq.hpp"
 
 #include <cmath>
+#include <limits>
 
 namespace Ipopt
 {

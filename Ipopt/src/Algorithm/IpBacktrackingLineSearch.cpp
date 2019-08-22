@@ -12,6 +12,7 @@
 #include "IpAlgTypes.hpp"
 
 #include <cmath>
+#include <limits>
 
 namespace Ipopt
 {

@@ -8,7 +8,6 @@
 #include "IpRestoIpoptNLP.hpp"
 
 #include <cmath>
-
 #include <limits>
 
 namespace Ipopt

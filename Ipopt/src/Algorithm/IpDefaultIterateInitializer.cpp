@@ -6,6 +6,8 @@
 
 #include "IpDefaultIterateInitializer.hpp"
 
+#include <limits>
+
 namespace Ipopt
 {
 #if COIN_IPOPT_VERBOSITY > 0
