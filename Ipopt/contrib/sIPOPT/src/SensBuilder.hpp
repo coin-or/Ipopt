@@ -17,7 +17,7 @@
 
 namespace Ipopt
 {
-  DECLARE_STD_EXCEPTION(SENS_BUILDER_ERROR);
+  DECLARE_STD_SIPOPT_EXCEPTION(SENS_BUILDER_ERROR);
 
   class SensBuilder : public ReferencedObject
   {

@@ -8,11 +8,12 @@
 #define __SENSAMPLTNLP_HPP__
 
 #include "AmplTNLP.hpp"
+#include "SensUtils.hpp"
 
 namespace Ipopt 
 {
 
-  DECLARE_STD_EXCEPTION(SUFFIX_EMPTY);
+  DECLARE_STD_SIPOPT_EXCEPTION(SUFFIX_EMPTY);
 
   class SensAmplTNLP : public AmplTNLP
   {

@@ -21,7 +21,7 @@
 namespace Ipopt
 {
   /** Standard exception for wrong/inconsistent suffixes for sipopt */
-  DECLARE_STD_EXCEPTION(SENS_SUFFIX_ERROR);
+  DECLARE_STD_SIPOPT_EXCEPTION(SENS_SUFFIX_ERROR);
 
   class SIPOPTLIB_EXPORT SensApplication : public ReferencedObject
   {
