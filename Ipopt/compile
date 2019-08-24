@@ -133,6 +133,8 @@ func_cl_wrapper ()
   lib_path=
   shared=:
   linker_opts=
+  outfile=
+  implib=
   for arg
   do
     if test -n "$eat"; then
@@ -147,11 +149,13 @@ func_cl_wrapper ()
 	      func_file_conv "$2"
 	      set x "$@" -Fo"$file"
 	      shift
+	      outfile="$file"
 	      ;;
 	    *)
 	      func_file_conv "$2"
 	      set x "$@" -Fe"$file"
 	      shift
+	      outfile="$file"
 	      ;;
 	  esac
 	  ;;
@@ -193,6 +197,7 @@ func_cl_wrapper ()
 	  for flag in $arg; do
 	    IFS="$save_ifs"
 	    linker_opts="$linker_opts $flag"
+	    case "$flag" in -IMPLIB:*) implib=${flag#-IMPLIB:} ;; esac
 	  done
 	  IFS="$save_ifs"
 	  ;;
@@ -225,8 +230,19 @@ func_cl_wrapper ()
   if test -n "$linker_opts"; then
     linker_opts="-link$linker_opts"
   fi
-  exec "$@" $linker_opts
-  exit 1
+  # remove old $implib, so we can distinguish between generated and not-generated implib below
+  if test -n "$implib" && test -f "$implib" ; then rm "$implib" ; fi
+
+  #echo "compile: $@ $linker_opts"
+  "$@" $linker_opts || exit $?
+
+  # if -implib got lost or ignored, then the lib should be named ${outfile/.dll/.lib} and we rename that file
+  if test -n "$implib" && test ! -f "$implib" ; then
+    echo "compile: mv ${outfile/.dll/.lib} $implib"
+    mv "${outfile/.dll/.lib}" "$implib"
+  fi
+
+  exit 0
 }
 
 eat=

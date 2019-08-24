@@ -13272,8 +13272,8 @@ cygwin* | mingw* | pw32* | cegcc*)
     dynamic_linker='Win32 ld.exe'
     ;;
 
-  *,cl* | *,icl*)
-    # Native MSVC or ICC
+  *,cl* | *,icl* | *,ifort*)
+    # Native MSVC or ICC or IFORT
     libname_spec='$name'
     soname_spec='$libname`echo $release | $SED -e 's/[.]/-/g'`$versuffix$shared_ext'
     library_names_spec='$libname.dll.lib'
@@ -17299,8 +17299,8 @@ cygwin* | mingw* | pw32* | cegcc*)
     dynamic_linker='Win32 ld.exe'
     ;;
 
-  *,cl* | *,icl*)
-    # Native MSVC or ICC
+  *,cl* | *,icl* | *,ifort*)
+    # Native MSVC or ICC or IFORT
     libname_spec='$name'
     soname_spec='$libname`echo $release | $SED -e 's/[.]/-/g'`$versuffix$shared_ext'
     library_names_spec='$libname.dll.lib'
@@ -20263,8 +20263,8 @@ cygwin* | mingw* | pw32* | cegcc*)
     dynamic_linker='Win32 ld.exe'
     ;;
 
-  *,cl* | *,icl*)
-    # Native MSVC or ICC
+  *,cl* | *,icl* | *,ifort*)
+    # Native MSVC or ICC or IFORT
     libname_spec='$name'
     soname_spec='$libname`echo $release | $SED -e 's/[.]/-/g'`$versuffix$shared_ext'
     library_names_spec='$libname.dll.lib'
