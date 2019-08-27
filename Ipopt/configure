@@ -23498,13 +23498,13 @@ $as_echo "$as_me: FINALIZE_FLAGS for HSLLib:" >&6;}
       # setup XYZ_EXPORT symbol for library users
       libexport_attribute=
       if test "$enable_shared" = yes ; then
-        # TODO better check for this? we essentially want to know whether we're building DLLs
-        # or do we also need this for GCC on Windows?
-        case $CC in */compile\ cl | cl | */cl | */compile\ icl | icl | */icl )
-          libexport_attribute="__declspec(dllimport)"
-          if test "$enable_static" = yes ; then
-            as_fn_error $? "Cannot do DLL and static LIB builds simultaneously. Do not add --enable-static without --disable-shared." "$LINENO" 5
-          fi
+        case $build_os in
+          cygwin* | mingw* | msys* | cegcc* )
+            libexport_attribute="__declspec(dllimport)"
+            if test "$enable_static" = yes ; then
+              as_fn_error $? "Cannot do DLL and static LIB builds simultaneously. Do not add --enable-static without --disable-shared." "$LINENO" 5
+            fi
+          ;;
         esac
       fi
 
@@ -25189,13 +25189,13 @@ $as_echo "$as_me: FINALIZE_FLAGS for IpoptLib:" >&6;}
       # setup XYZ_EXPORT symbol for library users
       libexport_attribute=
       if test "$enable_shared" = yes ; then
-        # TODO better check for this? we essentially want to know whether we're building DLLs
-        # or do we also need this for GCC on Windows?
-        case $CC in */compile\ cl | cl | */cl | */compile\ icl | icl | */icl )
-          libexport_attribute="__declspec(dllimport)"
-          if test "$enable_static" = yes ; then
-            as_fn_error $? "Cannot do DLL and static LIB builds simultaneously. Do not add --enable-static without --disable-shared." "$LINENO" 5
-          fi
+        case $build_os in
+          cygwin* | mingw* | msys* | cegcc* )
+            libexport_attribute="__declspec(dllimport)"
+            if test "$enable_static" = yes ; then
+              as_fn_error $? "Cannot do DLL and static LIB builds simultaneously. Do not add --enable-static without --disable-shared." "$LINENO" 5
+            fi
+          ;;
         esac
       fi
 
@@ -25236,13 +25236,13 @@ $as_echo "$as_me: FINALIZE_FLAGS for IpoptAmplInterfaceLib:" >&6;}
       # setup XYZ_EXPORT symbol for library users
       libexport_attribute=
       if test "$enable_shared" = yes ; then
-        # TODO better check for this? we essentially want to know whether we're building DLLs
-        # or do we also need this for GCC on Windows?
-        case $CC in */compile\ cl | cl | */cl | */compile\ icl | icl | */icl )
-          libexport_attribute="__declspec(dllimport)"
-          if test "$enable_static" = yes ; then
-            as_fn_error $? "Cannot do DLL and static LIB builds simultaneously. Do not add --enable-static without --disable-shared." "$LINENO" 5
-          fi
+        case $build_os in
+          cygwin* | mingw* | msys* | cegcc* )
+            libexport_attribute="__declspec(dllimport)"
+            if test "$enable_static" = yes ; then
+              as_fn_error $? "Cannot do DLL and static LIB builds simultaneously. Do not add --enable-static without --disable-shared." "$LINENO" 5
+            fi
+          ;;
         esac
       fi
 
@@ -25283,13 +25283,13 @@ $as_echo "$as_me: FINALIZE_FLAGS for sIpoptLib:" >&6;}
       # setup XYZ_EXPORT symbol for library users
       libexport_attribute=
       if test "$enable_shared" = yes ; then
-        # TODO better check for this? we essentially want to know whether we're building DLLs
-        # or do we also need this for GCC on Windows?
-        case $CC in */compile\ cl | cl | */cl | */compile\ icl | icl | */icl )
-          libexport_attribute="__declspec(dllimport)"
-          if test "$enable_static" = yes ; then
-            as_fn_error $? "Cannot do DLL and static LIB builds simultaneously. Do not add --enable-static without --disable-shared." "$LINENO" 5
-          fi
+        case $build_os in
+          cygwin* | mingw* | msys* | cegcc* )
+            libexport_attribute="__declspec(dllimport)"
+            if test "$enable_static" = yes ; then
+              as_fn_error $? "Cannot do DLL and static LIB builds simultaneously. Do not add --enable-static without --disable-shared." "$LINENO" 5
+            fi
+          ;;
         esac
       fi
 
