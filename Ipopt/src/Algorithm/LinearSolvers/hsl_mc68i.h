@@ -14,13 +14,11 @@
 #endif
 
 /* if we do not have MC68, we assume its is loaded via the linear solver loader, for which we assume HSL 2013 */
-#if defined(COINHSL_HSL2013) || !defined(COINHSL_HAS_MC68)
 #ifndef mc68_default_control
 #define mc68_control mc68_control_i
 #define mc68_info mc68_info_i
 #define mc68_default_control mc68_default_control_i
 #define mc68_order mc68_order_i
-#endif
 #endif
 
 struct mc68_control
@@ -35,11 +33,7 @@ struct mc68_control
     * @note 2x2 pivot information discarded if C indexing is used for output!
     */
    int f_array_out;
-#if defined(COINHSL_HSL2013) || !defined(COINHSL_HAS_MC68)
    long min_l_workspace; /**< Initial size of workspace, as argument in Fortran */
-#else
-   int  min_l_workspace; /**< Initial size of workspace, as argument in Fortran */
-#endif
    /** @} */
 
    /** @name Options from Fortran version
@@ -64,11 +58,7 @@ struct mc68_info
    int duplicate;      /**< holds number of duplicate entries */
    int n_compressions; /**< holds number of compressions in order */
    int n_zero_eigs;    /**< holds the number of zero eigs from ma47 */
-#if defined(COINHSL_HSL2013) || !defined(COINHSL_HAS_MC68)
    long l_workspace;   /**< holds length of workspace iw used in order */
-#else
-   int l_workspace;    /**< holds length of workspace iw used in order */
-#endif
    int zb01_info;      /**< holds flag from zb01_expand1 call */
    int n_dense_rows;   /**< holds number of dense rows from amdd */
 };

@@ -117,7 +117,6 @@ struct ma77_control_d
    ma77pkgtype_d_ umin; /**< Minimum pivot tolerance*/
    /** @} */
 
-#if defined(COINHSL_HSL2013) || !defined(COINHSL_HAS_MA77)
    /** @name Controls used by ma77_solve_fredholm
     * @{
     */
@@ -128,7 +127,6 @@ struct ma77_control_d
    int ispare[5];
    long int lspare[5];
    ma77pkgtype_d_ rspare[5];
-#endif
 };
 
 /***************************************************/
@@ -169,12 +167,10 @@ struct ma77_info_d
    ma77pkgtype_d_ usmall;
 
    /* if we do not have MA77, we assume its is loaded via the linear solver loader, for which we assume HSL 2013 */
-#if defined(COINHSL_HSL2013) || !defined(COINHSL_HAS_MA77)
    /* Pad data structure to allow for future growth */
    int ispare[5];
    long int lspare[5];
    ma77pkgtype_d_ rspare[5];
-#endif
 };
 
 /** Initialise control with default values */

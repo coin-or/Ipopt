@@ -397,9 +397,7 @@ ApplicationReturnStatus IpoptApplication::Initialize(
             options_to_print.push_back("ma77_file_size");
             options_to_print.push_back("ma77_maxstore");
             options_to_print.push_back("ma77_nemin");
-#if defined(COINHSL_HSL2013) || defined(HAVE_LINEARSOLVERLOADER)
             options_to_print.push_back("ma77_order");
-#endif
             options_to_print.push_back("ma77_small");
             options_to_print.push_back("ma77_static");
             options_to_print.push_back("ma77_u");
