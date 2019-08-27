@@ -841,6 +841,7 @@ ac_subst_files=''
 ac_user_opts='
 enable_option_checking
 enable_msvc
+enable_debug
 enable_silent_rules
 enable_maintainer_mode
 enable_dependency_tracking
@@ -1509,6 +1510,7 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-msvc           Look for and allow only Intel/Microsoft compilers on
                           MinGW/MSys/Cygwin.
+  --enable-debug          Build with debugging symbols.
   --enable-silent-rules   less verbose build output (undo: "make V=1")
   --disable-silent-rules  verbose build output (undo: "make V=0")
   --enable-maintainer-mode
@@ -3002,7 +3004,17 @@ fi
 
 
 
-# We want --enable-msvc setup and checked
+  # Check whether --enable-debug was given.
+if test "${enable_debug+set}" = set; then :
+  enableval=$enable_debug; enable_debug=$enableval
+else
+  enable_debug=no
+fi
+
+
+
+# We want --enable-msvc setup and checked. Also --enable-debug
+
 
 
 
@@ -3014,22 +3026,39 @@ fi
 
 
 
-# change default compiler flags (TODO bring back --enable-debug)
-# - disable debugging (remove -g, set -DNDEBUG)
+# change default compiler flags
+# - debugging enabled: enable debug symbols (-g/-Zi)
+# - debugging disabled: disable debug code (-DNDEBUG); enable (more) optimization (-O2)
 # - enable exceptions for (i)cl
 
-  if test "$enable_msvc" = yes ; then
-    : ${FFLAGS:=""}
-    : ${FCFLAGS:=""}
-    : ${CFLAGS:="-DNDEBUG -nologo"}
-    : ${CXXFLAGS:="-DNDEBUG -EHsc -nologo"}
-    : ${AR:="lib"}
-    : ${AR_FLAGS:="-nologo -out:"}
+  if test "$enable_debug" = yes ; then
+    if test "$enable_msvc" = yes ; then
+      : ${FFLAGS:="-nologo -Zi"}
+      : ${FCFLAGS:="-nologo -Zi"}
+      : ${CFLAGS:="-nologo -Zi"}
+      : ${CXXFLAGS:="-nologo -EHsc -Zi"}
+      : ${AR:="lib"}
+      : ${AR_FLAGS:="-nologo -out:"}
+    else
+      : ${FFLAGS:="-g"}
+      : ${FCFLAGS:="-g"}
+      : ${CFLAGS:="-g"}
+      : ${CXXFLAGS:="-g"}
+    fi
   else
-    : ${FFLAGS:=""}
-    : ${FCFLAGS:=""}
-    : ${CFLAGS:="-DNDEBUG"}
-    : ${CXXFLAGS:="-DNDEBUG"}
+    if test "$enable_msvc" = yes ; then
+      : ${FFLAGS:="-nologo -O2"}
+      : ${FCFLAGS:="-nologo -O2"}
+      : ${CFLAGS:="-nologo -DNDEBUG -O2"}
+      : ${CXXFLAGS:="-nologo -EHsc -DNDEBUG -O2"}
+      : ${AR:="lib"}
+      : ${AR_FLAGS:="-nologo -out:"}
+    else
+      : ${FFLAGS:="-O2"}
+      : ${FCFLAGS:="-O2"}
+      : ${CFLAGS:="-O2 -DNDEBUG"}
+      : ${CXXFLAGS:="-O2 -DNDEBUG"}
+    fi
   fi
 
 ac_aux_dir=
