@@ -14,22 +14,6 @@
 #include "IpReferenced.hpp"
 #include "IpObserver.hpp"
 
-/* keyword to declare a thread-local variable according to http://en.wikipedia.org/wiki/Thread-local_storage
- * GCC < 4.5 on MacOS X does not support TLS
- * With Intel compiler on MacOS X, problems with TLS were reported.
- */
-#ifndef IPOPT_THREAD_LOCAL
-
-#if defined(_MSC_VER)
-#define IPOPT_THREAD_LOCAL __declspec(thread)
-#elif defined(__APPLE__) && ((defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__ < 405)) || defined(__INTEL_COMPILER))
-#define IPOPT_THREAD_LOCAL
-#else
-#define IPOPT_THREAD_LOCAL __thread
-#endif
-
-#endif
-
 namespace Ipopt
 {
 
@@ -72,14 +56,14 @@ namespace Ipopt
  *  example, a Vector class, inside its own set method, MUST call
  *  ObjectChanged() to update the internally stored tag for comparison.
  */
-class TaggedObject : public ReferencedObject, public Subject
+class IPOPTLIB_EXPORT TaggedObject : public ReferencedObject, public Subject
 {
 public:
    /** Type for the Tag values */
    typedef unsigned int Tag;
 
    /** Constructor. */
-   IPOPTLIB_EXPORT TaggedObject()
+    TaggedObject()
       :
       Subject()
    {
@@ -87,14 +71,14 @@ public:
    }
 
    /** Destructor. */
-   IPOPTLIB_EXPORT virtual ~TaggedObject()
+   virtual ~TaggedObject()
    {}
 
    /** Users of TaggedObjects call this to
     *  update their own internal tags every time
     *  they perform the expensive operation.
     */
-   IPOPTLIB_EXPORT Tag GetTag() const
+   Tag GetTag() const
    {
       return tag_;
    }
@@ -104,7 +88,7 @@ public:
     *  they last updated their own internal
     *  tag.
     */
-   IPOPTLIB_EXPORT bool HasChanged(const Tag comparison_tag) const
+   bool HasChanged(const Tag comparison_tag) const
    {
       return (comparison_tag == tag_) ? false : true;
    }
@@ -113,7 +97,7 @@ protected:
     *  method every time their internal state changes to
     *  update the internal tag for comparison
     */
-   IPOPTLIB_EXPORT void ObjectChanged();
+   void ObjectChanged();
 private:
    /**@name Default Compiler Generated Methods (Hidden to avoid
     * implicit creation/calling).  These methods are not implemented
@@ -127,12 +111,6 @@ private:
    /** Default Assignment Operator */
    void operator=(const TaggedObject&);
    //@}
-
-   /** static data member that is incremented every
-    *  time ANY TaggedObject changes. This allows us
-    *  to obtain a unique Tag when the object changes
-    */
-   static IPOPT_THREAD_LOCAL Tag unique_tag_;
 
    /** The tag indicating the current state of the object.
     *  We use this to compare against the comparison_tag
