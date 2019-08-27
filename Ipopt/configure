@@ -5512,9 +5512,9 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 # Allow for the possibility that there is no Fortran compiler on the system.
 
-  if test -z "${F77}" ; then
-    { $as_echo "$as_me:${as_lineno-$LINENO}: No Fortran compiler available." >&5
-$as_echo "$as_me: No Fortran compiler available." >&6;}
+  if test -z "$F77" ; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: No Fortran 77 compiler available." >&5
+$as_echo "$as_me: No Fortran 77 compiler available." >&6;}
   fi
    if test -n "$F77"; then
   COIN_HAS_F77_TRUE=
@@ -6163,7 +6163,6 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 # F77_WRAPPERS will trigger the necessary F77 setup macros (F77_MAIN,
 # F77_LIBRARY_LDFLAGS, etc.)
-
   ac_ext=f
 ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
 ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
@@ -6221,6 +6220,8 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+
+  # check whether compile script should be used to wrap around Fortran 77 compiler
   ac_ext=f
 ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
 ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
@@ -20982,8 +20983,8 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 #    even though this .lib file may just be the one that eventually loads a depending DLL,
 #    e.g., mkl_core_dll.lib. Setting deplibs_check_method=pass_all will still print a
 #    warning, but the .lib is still passed to the linker.
-# 4. Ensure always_export_symbols=no. Even though pass win32-dll, libtool
-#    forces always_export_symbols=yes for --tag=CXX if using MS compiler.
+# 4. Ensure always_export_symbols=no if win32-dll. Even when we pass win32-dll,
+#    libtool forces always_export_symbols=yes for --tag=CXX if using MS compiler.
 #    This leads to a nm call that collects ALL C-functions from a library
 #    and explicitly dll-exporting them, leading to warnings about duplicates
 #    regarding those that are properly marked for dll-export in the source.
@@ -21014,14 +21015,15 @@ $as_echo "no" >&6; }
   # for Windows DLLs, it is mandatory to add this
   LT_LDFLAGS="$LT_LDFLAGS -no-undefined"
 
-  # set RPATH_FLAGS to the compiler link flags required to hardcode location
-  # of the shared objects
-  RPATH_FLAGS=
+
+# set RPATH_FLAGS to the compiler link flags required to hardcode location
+# of the shared objects (expanded_libdir is set somewhere in configure before)
+RPATH_FLAGS=
 
 if test $enable_shared = yes; then
   case $build in
     *-linux-*)
-      if test "$GXX" = "yes"; then
+      if test "$GCC" = "yes"; then
         RPATH_FLAGS=
         for dir in $expanded_libdir; do
           RPATH_FLAGS="$RPATH_FLAGS -Wl,--rpath -Wl,$dir"
@@ -21030,8 +21032,8 @@ if test $enable_shared = yes; then
     *-darwin*)
         RPATH_FLAGS=nothing ;;
     *-ibm-*)
-      case "$CXX" in
-      xlC* | */xlC* | mpxlC* | */mpxlC*)
+      case "$CC" in
+      xlc* | */xlc* | mpxlc* | */mpxlc*)
         RPATH_FLAGS=nothing ;;
       esac ;;
     *-hp-*)
@@ -21053,7 +21055,6 @@ $as_echo "$as_me: WARNING: Could not automatically determine how to tell the lin
     RPATH_FLAGS=
   fi
 fi
-
 
 
 
@@ -22108,10 +22109,8 @@ $as_echo "$ac_success" >&6; }
       ;;
 
       *-cygwin* | *-mingw* | *-msys*)
-        case "$CC" in
-          */compile\ cl | cl | */cl | */compile\ icl | icl | */icl )
-            # check for 64-bit sequential MKL
-            if test "$enable_shared" = yes ; then
+        # check for 64-bit sequential MKL
+        if test "$enable_shared" = yes ; then
 
   # setup LIBS by adding mkl_intel_lp64_dll.lib mkl_sequential_dll.lib mkl_core_dll.lib and those from
   ac_save_LIBS="$LIBS"
@@ -22180,13 +22179,12 @@ $as_echo "$ac_success" >&6; }
   LIBS=$ac_save_LIBS
 
   if test $ac_success = yes ; then
-
-                coin_has_lapack=yes
-                lapack_lflags="mkl_intel_lp64_dll.lib mkl_sequential_dll.lib mkl_core_dll.lib"
+    coin_has_lapack=yes
+             lapack_lflags="mkl_intel_lp64_dll.lib mkl_sequential_dll.lib mkl_core_dll.lib"
 
   fi
 
-            else
+        else
 
   # setup LIBS by adding mkl_intel_lp64.lib mkl_sequential.lib mkl_core.lib and those from
   ac_save_LIBS="$LIBS"
@@ -22255,15 +22253,12 @@ $as_echo "$ac_success" >&6; }
   LIBS=$ac_save_LIBS
 
   if test $ac_success = yes ; then
-
-                coin_has_lapack=yes
-                lapack_lflags="mkl_intel_lp64.lib mkl_sequential.lib mkl_core.lib"
+    coin_has_lapack=yes
+             lapack_lflags="mkl_intel_lp64.lib mkl_sequential.lib mkl_core.lib"
 
   fi
 
-            fi
-          ;;
-        esac
+        fi
       ;;
 
       *-darwin*)
@@ -23475,7 +23470,7 @@ $as_echo "#define COIN_HAS_HSL 1" >>confdefs.h
 
 
   fi
-   # TODO >= 1.3
+
 
 have_ma28=no
 if test "$coin_has_hsl" = yes ; then

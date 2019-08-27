@@ -46,6 +46,10 @@ fi
 # Initialize libtool
 AC_COIN_PROG_LIBTOOL
 
+# set RPATH_FLAGS to the compiler link flags required to hardcode location
+# of the shared objects (expanded_libdir is set somewhere in configure before)
+AC_COIN_RPATH_FLAGS([$expanded_libdir])
+
 # Get the C++ runtime libraries in case we want to link a static Ipopt library
 # with a C or Fortran compiler
 AC_COIN_CXXLIBS
@@ -87,7 +91,7 @@ AC_CHECK_FUNCS([MPI_Initialized])
 # HSL #
 #######
 
-AC_COIN_CHK_PKG(HSL,[IpoptLib HSLLib],[coinhsl],[build])   # TODO >= 1.3
+AC_COIN_CHK_PKG(HSL,[IpoptLib HSLLib],[coinhsl],[build])
 
 have_ma28=no
 if test "$coin_has_hsl" = yes ; then
