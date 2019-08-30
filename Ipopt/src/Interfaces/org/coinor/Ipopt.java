@@ -95,9 +95,6 @@ public abstract class Ipopt
    /** The default DLL name of the native implementation (without any platform dependent prefixes or suffixes) */
    public static final String DLLNAME = "ipopt";
 
-   /** The relative path where the native DLL is found */
-   public static final String DLLPATH = "../../src/Interfaces/.libs";
-
    /** Use C index style for iRow and jCol vectors */
    public final static int C_STYLE = 0;
 
@@ -153,16 +150,33 @@ public abstract class Ipopt
    /** Status returned by the solver */
    private int status = INVALID_PROBLEM_DEFINITION;
 
-   /** Creates a new NLP Solver using {@value #DLLPATH} as path and {@value #DLLNAME} as the DLL name.
+   /** Creates a new NLP Solver using {@value #DLLNAME} as the DLL name.
     *
-    * @see #Ipopt(String, String)
+    * This expects the the Ipopt DLL can somehow be found.
+    *
+    * @see #Ipopt()
     */
    public Ipopt()
    {
-      this(DLLPATH, DLLNAME);
+      this(DLLNAME);
    }
 
    /** Creates a NLP Solver for the given DLL file.
+    * The given file must implement the native interface required by this class.
+    * The given file must be located in some library search path.
+    *
+    * @param DLL the name of the DLL (without the extension or any platform dependent prefix).
+    *
+    * @see #Ipopt()
+    */
+   public Ipopt(
+      String DLL)
+   {
+      // Loads the library
+      System.loadLibrary(DLL);
+   }
+
+   /** Creates a NLP Solver for the given DLL file and path.
     * The given file must implement the native interface required by this class.
     *
     * @param path the path where the DLL is found.
