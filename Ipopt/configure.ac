@@ -284,14 +284,18 @@ fi
 
 ############# JAVA
 
-# look for javah and jni header: required to compile Java interface
+# look for javah and jni header: required to compile C++ part of Java interface
 AX_PROG_JAVAH
-AM_CONDITIONAL(BUILD_JAVA, test -n "$ac_cv_path_JAVAH")
 
-if test "${JAVA_HOME+set}" = set; then
-  AC_MSG_NOTICE([JAVA_HOME = $JAVA_HOME])
-fi
-AC_SUBST(JAVA_HOME)
+# look for javac: required to compile Java interface class and tests
+AX_PROG_JAVAC
+
+# look for jar: for Java examples and documentation
+AX_PROG_JAR
+AX_PROG_JAVA
+AX_PROG_JAVADOC
+
+AM_CONDITIONAL([BUILD_JAVA], [test -n "$ac_cv_path_JAVAH" && test -n "$JAVAC"])
 
 ##########
 # ASTYLE #
@@ -377,7 +381,6 @@ AC_CONFIG_LINKS([test/hs071_main.cpp:examples/hs071_cpp/hs071_main.cpp
 ##          Create links for VPATH config of certain files            ##
 ########################################################################
 
-AC_COIN_VPATH_LINK(contrib/JavaInterface/org/coinor/Ipopt.java)
 AC_COIN_VPATH_LINK(contrib/JavaInterface/org/coinor/examples/HS071.java)
 AC_COIN_VPATH_LINK(contrib/JavaInterface/org/coinor/examples/scalable/SolveProblem.java)
 AC_COIN_VPATH_LINK(contrib/JavaInterface/org/coinor/examples/scalable/Scalable.java)

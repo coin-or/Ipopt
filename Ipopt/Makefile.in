@@ -147,7 +147,6 @@ CONFIG_CLEAN_FILES = ipopt.pc doc/Doxyfile examples/hs071_f/hs071_f.f \
 	contrib/RInterface/src/Makevars.win \
 	contrib/RInterface/src/Makevars ipoptamplinterface.pc
 CONFIG_CLEAN_VPATH_FILES =  \
-	contrib/JavaInterface/org/coinor/Ipopt.java \
 	contrib/JavaInterface/org/coinor/examples/HS071.java \
 	contrib/JavaInterface/org/coinor/examples/scalable/SolveProblem.java \
 	contrib/JavaInterface/org/coinor/examples/scalable/Scalable.java \
@@ -368,8 +367,11 @@ IPOPTLIB_LFLAGS = @IPOPTLIB_LFLAGS@
 IPOPTLIB_LFLAGS_NOPC = @IPOPTLIB_LFLAGS_NOPC@
 IPOPTLIB_PCFILES = @IPOPTLIB_PCFILES@
 IPOPT_SVN_REV = @IPOPT_SVN_REV@
+JAR = @JAR@
+JAVA = @JAVA@
+JAVAC = @JAVAC@
+JAVADOC = @JAVADOC@
 JAVAH = @JAVAH@
-JAVA_HOME = @JAVA_HOME@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@

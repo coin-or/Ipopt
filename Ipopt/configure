@@ -652,9 +652,12 @@ BUILD_LINEARSOLVERLOADER_TRUE
 IPALLLIBS
 ASTYLEFLAGS
 ASTYLE
-JAVA_HOME
 BUILD_JAVA_FALSE
 BUILD_JAVA_TRUE
+JAVADOC
+JAVA
+JAR
+JAVAC
 JAVAH
 BUILD_INEXACT_FALSE
 BUILD_INEXACT_TRUE
@@ -24657,6 +24660,7 @@ fi
 
 ############# JAVA
 
+# look for javah and jni header: required to compile C++ part of Java interface
 
 # Extract the first word of "javah", so it can be a program name with args.
 set dummy javah; ac_word=$2
@@ -24796,18 +24800,584 @@ rm -f conftest.err conftest.i conftest.$ac_ext
 
 fi
 
- if true; then
+
+# look for javac: required to compile Java interface class and tests
+
+if test "x$JAVAPREFIX" = x; then :
+  test "x$JAVAC" = x && for ac_prog in "gcj -C" guavac jikes javac
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_JAVAC+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$JAVAC"; then
+  ac_cv_prog_JAVAC="$JAVAC" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_JAVAC="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+JAVAC=$ac_cv_prog_JAVAC
+if test -n "$JAVAC"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $JAVAC" >&5
+$as_echo "$JAVAC" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$JAVAC" && break
+done
+
+else
+  test "x$JAVAC" = x && for ac_prog in "gcj -C" guavac jikes javac
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_JAVAC+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$JAVAC"; then
+  ac_cv_prog_JAVAC="$JAVAC" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $JAVAPREFIX/bin
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_JAVAC="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+JAVAC=$ac_cv_prog_JAVAC
+if test -n "$JAVAC"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $JAVAC" >&5
+$as_echo "$JAVAC" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$JAVAC" && break
+done
+
+fi
+test "x$JAVAC" = x && as_fn_error $? "no acceptable Java compiler found in \$PATH" "$LINENO" 5
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if $JAVAC works" >&5
+$as_echo_n "checking if $JAVAC works... " >&6; }
+if ${ac_cv_prog_javac_works+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+JAVA_TEST=Test.java
+CLASS_TEST=Test.class
+cat << \EOF > $JAVA_TEST
+/* #line 24904 "configure" */
+public class Test {
+}
+EOF
+if { ac_try='$JAVAC $JAVACFLAGS $JAVA_TEST'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; } >/dev/null 2>&1; then
+  ac_cv_prog_javac_works=yes
+else
+  as_fn_error $? "The Java compiler $JAVAC failed (see config.log, check the CLASSPATH?)" "$LINENO" 5
+  echo "configure: failed program was:" >&5
+  cat $JAVA_TEST >&5
+fi
+rm -f $JAVA_TEST $CLASS_TEST
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_prog_javac_works" >&5
+$as_echo "$ac_cv_prog_javac_works" >&6; }
+
+
+
+# look for jar: for Java examples and documentation
+
+if test "x$JAVAPREFIX" = x; then :
+  test "x$JAR" = x && for ac_prog in jar
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_JAR+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$JAR"; then
+  ac_cv_prog_JAR="$JAR" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_JAR="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+JAR=$ac_cv_prog_JAR
+if test -n "$JAR"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $JAR" >&5
+$as_echo "$JAR" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$JAR" && break
+done
+
+else
+  test "x$JAR" = x && for ac_prog in jar
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_JAR+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$JAR"; then
+  ac_cv_prog_JAR="$JAR" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $JAVAPREFIX/bin
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_JAR="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+JAR=$ac_cv_prog_JAR
+if test -n "$JAR"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $JAR" >&5
+$as_echo "$JAR" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$JAR" && break
+done
+
+fi
+test "x$JAR" = x && as_fn_error $? "no acceptable jar program found in \$PATH" "$LINENO" 5
+
+
+if test "x$JAVAPREFIX" = x; then :
+  test x$JAVA = x && for ac_prog in kaffe java
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_JAVA+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$JAVA"; then
+  ac_cv_prog_JAVA="$JAVA" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_JAVA="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+JAVA=$ac_cv_prog_JAVA
+if test -n "$JAVA"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $JAVA" >&5
+$as_echo "$JAVA" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$JAVA" && break
+done
+
+else
+  test x$JAVA = x && for ac_prog in kaffe java
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_JAVA+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$JAVA"; then
+  ac_cv_prog_JAVA="$JAVA" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $JAVAPREFIX/bin
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_JAVA="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+JAVA=$ac_cv_prog_JAVA
+if test -n "$JAVA"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $JAVA" >&5
+$as_echo "$JAVA" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$JAVA" && break
+done
+
+fi
+test x$JAVA = x && as_fn_error $? "no acceptable Java virtual machine found in \$PATH" "$LINENO" 5
+
+        if test x$ac_cv_prog_javac_works = xno; then
+                as_fn_error $? "Cannot compile java source. $JAVAC does not work properly" "$LINENO" 5
+        fi
+        if test x$ac_cv_prog_javac_works = x; then
+
+if test "x$JAVAPREFIX" = x; then :
+  test "x$JAVAC" = x && for ac_prog in "gcj -C" guavac jikes javac
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_JAVAC+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$JAVAC"; then
+  ac_cv_prog_JAVAC="$JAVAC" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_JAVAC="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+JAVAC=$ac_cv_prog_JAVAC
+if test -n "$JAVAC"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $JAVAC" >&5
+$as_echo "$JAVAC" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$JAVAC" && break
+done
+
+else
+  test "x$JAVAC" = x && for ac_prog in "gcj -C" guavac jikes javac
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_JAVAC+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$JAVAC"; then
+  ac_cv_prog_JAVAC="$JAVAC" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $JAVAPREFIX/bin
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_JAVAC="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+JAVAC=$ac_cv_prog_JAVAC
+if test -n "$JAVAC"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $JAVAC" >&5
+$as_echo "$JAVAC" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$JAVAC" && break
+done
+
+fi
+test "x$JAVAC" = x && as_fn_error $? "no acceptable Java compiler found in \$PATH" "$LINENO" 5
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if $JAVAC works" >&5
+$as_echo_n "checking if $JAVAC works... " >&6; }
+if ${ac_cv_prog_javac_works+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+JAVA_TEST=Test.java
+CLASS_TEST=Test.class
+cat << \EOF > $JAVA_TEST
+/* #line 25212 "configure" */
+public class Test {
+}
+EOF
+if { ac_try='$JAVAC $JAVACFLAGS $JAVA_TEST'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; } >/dev/null 2>&1; then
+  ac_cv_prog_javac_works=yes
+else
+  as_fn_error $? "The Java compiler $JAVAC failed (see config.log, check the CLASSPATH?)" "$LINENO" 5
+  echo "configure: failed program was:" >&5
+  cat $JAVA_TEST >&5
+fi
+rm -f $JAVA_TEST $CLASS_TEST
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_prog_javac_works" >&5
+$as_echo "$ac_cv_prog_javac_works" >&6; }
+
+
+        fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if $JAVA works" >&5
+$as_echo_n "checking if $JAVA works... " >&6; }
+if ${ac_cv_prog_java_works+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+JAVA_TEST=Test.java
+CLASS_TEST=Test.class
+TEST=Test
+cat << \EOF > $JAVA_TEST
+/* [#]line 25246 "configure" */
+public class Test {
+public static void main (String args[]) {
+        System.exit (0);
+} }
+EOF
+        if { ac_try='$JAVAC $JAVACFLAGS $JAVA_TEST'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; } && test -s $CLASS_TEST; then
+                :
+        else
+          echo "configure: failed program was:" >&5
+          cat $JAVA_TEST >&5
+          as_fn_error $? "The Java compiler $JAVAC failed (see config.log, check the CLASSPATH?)" "$LINENO" 5
+        fi
+if { ac_try='$JAVA -classpath . $JAVAFLAGS $TEST'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; } >/dev/null 2>&1; then
+  ac_cv_prog_java_works=yes
+else
+  echo "configure: failed program was:" >&5
+  cat $JAVA_TEST >&5
+  as_fn_error $? "The Java VM $JAVA failed (see config.log, check the CLASSPATH?)" "$LINENO" 5
+fi
+rm -f $JAVA_TEST $CLASS_TEST
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_prog_java_works" >&5
+$as_echo "$ac_cv_prog_java_works" >&6; }
+
+
+
+
+if test "x$JAVAPREFIX" = x; then :
+  test "x$JAVADOC" = x && for ac_prog in javadoc
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_JAVADOC+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$JAVADOC"; then
+  ac_cv_prog_JAVADOC="$JAVADOC" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_JAVADOC="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+JAVADOC=$ac_cv_prog_JAVADOC
+if test -n "$JAVADOC"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $JAVADOC" >&5
+$as_echo "$JAVADOC" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$JAVADOC" && break
+done
+
+else
+  test "x$JAVADOC" = x && for ac_prog in javadoc
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_JAVADOC+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$JAVADOC"; then
+  ac_cv_prog_JAVADOC="$JAVADOC" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $JAVAPREFIX/bin
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_JAVADOC="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+JAVADOC=$ac_cv_prog_JAVADOC
+if test -n "$JAVADOC"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $JAVADOC" >&5
+$as_echo "$JAVADOC" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$JAVADOC" && break
+done
+
+fi
+test "x$JAVADOC" = x && as_fn_error $? "no acceptable javadoc generator found in \$PATH" "$LINENO" 5
+
+
+ if test -n "$ac_cv_path_JAVAH" && test -n "$JAVAC"; then
   BUILD_JAVA_TRUE=
   BUILD_JAVA_FALSE='#'
 else
   BUILD_JAVA_TRUE='#'
   BUILD_JAVA_FALSE=
-fi
-
-
-if test "${JAVA_HOME+set}" = set; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: JAVA_HOME = $JAVA_HOME" >&5
-$as_echo "$as_me: JAVA_HOME = $JAVA_HOME" >&6;}
 fi
 
 
@@ -25006,10 +25576,6 @@ ac_config_links="$ac_config_links test/hs071_main.cpp:examples/hs071_cpp/hs071_m
 ########################################################################
 ##          Create links for VPATH config of certain files            ##
 ########################################################################
-
-
-  ac_config_links="$ac_config_links contrib/JavaInterface/org/coinor/Ipopt.java:contrib/JavaInterface/org/coinor/Ipopt.java"
-
 
 
   ac_config_links="$ac_config_links contrib/JavaInterface/org/coinor/examples/HS071.java:contrib/JavaInterface/org/coinor/examples/HS071.java"
@@ -26769,7 +27335,6 @@ do
     "test/hs071_nlp.cpp") CONFIG_LINKS="$CONFIG_LINKS test/hs071_nlp.cpp:examples/hs071_cpp/hs071_nlp.cpp" ;;
     "test/hs071_nlp.hpp") CONFIG_LINKS="$CONFIG_LINKS test/hs071_nlp.hpp:examples/hs071_cpp/hs071_nlp.hpp" ;;
     "test/hs071_c.c") CONFIG_LINKS="$CONFIG_LINKS test/hs071_c.c:examples/hs071_c/hs071_c.c" ;;
-    "contrib/JavaInterface/org/coinor/Ipopt.java") CONFIG_LINKS="$CONFIG_LINKS contrib/JavaInterface/org/coinor/Ipopt.java:contrib/JavaInterface/org/coinor/Ipopt.java" ;;
     "contrib/JavaInterface/org/coinor/examples/HS071.java") CONFIG_LINKS="$CONFIG_LINKS contrib/JavaInterface/org/coinor/examples/HS071.java:contrib/JavaInterface/org/coinor/examples/HS071.java" ;;
     "contrib/JavaInterface/org/coinor/examples/scalable/SolveProblem.java") CONFIG_LINKS="$CONFIG_LINKS contrib/JavaInterface/org/coinor/examples/scalable/SolveProblem.java:contrib/JavaInterface/org/coinor/examples/scalable/SolveProblem.java" ;;
     "contrib/JavaInterface/org/coinor/examples/scalable/Scalable.java") CONFIG_LINKS="$CONFIG_LINKS contrib/JavaInterface/org/coinor/examples/scalable/Scalable.java:contrib/JavaInterface/org/coinor/examples/scalable/Scalable.java" ;;

@@ -34,11 +34,28 @@ libipopt_la_SOURCES = \
 	IpTNLPReducer.cpp
 
 if BUILD_JAVA
-libipopt_la_SOURCES += IpStdJInterface.cpp
+libipopt_la_SOURCES += IpStdJInterface.cpp org_coinor_Ipopt.h
+BUILT_SOURCES = org_coinor_Ipopt.h
 
-IpStdJInterface.cpp : org_coinor_Ipopt.h
-org_coinor_Ipopt.h : $(top_srcdir)/contrib/JavaInterface/org/coinor/Ipopt.java
-	cd $(top_srcdir)/contrib/JavaInterface && $(JAVAH) -d $(PWD) org.coinor.Ipopt
+org_coinor_Ipopt.h : $(srcdir)/org/coinor/Ipopt.java
+	cd $(srcdir) && $(JAVAH) -d $(PWD) org.coinor.Ipopt
+
+org.coinor.ipopt.jar : org/coinor/Ipopt.class
+	$(JAR) cf $@ $<
+
+org/coinor/Ipopt.class : $(srcdir)/org/coinor/Ipopt.java
+	@mkdir -p org/coinor
+	$(JAVAC) $< -d $(PWD)
+
+all-local : org.coinor.ipopt.jar
+
+CLEANFILES = org.coinor.ipopt.jar org/coinor/Ipopt.class org_coinor_Ipopt.h
+
+install-exec-local :
+	$(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) org.coinor.ipopt.jar "$(DESTDIR)$(libdir)"
+uninstall-local :
+	$(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/org.coinor.ipopt.jar"
+
 endif
 
 libipopt_la_LIBADD = $(IPALLLIBS) $(IPOPTLIB_LFLAGS)

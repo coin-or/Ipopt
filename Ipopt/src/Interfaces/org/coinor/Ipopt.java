@@ -20,7 +20,7 @@ import java.io.File;
  *
  * This class is a JNI hook around the C++ interface of Ipopt, as a consequence
  * it will need a nativelly compiled DLL to run.
- * For more details about Ipopt [click here](https://projects.coin-or.org/Ipopt).
+ * For more details about Ipopt [click here](https://github.com/coin-or/Ipopt).
  *
  * The user should subclass this class and implement the abstract methods.
  * At some point before solving the problem the

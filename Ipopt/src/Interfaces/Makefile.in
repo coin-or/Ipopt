@@ -95,7 +95,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@BUILD_JAVA_TRUE@am__append_1 = IpStdJInterface.cpp
+@BUILD_JAVA_TRUE@am__append_1 = IpStdJInterface.cpp org_coinor_Ipopt.h
 subdir = src/Interfaces
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -300,8 +300,11 @@ IPOPTLIB_LFLAGS = @IPOPTLIB_LFLAGS@
 IPOPTLIB_LFLAGS_NOPC = @IPOPTLIB_LFLAGS_NOPC@
 IPOPTLIB_PCFILES = @IPOPTLIB_PCFILES@
 IPOPT_SVN_REV = @IPOPT_SVN_REV@
+JAR = @JAR@
+JAVA = @JAVA@
+JAVAC = @JAVAC@
+JAVADOC = @JAVADOC@
 JAVAH = @JAVAH@
-JAVA_HOME = @JAVA_HOME@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
@@ -423,6 +426,8 @@ libipopt_la_SOURCES = IpInterfacesRegOp.cpp IpIpoptApplication.cpp \
 	IpSolveStatistics.cpp IpStdCInterface.cpp \
 	IpStdInterfaceTNLP.cpp IpStdFInterface.c IpTNLPAdapter.cpp \
 	IpTNLPReducer.cpp $(am__append_1)
+@BUILD_JAVA_TRUE@BUILT_SOURCES = org_coinor_Ipopt.h
+@BUILD_JAVA_TRUE@CLEANFILES = org.coinor.ipopt.jar org/coinor/Ipopt.class org_coinor_Ipopt.h
 libipopt_la_LIBADD = $(IPALLLIBS) $(IPOPTLIB_LFLAGS)
 libipopt_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -DIPOPT_BUILD \
@@ -454,7 +459,8 @@ ASTYLE_FILES = \
 
 DISTCLEANFILES = $(ASTYLE_FILES)
 SUFFIXES = .cppbak .hppbak .cbak .hbak
-all: all-am
+all: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
 .SUFFIXES: .cppbak .hppbak .cbak .hbak .c .cpp .h .hpp .lo .o .obj
@@ -669,13 +675,16 @@ cscopelist-am: $(am__tagged_files)
 distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 check-am: all-am
-check: check-am
-all-am: Makefile $(LTLIBRARIES) $(HEADERS)
+check: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) check-am
+@BUILD_JAVA_FALSE@all-local:
+all-am: Makefile $(LTLIBRARIES) $(HEADERS) all-local
 installdirs:
 	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includeipoptdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
-install: install-am
+install: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) install-am
 install-exec: install-exec-am
 install-data: install-data-am
 uninstall: uninstall-am
@@ -697,6 +706,7 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
@@ -706,6 +716,9 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
+@BUILD_JAVA_FALSE@uninstall-local:
+@BUILD_JAVA_FALSE@install-exec-local:
 clean: clean-am
 
 clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
@@ -743,7 +756,7 @@ install-dvi: install-dvi-am
 
 install-dvi-am:
 
-install-exec-am: install-libLTLIBRARIES
+install-exec-am: install-exec-local install-libLTLIBRARIES
 
 install-html: install-html-am
 
@@ -791,16 +804,18 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-includeipoptHEADERS uninstall-libLTLIBRARIES
+uninstall-am: uninstall-includeipoptHEADERS uninstall-libLTLIBRARIES \
+	uninstall-local
 
-.MAKE: install-am install-strip
+.MAKE: all check install install-am install-strip
 
-.PHONY: CTAGS GTAGS TAGS all all-am am--depfiles check check-am clean \
-	clean-generic clean-libLTLIBRARIES clean-libtool cscopelist-am \
-	ctags ctags-am distclean distclean-compile distclean-generic \
-	distclean-libtool distclean-tags dvi dvi-am html html-am info \
-	info-am install install-am install-data install-data-am \
-	install-dvi install-dvi-am install-exec install-exec-am \
+.PHONY: CTAGS GTAGS TAGS all all-am all-local am--depfiles check \
+	check-am clean clean-generic clean-libLTLIBRARIES \
+	clean-libtool cscopelist-am ctags ctags-am distclean \
+	distclean-compile distclean-generic distclean-libtool \
+	distclean-tags dvi dvi-am html html-am info info-am install \
+	install-am install-data install-data-am install-dvi \
+	install-dvi-am install-exec install-exec-am install-exec-local \
 	install-html install-html-am install-includeipoptHEADERS \
 	install-info install-info-am install-libLTLIBRARIES \
 	install-man install-pdf install-pdf-am install-ps \
@@ -809,14 +824,27 @@ uninstall-am: uninstall-includeipoptHEADERS uninstall-libLTLIBRARIES
 	mostlyclean mostlyclean-compile mostlyclean-generic \
 	mostlyclean-libtool pdf pdf-am ps ps-am tags tags-am uninstall \
 	uninstall-am uninstall-includeipoptHEADERS \
-	uninstall-libLTLIBRARIES
+	uninstall-libLTLIBRARIES uninstall-local
 
 .PRECIOUS: Makefile
 
 
-@BUILD_JAVA_TRUE@IpStdJInterface.cpp : org_coinor_Ipopt.h
-@BUILD_JAVA_TRUE@org_coinor_Ipopt.h : $(top_srcdir)/contrib/JavaInterface/org/coinor/Ipopt.java
-@BUILD_JAVA_TRUE@	cd $(top_srcdir)/contrib/JavaInterface && $(JAVAH) -d $(PWD) org.coinor.Ipopt
+@BUILD_JAVA_TRUE@org_coinor_Ipopt.h : $(srcdir)/org/coinor/Ipopt.java
+@BUILD_JAVA_TRUE@	cd $(srcdir) && $(JAVAH) -d $(PWD) org.coinor.Ipopt
+
+@BUILD_JAVA_TRUE@org.coinor.ipopt.jar : org/coinor/Ipopt.class
+@BUILD_JAVA_TRUE@	$(JAR) cf $@ $<
+
+@BUILD_JAVA_TRUE@org/coinor/Ipopt.class : $(srcdir)/org/coinor/Ipopt.java
+@BUILD_JAVA_TRUE@	@mkdir -p org/coinor
+@BUILD_JAVA_TRUE@	$(JAVAC) $< -d $(PWD)
+
+@BUILD_JAVA_TRUE@all-local : org.coinor.ipopt.jar
+
+@BUILD_JAVA_TRUE@install-exec-local :
+@BUILD_JAVA_TRUE@	$(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) org.coinor.ipopt.jar "$(DESTDIR)$(libdir)"
+@BUILD_JAVA_TRUE@uninstall-local :
+@BUILD_JAVA_TRUE@	$(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/org.coinor.ipopt.jar"
 
 astyle: $(ASTYLE_FILES)
 

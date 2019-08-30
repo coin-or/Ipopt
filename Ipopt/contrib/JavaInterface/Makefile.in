@@ -4,31 +4,26 @@
 #
 # Author: Andreas Waechter     2007-10-08     IBM
 
-## Installation of JDK
-#JAVA_HOME = @JAVA_HOME@
-
-# NOTE: We assume here that there are no spaces in $JAVA_HOME.
+# NOTE: We assume here that there are no spaces in paths.
 #   If you are on Windows and have Java in a path like C:\Program Files\Java,
 #   try setting JAVA_HOME to the DOS equivalent C:\Progra~1 or similar.
 
 # Java compiler
-JAVAC = $(JAVA_HOME)/bin/javac
+JAVAC = @JAVAC@
 
 # Jar utility
-JAR = $(JAVA_HOME)/bin/jar
+JAR = @JAR@
 
 # Java runtime
-JAVA = $(JAVA_HOME)/bin/java
+JAVA = @JAVA@
 
 # Java documentation utility
-JAVADOC = $(JAVA_HOME)/bin/javadoc
+JAVADOC = @JAVADOC@
 
 ##########################################################################
 
 SRCDIR = @srcdir@
 ORGDIR = org/coinor
-
-IPOPTCLASS = $(ORGDIR)/Ipopt.class
 
 HS071 = $(ORGDIR)/examples/HS071
 HS071CLASSES = $(ORGDIR)/examples/HS071.class
@@ -47,7 +42,7 @@ SCALJAR = ScalableProblems.jar
 	$(JAVAC) $<
 
 $(SCALJAR): $(SCALCLASSES)
-	$(JAR) cfm $(SCALJAR) $(SRCDIR)/manifest.txt $(IPOPTCLASS) $(SCALCLASSES)
+	$(JAR) cfm $(SCALJAR) $(SRCDIR)/manifest.txt $(SCALCLASSES)
 
 test: $(HS071CLASSES) $(SCALJAR)
 	$(JAVA) $(HS071)
@@ -55,7 +50,7 @@ test: $(HS071CLASSES) $(SCALJAR)
 	$(JAVA) -jar $(SCALJAR) LukVlE1 101
 
 clean:
-	rm -rf $(IPOPTCLASS) $(HS071CLASSES) $(SCALCLASSES) $(SCALJAR)
+	rm -rf $(HS071CLASSES) $(SCALCLASSES) $(SCALJAR)
 
 doc:
 	$(JAVADOC) -d javadoc -windowtitle "JIpopt API documentation" org/coinor/Ipopt.java
