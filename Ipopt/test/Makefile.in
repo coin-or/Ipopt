@@ -396,6 +396,7 @@ nodist_hs071_c_SOURCES = hs071_c.c
 hs071_c_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
 nodist_hs071_f_SOURCES = hs071_f.f
 hs071_f_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
+@BUILD_JAVA_TRUE@CLEANFILES = org/coinor/examples/HS071.class
 
 # Here list all include flags, relative to this "srcdir" directory.
 AM_CPPFLAGS = \
@@ -597,7 +598,8 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 check-am: all-am
 check: check-am
-all-am: Makefile $(PROGRAMS)
+@BUILD_JAVA_FALSE@all-local:
+all-am: Makefile $(PROGRAMS) all-local
 installdirs:
 install: install-am
 install-exec: install-exec-am
@@ -621,6 +623,7 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
@@ -707,28 +710,40 @@ uninstall-am:
 
 .MAKE: install-am install-strip
 
-.PHONY: CTAGS GTAGS TAGS all all-am am--depfiles check check-am clean \
-	clean-generic clean-libtool clean-noinstPROGRAMS cscopelist-am \
-	ctags ctags-am distclean distclean-compile distclean-generic \
-	distclean-libtool distclean-tags dvi dvi-am html html-am info \
-	info-am install install-am install-data install-data-am \
-	install-dvi install-dvi-am install-exec install-exec-am \
-	install-html install-html-am install-info install-info-am \
-	install-man install-pdf install-pdf-am install-ps \
-	install-ps-am install-strip installcheck installcheck-am \
-	installdirs maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-compile mostlyclean-generic \
-	mostlyclean-libtool pdf pdf-am ps ps-am tags tags-am uninstall \
-	uninstall-am
+.PHONY: CTAGS GTAGS TAGS all all-am all-local am--depfiles check \
+	check-am clean clean-generic clean-libtool \
+	clean-noinstPROGRAMS cscopelist-am ctags ctags-am distclean \
+	distclean-compile distclean-generic distclean-libtool \
+	distclean-tags dvi dvi-am html html-am info info-am install \
+	install-am install-data install-data-am install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am install-man \
+	install-pdf install-pdf-am install-ps install-ps-am \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
+	pdf pdf-am ps ps-am tags tags-am uninstall uninstall-am
 
 .PRECIOUS: Makefile
 
 
+@BUILD_JAVA_TRUE@org_coinor_Ipopt.h : $(srcdir)/org/coinor/Ipopt.java
+@BUILD_JAVA_TRUE@	cd $(srcdir) && $(JAVAH) -d $(PWD) org.coinor.Ipopt
+
+@BUILD_JAVA_TRUE@org.coinor.ipopt.jar : org/coinor/Ipopt.class
+@BUILD_JAVA_TRUE@	$(JAR) cf $@ $<
+
+@BUILD_JAVA_TRUE@org/coinor/examples/HS071.class : $(top_srcdir)/contrib/JavaInterface/org/coinor/examples/HS071.java
+@BUILD_JAVA_TRUE@	@mkdir -p org/coinor/examples
+@BUILD_JAVA_TRUE@	$(JAVAC) -classpath ../src/Interfaces/org.coinor.ipopt.jar $< -d $(PWD)
+
+@BUILD_JAVA_TRUE@all-local : org/coinor/examples/HS071.class
+
 hs071_f.f:
 	$(LN_S) ../examples/hs071_f/$@ $@
 
-@COIN_HAS_F77_TRUE@test: hs071_cpp$(EXEEXT) hs071_c$(EXEEXT) hs071_f$(EXEEXT)
-@COIN_HAS_F77_FALSE@test: hs071_cpp$(EXEEXT) hs071_c$(EXEEXT)
+@BUILD_JAVA_TRUE@test: $(noinst_PROGRAMS) org/coinor/examples/HS071.class
+@BUILD_JAVA_FALSE@test: $(noinst_PROGRAMS)
 	chmod u+x ./run_unitTests
 	./run_unitTests
 

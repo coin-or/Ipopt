@@ -100,11 +100,32 @@ else
   echo "Output of the test program is above."
 fi
 rm -rf tmpfile
-
 else
 echo "Skip testing Fortran Example (hs071_f not available)"
 fi
 
+@BUILD_JAVA_TRUE@test_java=true
+@BUILD_JAVA_FALSE@test_java=false
+if $test_java ; then
+echo Testing Java Example...
+java -Djava.library.path=../src/Interfaces/.libs:../src/Interfaces -cp ../src/Interfaces/org.coinor.ipopt.jar:. org.coinor.examples.HS071 >tmpfile 2>&1
+grep "EXIT: Optimal Solution Found." tmpfile 1>/dev/null 2>&1
+if test $? = 0; then
+  echo "    Test passed!"
+else
+  retval=-1
+  echo " "
+  echo " ---- 8< ---- Start of test program output ---- 8< ----"
+  cat tmpfile
+  echo " ---- 8< ----  End of test program output  ---- 8< ----"
+  echo " "
+  echo "    ******** Test FAILED! ********"
+  echo "Output of the test program is above."
+fi
+rm -rf tmpfile
+else
+echo "Skip testing Java Example (Java interface not build)"
+fi
 
 # clean up
 rm -rf tmpfile debug.out ipopt.out IPOPT.OUT

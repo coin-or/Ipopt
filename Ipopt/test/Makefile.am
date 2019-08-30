@@ -25,6 +25,26 @@ hs071_c_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
 nodist_hs071_f_SOURCES = hs071_f.f
 hs071_f_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
 
+
+if BUILD_JAVA
+
+org_coinor_Ipopt.h : $(srcdir)/org/coinor/Ipopt.java
+	cd $(srcdir) && $(JAVAH) -d $(PWD) org.coinor.Ipopt
+
+org.coinor.ipopt.jar : org/coinor/Ipopt.class
+	$(JAR) cf $@ $<
+
+org/coinor/examples/HS071.class : $(top_srcdir)/contrib/JavaInterface/org/coinor/examples/HS071.java
+	@mkdir -p org/coinor/examples
+	$(JAVAC) -classpath ../src/Interfaces/org.coinor.ipopt.jar $< -d $(PWD)
+
+all-local : org/coinor/examples/HS071.class
+
+CLEANFILES = org/coinor/examples/HS071.class
+
+endif
+
+
 # Here list all include flags, relative to this "srcdir" directory.
 AM_CPPFLAGS = \
 	-I$(srcdir)/../src/Common \
@@ -38,10 +58,10 @@ AM_FFLAGS = -I$(srcdir)/../src/Interfaces
 hs071_f.f:
 	$(LN_S) ../examples/hs071_f/$@ $@
 
-if COIN_HAS_F77
-test: hs071_cpp$(EXEEXT) hs071_c$(EXEEXT) hs071_f$(EXEEXT)
+if BUILD_JAVA
+test: $(noinst_PROGRAMS) org/coinor/examples/HS071.class
 else
-test: hs071_cpp$(EXEEXT) hs071_c$(EXEEXT)
+test: $(noinst_PROGRAMS)
 endif
 	chmod u+x ./run_unitTests
 	./run_unitTests
