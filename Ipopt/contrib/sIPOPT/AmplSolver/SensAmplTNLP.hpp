@@ -12,8 +12,18 @@
 
 namespace Ipopt 
 {
-
-  DECLARE_STD_SIPOPT_EXCEPTION(SUFFIX_EMPTY);
+  // same as DECLARE_STD_EXCEPTION, but not using any export
+  class SUFFIX_EMPTY : public Ipopt::IpoptException
+  {
+  public:
+    SUFFIX_EMPTY(std::string msg, std::string fname, Ipopt::Index line)
+    : Ipopt::IpoptException(msg,fname,line, "SUFFIX_EMPTY") {}
+    SUFFIX_EMPTY(const SUFFIX_EMPTY& copy)
+    : Ipopt::IpoptException(copy) {}
+  private:
+    SUFFIX_EMPTY();
+    void operator=(const SUFFIX_EMPTY&);
+  };
 
   class SensAmplTNLP : public AmplTNLP
   {
