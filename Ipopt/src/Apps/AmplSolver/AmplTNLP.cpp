@@ -1536,7 +1536,9 @@ AmplTNLP::get_options(
 #endif
 
    // AMPL's wantsol option
-   ampl_options_list->AddAmplOption("wantsol", "", AmplOptionsList::WS_Option, WS_desc_ASL + 5);
+   // description was originally taken from WS_desc_ASL+5, but that didn't make it through DLL boundaries
+   ampl_options_list->AddAmplOption("wantsol", "", AmplOptionsList::WS_Option,
+                                    "solution report without -AMPL: sum of 1 (write .sol file), 2 (print primal variable values), 4 (print dual variable values), 8 (do not print solution message)");
 
    // special AMPL option to exit when there is in error in the
    // function evaluation
