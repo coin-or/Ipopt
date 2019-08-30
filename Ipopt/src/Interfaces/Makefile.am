@@ -33,6 +33,14 @@ libipopt_la_SOURCES = \
 	IpTNLPAdapter.cpp \
 	IpTNLPReducer.cpp
 
+if BUILD_JAVA
+libipopt_la_SOURCES += IpStdJInterface.cpp
+
+IpStdJInterface.cpp : org_coinor_Ipopt.h
+org_coinor_Ipopt.h : $(top_srcdir)/contrib/JavaInterface/org/coinor/Ipopt.java
+	cd $(top_srcdir)/contrib/JavaInterface && $(JAVAH) -d $(PWD) org.coinor.Ipopt
+endif
+
 libipopt_la_LIBADD = $(IPALLLIBS) $(IPOPTLIB_LFLAGS)
 
 libipopt_la_LDFLAGS = $(LT_LDFLAGS)

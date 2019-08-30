@@ -284,6 +284,10 @@ fi
 
 ############# JAVA
 
+# look for javah and jni header: required to compile Java interface
+AX_PROG_JAVAH
+AM_CONDITIONAL(BUILD_JAVA, test -n "$ac_cv_path_JAVAH")
+
 if test "${JAVA_HOME+set}" = set; then
   AC_MSG_NOTICE([JAVA_HOME = $JAVA_HOME])
 fi

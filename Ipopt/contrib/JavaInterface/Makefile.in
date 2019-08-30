@@ -14,9 +14,6 @@
 # Java compiler
 JAVAC = $(JAVA_HOME)/bin/javac
 
-# JNI header file generator
-JAVAH = $(JAVA_HOME)/bin/javah -jni
-
 # Jar utility
 JAR = $(JAVA_HOME)/bin/jar
 
@@ -26,67 +23,23 @@ JAVA = $(JAVA_HOME)/bin/java
 # Java documentation utility
 JAVADOC = $(JAVA_HOME)/bin/javadoc
 
-# JNI header paths
-JNIINCL = -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux -I$(JAVA_HOME)/include/win32
-
-# libtool
-top_builddir = ../..
-SHELL = @SHELL@
-LIBTOOL = @LIBTOOL@
-
-# C++ Compiler command
-CXX = @CXX@
-
-# C++ Compiler options
-CXXFLAGS = @CXXFLAGS@
-
-# get some directories, so we can expand @libdir@ for -rpath arg for libtool
-prefix=@prefix@
-exec_prefix=@exec_prefix@
-
-# additional C++ Compiler options for linking
-# NOTE: it has been reported, that adding -Wl,--add-stdcall-alias to the
-#       LINKFLAGS might be necessary with mingw/gcc
-LINKFLAGS = $(CXXFLAGS) @LT_LDFLAGS@ -rpath @libdir@
-
-# Include directories
-@COIN_HAS_PKGCONFIG_TRUE@INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipopt` $(JNIINCL) -I.
-@COIN_HAS_PKGCONFIG_FALSE@INCL = -I@includedir@/coin @IPOPTLIB_CFLAGS@ $(JNIINCL) -I.
-
-# Linker flags
-@COIN_HAS_PKGCONFIG_TRUE@LIBS = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt`
-@COIN_HAS_PKGCONFIG_FALSE@LIBS = -L@libdir@ -lipopt @IPOPTLIB_LFLAGS@
-
 ##########################################################################
 
 SRCDIR = @srcdir@
 ORGDIR = org/coinor
-JNIHEADER = org_coinor_Ipopt.h
-
-JIPOPTOBJ = jipopt.lo
-LIBJIPOPT = libjipopt.la
 
 IPOPTCLASS = $(ORGDIR)/Ipopt.class
-HS071 = $(ORGDIR)/examples/HS071
-SCALABLE = $(ORGDIR)/examples/scalable/SolveProblem
 
+HS071 = $(ORGDIR)/examples/HS071
 HS071CLASSES = $(ORGDIR)/examples/HS071.class
 
+SCALABLE = $(ORGDIR)/examples/scalable/SolveProblem
 SCALCLASSES = \
 	$(ORGDIR)/examples/scalable/LuksanVlcek1.class \
 	$(ORGDIR)/examples/scalable/Scalable.class \
 	$(ORGDIR)/examples/scalable/SolveProblem.class
 
 SCALJAR = ScalableProblems.jar
-
-$(LIBJIPOPT): $(JIPOPTOBJ)
-	$(LIBTOOL) --tag=CXX --mode=link $(CXX) $(LINKFLAGS) -o $(LIBJIPOPT) $(JIPOPTOBJ) $(LIBS)
-
-$(JNIHEADER): $(IPOPTCLASS)
-	$(JAVAH) org.coinor.Ipopt
-
-$(JIPOPTOBJ): $(SRCDIR)/jipopt.cpp $(JNIHEADER) 
-	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(CXXFLAGS) $(INCL) -c -o $@ $<
 
 .SUFFIXES: .java .class
 
@@ -96,13 +49,13 @@ $(JIPOPTOBJ): $(SRCDIR)/jipopt.cpp $(JNIHEADER)
 $(SCALJAR): $(SCALCLASSES)
 	$(JAR) cfm $(SCALJAR) $(SRCDIR)/manifest.txt $(IPOPTCLASS) $(SCALCLASSES)
 
-test: $(LIBJIPOPT) $(HS071CLASSES) $(SCALJAR)
+test: $(HS071CLASSES) $(SCALJAR)
 	$(JAVA) $(HS071)
 	$(JAVA) -jar $(SCALJAR) LukVlI1 100
 	$(JAVA) -jar $(SCALJAR) LukVlE1 101
 
 clean:
-	rm -rf $(LIBJIPOPT) $(JIPOPTOBJ) $(JNIHEADER) $(IPOPTCLASS) $(HS071CLASSES) $(SCALCLASSES) $(SCALJAR) .libs
+	rm -rf $(IPOPTCLASS) $(HS071CLASSES) $(SCALCLASSES) $(SCALJAR)
 
 doc:
 	$(JAVADOC) -d javadoc -windowtitle "JIpopt API documentation" org/coinor/Ipopt.java

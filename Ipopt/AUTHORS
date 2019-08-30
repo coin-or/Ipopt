@@ -44,6 +44,7 @@ Contributors:
   Java interface files in directory (and subdirectories of)
 
   contrib/JavaInterface
+  src/Interfaces/IpStdJInterface.cpp
 
 - Lifeng Chen/Zaiwen Wen (Columbia University)
   Changes and additions to the implementation of the Chen-Goldfarb

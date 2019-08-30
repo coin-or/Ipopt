@@ -95,6 +95,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+@BUILD_JAVA_TRUE@am__append_1 = IpStdJInterface.cpp
 subdir = src/Interfaces
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -137,9 +138,11 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includeipoptdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
 libipopt_la_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+@BUILD_JAVA_TRUE@am__objects_1 = IpStdJInterface.lo
 am_libipopt_la_OBJECTS = IpInterfacesRegOp.lo IpIpoptApplication.lo \
 	IpSolveStatistics.lo IpStdCInterface.lo IpStdInterfaceTNLP.lo \
-	IpStdFInterface.lo IpTNLPAdapter.lo IpTNLPReducer.lo
+	IpStdFInterface.lo IpTNLPAdapter.lo IpTNLPReducer.lo \
+	$(am__objects_1)
 libipopt_la_OBJECTS = $(am_libipopt_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -169,7 +172,8 @@ am__depfiles_remade = ./$(DEPDIR)/IpInterfacesRegOp.Plo \
 	./$(DEPDIR)/IpStdCInterface.Plo \
 	./$(DEPDIR)/IpStdFInterface.Plo \
 	./$(DEPDIR)/IpStdInterfaceTNLP.Plo \
-	./$(DEPDIR)/IpTNLPAdapter.Plo ./$(DEPDIR)/IpTNLPReducer.Plo
+	./$(DEPDIR)/IpStdJInterface.Plo ./$(DEPDIR)/IpTNLPAdapter.Plo \
+	./$(DEPDIR)/IpTNLPReducer.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -296,6 +300,7 @@ IPOPTLIB_LFLAGS = @IPOPTLIB_LFLAGS@
 IPOPTLIB_LFLAGS_NOPC = @IPOPTLIB_LFLAGS_NOPC@
 IPOPTLIB_PCFILES = @IPOPTLIB_PCFILES@
 IPOPT_SVN_REV = @IPOPT_SVN_REV@
+JAVAH = @JAVAH@
 JAVA_HOME = @JAVA_HOME@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
@@ -414,16 +419,10 @@ includeipopt_HEADERS = \
 	IpTNLPReducer.hpp
 
 lib_LTLIBRARIES = libipopt.la
-libipopt_la_SOURCES = \
-	IpInterfacesRegOp.cpp \
-	IpIpoptApplication.cpp \
-	IpSolveStatistics.cpp \
-	IpStdCInterface.cpp \
-	IpStdInterfaceTNLP.cpp \
-	IpStdFInterface.c \
-	IpTNLPAdapter.cpp \
-	IpTNLPReducer.cpp
-
+libipopt_la_SOURCES = IpInterfacesRegOp.cpp IpIpoptApplication.cpp \
+	IpSolveStatistics.cpp IpStdCInterface.cpp \
+	IpStdInterfaceTNLP.cpp IpStdFInterface.c IpTNLPAdapter.cpp \
+	IpTNLPReducer.cpp $(am__append_1)
 libipopt_la_LIBADD = $(IPALLLIBS) $(IPOPTLIB_LFLAGS)
 libipopt_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -DIPOPT_BUILD \
@@ -539,6 +538,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdCInterface.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdFInterface.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdInterfaceTNLP.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdJInterface.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTNLPAdapter.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTNLPReducer.Plo@am__quote@ # am--include-marker
 
@@ -718,6 +718,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/IpStdCInterface.Plo
 	-rm -f ./$(DEPDIR)/IpStdFInterface.Plo
 	-rm -f ./$(DEPDIR)/IpStdInterfaceTNLP.Plo
+	-rm -f ./$(DEPDIR)/IpStdJInterface.Plo
 	-rm -f ./$(DEPDIR)/IpTNLPAdapter.Plo
 	-rm -f ./$(DEPDIR)/IpTNLPReducer.Plo
 	-rm -f Makefile
@@ -771,6 +772,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/IpStdCInterface.Plo
 	-rm -f ./$(DEPDIR)/IpStdFInterface.Plo
 	-rm -f ./$(DEPDIR)/IpStdInterfaceTNLP.Plo
+	-rm -f ./$(DEPDIR)/IpStdJInterface.Plo
 	-rm -f ./$(DEPDIR)/IpTNLPAdapter.Plo
 	-rm -f ./$(DEPDIR)/IpTNLPReducer.Plo
 	-rm -f Makefile
@@ -811,6 +813,10 @@ uninstall-am: uninstall-includeipoptHEADERS uninstall-libLTLIBRARIES
 
 .PRECIOUS: Makefile
 
+
+@BUILD_JAVA_TRUE@IpStdJInterface.cpp : org_coinor_Ipopt.h
+@BUILD_JAVA_TRUE@org_coinor_Ipopt.h : $(top_srcdir)/contrib/JavaInterface/org/coinor/Ipopt.java
+@BUILD_JAVA_TRUE@	cd $(top_srcdir)/contrib/JavaInterface && $(JAVAH) -d $(PWD) org.coinor.Ipopt
 
 astyle: $(ASTYLE_FILES)
 
