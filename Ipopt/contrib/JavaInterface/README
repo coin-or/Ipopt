@@ -50,3 +50,11 @@ If you have problem or you need me to add another functions, please contact me.
 Authors: Tong Kewei, E-mail:tongkewei@126.com
 Beihang University, website: www.buaa.edu.cn
 Beijing,China.
+
+-----------
+
+Comment by Stefan Vigerske (2019-08-31):
+The Java interface source has been moved into src/Interfaces and the
+examples have been moved into examples/*_java.
+This README will be removed when checked that all content is present in
+the Ipopt documentation.

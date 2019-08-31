@@ -11,6 +11,8 @@ history management of subversion.
 - dropped MSVS project files as unmaintained and not functioning with
   current Ipopt anymore
 - dropped support for HSL < 2013
+- integrated Java interface closer into Ipopt build
+  (handled like C and Fortran interfaces now)
 
 2019-04-08 releases/3.12.13
         - fixed Pardiso settings when using Pardiso from Pardiso project
