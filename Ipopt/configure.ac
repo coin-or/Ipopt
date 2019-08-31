@@ -284,8 +284,13 @@ fi
 
 ############# JAVA
 
-# look for javah and jni header: required to compile C++ part of Java interface
-AX_PROG_JAVAH
+# look for jni header: required to compile C++ part of Java interface
+AX_JNI_INCLUDE_DIR
+if test -n "$JNI_INCLUDE_DIRS" ; then
+  for JNI_INCLUDE_DIR in $JNI_INCLUDE_DIRS ; do
+    CPPFLAGS="$CPPFLAGS -I$JNI_INCLUDE_DIR"
+  done
+fi
 
 # look for javac: required to compile Java interface class and tests
 AX_PROG_JAVAC
@@ -295,7 +300,7 @@ AX_PROG_JAR
 AX_PROG_JAVA
 AX_PROG_JAVADOC
 
-AM_CONDITIONAL([BUILD_JAVA], [test -n "$ac_cv_path_JAVAH" && test -n "$JAVAC"])
+AM_CONDITIONAL([BUILD_JAVA], [test -n "$JNI_INCLUDE_DIRS" && test -n "$JAVAC"])
 
 ##########
 # ASTYLE #

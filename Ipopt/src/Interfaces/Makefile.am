@@ -37,15 +37,12 @@ if BUILD_JAVA
 libipopt_la_SOURCES += IpStdJInterface.cpp org_coinor_Ipopt.h
 BUILT_SOURCES = org_coinor_Ipopt.h
 
-org_coinor_Ipopt.h : $(srcdir)/org/coinor/Ipopt.java
-	cd $(srcdir) && $(JAVAH) -d $(PWD) org.coinor.Ipopt
-
 org.coinor.ipopt.jar : org/coinor/Ipopt.class
 	$(JAR) cf $@ $<
 
-org/coinor/Ipopt.class : $(srcdir)/org/coinor/Ipopt.java
+org/coinor/Ipopt.class org_coinor_Ipopt.h : $(srcdir)/org/coinor/Ipopt.java
 	@mkdir -p org/coinor
-	$(JAVAC) $< -d $(PWD)
+	$(JAVAC) $< -d $(PWD) -h $(PWD)
 
 all-local : org.coinor.ipopt.jar
 
