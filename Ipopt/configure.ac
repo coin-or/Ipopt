@@ -287,7 +287,7 @@ fi
 AC_ARG_ENABLE([java],
   [AC_HELP_STRING([--disable-java],[disable building of Java interface])],
   [enable_java="$enableval"],
-  [enable_java=yes])
+  [enable_java="$enable_shared"])
 
 if test "$enable_java" != no ; then
   # look for jni header: required to compile C++ part of Java interface

@@ -24666,7 +24666,7 @@ fi
 if test "${enable_java+set}" = set; then :
   enableval=$enable_java; enable_java="$enableval"
 else
-  enable_java=yes
+  enable_java="$enable_shared"
 fi
 
 
