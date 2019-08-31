@@ -41,10 +41,13 @@ Contributors:
 
 - Rafael de Pelegrini Soares (VRTech Industrial Technologies)
   and Tong Kewei (Beihang University, Beijing)
-  Java interface files in directory (and subdirectories of)
+  Java interface files
 
   contrib/JavaInterface
   src/Interfaces/IpStdJInterface.cpp
+  src/Interfaces/Ipopt.java
+  examples/hs071_java/HS071.java
+  examples/ScalableProblems_java/*.java
 
 - Lifeng Chen/Zaiwen Wen (Columbia University)
   Changes and additions to the implementation of the Chen-Goldfarb

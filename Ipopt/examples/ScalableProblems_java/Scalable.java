@@ -4,8 +4,6 @@
  * This code is published under the Eclipse Public License.
  */
 
-package org.coinor.examples.scalable;
-
 import org.coinor.Ipopt;
 
 /**

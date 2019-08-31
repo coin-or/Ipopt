@@ -832,8 +832,7 @@ uninstall-am: uninstall-includeipoptHEADERS uninstall-libLTLIBRARIES \
 @BUILD_JAVA_TRUE@org.coinor.ipopt.jar : org/coinor/Ipopt.class
 @BUILD_JAVA_TRUE@	$(JAR) cf $@ $<
 
-@BUILD_JAVA_TRUE@org/coinor/Ipopt.class org_coinor_Ipopt.h : $(srcdir)/org/coinor/Ipopt.java
-@BUILD_JAVA_TRUE@	@mkdir -p org/coinor
+@BUILD_JAVA_TRUE@org/coinor/Ipopt.class org_coinor_Ipopt.h : $(srcdir)/Ipopt.java
 @BUILD_JAVA_TRUE@	$(JAVAC) $< -d $(PWD) -h $(PWD) -target 1.8 -source 1.8
 
 @BUILD_JAVA_TRUE@all-local : org.coinor.ipopt.jar

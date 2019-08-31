@@ -40,8 +40,7 @@ BUILT_SOURCES = org_coinor_Ipopt.h
 org.coinor.ipopt.jar : org/coinor/Ipopt.class
 	$(JAR) cf $@ $<
 
-org/coinor/Ipopt.class org_coinor_Ipopt.h : $(srcdir)/org/coinor/Ipopt.java
-	@mkdir -p org/coinor
+org/coinor/Ipopt.class org_coinor_Ipopt.h : $(srcdir)/Ipopt.java
 	$(JAVAC) $< -d $(PWD) -h $(PWD) -target 1.8 -source 1.8
 
 all-local : org.coinor.ipopt.jar

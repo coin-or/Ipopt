@@ -108,7 +108,7 @@ fi
 @BUILD_JAVA_FALSE@test_java=false
 if $test_java ; then
 echo Testing Java Example...
-java -Djava.library.path=../src/Interfaces/.libs:../src/Interfaces -cp ../src/Interfaces/org.coinor.ipopt.jar:. org.coinor.examples.HS071 >tmpfile 2>&1
+java -Djava.library.path=../src/Interfaces/.libs -cp ../src/Interfaces/org.coinor.ipopt.jar:. HS071 >tmpfile 2>&1
 grep "EXIT: Optimal Solution Found." tmpfile 1>/dev/null 2>&1
 if test $? = 0; then
   echo "    Test passed!"

@@ -4,8 +4,6 @@
  * This code is published under the Eclipse Public License.
  */
 
-package org.coinor.examples.scalable;
-
 /** Implementation of Example 5.1 from "Sparse and Parially Separable Test Problems for Unconstrained and Equality Constrained Optimization" by L. Luksan and J. Vlcek.
  *
  * This code is based on an Ipopt example file with same name.

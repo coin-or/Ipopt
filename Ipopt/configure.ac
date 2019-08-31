@@ -413,11 +413,6 @@ AC_CONFIG_LINKS([test/hs071_main.cpp:examples/hs071_cpp/hs071_main.cpp
 ##          Create links for VPATH config of certain files            ##
 ########################################################################
 
-AC_COIN_VPATH_LINK(contrib/JavaInterface/org/coinor/examples/HS071.java)
-AC_COIN_VPATH_LINK(contrib/JavaInterface/org/coinor/examples/scalable/SolveProblem.java)
-AC_COIN_VPATH_LINK(contrib/JavaInterface/org/coinor/examples/scalable/Scalable.java)
-AC_COIN_VPATH_LINK(contrib/JavaInterface/org/coinor/examples/scalable/LuksanVlcek1.java)
-
 AC_COIN_VPATH_LINK(contrib/RInterface/DESCRIPTION)
 AC_COIN_VPATH_LINK(contrib/RInterface/NAMESPACE)
 AC_COIN_VPATH_LINK(contrib/RInterface/inst/CITATION)
@@ -456,6 +451,9 @@ AC_COIN_VPATH_LINK(examples/hs071_cpp/hs071_main.cpp)
 AC_COIN_VPATH_LINK(examples/hs071_cpp/hs071_nlp.cpp)
 AC_COIN_VPATH_LINK(examples/hs071_cpp/hs071_nlp.hpp)
 AC_COIN_VPATH_LINK(examples/hs071_c/hs071_c.c)
+if test "$enable_java" != no ; then
+  AC_COIN_VPATH_LINK(examples/hs071_java/HS071.java)
+fi
 
 AC_COIN_VPATH_LINK(tutorial/AmplExperiments/hs71.mod)
 AC_COIN_VPATH_LINK(tutorial/AmplExperiments/infeasible.mod)
@@ -543,8 +541,11 @@ AC_CONFIG_FILES([Makefile
 		 contrib/sIPOPT/examples/parametric_cpp/Makefile
 		 contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile
 		 contrib/sIPOPT/examples/redhess_cpp/Makefile
-		 contrib/JavaInterface/Makefile
 ])
+
+if test "$enable_java" != no ; then
+  AC_CONFIG_FILES([examples/hs071_java/Makefile examples/ScalableProblems_java/Makefile])
+fi
 
 # under Windows, the Makevars file for the R Interface need to be named Makevars.win
 case $build in 

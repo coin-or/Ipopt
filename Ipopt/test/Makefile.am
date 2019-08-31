@@ -25,22 +25,14 @@ hs071_c_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
 nodist_hs071_f_SOURCES = hs071_f.f
 hs071_f_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
 
-
 if BUILD_JAVA
 
-org_coinor_Ipopt.h : $(srcdir)/org/coinor/Ipopt.java
-	cd $(srcdir) && $(JAVAH) -d $(PWD) org.coinor.Ipopt
-
-org.coinor.ipopt.jar : org/coinor/Ipopt.class
-	$(JAR) cf $@ $<
-
-org/coinor/examples/HS071.class : $(top_srcdir)/contrib/JavaInterface/org/coinor/examples/HS071.java
-	@mkdir -p org/coinor/examples
+HS071.class : $(top_srcdir)/examples/hs071_java/HS071.java
 	$(JAVAC) -classpath ../src/Interfaces/org.coinor.ipopt.jar $< -d $(PWD)
 
-all-local : org/coinor/examples/HS071.class
+all-local : HS071.class
 
-CLEANFILES = org/coinor/examples/HS071.class
+CLEANFILES = HS071.class
 
 endif
 
@@ -59,7 +51,7 @@ hs071_f.f:
 	$(LN_S) ../examples/hs071_f/$@ $@
 
 if BUILD_JAVA
-test: $(noinst_PROGRAMS) org/coinor/examples/HS071.class
+test: $(noinst_PROGRAMS) HS071.class
 else
 test: $(noinst_PROGRAMS)
 endif

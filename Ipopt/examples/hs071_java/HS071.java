@@ -4,7 +4,6 @@
  * This code is published under the Eclipse Public License.
  */
 
-package org.coinor.examples;
 import org.coinor.Ipopt;
 
 /** Java example for interfacing with IPOPT.
