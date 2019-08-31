@@ -514,8 +514,6 @@ AC_CONFIG_FILES([Makefile
 		 test/run_unitTests
 		 ipopt.pc
 		 doc/Doxyfile
-		 examples/hs071_f/hs071_f.f
-		 examples/hs071_f/Makefile
 		 examples/Cpp_example/Makefile
 		 examples/hs071_cpp/Makefile
 		 examples/hs071_c/Makefile
@@ -526,12 +524,6 @@ AC_CONFIG_FILES([Makefile
 		 tutorial/CodingExercise/Cpp/1-skeleton/Makefile
 		 tutorial/CodingExercise/Cpp/2-mistake/Makefile
 		 tutorial/CodingExercise/Cpp/3-solution/Makefile
-		 tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f
-		 tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f
-		 tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f
-		 tutorial/CodingExercise/Fortran/1-skeleton/Makefile
-		 tutorial/CodingExercise/Fortran/2-mistake/Makefile
-		 tutorial/CodingExercise/Fortran/3-solution/Makefile
 		 tutorial/CodingExercise/Matlab/1-skeleton/startup.m
 		 tutorial/CodingExercise/Matlab/2-mistake/startup.m
 		 tutorial/CodingExercise/Matlab/3-solution/startup.m
@@ -542,6 +534,16 @@ AC_CONFIG_FILES([Makefile
 		 contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile
 		 contrib/sIPOPT/examples/redhess_cpp/Makefile
 ])
+
+if test -n "$F77" ; then
+  AC_CONFIG_FILES([examples/hs071_f/hs071_f.f examples/hs071_f/Makefile
+    tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f
+    tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f
+    tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f
+    tutorial/CodingExercise/Fortran/1-skeleton/Makefile
+    tutorial/CodingExercise/Fortran/2-mistake/Makefile
+    tutorial/CodingExercise/Fortran/3-solution/Makefile])
+fi
 
 if test "$enable_java" != no ; then
   AC_CONFIG_FILES([examples/hs071_java/Makefile examples/ScalableProblems_java/Makefile])

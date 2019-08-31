@@ -121,28 +121,28 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/src/Common/config.h \
 	$(top_builddir)/src/Common/config_ipopt.h
-CONFIG_CLEAN_FILES = ipopt.pc doc/Doxyfile examples/hs071_f/hs071_f.f \
-	examples/hs071_f/Makefile examples/Cpp_example/Makefile \
-	examples/hs071_cpp/Makefile examples/hs071_c/Makefile \
-	examples/ScalableProblems/Makefile \
+CONFIG_CLEAN_FILES = ipopt.pc doc/Doxyfile \
+	examples/Cpp_example/Makefile examples/hs071_cpp/Makefile \
+	examples/hs071_c/Makefile examples/ScalableProblems/Makefile \
 	tutorial/CodingExercise/C/1-skeleton/Makefile \
 	tutorial/CodingExercise/C/2-mistake/Makefile \
 	tutorial/CodingExercise/C/3-solution/Makefile \
 	tutorial/CodingExercise/Cpp/1-skeleton/Makefile \
 	tutorial/CodingExercise/Cpp/2-mistake/Makefile \
 	tutorial/CodingExercise/Cpp/3-solution/Makefile \
-	tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f \
-	tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f \
-	tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f \
-	tutorial/CodingExercise/Fortran/1-skeleton/Makefile \
-	tutorial/CodingExercise/Fortran/2-mistake/Makefile \
-	tutorial/CodingExercise/Fortran/3-solution/Makefile \
 	tutorial/CodingExercise/Matlab/1-skeleton/startup.m \
 	tutorial/CodingExercise/Matlab/2-mistake/startup.m \
 	tutorial/CodingExercise/Matlab/3-solution/startup.m \
 	contrib/sIPOPT/examples/parametric_cpp/Makefile \
 	contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile \
 	contrib/sIPOPT/examples/redhess_cpp/Makefile \
+	examples/hs071_f/hs071_f.f examples/hs071_f/Makefile \
+	tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f \
+	tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f \
+	tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f \
+	tutorial/CodingExercise/Fortran/1-skeleton/Makefile \
+	tutorial/CodingExercise/Fortran/2-mistake/Makefile \
+	tutorial/CodingExercise/Fortran/3-solution/Makefile \
 	examples/hs071_java/Makefile \
 	examples/ScalableProblems_java/Makefile \
 	contrib/RInterface/src/Makevars.win \
@@ -561,10 +561,6 @@ ipopt.pc: $(top_builddir)/config.status $(srcdir)/ipopt.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 doc/Doxyfile: $(top_builddir)/config.status $(top_srcdir)/doc/Doxyfile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
-examples/hs071_f/hs071_f.f: $(top_builddir)/config.status $(top_srcdir)/examples/hs071_f/hs071_f.f.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-examples/hs071_f/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/hs071_f/Makefile.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/Cpp_example/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/Cpp_example/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/hs071_cpp/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/hs071_cpp/Makefile.in
@@ -585,18 +581,6 @@ tutorial/CodingExercise/Cpp/2-mistake/Makefile: $(top_builddir)/config.status $(
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 tutorial/CodingExercise/Cpp/3-solution/Makefile: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Cpp/3-solution/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
-tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-tutorial/CodingExercise/Fortran/1-skeleton/Makefile: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Fortran/1-skeleton/Makefile.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-tutorial/CodingExercise/Fortran/2-mistake/Makefile: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Fortran/2-mistake/Makefile.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-tutorial/CodingExercise/Fortran/3-solution/Makefile: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Fortran/3-solution/Makefile.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
 tutorial/CodingExercise/Matlab/1-skeleton/startup.m: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Matlab/1-skeleton/startup.m.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 tutorial/CodingExercise/Matlab/2-mistake/startup.m: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Matlab/2-mistake/startup.m.in
@@ -608,6 +592,22 @@ contrib/sIPOPT/examples/parametric_cpp/Makefile: $(top_builddir)/config.status $
 contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 contrib/sIPOPT/examples/redhess_cpp/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/sIPOPT/examples/redhess_cpp/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+examples/hs071_f/hs071_f.f: $(top_builddir)/config.status $(top_srcdir)/examples/hs071_f/hs071_f.f.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+examples/hs071_f/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/hs071_f/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tutorial/CodingExercise/Fortran/1-skeleton/Makefile: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Fortran/1-skeleton/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tutorial/CodingExercise/Fortran/2-mistake/Makefile: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Fortran/2-mistake/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+tutorial/CodingExercise/Fortran/3-solution/Makefile: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Fortran/3-solution/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/hs071_java/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/hs071_java/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
