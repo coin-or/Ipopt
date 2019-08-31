@@ -22,7 +22,7 @@ if ALWAYS_FALSE
   SUBDIRS += test
 endif
 
-.PHONY: test unitTest astyle doc
+.PHONY: test unitTest astyle doc javadoc
 
 # Stuff to clean up from "make test"
 
@@ -59,6 +59,11 @@ unitTest: all
 
 doc :
 	cd doc && doxygen
+
+if BUILD_JAVA
+javadoc :
+	$(JAVADOC) -d javadoc -windowtitle "JIpopt API documentation" $(srcdir)/src/Interfaces/Ipopt.java
+endif
 
 clean-doc:
 	cd doc && rm -rf html *.log *.tag

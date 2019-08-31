@@ -992,7 +992,7 @@ uninstall-doc:
 	doxygen-docs pdf-doxygen-docs clean-doxygen-docs \
 	install-doxygen-docs uninstall-doxygen-docs
 
-.PHONY: test unitTest astyle doc
+.PHONY: test unitTest astyle doc javadoc
 
 test: unitTest
 
@@ -1001,6 +1001,9 @@ unitTest: all
 
 doc :
 	cd doc && doxygen
+
+@BUILD_JAVA_TRUE@javadoc :
+@BUILD_JAVA_TRUE@	$(JAVADOC) -d javadoc -windowtitle "JIpopt API documentation" $(srcdir)/src/Interfaces/Ipopt.java
 
 clean-doc:
 	cd doc && rm -rf html *.log *.tag
