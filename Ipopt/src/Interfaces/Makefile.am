@@ -42,7 +42,7 @@ org.coinor.ipopt.jar : org/coinor/Ipopt.class
 
 org/coinor/Ipopt.class org_coinor_Ipopt.h : $(srcdir)/org/coinor/Ipopt.java
 	@mkdir -p org/coinor
-	$(JAVAC) $< -d $(PWD) -h $(PWD)
+	$(JAVAC) $< -d $(PWD) -h $(PWD) -target 1.8 -source 1.8
 
 all-local : org.coinor.ipopt.jar
 
