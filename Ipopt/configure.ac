@@ -284,23 +284,50 @@ fi
 
 ############# JAVA
 
-# look for jni header: required to compile C++ part of Java interface
-AX_JNI_INCLUDE_DIR
-if test -n "$JNI_INCLUDE_DIRS" ; then
-  for JNI_INCLUDE_DIR in $JNI_INCLUDE_DIRS ; do
-    CPPFLAGS="$CPPFLAGS -I$JNI_INCLUDE_DIR"
-  done
+AC_ARG_ENABLE([java],
+  [AC_HELP_STRING([--disable-java],[disable building of Java interface])],
+  [enable_java="$enableval"],
+  [enable_java=yes])
+
+if test "$enable_java" != no ; then
+  # look for jni header: required to compile C++ part of Java interface
+  AX_JNI_INCLUDE_DIR
+  if test -z "$JNI_INCLUDE_DIRS" ; then
+    AC_MSG_NOTICE([No JNI header directory. Disabling build of Java interface.])
+    enable_java=no
+  else
+    for JNI_INCLUDE_DIR in $JNI_INCLUDE_DIRS ; do
+      CPPFLAGS="$CPPFLAGS -I$JNI_INCLUDE_DIR"
+    done
+  fi
 fi
 
-# look for javac: required to compile Java interface class and tests
-AX_PROG_JAVAC
+if test "$enable_java" != no ; then
+  # look for javac: required to compile Java code
+  AX_PROG_JAVAC
+  
+  if test -z "$JAVAC" ; then
+    AC_MSG_NOTICE([No JAVA compiler. Disabling build of Java interface.])
+    enable_java=no
+  fi
+fi
 
-# look for jar: for Java examples and documentation
-AX_PROG_JAR
-AX_PROG_JAVA
-AX_PROG_JAVADOC
+if test "$enable_java" != no ; then
+  # look for jar: required to pack Java interface
+  AX_PROG_JAR
+  if test -z "$JAR" ; then
+    AC_MSG_NOTICE([No JAR. Disabling build of Java interface.])
+    enable_java=no
+  fi
+fi
 
-AM_CONDITIONAL([BUILD_JAVA], [test -n "$JNI_INCLUDE_DIRS" && test -n "$JAVAC"])
+if test "$enable_java" != no ; then
+  # look for more java to run tests and examples and do documentation
+  AX_PROG_JAVA
+  AX_PROG_JAVADOC
+fi
+
+AM_CONDITIONAL([BUILD_JAVA], [test "$enable_java" != no])
 
 ##########
 # ASTYLE #

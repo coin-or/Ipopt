@@ -876,6 +876,7 @@ with_hsl_cflags
 with_pardiso
 with_wsmp
 enable_inexact_solver
+enable_java
 enable_linear_solver_loader
 '
       ac_precious_vars='build_alias
@@ -1534,6 +1535,7 @@ Optional Features:
   --disable-libtool-lock  avoid locking (might break parallel builds)
   --enable-inexact-solver enable inexact linear solver version EXPERIMENTAL!
                           (default: no)
+  --disable-java          disable building of Java interface
   --enable-linear-solver-loader
                           compile linear solver loader (default: yes, if F77
                           available, otherwise no)
@@ -24660,7 +24662,16 @@ fi
 
 ############# JAVA
 
-# look for jni header: required to compile C++ part of Java interface
+# Check whether --enable-java was given.
+if test "${enable_java+set}" = set; then :
+  enableval=$enable_java; enable_java="$enableval"
+else
+  enable_java=yes
+fi
+
+
+if test "$enable_java" != no ; then
+  # look for jni header: required to compile C++ part of Java interface
 
 
 
@@ -24802,13 +24813,19 @@ if test "x$ac_cv_jni_header_path" != "xnone"; then
   done
 fi
 
-if test -n "$JNI_INCLUDE_DIRS" ; then
-  for JNI_INCLUDE_DIR in $JNI_INCLUDE_DIRS ; do
-    CPPFLAGS="$CPPFLAGS -I$JNI_INCLUDE_DIR"
-  done
+  if test -z "$JNI_INCLUDE_DIRS" ; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: No JNI header directory. Disabling build of Java interface." >&5
+$as_echo "$as_me: No JNI header directory. Disabling build of Java interface." >&6;}
+    enable_java=no
+  else
+    for JNI_INCLUDE_DIR in $JNI_INCLUDE_DIRS ; do
+      CPPFLAGS="$CPPFLAGS -I$JNI_INCLUDE_DIR"
+    done
+  fi
 fi
 
-# look for javac: required to compile Java interface class and tests
+if test "$enable_java" != no ; then
+  # look for javac: required to compile Java code
 
 if test "x$JAVAPREFIX" = x; then :
   test "x$JAVAC" = x && for ac_prog in "gcj -C" guavac jikes javac
@@ -24908,7 +24925,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 24911 "configure" */
+/* #line 24928 "configure" */
 public class Test {
 }
 EOF
@@ -24932,7 +24949,15 @@ $as_echo "$ac_cv_prog_javac_works" >&6; }
 
 
 
-# look for jar: for Java examples and documentation
+  if test -z "$JAVAC" ; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: No JAVA compiler. Disabling build of Java interface." >&5
+$as_echo "$as_me: No JAVA compiler. Disabling build of Java interface." >&6;}
+    enable_java=no
+  fi
+fi
+
+if test "$enable_java" != no ; then
+  # look for jar: required to pack Java interface
 
 if test "x$JAVAPREFIX" = x; then :
   test "x$JAR" = x && for ac_prog in jar
@@ -25023,6 +25048,15 @@ done
 fi
 test "x$JAR" = x && as_fn_error $? "no acceptable jar program found in \$PATH" "$LINENO" 5
 
+  if test -z "$JAR" ; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: No JAR. Disabling build of Java interface." >&5
+$as_echo "$as_me: No JAR. Disabling build of Java interface." >&6;}
+    enable_java=no
+  fi
+fi
+
+if test "$enable_java" != no ; then
+  # look for more java to run tests and examples and do documentation
 
 if test "x$JAVAPREFIX" = x; then :
   test x$JAVA = x && for ac_prog in kaffe java
@@ -25216,7 +25250,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25219 "configure" */
+/* #line 25253 "configure" */
 public class Test {
 }
 EOF
@@ -25250,7 +25284,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25253 "configure" */
+/* [#]line 25287 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
@@ -25378,8 +25412,9 @@ done
 fi
 test "x$JAVADOC" = x && as_fn_error $? "no acceptable javadoc generator found in \$PATH" "$LINENO" 5
 
+fi
 
- if test -n "$JNI_INCLUDE_DIRS" && test -n "$JAVAC"; then
+ if test "$enable_java" != no; then
   BUILD_JAVA_TRUE=
   BUILD_JAVA_FALSE='#'
 else
