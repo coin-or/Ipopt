@@ -8,7 +8,7 @@ AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS = TMatrices
 
-includeipoptdir = $(includedir)/coin
+includeipoptdir = $(includedir)/coin-or
 includeipopt_HEADERS = \
 	IpBlas.hpp \
 	IpCompoundMatrix.hpp \

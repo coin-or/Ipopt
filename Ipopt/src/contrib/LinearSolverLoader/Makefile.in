@@ -383,7 +383,7 @@ EXTRA_DIST =
 noinst_LTLIBRARIES = libLinearSolverLoader.la
 libLinearSolverLoader_la_SOURCES = LibraryHandler.c HSLLoader.c \
 	$(am__append_1)
-includeipoptdir = $(includedir)/coin
+includeipoptdir = $(includedir)/coin-or
 includeipopt_HEADERS = HSLLoader.h $(am__append_2)
 AM_CPPFLAGS = -DIPOPT_BUILD \
   -I$(srcdir)/../../Common \

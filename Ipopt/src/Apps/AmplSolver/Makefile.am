@@ -30,7 +30,7 @@ AM_CPPFLAGS = -DIPOPTAMPL_BUILD \
 	-I$(srcdir)/../../Interfaces \
 	$(IPOPTAMPLINTERFACELIB_CFLAGS)
 
-includeipoptdir = $(includedir)/coin
+includeipoptdir = $(includedir)/coin-or
 includeipopt_HEADERS = AmplTNLP.hpp
 
 pkgconfiglibdir = $(libdir)/pkgconfig

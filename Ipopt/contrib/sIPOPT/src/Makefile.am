@@ -6,7 +6,7 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-includesipoptdir = $(includedir)/coin
+includesipoptdir = $(includedir)/coin-or
 includesipopt_HEADERS = \
 	SensAlgorithm.hpp \
 	SensApplication.hpp \

@@ -389,7 +389,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = foreign
-includesipoptdir = $(includedir)/coin
+includesipoptdir = $(includedir)/coin-or
 includesipopt_HEADERS = \
 	SensAlgorithm.hpp \
 	SensApplication.hpp \

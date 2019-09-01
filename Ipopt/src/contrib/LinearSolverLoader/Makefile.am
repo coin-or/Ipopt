@@ -14,7 +14,7 @@ libLinearSolverLoader_la_SOURCES = \
   LibraryHandler.c \
   HSLLoader.c
 
-includeipoptdir = $(includedir)/coin
+includeipoptdir = $(includedir)/coin-or
 includeipopt_HEADERS = HSLLoader.h
 
 AM_CPPFLAGS = -DIPOPT_BUILD \

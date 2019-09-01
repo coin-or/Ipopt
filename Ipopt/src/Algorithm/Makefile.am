@@ -8,7 +8,7 @@ AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS = LinearSolvers Inexact
 
-includeipoptdir = $(includedir)/coin
+includeipoptdir = $(includedir)/coin-or
 includeipopt_HEADERS = \
 	IpAlgBuilder.hpp \
 	IpAlgStrategy.hpp \
