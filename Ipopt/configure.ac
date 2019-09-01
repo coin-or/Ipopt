@@ -290,6 +290,23 @@ AC_ARG_ENABLE([java],
   [enable_java="$enable_shared"])
 
 if test "$enable_java" != no ; then
+  # look for javac: required to compile Java code and build C-header
+  # this is a modified version of AX_PROG_JAVAC
+  m4_define([m4_ax_prog_javac_list],["gcj -C" guavac jikes javac])dnl
+  AS_IF([test "x$JAVAPREFIX" = x],
+        [test "x$JAVAC" = x && AC_CHECK_PROGS([JAVAC], [m4_ax_prog_javac_list])],
+        [test "x$JAVAC" = x && AC_CHECK_PROGS([JAVAC], [m4_ax_prog_javac_list], [], [$JAVAPREFIX/bin])])
+  m4_undefine([m4_ax_prog_javac_list])dnl
+
+  if test -z "$JAVAC" ; then
+    AC_MSG_NOTICE([No JAVA compiler. Disabling build of Java interface.])
+    enable_java=no
+  else
+    AX_PROG_JAVAC_WORKS
+  fi
+fi
+
+if test "$enable_java" != no ; then
   # look for jni header: required to compile C++ part of Java interface
   AX_JNI_INCLUDE_DIR
   if test -z "$JNI_INCLUDE_DIRS" ; then
@@ -303,25 +320,11 @@ if test "$enable_java" != no ; then
 fi
 
 if test "$enable_java" != no ; then
-  # look for javac: required to compile Java code
-  AX_PROG_JAVAC
+  # the following macros can make configure stop with an error
+  # we could work around that, but having javac and no jar, java, or javadoc would be odd anyway
   
-  if test -z "$JAVAC" ; then
-    AC_MSG_NOTICE([No JAVA compiler. Disabling build of Java interface.])
-    enable_java=no
-  fi
-fi
-
-if test "$enable_java" != no ; then
   # look for jar: required to pack Java interface
   AX_PROG_JAR
-  if test -z "$JAR" ; then
-    AC_MSG_NOTICE([No JAR. Disabling build of Java interface.])
-    enable_java=no
-  fi
-fi
-
-if test "$enable_java" != no ; then
   # look for more java to run tests and examples and do documentation
   AX_PROG_JAVA
   AX_PROG_JAVADOC
