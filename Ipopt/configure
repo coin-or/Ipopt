@@ -3033,16 +3033,16 @@ fi
 
 
 # change default compiler flags
-# - debugging enabled: enable debug symbols (-g/-Zi)
+# - debugging enabled: enable debug symbols (-g/-Z7)
 # - debugging disabled: disable debug code (-DNDEBUG); enable (more) optimization (-O2)
 # - enable exceptions for (i)cl
 
   if test "$enable_debug" = yes ; then
     if test "$enable_msvc" = yes ; then
-      : ${FFLAGS:="-nologo -Zi"}
-      : ${FCFLAGS:="-nologo -Zi"}
-      : ${CFLAGS:="-nologo -Zi"}
-      : ${CXXFLAGS:="-nologo -EHsc -Zi"}
+      : ${FFLAGS:="-nologo -Z7 -MDd"}
+      : ${FCFLAGS:="-nologo -Z7 -MDd"}
+      : ${CFLAGS:="-nologo -Z7 -MDd"}
+      : ${CXXFLAGS:="-nologo -EHsc -Z7 -MDd"}
       : ${AR:="lib"}
       : ${AR_FLAGS:="-nologo -out:"}
     else
@@ -3053,10 +3053,10 @@ fi
     fi
   else
     if test "$enable_msvc" = yes ; then
-      : ${FFLAGS:="-nologo -O2"}
-      : ${FCFLAGS:="-nologo -O2"}
-      : ${CFLAGS:="-nologo -DNDEBUG -O2"}
-      : ${CXXFLAGS:="-nologo -EHsc -DNDEBUG -O2"}
+      : ${FFLAGS:="-nologo -O2 -MD"}
+      : ${FCFLAGS:="-nologo -O2 -MD"}
+      : ${CFLAGS:="-nologo -DNDEBUG -O2 -MD"}
+      : ${CXXFLAGS:="-nologo -EHsc -DNDEBUG -O2 -MD"}
       : ${AR:="lib"}
       : ${AR_FLAGS:="-nologo -out:"}
     else
