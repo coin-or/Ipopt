@@ -159,8 +159,8 @@ bool IterativePardisoSolverInterface::InitializeImpl(
    const std::string& prefix
 )
 {
-#ifdef HAVE_PARDISO_OLDINTERFACE
-   THROW_EXCEPTION(OPTION_INVALID, "The inexact version works only with a new version of Pardiso (at least 4.0)");
+#ifdef HAVE_PARDISO_MKL
+   THROW_EXCEPTION(OPTION_INVALID, "The inexact version works only with Pardiso from pardiso-project.org");
 #endif
 
    Index enum_int;

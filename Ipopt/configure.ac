@@ -145,7 +145,6 @@ else
      # TODO does sequential MKL also have a parallel Pardiso? do we need some check here?
      AC_DEFINE(HAVE_PARDISO_PARALLEL,1,[Define to 1 if you are using the parallel version of Pardiso])
      AC_DEFINE(HAVE_PARDISO_MKL,1,[Define to 1 if you are using Pardiso from MKL])
-     AC_DEFINE(HAVE_PARDISO_OLDINTERFACE,1,[Define to 1 if you are not using at least a 4.0 version of Pardiso])  # TODO remove as equiv. to MKL
     ])
 fi
 

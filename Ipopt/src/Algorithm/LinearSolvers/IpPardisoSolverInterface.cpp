@@ -29,7 +29,7 @@
 /* Prototypes for Pardiso's subroutines */
 extern "C"
 {
-#if defined(HAVE_PARDISO_OLDINTERFACE) || defined(HAVE_PARDISO_MKL)
+#ifdef HAVE_PARDISO_MKL
    void PARDISO_FUNC(pardisoinit,PARDISOINIT)(
       void*         PT,
       const ipfint* MTYPE,
@@ -237,7 +237,7 @@ void PardisoSolverInterface::RegisterOptions(
       "four", "undocumented",
       "five", "undocumented");
 #endif
-#if !defined(HAVE_PARDISO_OLDINTERFACE) && !defined(HAVE_PARDISO_MKL)
+#ifndef HAVE_PARDISO_MKL
    roptions->AddLowerBoundedIntegerOption(
       "pardiso_max_iter",
       "Maximum number of Krylov-Subspace Iteration",
@@ -327,7 +327,7 @@ bool PardisoSolverInterface::InitializeImpl(
    options.GetIntegerValue("pardiso_max_iterative_refinement_steps", max_iterref_steps, prefix);
    int order;
    options.GetEnumValue("pardiso_order", order, prefix);
-#if !defined(HAVE_PARDISO_OLDINTERFACE) && !defined(HAVE_PARDISO_MKL)
+#ifndef HAVE_PARDISO_MKL
    options.GetBoolValue("pardiso_iterative", pardiso_iterative_, prefix);
    int pardiso_max_iter;
    options.GetIntegerValue("pardiso_max_iter", pardiso_max_iter, prefix);
@@ -395,7 +395,7 @@ bool PardisoSolverInterface::InitializeImpl(
    memset(PT_, 0, 64); // needs to be initialized to 0 according to MKL Pardiso docu
    IPARM_[0] = 0;  // Tell it to fill IPARM with default values(?)
 
-#if ! defined(HAVE_PARDISO_OLDINTERFACE) && ! defined(HAVE_PARDISO_MKL)
+#ifndef HAVE_PARDISO_MKL
    ipfint ERROR = 0;
    ipfint SOLVER = 0; // initialize only direct solver
 
@@ -478,7 +478,7 @@ bool PardisoSolverInterface::InitializeImpl(
 
    if( pardiso_iterative_ )
    {
-#if defined(HAVE_PARDISO_OLDINTERFACE) || defined(HAVE_PARDISO_MKL)
+#ifdef HAVE_PARDISO_MKL
       THROW_EXCEPTION(OPTION_INVALID,
                       "You chose to use the iterative version of Pardiso, but you need to use a Pardiso version of at least 4.0.");
 #else

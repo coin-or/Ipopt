@@ -24115,9 +24115,6 @@ $as_echo "#define HAVE_PARDISO_PARALLEL 1" >>confdefs.h
 $as_echo "#define HAVE_PARDISO_MKL 1" >>confdefs.h
 
 
-$as_echo "#define HAVE_PARDISO_OLDINTERFACE 1" >>confdefs.h
-  # TODO remove as equiv. to MKL
-
 
   fi
 
@@ -24776,7 +24773,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 24779 "configure" */
+/* #line 24776 "configure" */
 public class Test {
 }
 EOF
@@ -25244,7 +25241,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25247 "configure" */
+/* #line 25244 "configure" */
 public class Test {
 }
 EOF
@@ -25278,7 +25275,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25281 "configure" */
+/* [#]line 25278 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
