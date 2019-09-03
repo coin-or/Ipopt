@@ -149,7 +149,6 @@ else
 fi
 
 AM_CONDITIONAL([HAVE_PARDISO],[test "$have_pardiso_mkl$have_pardiso_project" != nono])
-AM_CONDITIONAL([BUILD_PARDISOLOADER],[test "$have_pardiso_mkl$have_pardiso_project" = nono])  # TODO seems redundant
 
 ########
 # WSMP #

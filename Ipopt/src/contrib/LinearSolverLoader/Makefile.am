@@ -22,7 +22,7 @@ AM_CPPFLAGS = -DIPOPT_BUILD \
   -I$(srcdir)/../../Algorithm/LinearSolvers \
   $(IPOPTLIB_CFLAGS)
 
-if BUILD_PARDISOLOADER
+if !HAVE_PARDISO
   libLinearSolverLoader_la_SOURCES += PardisoLoader.c
   includeipopt_HEADERS += PardisoLoader.h
 endif

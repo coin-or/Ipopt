@@ -666,8 +666,6 @@ BIT32FCOMMENT
 BITS_PER_POINTER
 HAVE_WSMP_FALSE
 HAVE_WSMP_TRUE
-BUILD_PARDISOLOADER_FALSE
-BUILD_PARDISOLOADER_TRUE
 HAVE_PARDISO_FALSE
 HAVE_PARDISO_TRUE
 HAVE_MA28_FALSE
@@ -24128,14 +24126,6 @@ else
   HAVE_PARDISO_FALSE=
 fi
 
- if test "$have_pardiso_mkl$have_pardiso_project" = nono; then
-  BUILD_PARDISOLOADER_TRUE=
-  BUILD_PARDISOLOADER_FALSE='#'
-else
-  BUILD_PARDISOLOADER_TRUE='#'
-  BUILD_PARDISOLOADER_FALSE=
-fi
-  # TODO seems redundant
 
 ########
 # WSMP #
@@ -24773,7 +24763,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 24776 "configure" */
+/* #line 24766 "configure" */
 public class Test {
 }
 EOF
@@ -25241,7 +25231,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25244 "configure" */
+/* #line 25234 "configure" */
 public class Test {
 }
 EOF
@@ -25275,7 +25265,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25278 "configure" */
+/* [#]line 25268 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
@@ -26268,10 +26258,6 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${HAVE_PARDISO_TRUE}" && test -z "${HAVE_PARDISO_FALSE}"; then
   as_fn_error $? "conditional \"HAVE_PARDISO\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
-if test -z "${BUILD_PARDISOLOADER_TRUE}" && test -z "${BUILD_PARDISOLOADER_FALSE}"; then
-  as_fn_error $? "conditional \"BUILD_PARDISOLOADER\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${HAVE_WSMP_TRUE}" && test -z "${HAVE_WSMP_FALSE}"; then
