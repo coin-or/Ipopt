@@ -108,7 +108,8 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 @BUILD_LINEARSOLVERLOADER_TRUE@am__append_1 = src/contrib/LinearSolverLoader
-@ALWAYS_FALSE@am__append_2 = test
+@BUILD_SIPOPT_TRUE@am__append_2 = contrib/sIPOPT
+@ALWAYS_FALSE@am__append_3 = test
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -133,9 +134,6 @@ CONFIG_CLEAN_FILES = ipopt.pc doc/Doxyfile \
 	tutorial/CodingExercise/Matlab/1-skeleton/startup.m \
 	tutorial/CodingExercise/Matlab/2-mistake/startup.m \
 	tutorial/CodingExercise/Matlab/3-solution/startup.m \
-	contrib/sIPOPT/examples/parametric_cpp/Makefile \
-	contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile \
-	contrib/sIPOPT/examples/redhess_cpp/Makefile \
 	examples/hs071_f/hs071_f.f examples/hs071_f/Makefile \
 	tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f \
 	tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f \
@@ -145,6 +143,9 @@ CONFIG_CLEAN_FILES = ipopt.pc doc/Doxyfile \
 	tutorial/CodingExercise/Fortran/3-solution/Makefile \
 	examples/hs071_java/Makefile \
 	examples/ScalableProblems_java/Makefile \
+	contrib/sIPOPT/examples/parametric_cpp/Makefile \
+	contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile \
+	contrib/sIPOPT/examples/redhess_cpp/Makefile \
 	contrib/RInterface/src/Makevars.win \
 	contrib/RInterface/src/Makevars ipoptamplinterface.pc
 CONFIG_CLEAN_VPATH_FILES = contrib/RInterface/DESCRIPTION \
@@ -490,8 +491,8 @@ COIN_HAS_LATEX = @COIN_HAS_LATEX_TRUE@TRUE
 # autoconf substitution.
 DOXYTAG_EDIT = sed -e 's|@baredocdir_nosub@|$(datarootdir)/doc|g'
 SUBDIRS = src/Common src/LinAlg src/Algorithm src/contrib/CGPenalty \
-	$(am__append_1) src/Interfaces src/Apps contrib/sIPOPT \
-	$(am__append_2)
+	$(am__append_1) src/Interfaces src/Apps $(am__append_2) \
+	$(am__append_3)
 
 # Stuff to clean up from "make test"
 DISTCLEANFILES = \
@@ -587,12 +588,6 @@ tutorial/CodingExercise/Matlab/2-mistake/startup.m: $(top_builddir)/config.statu
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 tutorial/CodingExercise/Matlab/3-solution/startup.m: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Matlab/3-solution/startup.m.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
-contrib/sIPOPT/examples/parametric_cpp/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/sIPOPT/examples/parametric_cpp/Makefile.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-contrib/sIPOPT/examples/redhess_cpp/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/sIPOPT/examples/redhess_cpp/Makefile.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/hs071_f/hs071_f.f: $(top_builddir)/config.status $(top_srcdir)/examples/hs071_f/hs071_f.f.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/hs071_f/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/hs071_f/Makefile.in
@@ -612,6 +607,12 @@ tutorial/CodingExercise/Fortran/3-solution/Makefile: $(top_builddir)/config.stat
 examples/hs071_java/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/hs071_java/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/ScalableProblems_java/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/ScalableProblems_java/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+contrib/sIPOPT/examples/parametric_cpp/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/sIPOPT/examples/parametric_cpp/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+contrib/sIPOPT/examples/redhess_cpp/Makefile: $(top_builddir)/config.status $(top_srcdir)/contrib/sIPOPT/examples/redhess_cpp/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 contrib/RInterface/src/Makevars.win: $(top_builddir)/config.status $(top_srcdir)/contrib/RInterface/src/Makevars.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@

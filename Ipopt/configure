@@ -647,6 +647,8 @@ IPOPTAMPLINTERFACELIB_CFLAGS_NOPC
 IPOPTAMPLINTERFACELIB_LFLAGS_NOPC
 IPOPTLIB_CFLAGS_NOPC
 IPOPTLIB_LFLAGS_NOPC
+BUILD_SIPOPT_FALSE
+BUILD_SIPOPT_TRUE
 BUILD_LINEARSOLVERLOADER_FALSE
 BUILD_LINEARSOLVERLOADER_TRUE
 IPALLLIBS
@@ -878,6 +880,7 @@ with_wsmp
 enable_inexact_solver
 enable_java
 enable_linear_solver_loader
+enable_sipopt
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1539,6 +1542,7 @@ Optional Features:
   --enable-linear-solver-loader
                           compile linear solver loader (default: yes, if F77
                           available, otherwise no)
+  --disable-sipopt        disable build of sIpopt
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -24799,7 +24803,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 24802 "configure" */
+/* #line 24806 "configure" */
 public class Test {
 }
 EOF
@@ -25267,7 +25271,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25270 "configure" */
+/* #line 25274 "configure" */
 public class Test {
 }
 EOF
@@ -25301,7 +25305,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25304 "configure" */
+/* [#]line 25308 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
@@ -25626,6 +25630,31 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 ########################################################################
+##                             sIpopt                                 ##
+########################################################################
+
+# Check whether --enable-sipopt was given.
+if test "${enable_sipopt+set}" = set; then :
+  enableval=$enable_sipopt; case "$enableval" in
+     no | yes) ;;
+     *)
+       as_fn_error $? "invalid argument for --enable-sipopt: $enableval" "$LINENO" 5;;
+   esac
+   use_sipopt=$enableval
+else
+  use_sipopt=no
+fi
+
+ if test "$use_sipopt" = yes; then
+  BUILD_SIPOPT_TRUE=
+  BUILD_SIPOPT_FALSE='#'
+else
+  BUILD_SIPOPT_TRUE='#'
+  BUILD_SIPOPT_FALSE=
+fi
+
+
+########################################################################
 ##             Create links for the test source files                 ##
 ########################################################################
 
@@ -25891,6 +25920,7 @@ fi
 
 
 
+if test "$use_sipopt" = yes ; then
 
   ac_config_links="$ac_config_links contrib/sIPOPT/examples/parametric_cpp/parametric_driver.cpp:contrib/sIPOPT/examples/parametric_cpp/parametric_driver.cpp"
 
@@ -25927,6 +25957,7 @@ fi
   ac_config_links="$ac_config_links contrib/sIPOPT/examples/redhess_cpp/redhess_cpp.cpp:contrib/sIPOPT/examples/redhess_cpp/redhess_cpp.cpp"
 
 
+fi
 
 ########################################################################
 ##          Create Makefiles and other stuff                          ##
@@ -26027,7 +26058,25 @@ $as_echo "$as_me: IPOPTAMPLINTERFACELIB_LFLAGS: \"${IPOPTAMPLINTERFACELIB_LFLAGS
         { $as_echo "$as_me:${as_lineno-$LINENO}: IPOPTAMPLINTERFACELIB_CFLAGS: \"${IPOPTAMPLINTERFACELIB_CFLAGS}\"" >&5
 $as_echo "$as_me: IPOPTAMPLINTERFACELIB_CFLAGS: \"${IPOPTAMPLINTERFACELIB_CFLAGS}\"" >&6;}
       fi
-     if test "$BUILDTOOLS_DEBUG" = 1 ; then
+
+
+
+ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Algorithm/Inexact/Makefile src/contrib/CGPenalty/Makefile src/contrib/LinearSolverLoader/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile test/Makefile test/run_unitTests ipopt.pc doc/Doxyfile examples/Cpp_example/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile tutorial/CodingExercise/C/1-skeleton/Makefile tutorial/CodingExercise/C/2-mistake/Makefile tutorial/CodingExercise/C/3-solution/Makefile tutorial/CodingExercise/Cpp/1-skeleton/Makefile tutorial/CodingExercise/Cpp/2-mistake/Makefile tutorial/CodingExercise/Cpp/3-solution/Makefile tutorial/CodingExercise/Matlab/1-skeleton/startup.m tutorial/CodingExercise/Matlab/2-mistake/startup.m tutorial/CodingExercise/Matlab/3-solution/startup.m"
+
+
+if test -n "$F77" ; then
+  ac_config_files="$ac_config_files examples/hs071_f/hs071_f.f examples/hs071_f/Makefile tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f tutorial/CodingExercise/Fortran/1-skeleton/Makefile tutorial/CodingExercise/Fortran/2-mistake/Makefile tutorial/CodingExercise/Fortran/3-solution/Makefile"
+
+fi
+
+if test "$enable_java" != no ; then
+  ac_config_files="$ac_config_files examples/hs071_java/Makefile examples/ScalableProblems_java/Makefile"
+
+fi
+
+if test "$use_sipopt" = yes ; then
+
+   if test "$BUILDTOOLS_DEBUG" = 1 ; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: FINALIZE_FLAGS for sIpoptLib:" >&5
 $as_echo "$as_me: FINALIZE_FLAGS for sIpoptLib:" >&6;}
       fi
@@ -26076,19 +26125,10 @@ $as_echo "$as_me: SIPOPTLIB_CFLAGS: \"${SIPOPTLIB_CFLAGS}\"" >&6;}
       fi
 
 
-
-ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Algorithm/Inexact/Makefile src/contrib/CGPenalty/Makefile src/contrib/LinearSolverLoader/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile test/Makefile test/run_unitTests ipopt.pc doc/Doxyfile examples/Cpp_example/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile tutorial/CodingExercise/C/1-skeleton/Makefile tutorial/CodingExercise/C/2-mistake/Makefile tutorial/CodingExercise/C/3-solution/Makefile tutorial/CodingExercise/Cpp/1-skeleton/Makefile tutorial/CodingExercise/Cpp/2-mistake/Makefile tutorial/CodingExercise/Cpp/3-solution/Makefile tutorial/CodingExercise/Matlab/1-skeleton/startup.m tutorial/CodingExercise/Matlab/2-mistake/startup.m tutorial/CodingExercise/Matlab/3-solution/startup.m contrib/sIPOPT/Makefile contrib/sIPOPT/src/Makefile contrib/sIPOPT/AmplSolver/Makefile contrib/sIPOPT/examples/parametric_cpp/Makefile contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile contrib/sIPOPT/examples/redhess_cpp/Makefile"
-
-
-if test -n "$F77" ; then
-  ac_config_files="$ac_config_files examples/hs071_f/hs071_f.f examples/hs071_f/Makefile tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f tutorial/CodingExercise/Fortran/1-skeleton/Makefile tutorial/CodingExercise/Fortran/2-mistake/Makefile tutorial/CodingExercise/Fortran/3-solution/Makefile"
+  ac_config_files="$ac_config_files contrib/sIPOPT/Makefile contrib/sIPOPT/src/Makefile contrib/sIPOPT/AmplSolver/Makefile contrib/sIPOPT/examples/parametric_cpp/Makefile contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile contrib/sIPOPT/examples/redhess_cpp/Makefile"
 
 fi
 
-if test "$enable_java" != no ; then
-  ac_config_files="$ac_config_files examples/hs071_java/Makefile examples/ScalableProblems_java/Makefile"
-
-fi
 
 # under Windows, the Makevars file for the R Interface need to be named Makevars.win
 case $build in
@@ -26314,6 +26354,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${BUILD_LINEARSOLVERLOADER_TRUE}" && test -z "${BUILD_LINEARSOLVERLOADER_FALSE}"; then
   as_fn_error $? "conditional \"BUILD_LINEARSOLVERLOADER\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${BUILD_SIPOPT_TRUE}" && test -z "${BUILD_SIPOPT_FALSE}"; then
+  as_fn_error $? "conditional \"BUILD_SIPOPT\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 
@@ -27489,12 +27533,6 @@ do
     "tutorial/CodingExercise/Matlab/1-skeleton/startup.m") CONFIG_FILES="$CONFIG_FILES tutorial/CodingExercise/Matlab/1-skeleton/startup.m" ;;
     "tutorial/CodingExercise/Matlab/2-mistake/startup.m") CONFIG_FILES="$CONFIG_FILES tutorial/CodingExercise/Matlab/2-mistake/startup.m" ;;
     "tutorial/CodingExercise/Matlab/3-solution/startup.m") CONFIG_FILES="$CONFIG_FILES tutorial/CodingExercise/Matlab/3-solution/startup.m" ;;
-    "contrib/sIPOPT/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/sIPOPT/Makefile" ;;
-    "contrib/sIPOPT/src/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/sIPOPT/src/Makefile" ;;
-    "contrib/sIPOPT/AmplSolver/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/sIPOPT/AmplSolver/Makefile" ;;
-    "contrib/sIPOPT/examples/parametric_cpp/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/sIPOPT/examples/parametric_cpp/Makefile" ;;
-    "contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile" ;;
-    "contrib/sIPOPT/examples/redhess_cpp/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/sIPOPT/examples/redhess_cpp/Makefile" ;;
     "examples/hs071_f/hs071_f.f") CONFIG_FILES="$CONFIG_FILES examples/hs071_f/hs071_f.f" ;;
     "examples/hs071_f/Makefile") CONFIG_FILES="$CONFIG_FILES examples/hs071_f/Makefile" ;;
     "tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f") CONFIG_FILES="$CONFIG_FILES tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f" ;;
@@ -27505,6 +27543,12 @@ do
     "tutorial/CodingExercise/Fortran/3-solution/Makefile") CONFIG_FILES="$CONFIG_FILES tutorial/CodingExercise/Fortran/3-solution/Makefile" ;;
     "examples/hs071_java/Makefile") CONFIG_FILES="$CONFIG_FILES examples/hs071_java/Makefile" ;;
     "examples/ScalableProblems_java/Makefile") CONFIG_FILES="$CONFIG_FILES examples/ScalableProblems_java/Makefile" ;;
+    "contrib/sIPOPT/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/sIPOPT/Makefile" ;;
+    "contrib/sIPOPT/src/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/sIPOPT/src/Makefile" ;;
+    "contrib/sIPOPT/AmplSolver/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/sIPOPT/AmplSolver/Makefile" ;;
+    "contrib/sIPOPT/examples/parametric_cpp/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/sIPOPT/examples/parametric_cpp/Makefile" ;;
+    "contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile" ;;
+    "contrib/sIPOPT/examples/redhess_cpp/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/sIPOPT/examples/redhess_cpp/Makefile" ;;
     "contrib/RInterface/src/Makevars.win") CONFIG_FILES="$CONFIG_FILES contrib/RInterface/src/Makevars.win:contrib/RInterface/src/Makevars.in" ;;
     "contrib/RInterface/src/Makevars") CONFIG_FILES="$CONFIG_FILES contrib/RInterface/src/Makevars" ;;
     "ipoptamplinterface.pc") CONFIG_FILES="$CONFIG_FILES ipoptamplinterface.pc:src/Apps/AmplSolver/ipoptamplinterface.pc.in" ;;

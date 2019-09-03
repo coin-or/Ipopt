@@ -16,7 +16,9 @@ endif
 
 SUBDIRS += src/Interfaces src/Apps
 
-SUBDIRS += contrib/sIPOPT
+if BUILD_SIPOPT
+  SUBDIRS += contrib/sIPOPT
+endif
 
 if ALWAYS_FALSE
   SUBDIRS += test

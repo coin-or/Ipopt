@@ -404,6 +404,21 @@ AC_CHECK_FUNCS([vsnprintf _vsnprintf],[break])
 AC_LANG_POP(C)
 
 ########################################################################
+##                             sIpopt                                 ##
+########################################################################
+
+AC_ARG_ENABLE([sipopt],
+  [AC_HELP_STRING([--disable-sipopt],[disable build of sIpopt])],
+  [case "$enableval" in
+     no | yes) ;;
+     *)
+       AC_MSG_ERROR([invalid argument for --enable-sipopt: $enableval]);;
+   esac
+   use_sipopt=$enableval],
+  [use_sipopt=no])
+AM_CONDITIONAL(BUILD_SIPOPT, [test "$use_sipopt" = yes])
+
+########################################################################
 ##             Create links for the test source files                 ##
 ########################################################################
 
@@ -485,21 +500,23 @@ AC_COIN_VPATH_LINK(tutorial/CodingExercise/Matlab/1-skeleton/TutorialMatlab.m)
 AC_COIN_VPATH_LINK(tutorial/CodingExercise/Matlab/2-mistake/TutorialMatlab.m)
 AC_COIN_VPATH_LINK(tutorial/CodingExercise/Matlab/3-solution/TutorialMatlab.m)
 
-AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/parametric_cpp/parametric_driver.cpp)
-AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/parametric_cpp/parametricTNLP.cpp)
-AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/parametric_cpp/parametricTNLP.hpp)
-AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/parametric_dsdp_cpp/parametric_dsdp_driver.cpp)
-AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/parametric_dsdp_cpp/parametricTNLP.cpp)
-AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/parametric_dsdp_cpp/parametricTNLP.hpp)
-AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/redhess_cpp/MySensTNLP.cpp)
-AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/redhess_cpp/MySensTNLP.hpp)
-AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/redhess_cpp/redhess_cpp.cpp)
+if test "$use_sipopt" = yes ; then
+  AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/parametric_cpp/parametric_driver.cpp)
+  AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/parametric_cpp/parametricTNLP.cpp)
+  AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/parametric_cpp/parametricTNLP.hpp)
+  AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/parametric_dsdp_cpp/parametric_dsdp_driver.cpp)
+  AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/parametric_dsdp_cpp/parametricTNLP.cpp)
+  AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/parametric_dsdp_cpp/parametricTNLP.hpp)
+  AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/redhess_cpp/MySensTNLP.cpp)
+  AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/redhess_cpp/MySensTNLP.hpp)
+  AC_COIN_VPATH_LINK(contrib/sIPOPT/examples/redhess_cpp/redhess_cpp.cpp)
+fi
 
 ########################################################################
 ##          Create Makefiles and other stuff                          ##
 ########################################################################
 
-AC_COIN_FINALIZE_FLAGS([IpoptLib IpoptAmplInterfaceLib sIpoptLib])
+AC_COIN_FINALIZE_FLAGS([IpoptLib IpoptAmplInterfaceLib])
 
 AC_CONFIG_FILES([Makefile
 		 src/Common/Makefile
@@ -530,12 +547,6 @@ AC_CONFIG_FILES([Makefile
 		 tutorial/CodingExercise/Matlab/1-skeleton/startup.m
 		 tutorial/CodingExercise/Matlab/2-mistake/startup.m
 		 tutorial/CodingExercise/Matlab/3-solution/startup.m
-		 contrib/sIPOPT/Makefile
-		 contrib/sIPOPT/src/Makefile
-		 contrib/sIPOPT/AmplSolver/Makefile
-		 contrib/sIPOPT/examples/parametric_cpp/Makefile
-		 contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile
-		 contrib/sIPOPT/examples/redhess_cpp/Makefile
 ])
 
 if test -n "$F77" ; then
@@ -551,6 +562,19 @@ fi
 if test "$enable_java" != no ; then
   AC_CONFIG_FILES([examples/hs071_java/Makefile examples/ScalableProblems_java/Makefile])
 fi
+
+if test "$use_sipopt" = yes ; then
+  AC_COIN_FINALIZE_FLAGS([sIpoptLib])
+  AC_CONFIG_FILES([
+		 contrib/sIPOPT/Makefile
+		 contrib/sIPOPT/src/Makefile
+		 contrib/sIPOPT/AmplSolver/Makefile
+		 contrib/sIPOPT/examples/parametric_cpp/Makefile
+		 contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile
+		 contrib/sIPOPT/examples/redhess_cpp/Makefile
+  ])
+fi
+
 
 # under Windows, the Makevars file for the R Interface need to be named Makevars.win
 case $build in 
