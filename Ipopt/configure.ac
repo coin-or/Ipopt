@@ -57,6 +57,8 @@ AC_COIN_CXXLIBS
 # Doxygen
 AC_COIN_DOXYGEN
 
+# COIN_IPOPT_VERBOSITY and COIN_IPOPT_DEBUGLEVEL
+AC_COIN_DEBUGLEVEL(IPOPT)
 
 #############################################################################
 #                                 Dependencies                              #

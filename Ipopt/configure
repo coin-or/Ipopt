@@ -859,6 +859,8 @@ with_gnu_ld
 with_sysroot
 enable_libtool_lock
 with_dot
+with_ipopt_verbosity
+with_ipopt_checklevel
 with_lapack
 with_lapack_lflags
 with_lapack_cflags
@@ -1551,6 +1553,8 @@ Optional Packages:
                           compiler's sysroot if not specified).
   --with-dot              use dot (from graphviz) when creating documentation
                           with doxygen if available; --without-dot to disable
+  --with-ipopt-verbosity  specify the debug verbosity level for project IPOPT
+  --with-ipopt-checklevel specify the sanity check level for project IPOPT
   --with-lapack           Use lapack. If an argument is given, 'yes' is
                           equivalent to --with-lapack, 'no' is
                           equivalent to --without-lapack. Any other argument
@@ -21344,6 +21348,38 @@ done
 
 
 
+# COIN_IPOPT_VERBOSITY and COIN_IPOPT_DEBUGLEVEL
+
+
+# Check whether --with-ipopt-verbosity was given.
+if test "${with_ipopt_verbosity+set}" = set; then :
+  withval=$with_ipopt_verbosity; if test "$withval" = yes; then withval=1 ; fi
+     coin_ipopt_verbosity=$withval
+else
+  coin_ipopt_verbosity=0
+fi
+
+
+cat >>confdefs.h <<_ACEOF
+#define COIN_IPOPT_VERBOSITY $coin_ipopt_verbosity
+_ACEOF
+
+
+
+# Check whether --with-ipopt-checklevel was given.
+if test "${with_ipopt_checklevel+set}" = set; then :
+  withval=$with_ipopt_checklevel; if test "$withval" = yes; then withval=1 ; fi
+     coin_ipopt_checklevel=$withval
+else
+  coin_ipopt_checklevel=0
+fi
+
+
+cat >>confdefs.h <<_ACEOF
+#define COIN_IPOPT_CHECKLEVEL $coin_ipopt_checklevel
+_ACEOF
+
+
 
 #############################################################################
 #                                 Dependencies                              #
@@ -24763,7 +24799,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 24766 "configure" */
+/* #line 24802 "configure" */
 public class Test {
 }
 EOF
@@ -25231,7 +25267,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25234 "configure" */
+/* #line 25270 "configure" */
 public class Test {
 }
 EOF
@@ -25265,7 +25301,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25268 "configure" */
+/* [#]line 25304 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);

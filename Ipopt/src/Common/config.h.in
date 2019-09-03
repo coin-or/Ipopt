@@ -18,6 +18,12 @@
 /* Define to 1 if Mumps is available. */
 #undef COIN_HAS_MUMPS
 
+/* Define to the debug sanity check level (0 is no test) */
+#undef COIN_IPOPT_CHECKLEVEL
+
+/* Define to the debug verbosity level (0 is no output) */
+#undef COIN_IPOPT_VERBOSITY
+
 /* Define to a macro mangling the given C identifier (in lower and upper
    case). */
 #undef COIN_LAPACK_FUNC
