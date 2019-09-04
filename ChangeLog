@@ -39,6 +39,8 @@ A more detailed, probably incomplete, list of changes follows:
   - DLLPATH and DLLNAME have been removed from the Ipopt class and
     constructors that works without arguments and with only one argument
     (specifying the Ipopt library namestem) have been added.
+  - Method Ipopt::finalize has been marked as deprecated and will be removed
+    in some future Ipopt version. Users must call dispose() explicitly.
 - Integrated sIpopt into the main Ipopt build, that is, it is now build
   together with Ipopt, but installed as separate library and executable.
   Use --disable-sipopt to disable building sIpopt.

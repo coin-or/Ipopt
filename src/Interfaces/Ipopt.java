@@ -159,16 +159,26 @@ public abstract class Ipopt
    {
       if( System.getProperty("os.name").toLowerCase().indexOf("win") >=0 )
       {
-        try
+        /* for Ipopt releases, it should be ipopt-3.dll
+         * for other intermediate versions, it should be ipopt-0.dll
+         * with MinGW, libtool adds a "lib" prefix
+         * finally, try also without version info
+         */
+        final String[] candidates = { "ipopt-3", "ipopt-0", "libipopt-3", "libipopt-0", "ipopt", "libipopt" };
+        boolean loadedlib = false;
+        for( String c : candidates )
         {
-          /* for released versions, it should be ipopt-3.dll */
-          System.loadLibrary("ipopt-3");
+          try
+          {
+            System.loadLibrary(c);
+            loadedlib = true;
+            break;
+          }
+          catch( UnsatisfiedLinkError e )
+          { }
         }
-        catch( UnsatisfiedLinkError e )
-        {
-          /* for non-released versions, it could be ipopt-0.dll */
-          System.loadLibrary("ipopt-0");
-        }
+        if( !loadedlib )
+          throw new UnsatisfiedLinkError("Could not load Ipopt library. Check your java.library.path.");
       }
       else
         System.loadLibrary("ipopt");
@@ -300,6 +310,7 @@ public abstract class Ipopt
       }
    }
 
+   @Deprecated
    protected void finalize() throws Throwable
    {
       dispose();
