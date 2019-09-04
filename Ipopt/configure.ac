@@ -22,8 +22,7 @@ under the Eclipse Public License.])
 # whether the package is actually there
 AC_CONFIG_SRCDIR(src/Common/IpDebug.hpp)
 
-# Do some project-level initialization work (version numbers, change prefix
-# default, ...)
+# Do some project-level initialization work (version numbers, ...)
 AC_COIN_INITIALIZE(Ipopt)
 
 #############################################################################

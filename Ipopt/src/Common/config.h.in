@@ -161,9 +161,6 @@
 /* Library Visibility Attribute */
 #undef IPOPTLIB_EXPORT
 
-/* SVN revision number of project */
-#undef IPOPT_SVN_REV
-
 /* Version number of project */
 #undef IPOPT_VERSION
 
