@@ -51,7 +51,7 @@ script:
   - export CFGFLAGS=""
   - if $NOF77 ; then CFGFLAGS="$CFGFLAGS --disable-f77" ; fi
   - if $ENABLEDEBUG ; then CFGFLAGS="$CFGFLAGS --enable-debug" ; fi
-  - ../Ipopt/configure --prefix=$HOME/install $CFGFLAGS
+  - ../configure --prefix=$HOME/install $CFGFLAGS
   - make
   - if $NOF77 ; then echo "skip test as no linear solver" ; else make test ; fi
   - make install
