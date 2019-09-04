@@ -362,8 +362,7 @@ fi
 ########################################################################
 
 AC_ARG_ENABLE([linear-solver-loader],
-  [AC_HELP_STRING([--enable-linear-solver-loader],
-     [compile linear solver loader (default: yes, if F77 available, otherwise no)])],
+  [AC_HELP_STRING([--disable-linear-solver-loader],[disable build of linear solver loader])],
   [case "$enableval" in
      no | yes) ;;
      *)

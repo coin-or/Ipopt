@@ -34,9 +34,6 @@
 /* If defined, the Ampl Solver Library is available. */
 #define COIN_HAS_ASL 1
 
-/* If defined, the BLAS Library is available. */
-#define COIN_HAS_BLAS 1
-
 /* If defined, the LAPACK Library is available. */
 #define COIN_HAS_LAPACK 1
 

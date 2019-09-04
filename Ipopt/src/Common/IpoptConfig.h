@@ -10,7 +10,7 @@
  * header file includes the automatically generated header file, and
  * undefines macros that might configure with other Config.h files.
  *
- * #This isn't support for Ipopt at the moment:
+ * #This isn't supported for Ipopt at the moment:
  * #On systems that are compiled in other ways (e.g., with the
  * #Developer Studio), a header files is included to define those
  * #macros that depend on the operating system and the compiler.  The

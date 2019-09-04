@@ -63,7 +63,7 @@ public:
    typedef unsigned int Tag;
 
    /** Constructor. */
-    TaggedObject()
+   TaggedObject()
       :
       Subject()
    {

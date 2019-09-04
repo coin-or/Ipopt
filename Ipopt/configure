@@ -1516,9 +1516,10 @@ Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --enable-msvc           Look for and allow only Intel/Microsoft compilers on
-                          MinGW/MSys/Cygwin.
-  --enable-debug          Build with debugging symbols.
+  --enable-msvc           look for and allow only Intel/Microsoft compilers on
+                          MinGW/MSys/Cygwin
+  --enable-debug          build debugging symbols and turn off compiler
+                          optimization
   --enable-silent-rules   less verbose build output (undo: "make V=1")
   --disable-silent-rules  verbose build output (undo: "make V=0")
   --enable-maintainer-mode
@@ -1537,9 +1538,8 @@ Optional Features:
   --enable-inexact-solver enable inexact linear solver version EXPERIMENTAL!
                           (default: no)
   --disable-java          disable building of Java interface
-  --enable-linear-solver-loader
-                          compile linear solver loader (default: yes, if F77
-                          available, otherwise no)
+  --disable-linear-solver-loader
+                          disable build of linear solver loader
   --disable-sipopt        disable build of sIpopt
 
 Optional Packages:
@@ -3015,18 +3015,15 @@ fi
 
 
 
+  # We want --enable-msvc setup and checked
+
+
   # Check whether --enable-debug was given.
 if test "${enable_debug+set}" = set; then :
   enableval=$enable_debug; enable_debug=$enableval
 else
   enable_debug=no
 fi
-
-
-
-# We want --enable-msvc setup and checked. Also --enable-debug
-
-
 
 
 # This macro should run before the compiler checks (doesn't seem to be
@@ -9974,19 +9971,6 @@ func_stripname_cnf ()
   esac
 } # func_stripname_cnf
 
-
-# (lh, 180302) Sadly, we can't use the obvious libtool macros
-# (AC_{ENABLE,DISABLE}_{SHARED,STATIC}, nor parameters to LT_INIT,
-# precisely because these macros record the default behaviour by defining
-# a macro, _LT_ENABLE_{SHARED,STATIC}_DEFAULT. No shell code involved, hence
-# any shell conditional has no effect. Either we trust libtool or we need
-# something more inventive. The relevant libtool macros are in ltoptions.m4,
-# _LT_ENABLE_SHARED and _LT_ENABLE_STATIC.
-# That is, something like the following will not work:
-# case $host_os in
-#   cygwin* | mingw* | msys* ) AC_DISABLE_SHARED  ;;
-#   *) AC_DISABLE_STATIC ;;
-# esac
 
 # Create libtool.
 
@@ -24727,7 +24711,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 24730 "configure" */
+/* #line 24714 "configure" */
 public class Test {
 }
 EOF
@@ -25195,7 +25179,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25198 "configure" */
+/* #line 25182 "configure" */
 public class Test {
 }
 EOF
@@ -25229,7 +25213,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25232 "configure" */
+/* [#]line 25216 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
@@ -29111,9 +29095,7 @@ $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
 
 
-  { $as_echo "$as_me:${as_lineno-$LINENO}: In case of trouble, first consult the troubleshooting page at https://projects.coin-or.org/BuildTools/wiki/user-troubleshooting" >&5
-$as_echo "$as_me: In case of trouble, first consult the troubleshooting page at https://projects.coin-or.org/BuildTools/wiki/user-troubleshooting" >&6;}
+  #AC_MSG_NOTICE([In case of trouble, first consult the troubleshooting page at https://projects.coin-or.org/BuildTools/wiki/user-troubleshooting])
   { $as_echo "$as_me:${as_lineno-$LINENO}: Configuration of $PACKAGE_NAME successful" >&5
 $as_echo "$as_me: Configuration of $PACKAGE_NAME successful" >&6;}
-
 
