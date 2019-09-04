@@ -20920,11 +20920,27 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 #    This leads to a nm call that collects ALL C-functions from a library
 #    and explicitly dll-exporting them, leading to warnings about duplicates
 #    regarding those that are properly marked for dll-export in the source.
+#
+# Patch libtool also to circumbent some issues when using MinGW (Msys+GCC).
+# 1. Relax check which libraries can be used when linking a DLL.
+#    libtool's func_mode_link() would reject linking MinGW system libraries,
+#    e.g., -lmingw32, when building a DLL, because it does not find this
+#    library in the installation path, and then falls back to build only
+#    static libraries. Setting deplibs_check_method=pass_all will avoid
+#    this faulty check.
 
   case "$AR" in
     *lib* | *LIB* )
-      ac_config_commands="$ac_config_commands libtoolpatch"
+      ac_config_commands="$ac_config_commands libtoolclpatch"
 
+      ;;
+    * )
+      case $build in
+        *-mingw* )
+          ac_config_commands="$ac_config_commands libtoolmingwpatch"
+
+        ;;
+      esac
       ;;
   esac
 
@@ -24711,7 +24727,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 24714 "configure" */
+/* #line 24730 "configure" */
 public class Test {
 }
 EOF
@@ -25179,7 +25195,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25182 "configure" */
+/* #line 25198 "configure" */
 public class Test {
 }
 EOF
@@ -25213,7 +25229,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25216 "configure" */
+/* [#]line 25232 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
@@ -27336,7 +27352,8 @@ do
   case $ac_config_target in
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "libtool") CONFIG_COMMANDS="$CONFIG_COMMANDS libtool" ;;
-    "libtoolpatch") CONFIG_COMMANDS="$CONFIG_COMMANDS libtoolpatch" ;;
+    "libtoolclpatch") CONFIG_COMMANDS="$CONFIG_COMMANDS libtoolclpatch" ;;
+    "libtoolmingwpatch") CONFIG_COMMANDS="$CONFIG_COMMANDS libtoolmingwpatch" ;;
     "test/hs071_main.cpp") CONFIG_LINKS="$CONFIG_LINKS test/hs071_main.cpp:examples/hs071_cpp/hs071_main.cpp" ;;
     "test/hs071_nlp.cpp") CONFIG_LINKS="$CONFIG_LINKS test/hs071_nlp.cpp:examples/hs071_cpp/hs071_nlp.cpp" ;;
     "test/hs071_nlp.hpp") CONFIG_LINKS="$CONFIG_LINKS test/hs071_nlp.hpp:examples/hs071_cpp/hs071_nlp.hpp" ;;
@@ -29049,13 +29066,16 @@ compiler_lib_search_path=$lt_compiler_lib_search_path_F77
 _LT_EOF
 
  ;;
-    "libtoolpatch":C) sed -e 's|AR_FLAGS |AR_FLAGS|g' \
+    "libtoolclpatch":C) sed -e 's|AR_FLAGS |AR_FLAGS|g' \
              -e '/$AR x/s/.*/( cd $f_ex_an_ar_dir ; for f in `$AR -nologo -list "$f_ex_an_ar_oldlib" | tr "\\r" " "` ; do lib -nologo -extract:$f "$f_ex_an_ar_oldlib"; done ); : \\/g' \
              -e '/^deplibs_check_method/s/.*/deplibs_check_method="pass_all"/g' \
              -e 's|always_export_symbols=yes|always_export_symbols=no|g' \
          libtool > libtool.tmp
          mv libtool.tmp libtool
          chmod 755 libtool ;;
+    "libtoolmingwpatch":C) sed -e '/^deplibs_check_method/s/.*/deplibs_check_method="pass_all"/g' libtool > libtool.tmp
+             mv libtool.tmp libtool
+             chmod 755 libtool ;;
 
   esac
 done # for ac_tag
