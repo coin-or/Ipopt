@@ -92,9 +92,6 @@ public abstract class Ipopt
       double callback_hess[]
    );
 
-   /** The default DLL name of the native implementation (without any platform dependent prefixes or suffixes) */
-   public static final String DLLNAME = "ipopt";
-
    /** Use C index style for iRow and jCol vectors */
    public final static int C_STYLE = 0;
 
@@ -150,15 +147,31 @@ public abstract class Ipopt
    /** Status returned by the solver */
    private int status = INVALID_PROBLEM_DEFINITION;
 
-   /** Creates a new NLP Solver using {@value #DLLNAME} as the DLL name.
+   /** Creates a new NLP Solver using a default as the DLL name.
     *
-    * This expects the the Ipopt DLL can somehow be found.
+    * This expects the the Ipopt DLL can somehow be found
+    * and that it has the canoncial name "ipopt" (on Unix, et.al.)
+    * or "ipopt-3" or "ipopt-0" (on Windows).
     *
     * @see #Ipopt()
     */
    public Ipopt()
    {
-      this(DLLNAME);
+      if( System.getProperty("os.name").toLowerCase().indexOf("win") >=0 )
+      {
+        try
+        {
+          /* for released versions, it should be ipopt-3.dll */
+          System.loadLibrary("ipopt-3");
+        }
+        catch( UnsatisfiedLinkError e )
+        {
+          /* for non-released versions, it could be ipopt-0.dll */
+          System.loadLibrary("ipopt-0");
+        }
+      }
+      else
+        System.loadLibrary("ipopt");
    }
 
    /** Creates a NLP Solver for the given DLL file.
