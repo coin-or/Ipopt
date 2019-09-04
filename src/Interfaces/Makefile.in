@@ -830,8 +830,9 @@ uninstall-am: uninstall-includeipoptHEADERS uninstall-libLTLIBRARIES \
 @BUILD_JAVA_TRUE@org.coinor.ipopt.jar : org/coinor/Ipopt.class
 @BUILD_JAVA_TRUE@	$(JAR) cf $@ $<
 
+# had  -target 1.8 -source 1.8, but that produces a warning if Java 8 RT is not setup
 @BUILD_JAVA_TRUE@org/coinor/Ipopt.class org_coinor_Ipopt.h : $(srcdir)/Ipopt.java
-@BUILD_JAVA_TRUE@	$(JAVAC) $< -d $(PWD) -h $(PWD) -target 1.8 -source 1.8
+@BUILD_JAVA_TRUE@	$(JAVAC) $< -d $(PWD) -h $(PWD)
 
 @BUILD_JAVA_TRUE@all-local : org.coinor.ipopt.jar
 

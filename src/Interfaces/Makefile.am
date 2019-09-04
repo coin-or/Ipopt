@@ -40,8 +40,9 @@ BUILT_SOURCES = org_coinor_Ipopt.h
 org.coinor.ipopt.jar : org/coinor/Ipopt.class
 	$(JAR) cf $@ $<
 
+# had  -target 1.8 -source 1.8, but that produces a warning if Java 8 RT is not setup
 org/coinor/Ipopt.class org_coinor_Ipopt.h : $(srcdir)/Ipopt.java
-	$(JAVAC) $< -d $(PWD) -h $(PWD) -target 1.8 -source 1.8
+	$(JAVAC) $< -d $(PWD) -h $(PWD)
 
 all-local : org.coinor.ipopt.jar
 
