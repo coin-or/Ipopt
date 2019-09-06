@@ -33,7 +33,7 @@ import java.io.File;
  * {@link #create(int, int, int, int, int)}
  * and {@link #OptimizeNLP()} can be called multiple times.
  *
- * Programmers should, for efficiency, call {@link #dispose()} when finished using a
+ * Programmers must call {@link #dispose()} when finished using a
  * Ipopt object, otherwise the nativelly allocated memory will be disposed of only
  * when the JVM call {@link #finalize()} on it.
  *
@@ -216,7 +216,27 @@ public abstract class Ipopt
       System.load(file.getAbsolutePath());
    }
 
-   /** Callback function for the variable bounds and constraint sides. */
+
+   /** Method to request bounds on the variables and constraints.
+    *
+    * The values of n and m that were specified in create() and are passed
+    * here for debug checking. Setting a lower bound to a value less than or
+    * equal to the value of the option "nlp_lower_bound_inf"
+    * will cause Ipopt to assume no lower bound. Likewise, specifying the upper bound above or
+    * equal to the value of the option nlp_upper_bound_inf
+    * will cause Ipopt to assume no upper bound. These options are set to -10<sup>19</sup> and
+    * 10<sup>19</sup>, respectively, by default, but may be modified by changing these
+    * options.
+    *
+    *  @param n   (in) the number of variablesin the problem
+    *  @param x_l (out) the lower bounds for the variables
+    *  @param x_u (out) the upper bounds for the variables
+    *  @param m   (in) the number of constraints in the problem
+    *  @param g_l (out) the lower bounds for the constraints
+    *  @param g_u (out) the upper bounds for the constraints
+    *
+    * @return true on success, otherwise false
+    */
    abstract protected boolean get_bounds_info(
       int      n,
       double[] x_l,
@@ -226,7 +246,30 @@ public abstract class Ipopt
       double[] g_u
    );
 
-   /** Callback function for retrieving a starting point. */
+   /** Method to request the starting point before iterating.
+    *
+    *  The boolean variables indicate whether the algorithm requires to
+    *  have x, z_L/z_u, and lambda initialized, respectively.  If, for some
+    *  reason, the algorithm requires initializations that cannot be
+    *  provided, false should be returned and Ipopt will stop.
+    *  The default options only require initial values for the primal
+    *  variables.
+    *
+    *  Note, that the initial values for bound multiplier components for
+    *  absent bounds are ignored.
+    *
+    *  @param n      (in) the number of variables in the problem; it will have the same value that was specified in create()
+    *  @param init_x (in) if true, this method must provide an initial value for the primal variables
+    *  @param x      (out) the initial values for the primal variables
+    *  @param init_z (in) if true, this method must provide an initial value for the bound multipliers
+    *  @param z_L    (out) the initial values for the lower bound multipliers
+    *  @param z_U    (out) the initial values for the upper bound multipliers
+    *  @param m      (in) the number of constraints in the problem; it will have the same value that was specified in create()
+    *  @param init_lambda (in) if true, this method must provide an initial value for the constraint multipliers
+    *  @param lambda (out) the initial values for the constraint multipliers
+    *
+    * @return true on success, otherwise false
+    */
    abstract protected boolean get_starting_point(
       int      n,
       boolean  init_x,
@@ -239,7 +282,17 @@ public abstract class Ipopt
       double[] lambda
    );
 
-   /** Callback function for the objective function. */
+   /** Method to request the value of the objective function.
+    *
+    *  @param n     (in) the number of variables in the problem; it will have the same value that was specified in create()
+    *  @param x     (in) the values for the primal variables at which the objective function is to be evaluated
+    *  @param new_x (in) false if any evaluation method (`eval_*`) was previously called with the same values in x, true otherwise.
+    *                    This can be helpful when users have efficient implementations that calculate multiple outputs at once.
+    *                    Ipopt internally caches results from the TNLP and generally, this flag can be ignored.
+    *  @param obj_value (out) storage for the value of the objective function
+    *
+    * @return true on success, otherwise false
+    */
    abstract protected boolean eval_f(
       int      n,
       double[] x,
@@ -247,7 +300,17 @@ public abstract class Ipopt
       double[] obj_value
     );
 
-   /** Callback function for the objective function gradient. */
+   /** Method to request the gradient of the objective function.
+    *
+    *  @param n     (in) the number of variables in the problem; it will have the same value that was specified in create()
+    *  @param x     (in) the values for the primal variables at which the gradient is to be evaluated
+    *  @param new_x (in) false if any evaluation method (`eval_*`) was previously called with the same values in x, true otherwise; see also eval_f()
+    *  @param grad_f (out) array to store values of the gradient of the objective function.
+    *                      The gradient array is in the same order as the variables
+    *                      (i.e., the gradient of the objective with respect to `x[2]` should be put in `grad_f[2]`).
+    *
+    * @return true on success, otherwise false
+    */
    abstract protected boolean eval_grad_f(
       int      n,
       double[] x,
@@ -255,7 +318,16 @@ public abstract class Ipopt
       double[] grad_f
    );
 
-   /** Callback function for the constraints. */
+   /** Method to request the constraint values.
+    *
+    *  @param n     (in) the number of variables in the problem; it will have the same value that was specified in create()
+    *  @param x     (in) the values for the primal variables at which the constraint functions are to be evaluated
+    *  @param new_x (in) false if any evaluation method (`eval_*`) was previously called with the same values in x, true otherwise; see also eval_f()
+    *  @param m     (in) the number of constraints in the problem; it will have the same value that was specified in create()
+    *  @param g     (out) array to store constraint function values, do not add or subtract the bound values.
+    *
+    * @return true on success, otherwise false
+    */
    abstract protected boolean eval_g(
       int      n,
       double[] x,
@@ -264,7 +336,34 @@ public abstract class Ipopt
       double[] g
    );
 
-   /** Callback function for the constraints Jacobian. */
+   /** Method to request either the sparsity structure or the values of the Jacobian of the constraints.
+    *
+    * The Jacobian is the matrix of derivatives where the derivative of
+    * the i-th constraint function with respect to the j-th variable is placed in row
+    * i and column j.
+    *
+    * The arrays iRow and jCol only need to be filled once.
+    * If the iRow and jCol arguments are not NULL (first call to this function),
+    * then Ipopt expects that the sparsity structure of the Jacobian
+    * (the row and column indices only) are written into iRow and jCol.
+    * At this call, the arguments x and values will be NULL.
+    * If the arguments x and values are not NULL, then Ipopt
+    * expects that the value of the Jacobian as calculated from array x
+    * is stored in array values (using the same order as used when
+    * specifying the sparsity structure).
+    * At this call, the arguments iRow and jCol will be NULL.
+    *
+    *  @param n     (in) the number of variables in the problem; it will have the same value that was specified in create()
+    *  @param x     (in) first call: NULL; later calls: the values for the primal variables at which the constraint Jacobian is to be evaluated
+    *  @param new_x (in) false if any evaluation method (`eval_*`) was previously called with the same values in x, true otherwise; see also eval_f()
+    *  @param m     (in) the number of constraints in the problem; it will have the same value that was specified in create()
+    *  @param nele_jac (in) the number of nonzero elements in the Jacobian; it will have the same value that was specified in create()
+    *  @param iRow  (out) first call: array of length nele_jac to store the row indices of entries in the Jacobian of the constraints; later calls: NULL
+    *  @param jCol  (out) first call: array of length nele_jac to store the column indices of entries in the Jacobian of the constraints; later calls: NULL
+    *  @param values (out) first call: NULL; later calls: array of length nele_jac to store the values of the entries in the Jacobian of the constraints
+    *
+    * @return true on success, otherwise false
+    */
    abstract protected boolean eval_jac_g(
        int      n,
        double[] x,
@@ -276,7 +375,39 @@ public abstract class Ipopt
        double[] values
    );
 
-   /** Callback function for the hessian. */
+
+   /** Method to request either the sparsity structure or the values of the Hessian of the Lagrangian.
+    *
+    * The Hessian matrix that Ipopt uses is the sum of the Hessian matrices of objective function (multiplied by obj_factor)
+    * and each constraint function (multiplied by lambda).
+    *
+    * The arrays iRow and jCol only need to be filled once.
+    * If the iRow and jCol arguments are not NULL (first call to this function),
+    * then Ipopt expects that the sparsity structure of the Hessian
+    * (the row and column indices only) are written into iRow and jCol.
+    * At this call, the arguments x, lambda, and values will be NULL.
+    * If the arguments x, lambda, and values are not NULL, then Ipopt
+    * expects that the value of the Hessian as calculated from arrays x
+    * and lambda are stored in array values (using the same order as
+    * used when specifying the sparsity structure).
+    * At this call, the arguments iRow and jCol will be NULL.
+    *
+    * As this matrix is symmetric, Ipopt expects that only the lower diagonal entries are specified.
+    *
+    *  @param n     (in) the number of variables in the problem; it will have the same value that was specified in create()
+    *  @param x     (in) first call: NULL; later calls: the values for the primal variables at which the Hessian is to be evaluated
+    *  @param new_x (in) false if any evaluation method (`eval_*`) was previously called with the same values in x, true otherwise; see also eval_f()
+    *  @param obj_factor (in) factor in front of the objective term in the Hessian
+    *  @param m     (in) the number of constraints in the problem; it will have the same value that was specified in create()
+    *  @param lambda (in) the values for the constraint multipliers at which the Hessian is to be evaluated
+    *  @param new_lambda (in) false if any evaluation method was previously called with the same values in lambda, true otherwise
+    *  @param nele_hess (in) the number of nonzero elements in the Hessian; it will have the same value that was specified in create()
+    *  @param iRow  (out) first call: array of length nele_hess to store the row indices of entries in the Hessian; later calls: NULL
+    *  @param jCol  (out) first call: array of length nele_hess to store the column indices of entries in the Hessian; later calls: NULL
+    *  @param values (out) first call: NULL; later calls: array of length nele_hess to store the values of the entries in the Hessian
+    *
+    * @return true on success, otherwise false
+    */
    abstract protected boolean eval_h(
       int      n,
       double[] x,
@@ -292,7 +423,8 @@ public abstract class Ipopt
    );
 
    /** Dispose of the natively allocated memory.
-    * Programmers should, for efficiency, call the dispose method when finished
+    *
+    * Programmers must call the dispose method when finished
     * using a Ipopt object.
     *
     * An JIpopt object can be reused to solve different problems by calling again
@@ -316,7 +448,9 @@ public abstract class Ipopt
       dispose();
    }
 
-   /** Create a new problem. the use is the same as get_nlp_info, change the name for clarity in java.
+   /** Create a new problem.
+    *
+    * This is get_nlp_info in the C++ interface.
     *
     * @param n the number of variables in the problem.
     * @param m the number of constraints in the problem.

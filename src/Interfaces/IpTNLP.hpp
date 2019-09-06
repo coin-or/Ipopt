@@ -147,13 +147,15 @@ public:
     *  @param g_l (out) the lower bounds \f$g^L\f$ for the constraints \f$g(x)\f$
     *  @param g_u (out) the upper bounds \f$g^U\f$ for the constraints \f$g(x)\f$
     *
+    *  @return true if success, false otherwise.
+    *
     * The values of `n` and `m` that were specified in TNLP::get_nlp_info are passed
     * here for debug checking. Setting a lower bound to a value less than or
     * equal to the value of the option \ref OPT_nlp_lower_bound_inf "nlp_lower_bound_inf"
     * will cause \Ipopt to assume no lower bound. Likewise, specifying the upper bound above or
     * equal to the value of the option \ref OPT_nlp_upper_bound_inf "nlp_upper_bound_inf"
     * will cause \Ipopt to assume no upper bound. These options are set to -10<sup>19</sup> and
-    * $10<sup>19</sup>, respectively, by default, but may be modified by changing these
+    * 10<sup>19</sup>, respectively, by default, but may be modified by changing these
     * options.
     */
    // [TNLP_get_bounds_info]
@@ -264,6 +266,8 @@ public:
     *  @param init_lambda (in) if true, this method must provide an initial value for the constraint multipliers \f$\lambda\f$
     *  @param lambda (out) the initial values for the constraint multipliers, \f$\lambda\f$
     *
+    *  @return true if success, false otherwise.
+    *
     *  The boolean variables indicate whether the algorithm requires to
     *  have x, z_L/z_u, and lambda initialized, respectively.  If, for some
     *  reason, the algorithm requires initializations that cannot be
@@ -313,7 +317,7 @@ public:
     *                    \Ipopt internally caches results from the TNLP and generally, this flag can be ignored.
     *  @param obj_value (out) storage for the value of the objective function \f$f(x)\f$
     *
-    * The variable n is passed in for convenience. It will have the same value that was specified in TNLP::get_nlp_info.
+    *  @return true if success, false otherwise.
     */
    // [TNLP_eval_f]
    virtual bool eval_f(
@@ -332,6 +336,8 @@ public:
     *  @param grad_f (out) array to store values of the gradient of the objective function \f$\nabla f(x)\f$.
     *                      The gradient array is in the same order as the \f$x\f$ variables
     *                      (i.e., the gradient of the objective with respect to `x[2]` should be put in `grad_f[2]`).
+    *
+    *  @return true if success, false otherwise.
     */
    // [TNLP_eval_grad_f]
    virtual bool eval_grad_f(
@@ -349,6 +355,8 @@ public:
     *  @param new_x (in) false if any evaluation method (`eval_*`) was previously called with the same values in x, true otherwise; see also TNLP::eval_f
     *  @param m     (in) the number of constraints \f$g(x)\f$ in the problem; it will have the same value that was specified in TNLP::get_nlp_info
     *  @param g     (out) array to store constraint function values \f$g(x)\f$, do not add or subtract the bound values \f$g^L\f$ or \f$g^U\f$.
+    *
+    *  @return true if success, false otherwise.
     */
    // [TNLP_eval_g]
    virtual bool eval_g(
@@ -375,6 +383,8 @@ public:
     *  @param iRow  (out) first call: array of length nele_jac to store the row indices of entries in the Jacobian of the constraints; later calls: NULL
     *  @param jCol  (out) first call: array of length nele_jac to store the column indices of entries in the Jacobian of the constraints; later calls: NULL
     *  @param values (out) first call: NULL; later calls: array of length nele_jac to store the values of the entries in the Jacobian of the constraints
+    *
+    *  @return true if success, false otherwise.
     *
     * @note The arrays iRow and jCol only need to be filled once.
     * If the iRow and jCol arguments are not NULL (first call to this function),
@@ -418,6 +428,8 @@ public:
     *  @param iRow  (out) first call: array of length nele_hess to store the row indices of entries in the Hessian; later calls: NULL
     *  @param jCol  (out) first call: array of length nele_hess to store the column indices of entries in the Hessian; later calls: NULL
     *  @param values (out) first call: NULL; later calls: array of length nele_hess to store the values of the entries in the Hessian
+    *
+    *  @return true if success, false otherwise.
     *
     * @note The arrays iRow and jCol only need to be filled once.
     * If the iRow and jCol arguments are not NULL (first call to this function),
