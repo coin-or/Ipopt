@@ -20,21 +20,6 @@
 
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
-# Copyright (C) 2006, 2007 International Business Machines and others.
-# All Rights Reserved.
-# This file is distributed under the Eclipse Public License.
-
-# Author:  Andreas Waechter           IBM    2006-04-13
-
-########################################################################
-#        Variables for documentation and data directories              #
-########################################################################
-
-# Set these up to provide some uniformity in naming while also conforming
-# to Gnu directory standards. For reasons known only to the autoconf
-# developers, autoconf leaves datadir = $(datarootdir) but forces docdir
-# to $(datarootdir)/doc/$(PACKAGE_TARNAME).
-
 VPATH = @srcdir@
 am__is_gnu_make = { \
   if test -z '$(MAKELEVEL)'; then \
@@ -91,6 +76,8 @@ am__make_running_with_option = \
   test $$has_opt = yes
 am__make_dryrun = (target_option=n; $(am__make_running_with_option))
 am__make_keepgoing = (target_option=k; $(am__make_running_with_option))
+pkgdatadir = $(datadir)/@PACKAGE@
+pkgincludedir = $(includedir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkglibexecdir = $(libexecdir)/@PACKAGE@
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
@@ -267,8 +254,8 @@ am__uninstall_files_from_dir = { \
     || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
          $(am__cd) "$$dir" && rm -f $$files; }; \
   }
-am__installdirs = "$(DESTDIR)$(pkgconfiglibdir)"
-DATA = $(pkgconfiglib_DATA)
+am__installdirs = "$(DESTDIR)$(docdir)" "$(DESTDIR)$(pkgconfiglibdir)"
+DATA = $(doc_DATA) $(pkgconfiglib_DATA)
 RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
   distclean-recursive maintainer-clean-recursive
 am__recursive_targets = \
@@ -300,8 +287,6 @@ CSCOPE = cscope
 DIST_SUBDIRS = src/Common src/LinAlg src/Algorithm \
 	src/contrib/CGPenalty src/contrib/LinearSolverLoader \
 	src/Interfaces src/Apps contrib/sIPOPT test
-pkgdatadir = $(datadir)/$(PACKAGE_TARNAME)
-pkgincludedir = $(includedir)/coin-or
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
@@ -469,28 +454,10 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = foreign
-pkgdocdir = $(docdir)
-
-# doxydocdir is the top-level directory for doxygen documentation. It holds
-# the tag file and possibly the PDF or Postscript version. doxyhtmldir is
-# typically a subdirectory containing all the files doxygen creates for
-# html documentation.
-doxydocdir = $(pkgdocdir)/doxydoc
-doxyhtmldir = $(doxydocdir)/html
-
-########################################################################
-#                    Documentation installation                        #
-########################################################################
-DocFiles = README AUTHORS LICENSE
-COIN_HAS_DOXYGEN = @COIN_HAS_DOXYGEN_TRUE@TRUE
-COIN_HAS_LATEX = @COIN_HAS_LATEX_TRUE@TRUE
-
-# Needless to say, it's important that baredocdir_nosub not be a target for
-# autoconf substitution.
-DOXYTAG_EDIT = sed -e 's|@baredocdir_nosub@|$(datarootdir)/doc|g'
 SUBDIRS = src/Common src/LinAlg src/Algorithm src/contrib/CGPenalty \
 	$(am__append_1) src/Interfaces src/Apps $(am__append_2) \
 	$(am__append_3)
+doc_DATA = README.md AUTHORS LICENSE
 
 # Stuff to clean up from "make test"
 DISTCLEANFILES = \
@@ -524,7 +491,7 @@ all: all-recursive
 .SUFFIXES:
 am--refresh: Makefile
 	@:
-$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am $(top_srcdir)/BuildTools/Makemain.inc $(am__configure_deps)
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -546,7 +513,6 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $@ $(am__maybe_remake_depfiles)'; \
 	    cd $(top_builddir) && $(SHELL) ./config.status $@ $(am__maybe_remake_depfiles);; \
 	esac;
-$(top_srcdir)/BuildTools/Makemain.inc $(am__empty):
 
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	$(SHELL) ./config.status --recheck
@@ -627,6 +593,27 @@ clean-libtool:
 
 distclean-libtool:
 	-rm -f libtool config.lt
+install-docDATA: $(doc_DATA)
+	@$(NORMAL_INSTALL)
+	@list='$(doc_DATA)'; test -n "$(docdir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(docdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(docdir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(docdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(docdir)" || exit $$?; \
+	done
+
+uninstall-docDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(doc_DATA)'; test -n "$(docdir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(docdir)'; $(am__uninstall_files_from_dir)
 install-pkgconfiglibDATA: $(pkgconfiglib_DATA)
 	@$(NORMAL_INSTALL)
 	@list='$(pkgconfiglib_DATA)'; test -n "$(pkgconfiglibdir)" || list=; \
@@ -759,7 +746,7 @@ check: check-recursive
 all-am: Makefile $(DATA)
 installdirs: installdirs-recursive
 installdirs-am:
-	for dir in "$(DESTDIR)$(pkgconfiglibdir)"; do \
+	for dir in "$(DESTDIR)$(docdir)" "$(DESTDIR)$(pkgconfiglibdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-recursive
@@ -815,13 +802,13 @@ info: info-recursive
 
 info-am:
 
-install-data-am: install-pkgconfiglibDATA
+install-data-am: install-docDATA install-pkgconfiglibDATA
 
 install-dvi: install-dvi-recursive
 
 install-dvi-am:
 
-install-exec-am: install-exec-local
+install-exec-am:
 
 install-html: install-html-recursive
 
@@ -861,7 +848,7 @@ ps: ps-recursive
 
 ps-am:
 
-uninstall-am: uninstall-local uninstall-pkgconfiglibDATA
+uninstall-am: uninstall-docDATA uninstall-pkgconfiglibDATA
 
 .MAKE: $(am__recursive_targets) install-am install-strip
 
@@ -870,126 +857,18 @@ uninstall-am: uninstall-local uninstall-pkgconfiglibDATA
 	clean-libtool clean-local cscope cscopelist-am ctags ctags-am \
 	distclean distclean-generic distclean-libtool distclean-tags \
 	dvi dvi-am html html-am info info-am install install-am \
-	install-data install-data-am install-dvi install-dvi-am \
-	install-exec install-exec-am install-exec-local install-html \
+	install-data install-data-am install-docDATA install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
 	install-html-am install-info install-info-am install-man \
 	install-pdf install-pdf-am install-pkgconfiglibDATA install-ps \
 	install-ps-am install-strip installcheck installcheck-am \
 	installdirs installdirs-am maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-generic \
 	mostlyclean-libtool pdf pdf-am ps ps-am tags tags-am uninstall \
-	uninstall-am uninstall-local uninstall-pkgconfiglibDATA
+	uninstall-am uninstall-docDATA uninstall-pkgconfiglibDATA
 
 .PRECIOUS: Makefile
 
-
-doxygen-docs: 
-	if test "$(COIN_HAS_DOXYGEN)" = TRUE; then \
-	  if test -d "doxydoc/"; then \
-	    if test -f doxydoc/doxygen.conf ; then \
-	      $(DOXYTAG_EDIT) \
-	        doxydoc/doxygen.conf > doxydoc/doxygen.conf.tmp ; \
-	      mv doxydoc/doxygen.conf.tmp doxydoc/doxygen.conf ; \
-	    fi ; \
-	    doxygen doxydoc/doxygen.conf;\
-	  fi;\
-	fi
-
-pdf-doxygen-docs: doxygen-docs
-	if test "$(COIN_HAS_DOXYGEN)" = TRUE; then \
-	  if test -d "doxydoc/latex"; then \
-       	    if test "$(COIN_HAS_LATEX)" = TRUE; then \
-	      cd doxydoc/latex;\
-	      $(MAKE) pdf;\
-	      cd -;\
-	    fi;\
-	  fi;\
-	fi
-
-clean-doxygen-docs:
-	if test -d "doxydoc"; then \
-	  cd doxydoc ;\
-	  rm -rf html latex *.log *.tag;\
-	fi
-
-install-doxygen-docs: doxygen-docs
-	if test "$(COIN_HAS_DOXYGEN)" = TRUE; then \
-	  if test -d "doxydoc"; then \
-	    test -d "$(DESTDIR)$(doxydocdir)" || \
-	         $(mkdir_p) "$(DESTDIR)$(doxydocdir)"; \
-	    $(INSTALL_DATA) doxydoc/@coin_doxy_tagname@ \
-	        "$(DESTDIR)$(doxydocdir)"; \
-	    if test -f "doxydoc/latex/refman.pdf"; then \
-	      $(INSTALL_DATA) doxydoc/latex/refman.pdf \
-	          "$(DESTDIR)$(doxydocdir)";\
-	    fi;\
-	    if test -d "doxydoc/html"; then \
-	      test -d "$(DESTDIR)$(doxyhtmldir)/search/" || \
-	           $(mkdir_p) "$(DESTDIR)$(doxyhtmldir)/search/"; \
-	      $(INSTALL_DATA) doxydoc/html/*.* \
-	          "$(DESTDIR)$(doxyhtmldir)";\
-	      $(INSTALL_DATA) doxydoc/html/search/*.* \
-	          "$(DESTDIR)$(doxyhtmldir)/search";\
-            fi;\
-          fi;\
-        fi
-
-# It's not clear that uninstall-doc should also remove doxygen doc'n. Write
-# the rules so that the last one will remove pkgdocdir (which should be empty
-# by then).
-
-uninstall-doxygen-docs:
-	if test -d "$(DESTDIR)$(doxydocdir)"; then \
-	  rm -rf "$(DESTDIR)$(doxydocdir)"; \
-	fi
-	rmdir $(DESTDIR)$(pkgdocdir) || true
-
-install-doc: $(DocFiles)
-	$(mkdir_p) "$(DESTDIR)$(pkgdocdir)"
-	for file in $(DocFiles); do \
-	  if test -f "$$file"; then dir=; else dir="$(srcdir)/"; fi; \
-	  if test -f "$$dir$$file"; then \
-	    $(INSTALL_DATA) "$$dir$$file" \
-	        "$(DESTDIR)$(pkgdocdir)/$$file"; \
-	  fi; \
-	done
-
-uninstall-doc:
-	for file in $(DocFiles); do \
-	  rm -f "$(DESTDIR)$(pkgdocdir)/$$file"; \
-	done
-	rmdir $(DESTDIR)$(pkgdocdir) || true
-
-########################################################################
-#                         Maintainer Stuff                             #
-########################################################################
-
-# Make sure acinclude is using most recent coin.m4
-@MAINTAINER_MODE_TRUE@$(srcdir)/acinclude.m4: $(BUILDTOOLSDIR)/coin.m4
-@MAINTAINER_MODE_TRUE@	cat $(LIBTOOLM4) $< > $@
-
-# Make sure the autotools scripts are up to date
-@MAINTAINER_MODE_TRUE@$(AUX_DIR)/install-sh: $(BUILDTOOLSDIR)/install-sh
-@MAINTAINER_MODE_TRUE@	cp $< $@
-
-@MAINTAINER_MODE_TRUE@$(AUX_DIR)/missing: $(BUILDTOOLSDIR)/missing
-@MAINTAINER_MODE_TRUE@	cp $< $@
-
-@MAINTAINER_MODE_TRUE@$(AUX_DIR)/config.guess: $(BUILDTOOLSDIR)/config.guess
-@MAINTAINER_MODE_TRUE@	cp $< $@
-
-@MAINTAINER_MODE_TRUE@$(AUX_DIR)/config.sub: $(BUILDTOOLSDIR)/config.sub
-@MAINTAINER_MODE_TRUE@	cp $< $@
-
-@MAINTAINER_MODE_TRUE@$(AUX_DIR)/depcomp: $(BUILDTOOLSDIR)/depcomp
-@MAINTAINER_MODE_TRUE@	cp $< $@
-
-@MAINTAINER_MODE_TRUE@$(AUX_DIR)/ltmain.sh: $(BUILDTOOLSDIR)/ltmain.sh
-@MAINTAINER_MODE_TRUE@	cp $< $@
-
-.PHONY: install-doc uninstall-doc \
-	doxygen-docs pdf-doxygen-docs clean-doxygen-docs \
-	install-doxygen-docs uninstall-doxygen-docs
 
 .PHONY: test unitTest astyle doc javadoc
 
@@ -1006,10 +885,6 @@ doc :
 
 clean-doc:
 	cd doc && rm -rf html *.log *.tag
-
-install-exec-local: install-doc
-
-uninstall-local: uninstall-doc
 
 clean-local : clean-doc
 

@@ -26,10 +26,10 @@ The Ipopt project webpage is <https://github.com/coin-or/Ipopt>.
 Background
 ----------
 
-Ipopt is written in C++ and is released as open source code under the Eclipse Public License (EPL).
+Ipopt is written in C++ and is released as open source code under the [Eclipse Public License (EPL)](LICENSE).
 The code has been written by [Andreas Wächter](http://www.mccormick.northwestern.edu/directory/profiles/Andreas-Waechter.html) and [Carl Laird](http://allthingsoptimal.com/biography/).
 The COIN-OR project managers for Ipopt are [Andreas Wächter](http://users.iems.northwestern.edu/~andreasw) und [Stefan Vigerske](https://www.gams.com/~stefan).
-For a list of **all contributors**, see the [AUTHORS file](Ipopt/AUTHORS).
+For a list of **all contributors**, see the [AUTHORS file](AUTHORS).
 
 The C++ version has first been [released on Aug 26, 2005](http://list.coin-or.org/pipermail/ipopt/2005-August/000331.html) as version 3.0.0.
 The previously released [pre-3.0 Fortran version](https://github.com/coin-or/Ipopt/tree/stable/2.3) is no longer maintained.

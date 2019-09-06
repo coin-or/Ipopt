@@ -6,8 +6,6 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-include $(top_srcdir)/BuildTools/Makemain.inc
-
 SUBDIRS = src/Common src/LinAlg src/Algorithm src/contrib/CGPenalty
 
 if BUILD_LINEARSOLVERLOADER
@@ -23,6 +21,8 @@ endif
 if ALWAYS_FALSE
   SUBDIRS += test
 endif
+
+doc_DATA = README.md AUTHORS LICENSE
 
 .PHONY: test unitTest astyle doc javadoc
 
@@ -69,10 +69,6 @@ endif
 
 clean-doc:
 	cd doc && rm -rf html *.log *.tag
-
-install-exec-local: install-doc
-
-uninstall-local: uninstall-doc
 
 clean-local : clean-doc
 
