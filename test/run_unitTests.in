@@ -1,9 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 
 # (C) Copyright 2006 International Business Machines
 # This file is distributed under the Eclipse Public License
-#
-# $Id$
 #
 # Author: Andreas Waechter      IBM    2006-03-31
 
@@ -15,117 +13,63 @@ echo " "
 echo Running unitTests...
 echo " "
 
-# AMPL Solver executable
-echo Testing AMPL Solver Executable...
-if test -x ../src/Apps/AmplSolver/ipopt ; then
-  if test -f mytoy.nl; then
-    remove_mytoy=no
-  else
-    cp "$srcdir/mytoy.nl" .
-    remove_mytoy=yes
+function checkrun ()
+{
+  if ! $@ > tmpfile 2>&1 ; then
+    echo "$? "
+    echo " ---- 8< ---- Start of test program output ---- 8< ----"
+    cat tmpfile
+    echo " ---- 8< ----  End of test program output  ---- 8< ----"
+    echo " "
+    echo "    ******** Test FAILED! ********"
+    echo "Test program existed with nonzero status."
+    return 1
   fi
-  ../src/Apps/AmplSolver/ipopt mytoy.nl >tmpfile 2>&1
-  grep "EXIT: Optimal Solution Found." tmpfile 1>/dev/null 2>&1
-  if test $? = 0; then
-    echo "    Test passed!"
-  else
-    retval=-1
+
+  if ! grep -q "EXIT: Optimal Solution Found." tmpfile ; then
     echo " "
     echo " ---- 8< ---- Start of test program output ---- 8< ----"
     cat tmpfile
     echo " ---- 8< ----  End of test program output  ---- 8< ----"
     echo " "
     echo "    ******** Test FAILED! ********"
-    echo "Output of the test program is above."
+    echo "Output of the test program does not contain 'EXIT: Optimal Solution Found'."
+    return 1
   fi
-  rm -rf tmpfile  mytoy.sol
-  if test "$remove_mytoy" = "yes"; then
-    rm -rf mytoy.nl
-  fi
+
+  echo "    Test passed!"
+  rm tmpfile
+
+  return 0
+}
+
+# AMPL Solver executable
+echo "Testing AMPL Solver Executable..."
+if test -x ../src/Apps/AmplSolver/ipopt ; then
+  checkrun ../src/Apps/AmplSolver/ipopt "$srcdir/mytoy.nl" || retval=$?
 else
   echo "    no AMPL solver executable found, skipping test..."
 fi
 
 # C++ Example
-echo Testing C++ Example...
-./hs071_cpp >tmpfile 2>&1
-grep "EXIT: Optimal Solution Found." tmpfile 1>/dev/null 2>&1
-if test $? = 0; then
-  echo "    Test passed!"
-else
-  retval=-1
-  echo " "
-  echo " ---- 8< ---- Start of test program output ---- 8< ----"
-  cat tmpfile
-  echo " ---- 8< ----  End of test program output  ---- 8< ----"
-  echo " "
-  echo "    ******** Test FAILED! ********"
-  echo "Output of the test program is above."
-fi
-rm -rf tmpfile
+echo "Testing C++ Example..."
+checkrun ./hs071_cpp || retval=$?
 
 # C Example
-echo Testing C Example...
-./hs071_c >tmpfile 2>&1
-grep "EXIT: Optimal Solution Found." tmpfile 1>/dev/null 2>&1
-if test $? = 0; then
-  echo "    Test passed!"
-else
-  retval=-1
-  echo " "
-  echo " ---- 8< ---- Start of test program output ---- 8< ----"
-  cat tmpfile
-  echo " ---- 8< ----  End of test program output  ---- 8< ----"
-  echo " "
-  echo "    ******** Test FAILED! ********"
-  echo "Output of the test program is above."
-fi
-rm -rf tmpfile
+echo "Testing C Example..."
+checkrun ./hs071_c || retval=?
 
 # Fortran Example
 if test -e ./hs071_f ; then
-echo Testing Fortran Example...
-./hs071_f >tmpfile 2>&1
-grep "EXIT: Optimal Solution Found." tmpfile 1>/dev/null 2>&1
-if test $? = 0; then
-  echo "    Test passed!"
+  echo "Testing Fortran Example..."
+  checkrun ./hs071_f || retval=?
 else
-  retval=-1
-  echo " "
-  echo " ---- 8< ---- Start of test program output ---- 8< ----"
-  cat tmpfile
-  echo " ---- 8< ----  End of test program output  ---- 8< ----"
-  echo " "
-  echo "    ******** Test FAILED! ********"
-  echo "Output of the test program is above."
-fi
-rm -rf tmpfile
-else
-echo "Skip testing Fortran Example (hs071_f not available)"
+  echo "Skip testing Fortran Example (hs071_f not available)"
 fi
 
-@BUILD_JAVA_TRUE@test_java=true
-@BUILD_JAVA_FALSE@test_java=false
-if $test_java ; then
-echo Testing Java Example...
-java -Djava.library.path=../src/Interfaces/.libs -cp ../src/Interfaces/org.coinor.ipopt.jar:. HS071 >tmpfile 2>&1
-grep "EXIT: Optimal Solution Found." tmpfile 1>/dev/null 2>&1
-if test $? = 0; then
-  echo "    Test passed!"
-else
-  retval=-1
-  echo " "
-  echo " ---- 8< ---- Start of test program output ---- 8< ----"
-  cat tmpfile
-  echo " ---- 8< ----  End of test program output  ---- 8< ----"
-  echo " "
-  echo "    ******** Test FAILED! ********"
-  echo "Output of the test program is above."
-fi
-rm -rf tmpfile
-else
-echo "Skip testing Java Example (Java interface not build)"
-fi
+@BUILD_JAVA_TRUE@echo "Testing Java Example..."
+@BUILD_JAVA_TRUE@checkrun java -Djava.library.path=../src/Interfaces/.libs -cp ../src/Interfaces/org.coinor.ipopt.jar:. HS071 || retval=$?
+@BUILD_JAVA_FALSE@echo "Skip testing Java Example (Java interface not build)"
 
 # clean up
 rm -rf tmpfile debug.out ipopt.out IPOPT.OUT
