@@ -933,7 +933,9 @@ The only special things to consider are:
 This section is based on documentation by Rafael de Pelegrini Soares
 (VRTech Industrial Technologies).
 
-The Java interface offers an abstract base class \ref org.coinor.Ipopt "Ipopt"
+The Java Interface was written and contributed by Rafael de Pelegrini Soares
+and later updated by Tong Kewei (Beihang University).
+It offers an abstract base class \ref org.coinor.Ipopt "Ipopt"
 with basic methods to specify an NLP, set a number of \Ipopt options,
 to request \Ipopt to solve the NLP, and to retrieve a found
 solution, if any. A HTML documentation of all available interface

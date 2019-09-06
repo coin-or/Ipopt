@@ -734,6 +734,8 @@ flag, for a configuration of \Ipopt in debug mode
 (`--enable-debug`) or as static library (`--disable-shared`), the configure
 flag `--with-pic` need to be used to enable compilation with `-fPIC`.
 
+To generate the javadoc help, run 'make javadoc'.
+
 \section INSTALL_R Compiling and Installing the R Interface ipoptr
 
 The `ipoptr` interface can be build after \Ipopt has been
