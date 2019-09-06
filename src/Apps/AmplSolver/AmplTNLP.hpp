@@ -136,7 +136,7 @@ public:
    };
 
    /** Ampl Option class containing name, type and description for an AMPL option */
-   class AmplOption: public ReferencedObject
+   class IPOPTAMPLINTERFACELIB_EXPORT AmplOption: public ReferencedObject
    {
    public:
       AmplOption(
