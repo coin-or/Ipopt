@@ -7,13 +7,17 @@
 AUTOMAKE_OPTIONS = foreign
 
 ########################################################################
-#                      unitTest for CoinUtils                          #
+#                        unitTest for Ipopt                            #
 ########################################################################
 
 noinst_PROGRAMS = hs071_cpp hs071_c
 
 if COIN_HAS_F77
 noinst_PROGRAMS += hs071_f
+endif
+
+if BUILD_SIPOPT
+noinst_PROGRAMS += parametric_cpp redhess_cpp
 endif
 
 nodist_hs071_cpp_SOURCES = hs071_main.cpp hs071_nlp.cpp hs071_nlp.hpp
@@ -36,6 +40,11 @@ CLEANFILES = HS071.class
 
 endif
 
+nodist_parametric_cpp_SOURCES = parametricTNLP.cpp parametric_driver.cpp
+parametric_cpp_LDADD = ../contrib/sIPOPT/src/libsipopt.la
+
+nodist_redhess_cpp_SOURCES = MySensTNLP.cpp redhess_cpp.cpp
+redhess_cpp_LDADD = ../contrib/sIPOPT/src/libsipopt.la
 
 # Here list all include flags, relative to this "srcdir" directory.
 AM_CPPFLAGS = \
@@ -43,7 +52,10 @@ AM_CPPFLAGS = \
 	-I$(srcdir)/../src/LinAlg \
 	-I$(srcdir)/../src/LinAlg/TMatrices \
 	-I$(srcdir)/../src/Algorithm \
-	-I$(srcdir)/../src/Interfaces
+	-I$(srcdir)/../src/Interfaces \
+	-I$(srcdir)/../contrib/sIPOPT/src \
+	-I$(srcdir)/../contrib/sIPOPT/examples/parametric_cpp \
+	-I$(srcdir)/../contrib/sIPOPT/examples/redhess_cpp
 
 AM_FFLAGS = -I$(srcdir)/../src/Interfaces
 
@@ -60,7 +72,7 @@ endif
 
 unitTest: test
 
-.PHONY: test uniTest
+.PHONY: test unitTest
 
 ########################################################################
 #                          Cleaning stuff                              #

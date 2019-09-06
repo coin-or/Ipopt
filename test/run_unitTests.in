@@ -67,9 +67,17 @@ else
   echo "Skip testing Fortran Example (hs071_f not available)"
 fi
 
+# Java Example
 @BUILD_JAVA_TRUE@echo "Testing Java Example..."
 @BUILD_JAVA_TRUE@checkrun java -Djava.library.path=../src/Interfaces/.libs -cp ../src/Interfaces/org.coinor.ipopt.jar:. HS071 || retval=$?
 @BUILD_JAVA_FALSE@echo "Skip testing Java Example (Java interface not build)"
+
+# sIpopt examples
+@BUILD_SIPOPT_TRUE@echo "Testing sIpopt Example parametric_cpp..."
+@BUILD_SIPOPT_TRUE@checkrun ./parametric_cpp || retval=$?
+@BUILD_SIPOPT_TRUE@echo "Testing sIpopt Example redhess_cpp..."
+@BUILD_SIPOPT_TRUE@checkrun ./redhess_cpp || retval=$?
+@BUILD_SIPOPT_FALSE@echo "Skip testing sIpopt examples (sIPOPT not build)"
 
 # clean up
 rm -rf tmpfile debug.out ipopt.out IPOPT.OUT

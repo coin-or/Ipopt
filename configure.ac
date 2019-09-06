@@ -413,7 +413,7 @@ AC_ARG_ENABLE([sipopt],
        AC_MSG_ERROR([invalid argument for --enable-sipopt: $enableval]);;
    esac
    use_sipopt=$enableval],
-  [use_sipopt=no])
+  [use_sipopt=yes])
 AM_CONDITIONAL(BUILD_SIPOPT, [test "$use_sipopt" = yes])
 
 ########################################################################
@@ -424,6 +424,13 @@ AC_CONFIG_LINKS([test/hs071_main.cpp:examples/hs071_cpp/hs071_main.cpp
                  test/hs071_nlp.cpp:examples/hs071_cpp/hs071_nlp.cpp
                  test/hs071_nlp.hpp:examples/hs071_cpp/hs071_nlp.hpp
                  test/hs071_c.c:examples/hs071_c/hs071_c.c])
+
+if test "$use_sipopt" = yes ; then
+AC_CONFIG_LINKS([test/parametric_driver.cpp:contrib/sIPOPT/examples/parametric_cpp/parametric_driver.cpp
+  test/parametricTNLP.cpp:contrib/sIPOPT/examples/parametric_cpp/parametricTNLP.cpp
+  test/MySensTNLP.cpp:contrib/sIPOPT/examples/redhess_cpp/MySensTNLP.cpp
+  test/redhess_cpp.cpp:contrib/sIPOPT/examples/redhess_cpp/redhess_cpp.cpp])
+fi
 
 ########################################################################
 ##          Create links for VPATH config of certain files            ##

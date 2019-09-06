@@ -94,8 +94,10 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-noinst_PROGRAMS = hs071_cpp$(EXEEXT) hs071_c$(EXEEXT) $(am__EXEEXT_1)
+noinst_PROGRAMS = hs071_cpp$(EXEEXT) hs071_c$(EXEEXT) $(am__EXEEXT_1) \
+	$(am__EXEEXT_2)
 @COIN_HAS_F77_TRUE@am__append_1 = hs071_f
+@BUILD_SIPOPT_TRUE@am__append_2 = parametric_cpp redhess_cpp
 subdir = test
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -106,9 +108,12 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/src/Common/config.h \
 	$(top_builddir)/src/Common/config_ipopt.h
 CONFIG_CLEAN_FILES = run_unitTests hs071_main.cpp hs071_nlp.cpp \
-	hs071_nlp.hpp hs071_c.c
+	hs071_nlp.hpp hs071_c.c parametric_driver.cpp \
+	parametricTNLP.cpp MySensTNLP.cpp redhess_cpp.cpp
 CONFIG_CLEAN_VPATH_FILES =
 @COIN_HAS_F77_TRUE@am__EXEEXT_1 = hs071_f$(EXEEXT)
+@BUILD_SIPOPT_TRUE@am__EXEEXT_2 = parametric_cpp$(EXEEXT) \
+@BUILD_SIPOPT_TRUE@	redhess_cpp$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 nodist_hs071_c_OBJECTS = hs071_c.$(OBJEXT)
 hs071_c_OBJECTS = $(nodist_hs071_c_OBJECTS)
@@ -126,6 +131,14 @@ nodist_hs071_f_OBJECTS = hs071_f.$(OBJEXT)
 hs071_f_OBJECTS = $(nodist_hs071_f_OBJECTS)
 hs071_f_DEPENDENCIES = ../src/Interfaces/libipopt.la \
 	$(am__DEPENDENCIES_1)
+nodist_parametric_cpp_OBJECTS = parametricTNLP.$(OBJEXT) \
+	parametric_driver.$(OBJEXT)
+parametric_cpp_OBJECTS = $(nodist_parametric_cpp_OBJECTS)
+parametric_cpp_DEPENDENCIES = ../contrib/sIPOPT/src/libsipopt.la
+nodist_redhess_cpp_OBJECTS = MySensTNLP.$(OBJEXT) \
+	redhess_cpp.$(OBJEXT)
+redhess_cpp_OBJECTS = $(nodist_redhess_cpp_OBJECTS)
+redhess_cpp_DEPENDENCIES = ../contrib/sIPOPT/src/libsipopt.la
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -141,8 +154,10 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src/Common
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/hs071_c.Po ./$(DEPDIR)/hs071_main.Po \
-	./$(DEPDIR)/hs071_nlp.Po
+am__depfiles_remade = ./$(DEPDIR)/MySensTNLP.Po ./$(DEPDIR)/hs071_c.Po \
+	./$(DEPDIR)/hs071_main.Po ./$(DEPDIR)/hs071_nlp.Po \
+	./$(DEPDIR)/parametricTNLP.Po ./$(DEPDIR)/parametric_driver.Po \
+	./$(DEPDIR)/redhess_cpp.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -196,7 +211,8 @@ am__v_F77LD_ = $(am__v_F77LD_@AM_DEFAULT_V@)
 am__v_F77LD_0 = @echo "  F77LD   " $@;
 am__v_F77LD_1 = 
 SOURCES = $(nodist_hs071_c_SOURCES) $(nodist_hs071_cpp_SOURCES) \
-	$(nodist_hs071_f_SOURCES)
+	$(nodist_hs071_f_SOURCES) $(nodist_parametric_cpp_SOURCES) \
+	$(nodist_redhess_cpp_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -395,6 +411,10 @@ hs071_c_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
 nodist_hs071_f_SOURCES = hs071_f.f
 hs071_f_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
 @BUILD_JAVA_TRUE@CLEANFILES = HS071.class
+nodist_parametric_cpp_SOURCES = parametricTNLP.cpp parametric_driver.cpp
+parametric_cpp_LDADD = ../contrib/sIPOPT/src/libsipopt.la
+nodist_redhess_cpp_SOURCES = MySensTNLP.cpp redhess_cpp.cpp
+redhess_cpp_LDADD = ../contrib/sIPOPT/src/libsipopt.la
 
 # Here list all include flags, relative to this "srcdir" directory.
 AM_CPPFLAGS = \
@@ -402,7 +422,10 @@ AM_CPPFLAGS = \
 	-I$(srcdir)/../src/LinAlg \
 	-I$(srcdir)/../src/LinAlg/TMatrices \
 	-I$(srcdir)/../src/Algorithm \
-	-I$(srcdir)/../src/Interfaces
+	-I$(srcdir)/../src/Interfaces \
+	-I$(srcdir)/../contrib/sIPOPT/src \
+	-I$(srcdir)/../contrib/sIPOPT/examples/parametric_cpp \
+	-I$(srcdir)/../contrib/sIPOPT/examples/redhess_cpp
 
 AM_FFLAGS = -I$(srcdir)/../src/Interfaces
 
@@ -470,15 +493,27 @@ hs071_f$(EXEEXT): $(hs071_f_OBJECTS) $(hs071_f_DEPENDENCIES) $(EXTRA_hs071_f_DEP
 	@rm -f hs071_f$(EXEEXT)
 	$(AM_V_F77LD)$(F77LINK) $(hs071_f_OBJECTS) $(hs071_f_LDADD) $(LIBS)
 
+parametric_cpp$(EXEEXT): $(parametric_cpp_OBJECTS) $(parametric_cpp_DEPENDENCIES) $(EXTRA_parametric_cpp_DEPENDENCIES) 
+	@rm -f parametric_cpp$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(parametric_cpp_OBJECTS) $(parametric_cpp_LDADD) $(LIBS)
+
+redhess_cpp$(EXEEXT): $(redhess_cpp_OBJECTS) $(redhess_cpp_DEPENDENCIES) $(EXTRA_redhess_cpp_DEPENDENCIES) 
+	@rm -f redhess_cpp$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(redhess_cpp_OBJECTS) $(redhess_cpp_LDADD) $(LIBS)
+
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MySensTNLP.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hs071_c.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hs071_main.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hs071_nlp.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parametricTNLP.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parametric_driver.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/redhess_cpp.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -637,9 +672,13 @@ clean-am: clean-generic clean-libtool clean-noinstPROGRAMS \
 	mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/hs071_c.Po
+		-rm -f ./$(DEPDIR)/MySensTNLP.Po
+	-rm -f ./$(DEPDIR)/hs071_c.Po
 	-rm -f ./$(DEPDIR)/hs071_main.Po
 	-rm -f ./$(DEPDIR)/hs071_nlp.Po
+	-rm -f ./$(DEPDIR)/parametricTNLP.Po
+	-rm -f ./$(DEPDIR)/parametric_driver.Po
+	-rm -f ./$(DEPDIR)/redhess_cpp.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -685,9 +724,13 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/hs071_c.Po
+		-rm -f ./$(DEPDIR)/MySensTNLP.Po
+	-rm -f ./$(DEPDIR)/hs071_c.Po
 	-rm -f ./$(DEPDIR)/hs071_main.Po
 	-rm -f ./$(DEPDIR)/hs071_nlp.Po
+	-rm -f ./$(DEPDIR)/parametricTNLP.Po
+	-rm -f ./$(DEPDIR)/parametric_driver.Po
+	-rm -f ./$(DEPDIR)/redhess_cpp.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -740,7 +783,7 @@ hs071_f.f:
 
 unitTest: test
 
-.PHONY: test uniTest
+.PHONY: test unitTest
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
