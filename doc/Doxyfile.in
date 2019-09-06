@@ -319,7 +319,7 @@ AUTOLINK_SUPPORT       = YES
 # diagrams that involve STL classes more complete and accurate.
 # The default value is: NO.
 
-BUILTIN_STL_SUPPORT    = YES
+BUILTIN_STL_SUPPORT    = NO
 
 # If you use Microsoft's C++/CLI language, you should set this option to YES to
 # enable parsing support.
@@ -781,7 +781,10 @@ WARN_FORMAT            = "$file:$line: $text"
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = @abs_top_srcdir@
+INPUT                  = @abs_top_srcdir@/doc \
+  @abs_top_srcdir@/src \
+  @abs_top_srcdir@/contrib/sIPOPT/src \
+  @abs_top_srcdir@/contrib/sIPOPT/AmplSolver
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -840,8 +843,7 @@ EXCLUDE_SYMLINKS       = NO
 # Note that the wildcards are matched against the file with absolute path, so to
 # exclude all test directories for example use the pattern */test/*
 
-EXCLUDE_PATTERNS       = */.git* \
-                         @coin_doxy_excludes@
+EXCLUDE_PATTERNS       = @coin_doxy_excludes@
 
 # The EXCLUDE_SYMBOLS tag can be used to specify one or more symbol names
 # (namespaces, classes, functions, etc.) that should be excluded from the
@@ -859,8 +861,7 @@ EXCLUDE_SYMBOLS        =
 # command).
 
 EXAMPLE_PATH           = @abs_top_srcdir@/examples \
-  @abs_top_srcdir@/src/Interfaces \
-  @abs_top_srcdir@/contrib/JavaInterface
+  @abs_top_srcdir@/src/Interfaces
 
 # If the value of the EXAMPLE_PATH tag contains directories, you can use the
 # EXAMPLE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp and
@@ -2058,26 +2059,21 @@ PREDEFINED             = COIN_HAS_ASL \
                          COIN_HAS_HSL \
                          COIN_HAS_LAPACK \
                          COIN_HAS_MUMPS \
-                         F77_FUNC(x)=x \
-                         HAVE_CASSERT \
-                         HAVE_CCTYPE \
                          HAVE_CFLOAT \
                          HAVE_CIEEEFP \
-                         HAVE_CMATH \
-                         HAVE_CSTDARG \
-                         HAVE_CSTDDEF \
-                         HAVE_CSTDIO \
-                         HAVE_CSTDLIB \
-                         HAVE_CSTRING \
-                         HAVE_CTIME \
-                         HAVE_CTYPE_H \
                          HAVE_DLFCN_H \
                          HAVE_DRAND48 \
+                         HAVE_LINEARSOLVERLOADER \
                          HAVE_PARDISO \
                          HAVE_SNPRINTF \
                          HAVE_VA_COPY \
                          HAVE_VSNPRINTF \
                          HAVE_WSMP \
+                         COIN_LAPACK_FUNC(x)=x \
+                         F77_FUNC(x)=x \
+                         HSL_FUNC(x)=x \
+                         PARDISO_FUNC(x)=x \
+                         WSMP_FUNC(x)=x \
                          IPOPT_EXPORT(x)=x \
                          __cplusplus
 
