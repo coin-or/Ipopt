@@ -69,6 +69,7 @@ endif
 
 clean-doc:
 	cd doc && rm -rf html *.log *.tag
+	rm -rf javadoc
 
 clean-local : clean-doc
 
