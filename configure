@@ -3044,7 +3044,7 @@ fi
       : ${FFLAGS:="-nologo -Z7 -MDd"}
       : ${FCFLAGS:="-nologo -Z7 -MDd"}
       : ${CFLAGS:="-nologo -Z7 -MDd"}
-      : ${CXXFLAGS:="-nologo -EHsc -Z7 -MDd"}
+      : ${CXXFLAGS:="-nologo -EHs -Z7 -MDd"}
       : ${AR:="lib"}
       : ${AR_FLAGS:="-nologo -out:"}
     else
@@ -3058,7 +3058,7 @@ fi
       : ${FFLAGS:="-nologo -O2 -MD"}
       : ${FCFLAGS:="-nologo -O2 -MD"}
       : ${CFLAGS:="-nologo -DNDEBUG -O2 -MD"}
-      : ${CXXFLAGS:="-nologo -EHsc -DNDEBUG -O2 -MD"}
+      : ${CXXFLAGS:="-nologo -EHs -DNDEBUG -O2 -MD"}
       : ${AR:="lib"}
       : ${AR_FLAGS:="-nologo -out:"}
     else
@@ -3944,28 +3944,75 @@ fi
 
 
 
-# Setting up libtool with LT_INIT will AC_REQUIRE AC_PROG_CC, but we want
-# to invoke it from this macro first so that we can supply a parameter.
+  # Setting up libtool with LT_INIT will AC_REQUIRE AC_PROG_CC, but we want
+  # to invoke it from this macro first so that we can supply a parameter.
 
 
-
-# If enable-msvc, then test only for MS and Intel (on Windows) C compiler
-# otherwise, test a long list of C compilers that comes into our mind
-
+  # If enable-msvc, then test for Intel (on Windows) and MS C compiler
+  # explicitly and add compile-wrapper before AC_PROG_CC, because
+  # the compile-wrapper work around issues when having the wrong link.exe
+  # in the PATH first, which would upset tests in AC_PROG_CC.
+  # Further, if CC unset and not set by user, then stop with error.
   if test $enable_msvc = yes ; then
-    comps="icl cl"
-  else
-    # TODO old buildtools was doing some $build specific logic here, do we
-    # still need this?
-    comps="gcc clang cc icc icl cl cc xlc xlc_r pgcc"
+    for ac_prog in icl cl
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_CC+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$CC"; then
+  ac_cv_prog_CC="$CC" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_CC="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
   fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+CC=$ac_cv_prog_CC
+if test -n "$CC"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CC" >&5
+$as_echo "$CC" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$CC" && break
+done
+
+    if test -n "$CC" ; then
+      CC="$am_aux_dir/compile $CC"
+    else
+      as_fn_error $? "Neither MS nor Intel C compiler found in PATH and CC is unset." "$LINENO" 5
+    fi
+  fi
+
+  # look for some C compiler and check whether it works
+  # if user has set CC or we found icl/cl above, this shouldn't overwrite CC
+  # other than CXX of F77, this macro also takes care of adding the compile-wrapper
   ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 if test -n "$ac_tool_prefix"; then
-  for ac_prog in $comps
+  for ac_prog in gcc clang cc icc icl cl cc xlc xlc_r pgcc
   do
     # Extract the first word of "$ac_tool_prefix$ac_prog", so it can be a program name with args.
 set dummy $ac_tool_prefix$ac_prog; ac_word=$2
@@ -4009,7 +4056,7 @@ fi
 fi
 if test -z "$CC"; then
   ac_ct_CC=$CC
-  for ac_prog in $comps
+  for ac_prog in gcc clang cc icc icl cl cc xlc xlc_r pgcc
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
@@ -4748,16 +4795,63 @@ fi
 
 
 
-# If enable-msvc, then test only for MS and Intel (on Windows) C++ compiler
-# otherwise, test a long list of C++ compilers that comes into our mind
-
+  # If enable-msvc, then test for Intel (on Windows) and MS C++ compiler
+  # explicitly and add compile-wrapper before AC_PROG_CXX, because
+  # the compile-wrapper work around issues when having the wrong link.exe
+  # in the PATH first, which would upset tests in AC_PROG_CXX.
+  # Further, if CXX unset and not set by user, then stop with error.
   if test $enable_msvc = yes ; then
-    comps="icl cl"
-  else
-    # TODO old buildtools was doing some $build specific logic here, do we
-    # still need this?
-    comps="g++ clang++ c++ pgCC icpc gpp cxx cc++ icl cl FCC KCC RCC xlC_r aCC CC"
+    for ac_prog in icl cl
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_CXX+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$CXX"; then
+  ac_cv_prog_CXX="$CXX" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_CXX="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
   fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+CXX=$ac_cv_prog_CXX
+if test -n "$CXX"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CXX" >&5
+$as_echo "$CXX" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$CXX" && break
+done
+
+    if test -n "$CXX" ; then
+      CXX="$am_aux_dir/compile $CXX"
+    else
+      as_fn_error $? "Neither MS nor Intel C++ compiler found in PATH and CXX is unset." "$LINENO" 5
+    fi
+  fi
+
+  # look for some C++ compiler and check whether it works
+  # if user has set CXX or we found icl/cl above, this shouldn't overwrite CXX
   ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -4768,7 +4862,7 @@ if test -z "$CXX"; then
     CXX=$CCC
   else
     if test -n "$ac_tool_prefix"; then
-  for ac_prog in $comps
+  for ac_prog in g++ clang++ c++ pgCC icpc gpp cxx cc++ icl cl FCC KCC RCC xlC_r aCC CC
   do
     # Extract the first word of "$ac_tool_prefix$ac_prog", so it can be a program name with args.
 set dummy $ac_tool_prefix$ac_prog; ac_word=$2
@@ -4812,7 +4906,7 @@ fi
 fi
 if test -z "$CXX"; then
   ac_ct_CXX=$CXX
-  for ac_prog in $comps
+  for ac_prog in g++ clang++ c++ pgCC icpc gpp cxx cc++ icl cl FCC KCC RCC xlC_r aCC CC
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
@@ -5144,9 +5238,7 @@ fi
 
 
 
-# If the compiler does not support -c -o, then wrap the compile script around
-# it.
-
+  # If the compiler does not support -c -o, then wrap the compile script around it.
   ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -5232,20 +5324,67 @@ fi
     # make sure F77 is not set
     unset F77
   else
-    # if enable-msvc, then test only for Intel (on Windows) Fortran compiler
+    # If enable-msvc, then test for Intel Fortran compiler for Windows
+    # explicitly and add compile-wrapper before AC_PROG_F77, because
+    # the compile-wrapper work around issues when having the wrong link.exe
+    # in the PATH first, which could upset tests in AC_PROG_F77.
     if test $enable_msvc = yes ; then
-      comps="ifort"
-    else
-      # TODO old buildtools was doing some $build specific logic here, do we still
-      # need this?
-      comps="gfortran ifort g95 fort77 f77 f95 f90 g77 pgf90 pgf77 ifc frt af77 xlf_r fl32"
+      for ac_prog in ifort
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_F77+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$F77"; then
+  ac_cv_prog_F77="$F77" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_F77="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+F77=$ac_cv_prog_F77
+if test -n "$F77"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $F77" >&5
+$as_echo "$F77" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$F77" && break
+done
+
+      if test -n "$F77" ; then
+        F77="$am_aux_dir/compile $F77"
+      fi
     fi
-    ac_ext=f
+
+    # if not msvc-enabled, then look for some Fortran compiler and check whether it works
+    # if F77 is set, then this only checks whether it works
+    if test $enable_msvc = no || test -n "$F77" ; then
+      ac_ext=f
 ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
 ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_f77_compiler_gnu
 if test -n "$ac_tool_prefix"; then
-  for ac_prog in $comps
+  for ac_prog in gfortran ifort g95 fort77 f77 f95 f90 g77 pgf90 pgf77 ifc frt af77 xlf_r fl32
   do
     # Extract the first word of "$ac_tool_prefix$ac_prog", so it can be a program name with args.
 set dummy $ac_tool_prefix$ac_prog; ac_word=$2
@@ -5289,7 +5428,7 @@ fi
 fi
 if test -z "$F77"; then
   ac_ct_F77=$F77
-  for ac_prog in $comps
+  for ac_prog in gfortran ifort g95 fort77 f77 f95 f90 g77 pgf90 pgf77 ifc frt af77 xlf_r fl32
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
@@ -5451,10 +5590,10 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+    fi
   fi
 
-# Allow for the possibility that there is no Fortran compiler on the system.
-
+  # Allow for the possibility that there is no Fortran compiler on the system.
   if test -z "$F77" ; then
     { $as_echo "$as_me:${as_lineno-$LINENO}: No Fortran 77 compiler available." >&5
 $as_echo "$as_me: No Fortran 77 compiler available." >&6;}
@@ -24727,7 +24866,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 24730 "configure" */
+/* #line 24869 "configure" */
 public class Test {
 }
 EOF
@@ -25195,7 +25334,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25198 "configure" */
+/* #line 25337 "configure" */
 public class Test {
 }
 EOF
@@ -25229,7 +25368,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25232 "configure" */
+/* [#]line 25371 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);

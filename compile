@@ -135,6 +135,7 @@ func_cl_wrapper ()
   linker_opts=
   outfile=
   implib=
+  linking=1
   for arg
   do
     if test -n "$eat"; then
@@ -219,6 +220,11 @@ func_cl_wrapper ()
 	  set x "$@" "$file"
 	  shift
 	  ;;
+	-c)
+	  linking=0
+	  set x "$@" "$1"
+	  shift
+	  ;;
 	*)
 	  set x "$@" "$1"
 	  shift
@@ -232,6 +238,15 @@ func_cl_wrapper ()
   fi
   # remove old $implib, so we can distinguish between generated and not-generated implib below
   if test -n "$implib" && test -f "$implib" ; then rm "$implib" ; fi
+
+  # add path to MSVC link in front on PATH if we seem to link (check isn't so accurate, but some false-positives shouldn't matter)
+  # compiler will call the link it finds in the PATH, and we don't want it to use MSYS' /bin/link
+  # we assume that MSVC link is in same directory as cl and that cl is found in PATH
+  if test "$linking" = 1 && comppath=`which cl 2>/dev/null` ; then
+    comppath=`dirname "$comppath"`
+    #echo "Adding $comppath to front of PATH"
+    PATH="$comppath:$PATH"
+  fi
 
   #echo "compile: $@ $linker_opts"
   "$@" $linker_opts || exit $?
