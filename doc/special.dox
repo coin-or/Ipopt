@@ -230,14 +230,11 @@ linearization of the KKT conditions. More details can be found in
 please cite \cite PLNB:sIpopt.
 
 The `sIpopt` project is available in the \Ipopt repository under
-`$IPOPTDIR/Ipopt/contrib/sIPOPT`. After having installed
-\Ipopt successfully, `sIpopt` can be build and
-installed by changing to the directory
-`$IPOPTDIR/build/Ipopt/contrib/sIPOPT` and executing make install. This
-should copy the generated libraries `libsipopt.*` to `$IPOPTDIR/build/lib`
-and an AMPL executable `ipopt_sens` to `$IPOPTDIR/build/bin`.
+`$IPOPTDIR/contrib/sIPOPT`. It is build together with the \Ipopt library
+and the generated library `libsipopt.*` and AMPL executable `ipopt_sens`
+are installed in `$PREFIX/lib` and `$PREFIX/bin`.
 
-The files `$IPOPTDIR/Ipopt/contrib/sIPOPT/examples/parametric_ampl/parametric.{mod,run}`
+The files `$IPOPTDIR/contrib/sIPOPT/examples/parametric_ampl/parametric.{mod,run}`
 are an example that shows how to use `sIpopt` to solve the NLP
 \f{align*}{
 \min\quad & x_1^2 + x_2^2 + x_3^2, \\

@@ -35,10 +35,8 @@ The \Ipopt documentation gives detailed instructions on how to obtain and compil
 
 ## On what operating systems can \Ipopt be used?
 
-Convenient configuration scripts and Makefiles are provided and have been tested for several flavors of UNIX (Mac OS X, AIX, IRIX, Linux, OSF1, SunOS).
-The code has also been successfully compiled with the Developer Studio under Windows.
-A native win32 compilation can also be done using MinGW/MSYS [see Hints and Tricks](https://github.com/coin-or/Ipopt/wiki/HintsAndTricks).
-IPOPT had also been run on an old iPod, as well as BlueGene.
+Convenient configuration scripts and Makefiles are provided and have been tested for several flavors of GNU/Linux, Mac OS X, and MSYS2/MinGW.
+Previous versions of IPOPT have also been run on an old iPod, as well as BlueGene.
 
 ## Is \Ipopt thread-safe?
 
@@ -59,7 +57,8 @@ Additional technical information may be found in other publications [here](https
 
 ## Who do I contact with questions about \Ipopt?
 
-If you have any questions or comments please send a message to the [Ipopt Mailing List](http://list.coin-or.org/mailman/listinfo/ipopt).
+If you have any questions or comments please send a message to the [Ipopt Mailing List](http://list.coin-or.org/mailman/listinfo/ipopt)
+or open an issue on the [Ipopt GitHub issue tracker](https://github.com/coin-or/Ipopt/issues).
 Please include detailed information about your configuration (operating system, compilers, version number of Ipopt, etc) if you are writing about a compilation or execution problem.
 (Note: You need to subscribe to the mailing list before you can post a message.)
 

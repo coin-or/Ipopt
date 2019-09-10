@@ -330,9 +330,7 @@ pointer that takes care of memory management (object deletion) for you
 (for details, see \ref SMARTPTR).
 
 After `make install` (see \ref COMPILEINSTALL), the header files that
-define these classes are installed in
-`$IPOPTDIR/include/coin` (or in `$PREFIX/include/coin` if the switch
-`--prefix=$PREFIX` was used for configure).
+define these classes are installed in `$PREFIX/include/coin-or`.
 
 \subsubsection INTERFACE_CPP_NLP Coding the Problem Representation
 
@@ -543,13 +541,12 @@ progress to the console, and return the SolverReturn status.
 
 Our next task is to compile and test the code. If you are familiar with
 the compiler and linker used on your system, you can build the code,
-telling the linker about the necessary libraries, as listed in the
-`ipopt_addlibs_cpp.txt` file. If you are using the autotools based build
-system, then a sample makefile created by configure already exists. Copy
-`Ipopt/examples/hs071_cpp/Makefile` into your `MyExample` directory. This
-makefile was created for the `hs071_cpp` code, but it can be easily
-modified for your example problem. Edit the file, making the following
-changes,
+telling the linker about the necessary libraries, as obtained via
+`pkg-config --lflags ipopt`. The build system already created a sample
+makefile. Copy `Ipopt/examples/hs071_cpp/Makefile` into your `MyExample`
+directory. This makefile was created for the `hs071_cpp` code, but it can
+be easily modified for your example problem. Edit the file, making the
+following changes:
 
 -   change the EXE variable \verbatim
 EXE = my_example \endverbatim
@@ -557,16 +554,16 @@ EXE = my_example \endverbatim
 -   change the OBJS variable \verbatim
 OBJS = HS071_NLP.o MyExample.o \endverbatim
 
-and the problem should compile easily with,
+The code should compile easily with
 \verbatim
 $ make
 \endverbatim
 
-Now run the executable,
+Now run the executable with
 \verbatim
 $ ./my_example
 \endverbatim
-and you should see output resembling the following,
+and you should see output resembling the following:
 \verbatim
 ******************************************************************************
 This program contains Ipopt, a library for large-scale nonlinear optimization.
@@ -743,7 +740,7 @@ This method is called only if the \ref QUASI_NEWTON "quasi-Newton approximation"
 \subsection INTERFACE_C The C Interface
 
 The C interface for \Ipopt is declared in the header file
-IpStdCInterface.h, which is found in `$IPOPTDIR/include/coin`;
+IpStdCInterface.h, which is found in `$PREFIX/include/coin-or`;
 while reading this section,
 it will be helpful to have a look at this file.
 
@@ -759,7 +756,7 @@ dimensions, the variable and constraint bounds, and the function
 pointers for callbacks that will be used to evaluate the NLP problem
 functions and their derivatives (see also the discussion of the C++
 methods Ipopt::TNLP::get_nlp_info and Ipopt::TNLP::get_bounds_info for information
-about the arguments of \ref CreateIpoptProblem.
+about the arguments of \ref CreateIpoptProblem).
 
 The prototypes for the callback functions, \ref Eval_F_CB,
 \ref Eval_Grad_F_CB, etc., are defined in the header file
@@ -939,23 +936,21 @@ It offers an abstract base class \ref org.coinor.Ipopt "Ipopt"
 with basic methods to specify an NLP, set a number of \Ipopt options,
 to request \Ipopt to solve the NLP, and to retrieve a found
 solution, if any. A HTML documentation of all available interface
-methods of the \ref org.coinor.Ipopt "Ipopt" class can be generated via
-javadoc by executing make doc in the `JIpopt` build directory.
+methods of the \ref org.coinor.Ipopt "Ipopt" class can also be generated
+via javadoc by executing `make javadoc` in the \Ipopt build directory
+(`$IPOPTDIR`).
+
+If the \Ipopt build includes the Java interface, then a JAR file
+`org.coinor.ipopt.jar` containing class org.coinor.Ipopt will have been
+installed in `$PREFIX/lib`. To use the Java interface, make sure that this
+jar file is part of your Java classpath.
+A sample makefile that compiles and runs example HS071 can be found in
+`$IPOPTDIR/examples/hs071_java`.
 
 In the following, we discuss necessary steps to implement example (HS071)
 with `JIpopt`.
-
-First, we create a new directory and therein sub directories
-`org/coinor/`. Into `org/coinor/` we copy the file Ipopt.java, which
-contains the Java code of the interface, from the corresponding `JIpopt`
-source directory (`$IPOPTDIR/Ipopt/contrib/JavaInterface/org/coinor`).
-Further, we create a directory `lib` next to the `org` directory and place
-the previously build `JIpopt` library into it (`libjipopt.so` on Linux/UNIX,
-`libjipopt.dylib` on Mac OS X, `jipopt.dll` on Windows), see also
-\ref INSTALL_JAVA.
-
-Next, we create a new Java source file HS071.java and define a class
-`HS071` that extends the class \ref org.coinor.Ipopt "Ipopt" of `JIpopt`.
+We create a new Java source file HS071.java and define a class
+`HS071` that extends the class \ref org.coinor.Ipopt "Ipopt".
 In the class constructor, we call the \ref org.coinor.Ipopt::create()
 method of `JIpopt`, which works analogously to \ref Ipopt::TNLP::get_nlp_info()
 of the C++ interface. It initializes an \ref Ipopt::IpoptApplication object
@@ -1005,7 +1000,7 @@ options as input and returns information about an \Ipopt run
 
 In the following, we discuss necessary steps to implement example (HS071)
 with `ipoptr`. A more detailed documentation of `ipoptr` is
-available in `Ipopt/contrib/RInterface/inst/doc/ipoptr.pdf`.
+available in [contrib/RInterface/inst/doc/ipoptr.pdf](https://github.com/coin-or/Ipopt/raw/master/contrib/RInterface/inst/doc/ipoptr.pdf).
 
 First, we define the objective function and its gradient
 \code{.unparsed}

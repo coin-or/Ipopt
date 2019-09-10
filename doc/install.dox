@@ -4,9 +4,9 @@
 \tableofcontents
 
 The following sections describe the installation procedures on
-UNIX/Linux systems. For installation instructions on Windows see
-\ref INSTALL_WINDOWS.
+UNIX/Linux, Mac OS X, and Windows systems.
 
+<!-- TODO cleanup the pages below before linking to them again
 Additional hints on installing \Ipopt and its various
 interfaces is available on the \Ipopt and CoinHelp wiki
 pages, in particular
@@ -16,98 +16,99 @@ pages, in particular
 
 - Current configuration and installation issues for COIN-OR projects:
     <https://projects.coin-or.org/BuildTools/wiki/current-issues>
+-->
 
 \section SYSTEMPACKAGES Getting System Packages (Compilers, ...)
+
+\subsection SYSTEMPACKAGES_LINUX Linux distributions
 
 Many Linux distributions will come with all necessary tools. All you
 should need to do is check the compiler versions. On a Debian-based
 distribution, you can obtain all necessary tools with the following
 command:
 
-    sudo apt-get install gcc g++ gfortran git patch wget
+    sudo apt-get install gcc g++ gfortran git patch wget pkg-config
 
-Replace apt-get with your relevant package manager, e.g. yum for Red
-Hat-based distributions, zypper for SUSE, etc. The g++ and gfortran
-compilers may need to be specified respectively as gcc-c++ and
-gcc-gfortran with some package managers.
+Replace apt-get with your relevant package manager, e.g. `dnf` for
+RedHat-based distributions, `pacman` for Arch, etc. The g++ and gfortran
+compilers may need to be specified respectively as `gcc-c++` and
+`gcc-gfortran` with some package managers.
 
-On Mac OS X, you need either the [Xcode Command Line Tools](https://developer.apple.com/downloads)
-or a community alternative such as
-<https://github.com/kennethreitz/osx-gcc-installer> to install
-the gcc and g++ compilers. It has been reported, that gcc/g++ 4.2 and
-older is not sufficient for using the HSL codes. If you have a recent
-version of Xcode installed, the Command Line Tools are available under
-Preferences, Downloads. In Xcode 3.x, the Command Line Tools are
+\subsection SYSTEMPACKAGES_MAC Mac OS X
+
+You need either the [Xcode Command Line Tools](https://developer.apple.com/downloads)
+or a community alternative such as Homebrew to install the GNU compilers:
+
+    brew update
+    brew install bash gcc
+    brew link --overwrite gcc
+
+Further, pkg-config is required, which can be installed via Homebrew by
+
+    brew install pkg-config
+
+If you have a recent version of Xcode installed, the Command Line Tools
+are available under Preferences, Downloads. In Xcode 3.x, the Command Line Tools are
 contained in the optional item "UNIX Dev Support" during Xcode
 installation. These items unfortunately do not come with a Fortran
 compiler, but you can get gfortran from
-http://gcc.gnu.org/wiki/GFortranBinaries#MacOS. We have been able to
-compile \Ipopt using default Xcode versions of gcc and g++
-and a newer version of gfortran from this link, but consistent version
-numbers may be an issue in future cases.
+http://gcc.gnu.org/wiki/GFortranBinaries#MacOS.
+In the past, we have been able to compile \Ipopt using default Xcode
+versions of gcc and g++ and a newer version of gfortran from this link,
+but consistent version numbers may be an issue in future cases.
 
-\section GETIPOPT Getting the Ipopt Code
+\subsection SYSTEMPACKAGES_MSYS Windows with MSYS2/MinGW
 
-\Ipopt is available from the COIN-OR group at GitHub. You can either
-download the code using `git` or
-simply retrieve a tarball (compressed archive file). While the tarball
-is an easy method to retrieve the code, using the *git*
-system allows users the benefits of the version control system,
-including easy updates and revision control.
+For Windows, one can compile \Ipopt under MSYS/MinGW, which is a
+light-weight UNIX-like environment for Windows.
 
-\section GETIPOPT_GIT Getting the Ipopt code via git
+MSYS2/MinGW can be obtained from <https://www.msys2.org/>.
+After installation, a number of additional packages needs to be installed:
 
-Of course, the *git* client must be installed on your system if you want
-to obtain the code this way (the executable is called `git`).
-Information about *git* and how to download it can be found at
-<http://git-scm.com>.
+    pacman -S binutils diffutils git grep make patch pkg-config
 
-To obtain the \Ipopt source code via git, change into the
-directory in which you want to create a subdirectory CoinIpopt with the
-\Ipopt source code. Then follow the steps below:
+(I might have forgotten something.)
+If you also want to use GNU compilers, then install them, too:
 
-1.  Download the code from the repository:
-    \verbatim
-git clone --recursive -b stable/3.12 https://github.com/coin-or/Ipopt.git CoinIpopt
-    \endverbatim
+    pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-gfortran
 
-2.  Change into the root directory of the \Ipopt distribution: \verbatim
-cd CoinIpopt
-    \endverbatim
+When using MinGW, it is convenient to install MinGW's Lapack as well:
 
-In the following, `$IPOPTDIR` will refer to the directory in which you
-are right now (output of `pwd`).
+    pacman -S mingw-w64-x86_64-lapack
 
-\section GETIPOPT_TAR Getting the Ipopt code as a tarball
+To use MSYS2/MinGW to compile \Ipopt with native MSVC/Intel compilers,
+the basic version MSYS2 version without MinGW is sufficient.
+To use the GNU compilers, MinGW is required.
 
-To use the tarball, follow the steps below:
+If you want to use the native MSVC or Intel compiler, you need to make sure
+that environment variables are setup for the compilers.
+One way is to create a shell script that executes the batch files that
+are provided by Microsoft and Intel for this purpose before starting MSYS2.
+For using MSVC, this script may have a form similar to
 
-1.  Download the desired tarball from
-    <http://www.coin-or.org/download/source/Ipopt>, it has the form
-    `Ipopt-x.y.z.tgz`, where `x.y.z` is the version number, such as
-    3.12.0.
+    set MSYS2_PATH_TYPE=inherit
+    call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"
+    C:\msys64\msys2.exe
+    exit 0
 
-2.  Issue the following commands to unpack the archive file:
-    \verbatim
-gunzip Ipopt-x.y.z.tgz
-tar xvf Ipopt-x.y.z.tar
-    \endverbatim
+For using Intel C/C++ and Fortran compilers, the 2nd line may be replaced
+by something like
 
-3.  Rename the directory you just extracted: \verbatim
-mv Ipopt-x.y.z CoinIpopt
-    \endverbatim
+    call "C:\Program Files (x86)\IntelSWTools\compilers_and_libraries\windows\bin\ipsxe-comp-vars.bat" intel64 vs2017
 
-4.  Change into the root directory of the \Ipopt distribution: \verbatim
-cd CoinIpopt
-    \endverbatim
+You might have to search around a bit. The important thing is that,
+after your change, you can type `cl` and it finds the Microsoft C++ compiler
+and, if installed, you can type `ifort` and it finds the Intel Fortran compiler.
 
-In the following, `$IPOPTDIR` will refer to the directory in which you
-are right now (output of `pwd`).
+\attention The build systems of \Ipopt and dependencies currently require
+that `--enable-msvc` is specified as argument to configure if MSVC or Intel
+compiler should be used on Windows. Keep this in mind when following the
+next sections.
 
-\section EXTERNALCODE Download External Code
+\section EXTERNALCODE Download, build, and install dependencies
 
 \Ipopt uses a few external packages that are not included
-in the \Ipopt source code distribution, namely ASL (the
+in the \Ipopt source code distribution, for example ASL (the
 AMPL Solver Library if you want to compile the \Ipopt AMPL
 solver executable), Blas, Lapack.
 
@@ -123,47 +124,16 @@ best for your application.**
 Since this third party software is released under different licenses
 than \Ipopt, we cannot distribute their code together with
 the \Ipopt packages and have to ask you to go through the
-hassle of obtaining it yourself (even though we tried to make it as easy
-for you as we could). Keep in mind that it is still your responsibility
+hassle of obtaining it yourself. Keep in mind that it is still your responsibility
 to ensure that your downloading and usage of the third party components
 conforms with their licenses.
 
-Note that you only need to obtain the ASL if you intend to use
-\Ipopt from AMPL. It is not required if you want to specify
-your optimization problem in a programming language (C++, C, or
-Fortran). Also, currently, Lapack is only required if you intend to use
-the quasi-Newton options implemented in \Ipopt.
-
-\subsection DOWNLOAD_LINALGASL Download BLAS, LAPACK and ASL
-
-Note: It is **highly recommended that you obtain an efficient
-implementation of the BLAS library**, tailored to your hardware;
-Section \ref PREREQUISITES lists a few options. Assuming that your
-precompiled efficient BLAS library is `libmyblas.a` in `$HOME/lib`, you
-need to add the flag `--with-blas="-L$HOME/lib -lmyblas"` when you run
-`configure` (see \ref COMPILEINSTALL). Some of those libraries also include
-LAPACK.
-
-If you have the download utility `wget` installed on your system (or
-`ftp` on Mac OS X, or `curl`), retrieving source code for BLAS (the inefficient
-reference implementation, not required if you have a precompiled
-library), as well as LAPACK and ASL is straightforward using scripts
-included with the ipopt distribution. These scripts download the
-required files from the [Netlib Repository](http://www.netlib.org).
-
-\verbatim
-cd $IPOPTDIR/ThirdParty/Blas
-./get.Blas
-cd $IPOPTDIR/ThirdParty/Lapack
-./get.Lapack
-cd $IPOPTDIR/ThirdParty/ASL
-./get.ASL
-\endverbatim
-
-If you do not have `wget` (or `ftp` on Mac OS X or `curl`) installed on your
-system, please read the `INSTALL.*` files in the
-`$IPOPTDIR/ThirdParty/Blas`, `$IPOPTDIR/ThirdParty/Lapack` and
-`$IPOPTDIR/ThirdParty/ASL` directories for alternative instructions.
+For a number of dependencies, COIN-OR provides specialized build systems
+that produce libraries which are easy to use with the build system of \Ipopt.
+Some of the specialized build systems also come with a script that makes it
+easy to download the code using `wget` (or `curl` on Mac OS X). If these
+tools are not available on your system, please read the appropriate
+`INSTALL.*` file for alternative instructions.
 
 If you are having firewall issues with `wget`, try opening the
 `get.<library>` scripts and replace the line `wgetcmd=wget` with
@@ -173,7 +143,45 @@ If you are getting permissions errors from `tar`, try opening the
 `get.<library>` scripts and replace any instances of `tar xf` with
 `tar --no-same-owner -xf`.
 
-\subsection DOWNLOAD_HSL Download HSL Subroutines
+\subsection EXTERNALCODE_ASL ASL (Ampl Solver Library)
+
+Note that you only need to obtain the ASL if you intend to use
+\Ipopt from AMPL. It is not required if you want to specify
+your optimization problem in a programming language (e.g., C++, C, or
+Fortran).
+
+The COIN-OR Tools project [ThirdParty-ASL](https://github.com/coin-or-tools/ThirdParty-ASL/)
+can be used to download the ASL code and build an ASL library that is
+recognized by Ipopt.
+To do so, execute
+
+    git clone https://github.com/coin-or-tools/ThirdParty-ASL.git
+    cd ThirdParty-ASL
+    ./get.ASL
+    ./configure
+    make
+    sudo make install
+
+\subsection EXTERNALCODE_LINALG BLAS and LAPACK
+
+\Ipopt's build system tries to find an installation of BLAS and LAPACK
+in your system.
+On Ubuntu, such libraries can be made available by installing liblapack-dev.
+Other Linux distributions typically also offer a way to install Blas and
+Lapack via its package manager.
+On Mac OS X, \Ipopt's build system should pick up the Blas and Lapack
+from the Accelerate framework.
+
+\note It is **highly recommended that you obtain an efficient
+implementation of the BLAS and LAPACK library**, tailored to your hardware;
+Section \ref PREREQUISITES lists a few options. Assuming that your
+precompiled efficient BLAS and LAPACK libraries are `libmyblas.a` and
+`libmylapack.a`, respectively, in `$HOME/lib`, you need to add the flag
+`--with-lapack="-L$HOME/lib -lmylapack -lmyblas"` when you run
+`configure` (see \ref COMPILEINSTALL).
+
+
+\subsection DOWNLOAD_HSL HSL (Harwell Subroutines Library)
 
 There are two versions of HSL available:
 
@@ -183,18 +191,16 @@ There are two versions of HSL available:
     purchasing a licence from the authors. This version includes MA27,
     MA28, and MC19.
 
-- HSL 2011:   contains more modern codes that are freely available for academic
+- HSL Full:   contains more modern codes that are freely available for academic
     use only. This version includes the codes from the HSL Archive and
     additionally MA57, HSL_MA77, HSL_MA86, and HSL_MA97.
-    \Ipopt supports the HSL 2011 codes from 2012 and 2013,
-    the support for the versions from 2012 may be dropped in a future
-    release.
+    \Ipopt supports the HSL Full codes from 2013 and later.
 
 To obtain the HSL code, you can follow the following steps:
 
 1.  Go to <http://hsl.rl.ac.uk/ipopt>.
 
-2.  Choose whether to download either the Archive code or the HSL 2011
+2.  Choose whether to download either the Archive code or the HSL Full
     code. To download, select the relevant "source" link.
 
 3.  Follow the instructions on the website, read the license, and submit
@@ -205,20 +211,30 @@ To obtain the HSL code, you can follow the following steps:
 
 You may either:
 
--   Compile the HSL code as part of \Ipopt. See the
-    instructions below.
+-   Compile the HSL code via the COIN-OR Tools project
+    [ThirdParty-HSL](https://github.com/coin-or-tools/ThirdParty-HSL)
+    See the instructions below.
 
 -   Compile the HSL code separately either before or after the
     \Ipopt code and use the shared library loading
     mechanism. See the documentation distributed with the HSL package
     for information on how to do so.
 
-To compile the HSL code as part of \Ipopt, unpack the
-archive, then move and rename the resulting directory so that it becomes
-`$IPOPTDIR/ThirdParty/HSL/coinhsl`. \Ipopt may then be
-configured as normal.
+To compile the HSL code via the COIN-OR Tools project
+[ThirdParty-HSL](https://github.com/coin-or-tools/ThirdParty-HSL), run
 
-Note: Whereas it is essential to have at least one linear solver, the
+    git clone https://github.com/coin-or-tools/ThirdParty-HSL.git
+    cd ThirdParty-HSL
+
+Now unpack the HSL sources archive, move and rename the resulting directory
+so that it becomes `ThirdParty-HSL/coinhsl`.
+Then configure, build, and install the HSL sources:
+
+    ./configure
+    make
+    sudo make install
+
+\note Whereas it is essential to have at least one linear solver, the
 package MC19 could be omitted (with the consequence that you cannot use
 this method for scaling the linear systems arising inside the
 \Ipopt algorithm). By default, MC19 is only used to scale
@@ -228,50 +244,51 @@ scaling mechanisms). Further, also the package MA28 can be omitted,
 since it is used only in the experimental dependency detector, which is
 not used by default.
 
-Note: If you are an academic or a student, we recommend you download the
-HSL 2011 package as this ensures you have access to the full range of
+\note If you are an academic or a student, we recommend you download the
+HSL Full package as this ensures you have access to the full range of
 solvers. MA57 can be considerably faster than MA27 on some problems.
 
-Yet another note: If you have a precompiled library containing the HSL
+\note If you have a precompiled library containing the HSL
 codes, you can specify the directory with the header files and the
-linker flags for this library with the `--with-hsl-incdir` and
-`--with-hsl-lib` flags for the configure script described in
+linker flags for this library with the `--with-hsl-cflags` and
+`--with-hsl-lflags` flags for the configure script described in
 \ref COMPILEINSTALL.
 
-\subsection DOWNLOAD_MUMPS Obtaining the MUMPS Linear Solver
+\subsection DOWNLOAD_MUMPS MUMPS Linear Solver
 
 You can also use the (public domain) sparse linear solver MUMPS. Please
-visit the [MUMPS home page](http://graal.ens-lyon.fr/MUMPS) for more
+visit the [MUMPS home page](http://mumps.enseeiht.fr/) for more
 information about the solver. MUMPS is provided as Fortran 90 and C
-source code. You need to have a Fortran 90 compiler (for example, the
-GNU compiler gfortran is a free one) to be able to use it.
+source code. You need to have a Fortran 90 compiler (e.g., the
+GNU compiler gfortran) to be able to use it.
 
-You can obtain the MUMPS code by running the script
-`$IPOPTDIR/ThirdParty/Mumps/get.Mumps` if you have `wget` (or `ftp` on Mac OS
-X or `curl`) installed in your system. Alternatively, you can get
-MUMPS 4.10 from the MUMPS home page and extract the archive in the
-directory `$IPOPTDIR/ThirdParty/Mumps`. The extracted directory usually
-has the MUMPS version number in it, so you need to rename it to MUMPS
-such that you have a file called
-`$IPOPTDIR/ThirdParty/Mumps/MUMPS/README`.
+The COIN-OR Tools project [ThirdParty-Mumps](https://github.com/coin-or-tools/ThirdParty-Mumps)
+can be used to download the MUMPS code and build a MUMPS library that is
+recognized by Ipopt.
+To do so, execute
 
-Once you put the MUMPS source code into the correct place, the
-\Ipopt configuration scripts will automatically detect it
-and compile MUMPS together with \Ipopt, *if your Fortran
-compiler is able to compile Fortran 90 code*.
+    git clone https://github.com/coin-or-tools/ThirdParty-Mumps.git
+    cd ThirdParty-Mumps
+    ./get.Mumps
+    ./configure
+    make
+    sudo make install
 
-Note: MUMPS will perform better with METIS, see \ref DOWNLOAD_METIS.
+\note MUMPS will perform better with METIS, see \ref DOWNLOAD_METIS.
 
-Note: MUMPS uses interally a fake implementation of MPI. If you are
+\note MUMPS uses internally a fake implementation of MPI. If you are
 using \Ipopt within an MPI program together with MUMPS, the
 code will not run. You will have to modify the MUMPS sources so that the
 MPI symbols inside the MUMPS code are renamed.
 
-\subsection DOWNLOAD_PARDISO Obtaining the Linear Solver Pardiso
+\attention Only the older [MUMPS 4.10 version](http://mumps.enseeiht.fr/MUMPS_4.10.0.tar.gz)
+is supported by the build system and \Ipopt.
+The `./get.Mumps` script takes care of downloading the right MUMPS version.
 
-If you would like to compile \Ipopt with the Parallel
-Sparse Direct Linear Solver (Pardiso), you need to obtain either Intel's
-MKL library or the Pardiso library from <http://www.pardiso-project.org>
+\subsection DOWNLOAD_PARDISO Pardiso (Parallel Sparse Direct Linear Solver)
+
+If you would like to compile \Ipopt with Pardiso, you need to obtain either
+Intel's MKL library or the Pardiso library from <http://www.pardiso-project.org>
 for your operating system.
 
 From <http://www.pardiso-project.org>, you can obtain a limited time
@@ -282,12 +299,11 @@ agreement before filling out the download form.
 Please consult \ref EXPERT_INSTALL to find out how to configure your
 \Ipopt installation to work with Pardiso.
 
-\subsection DOWNLOAD_WSMP Obtaining the Linear Solver WSMP
+\subsection DOWNLOAD_WSMP WSMP (Watson Sparse Matrix Package)
 
-If you would like to compile \Ipopt with the Watson Sparse
-Matrix Package (WSMP), you need to obtain the WSMP library for your
-operating system. Information about WSMP can be found at
-<http://www.research.ibm.com/projects/wsmp>.
+If you would like to compile \Ipopt with WSMP, you need to obtain the
+WSMP library for your operating system. Information about WSMP can be
+found at <http://www.research.ibm.com/projects/wsmp>.
 
 At this website you can download the library for several operating
 systems including a trial license key for 90 days that allows you to use
@@ -299,10 +315,10 @@ version number of the library matches the one on the WSMP website.
 
 If a newer version is announced on that website, you can (and probably
 should) request the current version by sending a message to
-`wsmp@watson.ibm.com`. Please include the operating system and other
+`wsmp@us.ibm.com`. Please include the operating system and other
 details to describe which particular version of WSMP you need.
 
-Note: Only the interface to the shared-memory version of WSMP is
+\note Only the interface to the shared-memory version of WSMP is
 currently supported.
 
 Please consult \ref EXPERT_INSTALL to find out how to configure your
@@ -325,55 +341,126 @@ the names are `libhsl.dylib`, `libpardiso.dylib`, and
 `libpardiso.dll`, and `PATH`.
 
 The Pardiso shared library can be downloaded from the Pardiso website.
-To create a shared library containing the HSL linear solvers, read the
-instructions in `$IPOPTDIR/ThirdParty/HSL/INSTALL.HSL`.
+To create a shared library containing the HSL linear solvers, follow
+the instructions from \ref DOWNLOAD_HSL, but rename the resulting library
+to `libhsl.so`.
 
-The Linear Solver Loader is not enabled if you compile \Ipopt with the MS
-Visual Studio project files provided in the \Ipopt distribution.
-Further, if you have problems compiling this feature, you can disable this
+If you have problems compiling this feature, you can disable this
 by specifying `--disable-linear-solver-loader` for the `configure` script.
 
-\subsection DOWNLOAD_METIS Obtaining METIS
+\subsection DOWNLOAD_METIS METIS (matrix ordering)
 
 The linear solvers MA57, HSL_MA77, HSL_MA86, HSL_MA97, and MUMPS can
 make use of the matrix ordering algorithms implemented in
 [METIS](http://glaros.dtc.umn.edu/gkhome/metis/metis/overview).
-If you are using one of these linear solvers, you should obtain the METIS source
-code and put it into `$IPOPTDIR/ThirdParty/Metis`. Read the
-`INSTALL.Metis` file in that directory, and if you have the `wget`
-utility (or `ftp` on Mac OS X or `curl`) installed on your system, you can
-download the code by running the `./get.Metis` script.
+If you are using one of these linear solvers, you can use the COIN-OR Tools project
+[ThirdParty-Metis](https://github.com/coin-or-tools/ThirdParty-Metis)
+to download the METIS code and build a METIS library that is recognized
+by Ipopt.
+To do so, execute
 
-Note, that **only the older [METIS 4.x version](http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/OLD/metis-4.0.3.tar.gz) is supported** by
-MA57, HSL_MA77, HSL_MA86, HSL_MA97, MUMPS, and the build system. The
-`./get.Metis` script takes care of downloading the right METIS version.
+    git clone https://github.com/coin-or-tools/ThirdParty-Metis.git
+    cd ThirdParty-Metis
+    ./get.Metis
+    ./configure
+    make
+    sudo make install
+
+\attention Only the older [METIS 4.x version](http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/OLD/metis-4.0.3.tar.gz)
+is supported by MA57, HSL_MA77, HSL_MA86, HSL_MA97, MUMPS, and the build system.
+The `./get.Metis` script takes care of downloading the right METIS version.
+
+
+\section GETIPOPT Getting the Ipopt Code
+
+\Ipopt is available from the COIN-OR group at GitHub. You can either
+download the code using `git` or
+simply retrieve a tarball (compressed archive file). While the tarball
+is an easy method to retrieve the code, using the *git*
+system allows users the benefits of the version control system,
+including easy updates and revision control.
+
+\subsection GETIPOPT_GIT Getting the Ipopt code via git
+
+Of course, the *git* client must be installed on your system if you want
+to obtain the code this way (the executable is called `git`).
+Information about *git* and how to download it can be found at
+<http://git-scm.com>.
+
+To obtain the \Ipopt source code via git, change into the
+directory in which you want to create a subdirectory `\Ipopt` with the
+\Ipopt source code. Then follow the steps below:
+
+1.  Download the code from the repository:
+    \verbatim
+git clone https://github.com/coin-or/Ipopt.git
+    \endverbatim
+
+2.  Change into the root directory of the \Ipopt distribution: \verbatim
+cd Ipopt
+    \endverbatim
+
+In the following, `$IPOPTDIR` will refer to the directory in which you
+are right now (output of `pwd`).
+
+\subsection GETIPOPT_TAR Getting the Ipopt code as a tarball
+
+To use the tarball, follow the steps below:
+
+1.  Download the desired tarball from
+    <http://www.coin-or.org/download/source/Ipopt>, it has the form
+    `Ipopt-x.y.z.tgz`, where `x.y.z` is the version number, such as
+    3.12.0.
+
+2.  Issue the following commands to unpack the archive file:
+    \verbatim
+gunzip Ipopt-x.y.z.tgz
+tar xvf Ipopt-x.y.z.tar
+    \endverbatim
+
+3.  Rename the directory you just extracted: \verbatim
+mv Ipopt-x.y.z Ipopt
+    \endverbatim
+
+4.  Change into the root directory of the \Ipopt distribution: \verbatim
+cd Ipopt
+    \endverbatim
+
+In the following, `$IPOPTDIR` will refer to the directory in which you
+are right now (output of `pwd`).
 
 \section COMPILEINSTALL Compiling and Installing Ipopt
 
 \Ipopt can be easily compiled and installed with the usual
 configure, make, make install commands. We follow the procedure that is
-used for most of the COIN-OR projects, based on the GNU autotools. At
-<https://projects.coin-or.org/CoinHelp> you can find a general
-description of the tools.
+used for most of the COIN-OR projects, based on the GNU autotools.
+<!--TODO reactivate when updated wiki:
+At <https://github.com/coin-or-tools/BuildTools/wiki> you can find a general
+description of the tools. -->
 
 Below are the basic steps for the \Ipopt compilation that
 should work on most systems. For special compilations and for some
-troubleshooting see \ref EXPERT_INSTALL and consult the
-[generic COIN-OR help page](https://projects.coin-or.org/CoinHelp) before
-creating an issue or sending a message to the mailing list.
+troubleshooting see \ref EXPERT_INSTALL
+<!--TODO reactivate when updated wiki:
+and consult the [generic COIN-OR help page](https://github.com/coin-or-tools/BuildTools/wiki)
+--> before creating an issue or sending a message to the mailing list.
 
 1.  Create a directory where you want to compile \Ipopt, for example
     \verbatim
 mkdir $IPOPTDIR/build
     \endverbatim
     and change into this directory
-    \verbatim    
+    \verbatim
 cd $IPOPTDIR/build
     \endverbatim
 
-    Note: You can choose any location, including $IPOPTDIR itself, as
+    \note You can choose any location, including $IPOPTDIR itself, as
     the location of your compilation. However, on COIN-OR we recommend
-    to keep the source and compiled files separate.
+    to keep the source and compiled files separate as this comes in handy
+    when you want to compile the code with different compilers, compiler
+    options, or different operating system that share a common file system.
+    For this to work, the directories with the \Ipopt source must not have
+    any configuration and compiled code.
 
 2.  Run the configure script:
     \verbatim
@@ -381,19 +468,20 @@ $IPOPTDIR/configure
     \endverbatim
 
     One might have to give options to the configure script, e.g., in
-    order to choose a non-default compiler, or to tell it where some
-    third party code is installed, see \ref EXPERT_INSTALL.
+    order to choose a non-default compiler, or to tell it where to install
+    Ipopt eventually, see \ref EXPERT_INSTALL.
 
     If the last output line reads
     `configure: Main configuration of Ipopt successful` then
     everything worked fine. Otherwise, look at the screen output, have a
-    look at the `config.log` output files and/or consult \ref EXPERT_INSTALL.
+    look at the `config.log` output file and/or consult \ref EXPERT_INSTALL.
 
     The default configure (without any options) is sufficient for most
-    users that downloaded the source code for the linear solver. If you
-    want to see the configure options, consult \ref EXPERT_INSTALL and
-    also visit the generic
-    [COIN-OR configuration instruction page](https://projects.coin-or.org/CoinHelp/wiki/user-configure).
+    users that downloaded and installed the source code for the linear solver
+    and other dependencies. If you want to see the configure options,
+    consult \ref EXPERT_INSTALL.
+    <!-- TODO and also visit the generic
+    [COIN-OR configuration instruction page](https://github.com/coin-or-tools/BuildTools/wiki/user-configure).-->
 
 3.  Build the code:
     \verbatim
@@ -413,9 +501,9 @@ make
 make test
     \endverbatim
     This will test if the AMPL solver executable works (if you got the
-    ASL code) and if the included C++, C, and Fortran examples work.
+    ASL code) and if the included C++, C, Java, and Fortran examples work.
 
-    Note: The configure script is not able to automatically determine
+    \note The configure script is not able to automatically determine
     the C++ runtime libraries for the C++ compiler. For certain
     compilers we enabled default values for this, but those might not
     exist or be wrong for your compiler. In that case, the C and Fortran
@@ -431,310 +519,26 @@ make test
 
 5.  Install \Ipopt:
     \verbatim
-make install
+sudo make install
     \endverbatim
+    `sudo` has been added here as `make install` installs files into
+    `/usr/local`, where only system administrators have write permissions.
     This installs
 
-    -   the \Ipopt AMPL solver executable (if ASL source
-        was downloaded) in `$IPOPTDIR/build/bin`,
+    -   the \Ipopt and `sIpopt` AMPL solver executables (if ASL source
+        was downloaded) in `/usr/local/bin`,
 
-    -   the \Ipopt library (`libipopt.so`, `libipopt.a` or
-        similar) and all its dependencies (MUMPS, HSL, Metis libraries)
-        in `$IPOPTDIR/build/lib`,
+    -   the \Ipopt and `sIpopt` libraries (`libipopt.so`, `libipopt.a` or
+        similar) in `/usr/local/lib`,
 
-    -   text files `ipopt_addlibs_cpp.txt`, `ipopt_addlibs_c.txt`, and
-        `ipopt_addlibs_f.txt` in
-        `$IPOPTDIR/build/share/coin/doc/Ipopt`, each containing a line
-        with linking flags that are required for linking code with the
-        \Ipopt library for C++, C, and Fortran main
-        programs, respectively. (This is only for convenience if you
-        want to find out what additional flags are required, for
-        example, to include the Fortran runtime libraries with a C++
-        compiler.)
+    -   pkg-config files for use of the \Ipopt and `sIpopt` libraries
+        (`ipopt.pc`, `sipopt.pc`) in `/usr/local/lib/pkgconfig`.
 
-    -   the necessary header files in `$IPOPTDIR/build/include/coin`.
+    -   \Ipopt and `sIpopt` header files `/usr/local/include/coin-or`.
 
-    You can change the default installation directory (here
-    `$IPOPTDIR/build`) to something else (such as `/usr/local`) by using
-    the `--prefix` switch for `configure`.
-
-Note: The above procedures show how to compile the code in directories
-separate from the source files. This comes in handy when you want to
-compile the code with different compilers, compiler options, or
-different operating system that share a common file system. To use this
-feature, change into the directory where you want to compile the code,
-and then type `$IPOPTDIR/configure` with all the options. For this, the
-directories with the \Ipopt source must not have any
-configuration and compiled code.
-
-\section INSTALL_WINDOWS Installation on Windows
-
-There are several ways to install \Ipopt on Windows
-systems. The first two options, described in \ref INSTALL_CYGWIN and
-\ref INSTALL_CYGWINNATIVE, are to use [Cygwin](http://www.cygwin.com),
-which offers a comprehensive UNIX-like environment on Windows and in
-which the installation procedure described
-earlier in this section can be used. If you want to use the (free) GNU
-compilers, follow the instructions in \ref INSTALL_CYGWIN.
-If you have the Microsoft C++ compiler and possibly a "native" Fortran
-compiler (e.g., the Intel Fortran compiler)
-and want to use those to compile \Ipopt, please see
-\ref INSTALL_CYGWINNATIVE. If you use MSYS/MinGW (a light-weight
-UNIX-like environment for Windows), please consider the notes in
-\ref INSTALL_MINGW.
-
-Note: Some binaries for old version of \Ipopt are available on the COIN-OR
-website at <http://www.coin-or.org/download/binary/Ipopt>.
-
-\subsection INSTALL_CYGWIN Installation with Cygwin using GNU compilers
-
-Cygwin is a Linux-like environment for Windows; if you don't know what
-it is you might want to have a look at the [Cygwin homepage](http://www.cygwin.com).
-
-It is possible to build the \Ipopt AMPL solver executable
-in Cygwin for general use in Windows. You can also hook up
-\Ipopt to your own program if you compile it in the Cygwin
-environment. (It is also possible to build an \Ipopt DLL that can
-be used from non-cygwin compilers, but this is not (yet?) supported.)
-
-If you want to compile \Ipopt under Cygwin, you first have
-to install Cygwin on your Windows system. This is pretty straight
-forward; you simply download the "setup" program from
-<http://www.cygwin.com> and start it.
-
-Then you do the following steps (assuming here that you don't have any
-complications with firewall settings etc - in that case you might have
-to choose some connection settings differently):
-
-1.  Click next
-
-2.  Select "install from the internet" (default) and click next
-
-3.  Select a directory where Cygwin is to be installed (you can leave
-    the default) and choose all other things to your liking, then click
-    next
-
-4.  Select a temp dir for Cygwin setup to store some files (if you put
-    it on your desktop you will later remember to delete it)
-
-5.  Select "direct connection" (default) and click next
-
-6.  Select some mirror site that seems close by to you and click next
-
-7.  OK, now comes the complicated part:
-    You need to select the packages that you want to have installed. By
-    default, there are already selections, but the compilers are usually
-    not pre-chosen. You need to make sure that you select the GNU
-    compilers (for Fortran, C, and C++), Git, and some additional
-    tools. For this, get the following packages from the associated
-    branches:
-
-    -   "Devel": gcc4
-
-    -   "Devel": gcc4-fortran
-
-    -   "Devel": pkg-config
-
-    -   "Devel": subversion
-
-    -   "Archive": unzip
-
-    -   "Utils": patch
-
-    -   "Web": wget
-
-    When a Resolving Dependencies window comes up, be sure to "Select
-    required packages (RECOMMENDED)". This will automatically also
-    select some other packages.
-
-8.  Then you click
-    on next, and Cygwin will be installed (follow the rest of the
-    instructions and choose everything else to your liking). At a later
-    point you can easily add/remove packages with the setup program.
-
-9.  The version of the GNU Make utility provided by the Cygwin installer
-    will not work. Therefore, you need to download the fixed version
-    from <http://www.cmake.org/files/cygwin/make.exe> and save it to
-    `C:\cygwin\bin`. Double-check this new version
-    by typing `make --version` in a Cygwin terminal (see next point). If
-    you get an error `-bash: /usr/bin/make: Bad address`, then try
-    <http://www.cmake.org/files/cygwin/make.exe-cygwin1.7> instead,
-    rename it to make.exe and move it to `C:\cygwin\bin`.
-    (Replace `C:\cygwin` with your installation location if different.)
-
-10. Now that you have Cygwin, you can open a Cygwin window, which is
-    like a UNIX shell window.
-
-11. Now you just follow the instructions in the beginning of
-    \ref INSTALL : You download the \Ipopt code
-    into your Cygwin home directory (from the Windows explorer that is
-    usually something like `C:\Cygwin\home\your_user_name`). After
-    that you obtain the third party code (as on Linux/UNIX), type
-    \verbatim
-./configure
-make install
-    \endverbatim
-    in the correct directories, and hopefully that will work. The
-    \Ipopt AMPL solver executable will be in the
-    subdirectory `bin` (called `ipopt.exe`). If you want to test the
-    installation, type
-    \verbatim
-make test
-    \endverbatim
-
-\subsection INSTALL_CYGWINNATIVE Installation with Cygwin using the MSVC++ compiler
-
-This section describes how you can compile \Ipopt with the
-Microsoft Visual C++ compiler under Cygwin. Here you have two options
-for compiling the Fortran code in the third party dependencies:
-
--   Using a Windows Fortran compiler, e.g., the Intel Fortran compiler,
-    which is also able to compile Fortran 90 code. This would allow you
-    to compile the MUMPS linear solver if you desire to do so.
-
--   Using the f2c Fortran to C compiler, available for free at Netlib
-    (see <http://www.netlib.org/f2c>). This can only compile Fortran 77
-    code (i.e., you won't be able to compile MUMPS). Before doing the
-    following installation steps, you need to follow the instructions
-    in `$IPOPTDIR/BuildTools/compile_f2c/INSTALL`.
-
-Once you have settled on this, do the following:
-
-1.  Follow the instructions in \ref INSTALL_CYGWIN until
-    Step 11 and stop after your downloaded the third party code.
-
-2.  Now you need to make sure that Cygwin knows about the native
-    compilers. For this you need to edit the file `cygwin.bat` in the
-    Cygwin base directory (usually `C:\cygwin`). Here you need
-    to add a line like the following:
-    \verbatim
-call "C:\Program Files\Microsoft Visual Studio 8\VC\vcvarsall.bat"
-    \endverbatim
-
-    On my computer, this sets the environment variables so that I can
-    use the MSVC++ compiler.
-
-    If you want to use also a native Fortran compiler, you need to
-    include something like this
-    \verbatim
-call "C:\Program Files\Intel\Fortran\compiler80\IA32\BIN\ifortvars.bat"
-    \endverbatim
-
-    You might have to search around a bit. The important thing is that,
-    after your change, you can type `cl` in a newly opened Cygwin
-    windows, and it finds the Microsoft C++ compiler (and if you want to
-    use it, the Fortran compiler, such as the Intel's `ifort`).
-
-3.  Run the configuration script, and tell it that you want to use the
-    native compilers:
-    \verbatim
-./configure –enable-doscompile=msvc
-    \endverbatim
-
-    Make sure the last message is `Main Ipopt configuration successful`.
-
-4.  Now you can compile the code with
-    \verbatim
-make
-    \endverbatim
-    test the installation with
-    \verbatim
-make test
-    \endverbatim
-    and install everything with
-    \verbatim
-make install
-    \endverbatim
-
-\subsection INSTALL_MINGW Installation with MSYS/MinGW
-
-You can compile \Ipopt also under MSYS/MinGW, which is
-another, more light-weight UNIX-like environment for Windows. It can be
-obtained from <http://www.mingw.org/>.
-
-If you want to use MSYS/MinGW to compile \Ipopt with native
-Windows compilers (see \ref INSTALL_CYGWINNATIVE), all you need to install
-is the basic version (a convenient Windows install program is available from
-<http://sourceforge.net/projects/mingw/files/Installer/mingw-get-inst/>).
-If you also want to use the GNU compilers, you need to install those as
-well, of course.
-
-A compilation with the GNU compilers works just like with any other UNIX
-system, as described in \ref COMPILEINSTALL. That is, during the installation, select
-(at least) the C Compiler, C++ Compiler, Fortran Compiler, MSYS Basic
-System, and the MinGW Developer ToolKit. Additionally, wget and unzip
-should be installed with the following command in an MSYS terminal:
-\verbatim
-mingw-get install msys-wget msys-unzip
-\endverbatim
-
-If you want to use the native MSVC++ compiler (with `f2c` or a native
-Fortran compiler), you essentially follow the steps outlined in
-\ref INSTALL_CYGWINNATIVE. Additionally, you need to make sure
-that the environment variables are set for the compilers (see
-step 2), this time adding the line to the msys.bat file.
-
-For a 64-bit build, you will need to install also a MinGW-64
-distribution. We recommend TDM-GCC, which is available from
-<http://sourceforge.net/projects/tdm-gcc/files/TDM-GCC%20Installer/tdm-gcc-webdl.exe/download>.
-Install MinGW-64 in a different folder than your existing 32-bit MinGW
-installation! The components you need are: core (under gcc), c++ (under
-gcc), fortran (under gcc), openmp (under gcc, necessary if you want to
-use any multi-threaded linear solvers), binutils, and mingw64-runtime.
-
-After MinGW-64 is installed, open the file `C:\MinGW\msys\1.0\etc\fstab`,
-and replace the line
-\verbatim
-C:\MinGW\     /mingw
-\endverbatim
-with
-\verbatim
-C:\MinGW64\   /mingw
-\endverbatim
-
-(Replace paths with your installation locations if different.)
-
-\section INSTALL_JAVA Compiling and Installing the Java Interface JIpopt
-
-*based on documentation by Rafael de Pelegrini Soares* (VRTech Industrial Technologies)
-
-`JIpopt` uses the Java Native Interface (JNI), which is a
-programming framework that allows Java code running in the Java Virtual
-Machine (JVM) to call and be called by native applications and libraries
-written in languages such as C and C++. `JIpopt` requires Java 5 or higher.
-
-After building and installing \Ipopt, the `JIpopt` interface can be build
-by setting the environment variable `JAVA_HOME` to the directory that
-contains your JDK, changing to the `JIpopt` directory in your \Ipopt build,
-and issuing make, e.g.,
-\verbatim
-export JAVA_HOME=/usr/lib/jvm/java-1.5.0
-cd $IPOPTDIR/build/Ipopt/contrib/JavaInterface
-make
-\endverbatim
-
-This will generate the Java class org/coinor/Ipopt.class, which you will
-need to make available in your Java code (i.e., add
-`$IPOPTDIR/build/Ipopt/contrib/JavaInterface` to your `CLASSPATH`) and the
-shared object `lib/libjipopt.so` (on Linux/UNIX) or `lib/libjipopt.dylib`
-(on Mac OS X) or the DLL `lib/jipopt.dll` (on Windows). In order to test
-your `JIpopt` library you can run two example problems by
-issuing the command `make test` inside the `JIpopt` directory.
-
-\note The `JIpopt` build procedure currently cannot deal
-with spaces in the path to the JDK. If you are on Windows and have Java
-in a path like `C:\Program Files\Java`, try setting `JAVA_HOME` to the
-DOS equivalent `C:\Progra~1\Java` (or similar).
-
-\note `JIpopt` needs to be able to load the
-\Ipopt library dynamically at runtime. Therefore,
-\Ipopt must have been compiled with the `-fPIC` compiler
-flag. While per default, an Ipopt shared library is compiled with this
-flag, for a configuration of \Ipopt in debug mode
-(`--enable-debug`) or as static library (`--disable-shared`), the configure
-flag `--with-pic` need to be used to enable compilation with `-fPIC`.
-
-To generate the javadoc help, run 'make javadoc'.
+    You can change the default installation directory (here `/usr/local`)
+    by using the `--prefix` switch for `configure`. If this is a directory
+    that you have write permissions for, `sudo` can be omitted for `make install`.
 
 \section INSTALL_R Compiling and Installing the R Interface ipoptr
 
@@ -744,21 +548,6 @@ following command in R:
 \verbatim
 install.packages('$IPOPTDIR/build/Ipopt/contrib/RInterface', repos=NULL, type='source')
 \endverbatim
-
-In certain situations, however, it can be necessary to setup the dynamic
-library load path to the path where the \Ipopt library has
-been installed, e.g.,
-\verbatim
-LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$IPOPTDIR/build/lib
-\endverbatim
-
-\note R needs to be able to load the \Ipopt library
-dynamically at runtime. Therefore, \Ipopt must have been
-compiled with the `-fPIC` compiler flag. While per default, an Ipopt
-shared library is compiled with this flag, for a configuration of
-\Ipopt in debug mode (`--enable-debug`) or as static library
-(`--disable-shared`), the configure flag `--with-pic` need to be used to
-enable compilation with `-fPIC`.
 
 After installation of the `ipoptr` package, it should be possible to
 load the package in R and to view the help page:
@@ -770,66 +559,58 @@ library('ipoptr')
 \section EXPERT_INSTALL Expert Installation Options for Ipopt
 
 The configuration script and Makefiles in the \Ipopt
-distribution have been created using GNU's autoconf and automake. They
-attempt to automatically adapt the compiler settings, etc., to the system
-they are running on. We tested the provided scripts for a number of
+distribution have been created using GNU's autoconf and automake.
+We tested the provided scripts for a number of
 different machines, operating systems and compilers, but you might run
 into a situation where the default setting does not work, or where you
 need to change the settings to fit your particular environment.
 
 In general, you can see the list of options and variables that can be
-set for the configure script by typing `configure --help`. Also, the
+set for the configure script by typing `configure --help`.
+<!-- TODO Also, the
 [generic COIN-OR help pages](https://projects.coin-or.org/CoinHelp)
-are a valuable resource of information.
+are a valuable resource of information. -->
 
 Below a few particular options are discussed:
 
 -   The configure script tries to determine automatically, if you have
-    BLAS and/or LAPACK already installed on your system (trying a few
-    default libraries), and if it does not find them, it makes sure that
-    you put the source code in the required place.
+    BLAS and LAPACK already installed on your system by trying a few
+    default libraries.
 
-    However, you can specify a BLAS library (such as your local
-    [ATLAS library](http://math-atlas.sourceforge.net)) explicitly,
-    using the `--with-blas` flag for configure. For example,
+    However, you can specify a LAPACK library (such as your local
+    [ATLAS library](http://math-atlas.sourceforge.net) installed in $HOME/lib)
+    explicitly, using the `--with-lapack` flag for configure. For example,
     \verbatim
-./configure --with-blas="-L$HOME/lib -lf77blas -lcblas -latlas"
+./configure --with-lapack="-L$HOME/lib -lf77blas -lcblas -latlas"
     \endverbatim
 
-    To tell the configure script to compile and use the downloaded BLAS
-    source files even if a BLAS library is found on your system, specify
-    `--with-blas=BUILD`.
-
-    Similarly, you can use the `--with-lapack` switch to specify the
-    location of your LAPACK library, or use the keyword `BUILD` to force
-    the \Ipopt makefiles to compile LAPACK together with \Ipopt.
+    The configure script already tries to find Intel MKL libraries on some
+    systems. If that fails, e.g., because the libraries are not available
+    in a standard search path, then use the `--with-lapack` flag to explictly
+    state what flags are necessary to use MKL, e.g.,
+    \verbatim
+./configure --with-lapack="-L${MKLROOT}/lib/intel64 -Wl,--no-as-needed -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lm"
+    \endverbatim
 
 -   Similarly, if you have a precompiled library containing the HSL
-    packages, you can specify the directory with the `CoinHslConfig.h`
-    header file with the `--with-hsl-incdir` flag and the linker flags
-    with the `--with-hsl-lib` flag. Analogously, use `--with-asl-incdir`
-    and `--with-asl-lib` for building against a precompiled AMPL solver
-    library.
-
--   The HSL codes `HSL_MA86` and `HSL_MA97` can run in parallel if
-    compiled with OpenMP support. By default, this is not enabled by
-    \Ipopt's configure so far. To enable OpenMP with GNU
-    compilers, it has been reported that the following configure flags
-    should be used:
-    \verbatim
-ADD_CFLAGS=-fopenmp ADD_FFLAGS=-fopenmp ADD_CXXFLAGS=-fopenmp
-    \endverbatim
+    packages, you can specify the `-I` compiler flags to find locate
+    the `CoinHslConfig.h` header file with the `--with-hsl-cflags` flag
+    and the linker flags with the `--with-hsl-lflags` flag.
+    Analogously, use `--with-asl-cflags` and `--with-asl-lflags` for
+    building against a precompiled AMPL solver library.
 
 -   If you want to compile \Ipopt with the linear solver
-    Pardiso (see \ref DOWNLOAD_PARDISO) from the Pardiso project website, you need
-    to specify the link flags for the library with the `--with-pardiso`
-    flag, including required additional libraries and flags. For
-    example, if you want to compile \Ipopt with the
-    parallel version of Pardiso (located in `$HOME/lib`) on an AIX system
-    in 64bit mode, you should add the flag
+    Pardiso (see \ref DOWNLOAD_PARDISO) from the Pardiso project website,
+    you need to specify the link flags for the library with the `--with-pardiso`
+    flag, including required additional libraries (except for Lapack) and flags.
+    For example, if you want to compile \Ipopt with the
+    parallel version of Pardiso (located in `$HOME/lib`) on a GNU/Linux
+    system, you should add the flag
     \verbatim
---with-pardiso="-qsmp=omp $HOME/lib/libpardiso_P4AIX51_64_P.so"
+--with-pardiso="$HOME/lib/libpardiso600-GNU800-X86-64.so -fopenmp -lgfortran"
     \endverbatim
+    For best performance on Linux, use Pardiso from the Pardiso project website
+    together with linear algebra routines from Intel MKL (see above).
 
     If you are using the parallel version of Pardiso, you need to
     specify the number of processors it should run on with the
@@ -837,22 +618,9 @@ ADD_CFLAGS=-fopenmp ADD_FFLAGS=-fopenmp ADD_CXXFLAGS=-fopenmp
     manual.
 
     If you want to compile \Ipopt with the Pardiso library
-    that is included in Intel MKL, it should be sufficient to ensure
-    that MKL is used for the linear algebra routines (Blas/Lapack). On
-    some systems, configure is able to find MKL automatically when
-    looking for Blas. On other systems, one has to specify the MKL
-    libraries with the `--with-blas` option.
-
-    For best performance on Linux, use Pardiso from the Pardiso project website
-    together with linear algebra from Intel MKL. The configure command would
-    be something like the following (all in one line):
-    \verbatim
-MKL_LIBS="-L${MKLROOT}/lib/intel64 -Wl,--no-as-needed -lmkl_intel_lp64 -lmkl_lapack95_lp64 -lmkl_sequential -lmkl_core -lgfortran -fopenmp -lpthread -lm -ldl"
-ADD_CFLAGS="-fopenmp -fno-common -fexceptions"
-ADD_CXXFLAGS="-fopenmp -fno-common -fexceptions"
-ADD_FFLAGS="-fopenmp -fexceptions"
-./configure -C F77=gfortran CC=gcc CXX=g++ --with-blas-lib="${MKL_LIBS}" --with-lapack-lib="${MKL_LIBS}" --with-pardiso="libpardiso600-GNU720-X86-64.so -lgfortran -lquadmath"
-    \endverbatim
+    that is included in Intel MKL, it is sufficient to ensure
+    that MKL is used for the linear algebra routines (Blas/Lapack),
+    see above.
 
 -   If you want to compile \Ipopt with the linear solver
     WSMP (see \ref DOWNLOAD_WSMP), you need to specify the link flags for
@@ -865,21 +633,21 @@ ADD_FFLAGS="-fopenmp -fexceptions"
     \endverbatim
 
 -   If you want to compile \Ipopt with a precompiled MUMPS
-    library (see \ref DOWNLOAD_MUMPS), you need to specify the directory
-    containing the MUMPS header files with the `--with-mumps-incdir`
-    flag, e.g.,
+    library (see \ref DOWNLOAD_MUMPS), you need to specify the `-I` flag
+    to have the compiler find the directory containing the MUMPS header
+    files with the `--with-mumps-cflags` flag, e.g.,
     \verbatim
---with-mumps-incdir="$HOME/MUMPS/include"
+--with-mumps-cflags="$HOME/MUMPS/include"
     \endverbatim
     and you also need to provide the link flags for MUMPS with the
-    `--with-mumps-lib` flag.
+    `--with-mumps-lflags` flag.
 
 -   If you want to specify that you want to use particular compilers,
     you can do so by adding the variables definitions for CXX, CC, and
     F77 to the `./configure` command line, to specify the C++, C, and
-    Fortran compiler, respectively. For example,
+    Fortran 77 compiler, respectively. For example,
     \verbatim
-./configure CXX=g++-4.2.0 CC=gcc-4.2.0 F77=gfortran-4.2.0
+./configure CXX=g++-8.0.0 CC=gcc-8.0.0 F77=gfortran-8.0.0
     \endverbatim
 
     In order to set the compiler flags, you should use the variables
@@ -889,14 +657,26 @@ ADD_FFLAGS="-fopenmp -fexceptions"
     need to be given special flags to do that (e.g., `-qrtti=dyna` for
     the AIX `xlC` compiler).
 
-    Please also check the [generic COIN-OR help page](https://projects.coin-or.org/CoinHelp/wiki/user-configure#GivingOptions)
-    for the description of more variables that can be set for configure.
+    <!-- TODO Please also check the [generic COIN-OR help page](https://projects.coin-or.org/CoinHelp/wiki/user-configure#GivingOptions)
+    for the description of more variables that can be set for configure. -->
 
 -   By default, the \Ipopt library is compiled as a shared
     library, on systems where this is supported. If you want to generate
     a static library, you need to specify the `--disable-shared` flag. If
     you want to compile both shared and static libraries, you should
-    specify the `--enable-static` flag.
+    specify the `--enable-static` flag. This is no possible on Windows.
+
+-   It is possible to compile the \Ipopt library in a debug
+    configuration, by specifying `--enable-debug`. This switches the
+    default compiler flags (CFLAGS, CXXFLAGS, FFLAGS) to instruct the
+    compiler to include debug information into object files and disables
+    compiler optimization.
+
+    Also, you can tell \Ipopt to do some additional runtime
+    sanity checks, by specifying the flag `--with-ipopt-checklevel=1`.
+
+    This usually leads to a significant slowdown of the code, but might
+    be helpful when debugging something.
 
 -   If you want to link the \Ipopt library with a main
     program written in C or Fortran, the C and Fortran compiler doing
@@ -919,23 +699,36 @@ ADD_FFLAGS="-fopenmp -fexceptions"
 ./configure CC=icc F77=ifort CXX=icpc CXXLIBS='-L/usr/lib/gcc-lib/i386-redhat-linux/3.2.3 -lstdc++'
     \endverbatim
 
--   Compilation in 64bit mode sometimes requires some special
-    consideration. For example, for compilation of 64bit code on AIX, we
-    recommend the following configuration
+-   Compilation on an AIX 64bit system sometimes requires some special
+    consideration. We recommend the following configuration
     \verbatim
 ./configure AR='ar -X64' NM='nm -X64' CC='xlc -q64' F77='xlf -q64' CXX='xlC -q64' CFLAGS='-O3 -bmaxdata:0x3f0000000' FFLAGS='-O3 -bmaxdata:0x3f0000000' CXXFLAGS='-qrtti=dyna -O3 -bmaxdata:0x3f0000000'
     \endverbatim
     (Alternatively, a simpler solution for AIX is to set the environment
     variable `OBJECT_MODE` to 64.)
 
--   It is possible to compile the \Ipopt library in a debug
-    configuration, by specifying `--enable-debug`. Then the compilers
-    will use the debug flags (unless the compilation flag variables are
-    overwritten in the configure command line)
+-   Ipopt's Java interface `JIpopt` uses the Java Native Interface (JNI),
+    which is a programming framework that allows Java code running in the
+    Java Virtual Machine (JVM) to call and be called by native applications
+    and libraries written in languages such as C and C++.
 
-    Also, you can tell \Ipopt to do some additional runtime
-    sanity checks, by specifying the flag `--with-ipopt-checklevel=1`.
+    configure tries to find a Java compiler and the necessary compiler
+    flags to locate the JNI header files automatically. You can influence
+    this automated check by setting the environment variable `JAVA_HOME`
+    to the directory that contains your JDK.
 
-    This usually leads to a significant slowdown of the code, but might
-    be helpful when debugging something.
+    \note The build procedure currently cannot deal with spaces in the path
+    to the JDK. If you are on Windows and have Java in a path like
+    `C:\Program Files\Java`, try setting `JAVA_HOME` to the DOS equivalent
+    `C:\Progra~1\Java` (or similar).
+
+    You can disable the checks for Java and build of the Java interface
+    by specifying the configure flag `--disable-java`.
+    This is also the default if the build of shared libraries has been
+    disabled as `JIpopt` needs to be able to load the \Ipopt library
+    dynamically at runtime.
+
+-   \ref SIPOPT "sIpopt" is build and installed together with Ipopt. If
+    you do not need sIpopt, you can disable it via `--disable-sipopt`.
+
 */
