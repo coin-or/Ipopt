@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type = "text/xsl" href = "http://www.coin-or.org/projects/autoGen.xsl"?>
-<projectData xmlns="coin-or.org" 
+<projectData xmlns="coin-or.org"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="coin-or.org http://www.coin-or.org/projects/autoGen.xsd">
 
@@ -69,7 +69,7 @@
 		<!--                                                           -->
 		<!--Fill in your text below (outside the comment block).       -->
 
-		<projectHomePage> https://projects.coin-or.org/Ipopt </projectHomePage>
+		<projectHomePage> https://github.com/coin-or/Ipopt </projectHomePage>
 
 		<!-- Fill in the name of the license your project uses         -->
 		<!-- and a link to its page on www.opensource.org              -->
@@ -184,7 +184,7 @@
 				<packageURL>
                                 http://www.netlib.org/lapack
                                 </packageURL>
-				<requiredOrOptional>Optional (any implementation)
+				<requiredOrOptional>Required (any implementation)
                                 </requiredOrOptional>
 			</otherPackage>
 
@@ -199,15 +199,15 @@
 			</otherPackage>
 
 			<otherPackage>
-				<packageName>A sparse linear solver (MA27, MA57, WSMP, Pardiso, MUMPS)
+				<packageName>A sparse linear solver (MA27, MA57, HSL_MA86, HSL_MA97, WSMP, Pardiso, MUMPS)
                                 </packageName>
 				<packageURL>
-                                
+
                                 </packageURL>
 				<requiredOrOptional>Required (at least one)
                                 </requiredOrOptional>
 			</otherPackage>
-            
+
 			<otherPackage>
 				<packageName>Metis
                                 </packageName>
@@ -217,7 +217,7 @@
 				<requiredOrOptional>Optional
                                 </requiredOrOptional>
 			</otherPackage>
-            
+
 		</otherLinkedPackages>
 
 		<!-- Below, you can list the programming language(s) used in   -->
@@ -331,65 +331,51 @@
 
 		<testedPlatforms>
 
-		       <platform> 
-		          <operatingSystem>Microsoft Windows</operatingSystem>
-		          <compiler>CYGWIN/cl</compiler>                      
-		       </platform>
-
-		       <platform> 
-		          <operatingSystem>Microsoft Windows</operatingSystem>
-		          <compiler>CYGWIN/g++</compiler>                     
+		       <platform>
+		          <operatingSystem>Microsoft Windows with MSYS2/MinGW</operatingSystem>
+		          <compiler>g++</compiler>
 		       </platform>
 
 		       <platform>
-		          <operatingSystem>Microsoft Windows</operatingSystem>
-		          <compiler>Msys/cl</compiler>                      
+		          <operatingSystem>Microsoft Windows with MSYS2</operatingSystem>
+		          <compiler>cl</compiler>
 		       </platform>
 
-		       <platform> 
-		          <operatingSystem>Microsoft Windows</operatingSystem>
-		          <compiler>MSys/g++</compiler>                       
+		       <platform>
+		          <operatingSystem>Microsoft Windows with MSYS2</operatingSystem>
+		          <compiler>icl+ifort</compiler>
 		       </platform>
 
-		       <platform> 
+
+		       <platform>
 		          <operatingSystem>Linux</operatingSystem>
-		          <compiler>g++</compiler>                
+		          <compiler>g++</compiler>
 		       </platform>
 
-		       <platform> 
-		          <operatingSystem>Linux</operatingSystem>
-		          <compiler>Intel</compiler>                
+		       <platform>
+		          <operatingSystem>Mac OSX</operatingSystem>
+		          <compiler>g++</compiler>
 		       </platform>
 
-		       <platform> 
-		          <operatingSystem>Mac OSX</operatingSystem>    
-		          <compiler>g++</compiler>                      
+		       <platform>
+		          <operatingSystem>Mac OSX</operatingSystem>
+		          <compiler>clang</compiler>
 		       </platform>
 
-		       <platform> 
-	 	          <operatingSystem>Solaris x86</operatingSystem>
-		          <compiler>gcc</compiler>                      
-		       </platform>
-
-		       <platform> 
-	 	          <operatingSystem>AIX</operatingSystem>
-		          <compiler>xlC</compiler>                      
-		       </platform>
-
-			<platform>
+			<!--platform>
 				<operatingSystem>Ipod Linux (no kidding!)</operatingSystem>
 				<compiler>g++</compiler>
-			</platform>
+			</platform-->
 
 		</testedPlatforms>
-		
+
 		<projectCategories>
 			<!-- Start  of projectCategories block   -->
-		
+
 			<!--Below is the list of COIN-OR project categores.    -->
 			<!--Simply "un-comment" any categories that apply to   -->
 			<!--your project.                                      -->
-			
+
 			<!--   <category>                                      -->
 			<!--        Development tools                          -->
 			<!--    </category>                                    -->
@@ -429,10 +415,10 @@
 			<!--    <category>                                     -->
 			<!--        Optimization utility                       -->
 			<!--    </category>                                    -->
-			
+
 			<!-- End of projectCategories block                    -->
 		</projectCategories>
-		
+
 
 		<!-- End of projectBasics block                                -->
 
@@ -467,11 +453,11 @@
 
 	<leftMenuLinks>
 
-		<documentation>http://www.coin-or.org/Ipopt/documentation/</documentation>
+		<documentation>https://coin-or.github.io/Ipopt</documentation>
 
-		<sourceCodeDownload>http://www.coin-or.org/download/source/Ipopt/</sourceCodeDownload>
+		<sourceCodeDownload>https://github.com/coin-or/Ipopt</sourceCodeDownload>
 
-		<binaryDownload>http://www.coin-or.org/download/binary/Ipopt/</binaryDownload>
+		<!--binaryDownload>http://www.coin-or.org/download/binary/Ipopt/</binaryDownload-->
 
 		<mailingList>http://list.coin-or.org/mailman/listinfo/ipopt</mailingList>
 
