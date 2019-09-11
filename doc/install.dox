@@ -100,10 +100,9 @@ You might have to search around a bit. The important thing is that,
 after your change, you can type `cl` and it finds the Microsoft C++ compiler
 and, if installed, you can type `ifort` and it finds the Intel Fortran compiler.
 
-\attention The build systems of \Ipopt and dependencies currently require
-that `--enable-msvc` is specified as argument to configure if MSVC or Intel
-compiler should be used on Windows. Keep this in mind when following the
-next sections.
+\note The build systems of \Ipopt by default first looks for GCC and Clang
+before the Intel and MS compilers. To disable this, specify the flag
+`--enable-msvc` as argument to configure below.
 
 \section EXTERNALCODE Download, build, and install dependencies
 
