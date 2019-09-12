@@ -9,6 +9,9 @@
 //          Scott Turnberg                 CMU    2006-05-12
 //           (major revision)
 //           (incorporated by AW on 2006-11-11 into Ipopt package)
+//
+// NOTES:
+// - Since Mumps 5.1.0, mumps_->nz should be replaced by mumps_->nnz
 
 // The following line is a fix for otherwise twice-defined global variable
 // (This would have to be taken out for a parallel MUMPS version!)
@@ -45,8 +48,7 @@ MumpsSolverInterface::MumpsSolverInterface()
 {
    DBG_START_METH("MumpsSolverInterface::MumpsSolverInterface()",
                   dbg_verbosity);
-   //initialize mumps
-   DMUMPS_STRUC_C* mumps_ = (DMUMPS_STRUC_C*) calloc(1, sizeof(DMUMPS_STRUC_C));
+
 #ifndef MUMPS_MPI_H
 #if defined(HAVE_MPI_INITIALIZED)
    int mpi_initialized;
@@ -67,11 +69,9 @@ MumpsSolverInterface::MumpsSolverInterface()
    int myid;
    MPI_Comm_rank(MPI_COMM_WORLD, &myid);
 #endif
-   mumps_->n = 0;
-   mumps_->nz = 0;
-   mumps_->a = NULL;
-   mumps_->jcn = NULL;
-   mumps_->irn = NULL;
+
+   //initialize mumps
+   DMUMPS_STRUC_C* mumps_ = (DMUMPS_STRUC_C*) calloc(1, sizeof(DMUMPS_STRUC_C));
    mumps_->job = -1; //initialize mumps
    mumps_->par = 1; //working host for sequential version
    mumps_->sym = 2; //general symetric matrix
@@ -365,7 +365,7 @@ ESymSolverStatus MumpsSolverInterface::SymbolicFactorization()
    mumps_data->icntl[7] = mumps_scaling_;
    mumps_data->icntl[9] = 0;   //no iterative refinement iterations
 
-   mumps_data->icntl[12] = 1;   //avoid lapack bug, ensures proper inertia
+   mumps_data->icntl[12] = 1;   //avoid lapack bug, ensures proper inertia; mentioned to be very expensive in mumps manual
    mumps_data->icntl[13] = mem_percent_; //% memory to allocate over expected
    mumps_data->cntl[0] = pivtol_;  // Set pivot tolerance
 
