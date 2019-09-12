@@ -132,7 +132,7 @@ required:
 
     -   HSL_MA97 from the [HSL Mathematical Software Library](http://www.hsl.rl.ac.uk)
 
-    -   [MUMPS](http://graal.ens-lyon.fr/MUMPS) (MUltifrontal Massively Parallel sparse direct Solver)
+    -   [MUMPS](http://mumps.enseeiht.fr) (MUltifrontal Massively Parallel sparse direct Solver)
 
     -   PARDISO (Parallel Sparse Direct Solver) from [Pardiso Project](http://www.pardiso-project.org)
         or Intel MKL. Note that current versions from Pardiso Project typically

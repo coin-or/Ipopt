@@ -19,6 +19,8 @@ A more detailed, probably incomplete, list of changes follows:
 - Dropped support for HSL < 2013.
 - Dropped support for MA28 in the linear solver loader.
 - Dropped support for Pardiso < 4.0 from pardiso-project.org.
+- Added support for Mumps 5.2.x, though initial experiments on CUTEst indicated
+  that, on average, performance is worse than when using Mumps 4.10.0.
 - Dropped CUTEr interface, the successor CUTEst includes an interface to Ipopt.
 - Dropped Matlab interface as it is unmaintained and it was reported that
   it stopped functioning. Use https://github.com/ebertolazzi/mexIPOPT instead.

@@ -262,8 +262,8 @@ source code. You need to have a Fortran 90 compiler (e.g., the
 GNU compiler gfortran) to be able to use it.
 
 The COIN-OR Tools project [ThirdParty-Mumps](https://github.com/coin-or-tools/ThirdParty-Mumps)
-can be used to download the MUMPS code and build a MUMPS library that is
-recognized by Ipopt.
+can be used to download the MUMPS 4.10.0 code and build a MUMPS library
+that is recognized by Ipopt.
 To do so, execute
 
     git clone https://github.com/coin-or-tools/ThirdParty-Mumps.git
@@ -280,9 +280,10 @@ using \Ipopt within an MPI program together with MUMPS, the
 code will not run. You will have to modify the MUMPS sources so that the
 MPI symbols inside the MUMPS code are renamed.
 
-\attention Only the older [MUMPS 4.10 version](http://mumps.enseeiht.fr/MUMPS_4.10.0.tar.gz)
-is supported by the build system and \Ipopt.
-The `./get.Mumps` script takes care of downloading the right MUMPS version.
+\note Branch mumps5 of project ThirdParty-Mumps can be used to build a
+a library of MUMPS 5.2.x that is usable with \Ipopt. However, initial
+experiments on the CUTEst testset have shown that performance with MUMPS
+5.2.x is worse than with Mumps 4.10.0 on average.
 
 \subsection DOWNLOAD_PARDISO Pardiso (Parallel Sparse Direct Linear Solver)
 
@@ -366,7 +367,7 @@ To do so, execute
     sudo make install
 
 \attention Only the older [METIS 4.x version](http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/OLD/metis-4.0.3.tar.gz)
-is supported by MA57, HSL_MA77, HSL_MA86, HSL_MA97, MUMPS, and the build system.
+is supported by MA57, HSL_MA77, HSL_MA86, HSL_MA97, MUMPS 4, and the build system.
 The `./get.Metis` script takes care of downloading the right METIS version.
 
 
@@ -636,7 +637,7 @@ Below a few particular options are discussed:
     to have the compiler find the directory containing the MUMPS header
     files with the `--with-mumps-cflags` flag, e.g.,
     \verbatim
---with-mumps-cflags="$HOME/MUMPS/include"
+--with-mumps-cflags="-I$HOME/MUMPS/include"
     \endverbatim
     and you also need to provide the link flags for MUMPS with the
     `--with-mumps-lflags` flag.
