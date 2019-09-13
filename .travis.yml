@@ -19,7 +19,7 @@ matrix:
       env: VISHIDDEN=true
     - os: osx
       osx_image: xcode11
-      env: OSX=10.14 CC=gcc CXX=g++ VISHIDDEN=true
+      env: OSX=10.14 VISHIDDEN=true
       compiler: clang
     - os: osx
       osx_image: xcode11
@@ -27,18 +27,18 @@ matrix:
       compiler: clang
     - os: osx
       osx_image: xcode10
-      env: OSX=10.13 CC=gcc CXX=g++ ENABLEDEBUG=true
+      env: OSX=10.13 ENABLEDEBUG=true
       compiler: clang
     - os: osx
       osx_image: xcode9.2
-      env: OSX=10.12 CC=gcc CXX=g++
+      env: OSX=10.12
       compiler: clang
 
 before_script:
-  - if [[ "$TRAVIS_OS_NAME $CC" == "osx gcc" ]]; then brew update; brew install bash gcc; brew link --overwrite gcc; gfortran --version; fi
   - export VISHIDDEN=${VISHIDDEN:-false}
   - export NOF77=${NOF77:-false}
   - export ENABLEDEBUG=${ENABLEDEBUG:-false}
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && ! $NOF77; then brew update; brew install bash gcc; export CC=gcc-9 ; export CXX=g++-9 ; $CC --version; $CXX --version; gfortran --version; fi
 
 script:
   - git clone --branch autotools-update --depth 1 https://github.com/coin-or-tools/ThirdParty-ASL
