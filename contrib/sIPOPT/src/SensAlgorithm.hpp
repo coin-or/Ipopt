@@ -51,14 +51,14 @@ namespace Ipopt
     /** array place holders to store the vector of sensitivities */
     Number *DirectionalD_X_ ;
     Number *DirectionalD_L_ ;
-    Number *DirectionalD_Z_U_ ;
     Number *DirectionalD_Z_L_ ;
+    Number *DirectionalD_Z_U_ ;
 
     /** array place holders for the sensitivity matrix */
     Number *SensitivityM_X_ ;
     Number *SensitivityM_L_ ;
-    Number *SensitivityM_Z_U_ ;
     Number *SensitivityM_Z_L_ ;
+    Number *SensitivityM_Z_U_ ;
 
   private:
     

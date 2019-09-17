@@ -196,7 +196,7 @@ namespace Ipopt
   {
     DBG_START_METH("PColumn::GetSchurMatrixRows", dbg_verbosity);
 
-    for (Index i=0; i<row_idx_B->size(); ++i) {
+    for (Index i=0; i<(int)row_idx_B->size(); ++i) {
       S_col[i] = -val_[(*row_idx_B)[i]];
     }
   }

@@ -78,7 +78,7 @@ namespace Ipopt
 				      ip_cq,
 				      options,
 				      prefix);
-      DBG_ASSERT(retval);
+      DBG_ASSERT(retval);  (void) retval;
     }
 
     // Find out how many steps there are and create as many SchurSolveDrivers
@@ -108,6 +108,7 @@ namespace Ipopt
       DBG_ASSERT(schur_retval);
       schur_retval = driver_vec[i]->SchurFactorize();
       DBG_ASSERT(schur_retval);
+      (void) schur_retval;
     }
 
     SmartPtr<SensitivityStepCalculator> sens_stepper = new StdStepCalculator(E_0, backsolver);
@@ -177,13 +178,13 @@ namespace Ipopt
 				    ip_cq,
 				    options,
 				    prefix);
-    DBG_ASSERT(retval);
+    DBG_ASSERT(retval);  (void) retval;
 
-    retval = pcalc->ComputeP();
+    pcalc->ComputeP();
 
     SmartPtr<ReducedHessianCalculator> red_hess_calc = new ReducedHessianCalculator(E_0, pcalc);
 
-    retval = red_hess_calc->Initialize(jnlst,
+    red_hess_calc->Initialize(jnlst,
 				       ip_nlp,
 				       ip_data,
 				       ip_cq,

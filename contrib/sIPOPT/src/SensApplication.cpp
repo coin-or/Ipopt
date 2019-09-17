@@ -25,11 +25,6 @@ namespace Ipopt
 				   SmartPtr<OptionsList> options,
 				   SmartPtr<RegisteredOptions> reg_options)
     :
-    jnlst_(jnlst),
-    options_(options),
-    reg_options_(reg_options),
-    ipopt_retval_(Internal_Error),
-    controller(NULL),
     DirectionalD_X(NULL),
     DirectionalD_L(NULL),
     DirectionalD_Z_L(NULL),
@@ -37,7 +32,12 @@ namespace Ipopt
     SensitivityM_X(NULL),
     SensitivityM_L(NULL),
     SensitivityM_Z_L(NULL),
-    SensitivityM_Z_U(NULL)
+    SensitivityM_Z_U(NULL),
+    jnlst_(jnlst),
+    options_(options),
+    reg_options_(reg_options),
+    ipopt_retval_(Internal_Error),
+    controller(NULL)
   {
     DBG_START_METH("SensApplication::SensApplication", dbg_verbosity);
 

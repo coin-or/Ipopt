@@ -21,10 +21,6 @@ namespace Ipopt
 			       SmartPtr<Measurement> measurement,
 			       Index n_sens_steps)
     :
-    driver_vec_(driver_vec),
-    sens_step_calc_(sens_step_calc),
-    measurement_(measurement),
-    n_sens_steps_(n_sens_steps), // why doesn't he get this from the options?
     DirectionalD_X_(NULL),
     DirectionalD_L_(NULL),
     DirectionalD_Z_L_(NULL),
@@ -32,10 +28,14 @@ namespace Ipopt
     SensitivityM_X_(NULL),
     SensitivityM_L_(NULL),
     SensitivityM_Z_L_(NULL),
-    SensitivityM_Z_U_(NULL)
+    SensitivityM_Z_U_(NULL),
+    driver_vec_(driver_vec),
+    sens_step_calc_(sens_step_calc),
+    measurement_(measurement),
+    n_sens_steps_(n_sens_steps) // why doesn't he get this from the options?
   {
     DBG_START_METH("SensAlgorithm::SensAlgorithm", dbg_verbosity);
-    DBG_ASSERT(n_sens_steps<=driver_vec.size());
+    DBG_ASSERT(n_sens_steps<=(int)driver_vec.size());
   }
 
   SensAlgorithm::~SensAlgorithm()
@@ -83,7 +83,7 @@ namespace Ipopt
     const std::vector<Index> idx_ipopt = x_owner_space_->GetIntegerMetaData(state.c_str());
 
     np_ = 0 ;
-    for (Index i=0; i < idx_ipopt.size(); ++i) {
+    for (Index i=0; i < (int)idx_ipopt.size(); ++i) {
       if (idx_ipopt[i]>0) ++np_ ;
     }
 
@@ -174,12 +174,12 @@ namespace Ipopt
     char buffer[250] ;
 
     Index col = 0 ;
-    for (Index Scol =0; Scol < idx_ipopt.size(); ++Scol) {
+    for (Index Scol =0; Scol < (int)idx_ipopt.size(); ++Scol) {
 
       if ( idx_ipopt[Scol] > 0 ) {
 
 	// reset rhs vector to zero
-	for (Index j = 0; j < idx_ipopt.size(); ++j) {
+	for (Index j = 0; j < (int)idx_ipopt.size(); ++j) {
 	  if ( idx_ipopt[j] > 0 ) du_val[ idx_ipopt[j] - 1 ] = 0 ;
 	}
 

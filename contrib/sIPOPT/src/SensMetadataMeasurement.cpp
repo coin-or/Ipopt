@@ -72,7 +72,7 @@ namespace Ipopt
     const std::vector<Index> constr_metadata = y_c_owner_space_->GetIntegerMetaData("sens_init_constr");
 
     std::vector<Index> retval;
-    for (Index i = 0; i<constr_metadata.size(); ++i) {
+    for (Index i = 0; i<(int)constr_metadata.size(); ++i) {
       if (constr_metadata[i]!=0) {
 	retval.push_back(n_base+i);
       }
@@ -106,7 +106,7 @@ namespace Ipopt
     const Number* u_0_val = dynamic_cast<const DenseVector*>(GetRawPtr(IpData().trial()->x()))->Values();
 
     // Fill up values of delta_u vector
-    for (Index i=0; i<val_ipopt.size(); ++i) {
+    for (Index i=0; i<(int)val_ipopt.size(); ++i) {
       if (idx_ipopt[i]>0) {
 	du_val[idx_ipopt[i]-1] = val_ipopt[i]-u_0_val[i]; //initial_val[idx_ipopt[i]-1];
 	//du_val[idx_ipopt[i]-1] = val_ipopt[i];
