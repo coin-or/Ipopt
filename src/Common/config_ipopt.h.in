@@ -15,6 +15,12 @@
 /* Release Version number of project */
 #undef IPOPT_VERSION_RELEASE
 
+/* Define to the debug sanity check level (0 is no test) */
+#undef COIN_IPOPT_CHECKLEVEL
+
+/* Define to the debug verbosity level (0 is no output) */
+#undef COIN_IPOPT_VERBOSITY
+
 /* Define to the C type corresponding to Fortran INTEGER */
 #undef FORTRAN_INTEGER_TYPE
 
