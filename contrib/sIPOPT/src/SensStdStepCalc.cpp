@@ -148,6 +148,8 @@ namespace Ipopt
 	old_delta_u->Copy(*new_delta_u);
       }
     }
+    else
+        retval = true;   /* FIXME added to have retval initialized, but does it make sense??? */
 
     return retval;
   }
