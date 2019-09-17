@@ -659,7 +659,8 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
                {
                   rescale_ = false;
                }
-            // Falls through to:
+
+            // Falls through.
             case SWITCH_NDELAY:
             case SWITCH_OD_ND:
                if( rescale_ )

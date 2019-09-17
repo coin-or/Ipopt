@@ -635,6 +635,7 @@ Number QualityFunctionMuOracle::CalculateQualityFunction(
          break;
       case CEN_RECIPROCAL:
          quality_function += compl_inf / xi;
+         break;
       case CEN_CUBED_RECIPROCAL:
          quality_function += compl_inf / pow(xi, 3);
          break;

@@ -92,6 +92,8 @@ in preparation: 3.13
           flags. Note that the include directories need to be specified
           via -I<dir> in --with-*-cflags.
         - Fixed handling of ma77_default_control in LSL_setMA77().
+        - Fixed calculation of quality function when setting option
+          quality_function_centrality to reciprocal.
         - Fixed compiler warnings when using -Wunused-parameter.
 
 2019-04-08 releases/3.12.13
