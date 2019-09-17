@@ -15,6 +15,9 @@ The documentation consists of the following pages:
 - \subpage OUTPUT
 - \subpage IMPL
 - \subpage FAQ
+- \subpage CHANGELOG
+- \subpage AUTHORS
+- \subpage LICENSE
 
 The Ipopt project website is <https://github.com/coin-or/Ipopt>.
 
@@ -395,5 +398,20 @@ maintained by Stefan Vigerske (GAMS Software GmbH) and Andreas Wächter
 The following names used in this document are trademarks or registered
 trademarks: AMPL, IBM, Intel, Matlab, Microsoft, MKL, Visual Studio C++,
 Visual Studio C++ .NET
+
+
+\page CHANGELOG Release notes
+
+\verbinclude ChangeLog
+
+\page AUTHORS Authors and Contributors
+
+\verbinclude AUTHORS
+
+\page LICENSE License
+
+\Ipopt is available under the Eclipse Public License 1.0:
+
+\verbinclude LICENSE
 
 */

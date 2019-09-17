@@ -861,7 +861,8 @@ EXCLUDE_SYMBOLS        =
 # command).
 
 EXAMPLE_PATH           = @abs_top_srcdir@/examples \
-  @abs_top_srcdir@/src/Interfaces
+  @abs_top_srcdir@/src/Interfaces \
+  @abs_top_srcdir@/ChangeLog @abs_top_srcdir@/AUTHORS @abs_top_srcdir@/LICENSE
 
 # If the value of the EXAMPLE_PATH tag contains directories, you can use the
 # EXAMPLE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp and
