@@ -47,11 +47,14 @@ script:
   - if $NOF77 ; then echo "Skipping Mumps build." ; else git clone --branch autotools-update --depth 1 https://github.com/coin-or-tools/ThirdParty-Mumps ; pushd ThirdParty-Mumps && ./get.Mumps && ./configure --prefix=$HOME/install && make && make install && popd ; fi
   - mkdir build
   - pushd build
-  - if $VISHIDDEN ; then export CFLAGS="-fvisibility=hidden -DNDEBUG" ; fi
-  - if $VISHIDDEN ; then export CXXFLAGS="-fvisibility=hidden -DNDEBUG" ; fi
+  - export CFLAGS="-Wall -Wextra -Werror"
+  - export CXXFLAGS="-Wall -Wextra -Werror"
+  - if $VISHIDDEN ; then CFLAGS="$CFLAGS -fvisibility=hidden" ; fi
+  - if $VISHIDDEN ; then CXXFLAGS="$CXXFLAGS -fvisibility=hidden" ; fi
   - export CFGFLAGS=""
   - if $NOF77 ; then CFGFLAGS="$CFGFLAGS --disable-f77" ; fi
-  - if $ENABLEDEBUG ; then CFGFLAGS="$CFGFLAGS --enable-debug" ; fi
+  - if $ENABLEDEBUG ; then CFGFLAGS="$CFGFLAGS --enable-debug --with-ipopt-checklevel=5 --with-ipopt-verbosity=5" ; fi
+  - if ! $ENABLEDEBUG ; then CFLAGS="$CFLAGS -DNDEBUG" ; CXXFLAGS="$CXXFLAGS -DNDEBUG" ; fi
   - ../configure --prefix=$HOME/install $CFGFLAGS
   - make
   - if $NOF77 ; then echo "skip test as no linear solver" ; else make test ; fi
