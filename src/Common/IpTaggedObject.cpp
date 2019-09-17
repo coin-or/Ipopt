@@ -44,7 +44,7 @@ void TaggedObject::ObjectChanged()
    DBG_START_METH("TaggedObject::ObjectChanged()", 0);
    tag_ = unique_tag;
    unique_tag++;
-   DBG_ASSERT(unique_tag_ < std::numeric_limits<Tag>::max());
+   DBG_ASSERT(unique_tag < std::numeric_limits<Tag>::max());
    // The Notify method from the Subject base class notifies all
    // registered Observers that this subject has changed.
    Notify(Observer::NT_Changed);
