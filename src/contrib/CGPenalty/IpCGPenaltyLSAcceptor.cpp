@@ -533,9 +533,9 @@ bool CGPenaltyLSAcceptor::TrySecondOrderCorrection(
 }
 
 bool CGPenaltyLSAcceptor::TryCorrector(
-   Number                    alpha_primal_test,
-   Number&                   alpha_primal,
-   SmartPtr<IteratesVector>& actual_delta
+   Number                    /*alpha_primal_test*/,
+   Number&                   /*alpha_primal*/,
+   SmartPtr<IteratesVector>& /*actual_delta*/
 )
 {
    DBG_START_METH("CGPenaltyLSAcceptor::TryCorrector",
@@ -544,7 +544,7 @@ bool CGPenaltyLSAcceptor::TryCorrector(
 }
 
 char CGPenaltyLSAcceptor::UpdateForNextIteration(
-   Number alpha_primal_test
+   Number /*alpha_primal_test*/
 )
 {
    char info_alpha_primal_char = 'n';

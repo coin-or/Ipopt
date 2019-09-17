@@ -163,7 +163,7 @@ bool SymTMatrix::HasValidNumbersImpl() const
 
 void SymTMatrix::ComputeRowAMaxImpl(
    Vector& rows_norms,
-   bool    init
+   bool    /*init*/
 ) const
 {
    DBG_ASSERT(initialized_);

@@ -47,14 +47,14 @@ protected:
    ) const;
 
    virtual void ComputeRowAMaxImpl(
-      Vector& rows_norms,
-      bool    init
+      Vector& /*rows_norms*/,
+      bool    /*init*/
    ) const
    { }
 
    virtual void ComputeColAMaxImpl(
-      Vector& cols_norms,
-      bool    init
+      Vector& /*cols_norms*/,
+      bool    /*init*/
    ) const
    { }
 

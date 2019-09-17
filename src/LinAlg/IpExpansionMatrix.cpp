@@ -375,7 +375,7 @@ void ExpansionMatrix::SinvBlrmZMTdBrImpl(
 
 void ExpansionMatrix::ComputeRowAMaxImpl(
    Vector& rows_norms,
-   bool    init
+   bool    /*init*/
 ) const
 {
    DenseVector* dense_vec = static_cast<DenseVector*>(&rows_norms);

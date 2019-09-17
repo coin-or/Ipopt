@@ -41,7 +41,7 @@ static const Index dbg_verbosity = 0;
 #endif
 
 void EquilibrationScaling::RegisterOptions(
-   const SmartPtr<RegisteredOptions>& roptions
+   const SmartPtr<RegisteredOptions>& /*roptions*/
 )
 { }
 
@@ -60,7 +60,7 @@ void EquilibrationScaling::DetermineScalingParametersImpl(
    const SmartPtr<const VectorSpace>    d_space,
    const SmartPtr<const MatrixSpace>    jac_c_space,
    const SmartPtr<const MatrixSpace>    jac_d_space,
-   const SmartPtr<const SymMatrixSpace> h_space,
+   const SmartPtr<const SymMatrixSpace> /*h_space*/,
    const Matrix&                        Px_L,
    const Vector&                        x_L,
    const Matrix&                        Px_U,

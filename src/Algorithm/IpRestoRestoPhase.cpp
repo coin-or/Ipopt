@@ -20,8 +20,8 @@ RestoRestorationPhase::~RestoRestorationPhase()
 { }
 
 bool RestoRestorationPhase::InitializeImpl(
-   const OptionsList& options,
-   const std::string& prefix
+   const OptionsList& /*options*/,
+   const std::string& /*prefix*/
 )
 {
    return true;

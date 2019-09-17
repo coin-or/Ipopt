@@ -448,7 +448,7 @@ bool PDFullSpaceSolver::SolveOnce(
    }
    // improve_current_solution can only be true, if that system has
    // been solved before
-   DBG_ASSERT((!resolve_with_better_quality && !pretend_singular) || uptodate);
+   DBG_ASSERT((!resolve_with_better_quality && !pretend_singular) || uptodate);  (void) resolve_with_better_quality;
 
    ESymSolverStatus retval;
    if( uptodate && !pretend_singular )
@@ -678,10 +678,10 @@ void PDFullSpaceSolver::ComputeResiduals(
    const Vector&         slack_x_U,
    const Vector&         slack_s_L,
    const Vector&         slack_s_U,
-   const Vector&         sigma_x,
-   const Vector&         sigma_s,
-   Number                alpha,
-   Number                beta,
+   const Vector&         /*sigma_x*/,
+   const Vector&         /*sigma_s*/,
+   Number                /*alpha*/,
+   Number                /*beta*/,
    const IteratesVector& rhs,
    const IteratesVector& res,
    IteratesVector&       resid

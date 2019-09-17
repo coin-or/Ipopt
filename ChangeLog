@@ -91,6 +91,8 @@ in preparation: 3.13
           replaced by corresponding --with-*-cflags and --with-*-lflags
           flags. Note that the include directories need to be specified
           via -I<dir> in --with-*-cflags.
+        - Fixed handling of ma77_default_control in LSL_setMA77().
+        - Fixed compiler warnings when using -Wunused-parameter.
 
 2019-04-08 releases/3.12.13
         - fixed Pardiso settings when using Pardiso from Pardiso project

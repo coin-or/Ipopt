@@ -19,14 +19,14 @@ ZeroMatrix::~ZeroMatrix()
 { }
 
 void ZeroMatrix::MultVectorImpl(
-   Number        alpha,
+   Number        /*alpha*/,
    const Vector& x,
    Number        beta,
    Vector&       y
 ) const
 {
    //  A few sanity checks
-   DBG_ASSERT(NCols() == x.Dim());
+   DBG_ASSERT(NCols() == x.Dim());  (void) x;
    DBG_ASSERT(NRows() == y.Dim());
 
    // Take care of the y part of the addition
@@ -41,7 +41,7 @@ void ZeroMatrix::MultVectorImpl(
 }
 
 void ZeroMatrix::TransMultVectorImpl(
-   Number        alpha,
+   Number        /*alpha*/,
    const Vector& x,
    Number        beta,
    Vector&       y
@@ -49,7 +49,7 @@ void ZeroMatrix::TransMultVectorImpl(
 {
    //  A few sanity checks
    DBG_ASSERT(NCols() == y.Dim());
-   DBG_ASSERT(NRows() == x.Dim());
+   DBG_ASSERT(NRows() == x.Dim());  (void) x;
 
    // Take care of the y part of the addition
    if( beta != 0.0 )

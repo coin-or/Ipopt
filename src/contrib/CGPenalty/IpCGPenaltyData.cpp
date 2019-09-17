@@ -17,9 +17,9 @@ CGPenaltyData::~CGPenaltyData()
 { }
 
 bool CGPenaltyData::Initialize(
-   const Journalist&  jnlst,
-   const OptionsList& options,
-   const std::string& prefix
+   const Journalist&  /*jnlst*/,
+   const OptionsList& /*options*/,
+   const std::string& /*prefix*/
 )
 {
    have_cgpen_deltas_ = false;

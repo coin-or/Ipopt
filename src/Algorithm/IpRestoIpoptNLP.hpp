@@ -66,24 +66,24 @@ public:
 
    /** Method accessing the GetWarmStartIterate of the NLP */
    virtual bool GetWarmStartIterate(
-      IteratesVector& warm_start_iterate
+      IteratesVector& /*warm_start_iterate*/
    )
    {
       return false;
    }
 
    void FinalizeSolution(
-      SolverReturn               status,
-      const Vector&              x,
-      const Vector&              z_L,
-      const Vector&              z_U,
-      const Vector&              c,
-      const Vector&              d,
-      const Vector&              y_c,
-      const Vector&              y_d,
-      Number                     obj_value,
-      const IpoptData*           ip_data,
-      IpoptCalculatedQuantities* ip_cq
+      SolverReturn               /*status*/,
+      const Vector&              /*x*/,
+      const Vector&              /*z_L*/,
+      const Vector&              /*z_U*/,
+      const Vector&              /*c*/,
+      const Vector&              /*d*/,
+      const Vector&              /*y_c*/,
+      const Vector&              /*y_d*/,
+      Number                     /*obj_value*/,
+      const IpoptData*           /*ip_data*/,
+      IpoptCalculatedQuantities* /*ip_cq*/
    )
    { }
 

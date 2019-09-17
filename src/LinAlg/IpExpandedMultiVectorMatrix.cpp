@@ -177,16 +177,16 @@ bool ExpandedMultiVectorMatrix::HasValidNumbersImpl() const
 }
 
 void ExpandedMultiVectorMatrix::ComputeRowAMaxImpl(
-   Vector& rows_norms,
-   bool    init
+   Vector& /*rows_norms*/,
+   bool    /*init*/
 ) const
 {
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "ExpandedMultiVectorMatrix::ComputeRowAMaxImpl not implemented");
 }
 
 void ExpandedMultiVectorMatrix::ComputeColAMaxImpl(
-   Vector& cols_norms,
-   bool    init
+   Vector& /*cols_norms*/,
+   bool    /*init*/
 ) const
 {
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "ExpandedMultiVectorMatrix::ComputeColAMaxImpl not implemented");

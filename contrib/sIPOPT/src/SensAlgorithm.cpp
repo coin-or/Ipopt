@@ -51,8 +51,8 @@ namespace Ipopt
     if (NULL != SensitivityM_Z_L_) delete [] SensitivityM_Z_L_ ;
   }
 
-  bool SensAlgorithm::InitializeImpl(const OptionsList& options,
-				     const std::string& prefix)
+  bool SensAlgorithm::InitializeImpl(const OptionsList& /*options*/,
+				     const std::string& /*prefix*/)
   {
     // initialize values for variable sizes, and allocate memory for sensitivity vectors
     nx_ = dynamic_cast<const DenseVector*>( GetRawPtr( IpData().curr()->x() ) )->Dim() ;

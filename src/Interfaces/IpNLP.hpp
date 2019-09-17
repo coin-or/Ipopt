@@ -47,8 +47,8 @@ public:
    //@{
    /** Overload if you want the chance to process options or parameters that may be specific to the NLP */
    virtual bool ProcessOptions(
-      const OptionsList& options,
-      const std::string& prefix
+      const OptionsList& /*options*/,
+      const std::string& /*prefix*/
    )
    {
       return true;
@@ -110,7 +110,7 @@ public:
     * The default dummy implementation returns false.
     */
    virtual bool GetWarmStartIterate(
-      IteratesVector& warm_start_iterate
+      IteratesVector& /*warm_start_iterate*/
    )
    {
       return false;
@@ -169,17 +169,17 @@ public:
     * of the optimization, where SolverReturn is defined in
     * IpAlgTypes.hpp.  */
    virtual void FinalizeSolution(
-      SolverReturn               status,
-      const Vector&              x,
-      const Vector&              z_L,
-      const Vector&              z_U,
-      const Vector&              c,
-      const Vector&              d,
-      const Vector&              y_c,
-      const Vector&              y_d,
-      Number                     obj_value,
-      const IpoptData*           ip_data,
-      IpoptCalculatedQuantities* ip_cq
+      SolverReturn               /*status*/,
+      const Vector&              /*x*/,
+      const Vector&              /*z_L*/,
+      const Vector&              /*z_U*/,
+      const Vector&              /*c*/,
+      const Vector&              /*d*/,
+      const Vector&              /*y_c*/,
+      const Vector&              /*y_d*/,
+      Number                     /*obj_value*/,
+      const IpoptData*           /*ip_data*/,
+      IpoptCalculatedQuantities* /*ip_cq*/
    )
    { }
 
@@ -202,19 +202,19 @@ public:
     *  phase, the dual variables are probably not not changing.
     */
    virtual bool IntermediateCallBack(
-      AlgorithmMode              mode,
-      Index                      iter,
-      Number                     obj_value,
-      Number                     inf_pr,
-      Number                     inf_du,
-      Number                     mu,
-      Number                     d_norm,
-      Number                     regularization_size,
-      Number                     alpha_du,
-      Number                     alpha_pr,
-      Index                      ls_trials,
-      const IpoptData*           ip_data,
-      IpoptCalculatedQuantities* ip_cq
+      AlgorithmMode              /*mode*/,
+      Index                      /*iter*/,
+      Number                     /*obj_value*/,
+      Number                     /*inf_pr*/,
+      Number                     /*inf_du*/,
+      Number                     /*mu*/,
+      Number                     /*d_norm*/,
+      Number                     /*regularization_size*/,
+      Number                     /*alpha_du*/,
+      Number                     /*alpha_pr*/,
+      Index                      /*ls_trials*/,
+      const IpoptData*           /*ip_data*/,
+      IpoptCalculatedQuantities* /*ip_cq*/
    )
    {
       return true;
@@ -227,13 +227,13 @@ public:
     */
    //@{
    virtual void GetScalingParameters(
-      const SmartPtr<const VectorSpace> x_space,
-      const SmartPtr<const VectorSpace> c_space,
-      const SmartPtr<const VectorSpace> d_space,
-      Number&                           obj_scaling,
-      SmartPtr<Vector>&                 x_scaling,
-      SmartPtr<Vector>&                 c_scaling,
-      SmartPtr<Vector>&                 d_scaling
+      const SmartPtr<const VectorSpace> /*x_space*/,
+      const SmartPtr<const VectorSpace> /*c_space*/,
+      const SmartPtr<const VectorSpace> /*d_space*/,
+      Number&                           /*obj_scaling*/,
+      SmartPtr<Vector>&                 /*x_scaling*/,
+      SmartPtr<Vector>&                 /*c_scaling*/,
+      SmartPtr<Vector>&                 /*d_scaling*/
    ) const
    {
       THROW_EXCEPTION(USER_SCALING_NOT_IMPLEMENTED,

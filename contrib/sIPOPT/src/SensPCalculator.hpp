@@ -42,8 +42,8 @@ namespace Ipopt
     }
 
     /** Overloaded from AlgorithmStrategyObject */
-    virtual bool InitializeImpl(const OptionsList& options,
-                                const std::string& prefix)
+    virtual bool InitializeImpl(const OptionsList& /*options*/,
+                                const std::string& /*prefix*/)
     {
       return true;
     }

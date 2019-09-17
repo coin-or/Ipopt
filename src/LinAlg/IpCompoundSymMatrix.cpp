@@ -188,7 +188,7 @@ bool CompoundSymMatrix::HasValidNumbersImpl() const
 
 void CompoundSymMatrix::ComputeRowAMaxImpl(
    Vector& rows_norms,
-   bool    init
+   bool    /*init*/
 ) const
 {
    if( !matrices_valid_ )

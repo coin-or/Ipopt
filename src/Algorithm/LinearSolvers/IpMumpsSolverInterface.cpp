@@ -223,8 +223,8 @@ ESymSolverStatus MumpsSolverInterface::MultiSolve(
    DBG_START_METH("MumpsSolverInterface::MultiSolve", dbg_verbosity);
    DBG_ASSERT(!check_NegEVals || ProvidesInertia());
    DBG_ASSERT(initialized_);
-   DBG_ASSERT(((DMUMPS_STRUC_C*)mumps_ptr_)->irn == ia);
-   DBG_ASSERT(((DMUMPS_STRUC_C*)mumps_ptr_)->jcn == ja);
+   DBG_ASSERT(((DMUMPS_STRUC_C*)mumps_ptr_)->irn == ia);  (void) ia;
+   DBG_ASSERT(((DMUMPS_STRUC_C*)mumps_ptr_)->jcn == ja);  (void) ja;
 
    if( pivtol_changed_ )
    {
@@ -304,6 +304,8 @@ void dump_matrix(
       printf("\n%25.15e", 0.);
    }
    printf("    :RHS\n");
+#else
+   (void) mumps_data;
 #endif
 }
 
@@ -571,8 +573,8 @@ bool MumpsSolverInterface::ProvidesDegeneracyDetection() const
 }
 
 ESymSolverStatus MumpsSolverInterface::DetermineDependentRows(
-   const Index*      ia,
-   const Index*      ja,
+   const Index*      /*ia*/,
+   const Index*      /*ja*/,
    std::list<Index>& c_deps
 )
 {

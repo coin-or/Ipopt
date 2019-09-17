@@ -425,8 +425,8 @@ bool FileJournal::Open(const char* fname)
 }
 
 void FileJournal::PrintImpl(
-   EJournalCategory category,
-   EJournalLevel    level,
+   EJournalCategory /*category*/,
+   EJournalLevel    /*level*/,
    const char*      str
 )
 {
@@ -439,8 +439,8 @@ void FileJournal::PrintImpl(
 }
 
 void FileJournal::PrintfImpl(
-   EJournalCategory category,
-   EJournalLevel    level,
+   EJournalCategory /*category*/,
+   EJournalLevel    /*level*/,
    const char*      pformat,
    va_list          ap
 )
@@ -482,8 +482,8 @@ void StreamJournal::SetOutputStream(
 }
 
 void StreamJournal::PrintImpl(
-   EJournalCategory category,
-   EJournalLevel    level,
+   EJournalCategory /*category*/,
+   EJournalLevel    /*level*/,
    const char*      str
 )
 {
@@ -496,8 +496,8 @@ void StreamJournal::PrintImpl(
 }
 
 void StreamJournal::PrintfImpl(
-   EJournalCategory category,
-   EJournalLevel    level,
+   EJournalCategory /*category*/,
+   EJournalLevel    /*level*/,
    const char*      pformat,
    va_list          ap
 )

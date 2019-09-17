@@ -135,6 +135,14 @@ public:
    )
    // [TNLP_get_var_con_metadata]
    {
+      (void) n;
+      (void) var_string_md;
+      (void) var_integer_md;
+      (void) var_numeric_md;
+      (void) m;
+      (void) con_string_md;
+      (void) con_integer_md;
+      (void) con_numeric_md;
       return false;
    }
 
@@ -211,6 +219,13 @@ public:
    )
    // [TNLP_get_scaling_parameters]
    {
+      (void) obj_scaling;
+      (void) use_x_scaling;
+      (void) n;
+      (void) x_scaling;
+      (void) use_g_scaling;
+      (void) m;
+      (void) g_scaling;
       return false;
    }
 
@@ -231,6 +246,8 @@ public:
    )
    // [TNLP_get_variables_linearity]
    {
+      (void) n;
+      (void) var_types;
       return false;
    }
 
@@ -251,6 +268,8 @@ public:
    )
    // [TNLP_get_constraints_linearity]
    {
+      (void) m;
+      (void) const_types;
       return false;
    }
 
@@ -304,6 +323,7 @@ public:
       IteratesVector& warm_start_iterate /**< storage for warm start iterate in the form \Ipopt requires it internally */
    )
    {
+      (void) warm_start_iterate;
       return false;
    }
    // [TNLP_get_warm_start_iterate]
@@ -464,6 +484,17 @@ public:
    )
    // [TNLP_eval_h]
    {
+      (void) n;
+      (void) x;
+      (void) new_x;
+      (void) obj_factor;
+      (void) m;
+      (void) lambda;
+      (void) new_lambda;
+      (void) nele_hess;
+      (void) iRow;
+      (void) jCol;
+      (void) values;
       return false;
    }
    //@}
@@ -542,7 +573,16 @@ public:
       const NumericMetaDataMapType& con_numeric_md
    )
    // [TNLP_finalize_metadata]
-   { }
+   {
+      (void) n;
+      (void) var_string_md;
+      (void) var_integer_md;
+      (void) var_numeric_md;
+      (void) m;
+      (void) con_string_md;
+      (void) con_integer_md;
+      (void) con_numeric_md;
+   }
 
    /** Intermediate Callback method for the user.
     *
@@ -629,6 +669,19 @@ public:
    )
    // [TNLP_intermediate_callback]
    {
+      (void) mode;
+      (void) iter;
+      (void) obj_value;
+      (void) inf_pr;
+      (void) inf_du;
+      (void) mu;
+      (void) d_norm;
+      (void) regularization_size;
+      (void) alpha_du;
+      (void) alpha_pr;
+      (void) ls_trials;
+      (void) ip_data;
+      (void) ip_cq;
       return true;
    }
    //@}
@@ -681,6 +734,8 @@ public:
    )
    // [TNLP_get_list_of_nonlinear_variables]
    {
+      (void) num_nonlin_vars;
+      (void) pos_nonlin_vars;
       return false;
    }
    //@}

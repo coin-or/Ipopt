@@ -443,7 +443,7 @@ bool RestoIpoptNLP::InitializeStructures(
 }
 
 Number RestoIpoptNLP::f(
-   const Vector& x
+   const Vector& /*x*/
 )
 {
    THROW_EXCEPTION(INTERNAL_ABORT, "ERROR: In RestoIpoptNLP f() is called without mu!");
@@ -535,7 +535,7 @@ SmartPtr<const Vector> RestoIpoptNLP::c(
 }
 
 SmartPtr<const Vector> RestoIpoptNLP::grad_f(
-   const Vector& x
+   const Vector& /*x*/
 )
 {
    THROW_EXCEPTION(INTERNAL_ABORT, "ERROR: In RestoIpoptNLP grad_f() is called without mu!");
@@ -638,10 +638,10 @@ SmartPtr<const Matrix> RestoIpoptNLP::jac_d(
 }
 
 SmartPtr<const SymMatrix> RestoIpoptNLP::h(
-   const Vector& x,
-   Number        obj_factor,
-   const Vector& yc,
-   const Vector& yd
+   const Vector& /*x*/,
+   Number        /*obj_factor*/,
+   const Vector& /*yc*/,
+   const Vector& /*yd*/
 )
 {
    assert(false && "ERROR: In RestoIpoptNLP h() is called without mu!");

@@ -63,8 +63,8 @@ bool SymScaledMatrix::HasValidNumbersImpl() const
 }
 
 void SymScaledMatrix::ComputeRowAMaxImpl(
-   Vector& rows_norms,
-   bool    init
+   Vector& /*rows_norms*/,
+   bool    /*init*/
 ) const
 {
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "SymScaledMatrix::ComputeRowAMaxImpl not implemented");

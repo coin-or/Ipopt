@@ -143,10 +143,10 @@ bool NLPBoundsRemover::GetSpaces(
 }
 
 bool NLPBoundsRemover::GetBoundsInformation(
-   const Matrix& Px_L,
-   Vector&       x_L,
-   const Matrix& Px_U,
-   Vector&       x_U,
+   const Matrix& /*Px_L*/,
+   Vector&       /*x_L*/,
+   const Matrix& /*Px_U*/,
+   Vector&       /*x_U*/,
    const Matrix& Pd_L,
    Vector&       d_L,
    const Matrix& Pd_U,
@@ -201,10 +201,10 @@ bool NLPBoundsRemover::GetStartingPoint(
    bool             need_y_c,
    SmartPtr<Vector> y_d,
    bool             need_y_d,
-   SmartPtr<Vector> z_L,
-   bool             need_z_L,
-   SmartPtr<Vector> z_U,
-   bool             need_z_U
+   SmartPtr<Vector> /*z_L*/,
+   bool             /*need_z_L*/,
+   SmartPtr<Vector> /*z_U*/,
+   bool             /*need_z_U*/
 )
 {
    SmartPtr<Vector> y_d_orig;
@@ -281,8 +281,8 @@ bool NLPBoundsRemover::Eval_h(
 void NLPBoundsRemover::FinalizeSolution(
    SolverReturn               status,
    const Vector&              x,
-   const Vector&              z_L,
-   const Vector&              z_U,
+   const Vector&              /*z_L*/,
+   const Vector&              /*z_U*/,
    const Vector&              c,
    const Vector&              d,
    const Vector&              y_c,

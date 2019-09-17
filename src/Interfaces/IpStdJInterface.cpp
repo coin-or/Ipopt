@@ -536,7 +536,7 @@ bool Jipopt::eval_h(
 }
 
 void Jipopt::finalize_solution(
-   SolverReturn               status,
+   SolverReturn               /*status*/,
    Index                      n,
    const Number*              x,
    const Number*              z_L,
@@ -545,8 +545,9 @@ void Jipopt::finalize_solution(
    const Number*              g,
    const Number*              lambda,
    Number                     obj_value,
-   const IpoptData*           ip_data,
-   IpoptCalculatedQuantities* ip_cq)
+   const IpoptData*           /*ip_data*/,
+   IpoptCalculatedQuantities* /*ip_cq*/
+)
 {
    /* Copy the native arrays to Java double arrays */
 
@@ -730,9 +731,10 @@ JNIEXPORT jint JNICALL Java_org_coinor_Ipopt_OptimizeTNLP(
 }
 
 JNIEXPORT void JNICALL Java_org_coinor_Ipopt_FreeIpoptProblem(
-   JNIEnv* env,
-   jobject obj_this,
-   jlong   pipopt)
+   JNIEnv* /*env*/,
+   jobject /*obj_this*/,
+   jlong   pipopt
+)
 {
    SmartPtr<Jipopt>* pproblem = (SmartPtr<Jipopt>*)pipopt;
 
@@ -750,10 +752,11 @@ JNIEXPORT void JNICALL Java_org_coinor_Ipopt_FreeIpoptProblem(
 
 JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptIntOption(
    JNIEnv*  env,
-   jobject  obj_this,
+   jobject  /*obj_this*/,
    jlong    pipopt,
    jstring  jparname,
-   jint     jparvalue)
+   jint     jparvalue
+)
 {
    Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);
 
@@ -770,10 +773,11 @@ JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptIntOption(
 
 JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptNumOption(
    JNIEnv* env,
-   jobject obj_this,
+   jobject /*obj_this*/,
    jlong   pipopt,
    jstring jparname,
-   jdouble jparvalue)
+   jdouble jparvalue
+)
 {
    Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);
 
@@ -790,10 +794,11 @@ JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptNumOption(
 
 JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptStrOption(
    JNIEnv* env,
-   jobject obj_this,
+   jobject /*obj_this*/,
    jlong   pipopt,
    jstring jparname,
-   jstring jparvalue)
+   jstring jparvalue
+)
 {
    Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);
 

@@ -447,7 +447,7 @@ SmartPtr<const Vector> IpoptCalculatedQuantities::trial_slack_s_U()
 Index IpoptCalculatedQuantities::CalculateSafeSlack(
    SmartPtr<Vector>&             slack,
    const SmartPtr<const Vector>& bound,
-   const SmartPtr<const Vector>& curr_point,
+   const SmartPtr<const Vector>& /*curr_point*/,
    const SmartPtr<const Vector>& multiplier
 )
 {

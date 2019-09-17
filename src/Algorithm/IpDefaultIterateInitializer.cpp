@@ -665,9 +665,9 @@ void DefaultIterateInitializer::push_variables(
 
 void DefaultIterateInitializer::least_square_mults(
    const Journalist&                       jnlst,
-   IpoptNLP&                               ip_nlp,
+   IpoptNLP&                               /*ip_nlp*/,
    IpoptData&                              ip_data,
-   IpoptCalculatedQuantities&              ip_cq,
+   IpoptCalculatedQuantities&              /*ip_cq*/,
    const SmartPtr<EqMultiplierCalculator>& eq_mult_calculator,
    Number                                  constr_mult_init_max
 )

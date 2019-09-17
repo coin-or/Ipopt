@@ -605,7 +605,7 @@ bool CompoundMatrix::HasValidNumbersImpl() const
 
 void CompoundMatrix::ComputeRowAMaxImpl(
    Vector& rows_norms,
-   bool    init
+   bool    /*init*/
 ) const
 {
    if( !matrices_valid_ )
@@ -661,7 +661,7 @@ void CompoundMatrix::ComputeRowAMaxImpl(
 
 void CompoundMatrix::ComputeColAMaxImpl(
    Vector& cols_norms,
-   bool    init
+   bool    /*init*/
 ) const
 {
    if( !matrices_valid_ )

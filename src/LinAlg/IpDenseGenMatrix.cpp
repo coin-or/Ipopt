@@ -378,7 +378,7 @@ void DenseGenMatrix::TransMultVectorImpl(
 
 void DenseGenMatrix::ComputeRowAMaxImpl(
    Vector& rows_norms,
-   bool    init
+   bool    /*init*/
 ) const
 {
    //  A few sanity checks
@@ -401,7 +401,7 @@ void DenseGenMatrix::ComputeRowAMaxImpl(
 
 void DenseGenMatrix::ComputeColAMaxImpl(
    Vector& cols_norms,
-   bool    init
+   bool    /*init*/
 ) const
 {
    //  A few sanity checks

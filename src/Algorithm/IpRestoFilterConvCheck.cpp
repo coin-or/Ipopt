@@ -36,7 +36,7 @@ void RestoFilterConvergenceCheck::SetOrigLSAcceptor(
 }
 
 void RestoFilterConvergenceCheck::RegisterOptions(
-   SmartPtr<RegisteredOptions> roptions
+   SmartPtr<RegisteredOptions> /*roptions*/
 )
 { }
 

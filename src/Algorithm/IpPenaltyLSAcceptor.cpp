@@ -390,16 +390,16 @@ bool PenaltyLSAcceptor::TrySecondOrderCorrection(
 }
 
 bool PenaltyLSAcceptor::TryCorrector(
-   Number                    alpha_primal_test,
-   Number&                   alpha_primal,
-   SmartPtr<IteratesVector>& actual_delta
+   Number                    /*alpha_primal_test*/,
+   Number&                   /*alpha_primal*/,
+   SmartPtr<IteratesVector>& /*actual_delta*/
 )
 {
    return false;
 }
 
 char PenaltyLSAcceptor::UpdateForNextIteration(
-   Number alpha_primal_test
+   Number /*alpha_primal_test*/
 )
 {
    // delete some stuff
@@ -428,7 +428,7 @@ void PenaltyLSAcceptor::PrepareRestoPhaseStart()
 bool PenaltyLSAcceptor::IsAcceptableToCurrentIterate(
    Number trial_barr,
    Number trial_theta,
-   bool   called_from_restoration /*=false*/
+   bool   /*called_from_restoration*/ /*=false*/
 ) const
 {
    DBG_START_METH("PenaltyLSAcceptor::IsAcceptableToCurrentIterate",

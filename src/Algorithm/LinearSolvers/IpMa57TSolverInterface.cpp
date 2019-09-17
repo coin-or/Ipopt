@@ -608,8 +608,8 @@ ESymSolverStatus Ma57TSolverInterface::SymbolicFactorization(
 }
 
 ESymSolverStatus Ma57TSolverInterface::Factorization(
-   const Index* airn,
-   const Index* ajcn,
+   const Index* /*airn*/,
+   const Index* /*ajcn*/,
    bool         check_NegEVals,
    Index        numberOfNegEVals
 )

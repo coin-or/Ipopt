@@ -285,7 +285,7 @@ ESymSolverStatus Ma77SolverInterface::InitializeStructure(
 ESymSolverStatus Ma77SolverInterface::MultiSolve(
    bool         new_matrix,
    const Index* ia,
-   const Index* ja,
+   const Index* /*ja*/,
    Index        nrhs,
    double*      rhs_vals,
    bool         check_NegEVals,

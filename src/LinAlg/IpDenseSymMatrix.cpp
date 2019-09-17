@@ -231,7 +231,7 @@ bool DenseSymMatrix::HasValidNumbersImpl() const
 
 void DenseSymMatrix::ComputeRowAMaxImpl(
    Vector& rows_norms,
-   bool    init
+   bool    /*init*/
 ) const
 {
    //  A few sanity checks

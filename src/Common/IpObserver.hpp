@@ -355,7 +355,7 @@ inline Subject::~Subject()
 
 inline
 void Subject::AttachObserver(
-   Observer::NotifyType notify_type,
+   Observer::NotifyType /*notify_type*/,
    Observer*            observer
 ) const
 {
@@ -378,7 +378,7 @@ void Subject::AttachObserver(
 
 inline
 void Subject::DetachObserver(
-   Observer::NotifyType notify_type,
+   Observer::NotifyType /*notify_type*/,
    Observer*            observer
 ) const
 {

@@ -167,7 +167,7 @@ bool TNLPReducer::get_bounds_info(
    Index   n,
    Number* x_l,
    Number* x_u,
-   Index   m,
+   Index   /*m*/,
    Number* g_l,
    Number* g_u
 )
@@ -243,7 +243,7 @@ bool TNLPReducer::get_scaling_parameters(
    Index   n,
    Number* x_scaling,
    bool&   use_g_scaling,
-   Index   m,
+   Index   /*m*/,
    Number* g_scaling
 )
 {
@@ -276,7 +276,7 @@ bool TNLPReducer::get_variables_linearity(
 }
 
 bool TNLPReducer::get_constraints_linearity(
-   Index m,
+   Index /*m*/,
    LinearityType* const_types
 )
 {
@@ -307,7 +307,7 @@ bool TNLPReducer::get_starting_point(
    bool    init_z,
    Number* z_L,
    Number* z_U,
-   Index   m,
+   Index   /*m*/,
    bool    init_lambda,
    Number* lambda
 )
@@ -368,7 +368,7 @@ bool TNLPReducer::eval_g(
    Index         n,
    const Number* x,
    bool          new_x,
-   Index         m,
+   Index         /*m*/,
    Number*       g
 )
 {
@@ -396,8 +396,8 @@ bool TNLPReducer::eval_jac_g(
    Index         n,
    const Number* x,
    bool          new_x,
-   Index         m,
-   Index         nele_jac,
+   Index         /*m*/,
+   Index         /*nele_jac*/,
    Index*        iRow,
    Index*        jCol,
    Number*       values
@@ -478,7 +478,7 @@ bool TNLPReducer::eval_h(
    const Number* x,
    bool          new_x,
    Number        obj_factor,
-   Index         m,
+   Index         /*m*/,
    const Number* lambda,
    bool          new_lambda,
    Index         nele_hess,
@@ -519,8 +519,8 @@ void TNLPReducer::finalize_solution(
    const Number*              x,
    const Number*              z_L,
    const Number*              z_U,
-   Index                      m,
-   const Number*              g,
+   Index                      /*m*/,
+   const Number*              /*g*/,
    const Number*              lambda,
    Number                     obj_value,
    const IpoptData*           ip_data,

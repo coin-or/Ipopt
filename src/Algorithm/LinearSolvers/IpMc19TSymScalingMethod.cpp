@@ -43,8 +43,8 @@ static const Index dbg_verbosity = 0;
 #endif
 
 bool Mc19TSymScalingMethod::InitializeImpl(
-   const OptionsList& options,
-   const std::string& prefix
+   const OptionsList& /*options*/,
+   const std::string& /*prefix*/
 )
 {
    return true;

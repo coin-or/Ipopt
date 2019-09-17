@@ -35,7 +35,7 @@ void RestoPenaltyConvergenceCheck::SetOrigLSAcceptor(
 }
 
 void RestoPenaltyConvergenceCheck::RegisterOptions(
-   SmartPtr<RegisteredOptions> roptions
+   SmartPtr<RegisteredOptions> /*roptions*/
 )
 { }
 

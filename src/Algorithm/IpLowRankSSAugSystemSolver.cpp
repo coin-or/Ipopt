@@ -205,20 +205,20 @@ ESymSolverStatus LowRankSSAugSystemSolver::Solve(
 ESymSolverStatus LowRankSSAugSystemSolver::UpdateExtendedData(
    const SymMatrix* W,
    double           W_factor,
-   const Vector*    D_x,
-   double           delta_x,
-   const Vector*    D_s,
-   double           delta_s,
+   const Vector*    /*D_x*/,
+   double           /*delta_x*/,
+   const Vector*    /*D_s*/,
+   double           /*delta_s*/,
    const Matrix&    J_c,
    const Vector*    D_c,
-   double           delta_c,
-   const Matrix&    J_d,
-   const Vector*    D_d,
-   double           delta_d,
+   double           /*delta_c*/,
+   const Matrix&    /*J_d*/,
+   const Vector*    /*D_d*/,
+   double           /*delta_d*/,
    const Vector&    proto_rhs_x,
-   const Vector&    proto_rhs_s,
+   const Vector&    /*proto_rhs_s*/,
    const Vector&    proto_rhs_c,
-   const Vector&    proto_rhs_d
+   const Vector&    /*proto_rhs_d*/
 )
 {
    DBG_START_METH("LowRankSSAugSystemSolver::UpdateExtendedData",

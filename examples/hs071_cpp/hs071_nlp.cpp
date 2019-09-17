@@ -11,6 +11,10 @@
 
 using namespace Ipopt;
 
+#ifdef __GNUC__
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
+
 // constructor
 HS071_NLP::HS071_NLP()
 { }
@@ -194,6 +198,9 @@ bool HS071_NLP::eval_jac_g(
    Number*       values
    )
 {
+   assert(n == 4);
+   assert(m == 2);
+
    if( values == NULL )
    {
       // return the structure of the Jacobian
@@ -243,6 +250,9 @@ bool HS071_NLP::eval_h(
    Number*       values
    )
 {
+   assert(n == 4);
+   assert(m == 2);
+
    if( values == NULL )
    {
       // return the structure. This is a symmetric matrix, fill the lower left

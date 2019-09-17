@@ -491,8 +491,8 @@ Number OrigIpoptNLP::f(
 }
 
 Number OrigIpoptNLP::f(
-   const Vector& x,
-   Number        mu
+   const Vector& /*x*/,
+   Number        /*mu*/
 )
 {
    assert(false && "ERROR: This method is only a placeholder for f(mu) and should not be called");
@@ -524,8 +524,8 @@ SmartPtr<const Vector> OrigIpoptNLP::grad_f(
 }
 
 SmartPtr<const Vector> OrigIpoptNLP::grad_f(
-   const Vector& x,
-   Number mu
+   const Vector& /*x*/,
+   Number /*mu*/
 )
 {
    THROW_EXCEPTION(INTERNAL_ABORT, "ERROR: This method is only a placeholder for grad_f(mu) and should not be called");
@@ -797,11 +797,11 @@ SmartPtr<const SymMatrix> OrigIpoptNLP::h(
 }
 
 SmartPtr<const SymMatrix> OrigIpoptNLP::h(
-   const Vector& x,
-   Number        obj_factor,
-   const Vector& yc,
-   const Vector& yd,
-   Number        mu
+   const Vector& /*x*/,
+   Number        /*obj_factor*/,
+   const Vector& /*yc*/,
+   const Vector& /*yd*/,
+   Number        /*mu*/
 )
 {
    THROW_EXCEPTION(INTERNAL_ABORT, "ERROR: This method is only a for h(mu) and should not be called");

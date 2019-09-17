@@ -286,16 +286,16 @@ bool MultiVectorMatrix::HasValidNumbersImpl() const
 }
 
 void MultiVectorMatrix::ComputeRowAMaxImpl(
-   Vector& rows_norms,
-   bool    init
+   Vector& /*rows_norms*/,
+   bool    /*init*/
 ) const
 {
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "MultiVectorMatrix::ComputeRowAMaxImpl not implemented");
 }
 
 void MultiVectorMatrix::ComputeColAMaxImpl(
-   Vector& cols_norms,
-   bool    init
+   Vector& /*cols_norms*/,
+   bool    /*init*/
 ) const
 {
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "MultiVectorMatrix::ComputeColAMaxImpl not implemented");

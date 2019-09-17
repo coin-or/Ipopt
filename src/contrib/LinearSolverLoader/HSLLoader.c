@@ -1272,6 +1272,11 @@ void LSL_setMA27(
    func_ma27bd = ma27bd;
    func_ma27cd = ma27cd;
    func_ma27id = ma27id;
+#else
+   (void) ma27ad;
+   (void) ma27bd;
+   (void) ma27cd;
+   (void) ma27id;
 #endif
 }
 
@@ -1289,6 +1294,12 @@ void LSL_setMA57(
    func_ma57cd = ma57cd;
    func_ma57ed = ma57ed;
    func_ma57id = ma57id;
+#else
+   (void) ma57ad;
+   (void) ma57bd;
+   (void) ma57cd;
+   (void) ma57ed;
+   (void) ma57id;
 #endif
 }
 
@@ -1312,21 +1323,39 @@ void LSL_setMA77(
 )
 {
 #ifndef COINHSL_HAS_MA77
-   func_ma77_open_nelt      = ma77_open_nelt;
-   func_ma77_open           = ma77_open;
-   func_ma77_input_vars     = ma77_input_vars;
-   func_ma77_input_reals    = ma77_input_reals;
-   func_ma77_analyse        = ma77_analyse;
-   func_ma77_factor         = ma77_factor;
-   func_ma77_factor_solve   = ma77_factor_solve;
-   func_ma77_solve          = ma77_solve;
-   func_ma77_resid          = ma77_resid;
-   func_ma77_scale          = ma77_scale;
-   func_ma77_enquire_posdef = ma77_enquire_posdef;
-   func_ma77_enquire_indef  = ma77_enquire_indef;
-   func_ma77_alter          = ma77_alter;
-   func_ma77_restart        = ma77_restart;
-   func_ma77_finalise       = ma77_finalise;
+   func_ma77_default_control = ma77_default_control;
+   func_ma77_open_nelt       = ma77_open_nelt;
+   func_ma77_open            = ma77_open;
+   func_ma77_input_vars      = ma77_input_vars;
+   func_ma77_input_reals     = ma77_input_reals;
+   func_ma77_analyse         = ma77_analyse;
+   func_ma77_factor          = ma77_factor;
+   func_ma77_factor_solve    = ma77_factor_solve;
+   func_ma77_solve           = ma77_solve;
+   func_ma77_resid           = ma77_resid;
+   func_ma77_scale           = ma77_scale;
+   func_ma77_enquire_posdef  = ma77_enquire_posdef;
+   func_ma77_enquire_indef   = ma77_enquire_indef;
+   func_ma77_alter           = ma77_alter;
+   func_ma77_restart         = ma77_restart;
+   func_ma77_finalise        = ma77_finalise;
+#else
+   (void) ma77_default_control;
+   (void) ma77_open_nelt;
+   (void) ma77_open;
+   (void) ma77_input_vars;
+   (void) ma77_input_reals;
+   (void) ma77_analyse;
+   (void) ma77_factor;
+   (void) ma77_factor_solve;
+   (void) ma77_solve;
+   (void) ma77_resid;
+   (void) ma77_scale;
+   (void) ma77_enquire_posdef;
+   (void) ma77_enquire_indef;
+   (void) ma77_alter;
+   (void) ma77_restart;
+   (void) ma77_finalise;
 #endif
 }
 
@@ -1346,6 +1375,13 @@ void LSL_setMA86(
    func_ma86_factor_solve    = ma86_factor_solve;
    func_ma86_solve           = ma86_solve;
    func_ma86_finalise        = ma86_finalise;
+#else
+   (void) ma86_default_control;
+   (void) ma86_analyse;
+   (void) ma86_factor;
+   (void) ma86_factor_solve;
+   (void) ma86_solve;
+   (void) ma86_finalise;
 #endif
 }
 
@@ -1367,6 +1403,14 @@ void LSL_setMA97(
    func_ma97_solve           = ma97_solve;
    func_ma97_finalise        = ma97_finalise;
    func_ma97_free_akeep      = ma97_free_akeep;
+#else
+   (void) ma97_default_control;
+   (void) ma97_analyse;
+   (void) ma97_factor;
+   (void) ma97_factor_solve;
+   (void) ma97_solve;
+   (void) ma97_finalise;
+   (void) ma97_free_akeep;
 #endif
 }
 
@@ -1376,6 +1420,8 @@ void LSL_setMC19(
 {
 #ifndef COINHSL_HAS_MC19
    func_mc19ad = mc19ad;
+#else
+   (void) mc19ad;
 #endif
 }
 
@@ -1387,5 +1433,8 @@ void LSL_setMC68(
 #ifndef COINHSL_HAS_MC68
    func_mc68_default_control = mc68_default_control;
    func_mc68_order = mc68_order;
+#else
+   (void) mc68_default_control;
+   (void) mc68_order;
 #endif
 }

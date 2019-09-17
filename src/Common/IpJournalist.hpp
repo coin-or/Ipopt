@@ -437,15 +437,15 @@ protected:
    //@{
    /** Print to the designated output location */
    virtual void PrintImpl(
-      EJournalCategory category,
-      EJournalLevel    level,
+      EJournalCategory /*category*/,
+      EJournalLevel    /*level*/,
       const char*      str
    );
 
    /** Printf to the designated output location */
    virtual void PrintfImpl(
-      EJournalCategory category,
-      EJournalLevel    level,
+      EJournalCategory /*category*/,
+      EJournalLevel    /*level*/,
       const char*      pformat,
       va_list          ap
    );
@@ -513,15 +513,15 @@ protected:
    //@{
    /** Print to the designated output location */
    virtual void PrintImpl(
-      EJournalCategory category,
-      EJournalLevel    level,
+      EJournalCategory /*category*/,
+      EJournalLevel    /*level*/,
       const char*      str
    );
 
    /** Printf to the designated output location */
    virtual void PrintfImpl(
-      EJournalCategory category,
-      EJournalLevel    level,
+      EJournalCategory /*category*/,
+      EJournalLevel    /*level*/,
       const char*      pformat,
       va_list          ap
    );

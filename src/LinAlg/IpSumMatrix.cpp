@@ -121,16 +121,16 @@ bool SumMatrix::HasValidNumbersImpl() const
 }
 
 void SumMatrix::ComputeRowAMaxImpl(
-   Vector& rows_norms,
-   bool    init
+   Vector& /*rows_norms*/,
+   bool    /*init*/
 ) const
 {
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "SumMatrix::ComputeRowAMaxImpl not implemented");
 }
 
 void SumMatrix::ComputeColAMaxImpl(
-   Vector& cols_norms,
-   bool    init
+   Vector& /*cols_norms*/,
+   bool    /*init*/
 ) const
 {
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "SumMatrix::ComputeColAMaxImpl not implemented");

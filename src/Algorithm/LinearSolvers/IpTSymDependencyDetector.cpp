@@ -20,7 +20,7 @@ TSymDependencyDetector::TSymDependencyDetector(
 { }
 
 void TSymDependencyDetector::RegisterOptions(
-   SmartPtr<RegisteredOptions> roptions
+   SmartPtr<RegisteredOptions> /*roptions*/
 )
 {
    // Nothing so far

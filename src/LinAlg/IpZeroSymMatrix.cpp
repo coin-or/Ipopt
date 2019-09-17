@@ -19,14 +19,14 @@ ZeroSymMatrix::~ZeroSymMatrix()
 { }
 
 void ZeroSymMatrix::MultVectorImpl(
-   Number        alpha,
+   Number        /*alpha*/,
    const Vector& x,
    Number        beta,
    Vector&       y
 ) const
 {
    //  A few sanity checks
-   DBG_ASSERT(Dim() == x.Dim());
+   DBG_ASSERT(Dim() == x.Dim());  (void) x;
    DBG_ASSERT(Dim() == y.Dim());
 
    // Take care of the y part of the addition
@@ -41,7 +41,7 @@ void ZeroSymMatrix::MultVectorImpl(
 }
 
 void ZeroSymMatrix::TransMultVectorImpl(
-   Number        alpha,
+   Number        /*alpha*/,
    const Vector& x,
    Number        beta,
    Vector&       y
@@ -49,7 +49,7 @@ void ZeroSymMatrix::TransMultVectorImpl(
 {
    //  A few sanity checks
    DBG_ASSERT(Dim() == y.Dim());
-   DBG_ASSERT(Dim() == x.Dim());
+   DBG_ASSERT(Dim() == x.Dim());  (void) x;
 
    // Take care of the y part of the addition
    if( beta != 0.0 )

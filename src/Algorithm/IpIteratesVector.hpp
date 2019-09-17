@@ -752,8 +752,8 @@ public:
     *  construction.
     */
    virtual void SetCompSpace(
-      Index              icomp,
-      const VectorSpace& vec_space
+      Index              /*icomp*/,
+      const VectorSpace& /*vec_space*/
    )
    {
       DBG_ASSERT(false && "This is an IteratesVectorSpace - a special compound vector for Ipopt iterates. The contained spaces should not be modified.");

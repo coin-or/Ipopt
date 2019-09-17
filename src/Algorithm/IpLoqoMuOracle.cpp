@@ -24,8 +24,8 @@ LoqoMuOracle::~LoqoMuOracle()
 { }
 
 bool LoqoMuOracle::InitializeImpl(
-   const OptionsList& options,
-   const std::string& prefix
+   const OptionsList& /*options*/,
+   const std::string& /*prefix*/
 )
 {
    return true;

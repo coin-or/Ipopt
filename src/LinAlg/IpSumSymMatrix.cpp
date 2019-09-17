@@ -93,16 +93,16 @@ bool SumSymMatrix::HasValidNumbersImpl() const
 }
 
 void SumSymMatrix::ComputeRowAMaxImpl(
-   Vector& rows_norms,
-   bool    init
+   Vector& /*rows_norms*/,
+   bool    /*init*/
 ) const
 {
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "SumSymMatrix::ComputeRowAMaxImpl not implemented");
 }
 
 void SumSymMatrix::ComputeColAMaxImpl(
-   Vector& cols_norms,
-   bool    init
+   Vector& /*cols_norms*/,
+   bool    /*init*/
 ) const
 {
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "SumSymMatrix::ComputeColAMaxImpl not implemented");

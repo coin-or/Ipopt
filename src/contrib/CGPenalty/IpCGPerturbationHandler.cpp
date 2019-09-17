@@ -24,7 +24,7 @@ CGPerturbationHandler::CGPerturbationHandler()
 { }
 
 void CGPerturbationHandler::RegisterOptions(
-   SmartPtr<RegisteredOptions> roptions
+   SmartPtr<RegisteredOptions> /*roptions*/
 )
 { }
 

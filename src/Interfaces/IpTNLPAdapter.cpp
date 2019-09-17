@@ -3102,7 +3102,7 @@ bool TNLPAdapter::DetermineDependentConstraints(
    const Number*     x_l,
    const Number*     x_u,
    const Number*     g_l,
-   const Number*     g_u,
+   const Number*     /*g_u*/,
    Index             n_c,
    const Index*      c_map,
    std::list<Index>& c_deps

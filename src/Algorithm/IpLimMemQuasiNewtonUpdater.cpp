@@ -1405,7 +1405,7 @@ void LimMemQuasiNewtonUpdater::SetW()
 
 void LimMemQuasiNewtonUpdater::RecalcY(
    Number                       eta,
-   const Vector&                DR_x,
+   const Vector&                /*DR_x*/,
    MultiVectorMatrix&           DRS,
    MultiVectorMatrix&           Ypart,
    SmartPtr<MultiVectorMatrix>& Y

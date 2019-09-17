@@ -40,8 +40,8 @@ bool MySensTNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 bool MySensTNLP::get_bounds_info(Index n, Number* x_l, Number* x_u,
 				 Index m, Number* g_l, Number* g_u)
 {
-  assert(n==3);
-  assert(m==1);
+  assert(n==3);  (void) n;
+  assert(m==1);  (void) m;
 
   for (Index k=0; k<3; k++) {
     x_l[k] = -1.0e19;
@@ -54,10 +54,10 @@ bool MySensTNLP::get_bounds_info(Index n, Number* x_l, Number* x_u,
   return true;
 }
 
-bool MySensTNLP::get_starting_point(Index n, bool init_x, Number* x,
-				   bool init_z, Number* z_L, Number* z_U,
-				   Index m, bool init_lambda,
-				   Number* lambda)
+bool MySensTNLP::get_starting_point(Index /*n*/, bool /*init_x*/, Number* x,
+				   bool /*init_z*/, Number* /*z_L*/, Number* /*z_U*/,
+				   Index /*m*/, bool /*init_lambda*/,
+				   Number* /*lambda*/)
 {
 
   x[0] = 25;
@@ -67,7 +67,7 @@ bool MySensTNLP::get_starting_point(Index n, bool init_x, Number* x,
   return true;
 }
 
-bool MySensTNLP::eval_f(Index n, const Number* x, bool new_x, Number& obj_value)
+bool MySensTNLP::eval_f(Index /*n*/, const Number* x, bool /*new_x*/, Number& obj_value)
 {
   // return the value of the objective function
   Number x1 = x[0];
@@ -78,7 +78,7 @@ bool MySensTNLP::eval_f(Index n, const Number* x, bool new_x, Number& obj_value)
   return true;
 }
 
-bool MySensTNLP::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f)
+bool MySensTNLP::eval_grad_f(Index /*n*/, const Number* x, bool /*new_x*/, Number* grad_f)
 {
   // return the gradient of the objective function grad_{x} f(x)
 
@@ -93,7 +93,7 @@ bool MySensTNLP::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_
   return true;
 }
 
-bool MySensTNLP::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g)
+bool MySensTNLP::eval_g(Index /*n*/, const Number* x, bool /*new_x*/, Index /*m*/, Number* g)
 {
   // return the value of the constraints: g(x)
   Number x1 = x[0];
@@ -105,8 +105,8 @@ bool MySensTNLP::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g
   return true;
 }
 
-bool MySensTNLP::eval_jac_g(Index n, const Number* x, bool new_x,
-			   Index m, Index nele_jac, Index* iRow, Index *jCol,
+bool MySensTNLP::eval_jac_g(Index /*n*/, const Number* /*x*/, bool /*new_x*/,
+			   Index /*m*/, Index /*nele_jac*/, Index* iRow, Index *jCol,
 			   Number* values)
 {
   if (values == NULL) {
@@ -139,9 +139,9 @@ bool MySensTNLP::eval_jac_g(Index n, const Number* x, bool new_x,
   return true;
 }
 
-bool MySensTNLP::eval_h(Index n, const Number* x, bool new_x,
-		       Number obj_factor, Index m, const Number* lambda,
-		       bool new_lambda, Index nele_hess, Index* iRow,
+bool MySensTNLP::eval_h(Index /*n*/, const Number* /*x*/, bool /*new_x*/,
+		       Number /*obj_factor*/, Index /*m*/, const Number* /*lambda*/,
+		       bool /*new_lambda*/, Index /*nele_hess*/, Index* iRow,
 		       Index* jCol, Number* values)
 {
   if (values == NULL) {
@@ -178,14 +178,14 @@ bool MySensTNLP::eval_h(Index n, const Number* x, bool new_x,
 }
 
 
-bool MySensTNLP::get_var_con_metadata(Index n,
-				      StringMetaDataMapType& var_string_md,
+bool MySensTNLP::get_var_con_metadata(Index /*n*/,
+				      StringMetaDataMapType& /*var_string_md*/,
 				      IntegerMetaDataMapType& var_integer_md,
-                                      NumericMetaDataMapType& var_numeric_md,
-                                      Index m,
-                                      StringMetaDataMapType& con_string_md,
-                                      IntegerMetaDataMapType& con_integer_md,
-                                      NumericMetaDataMapType& con_numeric_md)
+                                      NumericMetaDataMapType& /*var_numeric_md*/,
+                                      Index /*m*/,
+                                      StringMetaDataMapType& /*con_string_md*/,
+                                      IntegerMetaDataMapType& /*con_integer_md*/,
+                                      NumericMetaDataMapType& /*con_numeric_md*/)
 {
   std::vector<Index> red_hess_idx(3,0);
   red_hess_idx[1] = 1;
@@ -197,12 +197,12 @@ bool MySensTNLP::get_var_con_metadata(Index n,
 }
 
 
-void MySensTNLP::finalize_solution(SolverReturn status,
-				  Index n, const Number* x, const Number* z_L, const Number* z_U,
-				  Index m, const Number* g, const Number* lambda,
-				  Number obj_value,
-				  const IpoptData* ip_data,
-				  IpoptCalculatedQuantities* ip_cq)
+void MySensTNLP::finalize_solution(SolverReturn /*status*/,
+				  Index /*n*/, const Number* /*x*/, const Number* /*z_L*/, const Number* /*z_U*/,
+				  Index /*m*/, const Number* /*g*/, const Number* /*lambda*/,
+				  Number /*obj_value*/,
+				  const IpoptData* /*ip_data*/,
+				  IpoptCalculatedQuantities* /*ip_cq*/)
 {
   // here is where we would store the solution to variables, or write to a file, etc
   // so we could use the solution. Since the solution is displayed to the console,

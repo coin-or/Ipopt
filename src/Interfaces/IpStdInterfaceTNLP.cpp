@@ -173,8 +173,8 @@ bool StdInterfaceTNLP::get_scaling_parameters(
    Number* g_scaling
 )
 {
-   DBG_ASSERT(n == n_var_);
-   DBG_ASSERT(m == n_con_);
+   DBG_ASSERT(n == n_var_);  (void) n;
+   DBG_ASSERT(m == n_con_);  (void) m;
 
    obj_scaling = obj_scaling_;
    if( x_scaling_ != NULL )
@@ -387,8 +387,8 @@ bool StdInterfaceTNLP::intermediate_callback(
    Number                     alpha_du,
    Number                     alpha_pr,
    Index                      ls_trials,
-   const IpoptData*           ip_data,
-   IpoptCalculatedQuantities* ip_cq
+   const IpoptData*           /*ip_data*/,
+   IpoptCalculatedQuantities* /*ip_cq*/
 )
 {
    Bool retval = 1;
@@ -401,7 +401,7 @@ bool StdInterfaceTNLP::intermediate_callback(
 }
 
 void StdInterfaceTNLP::finalize_solution(
-   SolverReturn               status,
+   SolverReturn               /*status*/,
    Index                      n,
    const Number*              x,
    const Number*              z_L,
@@ -410,8 +410,8 @@ void StdInterfaceTNLP::finalize_solution(
    const Number*              g,
    const Number*              lambda,
    Number                     obj_value,
-   const IpoptData*           ip_data,
-   IpoptCalculatedQuantities* ip_cq
+   const IpoptData*           /*ip_data*/,
+   IpoptCalculatedQuantities* /*ip_cq*/
 )
 {
    if( x_sol_ != NULL )

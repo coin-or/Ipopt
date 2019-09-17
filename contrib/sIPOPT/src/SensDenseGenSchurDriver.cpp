@@ -15,7 +15,7 @@ namespace Ipopt
 
   DenseGenSchurDriver::DenseGenSchurDriver(SmartPtr<SensBacksolver> backsolver,
 					   SmartPtr<PCalculator> pcalc,
-					   SmartPtr<SchurData> data_B)
+					   SmartPtr<SchurData> /*data_B*/)
     :
     SchurDriver(pcalc,new IndexSchurData()),
     backsolver_(backsolver),

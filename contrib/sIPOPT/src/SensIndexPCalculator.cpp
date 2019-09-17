@@ -32,8 +32,8 @@ namespace Ipopt
     DBG_START_METH("IndexPCalculator::~IndexPCalculator", dbg_verbosity);
   }
 
-  bool IndexPCalculator::InitializeImpl(const OptionsList& options,
-					const std::string& prefix)
+  bool IndexPCalculator::InitializeImpl(const OptionsList& /*options*/,
+					const std::string& /*prefix*/)
   {
     DBG_START_METH("IndexPCalculator::InitializeImpl", dbg_verbosity);
 

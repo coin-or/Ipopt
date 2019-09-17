@@ -217,8 +217,9 @@ void ReferencedObject::AddRef(
    //    DBG_PRINT((1, "New reference_count_ = %d\n", reference_count_));
 #   ifdef IP_DEBUG_REFERENCED
    referencers_.push_back(referencer);
+#   else
+    (void) referencer;
 #   endif
-
 }
 
 inline
@@ -251,6 +252,8 @@ void ReferencedObject::ReleaseRef(
    {
       referencers_.erase(iter);
    }
+#   else
+    (void) referencer;
 #   endif
 }
 

@@ -263,7 +263,10 @@ Bool eval_f(
    UserDataPtr user_data
    )
 {
-   assert(n == 4);
+   assert(n == 4);  (void) n;
+
+   (void) new_x;
+   (void) user_data;
 
    *obj_value = x[0] * x[3] * (x[0] + x[1] + x[2]) + x[2];
 
@@ -278,7 +281,10 @@ Bool eval_grad_f(
    UserDataPtr user_data
    )
 {
-   assert(n == 4);
+   assert(n == 4);  (void) n;
+
+   (void) new_x;
+   (void) user_data;
 
    grad_f[0] = x[0] * x[3] + x[3] * (x[0] + x[1] + x[2]);
    grad_f[1] = x[0] * x[3];
@@ -299,8 +305,10 @@ Bool eval_g(
 {
    struct MyUserData* my_data = user_data;
 
-   assert(n == 4);
-   assert(m == 2);
+   assert(n == 4);  (void) n;
+   assert(m == 2);  (void) m;
+
+   (void) new_x;
 
    g[0] = x[0] * x[1] * x[2] * x[3] + my_data->g_offset[0];
    g[1] = x[0] * x[0] + x[1] * x[1] + x[2] * x[2] + x[3] * x[3] + my_data->g_offset[1];
@@ -320,6 +328,12 @@ Bool eval_jac_g(
    UserDataPtr user_data
    )
 {
+   (void) n;
+   (void) new_x;
+   (void) m;
+   (void) nele_jac;
+   (void) user_data;
+
    if( values == NULL )
    {
       /* return the structure of the jacobian */
@@ -378,6 +392,13 @@ Bool eval_h(
    Index idx = 0; /* nonzero element counter */
    Index row = 0; /* row counter for loop */
    Index col = 0; /* col counter for loop */
+
+   (void) n;
+   (void) new_x;
+   (void) m;
+   (void) new_lambda;
+   (void) user_data;
+
    if( values == NULL )
    {
       /* return the structure. This is a symmetric matrix, fill the lower left
@@ -395,7 +416,7 @@ Bool eval_h(
          }
       }
 
-      assert(idx == nele_hess);
+      assert(idx == nele_hess);  (void) nele_hess;
    }
    else
    {
@@ -458,6 +479,17 @@ Bool intermediate_cb(
    printf("Testing intermediate callback in iteration %d\n", iter_count);
    if( inf_pr < 1e-4 )
       return FALSE;
+
+   (void) alg_mod;
+   (void) obj_value;
+   (void) inf_du;
+   (void) mu;
+   (void) d_norm;
+   (void) regularization_size;
+   (void) alpha_du;
+   (void) alpha_pr;
+   (void) ls_trials;
+   (void) user_data;
 
    return TRUE;
 }

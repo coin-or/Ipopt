@@ -467,7 +467,10 @@ void DependentResult<T>::Invalidate()
 }
 
 template<class T>
-void DependentResult<T>::ReceiveNotification(NotifyType notify_type, const Subject* subject)
+void DependentResult<T>::ReceiveNotification(
+   NotifyType notify_type,
+   const Subject* /*subject*/
+)
 {
 #ifdef IP_DEBUG_CACHE
    DBG_START_METH("DependentResult<T>::ReceiveNotification", dbg_verbosity);

@@ -244,9 +244,9 @@ public:
     *  dependent rows.
     */
    virtual ESymSolverStatus DetermineDependentRows(
-      const Index*      ia,
-      const Index*      ja,
-      std::list<Index>& c_deps
+      const Index*      /*ia*/,
+      const Index*      /*ja*/,
+      std::list<Index>& /*c_deps*/
    )
    {
       return SYMSOLVER_FATAL_ERROR;

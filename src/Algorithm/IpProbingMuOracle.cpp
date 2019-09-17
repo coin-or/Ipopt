@@ -28,7 +28,7 @@ ProbingMuOracle::~ProbingMuOracle()
 { }
 
 void ProbingMuOracle::RegisterOptions(
-   SmartPtr<RegisteredOptions> roptions
+   SmartPtr<RegisteredOptions> /*roptions*/
 )
 {
    // None to register...

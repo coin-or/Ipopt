@@ -594,8 +594,8 @@ ESymSolverStatus PardisoSolverInterface::InitializeStructure(
 }
 
 ESymSolverStatus PardisoSolverInterface::SymbolicFactorization(
-   const Index* ia,
-   const Index* ja
+   const Index* /*ia*/,
+   const Index* /*ja*/
 )
 {
    DBG_START_METH("PardisoSolverInterface::SymbolicFactorization",

@@ -241,7 +241,7 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::GetSymLinearSolver(
 }
 
 SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
-   const Journalist&     jnlst,
+   const Journalist&     /*jnlst*/,
    const OptionsList&    options,
    const std::string&    prefix
 )
@@ -693,9 +693,9 @@ SmartPtr<IpoptAlgorithm> AlgorithmBuilder::BuildBasicAlgorithm(
 }
 
 SmartPtr<IterationOutput> AlgorithmBuilder::BuildIterationOutput(
-   const Journalist&     jnlst,
-   const OptionsList&    options,
-   const std::string&    prefix
+   const Journalist&     /*jnlst*/,
+   const OptionsList&    /*options*/,
+   const std::string&    /*prefix*/
 )
 {
    // Create the object for the iteration output
@@ -704,7 +704,7 @@ SmartPtr<IterationOutput> AlgorithmBuilder::BuildIterationOutput(
 }
 
 SmartPtr<HessianUpdater> AlgorithmBuilder::BuildHessianUpdater(
-   const Journalist&     jnlst,
+   const Journalist&     /*jnlst*/,
    const OptionsList&    options,
    const std::string&    prefix
 )
@@ -728,9 +728,9 @@ SmartPtr<HessianUpdater> AlgorithmBuilder::BuildHessianUpdater(
 }
 
 SmartPtr<ConvergenceCheck> AlgorithmBuilder::BuildConvergenceCheck(
-   const Journalist&     jnlst,
-   const OptionsList&    options,
-   const std::string&    prefix
+   const Journalist&     /*jnlst*/,
+   const OptionsList&    /*options*/,
+   const std::string&    /*prefix*/
 )
 {
    SmartPtr<ConvergenceCheck> ConvCheck = new OptimalityErrorConvergenceCheck();

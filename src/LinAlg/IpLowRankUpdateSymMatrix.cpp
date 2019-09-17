@@ -155,16 +155,16 @@ bool LowRankUpdateSymMatrix::HasValidNumbersImpl() const
 }
 
 void LowRankUpdateSymMatrix::ComputeRowAMaxImpl(
-   Vector& rows_norms,
-   bool    init
+   Vector& /*rows_norms*/,
+   bool    /*init*/
 ) const
 {
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "LowRankUpdateSymMatrix::ComputeRowAMaxImpl not implemented");
 }
 
 void LowRankUpdateSymMatrix::ComputeColAMaxImpl(
-   Vector& cols_norms,
-   bool    init
+   Vector& /*cols_norms*/,
+   bool    /*init*/
 ) const
 {
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "LowRankUpdateSymMatrix::ComputeColAMaxImpl not implemented");

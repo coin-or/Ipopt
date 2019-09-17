@@ -165,9 +165,9 @@ public:
     *  This is activated with choosing the option alpha_for_y=acceptor
     */
    virtual Number ComputeAlphaForY(
-      Number                    alpha_primal,
-      Number                    alpha_dual,
-      SmartPtr<IteratesVector>& delta
+      Number                    /*alpha_primal*/,
+      Number                    /*alpha_dual*/,
+      SmartPtr<IteratesVector>& /*delta*/
    )
    {
       THROW_EXCEPTION(OPTION_INVALID, "Value \"acceptor\" for option \"alpha_for_y\" not valid for this line search.");

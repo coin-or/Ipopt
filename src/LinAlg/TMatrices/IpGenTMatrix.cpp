@@ -173,7 +173,7 @@ bool GenTMatrix::HasValidNumbersImpl() const
 
 void GenTMatrix::ComputeRowAMaxImpl(
    Vector& rows_norms,
-   bool    init
+   bool    /*init*/
 ) const
 {
    DBG_ASSERT(initialized_);
@@ -194,7 +194,7 @@ void GenTMatrix::ComputeRowAMaxImpl(
 
 void GenTMatrix::ComputeColAMaxImpl(
    Vector& cols_norms,
-   bool    init
+   bool    /*init*/
 ) const
 {
    DBG_ASSERT(initialized_);

@@ -231,6 +231,7 @@ int Snprintf(
    ret = _vsnprintf(str, size, format, apcopy);
 #  else
    ret = vsprintf(str, format, apcopy);
+   (void) size;
 #  endif
    va_end(apcopy);
 # endif
@@ -246,6 +247,7 @@ int Snprintf(
    ret = _vsnprintf(str, size, format, ap);
 #  else
    ret = vsprintf(str, format, ap);
+   (void) size;
 #  endif
 # endif
 #endif

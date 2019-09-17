@@ -47,14 +47,14 @@ CGPenaltyCq::~CGPenaltyCq()
 { }
 
 void CGPenaltyCq::RegisterOptions(
-   const SmartPtr<RegisteredOptions>& roptions
+   const SmartPtr<RegisteredOptions>& /*roptions*/
 )
 { }
 
 bool CGPenaltyCq::Initialize(
-   const Journalist&  jnlst,
-   const OptionsList& options,
-   const std::string& prefix
+   const Journalist&  /*jnlst*/,
+   const OptionsList& /*options*/,
+   const std::string& /*prefix*/
 )
 {
    initialize_called_ = true;
