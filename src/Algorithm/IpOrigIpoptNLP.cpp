@@ -55,7 +55,9 @@ void OrigIpoptNLP::RegisterOptions(
       "Before start of the optimization, the bounds given by the user are relaxed. "
       "This option sets the factor for this relaxation. "
       "If it is set to zero, then then bounds relaxation is disabled. "
-      "(See Eqn.(35) in implementation paper.)");
+      "(See Eqn.(35) in implementation paper.) "
+      "Note that the constraint violation reported by Ipopt at the end of the solution process "
+      "does not include violations of the original (non-relaxed) variable bounds.");
    roptions->AddStringOption2(
       "honor_original_bounds",
       "Indicates whether final points should be projected into original bounds.",
