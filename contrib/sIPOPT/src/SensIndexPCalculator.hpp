@@ -59,7 +59,7 @@ namespace Ipopt
      *  not necessarily in adjacent parts of memory. */
 
   public:
-    PColumn(Index nrows, Number* values);
+    PColumn(Number* values);
 
     virtual ~PColumn();
 
@@ -69,7 +69,6 @@ namespace Ipopt
 
   private:
 
-    Index nrows_;
     Number* val_;
   };
 

@@ -86,7 +86,7 @@ namespace Ipopt
 	  IpBlasDcopy(comp_vec->Dim(), comp_values, 1, col_values+curr_dim,1);
 	  curr_dim += comp_vec->Dim();
 	}
-	cols_[col] = new PColumn(nrows_, col_values);
+	cols_[col] = new PColumn(col_values);
 	col_values = NULL;
       }
       curr_schur_row++;
@@ -178,9 +178,8 @@ namespace Ipopt
     }
   }
 
-  PColumn::PColumn(Index nrows, Number* values)
+  PColumn::PColumn(Number* values)
     :
-    nrows_(nrows),
     val_(values)
   {
     DBG_START_METH("PColumn::PColumn", dbg_verbosity);
