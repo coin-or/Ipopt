@@ -104,7 +104,7 @@ bool MittelmannBndryCntrlDiriBase3D::get_nlp_info(
 }
 
 bool MittelmannBndryCntrlDiriBase3D::get_bounds_info(
-   Index   n,
+   Index   /*n*/,
    Number* x_l,
    Number* x_u,
    Index   m,
@@ -217,23 +217,23 @@ bool MittelmannBndryCntrlDiriBase3D::get_bounds_info(
 }
 
 bool MittelmannBndryCntrlDiriBase3D::get_starting_point(
-   Index   n,
+   Index   /*n*/,
    bool    init_x,
    Number* x,
    bool    init_z,
-   Number* z_L,
-   Number* z_U,
-   Index   m,
+   Number* /*z_L*/,
+   Number* /*z_U*/,
+   Index   /*m*/,
    bool    init_lambda,
-   Number* lambda
+   Number* /*lambda*/
    )
 {
    // Here, we assume we only have starting values for x, if you code
    // your own NLP, you can provide starting values for the others if
    // you wish.
-   assert(init_x == true);
-   assert(init_z == false);
-   assert(init_lambda == false);
+   assert(init_x == true);  (void) init_x;
+   assert(init_z == false);  (void) init_z;
+   assert(init_lambda == false);  (void) init_lambda;
 
    // set all y's to the perfect match with y_d
    for( Index i = 0; i <= N_ + 1; i++ )
@@ -303,11 +303,11 @@ bool MittelmannBndryCntrlDiriBase3D::get_starting_point(
 bool MittelmannBndryCntrlDiriBase3D::get_scaling_parameters(
    Number& obj_scaling,
    bool&   use_x_scaling,
-   Index   n,
-   Number* x_scaling,
+   Index   /*n*/,
+   Number* /*x_scaling*/,
    bool&   use_g_scaling,
-   Index   m,
-   Number* g_scaling
+   Index   /*m*/,
+   Number* /*g_scaling*/
    )
 {
    obj_scaling = 1. / hhh_;
@@ -317,9 +317,9 @@ bool MittelmannBndryCntrlDiriBase3D::get_scaling_parameters(
 }
 
 bool MittelmannBndryCntrlDiriBase3D::eval_f(
-   Index         n,
+   Index         /*n*/,
    const Number* x,
-   bool          new_x,
+   bool          /*new_x*/,
    Number&       obj_value
    )
 {
@@ -404,9 +404,9 @@ bool MittelmannBndryCntrlDiriBase3D::eval_f(
 }
 
 bool MittelmannBndryCntrlDiriBase3D::eval_grad_f(
-   Index         n,
+   Index         /*n*/,
    const Number* x,
-   bool          new_x,
+   bool          /*new_x*/,
    Number*       grad_f
    )
 {
@@ -554,9 +554,9 @@ bool MittelmannBndryCntrlDiriBase3D::eval_grad_f(
 }
 
 bool MittelmannBndryCntrlDiriBase3D::eval_g(
-   Index         n,
+   Index         /*n*/,
    const Number* x,
-   bool          new_x,
+   bool          /*new_x*/,
    Index         m,
    Number*       g
    )
@@ -583,16 +583,16 @@ bool MittelmannBndryCntrlDiriBase3D::eval_g(
       }
    }
 
-   DBG_ASSERT(ig==m);
+   DBG_ASSERT(ig==m);  (void) m;
 
    return true;
 }
 
 bool MittelmannBndryCntrlDiriBase3D::eval_jac_g(
-   Index         n,
-   const Number* x,
-   bool          new_x,
-   Index         m,
+   Index         /*n*/,
+   const Number* /*x*/,
+   bool          /*new_x*/,
+   Index         /*m*/,
    Index         nele_jac,
    Index*        iRow,
    Index*        jCol,
@@ -652,7 +652,7 @@ bool MittelmannBndryCntrlDiriBase3D::eval_jac_g(
          }
       }
 
-      DBG_ASSERT(ijac==nele_jac);
+      DBG_ASSERT(ijac==nele_jac);  (void) nele_jac;
    }
    else
    {
@@ -702,13 +702,13 @@ bool MittelmannBndryCntrlDiriBase3D::eval_jac_g(
 }
 
 bool MittelmannBndryCntrlDiriBase3D::eval_h(
-   Index         n,
+   Index         /*n*/,
    const Number* x,
-   bool          new_x,
+   bool          /*new_x*/,
    Number        obj_factor,
-   Index         m,
-   const Number* lambda,
-   bool          new_lambda,
+   Index         /*m*/,
+   const Number* /*lambda*/,
+   bool          /*new_lambda*/,
    Index         nele_hess,
    Index*        iRow,
    Index*        jCol,
@@ -798,7 +798,7 @@ bool MittelmannBndryCntrlDiriBase3D::eval_h(
                ihes++;
             }
          }
-      } DBG_ASSERT(ihes==nele_hess);
+      } DBG_ASSERT(ihes==nele_hess);  (void) nele_hess;
    }
    else
    {
@@ -881,17 +881,17 @@ bool MittelmannBndryCntrlDiriBase3D::eval_h(
 }
 
 void MittelmannBndryCntrlDiriBase3D::finalize_solution(
-   SolverReturn               status,
-   Index                      n,
-   const Number*              x,
-   const Number*              z_L,
-   const Number*              z_U,
-   Index                      m,
-   const Number*              g,
-   const Number*              lambda,
-   Number                     obj_value,
-   const IpoptData*           ip_data,
-   IpoptCalculatedQuantities* ip_cq
+   SolverReturn               /*status*/,
+   Index                      /*n*/,
+   const Number*              /*x*/,
+   const Number*              /*z_L*/,
+   const Number*              /*z_U*/,
+   Index                      /*m*/,
+   const Number*              /*g*/,
+   const Number*              /*lambda*/,
+   Number                     /*obj_value*/,
+   const IpoptData*           /*ip_data*/,
+   IpoptCalculatedQuantities* /*ip_cq*/
    )
 {
    /*

@@ -395,9 +395,9 @@ protected:
 
    /** Forcing function for the elliptic equation */
    virtual Number d_cont(
-      Number x1,
-      Number x2,
-      Number y
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/
       ) const
    {
       return 0.;
@@ -405,9 +405,9 @@ protected:
 
    /** First partial derivative of forcing function w.r.t. y */
    virtual Number d_cont_dy(
-      Number x1,
-      Number x2,
-      Number y
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/
       ) const
    {
       return 0.;
@@ -415,9 +415,9 @@ protected:
 
    /** Second partial derivative of forcing function w.r.t y,y */
    virtual Number d_cont_dydy(
-      Number x1,
-      Number x2,
-      Number y
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/
       ) const
    {
       return 0.;
@@ -433,8 +433,8 @@ protected:
 
    /** Function in Neuman boundary condition */
    virtual Number b_cont(
-      Number x1,
-      Number x2,
+      Number /*x1*/,
+      Number /*x2*/,
       Number y,
       Number u
       ) const
@@ -444,10 +444,10 @@ protected:
 
    /** First partial derivative of b_cont w.r.t. y */
    virtual Number b_cont_dy(
-      Number x1,
-      Number x2,
+      Number /*x1*/,
+      Number /*x2*/,
       Number y,
-      Number u
+      Number /*u*/
       ) const
    {
       return -2. * y;
@@ -455,10 +455,10 @@ protected:
 
    /** First partial derivative of b_cont w.r.t. u */
    virtual Number b_cont_du(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return 1.;
@@ -466,10 +466,10 @@ protected:
 
    /** Second partial derivative of b_cont w.r.t. y,y */
    virtual Number b_cont_dydy(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return -2.;
@@ -538,9 +538,9 @@ protected:
 
    /** Forcing function for the elliptic equation */
    virtual Number d_cont(
-      Number x1,
-      Number x2,
-      Number y
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/
       ) const
    {
       return 0.;
@@ -548,9 +548,9 @@ protected:
 
    /** First partial derivative of forcing function w.r.t. y */
    virtual Number d_cont_dy(
-      Number x1,
-      Number x2,
-      Number y
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/
       ) const
    {
       return 0.;
@@ -558,9 +558,9 @@ protected:
 
    /** Second partial derivative of forcing function w.r.t y,y */
    virtual Number d_cont_dydy(
-      Number x1,
-      Number x2,
-      Number y
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/
       ) const
    {
       return 0.;
@@ -576,8 +576,8 @@ protected:
 
    /** Function in Neuman boundary condition */
    virtual Number b_cont(
-      Number x1,
-      Number x2,
+      Number /*x1*/,
+      Number /*x2*/,
       Number y,
       Number u
       ) const
@@ -587,10 +587,10 @@ protected:
 
    /** First partial derivative of b_cont w.r.t. y */
    virtual Number b_cont_dy(
-      Number x1,
-      Number x2,
+      Number /*x1*/,
+      Number /*x2*/,
       Number y,
-      Number u
+      Number /*u*/
       ) const
    {
       return -2. * y;
@@ -598,10 +598,10 @@ protected:
 
    /** First partial derivative of b_cont w.r.t. u */
    virtual Number b_cont_du(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return 1.;
@@ -609,10 +609,10 @@ protected:
 
    /** Second partial derivative of b_cont w.r.t. y,y */
    virtual Number b_cont_dydy(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return -2.;
@@ -681,8 +681,8 @@ protected:
 
    /** Forcing function for the elliptic equation */
    virtual Number d_cont(
-      Number x1,
-      Number x2,
+      Number /*x1*/,
+      Number /*x2*/,
       Number y
       ) const
    {
@@ -691,8 +691,8 @@ protected:
 
    /** First partial derivative of forcing function w.r.t. y */
    virtual Number d_cont_dy(
-      Number x1,
-      Number x2,
+      Number /*x1*/,
+      Number /*x2*/,
       Number y
       ) const
    {
@@ -701,8 +701,8 @@ protected:
 
    /** Second partial derivative of forcing function w.r.t y,y */
    virtual Number d_cont_dydy(
-      Number x1,
-      Number x2,
+      Number /*x1*/,
+      Number /*x2*/,
       Number y
       ) const
    {
@@ -719,9 +719,9 @@ protected:
 
    /** Function in Neuman boundary condition */
    virtual Number b_cont(
-      Number x1,
-      Number x2,
-      Number y,
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
       Number u
       ) const
    {
@@ -730,10 +730,10 @@ protected:
 
    /** First partial derivative of b_cont w.r.t. y */
    virtual Number b_cont_dy(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return 0.;
@@ -741,10 +741,10 @@ protected:
 
    /** First partial derivative of b_cont w.r.t. u */
    virtual Number b_cont_du(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return 1.;
@@ -752,10 +752,10 @@ protected:
 
    /** Second partial derivative of b_cont w.r.t. y,y */
    virtual Number b_cont_dydy(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return 0.;
@@ -824,8 +824,8 @@ protected:
 
    /** Forcing function for the elliptic equation */
    virtual Number d_cont(
-      Number x1,
-      Number x2,
+      Number /*x1*/,
+      Number /*x2*/,
       Number y
       ) const
    {
@@ -834,8 +834,8 @@ protected:
 
    /** First partial derivative of forcing function w.r.t. y */
    virtual Number d_cont_dy(
-      Number x1,
-      Number x2,
+      Number /*x1*/,
+      Number /*x2*/,
       Number y
       ) const
    {
@@ -844,8 +844,8 @@ protected:
 
    /** Second partial derivative of forcing function w.r.t y,y */
    virtual Number d_cont_dydy(
-      Number x1,
-      Number x2,
+      Number /*x1*/,
+      Number /*x2*/,
       Number y
       ) const
    {
@@ -862,9 +862,9 @@ protected:
 
    /** Function in Neuman boundary condition */
    virtual Number b_cont(
-      Number x1,
-      Number x2,
-      Number y,
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
       Number u
       ) const
    {
@@ -873,10 +873,10 @@ protected:
 
    /** First partial derivative of b_cont w.r.t. y */
    virtual Number b_cont_dy(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return 0.;
@@ -884,10 +884,10 @@ protected:
 
    /** First partial derivative of b_cont w.r.t. u */
    virtual Number b_cont_du(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return 1.;
@@ -895,10 +895,10 @@ protected:
 
    /** Second partial derivative of b_cont w.r.t. y,y */
    virtual Number b_cont_dydy(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return 0.;

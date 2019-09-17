@@ -8,6 +8,10 @@
 
 #include <cassert>
 
+#ifdef __GNUC__
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
+
 using namespace Ipopt;
 
 /* Constructor. */

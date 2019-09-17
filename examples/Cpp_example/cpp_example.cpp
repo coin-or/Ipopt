@@ -13,8 +13,8 @@
 using namespace Ipopt;
 
 int main(
-   int   argv,
-   char* argc[]
+   int,
+   char**
    )
 {
    // Create an instance of your nlp...

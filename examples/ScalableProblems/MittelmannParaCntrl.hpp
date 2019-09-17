@@ -333,10 +333,10 @@ bool MittelmannParaCntrlBase<T>::get_nlp_info(
 
 template<class T>
 bool MittelmannParaCntrlBase<T>::get_bounds_info(
-   Index   n,
+   Index   /*n*/,
    Number* x_l,
    Number* x_u,
-   Index   m,
+   Index   /*m*/,
    Number* g_l,
    Number* g_u
    )
@@ -392,18 +392,20 @@ bool MittelmannParaCntrlBase<T>::get_bounds_info(
 
 template<class T>
 bool MittelmannParaCntrlBase<T>::get_starting_point(
-   Index   n,
+   Index   /*n*/,
    bool    init_x,
    Number* x,
    bool    init_z,
-   Number* z_L,
-   Number* z_U,
-   Index   m,
+   Number* /*z_L*/,
+   Number* /*z_U*/,
+   Index   /*m*/,
    bool    init_lambda,
-   Number* lambda
+   Number* /*lambda*/
    )
 {
-   DBG_ASSERT(init_x==true && init_z==false && init_lambda==false);
+   DBG_ASSERT(init_x);  (void) init_x;
+   DBG_ASSERT(!init_z);  (void) init_z;
+   DBG_ASSERT(!init_lambda);  (void) init_lambda;
 
    // Set starting point for y
    for( Index jx = 0; jx <= Nx_; jx++ )
@@ -419,13 +421,6 @@ bool MittelmannParaCntrlBase<T>::get_starting_point(
       x[u_index(i)] = (ub_u_ + lb_u_) / 2.;
    }
 
-   /*
-    // DELETEME
-    for (Index i=0; i<n; i++) {
-    x[i] += 0.01*i;
-    }
-    */
-
    return true;
 }
 
@@ -433,11 +428,11 @@ template<class T>
 bool MittelmannParaCntrlBase<T>::get_scaling_parameters(
    Number& obj_scaling,
    bool&   use_x_scaling,
-   Index   n,
-   Number* x_scaling,
+   Index   /*n*/,
+   Number* /*x_scaling*/,
    bool&   use_g_scaling,
-   Index   m,
-   Number* g_scaling
+   Index   /*m*/,
+   Number* /*g_scaling*/
    )
 {
    obj_scaling = 1. / Min(dx_, dt_);
@@ -448,9 +443,9 @@ bool MittelmannParaCntrlBase<T>::get_scaling_parameters(
 
 template<class T>
 bool MittelmannParaCntrlBase<T>::eval_f(
-   Index         n,
+   Index         /*n*/,
    const Number* x,
-   bool          new_x,
+   bool          /*new_x*/,
    Number&       obj_value
    )
 {
@@ -491,9 +486,9 @@ bool MittelmannParaCntrlBase<T>::eval_f(
 
 template<class T>
 bool MittelmannParaCntrlBase<T>::eval_grad_f(
-   Index         n,
+   Index         /*n*/,
    const Number* x,
-   bool          new_x,
+   bool          /*new_x*/,
    Number*       grad_f
    )
 {
@@ -533,9 +528,9 @@ bool MittelmannParaCntrlBase<T>::eval_grad_f(
 
 template<class T>
 bool MittelmannParaCntrlBase<T>::eval_g(
-   Index         n,
+   Index         /*n*/,
    const Number* x,
-   bool          new_x,
+   bool          /*new_x*/,
    Index         m,
    Number*       g
    )
@@ -571,18 +566,18 @@ bool MittelmannParaCntrlBase<T>::eval_g(
       ig++;
    }
 
-   DBG_ASSERT(ig == m);
+   DBG_ASSERT(ig == m);  (void) m;
 
    return true;
 }
 
 template<class T>
 bool MittelmannParaCntrlBase<T>::eval_jac_g(
-   Index         n,
+   Index         /*n*/,
    const Number* x,
-   bool          new_x,
+   bool          /*new_x*/,
    Index         m,
-   Index         nele_jac,
+   Index         /*nele_jac*/,
    Index*        iRow,
    Index*        jCol,
    Number*       values
@@ -653,7 +648,8 @@ bool MittelmannParaCntrlBase<T>::eval_jac_g(
          ijac++;
 
          ig++;
-      }DBG_ASSERT(ig == m);
+      }
+      DBG_ASSERT(ig == m);  (void) m;
    }
    else
    {
@@ -695,13 +691,13 @@ bool MittelmannParaCntrlBase<T>::eval_jac_g(
 
 template<class T>
 bool MittelmannParaCntrlBase<T>::eval_h(
-   Index         n,
+   Index         /*n*/,
    const Number* x,
-   bool          new_x,
+   bool          /*new_x*/,
    Number        obj_factor,
-   Index         m,
+   Index         /*m*/,
    const Number* lambda,
-   bool          new_lambda,
+   bool          /*new_lambda*/,
    Index         nele_hess,
    Index*        iRow,
    Index*        jCol,
@@ -767,24 +763,24 @@ bool MittelmannParaCntrlBase<T>::eval_h(
       }
    }
 
-   DBG_ASSERT(ihes==nele_hess);
+   DBG_ASSERT(ihes==nele_hess);  (void) nele_hess;
 
    return true;
 }
 
 template<class T>
 void MittelmannParaCntrlBase<T>::finalize_solution(
-   SolverReturn               status,
-   Index                      n,
-   const Number*              x,
-   const Number*              z_L,
-   const Number*              z_U,
-   Index                      m,
-   const Number*              g,
-   const Number*              lambda,
-   Number                     obj_value,
-   const IpoptData*           ip_data,
-   IpoptCalculatedQuantities* ip_cq
+   SolverReturn               /*status*/,
+   Index                      /*n*/,
+   const Number*              /*x*/,
+   const Number*              /*z_L*/,
+   const Number*              /*z_U*/,
+   Index                      /*m*/,
+   const Number*              /*g*/,
+   const Number*              /*lambda*/,
+   Number                     /*obj_value*/,
+   const IpoptData*           /*ip_data*/,
+   IpoptCalculatedQuantities* /*ip_cq*/
    )
 { }
 
@@ -865,7 +861,7 @@ public:
       }
 
       inline Number a_u(
-         Number t
+         Number /*t*/
          )
       {
          return sqrt2_ / 2. * exp13_;
@@ -971,49 +967,49 @@ public:
       }
 
       inline Number a(
-         Number x
+         Number /*x*/
          )
       {
          return 0.;
       }
 
       inline Number a_y(
-         Number t
+         Number /*t*/
          )
       {
          return 0.;
       }
 
       inline Number a_u(
-         Number t
+         Number /*t*/
          )
       {
          return 0.;
       }
 
       inline Number b(
-         Number t
+         Number /*t*/
          )
       {
          return 0.;
       }
 
       inline Number phi(
-         Number y
+         Number /*y*/
          )
       {
          return 0.;
       }
 
       inline Number phi_dy(
-         Number y
+         Number /*y*/
          )
       {
          return 0.;
       }
 
       inline Number phi_dydy(
-         Number y
+         Number /*y*/
          )
       {
          DBG_ASSERT(false);
@@ -1084,28 +1080,28 @@ public:
       }
 
       inline Number a(
-         Number x
+         Number /*x*/
          )
       {
          return 0.;
       }
 
       inline Number a_y(
-         Number t
+         Number /*t*/
          )
       {
          return 0.;
       }
 
       inline Number a_u(
-         Number t
+         Number /*t*/
          )
       {
          return 0.;
       }
 
       inline Number b(
-         Number t
+         Number /*t*/
          )
       {
          return 0.;
@@ -1126,7 +1122,7 @@ public:
       }
 
       inline Number phi_dydy(
-         Number y
+         Number /*y*/
          )
       {
          return 2.;
@@ -1196,28 +1192,28 @@ public:
       }
 
       inline Number a(
-         Number x
+         Number /*x*/
          )
       {
          return 0.;
       }
 
       inline Number a_y(
-         Number t
+         Number /*t*/
          )
       {
          return 0.;
       }
 
       inline Number a_u(
-         Number t
+         Number /*t*/
          )
       {
          return 0.;
       }
 
       inline Number b(
-         Number t
+         Number /*t*/
          )
       {
          return 0.;
@@ -1238,7 +1234,7 @@ public:
       }
 
       inline Number phi_dydy(
-         Number y
+         Number /*y*/
          )
       {
          return 2.;
@@ -1328,7 +1324,7 @@ public:
       }
 
       inline Number a_u(
-         Number t
+         Number /*t*/
          )
       {
          return sqrt2_ / 2. * exp13_;

@@ -403,7 +403,7 @@ protected:
    virtual Number y_d_cont(
       Number x1,
       Number x2,
-      Number x3
+      Number /*x3*/
       ) const
    {
       return 3. + 5. * (x1 * (x1 - 1.) * x2 * (x2 - 1.));
@@ -458,7 +458,7 @@ protected:
    virtual Number y_d_cont(
       Number x1,
       Number x2,
-      Number x3
+      Number /*x3*/
       ) const
    {
       return 3. + 5. * (x1 * (x1 - 1.) * x2 * (x2 - 1.));

@@ -90,11 +90,11 @@ bool LuksanVlcek3::get_starting_point(
    bool    init_x,
    Number* x,
    bool    init_z,
-   Number* z_L,
-   Number* z_U,
-   Index   m,
+   Number* /*z_L*/,
+   Number* /*z_U*/,
+   Index   /*m*/,
    bool    init_lambda,
-   Number* lambda
+   Number* /*lambda*/
    )
 {
    if( !init_x || init_z || init_lambda )
@@ -111,21 +111,14 @@ bool LuksanVlcek3::get_starting_point(
       x[4 * i + 3] = 1.;
    }
 
-   /*
-    // DELETEME
-    for (Index i=0; i<n; i++) {
-    x[i] += 0.1*((Number) i);
-    }
-    */
-
    return true;
 }
 
 // returns the value of the objective function
 bool LuksanVlcek3::eval_f(
-   Index         n,
+   Index         /*n*/,
    const Number* x,
-   bool          new_x,
+   bool          /*new_x*/,
    Number&       obj_value
    )
 {
@@ -144,9 +137,9 @@ bool LuksanVlcek3::eval_f(
 
 // return the gradient of the objective function grad_{x} f(x)
 bool LuksanVlcek3::eval_grad_f(
-   Index         n,
+   Index         /*n*/,
    const Number* x,
-   bool          new_x,
+   bool          /*new_x*/,
    Number*       grad_f
    )
 {
@@ -171,14 +164,14 @@ bool LuksanVlcek3::eval_grad_f(
 bool LuksanVlcek3::eval_g(
    Index         n,
    const Number* x,
-   bool          new_x,
-   Index         m,
+   bool          /*new_x*/,
+   Index         /*m*/,
    Number*       g
    )
 {
    g[0] = 3. * pow(x[0], 3) + 2. * x[1] - 5. + sin(x[0] - x[1]) * sin(x[0] + x[1]);
    g[1] = 4. * x[n - 3] - x[n - 4] * exp(x[n - 4] - x[n - 3]) - 3;
-   ;
+
    return true;
 }
 
@@ -186,8 +179,8 @@ bool LuksanVlcek3::eval_g(
 bool LuksanVlcek3::eval_jac_g(
    Index         n,
    const Number* x,
-   bool          new_x,
-   Index         m,
+   bool          /*new_x*/,
+   Index         /*m*/,
    Index         nele_jac,
    Index*        iRow,
    Index*        jCol,
@@ -212,7 +205,7 @@ bool LuksanVlcek3::eval_jac_g(
       jCol[ijac] = n - 3;
       ijac++;
 
-      DBG_ASSERT(ijac == nele_jac);
+      DBG_ASSERT(ijac == nele_jac);  (void) nele_jac;
    }
    else
    {
@@ -236,11 +229,11 @@ bool LuksanVlcek3::eval_jac_g(
 bool LuksanVlcek3::eval_h(
    Index         n,
    const Number* x,
-   bool          new_x,
+   bool          /*new_x*/,
    Number        obj_factor,
-   Index         m,
+   Index         /*m*/,
    const Number* lambda,
-   bool          new_lambda,
+   bool          /*new_lambda*/,
    Index         nele_hess,
    Index*        iRow,
    Index*        jCol,
@@ -277,7 +270,7 @@ bool LuksanVlcek3::eval_h(
       iRow[ihes] = N_ + 1;
       jCol[ihes] = N_ + 1;
       ihes++;
-      DBG_ASSERT(ihes == nele_hess);
+      DBG_ASSERT(ihes == nele_hess);  (void) nele_hess;
    }
    else
    {
@@ -364,16 +357,16 @@ bool LuksanVlcek3::eval_h(
 }
 
 void LuksanVlcek3::finalize_solution(
-   SolverReturn               status,
-   Index                      n,
-   const Number*              x,
-   const Number*              z_L,
-   const Number*              z_U,
-   Index                      m,
-   const Number*              g,
-   const Number*              lambda,
-   Number                     obj_value,
-   const IpoptData*           ip_data,
-   IpoptCalculatedQuantities* ip_cq
+   SolverReturn               /*status*/,
+   Index                      /*n*/,
+   const Number*              /*x*/,
+   const Number*              /*z_L*/,
+   const Number*              /*z_U*/,
+   Index                      /*m*/,
+   const Number*              /*g*/,
+   const Number*              /*lambda*/,
+   Number                     /*obj_value*/,
+   const IpoptData*           /*ip_data*/,
+   IpoptCalculatedQuantities* /*ip_cq*/
    )
 { }

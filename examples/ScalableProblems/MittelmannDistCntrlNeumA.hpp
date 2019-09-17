@@ -466,7 +466,7 @@ protected:
       Number x1,
       Number x2,
       Number y,
-      Number u
+      Number /*u*/
       ) const
    {
       return y - y_d_cont(x1, x2);
@@ -474,9 +474,9 @@ protected:
 
    /** First partial derivative of fint_cont w.r.t. u */
    virtual Number fint_cont_du(
-      Number x1,
-      Number x2,
-      Number y,
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
       Number u
       ) const
    {
@@ -485,10 +485,10 @@ protected:
 
    /** Second partial derivative of fint_cont w.r.t. y,y */
    virtual Number fint_cont_dydy(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return 1.;
@@ -504,10 +504,10 @@ protected:
 
    /** Second partial derivative of fint_cont w.r.t. u,u */
    virtual Number fint_cont_dudu(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return alpha_;
@@ -523,10 +523,10 @@ protected:
 
    /** Second partial derivative of fint_cont w.r.t. y,u */
    virtual Number fint_cont_dydu(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return 0.;
@@ -542,8 +542,8 @@ protected:
 
    /** Forcing function for the elliptic equation */
    virtual Number d_cont(
-      Number x1,
-      Number x2,
+      Number /*x1*/,
+      Number /*x2*/,
       Number y,
       Number u
       ) const
@@ -553,10 +553,10 @@ protected:
 
    /** First partial derivative of forcing function w.r.t. y */
    virtual Number d_cont_dy(
-      Number x1,
-      Number x2,
+      Number /*x1*/,
+      Number /*x2*/,
       Number y,
-      Number u
+      Number /*u*/
       ) const
    {
       return -exp(y);
@@ -564,10 +564,10 @@ protected:
 
    /** First partial derivative of forcing function w.r.t. u */
    virtual Number d_cont_du(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return -1.;
@@ -575,10 +575,10 @@ protected:
 
    /** Second partial derivative of forcing function w.r.t y,y */
    virtual Number d_cont_dydy(
-      Number x1,
-      Number x2,
+      Number /*x1*/,
+      Number /*x2*/,
       Number y,
-      Number u
+      Number /*u*/
       ) const
    {
       return -exp(y);
@@ -594,10 +594,10 @@ protected:
 
    /** Second partial derivative of forcing function w.r.t. u,u */
    virtual Number d_cont_dudu(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return 0.;
@@ -613,10 +613,10 @@ protected:
 
    /** Second partial derivative of forcing function w.r.t. y,u */
    virtual Number d_cont_dydu(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return 0.;
@@ -697,7 +697,7 @@ protected:
       Number x1,
       Number x2,
       Number y,
-      Number u
+      Number /*u*/
       ) const
    {
       Number diff_y = y - y_d_cont(x1, x2);
@@ -709,7 +709,7 @@ protected:
       Number x1,
       Number x2,
       Number y,
-      Number u
+      Number /*u*/
       ) const
    {
       return y - y_d_cont(x1, x2);
@@ -717,10 +717,10 @@ protected:
 
    /** First partial derivative of fint_cont w.r.t. u */
    virtual Number fint_cont_du(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return 0.;
@@ -728,10 +728,10 @@ protected:
 
    /** Second partial derivative of fint_cont w.r.t. y,y */
    virtual Number fint_cont_dydy(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return 1.;
@@ -747,10 +747,10 @@ protected:
 
    /** Second partial derivative of fint_cont w.r.t. u,u */
    virtual Number fint_cont_dudu(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return 0.;
@@ -766,10 +766,10 @@ protected:
 
    /** Second partial derivative of fint_cont w.r.t. y,u */
    virtual Number fint_cont_dydu(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return 0.;
@@ -785,8 +785,8 @@ protected:
 
    /** Forcing function for the elliptic equation */
    virtual Number d_cont(
-      Number x1,
-      Number x2,
+      Number /*x1*/,
+      Number /*x2*/,
       Number y,
       Number u
       ) const
@@ -796,10 +796,10 @@ protected:
 
    /** First partial derivative of forcing function w.r.t. y */
    virtual Number d_cont_dy(
-      Number x1,
-      Number x2,
+      Number /*x1*/,
+      Number /*x2*/,
       Number y,
-      Number u
+      Number /*u*/
       ) const
    {
       return -exp(y);
@@ -807,10 +807,10 @@ protected:
 
    /** First partial derivative of forcing function w.r.t. u */
    virtual Number d_cont_du(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return -1.;
@@ -818,10 +818,10 @@ protected:
 
    /** Second partial derivative of forcing function w.r.t y,y */
    virtual Number d_cont_dydy(
-      Number x1,
-      Number x2,
+      Number /*x1*/,
+      Number /*x2*/,
       Number y,
-      Number u
+      Number /*u*/
       ) const
    {
       return -exp(y);
@@ -837,10 +837,10 @@ protected:
 
    /** Second partial derivative of forcing function w.r.t. u,u */
    virtual Number d_cont_dudu(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return 0.;
@@ -856,10 +856,10 @@ protected:
 
    /** Second partial derivative of forcing function w.r.t. y,u */
    virtual Number d_cont_dydu(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return 0.;
@@ -929,8 +929,8 @@ public:
 protected:
    /** Profile function for initial y */
    virtual Number y_d_cont(
-      Number x1,
-      Number x2
+      Number /*x1*/,
+      Number /*x2*/
       ) const
    {
       return 6.;
@@ -938,8 +938,8 @@ protected:
 
    /** Integrant in objective function */
    virtual Number fint_cont(
-      Number x1,
-      Number x2,
+      Number /*x1*/,
+      Number /*x2*/,
       Number y,
       Number u
       ) const
@@ -949,9 +949,9 @@ protected:
 
    /** First partial derivative of fint_cont w.r.t. y */
    virtual Number fint_cont_dy(
-      Number x1,
-      Number x2,
-      Number y,
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
       Number u
       ) const
    {
@@ -960,8 +960,8 @@ protected:
 
    /** First partial derivative of fint_cont w.r.t. u */
    virtual Number fint_cont_du(
-      Number x1,
-      Number x2,
+      Number /*x1*/,
+      Number /*x2*/,
       Number y,
       Number u
       ) const
@@ -971,10 +971,10 @@ protected:
 
    /** Second partial derivative of fint_cont w.r.t. y,y */
    virtual Number fint_cont_dydy(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return 0.;
@@ -990,10 +990,10 @@ protected:
 
    /** Second partial derivative of fint_cont w.r.t. u,u */
    virtual Number fint_cont_dudu(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return 2. * M_;
@@ -1009,10 +1009,10 @@ protected:
 
    /** Second partial derivative of fint_cont w.r.t. y,u */
    virtual Number fint_cont_dydu(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return -K_;
@@ -1050,10 +1050,10 @@ protected:
 
    /** First partial derivative of forcing function w.r.t. u */
    virtual Number d_cont_du(
-      Number x1,
-      Number x2,
+      Number /*x1*/,
+      Number /*x2*/,
       Number y,
-      Number u
+      Number /*u*/
       ) const
    {
       return y;
@@ -1061,10 +1061,10 @@ protected:
 
    /** Second partial derivative of forcing function w.r.t y,y */
    virtual Number d_cont_dydy(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return 2. * b_;
@@ -1080,10 +1080,10 @@ protected:
 
    /** Second partial derivative of forcing function w.r.t. u,u */
    virtual Number d_cont_dudu(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return 0.;
@@ -1099,10 +1099,10 @@ protected:
 
    /** Second partial derivative of forcing function w.r.t. y,u */
    virtual Number d_cont_dydu(
-      Number x1,
-      Number x2,
-      Number y,
-      Number u
+      Number /*x1*/,
+      Number /*x2*/,
+      Number /*y*/,
+      Number /*u*/
       ) const
    {
       return 1.;
