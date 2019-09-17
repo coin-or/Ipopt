@@ -105,7 +105,7 @@ void DebugJournalistWrapper::DebugPrintf(
 
    if (Verbosity() >= verbosity)
    {
-      va_list(ap);
+      va_list ap;
 
       va_start(ap, pformat);
 
