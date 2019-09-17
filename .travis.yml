@@ -59,3 +59,20 @@ script:
   - make
   - if $NOF77 ; then echo "skip test as no linear solver" ; else make test ; fi
   - make install
+  - pushd examples/Cpp_example
+  - make
+  - if ! $NOF77 ; then ./cpp_example ; fi
+  - popd
+  - pushd examples/hs071_c
+  - make
+  - if ! $NOF77 ; then ./hs071_c ; fi
+  - popd
+  - pushd examples/hs071_cpp
+  - make
+  - if ! $NOF77 ; then ./hs071_cpp ; fi
+  - popd
+  - if ! $NOF77 ; then pushd examples/hs071_f && make && ./hs071_f && popd ; fi
+  - pushd examples/ScalableProblems
+  - make
+  - if ! $NOF77 ; then ./solve_problem MBndryCntrl1 10 ; fi
+  - popd
