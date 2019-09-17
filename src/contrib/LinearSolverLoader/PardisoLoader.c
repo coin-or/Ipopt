@@ -29,34 +29,8 @@ voidfun LSL_loadSym(
    int         msgLen
    );
 
-/* Old pre-4.0.0 pardiso interface */
-typedef void (*pardisoinit_old_t)(
-   void*         PT,
-   const ipfint* MTYPE,
-   ipfint*       IPARM
-   );
-
-typedef void (*pardiso_old_t)(
-   void**        PT,
-   const ipfint* MAXFCT,
-   const ipfint* MNUM,
-   const ipfint* MTYPE,
-   const ipfint* PHASE,
-   const ipfint* N,
-   const double* A,
-   const ipfint* IA,
-   const ipfint* JA,
-   const ipfint* PERM,
-   const ipfint* NRHS,
-   ipfint*       IPARM,
-   const ipfint* MSGLVL,
-   double*       B,
-   double*       X,
-   ipfint*       E
-   );
-
-/* PARDISO 4.0.0 and above */
-typedef void (*pardisoinit_new_t)(
+/* assuming PARDISO 4.0.0 and above */
+typedef void (*pardisoinit_t)(
    void*         PT,
    const ipfint* MTYPE,
    const ipfint* SOLVER,
@@ -65,7 +39,7 @@ typedef void (*pardisoinit_new_t)(
    ipfint*       E
    );
 
-typedef void (*pardiso_new_t)(
+typedef void (*pardiso_t)(
    void**        PT,
    const ipfint* MAXFCT,
    const ipfint* MNUM,
@@ -85,59 +59,9 @@ typedef void (*pardiso_new_t)(
    double*       DPARM
    );
 
-static pardisoinit_old_t func_pardisoinit     = NULL;
-static pardisoinit_new_t func_new_pardisoinit = NULL;
-static pardiso_old_t     func_pardiso         = NULL;
-static pardiso_new_t     func_new_pardiso     = NULL;
-static int               pardiso_is_parallel  = 0;
-
-void wrap_old_pardisoinit(
-   void*         PT,
-   const ipfint* MTYPE,
-   const ipfint* SOLVER,
-   ipfint*       IPARM,
-   double*       DPARM,
-   ipfint*       E
-   )
-{
-   if( func_pardisoinit == NULL )
-      LSL_lateParadisoLibLoad();
-
-   func_pardisoinit(PT, MTYPE, IPARM);
-   *E = 0;
-}
-
-void wrap_old_pardiso(
-   void**        PT,
-   const ipfint* MAXFCT,
-   const ipfint* MNUM,
-   const ipfint* MTYPE,
-   const ipfint* PHASE,
-   const ipfint* N,
-   const double* A,
-   const ipfint* IA,
-   const ipfint* JA,
-   const ipfint* PERM,
-   const ipfint* NRHS,
-   ipfint*       IPARM,
-   const ipfint* MSGLVL,
-   double*       B,
-   double*       X,
-   ipfint*       E,
-   double*       DPARM
-   )
-{
-   /* Note: we assume dparm is not of importance (only used for indirect solver
-    * according to PARDISO 4.1.1 documentation). */
-   if( func_pardiso == NULL )
-      LSL_lateParadisoLibLoad();
-
-   /* if we do not have a parallel version, ensure that IPARM[2] (#threads) is set to 1 */
-   if( !pardiso_is_parallel )
-      IPARM[2] = 1;
-
-   func_pardiso(PT, MAXFCT, MNUM, MTYPE, PHASE, N, A, IA, JA, PERM, NRHS, IPARM, MSGLVL, B, X, E);
-}
+static pardisoinit_t func_pardisoinit = NULL;
+static pardiso_t     func_pardiso     = NULL;
+static int           pardiso_is_parallel  = 0;
 
 void pardisoinit(
    void*         PT,
@@ -148,11 +72,11 @@ void pardisoinit(
    ipfint*       E
    )
 {
-   if( func_new_pardisoinit == NULL )
+   if( func_pardisoinit == NULL )
       LSL_lateParadisoLibLoad();
-   assert(func_new_pardisoinit != NULL);
+   assert(func_pardisoinit != NULL);
 
-   func_new_pardisoinit(PT, MTYPE, SOLVER, IPARM, DPARM, E);
+   func_pardisoinit(PT, MTYPE, SOLVER, IPARM, DPARM, E);
 }
 
 void pardiso(
@@ -175,15 +99,15 @@ void pardiso(
    double*       DPARM
 )
 {
-   if (func_new_pardiso == NULL)
+   if (func_pardiso == NULL)
       LSL_lateParadisoLibLoad();
-   assert(func_new_pardiso != NULL);
+   assert(func_pardiso != NULL);
 
    /* if we do not have a parallel version, ensure that IPARM[2] (#threads) is set to 1 */
    if (!pardiso_is_parallel)
       IPARM[2] = 1;
 
-   func_new_pardiso(PT, MAXFCT, MNUM, MTYPE, PHASE, N, A, IA, JA, PERM, NRHS, IPARM, MSGLVL, B, X, E, DPARM);
+   func_pardiso(PT, MAXFCT, MNUM, MTYPE, PHASE, N, A, IA, JA, PERM, NRHS, IPARM, MSGLVL, B, X, E, DPARM);
 }
 
 #define PARDISOLIBNAME "libpardiso." SHAREDLIBEXT
@@ -202,36 +126,19 @@ int LSL_loadPardisoLib(
    else
    {
       /* try a default library name */
-      Pardiso_handle=LSL_loadLib(PARDISOLIBNAME, msgbuf, msglen);
+      Pardiso_handle = LSL_loadLib(PARDISOLIBNAME, msgbuf, msglen);
    }
    if( Pardiso_handle == NULL )
       return 1;
 
-   /* load Pardiso functions */
-   /* first check if we are new or old interface */
-   if( LSL_loadSym(Pardiso_handle, "pardiso_ipopt_newinterface", msgbuf, msglen) != NULL )
-   {
-      func_new_pardisoinit = (pardisoinit_new_t) LSL_loadSym(Pardiso_handle, "pardisoinit", msgbuf, msglen);
-      if( func_new_pardisoinit == NULL )
-         return 1;
+   /* load Pardiso functions, we assume the >= 4.0.0 interface */
+   func_pardisoinit = (pardisoinit_t) LSL_loadSym(Pardiso_handle, "pardisoinit", msgbuf, msglen);
+   if( func_pardisoinit == NULL )
+	   return 1;
 
-      func_new_pardiso = (pardiso_new_t) LSL_loadSym(Pardiso_handle, "pardiso", msgbuf, msglen);
-      if( func_new_pardiso == NULL )
-         return 1;
-   }
-   else
-   {
-      func_pardisoinit = (pardisoinit_old_t) LSL_loadSym(Pardiso_handle, "pardisoinit", msgbuf, msglen);
-      if( func_pardisoinit == NULL )
-         return 1;
-
-      func_pardiso = (pardiso_old_t) LSL_loadSym(Pardiso_handle, "pardiso", msgbuf, msglen);
-      if( func_pardiso == NULL )
-         return 1;
-
-      func_new_pardisoinit = wrap_old_pardisoinit;
-      func_new_pardiso = wrap_old_pardiso;
-   }
+   func_pardiso = (pardiso_t) LSL_loadSym(Pardiso_handle, "pardiso", msgbuf, msglen);
+   if( func_pardiso == NULL )
+	   return 1;
 
    /* check if we use a parallel version of pardiso */
    pardiso_is_parallel = LSL_loadSym(Pardiso_handle, "pardiso_exist_parallel", msgbuf, msglen) != NULL;
