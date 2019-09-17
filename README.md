@@ -58,9 +58,7 @@ Download
 **[Download Ipopt source as tarballs.](http://www.coin-or.org/download/source/Ipopt)**
 
 You can also obtain the Ipopt code via Git.
-Please refer to the [documentation](https://coin-or.github.io/Ipopt) and the [General Configuration and Installation Instructions for COIN-OR projects](https://projects.coin-or.org/CoinHelp/).
-
-**Please make sure you read the [current issues page](https://projects.coin-or.org/CoinHelp/wiki/current-issues) before you try to install Ipopt.**
+Please refer to the [documentation](https://coin-or.github.io/Ipopt).
 
 Also still available is the no longer maintained older [Fortran version](https://github.com/coin-or/Ipopt/tree/stable/2.3).
 
@@ -76,7 +74,6 @@ Documentation
  * **[Ipopt Wiki](https://github.com/coin-or/Ipopt/wiki)** with more compilation hints, current issues, and hints and tricks
  * **[Mailing list archive](http://list.coin-or.org/pipermail/ipopt/)**
  * [Changelog](ChangeLog)
- * [General Configuration and Installation Instructions](https://projects.coin-or.org/CoinHelp/) for COIN-OR projects
  * [short Ipopt tutorial](http://drops.dagstuhl.de/volltexte/2009/2089/pdf/09061.WaechterAndreas.Paper.2089.pdf)
 
 
