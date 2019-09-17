@@ -16,6 +16,9 @@
 // The following line is a fix for otherwise twice-defined global variable
 // (This would have to be taken out for a parallel MUMPS version!)
 #define MPI_COMM_WORLD IPOPT_MPI_COMM_WORLD
+#ifdef __GNUC__
+#pragma GCC diagnostic ignored "-Wunused-variable"
+#endif
 // The first header to include is the one for MPI.
 // In newer ThirdParty/Mumps, mpi.h is renamed to mumps_mpi.h.
 // We get informed about this by having COIN_USE_MUMPS_MPI_H defined,
