@@ -95,6 +95,8 @@ in preparation: 3.13
         - Fixed calculation of quality function when setting option
           quality_function_centrality to reciprocal.
         - Fixed compiler warnings when using -Wunused-parameter.
+        - Changed default for ma97_print_level to -1. This avoids messages
+          about numerical singular systems written to stdout by default.
 
 2019-04-08 releases/3.12.13
         - fixed Pardiso settings when using Pardiso from Pardiso project

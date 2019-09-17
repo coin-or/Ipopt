@@ -68,7 +68,7 @@ void Ma97SolverInterface::RegisterOptions(
    roptions->AddIntegerOption(
       "ma97_print_level",
       "Debug printing level",
-      0
+      -1  /* changed from 0 to -1, as MA97 would write error messages about singular systems to stdout, which are "errors" that Ipopt handles fine */
       /*
       "<0 no printing.\n"
       "0  Error and warning messages only.\n"

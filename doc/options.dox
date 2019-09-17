@@ -1271,7 +1271,7 @@ Possible values:
 \anchor OPT_ma97_print_level
  <strong>ma97_print_level</strong>: Debug printing level
 <blockquote>
- The valid range for this integer option is unrestricted and its default value is 0.
+ The valid range for this integer option is unrestricted and its default value is -1.
 
 </blockquote>
 
