@@ -44,8 +44,8 @@ bool ParametricTNLP::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
   return true;
 }
 
-bool ParametricTNLP::get_bounds_info(Index n, Number* x_l, Number* x_u,
-				     Index m, Number* g_l, Number* g_u)
+bool ParametricTNLP::get_bounds_info(Index /*n*/, Number* x_l, Number* x_u,
+				     Index /*m*/, Number* g_l, Number* g_u)
 {
   for (Index k=0; k<3; ++k) {
     x_l[k] = 0.0;
@@ -70,10 +70,10 @@ bool ParametricTNLP::get_bounds_info(Index n, Number* x_l, Number* x_u,
   return true;
 }
 
-bool ParametricTNLP::get_starting_point(Index n, bool init_x, Number* x,
-					bool init_z, Number* z_L, Number* z_U,
-					Index m, bool init_lambda,
-					Number* lambda)
+bool ParametricTNLP::get_starting_point(Index /*n*/, bool /*init_x*/, Number* x,
+					bool /*init_z*/, Number* /*z_L*/, Number* /*z_U*/,
+					Index /*m*/, bool /*init_lambda*/,
+					Number* /*lambda*/)
 {
   x[0] = 0.15;
   x[1] = 0.15;
@@ -84,7 +84,7 @@ bool ParametricTNLP::get_starting_point(Index n, bool init_x, Number* x,
   return true;
 }
 
-bool ParametricTNLP::eval_f(Index n, const Number* x, bool new_x, Number& obj_value)
+bool ParametricTNLP::eval_f(Index /*n*/, const Number* x, bool /*new_x*/, Number& obj_value)
 {
   obj_value = 0;
   for (Index k=0; k<3; ++k) {
@@ -93,7 +93,7 @@ bool ParametricTNLP::eval_f(Index n, const Number* x, bool new_x, Number& obj_va
   return true;
 }
 
-bool ParametricTNLP::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f)
+bool ParametricTNLP::eval_grad_f(Index /*n*/, const Number* x, bool /*new_x*/, Number* grad_f)
 {
   grad_f[0] = 2*x[0];
   grad_f[1] = 2*x[1];
@@ -103,7 +103,7 @@ bool ParametricTNLP::eval_grad_f(Index n, const Number* x, bool new_x, Number* g
   return true;
 }
 
-bool ParametricTNLP::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g)
+bool ParametricTNLP::eval_g(Index /*n*/, const Number* x, bool /*new_x*/, Index /*m*/, Number* g)
 {
   Number x1, x2, x3, eta1, eta2;
   x1 = x[0];
@@ -118,8 +118,8 @@ bool ParametricTNLP::eval_g(Index n, const Number* x, bool new_x, Index m, Numbe
   return true;
 }
 
-bool ParametricTNLP::eval_jac_g(Index n, const Number* x, bool new_x,
-				Index m, Index nele_jac, Index* iRow, Index *jCol,
+bool ParametricTNLP::eval_jac_g(Index /*n*/, const Number* x, bool /*new_x*/,
+				Index /*m*/, Index /*nele_jac*/, Index* iRow, Index *jCol,
 				Number* values)
 {
   if (values == NULL) {
@@ -159,9 +159,9 @@ bool ParametricTNLP::eval_jac_g(Index n, const Number* x, bool new_x,
   return true;
 }
 
-bool ParametricTNLP::eval_h(Index n, const Number* x, bool new_x,
-			    Number obj_factor, Index m, const Number* lambda,
-			    bool new_lambda, Index nele_hess, Index* iRow,
+bool ParametricTNLP::eval_h(Index /*n*/, const Number* /*x*/, bool /*new_x*/,
+			    Number obj_factor, Index /*m*/, const Number* lambda,
+			    bool /*new_lambda*/, Index /*nele_hess*/, Index* iRow,
 			    Index* jCol, Number* values)
 {
   if (values == NULL) {
@@ -191,13 +191,13 @@ bool ParametricTNLP::eval_h(Index n, const Number* x, bool new_x,
 }
 
 bool ParametricTNLP::get_var_con_metadata(Index n,
-					  StringMetaDataMapType& var_string_md,
+					  StringMetaDataMapType& /*var_string_md*/,
 					  IntegerMetaDataMapType& var_integer_md,
 					  NumericMetaDataMapType& var_numeric_md,
 					  Index m,
-					  StringMetaDataMapType& con_string_md,
+					  StringMetaDataMapType& /*con_string_md*/,
 					  IntegerMetaDataMapType& con_integer_md,
-					  NumericMetaDataMapType& con_numeric_md)
+					  NumericMetaDataMapType& /*con_numeric_md*/)
 {
   /* In this function, the indices for the parametric computations are set.
    * To keep track of the parameters, each parameter gets an index from 1 to n_parameters.
@@ -236,12 +236,12 @@ bool ParametricTNLP::get_var_con_metadata(Index n,
   return true;
 }
 
-void ParametricTNLP::finalize_solution(SolverReturn status,
-				       Index n, const Number* x, const Number* z_L, const Number* z_U,
-				       Index m, const Number* g, const Number* lambda,
-				       Number obj_value,
+void ParametricTNLP::finalize_solution(SolverReturn /*status*/,
+				       Index /*n*/, const Number* x, const Number* /*z_L*/, const Number* /*z_U*/,
+				       Index m, const Number* /*g*/, const Number* lambda,
+				       Number /*obj_value*/,
 				       const IpoptData* ip_data,
-				       IpoptCalculatedQuantities* ip_cq)
+				       IpoptCalculatedQuantities* /*ip_cq*/)
 {
   // Check whether sIPOPT Algorithm aborted internally
   //  bool sens_internal_abort;
@@ -274,12 +274,12 @@ void ParametricTNLP::finalize_solution(SolverReturn status,
 }
 
 void ParametricTNLP::finalize_metadata(Index n,
-				       const StringMetaDataMapType& var_string_md,
-				       const IntegerMetaDataMapType& var_integer_md,
+				       const StringMetaDataMapType& /*var_string_md*/,
+				       const IntegerMetaDataMapType& /*var_integer_md*/,
 				       const NumericMetaDataMapType& var_numeric_md,
 				       Index m,
-				       const StringMetaDataMapType& con_string_md,
-				       const IntegerMetaDataMapType& con_integer_md,
+				       const StringMetaDataMapType& /*con_string_md*/,
+				       const IntegerMetaDataMapType& /*con_integer_md*/,
 				       const NumericMetaDataMapType& con_numeric_md)
 {
   // bound multipliers for lower and upper bounds

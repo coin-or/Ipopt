@@ -11,7 +11,7 @@
 #include "IpIpoptAlg.hpp"
 #include "SensRegOp.hpp"
 
-int main(int argv, char**argc)
+int main(int /*argv*/, char** /*argc*/)
 {
   using namespace Ipopt;
 
