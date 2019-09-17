@@ -545,6 +545,9 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
          (&fctidx_, &ndim_, ia, ja, val_);
          fctidx_++;
       }
+#else
+      (void) fctidx_;
+      (void) dump_;
 #endif
 
       // Set scaling option
