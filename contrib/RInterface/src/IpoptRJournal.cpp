@@ -22,8 +22,8 @@ IpoptRJournal::IpoptRJournal(
 { }
 
 void IpoptRJournal::PrintImpl(
-   Ipopt::EJournalCategory category,
-   Ipopt::EJournalLevel    level,
+   Ipopt::EJournalCategory /*category*/,
+   Ipopt::EJournalLevel    /*level*/,
    const char*             str
 )
 {
@@ -32,14 +32,14 @@ void IpoptRJournal::PrintImpl(
 }
 
 void IpoptRJournal::PrintfImpl(
-   Ipopt::EJournalCategory category,
-   Ipopt::EJournalLevel    level,
+   Ipopt::EJournalCategory /*category*/,
+   Ipopt::EJournalLevel    /*level*/,
    const char*             pformat,
    va_list                 ap
 )
 {
    // Define string
-   const size_t MaxStrLen = 8192;
+   const int MaxStrLen = 8192;
    char s[MaxStrLen];
 
    // R guarantees to have an implementation of vsnprintf available
