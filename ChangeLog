@@ -5,9 +5,10 @@ commit history.
 in preparation: 3.13
         This major release comes with a larger renovation of the build
         system and a changed directory structure (eliminated top directory),
-        which is the result of a long effort to use recent autotools versions
-        for various COIN-OR projects, reduce future maintenance efforts,
-        and adapting behaviors of standard autotools-based projects.
+        which is the result of a long and still on-going effort to use
+        recent autotools versions for various COIN-OR projects, reduce
+        future maintenance efforts, and adapting behaviors of standard
+        autotools-based projects.
         As a consequence, a monolithic build of Ipopt, which builds Ipopt
         with all its dependencies in one run of configure and make is no
         longer possible. Dependencies should now be build and installed
@@ -94,7 +95,7 @@ in preparation: 3.13
         - Fixed handling of ma77_default_control in LSL_setMA77().
         - Fixed calculation of quality function when setting option
           quality_function_centrality to reciprocal.
-        - Fixed compiler warnings when using -Wunused-parameter.
+        - Fixed compiler warnings, in particular when using -Wunused-parameter.
         - Changed default for ma97_print_level to -1. This avoids messages
           about numerical singular systems written to stdout by default.
 

@@ -58,7 +58,7 @@ Download
 **[Download Ipopt source as tarballs.](http://www.coin-or.org/download/source/Ipopt)**
 
 You can also obtain the Ipopt code via Git.
-Please refer to the [documentation](https://coin-or.github.io/Ipopt).
+Please refer to the [documentation](https://coin-or.github.io/Ipopt)  (for Ipopt 3.13 beta, use [this link](http://www.zib.de/vigerske/ipopt3.13)).
 
 Also still available is the no longer maintained older [Fortran version](https://github.com/coin-or/Ipopt/tree/stable/2.3).
 
@@ -70,7 +70,7 @@ and the **[Pardiso project provides binaries](https://pardiso-project.org/index.
 Documentation
 -------------
 
- * **[Ipopt Documentation](https://coin-or.github.io/Ipopt/)** with installation instructions, options reference, and more
+ * **[Ipopt Documentation](https://coin-or.github.io/Ipopt/)** with installation instructions, options reference, and more (for Ipopt 3.13 beta, use [this link](http://www.zib.de/vigerske/ipopt3.13))
  * **[Ipopt Wiki](https://github.com/coin-or/Ipopt/wiki)** with more compilation hints, current issues, and hints and tricks
  * **[Mailing list archive](http://list.coin-or.org/pipermail/ipopt/)**
  * [Changelog](ChangeLog)

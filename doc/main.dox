@@ -19,7 +19,7 @@ The documentation consists of the following pages:
 - \subpage AUTHORS
 - \subpage LICENSE
 
-The Ipopt project website is <https://github.com/coin-or/Ipopt>.
+The \Ipopt project website is <https://github.com/coin-or/Ipopt>.
 
 \tableofcontents
 
