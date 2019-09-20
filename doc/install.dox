@@ -18,6 +18,23 @@ pages, in particular
     <https://projects.coin-or.org/BuildTools/wiki/current-issues>
 -->
 
+\section COINBREW Quick Start: Using CoinBrew
+
+On sufficiently prepared systems, a quick way to build and install \Ipopt
+is to get the coinbrew script from https://coin-or.github.io/coinbrew/
+and running
+
+    /path/to/coinbrew fetch Ipopt
+    /path/to/coinbrew build Ipopt --prefix=/dir/to/install --test
+    /path/to/coinbrew install Ipopt
+
+The coinbrew script will take care of building and installing the
+dependencies ASL, Metis, and Mumps before building \Ipopt.
+
+If these commands fail or this build is not sufficient, e.g., because
+other linear solvers should be used by \Ipopt, the following sections
+and the help of coinbrew should be studied.
+
 \section SYSTEMPACKAGES Getting System Packages (Compilers, ...)
 
 \subsection SYSTEMPACKAGES_LINUX Linux distributions
