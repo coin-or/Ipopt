@@ -31,7 +31,7 @@ using namespace Ipopt;
 int main(
    int argv,
    char* argc[]
-   )
+)
 {
    // Set the data:
 

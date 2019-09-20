@@ -14,7 +14,7 @@ using namespace Ipopt;
 LuksanVlcek1::LuksanVlcek1(
    Number g_l,
    Number g_u
-   )
+)
 {
    g_l_ = g_l;
    g_u_ = g_u;
@@ -22,7 +22,7 @@ LuksanVlcek1::LuksanVlcek1(
 
 bool LuksanVlcek1::InitializeProblem(
    Index N
-   )
+)
 {
    N_ = N;
    if( N_ <= 2 )
@@ -40,7 +40,7 @@ bool LuksanVlcek1::get_nlp_info(
    Index&          nnz_jac_g,
    Index&          nnz_h_lag,
    IndexStyleEnum& index_style
-   )
+)
 {
    // The problem described in LuksanVlcek1.hpp has 4 variables, x[0] through x[3]
    n = N_;
@@ -65,7 +65,7 @@ bool LuksanVlcek1::get_bounds_info(
    Index   m,
    Number* g_l,
    Number* g_u
-   )
+)
 {
    // none of the variables have bounds
    for( Index i = 0; i < n; i++ )
@@ -95,7 +95,7 @@ bool LuksanVlcek1::get_starting_point(
    Index   /*m*/,
    bool    init_lambda,
    Number* /*lambda*/
-   )
+)
 {
    if( !init_x || init_z || init_lambda )
    {
@@ -122,7 +122,7 @@ bool LuksanVlcek1::eval_f(
    const Number* x,
    bool          /*new_x*/,
    Number&       obj_value
-   )
+)
 {
    obj_value = 0.;
    for( Index i = 0; i < N_ - 1; i++ )
@@ -141,7 +141,7 @@ bool LuksanVlcek1::eval_grad_f(
    const Number* x,
    bool          /*new_x*/,
    Number*       grad_f
-   )
+)
 {
    grad_f[0] = 0.;
    for( Index i = 0; i < N_ - 1; i++ )
@@ -160,12 +160,12 @@ bool LuksanVlcek1::eval_g(
    bool          /*new_x*/,
    Index         /*m*/,
    Number*       g
-   )
+)
 {
    for( Index i = 0; i < N_ - 2; i++ )
    {
       g[i] = 3. * pow(x[i + 1], 3.) + 2. * x[i + 2] - 5. + sin(x[i + 1] - x[i + 2]) * sin(x[i + 1] + x[i + 2])
-         + 4. * x[i + 1] - x[i] * exp(x[i] - x[i + 1]) - 3.;
+             + 4. * x[i + 1] - x[i] * exp(x[i] - x[i + 1]) - 3.;
    }
 
    return true;
@@ -181,7 +181,7 @@ bool LuksanVlcek1::eval_jac_g(
    Index*        iRow,
    Index*        jCol,
    Number*       values
-   )
+)
 {
    if( values == NULL )
    {
@@ -213,11 +213,11 @@ bool LuksanVlcek1::eval_jac_g(
          ijac++;
          // x[i+1]
          values[ijac] = 9. * x[i + 1] * x[i + 1] + cos(x[i + 1] - x[i + 2]) * sin(x[i + 1] + x[i + 2])
-            + sin(x[i + 1] - x[i + 2]) * cos(x[i + 1] + x[i + 2]) + 4. + x[i] * exp(x[i] - x[i + 1]);
+                        + sin(x[i + 1] - x[i + 2]) * cos(x[i + 1] + x[i + 2]) + 4. + x[i] * exp(x[i] - x[i + 1]);
          ijac++;
          // x[i+2]
          values[ijac] = 2. - cos(x[i + 1] - x[i + 2]) * sin(x[i + 1] + x[i + 2])
-            + sin(x[i + 1] - x[i + 2]) * cos(x[i + 1] + x[i + 2]);
+                        + sin(x[i + 1] - x[i + 2]) * cos(x[i + 1] + x[i + 2]);
          ijac++;
       }
    }
@@ -238,7 +238,7 @@ bool LuksanVlcek1::eval_h(
    Index*        iRow,
    Index*        jCol,
    Number*       values
-   )
+)
 {
    if( values == NULL )
    {
@@ -255,7 +255,8 @@ bool LuksanVlcek1::eval_h(
             ihes++;
          }
       }
-      DBG_ASSERT(ihes == nele_hess);  (void) nele_hess;
+      DBG_ASSERT(ihes == nele_hess);
+      (void) nele_hess;
    }
    else
    {
@@ -282,15 +283,15 @@ bool LuksanVlcek1::eval_h(
             if( i < N_ - 1 )
             {
                values[ihes] += lambda[i - 1]
-                  * (18. * x[i] - 2. * sin(x[i] - x[i + 1]) * sin(x[i] + x[i + 1])
-                     + 2. * cos(x[i] - x[i + 1]) * cos(x[i] + x[i + 1]) - x[i - 1] * exp(x[i - 1] - x[i]));
+                               * (18. * x[i] - 2. * sin(x[i] - x[i + 1]) * sin(x[i] + x[i + 1])
+                                  + 2. * cos(x[i] - x[i + 1]) * cos(x[i] + x[i + 1]) - x[i - 1] * exp(x[i - 1] - x[i]));
             }
          }
          if( i > 1 )
          {
             // x[i+2]x[i+2]
             values[ihes] += lambda[i - 2]
-               * (-2. * sin(x[i - 1] - x[i]) * sin(x[i - 1] + x[i]) - 2. * cos(x[i - 1] - x[i]) * cos(x[i - 1] + x[i]));
+                            * (-2. * sin(x[i - 1] - x[i]) * sin(x[i - 1] + x[i]) - 2. * cos(x[i - 1] - x[i]) * cos(x[i - 1] + x[i]));
          }
          ihes++;
 
@@ -315,7 +316,8 @@ bool LuksanVlcek1::eval_h(
              */
             ihes++;
          }
-      } DBG_ASSERT(ihes == nele_hess);
+      }
+      DBG_ASSERT(ihes == nele_hess);
    }
 
    return true;
@@ -333,5 +335,5 @@ void LuksanVlcek1::finalize_solution(
    Number                     /*obj_value*/,
    const IpoptData*           /*ip_data*/,
    IpoptCalculatedQuantities* /*ip_cq*/
-   )
+)
 { }

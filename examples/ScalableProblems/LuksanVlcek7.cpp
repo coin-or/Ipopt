@@ -14,7 +14,7 @@ using namespace Ipopt;
 LuksanVlcek7::LuksanVlcek7(
    Number g_l,
    Number g_u
-   )
+)
 {
    g_l_ = g_l;
    g_u_ = g_u;
@@ -22,7 +22,7 @@ LuksanVlcek7::LuksanVlcek7(
 
 bool LuksanVlcek7::InitializeProblem(
    Index N
-   )
+)
 {
    N_ = N;
    if( N_ < 3 )
@@ -40,7 +40,7 @@ bool LuksanVlcek7::get_nlp_info(
    Index&          nnz_jac_g,
    Index&          nnz_h_lag,
    IndexStyleEnum& index_style
-   )
+)
 {
    // The problem described in LuksanVlcek7.hpp has 4 variables, x[0] through x[3]
    n = N_ + 2;
@@ -65,7 +65,7 @@ bool LuksanVlcek7::get_bounds_info(
    Index   m,
    Number* g_l,
    Number* g_u
-   )
+)
 {
    // none of the variables have bounds
    for( Index i = 0; i < n; i++ )
@@ -95,7 +95,7 @@ bool LuksanVlcek7::get_starting_point(
    Index   /*m*/,
    bool    init_lambda,
    Number* /*lambda*/
-   )
+)
 {
    if( !init_x || init_z || init_lambda )
    {
@@ -117,7 +117,7 @@ bool LuksanVlcek7::eval_f(
    const Number* x,
    bool          /*new_x*/,
    Number&       obj_value
-   )
+)
 {
    obj_value = 0.;
    for( Index i = 1; i <= N_; i++ )
@@ -134,7 +134,7 @@ bool LuksanVlcek7::eval_grad_f(
    const Number* x,
    bool          /*new_x*/,
    Number*       grad_f
-   )
+)
 {
    grad_f[0] = 0.;
    grad_f[1] = 0.;
@@ -155,12 +155,12 @@ bool LuksanVlcek7::eval_g(
    bool          /*new_x*/,
    Index         /*m*/,
    Number*       g
-   )
+)
 {
    g[0] = 4. * (x[1] - x[2] * x[2]) + x[2] - x[3] * x[3];
    g[1] = 8. * x[2] * (x[2] * x[2] - x[1]) - 2. * (1. - x[2]) + 4. * (x[2] - x[3] * x[3]) + x[3] - x[4] * x[4];
    g[2] = 8. * x[N_ - 1] * (x[N_ - 1] * x[N_ - 1] - x[N_ - 2]) - 2. * (1. - x[N_ - 1])
-      + 4. * (x[N_ - 1] - x[N_] * x[N_]) + x[N_ - 2] * x[N_ - 2] - x[N_ - 3];
+          + 4. * (x[N_ - 1] - x[N_] * x[N_]) + x[N_ - 2] * x[N_ - 2] - x[N_ - 3];
    g[3] = 8. * x[N_] * (x[N_] * x[N_] - x[N_ - 1]) - 2. * (1. - x[N_]) + x[N_ - 1] * x[N_ - 1] - x[N_ - 2];
    return true;
 }
@@ -175,7 +175,7 @@ bool LuksanVlcek7::eval_jac_g(
    Index*        iRow,
    Index*        jCol,
    Number*       values
-   )
+)
 {
    if( values == NULL )
    {
@@ -232,7 +232,8 @@ bool LuksanVlcek7::eval_jac_g(
       jCol[ijac] = N_;
       ijac++;
 
-      DBG_ASSERT(ijac == nele_jac);  (void) nele_jac;
+      DBG_ASSERT(ijac == nele_jac);
+      (void) nele_jac;
    }
    else
    {
@@ -289,7 +290,7 @@ bool LuksanVlcek7::eval_h(
    Index*        iRow,
    Index*        jCol,
    Number*       values
-   )
+)
 {
    if( values == NULL )
    {
@@ -356,5 +357,5 @@ void LuksanVlcek7::finalize_solution(
    Number                     /*obj_value*/,
    const IpoptData*           /*ip_data*/,
    IpoptCalculatedQuantities* /*ip_cq*/
-   )
+)
 { }

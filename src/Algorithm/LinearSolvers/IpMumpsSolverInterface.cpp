@@ -226,8 +226,10 @@ ESymSolverStatus MumpsSolverInterface::MultiSolve(
    DBG_START_METH("MumpsSolverInterface::MultiSolve", dbg_verbosity);
    DBG_ASSERT(!check_NegEVals || ProvidesInertia());
    DBG_ASSERT(initialized_);
-   DBG_ASSERT(((DMUMPS_STRUC_C*)mumps_ptr_)->irn == ia);  (void) ia;
-   DBG_ASSERT(((DMUMPS_STRUC_C*)mumps_ptr_)->jcn == ja);  (void) ja;
+   DBG_ASSERT(((DMUMPS_STRUC_C*)mumps_ptr_)->irn == ia);
+   (void) ia;
+   DBG_ASSERT(((DMUMPS_STRUC_C*)mumps_ptr_)->jcn == ja);
+   (void) ja;
 
    if( pivtol_changed_ )
    {

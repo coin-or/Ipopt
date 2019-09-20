@@ -36,7 +36,7 @@ Bool eval_f(
    Bool        new_x,
    Number*     obj_value,
    UserDataPtr user_data
-   );
+);
 
 Bool eval_grad_f(
    Index       n,
@@ -44,7 +44,7 @@ Bool eval_grad_f(
    Bool        new_x,
    Number*     grad_f,
    UserDataPtr user_data
-   );
+);
 
 Bool eval_g(
    Index       n,
@@ -53,7 +53,7 @@ Bool eval_g(
    Index       m,
    Number*     g,
    UserDataPtr user_data
-   );
+);
 
 Bool eval_jac_g(
    Index       n,
@@ -65,7 +65,7 @@ Bool eval_jac_g(
    Index*      jCol,
    Number*     values,
    UserDataPtr user_data
-   );
+);
 
 Bool eval_h(
    Index       n,
@@ -80,7 +80,7 @@ Bool eval_h(
    Index*      jCol,
    Number*     values,
    UserDataPtr user_data
-   );
+);
 
 /* Structure to communicate problem data */
 struct _ProblemData
@@ -164,7 +164,7 @@ int main()
 
    /* create the IpoptProblem */
    nlp = CreateIpoptProblem(n, x_L, x_U, m, g_L, g_U, nele_jac, nele_hess, index_style, &eval_f, &eval_g, &eval_grad_f,
-      &eval_jac_g, &eval_h);
+                            &eval_jac_g, &eval_h);
 
    /* We can free the memory now - the values for the bounds have been
     * copied internally in CreateIpoptProblem.
@@ -191,9 +191,9 @@ int main()
    /*#define skip_me */
 #ifdef skip_me
    /* If checking derivatives, if is useful to choose different values */
-   for (i=0; i<n; i++)
+   for (i = 0; i < n; i++)
    {
-      x[i] = -0.5+0.1*i/n;
+      x[i] = -0.5 + 0.1 * i / n;
    }
 #endif
 
@@ -246,7 +246,7 @@ Bool eval_f(
    Bool        new_x,
    Number*     obj_value,
    UserDataPtr user_data
-   )
+)
 {
    int i;
    ProblemData PD = (ProblemData) user_data;
@@ -267,7 +267,7 @@ Bool eval_grad_f(
    Bool        new_x,
    Number*     grad_f,
    UserDataPtr user_data
-   )
+)
 {
    int i;
    ProblemData PD = (ProblemData) user_data;
@@ -288,7 +288,7 @@ Bool eval_g(
    Index       m,
    Number*     g,
    UserDataPtr user_data
-   )
+)
 {
    int j;
    ProblemData PD = (ProblemData) user_data;
@@ -314,7 +314,7 @@ Bool eval_jac_g(
    Index*      jCol,
    Number*     values,
    UserDataPtr user_data
-   )
+)
 {
    int j, inz;
    ProblemData PD = (ProblemData) user_data;
@@ -374,7 +374,7 @@ Bool eval_h(
    Index*      jCol,
    Number*     values,
    UserDataPtr user_data
-   )
+)
 {
    int i, inz;
    ProblemData PD = (ProblemData) user_data;

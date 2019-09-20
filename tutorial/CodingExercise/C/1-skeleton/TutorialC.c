@@ -36,7 +36,7 @@ Bool eval_f(
    Bool        new_x,
    Number*     obj_value,
    UserDataPtr user_data
-   );
+);
 
 Bool eval_grad_f(
    Index       n,
@@ -44,7 +44,7 @@ Bool eval_grad_f(
    Bool        new_x,
    Number*     grad_f,
    UserDataPtr user_data
-   );
+);
 
 Bool eval_g(
    Index       n,
@@ -53,7 +53,7 @@ Bool eval_g(
    Index       m,
    Number*     g,
    UserDataPtr user_data
-   );
+);
 
 Bool eval_jac_g(
    Index       n,
@@ -65,7 +65,7 @@ Bool eval_jac_g(
    Index*      jCol,
    Number*     values,
    UserDataPtr user_data
-   );
+);
 
 Bool eval_h(
    Index       n,
@@ -80,7 +80,7 @@ Bool eval_h(
    Index*      jCol,
    Number*     values,
    UserDataPtr user_data
-   );
+);
 
 /* Structure to communicate problem data */
 struct _ProblemData
@@ -144,19 +144,19 @@ int main()
     */
    nele_jac = FILLME
 
-   /* Number of nonzeros in the Hessian of the Lagrangian (lower or
-    * upper triangual part only)
-    * We have the full diagonal, and the first off-diagonal except for
-    * the first and last variable.
-    */
-   nele_hess = FILLME
+              /* Number of nonzeros in the Hessian of the Lagrangian (lower or
+               * upper triangual part only)
+               * We have the full diagonal, and the first off-diagonal except for
+               * the first and last variable.
+               */
+              nele_hess = FILLME
 
-   /* indexing style for matrices */
-   index_style = FILLME; /* C-style; start counting of rows and column indices at 0 */
+                          /* indexing style for matrices */
+                          index_style = FILLME; /* C-style; start counting of rows and column indices at 0 */
 
    /* create the IpoptProblem */
    nlp = CreateIpoptProblem(n, x_L, x_U, m, g_L, g_U, nele_jac, nele_hess, index_style, &eval_f, &eval_g, &eval_grad_f,
-      &eval_jac_g, &eval_h);
+                            &eval_jac_g, &eval_h);
 
    /* We can free the memory now - the values for the bounds have been
     * copied internally in CreateIpoptProblem
@@ -227,7 +227,7 @@ Bool eval_f(
    Bool        new_x,
    Number*     obj_value,
    UserDataPtr user_data
-   )
+)
 {
    int i;
    ProblemData PD = (ProblemData) user_data;
@@ -242,7 +242,7 @@ Bool eval_grad_f(
    Bool        new_x,
    Number*     grad_f,
    UserDataPtr user_data
-   )
+)
 {
    int i;
    ProblemData PD = (ProblemData) user_data;
@@ -258,7 +258,7 @@ Bool eval_g(
    Index       m,
    Number*     g,
    UserDataPtr user_data
-   )
+)
 {
    int j;
    ProblemData PD = (ProblemData) user_data;
@@ -277,7 +277,7 @@ Bool eval_jac_g(
    Index*      jCol,
    Number*     values,
    UserDataPtr user_data
-   )
+)
 {
    int j, inz;
    ProblemData PD = (ProblemData) user_data;
@@ -299,7 +299,7 @@ Bool eval_h(
    Index*      jCol,
    Number*     values,
    UserDataPtr user_data
-   )
+)
 {
    int i, inz;
    ProblemData PD = (ProblemData) user_data;

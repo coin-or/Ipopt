@@ -30,14 +30,14 @@
 extern "C"
 {
 #ifdef HAVE_PARDISO_MKL
-   void PARDISO_FUNC(pardisoinit,PARDISOINIT)(
+   void PARDISO_FUNC(pardisoinit, PARDISOINIT)(
       void*         PT,
       const ipfint* MTYPE,
       ipfint*       IPARM
    );
 #else
 // The following is a fix to allow linking with Pardiso library under Windows
-   void PARDISO_FUNC(pardisoinit,PARDISOINIT)(
+   void PARDISO_FUNC(pardisoinit, PARDISOINIT)(
       void*         PT,
       const ipfint* MTYPE,
       const ipfint* SOLVER,
@@ -47,7 +47,7 @@ extern "C"
    );
 #endif
 
-   void PARDISO_FUNC(pardiso,PARDISO)(
+   void PARDISO_FUNC(pardiso, PARDISO)(
       void**        PT,
       const ipfint* MAXFCT,
       const ipfint* MNUM,
@@ -68,7 +68,7 @@ extern "C"
    );
 
 #ifdef PARDISO_MATCHING_PREPROCESS
-   void PARDISO_FUNC(smat_reordering_pardiso_wsmp,SMAT_REORDERING_PARDISO_WSMP)(
+   void PARDISO_FUNC(smat_reordering_pardiso_wsmp, SMAT_REORDERING_PARDISO_WSMP)(
       const ipfint* N,
       const ipfint* ia,
       const ipfint* ja,
@@ -128,8 +128,8 @@ PardisoSolverInterface::~PardisoSolverInterface()
       ipfint ERROR;
       ipfint idmy;
       double ddmy;
-      PARDISO_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
-                   &ddmy, &ERROR, DPARM_);
+      PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
+                                     &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
    }
 
@@ -361,8 +361,8 @@ bool PardisoSolverInterface::InitializeImpl(
       ipfint ERROR;
       ipfint idmy;
       double ddmy;
-      PARDISO_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
-                   &ddmy, &ERROR, DPARM_);
+      PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
+                                     &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
    }
 
@@ -399,9 +399,9 @@ bool PardisoSolverInterface::InitializeImpl(
    ipfint ERROR = 0;
    ipfint SOLVER = 0; // initialize only direct solver
 
-   PARDISO_FUNC(pardisoinit,PARDISOINIT)(PT_, &MTYPE_, &SOLVER, IPARM_, DPARM_, &ERROR);
+   PARDISO_FUNC(pardisoinit, PARDISOINIT)(PT_, &MTYPE_, &SOLVER, IPARM_, DPARM_, &ERROR);
 #else
-   PARDISO_FUNC(pardisoinit,PARDISOINIT)(PT_, &MTYPE_, IPARM_);
+   PARDISO_FUNC(pardisoinit, PARDISOINIT)(PT_, &MTYPE_, IPARM_);
 #endif
 
    // Set some parameters for Pardiso
@@ -763,7 +763,7 @@ ESymSolverStatus PardisoSolverInterface::Factorization(
          scale2 = new double[N];
          ipfint* tmp2_ = new ipfint[N];
 
-         PARDISO_FUNC(smat_reordering_pardiso_wsmp,SMAT_REORDERING_PARDISO_WSMP)(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp2_, 0);
+         PARDISO_FUNC(smat_reordering_pardiso_wsmp, SMAT_REORDERING_PARDISO_WSMP)(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp2_, 0);
 
          delete[] tmp2_;
 
@@ -771,13 +771,13 @@ ESymSolverStatus PardisoSolverInterface::Factorization(
 
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                         "Calling Pardiso for symbolic factorization.\n");
-         PARDISO_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+         PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
 #ifdef PARDISO_MATCHING_PREPROCESS
-                      &PHASE, &N, a2_, ia2, ja2, &PERM,
+                                        &PHASE, &N, a2_, ia2, ja2, &PERM,
 #else
-                      &PHASE, &N, a_, ia, ja, &PERM,
+                                        &PHASE, &N, a_, ia, ja, &PERM,
 #endif
-                      &NRHS, IPARM_, &MSGLVL_, &B, &X, &ERROR, DPARM_);
+                                        &NRHS, IPARM_, &MSGLVL_, &B, &X, &ERROR, DPARM_);
          if( HaveIpData() )
          {
             IpData().TimingStats().LinearSystemSymbolicFactorization().End();
@@ -831,17 +831,17 @@ ESymSolverStatus PardisoSolverInterface::Factorization(
 
 #ifdef PARDISO_MATCHING_PREPROCESS
       ipfint* tmp3_ = new ipfint[N];
-      PARDISO_FUNC(smat_reordering_pardiso_wsmp,SMAT_REORDERING_PARDISO_WSMP)(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp3_, 1);
+      PARDISO_FUNC(smat_reordering_pardiso_wsmp, SMAT_REORDERING_PARDISO_WSMP)(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp3_, 1);
       delete[] tmp3_;
 #endif
 
-      PARDISO_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+      PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
 #ifdef PARDISO_MATCHING_PREPROCESS
-                   &PHASE, &N, a2_, ia2, ja2, &PERM,
+                                     &PHASE, &N, a2_, ia2, ja2, &PERM,
 #else
-                   &PHASE, &N, a_, ia, ja, &PERM,
+                                     &PHASE, &N, a_, ia, ja, &PERM,
 #endif
-                   &NRHS, IPARM_, &MSGLVL_, &B, &X, &ERROR, DPARM_);
+                                     &NRHS, IPARM_, &MSGLVL_, &B, &X, &ERROR, DPARM_);
       if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemFactorization().End();
@@ -989,10 +989,10 @@ ESymSolverStatus PardisoSolverInterface::Solve(
       {
          rhs_vals[perm2[i]] = scale2[i] * ORIG_RHS[ i ];
       }
-      PARDISO_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
-                   &PHASE, &N, a2_, ia2, ja2, &PERM,
-                   &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
-                   &ERROR, DPARM_);
+      PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+                                     &PHASE, &N, a2_, ia2, ja2, &PERM,
+                                     &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
+                                     &ERROR, DPARM_);
       for (int i = 0; i < N; i++)
       {
          X[i] = rhs_vals[ perm2[i]];
@@ -1007,8 +1007,8 @@ ESymSolverStatus PardisoSolverInterface::Solve(
       {
          rhs_vals[i] = ORIG_RHS[i];
       }
-      PARDISO_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, a_, ia, ja, &PERM, &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
-                   &ERROR, DPARM_);
+      PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, a_, ia, ja, &PERM, &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
+                                     &ERROR, DPARM_);
 #endif
 
       if( ERROR <= -100 && ERROR >= -102 )

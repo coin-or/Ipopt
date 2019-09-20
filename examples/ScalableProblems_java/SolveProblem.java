@@ -29,7 +29,9 @@ public class SolveProblem
          System.out.println("  - ProblemName is one of:");
          // list all problems
          for( Scalable s : list.values() )
+         {
             System.out.println("       " + s);
+         }
 
          return;
       }
@@ -47,7 +49,9 @@ public class SolveProblem
       }
 
       if( !p.initialize(n) )
+      {
          return;
+      }
 
       p.create();
 

@@ -25,7 +25,7 @@ IPOPTLIB_EXPORT int LSL_loadPardisoLib(
    const char* libname,
    char*       msgbuf,
    int         msglen
-   );
+);
 
 /** Unloads a loaded Pardiso library.
  * @return Zero on success, nonzero on failure.

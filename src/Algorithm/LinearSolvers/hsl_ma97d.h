@@ -93,7 +93,7 @@ struct ma97_info
 /** Set default values of control */
 void ma97_default_control_d(
    struct ma97_control_d* control
-   );
+);
 
 /** Perform symbolic analysis of matrix (sparse column entry) */
 void ma97_analyse_d(
@@ -106,7 +106,7 @@ void ma97_analyse_d(
    const struct ma97_control_d* control,
    struct ma97_info_d*          info,
    int                          order[]
-   );
+);
 
 /** Perform symbolic analysis of matrix (coordinate entry) */
 void ma97_analyse_coord_d(
@@ -119,7 +119,7 @@ void ma97_analyse_coord_d(
    const struct ma97_control_d* control,
    struct ma97_info_d*          info,
    int                          order[]
-   );
+);
 
 /** Perform numerical factorization, following call to ma97_analyse */
 void ma97_factor_d(
@@ -132,7 +132,7 @@ void ma97_factor_d(
    const struct ma97_control_d* control,
    struct ma97_info_d*          info,
    ma97realtype_d_              scale[]
-   );
+);
 
 /** Perform numerical factorization and solve, following call to ma97_analyse */
 void ma97_factor_solve_d(
@@ -148,7 +148,7 @@ void ma97_factor_solve_d(
    const struct ma97_control_d* control,
    struct ma97_info_d*          info,
    ma97realtype_d_              scale[]
-   );
+);
 
 /** Perform forward and back substitutions, following call to ma97_factor */
 void ma97_solve_d(
@@ -160,23 +160,23 @@ void ma97_solve_d(
    void**                       fkeep,
    const struct ma97_control_d* control,
    struct ma97_info_d*          info
-   );
+);
 
 /** Free memory in akeep */
 void ma97_free_akeep_d(
    void** akeep
-   );
+);
 
 /** Free memory in fkeep */
 void ma97_free_fkeep_d(
    void** fkeep
-   );
+);
 
 /** Free memory in akeep and fkeep */
 void ma97_finalise_d(
    void** akeep,
    void** fkeep
-   );
+);
 
 /** Return diagonal entries of L */
 void ma97_enquire_posdef_d(
@@ -185,7 +185,7 @@ void ma97_enquire_posdef_d(
    const struct ma97_control* control,
    struct ma97_info*          info,
    ma97realtype_d_            d[]
-   );
+);
 
 /** Return diagonal, subdiagonal and/or pivot order of D */
 void ma97_enquire_indef_d(
@@ -195,7 +195,7 @@ void ma97_enquire_indef_d(
    struct ma97_info*          info,
    int*                       piv_order,
    ma97pkgtype_d_*            d
-   );
+);
 
 /** Alter diagonal and subdiagonal of D */
 void ma97_alter_d(
@@ -204,7 +204,7 @@ void ma97_alter_d(
    void**                     fkeep,
    const struct ma97_control* control,
    struct ma97_info*          info
-   );
+);
 
 /** Fredholm alternative for singular systems */
 void ma97_solve_fredholm_d(
@@ -216,7 +216,7 @@ void ma97_solve_fredholm_d(
    void**                     fkeep,
    const struct ma97_control* control,
    struct ma97_info*          info
-   );
+);
 
 /** Form (S^{-1}PL) X or (S^{-1}PL)^T X */
 void ma97_lmultiply_d(
@@ -230,7 +230,7 @@ void ma97_lmultiply_d(
    void**                       fkeep,
    const struct ma97_control_d* control,
    struct ma97_info_d*          info
-   );
+);
 
 /** Perform a sparse forward solve */
 void ma97_sparse_fwd_solve_d(
@@ -245,6 +245,6 @@ void ma97_sparse_fwd_solve_d(
    void**                       fkeep,
    const struct ma97_control_d* control,
    struct ma97_info_d*          info
-   );
+);
 
 #endif

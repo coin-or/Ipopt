@@ -43,7 +43,7 @@ public:
       Index&          nnz_jac_g,
       Index&          nnz_h_lag,
       IndexStyleEnum& index_style
-      );
+   );
 
    /** Method to return the bounds for my problem */
    virtual bool get_bounds_info(
@@ -53,7 +53,7 @@ public:
       Index   m,
       Number* g_l,
       Number* g_u
-      );
+   );
 
    /** Method to return the starting point for the algorithm */
    virtual bool get_starting_point(
@@ -66,7 +66,7 @@ public:
       Index   m,
       bool    init_lambda,
       Number* lambda
-      );
+   );
 
    /** Method to return the objective value */
    virtual bool eval_f(
@@ -74,7 +74,7 @@ public:
       const Number* x,
       bool          new_x,
       Number&       obj_value
-      );
+   );
 
    /** Method to return the gradient of the objective */
    virtual bool eval_grad_f(
@@ -82,7 +82,7 @@ public:
       const Number* x,
       bool          new_x,
       Number*       grad_f
-      );
+   );
 
    /** Method to return the constraint residuals */
    virtual bool eval_g(
@@ -91,7 +91,7 @@ public:
       bool          new_x,
       Index         m,
       Number*       g
-      );
+   );
 
    /** Method to return:
     *   1) The structure of the Jacobian (if "values" is NULL)
@@ -106,7 +106,7 @@ public:
       Index*        iRow,
       Index*        jCol,
       Number*       values
-      );
+   );
 
    /** Method to return:
     *   1) The structure of the Hessian of the Lagrangian (if "values" is NULL)
@@ -124,7 +124,7 @@ public:
       Index*        iRow,
       Index*        jCol,
       Number*       values
-      );
+   );
 
    /** Method for returning scaling parameters */
    virtual bool get_scaling_parameters(
@@ -135,7 +135,7 @@ public:
       bool&   use_g_scaling,
       Index   m,
       Number* g_scaling
-      );
+   );
 
    /** This method is called when the algorithm is complete so the TNLP can store/write the solution */
    virtual void finalize_solution(
@@ -150,7 +150,7 @@ public:
       Number                     obj_value,
       const IpoptData*           ip_data,
       IpoptCalculatedQuantities* ip_cq
-      );
+   );
    //@}
 
 protected:
@@ -170,7 +170,7 @@ protected:
       Number d_const,
       Number B,
       Number C
-      );
+   );
 
    /**@name Functions that defines a particular instance. */
    //@{
@@ -179,7 +179,7 @@ protected:
       Number x1,
       Number x2,
       Number x3
-      ) const = 0;
+   ) const = 0;
    //@}
 
 private:
@@ -196,11 +196,11 @@ private:
    //@{
    MittelmannBndryCntrlDiriBase3D_27(
       const MittelmannBndryCntrlDiriBase3D_27&
-      );
+   );
 
    MittelmannBndryCntrlDiriBase3D_27& operator=(
       const MittelmannBndryCntrlDiriBase3D_27&
-      );
+   );
    //@}
 
    /**@name Problem specification */
@@ -238,7 +238,7 @@ private:
       Index i,
       Index j,
       Index k
-      ) const
+   ) const
    {
       return k + (N_ + 2) * j + (N_ + 2) * (N_ + 2) * i;
    }
@@ -250,7 +250,7 @@ private:
       Index i,
       Index j,
       Index k
-      ) const
+   ) const
    {
       return (k - 1) + N_ * (j - 1) + N_ * N_ * (i - 1);
    }
@@ -258,7 +258,7 @@ private:
    /** Compute the grid coordinate for given index in x1 direction */
    inline Number x1_grid(
       Index i
-      ) const
+   ) const
    {
       return h_ * (Number) i;
    }
@@ -266,7 +266,7 @@ private:
    /** Compute the grid coordinate for given index in x2 direction */
    inline Number x2_grid(
       Index i
-      ) const
+   ) const
    {
       return h_ * (Number) i;
    }
@@ -274,7 +274,7 @@ private:
    /** Compute the grid coordinate for given index in x3 direction */
    inline Number x3_grid(
       Index i
-      ) const
+   ) const
    {
       return h_ * (Number) i;
    }
@@ -282,7 +282,7 @@ private:
    /** value of penalty function term */
    inline Number PenObj(
       Number t
-      ) const
+   ) const
    {
       if( B_ == 0. )
       {
@@ -308,7 +308,7 @@ private:
    /** first derivative of penalty function term */
    inline Number PenObj_1(
       Number t
-      ) const
+   ) const
    {
       if( B_ == 0. )
       {
@@ -334,7 +334,7 @@ private:
    /** second derivative of penalty function term */
    inline Number PenObj_2(
       Number t
-      ) const
+   ) const
    {
       if( B_ == 0. )
       {
@@ -379,7 +379,7 @@ public:
 
    virtual bool InitializeProblem(
       Index N
-      )
+   )
    {
       if( N < 1 )
       {
@@ -404,7 +404,7 @@ protected:
       Number x1,
       Number x2,
       Number /*x3*/
-      ) const
+   ) const
    {
       return 3. + 5. * (x1 * (x1 - 1.) * x2 * (x2 - 1.));
    }
@@ -414,11 +414,11 @@ private:
    //@{
    MittelmannBndryCntrlDiri3D_27(
       const MittelmannBndryCntrlDiri3D_27&
-      );
+   );
 
    MittelmannBndryCntrlDiri3D_27& operator=(
       const MittelmannBndryCntrlDiri3D_27&
-      );
+   );
    //@}
 };
 
@@ -434,7 +434,7 @@ public:
 
    virtual bool InitializeProblem(
       Index N
-      )
+   )
    {
       if( N < 1 )
       {
@@ -459,7 +459,7 @@ protected:
       Number x1,
       Number x2,
       Number /*x3*/
-      ) const
+   ) const
    {
       return 3. + 5. * (x1 * (x1 - 1.) * x2 * (x2 - 1.));
    }
@@ -469,11 +469,11 @@ private:
    //@{
    MittelmannBndryCntrlDiri3D_27BT(
       const MittelmannBndryCntrlDiri3D_27BT&
-      );
+   );
 
    MittelmannBndryCntrlDiri3D_27BT& operator=(
       const MittelmannBndryCntrlDiri3D_27BT&
-      );
+   );
    //@}
 };
 

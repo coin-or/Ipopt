@@ -37,7 +37,7 @@ public:
       Index&          nnz_jac_g,
       Index&          nnz_h_lag,
       IndexStyleEnum& index_style
-      );
+   );
 
    /** Method to return the bounds for my problem */
    virtual bool get_bounds_info(
@@ -47,7 +47,7 @@ public:
       Index   m,
       Number* g_l,
       Number* g_u
-      );
+   );
 
    /** Method to return the starting point for the algorithm */
    virtual bool get_starting_point(
@@ -60,7 +60,7 @@ public:
       Index   m,
       bool    init_lambda,
       Number* lambda
-      );
+   );
 
    /** Method to return the objective value */
    virtual bool eval_f(
@@ -68,7 +68,7 @@ public:
       const Number* x,
       bool          new_x,
       Number&       obj_value
-      );
+   );
 
    /** Method to return the gradient of the objective */
    virtual bool eval_grad_f(
@@ -76,7 +76,7 @@ public:
       const Number* x,
       bool          new_x,
       Number*       grad_f
-      );
+   );
 
    /** Method to return the constraint residuals */
    virtual bool eval_g(
@@ -85,7 +85,7 @@ public:
       bool          new_x,
       Index         m,
       Number*       g
-      );
+   );
 
    /** Method to return:
     *   1) The structure of the Jacobian (if "values" is NULL)
@@ -100,7 +100,7 @@ public:
       Index*        iRow,
       Index*        jCol,
       Number*       values
-      );
+   );
 
    /** Method to return:
     *   1) The structure of the Hessian of the Lagrangian (if "values" is NULL)
@@ -118,7 +118,7 @@ public:
       Index*        iRow,
       Index*        jCol,
       Number*       values
-      );
+   );
 
    /** Method for returning scaling parameters */
    virtual bool get_scaling_parameters(
@@ -129,7 +129,7 @@ public:
       bool&   use_g_scaling,
       Index   m,
       Number* g_scaling
-      );
+   );
 
    /** This method is called when the algorithm is complete so the TNLP can store/write the solution */
    virtual void finalize_solution(
@@ -144,12 +144,12 @@ public:
       Number                     obj_value,
       const IpoptData*           ip_data,
       IpoptCalculatedQuantities* ip_cq
-      );
+   );
    //@}
 
    virtual bool InitializeProblem(
       Index N
-      );
+   );
 
 private:
    /**@name Methods to block default compiler methods.
@@ -165,11 +165,11 @@ private:
    //@{
    MittelmannParaCntrlBase(
       const MittelmannParaCntrlBase<T>&
-      );
+   );
 
    MittelmannParaCntrlBase& operator=(
       const MittelmannParaCntrlBase<T>&
-      );
+   );
    //@}
 
    /**@name Problem specification */
@@ -213,14 +213,14 @@ private:
    inline Index y_index(
       Index jx,
       Index it
-      ) const
+   ) const
    {
       return jx + (Nx_ + 1) * it;
    }
 
    inline Index u_index(
       Index it
-      ) const
+   ) const
    {
       return (Nt_ + 1) * (Nx_ + 1) + it - 1;
    }
@@ -228,7 +228,7 @@ private:
    /** Compute the grid coordinate for given index in t direction */
    inline Number t_grid(
       Index i
-      ) const
+   ) const
    {
       return dt_ * (Number) i;
    }
@@ -236,7 +236,7 @@ private:
    /** Compute the grid coordinate for given index in x direction */
    inline Number x_grid(
       Index j
-      ) const
+   ) const
    {
       return dx_ * (Number) j;
    }
@@ -261,7 +261,7 @@ MittelmannParaCntrlBase<T>::~MittelmannParaCntrlBase()
 template<class T>
 bool MittelmannParaCntrlBase<T>::InitializeProblem(
    Index N
-   )
+)
 {
    typename T::ProblemSpecs p;
 
@@ -310,7 +310,7 @@ bool MittelmannParaCntrlBase<T>::get_nlp_info(
    Index&          nnz_jac_g,
    Index&          nnz_h_lag,
    IndexStyleEnum& index_style
-   )
+)
 {
    typename T::ProblemSpecs p;
 
@@ -339,7 +339,7 @@ bool MittelmannParaCntrlBase<T>::get_bounds_info(
    Index   /*m*/,
    Number* g_l,
    Number* g_u
-   )
+)
 {
    typename T::ProblemSpecs p;
 
@@ -401,11 +401,14 @@ bool MittelmannParaCntrlBase<T>::get_starting_point(
    Index   /*m*/,
    bool    init_lambda,
    Number* /*lambda*/
-   )
+)
 {
-   DBG_ASSERT(init_x);  (void) init_x;
-   DBG_ASSERT(!init_z);  (void) init_z;
-   DBG_ASSERT(!init_lambda);  (void) init_lambda;
+   DBG_ASSERT(init_x);
+   (void) init_x;
+   DBG_ASSERT(!init_z);
+   (void) init_z;
+   DBG_ASSERT(!init_lambda);
+   (void) init_lambda;
 
    // Set starting point for y
    for( Index jx = 0; jx <= Nx_; jx++ )
@@ -433,7 +436,7 @@ bool MittelmannParaCntrlBase<T>::get_scaling_parameters(
    bool&   use_g_scaling,
    Index   /*m*/,
    Number* /*g_scaling*/
-   )
+)
 {
    obj_scaling = 1. / Min(dx_, dt_);
    use_x_scaling = false;
@@ -447,7 +450,7 @@ bool MittelmannParaCntrlBase<T>::eval_f(
    const Number* x,
    bool          /*new_x*/,
    Number&       obj_value
-   )
+)
 {
    // Deviation of y from target
    Number a = x[y_index(0, Nt_)] - y_T_[0];
@@ -490,7 +493,7 @@ bool MittelmannParaCntrlBase<T>::eval_grad_f(
    const Number* x,
    bool          /*new_x*/,
    Number*       grad_f
-   )
+)
 {
    // First set all y entries to zero
    for( Index jx = 0; jx <= Nx_; jx++ )
@@ -533,7 +536,7 @@ bool MittelmannParaCntrlBase<T>::eval_g(
    bool          /*new_x*/,
    Index         m,
    Number*       g
-   )
+)
 {
    typename T::ProblemSpecs p;
 
@@ -545,9 +548,9 @@ bool MittelmannParaCntrlBase<T>::eval_g(
       for( Index it = 0; it < Nt_; it++ )
       {
          g[ig] = (x[y_index(jx, it)] - x[y_index(jx, it + 1)]) / dt_
-            + f
-               * (x[y_index(jx - 1, it)] - 2. * x[y_index(jx, it)] + x[y_index(jx + 1, it)] + x[y_index(jx - 1, it + 1)]
-                  - 2. * x[y_index(jx, it + 1)] + x[y_index(jx + 1, it + 1)]);
+                 + f
+                 * (x[y_index(jx - 1, it)] - 2. * x[y_index(jx, it)] + x[y_index(jx + 1, it)] + x[y_index(jx - 1, it + 1)]
+                    - 2. * x[y_index(jx, it + 1)] + x[y_index(jx + 1, it + 1)]);
          ig++;
       }
    }
@@ -562,11 +565,12 @@ bool MittelmannParaCntrlBase<T>::eval_g(
    for( Index it = 1; it <= Nt_; it++ )
    {
       g[ig] = f * (x[y_index(Nx_ - 2, it)] - 4. * x[y_index(Nx_ - 1, it)] + 3. * x[y_index(Nx_, it)])
-         + beta_ * x[y_index(Nx_, it)] - x[u_index(it)] + p.phi(x[y_index(Nx_, it)]);
+              + beta_ * x[y_index(Nx_, it)] - x[u_index(it)] + p.phi(x[y_index(Nx_, it)]);
       ig++;
    }
 
-   DBG_ASSERT(ig == m);  (void) m;
+   DBG_ASSERT(ig == m);
+   (void) m;
 
    return true;
 }
@@ -581,7 +585,7 @@ bool MittelmannParaCntrlBase<T>::eval_jac_g(
    Index*        iRow,
    Index*        jCol,
    Number*       values
-   )
+)
 {
    typename T::ProblemSpecs p;
 
@@ -649,7 +653,8 @@ bool MittelmannParaCntrlBase<T>::eval_jac_g(
 
          ig++;
       }
-      DBG_ASSERT(ig == m);  (void) m;
+      DBG_ASSERT(ig == m);
+      (void) m;
    }
    else
    {
@@ -702,7 +707,7 @@ bool MittelmannParaCntrlBase<T>::eval_h(
    Index*        iRow,
    Index*        jCol,
    Number*       values
-   )
+)
 {
    typename T::ProblemSpecs p;
 
@@ -763,7 +768,8 @@ bool MittelmannParaCntrlBase<T>::eval_h(
       }
    }
 
-   DBG_ASSERT(ihes==nele_hess);  (void) nele_hess;
+   DBG_ASSERT(ihes == nele_hess);
+   (void) nele_hess;
 
    return true;
 }
@@ -781,7 +787,7 @@ void MittelmannParaCntrlBase<T>::finalize_solution(
    Number                     /*obj_value*/,
    const IpoptData*           /*ip_data*/,
    IpoptCalculatedQuantities* /*ip_cq*/
-   )
+)
 { }
 
 class MittelmannParaCntrl5_1
@@ -841,56 +847,56 @@ public:
 
       inline Number y_T(
          Number x
-         )
+      )
       {
          return (exp1_ + expm1_) * cos(x);
       }
 
       inline Number a(
          Number x
-         )
+      )
       {
          return cos(x);
       }
 
       inline Number a_y(
          Number t
-         )
+      )
       {
          return -exp(-2. * t);
       }
 
       inline Number a_u(
          Number /*t*/
-         )
+      )
       {
          return sqrt2_ / 2. * exp13_;
       }
 
       inline Number b(
          Number t
-         )
+      )
       {
          return exp(-4. * t) / 4. - Min(1., Max(0., (exp(t) - exp13_) / (exp23_ - exp13_)));
       }
 
       inline Number phi(
          Number y
-         )
+      )
       {
          return y * pow(fabs(y), 3);
       }
 
       inline Number phi_dy(
          Number y
-         )
+      )
       {
          return 4. * pow(fabs(y), 3);
       }
 
       inline Number phi_dydy(
          Number y
-         )
+      )
       {
          return 12. * y * y;
       }
@@ -961,56 +967,56 @@ public:
 
       inline Number y_T(
          Number x
-         )
+      )
       {
          return .5 * (1. - x * x);
       }
 
       inline Number a(
          Number /*x*/
-         )
+      )
       {
          return 0.;
       }
 
       inline Number a_y(
          Number /*t*/
-         )
+      )
       {
          return 0.;
       }
 
       inline Number a_u(
          Number /*t*/
-         )
+      )
       {
          return 0.;
       }
 
       inline Number b(
          Number /*t*/
-         )
+      )
       {
          return 0.;
       }
 
       inline Number phi(
          Number /*y*/
-         )
+      )
       {
          return 0.;
       }
 
       inline Number phi_dy(
          Number /*y*/
-         )
+      )
       {
          return 0.;
       }
 
       inline Number phi_dydy(
          Number /*y*/
-         )
+      )
       {
          DBG_ASSERT(false);
          return 0.;
@@ -1074,56 +1080,56 @@ public:
 
       inline Number y_T(
          Number x
-         )
+      )
       {
          return .5 * (1. - x * x);
       }
 
       inline Number a(
          Number /*x*/
-         )
+      )
       {
          return 0.;
       }
 
       inline Number a_y(
          Number /*t*/
-         )
+      )
       {
          return 0.;
       }
 
       inline Number a_u(
          Number /*t*/
-         )
+      )
       {
          return 0.;
       }
 
       inline Number b(
          Number /*t*/
-         )
+      )
       {
          return 0.;
       }
 
       inline Number phi(
          Number y
-         )
+      )
       {
          return y * y;
       }
 
       inline Number phi_dy(
          Number y
-         )
+      )
       {
          return 2. * y;
       }
 
       inline Number phi_dydy(
          Number /*y*/
-         )
+      )
       {
          return 2.;
       }
@@ -1186,56 +1192,56 @@ public:
 
       inline Number y_T(
          Number x
-         )
+      )
       {
          return .5 * (1. - x * x);
       }
 
       inline Number a(
          Number /*x*/
-         )
+      )
       {
          return 0.;
       }
 
       inline Number a_y(
          Number /*t*/
-         )
+      )
       {
          return 0.;
       }
 
       inline Number a_u(
          Number /*t*/
-         )
+      )
       {
          return 0.;
       }
 
       inline Number b(
          Number /*t*/
-         )
+      )
       {
          return 0.;
       }
 
       inline Number phi(
          Number y
-         )
+      )
       {
          return y * y;
       }
 
       inline Number phi_dy(
          Number y
-         )
+      )
       {
          return 2. * y;
       }
 
       inline Number phi_dydy(
          Number /*y*/
-         )
+      )
       {
          return 2.;
       }
@@ -1304,56 +1310,56 @@ public:
 
       inline Number y_T(
          Number x
-         )
+      )
       {
          return (exp1_ + expm1_) * cos(x);
       }
 
       inline Number a(
          Number x
-         )
+      )
       {
          return cos(x);
       }
 
       inline Number a_y(
          Number t
-         )
+      )
       {
          return -exp(-2. * t);
       }
 
       inline Number a_u(
          Number /*t*/
-         )
+      )
       {
          return sqrt2_ / 2. * exp13_;
       }
 
       inline Number b(
          Number t
-         )
+      )
       {
          return exp(-4. * t) / 4. - Min(1., Max(0., (exp(t) - exp13_) / (exp23_ - exp13_)));
       }
 
       inline Number phi(
          Number y
-         )
+      )
       {
          return -y * sin(y / 10.);
       }
 
       inline Number phi_dy(
          Number y
-         )
+      )
       {
          return -y * cos(y / 10.) / 10. - sin(y / 10.);
       }
 
       inline Number phi_dydy(
          Number y
-         )
+      )
       {
          return y * sin(y / 10.) / 100.;
       }

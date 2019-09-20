@@ -16,7 +16,7 @@ using namespace Ipopt;
  *  HS071_NLP implements a C++ example of problem 71 of the
  *  Hock-Schittkowski test suite. This example is designed to go
  *  along with the tutorial document and show how to interface
- *  with IPOPT through the TNLP interface. 
+ *  with IPOPT through the TNLP interface.
  *
  * Problem hs071 looks like this
  *
@@ -49,7 +49,7 @@ public:
       Index&          nnz_jac_g,
       Index&          nnz_h_lag,
       IndexStyleEnum& index_style
-      );
+   );
 
    /** Method to return the bounds for my problem */
    virtual bool get_bounds_info(
@@ -59,7 +59,7 @@ public:
       Index   m,
       Number* g_l,
       Number* g_u
-      );
+   );
 
    /** Method to return the starting point for the algorithm */
    virtual bool get_starting_point(
@@ -72,7 +72,7 @@ public:
       Index   m,
       bool    init_lambda,
       Number* lambda
-      );
+   );
 
    /** Method to return the objective value */
    virtual bool eval_f(
@@ -80,7 +80,7 @@ public:
       const Number* x,
       bool          new_x,
       Number&       obj_value
-      );
+   );
 
    /** Method to return the gradient of the objective */
    virtual bool eval_grad_f(
@@ -88,7 +88,7 @@ public:
       const Number* x,
       bool          new_x,
       Number*       grad_f
-      );
+   );
 
    /** Method to return the constraint residuals */
    virtual bool eval_g(
@@ -97,7 +97,7 @@ public:
       bool          new_x,
       Index         m,
       Number*       g
-      );
+   );
 
    /** Method to return:
     *   1) The structure of the jacobian (if "values" is NULL)
@@ -112,7 +112,7 @@ public:
       Index*        iRow,
       Index*        jCol,
       Number*       values
-      );
+   );
 
    /** Method to return:
     *   1) The structure of the hessian of the lagrangian (if "values" is NULL)
@@ -130,7 +130,7 @@ public:
       Index*        iRow,
       Index*        jCol,
       Number*       values
-      );
+   );
 
    /** This method is called when the algorithm is complete so the TNLP can store/write the solution */
    virtual void finalize_solution(
@@ -145,7 +145,7 @@ public:
       Number                     obj_value,
       const IpoptData*           ip_data,
       IpoptCalculatedQuantities* ip_cq
-      );
+   );
    //@}
 
 private:
@@ -162,11 +162,11 @@ private:
    //@{
    HS071_NLP(
       const HS071_NLP&
-      );
+   );
 
    HS071_NLP& operator=(
       const HS071_NLP&
-      );
+   );
    //@}
 };
 

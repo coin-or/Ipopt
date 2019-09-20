@@ -30,7 +30,7 @@ void MittelmannBndryCntrlDiriBase3Dsin::SetBaseParameters(
    Number lb_u,
    Number ub_u,
    Number d_const
-   )
+)
 {
    N_ = N;
    h_ = 1. / (N + 1);
@@ -63,7 +63,7 @@ bool MittelmannBndryCntrlDiriBase3Dsin::get_nlp_info(
    Index&          nnz_jac_g,
    Index&          nnz_h_lag,
    IndexStyleEnum& index_style
-   )
+)
 {
    // We for each of the N_+2 times N_+2 times N_+2  mesh points we have
    // the value of the functions y, including the control parameters on
@@ -101,7 +101,7 @@ bool MittelmannBndryCntrlDiriBase3Dsin::get_bounds_info(
    Index   m,
    Number* g_l,
    Number* g_u
-   )
+)
 {
    // Set overall bounds on the y variables
    for( Index i = 0; i <= N_ + 1; i++ )
@@ -175,26 +175,26 @@ bool MittelmannBndryCntrlDiriBase3Dsin::get_bounds_info(
 #if 0
    // The values of y on the corners doens't appear anywhere, so we fix
    // them to zero
-   for (Index j=0; j<=N_+1; j++)
+   for (Index j = 0; j <= N_ + 1; j++)
    {
-      x_l[y_index(0,j,0)] = x_u[y_index(0,j,0)] = 0.;
-      x_l[y_index(0,j,N_+1)] = x_u[y_index(0,j,N_+1)] = 0.;
-      x_l[y_index(N_+1,j,0)] = x_u[y_index(N_+1,j,0)] = 0.;
-      x_l[y_index(N_+1,j,N_+1)] = x_u[y_index(N_+1,j,N_+1)] = 0.;
+      x_l[y_index(0, j, 0)] = x_u[y_index(0, j, 0)] = 0.;
+      x_l[y_index(0, j, N_ + 1)] = x_u[y_index(0, j, N_ + 1)] = 0.;
+      x_l[y_index(N_ + 1, j, 0)] = x_u[y_index(N_ + 1, j, 0)] = 0.;
+      x_l[y_index(N_ + 1, j, N_ + 1)] = x_u[y_index(N_ + 1, j, N_ + 1)] = 0.;
    }
-   for (Index k=0; k<=N_+1; k++)
+   for (Index k = 0; k <= N_ + 1; k++)
    {
-      x_l[y_index(0,0,k)] = x_u[y_index(0,0,k)] = 0.;
-      x_l[y_index(0,N_+1,k)] = x_u[y_index(0,N_+1,k)] = 0.;
-      x_l[y_index(N_+1,0,k)] = x_u[y_index(N_+1,0,k)] = 0.;
-      x_l[y_index(N_+1,N_+1,k)] = x_u[y_index(N_+1,N_+1,k)] = 0.;
+      x_l[y_index(0, 0, k)] = x_u[y_index(0, 0, k)] = 0.;
+      x_l[y_index(0, N_ + 1, k)] = x_u[y_index(0, N_ + 1, k)] = 0.;
+      x_l[y_index(N_ + 1, 0, k)] = x_u[y_index(N_ + 1, 0, k)] = 0.;
+      x_l[y_index(N_ + 1, N_ + 1, k)] = x_u[y_index(N_ + 1, N_ + 1, k)] = 0.;
    }
-   for (Index i=0; i<=N_+1; i++)
+   for (Index i = 0; i <= N_ + 1; i++)
    {
-      x_l[y_index(i,0,0)] = x_u[y_index(i,0,0)] = 0.;
-      x_l[y_index(i,0,N_+1)] = x_u[y_index(i,0,N_+1)] = 0.;
-      x_l[y_index(i,N_+1,0)] = x_u[y_index(i,N_+1,0)] = 0.;
-      x_l[y_index(i,N_+1,N_+1)] = x_u[y_index(i,N_+1,N_+1)] = 0.;
+      x_l[y_index(i, 0, 0)] = x_u[y_index(i, 0, 0)] = 0.;
+      x_l[y_index(i, 0, N_ + 1)] = x_u[y_index(i, 0, N_ + 1)] = 0.;
+      x_l[y_index(i, N_ + 1, 0)] = x_u[y_index(i, N_ + 1, 0)] = 0.;
+      x_l[y_index(i, N_ + 1, N_ + 1)] = x_u[y_index(i, N_ + 1, N_ + 1)] = 0.;
    }
 #endif
 
@@ -219,14 +219,17 @@ bool MittelmannBndryCntrlDiriBase3Dsin::get_starting_point(
    Index   /*m*/,
    bool    init_lambda,
    Number* /*lambda*/
-   )
+)
 {
    // Here, we assume we only have starting values for x, if you code
    // your own NLP, you can provide starting values for the others if
    // you wish.
-   assert(init_x == true);  (void) init_x;
-   assert(init_z == false);  (void) init_z;
-   assert(init_lambda == false); (void) init_lambda;
+   assert(init_x == true);
+   (void) init_x;
+   assert(init_z == false);
+   (void) init_z;
+   assert(init_lambda == false);
+   (void) init_lambda;
 
    // set all y's to the perfect match with y_d
    for( Index i = 0; i <= N_ + 1; i++ )
@@ -301,7 +304,7 @@ bool MittelmannBndryCntrlDiriBase3Dsin::get_scaling_parameters(
    bool&   use_g_scaling,
    Index   /*m*/,
    Number* /*g_scaling*/
-   )
+)
 {
    obj_scaling = 1. / hh_;
    use_x_scaling = false;
@@ -314,7 +317,7 @@ bool MittelmannBndryCntrlDiriBase3Dsin::eval_f(
    const Number* x,
    bool          /*new_x*/,
    Number&       obj_value
-   )
+)
 {
    // return the value of the objective function
    obj_value = 0.;
@@ -344,7 +347,7 @@ bool MittelmannBndryCntrlDiriBase3Dsin::eval_f(
          for( Index j = 1; j <= N_; j++ )
          {
             const Number D = (4 * x[y_index(i, j, 0)] - x[y_index(i - 1, j, 0)] - x[y_index(i + 1, j, 0)]
-               - x[y_index(i, j - 1, 0)] - x[y_index(i, j + 1, 0)]) / hh_;
+                              - x[y_index(i, j - 1, 0)] - x[y_index(i, j + 1, 0)]) / hh_;
             const Number sinD = sin(D) - 0.5;
             usum += sinD * sinD;
          }
@@ -354,7 +357,7 @@ bool MittelmannBndryCntrlDiriBase3Dsin::eval_f(
          for( Index j = 1; j <= N_; j++ )
          {
             const Number D = (4 * x[y_index(i, j, N_ + 1)] - x[y_index(i - 1, j, N_ + 1)] - x[y_index(i + 1, j, N_ + 1)]
-               - x[y_index(i, j - 1, N_ + 1)] - x[y_index(i, j + 1, N_ + 1)]) / hh_;
+                              - x[y_index(i, j - 1, N_ + 1)] - x[y_index(i, j + 1, N_ + 1)]) / hh_;
             const Number sinD = sin(D) - 0.5;
             usum += sinD * sinD;
          }
@@ -365,7 +368,7 @@ bool MittelmannBndryCntrlDiriBase3Dsin::eval_f(
          for( Index j = 1; j <= N_; j++ )
          {
             const Number D = (4 * x[y_index(0, i, j)] - x[y_index(0, i - 1, j)] - x[y_index(0, i + 1, j)]
-               - x[y_index(0, i, j - 1)] - x[y_index(0, i, j + 1)]) / hh_;
+                              - x[y_index(0, i, j - 1)] - x[y_index(0, i, j + 1)]) / hh_;
             const Number sinD = sin(D) - 0.5;
             usum += sinD * sinD;
          }
@@ -375,7 +378,7 @@ bool MittelmannBndryCntrlDiriBase3Dsin::eval_f(
          for( Index j = 1; j <= N_; j++ )
          {
             const Number D = (4 * x[y_index(N_ + 1, i, j)] - x[y_index(N_ + 1, i - 1, j)] - x[y_index(N_ + 1, i + 1, j)]
-               - x[y_index(N_ + 1, i, j - 1)] - x[y_index(N_ + 1, i, j + 1)]) / hh_;
+                              - x[y_index(N_ + 1, i, j - 1)] - x[y_index(N_ + 1, i, j + 1)]) / hh_;
             const Number sinD = sin(D) - 0.5;
             usum += sinD * sinD;
          }
@@ -386,7 +389,7 @@ bool MittelmannBndryCntrlDiriBase3Dsin::eval_f(
          for( Index j = 1; j <= N_; j++ )
          {
             const Number D = (4 * x[y_index(i, 0, j)] - x[y_index(i - 1, 0, j)] - x[y_index(i + 1, 0, j)]
-               - x[y_index(i, 0, j - 1)] - x[y_index(i, 0, j + 1)]) / hh_;
+                              - x[y_index(i, 0, j - 1)] - x[y_index(i, 0, j + 1)]) / hh_;
             const Number sinD = sin(D) - 0.5;
             usum += sinD * sinD;
          }
@@ -396,7 +399,7 @@ bool MittelmannBndryCntrlDiriBase3Dsin::eval_f(
          for( Index j = 1; j <= N_; j++ )
          {
             const Number D = (4 * x[y_index(i, N_ + 1, j)] - x[y_index(i - 1, N_ + 1, j)] - x[y_index(i + 1, N_ + 1, j)]
-               - x[y_index(i, N_ + 1, j - 1)] - x[y_index(i, N_ + 1, j + 1)]) / hh_;
+                              - x[y_index(i, N_ + 1, j - 1)] - x[y_index(i, N_ + 1, j + 1)]) / hh_;
             const Number sinD = sin(D) - 0.5;
             usum += sinD * sinD;
          }
@@ -413,7 +416,7 @@ bool MittelmannBndryCntrlDiriBase3Dsin::eval_grad_f(
    const Number* x,
    bool          /*new_x*/,
    Number*       grad_f
-   )
+)
 {
    // return the gradient of the objective function grad_{x} f(x)
 
@@ -484,7 +487,7 @@ bool MittelmannBndryCntrlDiriBase3Dsin::eval_grad_f(
          for( Index j = 1; j <= N_; j++ )
          {
             const Number D = (4 * x[y_index(i, j, 0)] - x[y_index(i - 1, j, 0)] - x[y_index(i + 1, j, 0)]
-               - x[y_index(i, j - 1, 0)] - x[y_index(i, j + 1, 0)]) / hh_;
+                              - x[y_index(i, j - 1, 0)] - x[y_index(i, j + 1, 0)]) / hh_;
             const Number FD = alpha_ * h_ * (cos(D) * (sin(D) - 0.5) / hh_);
             grad_f[y_index(i, j, 0)] += 4. * FD;
             grad_f[y_index(i - 1, j, 0)] += -1. * FD;
@@ -499,7 +502,7 @@ bool MittelmannBndryCntrlDiriBase3Dsin::eval_grad_f(
          for( Index j = 1; j <= N_; j++ )
          {
             const Number D = (4 * x[y_index(i, j, N_ + 1)] - x[y_index(i - 1, j, N_ + 1)] - x[y_index(i + 1, j, N_ + 1)]
-               - x[y_index(i, j - 1, N_ + 1)] - x[y_index(i, j + 1, N_ + 1)]) / hh_;
+                              - x[y_index(i, j - 1, N_ + 1)] - x[y_index(i, j + 1, N_ + 1)]) / hh_;
             const Number FD = alpha_ * h_ * (cos(D) * (sin(D) - 0.5) / hh_);
             grad_f[y_index(i, j, N_ + 1)] += 4. * FD;
             grad_f[y_index(i - 1, j, N_ + 1)] += -1. * FD;
@@ -514,7 +517,7 @@ bool MittelmannBndryCntrlDiriBase3Dsin::eval_grad_f(
          for( Index j = 1; j <= N_; j++ )
          {
             const Number D = (4 * x[y_index(0, i, j)] - x[y_index(0, i - 1, j)] - x[y_index(0, i + 1, j)]
-               - x[y_index(0, i, j - 1)] - x[y_index(0, i, j + 1)]) / hh_;
+                              - x[y_index(0, i, j - 1)] - x[y_index(0, i, j + 1)]) / hh_;
             const Number FD = alpha_ * h_ * (cos(D) * (sin(D) - 0.5) / hh_);
             grad_f[y_index(0, i, j)] += 4. * FD;
             grad_f[y_index(0, i - 1, j)] += -1. * FD;
@@ -528,7 +531,7 @@ bool MittelmannBndryCntrlDiriBase3Dsin::eval_grad_f(
          for( Index j = 1; j <= N_; j++ )
          {
             const Number D = (4 * x[y_index(N_ + 1, i, j)] - x[y_index(N_ + 1, i - 1, j)] - x[y_index(N_ + 1, i + 1, j)]
-               - x[y_index(N_ + 1, i, j - 1)] - x[y_index(N_ + 1, i, j + 1)]) / hh_;
+                              - x[y_index(N_ + 1, i, j - 1)] - x[y_index(N_ + 1, i, j + 1)]) / hh_;
             const Number FD = alpha_ * h_ * (cos(D) * (sin(D) - 0.5) / hh_);
             grad_f[y_index(N_ + 1, i, j)] += 4. * FD;
             grad_f[y_index(N_ + 1, i - 1, j)] += -1. * FD;
@@ -543,7 +546,7 @@ bool MittelmannBndryCntrlDiriBase3Dsin::eval_grad_f(
          for( Index j = 1; j <= N_; j++ )
          {
             const Number D = (4 * x[y_index(i, 0, j)] - x[y_index(i - 1, 0, j)] - x[y_index(i + 1, 0, j)]
-               - x[y_index(i, 0, j - 1)] - x[y_index(i, 0, j + 1)]) / hh_;
+                              - x[y_index(i, 0, j - 1)] - x[y_index(i, 0, j + 1)]) / hh_;
             const Number FD = alpha_ * h_ * (cos(D) * (sin(D) - 0.5) / hh_);
             grad_f[y_index(i, 0, j)] += 4. * FD;
             grad_f[y_index(i - 1, 0, j)] += -1. * FD;
@@ -557,7 +560,7 @@ bool MittelmannBndryCntrlDiriBase3Dsin::eval_grad_f(
          for( Index j = 1; j <= N_; j++ )
          {
             const Number D = (4 * x[y_index(i, N_ + 1, j)] - x[y_index(i - 1, N_ + 1, j)] - x[y_index(i + 1, N_ + 1, j)]
-               - x[y_index(i, N_ + 1, j - 1)] - x[y_index(i, N_ + 1, j + 1)]) / hh_;
+                              - x[y_index(i, N_ + 1, j - 1)] - x[y_index(i, N_ + 1, j + 1)]) / hh_;
             const Number FD = alpha_ * h_ * (cos(D) * (sin(D) - 0.5) / hh_);
             grad_f[y_index(i, N_ + 1, j)] += 4. * FD;
             grad_f[y_index(i - 1, N_ + 1, j)] += -1. * FD;
@@ -578,7 +581,7 @@ bool MittelmannBndryCntrlDiriBase3Dsin::eval_g(
    bool          /*new_x*/,
    Index         m,
    Number*       g
-   )
+)
 {
    // return the value of the constraints: g(x)
 
@@ -594,7 +597,7 @@ bool MittelmannBndryCntrlDiriBase3Dsin::eval_g(
 
             // Start with the discretized Laplacian operator
             val = 6. * x[y_index(i, j, k)] - x[y_index(i - 1, j, k)] - x[y_index(i + 1, j, k)] - x[y_index(i, j - 1, k)]
-               - x[y_index(i, j + 1, k)] - x[y_index(i, j, k - 1)] - x[y_index(i, j, k + 1)];
+                  - x[y_index(i, j + 1, k)] - x[y_index(i, j, k - 1)] - x[y_index(i, j, k + 1)];
 
             g[ig] = val;
             ig++;
@@ -602,7 +605,8 @@ bool MittelmannBndryCntrlDiriBase3Dsin::eval_g(
       }
    }
 
-   DBG_ASSERT(ig==m);  (void) m;
+   DBG_ASSERT(ig == m);
+   (void) m;
 
    return true;
 }
@@ -616,7 +620,7 @@ bool MittelmannBndryCntrlDiriBase3Dsin::eval_jac_g(
    Index*        iRow,
    Index*        jCol,
    Number*       values
-   )
+)
 {
    if( values == NULL )
    {
@@ -671,7 +675,8 @@ bool MittelmannBndryCntrlDiriBase3Dsin::eval_jac_g(
          }
       }
 
-      DBG_ASSERT(ijac==nele_jac);  (void) nele_jac;
+      DBG_ASSERT(ijac == nele_jac);
+      (void) nele_jac;
    }
    else
    {
@@ -714,7 +719,7 @@ bool MittelmannBndryCntrlDiriBase3Dsin::eval_jac_g(
          }
       }
 
-      DBG_ASSERT(ijac==nele_jac);
+      DBG_ASSERT(ijac == nele_jac);
    }
 
    return true;
@@ -729,7 +734,7 @@ inline static void hessstruct(
    Index  ijm,
    Index  ijp,
    Index& ihes
-   )
+)
 {
    //printf("ihes = %3d ij = %3d imj = %3d ipj = %3d ijm = %3d ijp = %3d\n",ihes,ij,imj,ipj,ijm,ijp);
    iRow[ihes] = ij;
@@ -831,7 +836,7 @@ inline static void hessvals(
    Index&        ihes,
    Number        hh_,
    Number        fact
-   )
+)
 {
    //printf("ihes = %d\n",ihes);
    const Number D = (4 * x[ij] - x[imj] - x[ipj] - x[ijm] - x[ijp]) / hh_;
@@ -871,7 +876,7 @@ bool MittelmannBndryCntrlDiriBase3Dsin::eval_h(
    Index*        iRow,
    Index*        jCol,
    Number*       values
-   )
+)
 {
    if( values == NULL )
    {
@@ -902,26 +907,28 @@ bool MittelmannBndryCntrlDiriBase3Dsin::eval_h(
             for( Index j = 1; j <= N_; j++ )
             {
                hessstruct(iRow, jCol, y_index(i, j, 0), y_index(i - 1, j, 0), y_index(i + 1, j, 0),
-                  y_index(i, j - 1, 0), y_index(i, j + 1, 0), ihes);
+                          y_index(i, j - 1, 0), y_index(i, j + 1, 0), ihes);
 
                hessstruct(iRow, jCol, y_index(i, j, N_ + 1), y_index(i - 1, j, N_ + 1), y_index(i + 1, j, N_ + 1),
-                  y_index(i, j - 1, N_ + 1), y_index(i, j + 1, N_ + 1), ihes);
+                          y_index(i, j - 1, N_ + 1), y_index(i, j + 1, N_ + 1), ihes);
 
                hessstruct(iRow, jCol, y_index(0, i, j), y_index(0, i - 1, j), y_index(0, i + 1, j),
-                  y_index(0, i, j - 1), y_index(0, i, j + 1), ihes);
+                          y_index(0, i, j - 1), y_index(0, i, j + 1), ihes);
 
                hessstruct(iRow, jCol, y_index(N_ + 1, i, j), y_index(N_ + 1, i - 1, j), y_index(N_ + 1, i + 1, j),
-                  y_index(N_ + 1, i, j - 1), y_index(N_ + 1, i, j + 1), ihes);
+                          y_index(N_ + 1, i, j - 1), y_index(N_ + 1, i, j + 1), ihes);
 
                hessstruct(iRow, jCol, y_index(i, 0, j), y_index(i - 1, 0, j), y_index(i + 1, 0, j),
-                  y_index(i, 0, j - 1), y_index(i, 0, j + 1), ihes);
+                          y_index(i, 0, j - 1), y_index(i, 0, j + 1), ihes);
 
                hessstruct(iRow, jCol, y_index(i, N_ + 1, j), y_index(i - 1, N_ + 1, j), y_index(i + 1, N_ + 1, j),
-                  y_index(i, N_ + 1, j - 1), y_index(i, N_ + 1, j + 1), ihes);
+                          y_index(i, N_ + 1, j - 1), y_index(i, N_ + 1, j + 1), ihes);
             }
          }
 
-      } DBG_ASSERT(ihes==nele_hess);  (void) nele_hess;
+      }
+      DBG_ASSERT(ihes == nele_hess);
+      (void) nele_hess;
    }
    else
    {
@@ -952,22 +959,22 @@ bool MittelmannBndryCntrlDiriBase3Dsin::eval_h(
             for( Index j = 1; j <= N_; j++ )
             {
                hessvals(x, values, y_index(i, j, 0), y_index(i - 1, j, 0), y_index(i + 1, j, 0), y_index(i, j - 1, 0),
-                  y_index(i, j + 1, 0), ihes, hh_, obj_factor * alpha_ * h_ / (hh_ * hh_));
+                        y_index(i, j + 1, 0), ihes, hh_, obj_factor * alpha_ * h_ / (hh_ * hh_));
                hessvals(x, values, y_index(i, j, N_ + 1), y_index(i - 1, j, N_ + 1), y_index(i + 1, j, N_ + 1),
-                  y_index(i, j - 1, N_ + 1), y_index(i, j + 1, N_ + 1), ihes, hh_,
-                  obj_factor * alpha_ * h_ / (hh_ * hh_));
+                        y_index(i, j - 1, N_ + 1), y_index(i, j + 1, N_ + 1), ihes, hh_,
+                        obj_factor * alpha_ * h_ / (hh_ * hh_));
 
                hessvals(x, values, y_index(0, i, j), y_index(0, i - 1, j), y_index(0, i + 1, j), y_index(0, i, j - 1),
-                  y_index(0, i, j + 1), ihes, hh_, obj_factor * alpha_ * h_ / (hh_ * hh_));
+                        y_index(0, i, j + 1), ihes, hh_, obj_factor * alpha_ * h_ / (hh_ * hh_));
                hessvals(x, values, y_index(N_ + 1, i, j), y_index(N_ + 1, i - 1, j), y_index(N_ + 1, i + 1, j),
-                  y_index(N_ + 1, i, j - 1), y_index(N_ + 1, i, j + 1), ihes, hh_,
-                  obj_factor * alpha_ * h_ / (hh_ * hh_));
+                        y_index(N_ + 1, i, j - 1), y_index(N_ + 1, i, j + 1), ihes, hh_,
+                        obj_factor * alpha_ * h_ / (hh_ * hh_));
 
                hessvals(x, values, y_index(i, 0, j), y_index(i - 1, 0, j), y_index(i + 1, 0, j), y_index(i, 0, j - 1),
-                  y_index(i, 0, j + 1), ihes, hh_, obj_factor * alpha_ * h_ / (hh_ * hh_));
+                        y_index(i, 0, j + 1), ihes, hh_, obj_factor * alpha_ * h_ / (hh_ * hh_));
                hessvals(x, values, y_index(i, N_ + 1, j), y_index(i - 1, N_ + 1, j), y_index(i + 1, N_ + 1, j),
-                  y_index(i, N_ + 1, j - 1), y_index(i, N_ + 1, j + 1), ihes, hh_,
-                  obj_factor * alpha_ * h_ / (hh_ * hh_));
+                        y_index(i, N_ + 1, j - 1), y_index(i, N_ + 1, j + 1), ihes, hh_,
+                        obj_factor * alpha_ * h_ / (hh_ * hh_));
             }
          }
       }
@@ -988,7 +995,7 @@ void MittelmannBndryCntrlDiriBase3Dsin::finalize_solution(
    Number                     /*obj_value*/,
    const IpoptData*           /*ip_data*/,
    IpoptCalculatedQuantities* /*ip_cq*/
-   )
+)
 {
    /*
     FILE* fp = fopen("solution.txt", "w+");

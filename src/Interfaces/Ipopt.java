@@ -157,31 +157,35 @@ public abstract class Ipopt
     */
    public Ipopt()
    {
-      if( System.getProperty("os.name").toLowerCase().indexOf("win") >=0 )
+      if( System.getProperty("os.name").toLowerCase().indexOf("win") >= 0 )
       {
-        /* for Ipopt releases, it should be ipopt-3.dll
-         * for other intermediate versions, it should be ipopt-0.dll
-         * with MinGW, libtool adds a "lib" prefix
-         * finally, try also without version info
-         */
-        final String[] candidates = { "ipopt-3", "ipopt-0", "libipopt-3", "libipopt-0", "ipopt", "libipopt" };
-        boolean loadedlib = false;
-        for( String c : candidates )
-        {
-          try
-          {
-            System.loadLibrary(c);
-            loadedlib = true;
-            break;
-          }
-          catch( UnsatisfiedLinkError e )
-          { }
-        }
-        if( !loadedlib )
-          throw new UnsatisfiedLinkError("Could not load Ipopt library. Check your java.library.path.");
+         /* for Ipopt releases, it should be ipopt-3.dll
+          * for other intermediate versions, it should be ipopt-0.dll
+          * with MinGW, libtool adds a "lib" prefix
+          * finally, try also without version info
+          */
+         final String[] candidates = { "ipopt-3", "ipopt-0", "libipopt-3", "libipopt-0", "ipopt", "libipopt" };
+         boolean loadedlib = false;
+         for( String c : candidates )
+         {
+            try
+            {
+               System.loadLibrary(c);
+               loadedlib = true;
+               break;
+            }
+            catch( UnsatisfiedLinkError e )
+            { }
+         }
+         if( !loadedlib )
+         {
+            throw new UnsatisfiedLinkError("Could not load Ipopt library. Check your java.library.path.");
+         }
       }
       else
-        System.loadLibrary("ipopt");
+      {
+         System.loadLibrary("ipopt");
+      }
    }
 
    /** Creates a NLP Solver for the given DLL file.
@@ -298,7 +302,7 @@ public abstract class Ipopt
       double[] x,
       boolean  new_x,
       double[] obj_value
-    );
+   );
 
    /** Method to request the gradient of the objective function.
     *
@@ -365,14 +369,14 @@ public abstract class Ipopt
     * @return true on success, otherwise false
     */
    abstract protected boolean eval_jac_g(
-       int      n,
-       double[] x,
-       boolean  new_x,
-       int      m,
-       int      nele_jac,
-       int[]    iRow,
-       int[]    jCol,
-       double[] values
+      int      n,
+      double[] x,
+      boolean  new_x,
+      int      m,
+      int      nele_jac,
+      int[]    iRow,
+      int[]    jCol,
+      double[] values
    );
 
 
@@ -503,7 +507,9 @@ public abstract class Ipopt
       int    val)
    {
       if( ipopt == 0 )
+      {
          return false;
+      }
 
       return AddIpoptIntOption(ipopt, keyword, val);
    }
@@ -521,7 +527,9 @@ public abstract class Ipopt
       double val)
    {
       if( ipopt == 0 )
+      {
          return false;
+      }
 
       return AddIpoptNumOption(ipopt, keyword, val);
    }
@@ -539,7 +547,9 @@ public abstract class Ipopt
       String val)
    {
       if( ipopt == 0 )
+      {
          return false;
+      }
 
       return AddIpoptStrOption(ipopt, keyword, val.toLowerCase());
    }
@@ -557,8 +567,8 @@ public abstract class Ipopt
    public int OptimizeNLP()
    {
       this.status = this.OptimizeTNLP(ipopt,
-         x, g, obj_val, mult_g, mult_x_L, mult_x_U,
-         callback_grad_f, callback_jac_g, callback_hess);
+                                      x, g, obj_val, mult_g, mult_x_L, mult_x_U,
+                                      callback_grad_f, callback_jac_g, callback_hess);
 
       return this.status;
    }

@@ -176,7 +176,7 @@ struct ma77_info_d
 /** Initialise control with default values */
 void ma77_default_control_d(
    struct ma77_control_d* control
-   );
+);
 
 void ma77_open_nelt(
    const int                    n,
@@ -188,7 +188,7 @@ void ma77_open_nelt(
    const struct ma77_control_d* control,
    struct ma77_info_d*          info,
    const int                    nelt
-   );
+);
 
 void ma77_open_d(
    const int                    n,
@@ -199,7 +199,7 @@ void ma77_open_d(
    void**                       keep,
    const struct ma77_control_d* control,
    struct ma77_info_d*          info
-   );
+);
 
 void ma77_input_vars(
    const int                    idx,
@@ -208,7 +208,7 @@ void ma77_input_vars(
    void**                       keep,
    const struct ma77_control_d* control,
    struct ma77_info_d*          info
-   );
+);
 
 void ma77_input_reals_d(
    const int                    idx,
@@ -217,7 +217,7 @@ void ma77_input_reals_d(
    void**                       keep,
    const struct ma77_control_d* control,
    struct ma77_info_d*          info
-   );
+);
 
 /** Analyse the sparsity pattern and prepare for factorization */
 void ma77_analyse(
@@ -225,7 +225,7 @@ void ma77_analyse(
    void**                       keep,
    const struct ma77_control_d* control,
    struct ma77_info_d*          info
-   );
+);
 
 /** To factorize the matrix */
 void ma77_factor_d(
@@ -234,7 +234,7 @@ void ma77_factor_d(
    const struct ma77_control_d* control,
    struct ma77_info_d*          info,
    const ma77pkgtype_d_*        scale
-   );
+);
 
 /** To factorize the matrix AND solve AX = B */
 void ma77_factor_solve_d(
@@ -246,7 +246,7 @@ void ma77_factor_solve_d(
    const int                    nrhs,
    const int                    lx,
    ma77pkgtype_d_               rhs[]
-   );
+);
 
 /** To solve AX = B using the computed factors */
 void ma77_solve_d(
@@ -258,7 +258,7 @@ void ma77_solve_d(
    const struct ma77_control_d* control,
    struct ma77_info_d*          info,
    const ma77pkgtype_d_*        scale
-   );
+);
 
 void ma77_resid_d(
    const int                    nrhs,
@@ -270,7 +270,7 @@ void ma77_resid_d(
    const struct ma77_control_d* control,
    struct ma77_info_d*          info,
    ma77pkgtype_d_*              anorm_bnd
-   );
+);
 
 void ma77_scale_d(
    ma77pkgtype_d_               scale[],
@@ -278,14 +278,14 @@ void ma77_scale_d(
    const struct ma77_control_d* control,
    struct ma77_info_d*          info,
    ma77pkgtype_d_*              anorm
-   );
+);
 
 void ma77_enquire_posdef_d(
    ma77pkgtype_d_               d[],
    void**                       keep,
    const struct ma77_control_d* control,
    struct ma77_info_d*          info
-   );
+);
 
 void ma77_enquire_indef_d(
    int                          piv_order[],
@@ -293,14 +293,14 @@ void ma77_enquire_indef_d(
    void**                       keep,
    const struct ma77_control_d* control,
    struct ma77_info_d*          info
-   );
+);
 
 void ma77_alter_d(
    ma77pkgtype_d_               d[],
    void**                       keep,
    const struct ma77_control_d* control,
    struct ma77_info_d*          info
-   );
+);
 
 void ma77_restart_d(
    const char*                  restart_file,
@@ -311,7 +311,7 @@ void ma77_restart_d(
    void**                       keep,
    const struct ma77_control_d* control,
    struct ma77_info_d*          info
-   );
+);
 
 /* exists only for HSL 2013 */
 void ma77_solve_fredholm_d(
@@ -323,7 +323,7 @@ void ma77_solve_fredholm_d(
    const struct ma77_control_d* control,
    struct ma77_info_d*          info,
    const ma77pkgtype_d_*        scale
-   );
+);
 
 /* exists only for HSL 2013 */
 void ma77_lmultiply_d(
@@ -337,13 +337,13 @@ void ma77_lmultiply_d(
    const struct ma77_control_d* control,
    struct ma77_info_d*          info,
    const ma77pkgtype_d_*        scale
-   );
+);
 
 /** To clean up memory in keep */
 void ma77_finalise_d(
    void**                       keep,
    const struct ma77_control_d* control,
    struct ma77_info_d*          info
-   );
+);
 
 #endif

@@ -166,7 +166,7 @@ public:
 
 public:
    /// The JNI Environment
-   JNIEnv *env;
+   JNIEnv* env;
    jobject solver;
 
    jint n;
@@ -219,11 +219,11 @@ Jipopt::Jipopt(
    jint    nele_jac_,
    jint    nele_hess_,
    jint    index_style_
- )
- : env(env_), solver(solver_), n(n_), m(m_), nele_jac(nele_jac_), nele_hess(nele_hess_), index_style(index_style_),
-   mult_gj(NULL), mult_x_Lj(NULL), mult_x_Uj(NULL), xj(NULL), fj(NULL), grad_fj(NULL),
-   gj(NULL), jac_gj(NULL), hessj(NULL),
-   using_scaling_parameters(false), using_LBFGS(false)
+)
+   : env(env_), solver(solver_), n(n_), m(m_), nele_jac(nele_jac_), nele_hess(nele_hess_), index_style(index_style_),
+     mult_gj(NULL), mult_x_Lj(NULL), mult_x_Uj(NULL), xj(NULL), fj(NULL), grad_fj(NULL),
+     gj(NULL), jac_gj(NULL), hessj(NULL),
+     using_scaling_parameters(false), using_LBFGS(false)
 {
    application = new IpoptApplication();
    application->RethrowNonIpoptException(false);
@@ -244,10 +244,12 @@ Jipopt::Jipopt(
    get_list_of_nonlinear_variables_   = env->GetMethodID(solverCls, "get_list_of_nonlinear_variables", "(I[I)Z");
 
    if( get_bounds_info_ == 0 || get_starting_point_ == 0 || eval_f_ == 0
-      || eval_grad_f_ == 0 || eval_g_ == 0 || eval_jac_g_ == 0 || eval_h_ == 0
-      || get_scaling_parameters_ == 0 || get_number_of_nonlinear_variables_ == 0
-      || get_list_of_nonlinear_variables_ == 0 )
+       || eval_grad_f_ == 0 || eval_g_ == 0 || eval_jac_g_ == 0 || eval_h_ == 0
+       || get_scaling_parameters_ == 0 || get_number_of_nonlinear_variables_ == 0
+       || get_list_of_nonlinear_variables_ == 0 )
+   {
       std::cerr << "Expected callback methods missing on JIpopt.java" << std::endl;
+   }
 
    assert(get_bounds_info_    != 0);
    assert(get_starting_point_ != 0);
@@ -302,7 +304,9 @@ bool Jipopt::get_bounds_info(
    g_uj = env->NewDoubleArray(m);
 
    if( !env->CallBooleanMethod(solver, get_bounds_info_, n, x_lj, x_uj, m, g_lj, g_uj) )
+   {
       return false;
+   }
 
    // Copy from Java to native value
    env->GetDoubleArrayRegion(x_lj, 0, n, x_l);
@@ -330,11 +334,15 @@ bool Jipopt::get_starting_point(
    jdoubleArray lambdaj = this->mult_gj;
 
    if( !env->CallBooleanMethod(solver, get_starting_point_, n, init_x, xj, init_z, z_lj, z_uj, m, init_lambda, lambdaj) )
+   {
       return false;
+   }
 
    /* Copy from Java to native value */
    if( init_x )
+   {
       env->GetDoubleArrayRegion(xj, 0, n, x);
+   }
 
    if( init_z )
    {
@@ -343,7 +351,9 @@ bool Jipopt::get_starting_point(
    }
 
    if( init_lambda )
+   {
       env->GetDoubleArrayRegion(lambdaj, 0, m, lambda);
+   }
 
    return true;
 }
@@ -356,12 +366,16 @@ bool Jipopt::eval_f(
 {
    /* Copy the native double x to the Java double array xj, if new values */
    if( new_x )
+   {
       env->SetDoubleArrayRegion(xj, 0, n, const_cast<Number*>(x));
+   }
 
    /* Call the java method */
    jboolean new_xj = new_x;
    if( !env->CallBooleanMethod(solver, eval_f_, n, xj, new_xj, fj) )
+   {
       return false;
+   }
 
    /* Copy from Java to native value */
    env->GetDoubleArrayRegion(fj, 0, 1, &obj_value);
@@ -377,12 +391,16 @@ bool Jipopt::eval_grad_f(
 {
    /* Copy the native double x to the Java double array xj, if new values */
    if( new_x )
+   {
       env->SetDoubleArrayRegion(xj, 0, n, const_cast<Number*>(x));
+   }
 
    /* Call the java method */
    jboolean new_xj = new_x;
    if( !env->CallBooleanMethod(solver, eval_grad_f_, n, xj, new_xj, grad_fj) )
+   {
       return false;
+   }
 
    env->GetDoubleArrayRegion(grad_fj, 0, n, grad_f);
 
@@ -398,12 +416,16 @@ bool Jipopt::eval_g(
 {
    /* Copy the native double x to the Java double array xj, if new values */
    if( new_x )
+   {
       env->SetDoubleArrayRegion(xj, 0, n, const_cast<Number*>(x));
+   }
 
    /* Call the java method */
    jboolean new_xj = new_x;
    if( !env->CallBooleanMethod(solver, eval_g_, n, xj, new_xj, m, gj) )
+   {
       return false;
+   }
 
    /* Copy from Java to native value */
    env->GetDoubleArrayRegion(gj, 0, m, g);
@@ -423,7 +445,9 @@ bool Jipopt::eval_jac_g(
 {
    // Copy the native double x to the Java double array xj, if new values
    if( new_x && x != NULL )
+   {
       env->SetDoubleArrayRegion(xj, 0, n, const_cast<Number*>(x));
+   }
 
    /// Create the index arrays if needed
    jintArray iRowj = NULL;
@@ -437,11 +461,15 @@ bool Jipopt::eval_jac_g(
    /* Call the java method */
    jboolean new_xj = new_x;
    if( !env->CallBooleanMethod(solver, eval_jac_g_, n, xj, new_xj, m, nele_jac, iRowj, jColj, jac_g == NULL ? NULL : jac_gj) )
+   {
       return false;
+   }
 
    /* Copy from Java to native value */
    if( jac_g != NULL )
+   {
       env->GetDoubleArrayRegion(jac_gj, 0, nele_jac, jac_g);
+   }
 
    if( iRow != NULL && jCol != NULL )
    {
@@ -456,11 +484,15 @@ bool Jipopt::eval_jac_g(
 
          env->GetIntArrayRegion(iRowj, 0, nele_jac, tmp);
          for( int i = 0; i < nele_jac; ++i )
+         {
             iRow[i] = (Index) tmp[i];
+         }
 
          env->GetIntArrayRegion(jColj, 0, nele_jac, tmp);
          for( int i = 0; i < nele_jac; ++i )
+         {
             jCol[i] = (Index) tmp[i];
+         }
 
          delete[] tmp;
       }
@@ -484,11 +516,15 @@ bool Jipopt::eval_h(
 {
    /* Copy the native double x to the Java double array xj, if new values */
    if( new_x && x != NULL )
+   {
       env->SetDoubleArrayRegion(xj, 0, n, const_cast<Number*>(x));
+   }
 
    /* Copy the native double lambda to the Java double array lambdaj, if new values */
    if( new_lambda && lambda != NULL )
+   {
       env->SetDoubleArrayRegion(mult_gj, 0, m, const_cast<Number*>(lambda));
+   }
 
    /* Create the index arrays if needed */
    jintArray iRowj = NULL;
@@ -503,11 +539,15 @@ bool Jipopt::eval_h(
    jboolean new_xj = new_x;
    jboolean new_lambdaj = new_lambda;
    if( !env->CallBooleanMethod(solver, eval_h_, n, xj, new_xj, obj_factor, m, mult_gj, new_lambdaj, nele_hess, iRowj, jColj, hess == NULL ? NULL : hessj) )
+   {
       return false;
+   }
 
    /* Copy from Java to native value */
    if( hess != NULL )
+   {
       env->GetDoubleArrayRegion(hessj, 0, nele_hess, hess);
+   }
 
    if( iRow != NULL && jCol != NULL )
    {
@@ -522,11 +562,15 @@ bool Jipopt::eval_h(
 
          env->GetIntArrayRegion(iRowj, 0, nele_hess, tmp);
          for( int i = 0; i < nele_hess; ++i )
+         {
             iRow[i] = (Index) tmp[i];
+         }
 
          env->GetIntArrayRegion(jColj, 0, nele_hess, tmp);
          for( int i = 0; i < nele_hess; ++i )
+         {
             jCol[i] = (Index) tmp[i];
+         }
 
          delete[] tmp;
       }
@@ -552,19 +596,29 @@ void Jipopt::finalize_solution(
    /* Copy the native arrays to Java double arrays */
 
    if( x != NULL )
+   {
       env->SetDoubleArrayRegion(xj, 0, n, const_cast<Number*>(x));
+   }
 
    if( z_L != NULL )
+   {
       env->SetDoubleArrayRegion(mult_x_Lj, 0, n, const_cast<Number*>(z_L));
+   }
 
    if( z_U != NULL )
+   {
       env->SetDoubleArrayRegion(mult_x_Uj, 0, n, const_cast<Number*>(z_U));
+   }
 
    if( g != NULL )
+   {
       env->SetDoubleArrayRegion(gj, 0, m, const_cast<Number*>(g));
+   }
 
    if( lambda != NULL )
+   {
       env->SetDoubleArrayRegion(mult_gj, 0, m, const_cast<Number*>(lambda));
+   }
 
    env->GetDoubleArrayRegion(fj, 0, 1, &obj_value);
 }
@@ -579,7 +633,9 @@ bool Jipopt::get_scaling_parameters(
    Number* g_scaling)
 {
    if( !using_scaling_parameters )
+   {
       return false;
+   }
 
    jdoubleArray obj_scaling_j = env->NewDoubleArray(1);
    jdoubleArray x_scaling_j   = env->NewDoubleArray(n);
@@ -624,7 +680,9 @@ bool Jipopt::get_scaling_parameters(
 Index Jipopt::get_number_of_nonlinear_variables()
 {
    if( using_LBFGS )
+   {
       return env->CallIntMethod(solver, get_number_of_nonlinear_variables_);
+   }
 
    return -1;
 }
@@ -634,12 +692,16 @@ bool Jipopt::get_list_of_nonlinear_variables(
    Index* pos_nonlin_vars)
 {
    if( !using_LBFGS )
+   {
       return false;
+   }
 
    jintArray pos_nonlin_vars_j = env->NewIntArray(num_nonlin_vars);
 
    if( !env->CallBooleanMethod(solver, get_list_of_nonlinear_variables_, num_nonlin_vars, pos_nonlin_vars_j) )
+   {
       return false;
+   }
 
    if( pos_nonlin_vars != NULL )
    {
@@ -653,7 +715,9 @@ bool Jipopt::get_list_of_nonlinear_variables(
 
          env->GetIntArrayRegion(pos_nonlin_vars_j, 0, num_nonlin_vars, tmp);
          for( int i = 0; i < num_nonlin_vars; ++i )
+         {
             pos_nonlin_vars[i] = (Index) tmp[i];
+         }
 
          delete[] tmp;
       }
@@ -665,161 +729,165 @@ bool Jipopt::get_list_of_nonlinear_variables(
 extern "C"
 {
 
-JNIEXPORT jlong JNICALL Java_org_coinor_Ipopt_CreateIpoptProblem(
-   JNIEnv* env,
-   jobject obj_this,
-   jint    n,
-   jint    m,
-   jint    nele_jac,
-   jint    nele_hess,
-   jint    index_style)
-{
-   /* create the smart pointer to the Ipopt problem */
-   SmartPtr<Jipopt>* pproblem = new SmartPtr<Jipopt>;
-
-   /* create the IpoptProblem */
-   *pproblem = new Jipopt(env, obj_this, n, m, nele_jac, nele_hess, index_style);
-
-   /* return the smart pointer to our class */
-   return (jlong) pproblem;
-}
-
-JNIEXPORT jint JNICALL Java_org_coinor_Ipopt_OptimizeTNLP(
-   JNIEnv*      env,
-   jobject      obj_this,
-   jlong        pipopt,
-   jdoubleArray xj,
-   jdoubleArray gj,
-   jdoubleArray obj_valj,
-   jdoubleArray mult_gj,
-   jdoubleArray mult_x_Lj,
-   jdoubleArray mult_x_Uj,
-   jdoubleArray callback_grad_f,
-   jdoubleArray callback_jac_g,
-   jdoubleArray callback_hess)
-{
-   Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);
-
-   problem->env       = env;
-   problem->solver    = obj_this;
-
-   problem->xj        = xj;
-   problem->gj        = gj;
-   problem->fj        = obj_valj;
-   problem->mult_gj   = mult_gj;
-   problem->mult_x_Lj = mult_x_Lj;
-   problem->mult_x_Uj = mult_x_Uj;
-
-   problem->grad_fj   = callback_grad_f;
-   problem->jac_gj    = callback_jac_g;
-   problem->hessj     = callback_hess;
-
-   ApplicationReturnStatus status;
-
-   status = problem->application->Initialize();
-
-   if( status != Solve_Succeeded )
+   JNIEXPORT jlong JNICALL Java_org_coinor_Ipopt_CreateIpoptProblem(
+      JNIEnv* env,
+      jobject obj_this,
+      jint    n,
+      jint    m,
+      jint    nele_jac,
+      jint    nele_hess,
+      jint    index_style)
    {
-      printf("\n\n*** Error during initialization!\n");
-      return (int) status;
+      /* create the smart pointer to the Ipopt problem */
+      SmartPtr<Jipopt>* pproblem = new SmartPtr<Jipopt>;
+
+      /* create the IpoptProblem */
+      *pproblem = new Jipopt(env, obj_this, n, m, nele_jac, nele_hess, index_style);
+
+      /* return the smart pointer to our class */
+      return (jlong) pproblem;
    }
 
-   /* solve the problem */
-   status = problem->application->OptimizeTNLP(problem);
-
-   return (jint) status;
-}
-
-JNIEXPORT void JNICALL Java_org_coinor_Ipopt_FreeIpoptProblem(
-   JNIEnv* /*env*/,
-   jobject /*obj_this*/,
-   jlong   pipopt
-)
-{
-   SmartPtr<Jipopt>* pproblem = (SmartPtr<Jipopt>*)pipopt;
-
-   if( pproblem != NULL && IsValid(*pproblem) )
+   JNIEXPORT jint JNICALL Java_org_coinor_Ipopt_OptimizeTNLP(
+      JNIEnv*      env,
+      jobject      obj_this,
+      jlong        pipopt,
+      jdoubleArray xj,
+      jdoubleArray gj,
+      jdoubleArray obj_valj,
+      jdoubleArray mult_gj,
+      jdoubleArray mult_x_Lj,
+      jdoubleArray mult_x_Uj,
+      jdoubleArray callback_grad_f,
+      jdoubleArray callback_jac_g,
+      jdoubleArray callback_hess)
    {
-      /* if OptimizeTNLP has been called, the application holds a SmartPtr to our problem class
-       * to resolve this circular dependency we first free the application explicitly
-       */
-      (*pproblem)->application = NULL;
+      Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);
 
-      /* now free our JIpopt itself */
-      *pproblem = NULL;
+      problem->env       = env;
+      problem->solver    = obj_this;
+
+      problem->xj        = xj;
+      problem->gj        = gj;
+      problem->fj        = obj_valj;
+      problem->mult_gj   = mult_gj;
+      problem->mult_x_Lj = mult_x_Lj;
+      problem->mult_x_Uj = mult_x_Uj;
+
+      problem->grad_fj   = callback_grad_f;
+      problem->jac_gj    = callback_jac_g;
+      problem->hessj     = callback_hess;
+
+      ApplicationReturnStatus status;
+
+      status = problem->application->Initialize();
+
+      if( status != Solve_Succeeded )
+      {
+         printf("\n\n*** Error during initialization!\n");
+         return (int) status;
+      }
+
+      /* solve the problem */
+      status = problem->application->OptimizeTNLP(problem);
+
+      return (jint) status;
    }
-}
 
-JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptIntOption(
-   JNIEnv*  env,
-   jobject  /*obj_this*/,
-   jlong    pipopt,
-   jstring  jparname,
-   jint     jparvalue
-)
-{
-   Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);
+   JNIEXPORT void JNICALL Java_org_coinor_Ipopt_FreeIpoptProblem(
+      JNIEnv* /*env*/,
+      jobject /*obj_this*/,
+      jlong   pipopt
+   )
+   {
+      SmartPtr<Jipopt>* pproblem = (SmartPtr<Jipopt>*)pipopt;
 
-   const char* pparameterName = env->GetStringUTFChars(jparname, 0);
-   string parameterName = pparameterName;
+      if( pproblem != NULL && IsValid(*pproblem) )
+      {
+         /* if OptimizeTNLP has been called, the application holds a SmartPtr to our problem class
+          * to resolve this circular dependency we first free the application explicitly
+          */
+         (*pproblem)->application = NULL;
 
-   // Try to apply the integer option
-   jboolean ret = problem->application->Options()->SetIntegerValue(parameterName, jparvalue);
+         /* now free our JIpopt itself */
+         *pproblem = NULL;
+      }
+   }
 
-   env->ReleaseStringUTFChars(jparname, pparameterName);
+   JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptIntOption(
+      JNIEnv*  env,
+      jobject  /*obj_this*/,
+      jlong    pipopt,
+      jstring  jparname,
+      jint     jparvalue
+   )
+   {
+      Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);
 
-   return ret;
-}
+      const char* pparameterName = env->GetStringUTFChars(jparname, 0);
+      string parameterName = pparameterName;
 
-JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptNumOption(
-   JNIEnv* env,
-   jobject /*obj_this*/,
-   jlong   pipopt,
-   jstring jparname,
-   jdouble jparvalue
-)
-{
-   Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);
+      // Try to apply the integer option
+      jboolean ret = problem->application->Options()->SetIntegerValue(parameterName, jparvalue);
 
-   const char* pparameterName = env->GetStringUTFChars(jparname, 0);
-   string parameterName = pparameterName;
+      env->ReleaseStringUTFChars(jparname, pparameterName);
 
-   // Try to set the real option
-   jboolean ret = problem->application->Options()->SetNumericValue(parameterName, jparvalue);
+      return ret;
+   }
 
-   env->ReleaseStringUTFChars(jparname, pparameterName);
+   JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptNumOption(
+      JNIEnv* env,
+      jobject /*obj_this*/,
+      jlong   pipopt,
+      jstring jparname,
+      jdouble jparvalue
+   )
+   {
+      Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);
 
-   return ret;
-}
+      const char* pparameterName = env->GetStringUTFChars(jparname, 0);
+      string parameterName = pparameterName;
 
-JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptStrOption(
-   JNIEnv* env,
-   jobject /*obj_this*/,
-   jlong   pipopt,
-   jstring jparname,
-   jstring jparvalue
-)
-{
-   Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);
+      // Try to set the real option
+      jboolean ret = problem->application->Options()->SetNumericValue(parameterName, jparvalue);
 
-   const char* pparameterName = env->GetStringUTFChars(jparname, NULL);
-   string parameterName = pparameterName;
-   const char* pparameterValue = env->GetStringUTFChars(jparvalue, NULL);
-   string parameterValue = pparameterValue;
+      env->ReleaseStringUTFChars(jparname, pparameterName);
 
-   // parameterValue has been changed to LowerCase in Java!
-   if( parameterName == "hessian_approximation" && parameterValue == "limited-memory" )
-      problem->using_LBFGS = true;
-   else if( parameterName == "nlp_scaling_method" && parameterValue == "user-scaling" )
-      problem->using_scaling_parameters = true;
+      return ret;
+   }
 
-   // Try to apply the string option
-   jboolean ret = problem->application->Options()->SetStringValue(parameterName, parameterValue);
+   JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_AddIpoptStrOption(
+      JNIEnv* env,
+      jobject /*obj_this*/,
+      jlong   pipopt,
+      jstring jparname,
+      jstring jparvalue
+   )
+   {
+      Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);
 
-   env->ReleaseStringUTFChars(jparname, pparameterName);
-   env->ReleaseStringUTFChars(jparname, pparameterValue);
+      const char* pparameterName = env->GetStringUTFChars(jparname, NULL);
+      string parameterName = pparameterName;
+      const char* pparameterValue = env->GetStringUTFChars(jparvalue, NULL);
+      string parameterValue = pparameterValue;
 
-   return ret;
-}
+      // parameterValue has been changed to LowerCase in Java!
+      if( parameterName == "hessian_approximation" && parameterValue == "limited-memory" )
+      {
+         problem->using_LBFGS = true;
+      }
+      else if( parameterName == "nlp_scaling_method" && parameterValue == "user-scaling" )
+      {
+         problem->using_scaling_parameters = true;
+      }
+
+      // Try to apply the string option
+      jboolean ret = problem->application->Options()->SetStringValue(parameterName, parameterValue);
+
+      env->ReleaseStringUTFChars(jparname, pparameterName);
+      env->ReleaseStringUTFChars(jparname, pparameterValue);
+
+      return ret;
+   }
 
 } // extern "C"

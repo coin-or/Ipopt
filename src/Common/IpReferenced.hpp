@@ -218,7 +218,7 @@ void ReferencedObject::AddRef(
 #   ifdef IP_DEBUG_REFERENCED
    referencers_.push_back(referencer);
 #   else
-    (void) referencer;
+   (void) referencer;
 #   endif
 }
 
@@ -253,7 +253,7 @@ void ReferencedObject::ReleaseRef(
       referencers_.erase(iter);
    }
 #   else
-    (void) referencer;
+   (void) referencer;
 #   endif
 }
 

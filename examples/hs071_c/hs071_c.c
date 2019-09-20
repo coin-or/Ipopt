@@ -17,7 +17,7 @@ Bool eval_f(
    Bool        new_x,
    Number*     obj_value,
    UserDataPtr user_data
-   );
+);
 
 Bool eval_grad_f(
    Index       n,
@@ -25,7 +25,7 @@ Bool eval_grad_f(
    Bool        new_x,
    Number*     grad_f,
    UserDataPtr user_data
-   );
+);
 
 Bool eval_g(
    Index       n,
@@ -34,7 +34,7 @@ Bool eval_g(
    Index       m,
    Number*     g,
    UserDataPtr user_data
-   );
+);
 
 Bool eval_jac_g(
    Index       n,
@@ -46,7 +46,7 @@ Bool eval_jac_g(
    Index*      jCol,
    Number*     values,
    UserDataPtr user_data
-   );
+);
 
 Bool eval_h(
    Index       n,
@@ -61,7 +61,7 @@ Bool eval_h(
    Index*      jCol,
    Number*     values,
    UserDataPtr user_data
-   );
+);
 
 Bool intermediate_cb(
    Index       alg_mod,
@@ -76,7 +76,7 @@ Bool intermediate_cb(
    Number      alpha_pr,
    Index       ls_trials,
    UserDataPtr user_data
-   );
+);
 
 /** This is an example how user_data can be used. */
 struct MyUserData
@@ -137,8 +137,8 @@ int main()
 
    /* create the IpoptProblem */
    nlp = CreateIpoptProblem(n, x_L, x_U, m, g_L, g_U, nele_jac, nele_hess, index_style,
-      &eval_f, &eval_g, &eval_grad_f,
-      &eval_jac_g, &eval_h);
+                            &eval_f, &eval_g, &eval_grad_f,
+                            &eval_jac_g, &eval_h);
 
    /* We can free the memory now - the values for the bounds have been
     * copied internally in CreateIpoptProblem
@@ -184,16 +184,24 @@ int main()
    {
       printf("\n\nSolution of the primal variables, x\n");
       for( i = 0; i < n; i++ )
+      {
          printf("x[%d] = %e\n", i, x[i]);
+      }
 
       printf("\n\nSolution of the constraint multipliers, lambda\n");
       for( i = 0; i < m; i++ )
+      {
          printf("lambda[%d] = %e\n", i, mult_g[i]);
+      }
       printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
       for( i = 0; i < n; i++ )
+      {
          printf("z_L[%d] = %e\n", i, mult_x_L[i]);
+      }
       for( i = 0; i < n; i++ )
+      {
          printf("z_U[%d] = %e\n", i, mult_x_U[i]);
+      }
 
       printf("\n\nObjective value\nf(x*) = %e\n", obj);
    }
@@ -224,16 +232,24 @@ int main()
       {
          printf("\n\nSolution of the primal variables, x\n");
          for( i = 0; i < n; i++ )
+         {
             printf("x[%d] = %e\n", i, x[i]);
+         }
 
          printf("\n\nSolution of the constraint multipliers, lambda\n");
          for( i = 0; i < m; i++ )
+         {
             printf("lambda[%d] = %e\n", i, mult_g[i]);
+         }
          printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
          for( i = 0; i < n; i++ )
+         {
             printf("z_L[%d] = %e\n", i, mult_x_L[i]);
+         }
          for( i = 0; i < n; i++ )
+         {
             printf("z_U[%d] = %e\n", i, mult_x_U[i]);
+         }
 
          printf("\n\nObjective value\nf(x*) = %e\n", obj);
       }
@@ -261,9 +277,10 @@ Bool eval_f(
    Bool        new_x,
    Number*     obj_value,
    UserDataPtr user_data
-   )
+)
 {
-   assert(n == 4);  (void) n;
+   assert(n == 4);
+   (void) n;
 
    (void) new_x;
    (void) user_data;
@@ -279,9 +296,10 @@ Bool eval_grad_f(
    Bool        new_x,
    Number*     grad_f,
    UserDataPtr user_data
-   )
+)
 {
-   assert(n == 4);  (void) n;
+   assert(n == 4);
+   (void) n;
 
    (void) new_x;
    (void) user_data;
@@ -301,12 +319,14 @@ Bool eval_g(
    Index       m,
    Number*     g,
    UserDataPtr user_data
-   )
+)
 {
    struct MyUserData* my_data = user_data;
 
-   assert(n == 4);  (void) n;
-   assert(m == 2);  (void) m;
+   assert(n == 4);
+   (void) n;
+   assert(m == 2);
+   (void) m;
 
    (void) new_x;
 
@@ -326,7 +346,7 @@ Bool eval_jac_g(
    Index*      jCol,
    Number*     values,
    UserDataPtr user_data
-   )
+)
 {
    (void) n;
    (void) new_x;
@@ -387,7 +407,7 @@ Bool eval_h(
    Index*      jCol,
    Number*     values,
    UserDataPtr user_data
-   )
+)
 {
    Index idx = 0; /* nonzero element counter */
    Index row = 0; /* row counter for loop */
@@ -416,7 +436,8 @@ Bool eval_h(
          }
       }
 
-      assert(idx == nele_hess);  (void) nele_hess;
+      assert(idx == nele_hess);
+      (void) nele_hess;
    }
    else
    {
@@ -474,11 +495,13 @@ Bool intermediate_cb(
    Number      alpha_pr,
    Index       ls_trials,
    UserDataPtr user_data
-   )
+)
 {
    printf("Testing intermediate callback in iteration %d\n", iter_count);
    if( inf_pr < 1e-4 )
+   {
       return FALSE;
+   }
 
    (void) alg_mod;
    (void) obj_value;

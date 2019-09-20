@@ -17,14 +17,14 @@ std::map<std::string, SmartPtr<RegisteredTNLP> >& RegisteredTNLPListMap()
 void RegisteredTNLPs::RegisterTNLP(
    const SmartPtr<RegisteredTNLP>& tnlp,
    const std::string               name
-   )
+)
 {
    RegisteredTNLPListMap()[name] = GetRawPtr(tnlp);
 }
 
 SmartPtr<RegisteredTNLP> RegisteredTNLPs::GetTNLP(
    const std::string name
-   )
+)
 {
    SmartPtr<RegisteredTNLP> retval = NULL;
    std::map<std::string, SmartPtr<RegisteredTNLP> >::iterator it;
@@ -39,7 +39,7 @@ SmartPtr<RegisteredTNLP> RegisteredTNLPs::GetTNLP(
 void RegisteredTNLPs::PrintRegisteredProblems()
 {
    for( std::map<std::string, SmartPtr<RegisteredTNLP> >::iterator it = RegisteredTNLPListMap().begin();
-      it != RegisteredTNLPListMap().end(); it++ )
+        it != RegisteredTNLPListMap().end(); it++ )
    {
       printf("%s\n", it->first.c_str());
    }

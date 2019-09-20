@@ -426,7 +426,8 @@ bool AmplTNLP::get_constraints_linearity(
 {
    ASL_pfgh* asl = AmplSolverObject();
    //check that n is good
-   DBG_ASSERT(n == n_con);  (void) n;
+   DBG_ASSERT(n == n_con);
+   (void) n;
    // check that there are no network constraints
    DBG_ASSERT(nlnc == 0 && lnc == 0);
    //the first nlc constraints are non linear the rest is linear
@@ -585,7 +586,8 @@ bool AmplTNLP::eval_jac_g(
    ASL_pfgh* asl = asl_;
    DBG_ASSERT(asl_);
    DBG_ASSERT(n == n_var);
-   DBG_ASSERT(m == n_con);  (void) m;
+   DBG_ASSERT(m == n_con);
+   (void) m;
 
    if( iRow && jCol && !values )
    {
@@ -602,7 +604,8 @@ bool AmplTNLP::eval_jac_g(
             current_nz++;
          }
       }
-      DBG_ASSERT(current_nz == nele_jac);  (void) nele_jac;
+      DBG_ASSERT(current_nz == nele_jac);
+      (void) nele_jac;
       return true;
    }
    else if( !iRow && !jCol && values )
@@ -660,7 +663,8 @@ bool AmplTNLP::eval_h(
             k++;
          }
       }
-      DBG_ASSERT(k == nele_hess);  (void) nele_hess;
+      DBG_ASSERT(k == nele_hess);
+      (void) nele_hess;
       return true;
    }
    else if( !iRow && !jCol && values )

@@ -2072,7 +2072,9 @@ void TNLPAdapter::FinalizeSolution(
             SmartPtr<DenseVector> y_d_meta_vector = y_d_space->MakeNewDenseVector();
             y_c_meta_vector->SetValues(&(y_c_meta_iter->second)[0]);
             if( y_d_second.size() > 0 )
+            {
                y_d_meta_vector->SetValues(&y_d_second[0]);
+            }
             ResortG(*y_c_meta_vector, *y_d_meta_vector, &new_g_meta_data[0]);
             con_numeric_md[y_c_meta_iter->first] = new_g_meta_data;
          }
@@ -2122,7 +2124,9 @@ void TNLPAdapter::FinalizeSolution(
             SmartPtr<DenseVector> z_U_meta_vector = z_U_space->MakeNewDenseVector();
             z_L_meta_vector->SetValues(&(z_L_meta_iter->second)[0]);
             if( z_U_second.size() > 0 )
+            {
                z_U_meta_vector->SetValues(&z_U_second[0]);
+            }
             std::vector<Number> new_z_L_meta_data(n_full_x_, 0.0);
             std::vector<Number> new_z_U_meta_data(n_full_x_, 0.0);
             ResortBnds(*z_L_meta_vector, &new_z_L_meta_data[0], *z_U_meta_vector, &new_z_U_meta_data[0]);

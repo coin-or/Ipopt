@@ -22,9 +22,9 @@
 
 extern "C" void* killer_thread(
    void* arg
-   )
+)
 {
-   int runtime = *reinterpret_cast<int *>(arg);
+   int runtime = *reinterpret_cast<int*>(arg);
    if (runtime <= 0)
    {
       printf("Invalid argument for run time (%d)\n", runtime);
@@ -46,26 +46,26 @@ using namespace std;
 // can't get it to work right now.  For now, list explicitly the
 // problems we want to include:
 #include "LuksanVlcek1.hpp"
-REGISTER_TNLP(LuksanVlcek1(0,0), LukVlE1)
-REGISTER_TNLP(LuksanVlcek1(-1.,0.), LukVlI1)
+REGISTER_TNLP(LuksanVlcek1(0, 0), LukVlE1)
+REGISTER_TNLP(LuksanVlcek1(-1., 0.), LukVlI1)
 #include "LuksanVlcek2.hpp"
-REGISTER_TNLP(LuksanVlcek2(0,0), LukVlE2)
-REGISTER_TNLP(LuksanVlcek2(-1.,0.), LukVlI2)
+REGISTER_TNLP(LuksanVlcek2(0, 0), LukVlE2)
+REGISTER_TNLP(LuksanVlcek2(-1., 0.), LukVlI2)
 #include "LuksanVlcek3.hpp"
-REGISTER_TNLP(LuksanVlcek3(0,0), LukVlE3)
-REGISTER_TNLP(LuksanVlcek3(-1.,0.), LukVlI3)
+REGISTER_TNLP(LuksanVlcek3(0, 0), LukVlE3)
+REGISTER_TNLP(LuksanVlcek3(-1., 0.), LukVlI3)
 #include "LuksanVlcek4.hpp"
-REGISTER_TNLP(LuksanVlcek4(0,0), LukVlE4)
-REGISTER_TNLP(LuksanVlcek4(-1.,0.), LukVlI4)
+REGISTER_TNLP(LuksanVlcek4(0, 0), LukVlE4)
+REGISTER_TNLP(LuksanVlcek4(-1., 0.), LukVlI4)
 #include "LuksanVlcek5.hpp"
-REGISTER_TNLP(LuksanVlcek5(0,0), LukVlE5)
-REGISTER_TNLP(LuksanVlcek5(-1.,0.), LukVlI5)
+REGISTER_TNLP(LuksanVlcek5(0, 0), LukVlE5)
+REGISTER_TNLP(LuksanVlcek5(-1., 0.), LukVlI5)
 #include "LuksanVlcek6.hpp"
-REGISTER_TNLP(LuksanVlcek6(0,0), LukVlE6)
-REGISTER_TNLP(LuksanVlcek6(-1.,0.), LukVlI6)
+REGISTER_TNLP(LuksanVlcek6(0, 0), LukVlE6)
+REGISTER_TNLP(LuksanVlcek6(-1., 0.), LukVlI6)
 #include "LuksanVlcek7.hpp"
-REGISTER_TNLP(LuksanVlcek7(0,0), LukVlE7)
-REGISTER_TNLP(LuksanVlcek7(-1.,0.), LukVlI7)
+REGISTER_TNLP(LuksanVlcek7(0, 0), LukVlE7)
+REGISTER_TNLP(LuksanVlcek7(-1., 0.), LukVlI7)
 
 #include "MittelmannBndryCntrlDiri.hpp"
 REGISTER_TNLP(MittelmannBndryCntrlDiri1, MBndryCntrl1)
@@ -120,7 +120,7 @@ static void print_problems()
 int main(
    int   argv,
    char* argc[]
-   )
+)
 {
    if( argv == 2 && !strcmp(argc[1], "list") )
    {
@@ -129,7 +129,7 @@ int main(
    }
 
 #ifdef TIME_LIMIT
-   if (argv==4)
+   if (argv == 4)
    {
       int runtime = atoi(argc[3]);
       pthread_t thread;
@@ -137,15 +137,15 @@ int main(
    }
    else
 #endif
-   if( argv != 3 && argv != 1 )
-   {
-      printf("Usage: %s (this will ask for problem name)\n", argc[0]);
-      printf("       %s ProblemName N\n", argc[0]);
-      printf("          where N is a positive parameter determining problem size\n");
-      printf("       %s list\n", argc[0]);
-      printf("          to list all registered problems.\n");
-      return -1;
-   }
+      if( argv != 3 && argv != 1 )
+      {
+         printf("Usage: %s (this will ask for problem name)\n", argc[0]);
+         printf("       %s ProblemName N\n", argc[0]);
+         printf("          where N is a positive parameter determining problem size\n");
+         printf("       %s list\n", argc[0]);
+         printf("          to list all registered problems.\n");
+         return -1;
+      }
 
    SmartPtr<RegisteredTNLP> tnlp;
    Index N;

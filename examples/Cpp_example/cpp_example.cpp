@@ -15,7 +15,7 @@ using namespace Ipopt;
 int main(
    int,
    char**
-   )
+)
 {
    // Create an instance of your nlp...
    SmartPtr<TNLP> mynlp = new MyNLP();
@@ -45,7 +45,7 @@ int main(
 
       Number final_obj = app->Statistics()->FinalObjective();
       std::cout << std::endl << std::endl << "*** The final value of the objective function is " << final_obj << '.'
-         << std::endl;
+                << std::endl;
    }
 
    return (int) status;

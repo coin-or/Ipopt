@@ -173,8 +173,10 @@ bool StdInterfaceTNLP::get_scaling_parameters(
    Number* g_scaling
 )
 {
-   DBG_ASSERT(n == n_var_);  (void) n;
-   DBG_ASSERT(m == n_con_);  (void) m;
+   DBG_ASSERT(n == n_var_);
+   (void) n;
+   DBG_ASSERT(m == n_con_);
+   (void) m;
 
    obj_scaling = obj_scaling_;
    if( x_scaling_ != NULL )

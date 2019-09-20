@@ -39,7 +39,7 @@ extern "C"
    void WSMP_FUNC_(wsmp_clear, WSMP_CLEAR)(void);
 
 #ifdef PARDISO_MATCHING_PREPROCESS
-   void PARDISO_FUNC(smat_reordering_pardiso_wsmp,SMAT_REORDERING_PARDISO_WSMP)(
+   void PARDISO_FUNC(smat_reordering_pardiso_wsmp, SMAT_REORDERING_PARDISO_WSMP)(
       const ipfint* N,
       const ipfint* ia,
       const ipfint* ja,
@@ -261,7 +261,7 @@ bool WsmpSolverInterface::InitializeImpl(
    ipfint idmy;
    double ddmy;
    WSMP_FUNC(wssmp, WSSMP)(&idmy, &idmy, &idmy, &ddmy, &ddmy, &idmy, &idmy, &ddmy, &idmy, &idmy, &ddmy, &idmy, &idmy,
-                          IPARM_, DPARM_);
+                           IPARM_, DPARM_);
    IPARM_[15] = wsmp_ordering_option; // ordering option
    IPARM_[17] = 0; // use local minimum fill-in ordering
    IPARM_[19] = wsmp_ordering_option2; // for ordering in IP methods?
@@ -426,8 +426,8 @@ ESymSolverStatus WsmpSolverInterface::InternalSymFact(
    scale2 = new double[N];
    ipfint* tmp2_ = new ipfint[N];
 
-   PARDISO_FUNC(smat_reordering_pardiso_wsmp,SMAT_REORDERING_PARDISO_WSMP)(&N, ia, ja, a_, ia2, ja2, a2_, perm2,
-                                 scale2, tmp2_, 0);
+   PARDISO_FUNC(smat_reordering_pardiso_wsmp, SMAT_REORDERING_PARDISO_WSMP)(&N, ia, ja, a_, ia2, ja2, a2_, perm2,
+         scale2, tmp2_, 0);
 
    delete[] tmp2_;
 
@@ -464,7 +464,7 @@ ESymSolverStatus WsmpSolverInterface::InternalSymFact(
 #else
    WSMP_FUNC(wssmp, WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
 #endif
-                          &ddmy, &idmy, &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
+                           &ddmy, &idmy, &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                   "Done with WSSMP-1-2 for ordering and symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(),
                   WallclockTime());
@@ -577,7 +577,7 @@ ESymSolverStatus WsmpSolverInterface::Factorization(
 #ifdef PARDISO_MATCHING_PREPROCESS
    {
       ipfint* tmp2_ = new ipfint[N];
-      PARDISO_FUNC(smat_reordering_pardiso_wsmp,SMAT_REORDERING_PARDISO_WSMP)(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp2_, 1);
+      PARDISO_FUNC(smat_reordering_pardiso_wsmp, SMAT_REORDERING_PARDISO_WSMP)(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp2_, 1);
       delete[] tmp2_;
    }
 #endif
@@ -589,7 +589,7 @@ ESymSolverStatus WsmpSolverInterface::Factorization(
 #else
    WSMP_FUNC(wssmp, WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
 #endif
-                          &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
+                           &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                   "Done with WSSMP-3-3 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(),
                   WallclockTime());
@@ -704,15 +704,15 @@ ESymSolverStatus WsmpSolverInterface::Solve(
       X[perm2[i]] = scale2[i] * rhs_vals[i];
    }
    WSMP_FUNC(wssmp, WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
-                          X, &LDB, &NRHS, &ddmy, &NAUX,
-                          MRP_, IPARM_, DPARM_);
+                           X, &LDB, &NRHS, &ddmy, &NAUX,
+                           MRP_, IPARM_, DPARM_);
    for (int i = 0; i < N; i++)
    {
       rhs_vals[i] = scale2[i] * X[perm2[i]];
    }
 #else
    WSMP_FUNC(wssmp, WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_, rhs_vals, &LDB, &NRHS, &ddmy, &NAUX, MRP_, IPARM_,
-                          DPARM_);
+                           DPARM_);
 #endif
 
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
@@ -822,10 +822,10 @@ ESymSolverStatus WsmpSolverInterface::DetermineDependentRows(
 
 #ifdef PARDISO_MATCHING_PREPROCESS
    WSMP_FUNC(wssmp, WSSMP)(&N, ia2, ja2, a2_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
-                          &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
+                           &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
 #else
    WSMP_FUNC(wssmp, WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_, &ddmy, &idmy, &idmy, &ddmy, &NAUX, MRP_, IPARM_,
-                          DPARM_);
+                           DPARM_);
 #endif
 
    const Index ierror = IPARM_[63];

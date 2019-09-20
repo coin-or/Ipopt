@@ -27,7 +27,7 @@ bool MyNLP::get_nlp_info(
    Index&          nnz_jac_g,
    Index&          nnz_h_lag,
    IndexStyleEnum& index_style
-   )
+)
 {
    // The problem described in MyNLP.hpp has 2 variables, x1, & x2,
    n = 2;
@@ -56,7 +56,7 @@ bool MyNLP::get_bounds_info(
    Index   m,
    Number* g_l,
    Number* g_u
-   )
+)
 {
    // here, the n and m we gave IPOPT in get_nlp_info are passed back to us.
    // If desired, we could assert to make sure they are what we think they are.
@@ -91,7 +91,7 @@ bool MyNLP::get_starting_point(
    Index   m,
    bool    init_lambda,
    Number* lambda
-   )
+)
 {
    // Here, we assume we only have starting values for x, if you code
    // your own NLP, you can provide starting values for the others if
@@ -112,7 +112,7 @@ bool MyNLP::eval_f(
    const Number* x,
    bool          new_x,
    Number&       obj_value
-   )
+)
 {
    // return the value of the objective function
    Number x2 = x[1];
@@ -127,7 +127,7 @@ bool MyNLP::eval_grad_f(
    const Number* x,
    bool          new_x,
    Number*       grad_f
-   )
+)
 {
    // return the gradient of the objective function grad_{x} f(x)
 
@@ -147,7 +147,7 @@ bool MyNLP::eval_g(
    bool          new_x,
    Index         m,
    Number*       g
-   )
+)
 {
    // return the value of the constraints: g(x)
    Number x1 = x[0];
@@ -167,7 +167,7 @@ bool MyNLP::eval_jac_g(
    Index*        iRow,
    Index*        jCol,
    Number*       values
-   )
+)
 {
    if( values == NULL )
    {
@@ -208,7 +208,7 @@ bool MyNLP::eval_h(
    Index*        iRow,
    Index*        jCol,
    Number*       values
-   )
+)
 {
    if( values == NULL )
    {
@@ -253,7 +253,7 @@ void MyNLP::finalize_solution(
    Number                     obj_value,
    const IpoptData*           ip_data,
    IpoptCalculatedQuantities* ip_cq
-   )
+)
 {
    // here is where we would store the solution to variables, or write to a file, etc
    // so we could use the solution. Since the solution is displayed to the console,

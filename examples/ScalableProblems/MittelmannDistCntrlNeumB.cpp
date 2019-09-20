@@ -31,7 +31,7 @@ void MittelmannDistCntrlNeumBBase::SetBaseParameters(
    Number b_i0,
    Number b_i1,
    Number u_init
-   )
+)
 {
    N_ = N;
    h_ = 1. / (N + 1);
@@ -64,7 +64,7 @@ bool MittelmannDistCntrlNeumBBase::get_nlp_info(
    Index&          nnz_jac_g,
    Index&          nnz_h_lag,
    IndexStyleEnum& index_style
-   )
+)
 {
    // We for each of the N_+2 times N_+2 mesh points we have the value
    // of the functions y, and for each N_ times N_ interior mesh points
@@ -110,7 +110,7 @@ bool MittelmannDistCntrlNeumBBase::get_bounds_info(
    Index   m,
    Number* g_l,
    Number* g_u
-   )
+)
 {
    // Set overall bounds on the variables
    for( Index i = 0; i <= N_ + 1; i++ )
@@ -159,14 +159,17 @@ bool MittelmannDistCntrlNeumBBase::get_starting_point(
    Index   /*m*/,
    bool    init_lambda,
    Number* /*lambda*/
-   )
+)
 {
    // Here, we assume we only have starting values for x, if you code
    // your own NLP, you can provide starting values for the others if
    // you wish.
-   assert(init_x == true);  (void) init_x;
-   assert(init_z == false);  (void) init_z;
-   assert(init_lambda == false);  (void) init_lambda;
+   assert(init_x == true);
+   (void) init_x;
+   assert(init_z == false);
+   (void) init_z;
+   assert(init_lambda == false);
+   (void) init_lambda;
 
    // set all y's to the perfect match with y_d
    for( Index i = 0; i <= N_ + 1; i++ )
@@ -199,7 +202,7 @@ bool MittelmannDistCntrlNeumBBase::get_scaling_parameters(
    bool&   use_g_scaling,
    Index   /*m*/,
    Number* /*g_scaling*/
-   )
+)
 {
    obj_scaling = 1. / hh_;
    use_x_scaling = false;
@@ -212,7 +215,7 @@ bool MittelmannDistCntrlNeumBBase::eval_f(
    const Number* x,
    bool          /*new_x*/,
    Number&       obj_value
-   )
+)
 {
    // return the value of the objective function
    obj_value = 0.;
@@ -235,7 +238,7 @@ bool MittelmannDistCntrlNeumBBase::eval_grad_f(
    const Number* x,
    bool          /*new_x*/,
    Number*       grad_f
-   )
+)
 {
    // return the gradient of the objective function grad_{x} f(x)
 
@@ -278,7 +281,7 @@ bool MittelmannDistCntrlNeumBBase::eval_g(
    bool          /*new_x*/,
    Index         m,
    Number*       g
-   )
+)
 {
    // return the value of the constraints: g(x)
 
@@ -291,7 +294,7 @@ bool MittelmannDistCntrlNeumBBase::eval_g(
 
          // Start with the discretized Laplacian operator
          val = 4. * x[y_index(i, j)] - x[y_index(i - 1, j)] - x[y_index(i + 1, j)] - x[y_index(i, j - 1)]
-            - x[y_index(i, j + 1)];
+               - x[y_index(i, j + 1)];
 
          // Add the forcing term (including the step size here)
          val += hh_ * d_cont(x1_grid(i), x2_grid(j), x[y_index(i, j)], x[u_index(i, j)]);
@@ -322,7 +325,8 @@ bool MittelmannDistCntrlNeumBBase::eval_g(
       ig++;
    }
 
-   DBG_ASSERT(ig==m);  (void) m;
+   DBG_ASSERT(ig == m);
+   (void) m;
 
    return true;
 }
@@ -336,7 +340,7 @@ bool MittelmannDistCntrlNeumBBase::eval_jac_g(
    Index*        iRow,
    Index*        jCol,
    Number*       values
-   )
+)
 {
    if( values == NULL )
    {
@@ -425,7 +429,8 @@ bool MittelmannDistCntrlNeumBBase::eval_jac_g(
          ig++;
       }
 
-      DBG_ASSERT(ijac==nele_jac);  (void) nele_jac;
+      DBG_ASSERT(ijac == nele_jac);
+      (void) nele_jac;
    }
    else
    {
@@ -490,7 +495,7 @@ bool MittelmannDistCntrlNeumBBase::eval_jac_g(
          ijac++;
       }
 
-      DBG_ASSERT(ijac==nele_jac);
+      DBG_ASSERT(ijac == nele_jac);
    }
 
    return true;
@@ -508,7 +513,7 @@ bool MittelmannDistCntrlNeumBBase::eval_h(
    Index*        iRow,
    Index*        jCol,
    Number*       values
-   )
+)
 {
    if( values == NULL )
    {
@@ -558,7 +563,8 @@ bool MittelmannDistCntrlNeumBBase::eval_h(
          }
       }
 
-      DBG_ASSERT(ihes==nele_hess);  (void) nele_hess;
+      DBG_ASSERT(ihes == nele_hess);
+      (void) nele_hess;
    }
    else
    {
@@ -578,7 +584,7 @@ bool MittelmannDistCntrlNeumBBase::eval_h(
                for( Index j = 1; j <= N_; j++ )
                {
                   values[ihes] = obj_factor * hh_
-                     * fint_cont_dydy(x1_grid(i), x2_grid(j), x[y_index(i, j)], x[u_index(i, j)]);
+                                 * fint_cont_dydy(x1_grid(i), x2_grid(j), x[y_index(i, j)], x[u_index(i, j)]);
                   ihes++;
                }
             }
@@ -603,7 +609,7 @@ bool MittelmannDistCntrlNeumBBase::eval_h(
                for( Index j = 1; j <= N_; j++ )
                {
                   values[ihes] += lambda[pde_index(i, j)] * hh_
-                     * d_cont_dydy(x1_grid(i), x2_grid(j), x[y_index(i, j)], x[u_index(i, j)]);
+                                  * d_cont_dydy(x1_grid(i), x2_grid(j), x[y_index(i, j)], x[u_index(i, j)]);
                   ihes++;
                }
             }
@@ -622,7 +628,7 @@ bool MittelmannDistCntrlNeumBBase::eval_h(
                for( Index j = 1; j <= N_; j++ )
                {
                   values[ihes] = obj_factor * hh_
-                     * fint_cont_dudu(x1_grid(i), x2_grid(j), x[y_index(i, j)], x[u_index(i, j)]);
+                                 * fint_cont_dudu(x1_grid(i), x2_grid(j), x[y_index(i, j)], x[u_index(i, j)]);
                   ihes++;
                }
             }
@@ -647,7 +653,7 @@ bool MittelmannDistCntrlNeumBBase::eval_h(
                for( Index j = 1; j <= N_; j++ )
                {
                   values[ihes] += lambda[pde_index(i, j)] * hh_
-                     * d_cont_dudu(x1_grid(i), x2_grid(j), x[y_index(i, j)], x[u_index(i, j)]);
+                                  * d_cont_dudu(x1_grid(i), x2_grid(j), x[y_index(i, j)], x[u_index(i, j)]);
                   ihes++;
                }
             }
@@ -666,7 +672,7 @@ bool MittelmannDistCntrlNeumBBase::eval_h(
                for( Index j = 1; j <= N_; j++ )
                {
                   values[ihes] = obj_factor * hh_
-                     * fint_cont_dydu(x1_grid(i), x2_grid(j), x[y_index(i, j)], x[u_index(i, j)]);
+                                 * fint_cont_dydu(x1_grid(i), x2_grid(j), x[y_index(i, j)], x[u_index(i, j)]);
                   ihes++;
                }
             }
@@ -691,7 +697,7 @@ bool MittelmannDistCntrlNeumBBase::eval_h(
                for( Index j = 1; j <= N_; j++ )
                {
                   values[ihes] += lambda[pde_index(i, j)] * hh_
-                     * d_cont_dydu(x1_grid(i), x2_grid(j), x[y_index(i, j)], x[u_index(i, j)]);
+                                  * d_cont_dydu(x1_grid(i), x2_grid(j), x[y_index(i, j)], x[u_index(i, j)]);
                   ihes++;
                }
             }
@@ -714,7 +720,7 @@ void MittelmannDistCntrlNeumBBase::finalize_solution(
    Number                     /*obj_value*/,
    const IpoptData*           /*ip_data*/,
    IpoptCalculatedQuantities* /*ip_cq*/
-   )
+)
 {
    /*
     FILE* fp = fopen("solution.txt", "w+");

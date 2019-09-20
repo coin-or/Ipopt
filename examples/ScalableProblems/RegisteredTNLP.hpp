@@ -21,7 +21,7 @@ public:
     */
    virtual bool InitializeProblem(
       Index N  /**< determines problems size */
-      ) = 0;
+   ) = 0;
 };
 
 class RegisteredTNLPs
@@ -30,7 +30,7 @@ public:
    RegisteredTNLPs(
       const SmartPtr<RegisteredTNLP>& tnlp,
       const std::string               name
-      )
+   )
    {
       RegisterTNLP(tnlp, name);
    }
@@ -39,7 +39,7 @@ public:
    { }
    static SmartPtr<RegisteredTNLP> GetTNLP(
       const std::string name
-      );
+   );
 
    static void PrintRegisteredProblems();
 
@@ -47,7 +47,7 @@ private:
    void RegisterTNLP(
       const SmartPtr<RegisteredTNLP>& tnlp,
       const std::string               name
-      );
+   );
 
    SmartPtr<RegisteredTNLP> tnlp_;
 };

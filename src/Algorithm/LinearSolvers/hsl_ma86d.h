@@ -125,7 +125,7 @@ struct ma86_info_d
 /** Initialise control with default values */
 void ma86_default_control_d(
    struct ma86_control_d* control
-   );
+);
 
 /** Analyse the sparsity pattern and prepare for factorization */
 void ma86_analyse_d(
@@ -136,7 +136,7 @@ void ma86_analyse_d(
    void**                       keep,
    const struct ma86_control_d* control,
    struct ma86_info_d*          info
-   );
+);
 
 /** To factorize the matrix */
 void ma86_factor_d(
@@ -149,7 +149,7 @@ void ma86_factor_d(
    const struct ma86_control_d* control,
    struct ma86_info_d*          info,
    const ma86realtype_d_        scale[]
-   );
+);
 
 /** To factorize the matrix AND solve AX = B */
 void ma86_factor_solve_d(
@@ -165,7 +165,7 @@ void ma86_factor_solve_d(
    const int                    ldx,
    ma86pkgtype_d_               x[],
    const ma86realtype_d_        scale[]
-   );
+);
 
 /** To solve AX = B using the computed factors */
 void ma86_solve_d(
@@ -178,12 +178,12 @@ void ma86_solve_d(
    const struct ma86_control_d* control,
    struct ma86_info_d*          info,
    const ma86realtype_d_        scale[]
-   );
+);
 
 /** To clean up memory in keep */
 void ma86_finalise_d(
    void**                       keep,
    const struct ma86_control_d* control
-   );
+);
 
 #endif

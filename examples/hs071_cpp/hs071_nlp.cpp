@@ -31,7 +31,7 @@ bool HS071_NLP::get_nlp_info(
    Index&          nnz_jac_g,
    Index&          nnz_h_lag,
    IndexStyleEnum& index_style
-   )
+)
 {
    // The problem described in HS071_NLP.hpp has 4 variables, x[0] through x[3]
    n = 4;
@@ -62,7 +62,7 @@ bool HS071_NLP::get_bounds_info(
    Index   m,
    Number* g_l,
    Number* g_u
-   )
+)
 {
    // here, the n and m we gave IPOPT in get_nlp_info are passed back to us.
    // If desired, we could assert to make sure they are what we think they are.
@@ -109,7 +109,7 @@ bool HS071_NLP::get_starting_point(
    Index   m,
    bool    init_lambda,
    Number* lambda
-   )
+)
 {
    // Here, we assume we only have starting values for x, if you code
    // your own NLP, you can provide starting values for the dual variables
@@ -135,7 +135,7 @@ bool HS071_NLP::eval_f(
    const Number* x,
    bool          new_x,
    Number&       obj_value
-   )
+)
 {
    assert(n == 4);
 
@@ -152,7 +152,7 @@ bool HS071_NLP::eval_grad_f(
    const Number* x,
    bool          new_x,
    Number*       grad_f
-   )
+)
 {
    assert(n == 4);
 
@@ -173,7 +173,7 @@ bool HS071_NLP::eval_g(
    bool          new_x,
    Index         m,
    Number*       g
-   )
+)
 {
    assert(n == 4);
    assert(m == 2);
@@ -196,7 +196,7 @@ bool HS071_NLP::eval_jac_g(
    Index*        iRow,
    Index*        jCol,
    Number*       values
-   )
+)
 {
    assert(n == 4);
    assert(m == 2);
@@ -206,14 +206,22 @@ bool HS071_NLP::eval_jac_g(
       // return the structure of the Jacobian
 
       // this particular Jacobian is dense
-      iRow[0] = 0;  jCol[0] = 0;
-      iRow[1] = 0;  jCol[1] = 1;
-      iRow[2] = 0;  jCol[2] = 2;
-      iRow[3] = 0;  jCol[3] = 3;
-      iRow[4] = 1;  jCol[4] = 0;
-      iRow[5] = 1;  jCol[5] = 1;
-      iRow[6] = 1;  jCol[6] = 2;
-      iRow[7] = 1;  jCol[7] = 3;
+      iRow[0] = 0;
+      jCol[0] = 0;
+      iRow[1] = 0;
+      jCol[1] = 1;
+      iRow[2] = 0;
+      jCol[2] = 2;
+      iRow[3] = 0;
+      jCol[3] = 3;
+      iRow[4] = 1;
+      jCol[4] = 0;
+      iRow[5] = 1;
+      jCol[5] = 1;
+      iRow[6] = 1;
+      jCol[6] = 2;
+      iRow[7] = 1;
+      jCol[7] = 3;
    }
    else
    {
@@ -248,7 +256,7 @@ bool HS071_NLP::eval_h(
    Index*        iRow,
    Index*        jCol,
    Number*       values
-   )
+)
 {
    assert(n == 4);
    assert(m == 2);
@@ -329,7 +337,7 @@ void HS071_NLP::finalize_solution(
    Number                     obj_value,
    const IpoptData*           ip_data,
    IpoptCalculatedQuantities* ip_cq
-   )
+)
 {
    // here is where we would store the solution to variables, or write to a file, etc
    // so we could use the solution.

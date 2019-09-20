@@ -13,7 +13,7 @@ using namespace Ipopt;
 
 inline static Index Sgn(
    Number a
-   )
+)
 {
    if( a > 0. )
    {
@@ -28,7 +28,7 @@ inline static Index Sgn(
 LuksanVlcek5::LuksanVlcek5(
    Number g_l,
    Number g_u
-   )
+)
 {
    g_l_ = g_l;
    g_u_ = g_u;
@@ -36,7 +36,7 @@ LuksanVlcek5::LuksanVlcek5(
 
 bool LuksanVlcek5::InitializeProblem(
    Index N
-   )
+)
 {
    N_ = N;
    if( N_ <= 4 )
@@ -54,7 +54,7 @@ bool LuksanVlcek5::get_nlp_info(
    Index&          nnz_jac_g,
    Index&          nnz_h_lag,
    IndexStyleEnum& index_style
-   )
+)
 {
    // The problem described in LuksanVlcek5.hpp has 4 variables, x[0] through x[3]
    n = N_ + 2;
@@ -79,7 +79,7 @@ bool LuksanVlcek5::get_bounds_info(
    Index   m,
    Number* g_l,
    Number* g_u
-   )
+)
 {
    // none of the variables have bounds
    for( Index i = 1; i < n - 1; i++ )
@@ -112,7 +112,7 @@ bool LuksanVlcek5::get_starting_point(
    Index   /*m*/,
    bool    init_lambda,
    Number* /*lambda*/
-   )
+)
 {
    if( !init_x || init_z || init_lambda )
    {
@@ -134,7 +134,7 @@ bool LuksanVlcek5::eval_f(
    const Number* x,
    bool          /*new_x*/,
    Number&       obj_value
-   )
+)
 {
    Number p = 7. / 3.;
    obj_value = 0.;
@@ -153,7 +153,7 @@ bool LuksanVlcek5::eval_grad_f(
    const Number* x,
    bool          /*new_x*/,
    Number*       grad_f
-   )
+)
 {
    Number p = 7. / 3.;
    grad_f[0] = 0.;
@@ -178,12 +178,12 @@ bool LuksanVlcek5::eval_g(
    bool          /*new_x*/,
    Index         /*m*/,
    Number*       g
-   )
+)
 {
    for( Index i = 0; i < N_ - 4; i++ )
    {
       g[i] = 8. * x[i + 3] * (x[i + 3] * x[i + 3] - x[i + 2]) - 2. * (1 - x[i + 3])
-         + 4. * (x[i + 3] - x[i + 4] * x[i + 4]) + x[i + 2] * x[i + 2] - x[i + 1] + x[i + 4] - x[i + 5] * x[i + 5];
+             + 4. * (x[i + 3] - x[i + 4] * x[i + 4]) + x[i + 2] * x[i + 2] - x[i + 1] + x[i + 4] - x[i + 5] * x[i + 5];
    }
    return true;
 }
@@ -198,7 +198,7 @@ bool LuksanVlcek5::eval_jac_g(
    Index*        iRow,
    Index*        jCol,
    Number*       values
-   )
+)
 {
    if( values == NULL )
    {
@@ -222,7 +222,9 @@ bool LuksanVlcek5::eval_jac_g(
          iRow[ijac] = i;
          jCol[ijac] = i + 5;
          ijac++;
-      } DBG_ASSERT(ijac == nele_jac);  (void) nele_jac;
+      }
+      DBG_ASSERT(ijac == nele_jac);
+      (void) nele_jac;
    }
    else
    {
@@ -260,7 +262,7 @@ bool LuksanVlcek5::eval_h(
    Index*        iRow,
    Index*        jCol,
    Number*       values
-   )
+)
 {
    if( values == NULL )
    {
@@ -286,7 +288,8 @@ bool LuksanVlcek5::eval_h(
          jCol[ihes] = i + 2;
          ihes++;
       }
-      DBG_ASSERT(ihes == nele_hess);  (void) nele_hess;
+      DBG_ASSERT(ihes == nele_hess);
+      (void) nele_hess;
    }
    else
    {
@@ -348,5 +351,5 @@ void LuksanVlcek5::finalize_solution(
    Number                     /*obj_value*/,
    const IpoptData*           /*ip_data*/,
    IpoptCalculatedQuantities* /*ip_cq*/
-   )
+)
 { }

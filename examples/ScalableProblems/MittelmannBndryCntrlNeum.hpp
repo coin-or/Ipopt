@@ -40,7 +40,7 @@ public:
       Index&          nnz_jac_g,
       Index&          nnz_h_lag,
       IndexStyleEnum& index_style
-      );
+   );
 
    /** Method to return the bounds for my problem */
    virtual bool get_bounds_info(
@@ -50,7 +50,7 @@ public:
       Index   m,
       Number* g_l,
       Number* g_u
-      );
+   );
 
    /** Method to return the starting point for the algorithm */
    virtual bool get_starting_point(
@@ -63,7 +63,7 @@ public:
       Index   m,
       bool    init_lambda,
       Number* lambda
-      );
+   );
 
    /** Method to return the objective value */
    virtual bool eval_f(
@@ -71,7 +71,7 @@ public:
       const Number* x,
       bool          new_x,
       Number&       obj_value
-      );
+   );
 
    /** Method to return the gradient of the objective */
    virtual bool eval_grad_f(
@@ -79,7 +79,7 @@ public:
       const Number* x,
       bool          new_x,
       Number*       grad_f
-      );
+   );
 
    /** Method to return the constraint residuals */
    virtual bool eval_g(
@@ -88,7 +88,7 @@ public:
       bool          new_x,
       Index         m,
       Number*       g
-      );
+   );
 
    /** Method to return:
     *   1) The structure of the Jacobian (if "values" is NULL)
@@ -103,7 +103,7 @@ public:
       Index*        iRow,
       Index*        jCol,
       Number*       values
-      );
+   );
 
    /** Method to return:
     *   1) The structure of the Hessian of the Lagrangian (if "values" is NULL)
@@ -121,7 +121,7 @@ public:
       Index*        iRow,
       Index*        jCol,
       Number*       values
-      );
+   );
 
    /** Method for returning scaling parameters */
    virtual bool get_scaling_parameters(
@@ -132,7 +132,7 @@ public:
       bool&   use_g_scaling,
       Index   m,
       Number* g_scaling
-      );
+   );
 
    /** This method is called when the algorithm is complete so the TNLP can store/write the solution */
    virtual void finalize_solution(
@@ -147,7 +147,7 @@ public:
       Number                     obj_value,
       const IpoptData*           ip_data,
       IpoptCalculatedQuantities* ip_cq
-      );
+   );
    //@}
 
 protected:
@@ -171,28 +171,28 @@ protected:
    virtual Number y_d_cont(
       Number x1,
       Number x2
-      ) const = 0;
+   ) const = 0;
 
    /** Forcing function for the elliptic equation */
    virtual Number d_cont(
       Number x1,
       Number x2,
       Number y
-      ) const = 0;
+   ) const = 0;
 
    /** First partial derivative of forcing function w.r.t. y */
    virtual Number d_cont_dy(
       Number x1,
       Number x2,
       Number y
-      ) const = 0;
+   ) const = 0;
 
    /** Second partial derivative of forcing function w.r.t. y,y */
    virtual Number d_cont_dydy(
       Number x1,
       Number x2,
       Number y
-      ) const = 0;
+   ) const = 0;
 
    /** returns true if second partial derivative of d_cont
     *  w.r.t. y,y is always zero.
@@ -205,7 +205,7 @@ protected:
       Number x2,
       Number y,
       Number u
-      ) const = 0;
+   ) const = 0;
 
    /** First partial derivative of b_cont w.r.t. y */
    virtual Number b_cont_dy(
@@ -213,7 +213,7 @@ protected:
       Number x2,
       Number y,
       Number u
-      ) const = 0;
+   ) const = 0;
 
    /** First partial derivative of b_cont w.r.t. u */
    virtual Number b_cont_du(
@@ -221,7 +221,7 @@ protected:
       Number x2,
       Number y,
       Number u
-      ) const = 0;
+   ) const = 0;
 
    /** Second partial derivative of b_cont w.r.t. y,y */
    virtual Number b_cont_dydy(
@@ -229,7 +229,7 @@ protected:
       Number x2,
       Number y,
       Number u
-      ) const = 0;
+   ) const = 0;
 
    /** returns true if second partial derivative of b_cont
     *  w.r.t. y,y is always zero.
@@ -251,11 +251,11 @@ private:
    //@{
    MittelmannBndryCntrlNeumBase(
       const MittelmannBndryCntrlNeumBase&
-      );
+   );
 
    MittelmannBndryCntrlNeumBase& operator=(
       const MittelmannBndryCntrlNeumBase&
-      );
+   );
    //@}
 
    /**@name Problem specification */
@@ -290,7 +290,7 @@ private:
    inline Index y_index(
       Index i,
       Index j
-      ) const
+   ) const
    {
       return j + (N_ + 2) * i;
    }
@@ -300,7 +300,7 @@ private:
     */
    inline Index u0j_index(
       Index j
-      ) const
+   ) const
    {
       return (N_ + 2) * (N_ + 2) + j - 1;
    }
@@ -310,7 +310,7 @@ private:
     */
    inline Index u1j_index(
       Index j
-      ) const
+   ) const
    {
       return (N_ + 2) * (N_ + 2) + N_ + j - 1;
    }
@@ -320,7 +320,7 @@ private:
     */
    inline Index ui0_index(
       Index j
-      ) const
+   ) const
    {
       return (N_ + 2) * (N_ + 2) + 2 * N_ + j - 1;
    }
@@ -330,7 +330,7 @@ private:
     */
    inline Index ui1_index(
       Index j
-      ) const
+   ) const
    {
       return (N_ + 2) * (N_ + 2) + 3 * N_ + j - 1;
    }
@@ -338,7 +338,7 @@ private:
    /** Compute the grid coordinate for given index in x1 direction */
    inline Number x1_grid(
       Index i
-      ) const
+   ) const
    {
       return h_ * (Number) i;
    }
@@ -346,7 +346,7 @@ private:
    /** Compute the grid coordinate for given index in x2 direction */
    inline Number x2_grid(
       Index j
-      ) const
+   ) const
    {
       return h_ * (Number) j;
    }
@@ -365,7 +365,7 @@ public:
 
    virtual bool InitializeProblem(
       Index N
-      )
+   )
    {
       if( N < 1 )
       {
@@ -388,7 +388,7 @@ protected:
    virtual Number y_d_cont(
       Number x1,
       Number x2
-      ) const
+   ) const
    {
       return 2. - 2. * (x1 * (x1 - 1.) + x2 * (x2 - 1.));
    }
@@ -398,7 +398,7 @@ protected:
       Number /*x1*/,
       Number /*x2*/,
       Number /*y*/
-      ) const
+   ) const
    {
       return 0.;
    }
@@ -408,7 +408,7 @@ protected:
       Number /*x1*/,
       Number /*x2*/,
       Number /*y*/
-      ) const
+   ) const
    {
       return 0.;
    }
@@ -418,7 +418,7 @@ protected:
       Number /*x1*/,
       Number /*x2*/,
       Number /*y*/
-      ) const
+   ) const
    {
       return 0.;
    }
@@ -437,7 +437,7 @@ protected:
       Number /*x2*/,
       Number y,
       Number u
-      ) const
+   ) const
    {
       return u - y * y;
    }
@@ -448,7 +448,7 @@ protected:
       Number /*x2*/,
       Number y,
       Number /*u*/
-      ) const
+   ) const
    {
       return -2. * y;
    }
@@ -459,7 +459,7 @@ protected:
       Number /*x2*/,
       Number /*y*/,
       Number /*u*/
-      ) const
+   ) const
    {
       return 1.;
    }
@@ -470,7 +470,7 @@ protected:
       Number /*x2*/,
       Number /*y*/,
       Number /*u*/
-      ) const
+   ) const
    {
       return -2.;
    }
@@ -488,11 +488,11 @@ private:
    //@{
    MittelmannBndryCntrlNeum1(
       const MittelmannBndryCntrlNeum1&
-      );
+   );
 
    MittelmannBndryCntrlNeum1& operator=(
       const MittelmannBndryCntrlNeum1&
-      );
+   );
    //@}
 };
 
@@ -508,7 +508,7 @@ public:
 
    virtual bool InitializeProblem(
       Index N
-      )
+   )
    {
       if( N < 1 )
       {
@@ -531,7 +531,7 @@ protected:
    virtual Number y_d_cont(
       Number x1,
       Number x2
-      ) const
+   ) const
    {
       return 2. - 2. * (x1 * (x1 - 1.) + x2 * (x2 - 1.));
    }
@@ -541,7 +541,7 @@ protected:
       Number /*x1*/,
       Number /*x2*/,
       Number /*y*/
-      ) const
+   ) const
    {
       return 0.;
    }
@@ -551,7 +551,7 @@ protected:
       Number /*x1*/,
       Number /*x2*/,
       Number /*y*/
-      ) const
+   ) const
    {
       return 0.;
    }
@@ -561,7 +561,7 @@ protected:
       Number /*x1*/,
       Number /*x2*/,
       Number /*y*/
-      ) const
+   ) const
    {
       return 0.;
    }
@@ -580,7 +580,7 @@ protected:
       Number /*x2*/,
       Number y,
       Number u
-      ) const
+   ) const
    {
       return u - y * y;
    }
@@ -591,7 +591,7 @@ protected:
       Number /*x2*/,
       Number y,
       Number /*u*/
-      ) const
+   ) const
    {
       return -2. * y;
    }
@@ -602,7 +602,7 @@ protected:
       Number /*x2*/,
       Number /*y*/,
       Number /*u*/
-      ) const
+   ) const
    {
       return 1.;
    }
@@ -613,7 +613,7 @@ protected:
       Number /*x2*/,
       Number /*y*/,
       Number /*u*/
-      ) const
+   ) const
    {
       return -2.;
    }
@@ -631,11 +631,11 @@ private:
    //@{
    MittelmannBndryCntrlNeum2(
       const MittelmannBndryCntrlNeum2&
-      );
+   );
 
    MittelmannBndryCntrlNeum2& operator=(
       const MittelmannBndryCntrlNeum2&
-      );
+   );
    //@}
 };
 
@@ -651,7 +651,7 @@ public:
 
    virtual bool InitializeProblem(
       Index N
-      )
+   )
    {
       if( N < 1 )
       {
@@ -674,7 +674,7 @@ protected:
    virtual Number y_d_cont(
       Number x1,
       Number x2
-      ) const
+   ) const
    {
       return 2. - 2. * (x1 * (x1 - 1.) + x2 * (x2 - 1.));
    }
@@ -684,7 +684,7 @@ protected:
       Number /*x1*/,
       Number /*x2*/,
       Number y
-      ) const
+   ) const
    {
       return y * y * y - y;
    }
@@ -694,7 +694,7 @@ protected:
       Number /*x1*/,
       Number /*x2*/,
       Number y
-      ) const
+   ) const
    {
       return 3. * y * y - 1.;
    }
@@ -704,7 +704,7 @@ protected:
       Number /*x1*/,
       Number /*x2*/,
       Number y
-      ) const
+   ) const
    {
       return 6. * y;
    }
@@ -723,7 +723,7 @@ protected:
       Number /*x2*/,
       Number /*y*/,
       Number u
-      ) const
+   ) const
    {
       return u;
    }
@@ -734,7 +734,7 @@ protected:
       Number /*x2*/,
       Number /*y*/,
       Number /*u*/
-      ) const
+   ) const
    {
       return 0.;
    }
@@ -745,7 +745,7 @@ protected:
       Number /*x2*/,
       Number /*y*/,
       Number /*u*/
-      ) const
+   ) const
    {
       return 1.;
    }
@@ -756,7 +756,7 @@ protected:
       Number /*x2*/,
       Number /*y*/,
       Number /*u*/
-      ) const
+   ) const
    {
       return 0.;
    }
@@ -774,11 +774,11 @@ private:
    //@{
    MittelmannBndryCntrlNeum3(
       const MittelmannBndryCntrlNeum3&
-      );
+   );
 
    MittelmannBndryCntrlNeum3& operator=(
       const MittelmannBndryCntrlNeum3&
-      );
+   );
    //@}
 };
 
@@ -794,7 +794,7 @@ public:
 
    virtual bool InitializeProblem(
       Index N
-      )
+   )
    {
       if( N < 1 )
       {
@@ -817,7 +817,7 @@ protected:
    virtual Number y_d_cont(
       Number x1,
       Number x2
-      ) const
+   ) const
    {
       return 2. - 2. * (x1 * (x1 - 1.) + x2 * (x2 - 1.));
    }
@@ -827,7 +827,7 @@ protected:
       Number /*x1*/,
       Number /*x2*/,
       Number y
-      ) const
+   ) const
    {
       return y * y * y - y;
    }
@@ -837,7 +837,7 @@ protected:
       Number /*x1*/,
       Number /*x2*/,
       Number y
-      ) const
+   ) const
    {
       return 3. * y * y - 1.;
    }
@@ -847,7 +847,7 @@ protected:
       Number /*x1*/,
       Number /*x2*/,
       Number y
-      ) const
+   ) const
    {
       return 6. * y;
    }
@@ -866,7 +866,7 @@ protected:
       Number /*x2*/,
       Number /*y*/,
       Number u
-      ) const
+   ) const
    {
       return u;
    }
@@ -877,7 +877,7 @@ protected:
       Number /*x2*/,
       Number /*y*/,
       Number /*u*/
-      ) const
+   ) const
    {
       return 0.;
    }
@@ -888,7 +888,7 @@ protected:
       Number /*x2*/,
       Number /*y*/,
       Number /*u*/
-      ) const
+   ) const
    {
       return 1.;
    }
@@ -899,7 +899,7 @@ protected:
       Number /*x2*/,
       Number /*y*/,
       Number /*u*/
-      ) const
+   ) const
    {
       return 0.;
    }
@@ -917,11 +917,11 @@ private:
    //@{
    MittelmannBndryCntrlNeum4(
       const MittelmannBndryCntrlNeum4&
-      );
+   );
 
    MittelmannBndryCntrlNeum4& operator=(
       const MittelmannBndryCntrlNeum4&
-      );
+   );
    //@}
 };
 

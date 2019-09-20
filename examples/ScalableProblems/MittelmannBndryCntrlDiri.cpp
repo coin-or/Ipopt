@@ -29,7 +29,7 @@ void MittelmannBndryCntrlDiriBase::SetBaseParameters(
    Number lb_u,
    Number ub_u,
    Number d_const
-   )
+)
 {
    N_ = N;
    h_ = 1. / (N + 1);
@@ -59,7 +59,7 @@ bool MittelmannBndryCntrlDiriBase::get_nlp_info(
    Index&          nnz_jac_g,
    Index&          nnz_h_lag,
    IndexStyleEnum& index_style
-   )
+)
 {
    // We for each of the N_+2 times N_+2 mesh points we have the value
    // of the functions y, including the control parameters on the boundary
@@ -95,7 +95,7 @@ bool MittelmannBndryCntrlDiriBase::get_bounds_info(
    Index   m,
    Number* g_l,
    Number* g_u
-   )
+)
 {
    // Set overall bounds on the y variables
    for( Index i = 0; i <= N_ + 1; i++ )
@@ -161,14 +161,17 @@ bool MittelmannBndryCntrlDiriBase::get_starting_point(
    Index   /*m*/,
    bool    init_lambda,
    Number* /*lambda*/
-   )
+)
 {
    // Here, we assume we only have starting values for x, if you code
    // your own NLP, you can provide starting values for the others if
    // you wish.
-   assert(init_x == true);  (void) init_x;
-   assert(init_z == false);  (void) init_z;
-   assert(init_lambda == false);  (void) init_lambda;
+   assert(init_x == true);
+   (void) init_x;
+   assert(init_z == false);
+   (void) init_z;
+   assert(init_lambda == false);
+   (void) init_lambda;
 
    // set all y's to the perfect match with y_d
    for( Index i = 0; i <= N_ + 1; i++ )
@@ -212,7 +215,7 @@ bool MittelmannBndryCntrlDiriBase::get_scaling_parameters(
    bool&   use_g_scaling,
    Index   /*m*/,
    Number* /*g_scaling*/
-   )
+)
 {
    obj_scaling = 1. / hh_;
    use_x_scaling = false;
@@ -225,7 +228,7 @@ bool MittelmannBndryCntrlDiriBase::eval_f(
    const Number* x,
    bool          /*new_x*/,
    Number&       obj_value
-   )
+)
 {
    // return the value of the objective function
    obj_value = 0.;
@@ -277,7 +280,7 @@ bool MittelmannBndryCntrlDiriBase::eval_grad_f(
    const Number* x,
    bool          /*new_x*/,
    Number*       grad_f
-   )
+)
 {
    // return the gradient of the objective function grad_{x} f(x)
 
@@ -351,7 +354,7 @@ bool MittelmannBndryCntrlDiriBase::eval_g(
    bool          /*new_x*/,
    Index         m,
    Number*       g
-   )
+)
 {
    // return the value of the constraints: g(x)
 
@@ -365,14 +368,15 @@ bool MittelmannBndryCntrlDiriBase::eval_g(
 
          // Start with the discretized Laplacian operator
          val = 4. * x[y_index(i, j)] - x[y_index(i - 1, j)] - x[y_index(i + 1, j)] - x[y_index(i, j - 1)]
-            - x[y_index(i, j + 1)];
+               - x[y_index(i, j + 1)];
 
          g[ig] = val;
          ig++;
       }
    }
 
-   DBG_ASSERT(ig==m);  (void) m;
+   DBG_ASSERT(ig == m);
+   (void) m;
 
    return true;
 }
@@ -386,7 +390,7 @@ bool MittelmannBndryCntrlDiriBase::eval_jac_g(
    Index*        iRow,
    Index*        jCol,
    Number*       values
-   )
+)
 {
    if( values == NULL )
    {
@@ -428,7 +432,8 @@ bool MittelmannBndryCntrlDiriBase::eval_jac_g(
          }
       }
 
-      DBG_ASSERT(ijac==nele_jac);  (void) nele_jac;
+      DBG_ASSERT(ijac == nele_jac);
+      (void) nele_jac;
    }
    else
    {
@@ -460,7 +465,7 @@ bool MittelmannBndryCntrlDiriBase::eval_jac_g(
          }
       }
 
-      DBG_ASSERT(ijac==nele_jac);
+      DBG_ASSERT(ijac == nele_jac);
    }
 
    return true;
@@ -478,7 +483,7 @@ bool MittelmannBndryCntrlDiriBase::eval_h(
    Index*        iRow,
    Index*        jCol,
    Number*       values
-   )
+)
 {
    if( values == NULL )
    {
@@ -530,7 +535,8 @@ bool MittelmannBndryCntrlDiriBase::eval_h(
          }
       }
 
-      DBG_ASSERT(ihes==nele_hess);  (void) nele_hess;
+      DBG_ASSERT(ihes == nele_hess);
+      (void) nele_hess;
    }
    else
    {
@@ -592,7 +598,7 @@ void MittelmannBndryCntrlDiriBase::finalize_solution(
    Number                     /*obj_value*/,
    const IpoptData*           /*ip_data*/,
    IpoptCalculatedQuantities* /*ip_cq*/
-   )
+)
 {
    /*
     FILE* fp = fopen("solution.txt", "w+");

@@ -448,7 +448,8 @@ bool PDFullSpaceSolver::SolveOnce(
    }
    // improve_current_solution can only be true, if that system has
    // been solved before
-   DBG_ASSERT((!resolve_with_better_quality && !pretend_singular) || uptodate);  (void) resolve_with_better_quality;
+   DBG_ASSERT((!resolve_with_better_quality && !pretend_singular) || uptodate);
+   (void) resolve_with_better_quality;
 
    ESymSolverStatus retval;
    if( uptodate && !pretend_singular )

@@ -15,13 +15,13 @@
 #ifndef IPOPT_THREAD_LOCAL
 
 #if __cplusplus >= 201103L
- #define IPOPT_THREAD_LOCAL thread_local
+#define IPOPT_THREAD_LOCAL thread_local
 #elif defined(_MSC_VER)
- #define IPOPT_THREAD_LOCAL __declspec(thread)
+#define IPOPT_THREAD_LOCAL __declspec(thread)
 #elif defined(__APPLE__) && ((defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__ < 405)) || defined(__INTEL_COMPILER))
- #define IPOPT_THREAD_LOCAL
+#define IPOPT_THREAD_LOCAL
 #else
- #define IPOPT_THREAD_LOCAL __thread
+#define IPOPT_THREAD_LOCAL __thread
 #endif
 
 #endif

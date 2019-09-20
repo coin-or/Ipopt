@@ -11,11 +11,11 @@
 #include "IpoptConfig.h"
 
 #ifndef IPOPT_EXPORT
- #ifdef _MSC_VER
-  #define IPOPT_EXPORT(type) type __cdecl
- #else
-  #define IPOPT_EXPORT(type) type
- #endif
+#ifdef _MSC_VER
+#define IPOPT_EXPORT(type) type __cdecl
+#else
+#define IPOPT_EXPORT(type) type
+#endif
 #endif
 
 #ifdef __cplusplus

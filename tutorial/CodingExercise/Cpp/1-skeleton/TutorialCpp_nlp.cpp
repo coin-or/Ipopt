@@ -34,7 +34,7 @@ using namespace Ipopt;
 TutorialCpp_NLP::TutorialCpp_NLP(
    Index         N,
    const Number* a
-   )
+)
    : N_(N)
 {
    // Copy the values for the constants appearing in the constraints
@@ -59,7 +59,7 @@ bool TutorialCpp_NLP::get_nlp_info(
    Index&          nnz_jac_g,
    Index&          nnz_h_lag,
    IndexStyleEnum& index_style
-   )
+)
 {
    // number of variables is given in constructor
    n =;
@@ -88,7 +88,7 @@ bool TutorialCpp_NLP::get_bounds_info(
    Index   m,
    Number* g_l,
    Number* g_u
-   )
+)
 {
    // here, the n and m we gave IPOPT in get_nlp_info are passed back to us.
    // If desired, we could assert to make sure they are what we think they are.
@@ -111,7 +111,7 @@ bool TutorialCpp_NLP::get_starting_point(
    Index   m,
    bool    init_lambda,
    Number* lambda
-   )
+)
 {
    // Here, we assume we only have starting values for x, if you code
    // your own NLP, you can provide starting values for the dual variables
@@ -136,12 +136,12 @@ bool TutorialCpp_NLP::eval_f(
    const Number* x,
    bool          new_x,
    Number&       obj_value
-   )
+)
 {
    // HERE COMPUTE VALUE OF OBJECTIVE FUNCTION
    obj_value = ...
 
-   return true;
+               return true;
 }
 
 // return the gradient of the objective function grad_{x} f(x)
@@ -150,7 +150,7 @@ bool TutorialCpp_NLP::eval_grad_f(
    const Number* x,
    bool          new_x,
    Number*       grad_f
-   )
+)
 {
    // HERE SET ALL VALUES OF GRADIENT IN grad_f
 
@@ -165,7 +165,7 @@ bool TutorialCpp_NLP::eval_g(
    bool          new_x,
    Index         m,
    Number*       g
-   )
+)
 {
    // HERE COMPUTE VALUE OF ALL CONSTRAINTS IN g
 
@@ -182,7 +182,7 @@ bool TutorialCpp_NLP::eval_jac_g(
    Index*        iRow,
    Index*        jCol,
    Number*       values
-   )
+)
 {
    if( values == NULL )
    {
@@ -213,7 +213,7 @@ bool TutorialCpp_NLP::eval_h(
    Index*        iRow,
    Index*        jCol,
    Number*       values
-   )
+)
 {
    if( values == NULL )
    {
@@ -245,7 +245,7 @@ void TutorialCpp_NLP::finalize_solution(
    Number                     obj_value,
    const IpoptData*           ip_data,
    IpoptCalculatedQuantities* ip_cq
-   )
+)
 {
    // here is where we would store the solution to variables, or write
    // to a file, etc so we could use the solution.

@@ -66,7 +66,7 @@ struct mc68_info
 /** Set default values for control struct */
 void mc68_default_control(
    struct mc68_control* control
-   );
+);
 
 /** Perform ordering */
 void mc68_order(
@@ -77,6 +77,6 @@ void mc68_order(
    int                        perm[],
    const struct mc68_control* control,
    struct mc68_info*          info
-   );
+);
 
 #endif

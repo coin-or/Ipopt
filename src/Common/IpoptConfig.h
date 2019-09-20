@@ -49,33 +49,33 @@
  *   so user can compile with -fvisibility=hidden
  */
 #ifdef IPOPT_BUILD
- #ifdef DLL_EXPORT
-  #undef IPOPTLIB_EXPORT
-  #define IPOPTLIB_EXPORT __declspec(dllexport)
- #elif defined(__GNUC__) && __GNUC__ >= 4
-  #undef IPOPTLIB_EXPORT
-  #define IPOPTLIB_EXPORT __attribute__((__visibility__("default")))
- #endif
+#ifdef DLL_EXPORT
+#undef IPOPTLIB_EXPORT
+#define IPOPTLIB_EXPORT __declspec(dllexport)
+#elif defined(__GNUC__) && __GNUC__ >= 4
+#undef IPOPTLIB_EXPORT
+#define IPOPTLIB_EXPORT __attribute__((__visibility__("default")))
+#endif
 #endif
 
 #ifdef IPOPTAMPL_BUILD
- #ifdef DLL_EXPORT
-  #undef IPOPTAMPLINTERFACELIB_EXPORT
-  #define IPOPTAMPLINTERFACELIB_EXPORT __declspec(dllexport)
- #elif defined(__GNUC__) && __GNUC__ >= 4
-  #undef IPOPTAMPLINTERFACELIB_EXPORT
-  #define IPOPTAMPLINTERFACELIB_EXPORT __attribute__((__visibility__("default")))
- #endif
+#ifdef DLL_EXPORT
+#undef IPOPTAMPLINTERFACELIB_EXPORT
+#define IPOPTAMPLINTERFACELIB_EXPORT __declspec(dllexport)
+#elif defined(__GNUC__) && __GNUC__ >= 4
+#undef IPOPTAMPLINTERFACELIB_EXPORT
+#define IPOPTAMPLINTERFACELIB_EXPORT __attribute__((__visibility__("default")))
+#endif
 #endif
 
 #ifdef SIPOPT_BUILD
- #ifdef DLL_EXPORT
-  #undef SIPOPTLIB_EXPORT
-  #define SIPOPTLIB_EXPORT __declspec(dllexport)
- #elif defined(__GNUC__) && __GNUC__ >= 4
-  #undef SIPOPTLIB_EXPORT
-  #define SIPOPTLIB_EXPORT __attribute__((__visibility__("default")))
- #endif
+#ifdef DLL_EXPORT
+#undef SIPOPTLIB_EXPORT
+#define SIPOPTLIB_EXPORT __declspec(dllexport)
+#elif defined(__GNUC__) && __GNUC__ >= 4
+#undef SIPOPTLIB_EXPORT
+#define SIPOPTLIB_EXPORT __attribute__((__visibility__("default")))
+#endif
 #endif
 
 #endif /*__IPOPTCONFIG_H__*/

@@ -10,7 +10,8 @@
  *
  * @author Rafael de Pelegrini Soares, Tong Kewei
  */
-public class LuksanVlcek1 extends Scalable {
+public class LuksanVlcek1 extends Scalable
+{
    /** Constructor.
     *
     * Here, gl and gu are the bounds for the constraints.
@@ -74,7 +75,9 @@ public class LuksanVlcek1 extends Scalable {
          x[2 * i + 1] =  1.0;
       }
       if (n % 2 == 1)
+      {
          x[n - 1] = -1.2;
+      }
 
       return true;
    }
@@ -121,7 +124,9 @@ public class LuksanVlcek1 extends Scalable {
          x[2 * i + 1] =  1.0;
       }
       if (n % 2 == 1)
+      {
          x[n - 1] = -1.2;
+      }
 
       return true;
    }
@@ -154,12 +159,12 @@ public class LuksanVlcek1 extends Scalable {
    {
       for( int i = 0; i < n - 2; ++i )
          g[i] = 3.0 * Math.pow(x[i + 1], 3.0)
-              + 2.0 * x[i + 2]
-              - 5.0
-              + Math.sin(x[i + 1] - x[i + 2]) * Math.sin(x[i + 1] + x[i + 2])
-              + 4.0 * x[i + 1]
-              - x[i] * Math.exp(x[i] - x[i + 1])
-              - 3.0;
+                + 2.0 * x[i + 2]
+                - 5.0
+                + Math.sin(x[i + 1] - x[i + 2]) * Math.sin(x[i + 1] + x[i + 2])
+                + 4.0 * x[i + 1]
+                - x[i] * Math.exp(x[i] - x[i + 1])
+                - 3.0;
 
       return true;
    }
@@ -222,16 +227,16 @@ public class LuksanVlcek1 extends Scalable {
 
             // x[i+1]
             values[ijac] = 9.0 * x[i + 1] * x[i + 1]
-                         + Math.cos(x[i + 1] - x[i + 2]) * Math.sin(x[i + 1] + x[i + 2])
-                         + Math.sin(x[i + 1] - x[i + 2]) * Math.cos(x[i + 1] + x[i + 2])
-                         + 4.0
-                         + x[i] * Math.exp(x[i] - x[i + 1]);
+                           + Math.cos(x[i + 1] - x[i + 2]) * Math.sin(x[i + 1] + x[i + 2])
+                           + Math.sin(x[i + 1] - x[i + 2]) * Math.cos(x[i + 1] + x[i + 2])
+                           + 4.0
+                           + x[i] * Math.exp(x[i] - x[i + 1]);
             ijac++;
 
             // x[i+2]
             values[ijac] = 2.0
-                         - Math.cos(x[i + 1] - x[i + 2]) * Math.sin(x[i + 1] + x[i + 2])
-                         + Math.sin(x[i + 1] - x[i + 2]) * Math.cos(x[i + 1] + x[i + 2]);
+                           - Math.cos(x[i + 1] - x[i + 2]) * Math.sin(x[i + 1] + x[i + 2])
+                           + Math.sin(x[i + 1] - x[i + 2]) * Math.cos(x[i + 1] + x[i + 2]);
             ijac++;
          }
       }
@@ -280,10 +285,14 @@ public class LuksanVlcek1 extends Scalable {
             {
                values[ihes] = obj_factor * (2.0 + 400.0 * (3.0 * x[i] * x[i] - x[i + 1]));
                if (i < n - 2)
+               {
                   values[ihes] -= lambda[i] * (2.0 + x[i]) * Math.exp(x[i] - x[i + 1]);
+               }
             }
             else
+            {
                values[ihes] = 0.;
+            }
 
             if( i > 0 )
             {
@@ -291,15 +300,15 @@ public class LuksanVlcek1 extends Scalable {
                values[ihes] += obj_factor * 200.0;
                if( i < n - 1 )
                   values[ihes] += lambda[i - 1] * (18.0 * x[i]
-                                                   -2.0 * Math.sin(x[i] - x[i + 1]) * Math.sin(x[i] + x[i + 1])
-                                                   +2.0 * Math.cos(x[i] - x[i + 1]) * Math.cos(x[i] + x[i + 1])
-                                                   -x[i - 1] * Math.exp(x[i - 1] - x[i]));
+                                                   - 2.0 * Math.sin(x[i] - x[i + 1]) * Math.sin(x[i] + x[i + 1])
+                                                   + 2.0 * Math.cos(x[i] - x[i + 1]) * Math.cos(x[i] + x[i + 1])
+                                                   - x[i - 1] * Math.exp(x[i - 1] - x[i]));
             }
 
             if( i > 1 )
                // x[i+2]x[i+2]
                values[ihes] += lambda[i - 2] * (-2.0 * Math.sin(x[i - 1] - x[i]) * Math.sin(x[i - 1] + x[i])
-                                                -2.0 * Math.cos(x[i - 1] - x[i]) * Math.cos(x[i - 1] + x[i]));
+                                                - 2.0 * Math.cos(x[i - 1] - x[i]) * Math.cos(x[i - 1] + x[i]));
             ihes++;
 
             if( i < n - 1 )
@@ -307,7 +316,9 @@ public class LuksanVlcek1 extends Scalable {
                // x[i],x[i+1]
                values[ihes] = obj_factor * (-400.0) * x[i];
                if( i < n - 2 )
+               {
                   values[ihes] += lambda[i] * (1.0 + x[i]) * Math.exp(x[i] - x[i + 1]);
+               }
                /*
                 * if (i>0) { // x[i+1],x[i+2] values[ihes] += lambda[i-1]*(
                 * sin(x[i]-x[i+1])*sin(x[i]+x[i+1]) +

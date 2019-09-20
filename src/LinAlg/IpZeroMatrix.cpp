@@ -26,7 +26,8 @@ void ZeroMatrix::MultVectorImpl(
 ) const
 {
    //  A few sanity checks
-   DBG_ASSERT(NCols() == x.Dim());  (void) x;
+   DBG_ASSERT(NCols() == x.Dim());
+   (void) x;
    DBG_ASSERT(NRows() == y.Dim());
 
    // Take care of the y part of the addition
@@ -49,7 +50,8 @@ void ZeroMatrix::TransMultVectorImpl(
 {
    //  A few sanity checks
    DBG_ASSERT(NCols() == y.Dim());
-   DBG_ASSERT(NRows() == x.Dim());  (void) x;
+   DBG_ASSERT(NRows() == x.Dim());
+   (void) x;
 
    // Take care of the y part of the addition
    if( beta != 0.0 )

@@ -32,7 +32,7 @@ void MittelmannBndryCntrlDiriBase3D_27::SetBaseParameters(
    Number d_const,
    Number B,
    Number C
-   )
+)
 {
    N_ = N;
    h_ = 1. / (N + 1);
@@ -72,7 +72,7 @@ bool MittelmannBndryCntrlDiriBase3D_27::get_nlp_info(
    Index&          nnz_jac_g,
    Index&          nnz_h_lag,
    IndexStyleEnum& index_style
-   )
+)
 {
    // We for each of the N_+2 times N_+2 times N_+2  mesh points we have
    // the value of the functions y, including the control parameters on
@@ -120,7 +120,7 @@ bool MittelmannBndryCntrlDiriBase3D_27::get_bounds_info(
    Index   m,
    Number* g_l,
    Number* g_u
-   )
+)
 {
    // Set overall bounds on the y variables
    for( Index i = 0; i <= N_ + 1; i++ )
@@ -236,14 +236,17 @@ bool MittelmannBndryCntrlDiriBase3D_27::get_starting_point(
    Index   /*m*/,
    bool    init_lambda,
    Number* /*lambda*/
-   )
+)
 {
    // Here, we assume we only have starting values for x, if you code
    // your own NLP, you can provide starting values for the others if
    // you wish.
-   assert(init_x == true);  (void) init_x;
-   assert(init_z == false);  (void) init_z;
-   assert(init_lambda == false);  (void) init_lambda;
+   assert(init_x == true);
+   (void) init_x;
+   assert(init_z == false);
+   (void) init_z;
+   assert(init_lambda == false);
+   (void) init_lambda;
 
    // set all y's to the perfect match with y_d
    for( Index i = 0; i <= N_ + 1; i++ )
@@ -318,7 +321,7 @@ bool MittelmannBndryCntrlDiriBase3D_27::get_scaling_parameters(
    bool&   use_g_scaling,
    Index   /*m*/,
    Number* /*g_scaling*/
-   )
+)
 {
    obj_scaling = 1. / hhh_;
    use_x_scaling = false;
@@ -331,7 +334,7 @@ bool MittelmannBndryCntrlDiriBase3D_27::eval_f(
    const Number* x,
    bool          /*new_x*/,
    Number&       obj_value
-   )
+)
 {
    // return the value of the objective function
    obj_value = 0.;
@@ -418,7 +421,7 @@ bool MittelmannBndryCntrlDiriBase3D_27::eval_grad_f(
    const Number* x,
    bool          /*new_x*/,
    Number*       grad_f
-   )
+)
 {
    // return the gradient of the objective function grad_{x} f(x)
 
@@ -569,7 +572,7 @@ bool MittelmannBndryCntrlDiriBase3D_27::eval_g(
    bool          /*new_x*/,
    Index         m,
    Number*       g
-   )
+)
 {
    // return the value of the constraints: g(x)
 
@@ -585,15 +588,15 @@ bool MittelmannBndryCntrlDiriBase3D_27::eval_g(
 
             // Start with the discretized Laplacian operator
             val = 200. * x[y_index(i, j, k)]
-               - 16.
+                  - 16.
                   * (x[y_index(i + 1, j, k)] + x[y_index(i - 1, j, k)] + x[y_index(i, j + 1, k)]
                      + x[y_index(i, j - 1, k)] + x[y_index(i, j, k + 1)] + x[y_index(i, j, k - 1)])
-               - 8.
+                  - 8.
                   * (x[y_index(i + 1, j + 1, k)] + x[y_index(i + 1, j - 1, k)] + x[y_index(i - 1, j + 1, k)]
                      + x[y_index(i - 1, j - 1, k)] + x[y_index(i, j + 1, k + 1)] + x[y_index(i, j + 1, k - 1)]
                      + x[y_index(i, j - 1, k + 1)] + x[y_index(i, j - 1, k - 1)] + x[y_index(i + 1, j, k + 1)]
                      + x[y_index(i + 1, j, k - 1)] + x[y_index(i - 1, j, k + 1)] + x[y_index(i - 1, j, k - 1)])
-               - 1.
+                  - 1.
                   * (x[y_index(i + 1, j + 1, k + 1)] + x[y_index(i + 1, j - 1, k + 1)] + x[y_index(i + 1, j + 1, k - 1)]
                      + x[y_index(i + 1, j - 1, k - 1)] + x[y_index(i - 1, j + 1, k + 1)]
                      + x[y_index(i - 1, j - 1, k + 1)] + x[y_index(i - 1, j + 1, k - 1)]
@@ -605,7 +608,8 @@ bool MittelmannBndryCntrlDiriBase3D_27::eval_g(
       }
    }
 
-   DBG_ASSERT(ig==m);  (void) m;
+   DBG_ASSERT(ig == m);
+   (void) m;
 
    return true;
 }
@@ -619,7 +623,7 @@ bool MittelmannBndryCntrlDiriBase3D_27::eval_jac_g(
    Index*        iRow,
    Index*        jCol,
    Number*       values
-   )
+)
 {
    if( values == NULL )
    {
@@ -756,7 +760,8 @@ bool MittelmannBndryCntrlDiriBase3D_27::eval_jac_g(
          }
       }
 
-      DBG_ASSERT(ijac==nele_jac);  (void) nele_jac;
+      DBG_ASSERT(ijac == nele_jac);
+      (void) nele_jac;
    }
    else
    {
@@ -863,7 +868,7 @@ bool MittelmannBndryCntrlDiriBase3D_27::eval_jac_g(
          }
       }
 
-      DBG_ASSERT(ijac==nele_jac);
+      DBG_ASSERT(ijac == nele_jac);
    }
 
    return true;
@@ -881,7 +886,7 @@ bool MittelmannBndryCntrlDiriBase3D_27::eval_h(
    Index*        iRow,
    Index*        jCol,
    Number*       values
-   )
+)
 {
    if( values == NULL )
    {
@@ -966,7 +971,9 @@ bool MittelmannBndryCntrlDiriBase3D_27::eval_h(
                ihes++;
             }
          }
-      } DBG_ASSERT(ihes==nele_hess);  (void) nele_hess;
+      }
+      DBG_ASSERT(ihes == nele_hess);
+      (void) nele_hess;
    }
    else
    {
@@ -1060,7 +1067,7 @@ void MittelmannBndryCntrlDiriBase3D_27::finalize_solution(
    Number                     /*obj_value*/,
    const IpoptData*           /*ip_data*/,
    IpoptCalculatedQuantities* /*ip_cq*/
-   )
+)
 {
    /*
     FILE* fp = fopen("solution.txt", "w+");

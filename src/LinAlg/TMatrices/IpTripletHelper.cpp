@@ -508,7 +508,8 @@ void TripletHelper::FillValues_(
    Number*           values
 )
 {
-   DBG_ASSERT(n_entries == matrix.Nonzeros()); (void) n_entries;
+   DBG_ASSERT(n_entries == matrix.Nonzeros());
+   (void) n_entries;
    matrix.FillValues(values);
 }
 
@@ -521,7 +522,8 @@ void TripletHelper::FillRowCol_(
    Index*            jCol
 )
 {
-   DBG_ASSERT(n_entries == matrix.Dim()); (void) matrix;
+   DBG_ASSERT(n_entries == matrix.Dim());
+   (void) matrix;
    row_offset++;
    col_offset++;
    for( Index i = 0; i < n_entries; i++ )
@@ -551,7 +553,8 @@ void TripletHelper::FillRowCol_(
    Index*                jCol
 )
 {
-   DBG_ASSERT(n_entries == matrix.Dim()); (void) matrix;
+   DBG_ASSERT(n_entries == matrix.Dim());
+   (void) matrix;
    row_offset++;
    col_offset++;
    for( Index i = 0; i < n_entries; i++ )
@@ -601,7 +604,8 @@ void TripletHelper::FillValues_(
    Number*                values
 )
 {
-   DBG_ASSERT(n_entries == matrix.NCols()); (void) matrix;
+   DBG_ASSERT(n_entries == matrix.NCols());
+   (void) matrix;
    for( Index i = 0; i < n_entries; i++ )
    {
       values[i] = 1.0;
@@ -632,7 +636,8 @@ void TripletHelper::FillRowCol_(
       iRow += term_n_entries;
       jCol += term_n_entries;
    }
-   DBG_ASSERT(total_n_entries == n_entries);  (void) n_entries;
+   DBG_ASSERT(total_n_entries == n_entries);
+   (void) n_entries;
 }
 
 void TripletHelper::FillValues_(
@@ -658,7 +663,8 @@ void TripletHelper::FillValues_(
       // now shift the values pointer for the next term
       values += term_n_entries;
    }
-   DBG_ASSERT(total_n_entries == n_entries);  (void) n_entries;
+   DBG_ASSERT(total_n_entries == n_entries);
+   (void) n_entries;
 }
 
 void TripletHelper::FillRowCol_(
@@ -685,7 +691,8 @@ void TripletHelper::FillRowCol_(
       iRow += term_n_entries;
       jCol += term_n_entries;
    }
-   DBG_ASSERT(total_n_entries == n_entries);  (void) n_entries;
+   DBG_ASSERT(total_n_entries == n_entries);
+   (void) n_entries;
 }
 
 void TripletHelper::FillValues_(
@@ -722,7 +729,8 @@ void TripletHelper::FillValues_(
       // now shift the values pointer for the next term
       values += term_n_entries;
    }
-   DBG_ASSERT(total_n_entries == n_entries);  (void) n_entries;
+   DBG_ASSERT(total_n_entries == n_entries);
+   (void) n_entries;
 }
 
 void TripletHelper::FillRowCol_(
@@ -761,7 +769,8 @@ void TripletHelper::FillRowCol_(
       }
       c_row_offset += owner_space->GetBlockRows(i);
    }
-   DBG_ASSERT(total_n_entries == n_entries);  (void) n_entries;
+   DBG_ASSERT(total_n_entries == n_entries);
+   (void) n_entries;
 }
 
 void TripletHelper::FillValues_(
@@ -789,7 +798,8 @@ void TripletHelper::FillValues_(
          }
       }
    }
-   DBG_ASSERT(total_n_entries == n_entries);  (void) n_entries;
+   DBG_ASSERT(total_n_entries == n_entries);
+   (void) n_entries;
 }
 
 void TripletHelper::FillRowCol_(
@@ -829,7 +839,8 @@ void TripletHelper::FillRowCol_(
       }
       c_row_offset += owner_space->GetBlockDim(i);
    }
-   DBG_ASSERT(total_n_entries == n_entries);  (void) n_entries;
+   DBG_ASSERT(total_n_entries == n_entries);
+   (void) n_entries;
 }
 
 void TripletHelper::FillValues_(
@@ -857,7 +868,8 @@ void TripletHelper::FillValues_(
          }
       }
    }
-   DBG_ASSERT(total_n_entries == n_entries);  (void) n_entries;
+   DBG_ASSERT(total_n_entries == n_entries);
+   (void) n_entries;
 }
 
 void TripletHelper::FillValuesFromVector(
@@ -1061,7 +1073,8 @@ void TripletHelper::FillRowCol_(
    else
    {
       const Index nCols = matrix.NCols();
-      DBG_ASSERT(n_entries = nRows * nCols);  (void) n_entries;
+      DBG_ASSERT(n_entries = nRows * nCols);
+      (void) n_entries;
       for( Index irow = row_offset; irow < row_offset + nRows; irow++ )
       {
          for( Index jcol = col_offset; jcol < col_offset + nCols; jcol++ )
