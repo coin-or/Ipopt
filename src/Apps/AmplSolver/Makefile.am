@@ -35,28 +35,3 @@ includeipopt_HEADERS = AmplTNLP.hpp
 
 pkgconfiglibdir = $(libdir)/pkgconfig
 pkgconfiglib_DATA = ../../../ipoptamplinterface.pc
-
-# Astyle stuff
-
-ASTYLE_FILES = \
-	AmplTNLP.cppbak AmplTNLP.hppbak \
-	ampl_ipopt.cppbak
-
-ASTYLE = @ASTYLE@
-ASTYLEFLAGS = @ASTYLEFLAGS@
-
-DISTCLEANFILES = $(ASTYLE_FILES)
-
-SUFFIXES = .cppbak .hppbak
-
-astyle: $(ASTYLE_FILES)
-
-.hpp.hppbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
-	touch $@
-
-.cpp.cppbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
-	touch $@

@@ -26,28 +26,3 @@ if !HAVE_PARDISO
   libLinearSolverLoader_la_SOURCES += PardisoLoader.c
   includeipopt_HEADERS += PardisoLoader.h
 endif
-
-# Astyle stuff
-
-ASTYLE_FILES = \
-    LibraryHandler.cbak LibraryHandler.hbak \
-    HSLLoader.cbak HSLLoader.hbak
-
-ASTYLE = @ASTYLE@
-ASTYLEFLAGS = @ASTYLEFLAGS@
-
-DISTCLEANFILES = $(ASTYLE_FILES)
-
-SUFFIXES = .cppbak .hppbak
-
-astyle: $(ASTYLE_FILES)
-
-.h.hbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
-	touch $@
-
-.c.cbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
-	touch $@

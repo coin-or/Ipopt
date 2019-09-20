@@ -202,8 +202,6 @@ AMTAR = @AMTAR@
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 AR = @AR@
 AS = @AS@
-ASTYLE = @ASTYLE@
-ASTYLEFLAGS = @ASTYLEFLAGS@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
@@ -392,31 +390,10 @@ AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../../contrib/LinearSolverLoader \
 	$(IPOPTLIB_CFLAGS)
 
-
-# Astyle stuff
-ASTYLE_FILES = \
-	IpInexactAlgBuilder.cppbak IpInexactAlgBuilder.hppbak \
-	IpInexactCq.cppbak IpInexactCq.hppbak \
-	IpInexactData.cppbak IpInexactData.hppbak \
-	IpInexactDoglegNormal.cppbak IpInexactDoglegNormal.hppbak \
-	IpInexactLSAcceptor.cppbak IpInexactLSAcceptor.hppbak \
-	IpInexactNewtonNormal.cppbak IpInexactNewtonNormal.hppbak \
-	IpInexactNormalStepCalc.hppbak \
-	IpInexactNormalTerminationTester.cppbak IpInexactNormalTerminationTester.hppbak \
-	IpInexactPDSolver.cppbak IpInexactPDSolver.hppbak \
-	IpInexactPDTerminationTester.cppbak IpInexactPDTerminationTester.hppbak \
-	IpInexactRegOp.cppbak IpInexactRegOp.hppbak \
-	IpInexactSearchDirCalc.cppbak IpInexactSearchDirCalc.hppbak \
-	IpInexactTSymScalingMethod.cppbak IpInexactTSymScalingMethod.hppbak \
-	IpIterativePardisoSolverInterface.cppbak IpIterativePardisoSolverInterface.hppbak \
-	IpIterativeSolverTerminationTester.cppbak IpIterativeSolverTerminationTester.hppbak
-
-DISTCLEANFILES = $(ASTYLE_FILES)
-SUFFIXES = .cppbak .hppbak
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .cppbak .hppbak .cpp .hpp .lo .o .obj
+.SUFFIXES: .cpp .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -596,7 +573,6 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
-	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -716,18 +692,6 @@ uninstall-am:
 
 .PRECIOUS: Makefile
 
-
-astyle: $(ASTYLE_FILES)
-
-.hpp.hppbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
-	touch $@
-
-.cpp.cppbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
-	touch $@
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

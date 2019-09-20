@@ -242,8 +242,6 @@ AMTAR = @AMTAR@
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 AR = @AR@
 AS = @AS@
-ASTYLE = @ASTYLE@
-ASTYLEFLAGS = @ASTYLEFLAGS@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
@@ -439,29 +437,11 @@ AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../contrib/LinearSolverLoader \
 	$(IPOPTLIB_CFLAGS)
 
-
-# Astyle stuff
-ASTYLE_FILES = \
-	IpAlgTypes.hppbak \
-	IpInterfacesRegOp.cppbak IpInterfacesRegOp.hppbak \
-	IpIpoptApplication.cppbak IpIpoptApplication.hppbak \
-	IpNLP.hppbak \
-	IpReturnCodes_inc.hbak IpReturnCodes.hbak IpReturnCodes.hppbak \
-	IpSolveStatistics.cppbak IpSolveStatistics.hppbak \
-	IpStdCInterface.cppbak IpStdCInterface.hbak \
-	IpStdFInterface.cbak \
-	IpStdInterfaceTNLP.cppbak IpStdInterfaceTNLP.hppbak \
-	IpTNLP.hppbak \
-	IpTNLPAdapter.cppbak IpTNLPAdapter.hppbak \
-	IpTNLPReducer.cppbak IpTNLPReducer.hppbak
-
-DISTCLEANFILES = $(ASTYLE_FILES)
-SUFFIXES = .cppbak .hppbak .cbak .hbak
 all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
-.SUFFIXES: .cppbak .hppbak .cbak .hbak .c .cpp .h .hpp .lo .o .obj
+.SUFFIXES: .c .cpp .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -709,14 +689,13 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
-	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
 	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
-@BUILD_JAVA_FALSE@install-exec-local:
 @BUILD_JAVA_FALSE@uninstall-local:
+@BUILD_JAVA_FALSE@install-exec-local:
 clean: clean-am
 
 clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
@@ -840,28 +819,6 @@ uninstall-am: uninstall-includeipoptHEADERS uninstall-libLTLIBRARIES \
 @BUILD_JAVA_TRUE@	$(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) org.coinor.ipopt.jar "$(DESTDIR)$(libdir)"
 @BUILD_JAVA_TRUE@uninstall-local :
 @BUILD_JAVA_TRUE@	$(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/org.coinor.ipopt.jar"
-
-astyle: $(ASTYLE_FILES)
-
-.h.hbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
-	touch $@
-
-.hpp.hppbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
-	touch $@
-
-.c.cbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
-	touch $@
-
-.cpp.cppbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
-	touch $@
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

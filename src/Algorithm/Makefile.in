@@ -289,8 +289,6 @@ AMTAR = @AMTAR@
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 AR = @AR@
 AS = @AS@
-ASTYLE = @ASTYLE@
-ASTYLEFLAGS = @ASTYLEFLAGS@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
@@ -534,76 +532,10 @@ AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../contrib/LinearSolverLoader \
 	$(IPOPTLIB_CFLAGS)
 
-
-# Astyle stuff
-ASTYLE_FILES = \
-	IpAdaptiveMuUpdate.cppbak IpAdaptiveMuUpdate.hppbak \
-	IpAlgBuilder.cppbak IpAlgBuilder.hppbak \
-	IpAlgorithmRegOp.cppbak IpAlgorithmRegOp.hppbak \
-	IpAlgStrategy.hppbak \
-	IpAugRestoSystemSolver.cppbak IpAugRestoSystemSolver.hppbak \
-	IpAugSystemSolver.hppbak \
-	IpBacktrackingLSAcceptor.hppbak \
-	IpBacktrackingLineSearch.cppbak IpBacktrackingLineSearch.hppbak \
-	IpConvCheck.hppbak \
-	IpDefaultIterateInitializer.cppbak IpDefaultIterateInitializer.hppbak \
-	IpEqMultCalculator.hppbak \
-	IpEquilibrationScaling.cppbak IpEquilibrationScaling.hppbak \
-	IpExactHessianUpdater.cppbak IpExactHessianUpdater.hppbak \
-	IpFilter.cppbak IpFilter.hppbak \
-	IpFilterLSAcceptor.cppbak IpFilterLSAcceptor.hppbak \
-	IpGenAugSystemSolver.cppbak IpGenAugSystemSolver.hppbak \
-	IpGradientScaling.cppbak IpGradientScaling.hppbak \
-	IpHessianUpdater.hppbak \
-	IpIpoptAlg.cppbak IpIpoptAlg.hppbak \
-	IpIpoptCalculatedQuantities.cppbak IpIpoptCalculatedQuantities.hppbak \
-	IpIpoptData.cppbak IpIpoptData.hppbak \
-	IpIpoptNLP.hppbak \
-	IpIterateInitializer.hppbak \
-	IpIteratesVector.cppbak IpIteratesVector.hppbak \
-	IpIterationOutput.hppbak \
-	IpLeastSquareMults.cppbak IpLeastSquareMults.hppbak \
-	IpLimMemQuasiNewtonUpdater.cppbak IpLimMemQuasiNewtonUpdater.hppbak \
-	IpLineSearch.hppbak \
-	IpLoqoMuOracle.cppbak IpLoqoMuOracle.hppbak \
-	IpLowRankAugSystemSolver.cppbak IpLowRankAugSystemSolver.hppbak \
-	IpLowRankSSAugSystemSolver.cppbak IpLowRankSSAugSystemSolver.hppbak \
-	IpMonotoneMuUpdate.cppbak IpMonotoneMuUpdate.hppbak \
-	IpMuOracle.hppbak \
-	IpMuUpdate.hppbak \
-	IpNLPBoundsRemover.cppbak IpNLPBoundsRemover.hppbak \
-	IpNLPScaling.cppbak IpNLPScaling.hppbak \
-	IpOptErrorConvCheck.cppbak IpOptErrorConvCheck.hppbak \
-	IpOrigIpoptNLP.cppbak IpOrigIpoptNLP.hppbak \
-	IpOrigIterationOutput.cppbak IpOrigIterationOutput.hppbak \
-	IpPDFullSpaceSolver.cppbak IpPDFullSpaceSolver.hppbak \
-	IpPDPerturbationHandler.cppbak IpPDPerturbationHandler.hppbak \
-	IpPDSearchDirCalc.cppbak IpPDSearchDirCalc.hppbak \
-	IpPDSystemSolver.hppbak \
-	IpPenaltyLSAcceptor.cppbak IpPenaltyLSAcceptor.hppbak \
-	IpProbingMuOracle.cppbak IpProbingMuOracle.hppbak \
-	IpQualityFunctionMuOracle.cppbak IpQualityFunctionMuOracle.hppbak \
-	IpRestoConvCheck.cppbak IpRestoConvCheck.hppbak \
-	IpRestoFilterConvCheck.cppbak IpRestoFilterConvCheck.hppbak \
-	IpRestoIpoptNLP.cppbak IpRestoIpoptNLP.hppbak \
-	IpRestoIterateInitializer.cppbak IpRestoIterateInitializer.hppbak \
-	IpRestoIterationOutput.cppbak IpRestoIterationOutput.hppbak \
-	IpRestoMinC_1Nrm.cppbak IpRestoMinC_1Nrm.hppbak \
-	IpRestoPenaltyConvCheck.cppbak IpRestoPenaltyConvCheck.hppbak \
-	IpRestoPhase.hppbak \
-	IpRestoRestoPhase.cppbak IpRestoRestoPhase.hppbak \
-	IpSearchDirCalculator.hppbak \
-	IpStdAugSystemSolver.cppbak IpStdAugSystemSolver.hppbak \
-	IpTimingStatistics.cppbak IpTimingStatistics.hppbak \
-	IpUserScaling.cppbak IpUserScaling.hppbak \
-	IpWarmStartIterateInitializer.cppbak IpWarmStartIterateInitializer.hppbak
-
-DISTCLEANFILES = $(ASTYLE_FILES)
-SUFFIXES = .cppbak .hppbak
 all: all-recursive
 
 .SUFFIXES:
-.SUFFIXES: .cppbak .hppbak .cpp .hpp .lo .o .obj
+.SUFFIXES: .cpp .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -886,7 +818,6 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
-	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -1070,18 +1001,6 @@ uninstall-am: uninstall-includeipoptHEADERS
 
 .PRECIOUS: Makefile
 
-
-astyle: $(ASTYLE_FILES)
-
-.hpp.hppbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
-	touch $@
-
-.cpp.cppbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
-	touch $@
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

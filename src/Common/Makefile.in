@@ -215,8 +215,6 @@ AMTAR = @AMTAR@
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 AR = @AR@
 AS = @AS@
-ASTYLE = @ASTYLE@
-ASTYLEFLAGS = @ASTYLEFLAGS@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
@@ -405,31 +403,11 @@ libcommon_la_SOURCES = \
 
 libcommon_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -DIPOPT_BUILD
-
-# Astyle stuff
-ASTYLE_FILES = \
-	IpoptConfig.hbak \
-	IpCachedResults.hppbak \
-	IpDebug.cppbak IpDebug.hppbak \
-	IpException.hppbak \
-	IpJournalist.cppbak IpJournalist.hppbak \
-	IpObserver.cppbak IpObserver.hppbak \
-	IpOptionsList.cppbak IpOptionsList.hppbak \
-	IpRegOptions.cppbak IpRegOptions.hppbak \
-	IpReferenced.hppbak \
-	IpSmartPtr.hppbak \
-	IpTaggedObject.cppbak IpTaggedObject.hppbak \
-	IpTimedTask.hppbak \
-	IpTypes.hppbak \
-	IpUtils.cppbak IpUtils.hppbak
-
-DISTCLEANFILES = $(ASTYLE_FILES)
-SUFFIXES = .cppbak .hppbak .hbak
 all: config.h config_ipopt.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
-.SUFFIXES: .cppbak .hppbak .hbak .cpp .h .hpp .lo .o .obj
+.SUFFIXES: .cpp .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -649,7 +627,6 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
-	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -763,23 +740,6 @@ install-exec-local:
 
 uninstall-local:
 	rm -f $(DESTDIR)$(includeipoptdir)/IpoptConfig.h
-
-astyle: $(ASTYLE_FILES)
-
-.h.hbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
-	touch $@
-
-.hpp.hppbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
-	touch $@
-
-.cpp.cppbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
-	touch $@
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

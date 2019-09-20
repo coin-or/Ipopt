@@ -251,8 +251,6 @@ AMTAR = @AMTAR@
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 AR = @AR@
 AS = @AS@
-ASTYLE = @ASTYLE@
-ASTYLEFLAGS = @ASTYLEFLAGS@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
@@ -463,39 +461,10 @@ liblinalg_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../Common
 
-
-# Astyle stuff
-ASTYLE_FILES = IpBlas.cppbak IpBlas.hppbak \
-	IpCompoundMatrix.cppbak IpCompoundMatrix.hppbak \
-	IpCompoundSymMatrix.cppbak IpCompoundSymMatrix.hppbak \
-	IpCompoundVector.cppbak IpCompoundVector.hppbak \
-	IpDenseGenMatrix.cppbak IpDenseGenMatrix.hppbak \
-	IpDenseSymMatrix.cppbak IpDenseSymMatrix.hppbak \
-	IpDenseVector.cppbak IpDenseVector.hppbak \
-	IpDiagMatrix.cppbak IpDiagMatrix.hppbak \
-	IpExpandedMultiVectorMatrix.cppbak IpExpandedMultiVectorMatrix.hppbak \
-	IpExpansionMatrix.cppbak IpExpansionMatrix.hppbak \
-	IpIdentityMatrix.cppbak IpIdentityMatrix.hppbak \
-	IpLapack.cppbak IpLapack.hppbak \
-	IpLowRankUpdateSymMatrix.cppbak IpLowRankUpdateSymMatrix.hppbak \
-	IpMatrix.cppbak IpMatrix.hppbak \
-	IpMultiVectorMatrix.cppbak IpMultiVectorMatrix.hppbak \
-	IpScaledMatrix.cppbak IpScaledMatrix.hppbak \
-	IpSumMatrix.cppbak IpSumMatrix.hppbak \
-	IpSumSymMatrix.cppbak IpSumSymMatrix.hppbak \
-	IpSymMatrix.hppbak \
-	IpSymScaledMatrix.cppbak IpSymScaledMatrix.hppbak \
-	IpTransposeMatrix.cppbak IpTransposeMatrix.hppbak \
-	IpVector.cppbak IpVector.hppbak \
-	IpZeroMatrix.cppbak IpZeroMatrix.hppbak \
-	IpZeroSymMatrix.cppbak IpZeroSymMatrix.hppbak
-
-DISTCLEANFILES = $(ASTYLE_FILES)
-SUFFIXES = .cppbak .hppbak
 all: all-recursive
 
 .SUFFIXES:
-.SUFFIXES: .cppbak .hppbak .cpp .hpp .lo .o .obj
+.SUFFIXES: .cpp .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -756,7 +725,6 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
-	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -896,18 +864,6 @@ uninstall-am: uninstall-includeipoptHEADERS
 
 .PRECIOUS: Makefile
 
-
-astyle: $(ASTYLE_FILES)
-
-.hpp.hppbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
-	touch $@
-
-.cpp.cppbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
-	touch $@
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

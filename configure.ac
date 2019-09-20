@@ -331,16 +331,6 @@ fi
 
 AM_CONDITIONAL([BUILD_JAVA], [test "$enable_java" != no])
 
-##########
-# ASTYLE #
-##########
-
-ASTYLE=astyle
-AC_SUBST(ASTYLE)
-ASTYLEFLAGS="--mode=c -A1 --indent=spaces=3 --indent-switches --min-conditional-indent=1 --convert-tabs --align-pointer=type --pad-oper --add-brackets"
-AC_SUBST(ASTYLEFLAGS)
-
-
 #########################
 # Makefile conditionals #
 #########################

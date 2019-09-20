@@ -284,8 +284,6 @@ AMTAR = @AMTAR@
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 AR = @AR@
 AS = @AS@
-ASTYLE = @ASTYLE@
-ASTYLEFLAGS = @ASTYLEFLAGS@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
@@ -467,38 +465,10 @@ AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../../contrib/CGPenalty \
 	$(IPOPTLIB_CFLAGS)
 
-
-# Astyle stuff
-ASTYLE_FILES = \
-	IpGenKKTSolverInterface.hppbak \
-	IpIterativeWsmpSolverInterface.cppbak \
-	IpIterativeWsmpSolverInterface.hppbak \
-	IpLinearSolversRegOp.cppbak IpLinearSolversRegOp.hppbak \
-	IpMa27TSolverInterface.cppbak IpMa27TSolverInterface.hppbak \
-	IpMa28TDependencyDetector.cppbak IpMa28TDependencyDetector.hppbak \
-	IpMa57TSolverInterface.cppbak IpMa57TSolverInterface.hppbak \
-	IpMa77SolverInterface.cppbak IpMa77SolverInterface.hppbak \
-	IpMa86SolverInterface.cppbak IpMa86SolverInterface.hppbak \
-	IpMa97SolverInterface.cppbak IpMa97SolverInterface.hppbak \
-	IpMc19TSymScalingMethod.cppbak IpMc19TSymScalingMethod.hppbak \
-	IpMumpsSolverInterface.cppbak IpMumpsSolverInterface.hppbak \
-	IpSlackBasedTSymScalingMethod.cppbak IpSlackBasedTSymScalingMethod.hppbak \
-	IpSparseSymLinearSolverInterface.hppbak \
-	IpSymLinearSolver.hppbak \
-	IpTDependencyDetector.hppbak \
-	IpTripletToCSRConverter.cppbak IpTripletToCSRConverter.hppbak \
-	IpTSymDependencyDetector.cppbak IpTSymDependencyDetector.hppbak \
-	IpTSymLinearSolver.cppbak IpTSymLinearSolver.hppbak \
-	IpTSymScalingMethod.hppbak \
-	IpPardisoSolverInterface.cppbak IpPardisoSolverInterface.hppbak \
-	IpWsmpSolverInterface.cppbak IpWsmpSolverInterface.hppbak
-
-DISTCLEANFILES = $(ASTYLE_FILES)
-SUFFIXES = .cppbak .hppbak
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .cppbak .hppbak .F .cpp .f .hpp .lo .o .obj
+.SUFFIXES: .F .cpp .f .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -715,7 +685,6 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
-	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -840,18 +809,6 @@ uninstall-am: uninstall-includeipoptHEADERS
 
 .PRECIOUS: Makefile
 
-
-astyle: $(ASTYLE_FILES)
-
-.hpp.hppbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
-	touch $@
-
-.cpp.cppbak:
-	mv $< $@
-	$(ASTYLE) $(ASTYLEFLAGS) < $@ | sed -e 's/  *$$//' > $<
-	touch $@
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

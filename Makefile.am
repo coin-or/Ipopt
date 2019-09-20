@@ -74,17 +74,7 @@ clean-doc:
 clean-local : clean-doc
 
 astyle:
-	cd src/Algorithm; $(MAKE) astyle
-	cd src/Algorithm/LinearSolvers; $(MAKE) astyle
-	cd src/Algorithm/Inexact; $(MAKE) astyle
-	cd src/contrib/CGPenalty; $(MAKE) astyle
-	cd src/Apps/AmplSolver; $(MAKE) astyle
-	cd src/Common; $(MAKE) astyle
-	cd src/LinAlg; $(MAKE) astyle
-	cd src/LinAlg/TMatrices; $(MAKE) astyle
-	cd src/Interfaces; $(MAKE) astyle
-	cd contrib/sIPOPT/src; $(MAKE) astyle
-	cd contrib/sIPOPT/AmplSolver; $(MAKE) astyle
+	cd $(srcdir) && astyle --mode=c -A1 --indent=spaces=3 --indent-switches --min-conditional-indent=1 --convert-tabs --align-pointer=type --pad-oper --add-brackets -n -r "*.hpp" "*.h"  "*.cpp" "*.c"
 
 pkgconfiglibdir = $(libdir)/pkgconfig
 pkgconfiglib_DATA = ipopt.pc

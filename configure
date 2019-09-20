@@ -652,8 +652,6 @@ BUILD_SIPOPT_TRUE
 BUILD_LINEARSOLVERLOADER_FALSE
 BUILD_LINEARSOLVERLOADER_TRUE
 IPALLLIBS
-ASTYLEFLAGS
-ASTYLE
 BUILD_JAVA_FALSE
 BUILD_JAVA_TRUE
 JAVADOC
@@ -24915,7 +24913,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 24918 "configure" */
+/* #line 24916 "configure" */
 public class Test {
 }
 EOF
@@ -25383,7 +25381,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25386 "configure" */
+/* #line 25384 "configure" */
 public class Test {
 }
 EOF
@@ -25417,7 +25415,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25420 "configure" */
+/* [#]line 25418 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
@@ -25554,16 +25552,6 @@ else
   BUILD_JAVA_TRUE='#'
   BUILD_JAVA_FALSE=
 fi
-
-
-##########
-# ASTYLE #
-##########
-
-ASTYLE=astyle
-
-ASTYLEFLAGS="--mode=c -A1 --indent=spaces=3 --indent-switches --min-conditional-indent=1 --convert-tabs --align-pointer=type --pad-oper --add-brackets"
-
 
 
 #########################
