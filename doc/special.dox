@@ -1,0 +1,296 @@
+/**
+\page SPECIALS Special Features
+
+\tableofcontents
+
+\section DERIVCHECK Derivative Checker
+
+When writing code for the evaluation of derivatives it is very easy to
+make mistakes (much easier than writing it correctly the first time :)).
+As a convenient feature, \Ipopt provides the option to run
+a simple derivative checker, based on finite differences, before the
+optimization is started.
+
+To use the derivative checker, you need to use the option \ref OPT_derivative_test "derivative_test".
+By default, this option is set to `none`, i.e., no finite difference test
+is performed. If it is set to `first-order`, then the first derivatives of the
+objective function and the constraints are verified, and for the setting
+`second-order`, the second derivatives are tested as well.
+
+The verification is done by a simple finite differences approximation,
+where each component of the user-provided starting point is perturbed
+one of the other. The relative size of the perturbation is determined by
+the option \ref OPT_derivative_test_perturbation "derivative_test_perturbation". The default value
+(10<sup>-8</sup>, about the square root of the machine precision)
+is probably fine in most cases, but if you believe
+that you see wrong warnings, you might want to play with this parameter.
+When the test is performed, \Ipopt prints out a line for
+every partial derivative, for which the user-provided derivative value
+deviates too much from the finite difference approximation. The relative
+tolerance for deciding when a warning should be issued, is determined by
+the option \ref OPT_derivative_test_tol "derivative_test_tol". If you want to see the user-provided and estimated
+derivative values with the relative deviation for each single partial
+derivative, you can switch the option \ref OPT_derivative_test_print_all "derivative_test_print_all" to `yes`.
+
+A typical output is:
+\verbatim
+Starting derivative checker.
+
+* grad_f[          2] = -6.5159999999999991e+02    ~ -6.5559997134793468e+02  [ 6.101e-03]
+* jac_g [    4,    4] =  0.0000000000000000e+00    ~  2.2160643690464592e-02  [ 2.216e-02]
+* jac_g [    4,    5] =  1.3798494268463347e+01 v  ~  1.3776333629422766e+01  [ 1.609e-03]
+* jac_g [    6,    7] =  1.4776333636790881e+01 v  ~  1.3776333629422766e+01  [ 7.259e-02]
+
+Derivative checker detected 4 error(s).
+\endverbatim
+
+The star ("*") in the first column indicates that this line
+corresponds to some partial derivative for which the error tolerance was
+exceeded. Next, we see which partial derivative is concerned in this
+output line. For example, in the first line, it is the second component
+of the objective function gradient (or the third, if the C_STYLE
+numbering is used, i.e., when counting of indices starts with 0 instead
+of 1). The first floating point number is the value given by the user
+code, and the second number (after "~") is the finite differences
+estimation. Finally, the number in square brackets is the relative
+difference between these two numbers.
+
+For constraints, the first index after `jac_g` is the index of the
+constraint, and the second one corresponds to the variable index (again,
+the choice of the numbering style matters).
+
+Since also the sparsity structure of the constraint Jacobian has to be
+provided by the user, it can be faulty as well. For this, the "v" after
+a user-provided derivative value indicates that this component of the
+Jacobian is part of the user provided sparsity structure. If there is no
+"v", it means that the user did not include this partial derivative in
+the list of non-zero elements. In the above output, the partial
+derivative `jac_g[4,4]` is non-zero (based on the finite difference
+approximation), but it is not included in the list of non-zero elements
+(missing "v"), so that the user probably made a mistake in the sparsity
+structure. The other two Jacobian entries are provided in the non-zero
+structure but their values seem to be off.
+
+For second derivatives, the output looks like:
+\verbatim
+*             obj_hess[    1,    1] =  1.8810000000000000e+03 v  ~  1.8820000036612328e+03  [ 5.314e-04]
+*     3-th constr_hess[    2,    4] =  1.0000000000000000e+00 v  ~  0.0000000000000000e+00  [ 1.000e+00]
+\endverbatim
+There, the first line shows the deviation of the user-provided partial
+second derivative in the Hessian for the objective function, and the
+second line show an error in a partial derivative for the Hessian of the
+third constraint (again, the numbering style matters).
+
+Since the second derivatives are approximates by finite differences of
+the first derivatives, you should first correct errors for the first
+derivatives. Also, since the finite difference approximations are quite
+expensive, you should try to debug a small instance of your problem if
+you can.
+
+Another useful option is \ref OPT_derivative_test_first_index "derivative_test_first_index"
+which allows your to start the derivative test with variables with a
+larger index. Finally, it is of course always a good idea to run your
+code through some memory checker, such as valgrind on Linux.
+
+\section QUASI_NEWTON Quasi-Newton Approximation of Second Derivatives
+
+\Ipopt has an option to approximate the Hessian of the
+Lagrangian by a limited-memory quasi-Newton method (L-BFGS). You can use
+this feature by setting the option \ref OPT_hessian_approximation "hessian_approximation"
+to the value `limited-memory`.
+In this case, it is not necessary to implement the Hessian computation method
+Ipopt::TNLP::eval_h. If you are using the C or Fortran interface, you still
+need to implement these functions, but they should return `false` or
+`IERR=1`, respectively, and don't need to do anything else.
+
+In general, when second derivatives can be computed with reasonable
+computational effort, it is usually a good idea to use them, since then
+\Ipopt normally converges in fewer iterations and is more
+robust. An exception might be in cases, where your optimization problem
+has a dense Hessian, i.e., a large percentage of non-zero entries in the
+Hessian. In such a case, using the quasi-Newton approximation might be
+better, even if it increases the number of iterations, since with exact
+second derivatives the computation time per iteration might be
+significantly higher due to the very large number of non-zero elements
+in the linear systems that \Ipopt solve in order to compute
+the search direction.
+
+Since the Hessian of the Lagrangian is zero for all variables that
+appear only linearly in the objective and constraint functions, the
+Hessian approximation should only take place in the space of all
+nonlinear variables. By default, it is assumed that all variables are
+nonlinear, but you can tell \Ipopt explicitly which
+variables are nonlinear, using the Ipopt::TNLP::get_number_of_nonlinear_variables
+and Ipopt::TNLP::get_list_of_nonlinear_variables methods, see
+\ref INTERFACE_CPP_ADDITIONAL. (Those methods have been implemented for the
+AMPL interface, so you would automatically only approximate the Hessian
+in the space of the nonlinear variables, if you are using the
+quasi-Newton option for AMPL models.) Currently, those two methods are
+not available through the C or Fortran interface.
+
+\section AMPL_WARMSTART Warm-Starting Capabilities via AMPL
+
+This section is based on documentation by Victor M. Zavala
+(Department of Chemical Engineering, Carnegie Mellon University).
+
+Warm-starting an interior-point algorithm is an important issue. One of
+the main difficulties arises from the fact that full-space variable
+information is required to generate the warm-starting point. While
+\Ipopt is currently equipped to retrieve and receive this
+type of information through the TNLP interface, there exist some
+communication barriers in the AMPL interface. When the user solves the
+problem \ref NLP "(NLP)", \Ipopt will only return the optimal
+values of the primal variables \f$x\f$ and of the constraint multipliers
+corresponding to the active sides of \f$g^L \leq g(x) \leq g^U\f$.
+The constraint multiplier values can be
+accessed through the `.dual` suffix or through the `.sol` file. If this
+information is used to solve the same problem again, you will notice
+that \Ipopt will take some iterations in finding the same
+solution. The reason for this is that we are missing the input
+information of the multipliers \f$z^L\f$ and \f$z^U\f$ corresponding to the
+variable bounds \f$x^L \leq x \leq x^U\f$.
+
+However, \Ipopt also passes the values of the bound multipliers
+\f$z^L\f$ and \f$z^U\f$ to AMPL. This will be communicated to the
+AMPL user through the suffixes `ipopt_zL_out` and `ipopt_zU_out`,
+respectively. The user does not need to declare these suffixes, they
+will be generated automatically in the AMPL interface. The user can use
+the suffix values to initialize the bound multipliers for subsequent
+calls. In order to pass this information to \Ipopt, the
+user will need to declare and assign values to the suffixes
+`ipopt_zL_in` and `ipopt_zU_in`. For instance, for a given variable
+`x[i]`, this can be done by setting:
+\verbatim
+let x[i].ipopt_zL_in := x[i].ipopt_zL_out;
+let x[i].ipopt_zU_in := x[i].ipopt_zU_out;
+\endverbatim
+
+If the user does not specify some of these values, \Ipopt
+will set these multipliers to 1.0 (as before). In order to make the
+warm-start effective, the user has control over the following options
+from AMPL:
+- \ref OPT_warm_start_init_point "warm_start_init_point"
+- \ref OPT_warm_start_bound_push "warm_start_bound_push"
+- \ref OPT_warm_start_mult_bound_push "warm_start_mult_bound_push"
+
+Note, that the use of this feature is far from solving the complicated
+issue of warm-starting interior-point algorithms. As a general advice,
+this feature will be useful if the user observes that the solution of
+subsequent problems (i.e., for different data instances) preserves the
+same set of active inequalities and bounds (monitor the values of \f$z^L\f$
+and \f$z^U\f$ for subsequent solutions). In this case, initializing the
+bound multipliers and setting `warm_start_init_point` to `yes` and setting
+`warm_start_bound_push`, `warm_start_mult_bound_push`, and `mu_init` to
+a small value (10<sup>-6</sup> or so) will reduce significantly the number of iterations.
+This is particularly useful in setting up on-line applications and
+high-level optimization strategies in AMPL. If active-set changes are
+observed between subsequent solutions, then this strategy might not
+decrease the number of iterations (in some cases, it might even tend to
+increase the number of iterations).
+
+You might also want to try the adaptive barrier update (instead of the
+default monotone one where above we chose the initial value 10<sup>-6</sup>)
+when doing the warm start. This can be activated by setting the option
+\ref OPT_mu_strategy "mu_strategy" to `adaptive`. Also the option
+\ref OPT_mu_oracle "mu_oracle" gives some alternative choices.
+In general, the adaptive choice often leads to less iterations, but the
+computational cost per iteration might be higher.
+
+The file `$IPOPTDIR/Ipopt/doc/hs071_warmstart.mod` illustrates the use
+of the warm-start feature on the HS071 problem, see also \ref INTERFACE_AMPL.
+
+\section SIPOPT sIpopt: Optimal Sensitivity Based on Ipopt
+
+This section is based on documentation by Hans Pirnay (RWTH Aachen) and
+Rodrigo López-Negrete (Carnegie Mellon University).
+
+The `sIpopt` project provides a toolbox that uses NLP sensitivity theory
+to generate fast approximations to solutions when parameters in the
+problem change. It has been developed primarily by
+Hans Pirnay (RWTH-Aachen), Rodrigo López-Negrete (CMU), and Lorenz
+Biegler (CMU).
+
+Sensitivity of nonlinear programming problems is a key step in any
+optimization study. Sensitivity provides information on regularity and
+curvature conditions at KKT points, assesses which variables play
+dominant roles in the optimization, and provides first order estimates
+for parametric nonlinear programs. Moreover, for NLP algorithms that use
+exact second derivatives, sensitivity can be implemented very
+efficiently within NLP solvers and provide valuable information with
+very little added computation. This implementation provides
+\Ipopt with the capabilities to calculate sensitivities,
+and approximate perturbed solutions with them.
+
+The basic sensitivity strategy implemented here is based on the
+application of the Implicit Function Theorem (IFT) to the KKT conditions
+of the NLP. As shown by Fiacco \cite Fiacco1983, sensitivities can be obtained
+from a solution with suitable regularity conditions merely by solving a
+linearization of the KKT conditions. More details can be found in
+\cite PLNB:sIpopt. If you are using `sIpopt` for your research,
+please cite \cite PLNB:sIpopt.
+
+The `sIpopt` project is available in the \Ipopt repository under
+`$IPOPTDIR/contrib/sIPOPT`. It is build together with the \Ipopt library
+and the generated library `libsipopt.*` and AMPL executable `ipopt_sens`
+are installed in `$PREFIX/lib` and `$PREFIX/bin`.
+
+The files `$IPOPTDIR/contrib/sIPOPT/examples/parametric_ampl/parametric.{mod,run}`
+are an example that shows how to use `sIpopt` to solve the NLP
+\f{align*}{
+\min\quad & x_1^2 + x_2^2 + x_3^2, \\
+\text{such that}\quad & 6x_1 + 3x_2 + 2x_3 = p_1, \\
+ & p_2 x_1 + x_2 - x_3  = 1, \\
+ & x_1, x_2, x_3 \geq 0,
+\f} where we perturb the parameters
+\f$p_1\f$ and \f$p_2\f$ from \f$p_a = (p_1, p_2) = (5, 1)\f$ to \f$p_b = (4.5, 1)\f$.
+
+Note, that `sIpopt` has been developed under the constraint
+that it must work with the regular \Ipopt code. Due to this
+constraint, some compromises had to be made. However, there is an
+<!--ongoing--> effort to develop `sIpopt` 2, which is a fork of the
+\Ipopt code that allows for the explicit definition of
+parametric NLPs. This code can be found at
+<https://github.com/athrpf/sipopt2>. If you have questions about
+`sIpopt` 2, please contact ​Hans Pirnay.
+
+\section INERTIAFREE_CURVTEST Inertia-Free Curvature Test
+
+This section has been contributed by [Nai-Yuan Chiang](http://www.mcs.anl.gov/~nychiang/)
+(Argonne National Laboratory) and [Victor M. Zavala Tejeda](http://zavalab.engr.wisc.edu/)
+(University of Wisconsin-Madison).
+
+In a filter line-search setting it is necessary to detect the presence
+of negative curvature and to regularize the Hessian of the Lagrangian
+when such is present. Regularization ensures that the computed step is a
+descent direction for the objective function when the constraint
+violation is sufficiently small, which in turn is necessary to guarantee
+global convergence.
+
+To detect the presence of negative curvature, the default method
+implemented in IPOPT requires inertia information of the augmented
+system. The inertia of the augmented system is the number of positive,
+negative, and zero eigenvalues. Inertia is currently estimated using
+symmetric indefinite factorization routines implemented in powerful
+packages such as MA27, MA57, or Pardiso. When more general linear
+algebra strategies/packages are used (e.g., iterative, parallel
+decomposition), however, inertia information is difficult (if not
+impossible) to obtain.
+
+In \cite ChiangZavala2014, we present acceptance tests for the search step
+that do not require inertia information of the linear system and prove
+that such tests are sufficient to ensure global convergence. Similar
+tests were proposed in the exact penalty framework reported in
+\cite CouHubSchWae:inexact. The inertia-free approach also enables the use
+of a wider range of linear algebra strategies and packages. We have
+performed significant benchmarks and found satisfactory performance
+compared to the inertia-based counterpart. Moreover, we have found that
+this test can yield significant improvements in computing time because
+it provides more flexibility to accept steps. This flexibility is
+particularly beneficial in problems that are inherently ill-conditioned
+and require significant amounts of regularization.
+
+The inertia-free capability implemented in \Ipopt is
+controlled by the options \ref OPT_neg_curv_test_tol "neg_curv_test_tol"
+and \ref OPT_neg_curv_test_reg "neg_curv_test_reg".
+
+*/

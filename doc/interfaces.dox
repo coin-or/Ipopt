@@ -1,0 +1,1241 @@
+/**
+\page INTERFACES Interfacing your NLP to %Ipopt
+
+\tableofcontents
+
+\Ipopt has been designed to be flexible for a wide variety
+of applications, and there are a number of ways to interface with
+\Ipopt that allow specific data structures and linear
+solver techniques. Nevertheless, the authors have included a standard
+representation that should meet the needs of most users.
+
+This tutorial will discuss six interfaces to \Ipopt, namely
+the AMPL modeling language \cite FouGayKer:AMPLbook interface, and the C++,
+C, Fortran, Java, and R code interfaces. AMPL is a modeling
+language tool that allows users to write their optimization problem in a
+syntax that resembles the way the problem would be written
+mathematically. Once the problem has been formulated in AMPL, the
+problem can be easily solved using the (already compiled)
+\Ipopt AMPL solver executable, ipopt. Interfacing your
+problem by directly linking code requires more effort to write, but can
+be far more efficient for large problems.
+
+We will illustrate how to use each of the four interfaces using an
+example problem, number 71 from the Hock-Schittkowsky test suite \cite HS,
+\f{equation}{ \begin{aligned}
+    \min_{x \in \Re^4} &&x_1 x_4 (x_1 + x_2 + x_3)  +  x_3  \\
+    \mbox{s.t.}  &&x_1 x_2 x_3 x_4 \ge 25  \\
+    &&x_1^2 + x_2^2 + x_3^2 + x_4^2  =  40  \\
+    &&1 \leq x_1, x_2, x_3, x_4 \leq 5, 
+\end{aligned} \tag{HS071} \f} with the starting point
+\f[ x_0 = (1, 5, 5, 1) \f] and the optimal solution
+\f[ x_* = (1.00000000, 4.74299963, 3.82114998, 1.37940829). \f]
+
+You can find further, less documented examples for using
+\Ipopt from your own source code in the Ipopt/examples
+subdirectory.
+
+\section INTERFACE_AMPL Using Ipopt through AMPL
+
+Using the AMPL solver executable is by far the easiest way to solve a
+problem with \Ipopt. The user must simply formulate the
+problem in AMPL syntax, and solve the problem through the AMPL
+environment. There are drawbacks, however. AMPL is a 3rd party package
+and, as such, must be appropriately licensed (a free student version for
+limited problem size is available from the [AMPL website](http://www.ampl.com).
+Furthermore, the AMPL environment may be
+prohibitive for very large problems. Nevertheless, formulating the
+problem in AMPL is straightforward and even for large problems, it is
+often used as a prototyping tool before using one of the code
+interfaces.
+
+This tutorial is not intended as a guide to formulating models in AMPL.
+If you are not already familiar with AMPL, please consult
+\cite FouGayKer:AMPLbook.
+
+The problem presented in (HS071) can be solved with \Ipopt with
+the following AMPL model.
+
+    # tell ampl to use the ipopt executable as a solver
+    # make sure ipopt is in the path!
+    option solver ipopt;
+
+    # declare the variables and their bounds, 
+    # set notation could be used, but this is straightforward
+    var x1 >= 1, <= 5; 
+    var x2 >= 1, <= 5; 
+    var x3 >= 1, <= 5; 
+    var x4 >= 1, <= 5;
+
+    # specify the objective function
+    minimize obj:
+        x1 * x4 * (x1 + x2 + x3) + x3;
+            
+    # specify the constraints
+    s.t.
+      inequality:
+        x1 * x2 * x3 * x4 >= 25;
+                    
+      equality:
+        x1^2 + x2^2 + x3^2 +x4^2 = 40;
+
+    # specify the starting point            
+    let x1 := 1;
+    let x2 := 5;
+    let x3 := 5;
+    let x4 := 1;
+
+    # solve the problem
+    solve;
+
+    # print the solution
+    display x1;
+    display x2;
+    display x3;
+    display x4;
+
+The line, `option solver ipopt;` tells AMPL to use \Ipopt
+as the solver. The \Ipopt executable (installed in
+\ref COMPILEINSTALL) must be in the `PATH` for AMPL to find it.
+The remaining lines specify the problem in AMPL format. The problem can
+now be solved by starting AMPL and loading the mod file:
+
+    $ ampl
+    > model hs071_ampl.mod;
+    .
+    .
+    .
+
+The problem will be solved using \Ipopt and the solution
+will be displayed.
+
+At this point, AMPL users may wish to skip the sections about
+interfacing with code, but should read \ref OPTIONS and \ref OUTPUT.
+
+\subsection INTERFACE_AMPL_CL Using Ipopt from the command line
+
+It is possible to solve AMPL problems with \Ipopt directly
+from the command line. However, this requires a file in format `.nl`
+produced by ampl. If you have a model and data loaded in Ampl, you can
+create the corresponding `.nl` file with name, say, `myprob.nl` by using the
+Ampl command:
+
+    write gmyprob
+
+There is a small `.nl` file available in the \Ipopt
+distribution. It is located at `Ipopt/test/mytoy.nl`. We use this file in
+the remainder of this section. We assume that the file `mytoy.nl` is in
+the current directory and that the command `ipopt` is a shortcut for
+running the \Ipopt binary available in the `bin` directory of the
+installation of \Ipopt.
+
+We list below commands to perform basic tasks from the Linux prompt.
+
+-   To solve mytoy.nl from the Linux prompt, use:
+
+        ipopt mytoy
+
+-   To see all command line options for \Ipopt, use:
+
+        ipopt -=
+
+-   To see more detailed information on all options for \Ipopt:
+
+        ipopt mytoy 'print_options_documentation yes'
+
+-   To run ipopt, setting the maximum number of iterations to 2 and
+    print level to 4:
+
+        ipopt mytoy 'max_iter 2 print_level 4'
+
+If many options are to be set, they can be collected in a file `ipopt.opt`
+that is automatically read by \Ipopt, if present, in the
+current directory, see also \ref OPTIONS.
+
+\section INTERFACE_CODE Interfacing with Ipopt through code
+
+In order to solve a problem, \Ipopt needs more information
+than just the problem definition (for example, the derivative
+information). If you are using a modeling language like AMPL, the extra
+information is provided by the modeling tool and the \Ipopt
+interface. When interfacing with \Ipopt through your own
+code, however, you must provide this additional information. The
+following information is required by \Ipopt:
+
+1.  Problem dimensions
+
+    -   number of variables
+
+    -   number of constraints
+
+2.  Problem bounds
+
+    -   variable bounds
+
+    -   constraint bounds
+
+3.  Initial starting point
+
+    -   Initial values for the primal \f$x\f$ variables
+
+    -   Initial values for the multipliers (only required for a warm start option)
+
+4.  Problem Structure
+
+    -   number of nonzeros in the Jacobian of the constraints
+
+    -   number of nonzeros in the Hessian of the Lagrangian function
+
+    -   sparsity structure of the Jacobian of the constraints
+
+    -   sparsity structure of the Hessian of the Lagrangian function
+
+5.  Evaluation of Problem Functions <BR/>
+    Information evaluated using a given point (\f$x\f$, \f$\lambda\f$, \f$\sigma_f\f$ coming from \Ipopt)
+
+    -   Objective function, \f$f(x)\f$
+
+    -   Gradient of the objective, \f$\nabla f(x)\f$
+
+    -   Constraint function values, \f$g(x)\f$
+
+    -   Jacobian of the constraints, \f$\nabla g(x)^T\f$
+
+    -   Hessian of the Lagrangian function,
+        \f$\sigma_f \nabla^2 f(x) + \sum_{i=1}^m\lambda_i\nabla^2 g_i(x)\f$ <BR>
+        (this is not required if a quasi-Newton options is chosen to
+        approximate the second derivatives)
+
+The problem dimensions and bounds are straightforward and come solely
+from the problem definition. The initial starting point is used by the
+algorithm when it begins iterating to solve the problem. If
+\Ipopt has difficulty converging, or if it converges to a
+locally infeasible point, adjusting the starting point may help.
+Depending on the starting point, \Ipopt may also converge
+to different local solutions.
+
+Providing the sparsity structure of derivative matrices is a bit more
+involved. \Ipopt is a nonlinear programming solver that is
+designed for solving large-scale, sparse problems. While
+\Ipopt can be customized for a variety of matrix formats,
+the triplet format is used for the standard interfaces in this tutorial.
+For an overview of the triplet format for sparse matrices, see
+\ref TRIPLET. Before solving the problem,
+\Ipopt needs to know the number of nonzero elements and the
+sparsity structure (row and column indices of each of the nonzero
+entries) of the constraint Jacobian and the Lagrangian function Hessian.
+Once defined, this nonzero structure MUST remain constant for the entire
+optimization procedure. This means that the structure needs to include
+entries for any element that could ever be nonzero, not only those that
+are nonzero at the starting point.
+
+As \Ipopt iterates, it will need the values for problem functions
+evaluated at particular points. Before we
+can begin coding the interface, however, we need to work out the details
+of these equations symbolically for example problem (HS071).
+
+The gradient of the objective \f$f(x)\f$ is given by
+\f[\left[
+\begin{array}{c}
+x_1 x_4 + x_4 (x_1 + x_2 + x_3) \\
+x_1 x_4 \\
+x_1 x_4 + 1 \\
+x_1 (x_1 + x_2 + x_3)
+\end{array}
+\right]\f]
+and the Jacobian of the constraints \f$g(x)\f$ is
+\f[\left[
+\begin{array}{cccc}
+x_2 x_3 x_4     & x_1 x_3 x_4   & x_1 x_2 x_4   & x_1 x_2 x_3   \\
+2 x_1           & 2 x_2         & 2 x_3         & 2 x_4
+\end{array}
+\right].
+\f]
+
+We also need to determine the Hessian of the Lagrangian.
+(If a quasi-Newton option is chosen to approximate the second
+derivatives, this is not required. However, if second derivatives
+can be computed, it is often worthwhile to let \Ipopt
+use them, since the algorithm is then usually more robust and
+converges faster. More on the quasi-Newton approximation in
+\ref QUASI_NEWTON.)
+The Lagrangian function for the NLP (HS071) is defined as
+\f$f(x) + g(x)^T \lambda\f$ and the Hessian of the Lagrangian function is,
+technically, \f$\nabla^2 f(x_k) + \sum_{i=1}^m\lambda_i\nabla^2 g_i(x_k)\f$.
+However, we introduce a factor (\f$\sigma_f\f$) in front of the objective
+term so that \Ipopt can ask for the Hessian of the objective or the
+constraints independently, if required. Thus, for \Ipopt
+the symbolic form of the Hessian of the Lagrangian is
+\f[ \sigma_f \nabla^2 f(x_k) + \sum_{i=1}^m\lambda_i\nabla^2 g_i(x_k) \f]
+and for the example problem this becomes
+\f[ \sigma_f \left[
+\begin{array}{cccc}
+2 x_4           & x_4           & x_4           & 2 x_1 + x_2 + x_3     \\
+x_4             & 0             & 0             & x_1                   \\
+x_4             & 0             & 0             & x_1                   \\
+2 x_1+x_2+x_3   & x_1           & x_1           & 0
+\end{array}
+\right]
++
+\lambda_1
+\left[
+\begin{array}{cccc}
+0               & x_3 x_4       & x_2 x_4       & x_2 x_3       \\
+x_3 x_4         & 0             & x_1 x_4       & x_1 x_3       \\
+x_2 x_4         & x_1 x_4       & 0             & x_1 x_2       \\
+x_2 x_3         & x_1 x_3       & x_1 x_2       & 0 
+\end{array}
+\right]
++
+\lambda_2
+\left[
+\begin{array}{cccc}
+2       & 0     & 0     & 0     \\
+0       & 2     & 0     & 0     \\
+0       & 0     & 2     & 0     \\
+0       & 0     & 0     & 2
+\end{array}
+\right]\f] where the first term comes from the Hessian of the objective
+function, and the second and third term from the Hessian of the
+constraints. Therefore, the dual variables
+\f$\lambda_1\f$ and \f$\lambda_2\f$ are the multipliers for the constraints.
+
+The remaining sections of the tutorial will lead you through the coding
+required to solve example problem (HS071) using, first C++, then C, and finally
+Fortran. Completed versions of these examples can be found in
+`$IPOPTDIR/Ipopt/examples` under `hs071_cpp`, `hs071_c`, and `hs071_f`.
+
+As a user, you are responsible for coding two sections of the program
+that solves a problem using \Ipopt: the main executable
+(e.g., main) and the problem representation. Typically, you will write
+an executable that prepares the problem, and then passes control over to
+\Ipopt through an Optimize or Solve call. In this call, you
+will give \Ipopt everything that it requires to call back
+to your code whenever it needs functions evaluated (like the objective
+function, the Jacobian of the constraints, etc.). In each of the three
+sections that follow (C++, C, and Fortran), we will first discuss how to
+code the problem representation, and then how to code the executable.
+
+\subsection INTERFACE_CPP The C++ Interface
+
+This tutorial assumes that you are familiar with the C++ programming
+language, however, we will lead you through each step of the
+implementation. For the problem representation, we will create a class
+that inherits off of the pure virtual base class, Ipopt::TNLP.
+For the executable (the main function) we will make the call to
+\Ipopt through the Ipopt::IpoptApplication class.
+In addition, we will also be using the
+Ipopt::SmartPtr class which implements a reference counting
+pointer that takes care of memory management (object deletion) for you
+(for details, see \ref SMARTPTR).
+
+After `make install` (see \ref COMPILEINSTALL), the header files that
+define these classes are installed in `$PREFIX/include/coin-or`.
+
+\subsubsection INTERFACE_CPP_NLP Coding the Problem Representation
+
+We provide the required information by coding the HS071_NLP class, a
+specific implementation of the TNLP base class. In the executable, we
+will create an instance of the HS071_NLP class and give this class to
+\Ipopt so it can evaluate the problem functions through the
+Ipopt::TNLP interface. If you have any difficulty as the implementation
+proceeds, have a look at the completed example in the
+`Ipopt/examples/hs071_cpp` directory.
+
+Start by creating a new directory `MyExample` under examples and create
+the files hs071_nlp.hpp and hs071_nlp.cpp. In hs071_nlp.hpp, include
+IpTNLP.hpp (the base class), tell the compiler that we are using the namespace
+Ipopt, and create the declaration of the
+HS071_NLP class, inheriting off of TNLP. Have a look at the Ipopt::TNLP class;
+you will see eight pure virtual methods that we must
+implement. Declare these methods in the header file. Implement each of
+the methods in HS071_NLP.cpp using the descriptions given below. In
+hs071_nlp.cpp, first include the header file for your class and tell
+the compiler that you are using the namespace Ipopt. A
+full version of these files can be found in the
+`Ipopt/examples/hs071_cpp` directory.
+
+It is very easy to make mistakes in the implementation of the function
+evaluation methods, in particular regarding the derivatives.
+\Ipopt has a feature that can help you to debug the
+derivative code, using finite differences, see \ref DERIVCHECK.
+
+Note that the return value of any bool-valued function should be true,
+unless an error occurred, for example, because the value of a problem
+function could not be evaluated at the required point.
+
+\ref Ipopt::TNLP::get_nlp_info
+
+<blockquote>
+\snippet IpTNLP.hpp TNLP_get_nlp_info
+
+\copydoc Ipopt::TNLP::get_nlp_info
+</blockquote>
+
+Our example problem has 4 variables (n), and 2 constraints (m). The
+constraint Jacobian for this small problem is actually dense and has 8
+nonzeros (we still need to represent this Jacobian using the sparse
+matrix triplet format). The Hessian of the Lagrangian has 10 "symmetric"
+nonzeros (i.e., nonzeros in the lower left triangular part.). Keep in
+mind that the number of nonzeros is the total number of elements that
+may *ever* be nonzero, not just those that are nonzero at the starting
+point. This information is set once for the entire problem.
+
+\snippet hs071_nlp.cpp TNLP_get_nlp_info
+
+
+\ref Ipopt::TNLP::get_bounds_info
+
+<blockquote>
+\snippet IpTNLP.hpp TNLP_get_bounds_info
+
+\copydoc Ipopt::TNLP::get_bounds_info
+</blockquote>
+
+In our example, the first constraint has a lower bound of 25 and no
+upper bound, so we set the lower bound of constraint to 25 and the
+upper bound to some number greater than 10<sup>19</sup>.
+The second constraint is an equality constraint and we set both bounds to 40.
+\Ipopt recognizes this as an equality constraint and does
+not treat it as two inequalities.
+
+\snippet hs071_nlp.cpp TNLP_get_bounds_info
+
+
+\ref Ipopt::TNLP::get_starting_point
+
+<blockquote>
+\snippet IpTNLP.hpp TNLP_get_starting_point
+
+\copydoc Ipopt::TNLP::get_starting_point
+</blockquote>
+
+In our example, we provide initial values for \f$x\f$ as specified in the
+example problem. We do not provide any initial values for the dual
+variables, but use an assert to immediately let us know if we are ever
+asked for them.
+
+\snippet hs071_nlp.cpp TNLP_get_starting_point
+
+
+\ref Ipopt::TNLP::eval_f
+
+<blockquote>
+\snippet IpTNLP.hpp TNLP_eval_f
+
+\copydoc Ipopt::TNLP::eval_f
+</blockquote>
+
+For our example, we ignore the `new_x` flag and calculate the objective.
+
+\snippet hs071_nlp.cpp TNLP_eval_f
+
+
+\ref Ipopt::TNLP::eval_grad_f
+
+<blockquote>
+\snippet IpTNLP.hpp TNLP_eval_grad_f
+
+\copydoc Ipopt::TNLP::eval_grad_f
+</blockquote>
+
+In our example, we ignore the new\_x flag and calculate the values for
+the gradient of the objective.
+
+\snippet hs071_nlp.cpp TNLP_eval_grad_f
+
+
+\ref Ipopt::TNLP::eval_g
+
+<blockquote>
+\snippet IpTNLP.hpp TNLP_eval_g
+
+\copydoc Ipopt::TNLP::eval_g
+</blockquote>
+
+In our example, we ignore the new_x flag and calculate the values of
+constraint functions.
+
+\snippet hs071_nlp.cpp TNLP_eval_g
+
+
+\ref Ipopt::TNLP::eval_jac_g
+
+<blockquote>
+\snippet IpTNLP.hpp TNLP_eval_jac_g
+
+\copydoc Ipopt::TNLP::eval_jac_g
+</blockquote>
+
+In our example, the Jacobian is actually dense, but we still specify it
+using the sparse format.
+
+\snippet hs071_nlp.cpp TNLP_eval_jac_g
+
+
+\ref Ipopt::TNLP::eval_h
+
+<blockquote>
+\snippet IpTNLP.hpp TNLP_eval_h
+
+\copydoc Ipopt::TNLP::eval_h
+</blockquote>
+
+In our example, the Hessian is dense, but we still specify it using the
+sparse matrix format. Because the Hessian is symmetric, we only need to
+specify the lower left corner.
+
+\snippet hs071_nlp.cpp TNLP_eval_h
+
+
+\ref Ipopt::TNLP::finalize_solution
+
+<blockquote>
+This is the only method that is not mentioned in the beginning of this section.
+
+\snippet IpTNLP.hpp TNLP_finalize_solution
+
+\copydoc Ipopt::TNLP::finalize_solution
+</blockquote>
+
+In our example, we will print the values of some of the variables to the
+screen.
+
+\snippet hs071_nlp.cpp TNLP_finalize_solution
+
+This is all that is required for our HS071_NLP class and the coding of
+the problem representation.
+
+\subsubsection INTERFACE_CPP_MAIN Coding the Executable
+
+Now that we have a problem representation, the HS071_NLP class, we need
+to code the main function that will call \Ipopt and ask
+\Ipopt to find a solution.
+
+Here, we must create an instance of our problem (HS071_NLP), create an
+instance of the \Ipopt solver (Ipopt::IpoptApplication),
+initialize it, and ask the solver to find a solution. We always use the
+Ipopt::SmartPtr template class instead of raw C++ pointers when creating and
+passing \Ipopt objects. To find out more information about
+smart pointers and the SmartPtr implementation used in
+\Ipopt, see \ref SMARTPTR.
+
+Create the file `MyExample.cpp` in the `MyExample` directory. Include the
+header files `HS071_NLP.hpp` and `IpIpoptApplication.hpp`, tell the
+compiler to use the Ipopt namespace, and implement the main function.
+
+\snippet hs071_main.cpp MAIN
+
+The first line of code in `main()` creates an instance of HS071_NLP. We
+then create an instance of the \Ipopt solver, Ipopt::IpoptApplication.
+You could use `new` to create a new application object, but if you want
+to make sure that your code would also work with a Windows DLL, you need
+to use the factory, as done in the example above.
+The call to `app->Initialize(...)` will initialize that object
+and process the options (particularly the output related options). The
+call to `app->OptimizeTNLP(...)` will run \Ipopt and try to
+solve the problem. By default, \Ipopt will write its
+progress to the console, and return the SolverReturn status.
+
+\subsubsection INTERFACE_CPP_COMPILE Compiling and Testing the Example
+
+Our next task is to compile and test the code. If you are familiar with
+the compiler and linker used on your system, you can build the code,
+telling the linker about the necessary libraries, as obtained via
+`pkg-config --lflags ipopt`. The build system already created a sample
+makefile. Copy `Ipopt/examples/hs071_cpp/Makefile` into your `MyExample`
+directory. This makefile was created for the `hs071_cpp` code, but it can
+be easily modified for your example problem. Edit the file, making the
+following changes:
+
+-   change the EXE variable \verbatim
+EXE = my_example \endverbatim
+
+-   change the OBJS variable \verbatim
+OBJS = HS071_NLP.o MyExample.o \endverbatim
+
+The code should compile easily with
+\verbatim
+$ make
+\endverbatim
+
+Now run the executable with
+\verbatim
+$ ./my_example
+\endverbatim
+and you should see output resembling the following:
+\verbatim
+******************************************************************************
+This program contains Ipopt, a library for large-scale nonlinear optimization.
+ Ipopt is released as open source code under the Eclipse Public License (EPL).
+         For more information visit http://projects.coin-or.org/Ipopt
+******************************************************************************
+
+Number of nonzeros in equality constraint Jacobian...:        4
+Number of nonzeros in inequality constraint Jacobian.:        4
+Number of nonzeros in Lagrangian Hessian.............:       10
+
+Total number of variables............................:        4
+                     variables with only lower bounds:        0
+                variables with lower and upper bounds:        4
+                     variables with only upper bounds:        0
+Total number of equality constraints.................:        1
+Total number of inequality constraints...............:        1
+        inequality constraints with only lower bounds:        1
+   inequality constraints with lower and upper bounds:        0
+        inequality constraints with only upper bounds:        0
+
+iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
+   0  1.6109693e+01 1.12e+01 5.28e-01   0.0 0.00e+00    -  0.00e+00 0.00e+00   0
+   1  1.7410406e+01 8.38e-01 2.25e+01  -0.3 7.97e-01    -  3.19e-01 1.00e+00f  1
+   2  1.8001613e+01 1.06e-02 4.96e+00  -0.3 5.60e-02   2.0 9.97e-01 1.00e+00h  1
+   3  1.7199482e+01 9.04e-02 4.24e-01  -1.0 9.91e-01    -  9.98e-01 1.00e+00f  1
+   4  1.6940955e+01 2.09e-01 4.58e-02  -1.4 2.88e-01    -  9.66e-01 1.00e+00h  1
+   5  1.7003411e+01 2.29e-02 8.42e-03  -2.9 7.03e-02    -  9.68e-01 1.00e+00h  1
+   6  1.7013974e+01 2.59e-04 8.65e-05  -4.5 6.22e-03    -  1.00e+00 1.00e+00h  1
+   7  1.7014017e+01 2.26e-07 5.71e-08  -8.0 1.43e-04    -  1.00e-00 1.00e+00h  1
+   8  1.7014017e+01 4.62e-14 9.09e-14  -8.0 6.95e-08    -  1.00e+00 1.00e+00h  1
+
+Number of Iterations....: 8
+
+Number of objective function evaluations             = 9
+Number of objective gradient evaluations             = 9
+Number of equality constraint evaluations            = 9
+Number of inequality constraint evaluations          = 9
+Number of equality constraint Jacobian evaluations   = 9
+Number of inequality constraint Jacobian evaluations = 9
+Number of Lagrangian Hessian evaluations             = 8
+Total CPU secs in IPOPT (w/o function evaluations)   =      0.220
+Total CPU secs in NLP function evaluations           =      0.000
+
+EXIT: Optimal Solution Found.
+
+
+Solution of the primal variables, x
+x[0] = 1.000000e+00
+x[1] = 4.743000e+00
+x[2] = 3.821150e+00
+x[3] = 1.379408e+00
+
+
+Solution of the bound multipliers, z_L and z_U
+z_L[0] = 1.087871e+00
+z_L[1] = 2.428776e-09
+z_L[2] = 3.222413e-09
+z_L[3] = 2.396076e-08
+z_U[0] = 2.272727e-09
+z_U[1] = 3.537314e-08
+z_U[2] = 7.711676e-09
+z_U[3] = 2.510890e-09
+
+
+Objective value
+f(x*) = 1.701402e+01
+
+
+*** The problem solved!
+\endverbatim
+
+This completes the basic C++ tutorial, but see \ref OUTPUT for
+explanation on the standard console output of \Ipopt and
+\ref OPTIONS for information about the use of options to customize the
+behavior of \Ipopt.
+
+The `Ipopt/examples/ScalableProblems` directory contains other NLP
+problems coded in C++.
+
+\subsubsection INTERFACE_CPP_ADDITIONAL Additional methods in TNLP
+
+The following methods are available for additional features that are not
+explained in the example. Default implementations for those methods are
+provided, so that a user can safely ignore them, unless she wants to
+make use of those features. From these features, only the intermediate
+callback is already available in the C and Fortran interfaces.
+
+\ref Ipopt::TNLP::intermediate_callback
+
+<blockquote>
+\snippet IpTNLP.hpp TNLP_intermediate_callback
+
+\copydoc Ipopt::TNLP::intermediate_callback
+</blockquote>
+
+
+\ref Ipopt::TNLP::get_scaling_parameters
+
+<blockquote>
+\snippet IpTNLP.hpp TNLP_get_scaling_parameters
+
+\copydoc Ipopt::TNLP::get_scaling_parameters
+</blockquote>
+
+
+\ref Ipopt::TNLP::get_number_of_nonlinear_variables
+
+<blockquote>
+This method is called only if the \ref QUASI_NEWTON "quasi-Newton approximation" is selected.
+
+\snippet IpTNLP.hpp TNLP_get_number_of_nonlinear_variables
+
+\copydoc Ipopt::TNLP::get_number_of_nonlinear_variables
+</blockquote>
+
+
+\ref Ipopt::TNLP::get_list_of_nonlinear_variables
+
+<blockquote>
+This method is called only if the \ref QUASI_NEWTON "quasi-Newton approximation" is selected.
+
+\snippet IpTNLP.hpp TNLP_get_list_of_nonlinear_variables
+
+\copydoc Ipopt::TNLP::get_list_of_nonlinear_variables
+</blockquote>
+
+
+\ref Ipopt::TNLP::get_variables_linearity
+
+<blockquote>
+\snippet IpTNLP.hpp TNLP_get_variables_linearity
+
+\copydoc Ipopt::TNLP::get_variables_linearity
+</blockquote>
+
+
+\ref Ipopt::TNLP::get_constraints_linearity
+
+<blockquote>
+\snippet IpTNLP.hpp TNLP_get_constraints_linearity
+
+\copydoc Ipopt::TNLP::get_constraints_linearity
+</blockquote>
+
+
+\ref Ipopt::TNLP::get_var_con_metadata
+
+<blockquote>
+\snippet IpTNLP.hpp TNLP_get_var_con_metadata
+
+\copydoc Ipopt::TNLP::get_var_con_metadata
+</blockquote>
+
+
+\ref Ipopt::TNLP::finalize_metadata
+
+<blockquote>
+\snippet IpTNLP.hpp TNLP_finalize_metadata
+
+\copydoc Ipopt::TNLP::finalize_metadata
+</blockquote>
+
+
+\ref Ipopt::TNLP::get_warm_start_iterate
+
+<blockquote>
+\snippet IpTNLP.hpp TNLP_get_warm_start_iterate
+
+\copydoc Ipopt::TNLP::get_warm_start_iterate
+</blockquote>
+
+
+\subsection INTERFACE_C The C Interface
+
+The C interface for \Ipopt is declared in the header file
+IpStdCInterface.h, which is found in `$PREFIX/include/coin-or`;
+while reading this section,
+it will be helpful to have a look at this file.
+
+In order to solve an optimization problem with the C interface, one has
+to create an \ref IpoptProblem with the function \ref CreateIpoptProblem,
+which later has to be passed to the \ref IpoptSolve function.
+\ref IpoptProblem is a pointer to a C structure; you should not access
+this structure directly, but only through the functions provided in the
+C interface.
+
+The \ref IpoptProblem created by \ref CreateIpoptProblem contains the problem
+dimensions, the variable and constraint bounds, and the function
+pointers for callbacks that will be used to evaluate the NLP problem
+functions and their derivatives (see also the discussion of the C++
+methods Ipopt::TNLP::get_nlp_info and Ipopt::TNLP::get_bounds_info for information
+about the arguments of \ref CreateIpoptProblem).
+
+The prototypes for the callback functions, \ref Eval_F_CB,
+\ref Eval_Grad_F_CB, etc., are defined in the header file
+IpStdCInterface.h. Their arguments correspond one-to-one to the
+arguments for the corresponding C++ methods; for example,
+for the meaning of `n`, `x`, `new_x`, `obj_value` in the declaration of
+\ref Eval_F_CB see the discussion of Ipopt::TNLP::eval_f. The callback
+functions should return `TRUE`, unless there was a problem doing the requested
+function/derivative evaluation at the given point `x` (then it should
+return `FALSE`).
+
+Note the additional argument of type \ref UserDataPtr in the callback
+functions. This pointer argument is available for you to communicate
+information between the main program that calls \ref IpoptSolve and any of
+the callback functions. This pointer is simply passed unmodified by
+\Ipopt among those functions. For example, you can use this
+to pass constants that define the optimization problem and are computed
+before the optimization in the main C program to the callback functions.
+
+After an \ref IpoptProblem has been created, you can set algorithmic options
+for \Ipopt (see \ref OPTIONS) using the functions
+\ref AddIpoptStrOption, \ref AddIpoptNumOption, and \ref AddIpoptIntOption.
+Finally, the \Ipopt algorithm is called with \ref IpoptSolve, giving \Ipopt
+the \ref IpoptProblem, the starting point, and arrays to store the solution
+values (primal and dual variables), if desired. Finally, after
+everything is done, \ref FreeIpoptProblem should be called to release
+internal memory that is still allocated inside \Ipopt.
+
+In the remainder of this section we discuss how the example problem (HS071)
+can be solved using the C interface. A completed version of this example
+can be found in `Ipopt/examples/hs071_c`.
+
+In order to implement the example problem on your own, create a new
+directory `MyCExample` and create a new file, `hs071_c.c`. Here, include
+the interface header file IpStdCInterface.h, along with other necessary
+header files, such as `stdlib.h` and `assert.h`. Add the prototypes and
+implementations for the five callback functions. Have a look at the C++
+implementation for `eval_f`, `eval_g`, `eval_grad_f`, `eval_jac_g`, and
+`eval_h` in \ref INTERFACE_CPP_NLP. The C implementations have somewhat
+different prototypes, but are implemented almost identically to the C++
+code. See the completed example in `Ipopt/examples/hs071_c/hs071_c.c` if
+you are not sure how to do this.
+
+We now need to implement the main function, create the \ref IpoptProblem,
+set options, and call \ref IpoptSolve. The \ref CreateIpoptProblem function
+requires the problem dimensions, the variable and constraint bounds, and the
+function pointers to the callback routines. The \ref IpoptSolve function
+requires the \ref IpoptProblem, the starting point, and allocated arrays
+for the solution. The main function from the example is shown next and
+discussed below.
+
+\snippet hs071_c.c MAIN
+
+Here, we declare all the necessary variables and set the dimensions of
+the problem. The problem has 4 variables, so we set n and allocate space
+for the variable bounds (don't forget to call free for each of your
+malloc calls before the end of the program). We then set the values for
+the variable bounds.
+
+The problem has 2 constraints, so we set m and allocate space for the
+constraint bounds. The first constraint has a lower bound of 25 and no
+upper bound. Here we set the upper bound to `2e19`. \Ipopt interprets any
+number greater than or equal to the value of option \ref OPT_nlp_upper_bound_inf "nlp_upper_bound_inf"
+as infinity. The default value of \ref OPT_nlp_lower_bound_inf "nlp_lower_bound_inf"
+and \ref OPT_nlp_upper_bound_inf "nlp_upper_bound_inf" is `-1e19` and `1e19`,
+respectively, and can be changed through \Ipopt options.
+The second constraint is an equality with right hand side 40,
+so we set both the upper and the lower bound to 40.
+
+Next, we set the number of elements in the Jacobian and Hessian.
+The Jacobian has 8 nonzero entries. For the Hessian we only specify the
+number of nonzeros in the lower-triangular part, which is 10.
+See \ref TRIPLET for a description of the sparse
+matrix format.
+Finally, we set the style for the row and column indices of the matrices
+to 0 to indicate C-Style, that is, start indexing at 0.
+
+We next create an instance of the \ref IpoptProblem by calling
+\ref CreateIpoptProblem, giving it the problem dimensions and the variable
+and constraint bounds. We also include the references to each of our
+callback functions. \Ipopt uses these function pointers to
+ask for evaluation of the NLP when required.
+
+After freeing the bound arrays that are no longer required, the next three
+lines illustrate how to change the value of options through the
+interface. \Ipopt options can also be changed by creating an
+`ipopt.opt` file (see \ref OPTIONS).
+We next allocate space for the initial point and set the values as
+given in the problem definition.
+
+The call to \ref IpoptSolve can provide information about the
+solution, but most of this is optional. Here, we want values for the
+constraint and variable bound multipliers at the solution and thus
+allocate space for these.
+
+Further, we initialize the `user_data` that will be accessed in the
+function evaluation callbacks.
+
+We can now make the call to \ref IpoptSolve and find the solution of the
+problem. We pass in the \ref IpoptProblem, the starting point `x`
+(\Ipopt will use this array to return the solution or final
+point as well). The next 5 arguments are pointers so \Ipopt
+can fill in values at the solution. If these pointers are set to `NULL`,
+\Ipopt will ignore that entry. For example, here we do not want the
+constraint function values at the solution, so we set this entry to `NULL`.
+We do want the value of the objective, and the multipliers
+for the constraints and variable bounds. The last argument is a pointer
+to our example-specific "user data". Any pointer that is passed in here
+will be passed on to the callback functions.
+
+The return code is an \ref ApplicationReturnStatus enumeration, see the
+header file ReturnCodes_inc.h which is installed along
+IpStdCInterface.h in the \Ipopt include directory.
+After the optimizer terminates, we check the status and print the
+solution if successful.
+
+If the solve succeeded, we resolve a slightly modified version of the
+problem. We use both the primal solution point and the dual multipliers
+to warm-start \Ipopt for this second solve. Additionally, to improve
+the warmstart, we reduce the amount by which \Ipopt pushes the starting
+point into the interior of the variable bounds by setting the options
+`bound_push` and `bound_frac`. If the solve was successful, we print the
+solution again.
+
+Finally, we free the \ref IpoptProblem and the
+remaining memory and return from `main`.
+
+\subsection INTERFACE_FORTRAN The Fortran Interface
+
+The Fortran interface is essentially a wrapper of the \ref INTERFACE_C "C Interface".
+The way to hook up \Ipopt in a Fortran program is very similar to how it
+is done for the C interface, and the functions of the Fortran interface
+correspond one-to-one to the those of the C and C++ interface, including
+their arguments. You can find an implementation of the example problem
+(HS071) in `$IPOPTDIR/Ipopt/examples/hs071_f`.
+
+The only special things to consider are:
+
+-   The return value of the function `IPCREATE` is of type `INTEGER` that
+    must be large enough to capture a pointer on the particular machine.
+    This means, that you have to declare the "handle" for the
+    `IpoptProblem` as `INTEGER*8` if your program is compiled in 64-bit
+    mode. All other `INTEGER`-type variables must be of the regular type.
+
+-   For the call of `IPSOLVE` (which is the function that is to be called
+    to run \Ipopt), all arrays, including those for the
+    dual variables, must be given (in contrast to the C interface). The
+    return value `IERR` of this function indicates the outcome of the
+    optimization (see the include file `IpReturnCodes.inc` in the
+    \Ipopt include directory).
+
+-   The return value `IERR` of the remaining functions has to be set to
+    zero, unless there was a problem during execution of the function
+    call.
+
+-   The callback functions (`EV_*` in the example) include the arguments
+    `IDAT` and `DAT`, which are `INTEGER` and `DOUBLE PRECISION` arrays
+    that are passed unmodified between the main program calling `IPSOLVE`
+    and the evaluation subroutines `EV_*` (similarly to `UserDataPtr`
+    arguments in the C interface). These arrays can be used to pass
+    "private" data between the main program and the user-provided Fortran
+    subroutines.
+
+    The last argument of the `EV_*` subroutines, `IERR`, is to be set to 0
+    by the user on return, unless there was a problem during the
+    evaluation of the optimization problem function/derivative for the
+    given point `X` (then it should return a non-zero value).
+
+\subsection INTERFACE_JAVA The Java Interface JIpopt
+
+This section is based on documentation by Rafael de Pelegrini Soares
+(VRTech Industrial Technologies).
+
+The Java Interface was written and contributed by Rafael de Pelegrini Soares
+and later updated by Tong Kewei (Beihang University).
+It offers an abstract base class \ref org.coinor.Ipopt "Ipopt"
+with basic methods to specify an NLP, set a number of \Ipopt options,
+to request \Ipopt to solve the NLP, and to retrieve a found
+solution, if any. A HTML documentation of all available interface
+methods of the \ref org.coinor.Ipopt "Ipopt" class can also be generated
+via javadoc by executing `make javadoc` in the \Ipopt build directory
+(`$IPOPTDIR`).
+
+If the \Ipopt build includes the Java interface, then a JAR file
+`org.coinor.ipopt.jar` containing class org.coinor.Ipopt will have been
+installed in `$PREFIX/lib`. To use the Java interface, make sure that this
+jar file is part of your Java classpath.
+A sample makefile that compiles and runs example HS071 can be found in
+`$IPOPTDIR/examples/hs071_java`.
+
+In the following, we discuss necessary steps to implement example (HS071)
+with `JIpopt`.
+We create a new Java source file HS071.java and define a class
+`HS071` that extends the class \ref org.coinor.Ipopt "Ipopt".
+In the class constructor, we call the \ref org.coinor.Ipopt::create()
+method of `JIpopt`, which works analogously to \ref Ipopt::TNLP::get_nlp_info()
+of the C++ interface. It initializes an \ref Ipopt::IpoptApplication object
+and informs `JIpopt` about the problem size (number of variables, constraints,
+nonzeros in Jacobian and Hessian).
+
+\snippet HS071.java HS071
+
+Next, we add callback functions that are called by `JIpopt`
+to obtain variable bounds, constraint sides, and a starting point:
+
+\snippet HS071.java get_bounds_info
+
+\snippet HS071.java get_starting_point
+
+In the following, we implement the evaluation methods in a way that is
+very similar to the C++ interface:
+
+\snippet HS071.java eval
+
+Finally, we add a main routine to run this example. The main routines
+creates an instance of our class, calls the solve method
+\ref org.coinor.Ipopt::OptimizeNLP "OptimizeNLP", and prints the solution.
+
+\snippet HS071.java main
+
+The \ref org.coinor.Ipopt::OptimizeNLP "OptimizeNLP" method returns the
+\Ipopt solve status as integer, which indicates whether the problem was
+solved successfully. Further, the methods
+\ref org.coinor.Ipopt::getObjectiveValue() "getObjectiveValue()",
+\ref org.coinor.Ipopt::getVariableValues() "getVariableValues()",
+\ref org.coinor.Ipopt::getConstraintMultipliers() "getConstraintMultipliers()",
+\ref org.coinor.Ipopt::getLowerBoundMultipliers() "getLowerBoundMultipliers()", and
+\ref org.coinor.Ipopt::getUpperBoundMultipliers() "getUpperBoundMultipliers()"
+can be used to obtain the objective value, the primal solution value of
+the variables, and dual solution values.
+
+\subsection INTERFACE_R The R Interface ipoptr
+
+This section is based on documentation by Jelmer Ypma
+(University College London).
+
+The `ipoptr` package (see also \ref INSTALL_R) offers a R function
+`ipoptr` which takes an NLP specification, a starting point, and \Ipopt
+options as input and returns information about an \Ipopt run
+(status, message, ...) and a solution point.
+
+In the following, we discuss necessary steps to implement example (HS071)
+with `ipoptr`. A more detailed documentation of `ipoptr` is
+available in [contrib/RInterface/inst/doc/ipoptr.pdf](https://github.com/coin-or/Ipopt/raw/master/contrib/RInterface/inst/doc/ipoptr.pdf).
+
+First, we define the objective function and its gradient
+\code{.unparsed}
+> eval_f <- function( x ) { 
+    return( x[1]*x[4]*(x[1] + x[2] + x[3]) + x[3] ) 
+  }
+> eval_grad_f <- function( x ) {
+    return( c( x[1] * x[4] + x[4] * (x[1] + x[2] + x[3]),
+               x[1] * x[4],
+               x[1] * x[4] + 1.0,
+               x[1] * (x[1] + x[2] + x[3]) ) )       
+  }
+\endcode
+
+Then we define a function that returns the value of the two constraints.
+We define the bounds of the constraints (in this case the `g_L` and
+`g_U` are 25 and 40) later.
+\code{.unparsed}
+> # constraint functions
+> eval_g <- function( x ) {
+     return( c( x[1] * x[2] * x[3] * x[4],
+                x[1]^2 + x[2]^2 + x[3]^2 + x[4]^2 ) )
+  }
+\endcode
+
+Then we define the structure of the Jacobian, which is a dense matrix in
+this case, and function to evaluate it
+\code{.unparsed}
+> eval_jac_g_structure <- list( c(1,2,3,4), c(1,2,3,4) )
+> eval_jac_g <- function( x ) {
+     return( c ( x[2]*x[3]*x[4],
+                 x[1]*x[3]*x[4],
+                 x[1]*x[2]*x[4],
+                 x[1]*x[2]*x[3],
+                 2.0*x[1],
+                 2.0*x[2],
+                 2.0*x[3],
+                 2.0*x[4] ) )
+  }
+\endcode
+
+The Hessian is also dense, but it looks slightly more complicated
+because we have to take into account the Hessian of the objective
+function and of the constraints at the same time, although you could
+write a function to calculate them both separately and then return the
+combined result in `eval_h`.
+\code{.unparsed}
+> # The Hessian for this problem is actually dense, 
+> # This is a symmetric matrix, fill the lower left triangle only.
+> eval_h_structure <- list( c(1), c(1,2), c(1,2,3), c(1,2,3,4) )
+> eval_h <- function( x, obj_factor, hessian_lambda ) {
+     values <- numeric(10)
+     values[1] = obj_factor * (2*x[4]) # 1,1
+
+     values[2] = obj_factor * (x[4])   # 2,1
+     values[3] = 0                     # 2,2
+     
+     values[4] = obj_factor * (x[4])   # 3,1
+     values[5] = 0                     # 4,2
+     values[6] = 0                     # 3,3
+     
+     values[7] = obj_factor * (2*x[1] + x[2] + x[3]) # 4,1
+     values[8] = obj_factor * (x[1])                 # 4,2
+     values[9] = obj_factor * (x[1])                 # 4,3
+     values[10] = 0                                  # 4,4
+     
+     # add the portion for the first constraint
+     values[2] = values[2] + hessian_lambda[1] * (x[3] * x[4]) # 2,1
+         
+     values[4] = values[4] + hessian_lambda[1] * (x[2] * x[4]) # 3,1
+     values[5] = values[5] + hessian_lambda[1] * (x[1] * x[4]) # 3,2
+     
+     values[7] = values[7] + hessian_lambda[1] * (x[2] * x[3]) # 4,1
+     values[8] = values[8] + hessian_lambda[1] * (x[1] * x[3]) # 4,2
+     values[9] = values[9] + hessian_lambda[1] * (x[1] * x[2]) # 4,3
+    
+     # add the portion for the second constraint
+     values[1] = values[1] + hessian_lambda[2] * 2 # 1,1
+     values[3] = values[3] + hessian_lambda[2] * 2 # 2,2
+     values[6] = values[6] + hessian_lambda[2] * 2 # 3,3
+     values[10] = values[10] + hessian_lambda[2] * 2 # 4,4
+     
+     return ( values )
+  }
+\endcode
+
+After the hard part is done, we only have to define the initial values,
+the lower and upper bounds of the control variables, and the lower and
+upper bounds of the constraints. If a variable or a constraint does not
+have lower or upper bounds, the values `-Inf` or `Inf` can be used. If
+the upper and lower bounds of a constraint are equal, \Ipopt recognizes
+this as an equality constraint and acts accordingly.
+\code{.unparsed}
+> # initial values
+> x0 <- c( 1, 5, 5, 1 )
+> # lower and upper bounds of control
+> lb <- c( 1, 1, 1, 1 )
+> ub <- c( 5, 5, 5, 5 )
+> # lower and upper bounds of constraints
+> constraint_lb <- c(  25, 40 )
+> constraint_ub <- c( Inf, 40 )
+\endcode
+
+Finally, we can call \Ipopt with the `ipoptr` function. In
+order to redirect the \Ipopt output into a file, we use
+\Ipopt's and options.
+\code{.unparsed}
+> opts <- list("print_level" = 0,
+               "file_print_level" = 12,
+               "output_file" = "hs071_nlp.out")
+> print( ipoptr( x0 = x0, 
+                 eval_f = eval_f, 
+                 eval_grad_f = eval_grad_f, 
+                 lb = lb, 
+                 ub = ub, 
+                 eval_g = eval_g, 
+                 eval_jac_g = eval_jac_g, 
+                 constraint_lb = constraint_lb, 
+                 constraint_ub = constraint_ub, 
+                 eval_jac_g_structure = eval_jac_g_structure,
+                 eval_h = eval_h,
+                 eval_h_structure = eval_h_structure,
+                 opts = opts) )
+
+Call:
+
+ipoptr(x0 = x0, eval_f = eval_f, eval_grad_f = eval_grad_f, lb = lb, 
+  ub = ub, eval_g = eval_g, eval_jac_g = eval_jac_g,
+  eval_jac_g_structure = eval_jac_g_structure, constraint_lb = constraint_lb,
+  constraint_ub = constraint_ub, eval_h = eval_h, eval_h_structure = eval_h_structure,
+  opts = opts)
+
+Ipopt solver status: 0 ( SUCCESS: Algorithm terminated 
+successfully at a locally optimal point, satisfying the 
+convergence tolerances (can be specified by options). )
+
+Number of Iterations....: 8 
+Optimal value of objective function:  17.0140171451792 
+Optimal value of controls: 1 4.743 3.82115 1.379408
+\endcode
+
+To pass additional data to the evaluation routines, one can either
+supply additional arguments to the user defined functions and `ipoptr` or
+define an environment that holds the data and pass this environment to
+`ipoptr`. Both methods are shown in the file `tests/parameters.R` that
+comes with `ipoptr`.
+
+As a very simple example, suppose we want to find the minimum of
+\f$f(x) = a_1 x^2 + a_2 x + a_3\f$ for different values of the
+parameters \f$a_1\f$, \f$a_2\f$ and \f$a_3\f$.
+
+First, we define the objective function and its gradient using, assuming
+that there is some variable `params` that contains the values of the
+parameters.
+\code{.unparsed}
+> eval_f_ex1 <- function(x, params) { 
+     return( params[1]*x^2 + params[2]*x + params[3] ) 
+  }
+> eval_grad_f_ex1 <- function(x, params) { 
+     return( 2*params[1]*x + params[2] ) 
+  }
+\endcode
+Note, that the first parameter should always be the control variable.
+All of the user-defined functions should contain the same set of
+additional parameters. You have to supply them as input argument to all
+functions, even if you're not using them in some of the functions.
+
+Then we can solve the problem for a specific set of parameters, in this
+case \f$a_1=1\f$, \f$a_2=2\f$, and \f$a_3=3\f$, from initial value
+\f$x_0=0\f$, with the following command
+\code{.unparsed}
+> # solve using ipoptr with additional parameters
+> ipoptr(x0          = 0, 
+         eval_f      = eval_f_ex1, 
+         eval_grad_f = eval_grad_f_ex1,
+         opts        = list("print_level"=0),
+         params      = c(1,2,3) )
+             
+Call:
+
+ipoptr(x0 = 0, eval_f = eval_f_ex1, eval_grad_f = eval_grad_f_ex1, 
+    opts = list(print_level = 0), params = c(1, 2, 3))
+
+
+Ipopt solver status: 0 ( SUCCESS: Algorithm terminated 
+successfully at a locally optimal point, satisfying the 
+convergence tolerances (can be specified by options). )
+
+Number of Iterations....: 1 
+Optimal value of objective function:  2 
+Optimal value of controls: -1
+\endcode
+
+For the second method, we don't have to supply the parameters as
+additional arguments to the function.
+\code{.unparsed}
+> eval_f_ex2 <- function(x) { 
+     return( params[1]*x^2 + params[2]*x + params[3] ) 
+  }
+> eval_grad_f_ex2 <- function(x) { 
+     return( 2*params[1]*x + params[2] ) 
+  }
+\endcode
+
+Instead, we define an environment that contains specific values of `params`:
+\code{.unparsed}
+> # define a new environment that contains params
+> auxdata        <- new.env()
+> auxdata$params <- c(1,2,3)
+\endcode
+
+To solve this we supply `auxdata` as an argument to `ipoptr`, which will
+take care of evaluating the functions in the correct environment, so
+that the auxiliary data is available.
+\code{.unparsed}
+> # pass the environment that should be used to evaluate functions to ipoptr
+> ipoptr(x0                 = 0, 
+         eval_f             = eval_f_ex2, 
+         eval_grad_f        = eval_grad_f_ex2, 
+         ipoptr_environment = auxdata,
+         opts               = list("print_level"=0) )
+             
+Call:
+
+ipoptr(x0 = 0, eval_f = eval_f_ex2, eval_grad_f = eval_grad_f_ex2, 
+    opts = list(print_level = 0), ipoptr_environment = auxdata)
+
+
+Ipopt solver status: 0 ( SUCCESS: Algorithm terminated 
+successfully at a locally optimal point, satisfying the 
+convergence tolerances (can be specified by options). )
+
+Number of Iterations....: 1 
+Optimal value of objective function:  2 
+Optimal value of controls: -1
+\endcode
+
+*/

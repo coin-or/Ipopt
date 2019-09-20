@@ -1,0 +1,89 @@
+#!/bin/bash
+
+# (C) Copyright 2006 International Business Machines
+# This file is distributed under the Eclipse Public License
+#
+# Author: Andreas Waechter      IBM    2006-03-31
+
+srcdir="@srcdir@"
+prefix="@prefix@"
+exec_prefix="@exec_prefix@"
+
+retval=0
+
+echo " "
+echo Running unitTests...
+echo " "
+
+function checkrun ()
+{
+  if ! $@ > tmpfile 2>&1 ; then
+    echo "$? "
+    echo " ---- 8< ---- Start of test program output ---- 8< ----"
+    cat tmpfile
+    echo " ---- 8< ----  End of test program output  ---- 8< ----"
+    echo " "
+    echo "    ******** Test FAILED! ********"
+    echo "Test program existed with nonzero status."
+    return 1
+  fi
+
+  if ! grep -q "EXIT: Optimal Solution Found." tmpfile ; then
+    echo " "
+    echo " ---- 8< ---- Start of test program output ---- 8< ----"
+    cat tmpfile
+    echo " ---- 8< ----  End of test program output  ---- 8< ----"
+    echo " "
+    echo "    ******** Test FAILED! ********"
+    echo "Output of the test program does not contain 'EXIT: Optimal Solution Found'."
+    return 1
+  fi
+
+  echo "    Test passed!"
+  rm tmpfile
+
+  return 0
+}
+
+# AMPL Solver executable
+echo "Testing AMPL Solver Executable..."
+if test -x ../src/Apps/AmplSolver/ipopt ; then
+  checkrun ../src/Apps/AmplSolver/ipopt "$srcdir/mytoy.nl" || retval=$?
+else
+  echo "    no AMPL solver executable found, skipping test..."
+fi
+
+# C++ Example
+echo "Testing C++ Example..."
+checkrun ./hs071_cpp || retval=$?
+
+# C Example
+echo "Testing C Example..."
+checkrun ./hs071_c || retval=?
+
+# Fortran Example
+if test -e ./hs071_f ; then
+  echo "Testing Fortran Example..."
+  checkrun ./hs071_f || retval=?
+else
+  echo "Skip testing Fortran Example (hs071_f not available)"
+fi
+
+# Java Example
+# libtool magic does not work with Java programs and no rpath on Windows, so add path to find Ipopt DLL dependencies to PATH
+@BUILD_JAVA_TRUE@echo "Testing Java Example..."
+@BUILD_JAVA_TRUE@case @build_os@ in *mingw* | *msys* ) PATH=@bindir@:$PATH ;; esac
+@BUILD_JAVA_TRUE@checkrun java -Djava.library.path=../src/Interfaces/.libs -cp ../src/Interfaces/org.coinor.ipopt.jar:. HS071 || retval=$?
+@BUILD_JAVA_FALSE@echo "Skip testing Java Example (Java interface not build)"
+
+# sIpopt examples
+@BUILD_SIPOPT_TRUE@echo "Testing sIpopt Example parametric_cpp..."
+@BUILD_SIPOPT_TRUE@checkrun ./parametric_cpp || retval=$?
+@BUILD_SIPOPT_TRUE@echo "Testing sIpopt Example redhess_cpp..."
+@BUILD_SIPOPT_TRUE@checkrun ./redhess_cpp || retval=$?
+@BUILD_SIPOPT_FALSE@echo "Skip testing sIpopt examples (sIPOPT not build)"
+
+# clean up
+rm -rf tmpfile debug.out ipopt.out IPOPT.OUT
+
+exit $retval

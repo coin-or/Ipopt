@@ -7,27 +7,72 @@ matrix:
         apt:
           packages:
             - gfortran
-    - os: osx 
-      osx_image: xcode10
-      env: OSX=10.13
+            - liblapack-dev
+      env: ENABLEDEBUG=true
+    - os: linux
+      dist: bionic
+      addons:
+        apt:
+          packages:
+            - gfortran
+            - liblapack-dev
+      env: VISHIDDEN=true
+    - os: osx
+      osx_image: xcode11
+      env: OSX=10.14 VISHIDDEN=true
       compiler: clang
-    - os: osx 
+    - os: osx
+      osx_image: xcode11
+      env: OSX=10.14 VISHIDDEN=true NOF77=true
+      compiler: clang
+    - os: osx
+      osx_image: xcode10
+      env: OSX=10.13 ENABLEDEBUG=true
+      compiler: clang
+    - os: osx
       osx_image: xcode9.2
       env: OSX=10.12
       compiler: clang
-    - os: osx
-      osx_image: xcode8
-      env: OSX=10.11
-      compiler: clang
-  allow_failures:
-    - os: osx
 
 before_script:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; brew install bash gcc; brew link --overwrite gcc; gfortran --version; fi
-  - git clone https://github.com/coin-or/COIN-OR-OptimizationSuite COIN
-  - cd COIN
-  - export PROJECT=`echo $TRAVIS_REPO_SLUG | cut -d "/" -f 2`
-  - bash ./coin.install.sh fetch --no-prompt --main-proj=$PROJECT > /dev/null
+  - export VISHIDDEN=${VISHIDDEN:-false}
+  - export NOF77=${NOF77:-false}
+  - export ENABLEDEBUG=${ENABLEDEBUG:-false}
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && ! $NOF77; then brew update; brew install bash gcc; export CC=gcc-9 ; export CXX=g++-9 ; $CC --version; $CXX --version; gfortran --version; fi
 
 script:
-  - bash ./coin.install.sh build --no-prompt --main-proj=$PROJECT --verbosity=2 --test
+  - git clone --depth 1 https://github.com/coin-or-tools/ThirdParty-ASL
+  - pushd ThirdParty-ASL && ./get.ASL && ./configure --prefix=$HOME/install && make && make install && popd
+  - if $NOF77 ; then echo "Skipping Metis build." ; else git clone --depth 1 https://github.com/coin-or-tools/ThirdParty-Metis ; pushd ThirdParty-Metis && ./get.Metis && ./configure --prefix=$HOME/install && make && make install && popd ; fi
+  - if $NOF77 ; then echo "Skipping Mumps build." ; else git clone --depth 1 https://github.com/coin-or-tools/ThirdParty-Mumps ; pushd ThirdParty-Mumps && ./get.Mumps && ./configure --prefix=$HOME/install && make && make install && popd ; fi
+  - mkdir build
+  - pushd build
+  - export CFLAGS="-Wall -Wextra -Werror"
+  - export CXXFLAGS="-Wall -Wextra -Werror"
+  - if $VISHIDDEN ; then CFLAGS="$CFLAGS -fvisibility=hidden" ; fi
+  - if $VISHIDDEN ; then CXXFLAGS="$CXXFLAGS -fvisibility=hidden" ; fi
+  - export CFGFLAGS=""
+  - if $NOF77 ; then CFGFLAGS="$CFGFLAGS --disable-f77" ; fi
+  - if $ENABLEDEBUG ; then CFGFLAGS="$CFGFLAGS --enable-debug --with-ipopt-checklevel=5 --with-ipopt-verbosity=5" ; fi
+  - if ! $ENABLEDEBUG ; then CFLAGS="$CFLAGS -DNDEBUG" ; CXXFLAGS="$CXXFLAGS -DNDEBUG" ; fi
+  - ../configure --prefix=$HOME/install $CFGFLAGS
+  - make
+  - if $NOF77 ; then echo "skip test as no linear solver" ; else make test ; fi
+  - make install
+  - pushd examples/Cpp_example
+  - make
+  - if ! $NOF77 ; then ./cpp_example ; fi
+  - popd
+  - pushd examples/hs071_c
+  - make
+  - if ! $NOF77 ; then ./hs071_c ; fi
+  - popd
+  - pushd examples/hs071_cpp
+  - make
+  - if ! $NOF77 ; then ./hs071_cpp ; fi
+  - popd
+  - if ! $NOF77 ; then pushd examples/hs071_f && make && ./hs071_f && popd ; fi
+  - pushd examples/ScalableProblems
+  - make
+  - if ! $NOF77 ; then ./solve_problem MBndryCntrl1 10 ; fi
+  - popd

@@ -1,0 +1,84 @@
+/**
+\page FAQ Frequenty Asked Questions
+
+Contained below is a list of the frequently asked questions for \Ipopt.
+
+## What is \Ipopt?
+
+\Ipopt (*I*nterior *P*oint *OPT*imizer, pronounced eye-pea-Opt) is a software package for large-scale nonlinear optimization.
+\Ipopt implements an interior-point algorithm for continuous, nonlinear, nonconvex, constrained optimization problems.
+It is meant to be a general purpose nonlinear programming (NLP) solver.
+However, it is mainly written for large-scale problems with up to million of variables and constraints.
+(For such large problems, it is assumed that the derivative matrices are sparse.)
+
+Please see the [Ipopt project page](https://github.com/coin-or/Ipopt) for a more detailed description.
+
+## How do I use \Ipopt?
+
+You can use \Ipopt directly from your own computer code (C++, C, Fortran, Java, R).
+You can also use Ipopt from optimization modeling environments such as [AMPL](http://www.ampl.com/), [GAMS](http://www.gams.com/), [CUTEst](https://github.com/ralna/CUTEst), as well as on the [NEOS Server](http://www-neos.mcs.anl.gov/neos/solvers/nco:Ipopt/AMPL.html).
+
+## What license is \Ipopt released under?
+
+The \Ipopt source code is now released under the [Eclipse Public License (EPL)](http://www.eclipse.org/legal/epl-v10.html).
+
+Originally (before release 3.9.2), IPOPT was released under the Common Public License (CPL).
+However, the CPL has been "deprecated and superseded" by the Ecplise Public License (EPL).
+The new license (EPL) is almost the same as the old with 2 "new and improved" features: (i) the license steward is the Eclipse Foundation (not IBM) and (ii) the EPL does not have the "defense termination clause" (aka the patent retaliation bit) which was a point of objection by some.
+Some additional information regarding the licenses might be found at this [FAQ](http://www.ibm.com/developerworks/library/os-cplfaq.html).
+
+## What do I need to build \Ipopt?
+
+While the source code for \Ipopt itself is released as open source under the Eclipse Public License (EPL), compilation requires third party components (such as BLAS, LAPACK, some sparse linear solver library) which you have to obtain separately.
+The \Ipopt documentation gives detailed instructions on how to obtain and compile these components.
+(These components may be covered by license agreements different from EPL and may not be free for commercial use.)
+
+## On what operating systems can \Ipopt be used?
+
+Convenient configuration scripts and Makefiles are provided and have been tested for several flavors of GNU/Linux, Mac OS X, and MSYS2/MinGW.
+Previous versions of IPOPT have also been run on an old iPod, as well as BlueGene.
+
+## Is \Ipopt thread-safe?
+
+\Ipopt itself is thread-safe. Please check the used third-party components, i.e., linear algebra and linear solvers, for thread-safety, too.
+
+## What is the method behind \Ipopt?
+
+\Ipopt implements a interior point method for nonlinear programming.
+Search directions (coming from a linearization of the optimality conditions) can be computed in a full-space version by solving a large symmetric linear system.
+
+\Ipopt can employ second derivative information, if available, or otherwise approximate it by means of a limited-memory quasi-Newton approach (BFGS and SR1).
+
+Global convergence of the method is ensured by a line search procedure, based on a filter method.
+
+This paper describes the implementation of \Ipopt: \cite WaecBieg06:mp.
+
+Additional technical information may be found in other publications [here](https://researcher.ibm.com/researcher/view_page.php?id=1717).
+
+## Who do I contact with questions about \Ipopt?
+
+If you have any questions or comments please send a message to the [Ipopt Mailing List](http://list.coin-or.org/mailman/listinfo/ipopt)
+or open an issue on the [Ipopt GitHub issue tracker](https://github.com/coin-or/Ipopt/issues).
+Please include detailed information about your configuration (operating system, compilers, version number of Ipopt, etc) if you are writing about a compilation or execution problem.
+(Note: You need to subscribe to the mailing list before you can post a message.)
+
+## What is the difference between the Fortran version and the C++ version?
+
+The original version of \Ipopt was written in Fortran 77 by Andreas Wächter at Carnegie Mellon University.
+This version was contributed to the COIN-OR initiative and development has continued.
+In an effort to make \Ipopt more flexible for new algorithm development, we set out to design and implement a new version of \Ipopt in C++.
+This version was released on Aug. 26, 2005, and is the primary version for new developments.
+The previous Fortran version is still available, but will not see any new development other than bug fixes.
+
+Currently, there are some features in the Fortran version that are not implemented in the C++ version.
+ - Quasi-Newton Strategies: There is no reduced-space option in the new C++ version, but full space L-BFGS and L-SR1 options are slated for development.
+ - Complementarities: Handling of complementarity constraints using Arvind Raghunathan's constraint relaxation is not implemented.
+
+The new C++ version also contains features not available in the Fortran version.
+ - New problem structure: The new problem structure handles general inequalities. This means that slack variables are handled by \Ipopt and you no longer need to add them yourself. This also allows \Ipopt to identify the slack variables and take extra steps.
+ - Adaptive Mu Update: The new version of \Ipopt includes an adaptive strategy for selecting the value of the barrier parameter. In many cases, this can reduce the number of iterations required by \Ipopt. \cite NocWaeWal:adaptive
+ - New linear solvers: More linear solvers have been interfaced with \Ipopt with other linear solvers.
+
+All in all we think that the new version is easier to use. Furthermore, we think it is now far easier for others to contribute to the open source project.
+
+*/

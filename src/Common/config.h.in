@@ -1,0 +1,221 @@
+/* src/Common/config.h.in.  Generated from configure.ac by autoheader.  */
+
+/* Define to 1 if the inexact linear solver option is included */
+#undef BUILD_INEXACT
+
+/* Define to be the name of C-function for Inf check */
+#undef COIN_C_FINITE
+
+/* Define to 1 if ASL is available. */
+#undef COIN_HAS_ASL
+
+/* Define to 1 if HSL is available. */
+#undef COIN_HAS_HSL
+
+/* Define to 1 if the LAPACK package is available */
+#undef COIN_HAS_LAPACK
+
+/* Define to 1 if Mumps is available. */
+#undef COIN_HAS_MUMPS
+
+/* Define to the debug sanity check level (0 is no test) */
+#undef COIN_IPOPT_CHECKLEVEL
+
+/* Define to the debug verbosity level (0 is no output) */
+#undef COIN_IPOPT_VERBOSITY
+
+/* Define to a macro mangling the given C identifier (in lower and upper
+   case). */
+#undef COIN_LAPACK_FUNC
+
+/* As COIN_LAPACK_FUNC, but for C identifiers containing underscores. */
+#undef COIN_LAPACK_FUNC_
+
+/* Define to 1 if your C++ compiler doesn't accept -c and -o together. */
+#undef CXX_NO_MINUS_C_MINUS_O
+
+/* Define to dummy `main' function (if any) required to link to the Fortran
+   libraries. */
+#undef F77_DUMMY_MAIN
+
+/* Define to a macro mangling the given C identifier (in lower and upper
+   case), which must not contain underscores, for linking with Fortran. */
+#undef F77_FUNC
+
+/* As F77_FUNC, but for C identifiers containing underscores. */
+#undef F77_FUNC_
+
+/* Define to 1 if your Fortran compiler doesn't accept -c and -o together. */
+#undef F77_NO_MINUS_C_MINUS_O
+
+/* Define if F77 and FC dummy `main' functions are identical. */
+#undef FC_DUMMY_MAIN_EQ_F77
+
+/* Define to the C type corresponding to Fortran INTEGER */
+#undef FORTRAN_INTEGER_TYPE
+
+/* Define to 1 if you have the <cfloat> header file. */
+#undef HAVE_CFLOAT
+
+/* Define to 1 if you have the <cieeefp> header file. */
+#undef HAVE_CIEEEFP
+
+/* Define to 1 if you have the <cmath> header file. */
+#undef HAVE_CMATH
+
+/* Define to 1 if you have the <dlfcn.h> header file. */
+#undef HAVE_DLFCN_H
+
+/* Define to 1 if function drand48 is available */
+#undef HAVE_DRAND48
+
+/* Define to 1 if you have the <float.h> header file. */
+#undef HAVE_FLOAT_H
+
+/* Define to 1 if you have the <ieeefp.h> header file. */
+#undef HAVE_IEEEFP_H
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* Define to 1 if the linear solver loader should be compiled to allow dynamic
+   loading of shared libraries with linear solvers */
+#undef HAVE_LINEARSOLVERLOADER
+
+/* Define to 1 if you have the <math.h> header file. */
+#undef HAVE_MATH_H
+
+/* Define to 1 if you have the <memory.h> header file. */
+#undef HAVE_MEMORY_H
+
+/* Define to 1 if you have the `MPI_Initialized' function. */
+#undef HAVE_MPI_INITIALIZED
+
+/* Define to 1 if Pardiso is available */
+#undef HAVE_PARDISO
+
+/* Define to 1 if you are using Pardiso from MKL */
+#undef HAVE_PARDISO_MKL
+
+/* Define to 1 if you are using the parallel version of Pardiso */
+#undef HAVE_PARDISO_PARALLEL
+
+/* Define to 1 if function rand is available */
+#undef HAVE_RAND
+
+/* Define to 1 if you have the `snprintf' function. */
+#undef HAVE_SNPRINTF
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if function std::rand is available */
+#undef HAVE_STD__RAND
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Define to 1 if va_copy is available */
+#undef HAVE_VA_COPY
+
+/* Define to 1 if you have the `vsnprintf' function. */
+#undef HAVE_VSNPRINTF
+
+/* Define to 1 if WSMP is available */
+#undef HAVE_WSMP
+
+/* Define to 1 if you have the `_snprintf' function. */
+#undef HAVE__SNPRINTF
+
+/* Define to 1 if you have the `_vsnprintf' function. */
+#undef HAVE__VSNPRINTF
+
+/* Library Visibility Attribute */
+#undef HSLLIB_EXPORT
+
+/* Define to a macro mangling the given C identifier (in lower and upper
+   case). */
+#undef HSL_FUNC
+
+/* As m4_toupper(HSL)_FUNC, but for C identifiers containing underscores. */
+#undef HSL_FUNC_
+
+/* Library Visibility Attribute */
+#undef IPOPTAMPLINTERFACELIB_EXPORT
+
+/* Library Visibility Attribute */
+#undef IPOPTLIB_EXPORT
+
+/* Version number of project */
+#undef IPOPT_VERSION
+
+/* Major version number of project. */
+#undef IPOPT_VERSION_MAJOR
+
+/* Minor version number of project. */
+#undef IPOPT_VERSION_MINOR
+
+/* Release version number of project. */
+#undef IPOPT_VERSION_RELEASE
+
+/* Define to the sub-directory where libtool stores uninstalled libraries. */
+#undef LT_OBJDIR
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* Define to a macro mangling the given C identifier (in lower and upper
+   case). */
+#undef PARDISO_FUNC
+
+/* As PARDISO_FUNC, but for C identifiers containing underscores. */
+#undef PARDISO_FUNC_
+
+/* Set to extension for shared libraries in quotes. */
+#undef SHAREDLIBEXT
+
+/* Library Visibility Attribute */
+#undef SIPOPTLIB_EXPORT
+
+/* The size of `int *', as computed by sizeof. */
+#undef SIZEOF_INT_P
+
+/* Define to 1 if you have the ANSI C header files. */
+#undef STDC_HEADERS
+
+/* Define to a macro mangling the given C identifier (in lower and upper
+   case). */
+#undef WSMP_FUNC
+
+/* As WSMP_FUNC, but for C identifiers containing underscores. */
+#undef WSMP_FUNC_

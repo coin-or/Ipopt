@@ -1,0 +1,96 @@
+# Copyright (C) 2005, 2010 International Business Machines and others.
+# All Rights Reserved.
+# This file is distributed under the Eclipse Public License.
+
+# Directory to the sources for the (example) problem definition files
+SRCDIR = @srcdir@
+VPATH = @srcdir@
+
+# Compiler and options
+CXX = @CXX@
+CXXFLAGS = @CXXFLAGS@
+
+# additional C++ Compiler options for linking
+CXXLINKFLAGS = @RPATH_FLAGS@
+
+# get some directories, so we can expand @libdir@ for -rpath arg for libtool
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+
+# Include directories
+@COIN_HAS_PKGCONFIG_TRUE@INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipopt`
+@COIN_HAS_PKGCONFIG_FALSE@INCL = -I@includedir@/coin-or @IPOPTLIB_CFLAGS@
+
+# Linker flags
+@COIN_HAS_PKGCONFIG_TRUE@LIBS = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt`
+@COIN_HAS_PKGCONFIG_FALSE@LIBS = -L@libdir@ -lipopt @IPOPTLIB_LFLAGS@
+
+# Name of the executable
+EXE = solve_problem@EXEEXT@
+
+# List of all object files
+MAINOBJ =  solve_problem.@OBJEXT@ \
+        MittelmannDistCntrlNeumA.@OBJEXT@ \
+        MittelmannDistCntrlNeumB.@OBJEXT@ \
+        MittelmannDistCntrlDiri.@OBJEXT@ \
+        MittelmannBndryCntrlDiri.@OBJEXT@ \
+        MittelmannBndryCntrlDiri3D.@OBJEXT@ \
+        MittelmannBndryCntrlDiri3D_27.@OBJEXT@ \
+        MittelmannBndryCntrlDiri3Dsin.@OBJEXT@ \
+        MittelmannBndryCntrlNeum.@OBJEXT@ \
+        LuksanVlcek1.@OBJEXT@ \
+        LuksanVlcek2.@OBJEXT@ \
+        LuksanVlcek3.@OBJEXT@ \
+        LuksanVlcek4.@OBJEXT@ \
+        LuksanVlcek5.@OBJEXT@ \
+        LuksanVlcek6.@OBJEXT@ \
+        LuksanVlcek7.@OBJEXT@ \
+        RegisteredTNLP.@OBJEXT@
+
+all: $(EXE)
+
+# Dependencies
+LuksanVlcek1.@OBJEXT@ : LuksanVlcek1.hpp
+LuksanVlcek2.@OBJEXT@ : LuksanVlcek2.hpp
+LuksanVlcek3.@OBJEXT@ : LuksanVlcek3.hpp
+LuksanVlcek4.@OBJEXT@ : LuksanVlcek4.hpp
+LuksanVlcek5.@OBJEXT@ : LuksanVlcek5.hpp
+LuksanVlcek6.@OBJEXT@ : LuksanVlcek6.hpp
+LuksanVlcek7.@OBJEXT@ : LuksanVlcek7.hpp
+MittelmannDistCntrlNeumA.@OBJEXT@: MittelmannDistCntrlNeumA.hpp
+MittelmannDistCntrlNeumB.@OBJEXT@: MittelmannDistCntrlNeumB.hpp
+MittelmannDistCntrlDiri.@OBJEXT@: MittelmannDistCntrlDiri.hpp
+MittelmannBndryCntrlDiri.@OBJEXT@: MittelmannBndryCntrlDiri.hpp
+MittelmannBndryCntrlDiri3D.@OBJEXT@: MittelmannBndryCntrlDiri3D.hpp
+MittelmannBndryCntrlDiri3D_27.@OBJEXT@: MittelmannBndryCntrlDiri3D_27.hpp
+MittelmannBndryCntrlDiri3Dsin.@OBJEXT@: MittelmannBndryCntrlDiri3Dsin.hpp
+MittelmannBndryCntrlNeum.@OBJEXT@: MittelmannBndryCntrlNeum.hpp
+
+solve_problem.@OBJEXT@: \
+	LuksanVlcek1.hpp \
+	LuksanVlcek2.hpp \
+	LuksanVlcek3.hpp \
+	LuksanVlcek4.hpp \
+	LuksanVlcek5.hpp \
+	LuksanVlcek6.hpp \
+	LuksanVlcek7.hpp \
+	MittelmannDistCntrlNeumA.hpp \
+	MittelmannDistCntrlNeumB.hpp \
+	MittelmannDistCntrlDiri.hpp \
+	MittelmannBndryCntrlDiri.hpp \
+	MittelmannBndryCntrlDiri3D.hpp \
+	MittelmannBndryCntrlDiri3D_27.hpp \
+	MittelmannBndryCntrlDiri3Dsin.hpp \
+	MittelmannBndryCntrlNeum.hpp \
+	MittelmannParaCntrl.hpp
+
+.SUFFIXES: .cpp .@OBJEXT@
+
+$(EXE): $(MAINOBJ) $(LIB)
+	$(CXX) $(CXXFLAGS) $(CXXLINKFLAGS) -o $@ $(MAINOBJ) $(LIBS)
+
+clean:
+	rm -rf $(EXE) $(MAINOBJ)
+
+.cpp.@OBJEXT@:
+	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `test -f '$<' || echo '$(SRCDIR)/'`$<

@@ -26,17 +26,17 @@ The Ipopt project webpage is <https://github.com/coin-or/Ipopt>.
 Background
 ----------
 
-Ipopt is written in C++ and is released as open source code under the Eclipse Public License (EPL).
+Ipopt is written in C++ and is released as open source code under the [Eclipse Public License (EPL)](LICENSE).
 The code has been written by [Andreas Wächter](http://www.mccormick.northwestern.edu/directory/profiles/Andreas-Waechter.html) and [Carl Laird](http://allthingsoptimal.com/biography/).
 The COIN-OR project managers for Ipopt are [Andreas Wächter](http://users.iems.northwestern.edu/~andreasw) und [Stefan Vigerske](https://www.gams.com/~stefan).
-For a list of **all contributors**, see the [AUTHORS file](Ipopt/AUTHORS).
+For a list of **all contributors**, see the [AUTHORS file](AUTHORS).
 
 The C++ version has first been [released on Aug 26, 2005](http://list.coin-or.org/pipermail/ipopt/2005-August/000331.html) as version 3.0.0.
 The previously released [pre-3.0 Fortran version](https://github.com/coin-or/Ipopt/tree/stable/2.3) is no longer maintained.
 
 
 The Ipopt distribution can be used to generate a library that can be linked to one's own C++, C, Fortran, or Java code, as well as a solver executable for the [AMPL](http://www.ampl.com) modeling environment.
-The package includes interfaces to [CUTEr](http://cuter.rl.ac.uk/cuter-www/) optimization testing environment, as well as the [MATLAB](http://www.mathworks.com/products/matlab) and [R](http://www.r-project.org/) programming environments.
+The package includes an interface to the [R](http://www.r-project.org/) programming environment.
 IPOPT can be used on Linux/UNIX, Mac OS X and Windows platforms.
 
 As open source software, the source code for Ipopt is provided without charge.
@@ -58,9 +58,7 @@ Download
 **[Download Ipopt source as tarballs.](http://www.coin-or.org/download/source/Ipopt)**
 
 You can also obtain the Ipopt code via Git.
-Please refer to the [documentation](https://coin-or.github.io/Ipopt) and the [General Configuration and Installation Instructions for COIN-OR projects](https://projects.coin-or.org/CoinHelp/).
-
-**Please make sure you read the [current issues page](https://projects.coin-or.org/CoinHelp/wiki/current-issues) before you try to install Ipopt.**
+Please refer to the [documentation](https://coin-or.github.io/Ipopt).
 
 Also still available is the no longer maintained older [Fortran version](https://github.com/coin-or/Ipopt/tree/stable/2.3).
 
@@ -76,7 +74,6 @@ Documentation
  * **[Ipopt Wiki](https://github.com/coin-or/Ipopt/wiki)** with more compilation hints, current issues, and hints and tricks
  * **[Mailing list archive](http://list.coin-or.org/pipermail/ipopt/)**
  * [Changelog](ChangeLog)
- * [General Configuration and Installation Instructions](https://projects.coin-or.org/CoinHelp/) for COIN-OR projects
  * [short Ipopt tutorial](http://drops.dagstuhl.de/volltexte/2009/2089/pdf/09061.WaechterAndreas.Paper.2089.pdf)
 
 

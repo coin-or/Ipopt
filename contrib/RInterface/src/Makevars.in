@@ -1,0 +1,37 @@
+# Copyright (C) 2010 Jelmer Ypma. All Rights Reserved.
+# This code is published under the Eclipse Public License.
+#
+# File:   Makevars.in
+# Author: Jelmer Ypma
+# Date:   14 April 2010
+#
+# Changelog:
+# 30/01/2011 - Changed LIBS to IPOPT_LIBS and INCL to IPOPT_INCL, since R re-defines LIBS and INCL.
+
+
+# C++ Compiler command
+CXX = @CXX@
+
+# C++ Compiler options
+IPOPT_CXXFLAGS = @CXXFLAGS@
+
+# additional C++ Compiler options for linking
+IPOPT_CXXLINKFLAGS = @RPATH_FLAGS@
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+
+# Include directories
+@COIN_HAS_PKGCONFIG_TRUE@IPOPT_INCL = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --cflags ipopt`
+@COIN_HAS_PKGCONFIG_FALSE@IPOPT_INCL = -I@includedir@/coin @IPOPTLIB_CFLAGS@
+
+# Linker flags
+@COIN_HAS_PKGCONFIG_TRUE@IPOPT_LIBS = `PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ @PKG_CONFIG@ --libs ipopt`
+@COIN_HAS_PKGCONFIG_FALSE@IPOPT_LIBS = -L@libdir@ -lipopt @IPOPTLIB_LFLAGS@
+
+# Define objects for R to build
+OBJECTS = ipoptr.o IpoptRNLP.o IpoptRJournal.o
+
+# Convert to R macros
+PKG_LIBS = ${IPOPT_CXXLINKFLAGS} ${IPOPT_LIBS}
+PKG_CXXFLAGS = ${IPOPT_CXXFLAGS} ${IPOPT_INCL} -I@srcdir@

@@ -1,0 +1,417 @@
+/**
+\mainpage Documentation
+
+This document is a guide to using \Ipopt.  It includes
+instructions on how to obtain and compile \Ipopt, a description of
+the interface, user options, etc., as well as a tutorial on how to
+solve a nonlinear optimization problem with \Ipopt.
+The documentation consists of the following pages:
+
+- \ref Overview
+- \subpage INSTALL
+- \subpage INTERFACES
+- \subpage SPECIALS
+- \subpage OPTIONS
+- \subpage OUTPUT
+- \subpage IMPL
+- \subpage FAQ
+- \subpage CHANGELOG
+- \subpage AUTHORS
+- \subpage LICENSE
+
+The Ipopt project website is <https://github.com/coin-or/Ipopt>.
+
+\tableofcontents
+
+\section Overview
+
+\Ipopt (<b>I</b>nterior <b>P</b>oint <b>O</b>ptimizer, pronounced "Eye-Pea-Opt") is
+an open source software package for large-scale nonlinear optimization.
+It can be used to solve general nonlinear programming problems of the
+form \anchor NLP
+\f{align}{
+\min_{x\in\mathbb{R}^n} && f(x) \nonumber \\
+\text{s.t.} \;  && g^L \leq g(x) \leq g^U \tag{NLP} \\
+                && x^L \leq x \leq x^U, \nonumber
+\f}
+where \f$x \in \mathbb{R}^n\f$ are the optimization variables (possibly with
+lower and upper bounds, \f$x^L\in(\mathbb{R}\cup\{-\infty\})^n\f$ and
+\f$x^U\in(\mathbb{R}\cup\{+\infty\})^n\f$),
+\f$f:\mathbb{R}^n \to \mathbb{R}\f$ is the objective function, and
+\f$g:\mathbb{R}^n \to \mathbb{R}^m\f$ are the general nonlinear
+constraints. The functions \f$f(x)\f$ and \f$g(x)\f$ can be linear or nonlinear
+and convex or non-convex (but should be twice continuously
+differentiable). The constraints, \f$g(x)\f$, have lower and upper bounds,
+\f$g^L\in(\mathbb{R}\cup\{-\infty\})^m\f$ and
+\f$g^U\in(\mathbb{R}\cup\{+\infty\})^m\f$. Note that equality constraints of
+the form \f$g_i(x)=\bar g_i\f$ can be specified by setting
+\f$g^L_{i}=g^U_{i}=\bar g_i\f$.
+
+\subsection MATHBACKGROUND Mathematical Background
+
+\Ipopt implements an interior point line search filter
+method that aims to find a local solution of \ref NLP "(NLP)". The mathematical details of the algorithm can
+be found in several publications
+\cite NocWaeWal:adaptive,
+\cite WaechterPhD,
+\cite WaecBieg06:mp,
+\cite WaeBie05:filterglobal,
+\cite WaeBie05:filterlocal.
+
+\subsection AVAILABILITY Availability
+
+The \Ipopt package is available from [COIN-OR](http://www.coin-or.org)
+under the EPL (Eclipse Public License)
+open-source license and includes the source code for
+\Ipopt. This means, it is available free of charge, also
+for commercial purposes. However, if you give away software including
+\Ipopt code (in source code or binary form) and you made
+changes to the \Ipopt source code, you are required to make
+those changes public and to clearly indicate which modifications you
+made. After all, the goal of open source software is the continuous
+development and improvement of software. For details, please refer to
+the [Eclipse Public License](https://opensource.org/licenses/EPL-1.0).
+
+Also, if you are using \Ipopt to obtain results for a
+publication, we politely ask you to point out in your paper that you
+used \Ipopt, and to cite the publication \cite WaecBieg06:mp.
+Writing high-quality numerical software takes a lot of time and effort,
+and does usually not translate into a large number of publications,
+therefore we believe this request is only fair :).
+<!-- TODO bring back   We also have space at
+the \Ipopt project home page where we list publications,
+projects, etc., in which \Ipopt has been used. We would be
+very happy to hear about your experiences. -->
+
+\subsection PREREQUISITES Prerequisites
+
+In order to build \Ipopt, some third party components are
+required:
+
+-   BLAS (Basic Linear Algebra Subroutines) and LAPACK (Linear Algebra PACKage).
+    Many vendors of compilers and operating systems provide precompiled
+    and optimized libraries for these dense linear algebra subroutines.
+    You can also get the  source code for a simple reference implementation
+    from http://www.netlib.org. However, it is strongly recommended to use
+    some optimized BLAS and LAPACK implementations, for large problems
+    this can make a runtime difference of an order of magnitude!
+
+    Examples for efficient BLAS implementations are:
+
+    -   From hardware vendors:
+
+        -   ACML (AMD Core Math Library) by AMD
+
+        -   ESSL (Engineering Scientific Subroutine Library) by IBM
+
+        -   MKL (Math Kernel Library) by Intel
+
+        -   Sun Performance Library by Sun
+
+    -   Generic:
+
+        -   Atlas (Automatically Tuned Linear Algebra Software)
+
+        -   GotoBLAS
+
+    You find more information on the web. <!-- TODO add links -->
+
+    Note: BLAS libraries distributed with Linux are often not
+    optimized.
+
+-   A sparse symmetric indefinite linear solver. \Ipopt
+    needs to obtain the solution of sparse, symmetric, indefinite linear
+    systems, and for this it relies on third-party code.
+
+    Currently, the following linear solvers can be used:
+
+    -   MA27 from the [HSL Mathematical Software Library](http://www.hsl.rl.ac.uk)
+
+    -   MA57 from the [HSL Mathematical Software Library](http://www.hsl.rl.ac.uk)
+
+    -   HSL_MA77 from the [HSL Mathematical Software Library](http://www.hsl.rl.ac.uk)
+
+    -   HSL_MA86 from the [HSL Mathematical Software Library](http://www.hsl.rl.ac.uk)
+
+    -   HSL_MA97 from the [HSL Mathematical Software Library](http://www.hsl.rl.ac.uk)
+
+    -   [MUMPS](http://mumps.enseeiht.fr) (MUltifrontal Massively Parallel sparse direct Solver)
+
+    -   PARDISO (Parallel Sparse Direct Solver) from [Pardiso Project](http://www.pardiso-project.org)
+        or Intel MKL. Note that current versions from Pardiso Project typically
+        offer much better performance than the one from Intel MKL.
+
+    -   [WSMP](http://researcher.ibm.com/view_project.php?id=1426) (Watson Sparse Matrix Package)
+
+    You must include at least one of the linear solvers above in order
+    to run \Ipopt, and if you want to be able to switch
+    easily between different alternatives, you can compile
+    \Ipopt with all of them.
+
+    The \Ipopt library also has mechanisms to load the
+    linear solvers MA27, MA57, HSL_MA77, HSL_MA86, HSL_MA97, and
+    Pardiso from a shared library at runtime, if the library has not
+    been compiled with them, see \ref LINEARSOLVERLOADER.
+
+    \note The solution of the linear systems is a central ingredient
+    in \Ipopt and the optimizer's performance and
+    robustness depends on your choice. The best choice depends on your
+    application, and it makes sense to try different options. Most of
+    the solvers also rely on efficient BLAS code (see above), so you
+    should use a good BLAS library tailored to your system. Please keep
+    this in mind, particularly when you are comparing
+    \Ipopt with other optimization codes.
+
+    If you are compiling MA57, HSL_MA77, HSL_MA86, HSL_MA97, or MUMPS
+    within the \Ipopt build system, you should also include
+    the METIS linear system ordering package.
+
+    Interfaces to other linear solvers might be added in the future; if
+    you are interested in contributing such an interface please contact
+    us! Note that \Ipopt requires that the linear solver is
+    able to provide the inertia (number of positive and negative
+    eigenvalues) of the symmetric matrix that is factorized.
+
+-   Furthermore, \Ipopt can also use the HSL package MC19
+    for scaling of the linear systems before they are passed to the
+    linear solver. This may be particularly useful if
+    \Ipopt is used with MA27 or MA57. However, it is not
+    required to have MC19 to compile \Ipopt; if this
+    routine is missing, the scaling is never performed.
+
+-   ASL (AMPL Solver Library). The source code is available at
+    http://www.netlib.org, and COIN-OR's
+    [ThirdParty-ASL project](https://github.com/coin-or-tools/ThirdParty-ASL)
+    can be used to build a library that is recognized by \Ipopt's build system.
+    NOTE: This is only required if you want to use
+    \Ipopt from AMPL and want to compile the \Ipopt AMPL solver executable.
+
+For more information on third-party components and how to obtain them,
+see \ref EXTERNALCODE.
+
+Since the \Ipopt code is written in C++, you will need a
+C++ compiler to build the \Ipopt library. We tried very
+hard to write the code as platform and compiler independent as possible.
+
+In addition, the configuration script also searches for a Fortran
+compiler. If all third party dependencies are available as self-contained
+libraries and no Ipopt/Fortran interface needs to be build, a Fortran
+compile is not necessary.
+
+When using GNU compilers, we recommend you use the same version numbers
+for gcc, g++, and gfortran.
+Further, mixing clang (for C/C++) and gfortran has been problematic and
+should be avoided.
+
+\subsection HOWTOUSE How to use Ipopt
+
+If desired, the \Ipopt distribution generates an executable
+for the modeling environment AMPL. As well, you can link your problem
+statement with \Ipopt using interfaces for C++, C, Java, or
+Fortran. \Ipopt can be used with most Linux/Unix
+environments, and on Windows using Msys2/MinGW.
+In \ref INTERFACES this document demonstrates how to
+solve problems using \Ipopt. This includes installation and
+compilation of \Ipopt for use with AMPL as well as linking
+with your own code.
+
+Additionally, the \Ipopt distribution includes an interface
+for the R project for statistical computing, see \ref INTERFACE_R.
+
+There is also software that facilitates use of \Ipopt
+maintained by other people, among them are:
+
+-   [ADOL-C](https://projects.coin-or.org/ADOL-C) (automatic differentiation)
+
+    ADOL-C facilitates the evaluation of first and higher derivatives of
+    vector functions that are defined by computer programs written in C
+    or C++. It comes with [examples](https://projects.coin-or.org/ADOL-C/browser/stable/2.4/ADOL-C/examples/additional_examples/ipopt)
+    that show how to use it in connection with \Ipopt.
+
+-   AIMMS (modeling environment)
+
+    The [AIMMSlinks project](https://projects.coin-or.org/AIMMSlinks) on
+    COIN-OR, maintained by Marcel Hunting, provides an interface for
+    \Ipopt within the AIMMS modeling tool.
+
+-   [APMonitor](http://apmonitor.com)
+
+    MATLAB, Python, and Web Interface to \Ipopt for Android, Linux, Mac OS X,
+    and Windows.
+
+-   [CasADi](http://casadi.org)
+
+    CasADi is a symbolic framework for automatic differentiation and
+    numeric optimization and comes with \Ipopt.
+
+-   [CppAD](https://projects.coin-or.org/CppAD) (automatic differentiation)
+
+    Given a C++ algorithm that computes function values, CppAD generates
+    an algorithm that computes corresponding derivative values (of
+    arbitrary order using either forward or reverse mode). It comes with
+    an [example](http://www.coin-or.org/CppAD/Doc/ipopt_solve.htm) that
+    shows how to use it in connection with \Ipopt.
+
+-   [csipopt](https://github.com/cureos/csipopt)
+
+    Interfacing Ipopt from .NET languages such as **C#**, **F#** and **Visual Basic.NET**.
+
+-   GAMS (modeling environment)
+
+    The [GAMSlinks project](https://projects.coin-or.org/GAMSlinks) on
+    COIN-OR includes a GAMS interface for \Ipopt.
+
+-   [ifopt](https://github.com/ethz-adrl/ifopt)
+
+    Modern, light-weight (~1k loc), **Eigen**-based <strong>C++</strong> interface to \Ipopt and Snopt.
+
+-   [IPyOpt](https://github.com/g-braeunlich/IPyOpt)
+
+    Interfacing \Ipopt from **Python**.
+
+-   [JuliaOpt](http://juliaopt.org)
+
+    Julia is a high-level, high-performance dynamic programming language
+    for technical computing. JuliaOpt, is an
+    umbrella group for Julia-based optimization-related projects. It
+    includes the algebraic modeling language [JuMP](https://github.com/JuliaOpt/JuMP.jl)
+    and an [interface to \Ipopt](https://github.com/JuliaOpt/Ipopt.jl).
+
+-   [MADOPT](https://github.com/stanle/madopt) (Modelling and Automatic Differentiation for Optimisation)
+
+    Light-weight C++ and Python modelling interfaces implementing
+    expression building using operator overloading and automatic
+    differentiation.
+
+-   [mexIPOPT](https://github.com/ebertolazzi/mexIPOPT)
+
+    Matlab (mex) interface to you use \Ipopt from Matlab.
+
+-   [OPTimization Interface (OPTI) Toolbox](http://www.i2c2.aut.ac.nz/Wiki/OPTI/)
+
+    OPTI is a free **Matlab** toolbox for constructing and solving linear,
+    nonlinear, continuous and discrete optimization problem and comes
+    with \Ipopt, including binaries.
+
+-   [Optimization Services](https://projects.coin-or.org/OS)
+
+    The Optimization Services (OS) project provides a set of standards
+    for representing optimization instances, results, solver options,
+    and communication between clients and solvers, including \Ipopt, in a
+    distributed environment using Web Services.
+
+-   [PyIpopt](https://github.com/g-braeunlich/IPyOpt)
+
+    An interface to the **Python** language.
+
+-   Scilab (free Matlab-like environment):
+
+    A Scilab interface is available at http://forge.scilab.org/index.php/p/sci-ipopt.
+
+\subsection MOREINFO More Information and Contributions
+
+More and up-to-date information can be found at the \Ipopt
+homepage,
+
+https://github.com/coin-or/Ipopt.
+
+Here, you can find FAQs, some (hopefully useful) hints, an issue tracking
+system, etc. <!--TODO The website is managed with Wiki, which means that every
+user can edit the webpages from the regular web browser. **In
+particular, we encourage \Ipopt users to share their
+experiences and usage hints on the "Success Stories" and "Hints and
+Tricks" pages, or to list the publications discussing applications of
+\Ipopt in the "Papers related to Ipopt" page**.
+(Since we had some malicious hacker attacks destroying the content
+    of the web pages in the past, you are now required to enter a user
+    name and password; simply follow the instructions on top of the main
+    project page.)
+In particular, if you have trouble getting \Ipopt work well
+for your optimization problem, you might find some ideas here. Also, if
+you had some difficulties to solve a problem and found a way around it
+(e.g., by reformulating your problem or by using certain
+\Ipopt options), it would be very nice if you help other
+users by sharing your experience at the "Hints and Tricks" page. -->
+
+\Ipopt is an open source project, and we encourage people
+to contribute code (such as interfaces to appropriate linear solvers,
+modeling environments, or even algorithmic features). If you are
+interested in contributing code, please have a look at the
+[COIN-OR contributions webpage](http://www.coin-or.org/contributions.html)
+and contact the \Ipopt project leader.
+
+There is also a mailing list for \Ipopt, available from the
+webpage
+
+<http://list.coin-or.org/mailman/listinfo/ipopt>,
+
+where you can subscribe to get notified of updates, to ask general
+questions regarding installation and usage, or to share your experience
+with \Ipopt. You might want to look at the archives before
+posting a question. An easy way to search the archive with Google is to
+specify `site:http://list.coin-or.org/pipermail/ipopt` in addition to
+your keywords in the search string.
+
+We try to answer questions posted to the mailing list in a reasonable
+manner. Please understand that we cannot answer all questions in detail,
+and because of time constraints, we are not able to help you model and
+debug your particular optimization problem.
+
+A short tutorial on getting started with \Ipopt is also
+available \cite Waechter90Minutes.
+
+\subsection HISTORY_IPOPT History of Ipopt
+
+The original \Ipopt(Fortran version) was a product of the
+dissertation research of Andreas Wächter \cite WaechterPhD, under the
+supervision of Lorenz T. Biegler at the Chemical Engineering Department
+at Carnegie Mellon University. The code was made open source and
+distributed by the COIN-OR initiative, which is now a non-profit
+corporation. \Ipopt has been actively developed under
+COIN-OR since 2002.
+
+To continue natural extension of the code and allow easy addition of new
+features, IBM Research decided to invest in an open source re-write of
+\Ipopt in C++. With the help of Carl Laird, who came to the
+Mathematical Sciences Department at IBM Research as a summer intern in
+2004 and 2005 during his PhD studies, the code was re-implemented from
+scratch.
+
+The new C++ version of the \Ipopt optimization code
+(\Ipopt 3.0.0 and beyond) was maintained at IBM Research and
+remains part of the COIN-OR initiative. The development on the Fortran
+version has ceased, but the source code can still be downloaded from
+<https://github.com/coin-or/Ipopt/tree/stable/2.3>.
+
+\subsection HISTORY_DOC History of this document
+
+The initial version of this document was created by Yoshiaki Kawajir
+(then Department of Chemical Engineering, Carnegie Mellon University, Pittsburgh PA)
+as a course project for *47852 Open Source Software for Optimization*,
+taught by Prof. François Margot at Tepper School of Business, Carnegie
+Mellon University. After this, Carl Laird (then Department of Chemical Engineering,
+Carnegie Mellon University, Pittsburgh PA) has added significant
+portions, including the very nice tutorials. The current version is
+maintained by Stefan Vigerske (GAMS Software GmbH) and Andreas Wächter
+(Department of Industrial Engineering and Management Sciences, Northwestern University).
+
+The following names used in this document are trademarks or registered
+trademarks: AMPL, IBM, Intel, Matlab, Microsoft, MKL, Visual Studio C++,
+Visual Studio C++ .NET
+
+
+\page CHANGELOG Release notes
+
+\verbinclude ChangeLog
+
+\page AUTHORS Authors and Contributors
+
+\verbinclude AUTHORS
+
+\page LICENSE License
+
+\Ipopt is available under the Eclipse Public License 1.0:
+
+\verbinclude LICENSE
+
+*/

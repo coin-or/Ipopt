@@ -1,0 +1,35 @@
+# Copyright (C) 2007, 2011 International Business Machines and others.
+# All Rights Reserved.
+# This file is distributed under the Eclipse Public License.
+#
+# Author: Andreas Waechter     2007-10-08     IBM
+
+# NOTE: We assume here that there are no spaces in paths.
+#   If you are on Windows and have Java in a path like C:\Program Files\Java,
+#   try setting JAVA_HOME to the DOS equivalent C:\Progra~1 or similar.
+
+# Java compiler
+JAVAC = @JAVAC@
+
+# Java runtime
+JAVA = @JAVA@
+
+# Ipopt JAR
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+IPOPTJAR = @libdir@/org.coinor.ipopt.jar
+
+##########################################################################
+
+.SUFFIXES: .java .class
+
+.java.class:
+	$(JAVAC) -cp $(IPOPTJAR) $<
+
+all : HS071.class
+
+test : HS071.class
+	$(JAVA) -cp $(IPOPTJAR):. -Djava.library.path=@libdir@ HS071
+
+clean :
+	rm -rf HS071.class
