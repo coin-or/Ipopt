@@ -33,7 +33,7 @@ libcommon_la_SOURCES = \
 	IpTaggedObject.cpp \
 	IpUtils.cpp
 
-libcommon_la_LDFLAGS = $(LT_LDFLAGS)
+#libcommon_la_LDFLAGS = $(LT_LDFLAGS)
 
 AM_CPPFLAGS = -DIPOPT_BUILD
 

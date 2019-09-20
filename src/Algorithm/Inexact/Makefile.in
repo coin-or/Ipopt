@@ -120,10 +120,6 @@ AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-libinexact_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
-	$(AM_CXXFLAGS) $(CXXFLAGS) $(libinexact_la_LDFLAGS) $(LDFLAGS) \
-	-o $@
 @BUILD_INEXACT_TRUE@am_libinexact_la_rpath =
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -379,7 +375,8 @@ libinexact_la_SOURCES = \
 	IpIterativePardisoSolverInterface.cpp \
 	IpIterativeSolverTerminationTester.cpp
 
-libinexact_la_LDFLAGS = $(LT_LDFLAGS)
+
+#libinexact_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../../Common \
 	-I$(srcdir)/../../LinAlg \
@@ -436,7 +433,7 @@ clean-noinstLTLIBRARIES:
 	}
 
 libinexact.la: $(libinexact_la_OBJECTS) $(libinexact_la_DEPENDENCIES) $(EXTRA_libinexact_la_DEPENDENCIES) 
-	$(AM_V_CXXLD)$(libinexact_la_LINK) $(am_libinexact_la_rpath) $(libinexact_la_OBJECTS) $(libinexact_la_LIBADD) $(LIBS)
+	$(AM_V_CXXLD)$(CXXLINK) $(am_libinexact_la_rpath) $(libinexact_la_OBJECTS) $(libinexact_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)

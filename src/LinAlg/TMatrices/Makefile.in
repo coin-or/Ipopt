@@ -115,10 +115,6 @@ AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-libtmatrices_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
-	$(AM_CXXFLAGS) $(CXXFLAGS) $(libtmatrices_la_LDFLAGS) \
-	$(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -386,7 +382,8 @@ libtmatrices_la_SOURCES = \
 	IpSymTMatrix.cpp \
 	IpTripletHelper.cpp
 
-libtmatrices_la_LDFLAGS = $(LT_LDFLAGS)
+
+#libtmatrices_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../../Common \
 	-I$(srcdir)/..
@@ -437,7 +434,7 @@ clean-noinstLTLIBRARIES:
 	}
 
 libtmatrices.la: $(libtmatrices_la_OBJECTS) $(libtmatrices_la_DEPENDENCIES) $(EXTRA_libtmatrices_la_DEPENDENCIES) 
-	$(AM_V_CXXLD)$(libtmatrices_la_LINK)  $(libtmatrices_la_OBJECTS) $(libtmatrices_la_LIBADD) $(LIBS)
+	$(AM_V_CXXLD)$(CXXLINK)  $(libtmatrices_la_OBJECTS) $(libtmatrices_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)

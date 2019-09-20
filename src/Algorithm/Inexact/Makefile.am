@@ -26,7 +26,7 @@ libinexact_la_SOURCES = \
 	IpIterativePardisoSolverInterface.cpp \
 	IpIterativeSolverTerminationTester.cpp
 
-libinexact_la_LDFLAGS = $(LT_LDFLAGS)
+#libinexact_la_LDFLAGS = $(LT_LDFLAGS)
 
 AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../../Common \

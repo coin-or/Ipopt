@@ -116,10 +116,6 @@ AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-libcgpenalty_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
-	$(AM_CXXFLAGS) $(CXXFLAGS) $(libcgpenalty_la_LDFLAGS) \
-	$(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -361,7 +357,8 @@ libcgpenalty_la_SOURCES = \
 	IpCGSearchDirCalc.cpp \
 	IpPiecewisePenalty.cpp
 
-libcgpenalty_la_LDFLAGS = $(LT_LDFLAGS)
+
+#libcgpenalty_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../../Common \
 	-I$(srcdir)/../../LinAlg \
@@ -415,7 +412,7 @@ clean-noinstLTLIBRARIES:
 	}
 
 libcgpenalty.la: $(libcgpenalty_la_OBJECTS) $(libcgpenalty_la_DEPENDENCIES) $(EXTRA_libcgpenalty_la_DEPENDENCIES) 
-	$(AM_V_CXXLD)$(libcgpenalty_la_LINK)  $(libcgpenalty_la_OBJECTS) $(libcgpenalty_la_LIBADD) $(LIBS)
+	$(AM_V_CXXLD)$(CXXLINK)  $(libcgpenalty_la_OBJECTS) $(libcgpenalty_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)

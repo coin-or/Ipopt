@@ -80,7 +80,7 @@ libipoptalg_la_SOURCES = \
 	IpUserScaling.cpp \
 	IpWarmStartIterateInitializer.cpp
 
-libipoptalg_la_LDFLAGS = $(LT_LDFLAGS)
+#libipoptalg_la_LDFLAGS = $(LT_LDFLAGS)
 
 AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../Common \

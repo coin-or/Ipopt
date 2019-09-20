@@ -18,7 +18,7 @@ libtmatrices_la_SOURCES = \
 	IpSymTMatrix.cpp \
 	IpTripletHelper.cpp
 
-libtmatrices_la_LDFLAGS = $(LT_LDFLAGS)
+#libtmatrices_la_LDFLAGS = $(LT_LDFLAGS)
 
 AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../../Common \

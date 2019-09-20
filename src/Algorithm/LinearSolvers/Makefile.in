@@ -135,10 +135,6 @@ AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-liblinsolvers_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
-	$(AM_CXXFLAGS) $(CXXFLAGS) $(liblinsolvers_la_LDFLAGS) \
-	$(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -455,7 +451,8 @@ liblinsolvers_la_SOURCES = IpLinearSolversRegOp.cpp \
 	IpMc19TSymScalingMethod.cpp IpMa77SolverInterface.cpp \
 	$(am__append_1) $(am__append_2) $(am__append_3) \
 	$(am__append_4) $(am__append_5)
-liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)
+
+#liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../../Common \
 	-I$(srcdir)/../../LinAlg \
@@ -511,7 +508,7 @@ clean-noinstLTLIBRARIES:
 	}
 
 liblinsolvers.la: $(liblinsolvers_la_OBJECTS) $(liblinsolvers_la_DEPENDENCIES) $(EXTRA_liblinsolvers_la_DEPENDENCIES) 
-	$(AM_V_CXXLD)$(liblinsolvers_la_LINK)  $(liblinsolvers_la_OBJECTS) $(liblinsolvers_la_LIBADD) $(LIBS)
+	$(AM_V_CXXLD)$(CXXLINK)  $(liblinsolvers_la_OBJECTS) $(liblinsolvers_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)

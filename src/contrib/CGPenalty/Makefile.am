@@ -17,7 +17,7 @@ libcgpenalty_la_SOURCES = \
 	IpCGSearchDirCalc.cpp \
 	IpPiecewisePenalty.cpp
 
-libcgpenalty_la_LDFLAGS = $(LT_LDFLAGS)
+#libcgpenalty_la_LDFLAGS = $(LT_LDFLAGS)
 
 AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../../Common \
