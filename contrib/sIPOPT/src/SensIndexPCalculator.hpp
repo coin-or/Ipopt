@@ -11,66 +11,77 @@
 
 namespace Ipopt
 {
-  /* Forward declarations */
-  class PColumn;
+/* Forward declarations */
+class PColumn;
 
-  class IndexPCalculator : public PCalculator
-  {
-    /** This class is the implementation of the PCalculator that corresponds
-     *  to IndexSchurData. It expects to be used with a kind of IndexSchurData. */
+class IndexPCalculator: public PCalculator
+{
+   /** This class is the implementation of the PCalculator that corresponds
+    *  to IndexSchurData. It expects to be used with a kind of IndexSchurData. */
 
-  public:
+public:
 
-    IndexPCalculator(SmartPtr<SensBacksolver> backsolver,
-		     SmartPtr<SchurData> A_data);
+   IndexPCalculator(
+      SmartPtr<SensBacksolver> backsolver,
+      SmartPtr<SchurData>      A_data
+   );
 
-    virtual ~IndexPCalculator();
+   virtual ~IndexPCalculator();
 
-    /** Overloaded from PCalculator */
-    virtual bool InitializeImpl(const OptionsList& options,
-                                const std::string& prefix);
+   /** Overloaded from PCalculator */
+   virtual bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+   );
 
-    virtual bool ComputeP();
+   virtual bool ComputeP();
 
-    virtual bool GetSchurMatrix(const SmartPtr<const SchurData>& B, SmartPtr<Matrix>& S);
+   virtual bool GetSchurMatrix(
+      const SmartPtr<const SchurData>& B,
+      SmartPtr<Matrix>&                S
+   );
 
-    virtual void PrintImpl(const Journalist& jnlst,
-			   EJournalLevel level,
-			   EJournalCategory category,
-			   const std::string& name,
-			   Index indent,
-			   const std::string& prefix) const;
+   virtual void PrintImpl(
+      const Journalist&  jnlst,
+      EJournalLevel      level,
+      EJournalCategory   category,
+      const std::string& name,
+      Index              indent,
+      const std::string& prefix
+   ) const;
 
-  private:
+private:
+   /** Rows of P = Rows of KKT */
+   Index nrows_;
 
-    /** Rows of P = Rows of KKT */
-    Index nrows_;
+   /** Cols of P */
+   Index ncols_;
 
-    /** Cols of P */
-    Index ncols_;
+   std::map<Index, SmartPtr<PColumn> > cols_;
 
-    std::map< Index, SmartPtr<PColumn> > cols_;
+};
 
-  };
+/** This class provides an easy interface for PCalculators with data where columns are
+ *  not necessarily in adjacent parts of memory. */
+class PColumn: public ReferencedObject
+{
+public:
+   PColumn(
+      Number* values
+   );
 
-  class PColumn : public ReferencedObject
-  {
-    /** This class provides an easy interface for PCalculators with data where columns are
-     *  not necessarily in adjacent parts of memory. */
+   virtual ~PColumn();
 
-  public:
-    PColumn(Number* values);
+   virtual void GetSchurMatrixRows(
+      const std::vector<Index>* row_idx_B,
+      Number*                   S
+   ) const;
 
-    virtual ~PColumn();
+   virtual const Number* Values() const;
 
-    virtual void GetSchurMatrixRows(const std::vector<Index>* row_idx_B, Number* S) const;
-
-    virtual const Number* Values() const;
-
-  private:
-
-    Number* val_;
-  };
+private:
+   Number* val_;
+};
 
 }
 

@@ -14,33 +14,39 @@
 namespace Ipopt
 {
 
-  class ReducedHessianCalculator : public AlgorithmStrategyObject
-  {
-    /** This is the interface for the actual controller. It handles
-     *  Data input to the controller (measurement) and returns controls */
-  public:
-    ReducedHessianCalculator(SmartPtr<SchurData> hess_data,
-			     SmartPtr<PCalculator> pcalc);
+/** This is the interface for the actual controller.
+ *
+ *  It handles Data input to the controller (measurement) and returns controls.
+ */
+class ReducedHessianCalculator: public AlgorithmStrategyObject
+{
+public:
+   ReducedHessianCalculator(
+      SmartPtr<SchurData>   hess_data,
+      SmartPtr<PCalculator> pcalc
+   );
 
-    virtual ~ReducedHessianCalculator();
+   virtual ~ReducedHessianCalculator();
 
-    virtual bool InitializeImpl(const OptionsList& options,
-				const std::string& prefix);
+   virtual bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+   );
 
-    /* This function computes the unscaled reduced hessian matrix */
-    virtual bool ComputeReducedHessian();
+   /** This function computes the unscaled reduced hessian matrix */
+   virtual bool ComputeReducedHessian();
 
-  private:
+private:
 
-    /** Pointer to Schurdata object holding the indices for selecting the free variables */
-    SmartPtr<SchurData> hess_data_;
+   /** Pointer to Schurdata object holding the indices for selecting the free variables */
+   SmartPtr<SchurData> hess_data_;
 
-    /** Pointer to the P Calculator object that returns the reduced hessian matrix */
-    SmartPtr<PCalculator> pcalc_;
+   /** Pointer to the P Calculator object that returns the reduced hessian matrix */
+   SmartPtr<PCalculator> pcalc_;
 
-    /** True, if option rh_eigendecomp was set to yes */
-    bool compute_eigenvalues_;
-  };
+   /** True, if option rh_eigendecomp was set to yes */
+   bool compute_eigenvalues_;
+};
 
 }
 

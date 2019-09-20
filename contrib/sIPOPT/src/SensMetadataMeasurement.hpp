@@ -11,51 +11,59 @@
 #include "SensSuffixHandler.hpp"
 #include "IpAlgStrategy.hpp"
 
-
 namespace Ipopt
 {
 
-  class MetadataMeasurement : public Measurement, public SuffixHandler, public AlgorithmStrategyObject
-  {
-  public:
-    MetadataMeasurement();
+class MetadataMeasurement: public Measurement, public SuffixHandler, public AlgorithmStrategyObject
+{
+public:
+   MetadataMeasurement();
 
-    virtual ~MetadataMeasurement();
+   virtual ~MetadataMeasurement();
 
-    /* AlgorithmStrategyObject */
-    virtual bool InitializeImpl(const OptionsList& options,
-                                const std::string& prefix);
+   /* AlgorithmStrategyObject */
+   virtual bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+   );
 
-    /* measurement methods */
-    virtual std::vector<Index> GetInitialEqConstraints();
+   /* measurement methods */
+   virtual std::vector<Index> GetInitialEqConstraints();
 
-    virtual SmartPtr<DenseVector> GetMeasurement(Index measurement_number);
+   virtual SmartPtr<DenseVector> GetMeasurement(
+      Index measurement_number
+   );
 
-    virtual void SetSolution(Index measurement_number, SmartPtr<IteratesVector> sol);
+   virtual void SetSolution(
+      Index                    measurement_number,
+      SmartPtr<IteratesVector> sol
+   );
 
-    /** suffix handler methods */
+   /* suffix handler methods */
 
-    virtual std::vector<Index> GetIntegerSuffix(std::string suffix_string);
+   virtual std::vector<Index> GetIntegerSuffix(
+      std::string suffix_string
+   );
 
-  private:
+private:
 
-    /** Number of sens_indices */
-    Index n_idx_;
+   /** Number of sens_indices */
+   Index n_idx_;
 
-    /** owner space of x */
-    SmartPtr<const DenseVectorSpace> x_owner_space_;
-    /** owner space of s */
-    SmartPtr<const DenseVectorSpace> s_owner_space_;
-    /** owner space of y_c */
-    SmartPtr<const DenseVectorSpace> y_c_owner_space_;
-    /** owner space of y_d */
-    SmartPtr<const DenseVectorSpace> y_d_owner_space_;
-    /** owner space of z_L */
-    SmartPtr<const DenseVectorSpace> z_L_owner_space_;
-    /** owner space of z_U */
-    SmartPtr<const DenseVectorSpace> z_U_owner_space_;
+   /** owner space of x */
+   SmartPtr<const DenseVectorSpace> x_owner_space_;
+   /** owner space of s */
+   SmartPtr<const DenseVectorSpace> s_owner_space_;
+   /** owner space of y_c */
+   SmartPtr<const DenseVectorSpace> y_c_owner_space_;
+   /** owner space of y_d */
+   SmartPtr<const DenseVectorSpace> y_d_owner_space_;
+   /** owner space of z_L */
+   SmartPtr<const DenseVectorSpace> z_L_owner_space_;
+   /** owner space of z_U */
+   SmartPtr<const DenseVectorSpace> z_U_owner_space_;
 
-  };
+};
 
 }
 

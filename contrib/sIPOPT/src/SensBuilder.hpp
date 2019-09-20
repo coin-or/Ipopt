@@ -7,47 +7,46 @@
 #ifndef __ASSCHURBUILDER_HPP__
 #define __ASSCHURBUILDER_HPP__
 
-
 #include "IpReferenced.hpp"
 #include "SensAlgorithm.hpp"
 #include "IpPDSystemSolver.hpp"
 #include "SensUtils.hpp"
 #include "SensReducedHessianCalculator.hpp"
 
-
 namespace Ipopt
 {
-  DECLARE_STD_SIPOPT_EXCEPTION(SENS_BUILDER_ERROR);
+DECLARE_STD_SIPOPT_EXCEPTION(SENS_BUILDER_ERROR);
 
-  class SensBuilder : public ReferencedObject
-  {
-    /** This class sets up everything necessary and
-     *  builds the P matrix which is an intermediate step
-     *  in calculating the schur matrix. */
-  public:
-    SensBuilder();
+class SensBuilder: public ReferencedObject
+{
+   /** This class sets up everything necessary and
+    *  builds the P matrix which is an intermediate step
+    *  in calculating the schur matrix. */
+public:
+   SensBuilder();
 
-    ~SensBuilder();
+   ~SensBuilder();
 
-    SmartPtr<SensAlgorithm> BuildSensAlg(const Journalist& jnlst,
-					 const OptionsList& options,
-					 const std::string& prefix,
-					 IpoptNLP& ip_nlp,
-					 IpoptData& ip_data,
-					 IpoptCalculatedQuantities& ip_cq,
-					 PDSystemSolver& pd_solver);
+   SmartPtr<SensAlgorithm> BuildSensAlg(
+      const Journalist&          jnlst,
+      const OptionsList&         options,
+      const std::string&         prefix,
+      IpoptNLP&                  ip_nlp,
+      IpoptData&                 ip_data,
+      IpoptCalculatedQuantities& ip_cq,
+      PDSystemSolver&            pd_solver
+   );
 
-    SmartPtr<ReducedHessianCalculator> BuildRedHessCalc(const Journalist& jnlst,
-							const OptionsList& options,
-							const std::string& prefix,
-							IpoptNLP& ip_nlp,
-							IpoptData& ip_data,
-							IpoptCalculatedQuantities& ip_cq,
-							PDSystemSolver& pd_solver);
-
-  private:
-
-  };
+   SmartPtr<ReducedHessianCalculator> BuildRedHessCalc(
+      const Journalist&          jnlst,
+      const OptionsList&         options,
+      const std::string&         prefix,
+      IpoptNLP&                  ip_nlp,
+      IpoptData&                 ip_data,
+      IpoptCalculatedQuantities& ip_cq,
+      PDSystemSolver&            pd_solver
+   );
+};
 
 }
 

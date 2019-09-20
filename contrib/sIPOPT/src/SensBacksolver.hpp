@@ -4,7 +4,6 @@
 //
 // Date   : 2009-05-14
 
-
 #ifndef __ASASBACKSOLVER_HPP__
 #define __ASASBACKSOLVER_HPP__
 
@@ -14,23 +13,23 @@
 namespace Ipopt
 {
 
-  class SIPOPTLIB_EXPORT SensBacksolver : public AlgorithmStrategyObject
-  {
+class SIPOPTLIB_EXPORT SensBacksolver: public AlgorithmStrategyObject
+{
 
-    /** This class is the interface to all backsolvers that may
-     *  be used for the sIPOPT. */
-  public:
-    SensBacksolver()
-    {
-    }
+   /** This class is the interface to all backsolvers that may
+    *  be used for the sIPOPT. */
+public:
+   SensBacksolver()
+   { }
 
-    virtual ~SensBacksolver()
-    {
-    }
+   virtual ~SensBacksolver()
+   { }
 
-    virtual bool Solve(SmartPtr<IteratesVector> delta_lhs, SmartPtr<const IteratesVector> delta_rhs)=0;
-
-  };
+   virtual bool Solve(
+      SmartPtr<IteratesVector>       delta_lhs,
+      SmartPtr<const IteratesVector> delta_rhs
+   ) = 0;
+};
 
 }
 

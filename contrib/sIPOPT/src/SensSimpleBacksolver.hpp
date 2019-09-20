@@ -10,33 +10,40 @@
 #ifndef __ASSIMPLEBACKSOLVER_HPP__
 #define __ASSIMPLEBACKSOLVER_HPP__
 
-
 #include "IpPDSystemSolver.hpp"
 #include "SensBacksolver.hpp"
 
-namespace Ipopt {
-  class SIPOPTLIB_EXPORT SimpleBacksolver : public SensBacksolver
-  {
-  public:
+namespace Ipopt
+{
 
-    SimpleBacksolver(SmartPtr<PDSystemSolver> pd_solver);
+class SIPOPTLIB_EXPORT SimpleBacksolver: public SensBacksolver
+{
+public:
 
-    ~SimpleBacksolver()
-    {}
+   SimpleBacksolver(
+      SmartPtr<PDSystemSolver> pd_solver
+   );
 
-    bool InitializeImpl(const OptionsList& options,
-			const std::string& prefix);
+   ~SimpleBacksolver()
+   { }
 
-    bool Solve(SmartPtr<IteratesVector> delta_lhs, SmartPtr<const IteratesVector> delta_rhs);
+   bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+   );
 
+   bool Solve(
+      SmartPtr<IteratesVector>       delta_lhs,
+      SmartPtr<const IteratesVector> delta_rhs
+   );
 
-  private:
+private:
+   SimpleBacksolver();
 
-    SimpleBacksolver();
+   SmartPtr<PDSystemSolver> pd_solver_;
+   bool allow_inexact_;
+};
 
-    SmartPtr<PDSystemSolver> pd_solver_;
-    bool allow_inexact_;
-  };
 }
 
 #endif

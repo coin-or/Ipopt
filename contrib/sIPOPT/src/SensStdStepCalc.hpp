@@ -14,41 +14,54 @@
 
 #include <vector>
 
-
-
 namespace Ipopt
 {
 
-  class StdStepCalculator : public SensitivityStepCalculator
-  {
-  public:
-    StdStepCalculator(SmartPtr<SchurData> ift_data,
-		      SmartPtr<SensBacksolver> backsolver);
+class StdStepCalculator: public SensitivityStepCalculator
+{
+public:
+   StdStepCalculator(
+      SmartPtr<SchurData>      ift_data,
+      SmartPtr<SensBacksolver> backsolver
+   );
 
-    virtual ~StdStepCalculator();
+   virtual ~StdStepCalculator();
 
-    virtual bool InitializeImpl(const OptionsList& options,
-				const std::string& prefix);
+   virtual bool InitializeImpl(
+      const OptionsList& options,
+      const std::string& prefix
+   );
 
-    /** This is the main algorithmic function of this class; It calculates
-     *  a step using its SchurDriver, checks bounds, and returns it */
-    virtual bool Step(DenseVector& delta_u, IteratesVector& sol);
+   /** This is the main algorithmic function of this class.
+    *
+    * It calculates a step using its SchurDriver, checks bounds, and returns it
+    */
+   virtual bool Step(
+      DenseVector&    delta_u,
+      IteratesVector& sol
+   );
 
-    bool BoundCheck(IteratesVector& sol,
-		    std::vector<Index>& x_bound_violations_idx,
-		    std::vector<Number>& x_bound_violations_du);
+   bool BoundCheck(
+      IteratesVector&      sol,
+      std::vector<Index>&  x_bound_violations_idx,
+      std::vector<Number>& x_bound_violations_du
+   );
 
-    /** return the sensitivity vector */
-    virtual SmartPtr<IteratesVector> GetSensitivityVector(void) { return SensitivityVector ; } ;
+   /** return the sensitivity vector */
+   virtual SmartPtr<IteratesVector> GetSensitivityVector(void)
+   {
+      return SensitivityVector;
+   }
 
-  private:
-    SmartPtr<SchurData> ift_data_;
-    SmartPtr<SensBacksolver> backsolver_;
-    Number bound_eps_;
-    bool kkt_residuals_;
-    
-    SmartPtr<IteratesVector> SensitivityVector ;
-  };
+private:
+   SmartPtr<SchurData> ift_data_;
+   SmartPtr<SensBacksolver> backsolver_;
+   Number bound_eps_;
+   bool kkt_residuals_;
+
+   SmartPtr<IteratesVector> SensitivityVector;
+};
+
 }
 
 #endif

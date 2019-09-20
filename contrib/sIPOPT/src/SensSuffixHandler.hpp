@@ -4,7 +4,6 @@
 //
 // Date   : 2009-08-01
 
-
 #ifndef __SENS_ASSUFFIXHANDLER_HPP__
 #define __SENS_ASSUFFIXHANDLER_HPP__
 
@@ -15,23 +14,23 @@
 namespace Ipopt
 {
 
-  /** This class is the interface for all classes that can return indices.
-   *  The implementation for Ampl is done in the MetadataMeasurement class*/
+/** This class is the interface for all classes that can return indices.
+ *
+ *  The implementation for Ampl is done in the MetadataMeasurement class.
+ */
+class SuffixHandler: public ReferencedObject
+{
+public:
+   SuffixHandler()
+   { }
 
-  class SuffixHandler : public ReferencedObject
-  {
-  public:
-    SuffixHandler()
-    {
-    }
+   virtual ~SuffixHandler()
+   { }
 
-    virtual ~SuffixHandler()
-    {
-    }
-
-    virtual std::vector<Index> GetIntegerSuffix(std::string suffix_string) =0;
-
-  };
+   virtual std::vector<Index> GetIntegerSuffix(
+      std::string suffix_string
+   ) = 0;
+};
 
 }
 

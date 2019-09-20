@@ -4,7 +4,6 @@
 //
 // Date   : 2009-05-14
 
-
 #ifndef __SENSCUTILS_HPP__
 #define __SENSCUTILS_HPP__
 
@@ -17,21 +16,34 @@
 namespace Ipopt
 {
 
-  /** This header file provides some definitions used throughout the program. */
+/* This header file provides some definitions used throughout the program. */
 
+enum SensAlgorithmExitStatus
+{
+   SOLVE_SUCCESS,
+   FATAL_ERROR
+};
 
-  enum SensAlgorithmExitStatus{
-    SOLVE_SUCCESS,
-    FATAL_ERROR
-  };
+SIPOPTLIB_EXPORT Index AsIndexMax(
+   Index        length,
+   const Index* x,
+   Index        Incr
+);
 
-  SIPOPTLIB_EXPORT Index AsIndexMax(Index length, const Index* x, Index Incr);
+SIPOPTLIB_EXPORT Index AsIndexSum(
+   Index        length,
+   const Index* x,
+   Index        Incr
+);
 
-  SIPOPTLIB_EXPORT Index AsIndexSum(Index length, const Index* x, Index Incr);
+SIPOPTLIB_EXPORT void append_Index(
+   std::string& str,
+   Index        idx
+);
 
-  SIPOPTLIB_EXPORT void append_Index(std::string& str, Index idx);
-
-  SIPOPTLIB_EXPORT SolverReturn AppReturn2SolverReturn(ApplicationReturnStatus ipopt_retval);
+SIPOPTLIB_EXPORT SolverReturn AppReturn2SolverReturn(
+   ApplicationReturnStatus ipopt_retval
+);
 }
 
 // same as DECLARE_STD_EXCEPTION, but using SIPOPTLIB_EXPORT instead of IPOPTLIB_EXPORT
