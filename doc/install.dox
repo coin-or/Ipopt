@@ -563,7 +563,7 @@ The `ipoptr` interface can be build after \Ipopt has been
 build and installed. In the best case, it is sufficient to execute the
 following command in R:
 \verbatim
-install.packages('$IPOPTDIR/build/Ipopt/contrib/RInterface', repos=NULL, type='source')
+install.packages('$IPOPTDIR/build/contrib/RInterface', repos=NULL, type='source')
 \endverbatim
 
 After installation of the `ipoptr` package, it should be possible to
