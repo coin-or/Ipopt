@@ -137,7 +137,6 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includeipoptdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
-libipopt_la_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 @BUILD_JAVA_TRUE@am__objects_1 = IpStdJInterface.lo
 am_libipopt_la_OBJECTS = IpInterfacesRegOp.lo IpIpoptApplication.lo \
 	IpSolveStatistics.lo IpStdCInterface.lo IpStdInterfaceTNLP.lo \
@@ -425,6 +424,7 @@ libipopt_la_SOURCES = IpInterfacesRegOp.cpp IpIpoptApplication.cpp \
 @BUILD_JAVA_TRUE@BUILT_SOURCES = org_coinor_Ipopt.h
 @BUILD_JAVA_TRUE@CLEANFILES = org.coinor.ipopt.jar org/coinor/Ipopt.class org_coinor_Ipopt.h
 libipopt_la_LIBADD = $(IPALLLIBS) $(IPOPTLIB_LFLAGS)
+libipopt_la_DEPENDENCIES = $(IPALLLIBS)
 libipopt_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -DIPOPT_BUILD \
 	-I$(srcdir)/../Common \

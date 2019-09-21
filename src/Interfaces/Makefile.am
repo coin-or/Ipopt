@@ -56,6 +56,8 @@ uninstall-local :
 endif
 
 libipopt_la_LIBADD = $(IPALLLIBS) $(IPOPTLIB_LFLAGS)
+# probably we need to make this explicit because we set use a variable $(IPALLLIBS) in LIBADD
+libipopt_la_DEPENDENCIES = $(IPALLLIBS)
 
 libipopt_la_LDFLAGS = $(LT_LDFLAGS)
 
