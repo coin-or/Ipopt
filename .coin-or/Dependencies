@@ -1,4 +1,4 @@
-ThirdParty/ASL     https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL
-ThirdParty/HSL     https://projects.coin-or.org/svn/BuildTools/ThirdParty/HSL
-ThirdParty/Metis   https://projects.coin-or.org/svn/BuildTools/ThirdParty/Metis
-ThirdParty/Mumps   https://projects.coin-or.org/svn/BuildTools/ThirdParty/Mumps
+ThirdParty/ASL     https://github.com/coin-or-tools/ThirdParty-ASL   stable/2.0
+ThirdParty/HSL     https://github.com/coin-or-tools/ThirdParty-HSL   stable/2.0
+ThirdParty/Metis   https://github.com/coin-or-tools/ThirdParty-Metis stable/2.0
+ThirdParty/Mumps   https://github.com/coin-or-tools/ThirdParty-Mumps stable/2.0
