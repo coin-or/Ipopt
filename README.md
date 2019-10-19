@@ -52,38 +52,45 @@ If you want to learn more about Ipopt, you can find references in the [bibliogra
 For information on projects that use Ipopt, refer to the [Success Stories page](https://github.com/coin-or/Ipopt/wiki/SuccessStories).
 
 
-Download
---------
+Getting Started
+---------------
 
-**[Download Ipopt source as tarballs.](http://www.coin-or.org/download/source/Ipopt)**
+On sufficiently prepared systems, a quick way to build and install Ipopt
+is to get the coinbrew script from https://coin-or.github.io/coinbrew/
+and running
 
-You can also obtain the Ipopt code via Git.
-Please refer to the [documentation](https://coin-or.github.io/Ipopt).
+    /path/to/coinbrew fetch Ipopt
+    /path/to/coinbrew build Ipopt --prefix=/dir/to/install --test
+    /path/to/coinbrew install Ipopt
 
-Also still available is the no longer maintained older [Fortran version](https://github.com/coin-or/Ipopt/tree/stable/2.3).
+The coinbrew script will take care of building and installing the
+dependencies ASL, Metis, and Mumps before building \Ipopt.
 
-Additionally, **[JuliaOpt provides Ipopt binaries](https://github.com/JuliaOpt/IpoptBuilder/releases)**,
-**[AMPL provides binaries](http://ampl.com/products/solvers/open-source/#ipopt)** for using Ipopt through AMPL,
-and the **[Pardiso project provides binaries](https://pardiso-project.org/index.html#binaries)** for using Ipopt with Pardiso through Matlab.
+More details on using coinbrew can be found at the instructions on
+[Getting Started with the COIN-OR Optimization Suite](https://coin-or.github.io/user_introduction).
 
+If using coinbrew is not sufficient, e.g., because other linear solvers
+should be used by \Ipopt, the
+[installation instructions in the Ipopt documentation](https://coin-or.github.io/Ipopt/INSTALL.html)
+should be studied.
 
-Documentation
--------------
+Some precompiled binaries of Ipopt are also available:
 
- * **[Ipopt Documentation](https://coin-or.github.io/Ipopt/)** with installation instructions, options reference, and more
- * **[Ipopt Wiki](https://github.com/coin-or/Ipopt/wiki)** with more compilation hints, current issues, and hints and tricks
- * **[Mailing list archive](http://list.coin-or.org/pipermail/ipopt/)**
- * [Changelog](ChangeLog)
- * [short Ipopt tutorial](http://drops.dagstuhl.de/volltexte/2009/2089/pdf/09061.WaechterAndreas.Paper.2089.pdf)
+- **[JuliaOpt provides Ipopt binaries](https://github.com/JuliaOpt/IpoptBuilder/releases)**
+- **[AMPL provides binaries](http://ampl.com/products/solvers/open-source/#ipopt)** for using Ipopt through AMPL
+- **[Pardiso project provides binaries](https://pardiso-project.org/index.html#binaries)** for using Ipopt with Pardiso through Matlab
 
 
 Getting Help
 ------------
 
- * **[Mailing list](http://list.coin-or.org/mailman/listinfo/ipopt)**: subscribe to get notifications about updates and to post questions and comments regarding Ipopt
+ * **[Ipopt Documentation](https://coin-or.github.io/Ipopt/)** with installation instructions, options reference, and more
  * **[Issue tracking system](https://github.com/coin-or/Ipopt/issues/)**: If you believe you found a **bug** in the code, please use the issue tracking system.
    Please include as much information as possible, and if possible some (ideally simple) example code so that we can reproduce the error.
-
+ * **[Mailing list](http://list.coin-or.org/mailman/listinfo/ipopt)**: subscribe to get notifications about updates and to post questions and comments regarding Ipopt
+ * **[Mailing list archive](http://list.coin-or.org/pipermail/ipopt/)**
+ * **[Ipopt Wiki](https://github.com/coin-or/Ipopt/wiki)** with hints and tricks
+ * [short Ipopt tutorial](http://drops.dagstuhl.de/volltexte/2009/2089/pdf/09061.WaechterAndreas.Paper.2089.pdf)
 
 Please Cite Us
 --------------
