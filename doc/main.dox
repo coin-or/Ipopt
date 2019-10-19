@@ -78,10 +78,10 @@ used \Ipopt, and to cite the publication \cite WaecBieg06:mp.
 Writing high-quality numerical software takes a lot of time and effort,
 and does usually not translate into a large number of publications,
 therefore we believe this request is only fair :).
-<!-- TODO bring back   We also have space at
-the \Ipopt project home page where we list publications,
+We also have space in the [\Ipopt wiki](https://github.com/coin-or/Ipopt/wiki)
+where we list publications,
 projects, etc., in which \Ipopt has been used. We would be
-very happy to hear about your experiences. -->
+very happy to hear about your experiences.
 
 \subsection PREREQUISITES Prerequisites
 
@@ -310,13 +310,12 @@ maintained by other people, among them are:
 
 \subsection MOREINFO More Information and Contributions
 
-More and up-to-date information can be found at the \Ipopt
+An issue tracking system and a wiki can be found at the \Ipopt
 homepage,
 
 https://github.com/coin-or/Ipopt.
 
-Here, you can find FAQs, some (hopefully useful) hints, an issue tracking
-system, etc. <!--TODO The website is managed with Wiki, which means that every
+<!--TODO The website is managed with Wiki, which means that every
 user can edit the webpages from the regular web browser. **In
 particular, we encourage \Ipopt users to share their
 experiences and usage hints on the "Success Stories" and "Hints and

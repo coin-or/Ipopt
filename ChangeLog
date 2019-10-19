@@ -2,7 +2,7 @@ Here we list changes of Ipopt since the release of version 3.0.0.
 More detailed information about incremental changes can be found in the
 commit history.
 
-in preparation: 3.13
+2019-10-19: 3.13.0
         This major release comes with a larger renovation of the build
         system and a changed directory structure (eliminated top directory),
         which is the result of a long and still on-going effort to use
