@@ -37,7 +37,7 @@ The previously released [pre-3.0 Fortran version](https://github.com/coin-or/Ipo
 
 The Ipopt distribution can be used to generate a library that can be linked to one's own C++, C, Fortran, or Java code, as well as a solver executable for the [AMPL](http://www.ampl.com) modeling environment.
 The package includes an interface to the [R](http://www.r-project.org/) programming environment.
-IPOPT can be used on Linux/UNIX, Mac OS X and Windows platforms.
+IPOPT can be used on Linux/UNIX, Mac OS X, and Windows platforms.
 
 As open source software, the source code for Ipopt is provided without charge.
 You are free to use it, also for commercial purposes.
@@ -58,7 +58,7 @@ Download
 **[Download Ipopt source as tarballs.](http://www.coin-or.org/download/source/Ipopt)**
 
 You can also obtain the Ipopt code via Git.
-Please refer to the [documentation](https://coin-or.github.io/Ipopt)  (for Ipopt 3.13 beta, use [this link](http://www.zib.de/vigerske/ipopt3.13)).
+Please refer to the [documentation](https://coin-or.github.io/Ipopt).
 
 Also still available is the no longer maintained older [Fortran version](https://github.com/coin-or/Ipopt/tree/stable/2.3).
 
@@ -70,7 +70,7 @@ and the **[Pardiso project provides binaries](https://pardiso-project.org/index.
 Documentation
 -------------
 
- * **[Ipopt Documentation](https://coin-or.github.io/Ipopt/)** with installation instructions, options reference, and more (for Ipopt 3.13 beta, use [this link](http://www.zib.de/vigerske/ipopt3.13))
+ * **[Ipopt Documentation](https://coin-or.github.io/Ipopt/)** with installation instructions, options reference, and more
  * **[Ipopt Wiki](https://github.com/coin-or/Ipopt/wiki)** with more compilation hints, current issues, and hints and tricks
  * **[Mailing list archive](http://list.coin-or.org/pipermail/ipopt/)**
  * [Changelog](ChangeLog)
