@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['s_5f',['S_',['../classIpopt_1_1DenseGenSchurDriver.html#aeca98fedfc4fff1c34a4275085bc43e6',1,'Ipopt::DenseGenSchurDriver::S_()'],['../classIpopt_1_1LimMemQuasiNewtonUpdater.html#a2ebe9543568ffdbe356e98274b2fc3af',1,'Ipopt::LimMemQuasiNewtonUpdater::S_()']]],
+  ['s_5f',['S_',['../classIpopt_1_1LimMemQuasiNewtonUpdater.html#a2ebe9543568ffdbe356e98274b2fc3af',1,'Ipopt::LimMemQuasiNewtonUpdater::S_()'],['../classIpopt_1_1DenseGenSchurDriver.html#aeca98fedfc4fff1c34a4275085bc43e6',1,'Ipopt::DenseGenSchurDriver::S_()']]],
   ['s_5fmax_5f',['s_max_',['../classIpopt_1_1IpoptCalculatedQuantities.html#a7f0fc5bcfa547030195c4aaf693a4b37',1,'Ipopt::IpoptCalculatedQuantities']]],
   ['s_5fold_5f',['S_old_',['../classIpopt_1_1LimMemQuasiNewtonUpdater.html#ae39f3dcffe0149d85a578ecea3713ada',1,'Ipopt::LimMemQuasiNewtonUpdater']]],
   ['s_5fowner_5fspace_5f',['s_owner_space_',['../classIpopt_1_1MetadataMeasurement.html#a8ae47934da908ced873fa54854c382a0',1,'Ipopt::MetadataMeasurement']]],
@@ -34,7 +34,7 @@ var searchData=
   ['search_5fdir_5fcalculator_5f',['search_dir_calculator_',['../classIpopt_1_1IpoptAlgorithm.html#a13da10f88b6a7e77af8d1ebae80dfd45',1,'Ipopt::IpoptAlgorithm']]],
   ['search_5fdirection_5ftoo_5fsmall',['SEARCH_DIRECTION_TOO_SMALL',['../classorg_1_1coinor_1_1Ipopt.html#a71cca49bd302b1242449eb3b393d348b',1,'org::coinor::Ipopt']]],
   ['searchdircalc_5f',['SearchDirCalc_',['../classIpopt_1_1AlgorithmBuilder.html#a8f0d0f22e70d38806921299599ee759d',1,'Ipopt::AlgorithmBuilder']]],
-  ['sens_5fsol_5f',['sens_sol_',['../classIpopt_1_1SensAmplTNLP.html#aaf2972e098627e2a306d9f84ebba5a76',1,'Ipopt::SensAmplTNLP']]],
+  ['sens_5fsol_5f',['sens_sol_',['../classIpopt_1_1SensAmplTNLP.html#ae6013a5a3b7345f98dda99ce2c83f766',1,'Ipopt::SensAmplTNLP']]],
   ['sens_5fstep_5fcalc_5f',['sens_step_calc_',['../classIpopt_1_1SensAlgorithm.html#a1ddb235c0b1b52dc232776e930c9432a',1,'Ipopt::SensAlgorithm']]],
   ['sensitivitym_5fl',['SensitivityM_L',['../classIpopt_1_1SensApplication.html#a33b7a5cb8b438c4284ade6185bc157a1',1,'Ipopt::SensApplication']]],
   ['sensitivitym_5fl_5f',['SensitivityM_L_',['../classIpopt_1_1SensAlgorithm.html#a219ac52c13687d66c18fb2bb4a50321f',1,'Ipopt::SensAlgorithm']]],
@@ -78,7 +78,6 @@ var searchData=
   ['solve_5fmin',['solve_min',['../structma97__control__d.html#a68d91c62f3fffe461f47c6cbe2a027e8',1,'ma97_control_d']]],
   ['solve_5fsucceeded',['SOLVE_SUCCEEDED',['../classorg_1_1coinor_1_1Ipopt.html#a06e22b2ef0b1d1bf4d2d7ff49c228404',1,'org::coinor::Ipopt']]],
   ['solver_5finterface_5f',['solver_interface_',['../classIpopt_1_1GenAugSystemSolver.html#ada2e013075cc247ea2aa9fe2f4da89b6',1,'Ipopt::GenAugSystemSolver::solver_interface_()'],['../classIpopt_1_1TSymLinearSolver.html#a67b345f873df0a7037e9a9e0ec349aa0',1,'Ipopt::TSymLinearSolver::solver_interface_()']]],
-  ['sqrt2_5f',['sqrt2_',['../classMittelmannParaCntrl5__1_1_1ProblemSpecs.html#af9fa6ce5c772ed834be8dca14008ce3f',1,'MittelmannParaCntrl5_1::ProblemSpecs::sqrt2_()'],['../classMittelmannParaCntrl5__try_1_1ProblemSpecs.html#adfd3c0303f0cc4d6ece5135f76b7dc6b',1,'MittelmannParaCntrl5_try::ProblemSpecs::sqrt2_()']]],
   ['stale_5f',['stale_',['../classIpopt_1_1DependentResult.html#a65cb6be9d013f4427f511ed3fa530571',1,'Ipopt::DependentResult']]],
   ['start_5fcalled_5f',['start_called_',['../classIpopt_1_1TimedTask.html#abd5082a743c96246fd1e70c5ca65f4d9',1,'Ipopt::TimedTask']]],
   ['start_5fcputime_5f',['start_cputime_',['../classIpopt_1_1TimedTask.html#abdf4fa034d8f40b7707de8811cbed079',1,'Ipopt::TimedTask']]],

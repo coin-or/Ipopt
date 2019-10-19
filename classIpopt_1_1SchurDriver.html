@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">trunk</span-->
+   &#160;<!--span id="projectnumber">3.13.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -106,6 +106,9 @@ $(document).ready(function(){initNavTree('classIpopt_1_1SchurDriver.html','');})
 </div><!--header-->
 <div class="contents">
 
+<p>This class is the interface for any class that deals with the Schur matrix from the point when it is constructed by the <a class="el" href="classIpopt_1_1PCalculator.html" title="This class is the interface for implementations of any class that calculates the matrix  of the follo...">PCalculator</a> to the solution against one vector.  
+ <a href="classIpopt_1_1SchurDriver.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for Ipopt::SchurDriver:</div>
@@ -123,15 +126,14 @@ $(document).ready(function(){initNavTree('classIpopt_1_1SchurDriver.html','');})
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ac94decb4b998f52d597c351231967726"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SchurDriver.html#ac94decb4b998f52d597c351231967726">SchurDriver</a> (<a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1PCalculator.html">PCalculator</a> &gt; <a class="el" href="classIpopt_1_1SchurDriver.html#aaed78f3468b0afda5256e7de59242364">pcalc</a>, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1SchurData.html">SchurData</a> &gt; <a class="el" href="classIpopt_1_1SchurDriver.html#ac80b7bce84312beb0c65647a21e844d8">data_B</a>)</td></tr>
-<tr class="memdesc:ac94decb4b998f52d597c351231967726"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class is the interface for any class that deals with the Schur matrix from the point when it is constructed by the <a class="el" href="classIpopt_1_1PCalculator.html">PCalculator</a> to the solution against one vector.  <a href="#ac94decb4b998f52d597c351231967726">More...</a><br /></td></tr>
 <tr class="separator:ac94decb4b998f52d597c351231967726"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a764813e3681fe97d359a7f5be2e8cb11"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SchurDriver.html#a764813e3681fe97d359a7f5be2e8cb11">~SchurDriver</a> ()</td></tr>
 <tr class="separator:a764813e3681fe97d359a7f5be2e8cb11"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ca116868434ad0236960b6e95111641"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SchurDriver.html#a2ca116868434ad0236960b6e95111641">InitializeImpl</a> (const <a class="el" href="classIpopt_1_1OptionsList.html">OptionsList</a> &amp;options, const std::string &amp;prefix)</td></tr>
-<tr class="memdesc:a2ca116868434ad0236960b6e95111641"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overloaded from <a class="el" href="classIpopt_1_1AlgorithmStrategyObject.html" title="This is the base class for all algorithm strategy objects. ">AlgorithmStrategyObject</a>.  <a href="#a2ca116868434ad0236960b6e95111641">More...</a><br /></td></tr>
-<tr class="separator:a2ca116868434ad0236960b6e95111641"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0719399a2e261c63d776a3b3f9f87c6"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SchurDriver.html#ae0719399a2e261c63d776a3b3f9f87c6">InitializeImpl</a> (const <a class="el" href="classIpopt_1_1OptionsList.html">OptionsList</a> &amp;, const std::string &amp;)</td></tr>
+<tr class="memdesc:ae0719399a2e261c63d776a3b3f9f87c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of the initialization method that has to be overloaded by for each derived class.  <a href="#ae0719399a2e261c63d776a3b3f9f87c6">More...</a><br /></td></tr>
+<tr class="separator:ae0719399a2e261c63d776a3b3f9f87c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65a343ccc10b6710a132a5614e3de518"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1SchurData.html">SchurData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SchurDriver.html#a65a343ccc10b6710a132a5614e3de518">data_A</a> () const</td></tr>
-<tr class="memdesc:a65a343ccc10b6710a132a5614e3de518"><td class="mdescLeft">&#160;</td><td class="mdescRight">Const accessor methods to the <a class="el" href="classIpopt_1_1SchurData.html">SchurData</a> for for the derived classes.  <a href="#a65a343ccc10b6710a132a5614e3de518">More...</a><br /></td></tr>
+<tr class="memdesc:a65a343ccc10b6710a132a5614e3de518"><td class="mdescLeft">&#160;</td><td class="mdescRight">Const accessor methods to the <a class="el" href="classIpopt_1_1SchurData.html" title="This interface serves as a reference point for multiple classes that need to use SchurData (PCalculat...">SchurData</a> for for the derived classes.  <a href="#a65a343ccc10b6710a132a5614e3de518">More...</a><br /></td></tr>
 <tr class="separator:a65a343ccc10b6710a132a5614e3de518"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac80b7bce84312beb0c65647a21e844d8"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1SchurData.html">SchurData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SchurDriver.html#ac80b7bce84312beb0c65647a21e844d8">data_B</a> () const</td></tr>
 <tr class="separator:ac80b7bce84312beb0c65647a21e844d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -144,7 +146,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a27a1feaaa9f04bed837622912d56cde5"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1PCalculator.html">PCalculator</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SchurDriver.html#a27a1feaaa9f04bed837622912d56cde5">pcalc_nonconst</a> ()</td></tr>
 <tr class="separator:a27a1feaaa9f04bed837622912d56cde5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c8b4f296775a17f7529fe32a33a6f1b"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SchurDriver.html#a6c8b4f296775a17f7529fe32a33a6f1b">SchurBuild</a> ()=0</td></tr>
-<tr class="memdesc:a6c8b4f296775a17f7529fe32a33a6f1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the Data for which this SchurMatrix will be built.  <a href="#a6c8b4f296775a17f7529fe32a33a6f1b">More...</a><br /></td></tr>
+<tr class="memdesc:a6c8b4f296775a17f7529fe32a33a6f1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the SchurMatrix from B and P.  <a href="#a6c8b4f296775a17f7529fe32a33a6f1b">More...</a><br /></td></tr>
 <tr class="separator:a6c8b4f296775a17f7529fe32a33a6f1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acbef88ed3e6682c75ab9b5e19ed99914"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SchurDriver.html#acbef88ed3e6682c75ab9b5e19ed99914">SchurFactorize</a> ()=0</td></tr>
 <tr class="memdesc:acbef88ed3e6682c75ab9b5e19ed99914"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls the factorization routine for the SchurMatrix.  <a href="#acbef88ed3e6682c75ab9b5e19ed99914">More...</a><br /></td></tr>
@@ -180,7 +182,6 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:aa592c860dbd00818a9d643f5eb55d2ff"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SchurDriver.html#aa592c860dbd00818a9d643f5eb55d2ff">SchurDriver</a> ()</td></tr>
-<tr class="memdesc:aa592c860dbd00818a9d643f5eb55d2ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a backsolve on S and K; calls the latter with sol=K^(-1)*r_s=0 virtual bool SchurSolve(SmartPtr&lt;IteratesVector&gt; lhs, SmartPtr&lt;const IteratesVector&gt; rhs, SmartPtr&lt;Vector&gt; delta_u) =0;.  <a href="#aa592c860dbd00818a9d643f5eb55d2ff">More...</a><br /></td></tr>
 <tr class="separator:aa592c860dbd00818a9d643f5eb55d2ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
@@ -205,8 +206,14 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a5f6310084b90871ee4eec3d89bb407ee inherit pro_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="SensSchurDriver_8hpp_source.html#l00018">18</a> of file <a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>.</p>
+<div class="textblock"><p>This class is the interface for any class that deals with the Schur matrix from the point when it is constructed by the <a class="el" href="classIpopt_1_1PCalculator.html" title="This class is the interface for implementations of any class that calculates the matrix  of the follo...">PCalculator</a> to the solution against one vector. </p>
+<p>Specific implementations may also incorporate the treatment of adding rows/cols (like QPSchur).</p>
+<p>The computations done by this class are</p><ol type="1">
+<li>Solve \(S \Delta\nu = r_s\)</li>
+<li>Solve \(K\Delta s = ... - \Delta nu\) (really?) </li>
+</ol>
+
+<p class="definition">Definition at line <a class="el" href="SensSchurDriver_8hpp_source.html#l00029">29</a> of file <a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac94decb4b998f52d597c351231967726"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac94decb4b998f52d597c351231967726">&#9670;&nbsp;</a></span>SchurDriver() <span class="overload">[1/2]</span></h2>
@@ -242,14 +249,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>This class is the interface for any class that deals with the Schur matrix from the point when it is constructed by the <a class="el" href="classIpopt_1_1PCalculator.html">PCalculator</a> to the solution against one vector. </p>
-<p>Specific implementations may also incorporate the treatment of adding rows/cols (like QPSchur).</p>
-<p>The computations done by this class are</p><ol type="1">
-<li>Solve \(S \Delta\nu = r_s\)</li>
-<li>Solve \(K\Delta s = ... - \Delta nu\) (really?) </li>
-</ol>
-
-<p class="definition">Definition at line <a class="el" href="SensSchurDriver_8hpp_source.html#l00031">31</a> of file <a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensSchurDriver_8hpp_source.html#l00033">33</a> of file <a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>.</p>
 
 </div>
 </div>
@@ -276,7 +276,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensSchurDriver_8hpp_source.html#l00039">39</a> of file <a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensSchurDriver_8hpp_source.html#l00041">41</a> of file <a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>.</p>
 
 </div>
 </div>
@@ -303,15 +303,13 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Performs a backsolve on S and K; calls the latter with sol=K^(-1)*r_s=0 virtual bool SchurSolve(SmartPtr&lt;IteratesVector&gt; lhs, SmartPtr&lt;const IteratesVector&gt; rhs, SmartPtr&lt;Vector&gt; delta_u) =0;. </p>
-
-<p class="definition">Definition at line <a class="el" href="SensSchurDriver_8hpp_source.html#l00102">102</a> of file <a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensSchurDriver_8hpp_source.html#l00108">108</a> of file <a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a2ca116868434ad0236960b6e95111641"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2ca116868434ad0236960b6e95111641">&#9670;&nbsp;</a></span>InitializeImpl()</h2>
+<a id="ae0719399a2e261c63d776a3b3f9f87c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0719399a2e261c63d776a3b3f9f87c6">&#9670;&nbsp;</a></span>InitializeImpl()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -344,7 +342,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Overloaded from <a class="el" href="classIpopt_1_1AlgorithmStrategyObject.html" title="This is the base class for all algorithm strategy objects. ">AlgorithmStrategyObject</a>. </p>
+<p>Implementation of the initialization method that has to be overloaded by for each derived class. </p>
 
 <p>Implements <a class="el" href="classIpopt_1_1AlgorithmStrategyObject.html#a6e5ef59a257a61c928515ea78fd5c148">Ipopt::AlgorithmStrategyObject</a>.</p>
 
@@ -375,9 +373,9 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Const accessor methods to the <a class="el" href="classIpopt_1_1SchurData.html">SchurData</a> for for the derived classes. </p>
+<p>Const accessor methods to the <a class="el" href="classIpopt_1_1SchurData.html" title="This interface serves as a reference point for multiple classes that need to use SchurData (PCalculat...">SchurData</a> for for the derived classes. </p>
 
-<p class="definition">Definition at line <a class="el" href="SensSchurDriver_8hpp_source.html#l00051">51</a> of file <a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensSchurDriver_8hpp_source.html#l00053">53</a> of file <a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>.</p>
 
 </div>
 </div>
@@ -404,7 +402,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensSchurDriver_8hpp_source.html#l00056">56</a> of file <a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensSchurDriver_8hpp_source.html#l00058">58</a> of file <a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>.</p>
 
 </div>
 </div>
@@ -431,7 +429,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensSchurDriver_8hpp_source.html#l00061">61</a> of file <a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensSchurDriver_8hpp_source.html#l00063">63</a> of file <a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>.</p>
 
 </div>
 </div>
@@ -458,7 +456,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensSchurDriver_8hpp_source.html#l00066">66</a> of file <a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensSchurDriver_8hpp_source.html#l00068">68</a> of file <a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>.</p>
 
 </div>
 </div>
@@ -485,7 +483,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensSchurDriver_8hpp_source.html#l00071">71</a> of file <a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensSchurDriver_8hpp_source.html#l00073">73</a> of file <a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>.</p>
 
 </div>
 </div>
@@ -512,7 +510,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensSchurDriver_8hpp_source.html#l00076">76</a> of file <a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensSchurDriver_8hpp_source.html#l00078">78</a> of file <a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>.</p>
 
 </div>
 </div>
@@ -539,8 +537,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Sets the Data for which this SchurMatrix will be built. </p>
-<p>Creates the SchurMatrix from B and P </p>
+<p>Creates the SchurMatrix from B and P. </p>
 
 <p>Implemented in <a class="el" href="classIpopt_1_1DenseGenSchurDriver.html#afa8ab14f2f524eb9e8b65532edae062a">Ipopt::DenseGenSchurDriver</a>.</p>
 
@@ -622,6 +619,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Performs a backsolve on S and K. </p>
+<p>sol is the vector K^(-1)*r_s which usually should have been computed before </p>
 
 <p>Implemented in <a class="el" href="classIpopt_1_1DenseGenSchurDriver.html#a631875ac9b074e6b8ff5ca9a3e858e7b">Ipopt::DenseGenSchurDriver</a>.</p>
 
@@ -648,7 +646,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensSchurDriver_8hpp_source.html#l00106">106</a> of file <a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensSchurDriver_8hpp_source.html#l00111">111</a> of file <a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>.</p>
 
 </div>
 </div>
@@ -672,7 +670,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensSchurDriver_8hpp_source.html#l00108">108</a> of file <a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensSchurDriver_8hpp_source.html#l00113">113</a> of file <a class="el" href="SensSchurDriver_8hpp_source.html">SensSchurDriver.hpp</a>.</p>
 
 </div>
 </div>

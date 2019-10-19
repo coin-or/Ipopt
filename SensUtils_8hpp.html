@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">trunk</span-->
+   &#160;<!--span id="projectnumber">3.13.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -98,6 +98,7 @@ $(document).ready(function(){initNavTree('SensUtils_8hpp.html','');});
 <div class="header">
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
@@ -105,9 +106,9 @@ $(document).ready(function(){initNavTree('SensUtils_8hpp.html','');});
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="IpUtils_8hpp_source.html">IpUtils.hpp</a>&quot;</code><br />
-<code>#include &lt;string&gt;</code><br />
 <code>#include &quot;<a class="el" href="IpAlgTypes_8hpp_source.html">IpAlgTypes.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="IpReturnCodes_8hpp_source.html">IpReturnCodes.hpp</a>&quot;</code><br />
+<code>#include &lt;string&gt;</code><br />
 </div>
 <p><a href="SensUtils_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -117,25 +118,53 @@ Namespaces</h2></td></tr>
 <tr class="memdesc:namespaceIpopt"><td class="mdescLeft">&#160;</td><td class="mdescRight">This file contains a base class for all exceptions and a set of macros to help with exceptions. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:ad63949cc73e4271b72a6d80e0625ff88"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SensUtils_8hpp.html#ad63949cc73e4271b72a6d80e0625ff88">DECLARE_STD_SIPOPT_EXCEPTION</a>(__except_type)</td></tr>
+<tr class="separator:ad63949cc73e4271b72a6d80e0625ff88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:add98abac06d6862395ef27d827938126"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceIpopt.html#add98abac06d6862395ef27d827938126">Ipopt::SensAlgorithmExitStatus</a> { <a class="el" href="namespaceIpopt.html#add98abac06d6862395ef27d827938126a293096ffc6a0550b6ab9f134ca79d013">Ipopt::SOLVE_SUCCESS</a>, 
 <a class="el" href="namespaceIpopt.html#add98abac06d6862395ef27d827938126aa9c8e97080fc5d2d8f01348bb5b3aa89">Ipopt::FATAL_ERROR</a>
- }<tr class="memdesc:add98abac06d6862395ef27d827938126"><td class="mdescLeft">&#160;</td><td class="mdescRight">This header file provides some definitions used throughout the program.  <a href="namespaceIpopt.html#add98abac06d6862395ef27d827938126">More...</a><br /></td></tr>
-</td></tr>
+ }</td></tr>
 <tr class="separator:add98abac06d6862395ef27d827938126"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ad8389807e9b28f5e610687575e918cd2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceIpopt.html#ad8389807e9b28f5e610687575e918cd2">Ipopt::AsIndexMax</a> (<a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> length, const <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> *x, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> Incr)</td></tr>
-<tr class="separator:ad8389807e9b28f5e610687575e918cd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a1fad7e9d3e2cfbaf8d233f11510438"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceIpopt.html#a4a1fad7e9d3e2cfbaf8d233f11510438">Ipopt::AsIndexSum</a> (<a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> length, const <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> *x, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> Incr)</td></tr>
-<tr class="separator:a4a1fad7e9d3e2cfbaf8d233f11510438"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c88519d9bd4f581147b656b49391371"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceIpopt.html#a7c88519d9bd4f581147b656b49391371">Ipopt::append_Index</a> (std::string &amp;str, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> idx)</td></tr>
-<tr class="separator:a7c88519d9bd4f581147b656b49391371"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1dbddd49a7a293920e414d3031a1b0ea"><td class="memItemLeft" align="right" valign="top">SolverReturn&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceIpopt.html#a1dbddd49a7a293920e414d3031a1b0ea">Ipopt::AppReturn2SolverReturn</a> (<a class="el" href="IpReturnCodes__inc_8h.html#ab542e0b1ca364a9b7525a876ffdae7d7">ApplicationReturnStatus</a> ipopt_retval)</td></tr>
-<tr class="separator:a1dbddd49a7a293920e414d3031a1b0ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa39945f96a04d19ea6f24ffb67abe7e2"><td class="memItemLeft" align="right" valign="top">SIPOPTLIB_EXPORT <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceIpopt.html#aa39945f96a04d19ea6f24ffb67abe7e2">Ipopt::AsIndexMax</a> (<a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> length, const <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> *x, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> Incr)</td></tr>
+<tr class="separator:aa39945f96a04d19ea6f24ffb67abe7e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77ff4dbca9aa5d63b6ede7e77c56c16c"><td class="memItemLeft" align="right" valign="top">SIPOPTLIB_EXPORT <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceIpopt.html#a77ff4dbca9aa5d63b6ede7e77c56c16c">Ipopt::AsIndexSum</a> (<a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> length, const <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> *x, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> Incr)</td></tr>
+<tr class="separator:a77ff4dbca9aa5d63b6ede7e77c56c16c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a334ce463bb33929ee1ff24ce080241a8"><td class="memItemLeft" align="right" valign="top">SIPOPTLIB_EXPORT void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceIpopt.html#a334ce463bb33929ee1ff24ce080241a8">Ipopt::append_Index</a> (std::string &amp;str, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> idx)</td></tr>
+<tr class="separator:a334ce463bb33929ee1ff24ce080241a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92aaa8a8bbd6d35edb476bdb569b9d22"><td class="memItemLeft" align="right" valign="top">SIPOPTLIB_EXPORT SolverReturn&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceIpopt.html#a92aaa8a8bbd6d35edb476bdb569b9d22">Ipopt::AppReturn2SolverReturn</a> (<a class="el" href="IpReturnCodes__inc_8h.html#ab542e0b1ca364a9b7525a876ffdae7d7">ApplicationReturnStatus</a> ipopt_retval)</td></tr>
+<tr class="separator:a92aaa8a8bbd6d35edb476bdb569b9d22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="ad63949cc73e4271b72a6d80e0625ff88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad63949cc73e4271b72a6d80e0625ff88">&#9670;&nbsp;</a></span>DECLARE_STD_SIPOPT_EXCEPTION</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DECLARE_STD_SIPOPT_EXCEPTION</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">__except_type</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">class </span>SIPOPTLIB_EXPORT  __except_type : <span class="keyword">public</span> <a class="code" href="classIpopt_1_1IpoptException.html">Ipopt::IpoptException</a> \</div><div class="line">    { \</div><div class="line">    public: \</div><div class="line">      __except_type(std::string msg, std::string fname, <a class="code" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Ipopt::Index</a> line) \</div><div class="line">      : <a class="code" href="classIpopt_1_1IpoptException.html">Ipopt::IpoptException</a>(msg,fname,line, #__except_type) {} \</div><div class="line">      __except_type(<span class="keyword">const</span> __except_type&amp; copy) \</div><div class="line">      : <a class="code" href="classIpopt_1_1IpoptException.html">Ipopt::IpoptException</a>(copy) {} \</div><div class="line">    private: \</div><div class="line">       __except_type(); \</div><div class="line">       void <a class="code" href="classIpopt_1_1IpoptException.html#aaef01182e1a6236110613dbf85b9bf33">operator=</a>(<span class="keyword">const</span> __except_type&amp;); \</div><div class="line">    }</div><div class="ttc" id="classIpopt_1_1IpoptException_html"><div class="ttname"><a href="classIpopt_1_1IpoptException.html">Ipopt::IpoptException</a></div><div class="ttdoc">This is the base class for all exceptions. </div><div class="ttdef"><b>Definition:</b> <a href="IpException_8hpp_source.html#l00057">IpException.hpp:57</a></div></div>
+<div class="ttc" id="classIpopt_1_1IpoptException_html_aaef01182e1a6236110613dbf85b9bf33"><div class="ttname"><a href="classIpopt_1_1IpoptException.html#aaef01182e1a6236110613dbf85b9bf33">Ipopt::IpoptException::operator=</a></div><div class="ttdeci">void operator=(const IpoptException &amp;)</div><div class="ttdoc">Default Assignment Operator. </div></div>
+<div class="ttc" id="namespaceIpopt_html_a8728e67558138991e8ee3fea451dca94"><div class="ttname"><a href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Ipopt::Index</a></div><div class="ttdeci">int Index</div><div class="ttdoc">Type of all indices of vectors, matrices etc. </div><div class="ttdef"><b>Definition:</b> <a href="IpTypes_8hpp_source.html#l00017">IpTypes.hpp:17</a></div></div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="SensUtils_8hpp_source.html#l00050">50</a> of file <a class="el" href="SensUtils_8hpp_source.html">SensUtils.hpp</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 </body>

@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">trunk</span-->
+   &#160;<!--span id="projectnumber">3.13.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -591,7 +591,8 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>The values of <code>n</code> and <code>m</code> that were specified in <a class="el" href="classIpopt_1_1TNLP.html#a5da5791365764706aeda02b78f7719b6" title="Method to request the initial information about the problem. ">TNLP::get_nlp_info</a> are passed here for debug checking. Setting a lower bound to a value less than or equal to the value of the option <a class="el" href="OPTIONS.html#OPT_nlp_lower_bound_inf">nlp_lower_bound_inf</a> will cause <code>Ipopt</code> to assume no lower bound. Likewise, specifying the upper bound above or equal to the value of the option <a class="el" href="OPTIONS.html#OPT_nlp_upper_bound_inf">nlp_upper_bound_inf</a> will cause <code>Ipopt</code> to assume no upper bound. These options are set to -10<sup>19</sup> and $10<sup>19</sup>, respectively, by default, but may be modified by changing these options. </p>
+<dl class="section return"><dt>Returns</dt><dd>true if success, false otherwise.</dd></dl>
+<p>The values of <code>n</code> and <code>m</code> that were specified in <a class="el" href="classIpopt_1_1TNLP.html#a5da5791365764706aeda02b78f7719b6" title="Method to request the initial information about the problem. ">TNLP::get_nlp_info</a> are passed here for debug checking. Setting a lower bound to a value less than or equal to the value of the option <a class="el" href="OPTIONS.html#OPT_nlp_lower_bound_inf">nlp_lower_bound_inf</a> will cause <code>Ipopt</code> to assume no lower bound. Likewise, specifying the upper bound above or equal to the value of the option <a class="el" href="OPTIONS.html#OPT_nlp_upper_bound_inf">nlp_upper_bound_inf</a> will cause <code>Ipopt</code> to assume no upper bound. These options are set to -10<sup>19</sup> and 10<sup>19</sup>, respectively, by default, but may be modified by changing these options. </p>
 
 <p>Implements <a class="el" href="classIpopt_1_1TNLP.html#aafb65734cce3659c6fb496e136636e9e">Ipopt::TNLP</a>.</p>
 
@@ -846,6 +847,7 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>true if success, false otherwise.</dd></dl>
 <p>The boolean variables indicate whether the algorithm requires to have x, z_L/z_u, and lambda initialized, respectively. If, for some reason, the algorithm requires initializations that cannot be provided, false should be returned and <code>Ipopt</code> will stop. The default options only require initial values for the primal variables \(x\).</p>
 <p>Note, that the initial values for bound multiplier components for absent bounds ( \(x^L_i=-\infty\) or \(x^U_i=\infty\)) are ignored. </p>
 
@@ -940,7 +942,7 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>The variable n is passed in for convenience. It will have the same value that was specified in <a class="el" href="classIpopt_1_1TNLP.html#a5da5791365764706aeda02b78f7719b6" title="Method to request the initial information about the problem. ">TNLP::get_nlp_info</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd>true if success, false otherwise. </dd></dl>
 
 <p>Implements <a class="el" href="classIpopt_1_1TNLP.html#a709c03900227bc573b046ce0705e6c84">Ipopt::TNLP</a>.</p>
 
@@ -998,10 +1000,11 @@ Additional Inherited Members</h2></td></tr>
     <tr><td class="paramname">n</td><td>(in) the number of variables \(x\) in the problem; it will have the same value that was specified in <a class="el" href="classIpopt_1_1TNLP.html#a5da5791365764706aeda02b78f7719b6" title="Method to request the initial information about the problem. ">TNLP::get_nlp_info</a> </td></tr>
     <tr><td class="paramname">x</td><td>(in) the values for the primal variables \(x\) at which the gradient \(\nabla f(x)\) is to be evaluated </td></tr>
     <tr><td class="paramname">new_x</td><td>(in) false if any evaluation method (<code>eval_*</code>) was previously called with the same values in x, true otherwise; see also <a class="el" href="classIpopt_1_1TNLP.html#a709c03900227bc573b046ce0705e6c84" title="Method to request the value of the objective function. ">TNLP::eval_f</a> </td></tr>
-    <tr><td class="paramname">grad_f</td><td>(out) array to store values of the gradient of the objective function \(\nabla f(x)\). The gradient array is in the same order as the \(x\) variables (i.e., the gradient of the objective with respect to <code>x[2]</code> should be put in <code>grad_f[2]</code>). </td></tr>
+    <tr><td class="paramname">grad_f</td><td>(out) array to store values of the gradient of the objective function \(\nabla f(x)\). The gradient array is in the same order as the \(x\) variables (i.e., the gradient of the objective with respect to <code>x[2]</code> should be put in <code>grad_f[2]</code>).</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>true if success, false otherwise. </dd></dl>
 
 <p>Implements <a class="el" href="classIpopt_1_1TNLP.html#a52698f1861ffef271d5e317c0e168652">Ipopt::TNLP</a>.</p>
 
@@ -1066,10 +1069,11 @@ Additional Inherited Members</h2></td></tr>
     <tr><td class="paramname">x</td><td>(in) the values for the primal variables \(x\) at which the constraint functions \(g(x)\) are to be evaluated </td></tr>
     <tr><td class="paramname">new_x</td><td>(in) false if any evaluation method (<code>eval_*</code>) was previously called with the same values in x, true otherwise; see also <a class="el" href="classIpopt_1_1TNLP.html#a709c03900227bc573b046ce0705e6c84" title="Method to request the value of the objective function. ">TNLP::eval_f</a> </td></tr>
     <tr><td class="paramname">m</td><td>(in) the number of constraints \(g(x)\) in the problem; it will have the same value that was specified in <a class="el" href="classIpopt_1_1TNLP.html#a5da5791365764706aeda02b78f7719b6" title="Method to request the initial information about the problem. ">TNLP::get_nlp_info</a> </td></tr>
-    <tr><td class="paramname">g</td><td>(out) array to store constraint function values \(g(x)\), do not add or subtract the bound values \(g^L\) or \(g^U\). </td></tr>
+    <tr><td class="paramname">g</td><td>(out) array to store constraint function values \(g(x)\), do not add or subtract the bound values \(g^L\) or \(g^U\).</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>true if success, false otherwise. </dd></dl>
 
 <p>Implements <a class="el" href="classIpopt_1_1TNLP.html#afcfd8404b772dc4960f2d2db4e8bb382">Ipopt::TNLP</a>.</p>
 
@@ -1160,6 +1164,7 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>true if success, false otherwise.</dd></dl>
 <dl class="section note"><dt>Note</dt><dd>The arrays iRow and jCol only need to be filled once. If the iRow and jCol arguments are not NULL (first call to this function), then <code>Ipopt</code> expects that the sparsity structure of the Jacobian (the row and column indices only) are written into iRow and jCol. At this call, the arguments <code>x</code> and <code>values</code> will be NULL. If the arguments <code>x</code> and <code>values</code> are not NULL, then <code>Ipopt</code> expects that the value of the Jacobian as calculated from array <code>x</code> is stored in array <code>values</code> (using the same order as used when specifying the sparsity structure). At this call, the arguments <code>iRow</code> and <code>jCol</code> will be NULL. </dd></dl>
 
 <p>Implements <a class="el" href="classIpopt_1_1TNLP.html#aa4162d052f69d4f9946a42feec012853">Ipopt::TNLP</a>.</p>
@@ -1275,6 +1280,7 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>true if success, false otherwise.</dd></dl>
 <dl class="section note"><dt>Note</dt><dd>The arrays iRow and jCol only need to be filled once. If the iRow and jCol arguments are not NULL (first call to this function), then <code>Ipopt</code> expects that the sparsity structure of the Hessian (the row and column indices only) are written into iRow and jCol. At this call, the arguments <code>x</code>, <code>lambda</code>, and <code>values</code> will be NULL. If the arguments <code>x</code>, <code>lambda</code>, and <code>values</code> are not NULL, then <code>Ipopt</code> expects that the value of the Hessian as calculated from arrays <code>x</code> and <code>lambda</code> are stored in array <code>values</code> (using the same order as used when specifying the sparsity structure). At this call, the arguments <code>iRow</code> and <code>jCol</code> will be NULL.</dd></dl>
 <dl class="section attention"><dt>Attention</dt><dd>As this matrix is symmetric, <code>Ipopt</code> expects that only the lower diagonal entries are specified.</dd></dl>
 <p>A default implementation is provided, in case the user wants to set quasi-Newton approximations to estimate the second derivatives and doesn't not need to implement this method. </p>

@@ -10,36 +10,30 @@ var index =
       [ "History of this document", "index.html#HISTORY_DOC", null ]
     ] ],
     [ "Installing Ipopt", "INSTALL.html", [
-      [ "Getting System Packages (Compilers, ...)", "INSTALL.html#SYSTEMPACKAGES", null ],
-      [ "Getting the Ipopt Code", "INSTALL.html#GETIPOPT", null ],
-      [ "Getting the Ipopt code via git", "INSTALL.html#GETIPOPT_GIT", null ],
-      [ "Getting the Ipopt code as a tarball", "INSTALL.html#GETIPOPT_TAR", null ],
-      [ "Download External Code", "INSTALL.html#EXTERNALCODE", [
-        [ "Download BLAS, LAPACK and ASL", "INSTALL.html#DOWNLOAD_LINALGASL", null ],
-        [ "Download HSL Subroutines", "INSTALL.html#DOWNLOAD_HSL", null ],
-        [ "Obtaining the MUMPS Linear Solver", "INSTALL.html#DOWNLOAD_MUMPS", null ],
-        [ "Obtaining the Linear Solver Pardiso", "INSTALL.html#DOWNLOAD_PARDISO", null ],
-        [ "Obtaining the Linear Solver WSMP", "INSTALL.html#DOWNLOAD_WSMP", null ],
+      [ "Quick Start: Using CoinBrew", "INSTALL.html#COINBREW", null ],
+      [ "Getting System Packages (Compilers, ...)", "INSTALL.html#SYSTEMPACKAGES", [
+        [ "Linux distributions", "INSTALL.html#SYSTEMPACKAGES_LINUX", null ],
+        [ "Mac OS X", "INSTALL.html#SYSTEMPACKAGES_MAC", null ],
+        [ "Windows with MSYS2/MinGW", "INSTALL.html#SYSTEMPACKAGES_MSYS", null ]
+      ] ],
+      [ "Download, build, and install dependencies", "INSTALL.html#EXTERNALCODE", [
+        [ "ASL (Ampl Solver Library)", "INSTALL.html#EXTERNALCODE_ASL", null ],
+        [ "BLAS and LAPACK", "INSTALL.html#EXTERNALCODE_LINALG", null ],
+        [ "HSL (Harwell Subroutines Library)", "INSTALL.html#DOWNLOAD_HSL", null ],
+        [ "MUMPS Linear Solver", "INSTALL.html#DOWNLOAD_MUMPS", null ],
+        [ "Pardiso (Parallel Sparse Direct Linear Solver)", "INSTALL.html#DOWNLOAD_PARDISO", null ],
+        [ "WSMP (Watson Sparse Matrix Package)", "INSTALL.html#DOWNLOAD_WSMP", null ],
         [ "Using the Linear Solver Loader", "INSTALL.html#LINEARSOLVERLOADER", null ],
-        [ "Obtaining METIS", "INSTALL.html#DOWNLOAD_METIS", null ]
+        [ "METIS (matrix ordering)", "INSTALL.html#DOWNLOAD_METIS", null ]
       ] ],
-      [ "Compiling and Installing Ipopt", "INSTALL.html#COMPILEINSTALL", null ],
-      [ "Installation on Windows", "INSTALL.html#INSTALL_WINDOWS", [
-        [ "Installation with Cygwin using GNU compilers", "INSTALL.html#INSTALL_CYGWIN", null ],
-        [ "Installation with Cygwin using the MSVC++ compiler", "INSTALL.html#INSTALL_CYGWINNATIVE", null ],
-        [ "Installation with MSYS/MinGW", "INSTALL.html#INSTALL_MINGW", null ]
+      [ "Getting the Ipopt Code", "INSTALL.html#GETIPOPT", [
+        [ "Getting the Ipopt code via git", "INSTALL.html#GETIPOPT_GIT", null ],
+        [ "Getting the Ipopt code as a tarball", "INSTALL.html#GETIPOPT_TAR", null ]
       ] ],
-      [ "Compiling and Installing the Java Interface JIpopt", "INSTALL.html#INSTALL_JAVA", null ],
-      [ "Compiling and Installing the R Interface ipoptr", "INSTALL.html#INSTALL_R", null ],
-      [ "Compiling and Installing the MATLAB interface", "INSTALL.html#INSTALL_MATLAB", [
-        [ "Setting up mex", "INSTALL.html#INSTALL_MATLAB_MEX", null ],
-        [ "Adjusting configuration and build of Ipopt", "INSTALL.html#INSTALL_MATLAB_IPOPT", null ],
-        [ "Building the MATLAB interface", "INSTALL.html#INSTALL_MATLAB_BUILD", null ],
-        [ "Making MATLAB aware of the mex file", "INSTALL.html#INSTALL_MATLAB_ADDPATH", null ],
-        [ "Additional notes", "INSTALL.html#INSTALL_MATLAB_NOTES", null ],
-        [ "Troubleshooting", "INSTALL.html#INSTALL_MATLAB_TROUBLESHOOT", null ]
+      [ "Compiling and Installing Ipopt", "INSTALL.html#COMPILEINSTALL", [
+        [ "Flags to configure", "INSTALL.html#CONFIGURE_FLAGS", null ]
       ] ],
-      [ "Expert Installation Options for Ipopt", "INSTALL.html#EXPERT_INSTALL", null ]
+      [ "Compiling and Installing the R Interface ipoptr", "INSTALL.html#INSTALL_R", null ]
     ] ],
     [ "Interfacing your NLP to Ipopt", "INTERFACES.html", [
       [ "Using Ipopt through AMPL", "INTERFACES.html#INTERFACE_AMPL", [
@@ -55,8 +49,7 @@ var index =
         [ "The C Interface", "INTERFACES.html#INTERFACE_C", null ],
         [ "The Fortran Interface", "INTERFACES.html#INTERFACE_FORTRAN", null ],
         [ "The Java Interface JIpopt", "INTERFACES.html#INTERFACE_JAVA", null ],
-        [ "The R Interface ipoptr", "INTERFACES.html#INTERFACE_R", null ],
-        [ "The MATLAB Interface", "INTERFACES.html#INTERFACE_MATLAB", null ]
+        [ "The R Interface ipoptr", "INTERFACES.html#INTERFACE_R", null ]
       ] ]
     ] ],
     [ "Special Features", "SPECIALS.html", [
@@ -97,5 +90,8 @@ var index =
       [ "Triplet Format for Sparse Matrices", "IMPL.html#TRIPLET", null ],
       [ "The Smart Pointer Implementation: SmartPtr<T>", "IMPL.html#SMARTPTR", null ]
     ] ],
-    [ "Frequenty Asked Questions", "FAQ.html", null ]
+    [ "Frequenty Asked Questions", "FAQ.html", null ],
+    [ "Release notes", "CHANGELOG.html", null ],
+    [ "Authors and Contributors", "AUTHORS.html", null ],
+    [ "License", "LICENSE.html", null ]
 ];

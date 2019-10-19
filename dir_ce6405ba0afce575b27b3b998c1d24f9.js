@@ -6,6 +6,9 @@ var dir_ce6405ba0afce575b27b3b998c1d24f9 =
     [ "IpNLP.hpp", "IpNLP_8hpp.html", [
       [ "NLP", "classIpopt_1_1NLP.html", "classIpopt_1_1NLP" ]
     ] ],
+    [ "Ipopt.java", "Ipopt_8java.html", [
+      [ "Ipopt", "classorg_1_1coinor_1_1Ipopt.html", "classorg_1_1coinor_1_1Ipopt" ]
+    ] ],
     [ "IpReturnCodes.h", "IpReturnCodes_8h.html", null ],
     [ "IpReturnCodes.hpp", "IpReturnCodes_8hpp.html", "IpReturnCodes_8hpp" ],
     [ "IpReturnCodes_inc.h", "IpReturnCodes__inc_8h.html", "IpReturnCodes__inc_8h" ],

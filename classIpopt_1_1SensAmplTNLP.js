@@ -22,5 +22,5 @@ var classIpopt_1_1SensAmplTNLP =
     [ "n_sens_steps_", "classIpopt_1_1SensAmplTNLP.html#a7da9d0c95e3b4c6480d2ffb633814c06", null ],
     [ "run_sens_", "classIpopt_1_1SensAmplTNLP.html#a365130391fecebb01f0e0b29fd660ed4", null ],
     [ "compute_red_hessian_", "classIpopt_1_1SensAmplTNLP.html#a667cde08f67c0d1015a54fa65c1dba9c", null ],
-    [ "sens_sol_", "classIpopt_1_1SensAmplTNLP.html#aaf2972e098627e2a306d9f84ebba5a76", null ]
+    [ "sens_sol_", "classIpopt_1_1SensAmplTNLP.html#ae6013a5a3b7345f98dda99ce2c83f766", null ]
 ];

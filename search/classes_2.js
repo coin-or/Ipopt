@@ -7,7 +7,6 @@ var searchData=
   ['cachedresults_3c_20ipopt_3a_3asmartptr_3c_20ipopt_3a_3avector_20_3e_20_3e',['CachedResults&lt; Ipopt::SmartPtr&lt; Ipopt::Vector &gt; &gt;',['../classIpopt_1_1CachedResults.html',1,'Ipopt']]],
   ['cachedresults_3c_20number_20_3e',['CachedResults&lt; Number &gt;',['../classIpopt_1_1CachedResults.html',1,'Ipopt']]],
   ['cachedresults_3c_20void_20_2a_3e',['CachedResults&lt; void *&gt;',['../classIpopt_1_1CachedResults.html',1,'Ipopt']]],
-  ['callbackfunctions',['CallbackFunctions',['../classCallbackFunctions.html',1,'']]],
   ['cgpenaltycq',['CGPenaltyCq',['../classIpopt_1_1CGPenaltyCq.html',1,'Ipopt']]],
   ['cgpenaltydata',['CGPenaltyData',['../classIpopt_1_1CGPenaltyData.html',1,'Ipopt']]],
   ['cgpenaltylsacceptor',['CGPenaltyLSAcceptor',['../classIpopt_1_1CGPenaltyLSAcceptor.html',1,'Ipopt']]],

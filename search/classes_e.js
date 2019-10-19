@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['parametrictnlp',['ParametricTNLP',['../classIpopt_1_1ParametricTNLP.html',1,'Ipopt']]],
   ['pardisosolverinterface',['PardisoSolverInterface',['../classIpopt_1_1PardisoSolverInterface.html',1,'Ipopt']]],
   ['pcalculator',['PCalculator',['../classIpopt_1_1PCalculator.html',1,'Ipopt']]],
   ['pcolumn',['PColumn',['../classIpopt_1_1PColumn.html',1,'Ipopt']]],
@@ -13,6 +12,5 @@ var searchData=
   ['piecewisepenentry',['PiecewisePenEntry',['../structIpopt_1_1PiecewisePenEntry.html',1,'Ipopt']]],
   ['pointperturber',['PointPerturber',['../classIpopt_1_1PointPerturber.html',1,'Ipopt']]],
   ['privatinfo',['PrivatInfo',['../classIpopt_1_1AmplOptionsList_1_1PrivatInfo.html',1,'Ipopt::AmplOptionsList']]],
-  ['probingmuoracle',['ProbingMuOracle',['../classIpopt_1_1ProbingMuOracle.html',1,'Ipopt']]],
-  ['problemspecs',['ProblemSpecs',['../classMittelmannParaCntrl5__1_1_1ProblemSpecs.html',1,'MittelmannParaCntrl5_1::ProblemSpecs'],['../classMittelmannParaCntrl5__2__3_1_1ProblemSpecs.html',1,'MittelmannParaCntrl5_2_3::ProblemSpecs'],['../classMittelmannParaCntrl5__try_1_1ProblemSpecs.html',1,'MittelmannParaCntrl5_try::ProblemSpecs'],['../classMittelmannParaCntrl5__2__1_1_1ProblemSpecs.html',1,'MittelmannParaCntrl5_2_1::ProblemSpecs'],['../classMittelmannParaCntrl5__2__2_1_1ProblemSpecs.html',1,'MittelmannParaCntrl5_2_2::ProblemSpecs']]]
+  ['probingmuoracle',['ProbingMuOracle',['../classIpopt_1_1ProbingMuOracle.html',1,'Ipopt']]]
 ];

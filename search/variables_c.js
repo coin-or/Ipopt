@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['m',['m',['../classOptions.html#ada46db6475fb3e96022b2521f09407ac',1,'Options']]],
-  ['m_5f',['M_',['../classMittelmannDistCntrlNeumA3.html#aaee731cca613329eb46fde7a34dc77a1',1,'MittelmannDistCntrlNeumA3::M_()'],['../classMittelmannDistCntrlNeumB3.html#a3cf4e4b52a43124f09d1e47b1915617d',1,'MittelmannDistCntrlNeumB3::M_()']]],
   ['m_5forig_5f',['m_orig_',['../classIpopt_1_1TNLPReducer.html#a54149385af7a41c4d84372fa47cb35c3',1,'Ipopt::TNLPReducer']]],
   ['m_5freduced_5f',['m_reduced_',['../classIpopt_1_1TNLPReducer.html#ac577647e6ca58754abedf355cdb668f5',1,'Ipopt::TNLPReducer']]],
   ['ma28_5fpivtol_5f',['ma28_pivtol_',['../classIpopt_1_1Ma28TDependencyDetector.html#abcef27a2f147e4474c26ffb8c433d9e1',1,'Ipopt::Ma28TDependencyDetector']]],
@@ -40,7 +38,6 @@ var searchData=
   ['mehrotra_5falgorithm_5f',['mehrotra_algorithm_',['../classIpopt_1_1IpoptAlgorithm.html#a174974faf857114ff07429be6e648ef5',1,'Ipopt::IpoptAlgorithm::mehrotra_algorithm_()'],['../classIpopt_1_1PDSearchDirCalculator.html#a83ffb29ab552bac9a040ee4085a1b71f',1,'Ipopt::PDSearchDirCalculator::mehrotra_algorithm_()']]],
   ['mem_5fpercent_5f',['mem_percent_',['../classIpopt_1_1MumpsSolverInterface.html#ae0300ad4241b1a4f5ee2b6cacc2fa268',1,'Ipopt::MumpsSolverInterface']]],
   ['meminc_5ffactor_5f',['meminc_factor_',['../classIpopt_1_1Ma27TSolverInterface.html#afeecbc15bd4266ba0621edd207f41f78',1,'Ipopt::Ma27TSolverInterface']]],
-  ['message',['message',['../classMatlabException.html#a331f8167d018c5fb6772c33959133b57',1,'MatlabException']]],
   ['min_5falpha_5fprimal_5f',['min_alpha_primal_',['../classIpopt_1_1CGPenaltyLSAcceptor.html#ab50d5d590cca2f516f5878050a81fc39',1,'Ipopt::CGPenaltyLSAcceptor']]],
   ['min_5fcache_5ftag_5f',['min_cache_tag_',['../classIpopt_1_1Vector.html#af448cafb42ce472d36dbf76694c5bb03',1,'Ipopt::Vector']]],
   ['min_5fl_5fworkspace',['min_l_workspace',['../structmc68__control.html#a34ba1dc428dc353276e8cf4a7ed33cc6',1,'mc68_control']]],

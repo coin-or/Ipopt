@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['numconstraints',['numconstraints',['../classOptions.html#a997a40292280f988b4abaccce3382cb3',1,'Options']]],
-  ['numvars',['numvars',['../classIterate.html#ad2ec6f327cc8d75e3850080d610d6f27',1,'Iterate::numvars()'],['../classOptions.html#a109f29683c69964e8b19206ff531bcce',1,'Options::numvars()']]]
+  ['parexpansionmatrix',['ParExpansionMatrix',['../classIpopt_1_1ExpansionMatrix.html#a47affbedf9de527a430b1723fc645cec',1,'Ipopt::ExpansionMatrix']]],
+  ['pargenmatrix',['ParGenMatrix',['../classIpopt_1_1GenTMatrix.html#a666a1e0d4a43470572bc793d130b18a2',1,'Ipopt::GenTMatrix']]],
+  ['parvector',['ParVector',['../classIpopt_1_1DenseVector.html#a745e4410073929c09cc7abc36304d76c',1,'Ipopt::DenseVector']]]
 ];

@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">trunk</span-->
+   &#160;<!--span id="projectnumber">3.13.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -154,8 +154,8 @@ sIpopt: Optimal Sensitivity Based on Ipopt</h1>
 <p>The <code>sIpopt</code> project provides a toolbox that uses NLP sensitivity theory to generate fast approximations to solutions when parameters in the problem change. It has been developed primarily by Hans Pirnay (RWTH-Aachen), Rodrigo López-Negrete (CMU), and Lorenz Biegler (CMU).</p>
 <p>Sensitivity of nonlinear programming problems is a key step in any optimization study. Sensitivity provides information on regularity and curvature conditions at KKT points, assesses which variables play dominant roles in the optimization, and provides first order estimates for parametric nonlinear programs. Moreover, for NLP algorithms that use exact second derivatives, sensitivity can be implemented very efficiently within NLP solvers and provide valuable information with very little added computation. This implementation provides <code>Ipopt</code> with the capabilities to calculate sensitivities, and approximate perturbed solutions with them.</p>
 <p>The basic sensitivity strategy implemented here is based on the application of the Implicit Function Theorem (IFT) to the KKT conditions of the NLP. As shown by Fiacco <a class="el" href="citelist.html#CITEREF_Fiacco1983">[4]</a>, sensitivities can be obtained from a solution with suitable regularity conditions merely by solving a linearization of the KKT conditions. More details can be found in <a class="el" href="citelist.html#CITEREF_PLNB:sIpopt">[8]</a>. If you are using <code>sIpopt</code> for your research, please cite <a class="el" href="citelist.html#CITEREF_PLNB:sIpopt">[8]</a>.</p>
-<p>The <code>sIpopt</code> project is available in the <code>Ipopt</code> repository under <code>$IPOPTDIR/Ipopt/contrib/sIPOPT</code>. After having installed <code>Ipopt</code> successfully, <code>sIpopt</code> can be build and installed by changing to the directory <code>$IPOPTDIR/build/Ipopt/contrib/sIPOPT</code> and executing make install. This should copy the generated libraries <code>libsipopt.*</code> to <code>$IPOPTDIR/build/lib</code> and an AMPL executable <code>ipopt_sens</code> to <code>$IPOPTDIR/build/bin</code>.</p>
-<p>The files <code>$IPOPTDIR/Ipopt/contrib/sIPOPT/examples/parametric_ampl/parametric.{mod,run}</code> are an example that shows how to use <code>sIpopt</code> to solve the NLP </p><p class="formulaDsp">
+<p>The <code>sIpopt</code> project is available in the <code>Ipopt</code> repository under <code>$IPOPTDIR/contrib/sIPOPT</code>. It is build together with the <code>Ipopt</code> library and the generated library <code>libsipopt.*</code> and AMPL executable <code>ipopt_sens</code> are installed in <code>$PREFIX/lib</code> and <code>$PREFIX/bin</code>.</p>
+<p>The files <code>$IPOPTDIR/contrib/sIPOPT/examples/parametric_ampl/parametric.{mod,run}</code> are an example that shows how to use <code>sIpopt</code> to solve the NLP </p><p class="formulaDsp">
 \begin{align*} \min\quad &amp; x_1^2 + x_2^2 + x_3^2, \\ \text{such that}\quad &amp; 6x_1 + 3x_2 + 2x_3 = p_1, \\ &amp; p_2 x_1 + x_2 - x_3 = 1, \\ &amp; x_1, x_2, x_3 \geq 0, \end{align*}
 </p>
 <p> where we perturb the parameters \(p_1\) and \(p_2\) from \(p_a = (p_1, p_2) = (5, 1)\) to \(p_b = (4.5, 1)\).</p>

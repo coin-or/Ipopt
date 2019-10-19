@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">trunk</span-->
+   &#160;<!--span id="projectnumber">3.13.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -239,7 +239,7 @@ Termination</h2>
 <p></p>
 </blockquote>
 <p><a class="anchor" id="OPT_acceptable_tol"></a> <b>acceptable_tol</b>: "Acceptable" convergence tolerance (relative). </p><blockquote class="doxtable">
-<p>Determines which (scaled) overall optimality error is considered to be "acceptable." There are two levels of termination criteria. If the usual "desired" tolerances (see tol, dual_inf_tol etc) are satisfied at an iteration, the algorithm immediately terminates with a success message. On the other hand, if the algorithm encounters "acceptable_iter" many iterations in a row that are considered "acceptable", it will terminate before the desired convergence tolerance is met. This is useful in cases where the algorithm might not be able to achieve the "desired" level of accuracy. The valid range for this real option is 0 &lt; acceptable_tol and its default value is 10<sup>-06</sup>.</p>
+<p>Determines which (scaled) overall optimality error is considered to be "acceptable". There are two levels of termination criteria. If the usual "desired" tolerances (see tol, dual_inf_tol etc) are satisfied at an iteration, the algorithm immediately terminates with a success message. On the other hand, if the algorithm encounters "acceptable_iter" many iterations in a row that are considered "acceptable", it will terminate before the desired convergence tolerance is met. This is useful in cases where the algorithm might not be able to achieve the "desired" level of accuracy. The valid range for this real option is 0 &lt; acceptable_tol and its default value is 10<sup>-06</sup>.</p>
 <p></p>
 </blockquote>
 <p><a class="anchor" id="OPT_acceptable_iter"></a> <b>acceptable_iter</b>: Number of "acceptable" iterates before triggering termination. </p><blockquote class="doxtable">
@@ -292,7 +292,7 @@ NLP Scaling</h2>
 <h2><a class="anchor" id="OPT_NLP"></a>
 NLP</h2>
 <p><a class="anchor" id="OPT_bound_relax_factor"></a> <b>bound_relax_factor</b>: Factor for initial relaxation of the bounds. </p><blockquote class="doxtable">
-<p>Before start of the optimization, the bounds given by the user are relaxed. This option sets the factor for this relaxation. If it is set to zero, then then bounds relaxation is disabled. (See Eqn.(35) in implementation paper.) The valid range for this real option is 0 &le; bound_relax_factor and its default value is 10<sup>-08</sup>.</p>
+<p>Before start of the optimization, the bounds given by the user are relaxed. This option sets the factor for this relaxation. If it is set to zero, then then bounds relaxation is disabled. (See Eqn.(35) in implementation paper.) Note that the constraint violation reported by <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions...">Ipopt</a> at the end of the solution process does not include violations of the original (non-relaxed) variable bounds. The valid range for this real option is 0 &le; bound_relax_factor and its default value is 10<sup>-08</sup>.</p>
 <p></p>
 </blockquote>
 <p><a class="anchor" id="OPT_honor_original_bounds"></a> <b>honor_original_bounds</b>: Indicates whether final points should be projected into original bounds. </p><blockquote class="doxtable">
@@ -666,7 +666,7 @@ Hessian Perturbation</h2>
 <p></p>
 </blockquote>
 <p><a class="anchor" id="OPT_perturb_inc_fact_first"></a> <b>perturb_inc_fact_first</b>: Increase factor for x-s perturbation for very first perturbation. </p><blockquote class="doxtable">
-<p>The factor by which the perturbation is increased when a trial value was not sufficient - this value is used for the computation of the very first perturbation and allows a different value for for the first perturbation than that used for the remaining perturbations. (This is bar_kappa_w^+ in the implementation paper.) The valid range for this real option is 1 &lt; perturb_inc_fact_first and its default value is 100.</p>
+<p>The factor by which the perturbation is increased when a trial value was not sufficient - this value is used for the computation of the very first perturbation and allows a different value for the first perturbation than that used for the remaining perturbations. (This is bar_kappa_w^+ in the implementation paper.) The valid range for this real option is 1 &lt; perturb_inc_fact_first and its default value is 100.</p>
 <p></p>
 </blockquote>
 <p><a class="anchor" id="OPT_perturb_inc_fact"></a> <b>perturb_inc_fact</b>: Increase factor for x-s perturbation. </p><blockquote class="doxtable">
@@ -702,7 +702,7 @@ Quasi-Newton</h2>
 <p></p>
 </blockquote>
 <p><a class="anchor" id="OPT_limited_memory_max_skipping"></a> <b>limited_memory_max_skipping</b>: Threshold for successive iterations where update is skipped. </p><blockquote class="doxtable">
-<p>If the update is skipped more than this number of successive iterations, we quasi-Newton approximation is reset. The valid range for this integer option is 1 &le; limited_memory_max_skipping and its default value is 2.</p>
+<p>If the update is skipped more than this number of successive iterations, the quasi-Newton approximation is reset. The valid range for this integer option is 1 &le; limited_memory_max_skipping and its default value is 2.</p>
 <p></p>
 </blockquote>
 <p><a class="anchor" id="OPT_limited_memory_initialization"></a> <b>limited_memory_initialization</b>: Initialization strategy for the limited memory quasi-Newton approximation. </p><blockquote class="doxtable">
@@ -823,8 +823,8 @@ MA57 Linear Solver</h2>
 <p>This is ICNTL(12) in MA57. The valid range for this integer option is 1 &le; ma57_node_amalgamation and its default value is 16.</p>
 <p></p>
 </blockquote>
-<p><a class="anchor" id="OPT_ma57_small_pivot_flag"></a> <b>ma57_small_pivot_flag</b>: If set to 1, then when small entries defined by CNTL(2) are detected they are removed and the corresponding pivots placed at the end of the factorization. This can be particularly efficient if the matrix is highly rank deficient. </p><blockquote class="doxtable">
-<p>This is ICNTL(16) in MA57. The valid range for this integer option is 0 &le; ma57_small_pivot_flag &le; 1 and its default value is 0.</p>
+<p><a class="anchor" id="OPT_ma57_small_pivot_flag"></a> <b>ma57_small_pivot_flag</b>: Handling of small pivots </p><blockquote class="doxtable">
+<p>If set to 1, then when small entries defined by CNTL(2) are detected they are removed and the corresponding pivots placed at the end of the factorization. This can be particularly efficient if the matrix is highly rank deficient. This is ICNTL(16) in MA57. The valid range for this integer option is 0 &le; ma57_small_pivot_flag &le; 1 and its default value is 0.</p>
 <p></p>
 </blockquote>
 <h2><a class="anchor" id="OPT_MA77_Linear_Solver"></a>
@@ -878,7 +878,7 @@ MA77 Linear Solver</h2>
 </blockquote>
 <h2><a class="anchor" id="OPT_MA86_Linear_Solver"></a>
 MA86 Linear Solver</h2>
-<p><a class="anchor" id="OPT_ma86_print_level"></a> <b>ma86_print_level</b>: Debug printing level for the linear solver MA86 </p><blockquote class="doxtable">
+<p><a class="anchor" id="OPT_ma86_print_level"></a> <b>ma86_print_level</b>: Debug printing level </p><blockquote class="doxtable">
 <p>The valid range for this integer option is unrestricted and its default value is -1.</p>
 <p></p>
 </blockquote>
@@ -886,8 +886,8 @@ MA86 Linear Solver</h2>
 <p>Two nodes in elimination tree are merged if result has fewer than ma86_nemin variables. The valid range for this integer option is 1 &le; ma86_nemin and its default value is 32.</p>
 <p></p>
 </blockquote>
-<p><a class="anchor" id="OPT_ma86_order"></a> <b>ma86_order</b>: Controls type of ordering used by HSL_MA86 </p><blockquote class="doxtable">
-<p>This option controls ordering for the solver HSL_MA86. The default value for this string option is "auto".</p>
+<p><a class="anchor" id="OPT_ma86_order"></a> <b>ma86_order</b>: Controls type of ordering </p><blockquote class="doxtable">
+<p>The default value for this string option is "auto".</p>
 <p>Possible values:</p><ul>
 <li>auto: Try both AMD and MeTiS, pick best</li>
 <li>amd: Use the HSL_MC68 approximate minimum degree algorithm</li>
@@ -895,7 +895,7 @@ MA86 Linear Solver</h2>
 </ul>
 </blockquote>
 <p><a class="anchor" id="OPT_ma86_scaling"></a> <b>ma86_scaling</b>: Controls scaling of matrix </p><blockquote class="doxtable">
-<p>This option controls scaling for the solver HSL_MA86. The default value for this string option is "mc64".</p>
+<p>The default value for this string option is "mc64".</p>
 <p>Possible values:</p><ul>
 <li>none: Do not scale the linear system matrix</li>
 <li>mc64: Scale linear system matrix using MC64</li>
@@ -920,15 +920,15 @@ MA86 Linear Solver</h2>
 </blockquote>
 <h2><a class="anchor" id="OPT_MA97_Linear_Solver"></a>
 MA97 Linear Solver</h2>
-<p><a class="anchor" id="OPT_ma97_print_level"></a> <b>ma97_print_level</b>: Debug printing level for the linear solver MA97 </p><blockquote class="doxtable">
-<p>The valid range for this integer option is unrestricted and its default value is 0.</p>
+<p><a class="anchor" id="OPT_ma97_print_level"></a> <b>ma97_print_level</b>: Debug printing level </p><blockquote class="doxtable">
+<p>The valid range for this integer option is unrestricted and its default value is -1.</p>
 <p></p>
 </blockquote>
 <p><a class="anchor" id="OPT_ma97_nemin"></a> <b>ma97_nemin</b>: Node Amalgamation parameter </p><blockquote class="doxtable">
 <p>Two nodes in elimination tree are merged if result has fewer than ma97_nemin variables. The valid range for this integer option is 1 &le; ma97_nemin and its default value is 8.</p>
 <p></p>
 </blockquote>
-<p><a class="anchor" id="OPT_ma97_order"></a> <b>ma97_order</b>: Controls type of ordering used by HSL_MA97 </p><blockquote class="doxtable">
+<p><a class="anchor" id="OPT_ma97_order"></a> <b>ma97_order</b>: Controls type of ordering </p><blockquote class="doxtable">
 <p>The default value for this string option is "auto".</p>
 <p>Possible values:</p><ul>
 <li>auto: Use HSL_MA97 heuristic to guess best of AMD and METIS</li>
@@ -940,7 +940,7 @@ MA97 Linear Solver</h2>
 <li>matched-amd: Use the HSL_MC80 matching based ordering with AMD </li>
 </ul>
 </blockquote>
-<p><a class="anchor" id="OPT_ma97_scaling"></a> <b>ma97_scaling</b>: Specifies strategy for scaling in HSL_MA97 linear solver </p><blockquote class="doxtable">
+<p><a class="anchor" id="OPT_ma97_scaling"></a> <b>ma97_scaling</b>: Specifies strategy for scaling </p><blockquote class="doxtable">
 <p>The default value for this string option is "dynamic".</p>
 <p>Possible values:</p><ul>
 <li>none: Do not scale the linear system matrix</li>

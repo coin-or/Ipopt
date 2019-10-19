@@ -1,6 +1,7 @@
 var classorg_1_1coinor_1_1Ipopt =
 [
     [ "Ipopt", "classorg_1_1coinor_1_1Ipopt.html#ab140cae4c428047f583ca789df5e5495", null ],
+    [ "Ipopt", "classorg_1_1coinor_1_1Ipopt.html#a3f65d8c507f1ac7b3386dcd92e9a70e8", null ],
     [ "Ipopt", "classorg_1_1coinor_1_1Ipopt.html#a400135e918a4b6377ea4581411ac2298", null ],
     [ "AddIpoptIntOption", "classorg_1_1coinor_1_1Ipopt.html#a3372d37c34ef8716b2a2d5bf5eed64be", null ],
     [ "AddIpoptNumOption", "classorg_1_1coinor_1_1Ipopt.html#ac3b0533ed600d1a350c39cc7ac314657", null ],
@@ -32,8 +33,6 @@ var classorg_1_1coinor_1_1Ipopt =
     [ "get_scaling_parameters", "classorg_1_1coinor_1_1Ipopt.html#a28c05534837bdcae5d2c52358d7d8929", null ],
     [ "get_number_of_nonlinear_variables", "classorg_1_1coinor_1_1Ipopt.html#ae4a6b09656bdb836851c22baf0112e47", null ],
     [ "get_list_of_nonlinear_variables", "classorg_1_1coinor_1_1Ipopt.html#a9c67cda248766e9f66d749fa99f432a7", null ],
-    [ "DLLNAME", "classorg_1_1coinor_1_1Ipopt.html#ac4bcc9e104590f8258c5c80aabdb8009", null ],
-    [ "DLLPATH", "classorg_1_1coinor_1_1Ipopt.html#a3c44217715f89186326f0149ad91d1c3", null ],
     [ "C_STYLE", "classorg_1_1coinor_1_1Ipopt.html#a4443ff7d1619c147a03ec0d33dde3c94", null ],
     [ "FORTRAN_STYLE", "classorg_1_1coinor_1_1Ipopt.html#ad22ccf5588351d02b727a02a7cddd933", null ],
     [ "SOLVE_SUCCEEDED", "classorg_1_1coinor_1_1Ipopt.html#a06e22b2ef0b1d1bf4d2d7ff49c228404", null ],

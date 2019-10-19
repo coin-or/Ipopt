@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">trunk</span-->
+   &#160;<!--span id="projectnumber">3.13.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -107,6 +107,9 @@ $(document).ready(function(){initNavTree('classIpopt_1_1SensAlgorithm.html','');
 </div><!--header-->
 <div class="contents">
 
+<p>This is the interface for the actual controller.  
+ <a href="classIpopt_1_1SensAlgorithm.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for Ipopt::SensAlgorithm:</div>
@@ -123,7 +126,6 @@ $(document).ready(function(){initNavTree('classIpopt_1_1SensAlgorithm.html','');
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a9b109c8835fab74cc71d462bb0176078"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SensAlgorithm.html#a9b109c8835fab74cc71d462bb0176078">SensAlgorithm</a> (std::vector&lt; <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1SchurDriver.html">SchurDriver</a> &gt; &gt; &amp;driver_vec, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1SensitivityStepCalculator.html">SensitivityStepCalculator</a> &gt; sens_step_calc, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1Measurement.html">Measurement</a> &gt; measurement, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> n_sens_steps)</td></tr>
-<tr class="memdesc:a9b109c8835fab74cc71d462bb0176078"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the interface for the actual controller.  <a href="#a9b109c8835fab74cc71d462bb0176078">More...</a><br /></td></tr>
 <tr class="separator:a9b109c8835fab74cc71d462bb0176078"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeae1a8e5f6cfdb2d716ecb80c4a7c9df"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SensAlgorithm.html#aeae1a8e5f6cfdb2d716ecb80c4a7c9df">~SensAlgorithm</a> ()</td></tr>
 <tr class="separator:aeae1a8e5f6cfdb2d716ecb80c4a7c9df"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -180,19 +182,19 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a2bdd6284e6f8494496efa4c065647ff5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa57b4061572d97bb8f9a3664988e7c13"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SensAlgorithm.html#aa57b4061572d97bb8f9a3664988e7c13">DirectionalD_L_</a></td></tr>
 <tr class="separator:aa57b4061572d97bb8f9a3664988e7c13"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a270ae258c54c861523e97b3dd19a28b4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SensAlgorithm.html#a270ae258c54c861523e97b3dd19a28b4">DirectionalD_Z_U_</a></td></tr>
-<tr class="separator:a270ae258c54c861523e97b3dd19a28b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7f5e0cb73fc535fbbbeed10533df55b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SensAlgorithm.html#ad7f5e0cb73fc535fbbbeed10533df55b">DirectionalD_Z_L_</a></td></tr>
 <tr class="separator:ad7f5e0cb73fc535fbbbeed10533df55b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a270ae258c54c861523e97b3dd19a28b4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SensAlgorithm.html#a270ae258c54c861523e97b3dd19a28b4">DirectionalD_Z_U_</a></td></tr>
+<tr class="separator:a270ae258c54c861523e97b3dd19a28b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56e44f3517e263ca6b1cf52cbed22b6d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SensAlgorithm.html#a56e44f3517e263ca6b1cf52cbed22b6d">SensitivityM_X_</a></td></tr>
 <tr class="memdesc:a56e44f3517e263ca6b1cf52cbed22b6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">array place holders for the sensitivity matrix  <a href="#a56e44f3517e263ca6b1cf52cbed22b6d">More...</a><br /></td></tr>
 <tr class="separator:a56e44f3517e263ca6b1cf52cbed22b6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a219ac52c13687d66c18fb2bb4a50321f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SensAlgorithm.html#a219ac52c13687d66c18fb2bb4a50321f">SensitivityM_L_</a></td></tr>
 <tr class="separator:a219ac52c13687d66c18fb2bb4a50321f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af50a31df37af507ded50f790b0170a7e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SensAlgorithm.html#af50a31df37af507ded50f790b0170a7e">SensitivityM_Z_U_</a></td></tr>
-<tr class="separator:af50a31df37af507ded50f790b0170a7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a71b39e298a5d556babe373da3a0b28f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SensAlgorithm.html#a71b39e298a5d556babe373da3a0b28f5">SensitivityM_Z_L_</a></td></tr>
 <tr class="separator:a71b39e298a5d556babe373da3a0b28f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af50a31df37af507ded50f790b0170a7e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SensAlgorithm.html#af50a31df37af507ded50f790b0170a7e">SensitivityM_Z_U_</a></td></tr>
+<tr class="separator:af50a31df37af507ded50f790b0170a7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -248,8 +250,10 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a5f6310084b90871ee4eec3d89bb407ee inherit pro_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00019">19</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<div class="textblock"><p>This is the interface for the actual controller. </p>
+<p>It handles Data input to the controller (measurement) and returns controls. </p>
+
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00023">23</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a9b109c8835fab74cc71d462bb0176078"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9b109c8835fab74cc71d462bb0176078">&#9670;&nbsp;</a></span>SensAlgorithm()</h2>
@@ -288,9 +292,6 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>This is the interface for the actual controller. </p>
-<p>It handles Data input to the controller (measurement) and returns controls </p>
 
 </div>
 </div>
@@ -423,7 +424,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>accessor methods to get access to variable sizes </p>
 
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00044">44</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00047">47</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 
 </div>
 </div>
@@ -451,7 +452,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00045">45</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00051">51</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 
 </div>
 </div>
@@ -479,7 +480,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00046">46</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00055">55</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 
 </div>
 </div>
@@ -507,7 +508,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00047">47</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00059">59</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 
 </div>
 </div>
@@ -535,7 +536,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00048">48</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00063">63</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 
 </div>
 </div>
@@ -563,7 +564,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00049">49</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00067">67</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 
 </div>
 </div>
@@ -666,7 +667,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>array place holders to store the vector of sensitivities </p>
 
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00052">52</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00073">73</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 
 </div>
 </div>
@@ -682,23 +683,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00053">53</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a270ae258c54c861523e97b3dd19a28b4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a270ae258c54c861523e97b3dd19a28b4">&#9670;&nbsp;</a></span>DirectionalD_Z_U_</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>* Ipopt::SensAlgorithm::DirectionalD_Z_U_</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00054">54</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00074">74</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 
 </div>
 </div>
@@ -714,7 +699,23 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00055">55</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00075">75</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a270ae258c54c861523e97b3dd19a28b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a270ae258c54c861523e97b3dd19a28b4">&#9670;&nbsp;</a></span>DirectionalD_Z_U_</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>* Ipopt::SensAlgorithm::DirectionalD_Z_U_</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00076">76</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 
 </div>
 </div>
@@ -732,7 +733,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>array place holders for the sensitivity matrix </p>
 
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00058">58</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00079">79</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 
 </div>
 </div>
@@ -748,23 +749,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00059">59</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
-
-</div>
-</div>
-<a id="af50a31df37af507ded50f790b0170a7e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af50a31df37af507ded50f790b0170a7e">&#9670;&nbsp;</a></span>SensitivityM_Z_U_</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>* Ipopt::SensAlgorithm::SensitivityM_Z_U_</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00060">60</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00080">80</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 
 </div>
 </div>
@@ -780,7 +765,23 @@ Additional Inherited Members</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00061">61</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00081">81</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+
+</div>
+</div>
+<a id="af50a31df37af507ded50f790b0170a7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af50a31df37af507ded50f790b0170a7e">&#9670;&nbsp;</a></span>SensitivityM_Z_U_</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>* Ipopt::SensAlgorithm::SensitivityM_Z_U_</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00082">82</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 
 </div>
 </div>
@@ -804,7 +805,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00065">65</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00085">85</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 
 </div>
 </div>
@@ -828,7 +829,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00066">66</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00086">86</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 
 </div>
 </div>
@@ -852,7 +853,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00067">67</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00087">87</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 
 </div>
 </div>
@@ -876,7 +877,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00068">68</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00088">88</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 
 </div>
 </div>
@@ -900,7 +901,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00069">69</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00089">89</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 
 </div>
 </div>
@@ -924,7 +925,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00070">70</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00090">90</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 
 </div>
 </div>
@@ -948,7 +949,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00071">71</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00091">91</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 
 </div>
 </div>
@@ -972,7 +973,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00072">72</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00092">92</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 
 </div>
 </div>
@@ -996,7 +997,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00074">74</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00094">94</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 
 </div>
 </div>
@@ -1020,7 +1021,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00075">75</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00095">95</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 
 </div>
 </div>
@@ -1044,7 +1045,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00076">76</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00096">96</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 
 </div>
 </div>
@@ -1068,7 +1069,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00077">77</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensAlgorithm_8hpp_source.html#l00097">97</a> of file <a class="el" href="SensAlgorithm_8hpp_source.html">SensAlgorithm.hpp</a>.</p>
 
 </div>
 </div>

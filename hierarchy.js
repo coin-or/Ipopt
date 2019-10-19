@@ -1,15 +1,5 @@
 var hierarchy =
 [
-    [ "std::allocator< T >", null, null ],
-    [ "std::array< T >", null, null ],
-    [ "std::auto_ptr< T >", null, null ],
-    [ "std::basic_string< Char >", null, [
-      [ "std::string", null, null ],
-      [ "std::wstring", null, null ]
-    ] ],
-    [ "std::basic_string< char >", null, null ],
-    [ "std::basic_string< wchar_t >", null, null ],
-    [ "std::bitset< Bits >", null, null ],
     [ "Ipopt::CachedResults< T >", "classIpopt_1_1CachedResults.html", null ],
     [ "Ipopt::CachedResults< Ipopt::SmartPtr< const Ipopt::Matrix > >", "classIpopt_1_1CachedResults.html", null ],
     [ "Ipopt::CachedResults< Ipopt::SmartPtr< const Ipopt::SymMatrix > >", "classIpopt_1_1CachedResults.html", null ],
@@ -17,207 +7,27 @@ var hierarchy =
     [ "Ipopt::CachedResults< Ipopt::SmartPtr< Ipopt::Vector > >", "classIpopt_1_1CachedResults.html", null ],
     [ "Ipopt::CachedResults< Number >", "classIpopt_1_1CachedResults.html", null ],
     [ "Ipopt::CachedResults< void *>", "classIpopt_1_1CachedResults.html", null ],
-    [ "CallbackFunctions", "classCallbackFunctions.html", null ],
-    [ "std::complex", null, null ],
-    [ "std::list< T >::const_iterator", null, null ],
-    [ "std::forward_list< T >::const_iterator", null, null ],
-    [ "std::map< K, T >::const_iterator", null, null ],
-    [ "std::unordered_map< K, T >::const_iterator", null, null ],
-    [ "std::multimap< K, T >::const_iterator", null, null ],
-    [ "std::basic_string< Char >::const_iterator", null, null ],
-    [ "std::unordered_multimap< K, T >::const_iterator", null, null ],
-    [ "std::set< K >::const_iterator", null, null ],
-    [ "std::string::const_iterator", null, null ],
-    [ "std::unordered_set< K >::const_iterator", null, null ],
-    [ "std::wstring::const_iterator", null, null ],
-    [ "std::multiset< K >::const_iterator", null, null ],
-    [ "std::unordered_multiset< K >::const_iterator", null, null ],
-    [ "std::vector< T >::const_iterator", null, null ],
-    [ "std::deque< T >::const_iterator", null, null ],
-    [ "std::list< T >::const_reverse_iterator", null, null ],
-    [ "std::forward_list< T >::const_reverse_iterator", null, null ],
-    [ "std::map< K, T >::const_reverse_iterator", null, null ],
-    [ "std::unordered_map< K, T >::const_reverse_iterator", null, null ],
-    [ "std::multimap< K, T >::const_reverse_iterator", null, null ],
-    [ "std::basic_string< Char >::const_reverse_iterator", null, null ],
-    [ "std::unordered_multimap< K, T >::const_reverse_iterator", null, null ],
-    [ "std::set< K >::const_reverse_iterator", null, null ],
-    [ "std::string::const_reverse_iterator", null, null ],
-    [ "std::unordered_set< K >::const_reverse_iterator", null, null ],
-    [ "std::multiset< K >::const_reverse_iterator", null, null ],
-    [ "std::wstring::const_reverse_iterator", null, null ],
-    [ "std::unordered_multiset< K >::const_reverse_iterator", null, null ],
-    [ "std::vector< T >::const_reverse_iterator", null, null ],
-    [ "std::deque< T >::const_reverse_iterator", null, null ],
-    [ "std::deque< T >", null, null ],
-    [ "std::error_category", null, null ],
-    [ "std::error_code", null, null ],
-    [ "std::error_condition", null, null ],
-    [ "std::exception", null, [
-      [ "MatlabException", "classMatlabException.html", null ],
-      [ "std::bad_alloc", null, null ],
-      [ "std::bad_cast", null, null ],
-      [ "std::bad_exception", null, null ],
-      [ "std::bad_typeid", null, null ],
-      [ "std::ios_base::failure", null, null ],
-      [ "std::logic_error", null, [
-        [ "std::domain_error", null, null ],
-        [ "std::invalid_argument", null, null ],
-        [ "std::length_error", null, null ],
-        [ "std::out_of_range", null, null ]
-      ] ],
-      [ "std::runtime_error", null, [
-        [ "std::overflow_error", null, null ],
-        [ "std::range_error", null, null ],
-        [ "std::underflow_error", null, null ]
-      ] ]
-    ] ],
     [ "Ipopt::Filter", "classIpopt_1_1Filter.html", null ],
     [ "Ipopt::FilterEntry", "classIpopt_1_1FilterEntry.html", null ],
-    [ "std::forward_list< T >", null, null ],
-    [ "std::ios_base", null, [
-      [ "std::basic_ios< char >", null, null ],
-      [ "std::basic_ios< wchar_t >", null, null ],
-      [ "std::basic_ios< Char >", null, [
-        [ "std::basic_istream< char >", null, null ],
-        [ "std::basic_istream< wchar_t >", null, null ],
-        [ "std::basic_ostream< char >", null, null ],
-        [ "std::basic_ostream< wchar_t >", null, null ],
-        [ "std::basic_istream< Char >", null, [
-          [ "std::basic_ifstream< char >", null, null ],
-          [ "std::basic_ifstream< wchar_t >", null, null ],
-          [ "std::basic_iostream< char >", null, null ],
-          [ "std::basic_iostream< wchar_t >", null, null ],
-          [ "std::basic_istringstream< char >", null, null ],
-          [ "std::basic_istringstream< wchar_t >", null, null ],
-          [ "std::basic_ifstream< Char >", null, [
-            [ "std::ifstream", null, null ],
-            [ "std::wifstream", null, null ]
-          ] ],
-          [ "std::basic_iostream< Char >", null, [
-            [ "std::basic_fstream< char >", null, null ],
-            [ "std::basic_fstream< wchar_t >", null, null ],
-            [ "std::basic_stringstream< char >", null, null ],
-            [ "std::basic_stringstream< wchar_t >", null, null ],
-            [ "std::basic_fstream< Char >", null, [
-              [ "std::fstream", null, null ],
-              [ "std::wfstream", null, null ]
-            ] ],
-            [ "std::basic_stringstream< Char >", null, [
-              [ "std::stringstream", null, null ],
-              [ "std::wstringstream", null, null ]
-            ] ]
-          ] ],
-          [ "std::basic_istringstream< Char >", null, [
-            [ "std::istringstream", null, null ],
-            [ "std::wistringstream", null, null ]
-          ] ],
-          [ "std::istream", null, null ],
-          [ "std::wistream", null, null ]
-        ] ],
-        [ "std::basic_ostream< Char >", null, [
-          [ "std::basic_iostream< char >", null, null ],
-          [ "std::basic_iostream< wchar_t >", null, null ],
-          [ "std::basic_ofstream< char >", null, null ],
-          [ "std::basic_ofstream< wchar_t >", null, null ],
-          [ "std::basic_ostringstream< char >", null, null ],
-          [ "std::basic_ostringstream< wchar_t >", null, null ],
-          [ "std::basic_iostream< Char >", null, null ],
-          [ "std::basic_ofstream< Char >", null, [
-            [ "std::ofstream", null, null ],
-            [ "std::wofstream", null, null ]
-          ] ],
-          [ "std::basic_ostringstream< Char >", null, [
-            [ "std::ostringstream", null, null ],
-            [ "std::wostringstream", null, null ]
-          ] ],
-          [ "std::ostream", null, null ],
-          [ "std::wostream", null, null ]
-        ] ],
-        [ "std::ios", null, null ],
-        [ "std::wios", null, null ]
-      ] ]
+    [ "org.coinor.Ipopt", "classorg_1_1coinor_1_1Ipopt.html", null ],
+    [ "Ipopt::IpoptException", "classIpopt_1_1IpoptException.html", [
+      [ "Ipopt::SUFFIX_EMPTY", "classIpopt_1_1SUFFIX__EMPTY.html", null ]
     ] ],
-    [ "org.coinor.Ipopt", "classorg_1_1coinor_1_1Ipopt.html", [
-      [ "org.coinor.examples.HS071", "classorg_1_1coinor_1_1examples_1_1HS071.html", null ],
-      [ "org.coinor.examples.scalable.Scalable", "classorg_1_1coinor_1_1examples_1_1scalable_1_1Scalable.html", [
-        [ "org.coinor.examples.scalable.LuksanVlcek1", "classorg_1_1coinor_1_1examples_1_1scalable_1_1LuksanVlcek1.html", null ]
-      ] ]
-    ] ],
-    [ "Ipopt::IpoptException", "classIpopt_1_1IpoptException.html", null ],
-    [ "IpoptOptions", "classIpoptOptions.html", null ],
-    [ "Iterate", "classIterate.html", null ],
-    [ "std::list< T >::iterator", null, null ],
-    [ "std::forward_list< T >::iterator", null, null ],
-    [ "std::map< K, T >::iterator", null, null ],
-    [ "std::unordered_map< K, T >::iterator", null, null ],
-    [ "std::multimap< K, T >::iterator", null, null ],
-    [ "std::basic_string< Char >::iterator", null, null ],
-    [ "std::unordered_multimap< K, T >::iterator", null, null ],
-    [ "std::set< K >::iterator", null, null ],
-    [ "std::string::iterator", null, null ],
-    [ "std::unordered_set< K >::iterator", null, null ],
-    [ "std::wstring::iterator", null, null ],
-    [ "std::multiset< K >::iterator", null, null ],
-    [ "std::unordered_multiset< K >::iterator", null, null ],
-    [ "std::vector< T >::iterator", null, null ],
-    [ "std::deque< T >::iterator", null, null ],
-    [ "std::list< T >", null, null ],
-    [ "std::list< Ipopt::DependentResult< Ipopt::SmartPtr< const Ipopt::Matrix > > *>", null, null ],
-    [ "std::list< Ipopt::DependentResult< Ipopt::SmartPtr< const Ipopt::SymMatrix > > *>", null, null ],
-    [ "std::list< Ipopt::DependentResult< Ipopt::SmartPtr< const Ipopt::Vector > > *>", null, null ],
-    [ "std::list< Ipopt::DependentResult< Ipopt::SmartPtr< Ipopt::Vector > > *>", null, null ],
-    [ "std::list< Ipopt::DependentResult< Number > *>", null, null ],
-    [ "std::list< Ipopt::DependentResult< T > *>", null, null ],
-    [ "std::list< Ipopt::DependentResult< void *> *>", null, null ],
-    [ "std::list< Ipopt::FilterEntry *>", null, null ],
-    [ "std::list< Number >", null, null ],
     [ "ma77_control_d", "structma77__control__d.html", null ],
     [ "ma77_info_d", "structma77__info__d.html", null ],
     [ "ma86_control_d", "structma86__control__d.html", null ],
     [ "ma86_info_d", "structma86__info__d.html", null ],
     [ "ma97_control_d", "structma97__control__d.html", null ],
     [ "ma97_info", "structma97__info.html", null ],
-    [ "std::map< K, T >", null, null ],
-    [ "std::map< Index, Ipopt::SmartPtr< Ipopt::PColumn > >", null, null ],
-    [ "std::map< std::string, Ipopt::OptionsList::OptionValue >", null, null ],
-    [ "std::map< std::string, Ipopt::SmartPtr< const Ipopt::AmplOptionsList::AmplOption > >", null, null ],
-    [ "std::map< std::string, Ipopt::SmartPtr< Ipopt::RegisteredOption > >", null, null ],
-    [ "std::map< std::string, std::vector< Index > >", null, null ],
-    [ "std::map< std::string, std::vector< Number > >", null, null ],
-    [ "std::map< std::string, std::vector< std::string > >", null, null ],
-    [ "MatlabFunctionHandle", "classMatlabFunctionHandle.html", null ],
-    [ "MatlabInfo", "classMatlabInfo.html", null ],
     [ "mc68_control", "structmc68__control.html", null ],
     [ "mc68_info", "structmc68__info.html", null ],
-    [ "MittelmannParaCntrl5_1", "classMittelmannParaCntrl5__1.html", null ],
-    [ "MittelmannParaCntrl5_2_1", "classMittelmannParaCntrl5__2__1.html", null ],
-    [ "MittelmannParaCntrl5_2_2", "classMittelmannParaCntrl5__2__2.html", null ],
-    [ "MittelmannParaCntrl5_2_3", "classMittelmannParaCntrl5__2__3.html", null ],
-    [ "MittelmannParaCntrl5_try", "classMittelmannParaCntrl5__try.html", null ],
-    [ "std::multimap< K, T >", null, null ],
-    [ "std::multiset< K >", null, null ],
     [ "Ipopt::Observer", "classIpopt_1_1Observer.html", [
-      [ "Ipopt::DependentResult< Ipopt::SmartPtr< const Ipopt::Matrix > >", "classIpopt_1_1DependentResult.html", null ],
-      [ "Ipopt::DependentResult< Ipopt::SmartPtr< const Ipopt::SymMatrix > >", "classIpopt_1_1DependentResult.html", null ],
-      [ "Ipopt::DependentResult< Ipopt::SmartPtr< const Ipopt::Vector > >", "classIpopt_1_1DependentResult.html", null ],
-      [ "Ipopt::DependentResult< Ipopt::SmartPtr< Ipopt::Vector > >", "classIpopt_1_1DependentResult.html", null ],
-      [ "Ipopt::DependentResult< Number >", "classIpopt_1_1DependentResult.html", null ],
-      [ "Ipopt::DependentResult< void *>", "classIpopt_1_1DependentResult.html", null ],
       [ "Ipopt::DependentResult< T >", "classIpopt_1_1DependentResult.html", null ]
     ] ],
-    [ "Options", "classOptions.html", null ],
     [ "Ipopt::OptionsList::OptionValue", "classIpopt_1_1OptionsList_1_1OptionValue.html", null ],
     [ "Ipopt::PiecewisePenalty", "classIpopt_1_1PiecewisePenalty.html", null ],
     [ "Ipopt::PiecewisePenEntry", "structIpopt_1_1PiecewisePenEntry.html", null ],
-    [ "std::priority_queue< T >", null, null ],
     [ "Ipopt::AmplOptionsList::PrivatInfo", "classIpopt_1_1AmplOptionsList_1_1PrivatInfo.html", null ],
-    [ "MittelmannParaCntrl5_1::ProblemSpecs", "classMittelmannParaCntrl5__1_1_1ProblemSpecs.html", null ],
-    [ "MittelmannParaCntrl5_2_3::ProblemSpecs", "classMittelmannParaCntrl5__2__3_1_1ProblemSpecs.html", null ],
-    [ "MittelmannParaCntrl5_try::ProblemSpecs", "classMittelmannParaCntrl5__try_1_1ProblemSpecs.html", null ],
-    [ "MittelmannParaCntrl5_2_1::ProblemSpecs", "classMittelmannParaCntrl5__2__1_1_1ProblemSpecs.html", null ],
-    [ "MittelmannParaCntrl5_2_2::ProblemSpecs", "classMittelmannParaCntrl5__2__2_1_1ProblemSpecs.html", null ],
-    [ "std::queue< T >", null, null ],
     [ "Ipopt::ReferencedObject", "classIpopt_1_1ReferencedObject.html", [
       [ "Ipopt::AlgorithmBuilder", "classIpopt_1_1AlgorithmBuilder.html", [
         [ "Ipopt::InexactAlgorithmBuilder", "classIpopt_1_1InexactAlgorithmBuilder.html", null ]
@@ -358,9 +168,7 @@ var hierarchy =
       ] ],
       [ "Ipopt::Journal", "classIpopt_1_1Journal.html", [
         [ "Ipopt::FileJournal", "classIpopt_1_1FileJournal.html", null ],
-        [ "Ipopt::MatlabJournal", "classIpopt_1_1MatlabJournal.html", null ],
-        [ "Ipopt::StreamJournal", "classIpopt_1_1StreamJournal.html", null ],
-        [ "IpoptRJournal", "classIpoptRJournal.html", null ]
+        [ "Ipopt::StreamJournal", "classIpopt_1_1StreamJournal.html", null ]
       ] ],
       [ "Ipopt::Journalist", "classIpopt_1_1Journalist.html", null ],
       [ "Ipopt::MatrixSpace", "classIpopt_1_1MatrixSpace.html", [
@@ -448,69 +256,11 @@ var hierarchy =
       ] ],
       [ "Ipopt::TimingStatistics", "classIpopt_1_1TimingStatistics.html", null ],
       [ "Ipopt::TNLP", "classIpopt_1_1TNLP.html", [
-        [ "HS071_NLP", "classHS071__NLP.html", null ],
         [ "Ipopt::AmplTNLP", "classIpopt_1_1AmplTNLP.html", [
           [ "Ipopt::SensAmplTNLP", "classIpopt_1_1SensAmplTNLP.html", null ]
         ] ],
-        [ "Ipopt::MySensTNLP", "classIpopt_1_1MySensTNLP.html", null ],
-        [ "Ipopt::ParametricTNLP", "classIpopt_1_1ParametricTNLP.html", null ],
-        [ "Ipopt::ParametricTNLP", "classIpopt_1_1ParametricTNLP.html", null ],
         [ "Ipopt::StdInterfaceTNLP", "classIpopt_1_1StdInterfaceTNLP.html", null ],
-        [ "Ipopt::TNLPReducer", "classIpopt_1_1TNLPReducer.html", null ],
-        [ "IpoptRNLP", "classIpoptRNLP.html", null ],
-        [ "MatlabProgram", "classMatlabProgram.html", null ],
-        [ "MyNLP", "classMyNLP.html", null ],
-        [ "RegisteredTNLP", "classRegisteredTNLP.html", [
-          [ "LuksanVlcek1", "classLuksanVlcek1.html", null ],
-          [ "LuksanVlcek2", "classLuksanVlcek2.html", null ],
-          [ "LuksanVlcek3", "classLuksanVlcek3.html", null ],
-          [ "LuksanVlcek4", "classLuksanVlcek4.html", null ],
-          [ "LuksanVlcek5", "classLuksanVlcek5.html", null ],
-          [ "LuksanVlcek6", "classLuksanVlcek6.html", null ],
-          [ "LuksanVlcek7", "classLuksanVlcek7.html", null ],
-          [ "MittelmannBndryCntrlDiriBase", "classMittelmannBndryCntrlDiriBase.html", [
-            [ "MittelmannBndryCntrlDiri1", "classMittelmannBndryCntrlDiri1.html", null ],
-            [ "MittelmannBndryCntrlDiri2", "classMittelmannBndryCntrlDiri2.html", null ],
-            [ "MittelmannBndryCntrlDiri3", "classMittelmannBndryCntrlDiri3.html", null ],
-            [ "MittelmannBndryCntrlDiri4", "classMittelmannBndryCntrlDiri4.html", null ]
-          ] ],
-          [ "MittelmannBndryCntrlDiriBase3D", "classMittelmannBndryCntrlDiriBase3D.html", [
-            [ "MittelmannBndryCntrlDiri3D", "classMittelmannBndryCntrlDiri3D.html", null ]
-          ] ],
-          [ "MittelmannBndryCntrlDiriBase3D_27", "classMittelmannBndryCntrlDiriBase3D__27.html", [
-            [ "MittelmannBndryCntrlDiri3D_27", "classMittelmannBndryCntrlDiri3D__27.html", null ],
-            [ "MittelmannBndryCntrlDiri3D_27BT", "classMittelmannBndryCntrlDiri3D__27BT.html", null ]
-          ] ],
-          [ "MittelmannBndryCntrlDiriBase3Dsin", "classMittelmannBndryCntrlDiriBase3Dsin.html", [
-            [ "MittelmannBndryCntrlDiri3Dsin", "classMittelmannBndryCntrlDiri3Dsin.html", null ]
-          ] ],
-          [ "MittelmannBndryCntrlNeumBase", "classMittelmannBndryCntrlNeumBase.html", [
-            [ "MittelmannBndryCntrlNeum1", "classMittelmannBndryCntrlNeum1.html", null ],
-            [ "MittelmannBndryCntrlNeum2", "classMittelmannBndryCntrlNeum2.html", null ],
-            [ "MittelmannBndryCntrlNeum3", "classMittelmannBndryCntrlNeum3.html", null ],
-            [ "MittelmannBndryCntrlNeum4", "classMittelmannBndryCntrlNeum4.html", null ]
-          ] ],
-          [ "MittelmannDistCntrlDiriBase", "classMittelmannDistCntrlDiriBase.html", [
-            [ "MittelmannDistCntrlDiri1", "classMittelmannDistCntrlDiri1.html", null ],
-            [ "MittelmannDistCntrlDiri2", "classMittelmannDistCntrlDiri2.html", null ],
-            [ "MittelmannDistCntrlDiri3", "classMittelmannDistCntrlDiri3.html", null ],
-            [ "MittelmannDistCntrlDiri3a", "classMittelmannDistCntrlDiri3a.html", null ]
-          ] ],
-          [ "MittelmannDistCntrlNeumABase", "classMittelmannDistCntrlNeumABase.html", [
-            [ "MittelmannDistCntrlNeumA1", "classMittelmannDistCntrlNeumA1.html", null ],
-            [ "MittelmannDistCntrlNeumA2", "classMittelmannDistCntrlNeumA2.html", null ],
-            [ "MittelmannDistCntrlNeumA3", "classMittelmannDistCntrlNeumA3.html", null ]
-          ] ],
-          [ "MittelmannDistCntrlNeumBBase", "classMittelmannDistCntrlNeumBBase.html", [
-            [ "MittelmannDistCntrlNeumB1", "classMittelmannDistCntrlNeumB1.html", null ],
-            [ "MittelmannDistCntrlNeumB2", "classMittelmannDistCntrlNeumB2.html", null ],
-            [ "MittelmannDistCntrlNeumB3", "classMittelmannDistCntrlNeumB3.html", null ]
-          ] ],
-          [ "MittelmannParaCntrlBase< T >", "classMittelmannParaCntrlBase.html", null ]
-        ] ],
-        [ "TutorialCpp_NLP", "classTutorialCpp__NLP.html", null ],
-        [ "TutorialCpp_NLP", "classTutorialCpp__NLP.html", null ],
-        [ "TutorialCpp_NLP", "classTutorialCpp__NLP.html", null ]
+        [ "Ipopt::TNLPReducer", "classIpopt_1_1TNLPReducer.html", null ]
       ] ],
       [ "Ipopt::TripletToCSRConverter", "classIpopt_1_1TripletToCSRConverter.html", null ],
       [ "Ipopt::VectorSpace", "classIpopt_1_1VectorSpace.html", [
@@ -522,7 +272,6 @@ var hierarchy =
     ] ],
     [ "Ipopt::Referencer", "classIpopt_1_1Referencer.html", [
       [ "Ipopt::SmartPtr< T >", "classIpopt_1_1SmartPtr.html", null ],
-      [ "Ipopt::SmartPtr< const Ipopt::AmplOptionsList::AmplOption >", "classIpopt_1_1SmartPtr.html", null ],
       [ "Ipopt::SmartPtr< const Ipopt::CompoundVectorSpace >", "classIpopt_1_1SmartPtr.html", null ],
       [ "Ipopt::SmartPtr< const Ipopt::DenseVectorSpace >", "classIpopt_1_1SmartPtr.html", null ],
       [ "Ipopt::SmartPtr< const Ipopt::ExpansionMatrix >", "classIpopt_1_1SmartPtr.html", null ],
@@ -577,7 +326,6 @@ var hierarchy =
       [ "Ipopt::SmartPtr< Ipopt::IteratesVectorSpace >", "classIpopt_1_1SmartPtr.html", null ],
       [ "Ipopt::SmartPtr< Ipopt::IterationOutput >", "classIpopt_1_1SmartPtr.html", null ],
       [ "Ipopt::SmartPtr< Ipopt::IterativeSolverTerminationTester >", "classIpopt_1_1SmartPtr.html", null ],
-      [ "Ipopt::SmartPtr< Ipopt::Journal >", "classIpopt_1_1SmartPtr.html", null ],
       [ "Ipopt::SmartPtr< Ipopt::Journalist >", "classIpopt_1_1SmartPtr.html", null ],
       [ "Ipopt::SmartPtr< Ipopt::LineSearch >", "classIpopt_1_1SmartPtr.html", null ],
       [ "Ipopt::SmartPtr< Ipopt::Matrix >", "classIpopt_1_1SmartPtr.html", null ],
@@ -590,10 +338,8 @@ var hierarchy =
       [ "Ipopt::SmartPtr< Ipopt::OptionsList >", "classIpopt_1_1SmartPtr.html", null ],
       [ "Ipopt::SmartPtr< Ipopt::OrigIterationOutput >", "classIpopt_1_1SmartPtr.html", null ],
       [ "Ipopt::SmartPtr< Ipopt::PCalculator >", "classIpopt_1_1SmartPtr.html", null ],
-      [ "Ipopt::SmartPtr< Ipopt::PColumn >", "classIpopt_1_1SmartPtr.html", null ],
       [ "Ipopt::SmartPtr< Ipopt::PDPerturbationHandler >", "classIpopt_1_1SmartPtr.html", null ],
       [ "Ipopt::SmartPtr< Ipopt::PDSystemSolver >", "classIpopt_1_1SmartPtr.html", null ],
-      [ "Ipopt::SmartPtr< Ipopt::RegisteredOption >", "classIpopt_1_1SmartPtr.html", null ],
       [ "Ipopt::SmartPtr< Ipopt::RegisteredOptions >", "classIpopt_1_1SmartPtr.html", null ],
       [ "Ipopt::SmartPtr< Ipopt::RestorationPhase >", "classIpopt_1_1SmartPtr.html", null ],
       [ "Ipopt::SmartPtr< Ipopt::ScaledMatrixSpace >", "classIpopt_1_1SmartPtr.html", null ],
@@ -614,76 +360,15 @@ var hierarchy =
       [ "Ipopt::SmartPtr< Ipopt::TripletToCSRConverter >", "classIpopt_1_1SmartPtr.html", null ],
       [ "Ipopt::SmartPtr< Ipopt::TSymLinearSolver >", "classIpopt_1_1SmartPtr.html", null ],
       [ "Ipopt::SmartPtr< Ipopt::TSymScalingMethod >", "classIpopt_1_1SmartPtr.html", null ],
-      [ "Ipopt::SmartPtr< Ipopt::Vector >", "classIpopt_1_1SmartPtr.html", null ],
-      [ "Ipopt::SmartPtr< RegisteredTNLP >", "classIpopt_1_1SmartPtr.html", null ]
+      [ "Ipopt::SmartPtr< Ipopt::Vector >", "classIpopt_1_1SmartPtr.html", null ]
     ] ],
-    [ "RegisteredTNLPs", "classRegisteredTNLPs.html", null ],
-    [ "std::multiset< K >::reverse_iterator", null, null ],
-    [ "std::wstring::reverse_iterator", null, null ],
-    [ "std::map< K, T >::reverse_iterator", null, null ],
-    [ "std::unordered_map< K, T >::reverse_iterator", null, null ],
-    [ "std::multimap< K, T >::reverse_iterator", null, null ],
-    [ "std::string::reverse_iterator", null, null ],
-    [ "std::basic_string< Char >::reverse_iterator", null, null ],
-    [ "std::unordered_multimap< K, T >::reverse_iterator", null, null ],
-    [ "std::set< K >::reverse_iterator", null, null ],
-    [ "std::unordered_set< K >::reverse_iterator", null, null ],
-    [ "std::forward_list< T >::reverse_iterator", null, null ],
-    [ "std::unordered_multiset< K >::reverse_iterator", null, null ],
-    [ "std::list< T >::reverse_iterator", null, null ],
-    [ "std::vector< T >::reverse_iterator", null, null ],
-    [ "std::deque< T >::reverse_iterator", null, null ],
-    [ "std::set< K >", null, null ],
-    [ "std::smart_ptr< T >", null, null ],
-    [ "org.coinor.examples.scalable.SolveProblem", "classorg_1_1coinor_1_1examples_1_1scalable_1_1SolveProblem.html", null ],
-    [ "SparseMatrix", "classSparseMatrix.html", null ],
-    [ "std::stack< T >", null, null ],
     [ "Ipopt::RegisteredOption::string_entry", "classIpopt_1_1RegisteredOption_1_1string__entry.html", null ],
     [ "Ipopt::Subject", "classIpopt_1_1Subject.html", [
       [ "Ipopt::TaggedObject", "classIpopt_1_1TaggedObject.html", null ]
     ] ],
-    [ "std::system_error", null, null ],
-    [ "std::thread", null, null ],
     [ "Ipopt::TimedTask", "classIpopt_1_1TimedTask.html", null ],
     [ "Ipopt::TripletToCSRConverter::TripletEntry", "classIpopt_1_1TripletToCSRConverter_1_1TripletEntry.html", null ],
     [ "Ipopt::TripletHelper", "classIpopt_1_1TripletHelper.html", null ],
-    [ "std::unique_ptr< T >", null, null ],
-    [ "std::unordered_map< K, T >", null, null ],
-    [ "std::unordered_multimap< K, T >", null, null ],
-    [ "std::unordered_multiset< K >", null, null ],
-    [ "std::unordered_set< K >", null, null ],
-    [ "std::valarray< T >", null, null ],
-    [ "std::vector< T >", null, null ],
-    [ "std::vector< const Ipopt::Subject *>", null, null ],
-    [ "std::vector< Index >", null, null ],
-    [ "std::vector< Ipopt::Observer *>", null, null ],
-    [ "std::vector< Ipopt::PiecewisePenEntry >", null, null ],
-    [ "std::vector< Ipopt::RegisteredOption::string_entry >", null, null ],
-    [ "std::vector< Ipopt::SmartPtr< const Ipopt::Matrix > >", null, null ],
-    [ "std::vector< Ipopt::SmartPtr< const Ipopt::MatrixSpace > >", null, null ],
-    [ "std::vector< Ipopt::SmartPtr< const Ipopt::SymMatrix > >", null, null ],
-    [ "std::vector< Ipopt::SmartPtr< const Ipopt::SymMatrixSpace > >", null, null ],
-    [ "std::vector< Ipopt::SmartPtr< const Ipopt::Vector > >", null, null ],
-    [ "std::vector< Ipopt::SmartPtr< const Ipopt::VectorSpace > >", null, null ],
-    [ "std::vector< Ipopt::SmartPtr< Ipopt::IteratesVector > >", null, null ],
-    [ "std::vector< Ipopt::SmartPtr< Ipopt::Journal > >", null, null ],
-    [ "std::vector< Ipopt::SmartPtr< Ipopt::SchurDriver > >", null, null ],
-    [ "std::vector< Ipopt::SmartPtr< Ipopt::Vector > >", null, null ],
-    [ "std::vector< Number >", null, null ],
-    [ "std::vector< std::string >", null, null ],
-    [ "std::vector< std::vector< bool > >", null, null ],
-    [ "std::vector< std::vector< Ipopt::SmartPtr< const Ipopt::Matrix > > >", null, null ],
-    [ "std::vector< std::vector< Ipopt::SmartPtr< const Ipopt::MatrixSpace > > >", null, null ],
-    [ "std::vector< std::vector< Ipopt::SmartPtr< Ipopt::Matrix > > >", null, null ],
-    [ "std::vector< Suffix_Source >", null, null ],
-    [ "std::vector< Suffix_Type >", null, null ],
-    [ "std::vector< TaggedObject::Tag >", null, null ],
-    [ "std::weak_ptr< T >", null, null ],
-    [ "AlgorithmMode", null, null ],
-    [ "ApplicationReturnStatus", null, null ],
     [ "File", null, null ],
-    [ "HashMap", null, null ],
-    [ "K", null, null ],
-    [ "SolverReturn", null, null ],
     [ "T", null, null ]
 ];

@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['f',['f',['../classMatlabFunctionHandle.html#ae7c4557c0791851559bf10b831b7ea15',1,'MatlabFunctionHandle']]],
   ['f_5farray_5fin',['f_array_in',['../structmc68__control.html#a2bfbf76348bbb901035c729df5e5678f',1,'mc68_control']]],
   ['f_5farray_5fout',['f_array_out',['../structmc68__control.html#a06db81f0f57f11403211aec16342d9f2',1,'mc68_control']]],
   ['f_5farrays',['f_arrays',['../structma77__control__d.html#a4e4133ceef6c3b6369210171f7998fcb',1,'ma77_control_d::f_arrays()'],['../structma86__control__d.html#ad628feec781b3ba1b2bf2df22448dae4',1,'ma86_control_d::f_arrays()'],['../structma97__control__d.html#a35baac054ca7a91b2a8e66064c08063b',1,'ma97_control_d::f_arrays()']]],
@@ -47,6 +46,5 @@ var searchData=
   ['full_5fg_5f',['full_g_',['../classIpopt_1_1TNLPAdapter.html#a18a4549bcd6b661bc7d30c6a70ebea5b',1,'Ipopt::TNLPAdapter']]],
   ['full_5flambda_5f',['full_lambda_',['../classIpopt_1_1TNLPAdapter.html#a70c491d8ce531e705b7e6c68af2415a6',1,'Ipopt::TNLPAdapter']]],
   ['full_5fstep_5faccepted_5f',['full_step_accepted_',['../classIpopt_1_1InexactData.html#a26448b7df966dea6628f11fb7ef8cc0d',1,'Ipopt::InexactData']]],
-  ['full_5fx_5f',['full_x_',['../classIpopt_1_1TNLPAdapter.html#ae45511d41c1482f2a25e3800b4cd7627',1,'Ipopt::TNLPAdapter']]],
-  ['funcs',['funcs',['../classMatlabProgram.html#ab87a13439ab7978d86c16d18c862f1a4',1,'MatlabProgram']]]
+  ['full_5fx_5f',['full_x_',['../classIpopt_1_1TNLPAdapter.html#ae45511d41c1482f2a25e3800b4cd7627',1,'Ipopt::TNLPAdapter']]]
 ];

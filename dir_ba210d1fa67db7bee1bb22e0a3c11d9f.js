@@ -22,7 +22,9 @@ var dir_ba210d1fa67db7bee1bb22e0a3c11d9f =
     ] ],
     [ "IpRegOptions.hpp", "IpRegOptions_8hpp.html", "IpRegOptions_8hpp" ],
     [ "IpSmartPtr.hpp", "IpSmartPtr_8hpp.html", "IpSmartPtr_8hpp" ],
-    [ "IpTaggedObject.hpp", "IpTaggedObject_8hpp.html", "IpTaggedObject_8hpp" ],
+    [ "IpTaggedObject.hpp", "IpTaggedObject_8hpp.html", [
+      [ "TaggedObject", "classIpopt_1_1TaggedObject.html", "classIpopt_1_1TaggedObject" ]
+    ] ],
     [ "IpTimedTask.hpp", "IpTimedTask_8hpp.html", [
       [ "TimedTask", "classIpopt_1_1TimedTask.html", "classIpopt_1_1TimedTask" ]
     ] ],

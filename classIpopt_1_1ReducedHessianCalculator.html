@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">trunk</span-->
+   &#160;<!--span id="projectnumber">3.13.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -105,6 +105,9 @@ $(document).ready(function(){initNavTree('classIpopt_1_1ReducedHessianCalculator
 </div><!--header-->
 <div class="contents">
 
+<p>This is the interface for the actual controller.  
+ <a href="classIpopt_1_1ReducedHessianCalculator.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="SensReducedHessianCalculator_8hpp_source.html">SensReducedHessianCalculator.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for Ipopt::ReducedHessianCalculator:</div>
@@ -121,7 +124,6 @@ $(document).ready(function(){initNavTree('classIpopt_1_1ReducedHessianCalculator
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a257190deb4e4fd3b08950a288e0f89b1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReducedHessianCalculator.html#a257190deb4e4fd3b08950a288e0f89b1">ReducedHessianCalculator</a> (<a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1SchurData.html">SchurData</a> &gt; hess_data, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1PCalculator.html">PCalculator</a> &gt; pcalc)</td></tr>
-<tr class="memdesc:a257190deb4e4fd3b08950a288e0f89b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the interface for the actual controller.  <a href="#a257190deb4e4fd3b08950a288e0f89b1">More...</a><br /></td></tr>
 <tr class="separator:a257190deb4e4fd3b08950a288e0f89b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a945b61c9a45bb06541377b4d12873fe7"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReducedHessianCalculator.html#a945b61c9a45bb06541377b4d12873fe7">~ReducedHessianCalculator</a> ()</td></tr>
 <tr class="separator:a945b61c9a45bb06541377b4d12873fe7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -129,6 +131,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a5cab5c18fd935bbaa1c51f9c3b09bbc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of the initialization method that has to be overloaded by for each derived class.  <a href="#a5cab5c18fd935bbaa1c51f9c3b09bbc3">More...</a><br /></td></tr>
 <tr class="separator:a5cab5c18fd935bbaa1c51f9c3b09bbc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa94b9be6817e9ef3a997734e8a8cbcf"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReducedHessianCalculator.html#aaa94b9be6817e9ef3a997734e8a8cbcf">ComputeReducedHessian</a> ()</td></tr>
+<tr class="memdesc:aaa94b9be6817e9ef3a997734e8a8cbcf"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function computes the unscaled reduced hessian matrix.  <a href="#aaa94b9be6817e9ef3a997734e8a8cbcf">More...</a><br /></td></tr>
 <tr class="separator:aaa94b9be6817e9ef3a997734e8a8cbcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classIpopt_1_1AlgorithmStrategyObject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classIpopt_1_1AlgorithmStrategyObject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classIpopt_1_1AlgorithmStrategyObject.html">Ipopt::AlgorithmStrategyObject</a></td></tr>
 <tr class="memitem:aa2cb1ac4ea5b97c9283bc0fdb71da1d1 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1AlgorithmStrategyObject.html#aa2cb1ac4ea5b97c9283bc0fdb71da1d1">Initialize</a> (const <a class="el" href="classIpopt_1_1Journalist.html">Journalist</a> &amp;jnlst, <a class="el" href="classIpopt_1_1IpoptNLP.html">IpoptNLP</a> &amp;ip_nlp, <a class="el" href="classIpopt_1_1IpoptData.html">IpoptData</a> &amp;ip_data, <a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a> &amp;ip_cq, const <a class="el" href="classIpopt_1_1OptionsList.html">OptionsList</a> &amp;options, const std::string &amp;prefix)</td></tr>
@@ -182,8 +185,10 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a5f6310084b90871ee4eec3d89bb407ee inherit pro_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="SensReducedHessianCalculator_8hpp_source.html#l00017">17</a> of file <a class="el" href="SensReducedHessianCalculator_8hpp_source.html">SensReducedHessianCalculator.hpp</a>.</p>
+<div class="textblock"><p>This is the interface for the actual controller. </p>
+<p>It handles Data input to the controller (measurement) and returns controls. </p>
+
+<p class="definition">Definition at line <a class="el" href="SensReducedHessianCalculator_8hpp_source.html#l00021">21</a> of file <a class="el" href="SensReducedHessianCalculator_8hpp_source.html">SensReducedHessianCalculator.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a257190deb4e4fd3b08950a288e0f89b1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a257190deb4e4fd3b08950a288e0f89b1">&#9670;&nbsp;</a></span>ReducedHessianCalculator()</h2>
@@ -210,9 +215,6 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>This is the interface for the actual controller. </p>
-<p>It handles Data input to the controller (measurement) and returns controls </p>
 
 </div>
 </div>
@@ -305,6 +307,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>This function computes the unscaled reduced hessian matrix. </p>
+
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
@@ -330,7 +334,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Pointer to Schurdata object holding the indices for selecting the free variables. </p>
 
-<p class="definition">Definition at line <a class="el" href="SensReducedHessianCalculator_8hpp_source.html#l00036">36</a> of file <a class="el" href="SensReducedHessianCalculator_8hpp_source.html">SensReducedHessianCalculator.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensReducedHessianCalculator_8hpp_source.html#l00042">42</a> of file <a class="el" href="SensReducedHessianCalculator_8hpp_source.html">SensReducedHessianCalculator.hpp</a>.</p>
 
 </div>
 </div>
@@ -356,7 +360,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Pointer to the P Calculator object that returns the reduced hessian matrix. </p>
 
-<p class="definition">Definition at line <a class="el" href="SensReducedHessianCalculator_8hpp_source.html#l00039">39</a> of file <a class="el" href="SensReducedHessianCalculator_8hpp_source.html">SensReducedHessianCalculator.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensReducedHessianCalculator_8hpp_source.html#l00045">45</a> of file <a class="el" href="SensReducedHessianCalculator_8hpp_source.html">SensReducedHessianCalculator.hpp</a>.</p>
 
 </div>
 </div>
@@ -382,7 +386,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>True, if option rh_eigendecomp was set to yes. </p>
 
-<p class="definition">Definition at line <a class="el" href="SensReducedHessianCalculator_8hpp_source.html#l00042">42</a> of file <a class="el" href="SensReducedHessianCalculator_8hpp_source.html">SensReducedHessianCalculator.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensReducedHessianCalculator_8hpp_source.html#l00048">48</a> of file <a class="el" href="SensReducedHessianCalculator_8hpp_source.html">SensReducedHessianCalculator.hpp</a>.</p>
 
 </div>
 </div>

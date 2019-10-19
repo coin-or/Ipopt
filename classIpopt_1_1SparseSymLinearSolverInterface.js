@@ -18,5 +18,5 @@ var classIpopt_1_1SparseSymLinearSolverInterface =
     [ "ProvidesInertia", "classIpopt_1_1SparseSymLinearSolverInterface.html#a19b3c3b0daec34ff3c44e9d79f3b3b5d", null ],
     [ "MatrixFormat", "classIpopt_1_1SparseSymLinearSolverInterface.html#acdaeb282c301a02371ec206cb0c8277a", null ],
     [ "ProvidesDegeneracyDetection", "classIpopt_1_1SparseSymLinearSolverInterface.html#a437afeb947fb9c081a69ddebb3bd70fd", null ],
-    [ "DetermineDependentRows", "classIpopt_1_1SparseSymLinearSolverInterface.html#aaf8ed1318c2b7ae4664b7c19e136e360", null ]
+    [ "DetermineDependentRows", "classIpopt_1_1SparseSymLinearSolverInterface.html#ac0acf21743d7d571959bd5b432d2d58f", null ]
 ];

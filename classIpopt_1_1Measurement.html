@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">trunk</span-->
+   &#160;<!--span id="projectnumber">3.13.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -112,8 +112,8 @@ $(document).ready(function(){initNavTree('classIpopt_1_1Measurement.html','');})
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="classIpopt_1_1Measurement__inherit__graph.png" border="0" usemap="#Ipopt_1_1Measurement_inherit__map" alt="Inheritance graph"/></div>
 <map name="Ipopt_1_1Measurement_inherit__map" id="Ipopt_1_1Measurement_inherit__map">
-<area shape="rect" id="node3" href="classIpopt_1_1MetadataMeasurement.html" title="Ipopt::MetadataMeasurement" alt="" coords="5,155,219,181"/>
-<area shape="rect" id="node2" href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it. " alt="" coords="23,5,201,32"/>
+<area shape="rect" id="node3" href="classIpopt_1_1MetadataMeasurement.html" title="Ipopt::MetadataMeasurement" alt="" coords="5,155,220,181"/>
+<area shape="rect" id="node2" href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it. " alt="" coords="23,5,202,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -131,7 +131,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a7a41f780d9543ae951186222ef060379"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function returns delta_u.  <a href="#a7a41f780d9543ae951186222ef060379">More...</a><br /></td></tr>
 <tr class="separator:a7a41f780d9543ae951186222ef060379"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a738d5f75880c737fcf371bd354cb2196"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Measurement.html#a738d5f75880c737fcf371bd354cb2196">SetSolution</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> measurement_number, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1IteratesVector.html">IteratesVector</a> &gt; sol)=0</td></tr>
-<tr class="memdesc:a738d5f75880c737fcf371bd354cb2196"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function does whatever the measurement machine does with the solution of the <a class="el" href="classIpopt_1_1SensAlgorithm.html">SensAlgorithm</a>.  <a href="#a738d5f75880c737fcf371bd354cb2196">More...</a><br /></td></tr>
+<tr class="memdesc:a738d5f75880c737fcf371bd354cb2196"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function does whatever the measurement machine does with the solution of the <a class="el" href="classIpopt_1_1SensAlgorithm.html" title="This is the interface for the actual controller. ">SensAlgorithm</a>.  <a href="#a738d5f75880c737fcf371bd354cb2196">More...</a><br /></td></tr>
 <tr class="separator:a738d5f75880c737fcf371bd354cb2196"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classIpopt_1_1ReferencedObject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classIpopt_1_1ReferencedObject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classIpopt_1_1ReferencedObject.html">Ipopt::ReferencedObject</a></td></tr>
 <tr class="memitem:a5c0f2208e3ead22bf7c5179381ed8203 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#a5c0f2208e3ead22bf7c5179381ed8203">ReferencedObject</a> ()</td></tr>
@@ -147,7 +147,7 @@ Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="SensMeasurement_8hpp_source.html#l00019">19</a> of file <a class="el" href="SensMeasurement_8hpp_source.html">SensMeasurement.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensMeasurement_8hpp_source.html#l00017">17</a> of file <a class="el" href="SensMeasurement_8hpp_source.html">SensMeasurement.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a5dc3d2831da73034aed6fb1d89d86c3e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5dc3d2831da73034aed6fb1d89d86c3e">&#9670;&nbsp;</a></span>Measurement()</h2>
@@ -173,9 +173,9 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>This class provides an abstraction for the measurements of the states coming in and the solutions of the controller. </p>
-<p>It basicall acts as the "plant" of the controller. </p>
+<p>It basically acts as the "plant" of the controller. </p>
 
-<p class="definition">Definition at line <a class="el" href="SensMeasurement_8hpp_source.html#l00025">25</a> of file <a class="el" href="SensMeasurement_8hpp_source.html">SensMeasurement.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensMeasurement_8hpp_source.html#l00026">26</a> of file <a class="el" href="SensMeasurement_8hpp_source.html">SensMeasurement.hpp</a>.</p>
 
 </div>
 </div>
@@ -302,7 +302,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>This function does whatever the measurement machine does with the solution of the <a class="el" href="classIpopt_1_1SensAlgorithm.html">SensAlgorithm</a>. </p>
+<p>This function does whatever the measurement machine does with the solution of the <a class="el" href="classIpopt_1_1SensAlgorithm.html" title="This is the interface for the actual controller. ">SensAlgorithm</a>. </p>
 
 <p>Implemented in <a class="el" href="classIpopt_1_1MetadataMeasurement.html#aa896d7aa9cdd02a9de62210c0def0ea0">Ipopt::MetadataMeasurement</a>.</p>
 

@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">trunk</span-->
+   &#160;<!--span id="projectnumber">3.13.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -696,13 +696,13 @@ Method implementing the detection of linearly dependent equality constraints</h2
           <td class="memname">virtual bool Ipopt::TNLPAdapter::ProcessOptions </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classIpopt_1_1OptionsList.html">OptionsList</a> &amp;&#160;</td>
-          <td class="paramname"><em>options</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>prefix</em>&#160;</td>
+          <td class="paramname">&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -719,7 +719,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Overload if you want the chance to process options or parameters that may be specific to the <a class="el" href="classIpopt_1_1NLP.html">NLP</a>. </p>
 
-<p>Reimplemented from <a class="el" href="classIpopt_1_1NLP.html#a2993e07343315bc4ebabfcd076aba81a">Ipopt::NLP</a>.</p>
+<p>Reimplemented from <a class="el" href="classIpopt_1_1NLP.html#a57e81a7b5f494899c4dd6279f30fa9f0">Ipopt::NLP</a>.</p>
 
 </div>
 </div>
@@ -1027,7 +1027,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 <p>Method for obtaining an entire iterate as a warmstart point. </p>
 <p>The incoming <a class="el" href="classIpopt_1_1IteratesVector.html" title="Specialized CompoundVector class specifically for the algorithm iterates. ">IteratesVector</a> has to be filled. </p>
 
-<p>Reimplemented from <a class="el" href="classIpopt_1_1NLP.html#a963cf14fa4f434465c7e6c718622da3b">Ipopt::NLP</a>.</p>
+<p>Reimplemented from <a class="el" href="classIpopt_1_1NLP.html#ad53d47a017c13c4f90459c6c1d40925d">Ipopt::NLP</a>.</p>
 
 </div>
 </div>
@@ -1328,43 +1328,43 @@ Method implementing the detection of linearly dependent equality constraints</h2
           <td class="memname">virtual void Ipopt::TNLPAdapter::GetScalingParameters </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1VectorSpace.html">VectorSpace</a> &gt;&#160;</td>
-          <td class="paramname"><em>x_space</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1VectorSpace.html">VectorSpace</a> &gt;&#160;</td>
-          <td class="paramname"><em>c_space</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1VectorSpace.html">VectorSpace</a> &gt;&#160;</td>
-          <td class="paramname"><em>d_space</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> &amp;&#160;</td>
-          <td class="paramname"><em>obj_scaling</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>x_scaling</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>c_scaling</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>d_scaling</em>&#160;</td>
+          <td class="paramname">&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1382,7 +1382,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 <p>Routines to get the scaling parameters. </p>
 <p>These do not need to be overloaded unless the options are set for user scaling. </p>
 
-<p>Reimplemented from <a class="el" href="classIpopt_1_1NLP.html#a4d480089429ee8fad9297d44afebb6ba">Ipopt::NLP</a>.</p>
+<p>Reimplemented from <a class="el" href="classIpopt_1_1NLP.html#a8a5d127db49494ab7001e55c5438f888">Ipopt::NLP</a>.</p>
 
 </div>
 </div>
@@ -1399,67 +1399,67 @@ Method implementing the detection of linearly dependent equality constraints</h2
           <td class="memname">virtual void Ipopt::TNLPAdapter::FinalizeSolution </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespaceIpopt.html#a53a5dc5f64f568252ba7bb7385e7f834">SolverReturn</a>&#160;</td>
-          <td class="paramname"><em>status</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;&#160;</td>
-          <td class="paramname"><em>x</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;&#160;</td>
-          <td class="paramname"><em>z_L</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;&#160;</td>
-          <td class="paramname"><em>z_U</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;&#160;</td>
-          <td class="paramname"><em>c</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;&#160;</td>
-          <td class="paramname"><em>d</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;&#160;</td>
-          <td class="paramname"><em>y_c</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;&#160;</td>
-          <td class="paramname"><em>y_d</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
-          <td class="paramname"><em>obj_value</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="classIpopt_1_1IpoptData.html">IpoptData</a> *&#160;</td>
-          <td class="paramname"><em>ip_data</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a> *&#160;</td>
-          <td class="paramname"><em>ip_cq</em>&#160;</td>
+          <td class="paramname">&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1477,7 +1477,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 <p>This method is called at the very end of the optimization. </p>
 <p>It provides the final iterate to the user, so that it can be stored as the solution. The status flag indicates the outcome of the optimization, where SolverReturn is defined in <a class="el" href="IpAlgTypes_8hpp.html">IpAlgTypes.hpp</a>. </p>
 
-<p>Reimplemented from <a class="el" href="classIpopt_1_1NLP.html#a003c78d8eec0f43f6a81ffb0240b7032">Ipopt::NLP</a>.</p>
+<p>Reimplemented from <a class="el" href="classIpopt_1_1NLP.html#af5ac10c639e5587a8b4cdd4423aeea17">Ipopt::NLP</a>.</p>
 
 </div>
 </div>
@@ -1494,79 +1494,79 @@ Method implementing the detection of linearly dependent equality constraints</h2
           <td class="memname">virtual bool Ipopt::TNLPAdapter::IntermediateCallBack </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespaceIpopt.html#ace0dc10c65e5c7eba6c1ed2fd5fe3533">AlgorithmMode</a>&#160;</td>
-          <td class="paramname"><em>mode</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
-          <td class="paramname"><em>iter</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
-          <td class="paramname"><em>obj_value</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
-          <td class="paramname"><em>inf_pr</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
-          <td class="paramname"><em>inf_du</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
-          <td class="paramname"><em>mu</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
-          <td class="paramname"><em>d_norm</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
-          <td class="paramname"><em>regularization_size</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
-          <td class="paramname"><em>alpha_du</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
-          <td class="paramname"><em>alpha_pr</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
-          <td class="paramname"><em>ls_trials</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="classIpopt_1_1IpoptData.html">IpoptData</a> *&#160;</td>
-          <td class="paramname"><em>ip_data</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a> *&#160;</td>
-          <td class="paramname"><em>ip_cq</em>&#160;</td>
+          <td class="paramname">&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1584,7 +1584,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 <p>This method is called once per iteration, after the iteration summary output has been printed. </p>
 <p>It provides the current information to the user to do with it anything she wants. It also allows the user to ask for a premature termination of the optimization by returning false, in which case <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions...">Ipopt</a> will terminate with a corresponding return status. The basic information provided in the argument list has the quantities values printed in the iteration summary line. If more information is required, a user can obtain it from the IpData and IpCalculatedQuantities objects. However, note that the provided quantities are all for the problem that <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions...">Ipopt</a> sees, i.e., the quantities might be scaled, fixed variables might be sorted out, etc. The status indicates things like whether the algorithm is in the restoration phase... In the restoration phase, the dual variables are probably not not changing. </p>
 
-<p>Reimplemented from <a class="el" href="classIpopt_1_1NLP.html#a521e97cbf690e53e5784f0f5a5c4a47a">Ipopt::NLP</a>.</p>
+<p>Reimplemented from <a class="el" href="classIpopt_1_1NLP.html#a9cf00e4fc7ad13c810a6d1e238221fee">Ipopt::NLP</a>.</p>
 
 </div>
 </div>

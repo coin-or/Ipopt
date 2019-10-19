@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">trunk</span-->
+   &#160;<!--span id="projectnumber">3.13.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -106,6 +106,9 @@ $(document).ready(function(){initNavTree('classIpopt_1_1SchurData.html','');});
 </div><!--header-->
 <div class="contents">
 
+<p>This interface serves as a reference point for multiple classes that need to use <a class="el" href="classIpopt_1_1SchurData.html" title="This interface serves as a reference point for multiple classes that need to use SchurData (PCalculat...">SchurData</a> (<a class="el" href="classIpopt_1_1PCalculator.html" title="This class is the interface for implementations of any class that calculates the matrix  of the follo...">PCalculator</a>, <a class="el" href="classIpopt_1_1SchurDriver.html" title="This class is the interface for any class that deals with the Schur matrix from the point when it is ...">SchurDriver</a>).  
+ <a href="classIpopt_1_1SchurData.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="SensSchurData_8hpp_source.html">SensSchurData.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for Ipopt::SchurData:</div>
@@ -122,14 +125,13 @@ $(document).ready(function(){initNavTree('classIpopt_1_1SchurData.html','');});
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aac84cd5bf980b5872b05f4a85386425e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SchurData.html#aac84cd5bf980b5872b05f4a85386425e">SchurData</a> ()</td></tr>
-<tr class="memdesc:aac84cd5bf980b5872b05f4a85386425e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This interface serves as a reference point for multiple classes that need to use <a class="el" href="classIpopt_1_1SchurData.html">SchurData</a> (<a class="el" href="classIpopt_1_1PCalculator.html">PCalculator</a>, <a class="el" href="classIpopt_1_1SchurDriver.html">SchurDriver</a>).  <a href="#aac84cd5bf980b5872b05f4a85386425e">More...</a><br /></td></tr>
 <tr class="separator:aac84cd5bf980b5872b05f4a85386425e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad916596f3a15e89795cb66a88a882dfa"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SchurData.html#ad916596f3a15e89795cb66a88a882dfa">~SchurData</a> ()</td></tr>
 <tr class="separator:ad916596f3a15e89795cb66a88a882dfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08c1dd4143d6bec3b20685250e241cfc"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1SchurData.html">SchurData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SchurData.html#a08c1dd4143d6bec3b20685250e241cfc">MakeNewSchurDataCopy</a> () const =0</td></tr>
 <tr class="separator:a08c1dd4143d6bec3b20685250e241cfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a160ce7c181842df3018fcc35624822ac"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SchurData.html#a160ce7c181842df3018fcc35624822ac">SetData_Flag</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> dim, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *flags, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> v=1.0)=0</td></tr>
-<tr class="memdesc:a160ce7c181842df3018fcc35624822ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Functions to set the Schurdata.  <a href="#a160ce7c181842df3018fcc35624822ac">More...</a><br /></td></tr>
+<tr class="memdesc:a160ce7c181842df3018fcc35624822ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set Data to one for given indices.  <a href="#a160ce7c181842df3018fcc35624822ac">More...</a><br /></td></tr>
 <tr class="separator:a160ce7c181842df3018fcc35624822ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a969c0adc417f04afbb9de2e94ff10397"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SchurData.html#a969c0adc417f04afbb9de2e94ff10397">SetData_Flag</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> dim, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *flags, const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *values)=0</td></tr>
 <tr class="memdesc:a969c0adc417f04afbb9de2e94ff10397"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set Data to corresponing Number.  <a href="#a969c0adc417f04afbb9de2e94ff10397">More...</a><br /></td></tr>
@@ -192,8 +194,12 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a94209d32f74ab7fcf6ba489788d87685"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="SensSchurData_8hpp_source.html#l00018">18</a> of file <a class="el" href="SensSchurData_8hpp_source.html">SensSchurData.hpp</a>.</p>
+<div class="textblock"><p>This interface serves as a reference point for multiple classes that need to use <a class="el" href="classIpopt_1_1SchurData.html" title="This interface serves as a reference point for multiple classes that need to use SchurData (PCalculat...">SchurData</a> (<a class="el" href="classIpopt_1_1PCalculator.html" title="This class is the interface for implementations of any class that calculates the matrix  of the follo...">PCalculator</a>, <a class="el" href="classIpopt_1_1SchurDriver.html" title="This class is the interface for any class that deals with the Schur matrix from the point when it is ...">SchurDriver</a>). </p>
+<p>It declares as little as possible, so that <a class="el" href="classIpopt_1_1SchurData.html" title="This interface serves as a reference point for multiple classes that need to use SchurData (PCalculat...">SchurData</a> implementations can be very special and fast.</p>
+<p>I have not decided yet if there are certain ways I want to impose that <a class="el" href="classIpopt_1_1SchurData.html" title="This interface serves as a reference point for multiple classes that need to use SchurData (PCalculat...">SchurData</a> can be set. I will figure this out as soon as I write the upstream classes that need to do that</p>
+<p>Nomenclature in this program is based on Victor Zavalas thesis. </p>
+
+<p class="definition">Definition at line <a class="el" href="SensSchurData_8hpp_source.html#l00029">29</a> of file <a class="el" href="SensSchurData_8hpp_source.html">SensSchurData.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aac84cd5bf980b5872b05f4a85386425e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aac84cd5bf980b5872b05f4a85386425e">&#9670;&nbsp;</a></span>SchurData()</h2>
@@ -218,12 +224,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>This interface serves as a reference point for multiple classes that need to use <a class="el" href="classIpopt_1_1SchurData.html">SchurData</a> (<a class="el" href="classIpopt_1_1PCalculator.html">PCalculator</a>, <a class="el" href="classIpopt_1_1SchurDriver.html">SchurDriver</a>). </p>
-<p>It declares as little as possible, so that <a class="el" href="classIpopt_1_1SchurData.html">SchurData</a> implementations can be very special and fast.</p>
-<p>I have not decided yet if there are certain ways I want to impose that <a class="el" href="classIpopt_1_1SchurData.html">SchurData</a> can be set. I will figure this out as soon as I write the upstream classes that need to do that</p>
-<p>Nomenclature in this program is based on Victor Zavalas thesis. </p>
-
-<p class="definition">Definition at line <a class="el" href="SensSchurData_8hpp_source.html#l00033">33</a> of file <a class="el" href="SensSchurData_8hpp_source.html">SensSchurData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensSchurData_8hpp_source.html#l00032">32</a> of file <a class="el" href="SensSchurData_8hpp_source.html">SensSchurData.hpp</a>.</p>
 
 </div>
 </div>
@@ -250,7 +251,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensSchurData_8hpp_source.html#l00036">36</a> of file <a class="el" href="SensSchurData_8hpp_source.html">SensSchurData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensSchurData_8hpp_source.html#l00037">37</a> of file <a class="el" href="SensSchurData_8hpp_source.html">SensSchurData.hpp</a>.</p>
 
 </div>
 </div>
@@ -322,8 +323,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Functions to set the Schurdata. </p>
-<p>At least one must be overloaded Set Data to one for given indices. Size of vector is ipopt_x_&lt;full_x_ </p>
+<p>Set Data to one for given indices. </p>
+<p>Size of vector is ipopt_x_&lt;full_x_ </p>
 
 <p>Implemented in <a class="el" href="classIpopt_1_1IndexSchurData.html#a9004fe1185ce96c6ed57f2e59fccf6ac">Ipopt::IndexSchurData</a>.</p>
 
@@ -534,7 +535,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classIpopt_1_1IndexSchurData.html#aab9414ddd40d2772defd17b651f33b59">Ipopt::IndexSchurData</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="SensSchurData_8hpp_source.html#l00057">57</a> of file <a class="el" href="SensSchurData_8hpp_source.html">SensSchurData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensSchurData_8hpp_source.html#l00077">77</a> of file <a class="el" href="SensSchurData_8hpp_source.html">SensSchurData.hpp</a>.</p>
 
 </div>
 </div>
@@ -561,7 +562,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensSchurData_8hpp_source.html#l00062">62</a> of file <a class="el" href="SensSchurData_8hpp_source.html">SensSchurData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensSchurData_8hpp_source.html#l00082">82</a> of file <a class="el" href="SensSchurData_8hpp_source.html">SensSchurData.hpp</a>.</p>
 
 </div>
 </div>
@@ -646,7 +647,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns two vectors that are needed for matrix-vector multiplication of B and P. </p>
-<p>The index is the row, the first vector are the indices of non-zero components, in this row of B, the second vector gives the numbers in B(row,indices) </p>
+<p>The index is the row, the first vector are the indices of non-zero components, in this row of B, the second vector gives the numbers in B(row,indices)/ </p>
 
 <p>Implemented in <a class="el" href="classIpopt_1_1IndexSchurData.html#a468ec5794fbb1b55f26ecba3a4756549">Ipopt::IndexSchurData</a>.</p>
 
@@ -852,7 +853,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensSchurData_8hpp_source.html#l00091">91</a> of file <a class="el" href="SensSchurData_8hpp_source.html">SensSchurData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensSchurData_8hpp_source.html#l00127">127</a> of file <a class="el" href="SensSchurData_8hpp_source.html">SensSchurData.hpp</a>.</p>
 
 </div>
 </div>
@@ -914,7 +915,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensSchurData_8hpp_source.html#l00103">103</a> of file <a class="el" href="SensSchurData_8hpp_source.html">SensSchurData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensSchurData_8hpp_source.html#l00142">142</a> of file <a class="el" href="SensSchurData_8hpp_source.html">SensSchurData.hpp</a>.</p>
 
 </div>
 </div>
@@ -941,7 +942,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensSchurData_8hpp_source.html#l00117">117</a> of file <a class="el" href="SensSchurData_8hpp_source.html">SensSchurData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensSchurData_8hpp_source.html#l00159">159</a> of file <a class="el" href="SensSchurData_8hpp_source.html">SensSchurData.hpp</a>.</p>
 
 </div>
 </div>
@@ -969,7 +970,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensSchurData_8hpp_source.html#l00122">122</a> of file <a class="el" href="SensSchurData_8hpp_source.html">SensSchurData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensSchurData_8hpp_source.html#l00164">164</a> of file <a class="el" href="SensSchurData_8hpp_source.html">SensSchurData.hpp</a>.</p>
 
 </div>
 </div>
@@ -996,7 +997,7 @@ Private Attributes</h2></td></tr>
 
 <p>Makes sure that data is not set twice accidentially. </p>
 
-<p class="definition">Definition at line <a class="el" href="SensSchurData_8hpp_source.html#l00130">130</a> of file <a class="el" href="SensSchurData_8hpp_source.html">SensSchurData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensSchurData_8hpp_source.html#l00174">174</a> of file <a class="el" href="SensSchurData_8hpp_source.html">SensSchurData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1022,7 +1023,7 @@ Private Attributes</h2></td></tr>
 
 <p>Number of columns/rows of corresponding Schur <a class="el" href="classIpopt_1_1Matrix.html" title="Matrix Base Class. ">Matrix</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="SensSchurData_8hpp_source.html#l00133">133</a> of file <a class="el" href="SensSchurData_8hpp_source.html">SensSchurData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensSchurData_8hpp_source.html#l00177">177</a> of file <a class="el" href="SensSchurData_8hpp_source.html">SensSchurData.hpp</a>.</p>
 
 </div>
 </div>

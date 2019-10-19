@@ -3,7 +3,7 @@ var classIpopt_1_1SchurDriver =
     [ "SchurDriver", "classIpopt_1_1SchurDriver.html#ac94decb4b998f52d597c351231967726", null ],
     [ "~SchurDriver", "classIpopt_1_1SchurDriver.html#a764813e3681fe97d359a7f5be2e8cb11", null ],
     [ "SchurDriver", "classIpopt_1_1SchurDriver.html#aa592c860dbd00818a9d643f5eb55d2ff", null ],
-    [ "InitializeImpl", "classIpopt_1_1SchurDriver.html#a2ca116868434ad0236960b6e95111641", null ],
+    [ "InitializeImpl", "classIpopt_1_1SchurDriver.html#ae0719399a2e261c63d776a3b3f9f87c6", null ],
     [ "data_A", "classIpopt_1_1SchurDriver.html#a65a343ccc10b6710a132a5614e3de518", null ],
     [ "data_B", "classIpopt_1_1SchurDriver.html#ac80b7bce84312beb0c65647a21e844d8", null ],
     [ "data_A_nonconst", "classIpopt_1_1SchurDriver.html#aef6799a52f6ccb019897c86b5a6e1ae8", null ],

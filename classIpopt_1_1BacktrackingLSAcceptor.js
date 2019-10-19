@@ -17,7 +17,7 @@ var classIpopt_1_1BacktrackingLSAcceptor =
     [ "RestoredIterate", "classIpopt_1_1BacktrackingLSAcceptor.html#a23f8a7e07b7ab0e0d91a40d846b59472", null ],
     [ "NeverRestorationPhase", "classIpopt_1_1BacktrackingLSAcceptor.html#af92ac60229d6178a26ad262b3f52047b", null ],
     [ "DoFallback", "classIpopt_1_1BacktrackingLSAcceptor.html#ad751c34d9e63bb76a074d38c78bc0faf", null ],
-    [ "ComputeAlphaForY", "classIpopt_1_1BacktrackingLSAcceptor.html#a1219e102fdd7acb4b8980e1fe1c7f0d3", null ],
+    [ "ComputeAlphaForY", "classIpopt_1_1BacktrackingLSAcceptor.html#a21e6de5f883965c4c35a4b8754a54f62", null ],
     [ "HasComputeAlphaForY", "classIpopt_1_1BacktrackingLSAcceptor.html#a84cfa720e3025a61143109f912f6b30a", null ],
     [ "RegisterOptions", "classIpopt_1_1BacktrackingLSAcceptor.html#a948e091f9b593bfd4b057053f3c7077e", null ],
     [ "operator=", "classIpopt_1_1BacktrackingLSAcceptor.html#ab60f5284a0974b9d7d8e42f2bc595e73", null ]

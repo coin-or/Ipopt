@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['x',['x',['../classorg_1_1coinor_1_1Ipopt.html#a4d0279b61ddf81f2c137dc016b1f4c92',1,'org.coinor.Ipopt.x()'],['../classMatlabProgram.html#a813f5b3d894087a249c4f72aca1ea6c5',1,'MatlabProgram::x()'],['../classSparseMatrix.html#ad88429d1f71929a5d598dfea730eb129',1,'SparseMatrix::x()']]],
-  ['x0',['x0',['../classMatlabProgram.html#a648aeff164931c4f54de6170202b61eb',1,'MatlabProgram']]],
+  ['x',['x',['../classorg_1_1coinor_1_1Ipopt.html#a4d0279b61ddf81f2c137dc016b1f4c92',1,'org::coinor::Ipopt']]],
   ['x_5ffixed_5fmap_5f',['x_fixed_map_',['../classIpopt_1_1TNLPAdapter.html#a08b4eaae0a2a1e657927b719d2f81232',1,'Ipopt::TNLPAdapter']]],
   ['x_5fl_5f',['x_L_',['../classIpopt_1_1OrigIpoptNLP.html#a221b92fb51d6e8798749e6286f845904',1,'Ipopt::OrigIpoptNLP::x_L_()'],['../classIpopt_1_1RestoIpoptNLP.html#a681ec3f9d30947052a4c23559bb28e0c',1,'Ipopt::RestoIpoptNLP::x_L_()'],['../classIpopt_1_1StdInterfaceTNLP.html#aa753cae6bbd7538128ff45eeb6597f47',1,'Ipopt::StdInterfaceTNLP::x_L_()']]],
   ['x_5fl_5fspace_5f',['x_l_space_',['../classIpopt_1_1OrigIpoptNLP.html#af22a10a4ccd38e376f4d95e7773108d5',1,'Ipopt::OrigIpoptNLP::x_l_space_()'],['../classIpopt_1_1RestoIpoptNLP.html#ab0daa2e09df77527492557b3fdf9ef32',1,'Ipopt::RestoIpoptNLP::x_l_space_()'],['../classIpopt_1_1TNLPAdapter.html#a28a34e7cc7db297a793766a024c6ed19',1,'Ipopt::TNLPAdapter::x_l_space_()']]],

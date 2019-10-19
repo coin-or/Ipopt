@@ -5,8 +5,6 @@ var searchData=
   ['referencer',['Referencer',['../classIpopt_1_1Referencer.html',1,'Ipopt']]],
   ['registeredoption',['RegisteredOption',['../classIpopt_1_1RegisteredOption.html',1,'Ipopt']]],
   ['registeredoptions',['RegisteredOptions',['../classIpopt_1_1RegisteredOptions.html',1,'Ipopt']]],
-  ['registeredtnlp',['RegisteredTNLP',['../classRegisteredTNLP.html',1,'']]],
-  ['registeredtnlps',['RegisteredTNLPs',['../classRegisteredTNLPs.html',1,'']]],
   ['restoconvergencecheck',['RestoConvergenceCheck',['../classIpopt_1_1RestoConvergenceCheck.html',1,'Ipopt']]],
   ['restofilterconvergencecheck',['RestoFilterConvergenceCheck',['../classIpopt_1_1RestoFilterConvergenceCheck.html',1,'Ipopt']]],
   ['restoipoptnlp',['RestoIpoptNLP',['../classIpopt_1_1RestoIpoptNLP.html',1,'Ipopt']]],

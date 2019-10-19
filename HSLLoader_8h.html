@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">trunk</span-->
+   &#160;<!--span id="projectnumber">3.13.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -203,8 +203,6 @@ Typedefs</h2></td></tr>
 <tr class="separator:a7932b0a2533e5577f76161de9a81ed9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55a1dd460b81f273b63576bd52398353"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#a55a1dd460b81f273b63576bd52398353">ma27id_t</a>) (<a class="el" href="IpTypes_8hpp.html#aeccbe55f54794113f2043d6f8ce7bffe">ipfint</a> *ICNTL, double *CNTL)</td></tr>
 <tr class="separator:a55a1dd460b81f273b63576bd52398353"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5146108d8ae267992fe679c5426cb0d9"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#a5146108d8ae267992fe679c5426cb0d9">ma28ad_t</a>) (void *nsize, void *nz, void *rw, void *licn, void *iw, void *lirn, void *iw2, void *pivtol, void *iw3, void *iw4, void *rw2, void *iflag)</td></tr>
-<tr class="separator:a5146108d8ae267992fe679c5426cb0d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7cc600be90e724305d8d90298a343a0"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#af7cc600be90e724305d8d90298a343a0">ma57ad_t</a>) (<a class="el" href="IpTypes_8hpp.html#aeccbe55f54794113f2043d6f8ce7bffe">ipfint</a> *n, <a class="el" href="IpTypes_8hpp.html#aeccbe55f54794113f2043d6f8ce7bffe">ipfint</a> *ne, const <a class="el" href="IpTypes_8hpp.html#aeccbe55f54794113f2043d6f8ce7bffe">ipfint</a> *irn, const <a class="el" href="IpTypes_8hpp.html#aeccbe55f54794113f2043d6f8ce7bffe">ipfint</a> *jcn, <a class="el" href="IpTypes_8hpp.html#aeccbe55f54794113f2043d6f8ce7bffe">ipfint</a> *lkeep, <a class="el" href="IpTypes_8hpp.html#aeccbe55f54794113f2043d6f8ce7bffe">ipfint</a> *keep, <a class="el" href="IpTypes_8hpp.html#aeccbe55f54794113f2043d6f8ce7bffe">ipfint</a> *iwork, <a class="el" href="IpTypes_8hpp.html#aeccbe55f54794113f2043d6f8ce7bffe">ipfint</a> *icntl, <a class="el" href="IpTypes_8hpp.html#aeccbe55f54794113f2043d6f8ce7bffe">ipfint</a> *info, double *rinfo)</td></tr>
 <tr class="separator:af7cc600be90e724305d8d90298a343a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1222811b4334d60dffb558149c6cb30c"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#a1222811b4334d60dffb558149c6cb30c">ma57bd_t</a>) (<a class="el" href="IpTypes_8hpp.html#aeccbe55f54794113f2043d6f8ce7bffe">ipfint</a> *n, <a class="el" href="IpTypes_8hpp.html#aeccbe55f54794113f2043d6f8ce7bffe">ipfint</a> *ne, double *a, double *fact, <a class="el" href="IpTypes_8hpp.html#aeccbe55f54794113f2043d6f8ce7bffe">ipfint</a> *lfact, <a class="el" href="IpTypes_8hpp.html#aeccbe55f54794113f2043d6f8ce7bffe">ipfint</a> *ifact, <a class="el" href="IpTypes_8hpp.html#aeccbe55f54794113f2043d6f8ce7bffe">ipfint</a> *lifact, <a class="el" href="IpTypes_8hpp.html#aeccbe55f54794113f2043d6f8ce7bffe">ipfint</a> *lkeep, <a class="el" href="IpTypes_8hpp.html#aeccbe55f54794113f2043d6f8ce7bffe">ipfint</a> *keep, <a class="el" href="IpTypes_8hpp.html#aeccbe55f54794113f2043d6f8ce7bffe">ipfint</a> *iwork, <a class="el" href="IpTypes_8hpp.html#aeccbe55f54794113f2043d6f8ce7bffe">ipfint</a> *icntl, double *cntl, <a class="el" href="IpTypes_8hpp.html#aeccbe55f54794113f2043d6f8ce7bffe">ipfint</a> *info, double *rinfo)</td></tr>
@@ -282,66 +280,60 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ab302d934e3680c31821ad54fff3cdecd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#ab302d934e3680c31821ad54fff3cdecd">LSL_loadHSL</a> (const char *libname, char *msgbuf, int msglen)</td></tr>
-<tr class="memdesc:ab302d934e3680c31821ad54fff3cdecd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to load a dynamically linked library with HSL routines.  <a href="#ab302d934e3680c31821ad54fff3cdecd">More...</a><br /></td></tr>
-<tr class="separator:ab302d934e3680c31821ad54fff3cdecd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d2f9782657d1347696de095b1d4ae11"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#a4d2f9782657d1347696de095b1d4ae11">LSL_unloadHSL</a> ()</td></tr>
-<tr class="memdesc:a4d2f9782657d1347696de095b1d4ae11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unloads a loaded HSL library.  <a href="#a4d2f9782657d1347696de095b1d4ae11">More...</a><br /></td></tr>
-<tr class="separator:a4d2f9782657d1347696de095b1d4ae11"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a478c4dcb9e16b4986e4a4e37d2861c64"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#a478c4dcb9e16b4986e4a4e37d2861c64">LSL_isHSLLoaded</a> ()</td></tr>
-<tr class="memdesc:a478c4dcb9e16b4986e4a4e37d2861c64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether a HSL library has been loaded.  <a href="#a478c4dcb9e16b4986e4a4e37d2861c64">More...</a><br /></td></tr>
-<tr class="separator:a478c4dcb9e16b4986e4a4e37d2861c64"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a551ea49bedfce4e7fa585e9ed3c582ad"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#a551ea49bedfce4e7fa585e9ed3c582ad">LSL_isMA27available</a> ()</td></tr>
-<tr class="memdesc:a551ea49bedfce4e7fa585e9ed3c582ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether a HSL library is loaded and all symbols necessary to use MA27 have been found.  <a href="#a551ea49bedfce4e7fa585e9ed3c582ad">More...</a><br /></td></tr>
-<tr class="separator:a551ea49bedfce4e7fa585e9ed3c582ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a557cd82220ac4099f06de3cdfb772ee0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#a557cd82220ac4099f06de3cdfb772ee0">LSL_isMA28available</a> ()</td></tr>
-<tr class="memdesc:a557cd82220ac4099f06de3cdfb772ee0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether a HSL library is loaded and all symbols necessary to use MA28 have been found.  <a href="#a557cd82220ac4099f06de3cdfb772ee0">More...</a><br /></td></tr>
-<tr class="separator:a557cd82220ac4099f06de3cdfb772ee0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1544a01fb1c9ae425074f7f65a14c9a8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#a1544a01fb1c9ae425074f7f65a14c9a8">LSL_isMA57available</a> ()</td></tr>
-<tr class="memdesc:a1544a01fb1c9ae425074f7f65a14c9a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether a HSL library is loaded and all symbols necessary to use MA57 have been found.  <a href="#a1544a01fb1c9ae425074f7f65a14c9a8">More...</a><br /></td></tr>
-<tr class="separator:a1544a01fb1c9ae425074f7f65a14c9a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c1270097ad93cee91b3b5909c25d4aa"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#a1c1270097ad93cee91b3b5909c25d4aa">LSL_isMA77available</a> ()</td></tr>
-<tr class="memdesc:a1c1270097ad93cee91b3b5909c25d4aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether a HSL library is loaded and all symbols necessary to use MA77 have been found.  <a href="#a1c1270097ad93cee91b3b5909c25d4aa">More...</a><br /></td></tr>
-<tr class="separator:a1c1270097ad93cee91b3b5909c25d4aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a766828a1bb6ce8c5d94ca0ca6c957c45"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#a766828a1bb6ce8c5d94ca0ca6c957c45">LSL_isMA86available</a> ()</td></tr>
-<tr class="memdesc:a766828a1bb6ce8c5d94ca0ca6c957c45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether a HSL library is loaded and all symbols necessary to use HSL_MA86 have been found.  <a href="#a766828a1bb6ce8c5d94ca0ca6c957c45">More...</a><br /></td></tr>
-<tr class="separator:a766828a1bb6ce8c5d94ca0ca6c957c45"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7258eebcbc92cac9cad73bd30113a339"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#a7258eebcbc92cac9cad73bd30113a339">LSL_isMA97available</a> ()</td></tr>
-<tr class="memdesc:a7258eebcbc92cac9cad73bd30113a339"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether a HSL library is loaded and all symbols necessary to use HSL_MA97 have been found.  <a href="#a7258eebcbc92cac9cad73bd30113a339">More...</a><br /></td></tr>
-<tr class="separator:a7258eebcbc92cac9cad73bd30113a339"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aedda8b0c430454447e40f8dcc9353270"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#aedda8b0c430454447e40f8dcc9353270">LSL_isMC19available</a> ()</td></tr>
-<tr class="memdesc:aedda8b0c430454447e40f8dcc9353270"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether a HSL library is loaded and all symbols necessary to use MA57 have been found.  <a href="#aedda8b0c430454447e40f8dcc9353270">More...</a><br /></td></tr>
-<tr class="separator:aedda8b0c430454447e40f8dcc9353270"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae9c685c7f76204e7d5569ae92c3a0da8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#ae9c685c7f76204e7d5569ae92c3a0da8">LSL_isMC68available</a> ()</td></tr>
-<tr class="memdesc:ae9c685c7f76204e7d5569ae92c3a0da8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether a HSL library is loaded and all symbols necessary to use HSL_MC68 have been found.  <a href="#ae9c685c7f76204e7d5569ae92c3a0da8">More...</a><br /></td></tr>
-<tr class="separator:ae9c685c7f76204e7d5569ae92c3a0da8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad3e90fb01f1df9d41178e2a564ac78a0"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#ad3e90fb01f1df9d41178e2a564ac78a0">LSL_HSLLibraryName</a> ()</td></tr>
-<tr class="memdesc:ad3e90fb01f1df9d41178e2a564ac78a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns name of the shared library that should contain HSL.  <a href="#ad3e90fb01f1df9d41178e2a564ac78a0">More...</a><br /></td></tr>
-<tr class="separator:ad3e90fb01f1df9d41178e2a564ac78a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6eca6ce421e5c8bee0e91474110bebb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#ac6eca6ce421e5c8bee0e91474110bebb">LSL_setMA27</a> (<a class="el" href="HSLLoader_8h.html#ab22c9ea5700cd855e12d59fca9a35770">ma27ad_t</a> ma27ad, <a class="el" href="HSLLoader_8h.html#a37ecdec44673fbabd4ecf62146df378b">ma27bd_t</a> ma27bd, <a class="el" href="HSLLoader_8h.html#a7932b0a2533e5577f76161de9a81ed9c">ma27cd_t</a> ma27cd, <a class="el" href="HSLLoader_8h.html#a55a1dd460b81f273b63576bd52398353">ma27id_t</a> ma27id)</td></tr>
-<tr class="memdesc:ac6eca6ce421e5c8bee0e91474110bebb"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets pointers to MA27 functions  <a href="#ac6eca6ce421e5c8bee0e91474110bebb">More...</a><br /></td></tr>
-<tr class="separator:ac6eca6ce421e5c8bee0e91474110bebb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aabe9b3e2a4dfa407aae2eb278dfac3a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#aabe9b3e2a4dfa407aae2eb278dfac3a0">LSL_setMA28</a> (<a class="el" href="HSLLoader_8h.html#a5146108d8ae267992fe679c5426cb0d9">ma28ad_t</a> ma28ad)</td></tr>
-<tr class="memdesc:aabe9b3e2a4dfa407aae2eb278dfac3a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets pointers to MA28 functions  <a href="#aabe9b3e2a4dfa407aae2eb278dfac3a0">More...</a><br /></td></tr>
-<tr class="separator:aabe9b3e2a4dfa407aae2eb278dfac3a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5535ccb4550c0b892bafb0bb27308b3d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#a5535ccb4550c0b892bafb0bb27308b3d">LSL_setMA57</a> (<a class="el" href="HSLLoader_8h.html#af7cc600be90e724305d8d90298a343a0">ma57ad_t</a> ma57ad, <a class="el" href="HSLLoader_8h.html#a1222811b4334d60dffb558149c6cb30c">ma57bd_t</a> ma57bd, <a class="el" href="HSLLoader_8h.html#a5d4db3c0e14a6300282cd786eacb2b61">ma57cd_t</a> ma57cd, <a class="el" href="HSLLoader_8h.html#a57173c4c6031bf57f140c9797e0039d7">ma57ed_t</a> ma57ed, <a class="el" href="HSLLoader_8h.html#ab86f417499ea534a1ff3d57e2eb3f27c">ma57id_t</a> ma57id)</td></tr>
-<tr class="memdesc:a5535ccb4550c0b892bafb0bb27308b3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets pointers to MA57 functions  <a href="#a5535ccb4550c0b892bafb0bb27308b3d">More...</a><br /></td></tr>
-<tr class="separator:a5535ccb4550c0b892bafb0bb27308b3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3a1020d3e58d10baf87a7228b79db5a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#ae3a1020d3e58d10baf87a7228b79db5a">LSL_setMA77</a> (<a class="el" href="HSLLoader_8h.html#aa0708a133008124d224edc719d937b1a">ma77_default_control_t</a> <a class="el" href="HSLLoader_8h.html#acd812248899442e0ab008625bea65fa5">ma77_default_control</a>, <a class="el" href="HSLLoader_8h.html#ad4b125c5f4e3d9c9ff26ed4f67b59c14">ma77_open_nelt_t</a> <a class="el" href="hsl__ma77d_8h.html#ae2c5be50c80b3bf801355287a469403f">ma77_open_nelt</a>, <a class="el" href="HSLLoader_8h.html#a7570dff2942c9e4133267f11e432ee4a">ma77_open_t</a> <a class="el" href="HSLLoader_8h.html#ace7d5e1ef83246f237f0ae44e76c378e">ma77_open</a>, <a class="el" href="HSLLoader_8h.html#a385d95de887e6a4907aa9f77646d9968">ma77_input_vars_t</a> <a class="el" href="hsl__ma77d_8h.html#a9d7b3d388b6f41ba0eeb1aca7996aeaf">ma77_input_vars</a>, <a class="el" href="HSLLoader_8h.html#a15ccca838aaa139fc5ffe495dca16e39">ma77_input_reals_t</a> <a class="el" href="HSLLoader_8h.html#a701114ce83c0a72d75ce15cffb95f72f">ma77_input_reals</a>, <a class="el" href="HSLLoader_8h.html#a440ccae2b8354d5eacc013167bd5304f">ma77_analyse_t</a> <a class="el" href="hsl__ma77d_8h.html#a73be91e22455414e6b1d2bdffcc39aa6">ma77_analyse</a>, <a class="el" href="HSLLoader_8h.html#ac6c36830a0cf0755b3a00bf820cb0a85">ma77_factor_t</a> <a class="el" href="HSLLoader_8h.html#aa8ac8ac8bf1ec5f665f11e63bab6ff55">ma77_factor</a>, <a class="el" href="HSLLoader_8h.html#ab64c7d99826ff4d9d2abe55bd6ede8be">ma77_factor_solve_t</a> <a class="el" href="HSLLoader_8h.html#afd314ee6ee9e858069cebaa897014370">ma77_factor_solve</a>, <a class="el" href="HSLLoader_8h.html#a8ac3cb51334ac91c098df4ca2a7b6e50">ma77_solve_t</a> <a class="el" href="HSLLoader_8h.html#a5565c614b0ab81b79484a97865cec05a">ma77_solve</a>, <a class="el" href="HSLLoader_8h.html#a964e2ccb8ad7afb9bfacbfb1b26fd18e">ma77_resid_t</a> <a class="el" href="HSLLoader_8h.html#ac9258c0582b73b384028a10ba757698c">ma77_resid</a>, <a class="el" href="HSLLoader_8h.html#a0134b02c2a67c3be640b456072cfd421">ma77_scale_t</a> <a class="el" href="HSLLoader_8h.html#ae22abadf2e4c157ee5fa6f5f4fa536b5">ma77_scale</a>, <a class="el" href="HSLLoader_8h.html#a9944c18bbfe9a3058f89f139ed8f8c05">ma77_enquire_posdef_t</a> <a class="el" href="HSLLoader_8h.html#a07b78448b1e134127816865630f8c607">ma77_enquire_posdef</a>, <a class="el" href="HSLLoader_8h.html#a81763bbf27b65f9c6710c52116b26d1e">ma77_enquire_indef_t</a> <a class="el" href="HSLLoader_8h.html#a6ed8fd3de7f8dcdacd5f9a725bb8beb5">ma77_enquire_indef</a>, <a class="el" href="HSLLoader_8h.html#aeb29aaa6c87c10f5d8725d4f67d5df52">ma77_alter_t</a> <a class="el" href="HSLLoader_8h.html#aa103b5f077570e5afc645e3822118f80">ma77_alter</a>, <a class="el" href="HSLLoader_8h.html#a9f998cbec36275965a274fedf1ccef3a">ma77_restart_t</a> <a class="el" href="HSLLoader_8h.html#a53a553b20237456a86c7dd9c32b92771">ma77_restart</a>, <a class="el" href="HSLLoader_8h.html#a0ea7c543513ba3cacab45f22cb8861c4">ma77_finalise_t</a> <a class="el" href="HSLLoader_8h.html#aea2d69ad09126da2ba11078833acd0a9">ma77_finalise</a>)</td></tr>
-<tr class="memdesc:ae3a1020d3e58d10baf87a7228b79db5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets pointers to MA77 functions  <a href="#ae3a1020d3e58d10baf87a7228b79db5a">More...</a><br /></td></tr>
-<tr class="separator:ae3a1020d3e58d10baf87a7228b79db5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa42ca98bc7145ad42ebed5ebc8a3f3c5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#aa42ca98bc7145ad42ebed5ebc8a3f3c5">LSL_setMA86</a> (<a class="el" href="HSLLoader_8h.html#accf670d1677b3ded7fad7be237f758ec">ma86_default_control_t</a> <a class="el" href="HSLLoader_8h.html#accb3bb1b71af3eb3ae472d5a62bf96a3">ma86_default_control</a>, <a class="el" href="HSLLoader_8h.html#a1a9949e0dfb8c071883fe39d2e6023e3">ma86_analyse_t</a> <a class="el" href="HSLLoader_8h.html#ad99374c3da8aac40aaae366173b2a6c2">ma86_analyse</a>, <a class="el" href="HSLLoader_8h.html#a8cb032f2808a6662a4ee26ee92fda86a">ma86_factor_t</a> <a class="el" href="HSLLoader_8h.html#a68f854fcd7cfd00ad821c3c62ccf36c3">ma86_factor</a>, <a class="el" href="HSLLoader_8h.html#ae8686276a6ff240124bf88ced942973c">ma86_factor_solve_t</a> <a class="el" href="HSLLoader_8h.html#a7b6c510e3bfc51bac7a76160a16933ac">ma86_factor_solve</a>, <a class="el" href="HSLLoader_8h.html#a555a7369f037eb4fcebcf6b66cb8b77d">ma86_solve_t</a> <a class="el" href="HSLLoader_8h.html#a8299753f0e59dabd229fb564da59d654">ma86_solve</a>, <a class="el" href="HSLLoader_8h.html#a6326b9a769362811b10fd046b505e671">ma86_finalise_t</a> <a class="el" href="HSLLoader_8h.html#a8846c55589d0d9afdd1e24e5e22253eb">ma86_finalise</a>)</td></tr>
-<tr class="memdesc:aa42ca98bc7145ad42ebed5ebc8a3f3c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets pointers to MA86 functions  <a href="#aa42ca98bc7145ad42ebed5ebc8a3f3c5">More...</a><br /></td></tr>
-<tr class="separator:aa42ca98bc7145ad42ebed5ebc8a3f3c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab14c880531386adfcf4006d6862ae3fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#ab14c880531386adfcf4006d6862ae3fe">LSL_setMA97</a> (<a class="el" href="HSLLoader_8h.html#add630bc7c9bed3fb7e24e6aae608345b">ma97_default_control_t</a> <a class="el" href="HSLLoader_8h.html#a8c365bb33eaa6b9bdaf0a71a73264b68">ma97_default_control</a>, <a class="el" href="HSLLoader_8h.html#a9f02a6ab84f805378fe1447834d7f8ae">ma97_analyse_t</a> <a class="el" href="HSLLoader_8h.html#a5e9b73638564202d25601fbc93a257b6">ma97_analyse</a>, <a class="el" href="HSLLoader_8h.html#ad01b91714d44919feef7b5fa118580b4">ma97_factor_t</a> <a class="el" href="HSLLoader_8h.html#af7527b59f37b59c88624d7e6e07b54a9">ma97_factor</a>, <a class="el" href="HSLLoader_8h.html#a092355f79841bf91bf609aa3ce1f5627">ma97_factor_solve_t</a> <a class="el" href="HSLLoader_8h.html#aad117a4dbfc4a5fd4b4211b03f64d920">ma97_factor_solve</a>, <a class="el" href="HSLLoader_8h.html#aee2e6ab08216b0da8249eb17dc03f565">ma97_solve_t</a> <a class="el" href="HSLLoader_8h.html#aadf831d46c19a093a1a151e4105b7c55">ma97_solve</a>, <a class="el" href="HSLLoader_8h.html#a2907dd8bf260d5c027bb233013163739">ma97_finalise_t</a> <a class="el" href="HSLLoader_8h.html#a0d6fab4d1cc3225cf86ece58005b02ca">ma97_finalise</a>, <a class="el" href="HSLLoader_8h.html#a034d59485a799b5d672ddd2ed59605d0">ma97_free_akeep_t</a> <a class="el" href="HSLLoader_8h.html#ad7299747a01310a3f03bd42f0dbb9783">ma97_free_akeep</a>)</td></tr>
-<tr class="memdesc:ab14c880531386adfcf4006d6862ae3fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets pointers to MA97 functions  <a href="#ab14c880531386adfcf4006d6862ae3fe">More...</a><br /></td></tr>
-<tr class="separator:ab14c880531386adfcf4006d6862ae3fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aee3369374b7e7217c01da623ebe2b696"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#aee3369374b7e7217c01da623ebe2b696">LSL_setMC19</a> (<a class="el" href="HSLLoader_8h.html#ace1ec7f719f2134bcf2383b3adc099e6">mc19ad_t</a> mc19ad)</td></tr>
-<tr class="memdesc:aee3369374b7e7217c01da623ebe2b696"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets pointer to MC19 function  <a href="#aee3369374b7e7217c01da623ebe2b696">More...</a><br /></td></tr>
-<tr class="separator:aee3369374b7e7217c01da623ebe2b696"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a551da3021bd2efd12bfebe961e09859e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#a551da3021bd2efd12bfebe961e09859e">LSL_setMC68</a> (<a class="el" href="HSLLoader_8h.html#af5b3a2b543a2defa8f21db6434ef094d">mc68_default_control_t</a> <a class="el" href="hsl__mc68i_8h.html#a0529a4fd320a749c250b8ebf6911e789">mc68_default_control</a>, <a class="el" href="HSLLoader_8h.html#a0e0dc24d0c59fcc0cbffa74fdc674d3b">mc68_order_t</a> <a class="el" href="hsl__mc68i_8h.html#af05a6452525f2fd17dbeab633445046d">mc68_order</a>)</td></tr>
-<tr class="memdesc:a551da3021bd2efd12bfebe961e09859e"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets pointers to MC68 functions  <a href="#a551da3021bd2efd12bfebe961e09859e">More...</a><br /></td></tr>
-<tr class="separator:a551da3021bd2efd12bfebe961e09859e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1de16f48eed006ed3d11ecc50a98c353"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#a1de16f48eed006ed3d11ecc50a98c353">LSL_loadHSL</a> (const char *libname, char *msgbuf, int msglen)</td></tr>
+<tr class="memdesc:a1de16f48eed006ed3d11ecc50a98c353"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to load a dynamically linked library with HSL routines.  <a href="#a1de16f48eed006ed3d11ecc50a98c353">More...</a><br /></td></tr>
+<tr class="separator:a1de16f48eed006ed3d11ecc50a98c353"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad966c3616550adbf28e171776242ed48"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#ad966c3616550adbf28e171776242ed48">LSL_unloadHSL</a> ()</td></tr>
+<tr class="memdesc:ad966c3616550adbf28e171776242ed48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unloads a loaded HSL library.  <a href="#ad966c3616550adbf28e171776242ed48">More...</a><br /></td></tr>
+<tr class="separator:ad966c3616550adbf28e171776242ed48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac29dfeca0cf4d8ed706c2aa51e908ab3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#ac29dfeca0cf4d8ed706c2aa51e908ab3">LSL_isHSLLoaded</a> ()</td></tr>
+<tr class="memdesc:ac29dfeca0cf4d8ed706c2aa51e908ab3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether a HSL library has been loaded.  <a href="#ac29dfeca0cf4d8ed706c2aa51e908ab3">More...</a><br /></td></tr>
+<tr class="separator:ac29dfeca0cf4d8ed706c2aa51e908ab3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e914f75f51eaeef9e353d3129014981"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#a9e914f75f51eaeef9e353d3129014981">LSL_isMA27available</a> ()</td></tr>
+<tr class="memdesc:a9e914f75f51eaeef9e353d3129014981"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether a HSL library is loaded and all symbols necessary to use MA27 have been found.  <a href="#a9e914f75f51eaeef9e353d3129014981">More...</a><br /></td></tr>
+<tr class="separator:a9e914f75f51eaeef9e353d3129014981"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53bc0a1162fddeb687a6c1b991f3192a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#a53bc0a1162fddeb687a6c1b991f3192a">LSL_isMA57available</a> ()</td></tr>
+<tr class="memdesc:a53bc0a1162fddeb687a6c1b991f3192a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether a HSL library is loaded and all symbols necessary to use MA57 have been found.  <a href="#a53bc0a1162fddeb687a6c1b991f3192a">More...</a><br /></td></tr>
+<tr class="separator:a53bc0a1162fddeb687a6c1b991f3192a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69a1cf0b5ff138ed6533b553d8c62df3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#a69a1cf0b5ff138ed6533b553d8c62df3">LSL_isMA77available</a> ()</td></tr>
+<tr class="memdesc:a69a1cf0b5ff138ed6533b553d8c62df3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether a HSL library is loaded and all symbols necessary to use MA77 have been found.  <a href="#a69a1cf0b5ff138ed6533b553d8c62df3">More...</a><br /></td></tr>
+<tr class="separator:a69a1cf0b5ff138ed6533b553d8c62df3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99c1cb3dfa6cc03ae931d818bc87d0ec"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#a99c1cb3dfa6cc03ae931d818bc87d0ec">LSL_isMA86available</a> ()</td></tr>
+<tr class="memdesc:a99c1cb3dfa6cc03ae931d818bc87d0ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether a HSL library is loaded and all symbols necessary to use HSL_MA86 have been found.  <a href="#a99c1cb3dfa6cc03ae931d818bc87d0ec">More...</a><br /></td></tr>
+<tr class="separator:a99c1cb3dfa6cc03ae931d818bc87d0ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7d0faa98b475e7d84e1880ae01b3392"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#ab7d0faa98b475e7d84e1880ae01b3392">LSL_isMA97available</a> ()</td></tr>
+<tr class="memdesc:ab7d0faa98b475e7d84e1880ae01b3392"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether a HSL library is loaded and all symbols necessary to use HSL_MA97 have been found.  <a href="#ab7d0faa98b475e7d84e1880ae01b3392">More...</a><br /></td></tr>
+<tr class="separator:ab7d0faa98b475e7d84e1880ae01b3392"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93a45fb1e94118484dc8b7eaa3a59f4e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#a93a45fb1e94118484dc8b7eaa3a59f4e">LSL_isMC19available</a> ()</td></tr>
+<tr class="memdesc:a93a45fb1e94118484dc8b7eaa3a59f4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether a HSL library is loaded and all symbols necessary to use MA57 have been found.  <a href="#a93a45fb1e94118484dc8b7eaa3a59f4e">More...</a><br /></td></tr>
+<tr class="separator:a93a45fb1e94118484dc8b7eaa3a59f4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8df4d9f4929bfe5eb0ebbb18c23406e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#ae8df4d9f4929bfe5eb0ebbb18c23406e">LSL_isMC68available</a> ()</td></tr>
+<tr class="memdesc:ae8df4d9f4929bfe5eb0ebbb18c23406e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether a HSL library is loaded and all symbols necessary to use HSL_MC68 have been found.  <a href="#ae8df4d9f4929bfe5eb0ebbb18c23406e">More...</a><br /></td></tr>
+<tr class="separator:ae8df4d9f4929bfe5eb0ebbb18c23406e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a107fcdd308e786156f138e3afb706835"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#a107fcdd308e786156f138e3afb706835">LSL_HSLLibraryName</a> ()</td></tr>
+<tr class="memdesc:a107fcdd308e786156f138e3afb706835"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns name of the shared library that should contain HSL.  <a href="#a107fcdd308e786156f138e3afb706835">More...</a><br /></td></tr>
+<tr class="separator:a107fcdd308e786156f138e3afb706835"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a937887441ea3b59d2e68bebc442f0c99"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#a937887441ea3b59d2e68bebc442f0c99">LSL_setMA27</a> (<a class="el" href="HSLLoader_8h.html#ab22c9ea5700cd855e12d59fca9a35770">ma27ad_t</a> ma27ad, <a class="el" href="HSLLoader_8h.html#a37ecdec44673fbabd4ecf62146df378b">ma27bd_t</a> ma27bd, <a class="el" href="HSLLoader_8h.html#a7932b0a2533e5577f76161de9a81ed9c">ma27cd_t</a> ma27cd, <a class="el" href="HSLLoader_8h.html#a55a1dd460b81f273b63576bd52398353">ma27id_t</a> ma27id)</td></tr>
+<tr class="memdesc:a937887441ea3b59d2e68bebc442f0c99"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets pointers to MA27 functions  <a href="#a937887441ea3b59d2e68bebc442f0c99">More...</a><br /></td></tr>
+<tr class="separator:a937887441ea3b59d2e68bebc442f0c99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6894ba4a862b3907aa75004f17f8b0f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#ac6894ba4a862b3907aa75004f17f8b0f">LSL_setMA57</a> (<a class="el" href="HSLLoader_8h.html#af7cc600be90e724305d8d90298a343a0">ma57ad_t</a> ma57ad, <a class="el" href="HSLLoader_8h.html#a1222811b4334d60dffb558149c6cb30c">ma57bd_t</a> ma57bd, <a class="el" href="HSLLoader_8h.html#a5d4db3c0e14a6300282cd786eacb2b61">ma57cd_t</a> ma57cd, <a class="el" href="HSLLoader_8h.html#a57173c4c6031bf57f140c9797e0039d7">ma57ed_t</a> ma57ed, <a class="el" href="HSLLoader_8h.html#ab86f417499ea534a1ff3d57e2eb3f27c">ma57id_t</a> ma57id)</td></tr>
+<tr class="memdesc:ac6894ba4a862b3907aa75004f17f8b0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets pointers to MA57 functions  <a href="#ac6894ba4a862b3907aa75004f17f8b0f">More...</a><br /></td></tr>
+<tr class="separator:ac6894ba4a862b3907aa75004f17f8b0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90ad6d49e28ca406ba19ef7b4a23d3ef"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#a90ad6d49e28ca406ba19ef7b4a23d3ef">LSL_setMA77</a> (<a class="el" href="HSLLoader_8h.html#aa0708a133008124d224edc719d937b1a">ma77_default_control_t</a> <a class="el" href="HSLLoader_8h.html#acd812248899442e0ab008625bea65fa5">ma77_default_control</a>, <a class="el" href="HSLLoader_8h.html#ad4b125c5f4e3d9c9ff26ed4f67b59c14">ma77_open_nelt_t</a> <a class="el" href="hsl__ma77d_8h.html#ae2c5be50c80b3bf801355287a469403f">ma77_open_nelt</a>, <a class="el" href="HSLLoader_8h.html#a7570dff2942c9e4133267f11e432ee4a">ma77_open_t</a> <a class="el" href="HSLLoader_8h.html#ace7d5e1ef83246f237f0ae44e76c378e">ma77_open</a>, <a class="el" href="HSLLoader_8h.html#a385d95de887e6a4907aa9f77646d9968">ma77_input_vars_t</a> <a class="el" href="hsl__ma77d_8h.html#a9d7b3d388b6f41ba0eeb1aca7996aeaf">ma77_input_vars</a>, <a class="el" href="HSLLoader_8h.html#a15ccca838aaa139fc5ffe495dca16e39">ma77_input_reals_t</a> <a class="el" href="HSLLoader_8h.html#a701114ce83c0a72d75ce15cffb95f72f">ma77_input_reals</a>, <a class="el" href="HSLLoader_8h.html#a440ccae2b8354d5eacc013167bd5304f">ma77_analyse_t</a> <a class="el" href="hsl__ma77d_8h.html#a73be91e22455414e6b1d2bdffcc39aa6">ma77_analyse</a>, <a class="el" href="HSLLoader_8h.html#ac6c36830a0cf0755b3a00bf820cb0a85">ma77_factor_t</a> <a class="el" href="HSLLoader_8h.html#aa8ac8ac8bf1ec5f665f11e63bab6ff55">ma77_factor</a>, <a class="el" href="HSLLoader_8h.html#ab64c7d99826ff4d9d2abe55bd6ede8be">ma77_factor_solve_t</a> <a class="el" href="HSLLoader_8h.html#afd314ee6ee9e858069cebaa897014370">ma77_factor_solve</a>, <a class="el" href="HSLLoader_8h.html#a8ac3cb51334ac91c098df4ca2a7b6e50">ma77_solve_t</a> <a class="el" href="HSLLoader_8h.html#a5565c614b0ab81b79484a97865cec05a">ma77_solve</a>, <a class="el" href="HSLLoader_8h.html#a964e2ccb8ad7afb9bfacbfb1b26fd18e">ma77_resid_t</a> <a class="el" href="HSLLoader_8h.html#ac9258c0582b73b384028a10ba757698c">ma77_resid</a>, <a class="el" href="HSLLoader_8h.html#a0134b02c2a67c3be640b456072cfd421">ma77_scale_t</a> <a class="el" href="HSLLoader_8h.html#ae22abadf2e4c157ee5fa6f5f4fa536b5">ma77_scale</a>, <a class="el" href="HSLLoader_8h.html#a9944c18bbfe9a3058f89f139ed8f8c05">ma77_enquire_posdef_t</a> <a class="el" href="HSLLoader_8h.html#a07b78448b1e134127816865630f8c607">ma77_enquire_posdef</a>, <a class="el" href="HSLLoader_8h.html#a81763bbf27b65f9c6710c52116b26d1e">ma77_enquire_indef_t</a> <a class="el" href="HSLLoader_8h.html#a6ed8fd3de7f8dcdacd5f9a725bb8beb5">ma77_enquire_indef</a>, <a class="el" href="HSLLoader_8h.html#aeb29aaa6c87c10f5d8725d4f67d5df52">ma77_alter_t</a> <a class="el" href="HSLLoader_8h.html#aa103b5f077570e5afc645e3822118f80">ma77_alter</a>, <a class="el" href="HSLLoader_8h.html#a9f998cbec36275965a274fedf1ccef3a">ma77_restart_t</a> <a class="el" href="HSLLoader_8h.html#a53a553b20237456a86c7dd9c32b92771">ma77_restart</a>, <a class="el" href="HSLLoader_8h.html#a0ea7c543513ba3cacab45f22cb8861c4">ma77_finalise_t</a> <a class="el" href="HSLLoader_8h.html#aea2d69ad09126da2ba11078833acd0a9">ma77_finalise</a>)</td></tr>
+<tr class="memdesc:a90ad6d49e28ca406ba19ef7b4a23d3ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets pointers to MA77 functions  <a href="#a90ad6d49e28ca406ba19ef7b4a23d3ef">More...</a><br /></td></tr>
+<tr class="separator:a90ad6d49e28ca406ba19ef7b4a23d3ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c3c11bef58575b9386b9bc4c382cc7f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#a5c3c11bef58575b9386b9bc4c382cc7f">LSL_setMA86</a> (<a class="el" href="HSLLoader_8h.html#accf670d1677b3ded7fad7be237f758ec">ma86_default_control_t</a> <a class="el" href="HSLLoader_8h.html#accb3bb1b71af3eb3ae472d5a62bf96a3">ma86_default_control</a>, <a class="el" href="HSLLoader_8h.html#a1a9949e0dfb8c071883fe39d2e6023e3">ma86_analyse_t</a> <a class="el" href="HSLLoader_8h.html#ad99374c3da8aac40aaae366173b2a6c2">ma86_analyse</a>, <a class="el" href="HSLLoader_8h.html#a8cb032f2808a6662a4ee26ee92fda86a">ma86_factor_t</a> <a class="el" href="HSLLoader_8h.html#a68f854fcd7cfd00ad821c3c62ccf36c3">ma86_factor</a>, <a class="el" href="HSLLoader_8h.html#ae8686276a6ff240124bf88ced942973c">ma86_factor_solve_t</a> <a class="el" href="HSLLoader_8h.html#a7b6c510e3bfc51bac7a76160a16933ac">ma86_factor_solve</a>, <a class="el" href="HSLLoader_8h.html#a555a7369f037eb4fcebcf6b66cb8b77d">ma86_solve_t</a> <a class="el" href="HSLLoader_8h.html#a8299753f0e59dabd229fb564da59d654">ma86_solve</a>, <a class="el" href="HSLLoader_8h.html#a6326b9a769362811b10fd046b505e671">ma86_finalise_t</a> <a class="el" href="HSLLoader_8h.html#a8846c55589d0d9afdd1e24e5e22253eb">ma86_finalise</a>)</td></tr>
+<tr class="memdesc:a5c3c11bef58575b9386b9bc4c382cc7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets pointers to MA86 functions  <a href="#a5c3c11bef58575b9386b9bc4c382cc7f">More...</a><br /></td></tr>
+<tr class="separator:a5c3c11bef58575b9386b9bc4c382cc7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a603805fc42fa36296c917fb4bec6449a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#a603805fc42fa36296c917fb4bec6449a">LSL_setMA97</a> (<a class="el" href="HSLLoader_8h.html#add630bc7c9bed3fb7e24e6aae608345b">ma97_default_control_t</a> <a class="el" href="HSLLoader_8h.html#a8c365bb33eaa6b9bdaf0a71a73264b68">ma97_default_control</a>, <a class="el" href="HSLLoader_8h.html#a9f02a6ab84f805378fe1447834d7f8ae">ma97_analyse_t</a> <a class="el" href="HSLLoader_8h.html#a5e9b73638564202d25601fbc93a257b6">ma97_analyse</a>, <a class="el" href="HSLLoader_8h.html#ad01b91714d44919feef7b5fa118580b4">ma97_factor_t</a> <a class="el" href="HSLLoader_8h.html#af7527b59f37b59c88624d7e6e07b54a9">ma97_factor</a>, <a class="el" href="HSLLoader_8h.html#a092355f79841bf91bf609aa3ce1f5627">ma97_factor_solve_t</a> <a class="el" href="HSLLoader_8h.html#aad117a4dbfc4a5fd4b4211b03f64d920">ma97_factor_solve</a>, <a class="el" href="HSLLoader_8h.html#aee2e6ab08216b0da8249eb17dc03f565">ma97_solve_t</a> <a class="el" href="HSLLoader_8h.html#aadf831d46c19a093a1a151e4105b7c55">ma97_solve</a>, <a class="el" href="HSLLoader_8h.html#a2907dd8bf260d5c027bb233013163739">ma97_finalise_t</a> <a class="el" href="HSLLoader_8h.html#a0d6fab4d1cc3225cf86ece58005b02ca">ma97_finalise</a>, <a class="el" href="HSLLoader_8h.html#a034d59485a799b5d672ddd2ed59605d0">ma97_free_akeep_t</a> <a class="el" href="HSLLoader_8h.html#ad7299747a01310a3f03bd42f0dbb9783">ma97_free_akeep</a>)</td></tr>
+<tr class="memdesc:a603805fc42fa36296c917fb4bec6449a"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets pointers to MA97 functions  <a href="#a603805fc42fa36296c917fb4bec6449a">More...</a><br /></td></tr>
+<tr class="separator:a603805fc42fa36296c917fb4bec6449a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace6e624d76b41c3f429228660d4b88b5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#ace6e624d76b41c3f429228660d4b88b5">LSL_setMC19</a> (<a class="el" href="HSLLoader_8h.html#ace1ec7f719f2134bcf2383b3adc099e6">mc19ad_t</a> mc19ad)</td></tr>
+<tr class="memdesc:ace6e624d76b41c3f429228660d4b88b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets pointer to MC19 function  <a href="#ace6e624d76b41c3f429228660d4b88b5">More...</a><br /></td></tr>
+<tr class="separator:ace6e624d76b41c3f429228660d4b88b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad96278e9f5909d46b9b0ed9a84f7d3db"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="HSLLoader_8h.html#ad96278e9f5909d46b9b0ed9a84f7d3db">LSL_setMC68</a> (<a class="el" href="HSLLoader_8h.html#af5b3a2b543a2defa8f21db6434ef094d">mc68_default_control_t</a> <a class="el" href="hsl__mc68i_8h.html#a0529a4fd320a749c250b8ebf6911e789">mc68_default_control</a>, <a class="el" href="HSLLoader_8h.html#a0e0dc24d0c59fcc0cbffa74fdc674d3b">mc68_order_t</a> <a class="el" href="hsl__mc68i_8h.html#af05a6452525f2fd17dbeab633445046d">mc68_order</a>)</td></tr>
+<tr class="memdesc:ad96278e9f5909d46b9b0ed9a84f7d3db"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets pointers to MC68 functions  <a href="#ad96278e9f5909d46b9b0ed9a84f7d3db">More...</a><br /></td></tr>
+<tr class="separator:ad96278e9f5909d46b9b0ed9a84f7d3db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a89d4ae2606715d8ecf80125cd5b01a42"></a>
@@ -1065,22 +1057,6 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a5146108d8ae267992fe679c5426cb0d9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5146108d8ae267992fe679c5426cb0d9">&#9670;&nbsp;</a></span>ma28ad_t</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef void(* ma28ad_t) (void *nsize, void *nz, void *rw, void *licn, void *iw, void *lirn, void *iw2, void *pivtol, void *iw3, void *iw4, void *rw2, void *iflag)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00139">139</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
-
-</div>
-</div>
 <a id="af7cc600be90e724305d8d90298a343a0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af7cc600be90e724305d8d90298a343a0">&#9670;&nbsp;</a></span>ma57ad_t</h2>
 
@@ -1093,7 +1069,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00154">154</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00139">139</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1109,7 +1085,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00168">168</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00153">153</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1125,7 +1101,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00185">185</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00170">170</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1141,7 +1117,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00202">202</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00187">187</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1157,7 +1133,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00217">217</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00202">202</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1173,7 +1149,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00222">222</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00207">207</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1189,7 +1165,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00226">226</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00211">211</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1205,7 +1181,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00238">238</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00223">223</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1221,7 +1197,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00249">249</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00234">234</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1237,7 +1213,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00258">258</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00243">243</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1253,7 +1229,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00267">267</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00252">252</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1269,7 +1245,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00274">274</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00259">259</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1285,7 +1261,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00282">282</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00267">267</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1301,7 +1277,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00293">293</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00278">278</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1317,7 +1293,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00304">304</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00289">289</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1333,7 +1309,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00316">316</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00301">301</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1349,7 +1325,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00324">324</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00309">309</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1365,7 +1341,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00331">331</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00316">316</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1381,7 +1357,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00339">339</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00324">324</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1397,7 +1373,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00346">346</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00331">331</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1413,7 +1389,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00357">357</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00342">342</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1429,7 +1405,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00363">363</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00348">348</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1445,7 +1421,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00367">367</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00352">352</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1461,7 +1437,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00377">377</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00362">362</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1477,7 +1453,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00389">389</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00374">374</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1493,7 +1469,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00404">404</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00389">389</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1509,7 +1485,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00416">416</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00401">401</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1525,7 +1501,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00421">421</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00406">406</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1541,7 +1517,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00425">425</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00410">410</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1557,7 +1533,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00437">437</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00422">422</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1573,7 +1549,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00449">449</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00434">434</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1589,7 +1565,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00464">464</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00449">449</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1605,7 +1581,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00475">475</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00460">460</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1621,7 +1597,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00480">480</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00465">465</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1637,7 +1613,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00484">484</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00469">469</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1653,7 +1629,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00495">495</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00480">480</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
@@ -1669,19 +1645,19 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00499">499</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="HSLLoader_8h_source.html#l00484">484</a> of file <a class="el" href="HSLLoader_8h_source.html">HSLLoader.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ab302d934e3680c31821ad54fff3cdecd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab302d934e3680c31821ad54fff3cdecd">&#9670;&nbsp;</a></span>LSL_loadHSL()</h2>
+<a id="a1de16f48eed006ed3d11ecc50a98c353"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1de16f48eed006ed3d11ecc50a98c353">&#9670;&nbsp;</a></span>LSL_loadHSL()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int LSL_loadHSL </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> int LSL_loadHSL </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>libname</em>, </td>
@@ -1707,19 +1683,17 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Tries to load a dynamically linked library with HSL routines. </p>
-<p>Also tries to load symbols for those HSL routines that are not linked into <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions...">Ipopt</a>, i.e., HAVE_... is not defined. Returns a failure if the library cannot be loaded, but not if a symbol is not found. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="HSLLoader_8h.html#a551ea49bedfce4e7fa585e9ed3c582ad" title="Indicates whether a HSL library is loaded and all symbols necessary to use MA27 have been found...">LSL_isMA27available</a> </dd>
+<p>Also tries to load symbols for those HSL routines that are not linked into <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions...">Ipopt</a>, i.e., HAVE_... is not defined. Returns a failure if the library cannot be loaded, but not if a symbol is not found. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="HSLLoader_8h.html#a9e914f75f51eaeef9e353d3129014981" title="Indicates whether a HSL library is loaded and all symbols necessary to use MA27 have been found...">LSL_isMA27available</a> </dd>
 <dd>
-<a class="el" href="HSLLoader_8h.html#a557cd82220ac4099f06de3cdfb772ee0" title="Indicates whether a HSL library is loaded and all symbols necessary to use MA28 have been found...">LSL_isMA28available</a> </dd>
+<a class="el" href="HSLLoader_8h.html#a53bc0a1162fddeb687a6c1b991f3192a" title="Indicates whether a HSL library is loaded and all symbols necessary to use MA57 have been found...">LSL_isMA57available</a> </dd>
 <dd>
-<a class="el" href="HSLLoader_8h.html#a1544a01fb1c9ae425074f7f65a14c9a8" title="Indicates whether a HSL library is loaded and all symbols necessary to use MA57 have been found...">LSL_isMA57available</a> </dd>
+<a class="el" href="HSLLoader_8h.html#a69a1cf0b5ff138ed6533b553d8c62df3" title="Indicates whether a HSL library is loaded and all symbols necessary to use MA77 have been found...">LSL_isMA77available</a> </dd>
 <dd>
-<a class="el" href="HSLLoader_8h.html#a1c1270097ad93cee91b3b5909c25d4aa" title="Indicates whether a HSL library is loaded and all symbols necessary to use MA77 have been found...">LSL_isMA77available</a> </dd>
+<a class="el" href="HSLLoader_8h.html#a99c1cb3dfa6cc03ae931d818bc87d0ec" title="Indicates whether a HSL library is loaded and all symbols necessary to use HSL_MA86 have been found...">LSL_isMA86available</a> </dd>
 <dd>
-<a class="el" href="HSLLoader_8h.html#a766828a1bb6ce8c5d94ca0ca6c957c45" title="Indicates whether a HSL library is loaded and all symbols necessary to use HSL_MA86 have been found...">LSL_isMA86available</a> </dd>
+<a class="el" href="HSLLoader_8h.html#ab7d0faa98b475e7d84e1880ae01b3392" title="Indicates whether a HSL library is loaded and all symbols necessary to use HSL_MA97 have been found...">LSL_isMA97available</a> </dd>
 <dd>
-<a class="el" href="HSLLoader_8h.html#a7258eebcbc92cac9cad73bd30113a339" title="Indicates whether a HSL library is loaded and all symbols necessary to use HSL_MA97 have been found...">LSL_isMA97available</a> </dd>
-<dd>
-<a class="el" href="HSLLoader_8h.html#aedda8b0c430454447e40f8dcc9353270" title="Indicates whether a HSL library is loaded and all symbols necessary to use MA57 have been found...">LSL_isMC19available</a> </dd></dl>
+<a class="el" href="HSLLoader_8h.html#a93a45fb1e94118484dc8b7eaa3a59f4e" title="Indicates whether a HSL library is loaded and all symbols necessary to use MA57 have been found...">LSL_isMC19available</a> </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">libname</td><td>The name under which the HSL lib can be found, or NULL to use a default name (libhsl.SHAREDLIBEXT). </td></tr>
@@ -1732,14 +1706,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a4d2f9782657d1347696de095b1d4ae11"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4d2f9782657d1347696de095b1d4ae11">&#9670;&nbsp;</a></span>LSL_unloadHSL()</h2>
+<a id="ad966c3616550adbf28e171776242ed48"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad966c3616550adbf28e171776242ed48">&#9670;&nbsp;</a></span>LSL_unloadHSL()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int LSL_unloadHSL </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> int LSL_unloadHSL </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1752,14 +1726,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a478c4dcb9e16b4986e4a4e37d2861c64"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a478c4dcb9e16b4986e4a4e37d2861c64">&#9670;&nbsp;</a></span>LSL_isHSLLoaded()</h2>
+<a id="ac29dfeca0cf4d8ed706c2aa51e908ab3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac29dfeca0cf4d8ed706c2aa51e908ab3">&#9670;&nbsp;</a></span>LSL_isHSLLoaded()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int LSL_isHSLLoaded </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> int LSL_isHSLLoaded </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1772,14 +1746,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a551ea49bedfce4e7fa585e9ed3c582ad"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a551ea49bedfce4e7fa585e9ed3c582ad">&#9670;&nbsp;</a></span>LSL_isMA27available()</h2>
+<a id="a9e914f75f51eaeef9e353d3129014981"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e914f75f51eaeef9e353d3129014981">&#9670;&nbsp;</a></span>LSL_isMA27available()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int LSL_isMA27available </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> int LSL_isMA27available </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1792,34 +1766,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a557cd82220ac4099f06de3cdfb772ee0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a557cd82220ac4099f06de3cdfb772ee0">&#9670;&nbsp;</a></span>LSL_isMA28available()</h2>
+<a id="a53bc0a1162fddeb687a6c1b991f3192a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53bc0a1162fddeb687a6c1b991f3192a">&#9670;&nbsp;</a></span>LSL_isMA57available()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int LSL_isMA28available </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Indicates whether a HSL library is loaded and all symbols necessary to use MA28 have been found. </p>
-<dl class="section return"><dt>Returns</dt><dd>Zero if not available, nonzero if MA28 is available in the loaded library. </dd></dl>
-
-</div>
-</div>
-<a id="a1544a01fb1c9ae425074f7f65a14c9a8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1544a01fb1c9ae425074f7f65a14c9a8">&#9670;&nbsp;</a></span>LSL_isMA57available()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int LSL_isMA57available </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> int LSL_isMA57available </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1832,14 +1786,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a1c1270097ad93cee91b3b5909c25d4aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1c1270097ad93cee91b3b5909c25d4aa">&#9670;&nbsp;</a></span>LSL_isMA77available()</h2>
+<a id="a69a1cf0b5ff138ed6533b553d8c62df3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69a1cf0b5ff138ed6533b553d8c62df3">&#9670;&nbsp;</a></span>LSL_isMA77available()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int LSL_isMA77available </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> int LSL_isMA77available </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1852,14 +1806,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a766828a1bb6ce8c5d94ca0ca6c957c45"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a766828a1bb6ce8c5d94ca0ca6c957c45">&#9670;&nbsp;</a></span>LSL_isMA86available()</h2>
+<a id="a99c1cb3dfa6cc03ae931d818bc87d0ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99c1cb3dfa6cc03ae931d818bc87d0ec">&#9670;&nbsp;</a></span>LSL_isMA86available()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int LSL_isMA86available </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> int LSL_isMA86available </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1872,14 +1826,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a7258eebcbc92cac9cad73bd30113a339"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7258eebcbc92cac9cad73bd30113a339">&#9670;&nbsp;</a></span>LSL_isMA97available()</h2>
+<a id="ab7d0faa98b475e7d84e1880ae01b3392"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7d0faa98b475e7d84e1880ae01b3392">&#9670;&nbsp;</a></span>LSL_isMA97available()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int LSL_isMA97available </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> int LSL_isMA97available </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1892,14 +1846,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aedda8b0c430454447e40f8dcc9353270"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aedda8b0c430454447e40f8dcc9353270">&#9670;&nbsp;</a></span>LSL_isMC19available()</h2>
+<a id="a93a45fb1e94118484dc8b7eaa3a59f4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93a45fb1e94118484dc8b7eaa3a59f4e">&#9670;&nbsp;</a></span>LSL_isMC19available()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int LSL_isMC19available </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> int LSL_isMC19available </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1912,14 +1866,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae9c685c7f76204e7d5569ae92c3a0da8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae9c685c7f76204e7d5569ae92c3a0da8">&#9670;&nbsp;</a></span>LSL_isMC68available()</h2>
+<a id="ae8df4d9f4929bfe5eb0ebbb18c23406e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8df4d9f4929bfe5eb0ebbb18c23406e">&#9670;&nbsp;</a></span>LSL_isMC68available()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int LSL_isMC68available </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> int LSL_isMC68available </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1932,14 +1886,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ad3e90fb01f1df9d41178e2a564ac78a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad3e90fb01f1df9d41178e2a564ac78a0">&#9670;&nbsp;</a></span>LSL_HSLLibraryName()</h2>
+<a id="a107fcdd308e786156f138e3afb706835"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a107fcdd308e786156f138e3afb706835">&#9670;&nbsp;</a></span>LSL_HSLLibraryName()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">char* LSL_HSLLibraryName </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> char* LSL_HSLLibraryName </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1951,14 +1905,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ac6eca6ce421e5c8bee0e91474110bebb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac6eca6ce421e5c8bee0e91474110bebb">&#9670;&nbsp;</a></span>LSL_setMA27()</h2>
+<a id="a937887441ea3b59d2e68bebc442f0c99"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a937887441ea3b59d2e68bebc442f0c99">&#9670;&nbsp;</a></span>LSL_setMA27()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void LSL_setMA27 </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> void LSL_setMA27 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="HSLLoader_8h.html#ab22c9ea5700cd855e12d59fca9a35770">ma27ad_t</a>&#160;</td>
           <td class="paramname"><em>ma27ad</em>, </td>
@@ -1993,34 +1947,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aabe9b3e2a4dfa407aae2eb278dfac3a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aabe9b3e2a4dfa407aae2eb278dfac3a0">&#9670;&nbsp;</a></span>LSL_setMA28()</h2>
+<a id="ac6894ba4a862b3907aa75004f17f8b0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6894ba4a862b3907aa75004f17f8b0f">&#9670;&nbsp;</a></span>LSL_setMA57()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void LSL_setMA28 </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="HSLLoader_8h.html#a5146108d8ae267992fe679c5426cb0d9">ma28ad_t</a>&#160;</td>
-          <td class="paramname"><em>ma28ad</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>sets pointers to MA28 functions </p>
-
-</div>
-</div>
-<a id="a5535ccb4550c0b892bafb0bb27308b3d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5535ccb4550c0b892bafb0bb27308b3d">&#9670;&nbsp;</a></span>LSL_setMA57()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void LSL_setMA57 </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> void LSL_setMA57 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="HSLLoader_8h.html#af7cc600be90e724305d8d90298a343a0">ma57ad_t</a>&#160;</td>
           <td class="paramname"><em>ma57ad</em>, </td>
@@ -2061,14 +1995,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae3a1020d3e58d10baf87a7228b79db5a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae3a1020d3e58d10baf87a7228b79db5a">&#9670;&nbsp;</a></span>LSL_setMA77()</h2>
+<a id="a90ad6d49e28ca406ba19ef7b4a23d3ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90ad6d49e28ca406ba19ef7b4a23d3ef">&#9670;&nbsp;</a></span>LSL_setMA77()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void LSL_setMA77 </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> void LSL_setMA77 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="HSLLoader_8h.html#aa0708a133008124d224edc719d937b1a">ma77_default_control_t</a>&#160;</td>
           <td class="paramname"><em>ma77_default_control</em>, </td>
@@ -2175,14 +2109,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aa42ca98bc7145ad42ebed5ebc8a3f3c5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa42ca98bc7145ad42ebed5ebc8a3f3c5">&#9670;&nbsp;</a></span>LSL_setMA86()</h2>
+<a id="a5c3c11bef58575b9386b9bc4c382cc7f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c3c11bef58575b9386b9bc4c382cc7f">&#9670;&nbsp;</a></span>LSL_setMA86()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void LSL_setMA86 </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> void LSL_setMA86 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="HSLLoader_8h.html#accf670d1677b3ded7fad7be237f758ec">ma86_default_control_t</a>&#160;</td>
           <td class="paramname"><em>ma86_default_control</em>, </td>
@@ -2229,14 +2163,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ab14c880531386adfcf4006d6862ae3fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab14c880531386adfcf4006d6862ae3fe">&#9670;&nbsp;</a></span>LSL_setMA97()</h2>
+<a id="a603805fc42fa36296c917fb4bec6449a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a603805fc42fa36296c917fb4bec6449a">&#9670;&nbsp;</a></span>LSL_setMA97()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void LSL_setMA97 </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> void LSL_setMA97 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="HSLLoader_8h.html#add630bc7c9bed3fb7e24e6aae608345b">ma97_default_control_t</a>&#160;</td>
           <td class="paramname"><em>ma97_default_control</em>, </td>
@@ -2289,14 +2223,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aee3369374b7e7217c01da623ebe2b696"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aee3369374b7e7217c01da623ebe2b696">&#9670;&nbsp;</a></span>LSL_setMC19()</h2>
+<a id="ace6e624d76b41c3f429228660d4b88b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace6e624d76b41c3f429228660d4b88b5">&#9670;&nbsp;</a></span>LSL_setMC19()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void LSL_setMC19 </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> void LSL_setMC19 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="HSLLoader_8h.html#ace1ec7f719f2134bcf2383b3adc099e6">mc19ad_t</a>&#160;</td>
           <td class="paramname"><em>mc19ad</em></td><td>)</td>
@@ -2309,14 +2243,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a551da3021bd2efd12bfebe961e09859e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a551da3021bd2efd12bfebe961e09859e">&#9670;&nbsp;</a></span>LSL_setMC68()</h2>
+<a id="ad96278e9f5909d46b9b0ed9a84f7d3db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad96278e9f5909d46b9b0ed9a84f7d3db">&#9670;&nbsp;</a></span>LSL_setMC68()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void LSL_setMC68 </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> void LSL_setMC68 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="HSLLoader_8h.html#af5b3a2b543a2defa8f21db6434ef094d">mc68_default_control_t</a>&#160;</td>
           <td class="paramname"><em>mc68_default_control</em>, </td>

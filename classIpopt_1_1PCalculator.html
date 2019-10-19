@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">trunk</span-->
+   &#160;<!--span id="projectnumber">3.13.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -105,6 +105,12 @@ $(document).ready(function(){initNavTree('classIpopt_1_1PCalculator.html','');})
 </div><!--header-->
 <div class="contents">
 
+<p>This class is the interface for implementations of any class that calculates the matrix \(P =K^{-1}A\) of the following matrix: </p><p class="formulaDsp">
+\[ \left(\begin{array}{cc} K &amp; A\\ B &amp; 0 \end{array}\right) \]
+</p>
+<p>.  
+ <a href="classIpopt_1_1PCalculator.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for Ipopt::PCalculator:</div>
@@ -122,16 +128,12 @@ $(document).ready(function(){initNavTree('classIpopt_1_1PCalculator.html','');})
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a23d5b2c2ac87eb0dc57646035d18eaa1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PCalculator.html#a23d5b2c2ac87eb0dc57646035d18eaa1">PCalculator</a> (<a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1SensBacksolver.html">SensBacksolver</a> &gt; backsolver, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1SchurData.html">SchurData</a> &gt; A_data)</td></tr>
-<tr class="memdesc:a23d5b2c2ac87eb0dc57646035d18eaa1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class is the interface for implementations of any class that calculates the matrix \(P =K^{-1}A\) of the following matrix: </p><p class="formulaDsp">
-\[ \left(\begin{array}{cc} K &amp; A\\ B &amp; 0 \end{array}\right) \]
-</p>
-<p>.  <a href="#a23d5b2c2ac87eb0dc57646035d18eaa1">More...</a><br /></td></tr>
 <tr class="separator:a23d5b2c2ac87eb0dc57646035d18eaa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a851f0fab5307d479ee808dbcab4db3c9"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PCalculator.html#a851f0fab5307d479ee808dbcab4db3c9">~PCalculator</a> ()</td></tr>
 <tr class="separator:a851f0fab5307d479ee808dbcab4db3c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a32d014ae54dc8b3590511449354f6292"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PCalculator.html#a32d014ae54dc8b3590511449354f6292">InitializeImpl</a> (const <a class="el" href="classIpopt_1_1OptionsList.html">OptionsList</a> &amp;options, const std::string &amp;prefix)</td></tr>
-<tr class="memdesc:a32d014ae54dc8b3590511449354f6292"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overloaded from <a class="el" href="classIpopt_1_1AlgorithmStrategyObject.html" title="This is the base class for all algorithm strategy objects. ">AlgorithmStrategyObject</a>.  <a href="#a32d014ae54dc8b3590511449354f6292">More...</a><br /></td></tr>
-<tr class="separator:a32d014ae54dc8b3590511449354f6292"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc7e28a3c63d60d0ecf004d4a2c6a31e"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PCalculator.html#acc7e28a3c63d60d0ecf004d4a2c6a31e">InitializeImpl</a> (const <a class="el" href="classIpopt_1_1OptionsList.html">OptionsList</a> &amp;, const std::string &amp;)</td></tr>
+<tr class="memdesc:acc7e28a3c63d60d0ecf004d4a2c6a31e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of the initialization method that has to be overloaded by for each derived class.  <a href="#acc7e28a3c63d60d0ecf004d4a2c6a31e">More...</a><br /></td></tr>
+<tr class="separator:acc7e28a3c63d60d0ecf004d4a2c6a31e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab96ecb4446515612577435d309289fe2"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PCalculator.html#ab96ecb4446515612577435d309289fe2">ComputeP</a> ()=0</td></tr>
 <tr class="memdesc:ab96ecb4446515612577435d309289fe2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to start the computation of P from E_0 and KKT.  <a href="#ab96ecb4446515612577435d309289fe2">More...</a><br /></td></tr>
 <tr class="separator:ab96ecb4446515612577435d309289fe2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -202,8 +204,12 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a5f6310084b90871ee4eec3d89bb407ee inherit pro_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00017">17</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
+<div class="textblock"><p>This class is the interface for implementations of any class that calculates the matrix \(P =K^{-1}A\) of the following matrix: </p><p class="formulaDsp">
+\[ \left(\begin{array}{cc} K &amp; A\\ B &amp; 0 \end{array}\right) \]
+</p>
+<p>. </p>
+
+<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00026">26</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a23d5b2c2ac87eb0dc57646035d18eaa1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a23d5b2c2ac87eb0dc57646035d18eaa1">&#9670;&nbsp;</a></span>PCalculator()</h2>
@@ -239,12 +245,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>This class is the interface for implementations of any class that calculates the matrix \(P =K^{-1}A\) of the following matrix: </p><p class="formulaDsp">
-\[ \left(\begin{array}{cc} K &amp; A\\ B &amp; 0 \end{array}\right) \]
-</p>
-<p>. </p>
-
-<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00031">31</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00029">29</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
 
 </div>
 </div>
@@ -271,13 +272,13 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00040">40</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00038">38</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a32d014ae54dc8b3590511449354f6292"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a32d014ae54dc8b3590511449354f6292">&#9670;&nbsp;</a></span>InitializeImpl()</h2>
+<a id="acc7e28a3c63d60d0ecf004d4a2c6a31e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc7e28a3c63d60d0ecf004d4a2c6a31e">&#9670;&nbsp;</a></span>InitializeImpl()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -310,13 +311,13 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Overloaded from <a class="el" href="classIpopt_1_1AlgorithmStrategyObject.html" title="This is the base class for all algorithm strategy objects. ">AlgorithmStrategyObject</a>. </p>
+<p>Implementation of the initialization method that has to be overloaded by for each derived class. </p>
 
 <p>Implements <a class="el" href="classIpopt_1_1AlgorithmStrategyObject.html#a6e5ef59a257a61c928515ea78fd5c148">Ipopt::AlgorithmStrategyObject</a>.</p>
 
 <p>Reimplemented in <a class="el" href="classIpopt_1_1IndexPCalculator.html#a2fcbfba028be182f7d92bddccf5e507f">Ipopt::IndexPCalculator</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00045">45</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00042">42</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
 
 </div>
 </div>
@@ -384,7 +385,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Function to extract a SchurMatrix corresponding to $B K^{-1} A$. </p>
-<p>If B==NULL, use A=B </p>
+<p>If B==NULL, use A=B. </p>
 
 <p>Implemented in <a class="el" href="classIpopt_1_1IndexPCalculator.html#aacc05b38ac2bb509b2d600ea25facad2">Ipopt::IndexPCalculator</a>.</p>
 
@@ -510,7 +511,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00064">64</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00071">71</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
 
 </div>
 </div>
@@ -572,7 +573,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00076">76</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00086">86</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
 
 </div>
 </div>
@@ -602,7 +603,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Accessor methods for data and backsolver. </p>
 <p>This unconstness seems kind of dangerous but I don't think there is a way around it. Anyway, there is no difference between this and the <a class="el" href="classIpopt_1_1AlgorithmStrategyObject.html#a8b39e20ef00543ac41de1e4bb8a75930">IpData()</a> method of AlgStrategy. </p>
 
-<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00091">91</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00107">107</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
 
 </div>
 </div>
@@ -629,7 +630,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00096">96</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00112">112</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
 
 </div>
 </div>
@@ -656,7 +657,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00101">101</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00117">117</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
 
 </div>
 </div>
@@ -683,7 +684,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00106">106</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00122">122</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
 
 </div>
 </div>
@@ -708,7 +709,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00113">113</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00129">129</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
 
 </div>
 </div>
@@ -732,7 +733,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00115">115</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00131">131</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
 
 </div>
 </div>
@@ -756,7 +757,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00116">116</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensPCalculator_8hpp_source.html#l00132">132</a> of file <a class="el" href="SensPCalculator_8hpp_source.html">SensPCalculator.hpp</a>.</p>
 
 </div>
 </div>

@@ -100,9 +100,6 @@ var searchData=
   ['ipoptconfig_2eh',['IpoptConfig.h',['../IpoptConfig_8h.html',1,'']]],
   ['ipopterrorconvcheck_2ehpp',['IpOptErrorConvCheck.hpp',['../IpOptErrorConvCheck_8hpp.html',1,'']]],
   ['ipoptionslist_2ehpp',['IpOptionsList.hpp',['../IpOptionsList_8hpp.html',1,'']]],
-  ['ipoptoptions_2ehpp',['ipoptoptions.hpp',['../ipoptoptions_8hpp.html',1,'']]],
-  ['ipoptrjournal_2ehpp',['IpoptRJournal.hpp',['../IpoptRJournal_8hpp.html',1,'']]],
-  ['ipoptrnlp_2ehpp',['IpoptRNLP.hpp',['../IpoptRNLP_8hpp.html',1,'']]],
   ['iporigipoptnlp_2ehpp',['IpOrigIpoptNLP.hpp',['../IpOrigIpoptNLP_8hpp.html',1,'']]],
   ['iporigiterationoutput_2ehpp',['IpOrigIterationOutput.hpp',['../IpOrigIterationOutput_8hpp.html',1,'']]],
   ['ippardisosolverinterface_2ehpp',['IpPardisoSolverInterface.hpp',['../IpPardisoSolverInterface_8hpp.html',1,'']]],
@@ -163,6 +160,5 @@ var searchData=
   ['ipwarmstartiterateinitializer_2ehpp',['IpWarmStartIterateInitializer.hpp',['../IpWarmStartIterateInitializer_8hpp.html',1,'']]],
   ['ipwsmpsolverinterface_2ehpp',['IpWsmpSolverInterface.hpp',['../IpWsmpSolverInterface_8hpp.html',1,'']]],
   ['ipzeromatrix_2ehpp',['IpZeroMatrix.hpp',['../IpZeroMatrix_8hpp.html',1,'']]],
-  ['ipzerosymmatrix_2ehpp',['IpZeroSymMatrix.hpp',['../IpZeroSymMatrix_8hpp.html',1,'']]],
-  ['iterate_2ehpp',['iterate.hpp',['../iterate_8hpp.html',1,'']]]
+  ['ipzerosymmatrix_2ehpp',['IpZeroSymMatrix.hpp',['../IpZeroSymMatrix_8hpp.html',1,'']]]
 ];

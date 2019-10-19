@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">trunk</span-->
+   &#160;<!--span id="projectnumber">3.13.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -104,7 +104,8 @@ $(document).ready(function(){initNavTree('IpStdCInterface_8h.html','');});
 <div class="title">IpStdCInterface.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="IpReturnCodes_8h_source.html">IpReturnCodes.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="IpoptConfig_8h_source.html">IpoptConfig.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="IpReturnCodes_8h_source.html">IpReturnCodes.h</a>&quot;</code><br />
 </div>
 <p><a href="IpStdCInterface_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -156,33 +157,33 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a0176dd17c32f66628316b03da2281a50"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a0176dd17c32f66628316b03da2281a50">CreateIpoptProblem</a> (<a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> n, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *x_L, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *x_U, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> m, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *g_L, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *g_U, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> nele_jac, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> nele_hess, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> index_style, <a class="el" href="IpStdCInterface_8h.html#a564024fb8a0c187f361a39ed07507f5c">Eval_F_CB</a> eval_f, <a class="el" href="IpStdCInterface_8h.html#aa1bb552e8de03d99d8bfcd3e57411e76">Eval_G_CB</a> eval_g, <a class="el" href="IpStdCInterface_8h.html#a9bafd261fce11ab0eb8ff430f88292c1">Eval_Grad_F_CB</a> eval_grad_f, <a class="el" href="IpStdCInterface_8h.html#a07d8fad0da6cccf5ee7dcca52ab14d8f">Eval_Jac_G_CB</a> eval_jac_g, <a class="el" href="IpStdCInterface_8h.html#a6688e104732f5309e11ddb79b2c3909d">Eval_H_CB</a> eval_h)</td></tr>
-<tr class="memdesc:a0176dd17c32f66628316b03da2281a50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for creating a new <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions...">Ipopt</a> Problem object.  <a href="#a0176dd17c32f66628316b03da2281a50">More...</a><br /></td></tr>
-<tr class="separator:a0176dd17c32f66628316b03da2281a50"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5024b8f617cc9aad381309edcb825304"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a5024b8f617cc9aad381309edcb825304">FreeIpoptProblem</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem)</td></tr>
-<tr class="memdesc:a5024b8f617cc9aad381309edcb825304"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method for freeing a previously created IpoptProblem.  <a href="#a5024b8f617cc9aad381309edcb825304">More...</a><br /></td></tr>
-<tr class="separator:a5024b8f617cc9aad381309edcb825304"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e19cd8d1add327c9091a5641efbf203"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a3e19cd8d1add327c9091a5641efbf203">AddIpoptStrOption</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, char *keyword, char *val)</td></tr>
-<tr class="memdesc:a3e19cd8d1add327c9091a5641efbf203"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for adding a string option.  <a href="#a3e19cd8d1add327c9091a5641efbf203">More...</a><br /></td></tr>
-<tr class="separator:a3e19cd8d1add327c9091a5641efbf203"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3518c0c9966d46c8941293f8b02236e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#ae3518c0c9966d46c8941293f8b02236e">AddIpoptNumOption</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, char *keyword, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> val)</td></tr>
-<tr class="memdesc:ae3518c0c9966d46c8941293f8b02236e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for adding a Number option.  <a href="#ae3518c0c9966d46c8941293f8b02236e">More...</a><br /></td></tr>
-<tr class="separator:ae3518c0c9966d46c8941293f8b02236e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c22b4b2d96376ef96708f31fa07ed25"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a9c22b4b2d96376ef96708f31fa07ed25">AddIpoptIntOption</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, char *keyword, <a class="el" href="IpStdCInterface_8h.html#a7cc214a236ad3bb6ad435bdcf5262a3f">Int</a> val)</td></tr>
-<tr class="memdesc:a9c22b4b2d96376ef96708f31fa07ed25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for adding an Int option.  <a href="#a9c22b4b2d96376ef96708f31fa07ed25">More...</a><br /></td></tr>
-<tr class="separator:a9c22b4b2d96376ef96708f31fa07ed25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a30f768044835861156973184ad95597e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a30f768044835861156973184ad95597e">OpenIpoptOutputFile</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, char *file_name, <a class="el" href="IpStdCInterface_8h.html#a7cc214a236ad3bb6ad435bdcf5262a3f">Int</a> print_level)</td></tr>
-<tr class="memdesc:a30f768044835861156973184ad95597e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for opening an output file for a given name with given printlevel.  <a href="#a30f768044835861156973184ad95597e">More...</a><br /></td></tr>
-<tr class="separator:a30f768044835861156973184ad95597e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac8ee92bdb002867a6a59bc87f91d683c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#ac8ee92bdb002867a6a59bc87f91d683c">SetIpoptProblemScaling</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> obj_scaling, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *x_scaling, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *g_scaling)</td></tr>
-<tr class="memdesc:ac8ee92bdb002867a6a59bc87f91d683c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional function for setting scaling parameter for the NLP.  <a href="#ac8ee92bdb002867a6a59bc87f91d683c">More...</a><br /></td></tr>
-<tr class="separator:ac8ee92bdb002867a6a59bc87f91d683c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31d2237b82598baf4763eaeb972ba9c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a31d2237b82598baf4763eaeb972ba9c1">SetIntermediateCallback</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, <a class="el" href="IpStdCInterface_8h.html#ab4979ff76a16c222dac808998013b345">Intermediate_CB</a> intermediate_cb)</td></tr>
-<tr class="memdesc:a31d2237b82598baf4763eaeb972ba9c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting a callback function for the "intermediate callback" method in the TNLP.  <a href="#a31d2237b82598baf4763eaeb972ba9c1">More...</a><br /></td></tr>
-<tr class="separator:a31d2237b82598baf4763eaeb972ba9c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99eccae619da751bf1b01f4d45514b9b"><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="IpReturnCodes__inc_8h.html#ab542e0b1ca364a9b7525a876ffdae7d7">ApplicationReturnStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a99eccae619da751bf1b01f4d45514b9b">IpoptSolve</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *x, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *g, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *obj_val, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *mult_g, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *mult_x_L, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *mult_x_U, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td></tr>
-<tr class="memdesc:a99eccae619da751bf1b01f4d45514b9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function calling the <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions...">Ipopt</a> optimization algorithm for a problem previously defined with CreateIpoptProblem.  <a href="#a99eccae619da751bf1b01f4d45514b9b">More...</a><br /></td></tr>
-<tr class="separator:a99eccae619da751bf1b01f4d45514b9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a064ecc05d4945d0c9a4689b5c4039675"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a064ecc05d4945d0c9a4689b5c4039675">CreateIpoptProblem</a> (<a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> n, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *x_L, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *x_U, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> m, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *g_L, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *g_U, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> nele_jac, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> nele_hess, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> index_style, <a class="el" href="IpStdCInterface_8h.html#a564024fb8a0c187f361a39ed07507f5c">Eval_F_CB</a> eval_f, <a class="el" href="IpStdCInterface_8h.html#aa1bb552e8de03d99d8bfcd3e57411e76">Eval_G_CB</a> eval_g, <a class="el" href="IpStdCInterface_8h.html#a9bafd261fce11ab0eb8ff430f88292c1">Eval_Grad_F_CB</a> eval_grad_f, <a class="el" href="IpStdCInterface_8h.html#a07d8fad0da6cccf5ee7dcca52ab14d8f">Eval_Jac_G_CB</a> eval_jac_g, <a class="el" href="IpStdCInterface_8h.html#a6688e104732f5309e11ddb79b2c3909d">Eval_H_CB</a> eval_h)</td></tr>
+<tr class="memdesc:a064ecc05d4945d0c9a4689b5c4039675"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for creating a new <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions...">Ipopt</a> Problem object.  <a href="#a064ecc05d4945d0c9a4689b5c4039675">More...</a><br /></td></tr>
+<tr class="separator:a064ecc05d4945d0c9a4689b5c4039675"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3560885d47fc7282c85ed1364108a4ab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a3560885d47fc7282c85ed1364108a4ab">FreeIpoptProblem</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem)</td></tr>
+<tr class="memdesc:a3560885d47fc7282c85ed1364108a4ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method for freeing a previously created IpoptProblem.  <a href="#a3560885d47fc7282c85ed1364108a4ab">More...</a><br /></td></tr>
+<tr class="separator:a3560885d47fc7282c85ed1364108a4ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adff6271fbde661dba1a2e59316c5f6c0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#adff6271fbde661dba1a2e59316c5f6c0">AddIpoptStrOption</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, char *keyword, char *val)</td></tr>
+<tr class="memdesc:adff6271fbde661dba1a2e59316c5f6c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for adding a string option.  <a href="#adff6271fbde661dba1a2e59316c5f6c0">More...</a><br /></td></tr>
+<tr class="separator:adff6271fbde661dba1a2e59316c5f6c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afba87fc0265689aa0caa15d896aa0b8a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#afba87fc0265689aa0caa15d896aa0b8a">AddIpoptNumOption</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, char *keyword, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> val)</td></tr>
+<tr class="memdesc:afba87fc0265689aa0caa15d896aa0b8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for adding a Number option.  <a href="#afba87fc0265689aa0caa15d896aa0b8a">More...</a><br /></td></tr>
+<tr class="separator:afba87fc0265689aa0caa15d896aa0b8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19ab838c66ff503c0896bc61289f53fe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a19ab838c66ff503c0896bc61289f53fe">AddIpoptIntOption</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, char *keyword, <a class="el" href="IpStdCInterface_8h.html#a7cc214a236ad3bb6ad435bdcf5262a3f">Int</a> val)</td></tr>
+<tr class="memdesc:a19ab838c66ff503c0896bc61289f53fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for adding an Int option.  <a href="#a19ab838c66ff503c0896bc61289f53fe">More...</a><br /></td></tr>
+<tr class="separator:a19ab838c66ff503c0896bc61289f53fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5fface8b0aa5480dd8e526878d02025"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#ac5fface8b0aa5480dd8e526878d02025">OpenIpoptOutputFile</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, char *file_name, <a class="el" href="IpStdCInterface_8h.html#a7cc214a236ad3bb6ad435bdcf5262a3f">Int</a> print_level)</td></tr>
+<tr class="memdesc:ac5fface8b0aa5480dd8e526878d02025"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for opening an output file for a given name with given printlevel.  <a href="#ac5fface8b0aa5480dd8e526878d02025">More...</a><br /></td></tr>
+<tr class="separator:ac5fface8b0aa5480dd8e526878d02025"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17eb4861ff7fc751d1208fe41865ec2e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a17eb4861ff7fc751d1208fe41865ec2e">SetIpoptProblemScaling</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> obj_scaling, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *x_scaling, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *g_scaling)</td></tr>
+<tr class="memdesc:a17eb4861ff7fc751d1208fe41865ec2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional function for setting scaling parameter for the NLP.  <a href="#a17eb4861ff7fc751d1208fe41865ec2e">More...</a><br /></td></tr>
+<tr class="separator:a17eb4861ff7fc751d1208fe41865ec2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92e2c344447a142cc9b2bde38522e062"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a92e2c344447a142cc9b2bde38522e062">SetIntermediateCallback</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, <a class="el" href="IpStdCInterface_8h.html#ab4979ff76a16c222dac808998013b345">Intermediate_CB</a> intermediate_cb)</td></tr>
+<tr class="memdesc:a92e2c344447a142cc9b2bde38522e062"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting a callback function for the "intermediate callback" method in the TNLP.  <a href="#a92e2c344447a142cc9b2bde38522e062">More...</a><br /></td></tr>
+<tr class="separator:a92e2c344447a142cc9b2bde38522e062"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2219c823d971c40381eca8b2844297ea"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> enum <a class="el" href="IpReturnCodes__inc_8h.html#ab542e0b1ca364a9b7525a876ffdae7d7">ApplicationReturnStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a2219c823d971c40381eca8b2844297ea">IpoptSolve</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *x, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *g, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *obj_val, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *mult_g, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *mult_x_L, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *mult_x_U, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td></tr>
+<tr class="memdesc:a2219c823d971c40381eca8b2844297ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function calling the <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions...">Ipopt</a> optimization algorithm for a problem previously defined with CreateIpoptProblem.  <a href="#a2219c823d971c40381eca8b2844297ea">More...</a><br /></td></tr>
+<tr class="separator:a2219c823d971c40381eca8b2844297ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="aa8cecfc5c5c054d2875c03e77b7be15d"></a>
@@ -197,7 +198,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00058">58</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00056">56</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>
@@ -213,7 +214,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00061">61</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00059">59</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>
@@ -233,7 +234,7 @@ Functions</h2></td></tr>
 <p>Type for all number. </p>
 <p>We need to make sure that this is identical with what is defined in <a class="el" href="IpTypes_8hpp.html">Common/IpTypes.hpp</a> </p>
 
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00032">32</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00030">30</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>
@@ -252,7 +253,7 @@ Functions</h2></td></tr>
 <p>Type for all indices. </p>
 <p>We need to make sure that this is identical with what is defined in <a class="el" href="IpTypes_8hpp.html">Common/IpTypes.hpp</a> </p>
 
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00038">38</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00036">36</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>
@@ -271,7 +272,7 @@ Functions</h2></td></tr>
 <p>Type for all integers. </p>
 <p>We need to make sure that this is identical with what is defined in <a class="el" href="IpTypes_8hpp.html">Common/IpTypes.hpp</a> </p>
 
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00044">44</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00042">42</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>
@@ -289,7 +290,7 @@ Functions</h2></td></tr>
 
 <p>Pointer to an <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions...">Ipopt</a> Problem. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00053">53</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00051">51</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>
@@ -307,7 +308,7 @@ Functions</h2></td></tr>
 
 <p>define a boolean type for C </p>
 
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00056">56</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00054">54</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>
@@ -325,7 +326,7 @@ Functions</h2></td></tr>
 
 <p>A pointer for anything that is to be passed between the called and individual callback function. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00065">65</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00063">63</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>
@@ -345,7 +346,7 @@ Functions</h2></td></tr>
 <p>Return value should be set to false if there was a problem doing the evaluation.</p>
 <p>See also <a class="el" href="classIpopt_1_1TNLP.html#a709c03900227bc573b046ce0705e6c84" title="Method to request the value of the objective function. ">Ipopt::TNLP::eval_f</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00073">73</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00071">71</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>
@@ -365,7 +366,7 @@ Functions</h2></td></tr>
 <p>Return value should be set to false if there was a problem doing the evaluation.</p>
 <p>See also <a class="el" href="classIpopt_1_1TNLP.html#a52698f1861ffef271d5e317c0e168652" title="Method to request the gradient of the objective function. ">Ipopt::TNLP::eval_grad_f</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00087">87</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00085">85</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>
@@ -385,7 +386,7 @@ Functions</h2></td></tr>
 <p>Return value should be set to false if there was a problem doing the evaluation.</p>
 <p>See also <a class="el" href="classIpopt_1_1TNLP.html#afcfd8404b772dc4960f2d2db4e8bb382" title="Method to request the constraint values. ">Ipopt::TNLP::eval_g</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00101">101</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00099">99</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>
@@ -405,7 +406,7 @@ Functions</h2></td></tr>
 <p>Return value should be set to false if there was a problem doing the evaluation.</p>
 <p>See also <a class="el" href="classIpopt_1_1TNLP.html#aa4162d052f69d4f9946a42feec012853" title="Method to request either the sparsity structure or the values of the Jacobian of the constraints...">Ipopt::TNLP::eval_jac_g</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00116">116</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00114">114</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>
@@ -425,7 +426,7 @@ Functions</h2></td></tr>
 <p>Return value should be set to false if there was a problem doing the evaluation.</p>
 <p>See also <a class="el" href="classIpopt_1_1TNLP.html#a26b9145267e2574c53acc284fef1c354" title="Method to request either the sparsity structure or the values of the Hessian of the Lagrangian...">Ipopt::TNLP::eval_h</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00134">134</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00132">132</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>
@@ -445,19 +446,19 @@ Functions</h2></td></tr>
 <p>If set, it is called once per iteration, providing the user with some information on the state of the optimization. This can be used to print some user-defined output. It also gives the user a way to terminate the optimization prematurely. If this method returns false, <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions...">Ipopt</a> will terminate the optimization.</p>
 <p>See also <a class="el" href="classIpopt_1_1TNLP.html#a2f962a4c43464adb7928771af84503d6" title="Intermediate Callback method for the user. ">Ipopt::TNLP::intermediate_callback</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00159">159</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00157">157</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a0176dd17c32f66628316b03da2281a50"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0176dd17c32f66628316b03da2281a50">&#9670;&nbsp;</a></span>CreateIpoptProblem()</h2>
+<a id="a064ecc05d4945d0c9a4689b5c4039675"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a064ecc05d4945d0c9a4689b5c4039675">&#9670;&nbsp;</a></span>CreateIpoptProblem()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> CreateIpoptProblem </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> CreateIpoptProblem </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
@@ -594,14 +595,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a5024b8f617cc9aad381309edcb825304"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5024b8f617cc9aad381309edcb825304">&#9670;&nbsp;</a></span>FreeIpoptProblem()</h2>
+<a id="a3560885d47fc7282c85ed1364108a4ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3560885d47fc7282c85ed1364108a4ab">&#9670;&nbsp;</a></span>FreeIpoptProblem()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void FreeIpoptProblem </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> void FreeIpoptProblem </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a>&#160;</td>
           <td class="paramname"><em>ipopt_problem</em></td><td>)</td>
@@ -615,14 +616,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a3e19cd8d1add327c9091a5641efbf203"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3e19cd8d1add327c9091a5641efbf203">&#9670;&nbsp;</a></span>AddIpoptStrOption()</h2>
+<a id="adff6271fbde661dba1a2e59316c5f6c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adff6271fbde661dba1a2e59316c5f6c0">&#9670;&nbsp;</a></span>AddIpoptStrOption()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> AddIpoptStrOption </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> AddIpoptStrOption </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a>&#160;</td>
           <td class="paramname"><em>ipopt_problem</em>, </td>
@@ -652,14 +653,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae3518c0c9966d46c8941293f8b02236e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae3518c0c9966d46c8941293f8b02236e">&#9670;&nbsp;</a></span>AddIpoptNumOption()</h2>
+<a id="afba87fc0265689aa0caa15d896aa0b8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afba87fc0265689aa0caa15d896aa0b8a">&#9670;&nbsp;</a></span>AddIpoptNumOption()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> AddIpoptNumOption </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> AddIpoptNumOption </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a>&#160;</td>
           <td class="paramname"><em>ipopt_problem</em>, </td>
@@ -689,14 +690,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a9c22b4b2d96376ef96708f31fa07ed25"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c22b4b2d96376ef96708f31fa07ed25">&#9670;&nbsp;</a></span>AddIpoptIntOption()</h2>
+<a id="a19ab838c66ff503c0896bc61289f53fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19ab838c66ff503c0896bc61289f53fe">&#9670;&nbsp;</a></span>AddIpoptIntOption()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> AddIpoptIntOption </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> AddIpoptIntOption </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a>&#160;</td>
           <td class="paramname"><em>ipopt_problem</em>, </td>
@@ -726,14 +727,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a30f768044835861156973184ad95597e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a30f768044835861156973184ad95597e">&#9670;&nbsp;</a></span>OpenIpoptOutputFile()</h2>
+<a id="ac5fface8b0aa5480dd8e526878d02025"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5fface8b0aa5480dd8e526878d02025">&#9670;&nbsp;</a></span>OpenIpoptOutputFile()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> OpenIpoptOutputFile </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> OpenIpoptOutputFile </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a>&#160;</td>
           <td class="paramname"><em>ipopt_problem</em>, </td>
@@ -763,14 +764,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ac8ee92bdb002867a6a59bc87f91d683c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac8ee92bdb002867a6a59bc87f91d683c">&#9670;&nbsp;</a></span>SetIpoptProblemScaling()</h2>
+<a id="a17eb4861ff7fc751d1208fe41865ec2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a17eb4861ff7fc751d1208fe41865ec2e">&#9670;&nbsp;</a></span>SetIpoptProblemScaling()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> SetIpoptProblemScaling </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> SetIpoptProblemScaling </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a>&#160;</td>
           <td class="paramname"><em>ipopt_problem</em>, </td>
@@ -806,14 +807,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a31d2237b82598baf4763eaeb972ba9c1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a31d2237b82598baf4763eaeb972ba9c1">&#9670;&nbsp;</a></span>SetIntermediateCallback()</h2>
+<a id="a92e2c344447a142cc9b2bde38522e062"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92e2c344447a142cc9b2bde38522e062">&#9670;&nbsp;</a></span>SetIntermediateCallback()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> SetIntermediateCallback </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> SetIntermediateCallback </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a>&#160;</td>
           <td class="paramname"><em>ipopt_problem</em>, </td>
@@ -837,14 +838,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a99eccae619da751bf1b01f4d45514b9b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a99eccae619da751bf1b01f4d45514b9b">&#9670;&nbsp;</a></span>IpoptSolve()</h2>
+<a id="a2219c823d971c40381eca8b2844297ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2219c823d971c40381eca8b2844297ea">&#9670;&nbsp;</a></span>IpoptSolve()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="IpReturnCodes__inc_8h.html#ab542e0b1ca364a9b7525a876ffdae7d7">ApplicationReturnStatus</a> IpoptSolve </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> enum <a class="el" href="IpReturnCodes__inc_8h.html#ab542e0b1ca364a9b7525a876ffdae7d7">ApplicationReturnStatus</a> IpoptSolve </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a>&#160;</td>
           <td class="paramname"><em>ipopt_problem</em>, </td>

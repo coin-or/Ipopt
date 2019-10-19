@@ -32,7 +32,7 @@ var classIpopt_1_1Ma97SolverInterface =
     [ "ProvidesInertia", "classIpopt_1_1Ma97SolverInterface.html#a2b18b7f466ce6802e4bddec649843c9d", null ],
     [ "MatrixFormat", "classIpopt_1_1Ma97SolverInterface.html#af2f0e04298dacb10d7fd39d55cde4529", null ],
     [ "ProvidesDegeneracyDetection", "classIpopt_1_1Ma97SolverInterface.html#adffbaabf9b7614831b8f5a402c06e8e8", null ],
-    [ "DetermineDependentRows", "classIpopt_1_1Ma97SolverInterface.html#add3499b2d49ae37f3e6f047384ab8fa7", null ],
+    [ "DetermineDependentRows", "classIpopt_1_1Ma97SolverInterface.html#acc5707d0baa419f7b9f552ea3e968117", null ],
     [ "ScaleNameToNum", "classIpopt_1_1Ma97SolverInterface.html#a9e8ad180deeefbc1d95bbf7989802247", null ],
     [ "ndim_", "classIpopt_1_1Ma97SolverInterface.html#a99f0cd8312f58c530bd6f8358b87865d", null ],
     [ "val_", "classIpopt_1_1Ma97SolverInterface.html#a1e3b774d2dd1617367c3a14b541c97ed", null ],

@@ -8,7 +8,7 @@ var classIpopt_1_1IteratesVectorSpace =
     [ "MakeNewIteratesVector", "classIpopt_1_1IteratesVectorSpace.html#a07d2c45720d1dd3633a659d7cf46de0c", null ],
     [ "MakeNewCompoundVector", "classIpopt_1_1IteratesVectorSpace.html#a6887b2f90e8813da970dfbd151911809", null ],
     [ "MakeNew", "classIpopt_1_1IteratesVectorSpace.html#ad6ec3366eb9ac74433e1c8a6452800a2", null ],
-    [ "SetCompSpace", "classIpopt_1_1IteratesVectorSpace.html#a63b30ae14b22036bcc7c87874c7df6b5", null ],
+    [ "SetCompSpace", "classIpopt_1_1IteratesVectorSpace.html#ad3bd978e6fe80234e6014dfaec00c0fc", null ],
     [ "operator=", "classIpopt_1_1IteratesVectorSpace.html#ac826fd0f7913cae6c3ecb6b87b414b47", null ],
     [ "x_space_", "classIpopt_1_1IteratesVectorSpace.html#a2d2faf54b875a47cc18d6a4b343d6bec", null ],
     [ "s_space_", "classIpopt_1_1IteratesVectorSpace.html#ae4965d0326322da59514cd72d2dd1793", null ],

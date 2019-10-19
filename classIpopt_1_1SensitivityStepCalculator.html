@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">trunk</span-->
+   &#160;<!--span id="projectnumber">3.13.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -105,6 +105,9 @@ $(document).ready(function(){initNavTree('classIpopt_1_1SensitivityStepCalculato
 </div><!--header-->
 <div class="contents">
 
+<p>This is the interface for the classes that perform the actual step.  
+ <a href="classIpopt_1_1SensitivityStepCalculator.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="SensStepCalc_8hpp_source.html">SensStepCalc.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for Ipopt::SensitivityStepCalculator:</div>
@@ -135,7 +138,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1de66be7f535ac7d77aae7e7ef58f241"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1SchurDriver.html">SchurDriver</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SensitivityStepCalculator.html#a1de66be7f535ac7d77aae7e7ef58f241">Driver</a> ()</td></tr>
 <tr class="separator:a1de66be7f535ac7d77aae7e7ef58f241"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a84c70b13797c52c880810cec45cc8c60"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SensitivityStepCalculator.html#a84c70b13797c52c880810cec45cc8c60">Step</a> (<a class="el" href="classIpopt_1_1DenseVector.html">DenseVector</a> &amp;delta_u, <a class="el" href="classIpopt_1_1IteratesVector.html">IteratesVector</a> &amp;sol)=0</td></tr>
-<tr class="memdesc:a84c70b13797c52c880810cec45cc8c60"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the main algorithmic function of this class; It calculates a step using its <a class="el" href="classIpopt_1_1SchurDriver.html">SchurDriver</a>, checks bounds, and returns it.  <a href="#a84c70b13797c52c880810cec45cc8c60">More...</a><br /></td></tr>
+<tr class="memdesc:a84c70b13797c52c880810cec45cc8c60"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is the main algorithmic function of this class.  <a href="#a84c70b13797c52c880810cec45cc8c60">More...</a><br /></td></tr>
 <tr class="separator:a84c70b13797c52c880810cec45cc8c60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29dd947fb5db933f59a2178646fce733"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1IteratesVector.html">IteratesVector</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SensitivityStepCalculator.html#a29dd947fb5db933f59a2178646fce733">GetSensitivityVector</a> ()=0</td></tr>
 <tr class="memdesc:a29dd947fb5db933f59a2178646fce733"><td class="mdescLeft">&#160;</td><td class="mdescRight">return the sensitivity vector  <a href="#a29dd947fb5db933f59a2178646fce733">More...</a><br /></td></tr>
@@ -187,7 +190,8 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a5f6310084b90871ee4eec3d89bb407ee inherit pro_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
+<div class="textblock"><p>This is the interface for the classes that perform the actual step. </p>
+
 <p class="definition">Definition at line <a class="el" href="SensStepCalc_8hpp_source.html#l00020">20</a> of file <a class="el" href="SensStepCalc_8hpp_source.html">SensStepCalc.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aac22e9e047c136947c1f68070097b6a2"></a>
@@ -213,7 +217,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensStepCalc_8hpp_source.html#l00025">25</a> of file <a class="el" href="SensStepCalc_8hpp_source.html">SensStepCalc.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensStepCalc_8hpp_source.html#l00023">23</a> of file <a class="el" href="SensStepCalc_8hpp_source.html">SensStepCalc.hpp</a>.</p>
 
 </div>
 </div>
@@ -240,7 +244,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensStepCalc_8hpp_source.html#l00032">32</a> of file <a class="el" href="SensStepCalc_8hpp_source.html">SensStepCalc.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensStepCalc_8hpp_source.html#l00028">28</a> of file <a class="el" href="SensStepCalc_8hpp_source.html">SensStepCalc.hpp</a>.</p>
 
 </div>
 </div>
@@ -285,7 +289,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classIpopt_1_1StdStepCalculator.html#aac6bcd1d822045387f96379c60d906c6">Ipopt::StdStepCalculator</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="SensStepCalc_8hpp_source.html#l00036">36</a> of file <a class="el" href="SensStepCalc_8hpp_source.html">SensStepCalc.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensStepCalc_8hpp_source.html#l00031">31</a> of file <a class="el" href="SensStepCalc_8hpp_source.html">SensStepCalc.hpp</a>.</p>
 
 </div>
 </div>
@@ -312,7 +316,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensStepCalc_8hpp_source.html#l00043">43</a> of file <a class="el" href="SensStepCalc_8hpp_source.html">SensStepCalc.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensStepCalc_8hpp_source.html#l00040">40</a> of file <a class="el" href="SensStepCalc_8hpp_source.html">SensStepCalc.hpp</a>.</p>
 
 </div>
 </div>
@@ -340,7 +344,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensStepCalc_8hpp_source.html#l00048">48</a> of file <a class="el" href="SensStepCalc_8hpp_source.html">SensStepCalc.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensStepCalc_8hpp_source.html#l00045">45</a> of file <a class="el" href="SensStepCalc_8hpp_source.html">SensStepCalc.hpp</a>.</p>
 
 </div>
 </div>
@@ -367,7 +371,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensStepCalc_8hpp_source.html#l00058">58</a> of file <a class="el" href="SensStepCalc_8hpp_source.html">SensStepCalc.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensStepCalc_8hpp_source.html#l00059">59</a> of file <a class="el" href="SensStepCalc_8hpp_source.html">SensStepCalc.hpp</a>.</p>
 
 </div>
 </div>
@@ -405,7 +409,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>This is the main algorithmic function of this class; It calculates a step using its <a class="el" href="classIpopt_1_1SchurDriver.html">SchurDriver</a>, checks bounds, and returns it. </p>
+<p>This is the main algorithmic function of this class. </p>
+<p>It calculates a step using its <a class="el" href="classIpopt_1_1SchurDriver.html" title="This class is the interface for any class that deals with the Schur matrix from the point when it is ...">SchurDriver</a>, checks bounds, and returns it </p>
 
 <p>Implemented in <a class="el" href="classIpopt_1_1StdStepCalculator.html#a9070b7f45eb0f4299cdd927e0f9aade8">Ipopt::StdStepCalculator</a>.</p>
 
@@ -461,7 +466,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensStepCalc_8hpp_source.html#l00072">72</a> of file <a class="el" href="SensStepCalc_8hpp_source.html">SensStepCalc.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensStepCalc_8hpp_source.html#l00079">79</a> of file <a class="el" href="SensStepCalc_8hpp_source.html">SensStepCalc.hpp</a>.</p>
 
 </div>
 </div>
@@ -485,7 +490,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SensStepCalc_8hpp_source.html#l00073">73</a> of file <a class="el" href="SensStepCalc_8hpp_source.html">SensStepCalc.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SensStepCalc_8hpp_source.html#l00080">80</a> of file <a class="el" href="SensStepCalc_8hpp_source.html">SensStepCalc.hpp</a>.</p>
 
 </div>
 </div>

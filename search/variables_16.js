@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['w',['w',['../classSparseMatrix.html#ab9e046f202507eb654c256bf540cd025',1,'SparseMatrix']]],
   ['w_5f',['W_',['../classIpopt_1_1IpoptData.html#ad9d7439472a111b2943f934d86b54deb',1,'Ipopt::IpoptData']]],
   ['w_5ffactor_5f',['w_factor_',['../classIpopt_1_1GenAugSystemSolver.html#afd64b66b44b05b85a5eef2b5d76ed78c',1,'Ipopt::GenAugSystemSolver::w_factor_()'],['../classIpopt_1_1LowRankAugSystemSolver.html#abd5d799d3bd423d93cb37dd86d8e78c9',1,'Ipopt::LowRankAugSystemSolver::w_factor_()'],['../classIpopt_1_1LowRankSSAugSystemSolver.html#acc0fd4a10feeb994c00555286bf4868d',1,'Ipopt::LowRankSSAugSystemSolver::w_factor_()'],['../classIpopt_1_1StdAugSystemSolver.html#a9343705a757569c7dce5241fd2bddf41',1,'Ipopt::StdAugSystemSolver::w_factor_()']]],
   ['w_5ftag_5f',['w_tag_',['../classIpopt_1_1GenAugSystemSolver.html#ac663765fb522eb5a2b2fc76cd945ac1c',1,'Ipopt::GenAugSystemSolver::w_tag_()'],['../classIpopt_1_1LowRankAugSystemSolver.html#aac578c76d884103634a211aa5e82987e',1,'Ipopt::LowRankAugSystemSolver::w_tag_()'],['../classIpopt_1_1LowRankSSAugSystemSolver.html#ae12ba7167ebc3f6fce82b093031bb9fe',1,'Ipopt::LowRankSSAugSystemSolver::w_tag_()'],['../classIpopt_1_1StdAugSystemSolver.html#a997c7240d241129dac3fd774848fbb4a',1,'Ipopt::StdAugSystemSolver::w_tag_()']]],

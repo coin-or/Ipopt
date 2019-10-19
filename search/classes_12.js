@@ -14,6 +14,5 @@ var searchData=
   ['triplettocsrconverter',['TripletToCSRConverter',['../classIpopt_1_1TripletToCSRConverter.html',1,'Ipopt']]],
   ['tsymdependencydetector',['TSymDependencyDetector',['../classIpopt_1_1TSymDependencyDetector.html',1,'Ipopt']]],
   ['tsymlinearsolver',['TSymLinearSolver',['../classIpopt_1_1TSymLinearSolver.html',1,'Ipopt']]],
-  ['tsymscalingmethod',['TSymScalingMethod',['../classIpopt_1_1TSymScalingMethod.html',1,'Ipopt']]],
-  ['tutorialcpp_5fnlp',['TutorialCpp_NLP',['../classTutorialCpp__NLP.html',1,'']]]
+  ['tsymscalingmethod',['TSymScalingMethod',['../classIpopt_1_1TSymScalingMethod.html',1,'Ipopt']]]
 ];

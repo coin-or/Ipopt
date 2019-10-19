@@ -16,7 +16,7 @@ var classIpopt_1_1Ma77SolverInterface =
     [ "ProvidesInertia", "classIpopt_1_1Ma77SolverInterface.html#aadeb526e00e64ac22eb2b0074457a471", null ],
     [ "MatrixFormat", "classIpopt_1_1Ma77SolverInterface.html#a4d9c9e22a6a94e8e505bab040b06ab8d", null ],
     [ "ProvidesDegeneracyDetection", "classIpopt_1_1Ma77SolverInterface.html#a869edcf34c12f5aba10d85ec3653bfd3", null ],
-    [ "DetermineDependentRows", "classIpopt_1_1Ma77SolverInterface.html#a76b83798740eaa1e7166c19e044aa2fb", null ],
+    [ "DetermineDependentRows", "classIpopt_1_1Ma77SolverInterface.html#a1e80a428be05d6b31d4a8e9d80cd7f1d", null ],
     [ "ndim_", "classIpopt_1_1Ma77SolverInterface.html#af8198c025a389355a03d0c81aecddf63", null ],
     [ "val_", "classIpopt_1_1Ma77SolverInterface.html#a9928a2547d62a1340c6ff796eeb3240f", null ],
     [ "numneg_", "classIpopt_1_1Ma77SolverInterface.html#ad45dd6a9cb11ae22a00788e3ee097b9d", null ],

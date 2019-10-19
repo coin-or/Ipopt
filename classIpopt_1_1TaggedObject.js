@@ -8,7 +8,6 @@ var classIpopt_1_1TaggedObject =
     [ "HasChanged", "classIpopt_1_1TaggedObject.html#a6179c02755cba8456d611a0d469a9c70", null ],
     [ "ObjectChanged", "classIpopt_1_1TaggedObject.html#a427557597cbad74331b748d2a1c72623", null ],
     [ "operator=", "classIpopt_1_1TaggedObject.html#aa2438d53da745c1dc1a9bc929a2d3f52", null ],
-    [ "unique_tag_", "classIpopt_1_1TaggedObject.html#ad43fe22f5a1b4d6dcd1ba7ffd4752839", null ],
     [ "tag_", "classIpopt_1_1TaggedObject.html#a923dcd06bf128f45889d4116279141ff", null ],
     [ "cache_priority_", "classIpopt_1_1TaggedObject.html#acf2fbdd52911a44af1483ef959c48904", null ]
 ];

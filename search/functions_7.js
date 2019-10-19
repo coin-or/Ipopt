@@ -22,12 +22,9 @@ var searchData=
   ['havecgpendeltas',['HaveCgPenDeltas',['../classIpopt_1_1CGPenaltyData.html#a18be0911798d2b1e105079d4b758b47d',1,'Ipopt::CGPenaltyData']]],
   ['havedeltas',['HaveDeltas',['../classIpopt_1_1IpoptData.html#a40b0f5595f094defb59860065e191b50',1,'Ipopt::IpoptData']]],
   ['haveipdata',['HaveIpData',['../classIpopt_1_1AlgorithmStrategyObject.html#a5f6310084b90871ee4eec3d89bb407ee',1,'Ipopt::AlgorithmStrategyObject']]],
-  ['hessianfuncisavailable',['hessianFuncIsAvailable',['../classCallbackFunctions.html#aca6ce831b0a610ba5fc794889fcd0a67',1,'CallbackFunctions']]],
   ['hessianmatrixspace',['HessianMatrixSpace',['../classIpopt_1_1IpoptNLP.html#aa9e6ccff3e44a36add3ab5a239a67e5d',1,'Ipopt::IpoptNLP::HessianMatrixSpace()'],['../classIpopt_1_1OrigIpoptNLP.html#a672b88580aa879ddaf24081fd76af09d',1,'Ipopt::OrigIpoptNLP::HessianMatrixSpace()'],['../classIpopt_1_1RestoIpoptNLP.html#a3998a2cbd891e8f1eab37e0d6adabd03',1,'Ipopt::RestoIpoptNLP::HessianMatrixSpace()']]],
   ['hessianrequireschange',['HessianRequiresChange',['../classIpopt_1_1InexactPDSolver.html#ac66db5a00432dd6b643e6e03f9a5b8d9',1,'Ipopt::InexactPDSolver']]],
   ['hessianupdater',['HessianUpdater',['../classIpopt_1_1HessianUpdater.html#a07851fff009f6ffa3e82cf5925207550',1,'Ipopt::HessianUpdater::HessianUpdater()'],['../classIpopt_1_1HessianUpdater.html#a26c76ae1bf39370a8c9a8c7d84aa4389',1,'Ipopt::HessianUpdater::HessianUpdater(const HessianUpdater &amp;)']]],
   ['highrankupdate',['HighRankUpdate',['../classIpopt_1_1DenseSymMatrix.html#acfc9742f1399ca8140ea389ab8c60590',1,'Ipopt::DenseSymMatrix']]],
-  ['highrankupdatetranspose',['HighRankUpdateTranspose',['../classIpopt_1_1DenseGenMatrix.html#aca4711b658ee4239c48b24dbec6d9c94',1,'Ipopt::DenseGenMatrix::HighRankUpdateTranspose()'],['../classIpopt_1_1DenseSymMatrix.html#a3a35b4e67ec5774338cd1456a7b1f7f7',1,'Ipopt::DenseSymMatrix::HighRankUpdateTranspose()']]],
-  ['hs071',['HS071',['../classorg_1_1coinor_1_1examples_1_1HS071.html#a6d30c2f7f66279acb8d970a7105961a6',1,'org::coinor::examples::HS071']]],
-  ['hs071_5fnlp',['HS071_NLP',['../classHS071__NLP.html#a8ec486739a8e5377d45df75405a52eb2',1,'HS071_NLP::HS071_NLP()'],['../classHS071__NLP.html#a30567a135ef198f833f2889c2b428b86',1,'HS071_NLP::HS071_NLP(const HS071_NLP &amp;)']]]
+  ['highrankupdatetranspose',['HighRankUpdateTranspose',['../classIpopt_1_1DenseGenMatrix.html#aca4711b658ee4239c48b24dbec6d9c94',1,'Ipopt::DenseGenMatrix::HighRankUpdateTranspose()'],['../classIpopt_1_1DenseSymMatrix.html#a3a35b4e67ec5774338cd1456a7b1f7f7',1,'Ipopt::DenseSymMatrix::HighRankUpdateTranspose()']]]
 ];
