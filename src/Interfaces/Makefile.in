@@ -424,6 +424,7 @@ libipopt_la_SOURCES = IpInterfacesRegOp.cpp IpIpoptApplication.cpp \
 @BUILD_JAVA_TRUE@BUILT_SOURCES = org_coinor_Ipopt.h
 @BUILD_JAVA_TRUE@CLEANFILES = org.coinor.ipopt.jar org/coinor/Ipopt.class org_coinor_Ipopt.h
 libipopt_la_LIBADD = $(IPALLLIBS) $(IPOPTLIB_LFLAGS)
+# probably we need to make this explicit because we set use a variable $(IPALLLIBS) in LIBADD
 libipopt_la_DEPENDENCIES = $(IPALLLIBS)
 libipopt_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -DIPOPT_BUILD \
