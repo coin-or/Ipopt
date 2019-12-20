@@ -1112,10 +1112,26 @@ bool TNLPAdapter::GetSpaces(
       {
          for( Index i = 0; i < nz_full_jac_g_; i++ )
          {
+            DBG_ASSERT(g_iRow[i] >= 0);
+            DBG_ASSERT(g_iRow[i] < n_full_g_);
+            DBG_ASSERT(g_jCol[i] >= 0);
+            DBG_ASSERT(g_jCol[i] < n_full_x_);
             g_iRow[i] += 1;
             g_jCol[i] += 1;
          }
       }
+#if COIN_IPOPT_CHECKLEVEL > 0
+      else
+      {
+         for( Index i = 0; i < nz_full_jac_g_; i++ )
+         {
+            DBG_ASSERT(g_iRow[i] > 0);
+            DBG_ASSERT(g_iRow[i] <= n_full_g_);
+            DBG_ASSERT(g_jCol[i] > 0);
+            DBG_ASSERT(g_jCol[i] <= n_full_x_);
+         }
+      }
+#endif
 
       if( nz_full_jac_g_ > 0 && jacobian_approximation_ == JAC_FINDIFF_VALUES )
       {
@@ -1270,10 +1286,26 @@ bool TNLPAdapter::GetSpaces(
          {
             for( Index i = 0; i < nz_full_h_; i++ )
             {
+               DBG_ASSERT(full_h_iRow[i] >= 0);
+               DBG_ASSERT(full_h_iRow[i] < n_full_x);
+               DBG_ASSERT(full_h_jCol[i] >= 0);
+               DBG_ASSERT(full_h_jCol[i] < n_full_x);
                full_h_iRow[i] += 1;
                full_h_jCol[i] += 1;
             }
          }
+#if COIN_IPOPT_CHECKLEVEL > 0
+         else
+         {
+            for( Index i = 0; i < nz_full_h_; i++ )
+            {
+               DBG_ASSERT(full_h_iRow[i] > 0);
+               DBG_ASSERT(full_h_iRow[i] <= n_full_x);
+               DBG_ASSERT(full_h_jCol[i] > 0);
+               DBG_ASSERT(full_h_jCol[i] <= n_full_x);
+            }
+         }
+#endif
 
          current_nz = 0;
          if( IsValid(P_x_full_x_) )
@@ -2264,9 +2296,21 @@ void TNLPAdapter::GetQuasiNewtonApproximationSpaces(
       {
          for( Index i = 0; i < num_nonlin_vars; i++ )
          {
+            DBG_ASSERT(pos_nonlin_vars[i] > 0);
+            DBG_ASSERT(pos_nonlin_vars[i] <= n_full_x_);
             pos_nonlin_vars[i]--;
          }
       }
+#if COIN_IPOPT_CHECKLEVEL > 0
+      else
+      {
+         for( Index i = 0; i < num_nonlin_vars; i++ )
+         {
+            DBG_ASSERT(pos_nonlin_vars[i] >= 0);
+            DBG_ASSERT(pos_nonlin_vars[i] < n_full_x_);
+         }
+      }
+#endif
    }
 
    if( IsNull(P_x_full_x_) )
@@ -2819,10 +2863,26 @@ bool TNLPAdapter::CheckDerivatives(
       {
          for( Index i = 0; i < nz_jac_g; i++ )
          {
+            DBG_ASSERT(g_iRow[i] > 0);
+            DBG_ASSERT(g_iRow[i] <= ng);
+            DBG_ASSERT(g_jCol[i] > 0);
+            DBG_ASSERT(g_jCol[i] <= nx);
             g_iRow[i] -= 1;
             g_jCol[i] -= 1;
          }
       }
+#if COIN_IPOPT_CHECKLEVEL > 0
+      else
+      {
+         for( Index i = 0; i < nz_jac_g; i++ )
+         {
+            DBG_ASSERT(g_iRow[i] >= 0);
+            DBG_ASSERT(g_iRow[i] < ng);
+            DBG_ASSERT(g_jCol[i] >= 0);
+            DBG_ASSERT(g_jCol[i] < nx);
+         }
+      }
+#endif
       // Obtain values at reference pont
       jac_g = new Number[nz_jac_g];
       retval = tnlp_->eval_jac_g(nx, xref, new_x, ng, nz_jac_g, NULL, NULL, jac_g);
@@ -2939,10 +2999,26 @@ bool TNLPAdapter::CheckDerivatives(
       {
          for( Index i = 0; i < nz_hess_lag; i++ )
          {
+            DBG_ASSERT(h_iRow[i] > 0);
+            DBG_ASSERT(h_iRow[i] <= nx);
+            DBG_ASSERT(h_jCol[i] > 0);
+            DBG_ASSERT(h_jCol[i] <= nx);
             h_iRow[i] -= 1;
             h_jCol[i] -= 1;
          }
       }
+#if COIN_IPOPT_CHECKLEVEL > 0
+      else
+      {
+         for( Index i = 0; i < nz_hess_lag; i++ )
+         {
+            DBG_ASSERT(h_iRow[i] >= 0);
+            DBG_ASSERT(h_iRow[i] < nx);
+            DBG_ASSERT(h_jCol[i] >= 0);
+            DBG_ASSERT(h_jCol[i] < nx);
+         }
+      }
+#endif
       Number* h_values = new Number[nz_hess_lag];
 
       Number* lambda = NULL;
@@ -3133,10 +3209,26 @@ bool TNLPAdapter::DetermineDependentConstraints(
    {
       for( Index i = 0; i < nz_full_jac_g_; i++ )
       {
+         DBG_ASSERT(g_iRow[i] > 0);
+         DBG_ASSERT(g_iRow[i] <= n_full_g_);
+         DBG_ASSERT(g_jCol[i] > 0);
+         DBG_ASSERT(g_jCol[i] <= n_full_x_);
          g_iRow[i] -= 1;
          g_jCol[i] -= 1;
       }
    }
+#if COIN_IPOPT_CHECKLEVEL > 0
+   else
+   {
+      for( Index i = 0; i < nz_full_jac_g_; i++ )
+      {
+         DBG_ASSERT(g_iRow[i] >= 0);
+         DBG_ASSERT(g_iRow[i] < n_full_g_);
+         DBG_ASSERT(g_jCol[i] >= 0);
+         DBG_ASSERT(g_jCol[i] < n_full_x_);
+      }
+   }
+#endif
    // TODO: Here we don't handle
    // fixed_variable_treatment_==MAKE_PARAMETER correctly (yet?)
    // Include space for the RHS

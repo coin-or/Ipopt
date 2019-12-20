@@ -2,6 +2,11 @@ Here we list changes of Ipopt since the release of version 3.0.0.
 More detailed information about incremental changes can be found in the
 commit history.
 
+2020-xx-yy: 3.13.1
+        - Added asserts that check whether sparsity pattern of Jacobian
+          and Hessian as returned by TNLP are within range w.r.t. number
+          of variables and constraints.
+
 2019-10-19: 3.13.0
         This major release comes with a larger renovation of the build
         system and a changed directory structure (eliminated top directory),
