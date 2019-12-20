@@ -10,9 +10,7 @@
 #include "IpoptConfig.h"
 #include "IpTypes.hpp"
 
-#ifdef COIN_IPOPT_CHECKLEVEL
-#include <cassert>
-#else
+#ifndef COIN_IPOPT_CHECKLEVEL
 #define COIN_IPOPT_CHECKLEVEL 0
 #endif
 
@@ -20,6 +18,7 @@
 # ifdef NDEBUG
 #  undef NDEBUG
 # endif
+# include <cassert>
 # define DBG_ASSERT(test) assert(test)
 # define DBG_ASSERT_EXCEPTION(__condition, __except_type, __msg) \
    ASSERT_EXCEPTION( (__condition), __except_type, __msg);
