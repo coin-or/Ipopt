@@ -258,11 +258,16 @@ public:
       Number*       g_orig
    );
 
+   /** Provides values for lower and upper bounds on variables for given Ipopt-internal vectors.
+    *
+    * Similar to ResortX, but does so for two arrays and does not set any values for fixed variables.
+    */
    void ResortBnds(
-      const Vector& x_L,
-      Number*       x_L_orig,
-      const Vector& x_U,
-      Number*       x_U_orig
+      const Vector& x_L,              /**< internal values for lower bounds on x */
+      Number*       x_L_orig,         /**< vector to fill with values from x_L */
+      const Vector& x_U,              /**< internal values for upper bounds on x */
+      Number*       x_U_orig,         /**< vector to fill with values from x_U */
+      bool          clearorig = true  /**< whether to initialize complete x_L_orig and x_U_orig to 0.0 before setting values for non-fixed variables */
    );
    //@}
 

@@ -641,6 +641,9 @@ public:
     * tnlp_adapter->ResortBnds(*ip_data->curr()->z_L(), duallbs,
     *                          *ip_data->curr()->z_U(), dualubs);
     * \endcode
+    * \note ResortBnds does not provide dual multipliers for fixed variables, even if the
+    *   fixed-variable treatment has been set to handle them as constraints.
+    *
     * Additionally, information about scaled violation of constraint
     * and violation of complementarity constraints can be obtained via
     * \code

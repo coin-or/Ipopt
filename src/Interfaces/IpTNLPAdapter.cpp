@@ -35,6 +35,7 @@
 
 #include <cmath>
 #include <cstdio>
+#include <cstring>
 
 namespace Ipopt
 {
@@ -2132,11 +2133,6 @@ void TNLPAdapter::FinalizeSolution(
 
    Number* full_z_L = new Number[n_full_x_];
    Number* full_z_U = new Number[n_full_x_];
-   for( int i = 0; i < n_full_x_; i++ )
-   {
-      full_z_L[i] = 0.;   //nlp_lower_bound_inf_;
-      full_z_U[i] = 0.;   //nlp_upper_bound_inf_;
-   }
    ResortBnds(z_L, full_z_L, z_U, full_z_U);
 
    SmartPtr<const DenseVectorSpace> z_L_space = dynamic_cast<const DenseVectorSpace*>(GetRawPtr(z_L.OwnerSpace()));
@@ -2161,7 +2157,7 @@ void TNLPAdapter::FinalizeSolution(
             }
             std::vector<Number> new_z_L_meta_data(n_full_x_, 0.0);
             std::vector<Number> new_z_U_meta_data(n_full_x_, 0.0);
-            ResortBnds(*z_L_meta_vector, &new_z_L_meta_data[0], *z_U_meta_vector, &new_z_U_meta_data[0]);
+            ResortBnds(*z_L_meta_vector, &new_z_L_meta_data[0], *z_U_meta_vector, &new_z_U_meta_data[0], false);
             std::string z_L_meta_data_tag = z_L_meta_iter->first;
             std::string z_U_meta_data_tag = z_L_meta_iter->first;
             z_L_meta_data_tag += "_z_L";
@@ -2475,11 +2471,15 @@ void TNLPAdapter::ResortBnds(
    const Vector& x_L,
    Number*       x_L_orig,
    const Vector& x_U,
-   Number*       x_U_orig
+   Number*       x_U_orig,
+   bool          clearorig
 )
 {
    if( x_L_orig )
    {
+      if( clearorig )
+         memset(x_L_orig, 0, n_full_x_*sizeof(Number));
+
       const DenseVector* dx_L = static_cast<const DenseVector*>(&x_L);
       DBG_ASSERT(dynamic_cast<const DenseVector*>(&x_L));
 
@@ -2535,6 +2535,9 @@ void TNLPAdapter::ResortBnds(
 
    if( x_U_orig )
    {
+      if( clearorig )
+         memset(x_U_orig, 0, n_full_x_*sizeof(Number));
+
       const DenseVector* dx_U = static_cast<const DenseVector*>(&x_U);
       DBG_ASSERT(dynamic_cast<const DenseVector*>(&x_U));
 
