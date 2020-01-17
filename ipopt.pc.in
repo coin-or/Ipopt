@@ -1,4 +1,5 @@
-prefix=@prefix@
+@LIBDIR_IS_DEFAULT_FALSE@prefix=@prefix@
+@LIBDIR_IS_DEFAULT_TRUE@prefix=${pcfiledir}/../..
 exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@/coin-or
