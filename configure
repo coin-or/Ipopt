@@ -759,6 +759,8 @@ ac_ct_CC
 CPPFLAGS
 LDFLAGS
 CFLAGS
+LIBDIR_IS_DEFAULT_FALSE
+LIBDIR_IS_DEFAULT_TRUE
 MAINT
 MAINTAINER_MODE_FALSE
 MAINTAINER_MODE_TRUE
@@ -3916,6 +3918,16 @@ fi
   while expr "$expanded_libdir" : '.*$.*' >/dev/null 2>&1 ; do
     eval expanded_libdir=$expanded_libdir
   done
+
+   if test "$expanded_libdir" = "$prefix/lib"; then
+  LIBDIR_IS_DEFAULT_TRUE=
+  LIBDIR_IS_DEFAULT_FALSE='#'
+else
+  LIBDIR_IS_DEFAULT_TRUE='#'
+  LIBDIR_IS_DEFAULT_FALSE=
+fi
+
+
   prefix=$save_prefix
   exec_prefix=$save_exec_prefix
 
@@ -3996,10 +4008,13 @@ fi
 
 
   # If enable-msvc, then test for Intel (on Windows) and MS C compiler
-  # explicitly and add compile-wrapper before AC_PROG_CC, because
-  # the compile-wrapper work around issues when having the wrong link.exe
-  # in the PATH first, which would upset tests in AC_PROG_CC.
-  # Further, if CC unset and not set by user, then stop with error.
+  # explicitly and add the compile wrapper before AC_PROG_CC. The compile
+  # wrapper works around issues related to finding MS link.exe. (Unix link.exe
+  # occurs first in PATH, which causes compile and link checks to fail.) For
+  # the same reason, set LD to use the compile wrapper. If CC remains unset
+  # (neither icl or cl was found, and CC was not set by the user), stop with
+  # an error.
+
   if test $enable_msvc = yes ; then
     for ac_prog in icl cl
 do
@@ -4045,14 +4060,18 @@ done
 
     if test -n "$CC" ; then
       CC="$am_aux_dir/compile $CC"
+      ac_cv_prog_CC="$CC"
+      LD="$CC"
     else
       as_fn_error $? "Neither MS nor Intel C compiler found in PATH and CC is unset." "$LINENO" 5
     fi
   fi
 
-  # look for some C compiler and check whether it works
-  # if user has set CC or we found icl/cl above, this shouldn't overwrite CC
-  # other than CXX of F77, this macro also takes care of adding the compile-wrapper
+  # Look for some C compiler and check that it works. If the user has set CC
+  # or we found icl/cl above, this shouldn't overwrite CC. Unlike the macros
+  # that establish C++ or Fortran compilers, PROG_CC also takes care of adding
+  # the compile wrapper if needed.
+
   ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -4842,11 +4861,14 @@ fi
 
 
 
-  # If enable-msvc, then test for Intel (on Windows) and MS C++ compiler
-  # explicitly and add compile-wrapper before AC_PROG_CXX, because
-  # the compile-wrapper work around issues when having the wrong link.exe
-  # in the PATH first, which would upset tests in AC_PROG_CXX.
-  # Further, if CXX unset and not set by user, then stop with error.
+  # If enable-msvc, then test for Intel (on Windows) and MS C compiler
+  # explicitly and add the compile wrapper before AC_PROG_CXX. The compile
+  # wrapper works around issues related to finding MS link.exe. (Unix link.exe
+  # occurs first in PATH, which causes compile and link checks to fail.) For
+  # the same reason, set LD to use the compile wrapper. If CC remains unset
+  # (neither icl or cl was found, and CC was not set by the user), stop with
+  # an error.
+
   if test $enable_msvc = yes ; then
     for ac_prog in icl cl
 do
@@ -4892,13 +4914,16 @@ done
 
     if test -n "$CXX" ; then
       CXX="$am_aux_dir/compile $CXX"
+      ac_cv_prog_CXX="$CXX"
+      LD="$CXX"
     else
       as_fn_error $? "Neither MS nor Intel C++ compiler found in PATH and CXX is unset." "$LINENO" 5
     fi
   fi
 
-  # look for some C++ compiler and check whether it works
-  # if user has set CXX or we found icl/cl above, this shouldn't overwrite CXX
+  # Look for some C++ compiler and check that it works. If the user has set
+  # CXX or we found icl/cl above, this shouldn't overwrite CXX.
+
   ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -5285,7 +5310,8 @@ fi
 
 
 
-  # If the compiler does not support -c -o, then wrap the compile script around it.
+  # If the compiler does not support -c -o, wrap it with the compile script.
+
   ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -5372,9 +5398,10 @@ fi
     unset F77
   else
     # If enable-msvc, then test for Intel Fortran compiler for Windows
-    # explicitly and add compile-wrapper before AC_PROG_F77, because
-    # the compile-wrapper work around issues when having the wrong link.exe
-    # in the PATH first, which could upset tests in AC_PROG_F77.
+    # explicitly and add the compile wrapper before AC_PROG_F77. The compile
+    # wrapper works around issues related to finding MS link.exe. (Unix
+    # link.exe occurs first in PATH, which causes compile and link checks to
+    # fail.) For the same reason, set LD to use the compile wrapper.
     if test $enable_msvc = yes ; then
       for ac_prog in ifort
 do
@@ -5420,11 +5447,13 @@ done
 
       if test -n "$F77" ; then
         F77="$am_aux_dir/compile $F77"
+        ac_cv_prog_F77="$F77"
+        LD="$F77"
       fi
     fi
 
-    # if not msvc-enabled, then look for some Fortran compiler and check whether it works
-    # if F77 is set, then this only checks whether it works
+    # If not msvc-enabled, then look for some Fortran compiler and check
+    # whether it works. If F77 is set, this simply checks whether it works.
     if test $enable_msvc = no || test -n "$F77" ; then
       ac_ext=f
 ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
@@ -21107,7 +21136,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 #    and explicitly dll-exporting them, leading to warnings about duplicates
 #    regarding those that are properly marked for dll-export in the source.
 #
-# Patch libtool also to circumbent some issues when using MinGW (Msys+GCC).
+# Patch libtool also to circumvent some issues when using MinGW (Msys+GCC).
 # 1. Relax check which libraries can be used when linking a DLL.
 #    libtool's func_mode_link() would reject linking MinGW system libraries,
 #    e.g., -lmingw32, when building a DLL, because it does not find this
@@ -24916,7 +24945,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 24919 "configure" */
+/* #line 24948 "configure" */
 public class Test {
 }
 EOF
@@ -25384,7 +25413,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25387 "configure" */
+/* #line 25416 "configure" */
 public class Test {
 }
 EOF
@@ -25418,7 +25447,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25421 "configure" */
+/* [#]line 25450 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
@@ -26390,6 +26419,10 @@ fi
 
 if test -z "${MAINTAINER_MODE_TRUE}" && test -z "${MAINTAINER_MODE_FALSE}"; then
   as_fn_error $? "conditional \"MAINTAINER_MODE\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${LIBDIR_IS_DEFAULT_TRUE}" && test -z "${LIBDIR_IS_DEFAULT_FALSE}"; then
+  as_fn_error $? "conditional \"LIBDIR_IS_DEFAULT\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${AMDEP_TRUE}" && test -z "${AMDEP_FALSE}"; then
