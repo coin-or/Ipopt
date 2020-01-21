@@ -9,6 +9,7 @@ commit history.
         - TNLPAdapter::ResortBnds now initialized complete output arrays
           with 0.0 before filling in values for non-fixed variables. Use
           new argument clearorig to turn this off. [#352]
+        - bring back configure variables ADD_{C,CXX,F}FLAGS
 
 2019-10-19: 3.13.0
         This major release comes with a larger renovation of the build
