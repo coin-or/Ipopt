@@ -733,17 +733,20 @@ OBJDUMP
 DLLTOOL
 AS
 FLIBS
+ADD_FFLAGS
 COIN_HAS_F77_FALSE
 COIN_HAS_F77_TRUE
 ac_ct_F77
 FFLAGS
 F77
+ADD_CXXFLAGS
 am__fastdepCXX_FALSE
 am__fastdepCXX_TRUE
 CXXDEPMODE
 ac_ct_CXX
 CXXFLAGS
 CXX
+ADD_CFLAGS
 am__fastdepCC_FALSE
 am__fastdepCC_TRUE
 CCDEPMODE
@@ -759,8 +762,8 @@ ac_ct_CC
 CPPFLAGS
 LDFLAGS
 CFLAGS
-LIBDIR_IS_DEFAULT_FALSE
-LIBDIR_IS_DEFAULT_TRUE
+COIN_RELOCATABLE_FALSE
+COIN_RELOCATABLE_TRUE
 MAINT
 MAINTAINER_MODE_FALSE
 MAINTAINER_MODE_TRUE
@@ -848,6 +851,7 @@ enable_msvc
 enable_debug
 enable_silent_rules
 enable_maintainer_mode
+enable_relocatable
 enable_dependency_tracking
 enable_f77
 enable_static
@@ -888,11 +892,14 @@ CFLAGS
 LDFLAGS
 LIBS
 CPPFLAGS
+ADD_CFLAGS
 CXX
 CXXFLAGS
 CCC
+ADD_CXXFLAGS
 F77
 FFLAGS
+ADD_FFLAGS
 LT_SYS_LIBRARY_PATH
 CPP
 CXXCPP
@@ -1525,6 +1532,8 @@ Optional Features:
   --enable-maintainer-mode
                           enable make rules and dependencies not useful (and
                           sometimes confusing) to the casual installer
+  --enable-relocatable    whether prefix in installed .pc files should be
+                          setup relative to pcfiledir
   --enable-dependency-tracking
                           do not reject slow dependency extractors
   --disable-dependency-tracking
@@ -1608,10 +1617,15 @@ Some influential environment variables:
   LIBS        libraries to pass to the linker, e.g. -l<library>
   CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
               you have headers in a nonstandard directory <include dir>
+  ADD_CFLAGS  Additional C compiler options (if not overwriting CFLAGS)
   CXX         C++ compiler command
   CXXFLAGS    C++ compiler flags
+  ADD_CXXFLAGS
+              Additional C++ compiler options (if not overwriting CXXFLAGS)
   F77         Fortran 77 compiler command
   FFLAGS      Fortran 77 compiler flags
+  ADD_FFLAGS  Additional Fortran 77 compiler options (if not overwriting
+              FFLAGS)
   LT_SYS_LIBRARY_PATH
               User-defined run-time library search path.
   CPP         C preprocessor
@@ -3157,31 +3171,31 @@ fi
 
   if test "$enable_debug" = yes ; then
     if test "$enable_msvc" = yes ; then
-      : ${FFLAGS:="-nologo -fpp -Z7 -MDd"}
-      : ${FCFLAGS:="-nologo -fpp -Z7 -MDd"}
-      : ${CFLAGS:="-nologo -Z7 -MDd"}
-      : ${CXXFLAGS:="-nologo -EHs -Z7 -MDd"}
+      : ${FFLAGS:="-nologo -fpp -Z7 -MDd $ADD_FFLAGS"}
+      : ${FCFLAGS:="-nologo -fpp -Z7 -MDd $ADD_FCFLAGS"}
+      : ${CFLAGS:="-nologo -Z7 -MDd $ADD_CFLAGS"}
+      : ${CXXFLAGS:="-nologo -EHs -Z7 -MDd $ADD_CXXFLAGS"}
       : ${AR:="lib"}
       : ${AR_FLAGS:="-nologo -out:"}
     else
-      : ${FFLAGS:="-g"}
-      : ${FCFLAGS:="-g"}
-      : ${CFLAGS:="-g"}
-      : ${CXXFLAGS:="-g"}
+      : ${FFLAGS:="-g $ADD_FFLAGS"}
+      : ${FCFLAGS:="-g $ADD_FCFLAGS"}
+      : ${CFLAGS:="-g $ADD_CFLAGS"}
+      : ${CXXFLAGS:="-g $ADD_CXXFLAGS"}
     fi
   else
     if test "$enable_msvc" = yes ; then
-      : ${FFLAGS:="-nologo -fpp -O2 -MD"}
-      : ${FCFLAGS:="-nologo -fpp -O2 -MD"}
-      : ${CFLAGS:="-nologo -DNDEBUG -O2 -MD"}
-      : ${CXXFLAGS:="-nologo -EHs -DNDEBUG -O2 -MD"}
+      : ${FFLAGS:="-nologo -fpp -O2 -MD $ADD_FFLAGS"}
+      : ${FCFLAGS:="-nologo -fpp -O2 -MD $ADD_FCFLAGS"}
+      : ${CFLAGS:="-nologo -DNDEBUG -O2 -MD $ADD_CFLAGS"}
+      : ${CXXFLAGS:="-nologo -EHs -DNDEBUG -O2 -MD $ADD_CXXFLAGS"}
       : ${AR:="lib"}
       : ${AR_FLAGS:="-nologo -out:"}
     else
-      : ${FFLAGS:="-O2"}
-      : ${FCFLAGS:="-O2"}
-      : ${CFLAGS:="-O2 -DNDEBUG"}
-      : ${CXXFLAGS:="-O2 -DNDEBUG"}
+      : ${FFLAGS:="-O2 $ADD_FFLAGS"}
+      : ${FCFLAGS:="-O2 $ADD_FCFLAGS"}
+      : ${CFLAGS:="-O2 -DNDEBUG $ADD_CFLAGS"}
+      : ${CXXFLAGS:="-O2 -DNDEBUG $ADD_CXXFLAGS"}
     fi
   fi
 
@@ -3918,18 +3932,26 @@ fi
   while expr "$expanded_libdir" : '.*$.*' >/dev/null 2>&1 ; do
     eval expanded_libdir=$expanded_libdir
   done
-
-   if test "$expanded_libdir" = "$prefix/lib"; then
-  LIBDIR_IS_DEFAULT_TRUE=
-  LIBDIR_IS_DEFAULT_FALSE='#'
-else
-  LIBDIR_IS_DEFAULT_TRUE='#'
-  LIBDIR_IS_DEFAULT_FALSE=
-fi
-
-
   prefix=$save_prefix
   exec_prefix=$save_exec_prefix
+
+# add a configure flag to indicate whether .pc files should be made relocatable
+# off by default, as it creates libtool warnings
+  # Check whether --enable-relocatable was given.
+if test "${enable_relocatable+set}" = set; then :
+  enableval=$enable_relocatable; coin_enable_relocatable=$enableval
+else
+  coin_enable_relocatable=no
+fi
+
+   if test $coin_enable_relocatable = yes; then
+  COIN_RELOCATABLE_TRUE=
+  COIN_RELOCATABLE_FALSE='#'
+else
+  COIN_RELOCATABLE_TRUE='#'
+  COIN_RELOCATABLE_FALSE=
+fi
+
 
 
 #############################################################################
@@ -4857,6 +4879,9 @@ fi
 
 
 
+  # Declare precious variable for additional compiler flags
+
+
 
 
 
@@ -5381,6 +5406,9 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
     CXX="$am_aux_dir/compile $CXX"
   fi
 
+  # Declare precious variable for additional compiler flags
+
+
 
   # AC_MSG_NOTICE([In COIN_PROG_F77])
 
@@ -5681,6 +5709,10 @@ else
   COIN_HAS_F77_TRUE='#'
   COIN_HAS_F77_FALSE=
 fi
+
+
+  # Declare precious variable for additional compiler flags
+
 
   # AC_MSG_NOTICE([Leaving COIN_PROG_F77])
 
@@ -24945,7 +24977,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 24948 "configure" */
+/* #line 24980 "configure" */
 public class Test {
 }
 EOF
@@ -25413,7 +25445,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25416 "configure" */
+/* #line 25448 "configure" */
 public class Test {
 }
 EOF
@@ -25447,7 +25479,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25450 "configure" */
+/* [#]line 25482 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
@@ -26421,8 +26453,8 @@ if test -z "${MAINTAINER_MODE_TRUE}" && test -z "${MAINTAINER_MODE_FALSE}"; then
   as_fn_error $? "conditional \"MAINTAINER_MODE\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
-if test -z "${LIBDIR_IS_DEFAULT_TRUE}" && test -z "${LIBDIR_IS_DEFAULT_FALSE}"; then
-  as_fn_error $? "conditional \"LIBDIR_IS_DEFAULT\" was never defined.
+if test -z "${COIN_RELOCATABLE_TRUE}" && test -z "${COIN_RELOCATABLE_FALSE}"; then
+  as_fn_error $? "conditional \"COIN_RELOCATABLE\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${AMDEP_TRUE}" && test -z "${AMDEP_FALSE}"; then

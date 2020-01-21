@@ -288,6 +288,9 @@ DIST_SUBDIRS = src/Common src/LinAlg src/Algorithm \
 	src/contrib/CGPenalty src/contrib/LinearSolverLoader \
 	src/Interfaces src/Apps contrib/sIPOPT test
 ACLOCAL = @ACLOCAL@
+ADD_CFLAGS = @ADD_CFLAGS@
+ADD_CXXFLAGS = @ADD_CXXFLAGS@
+ADD_FFLAGS = @ADD_FFLAGS@
 AMTAR = @AMTAR@
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 AR = @AR@
