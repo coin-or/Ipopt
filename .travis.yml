@@ -30,7 +30,7 @@ matrix:
       env: OSX=10.13 ENABLEDEBUG=true
       compiler: clang
     - os: osx
-      osx_image: xcode9.3
+      osx_image: xcode9.4
       env: OSX=10.13
       compiler: clang
 
@@ -75,3 +75,6 @@ script:
   - make
   - if ! $NOF77 ; then ./solve_problem MBndryCntrl1 10 ; fi
   - popd
+
+after_failure:
+  - find . -name config.log -exec tail -n 1000 {} \;
