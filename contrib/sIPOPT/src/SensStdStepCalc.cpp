@@ -53,6 +53,7 @@ bool StdStepCalculator::Step(
    DBG_START_METH("StdStepCalculator::Step", dbg_verbosity);
 
    bool retval;
+   retval = true;   /* FIXME added to have retval initialized, but does it make sense??? */
 
    SmartPtr<IteratesVector> delta_u_long = IpData().trial()->MakeNewIteratesVector();
    ift_data_->TransMultiply(delta_u, *delta_u_long);
@@ -156,10 +157,6 @@ bool StdStepCalculator::Step(
          old_delta_u = new_delta_u->MakeNewDenseVector();
          old_delta_u->Copy(*new_delta_u);
       }
-   }
-   else
-   {
-      retval = true;   /* FIXME added to have retval initialized, but does it make sense??? */
    }
 
    return retval;
