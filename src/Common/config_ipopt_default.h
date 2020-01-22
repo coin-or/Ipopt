@@ -28,3 +28,4 @@
 #else
 #define IPOPTLIB_EXPORT
 #endif
+#endif
