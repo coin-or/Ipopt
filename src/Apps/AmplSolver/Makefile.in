@@ -150,10 +150,6 @@ AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-libipoptamplinterface_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
-	$(AM_CXXFLAGS) $(CXXFLAGS) $(libipoptamplinterface_la_LDFLAGS) \
-	$(LDFLAGS) -o $@
 am_ipopt_OBJECTS = ampl_ipopt.$(OBJEXT)
 ipopt_OBJECTS = $(am_ipopt_OBJECTS)
 ipopt_DEPENDENCIES = libipoptamplinterface.la \
@@ -289,7 +285,7 @@ JAVA = @JAVA@
 JAVAC = @JAVAC@
 JAVADOC = @JAVADOC@
 LD = @LD@
-LDFLAGS = @LDFLAGS@
+LDFLAGS = @LDFLAGS@ $(LT_LDFLAGS)
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
@@ -396,7 +392,6 @@ libipoptamplinterface_la_SOURCES = \
 libipoptamplinterface_la_LIBADD = ../../Interfaces/libipopt.la \
 	$(IPOPTAMPLINTERFACELIB_LFLAGS)
 
-libipoptamplinterface_la_LDFLAGS = $(LT_LDFLAGS)
 ipopt_SOURCES = \
 	ampl_ipopt.cpp
 
@@ -532,7 +527,7 @@ clean-libLTLIBRARIES:
 	}
 
 libipoptamplinterface.la: $(libipoptamplinterface_la_OBJECTS) $(libipoptamplinterface_la_DEPENDENCIES) $(EXTRA_libipoptamplinterface_la_DEPENDENCIES) 
-	$(AM_V_CXXLD)$(libipoptamplinterface_la_LINK) -rpath $(libdir) $(libipoptamplinterface_la_OBJECTS) $(libipoptamplinterface_la_LIBADD) $(LIBS)
+	$(AM_V_CXXLD)$(CXXLINK) -rpath $(libdir) $(libipoptamplinterface_la_OBJECTS) $(libipoptamplinterface_la_LIBADD) $(LIBS)
 
 ipopt$(EXEEXT): $(ipopt_OBJECTS) $(ipopt_DEPENDENCIES) $(EXTRA_ipopt_DEPENDENCIES) 
 	@rm -f ipopt$(EXEEXT)

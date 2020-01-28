@@ -15,12 +15,12 @@ libipoptamplinterface_la_SOURCES = \
 libipoptamplinterface_la_LIBADD = ../../Interfaces/libipopt.la \
 	$(IPOPTAMPLINTERFACELIB_LFLAGS)
 
-libipoptamplinterface_la_LDFLAGS = $(LT_LDFLAGS)
-
 ipopt_SOURCES = \
 	ampl_ipopt.cpp
 
 ipopt_LDADD = libipoptamplinterface.la ../../Interfaces/libipopt.la
+
+LDFLAGS += $(LT_LDFLAGS)
 
 AM_CPPFLAGS = -DIPOPTAMPL_BUILD \
 	-I$(srcdir)/../../Common \

@@ -903,6 +903,7 @@ ADD_FFLAGS
 LT_SYS_LIBRARY_PATH
 CPP
 CXXCPP
+LT_LDFLAGS
 CXXLIBS
 PKG_CONFIG'
 
@@ -1630,6 +1631,8 @@ Some influential environment variables:
               User-defined run-time library search path.
   CPP         C preprocessor
   CXXCPP      C++ preprocessor
+  LT_LDFLAGS  Flags passed to libtool when building libraries or executables
+              that are installed
   CXXLIBS     Libraries necessary for linking C++ code with non-C++ compiler
   PKG_CONFIG  path to pkg-config utility
 
@@ -21191,7 +21194,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
       ;;
   esac
 
-  # Set up LT_LDFLAGS.
+  # Set up LT_LDFLAGS, user can initialize and we augment below
 
 
   # Use the libtool library info, if defined, otherwise use the project version info,
@@ -24977,7 +24980,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 24980 "configure" */
+/* #line 24983 "configure" */
 public class Test {
 }
 EOF
@@ -25445,7 +25448,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25448 "configure" */
+/* #line 25451 "configure" */
 public class Test {
 }
 EOF
@@ -25479,7 +25482,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25482 "configure" */
+/* [#]line 25485 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);

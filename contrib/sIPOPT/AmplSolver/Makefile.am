@@ -11,6 +11,8 @@ ipopt_sens_SOURCES = ampl_sipopt.cpp SensAmplTNLP.cpp
 ipopt_sens_LDADD = ../src/libsipopt.la \
   ../../../src/Apps/AmplSolver/libipoptamplinterface.la
 
+LDFLAGS += $(LT_LDFLAGS)
+
 AM_CPPFLAGS = \
   -I$(srcdir)/../src \
   -I$(srcdir)/../../../src/Common \
