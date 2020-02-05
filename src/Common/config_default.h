@@ -4,8 +4,7 @@
 
 /* this needs to come before the include of config_ipopt_default.h */
 #ifndef IPOPTLIB_EXPORT
-#ifdef _WIN32
-/* assuming we build an Ipopt DLL */
+#if defined(_WIN32) && defined(DLL_EXPORT)
 #define IPOPTLIB_EXPORT __declspec(dllexport)
 #else
 #define IPOPTLIB_EXPORT

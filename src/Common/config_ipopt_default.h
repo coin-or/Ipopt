@@ -22,8 +22,7 @@
 #endif
 
 #ifndef IPOPTLIB_EXPORT
-#ifdef _WIN32
-/* assuming we link against an Ipopt DLL */
+#if defined(_WIN32) && defined(DLL_EXPORT)
 #define IPOPTLIB_EXPORT __declspec(dllimport)
 #else
 #define IPOPTLIB_EXPORT
