@@ -6477,7 +6477,11 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
   if test $ac_cv_prog_f77_c_o = no ; then
     F77="$am_aux_dir/compile $F77"
   else
-    case "$F77" in *ifort ) F77="$am_aux_dir/compile $F77" ;; esac
+    case "$F77" in *ifort )
+      case $build in
+        *-mingw* | *-cygwin* | *-msys* ) F77="$am_aux_dir/compile $F77" ;; esac
+      ;;
+    esac
   fi
   # AC_MSG_NOTICE([Leaving COIN_F77_SETUP])
 
@@ -24980,7 +24984,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 24983 "configure" */
+/* #line 24987 "configure" */
 public class Test {
 }
 EOF
@@ -25448,7 +25452,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25451 "configure" */
+/* #line 25455 "configure" */
 public class Test {
 }
 EOF
@@ -25482,7 +25486,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25485 "configure" */
+/* [#]line 25489 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
