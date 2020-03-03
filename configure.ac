@@ -286,7 +286,11 @@ fi
 AC_ARG_ENABLE([java],
   [AC_HELP_STRING([--disable-java],[disable building of Java interface])],
   [enable_java="$enableval"],
-  [enable_java="$enable_shared"])
+  [case "$JAVA_HOME" in
+     *\ * ) enable_java=no ;;   # do not enable java-check by default, if there are spaces in JAVA_HOME - that causes trouble
+     * )    enable_java="$enable_shared" ;;
+   esac
+  ])
 
 if test "$enable_java" != no ; then
   # look for javac: required to compile Java code and build C-header
