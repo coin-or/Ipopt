@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.0</span-->
+   &#160;<!--span id="projectnumber">3.13.1</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -328,7 +328,7 @@ Flags to configure</h2>
 <li><p class="startli"><a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions...">Ipopt</a>'s Java interface <code>JIpopt</code> uses the Java Native Interface (JNI), which is a programming framework that allows Java code running in the Java Virtual Machine (JVM) to call and be called by native applications and libraries written in languages such as C and C++.</p>
 <p class="startli">configure tries to find a Java compiler and the necessary compiler flags to locate the JNI header files automatically. You can influence this automated check by setting the environment variable <code>JAVA_HOME</code> to the directory that contains your JDK.</p>
 <dl class="section note"><dt>Note</dt><dd>The build procedure currently cannot deal with spaces in the path to the JDK. If you are on Windows and have Java in a path like <code>C:\Program Files\Java</code>, try setting <code>JAVA_HOME</code> to the DOS equivalent <code>C:\Progra~1\Java</code> (or similar).</dd></dl>
-<p>You can disable the checks for Java and build of the Java interface by specifying the configure flag <code>--disable-java</code>. This is also the default if the build of shared libraries has been disabled as <code>JIpopt</code> needs to be able to load the <code>Ipopt</code> library dynamically at runtime.</p>
+<p>You can disable the checks for Java and build of the Java interface by specifying the configure flag <code>--disable-java</code>. This is also the default if <code>JAVA_HOME</code> contains a space or the build of shared libraries has been disabled as <code>JIpopt</code> needs to be able to load the <code>Ipopt</code> library dynamically at runtime.</p>
 </li>
 <li><a class="el" href="SPECIALS.html#SIPOPT">sIpopt</a> is build and installed together with <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions...">Ipopt</a>. If you do not need sIpopt, you can disable it via <code>--disable-sipopt</code>.</li>
 </ul>

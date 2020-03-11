@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.0</span-->
+   &#160;<!--span id="projectnumber">3.13.1</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -216,8 +216,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9d1679322cc963f1e58aed0d9416247c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a33e37afa89a562815460ccbe63d2e659"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a33e37afa89a562815460ccbe63d2e659">ResortG</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;c, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;d, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *g_orig)</td></tr>
 <tr class="separator:a33e37afa89a562815460ccbe63d2e659"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6d9857a1312291b0c7bf81c35060299"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#ab6d9857a1312291b0c7bf81c35060299">ResortBnds</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x_L, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *x_L_orig, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x_U, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *x_U_orig)</td></tr>
-<tr class="separator:ab6d9857a1312291b0c7bf81c35060299"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36f2cffa17853a2dbf02d85705e57bac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a36f2cffa17853a2dbf02d85705e57bac">ResortBnds</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x_L, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *x_L_orig, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x_U, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *x_U_orig, bool clearorig=true)</td></tr>
+<tr class="memdesc:a36f2cffa17853a2dbf02d85705e57bac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides values for lower and upper bounds on variables for given Ipopt-internal vectors.  <a href="#a36f2cffa17853a2dbf02d85705e57bac">More...</a><br /></td></tr>
+<tr class="separator:a36f2cffa17853a2dbf02d85705e57bac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classIpopt_1_1NLP"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classIpopt_1_1NLP')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classIpopt_1_1NLP.html">Ipopt::NLP</a></td></tr>
 <tr class="memitem:a4352bb88edb772f6d4eeb5a90f019f24 inherit pub_methods_classIpopt_1_1NLP"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1NLP.html#a4352bb88edb772f6d4eeb5a90f019f24">NLP</a> ()</td></tr>
 <tr class="memdesc:a4352bb88edb772f6d4eeb5a90f019f24 inherit pub_methods_classIpopt_1_1NLP"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="classIpopt_1_1NLP.html#a4352bb88edb772f6d4eeb5a90f019f24">More...</a><br /></td></tr>
@@ -1777,8 +1778,8 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 </div>
 </div>
-<a id="ab6d9857a1312291b0c7bf81c35060299"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab6d9857a1312291b0c7bf81c35060299">&#9670;&nbsp;</a></span>ResortBnds()</h2>
+<a id="a36f2cffa17853a2dbf02d85705e57bac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36f2cffa17853a2dbf02d85705e57bac">&#9670;&nbsp;</a></span>ResortBnds()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1805,7 +1806,13 @@ Method implementing the detection of linearly dependent equality constraints</h2
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
-          <td class="paramname"><em>x_U_orig</em>&#160;</td>
+          <td class="paramname"><em>x_U_orig</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>clearorig</em> = <code>true</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1814,6 +1821,19 @@ Method implementing the detection of linearly dependent equality constraints</h2
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Provides values for lower and upper bounds on variables for given Ipopt-internal vectors. </p>
+<p>Similar to ResortX, but does so for two arrays and does not set any values for fixed variables. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x_L</td><td>internal values for lower bounds on x </td></tr>
+    <tr><td class="paramname">x_L_orig</td><td>vector to fill with values from x_L </td></tr>
+    <tr><td class="paramname">x_U</td><td>internal values for upper bounds on x </td></tr>
+    <tr><td class="paramname">x_U_orig</td><td>vector to fill with values from x_U </td></tr>
+    <tr><td class="paramname">clearorig</td><td>whether to initialize complete x_L_orig and x_U_orig to 0.0 before setting values for non-fixed variables </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -2098,7 +2118,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Pointer to the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors. ...">TNLP</a> class (class specific to Number* vectors and triplet matrices) </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00304">304</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00309">309</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2124,7 +2144,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p><a class="el" href="classIpopt_1_1Journalist.html" title="Class responsible for all message output. ">Journalist</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00307">307</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00312">312</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2150,7 +2170,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Object that can be used to detect linearly dependent rows in the equality constraint Jacobian. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00310">310</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00315">315</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2176,7 +2196,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Value for a lower bound that denotes -infinity. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00315">315</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00320">320</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2202,7 +2222,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Value for a upper bound that denotes infinity. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00317">317</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00322">322</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2228,7 +2248,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Flag indicating how fixed variables should be handled. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00319">319</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00324">324</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2254,7 +2274,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Determines relaxation of fixing bound for RELAX_BOUNDS. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00321">321</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00326">326</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2281,7 +2301,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 <p>Maximal slack for one-sidedly bounded variables. </p>
 <p>If a variable has only one bound, say a lower bound xL, then an upper bound xL + max_onesided_bound_slack_. If this value is zero, no upper bound is added. Whether and which derivative test should be performed at starting point </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00328">328</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00333">333</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2307,7 +2327,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Size of the perturbation for the derivative test. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00330">330</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00335">335</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2333,7 +2353,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Relative threshold for marking deviation from finite difference test. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00332">332</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00337">337</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2359,7 +2379,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Flag indicating if all test values should be printed, or only those violating the threshold. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00334">334</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00339">339</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2385,7 +2405,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Index of first quantity to be checked. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00336">336</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00341">341</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2411,7 +2431,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Flag indicating whether the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors. ...">TNLP</a> with identical structure has already been solved before. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00338">338</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00343">343</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2437,7 +2457,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Flag indicating what Hessian information is to be used. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00340">340</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00345">345</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2463,7 +2483,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Number of linear variables. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00342">342</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00347">347</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2489,7 +2509,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Flag indicating how Jacobian is computed. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00344">344</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00349">349</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2515,7 +2535,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Size of the perturbation for the derivative approximation. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00346">346</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00351">351</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2541,7 +2561,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Maximal perturbation of the initial point. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00348">348</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00353">353</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2567,7 +2587,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Flag indicating if rhs should be considered during dependency detection. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00350">350</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00355">355</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2593,7 +2613,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Overall convergence tolerance. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00353">353</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00358">358</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2619,7 +2639,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>full dimension of x (fixed + non-fixed) </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00359">359</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00364">364</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2645,7 +2665,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>full dimension of g (c + d) </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00361">361</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00366">366</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2671,7 +2691,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>non-zeros of the jacobian of c </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00363">363</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00368">368</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2697,7 +2717,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>non-zeros of the jacobian of c without added constraints for fixed variables. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00365">365</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00370">370</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2723,7 +2743,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>non-zeros of the jacobian of d </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00367">367</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00372">372</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2749,7 +2769,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>number of non-zeros in full-size Jacobian of g </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00369">369</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00374">374</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2775,7 +2795,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>number of non-zeros in full-size Hessian </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00371">371</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00376">376</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2801,7 +2821,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>number of non-zeros in the non-fixed-size Hessian </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00373">373</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00378">378</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2827,7 +2847,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Number of fixed variables. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00375">375</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00380">380</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2853,7 +2873,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Numbering style of variables and constraints. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00379">379</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00384">384</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2877,7 +2897,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00383">383</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00388">388</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2901,7 +2921,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00384">384</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00389">389</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2925,7 +2945,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00385">385</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00390">390</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2949,7 +2969,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00386">386</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00391">391</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2973,7 +2993,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00387">387</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00392">392</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2997,7 +3017,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00388">388</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00393">393</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3021,7 +3041,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00389">389</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00394">394</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3045,7 +3065,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00390">390</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00395">395</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3069,7 +3089,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00391">391</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00396">396</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3093,7 +3113,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00392">392</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00397">397</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3117,7 +3137,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00393">393</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00398">398</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3141,7 +3161,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00394">394</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00399">399</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3165,7 +3185,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00395">395</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00400">400</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3189,7 +3209,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00396">396</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00401">401</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3213,7 +3233,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00401">401</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00406">406</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3239,7 +3259,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>copy of the full x vector (fixed &amp; non-fixed) </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00402">402</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00407">407</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3265,7 +3285,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>copy of lambda (yc &amp; yd) </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00403">403</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00408">408</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3291,7 +3311,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>copy of g (c &amp; d) </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00404">404</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00409">409</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3317,7 +3337,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>the values for the full jacobian of g </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00405">405</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00410">410</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3341,7 +3361,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00410">410</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00415">415</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3365,7 +3385,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00411">411</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00416">416</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3389,7 +3409,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00412">412</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00417">417</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3413,7 +3433,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00413">413</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00418">418</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3437,7 +3457,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00414">414</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00419">419</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3463,7 +3483,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Expansion from fixed x (ipopt) to full x. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00442">442</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00447">447</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3487,7 +3507,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00443">443</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00448">448</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3513,7 +3533,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Expansion from fixed x_L (ipopt) to full x. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00446">446</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00451">451</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3537,7 +3557,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00447">447</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00452">452</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3563,7 +3583,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Expansion from fixed x_U (ipopt) to full x. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00450">450</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00455">455</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3587,7 +3607,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00451">451</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00456">456</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3613,7 +3633,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Expansion from c only (ipopt) to full ampl c. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00454">454</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00459">459</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3637,7 +3657,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00455">455</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00460">460</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3663,7 +3683,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Expansion from d only (ipopt) to full ampl d. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00458">458</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00463">463</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3687,7 +3707,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00459">459</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00464">464</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3711,7 +3731,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00461">461</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00466">466</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3735,7 +3755,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00462">462</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00467">467</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3762,7 +3782,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 <p>Position of fixed variables. </p>
 <p>This is required for a warm start </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00465">465</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00470">470</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3788,7 +3808,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Number of unique nonzeros in constraint Jacobian. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00471">471</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00476">476</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3814,7 +3834,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Start position for nonzero indices in ja for each column of Jacobian. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00473">473</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00478">478</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3840,7 +3860,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Ordered by columns, for each column the row indices in Jacobian. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00475">475</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00480">480</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3866,7 +3886,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Position of entry in original triplet matrix. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00477">477</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00482">482</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3892,7 +3912,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Copy of the lower bounds. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00479">479</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00484">484</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3918,7 +3938,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Copy of the upper bounds. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00481">481</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00486">486</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
