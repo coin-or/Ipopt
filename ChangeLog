@@ -2,14 +2,19 @@ Here we list changes of Ipopt since the release of version 3.0.0.
 More detailed information about incremental changes can be found in the
 commit history.
 
-2020-xx-yy: 3.13.1
+2020-03-11: 3.13.1
         - Added asserts that check whether sparsity pattern of Jacobian
           and Hessian as returned by TNLP are within range w.r.t. number
           of variables and constraints. [#350]
-        - TNLPAdapter::ResortBnds now initialized complete output arrays
+        - TNLPAdapter::ResortBnds now initializes complete output arrays
           with 0.0 before filling in values for non-fixed variables. Use
           new argument clearorig to turn this off. [#352]
         - bring back configure variables ADD_{C,CXX,F}FLAGS
+        - added configure option --enable-relocatable to make prefix in
+          pkg-config files relative to pcfiledir (assuming that --libdir
+          hasn't been set)
+        - bring back configall_system.h for build without config header
+        - minor fixes to buildsystem
 
 2019-10-19: 3.13.0
         This major release comes with a larger renovation of the build
