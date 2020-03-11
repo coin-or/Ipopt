@@ -437,6 +437,7 @@ bool PardisoSolverInterface::InitializeImpl(
 
 #ifdef HAVE_PARDISO_MKL
    IPARM_[1] = order;
+   (void) num_procs;
    // For MKL PARDSIO, the documentation says, "iparm(3) Reserved. Set to zero.", so we don't set IPARM_[2]
    IPARM_[5] = 1;// Overwrite right-hand side
    IPARM_[7] = max_iterref_steps;

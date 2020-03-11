@@ -282,6 +282,7 @@ double* MumpsSolverInterface::GetValuesArrayPtr()
    return mumps_->a;
 }
 
+static
 void dump_matrix(
    DMUMPS_STRUC_C* mumps_data
 )
