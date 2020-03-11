@@ -64,13 +64,12 @@ and running
     /path/to/coinbrew install Ipopt
 
 The coinbrew script will take care of building and installing the
-dependencies ASL, Metis, and Mumps before building \Ipopt.
+dependencies ASL, Metis, and Mumps before building Ipopt.
 
 More details on using coinbrew can be found at the instructions on
 [Getting Started with the COIN-OR Optimization Suite](https://coin-or.github.io/user_introduction).
 
-If using coinbrew is not sufficient, e.g., because other linear solvers
-should be used by \Ipopt, the
+If using coinbrew is not sufficient, then the
 [installation instructions in the Ipopt documentation](https://coin-or.github.io/Ipopt/INSTALL.html)
 should be studied.
 
