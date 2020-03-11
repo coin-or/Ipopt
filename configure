@@ -25694,23 +25694,6 @@ if test "x$ac_cv_lib_dl_dlopen" = xyes; then :
   IPOPTLIB_LFLAGS="$IPOPTLIB_LFLAGS -ldl"
 fi
 
-
-case $host in
-  *-cygwin* |  *-mingw* |  *-msys*)
-
-$as_echo "#define SHAREDLIBEXT \"dll\"" >>confdefs.h
-
-     ;;
-  *-darwin*)
-
-$as_echo "#define SHAREDLIBEXT \"dylib\"" >>confdefs.h
-
-     ;;
-  *)
-
-$as_echo "#define SHAREDLIBEXT \"so\"" >>confdefs.h
-
-esac
 for ac_func in snprintf _snprintf
 do :
   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`

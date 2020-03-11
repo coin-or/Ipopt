@@ -380,17 +380,6 @@ AC_LANG_PUSH(C)
 AC_CHECK_HEADER([windows.h])
 AC_CHECK_HEADER([dlfcn.h])
 AC_CHECK_LIB(dl,[dlopen],[IPOPTLIB_LFLAGS="$IPOPTLIB_LFLAGS -ldl"],[])
-
-case $host in
-  *-cygwin* |  *-mingw* |  *-msys*)
-     AC_DEFINE([SHAREDLIBEXT], ["dll"], [Set to extension for shared libraries in quotes.])
-     ;;
-  *-darwin*)
-     AC_DEFINE([SHAREDLIBEXT], ["dylib"], [Set to extension for shared libraries in quotes.])
-     ;;
-  *)
-     AC_DEFINE([SHAREDLIBEXT], ["so"], [Set to extension for shared libraries in quotes.])
-esac
 AC_CHECK_FUNCS([snprintf _snprintf],[break])
 AC_CHECK_FUNCS([vsnprintf _vsnprintf],[break])
 AC_LANG_POP(C)
