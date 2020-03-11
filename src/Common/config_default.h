@@ -58,7 +58,15 @@
 #define FORTRAN_INTEGER_TYPE int
 #endif
 
-#ifdef _MSC_VER
 /* Define to be the name of C-function for Inf check */
+#ifdef _MSC_VER
 #define COIN_C_FINITE _finite
+#else
+#define COIN_C_FINITE std::isfinite
 #endif
+
+#define COIN_BLAS_FUNC(name,NAME) F77_FUNC(name,NAME)
+#define COIN_LAPACK_FUNC(name,NAME) F77_FUNC(name,NAME)
+#define PARDISO_FUNC(name,NAME) F77_FUNC(name,NAME)
+#define WSMP_FUNC(name,NAME) F77_FUNC(name,NAME)
+#define WSMP_FUNC_(name,NAME) F77_FUNC_(name,NAME)
