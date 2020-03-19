@@ -30,15 +30,15 @@ IPOPTLIB_EXPORT int LSL_loadPardisoLib(
 /** Unloads a loaded Pardiso library.
  * @return Zero on success, nonzero on failure.
  */
-IPOPTLIB_EXPORT int LSL_unloadPardisoLib();
+IPOPTLIB_EXPORT int LSL_unloadPardisoLib(void);
 
 /** Indicates whether a Pardiso library has been successfully loaded.
  * @return Zero if not loaded, nonzero if handle is loaded
  */
-IPOPTLIB_EXPORT int LSL_isPardisoLoaded();
+IPOPTLIB_EXPORT int LSL_isPardisoLoaded(void);
 
 /** Returns name of the shared library that should contain Pardiso */
-IPOPTLIB_EXPORT char* LSL_PardisoLibraryName();
+IPOPTLIB_EXPORT char* LSL_PardisoLibraryName(void);
 
 #ifdef __cplusplus
 }

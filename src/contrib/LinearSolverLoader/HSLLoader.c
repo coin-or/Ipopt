@@ -20,7 +20,7 @@
 
 static soHandle_t HSL_handle = NULL;
 
-void LSL_lateHSLLoad();
+void LSL_lateHSLLoad(void);
 
 typedef void (*voidfun)(void);
 
@@ -1096,7 +1096,7 @@ int LSL_loadHSL(
    return 0;
 }
 
-int LSL_unloadHSL()
+int LSL_unloadHSL(void)
 {
    int rc;
 
@@ -1172,12 +1172,12 @@ int LSL_unloadHSL()
    return rc;
 }
 
-int LSL_isHSLLoaded()
+int LSL_isHSLLoaded(void)
 {
    return HSL_handle != NULL;
 }
 
-int LSL_isMA27available()
+int LSL_isMA27available(void)
 {
 #ifndef COINHSL_HAS_MA27
    return func_ma27id != NULL && func_ma27ad != NULL && func_ma27bd != NULL && func_ma27cd != NULL;
@@ -1186,7 +1186,7 @@ int LSL_isMA27available()
 #endif
 }
 
-int LSL_isMA57available()
+int LSL_isMA57available(void)
 {
 #ifndef COINHSL_HAS_MA57
    return func_ma57id != NULL && func_ma57ad != NULL && func_ma57bd != NULL && func_ma57cd != NULL && func_ma57ed != NULL;
@@ -1195,7 +1195,7 @@ int LSL_isMA57available()
 #endif
 }
 
-int LSL_isMA77available()
+int LSL_isMA77available(void)
 {
 #ifndef COINHSL_HAS_MA77
    return func_ma77_default_control != NULL && func_ma77_open_nelt != NULL && func_ma77_open != NULL && func_ma77_input_vars != NULL && func_ma77_input_reals != NULL && func_ma77_analyse != NULL && func_ma77_factor != NULL && func_ma77_factor_solve != NULL && func_ma77_solve != NULL && func_ma77_resid != NULL && func_ma77_scale != NULL && func_ma77_enquire_posdef != NULL && func_ma77_enquire_indef != NULL && func_ma77_alter != NULL && func_ma77_restart != NULL && func_ma77_finalise != NULL;
@@ -1204,7 +1204,7 @@ int LSL_isMA77available()
 #endif
 }
 
-int LSL_isMA86available()
+int LSL_isMA86available(void)
 {
 #ifndef COINHSL_HAS_MA86
    return func_ma86_default_control != NULL && func_ma86_analyse != NULL && func_ma86_factor != NULL && func_ma86_factor_solve != NULL && func_ma86_solve != NULL && func_ma86_finalise != NULL;
@@ -1213,7 +1213,7 @@ int LSL_isMA86available()
 #endif
 }
 
-int LSL_isMA97available()
+int LSL_isMA97available(void)
 {
 #ifndef COINHSL_HAS_MA97
    return func_ma97_default_control != NULL && func_ma97_analyse != NULL && func_ma97_factor != NULL && func_ma97_factor_solve != NULL && func_ma97_solve != NULL && func_ma97_finalise != NULL && func_ma97_free_akeep != NULL;
@@ -1222,7 +1222,7 @@ int LSL_isMA97available()
 #endif
 }
 
-int LSL_isMC19available()
+int LSL_isMC19available(void)
 {
 #ifndef COINHSL_HAS_MC19
    return func_mc19ad != NULL;
@@ -1231,7 +1231,7 @@ int LSL_isMC19available()
 #endif
 }
 
-int LSL_isMC68available()
+int LSL_isMC68available(void)
 {
 #ifndef COINHSL_HAS_MC68
    return func_mc68_default_control != NULL && func_mc68_order != NULL;
@@ -1240,7 +1240,7 @@ int LSL_isMC68available()
 #endif
 }
 
-void LSL_lateHSLLoad()
+void LSL_lateHSLLoad(void)
 {
    char buffer[512];
    int rc;
@@ -1254,7 +1254,7 @@ void LSL_lateHSLLoad()
    }
 }
 
-char* LSL_HSLLibraryName()
+char* LSL_HSLLibraryName(void)
 {
    static char name[] = HSLLIBNAME;
    return name;

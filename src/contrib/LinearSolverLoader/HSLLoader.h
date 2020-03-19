@@ -516,58 +516,58 @@ IPOPTLIB_EXPORT int LSL_loadHSL(
  *
  * @return Zero on success, nonzero on failure.
  */
-IPOPTLIB_EXPORT int LSL_unloadHSL();
+IPOPTLIB_EXPORT int LSL_unloadHSL(void);
 
 /** Indicates whether a HSL library has been loaded.
  *
  * @return Zero if not loaded, nonzero if handle is loaded
  */
-IPOPTLIB_EXPORT int LSL_isHSLLoaded();
+IPOPTLIB_EXPORT int LSL_isHSLLoaded(void);
 
 /** Indicates whether a HSL library is loaded and all symbols necessary to use MA27 have been found.
  *
  * @return Zero if not available, nonzero if MA27 is available in the loaded library.
  */
-IPOPTLIB_EXPORT int LSL_isMA27available();
+IPOPTLIB_EXPORT int LSL_isMA27available(void);
 
 /** Indicates whether a HSL library is loaded and all symbols necessary to use MA57 have been found.
  *
  * @return Zero if not available, nonzero if MA57 is available in the loaded library.
  */
-IPOPTLIB_EXPORT int LSL_isMA57available();
+IPOPTLIB_EXPORT int LSL_isMA57available(void);
 
 /** Indicates whether a HSL library is loaded and all symbols necessary to use MA77 have been found.
  *
  * @return Zero if not available, nonzero if HSL_MA77 is available in the loaded library.
  */
-IPOPTLIB_EXPORT int LSL_isMA77available();
+IPOPTLIB_EXPORT int LSL_isMA77available(void);
 
 /** Indicates whether a HSL library is loaded and all symbols necessary to use HSL_MA86 have been found.
  *
  * @return Zero if not available, nonzero if HSL_MA86 is available in the loaded library.
  */
-IPOPTLIB_EXPORT int LSL_isMA86available();
+IPOPTLIB_EXPORT int LSL_isMA86available(void);
 
 /** Indicates whether a HSL library is loaded and all symbols necessary to use HSL_MA97 have been found.
  *
  * @return Zero if not available, nonzero if HSL_MA97 is available in the loaded library.
  */
-IPOPTLIB_EXPORT int LSL_isMA97available();
+IPOPTLIB_EXPORT int LSL_isMA97available(void);
 
 /** Indicates whether a HSL library is loaded and all symbols necessary to use MA57 have been found.
  *
  * @return Zero if not available, nonzero if MC19 is available in the loaded library.
  */
-IPOPTLIB_EXPORT int LSL_isMC19available();
+IPOPTLIB_EXPORT int LSL_isMC19available(void);
 
 /** Indicates whether a HSL library is loaded and all symbols necessary to use HSL_MC68 have been found.
  *
  * @return Zero if not available, nonzero if MC68 is available in the loaded library.
  */
-IPOPTLIB_EXPORT int LSL_isMC68available();
+IPOPTLIB_EXPORT int LSL_isMC68available(void);
 
 /** Returns name of the shared library that should contain HSL */
-IPOPTLIB_EXPORT char* LSL_HSLLibraryName();
+IPOPTLIB_EXPORT char* LSL_HSLLibraryName(void);
 
 /** sets pointers to MA27 functions */
 IPOPTLIB_EXPORT void LSL_setMA27(
