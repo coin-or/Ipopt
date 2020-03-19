@@ -717,8 +717,6 @@ NMEDIT
 DSYMUTIL
 MANIFEST_TOOL
 RANLIB
-ac_ct_AR
-AR
 LN_S
 NM
 ac_ct_DUMPBIN
@@ -732,6 +730,8 @@ LIBTOOL
 OBJDUMP
 DLLTOOL
 AS
+ac_ct_AR
+AR
 FLIBS
 ADD_FFLAGS
 COIN_HAS_F77_FALSE
@@ -3174,8 +3174,6 @@ fi
       : ${FCFLAGS:="-nologo -fpp -Z7 -MDd $ADD_FCFLAGS"}
       : ${CFLAGS:="-nologo -Z7 -MDd $ADD_CFLAGS"}
       : ${CXXFLAGS:="-nologo -EHs -Z7 -MDd $ADD_CXXFLAGS"}
-      : ${AR:="lib"}
-      : ${AR_FLAGS:="-nologo -out:"}
     else
       : ${FFLAGS:="-g $ADD_FFLAGS"}
       : ${FCFLAGS:="-g $ADD_FCFLAGS"}
@@ -3188,8 +3186,6 @@ fi
       : ${FCFLAGS:="-nologo -fpp -O2 -MD $ADD_FCFLAGS"}
       : ${CFLAGS:="-nologo -DNDEBUG -O2 -MD $ADD_CFLAGS"}
       : ${CXXFLAGS:="-nologo -EHs -DNDEBUG -O2 -MD $ADD_CXXFLAGS"}
-      : ${AR:="lib"}
-      : ${AR_FLAGS:="-nologo -out:"}
     else
       : ${FFLAGS:="-O2 $ADD_FFLAGS"}
       : ${FCFLAGS:="-O2 $ADD_FCFLAGS"}
@@ -3775,9 +3771,11 @@ AM_BACKSLASH='\'
 
 
 # Initialize automake
+# - do not be as strict as for GNU projects
 # - don't AC_DEFINE PACKAGE or VERSION (but there're still defined as shell
 #   variables in configure, and as make variables).
 # - disable dist target
+# - place objects from sources in subdirs into corresponding subdirs
 # - enable all automake warnings
 
   if test "`cd $srcdir && pwd`" != "`pwd`"; then
@@ -4083,6 +4081,7 @@ done
       CC="$am_aux_dir/compile $CC"
       ac_cv_prog_CC="$CC"
       LD="$CC"
+      : ${AR:=lib}
     else
       as_fn_error $? "Neither MS nor Intel C compiler found in PATH and CC is unset." "$LINENO" 5
     fi
@@ -4940,6 +4939,7 @@ done
       CXX="$am_aux_dir/compile $CXX"
       ac_cv_prog_CXX="$CXX"
       LD="$CXX"
+      : ${AR:=lib}
     else
       as_fn_error $? "Neither MS nor Intel C++ compiler found in PATH and CXX is unset." "$LINENO" 5
     fi
@@ -5476,6 +5476,7 @@ done
         F77="$am_aux_dir/compile $F77"
         ac_cv_prog_F77="$F77"
         LD="$F77"
+        : ${AR:=lib}
       fi
     fi
 
@@ -10222,8 +10223,180 @@ func_stripname_cnf ()
 } # func_stripname_cnf
 
 
-# Create libtool.
+# checkout AR and decide whether to use ar-lib wrapper
+  if test -n "$ac_tool_prefix"; then
+  for ac_prog in ar lib "link -lib"
+  do
+    # Extract the first word of "$ac_tool_prefix$ac_prog", so it can be a program name with args.
+set dummy $ac_tool_prefix$ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_AR+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$AR"; then
+  ac_cv_prog_AR="$AR" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_AR="$ac_tool_prefix$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
 
+fi
+fi
+AR=$ac_cv_prog_AR
+if test -n "$AR"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $AR" >&5
+$as_echo "$AR" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+    test -n "$AR" && break
+  done
+fi
+if test -z "$AR"; then
+  ac_ct_AR=$AR
+  for ac_prog in ar lib "link -lib"
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_ac_ct_AR+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$ac_ct_AR"; then
+  ac_cv_prog_ac_ct_AR="$ac_ct_AR" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_ac_ct_AR="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+ac_ct_AR=$ac_cv_prog_ac_ct_AR
+if test -n "$ac_ct_AR"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_ct_AR" >&5
+$as_echo "$ac_ct_AR" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$ac_ct_AR" && break
+done
+
+  if test "x$ac_ct_AR" = x; then
+    AR="false"
+  else
+    case $cross_compiling:$ac_tool_warned in
+yes:)
+{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
+$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
+ac_tool_warned=yes ;;
+esac
+    AR=$ac_ct_AR
+  fi
+fi
+
+: ${AR=ar}
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking the archiver ($AR) interface" >&5
+$as_echo_n "checking the archiver ($AR) interface... " >&6; }
+if ${am_cv_ar_interface+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+   am_cv_ar_interface=ar
+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+int some_variable = 0;
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  am_ar_try='$AR cru libconftest.a conftest.$ac_objext >&5'
+      { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$am_ar_try\""; } >&5
+  (eval $am_ar_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+      if test "$ac_status" -eq 0; then
+        am_cv_ar_interface=ar
+      else
+        am_ar_try='$AR -NOLOGO -OUT:conftest.lib conftest.$ac_objext >&5'
+        { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$am_ar_try\""; } >&5
+  (eval $am_ar_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }
+        if test "$ac_status" -eq 0; then
+          am_cv_ar_interface=lib
+        else
+          am_cv_ar_interface=unknown
+        fi
+      fi
+      rm -f conftest.lib libconftest.a
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+   ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $am_cv_ar_interface" >&5
+$as_echo "$am_cv_ar_interface" >&6; }
+
+case $am_cv_ar_interface in
+ar)
+  ;;
+lib)
+  # Microsoft lib, so override with the ar-lib wrapper script.
+  # FIXME: It is wrong to rewrite AR.
+  # But if we don't then we get into trouble of one sort or another.
+  # A longer-term fix would be to have automake use am__AR in this case,
+  # and then we could set am__AR="$am_aux_dir/ar-lib \$(AR)" or something
+  # similar.
+  AR="$am_aux_dir/ar-lib $AR"
+  ;;
+unknown)
+  as_fn_error $? "could not determine $AR interface" "$LINENO" 5
+  ;;
+esac
+
+
+# Create libtool.
 
 
 
@@ -21152,27 +21325,19 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 # Patch libtool to circumvent some issues when using MSVC and MS lib.
 # This needs to be run after config.status has created libtool.
-# 1. Eliminate a trailing space after AR_FLAGS. Apparently necessary on
-#    Windows when AR=lib.exe.
-# 2. Patch libtool's func_extract_an_archive in case of $AR=lib. The current
-#    libtool implementation assumes that it can do $AR x to extract an archive.
-#    We replace this two-liner in func_extract_an_archive by replacing the first
-#    line by something clunky that works with lib and making sure that the following
-#    line is ignored (by finishing with ": \"). We completely disregard running the
-#    command through func_show_eval and do not stop if it fails.
-# 3. Relax check which libraries can be used when linking a DLL.
+# 1. Relax check which libraries can be used when linking a DLL.
 #    libtool's func_mode_link() would reject linking a .lib file when building a DLL,
 #    even though this .lib file may just be the one that eventually loads a depending DLL,
 #    e.g., mkl_core_dll.lib. Setting deplibs_check_method=pass_all will still print a
 #    warning, but the .lib is still passed to the linker.
-# 4. Ensure always_export_symbols=no if win32-dll. Even when we pass win32-dll,
+# 2. Ensure always_export_symbols=no if win32-dll. Even when we pass win32-dll,
 #    libtool forces always_export_symbols=yes for --tag=CXX if using MS compiler.
 #    This leads to a nm call that collects ALL C-functions from a library
 #    and explicitly dll-exporting them, leading to warnings about duplicates
 #    regarding those that are properly marked for dll-export in the source.
-# 5. Do not add mkl_*.lib to old_deplibs, which can result in trying to unpack and repack
+# 3. Do not add mkl_*.lib to old_deplibs, which can result in trying to unpack and repack
 #    the MKL libraries (which are pretty big). Instead, treat them like other -l<...> libs.
-# 6. Add MKL libraries to dependency_libs in .la file, which I guess should be
+# 4. Add MKL libraries to dependency_libs in .la file, which I guess should be
 #    the case due to point 5.
 #
 # Patch libtool also to circumvent some issues when using MinGW (Msys+GCC).
@@ -21183,8 +21348,8 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 #    static libraries. Setting deplibs_check_method=pass_all will avoid
 #    this faulty check.
 
-  case "$AR" in
-    *lib* | *LIB* )
+  case "$am_cv_ar_interface" in
+    lib )
       ac_config_commands="$ac_config_commands libtoolclpatch"
 
       ;;
@@ -24926,7 +25091,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 24929 "configure" */
+/* #line 25094 "configure" */
 public class Test {
 }
 EOF
@@ -25394,7 +25559,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25397 "configure" */
+/* #line 25562 "configure" */
 public class Test {
 }
 EOF
@@ -25428,7 +25593,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25431 "configure" */
+/* [#]line 25596 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
@@ -29251,9 +29416,7 @@ compiler_lib_search_path=$lt_compiler_lib_search_path_F77
 _LT_EOF
 
  ;;
-    "libtoolclpatch":C) sed -e 's|AR_FLAGS |AR_FLAGS|g' \
-             -e '/$AR x/s/.*/( cd $f_ex_an_ar_dir ; for f in `$AR -nologo -list "$f_ex_an_ar_oldlib" | tr "\\r" " "` ; do lib -nologo -extract:$f "$f_ex_an_ar_oldlib"; done ); : \\/g' \
-             -e '/^deplibs_check_method/s/.*/deplibs_check_method="pass_all"/g' \
+    "libtoolclpatch":C) sed -e '/^deplibs_check_method/s/.*/deplibs_check_method="pass_all"/g' \
              -e 's|always_export_symbols=yes|always_export_symbols=no|g' \
              -e '/func_append old_deplibs/s/\(.*\)/case $arg in *mkl_*.lib) ;; *) \1 ;; esac/g' \
              -e '/static library .deplib is not portable/a case $deplib in *mkl_*.lib) newdependency_libs="$deplib $newdependency_libs" ;; esac' \

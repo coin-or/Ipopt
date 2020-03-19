@@ -454,37 +454,10 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-AUTOMAKE_OPTIONS = foreign
 SUBDIRS = src/Common src/LinAlg src/Algorithm src/contrib/CGPenalty \
 	$(am__append_1) src/Interfaces src/Apps $(am__append_2) \
 	$(am__append_3)
 doc_DATA = README.md AUTHORS LICENSE
-
-# Stuff to clean up from "make test"
-DISTCLEANFILES = \
-	examples/Cpp_example/cpp_example@EXEEXT@ \
-	examples/Cpp_example/cpp_example.@OBJEXT@ \
-	examples/Cpp_example/MyNLP.@OBJEXT@ \
-	examples/hs071_cpp/hs071_cpp@EXEEXT@ \
-	examples/hs071_cpp/hs071_main.@OBJEXT@ \
-	examples/hs071_cpp/hs071_nlp.@OBJEXT@ \
-	examples/hs071_cpp/ipopt.out \
-	examples/hs071_c/hs071_c@EXEEXT@ \
-	examples/hs071_c/hs071_c.@OBJEXT@ \
-	examples/hs071_c/ipopt.out \
-	examples/hs071_f/hs071_f@EXEEXT@ \
-	examples/hs071_f/hs071_f.@OBJEXT@ \
-	examples/hs071_f/IPOPT.OUT \
-	examples/ScalableProblems/*.@OBJEXT@ \
-	examples/ScalableProblems/solve_problem@EXEEXT@ \
-	examples/ScalableProblems/solution.txt \
-	tutorial/CodingExercise/*/*/*.@OBJEXT@ \
-	tutorial/CodingExercise/C/*/TutorialC@EXEEXT@ \
-	tutorial/CodingExercise/Cpp/*/TutorialCpp@EXEEXT@ \
-	tutorial/CodingExercise/Fortran/*/TutorialFortran@EXEEXT@
-
-tmpdir = tmpdir
-libipopt = libipopt.a
 pkgconfiglibdir = $(libdir)/pkgconfig
 pkgconfiglib_DATA = ipopt.pc
 all: all-recursive
@@ -776,7 +749,6 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
-	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -871,7 +843,7 @@ uninstall-am: uninstall-docDATA uninstall-pkgconfiglibDATA
 .PRECIOUS: Makefile
 
 
-.PHONY: test unitTest astyle doc javadoc
+.PHONY: test unitTest doc javadoc astyle
 
 test: unitTest
 

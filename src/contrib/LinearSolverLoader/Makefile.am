@@ -4,10 +4,6 @@
 #
 # Author: Stefan Vigerske
 
-AUTOMAKE_OPTIONS = foreign
-
-EXTRA_DIST = 
-
 noinst_LTLIBRARIES = libLinearSolverLoader.la
 
 libLinearSolverLoader_la_SOURCES = \

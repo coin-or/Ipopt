@@ -4,8 +4,6 @@
 #
 # Authors:  Carl Laird, Andreas Waechter, Hans Pirnay     IBM    2009-12-19
 
-AUTOMAKE_OPTIONS = foreign
-
 includesipoptdir = $(includedir)/coin-or
 includesipopt_HEADERS = \
 	SensAlgorithm.hpp \

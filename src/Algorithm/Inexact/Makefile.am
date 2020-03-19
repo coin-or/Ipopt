@@ -4,8 +4,6 @@
 
 # Authors:  Andreas Waechter        IBM       2008-08-31
 
-AUTOMAKE_OPTIONS = foreign
-
 if BUILD_INEXACT
   noinst_LTLIBRARIES = libinexact.la
 endif

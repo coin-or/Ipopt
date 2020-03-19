@@ -4,8 +4,6 @@
 
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
-AUTOMAKE_OPTIONS = foreign
-
 includeipoptdir = $(includedir)/coin-or
 includeipopt_HEADERS = \
 	IpCachedResults.hpp \

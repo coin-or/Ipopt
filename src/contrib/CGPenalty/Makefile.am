@@ -4,8 +4,6 @@
 
 # Authors:  Andreas Waechter        IBM       2007-06-01
 
-AUTOMAKE_OPTIONS = foreign
-
 noinst_LTLIBRARIES = libcgpenalty.la
 
 libcgpenalty_la_SOURCES = \
