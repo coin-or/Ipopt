@@ -76,7 +76,7 @@ if test $coin_has_lapack != yes; then
 #  AC_MSG_WARN([Compiling code without LAPACK.  Certain options (e.g., quasi-Newton) will not work.])
 fi
 
-AC_COIN_CHK_PKG(ASL,[IpoptAmplInterfaceLib],[coinasl],[build])
+AC_COIN_CHK_PKG(ASL,[IpoptAmplInterfaceLib SIpoptAmplInterfaceLib],[coinasl],[build])
 
 #########
 # MUMPS #
@@ -504,7 +504,7 @@ fi
 ##          Create Makefiles and other stuff                          ##
 ########################################################################
 
-AC_COIN_FINALIZE_FLAGS([IpoptLib IpoptAmplInterfaceLib])
+AC_COIN_FINALIZE_FLAGS([IpoptLib IpoptAmplInterfaceLib SIpoptAmplInterfaceLib])
 
 AC_CONFIG_FILES([Makefile
 		 src/Common/Makefile
@@ -552,7 +552,6 @@ if test "$enable_java" != no ; then
 fi
 
 if test "$use_sipopt" = yes ; then
-  AC_COIN_FINALIZE_FLAGS([sIpoptLib])
   AC_CONFIG_FILES([
 		 contrib/sIPOPT/Makefile
 		 contrib/sIPOPT/src/Makefile

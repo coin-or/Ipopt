@@ -54,5 +54,6 @@ liblinalg_la_SOURCES = \
 
 #liblinalg_la_LDFLAGS = $(LT_LDFLAGS)
 
-AM_CPPFLAGS = -DIPOPT_BUILD \
-	-I$(srcdir)/../Common
+AM_CPPFLAGS = \
+	-I$(srcdir)/../Common \
+	$(IPOPTLIB_CFLAGS)

@@ -59,7 +59,7 @@ libipopt_la_DEPENDENCIES = $(IPALLLIBS)
 
 libipopt_la_LDFLAGS = $(LT_LDFLAGS)
 
-AM_CPPFLAGS = -DIPOPT_BUILD \
+AM_CPPFLAGS = \
 	-I$(srcdir)/../Common \
 	-I$(srcdir)/../LinAlg \
 	-I$(srcdir)/../Algorithm/LinearSolvers \

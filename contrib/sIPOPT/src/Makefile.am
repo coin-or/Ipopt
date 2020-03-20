@@ -37,7 +37,7 @@ libsipopt_la_SOURCES = \
 libsipopt_la_LDFLAGS = $(LT_LDFLAGS)
 libsipopt_la_LIBADD = ../../../src/Interfaces/libipopt.la
 
-AM_CPPFLAGS = -DSIPOPT_BUILD \
+AM_CPPFLAGS = -DSIPOPTLIB_BUILD \
   -I$(srcdir)/../../../src/Common \
   -I$(srcdir)/../../../src/Interfaces \
   -I$(srcdir)/../../../src/LinAlg \

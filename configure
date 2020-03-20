@@ -641,8 +641,8 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
-SIPOPTLIB_CFLAGS_NOPC
-SIPOPTLIB_LFLAGS_NOPC
+SIPOPTAMPLINTERFACELIB_CFLAGS_NOPC
+SIPOPTAMPLINTERFACELIB_LFLAGS_NOPC
 IPOPTAMPLINTERFACELIB_CFLAGS_NOPC
 IPOPTAMPLINTERFACELIB_LFLAGS_NOPC
 IPOPTLIB_CFLAGS_NOPC
@@ -681,6 +681,9 @@ COIN_HAS_MUMPS_FALSE
 COIN_HAS_MUMPS_TRUE
 COIN_HAS_ASL_FALSE
 COIN_HAS_ASL_TRUE
+SIPOPTAMPLINTERFACELIB_PCFILES
+SIPOPTAMPLINTERFACELIB_CFLAGS
+SIPOPTAMPLINTERFACELIB_LFLAGS
 IPOPTAMPLINTERFACELIB_PCFILES
 IPOPTAMPLINTERFACELIB_CFLAGS
 IPOPTAMPLINTERFACELIB_LFLAGS
@@ -23024,6 +23027,9 @@ $as_echo_n "checking for package ASL... " >&6; }
 
 
 
+
+
+
 # Check to see if the user has set an override to skip this primary.
 
   coin_has_asl=noInfo
@@ -23258,6 +23264,9 @@ $as_echo "#define COIN_HAS_ASL 1" >>confdefs.h
     if test -n "$asl_pcfiles" ; then IPOPTAMPLINTERFACELIB_PCFILES="$asl_pcfiles $IPOPTAMPLINTERFACELIB_PCFILES" ; fi
        IPOPTAMPLINTERFACELIB_LFLAGS="$asl_lflags $IPOPTAMPLINTERFACELIB_LFLAGS"
        IPOPTAMPLINTERFACELIB_CFLAGS="$asl_cflags $IPOPTAMPLINTERFACELIB_CFLAGS"
+      if test -n "$asl_pcfiles" ; then SIPOPTAMPLINTERFACELIB_PCFILES="$asl_pcfiles $SIPOPTAMPLINTERFACELIB_PCFILES" ; fi
+       SIPOPTAMPLINTERFACELIB_LFLAGS="$asl_lflags $SIPOPTAMPLINTERFACELIB_LFLAGS"
+       SIPOPTAMPLINTERFACELIB_CFLAGS="$asl_cflags $SIPOPTAMPLINTERFACELIB_CFLAGS"
 
 
 # Finally, set up PRIM_DATA, unless the user specified nodata.
@@ -23839,6 +23848,9 @@ cat >>confdefs.h <<_ACEOF
 #define HSLLIB_EXPORT $libexport_attribute
 _ACEOF
 
+
+      # add -DXYZ_BUILD to XYZ_CFLAGS
+      HSLLIB_CFLAGS="${HSLLIB_CFLAGS} -DHSLLIB_BUILD"
 
 # Define BUILDTOOLS_DEBUG to enable debugging output
 
@@ -25091,7 +25103,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25094 "configure" */
+/* #line 25106 "configure" */
 public class Test {
 }
 EOF
@@ -25559,7 +25571,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25562 "configure" */
+/* #line 25574 "configure" */
 public class Test {
 }
 EOF
@@ -25593,7 +25605,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25596 "configure" */
+/* [#]line 25608 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
@@ -26263,6 +26275,9 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
+      # add -DXYZ_BUILD to XYZ_CFLAGS
+      IPOPTLIB_CFLAGS="${IPOPTLIB_CFLAGS} -DIPOPTLIB_BUILD"
+
 # Define BUILDTOOLS_DEBUG to enable debugging output
 
       if test "$BUILDTOOLS_DEBUG" = 1 ; then
@@ -26310,6 +26325,9 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
+      # add -DXYZ_BUILD to XYZ_CFLAGS
+      IPOPTAMPLINTERFACELIB_CFLAGS="${IPOPTAMPLINTERFACELIB_CFLAGS} -DIPOPTAMPLINTERFACELIB_BUILD"
+
 # Define BUILDTOOLS_DEBUG to enable debugging output
 
       if test "$BUILDTOOLS_DEBUG" = 1 ; then
@@ -26323,6 +26341,56 @@ $as_echo "$as_me: adding \"${IPOPTAMPLINTERFACELIB_PCFILES}\"" >&6;}
 $as_echo "$as_me: IPOPTAMPLINTERFACELIB_LFLAGS: \"${IPOPTAMPLINTERFACELIB_LFLAGS}\"" >&6;}
         { $as_echo "$as_me:${as_lineno-$LINENO}: IPOPTAMPLINTERFACELIB_CFLAGS: \"${IPOPTAMPLINTERFACELIB_CFLAGS}\"" >&5
 $as_echo "$as_me: IPOPTAMPLINTERFACELIB_CFLAGS: \"${IPOPTAMPLINTERFACELIB_CFLAGS}\"" >&6;}
+      fi
+     if test "$BUILDTOOLS_DEBUG" = 1 ; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: FINALIZE_FLAGS for SIpoptAmplInterfaceLib:" >&5
+$as_echo "$as_me: FINALIZE_FLAGS for SIpoptAmplInterfaceLib:" >&6;}
+      fi
+      SIPOPTAMPLINTERFACELIB_LFLAGS_NOPC=$SIPOPTAMPLINTERFACELIB_LFLAGS
+
+      SIPOPTAMPLINTERFACELIB_CFLAGS_NOPC=$SIPOPTAMPLINTERFACELIB_CFLAGS
+
+      if test -n "${SIPOPTAMPLINTERFACELIB_PCFILES}" ; then
+        temp_CFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --cflags ${SIPOPTAMPLINTERFACELIB_PCFILES}`
+        temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs ${SIPOPTAMPLINTERFACELIB_PCFILES}`
+        SIPOPTAMPLINTERFACELIB_CFLAGS="$temp_CFLAGS ${SIPOPTAMPLINTERFACELIB_CFLAGS}"
+        SIPOPTAMPLINTERFACELIB_LFLAGS="$temp_LFLAGS ${SIPOPTAMPLINTERFACELIB_LFLAGS}"
+      fi
+
+      # setup XYZ_EXPORT symbol for library users
+      libexport_attribute=
+      if test "$enable_shared" = yes ; then
+        case $build_os in
+          cygwin* | mingw* | msys* | cegcc* )
+            libexport_attribute="__declspec(dllimport)"
+            if test "$enable_static" = yes ; then
+              as_fn_error $? "Cannot do DLL and static LIB builds simultaneously. Do not add --enable-static without --disable-shared." "$LINENO" 5
+            fi
+          ;;
+        esac
+      fi
+
+cat >>confdefs.h <<_ACEOF
+#define SIPOPTAMPLINTERFACELIB_EXPORT $libexport_attribute
+_ACEOF
+
+
+      # add -DXYZ_BUILD to XYZ_CFLAGS
+      SIPOPTAMPLINTERFACELIB_CFLAGS="${SIPOPTAMPLINTERFACELIB_CFLAGS} -DSIPOPTAMPLINTERFACELIB_BUILD"
+
+# Define BUILDTOOLS_DEBUG to enable debugging output
+
+      if test "$BUILDTOOLS_DEBUG" = 1 ; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: SIPOPTAMPLINTERFACELIB_LFLAGS_NOPC: \"${SIPOPTAMPLINTERFACELIB_LFLAGS_NOPC}\"" >&5
+$as_echo "$as_me: SIPOPTAMPLINTERFACELIB_LFLAGS_NOPC: \"${SIPOPTAMPLINTERFACELIB_LFLAGS_NOPC}\"" >&6;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: SIPOPTAMPLINTERFACELIB_CFLAGS_NOPC: \"${SIPOPTAMPLINTERFACELIB_CFLAGS_NOPC}\"" >&5
+$as_echo "$as_me: SIPOPTAMPLINTERFACELIB_CFLAGS_NOPC: \"${SIPOPTAMPLINTERFACELIB_CFLAGS_NOPC}\"" >&6;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: adding \"${SIPOPTAMPLINTERFACELIB_PCFILES}\"" >&5
+$as_echo "$as_me: adding \"${SIPOPTAMPLINTERFACELIB_PCFILES}\"" >&6;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: SIPOPTAMPLINTERFACELIB_LFLAGS: \"${SIPOPTAMPLINTERFACELIB_LFLAGS}\"" >&5
+$as_echo "$as_me: SIPOPTAMPLINTERFACELIB_LFLAGS: \"${SIPOPTAMPLINTERFACELIB_LFLAGS}\"" >&6;}
+        { $as_echo "$as_me:${as_lineno-$LINENO}: SIPOPTAMPLINTERFACELIB_CFLAGS: \"${SIPOPTAMPLINTERFACELIB_CFLAGS}\"" >&5
+$as_echo "$as_me: SIPOPTAMPLINTERFACELIB_CFLAGS: \"${SIPOPTAMPLINTERFACELIB_CFLAGS}\"" >&6;}
       fi
 
 
@@ -26341,56 +26409,6 @@ if test "$enable_java" != no ; then
 fi
 
 if test "$use_sipopt" = yes ; then
-
-   if test "$BUILDTOOLS_DEBUG" = 1 ; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: FINALIZE_FLAGS for sIpoptLib:" >&5
-$as_echo "$as_me: FINALIZE_FLAGS for sIpoptLib:" >&6;}
-      fi
-      SIPOPTLIB_LFLAGS_NOPC=$SIPOPTLIB_LFLAGS
-
-      SIPOPTLIB_CFLAGS_NOPC=$SIPOPTLIB_CFLAGS
-
-      if test -n "${SIPOPTLIB_PCFILES}" ; then
-        temp_CFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --cflags ${SIPOPTLIB_PCFILES}`
-        temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs ${SIPOPTLIB_PCFILES}`
-        SIPOPTLIB_CFLAGS="$temp_CFLAGS ${SIPOPTLIB_CFLAGS}"
-        SIPOPTLIB_LFLAGS="$temp_LFLAGS ${SIPOPTLIB_LFLAGS}"
-      fi
-
-      # setup XYZ_EXPORT symbol for library users
-      libexport_attribute=
-      if test "$enable_shared" = yes ; then
-        case $build_os in
-          cygwin* | mingw* | msys* | cegcc* )
-            libexport_attribute="__declspec(dllimport)"
-            if test "$enable_static" = yes ; then
-              as_fn_error $? "Cannot do DLL and static LIB builds simultaneously. Do not add --enable-static without --disable-shared." "$LINENO" 5
-            fi
-          ;;
-        esac
-      fi
-
-cat >>confdefs.h <<_ACEOF
-#define SIPOPTLIB_EXPORT $libexport_attribute
-_ACEOF
-
-
-# Define BUILDTOOLS_DEBUG to enable debugging output
-
-      if test "$BUILDTOOLS_DEBUG" = 1 ; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: SIPOPTLIB_LFLAGS_NOPC: \"${SIPOPTLIB_LFLAGS_NOPC}\"" >&5
-$as_echo "$as_me: SIPOPTLIB_LFLAGS_NOPC: \"${SIPOPTLIB_LFLAGS_NOPC}\"" >&6;}
-        { $as_echo "$as_me:${as_lineno-$LINENO}: SIPOPTLIB_CFLAGS_NOPC: \"${SIPOPTLIB_CFLAGS_NOPC}\"" >&5
-$as_echo "$as_me: SIPOPTLIB_CFLAGS_NOPC: \"${SIPOPTLIB_CFLAGS_NOPC}\"" >&6;}
-        { $as_echo "$as_me:${as_lineno-$LINENO}: adding \"${SIPOPTLIB_PCFILES}\"" >&5
-$as_echo "$as_me: adding \"${SIPOPTLIB_PCFILES}\"" >&6;}
-        { $as_echo "$as_me:${as_lineno-$LINENO}: SIPOPTLIB_LFLAGS: \"${SIPOPTLIB_LFLAGS}\"" >&5
-$as_echo "$as_me: SIPOPTLIB_LFLAGS: \"${SIPOPTLIB_LFLAGS}\"" >&6;}
-        { $as_echo "$as_me:${as_lineno-$LINENO}: SIPOPTLIB_CFLAGS: \"${SIPOPTLIB_CFLAGS}\"" >&5
-$as_echo "$as_me: SIPOPTLIB_CFLAGS: \"${SIPOPTLIB_CFLAGS}\"" >&6;}
-      fi
-
-
   ac_config_files="$ac_config_files contrib/sIPOPT/Makefile contrib/sIPOPT/src/Makefile contrib/sIPOPT/AmplSolver/Makefile contrib/sIPOPT/examples/parametric_cpp/Makefile contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile contrib/sIPOPT/examples/redhess_cpp/Makefile"
 
 fi

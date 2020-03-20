@@ -20,7 +20,7 @@ ipopt_LDADD = libipoptamplinterface.la ../../Interfaces/libipopt.la
 
 AM_LDFLAGS = $(LT_LDFLAGS)
 
-AM_CPPFLAGS = -DIPOPTAMPL_BUILD \
+AM_CPPFLAGS = \
 	-I$(srcdir)/../../Common \
 	-I$(srcdir)/../../LinAlg \
 	-I$(srcdir)/../../LinAlg/TMatrices \

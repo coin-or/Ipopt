@@ -18,4 +18,4 @@ AM_CPPFLAGS = \
   -I$(srcdir)/../../../src/LinAlg \
   -I$(srcdir)/../../../src/Algorithm \
   -I$(srcdir)/../../../src/Apps/AmplSolver \
-  $(IPOPTAMPLINTERFACELIB_CFLAGS)
+  $(SIPOPTAMPLINTERFACELIB_CFLAGS)

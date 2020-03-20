@@ -80,7 +80,7 @@ libipoptalg_la_SOURCES = \
 
 #libipoptalg_la_LDFLAGS = $(LT_LDFLAGS)
 
-AM_CPPFLAGS = -DIPOPT_BUILD \
+AM_CPPFLAGS = \
 	-I$(srcdir)/../Common \
 	-I$(srcdir)/../LinAlg \
 	-I$(srcdir)/../LinAlg/TMatrices \

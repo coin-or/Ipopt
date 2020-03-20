@@ -202,7 +202,7 @@
 #undef PARDISO_FUNC_
 
 /* Library Visibility Attribute */
-#undef SIPOPTLIB_EXPORT
+#undef SIPOPTAMPLINTERFACELIB_EXPORT
 
 /* The size of `int *', as computed by sizeof. */
 #undef SIZEOF_INT_P

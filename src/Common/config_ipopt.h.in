@@ -30,7 +30,4 @@
 /* Library Visibility Attribute */
 #undef IPOPTLIB_EXPORT
 
-/* Library Visibility Attribute */
-#undef SIPOPTLIB_EXPORT
-
 #endif
