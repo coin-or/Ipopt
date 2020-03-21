@@ -26,13 +26,13 @@
 #define COIN_IPOPT_VERBOSITY 0
 
 /* If defined, the Ampl Solver Library is available. */
-#define COIN_HAS_ASL 1
+/* #undef COIN_HAS_ASL 1 */
 
 /* If defined, the LAPACK Library is available. */
 #define COIN_HAS_LAPACK 1
 
 /* If defined, the HSL library is available. */
-#define COIN_HAS_HSL 1
+/* #undef COIN_HAS_HSL 1 */
 
 /* If defined, the MUMPS library is available. */
 /* #undef COIN_HAS_MUMPS */
@@ -58,7 +58,15 @@
 #define FORTRAN_INTEGER_TYPE int
 #endif
 
-#ifdef _MSC_VER
 /* Define to be the name of C-function for Inf check */
+#ifdef _MSC_VER
 #define COIN_C_FINITE _finite
+#else
+#define COIN_C_FINITE std::isfinite
 #endif
+
+#define COIN_BLAS_FUNC(name,NAME) F77_FUNC(name,NAME)
+#define COIN_LAPACK_FUNC(name,NAME) F77_FUNC(name,NAME)
+#define PARDISO_FUNC(name,NAME) F77_FUNC(name,NAME)
+#define WSMP_FUNC(name,NAME) F77_FUNC(name,NAME)
+#define WSMP_FUNC_(name,NAME) F77_FUNC_(name,NAME)

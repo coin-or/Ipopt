@@ -10,7 +10,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([Ipopt],[3.13.1],[https://github.com/coin-or/Ipopt/issues/new],,[https://github.com/coin-or/Ipopt])
+AC_INIT([Ipopt],[3.13.2],[https://github.com/coin-or/Ipopt/issues/new],,[https://github.com/coin-or/Ipopt])
 
 AC_COPYRIGHT(
 [Copyright 2004, 2011 International Business Machines and others.
@@ -286,7 +286,11 @@ fi
 AC_ARG_ENABLE([java],
   [AC_HELP_STRING([--disable-java],[disable building of Java interface])],
   [enable_java="$enableval"],
-  [enable_java="$enable_shared"])
+  [case "$JAVA_HOME" in
+     *\ * ) enable_java=no ;;   # do not enable java-check by default, if there are spaces in JAVA_HOME - that causes trouble
+     * )    enable_java="$enable_shared" ;;
+   esac
+  ])
 
 if test "$enable_java" != no ; then
   # look for javac: required to compile Java code and build C-header
@@ -376,17 +380,6 @@ AC_LANG_PUSH(C)
 AC_CHECK_HEADER([windows.h])
 AC_CHECK_HEADER([dlfcn.h])
 AC_CHECK_LIB(dl,[dlopen],[IPOPTLIB_LFLAGS="$IPOPTLIB_LFLAGS -ldl"],[])
-
-case $host in
-  *-cygwin* |  *-mingw* |  *-msys*)
-     AC_DEFINE([SHAREDLIBEXT], ["dll"], [Set to extension for shared libraries in quotes.])
-     ;;
-  *-darwin*)
-     AC_DEFINE([SHAREDLIBEXT], ["dylib"], [Set to extension for shared libraries in quotes.])
-     ;;
-  *)
-     AC_DEFINE([SHAREDLIBEXT], ["so"], [Set to extension for shared libraries in quotes.])
-esac
 AC_CHECK_FUNCS([snprintf _snprintf],[break])
 AC_CHECK_FUNCS([vsnprintf _vsnprintf],[break])
 AC_LANG_POP(C)

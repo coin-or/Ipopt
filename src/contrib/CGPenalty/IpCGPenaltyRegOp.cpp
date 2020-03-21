@@ -7,6 +7,7 @@
 #include "IpAlgorithmRegOp.hpp"
 #include "IpRegOptions.hpp"
 
+#include "IpCGPenaltyRegOp.hpp"
 #include "IpCGSearchDirCalc.hpp"
 #include "IpCGPenaltyLSAcceptor.hpp"
 

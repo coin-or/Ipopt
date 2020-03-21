@@ -683,9 +683,9 @@ Below a few particular options are discussed:
 
     You can disable the checks for Java and build of the Java interface
     by specifying the configure flag `--disable-java`.
-    This is also the default if the build of shared libraries has been
-    disabled as `JIpopt` needs to be able to load the \Ipopt library
-    dynamically at runtime.
+    This is also the default if `JAVA_HOME` contains a space or the build
+    of shared libraries has been disabled as `JIpopt` needs to be able to
+    load the \Ipopt library dynamically at runtime.
 
 -   \ref SIPOPT "sIpopt" is build and installed together with Ipopt. If
     you do not need sIpopt, you can disable it via `--disable-sipopt`.

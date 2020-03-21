@@ -29,6 +29,14 @@ typedef void* soHandle_t;
 # endif
 #endif
 
+#ifdef _MSC_VER
+# define SHAREDLIBEXT "dll"
+#elif defined(__APPLE__)
+# define SHAREDLIBEXT "dylib"
+#else
+# define SHAREDLIBEXT "so"
+#endif
+
 /** Loads a dynamically linked library.
  *
  * @param libname The name of the library to load.

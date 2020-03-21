@@ -201,9 +201,6 @@
 /* As PARDISO_FUNC, but for C identifiers containing underscores. */
 #undef PARDISO_FUNC_
 
-/* Set to extension for shared libraries in quotes. */
-#undef SHAREDLIBEXT
-
 /* Library Visibility Attribute */
 #undef SIPOPTLIB_EXPORT
 
