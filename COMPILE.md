@@ -41,8 +41,7 @@ export OMP_PROC_BIND=TRUE
 Within the `build` directory created above, the `examples/ScalableProblems` directory contains a set of scalable test problems.
 After compilation of Ipopt, these examples can be compiled via
 ```bash
-cd examples/ScalableProblems
-make
+cd examples/ScalableProblems && make
 ```
 As an example if Ipopt was compiled with SPRAL support, try creating a file named `ipopt.opt` in this directory with the contents
 ```
