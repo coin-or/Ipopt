@@ -24472,6 +24472,7 @@ else
 fi
 
 
+    #[AC_COIN_DEFINENAMEMANGLING([SPRAL],[$spral_namemangling])
 if test "$have_spral" = "yes"; then
 
   # setup LIBS by adding $spral_lflags and those from
@@ -24541,57 +24542,7 @@ $as_echo "$ac_success" >&6; }
   LIBS=$ac_save_LIBS
 
   if test $ac_success = yes ; then
-
-
-
-  case "$spral_namemangling" in
-   "lower case, no underscore, no extra underscore")
-      $as_echo "#define SPRAL_FUNC(name,NAME) name" >>confdefs.h
-
-      $as_echo "#define SPRAL_FUNC_(name,NAME) name" >>confdefs.h
- ;;
-   "lower case, no underscore, extra underscore")
-      $as_echo "#define SPRAL_FUNC(name,NAME) name" >>confdefs.h
-
-      $as_echo "#define SPRAL_FUNC_(name,NAME) name ## _" >>confdefs.h
- ;;
-   "lower case, underscore, no extra underscore")
-      $as_echo "#define SPRAL_FUNC(name,NAME) name ## _" >>confdefs.h
-
-      $as_echo "#define SPRAL_FUNC_(name,NAME) name ## _" >>confdefs.h
- ;;
-   "lower case, underscore, extra underscore")
-      $as_echo "#define SPRAL_FUNC(name,NAME) name ## _" >>confdefs.h
-
-      $as_echo "#define SPRAL_FUNC_(name,NAME) name ## __" >>confdefs.h
- ;;
-   "upper case, no underscore, no extra underscore")
-      $as_echo "#define SPRAL_FUNC(name,NAME) NAME" >>confdefs.h
-
-      $as_echo "#define SPRAL_FUNC_(name,NAME) NAME" >>confdefs.h
- ;;
-   "upper case, no underscore, extra underscore")
-      $as_echo "#define SPRAL_FUNC(name,NAME) NAME" >>confdefs.h
-
-      $as_echo "#define SPRAL_FUNC_(name,NAME) NAME ## _" >>confdefs.h
- ;;
-   "upper case, underscore, no extra underscore")
-      $as_echo "#define SPRAL_FUNC(name,NAME) NAME ## _" >>confdefs.h
-
-      $as_echo "#define SPRAL_FUNC_(name,NAME) NAME ## _" >>confdefs.h
- ;;
-   "upper case, underscore, extra underscore")
-      $as_echo "#define SPRAL_FUNC(name,NAME) NAME ## _" >>confdefs.h
-
-      $as_echo "#define SPRAL_FUNC_(name,NAME) NAME ## __" >>confdefs.h
- ;;
-   *)
-      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Unsupported or unknown name-mangling scheme: $spral_namemangling" >&5
-$as_echo "$as_me: WARNING: Unsupported or unknown name-mangling scheme: $spral_namemangling" >&2;}
-      ;;
-  esac
-
-     IPOPTLIB_LFLAGS="$spral_lflags $IPOPTLIB_LFLAGS"
+    IPOPTLIB_LFLAGS="$spral_lflags $IPOPTLIB_LFLAGS"
 
 $as_echo "#define HAVE_SPRAL 1" >>confdefs.h
 
@@ -25250,7 +25201,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25253 "configure" */
+/* #line 25204 "configure" */
 public class Test {
 }
 EOF
@@ -25718,7 +25669,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25721 "configure" */
+/* #line 25672 "configure" */
 public class Test {
 }
 EOF
@@ -25752,7 +25703,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25755 "configure" */
+/* [#]line 25706 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);

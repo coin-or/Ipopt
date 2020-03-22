@@ -210,13 +210,6 @@
 /* The size of `int *', as computed by sizeof. */
 #undef SIZEOF_INT_P
 
-/* Define to a macro mangling the given C identifier (in lower and upper
-   case). */
-#undef SPRAL_FUNC
-
-/* As SPRAL_FUNC, but for C identifiers containing underscores. */
-#undef SPRAL_FUNC_
-
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 

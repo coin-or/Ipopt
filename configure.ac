@@ -160,10 +160,10 @@ AC_ARG_WITH([spral],
             [have_spral=yes; spral_lflags=$withval],
             [have_spral=no])
 
+    #[AC_COIN_DEFINENAMEMANGLING([SPRAL],[$spral_namemangling])
 if test "$have_spral" = "yes"; then
   AC_COIN_TRY_LINK([spral_ssids_analyse],[$spral_lflags],[],
-    [AC_COIN_DEFINENAMEMANGLING([SPRAL],[$spral_namemangling])
-     IPOPTLIB_LFLAGS="$spral_lflags $IPOPTLIB_LFLAGS"
+    [IPOPTLIB_LFLAGS="$spral_lflags $IPOPTLIB_LFLAGS"
      AC_DEFINE(HAVE_SPRAL,1,[Define to 1 if SPRAL is available])
     ],
     [AC_MSG_ERROR([Symbol ssids_solve not found with SPRAL flags $spral_lflags.])])
