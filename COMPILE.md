@@ -39,7 +39,7 @@ export OMP_PROC_BIND=TRUE
 
 ## Testing
 Within the `build` directory created above, the `examples/ScalableProblems` directory contains a set of scalable test problems.
-After compilation, these examples can be compiled via
+After compilation of Ipopt, these examples can be compiled via
 ```bash
 cd examples/ScalableProblems
 make
