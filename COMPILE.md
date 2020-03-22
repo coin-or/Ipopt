@@ -63,4 +63,4 @@ time ./solve_problem MBndryCntrl1 768
 ```
 The `real` time required by the solver should typically decrease on very large, dense problems, compared with a solve using `spral_use_gpu no`.
 If this is not the case, ensure your GPU is actually being recognized by SPRAL.
-This issue is briefly discussed near the end of the associated  [SPRAL compilation guide](https://github.com/lanl-ansi/spral/blob/master/COMPILE.md).
+This issue is briefly discussed near the end of the associated  [SPRAL compilation guide](https://github.com/lanl-ansi/spral/blob/master/COMPILE.md#multicore-cpus-and-nvidia-gpus-optional).
