@@ -50,6 +50,9 @@
 /* Define to 1 if you are using the parallel version of Pardiso */
 /* #undef HAVE_PARDISO_PARALLEL */
 
+/* Define to 1 if SPRAL is available */
+/* #undef HAVE_SPRAL */
+
 /* Define to 1 if WSMP is available */
 /* #undef HAVE_WSMP */
 
@@ -68,5 +71,6 @@
 #define COIN_BLAS_FUNC(name,NAME) F77_FUNC(name,NAME)
 #define COIN_LAPACK_FUNC(name,NAME) F77_FUNC(name,NAME)
 #define PARDISO_FUNC(name,NAME) F77_FUNC(name,NAME)
+#define SPRAL_FUNC(name,NAME) F77_FUNC(name,NAME)
 #define WSMP_FUNC(name,NAME) F77_FUNC(name,NAME)
 #define WSMP_FUNC_(name,NAME) F77_FUNC_(name,NAME)

@@ -199,7 +199,7 @@
 			</otherPackage>
 
 			<otherPackage>
-				<packageName>A sparse linear solver (MA27, MA57, HSL_MA86, HSL_MA97, WSMP, Pardiso, MUMPS)
+				<packageName>A sparse linear solver (MA27, MA57, HSL_MA86, HSL_MA97, WSMP, Pardiso, MUMPS, SPRAL)
                                 </packageName>
 				<packageURL>
 

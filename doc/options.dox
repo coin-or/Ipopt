@@ -780,6 +780,7 @@ Possible values:
  - ma86: use the Harwell routine HSL_MA86
  - ma97: use the Harwell routine HSL_MA97
  - pardiso: use the Pardiso package
+ - spral: use the SPRAL package
  - wsmp: use WSMP package
  - mumps: use MUMPS package
  - custom: use custom linear solver
@@ -1511,6 +1512,168 @@ Possible values:
  - pmetis: parallel (OpenMP) version of MeTiS nested dissection algorithm
  - four: undocumented
  - five: undocumented
+</blockquote>
+
+\subsection OPT_SPRAL_Linear_Solver SPRAL Linear Solver
+
+\anchor OPT_spral_print_level
+ <strong>spral_print_level</strong>: Debug printing level for the linear solver SPRAL
+<blockquote>
+ The valid range for this integer option is unrestricted and its default value is 0.
+
+</blockquote>
+
+\anchor OPT_spral_nemin
+ <strong>spral_nemin</strong>: Node Amalgamation parameter
+<blockquote>
+ Two nodes in elimination tree are merged if result has fewer than spral_nemin variables. The valid range for this integer option is 1 &le; spral_nemin and its default value is 8.
+
+</blockquote>
+
+\anchor OPT_spral_order
+ <strong>spral_order</strong>: Controls type of ordering used by HSL_SPRAL
+<blockquote>
+ The default value for this string option is "auto".
+
+Possible values:
+ - auto: Use HSL_SPRAL heuristic to guess best of AMD and METIS
+ - best: Try both AMD and MeTiS, pick best
+ - amd: Use the HSL_MC68 approximate minimum degree algorithm
+ - metis: Use the MeTiS nested dissection algorithm
+ - matched-auto: Use the HSL_MC80 matching with heuristic choice of AMD or METIS
+ - matched-metis: Use the HSL_MC80 matching based ordering with METIS
+ - matched-amd: Use the HSL_MC80 matching based ordering with AMD
+</blockquote>
+
+\anchor OPT_spral_scaling
+ <strong>spral_scaling</strong>: Specifies strategy for scaling in HSL_SPRAL linear solver
+<blockquote>
+ The default value for this string option is "dynamic".
+
+Possible values:
+ - none: Do not scale the linear system matrix
+ - mc30: Scale all linear system matrices using MC30
+ - mc64: Scale all linear system matrices using MC64
+ - mc77: Scale all linear system matrices using MC77 [1,3,0]
+ - dynamic: Dynamically select scaling according to rules specified by spral_scalingX and spral_switchX options.
+</blockquote>
+
+\anchor OPT_spral_scaling1
+ <strong>spral_scaling1</strong>: First scaling.
+<blockquote>
+ If spral_scaling=dynamic, this scaling is used according to the trigger spral_switch1. If spral_switch2 is triggered it is disabled. The default value for this string option is "mc64".
+
+Possible values:
+ - none: No scaling
+ - mc30: Scale linear system matrix using MC30
+ - mc64: Scale linear system matrix using MC64
+ - mc77: Scale linear system matrix using MC77 [1,3,0]
+</blockquote>
+
+\anchor OPT_spral_scaling2
+ <strong>spral_scaling2</strong>: Second scaling.
+<blockquote>
+ If spral_scaling=dynamic, this scaling is used according to the trigger spral_switch2. If spral_switch3 is triggered it is disabled. The default value for this string option is "mc64".
+
+Possible values:
+ - none: No scaling
+ - mc30: Scale linear system matrix using MC30
+ - mc64: Scale linear system matrix using MC64
+ - mc77: Scale linear system matrix using MC77 [1,3,0]
+</blockquote>
+
+\anchor OPT_spral_scaling3
+ <strong>spral_scaling3</strong>: Third scaling.
+<blockquote>
+ If spral_scaling=dynamic, this scaling is used according to the trigger spral_switch3. The default value for this string option is "mc64".
+
+Possible values:
+ - none: No scaling
+ - mc30: Scale linear system matrix using MC30
+ - mc64: Scale linear system matrix using MC64
+ - mc77: Scale linear system matrix using MC77 [1,3,0]
+</blockquote>
+
+\anchor OPT_spral_small
+ <strong>spral_small</strong>: Zero Pivot Threshold
+<blockquote>
+ Any pivot less than spral_small is treated as zero. The valid range for this real option is 0 &le; spral_small and its default value is 10<sup>-20</sup>.
+
+</blockquote>
+
+\anchor OPT_spral_solve_blas3
+ <strong>spral_solve_blas3</strong>: Controls if blas2 or blas3 routines are used for solve
+<blockquote>
+ The default value for this string option is "no".
+
+Possible values:
+ - no: Use BLAS2 (faster, some implementations bit incompatible)
+ - yes: Use BLAS3 (slower)
+</blockquote>
+
+\anchor OPT_spral_switch1
+ <strong>spral_switch1</strong>: First switch, determine when spral_scaling1 is enabled.
+<blockquote>
+ If spral_scaling=dynamic, spral_scaling1 is enabled according to this condition. If spral_switch2 occurs this option is henceforth ignored. The default value for this string option is "od_hd_reuse".
+
+Possible values:
+ - never: Scaling is never enabled.
+ - at_start: Scaling to be used from the very start.
+ - at_start_reuse: Scaling to be used on first iteration, then reused thereafter.
+ - on_demand: Scaling to be used after Ipopt request improved solution (i.e. iterative refinement has failed).
+ - on_demand_reuse: As on_demand, but reuse scaling from previous itr
+ - high_delay: Scaling to be used after more than 0.05*n delays are present
+ - high_delay_reuse: Scaling to be used only when previous itr created more that 0.05*n additional delays, otherwise reuse scaling from previous itr
+ - od_hd: Combination of on_demand and high_delay
+ - od_hd_reuse: Combination of on_demand_reuse and high_delay_reuse
+</blockquote>
+
+\anchor OPT_spral_switch2
+ <strong>spral_switch2</strong>: Second switch, determine when spral_scaling2 is enabled.
+<blockquote>
+ If spral_scaling=dynamic, spral_scaling2 is enabled according to this condition. If spral_switch3 occurs this option is henceforth ignored. The default value for this string option is "never".
+
+Possible values:
+ - never: Scaling is never enabled.
+ - at_start: Scaling to be used from the very start.
+ - at_start_reuse: Scaling to be used on first iteration, then reused thereafter.
+ - on_demand: Scaling to be used after Ipopt request improved solution (i.e. iterative refinement has failed).
+ - on_demand_reuse: As on_demand, but reuse scaling from previous itr
+ - high_delay: Scaling to be used after more than 0.05*n delays are present
+ - high_delay_reuse: Scaling to be used only when previous itr created more that 0.05*n additional delays, otherwise reuse scaling from previous itr
+ - od_hd: Combination of on_demand and high_delay
+ - od_hd_reuse: Combination of on_demand_reuse and high_delay_reuse
+</blockquote>
+
+\anchor OPT_spral_switch3
+ <strong>spral_switch3</strong>: Third switch, determine when spral_scaling3 is enabled.
+<blockquote>
+ If spral_scaling=dynamic, spral_scaling3 is enabled according to this condition. The default value for this string option is "never".
+
+Possible values:
+ - never: Scaling is never enabled.
+ - at_start: Scaling to be used from the very start.
+ - at_start_reuse: Scaling to be used on first iteration, then reused thereafter.
+ - on_demand: Scaling to be used after Ipopt request improved solution (i.e. iterative refinement has failed).
+ - on_demand_reuse: As on_demand, but reuse scaling from previous itr
+ - high_delay: Scaling to be used after more than 0.05*n delays are present
+ - high_delay_reuse: Scaling to be used only when previous itr created more that 0.05*n additional delays, otherwise reuse scaling from previous itr
+ - od_hd: Combination of on_demand and high_delay
+ - od_hd_reuse: Combination of on_demand_reuse and high_delay_reuse
+</blockquote>
+
+\anchor OPT_spral_u
+ <strong>spral_u</strong>: Pivoting Threshold
+<blockquote>
+ See SPRAL documentation. The valid range for this real option is 0 &le; spral_u &le; 0.5 and its default value is 10<sup>-08</sup>.
+
+</blockquote>
+
+\anchor OPT_spral_umax
+ <strong>spral_umax</strong>: Maximum Pivoting Threshold
+<blockquote>
+ See SPRAL documentation. The valid range for this real option is 0 &le; spral_umax &le; 0.5 and its default value is 0.0001.
+
 </blockquote>
 
 \section OPTIONS_AMPL Options available via the AMPL Interface

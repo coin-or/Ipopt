@@ -47,6 +47,10 @@ if COIN_HAS_MUMPS
   liblinsolvers_la_SOURCES += IpMumpsSolverInterface.cpp
 endif
 
+if HAVE_SPRAL
+  liblinsolvers_la_SOURCES += IpSpralSolverInterface.cpp
+endif
+
 #liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)
 
 AM_CPPFLAGS = -DIPOPT_BUILD \

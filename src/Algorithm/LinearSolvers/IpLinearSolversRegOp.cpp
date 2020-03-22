@@ -22,6 +22,9 @@
 #ifdef COIN_HAS_MUMPS
 # include "IpMumpsSolverInterface.hpp"
 #endif
+#ifdef HAVE_SPRAL
+# include "IpSpralSolverInterface.hpp"
+#endif
 #ifdef HAVE_WSMP
 # include "IpWsmpSolverInterface.hpp"
 # include "IpIterativeWsmpSolverInterface.hpp"
@@ -65,6 +68,11 @@ void RegisterOptions_LinearSolvers(
 #if defined(HAVE_PARDISO) || defined(HAVE_LINEARSOLVERLOADER)
    roptions->SetRegisteringCategory("Pardiso Linear Solver");
    PardisoSolverInterface::RegisterOptions(roptions);
+#endif
+
+#ifdef HAVE_SPRAL
+   roptions->SetRegisteringCategory("SPRAL Linear Solver");
+   SpralSolverInterface::RegisterOptions(roptions);
 #endif
 
 #ifdef HAVE_WSMP

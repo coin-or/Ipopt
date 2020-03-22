@@ -62,6 +62,9 @@
 #include "IpPardisoSolverInterface.hpp"
 #include "IpSlackBasedTSymScalingMethod.hpp"
 
+#ifdef HAVE_SPRAL
+# include "IpSpralSolverInterface.hpp"
+#endif
 #ifdef HAVE_WSMP
 # include "IpWsmpSolverInterface.hpp"
 # include "IpIterativeWsmpSolverInterface.hpp"
@@ -92,7 +95,7 @@ void AlgorithmBuilder::RegisterOptions(
 )
 {
    roptions->SetRegisteringCategory("Linear Solver");
-   roptions->AddStringOption9(
+   roptions->AddStringOption10(
       "linear_solver",
       "Linear solver used for step computations.",
 #ifdef COINHSL_HAS_MA27
@@ -105,21 +108,25 @@ void AlgorithmBuilder::RegisterOptions(
       "ma97",
 #else
 #   ifdef COINHSL_HAS_MA86
-      "ma86",
+     "ma86",
 #   else
 #    ifdef HAVE_PARDISO
       "pardiso",
 #    else
-#     ifdef HAVE_WSMP
-      "wsmp",
+#     ifdef HAVE_SPRAL
+       "spral",
 #     else
-#      ifdef COIN_HAS_MUMPS
-      "mumps",
+#      ifdef HAVE_WSMP
+        "wsmp",
 #      else
-#       ifdef COINHSL_HAS_MA77
-      "ma77",
+#       ifdef COIN_HAS_MUMPS
+         "mumps",
 #       else
-      "ma27",
+#        ifdef COINHSL_HAS_MA77
+          "ma77",
+#        else
+          "ma27",
+#        endif
 #       endif
 #      endif
 #     endif
@@ -134,6 +141,7 @@ void AlgorithmBuilder::RegisterOptions(
       "ma86", "use the Harwell routine HSL_MA86",
       "ma97", "use the Harwell routine HSL_MA97",
       "pardiso", "use the Pardiso package",
+      "spral", "use the SPRAL package",
       "wsmp", "use WSMP package",
       "mumps", "use MUMPS package",
       "custom", "use custom linear solver",
@@ -378,6 +386,15 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
 # endif
 #else
       SolverInterface = new PardisoSolverInterface();
+#endif
+
+   }
+   else if( linear_solver == "spral" )
+   {
+#ifdef HAVE_SPRAL
+      SolverInterface = new SpralSolverInterface();
+#else
+      THROW_EXCEPTION(OPTION_INVALID, "Selected linear solver SPRAL not available.");
 #endif
 
    }

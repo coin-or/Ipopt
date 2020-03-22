@@ -401,8 +401,8 @@ by specifying `--disable-linear-solver-loader` for the `configure` script.
 
 \subsection DOWNLOAD_METIS METIS (matrix ordering)
 
-The linear solvers MA57, HSL_MA77, HSL_MA86, HSL_MA97, and MUMPS can
-make use of the matrix ordering algorithms implemented in
+The linear solvers MA57, HSL_MA77, HSL_MA86, HSL_MA97, MUMPS, and SPRAL
+can make use of the matrix ordering algorithms implemented in
 [METIS](http://glaros.dtc.umn.edu/gkhome/metis/metis/overview).
 If you are using one of these linear solvers, you can use the COIN-OR Tools project
 [ThirdParty-Metis](https://github.com/coin-or-tools/ThirdParty-Metis)
