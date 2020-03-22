@@ -43,7 +43,7 @@ After compilation of Ipopt, these examples can be compiled via
 ```bash
 cd examples/ScalableProblems && make
 ```
-As an example if Ipopt was compiled with SPRAL support, try creating a file named `ipopt.opt` in this directory with the contents
+As an example, if Ipopt was compiled with SPRAL support, try creating a file named `ipopt.opt` in this directory with the contents
 ```
 linear_solver spral
 spral_use_gpu no
