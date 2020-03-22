@@ -1,3 +1,5 @@
+First, compile the [LANL ANSI version of SPRAL](https://github.com/lanl-ansi/spral) using the [compilation suggestions described therein](https://github.com/lanl-ansi/spral/blob/master/COMPILE.md).
+
 To rebuild configuration files, execute
 ```bash
 git clone git@github.com:coin-or-tools/BuildTools.git
