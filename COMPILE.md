@@ -1,6 +1,7 @@
-First, compile the [LANL ANSI version of SPRAL](https://github.com/lanl-ansi/spral) using the [compilation suggestions described therein](https://github.com/lanl-ansi/spral/blob/master/COMPILE.md).
-
-To rebuild configuration files, execute
+This is a guide detailing the compilation of Ipopt with SPRAL as a linear solver.
+It was developed assuming a standard installation of Ubuntu 18.04 LTS.
+To begin, first, compile the [LANL ANSI version of SPRAL](https://github.com/lanl-ansi/spral) using the [compilation suggestions described therein](https://github.com/lanl-ansi/spral/blob/master/COMPILE.md).
+To rebuild configuration files for Ipopt, if needed (e.g., during development), execute
 ```bash
 git clone git@github.com:coin-or-tools/BuildTools.git
 export AUTOTOOLS_DIR="${HOME}/local2"
