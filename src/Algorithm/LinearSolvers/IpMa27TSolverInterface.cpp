@@ -6,15 +6,15 @@
 
 #include "IpoptConfig.h"
 
-#ifdef COIN_HAS_HSL
+#ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"
 #else
 /* if we build for the Linear Solver loader, then use normal C-naming style */
-#define HSL_FUNC(name,NAME) name
+#define IPOPT_HSL_FUNC(name,NAME) name
 #endif
 
 // if we do not have MA27 in HSL or the linear solver loader, then we want to build the MA27 interface
-#if defined(COINHSL_HAS_MA27) || defined(HAVE_LINEARSOLVERLOADER)
+#if defined(COINHSL_HAS_MA27) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
 
 #include "IpMa27TSolverInterface.hpp"
 
@@ -23,12 +23,12 @@
 /** Prototypes for MA27's Fortran subroutines */
 extern "C"
 {
-   void HSL_FUNC(ma27id, MA27ID)(
+   void IPOPT_HSL_FUNC(ma27id, MA27ID)(
       ipfint* ICNTL,
       double* CNTL
    );
 
-   void HSL_FUNC(ma27ad, MA27AD)(
+   void IPOPT_HSL_FUNC(ma27ad, MA27AD)(
       ipfint*       N,
       ipfint*       NZ,
       const ipfint* IRN,
@@ -45,7 +45,7 @@ extern "C"
       double*       OPS
    );
 
-   void HSL_FUNC(ma27bd, MA27BD)(
+   void IPOPT_HSL_FUNC(ma27bd, MA27BD)(
       ipfint*       N,
       ipfint*       NZ,
       const ipfint* IRN,
@@ -63,7 +63,7 @@ extern "C"
       ipfint*       INFO
    );
 
-   void HSL_FUNC(ma27cd, MA27CD)(
+   void IPOPT_HSL_FUNC(ma27cd, MA27CD)(
       ipfint* N,
       double* A,
       ipfint* LA,
@@ -81,7 +81,7 @@ extern "C"
 
 namespace Ipopt
 {
-#if COIN_IPOPT_VERBOSITY > 0
+#if IPOPT_VERBOSITY > 0
 static const Index dbg_verbosity = 0;
 #endif
 
@@ -198,8 +198,8 @@ bool Ma27TSolverInterface::InitializeImpl(
    options.GetBoolValue("warm_start_same_structure", warm_start_same_structure_, prefix);
 
    /* Set the default options for MA27 */
-   HSL_FUNC(ma27id, MA27ID)(icntl_, cntl_);
-#if COIN_IPOPT_VERBOSITY == 0
+   IPOPT_HSL_FUNC(ma27id, MA27ID)(icntl_, cntl_);
+#if IPOPT_VERBOSITY == 0
 
    icntl_[0] = 0;       // Suppress error messages
    icntl_[1] = 0;       // Suppress diagnostic messages
@@ -375,7 +375,7 @@ ESymSolverStatus Ma27TSolverInterface::SymbolicFactorization(
    double OPS;
    ipfint INFO[20];
    ipfint* IW1 = new ipfint[2 * dim_];      // Get memory for IW1 (only local)
-   HSL_FUNC(ma27ad, MA27AD)(&N, &NZ, airn, ajcn, iw_, &liw_, ikeep_, IW1, &nsteps_, &IFLAG, icntl_, cntl_, INFO, &OPS);
+   IPOPT_HSL_FUNC(ma27ad, MA27AD)(&N, &NZ, airn, ajcn, iw_, &liw_, ikeep_, IW1, &nsteps_, &IFLAG, icntl_, cntl_, INFO, &OPS);
    delete[] IW1;      // No longer required
 
    // Receive several information
@@ -486,7 +486,7 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
    ipfint INFO[20];
    cntl_[0] = pivtol_;  // Set pivot tolerance
 
-   HSL_FUNC(ma27bd, MA27BD)(&N, &NZ, airn, ajcn, a_, &la_, iw_, &liw_, ikeep_, &nsteps_, &maxfrt_, IW1, icntl_, cntl_,
+   IPOPT_HSL_FUNC(ma27bd, MA27BD)(&N, &NZ, airn, ajcn, a_, &la_, iw_, &liw_, ikeep_, &nsteps_, &maxfrt_, IW1, icntl_, cntl_,
                             INFO);
    delete[] IW1;
 
@@ -629,7 +629,7 @@ ESymSolverStatus Ma27TSolverInterface::Backsolve(
          }
       }
 
-      HSL_FUNC(ma27cd, MA27CD)(&N, a_, &la_, iw_, &liw_, W, &maxfrt_, &rhs_vals[irhs * dim_], IW1, &nsteps_, icntl_,
+      IPOPT_HSL_FUNC(ma27cd, MA27CD)(&N, a_, &la_, iw_, &liw_, W, &maxfrt_, &rhs_vals[irhs * dim_], IW1, &nsteps_, icntl_,
                                cntl_);
 
       if( DBG_VERBOSITY() >= 2 )
@@ -679,4 +679,4 @@ bool Ma27TSolverInterface::IncreaseQuality()
 
 } // namespace Ipopt
 
-#endif /* COINHSL_HAS_MA27 or HAVE_LINEARSOLVERLOADER */
+#endif /* COINHSL_HAS_MA27 or IPOPT_HAS_LINEARSOLVERLOADER */

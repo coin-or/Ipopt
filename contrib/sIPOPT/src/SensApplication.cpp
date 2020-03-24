@@ -15,7 +15,7 @@
 
 namespace Ipopt
 {
-#if COIN_IPOPT_VERBOSITY > 0
+#if IPOPT_VERBOSITY > 0
 static const Index dbg_verbosity = 1;
 #endif
 

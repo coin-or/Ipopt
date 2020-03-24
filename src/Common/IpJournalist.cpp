@@ -178,7 +178,7 @@ void Journalist::VPrintf(
       if( journals_[i]->IsAccepted(category, level) )
       {
          // print the message
-#ifdef HAVE_VA_COPY
+#ifdef IPOPT_HAS_VA_COPY
          va_list apcopy;
          va_copy(apcopy, ap);
          journals_[i]->Printf(category, level, pformat, apcopy);
@@ -214,7 +214,7 @@ void Journalist::VPrintfIndented(
          }
 
          // print the message
-#ifdef HAVE_VA_COPY
+#ifdef IPOPT_HAS_VA_COPY
          va_list apcopy;
          va_copy(apcopy, ap);
          journals_[i]->Printf(category, level, pformat, apcopy);

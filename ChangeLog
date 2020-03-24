@@ -3,6 +3,12 @@ More detailed information about incremental changes can be found in the
 commit history.
 
 2020-xx-yy: 3.13.2
+        - The C-preprocessor defines COIN_IPOPT_CHECKLEVEL,
+          COIN_IPOPT_VERBOSITY, and FORTRAN_INTEGER_TYPE, which are defined
+          by IpoptConfig.h, have been renamed to IPOPT_CHECKLEVEL,
+          IPOPT_VERBOSITY, and IPOPT_FORTRAN_INTEGER_TYPE, respectively.
+          They are still available under their previous name, but these
+          will be removed in Ipopt 3.14.
 
 2020-03-11: 3.13.1
         - Added asserts that check whether sparsity pattern of Jacobian

@@ -6,7 +6,7 @@
 
 #include "IpoptConfig.h"
 
-#ifdef COIN_HAS_HSL
+#ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"
 #endif
 
@@ -42,7 +42,7 @@ extern "C"
 
 namespace Ipopt
 {
-#if COIN_IPOPT_VERBOSITY > 0
+#if IPOPT_VERBOSITY > 0
 static const Index dbg_verbosity = 0;
 #endif
 

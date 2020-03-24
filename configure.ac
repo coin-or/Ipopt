@@ -23,7 +23,7 @@ under the Eclipse Public License.])
 AC_CONFIG_SRCDIR(src/Common/IpDebug.hpp)
 
 # Do some project-level initialization work (version numbers, ...)
-AC_COIN_INITIALIZE(Ipopt)
+AC_COIN_INITIALIZE
 
 #############################################################################
 #                         Standard build tool stuff                         #
@@ -56,8 +56,8 @@ AC_COIN_CXXLIBS
 # Doxygen
 AC_COIN_DOXYGEN
 
-# COIN_IPOPT_VERBOSITY and COIN_IPOPT_DEBUGLEVEL
-AC_COIN_DEBUGLEVEL(IPOPT)
+# IPOPT_VERBOSITY and IPOPT_DEBUGLEVEL
+AC_COIN_DEBUGLEVEL
 
 #############################################################################
 #                                 Dependencies                              #
@@ -126,26 +126,26 @@ if test "$have_pardiso_project" = yes ; then
   # check whether flags from --with-pardiso work and figure out name mangling
   # if so, define PARDISO_FUNC and keep lflags
   AC_COIN_TRY_LINK([pardiso_ipopt_newinterface],[$pardiso_lflags $lapack_lflags],[$lapack_pcfiles],
-    [AC_COIN_DEFINENAMEMANGLING([PARDISO],[$pardiso_ipopt_newinterface_namemangling])
+    [AC_COIN_DEFINENAMEMANGLING([IPOPT_PARDISO],[$pardiso_ipopt_newinterface_namemangling])
      IPOPTLIB_LFLAGS="$pardiso_lflags $IPOPTLIB_LFLAGS"
-     AC_DEFINE(HAVE_PARDISO,1,[Define to 1 if Pardiso is available])
+     AC_DEFINE(IPOPT_HAS_PARDISO,1,[Define to 1 if Pardiso is available])
     ],
     [AC_MSG_ERROR([Symbol pardiso_ipopt_newinterface not found with Pardiso flags $pardiso_lflags and Lapack. Require Pardiso >= 4.0.])])
 
   AC_COIN_TRY_LINK([pardiso_exist_parallel],[$pardiso_lflags $lapack_lflags],[$lapack_pcfiles],
-    [AC_DEFINE(HAVE_PARDISO_PARALLEL,1,[Define to 1 if you are using the parallel version of Pardiso])])
+    [AC_DEFINE(IPOPT_HAS_PARDISO_PARALLEL,1,[Define to 1 if you are using the parallel version of Pardiso])])
 
 else
   # check whether Pardiso is available via Lapack, which should then be MKL
   # figure out name mangling and define PARDISO_FUNC
   AC_COIN_TRY_LINK([pardiso],[$lapack_lflags],[$lapack_pcfiles],
-    [AC_COIN_DEFINENAMEMANGLING([PARDISO],[$pardiso_namemangling])
+    [AC_COIN_DEFINENAMEMANGLING([IPOPT_PARDISO],[$pardiso_namemangling])
      have_pardiso_mkl=yes
-     AC_DEFINE(HAVE_PARDISO,1,[Define to 1 if Pardiso is available])
+     AC_DEFINE(IPOPT_HAS_PARDISO,1,[Define to 1 if Pardiso is available])
      # assume MKL Pardiso is parallel (it never has pardiso_exist_parallel)
      # TODO does sequential MKL also have a parallel Pardiso? do we need some check here?
-     AC_DEFINE(HAVE_PARDISO_PARALLEL,1,[Define to 1 if you are using the parallel version of Pardiso])
-     AC_DEFINE(HAVE_PARDISO_MKL,1,[Define to 1 if you are using Pardiso from MKL])
+     AC_DEFINE(IPOPT_HAS_PARDISO_PARALLEL,1,[Define to 1 if you are using the parallel version of Pardiso])
+     AC_DEFINE(IPOPT_HAS_PARDISO_MKL,1,[Define to 1 if you are using Pardiso from MKL])
     ])
 fi
 
@@ -162,9 +162,9 @@ AC_ARG_WITH([wsmp],
 
 if test "$have_wsmp" = "yes"; then
   AC_COIN_TRY_LINK([wssmp],[$wsmp_lflags],[],
-    [AC_COIN_DEFINENAMEMANGLING([WSMP],[$wssmp_namemangling])
+    [AC_COIN_DEFINENAMEMANGLING([IPOPT_WSMP],[$wssmp_namemangling])
      IPOPTLIB_LFLAGS="$wsmp_lflags $IPOPTLIB_LFLAGS"
-     AC_DEFINE(HAVE_WSMP,1,[Define to 1 if WSMP is available])
+     AC_DEFINE(IPOPT_HAS_WSMP,1,[Define to 1 if WSMP is available])
     ],
     [AC_MSG_ERROR([Symbol wssmp not found with WSMP flags $wsmp_lflags.])])
 fi
@@ -211,21 +211,21 @@ AC_COIN_CHECK_ISFINITE
 # va_copy #
 ###########
 
-AC_CHECK_DECL([va_copy],[AC_DEFINE([HAVE_VA_COPY],[1],
+AC_CHECK_DECL([va_copy],[AC_DEFINE([IPOPT_HAS_VA_COPY],[1],
                                    [Define to 1 if va_copy is available])],,[#include <cstdarg>])
 
 ###########################
 # Random number generator #
 ###########################
 
-AC_CHECK_DECL([drand48],[AC_DEFINE([HAVE_DRAND48],[1],
+AC_CHECK_DECL([drand48],[AC_DEFINE([IPOPT_HAS_DRAND48],[1],
                                    [Define to 1 if function drand48 is available])],,[#include <cstdlib>])
 
-AC_CHECK_DECL([rand],[AC_DEFINE([HAVE_RAND],[1],
+AC_CHECK_DECL([rand],[AC_DEFINE([IPOPT_HAS_RAND],[1],
                                 [Define to 1 if function rand is available])],,[#include <cstdlib>])
 
 AC_COIN_CHECK_NAMESPACE_DECL([std::srand],[1],
-  [AC_DEFINE([HAVE_STD__RAND],[1],[Define to 1 if function std::rand is available])],[],
+  [AC_DEFINE([IPOPT_HAS_STD__RAND],[1],[Define to 1 if function std::rand is available])],[],
   [#include <cstdlib>])
 
 ##########################################################################
@@ -263,22 +263,22 @@ AC_LANG_POP(C++)
 #        code to copy Index* to ipfint* arrays...
 if test "$cross_compiling" = no && test "$is_bg" != yes; then
   AC_LANG_PUSH(C)
-  AC_DEFINE([FORTRAN_INTEGER_TYPE],[int],[Define to the C type corresponding to Fortran INTEGER])
+  AC_DEFINE([IPOPT_FORTRAN_INTEGER_TYPE],[int],[Define to the C type corresponding to Fortran INTEGER])
 #  AC_CHECK_SIZEOF([long])
 #  AC_CHECK_SIZEOF([int])
 #  AC_CHECK_SIZEOF([double])
 #  AC_MSG_CHECKING([for C type corresponding to Fortran INTEGER])
 #  if test $ac_cv_sizeof_long = $ac_cv_sizeof_double; then
-#    AC_DEFINE([FORTRAN_INTEGER_TYPE],[int],[Define to the C type corresponding to Fortran INTEGER])
+#    AC_DEFINE([IPOPT_FORTRAN_INTEGER_TYPE],[int],[Define to the C type corresponding to Fortran INTEGER])
 #    AC_MSG_RESULT([int])
 #  else
-#    AC_DEFINE([FORTRAN_INTEGER_TYPE],[long])
+#    AC_DEFINE([IPOPT_FORTRAN_INTEGER_TYPE],[long])
 #    AC_MSG_RESULT([long])
 #  fi
   AC_LANG_POP(C)
 else
   AC_MSG_WARN([We are cross compiling, assuming Fortran 'INTEGER' type corresponds to C 'int' type])
-  AC_DEFINE([FORTRAN_INTEGER_TYPE],[int])
+  AC_DEFINE([IPOPT_FORTRAN_INTEGER_TYPE],[int])
 fi
 
 ############# JAVA
@@ -369,7 +369,7 @@ AC_MSG_CHECKING([whether the linear solver loader should be compiled])
 AC_MSG_RESULT([$use_linearsolverloader])
 
 if test $use_linearsolverloader = yes; then
-  AC_DEFINE([HAVE_LINEARSOLVERLOADER],[1],
+  AC_DEFINE([IPOPT_HAS_LINEARSOLVERLOADER],[1],
             [Define to 1 if the linear solver loader should be compiled to allow dynamic loading of shared libraries with linear solvers])
   IPALLLIBS="../contrib/LinearSolverLoader/libLinearSolverLoader.la $IPALLLIBS"
 fi

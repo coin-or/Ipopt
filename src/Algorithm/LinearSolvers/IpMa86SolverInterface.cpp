@@ -10,12 +10,12 @@
 
 #include "IpoptConfig.h"
 
-#ifdef COIN_HAS_HSL
+#ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"
 #endif
 
 // if we do not have MA86 in HSL or the linear solver loader, then we want to build the MA86 interface
-#if defined(COINHSL_HAS_MA86) || defined(HAVE_LINEARSOLVERLOADER)
+#if defined(COINHSL_HAS_MA86) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
 
 #include "IpMa86SolverInterface.hpp"
 #include <iostream>
@@ -359,4 +359,4 @@ bool Ma86SolverInterface::IncreaseQuality()
 
 } // namespace Ipopt
 
-#endif /* COINHSL_HAS_MA86 or HAVE_LINEARSOLVERLOADER */
+#endif /* COINHSL_HAS_MA86 or IPOPT_HAS_LINEARSOLVERLOADER */

@@ -50,7 +50,7 @@
 #include "IpEquilibrationScaling.hpp"
 #include "IpExactHessianUpdater.hpp"
 
-#ifdef COIN_HAS_HSL
+#ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"
 #endif
 #include "IpMa27TSolverInterface.hpp"
@@ -66,18 +66,18 @@
 # include "IpWsmpSolverInterface.hpp"
 # include "IpIterativeWsmpSolverInterface.hpp"
 #endif
-#ifdef COIN_HAS_MUMPS
+#ifdef IPOPT_HAS_MUMPS
 # include "IpMumpsSolverInterface.hpp"
 #endif
 
-#ifdef HAVE_LINEARSOLVERLOADER
+#ifdef IPOPT_HAS_LINEARSOLVERLOADER
 # include "HSLLoader.h"
 # include "PardisoLoader.h"
 #endif
 
 namespace Ipopt
 {
-#if COIN_IPOPT_VERBOSITY > 0
+#if IPOPT_VERBOSITY > 0
 static const Index dbg_verbosity = 0;
 #endif
 
@@ -107,13 +107,13 @@ void AlgorithmBuilder::RegisterOptions(
 #   ifdef COINHSL_HAS_MA86
       "ma86",
 #   else
-#    ifdef HAVE_PARDISO
+#    ifdef IPOPT_HAS_PARDISO
       "pardiso",
 #    else
 #     ifdef HAVE_WSMP
       "wsmp",
 #     else
-#      ifdef COIN_HAS_MUMPS
+#      ifdef IPOPT_HAS_MUMPS
       "mumps",
 #      else
 #       ifdef COINHSL_HAS_MA77
@@ -252,7 +252,7 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    if( linear_solver == "ma27" )
    {
 #ifndef COINHSL_HAS_MA27
-# ifdef HAVE_LINEARSOLVERLOADER
+# ifdef IPOPT_HAS_LINEARSOLVERLOADER
       SolverInterface = new Ma27TSolverInterface();
       if (!LSL_isMA27available())
       {
@@ -279,7 +279,7 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    else if( linear_solver == "ma57" )
    {
 #ifndef COINHSL_HAS_MA57
-# ifdef HAVE_LINEARSOLVERLOADER
+# ifdef IPOPT_HAS_LINEARSOLVERLOADER
       SolverInterface = new Ma57TSolverInterface();
       if (!LSL_isMA57available())
       {
@@ -306,7 +306,7 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    else if( linear_solver == "ma77" )
    {
 #ifndef COINHSL_HAS_MA77
-# ifdef HAVE_LINEARSOLVERLOADER
+# ifdef IPOPT_HAS_LINEARSOLVERLOADER
       SolverInterface = new Ma77SolverInterface();
       if (!LSL_isMA77available())
       {
@@ -333,7 +333,7 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    else if( linear_solver == "ma86" )
    {
 #ifndef COINHSL_HAS_MA86
-# ifdef HAVE_LINEARSOLVERLOADER
+# ifdef IPOPT_HAS_LINEARSOLVERLOADER
       SolverInterface = new Ma86SolverInterface();
       if (!LSL_isMA86available())
       {
@@ -359,8 +359,8 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    }
    else if( linear_solver == "pardiso" )
    {
-#ifndef HAVE_PARDISO
-# ifdef HAVE_LINEARSOLVERLOADER
+#ifndef IPOPT_HAS_PARDISO
+# ifdef IPOPT_HAS_LINEARSOLVERLOADER
       SolverInterface = new PardisoSolverInterface();
       char buf[256];
       int rc = LSL_loadPardisoLib(NULL, buf, 255);
@@ -384,7 +384,7 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    else if( linear_solver == "ma97" )
    {
 #ifndef COINHSL_HAS_MA97
-# ifdef HAVE_LINEARSOLVERLOADER
+# ifdef IPOPT_HAS_LINEARSOLVERLOADER
       SolverInterface = new Ma97SolverInterface();
       if (!LSL_isMA97available())
       {
@@ -429,7 +429,7 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    }
    else if( linear_solver == "mumps" )
    {
-#ifdef COIN_HAS_MUMPS
+#ifdef IPOPT_HAS_MUMPS
       SolverInterface = new MumpsSolverInterface();
 #else
 
@@ -455,7 +455,7 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    if( linear_system_scaling == "mc19" )
    {
 #ifndef COINHSL_HAS_MC19
-# ifdef HAVE_LINEARSOLVERLOADER
+# ifdef IPOPT_HAS_LINEARSOLVERLOADER
       ScalingMethod = new Mc19TSymScalingMethod();
       if (!LSL_isMC19available())
       {

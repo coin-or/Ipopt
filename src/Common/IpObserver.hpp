@@ -12,7 +12,7 @@
 #include <algorithm>
 
 //#define IP_DEBUG_OBSERVER
-#if COIN_IPOPT_CHECKLEVEL > 2
+#if IPOPT_CHECKLEVEL > 2
 # define IP_DEBUG_OBSERVER
 #endif
 #ifdef IP_DEBUG_OBSERVER

@@ -78,7 +78,7 @@ struct mc68_info_i;
 
 #ifndef __IPTYPES_HPP__
 /* Type of Fortran integer translated into C */
-typedef FORTRAN_INTEGER_TYPE ipfint;
+typedef IPOPT_FORTRAN_INTEGER_TYPE ipfint;
 #endif
 
 typedef void (*ma27ad_t)(

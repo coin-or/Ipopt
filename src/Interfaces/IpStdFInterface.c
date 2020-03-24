@@ -17,7 +17,7 @@
 #endif
 
 /* ToDo: The following needs to be adapted based on configuration */
-typedef FORTRAN_INTEGER_TYPE fint;
+typedef IPOPT_FORTRAN_INTEGER_TYPE fint;
 typedef double fdouble;
 /* in configure, we checked whether an int* is 32 or 64bit long to decide how much space
  * is needed to store a pointer

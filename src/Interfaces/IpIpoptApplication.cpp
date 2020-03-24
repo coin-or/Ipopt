@@ -19,7 +19,7 @@
 #include "IpCGPenaltyRegOp.hpp"
 #include "IpNLPBoundsRemover.hpp"
 
-#ifdef COIN_HAS_HSL
+#ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"
 #endif
 
@@ -40,7 +40,7 @@ Ipopt::IpoptApplication* IpoptApplicationFactory()
 
 namespace Ipopt
 {
-#if COIN_IPOPT_VERBOSITY > 0
+#if IPOPT_VERBOSITY > 0
 static const Index dbg_verbosity = 0;
 #endif
 
@@ -62,7 +62,7 @@ IpoptApplication::IpoptApplication(
    jnlst_ = new Journalist();
    try
    {
-# if COIN_IPOPT_VERBOSITY > 0
+# if IPOPT_VERBOSITY > 0
       DebugJournalistWrapper::SetJournalist(GetRawPtr(jnlst_));
       SmartPtr<Journal> debug_jrnl = jnlst_->AddFileJournal("Debug", "debug.out", J_ITERSUMMARY);
       debug_jrnl->SetPrintLevel(J_DBG, J_ALL);
@@ -167,7 +167,7 @@ ApplicationReturnStatus IpoptApplication::Initialize(
 
          bool option_set;
 
-#if COIN_IPOPT_VERBOSITY > 0
+#if IPOPT_VERBOSITY > 0
          // Set printlevel for debug
          option_set = options_->GetIntegerValue("debug_print_level",
                                                 ivalue, "");
@@ -365,7 +365,7 @@ ApplicationReturnStatus IpoptApplication::Initialize(
             options_to_print.push_back("point_perturbation_radius");
 
             // Special linear solver
-#if defined(COINHSL_HAS_MA27) || defined(HAVE_LINEARSOLVERLOADER)
+#if defined(COINHSL_HAS_MA27) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
 
             options_to_print.push_back("#MA27 Linear Solver");
             options_to_print.push_back("ma27_pivtol");
@@ -375,7 +375,7 @@ ApplicationReturnStatus IpoptApplication::Initialize(
             options_to_print.push_back("ma27_meminc_factor");
 #endif
 
-#if defined(COINHSL_HAS_MA57) || defined(HAVE_LINEARSOLVERLOADER)
+#if defined(COINHSL_HAS_MA57) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
 
             options_to_print.push_back("#MA57 Linear Solver");
             options_to_print.push_back("ma57_pivtol");
@@ -388,7 +388,7 @@ ApplicationReturnStatus IpoptApplication::Initialize(
             options_to_print.push_back("ma57_small_pivot_flag");
 #endif
 
-#if defined(COINHSL_HAS_MA77) || defined(HAVE_LINEARSOLVERLOADER)
+#if defined(COINHSL_HAS_MA77) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
 
             options_to_print.push_back("#MA77 Linear Solver");
             options_to_print.push_back("ma77_print_level");
@@ -404,7 +404,7 @@ ApplicationReturnStatus IpoptApplication::Initialize(
             options_to_print.push_back("ma77_umax");
 #endif
 
-#if defined(COINHSL_HAS_MA86) || defined(HAVE_LINEARSOLVERLOADER)
+#if defined(COINHSL_HAS_MA86) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
 
             options_to_print.push_back("#MA86 Linear Solver");
             options_to_print.push_back("ma86_print_level");
@@ -417,7 +417,7 @@ ApplicationReturnStatus IpoptApplication::Initialize(
             options_to_print.push_back("ma86_umax");
 #endif
 
-#if defined(COINHSL_HAS_MA97) || defined(HAVE_LINEARSOLVERLOADER)
+#if defined(COINHSL_HAS_MA97) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
 
             options_to_print.push_back("#MA97 Linear Solver");
             options_to_print.push_back("ma97_print_level");
@@ -436,7 +436,7 @@ ApplicationReturnStatus IpoptApplication::Initialize(
             options_to_print.push_back("ma97_umax");
 #endif
 
-#ifdef COIN_HAS_MUMPS
+#ifdef IPOPT_HAS_MUMPS
 
             options_to_print.push_back("#MUMPS Linear Solver");
             options_to_print.push_back("mumps_pivtol");
@@ -447,7 +447,7 @@ ApplicationReturnStatus IpoptApplication::Initialize(
             options_to_print.push_back("mumps_scaling");
 #endif
 
-#if defined(HAVE_PARDISO) || defined(HAVE_LINEARSOLVERLOADER)
+#if defined(IPOPT_HAS_PARDISO) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
 
             options_to_print.push_back("#Pardiso Linear Solver");
             options_to_print.push_back("pardiso_matching_strategy");
@@ -501,7 +501,7 @@ ApplicationReturnStatus IpoptApplication::Initialize(
 
             categories.push_back("WSMP Linear Solver");
 #endif
-#ifdef COIN_HAS_MUMPS
+#ifdef IPOPT_HAS_MUMPS
 
             categories.push_back("Mumps Linear Solver");
 #endif
@@ -662,7 +662,7 @@ void IpoptApplication::RegisterOptions(
       "If selected, the algorithm will print the list of all available algorithmic options with some documentation "
       "before solving the optimization problem.");
 
-#if COIN_IPOPT_VERBOSITY > 0
+#if IPOPT_VERBOSITY > 0
 
    roptions->AddBoundedIntegerOption(
       "debug_print_level",

@@ -17,19 +17,19 @@
 #include "IpTSymDependencyDetector.hpp"
 #include "IpTripletToCSRConverter.hpp"
 
-#ifdef COIN_HAS_HSL
+#ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"
 #include "IpMa28TDependencyDetector.hpp"
 #endif
 
-#ifdef COIN_HAS_MUMPS
+#ifdef IPOPT_HAS_MUMPS
 # include "IpMumpsSolverInterface.hpp"
 #endif
 #ifdef HAVE_WSMP
 # include "IpWsmpSolverInterface.hpp"
 #endif
 
-#ifdef HAVE_LINEARSOLVERLOADER
+#ifdef IPOPT_HAS_LINEARSOLVERLOADER
 # include "HSLLoader.h"
 #endif
 
@@ -39,7 +39,7 @@
 
 namespace Ipopt
 {
-#if COIN_IPOPT_VERBOSITY > 0
+#if IPOPT_VERBOSITY > 0
 static const Index dbg_verbosity = 0;
 #endif
 
@@ -246,7 +246,7 @@ bool TNLPAdapter::ProcessOptions(
    {
       if( dependency_detector == "mumps" )
       {
-#ifdef COIN_HAS_MUMPS
+#ifdef IPOPT_HAS_MUMPS
          SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
          SolverInterface = new MumpsSolverInterface();
          SmartPtr<TSymLinearSolver> ScaledSolver =
@@ -1121,7 +1121,7 @@ bool TNLPAdapter::GetSpaces(
             g_jCol[i] += 1;
          }
       }
-#if COIN_IPOPT_CHECKLEVEL > 0
+#if IPOPT_CHECKLEVEL > 0
       else
       {
          for( Index i = 0; i < nz_full_jac_g_; i++ )
@@ -1295,7 +1295,7 @@ bool TNLPAdapter::GetSpaces(
                full_h_jCol[i] += 1;
             }
          }
-#if COIN_IPOPT_CHECKLEVEL > 0
+#if IPOPT_CHECKLEVEL > 0
          else
          {
             for( Index i = 0; i < nz_full_h_; i++ )
@@ -2297,7 +2297,7 @@ void TNLPAdapter::GetQuasiNewtonApproximationSpaces(
             pos_nonlin_vars[i]--;
          }
       }
-#if COIN_IPOPT_CHECKLEVEL > 0
+#if IPOPT_CHECKLEVEL > 0
       else
       {
          for( Index i = 0; i < num_nonlin_vars; i++ )
@@ -2874,7 +2874,7 @@ bool TNLPAdapter::CheckDerivatives(
             g_jCol[i] -= 1;
          }
       }
-#if COIN_IPOPT_CHECKLEVEL > 0
+#if IPOPT_CHECKLEVEL > 0
       else
       {
          for( Index i = 0; i < nz_jac_g; i++ )
@@ -3010,7 +3010,7 @@ bool TNLPAdapter::CheckDerivatives(
             h_jCol[i] -= 1;
          }
       }
-#if COIN_IPOPT_CHECKLEVEL > 0
+#if IPOPT_CHECKLEVEL > 0
       else
       {
          for( Index i = 0; i < nz_hess_lag; i++ )
@@ -3220,7 +3220,7 @@ bool TNLPAdapter::DetermineDependentConstraints(
          g_jCol[i] -= 1;
       }
    }
-#if COIN_IPOPT_CHECKLEVEL > 0
+#if IPOPT_CHECKLEVEL > 0
    else
    {
       for( Index i = 0; i < nz_full_jac_g_; i++ )

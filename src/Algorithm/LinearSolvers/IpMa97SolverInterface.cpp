@@ -12,15 +12,15 @@
 
 #include "IpoptConfig.h"
 
-#ifdef COIN_HAS_HSL
+#ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"
 #else
 /* if we build for the Linear Solver loader, then use normal C-naming style */
-#define HSL_FUNC(name,NAME) name
+#define IPOPT_HSL_FUNC(name,NAME) name
 #endif
 
 // if we have MA97 in HSL or the linear solver loader, then we want to build the MA97 interface
-#if defined(COINHSL_HAS_MA97) || defined(HAVE_LINEARSOLVERLOADER)
+#if defined(COINHSL_HAS_MA97) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
 
 #include "IpMa97SolverInterface.hpp"
 #include <iostream>
@@ -37,7 +37,7 @@ using namespace std;
 #ifdef MA97_DUMP_MATRIX
 extern "C"
 {
-   extern void HSL_FUNC(dump_mat_csc, DUMP_MAT_CSC) (
+   extern void IPOPT_HSL_FUNC(dump_mat_csc, DUMP_MAT_CSC) (
       const ipfint* factidx,
       const ipfint* n,
       const ipfint* ptr,
@@ -541,7 +541,7 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
       {
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                         "Dumping matrix %d\n", fctidx_);
-         HSL_FUNC (dump_mat_csc, DUMP_MAT_CSC)
+         IPOPT_HSL_FUNC (dump_mat_csc, DUMP_MAT_CSC)
          (&fctidx_, &ndim_, ia, ja, val_);
          fctidx_++;
       }
@@ -760,4 +760,4 @@ bool Ma97SolverInterface::IncreaseQuality()
 
 } // namespace Ipopt
 
-#endif /* COINHSL_HAS_MA97 or HAVE_LINEARSOLVERLOADER */
+#endif /* COINHSL_HAS_MA97 or IPOPT_HAS_LINEARSOLVERLOADER */

@@ -11,7 +11,7 @@
 
 namespace Ipopt
 {
-#if COIN_IPOPT_VERBOSITY > 0
+#if IPOPT_VERBOSITY > 0
 static const Index dbg_verbosity = 0;
 #endif
 
@@ -373,7 +373,7 @@ bool LowRankSSAugSystemSolver::AugmentedSystemRequiresChange(
    DBG_START_METH("LowRankSSAugSystemSolver::AugmentedSystemRequiresChange",
                   dbg_verbosity);
 
-#if COIN_IPOPT_VERBOSITY > 0
+#if IPOPT_VERBOSITY > 0
 
    bool Wtest = (W && W->GetTag() != w_tag_);
    bool iWtest = (!W && w_tag_ != 0);

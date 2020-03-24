@@ -9,7 +9,7 @@
 #include "LibraryHandler.h"
 #include "HSLLoader.h"
 
-#ifdef COIN_HAS_HSL
+#ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"
 #endif
 

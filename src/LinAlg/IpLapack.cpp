@@ -14,12 +14,12 @@
 # define ipfintarray ipfint
 #endif
 
-#ifdef COIN_HAS_LAPACK
+#ifdef IPOPT_HAS_LAPACK
 // Prototypes for the LAPACK routines
 extern "C"
 {
    /** LAPACK Fortran subroutine DPOTRS. */
-   void COIN_LAPACK_FUNC(dpotrs, DPOTRS)(
+   void IPOPT_LAPACK_FUNC(dpotrs, DPOTRS)(
       char*         uplo,
       ipfint*       n,
       ipfint*       nrhs,
@@ -32,7 +32,7 @@ extern "C"
    );
 
    /** LAPACK Fortran subroutine DPOTRF. */
-   void COIN_LAPACK_FUNC(dpotrf, DPOTRF)(
+   void IPOPT_LAPACK_FUNC(dpotrf, DPOTRF)(
       char*   uplo,
       ipfint* n,
       double* A,
@@ -42,7 +42,7 @@ extern "C"
    );
 
    /** LAPACK Fortran subroutine DSYEV */
-   void COIN_LAPACK_FUNC(dsyev, DSYEV)(
+   void IPOPT_LAPACK_FUNC(dsyev, DSYEV)(
       char*   jobz,
       char*   uplo,
       ipfint* n,
@@ -57,7 +57,7 @@ extern "C"
    );
 
    /** LAPACK Fortran subroutine DGETRF. */
-   void COIN_LAPACK_FUNC(dgetrf, DGETRF)(
+   void IPOPT_LAPACK_FUNC(dgetrf, DGETRF)(
       ipfint*      m,
       ipfint*      n,
       double*      A,
@@ -67,7 +67,7 @@ extern "C"
    );
 
    /** LAPACK Fortran subroutine DGETRS. */
-   void COIN_LAPACK_FUNC(dgetrs, DGETRS)(
+   void IPOPT_LAPACK_FUNC(dgetrs, DGETRS)(
       char*         trans,
       ipfint*       n,
       ipfint*       nrhs,
@@ -81,7 +81,7 @@ extern "C"
    );
 
    /** LAPACK Fortran subroutine DPPSV. */
-   void COIN_LAPACK_FUNC(dppsv, DPPSV)(
+   void IPOPT_LAPACK_FUNC(dppsv, DPPSV)(
       char*         uplo,
       ipfint*       n,
       ipfint*       nrhs,
@@ -104,11 +104,11 @@ void IpLapackDpotrs(
    Index         ldb
 )
 {
-#ifdef COIN_HAS_LAPACK
+#ifdef IPOPT_HAS_LAPACK
    ipfint N = ndim, NRHS = nrhs, LDA = lda, LDB = ldb, INFO;
    char uplo = 'L';
 
-   COIN_LAPACK_FUNC(dpotrs, DPOTRS)(&uplo, &N, &NRHS, a, &LDA, b, &LDB, &INFO, 1);
+   IPOPT_LAPACK_FUNC(dpotrs, DPOTRS)(&uplo, &N, &NRHS, a, &LDA, b, &LDB, &INFO, 1);
    DBG_ASSERT(INFO == 0);
 #else
 
@@ -125,12 +125,12 @@ void IpLapackDpotrf(
    Index&  info
 )
 {
-#ifdef COIN_HAS_LAPACK
+#ifdef IPOPT_HAS_LAPACK
    ipfint N = ndim, LDA = lda, INFO;
 
    char UPLO = 'L';
 
-   COIN_LAPACK_FUNC(dpotrf, DPOTRF)(&UPLO, &N, a, &LDA, &INFO, 1);
+   IPOPT_LAPACK_FUNC(dpotrf, DPOTRF)(&UPLO, &N, a, &LDA, &INFO, 1);
 
    info = INFO;
 #else
@@ -151,7 +151,7 @@ void IpLapackDsyev(
    Index&  info
 )
 {
-#ifdef COIN_HAS_LAPACK
+#ifdef IPOPT_HAS_LAPACK
    ipfint N = ndim, LDA = lda, INFO;
 
    char JOBZ;
@@ -168,7 +168,7 @@ void IpLapackDsyev(
    // First we find out how large LWORK should be
    ipfint LWORK = -1;
    double WORK_PROBE;
-   COIN_LAPACK_FUNC(dsyev, DSYEV)(&JOBZ, &UPLO, &N, a, &LDA, w,
+   IPOPT_LAPACK_FUNC(dsyev, DSYEV)(&JOBZ, &UPLO, &N, a, &LDA, w,
                                   &WORK_PROBE, &LWORK, &INFO, 1, 1);
    DBG_ASSERT(INFO == 0);
 
@@ -180,7 +180,7 @@ void IpLapackDsyev(
    {
       WORK[i] = i;
    }
-   COIN_LAPACK_FUNC(dsyev, DSYEV)(&JOBZ, &UPLO, &N, a, &LDA, w,
+   IPOPT_LAPACK_FUNC(dsyev, DSYEV)(&JOBZ, &UPLO, &N, a, &LDA, w,
                                   WORK, &LWORK, &INFO, 1, 1);
 
    DBG_ASSERT(INFO >= 0);
@@ -204,10 +204,10 @@ void IpLapackDgetrf(
    Index&  info
 )
 {
-#ifdef COIN_HAS_LAPACK
+#ifdef IPOPT_HAS_LAPACK
    ipfint M = ndim, N = ndim, LDA = lda, INFO;
 
-   COIN_LAPACK_FUNC(dgetrf, DGETRF)(&M, &N, a, &LDA, ipiv, &INFO);
+   IPOPT_LAPACK_FUNC(dgetrf, DGETRF)(&M, &N, a, &LDA, ipiv, &INFO);
 
    info = INFO;
 #else
@@ -229,11 +229,11 @@ void IpLapackDgetrs(
    Index         ldb
 )
 {
-#ifdef COIN_HAS_LAPACK
+#ifdef IPOPT_HAS_LAPACK
    ipfint N = ndim, NRHS = nrhs, LDA = lda, LDB = ldb, INFO;
    char trans = 'N';
 
-   COIN_LAPACK_FUNC(dgetrs, DGETRS)(&trans, &N, &NRHS, a, &LDA, ipiv, b, &LDB,
+   IPOPT_LAPACK_FUNC(dgetrs, DGETRS)(&trans, &N, &NRHS, a, &LDA, ipiv, b, &LDB,
                                     &INFO, 1);
    DBG_ASSERT(INFO == 0);
 #else
@@ -254,11 +254,11 @@ void IpLapackDppsv(
    Index&        info
 )
 {
-#ifdef COIN_HAS_LAPACK
+#ifdef IPOPT_HAS_LAPACK
    ipfint N = ndim, NRHS = nrhs, LDB = ldb, INFO;
    char uplo = 'U';
 
-   COIN_LAPACK_FUNC(dppsv, DPPSV)(&uplo, &N, &NRHS, a, b, &LDB, &INFO);
+   IPOPT_LAPACK_FUNC(dppsv, DPPSV)(&uplo, &N, &NRHS, a, b, &LDB, &INFO);
 
    info = INFO;
 #else

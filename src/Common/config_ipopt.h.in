@@ -16,18 +16,23 @@
 #undef IPOPT_VERSION_RELEASE
 
 /* Define to the debug sanity check level (0 is no test) */
-#undef COIN_IPOPT_CHECKLEVEL
+#undef IPOPT_CHECKLEVEL
 
 /* Define to the debug verbosity level (0 is no output) */
-#undef COIN_IPOPT_VERBOSITY
+#undef IPOPT_VERBOSITY
 
 /* Define to the C type corresponding to Fortran INTEGER */
-#undef FORTRAN_INTEGER_TYPE
+#undef IPOPT_FORTRAN_INTEGER_TYPE
 
 /* Library Visibility Attribute */
 #undef IPOPTAMPLINTERFACELIB_EXPORT
 
 /* Library Visibility Attribute */
 #undef IPOPTLIB_EXPORT
+
+/* for backward compatibility: will be removed in Ipopt 3.14 */
+#define FORTRAN_INTEGER_TYPE  IPOPT_FORTRAN_INTEGER_TYPE
+#define COIN_IPOPT_CHECKLEVEL IPOPT_CHECKLEVEL
+#define COIN_IPOPT_VERBOSITY  IPOPT_VERBOSITY
 
 #endif

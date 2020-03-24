@@ -1567,8 +1567,8 @@ Optional Packages:
                           compiler's sysroot if not specified).
   --with-dot              use dot (from graphviz) when creating documentation
                           with doxygen if available; --without-dot to disable
-  --with-ipopt-verbosity  specify the debug verbosity level for project IPOPT
-  --with-ipopt-checklevel specify the sanity check level for project IPOPT
+  --with-ipopt-verbosity  specify the debug verbosity level
+  --with-ipopt-checklevel specify the sanity check level
   --with-lapack           Use lapack. If an argument is given, 'yes' is
                           equivalent to --with-lapack, 'no' is
                           equivalent to --without-lapack. Any other argument
@@ -3689,8 +3689,6 @@ _ACEOF
 cat >>confdefs.h <<_ACEOF
 #define IPOPT_VERSION_RELEASE 2
 _ACEOF
-
-
 
 
 
@@ -21701,20 +21699,20 @@ done
 
 
 
-# COIN_IPOPT_VERBOSITY and COIN_IPOPT_DEBUGLEVEL
+# IPOPT_VERBOSITY and IPOPT_DEBUGLEVEL
 
 
 # Check whether --with-ipopt-verbosity was given.
 if test "${with_ipopt_verbosity+set}" = set; then :
   withval=$with_ipopt_verbosity; if test "$withval" = yes; then withval=1 ; fi
-     coin_ipopt_verbosity=$withval
+     coin_verbosity=$withval
 else
-  coin_ipopt_verbosity=0
+  coin_verbosity=0
 fi
 
 
 cat >>confdefs.h <<_ACEOF
-#define COIN_IPOPT_VERBOSITY $coin_ipopt_verbosity
+#define IPOPT_VERBOSITY $coin_verbosity
 _ACEOF
 
 
@@ -21722,14 +21720,14 @@ _ACEOF
 # Check whether --with-ipopt-checklevel was given.
 if test "${with_ipopt_checklevel+set}" = set; then :
   withval=$with_ipopt_checklevel; if test "$withval" = yes; then withval=1 ; fi
-     coin_ipopt_checklevel=$withval
+     coin_checklevel=$withval
 else
-  coin_ipopt_checklevel=0
+  coin_checklevel=0
 fi
 
 
 cat >>confdefs.h <<_ACEOF
-#define COIN_IPOPT_CHECKLEVEL $coin_ipopt_checklevel
+#define IPOPT_CHECKLEVEL $coin_checklevel
 _ACEOF
 
 
@@ -22839,7 +22837,8 @@ $as_echo "$ac_success" >&6; }
   if test $ac_success = yes ; then
     coin_has_lapack=yes
          lapack_pcfiles="lapack blas"
-    else as_fn_error $? "Could not find dsyev in Lapack from lapack.pc blas.pc." "$LINENO" 5
+    else { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: lapack.pc and blas.pc present, but could not find dsyev when trying to link with it." >&5
+$as_echo "$as_me: WARNING: lapack.pc and blas.pc present, but could not find dsyev when trying to link with it." >&2;}
   fi
 
     else
@@ -22951,51 +22950,51 @@ fi
 # and COIN_LAPACK_FUNC[_] and augment the necessary variables for the client packages.
   if test $coin_has_lapack = yes ; then
 
-$as_echo "#define COIN_HAS_LAPACK 1" >>confdefs.h
+$as_echo "#define IPOPT_HAS_LAPACK 1" >>confdefs.h
 
 
 
 
   case "${dsyev_namemangling}" in
    "lower case, no underscore, no extra underscore")
-      $as_echo "#define COIN_LAPACK_FUNC(name,NAME) name" >>confdefs.h
+      $as_echo "#define IPOPT_LAPACK_FUNC(name,NAME) name" >>confdefs.h
 
-      $as_echo "#define COIN_LAPACK_FUNC_(name,NAME) name" >>confdefs.h
+      $as_echo "#define IPOPT_LAPACK_FUNC_(name,NAME) name" >>confdefs.h
  ;;
    "lower case, no underscore, extra underscore")
-      $as_echo "#define COIN_LAPACK_FUNC(name,NAME) name" >>confdefs.h
+      $as_echo "#define IPOPT_LAPACK_FUNC(name,NAME) name" >>confdefs.h
 
-      $as_echo "#define COIN_LAPACK_FUNC_(name,NAME) name ## _" >>confdefs.h
+      $as_echo "#define IPOPT_LAPACK_FUNC_(name,NAME) name ## _" >>confdefs.h
  ;;
    "lower case, underscore, no extra underscore")
-      $as_echo "#define COIN_LAPACK_FUNC(name,NAME) name ## _" >>confdefs.h
+      $as_echo "#define IPOPT_LAPACK_FUNC(name,NAME) name ## _" >>confdefs.h
 
-      $as_echo "#define COIN_LAPACK_FUNC_(name,NAME) name ## _" >>confdefs.h
+      $as_echo "#define IPOPT_LAPACK_FUNC_(name,NAME) name ## _" >>confdefs.h
  ;;
    "lower case, underscore, extra underscore")
-      $as_echo "#define COIN_LAPACK_FUNC(name,NAME) name ## _" >>confdefs.h
+      $as_echo "#define IPOPT_LAPACK_FUNC(name,NAME) name ## _" >>confdefs.h
 
-      $as_echo "#define COIN_LAPACK_FUNC_(name,NAME) name ## __" >>confdefs.h
+      $as_echo "#define IPOPT_LAPACK_FUNC_(name,NAME) name ## __" >>confdefs.h
  ;;
    "upper case, no underscore, no extra underscore")
-      $as_echo "#define COIN_LAPACK_FUNC(name,NAME) NAME" >>confdefs.h
+      $as_echo "#define IPOPT_LAPACK_FUNC(name,NAME) NAME" >>confdefs.h
 
-      $as_echo "#define COIN_LAPACK_FUNC_(name,NAME) NAME" >>confdefs.h
+      $as_echo "#define IPOPT_LAPACK_FUNC_(name,NAME) NAME" >>confdefs.h
  ;;
    "upper case, no underscore, extra underscore")
-      $as_echo "#define COIN_LAPACK_FUNC(name,NAME) NAME" >>confdefs.h
+      $as_echo "#define IPOPT_LAPACK_FUNC(name,NAME) NAME" >>confdefs.h
 
-      $as_echo "#define COIN_LAPACK_FUNC_(name,NAME) NAME ## _" >>confdefs.h
+      $as_echo "#define IPOPT_LAPACK_FUNC_(name,NAME) NAME ## _" >>confdefs.h
  ;;
    "upper case, underscore, no extra underscore")
-      $as_echo "#define COIN_LAPACK_FUNC(name,NAME) NAME ## _" >>confdefs.h
+      $as_echo "#define IPOPT_LAPACK_FUNC(name,NAME) NAME ## _" >>confdefs.h
 
-      $as_echo "#define COIN_LAPACK_FUNC_(name,NAME) NAME ## _" >>confdefs.h
+      $as_echo "#define IPOPT_LAPACK_FUNC_(name,NAME) NAME ## _" >>confdefs.h
  ;;
    "upper case, underscore, extra underscore")
-      $as_echo "#define COIN_LAPACK_FUNC(name,NAME) NAME ## _" >>confdefs.h
+      $as_echo "#define IPOPT_LAPACK_FUNC(name,NAME) NAME ## _" >>confdefs.h
 
-      $as_echo "#define COIN_LAPACK_FUNC_(name,NAME) NAME ## __" >>confdefs.h
+      $as_echo "#define IPOPT_LAPACK_FUNC_(name,NAME) NAME ## __" >>confdefs.h
  ;;
    *)
       { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Unsupported or unknown name-mangling scheme: ${dsyev_namemangling}" >&5
@@ -23259,7 +23258,7 @@ fi
 
   if test $coin_has_asl = yes ; then
 
-$as_echo "#define COIN_HAS_ASL 1" >>confdefs.h
+$as_echo "#define IPOPT_HAS_ASL 1" >>confdefs.h
 
     if test -n "$asl_pcfiles" ; then IPOPTAMPLINTERFACELIB_PCFILES="$asl_pcfiles $IPOPTAMPLINTERFACELIB_PCFILES" ; fi
        IPOPTAMPLINTERFACELIB_LFLAGS="$asl_lflags $IPOPTAMPLINTERFACELIB_LFLAGS"
@@ -23521,7 +23520,7 @@ fi
 
   if test $coin_has_mumps = yes ; then
 
-$as_echo "#define COIN_HAS_MUMPS 1" >>confdefs.h
+$as_echo "#define IPOPT_HAS_MUMPS 1" >>confdefs.h
 
     if test -n "$mumps_pcfiles" ; then IPOPTLIB_PCFILES="$mumps_pcfiles $IPOPTLIB_PCFILES" ; fi
        IPOPTLIB_LFLAGS="$mumps_lflags $IPOPTLIB_LFLAGS"
@@ -23797,7 +23796,7 @@ fi
 
   if test $coin_has_hsl = yes ; then
 
-$as_echo "#define COIN_HAS_HSL 1" >>confdefs.h
+$as_echo "#define IPOPT_HAS_HSL 1" >>confdefs.h
 
     if test -n "$hsl_pcfiles" ; then IPOPTLIB_PCFILES="$hsl_pcfiles $IPOPTLIB_PCFILES" ; fi
        IPOPTLIB_LFLAGS="$hsl_lflags $IPOPTLIB_LFLAGS"
@@ -23943,44 +23942,44 @@ $as_echo "$ac_cv_hsl_namemangling" >&6; }
 
   case "$ac_cv_hsl_namemangling" in
    "lower case, no underscore, no extra underscore")
-      $as_echo "#define HSL_FUNC(name,NAME) name" >>confdefs.h
+      $as_echo "#define IPOPT_HSL_FUNC(name,NAME) name" >>confdefs.h
 
-      $as_echo "#define HSL_FUNC_(name,NAME) name" >>confdefs.h
+      $as_echo "#define IPOPT_HSL_FUNC_(name,NAME) name" >>confdefs.h
  ;;
    "lower case, no underscore, extra underscore")
-      $as_echo "#define HSL_FUNC(name,NAME) name" >>confdefs.h
+      $as_echo "#define IPOPT_HSL_FUNC(name,NAME) name" >>confdefs.h
 
-      $as_echo "#define HSL_FUNC_(name,NAME) name ## _" >>confdefs.h
+      $as_echo "#define IPOPT_HSL_FUNC_(name,NAME) name ## _" >>confdefs.h
  ;;
    "lower case, underscore, no extra underscore")
-      $as_echo "#define HSL_FUNC(name,NAME) name ## _" >>confdefs.h
+      $as_echo "#define IPOPT_HSL_FUNC(name,NAME) name ## _" >>confdefs.h
 
-      $as_echo "#define HSL_FUNC_(name,NAME) name ## _" >>confdefs.h
+      $as_echo "#define IPOPT_HSL_FUNC_(name,NAME) name ## _" >>confdefs.h
  ;;
    "lower case, underscore, extra underscore")
-      $as_echo "#define HSL_FUNC(name,NAME) name ## _" >>confdefs.h
+      $as_echo "#define IPOPT_HSL_FUNC(name,NAME) name ## _" >>confdefs.h
 
-      $as_echo "#define HSL_FUNC_(name,NAME) name ## __" >>confdefs.h
+      $as_echo "#define IPOPT_HSL_FUNC_(name,NAME) name ## __" >>confdefs.h
  ;;
    "upper case, no underscore, no extra underscore")
-      $as_echo "#define HSL_FUNC(name,NAME) NAME" >>confdefs.h
+      $as_echo "#define IPOPT_HSL_FUNC(name,NAME) NAME" >>confdefs.h
 
-      $as_echo "#define HSL_FUNC_(name,NAME) NAME" >>confdefs.h
+      $as_echo "#define IPOPT_HSL_FUNC_(name,NAME) NAME" >>confdefs.h
  ;;
    "upper case, no underscore, extra underscore")
-      $as_echo "#define HSL_FUNC(name,NAME) NAME" >>confdefs.h
+      $as_echo "#define IPOPT_HSL_FUNC(name,NAME) NAME" >>confdefs.h
 
-      $as_echo "#define HSL_FUNC_(name,NAME) NAME ## _" >>confdefs.h
+      $as_echo "#define IPOPT_HSL_FUNC_(name,NAME) NAME ## _" >>confdefs.h
  ;;
    "upper case, underscore, no extra underscore")
-      $as_echo "#define HSL_FUNC(name,NAME) NAME ## _" >>confdefs.h
+      $as_echo "#define IPOPT_HSL_FUNC(name,NAME) NAME ## _" >>confdefs.h
 
-      $as_echo "#define HSL_FUNC_(name,NAME) NAME ## _" >>confdefs.h
+      $as_echo "#define IPOPT_HSL_FUNC_(name,NAME) NAME ## _" >>confdefs.h
  ;;
    "upper case, underscore, extra underscore")
-      $as_echo "#define HSL_FUNC(name,NAME) NAME ## _" >>confdefs.h
+      $as_echo "#define IPOPT_HSL_FUNC(name,NAME) NAME ## _" >>confdefs.h
 
-      $as_echo "#define HSL_FUNC_(name,NAME) NAME ## __" >>confdefs.h
+      $as_echo "#define IPOPT_HSL_FUNC_(name,NAME) NAME ## __" >>confdefs.h
  ;;
    *)
       { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Unsupported or unknown name-mangling scheme: $ac_cv_hsl_namemangling" >&5
@@ -24178,44 +24177,44 @@ $as_echo "$ac_success" >&6; }
 
   case "$pardiso_ipopt_newinterface_namemangling" in
    "lower case, no underscore, no extra underscore")
-      $as_echo "#define PARDISO_FUNC(name,NAME) name" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) name" >>confdefs.h
 
-      $as_echo "#define PARDISO_FUNC_(name,NAME) name" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) name" >>confdefs.h
  ;;
    "lower case, no underscore, extra underscore")
-      $as_echo "#define PARDISO_FUNC(name,NAME) name" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) name" >>confdefs.h
 
-      $as_echo "#define PARDISO_FUNC_(name,NAME) name ## _" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) name ## _" >>confdefs.h
  ;;
    "lower case, underscore, no extra underscore")
-      $as_echo "#define PARDISO_FUNC(name,NAME) name ## _" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) name ## _" >>confdefs.h
 
-      $as_echo "#define PARDISO_FUNC_(name,NAME) name ## _" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) name ## _" >>confdefs.h
  ;;
    "lower case, underscore, extra underscore")
-      $as_echo "#define PARDISO_FUNC(name,NAME) name ## _" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) name ## _" >>confdefs.h
 
-      $as_echo "#define PARDISO_FUNC_(name,NAME) name ## __" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) name ## __" >>confdefs.h
  ;;
    "upper case, no underscore, no extra underscore")
-      $as_echo "#define PARDISO_FUNC(name,NAME) NAME" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) NAME" >>confdefs.h
 
-      $as_echo "#define PARDISO_FUNC_(name,NAME) NAME" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) NAME" >>confdefs.h
  ;;
    "upper case, no underscore, extra underscore")
-      $as_echo "#define PARDISO_FUNC(name,NAME) NAME" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) NAME" >>confdefs.h
 
-      $as_echo "#define PARDISO_FUNC_(name,NAME) NAME ## _" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) NAME ## _" >>confdefs.h
  ;;
    "upper case, underscore, no extra underscore")
-      $as_echo "#define PARDISO_FUNC(name,NAME) NAME ## _" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) NAME ## _" >>confdefs.h
 
-      $as_echo "#define PARDISO_FUNC_(name,NAME) NAME ## _" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) NAME ## _" >>confdefs.h
  ;;
    "upper case, underscore, extra underscore")
-      $as_echo "#define PARDISO_FUNC(name,NAME) NAME ## _" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) NAME ## _" >>confdefs.h
 
-      $as_echo "#define PARDISO_FUNC_(name,NAME) NAME ## __" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) NAME ## __" >>confdefs.h
  ;;
    *)
       { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Unsupported or unknown name-mangling scheme: $pardiso_ipopt_newinterface_namemangling" >&5
@@ -24225,7 +24224,7 @@ $as_echo "$as_me: WARNING: Unsupported or unknown name-mangling scheme: $pardiso
 
      IPOPTLIB_LFLAGS="$pardiso_lflags $IPOPTLIB_LFLAGS"
 
-$as_echo "#define HAVE_PARDISO 1" >>confdefs.h
+$as_echo "#define IPOPT_HAS_PARDISO 1" >>confdefs.h
 
 
     else as_fn_error $? "Symbol pardiso_ipopt_newinterface not found with Pardiso flags $pardiso_lflags and Lapack. Require Pardiso >= 4.0." "$LINENO" 5
@@ -24305,7 +24304,7 @@ $as_echo "$ac_success" >&6; }
 
   if test $ac_success = yes ; then
 
-$as_echo "#define HAVE_PARDISO_PARALLEL 1" >>confdefs.h
+$as_echo "#define IPOPT_HAS_PARDISO_PARALLEL 1" >>confdefs.h
 
 
   fi
@@ -24391,44 +24390,44 @@ $as_echo "$ac_success" >&6; }
 
   case "$pardiso_namemangling" in
    "lower case, no underscore, no extra underscore")
-      $as_echo "#define PARDISO_FUNC(name,NAME) name" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) name" >>confdefs.h
 
-      $as_echo "#define PARDISO_FUNC_(name,NAME) name" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) name" >>confdefs.h
  ;;
    "lower case, no underscore, extra underscore")
-      $as_echo "#define PARDISO_FUNC(name,NAME) name" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) name" >>confdefs.h
 
-      $as_echo "#define PARDISO_FUNC_(name,NAME) name ## _" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) name ## _" >>confdefs.h
  ;;
    "lower case, underscore, no extra underscore")
-      $as_echo "#define PARDISO_FUNC(name,NAME) name ## _" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) name ## _" >>confdefs.h
 
-      $as_echo "#define PARDISO_FUNC_(name,NAME) name ## _" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) name ## _" >>confdefs.h
  ;;
    "lower case, underscore, extra underscore")
-      $as_echo "#define PARDISO_FUNC(name,NAME) name ## _" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) name ## _" >>confdefs.h
 
-      $as_echo "#define PARDISO_FUNC_(name,NAME) name ## __" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) name ## __" >>confdefs.h
  ;;
    "upper case, no underscore, no extra underscore")
-      $as_echo "#define PARDISO_FUNC(name,NAME) NAME" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) NAME" >>confdefs.h
 
-      $as_echo "#define PARDISO_FUNC_(name,NAME) NAME" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) NAME" >>confdefs.h
  ;;
    "upper case, no underscore, extra underscore")
-      $as_echo "#define PARDISO_FUNC(name,NAME) NAME" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) NAME" >>confdefs.h
 
-      $as_echo "#define PARDISO_FUNC_(name,NAME) NAME ## _" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) NAME ## _" >>confdefs.h
  ;;
    "upper case, underscore, no extra underscore")
-      $as_echo "#define PARDISO_FUNC(name,NAME) NAME ## _" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) NAME ## _" >>confdefs.h
 
-      $as_echo "#define PARDISO_FUNC_(name,NAME) NAME ## _" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) NAME ## _" >>confdefs.h
  ;;
    "upper case, underscore, extra underscore")
-      $as_echo "#define PARDISO_FUNC(name,NAME) NAME ## _" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) NAME ## _" >>confdefs.h
 
-      $as_echo "#define PARDISO_FUNC_(name,NAME) NAME ## __" >>confdefs.h
+      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) NAME ## __" >>confdefs.h
  ;;
    *)
       { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Unsupported or unknown name-mangling scheme: $pardiso_namemangling" >&5
@@ -24438,15 +24437,15 @@ $as_echo "$as_me: WARNING: Unsupported or unknown name-mangling scheme: $pardiso
 
      have_pardiso_mkl=yes
 
-$as_echo "#define HAVE_PARDISO 1" >>confdefs.h
+$as_echo "#define IPOPT_HAS_PARDISO 1" >>confdefs.h
 
      # assume MKL Pardiso is parallel (it never has pardiso_exist_parallel)
      # TODO does sequential MKL also have a parallel Pardiso? do we need some check here?
 
-$as_echo "#define HAVE_PARDISO_PARALLEL 1" >>confdefs.h
+$as_echo "#define IPOPT_HAS_PARDISO_PARALLEL 1" >>confdefs.h
 
 
-$as_echo "#define HAVE_PARDISO_MKL 1" >>confdefs.h
+$as_echo "#define IPOPT_HAS_PARDISO_MKL 1" >>confdefs.h
 
 
 
@@ -24550,44 +24549,44 @@ $as_echo "$ac_success" >&6; }
 
   case "$wssmp_namemangling" in
    "lower case, no underscore, no extra underscore")
-      $as_echo "#define WSMP_FUNC(name,NAME) name" >>confdefs.h
+      $as_echo "#define IPOPT_WSMP_FUNC(name,NAME) name" >>confdefs.h
 
-      $as_echo "#define WSMP_FUNC_(name,NAME) name" >>confdefs.h
+      $as_echo "#define IPOPT_WSMP_FUNC_(name,NAME) name" >>confdefs.h
  ;;
    "lower case, no underscore, extra underscore")
-      $as_echo "#define WSMP_FUNC(name,NAME) name" >>confdefs.h
+      $as_echo "#define IPOPT_WSMP_FUNC(name,NAME) name" >>confdefs.h
 
-      $as_echo "#define WSMP_FUNC_(name,NAME) name ## _" >>confdefs.h
+      $as_echo "#define IPOPT_WSMP_FUNC_(name,NAME) name ## _" >>confdefs.h
  ;;
    "lower case, underscore, no extra underscore")
-      $as_echo "#define WSMP_FUNC(name,NAME) name ## _" >>confdefs.h
+      $as_echo "#define IPOPT_WSMP_FUNC(name,NAME) name ## _" >>confdefs.h
 
-      $as_echo "#define WSMP_FUNC_(name,NAME) name ## _" >>confdefs.h
+      $as_echo "#define IPOPT_WSMP_FUNC_(name,NAME) name ## _" >>confdefs.h
  ;;
    "lower case, underscore, extra underscore")
-      $as_echo "#define WSMP_FUNC(name,NAME) name ## _" >>confdefs.h
+      $as_echo "#define IPOPT_WSMP_FUNC(name,NAME) name ## _" >>confdefs.h
 
-      $as_echo "#define WSMP_FUNC_(name,NAME) name ## __" >>confdefs.h
+      $as_echo "#define IPOPT_WSMP_FUNC_(name,NAME) name ## __" >>confdefs.h
  ;;
    "upper case, no underscore, no extra underscore")
-      $as_echo "#define WSMP_FUNC(name,NAME) NAME" >>confdefs.h
+      $as_echo "#define IPOPT_WSMP_FUNC(name,NAME) NAME" >>confdefs.h
 
-      $as_echo "#define WSMP_FUNC_(name,NAME) NAME" >>confdefs.h
+      $as_echo "#define IPOPT_WSMP_FUNC_(name,NAME) NAME" >>confdefs.h
  ;;
    "upper case, no underscore, extra underscore")
-      $as_echo "#define WSMP_FUNC(name,NAME) NAME" >>confdefs.h
+      $as_echo "#define IPOPT_WSMP_FUNC(name,NAME) NAME" >>confdefs.h
 
-      $as_echo "#define WSMP_FUNC_(name,NAME) NAME ## _" >>confdefs.h
+      $as_echo "#define IPOPT_WSMP_FUNC_(name,NAME) NAME ## _" >>confdefs.h
  ;;
    "upper case, underscore, no extra underscore")
-      $as_echo "#define WSMP_FUNC(name,NAME) NAME ## _" >>confdefs.h
+      $as_echo "#define IPOPT_WSMP_FUNC(name,NAME) NAME ## _" >>confdefs.h
 
-      $as_echo "#define WSMP_FUNC_(name,NAME) NAME ## _" >>confdefs.h
+      $as_echo "#define IPOPT_WSMP_FUNC_(name,NAME) NAME ## _" >>confdefs.h
  ;;
    "upper case, underscore, extra underscore")
-      $as_echo "#define WSMP_FUNC(name,NAME) NAME ## _" >>confdefs.h
+      $as_echo "#define IPOPT_WSMP_FUNC(name,NAME) NAME ## _" >>confdefs.h
 
-      $as_echo "#define WSMP_FUNC_(name,NAME) NAME ## __" >>confdefs.h
+      $as_echo "#define IPOPT_WSMP_FUNC_(name,NAME) NAME ## __" >>confdefs.h
  ;;
    *)
       { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Unsupported or unknown name-mangling scheme: $wssmp_namemangling" >&5
@@ -24597,7 +24596,7 @@ $as_echo "$as_me: WARNING: Unsupported or unknown name-mangling scheme: $wssmp_n
 
      IPOPTLIB_LFLAGS="$wsmp_lflags $IPOPTLIB_LFLAGS"
 
-$as_echo "#define HAVE_WSMP 1" >>confdefs.h
+$as_echo "#define IPOPT_HAS_WSMP 1" >>confdefs.h
 
 
     else as_fn_error $? "Symbol wssmp not found with WSMP flags $wsmp_lflags." "$LINENO" 5
@@ -24832,7 +24831,7 @@ $as_echo "$as_me: WARNING: Cannot find C-function for checking Inf." >&2;}
   else
 
 cat >>confdefs.h <<_ACEOF
-#define COIN_C_FINITE $COIN_C_FINITE
+#define IPOPT_C_FINITE $COIN_C_FINITE
 _ACEOF
 
   fi
@@ -24846,7 +24845,7 @@ ac_fn_cxx_check_decl "$LINENO" "va_copy" "ac_cv_have_decl_va_copy" "#include <cs
 "
 if test "x$ac_cv_have_decl_va_copy" = xyes; then :
 
-$as_echo "#define HAVE_VA_COPY 1" >>confdefs.h
+$as_echo "#define IPOPT_HAS_VA_COPY 1" >>confdefs.h
 
 fi
 
@@ -24859,7 +24858,7 @@ ac_fn_cxx_check_decl "$LINENO" "drand48" "ac_cv_have_decl_drand48" "#include <cs
 "
 if test "x$ac_cv_have_decl_drand48" = xyes; then :
 
-$as_echo "#define HAVE_DRAND48 1" >>confdefs.h
+$as_echo "#define IPOPT_HAS_DRAND48 1" >>confdefs.h
 
 fi
 
@@ -24868,7 +24867,7 @@ ac_fn_cxx_check_decl "$LINENO" "rand" "ac_cv_have_decl_rand" "#include <cstdlib>
 "
 if test "x$ac_cv_have_decl_rand" = xyes; then :
 
-$as_echo "#define HAVE_RAND 1" >>confdefs.h
+$as_echo "#define IPOPT_HAS_RAND 1" >>confdefs.h
 
 fi
 
@@ -24888,7 +24887,7 @@ $as_echo_n "checking for std::srand... " >&6; }
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
-$as_echo "#define HAVE_STD__RAND 1" >>confdefs.h
+$as_echo "#define IPOPT_HAS_STD__RAND 1" >>confdefs.h
 
      { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
@@ -24957,17 +24956,17 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
-$as_echo "#define FORTRAN_INTEGER_TYPE int" >>confdefs.h
+$as_echo "#define IPOPT_FORTRAN_INTEGER_TYPE int" >>confdefs.h
 
 #  AC_CHECK_SIZEOF([long])
 #  AC_CHECK_SIZEOF([int])
 #  AC_CHECK_SIZEOF([double])
 #  AC_MSG_CHECKING([for C type corresponding to Fortran INTEGER])
 #  if test $ac_cv_sizeof_long = $ac_cv_sizeof_double; then
-#    AC_DEFINE([FORTRAN_INTEGER_TYPE],[int],[Define to the C type corresponding to Fortran INTEGER])
+#    AC_DEFINE([IPOPT_FORTRAN_INTEGER_TYPE],[int],[Define to the C type corresponding to Fortran INTEGER])
 #    AC_MSG_RESULT([int])
 #  else
-#    AC_DEFINE([FORTRAN_INTEGER_TYPE],[long])
+#    AC_DEFINE([IPOPT_FORTRAN_INTEGER_TYPE],[long])
 #    AC_MSG_RESULT([long])
 #  fi
   ac_ext=c
@@ -24979,7 +24978,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: We are cross compiling, assuming Fortran 'INTEGER' type corresponds to C 'int' type" >&5
 $as_echo "$as_me: WARNING: We are cross compiling, assuming Fortran 'INTEGER' type corresponds to C 'int' type" >&2;}
-  $as_echo "#define FORTRAN_INTEGER_TYPE int" >>confdefs.h
+  $as_echo "#define IPOPT_FORTRAN_INTEGER_TYPE int" >>confdefs.h
 
 fi
 
@@ -25103,7 +25102,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25106 "configure" */
+/* #line 25105 "configure" */
 public class Test {
 }
 EOF
@@ -25571,7 +25570,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25574 "configure" */
+/* #line 25573 "configure" */
 public class Test {
 }
 EOF
@@ -25605,7 +25604,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25608 "configure" */
+/* [#]line 25607 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
@@ -25791,7 +25790,7 @@ $as_echo "$use_linearsolverloader" >&6; }
 
 if test $use_linearsolverloader = yes; then
 
-$as_echo "#define HAVE_LINEARSOLVERLOADER 1" >>confdefs.h
+$as_echo "#define IPOPT_HAS_LINEARSOLVERLOADER 1" >>confdefs.h
 
   IPALLLIBS="../contrib/LinearSolverLoader/libLinearSolverLoader.la $IPALLLIBS"
 fi

@@ -3,34 +3,6 @@
 /* Define to 1 if the inexact linear solver option is included */
 #undef BUILD_INEXACT
 
-/* Define to be the name of C-function for Inf check */
-#undef COIN_C_FINITE
-
-/* Define to 1 if ASL is available. */
-#undef COIN_HAS_ASL
-
-/* Define to 1 if HSL is available. */
-#undef COIN_HAS_HSL
-
-/* Define to 1 if the LAPACK package is available */
-#undef COIN_HAS_LAPACK
-
-/* Define to 1 if Mumps is available. */
-#undef COIN_HAS_MUMPS
-
-/* Define to the debug sanity check level (0 is no test) */
-#undef COIN_IPOPT_CHECKLEVEL
-
-/* Define to the debug verbosity level (0 is no output) */
-#undef COIN_IPOPT_VERBOSITY
-
-/* Define to a macro mangling the given C identifier (in lower and upper
-   case). */
-#undef COIN_LAPACK_FUNC
-
-/* As COIN_LAPACK_FUNC, but for C identifiers containing underscores. */
-#undef COIN_LAPACK_FUNC_
-
 /* Define to 1 if your C++ compiler doesn't accept -c and -o together. */
 #undef CXX_NO_MINUS_C_MINUS_O
 
@@ -51,9 +23,6 @@
 /* Define if F77 and FC dummy `main' functions are identical. */
 #undef FC_DUMMY_MAIN_EQ_F77
 
-/* Define to the C type corresponding to Fortran INTEGER */
-#undef FORTRAN_INTEGER_TYPE
-
 /* Define to 1 if you have the <cfloat> header file. */
 #undef HAVE_CFLOAT
 
@@ -66,9 +35,6 @@
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 
-/* Define to 1 if function drand48 is available */
-#undef HAVE_DRAND48
-
 /* Define to 1 if you have the <float.h> header file. */
 #undef HAVE_FLOAT_H
 
@@ -77,10 +43,6 @@
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
-
-/* Define to 1 if the linear solver loader should be compiled to allow dynamic
-   loading of shared libraries with linear solvers */
-#undef HAVE_LINEARSOLVERLOADER
 
 /* Define to 1 if you have the <math.h> header file. */
 #undef HAVE_MATH_H
@@ -91,18 +53,6 @@
 /* Define to 1 if you have the `MPI_Initialized' function. */
 #undef HAVE_MPI_INITIALIZED
 
-/* Define to 1 if Pardiso is available */
-#undef HAVE_PARDISO
-
-/* Define to 1 if you are using Pardiso from MKL */
-#undef HAVE_PARDISO_MKL
-
-/* Define to 1 if you are using the parallel version of Pardiso */
-#undef HAVE_PARDISO_PARALLEL
-
-/* Define to 1 if function rand is available */
-#undef HAVE_RAND
-
 /* Define to 1 if you have the `snprintf' function. */
 #undef HAVE_SNPRINTF
 
@@ -111,9 +61,6 @@
 
 /* Define to 1 if you have the <stdlib.h> header file. */
 #undef HAVE_STDLIB_H
-
-/* Define to 1 if function std::rand is available */
-#undef HAVE_STD__RAND
 
 /* Define to 1 if you have the <strings.h> header file. */
 #undef HAVE_STRINGS_H
@@ -130,14 +77,8 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
-/* Define to 1 if va_copy is available */
-#undef HAVE_VA_COPY
-
 /* Define to 1 if you have the `vsnprintf' function. */
 #undef HAVE_VSNPRINTF
-
-/* Define to 1 if WSMP is available */
-#undef HAVE_WSMP
 
 /* Define to 1 if you have the `_snprintf' function. */
 #undef HAVE__SNPRINTF
@@ -148,18 +89,84 @@
 /* Library Visibility Attribute */
 #undef HSLLIB_EXPORT
 
-/* Define to a macro mangling the given C identifier (in lower and upper
-   case). */
-#undef HSL_FUNC
-
-/* As m4_toupper(HSL)_FUNC, but for C identifiers containing underscores. */
-#undef HSL_FUNC_
-
 /* Library Visibility Attribute */
 #undef IPOPTAMPLINTERFACELIB_EXPORT
 
 /* Library Visibility Attribute */
 #undef IPOPTLIB_EXPORT
+
+/* Define to the debug sanity check level (0 is no test) */
+#undef IPOPT_CHECKLEVEL
+
+/* Define to be the name of C-function for Inf check */
+#undef IPOPT_C_FINITE
+
+/* Define to the C type corresponding to Fortran INTEGER */
+#undef IPOPT_FORTRAN_INTEGER_TYPE
+
+/* Define to 1 if ASL is available. */
+#undef IPOPT_HAS_ASL
+
+/* Define to 1 if function drand48 is available */
+#undef IPOPT_HAS_DRAND48
+
+/* Define to 1 if HSL is available. */
+#undef IPOPT_HAS_HSL
+
+/* Define to 1 if the LAPACK package is available */
+#undef IPOPT_HAS_LAPACK
+
+/* Define to 1 if the linear solver loader should be compiled to allow dynamic
+   loading of shared libraries with linear solvers */
+#undef IPOPT_HAS_LINEARSOLVERLOADER
+
+/* Define to 1 if Mumps is available. */
+#undef IPOPT_HAS_MUMPS
+
+/* Define to 1 if Pardiso is available */
+#undef IPOPT_HAS_PARDISO
+
+/* Define to 1 if you are using Pardiso from MKL */
+#undef IPOPT_HAS_PARDISO_MKL
+
+/* Define to 1 if you are using the parallel version of Pardiso */
+#undef IPOPT_HAS_PARDISO_PARALLEL
+
+/* Define to 1 if function rand is available */
+#undef IPOPT_HAS_RAND
+
+/* Define to 1 if function std::rand is available */
+#undef IPOPT_HAS_STD__RAND
+
+/* Define to 1 if va_copy is available */
+#undef IPOPT_HAS_VA_COPY
+
+/* Define to 1 if WSMP is available */
+#undef IPOPT_HAS_WSMP
+
+/* Define to a macro mangling the given C identifier (in lower and upper
+   case). */
+#undef IPOPT_HSL_FUNC
+
+/* As IPOPT_HSL_FUNC, but for C identifiers containing underscores. */
+#undef IPOPT_HSL_FUNC_
+
+/* Define to a macro mangling the given C identifier (in lower and upper
+   case). */
+#undef IPOPT_LAPACK_FUNC
+
+/* As IPOPT_LAPACK_FUNC, but for C identifiers containing underscores. */
+#undef IPOPT_LAPACK_FUNC_
+
+/* Define to a macro mangling the given C identifier (in lower and upper
+   case). */
+#undef IPOPT_PARDISO_FUNC
+
+/* As IPOPT_PARDISO_FUNC, but for C identifiers containing underscores. */
+#undef IPOPT_PARDISO_FUNC_
+
+/* Define to the debug verbosity level (0 is no output) */
+#undef IPOPT_VERBOSITY
 
 /* Version number of project */
 #undef IPOPT_VERSION
@@ -172,6 +179,13 @@
 
 /* Release version number of project. */
 #undef IPOPT_VERSION_RELEASE
+
+/* Define to a macro mangling the given C identifier (in lower and upper
+   case). */
+#undef IPOPT_WSMP_FUNC
+
+/* As IPOPT_WSMP_FUNC, but for C identifiers containing underscores. */
+#undef IPOPT_WSMP_FUNC_
 
 /* Define to the sub-directory where libtool stores uninstalled libraries. */
 #undef LT_OBJDIR
@@ -194,13 +208,6 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
-/* Define to a macro mangling the given C identifier (in lower and upper
-   case). */
-#undef PARDISO_FUNC
-
-/* As PARDISO_FUNC, but for C identifiers containing underscores. */
-#undef PARDISO_FUNC_
-
 /* Library Visibility Attribute */
 #undef SIPOPTAMPLINTERFACELIB_EXPORT
 
@@ -209,10 +216,3 @@
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
-
-/* Define to a macro mangling the given C identifier (in lower and upper
-   case). */
-#undef WSMP_FUNC
-
-/* As WSMP_FUNC, but for C identifiers containing underscores. */
-#undef WSMP_FUNC_
