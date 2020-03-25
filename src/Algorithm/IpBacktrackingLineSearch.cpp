@@ -723,7 +723,7 @@ bool BacktrackingLineSearch::DoBacktrackingLineSearch(
 
    if( !accept )
    {
-      // Loop over decreaseing step sizes until acceptable point is
+      // Loop over decreasing step sizes until acceptable point is
       // found or until step size becomes too small
 
       while( alpha_primal > alpha_min || n_steps == 0 )
