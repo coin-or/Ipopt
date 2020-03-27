@@ -3,7 +3,7 @@ It was developed assuming a standard installation of Ubuntu 18.04 LTS.
 To begin, first, compile the [LANL ANSI version of SPRAL](https://github.com/lanl-ansi/spral) using the [compilation suggestions described therein](https://github.com/lanl-ansi/spral/blob/master/COMPILE.md).
 
 ## Cloning the Repository
-First, create a directory where Ipopt will be compiled, e.g.,
+First, create a directory where Ipopt will be compiled from source (not via `coinbrew`), e.g.,
 ```bash
 mkdir -p ${HOME}/Software
 ```
