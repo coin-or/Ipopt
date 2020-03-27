@@ -370,6 +370,13 @@ The above assume a SPRAL compilation using OpenBLAS libraries. For best
 performance, use SPRAL together with linear algebra routines from the Intel MKL
 (see \ref EXTERNALCODE_LINALG).
 
+Finally, ensure the following environment variables are employed when using SPRAL
+\verbatim
+export OMP_CANCELLATION=TRUE
+export OMP_NESTED=TRUE
+export OMP_PROC_BIND=TRUE
+\endverbatim
+
 \subsection DOWNLOAD_WSMP WSMP (Watson Sparse Matrix Package)
 
 If you would like to compile \Ipopt with WSMP, you need to obtain the
