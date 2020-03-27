@@ -27,7 +27,8 @@ export AUTOTOOLS_DIR="${HOME}/local2"
 To compile Ipopt with SPRAL (CPU support only), specify `${SPRALDIR}` as the directory containing `lib/libspral.a`, then execute
 ```bash
 cd ${HOME}/Software/Ipopt
-mkdir build && cd build
+mkdir build
+cd build
 ../configure --prefix=${PWD} --with-spral="-L${SPRALDIR}/lib -L${METISDIR}/lib \
     -lspral -lgfortran -lhwloc -lm -lcoinmetis -lopenblas -lstdc++ -fopenmp" \
     --with-lapack-lflags="-llapack -lopenblas"
@@ -38,7 +39,8 @@ make && make install
 To compile with GPU support, execute
 ```bash
 cd ${HOME}/Software/Ipopt
-mkdir build && cd build
+mkdir build
+cd build
 ../configure --prefix=${PWD} --with-spral="-L${SPRALDIR}/lib -L${METISDIR}/lib \
     -lspral -lgfortran -lhwloc -lm -lcoinmetis -lopenblas -lstdc++ -fopenmp \
     -lcudadevrt -lcudart -lcuda -lcublas" --with-lapack-lflags="-llapack -lopenblas"
