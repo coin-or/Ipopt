@@ -1,9 +1,22 @@
 This is a guide detailing the compilation of Ipopt with SPRAL as a linear solver.
 It was developed assuming a standard installation of Ubuntu 18.04 LTS.
 To begin, first, compile the [LANL ANSI version of SPRAL](https://github.com/lanl-ansi/spral) using the [compilation suggestions described therein](https://github.com/lanl-ansi/spral/blob/master/COMPILE.md).
+
+## Cloning the Repository
+First, create a directory where Ipopt will be compiled, e.g.,
+```bash
+mkdir -p ${HOME}/Software
+```
+The remainder of this guide assumes such a directory has been created.
+Then, clone the Ipopt repository via
+```bash
+cd ${HOME}/Software
+git clone https://github.com/lanl-ansi/Ipopt.git
+```
 To rebuild configuration files for Ipopt, if needed (e.g., during development), execute
 ```bash
-git clone git@github.com:coin-or-tools/BuildTools.git
+cd ${HOME}/Software/Ipopt
+git clone https://github.com/coin-or-tools/BuildTools.git
 export AUTOTOOLS_DIR="${HOME}/local2"
 ./BuildTools/install_autotools.sh
 ./BuildTools/run_autotools
@@ -13,6 +26,7 @@ export AUTOTOOLS_DIR="${HOME}/local2"
 ### Multicore CPUs Only
 To compile Ipopt with SPRAL (CPU support only), specify `${SPRALDIR}` as the directory containing `lib/libspral.a`, then execute
 ```bash
+cd ${HOME}/Software/Ipopt
 mkdir build && cd build
 ../configure --prefix=${PWD} --with-spral="-L${SPRALDIR}/lib -L${METISDIR}/lib \
     -lspral -lgfortran -lhwloc -lm -lcoinmetis -lopenblas -lstdc++ -fopenmp" \
@@ -23,6 +37,7 @@ make && make install
 ### Multicore CPUs and NVIDIA GPUs
 To compile with GPU support, execute
 ```bash
+cd ${HOME}/Software/Ipopt
 mkdir build && cd build
 ../configure --prefix=${PWD} --with-spral="-L${SPRALDIR}/lib -L${METISDIR}/lib \
     -lspral -lgfortran -lhwloc -lm -lcoinmetis -lopenblas -lstdc++ -fopenmp \
@@ -42,6 +57,7 @@ export OMP_PROC_BIND=TRUE
 Within the `build` directory created above, the `examples/ScalableProblems` directory contains a set of scalable test problems.
 After compilation of Ipopt, these examples can be compiled via
 ```bash
+cd ${HOME}/Software/Ipopt/build
 cd examples/ScalableProblems && make
 ```
 As an example, if Ipopt was compiled with SPRAL support, try creating a file named `ipopt.opt` in this directory with the contents
