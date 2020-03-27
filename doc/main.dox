@@ -141,7 +141,7 @@ required:
         or Intel MKL. Note that current versions from Pardiso Project typically
         offer much better performance than the one from Intel MKL.
 
-    -   [SPRAL](https://github.com/ralna/spral) (Sparse Parallel Robust Algorithms Library)
+    -   [SPRAL](https://github.com/lanl-ansi/spral) (Sparse Parallel Robust Algorithms Library)
 
     -   [WSMP](http://researcher.ibm.com/view_project.php?id=1426) (Watson Sparse Matrix Package)
 

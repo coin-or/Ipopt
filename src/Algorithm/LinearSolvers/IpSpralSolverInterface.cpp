@@ -49,7 +49,7 @@ void SpralSolverInterface::RegisterOptions(
       "How many times faster a GPU is than CPU at factoring a subtree.");
 
    roptions->AddStringOption2(
-      "spral_ignore_numa", "NUMA Region Setting.",
+      "spral_ignore_numa", "Non-uniform memory access (NUMA) region setting.",
       "yes", "no", "Do not treat CPUs and GPUs as belonging to a single NUMA region.",
       "yes", "Treat CPUs and GPUs as belonging to a single NUMA region.", "");
 
@@ -147,10 +147,10 @@ void SpralSolverInterface::RegisterOptions(
       "at_start_reuse", "Scaling is used on the first iteration, then reused thereafter.",
       "on_demand", "Scaling is used when iterative refinement has failed.",
       "on_demand_reuse", "As on_demand, but scaling from previous iteration is reused.",
-      "high_delay", "Scaling is used after more than 0.05*n delays are present",
+      "high_delay", "Scaling is used after more than 0.05*n delays are present.",
       "high_delay_reuse", "Scaling is used only when previous iteration created "
       "more that 0.05*n additional delays; otherwise, reuse scaling from the previous iteration.",
-      "od_hd", "Combination of on_demand and high_delay",
+      "od_hd", "Combination of on_demand and high_delay.",
       "od_hd_reuse", "Combination of on_demand_reuse and high_delay_reuse",
       "If spral_scaling = dynamic, spral_scaling_1 is enabled according to this "
       "condition. If spral_switch_2 occurs this option is henceforth ignored.");
@@ -173,7 +173,7 @@ void SpralSolverInterface::RegisterOptions(
 
    roptions->AddStringOption9(
       "spral_switch_3",
-      "First switch, determining when spral_scaling_3 is enabled.", "never",
+      "Third switch, determining when spral_scaling_3 is enabled.", "never",
       "never", "Scaling is never enabled.",
       "at_start", "Scaling is used from the very start.",
       "at_start_reuse", "Scaling is used on the first iteration, then reused thereafter.",

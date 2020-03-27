@@ -344,6 +344,19 @@ that is included in Intel MKL, it is sufficient to ensure
 that MKL is used for the linear algebra routines (Blas/Lapack),
 see \ref EXTERNALCODE_LINALG.
 
+\subsection DOWNLOAD_SPRAL SPRAL (Sparse Parallel Robust Algorithms Library)
+
+To compile \Ipopt with the linear solver SPRAL, you need to specify the link
+flags for the library with the `--with-pardiso` flag, including required
+additional libraries (except for Lapack) and flags.  For example, if you want
+to compile \Ipopt with the parallel version of SPRAL (located in `$HOME/lib`)
+on a GNU/Linux system, you should add the flag
+\verbatim
+--with-spral="-L${HOME}/Software/spral/build -fopenmp -lgfortran"
+\endverbatim
+For best performance, use SPRAL together with linear algebra routines from
+Intel MKL (see \ref EXTERNALCODE_LINALG).
+
 \subsection DOWNLOAD_WSMP WSMP (Watson Sparse Matrix Package)
 
 If you would like to compile \Ipopt with WSMP, you need to obtain the
