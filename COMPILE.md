@@ -13,6 +13,8 @@ Then, clone the Ipopt repository via
 cd ${HOME}/Software
 git clone https://github.com/lanl-ansi/Ipopt.git
 ```
+
+## Rebuilding Configuration Files (optional)
 To rebuild configuration files for Ipopt, if needed (e.g., during development), execute
 ```bash
 cd ${HOME}/Software/Ipopt
@@ -21,6 +23,7 @@ export AUTOTOOLS_DIR="${HOME}/local2"
 ./BuildTools/install_autotools.sh
 ./BuildTools/run_autotools
 ```
+If you are not modifying the directory or source structure of Ipopt, this step is not required.
 
 ## Compilation with SPRAL
 ### Multicore CPUs Only
