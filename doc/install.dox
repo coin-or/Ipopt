@@ -244,7 +244,7 @@ To compile the HSL code via the COIN-OR Tools project
 
 Now unpack the HSL sources archive, move and rename the resulting directory
 so that it becomes `ThirdParty-HSL/coinhsl`.
-Then configure, build, and install the HSL sources:
+Then, in `ThirdParty-HSL`, configure, build, and install the HSL sources:
 
     ./configure
     make
