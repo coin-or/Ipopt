@@ -457,7 +457,7 @@ ApplicationReturnStatus IpoptApplication::Initialize(
             //options_to_print.push_back("pardiso_out_of_core_power");
 #endif
 
-#ifdef HAVE_WSMP
+#ifdef IPOPT_HAS_WSMP
 
             options_to_print.push_back("#WSMP Linear Solver");
             options_to_print.push_back("wsmp_num_threads");
@@ -497,7 +497,7 @@ ApplicationReturnStatus IpoptApplication::Initialize(
             categories.push_back("MA27 Linear Solver");
             categories.push_back("MA57 Linear Solver");
             categories.push_back("Pardiso Linear Solver");
-#ifdef HAVE_WSMP
+#ifdef IPOPT_HAS_WSMP
 
             categories.push_back("WSMP Linear Solver");
 #endif

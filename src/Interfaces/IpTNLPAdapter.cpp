@@ -25,7 +25,7 @@
 #ifdef IPOPT_HAS_MUMPS
 # include "IpMumpsSolverInterface.hpp"
 #endif
-#ifdef HAVE_WSMP
+#ifdef IPOPT_HAS_WSMP
 # include "IpWsmpSolverInterface.hpp"
 #endif
 
@@ -261,7 +261,7 @@ bool TNLPAdapter::ProcessOptions(
       }
       else if( dependency_detector == "wsmp" )
       {
-#ifdef HAVE_WSMP
+#ifdef IPOPT_HAS_WSMP
          SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
          SolverInterface = new WsmpSolverInterface();
          SmartPtr<TSymLinearSolver> ScaledSolver =

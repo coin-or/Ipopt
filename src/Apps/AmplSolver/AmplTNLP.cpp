@@ -1519,7 +1519,7 @@ AmplTNLP::get_options(
    //                                 AmplOptionsList::Integer_Option,
    //                                 "Enables out-of-core version of linear solver Pardiso");
 
-#ifdef HAVE_WSMP
+#ifdef IPOPT_HAS_WSMP
 
    ampl_options_list->AddAmplOption("wsmp_num_threads",
                                     "wsmp_num_threads",

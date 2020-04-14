@@ -47,7 +47,7 @@
 # include "CoinHslConfig.h"
 #endif
 
-#ifdef HAVE_WSMP
+#ifdef IPOPT_HAS_WSMP
 # include "IpWsmpSolverInterface.hpp"
 #endif
 #ifdef IPOPT_HAS_MUMPS
@@ -206,7 +206,7 @@ SmartPtr<IpoptAlgorithm> InexactAlgorithmBuilder::BuildBasicAlgorithm(
    }
    else if( linear_solver == "wsmp" )
    {
-#ifdef HAVE_WSMP
+#ifdef IPOPT_HAS_WSMP
       SolverInterface = new WsmpSolverInterface();
 #else
 

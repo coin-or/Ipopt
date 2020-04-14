@@ -62,7 +62,7 @@
 #include "IpPardisoSolverInterface.hpp"
 #include "IpSlackBasedTSymScalingMethod.hpp"
 
-#ifdef HAVE_WSMP
+#ifdef IPOPT_HAS_WSMP
 # include "IpWsmpSolverInterface.hpp"
 # include "IpIterativeWsmpSolverInterface.hpp"
 #endif
@@ -110,7 +110,7 @@ void AlgorithmBuilder::RegisterOptions(
 #    ifdef IPOPT_HAS_PARDISO
       "pardiso",
 #    else
-#     ifdef HAVE_WSMP
+#     ifdef IPOPT_HAS_WSMP
       "wsmp",
 #     else
 #      ifdef IPOPT_HAS_MUMPS
@@ -410,7 +410,7 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    }
    else if( linear_solver == "wsmp" )
    {
-#ifdef HAVE_WSMP
+#ifdef IPOPT_HAS_WSMP
       bool wsmp_iterative;
       options.GetBoolValue("wsmp_iterative", wsmp_iterative, prefix);
       if (wsmp_iterative)

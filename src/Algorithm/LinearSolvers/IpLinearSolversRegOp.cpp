@@ -22,7 +22,7 @@
 #ifdef IPOPT_HAS_MUMPS
 # include "IpMumpsSolverInterface.hpp"
 #endif
-#ifdef HAVE_WSMP
+#ifdef IPOPT_HAS_WSMP
 # include "IpWsmpSolverInterface.hpp"
 # include "IpIterativeWsmpSolverInterface.hpp"
 #endif
@@ -67,7 +67,7 @@ void RegisterOptions_LinearSolvers(
    PardisoSolverInterface::RegisterOptions(roptions);
 #endif
 
-#ifdef HAVE_WSMP
+#ifdef IPOPT_HAS_WSMP
    roptions->SetRegisteringCategory("WSMP Linear Solver");
    WsmpSolverInterface::RegisterOptions(roptions);
    IterativeWsmpSolverInterface::RegisterOptions(roptions);
