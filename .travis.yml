@@ -8,6 +8,7 @@ matrix:
           packages:
             - gfortran
             - liblapack-dev
+            - libmetis-dev
       env: ENABLEDEBUG=true
     - os: linux
       dist: bionic
@@ -16,6 +17,7 @@ matrix:
           packages:
             - gfortran
             - liblapack-dev
+            - libmetis-dev
       env: VISHIDDEN=true
     - os: osx
       osx_image: xcode11.3
@@ -43,7 +45,6 @@ before_script:
 script:
   - git clone --depth 1 https://github.com/coin-or-tools/ThirdParty-ASL
   - pushd ThirdParty-ASL && ./get.ASL && ./configure --prefix=$HOME/install && make && make install && popd
-  - if $NOF77 ; then echo "Skipping Metis build." ; else git clone --depth 1 https://github.com/coin-or-tools/ThirdParty-Metis ; pushd ThirdParty-Metis && ./get.Metis && ./configure --prefix=$HOME/install && make && make install && popd ; fi
   - if $NOF77 ; then echo "Skipping Mumps build." ; else git clone --depth 1 https://github.com/coin-or-tools/ThirdParty-Mumps ; pushd ThirdParty-Mumps && ./get.Mumps && ./configure --prefix=$HOME/install && make && make install && popd ; fi
   - mkdir build
   - pushd build
