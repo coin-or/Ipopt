@@ -9,7 +9,7 @@ commit history.
           IPOPT_VERBOSITY, and IPOPT_FORTRAN_INTEGER_TYPE, respectively.
           They are still available under their previous name, but these
           will be removed in Ipopt 3.14.
-        - Changed dependencies as used by coinbrew to use master version
+        - Changed dependencies as used by coinbrew to use new versions
           of ThirdParty/HSL and ThirdParty/MUMPS and dropped ThirdParty/Metis.
           The new versions of the HSL and MUMPS build scripts now look
           for a Metis library in the system and should work with both
