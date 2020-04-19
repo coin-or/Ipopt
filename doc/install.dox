@@ -74,6 +74,12 @@ In the past, we have been able to compile \Ipopt using default Xcode
 versions of gcc and g++ and a newer version of gfortran from this link,
 but consistent version numbers may be an issue in future cases.
 
+If you intend to use \ref DOWNLOAD_MUMPS "MUMPS" or one of the DOWNLOAD_HSL "HSL linear solvers",
+then they may profit from an installation of METIS.
+This can be accomplished via
+
+    brew install metis
+
 \subsection SYSTEMPACKAGES_MSYS Windows with MSYS2/MinGW
 
 For Windows, one can compile \Ipopt under MSYS2/MinGW, which is a

@@ -40,7 +40,7 @@ before_script:
   - export VISHIDDEN=${VISHIDDEN:-false}
   - export NOF77=${NOF77:-false}
   - export ENABLEDEBUG=${ENABLEDEBUG:-false}
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && ! $NOF77; then brew update; brew install bash gcc; export CC=gcc-9 ; export CXX=g++-9 ; $CC --version; $CXX --version; gfortran --version; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && ! $NOF77; then brew update; brew install bash gcc metis; export CC=gcc-9 ; export CXX=g++-9 ; $CC --version; $CXX --version; gfortran --version; fi
 
 script:
   - git clone --depth 1 https://github.com/coin-or-tools/ThirdParty-ASL
