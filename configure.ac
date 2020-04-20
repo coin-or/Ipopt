@@ -98,6 +98,9 @@ have_ma28=no
 if test "$coin_has_hsl" = yes ; then
   AC_COIN_FINALIZE_FLAGS([HSLLib])
   AC_COIN_NAMEMANGLING([HSL],[ma27ad],[$HSLLIB_LFLAGS])
+  if test "$ac_cv_hsl_namemangling" = "unknown" ; then
+    AC_MSG_ERROR([Provided package HSL is not working.])
+  fi
 
   # extra check for MA28, since that decides whether we have to build IpMa28Partition.F
   if test -n "$F77" ; then

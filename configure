@@ -23990,6 +23990,9 @@ $as_echo "$as_me: WARNING: Unsupported or unknown name-mangling scheme: $ac_cv_h
 
   # AC_MSG_NOTICE([Done COIN_NAMEMANGLING])
 
+  if test "$ac_cv_hsl_namemangling" = "unknown" ; then
+    as_fn_error $? "Provided package HSL is not working." "$LINENO" 5
+  fi
 
   # extra check for MA28, since that decides whether we have to build IpMa28Partition.F
   if test -n "$F77" ; then
@@ -25102,7 +25105,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25105 "configure" */
+/* #line 25108 "configure" */
 public class Test {
 }
 EOF
@@ -25570,7 +25573,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25573 "configure" */
+/* #line 25576 "configure" */
 public class Test {
 }
 EOF
@@ -25604,7 +25607,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25607 "configure" */
+/* [#]line 25610 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
