@@ -709,6 +709,8 @@ coin_have_latex
 coin_have_doxygen
 CXXLIBS
 RPATH_FLAGS
+COIN_STATIC_BUILD_FALSE
+COIN_STATIC_BUILD_TRUE
 LT_LDFLAGS
 CXXCPP
 CPP
@@ -3659,9 +3661,7 @@ rmdir .tst 2>/dev/null
 # Enforce the required autoconf version
 
 
-
 # Set the project's version numbers
-
 
   # break up package version number in major.minor.release
   # AC_PACKAGE_VERSION is defined by AC_INIT
@@ -3695,7 +3695,6 @@ _ACEOF
 
 
 # A useful makefile conditional that is always false
-
    if false; then
   ALWAYS_FALSE_TRUE=
   ALWAYS_FALSE_FALSE='#'
@@ -3709,14 +3708,11 @@ fi
 # AC_CANONICAL_BUILD.
 
 
-
 # Get the build and host types
 
 
 
-
 # libtool has some magic for host_os and build_os being mingw, but doesn't know about msys
-
   if test $host_os = msys ; then
     host_os=mingw
     host=`echo $host | sed -e 's/msys/mingw/'`
@@ -3730,7 +3726,6 @@ fi
 # Make silent build rules the default (https://www.gnu.org/software/automake/
 # manual/html_node/Automake-Silent-Rules.html). Run before AM_INIT_AUTOMAKE,
 # which will AC_REQUIRE it anyway.
-
   # Check whether --enable-silent-rules was given.
 if test "${enable_silent_rules+set}" = set; then :
   enableval=$enable_silent_rules;
@@ -3778,7 +3773,6 @@ AM_BACKSLASH='\'
 # - disable dist target
 # - place objects from sources in subdirs into corresponding subdirs
 # - enable all automake warnings
-
   if test "`cd $srcdir && pwd`" != "`pwd`"; then
   # Use -I$(srcdir) only when $(srcdir) != ., so that make's output
   # is not polluted with repeated "-I."
@@ -3887,7 +3881,6 @@ fi
 
 
 # Disable automatic rebuild of configure/Makefile. Use run_autotools.
-
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable maintainer-specific portions of Makefiles" >&5
 $as_echo_n "checking whether to enable maintainer-specific portions of Makefiles... " >&6; }
@@ -21378,6 +21371,16 @@ $as_echo "$as_me: libtool version info: -version-number 3:13:2" >&6;}
   # for Windows DLLs, it is mandatory to add this
   LT_LDFLAGS="$LT_LDFLAGS -no-undefined"
 
+  # add automake conditional on whether we build shared or static, useful for .pc files
+   if test "$enable_shared" = no; then
+  COIN_STATIC_BUILD_TRUE=
+  COIN_STATIC_BUILD_FALSE='#'
+else
+  COIN_STATIC_BUILD_TRUE='#'
+  COIN_STATIC_BUILD_FALSE=
+fi
+
+
 
 # set RPATH_FLAGS to the compiler link flags required to hardcode location
 # of the shared objects (expanded_libdir is set somewhere in configure before)
@@ -22211,10 +22214,14 @@ $as_echo "$as_me: lapack_pcfiles is \"$lapack_pcfiles\"" >&6;}
 $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
 #ifdef __cplusplus
-             extern "C"
-             #endif
-             void $ac_name();
+extern "C"
+#endif
+char $ac_name ();
 #ifdef F77_DUMMY_MAIN
 
 #  ifdef __cplusplus
@@ -22226,7 +22233,7 @@ $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
 int
 main ()
 {
-$ac_name()
+return $ac_name ();
   ;
   return 0;
 }
@@ -22290,10 +22297,14 @@ $as_echo "$ac_success" >&6; }
 $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
 #ifdef __cplusplus
-             extern "C"
-             #endif
-             void $ac_name();
+extern "C"
+#endif
+char $ac_name ();
 #ifdef F77_DUMMY_MAIN
 
 #  ifdef __cplusplus
@@ -22305,7 +22316,7 @@ $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
 int
 main ()
 {
-$ac_name()
+return $ac_name ();
   ;
   return 0;
 }
@@ -22367,10 +22378,14 @@ $as_echo "$ac_success" >&6; }
 $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
 #ifdef __cplusplus
-             extern "C"
-             #endif
-             void $ac_name();
+extern "C"
+#endif
+char $ac_name ();
 #ifdef F77_DUMMY_MAIN
 
 #  ifdef __cplusplus
@@ -22382,7 +22397,7 @@ $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
 int
 main ()
 {
-$ac_name()
+return $ac_name ();
   ;
   return 0;
 }
@@ -22451,10 +22466,14 @@ $as_echo "$ac_success" >&6; }
 $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
 #ifdef __cplusplus
-             extern "C"
-             #endif
-             void $ac_name();
+extern "C"
+#endif
+char $ac_name ();
 #ifdef F77_DUMMY_MAIN
 
 #  ifdef __cplusplus
@@ -22466,7 +22485,7 @@ $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
 int
 main ()
 {
-$ac_name()
+return $ac_name ();
   ;
   return 0;
 }
@@ -22548,10 +22567,14 @@ $as_echo "$ac_success" >&6; }
 $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
 #ifdef __cplusplus
-             extern "C"
-             #endif
-             void $ac_name();
+extern "C"
+#endif
+char $ac_name ();
 #ifdef F77_DUMMY_MAIN
 
 #  ifdef __cplusplus
@@ -22563,7 +22586,7 @@ $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
 int
 main ()
 {
-$ac_name()
+return $ac_name ();
   ;
   return 0;
 }
@@ -22624,10 +22647,14 @@ $as_echo "$ac_success" >&6; }
 $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
 #ifdef __cplusplus
-             extern "C"
-             #endif
-             void $ac_name();
+extern "C"
+#endif
+char $ac_name ();
 #ifdef F77_DUMMY_MAIN
 
 #  ifdef __cplusplus
@@ -22639,7 +22666,7 @@ $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
 int
 main ()
 {
-$ac_name()
+return $ac_name ();
   ;
   return 0;
 }
@@ -22699,10 +22726,14 @@ $as_echo "$ac_success" >&6; }
 $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
 #ifdef __cplusplus
-             extern "C"
-             #endif
-             void $ac_name();
+extern "C"
+#endif
+char $ac_name ();
 #ifdef F77_DUMMY_MAIN
 
 #  ifdef __cplusplus
@@ -22714,7 +22745,7 @@ $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
 int
 main ()
 {
-$ac_name()
+return $ac_name ();
   ;
   return 0;
 }
@@ -22796,10 +22827,14 @@ $as_echo "yes" >&6; }
 $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
 #ifdef __cplusplus
-             extern "C"
-             #endif
-             void $ac_name();
+extern "C"
+#endif
+char $ac_name ();
 #ifdef F77_DUMMY_MAIN
 
 #  ifdef __cplusplus
@@ -22811,7 +22846,7 @@ $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
 int
 main ()
 {
-$ac_name()
+return $ac_name ();
   ;
   return 0;
 }
@@ -22887,10 +22922,14 @@ $as_echo "no" >&6; }
 $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
 #ifdef __cplusplus
-             extern "C"
-             #endif
-             void $ac_name();
+extern "C"
+#endif
+char $ac_name ();
 #ifdef F77_DUMMY_MAIN
 
 #  ifdef __cplusplus
@@ -22902,7 +22941,7 @@ $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
 int
 main ()
 {
-$ac_name()
+return $ac_name ();
   ;
   return 0;
 }
@@ -23851,8 +23890,7 @@ _ACEOF
       # add -DXYZ_BUILD to XYZ_CFLAGS
       HSLLIB_CFLAGS="${HSLLIB_CFLAGS} -DHSLLIB_BUILD"
 
-# Define BUILDTOOLS_DEBUG to enable debugging output
-
+      # Define BUILDTOOLS_DEBUG to enable debugging output
       if test "$BUILDTOOLS_DEBUG" = 1 ; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: HSLLIB_LFLAGS_NOPC: \"${HSLLIB_LFLAGS_NOPC}\"" >&5
 $as_echo "$as_me: HSLLIB_LFLAGS_NOPC: \"${HSLLIB_LFLAGS_NOPC}\"" >&6;}
@@ -23873,7 +23911,13 @@ $as_echo_n "checking HSL name mangling scheme... " >&6; }
 if ${ac_cv_hsl_namemangling+:} false; then :
   $as_echo_n "(cached) " >&6
 else
-  ac_save_LIBS=$LIBS
+  ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+     ac_save_LIBS=$LIBS
      LIBS="$HSLLIB_LFLAGS"
      for ac_case in "lower case" "upper case" ; do
        for ac_trail in "underscore" "no underscore" ; do
@@ -23894,10 +23938,14 @@ else
            # AC_MSG_CHECKING([ma27ad -> $ac_name])
            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
 #ifdef __cplusplus
-                  extern "C"
-                 #endif
-                 void $ac_name();
+extern "C"
+#endif
+char $ac_name ();
 #ifdef F77_DUMMY_MAIN
 
 #  ifdef __cplusplus
@@ -23909,7 +23957,7 @@ else
 int
 main ()
 {
-$ac_name()
+return $ac_name ();
   ;
   return 0;
 }
@@ -23932,6 +23980,12 @@ rm -f core conftest.err conftest.$ac_objext \
        ac_cv_hsl_namemangling=unknown
      fi
      LIBS=$ac_save_LIBS
+     ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_hsl_namemangling" >&5
 $as_echo "$ac_cv_hsl_namemangling" >&6; }
@@ -24025,10 +24079,14 @@ $as_echo "$as_me: WARNING: Unsupported or unknown name-mangling scheme: $ac_cv_h
 $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
 #ifdef __cplusplus
-             extern "C"
-             #endif
-             void $ac_name();
+extern "C"
+#endif
+char $ac_name ();
 #ifdef F77_DUMMY_MAIN
 
 #  ifdef __cplusplus
@@ -24040,7 +24098,7 @@ $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
 int
 main ()
 {
-$ac_name()
+return $ac_name ();
   ;
   return 0;
 }
@@ -24136,10 +24194,14 @@ if test "$have_pardiso_project" = yes ; then
 $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
 #ifdef __cplusplus
-             extern "C"
-             #endif
-             void $ac_name();
+extern "C"
+#endif
+char $ac_name ();
 #ifdef F77_DUMMY_MAIN
 
 #  ifdef __cplusplus
@@ -24151,7 +24213,7 @@ $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
 int
 main ()
 {
-$ac_name()
+return $ac_name ();
   ;
   return 0;
 }
@@ -24267,10 +24329,14 @@ $as_echo "#define IPOPT_HAS_PARDISO 1" >>confdefs.h
 $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
 #ifdef __cplusplus
-             extern "C"
-             #endif
-             void $ac_name();
+extern "C"
+#endif
+char $ac_name ();
 #ifdef F77_DUMMY_MAIN
 
 #  ifdef __cplusplus
@@ -24282,7 +24348,7 @@ $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
 int
 main ()
 {
-$ac_name()
+return $ac_name ();
   ;
   return 0;
 }
@@ -24349,10 +24415,14 @@ else
 $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
 #ifdef __cplusplus
-             extern "C"
-             #endif
-             void $ac_name();
+extern "C"
+#endif
+char $ac_name ();
 #ifdef F77_DUMMY_MAIN
 
 #  ifdef __cplusplus
@@ -24364,7 +24434,7 @@ $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
 int
 main ()
 {
-$ac_name()
+return $ac_name ();
   ;
   return 0;
 }
@@ -24508,10 +24578,14 @@ if test "$have_wsmp" = "yes"; then
 $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
 #ifdef __cplusplus
-             extern "C"
-             #endif
-             void $ac_name();
+extern "C"
+#endif
+char $ac_name ();
 #ifdef F77_DUMMY_MAIN
 
 #  ifdef __cplusplus
@@ -24523,7 +24597,7 @@ $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
 int
 main ()
 {
-$ac_name()
+return $ac_name ();
   ;
   return 0;
 }
@@ -25105,7 +25179,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25108 "configure" */
+/* #line 25182 "configure" */
 public class Test {
 }
 EOF
@@ -25573,7 +25647,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25576 "configure" */
+/* #line 25650 "configure" */
 public class Test {
 }
 EOF
@@ -25607,7 +25681,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25610 "configure" */
+/* [#]line 25684 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
@@ -26280,8 +26354,7 @@ _ACEOF
       # add -DXYZ_BUILD to XYZ_CFLAGS
       IPOPTLIB_CFLAGS="${IPOPTLIB_CFLAGS} -DIPOPTLIB_BUILD"
 
-# Define BUILDTOOLS_DEBUG to enable debugging output
-
+      # Define BUILDTOOLS_DEBUG to enable debugging output
       if test "$BUILDTOOLS_DEBUG" = 1 ; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: IPOPTLIB_LFLAGS_NOPC: \"${IPOPTLIB_LFLAGS_NOPC}\"" >&5
 $as_echo "$as_me: IPOPTLIB_LFLAGS_NOPC: \"${IPOPTLIB_LFLAGS_NOPC}\"" >&6;}
@@ -26330,8 +26403,7 @@ _ACEOF
       # add -DXYZ_BUILD to XYZ_CFLAGS
       IPOPTAMPLINTERFACELIB_CFLAGS="${IPOPTAMPLINTERFACELIB_CFLAGS} -DIPOPTAMPLINTERFACELIB_BUILD"
 
-# Define BUILDTOOLS_DEBUG to enable debugging output
-
+      # Define BUILDTOOLS_DEBUG to enable debugging output
       if test "$BUILDTOOLS_DEBUG" = 1 ; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: IPOPTAMPLINTERFACELIB_LFLAGS_NOPC: \"${IPOPTAMPLINTERFACELIB_LFLAGS_NOPC}\"" >&5
 $as_echo "$as_me: IPOPTAMPLINTERFACELIB_LFLAGS_NOPC: \"${IPOPTAMPLINTERFACELIB_LFLAGS_NOPC}\"" >&6;}
@@ -26380,8 +26452,7 @@ _ACEOF
       # add -DXYZ_BUILD to XYZ_CFLAGS
       SIPOPTAMPLINTERFACELIB_CFLAGS="${SIPOPTAMPLINTERFACELIB_CFLAGS} -DSIPOPTAMPLINTERFACELIB_BUILD"
 
-# Define BUILDTOOLS_DEBUG to enable debugging output
-
+      # Define BUILDTOOLS_DEBUG to enable debugging output
       if test "$BUILDTOOLS_DEBUG" = 1 ; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: SIPOPTAMPLINTERFACELIB_LFLAGS_NOPC: \"${SIPOPTAMPLINTERFACELIB_LFLAGS_NOPC}\"" >&5
 $as_echo "$as_me: SIPOPTAMPLINTERFACELIB_LFLAGS_NOPC: \"${SIPOPTAMPLINTERFACELIB_LFLAGS_NOPC}\"" >&6;}
@@ -26588,6 +26659,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${COIN_HAS_F77_TRUE}" && test -z "${COIN_HAS_F77_FALSE}"; then
   as_fn_error $? "conditional \"COIN_HAS_F77\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${COIN_STATIC_BUILD_TRUE}" && test -z "${COIN_STATIC_BUILD_FALSE}"; then
+  as_fn_error $? "conditional \"COIN_STATIC_BUILD\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${COIN_HAS_DOXYGEN_TRUE}" && test -z "${COIN_HAS_DOXYGEN_FALSE}"; then
