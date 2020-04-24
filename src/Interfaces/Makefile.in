@@ -706,8 +706,8 @@ maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
 	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
-@BUILD_JAVA_FALSE@uninstall-local:
 @BUILD_JAVA_FALSE@install-exec-local:
+@BUILD_JAVA_FALSE@uninstall-local:
 clean: clean-am
 
 clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
@@ -828,6 +828,7 @@ uninstall-am: uninstall-includeipoptHEADERS uninstall-libLTLIBRARIES \
 @BUILD_JAVA_TRUE@all-local : org.coinor.ipopt.jar
 
 @BUILD_JAVA_TRUE@install-exec-local :
+@BUILD_JAVA_TRUE@	$(MKDIR_P) "$(DESTDIR)$(libdir)"
 @BUILD_JAVA_TRUE@	$(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) org.coinor.ipopt.jar "$(DESTDIR)$(libdir)"
 @BUILD_JAVA_TRUE@uninstall-local :
 @BUILD_JAVA_TRUE@	$(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/org.coinor.ipopt.jar"
