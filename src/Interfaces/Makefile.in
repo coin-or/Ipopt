@@ -828,10 +828,10 @@ uninstall-am: uninstall-includeipoptHEADERS uninstall-libLTLIBRARIES \
 @BUILD_JAVA_TRUE@all-local : org.coinor.ipopt.jar
 
 @BUILD_JAVA_TRUE@install-exec-local :
-@BUILD_JAVA_TRUE@	$(MKDIR_P) "$(DESTDIR)$(libdir)"
-@BUILD_JAVA_TRUE@	$(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) org.coinor.ipopt.jar "$(DESTDIR)$(libdir)"
+@BUILD_JAVA_TRUE@	$(MKDIR_P) "$(DESTDIR)$(datadir)/java"
+@BUILD_JAVA_TRUE@	$(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) org.coinor.ipopt.jar "$(DESTDIR)$(datadir)/java"
 @BUILD_JAVA_TRUE@uninstall-local :
-@BUILD_JAVA_TRUE@	$(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/org.coinor.ipopt.jar"
+@BUILD_JAVA_TRUE@	$(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(datadir)/java/org.coinor.ipopt.jar"
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
