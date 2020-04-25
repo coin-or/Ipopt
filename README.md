@@ -59,12 +59,12 @@ On sufficiently prepared systems, a quick way to build and install Ipopt
 is to get the coinbrew script from https://coin-or.github.io/coinbrew/
 and running
 
-    /path/to/coinbrew fetch Ipopt
-    /path/to/coinbrew build Ipopt --prefix=/dir/to/install --test
-    /path/to/coinbrew install Ipopt
+    /path/to/coinbrew fetch Ipopt --no-prompt
+    /path/to/coinbrew build Ipopt --prefix=/dir/to/install --test --no-prompt --verbosity=3
+    /path/to/coinbrew install Ipopt --no-prompt
 
 The coinbrew script will take care of building and installing the
-dependencies ASL, Metis, and Mumps before building Ipopt.
+dependencies ASL and Mumps before building Ipopt.
 
 More details on using coinbrew can be found at the instructions on
 [Getting Started with the COIN-OR Optimization Suite](https://coin-or.github.io/user_introduction).
