@@ -25205,6 +25205,24 @@ $as_echo "$ac_cv_prog_javac_works" >&6; }
 fi
 
 if test "$enable_java" != no ; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking if javac supports -h" >&5
+$as_echo_n "checking if javac supports -h... " >&6; }
+  echo "public abstract class conftest { private native boolean test(); }" > conftest.java
+  $as_echo "$as_me:${as_lineno-$LINENO}: $JAVAC conftest.java -h conftest.header" >&5
+  "$JAVAC" conftest.java -h conftest.header >&5
+  if test -e conftest.header/conftest.h ; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+  else
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+    echo "configure: failed program was:" >&5
+    cat conftest.java >&5
+    enable_java=no
+  fi
+fi
+
+if test "$enable_java" != no ; then
   # look for jni header: required to compile C++ part of Java interface
 
 
@@ -25647,7 +25665,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25650 "configure" */
+/* #line 25668 "configure" */
 public class Test {
 }
 EOF
@@ -25681,7 +25699,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25684 "configure" */
+/* [#]line 25702 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);

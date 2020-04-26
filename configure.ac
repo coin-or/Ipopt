@@ -313,6 +313,21 @@ if test "$enable_java" != no ; then
 fi
 
 if test "$enable_java" != no ; then
+  AC_MSG_CHECKING([if javac supports -h])
+  echo "public abstract class conftest { private native boolean test(); }" > conftest.java
+  $as_echo "$as_me:${as_lineno-$LINENO}: $JAVAC conftest.java -h conftest.header" >&AS_MESSAGE_LOG_FD
+  "$JAVAC" conftest.java -h conftest.header >&AS_MESSAGE_LOG_FD
+  if test -e conftest.header/conftest.h ; then
+    AC_MSG_RESULT([yes])
+  else
+    AC_MSG_RESULT([no])
+    echo "configure: failed program was:" >&AS_MESSAGE_LOG_FD
+    cat conftest.java >&AS_MESSAGE_LOG_FD
+    enable_java=no
+  fi
+fi
+
+if test "$enable_java" != no ; then
   # look for jni header: required to compile C++ part of Java interface
   AX_JNI_INCLUDE_DIR
   if test -z "$JNI_INCLUDE_DIRS" ; then
