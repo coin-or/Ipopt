@@ -256,6 +256,9 @@ Then, in `ThirdParty-HSL`, configure, build, and install the HSL sources:
     make
     sudo make install
 
+\attention The build system of Ipopt currently requires that MA27 is part
+of a HSL library, if a HSL library is provided.
+
 \note Whereas it is essential to have at least one linear solver, the
 package MC19 could be omitted (with the consequence that you cannot use
 this method for scaling the linear systems arising inside the

@@ -24045,7 +24045,7 @@ $as_echo "$as_me: WARNING: Unsupported or unknown name-mangling scheme: $ac_cv_h
   # AC_MSG_NOTICE([Done COIN_NAMEMANGLING])
 
   if test "$ac_cv_hsl_namemangling" = "unknown" ; then
-    as_fn_error $? "Provided package HSL is not working." "$LINENO" 5
+    as_fn_error $? "Provided package HSL is not working or does not contain MA27." "$LINENO" 5
   fi
 
   # extra check for MA28, since that decides whether we have to build IpMa28Partition.F
