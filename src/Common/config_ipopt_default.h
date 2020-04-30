@@ -14,7 +14,7 @@
 #define IPOPT_VERSION_MINOR     13
 
 /* Release Version number of project */
-#define IPOPT_VERSION_RELEASE    2
+#define IPOPT_VERSION_RELEASE    3
 
 /* Define to the C type corresponding to Fortran INTEGER */
 #ifndef IPOPT_FORTRAN_INTEGER_TYPE
