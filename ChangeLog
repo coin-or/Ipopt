@@ -2,7 +2,7 @@ Here we list changes of Ipopt since the release of version 3.0.0.
 More detailed information about incremental changes can be found in the
 commit history.
 
-2020-xx-yy: 3.13.2
+2020-04-30: 3.13.2
         - The C-preprocessor defines COIN_IPOPT_CHECKLEVEL,
           COIN_IPOPT_VERBOSITY, and FORTRAN_INTEGER_TYPE, which are defined
           by IpoptConfig.h, have been renamed to IPOPT_CHECKLEVEL,
