@@ -1,9 +1,13 @@
 var config__default_8h =
 [
     [ "IPOPTLIB_EXPORT", "config__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b", null ],
-    [ "COIN_IPOPT_CHECKLEVEL", "config__default_8h.html#adfa8a79d18639cdfa8e7f68dbda65682", null ],
-    [ "COIN_IPOPT_VERBOSITY", "config__default_8h.html#a22fe07fb21a7660bea8b84bb0d4a0046", null ],
-    [ "COIN_HAS_ASL", "config__default_8h.html#a3453f8b0163adf013b900efa45627374", null ],
-    [ "COIN_HAS_LAPACK", "config__default_8h.html#ad45bd576de91f5537be5b86e9ab429e6", null ],
-    [ "COIN_HAS_HSL", "config__default_8h.html#a2fbc4c7d1231e5e1df0120d9b46c23e5", null ]
+    [ "IPOPT_CHECKLEVEL", "config__default_8h.html#aee7eb79e1e5393f437efc832b7919f5c", null ],
+    [ "IPOPT_VERBOSITY", "config__default_8h.html#a5d050e78bd81677969d6b3850b1624a4", null ],
+    [ "IPOPT_HAS_LAPACK", "config__default_8h.html#aa57ac9c99e9cc69e98d794dbfcd107ca", null ],
+    [ "IPOPT_C_FINITE", "config__default_8h.html#aec30f36872c5acb4dee3c14dfa531456", null ],
+    [ "IPOPT_BLAS_FUNC", "config__default_8h.html#ab924fb02d467f6e4842c78bd87219a66", null ],
+    [ "IPOPT_LAPACK_FUNC", "config__default_8h.html#af8ba164b2911f1ff6ac15a0453dbabba", null ],
+    [ "IPOPT_PARDISO_FUNC", "config__default_8h.html#afdd4f08c71f65f539cead88f16217a52", null ],
+    [ "IPOPT_WSMP_FUNC", "config__default_8h.html#a4648adf92cc2c04c0a61c44372f7654d", null ],
+    [ "IPOPT_WSMP_FUNC_", "config__default_8h.html#a741bbd00c3ce862235fb0cf42deb2152", null ]
 ];

@@ -1,5 +1,6 @@
 var NAVTREEINDEX9 =
 {
+"classIpopt_1_1InexactData.html#aec2951dadd2aab218cdb75aed0952b3c":[1,0,0,57,16],
 "classIpopt_1_1InexactDoglegNormalStep.html":[1,0,0,58],
 "classIpopt_1_1InexactDoglegNormalStep.html#a00fc25c95ad04b1820bb07aa1b3bad93":[1,0,0,58,7],
 "classIpopt_1_1InexactDoglegNormalStep.html#a08144b0281ba530b5beb82499ebecaed":[1,0,0,58,12],
@@ -248,6 +249,5 @@ var NAVTREEINDEX9 =
 "classIpopt_1_1IpoptApplication.html#a2d8bb3dc2d50178738323128ae183270":[1,0,0,70,24],
 "classIpopt_1_1IpoptApplication.html#a3443b7f853306eb53e2eacfda4b5ea5b":[1,0,0,70,27],
 "classIpopt_1_1IpoptApplication.html#a344967945748a2dba0025829c95c3649":[1,0,0,70,31],
-"classIpopt_1_1IpoptApplication.html#a3a6064e22ad3921f590496dfff406c55":[1,0,0,70,22],
-"classIpopt_1_1IpoptApplication.html#a441171d939b9191c2968b738073934fd":[1,0,0,70,32]
+"classIpopt_1_1IpoptApplication.html#a3a6064e22ad3921f590496dfff406c55":[1,0,0,70,22]
 };

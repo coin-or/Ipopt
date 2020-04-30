@@ -1,5 +1,6 @@
 var NAVTREEINDEX20 =
 {
+"classIpopt_1_1StandardScalingBase.html#a18f95095b38707d9a32b75e12c9ff703":[1,0,0,161,4],
 "classIpopt_1_1StandardScalingBase.html#a1df64afc4bb5547284a81c7c7983f641":[1,0,0,161,2],
 "classIpopt_1_1StandardScalingBase.html#a2dd960600c149cf46ebb4c018a68cd1e":[1,0,0,161,12],
 "classIpopt_1_1StandardScalingBase.html#a37f4cc240945588ce0c11e5ee481e9c1":[1,0,0,161,13],
@@ -248,6 +249,5 @@ var NAVTREEINDEX20 =
 "classIpopt_1_1SymScaledMatrix.html#a3dcc062ed8e9bbe15e4e031c02d1be5f":[1,0,0,176,13],
 "classIpopt_1_1SymScaledMatrix.html#a42c01e32d6991d2219123715dfb2bff8":[1,0,0,176,9],
 "classIpopt_1_1SymScaledMatrix.html#a4ec7070263e60c118be3b40d107a8513":[1,0,0,176,4],
-"classIpopt_1_1SymScaledMatrix.html#a5c74ed3a882efa768b7bd10ef0720271":[1,0,0,176,16],
-"classIpopt_1_1SymScaledMatrix.html#a5f287285ded48df69e395da6ddd56d4c":[1,0,0,176,2]
+"classIpopt_1_1SymScaledMatrix.html#a5c74ed3a882efa768b7bd10ef0720271":[1,0,0,176,16]
 };

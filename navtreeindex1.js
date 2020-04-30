@@ -1,6 +1,5 @@
 var NAVTREEINDEX1 =
 {
-"IpDenseVector_8hpp.html":[2,0,1,5,7],
 "IpDenseVector_8hpp.html#a08458195ba30ac6f9e88a2a48c87df52":[2,0,1,5,7,4],
 "IpDenseVector_8hpp.html#a7b95940bef97320ac5a3635114ac6114":[2,0,1,5,7,3],
 "IpDenseVector_8hpp.html#a7f89f76420ddf344ed16656018302c30":[2,0,1,5,7,5],
@@ -249,5 +248,6 @@ var NAVTREEINDEX1 =
 "IpQualityFunctionMuOracle_8hpp_source.html":[2,0,1,0,47],
 "IpReferenced_8hpp.html":[2,0,1,2,11],
 "IpReferenced_8hpp_source.html":[2,0,1,2,11],
-"IpRegOptions_8hpp.html":[2,0,1,2,12]
+"IpRegOptions_8hpp.html":[2,0,1,2,12],
+"IpRegOptions_8hpp.html#a8fa4729b02ed5a27c39209cc75864bb6":[2,0,1,2,12,3]
 };

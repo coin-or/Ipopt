@@ -1,5 +1,6 @@
 var NAVTREEINDEX17 =
 {
+"classIpopt_1_1PardisoSolverInterface.html#ac22739903dfdad5c2627eff5c925f49b":[1,0,0,119,4],
 "classIpopt_1_1PardisoSolverInterface.html#ac8001cd1faad8199ecfad60c0cd25daa":[1,0,0,119,0],
 "classIpopt_1_1PardisoSolverInterface.html#ac8001cd1faad8199ecfad60c0cd25daaa57a352a01c0edb7eec64054fa9c7bd54":[1,0,0,119,0,0],
 "classIpopt_1_1PardisoSolverInterface.html#ac8001cd1faad8199ecfad60c0cd25daaa8ed485bff1b2c2e1ab97ca6ea51d8f95":[1,0,0,119,0,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX17 =
 "classIpopt_1_1RegisteredOption_1_1string__entry.html":[1,0,0,135,0],
 "classIpopt_1_1RegisteredOption_1_1string__entry.html#a1dfd638b422210d9e6ff62e0e1252fb1":[1,0,0,135,0,1],
 "classIpopt_1_1RegisteredOption_1_1string__entry.html#a7361e1b10d6e73848e6bcd8485c9b94e":[1,0,0,135,0,2],
-"classIpopt_1_1RegisteredOption_1_1string__entry.html#a7e7d2e30a3695a2087457528300258b3":[1,0,0,135,0,0],
-"classIpopt_1_1RegisteredOptions.html":[1,0,0,136]
+"classIpopt_1_1RegisteredOption_1_1string__entry.html#a7e7d2e30a3695a2087457528300258b3":[1,0,0,135,0,0]
 };

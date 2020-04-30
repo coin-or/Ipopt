@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.1</span-->
+   &#160;<!--span id="projectnumber">3.13.2</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -103,6 +103,22 @@ $(document).ready(function(){initNavTree('CHANGELOG.html','');});
 <div class="textblock"><pre class="fragment">Here we list changes of Ipopt since the release of version 3.0.0.
 More detailed information about incremental changes can be found in the
 commit history.
+
+2020-04-30: 3.13.2
+        - The C-preprocessor defines COIN_IPOPT_CHECKLEVEL,
+          COIN_IPOPT_VERBOSITY, and FORTRAN_INTEGER_TYPE, which are defined
+          by IpoptConfig.h, have been renamed to IPOPT_CHECKLEVEL,
+          IPOPT_VERBOSITY, and IPOPT_FORTRAN_INTEGER_TYPE, respectively.
+          They are still available under their previous name, but these
+          will be removed in Ipopt 3.14.
+        - Changed dependencies as used by coinbrew to use new versions (2.1)
+          of ThirdParty/HSL and ThirdParty/MUMPS and dropped ThirdParty/Metis.
+          The new versions of the HSL and MUMPS build scripts now look
+          for a Metis library in the system and should work with both
+          Metis 4 and Metis 5.
+        - Changed location where Java interface jar gets installed from
+          $libdir to $datadir/java/.
+        - minor fixes to buildsystem
 
 2020-03-11: 3.13.1
         - Added asserts that check whether sparsity pattern of Jacobian

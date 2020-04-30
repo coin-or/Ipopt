@@ -1,5 +1,6 @@
 var NAVTREEINDEX7 =
 {
+"classIpopt_1_1DenseVector.html#a40b20012ebbeaa4e51cae2643b3846ab":[1,0,0,29,46],
 "classIpopt_1_1DenseVector.html#a4195011f8b4d80ef892f12b0e1816133":[1,0,0,29,22],
 "classIpopt_1_1DenseVector.html#a4514fc6727191e1ba63f2ecefdde2f39":[1,0,0,29,0],
 "classIpopt_1_1DenseVector.html#a464572d41a11421b571c45240810759a":[1,0,0,29,28],
@@ -248,6 +249,5 @@ var NAVTREEINDEX7 =
 "classIpopt_1_1FilterLSAcceptor.html#a9fdb48eba6aac599c3d3d077a315828aad6808d784fd43fa4e687cb07c229f291":[1,0,0,44,0,1],
 "classIpopt_1_1FilterLSAcceptor.html#a9fdb48eba6aac599c3d3d077a315828aaf1838561a93d3c16d182c56d0979d874":[1,0,0,44,0,2],
 "classIpopt_1_1FilterLSAcceptor.html#aa1040c8be70182ad6669f4263af53ca1":[1,0,0,44,32],
-"classIpopt_1_1FilterLSAcceptor.html#aa32482a0982e79ac34a1da0834002fad":[1,0,0,44,25],
-"classIpopt_1_1FilterLSAcceptor.html#aa6a041643de27fe854c5d144b1c74c2a":[1,0,0,44,29]
+"classIpopt_1_1FilterLSAcceptor.html#aa32482a0982e79ac34a1da0834002fad":[1,0,0,44,25]
 };

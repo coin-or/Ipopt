@@ -1,10 +1,10 @@
 var IpDebug_8hpp =
 [
-    [ "COIN_IPOPT_CHECKLEVEL", "IpDebug_8hpp.html#adfa8a79d18639cdfa8e7f68dbda65682", null ],
+    [ "IPOPT_CHECKLEVEL", "IpDebug_8hpp.html#aee7eb79e1e5393f437efc832b7919f5c", null ],
     [ "DBG_ASSERT", "IpDebug_8hpp.html#a346733cd6806024295f8c3564071d021", null ],
     [ "DBG_ASSERT_EXCEPTION", "IpDebug_8hpp.html#ac59d1114f41f02ee169b7619e174f4c9", null ],
     [ "DBG_DO", "IpDebug_8hpp.html#a17536f348a5e38997d694f731fd0a875", null ],
-    [ "COIN_IPOPT_VERBOSITY", "IpDebug_8hpp.html#a22fe07fb21a7660bea8b84bb0d4a0046", null ],
+    [ "IPOPT_VERBOSITY", "IpDebug_8hpp.html#a5d050e78bd81677969d6b3850b1624a4", null ],
     [ "DBG_START_FUN", "IpDebug_8hpp.html#aa606836c00d673994538fc636f1a77c1", null ],
     [ "DBG_START_METH", "IpDebug_8hpp.html#abac44fd4713c03644cf925f4a1bcb22a", null ],
     [ "DBG_PRINT", "IpDebug_8hpp.html#a40fdb0e5238b05a8134decce9cedad0f", null ],

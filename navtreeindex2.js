@@ -1,6 +1,5 @@
 var NAVTREEINDEX2 =
 {
-"IpRegOptions_8hpp.html#a8fa4729b02ed5a27c39209cc75864bb6":[2,0,1,2,12,3],
 "IpRegOptions_8hpp.html#a8fa4729b02ed5a27c39209cc75864bb6a2d58ddf2aa6542f6a8afee6539d0d9cc":[2,0,1,2,12,3,2],
 "IpRegOptions_8hpp.html#a8fa4729b02ed5a27c39209cc75864bb6a663218c5d5611c4569785be276954df7":[2,0,1,2,12,3,3],
 "IpRegOptions_8hpp.html#a8fa4729b02ed5a27c39209cc75864bb6a739e1bc7ab6935282552c2e23abe1b74":[2,0,1,2,12,3,1],
@@ -191,8 +190,8 @@ var NAVTREEINDEX2 =
 "IpTypes_8hpp.html":[2,0,1,2,16],
 "IpTypes_8hpp.html#a0dae86ecbedd018c15054019f260811e":[2,0,1,2,16,2],
 "IpTypes_8hpp.html#a8728e67558138991e8ee3fea451dca94":[2,0,1,2,16,1],
+"IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65":[2,0,1,2,16,3],
 "IpTypes_8hpp.html#ad77ec4132352c5093febf9c488a72a4c":[2,0,1,2,16,0],
-"IpTypes_8hpp.html#aeccbe55f54794113f2043d6f8ce7bffe":[2,0,1,2,16,3],
 "IpTypes_8hpp_source.html":[2,0,1,2,16],
 "IpUserScaling_8hpp.html":[2,0,1,0,60],
 "IpUserScaling_8hpp_source.html":[2,0,1,0,60],
@@ -231,14 +230,16 @@ var NAVTREEINDEX2 =
 "IpZeroSymMatrix_8hpp.html":[2,0,1,5,24],
 "IpZeroSymMatrix_8hpp_source.html":[2,0,1,5,24],
 "IpoptConfig_8h.html":[2,0,1,2,9],
+"IpoptConfig_8h.html#aa9fd3a3ea872065343621b4178fbf6a9":[2,0,1,2,9,0],
 "IpoptConfig_8h_source.html":[2,0,1,2,9],
 "Ipopt_8java.html":[2,0,1,4,4],
 "Ipopt_8java_source.html":[2,0,1,4,4],
 "LICENSE.html":[0,10],
 "LibraryHandler_8h.html":[2,0,1,3,1,1],
-"LibraryHandler_8h.html#a38ee85c69301cecd9f75b547637abf60":[2,0,1,3,1,1,2],
-"LibraryHandler_8h.html#aedf51f406398749313f0212b5bbfc766":[2,0,1,3,1,1,0],
-"LibraryHandler_8h.html#afb2f8d49ea4667d1cad0f96bff8f7a5e":[2,0,1,3,1,1,1],
+"LibraryHandler_8h.html#a38ee85c69301cecd9f75b547637abf60":[2,0,1,3,1,1,3],
+"LibraryHandler_8h.html#aedf51f406398749313f0212b5bbfc766":[2,0,1,3,1,1,1],
+"LibraryHandler_8h.html#afa98b3a0295460d28397b37270c930e7":[2,0,1,3,1,1,0],
+"LibraryHandler_8h.html#afb2f8d49ea4667d1cad0f96bff8f7a5e":[2,0,1,3,1,1,2],
 "LibraryHandler_8h_source.html":[2,0,1,3,1,1],
 "OPTIONS.html":[0,4],
 "OPTIONS.html#OPTIONS_AMPL":[0,4,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "OPTIONS.html#OPT_Hessian_Perturbation":[0,4,0,11],
 "OPTIONS.html#OPT_Initialization":[0,4,0,4],
 "OPTIONS.html#OPT_Line_Search":[0,4,0,7],
-"OPTIONS.html#OPT_Linear_Solver":[0,4,0,10],
-"OPTIONS.html#OPT_MA27_Linear_Solver":[0,4,0,14]
+"OPTIONS.html#OPT_Linear_Solver":[0,4,0,10]
 };

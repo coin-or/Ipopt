@@ -1,5 +1,6 @@
 var NAVTREEINDEX12 =
 {
+"classIpopt_1_1IteratesVectorSpace.html":[1,0,0,77],
 "classIpopt_1_1IteratesVectorSpace.html#a07d2c45720d1dd3633a659d7cf46de0c":[1,0,0,77,5],
 "classIpopt_1_1IteratesVectorSpace.html#a1f5788622136fc72f33da667a02d2fb2":[1,0,0,77,13],
 "classIpopt_1_1IteratesVectorSpace.html#a2a683e5c692746113373eafd5c6a6961":[1,0,0,77,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX12 =
 "classIpopt_1_1LimMemQuasiNewtonUpdater.html#a965ff2daa98ef1e330111e5feef2f113":[1,0,0,85,3],
 "classIpopt_1_1LimMemQuasiNewtonUpdater.html#a9ad1d47e72181bb14902c63acc4bc421":[1,0,0,85,21],
 "classIpopt_1_1LimMemQuasiNewtonUpdater.html#a9b72dba39efe0d8d3bc8c0f0e5ab02f1":[1,0,0,85,49],
-"classIpopt_1_1LimMemQuasiNewtonUpdater.html#aa17edd63f7905cec9abfa8d8d592009c":[1,0,0,85,70],
-"classIpopt_1_1LimMemQuasiNewtonUpdater.html#aa89449bb9bffcc06bd6f723f97abc08c":[1,0,0,85,13]
+"classIpopt_1_1LimMemQuasiNewtonUpdater.html#aa17edd63f7905cec9abfa8d8d592009c":[1,0,0,85,70]
 };

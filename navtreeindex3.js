@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"OPTIONS.html#OPT_MA27_Linear_Solver":[0,4,0,14],
 "OPTIONS.html#OPT_MA57_Linear_Solver":[0,4,0,15],
 "OPTIONS.html#OPT_MA77_Linear_Solver":[0,4,0,16],
 "OPTIONS.html#OPT_MA86_Linear_Solver":[0,4,0,17],
@@ -16,10 +17,10 @@ var NAVTREEINDEX3 =
 "OPTIONS.html#OPT_Warm_Start":[0,4,0,8],
 "OUTPUT.html":[0,5],
 "PardisoLoader_8h.html":[2,0,1,3,1,2],
-"PardisoLoader_8h.html#a6f1b0d9cf34197f834c7cdfe303a6cbd":[2,0,1,3,1,2,2],
-"PardisoLoader_8h.html#aeabef485e68a2f08e2e5cf1bd5988828":[2,0,1,3,1,2,3],
+"PardisoLoader_8h.html#a8760e9e2cdbfdc8c7f4351022c06f5ff":[2,0,1,3,1,2,3],
+"PardisoLoader_8h.html#ae836287c848ed3c3fdb299a65d130446":[2,0,1,3,1,2,1],
 "PardisoLoader_8h.html#aebea2a1e17df9b9dd4b35bc8732cd336":[2,0,1,3,1,2,0],
-"PardisoLoader_8h.html#af6ff9ab2f42f4a5c90469aa449f4d44b":[2,0,1,3,1,2,1],
+"PardisoLoader_8h.html#af12eaeec1da4518b8348abafb47bfe1b":[2,0,1,3,1,2,2],
 "PardisoLoader_8h_source.html":[2,0,1,3,1,2],
 "SPECIALS.html":[0,3],
 "SPECIALS.html#AMPL_WARMSTART":[0,3,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "classIpopt_1_1AmplSuffixHandler.html#acf8bd69c2e7005a03134213e3dec9919":[1,0,0,4,16],
 "classIpopt_1_1AmplSuffixHandler.html#adb8ba0b3b285145b3b762b78b4d55b22":[1,0,0,4,4],
 "classIpopt_1_1AmplSuffixHandler.html#ae3e2273b878b9f944a8f0cce55bd54c9":[1,0,0,4,2],
-"classIpopt_1_1AmplSuffixHandler.html#aeade7973b80317dfe1d42e1081ef1175":[1,0,0,4,8],
-"classIpopt_1_1AmplSuffixHandler.html#aef7bfc25f9695d6e905b694e4e086b30":[1,0,0,4,9]
+"classIpopt_1_1AmplSuffixHandler.html#aeade7973b80317dfe1d42e1081ef1175":[1,0,0,4,8]
 };

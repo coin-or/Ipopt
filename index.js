@@ -23,8 +23,7 @@ var index =
         [ "MUMPS Linear Solver", "INSTALL.html#DOWNLOAD_MUMPS", null ],
         [ "Pardiso (Parallel Sparse Direct Linear Solver)", "INSTALL.html#DOWNLOAD_PARDISO", null ],
         [ "WSMP (Watson Sparse Matrix Package)", "INSTALL.html#DOWNLOAD_WSMP", null ],
-        [ "Using the Linear Solver Loader", "INSTALL.html#LINEARSOLVERLOADER", null ],
-        [ "METIS (matrix ordering)", "INSTALL.html#DOWNLOAD_METIS", null ]
+        [ "Using the Linear Solver Loader", "INSTALL.html#LINEARSOLVERLOADER", null ]
       ] ],
       [ "Getting the Ipopt Code", "INSTALL.html#GETIPOPT", [
         [ "Getting the Ipopt code via git", "INSTALL.html#GETIPOPT_GIT", null ],

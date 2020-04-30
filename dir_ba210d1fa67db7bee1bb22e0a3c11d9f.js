@@ -16,7 +16,7 @@ var dir_ba210d1fa67db7bee1bb22e0a3c11d9f =
       [ "Observer", "classIpopt_1_1Observer.html", "classIpopt_1_1Observer" ],
       [ "Subject", "classIpopt_1_1Subject.html", "classIpopt_1_1Subject" ]
     ] ],
-    [ "IpoptConfig.h", "IpoptConfig_8h.html", null ],
+    [ "IpoptConfig.h", "IpoptConfig_8h.html", "IpoptConfig_8h" ],
     [ "IpOptionsList.hpp", "IpOptionsList_8hpp.html", "IpOptionsList_8hpp" ],
     [ "IpReferenced.hpp", "IpReferenced_8hpp.html", [
       [ "Referencer", "classIpopt_1_1Referencer.html", null ],

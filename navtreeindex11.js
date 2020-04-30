@@ -1,5 +1,6 @@
 var NAVTREEINDEX11 =
 {
+"classIpopt_1_1IpoptCalculatedQuantities.html#af030f890617b462a0fe90f9c7f2fc194":[1,0,0,71,111],
 "classIpopt_1_1IpoptCalculatedQuantities.html#af10d8056158f527483e5ca7b4cf8e82a":[1,0,0,71,10],
 "classIpopt_1_1IpoptCalculatedQuantities.html#af154b4f264b8f422ed8dfa166b71be0d":[1,0,0,71,187],
 "classIpopt_1_1IpoptCalculatedQuantities.html#af277b79a8d7ccbbb3761328926648b11":[1,0,0,71,196],
@@ -248,6 +249,5 @@ var NAVTREEINDEX11 =
 "classIpopt_1_1IteratesVector.html#af86a4799541add329545ce8d9b746c9a":[1,0,0,76,2],
 "classIpopt_1_1IteratesVector.html#af9e53fd8fb0e2fcf093021a7436ab7cd":[1,0,0,76,6],
 "classIpopt_1_1IteratesVector.html#afec10f6764fd977a8afb8585b5f5054e":[1,0,0,76,30],
-"classIpopt_1_1IteratesVector.html#affe8decdc8a8c2afb7666b019eddefe4":[1,0,0,76,53],
-"classIpopt_1_1IteratesVectorSpace.html":[1,0,0,77]
+"classIpopt_1_1IteratesVector.html#affe8decdc8a8c2afb7666b019eddefe4":[1,0,0,76,53]
 };

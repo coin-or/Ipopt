@@ -1,5 +1,6 @@
 var NAVTREEINDEX10 =
 {
+"classIpopt_1_1IpoptApplication.html#a441171d939b9191c2968b738073934fd":[1,0,0,70,32],
 "classIpopt_1_1IpoptApplication.html#a483aa387ec56687a106d414da5df4ad8":[1,0,0,70,13],
 "classIpopt_1_1IpoptApplication.html#a4d0682d8b1ec5751b8727bb0573956b3":[1,0,0,70,21],
 "classIpopt_1_1IpoptApplication.html#a4f155c7e7ba03e3ac1b47407c7ba4f11":[1,0,0,70,15],
@@ -248,6 +249,5 @@ var NAVTREEINDEX10 =
 "classIpopt_1_1IpoptCalculatedQuantities.html#aeddcb989dcac80e63433f715b407f830":[1,0,0,71,155],
 "classIpopt_1_1IpoptCalculatedQuantities.html#aee0f1a75aee872b9d38ddd23ac527c91":[1,0,0,71,81],
 "classIpopt_1_1IpoptCalculatedQuantities.html#aef5678771165fd3c6285c8f0872c313c":[1,0,0,71,7],
-"classIpopt_1_1IpoptCalculatedQuantities.html#aef9ccdf1d7aee97dabeaf4acc1a2a339":[1,0,0,71,114],
-"classIpopt_1_1IpoptCalculatedQuantities.html#af030f890617b462a0fe90f9c7f2fc194":[1,0,0,71,111]
+"classIpopt_1_1IpoptCalculatedQuantities.html#aef9ccdf1d7aee97dabeaf4acc1a2a339":[1,0,0,71,114]
 };
