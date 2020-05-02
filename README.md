@@ -75,10 +75,10 @@ should be studied.
 
 Some precompiled binaries of Ipopt are also available:
 
+- **[Ipopt releases page](https://github.com/coin-or/Ipopt/releases)**
 - **[JuliaOpt provides Ipopt binaries](https://github.com/JuliaOpt/IpoptBuilder/releases)**
 - **[AMPL provides binaries](http://ampl.com/products/solvers/open-source/#ipopt)** for using Ipopt through AMPL
 - **[Pardiso project provides binaries](https://pardiso-project.org/index.html#binaries)** for using Ipopt with Pardiso through Matlab
-
 
 Getting Help
 ------------
