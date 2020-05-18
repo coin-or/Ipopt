@@ -43,25 +43,25 @@
 #include "IpInexactNormalTerminationTester.hpp"
 #include "IpInexactPDTerminationTester.hpp"
 
-#ifdef COIN_HAS_HSL
+#ifdef IPOPT_HAS_HSL
 # include "CoinHslConfig.h"
 #endif
 
-#ifdef HAVE_WSMP
+#ifdef IPOPT_HAS_WSMP
 # include "IpWsmpSolverInterface.hpp"
 #endif
-#ifdef COIN_HAS_MUMPS
+#ifdef IPOPT_HAS_MUMPS
 # include "IpMumpsSolverInterface.hpp"
 #endif
 
-#ifdef HAVE_LINEARSOLVERLOADER
+#ifdef IPOPT_HAS_LINEARSOLVERLOADER
 # include "HSLLoader.h"
 # include "PardisoLoader.h"
 #endif
 
 namespace Ipopt
 {
-#if COIN_IPOPT_VERBOSITY > 0
+#if IPOPT_VERBOSITY > 0
 static const Index dbg_verbosity = 0;
 #endif
 
@@ -133,7 +133,7 @@ SmartPtr<IpoptAlgorithm> InexactAlgorithmBuilder::BuildBasicAlgorithm(
    if( linear_solver == "ma27" )
    {
 #ifndef COINHSL_HAS_MA27
-# ifdef HAVE_LINEARSOLVERLOADER
+# ifdef IPOPT_HAS_LINEARSOLVERLOADER
       SolverInterface = new Ma27TSolverInterface();
       char buf[256];
       int rc = LSL_loadHSL(NULL, buf, 255);
@@ -157,7 +157,7 @@ SmartPtr<IpoptAlgorithm> InexactAlgorithmBuilder::BuildBasicAlgorithm(
    else if( linear_solver == "ma57" )
    {
 #ifndef COINHSL_HAS_MA57
-# ifdef HAVE_LINEARSOLVERLOADER
+# ifdef IPOPT_HAS_LINEARSOLVERLOADER
       SolverInterface = new Ma57TSolverInterface();
       char buf[256];
       int rc = LSL_loadHSL(NULL, buf, 255);
@@ -182,8 +182,8 @@ SmartPtr<IpoptAlgorithm> InexactAlgorithmBuilder::BuildBasicAlgorithm(
    {
       NormalTester = new InexactNormalTerminationTester();
       SmartPtr<IterativeSolverTerminationTester> pd_tester = new InexactPDTerminationTester();
-#ifndef HAVE_PARDISO
-# ifdef HAVE_LINEARSOLVERLOADER
+#ifndef IPOPT_HAS_PARDISO
+# ifdef IPOPT_HAS_LINEARSOLVERLOADER
       SolverInterface = new IterativePardisoSolverInterface(*NormalTester, *pd_tester);
       char buf[256];
       int rc = LSL_loadPardisoLib(NULL, buf, 255);
@@ -206,7 +206,7 @@ SmartPtr<IpoptAlgorithm> InexactAlgorithmBuilder::BuildBasicAlgorithm(
    }
    else if( linear_solver == "wsmp" )
    {
-#ifdef HAVE_WSMP
+#ifdef IPOPT_HAS_WSMP
       SolverInterface = new WsmpSolverInterface();
 #else
 
@@ -216,7 +216,7 @@ SmartPtr<IpoptAlgorithm> InexactAlgorithmBuilder::BuildBasicAlgorithm(
    }
    else if( linear_solver == "mumps" )
    {
-#ifdef COIN_HAS_MUMPS
+#ifdef IPOPT_HAS_MUMPS
       SolverInterface = new MumpsSolverInterface();
 #else
 

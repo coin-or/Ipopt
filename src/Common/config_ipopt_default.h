@@ -5,7 +5,7 @@
 /***************************************************************************/
 
 /* Version number of project */
-#define IPOPT_VERSION      "3.13.1"
+#define IPOPT_VERSION      "3.13.2"
 
 /* Major Version number of project */
 #define IPOPT_VERSION_MAJOR      3
@@ -14,11 +14,11 @@
 #define IPOPT_VERSION_MINOR     13
 
 /* Release Version number of project */
-#define IPOPT_VERSION_RELEASE    2
+#define IPOPT_VERSION_RELEASE    3
 
 /* Define to the C type corresponding to Fortran INTEGER */
-#ifndef FORTRAN_INTEGER_TYPE
-#define FORTRAN_INTEGER_TYPE int
+#ifndef IPOPT_FORTRAN_INTEGER_TYPE
+#define IPOPT_FORTRAN_INTEGER_TYPE int
 #endif
 
 #ifndef IPOPTLIB_EXPORT

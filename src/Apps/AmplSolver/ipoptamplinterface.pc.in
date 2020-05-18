@@ -8,8 +8,9 @@ Name: IPOPT-AMPL
 Description: Ampl Interface TNLP to Ipopt
 URL: https://github.com/coin-or/Ipopt
 Version: @PACKAGE_VERSION@
-Libs: -L${libdir} -lipoptamplinterface
-Libs.private: @IPOPTAMPLINTERFACELIB_LFLAGS_NOPC@
 Cflags: -I${includedir}
-Requires: ipopt
-Requires.private: @IPOPTAMPLINTERFACELIB_PCFILES@
+@COIN_STATIC_BUILD_FALSE@Libs: -L${libdir} -lipoptamplinterface
+@COIN_STATIC_BUILD_FALSE@Requires: ipopt
+@COIN_STATIC_BUILD_FALSE@Requires.private: @IPOPTAMPLINTERFACELIB_PCFILES@
+@COIN_STATIC_BUILD_TRUE@Libs: -L${libdir} -lipoptamplinterface @IPOPTAMPLINTERFACELIB_LFLAGS_NOPC@
+@COIN_STATIC_BUILD_TRUE@Requires: ipopt @IPOPTAMPLINTERFACELIB_PCFILES@

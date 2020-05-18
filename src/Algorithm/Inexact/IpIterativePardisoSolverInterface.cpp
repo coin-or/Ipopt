@@ -16,9 +16,9 @@
 #include <cstring>
 
 // determine the correct name of the Pardiso function
-#ifndef HAVE_PARDISO
+#ifndef IPOPT_HAS_PARDISO
 // if we build for the Linear Solver loader, then use normal C-naming style
-# define PARDISO_FUNC(name,NAME) name
+# define IPOPT_PARDISO_FUNC(name,NAME) name
 #endif
 
 Ipopt::IterativeSolverTerminationTester* global_tester_ptr_;
@@ -65,7 +65,7 @@ extern "C"
 /** Prototypes for Pardiso's subroutines */
 extern "C"
 {
-   void PARDISO_FUNC(pardisoinit, PARDISOINIT) (
+   void IPOPT_PARDISO_FUNC(pardisoinit, PARDISOINIT) (
       void*         PT,
       const ipfint* MTYPE,
       const ipfint* SOLVER,
@@ -74,7 +74,7 @@ extern "C"
       ipfint*       ERROR
    );
 
-   void PARDISO_FUNC(pardiso, PARDISO)(
+   void IPOPT_PARDISO_FUNC(pardiso, PARDISO)(
       void**        PT,
       const ipfint* MAXFCT,
       const ipfint* MNUM,
@@ -97,7 +97,7 @@ extern "C"
 
 namespace Ipopt
 {
-#if COIN_IPOPT_VERBOSITY > 0
+#if IPOPT_VERBOSITY > 0
 static const Index dbg_verbosity = 0;
 #endif
 
@@ -138,7 +138,7 @@ IterativePardisoSolverInterface::~IterativePardisoSolverInterface()
       ipfint ERROR;
       ipfint idmy;
       double ddmy;
-      PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_,
+      IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_,
                                      &MSGLVL_, &ddmy, &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
    }
@@ -159,7 +159,7 @@ bool IterativePardisoSolverInterface::InitializeImpl(
    const std::string& prefix
 )
 {
-#ifdef HAVE_PARDISO_MKL
+#ifdef IPOPT_HAS_PARDISO_MKL
    THROW_EXCEPTION(OPTION_INVALID, "The inexact version works only with Pardiso from pardiso-project.org");
 #endif
 
@@ -214,7 +214,7 @@ bool IterativePardisoSolverInterface::InitializeImpl(
       ipfint ERROR;
       ipfint idmy;
       double ddmy;
-      PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_,
+      IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_,
                                      &MSGLVL_, &ddmy, &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
    }
@@ -231,12 +231,12 @@ bool IterativePardisoSolverInterface::InitializeImpl(
    IPARM_[0] = 0;  // Tell it to fill IPARM with default values(?)
    ipfint ERROR = 0;
    ipfint SOLVER = 1; // initialze only direct solver
-   PARDISO_FUNC(pardisoinit, PARDISOINIT)(PT_, &MTYPE_, &SOLVER, IPARM_, DPARM_, &ERROR);
+   IPOPT_PARDISO_FUNC(pardisoinit, PARDISOINIT)(PT_, &MTYPE_, &SOLVER, IPARM_, DPARM_, &ERROR);
 
    // Set some parameters for Pardiso
    IPARM_[0] = 1;  // Don't use the default values
 
-#if defined(HAVE_PARDISO_PARALLEL) || ! defined(HAVE_PARDISO)
+#if defined(IPOPT_HAS_PARDISO_PARALLEL) || ! defined(IPOPT_HAS_PARDISO)
    // Obtain the numbers of processors from the value of OMP_NUM_THREADS
    char* var = getenv("OMP_NUM_THREADS");
    int num_procs = 1;
@@ -252,7 +252,7 @@ bool IterativePardisoSolverInterface::InitializeImpl(
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Using environment OMP_NUM_THREADS = %d as the number of processors.\n", num_procs);
    }
-#ifdef HAVE_PARDISO
+#ifdef IPOPT_HAS_PARDISO
    // If we run Pardiso through the linear solver loader,
    // we do not know whether it is the parallel version, so we do not report an error if OMP_NUM_THREADS is not set.
    else
@@ -526,7 +526,7 @@ ESymSolverStatus IterativePardisoSolverInterface::Factorization(
          }
          DPARM_[8] = 25; // maximum number of non-improvement steps
 
-         PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, a_, ia, ja, &PERM, &NRHS, IPARM_, &MSGLVL_,
+         IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, a_, ia, ja, &PERM, &NRHS, IPARM_, &MSGLVL_,
                                         &B, &X, &ERROR, DPARM_);
          if( HaveIpData() )
          {
@@ -603,7 +603,7 @@ ESymSolverStatus IterativePardisoSolverInterface::Factorization(
       }
       DPARM_[8] = 25; // maximum number of non-improvement steps
 
-      PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, a_, ia, ja, &PERM, &NRHS, IPARM_, &MSGLVL_,
+      IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, a_, ia, ja, &PERM, &NRHS, IPARM_, &MSGLVL_,
                                      &B, &X, &ERROR, DPARM_);
       if( HaveIpData() )
       {
@@ -732,7 +732,7 @@ ESymSolverStatus IterativePardisoSolverInterface::Solve(
       }
 
       DPARM_[8] = 25; // non_improvement in SQMR iteration
-      PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, a_, ia, ja, &PERM, &NRHS, IPARM_, &MSGLVL_,
+      IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, a_, ia, ja, &PERM, &NRHS, IPARM_, &MSGLVL_,
                                      rhs_vals, X, &ERROR, DPARM_);
 
       if( ERROR <= -100 && ERROR >= -110 )

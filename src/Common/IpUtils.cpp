@@ -100,8 +100,8 @@ bool IsFiniteNumber(
    Number val
 )
 {
-#ifdef COIN_C_FINITE
-   return (bool)COIN_C_FINITE(val);
+#ifdef IPOPT_C_FINITE
+   return (bool)IPOPT_C_FINITE(val);
 #else
    return true;
 #endif
@@ -110,10 +110,10 @@ bool IsFiniteNumber(
 
 Number IpRandom01()
 {
-#ifdef HAVE_DRAND48
+#ifdef IPOPT_HAS_DRAND48
    return Number(drand48());
 #else
-# ifdef HAVE_RAND
+# ifdef IPOPT_HAS_RAND
    return Number(rand()) / Number(RAND_MAX);
 # else
 #  ifdef HAVE_STD__RAND
@@ -127,10 +127,10 @@ Number IpRandom01()
 
 void IpResetRandom01()
 {
-#ifdef HAVE_DRAND48
+#ifdef IPOPT_HAS_DRAND48
    srand48(1);
 #else
-# ifdef HAVE_RAND
+# ifdef IPOPT_HAS_RAND
    srand(1);
 # else
 #  ifdef HAVE_STD__RAND
@@ -217,7 +217,7 @@ int Snprintf(
 #endif
    va_start(ap, format);
    int ret;
-#ifdef HAVE_VA_COPY
+#ifdef IPOPT_HAS_VA_COPY
    va_list apcopy;
    va_copy(apcopy, ap);
 # ifdef HAVE_VSNPRINTF

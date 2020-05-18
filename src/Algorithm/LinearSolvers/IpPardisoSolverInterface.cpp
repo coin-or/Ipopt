@@ -21,23 +21,23 @@
 #include <cstring>
 
 // determine the correct name of the Pardiso function
-#ifndef HAVE_PARDISO
+#ifndef IPOPT_HAS_PARDISO
 // if we build for the Linear Solver loader, then use normal C-naming style
-# define PARDISO_FUNC(name,NAME) name
+# define IPOPT_PARDISO_FUNC(name,NAME) name
 #endif
 
 /* Prototypes for Pardiso's subroutines */
 extern "C"
 {
-#ifdef HAVE_PARDISO_MKL
-   void PARDISO_FUNC(pardisoinit, PARDISOINIT)(
+#ifdef IPOPT_HAS_PARDISO_MKL
+   void IPOPT_PARDISO_FUNC(pardisoinit, PARDISOINIT)(
       void*         PT,
       const ipfint* MTYPE,
       ipfint*       IPARM
    );
 #else
 // The following is a fix to allow linking with Pardiso library under Windows
-   void PARDISO_FUNC(pardisoinit, PARDISOINIT)(
+   void IPOPT_PARDISO_FUNC(pardisoinit, PARDISOINIT)(
       void*         PT,
       const ipfint* MTYPE,
       const ipfint* SOLVER,
@@ -47,7 +47,7 @@ extern "C"
    );
 #endif
 
-   void PARDISO_FUNC(pardiso, PARDISO)(
+   void IPOPT_PARDISO_FUNC(pardiso, PARDISO)(
       void**        PT,
       const ipfint* MAXFCT,
       const ipfint* MNUM,
@@ -68,7 +68,7 @@ extern "C"
    );
 
 #ifdef PARDISO_MATCHING_PREPROCESS
-   void PARDISO_FUNC(smat_reordering_pardiso_wsmp, SMAT_REORDERING_PARDISO_WSMP)(
+   void IPOPT_PARDISO_FUNC(smat_reordering_pardiso_wsmp, SMAT_REORDERING_PARDISO_WSMP)(
       const ipfint* N,
       const ipfint* ia,
       const ipfint* ja,
@@ -86,7 +86,7 @@ extern "C"
 
 namespace Ipopt
 {
-#if COIN_IPOPT_VERBOSITY > 0
+#if IPOPT_VERBOSITY > 0
 static const Index dbg_verbosity = 0;
 #endif
 
@@ -128,7 +128,7 @@ PardisoSolverInterface::~PardisoSolverInterface()
       ipfint ERROR;
       ipfint idmy;
       double ddmy;
-      PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
+      IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
                                      &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
    }
@@ -206,7 +206,7 @@ void PardisoSolverInterface::RegisterOptions(
       //       Setting it to 1 should decrease the number of iterative refinement
       //       steps by 1 in case that perturbed pivots have been used, and increase
       //       it by 1 otherwise.
-#ifdef HAVE_PARDISO_MKL
+#ifdef IPOPT_HAS_PARDISO_MKL
       1,
 #else
       0,
@@ -216,7 +216,7 @@ void PardisoSolverInterface::RegisterOptions(
       "If negative, the accumulation of the residue uses extended precision real and complex data types. "
       "Perturbed pivots result in iterative refinement. "
       "The solver automatically performs two steps of iterative refinements when perturbed pivots are obtained during the numerical factorization and this option is set to 0.");
-#ifdef HAVE_PARDISO_MKL
+#ifdef IPOPT_HAS_PARDISO_MKL
    roptions->AddStringOption4(
       "pardiso_order",
       "Controls the fill-in reduction ordering algorithm for the input matrix.",
@@ -237,7 +237,7 @@ void PardisoSolverInterface::RegisterOptions(
       "four", "undocumented",
       "five", "undocumented");
 #endif
-#ifndef HAVE_PARDISO_MKL
+#ifndef IPOPT_HAS_PARDISO_MKL
    roptions->AddLowerBoundedIntegerOption(
       "pardiso_max_iter",
       "Maximum number of Krylov-Subspace Iteration",
@@ -327,7 +327,7 @@ bool PardisoSolverInterface::InitializeImpl(
    options.GetIntegerValue("pardiso_max_iterative_refinement_steps", max_iterref_steps, prefix);
    int order;
    options.GetEnumValue("pardiso_order", order, prefix);
-#ifndef HAVE_PARDISO_MKL
+#ifndef IPOPT_HAS_PARDISO_MKL
    options.GetBoolValue("pardiso_iterative", pardiso_iterative_, prefix);
    int pardiso_max_iter;
    options.GetIntegerValue("pardiso_max_iter", pardiso_max_iter, prefix);
@@ -361,7 +361,7 @@ bool PardisoSolverInterface::InitializeImpl(
       ipfint ERROR;
       ipfint idmy;
       double ddmy;
-      PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
+      IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
                                      &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
    }
@@ -395,20 +395,20 @@ bool PardisoSolverInterface::InitializeImpl(
    memset(PT_, 0, 64); // needs to be initialized to 0 according to MKL Pardiso docu
    IPARM_[0] = 0;  // Tell it to fill IPARM with default values(?)
 
-#ifndef HAVE_PARDISO_MKL
+#ifndef IPOPT_HAS_PARDISO_MKL
    ipfint ERROR = 0;
    ipfint SOLVER = 0; // initialize only direct solver
 
-   PARDISO_FUNC(pardisoinit, PARDISOINIT)(PT_, &MTYPE_, &SOLVER, IPARM_, DPARM_, &ERROR);
+   IPOPT_PARDISO_FUNC(pardisoinit, PARDISOINIT)(PT_, &MTYPE_, &SOLVER, IPARM_, DPARM_, &ERROR);
 #else
-   PARDISO_FUNC(pardisoinit, PARDISOINIT)(PT_, &MTYPE_, IPARM_);
+   IPOPT_PARDISO_FUNC(pardisoinit, PARDISOINIT)(PT_, &MTYPE_, IPARM_);
 #endif
 
    // Set some parameters for Pardiso
    IPARM_[0] = 1;  // Don't use the default values
 
    int num_procs = 1;
-#if defined(HAVE_PARDISO_PARALLEL) || ! defined(HAVE_PARDISO)
+#if defined(IPOPT_HAS_PARDISO_PARALLEL) || ! defined(IPOPT_HAS_PARDISO)
    // Obtain the numbers of processors from the value of OMP_NUM_THREADS
    char* var = getenv("OMP_NUM_THREADS");
    if( var != NULL )
@@ -423,7 +423,7 @@ bool PardisoSolverInterface::InitializeImpl(
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Using environment OMP_NUM_THREADS = %d as the number of processors for PARDISO.\n", num_procs);
    }
-#if defined(HAVE_PARDISO) && ! defined(HAVE_PARDISO_MKL)
+#if defined(IPOPT_HAS_PARDISO) && ! defined(IPOPT_HAS_PARDISO_MKL)
    // If we run Pardiso through the linear solver loader,
    // we do not know whether it is the parallel version, so we do not report a warning if OMP_NUM_THREADS is not set.
    // If we run Pardiso from MKL, then OMP_NUM_THREADS does not need to be set, so no warning.
@@ -435,7 +435,7 @@ bool PardisoSolverInterface::InitializeImpl(
 #endif
 #endif
 
-#ifdef HAVE_PARDISO_MKL
+#ifdef IPOPT_HAS_PARDISO_MKL
    IPARM_[1] = order;
    (void) num_procs;
    // For MKL PARDSIO, the documentation says, "iparm(3) Reserved. Set to zero.", so we don't set IPARM_[2]
@@ -479,7 +479,7 @@ bool PardisoSolverInterface::InitializeImpl(
 
    if( pardiso_iterative_ )
    {
-#ifdef HAVE_PARDISO_MKL
+#ifdef IPOPT_HAS_PARDISO_MKL
       THROW_EXCEPTION(OPTION_INVALID,
                       "You chose to use the iterative version of Pardiso, but you need to use a Pardiso version of at least 4.0.");
 #else
@@ -764,7 +764,7 @@ ESymSolverStatus PardisoSolverInterface::Factorization(
          scale2 = new double[N];
          ipfint* tmp2_ = new ipfint[N];
 
-         PARDISO_FUNC(smat_reordering_pardiso_wsmp, SMAT_REORDERING_PARDISO_WSMP)(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp2_, 0);
+         IPOPT_PARDISO_FUNC(smat_reordering_pardiso_wsmp, SMAT_REORDERING_PARDISO_WSMP)(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp2_, 0);
 
          delete[] tmp2_;
 
@@ -772,7 +772,7 @@ ESymSolverStatus PardisoSolverInterface::Factorization(
 
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                         "Calling Pardiso for symbolic factorization.\n");
-         PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+         IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
 #ifdef PARDISO_MATCHING_PREPROCESS
                                         &PHASE, &N, a2_, ia2, ja2, &PERM,
 #else
@@ -832,11 +832,11 @@ ESymSolverStatus PardisoSolverInterface::Factorization(
 
 #ifdef PARDISO_MATCHING_PREPROCESS
       ipfint* tmp3_ = new ipfint[N];
-      PARDISO_FUNC(smat_reordering_pardiso_wsmp, SMAT_REORDERING_PARDISO_WSMP)(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp3_, 1);
+      IPOPT_PARDISO_FUNC(smat_reordering_pardiso_wsmp, SMAT_REORDERING_PARDISO_WSMP)(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp3_, 1);
       delete[] tmp3_;
 #endif
 
-      PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+      IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
 #ifdef PARDISO_MATCHING_PREPROCESS
                                      &PHASE, &N, a2_, ia2, ja2, &PERM,
 #else
@@ -990,7 +990,7 @@ ESymSolverStatus PardisoSolverInterface::Solve(
       {
          rhs_vals[perm2[i]] = scale2[i] * ORIG_RHS[ i ];
       }
-      PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+      IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
                                      &PHASE, &N, a2_, ia2, ja2, &PERM,
                                      &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
                                      &ERROR, DPARM_);
@@ -1008,7 +1008,7 @@ ESymSolverStatus PardisoSolverInterface::Solve(
       {
          rhs_vals[i] = ORIG_RHS[i];
       }
-      PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, a_, ia, ja, &PERM, &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
+      IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, a_, ia, ja, &PERM, &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
                                      &ERROR, DPARM_);
 #endif
 

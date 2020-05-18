@@ -852,7 +852,7 @@ inline VectorSpace::VectorSpace(
 } // namespace Ipopt
 
 // Macro definitions for debugging vectors
-#if COIN_IPOPT_VERBOSITY == 0
+#if IPOPT_VERBOSITY == 0
 # define DBG_PRINT_VECTOR(__verbose_level, __vec_name, __vec)
 #else
 # define DBG_PRINT_VECTOR(__verbose_level, __vec_name, __vec) \
@@ -865,6 +865,6 @@ inline VectorSpace::VectorSpace(
         "# "); \
       } \
    }
-#endif //if COIN_IPOPT_VERBOSITY == 0
+#endif //if IPOPT_VERBOSITY == 0
 
 #endif

@@ -4,8 +4,6 @@
 
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
-AUTOMAKE_OPTIONS = foreign
-
 SUBDIRS = TMatrices
 
 includeipoptdir = $(includedir)/coin-or
@@ -56,5 +54,6 @@ liblinalg_la_SOURCES = \
 
 #liblinalg_la_LDFLAGS = $(LT_LDFLAGS)
 
-AM_CPPFLAGS = -DIPOPT_BUILD \
-	-I$(srcdir)/../Common
+AM_CPPFLAGS = \
+	-I$(srcdir)/../Common \
+	$(IPOPTLIB_CFLAGS)

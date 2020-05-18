@@ -304,7 +304,7 @@ private:
    );
    //@}
 
-#if COIN_IPOPT_CHECKLEVEL > 0
+#if IPOPT_CHECKLEVEL > 0
    /** Some debug flags to make sure vectors are not changed
     *  behind the CGPenaltyData's back
     */
@@ -338,7 +338,7 @@ void CGPenaltyData::set_delta_cgpen(
 )
 {
    delta_cgpen_ = ConstPtr(delta_cgpen);
-#if COIN_IPOPT_CHECKLEVEL > 0
+#if IPOPT_CHECKLEVEL > 0
 
    if (IsValid(delta_cgpen))
    {
@@ -361,7 +361,7 @@ void CGPenaltyData::set_delta_cgpen(
 )
 {
    delta_cgpen_ = delta_cgpen;
-#if COIN_IPOPT_CHECKLEVEL > 0
+#if IPOPT_CHECKLEVEL > 0
 
    if (IsValid(delta_cgpen))
    {
@@ -384,7 +384,7 @@ void CGPenaltyData::set_delta_cgfast(
 )
 {
    delta_cgfast_ = ConstPtr(delta_cgfast);
-#if COIN_IPOPT_CHECKLEVEL > 0
+#if IPOPT_CHECKLEVEL > 0
 
    if (IsValid(delta_cgfast))
    {

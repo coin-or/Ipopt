@@ -416,7 +416,7 @@ inline SmartPtr<const MatrixSpace> Matrix::OwnerSpace() const
 } // namespace Ipopt
 
 // Macro definitions for debugging matrices
-#if COIN_IPOPT_VERBOSITY == 0
+#if IPOPT_VERBOSITY == 0
 # define DBG_PRINT_MATRIX(__verbose_level, __mat_name, __mat)
 #else
 # define DBG_PRINT_MATRIX(__verbose_level, __mat_name, __mat) \
@@ -429,6 +429,6 @@ inline SmartPtr<const MatrixSpace> Matrix::OwnerSpace() const
         "# "); \
       } \
    }
-#endif // #if COIN_IPOPT_VERBOSITY == 0
+#endif // #if IPOPT_VERBOSITY == 0
 
 #endif

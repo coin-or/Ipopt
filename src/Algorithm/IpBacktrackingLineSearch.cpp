@@ -17,7 +17,7 @@
 namespace Ipopt
 {
 
-#if COIN_IPOPT_VERBOSITY > 0
+#if IPOPT_VERBOSITY > 0
 static const Index dbg_verbosity = 0;
 #endif
 
@@ -723,7 +723,7 @@ bool BacktrackingLineSearch::DoBacktrackingLineSearch(
 
    if( !accept )
    {
-      // Loop over decreaseing step sizes until acceptable point is
+      // Loop over decreasing step sizes until acceptable point is
       // found or until step size becomes too small
 
       while( alpha_primal > alpha_min || n_steps == 0 )

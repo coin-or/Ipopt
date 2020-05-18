@@ -4,8 +4,6 @@
 
 # Authors:  Andreas Waechter        IBM       2008-08-31
 
-AUTOMAKE_OPTIONS = foreign
-
 if BUILD_INEXACT
   noinst_LTLIBRARIES = libinexact.la
 endif
@@ -28,7 +26,7 @@ libinexact_la_SOURCES = \
 
 #libinexact_la_LDFLAGS = $(LT_LDFLAGS)
 
-AM_CPPFLAGS = -DIPOPT_BUILD \
+AM_CPPFLAGS = \
 	-I$(srcdir)/../../Common \
 	-I$(srcdir)/../../LinAlg \
 	-I$(srcdir)/../../LinAlg/TMatrices \

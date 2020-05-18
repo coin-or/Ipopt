@@ -4,8 +4,6 @@
 
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
-AUTOMAKE_OPTIONS = foreign
-
 lib_LTLIBRARIES = libipoptamplinterface.la
 bin_PROGRAMS = ipopt
 
@@ -20,9 +18,9 @@ ipopt_SOURCES = \
 
 ipopt_LDADD = libipoptamplinterface.la ../../Interfaces/libipopt.la
 
-LDFLAGS += $(LT_LDFLAGS)
+AM_LDFLAGS = $(LT_LDFLAGS)
 
-AM_CPPFLAGS = -DIPOPTAMPL_BUILD \
+AM_CPPFLAGS = \
 	-I$(srcdir)/../../Common \
 	-I$(srcdir)/../../LinAlg \
 	-I$(srcdir)/../../LinAlg/TMatrices \

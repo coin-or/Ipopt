@@ -9,7 +9,7 @@
 #include "IpDebug.hpp"
 #include "IpJournalist.hpp"
 
-#if COIN_IPOPT_VERBOSITY > 0
+#if IPOPT_VERBOSITY > 0
 
 namespace Ipopt
 {
@@ -119,4 +119,4 @@ void DebugJournalistWrapper::DebugPrintf(
 
 } // namespace Ipopt
 
-#endif // #if COIN_IPOPT_VERBOSITY > 0
+#endif // #if IPOPT_VERBOSITY > 0

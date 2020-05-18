@@ -10,12 +10,12 @@
 
 #include "IpoptConfig.h"
 
-#ifdef COIN_HAS_HSL
+#ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"
 #endif
 
 // if we do not have HSL_MA77 in HSL or the linear solver loader, then we want to build the MA77 interface
-#if defined(COINHSL_HAS_MA77) || defined(HAVE_LINEARSOLVERLOADER)
+#if defined(COINHSL_HAS_MA77) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
 
 #include "IpMa77SolverInterface.hpp"
 #include <iostream>
@@ -365,4 +365,4 @@ bool Ma77SolverInterface::IncreaseQuality()
 
 } // namespace Ipopt
 
-#endif /* COINHSL_HAS_MA77 or HAVE_LINEARSOLVERLOADER */
+#endif /* COINHSL_HAS_MA77 or IPOPT_HAS_LINEARSOLVERLOADER */

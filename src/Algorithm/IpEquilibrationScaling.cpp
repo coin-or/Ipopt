@@ -8,11 +8,11 @@
 #include "IpEquilibrationScaling.hpp"
 #include "IpTripletHelper.hpp"
 
-#ifdef COIN_HAS_HSL
+#ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"
 #else
 /* if we build for the Linear Solver loader, then use normal C-naming style */
-#define HSL_FUNC(name,NAME) name
+#define IPOPT_HSL_FUNC(name,NAME) name
 #endif
 
 #include <cmath>
@@ -22,7 +22,7 @@ extern "C"
 {
 // here we assume that float corresponds to Fortran's single
 // precision
-   void HSL_FUNC(mc19ad, MC19AD)(
+   void IPOPT_HSL_FUNC(mc19ad, MC19AD)(
       const ipfint* N,
       const ipfint* NZ,
       const double* A,
@@ -36,7 +36,7 @@ extern "C"
 
 namespace Ipopt
 {
-#if COIN_IPOPT_VERBOSITY > 0
+#if IPOPT_VERBOSITY > 0
 static const Index dbg_verbosity = 0;
 #endif
 
@@ -209,10 +209,10 @@ void EquilibrationScaling::DetermineScalingParametersImpl(
    float* R = new float[N];
    float* C = new float[N];
    float* W = new float[5 * N];
-#if defined(COINHSL_HAS_MC19) || defined(HAVE_LINEARSOLVERLOADER)
+#if defined(COINHSL_HAS_MC19) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
    const ipfint NZ = nnz_jac_c + nnz_jac_d + nnz_grad_f;
-   //HSL_FUNC(mc19ad,MC19AD)(&N, &NZ, avrg_values, AIRN, AJCN, R, C, W);
-   HSL_FUNC(mc19ad, MC19AD)(&N, &NZ, avrg_values, AJCN, AIRN, C, R, W);
+   //IPOPT_HSL_FUNC(mc19ad,MC19AD)(&N, &NZ, avrg_values, AIRN, AJCN, R, C, W);
+   IPOPT_HSL_FUNC(mc19ad, MC19AD)(&N, &NZ, avrg_values, AJCN, AIRN, C, R, W);
 #else
 
    THROW_EXCEPTION(OPTION_INVALID, "Currently cannot do equilibration-based NLP scaling if MC19 is not available.");

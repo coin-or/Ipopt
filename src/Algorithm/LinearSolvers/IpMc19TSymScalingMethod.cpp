@@ -6,15 +6,15 @@
 
 #include "IpoptConfig.h"
 
-#ifdef COIN_HAS_HSL
+#ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"
 #else
 /* if we build for the Linear Solver loader, then use normal C-naming style */
-#define HSL_FUNC(name,NAME) name
+#define IPOPT_HSL_FUNC(name,NAME) name
 #endif
 
 // if we do not have MC19 in HSL or the linear solver loader, then we want to build the MC19 interface
-#if defined(COINHSL_HAS_MC19) || defined(HAVE_LINEARSOLVERLOADER)
+#if defined(COINHSL_HAS_MC19) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
 
 #include "IpMc19TSymScalingMethod.hpp"
 
@@ -24,7 +24,7 @@
 extern "C"
 {
 // here we assume that float corresponds to Fortran's single precision
-   void HSL_FUNC(mc19ad, MC19AD)(
+   void IPOPT_HSL_FUNC(mc19ad, MC19AD)(
       ipfint* N,
       ipfint* NZ,
       double* A,
@@ -38,7 +38,7 @@ extern "C"
 
 namespace Ipopt
 {
-#if COIN_IPOPT_VERBOSITY > 0
+#if IPOPT_VERBOSITY > 0
 static const Index dbg_verbosity = 0;
 #endif
 
@@ -139,7 +139,7 @@ bool Mc19TSymScalingMethod::ComputeSymTScalingFactors(
    float* R = new float[n];
    float* C = new float[n];
    float* W = new float[5 * n];
-   HSL_FUNC(mc19ad, MC19AD)(&n, &nnz2, A2, AIRN2, AJCN2, R, C, W);
+   IPOPT_HSL_FUNC(mc19ad, MC19AD)(&n, &nnz2, A2, AIRN2, AJCN2, R, C, W);
    delete[] W;
 
    if( DBG_VERBOSITY() >= 3 )
@@ -194,4 +194,4 @@ bool Mc19TSymScalingMethod::ComputeSymTScalingFactors(
 
 } // namespace Ipopt
 
-#endif /* COINHSL_HAS_MC19 or HAVE_LINEARSOLVERLOADER */
+#endif /* COINHSL_HAS_MC19 or IPOPT_HAS_LINEARSOLVERLOADER */

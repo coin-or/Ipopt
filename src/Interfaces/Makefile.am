@@ -4,8 +4,6 @@
 
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
-AUTOMAKE_OPTIONS = foreign
-
 includeipoptdir = $(includedir)/coin-or
 includeipopt_HEADERS = \
 	IpAlgTypes.hpp \
@@ -49,9 +47,10 @@ all-local : org.coinor.ipopt.jar
 CLEANFILES = org.coinor.ipopt.jar org/coinor/Ipopt.class org_coinor_Ipopt.h
 
 install-exec-local :
-	$(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) org.coinor.ipopt.jar "$(DESTDIR)$(libdir)"
+	$(MKDIR_P) "$(DESTDIR)$(datadir)/java"
+	$(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) org.coinor.ipopt.jar "$(DESTDIR)$(datadir)/java"
 uninstall-local :
-	$(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/org.coinor.ipopt.jar"
+	$(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(datadir)/java/org.coinor.ipopt.jar"
 
 endif
 
@@ -61,7 +60,7 @@ libipopt_la_DEPENDENCIES = $(IPALLLIBS)
 
 libipopt_la_LDFLAGS = $(LT_LDFLAGS)
 
-AM_CPPFLAGS = -DIPOPT_BUILD \
+AM_CPPFLAGS = \
 	-I$(srcdir)/../Common \
 	-I$(srcdir)/../LinAlg \
 	-I$(srcdir)/../Algorithm/LinearSolvers \

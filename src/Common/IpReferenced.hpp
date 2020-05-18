@@ -12,7 +12,7 @@
 
 #include <list>
 
-#if COIN_IPOPT_CHECKLEVEL > 3
+#if IPOPT_CHECKLEVEL > 3
 #define IP_DEBUG_REFERENCED
 #endif
 

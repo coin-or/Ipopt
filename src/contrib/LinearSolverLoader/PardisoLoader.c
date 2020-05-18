@@ -14,11 +14,11 @@
 #include <assert.h>
 
 /* Type of Fortran integer translated into C */
-typedef FORTRAN_INTEGER_TYPE ipfint;
+typedef IPOPT_FORTRAN_INTEGER_TYPE ipfint;
 
 static soHandle_t Pardiso_handle = NULL;
 
-void LSL_lateParadisoLibLoad();
+void LSL_lateParadisoLibLoad(void);
 
 typedef void (*voidfun)(void);
 
@@ -158,7 +158,7 @@ int LSL_loadPardisoLib(
    return 0;
 }
 
-int LSL_unloadPardisoLib()
+int LSL_unloadPardisoLib(void)
 {
    int rc;
 
@@ -176,12 +176,12 @@ int LSL_unloadPardisoLib()
    return rc;
 }
 
-int LSL_isPardisoLoaded()
+int LSL_isPardisoLoaded(void)
 {
    return Pardiso_handle != NULL;
 }
 
-void LSL_lateParadisoLibLoad()
+void LSL_lateParadisoLibLoad(void)
 {
    char buffer[512];
    int rc;
@@ -195,7 +195,7 @@ void LSL_lateParadisoLibLoad()
    }
 }
 
-char* LSL_PardisoLibraryName()
+char* LSL_PardisoLibraryName(void)
 {
    static char name[] = PARDISOLIBNAME;
    return name;

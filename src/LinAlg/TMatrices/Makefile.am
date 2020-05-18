@@ -4,8 +4,6 @@
 
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
-AUTOMAKE_OPTIONS = foreign
-
 includeipoptdir = $(includedir)/coin-or
 includeipopt_HEADERS = \
 	IpGenTMatrix.hpp \
@@ -20,6 +18,7 @@ libtmatrices_la_SOURCES = \
 
 #libtmatrices_la_LDFLAGS = $(LT_LDFLAGS)
 
-AM_CPPFLAGS = -DIPOPT_BUILD \
+AM_CPPFLAGS = \
 	-I$(srcdir)/../../Common \
-	-I$(srcdir)/..
+	-I$(srcdir)/.. \
+	$(IPOPTLIB_CFLAGS)

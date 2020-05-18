@@ -10,11 +10,11 @@
 #include "IpoptConfig.h"
 #include "IpTypes.hpp"
 
-#ifndef COIN_IPOPT_CHECKLEVEL
-#define COIN_IPOPT_CHECKLEVEL 0
+#ifndef IPOPT_CHECKLEVEL
+#define IPOPT_CHECKLEVEL 0
 #endif
 
-#if COIN_IPOPT_CHECKLEVEL > 0
+#if IPOPT_CHECKLEVEL > 0
 # ifdef NDEBUG
 #  undef NDEBUG
 # endif
@@ -29,11 +29,11 @@
 # define DBG_DO(__cmd)
 #endif
 
-#ifndef COIN_IPOPT_VERBOSITY
-#define COIN_IPOPT_VERBOSITY 0
+#ifndef IPOPT_VERBOSITY
+#define IPOPT_VERBOSITY 0
 #endif
 
-#if COIN_IPOPT_VERBOSITY < 1
+#if IPOPT_VERBOSITY < 1
 # define DBG_START_FUN(__func_name, __verbose_level)
 # define DBG_START_METH(__func_name, __verbose_level)
 # define DBG_PRINT(__printf_args)

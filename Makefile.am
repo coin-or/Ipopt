@@ -4,8 +4,6 @@
 
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
-AUTOMAKE_OPTIONS = foreign
-
 SUBDIRS = src/Common src/LinAlg src/Algorithm src/contrib/CGPenalty
 
 if BUILD_LINEARSOLVERLOADER
@@ -24,35 +22,7 @@ endif
 
 doc_DATA = README.md AUTHORS LICENSE
 
-.PHONY: test unitTest astyle doc javadoc
-
-# Stuff to clean up from "make test"
-
-DISTCLEANFILES = \
-	examples/Cpp_example/cpp_example@EXEEXT@ \
-	examples/Cpp_example/cpp_example.@OBJEXT@ \
-	examples/Cpp_example/MyNLP.@OBJEXT@ \
-	examples/hs071_cpp/hs071_cpp@EXEEXT@ \
-	examples/hs071_cpp/hs071_main.@OBJEXT@ \
-	examples/hs071_cpp/hs071_nlp.@OBJEXT@ \
-	examples/hs071_cpp/ipopt.out \
-	examples/hs071_c/hs071_c@EXEEXT@ \
-	examples/hs071_c/hs071_c.@OBJEXT@ \
-	examples/hs071_c/ipopt.out \
-	examples/hs071_f/hs071_f@EXEEXT@ \
-	examples/hs071_f/hs071_f.@OBJEXT@ \
-	examples/hs071_f/IPOPT.OUT \
-	examples/ScalableProblems/*.@OBJEXT@ \
-	examples/ScalableProblems/solve_problem@EXEEXT@ \
-	examples/ScalableProblems/solution.txt \
-	tutorial/CodingExercise/*/*/*.@OBJEXT@ \
-	tutorial/CodingExercise/C/*/TutorialC@EXEEXT@ \
-	tutorial/CodingExercise/Cpp/*/TutorialCpp@EXEEXT@ \
-	tutorial/CodingExercise/Fortran/*/TutorialFortran@EXEEXT@
-
-tmpdir = tmpdir
-
-libipopt = libipopt.a
+.PHONY: test unitTest doc javadoc astyle
 
 test: unitTest
 

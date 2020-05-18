@@ -10,7 +10,7 @@
 #include "IpReferenced.hpp"
 
 #include "IpDebug.hpp"
-#if COIN_IPOPT_CHECKLEVEL > 2
+#if IPOPT_CHECKLEVEL > 2
 # define IP_DEBUG_SMARTPTR
 #endif
 #ifndef IPOPT_UNUSED
@@ -526,7 +526,7 @@ T* SmartPtr<T>::operator->() const
 #endif
 
    // cannot deref a null pointer
-#if COIN_IPOPT_CHECKLEVEL > 0
+#if IPOPT_CHECKLEVEL > 0
    assert(ptr_);
 #endif
 
@@ -541,7 +541,7 @@ T& SmartPtr<T>::operator*() const
 #endif
 
    // cannot dereference a null pointer
-#if COIN_IPOPT_CHECKLEVEL > 0
+#if IPOPT_CHECKLEVEL > 0
    assert(ptr_);
 #endif
 

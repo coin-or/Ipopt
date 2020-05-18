@@ -4,8 +4,6 @@
 
 # Authors:  Andreas Waechter        IBM       2007-06-01
 
-AUTOMAKE_OPTIONS = foreign
-
 noinst_LTLIBRARIES = libcgpenalty.la
 
 libcgpenalty_la_SOURCES = \
@@ -19,9 +17,10 @@ libcgpenalty_la_SOURCES = \
 
 #libcgpenalty_la_LDFLAGS = $(LT_LDFLAGS)
 
-AM_CPPFLAGS = -DIPOPT_BUILD \
+AM_CPPFLAGS = \
 	-I$(srcdir)/../../Common \
 	-I$(srcdir)/../../LinAlg \
 	-I$(srcdir)/../../LinAlg/TMatrices \
 	-I$(srcdir)/../../Interfaces \
-	-I$(srcdir)/../../Algorithm
+	-I$(srcdir)/../../Algorithm \
+	$(IPOPTLIB_CFLAGS)

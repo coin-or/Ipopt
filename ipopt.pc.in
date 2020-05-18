@@ -8,8 +8,8 @@ Name: IPOPT
 Description: Interior Point Optimizer
 URL: https://github.com/coin-or/Ipopt
 Version: @PACKAGE_VERSION@
-Libs: -L${libdir} -lipopt
-Libs.private: @IPOPTLIB_LFLAGS_NOPC@
 Cflags: -I${includedir}
-Requires:
-Requires.private: @IPOPTLIB_PCFILES@
+@COIN_STATIC_BUILD_FALSE@Libs: -L${libdir} -lipopt
+@COIN_STATIC_BUILD_FALSE@Requires.private: @IPOPTLIB_PCFILES@
+@COIN_STATIC_BUILD_TRUE@Libs: -L${libdir} -lipopt @IPOPTLIB_LFLAGS_NOPC@
+@COIN_STATIC_BUILD_TRUE@Requires: @IPOPTLIB_PCFILES@

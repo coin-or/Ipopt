@@ -141,7 +141,7 @@ bool IpoptData::InitializeDataStructures(
 
    curr_ = iterates_space_->MakeNewIteratesVector(*new_x, *new_s, *new_y_c, *new_y_d, *new_z_L, *new_z_U, *new_v_L,
            *new_v_U);
-#if COIN_IPOPT_CHECKLEVEL > 0
+#if IPOPT_CHECKLEVEL > 0
 
    debug_curr_tag_ = curr_->GetTag();
    debug_curr_tag_sum_ = curr_->GetTagSum();

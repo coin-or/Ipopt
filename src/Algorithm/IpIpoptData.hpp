@@ -802,7 +802,7 @@ private:
    );
    //@}
 
-#if COIN_IPOPT_CHECKLEVEL > 0
+#if IPOPT_CHECKLEVEL > 0
    /** Some debug flags to make sure vectors are not changed
     *  behind the IpoptData's back
     */
@@ -852,7 +852,7 @@ inline
 void IpoptData::CopyTrialToCurrent()
 {
    curr_ = trial_;
-#if COIN_IPOPT_CHECKLEVEL > 0
+#if IPOPT_CHECKLEVEL > 0
 
    if (IsValid(curr_))
    {
@@ -875,7 +875,7 @@ void IpoptData::set_trial(
 {
    trial_ = ConstPtr(trial);
 
-#if COIN_IPOPT_CHECKLEVEL > 0
+#if IPOPT_CHECKLEVEL > 0
    // verify the correct space
    DBG_ASSERT(trial_->OwnerSpace() == (VectorSpace*)GetRawPtr(iterates_space_));
    if (IsValid(trial))
@@ -899,7 +899,7 @@ void IpoptData::set_delta(
 )
 {
    delta_ = ConstPtr(delta);
-#if COIN_IPOPT_CHECKLEVEL > 0
+#if IPOPT_CHECKLEVEL > 0
 
    if (IsValid(delta))
    {
@@ -922,7 +922,7 @@ void IpoptData::set_delta(
 )
 {
    delta_ = delta;
-#if COIN_IPOPT_CHECKLEVEL > 0
+#if IPOPT_CHECKLEVEL > 0
 
    if (IsValid(delta))
    {
@@ -945,7 +945,7 @@ void IpoptData::set_delta_aff(
 )
 {
    delta_aff_ = ConstPtr(delta_aff);
-#if COIN_IPOPT_CHECKLEVEL > 0
+#if IPOPT_CHECKLEVEL > 0
 
    if (IsValid(delta_aff))
    {
