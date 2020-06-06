@@ -55,23 +55,57 @@ For information on projects that use Ipopt, refer to the [Success Stories page](
 Getting Started
 ---------------
 
-On sufficiently prepared systems, a quick way to build and install Ipopt
-is to get the coinbrew script from https://coin-or.github.io/coinbrew/
-and running
+Please consult the [detailed installation instructions](https://coin-or.github.io/Ipopt/INSTALL.html)
+in the Ipopt documentation. In the following, we only summarize some main points.
+
+### Dependencies
+
+Ipopt requires at least one of the following solvers for systems of linear equations:
+- MA27, MA57, HSL_MA77, HSL_MA86, or HSL_MA97 from the [Harwell Subroutines Library](http://hsl.rl.ac.uk) (HSL).
+  It is recommended to use project [ThirdParty-HSL](https://github.com/coin-or-tools/ThirdParty-HSL) to build a HSL library for use by Ipopt.
+- [Parallel Sparse Direct Linear Solver](http://www.pardiso-project.org) (Pardiso).
+  Note, that the Intel Math Kernel Library (MKL) also includes a version of Pardiso, but the one from Pardiso Project often offers better performance.
+- [MUltifrontal Massively Parallel sparse direct Solver](http://mumps.enseeiht.fr/) (MUMPS).
+  It is highly recommended to use project [ThirdParty-Mumps](https://github.com/coin-or-tools/ThirdParty-Mumps) to build a MUMPS library for use by Ipopt.
+- [Watson Sparse Matrix Package](http://www.research.ibm.com/projects/wsmp)
+
+A fast implementation of BLAS and LAPACK is required by Ipopt.
+
+To build the AMPL interface of Ipopt, the AMPL Solver Library (ASL) is required.
+It is recommended to use project [ThirdParty-ASL](https://github.com/coin-or-tools/ThirdParty-ASL) to build a ASL library for use by Ipopt.
+
+### Build
+
+After installation of dependencies, an Ipopt build and installation follows these 4 steps:
+
+1. Run `./configure`. Use `./configure --help` to see available options.
+
+2. Run `make` to build the Ipopt libraries. If ASL was made available, also Ipopt executables will be build.
+
+3. Run `make test` to test the Ipopt build.
+
+4. Run `make install` to install Ipopt (libraries, executables, and header files).
+
+It is suggested to use the same installation prefix (`--prefix` option of `configure`)
+when configuring the build of ThirdParty-ASL, ThirdParty-HSL, ThirdParty-MUMPS, and Ipopt.
+
+### Using coinbrew
+
+An alternative to the above steps is to use the `coinbrew` script from
+https://coin-or.github.io/coinbrew/.
+`coinbrew` automates the download of the source code for ASL, MUMPS, and Ipopt
+and the sequential build and installation of these three packages.
+
+After obtaining the `coinbrew` script, run
 
     /path/to/coinbrew fetch Ipopt --no-prompt
     /path/to/coinbrew build Ipopt --prefix=/dir/to/install --test --no-prompt --verbosity=3
     /path/to/coinbrew install Ipopt --no-prompt
 
-The coinbrew script will take care of building and installing the
-dependencies ASL and Mumps before building Ipopt.
-
 More details on using coinbrew can be found at the instructions on
 [Getting Started with the COIN-OR Optimization Suite](https://coin-or.github.io/user_introduction).
 
-If using coinbrew is not sufficient, then the
-[installation instructions in the Ipopt documentation](https://coin-or.github.io/Ipopt/INSTALL.html)
-should be studied.
+### Precompiled binaries
 
 Some precompiled binaries of Ipopt are also available:
 
