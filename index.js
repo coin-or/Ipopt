@@ -10,7 +10,6 @@ var index =
       [ "History of this document", "index.html#HISTORY_DOC", null ]
     ] ],
     [ "Installing Ipopt", "INSTALL.html", [
-      [ "Quick Start: Using CoinBrew", "INSTALL.html#COINBREW", null ],
       [ "Getting System Packages (Compilers, ...)", "INSTALL.html#SYSTEMPACKAGES", [
         [ "Linux distributions", "INSTALL.html#SYSTEMPACKAGES_LINUX", null ],
         [ "Mac OS X", "INSTALL.html#SYSTEMPACKAGES_MAC", null ],
@@ -32,6 +31,7 @@ var index =
       [ "Compiling and Installing Ipopt", "INSTALL.html#COMPILEINSTALL", [
         [ "Flags to configure", "INSTALL.html#CONFIGURE_FLAGS", null ]
       ] ],
+      [ "Using CoinBrew", "INSTALL.html#COINBREW", null ],
       [ "Compiling and Installing the R Interface ipoptr", "INSTALL.html#INSTALL_R", null ]
     ] ],
     [ "Interfacing your NLP to Ipopt", "INTERFACES.html", [

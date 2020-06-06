@@ -147,10 +147,11 @@ Prerequisites</h2>
 <li><p class="startli">BLAS (Basic Linear Algebra Subroutines) and LAPACK (Linear Algebra PACKage). Many vendors of compilers and operating systems provide precompiled and optimized libraries for these dense linear algebra subroutines. You can also get the source code for a simple reference implementation from <a href="http://www.netlib.org">http://www.netlib.org</a>. However, it is strongly recommended to use some optimized BLAS and LAPACK implementations, for large problems this can make a runtime difference of an order of magnitude!</p>
 <p class="startli">Examples for efficient BLAS implementations are:</p><ul>
 <li>From hardware vendors:<ul>
-<li>ACML (AMD Core Math Library) by AMD</li>
-<li>ESSL (Engineering Scientific Subroutine Library) by IBM</li>
-<li>MKL (Math Kernel Library) by Intel</li>
-<li>Sun Performance Library by Sun</li>
+<li><a href="https://developer.apple.com/documentation/accelerate">Accelerate</a> Framework by Apple</li>
+<li><a href="https://github.com/amd/blis">BLIS</a> (BLAS-like Library Instantiation Software Framework) by AMD</li>
+<li><a href="https://www.ibm.com/support/knowledgecenter/en/SSFHY8/essl_welcome.html">ESSL</a> (Engineering Scientific Subroutine Library) by IBM</li>
+<li><a href="https://software.intel.com/content/www/us/en/develop/tools/math-kernel-library.html">MKL</a> (Math Kernel Library) by Intel</li>
+<li><a href="https://docs.oracle.com/cd/E18659_01/html/821-2763/gjgis.html">Sun Performance Library</a> by Sun</li>
 </ul>
 </li>
 <li>Generic:<ul>
@@ -259,7 +260,7 @@ History of Ipopt</h2>
 <h2><a class="anchor" id="HISTORY_DOC"></a>
 History of this document</h2>
 <p>The initial version of this document was created by Yoshiaki Kawajir (then Department of Chemical Engineering, Carnegie Mellon University, Pittsburgh PA) as a course project for <em>47852 Open Source Software for Optimization</em>, taught by Prof. François Margot at Tepper School of Business, Carnegie Mellon University. After this, Carl Laird (then Department of Chemical Engineering, Carnegie Mellon University, Pittsburgh PA) has added significant portions, including the very nice tutorials. The current version is maintained by Stefan Vigerske (GAMS Software GmbH) and Andreas Wächter (Department of Industrial Engineering and Management Sciences, Northwestern University).</p>
-<p>The following names used in this document are trademarks or registered trademarks: AMPL, IBM, Intel, Matlab, Microsoft, MKL, Visual Studio C++, Visual Studio C++ .NET </p>
+<p>The following names used in this document are trademarks or registered trademarks: Apple, AMPL, IBM, Intel, Matlab, Microsoft, MKL, Visual Studio C++, Visual Studio C++ .NET </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 </body>

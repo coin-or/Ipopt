@@ -101,8 +101,7 @@ $(document).ready(function(){initNavTree('INSTALL.html','');});
 </div><!--header-->
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
-<ul><li class="level1"><a href="#COINBREW">Quick Start: Using CoinBrew</a></li>
-<li class="level1"><a href="#SYSTEMPACKAGES">Getting System Packages (Compilers, ...)</a><ul><li class="level2"><a href="#SYSTEMPACKAGES_LINUX">Linux distributions</a></li>
+<ul><li class="level1"><a href="#SYSTEMPACKAGES">Getting System Packages (Compilers, ...)</a><ul><li class="level2"><a href="#SYSTEMPACKAGES_LINUX">Linux distributions</a></li>
 <li class="level2"><a href="#SYSTEMPACKAGES_MAC">Mac OS X</a></li>
 <li class="level2"><a href="#SYSTEMPACKAGES_MSYS">Windows with MSYS2/MinGW</a></li>
 </ul>
@@ -123,19 +122,12 @@ $(document).ready(function(){initNavTree('INSTALL.html','');});
 <li class="level1"><a href="#COMPILEINSTALL">Compiling and Installing Ipopt</a><ul><li class="level2"><a href="#CONFIGURE_FLAGS">Flags to configure</a></li>
 </ul>
 </li>
+<li class="level1"><a href="#COINBREW">Using CoinBrew</a></li>
 <li class="level1"><a href="#INSTALL_R">Compiling and Installing the R Interface ipoptr</a></li>
 </ul>
 </div>
 <div class="textblock"><p>The following sections describe the installation procedures on UNIX/Linux, Mac OS X, and Windows systems.</p>
 <p>The configuration script and Makefiles in the <code>Ipopt</code> distribution have been created using GNU's autoconf and automake. In general, you can see the list of options and variables that can be set for the configure script by typing <code>configure --help</code>.</p>
-<h1><a class="anchor" id="COINBREW"></a>
-Quick Start: Using CoinBrew</h1>
-<p>On sufficiently prepared systems, a quick way to build and install <code>Ipopt</code> is to get the coinbrew script from <a href="https://coin-or.github.io/coinbrew/">https://coin-or.github.io/coinbrew/</a> and running </p><pre class="fragment">/path/to/coinbrew fetch Ipopt --no-prompt
-/path/to/coinbrew build Ipopt --prefix=/dir/to/install --test --no-prompt --verbosity=3
-/path/to/coinbrew install Ipopt --no-prompt
-</pre><p>The coinbrew script will take care of building and installing the dependencies ASL and Mumps before building <code>Ipopt</code>. To use HSL sources, change to the <code>ThirdParty/HSL</code> directory created by <code>coinbrew fetch</code> and follow the download instructions (i.e., skip the build step) from <a class="el" href="INSTALL.html#DOWNLOAD_HSL">HSL (Harwell Subroutines Library)</a>. Then proceed with the <code>coinbrew build</code> step.</p>
-<p>More details on using coinbrew can be found at the instructions on <a href="https://coin-or.github.io/user_introduction">Getting Started with the COIN-OR Optimization Suite</a>.</p>
-<p>If these commands fail or this build is not sufficient, the following sections and the help of coinbrew should be studied.</p>
 <h1><a class="anchor" id="SYSTEMPACKAGES"></a>
 Getting System Packages (Compilers, ...)</h1>
 <h2><a class="anchor" id="SYSTEMPACKAGES_LINUX"></a>
@@ -169,7 +161,7 @@ Download, build, and install dependencies</h1>
 <p><code>Ipopt</code> uses a few external packages that are not included in the <code>Ipopt</code> source code distribution, for example ASL (the AMPL Solver Library if you want to compile the <code>Ipopt</code> AMPL solver executable), Blas, Lapack.</p>
 <p><code>Ipopt</code> also requires at least one linear solver for sparse symmetric indefinite matrices. There are different possibilities, see below. <b>It is important to keep in mind that usually the largest fraction of computation time in the optimizer is spent for solving the linear system, and that your choice of the linear solver impacts <code>Ipopt</code>'s speed and robustness. It might be worthwhile to try different linear solver to experiment with what is best for your application.</b></p>
 <p>Since this third party software is released under different licenses than <code>Ipopt</code>, we cannot distribute their code together with the <code>Ipopt</code> packages and have to ask you to go through the hassle of obtaining it yourself. Keep in mind that it is still your responsibility to ensure that your downloading and usage of the third party components conforms with their licenses.</p>
-<p>For a number of dependencies, COIN-OR provides specialized build systems that produce libraries which are easy to use with the build system of <code>Ipopt</code>. Some of the specialized build systems also come with a script that makes it easy to download the code using <code>wget</code> (or <code>curl</code> on Mac OS X). If these tools are not available on your system, please read the appropriate <code>INSTALL.*</code> file for alternative instructions.</p>
+<p>For ASL, HSL, and MUMPS, COIN-OR provides specialized build systems that produce libraries which are easy to use with the build system of <code>Ipopt</code>. Some of the specialized build systems also come with a script that makes it easy to download the code using <code>wget</code> or <code>curl</code>.</p>
 <h2><a class="anchor" id="EXTERNALCODE_ASL"></a>
 ASL (Ampl Solver Library)</h2>
 <p>Note that you only need to obtain the ASL if you intend to use <code>Ipopt</code> from AMPL. It is not required if you want to specify your optimization problem in a programming language (e.g., C++, C, or Fortran).</p>
@@ -201,7 +193,7 @@ HSL (Harwell Subroutines Library)</h2>
 </ol>
 <p>You may either:</p>
 <ul>
-<li>Compile the HSL code via the COIN-OR Tools project <a href="https://github.com/coin-or-tools/ThirdParty-HSL">ThirdParty-HSL</a> See the instructions below.</li>
+<li>Compile the HSL code via the COIN-OR Tools project <a href="https://github.com/coin-or-tools/ThirdParty-HSL">ThirdParty-HSL</a>. See the instructions below.</li>
 <li>Compile the HSL code separately either before or after the <code>Ipopt</code> code and use the shared library loading mechanism. See the documentation distributed with the HSL package for information on how to do so.</li>
 </ul>
 <p>To compile the HSL code via the COIN-OR Tools project <a href="https://github.com/coin-or-tools/ThirdParty-HSL">ThirdParty-HSL</a>, run </p><pre class="fragment">git clone https://github.com/coin-or-tools/ThirdParty-HSL.git
@@ -327,6 +319,14 @@ Flags to configure</h2>
 <li><a class="el" href="SPECIALS.html#SIPOPT">sIpopt</a> is build and installed together with <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions...">Ipopt</a>. If you do not need sIpopt, you can disable it via <code>--disable-sipopt</code>.</li>
 </ul>
 <p>Configure flags specific to the use of <code>Ipopt</code>'s dependencies were discussed in the corresponding sections of <a class="el" href="INSTALL.html#EXTERNALCODE">Download, build, and install dependencies</a>.</p>
+<h1><a class="anchor" id="COINBREW"></a>
+Using CoinBrew</h1>
+<p>On sufficiently prepared systems, an alternative way to download, build, and install <code>Ipopt</code> with dependencies ASL, HSL, and MUMPS is to use the coinbrew script from <a href="https://coin-or.github.io/coinbrew/">https://coin-or.github.io/coinbrew/</a></p>
+<p>After obtaining the script, run </p><pre class="fragment">/path/to/coinbrew fetch Ipopt --no-prompt
+/path/to/coinbrew build Ipopt --prefix=/dir/to/install --test --no-prompt --verbosity=3
+/path/to/coinbrew install Ipopt --no-prompt
+</pre><p>The coinbrew script will take care of building and installing the dependencies ASL and Mumps before building <code>Ipopt</code>. To use HSL sources, change to the <code>ThirdParty/HSL</code> directory created by <code>coinbrew fetch</code> and follow the download instructions (i.e., skip the build step) from <a class="el" href="INSTALL.html#DOWNLOAD_HSL">HSL (Harwell Subroutines Library)</a>. Then proceed with the <code>coinbrew build</code> step.</p>
+<p>More details on using coinbrew can be found at the instructions on <a href="https://coin-or.github.io/user_introduction">Getting Started with the COIN-OR Optimization Suite</a>.</p>
 <h1><a class="anchor" id="INSTALL_R"></a>
 Compiling and Installing the R Interface ipoptr</h1>
 <p>The <code>ipoptr</code> interface can be build after <code>Ipopt</code> has been build and installed. In the best case, it is sufficient to execute the following command in R: </p><pre class="fragment">install.packages('$IPOPTDIR/build/contrib/RInterface', repos=NULL, type='source')
