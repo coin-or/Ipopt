@@ -128,12 +128,10 @@ hassle of obtaining it yourself. Keep in mind that it is still your responsibili
 to ensure that your downloading and usage of the third party components
 conforms with their licenses.
 
-For a number of dependencies, COIN-OR provides specialized build systems
+For ASL, HSL, and MUMPS, COIN-OR provides specialized build systems
 that produce libraries which are easy to use with the build system of \Ipopt.
 Some of the specialized build systems also come with a script that makes it
-easy to download the code using `wget` (or `curl` on Mac OS X). If these
-tools are not available on your system, please read the appropriate
-`INSTALL.*` file for alternative instructions.
+easy to download the code using `wget` or `curl`.
 
 \subsection EXTERNALCODE_ASL ASL (Ampl Solver Library)
 
@@ -212,7 +210,7 @@ To obtain the HSL code, you can follow the following steps:
 You may either:
 
 -   Compile the HSL code via the COIN-OR Tools project
-    [ThirdParty-HSL](https://github.com/coin-or-tools/ThirdParty-HSL)
+    [ThirdParty-HSL](https://github.com/coin-or-tools/ThirdParty-HSL).
     See the instructions below.
 
 -   Compile the HSL code separately either before or after the
