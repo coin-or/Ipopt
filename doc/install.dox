@@ -353,6 +353,10 @@ organizations; make sure you read the license agreement before using the
 library. Once you obtained the library and license, please check if the
 version number of the library matches the one on the WSMP website.
 
+\note The license included in package of the libraries may not work and a
+  working one may need to be downloaded separately. Look out for messages
+  about an invalid WSMP license when testing the Ipopt build.
+
 If a newer version is announced on that website, you can (and probably
 should) request the current version by sending a message to
 `wsmp@us.ibm.com`. Please include the operating system and other
@@ -365,10 +369,11 @@ To compile \Ipopt with the linear solver WSMP, you need to specify the
 linker flags for the library with the `--with-wsmp` flag, including
 required additional libraries and flags. For example, if you want to compile
 \Ipopt with WSMP (located in `$HOME/lib`) on an Intel IA32 Linux system,
-you should use the `configure` flag
+you may use the `configure` flag
 \verbatim
---with-wsmp="$HOME/lib/wsmp/wsmp-Linux/lib/IA32/libwsmp.a -lpthread"
+--with-wsmp="$HOME/lib/wsmp/wsmp-Linux/lib/IA32/libwsmp.a -lpthread -lblas -llapack -lpthread -lm -lgfortran"
 \endverbatim
+But the actual flags depend on WSMP library and your preference for the Blas/Lapack libraries.
 
 \subsection LINEARSOLVERLOADER Using the Linear Solver Loader
 
