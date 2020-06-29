@@ -52,8 +52,4 @@ liblinalg_la_SOURCES = \
 	IpZeroMatrix.cpp \
 	IpZeroSymMatrix.cpp
 
-#liblinalg_la_LDFLAGS = $(LT_LDFLAGS)
-
-AM_CPPFLAGS = \
-	-I$(srcdir)/../Common \
-	$(IPOPTLIB_CFLAGS)
+AM_CPPFLAGS = -I$(srcdir)/../Common $(IPOPTLIB_CFLAGS)

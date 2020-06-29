@@ -1,7 +1,7 @@
 # Copyright (C) 2004, 2006 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
-
+#
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 includeipoptdir = $(includedir)/coin-or
@@ -30,8 +30,6 @@ libcommon_la_SOURCES = \
 	IpRegOptions.cpp \
 	IpTaggedObject.cpp \
 	IpUtils.cpp
-
-#libcommon_la_LDFLAGS = $(LT_LDFLAGS)
 
 AM_CPPFLAGS = -DIPOPTLIB_BUILD
 

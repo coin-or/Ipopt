@@ -45,8 +45,6 @@ if COIN_HAS_MUMPS
   liblinsolvers_la_SOURCES += IpMumpsSolverInterface.cpp
 endif
 
-#liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)
-
 AM_CPPFLAGS = \
 	-I$(srcdir)/../../Common \
 	-I$(srcdir)/../../LinAlg \

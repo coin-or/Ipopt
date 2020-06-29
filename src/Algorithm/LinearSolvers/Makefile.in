@@ -456,8 +456,6 @@ liblinsolvers_la_SOURCES = IpLinearSolversRegOp.cpp \
 	IpMc19TSymScalingMethod.cpp IpMa77SolverInterface.cpp \
 	$(am__append_1) $(am__append_2) $(am__append_3) \
 	$(am__append_4) $(am__append_5)
-
-#liblinsolvers_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = \
 	-I$(srcdir)/../../Common \
 	-I$(srcdir)/../../LinAlg \

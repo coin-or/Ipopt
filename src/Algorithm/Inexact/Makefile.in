@@ -380,8 +380,6 @@ libinexact_la_SOURCES = \
 	IpIterativePardisoSolverInterface.cpp \
 	IpIterativeSolverTerminationTester.cpp
 
-
-#libinexact_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = \
 	-I$(srcdir)/../../Common \
 	-I$(srcdir)/../../LinAlg \

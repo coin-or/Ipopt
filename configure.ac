@@ -1,19 +1,17 @@
 # Copyright (C) 2004, 2011 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
-
+#
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #############################################################################
 #                       Names and other basic things                        #
 #############################################################################
 
-AC_PREREQ(2.59)
-
 AC_INIT([Ipopt],[3.13.3],[https://github.com/coin-or/Ipopt/issues/new],,[https://github.com/coin-or/Ipopt])
 
-AC_COPYRIGHT(
-[Copyright 2004, 2011 International Business Machines and others.
+AC_COPYRIGHT([
+Copyright 2004, 2011 International Business Machines and others.
 All Rights Reserved.
 This file is part of the open source package IPOPT which is distributed
 under the Eclipse Public License.])
@@ -64,11 +62,6 @@ AC_COIN_DEBUGLEVEL
 #############################################################################
 
 AC_COIN_CHK_LIBM(IpoptLib)
-
-#AC_COIN_CHK_BLAS(IpoptLib)
-#if test $coin_has_blas != yes; then
-#  AC_MSG_ERROR([Required package BLAS not found.])
-#fi
 
 AC_COIN_CHK_LAPACK(IpoptLib)
 if test $coin_has_lapack != yes; then

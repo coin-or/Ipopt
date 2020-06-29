@@ -34,8 +34,9 @@ libsipopt_la_SOURCES = \
 	SensSimpleBacksolver.cpp \
 	SensStdStepCalc.cpp
 
-libsipopt_la_LDFLAGS = $(LT_LDFLAGS)
 libsipopt_la_LIBADD = ../../../src/Interfaces/libipopt.la
+
+AM_LDFLAGS = $(LT_LDFLAGS)
 
 AM_CPPFLAGS = -DSIPOPTLIB_BUILD \
   -I$(srcdir)/../../../src/Common \

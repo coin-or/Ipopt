@@ -17,7 +17,7 @@
 # Copyright (C) 2004, 2008 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
-
+#
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 VPATH = @srcdir@
@@ -96,7 +96,6 @@ build_triplet = @build@
 host_triplet = @host@
 @BUILD_LINEARSOLVERLOADER_TRUE@am__append_1 = src/contrib/LinearSolverLoader
 @BUILD_SIPOPT_TRUE@am__append_2 = contrib/sIPOPT
-@ALWAYS_FALSE@am__append_3 = test
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -286,7 +285,7 @@ CTAGS = ctags
 CSCOPE = cscope
 DIST_SUBDIRS = src/Common src/LinAlg src/Algorithm \
 	src/contrib/CGPenalty src/contrib/LinearSolverLoader \
-	src/Interfaces src/Apps contrib/sIPOPT test
+	src/Interfaces src/Apps contrib/sIPOPT
 ACLOCAL = @ACLOCAL@
 ADD_CFLAGS = @ADD_CFLAGS@
 ADD_CXXFLAGS = @ADD_CXXFLAGS@
@@ -458,8 +457,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = src/Common src/LinAlg src/Algorithm src/contrib/CGPenalty \
-	$(am__append_1) src/Interfaces src/Apps $(am__append_2) \
-	$(am__append_3)
+	$(am__append_1) src/Interfaces src/Apps $(am__append_2)
 doc_DATA = README.md AUTHORS LICENSE
 pkgconfiglibdir = $(libdir)/pkgconfig
 pkgconfiglib_DATA = ipopt.pc
