@@ -70,7 +70,7 @@ changes to the \Ipopt source code, you are required to make
 those changes public and to clearly indicate which modifications you
 made. After all, the goal of open source software is the continuous
 development and improvement of software. For details, please refer to
-the [Eclipse Public License](https://opensource.org/licenses/EPL-1.0).
+the [Eclipse Public License](https://opensource.org/licenses/EPL-2.0).
 
 Also, if you are using \Ipopt to obtain results for a
 publication, we politely ask you to point out in your paper that you
@@ -411,7 +411,7 @@ Visual Studio C++ .NET
 
 \page LICENSE License
 
-\Ipopt is available under the Eclipse Public License 1.0:
+\Ipopt is available under the Eclipse Public License:
 
 \verbinclude LICENSE
 
