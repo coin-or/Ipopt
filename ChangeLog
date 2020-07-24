@@ -3,6 +3,7 @@ More detailed information about incremental changes can be found in the
 commit history.
 
 2020-xx-yy: 3.13.3
+        - Members of AmplTNLP class are now protected instead of private.
         - Updated Eclipse Public License from 1.0 to 2.0.
 
 2020-04-30: 3.13.2
