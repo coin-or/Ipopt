@@ -11,6 +11,9 @@
 
 #ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"
+#else
+/* use normal C-naming style */
+#define IPOPT_HSL_FUNC(name,NAME) name
 #endif
 
 #include <stdio.h>
@@ -37,7 +40,7 @@ static ma27bd_t func_ma27bd = NULL;
 static ma27cd_t func_ma27cd = NULL;
 static ma27id_t func_ma27id = NULL;
 
-void ma27ad(
+void IPOPT_HSL_FUNC(ma27ad, MA27AD)(
    ipfint*       N,
    ipfint*       NZ,
    const ipfint* IRN,
@@ -66,7 +69,7 @@ void ma27ad(
    func_ma27ad(N, NZ, IRN, ICN, IW, LIW, IKEEP, IW1, NSTEPS, IFLAG, ICNTL, CNTL, INFO, OPS);
 }
 
-void ma27bd(
+void IPOPT_HSL_FUNC(ma27bd, MA27BD)(
    ipfint*       N,
    ipfint*       NZ,
    const ipfint* IRN,
@@ -96,7 +99,7 @@ void ma27bd(
    func_ma27bd(N, NZ, IRN, ICN, A, LA, IW, LIW, IKEEP, NSTEPS, MAXFRT, IW1, ICNTL, CNTL, INFO);
 }
 
-void ma27cd(
+void IPOPT_HSL_FUNC(ma27cd, MA27CD)(
    ipfint* N,
    double* A,
    ipfint* LA,
@@ -123,7 +126,7 @@ void ma27cd(
    func_ma27cd(N, A, LA, IW, LIW, W, MAXFRT, RHS, IW1, NSTEPS, ICNTL, CNTL);
 }
 
-void ma27id(
+void IPOPT_HSL_FUNC(ma27id, MA27ID)(
    ipfint* ICNTL,
    double* CNTL
 )
@@ -150,7 +153,7 @@ static ma57bd_t func_ma57bd = NULL;
 static ma57cd_t func_ma57cd = NULL;
 static ma57ed_t func_ma57ed = NULL;
 
-void ma57id(
+void IPOPT_HSL_FUNC(ma57id, MA57ID)(
    double* cntl,
    ipfint* icntl
 )
@@ -167,7 +170,7 @@ void ma57id(
    func_ma57id(cntl, icntl);
 }
 
-void ma57ad(
+void IPOPT_HSL_FUNC(ma57ad, MA57AD)(
    ipfint*       n,       /**< Order of matrix. */
    ipfint*       ne,      /**< Number of entries. */
    const ipfint* irn,     /**< Matrix nonzero row structure */
@@ -192,7 +195,7 @@ void ma57ad(
    func_ma57ad(n, ne, irn, jcn, lkeep, keep, iwork, icntl, info, rinfo);
 }
 
-void ma57bd(
+void IPOPT_HSL_FUNC(ma57bd, MA57BD)(
    ipfint*    n,         /**< Order of matrix. */
    ipfint*    ne,        /**< Number of entries. */
    double*    a,         /**< Numerical values. */
@@ -221,7 +224,7 @@ void ma57bd(
    func_ma57bd(n, ne, a, fact, lfact, ifact, lifact, lkeep, keep, iwork, icntl, cntl, info, rinfo);
 }
 
-void ma57cd(
+void IPOPT_HSL_FUNC(ma57cd, MA57CD)(
    ipfint*    job,       /**< Solution job.  Solve for... */
    ipfint*    n,         /**< Order of matrix. */
    double*    fact,      /**< Entries of factors. */
@@ -250,7 +253,7 @@ void ma57cd(
    func_ma57cd(job, n, fact, lfact, ifact, lifact, nrhs, rhs, lrhs, work, lwork, iwork, icntl, info);
 }
 
-void ma57ed(
+void IPOPT_HSL_FUNC(ma57ed, MA57ED)(
    ipfint*    n,
    ipfint*    ic,        /**< 0: copy real array.  >=1:  copy integer array. */
    ipfint*    keep,
@@ -938,7 +941,7 @@ void ma97_free_akeep(
 
 static mc19ad_t func_mc19ad = NULL;
 
-void mc19ad(
+void IPOPT_HSL_FUNC(mc19ad, MC19AD)(
    ipfint* N,
    ipfint* NZ,
    double* A,

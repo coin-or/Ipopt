@@ -8,6 +8,8 @@ commit history.
         - Fixed dangling pointer problems with Journalist used for debugging
           (--with-ipopt-verbosity > 0) when more than one IpoptApplication
           is used. [#393, thanks to Brad Bell]
+        - Fixed build problem when using HSL library that does not include
+          MA27, MA57, or MC19. [#395]
 
 2020-04-30: 3.13.2
         - The C-preprocessor defines COIN_IPOPT_CHECKLEVEL,
