@@ -97,16 +97,18 @@ public:
       ...
    );
 
+private:
+   friend class IpoptApplication;
    /* Method for initialization of the static GLOBAL journalist,
     * through with all debug printout is to be written.
     *
     * This needs to be set before any debug printout can be done.
+    * It is expected that this is only called by the IpoptApplication constructor.
     */
    static void SetJournalist(
       Journalist* jrnl
    );
 
-private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
     *
