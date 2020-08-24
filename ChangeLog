@@ -5,6 +5,9 @@ commit history.
 2020-xx-yy: 3.13.3
         - Members of AmplTNLP class are now protected instead of private.
         - Updated Eclipse Public License from 1.0 to 2.0.
+        - Fixed dangling pointer problems with Journalist used for debugging
+          (--with-ipopt-verbosity > 0) when more than one IpoptApplication
+          is used. [#393, thanks to Brad Bell]
 
 2020-04-30: 3.13.2
         - The C-preprocessor defines COIN_IPOPT_CHECKLEVEL,
