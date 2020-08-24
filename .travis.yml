@@ -76,6 +76,10 @@ script:
   - make
   - if ! $NOF77 ; then ./solve_problem MBndryCntrl1 10 ; fi
   - popd
+  - pushd examples/recursive_nlp
+  - make
+  - if ! $NOF77 ; then ./recursive_nlp ; fi
+  - popd
 
 after_failure:
   - find . -name config.log -exec tail -n 1000 {} \;
