@@ -10,6 +10,9 @@ commit history.
           is used. [#393, thanks to Brad Bell]
         - Fixed build problem when using HSL library that does not include
           MA27, MA57, or MC19. [#395]
+        - Added example recursive_nlp that uses Ipopt to solves an
+          optimization problem for the evaluation of the objective function.
+          [contributed by Brad Bell]
 
 2020-04-30: 3.13.2
         - The C-preprocessor defines COIN_IPOPT_CHECKLEVEL,

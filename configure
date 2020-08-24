@@ -21568,18 +21568,7 @@ else
 fi
 
 
-  # Process the list of project names and massage each one into the name of
-  # a tag file. The value of coin_doxy_tagfiles is substituted for TAGFILES
-  # in doxygen.conf.in. Further substitution for @baredocdir_nosub@ will happen
-  # as an edit during make install. See comments in Makemain.inc.
-  coin_doxy_tagfiles=
-  tmp=""
-  for proj in $tmp ; do
-    lc_proj=`echo $proj | tr [A-Z] [a-z]`
-    doxytag=${lc_proj}_doxy.tag
-    doxydir="@baredocdir_nosub@/coin-or-${lc_proj}/doxydoc"
-    coin_doxy_tagfiles="$coin_doxy_tagfiles $doxydir/$doxytag=$doxydir/html"
-  done
+  coin_doxy_tagfiles=""
 
 
 
@@ -21825,6 +21814,12 @@ $as_echo "no" >&6; }
     pkg_short_errors=""
   fi
 
+  # Check whether -static option of pkg-config should be used when requesting libs
+  pkg_static=
+  if test -n "$PKG_CONFIG" ; then
+    case "$LDFLAGS" in "-static" | "* -static*" ) pkg_static=--static ;; esac
+  fi
+
    if test -n "$PKG_CONFIG"; then
   COIN_HAS_PKGCONFIG_TRUE=
   COIN_HAS_PKGCONFIG_FALSE='#'
@@ -22036,7 +22031,7 @@ $as_echo "$as_me: lapack_pcfiles is \"$lapack_pcfiles\"" >&6;}
   LIBS="$lapack_lflags $LIBS"
   if test -n "$lapack_pcfiles" ; then
 
-      temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs $lapack_pcfiles`
+      temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs $pkg_static $lapack_pcfiles`
       LIBS="$temp_LFLAGS $LIBS"
     fi
 
@@ -22347,6 +22342,7 @@ $as_echo "$ac_success" >&6; }
         # check for 64-bit sequential MKL in $LIB
         old_IFS="$IFS"
         IFS=";"
+        coin_mkl=""
         for d in $LIB ; do
           # turn $d into unix-style short path (no spaces); cannot do -us, so first do -ws, then -u
           d=`cygpath -ws "$d"`
@@ -22364,6 +22360,7 @@ $as_echo "$ac_success" >&6; }
           fi
         done
         IFS="$old_IFS"
+        if test -n "$coin_mkl" ; then
 
   ac_save_LIBS="$LIBS"
   LIBS="$coin_mkl $LIBS"
@@ -22433,10 +22430,11 @@ $as_echo "$ac_success" >&6; }
 
   if test $ac_success = yes ; then
     coin_has_lapack=yes
-             lapack_lflags="$coin_mkl"
+                lapack_lflags="$coin_mkl"
 
   fi
 
+        fi
       ;;
 
       *-darwin*)
@@ -22613,7 +22611,7 @@ $as_echo "yes" >&6; }
 
   if test -n "lapack" ; then
 
-      temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs lapack`
+      temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs $pkg_static lapack`
       LIBS="$temp_LFLAGS $LIBS"
     fi
 
@@ -23611,7 +23609,7 @@ $as_echo "$as_me: FINALIZE_FLAGS for HSLLib:" >&6;}
 
       if test -n "${HSLLIB_PCFILES}" ; then
         temp_CFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --cflags ${HSLLIB_PCFILES}`
-        temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs ${HSLLIB_PCFILES}`
+        temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs $pkg_static ${HSLLIB_PCFILES}`
         HSLLIB_CFLAGS="$temp_CFLAGS ${HSLLIB_CFLAGS}"
         HSLLIB_LFLAGS="$temp_LFLAGS ${HSLLIB_LFLAGS}"
       fi
@@ -23903,7 +23901,7 @@ if test "$have_pardiso_project" = yes ; then
   LIBS="$pardiso_lflags $lapack_lflags $LIBS"
   if test -n "$lapack_pcfiles" ; then
 
-      temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs $lapack_pcfiles`
+      temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs $pkg_static $lapack_pcfiles`
       LIBS="$temp_LFLAGS $LIBS"
     fi
 
@@ -24034,7 +24032,7 @@ $as_echo "#define IPOPT_HAS_PARDISO 1" >>confdefs.h
   LIBS="$pardiso_lflags $lapack_lflags $LIBS"
   if test -n "$lapack_pcfiles" ; then
 
-      temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs $lapack_pcfiles`
+      temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs $pkg_static $lapack_pcfiles`
       LIBS="$temp_LFLAGS $LIBS"
     fi
 
@@ -24116,7 +24114,7 @@ else
   LIBS="$lapack_lflags $LIBS"
   if test -n "$lapack_pcfiles" ; then
 
-      temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs $lapack_pcfiles`
+      temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs $pkg_static $lapack_pcfiles`
       LIBS="$temp_LFLAGS $LIBS"
     fi
 
@@ -24900,7 +24898,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 24903 "configure" */
+/* #line 24901 "configure" */
 public class Test {
 }
 EOF
@@ -25386,7 +25384,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25389 "configure" */
+/* #line 25387 "configure" */
 public class Test {
 }
 EOF
@@ -25420,7 +25418,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25423 "configure" */
+/* [#]line 25421 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
@@ -26067,7 +26065,7 @@ $as_echo "$as_me: FINALIZE_FLAGS for IpoptLib:" >&6;}
 
       if test -n "${IPOPTLIB_PCFILES}" ; then
         temp_CFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --cflags ${IPOPTLIB_PCFILES}`
-        temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs ${IPOPTLIB_PCFILES}`
+        temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs $pkg_static ${IPOPTLIB_PCFILES}`
         IPOPTLIB_CFLAGS="$temp_CFLAGS ${IPOPTLIB_CFLAGS}"
         IPOPTLIB_LFLAGS="$temp_LFLAGS ${IPOPTLIB_LFLAGS}"
       fi
@@ -26116,7 +26114,7 @@ $as_echo "$as_me: FINALIZE_FLAGS for IpoptAmplInterfaceLib:" >&6;}
 
       if test -n "${IPOPTAMPLINTERFACELIB_PCFILES}" ; then
         temp_CFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --cflags ${IPOPTAMPLINTERFACELIB_PCFILES}`
-        temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs ${IPOPTAMPLINTERFACELIB_PCFILES}`
+        temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs $pkg_static ${IPOPTAMPLINTERFACELIB_PCFILES}`
         IPOPTAMPLINTERFACELIB_CFLAGS="$temp_CFLAGS ${IPOPTAMPLINTERFACELIB_CFLAGS}"
         IPOPTAMPLINTERFACELIB_LFLAGS="$temp_LFLAGS ${IPOPTAMPLINTERFACELIB_LFLAGS}"
       fi
@@ -26165,7 +26163,7 @@ $as_echo "$as_me: FINALIZE_FLAGS for SIpoptAmplInterfaceLib:" >&6;}
 
       if test -n "${SIPOPTAMPLINTERFACELIB_PCFILES}" ; then
         temp_CFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --cflags ${SIPOPTAMPLINTERFACELIB_PCFILES}`
-        temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs ${SIPOPTAMPLINTERFACELIB_PCFILES}`
+        temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs $pkg_static ${SIPOPTAMPLINTERFACELIB_PCFILES}`
         SIPOPTAMPLINTERFACELIB_CFLAGS="$temp_CFLAGS ${SIPOPTAMPLINTERFACELIB_CFLAGS}"
         SIPOPTAMPLINTERFACELIB_LFLAGS="$temp_LFLAGS ${SIPOPTAMPLINTERFACELIB_LFLAGS}"
       fi
@@ -26207,7 +26205,7 @@ $as_echo "$as_me: SIPOPTAMPLINTERFACELIB_CFLAGS: \"${SIPOPTAMPLINTERFACELIB_CFLA
 
 
 
-ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Algorithm/Inexact/Makefile src/contrib/CGPenalty/Makefile src/contrib/LinearSolverLoader/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile test/Makefile test/run_unitTests ipopt.pc doc/Doxyfile examples/Cpp_example/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile tutorial/CodingExercise/C/1-skeleton/Makefile tutorial/CodingExercise/C/2-mistake/Makefile tutorial/CodingExercise/C/3-solution/Makefile tutorial/CodingExercise/Cpp/1-skeleton/Makefile tutorial/CodingExercise/Cpp/2-mistake/Makefile tutorial/CodingExercise/Cpp/3-solution/Makefile tutorial/CodingExercise/Matlab/1-skeleton/startup.m tutorial/CodingExercise/Matlab/2-mistake/startup.m tutorial/CodingExercise/Matlab/3-solution/startup.m"
+ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Algorithm/Inexact/Makefile src/contrib/CGPenalty/Makefile src/contrib/LinearSolverLoader/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile test/Makefile test/run_unitTests ipopt.pc doc/Doxyfile examples/Cpp_example/Makefile examples/recursive_nlp/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile tutorial/CodingExercise/C/1-skeleton/Makefile tutorial/CodingExercise/C/2-mistake/Makefile tutorial/CodingExercise/C/3-solution/Makefile tutorial/CodingExercise/Cpp/1-skeleton/Makefile tutorial/CodingExercise/Cpp/2-mistake/Makefile tutorial/CodingExercise/Cpp/3-solution/Makefile tutorial/CodingExercise/Matlab/1-skeleton/startup.m tutorial/CodingExercise/Matlab/2-mistake/startup.m tutorial/CodingExercise/Matlab/3-solution/startup.m"
 
 
 if test -n "$F77" ; then
@@ -27626,6 +27624,7 @@ do
     "ipopt.pc") CONFIG_FILES="$CONFIG_FILES ipopt.pc" ;;
     "doc/Doxyfile") CONFIG_FILES="$CONFIG_FILES doc/Doxyfile" ;;
     "examples/Cpp_example/Makefile") CONFIG_FILES="$CONFIG_FILES examples/Cpp_example/Makefile" ;;
+    "examples/recursive_nlp/Makefile") CONFIG_FILES="$CONFIG_FILES examples/recursive_nlp/Makefile" ;;
     "examples/hs071_cpp/Makefile") CONFIG_FILES="$CONFIG_FILES examples/hs071_cpp/Makefile" ;;
     "examples/hs071_c/Makefile") CONFIG_FILES="$CONFIG_FILES examples/hs071_c/Makefile" ;;
     "examples/ScalableProblems/Makefile") CONFIG_FILES="$CONFIG_FILES examples/ScalableProblems/Makefile" ;;

@@ -534,6 +534,7 @@ AC_CONFIG_FILES([Makefile
 		 ipopt.pc
 		 doc/Doxyfile
 		 examples/Cpp_example/Makefile
+		 examples/recursive_nlp/Makefile
 		 examples/hs071_cpp/Makefile
 		 examples/hs071_c/Makefile
 		 examples/ScalableProblems/Makefile
