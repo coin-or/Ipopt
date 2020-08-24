@@ -22,6 +22,10 @@
 #include <cassert>
 #include <cmath>
 
+#ifdef __GNUC__
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
+
 using namespace Ipopt;
 
 class recursive_nlp: public TNLP
@@ -85,8 +89,11 @@ public:
       Number* g_u)
    {
       assert(n == 1 && m == 0);
-      x_l[0] = -std::numeric_limits<Number>::infinity();
-      x_u[0] = +std::numeric_limits<Number>::infinity();
+
+      /* default Ipopt value for "infinity" is 1e20 */
+      x_l[0] = -1e20;
+      x_u[0] = +1e20;
+
       return true;
    }
 
