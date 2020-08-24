@@ -137,14 +137,16 @@ public:
       {
          // solve the inner problem with corresponding to x[0]
          SmartPtr<IpoptApplication> app = IpoptApplicationFactory();
-         app->Options()->SetIntegerValue("print_level", 0);
+         app->Options()->SetIntegerValue("print_level", J_STRONGWARNING);
          app->Options()->SetStringValue("hessian_approximation", "limited-memory");
          ApplicationReturnStatus status = app->Initialize();
-         assert(status == Solve_Succeeded);
+         if( status != Solve_Succeeded )
+            return false;
 
          SmartPtr<recursive_nlp> nlp = new recursive_nlp(x[0]);
          status = app->OptimizeTNLP(nlp);
-         assert(status == Solve_Succeeded);
+         if( status != Solve_Succeeded )
+            return false;
 
          // set y_ equal to the arg_min for the inner problem
          y_ = nlp->arg_min();
@@ -255,14 +257,14 @@ int main(int argc, char** argv)
    ApplicationReturnStatus status = app->Initialize();
    assert(status == Solve_Succeeded);
 
-   app->Options()->SetIntegerValue("print_level", 5);
    app->Options()->SetStringValue("derivative_test", "first-order");
    app->Options()->SetStringValue("hessian_approximation", "limited-memory");
 
    SmartPtr<recursive_nlp> nlp = new recursive_nlp();
    status = app->OptimizeTNLP(nlp);
-   assert(status == Solve_Succeeded);
 
-   std::cout << "nlp->arg_min() = " << nlp->arg_min() << "\n";
+   if( status == Solve_Succeeded )
+      std::cout << "nlp->arg_min() = " << nlp->arg_min() << "\n";
+
    return EXIT_SUCCESS;
 }
