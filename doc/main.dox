@@ -70,7 +70,7 @@ changes to the \Ipopt source code, you are required to make
 those changes public and to clearly indicate which modifications you
 made. After all, the goal of open source software is the continuous
 development and improvement of software. For details, please refer to
-the [Eclipse Public License](https://opensource.org/licenses/EPL-1.0).
+the [Eclipse Public License](https://opensource.org/licenses/EPL-2.0).
 
 Also, if you are using \Ipopt to obtain results for a
 publication, we politely ask you to point out in your paper that you
@@ -100,13 +100,15 @@ required:
 
     -   From hardware vendors:
 
-        -   ACML (AMD Core Math Library) by AMD
+        -   [Accelerate](https://developer.apple.com/documentation/accelerate) Framework by Apple
 
-        -   ESSL (Engineering Scientific Subroutine Library) by IBM
+        -   [BLIS](https://github.com/amd/blis) (BLAS-like Library Instantiation Software Framework) by AMD
 
-        -   MKL (Math Kernel Library) by Intel
+        -   [ESSL](https://www.ibm.com/support/knowledgecenter/en/SSFHY8/essl_welcome.html) (Engineering Scientific Subroutine Library) by IBM
 
-        -   Sun Performance Library by Sun
+        -   [MKL](https://software.intel.com/content/www/us/en/develop/tools/math-kernel-library.html) (Math Kernel Library) by Intel
+
+        -   [Sun Performance Library](https://docs.oracle.com/cd/E18659_01/html/821-2763/gjgis.html) by Sun
 
     -   Generic:
 
@@ -397,7 +399,7 @@ maintained by Stefan Vigerske (GAMS Software GmbH) and Andreas Wächter
 (Department of Industrial Engineering and Management Sciences, Northwestern University).
 
 The following names used in this document are trademarks or registered
-trademarks: AMPL, IBM, Intel, Matlab, Microsoft, MKL, Visual Studio C++,
+trademarks: Apple, AMPL, IBM, Intel, Matlab, Microsoft, MKL, Visual Studio C++,
 Visual Studio C++ .NET
 
 
@@ -411,7 +413,7 @@ Visual Studio C++ .NET
 
 \page LICENSE License
 
-\Ipopt is available under the Eclipse Public License 1.0:
+\Ipopt is available under the Eclipse Public License:
 
 \verbinclude LICENSE
 

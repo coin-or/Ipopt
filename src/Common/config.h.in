@@ -56,9 +56,6 @@
 /* Define to 1 if you have the `snprintf' function. */
 #undef HAVE_SNPRINTF
 
-/* Define to 1 if SPRAL is available */
-#undef HAVE_SPRAL
-
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
 
@@ -137,6 +134,9 @@
 
 /* Define to 1 if function rand is available */
 #undef IPOPT_HAS_RAND
+
+/* Define to 1 if SPRAL is available */
+#undef IPOPT_HAS_SPRAL
 
 /* Define to 1 if function std::rand is available */
 #undef IPOPT_HAS_STD__RAND

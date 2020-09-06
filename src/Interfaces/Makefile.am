@@ -1,7 +1,7 @@
 # Copyright (C) 2004, 2008 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
-
+#
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 includeipoptdir = $(includedir)/coin-or
@@ -58,7 +58,7 @@ libipopt_la_LIBADD = $(IPALLLIBS) $(IPOPTLIB_LFLAGS)
 # probably we need to make this explicit because we set use a variable $(IPALLLIBS) in LIBADD
 libipopt_la_DEPENDENCIES = $(IPALLLIBS)
 
-libipopt_la_LDFLAGS = $(LT_LDFLAGS)
+AM_LDFLAGS = $(LT_LDFLAGS)
 
 AM_CPPFLAGS = \
 	-I$(srcdir)/../Common \

@@ -15,28 +15,6 @@ set for the configure script by typing `configure --help`.
 are a valuable resource of information. -->
 
 
-\section COINBREW Quick Start: Using CoinBrew
-
-On sufficiently prepared systems, a quick way to build and install \Ipopt
-is to get the coinbrew script from https://coin-or.github.io/coinbrew/
-and running
-
-    /path/to/coinbrew fetch Ipopt --no-prompt
-    /path/to/coinbrew build Ipopt --prefix=/dir/to/install --test --no-prompt --verbosity=3
-    /path/to/coinbrew install Ipopt --no-prompt
-
-The coinbrew script will take care of building and installing the
-dependencies ASL and Mumps before building \Ipopt.
-To use HSL sources, change to the `ThirdParty/HSL` directory created by
-`coinbrew fetch` and follow the download instructions (i.e., skip the build step)
-from \ref DOWNLOAD_HSL. Then proceed with the `coinbrew build` step.
-
-More details on using coinbrew can be found at the instructions on
-[Getting Started with the COIN-OR Optimization Suite](https://coin-or.github.io/user_introduction).
-
-If these commands fail or this build is not sufficient, the following sections
-and the help of coinbrew should be studied.
-
 \section SYSTEMPACKAGES Getting System Packages (Compilers, ...)
 
 \subsection SYSTEMPACKAGES_LINUX Linux distributions
@@ -150,12 +128,10 @@ hassle of obtaining it yourself. Keep in mind that it is still your responsibili
 to ensure that your downloading and usage of the third party components
 conforms with their licenses.
 
-For a number of dependencies, COIN-OR provides specialized build systems
+For ASL, HSL, and MUMPS, COIN-OR provides specialized build systems
 that produce libraries which are easy to use with the build system of \Ipopt.
 Some of the specialized build systems also come with a script that makes it
-easy to download the code using `wget` (or `curl` on Mac OS X). If these
-tools are not available on your system, please read the appropriate
-`INSTALL.*` file for alternative instructions.
+easy to download the code using `wget` or `curl`.
 
 \subsection EXTERNALCODE_ASL ASL (Ampl Solver Library)
 
@@ -234,7 +210,7 @@ To obtain the HSL code, you can follow the following steps:
 You may either:
 
 -   Compile the HSL code via the COIN-OR Tools project
-    [ThirdParty-HSL](https://github.com/coin-or-tools/ThirdParty-HSL)
+    [ThirdParty-HSL](https://github.com/coin-or-tools/ThirdParty-HSL).
     See the instructions below.
 
 -   Compile the HSL code separately either before or after the
@@ -410,6 +386,10 @@ organizations; make sure you read the license agreement before using the
 library. Once you obtained the library and license, please check if the
 version number of the library matches the one on the WSMP website.
 
+\note The license included in package of the libraries may not work and a
+  working one may need to be downloaded separately. Look out for messages
+  about an invalid WSMP license when testing the Ipopt build.
+
 If a newer version is announced on that website, you can (and probably
 should) request the current version by sending a message to
 `wsmp@us.ibm.com`. Please include the operating system and other
@@ -422,10 +402,11 @@ To compile \Ipopt with the linear solver WSMP, you need to specify the
 linker flags for the library with the `--with-wsmp` flag, including
 required additional libraries and flags. For example, if you want to compile
 \Ipopt with WSMP (located in `$HOME/lib`) on an Intel IA32 Linux system,
-you should use the `configure` flag
+you may use the `configure` flag
 \verbatim
---with-wsmp="$HOME/lib/wsmp/wsmp-Linux/lib/IA32/libwsmp.a -lpthread"
+--with-wsmp="$HOME/lib/wsmp/wsmp-Linux/lib/IA32/libwsmp.a -lpthread -lblas -llapack -lpthread -lm -lgfortran"
 \endverbatim
+But the actual flags depend on WSMP library and your preference for the Blas/Lapack libraries.
 
 \subsection LINEARSOLVERLOADER Using the Linear Solver Loader
 
@@ -721,6 +702,29 @@ Below a few particular options are discussed:
 
 Configure flags specific to the use of \Ipopt's dependencies were discussed
 in the corresponding sections of \ref EXTERNALCODE.
+
+
+\section COINBREW Using CoinBrew
+
+On sufficiently prepared systems, an alternative way to download, build,
+and install \Ipopt with dependencies ASL, HSL, and MUMPS is to use the
+coinbrew script from https://coin-or.github.io/coinbrew/
+
+After obtaining the script, run
+
+    /path/to/coinbrew fetch Ipopt --no-prompt
+    /path/to/coinbrew build Ipopt --prefix=/dir/to/install --test --no-prompt --verbosity=3
+    /path/to/coinbrew install Ipopt --no-prompt
+
+The coinbrew script will take care of building and installing the
+dependencies ASL and Mumps before building \Ipopt.
+To use HSL sources, change to the `ThirdParty/HSL` directory created by
+`coinbrew fetch` and follow the download instructions (i.e., skip the build step)
+from \ref DOWNLOAD_HSL. Then proceed with the `coinbrew build` step.
+
+More details on using coinbrew can be found at the instructions on
+[Getting Started with the COIN-OR Optimization Suite](https://coin-or.github.io/user_introduction).
+
 
 \section INSTALL_R Compiling and Installing the R Interface ipoptr
 

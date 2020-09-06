@@ -6,7 +6,7 @@ includedir=@includedir@/coin-or
 
 Name: IPOPT-AMPL
 Description: Ampl Interface TNLP to Ipopt
-URL: https://github.com/coin-or/Ipopt
+URL: @PACKAGE_URL@
 Version: @PACKAGE_VERSION@
 Cflags: -I${includedir}
 @COIN_STATIC_BUILD_FALSE@Libs: -L${libdir} -lipoptamplinterface

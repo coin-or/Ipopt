@@ -1,7 +1,7 @@
 # Copyright (C) 2007 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
-
+#
 # Authors:  Andreas Waechter        IBM       2007-06-01
 
 noinst_LTLIBRARIES = libcgpenalty.la
@@ -14,8 +14,6 @@ libcgpenalty_la_SOURCES = \
 	IpCGPerturbationHandler.cpp \
 	IpCGSearchDirCalc.cpp \
 	IpPiecewisePenalty.cpp
-
-#libcgpenalty_la_LDFLAGS = $(LT_LDFLAGS)
 
 AM_CPPFLAGS = \
 	-I$(srcdir)/../../Common \

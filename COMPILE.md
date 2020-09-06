@@ -19,7 +19,7 @@ To rebuild configuration files for Ipopt, if needed (e.g., during development), 
 ```bash
 cd ${HOME}/Software/Ipopt
 git clone https://github.com/coin-or-tools/BuildTools.git
-export AUTOTOOLS_DIR="${HOME}/local2"
+export COIN_AUTOTOOLS_DIR="${HOME}/local2"
 ./BuildTools/install_autotools.sh
 ./BuildTools/run_autotools
 ```

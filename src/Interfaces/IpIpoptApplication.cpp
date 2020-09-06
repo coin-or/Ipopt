@@ -42,6 +42,8 @@ namespace Ipopt
 {
 #if IPOPT_VERBOSITY > 0
 static const Index dbg_verbosity = 0;
+// Kluge: Add reference counter for DebugJournalistWrapper::jrnl
+static SmartPtr<Journalist> smart_jnlst(NULL);
 #endif
 
 IpoptApplication::IpoptApplication(
@@ -63,9 +65,16 @@ IpoptApplication::IpoptApplication(
    try
    {
 # if IPOPT_VERBOSITY > 0
-      DebugJournalistWrapper::SetJournalist(GetRawPtr(jnlst_));
-      SmartPtr<Journal> debug_jrnl = jnlst_->AddFileJournal("Debug", "debug.out", J_ITERSUMMARY);
-      debug_jrnl->SetPrintLevel(J_DBG, J_ALL);
+      // Kludge: If this is the first IpoptApplication, then store jnlst_ in smart_jnlst, too, so that it doesn't
+      // get freed when the IpoptApplication is freed and DebugJournalistWrapper::jrnl becomes a dangling pointer.
+      // Also add the Debug journal that writes to debug.out.
+      if( IsNull(smart_jnlst) )
+      {
+         smart_jnlst = jnlst_;
+         DebugJournalistWrapper::SetJournalist(GetRawPtr(jnlst_));
+         SmartPtr<Journal> debug_jrnl = jnlst_->AddFileJournal("Debug", "debug.out", J_ITERSUMMARY);
+         debug_jrnl->SetPrintLevel(J_DBG, J_ALL);
+      }
 # endif
 
       DBG_START_METH("IpoptApplication::IpoptApplication()",
@@ -180,13 +189,15 @@ ApplicationReturnStatus IpoptApplication::Initialize(
          {
             debug_print_level = print_level;
          }
-         SmartPtr<Journal> debug_jrnl = jnlst_->GetJournal("Debug");
-         if (IsNull(debug_jrnl))
-         {
-            debug_jrnl = jnlst_->AddFileJournal("Debug", "debug.out", J_ITERSUMMARY);
-         }
+         assert(IsValid(smart_jnlst));  /* should have been created in constructor */
+         SmartPtr<Journal> debug_jrnl = smart_jnlst->GetJournal("Debug");
+         assert(IsValid(debug_jrnl));  /* should have been added in constructor */
          debug_jrnl->SetAllPrintLevels(debug_print_level);
          debug_jrnl->SetPrintLevel(J_DBG, J_ALL);
+         if( IsNull(jnlst_->GetJournal("Debug")) )
+         {
+            jnlst_->AddJournal(debug_jrnl);
+         }
 #endif
 
          // Open an output file if required

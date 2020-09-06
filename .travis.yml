@@ -50,8 +50,8 @@ script:
   - pushd build
   - export ADD_CFLAGS="-Wall -Wextra -Werror"
   - export ADD_CXXFLAGS="-Wall -Wextra -Werror"
-  - if $VISHIDDEN ; then ADD_CFLAGS="$CFLAGS -fvisibility=hidden" ; fi
-  - if $VISHIDDEN ; then ADD_CXXFLAGS="$CXXFLAGS -fvisibility=hidden" ; fi
+  - if $VISHIDDEN ; then ADD_CFLAGS="$ADD_CFLAGS -fvisibility=hidden" ; fi
+  - if $VISHIDDEN ; then ADD_CXXFLAGS="$ADD_CXXFLAGS -fvisibility=hidden" ; fi
   - export CFGFLAGS=""
   - if $NOF77 ; then CFGFLAGS="$CFGFLAGS --disable-f77" ; fi
   - if $ENABLEDEBUG ; then CFGFLAGS="$CFGFLAGS --enable-debug --with-ipopt-checklevel=5 --with-ipopt-verbosity=5" ; fi
@@ -75,6 +75,10 @@ script:
   - pushd examples/ScalableProblems
   - make
   - if ! $NOF77 ; then ./solve_problem MBndryCntrl1 10 ; fi
+  - popd
+  - pushd examples/recursive_nlp
+  - make
+  - if ! $NOF77 ; then ./recursive_nlp ; fi
   - popd
 
 after_failure:

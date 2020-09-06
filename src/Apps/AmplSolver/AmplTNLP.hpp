@@ -596,6 +596,7 @@ private:
    );
    //@}
 
+protected:
    /** Journalist */
    SmartPtr<const Journalist> jnlst_;
 

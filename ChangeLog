@@ -2,6 +2,18 @@ Here we list changes of Ipopt since the release of version 3.0.0.
 More detailed information about incremental changes can be found in the
 commit history.
 
+2020-xx-yy: 3.13.3
+        - Members of AmplTNLP class are now protected instead of private.
+        - Updated Eclipse Public License from 1.0 to 2.0.
+        - Fixed dangling pointer problems with Journalist used for debugging
+          (--with-ipopt-verbosity > 0) when more than one IpoptApplication
+          is used. [#393, thanks to Brad Bell]
+        - Fixed build problem when using HSL library that does not include
+          MA27, MA57, or MC19. [#395]
+        - Added example recursive_nlp that uses Ipopt to solves an
+          optimization problem for the evaluation of the objective function.
+          [contributed by Brad Bell]
+
 2020-04-30: 3.13.2
         - The C-preprocessor defines COIN_IPOPT_CHECKLEVEL,
           COIN_IPOPT_VERBOSITY, and FORTRAN_INTEGER_TYPE, which are defined

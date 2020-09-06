@@ -987,7 +987,7 @@ void IpoptAlgorithm::print_copyright_message(
                 "\n******************************************************************************\n"
                 "This program contains Ipopt, a library for large-scale nonlinear optimization.\n"
                 " Ipopt is released as open source code under the Eclipse Public License (EPL).\n"
-                "         For more information visit http://projects.coin-or.org/Ipopt\n"
+                "         For more information visit https://github.com/coin-or/Ipopt\n"
                 "******************************************************************************\n\n");
    copyright_message_printed = true;
 }

@@ -148,9 +148,6 @@ AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-libsipopt_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
-	$(CXXFLAGS) $(libsipopt_la_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -419,8 +416,8 @@ libsipopt_la_SOURCES = \
 	SensSimpleBacksolver.cpp \
 	SensStdStepCalc.cpp
 
-libsipopt_la_LDFLAGS = $(LT_LDFLAGS)
 libsipopt_la_LIBADD = ../../../src/Interfaces/libipopt.la
+AM_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -DSIPOPTLIB_BUILD \
   -I$(srcdir)/../../../src/Common \
   -I$(srcdir)/../../../src/Interfaces \
@@ -501,7 +498,7 @@ clean-libLTLIBRARIES:
 	}
 
 libsipopt.la: $(libsipopt_la_OBJECTS) $(libsipopt_la_DEPENDENCIES) $(EXTRA_libsipopt_la_DEPENDENCIES) 
-	$(AM_V_CXXLD)$(libsipopt_la_LINK) -rpath $(libdir) $(libsipopt_la_OBJECTS) $(libsipopt_la_LIBADD) $(LIBS)
+	$(AM_V_CXXLD)$(CXXLINK) -rpath $(libdir) $(libsipopt_la_OBJECTS) $(libsipopt_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)

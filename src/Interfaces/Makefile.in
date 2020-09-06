@@ -17,7 +17,7 @@
 # Copyright (C) 2004, 2008 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
-
+#
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 
@@ -147,9 +147,6 @@ AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-libipopt_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(AM_CXXFLAGS) \
-	$(CXXFLAGS) $(libipopt_la_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -431,7 +428,7 @@ libipopt_la_SOURCES = IpInterfacesRegOp.cpp IpIpoptApplication.cpp \
 libipopt_la_LIBADD = $(IPALLLIBS) $(IPOPTLIB_LFLAGS)
 # probably we need to make this explicit because we set use a variable $(IPALLLIBS) in LIBADD
 libipopt_la_DEPENDENCIES = $(IPALLLIBS)
-libipopt_la_LDFLAGS = $(LT_LDFLAGS)
+AM_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = \
 	-I$(srcdir)/../Common \
 	-I$(srcdir)/../LinAlg \
@@ -514,7 +511,7 @@ clean-libLTLIBRARIES:
 	}
 
 libipopt.la: $(libipopt_la_OBJECTS) $(libipopt_la_DEPENDENCIES) $(EXTRA_libipopt_la_DEPENDENCIES) 
-	$(AM_V_CXXLD)$(libipopt_la_LINK) -rpath $(libdir) $(libipopt_la_OBJECTS) $(libipopt_la_LIBADD) $(LIBS)
+	$(AM_V_CXXLD)$(CXXLINK) -rpath $(libdir) $(libipopt_la_OBJECTS) $(libipopt_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
