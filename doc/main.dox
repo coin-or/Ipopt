@@ -295,7 +295,7 @@ maintained by other people, among them are:
     nonlinear, continuous and discrete optimization problem and comes
     with \Ipopt, including binaries.
 
--   [Optimization Services](https://projects.coin-or.org/OS)
+-   [Optimization Services](https://github.com/coin-or/OS)
 
     The Optimization Services (OS) project provides a set of standards
     for representing optimization instances, results, solver options,
@@ -306,9 +306,9 @@ maintained by other people, among them are:
 
     An interface to the **Python** language.
 
--   Scilab (free Matlab-like environment):
+-   [Scilab](https://www.scilab.org/) (free Matlab-like environment):
 
-    A Scilab interface is available at http://forge.scilab.org/index.php/p/sci-ipopt.
+    A Scilab interface is available at https://atoms.scilab.org/toolboxes/sci_ipopt.
 
 \subsection MOREINFO More Information and Contributions
 
