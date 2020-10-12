@@ -223,16 +223,16 @@ for the R project for statistical computing, see \ref INTERFACE_R.
 There is also software that facilitates use of \Ipopt
 maintained by other people, among them are:
 
--   [ADOL-C](https://projects.coin-or.org/ADOL-C) (automatic differentiation)
+-   [ADOL-C](https://github.com/coin-or/ADOL-C) (automatic differentiation)
 
     ADOL-C facilitates the evaluation of first and higher derivatives of
     vector functions that are defined by computer programs written in C
-    or C++. It comes with [examples](https://projects.coin-or.org/ADOL-C/browser/stable/2.4/ADOL-C/examples/additional_examples/ipopt)
+    or C++. It comes with [examples](https://github.com/coin-or/ADOL-C/tree/master/ADOL-C/examples/additional_examples/ipopt)
     that show how to use it in connection with \Ipopt.
 
 -   AIMMS (modeling environment)
 
-    The [AIMMSlinks project](https://projects.coin-or.org/AIMMSlinks) on
+    The [AIMMSlinks project](https://github.com/coin-or/AIMMSlinks) on
     COIN-OR, maintained by Marcel Hunting, provides an interface for
     \Ipopt within the AIMMS modeling tool.
 
@@ -246,12 +246,12 @@ maintained by other people, among them are:
     CasADi is a symbolic framework for automatic differentiation and
     numeric optimization and comes with \Ipopt.
 
--   [CppAD](https://projects.coin-or.org/CppAD) (automatic differentiation)
+-   [CppAD](https://github.com/coin-or/CppAD) (automatic differentiation)
 
     Given a C++ algorithm that computes function values, CppAD generates
     an algorithm that computes corresponding derivative values (of
     arbitrary order using either forward or reverse mode). It comes with
-    an [example](http://www.coin-or.org/CppAD/Doc/ipopt_solve.htm) that
+    an [example](https://coin-or.github.io/CppAD/doc/ipopt_solve.htm) that
     shows how to use it in connection with \Ipopt.
 
 -   [csipopt](https://github.com/cureos/csipopt)
@@ -260,7 +260,7 @@ maintained by other people, among them are:
 
 -   GAMS (modeling environment)
 
-    The [GAMSlinks project](https://projects.coin-or.org/GAMSlinks) on
+    The [GAMSlinks project](https://github.com/coin-or/GAMSlinks) on
     COIN-OR includes a GAMS interface for \Ipopt.
 
 -   [ifopt](https://github.com/ethz-adrl/ifopt)
