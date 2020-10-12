@@ -388,8 +388,7 @@ fi
 AM_CONDITIONAL([BUILD_LINEARSOLVERLOADER],[test $use_linearsolverloader = yes])
 
 AC_LANG_PUSH(C)
-AC_CHECK_HEADER([windows.h])
-AC_CHECK_HEADER([dlfcn.h])
+AC_CHECK_HEADER([windows.h],AC_DEFINE(HAVE_WINDOWS_H,[1],[Define to 1 if windows.h is available.]))
 AC_CHECK_LIB(dl,[dlopen],[IPOPTLIB_LFLAGS="$IPOPTLIB_LFLAGS -ldl"],[])
 AC_CHECK_FUNCS([snprintf _snprintf],[break])
 AC_CHECK_FUNCS([vsnprintf _vsnprintf],[break])

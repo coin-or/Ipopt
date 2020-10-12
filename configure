@@ -25627,11 +25627,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 ac_fn_c_check_header_mongrel "$LINENO" "windows.h" "ac_cv_header_windows_h" "$ac_includes_default"
 if test "x$ac_cv_header_windows_h" = xyes; then :
 
-fi
-
-
-ac_fn_c_check_header_mongrel "$LINENO" "dlfcn.h" "ac_cv_header_dlfcn_h" "$ac_includes_default"
-if test "x$ac_cv_header_dlfcn_h" = xyes; then :
+$as_echo "#define HAVE_WINDOWS_H 1" >>confdefs.h
 
 fi
 

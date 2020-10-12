@@ -80,6 +80,9 @@
 /* Define to 1 if you have the `vsnprintf' function. */
 #undef HAVE_VSNPRINTF
 
+/* Define to 1 if windows.h is available. */
+#undef HAVE_WINDOWS_H
+
 /* Define to 1 if you have the `_snprintf' function. */
 #undef HAVE__SNPRINTF
 

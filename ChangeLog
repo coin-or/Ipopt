@@ -13,6 +13,7 @@ commit history.
         - Added example recursive_nlp that uses Ipopt to solves an
           optimization problem for the evaluation of the objective function.
           [contributed by Brad Bell]
+        - Fixed build of linear-solver loader on Windows [#408]
 
 2020-04-30: 3.13.2
         - The C-preprocessor defines COIN_IPOPT_CHECKLEVEL,
