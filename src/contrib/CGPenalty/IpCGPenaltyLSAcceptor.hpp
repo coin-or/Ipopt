@@ -22,7 +22,7 @@ class CGPenaltyLSAcceptor: public BacktrackingLSAcceptor
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor.
     *
     *  The PDSystemSolver object only needs to be
@@ -35,7 +35,7 @@ public:
 
    /** Destructor */
    virtual ~CGPenaltyLSAcceptor();
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -152,11 +152,11 @@ public:
    virtual bool DoFallback();
 
    /** Methods for OptionsList */
-   //@{
+   ///@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
    );
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -168,7 +168,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    CGPenaltyLSAcceptor(
       const CGPenaltyLSAcceptor&
@@ -178,7 +178,7 @@ private:
    void operator=(
       const CGPenaltyLSAcceptor&
    );
-   //@}
+   ///@}
 
    /** Method to easily access CGPenalty data */
    CGPenaltyData& CGPenData()
@@ -223,7 +223,7 @@ private:
    char UpdatePenaltyParameter();
 
    /** @name Parameters for the penalty function algorithm. */
-   //@{
+   ///@{
    /** Relaxation factor in the Armijo condition for the penalty function */
    Number eta_penalty_;
    /** Tolerance for infeasibility part in penalty parameter update
@@ -245,11 +245,11 @@ private:
    /** Parameters for piecewise penalty acceptor */
    Number piecewisepenalty_gamma_obj_;
    Number piecewisepenalty_gamma_infeasi_;
-   //@{
+   ///@{
    /** Upper bound on infeasibility */
    Number pen_theta_max_;
    Number pen_theta_max_fact_;
-   //@}
+   ///@}
    // Number used to indicate that mu has been decreased
    Number pen_curr_mu_;
 
@@ -264,17 +264,17 @@ private:
    /** Minimal step size that triggers non-monotone method */
    Number min_alpha_primal_;
 
-   //@{
+   ///@{
    /** Initial constraint violation */
    Number reference_theta_;
-   //@}
+   ///@}
    /** Maximal number of second order correction steps */
    Index max_soc_;
    /** Required reduction in constraint violation before trying
     *  multiple second order correction steps \f$ \kappa_{soc}\f$.
     */
    Number kappa_soc_;
-   //@}
+   ///@}
    /** Counter for increases of penalty parameter. */
    Index counter_first_type_penalty_updates_;
    Index counter_second_type_penalty_updates_;
@@ -292,7 +292,7 @@ private:
    Number mult_diverg_y_tol_;
 
    /** @name Information related to watchdog procedure */
-   //@{
+   ///@{
    /** Penalty function at the point with respect to which
     *  progress is to be made */
    Number reference_penalty_function_;
@@ -309,7 +309,7 @@ private:
    /** Backup for the Chen-Goldfarb search direction (needed in the
     *  update rule for the penalty parameter */
    SmartPtr<const IteratesVector> watchdog_delta_cgpen_;
-   //@}
+   ///@}
    /** Flag for whether or not use piecewise penalty line search */
    bool never_use_piecewise_penalty_ls_;
    /** piecewise penalty list */
@@ -320,9 +320,9 @@ private:
    Index jump_for_tiny_step_;
 
    /** @name Strategy objective that are used */
-   //@{
+   ///@{
    SmartPtr<PDSystemSolver> pd_solver_;
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

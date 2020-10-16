@@ -21,7 +21,7 @@ class GradientScaling: public StandardScalingBase
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    GradientScaling(
       const SmartPtr<NLP>& nlp
    )
@@ -33,7 +33,7 @@ public:
    /** Destructor */
    virtual ~GradientScaling()
    { }
-   //@}
+   ///@}
 
    /** Register the options for this class */
    static void RegisterOptions(
@@ -75,7 +75,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    GradientScaling(
       const GradientScaling&
@@ -85,7 +85,7 @@ private:
    void operator=(
       const GradientScaling&
    );
-   //@}
+   ///@}
 
    /** pointer to the NLP to get scaling parameters */
    SmartPtr<NLP> nlp_;

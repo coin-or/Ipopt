@@ -16,12 +16,12 @@ class Ma28TDependencyDetector: public TDependencyDetector
 {
 public:
    /** @name Constructor/Destructor */
-   //@{
+   ///@{
    Ma28TDependencyDetector();
 
    virtual ~Ma28TDependencyDetector()
    { }
-   //@}
+   ///@}
 
    /** Has to be called to initialize and reset these objects. */
    virtual bool InitializeImpl(
@@ -63,7 +63,7 @@ private:
     * them for us, so we declare them private
     * and do not define them. This ensures that
     * they will not be implicitly created/called. */
-   //@{
+   ///@{
    /** Copy Constructor */
    Ma28TDependencyDetector(
       const Ma28TDependencyDetector&
@@ -73,15 +73,15 @@ private:
    void operator=(
       const Ma28TDependencyDetector&
    );
-   //@}
+   ///@}
 
    SmartPtr<const Journalist> jnlst_;
 
    /** @name Algorithmic parameters */
-   //@{
+   ///@{
    /** Pivot tolerance for MA28 */
    Number ma28_pivtol_;
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

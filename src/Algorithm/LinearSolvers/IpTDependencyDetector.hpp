@@ -20,13 +20,13 @@ class TDependencyDetector: public AlgorithmStrategyObject
 {
 public:
    /** @name Constructor/Destructor */
-   //@{
+   ///@{
    TDependencyDetector()
    { }
 
    virtual ~TDependencyDetector()
    { }
-   //@}
+   ///@}
 
    /** Has to be called to initialize and reset these objects. */
    virtual bool InitializeImpl(
@@ -63,7 +63,7 @@ private:
     * them for us, so we declare them private
     * and do not define them. This ensures that
     * they will not be implicitly created/called. */
-   //@{
+   ///@{
    /** Copy Constructor */
    TDependencyDetector(
       const TDependencyDetector&
@@ -73,7 +73,7 @@ private:
    void operator=(
       const TDependencyDetector&
    );
-   //@}
+   ///@}
 
 };
 

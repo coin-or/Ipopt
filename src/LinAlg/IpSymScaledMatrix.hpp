@@ -27,7 +27,7 @@ class IPOPTLIB_EXPORT SymScaledMatrix: public SymMatrix
 {
 public:
    /**@name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, taking the owner_space.
     */
    SymScaledMatrix(
@@ -36,7 +36,7 @@ public:
 
    /** Destructor */
    ~SymScaledMatrix();
-   //@}
+   ///@}
 
    /** Set the unscaled matrix */
    void SetUnscaledMatrix(
@@ -59,7 +59,7 @@ public:
 
 protected:
    /**@name Methods overloaded from Matrix */
-   //@{
+   ///@{
    virtual void MultVectorImpl(
       Number        alpha,
       const Vector& x,
@@ -82,7 +82,7 @@ protected:
       Index              indent,
       const std::string& prefix
    ) const;
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -93,7 +93,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    SymScaledMatrix();
 
@@ -106,7 +106,7 @@ private:
    void operator=(
       const SymScaledMatrix&
    );
-   //@}
+   ///@}
 
    /** const version of the unscaled matrix */
    SmartPtr<const SymMatrix> matrix_;
@@ -124,7 +124,7 @@ class IPOPTLIB_EXPORT SymScaledMatrixSpace: public SymMatrixSpace
 {
 public:
    /** @name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, given the number of row and columns blocks, as
     *  well as the total number of rows and columns.
     */
@@ -146,7 +146,7 @@ public:
    /** Destructor */
    ~SymScaledMatrixSpace()
    { }
-   //@}
+   ///@}
 
    /** Method for creating a new matrix of this specific type. */
    SymScaledMatrix* MakeNewSymScaledMatrix(
@@ -193,7 +193,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default constructor */
    SymScaledMatrixSpace();
 
@@ -206,7 +206,7 @@ private:
    SymScaledMatrixSpace& operator=(
       const SymScaledMatrixSpace&
    );
-   //@}
+   ///@}
 
    /** Row scaling vector */
    SmartPtr<Vector> scaling_;

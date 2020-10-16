@@ -32,12 +32,12 @@ class IPOPTLIB_EXPORT NLPScalingObject: public ReferencedObject
 {
 public:
    /**@name Constructors / Destructor */
-   //@{
+   ///@{
    NLPScalingObject();
 
    /** Destructor */
    virtual ~NLPScalingObject();
-   //@}
+   ///@}
 
    /** Method to initialize the options */
    bool Initialize(
@@ -51,7 +51,7 @@ public:
    }
 
    /** Methods to map scaled and unscaled matrices */
-   //@{
+   ///@{
    /** Returns an obj-scaled version of the given scalar */
    virtual Number apply_obj_scaling(
       const Number& f
@@ -163,10 +163,10 @@ public:
    apply_hessian_scaling(
       SmartPtr<const SymMatrix> matrix
    ) = 0;
-   //@}
+   ///@}
 
    /** Methods for scaling bounds - these wrap those above */
-   //@{
+   ///@{
    /** Returns an x-scaled vector in the x_L or x_U space */
    SmartPtr<Vector> apply_vector_scaling_x_LU_NonConst(
       const Matrix&                 Px_LU,
@@ -208,12 +208,12 @@ public:
       const SmartPtr<const Vector>& lu,
       const VectorSpace&            d_space
    );
-   //@}
+   ///@}
 
    /** Methods for scaling the gradient of the objective - wraps the
     *  virtual methods above
     */
-   //@{
+   ///@{
    /** Returns a grad_f scaled version (d_f * D_x^{-1}) of the given vector */
    virtual SmartPtr<Vector>
    apply_grad_obj_scaling_NonConst(
@@ -239,17 +239,17 @@ public:
    unapply_grad_obj_scaling(
       const SmartPtr<const Vector>& v
    );
-   //@}
+   ///@}
 
    /** @name Methods for determining whether scaling for entities is done */
-   //@{
+   ///@{
    /** Returns true if the primal x variables are scaled. */
    virtual bool have_x_scaling() = 0;
    /** Returns true if the equality constraints are scaled. */
    virtual bool have_c_scaling() = 0;
    /** Returns true if the inequality constraints are scaled. */
    virtual bool have_d_scaling() = 0;
-   //@}
+   ///@}
 
    /** This method is called by the IpoptNLP's at a convenient time to
     *  compute and/or read scaling factors
@@ -293,7 +293,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    NLPScalingObject(
       const NLPScalingObject&
@@ -303,7 +303,7 @@ private:
    void operator=(
       const NLPScalingObject&
    );
-   //@}
+   ///@}
 
    SmartPtr<const Journalist> jnlst_;
 };
@@ -316,15 +316,15 @@ class IPOPTLIB_EXPORT StandardScalingBase: public NLPScalingObject
 {
 public:
    /**@name Constructors / Destructor */
-   //@{
+   ///@{
    StandardScalingBase();
 
    /** Destructor */
    virtual ~StandardScalingBase();
-   //@}
+   ///@}
 
    /** Methods to map scaled and unscaled matrices */
-   //@{
+   ///@{
    virtual Number apply_obj_scaling(
       const Number& f
    );
@@ -406,14 +406,14 @@ public:
    virtual SmartPtr<const SymMatrix>
    apply_hessian_scaling(
       SmartPtr<const SymMatrix> matrix);
-   //@}
+   ///@}
 
    /** @name Methods for determining whether scaling for entities is done */
-   //@{
+   ///@{
    virtual bool have_x_scaling();
    virtual bool have_c_scaling();
    virtual bool have_d_scaling();
-   //@}
+   ///@}
 
    /** This method is called by the IpoptNLP's at a convenient time to
     *  compute and/or read scaling factors
@@ -478,7 +478,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    StandardScalingBase(
       const StandardScalingBase&
@@ -488,22 +488,22 @@ private:
    void operator=(
       const StandardScalingBase&
    );
-   //@}
+   ///@}
 
    /** Scaling parameters - we only need to keep copies of
     *  the objective scaling and the x scaling - the others we can
     *  get from the scaled matrix spaces.
     */
-   //@{
+   ///@{
    /** objective scaling parameter */
    Number df_;
 
    /** x scaling */
    SmartPtr<Vector> dx_;
-   //@}
+   ///@}
 
    /** Scaled Matrix Spaces */
-   //@{
+   ///@{
    /** Scaled Jacobian of c space */
    SmartPtr<ScaledMatrixSpace> scaled_jac_c_space_;
 
@@ -512,13 +512,13 @@ private:
 
    /** Scaled Hessian of Lagrangian spacea */
    SmartPtr<SymScaledMatrixSpace> scaled_h_space_;
-   //@}
+   ///@}
 
    /** @name Algorithmic parameters */
-   //@{
+   ///@{
    /** Additional scaling value for the objective function */
    Number obj_scaling_factor_;
-   //@}
+   ///@}
 };
 
 /** Class implementing the scaling object that doesn't to any scaling */
@@ -526,14 +526,14 @@ class IPOPTLIB_EXPORT NoNLPScalingObject: public StandardScalingBase
 {
 public:
    /**@name Constructors / Destructor */
-   //@{
+   ///@{
    NoNLPScalingObject()
    { }
 
    /** Destructor */
    virtual ~NoNLPScalingObject()
    { }
-   //@}
+   ///@}
 
 protected:
    /** Overloaded from StandardScalingBase */
@@ -564,7 +564,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    NoNLPScalingObject(
       const NoNLPScalingObject&
@@ -574,7 +574,7 @@ private:
    void operator=(
       const NoNLPScalingObject&
    );
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

@@ -21,7 +21,7 @@ class AdaptiveMuUpdate: public MuUpdate
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor */
    AdaptiveMuUpdate(
       const SmartPtr<LineSearch>& linesearch,
@@ -31,7 +31,7 @@ public:
 
    /** Destructor */
    virtual ~AdaptiveMuUpdate();
-   //@}
+   ///@}
 
    /** Initialize method - overloaded from AlgorithmStrategyObject */
    virtual bool InitializeImpl(
@@ -47,11 +47,11 @@ public:
    virtual bool UpdateBarrierParameter();
 
    /** Methods for IpoptType */
-   //@{
+   ///@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
    );
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -63,7 +63,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    AdaptiveMuUpdate();
 
@@ -76,10 +76,10 @@ private:
    void operator=(
       const AdaptiveMuUpdate&
    );
-   //@}
+   ///@}
 
    /** @name Algorithmic parameters */
-   //@{
+   ///@{
    Number mu_max_fact_;
    Number mu_max_;
    Number mu_min_;
@@ -109,10 +109,10 @@ private:
    Number filter_margin_fact_;
    /** Unscaled tolerance for complementarity */
    Number compl_inf_tol_;
-   //@}
+   ///@}
 
    /** @name Strategy objects */
-   //@{
+   ///@{
    /** Line search object of the Ipopt algorithm.  */
    SmartPtr<LineSearch> linesearch_;
    /** Pointer to strategy object that is to be used for computing a
@@ -125,7 +125,7 @@ private:
     *  If NULL, the current average complementarity is used.
     */
    SmartPtr<MuOracle> fix_mu_oracle_;
-   //@}
+   ///@}
 
    /** Dual infeasibility at initial point.
     *
@@ -143,7 +143,7 @@ private:
    /** @name Methods and data defining the outer globalization
     *  strategy (might be a strategy object later).
     */
-   //@{
+   ///@{
    void InitializeFixedMuGlobalization();
    /** Check whether the point in the "current" fields offers
     *  sufficient reduction in order to remain in or switch to the
@@ -201,7 +201,7 @@ private:
     *  be restored, when switching to the fixed mode.
     */
    bool restore_accepted_iterate_;
-   //@}
+   ///@}
 
    /** Flag indicating whether the problem has any inequality constraints */
    bool no_bounds_;
@@ -211,9 +211,9 @@ private:
    /** @name Most recent accepted point in free mode, from which
     *  fixed mode should be started.
     */
-   //@{
+   ///@{
    SmartPtr<const IteratesVector> accepted_point_;
-   //@}
+   ///@}
 
 };
 

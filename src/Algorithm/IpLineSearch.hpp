@@ -18,7 +18,7 @@ class IPOPTLIB_EXPORT LineSearch: public AlgorithmStrategyObject
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default Constructor */
    LineSearch()
    { }
@@ -26,7 +26,7 @@ public:
    /** Destructor */
    virtual ~LineSearch()
    { }
-   //@}
+   ///@}
 
    /** Perform the line search.
     *
@@ -88,7 +88,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    LineSearch(
       const LineSearch&
@@ -97,7 +97,7 @@ private:
    void operator=(
       const LineSearch&
    );
-   //@}
+   ///@}
 
 };
 

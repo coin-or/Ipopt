@@ -22,13 +22,13 @@ class CGPenaltyData: public IpoptAdditionalData
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor */
    CGPenaltyData();
 
    /** Destructor */
    ~CGPenaltyData();
-   //@}
+   ///@}
 
    /** This method must be called to initialize the global
     *  algorithmic parameters.
@@ -86,7 +86,7 @@ public:
     *  Those fields can be used to store
     *  directions related to the Chen-Goldfarb algorithm
     */
-   //@{
+   ///@{
    bool HaveCgPenDeltas() const
    {
       return have_cgpen_deltas_;
@@ -110,13 +110,13 @@ public:
    {
       have_cgfast_deltas_ = have_cgfast_deltas;
    }
-   //@}
+   ///@}
 
    /** @name Public Methods for updating iterates */
-   //@{
+   ///@{
    /** Set the current iterate values from the trial values. */
    void AcceptTrialPoint();
-   //@}
+   ///@}
 
    Number CurrPenaltyPert()
    {
@@ -233,7 +233,7 @@ private:
     *  computation of the overall search direction to the line
     *  search.
     */
-   //@{
+   ///@{
    SmartPtr<const IteratesVector> delta_cgpen_;
 
    /** The following flag is set to true, if some other part of the
@@ -242,7 +242,7 @@ private:
     *  @todo we could cue off of a null delta_cgpen_
     */
    bool have_cgpen_deltas_;
-   //@}
+   ///@}
 
    /** @name Fast Chen-Goldfarb step for the penalty function.
     *
@@ -250,7 +250,7 @@ private:
     *  computation of the overall search direction to the line
     *  search.
     */
-   //@{
+   ///@{
    SmartPtr<const IteratesVector> delta_cgfast_;
 
    /** The following flag is set to true, if some other part of the
@@ -260,10 +260,10 @@ private:
     *  @todo we could cue off of a null delta_cgfast_
     */
    bool have_cgfast_deltas_;
-   //@}
+   ///@}
 
    /** @name penalty method **/
-   //@{
+   ///@{
    /** Flag indicating whether the pure Newton method is used */
    bool never_try_pure_Newton_;
 
@@ -278,7 +278,7 @@ private:
    bool kkt_penalty_initialized_;
    Number curr_penalty_pert_;
    Number max_alpha_x_;
-   //@}
+   ///@}
 
    /** flag indicating if Initialize method has been called (for debugging) */
    bool initialize_called_;
@@ -292,7 +292,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    CGPenaltyData(
       const CGPenaltyData&
@@ -302,18 +302,18 @@ private:
    void operator=(
       const CGPenaltyData&
    );
-   //@}
+   ///@}
 
 #if IPOPT_CHECKLEVEL > 0
    /** Some debug flags to make sure vectors are not changed
     *  behind the CGPenaltyData's back
     */
-   //@{
+   ///@{
    TaggedObject::Tag debug_delta_cgpen_tag_;
    TaggedObject::Tag debug_delta_cgfast_tag_;
    TaggedObject::Tag debug_delta_cgpen_tag_sum_;
    TaggedObject::Tag debug_delta_cgfast_tag_sum_;
-   //@}
+   ///@}
 #endif
 
 };

@@ -21,7 +21,7 @@ class MinC_1NrmRestorationPhase: public RestorationPhase
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor, taking strategy objects.
     *
     *  The resto_alg strategy object is the restoration phase Ipopt
@@ -37,7 +37,7 @@ public:
 
    /** Destructor */
    virtual ~MinC_1NrmRestorationPhase();
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -60,7 +60,7 @@ private:
     * declare them private and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    MinC_1NrmRestorationPhase();
 
@@ -73,13 +73,13 @@ private:
    void operator=(
       const MinC_1NrmRestorationPhase&
    );
-   //@}
+   ///@}
 
    /** @name Strategy objects */
-   //@{
+   ///@{
    SmartPtr<IpoptAlgorithm> resto_alg_;
    SmartPtr<EqMultiplierCalculator> eq_mult_calculator_;
-   //@}
+   ///@}
 
    /** Copy of original options, which is required to initialize the
     *  Ipopt algorithm strategy object before restoration phase is
@@ -88,7 +88,7 @@ private:
    SmartPtr<OptionsList> resto_options_;
 
    /** @name Algorithmic parameters */
-   //@{
+   ///@{
    Number constr_mult_reset_threshold_;
 
    /** Maximal allowed value of a bound multiplier after restoration
@@ -111,7 +111,7 @@ private:
     *  met.
     */
    Number resto_failure_feasibility_threshold_;
-   //@}
+   ///@}
 
    /** Counter for the number of time that PerformRestoration is
     *  called.
@@ -119,7 +119,7 @@ private:
    Index count_restorations_;
 
    /** @name Auxiliary methods */
-   //@{
+   ///@{
    /** Method for computing "primal-dual" step in bound multipliers,
     *  given step in slacks.
     */
@@ -129,7 +129,7 @@ private:
       const Vector& curr_slack,
       const Vector& trial_slack
    );
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

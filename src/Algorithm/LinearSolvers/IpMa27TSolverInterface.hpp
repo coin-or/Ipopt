@@ -18,13 +18,13 @@ class Ma27TSolverInterface: public SparseSymLinearSolverInterface
 {
 public:
    /** @name Constructor/Destructor */
-   //@{
+   ///@{
    /** Constructor */
    Ma27TSolverInterface();
 
    /** Destructor */
    virtual ~Ma27TSolverInterface();
-   //@}
+   ///@}
 
    bool InitializeImpl(
       const OptionsList& options,
@@ -32,7 +32,7 @@ public:
    );
 
    /** @name Methods for requesting solution of the linear system. */
-   //@{
+   ///@{
    virtual ESymSolverStatus InitializeStructure(
       Index        dim,
       Index        nonzeros,
@@ -52,10 +52,10 @@ public:
       Index        numberOfNegEVals);
 
    virtual Index NumberOfNegEVals() const;
-   //@}
+   ///@}
 
    //* @name Options of Linear solver */
-   //@{
+   ///@{
    virtual bool IncreaseQuality();
 
    virtual bool ProvidesInertia() const
@@ -67,13 +67,13 @@ public:
    {
       return Triplet_Format;
    }
-   //@}
+   ///@}
 
-   //@{
+   ///@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
    );
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -83,7 +83,7 @@ private:
     * them for us, so we declare them private
     * and do not define them. This ensures that
     * they will not be implicitly created/called. */
-   //@{
+   ///@{
    /** Copy Constructor */
    Ma27TSolverInterface(
       const Ma27TSolverInterface&
@@ -93,25 +93,25 @@ private:
    void operator=(
       const Ma27TSolverInterface&
    );
-   //@}
+   ///@}
 
    /** @name Information about the matrix */
-   //@{
+   ///@{
    /** Number of rows and columns of the matrix */
    Index dim_;
 
    /** Number of nonzeros of the matrix */
    Index nonzeros_;
-   //@}
+   ///@}
 
    /** @name Information about most recent factorization/solve */
-   //@{
+   ///@{
    /** Number of negative eigenvalues */
    Index negevals_;
-   //@}
+   ///@}
 
    /** @name Initialization flags */
-   //@{
+   ///@{
    /** Flag indicating if internal data is initialized.
     *
     *  For initialization, this object needs to have seen a matrix.
@@ -126,10 +126,10 @@ private:
     *  again.
     */
    bool refactorize_;
-   //@}
+   ///@}
 
    /** @name Solver specific data/options */
-   //@{
+   ///@{
    /** Pivot tolerance */
    Number pivtol_;
 
@@ -152,12 +152,12 @@ private:
     * is detected, but right hands sides are still accepted.
     */
    bool ignore_singularity_;
-   //@}
+   ///@}
 
    /** @name Data for the linear solver.
     * Storing factorization and other solver specific data structure.
     */
-   //@{
+   ///@{
    /** integer control values */
    ipfint icntl_[30];
    /** real control values */
@@ -184,10 +184,10 @@ private:
    bool la_increase_;
    /** flag indicating that liw should be increased before next factorization */
    bool liw_increase_;
-   //@}
+   ///@}
 
    /** @name Internal functions */
-   //@{
+   ///@{
    /** Call MA27AD and reserve memory for MA27 data.
     *
     *  Reserve memory for iw_ and ikeep_, call MA27AD to perform
@@ -215,7 +215,7 @@ private:
       Index   nrhs,
       double* rhs_vals
    );
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

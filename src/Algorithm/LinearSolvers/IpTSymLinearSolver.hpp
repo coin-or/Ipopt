@@ -34,7 +34,7 @@ class TSymLinearSolver: public SymLinearSolver
 {
 public:
    /** @name Constructor/Destructor */
-   //@{
+   ///@{
    /** Constructor.
     *
     *  The solver_interface is a pointer to a linear
@@ -49,14 +49,14 @@ public:
 
    /** Destructor */
    virtual ~TSymLinearSolver();
-   //@}
+   ///@}
 
    bool InitializeImpl(
       const OptionsList& options,
       const std::string& prefix);
 
    /** @name Methods for requesting solution of the linear system. */
-   //@{
+   ///@{
    virtual ESymSolverStatus MultiSolve(
       const SymMatrix&                      A,
       std::vector<SmartPtr<const Vector> >& rhsV,
@@ -66,19 +66,19 @@ public:
    );
 
    virtual Index NumberOfNegEVals() const;
-   //@}
+   ///@}
 
    //* @name Options of Linear solver */
-   //@{
+   ///@{
    virtual bool IncreaseQuality();
 
    virtual bool ProvidesInertia() const;
-   //@}
+   ///@}
 
    /** @name Methods related to the detection of linearly dependent
     *  rows in a matrix
     */
-   //@{
+   ///@{
    bool ProvidesDegeneracyDetection() const;
 
    ESymSolverStatus DetermineDependentRows(
@@ -90,14 +90,14 @@ public:
       Index*            jac_c_jCol,
       std::list<Index>& c_deps
    );
-   //@}
+   ///@}
 
    /** Methods for OptionsList */
-   //@{
+   ///@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
    );
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -107,7 +107,7 @@ private:
     * them for us, so we declare them private
     * and do not define them. This ensures that
     * they will not be implicitly created/called. */
-   //@{
+   ///@{
    /** Default Constructor */
    TSymLinearSolver();
 
@@ -120,10 +120,10 @@ private:
    void operator=(
       const TSymLinearSolver&
    );
-   //@}
+   ///@}
 
    /** @name Information about the matrix */
-   //@{
+   ///@{
    /** Tag for the incoming matrix */
    TaggedObject::Tag atag_;
 
@@ -142,10 +142,10 @@ private:
     *  with the CSR format.
     */
    Index nonzeros_compressed_;
-   //@}
+   ///@}
 
    /** @name Initialization flags */
-   //@{
+   ///@{
    /** Flag indicating if the internal structures are initialized.
     *
     *  For initialization, this object needs to have seen a matrix.
@@ -159,12 +159,12 @@ private:
     *  called for the linear solver.
     */
    bool initialized_;
-   //@}
+   ///@}
 
    /** Strategy Object for an interface to a linear solver. */
    SmartPtr<SparseSymLinearSolverInterface> solver_interface_;
    /** @name Stuff for scaling of the linear system. */
-   //@{
+   ///@{
    /** Strategy Object for a method that computes scaling factors for
     *  the matrices.
     *
@@ -177,10 +177,10 @@ private:
    bool use_scaling_;
    /** Flag indicating whether we just switched on the scaling */
    bool just_switched_on_scaling_;
-   //@}
+   ///@}
 
    /** @name information about the matrix. */
-   //@{
+   ///@{
    /** row indices of matrix in triplet (MA27) format. */
    Index* airn_;
    /** column indices of matrix in triplet (MA27) format. */
@@ -193,18 +193,18 @@ private:
    SmartPtr<TripletToCSRConverter> triplet_to_csr_converter_;
    /** Flag indicating what matrix data format the solver requires. */
    SparseSymLinearSolverInterface::EMatrixFormat matrix_format_;
-   //@}
+   ///@}
 
    /** @name Algorithmic parameters */
-   //@{
+   ///@{
    /** Flag indicating whether the TNLP with identical structure has
     *  already been solved before.
     */
    bool warm_start_same_structure_;
-   //@}
+   ///@}
 
    /** @name Internal functions */
-   //@{
+   ///@{
    /** Initialize nonzero structure.
     *
     *  Set dim_ and nonzeros_, and copy the nonzero structure of symT_A
@@ -221,7 +221,7 @@ private:
       bool             new_matrix,
       const SymMatrix& sym_A
    );
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

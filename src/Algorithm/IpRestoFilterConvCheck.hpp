@@ -23,13 +23,13 @@ class RestoFilterConvergenceCheck: public RestoConvergenceCheck
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default Constructor */
    RestoFilterConvergenceCheck();
 
    /** Destructor */
    virtual ~RestoFilterConvergenceCheck();
-   //@}
+   ///@}
 
    /** Set the object for the original filter line search.
     *
@@ -59,7 +59,7 @@ private:
     * declare them private and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    RestoFilterConvergenceCheck(
       const RestoFilterConvergenceCheck&
@@ -69,7 +69,7 @@ private:
    void operator=(
       const RestoFilterConvergenceCheck&
    );
-   //@}
+   ///@}
 
    /** Method for checking progress with original filter
     *  globalization mechanism.

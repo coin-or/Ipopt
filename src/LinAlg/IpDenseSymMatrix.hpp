@@ -28,7 +28,7 @@ class IPOPTLIB_EXPORT DenseSymMatrix: public SymMatrix
 {
 public:
    /**@name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, taking the owner_space. */
    DenseSymMatrix(
       const DenseSymMatrixSpace* owner_space
@@ -36,7 +36,7 @@ public:
 
    /** Destructor */
    ~DenseSymMatrix();
-   //@}
+   ///@}
 
    /** Create a new DenseSymMatrix from same MatrixSpace */
    SmartPtr<DenseSymMatrix> MakeNewDenseSymMatrix() const;
@@ -118,7 +118,7 @@ public:
 
 protected:
    /**@name Overloaded methods from Matrix base class*/
-   //@{
+   ///@{
    virtual void MultVectorImpl(
       Number        alpha,
       const Vector& x,
@@ -141,7 +141,7 @@ protected:
       Index              indent,
       const std::string& prefix
    ) const;
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -151,7 +151,7 @@ private:
     * them for us, so we declare them private
     * and do not define them. This ensures that
     * they will not be implicitly created/called. */
-   //@{
+   ///@{
    /** Default Constructor */
    DenseSymMatrix();
 
@@ -164,7 +164,7 @@ private:
    void operator=(
       const DenseSymMatrix&
    );
-   //@}
+   ///@}
 
    const DenseSymMatrixSpace* owner_space_;
 
@@ -180,7 +180,7 @@ class IPOPTLIB_EXPORT DenseSymMatrixSpace: public SymMatrixSpace
 {
 public:
    /** @name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor for matrix space for DenseSymMatrices.
     *
     * Takes in dimension of the matrices.
@@ -192,7 +192,7 @@ public:
    /** Destructor */
    ~DenseSymMatrixSpace()
    { }
-   //@}
+   ///@}
 
    /** Method for creating a new matrix of this specific type. */
    DenseSymMatrix* MakeNewDenseSymMatrix() const

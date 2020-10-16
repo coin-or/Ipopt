@@ -22,7 +22,7 @@ class InexactCq: public IpoptAdditionalCq
 public:
 
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor */
    InexactCq(
       IpoptNLP*                  ip_nlp,
@@ -32,7 +32,7 @@ public:
 
    /** Destructor */
    virtual ~InexactCq();
-   //@}
+   ///@}
 
    /** This method must be called to initialize the global
     *  algorithmic parameters.
@@ -130,7 +130,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    InexactCq();
 
@@ -141,18 +141,18 @@ private:
    /** Overloaded Assignment Operator */
    void operator=(
       const InexactCq&);
-   //@}
+   ///@}
 
    /** @name Pointers for easy access to data and NLP information.
     *
     *  To avoid circular references of Smart Pointers, we use a regular
     *  pointer here.
     */
-   //@{
+   ///@{
    IpoptNLP* ip_nlp_;
    IpoptData* ip_data_;
    IpoptCalculatedQuantities* ip_cq_;
-   //@}
+   ///@}
 
    /** Method to easily access Inexact data */
    InexactData& InexData()
@@ -163,7 +163,7 @@ private:
    }
 
    /** @name Caches */
-   //@{
+   ///@{
    CachedResults<SmartPtr<const Vector> > curr_jac_cdT_times_curr_cdminuss_cache_;
    CachedResults<SmartPtr<const Vector> > curr_scaling_slacks_cache_;
    CachedResults<SmartPtr<const Vector> > curr_slack_scaled_d_minus_s_cache_;
@@ -176,7 +176,7 @@ private:
    CachedResults<Number> curr_uWu_cache_;
    CachedResults<SmartPtr<const Vector> > curr_jac_times_normal_c_cache_;
    CachedResults<SmartPtr<const Vector> > curr_jac_times_normal_d_cache_;
-   //@}
+   ///@}
 
    /** Upper bound on slack-based scaling factors */
    Number slack_scale_max_;

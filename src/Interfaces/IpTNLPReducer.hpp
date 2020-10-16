@@ -24,7 +24,7 @@ class IPOPTLIB_EXPORT TNLPReducer: public TNLP
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor is given the indices of the constraints that
     *  should be taken out of the problem statement, as well as the
     *  original TNLP.
@@ -43,9 +43,10 @@ public:
 
    /** Default destructor */
    virtual ~TNLPReducer();
-   //@}
+   ///@}
 
    /** @name Overloaded methods from TNLP */
+   ///@{
    virtual bool get_nlp_info(
       Index&          n,
       Index&          m,
@@ -182,7 +183,7 @@ public:
       Index  num_nonlin_vars,
       Index* pos_nonlin_vars
    );
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -194,7 +195,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    TNLPReducer();
 
@@ -207,14 +208,14 @@ private:
    void operator=(
       const TNLPReducer&
    );
-   //@}
+   ///@}
 
    /** @name original TNLP */
-   //@{
+   ///@{
    SmartPtr<TNLP> tnlp_;
    Index m_orig_;
    Index nnz_jac_g_orig_;
-   //@}
+   ///@}
 
    /** Number of constraints to be skipped */
    Index n_g_skip_;

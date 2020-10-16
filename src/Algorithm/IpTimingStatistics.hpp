@@ -19,7 +19,7 @@ class IPOPTLIB_EXPORT TimingStatistics: public ReferencedObject
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default constructor. */
    TimingStatistics()
    { }
@@ -27,7 +27,7 @@ public:
    /** Destructor */
    virtual ~TimingStatistics()
    { }
-   //@}
+   ///@}
 
    /** Method for resetting all times. */
    void ResetTimes();
@@ -40,7 +40,7 @@ public:
    ) const;
 
    /**@name Accessor methods to all timed tasks. */
-   //@{
+   ///@{
    TimedTask& OverallAlgorithm()
    {
       return OverallAlgorithm_;
@@ -180,7 +180,7 @@ public:
    {
       return Task6_;
    }
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -192,7 +192,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    TimingStatistics(
       const TimingStatistics&
@@ -202,10 +202,10 @@ private:
    void operator=(
       const TimingStatistics&
    );
-   //@}
+   ///@}
 
    /**@name All timed tasks. */
-   //@{
+   ///@{
    TimedTask OverallAlgorithm_;
    TimedTask PrintProblemStatistics_;
    TimedTask InitializeIterates_;
@@ -236,7 +236,7 @@ private:
    TimedTask Task4_;
    TimedTask Task5_;
    TimedTask Task6_;
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

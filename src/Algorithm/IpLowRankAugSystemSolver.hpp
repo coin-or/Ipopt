@@ -23,7 +23,7 @@ class LowRankAugSystemSolver: public AugSystemSolver
 {
 public:
    /**@name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor using only a linear solver object */
    LowRankAugSystemSolver(
       AugSystemSolver& aug_system_solver
@@ -31,7 +31,7 @@ public:
 
    /** Destructor */
    virtual ~LowRankAugSystemSolver();
-   //@}
+   ///@}
 
    /** overloaded from AlgorithmStrategyObject */
    bool InitializeImpl(
@@ -99,7 +99,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default constructor. */
    LowRankAugSystemSolver();
 
@@ -111,7 +111,7 @@ private:
    void operator=(
       const LowRankAugSystemSolver&
    );
-   //@}
+   ///@}
 
    /** The augmented system solver object that should be used for the
     *  factorization of the augmented system without the low-rank
@@ -123,7 +123,7 @@ private:
     matrix has to be updated compared to the most recent call of
     the Set method.
     */
-   //@{
+   ///@{
    /** Tag for W matrix.
     *
     * If W has been given to Set as NULL, then this tag is set to 0.
@@ -179,11 +179,11 @@ private:
 
    /** Most recent value of delta_d from Set method */
    double delta_d_;
-   //@}
+   ///@}
 
    /** @name Information to be stored in order to resolve for the
     *  same matrix with a different right hand side. */
-   //@{
+   ///@{
    bool first_call_;
    SmartPtr<DenseGenMatrix> J1_;
    SmartPtr<DenseGenMatrix> J2_;
@@ -197,7 +197,7 @@ private:
    /** Vector space for Compound vectors that capture the entire
     *  right hand side and solution vectors .*/
    SmartPtr<const CompoundVectorSpace> compound_sol_vecspace_;
-   //@}
+   ///@}
 
    /** Stores the number of negative eigenvalues detected during most
     *  recent factorization.
@@ -211,7 +211,7 @@ private:
    Index num_neg_evals_;
 
    /** @name Internal functions */
-   //@{
+   ///@{
    /** Method for updating the factorization, including J1_, J2_,
     *  Vtilde1_, Utilde2, Wdiag_, compound_sol_vecspace_
     */
@@ -286,7 +286,7 @@ private:
       const Vector*    D_d,
       double           delta_d
    );
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

@@ -22,13 +22,13 @@ class TSymScalingMethod: public AlgorithmStrategyObject
 {
 public:
    /** @name Constructor/Destructor */
-   //@{
+   ///@{
    TSymScalingMethod()
    { }
 
    ~TSymScalingMethod()
    { }
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -53,7 +53,7 @@ private:
     * and we do not want the compiler to implement them for us, so we
     * declare them private and do not define them. This ensures that
     * they will not be implicitly created/called. */
-   //@{
+   ///@{
    /** Copy Constructor */
    TSymScalingMethod(
       const TSymScalingMethod&

@@ -20,13 +20,13 @@ class TSymDependencyDetector: public TDependencyDetector
 {
 public:
    /** @name Constructor/Destructor */
-   //@{
+   ///@{
    TSymDependencyDetector(
       TSymLinearSolver& tsym_linear_solver);
 
    virtual ~TSymDependencyDetector()
    { }
-   //@}
+   ///@}
 
    /** Has to be called to initialize and reset these objects. */
    virtual bool InitializeImpl(
@@ -68,7 +68,7 @@ private:
     * them for us, so we declare them private
     * and do not define them. This ensures that
     * they will not be implicitly created/called. */
-   //@{
+   ///@{
    /** Default Constructor */
    TSymDependencyDetector();
 
@@ -81,7 +81,7 @@ private:
    void operator=(
       const TSymDependencyDetector&
    );
-   //@}
+   ///@}
 
    SmartPtr<const Journalist> jnlst_;
 

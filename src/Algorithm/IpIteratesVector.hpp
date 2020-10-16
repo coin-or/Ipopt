@@ -26,17 +26,17 @@ class IPOPTLIB_EXPORT IteratesVector: public CompoundVector
 {
 public:
    /** Constructors / Destructors */
-   //@{
+   ///@{
    IteratesVector(
       const IteratesVectorSpace* owner_space,
       bool                       create_new
    );
 
    virtual ~IteratesVector();
-   //@}
+   ///@}
 
    /** Make New methods */
-   //@{
+   ///@{
    /** Use this method to create a new iterates vector.
     *
     *  The MakeNew method on the Vector class also works, but it does not give
@@ -65,10 +65,10 @@ public:
     *  existing entries may or may not be modifiable.
     */
    SmartPtr<IteratesVector> MakeNewContainer() const;
-   //@}
+   ///@}
 
    /** Iterates Set/Get Methods */
-   //@{
+   ///@{
    /** Get the x iterate (const) */
    SmartPtr<const Vector> x() const
    {
@@ -598,7 +598,7 @@ public:
 
       return tag;
    }
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods (Hidden to avoid
@@ -609,7 +609,7 @@ private:
     * declare them private and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    IteratesVector();
 
@@ -622,7 +622,7 @@ private:
    void operator=(
       const IteratesVector&
    );
-   //@}
+   ///@}
 
    const IteratesVectorSpace* owner_space_;
 
@@ -666,7 +666,7 @@ class IPOPTLIB_EXPORT IteratesVectorSpace: public CompoundVectorSpace
 {
 public:
    /** @name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor that takes the spaces for each of the iterates.
     *
     *  @attention None of these can be NULL !
@@ -683,10 +683,10 @@ public:
    );
 
    virtual ~IteratesVectorSpace();
-   //@}
+   ///@}
 
    /** Method for creating vectors . */
-   //@{
+   ///@{
    /** Use this to create a new IteratesVector.
     *
     *  You can pass-in
@@ -745,7 +745,7 @@ public:
    {
       return MakeNewIteratesVector();
    }
-   //@}
+   ///@}
 
    /** This method hides the CompoundVectorSpace::SetCompSpace method
     *  since the components of the Iterates are fixed at
@@ -768,7 +768,7 @@ private:
     * declare them private and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default constructor */
    IteratesVectorSpace();
 
@@ -781,7 +781,7 @@ private:
    IteratesVectorSpace& operator=(
       const IteratesVectorSpace&
    );
-   //@}
+   ///@}
 
    /** Contained Spaces */
    SmartPtr<const VectorSpace> x_space_;

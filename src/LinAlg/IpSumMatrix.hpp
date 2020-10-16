@@ -24,7 +24,7 @@ class SumMatrix: public Matrix
 {
 public:
    /**@name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, taking the owner_space. */
    SumMatrix(
       const SumMatrixSpace* owner_space
@@ -32,7 +32,7 @@ public:
 
    /** Destructor */
    virtual ~SumMatrix();
-   //@}
+   ///@}
 
    /** Method for setting term iterm for the sum. */
    void SetTerm(
@@ -56,7 +56,7 @@ public:
 
 protected:
    /**@name Methods overloaded from matrix */
-   //@{
+   ///@{
    virtual void MultVectorImpl(
       Number        alpha,
       const Vector& x,
@@ -91,7 +91,7 @@ protected:
       Index              indent,
       const std::string& prefix
    ) const;
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -102,7 +102,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    SumMatrix();
 
@@ -115,7 +115,7 @@ private:
    void operator=(
       const SumMatrix&
    );
-   //@}
+   ///@}
 
    /** std::vector storing the factors for each term. */
    std::vector<Number> factors_;
@@ -132,7 +132,7 @@ class SumMatrixSpace: public MatrixSpace
 {
 public:
    /** @name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, given the number of row and columns, as well as
     *  the number of terms in the sum.
     */
@@ -148,7 +148,7 @@ public:
    /** Destructor */
    virtual ~SumMatrixSpace()
    { }
-   //@}
+   ///@}
 
    /** Accessor functions to get the number of terms in the sum. */
    Index NTerms() const
@@ -184,7 +184,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default constructor */
    SumMatrixSpace();
 
@@ -197,7 +197,7 @@ private:
    SumMatrixSpace& operator=(
       const SumMatrixSpace&
    );
-   //@}
+   ///@}
 
    const Index nterms_;
 

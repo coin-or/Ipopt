@@ -20,7 +20,7 @@ class IPOPTLIB_EXPORT IterateInitializer: public AlgorithmStrategyObject
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default Constructor */
    IterateInitializer()
    { }
@@ -28,7 +28,7 @@ public:
    /** Default destructor */
    virtual ~IterateInitializer()
    { }
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -49,7 +49,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    IterateInitializer(
       const IterateInitializer&
@@ -59,7 +59,7 @@ private:
    void operator=(
       const IterateInitializer&
    );
-   //@}
+   ///@}
 
 };
 

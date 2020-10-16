@@ -20,7 +20,7 @@ class ProbingMuOracle: public MuOracle
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor */
    ProbingMuOracle(
       const SmartPtr<PDSystemSolver>& pd_solver
@@ -28,7 +28,7 @@ public:
 
    /** Destructor */
    virtual ~ProbingMuOracle();
-   //@}
+   ///@}
 
    /** overloaded from AlgorithmStrategyObject */
    virtual bool InitializeImpl(
@@ -60,7 +60,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    ProbingMuOracle();
 
@@ -73,7 +73,7 @@ private:
    void operator=(
       const ProbingMuOracle&
    );
-   //@}
+   ///@}
 
    /** Pointer to the object that should be used to solve the
     *  primal-dual system.
@@ -90,10 +90,10 @@ private:
    );
 
    /** @name Algorithmic parameters */
-   //@{
+   ///@{
    /** safeguarding upper bound on centering parameter sigma */
    Number sigma_max_;
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

@@ -20,7 +20,7 @@ class IPOPTLIB_EXPORT PDSearchDirCalculator: public SearchDirectionCalculator
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor */
    PDSearchDirCalculator(
       const SmartPtr<PDSystemSolver>& pd_solver
@@ -28,7 +28,7 @@ public:
 
    /** Destructor */
    virtual ~PDSearchDirCalculator();
-   //@}
+   ///@}
 
    /** overloaded from AlgorithmStrategyObject */
    virtual bool InitializeImpl(
@@ -62,7 +62,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    PDSearchDirCalculator();
 
@@ -75,15 +75,15 @@ private:
    void operator=(
       const PDSearchDirCalculator&
    );
-   //@}
+   ///@}
 
    /** @name Strategy objects */
-   //@{
+   ///@{
    SmartPtr<PDSystemSolver> pd_solver_;
-   //@}
+   ///@}
 
    /** @name Algorithmic parameters */
-   //@{
+   ///@{
    /** Flag indicating that we trust that the steps from the linear
     *  solver are very good and that we don't need any residual
     *  checks. */
@@ -95,7 +95,7 @@ private:
     *  to be set (or are automatically set) to certain values.
     */
    bool mehrotra_algorithm_;
-   //@}
+   ///@}
 
 };
 

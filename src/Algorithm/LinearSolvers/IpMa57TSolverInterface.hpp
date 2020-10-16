@@ -26,13 +26,13 @@ class Ma57TSolverInterface: public SparseSymLinearSolverInterface
 {
 public:
    /** @name Constructor/Destructor */
-   //@{
+   ///@{
    /** Constructor */
    Ma57TSolverInterface();
 
    /** Destructor */
    virtual ~Ma57TSolverInterface();
-   //@}
+   ///@}
 
    bool InitializeImpl(
       const OptionsList& options,
@@ -40,7 +40,7 @@ public:
    );
 
    /** @name Methods for requesting solution of the linear system. */
-   //@{
+   ///@{
    virtual ESymSolverStatus InitializeStructure(
       Index        dim,
       Index        nonzeros,
@@ -61,10 +61,10 @@ public:
    );
 
    virtual Index NumberOfNegEVals() const;
-   //@}
+   ///@}
 
    //* @name Options of Linear solver */
-   //@{
+   ///@{
    virtual bool IncreaseQuality();
 
    virtual bool ProvidesInertia() const
@@ -76,13 +76,13 @@ public:
    {
       return Triplet_Format;
    }
-   //@}
+   ///@}
 
-   //@{
+   ///@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
    );
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -92,7 +92,7 @@ private:
     * them for us, so we declare them private
     * and do not define them. This ensures that
     * they will not be implicitly created/called. */
-   //@{
+   ///@{
    /** Copy Constructor */
    Ma57TSolverInterface(
       const Ma57TSolverInterface&
@@ -102,25 +102,25 @@ private:
    void operator=(
       const Ma57TSolverInterface&
    );
-   //@}
+   ///@}
 
    /** @name Information about the matrix */
-   //@{
+   ///@{
    /** Number of rows and columns of the matrix */
    Index dim_;
 
    /** Number of nonzeros of the matrix */
    Index nonzeros_;
-   //@}
+   ///@}
 
    /** @name Information about most recent factorization/solve */
-   //@{
+   ///@{
    /** Number of negative eigenvalues */
    Index negevals_;
-   //@}
+   ///@}
 
    /** @name Initialization flags */
-   //@{
+   ///@{
    /** Flag indicating if internal data is initialized.
     *
     *  For initialization, this object needs to have seen a matrix
@@ -135,10 +135,10 @@ private:
     *  again.
     */
    bool refactorize_;
-   //@}
+   ///@}
 
    /** @name Solver specific data/options */
-   //@{
+   ///@{
    /** Pivot tolerance */
    Number pivtol_;
    /** Maximal pivot tolerance */
@@ -149,12 +149,12 @@ private:
     *  already been solved before.
     */
    bool warm_start_same_structure_;
-   //@}
+   ///@}
 
    /** @name Data for the linear solver.
     * Storing factorization and other solver specific data structure.
     */
-   //@{
+   ///@{
    double wd_cntl_[5];
    ma57int wd_icntl_[20];
 
@@ -173,10 +173,10 @@ private:
 
    /** factor A of matrix */
    double* a_;
-   //@}
+   ///@}
 
    /** @name Internal functions */
-   //@{
+   ///@{
    /** Call MA57AD and reserve memory for MA57 data.
     *
     *  Reserve memory for iw_ and ikeep_, call MA57AD to perform
@@ -204,7 +204,7 @@ private:
       Index   nrhs,
       double* rhs_vals
    );
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

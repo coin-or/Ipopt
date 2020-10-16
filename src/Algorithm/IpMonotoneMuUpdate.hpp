@@ -22,7 +22,7 @@ class MonotoneMuUpdate: public MuUpdate
 {
 public:
    /**@name Constructors / Destructor */
-   //@{
+   ///@{
    /** Default Constructor */
    MonotoneMuUpdate(
       const SmartPtr<LineSearch>& linesearch
@@ -30,7 +30,7 @@ public:
 
    /** Destructor */
    virtual ~MonotoneMuUpdate();
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -61,7 +61,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    MonotoneMuUpdate();
 
    /** Copy Constructor */
@@ -71,7 +71,7 @@ private:
 
    void operator=(
       const MonotoneMuUpdate&);
-   //@}
+   ///@}
 
    /** Internal method for computing the new values for mu and tau */
    void CalcNewMuAndTau(
@@ -80,7 +80,7 @@ private:
    );
 
    /** @name Algorithmic parameters */
-   //@{
+   ///@{
    /** Initial value of the barrier parameter */
    Number mu_init_;
    Number barrier_tol_factor_;
@@ -91,7 +91,7 @@ private:
    Number tau_min_;
    Number compl_inf_tol_;
    Number mu_target_;
-   //@}
+   ///@}
 
    SmartPtr<LineSearch> linesearch_;
 

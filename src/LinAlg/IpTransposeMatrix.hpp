@@ -20,7 +20,7 @@ class TransposeMatrix: public Matrix
 {
 public:
    /**@name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, initializing with dimensions of the matrix. */
    TransposeMatrix(
       const TransposeMatrixSpace* owner_space
@@ -34,11 +34,11 @@ public:
    {
       return ConstPtr(orig_matrix_);
    }
-   //@}
+   ///@}
 
 protected:
    /**@name Methods overloaded from matrix */
-   //@{
+   ///@{
    virtual void MultVectorImpl(
       Number        alpha,
       const Vector& x,
@@ -93,7 +93,7 @@ protected:
       Index              indent,
       const std::string& prefix
    ) const;
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -104,7 +104,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    TransposeMatrix();
 
@@ -117,7 +117,7 @@ private:
    void operator=(
       const TransposeMatrix&
    );
-   //@}
+   ///@}
 
    /** Pointer to original matrix */
    SmartPtr<Matrix> orig_matrix_;
@@ -128,7 +128,7 @@ class TransposeMatrixSpace: public MatrixSpace
 {
 public:
    /** @name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, given the dimension of the matrix. */
    TransposeMatrixSpace(
       const MatrixSpace* orig_matrix_space
@@ -140,7 +140,7 @@ public:
    /** Destructor */
    virtual ~TransposeMatrixSpace()
    { }
-   //@}
+   ///@}
 
    virtual Matrix* MakeNew() const
    {
@@ -167,7 +167,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    TransposeMatrixSpace();
 
@@ -180,7 +180,7 @@ private:
    void operator=(
       const TransposeMatrixSpace&
    );
-   //@}
+   ///@}
 
    /** Matrix space of the original matrix */
    SmartPtr<const MatrixSpace> orig_matrix_space_;

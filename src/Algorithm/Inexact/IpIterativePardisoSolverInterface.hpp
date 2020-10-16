@@ -22,7 +22,7 @@ class IterativePardisoSolverInterface: public SparseSymLinearSolverInterface
 {
 public:
    /** @name Constructor/Destructor */
-   //@{
+   ///@{
    /** Constructor */
    IterativePardisoSolverInterface(
       IterativeSolverTerminationTester& normal_tester,
@@ -31,7 +31,7 @@ public:
 
    /** Destructor */
    virtual ~IterativePardisoSolverInterface();
-   //@}
+   ///@}
 
    bool InitializeImpl(
       const OptionsList& options,
@@ -39,7 +39,7 @@ public:
    );
 
    /** @name Methods for requesting solution of the linear system. */
-   //@{
+   ///@{
    /** Method for initializing internal structures. */
    virtual ESymSolverStatus InitializeStructure(
       Index        dim,
@@ -68,10 +68,10 @@ public:
     *  factorization.
     */
    virtual Index NumberOfNegEVals() const;
-   //@}
+   ///@}
 
    //* @name Options of Linear solver */
-   //@{
+   ///@{
    /** Request to increase quality of solution for next solve.
     */
    virtual bool IncreaseQuality();
@@ -92,7 +92,7 @@ public:
    {
       return CSR_Format_1_Offset;
    }
-   //@}
+   ///@}
 
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
@@ -108,7 +108,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    IterativePardisoSolverInterface();
 
@@ -121,10 +121,10 @@ private:
    void operator=(
       const IterativePardisoSolverInterface&
    );
-   //@}
+   ///@}
 
    /** @name Information about the matrix */
-   //@{
+   ///@{
    /** Number of rows and columns of the matrix */
    Index dim_;
 
@@ -133,16 +133,16 @@ private:
 
    /** Array for storing the values of the matrix. */
    double* a_;
-   //@}
+   ///@}
 
    /** @name Information about most recent factorization/solve */
-   //@{
+   ///@{
    /** Number of negative eigenvalues */
    Index negevals_;
-   //@}
+   ///@}
 
    /** @name Solver specific options */
-   //@{
+   ///@{
    /** Type for matching strategies */
    enum PardisoMatchingStrategy
    {
@@ -169,10 +169,10 @@ private:
    bool skip_inertia_check_;
    /** Maximal number of decreases of drop tolerance during one solve. */
    Index pardiso_max_droptol_corrections_;
-   //@}
+   ///@}
 
    /** Options for the preconditioner */
-   //@{
+   ///@{
    Index pardiso_max_iter_;
    Number pardiso_iter_relative_tol_;
    Index pardiso_iter_coarse_size_;
@@ -190,30 +190,30 @@ private:
    Number normal_pardiso_iter_dropping_schur_;
    Index normal_pardiso_iter_max_row_fill_;
    Number normal_pardiso_iter_inverse_norm_factor_;
-   //@}
+   ///@}
 
    /** Decrease factor for dropping tolerances */
    Number decr_factor_;
 
    /** Actually used dropping tolerances */
-   //@{
+   ///@{
    Number pardiso_iter_dropping_factor_used_;
    Number pardiso_iter_dropping_schur_used_;
    Number normal_pardiso_iter_dropping_factor_used_;
    Number normal_pardiso_iter_dropping_schur_used_;
-   //@}
+   ///@}
 
    /** @name Initialization flags */
-   //@{
+   ///@{
    /** Flag indicating if internal data is initialized.
     *
     *  For initialization, this object needs to have seen a matrix.
     */
    bool initialized_;
-   //@}
+   ///@}
 
    /** @name Solver specific information */
-   //@{
+   ///@{
    /** Internal data address pointers. */
    void** PT_;
    /** Maximal number of factors with identical nonzero structure.
@@ -231,16 +231,16 @@ private:
    double* DPARM_;
    /** Message level. */
    ipfint MSGLVL_;
-   //@}
+   ///@}
 
    /**@name Some counters for debugging */
-   //@{
+   ///@{
    Index debug_last_iter_;
    Index debug_cnt_;
-   //@}
+   ///@}
 
    /** @name Internal functions */
-   //@{
+   ///@{
    /** Call Pardiso to do the analysis phase. */
    ESymSolverStatus SymbolicFactorization(
       const Index* ia,
@@ -263,7 +263,7 @@ private:
       Index        nrhs,
       double*      rhs_vals
    );
-   //@}
+   ///@}
 
    /** Method to easily access Inexact data */
    InexactData& InexData()

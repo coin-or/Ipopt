@@ -24,7 +24,7 @@ class InexactSearchDirCalculator: public SearchDirectionCalculator
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor */
    InexactSearchDirCalculator(
       SmartPtr<InexactNormalStepCalculator> normal_step_calculator,
@@ -33,7 +33,7 @@ public:
 
    /** Destructor */
    virtual ~InexactSearchDirCalculator();
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -63,7 +63,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    InexactSearchDirCalculator();
 
@@ -76,7 +76,7 @@ private:
    void operator=(
       const InexactSearchDirCalculator&
    );
-   //@}
+   ///@}
 
    /** Method to easily access Inexact data */
    InexactData& InexData()
@@ -95,16 +95,16 @@ private:
    }
 
    /** @name Algorithmic options */
-   //@{
+   ///@{
    /** termination tolerance for local infeasibility */
    Number local_inf_Ac_tol_;
-   //@}
+   ///@}
 
    /** @name Strategy objects */
-   //@{
+   ///@{
    SmartPtr<InexactNormalStepCalculator> normal_step_calculator_;
    SmartPtr<InexactPDSolver> inexact_pd_solver_;
-   //@}
+   ///@}
 
    /** enumeration for decomposition options */
    enum DecompositionTypeEnum

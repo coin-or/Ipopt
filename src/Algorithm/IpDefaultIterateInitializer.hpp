@@ -24,7 +24,7 @@ class DefaultIterateInitializer: public IterateInitializer
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor.
     *
     *  If eq_mult_calculator is not NULL, it will be
@@ -42,7 +42,7 @@ public:
    /** Destructor */
    virtual ~DefaultIterateInitializer()
    { }
-   //@}
+   ///@}
 
    /** overloaded from AlgorithmStrategyObject */
    virtual bool InitializeImpl(
@@ -91,20 +91,20 @@ public:
       Number                                  constr_mult_init_max
    );
 
-   //@{
+   ///@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> reg_options
    );
-   //@}
+   ///@}
 
    /** @name Enums of option values */
-   //@{
+   ///@{
    enum BoundMultInitMethod
    {
       B_CONSTANT = 0,
       B_MU_BASED
    };
-   //@}
+   ///@}
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
@@ -115,7 +115,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    DefaultIterateInitializer();
 
@@ -128,10 +128,10 @@ private:
    void operator=(
       const DefaultIterateInitializer&
    );
-   //@}
+   ///@}
 
    /**@name Algorithmic Parameters */
-   //@{
+   ///@{
    /** Absolute parameter for bumping x0 */
    Number bound_push_;
    /** Relative parameter for bumping x0 */
@@ -162,7 +162,7 @@ private:
    BoundMultInitMethod bound_mult_init_method_;
    /** Initial value of barrier parameter */
    Number mu_init_;
-   //@}
+   ///@}
 
    /** object to be used for the initialization of the equality
     *  constraint multipliers.

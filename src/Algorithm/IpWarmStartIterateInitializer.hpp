@@ -18,14 +18,14 @@ class WarmStartIterateInitializer: public IterateInitializer
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor. */
    WarmStartIterateInitializer();
 
    /** Destructor */
    virtual ~WarmStartIterateInitializer()
    { }
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -51,7 +51,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    WarmStartIterateInitializer(
       const WarmStartIterateInitializer&
@@ -61,10 +61,10 @@ private:
    void operator=(
       const WarmStartIterateInitializer&
    );
-   //@}
+   ///@}
 
    /**@name Algorithmic Parameters */
-   //@{
+   ///@{
    /** Absolute parameters for bumping x0 in warm start mode */
    Number warm_start_bound_push_;
 
@@ -96,10 +96,10 @@ private:
     *  the warm start.
     */
    bool warm_start_entire_iterate_;
-   //@}
+   ///@}
 
    /** @name Auxiliary functions */
-   //@{
+   ///@{
    void process_target_mu(
       Number                  factor,
       const Vector&           curr_vars,
@@ -115,7 +115,7 @@ private:
       Vector& new_z,
       Number  target_mu
    );
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

@@ -22,7 +22,7 @@ class RestoIterationOutput: public IterationOutput
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor.
     *
     *  If resto_orig_iteration_output is not NULL, the
@@ -36,7 +36,7 @@ public:
 
    /** Destructor */
    virtual ~RestoIterationOutput();
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -59,7 +59,7 @@ private:
     * declare them private and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    RestoIterationOutput();
 
@@ -72,7 +72,7 @@ private:
    void operator=(
       const RestoIterationOutput&
    );
-   //@}
+   ///@}
 
    /** Pointer to output strategy object during regular iterations. */
    SmartPtr<OrigIterationOutput> resto_orig_iteration_output_;

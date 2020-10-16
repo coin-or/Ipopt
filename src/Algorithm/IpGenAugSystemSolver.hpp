@@ -22,7 +22,7 @@ class GenAugSystemSolver: public AugSystemSolver
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor using only a linear solver object */
    GenAugSystemSolver(
       GenKKTSolverInterface& SolverInterface
@@ -30,7 +30,7 @@ public:
 
    /** Destructor */
    virtual ~GenAugSystemSolver();
-   //@}
+   ///@}
 
    /** overloaded from AlgorithmStrategyObject */
    bool InitializeImpl(
@@ -102,7 +102,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default constructor. */
    GenAugSystemSolver();
    /** Copy Constructor */
@@ -114,7 +114,7 @@ private:
    void operator=(
       const GenAugSystemSolver&
    );
-   //@}
+   ///@}
 
    /** Check the internal tags and decide if the passed variables are
     *  different from what is in the augmented_system_
@@ -158,7 +158,7 @@ private:
     * matrix has to be updated compared to the most recent call of
     * the Set method.
     */
-   //@{
+   ///@{
    /** Tag for W matrix.
     *
     *  If W has been given to Set as NULL, then this tag is set to 0
@@ -204,26 +204,26 @@ private:
    TaggedObject::Tag d_d_tag_;
    /** Most recent value of delta_d from Set method */
    double delta_d_;
-   //@}
+   ///@}
 
    /** @name Space for storing the diagonal matrices.
     *
     *  If the matrix hasn't changed, we can use it from the last call.
     */
-   //@{
+   ///@{
    Number* dx_vals_copy_;
    Number* ds_vals_copy_;
    Number* dc_vals_copy_;
    Number* dd_vals_copy_;
-   //@}
+   ///@}
 
    /** @name Algorithmic parameters */
-   //@{
+   ///@{
    /** Flag indicating whether the TNLP with identical structure has
     *  already been solved before.
     */
    bool warm_start_same_structure_;
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

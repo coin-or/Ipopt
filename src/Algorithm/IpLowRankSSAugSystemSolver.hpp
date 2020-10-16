@@ -28,7 +28,7 @@ class LowRankSSAugSystemSolver: public AugSystemSolver
 {
 public:
    /**@name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor using an existing augmented system solver. */
    LowRankSSAugSystemSolver(
       AugSystemSolver& aug_system_solver,  /**< augmented system solver to copy */
@@ -37,7 +37,7 @@ public:
 
    /** Destructor */
    virtual ~LowRankSSAugSystemSolver();
-   //@}
+   ///@}
 
    bool InitializeImpl(
       const OptionsList& options,
@@ -105,7 +105,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default constructor. */
    LowRankSSAugSystemSolver();
 
@@ -117,7 +117,7 @@ private:
    void operator=(
       const LowRankSSAugSystemSolver&
    );
-   //@}
+   ///@}
 
    /** The augmented system solver object that should be used for the
     *  factorization of the augmented system without the low-rank
@@ -132,7 +132,7 @@ private:
     matrix has to be updated compared to the most recent call of
     the Set method.
     */
-   //@{
+   ///@{
    /** Tag for W matrix.
     *
     *  If W has been given to Set as NULL, then this tag is set to 0.
@@ -188,14 +188,14 @@ private:
 
    /** Most recent value of delta_d from Set method */
    double delta_d_;
-   //@}
+   ///@}
 
    /** Flag indicating if this is the first call */
    bool first_call_;
 
    /** @name Information to be stored in order to resolve for the
     *  same matrix with a different right hand side. */
-   //@{
+   ///@{
    /** Hessian Matrix passed to the augmented system solver solving
     *  the matrix without the low-rank update.
     */
@@ -216,7 +216,7 @@ private:
    /** Number of components in V, so that it can be used to correct
     *  the inertia */
    Index negEvalsCorrection_;
-   //@}
+   ///@}
 
    /** Stores the number of negative eigenvalues detected during most
     *  recent factorization.
@@ -231,7 +231,7 @@ private:
    Index num_neg_evals_;
 
    /** @name Internal functions */
-   //@{
+   ///@{
    /** Method for updating the factorization, including J1_, J2_,
     *  Vtilde1_, Utilde2, Wdiag_, compound_sol_vecspace_.
     */
@@ -273,7 +273,7 @@ private:
       const Vector*    D_d,
       double           delta_d
    );
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

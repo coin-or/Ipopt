@@ -31,7 +31,7 @@ class PDFullSpaceSolver: public PDSystemSolver
 {
 public:
    /** @name /Destructor */
-   //@{
+   ///@{
    /** Constructor that takes in the Augmented System solver that
     *  is to be used inside
     */
@@ -42,7 +42,7 @@ public:
 
    /** Default destructor */
    virtual ~PDFullSpaceSolver();
-   //@}
+   ///@}
 
    /* overloaded from AlgorithmStrategyObject */
    bool InitializeImpl(
@@ -62,11 +62,11 @@ public:
    );
 
    /** Methods for IpoptType */
-   //@{
+   ///@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
    );
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -78,7 +78,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    PDFullSpaceSolver();
 
@@ -86,19 +86,19 @@ private:
    PDFullSpaceSolver& operator=(
       const PDFullSpaceSolver&
    );
-   //@}
+   ///@}
 
    /** @name Strategy objects to hold on to. */
-   //@{
+   ///@{
    /** Pointer to the Solver for the augmented system */
    SmartPtr<AugSystemSolver> augSysSolver_;
 
    /** Pointer to the Perturbation Handler. */
    SmartPtr<PDPerturbationHandler> perturbHandler_;
-   //@}
+   ///@}
 
    /**@name Data about the correction made to the system */
-   //@{
+   ///@{
    /** A dummy cache to figure out if the deltas are still up to date */
    CachedResults<void*> dummy_cache_;
 
@@ -106,10 +106,10 @@ private:
     *  of the augmented system solver has already been increased.
     */
    bool augsys_improved_;
-   //@}
+   ///@}
 
    /** @name Parameters */
-   //@{
+   ///@{
    /** Minimal number of iterative refinement performed per backsolve */
    Index min_refinement_steps_;
 
@@ -137,7 +137,7 @@ private:
 
    /** Do curvature test with primal regularization */
    bool neg_curv_test_reg_;
-   //@}
+   ///@}
 
    /** Internal function for a single backsolve (which will be used
     *  for iterative refinement on the outside).
@@ -212,7 +212,7 @@ private:
    );
 
    /** @name Auxiliary functions */
-   //@{
+   ///@{
    /** Compute \f$ x = S^{-1}(r + \alpha Z P^T d)\f$ */
    void SinvBlrmZPTdBr(
       Number        alpha,
@@ -223,7 +223,7 @@ private:
       const Vector& g,
       Vector&       X
    );
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

@@ -19,7 +19,7 @@ class InexactDoglegNormalStep: public InexactNormalStepCalculator
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default Constructor */
    InexactDoglegNormalStep(
       SmartPtr<InexactNewtonNormalStep>        newton_step,
@@ -28,7 +28,7 @@ public:
 
    /** Destructor */
    virtual ~InexactDoglegNormalStep();
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -61,7 +61,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    InexactDoglegNormalStep();
 
@@ -74,7 +74,7 @@ private:
    void operator=(
       const InexactDoglegNormalStep&
    );
-   //@}
+   ///@}
 
    /** Pointer to object for computing the "Newton" step in the dogleg
     *  method
@@ -91,9 +91,9 @@ private:
    SmartPtr<InexactNormalTerminationTester> normal_tester_;
 
    /** @name Algorithmic options */
-   //@{
+   ///@{
    Number omega_max_;
-   //@}
+   ///@}
 
    /** Current value of the trust region factor */
    Number curr_omega_;

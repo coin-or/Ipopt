@@ -60,7 +60,7 @@ public:
    );
 
    /** @name Methods for requesting solution of the linear system. */
-   //@{
+   ///@{
    ESymSolverStatus InitializeStructure(
       Index        dim,
       Index        nonzeros,
@@ -87,10 +87,10 @@ public:
    {
       return numneg_;
    }
-   //@}
+   ///@}
 
    //* @name Options of Linear solver */
-   //@{
+   ///@{
    bool IncreaseQuality();
 
    bool ProvidesInertia() const
@@ -102,11 +102,11 @@ public:
    {
       return CSR_Full_Format_1_Offset;
    }
-   //@}
+   ///@}
 
    /** @name Methods related to the detection of linearly dependent
     *  rows in a matrix */
-   //@{
+   ///@{
    bool ProvidesDegeneracyDetection() const
    {
       return false;

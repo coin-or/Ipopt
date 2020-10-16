@@ -174,7 +174,7 @@ public:
 #define ipopt_dbg_smartptr_verbosity 0
 
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default constructor, initialized to NULL */
    SmartPtr();
 
@@ -199,10 +199,10 @@ public:
     * necessary.
     */
    ~SmartPtr();
-   //@}
+   ///@}
 
    /**@name Overloaded operators. */
-   //@{
+   ///@{
    /** Overloaded arrow operator, allows the user to call
     * methods using the contained pointer.
     */
@@ -305,10 +305,10 @@ public:
       const SmartPtr<U>& lhs,
       const SmartPtr<U>& rhs
    );
-   //@}
+   ///@}
 
    /**@name friend method declarations */
-   //@{
+   ///@{
    /** Returns the raw pointer contained.
     *
     * Use to get the value of
@@ -352,11 +352,11 @@ public:
    bool IsNull(
       const SmartPtr<U>& smart_ptr
    );
-   //@}
+   ///@}
 
 private:
    /**@name Private Data/Methods */
-   //@{
+   ///@{
    /** Actual raw pointer to the object. */
    T* ptr_;
 
@@ -378,11 +378,11 @@ private:
 
    /** Release the currently referenced object. */
    void ReleasePointer_();
-   //@}
+   ///@}
 };
 
-/**@name SmartPtr friend function declarations.*/
-//@{
+/**@name SmartPtr friend function declarations */
+///@{
 template<class U>
 U* GetRawPtr(
    const SmartPtr<U>& smart_ptr
@@ -438,7 +438,7 @@ bool operator!=(
    const SmartPtr<U2>& raw_rhs
 );
 
-//@}
+///@}
 
 template<class T>
 SmartPtr<T>::SmartPtr()

@@ -28,13 +28,13 @@ class RestoConvergenceCheck: public OptimalityErrorConvergenceCheck
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default Constructor */
    RestoConvergenceCheck();
 
    /** Destructor */
    virtual ~RestoConvergenceCheck();
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -62,7 +62,7 @@ private:
     * declare them private and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    RestoConvergenceCheck(
       const RestoConvergenceCheck&
@@ -72,7 +72,7 @@ private:
    void operator=(
       const RestoConvergenceCheck&
    );
-   //@}
+   ///@}
 
    /** Method for checking progress with original globalization mechanism. */
    virtual ConvergenceStatus TestOrigProgress(
@@ -81,7 +81,7 @@ private:
    ) = 0;
 
    /** @name Algorithmic parameters */
-   //@{
+   ///@{
    /** Fraction of required reduction in infeasibility before problem
     *  is considered to be solved. */
    Number kappa_resto_;
@@ -94,7 +94,7 @@ private:
 
    /** Constraint violation tolerance for original algorithm */
    Number orig_constr_viol_tol_;
-   //@}
+   ///@}
 
    /** Flag indicating that this is the first call.
     *

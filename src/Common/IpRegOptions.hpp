@@ -50,7 +50,7 @@ public:
    };
 
    /** Constructors / Destructors */
-   //@{
+   ///@{
    RegisteredOption(
       Index counter
    )
@@ -98,13 +98,13 @@ public:
 
    virtual ~RegisteredOption()
    { }
-   //@}
+   ///@}
 
    DECLARE_STD_EXCEPTION(ERROR_CONVERTING_STRING_TO_ENUM)
    ;
 
    /** Standard Get / Set Methods */
-   //@{
+   ///@{
    /** Get the option's name (tag in the input file) */
    virtual const std::string& Name() const
    {
@@ -178,13 +178,13 @@ public:
    {
       return counter_;
    }
-   //@}
+   ///@}
 
    /** @name Get / Set methods valid for specific types
     *
     * @note The Type must be set before calling these methods.
     */
-   //@{
+   ///@{
    /** check if the option has a lower bound
     *
     * can be called for OT_Number & OT_Integer
@@ -483,7 +483,7 @@ public:
    virtual Index MapStringSettingToEnum(
       const std::string& value
    ) const;
-   //@}
+   ///@}
 
    /** output a description of the option */
    virtual void OutputDescription(
@@ -555,7 +555,7 @@ class IPOPTLIB_EXPORT RegisteredOptions: public ReferencedObject
 {
 public:
    /** Constructors / Destructors */
-   //@{
+   ///@{
    /** Default Constructor */
    RegisteredOptions()
       : next_counter_(0),
@@ -565,13 +565,13 @@ public:
    /** Destructor */
    virtual ~RegisteredOptions()
    { }
-   //@}
+   ///@}
 
    DECLARE_STD_EXCEPTION(OPTION_ALREADY_REGISTERED)
    ;
 
    /** Methods to interact with registered options */
-   //@{
+   ///@{
    /** set the registering class
     *
     * All subsequent options will be added with the registered class
@@ -881,7 +881,7 @@ public:
       const Journalist&       jnlst,
       std::list<std::string>& categories
    );
-   //@}
+   ///@}
 
    typedef std::map<std::string, SmartPtr<RegisteredOption> > RegOptionsList;
 

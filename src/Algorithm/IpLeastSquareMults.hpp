@@ -23,7 +23,7 @@ class LeastSquareMultipliers: public EqMultiplierCalculator
 {
 public:
    /**@name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor.
     *
     *  It needs to be given the strategy object for
@@ -36,7 +36,7 @@ public:
    /** Destructor */
    virtual ~LeastSquareMultipliers()
    { }
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -63,7 +63,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    LeastSquareMultipliers();
 
@@ -75,7 +75,7 @@ private:
    void operator=(
       const LeastSquareMultipliers&
    );
-   //@}
+   ///@}
 
    /** augmented system solver to be used for solving the linear system */
    SmartPtr<AugSystemSolver> augsyssolver_;

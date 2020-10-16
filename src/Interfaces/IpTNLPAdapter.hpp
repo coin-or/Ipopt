@@ -30,7 +30,7 @@ class IPOPTLIB_EXPORT TNLPAdapter : public NLP
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default constructor */
    TNLPAdapter(
       const SmartPtr<TNLP>             tnlp,
@@ -39,16 +39,16 @@ public:
 
    /** Default destructor */
    virtual ~TNLPAdapter();
-   //@}
+   ///@}
 
    /**@name Exceptions */
-   //@{
+   ///@{
    DECLARE_STD_EXCEPTION(INVALID_TNLP);
    DECLARE_STD_EXCEPTION(ERROR_IN_TNLP_DERIVATIVE_TEST);
-   //@}
+   ///@}
 
    /** @name TNLPAdapter Initialization. */
-   //@{
+   ///@{
    virtual bool ProcessOptions(
       const OptionsList& options,
       const std::string& prefix
@@ -108,10 +108,10 @@ public:
    virtual bool GetWarmStartIterate(
       IteratesVector& warm_start_iterate
    );
-   //@}
+   ///@}
 
    /** @name TNLPAdapter evaluation routines. */
-   //@{
+   ///@{
    virtual bool Eval_f(
       const Vector& x,
       Number&       f
@@ -159,10 +159,10 @@ public:
       SmartPtr<Vector>&                 c_scaling,
       SmartPtr<Vector>&                 d_scaling
    ) const;
-   //@}
+   ///@}
 
    /** @name Solution Reporting Methods */
-   //@{
+   ///@{
    virtual void FinalizeSolution(
       SolverReturn               status,
       const Vector&              x,
@@ -192,7 +192,7 @@ public:
       const IpoptData*           ip_data,
       IpoptCalculatedQuantities* ip_cq
    );
-   //@}
+   ///@}
 
    /** Method returning information on quasi-Newton approximation. */
    virtual void GetQuasiNewtonApproximationSpaces(
@@ -245,7 +245,7 @@ public:
     *  These methods are used to obtain the current (or final)
     *  data for the TNLP formulation from the IpoptNLP structure.
     */
-   //@{
+   ///@{
    /** Sort the primal variables, and add the fixed values in x */
    void ResortX(
       const Vector& x,
@@ -269,7 +269,7 @@ public:
       Number*       x_U_orig,         /**< vector to fill with values from x_U */
       bool          clearorig = true  /**< whether to initialize complete x_L_orig and x_U_orig to 0.0 before setting values for non-fixed variables */
    );
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -281,7 +281,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    TNLPAdapter(
       const TNLPAdapter&
@@ -291,7 +291,7 @@ private:
    void operator=(
       const TNLPAdapter&
    );
-   //@}
+   ///@}
 
    /** @name Method implementing the detection of linearly dependent equality constraints */
    bool DetermineDependentConstraints(
@@ -315,7 +315,7 @@ private:
    SmartPtr<TDependencyDetector> dependency_detector_;
 
    /**@name Algorithmic parameters */
-   //@{
+   ///@{
    /** Value for a lower bound that denotes -infinity */
    Number nlp_lower_bound_inf_;
    /** Value for a upper bound that denotes infinity */
@@ -356,10 +356,10 @@ private:
 
    /** Overall convergence tolerance */
    Number tol_;
-   //@}
+   ///@}
 
    /**@name Problem Size Data */
-   //@{
+   ///@{
    /** full dimension of x (fixed + non-fixed) */
    Index n_full_x_;
    /** full dimension of g (c + d) */
@@ -378,13 +378,13 @@ private:
    Index nz_h_;
    /** Number of fixed variables */
    Index n_x_fixed_;
-   //@}
+   ///@}
 
    /** Numbering style of variables and constraints */
    TNLP::IndexStyleEnum index_style_;
 
    /** @name Local copy of spaces (for warm start) */
-   //@{
+   ///@{
    SmartPtr<const VectorSpace> x_space_;
    SmartPtr<const VectorSpace> c_space_;
    SmartPtr<const VectorSpace> d_space_;
@@ -399,50 +399,50 @@ private:
    SmartPtr<const MatrixSpace> Jac_c_space_;
    SmartPtr<const MatrixSpace> Jac_d_space_;
    SmartPtr<const SymMatrixSpace> Hess_lagrangian_space_;
-   //@}
+   ///@}
 
    /**@name Local Copy of the Data */
-   //@{
+   ///@{
    Number* full_x_; /** copy of the full x vector (fixed & non-fixed) */
    Number* full_lambda_; /** copy of lambda (yc & yd) */
    Number* full_g_; /** copy of g (c & d) */
    Number* jac_g_; /** the values for the full jacobian of g */
    Number* c_rhs_; /** the rhs values of c */
-   //@}
+   ///@}
 
    /**@name Tags for deciding when to update internal copies of vectors */
-   //@{
+   ///@{
    TaggedObject::Tag x_tag_for_iterates_;
    TaggedObject::Tag y_c_tag_for_iterates_;
    TaggedObject::Tag y_d_tag_for_iterates_;
    TaggedObject::Tag x_tag_for_g_;
    TaggedObject::Tag x_tag_for_jac_g_;
-   //@}
+   ///@}
 
    /**@name Methods to update the values in the local copies of vectors */
-   //@{
+   ///@{
    bool update_local_x(const Vector& x);
    bool update_local_lambda(const Vector& y_c, const Vector& y_d);
-   //@}
+   ///@}
 
    /**@name Internal routines for evaluating g and jac_g.
     *
     * Values stored since they are used in both c and d routines.
     */
-   //@{
+   ///@{
    bool internal_eval_g(bool new_x);
    bool internal_eval_jac_g(bool new_x);
-   //@}
+   ///@}
 
    /** @name Internal methods for dealing with finite difference approximation */
-   //@{
+   ///@{
    /** Initialize sparsity structure for finite difference Jacobian */
    void initialize_findiff_jac(const Index* iRow, const Index* jCol);
-   //@}
+   ///@}
 
    /**@name Internal Permutation Spaces and matrices
     */
-   //@{
+   ///@{
    /** Expansion from fixed x (ipopt) to full x */
    SmartPtr<ExpansionMatrix> P_x_full_x_;
    SmartPtr<ExpansionMatrixSpace> P_x_full_x_space_;
@@ -468,10 +468,10 @@ private:
 
    /** Position of fixed variables. This is required for a warm start */
    Index* x_fixed_map_;
-   //@}
+   ///@}
 
    /** @name Data for finite difference approximations of derivatives */
-   //@{
+   ///@{
    /** Number of unique nonzeros in constraint Jacobian */
    Index findiff_jac_nnz_;
    /** Start position for nonzero indices in ja for each column of Jacobian */
@@ -484,7 +484,7 @@ private:
    Number* findiff_x_l_;
    /** Copy of the upper bounds */
    Number* findiff_x_u_;
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

@@ -29,7 +29,7 @@ class ExpandedMultiVectorMatrix: public Matrix
 {
 public:
    /**@name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, taking the owner_space. */
    ExpandedMultiVectorMatrix(
       const ExpandedMultiVectorMatrixSpace* owner_space
@@ -38,7 +38,7 @@ public:
    /** Destructor */
    virtual ~ExpandedMultiVectorMatrix()
    { }
-   //@}
+   ///@}
 
    SmartPtr<ExpandedMultiVectorMatrix> MakeNewExpandedMultiVectorMatrix() const;
 
@@ -73,7 +73,7 @@ public:
 
 protected:
    /**@name Overloaded methods from Matrix base class */
-   //@{
+   ///@{
    virtual void MultVectorImpl(
       Number        alpha,
       const Vector& x,
@@ -109,7 +109,7 @@ protected:
       Index              indent,
       const std::string& prefix
    ) const;
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -120,7 +120,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    ExpandedMultiVectorMatrix();
 
@@ -133,7 +133,7 @@ private:
    void operator=(
       const ExpandedMultiVectorMatrix&
    );
-   //@}
+   ///@}
 
    const ExpandedMultiVectorMatrixSpace* owner_space_;
 
@@ -147,7 +147,7 @@ class ExpandedMultiVectorMatrixSpace: public MatrixSpace
 {
 public:
    /** @name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, given the number of rows (i.e., Vectors to be
     *  stored) and given the VectorSpace for the Vectors.
     */
@@ -160,7 +160,7 @@ public:
    /** Destructor */
    virtual ~ExpandedMultiVectorMatrixSpace()
    { }
-   //@}
+   ///@}
 
    /** Method for creating a new matrix of this specific type. */
    ExpandedMultiVectorMatrix* MakeNewExpandedMultiVectorMatrix() const

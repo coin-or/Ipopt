@@ -19,7 +19,7 @@ class ZeroMatrix: public Matrix
 {
 public:
    /**@name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, taking the corresponding matrix space. */
    ZeroMatrix(
       const MatrixSpace* owner_space
@@ -27,11 +27,11 @@ public:
 
    /** Destructor */
    ~ZeroMatrix();
-   //@}
+   ///@}
 
 protected:
    /**@name Methods overloaded from matrix */
-   //@{
+   ///@{
    virtual void MultVectorImpl(
       Number        alpha,
       const Vector& x,
@@ -66,7 +66,7 @@ protected:
       Index              indent,
       const std::string& prefix
    ) const;
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -77,7 +77,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    ZeroMatrix();
 
@@ -90,7 +90,7 @@ private:
    void operator=(
       const ZeroMatrix&
    );
-   //@}
+   ///@}
 };
 
 /** Class for matrix space for ZeroMatrix. */
@@ -98,7 +98,7 @@ class ZeroMatrixSpace: public MatrixSpace
 {
 public:
    /** @name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, given the number of row and columns. */
    ZeroMatrixSpace(
       Index nrows,
@@ -110,7 +110,7 @@ public:
    /** Destructor */
    virtual ~ZeroMatrixSpace()
    { }
-   //@}
+   ///@}
 
    virtual Matrix* MakeNew() const
    {
@@ -132,7 +132,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    ZeroMatrixSpace();
 
@@ -145,7 +145,7 @@ private:
    void operator=(
       const ZeroMatrixSpace&
    );
-   //@}
+   ///@}
 };
 } // namespace Ipopt
 #endif

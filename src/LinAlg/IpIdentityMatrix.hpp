@@ -18,7 +18,7 @@ class IPOPTLIB_EXPORT IdentityMatrix: public SymMatrix
 {
 public:
    /**@name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, initializing with dimensions of the matrix
     *  (true identity matrix).
     */
@@ -28,7 +28,7 @@ public:
 
    /** Destructor */
    ~IdentityMatrix();
-   //@}
+   ///@}
 
    /** Method for setting the factor for the identity matrix. */
    void SetFactor(
@@ -49,7 +49,7 @@ public:
 
 protected:
    /**@name Methods overloaded from matrix */
-   //@{
+   ///@{
    virtual void MultVectorImpl(
       Number        alpha,
       const Vector& x,
@@ -79,7 +79,7 @@ protected:
       Index              indent,
       const std::string& prefix
    ) const;
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -90,7 +90,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    IdentityMatrix();
 
@@ -103,7 +103,7 @@ private:
    void operator=(
       const IdentityMatrix&
    );
-   //@}
+   ///@}
 
    /** Scaling factor for this identity matrix */
    Number factor_;
@@ -114,7 +114,7 @@ class IPOPTLIB_EXPORT IdentityMatrixSpace: public SymMatrixSpace
 {
 public:
    /** @name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, given the dimension of the matrix. */
    IdentityMatrixSpace(
       Index dim
@@ -125,7 +125,7 @@ public:
    /** Destructor */
    virtual ~IdentityMatrixSpace()
    { }
-   //@}
+   ///@}
 
    virtual SymMatrix* MakeNewSymMatrix() const
    {
@@ -147,7 +147,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    IdentityMatrixSpace();
 
@@ -160,7 +160,7 @@ private:
    void operator=(
       const IdentityMatrixSpace&
    );
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

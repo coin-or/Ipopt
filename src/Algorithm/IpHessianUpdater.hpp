@@ -23,7 +23,7 @@ class IPOPTLIB_EXPORT HessianUpdater: public AlgorithmStrategyObject
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default Constructor */
    HessianUpdater()
    { }
@@ -31,7 +31,7 @@ public:
    /** Destructor */
    virtual ~HessianUpdater()
    { }
-   //@}
+   ///@}
 
    /** overloaded from AlgorithmStrategyObject */
    virtual bool InitializeImpl(
@@ -54,7 +54,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    HessianUpdater(
       const HessianUpdater&
@@ -64,7 +64,7 @@ private:
    void operator=(
       const HessianUpdater&
    );
-   //@}
+   ///@}
 
 };
 

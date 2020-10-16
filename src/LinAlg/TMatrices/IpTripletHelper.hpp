@@ -39,7 +39,7 @@ class IPOPTLIB_EXPORT TripletHelper
 {
 public:
    /**@name A set of recursive routines that help with the Triplet format. */
-   //@{
+   ///@{
    /** find the total number of triplet entries of a Matrix */
    static Index GetNumberEntries(
       const Matrix& matrix
@@ -75,7 +75,7 @@ public:
       const double* values,
       Vector&       vector
    );
-   //@}
+   ///@}
 
 private:
    /** find the total number of triplet entries for the SumMatrix */

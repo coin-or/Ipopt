@@ -35,7 +35,7 @@ class IPOPTLIB_EXPORT AlgorithmStrategyObject: public ReferencedObject
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default Constructor */
    AlgorithmStrategyObject()
       : initialize_called_(false)
@@ -44,7 +44,7 @@ public:
    /** Destructor */
    virtual ~AlgorithmStrategyObject()
    { }
-   //@}
+   ///@}
 
    /** This method is called every time the algorithm starts again -
     *  it is used to reset any internal state.
@@ -129,7 +129,7 @@ protected:
     *
     *  Those should be used by the derived classes.
     */
-   //@{
+   ///@{
    const Journalist& Jnlst() const
    {
       DBG_ASSERT(initialize_called_);
@@ -157,7 +157,7 @@ protected:
    {
       return IsValid(ip_data_);
    }
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -169,7 +169,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    //AlgorithmStrategyObject();
 
@@ -182,15 +182,15 @@ private:
    void operator=(
       const AlgorithmStrategyObject&
    );
-   //@}
+   ///@}
 
    /** @name Pointers to objects defining a particular optimization problem */
-   //@{
+   ///@{
    SmartPtr<const Journalist> jnlst_;
    SmartPtr<IpoptNLP> ip_nlp_;
    SmartPtr<IpoptData> ip_data_;
    SmartPtr<IpoptCalculatedQuantities> ip_cq_;
-   //@}
+   ///@}
 
    /** flag indicating if Initialize method has been called (for debugging) */
    bool initialize_called_;

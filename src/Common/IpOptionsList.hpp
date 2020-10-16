@@ -36,7 +36,7 @@ class IPOPTLIB_EXPORT OptionsList: public ReferencedObject
    {
    public:
       /**@name Constructors/Destructors */
-      //@{
+      ///@{
       /** Default constructor */
       OptionValue()
          : initialized_(false)
@@ -83,7 +83,7 @@ class IPOPTLIB_EXPORT OptionsList: public ReferencedObject
       /** Default Destructor */
       ~OptionValue()
       { }
-      //@}
+      ///@}
 
       /** Method for retrieving the value of an option.
        *
@@ -146,7 +146,7 @@ class IPOPTLIB_EXPORT OptionsList: public ReferencedObject
 
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    OptionsList(
       SmartPtr<RegisteredOptions> reg_options,
       SmartPtr<Journalist>        jnlst
@@ -182,7 +182,7 @@ public:
       reg_options_ = source.reg_options_;
       jnlst_ = source.jnlst_;
    }
-   //@}
+   ///@}
 
    /** Method for clearing all previously set options */
    virtual void clear()
@@ -191,7 +191,7 @@ public:
    }
 
    /** @name Get / Set Methods */
-   //@{
+   ///@{
    virtual void SetRegisteredOptions(
       const SmartPtr<RegisteredOptions> reg_options
    )
@@ -206,9 +206,9 @@ public:
       jnlst_ = jnlst;
    }
 
-   //@}
+   ///@}
    /** @name Methods for setting options */
-   //@{
+   ///@{
    virtual bool SetStringValue(
       const std::string& tag,
       const std::string& value,
@@ -229,11 +229,11 @@ public:
       bool               allow_clobber = true,
       bool               dont_print = false
    );
-   //@}
+   ///@}
 
    /** @name Methods for setting options only if they have not been
     *  set before*/
-   //@{
+   ///@{
    virtual bool SetStringValueIfUnset(
       const std::string& tag,
       const std::string& value,
@@ -254,12 +254,12 @@ public:
       bool               allow_clobber = true,
       bool               dont_print = false
    );
-   //@}
+   ///@}
 
    /** @name Methods for retrieving values from the options list.  If
     *  a tag is not found, the methods return false, and value is set
     *  to the default value defined in the registered options. */
-   //@{
+   ///@{
    virtual bool GetStringValue(
       const std::string& tag,
       std::string&       value,
@@ -289,7 +289,7 @@ public:
       Index&             value,
       const std::string& prefix
    ) const;
-   //@}
+   ///@}
 
    /** Get a string with the list of all options (tag, value, counter) */
    virtual void PrintList(
@@ -325,10 +325,10 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    //    OptionsList();
-   //@}
+   ///@}
    /** map for storing the options */
    std::map<std::string, OptionValue> options_;
 

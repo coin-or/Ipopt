@@ -20,7 +20,7 @@ class IPOPTLIB_EXPORT MuUpdate: public AlgorithmStrategyObject
 {
 public:
    /**@name Constructors / Destructor */
-   //@{
+   ///@{
    /** Default Constructor */
    MuUpdate()
    { }
@@ -28,7 +28,7 @@ public:
    /** Destructor */
    virtual ~MuUpdate()
    { }
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -58,7 +58,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    MuUpdate(
       const MuUpdate&
@@ -68,7 +68,7 @@ private:
    void operator=(
       const MuUpdate&
    );
-   //@}
+   ///@}
 
 };
 

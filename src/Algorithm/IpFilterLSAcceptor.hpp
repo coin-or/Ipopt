@@ -20,7 +20,7 @@ class FilterLSAcceptor: public BacktrackingLSAcceptor
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor.
     *
     *  The PDSystemSolver object only needs to be
@@ -32,7 +32,7 @@ public:
    );
 
    virtual ~FilterLSAcceptor();
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -134,7 +134,7 @@ public:
     * acceptability criteria and used externally (by the restoration phase
     * convergence check object, for instance)
     */
-   //@{
+   ///@{
    /** Checks if a trial point is acceptable to the current iterate */
    bool IsAcceptableToCurrentIterate(
       Number trial_barr,
@@ -147,14 +147,14 @@ public:
       Number trial_barr,
       Number trial_theta
    ) const;
-   //@}
+   ///@}
 
    /** Methods for OptionsList */
-   //@{
+   ///@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
    );
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -166,7 +166,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    FilterLSAcceptor(
       const FilterLSAcceptor&
@@ -176,10 +176,10 @@ private:
    void operator=(
       const FilterLSAcceptor&
    );
-   //@}
+   ///@}
 
    /** @name Filter information */
-   //@{
+   ///@{
    /** Upper bound on infeasibility */
    Number theta_max_;
    Number theta_max_fact_;
@@ -187,7 +187,7 @@ private:
    /** Infeasibility switching bound */
    Number theta_min_;
    Number theta_min_fact_;
-   //@}
+   ///@}
 
    /** Method for checking if the current step size satisfies the
     *  f-type switching condition.
@@ -214,7 +214,7 @@ private:
    void AugmentFilter();
 
    /** @name Parameters for the filter algorithm.  Names as in the paper */
-   //@{
+   ///@{
    /** \f$ \eta_{\varphi} \f$ */
    Number eta_phi_;
    /** \f$ \delta \f$ */
@@ -274,10 +274,10 @@ private:
     *  then the filter is reset.
     */
    Index filter_reset_trigger_;
-   //@}
+   ///@}
 
    /** @name Information related to watchdog procedure */
-   //@{
+   ///@{
    /** Constraint violation at the point with respect to which
     *  progress is to be made
     */
@@ -296,13 +296,13 @@ private:
    Number watchdog_barr_;
    /** Barrier gradient transpose search direction at reference point */
    Number watchdog_gradBarrTDelta_;
-   //@}
+   ///@}
 
    /** Filter with entries */
    Filter filter_;
 
    /** @name Filter reset stuff */
-   //@{
+   ///@{
    /** True, if last rejected was due to the filter. */
    Number last_rejection_due_to_filter_;
    /** Counter of successive iterations in which filter was reason
@@ -311,12 +311,12 @@ private:
    Index count_successive_filter_rejections_;
    /** Counter for the filter resets done so far. */
    Index n_filter_resets_;
-   //@}
+   ///@}
 
    /** @name Strategy objective that are used */
-   //@{
+   ///@{
    SmartPtr<PDSystemSolver> pd_solver_;
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

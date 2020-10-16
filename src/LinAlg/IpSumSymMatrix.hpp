@@ -24,7 +24,7 @@ class IPOPTLIB_EXPORT SumSymMatrix: public SymMatrix
 {
 public:
    /**@name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, initializing with dimensions of the matrix and
     *  the number of terms in the sum.
     */
@@ -34,7 +34,7 @@ public:
 
    /** Destructor */
    ~SumSymMatrix();
-   //@}
+   ///@}
 
    /** Method for setting term iterm for the sum.
     *
@@ -61,7 +61,7 @@ public:
 
 protected:
    /**@name Methods overloaded from matrix */
-   //@{
+   ///@{
    virtual void MultVectorImpl(
       Number        alpha,
       const Vector& x,
@@ -89,7 +89,7 @@ protected:
       Index              indent,
       const std::string& prefix
    ) const;
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -100,7 +100,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    SumSymMatrix();
 
@@ -113,7 +113,7 @@ private:
    void operator=(
       const SumSymMatrix&
    );
-   //@}
+   ///@}
 
    /** std::vector storing the factors for each term. */
    std::vector<Number> factors_;
@@ -130,7 +130,7 @@ class IPOPTLIB_EXPORT SumSymMatrixSpace: public SymMatrixSpace
 {
 public:
    /** @name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, given the dimension of the matrix and the number
     *  of terms in the sum.
     */
@@ -145,16 +145,16 @@ public:
    /** Destructor */
    ~SumSymMatrixSpace()
    { }
-   //@}
+   ///@}
 
    /** @name Accessor functions */
-   //@{
+   ///@{
    /** Number of terms in the sum. */
    Index NTerms() const
    {
       return nterms_;
    }
-   //@}
+   ///@}
 
    /** Use this method to set the matrix spaces for the various terms.
     *

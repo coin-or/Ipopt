@@ -36,7 +36,7 @@ class IPOPTLIB_EXPORT CompoundMatrix: public Matrix
 public:
 
    /**@name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, taking the owner_space.
     *
     *  The owner_space has to
@@ -51,7 +51,7 @@ public:
 
    /** Destructor */
    virtual ~CompoundMatrix();
-   //@}
+   ///@}
 
    /** Method for setting an individual component at position (irow,
     *  icol) in the compound matrix.
@@ -112,7 +112,7 @@ public:
 
 protected:
    /**@name Methods overloaded from Matrix */
-   //@{
+   ///@{
    virtual void MultVectorImpl(
       Number        alpha,
       const Vector& x,
@@ -163,7 +163,7 @@ protected:
       Index              indent,
       const std::string& prefix
    ) const;
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -173,7 +173,7 @@ private:
     * them for us, so we declare them private
     * and do not define them. This ensures that
     * they will not be implicitly created/called. */
-   //@{
+   ///@{
    /** Default Constructor */
    CompoundMatrix();
 
@@ -184,7 +184,7 @@ private:
    /** Default Assignment Operator */
    void operator=(
       const CompoundMatrix&);
-   //@}
+   ///@}
 
    /** Matrix of matrix's containing the components */
    std::vector<std::vector<SmartPtr<Matrix> > > comps_;
@@ -223,7 +223,7 @@ class IPOPTLIB_EXPORT CompoundMatrixSpace: public MatrixSpace
 {
 public:
    /** @name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, given the number of row and columns blocks, as
     *  well as the totel number of rows and columns.
     */
@@ -237,10 +237,10 @@ public:
    /** Destructor */
    ~CompoundMatrixSpace()
    { }
-   //@}
+   ///@}
 
    /** @name Methods for setting information about the components. */
-   //@{
+   ///@{
    /** Set the number nrows of rows in row-block number irow. */
    void SetBlockRows(
       Index irow,
@@ -277,7 +277,7 @@ public:
       const MatrixSpace& mat_space,
       bool               auto_allocate = false
    );
-   //@}
+   ///@}
 
    /** Obtain the component MatrixSpace in block row irow and block
     *  column jcol.
@@ -293,7 +293,7 @@ public:
    }
 
    /** @name Accessor methods */
-   //@{
+   ///@{
    /** Number of block rows */
    Index NComps_Rows() const
    {
@@ -311,7 +311,7 @@ public:
    {
       return diagonal_;
    }
-   //@}
+   ///@}
 
    /** Method for creating a new matrix of this specific type. */
    CompoundMatrix* MakeNewCompoundMatrix() const;
@@ -329,7 +329,7 @@ private:
     * them for us, so we declare them private
     * and do not define them. This ensures that
     * they will not be implicitly created/called. */
-   //@{
+   ///@{
    /** Default constructor */
    CompoundMatrixSpace();
 
@@ -341,7 +341,7 @@ private:
    CompoundMatrixSpace& operator=(
       const CompoundMatrixSpace&
    );
-   //@}
+   ///@}
 
    /** Number of block rows */
    Index ncomps_rows_;

@@ -112,13 +112,13 @@ public:
    };
 
    /** @name Constructor/Destructor */
-   //@{
+   ///@{
    SparseSymLinearSolverInterface()
    { }
 
    virtual ~SparseSymLinearSolverInterface()
    { }
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -126,7 +126,7 @@ public:
    ) = 0;
 
    /** @name Methods for requesting solution of the linear system. */
-   //@{
+   ///@{
    /** Method for initializing internal structures.
     *
     *  Here, ndim gives the number of rows and columns of the matrix,
@@ -203,10 +203,10 @@ public:
     *  (see ProvidesInertia).
     */
    virtual Index NumberOfNegEVals() const = 0;
-   //@}
+   ///@}
 
    //* @name Options of Linear solver */
-   //@{
+   ///@{
    /** Request to increase quality of solution for next solve.
     *
     *  The calling class asks linear solver to increase quality of
@@ -227,11 +227,11 @@ public:
     *  understands.
     */
    virtual EMatrixFormat MatrixFormat() const = 0;
-   //@}
+   ///@}
 
    /** @name Methods related to the detection of linearly dependent
     *  rows in a matrix */
-   //@{
+   ///@{
    /** Query whether the indices of linearly dependent rows/columns
     *  can be determined by this linear solver.
     */

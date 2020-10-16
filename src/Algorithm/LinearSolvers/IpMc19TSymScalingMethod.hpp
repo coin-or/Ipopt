@@ -20,13 +20,13 @@ class Mc19TSymScalingMethod: public TSymScalingMethod
 {
 public:
    /** @name Constructor/Destructor */
-   //@{
+   ///@{
    Mc19TSymScalingMethod()
    { }
 
    virtual ~Mc19TSymScalingMethod()
    { }
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -51,7 +51,7 @@ private:
     * and we do not want the compiler to implement them for us, so we
     * declare them private and do not define them. This ensures that
     * they will not be implicitly created/called. */
-   //@{
+   ///@{
    /** Copy Constructor */
    Mc19TSymScalingMethod(
       const Mc19TSymScalingMethod&

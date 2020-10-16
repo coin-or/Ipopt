@@ -43,7 +43,7 @@ public:
 #endif
 
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default Constructor */
    Observer()
    { }
@@ -51,7 +51,7 @@ public:
    /** Destructor */
    inline
    virtual ~Observer();
-   //@}
+   ///@}
 
    /** Enumeration specifying the type of notification */
    enum NotifyType
@@ -105,7 +105,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    Observer(
       const Observer&
@@ -115,7 +115,7 @@ private:
    void operator=(
       const Observer&
    );
-   //@}
+   ///@}
 
    /** A list of the subjects currently being observed. */
    std::vector<const Subject*> subjects_;
@@ -154,7 +154,7 @@ public:
 #endif
 
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default Constructor */
    Subject()
    { }
@@ -162,7 +162,7 @@ public:
    /** Destructor */
    inline
    virtual ~Subject();
-   //@}
+   ///@}
 
    /**@name Methods to Add and Remove Observers.
     *
@@ -176,7 +176,7 @@ public:
     *  depending on type could be implemented later if
     *  necessary.
     */
-   //@{
+   ///@{
    /** Attach the specified observer
     *  (i.e., begin receiving notifications). */
    inline
@@ -192,7 +192,7 @@ public:
       Observer::NotifyType notify_type,
       Observer*            observer
    ) const;
-   //@}
+   ///@}
 
 protected:
 
@@ -211,7 +211,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    Subject(
       const Subject&
@@ -221,7 +221,7 @@ private:
    void operator=(
       const Subject&
    );
-   //@}
+   ///@}
 
    mutable std::vector<Observer*> observers_;
 };

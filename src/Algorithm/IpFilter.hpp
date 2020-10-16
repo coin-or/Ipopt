@@ -20,7 +20,7 @@ class FilterEntry
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor with the two components and the current iteration count */
    FilterEntry(
       std::vector<Number> vals,
@@ -29,7 +29,7 @@ public:
 
    /** Destructor */
    ~FilterEntry();
-   //@}
+   ///@}
 
    /** Check acceptability of pair (phi,theta) with respect
     *  to this filter entry.
@@ -82,7 +82,7 @@ public:
    }
 
    /** @name Accessor functions */
-   //@{
+   ///@{
    Number val(
       Index i
    ) const
@@ -93,7 +93,7 @@ public:
    {
       return iter_;
    }
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -105,7 +105,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    FilterEntry();
    /** Copy Constructor */
@@ -117,7 +117,7 @@ private:
    void operator=(
       const FilterEntry&
    );
-   //@}
+   ///@}
 
    /** values defining the coordinates of the entry */
    std::vector<Number> vals_;
@@ -135,7 +135,7 @@ class Filter
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default Constructor */
    Filter(
       Index dim
@@ -146,7 +146,7 @@ public:
       //ToDo figure out if that here is necessary
       Clear();
    }
-   //@}
+   ///@}
 
    /** Check acceptability of given coordinates with respect
     *  to the filter.
@@ -168,7 +168,7 @@ public:
    );
 
    /** @name Wrappers for 2-dimensional filter. */
-   //@{
+   ///@{
    bool Acceptable(
       Number val1,
       Number val2
@@ -193,7 +193,7 @@ public:
 
       AddEntry(vals, iteration);
    }
-   //@}
+   ///@}
 
    /** Delete all filter entries */
    void Clear();
@@ -213,7 +213,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    Filter();
    /** Copy Constructor */
@@ -225,7 +225,7 @@ private:
    void operator=(
       const Filter&
    );
-   //@}
+   ///@}
 
    /** Dimension of the filter (number of coordinates per entry) */
    Index dim_;

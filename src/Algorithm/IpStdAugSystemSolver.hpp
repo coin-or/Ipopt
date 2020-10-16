@@ -26,7 +26,7 @@ class StdAugSystemSolver: public AugSystemSolver
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor using only a linear solver object */
    StdAugSystemSolver(
       SymLinearSolver& LinSolver
@@ -34,7 +34,7 @@ public:
 
    /** Destructor */
    virtual ~StdAugSystemSolver();
-   //@}
+   ///@}
 
    bool InitializeImpl(
       const OptionsList& options,
@@ -106,7 +106,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default constructor. */
    StdAugSystemSolver();
 
@@ -119,7 +119,7 @@ private:
    void operator=(
       const StdAugSystemSolver&
    );
-   //@}
+   ///@}
 
    /** Create the matrix space for the Compound Sym Matrix that
     *  represents the augmented system.
@@ -200,7 +200,7 @@ private:
     matrix has to be updated compared to the most recent call of
     the Set method.
     */
-   //@{
+   ///@{
    /** Tag for W matrix.
     *
     *  If W has been given to Set as NULL, then this tag is set to 0.
@@ -266,7 +266,7 @@ private:
     *  well.
     */
    TaggedObject::Tag augsys_tag_;
-   //@}
+   ///@}
 
    /** The resulting augmented matrix.
     *
@@ -285,12 +285,12 @@ private:
    SmartPtr<const SymMatrix> old_w_;
 
    /** @name Algorithmic parameters */
-   //@{
+   ///@{
    /** Flag indicating whether the TNLP with identical structure has
     *  already been solved before.
     */
    bool warm_start_same_structure_;
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

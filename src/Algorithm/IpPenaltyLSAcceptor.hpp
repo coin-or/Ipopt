@@ -23,7 +23,7 @@ class PenaltyLSAcceptor: public BacktrackingLSAcceptor
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor.
     *
     *  The PDSystemSolver object only needs to be provided
@@ -36,7 +36,7 @@ public:
 
    /** Destructor */
    virtual ~PenaltyLSAcceptor();
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -134,21 +134,21 @@ public:
     * acceptability criteria and used externally (by the restoration phase
     * convergence check object, for instance).
     */
-   //@{
+   ///@{
    /** Checks if a trial point is acceptable to the current iterate */
    bool IsAcceptableToCurrentIterate(
       Number trial_barr,
       Number trial_theta,
       bool   called_from_restoration = false
    ) const;
-   //@}
+   ///@}
 
    /** Methods for OptionsList */
-   //@{
+   ///@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
    );
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -160,7 +160,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    PenaltyLSAcceptor(
       const PenaltyLSAcceptor&
@@ -170,7 +170,7 @@ private:
    void operator=(
       const PenaltyLSAcceptor&
    );
-   //@}
+   ///@}
 
    /** Compute predicted reduction for given step size */
    Number CalcPred(
@@ -179,7 +179,7 @@ private:
 
    /** @name Parameters for the penalty function line search
     *  algorithm.  Names as in the filter paper */
-   //@{
+   ///@{
    /** Initial value of penalty parameter */
    Number nu_init_;
    /** Incrememt for penalty parameter */
@@ -196,10 +196,10 @@ private:
    Number kappa_soc_;
    /** Second method correction method */
    Index soc_method_;
-   //@}
+   ///@}
 
    /** @name Information related to watchdog procedure */
-   //@{
+   ///@{
    /** Constraint violation at the point with respect to which
     *  progress is to be made */
    Number reference_theta_;
@@ -224,24 +224,24 @@ private:
    Number watchdog_barr_;
    /** Predicted reduction to be compared with in watch dog. */
    Number watchdog_pred_;
-   //@}
+   ///@}
 
    /** @name Penalty parameter */
-   //@{
+   ///@{
    /** Current value of the penalty parameter */
    Number nu_;
    /** Value of penalty parameter at beginning of the iteration. */
    Number last_nu_;
-   //@}
+   ///@}
 
    /** When called from the restoration phase, this is the required
     *  predicted reduction */
    Number resto_pred_;
 
    /** @name Strategy objective that are used */
-   //@{
+   ///@{
    SmartPtr<PDSystemSolver> pd_solver_;
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

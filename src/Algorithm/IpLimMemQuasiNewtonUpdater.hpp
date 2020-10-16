@@ -24,7 +24,7 @@ class LimMemQuasiNewtonUpdater: public HessianUpdater
 {
 public:
    /**@name Constructors / Destructors */
-   //@{
+   ///@{
    /** Default Constructor */
    LimMemQuasiNewtonUpdater(
       bool update_for_resto
@@ -33,7 +33,7 @@ public:
    /** Destructor */
    virtual ~LimMemQuasiNewtonUpdater()
    { }
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -44,11 +44,11 @@ public:
    virtual void UpdateHessian();
 
    /** Methods for OptionsList */
-   //@{
+   ///@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
    );
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -60,7 +60,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    LimMemQuasiNewtonUpdater(
       const LimMemQuasiNewtonUpdater&
@@ -70,13 +70,13 @@ private:
    void operator=(
       const LimMemQuasiNewtonUpdater&
    );
-   //@}
+   ///@}
 
    /** Matrix space for the low-rank Hessian approximation. */
    SmartPtr<const LowRankUpdateSymMatrixSpace> h_space_;
 
    /** @name Algorithmic parameters */
-   //@{
+   ///@{
    /** Size of memory for limited memory update. */
    Index limited_memory_max_history_;
 
@@ -121,7 +121,7 @@ private:
     *  special manner for the restoration phase.
     */
    bool limited_memory_special_for_resto_;
-   //@}
+   ///@}
 
    /** Flag indicating if the update is to be done for the original
     *  NLP or for the restoration phase NLP.
@@ -164,7 +164,7 @@ private:
    Index lm_skipped_iter_;
 
    /** @name Information for the limited memory update */
-   //@{
+   ///@{
    /** current size of limited memory */
    Index curr_lm_memory_;
 
@@ -296,10 +296,10 @@ private:
     *  Only for restoration phase. (backup)
     */
    SmartPtr<DenseSymMatrix> STDRS_old_;
-   //@}
+   ///@}
 
    /** @name Auxiliary function */
-   //@{
+   ///@{
    /** Method deciding whether the BFGS update should be skipped.
     *
     *  If Powell-damping is performed, the Vectors s_new and y_new
@@ -521,7 +521,7 @@ private:
     *  B0_, V_, and U_.
     */
    void SetW();
-   //@}
+   ///@}
 
 };
 

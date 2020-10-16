@@ -19,13 +19,13 @@ class InexactNormalTerminationTester: public IterativeSolverTerminationTester
 {
 public:
    /** @name Constructor/Destructor */
-   //@{
+   ///@{
    /** Default Constructor */
    InexactNormalTerminationTester();
 
    /** Destructor */
    virtual ~InexactNormalTerminationTester();
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -94,22 +94,22 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Overloaded Assignment Operator */
    InexactNormalTerminationTester& operator=(
       const InexactNormalTerminationTester&
    );
-   //@}
+   ///@}
 
    /** @name Algorithmic options */
-   //@{
+   ///@{
    /** Desired reduction of residual */
    Number inexact_normal_tol_;
    /** Maximal number of iterative solve iterations */
    Index inexact_normal_max_iter_;
    /** Is set to true if the linear system is scaled via slacks. */
    bool requires_scaling_;
-   //@}
+   ///@}
 
    /** Value of normal problem objective function achived by the
     *  Cauchy step.

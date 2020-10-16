@@ -20,7 +20,7 @@ class EquilibrationScaling: public StandardScalingBase
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    EquilibrationScaling(
       const SmartPtr<NLP>& nlp)
       : StandardScalingBase(),
@@ -30,15 +30,15 @@ public:
    /** Destructor */
    virtual ~EquilibrationScaling()
    { }
-   //@}
+   ///@}
 
    /** Methods for IpoptType */
-   //@{
+   ///@{
    /** Register the options for this class */
    static void RegisterOptions(
       const SmartPtr<RegisteredOptions>& roptions
    );
-   //@}
+   ///@}
 
 protected:
    /** Initialize the object from the options */
@@ -75,7 +75,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    EquilibrationScaling(
       const EquilibrationScaling&
@@ -85,7 +85,7 @@ private:
    void operator=(
       const EquilibrationScaling&
    );
-   //@}
+   ///@}
 
    /** pointer to the NLP to get scaling parameters */
    SmartPtr<NLP> nlp_;
@@ -104,7 +104,7 @@ class PointPerturber: public ReferencedObject
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    PointPerturber(
       const Vector& reference_point,
       Number        random_pert_radius,
@@ -117,7 +117,7 @@ public:
    /** Destructor */
    virtual ~PointPerturber()
    { }
-   //@}
+   ///@}
 
    /** Return a new perturbed point */
    SmartPtr<Vector> MakeNewPerturbedPoint() const;
@@ -133,7 +133,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    PointPerturber(
       const PointPerturber&
@@ -143,7 +143,7 @@ private:
    void operator=(
       const PointPerturber&
    );
-   //@}
+   ///@}
 
    /** pointer to the midpoint of the perturbation */
    SmartPtr<Vector> ref_point_;

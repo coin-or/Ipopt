@@ -47,7 +47,7 @@ class TripletToCSRConverter: public ReferencedObject
       }
 
       /** @name Accessor methods. */
-      //@{
+      ///@{
       /** Row position. */
       Index IRow() const
       {
@@ -65,7 +65,7 @@ class TripletToCSRConverter: public ReferencedObject
       {
          return i_pos_triplet_;
       }
-      //@}
+      ///@}
 
       /** Comparison operator.
        *
@@ -80,11 +80,11 @@ class TripletToCSRConverter: public ReferencedObject
 
    private:
       /** @name Entry content. */
-      //@{
+      ///@{
       Index i_row_;
       Index j_col_;
       Index i_pos_triplet_;
-      //@}
+      ///@}
    };
 
 public:
@@ -98,7 +98,7 @@ public:
    };
 
    /** @name Constructor/Destructor */
-   //@{
+   ///@{
    /* Constructor.
     *
     * If offset is 0, then the counting of indices in the compressed
@@ -112,7 +112,7 @@ public:
 
    /** Destructor */
    virtual ~TripletToCSRConverter();
-   //@}
+   ///@}
 
    /** Initialize the converter, given the fixed structure of the matrix.
     *
@@ -135,7 +135,7 @@ public:
    );
 
    /** @name Accessor methods */
-   //@{
+   ///@{
    /** Return the IA array for the condensed format. */
    const Index* IA() const
    {
@@ -155,7 +155,7 @@ public:
       DBG_ASSERT(initialized_);
       return ipos_first_;
    }
-   //@}
+   ///@}
 
    /** Convert the values of the nonzero elements.
     *
@@ -179,7 +179,7 @@ private:
     * them for us, so we declare them private
     * and do not define them. This ensures that
     * they will not be implicitly created/called. */
-   //@{
+   ///@{
    /** Default Constructor */
    TripletToCSRConverter();
 
@@ -192,7 +192,7 @@ private:
    void operator=(
       const TripletToCSRConverter&
    );
-   //@}
+   ///@}
 
    /** Offset for CSR numbering. */
    Index offset_;
@@ -222,7 +222,7 @@ private:
    bool initialized_;
 
    /** @name Arrays for cross-positions for the conversion of values. */
-   //@{
+   ///@{
    /** First elements assignment.
     *
     *  For i with 0 <= i <= nonzeros_compressed-1, the i-th element in
@@ -240,7 +240,7 @@ private:
 
    /** Position of multiple elements in compressed matrix. */
    Index* ipos_double_compressed_;
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

@@ -19,7 +19,7 @@ class IPOPTLIB_EXPORT TimedTask
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default constructor. */
    TimedTask()
       :
@@ -33,7 +33,7 @@ public:
    /** Default destructor */
    ~TimedTask()
    {}
-   //@}
+   ///@}
 
    /** Method for resetting time to zero. */
    void Reset()
@@ -114,13 +114,13 @@ private:
     * for us, so we declare them private and do not define
     * them. This ensures that they will not be implicitly
     * created/called. */
-   //@{
+   ///@{
    /** Copy Constructor */
    TimedTask(const TimedTask&);
 
    /** Default Assignment Operator */
    void operator=(const TimedTask&);
-   //@}
+   ///@}
 
    /** CPU time at beginning of task. */
    Number start_cputime_;
@@ -136,10 +136,10 @@ private:
    Number total_walltime_;
 
    /** @name fields for debugging */
-   //@{
+   ///@{
    bool start_called_;
    bool end_called_;
-   //@}
+   ///@}
 
 };
 } // namespace Ipopt

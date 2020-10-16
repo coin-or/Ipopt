@@ -21,7 +21,7 @@ class InexactLSAcceptor: public BacktrackingLSAcceptor
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor.
     *
     *  The PDSystemSolver object only needs to be
@@ -32,7 +32,7 @@ public:
 
    /** Destructor */
    virtual ~InexactLSAcceptor();
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -128,14 +128,14 @@ public:
     * acceptability criteria and used externally (by the restoration phase
     * convergence check object, for instance)
     */
-   //@{
+   ///@{
    /** Checks if a trial point is acceptable to the current iterate */
    bool IsAcceptableToCurrentIterate(
       Number trial_barr,
       Number trial_theta,
       bool   called_from_restoration = false
    ) const;
-   //@}
+   ///@}
 
    /** Method for updating the equality constraint multipliers */
    virtual Number ComputeAlphaForY(
@@ -153,11 +153,11 @@ public:
    }
 
    /** Methods for OptionsList */
-   //@{
+   ///@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
    );
-   //@}
+   ///@}
 
 protected:
    /** Method to easily access Inexact data */
@@ -186,7 +186,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    InexactLSAcceptor(
       const InexactLSAcceptor&
@@ -196,7 +196,7 @@ private:
    void operator=(
       const InexactLSAcceptor&
    );
-   //@}
+   ///@}
 
    /** Compute predicted reduction for given step size */
    Number CalcPred(
@@ -210,7 +210,7 @@ private:
    void ResetSlacks();
 
    /** @name Parameters for the penalty function algorithm. */
-   //@{
+   ///@{
    /** Initial value of penalty parameter */
    Number nu_init_;
    /** Initial value of lower penalty parameter */
@@ -230,10 +230,10 @@ private:
    /** Flag indicating whether the Curtis/Nocedal flexible penalty
     *  function should be used */
    bool flexible_penalty_function_;
-   //@}
+   ///@}
 
    /** @name Information related to watchdog procedure */
-   //@{
+   ///@{
    /** Constraint violation at the point with respect to which
     *  progress is to be made */
    Number reference_theta_;
@@ -249,10 +249,10 @@ private:
    Number watchdog_barr_;
    /** Predicted reduction to be compared with in watch dog. */
    Number watchdog_pred_;
-   //@}
+   ///@}
 
    /** @name Penalty parameter */
-   //@{
+   ///@{
    /** Current value of the penalty parameter */
    Number nu_;
    /** Value of penalty parameter at beginning of the iteration. */
@@ -265,7 +265,7 @@ private:
    Number inexact_decomposition_activate_tol_;
    /** Step size threshold for inactivating step decomposition */
    Number inexact_decomposition_inactivate_tol_;
-   //@}
+   ///@}
 
    /** Flag indicating if this is a termination test 2 iteration in
     *  which we just update the multipliers and skip the line

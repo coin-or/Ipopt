@@ -25,13 +25,13 @@ class RestoRestorationPhase: public RestorationPhase
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default Constructor. */
    RestoRestorationPhase();
 
    /** Destructor */
    virtual ~RestoRestorationPhase();
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -50,7 +50,7 @@ private:
     * declare them private and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    RestoRestorationPhase(
       const RestoRestorationPhase&
@@ -60,17 +60,17 @@ private:
    void operator=(
       const RestoRestorationPhase&
    );
-   //@}
+   ///@}
 
    /** @name Auxiliary methods */
-   //@{
+   ///@{
    /** Method for solving the quadratic vector equation v^2 + 2a*v - b = 0 */
    void solve_quadratic(
       const Vector& a,
       const Vector& b,
       Vector&       v
    );
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

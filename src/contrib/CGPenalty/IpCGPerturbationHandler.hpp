@@ -26,14 +26,14 @@ class CGPerturbationHandler: public PDPerturbationHandler
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default Constructor */
    CGPerturbationHandler();
 
    /** Destructor */
    virtual ~CGPerturbationHandler()
    { }
-   //@}
+   ///@}
 
    /* overloaded from AlgorithmStrategyObject */
    virtual bool InitializeImpl(
@@ -106,7 +106,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    CGPerturbationHandler(
       const CGPerturbationHandler&
@@ -116,7 +116,7 @@ private:
    void operator=(
       const CGPerturbationHandler&
    );
-   //@}
+   ///@}
 
    /** Method to easily access CGPenalty data */
    CGPenaltyData& CGPenData()
@@ -135,7 +135,7 @@ private:
    }
 
    /** @name Size of the most recent non-zero perturbation. */
-   //@{
+   ///@{
    /** The last nonzero value for delta_x */
    Number delta_x_last_;
    /** The last nonzero value for delta_s */
@@ -144,11 +144,11 @@ private:
    Number delta_c_last_;
    /** The last nonzero value for delta_d */
    Number delta_d_last_;
-   //@}
+   ///@}
 
    /** @name Size of the most recently suggested perturbation for the
     *  current matrix. */
-   //@{
+   ///@{
    /** The current value for delta_x */
    Number delta_x_curr_;
    /** The current value for delta_s */
@@ -157,14 +157,14 @@ private:
    Number delta_c_curr_;
    /** The current value for delta_d */
    Number delta_d_curr_;
-   //@}
+   ///@}
 
    /** Flag indicating if for the given matrix the perturbation for wrong
     *  inertia method has already been called. */
    bool get_deltas_for_wrong_inertia_called_;
 
    /** @name Handling structural degeneracy */
-   //@{
+   ///@{
    /** Type for degeneracy flags */
    enum DegenType
    {
@@ -203,10 +203,10 @@ private:
 
    /** Current status */
    TrialStatus test_status_;
-   //@}
+   ///@}
 
    /** @name Algorithmic parameters. */
-   //@{
+   ///@{
    /** Maximal perturbation for x and s. */
    Number delta_xs_max_;
    /** Smallest possible perturbation for x and s. */
@@ -233,7 +233,7 @@ private:
    /** Flag indicating that the delta_c, delta_d perturbation should
     *  always be used */
    bool perturb_always_cd_;
-   //@}
+   ///@}
 
    /** The max reference value for scaling the penalty parameter */
    Number penalty_max_;
@@ -241,7 +241,7 @@ private:
    Number mult_diverg_feasibility_tol_;
 
    /** @name Auxiliary methods */
-   //@{
+   ///@{
    /** Internal version of PerturbForWrongInertia with the
     *  difference, that finalize_test is not called.
     *
@@ -263,7 +263,7 @@ private:
 
    /** Compute perturbation value for constraints */
    Number delta_cd();
-   //@}
+   ///@}
 
 };
 

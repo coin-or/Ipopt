@@ -16,13 +16,13 @@ class OptimalityErrorConvergenceCheck: public ConvergenceCheck
 {
 public:
    /**@name Constructors / Destructor */
-   //@{
+   ///@{
    /** Default Constructor */
    OptimalityErrorConvergenceCheck();
 
    /** Destructor */
    virtual ~OptimalityErrorConvergenceCheck();
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -45,7 +45,7 @@ public:
 
 protected:
    /** @name Algorithmic parameters */
-   //@{
+   ///@{
    /** Maximal number of iterations */
    Index max_iterations_;
    /** Tolerance on unscaled dual infeasibility */
@@ -78,7 +78,7 @@ protected:
    Number mu_target_;
    /** Upper bound on CPU time */
    Number max_cpu_time_;
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods (Hidden to avoid
@@ -89,7 +89,7 @@ private:
     * declare them private and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    OptimalityErrorConvergenceCheck(
       const OptimalityErrorConvergenceCheck&
@@ -99,7 +99,7 @@ private:
    void operator=(
       const OptimalityErrorConvergenceCheck&
    );
-   //@}
+   ///@}
 
    /** Counter for successive iterations in which acceptability
     *  criteria are met.

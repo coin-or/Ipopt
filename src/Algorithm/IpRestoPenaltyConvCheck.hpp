@@ -22,13 +22,13 @@ class RestoPenaltyConvergenceCheck: public RestoConvergenceCheck
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default Constructor */
    RestoPenaltyConvergenceCheck();
 
    /** Destructor */
    virtual ~RestoPenaltyConvergenceCheck();
-   //@}
+   ///@}
 
    /** Set the object for the original penalty line search.
     *
@@ -59,7 +59,7 @@ private:
     * declare them private and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    RestoPenaltyConvergenceCheck(
       const RestoPenaltyConvergenceCheck&
@@ -69,7 +69,7 @@ private:
    void operator=(
       const RestoPenaltyConvergenceCheck&
    );
-   //@}
+   ///@}
 
    /** Method for checking progress with original filter
     *  globalization mechanism.

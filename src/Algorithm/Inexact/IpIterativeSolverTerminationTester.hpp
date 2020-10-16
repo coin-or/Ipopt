@@ -37,7 +37,7 @@ public:
    };
 
    /** @name Constructor/Destructor */
-   //@{
+   ///@{
    /** Default constructor */
    IterativeSolverTerminationTester()
    { }
@@ -45,7 +45,7 @@ public:
    /** Destructor */
    virtual ~IterativeSolverTerminationTester()
    { }
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -130,12 +130,12 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Overloaded Assignment Operator */
    IterativeSolverTerminationTester& operator=(
       const IterativeSolverTerminationTester&
    );
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

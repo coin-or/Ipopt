@@ -27,7 +27,7 @@ class IPOPTLIB_EXPORT ScaledMatrix: public Matrix
 {
 public:
    /**@name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, taking the owner_space.
     */
    ScaledMatrix(
@@ -36,7 +36,7 @@ public:
 
    /** Destructor */
    ~ScaledMatrix();
-   //@}
+   ///@}
 
    /** Set the unscaled matrix */
    void SetUnscaledMatrix(
@@ -62,7 +62,7 @@ public:
 
 protected:
    /**@name Methods overloaded from Matrix */
-   //@{
+   ///@{
    virtual void MultVectorImpl(
       Number        alpha,
       const Vector& x,
@@ -121,7 +121,7 @@ protected:
       const Vector& D,
       Vector&       X
    ) const;
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -132,7 +132,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    ScaledMatrix();
 
@@ -145,7 +145,7 @@ private:
    void operator=(
       const ScaledMatrix&
    );
-   //@}
+   ///@}
 
    /** const version of the unscaled matrix */
    SmartPtr<const Matrix> matrix_;
@@ -162,7 +162,7 @@ class IPOPTLIB_EXPORT ScaledMatrixSpace: public MatrixSpace
 {
 public:
    /** @name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, given the number of row and columns blocks, as
     *  well as the totel number of rows and columns.
     */
@@ -177,7 +177,7 @@ public:
    /** Destructor */
    ~ScaledMatrixSpace()
    { }
-   //@}
+   ///@}
 
    /** Method for creating a new matrix of this specific type. */
    ScaledMatrix* MakeNewScaledMatrix(
@@ -225,7 +225,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default constructor */
    ScaledMatrixSpace();
 
@@ -238,7 +238,7 @@ private:
    ScaledMatrixSpace& operator=(
       const ScaledMatrixSpace&
    );
-   //@}
+   ///@}
 
    /** Row scaling vector */
    SmartPtr<Vector> row_scaling_;

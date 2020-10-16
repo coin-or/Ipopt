@@ -24,14 +24,14 @@ class PDPerturbationHandler: public AlgorithmStrategyObject
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default Constructor */
    PDPerturbationHandler();
 
    /** Destructor */
    virtual ~PDPerturbationHandler()
    { }
-   //@}
+   ///@}
 
    /* overloaded from AlgorithmStrategyObject */
    virtual bool InitializeImpl(
@@ -103,7 +103,7 @@ protected:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    PDPerturbationHandler(
       const PDPerturbationHandler&
@@ -113,10 +113,10 @@ protected:
    void operator=(
       const PDPerturbationHandler&
    );
-   //@}
+   ///@}
 
    /** @name Size of the most recent non-zero perturbation. */
-   //@{
+   ///@{
    /** The last nonzero value for delta_x */
    Number delta_x_last_;
    /** The last nonzero value for delta_s */
@@ -125,12 +125,12 @@ protected:
    Number delta_c_last_;
    /** The last nonzero value for delta_d */
    Number delta_d_last_;
-   //@}
+   ///@}
 
    /** @name Size of the most recently suggested perturbation for the
     *  current matrix.
     */
-   //@{
+   ///@{
    /** The current value for delta_x */
    Number delta_x_curr_;
    /** The current value for delta_s */
@@ -139,7 +139,7 @@ protected:
    Number delta_c_curr_;
    /** The current value for delta_d */
    Number delta_d_curr_;
-   //@}
+   ///@}
 
    /** Flag indicating if for the given matrix the perturb for wrong
     *  inertia method has already been called.
@@ -147,7 +147,7 @@ protected:
    bool get_deltas_for_wrong_inertia_called_;
 
    /** @name Handling structural degeneracy */
-   //@{
+   ///@{
    /** Type for degeneracy flags */
    enum DegenType
    {
@@ -186,10 +186,10 @@ protected:
 
    /** Current status */
    TrialStatus test_status_;
-   //@}
+   ///@}
 
    /** @name Algorithmic parameters. */
-   //@{
+   ///@{
    /** Maximal perturbation for x and s. */
    Number delta_xs_max_;
    /** Smallest possible perturbation for x and s. */
@@ -217,10 +217,10 @@ protected:
     *  always be used.
     */
    bool perturb_always_cd_;
-   //@}
+   ///@}
 
    /** @name Auxiliary methods */
-   //@{
+   ///@{
    /** Internal version of PerturbForWrongInertia with the
     *  difference, that finalize_test is not called.
     *
@@ -242,7 +242,7 @@ protected:
 
    /** Compute perturbation value for constraints */
    Number delta_cd();
-   //@}
+   ///@}
 
 };
 

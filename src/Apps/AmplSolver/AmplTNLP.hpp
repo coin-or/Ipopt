@@ -88,7 +88,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    //AmplSuffixHandler();
    /** Copy Constructor */
@@ -100,7 +100,7 @@ private:
    void operator=(
       const AmplSuffixHandler&
    );
-   //@}
+   ///@}
 
    mutable ASL_pfgh* asl_;
 
@@ -171,7 +171,7 @@ public:
        * and do not define them. This ensures that
        * they will not be implicitly created/called.
        */
-      //@{
+      ///@{
       /** Default Constructor */
       AmplOption();
 
@@ -182,7 +182,7 @@ public:
       /** Default Assignment Operator */
       void operator=(
          const AmplOption&);
-      //@}
+      ///@}
 
       const std::string ipopt_option_name_;
       const AmplOptionType type_;
@@ -272,7 +272,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    //AmplOptionsList();
    /** Copy Constructor */
@@ -284,7 +284,7 @@ private:
    void operator=(
       const AmplOptionsList&
    );
-   //@}
+   ///@}
 
    void MakeValidLatexString(
       std::string  source,
@@ -317,7 +317,7 @@ class IPOPTAMPLINTERFACELIB_EXPORT AmplTNLP: public TNLP
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor. */
    AmplTNLP(
       const SmartPtr<const Journalist>& jnlst,
@@ -334,13 +334,13 @@ public:
 
    /** Default destructor */
    virtual ~AmplTNLP();
-   //@}
+   ///@}
 
    /** Exceptions */
    DECLARE_STD_EXCEPTION(NONPOSITIVE_SCALING_FACTOR);
 
    /**@name methods to gather information about the NLP */
-   //@{
+   ///@{
    virtual bool get_nlp_info(
       Index&          n,
       Index&          m,
@@ -443,10 +443,10 @@ public:
       Index   m,
       Number* g_scaling
    );
-   //@}
+   ///@}
 
    /** @name Solution Methods */
-   //@{
+   ///@{
    virtual void finalize_solution(
       SolverReturn               status,
       Index                      n,
@@ -460,19 +460,19 @@ public:
       const IpoptData*           ip_data,
       IpoptCalculatedQuantities* ip_cq
    );
-   //@}
+   ///@}
 
    /** @name Method for quasi-Newton approximation information. */
-   //@{
+   ///@{
    virtual Index get_number_of_nonlinear_variables();
    virtual bool get_list_of_nonlinear_variables(
       Index  num_nonlin_vars,
       Index* pos_nonlin_vars
    );
-   //@}
+   ///@}
 
    /**@name Ampl specific methods */
-   //@{
+   ///@{
    /** Return the ampl solver object (ASL*) */
    ASL_pfgh* AmplSolverObject()
    {
@@ -503,7 +503,7 @@ public:
       Index& nbv_,
       Index& niv_
    ) const;
-   //@}
+   ///@}
 
    /** A method for setting the index of the objective function to be
     *  considered.
@@ -521,7 +521,7 @@ public:
     *
     * These values will be passed on to the TNLP in get_var_con_meta_data.
     */
-   //@{
+   ///@{
    void set_string_metadata_for_var(
       std::string              tag,
       std::vector<std::string> meta_data)
@@ -563,7 +563,7 @@ public:
    {
       con_numeric_md_[tag] = meta_data;
    }
-   //@}
+   ///@}
 
    /** Method for returning the suffix handler */
    SmartPtr<AmplSuffixHandler> get_suffix_handler()
@@ -581,7 +581,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    AmplTNLP();
 
@@ -594,7 +594,7 @@ private:
    void operator=(
       const AmplTNLP&
    );
-   //@}
+   ///@}
 
 protected:
    /** Journalist */
@@ -607,23 +607,23 @@ protected:
    double obj_sign_;
 
    /**@name Problem Size Data*/
-   //@{
+   ///@{
    /** number of nonzeros in the full_x Hessian */
    Index nz_h_full_;
    /* the rest of the problem size data is available easily through the ampl variables */
-   //@}
+   ///@}
    /**@name Internal copies of solution vectors */
-   //@{
+   ///@{
    Number* x_sol_;
    Number* z_L_sol_;
    Number* z_U_sol_;
    Number* g_sol_;
    Number* lambda_sol_;
    Number  obj_sol_;
-   //@}
+   ///@}
 
    /**@name Flags to track internal state */
-   //@{
+   ///@{
    /** whether the objective value has been calculated with the current x
     *
     *  set to false in apply_new_x, and set to true in internal_objval
@@ -637,7 +637,7 @@ protected:
    bool hesset_called_;
    /** whether set_active_objective has been called */
    bool set_active_objective_called_;
-   //@}
+   ///@}
 
    /** Pointer to the Oinfo structure */
    void* Oinfo_ptr_;

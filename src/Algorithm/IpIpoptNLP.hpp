@@ -28,7 +28,7 @@ class IPOPTLIB_EXPORT IpoptNLP: public ReferencedObject
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    IpoptNLP(
       const SmartPtr<NLPScalingObject> nlp_scaling
    )
@@ -38,7 +38,7 @@ public:
    /** Destructor */
    virtual ~IpoptNLP()
    { }
-   //@}
+   ///@}
 
    /** Initialization method.
     *
@@ -59,11 +59,11 @@ public:
    }
 
    /**@name Possible Exceptions */
-   //@{
+   ///@{
    /** thrown if there is any error evaluating values from the nlp */
    DECLARE_STD_EXCEPTION(Eval_Error);
 
-   //@}
+   ///@}
    /** Initialize (create) structures for the iteration data */
    virtual bool InitializeStructures(
       SmartPtr<Vector>& x,
@@ -86,7 +86,7 @@ public:
    ) = 0;
 
    /** Accessor methods for model data */
-   //@{
+   ///@{
    /** Objective value */
    virtual Number f(
       const Vector& x
@@ -158,7 +158,7 @@ public:
     *  matrix (or it's approximation)
     */
    virtual SmartPtr<const SymMatrixSpace> HessianMatrixSpace() const = 0;
-   //@}
+   ///@}
 
    /** Accessor method for vector/matrix spaces pointers. */
    virtual void GetSpaces(
@@ -188,7 +188,7 @@ public:
    ) = 0;
 
    /** @name Counters for the number of function evaluations. */
-   //@{
+   ///@{
    virtual Index f_evals() const = 0;
    virtual Index grad_f_evals() const = 0;
    virtual Index c_evals() const = 0;
@@ -196,12 +196,12 @@ public:
    virtual Index d_evals() const = 0;
    virtual Index jac_d_evals() const = 0;
    virtual Index h_evals() const = 0;
-   //@}
+   ///@}
 
    /** @name Special method for dealing with the fact that the
     *  restoration phase objective function depends on the barrier
     *  parameter */
-   //@{
+   ///@{
    /** Method for telling the IpoptCalculatedQuantities class whether
     *  the objective function depends on the barrier function.
     *
@@ -247,10 +247,10 @@ public:
     *  This can be used in LeastSquareMults to obtain a "zero Hessian".
     */
    virtual SmartPtr<const SymMatrix> uninitialized_h() = 0;
-   //@}
+   ///@}
 
    /**@name solution routines */
-   //@{
+   ///@{
    virtual void FinalizeSolution(
       SolverReturn               status,
       const Vector&              x,
@@ -280,7 +280,7 @@ public:
       SmartPtr<const IpoptData>           ip_data,
       SmartPtr<IpoptCalculatedQuantities> ip_cq
    ) = 0;
-   //@}
+   ///@}
 
    /** Returns the scaling strategy object */
    SmartPtr<NLPScalingObject> NLP_scaling() const
@@ -300,7 +300,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    IpoptNLP(
       const IpoptNLP&
@@ -310,7 +310,7 @@ private:
    void operator=(
       const IpoptNLP&
    );
-   //@}
+   ///@}
 
    SmartPtr<NLPScalingObject> nlp_scaling_;
 };

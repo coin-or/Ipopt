@@ -40,7 +40,7 @@ class IPOPTLIB_EXPORT SymTMatrix: public SymMatrix
 {
 public:
    /**@name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, taking the corresponding matrix space. */
    SymTMatrix(
       const SymTMatrixSpace* owner_space
@@ -48,10 +48,10 @@ public:
 
    /** Destructor */
    ~SymTMatrix();
-   //@}
+   ///@}
 
    /**@name Changing the Values.*/
-   //@{
+   ///@{
    /** Set values of nonzero elements.
     *
     *  The values of the nonzero
@@ -62,10 +62,10 @@ public:
    void SetValues(
       const Number* Values
    );
-   //@}
+   ///@}
 
    /** @name Accessor Methods */
-   //@{
+   ///@{
    /** Number of nonzero entries */
    Index Nonzeros() const;
 
@@ -96,10 +96,10 @@ public:
     *  @attention This does not produce a copy, and lifetime is not guaranteed!
     */
    const Number* Values() const;
-   //@}
+   ///@}
 
    /**@name Methods for providing copy of the matrix data */
-   //@{
+   ///@{
    /** Copy the nonzero structure into provided space */
    void FillStruct(
       ipfint* Irn,
@@ -110,11 +110,11 @@ public:
    void FillValues(
       Number* Values
    ) const;
-   //@}
+   ///@}
 
 protected:
    /**@name Methods overloaded from matrix */
-   //@{
+   ///@{
    virtual void MultVectorImpl(
       Number        alpha,
       const Vector& x,
@@ -137,7 +137,7 @@ protected:
       Index              indent,
       const std::string& prefix
    ) const;
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -148,7 +148,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    SymTMatrix();
 
@@ -161,7 +161,7 @@ private:
    void operator=(
       const SymTMatrix&
    );
-   //@}
+   ///@}
 
    /** Copy of the owner_space ptr as a SymTMatrixSpace instead
     *  of a MatrixSpace
@@ -184,7 +184,7 @@ class IPOPTLIB_EXPORT SymTMatrixSpace: public SymMatrixSpace
 {
 public:
    /** @name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, given the number of rows and columns (both as
     *  dim), as well as the number of nonzeros and the position of
     *  the nonzero elements.  Note that the counting of the nonzeros
@@ -202,7 +202,7 @@ public:
 
    /** Destructor */
    ~SymTMatrixSpace();
-   //@}
+   ///@}
 
    virtual SymMatrix* MakeNewSymMatrix() const
    {
@@ -216,7 +216,7 @@ public:
    }
 
    /**@name Methods describing Matrix structure */
-   //@{
+   ///@{
    /** Number of non-zeros in the sparse matrix */
    Index Nonzeros() const
    {
@@ -234,11 +234,11 @@ public:
    {
       return jCols_;
    }
-   //@}
+   ///@}
 
 private:
    /**@name Methods called by SymTMatrix for memory management */
-   //@{
+   ///@{
    /** Allocate internal storage for the SymTMatrix values */
    Number* AllocateInternalStorage() const;
 
@@ -246,7 +246,7 @@ private:
    void FreeInternalStorage(
       Number* values
    ) const;
-   //@}
+   ///@}
 
    const Index nonZeros_;
    Index* iRows_;

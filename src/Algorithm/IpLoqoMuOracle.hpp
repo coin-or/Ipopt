@@ -19,13 +19,13 @@ class LoqoMuOracle: public MuOracle
 {
 public:
    /**@name Constructors / Destructors */
-   //@{
+   ///@{
    /** Default Constructor */
    LoqoMuOracle();
 
    /** Destructor */
    virtual ~LoqoMuOracle();
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -51,7 +51,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    LoqoMuOracle(
       const LoqoMuOracle&
@@ -61,7 +61,7 @@ private:
    void operator=(
       const LoqoMuOracle&
    );
-   //@}
+   ///@}
 
 };
 

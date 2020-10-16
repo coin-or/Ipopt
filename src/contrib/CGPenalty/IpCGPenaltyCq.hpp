@@ -22,7 +22,7 @@ class CGPenaltyCq: public IpoptAdditionalCq
 public:
 
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor */
    CGPenaltyCq(
       IpoptNLP*                  ip_nlp,
@@ -32,7 +32,7 @@ public:
 
    /** Default destructor */
    virtual ~CGPenaltyCq();
-   //@}
+   ///@}
 
    /** This method must be called to initialize the global
     *  algorithmic parameters.
@@ -46,7 +46,7 @@ public:
    );
 
    /**@name Methods for the Chen-Goldfarb line search */
-   //@{
+   ///@{
    /** Compute ||delta_c, delta_d||_infty */
    Number curr_jac_cd_norm(
       Index nrm_type
@@ -82,14 +82,14 @@ public:
 
    /** Method for choose penalty parameters for scaling the KKT system  */
    Number compute_curr_cg_penalty_scale();
-   //@}
+   ///@}
 
    /** Methods for IpoptType */
-   //@{
+   ///@{
    static void RegisterOptions(
       const SmartPtr<RegisteredOptions>& roptions
    );
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -101,7 +101,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    CGPenaltyCq();
 
@@ -114,16 +114,16 @@ private:
    void operator=(
       const CGPenaltyCq&
    );
-   //@}
+   ///@}
 
    /** @name Pointers for easy access to data and NLP information. To
     *  avoid circular references of Smart Pointers, we use a regular
     *  pointer here. */
-   //@{
+   ///@{
    IpoptNLP* ip_nlp_;
    IpoptData* ip_data_;
    IpoptCalculatedQuantities* ip_cq_;
-   //@}
+   ///@}
 
    /** Method to easily access CGPenalty data */
    CGPenaltyData& CGPenData()
@@ -134,7 +134,7 @@ private:
    }
 
    /**@name Caches for the Chen-Goldfarb line search */
-   //@{
+   ///@{
    CachedResults<Number> curr_fast_direct_deriv_penalty_function_cache_;
    CachedResults<Number> curr_jac_cd_norm_cache_;
    CachedResults<Number> curr_scaled_y_Amax_cache_;
@@ -148,12 +148,12 @@ private:
    CachedResults<Number> curr_direct_deriv_penalty_function_cache_;
    /** Cache for Chen-Goldfarb perturbation factor. */
    CachedResults<Number> curr_cg_pert_fact_cache_;
-   //@}
+   ///@}
 
    /** Parameters for penalty method */
-   //@{
+   ///@{
    Number reference_infeasibility_;
-   //@}
+   ///@}
 
    /** flag indicating if Initialize method has been called (for
     *  debugging) */

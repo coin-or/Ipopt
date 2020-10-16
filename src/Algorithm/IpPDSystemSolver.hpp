@@ -75,7 +75,7 @@ class IPOPTLIB_EXPORT PDSystemSolver: public AlgorithmStrategyObject
 {
 public:
    /** @name Constructor/Destructor */
-   //@{
+   ///@{
    /** Default Constructor */
    PDSystemSolver()
    { }
@@ -83,7 +83,7 @@ public:
    /** Destructor */
    virtual ~PDSystemSolver()
    { }
-   //@}
+   ///@}
 
    /** overloaded from AlgorithmStrategyObject */
    virtual bool InitializeImpl(
@@ -124,12 +124,12 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Assignment Operator */
    PDSystemSolver& operator=(
       const PDSystemSolver&
    );
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

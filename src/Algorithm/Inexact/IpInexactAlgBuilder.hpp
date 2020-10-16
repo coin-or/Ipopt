@@ -26,17 +26,17 @@ class InexactAlgorithmBuilder: public AlgorithmBuilder
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor */
    InexactAlgorithmBuilder();
 
    /** Destructor */
    virtual ~InexactAlgorithmBuilder()
    { }
-   //@}
+   ///@}
 
    /** @name Methods to build parts of the algorithm */
-   //@{
+   ///@{
    virtual void BuildIpoptObjects(
       const Journalist&                    jnlst,
       const OptionsList&                   options,
@@ -52,7 +52,7 @@ public:
       const OptionsList& options,
       const std::string& prefix
    );
-   //@}
+   ///@}
 
    /** register the options used by the algorithm builder */
    static void RegisterOptions(
@@ -69,7 +69,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    InexactAlgorithmBuilder(
       const InexactAlgorithmBuilder&
@@ -79,7 +79,7 @@ private:
    void operator=(
       const InexactAlgorithmBuilder&
    );
-   //@}
+   ///@}
 
    /** Optional pointer to AugSystemSolver.
     *

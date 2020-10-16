@@ -25,7 +25,7 @@ class IPOPTLIB_EXPORT MultiVectorMatrix: public Matrix
 {
 public:
    /**@name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, taking the owner_space.
     */
    MultiVectorMatrix(
@@ -34,7 +34,7 @@ public:
 
    /** Destructor */
    ~MultiVectorMatrix();
-   //@}
+   ///@}
 
    /** Create a new MultiVectorMatrix from same MatrixSpace */
    SmartPtr<MultiVectorMatrix> MakeNewMultiVectorMatrix() const;
@@ -44,7 +44,7 @@ public:
     *
     *  Depending on whether the Vector is const or not, it is stored
     *  in the const or non-const internal column. */
-   //@{
+   ///@{
    void SetVector(
       Index         i,
       const Vector& vec
@@ -58,7 +58,7 @@ public:
       Index   i,
       Vector& vec
    );
-   //@}
+   ///@}
 
    /** Get a Vector in a particular column as a const Vector */
    inline SmartPtr<const Vector> GetVector(
@@ -138,7 +138,7 @@ public:
 
 protected:
    /**@name Overloaded methods from Matrix base class */
-   //@{
+   ///@{
    virtual void MultVectorImpl(
       Number        alpha,
       const Vector& x,
@@ -173,7 +173,7 @@ protected:
       Index              indent,
       const std::string& prefix
    ) const;
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -184,7 +184,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    MultiVectorMatrix();
 
@@ -197,7 +197,7 @@ private:
    void operator=(
       const MultiVectorMatrix&
    );
-   //@}
+   ///@}
 
    const MultiVectorMatrixSpace* owner_space_;
 
@@ -208,7 +208,7 @@ private:
    std::vector<SmartPtr<Vector> > non_const_vecs_;
 
    /** Method for accessing the internal Vectors internally */
-   //@{
+   ///@{
    inline const Vector* ConstVec(
       Index i
    ) const
@@ -233,7 +233,7 @@ private:
       DBG_ASSERT(IsValid(non_const_vecs_[i]));
       return GetRawPtr(non_const_vecs_[i]);
    }
-   //@}
+   ///@}
 };
 
 /** This is the matrix space for MultiVectorMatrix. */
@@ -241,7 +241,7 @@ class IPOPTLIB_EXPORT MultiVectorMatrixSpace: public MatrixSpace
 {
 public:
    /** @name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, given the number of columns (i.e., Vectors to be
     *  stored) and given the VectorSpace for the Vectors.
     */
@@ -253,7 +253,7 @@ public:
    /** Destructor */
    ~MultiVectorMatrixSpace()
    { }
-   //@}
+   ///@}
 
    /** Method for creating a new matrix of this specific type. */
    MultiVectorMatrix* MakeNewMultiVectorMatrix() const

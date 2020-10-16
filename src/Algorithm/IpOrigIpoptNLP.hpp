@@ -39,7 +39,7 @@ class IPOPTLIB_EXPORT OrigIpoptNLP: public IpoptNLP
 {
 public:
    /**@name Constructors / Destructor */
-   //@{
+   ///@{
    /** Constructor */
    OrigIpoptNLP(
       const SmartPtr<const Journalist>& jnlst,
@@ -49,7 +49,7 @@ public:
 
    /** Destructor */
    virtual ~OrigIpoptNLP();
-   //@}
+   ///@}
 
    virtual bool Initialize(
       const Journalist&  jnlst,
@@ -82,7 +82,7 @@ public:
    }
 
    /** Accessor methods for model data */
-   //@{
+   ///@{
    /** Objective value */
    virtual Number f(
       const Vector& x
@@ -214,7 +214,7 @@ public:
    {
       return x_space_;
    }
-   //@}
+   ///@}
 
    /** Accessor method for vector/matrix spaces pointers */
    virtual void GetSpaces(
@@ -244,7 +244,7 @@ public:
    );
 
    /** @name Counters for the number of function evaluations. */
-   //@{
+   ///@{
    virtual Index f_evals() const
    {
       return f_evals_;
@@ -273,10 +273,10 @@ public:
    {
       return h_evals_;
    }
-   //@}
+   ///@}
 
    /** Solution Routines - overloaded from IpoptNLP */
-   //@{
+   ///@{
    void FinalizeSolution(
       SolverReturn               status,
       const Vector&              x,
@@ -306,7 +306,7 @@ public:
       SmartPtr<const IpoptData>           ip_data,
       SmartPtr<IpoptCalculatedQuantities> ip_cq
    );
-   //@}
+   ///@}
 
    /** Called to register the options */
    static void RegisterOptions(
@@ -320,7 +320,7 @@ public:
    }
 
    /**@name Methods related to function evaluation timing. */
-   //@{
+   ///@{
    /** Reset the timing statistics */
    void ResetTimes();
 
@@ -362,7 +362,7 @@ public:
    Number TotalFunctionEvaluationCpuTime() const;
    Number TotalFunctionEvaluationSysTime() const;
    Number TotalFunctionEvaluationWallclockTime() const;
-   //@}
+   ///@}
 
 private:
    /** Journalist */
@@ -372,7 +372,7 @@ private:
    SmartPtr<NLP> nlp_;
 
    /** Necessary Vector/Matrix spaces */
-   //@{
+   ///@{
    SmartPtr<const VectorSpace> x_space_;
    SmartPtr<const VectorSpace> c_space_;
    SmartPtr<const VectorSpace> d_space_;
@@ -391,10 +391,10 @@ private:
    SmartPtr<const MatrixSpace> scaled_jac_c_space_;
    SmartPtr<const MatrixSpace> scaled_jac_d_space_;
    SmartPtr<const SymMatrixSpace> scaled_h_space_;
-   //@}
+   ///@}
 
    /**@name Storage for Model Quantities */
-   //@{
+   ///@{
    /** Objective function */
    CachedResults<Number> f_cache_;
 
@@ -456,7 +456,7 @@ private:
 
    /** Original unmodified upper bounds on x */
    SmartPtr<const Vector> orig_x_U_;
-   //@}
+   ///@}
 
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
@@ -467,7 +467,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    OrigIpoptNLP();
 
@@ -480,10 +480,10 @@ private:
    void operator=(
       const OrigIpoptNLP&
    );
-   //@}
+   ///@}
 
    /** @name auxiliary functions */
-   //@{
+   ///@{
    /** relax the bounds by a relative move of relax_bound_factor.
     *
     *  Here, relax_bound_factor should be negative (or zero) for
@@ -498,10 +498,10 @@ private:
    SmartPtr<const Vector> get_unscaled_x(
       const Vector& x
    );
-   //@}
+   ///@}
 
    /** @name Algorithmic parameters */
-   //@{
+   ///@{
 
    /** relaxation factor for the bounds */
    Number bound_relax_factor_;
@@ -539,10 +539,10 @@ private:
 
    /** Flag indicating if we need to ask for Hessian only once */
    bool hessian_constant_;
-   //@}
+   ///@}
 
    /** @name Counters for the function evaluations */
-   //@{
+   ///@{
    Index f_evals_;
    Index grad_f_evals_;
    Index c_evals_;
@@ -550,13 +550,13 @@ private:
    Index d_evals_;
    Index jac_d_evals_;
    Index h_evals_;
-   //@}
+   ///@}
 
    /** Flag indicating if initialization method has been called */
    bool initialized_;
 
    /**@name Timing statistics for the function evaluations. */
-   //@{
+   ///@{
    TimedTask f_eval_time_;
    TimedTask grad_f_eval_time_;
    TimedTask c_eval_time_;
@@ -564,7 +564,7 @@ private:
    TimedTask d_eval_time_;
    TimedTask jac_d_eval_time_;
    TimedTask h_eval_time_;
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

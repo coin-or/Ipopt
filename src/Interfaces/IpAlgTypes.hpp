@@ -14,7 +14,7 @@ namespace Ipopt
 {
 
 /**@name Enumerations */
-//@{
+///@{
 /** enum for the return from the optimize algorithm */
 enum SolverReturn
 {
@@ -36,10 +36,10 @@ enum SolverReturn
    INTERNAL_ERROR,
    UNASSIGNED
 };
-//@}
+///@}
 
 /** @name Some exceptions used in multiple places */
-//@{
+///@{
 DECLARE_STD_EXCEPTION(LOCALLY_INFEASIBLE);
 DECLARE_STD_EXCEPTION(TOO_FEW_DOF);
 DECLARE_STD_EXCEPTION(TINY_STEP_DETECTED);
@@ -57,7 +57,7 @@ DECLARE_STD_EXCEPTION(INCONSISTENT_BOUNDS);
  *  initialization, such as a value out of a feasible range.
  */
 DECLARE_STD_EXCEPTION(FAILED_INITIALIZATION);
-//@}
+///@}
 
 }
 

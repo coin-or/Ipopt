@@ -22,7 +22,7 @@ class RestoIterateInitializer: public IterateInitializer
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor.
     *
     *  If eq_mult_calculator is not NULL, it will be
@@ -36,7 +36,7 @@ public:
    /** Destructor */
    virtual ~RestoIterateInitializer()
    { }
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -62,7 +62,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    RestoIterateInitializer();
 
@@ -75,16 +75,16 @@ private:
    void operator=(
       const RestoIterateInitializer&
    );
-   //@}
+   ///@}
 
    /**@name Parameters for bumping x0 */
-   //@{
+   ///@{
    /** If max-norm of the initial equality constraint multiplier
     *  estimate is larger than this, the initial y_* variables are
     *  set to zero.
     */
    Number constr_mult_init_max_;
-   //@}
+   ///@}
 
    /** object to be used for the initialization of the equality
     *  constraint multipliers.
@@ -92,14 +92,14 @@ private:
    SmartPtr<EqMultiplierCalculator> resto_eq_mult_calculator_;
 
    /** @name Auxiliary functions */
-   //@{
+   ///@{
    /** Method for solving the quadratic vector equation v^2 + 2a*v - b = 0 */
    void solve_quadratic(
       const Vector& a,
       const Vector& b,
       Vector&     v
    );
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

@@ -22,7 +22,7 @@ class IPOPTLIB_EXPORT DiagMatrix: public SymMatrix
 public:
 
    /**@name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, given the corresponding matrix space. */
    DiagMatrix(
       const SymMatrixSpace* owner_space
@@ -30,7 +30,7 @@ public:
 
    /** Destructor */
    ~DiagMatrix();
-   //@}
+   ///@}
 
    /** Set the diagonal elements (as a Vector). */
    void SetDiag(
@@ -48,7 +48,7 @@ public:
 
 protected:
    /**@name Methods overloaded from matrix */
-   //@{
+   ///@{
    virtual void MultVectorImpl(
       Number        alpha,
       const Vector& x,
@@ -71,7 +71,7 @@ protected:
       Index              indent,
       const std::string& prefix
    ) const;
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -81,7 +81,7 @@ private:
     * them for us, so we declare them private
     * and do not define them. This ensures that
     * they will not be implicitly created/called. */
-   //@{
+   ///@{
    /** Default Constructor */
    DiagMatrix();
 
@@ -94,7 +94,7 @@ private:
    void operator=(
       const DiagMatrix&
    );
-   //@}
+   ///@}
 
    /** Vector storing the diagonal elements */
    SmartPtr<const Vector> diag_;
@@ -105,7 +105,7 @@ class IPOPTLIB_EXPORT DiagMatrixSpace: public SymMatrixSpace
 {
 public:
    /** @name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, given the dimension of the matrix. */
    DiagMatrixSpace(
       Index dim
@@ -116,7 +116,7 @@ public:
    /** Destructor */
    virtual ~DiagMatrixSpace()
    { }
-   //@}
+   ///@}
 
    virtual SymMatrix* MakeNewSymMatrix() const
    {
@@ -137,7 +137,7 @@ private:
     * them for us, so we declare them private
     * and do not define them. This ensures that
     * they will not be implicitly created/called. */
-   //@{
+   ///@{
    /** Default Constructor */
    DiagMatrixSpace();
 
@@ -150,7 +150,7 @@ private:
    void operator=(
       const DiagMatrixSpace&
    );
-   //@}
+   ///@}
 
 };
 

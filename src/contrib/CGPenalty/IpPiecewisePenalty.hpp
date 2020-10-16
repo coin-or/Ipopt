@@ -37,7 +37,7 @@ class PiecewisePenalty
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default Constructor */
    PiecewisePenalty(
       Index dim);
@@ -47,9 +47,9 @@ public:
       // @todo figure out if that here is necessary
       //    Clear();
    }
-   //@}
+   ///@}
 
-   //@{
+   ///@{
    // Initialize Piecewise Penalty list
    bool IsPiecewisePenaltyListEmpty()
    {
@@ -114,7 +114,7 @@ public:
       AddEntry(pen_r, barrier_obj, infeasi);
    }
 
-   //@}
+   ///@}
 
    /** Delete all Piecewise Penalty entries */
    void Clear()
@@ -137,7 +137,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    PiecewisePenalty();
    /** Copy Constructor */
@@ -149,7 +149,7 @@ private:
    void operator=(
       const PiecewisePenalty&
    );
-   //@}
+   ///@}
 
    /** Dimension of the Piecewise Penalty (number of coordinates per entry) */
    Index dim_;

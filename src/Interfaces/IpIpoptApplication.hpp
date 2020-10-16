@@ -146,7 +146,7 @@ public:
    );
 
    /**@name Solve methods */
-   //@{
+   ///@{
    /** Solve a problem that inherits from TNLP */
    virtual ApplicationReturnStatus OptimizeTNLP(
       const SmartPtr<TNLP>& tnlp
@@ -184,7 +184,7 @@ public:
    virtual ApplicationReturnStatus ReOptimizeNLP(
       const SmartPtr<NLP>& nlp
    );
-   //@}
+   ///@}
 
    /** Method for opening an output file with given print_level.
     *
@@ -196,7 +196,7 @@ public:
    );
 
    /**@name Accessor methods */
-   //@{
+   ///@{
    /** Get the Journalist for printing output */
    virtual SmartPtr<Journalist> Jnlst()
    {
@@ -237,7 +237,7 @@ public:
 
    /** Get the Algorithm Object */
    SmartPtr<IpoptAlgorithm> AlgorithmObject();
-   //@}
+   ///@}
 
    /** Method for printing Ipopt copyright message now instead of
     *  just before the optimization.
@@ -284,7 +284,7 @@ private:
     * them for us, so we declare them private
     * and do not define them. This ensures that
     * they will not be implicitly created/called. */
-   //@{
+   ///@{
    /** Copy Constructor */
    IpoptApplication(
       const IpoptApplication&
@@ -294,7 +294,7 @@ private:
    void operator=(
       const IpoptApplication&
    );
-   //@}
+   ///@}
 
    /** Method for the actual optimize call of the Ipopt algorithm.
     *
@@ -303,13 +303,13 @@ private:
    ApplicationReturnStatus call_optimize();
 
    /**@name Variables that customize the application behavior */
-   //@{
+   ///@{
    /** Decide whether or not the ipopt.opt file should be read */
    bool read_params_dat_;
 
    /** Decide whether non-ipopt non-bad_alloc exceptions should be rethrown */
    bool rethrow_nonipoptexception_;
-   //@}
+   ///@}
 
    /** Journalist for reporting output */
    SmartPtr<Journalist> jnlst_;
@@ -354,7 +354,7 @@ private:
    SmartPtr<NLP> nlp_adapter_;
 
    /** @name Algorithmic parameters */
-   //@{
+   ///@{
    /** Flag indicating if we are to use the inexact linear solver option */
    bool inexact_algorithm_;
 
@@ -364,7 +364,7 @@ private:
     *  This is necessary for the inexact algorithm.
     */
    bool replace_bounds_;
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

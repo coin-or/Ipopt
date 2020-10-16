@@ -38,7 +38,7 @@ public:
    }
 
    /**@name Overloaded from TNLP */
-   //@{
+   ///@{
    /* Method to return some info about the NLP */
    virtual bool get_nlp_info(
       Index&          n,
@@ -162,7 +162,7 @@ public:
       Index  num_nonlin_vars,
       Index* pos_nonlin_vars
    );
-   //@}
+   ///@}
 
 public:
    /// The JNI Environment

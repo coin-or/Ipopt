@@ -24,7 +24,7 @@ class InexactPDSolver: public AlgorithmStrategyObject
 {
 public:
    /** @name Constructor/Destructor */
-   //@{
+   ///@{
    /** Constructor that takes in the Augmented System solver that
     *  is to be used inside
     */
@@ -35,7 +35,7 @@ public:
 
    /** Destructor */
    virtual ~InexactPDSolver();
-   //@}
+   ///@}
 
    bool InitializeImpl(
       const OptionsList& options,
@@ -63,14 +63,14 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    InexactPDSolver();
    /** Overloaded Assignment Operator */
    InexactPDSolver& operator=(
       const InexactPDSolver&
    );
-   //@}
+   ///@}
 
    /** Method to easily access Inexact data */
    InexactData& InexData()
@@ -89,12 +89,12 @@ private:
    }
 
    /** @name Strategy objects to hold on to. */
-   //@{
+   ///@{
    /** Pointer to the Solver for the augmented system */
    SmartPtr<AugSystemSolver> augSysSolver_;
    /** Pointer to the Perturbation Handler. */
    SmartPtr<PDPerturbationHandler> perturbHandler_;
-   //@}
+   ///@}
 
    /** Internal function for computing the residual (resid) given the
     * right hand side (rhs) and the solution of the system (res).
@@ -123,7 +123,7 @@ private:
    bool HessianRequiresChange();
 
    /** @name Algorithmic options */
-   //@{
+   ///@{
    /** Psi factor in the tangential component condition */
    Number tcc_psi_;
    /** theta factor in the tangential component condition */
@@ -139,7 +139,7 @@ private:
     * modification.
     */
    Index inexact_regularization_ls_count_trigger_;
-   //@}
+   ///@}
 
    /** flag indicating if we are dealing with the Pardiso solver
     *  (temporary)

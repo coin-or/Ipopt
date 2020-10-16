@@ -28,7 +28,7 @@ class IPOPTLIB_EXPORT ExpansionMatrix: public Matrix
 {
 public:
    /**@name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, taking the owner_space.
     */
    ExpansionMatrix(
@@ -37,7 +37,7 @@ public:
 
    /** Destructor */
    ~ExpansionMatrix();
-   //@}
+   ///@}
 
    /** Return the vector of indices marking the expanded position.
     *
@@ -62,7 +62,7 @@ public:
 
 protected:
    /**@name Overloaded methods from Matrix base class*/
-   //@{
+   ///@{
    virtual void MultVectorImpl(
       Number        alpha,
       const Vector& x,
@@ -114,7 +114,7 @@ protected:
    {
       PrintImplOffset(jnlst, level, category, name, indent, prefix, 1, 1);
    }
-   //@}
+   ///@}
 
    void PrintImplOffset(
       const Journalist&  jnlst,
@@ -138,7 +138,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    ExpansionMatrix();
 
@@ -151,7 +151,7 @@ private:
    void operator=(
       const ExpansionMatrix&
    );
-   //@}
+   ///@}
 
    const ExpansionMatrixSpace* owner_space_;
 
@@ -162,7 +162,7 @@ class IPOPTLIB_EXPORT ExpansionMatrixSpace: public MatrixSpace
 {
 public:
    /** @name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, given the list of elements of the large vector
     *  (of size NLargeVec) to be filtered into the small vector (of
     *  size NSmallVec).
@@ -185,7 +185,7 @@ public:
       delete[] compressed_pos_;
       delete[] expanded_pos_;
    }
-   //@}
+   ///@}
 
    /** Method for creating a new matrix of this specific type. */
    ExpansionMatrix* MakeNewExpansionMatrix() const

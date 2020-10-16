@@ -27,7 +27,7 @@ class IPOPTLIB_EXPORT SolveStatistics : public ReferencedObject
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default constructor.
     *
     *  It takes in those collecting Ipopt
@@ -44,10 +44,10 @@ public:
    /** Default destructor */
    virtual ~SolveStatistics()
    { }
-   //@}
+   ///@}
 
    /** @name Accessor methods for retrieving different kind of solver statistics information */
-   //@{
+   ///@{
    /** Iteration counts. */
    virtual Index IterationCount() const;
 
@@ -99,7 +99,7 @@ public:
 
    /** Final scaled value of objective function */
    virtual Number FinalScaledObjective() const;
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -111,7 +111,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    SolveStatistics();
 
@@ -124,10 +124,10 @@ private:
    void operator=(
       const SolveStatistics&
    );
-   //@}
+   ///@}
 
    /** @name Fields for storing the statistics data */
-   //@{
+   ///@{
    /** Number of iterations. */
    Index num_iters_;
    /* Total CPU time */
@@ -167,7 +167,7 @@ private:
    Number scaled_kkt_error_;
    /** Final overall unscaled KKT error (max-norm) */
    Number kkt_error_;
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

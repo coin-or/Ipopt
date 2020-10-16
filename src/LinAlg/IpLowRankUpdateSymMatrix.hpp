@@ -32,7 +32,7 @@ class LowRankUpdateSymMatrix: public SymMatrix
 {
 public:
    /**@name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, given the corresponding matrix space. */
    LowRankUpdateSymMatrix(
       const LowRankUpdateSymMatrixSpace* owner_space
@@ -40,7 +40,7 @@ public:
 
    /** Destructor */
    ~LowRankUpdateSymMatrix();
-   //@}
+   ///@}
 
    /** Method for setting the diagonal elements (as a Vector). */
    void SetDiag(
@@ -102,7 +102,7 @@ public:
 
 protected:
    /**@name Methods overloaded from matrix */
-   //@{
+   ///@{
    virtual void MultVectorImpl(
       Number        alpha,
       const Vector& x,
@@ -130,7 +130,7 @@ protected:
       Index              indent,
       const std::string& prefix
    ) const;
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -141,7 +141,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    LowRankUpdateSymMatrix();
 
@@ -154,7 +154,7 @@ private:
    void operator=(
       const LowRankUpdateSymMatrix&
    );
-   //@}
+   ///@}
 
    /** corresponding matrix space */
    SmartPtr<const LowRankUpdateSymMatrixSpace> owner_space_;
@@ -174,7 +174,7 @@ class LowRankUpdateSymMatrixSpace: public SymMatrixSpace
 {
 public:
    /** @name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, given the dimension of the matrix. */
    LowRankUpdateSymMatrixSpace(
       Index                       dim,
@@ -193,7 +193,7 @@ public:
    /** Destructor */
    virtual ~LowRankUpdateSymMatrixSpace()
    { }
-   //@}
+   ///@}
 
    virtual SymMatrix* MakeNewSymMatrix() const
    {
@@ -230,7 +230,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    LowRankUpdateSymMatrixSpace();
 
@@ -243,7 +243,7 @@ private:
    void operator=(
       const LowRankUpdateSymMatrixSpace&
    );
-   //@}
+   ///@}
 
    /** Expansion matrix to lift the low-rank approximation into a
     *  possibly higher-dimensional space.

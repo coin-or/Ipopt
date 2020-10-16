@@ -21,7 +21,7 @@ class QualityFunctionMuOracle: public MuOracle
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor */
    QualityFunctionMuOracle(
       const SmartPtr<PDSystemSolver>& pd_solver
@@ -30,7 +30,7 @@ public:
    /** Destructor */
    virtual ~QualityFunctionMuOracle();
 
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -53,7 +53,7 @@ public:
    /** @name Public enums.
     *  Some of those are also used for the quality function.
     */
-   //@{
+   ///@{
    /** enum for norm type */
    enum NormEnum
    {
@@ -78,7 +78,7 @@ public:
       BT_NONE = 0,
       BT_CUBIC
    };
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -90,7 +90,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    QualityFunctionMuOracle();
 
@@ -103,7 +103,7 @@ private:
    void operator=(
       const QualityFunctionMuOracle&
    );
-   //@}
+   ///@}
 
    /** Pointer to the object that should be used to solve the
     *  primal-dual system.
@@ -171,7 +171,7 @@ private:
    /** Auxiliary functions for scaling the sigma axis in the golden
     *  section procedure
     */
-   //@{
+   ///@{
    Number ScaleSigma(
       Number sigma
    );
@@ -179,7 +179,7 @@ private:
    Number UnscaleSigma(
       Number scaled_sigma
    );
-   //@}
+   ///@}
 
    /** Auxiliary function performing the golden section in the
     *  logarithmic scale
@@ -211,7 +211,7 @@ private:
     */
 
    /** @name Algorithmic parameters */
-   //@{
+   ///@{
    /** Upper bound on centering parameter sigma */
    Number sigma_max_;
 
@@ -245,13 +245,13 @@ private:
     *  search for sigma.
     */
    Index quality_function_max_section_steps_;
-   //@}
+   ///@}
 
    /** @name Temporary work space vectors.
     *
     *  We use those to avoid repeated reallocation in CalculateQualityFunction.
     */
-   //@{
+   ///@{
    SmartPtr<Vector> tmp_step_x_L_;
    SmartPtr<Vector> tmp_step_x_U_;
    SmartPtr<Vector> tmp_step_s_L_;
@@ -269,7 +269,7 @@ private:
    SmartPtr<Vector> tmp_z_U_;
    SmartPtr<Vector> tmp_v_L_;
    SmartPtr<Vector> tmp_v_U_;
-   //@}
+   ///@}
 
    /* Counter for the qualify function evaluations */
    Index count_qf_evals_;
@@ -280,7 +280,7 @@ private:
     * I (AW) don't know if that really makes a difference, but
     * some of those things showed up in gprof.
     */
-   //@{
+   ///@{
    bool initialized_;
    Index n_dual_;
    Index n_pri_;
@@ -310,7 +310,7 @@ private:
    Number curr_grad_lag_s_amax_;
    Number curr_c_amax_;
    Number curr_d_minus_s_amax_;
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

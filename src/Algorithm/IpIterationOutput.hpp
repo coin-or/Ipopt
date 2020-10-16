@@ -21,7 +21,7 @@ class IPOPTLIB_EXPORT IterationOutput: public AlgorithmStrategyObject
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default Constructor */
    IterationOutput()
    { }
@@ -29,7 +29,7 @@ public:
    /** Destructor */
    virtual ~IterationOutput()
    { }
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -60,7 +60,7 @@ private:
     * declare them private and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    IterationOutput(
       const IterationOutput&
@@ -69,7 +69,7 @@ private:
    void operator=(
       const IterationOutput&
    );
-   //@}
+   ///@}
 
 };
 

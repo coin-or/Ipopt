@@ -19,7 +19,7 @@ class BacktrackingLSAcceptor: public AlgorithmStrategyObject
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor. */
    BacktrackingLSAcceptor()
    { }
@@ -27,7 +27,7 @@ public:
    /** Destructor */
    virtual ~BacktrackingLSAcceptor()
    { }
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -183,11 +183,11 @@ public:
    }
 
    /** Methods for OptionsList */
-   //@{
+   ///@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
    );
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -199,7 +199,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    BacktrackingLSAcceptor(
       const BacktrackingLSAcceptor&
@@ -209,7 +209,7 @@ private:
    void operator=(
       const BacktrackingLSAcceptor&
    );
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

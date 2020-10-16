@@ -27,7 +27,7 @@ class IPOPTLIB_EXPORT DenseGenMatrix: public Matrix
 public:
 
    /**@name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, taking the owner_space. */
    DenseGenMatrix(
       const DenseGenMatrixSpace* owner_space
@@ -35,7 +35,7 @@ public:
 
    /** Destructor */
    ~DenseGenMatrix();
-   //@}
+   ///@}
 
    /** Create a new DenseGenMatrix from same MatrixSpace */
    SmartPtr<DenseGenMatrix> MakeNewDenseGenMatrix() const;
@@ -190,7 +190,7 @@ public:
 
 protected:
    /**@name Overloaded methods from Matrix base class*/
-   //@{
+   ///@{
    virtual void MultVectorImpl(
       Number        alpha,
       const Vector& x,
@@ -225,7 +225,7 @@ protected:
       Index              indent,
       const std::string& prefix
    ) const;
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -235,7 +235,7 @@ private:
     * them for us, so we declare them private
     * and do not define them. This ensures that
     * they will not be implicitly created/called. */
-   //@{
+   ///@{
    /** Default Constructor */
    DenseGenMatrix();
 
@@ -248,7 +248,7 @@ private:
    void operator=(
       const DenseGenMatrix&
    );
-   //@}
+   ///@}
 
    const DenseGenMatrixSpace* owner_space_;
 
@@ -279,7 +279,7 @@ class IPOPTLIB_EXPORT DenseGenMatrixSpace: public MatrixSpace
 {
 public:
    /** @name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor for matrix space for DenseGenMatrices.
     *
     * Takes in dimension of the matrices.
@@ -292,7 +292,7 @@ public:
    /** Destructor */
    ~DenseGenMatrixSpace()
    { }
-   //@}
+   ///@}
 
    /** Method for creating a new matrix of this specific type. */
    DenseGenMatrix* MakeNewDenseGenMatrix() const

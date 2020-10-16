@@ -18,9 +18,9 @@ namespace Ipopt
 class DenseVectorSpace;
 
 /** @name Exceptions */
-//@{
+///@{
 DECLARE_STD_EXCEPTION(METADATA_ERROR);
-//@}
+///@}
 
 /** Dense Vector Implementation.
  *
@@ -41,7 +41,7 @@ class IPOPTLIB_EXPORT DenseVector: public Vector
 {
 public:
    /**@name Constructors / Destructors */
-   //@{
+   ///@{
    /** Default Constructor
     */
    DenseVector(
@@ -51,10 +51,10 @@ public:
    /** Destructor
     */
    virtual ~DenseVector();
-   //@}
+   ///@}
 
    /** @name Additional public methods not in Vector base class. */
-   //@{
+   ///@{
    /** Create a new DenseVector from same VectorSpace */
    SmartPtr<DenseVector> MakeNewDenseVector() const;
 
@@ -111,10 +111,10 @@ public:
       DBG_ASSERT(homogeneous_);
       return scalar_;
    }
-   //@}
+   ///@}
 
    /** @name Modifying subranges of the vector. */
-   //@{
+   ///@{
    /** Copy the data in x into the subrange of this vector starting
     *  at position Pos in this vector.
     *
@@ -134,11 +134,11 @@ public:
       Index         Pos,
       const Vector& x
    );
-   //@}
+   ///@}
 
 protected:
    /** @name Overloaded methods from Vector base class */
-   //@{
+   ///@{
    virtual void CopyImpl(
       const Vector& x
    );
@@ -201,10 +201,10 @@ protected:
    virtual Number SumImpl() const;
 
    virtual Number SumLogsImpl() const;
-   //@}
+   ///@}
 
    /** @name Implemented specialized functions */
-   //@{
+   ///@{
    /** Add two vectors (a * v1 + b * v2).
     *
     * Result is stored in this vector.
@@ -230,10 +230,10 @@ protected:
       const Vector& s,
       Number        c
    );
-   //@}
+   ///@}
 
    /** @name Output methods */
-   //@{
+   ///@{
    virtual void PrintImpl(
       const Journalist&  jnlst,
       EJournalLevel      level,
@@ -256,7 +256,7 @@ protected:
       const std::string& prefix,
       Index              offset
    ) const;
-   //@}
+   ///@}
 
    friend class ParVector;
 
@@ -268,7 +268,7 @@ private:
     * them for us, so we declare them private
     * and do not define them. This ensures that
     * they will not be implicitly created/called. */
-   //@{
+   ///@{
    /** Default Constructor */
    DenseVector();
 
@@ -281,7 +281,7 @@ private:
    void operator=(
       const DenseVector&
    );
-   //@}
+   ///@}
 
    /** Copy of the owner_space ptr as a DenseVectorSpace instead of a VectorSpace. */
    const DenseVectorSpace* owner_space_;
@@ -319,18 +319,18 @@ private:
 };
 
 /** @name typedefs for the map variables that define meta data for the DenseVectorSpace */
-//@{
+///@{
 typedef std::map<std::string, std::vector<std::string> > StringMetaDataMapType;
 typedef std::map<std::string, std::vector<Index> > IntegerMetaDataMapType;
 typedef std::map<std::string, std::vector<Number> > NumericMetaDataMapType;
-//@}
+///@}
 
 /** This vectors space is the vector space for DenseVector. */
 class IPOPTLIB_EXPORT DenseVectorSpace: public VectorSpace
 {
 public:
    /** @name Constructors/Destructors. */
-   //@{
+   ///@{
    /** Constructor, requires dimension of all vector for this VectorSpace */
    DenseVectorSpace(
       Index dim
@@ -341,7 +341,7 @@ public:
    /** Destructor */
    ~DenseVectorSpace()
    { }
-   //@}
+   ///@}
 
    /** Method for creating a new vector of this specific type. */
    inline DenseVector* MakeNewDenseVector() const
@@ -359,7 +359,7 @@ public:
     * This could allow to have sophisticated memory management in the
     * VectorSpace.
     */
-   //@{
+   ///@{
    /** Allocate internal storage for the DenseVector */
    inline Number* AllocateInternalStorage() const;
 
@@ -367,11 +367,11 @@ public:
    inline void FreeInternalStorage(
       Number* values
    ) const;
-   //@}
+   ///@}
 
    /**@name Methods for dealing with meta data on the vector
     */
-   //@{
+   ///@{
    /** Check if string meta exists for tag */
    inline
    bool HasStringMetaData(
@@ -431,7 +431,7 @@ public:
 
    /** Get map of meta data of type Number */
    inline const NumericMetaDataMapType& GetNumericMetaData() const;
-   //@}
+   ///@}
 
 private:
    // variables to store vector meta data

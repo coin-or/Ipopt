@@ -20,7 +20,7 @@ class MuOracle: public AlgorithmStrategyObject
 {
 public:
    /**@name Constructors / Destructor */
-   //@{
+   ///@{
    /** Default Constructor */
    MuOracle()
    { }
@@ -28,7 +28,7 @@ public:
    /** Destructor */
    virtual ~MuOracle()
    { }
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -61,7 +61,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    MuOracle(
       const MuOracle&
@@ -70,7 +70,7 @@ private:
    void operator=(
       const MuOracle&
    );
-   //@}
+   ///@}
 
 };
 

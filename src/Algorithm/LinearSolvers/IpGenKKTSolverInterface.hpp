@@ -19,13 +19,13 @@ class GenKKTSolverInterface: public AlgorithmStrategyObject
 {
 public:
    /** @name Constructor/Destructor */
-   //@{
+   ///@{
    GenKKTSolverInterface()
    { }
 
    virtual ~GenKKTSolverInterface()
    { }
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -33,7 +33,7 @@ public:
    ) = 0;
 
    /** @name Methods for requesting solution of the linear system. */
-   //@{
+   ///@{
    /** Solve operation for multiple right hand sides.
     *
     *  The linear system is of the form
@@ -100,10 +100,10 @@ public:
     *  (see ProvidesInertia).
     */
    virtual Index NumberOfNegEVals() const = 0;
-   //@}
+   ///@}
 
    //* @name Options of Linear solver */
-   //@{
+   ///@{
    /** Request to increase quality of solution for next solve.
     *
     *  The calling class asks linear solver to increase quality of
@@ -118,7 +118,7 @@ public:
     * @return true, if linear solver provides inertia
     */
    virtual bool ProvidesInertia() const = 0;
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

@@ -26,7 +26,7 @@ class Journal;
 class FileJournal;
 
 /**@name Journalist Enumerations. */
-//@{
+///@{
 /** Print Level Enum. */
 enum EJournalLevel
 {
@@ -84,7 +84,7 @@ enum EJournalCategory
    J_USER17,           /**< This can be used by the user's application*/
    J_LAST_CATEGORY
 };
-//@}
+///@}
 
 /** Class responsible for all message output.
  *
@@ -117,19 +117,19 @@ class IPOPTLIB_EXPORT Journalist: public ReferencedObject
 {
 public:
    /**@name Constructor / Desructor. */
-   //@{
+   ///@{
    /** Constructor. */
    Journalist();
 
    /** Destructor... */
    virtual ~Journalist();
-   //@}
+   ///@}
 
    /**@name Author Methods.
     * These methods are used by authoring code, or code that wants
     * to report some information.
     */
-   //@{
+   ///@{
    /** Method to print a formatted string */
    virtual void Printf(
       EJournalLevel    level,
@@ -200,7 +200,7 @@ public:
     * program (e.g. written in Fortran)
     */
    virtual void FlushBuffer() const;
-   //@}
+   ///@}
 
    /**@name Reader Methods.
     * These methods are used by the reader. The reader will setup the
@@ -212,7 +212,7 @@ public:
     * for each category. Then use the internal Journal objects to
     * set specific print levels for each category (or keep defaults).
     */
-   //@{
+   ///@{
    /** Add a new journal. */
    virtual bool AddJournal(
       const SmartPtr<Journal> jrnl
@@ -238,7 +238,7 @@ public:
 
    /** Delete all journals currently known by the journalist. */
    virtual void DeleteAllJournals();
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -250,7 +250,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    Journalist(
       const Journalist&
@@ -260,12 +260,12 @@ private:
    void operator=(
       const Journalist&
    );
-   //@}
+   ///@}
 
    //** Private Data Members. */
-   //@{
+   ///@{
    std::vector<SmartPtr<Journal> > journals_;
-   //@}
+   ///@}
 };
 
 /** Journal class (part of the Journalist implementation.). This
@@ -308,7 +308,7 @@ public:
     *  Journalist will output the message regardless of print level
     *  and category. You should use the Journalist to print & flush instead
     */
-   //@{
+   ///@{
    /** Ask if a particular print level/category is accepted by the journal. */
    virtual bool IsAccepted(
       EJournalCategory category,
@@ -341,14 +341,14 @@ public:
    {
       FlushBufferImpl();
    }
-   //@}
+   ///@}
 
 protected:
    /**@name Implementation version of Print methods.
     *
     * Derived classes should overload the Impl methods.
     */
-   //@{
+   ///@{
    /** Print to the designated output location */
    virtual void PrintImpl(
       EJournalCategory category,
@@ -366,7 +366,7 @@ protected:
 
    /** Flush output buffer.*/
    virtual void FlushBufferImpl() = 0;
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -378,7 +378,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    Journal();
 
@@ -391,7 +391,7 @@ private:
    void operator=(
       const Journal&
    );
-   //@}
+   ///@}
 
    /** Name of the output location */
    std::string name_;
@@ -434,7 +434,7 @@ protected:
     *
     * Overloaded from Journal base class.
     */
-   //@{
+   ///@{
    /** Print to the designated output location */
    virtual void PrintImpl(
       EJournalCategory /*category*/,
@@ -452,7 +452,7 @@ protected:
 
    /** Flush output buffer.*/
    virtual void FlushBufferImpl();
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -464,7 +464,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    FileJournal();
 
@@ -477,7 +477,7 @@ private:
    void operator=(
       const FileJournal&
    );
-   //@}
+   ///@}
 
    /** FILE pointer for the output destination */
    FILE* file_;
@@ -510,7 +510,7 @@ protected:
     *
     * Overloaded from Journal base class.
     */
-   //@{
+   ///@{
    /** Print to the designated output location */
    virtual void PrintImpl(
       EJournalCategory /*category*/,
@@ -528,7 +528,7 @@ protected:
 
    /** Flush output buffer.*/
    virtual void FlushBufferImpl();
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -540,7 +540,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    StreamJournal();
 
@@ -553,7 +553,7 @@ private:
    void operator=(
       const StreamJournal&
    );
-   //@}
+   ///@}
 
    /** pointer to output stream for the output destination */
    std::ostream* os_;

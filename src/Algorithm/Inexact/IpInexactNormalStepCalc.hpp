@@ -19,7 +19,7 @@ class InexactNormalStepCalculator: public AlgorithmStrategyObject
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default Constructor */
    InexactNormalStepCalculator()
    { }
@@ -27,7 +27,7 @@ public:
    /** Destructor */
    virtual ~InexactNormalStepCalculator()
    { }
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -73,7 +73,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    InexactNormalStepCalculator(
       const InexactNormalStepCalculator&
@@ -83,7 +83,7 @@ private:
    void operator=(
       const InexactNormalStepCalculator&
    );
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

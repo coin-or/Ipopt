@@ -37,14 +37,14 @@ class IPOPTLIB_EXPORT AugSystemSolver: public AlgorithmStrategyObject
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default constructor. */
    AugSystemSolver()
    { }
    /** Destructor */
    virtual ~AugSystemSolver()
    { }
-   //@}
+   ///@}
 
    /** overloaded from AlgorithmStrategyObject */
    virtual bool InitializeImpl(
@@ -193,7 +193,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    AugSystemSolver(
       const AugSystemSolver&
@@ -203,7 +203,7 @@ private:
    void operator=(
       const AugSystemSolver&
    );
-   //@}
+   ///@}
 
 };
 

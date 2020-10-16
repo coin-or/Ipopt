@@ -58,7 +58,7 @@ class IPOPTLIB_EXPORT IpoptException
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor */
    IpoptException(
       std::string msg,
@@ -85,7 +85,7 @@ public:
    /** Default destructor */
    virtual ~IpoptException()
    { }
-   //@}
+   ///@}
 
    /** Method to report the exception to a journalist */
    void ReportException(
@@ -111,7 +111,7 @@ private:
     * them for us, so we declare them private
     * and do not define them. This ensures that
     * they will not be implicitly created/called. */
-   //@{
+   ///@{
    /** Default Constructor */
    IpoptException();
 
@@ -119,7 +119,7 @@ private:
    void operator=(
       const IpoptException&
    );
-   //@}
+   ///@}
 
    std::string msg_;
    std::string file_name_;

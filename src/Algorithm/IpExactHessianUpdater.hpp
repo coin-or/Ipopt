@@ -19,7 +19,7 @@ class ExactHessianUpdater: public HessianUpdater
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default Constructor */
    ExactHessianUpdater()
    { }
@@ -27,7 +27,7 @@ public:
    /** Destructor */
    virtual ~ExactHessianUpdater()
    { }
-   //@}
+   ///@}
 
    /** overloaded from AlgorithmStrategyObject */
    virtual bool InitializeImpl(
@@ -48,7 +48,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    ExactHessianUpdater(
       const ExactHessianUpdater&
@@ -58,7 +58,7 @@ private:
    void operator=(
       const ExactHessianUpdater&
    );
-   //@}
+   ///@}
 
 };
 

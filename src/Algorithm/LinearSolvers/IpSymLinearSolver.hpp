@@ -51,13 +51,13 @@ class IPOPTLIB_EXPORT SymLinearSolver: public AlgorithmStrategyObject
 {
 public:
    /** @name Constructor/Destructor */
-   //@{
+   ///@{
    SymLinearSolver()
    { }
 
    virtual ~SymLinearSolver()
    { }
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -65,7 +65,7 @@ public:
    ) = 0;
 
    /** @name Methods for requesting solution of the linear system. */
-   //@{
+   ///@{
    /** Solve operation for multiple right hand sides.
     *
     *  Solves the linear system A * Sol = Rhs with multiple right hand sides.
@@ -115,10 +115,10 @@ public:
     *  (see ProvidesInertia).
     */
    virtual Index NumberOfNegEVals() const = 0;
-   //@}
+   ///@}
 
    //* @name Options of Linear solver */
-   //@{
+   ///@{
    /** Request to increase quality of solution for next solve.
     *
     * Ask linear solver to increase quality of solution for the next
@@ -133,7 +133,7 @@ public:
     * @return true, if linear solver provides inertia
     */
    virtual bool ProvidesInertia() const = 0;
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

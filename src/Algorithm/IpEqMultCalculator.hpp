@@ -22,14 +22,14 @@ class EqMultiplierCalculator: public AlgorithmStrategyObject
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default Constructor. */
    EqMultiplierCalculator()
    { }
    /** Destructor */
    virtual ~EqMultiplierCalculator()
    { }
-   //@}
+   ///@}
 
    /** overloaded from AlgorithmStrategyObject */
    virtual bool InitializeImpl(
@@ -58,7 +58,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    EqMultiplierCalculator(
       const EqMultiplierCalculator&
@@ -68,7 +68,7 @@ private:
    void operator=(
       const EqMultiplierCalculator&
    );
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

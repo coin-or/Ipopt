@@ -24,7 +24,7 @@ class CGSearchDirCalculator: public SearchDirectionCalculator
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor */
    CGSearchDirCalculator(
       const SmartPtr<PDSystemSolver>& pd_solver
@@ -32,7 +32,7 @@ public:
 
    /** Destructor */
    virtual ~CGSearchDirCalculator();
-   //@}
+   ///@}
 
    /** overloaded from AlgorithmStrategyObject */
    virtual bool InitializeImpl(
@@ -49,11 +49,11 @@ public:
    virtual bool ComputeSearchDirection();
 
    /** Methods for IpoptType */
-   //@{
+   ///@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
    );
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -65,7 +65,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    CGSearchDirCalculator();
 
@@ -78,7 +78,7 @@ private:
    void operator=(
       const CGSearchDirCalculator&
    );
-   //@}
+   ///@}
 
    /** Method to easily access CGPenalty data */
    CGPenaltyData& CGPenData()
@@ -97,7 +97,7 @@ private:
    }
 
    /** @name Algorithmic parameters */
-   //@{
+   ///@{
    /** safeguard factor for bound multipliers.
     *
     *  If value >= 1, then
@@ -135,12 +135,12 @@ private:
 
    /** Counter for how many times the pen parameter is updated non-monotonically */
    Index nonmonotone_pen_update_counter_;
-   //@}
+   ///@}
 
    /** @name Strategy objects */
-   //@{
+   ///@{
    SmartPtr<PDSystemSolver> pd_solver_;
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

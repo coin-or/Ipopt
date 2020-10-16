@@ -18,7 +18,7 @@ class IPOPTLIB_EXPORT ZeroSymMatrix: public SymMatrix
 {
 public:
    /**@name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, taking the corresponding matrix space. */
    ZeroSymMatrix(
       const SymMatrixSpace* owner_space
@@ -26,11 +26,11 @@ public:
 
    /** Destructor */
    ~ZeroSymMatrix();
-   //@}
+   ///@}
 
 protected:
    /**@name Methods overloaded from matrix */
-   //@{
+   ///@{
    virtual void MultVectorImpl(
       Number        alpha,
       const Vector& x,
@@ -65,7 +65,7 @@ protected:
       Index              indent,
       const std::string& prefix
    ) const;
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -76,7 +76,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    ZeroSymMatrix();
 
@@ -89,7 +89,7 @@ private:
    void operator=(
       const ZeroSymMatrix&
    );
-   //@}
+   ///@}
 };
 
 /** Class for matrix space for ZeroSymMatrix. */
@@ -97,7 +97,7 @@ class IPOPTLIB_EXPORT ZeroSymMatrixSpace: public SymMatrixSpace
 {
 public:
    /** @name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, given the number of row and columns. */
    ZeroSymMatrixSpace(
       Index dim
@@ -108,7 +108,7 @@ public:
    /** Destructor */
    virtual ~ZeroSymMatrixSpace()
    { }
-   //@}
+   ///@}
 
    virtual Matrix* MakeNew() const
    {
@@ -135,7 +135,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    ZeroSymMatrixSpace();
 
@@ -148,7 +148,7 @@ private:
    void operator=(
       const ZeroSymMatrixSpace&
    );
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

@@ -74,7 +74,7 @@ public:
 #endif
 
    /** @name Constructors and Destructors. */
-   //@{
+   ///@{
    /** Constructor */
    CachedResults(
       Int max_cache_size /**< maximal number of results that should be cached, negative for infinity */
@@ -82,10 +82,10 @@ public:
 
    /** Destructor */
    virtual ~CachedResults();
-   //@}
+   ///@}
 
    /** @name Generic methods for adding and retrieving cached results. */
-   //@{
+   ///@{
    /** Generic method for adding a result to the cache, given a
     *  std::vector of TaggesObjects and a std::vector of Numbers.
     */
@@ -116,12 +116,12 @@ public:
       T&                                      retResult,
       const std::vector<const TaggedObject*>& dependents
    ) const;
-   //@}
+   ///@}
 
    /** @name Pointer-based methods for adding and retrieving cached
     *  results, providing dependencies explicitly.
     */
-   //@{
+   ///@{
    /** Method for adding a result to the cache, proving one
     *  dependency as a TaggedObject explicitly.
     */
@@ -177,7 +177,7 @@ public:
    );
 
    /** @name Pointer-free version of the Add and Get methods */
-   //@{
+   ///@{
    bool GetCachedResult1Dep(
       T&                  retResult,
       const TaggedObject& dependent1
@@ -230,7 +230,7 @@ public:
    {
       AddCachedResult3Dep(result, &dependent1, &dependent2, &dependent3);
    }
-   //@}
+   ///@}
 
    /** Invalidates the result for given dependencies.
     *
@@ -261,7 +261,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    CachedResults();
 
@@ -274,7 +274,7 @@ private:
    void operator=(
       const CachedResults&
    );
-   //@}
+   ///@}
 
    /** maximum number of cached results */
    Int max_cache_size_;
@@ -307,7 +307,7 @@ public:
 #endif
 
    /** @name Constructor, Destructors */
-   //@{
+   ///@{
    /** Constructor, given all information about the result. */
    DependentResult(
       const T&                                result,
@@ -317,10 +317,10 @@ public:
 
    /** Destructor. */
    ~DependentResult();
-   //@}
+   ///@}
 
    /** @name Accessor method. */
-   //@{
+   ///@{
    /** Indicates, whether the DependentResult is no longer valid. */
    bool IsStale() const;
 
@@ -329,7 +329,7 @@ public:
 
    /** Returns the cached result. */
    const T& GetResult() const;
-   //@}
+   ///@}
 
    /** This method returns true if the dependencies provided to this
     *  function are identical to the ones stored with the
@@ -369,7 +369,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    DependentResult();
 
@@ -382,7 +382,7 @@ private:
    void operator=(
       const DependentResult&
    );
-   //@}
+   ///@}
 
    /** Flag indicating, if the cached result is still valid.
     *

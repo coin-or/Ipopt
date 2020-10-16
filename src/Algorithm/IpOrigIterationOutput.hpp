@@ -18,13 +18,13 @@ class OrigIterationOutput: public IterationOutput
 {
 public:
    /**@name Constructors / Destructor */
-   //@{
+   ///@{
    /** Default Constructor */
    OrigIterationOutput();
 
    /** Destructor */
    virtual ~OrigIterationOutput();
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -39,11 +39,11 @@ public:
    virtual void WriteOutput();
 
    /** Methods for OptionsList */
-   //@{
+   ///@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
    );
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods (Hidden to avoid
@@ -54,7 +54,7 @@ private:
     * declare them private and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    OrigIterationOutput(
       const OrigIterationOutput&
@@ -64,7 +64,7 @@ private:
    void operator=(
       const OrigIterationOutput&
    );
-   //@}
+   ///@}
 
    /** Flag indicating weather info string should be printed at end
     *  of iteration summary line.

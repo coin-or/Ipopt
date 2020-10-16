@@ -56,19 +56,19 @@ public:
    };
 
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    TNLP()
    { }
 
    /** Default destructor */
    virtual ~TNLP()
    { }
-   //@}
+   ///@}
 
    DECLARE_STD_EXCEPTION(INVALID_TNLP);
 
    /**@name methods to gather information about the NLP */
-   //@{
+   ///@{
 
    enum IndexStyleEnum
    {
@@ -497,10 +497,10 @@ public:
       (void) values;
       return false;
    }
-   //@}
+   ///@}
 
    /** @name Solution Methods */
-   //@{
+   ///@{
    /** This method is called when the algorithm has finished (successfully or not) so the TNLP can digest the outcome, e.g., store/write the solution, if any.
     *
     *  @param status @parblock (in) gives the status of the algorithm
@@ -687,7 +687,7 @@ public:
       (void) ip_cq;
       return true;
    }
-   //@}
+   ///@}
 
    /** @name Methods for quasi-Newton approximation.
     *
@@ -741,7 +741,7 @@ public:
       (void) pos_nonlin_vars;
       return false;
    }
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -752,7 +752,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    TNLP(
       const TNLP&
@@ -762,7 +762,7 @@ private:
    void operator=(
       const TNLP&
    );
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

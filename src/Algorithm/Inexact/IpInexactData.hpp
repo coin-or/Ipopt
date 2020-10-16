@@ -19,16 +19,16 @@ class InexactData: public IpoptAdditionalData
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor */
    InexactData();
 
    /** Destructor */
    ~InexactData();
-   //@}
+   ///@}
 
    /** @name Methods overloaded from IpoptAdditionalData */
-   //@{
+   ///@{
    /** This method must be called to initialize the global
     *  algorithmic parameters.
     *
@@ -50,10 +50,10 @@ public:
     *  release memory, and to reset any flags for a new iteration.
     */
    void AcceptTrialPoint();
-   //@}
+   ///@}
 
    /** @name Normal step set and accessor methods */
-   //@{
+   ///@{
    void set_normal_x(
       SmartPtr<Vector>& normal_x
    )
@@ -79,10 +79,10 @@ public:
    {
       return normal_s_;
    }
-   //@}
+   ///@}
 
    /** @name Tangential step set and accessor methods */
-   //@{
+   ///@{
    void set_tangential_x(
       SmartPtr<const Vector>& tangential_x
    )
@@ -108,14 +108,14 @@ public:
    {
       return tangential_s_;
    }
-   //@}
+   ///@}
 
    /** @name Flag indicating if most recent step has been fully accepted.
     *
     *  This is used to determine if the trust region
     *  radius should be increased.
     */
-   //@{
+   ///@{
    void set_full_step_accepted(
       bool full_step_accepted
    )
@@ -127,10 +127,10 @@ public:
    {
       return full_step_accepted_;
    }
-   //@}
+   ///@}
 
    /** @name Current value of penalty parameter */
-   //@{
+   ///@{
    void set_curr_nu(
       Number nu
    )
@@ -142,10 +142,10 @@ public:
    {
       return curr_nu_;
    }
-   //@}
+   ///@}
 
    /** @name Current normal step computation flag */
-   //@{
+   ///@{
    void set_compute_normal(
       bool compute_normal
    )
@@ -157,10 +157,10 @@ public:
    {
       return compute_normal_;
    }
-   //@}
+   ///@}
 
    /** @name Next iteration normal step computation flag */
-   //@{
+   ///@{
    void set_next_compute_normal(
       bool next_compute_normal
    )
@@ -172,7 +172,7 @@ public:
    {
       return next_compute_normal_;
    }
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -184,7 +184,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    InexactData(
       const InexactData&
@@ -194,19 +194,19 @@ private:
    void operator=(
       const InexactData&
    );
-   //@}
+   ///@}
 
    /** @name Normal step */
-   //@{
+   ///@{
    SmartPtr<const Vector> normal_x_;
    SmartPtr<const Vector> normal_s_;
-   //@}
+   ///@}
 
    /** @name Tangential step */
-   //@{
+   ///@{
    SmartPtr<const Vector> tangential_x_;
    SmartPtr<const Vector> tangential_s_;
-   //@}
+   ///@}
 
    /** Flag indicating if most recent step has been fully accepted */
    bool full_step_accepted_;

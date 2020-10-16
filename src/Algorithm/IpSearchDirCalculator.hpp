@@ -19,7 +19,7 @@ class IPOPTLIB_EXPORT SearchDirectionCalculator: public AlgorithmStrategyObject
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor */
    SearchDirectionCalculator()
    { }
@@ -27,7 +27,7 @@ public:
    /** Destructor */
    virtual ~SearchDirectionCalculator()
    { }
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -50,7 +50,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    //    SearchDirectionCalculator();
 
@@ -63,7 +63,7 @@ private:
    void operator=(
       const SearchDirectionCalculator&
    );
-   //@}
+   ///@}
 
 };
 

@@ -19,7 +19,7 @@ class UserScaling: public StandardScalingBase
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    UserScaling(
       const SmartPtr<const NLP>& nlp)
       : StandardScalingBase(),
@@ -29,7 +29,7 @@ public:
    /** Destructor */
    virtual ~UserScaling()
    { }
-   //@}
+   ///@}
 
 protected:
    virtual void DetermineScalingParametersImpl(
@@ -60,7 +60,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    UserScaling(
       const UserScaling&
@@ -70,7 +70,7 @@ private:
    void operator=(
       const UserScaling&
    );
-   //@}
+   ///@}
 
    /** pointer to the NLP to get scaling parameters */
    SmartPtr<const NLP> nlp_;

@@ -24,7 +24,7 @@ class NLPBoundsRemover: public NLP
 {
 public:
    /**@name Constructors / Destructor */
-   //@{
+   ///@{
    /** The constructor is given the NLP of which the bounds are to be
     *  replaced by inequality constraints.
     */
@@ -36,10 +36,10 @@ public:
    /** Destructor */
    virtual ~NLPBoundsRemover()
    { }
-   //@}
+   ///@}
 
    /** @name NLP Initialization.*/
-   //@{
+   ///@{
    /** Overload if you want the chance to process options or parameters that
     *  may be specific to the NLP
     */
@@ -112,10 +112,10 @@ public:
    {
       return nlp_->GetWarmStartIterate(warm_start_iterate);
    }
-   //@}
+   ///@}
 
    /** @name NLP evaluation routines. */
-   //@{
+   ///@{
    virtual bool Eval_f(
       const Vector& x,
       Number&       f
@@ -165,10 +165,10 @@ public:
       const Vector& yd,
       SymMatrix&    h
    );
-   //@}
+   ///@}
 
    /** @name NLP solution routines. */
-   //@{
+   ///@{
    virtual void FinalizeSolution(
       SolverReturn               status,
       const Vector&              x,
@@ -202,10 +202,10 @@ public:
       return nlp_->IntermediateCallBack(mode, iter, obj_value, inf_pr, inf_du, mu, d_norm, regularization_size,
                                         alpha_du, alpha_pr, ls_trials, ip_data, ip_cq);
    }
-   //@}
+   ///@}
 
    /** Routines to get the scaling parameters. */
-   //@{
+   ///@{
    virtual void GetScalingParameters(
       const SmartPtr<const VectorSpace> x_space,
       const SmartPtr<const VectorSpace> c_space,
@@ -215,7 +215,7 @@ public:
       SmartPtr<Vector>&                 c_scaling,
       SmartPtr<Vector>&                 d_scaling
    ) const;
-   //@}
+   ///@}
 
    virtual void GetQuasiNewtonApproximationSpaces(
       SmartPtr<VectorSpace>& approx_space,
@@ -241,7 +241,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    NLPBoundsRemover();
    /** Copy Constructor */
@@ -253,7 +253,7 @@ private:
    void operator=(
       const NLPBoundsRemover&
    );
-   //@}
+   ///@}
 
    /** Pointer to the original NLP */
    SmartPtr<NLP> nlp_;

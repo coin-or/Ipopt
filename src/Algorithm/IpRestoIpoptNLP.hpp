@@ -32,7 +32,7 @@ class RestoIpoptNLP: public IpoptNLP
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    RestoIpoptNLP(
       IpoptNLP&                  orig_ip_nlp,
       IpoptData&                 orig_ip_data,
@@ -41,7 +41,7 @@ public:
 
    /** Destructor */
    ~RestoIpoptNLP();
-   //@}
+   ///@}
 
    virtual bool Initialize(
       const Journalist&  jnlst,
@@ -88,7 +88,7 @@ public:
    { }
 
    /** Accessor methods for model data */
-   //@{
+   ///@{
    /** Method for telling IpoptCalculatedQuantities that the
     *  restoration phase objective function depends on the barrier
     *  parameter
@@ -222,7 +222,7 @@ public:
    {
       return GetRawPtr(x_space_);
    }
-   //@}
+   ///@}
 
    /** Accessor method for vector/matrix spaces pointers */
    virtual void GetSpaces(
@@ -272,7 +272,7 @@ public:
    /** @name Accessor method for the information of the original NLP.
     *
     *  These methods are not overloaded from IpoptNLP. */
-   //@{
+   ///@{
    IpoptNLP& OrigIpNLP() const
    {
       return *orig_ip_nlp_;
@@ -287,7 +287,7 @@ public:
    {
       return *orig_ip_cq_;
    }
-   //@}
+   ///@}
 
    /** Accessor Method for obtaining the Rho penalization factor for
     *  the ell_1 norm.
@@ -298,7 +298,7 @@ public:
    }
 
    /** @name Counters for the number of function evaluations. */
-   //@{
+   ///@{
    virtual Index f_evals() const
    {
       return f_evals_;
@@ -327,7 +327,7 @@ public:
    {
       return h_evals_;
    }
-   //@}
+   ///@}
 
    /** Method to calculate eta, the factor for the regularization term */
    Number Eta(
@@ -348,7 +348,7 @@ public:
 
 private:
    /** @name Pointers for the original NLP information. */
-   //@{
+   ///@{
    /** Pointer to the original IpoptNLP */
    SmartPtr<IpoptNLP> orig_ip_nlp_;
 
@@ -357,10 +357,10 @@ private:
 
    /** Pointer to the original IpoptCalculatedQuantities */
    SmartPtr<IpoptCalculatedQuantities> orig_ip_cq_;
-   //@}
+   ///@}
 
    /** Necessary Vector/Matrix spaces */
-   //@{
+   ///@{
    SmartPtr<CompoundVectorSpace> x_space_;
 
    SmartPtr<CompoundVectorSpace> c_space_;
@@ -388,10 +388,10 @@ private:
    SmartPtr<CompoundMatrixSpace> jac_d_space_;
 
    SmartPtr<CompoundSymMatrixSpace> h_space_;
-   //@}
+   ///@}
 
    /**@name Storage for Model Quantities */
-   //@{
+   ///@{
    /** Lower bounds on x */
    SmartPtr<CompoundVector> x_L_;
 
@@ -415,10 +415,10 @@ private:
 
    /** Permutation matrix (d_U_ -> d */
    SmartPtr<CompoundMatrix> Pd_U_;
-   //@}
+   ///@}
 
    /** @name Values particular to the restoration phase problem statement */
-   //@{
+   ///@{
    /** Penalty parameter for the \$l_1\$ norm
     * @todo make this parameter?
     */
@@ -438,7 +438,7 @@ private:
 
    /** \$x\$ part of the reference point in the regularization term */
    SmartPtr<Vector> x_ref_;
-   //@}
+   ///@}
 
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
@@ -448,7 +448,7 @@ private:
     * them for us, so we declare them private
     * and do not define them. This ensures that
     * they will not be implicitly created/called. */
-   //@{
+   ///@{
    /** Default Constructor */
    RestoIpoptNLP();
 
@@ -461,10 +461,10 @@ private:
    void operator=(
       const RestoIpoptNLP&
    );
-   //@}
+   ///@}
 
    /** @name Algorithmic parameter */
-   //@{
+   ///@{
    /** Flag indicating if evaluation of the objective should be
     *  performed for every restoration phase objective function
     *  evaluation.
@@ -473,13 +473,13 @@ private:
 
    /** Flag indicating how Hessian information is obtained */
    HessianApproximationType hessian_approximation_;
-   //@}
+   ///@}
 
    /** Flag indicating if initialization method has been called */
    bool initialized_;
 
    /** @name Counters for the function evaluations */
-   //@{
+   ///@{
    Index f_evals_;
    Index grad_f_evals_;
    Index c_evals_;
@@ -487,7 +487,7 @@ private:
    Index d_evals_;
    Index jac_d_evals_;
    Index h_evals_;
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

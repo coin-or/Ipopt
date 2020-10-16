@@ -31,7 +31,7 @@ class IPOPTLIB_EXPORT CompoundVector: public Vector
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor, given the corresponding CompoundVectorSpace.
     *
     *  Before this constructor can be called, all components of the
@@ -50,7 +50,7 @@ public:
 
    /** Default destructor */
    virtual ~CompoundVector();
-   //@}
+   ///@}
 
    /** Method for setting the pointer for a component that is a const Vector */
    void SetComp(
@@ -118,7 +118,7 @@ public:
 
 protected:
    /** @name Overloaded methods from Vector base class */
-   //@{
+   ///@{
    virtual void CopyImpl(
       const Vector& x
    );
@@ -181,10 +181,10 @@ protected:
    virtual Number SumImpl() const;
 
    virtual Number SumLogsImpl() const;
-   //@}
+   ///@}
 
    /** @name Implemented specialized functions */
-   //@{
+   ///@{
    void AddTwoVectorsImpl(
       Number        a,
       const Vector& v1,
@@ -204,13 +204,13 @@ protected:
       const Vector& s,
       Number        c
    );
-   //@}
+   ///@}
 
    /** Method for determining if all stored numbers are valid (i.e., no Inf or Nan). */
    virtual bool HasValidNumbersImpl() const;
 
    /** @name Output methods */
-   //@{
+   ///@{
    virtual void PrintImpl(
       const Journalist&  jnlst,
       EJournalLevel      level,
@@ -219,7 +219,7 @@ protected:
       Index              indent,
       const std::string& prefix
    ) const;
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -230,7 +230,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    CompoundVector();
 
@@ -243,7 +243,7 @@ private:
    void operator=(
       const CompoundVector&
    );
-   //@}
+   ///@}
 
    /** Components of the compound vector.
     *
@@ -278,7 +278,7 @@ class IPOPTLIB_EXPORT CompoundVectorSpace: public VectorSpace
 {
 public:
    /** @name Constructors/Destructors. */
-   //@{
+   ///@{
    /** Constructor, has to be given the number of components and the
     *  total dimension of all components combined.
     */
@@ -290,7 +290,7 @@ public:
    /** Destructor */
    ~CompoundVectorSpace()
    { }
-   //@}
+   ///@}
 
    /** Method for setting the individual component VectorSpaces */
    virtual void SetCompSpace(
@@ -330,7 +330,7 @@ private:
     * them for us, so we declare them private
     * and do not define them. This ensures that
     * they will not be implicitly created/called. */
-   //@{
+   ///@{
    /** Default constructor */
    CompoundVectorSpace();
 
@@ -343,7 +343,7 @@ private:
    CompoundVectorSpace& operator=(
       const CompoundVectorSpace&
    );
-   //@}
+   ///@}
 
    /** Number of components */
    const Index ncomp_spaces_;

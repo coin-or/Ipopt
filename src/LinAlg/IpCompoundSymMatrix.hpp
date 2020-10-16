@@ -25,7 +25,7 @@ class IPOPTLIB_EXPORT CompoundSymMatrix: public SymMatrix
 public:
 
    /**@name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, taking only the number for block components into the
     *  row and column direction.
     *
@@ -38,7 +38,7 @@ public:
 
    /** Destructor */
    ~CompoundSymMatrix();
-   //@}
+   ///@}
 
    /** Method for setting an individual component at position (irow, icol)
     *  in the compound matrix.
@@ -102,7 +102,7 @@ public:
 
 protected:
    /**@name Methods overloaded from matrix */
-   //@{
+   ///@{
    virtual void MultVectorImpl(
       Number        alpha,
       const Vector& x,
@@ -125,7 +125,7 @@ protected:
       Index              indent,
       const std::string& prefix
    ) const;
-   //@}
+   ///@}
 
 private:
    /**@name Default Compiler Generated Methods
@@ -135,7 +135,7 @@ private:
     * them for us, so we declare them private
     * and do not define them. This ensures that
     * they will not be implicitly created/called. */
-   //@{
+   ///@{
    /** Default Constructor */
    CompoundSymMatrix();
 
@@ -148,7 +148,7 @@ private:
    void operator=(
       const CompoundSymMatrix&
    );
-   //@}
+   ///@}
 
    /** Vector of vectors containing the components */
    std::vector<std::vector<SmartPtr<Matrix> > > comps_;
@@ -215,7 +215,7 @@ class IPOPTLIB_EXPORT CompoundSymMatrixSpace: public SymMatrixSpace
 {
 public:
    /** @name Constructors / Destructors */
-   //@{
+   ///@{
    /** Constructor, given the number of blocks (same for rows and
     *  columns), as well as the total dimension of the matrix.
     */
@@ -227,10 +227,10 @@ public:
    /** Destructor */
    ~CompoundSymMatrixSpace()
    { }
-   //@}
+   ///@}
 
    /** @name Methods for setting information about the components. */
-   //@{
+   ///@{
    /** Set the dimension dim for block row (or column) irow_jcol */
    void SetBlockDim(
       Index irow_jcol,
@@ -256,7 +256,7 @@ public:
       const MatrixSpace& mat_space,
       bool               auto_allocate = false
    );
-   //@}
+   ///@}
 
    /** Obtain the component MatrixSpace in block row irow and block
     *  column jcol.
@@ -272,12 +272,12 @@ public:
    }
 
    /** @name Accessor methods */
-   //@{
+   ///@{
    Index NComps_Dim() const
    {
       return ncomp_spaces_;
    }
-   //@}
+   ///@}
 
    /** Method for creating a new matrix of this specific type. */
    CompoundSymMatrix* MakeNewCompoundSymMatrix() const;
@@ -295,7 +295,7 @@ private:
     * them for us, so we declare them private
     * and do not define them. This ensures that
     * they will not be implicitly created/called. */
-   //@{
+   ///@{
    /** Default constructor */
    CompoundSymMatrixSpace();
 
@@ -308,7 +308,7 @@ private:
    CompoundSymMatrixSpace& operator=(
       const CompoundSymMatrixSpace&
    );
-   //@}
+   ///@}
 
    /** Number of components per row and column */
    Index ncomp_spaces_;

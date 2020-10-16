@@ -21,13 +21,13 @@ class WsmpSolverInterface: public SparseSymLinearSolverInterface
 {
 public:
    /** @name Constructor/Destructor */
-   //@{
+   ///@{
    /** Constructor */
    WsmpSolverInterface();
 
    /** Destructor */
    virtual ~WsmpSolverInterface();
-   //@}
+   ///@}
 
    bool InitializeImpl(
       const OptionsList& options,
@@ -35,7 +35,7 @@ public:
    );
 
    /** @name Methods for requesting solution of the linear system. */
-   //@{
+   ///@{
    virtual ESymSolverStatus InitializeStructure(
       Index        dim,
       Index        nonzeros,
@@ -56,10 +56,10 @@ public:
    );
 
    virtual Index NumberOfNegEVals() const;
-   //@}
+   ///@}
 
    //* @name Options of Linear solver */
-   //@{
+   ///@{
    virtual bool IncreaseQuality();
 
    virtual bool ProvidesInertia() const
@@ -71,13 +71,13 @@ public:
    {
       return CSR_Format_1_Offset;
    }
-   //@}
+   ///@}
 
-   //@{
+   ///@{
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
    );
-   //@}
+   ///@}
 
    virtual bool ProvidesDegeneracyDetection() const;
 
@@ -95,7 +95,7 @@ private:
     * them for us, so we declare them private
     * and do not define them. This ensures that
     * they will not be implicitly created/called. */
-   //@{
+   ///@{
    /** Copy Constructor */
    WsmpSolverInterface(
       const WsmpSolverInterface&
@@ -105,10 +105,10 @@ private:
    void operator=(
       const WsmpSolverInterface&
    );
-   //@}
+   ///@}
 
    /** @name Information about the matrix */
-   //@{
+   ///@{
    /** Number of rows and columns of the matrix */
    Index dim_;
 
@@ -120,19 +120,19 @@ private:
 
 #ifdef PARDISO_MATCHING_PREPROCESS
    /**  @name Arrays for storing the values of a second matrix that has been already reordered. */
-   //@{
+   ///@{
    ipfint* ia2;
    ipfint* ja2;
    double* a2_;
    ipfint* perm2;
    double* scale2;
-   //@}
+   ///@}
 #endif
 
-   //@}
+   ///@}
 
    /** @name Solver specific options */
-   //@{
+   ///@{
    /** Option that controls the matching strategy. */
    Index wsmp_num_threads_;
    /** Pivot tolerance */
@@ -152,19 +152,19 @@ private:
    bool skip_inertia_check_;
    /** Flag indicating whether the positive definite version of WSMP should be used */
    bool wsmp_no_pivoting_;
-   //@}
+   ///@}
 
    /** Counter for matrix file numbers */
    Index matrix_file_number_;
 
    /** @name Information about most recent factorization/solve */
-   //@{
+   ///@{
    /** Number of negative eigenvalues */
    Index negevals_;
-   //@}
+   ///@}
 
    /** @name Initialization flags */
-   //@{
+   ///@{
    /** Flag indicating if internal data is initialized.
     *
     *  For initialization, this object needs to have seen a matrix.
@@ -185,10 +185,10 @@ private:
     *  the last recomputation of the ordering.
     */
    Index factorizations_since_recomputed_ordering_;
-   //@}
+   ///@}
 
    /** @name Solver specific information */
-   //@{
+   ///@{
    /** Integer parameter array for WSSMP. */
    ipfint* IPARM_;
    /** Double precision parameter array for WSSMP. */
@@ -199,10 +199,10 @@ private:
    ipfint* INVP_;
    /** WSSMP's internal MRP array */
    ipfint* MRP_;
-   //@}
+   ///@}
 
    /** @name Internal functions */
-   //@{
+   ///@{
    /** Call Wsmp to do the analysis phase. */
    ESymSolverStatus SymbolicFactorization(
       const Index* ia,
@@ -231,7 +231,7 @@ private:
       Index        nrhs,
       double*      rhs_vals
    );
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt

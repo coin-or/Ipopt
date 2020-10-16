@@ -20,7 +20,7 @@ class InexactNewtonNormalStep: public AlgorithmStrategyObject
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor */
    InexactNewtonNormalStep(
       SmartPtr<AugSystemSolver> aug_solver
@@ -28,7 +28,7 @@ public:
 
    /** Destructor */
    virtual ~InexactNewtonNormalStep();
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -79,7 +79,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    InexactNewtonNormalStep();
 
@@ -91,7 +91,7 @@ private:
    void operator=(
       const InexactNewtonNormalStep&
    );
-   //@}
+   ///@}
 
    /** Object to be used to solve the augmented system */
    SmartPtr<AugSystemSolver> aug_solver_;

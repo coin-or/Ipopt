@@ -21,7 +21,7 @@ class IPOPTLIB_EXPORT SymMatrix: public Matrix
 {
 public:
    /** @name Constructor/Destructor */
-   //@{
+   ///@{
    /** Constructor, taking the owner_space.
     */
    inline SymMatrix(
@@ -31,19 +31,19 @@ public:
    /** Destructor */
    virtual ~SymMatrix()
    { }
-   //@}
+   ///@}
 
    /** @name Information about the size of the matrix */
-   //@{
+   ///@{
    /** Dimension of the matrix (number of rows and columns) */
    inline Index Dim() const;
-   //@}
+   ///@}
 
    inline SmartPtr<const SymMatrixSpace> OwnerSymMatrixSpace() const;
 
 protected:
    /** @name Overloaded methods from Matrix. */
-   //@{
+   ///@{
    /** Implementation of TransMultVectorImpl, which calls MultVectorImpl.
     *
     *  Since the matrix is symmetric, it is only necessary to implement the
@@ -72,7 +72,7 @@ protected:
    {
       ComputeRowAMaxImpl(cols_norms, init);
    }
-   //@}
+   ///@}
 
 private:
    /** Copy of the owner space ptr as a SymMatrixSpace instead
@@ -86,7 +86,7 @@ class IPOPTLIB_EXPORT SymMatrixSpace: public MatrixSpace
 {
 public:
    /** @name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor, given the dimension (identical to the number of
     *  rows and columns).
     */
@@ -99,7 +99,7 @@ public:
    /** Destructor */
    virtual ~SymMatrixSpace()
    { }
-   //@}
+   ///@}
 
    /** Pure virtual method for creating a new matrix of this specific type. */
    virtual SymMatrix* MakeNewSymMatrix() const = 0;
@@ -127,7 +127,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default constructor */
    SymMatrixSpace();
 
@@ -140,7 +140,7 @@ private:
    SymMatrixSpace& operator=(
       const SymMatrixSpace&
    );
-   //@}
+   ///@}
 
 };
 

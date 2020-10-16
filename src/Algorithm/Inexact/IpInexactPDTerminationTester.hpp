@@ -19,14 +19,14 @@ class InexactPDTerminationTester: public IterativeSolverTerminationTester
 {
 public:
    /** @name Constructor/Destructor */
-   //@{
+   ///@{
    /** Default constructor
     */
    InexactPDTerminationTester();
 
    /** Destructor */
    virtual ~InexactPDTerminationTester();
-   //@}
+   ///@}
 
    virtual bool InitializeImpl(
       const OptionsList& options,
@@ -83,15 +83,15 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Overloaded Assignment Operator */
    InexactPDTerminationTester& operator=(
       const InexactPDTerminationTester&
    );
-   //@}
+   ///@}
 
    /** @name Algorithmic options */
-   //@{
+   ///@{
    /** Psi factor in the tangential component condition */
    Number tcc_psi_;
    /** theta factor in the tangential component condition */
@@ -121,12 +121,12 @@ private:
    Index inexact_desired_pd_residual_iter_;
    /** Is set to true if the linear system is scaled via slacks. */
    bool requires_scaling_;
-   //@}
+   ///@}
 
    /** @name Quantities that are identical for all tests and can be
     *  precomputed.
     */
-   //@{
+   ///@{
    SmartPtr<const Vector> curr_Av_c_;
    SmartPtr<const Vector> curr_Av_d_;
    Number c_norm_;
@@ -145,13 +145,13 @@ private:
    SmartPtr<const Vector> curr_Wv_x_;
    SmartPtr<const Vector> curr_Wv_s_; // in original space
    bool try_tt2_;
-   //@}
+   ///@}
 
    /** @name Quantities from previous iteration required in the tests */
-   //@{
+   ///@{
    Number last_Av_norm_;
    Number last_tt1_norm_;
-   //@}
+   ///@}
 
    /** Last iterative solver iteration counter */
    Index last_iter_;

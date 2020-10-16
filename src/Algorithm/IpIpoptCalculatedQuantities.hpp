@@ -42,7 +42,7 @@ class IPOPTLIB_EXPORT IpoptAdditionalCq: public ReferencedObject
 {
 public:
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Default Constructor */
    IpoptAdditionalCq()
    { }
@@ -50,7 +50,7 @@ public:
    /** Destructor */
    virtual ~IpoptAdditionalCq()
    { }
-   //@}
+   ///@}
 
    /** This method is called to initialize the global algorithmic
     *  parameters.
@@ -73,7 +73,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Copy Constructor */
    IpoptAdditionalCq(
       const IpoptAdditionalCq&);
@@ -81,7 +81,7 @@ private:
    /** Default Assignment Operator */
    void operator=(
       const IpoptAdditionalCq&);
-   //@}
+   ///@}
 };
 
 /** Class for all IPOPT specific calculated quantities. */
@@ -90,7 +90,7 @@ class IPOPTLIB_EXPORT IpoptCalculatedQuantities: public ReferencedObject
 public:
 
    /**@name Constructors/Destructors */
-   //@{
+   ///@{
    /** Constructor */
    IpoptCalculatedQuantities(
       const SmartPtr<IpoptNLP>&  ip_nlp,
@@ -98,7 +98,7 @@ public:
    );
    /** Destructor */
    virtual ~IpoptCalculatedQuantities();
-   //@}
+   ///@}
 
    /** Method for setting pointer for additional calculated
     *  quantities.
@@ -133,7 +133,7 @@ public:
    );
 
    /** @name Slacks */
-   //@{
+   ///@{
    /** Slacks for x_L (at current iterate) */
    SmartPtr<const Vector> curr_slack_x_L();
    /** Slacks for x_U (at current iterate) */
@@ -154,10 +154,10 @@ public:
    Index AdjustedTrialSlacks();
    /** Reset the flags for "fudged" slacks */
    void ResetAdjustedTrialSlacks();
-   //@}
+   ///@}
 
    /** @name Objective function */
-   //@{
+   ///@{
    /** Value of objective function (at current point) */
    virtual Number curr_f();
    /** Unscaled value of the objective function (at the current point) */
@@ -170,10 +170,10 @@ public:
    SmartPtr<const Vector> curr_grad_f();
    /** Gradient of objective function (at trial point) */
    SmartPtr<const Vector> trial_grad_f();
-   //@}
+   ///@}
 
    /** @name Barrier Objective Function */
-   //@{
+   ///@{
    /** Barrier Objective Function Value
     * (at current iterate with current mu)
     */
@@ -196,10 +196,10 @@ public:
    SmartPtr<const Vector> grad_kappa_times_damping_x();
    /** Gradient of the damping term with respect to s (times kappa_d) */
    SmartPtr<const Vector> grad_kappa_times_damping_s();
-   //@}
+   ///@}
 
    /** @name Constraints */
-   //@{
+   ///@{
    /** c(x) (at current point) */
    SmartPtr<const Vector> curr_c();
    /** unscaled c(x) (at current point) */
@@ -313,16 +313,16 @@ public:
    virtual Number unscaled_trial_nlp_constraint_violation(
       ENormType NormType
    );
-   //@}
+   ///@}
 
    /** @name Hessian matrices */
-   //@{
+   ///@{
    /** exact Hessian at current iterate (uncached) */
    SmartPtr<const SymMatrix> curr_exact_hessian();
-   //@}
+   ///@}
 
    /** @name primal-dual error and its components */
-   //@{
+   ///@{
    /** x-part of gradient of Lagrangian function (at current point) */
    SmartPtr<const Vector> curr_grad_lag_x();
    /** x-part of gradient of Lagrangian function (at trial point) */
@@ -459,10 +459,10 @@ public:
    virtual Number trial_primal_dual_system_error(
       Number mu
    );
-   //@}
+   ///@}
 
    /** @name Computing fraction-to-the-boundary step sizes */
-   //@{
+   ///@{
    /** Fraction to the boundary from (current) primal variables x and s
     *  for a given step
     */
@@ -520,13 +520,13 @@ public:
       const Vector& delta_s_L,
       const Vector& delta_s_U
    );
-   //@}
+   ///@}
 
    /** @name Sigma matrices */
-   //@{
+   ///@{
    SmartPtr<const Vector> curr_sigma_x();
    SmartPtr<const Vector> curr_sigma_s();
-   //@}
+   ///@}
 
    /** average of current values of the complementarities */
    Number curr_avrg_compl();
@@ -592,7 +592,7 @@ private:
     * and do not define them. This ensures that
     * they will not be implicitly created/called.
     */
-   //@{
+   ///@{
    /** Default Constructor */
    IpoptCalculatedQuantities();
 
@@ -605,24 +605,24 @@ private:
    void operator=(
       const IpoptCalculatedQuantities&
    );
-   //@}
+   ///@}
 
    /** @name Pointers for easy access to data and NLP information */
-   //@{
+   ///@{
    /** Ipopt NLP object */
    SmartPtr<IpoptNLP> ip_nlp_;
    /** Ipopt Data object */
    SmartPtr<IpoptData> ip_data_;
    /** Chen-Goldfarb specific calculated quantities */
    SmartPtr<IpoptAdditionalCq> add_cq_;
-   //@}
+   ///@}
 
    /** @name Algorithmic Parameters that can be set through the
     *  options list.
     *
     *  Those parameters are initialize by calling the Initialize method.
     */
-   //@{
+   ///@{
    /** Parameter in formula for computing overall primal-dual
     *  optimality error
     */
@@ -641,10 +641,10 @@ private:
    bool warm_start_same_structure_;
    /** Desired value of the barrier parameter */
    Number mu_target_;
-   //@}
+   ///@}
 
    /** @name Caches for slacks */
-   //@{
+   ///@{
    CachedResults<SmartPtr<Vector> > curr_slack_x_L_cache_;
    CachedResults<SmartPtr<Vector> > curr_slack_x_U_cache_;
    CachedResults<SmartPtr<Vector> > curr_slack_s_L_cache_;
@@ -657,28 +657,28 @@ private:
    Index num_adjusted_slack_x_U_;
    Index num_adjusted_slack_s_L_;
    Index num_adjusted_slack_s_U_;
-   //@}
+   ///@}
 
    /** @name Cached for objective function stuff */
-   //@{
+   ///@{
    CachedResults<Number> curr_f_cache_;
    CachedResults<Number> trial_f_cache_;
    CachedResults<SmartPtr<const Vector> > curr_grad_f_cache_;
    CachedResults<SmartPtr<const Vector> > trial_grad_f_cache_;
-   //@}
+   ///@}
 
    /** @name Caches for barrier function stuff */
-   //@{
+   ///@{
    CachedResults<Number> curr_barrier_obj_cache_;
    CachedResults<Number> trial_barrier_obj_cache_;
    CachedResults<SmartPtr<const Vector> > curr_grad_barrier_obj_x_cache_;
    CachedResults<SmartPtr<const Vector> > curr_grad_barrier_obj_s_cache_;
    CachedResults<SmartPtr<const Vector> > grad_kappa_times_damping_x_cache_;
    CachedResults<SmartPtr<const Vector> > grad_kappa_times_damping_s_cache_;
-   //@}
+   ///@}
 
    /** @name Caches for constraint stuff */
-   //@{
+   ///@{
    CachedResults<SmartPtr<const Vector> > curr_c_cache_;
    CachedResults<SmartPtr<const Vector> > trial_c_cache_;
    CachedResults<SmartPtr<const Vector> > curr_d_cache_;
@@ -700,13 +700,13 @@ private:
    CachedResults<Number> curr_nlp_constraint_violation_cache_;
    CachedResults<Number> unscaled_curr_nlp_constraint_violation_cache_;
    CachedResults<Number> unscaled_trial_nlp_constraint_violation_cache_;
-   //@}
+   ///@}
 
    /** Cache for the exact Hessian */
    CachedResults<SmartPtr<const SymMatrix> > curr_exact_hessian_cache_;
 
    /** @name Components of primal-dual error */
-   //@{
+   ///@{
    CachedResults<SmartPtr<const Vector> > curr_grad_lag_x_cache_;
    CachedResults<SmartPtr<const Vector> > trial_grad_lag_x_cache_;
    CachedResults<SmartPtr<const Vector> > curr_grad_lag_s_cache_;
@@ -738,19 +738,19 @@ private:
    CachedResults<Number> curr_barrier_error_cache_;
    CachedResults<Number> curr_primal_dual_system_error_cache_;
    CachedResults<Number> trial_primal_dual_system_error_cache_;
-   //@}
+   ///@}
 
    /** @name Caches for fraction to the boundary step sizes */
-   //@{
+   ///@{
    CachedResults<Number> primal_frac_to_the_bound_cache_;
    CachedResults<Number> dual_frac_to_the_bound_cache_;
-   //@}
+   ///@}
 
    /** @name Caches for sigma matrices */
-   //@{
+   ///@{
    CachedResults<SmartPtr<const Vector> > curr_sigma_x_cache_;
    CachedResults<SmartPtr<const Vector> > curr_sigma_s_cache_;
-   //@}
+   ///@}
 
    /** Cache for average of current complementarity */
    CachedResults<Number> curr_avrg_compl_cache_;
@@ -762,7 +762,7 @@ private:
 
    /** @name Indicator vectors required for the linear damping terms
     *  to handle unbounded solution sets. */
-   //@{
+   ///@{
    /** Indicator vector for selecting the elements in x that have
     *  only lower bounds.
     */
@@ -779,14 +779,14 @@ private:
     *  only upper bounds.
     */
    SmartPtr<Vector> dampind_s_U_;
-   //@}
+   ///@}
 
    /** @name Temporary vectors for intermediate calculations.
     *
     *  We keep these around to avoid unnecessarily many new allocations
     *  of Vectors.
     */
-   //@{
+   ///@{
    SmartPtr<Vector> tmp_x_;
    SmartPtr<Vector> tmp_s_;
    SmartPtr<Vector> tmp_c_;
@@ -805,7 +805,7 @@ private:
    Vector& Tmp_x_U();
    Vector& Tmp_s_L();
    Vector& Tmp_s_U();
-   //@}
+   ///@}
 
    /** flag indicating if Initialize method has been called (for
     *  debugging)
@@ -813,7 +813,7 @@ private:
    bool initialize_called_;
 
    /** @name Auxiliary functions */
-   //@{
+   ///@{
    /** Compute new vector containing the slack to a lower bound
     *  (uncached)
     */
@@ -911,7 +911,7 @@ private:
     */
    bool in_restoration_phase();
 
-   //@}
+   ///@}
 };
 
 } // namespace Ipopt
