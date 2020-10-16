@@ -1,467 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type = "text/xsl" href = "http://www.coin-or.org/projects/autoGen.xsl"?>
-<projectData xmlns="coin-or.org"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="coin-or.org http://www.coin-or.org/projects/autoGen.xsd">
-
-	<!-- This file is a template that will you fill in in order to provide -->
-	<!-- specific information about your project. Once the template is     -->
-	<!-- filled in and checked into your projects repository in the conf/  -->
-	<!-- directory, it will be automatically parsed and displayed in a     -->
-	<!-- standard HTML format when users call up the file from the main    -->
-	<!-- COIN Web site. The file is extensively commented to help you      -->
-	<!-- understand where to fill in the various pieces of required        -->
-	<!-- information. The comments are enclosed in blocks like this one.   -->
-
-	<projectBasics>
-
-		<!-- Fill in your project's name in this block.                -->
-		<!-- For example, for SYMPHONY, you would put:                 -->
-		<!--                                                           -->
-		<!-- <projectName>                                             -->
-		<!--    SYMPHONY                                               -->
-		<!-- </projectName>                                            -->
-		<!--                                                           -->
-		<!-- Fill in your text below (outside the comment block).      -->
-
-		<projectName> Ipopt </projectName>
-
-		<!-- Fill in a brief description of your project here.         -->
-		<!-- For example, for SYMPHONY, you might put:                 -->
-		<!--                                                           -->
-		<!-- <projectDescription>                                      -->
-		<!--    SYMPHONY is an open-source generic MILP solver,        -->
-		<!--    callable library, and extensible framework for         -->
-		<!--    implementing customized solvers for mixed-integer      -->
-		<!--    linear programs (MILPs). Blah, blah, blah.             -->
-		<!-- </projectDescription>                                     -->
-		<!--                                                           -->
-		<!-- Fill in your text below (outside the comment block)       -->
-
-		<projectDescription>
-                Ipopt is an open-source solver for large-scale nonlinear continuous optimization.  It can be used from modeling environments, such as AIMMS, AMPL, GAMS, or Matlab, and it is also available as callable library with interfaces to C++, C, Fortran, Java, and R.  Ipopt uses an interior point method, together with a filter linear search procedure.
-                </projectDescription>
-		<projectShortDescription>
-		  A solver for general large-scale nonlinear continuous optimization.
-		</projectShortDescription>
-
-		<!-- Fill in the project manager's name and (obfuscated)       -->
-		<!-- e-mail address here (only one name allowed).              -->
-		<!-- For example, for the SYMPHONY project, you would put      -->
-		<!--                                                           -->
-		<!--<projectManager>                                           -->
-		<!--   Ted Ralphs, tkralphs at lehigh dot edu                  -->
-		<!--</projectManager>                                          -->
-		<!--                                                           -->
-		<!--Fill in your text below (outside the comment block).       -->
-
-		<projectManager> andreas dot waechter at northwestern dot edu </projectManager>
-
-		<!-- Fill in the URLS you would like use for your main         -->
-		<!-- home page. This could be either your Trac page or         -->
-		<!-- your static page (if you have one).                       -->
-		<!-- For example, for SYMPHONY, you would put                  -->
-		<!--                                                           -->
-		<!--                                                           -->
-		<!--<projectHomePage>					       -->
-		<!--   https://projects.coin-or.org/SYMPHONY                   -->
-		<!--</projectHomePage>                                         -->
-		<!--                                                           -->
-		<!--Fill in your text below (outside the comment block).       -->
-
-		<projectHomePage> https://github.com/coin-or/Ipopt </projectHomePage>
-
-		<!-- Fill in the name of the license your project uses         -->
-		<!-- and a link to its page on www.opensource.org              -->
-		<!-- For example, if you use the CPL, you would put            -->
-		<!--                                                           -->
-		<!--<projectLicense>					       -->
-		<!--   Common Public License 1.0                               -->
-		<!--</projectLicense>                                          -->
-		<!--<projectLicenseURL>				               -->
-		<!--   http://www.opensource.org/licenses/cpl1.0.php           -->
-		<!--</projectLicenseURL>                                       -->
-		<!--                                                           -->
-		<!--Fill in your text below (outside the comment block).       -->
-
-		<projectLicense> Eclipse Public License</projectLicense>
-		<projectLicenseURL>http://opensource.org/licenses/EPL-2.0</projectLicenseURL>
-
-		<!-- Below, you can list other COIN projects your project      -->
-		<!-- depends on. These are listed one by one, as in the        -->
-		<!-- following example for SYMPHONY:                           -->
-		<!--                                                           -->
-		<!--<coinLinkedProjects>                                       -->
-		<!--                                                           -->
-		<!--   <coinProject>                                           -->
-		<!--      <repoName>                                           -->
-		<!--         CoinUtils                                         -->
-		<!--      </repoName>                                          -->
-		<!--   </coinProject>                                          -->
-		<!--                                                           -->
-		<!--   <coinProject>                                           -->
-		<!--      <repoName>                                           -->
-		<!--         Cgl                                               -->
-		<!--      </repoName>                                          -->
-		<!--   </coinProject>                                          -->
-		<!--                                                           -->
-		<!--   <coinProject>                                           -->
-		<!--      <repoName>                                           -->
-		<!--         Osi                                               -->
-		<!--      </repoName>                                          -->
-		<!--   </coinProject>                                          -->
-		<!--                                                           -->
-		<!--   <coinProject>                                           -->
-		<!--      <repoName>                                           -->
-		<!--         Clp                                               -->
-		<!--      </repoName>                                          -->
-		<!--   </coinProject>                                          -->
-		<!--                                                           -->
-		<!--</coinLinkedProjects>                                      -->
-		<!--                                                           -->
-		<!--Fill in your text below (outside the comment block).       -->
-
-		<coinLinkedProjects> </coinLinkedProjects>
-
-		<!-- Below, you can list other packages your project           -->
-		<!-- either requires or can optionally link to. These are      -->
-		<!-- one by one, as in the following example:                  -->
-		<!--                                                           -->
-		<!--<otherLinkedPackages>                                      -->
-		<!--                                                           -->
-		<!--   <otherPackage>                                          -->
-		<!--      <packageName>                                        -->
-		<!--         GLPK                                              -->
-		<!--      </packageName>                                       -->
-		<!--      <packageURL>                                         -->
-		<!--         http://www.gnu.org/software/glpk/                 -->
-		<!--      </packageURL>                                        -->
-		<!--      <requiredOrOptional>                                 -->
-		<!--         Optional                                          -->
-		<!--      </requiredOrOptional>                                -->
-		<!--   </otherPackage>                                         -->
-		<!--                                                           -->
-		<!--   <otherPackage>                                          -->
-		<!--      <packageName>                                        -->
-		<!--         GNU Readline                                      -->
-		<!--      </packageName>                                       -->
-		<!--      <packageURL>                                         -->
-		<!--      </packageURL>                                        -->
-		<!--      <requiredOrOptional>                                 -->
-		<!--         Optional                                          -->
-		<!--      </requiredOrOptional>                                -->
-		<!--   </otherPackage>                                         -->
-		<!--                                                           -->
-		<!--   <otherPackage>                                          -->
-		<!--      <packageName>                                        -->
-		<!--         GNU History                                       -->
-		<!--      </packageName>                                       -->
-		<!--      <packageURL>                                         -->
-		<!--      </packageURL>                                        -->
-		<!--      <requiredOrOptional>                                 -->
-		<!--         Optional                                          -->
-		<!--      </requiredOrOptional>                                -->
-		<!--   </otherPackage>                                         -->
-		<!--                                                           -->
-		<!--</otherLinkedPackages>                                     -->
-		<!--                                                           -->
-		<!--Fill in your text below (outside the comment block).       -->
-
-		<otherLinkedPackages>
-			<otherPackage>
-				<packageName>Blas
-                                </packageName>
-				<packageURL>
-                                http://www.netlib.org/blas
-                                </packageURL>
-				<requiredOrOptional>Required (any implementation)
-                                </requiredOrOptional>
-			</otherPackage>
-
-			<otherPackage>
-				<packageName>Lapack
-                                </packageName>
-				<packageURL>
-                                http://www.netlib.org/lapack
-                                </packageURL>
-				<requiredOrOptional>Required (any implementation)
-                                </requiredOrOptional>
-			</otherPackage>
-
-			<otherPackage>
-				<packageName>Ampl Solver Library
-                                </packageName>
-				<packageURL>
-                                http://www.netlib.org/ampl/solvers
-                                </packageURL>
-				<requiredOrOptional>Optional
-                                </requiredOrOptional>
-			</otherPackage>
-
-			<otherPackage>
-				<packageName>A sparse linear solver (MA27, MA57, HSL_MA86, HSL_MA97, WSMP, Pardiso, MUMPS)
-                                </packageName>
-				<packageURL>
-
-                                </packageURL>
-				<requiredOrOptional>Required (at least one)
-                                </requiredOrOptional>
-			</otherPackage>
-
-			<otherPackage>
-				<packageName>Metis
-                                </packageName>
-				<packageURL>
-                                http://glaros.dtc.umn.edu/gkhome/views/metis
-                                </packageURL>
-				<requiredOrOptional>Optional
-                                </requiredOrOptional>
-			</otherPackage>
-
-		</otherLinkedPackages>
-
-		<!-- Below, you can list the programming language(s) used in   -->
-		<!-- the project. For example:                                 -->
-		<!--<projectLanguage>C</projectLanguage>                       -->
-		<!--                                                           -->
-		<!--Fill in your text below (outside the comment block).       -->
-
-		<projectLanguage>C++</projectLanguage>
-
-
-		<!--The following fields describe the development status       -->
-		<!--of the project.                                            -->
-		<!--                                                           -->
-		<!--Fill in your text below (outside the comment block).       -->
-
-		<developmentStatus>
-
-			<!--If you are actively managing your project, use     -->
-
-			<activityStatus>Active</activityStatus>
-
-			<!--The maturity level is determined during project    -->
-			<!--review and should have been reported to you.       -->
-			<!--See http://www.coin-or.org/faqs.html#q18 for       -->
-			<!--more information on maturity level.                -->
-			<!--Fill it in like this:                              -->
-			<!--                                                   -->
-			<!--<maturityLevel>5</maturityLevel>                   -->
-			<!--                                                   -->
-
-			<maturityLevel>5</maturityLevel>
-
-			<!--If you have versioning and releases, you should    -->
-			<!--fill in your latest stable version number here.    -->
-			<!--See http://www.coin-or.org/faqs.html#q19 for       -->
-			<!--more information on version numbers.               -->
-			<!--Fill it in like this:                              -->
-			<!--                                                   -->
-			<!--<stableVersionNumber>5.1</stableVersionNumber>     -->
-			<!-- DO NOT USE stableVersionNumber and releaseNumber
-			     unless you need to override the automated system
-			     that tracks stable and release versions.
-
-			<stableVersionNumber>3.11</stableVersionNumber>
-			-->
-
-			<!--If you have versioning and releases, you should    -->
-			<!--fill in your latest stable release number here.    -->
-			<!--See http://www.coin-or.org/faqs.html#q19 for       -->
-			<!--more information on version numbers.               -->
-			<!--Fill it in like this:                              -->
-			<!--                                                   -->
-			<!--<releaseVersionNumber>5.1.4</releaseeVersionNumber>-->
-			<!--                                                   -->
-
-			<!-- <releaseNumber>3.11.0</releaseNumber> -->
-
-		</developmentStatus>
-
-		<!--Below, you can list the platforms on which your            -->
-		<!--project has been tested. Again, these are listed one       -->
-		<!--by one. There are fields for both operating system and     -->
-		<!--compiler. Here is an example for SYMPHONY                  -->
-		<!--                                                           -->
-		<!--<testedPlatforms>                                          -->
-		<!--                                                           -->
-		<!--   <platform>                                              -->
-		<!--      <operatingSystem>Microsoft Windows</operatingSystem> -->
-		<!--      <compiler>MSVC++/cl</compiler>                       -->
-		<!--   </platform>                                             -->
-		<!--                                                           -->
-		<!--   <platform>                                              -->
-		<!--      <operatingSystem>Microsoft Windows</operatingSystem> -->
-		<!--      <compiler>CYGWIN/cl</compiler>                       -->
-		<!--   </platform>                                             -->
-		<!--                                                           -->
-		<!--   <platform>                                              -->
-		<!--      <operatingSystem>Microsoft Windows</operatingSystem> -->
-		<!--      <compiler>CYGWIN/gcc</compiler>                      -->
-		<!--   </platform>                                             -->
-		<!--                                                           -->
-		<!--   <platform>                                              -->
-		<!--      <operatingSystem>Microsoft Windows</operatingSystem> -->
-		<!--      <compiler>MSys/gcc</compiler>                        -->
-		<!--   </platform>                                             -->
-		<!--                                                           -->
-		<!--   <platform>                                              -->
-		<!--      <operatingSystem>Linux</operatingSystem> -->
-		<!--      <compiler>gcc</compiler>                             -->
-		<!--   </platform>                                             -->
-		<!--                                                           -->
-		<!--   <platform>                                              -->
-		<!--      <operatingSystem>Mac OSX</operatingSystem>           -->
-		<!--      <compiler>gcc</compiler>                             -->
-		<!--   </platform>                                             -->
-		<!--                                                           -->
-		<!--   <platform>                                              -->
-		<!--      <operatingSystem>Solaris x86</operatingSystem>       -->
-		<!--      <compiler>gcc</compiler>                             -->
-		<!--   </platform>                                             -->
-		<!--                                                           -->
-		<!--   <platform>                                              -->
-		<!--      <operatingSystem>Solaris x86</operatingSystem>       -->
-		<!--      <compiler>sunpro</compiler>                          -->
-		<!--   </platform>                                             -->
-		<!--                                                           -->
-		<!--</testedPlatforms>					       -->
-		<!--                                                           -->
-		<!--Fill in your text below (outside the comment block).       -->
-
-		<testedPlatforms>
-
-		       <platform>
-		          <operatingSystem>Microsoft Windows with MSYS2/MinGW</operatingSystem>
-		          <compiler>g++</compiler>
-		       </platform>
-
-		       <platform>
-		          <operatingSystem>Microsoft Windows with MSYS2</operatingSystem>
-		          <compiler>cl</compiler>
-		       </platform>
-
-		       <platform>
-		          <operatingSystem>Microsoft Windows with MSYS2</operatingSystem>
-		          <compiler>icl+ifort</compiler>
-		       </platform>
-
-
-		       <platform>
-		          <operatingSystem>Linux</operatingSystem>
-		          <compiler>g++</compiler>
-		       </platform>
-
-		       <platform>
-		          <operatingSystem>Mac OSX</operatingSystem>
-		          <compiler>g++</compiler>
-		       </platform>
-
-		       <platform>
-		          <operatingSystem>Mac OSX</operatingSystem>
-		          <compiler>clang</compiler>
-		       </platform>
-
-			<!--platform>
-				<operatingSystem>Ipod Linux (no kidding!)</operatingSystem>
-				<compiler>g++</compiler>
-			</platform-->
-
-		</testedPlatforms>
-
-		<projectCategories>
-			<!-- Start  of projectCategories block   -->
-
-			<!--Below is the list of COIN-OR project categores.    -->
-			<!--Simply "un-comment" any categories that apply to   -->
-			<!--your project.                                      -->
-
-			<!--   <category>                                      -->
-			<!--        Development tools                          -->
-			<!--    </category>                                    -->
-			<!--    <category>                                     -->
-			<!--        Graphs                                     -->
-			<!--    </category>                                    -->
-			<!--    <category>                                     -->
-			<!--        Interfaces                                 -->
-			<!--    </category>                                    -->
-			<!--    <category>                                     -->
-			<!--        Metaheuristics                             -->
-			<!--    </category>                                    -->
-			<!--    <category>                                     -->
-			<!--        Modeling systems                           -->
-			<!--    </category>                                    -->
-			<!--    <category>                                     -->
-			<!--        Optimization convex non-differentiable     -->
-			<!--    </category>                                    -->
-			<!--    <category>                                     -->
-			<!--        Optimization deterministic linear continuous -->
-			<!--    </category>                                    -->
-			<!--    <category>                                     -->
-			<!--        Optimization deterministic linear discrete -->
-			<!--    </category>                                    -->
-			        <category>
-			            Optimization deterministic nonlinear
-			        </category>
-			<!--    <category>                                     -->
-			<!--        Optimization deterministic nonlinear discrete -->
-			<!--    </category>                                    -->
-			<!--    <category>                                     -->
-			<!--        Optimization deterministic semidefinite continuous -->
-			<!--    </category>                                    -->
-			<!--    <category>                                     -->
-			<!--        Optimization stochastic                    -->
-			<!--    </category>                                    -->
-			<!--    <category>                                     -->
-			<!--        Optimization utility                       -->
-			<!--    </category>                                    -->
-
-			<!-- End of projectCategories block                    -->
-		</projectCategories>
-
-
-		<!-- End of projectBasics block                                -->
-
-	</projectBasics>
-
-	<!--Below, you can specify the links for the left-hand side menu.      -->
-	<!--Note that these are optional, so if there is a blank, there will   -->
-	<!--be no corresponding menu item                                      -->
-	<!--                                                                   -->
-	<!--For SYMPHONY, this block would look like this:                     -->
-	<!--                                                                   -->
-	<!--<leftMenuLinks>                                                    -->
-	<!--                                                                   -->
-	<!--   <documentation>                                                 -->
-	<!--      http://www.coin-or.org/SYMPHONY/man-5.1                      -->
-	<!--   </documentation>                                                -->
-	<!--                                                                   -->
-	<!--   <sourceCodeDownload>                                            -->
-	<!--      http://www.coin-or.org/download/source/SYMPHONY              -->
-	<!--   </sourceCodeDownload>                                           -->
-	<!--                                                                   -->
-	<!--   <binaryDownload>                                                -->
-	<!--      http://www.coin-or.org/download/binary/SYMPHONY              -->
-	<!--   </binaryDownload>                                               -->
-	<!--                                                                   -->
-	<!--   <mailingList>                                                   -->
-	<!--      http://list.coin-or.org/mailman/listinfo/coin-symphony       -->
-	<!--   </mailingList>                                                  -->
-	<!--</leftMenuLinks>                                                   -->
-	<!--                                                                   -->
-	<!--Fill in your text below (outside the comment block).               -->
-
-	<leftMenuLinks>
-
-		<documentation>https://coin-or.github.io/Ipopt</documentation>
-
-		<sourceCodeDownload>https://github.com/coin-or/Ipopt</sourceCodeDownload>
-
-		<!--binaryDownload>http://www.coin-or.org/download/binary/Ipopt/</binaryDownload-->
-
-		<mailingList>http://list.coin-or.org/mailman/listinfo/ipopt</mailingList>
-
-	</leftMenuLinks>
-
-	<!-- End of projectData block                                          -->
+<projectData xmlns="coin-or.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="coin-or.org http://www.coin-or.org/projects/autoGen.xsd">
+  <projectBasics>
+    <projectName>Ipopt</projectName>
+    <projectDescription>Ipopt is an open-source solver for large-scale nonlinear continuous optimization.
+      It can be used from modeling environments, such as AIMMS, AMPL, GAMS, or Matlab, and it is also available as callable library with interfaces to C++, C, Fortran, Java, and R.
+      Ipopt uses an interior point method, together with a filter linear search procedure.
+    </projectDescription>
+    <projectShortDescription>A solver for general large-scale nonlinear continuous optimization.</projectShortDescription>
+    <projectManager>Andreas Waechter</projectManager>
+    <projectHomePage>https://github.com/coin-or/Ipopt</projectHomePage>
+    <projectLicense> Eclipse Public License</projectLicense>
+    <projectLicenseURL>http://opensource.org/licenses/EPL-2.0</projectLicenseURL>
+    <coinLinkedProjects/>
+    <otherLinkedPackages>
+      <otherPackage>
+        <packageName>Blas</packageName>
+        <packageURL>http://www.netlib.org/blas</packageURL>
+        <requiredOrOptional>Required (any implementation)</requiredOrOptional>
+      </otherPackage>
+      <otherPackage>
+        <packageName>Lapack</packageName>
+        <packageURL>http://www.netlib.org/lapack</packageURL>
+        <requiredOrOptional>Required (any implementation)</requiredOrOptional>
+      </otherPackage>
+      <otherPackage>
+        <packageName>Ampl Solver Library</packageName>
+        <packageURL>http://www.netlib.org/ampl/solvers</packageURL>
+        <requiredOrOptional>Optional</requiredOrOptional>
+      </otherPackage>
+      <otherPackage>
+        <packageName>A sparse linear solver (MA27, MA57, HSL_MA86, HSL_MA97, WSMP, Pardiso, MUMPS)</packageName>
+        <packageURL/>
+        <requiredOrOptional>Required (at least one)</requiredOrOptional>
+      </otherPackage>
+    </otherLinkedPackages>
+    <projectLanguage>C++</projectLanguage>
+    <developmentStatus>
+      <activityStatus>Active</activityStatus>
+      <maturityLevel>5</maturityLevel>
+    </developmentStatus>
+    <testedPlatforms>
+      <platform>
+        <operatingSystem>Microsoft Windows with MSYS2/MinGW</operatingSystem>
+        <compiler>g++</compiler>
+      </platform>
+      <platform>
+        <operatingSystem>Microsoft Windows with MSYS2</operatingSystem>
+        <compiler>cl</compiler>
+      </platform>
+      <platform>
+        <operatingSystem>Microsoft Windows with MSYS2</operatingSystem>
+        <compiler>icl+ifort</compiler>
+      </platform>
+      <platform>
+        <operatingSystem>Linux</operatingSystem>
+        <compiler>g++</compiler>
+      </platform>
+      <platform>
+        <operatingSystem>macOS</operatingSystem>
+        <compiler>g++</compiler>
+      </platform>
+      <platform>
+        <operatingSystem>macOS</operatingSystem>
+        <compiler>clang</compiler>
+      </platform>
+      <!--platform>
+        <operatingSystem>Ipod Linux (no kidding!)</operatingSystem>
+        <compiler>g++</compiler>
+      </platform-->
+    </testedPlatforms>
+    <projectCategories>
+      <category>Optimization deterministic nonlinear</category>
+    </projectCategories>
+  </projectBasics>
+  <leftMenuLinks>
+    <documentation>https://coin-or.github.io/Ipopt</documentation>
+    <sourceCodeDownload>https://github.com/coin-or/Ipopt</sourceCodeDownload>
+    <!--binaryDownload>http://www.coin-or.org/download/binary/Ipopt/</binaryDownload-->
+    <mailingList>http://list.coin-or.org/mailman/listinfo/ipopt</mailingList>
+  </leftMenuLinks>
 </projectData>
