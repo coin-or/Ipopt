@@ -1,0 +1,64 @@
+Description:
+  Slug: Ipopt
+  ShortName: Ipopt
+  LongName:
+  ShortDescription: A solver for general large-scale nonlinear continuous optimization.
+  LongDescription: |2
+    "Ipopt is an open-source solver for large-scale nonlinear continuous optimization.
+     It can be used from modeling environments, such as AIMMS, AMPL, GAMS, or Matlab, and it is also available as callable library with interfaces to C++, C, Fortran, Java, and R.
+     Ipopt uses an interior point method, together with a filter linear search procedure."
+  Manager: Andreas Waechter
+  Homepage: https://github.com/coin-or/Ipopt
+  License: Eclipse Public License 2.0
+  LicenseURL: http://www.opensource.org/licenses/EPL-2.0
+  Appveyor:
+    Slug: ipopt-5qaur
+  Language:
+    - C++
+  Categories: 
+    - Optimization deterministic nonlinear
+
+Dependencies:
+  - Description: ThirdParty wrapper for building ASL
+    URL: https://github.com/coin-or-tools/ThirdParty-ASL
+    Version: stable/2.0
+    Required: Optional
+  - Description: ThirdParty wrapper for building Mumps
+    URL: https://github.com/coin-or-tools/ThirdParty-Mumps
+    Version: stable/2.1
+    Required: Optional
+  - Description: ThirdParty wrapper for building HSL codes
+    URL: https://github.com/coin-or-tools/ThirdParty-HSL
+    Version: stable/2.1
+    Required: Optional
+  - Description: Parallel Sparse Direct Solver from Pardiso-Project
+    URL: http://www.pardiso-project.org/
+    Required: Optional
+  - Description: Parallel Sparse Direct Solver from Intel MKL
+    URL: https://software.intel.com/content/www/us/en/develop/tools/math-kernel-library.html
+    Required: Optional
+  - Description: Watson Sparse Matrix Package
+    URL: http://researcher.ibm.com/view_project.php?id=1426
+    Required: Optional
+  - Description: Basic Linear Algebra Subroutines (BLAS)
+    URL: http://www.netlib.org/blas
+    Required: Required
+  - Description: Linear Algebra Package (LAPACK)
+    URL: http://www.netlib.org/lapack
+    Required: Required
+
+DevelopmentStatus: 
+  activityStatus: Active
+  maturityLevel: 5
+  testedPlatforms: 
+  - operatingSystem: Linux
+    compiler: gcc
+  - operatingSystem: macOS
+    compiler:
+    - gcc
+    - clang
+  - operatingSystem: Microsoft Windows with MSys2
+    compiler:
+    - gcc
+    - cl+ifort
+    - icl+ifort
