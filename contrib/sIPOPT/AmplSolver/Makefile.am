@@ -7,7 +7,8 @@ bin_PROGRAMS = ipopt_sens
 ipopt_sens_SOURCES = ampl_sipopt.cpp SensAmplTNLP.cpp
 
 ipopt_sens_LDADD = ../src/libsipopt.la \
-  ../../../src/Apps/AmplSolver/libipoptamplinterface.la
+  ../../../src/Apps/AmplSolver/libipoptamplinterface.la \
+  $(SIPOPTAMPLINTERFACELIB_LFLAGS)
 
 AM_LDFLAGS = $(LT_LDFLAGS)
 

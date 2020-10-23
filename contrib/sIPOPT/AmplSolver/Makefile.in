@@ -108,8 +108,10 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_ipopt_sens_OBJECTS = ampl_sipopt.$(OBJEXT) SensAmplTNLP.$(OBJEXT)
 ipopt_sens_OBJECTS = $(am_ipopt_sens_OBJECTS)
+am__DEPENDENCIES_1 =
 ipopt_sens_DEPENDENCIES = ../src/libsipopt.la \
-	../../../src/Apps/AmplSolver/libipoptamplinterface.la
+	../../../src/Apps/AmplSolver/libipoptamplinterface.la \
+	$(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
@@ -347,7 +349,8 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ipopt_sens_SOURCES = ampl_sipopt.cpp SensAmplTNLP.cpp
 ipopt_sens_LDADD = ../src/libsipopt.la \
-  ../../../src/Apps/AmplSolver/libipoptamplinterface.la
+  ../../../src/Apps/AmplSolver/libipoptamplinterface.la \
+  $(SIPOPTAMPLINTERFACELIB_LFLAGS)
 
 AM_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = \
