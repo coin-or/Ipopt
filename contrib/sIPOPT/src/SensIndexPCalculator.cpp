@@ -90,7 +90,7 @@ bool IndexPCalculator::ComputeP()
          {
             comp_vec = dynamic_cast<const DenseVector*>(GetRawPtr(sol_vec->GetComp(j)));
             comp_values = comp_vec->Values();
-            IpBlasDcopy(comp_vec->Dim(), comp_values, 1, col_values + curr_dim, 1);
+            IpBlasCopy(comp_vec->Dim(), comp_values, 1, col_values + curr_dim, 1);
             curr_dim += comp_vec->Dim();
          }
          cols_[col] = new PColumn(col_values);

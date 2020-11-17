@@ -418,27 +418,27 @@ void StdInterfaceTNLP::finalize_solution(
 {
    if( x_sol_ != NULL )
    {
-      IpBlasDcopy(n, x, 1, x_sol_, 1);
+      IpBlasCopy(n, x, 1, x_sol_, 1);
    }
 
    if( z_L_sol_ != NULL )
    {
-      IpBlasDcopy(n, z_L, 1, z_L_sol_, 1);
+      IpBlasCopy(n, z_L, 1, z_L_sol_, 1);
    }
 
    if( z_U_sol_ != NULL )
    {
-      IpBlasDcopy(n, z_U, 1, z_U_sol_, 1);
+      IpBlasCopy(n, z_U, 1, z_U_sol_, 1);
    }
 
    if( g_sol_ != NULL )
    {
-      IpBlasDcopy(m, g, 1, g_sol_, 1);
+      IpBlasCopy(m, g, 1, g_sol_, 1);
    }
 
    if( lambda_sol_ != NULL )
    {
-      IpBlasDcopy(m, lambda, 1, lambda_sol_, 1);
+      IpBlasCopy(m, lambda, 1, lambda_sol_, 1);
    }
 
    if( obj_sol_ != NULL )

@@ -156,7 +156,7 @@ void IpoptCalculatedQuantities::RegisterOptions(
       "slack_move",
       "Correction size for very small slacks.",
       0.0, false,
-      pow(std::numeric_limits<double>::epsilon(), 0.75),
+      pow(std::numeric_limits<Number>::epsilon(), 0.75),
       "Due to numerical issues or the lack of an interior, the slack variables might become very small. "
       "If a slack becomes very small compared to machine precision, the corresponding bound is moved slightly. "
       "This parameter determines how large the move should be. "

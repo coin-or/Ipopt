@@ -44,6 +44,8 @@ void RegisterOptions_LinearSolvers(
    roptions->SetRegisteringCategory("MA57 Linear Solver");
    Ma57TSolverInterface::RegisterOptions(roptions);
 #endif
+
+#ifndef IPOPT_SINGLE // don't build these if using single precision
 #if defined(COINHSL_HAS_MA77) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
    roptions->SetRegisteringCategory("MA77 Linear Solver");
    Ma77SolverInterface::RegisterOptions(roptions);
@@ -56,6 +58,7 @@ void RegisterOptions_LinearSolvers(
    roptions->SetRegisteringCategory("MA97 Linear Solver");
    Ma97SolverInterface::RegisterOptions(roptions);
 #endif
+#endif // IPOPT_SINGLE
 
 #ifdef IPOPT_HAS_MUMPS
    roptions->SetRegisteringCategory("Mumps Linear Solver");

@@ -470,8 +470,8 @@ bool AmplTNLP::get_starting_point(
    {
       // Modified for warm-start from AMPL
       DBG_ASSERT(IsValid(suffix_handler_));
-      const double* zL_init = suffix_handler_->GetNumberSuffixValues("ipopt_zL_in", AmplSuffixHandler::Variable_Source);
-      const double* zU_init = suffix_handler_->GetNumberSuffixValues("ipopt_zU_in", AmplSuffixHandler::Variable_Source);
+      const Number* zL_init = suffix_handler_->GetNumberSuffixValues("ipopt_zL_in", AmplSuffixHandler::Variable_Source);
+      const Number* zU_init = suffix_handler_->GetNumberSuffixValues("ipopt_zU_in", AmplSuffixHandler::Variable_Source);
       for( Index i = 0; i < n; i++ )
       {
          z_L[i] = zL_init != NULL ? obj_sign_ * zL_init[i] : 1.0;
@@ -742,20 +742,20 @@ void AmplTNLP::finalize_solution(
       lambda_sol_ = new Number[m];
    }
 
-   IpBlasDcopy(n, x, 1, x_sol_, 1);
-   IpBlasDcopy(m, g, 1, g_sol_, 1);
+   IpBlasCopy(n, x, 1, x_sol_, 1);
+   IpBlasCopy(m, g, 1, g_sol_, 1);
    if( obj_sign_ == -1.0 ) // maximization
    {
       for( int i = 0; i < n; ++i )
       {
          z_L_sol_[i] = -z_L[i];
       }
-      IpBlasDcopy(n, z_U, 1, z_U_sol_, 1);
-      IpBlasDcopy(m, lambda, 1, lambda_sol_, 1);
+      IpBlasCopy(n, z_U, 1, z_U_sol_, 1);
+      IpBlasCopy(m, lambda, 1, lambda_sol_, 1);
    }
    else
    {
-      IpBlasDcopy(n, z_L, 1, z_L_sol_, 1);
+      IpBlasCopy(n, z_L, 1, z_L_sol_, 1);
       for( int i = 0; i < n; ++i )
       {
          z_U_sol_[i] = -z_U[i];
@@ -878,7 +878,7 @@ bool AmplTNLP::internal_conval(
    bool allocated = false;
    if( !g )
    {
-      g = new double[m];
+      g = new Number[m];
       allocated = true;
    }
    conval(const_cast<Number*>(x), g, (fint* )nerror_);
@@ -983,10 +983,10 @@ bool AmplTNLP::get_scaling_parameters(
 )
 {
    DBG_ASSERT(IsValid(suffix_handler_));
-   const double* obj = suffix_handler_->GetNumberSuffixValues("scaling_factor", AmplSuffixHandler::Objective_Source);
+   const Number* obj = suffix_handler_->GetNumberSuffixValues("scaling_factor", AmplSuffixHandler::Objective_Source);
    obj_scaling = (obj) ? obj[0] : 1.0;
 
-   const double* x = suffix_handler_->GetNumberSuffixValues("scaling_factor", AmplSuffixHandler::Variable_Source);
+   const Number* x = suffix_handler_->GetNumberSuffixValues("scaling_factor", AmplSuffixHandler::Variable_Source);
    if( x )
    {
       use_x_scaling = true;
@@ -1007,7 +1007,7 @@ bool AmplTNLP::get_scaling_parameters(
       use_x_scaling = false;
    }
 
-   const double* g = suffix_handler_->GetNumberSuffixValues("scaling_factor", AmplSuffixHandler::Constraint_Source);
+   const Number* g = suffix_handler_->GetNumberSuffixValues("scaling_factor", AmplSuffixHandler::Constraint_Source);
    if( g )
    {
       use_g_scaling = true;

@@ -23,6 +23,62 @@
 /** Prototypes for MA27's Fortran subroutines */
 extern "C"
 {
+#ifdef IPOPT_SINGLE
+   void IPOPT_HSL_FUNC(ma27i, MA27I)(
+      ipfint* ICNTL,
+      float*  CNTL
+   );
+
+   void IPOPT_HSL_FUNC(ma27a, MA27A)(
+      ipfint*       N,
+      ipfint*       NZ,
+      const ipfint* IRN,
+      const ipfint* ICN,
+      ipfint*       IW,
+      ipfint*       LIW,
+      ipfint*       IKEEP,
+      ipfint*       IW1,
+      ipfint*       NSTEPS,
+      ipfint*       IFLAG,
+      ipfint*       ICNTL,
+      float*        CNTL,
+      ipfint*       INFO,
+      float*        OPS
+   );
+
+   void IPOPT_HSL_FUNC(ma27b, MA27B)(
+      ipfint*       N,
+      ipfint*       NZ,
+      const ipfint* IRN,
+      const ipfint* ICN,
+      float*        A,
+      ipfint*       LA,
+      ipfint*       IW,
+      ipfint*       LIW,
+      ipfint*       IKEEP,
+      ipfint*       NSTEPS,
+      ipfint*       MAXFRT,
+      ipfint*       IW1,
+      ipfint*       ICNTL,
+      float*        CNTL,
+      ipfint*       INFO
+   );
+
+   void IPOPT_HSL_FUNC(ma27c, MA27C)(
+      ipfint* N,
+      float*  A,
+      ipfint* LA,
+      ipfint* IW,
+      ipfint* LIW,
+      float*  W,
+      ipfint* MAXFRT,
+      float*  RHS,
+      ipfint* IW1,
+      ipfint* NSTEPS,
+      ipfint* ICNTL,
+      float*  CNTL
+   );
+#else
    void IPOPT_HSL_FUNC(ma27id, MA27ID)(
       ipfint* ICNTL,
       double* CNTL
@@ -77,6 +133,7 @@ extern "C"
       ipfint* ICNTL,
       double* CNTL
    );
+#endif
 }
 
 namespace Ipopt
@@ -198,7 +255,11 @@ bool Ma27TSolverInterface::InitializeImpl(
    options.GetBoolValue("warm_start_same_structure", warm_start_same_structure_, prefix);
 
    /* Set the default options for MA27 */
+#ifdef IPOPT_SINGLE
+   IPOPT_HSL_FUNC(ma27i, MA27I)(icntl_, cntl_);
+#else
    IPOPT_HSL_FUNC(ma27id, MA27ID)(icntl_, cntl_);
+#endif
 #if IPOPT_VERBOSITY == 0
 
    icntl_[0] = 0;       // Suppress error messages
@@ -232,7 +293,7 @@ ESymSolverStatus Ma27TSolverInterface::MultiSolve(
    const Index* airn,
    const Index* ajcn,
    Index        nrhs,
-   double*      rhs_vals,
+   Number*      rhs_vals,
    bool         check_NegEVals,
    Index        numberOfNegEVals
 )
@@ -276,7 +337,7 @@ ESymSolverStatus Ma27TSolverInterface::MultiSolve(
    return Backsolve(nrhs, rhs_vals);
 }
 
-double* Ma27TSolverInterface::GetValuesArrayPtr()
+Number* Ma27TSolverInterface::GetValuesArrayPtr()
 {
    DBG_START_METH("Ma27TSolverInterface::GetValuesArrayPtr", dbg_verbosity);
    DBG_ASSERT(initialized_);
@@ -289,7 +350,7 @@ double* Ma27TSolverInterface::GetValuesArrayPtr()
    {
       delete[] a_;
       a_ = NULL;
-      a_ = new double[nonzeros_];
+      a_ = new Number[nonzeros_];
    }
 
    return a_;
@@ -346,10 +407,10 @@ ESymSolverStatus Ma27TSolverInterface::SymbolicFactorization(
    iw_ = NULL;
 
    // Overestimation factor for LIW (20% recommended in MA27 documentation)
-   const double LiwFact = 2.0;      // This is 100% overestimation
+   const Number LiwFact = 2.0;      // This is 100% overestimation
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "In Ma27TSolverInterface::InitializeStructure: Using overestimation factor LiwFact = %e\n", LiwFact);
-   liw_ = (ipfint) (LiwFact * (double(2 * nonzeros_ + 3 * dim_ + 1)));
+   liw_ = (ipfint) (LiwFact * (Number(2 * nonzeros_ + 3 * dim_ + 1)));
    iw_ = new ipfint[liw_];
 
    // Get memory for IKEEP
@@ -368,14 +429,18 @@ ESymSolverStatus Ma27TSolverInterface::SymbolicFactorization(
       }
    }
 
-   // Call MA27AD (cast to ipfint for Index types)
+   // Call MA27AX (cast to ipfint for Index types)
    ipfint N = dim_;
    ipfint NZ = nonzeros_;
    ipfint IFLAG = 0;
-   double OPS;
+   Number OPS;
    ipfint INFO[20];
    ipfint* IW1 = new ipfint[2 * dim_];      // Get memory for IW1 (only local)
+#ifdef IPOPT_SINGLE
+   IPOPT_HSL_FUNC(ma27a, MA27A)(&N, &NZ, airn, ajcn, iw_, &liw_, ikeep_, IW1, &nsteps_, &IFLAG, icntl_, cntl_, INFO, &OPS);
+#else
    IPOPT_HSL_FUNC(ma27ad, MA27AD)(&N, &NZ, airn, ajcn, iw_, &liw_, ikeep_, IW1, &nsteps_, &IFLAG, icntl_, cntl_, INFO, &OPS);
+#endif
    delete[] IW1;      // No longer required
 
    // Receive several information
@@ -408,7 +473,7 @@ ESymSolverStatus Ma27TSolverInterface::SymbolicFactorization(
    iw_ = NULL;
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "Size of integer work space recommended by MA27 is %d\n", nirnec);
-   liw_ = (ipfint) (liw_init_factor_ * (double) (nirnec));
+   liw_ = (ipfint) (liw_init_factor_ * (Number) (nirnec));
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "Setting integer work space size to %d\n", liw_);
    iw_ = new ipfint[liw_];
@@ -418,10 +483,10 @@ ESymSolverStatus Ma27TSolverInterface::SymbolicFactorization(
    a_ = NULL;
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "Size of doublespace recommended by MA27 is %d\n", nrlnec);
-   la_ = Max(nonzeros_, (ipfint) (la_init_factor_ * (double) (nrlnec)));
+   la_ = Max(nonzeros_, (ipfint) (la_init_factor_ * (Number) (nrlnec)));
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "Setting double work space size to %d\n", la_);
-   a_ = new double[la_];
+   a_ = new Number[la_];
 
    if( HaveIpData() )
    {
@@ -448,10 +513,10 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
 
    if( la_increase_ )
    {
-      double* a_old = a_;
+      Number* a_old = a_;
       ipfint la_old = la_;
-      la_ = (ipfint) (meminc_factor_ * (double) (la_));
-      a_ = new double[la_];
+      la_ = (ipfint) (meminc_factor_ * (Number) (la_));
+      a_ = new Number[la_];
       for( Index i = 0; i < nonzeros_; i++ )
       {
          a_[i] = a_old[i];
@@ -468,7 +533,7 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
       delete[] iw_;
       iw_ = NULL;
       ipfint liw_old = liw_;
-      liw_ = (ipfint) (meminc_factor_ * (double) (liw_));
+      liw_ = (ipfint) (meminc_factor_ * (Number) (liw_));
       iw_ = new ipfint[liw_];
       liw_increase_ = false;
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
@@ -479,15 +544,20 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
    ipfint ncmpbr;  // Number of double precision compressions
    ipfint ncmpbi;  // Number of integer compressions
 
-   // Call MA27BD; possibly repeatedly if workspaces are too small
+   // Call MA27BX; possibly repeatedly if workspaces are too small
    ipfint N = dim_;
    ipfint NZ = nonzeros_;
    ipfint* IW1 = new ipfint[2 * dim_];
    ipfint INFO[20];
    cntl_[0] = pivtol_;  // Set pivot tolerance
 
+#ifdef IPOPT_SINGLE
+   IPOPT_HSL_FUNC(ma27b, MA27B)(&N, &NZ, airn, ajcn, a_, &la_, iw_, &liw_, ikeep_, &nsteps_, &maxfrt_, IW1, icntl_, cntl_,
+                            INFO);
+#else
    IPOPT_HSL_FUNC(ma27bd, MA27BD)(&N, &NZ, airn, ajcn, a_, &la_, iw_, &liw_, ikeep_, &nsteps_, &maxfrt_, IW1, icntl_, cntl_,
                             INFO);
+#endif
    delete[] IW1;
 
    // Receive information about the factorization
@@ -517,16 +587,16 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
       ipfint la_old = la_;
       if( iflag == -3 )
       {
-         liw_ = (ipfint) (meminc_factor_ * (double) (ierror));
-         la_ = (ipfint) (meminc_factor_ * (double) (la_));
+         liw_ = (ipfint) (meminc_factor_ * (Number) (ierror));
+         la_ = (ipfint) (meminc_factor_ * (Number) (la_));
       }
       else
       {
-         liw_ = (ipfint) (meminc_factor_ * (double) (liw_));
-         la_ = (ipfint) (meminc_factor_ * (double) (ierror));
+         liw_ = (ipfint) (meminc_factor_ * (Number) (liw_));
+         la_ = (ipfint) (meminc_factor_ * (Number) (ierror));
       }
       iw_ = new ipfint[liw_];
-      a_ = new double[la_];
+      a_ = new Number[la_];
       Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                      "MA27BD returned iflag=%d and requires more memory.\n Increase liw from %d to %d and la from %d to %d and factorize again.\n",
                      iflag, liw_old, liw_, la_old, la_);
@@ -605,7 +675,7 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
 
 ESymSolverStatus Ma27TSolverInterface::Backsolve(
    Index   nrhs,
-   double* rhs_vals
+   Number* rhs_vals
 )
 {
    DBG_START_METH("Ma27TSolverInterface::Backsolve", dbg_verbosity);
@@ -615,10 +685,10 @@ ESymSolverStatus Ma27TSolverInterface::Backsolve(
    }
 
    ipfint N = dim_;
-   double* W = new double[maxfrt_];
+   Number* W = new Number[maxfrt_];
    ipfint* IW1 = new ipfint[nsteps_];
 
-   // For each right hand side, call MA27CD
+   // For each right hand side, call MA27CX
    for( Index irhs = 0; irhs < nrhs; irhs++ )
    {
       if( DBG_VERBOSITY() >= 2 )
@@ -628,10 +698,13 @@ ESymSolverStatus Ma27TSolverInterface::Backsolve(
             DBG_PRINT((2, "rhs[%5d] = %23.15e\n", i, rhs_vals[irhs * dim_ + i]));
          }
       }
-
+#ifdef IPOPT_SINGLE
+      IPOPT_HSL_FUNC(ma27c, MA27C)(&N, a_, &la_, iw_, &liw_, W, &maxfrt_, &rhs_vals[irhs * dim_], IW1, &nsteps_, icntl_,
+                               cntl_);
+#else
       IPOPT_HSL_FUNC(ma27cd, MA27CD)(&N, a_, &la_, iw_, &liw_, W, &maxfrt_, &rhs_vals[irhs * dim_], IW1, &nsteps_, icntl_,
                                cntl_);
-
+#endif
       if( DBG_VERBOSITY() >= 2 )
       {
          for( Index i = 0; i < dim_; i++ )

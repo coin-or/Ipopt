@@ -131,7 +131,7 @@ bool StdStepCalculator::Step(
          delta_u_space = new DenseVectorSpace(new_du_size); // create new delta_u space
          new_delta_u = new DenseVector(GetRawPtr(ConstPtr(delta_u_space)));
          new_du_values = new_delta_u->Values();
-         IpBlasDcopy(old_delta_u->Dim(), old_delta_u->Values(), 1, new_du_values, 1);
+         IpBlasCopy(old_delta_u->Dim(), old_delta_u->Values(), 1, new_du_values, 1);
          for( Index i = 0; i < (int) x_bound_violations_idx.size(); ++i )
          {
             //   printf("i=%d, delta_u_sort[i]=%d, x_bound_viol_du[i]=%f\n", i, delta_u_sort[i], x_bound_violations_du[i]);

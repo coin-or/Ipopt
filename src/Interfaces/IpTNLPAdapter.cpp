@@ -643,9 +643,9 @@ bool TNLPAdapter::GetSpaces(
          Number* full_lambda = new Number[n_full_g_];
          // For now, we return zeros as multipliers... (ToDo?)
          const Number zero = 0.;
-         IpBlasDcopy(n_full_x_, &zero, 0, full_z_L, 1);
-         IpBlasDcopy(n_full_x_, &zero, 0, full_z_U, 1);
-         IpBlasDcopy(n_full_g_, &zero, 0, full_lambda, 1);
+         IpBlasCopy(n_full_x_, &zero, 0, full_z_L, 1);
+         IpBlasCopy(n_full_x_, &zero, 0, full_z_U, 1);
+         IpBlasCopy(n_full_g_, &zero, 0, full_lambda, 1);
          tnlp_->finalize_solution(status, n_full_x_, full_x_, full_z_L, full_z_U, n_full_g_, full_g_, full_lambda,
                                   obj_value, NULL, NULL);
          delete[] full_z_L;
@@ -749,7 +749,7 @@ bool TNLPAdapter::GetSpaces(
             // to zero (could do only for dependent ones... was too lazy
             // right now)
             const Number zero = 0.;
-            IpBlasDcopy(n_full_g_, &zero, 0, full_lambda_, 1);
+            IpBlasCopy(n_full_g_, &zero, 0, full_lambda_, 1);
          }
       }
       delete[] x_l;
@@ -1425,8 +1425,13 @@ bool TNLPAdapter::GetBoundsInformation(
       {
          if( x_l[i] == x_u[i] )
          {
+#ifdef IPOPT_SINGLE
+            x_l[i] -= bound_relax * Max(1.f, fabs(x_l[i]));
+            x_u[i] += bound_relax * Max(1.f, fabs(x_u[i]));
+#else
             x_l[i] -= bound_relax * Max(1., fabs(x_l[i]));
             x_u[i] += bound_relax * Max(1., fabs(x_u[i]));
+#endif
          }
       }
    }
@@ -1601,7 +1606,7 @@ bool TNLPAdapter::GetStartingPoint(
       }
       else
       {
-         IpBlasDcopy(n_x_var, full_x, 1, values, 1);
+         IpBlasCopy(n_x_var, full_x, 1, values, 1);
       }
    }
 
@@ -1619,7 +1624,7 @@ bool TNLPAdapter::GetStartingPoint(
       {
          // ToDo maybe use info from z_L and Z_U here?
          const Number zero = 0.;
-         IpBlasDcopy(n_x_fixed_, &zero, 0, &values[P_c_g_->NCols()], 1);
+         IpBlasCopy(n_x_fixed_, &zero, 0, &values[P_c_g_->NCols()], 1);
       }
    }
 
@@ -1818,7 +1823,7 @@ bool TNLPAdapter::Eval_jac_c(
       if( fixed_variable_treatment_ == MAKE_CONSTRAINT )
       {
          const Number one = 1.;
-         IpBlasDcopy(n_x_fixed_, &one, 0, &values[nz_jac_c_no_extra_], 1);
+         IpBlasCopy(n_x_fixed_, &one, 0, &values[nz_jac_c_no_extra_], 1);
       }
       return true;
    }
@@ -2022,7 +2027,7 @@ void TNLPAdapter::GetScalingParameters(
       if( fixed_variable_treatment_ == MAKE_CONSTRAINT )
       {
          const Number one = 1.;
-         IpBlasDcopy(n_x_fixed_, &one, 0, &dc_values[P_c_g_->NCols()], 1);
+         IpBlasCopy(n_x_fixed_, &one, 0, &dc_values[P_c_g_->NCols()], 1);
       }
 
       const Index* d_pos = P_d_g_->ExpandedPosIndices();
@@ -2119,7 +2124,7 @@ void TNLPAdapter::FinalizeSolution(
    if( c.Dim() + d.Dim() < n_full_g_ )
    {
       const Number zero = 0.;
-      IpBlasDcopy(n_full_g_, &zero, 0, full_g, 1);
+      IpBlasCopy(n_full_g_, &zero, 0, full_g, 1);
    }
    ResortG(c, d, full_g);
    // To Ipopt, the equality constraints are presented with right
@@ -2186,11 +2191,16 @@ void TNLPAdapter::FinalizeSolution(
       }
       else
       {
-         double value = dy_c->Scalar();
+         Number value = dy_c->Scalar();
          for( Index i = 0; i < n_x_fixed_; i++ )
          {
+#ifdef IPOPT_SINGLE
+            full_z_L[x_fixed_map_[i]] = Max(0.f, -value);
+            full_z_U[x_fixed_map_[i]] = Max(0.f, value);
+#else
             full_z_L[x_fixed_map_[i]] = Max(0., -value);
             full_z_U[x_fixed_map_[i]] = Max(0., value);
+#endif
          }
       }
    }
@@ -2409,11 +2419,11 @@ void TNLPAdapter::ResortX(
       if( dx->IsHomogeneous() )
       {
          const Number& scalar = dx->Scalar();
-         IpBlasDcopy(n_full_x_, &scalar, 0, x_orig, 1);
+         IpBlasCopy(n_full_x_, &scalar, 0, x_orig, 1);
       }
       else
       {
-         IpBlasDcopy(n_full_x_, dx->Values(), 1, x_orig, 1);
+         IpBlasCopy(n_full_x_, dx->Values(), 1, x_orig, 1);
       }
    }
 }
@@ -2672,14 +2682,18 @@ bool TNLPAdapter::internal_eval_jac_g(
       {
          Number* full_g_pert = new Number[n_full_g_];
          Number* full_x_pert = new Number[n_full_x_];
-         IpBlasDcopy(n_full_x_, full_x_, 1, full_x_pert, 1);
+         IpBlasCopy(n_full_x_, full_x_, 1, full_x_pert, 1);
          // Compute the finite difference Jacobian
          for( Index ivar = 0; ivar < n_full_x_; ivar++ )
          {
             if( findiff_x_l_[ivar] < findiff_x_u_[ivar] )
             {
                const Number xorig = full_x_pert[ivar];
+#ifdef IPOPT_SINGLE
+               Number this_perturbation = findiff_perturbation_ * Max(1.f, fabs(full_x_[ivar]));
+#else
                Number this_perturbation = findiff_perturbation_ * Max(1., fabs(full_x_[ivar]));
+#endif
                full_x_pert[ivar] += this_perturbation;
                if( full_x_pert[ivar] > findiff_x_u_[ivar] )
                {
@@ -2895,7 +2909,7 @@ bool TNLPAdapter::CheckDerivatives(
 
    // Space for the perturbed point
    Number* xpert = new Number[nx];
-   IpBlasDcopy(nx, xref, 1, xpert, 1);
+   IpBlasCopy(nx, xref, 1, xpert, 1);
 
    // Space for constraints at perturbed point
    Number* gpert = NULL;
@@ -2918,7 +2932,11 @@ bool TNLPAdapter::CheckDerivatives(
       const Index ivar_first = Max(0, deriv_test_start_index);
       for( Index ivar = ivar_first; ivar < nx; ivar++ )
       {
+#ifdef IPOPT_SINGLE
+         Number this_perturbation = derivative_test_perturbation_ * Max(1.f, fabs(xref[ivar]));
+#else
          Number this_perturbation = derivative_test_perturbation_ * Max(1., fabs(xref[ivar]));
+#endif
          xpert[ivar] = xref[ivar] + this_perturbation;
 
          Number fpert;
@@ -2930,7 +2948,11 @@ bool TNLPAdapter::CheckDerivatives(
 
          Number deriv_approx = (fpert - fref) / this_perturbation;
          Number deriv_exact = grad_f[ivar];
+#ifdef IPOPT_SINGLE
+         Number rel_error = fabs(deriv_approx - deriv_exact) / Max(fabs(deriv_approx), 1.f);
+#else
          Number rel_error = fabs(deriv_approx - deriv_exact) / Max(fabs(deriv_approx), 1.);
+#endif
          char cflag = ' ';
          if( rel_error >= derivative_test_tol_ )
          {
@@ -2961,8 +2983,11 @@ bool TNLPAdapter::CheckDerivatives(
                      deriv_exact += jac_g[i];
                   }
                }
-
+#ifdef IPOPT_SINGLE
+               rel_error = fabs(deriv_approx - deriv_exact) / Max(fabs(deriv_approx), 1.f);
+#else
                rel_error = fabs(deriv_approx - deriv_exact) / Max(fabs(deriv_approx), 1.);
+#endif
                cflag = ' ';
                if( rel_error >= derivative_test_tol_ )
                {
@@ -3028,7 +3053,7 @@ bool TNLPAdapter::CheckDerivatives(
       if( ng > 0 )
       {
          lambda = new Number[ng];
-         IpBlasDcopy(ng, &zero, 0, lambda, 1);
+         IpBlasCopy(ng, &zero, 0, lambda, 1);
       }
       Number* gradref = new Number[nx]; // gradient of objective or constraint at reference point
       Number* gradpert = new Number[nx]; // gradient of objective or constraint at perturbed point
@@ -3042,12 +3067,12 @@ bool TNLPAdapter::CheckDerivatives(
          if( icon == -1 )
          {
             objfact = 1.;
-            IpBlasDcopy(nx, grad_f, 1, gradref, 1);
+            IpBlasCopy(nx, grad_f, 1, gradref, 1);
          }
          else
          {
             lambda[icon] = 1.;
-            IpBlasDcopy(nx, &zero, 0, gradref, 1);
+            IpBlasCopy(nx, &zero, 0, gradref, 1);
             for( Index i = 0; i < nz_jac_g; i++ )
             {
                if( g_iRow[i] == icon )
@@ -3067,7 +3092,11 @@ bool TNLPAdapter::CheckDerivatives(
 
          for( Index ivar = 0; ivar < nx; ivar++ )
          {
+#ifdef IPOPT_SINGLE
+            Number this_perturbation = derivative_test_perturbation_ * Max(1.f, fabs(xref[ivar]));
+#else
             Number this_perturbation = derivative_test_perturbation_ * Max(1., fabs(xref[ivar]));
+#endif
             xpert[ivar] = xref[ivar] + this_perturbation;
 
             new_x = true;
@@ -3085,8 +3114,8 @@ bool TNLPAdapter::CheckDerivatives(
                ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
                                 "In TNLP derivative test: Jacobian values could not be evaluated at reference point.");
                // ok, now we need to filter the gradient of the icon-th constraint
-               IpBlasDcopy(nx, &zero, 0, gradpert, 1);
-               IpBlasDcopy(nx, &zero, 0, gradref, 1);
+               IpBlasCopy(nx, &zero, 0, gradpert, 1);
+               IpBlasCopy(nx, &zero, 0, gradref, 1);
                for( Index i = 0; i < nz_jac_g; i++ )
                {
                   if( g_iRow[i] == icon )
@@ -3111,7 +3140,11 @@ bool TNLPAdapter::CheckDerivatives(
                      found = true;
                   }
                }
+#ifdef IPOPT_SINGLE
+               Number rel_error = fabs(deriv_approx - deriv_exact) / Max(fabs(deriv_approx), 1.f);
+#else
                Number rel_error = fabs(deriv_approx - deriv_exact) / Max(fabs(deriv_approx), 1.);
+#endif
                char cflag = ' ';
                if( rel_error >= derivative_test_tol_ )
                {
@@ -3329,7 +3362,7 @@ bool TNLPAdapter::DetermineDependentConstraints(
    }
 
    // Get the equality constraint Jacobian out
-   double* jac_c_vals = new double[nz_jac_c + n_c];
+   Number* jac_c_vals = new Number[nz_jac_c + n_c];
    for( Index i = 0; i < nz_jac_c; i++ )
    {
       jac_c_vals[i] = jac_g_[jac_c_map[i]];

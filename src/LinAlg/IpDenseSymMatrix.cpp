@@ -51,7 +51,7 @@ void DenseSymMatrix::MultVectorImpl(
    DenseVector* dense_y = static_cast<DenseVector*>(&y);
    DBG_ASSERT(dynamic_cast<DenseVector*>(&y));
 
-   IpBlasDsymv(Dim(), alpha, values_, NRows(), dense_x->Values(), 1, beta, dense_y->Values(), 1);
+   IpBlasSymv(Dim(), alpha, values_, NRows(), dense_x->Values(), 1, beta, dense_y->Values(), 1);
 }
 
 void DenseSymMatrix::FillIdentity(
@@ -177,7 +177,7 @@ void DenseSymMatrix::HighRankUpdate(
       nrank = V.NCols();
    }
 
-   IpBlasDsyrk(trans, Dim(), nrank, alpha, V.Values(), V.NRows(), beta, values_, NRows());
+   IpBlasSyrk(trans, Dim(), nrank, alpha, V.Values(), V.NRows(), beta, values_, NRows());
 
    initialized_ = true;
    ObjectChanged();
@@ -241,12 +241,12 @@ void DenseSymMatrix::ComputeRowAMaxImpl(
    DBG_ASSERT(dynamic_cast<DenseVector*>(&rows_norms));
    Number* vec_vals = dense_vec->Values();
 
-   const double* vals = values_;
+   const Number* vals = values_;
    for( Index irow = 0; irow < NRows(); irow++ )
    {
       for( Index jcol = 0; jcol <= irow; jcol++ )
       {
-         const double f = fabs(*vals);
+         const Number f = fabs(*vals);
          vec_vals[irow] = Max(vec_vals[irow], f);
          vec_vals[jcol] = Max(vec_vals[jcol], f);
          vals++;

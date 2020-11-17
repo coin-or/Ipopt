@@ -43,14 +43,14 @@ public:
       const Index* ja
    );
 
-   virtual double* GetValuesArrayPtr();
+   virtual Number* GetValuesArrayPtr();
 
    virtual ESymSolverStatus MultiSolve(
       bool         new_matrix,
       const Index* ia,
       const Index* ja,
       Index        nrhs,
-      double*      rhs_vals,
+      Number*      rhs_vals,
       bool         check_NegEVals,
       Index        numberOfNegEVals);
 
@@ -105,16 +105,16 @@ private:
    Index nonzeros_;
 
    /** Array for storing the values of the matrix. */
-   double* a_;
+   Number* a_;
    ///@}
 
 #ifdef PARDISO_MATCHING_PREPROCESS
    /** Array for storing the values of a second matrix that has been already reordered. */
    ipfint* ia2;
    ipfint* ja2;
-   double* a2_;
+   Number* a2_;
    ipfint* perm2;
-   double* scale2;
+   Number* scale2;
 #endif
 
    /** @name Information about most recent factorization/solve */
@@ -178,7 +178,7 @@ private:
    /** Parameter and info array for Pardiso. */
    ipfint* IPARM_;
    /** Parameter and info array for Pardiso. */
-   double* DPARM_;
+   Number* DPARM_;
    /** Message level. */
    ipfint MSGLVL_;
    ///@}
@@ -210,7 +210,7 @@ private:
       const Index* ia,
       const Index* ja,
       Index        nrhs,
-      double*      rhs_vals
+      Number*      rhs_vals
    );
    ///@}
 };

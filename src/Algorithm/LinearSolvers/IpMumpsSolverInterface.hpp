@@ -47,14 +47,14 @@ public:
       const Index* ajcn
    );
 
-   virtual double* GetValuesArrayPtr();
+   virtual Number* GetValuesArrayPtr();
 
    virtual ESymSolverStatus MultiSolve(
       bool         new_matrix,
       const Index* airn,
       const Index* ajcn,
       Index        nrhs,
-      double*      rhs_vals,
+      Number*      rhs_vals,
       bool         check_NegEVals,
       Index        numberOfNegEVals
    );
@@ -194,7 +194,7 @@ private:
    /** Call MUMPS (job=3) to do the solve. */
    ESymSolverStatus Solve(
       Index   nrhs,
-      double* rhs_vals
+      Number* rhs_vals
    );
    ///@}
 };

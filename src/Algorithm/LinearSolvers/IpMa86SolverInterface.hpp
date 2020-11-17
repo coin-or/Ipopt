@@ -31,7 +31,7 @@ private:
    };
 
    int ndim_;     ///< Number of dimensions
-   double* val_;  ///< Storage for variables
+   Number* val_;  ///< Storage for variables
    int numneg_;   ///< Number of negative pivots in last factorization
    Index* order_; ///< Fill reducing permutation
    void* keep_;   ///< Stores pointer to factors (only understood by Fortran code!)
@@ -39,7 +39,7 @@ private:
 
    /* Options */
    struct ma86_control control_;
-   double umax_;
+   Number umax_;
    int ordering_;
 
 public:
@@ -71,7 +71,7 @@ public:
       const Index* ja
    );
 
-   double* GetValuesArrayPtr()
+   Number* GetValuesArrayPtr()
    {
       return val_;
    }
@@ -81,7 +81,7 @@ public:
       const Index* ia,
       const Index* ja,
       Index        nrhs,
-      double*      rhs_vals,
+      Number*      rhs_vals,
       bool         check_NegEVals,
       Index        numberOfNegEVals
    );

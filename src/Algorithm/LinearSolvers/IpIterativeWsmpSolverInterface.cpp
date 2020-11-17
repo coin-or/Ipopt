@@ -488,7 +488,7 @@ ESymSolverStatus IterativeWsmpSolverInterface::Solve(
    ipfint N = dim_;
    ipfint LDB = dim_;
    double* RHS = new double[dim_ * nrhs];
-   IpBlasDcopy(dim_ * nrhs, rhs_vals, 1, RHS, 1);
+   IpBlasCopy(dim_ * nrhs, rhs_vals, 1, RHS, 1);
    ipfint LDX = dim_; // Q: Do we have to zero out solution?
    ipfint NRHS = nrhs;
    IPARM_[1] = 4; // Iterative solver solution

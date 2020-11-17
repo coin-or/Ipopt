@@ -59,17 +59,17 @@ bool AugRestoSystemSolver::InitializeImpl(
 
 ESymSolverStatus AugRestoSystemSolver::Solve(
    const SymMatrix* W,
-   double           W_factor,
+   Number           W_factor,
    const Vector*    D_x,
-   double           delta_x,
+   Number           delta_x,
    const Vector*    D_s,
-   double           delta_s,
+   Number           delta_s,
    const Matrix*    J_c,
    const Vector*    D_c,
-   double           delta_c,
+   Number           delta_c,
    const Matrix*    J_d,
    const Vector*    D_d,
-   double           delta_d,
+   Number           delta_d,
    const Vector&    rhs_x,
    const Vector&    rhs_s,
    const Vector&    rhs_c,
@@ -200,12 +200,12 @@ ESymSolverStatus AugRestoSystemSolver::Solve(
    {
       // We seem to be in the regular situation with exact second
       // derivatives
-      double temp_factor;
+      Number temp_factor;
       WR_sum->GetTerm(0, temp_factor, h_orig);
       DBG_ASSERT(temp_factor == 1. || temp_factor == 0.);
       orig_W_factor = temp_factor * W_factor;
       SmartPtr<const SymMatrix> eta_DR;
-      double factor;
+      Number factor;
       WR_sum->GetTerm(1, factor, eta_DR);
       SmartPtr<const Vector> wr_d = static_cast<const DiagMatrix*>(GetRawPtr(eta_DR))->GetDiag();
 

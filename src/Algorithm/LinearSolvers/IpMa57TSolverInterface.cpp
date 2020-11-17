@@ -26,6 +26,86 @@
 /** Prototypes for MA57's Fortran subroutines */
 extern "C"
 {
+#ifdef IPOPT_SINGLE
+   /** MA57I -- Initialize solver. */
+   extern void IPOPT_HSL_FUNC (ma57i, MA57I)(
+      float*   cntl,
+      ma57int* icntl
+   );
+
+   /** MA57A -- Symbolic Factorization. */
+   extern void IPOPT_HSL_FUNC (ma57a, MA57A)(
+      ma57int*       n,     /**< Order of matrix. */
+      ma57int*       ne,    /**< Number of entries. */
+      const ma57int* irn,   /**< Matrix nonzero row structure */
+      const ma57int* jcn,   /**< Matrix nonzero column structure */
+      ma57int*       lkeep, /**< Workspace for the pivot order of length 3*n */
+      ma57int*       keep,  /**< Workspace for the pivot order of length 3*n */
+      /* Automatically iflag = 0; ikeep pivot order iflag = 1 */
+      ma57int*       iwork, /**< Integer work space. */
+      ma57int*       icntl, /**< Integer Control parameter of length 30 */
+      ma57int*       info,  /**< Statistical Information; Integer array of length 20 */
+      float*         rinfo  /**< Float Control parameter of length 5 */
+   );
+
+   /** MA57B -- Numerical Factorization. */
+   extern void IPOPT_HSL_FUNC (ma57b, MA57B)(
+      ma57int* n,      /**< Order of matrix. */
+      ma57int* ne,     /**< Number of entries. */
+      float*   a,      /**< Numerical values. */
+      float*   fact,   /**< Entries of factors. */
+      ma57int* lfact,  /**< Length of array `fact'. */
+      ma57int* ifact,  /**< Indexing info for factors. */
+      ma57int* lifact, /**< Length of array `ifact'. */
+      ma57int* lkeep,  /**< Length of array `keep'. */
+      ma57int* keep,   /**< Integer array. */
+      ma57int* iwork,  /**< Workspace of length `n'. */
+      ma57int* icntl,  /**< Integer Control parameter of length 20. */
+      float*   cntl,   /**< Float Control parameter of length 5. */
+      ma57int* info,   /**< Statistical Information; Integer array of length 40. */
+      float*   rinfo   /**< Statistical Information; Real array of length 20. */
+   );
+
+   /** MA57C -- Solution. */
+   extern void IPOPT_HSL_FUNC (ma57c, MA57C)(
+      /** Solution job.  Solve for...
+       * - JOB <= 1:  A
+       * - JOB == 2:  PLP^t
+       * - JOB == 3:  PDP^t
+       * - JOB >= 4:  PL^t P^t
+       */
+      ma57int* job,
+      ma57int* n,      /**< Order of matrix. */
+      float*   fact,   /**< Entries of factors. */
+      ma57int* lfact,  /**< Length of array `fact'. */
+      ma57int* ifact,  /**< Indexing info for factors. */
+      ma57int* lifact, /**< Length of array `ifact'. */
+      ma57int* nrhs,   /**< Number of right hand sides. */
+      float*   rhs,    /**< Numerical Values. */
+      ma57int* lrhs,   /**< Leading dimensions of `rhs'. */
+      float*   work,   /**< Real workspace. */
+      ma57int* lwork,  /**< Length of `work', >= N*NRHS. */
+      ma57int* iwork,  /**< Integer array of length `n'. */
+      ma57int* icntl,  /**< Integer Control parameter array of length 20. */
+      ma57int* info    /**< Statistical Information; Integer array of length 40. */
+   );
+
+   /** MC57E -- Copy arrays. */
+   extern void IPOPT_HSL_FUNC (ma57e, MA57E)(
+      ma57int* n,
+      ma57int* ic,   /**< 0: copy real array.  >=1:  copy integer array. */
+      ma57int* keep,
+      float*   fact,
+      ma57int* lfact,
+      float*   newfac,
+      ma57int* lnew,
+      ma57int* ifact,
+      ma57int* lifact,
+      ma57int* newifc,
+      ma57int* linew,
+      ma57int* info
+   );
+#else
    /** MA57ID -- Initialize solver. */
    extern void IPOPT_HSL_FUNC (ma57id, MA57ID)(
       double*  cntl,
@@ -104,6 +184,7 @@ extern "C"
       ma57int* linew,
       ma57int* info
    );
+#endif
 }
 
 namespace Ipopt
@@ -357,8 +438,11 @@ bool Ma57TSolverInterface::InitializeImpl(
    // CET 04-29-2010
 
    /* Initialize. */
+#ifdef IPOPT_SINGLE
+   IPOPT_HSL_FUNC (ma57i, MA57I)(wd_cntl_, wd_icntl_);
+#else
    IPOPT_HSL_FUNC (ma57id, MA57ID)(wd_cntl_, wd_icntl_);
-
+#endif
    /* Custom settings for MA57. */
    wd_icntl_[1 - 1] = 0; /* Error stream */
    wd_icntl_[2 - 1] = 0; /* Warning stream. */
@@ -421,7 +505,7 @@ ESymSolverStatus Ma57TSolverInterface::MultiSolve(
    const Index* airn,
    const Index* ajcn,
    Index        nrhs,
-   double*      rhs_vals,
+   Number*      rhs_vals,
    bool         check_NegEVals,
    Index        numberOfNegEVals
 )
@@ -466,7 +550,7 @@ ESymSolverStatus Ma57TSolverInterface::MultiSolve(
    return Backsolve(nrhs, rhs_vals);
 }
 
-double* Ma57TSolverInterface::GetValuesArrayPtr()
+Number* Ma57TSolverInterface::GetValuesArrayPtr()
 {
    DBG_START_METH("Ma57TSolverInterface::GetValuesArrayPtr", dbg_verbosity);
    DBG_ASSERT(initialized_);
@@ -493,7 +577,7 @@ ESymSolverStatus Ma57TSolverInterface::InitializeStructure(
       // elements
       delete[] a_;
       a_ = NULL;
-      a_ = new double[nonzeros_];
+      a_ = new Number[nonzeros_];
 
       // Do the symbolic factorization
       retval = SymbolicFactorization(airn, ajcn);
@@ -535,7 +619,7 @@ ESymSolverStatus Ma57TSolverInterface::SymbolicFactorization(
 
    wd_iwork_ = new ma57int[5 * n];
    wd_keep_ = new ma57int[wd_lkeep_];
-   // Initialize to 0 as otherwise MA57ED can sometimes fail
+   // Initialize to 0 as otherwise MA57EX can sometimes fail
    for( int k = 0; k < wd_lkeep_; k++ )
    {
       wd_keep_[k] = 0;
@@ -559,10 +643,13 @@ ESymSolverStatus Ma57TSolverInterface::SymbolicFactorization(
       airn_ma57int = (ma57int*) (void*) const_cast<Index*>(airn);
       ajcn_ma57int = (ma57int*) (void*) const_cast<Index*>(ajcn);
    }
-
+#ifdef IPOPT_SINGLE
+   IPOPT_HSL_FUNC (ma57a, MA57A)(&n, &ne, airn_ma57int, ajcn_ma57int, &wd_lkeep_, wd_keep_, wd_iwork_, wd_icntl_, wd_info_,
+							 wd_rinfo_);
+#else
    IPOPT_HSL_FUNC (ma57ad, MA57AD)(&n, &ne, airn_ma57int, ajcn_ma57int, &wd_lkeep_, wd_keep_, wd_iwork_, wd_icntl_, wd_info_,
                              wd_rinfo_);
-
+#endif
    // free copy-casted ma57int arrays, no longer needed
    if( sizeof(ma57int) != sizeof(Index) )
    {
@@ -592,7 +679,7 @@ ESymSolverStatus Ma57TSolverInterface::SymbolicFactorization(
    delete[] wd_ifact_;
    wd_ifact_ = NULL;
 
-   wd_fact_ = new double[wd_lfact_];
+   wd_fact_ = new Number[wd_lfact_];
    wd_ifact_ = new ma57int[wd_lifact_];
 
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
@@ -629,9 +716,13 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
 
    while( fact_error > 0 )
    {
+#ifdef IPOPT_SINGLE
+      IPOPT_HSL_FUNC (ma57b, MA57B)(&n, &ne, a_, wd_fact_, &wd_lfact_, wd_ifact_, &wd_lifact_, &wd_lkeep_, wd_keep_,
+								wd_iwork_, wd_icntl_, wd_cntl_, wd_info_, wd_rinfo_);
+#else
       IPOPT_HSL_FUNC (ma57bd, MA57BD)(&n, &ne, a_, wd_fact_, &wd_lfact_, wd_ifact_, &wd_lifact_, &wd_lkeep_, wd_keep_,
                                 wd_iwork_, wd_icntl_, wd_cntl_, wd_info_, wd_rinfo_);
-
+#endif
       negevals_ = (Index) wd_info_[24 - 1]; // Number of negative eigenvalues
 
       if( wd_info_[0] == 0 )
@@ -646,26 +737,30 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
           * copy the contents of FACT into it using MA57E/ED, and recall
           * MA57B/BD.
           */
-         double* temp;
+         Number* temp;
          ma57int ic = 0;
 
          wd_lfact_ = (ma57int) ((Number) wd_info_[16] * ma57_pre_alloc_);
          Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                         "Reallocating memory for MA57: lfact (%d)\n", wd_lfact_);
 
-         if( (size_t) wd_lfact_ > std::numeric_limits<size_t>::max() / sizeof(double) )
+         if( (size_t) wd_lfact_ > std::numeric_limits<size_t>::max() / sizeof(Number) )
          {
             Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                            "Cannot allocate memory of size %d exceeding SIZE_MAX = %u\n", wd_lfact_, std::numeric_limits<size_t>::max());
             return SYMSOLVER_FATAL_ERROR;
          }
 
-         temp = new double[wd_lfact_];
+         temp = new Number[wd_lfact_];
 
          ma57int idmy;
+#ifdef IPOPT_SINGLE
+		 IPOPT_HSL_FUNC (ma57e, MA57E)(&n, &ic, wd_keep_, wd_fact_, &wd_info_[1], temp, &wd_lfact_, wd_ifact_, &wd_info_[1],
+                                   &idmy, &wd_lfact_, wd_info_);
+#else
          IPOPT_HSL_FUNC (ma57ed, MA57ED)(&n, &ic, wd_keep_, wd_fact_, &wd_info_[1], temp, &wd_lfact_, wd_ifact_, &wd_info_[1],
                                    &idmy, &wd_lfact_, wd_info_);
-
+#endif
          delete[] wd_fact_;
          wd_fact_ = temp;
       }
@@ -687,10 +782,14 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                         "Reallocating lifact (%d)\n", wd_lifact_);
 
-         double ddmy;
+         Number ddmy;
+#ifdef IPOPT_SINGLE
+		 IPOPT_HSL_FUNC (ma57e, MA57E)(&n, &ic, wd_keep_, wd_fact_, &wd_info_[1], &ddmy, &wd_lifact_, wd_ifact_,
+                                   &wd_info_[1], temp, &wd_lifact_, wd_info_);
+#else
          IPOPT_HSL_FUNC (ma57ed, MA57ED)(&n, &ic, wd_keep_, wd_fact_, &wd_info_[1], &ddmy, &wd_lifact_, wd_ifact_,
                                    &wd_info_[1], temp, &wd_lifact_, wd_info_);
-
+#endif
          delete[] wd_ifact_;
          wd_ifact_ = temp;
       }
@@ -724,7 +823,7 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
       }
    }
 
-   double peak_mem = 1.0e-3 * ((double) wd_lfact_ * 8.0 + (double) wd_lifact_ * 4.0 + (double) wd_lkeep_ * 4.0);
+   Number peak_mem = 1.0e-3 * ((Number) wd_lfact_ * 8.0 + (Number) wd_lifact_ * 4.0 + (Number) wd_lkeep_ * 4.0);
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "MA57 peak memory use: %dKB\n", (ma57int) (peak_mem));
 
@@ -746,7 +845,7 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
 
 ESymSolverStatus Ma57TSolverInterface::Backsolve(
    Index   nrhs,
-   double* rhs_vals
+   Number* rhs_vals
 )
 {
    DBG_START_METH("Ma27TSolverInterface::Backsolve", dbg_verbosity);
@@ -762,10 +861,10 @@ ESymSolverStatus Ma57TSolverInterface::Backsolve(
    ma57int lrhs = n;
 
    ma57int lwork;
-   double* work;
+   Number* work;
 
    lwork = n * nrhs;
-   work = new double[lwork];
+   work = new Number[lwork];
 
    // For each right hand side, call MA57CD
    // XXX MH: MA57 can do several RHSs; just do one solve...
@@ -780,10 +879,13 @@ ESymSolverStatus Ma57TSolverInterface::Backsolve(
          }
       }
    }
-
+#ifdef IPOPT_SINGLE
+   IPOPT_HSL_FUNC (ma57c, MA57C)(&job, &n, wd_fact_, &wd_lfact_, wd_ifact_, &wd_lifact_, &nrhs_X, rhs_vals, &lrhs, work,
+                             &lwork, wd_iwork_, wd_icntl_, wd_info_);
+#else
    IPOPT_HSL_FUNC (ma57cd, MA57CD)(&job, &n, wd_fact_, &wd_lfact_, wd_ifact_, &wd_lifact_, &nrhs_X, rhs_vals, &lrhs, work,
                              &lwork, wd_iwork_, wd_icntl_, wd_info_);
-
+#endif
    if( wd_info_[0] != 0 )
    {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,

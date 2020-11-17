@@ -8,6 +8,7 @@
 //          Jonathan Hogg                           2009-07-29
 //          Carl Laird, Andreas Waechter     IBM    2004-03-17
 
+#ifndef IPOPT_SINGLE
 #include "IpoptConfig.h"
 
 #ifdef IPOPT_HAS_HSL
@@ -360,3 +361,4 @@ bool Ma86SolverInterface::IncreaseQuality()
 } // namespace Ipopt
 
 #endif /* COINHSL_HAS_MA86 or IPOPT_HAS_LINEARSOLVERLOADER */
+#endif // IPOPT_SINGLE

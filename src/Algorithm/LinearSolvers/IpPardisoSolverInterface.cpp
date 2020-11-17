@@ -9,7 +9,7 @@
 
 /* some useful links:
  * MKL documentation: https://software.intel.com/en-us/intel-mkl/documentation
- * API differences MKL vs Basel PARDISO: http://software.intel.com/en-us/articles/summary-of-api-differences-between-intel-mkl-pardiso-and-university-of-basel-pardiso-400
+ * API differences MKL vs Basel PARDISO: https://software.intel.com/content/www/us/en/develop/articles/summary-of-the-api-differences-between-university-of-basel-ub-pardiso-and-intel-mkl-pardiso.html
  */
 
 #include "IpoptConfig.h"
@@ -42,7 +42,11 @@ extern "C"
       const ipfint* MTYPE,
       const ipfint* SOLVER,
       ipfint*       IPARM,
+#ifdef IPOPT_SINGLE
+      float*        DPARM,
+#else
       double*       DPARM,
+#endif
       ipfint*       ERROR
    );
 #endif
@@ -54,17 +58,30 @@ extern "C"
       const ipfint* MTYPE,
       const ipfint* PHASE,
       const ipfint* N,
+#ifdef IPOPT_SINGLE
+      const float*  A,
+#else
       const double* A,
+#endif
       const ipfint* IA,
       const ipfint* JA,
       const ipfint* PERM,
       const ipfint* NRHS,
       ipfint*       IPARM,
       const ipfint* MSGLVL,
+#ifdef IPOPT_SINGLE
+      float*        B,
+      float*        X,
+#else
       double*       B,
       double*       X,
+#endif
       ipfint*       ERROR,
+#ifdef IPOPT_SINGLE
+      float*        DPARM
+#else
       double*       DPARM
+#endif
    );
 
 #ifdef PARDISO_MATCHING_PREPROCESS
@@ -72,12 +89,24 @@ extern "C"
       const ipfint* N,
       const ipfint* ia,
       const ipfint* ja,
+#ifdef IPOPT_SINGLE
+      const float*  a_,
+#else
       const double* a_,
+#endif
       ipfint*       a2,
       ipfint*       ja2,
+#ifdef IPOPT_SINGLE
+      float*        a2_,
+#else
       double*       a2_,
+#endif
       ipfint*       perm2,
+#ifdef IPOPT_SINGLE
+      float*        scale2,
+#else
       double*       scale2,
+#endif
       ipfint*       tmp2_,
       ipfint        preprocess
    );
@@ -111,7 +140,7 @@ PardisoSolverInterface::PardisoSolverInterface()
 
    PT_ = new void* [64];
    IPARM_ = new ipfint[64];
-   DPARM_ = new double[64];
+   DPARM_ = new Number[64];
 }
 
 PardisoSolverInterface::~PardisoSolverInterface()
@@ -127,7 +156,7 @@ PardisoSolverInterface::~PardisoSolverInterface()
       ipfint NRHS = 0;
       ipfint ERROR;
       ipfint idmy;
-      double ddmy;
+      Number ddmy;
       IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
                                      &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
@@ -360,7 +389,7 @@ bool PardisoSolverInterface::InitializeImpl(
       ipfint NRHS = 0;
       ipfint ERROR;
       ipfint idmy;
-      double ddmy;
+      Number ddmy;
       IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
                                      &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
@@ -448,6 +477,11 @@ bool PardisoSolverInterface::InitializeImpl(
    IPARM_[23] = 1;// parallel fac
    IPARM_[24] = 0;// parallel solve
    //IPARM_[26] = 1; // matrix checker
+#ifdef IPOPT_SINGLE
+   IPARM_[27] = 1; // Use single precision
+#else
+   IPARM_[27] = 0; // Use double precision
+#endif
 #else
    IPARM_[1] = order;
    IPARM_[2] = num_procs; // Set the number of processors
@@ -465,7 +499,11 @@ bool PardisoSolverInterface::InitializeImpl(
    IPARM_[20] = 3; // Results in better accuracy
    IPARM_[23] = 1; // parallel fac
    IPARM_[24] = 1; // parallel solve
-   IPARM_[28] = 0; // 32-bit factorization
+#ifdef IPOPT_SINGLE
+   IPARM_[28] = 1; // 32-bit factorization (single precision)
+#else
+   IPARM_[28] = 0; // 64-bit factorization (double precision)
+#endif
    IPARM_[29] = 80; // we need this for IPOPT interface
    //IPARM_[33] = 1; // bit-by-bit identical results in parallel run
 #endif
@@ -533,7 +571,7 @@ ESymSolverStatus PardisoSolverInterface::MultiSolve(
    const Index* ia,
    const Index* ja,
    Index        nrhs,
-   double*      rhs_vals,
+   Number*      rhs_vals,
    bool         check_NegEVals,
    Index        numberOfNegEVals
 )
@@ -559,7 +597,7 @@ ESymSolverStatus PardisoSolverInterface::MultiSolve(
    return Solve(ia, ja, nrhs, rhs_vals);
 }
 
-double* PardisoSolverInterface::GetValuesArrayPtr()
+Number* PardisoSolverInterface::GetValuesArrayPtr()
 {
    DBG_ASSERT(initialized_);
    DBG_ASSERT(a_);
@@ -580,7 +618,7 @@ ESymSolverStatus PardisoSolverInterface::InitializeStructure(
    // Make space for storing the matrix elements
    delete[] a_;
    a_ = NULL;
-   a_ = new double[nonzeros_];
+   a_ = new Number[nonzeros_];
 
    // Do the symbolic facotrization
    ESymSolverStatus retval = SymbolicFactorization(ia, ja);
@@ -618,8 +656,8 @@ void write_iajaa_matrix(
    int          N,
    const Index* ia,
    const Index* ja,
-   double*      a_,
-   double*      rhs_vals,
+   Number*      a_,
+   Number*      rhs_vals,
    int          iter_cnt,
    int          sol_cnt
 )
@@ -722,9 +760,9 @@ ESymSolverStatus PardisoSolverInterface::Factorization(
    ipfint N = dim_;
    ipfint PERM;   // This should not be accessed by Pardiso
    ipfint NRHS = 0;
-   double B;  // This should not be accessed by Pardiso in factorization
+   Number B;  // This should not be accessed by Pardiso in factorization
    // phase
-   double X;  // This should not be accessed by Pardiso in factorization
+   Number X;  // This should not be accessed by Pardiso in factorization
    // phase
    ipfint ERROR;
 
@@ -759,9 +797,9 @@ ESymSolverStatus PardisoSolverInterface::Factorization(
 
          ia2 = new ipfint[N + 1];
          ja2 = new ipfint[nonzeros_];
-         a2_ = new double[nonzeros_];
+         a2_ = new Number[nonzeros_];
          perm2 = new ipfint[N];
-         scale2 = new double[N];
+         scale2 = new Number[N];
          ipfint* tmp2_ = new ipfint[N];
 
          IPOPT_PARDISO_FUNC(smat_reordering_pardiso_wsmp, SMAT_REORDERING_PARDISO_WSMP)(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp2_, 0);
@@ -941,7 +979,7 @@ ESymSolverStatus PardisoSolverInterface::Solve(
    const Index* ia,
    const Index* ja,
    Index        nrhs,
-   double*      rhs_vals
+   Number*      rhs_vals
 )
 {
    DBG_START_METH("PardisoSolverInterface::Solve", dbg_verbosity);
@@ -955,9 +993,9 @@ ESymSolverStatus PardisoSolverInterface::Solve(
    ipfint N = dim_;
    ipfint PERM;   // This should not be accessed by Pardiso
    ipfint NRHS = nrhs;
-   double* X = new double[nrhs * dim_];
+   Number* X = new Number[nrhs * dim_];
 
-   double* ORIG_RHS = new double[nrhs * dim_];
+   Number* ORIG_RHS = new Number[nrhs * dim_];
    ipfint ERROR;
    // Initialize solution with zero and save right hand side
    for( int i = 0; i < N; i++ )
