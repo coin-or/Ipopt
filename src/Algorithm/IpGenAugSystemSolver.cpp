@@ -69,17 +69,17 @@ bool GenAugSystemSolver::InitializeImpl(
 
 ESymSolverStatus GenAugSystemSolver::MultiSolve(
    const SymMatrix*                      W,
-   double                                W_factor,
+   Number                                W_factor,
    const Vector*                         D_x,
-   double                                delta_x,
+   Number                                delta_x,
    const Vector*                         D_s,
-   double                                delta_s,
+   Number                                delta_s,
    const Matrix*                         J_c,
    const Vector*                         D_c,
-   double                                delta_c,
+   Number                                delta_c,
    const Matrix*                         J_d,
    const Vector*                         D_d,
-   double                                delta_d,
+   Number                                delta_d,
    std::vector<SmartPtr<const Vector> >& rhs_xV,
    std::vector<SmartPtr<const Vector> >& rhs_sV,
    std::vector<SmartPtr<const Vector> >& rhs_cV,
@@ -242,17 +242,17 @@ ESymSolverStatus GenAugSystemSolver::MultiSolve(
 
 void GenAugSystemSolver::UpdateTags(
    const SymMatrix* W,
-   double           W_factor,
+   Number           W_factor,
    const Vector*    D_x,
-   double           delta_x,
+   Number           delta_x,
    const Vector*    D_s,
-   double           delta_s,
+   Number           delta_s,
    const Matrix&    J_c,
    const Vector*    D_c,
-   double           delta_c,
+   Number           delta_c,
    const Matrix&    J_d,
    const Vector*    D_d,
-   double           delta_d
+   Number           delta_d
 )
 {
    if( W )
@@ -307,17 +307,17 @@ void GenAugSystemSolver::UpdateTags(
 
 bool GenAugSystemSolver::AugmentedSystemChanged(
    const SymMatrix* W,
-   double           W_factor,
+   Number           W_factor,
    const Vector*    D_x,
-   double           delta_x,
+   Number           delta_x,
    const Vector*    D_s,
-   double           delta_s,
+   Number           delta_s,
    const Matrix&    J_c,
    const Vector*    D_c,
-   double           delta_c,
+   Number           delta_c,
    const Matrix&    J_d,
    const Vector*    D_d,
-   double           delta_d
+   Number           delta_d
 )
 {
    DBG_START_METH("GenAugSystemSolver::AugmentedSystemRequiresChange", dbg_verbosity);

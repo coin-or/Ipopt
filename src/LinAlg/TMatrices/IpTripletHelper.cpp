@@ -658,7 +658,7 @@ void TripletHelper::FillValues_(
       FillValues(term_n_entries, *retTerm, values);
 
       // Now adjust the values based on the factor
-      IpBlasDscal(term_n_entries, retFactor, values, 1);
+      IpBlasScal(term_n_entries, retFactor, values, 1);
 
       // now shift the values pointer for the next term
       values += term_n_entries;
@@ -717,13 +717,13 @@ void TripletHelper::FillValues_(
          if( retFactor != 1. )
          {
             // Now adjust the values based on the factor
-            IpBlasDscal(term_n_entries, retFactor, values, 1);
+            IpBlasScal(term_n_entries, retFactor, values, 1);
          }
       }
       else
       {
          const Number zero = 0.;
-         IpBlasDcopy(term_n_entries, &zero, 0, values, 1);
+         IpBlasCopy(term_n_entries, &zero, 0, values, 1);
       }
 
       // now shift the values pointer for the next term
@@ -885,12 +885,12 @@ void TripletHelper::FillValuesFromVector(
       if( dv->IsHomogeneous() )
       {
          Number scalar = dv->Scalar();
-         IpBlasDcopy(dim, &scalar, 0, values, 1);
+         IpBlasCopy(dim, &scalar, 0, values, 1);
       }
       else
       {
          const Number* dv_vals = dv->Values();
-         IpBlasDcopy(dim, dv_vals, 1, values, 1);
+         IpBlasCopy(dim, dv_vals, 1, values, 1);
       }
       return;
    }
@@ -1097,7 +1097,7 @@ void TripletHelper::FillValues_(
    if( IsValid(P) )
    {
       const Index nExp = P->NCols();
-      double* vecvals = new double[nExp];
+      Number* vecvals = new Number[nExp];
       for( Index i = 0; i < nRows; i++ )
       {
          SmartPtr<const Vector> vec = matrix.GetVector(i);
@@ -1145,7 +1145,7 @@ void TripletHelper::FillValues_(
 
 void TripletHelper::PutValuesInVector(
    Index         dim,
-   const double* values,
+   const Number* values,
    Vector&       vector
 )
 {
@@ -1154,7 +1154,7 @@ void TripletHelper::PutValuesInVector(
    if( dv )
    {
       Number* dv_vals = dv->Values();
-      IpBlasDcopy(dim, values, 1, dv_vals, 1);
+      IpBlasCopy(dim, values, 1, dv_vals, 1);
       return;
    }
 

@@ -47,19 +47,19 @@ private:
    };
 
    int ndim_;            ///< Number of dimensions
-   double* val_;         ///< Storage for variables
+   Number* val_;         ///< Storage for variables
    int numneg_;          ///< Number of negative pivots in last factorization
    int numdelay_;        ///< Number of delayed pivots last time we scaled
    void* akeep_;         ///< Stores pointer to factors (only understood Fortran code!)
    void* fkeep_;         ///< Stores pointer to factors (only understood Fortran code!)
    bool pivtol_changed_; ///< indicates if pivtol has been changed
    bool rescale_;        ///< Indicates if we should rescale next factorization
-   double* scaling_;     ///< Store scaling for reuse if doing dynamic scaling
+   Number* scaling_;     ///< Store scaling for reuse if doing dynamic scaling
    int fctidx_;          ///< Current factorization number to dump to
 
    /* Options */
    struct ma97_control control_;
-   double umax_;
+   Number umax_;
    int ordering_;
    int scaling_type_;
    enum scale_opts switch_[3];
@@ -102,7 +102,7 @@ public:
       const Index* ja
    );
 
-   double* GetValuesArrayPtr()
+   Number* GetValuesArrayPtr()
    {
       return val_;
    }
@@ -112,7 +112,7 @@ public:
       const Index* ia,
       const Index* ja,
       Index        nrhs,
-      double*      rhs_vals,
+      Number*      rhs_vals,
       bool         check_NegEVals,
       Index        numberOfNegEVals
    );

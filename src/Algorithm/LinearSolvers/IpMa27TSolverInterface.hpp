@@ -40,14 +40,14 @@ public:
       const Index* ajcn
    );
 
-   virtual double* GetValuesArrayPtr();
+   virtual Number* GetValuesArrayPtr();
 
    virtual ESymSolverStatus MultiSolve(
       bool         new_matrix,
       const Index* airn,
       const Index* ajcn,
       Index        nrhs,
-      double*      rhs_vals,
+      Number*      rhs_vals,
       bool         check_NegEVals,
       Index        numberOfNegEVals);
 
@@ -161,7 +161,7 @@ private:
    /** integer control values */
    ipfint icntl_[30];
    /** real control values */
-   double cntl_[5];
+   Number cntl_[5];
 
    /** length of integer work space */
    ipfint liw_;
@@ -178,7 +178,7 @@ private:
    /** length LA of A */
    ipfint la_;
    /** factor A of matrix */
-   double* a_;
+   Number* a_;
 
    /** flag indicating that la should be increased before next factorization */
    bool la_increase_;
@@ -188,7 +188,7 @@ private:
 
    /** @name Internal functions */
    ///@{
-   /** Call MA27AD and reserve memory for MA27 data.
+   /** Call MA27AX and reserve memory for MA27 data.
     *
     *  Reserve memory for iw_ and ikeep_, call MA27AD to perform
     *  symbolic manipulations, and reserve all the remaining data memory
@@ -198,7 +198,7 @@ private:
       const Index* ajcn
    );
 
-   /** Call MA27BD to factorize the Matrix.
+   /** Call MA27BX to factorize the Matrix.
     *
     *  It is assumed that the first nonzeros_ element of a_ contain the values
     *  of the matrix to be factorized.
@@ -210,10 +210,10 @@ private:
       Index        numberOfNegEVals
    );
 
-   /** Call MA27CD to do the backsolve. */
+   /** Call MA27CX to do the backsolve. */
    ESymSolverStatus Backsolve(
       Index   nrhs,
-      double* rhs_vals
+      Number* rhs_vals
    );
    ///@}
 };

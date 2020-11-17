@@ -107,7 +107,7 @@ void BacktrackingLineSearch::RegisterOptions(
       "tiny_step_tol",
       "Tolerance for detecting numerically insignificant steps.",
       0.0, false,
-      10.0 * std::numeric_limits<double>::epsilon(),
+      10.0 * std::numeric_limits<Number>::epsilon(),
       "If the search direction in the primal variables (x and s) is, in relative terms for each component, "
       "less than this value, the algorithm accepts the full step without line search. "
       "If this happens repeatedly, the algorithm will terminate with a corresponding exit message. "
@@ -961,7 +961,6 @@ void BacktrackingLineSearch::PerformDualStep(
          SmartPtr<Vector> new_jac_times_delta_y = IpData().curr()->x()->MakeNew();
          new_jac_times_delta_y->AddTwoVectors(1., *IpCq().trial_jac_cT_times_vec(*delta->y_c()), 1.,
                                               *IpCq().trial_jac_dT_times_vec(*delta->y_d()), 0.);
-
          Number a = pow(new_jac_times_delta_y->Nrm2(), 2.) + pow(delta->y_d()->Nrm2(), 2.);
          Number b = dual_inf_x->Dot(*new_jac_times_delta_y) - dual_inf_s->Dot(*delta->y_d());
 

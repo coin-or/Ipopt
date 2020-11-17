@@ -51,7 +51,7 @@ public:
    /** Method returning an internal array into which the nonzero
     *  elements are to be stored.
     */
-   virtual double* GetValuesArrayPtr();
+   virtual Number* GetValuesArrayPtr();
 
    /** Solve operation for multiple right hand sides. */
    virtual ESymSolverStatus MultiSolve(
@@ -59,7 +59,7 @@ public:
       const Index* ia,
       const Index* ja,
       Index        nrhs,
-      double*      rhs_vals,
+      Number*      rhs_vals,
       bool         check_NegEVals,
       Index        numberOfNegEVals
    );
@@ -132,7 +132,7 @@ private:
    Index nonzeros_;
 
    /** Array for storing the values of the matrix. */
-   double* a_;
+   Number* a_;
    ///@}
 
    /** @name Information about most recent factorization/solve */
@@ -228,7 +228,7 @@ private:
    /** Parameter and info array for Pardiso. */
    ipfint* IPARM_;
    /** Parameter and info array for Pardiso. */
-   double* DPARM_;
+   Number* DPARM_;
    /** Message level. */
    ipfint MSGLVL_;
    ///@}
@@ -261,7 +261,7 @@ private:
       const Index* ia,
       const Index* ja,
       Index        nrhs,
-      double*      rhs_vals
+      Number*      rhs_vals
    );
    ///@}
 

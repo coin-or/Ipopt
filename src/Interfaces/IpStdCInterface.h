@@ -27,8 +27,11 @@ extern "C"
  *
  * We need to make sure that this is identical with what is defined in Common/IpTypes.hpp
  */
-typedef double Number;
-
+#ifdef IPOPT_SINGLE
+  typedef float Number;
+#else
+  typedef double Number;
+#endif
 /** Type for all indices.
  *
  * We need to make sure that this is identical with what is defined in Common/IpTypes.hpp

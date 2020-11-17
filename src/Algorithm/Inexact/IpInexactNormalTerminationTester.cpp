@@ -89,7 +89,7 @@ InexactNormalTerminationTester::ETerminationTest InexactNormalTerminationTester:
 
    ETerminationTest retval = CONTINUE;
 
-   double norm2_resid = IpBlasDnrm2(ndim, resid, 1);
+   Number norm2_resid = IpBlasNrm2(ndim, resid, 1);
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "TTNormal: iter = %d ||resid|| = %23.16e ||rhs|| = %23.16e\n", iter,  norm2_resid, norm2_rhs);
 

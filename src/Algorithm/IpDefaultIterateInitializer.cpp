@@ -505,8 +505,8 @@ void DefaultIterateInitializer::push_variables(
    SmartPtr<Vector> tmp_l = x_L.MakeNew();
    SmartPtr<Vector> tmp_u = x_U.MakeNew();
 
-   const double dbl_min = std::numeric_limits<double>::min();
-   const double tiny_double = 100.0 * dbl_min;
+   const Number dbl_min = std::numeric_limits<Number>::min();
+   const Number tiny_double = 100.0 * dbl_min;
 
    // Calculate any required shift in x0 and s0
    SmartPtr<Vector> tmp = my_orig_x->MakeNew();

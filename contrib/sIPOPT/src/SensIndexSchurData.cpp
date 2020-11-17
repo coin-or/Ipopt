@@ -298,7 +298,7 @@ void IndexSchurData::TransMultiply(
    {
       curr_dim = v.GetCompNonConst(i)->Dim();
       curr_val = dynamic_cast<DenseVector*>(GetRawPtr(v.GetCompNonConst(i)))->Values();
-      IpBlasDcopy(curr_dim, v_vals + v_idx, 1, curr_val, 1);
+      IpBlasCopy(curr_dim, v_vals + v_idx, 1, curr_val, 1);
 
       v_idx += curr_dim;
    }

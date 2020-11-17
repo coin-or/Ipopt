@@ -218,7 +218,7 @@ ESymSolverStatus MumpsSolverInterface::MultiSolve(
    const Index* ia,
    const Index* ja,
    Index        nrhs,
-   double*      rhs_vals,
+   Number*      rhs_vals,
    bool         check_NegEVals,
    Index        numberOfNegEVals
 )
@@ -274,7 +274,7 @@ ESymSolverStatus MumpsSolverInterface::MultiSolve(
    return Solve(nrhs, rhs_vals);
 }
 
-double* MumpsSolverInterface::GetValuesArrayPtr()
+Number* MumpsSolverInterface::GetValuesArrayPtr()
 {
    DMUMPS_STRUC_C* mumps_ = (DMUMPS_STRUC_C*) mumps_ptr_;
    DBG_START_METH("MumpsSolverInterface::GetValuesArrayPtr", dbg_verbosity)
@@ -333,7 +333,7 @@ ESymSolverStatus MumpsSolverInterface::InitializeStructure(
       delete[] mumps_->a;
       mumps_->a = NULL;
 
-      mumps_->a = new double[nonzeros];
+      mumps_->a = new Number[nonzeros];
       mumps_->irn = const_cast<int*>(ia);
       mumps_->jcn = const_cast<int*>(ja);
 
@@ -442,7 +442,7 @@ ESymSolverStatus MumpsSolverInterface::Factorization(
                         "MUMPS returned INFO(1) = %d and requires more memory, reallocating.  Attempt %d\n", error, trycount + 1);
          Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                         "  Increasing icntl[13] from %d to ", mumps_data->icntl[13]);
-         double mem_percent = mumps_data->icntl[13];
+         Number mem_percent = mumps_data->icntl[13];
          mumps_data->icntl[13] = (Index) (2.0 * mem_percent);
          Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                         "%d.\n", mumps_data->icntl[13]);
@@ -511,7 +511,7 @@ ESymSolverStatus MumpsSolverInterface::Factorization(
 
 ESymSolverStatus MumpsSolverInterface::Solve(
    Index   nrhs,
-   double* rhs_vals
+   Number* rhs_vals
 )
 {
    DBG_START_METH("MumpsSolverInterface::Solve", dbg_verbosity);
@@ -628,7 +628,7 @@ ESymSolverStatus MumpsSolverInterface::DetermineDependentRows(
                         "MUMPS returned INFO(1) = %d and requires more memory, reallocating.  Attempt %d\n", error, trycount + 1);
          Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                         "  Increasing icntl[13] from %d to ", mumps_data->icntl[13]);
-         double mem_percent = mumps_data->icntl[13];
+         Number mem_percent = mumps_data->icntl[13];
          mumps_data->icntl[13] = (Index) (2.0 * mem_percent);
          Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                         "%d.\n", mumps_data->icntl[13]);

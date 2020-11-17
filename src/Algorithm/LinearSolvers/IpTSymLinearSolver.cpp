@@ -200,7 +200,7 @@ ESymSolverStatus TSymLinearSolver::MultiSolve(
 
    // Retrieve the right hand sides and scale if required
    Index nrhs = (Index) rhsV.size();
-   double* rhs_vals = new double[dim_ * nrhs];
+   Number* rhs_vals = new Number[dim_ * nrhs];
    for( Index irhs = 0; irhs < nrhs; irhs++ )
    {
       TripletHelper::FillValuesFromVector(dim_, *rhsV[irhs], &rhs_vals[irhs * (dim_)]);
@@ -384,7 +384,7 @@ ESymSolverStatus TSymLinearSolver::InitializeStructure(
          {
             IpData().TimingStats().LinearSystemScaling().Start();
          }
-         scaling_factors_ = new double[dim_];
+         scaling_factors_ = new Number[dim_];
          if( HaveIpData() )
          {
             IpData().TimingStats().LinearSystemScaling().End();
@@ -460,12 +460,12 @@ void TSymLinearSolver::GiveMatrixToSolver(
    DBG_START_METH("TSymLinearSolver::GiveMatrixToSolver", dbg_verbosity);
    DBG_PRINT((1, "new_matrix = %d\n", new_matrix));
 
-   double* pa = solver_interface_->GetValuesArrayPtr();
-   double* atriplet;
+   Number* pa = solver_interface_->GetValuesArrayPtr();
+   Number* atriplet;
 
    if( matrix_format_ != SparseSymLinearSolverInterface::Triplet_Format )
    {
-      atriplet = new double[nonzeros_triplet_];
+      atriplet = new Number[nonzeros_triplet_];
    }
    else
    {
@@ -619,30 +619,30 @@ ESymSolverStatus TSymLinearSolver::DetermineDependentRows(
       {
          IpData().TimingStats().LinearSystemScaling().Start();
       }
-      scaling_factors_ = new double[dim_];
+      scaling_factors_ = new Number[dim_];
       if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemScaling().End();
       }
    }
 
-   double* pa = solver_interface_->GetValuesArrayPtr();
-   double* atriplet;
+   Number* pa = solver_interface_->GetValuesArrayPtr();
+   Number* atriplet;
 
    if( matrix_format_ != SparseSymLinearSolverInterface::Triplet_Format )
    {
-      atriplet = new double[nonzeros_triplet_];
+      atriplet = new Number[nonzeros_triplet_];
    }
    else
    {
       atriplet = pa;
    }
 
-   IpBlasDcopy(n_jac_nz, jac_c_vals, 1, atriplet, 1);
+   IpBlasCopy(n_jac_nz, jac_c_vals, 1, atriplet, 1);
    const Number one = 1.;
-   IpBlasDcopy(n_cols, &one, 0, atriplet + n_jac_nz, 1);
+   IpBlasCopy(n_cols, &one, 0, atriplet + n_jac_nz, 1);
    const Number zero = 0.;
-   IpBlasDcopy(n_rows, &zero, 0, atriplet + n_jac_nz + n_cols, 1);
+   IpBlasCopy(n_rows, &zero, 0, atriplet + n_jac_nz + n_cols, 1);
 
    if( DBG_VERBOSITY() >= 3 )
    {

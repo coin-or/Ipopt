@@ -43,8 +43,8 @@ public:
       Index         nnz,
       const Index*  airn,
       const Index*  ajcn,
-      const double* a,
-      double*       scaling_factors
+      const Number* a,
+      Number*       scaling_factors
    ) = 0;
 
 private:

@@ -38,7 +38,7 @@ void SymTMatrix::SetValues(
    const Number* Values
 )
 {
-   IpBlasDcopy(Nonzeros(), Values, 1, values_, 1);
+   IpBlasCopy(Nonzeros(), Values, 1, values_, 1);
    initialized_ = true;
    ObjectChanged();
 }
@@ -151,13 +151,13 @@ void SymTMatrix::FillValues(
 ) const
 {
    DBG_ASSERT(initialized_);
-   IpBlasDcopy(Nonzeros(), values_, 1, Values, 1);
+   IpBlasCopy(Nonzeros(), values_, 1, Values, 1);
 }
 
 bool SymTMatrix::HasValidNumbersImpl() const
 {
    DBG_ASSERT(initialized_);
-   Number sum = IpBlasDasum(Nonzeros(), values_, 1);
+   Number sum = IpBlasAsum(Nonzeros(), values_, 1);
    return IsFiniteNumber(sum);
 }
 
@@ -178,11 +178,11 @@ void SymTMatrix::ComputeRowAMaxImpl(
    vec_vals--;
 
    const Number zero = 0.;
-   IpBlasDcopy(NRows(), &zero, 0, vec_vals, 1);
+   IpBlasCopy(NRows(), &zero, 0, vec_vals, 1);
 
    for( Index i = 0; i < Nonzeros(); i++ )
    {
-      const double f = fabs(*val);
+      const Number f = fabs(*val);
       vec_vals[*irn] = Max(vec_vals[*irn], f);
       vec_vals[*jcn] = Max(vec_vals[*jcn], f);
       val++;

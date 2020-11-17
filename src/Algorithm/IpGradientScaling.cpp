@@ -99,7 +99,7 @@ void GradientScaling::DetermineScalingParametersImpl(
    SmartPtr<Vector> grad_f = x_space->MakeNew();
    if( nlp_->Eval_grad_f(*x, *grad_f) )
    {
-      double max_grad_f = grad_f->Amax();
+      Number max_grad_f = grad_f->Amax();
       df = 1.;
       if( scaling_obj_target_gradient_ == 0. )
       {
@@ -145,7 +145,7 @@ void GradientScaling::DetermineScalingParametersImpl(
       if( nlp_->Eval_jac_c(*x, *jac_c) )
       {
          dc = c_space->MakeNew();
-         const double dbl_min = std::numeric_limits<double>::min();
+         const Number dbl_min = std::numeric_limits<Number>::min();
          dc->Set(dbl_min);
          jac_c->ComputeRowAMax(*dc, false);
          Number arow_max = dc->Amax();
@@ -192,7 +192,7 @@ void GradientScaling::DetermineScalingParametersImpl(
       if( nlp_->Eval_jac_d(*x, *jac_d) )
       {
          dd = d_space->MakeNew();
-         const double dbl_min = std::numeric_limits<double>::min();
+         const Number dbl_min = std::numeric_limits<Number>::min();
          dd->Set(dbl_min);
          jac_d->ComputeRowAMax(*dd, false);
          Number arow_max = dd->Amax();

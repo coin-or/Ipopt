@@ -305,6 +305,8 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    }
    else if( linear_solver == "ma77" )
    {
+
+#ifndef IPOPT_SINGLE // don't build these if in single precision
 #ifndef COINHSL_HAS_MA77
 # ifdef IPOPT_HAS_LINEARSOLVERLOADER
       SolverInterface = new Ma77SolverInterface();
@@ -355,6 +357,7 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
 #else
       SolverInterface = new Ma86SolverInterface();
 #endif
+#endif // IPOPT_SINGLE
 
    }
    else if( linear_solver == "pardiso" )
@@ -380,6 +383,7 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
       SolverInterface = new PardisoSolverInterface();
 #endif
 
+#ifndef IPOPT_SINGLE // don't build these if using single precision
    }
    else if( linear_solver == "ma97" )
    {
@@ -406,6 +410,7 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
 #else
       SolverInterface = new Ma97SolverInterface();
 #endif
+#endif // IPOPT_SINGLE
 
    }
    else if( linear_solver == "wsmp" )

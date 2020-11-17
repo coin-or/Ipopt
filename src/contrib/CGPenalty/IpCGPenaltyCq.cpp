@@ -393,7 +393,11 @@ Number CGPenaltyCq::compute_curr_cg_penalty_scale()
    Number infeasibility = ip_cq_->curr_primal_infeasibility(NORM_2);
    if( !CGPenData().NeverTryPureNewton() )
    {
+#ifdef IPOPT_SINGLE
+      penalty = Min(1e13f, infeasibility * 1e9f);
+#else
       penalty = Min(1e13, infeasibility * 1e9);
+#endif
    }
    else
    {
@@ -406,7 +410,7 @@ Number CGPenaltyCq::compute_curr_cg_penalty_scale()
          reference_infeasibility_ = Min(1., infeasibility);
       }
       Number i = CGPenData().restor_counter();
-      Number fac = 4 * 1e-2 * pow(1e1, i);
+      Number fac = 4. * 1e-2 * pow(1e1, i);
       //Number fac = 1e-2;
       penalty = Min(1e4, infeasibility) / (reference * fac * pow(reference_infeasibility_, 1));
    }

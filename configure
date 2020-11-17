@@ -648,6 +648,8 @@ IPOPTAMPLINTERFACELIB_CFLAGS_NOPC
 IPOPTAMPLINTERFACELIB_LFLAGS_NOPC
 IPOPTLIB_CFLAGS_NOPC
 IPOPTLIB_LFLAGS_NOPC
+IPOPT_DOUBLE_FALSE
+IPOPT_DOUBLE_TRUE
 BUILD_SIPOPT_FALSE
 BUILD_SIPOPT_TRUE
 BUILD_LINEARSOLVERLOADER_FALSE
@@ -886,6 +888,7 @@ enable_inexact_solver
 enable_java
 enable_linear_solver_loader
 enable_sipopt
+enable_single_precision
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1554,6 +1557,8 @@ Optional Features:
   --disable-linear-solver-loader
                           disable build of linear solver loader
   --disable-sipopt        disable build of sIpopt
+  --enable-single-precision
+                          use single precision in this build of IPOPT
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -24898,7 +24903,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 24901 "configure" */
+/* #line 24906 "configure" */
 public class Test {
 }
 EOF
@@ -25384,7 +25389,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25387 "configure" */
+/* #line 25392 "configure" */
 public class Test {
 }
 EOF
@@ -25418,7 +25423,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25421 "configure" */
+/* [#]line 25426 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
@@ -25735,6 +25740,29 @@ else
   BUILD_SIPOPT_FALSE=
 fi
 
+
+########################################################################
+##                          Single Precision                          ##
+########################################################################
+
+# Check whether --enable-single-precision was given.
+if test "${enable_single_precision+set}" = set; then :
+  enableval=$enable_single_precision;
+fi
+
+
+if test "x$enable_single_precision" = "xyes" ; then
+
+$as_echo "#define IPOPT_SINGLE 1" >>confdefs.h
+
+fi
+ if test "$enable_single_precision" != yes; then
+  IPOPT_DOUBLE_TRUE=
+  IPOPT_DOUBLE_FALSE='#'
+else
+  IPOPT_DOUBLE_TRUE='#'
+  IPOPT_DOUBLE_FALSE=
+fi
 
 ########################################################################
 ##             Create links for the test source files                 ##
@@ -26452,6 +26480,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${BUILD_SIPOPT_TRUE}" && test -z "${BUILD_SIPOPT_FALSE}"; then
   as_fn_error $? "conditional \"BUILD_SIPOPT\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${IPOPT_DOUBLE_TRUE}" && test -z "${IPOPT_DOUBLE_FALSE}"; then
+  as_fn_error $? "conditional \"IPOPT_DOUBLE\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 

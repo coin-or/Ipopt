@@ -168,6 +168,9 @@
 /* As IPOPT_PARDISO_FUNC, but for C identifiers containing underscores. */
 #undef IPOPT_PARDISO_FUNC_
 
+/* Define to 1 if using single precision floating point */
+#undef IPOPT_SINGLE
+
 /* Define to the debug verbosity level (0 is no output) */
 #undef IPOPT_VERBOSITY
 

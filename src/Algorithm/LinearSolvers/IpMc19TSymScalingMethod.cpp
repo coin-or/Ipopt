@@ -23,6 +23,18 @@
 /** Prototypes for MC19's Fortran subroutines */
 extern "C"
 {
+#ifdef IPOPT_SINGLE
+   void IPOPT_HSL_FUNC(mc19a, MC19A)(
+      ipfint* N,
+      ipfint* NZ,
+      float* A,
+      ipfint* IRN,
+      ipfint* ICN,
+      float*  R,
+      float*  C,
+      float*  W
+   );
+#else
 // here we assume that float corresponds to Fortran's single precision
    void IPOPT_HSL_FUNC(mc19ad, MC19AD)(
       ipfint* N,
@@ -34,6 +46,7 @@ extern "C"
       float*  C,
       float*  W
    );
+#endif
 }
 
 namespace Ipopt
@@ -55,8 +68,8 @@ bool Mc19TSymScalingMethod::ComputeSymTScalingFactors(
    Index         nnz,
    const ipfint* airn,
    const ipfint* ajcn,
-   const double* a,
-   double*       scaling_factors
+   const Number* a,
+   Number*       scaling_factors
 )
 {
    DBG_START_METH("Mc19TSymScalingMethod::ComputeSymTScalingFactors",
@@ -73,7 +86,7 @@ bool Mc19TSymScalingMethod::ComputeSymTScalingFactors(
    // format matrix
    ipfint* AIRN2 = new ipfint[2 * nnz];
    ipfint* AJCN2 = new ipfint[2 * nnz];
-   double* A2 = new double[2 * nnz];
+   Number* A2 = new Number[2 * nnz];
    ipfint nnz2 = 0;
    for( Index i = 0; i < nnz; i++ )
    {
@@ -139,7 +152,11 @@ bool Mc19TSymScalingMethod::ComputeSymTScalingFactors(
    float* R = new float[n];
    float* C = new float[n];
    float* W = new float[5 * n];
+#ifdef IPOPT_SINGLE
+   IPOPT_HSL_FUNC(mc19a, MC19A)(&n, &nnz2, A2, AIRN2, AJCN2, R, C, W);
+#else
    IPOPT_HSL_FUNC(mc19ad, MC19AD)(&n, &nnz2, A2, AIRN2, AJCN2, R, C, W);
+#endif
    delete[] W;
 
    if( DBG_VERBOSITY() >= 3 )
@@ -159,7 +176,7 @@ bool Mc19TSymScalingMethod::ComputeSymTScalingFactors(
    Number smax = 0.;
    for( Index i = 0; i < n; i++ )
    {
-      scaling_factors[i] = exp((double) ((R[i] + C[i]) / 2.));
+      scaling_factors[i] = exp((Number) ((R[i] + C[i]) / 2.));
       sum += scaling_factors[i];
       smax = Max(smax, scaling_factors[i]);
    }

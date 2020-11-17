@@ -35,7 +35,11 @@ typedef void (*pardisoinit_t)(
    const ipfint* MTYPE,
    const ipfint* SOLVER,
    ipfint*       IPARM,
+#ifdef IPOPT_SINGLE
+   float*        DPARM,
+#else
    double*       DPARM,
+#endif
    ipfint*       E
 );
 
@@ -46,17 +50,30 @@ typedef void (*pardiso_t)(
    const ipfint* MTYPE,
    const ipfint* PHASE,
    const ipfint* N,
+#ifdef IPOPT_SINGLE
+   const float*  A,
+#else
    const double* A,
+#endif
    const ipfint* IA,
    const ipfint* JA,
    const ipfint* PERM,
    const ipfint* NRHS,
    ipfint*       IPARM,
    const ipfint* MSGLVL,
+#ifdef IPOPT_SINGLE
+   float*        B,
+   float*        X,
+#else
    double*       B,
    double*       X,
+#endif
    ipfint*       E,
+#ifdef IPOPT_SINGLE
+   float*        DPARM
+#else
    double*       DPARM
+#endif
 );
 
 static pardisoinit_t func_pardisoinit = NULL;
@@ -68,7 +85,11 @@ void pardisoinit(
    const ipfint* MTYPE,
    const ipfint* SOLVER,
    ipfint*       IPARM,
+#ifdef IPOPT_SINGLE
+   float*        DPARM,
+#else
    double*       DPARM,
+#endif
    ipfint*       E
 )
 {
@@ -88,17 +109,30 @@ void pardiso(
    const ipfint* MTYPE,
    const ipfint* PHASE,
    const ipfint* N,
+#ifdef IPOPT_SINGLE
+   const float*  A,
+#else
    const double* A,
+#endif   
    const ipfint* IA,
    const ipfint* JA,
    const ipfint* PERM,
    const ipfint* NRHS,
    ipfint*       IPARM,
    const ipfint* MSGLVL,
+#ifdef IPOPT_SINGLE
+   float*        B,
+   float*        X,
+#else
    double*       B,
    double*       X,
+#endif
    ipfint*       E,
+#ifdef IPOPT_SINGLE
+   float*        DPARM
+#else   
    double*       DPARM
+#endif
 )
 {
    if (func_pardiso == NULL)

@@ -50,7 +50,11 @@ bool LoqoMuOracle::CalculateMu(
 
    //Number factor = 1.-tau_min_;   //This is the original values
    Number factor = 0.05;   //This is the value I used otherwise
+#ifdef IPOPT_SINGLE
+   Number sigma = 0.1f * pow(Min(factor * (1.f - xi) / xi, 2.f), 3.f);
+#else
    Number sigma = 0.1 * pow(Min(factor * (1. - xi) / xi, 2.), 3.);
+#endif
 
    Number mu = sigma * avrg_compl;
    Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,

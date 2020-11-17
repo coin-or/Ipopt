@@ -14,12 +14,12 @@ namespace Ipopt
 {
 DECLARE_STD_EXCEPTION(LAPACK_NOT_INCLUDED);
 
-/** Wrapper for LAPACK subroutine DPOTRS.
+/** Wrapper for LAPACK subroutine XPOTRS.
  *
  *  Solving a linear system given a Cholesky factorization.
  *  We assume that the Cholesky factor is lower traiangular.
  */
-IPOPTLIB_EXPORT void IpLapackDpotrs(
+IPOPTLIB_EXPORT void IpLapackPotrs(
    Index         ndim,
    Index         nrhs,
    const Number* a,
@@ -28,25 +28,25 @@ IPOPTLIB_EXPORT void IpLapackDpotrs(
    Index         ldb
 );
 
-/** Wrapper for LAPACK subroutine DPOTRF.
+/** Wrapper for LAPACK subroutine XPOTRF.
  *
  *  Compute Cholesky factorization (lower triangular factor).
  *  info is the return value from the LAPACK routine.
  */
-IPOPTLIB_EXPORT void IpLapackDpotrf(
+IPOPTLIB_EXPORT void IpLapackPotrf(
    Index   ndim,
    Number* a,
    Index   lda,
    Index&  info
 );
 
-/** Wrapper for LAPACK subroutine DSYEV.
+/** Wrapper for LAPACK subroutine XSYEV.
  *
  *  Compute the Eigenvalue decomposition for a given matrix.
  *  If compute_eigenvectors is true, a will contain the eigenvectors
  *  in its columns on return.
  */
-IPOPTLIB_EXPORT void IpLapackDsyev(
+IPOPTLIB_EXPORT void IpLapackSyev(
    bool    compute_eigenvectors,
    Index   ndim,
    Number* a,
@@ -55,12 +55,12 @@ IPOPTLIB_EXPORT void IpLapackDsyev(
    Index&  info
 );
 
-/** Wrapper for LAPACK subroutine DGETRF.
+/** Wrapper for LAPACK subroutine XGETRF.
  *
  *  Compute LU factorization.
  *  info is the return value from the LAPACK routine.
  */
-IPOPTLIB_EXPORT void IpLapackDgetrf(
+IPOPTLIB_EXPORT void IpLapackGetrf(
    Index   ndim,
    Number* a,
    Index*  ipiv,
@@ -68,11 +68,11 @@ IPOPTLIB_EXPORT void IpLapackDgetrf(
    Index&  info
 );
 
-/** Wrapper for LAPACK subroutine DGETRS.
+/** Wrapper for LAPACK subroutine XGETRS.
  *
  * Solving a linear system given a LU factorization.
  */
-IPOPTLIB_EXPORT void IpLapackDgetrs(
+IPOPTLIB_EXPORT void IpLapackGetrs(
    Index         ndim,
    Index         nrhs,
    const Number* a,
@@ -82,13 +82,13 @@ IPOPTLIB_EXPORT void IpLapackDgetrs(
    Index         ldb
 );
 
-/** Wrapper for LAPACK subroutine DPPSV.
+/** Wrapper for LAPACK subroutine XPPSV.
  *
  *  Solves a symmetric positive
  *  definite linear system in packed storage format (upper triangular).
  *  info is the return value from the LAPACK routine.
  */
-IPOPTLIB_EXPORT void IpLapackDppsv(
+IPOPTLIB_EXPORT void IpLapackPpsv(
    Index         ndim,
    Index         nrhs,
    const Number* a,

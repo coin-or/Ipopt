@@ -410,6 +410,17 @@ AC_ARG_ENABLE([sipopt],
 AM_CONDITIONAL(BUILD_SIPOPT, [test "$use_sipopt" = yes])
 
 ########################################################################
+##                          Single Precision                          ##
+########################################################################
+
+AC_ARG_ENABLE([single-precision],
+			  AC_HELP_STRING([--enable-single-precision],[use single precision in this build of IPOPT]))
+
+if test "x$enable_single_precision" = "xyes" ; then
+   AC_DEFINE([IPOPT_SINGLE],[1],[Define to 1 if using single precision floating point])
+fi
+AM_CONDITIONAL([IPOPT_DOUBLE],[test "$enable_single_precision" != yes])
+########################################################################
 ##             Create links for the test source files                 ##
 ########################################################################
 

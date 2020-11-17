@@ -54,7 +54,7 @@ void DenseVector::SetValues(
 )
 {
    initialized_ = true;
-   IpBlasDcopy(Dim(), x, 1, values_allocated(), 1);
+   IpBlasCopy(Dim(), x, 1, values_allocated(), 1);
    homogeneous_ = false;
    // This is not an overloaded method from
    // Vector. Here, we must call ObjectChanged()
@@ -70,7 +70,7 @@ const Number* DenseVector::ExpandedValues() const
       {
          expanded_values_ = owner_space_->AllocateInternalStorage();
       }
-      IpBlasDcopy(Dim(), &scalar_, 0, expanded_values_, 1);
+      IpBlasCopy(Dim(), &scalar_, 0, expanded_values_, 1);
       return expanded_values_;
    }
    else
@@ -85,7 +85,7 @@ void DenseVector::set_values_from_scalar()
    initialized_ = true;
    homogeneous_ = false;
    Number* vals = values_allocated();
-   IpBlasDcopy(Dim(), &scalar_, 0, vals, 1);
+   IpBlasCopy(Dim(), &scalar_, 0, vals, 1);
 }
 
 void DenseVector::CopyImpl(
@@ -105,7 +105,7 @@ void DenseVector::CopyImpl(
    }
    else
    {
-      IpBlasDcopy(Dim(), dense_x->values_, 1, values_allocated(), 1);
+      IpBlasCopy(Dim(), dense_x->values_, 1, values_allocated(), 1);
    }
    initialized_ = true;
 }
@@ -121,7 +121,7 @@ void DenseVector::ScalImpl(
    }
    else
    {
-      IpBlasDscal(Dim(), alpha, values_, 1);
+      IpBlasScal(Dim(), alpha, values_, 1);
    }
 }
 
@@ -158,12 +158,12 @@ void DenseVector::AxpyImpl(
       {
          if( dense_x->scalar_ != 0. )
          {
-            IpBlasDaxpy(Dim(), alpha, &dense_x->scalar_, 0, values_, 1);
+            IpBlasAxpy(Dim(), alpha, &dense_x->scalar_, 0, values_, 1);
          }
       }
       else
       {
-         IpBlasDaxpy(Dim(), alpha, dense_x->values_, 1, values_, 1);
+         IpBlasAxpy(Dim(), alpha, dense_x->values_, 1, values_, 1);
       }
    }
 }
@@ -187,18 +187,18 @@ Number DenseVector::DotImpl(
       }
       else
       {
-         retValue = IpBlasDdot(Dim(), dense_x->values_, 1, &scalar_, 0);
+         retValue = IpBlasDot(Dim(), dense_x->values_, 1, &scalar_, 0);
       }
    }
    else
    {
       if( dense_x->homogeneous_ )
       {
-         retValue = IpBlasDdot(Dim(), &dense_x->scalar_, 0, values_, 1);
+         retValue = IpBlasDot(Dim(), &dense_x->scalar_, 0, values_, 1);
       }
       else
       {
-         retValue = IpBlasDdot(Dim(), dense_x->values_, 1, values_, 1);
+         retValue = IpBlasDot(Dim(), dense_x->values_, 1, values_, 1);
       }
    }
    return retValue;
@@ -209,11 +209,11 @@ Number DenseVector::Nrm2Impl() const
    DBG_ASSERT(initialized_);
    if( homogeneous_ )
    {
-      return sqrt((double) Dim()) * fabs(scalar_);
+      return sqrt((Number) Dim()) * fabs(scalar_);
    }
    else
    {
-      return IpBlasDnrm2(Dim(), values_, 1);
+      return IpBlasNrm2(Dim(), values_, 1);
    }
 }
 
@@ -226,7 +226,7 @@ Number DenseVector::AsumImpl() const
    }
    else
    {
-      return IpBlasDasum(Dim(), values_, 1);
+      return IpBlasAsum(Dim(), values_, 1);
    }
 }
 
@@ -245,7 +245,7 @@ Number DenseVector::AmaxImpl() const
       }
       else
       {
-         return fabs(values_[IpBlasIdamax(Dim(), values_, 1) - 1]);
+         return fabs(values_[IpBlasIamax(Dim(), values_, 1) - 1]);
       }
    }
 }
@@ -511,7 +511,7 @@ void DenseVector::AddScalarImpl(
    }
    else
    {
-      IpBlasDaxpy(Dim(), 1., &scalar, 0, values_, 1);
+      IpBlasAxpy(Dim(), 1., &scalar, 0, values_, 1);
    }
 }
 
@@ -718,7 +718,7 @@ void DenseVector::AddTwoVectorsImpl(
       {
          if( b == 0. )
          {
-            IpBlasDcopy(Dim(), values_v1, 1, values_, 1);
+            IpBlasCopy(Dim(), values_v1, 1, values_, 1);
          }
          else if( b == 1. )
          {
@@ -778,13 +778,13 @@ void DenseVector::AddTwoVectorsImpl(
          if( b == 0. )
          {
             Number zero = 0.;
-            IpBlasDcopy(Dim(), &zero, 0, values_, 1);
+            IpBlasCopy(Dim(), &zero, 0, values_, 1);
          }
          else if( b == 1. )
          {
             for( Index i = 0; i < Dim(); i++ )
             {
-               IpBlasDcopy(Dim(), values_v2, 1, values_, 1);
+               IpBlasCopy(Dim(), values_v2, 1, values_, 1);
             }
          }
          else if( b == -1. )
@@ -840,7 +840,7 @@ void DenseVector::AddTwoVectorsImpl(
       {
          if( b == 0. )
          {
-            IpBlasDaxpy(Dim(), 1., values_v1, 1, values_, 1);
+            IpBlasAxpy(Dim(), 1., values_v1, 1, values_, 1);
          }
          else if( b == 1. )
          {
@@ -868,7 +868,7 @@ void DenseVector::AddTwoVectorsImpl(
       {
          if( b == 0. )
          {
-            IpBlasDaxpy(Dim(), -1., values_v1, 1, values_, 1);
+            IpBlasAxpy(Dim(), -1., values_v1, 1, values_, 1);
          }
          else if( b == 1. )
          {
@@ -902,23 +902,23 @@ void DenseVector::AddTwoVectorsImpl(
          {
             for( Index i = 0; i < Dim(); i++ )
             {
-               IpBlasDaxpy(Dim(), 1., values_v2, 1, values_, 1);
+               IpBlasAxpy(Dim(), 1., values_v2, 1, values_, 1);
             }
          }
          else if( b == -1. )
          {
-            IpBlasDaxpy(Dim(), -1., values_v2, 1, values_, 1);
+            IpBlasAxpy(Dim(), -1., values_v2, 1, values_, 1);
          }
          else
          {
-            IpBlasDaxpy(Dim(), b, values_v2, 1, values_, 1);
+            IpBlasAxpy(Dim(), b, values_v2, 1, values_, 1);
          }
       }
       else
       {
          if( b == 0. )
          {
-            IpBlasDaxpy(Dim(), a, values_v1, 1, values_, 1);
+            IpBlasAxpy(Dim(), a, values_v1, 1, values_, 1);
          }
          else if( b == 1. )
          {
@@ -1011,7 +1011,7 @@ void DenseVector::AddTwoVectorsImpl(
       {
          if( b == 0. )
          {
-            IpBlasDscal(Dim(), -1., values_, 1);
+            IpBlasScal(Dim(), -1., values_, 1);
          }
          else if( b == 1. )
          {
@@ -1135,7 +1135,7 @@ void DenseVector::AddTwoVectorsImpl(
       {
          if( b == 0. )
          {
-            IpBlasDscal(Dim(), c, values_, 1);
+            IpBlasScal(Dim(), c, values_, 1);
          }
          else if( b == 1. )
          {
@@ -1414,11 +1414,11 @@ void DenseVector::CopyToPos(
 
    if( dense_x->homogeneous_ )
    {
-      IpBlasDcopy(dim_x, &scalar_, 0, vals + Pos, 1);
+      IpBlasCopy(dim_x, &scalar_, 0, vals + Pos, 1);
    }
    else
    {
-      IpBlasDcopy(dim_x, dense_x->values_, 1, vals + Pos, 1);
+      IpBlasCopy(dim_x, dense_x->values_, 1, vals + Pos, 1);
    }
    initialized_ = true;
    ObjectChanged();
@@ -1439,7 +1439,7 @@ void DenseVector::CopyFromPos(
    }
    else
    {
-      IpBlasDcopy(Dim(), dense_x->Values() + Pos, 1, Values(), 1);
+      IpBlasCopy(Dim(), dense_x->Values() + Pos, 1, Values(), 1);
       initialized_ = true;
       ObjectChanged();
    }

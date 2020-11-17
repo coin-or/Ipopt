@@ -259,7 +259,7 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
     return retval;
     }
     */
-   Number norm2_resid = IpBlasDnrm2(ndim, resid, 1);
+   Number norm2_resid = IpBlasNrm2(ndim, resid, 1);
    Number test_ratio = norm2_resid / norm2_rhs; // Min(norm2_resid/norm2_rhs, norm2_resid);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                   "TT: test ratio %e (norm2_rhs = %e norm2_resid = %e).\n",

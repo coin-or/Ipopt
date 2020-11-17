@@ -604,7 +604,7 @@ protected:
    ASL_pfgh* asl_;
 
    /** Sign of the objective fn (1 for min, -1 for max) */
-   double obj_sign_;
+   Number obj_sign_;
 
    /**@name Problem Size Data*/
    ///@{

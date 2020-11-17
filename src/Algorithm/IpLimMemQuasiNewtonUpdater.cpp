@@ -558,7 +558,11 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
                else
                {
                   // ToDo: What lower bound to use?
+#ifdef IPOPT_SINGLE
+                  Number sTy_new = Max(1e-8f, fabs(s_new->Dot(*y_new)));
+#else
                   Number sTy_new = Max(1e-8, fabs(s_new->Dot(*y_new)));
+#endif
                   DBG_ASSERT(sTy_new != 0.);
                   switch( limited_memory_initialization_ )
                   {
@@ -899,7 +903,7 @@ bool LimMemQuasiNewtonUpdater::SplitEigenvalues(
    }
 
    // Determine the ratio of smallest over the largest eigenvalue
-   Number emax = Max(fabs(Evals[0]), fabs(Evals[dim - 1]));
+   Number emax = Max((Number)fabs(Evals[0]), (Number)fabs(Evals[dim - 1]));
    if( emax == 0. )
    {
       return true;

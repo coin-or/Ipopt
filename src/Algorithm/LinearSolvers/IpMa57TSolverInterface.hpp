@@ -48,14 +48,14 @@ public:
       const Index* ajcn
    );
 
-   virtual double* GetValuesArrayPtr();
+   virtual Number* GetValuesArrayPtr();
 
    virtual ESymSolverStatus MultiSolve(
       bool         new_matrix,
       const Index* airn,
       const Index* ajcn,
       Index        nrhs,
-      double*      rhs_vals,
+      Number*      rhs_vals,
       bool         check_NegEVals,
       Index        numberOfNegEVals
    );
@@ -155,29 +155,29 @@ private:
     * Storing factorization and other solver specific data structure.
     */
    ///@{
-   double wd_cntl_[5];
+   Number wd_cntl_[5];
    ma57int wd_icntl_[20];
 
    ma57int wd_info_[40];
-   double wd_rinfo_[20];
+   Number wd_rinfo_[20];
 
    ma57int wd_lkeep_; /* LKEEP >= 5*N + NE + max(N,NE) + 42. */
    ma57int* wd_keep_;
 
    ma57int* wd_iwork_; /* 5 * N. */
 
-   double* wd_fact_;
+   Number* wd_fact_;
    ma57int wd_lfact_;
    ma57int* wd_ifact_;
    ma57int wd_lifact_;
 
    /** factor A of matrix */
-   double* a_;
+   Number* a_;
    ///@}
 
    /** @name Internal functions */
    ///@{
-   /** Call MA57AD and reserve memory for MA57 data.
+   /** Call MA57AX and reserve memory for MA57 data.
     *
     *  Reserve memory for iw_ and ikeep_, call MA57AD to perform
     *  symbolic manipulations, and reserve all the remaining data memory
@@ -187,7 +187,7 @@ private:
       const Index* ajcn
    );
 
-   /** Call MA57BD to factorize the Matrix.
+   /** Call MA57BX to factorize the Matrix.
     *
     *  It is assumed that the first nonzeros_ element of a_ contain the values
     *  of the matrix to be factorized.
@@ -199,10 +199,10 @@ private:
       Index        numberOfNegEVals
    );
 
-   /** Call MA57CD to do the backsolve. */
+   /** Call MA57CX to do the backsolve. */
    ESymSolverStatus Backsolve(
       Index   nrhs,
-      double* rhs_vals
+      Number* rhs_vals
    );
    ///@}
 };

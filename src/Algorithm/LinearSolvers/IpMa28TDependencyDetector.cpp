@@ -18,6 +18,28 @@
 /** Prototypes for MA28's Fortran auxiliary function */
 extern "C"
 {
+#ifdef IPOPT_SINGLE
+   void
+   F77_FUNC(ma28part, MA28PART)(
+      ipfint* TASK,
+      ipfint* N,
+      ipfint* M,
+      ipfint* NZ,
+      float*  A,
+      ipfint* IROW,
+      ipfint* ICOL,
+      float*  PIVTOL,
+      ipfint* FILLFACT,
+      ipfint* IVAR,
+      ipfint* NDEGEN,
+      ipfint* IDEGEN,
+      ipfint* LIW,
+      ipfint* IW,
+      ipfint* LRW,
+      float*  RW,
+      ipfint* IERR
+   );
+#else
    void
    F77_FUNC(ma28part, MA28PART)(
       ipfint* TASK,
@@ -38,6 +60,7 @@ extern "C"
       double* RW,
       ipfint* IERR
    );
+#endif
 }
 
 namespace Ipopt
@@ -94,14 +117,14 @@ bool Ma28TDependencyDetector::DetermineDependentRows(
    ipfint N = n_cols;
    ipfint M = n_rows;
    ipfint NZ = n_jac_nz;
-   double PIVTOL = ma28_pivtol_;
+   Number PIVTOL = ma28_pivtol_;
    ipfint FILLFACT = 40;
    ipfint* IVAR;
    ipfint NDEGEN;
    ipfint* IDEGEN;
    ipfint LRW;
    ipfint LIW;
-   double ddummy;
+   Number ddummy;
    ipfint idummy;
    ipfint IERR;
    // First determine how much work space we need to allocate
@@ -110,7 +133,7 @@ bool Ma28TDependencyDetector::DetermineDependentRows(
    F77_FUNC(ma28part, MA28PART)(&TASK, &N, &M, &NZ, &ddummy, jac_c_iRow, jac_c_jCol, &PIVTOL, &FILLFACT, IVAR, &NDEGEN,
                                 IDEGEN, &LIW, &idummy, &LRW, &ddummy, &IERR);
    ipfint* IW = new ipfint[LIW];
-   double* RW = new double[LRW];
+   Number* RW = new Number[LRW];
 
    // Now do the actual factorization and determine dependent constraints
    TASK = 1;

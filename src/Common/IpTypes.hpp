@@ -12,7 +12,11 @@
 namespace Ipopt
 {
 /** Type of all numbers */
-typedef double Number;
+#ifdef IPOPT_SINGLE
+  typedef float Number;
+#else
+  typedef double Number;
+#endif
 /** Type of all indices of vectors, matrices etc */
 typedef int Index;
 /** Type of default integer */

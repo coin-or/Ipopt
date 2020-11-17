@@ -38,7 +38,7 @@ void GenTMatrix::SetValues(
    const Number* Values
 )
 {
-   IpBlasDcopy(Nonzeros(), Values, 1, values_, 1);
+   IpBlasCopy(Nonzeros(), Values, 1, values_, 1);
    initialized_ = true;
    ObjectChanged();
 }
@@ -167,7 +167,7 @@ void GenTMatrix::TransMultVectorImpl(
 bool GenTMatrix::HasValidNumbersImpl() const
 {
    DBG_ASSERT(initialized_);
-   Number sum = IpBlasDasum(Nonzeros(), values_, 1);
+   Number sum = IpBlasAsum(Nonzeros(), values_, 1);
    return IsFiniteNumber(sum);
 }
 

@@ -72,7 +72,7 @@ public:
    /** put the values from the double* back into the vector */
    static void PutValuesInVector(
       Index         dim,
-      const double* values,
+      const Number* values,
       Vector&       vector
    );
    ///@}

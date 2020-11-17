@@ -28,10 +28,10 @@ extern "C"
 {
    int IpoptTerminationTest(
       int     n,
-      double* sol,
-      double* resid,
+      Number* sol,
+      Number* resid,
       int     iter,
-      double  norm2_rhs
+      Number  norm2_rhs
    )
    {
       fflush(stdout);
@@ -55,10 +55,10 @@ extern "C"
    void SetIpoptCallbackFunction(
       int (*IpoptFunction)(
          int     n,
-         double* x,
-         double* r,
+         Number* x,
+         Number* r,
          int     k,
-         double  b)
+         Number  b)
    );
 }
 
@@ -70,7 +70,7 @@ extern "C"
       const ipfint* MTYPE,
       const ipfint* SOLVER,
       ipfint*       IPARM,
-      double*       DPARM,
+      Number*       DPARM,
       ipfint*       ERROR
    );
 
@@ -81,17 +81,17 @@ extern "C"
       const ipfint* MTYPE,
       const ipfint* PHASE,
       const ipfint* N,
-      const double* A,
+      const Number* A,
       const ipfint* IA,
       const ipfint* JA,
       const ipfint* PERM,
       const ipfint* NRHS,
       ipfint*       IPARM,
       const ipfint* MSGLVL,
-      double*       B,
-      double*       X,
+      Number*       B,
+      Number*       X,
       ipfint*       ERROR,
-      double*       DPARM
+      Number*       DPARM
    );
 }
 
@@ -121,7 +121,7 @@ IterativePardisoSolverInterface::IterativePardisoSolverInterface(
 
    PT_ = new void* [64];
    IPARM_ = new ipfint[64];
-   DPARM_ = new double[64];
+   DPARM_ = new Number[64];
 }
 
 IterativePardisoSolverInterface::~IterativePardisoSolverInterface()
@@ -137,7 +137,7 @@ IterativePardisoSolverInterface::~IterativePardisoSolverInterface()
       ipfint NRHS = 0;
       ipfint ERROR;
       ipfint idmy;
-      double ddmy;
+      Number ddmy;
       IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_,
                                      &MSGLVL_, &ddmy, &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
@@ -213,7 +213,7 @@ bool IterativePardisoSolverInterface::InitializeImpl(
       ipfint NRHS = 0;
       ipfint ERROR;
       ipfint idmy;
-      double ddmy;
+      Number ddmy;
       IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_,
                                      &MSGLVL_, &ddmy, &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
@@ -285,7 +285,11 @@ bool IterativePardisoSolverInterface::InitializeImpl(
    IPARM_[20] = 3; // Results in better accuracy
    IPARM_[23] = 1; // parallel fac
    IPARM_[24] = 1; // parallel solve
-   IPARM_[28] = 0; // 32-bit factorization
+#ifdef IPOPT_SINGLE
+   IPARM_[28] = 1; // 32-bit factorization (single precision)
+#else
+   IPARM_[28] = 0; // 64-bit factorization (double precision)
+#endif
    IPARM_[29] = 1; // we need this for IPOPT interface
 
    IPARM_[31] = 1;  // iterative solver
@@ -318,7 +322,7 @@ ESymSolverStatus IterativePardisoSolverInterface::MultiSolve(
    const Index* ia,
    const Index* ja,
    Index        nrhs,
-   double*      rhs_vals,
+   Number*      rhs_vals,
    bool         check_NegEVals,
    Index        numberOfNegEVals
 )
@@ -344,7 +348,7 @@ ESymSolverStatus IterativePardisoSolverInterface::MultiSolve(
    return Solve(ia, ja, nrhs, rhs_vals);
 }
 
-double* IterativePardisoSolverInterface::GetValuesArrayPtr()
+Number* IterativePardisoSolverInterface::GetValuesArrayPtr()
 {
    DBG_ASSERT(initialized_);
    DBG_ASSERT(a_);
@@ -367,7 +371,7 @@ ESymSolverStatus IterativePardisoSolverInterface::InitializeStructure(
    // Make space for storing the matrix elements
    delete[] a_;
    a_ = NULL;
-   a_ = new double[nonzeros_];
+   a_ = new Number[nonzeros_];
 
    // Do the symbolic facotrization
    ESymSolverStatus retval = SymbolicFactorization(ia, ja);
@@ -404,8 +408,8 @@ static void write_iajaa_matrix(
    int          N,
    const Index* ia,
    const Index* ja,
-   double*      a_,
-   double*      rhs_vals,
+   Number*      a_,
+   Number*      rhs_vals,
    int          iter_cnt,
    int          sol_cnt
 )
@@ -476,9 +480,9 @@ ESymSolverStatus IterativePardisoSolverInterface::Factorization(
    ipfint N = dim_;
    ipfint PERM;   // This should not be accessed by Pardiso
    ipfint NRHS = 0;
-   double B;  // This should not be accessed by Pardiso in factorization
+   Number B;  // This should not be accessed by Pardiso in factorization
    // phase
-   double X;  // This should not be accessed by Pardiso in factorization
+   Number X;  // This should not be accessed by Pardiso in factorization
    // phase
    ipfint ERROR;
 
@@ -669,7 +673,7 @@ ESymSolverStatus IterativePardisoSolverInterface::Solve(
    const Index* ia,
    const Index* ja,
    Index        nrhs,
-   double*      rhs_vals
+   Number*      rhs_vals
 )
 {
    DBG_START_METH("IterativePardisoSolverInterface::Solve", dbg_verbosity);
@@ -685,8 +689,8 @@ ESymSolverStatus IterativePardisoSolverInterface::Solve(
    ipfint N = dim_;
    ipfint PERM;   // This should not be accessed by Pardiso
    ipfint NRHS = nrhs;
-   double* X = new double[nrhs * dim_];
-   double* ORIG_RHS = new double[nrhs * dim_];
+   Number* X = new Number[nrhs * dim_];
+   Number* ORIG_RHS = new Number[nrhs * dim_];
    ipfint ERROR;
 
    // Initialize solution with zero and save right hand side
@@ -858,7 +862,7 @@ ESymSolverStatus IterativePardisoSolverInterface::Solve(
       // iterates to zero
       Index nvars = IpData().curr()->x()->Dim() + IpData().curr()->s()->Dim();
       const Number zero = 0.;
-      IpBlasDcopy(nvars, &zero, 0, rhs_vals, 1);
+      IpBlasCopy(nvars, &zero, 0, rhs_vals, 1);
    }
    return SYMSOLVER_SUCCESS;
 }

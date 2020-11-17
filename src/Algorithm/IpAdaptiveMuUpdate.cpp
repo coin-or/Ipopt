@@ -316,7 +316,6 @@ bool AdaptiveMuUpdate::UpdateBarrierParameter()
             // ToDo combine this code with MonotoneMuUpdate
             Number tol = IpData().tol();
             Number compl_inf_tol = IpNLP().NLP_scaling()->apply_obj_scaling(compl_inf_tol_);
-
             Number new_mu = Min(mu_linear_decrease_factor_ * mu, pow(mu, mu_superlinear_decrease_power_));
             DBG_PRINT((1, "new_mu = %e, compl_inf_tol = %e tol = %e\n", new_mu, compl_inf_tol, tol));
             new_mu = Max(new_mu, Min(compl_inf_tol, tol) / (barrier_tol_factor_ + 1.));
