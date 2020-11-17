@@ -254,6 +254,9 @@ maintained by other people, among them are:
     an [example](https://coin-or.github.io/CppAD/doc/ipopt_solve.htm) that
     shows how to use it in connection with \Ipopt.
 
+    It is also possible to use Ipopt via [CppADs Python interface](https://bradbell.github.io/cppad_py/doc/xsrst/cppad_py.html).
+    An example is available [here](https://bradbell.github.io/cppad_py/doc/xsrst/mixed_optimize_fixed_2_py.html).
+
 -   [csipopt](https://github.com/cureos/csipopt)
 
     Interfacing Ipopt from .NET languages such as **C#**, **F#** and **Visual Basic.NET**.
