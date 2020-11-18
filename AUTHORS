@@ -131,6 +131,11 @@ Contributors:
   
   examples/recursive_nlp/recursive_nlp.cpp
 
+- Mitchell Clement
+  support for use of single-precision floating point number
+
+  many source files affected, see https://github.com/coin-or/Ipopt/pull/428
+
 Contributors of code that is no longer included in Ipopt distribution:
 
 - Yifan Hu (Wolfram): Contributed TAUCS interface, implemented in the files
