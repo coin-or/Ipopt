@@ -123,7 +123,9 @@ Getting Help
  * **[Mailing list](http://list.coin-or.org/mailman/listinfo/ipopt)**: subscribe to get notifications about updates and to post questions and comments regarding Ipopt
  * **[Mailing list archive](http://list.coin-or.org/pipermail/ipopt/)**
  * **[Ipopt Wiki](https://github.com/coin-or/Ipopt/wiki)** with hints and tricks
- * [short Ipopt tutorial](http://drops.dagstuhl.de/volltexte/2009/2089/pdf/09061.WaechterAndreas.Paper.2089.pdf)
+ * External resources:
+   * [short Ipopt tutorial](http://drops.dagstuhl.de/volltexte/2009/2089/pdf/09061.WaechterAndreas.Paper.2089.pdf)
+   * [build Ipopt on Windows step-by-step](https://github.com/Ishanki/IPOPT-Installation-on-Windows-10)
 
 Please Cite Us
 --------------
