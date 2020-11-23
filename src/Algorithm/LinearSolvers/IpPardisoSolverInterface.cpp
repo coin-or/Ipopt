@@ -42,11 +42,7 @@ extern "C"
       const ipfint* MTYPE,
       const ipfint* SOLVER,
       ipfint*       IPARM,
-#ifdef IPOPT_SINGLE
-      float*        DPARM,
-#else
-      double*       DPARM,
-#endif
+      Ipopt::Number* DPARM,
       ipfint*       ERROR
    );
 #endif
@@ -58,30 +54,17 @@ extern "C"
       const ipfint* MTYPE,
       const ipfint* PHASE,
       const ipfint* N,
-#ifdef IPOPT_SINGLE
-      const float*  A,
-#else
-      const double* A,
-#endif
+      const Ipopt::Number* A,
       const ipfint* IA,
       const ipfint* JA,
       const ipfint* PERM,
       const ipfint* NRHS,
       ipfint*       IPARM,
       const ipfint* MSGLVL,
-#ifdef IPOPT_SINGLE
-      float*        B,
-      float*        X,
-#else
-      double*       B,
-      double*       X,
-#endif
+      Ipopt::Number* B,
+      Ipopt::Number* X,
       ipfint*       ERROR,
-#ifdef IPOPT_SINGLE
-      float*        DPARM
-#else
-      double*       DPARM
-#endif
+      Ipopt::Number* DPARM
    );
 
 #ifdef PARDISO_MATCHING_PREPROCESS
@@ -89,24 +72,12 @@ extern "C"
       const ipfint* N,
       const ipfint* ia,
       const ipfint* ja,
-#ifdef IPOPT_SINGLE
-      const float*  a_,
-#else
-      const double* a_,
-#endif
+      const Ipopt::Number* a_,
       ipfint*       a2,
       ipfint*       ja2,
-#ifdef IPOPT_SINGLE
-      float*        a2_,
-#else
-      double*       a2_,
-#endif
+      Ipopt::Number* a2_,
       ipfint*       perm2,
-#ifdef IPOPT_SINGLE
-      float*        scale2,
-#else
-      double*       scale2,
-#endif
+      Ipopt::Number* scale2,
       ipfint*       tmp2_,
       ipfint        preprocess
    );

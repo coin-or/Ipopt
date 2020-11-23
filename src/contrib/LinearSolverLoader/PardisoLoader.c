@@ -16,6 +16,13 @@
 /* Type of Fortran integer translated into C */
 typedef IPOPT_FORTRAN_INTEGER_TYPE ipfint;
 
+/* Type of Fortran real translated into C */
+#ifdef IPOPT_SINGLE
+typedef float ipfreal;
+#else
+typedef double ipfreal;
+#endif
+
 static soHandle_t Pardiso_handle = NULL;
 
 void LSL_lateParadisoLibLoad(void);
@@ -35,11 +42,7 @@ typedef void (*pardisoinit_t)(
    const ipfint* MTYPE,
    const ipfint* SOLVER,
    ipfint*       IPARM,
-#ifdef IPOPT_SINGLE
-   float*        DPARM,
-#else
-   double*       DPARM,
-#endif
+   ipfreal*      DPARM,
    ipfint*       E
 );
 
@@ -50,30 +53,17 @@ typedef void (*pardiso_t)(
    const ipfint* MTYPE,
    const ipfint* PHASE,
    const ipfint* N,
-#ifdef IPOPT_SINGLE
-   const float*  A,
-#else
-   const double* A,
-#endif
+   const ipfreal* A,
    const ipfint* IA,
    const ipfint* JA,
    const ipfint* PERM,
    const ipfint* NRHS,
    ipfint*       IPARM,
    const ipfint* MSGLVL,
-#ifdef IPOPT_SINGLE
-   float*        B,
-   float*        X,
-#else
-   double*       B,
-   double*       X,
-#endif
+   ipfreal*      B,
+   ipfreal*      X,
    ipfint*       E,
-#ifdef IPOPT_SINGLE
-   float*        DPARM
-#else
-   double*       DPARM
-#endif
+   ipfreal*      DPARM
 );
 
 static pardisoinit_t func_pardisoinit = NULL;
@@ -85,11 +75,7 @@ void pardisoinit(
    const ipfint* MTYPE,
    const ipfint* SOLVER,
    ipfint*       IPARM,
-#ifdef IPOPT_SINGLE
-   float*        DPARM,
-#else
-   double*       DPARM,
-#endif
+   ipfreal*      DPARM,
    ipfint*       E
 )
 {
@@ -109,30 +95,17 @@ void pardiso(
    const ipfint* MTYPE,
    const ipfint* PHASE,
    const ipfint* N,
-#ifdef IPOPT_SINGLE
-   const float*  A,
-#else
-   const double* A,
-#endif   
+   const ipfreal* A,
    const ipfint* IA,
    const ipfint* JA,
    const ipfint* PERM,
    const ipfint* NRHS,
    ipfint*       IPARM,
    const ipfint* MSGLVL,
-#ifdef IPOPT_SINGLE
-   float*        B,
-   float*        X,
-#else
-   double*       B,
-   double*       X,
-#endif
+   ipfreal*      B,
+   ipfreal*      X,
    ipfint*       E,
-#ifdef IPOPT_SINGLE
-   float*        DPARM
-#else   
-   double*       DPARM
-#endif
+   ipfreal*      DPARM
 )
 {
    if (func_pardiso == NULL)

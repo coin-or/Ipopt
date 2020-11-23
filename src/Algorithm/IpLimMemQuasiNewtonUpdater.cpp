@@ -558,11 +558,7 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
                else
                {
                   // ToDo: What lower bound to use?
-#ifdef IPOPT_SINGLE
-                  Number sTy_new = Max(1e-8f, fabs(s_new->Dot(*y_new)));
-#else
-                  Number sTy_new = Max(1e-8, fabs(s_new->Dot(*y_new)));
-#endif
+                  Number sTy_new = Max(Number(1e-8), fabs(s_new->Dot(*y_new)));
                   DBG_ASSERT(sTy_new != 0.);
                   switch( limited_memory_initialization_ )
                   {

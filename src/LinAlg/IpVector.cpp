@@ -131,11 +131,7 @@ Number Vector::FracToBoundImpl(
    Number alpha = inv_alpha_bar->Max();
    if( alpha > 0 )
    {
-#ifdef IPOPT_SINGLE
-      alpha = Ipopt::Min(1.0f / alpha, 1.0f);
-#else
-      alpha = Ipopt::Min(1.0 / alpha, 1.0);
-#endif      
+      alpha = Ipopt::Min(Number(1.0) / alpha, Number(1.0));
    }
    else
    {

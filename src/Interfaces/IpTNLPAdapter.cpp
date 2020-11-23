@@ -1425,13 +1425,8 @@ bool TNLPAdapter::GetBoundsInformation(
       {
          if( x_l[i] == x_u[i] )
          {
-#ifdef IPOPT_SINGLE
-            x_l[i] -= bound_relax * Max(1.f, fabs(x_l[i]));
-            x_u[i] += bound_relax * Max(1.f, fabs(x_u[i]));
-#else
-            x_l[i] -= bound_relax * Max(1., fabs(x_l[i]));
-            x_u[i] += bound_relax * Max(1., fabs(x_u[i]));
-#endif
+            x_l[i] -= bound_relax * Max(Number(1.), fabs(x_l[i]));
+            x_u[i] += bound_relax * Max(Number(1.), fabs(x_u[i]));
          }
       }
    }
@@ -2194,13 +2189,8 @@ void TNLPAdapter::FinalizeSolution(
          Number value = dy_c->Scalar();
          for( Index i = 0; i < n_x_fixed_; i++ )
          {
-#ifdef IPOPT_SINGLE
-            full_z_L[x_fixed_map_[i]] = Max(0.f, -value);
-            full_z_U[x_fixed_map_[i]] = Max(0.f, value);
-#else
-            full_z_L[x_fixed_map_[i]] = Max(0., -value);
-            full_z_U[x_fixed_map_[i]] = Max(0., value);
-#endif
+            full_z_L[x_fixed_map_[i]] = Max(Number(0.), -value);
+            full_z_U[x_fixed_map_[i]] = Max(Number(0.), value);
          }
       }
    }
@@ -2689,11 +2679,7 @@ bool TNLPAdapter::internal_eval_jac_g(
             if( findiff_x_l_[ivar] < findiff_x_u_[ivar] )
             {
                const Number xorig = full_x_pert[ivar];
-#ifdef IPOPT_SINGLE
-               Number this_perturbation = findiff_perturbation_ * Max(1.f, fabs(full_x_[ivar]));
-#else
-               Number this_perturbation = findiff_perturbation_ * Max(1., fabs(full_x_[ivar]));
-#endif
+               Number this_perturbation = findiff_perturbation_ * Max(Number(1.), fabs(full_x_[ivar]));
                full_x_pert[ivar] += this_perturbation;
                if( full_x_pert[ivar] > findiff_x_u_[ivar] )
                {
@@ -2932,11 +2918,7 @@ bool TNLPAdapter::CheckDerivatives(
       const Index ivar_first = Max(0, deriv_test_start_index);
       for( Index ivar = ivar_first; ivar < nx; ivar++ )
       {
-#ifdef IPOPT_SINGLE
-         Number this_perturbation = derivative_test_perturbation_ * Max(1.f, fabs(xref[ivar]));
-#else
-         Number this_perturbation = derivative_test_perturbation_ * Max(1., fabs(xref[ivar]));
-#endif
+         Number this_perturbation = derivative_test_perturbation_ * Max(Number(1.), fabs(xref[ivar]));
          xpert[ivar] = xref[ivar] + this_perturbation;
 
          Number fpert;
@@ -2948,11 +2930,7 @@ bool TNLPAdapter::CheckDerivatives(
 
          Number deriv_approx = (fpert - fref) / this_perturbation;
          Number deriv_exact = grad_f[ivar];
-#ifdef IPOPT_SINGLE
-         Number rel_error = fabs(deriv_approx - deriv_exact) / Max(fabs(deriv_approx), 1.f);
-#else
-         Number rel_error = fabs(deriv_approx - deriv_exact) / Max(fabs(deriv_approx), 1.);
-#endif
+         Number rel_error = fabs(deriv_approx - deriv_exact) / Max(fabs(deriv_approx), Number(1.));
          char cflag = ' ';
          if( rel_error >= derivative_test_tol_ )
          {
@@ -2983,11 +2961,7 @@ bool TNLPAdapter::CheckDerivatives(
                      deriv_exact += jac_g[i];
                   }
                }
-#ifdef IPOPT_SINGLE
-               rel_error = fabs(deriv_approx - deriv_exact) / Max(fabs(deriv_approx), 1.f);
-#else
-               rel_error = fabs(deriv_approx - deriv_exact) / Max(fabs(deriv_approx), 1.);
-#endif
+               rel_error = fabs(deriv_approx - deriv_exact) / Max(fabs(deriv_approx), Number(1.));
                cflag = ' ';
                if( rel_error >= derivative_test_tol_ )
                {
@@ -3092,11 +3066,7 @@ bool TNLPAdapter::CheckDerivatives(
 
          for( Index ivar = 0; ivar < nx; ivar++ )
          {
-#ifdef IPOPT_SINGLE
-            Number this_perturbation = derivative_test_perturbation_ * Max(1.f, fabs(xref[ivar]));
-#else
-            Number this_perturbation = derivative_test_perturbation_ * Max(1., fabs(xref[ivar]));
-#endif
+            Number this_perturbation = derivative_test_perturbation_ * Max(Number(1.), fabs(xref[ivar]));
             xpert[ivar] = xref[ivar] + this_perturbation;
 
             new_x = true;
@@ -3140,11 +3110,7 @@ bool TNLPAdapter::CheckDerivatives(
                      found = true;
                   }
                }
-#ifdef IPOPT_SINGLE
-               Number rel_error = fabs(deriv_approx - deriv_exact) / Max(fabs(deriv_approx), 1.f);
-#else
-               Number rel_error = fabs(deriv_approx - deriv_exact) / Max(fabs(deriv_approx), 1.);
-#endif
+               Number rel_error = fabs(deriv_approx - deriv_exact) / Max(fabs(deriv_approx), Number(1.));
                char cflag = ' ';
                if( rel_error >= derivative_test_tol_ )
                {

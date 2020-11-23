@@ -755,7 +755,7 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
 
          ma57int idmy;
 #ifdef IPOPT_SINGLE
-		 IPOPT_HSL_FUNC (ma57e, MA57E)(&n, &ic, wd_keep_, wd_fact_, &wd_info_[1], temp, &wd_lfact_, wd_ifact_, &wd_info_[1],
+         IPOPT_HSL_FUNC (ma57e, MA57E)(&n, &ic, wd_keep_, wd_fact_, &wd_info_[1], temp, &wd_lfact_, wd_ifact_, &wd_info_[1],
                                    &idmy, &wd_lfact_, wd_info_);
 #else
          IPOPT_HSL_FUNC (ma57ed, MA57ED)(&n, &ic, wd_keep_, wd_fact_, &wd_info_[1], temp, &wd_lfact_, wd_ifact_, &wd_info_[1],
@@ -784,7 +784,7 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
 
          Number ddmy;
 #ifdef IPOPT_SINGLE
-		 IPOPT_HSL_FUNC (ma57e, MA57E)(&n, &ic, wd_keep_, wd_fact_, &wd_info_[1], &ddmy, &wd_lifact_, wd_ifact_,
+         IPOPT_HSL_FUNC (ma57e, MA57E)(&n, &ic, wd_keep_, wd_fact_, &wd_info_[1], &ddmy, &wd_lifact_, wd_ifact_,
                                    &wd_info_[1], temp, &wd_lifact_, wd_info_);
 #else
          IPOPT_HSL_FUNC (ma57ed, MA57ED)(&n, &ic, wd_keep_, wd_fact_, &wd_info_[1], &ddmy, &wd_lifact_, wd_ifact_,
