@@ -5,6 +5,7 @@
 // Authors:  Andreas Waechter            IBM    2007-04-17
 
 #include "IpoptConfig.h"
+#include "IpTypes.h"
 
 #ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"

@@ -6,6 +6,7 @@
 
 #include "IpoptConfig.h"
 #include "IpLapack.hpp"
+#include "IpTypes.h"
 
 #ifdef FUNNY_LAPACK_FINT
 # define ipfint long

@@ -102,8 +102,8 @@ public:
    ///@{
    /** Copy the nonzero structure into provided space */
    void FillStruct(
-      ipfint* Irn,
-      ipfint* Jcn
+      Index* Irn,
+      Index* Jcn
    ) const;
 
    /** Copy the value data into provided space */

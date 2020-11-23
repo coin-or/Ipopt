@@ -11,6 +11,7 @@
 #include "IpSparseSymLinearSolverInterface.hpp"
 #include "IpInexactCq.hpp"
 #include "IpIterativeSolverTerminationTester.hpp"
+#include "IpTypes.h"
 
 namespace Ipopt
 {

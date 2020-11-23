@@ -8,6 +8,7 @@
 #define __IPPARDISOSOLVERINTERFACE_HPP__
 
 #include "IpSparseSymLinearSolverInterface.hpp"
+#include "IpTypes.h"
 
 //#define PARDISO_MATCHING_PREPROCESS
 

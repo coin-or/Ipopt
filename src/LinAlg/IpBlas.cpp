@@ -6,6 +6,7 @@
 
 #include "IpoptConfig.h"
 #include "IpBlas.hpp"
+#include "IpTypes.h"
 
 /* we currently have no separate check for Blas, but assume that Blas comes with Lapack
  * thus, we use the nameing convention of Lapack for Blas, too

@@ -9,6 +9,7 @@
 #define __IPITERATIVEWSMPSOLVERINTERFACE_HPP__
 
 #include "IpSparseSymLinearSolverInterface.hpp"
+#include "IpTypes.h"
 
 namespace Ipopt
 {

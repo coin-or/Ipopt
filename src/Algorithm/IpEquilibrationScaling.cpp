@@ -7,6 +7,7 @@
 #include "IpoptConfig.h"
 #include "IpEquilibrationScaling.hpp"
 #include "IpTripletHelper.hpp"
+#include "IpTypes.h"
 
 #ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"

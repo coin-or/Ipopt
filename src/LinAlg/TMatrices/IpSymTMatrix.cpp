@@ -134,8 +134,8 @@ const Number* SymTMatrix::Values() const
 }
 
 void SymTMatrix::FillStruct(
-   ipfint* Irn,
-   ipfint* Jcn
+   Index* Irn,
+   Index* Jcn
 ) const
 {
    DBG_ASSERT(initialized_);

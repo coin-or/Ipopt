@@ -26,8 +26,8 @@ bool InexactTSymScalingMethod::InitializeImpl(
 bool InexactTSymScalingMethod::ComputeSymTScalingFactors(
    Index         n,
    Index         nnz,
-   const ipfint* airn,
-   const ipfint* ajcn,
+   const Index*  airn,
+   const Index*  ajcn,
    const Number* a,
    Number*       scaling_factors
 )

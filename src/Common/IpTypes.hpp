@@ -8,7 +8,6 @@
 #define __IPTYPES_HPP__
 
 #include "IpoptConfig.h"
-#include "IpTypes.h"
 
 namespace Ipopt
 {

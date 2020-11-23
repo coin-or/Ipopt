@@ -3235,8 +3235,8 @@ bool TNLPAdapter::DetermineDependentConstraints(
    // fixed_variable_treatment_==MAKE_PARAMETER correctly (yet?)
    // Include space for the RHS
    Index* jac_c_map = new Index[nz_full_jac_g_];
-   ipfint* jac_c_iRow = new ipfint[nz_full_jac_g_ + n_c];
-   ipfint* jac_c_jCol = new ipfint[nz_full_jac_g_ + n_c];
+   Index* jac_c_iRow = new Index[nz_full_jac_g_ + n_c];
+   Index* jac_c_jCol = new Index[nz_full_jac_g_ + n_c];
    Index nz_jac_c = 0;
    const Index* c_row_pos = P_c_g->CompressedPosIndices();
    Index n_fixed = n_full_x_ - n_x_var;

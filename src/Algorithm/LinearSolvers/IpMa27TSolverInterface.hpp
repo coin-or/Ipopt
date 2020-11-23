@@ -8,6 +8,7 @@
 #define __IPMA27TSOLVERINTERFACE_HPP__
 
 #include "IpSparseSymLinearSolverInterface.hpp"
+#include "IpTypes.h"
 
 namespace Ipopt
 {

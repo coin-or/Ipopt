@@ -5,6 +5,7 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-03-17
 
 #include "IpoptConfig.h"
+#include "IpTypes.h"
 
 #ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"
@@ -66,8 +67,8 @@ bool Mc19TSymScalingMethod::InitializeImpl(
 bool Mc19TSymScalingMethod::ComputeSymTScalingFactors(
    Index         n,
    Index         nnz,
-   const ipfint* airn,
-   const ipfint* ajcn,
+   const Index*  airn,
+   const Index*  ajcn,
    const Number* a,
    Number*       scaling_factors
 )

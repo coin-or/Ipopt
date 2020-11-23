@@ -14,6 +14,7 @@
 #include <cstddef>
 typedef ptrdiff_t ma57int;
 #else
+#include "IpTypes.h"
 typedef ipfint ma57int;
 #endif
 

@@ -9,6 +9,7 @@
 //          Carl Laird, Andreas Waechter     IBM    2004-03-17
 
 #include "IpoptConfig.h"
+#include "IpTypes.h"
 
 #ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"
