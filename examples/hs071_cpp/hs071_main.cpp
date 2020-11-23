@@ -30,7 +30,11 @@ int main(
    // Change some options
    // Note: The following choices are only examples, they might not be
    //       suitable for your optimization problem.
+#ifdef IPOPT_SINGLE
+   app->Options()->SetNumericValue("tol", 3.82e-6); // reduce tolerance in single precision to avoid "EXIT: Search Direction is becoming Too Small."
+#else
    app->Options()->SetNumericValue("tol", 1e-7);
+#endif
    app->Options()->SetStringValue("mu_strategy", "adaptive");
    app->Options()->SetStringValue("output_file", "ipopt.out");
    // The following overwrites the default name (ipopt.opt) of the options file
