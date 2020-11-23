@@ -11,7 +11,9 @@
 noinst_PROGRAMS = hs071_cpp hs071_c
 
 if COIN_HAS_F77
+if !IPOPT_SINGLE
 noinst_PROGRAMS += hs071_f
+endif
 endif
 
 if BUILD_SIPOPT

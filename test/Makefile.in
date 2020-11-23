@@ -100,7 +100,7 @@ build_triplet = @build@
 host_triplet = @host@
 noinst_PROGRAMS = hs071_cpp$(EXEEXT) hs071_c$(EXEEXT) $(am__EXEEXT_1) \
 	$(am__EXEEXT_2)
-@COIN_HAS_F77_TRUE@am__append_1 = hs071_f
+@COIN_HAS_F77_TRUE@@IPOPT_SINGLE_FALSE@am__append_1 = hs071_f
 @BUILD_SIPOPT_TRUE@am__append_2 = parametric_cpp redhess_cpp
 subdir = test
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -115,7 +115,8 @@ CONFIG_CLEAN_FILES = run_unitTests hs071_main.cpp hs071_nlp.cpp \
 	hs071_nlp.hpp hs071_c.c parametric_driver.cpp \
 	parametricTNLP.cpp MySensTNLP.cpp redhess_cpp.cpp
 CONFIG_CLEAN_VPATH_FILES =
-@COIN_HAS_F77_TRUE@am__EXEEXT_1 = hs071_f$(EXEEXT)
+@COIN_HAS_F77_TRUE@@IPOPT_SINGLE_FALSE@am__EXEEXT_1 =  \
+@COIN_HAS_F77_TRUE@@IPOPT_SINGLE_FALSE@	hs071_f$(EXEEXT)
 @BUILD_SIPOPT_TRUE@am__EXEEXT_2 = parametric_cpp$(EXEEXT) \
 @BUILD_SIPOPT_TRUE@	redhess_cpp$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
