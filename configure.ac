@@ -90,11 +90,16 @@ AC_COIN_CHK_PKG(ASL,[IpoptAmplInterfaceLib SIpoptAmplInterfaceLib],[coinasl],[bu
 # MUMPS #
 #########
 
-AC_COIN_CHK_PKG(Mumps,[IpoptLib],[coinmumps],[build])
+# TODO even though there is a single-precision variant of Mumps, Ipopt hasn't been setup to use it so far
+if test $precision = double ; then
+  AC_COIN_CHK_PKG(Mumps,[IpoptLib],[coinmumps],[build])
 
-# Check whether MPI_Initialized is available
-#   we assume that MPI_Finalized is present if MPI_Initialized is present
-AC_CHECK_FUNCS([MPI_Initialized])
+  # Check whether MPI_Initialized is available
+  #   we assume that MPI_Finalized is present if MPI_Initialized is present
+  AC_CHECK_FUNCS([MPI_Initialized])
+else
+  AM_CONDITIONAL([COIN_HAS_MUMPS],[false])
+fi
 
 #######
 # HSL #
