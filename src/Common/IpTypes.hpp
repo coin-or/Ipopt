@@ -27,4 +27,11 @@ typedef int Int;
 /* Type of Fortran integer translated into C */
 typedef IPOPT_FORTRAN_INTEGER_TYPE ipfint;
 
+/* Type of Fortran real translated into C */
+#ifdef IPOPT_SINGLE
+typedef float ipfreal;
+#else
+typedef double ipfreal;
+#endif
+
 #endif
