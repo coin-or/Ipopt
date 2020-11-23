@@ -698,8 +698,8 @@ PKG_CONFIG
 IPOPTLIB_PCFILES
 IPOPTLIB_CFLAGS
 IPOPTLIB_LFLAGS
-IPOPT_DOUBLE_FALSE
-IPOPT_DOUBLE_TRUE
+IPOPT_SINGLE_FALSE
+IPOPT_SINGLE_TRUE
 coin_doxy_tagfiles
 COIN_HAS_LATEX_FALSE
 COIN_HAS_LATEX_TRUE
@@ -21629,12 +21629,12 @@ $as_echo "#define IPOPT_SINGLE 1" >>confdefs.h
   double ) ;;
   *) as_fn_error $? "unsupported value $precision for option --with-precision" "$LINENO" 5
 esac
- if test "$precision" = double; then
-  IPOPT_DOUBLE_TRUE=
-  IPOPT_DOUBLE_FALSE='#'
+ if test "$precision" = single; then
+  IPOPT_SINGLE_TRUE=
+  IPOPT_SINGLE_FALSE='#'
 else
-  IPOPT_DOUBLE_TRUE='#'
-  IPOPT_DOUBLE_FALSE=
+  IPOPT_SINGLE_TRUE='#'
+  IPOPT_SINGLE_FALSE=
 fi
 
 
@@ -26469,8 +26469,8 @@ if test -z "${COIN_HAS_LATEX_TRUE}" && test -z "${COIN_HAS_LATEX_FALSE}"; then
   as_fn_error $? "conditional \"COIN_HAS_LATEX\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
-if test -z "${IPOPT_DOUBLE_TRUE}" && test -z "${IPOPT_DOUBLE_FALSE}"; then
-  as_fn_error $? "conditional \"IPOPT_DOUBLE\" was never defined.
+if test -z "${IPOPT_SINGLE_TRUE}" && test -z "${IPOPT_SINGLE_FALSE}"; then
+  as_fn_error $? "conditional \"IPOPT_SINGLE\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${COIN_HAS_PKGCONFIG_TRUE}" && test -z "${COIN_HAS_PKGCONFIG_FALSE}"; then

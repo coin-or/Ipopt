@@ -70,7 +70,7 @@ case "$precision" in
   double ) ;;
   *) AC_MSG_ERROR([unsupported value $precision for option --with-precision])
 esac
-AM_CONDITIONAL([IPOPT_DOUBLE],[test "$precision" = double])
+AM_CONDITIONAL([IPOPT_SINGLE],[test "$precision" = single])
 
 #############################################################################
 #                                 Dependencies                              #

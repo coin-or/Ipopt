@@ -95,10 +95,10 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@IPOPT_DOUBLE_TRUE@am__append_1 = \
-@IPOPT_DOUBLE_TRUE@	IpMa86SolverInterface.cpp \
-@IPOPT_DOUBLE_TRUE@	IpMa97SolverInterface.cpp \
-@IPOPT_DOUBLE_TRUE@	IpMa77SolverInterface.cpp
+@IPOPT_SINGLE_FALSE@am__append_1 = \
+@IPOPT_SINGLE_FALSE@	IpMa86SolverInterface.cpp \
+@IPOPT_SINGLE_FALSE@	IpMa97SolverInterface.cpp \
+@IPOPT_SINGLE_FALSE@	IpMa77SolverInterface.cpp
 
 @BUILD_LINEARSOLVERLOADER_TRUE@am__append_2 = IpPardisoSolverInterface.cpp
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__append_3 = IpPardisoSolverInterface.cpp
@@ -119,9 +119,9 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 liblinsolvers_la_LIBADD =
-@IPOPT_DOUBLE_TRUE@am__objects_1 = IpMa86SolverInterface.lo \
-@IPOPT_DOUBLE_TRUE@	IpMa97SolverInterface.lo \
-@IPOPT_DOUBLE_TRUE@	IpMa77SolverInterface.lo
+@IPOPT_SINGLE_FALSE@am__objects_1 = IpMa86SolverInterface.lo \
+@IPOPT_SINGLE_FALSE@	IpMa97SolverInterface.lo \
+@IPOPT_SINGLE_FALSE@	IpMa77SolverInterface.lo
 @BUILD_LINEARSOLVERLOADER_TRUE@am__objects_2 =  \
 @BUILD_LINEARSOLVERLOADER_TRUE@	IpPardisoSolverInterface.lo
 @BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__objects_3 = IpPardisoSolverInterface.lo
