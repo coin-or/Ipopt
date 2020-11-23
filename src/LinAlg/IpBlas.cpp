@@ -14,298 +14,165 @@
 #define IPOPT_BLAS_FUNC(name,NAME) IPOPT_LAPACK_FUNC(name,NAME)
 #endif
 
+#ifdef IPOPT_SINGLE
+#define IPOPT_BLAS_FUNCP(x,X) IPOPT_BLAS_FUNC(s ## x,S ## X)
+#else
+#define IPOPT_BLAS_FUNCP(x,X) IPOPT_BLAS_FUNC(d ## x,D ## X)
+#endif
+
 #include <cstring>
 
 // Prototypes for the BLAS routines
 extern "C"
 {
+   /** BLAS Fortran function XDOT */
+   ipfreal IPOPT_BLAS_FUNCP(dot, DOT)(
+      ipfint*        n,
+      const ipfreal* x,
+      ipfint*        incX,
+      const ipfreal* y,
+      ipfint*        incY
+   );
+
+   /** BLAS Fortran function XNRM2 */
+   ipfreal IPOPT_BLAS_FUNCP(nrm2, NRM2)(
+      ipfint*        n,
+      const ipfreal* x,
+      ipfint*        incX
+   );
+
+   /** BLAS Fortran function XASUM */
+   ipfreal IPOPT_BLAS_FUNCP(asum, ASUM)(
+      ipfint*        n,
+      const ipfreal* x,
+      ipfint*        incX
+   );
+
 #ifdef IPOPT_SINGLE
-   /** BLAS Fortran function SDOT */
-   float IPOPT_BLAS_FUNC(sdot, SDOT)(
-      ipfint*      n,
-      const float* x,
-      ipfint*      incX,
-      const float* y,
-      ipfint*      incY
-   );
-
-   /** BLAS Fortran function SNRM2 */
-   float IPOPT_BLAS_FUNC(snrm2, SNRM2)(
-      ipfint*      n,
-      const float* x,
-      ipfint*      incX
-   );
-
-   /** BLAS Fortran function SASUM */
-   float IPOPT_BLAS_FUNC(sasum, SASUM)(
-      ipfint*      n,
-      const float* x,
-      ipfint*      incX
-   );
-
    /** BLAS Fortran function ISAMAX */
    ipfint IPOPT_BLAS_FUNC(isamax, ISAMAX)(
-      ipfint*      n,
-      const float* x,
-      ipfint*      incX
-   );
-
-   /** BLAS Fortran subroutine SCOPY */
-   void IPOPT_BLAS_FUNC(scopy, SCOPY)(
-      ipfint*      n,
-      const float* x,
-      ipfint*      incX,
-      float*       y,
-      ipfint*      incY
-   );
-
-   /** BLAS Fortran subroutine SAXPY */
-   void IPOPT_BLAS_FUNC(saxpy, SAXPY)(
-      ipfint*      n,
-      const float* alpha,
-      const float* x,
-      ipfint*      incX,
-      float*       y,
-      ipfint*      incY
-   );
-
-   /** BLAS Fortran subroutine SSCAL */
-   void IPOPT_BLAS_FUNC(sscal, SSCAL)(
-      ipfint*      n,
-      const float* alpha,
-      const float* x,
-      ipfint*      incX
-   );
-
-   /** BLAS Fortran subroutine SGEMV */
-   void IPOPT_BLAS_FUNC(sgemv, SGEMV)(
-      char*        trans,
-      ipfint*      m,
-      ipfint*      n,
-      const float* alpha,
-      const float* a,
-      ipfint*      lda,
-      const float* x,
-      ipfint*      incX,
-      const float* beta,
-      float*       y,
-      ipfint*      incY,
-      int          trans_len
-   );
-
-   /** BLAS Fortran subroutine SSYMV */
-   void IPOPT_BLAS_FUNC(ssymv, SSYMV)(
-      char*        uplo,
-      ipfint*      n,
-      const float* alpha,
-      const float* a,
-      ipfint*      lda,
-      const float* x,
-      ipfint*      incX,
-      const float* beta,
-      float*       y,
-      ipfint*      incY,
-      int          uplo_len
-   );
-
-   /** BLAS Fortran subroutine SGEMM */
-   void IPOPT_BLAS_FUNC(sgemm, SGEMM)(
-      char*        transa,
-      char*        transb,
-      ipfint*      m,
-      ipfint*      n,
-      ipfint*      k,
-      const float* alpha,
-      const float* a,
-      ipfint*      lda,
-      const float* b,
-      ipfint*      ldb,
-      const float* beta,
-      float*       c,
-      ipfint*      ldc,
-      int          transa_len,
-      int          transb_len
-   );
-
-   /** BLAS Fortran subroutine SSYRK */
-   void IPOPT_BLAS_FUNC(ssyrk, SSYRK)(
-      char*        uplo,
-      char*        trans,
-      ipfint*      n,
-      ipfint*      k,
-      const float* alpha,
-      const float* a,
-      ipfint*      lda,
-      const float* beta,
-      float*       c,
-      ipfint*      ldc,
-      int          uplo_len,
-      int          trans_len
-   );
-
-   /** BLAS Fortran subroutine STRSM */
-   void IPOPT_BLAS_FUNC(strsm, STRSM)(
-      char*        side,
-      char*        uplo,
-      char*        transa,
-      char*        diag,
-      ipfint*      m,
-      ipfint*      n,
-      const float* alpha,
-      const float* a,
-      ipfint*      lda,
-      const float* b,
-      ipfint*      ldb,
-      int          side_len,
-      int          uplo_len,
-      int          transa_len,
-      int          diag_len
-   );
 #else
-   /** BLAS Fortran function DDOT */
-   double IPOPT_BLAS_FUNC(ddot, DDOT)(
-      ipfint*       n,
-      const double* x,
-      ipfint*       incX,
-      const double* y,
-      ipfint*       incY
-   );
-
-   /** BLAS Fortran function DNRM2 */
-   double IPOPT_BLAS_FUNC(dnrm2, DNRM2)(
-      ipfint*       n,
-      const double* x,
-      ipfint*       incX
-   );
-
-   /** BLAS Fortran function DASUM */
-   double IPOPT_BLAS_FUNC(dasum, DASUM)(
-      ipfint*       n,
-      const double* x,
-      ipfint*       incX
-   );
-
    /** BLAS Fortran function IDAMAX */
    ipfint IPOPT_BLAS_FUNC(idamax, IDAMAX)(
-      ipfint*       n,
-      const double* x,
-      ipfint*       incX
-   );
-
-   /** BLAS Fortran subroutine DCOPY */
-   void IPOPT_BLAS_FUNC(dcopy, DCOPY)(
-      ipfint*       n,
-      const double* x,
-      ipfint*       incX,
-      double*       y,
-      ipfint*       incY
-   );
-
-   /** BLAS Fortran subroutine DAXPY */
-   void IPOPT_BLAS_FUNC(daxpy, DAXPY)(
-      ipfint*       n,
-      const double* alpha,
-      const double* x,
-      ipfint*       incX,
-      double*       y,
-      ipfint*       incY
-   );
-
-   /** BLAS Fortran subroutine DSCAL */
-   void IPOPT_BLAS_FUNC(dscal, DSCAL)(
-      ipfint*       n,
-      const double* alpha,
-      const double* x,
-      ipfint*       incX
-   );
-
-   /** BLAS Fortran subroutine DGEMV */
-   void IPOPT_BLAS_FUNC(dgemv, DGEMV)(
-      char*         trans,
-      ipfint*       m,
-      ipfint*       n,
-      const double* alpha,
-      const double* a,
-      ipfint*       lda,
-      const double* x,
-      ipfint*       incX,
-      const double* beta,
-      double*       y,
-      ipfint*       incY,
-      int           trans_len
-   );
-
-   /** BLAS Fortran subroutine DSYMV */
-   void IPOPT_BLAS_FUNC(dsymv, DSYMV)(
-      char*         uplo,
-      ipfint*       n,
-      const double* alpha,
-      const double* a,
-      ipfint*       lda,
-      const double* x,
-      ipfint*       incX,
-      const double* beta,
-      double*       y,
-      ipfint*       incY,
-      int           uplo_len
-   );
-
-   /** BLAS Fortran subroutine DGEMM */
-   void IPOPT_BLAS_FUNC(dgemm, DGEMM)(
-      char*         transa,
-      char*         transb,
-      ipfint*       m,
-      ipfint*       n,
-      ipfint*       k,
-      const double* alpha,
-      const double* a,
-      ipfint*       lda,
-      const double* b,
-      ipfint*       ldb,
-      const double* beta,
-      double*       c,
-      ipfint*       ldc,
-      int           transa_len,
-      int           transb_len
-   );
-
-   /** BLAS Fortran subroutine DSYRK */
-   void IPOPT_BLAS_FUNC(dsyrk, DSYRK)(
-      char*         uplo,
-      char*         trans,
-      ipfint*       n,
-      ipfint*       k,
-      const double* alpha,
-      const double* a,
-      ipfint*       lda,
-      const double* beta,
-      double*       c,
-      ipfint*       ldc,
-      int           uplo_len,
-      int           trans_len
-   );
-
-   /** BLAS Fortran subroutine DTRSM */
-   void IPOPT_BLAS_FUNC(dtrsm, DTRSM)(
-      char*         side,
-      char*         uplo,
-      char*         transa,
-      char*         diag,
-      ipfint*       m,
-      ipfint*       n,
-      const double* alpha,
-      const double* a,
-      ipfint*       lda,
-      const double* b,
-      ipfint*       ldb,
-      int           side_len,
-      int           uplo_len,
-      int           transa_len,
-      int           diag_len
-   );
-
 #endif
+      ipfint*        n,
+      const ipfreal* x,
+      ipfint*        incX
+   );
+
+   /** BLAS Fortran subroutine XCOPY */
+   void IPOPT_BLAS_FUNCP(copy, COPY)(
+      ipfint*        n,
+      const ipfreal* x,
+      ipfint*        incX,
+      ipfreal*       y,
+      ipfint*        incY
+   );
+
+   /** BLAS Fortran subroutine XAXPY */
+   void IPOPT_BLAS_FUNCP(axpy, AXPY)(
+      ipfint*        n,
+      const ipfreal* alpha,
+      const ipfreal* x,
+      ipfint*        incX,
+      ipfreal*       y,
+      ipfint*        incY
+   );
+
+   /** BLAS Fortran subroutine XSCAL */
+   void IPOPT_BLAS_FUNCP(scal, SCAL)(
+      ipfint*        n,
+      const ipfreal* alpha,
+      const ipfreal* x,
+      ipfint*        incX
+   );
+
+   /** BLAS Fortran subroutine XGEMV */
+   void IPOPT_BLAS_FUNCP(gemv, GEMV)(
+      char*          trans,
+      ipfint*        m,
+      ipfint*        n,
+      const ipfreal* alpha,
+      const ipfreal* a,
+      ipfint*        lda,
+      const ipfreal* x,
+      ipfint*        incX,
+      const ipfreal* beta,
+      ipfreal*       y,
+      ipfint*        incY,
+      int            trans_len
+   );
+
+   /** BLAS Fortran subroutine XSYMV */
+   void IPOPT_BLAS_FUNCP(symv, SYMV)(
+      char*          uplo,
+      ipfint*        n,
+      const ipfreal* alpha,
+      const ipfreal* a,
+      ipfint*        lda,
+      const ipfreal* x,
+      ipfint*        incX,
+      const ipfreal* beta,
+      ipfreal*       y,
+      ipfint*        incY,
+      int            uplo_len
+   );
+
+   /** BLAS Fortran subroutine XGEMM */
+   void IPOPT_BLAS_FUNCP(gemm, GEMM)(
+      char*          transa,
+      char*          transb,
+      ipfint*        m,
+      ipfint*        n,
+      ipfint*        k,
+      const ipfreal* alpha,
+      const ipfreal* a,
+      ipfint*        lda,
+      const ipfreal* b,
+      ipfint*        ldb,
+      const ipfreal* beta,
+      ipfreal*       c,
+      ipfint*        ldc,
+      int            transa_len,
+      int            transb_len
+   );
+
+   /** BLAS Fortran subroutine XSYRK */
+   void IPOPT_BLAS_FUNCP(syrk, SYRK)(
+      char*          uplo,
+      char*          trans,
+      ipfint*        n,
+      ipfint*        k,
+      const ipfreal* alpha,
+      const ipfreal* a,
+      ipfint*        lda,
+      const ipfreal* beta,
+      ipfreal*       c,
+      ipfint*        ldc,
+      int            uplo_len,
+      int            trans_len
+   );
+
+   /** BLAS Fortran subroutine XTRSM */
+   void IPOPT_BLAS_FUNCP(trsm, TRSM)(
+      char*          side,
+      char*          uplo,
+      char*          transa,
+      char*          diag,
+      ipfint*        m,
+      ipfint*        n,
+      const ipfreal* alpha,
+      const ipfreal* a,
+      ipfint*        lda,
+      const ipfreal* b,
+      ipfint*        ldb,
+      int            side_len,
+      int            uplo_len,
+      int            transa_len,
+      int            diag_len
+   );
 }
+
 namespace Ipopt
 {
 Number IpBlasDot(
@@ -319,11 +186,7 @@ Number IpBlasDot(
    if( incX > 0 && incY > 0 )
    {
       ipfint n = size, INCX = incX, INCY = incY;
-#ifdef IPOPT_SINGLE
-      return IPOPT_BLAS_FUNC(sdot, SDOT)(&n, x, &INCX, y, &INCY);
-#else
-      return IPOPT_BLAS_FUNC(ddot, DDOT)(&n, x, &INCX, y, &INCY);
-#endif
+      return IPOPT_BLAS_FUNCP(dot, DOT)(&n, x, &INCX, y, &INCY);
    }
    else
    {
@@ -345,11 +208,7 @@ Number IpBlasNrm2(
 )
 {
    ipfint n = size, INCX = incX;
-#ifdef IPOPT_SINGLE
-   return IPOPT_BLAS_FUNC(snrm2, SNRM2)(&n, x, &INCX);
-#else
-   return IPOPT_BLAS_FUNC(dnrm2, DNRM2)(&n, x, &INCX);
-#endif
+   return IPOPT_BLAS_FUNCP(nrm2, NRM2)(&n, x, &INCX);
 }
 
 Number IpBlasAsum(
@@ -359,11 +218,7 @@ Number IpBlasAsum(
 )
 {
    ipfint n = size, INCX = incX;
-#ifdef IPOPT_SINGLE
-   return IPOPT_BLAS_FUNC(sasum, SASUM)(&n, x, &INCX);
-#else
-   return IPOPT_BLAS_FUNC(dasum, DASUM)(&n, x, &INCX);
-#endif
+   return IPOPT_BLAS_FUNCP(asum, ASUM)(&n, x, &INCX);
 }
 
 /** interface to FORTRAN routine IXAMAX */
@@ -393,11 +248,7 @@ void IpBlasCopy(
    if( incX > 0 )
    {
       ipfint N = size, INCX = incX, INCY = incY;
-#ifdef IPOPT_SINGLE
-      IPOPT_BLAS_FUNC(scopy, SCOPY)(&N, x, &INCX, y, &INCY);
-#else
-      IPOPT_BLAS_FUNC(dcopy, DCOPY)(&N, x, &INCX, y, &INCY);
-#endif
+      IPOPT_BLAS_FUNCP(copy, COPY)(&N, x, &INCX, y, &INCY);
    }
    else if( incY == 1 )
    {
@@ -427,11 +278,7 @@ void IpBlasAxpy(
    if( incX > 0 )
    {
       ipfint N = size, INCX = incX, INCY = incY;
-#ifdef IPOPT_SINGLE
-      IPOPT_BLAS_FUNC(saxpy, SAXPY)(&N, &alpha, x, &INCX, y, &INCY);
-#else
-      IPOPT_BLAS_FUNC(daxpy, DAXPY)(&N, &alpha, x, &INCX, y, &INCY);
-#endif
+      IPOPT_BLAS_FUNCP(axpy, AXPY)(&N, &alpha, x, &INCX, y, &INCY);
    }
    else if( incY == 1 )
    {
@@ -457,11 +304,7 @@ void IpBlasScal(
 )
 {
    ipfint N = size, INCX = incX;
-#ifdef IPOPT_SINGLE
-   IPOPT_BLAS_FUNC(sscal, SSCAL)(&N, &alpha, x, &INCX);
-#else
-   IPOPT_BLAS_FUNC(dscal, DSCAL)(&N, &alpha, x, &INCX);
-#endif
+   IPOPT_BLAS_FUNCP(scal, SCAL)(&N, &alpha, x, &INCX);
 }
 
 void IpBlasGemv(
@@ -489,11 +332,7 @@ void IpBlasGemv(
    {
       TRANS = 'N';
    }
-#ifdef IPOPT_SINGLE
-   IPOPT_BLAS_FUNC(sgemv, SGEMV)(&TRANS, &M, &N, &alpha, A, &LDA, x, &INCX, &beta, y, &INCY, 1);
-#else
-   IPOPT_BLAS_FUNC(dgemv, DGEMV)(&TRANS, &M, &N, &alpha, A, &LDA, x, &INCX, &beta, y, &INCY, 1);
-#endif
+   IPOPT_BLAS_FUNCP(gemv, GEMV)(&TRANS, &M, &N, &alpha, A, &LDA, x, &INCX, &beta, y, &INCY, 1);
 }
 
 void IpBlasSymv(
@@ -511,11 +350,7 @@ void IpBlasSymv(
    ipfint N = n, LDA = ldA, INCX = incX, INCY = incY;
 
    char UPLO = 'L';
-#ifdef IPOPT_SINGLE
-   IPOPT_BLAS_FUNC(ssymv, SSYMV)(&UPLO, &N, &alpha, A, &LDA, x, &INCX, &beta, y, &INCY, 1);
-#else
-   IPOPT_BLAS_FUNC(dsymv, DSYMV)(&UPLO, &N, &alpha, A, &LDA, x, &INCX, &beta, y, &INCY, 1);
-#endif
+   IPOPT_BLAS_FUNCP(symv, SYMV)(&UPLO, &N, &alpha, A, &LDA, x, &INCX, &beta, y, &INCY, 1);
 }
 
 void IpBlasGemm(
@@ -554,11 +389,7 @@ void IpBlasGemm(
    {
       TRANSB = 'N';
    }
-#ifdef IPOPT_SINGLE
-   IPOPT_BLAS_FUNC(sgemm, SGEMM)(&TRANSA, &TRANSB, &M, &N, &K, &alpha, A, &LDA, B, &LDB, &beta, C, &LDC, 1, 1);
-#else
-   IPOPT_BLAS_FUNC(dgemm, DGEMM)(&TRANSA, &TRANSB, &M, &N, &K, &alpha, A, &LDA, B, &LDB, &beta, C, &LDC, 1, 1);
-#endif
+   IPOPT_BLAS_FUNCP(gemm, GEMM)(&TRANSA, &TRANSB, &M, &N, &K, &alpha, A, &LDA, B, &LDB, &beta, C, &LDC, 1, 1);
 }
 
 void IpBlasSyrk(
@@ -585,11 +416,7 @@ void IpBlasSyrk(
    {
       TRANS = 'N';
    }
-#ifdef IPOPT_SINGLE
-   IPOPT_BLAS_FUNC(ssyrk, SSYRK)(&UPLO, &TRANS, &N, &K, &alpha, A, &LDA, &beta, C, &LDC, 1, 1);
-#else
-   IPOPT_BLAS_FUNC(dsyrk, DSYRK)(&UPLO, &TRANS, &N, &K, &alpha, A, &LDA, &beta, C, &LDC, 1, 1);
-#endif
+   IPOPT_BLAS_FUNCP(syrk, SYRK)(&UPLO, &TRANS, &N, &K, &alpha, A, &LDA, &beta, C, &LDC, 1, 1);
 }
 
 void IpBlasTrsm(
@@ -617,11 +444,7 @@ void IpBlasTrsm(
       TRANSA = 'N';
    }
    char DIAG = 'N';
-#ifdef IPOPT_SINGLE
-   IPOPT_BLAS_FUNC(strsm, STRSM)(&SIDE, &UPLO, &TRANSA, &DIAG, &M, &N, &alpha, A, &LDA, B, &LDB, 1, 1, 1, 1);
-#else
-   IPOPT_BLAS_FUNC(dtrsm, DTRSM)(&SIDE, &UPLO, &TRANSA, &DIAG, &M, &N, &alpha, A, &LDA, B, &LDB, 1, 1, 1, 1);
-#endif
+   IPOPT_BLAS_FUNCP(trsm, TRSM)(&SIDE, &UPLO, &TRANSA, &DIAG, &M, &N, &alpha, A, &LDA, B, &LDB, 1, 1, 1, 1);
 }
 
 } // namespace Ipopt
