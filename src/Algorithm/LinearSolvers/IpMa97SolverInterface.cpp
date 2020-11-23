@@ -4,8 +4,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id: IpMa97SolverInterface.cpp 2003 2011-06-03 03:53:44Z andreasw $
-//
 // Authors: Jonathan Hogg                    STFC   2012-12-21
 //          Jonathan Hogg                           2009-07-29
 //          Carl Laird, Andreas Waechter     IBM    2004-03-17
