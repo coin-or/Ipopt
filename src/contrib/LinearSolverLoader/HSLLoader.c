@@ -24,11 +24,11 @@
 #ifdef IPOPT_SINGLE
 #define HSLFUNCNAMESUFFIX ""
 #define HSLFUNCNAMESUFFIXUC ""
-#define IPOPT_HSL_FUNCP(x,X) IPOPT_HSL_FUNC(x,X)
+#define IPOPT_HSL_FUNCP(name,NAME) IPOPT_HSL_FUNC(name,NAME)
 #else
 #define HSLFUNCNAMESUFFIX "d"
 #define HSLFUNCNAMESUFFIXUC "D"
-#define IPOPT_HSL_FUNCP(x,X) IPOPT_HSL_FUNC(x ## d,X ## D)
+#define IPOPT_HSL_FUNCP(name,NAME) IPOPT_HSL_FUNC(name ## d,NAME ## D)
 #endif
 
 static soHandle_t HSL_handle = NULL;

@@ -16,9 +16,9 @@
 #endif
 
 #ifdef IPOPT_SINGLE
-#define IPOPT_BLAS_FUNCP(x,X) IPOPT_BLAS_FUNC(s ## x,S ## X)
+#define IPOPT_BLAS_FUNCP(name,NAME) IPOPT_BLAS_FUNC(s ## name,S ## NAME)
 #else
-#define IPOPT_BLAS_FUNCP(x,X) IPOPT_BLAS_FUNC(d ## x,D ## X)
+#define IPOPT_BLAS_FUNCP(name,NAME) IPOPT_BLAS_FUNC(d ## name,D ## NAME)
 #endif
 
 #include <cstring>

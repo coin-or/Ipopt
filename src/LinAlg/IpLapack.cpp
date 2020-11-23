@@ -16,9 +16,9 @@
 #endif
 
 #ifdef IPOPT_SINGLE
-#define IPOPT_LAPACK_FUNCP(x,X) IPOPT_LAPACK_FUNC(s ## x,S ## X)
+#define IPOPT_LAPACK_FUNCP(name,NAME) IPOPT_LAPACK_FUNC(s ## name,S ## NAME)
 #else
-#define IPOPT_LAPACK_FUNCP(x,X) IPOPT_LAPACK_FUNC(d ## x,D ## X)
+#define IPOPT_LAPACK_FUNCP(name,NAME) IPOPT_LAPACK_FUNC(d ## name,D ## NAME)
 #endif
 
 #ifdef IPOPT_HAS_LAPACK
