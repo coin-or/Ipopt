@@ -84,7 +84,12 @@ if test $coin_has_lapack != yes; then
 #  AC_MSG_WARN([Compiling code without LAPACK.  Certain options (e.g., quasi-Newton) will not work.])
 fi
 
-AC_COIN_CHK_PKG(ASL,[IpoptAmplInterfaceLib SIpoptAmplInterfaceLib],[coinasl],[build])
+# check for ASL only if building for double precision
+if test $precision = double ; then
+  AC_COIN_CHK_PKG(ASL,[IpoptAmplInterfaceLib SIpoptAmplInterfaceLib],[coinasl],[build])
+else
+  AM_CONDITIONAL([COIN_HAS_ASL],[false])
+fi
 
 #########
 # MUMPS #
@@ -614,7 +619,7 @@ case $build in
     ;;
 esac
 
-if test $coin_has_asl = yes ; then
+if test "$coin_has_asl" = yes ; then
   AC_CONFIG_FILES([ipoptamplinterface.pc:src/Apps/AmplSolver/ipoptamplinterface.pc.in])
 fi
 

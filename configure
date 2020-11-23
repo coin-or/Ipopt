@@ -22884,6 +22884,8 @@ if test $coin_has_lapack != yes; then
 #  AC_MSG_WARN([Compiling code without LAPACK.  Certain options (e.g., quasi-Newton) will not work.])
 fi
 
+# check for ASL only if building for double precision
+if test $precision = double ; then
 
 
 
@@ -23126,6 +23128,16 @@ $as_echo "#define IPOPT_HAS_ASL 1" >>confdefs.h
 
   fi
 
+else
+   if false; then
+  COIN_HAS_ASL_TRUE=
+  COIN_HAS_ASL_FALSE='#'
+else
+  COIN_HAS_ASL_TRUE='#'
+  COIN_HAS_ASL_FALSE=
+fi
+
+fi
 
 #########
 # MUMPS #
@@ -24953,7 +24965,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 24956 "configure" */
+/* #line 24968 "configure" */
 public class Test {
 }
 EOF
@@ -25439,7 +25451,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25442 "configure" */
+/* #line 25454 "configure" */
 public class Test {
 }
 EOF
@@ -25473,7 +25485,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25476 "configure" */
+/* [#]line 25488 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
@@ -26287,7 +26299,7 @@ case $build in
     ;;
 esac
 
-if test $coin_has_asl = yes ; then
+if test "$coin_has_asl" = yes ; then
   ac_config_files="$ac_config_files ipoptamplinterface.pc:src/Apps/AmplSolver/ipoptamplinterface.pc.in"
 
 fi
@@ -26467,6 +26479,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${COIN_HAS_LAPACK_TRUE}" && test -z "${COIN_HAS_LAPACK_FALSE}"; then
   as_fn_error $? "conditional \"COIN_HAS_LAPACK\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${COIN_HAS_ASL_TRUE}" && test -z "${COIN_HAS_ASL_FALSE}"; then
+  as_fn_error $? "conditional \"COIN_HAS_ASL\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${COIN_HAS_ASL_TRUE}" && test -z "${COIN_HAS_ASL_FALSE}"; then
