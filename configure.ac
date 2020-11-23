@@ -116,7 +116,7 @@ if test "$coin_has_hsl" = yes ; then
   fi
 
   # extra check for MA28, since that decides whether we have to build IpMa28Partition.F
-  if test -n "$F77" ; then
+  if test -n "$F77" && test $precision = double ; then
     AC_COIN_TRY_LINK([ma28ad],[$HSLLIB_LFLAGS],,[
       if test "$ma28ad_namemangling" != "$ac_cv_f77_mangling" ; then
         AC_MSG_WARN([Name mangling of MA28 different than Fortran. This will not link. Disabling MA28])

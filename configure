@@ -23826,7 +23826,7 @@ $as_echo "$as_me: WARNING: Unsupported or unknown name-mangling scheme: $ac_cv_h
   fi
 
   # extra check for MA28, since that decides whether we have to build IpMa28Partition.F
-  if test -n "$F77" ; then
+  if test -n "$F77" && test $precision = double ; then
 
   ac_save_LIBS="$LIBS"
   LIBS="$HSLLIB_LFLAGS $LIBS"
