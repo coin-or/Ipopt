@@ -23683,6 +23683,11 @@ $as_echo "$as_me: HSLLIB_CFLAGS: \"${HSLLIB_CFLAGS}\"" >&6;}
       fi
 
 
+  case $precision in
+    single ) ma27func=ma27a  MA27FUNC=MA27A  ;;
+    double ) ma27func=ma27ad MA27FUNC=MA27AD ;;
+    * ) as_fn_error $? "HSL cannot be used with --with-precision=$precision" "$LINENO" 5 ;;
+  esac
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking HSL name mangling scheme" >&5
 $as_echo_n "checking HSL name mangling scheme... " >&6; }
@@ -23703,10 +23708,10 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
            ac_cv_hsl_namemangling="${ac_case}, ${ac_trail}, ${ac_extra}"
            case $ac_case in
              "lower case")
-               ac_name=ma27ad
+               ac_name=$ma27func
                ;;
              "upper case")
-               ac_name=MA27AD
+               ac_name=$MA27FUNC
                ;;
            esac
            if test "$ac_trail" = underscore ; then
@@ -24936,7 +24941,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 24939 "configure" */
+/* #line 24944 "configure" */
 public class Test {
 }
 EOF
@@ -25422,7 +25427,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25425 "configure" */
+/* #line 25430 "configure" */
 public class Test {
 }
 EOF
@@ -25456,7 +25461,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25459 "configure" */
+/* [#]line 25464 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);

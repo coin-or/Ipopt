@@ -105,7 +105,12 @@ AC_COIN_CHK_PKG(HSL,[IpoptLib HSLLib],[coinhsl],[build])
 have_ma28=no
 if test "$coin_has_hsl" = yes ; then
   AC_COIN_FINALIZE_FLAGS([HSLLib])
-  AC_COIN_NAMEMANGLING([HSL],[ma27ad],[$HSLLIB_LFLAGS])
+  case $precision in
+    single ) ma27func=ma27a  MA27FUNC=MA27A  ;;
+    double ) ma27func=ma27ad MA27FUNC=MA27AD ;;
+    * ) AC_MSG_ERROR([HSL cannot be used with --with-precision=$precision]) ;;
+  esac
+  AC_COIN_NAMEMANGLING([HSL],[$ma27func],[$HSLLIB_LFLAGS])
   if test "$ac_cv_hsl_namemangling" = "unknown" ; then
     AC_MSG_ERROR([Provided package HSL is not working or does not contain MA27.])
   fi
