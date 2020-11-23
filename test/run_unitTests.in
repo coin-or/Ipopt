@@ -59,12 +59,12 @@ checkrun ./hs071_cpp || retval=$?
 
 # C Example
 echo "Testing C Example..."
-checkrun ./hs071_c || retval=?
+checkrun ./hs071_c || retval=$?
 
 # Fortran Example
 if test -e ./hs071_f ; then
   echo "Testing Fortran Example..."
-  checkrun ./hs071_f || retval=?
+  checkrun ./hs071_f || retval=$?
 else
   echo "Skip testing Fortran Example (hs071_f not available)"
 fi
