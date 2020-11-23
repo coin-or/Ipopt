@@ -18,8 +18,12 @@
 
 /* ToDo: The following needs to be adapted based on configuration */
 typedef IPOPT_FORTRAN_INTEGER_TYPE fint;
-typedef double fdouble;
-typedef float ffloat;
+/* Type of Fortran real translated into C */
+#ifdef IPOPT_SINGLE
+typedef float freal;
+#else
+typedef double freal;
+#endif
 /* in configure, we checked whether an int* is 32 or 64bit long to decide how much space
  * is needed to store a pointer
  * thus, we can use a void* here to represent a pointer for Fortran
@@ -32,92 +36,91 @@ static const fint OKRetVal = 0;
 static const fint NotOKRetVal = 1;
 
 /* Function pointer types for the Fortran callback functions */
-#ifdef IPOPT_SINGLE
 typedef void (*FEval_F_CB)(
    fint*    N,
-   ffloat*  X,
+   freal*   X,
    fint*    NEW_X,
-   ffloat*  OBJVAL,
+   freal*   OBJVAL,
    fint*    IDAT,
-   ffloat*  DDAT,
+   freal*   DDAT,
    fint*    IERR
 );
 
 typedef void (*FEval_G_CB)(
    fint*    N,
-   ffloat*  X,
+   freal*   X,
    fint*    NEW_X,
    fint*    M,
-   ffloat*  G,
+   freal*   G,
    fint*    IDAT,
-   ffloat*  DDAT,
+   freal*   DDAT,
    fint*    IERR
 );
 
 typedef void (*FEval_Grad_F_CB)(
    fint*    N,
-   ffloat*  X,
+   freal*   X,
    fint*    NEW_X,
-   ffloat*  GRAD,
+   freal*   GRAD,
    fint*    IDAT,
-   ffloat*  DDAT,
+   freal*   DDAT,
    fint*    IERR
 );
 
 typedef void (*FEval_Jac_G_CB)(
    fint*    TASK,
    fint*    N,
-   ffloat*  X,
+   freal*   X,
    fint*    NEW_X,
    fint*    M,
    fint*    NNZJAC,
    fint*    IROW,
    fint*    JCOL,
-   ffloat*  VALUES,
+   freal*   VALUES,
    fint*    IDAT,
-   ffloat*  DDAT,
+   freal*   DDAT,
    fint*    IERR
 );
 
 typedef void (*FEval_Hess_CB)(
    fint*    TASK,
    fint*    N,
-   ffloat*  X,
+   freal*   X,
    fint*    NEW_X,
-   ffloat*  OBJFACT,
+   freal*   OBJFACT,
    fint*    M,
-   ffloat*  LAMBDA,
+   freal*   LAMBDA,
    fint*    NEW_LAM,
    fint*    NNZHESS,
    fint*    IROW,
    fint*    JCOL,
-   ffloat*  VALUES,
+   freal*   VALUES,
    fint*    IDAT,
-   ffloat*  DDAT,
+   freal*   DDAT,
    fint*    IERR
 );
 
 typedef void (*FIntermediate_CB)(
    fint*    ALG_MODE,
    fint*    ITER_COUNT,
-   ffloat*  OBJVAL,
-   ffloat*  INF_PR,
-   ffloat*  INF_DU,
-   ffloat*  MU,
-   ffloat*  DNORM,
-   ffloat*  REGU_SIZE,
-   ffloat*  ALPHA_DU,
-   ffloat*  ALPHA_PR,
+   freal*   OBJVAL,
+   freal*   INF_PR,
+   freal*   INF_DU,
+   freal*   MU,
+   freal*   DNORM,
+   freal*   REGU_SIZE,
+   freal*   ALPHA_DU,
+   freal*   ALPHA_PR,
    fint*    LS_TRIAL,
    fint*    IDAT,
-   ffloat*  DDAT,
+   freal*   DDAT,
    fint*    ISTOP
 );
 
 struct _FUserData
 {
    fint*            IDAT;
-   ffloat*          DDAT;
+   freal*           DDAT;
    FEval_F_CB       EVAL_F;
    FEval_G_CB       EVAL_G;
    FEval_Grad_F_CB  EVAL_GRAD_F;
@@ -126,101 +129,6 @@ struct _FUserData
    FIntermediate_CB INTERMEDIATE_CB;
    IpoptProblem     Problem;
 };
-#else
-typedef void (*FEval_F_CB)(
-   fint*    N,
-   fdouble* X,
-   fint*    NEW_X,
-   fdouble* OBJVAL,
-   fint*    IDAT,
-   fdouble* DDAT,
-   fint*    IERR
-);
-
-typedef void (*FEval_G_CB)(
-   fint*    N,
-   fdouble* X,
-   fint*    NEW_X,
-   fint*    M,
-   fdouble* G,
-   fint*    IDAT,
-   fdouble* DDAT,
-   fint*    IERR
-);
-
-typedef void (*FEval_Grad_F_CB)(
-   fint*    N,
-   fdouble* X,
-   fint*    NEW_X,
-   fdouble* GRAD,
-   fint*    IDAT,
-   fdouble* DDAT,
-   fint*    IERR
-);
-
-typedef void (*FEval_Jac_G_CB)(
-   fint*    TASK,
-   fint*    N,
-   fdouble* X,
-   fint*    NEW_X,
-   fint*    M,
-   fint*    NNZJAC,
-   fint*    IROW,
-   fint*    JCOL,
-   fdouble* VALUES,
-   fint*    IDAT,
-   fdouble* DDAT,
-   fint*    IERR
-);
-
-typedef void (*FEval_Hess_CB)(
-   fint*    TASK,
-   fint*    N,
-   fdouble* X,
-   fint*    NEW_X,
-   fdouble* OBJFACT,
-   fint*    M,
-   fdouble* LAMBDA,
-   fint*    NEW_LAM,
-   fint*    NNZHESS,
-   fint*    IROW,
-   fint*    JCOL,
-   fdouble* VALUES,
-   fint*    IDAT,
-   fdouble* DDAT,
-   fint*    IERR
-);
-
-typedef void (*FIntermediate_CB)(
-   fint*    ALG_MODE,
-   fint*    ITER_COUNT,
-   fdouble* OBJVAL,
-   fdouble* INF_PR,
-   fdouble* INF_DU,
-   fdouble* MU,
-   fdouble* DNORM,
-   fdouble* REGU_SIZE,
-   fdouble* ALPHA_DU,
-   fdouble* ALPHA_PR,
-   fint*    LS_TRIAL,
-   fint*    IDAT,
-   fdouble* DDAT,
-   fint*    ISTOP
-);
-
-struct _FUserData
-{
-   fint*            IDAT;
-   fdouble*         DDAT;
-   FEval_F_CB       EVAL_F;
-   FEval_G_CB       EVAL_G;
-   FEval_Grad_F_CB  EVAL_GRAD_F;
-   FEval_Jac_G_CB   EVAL_JAC_G;
-   FEval_Hess_CB    EVAL_HESS;
-   FIntermediate_CB INTERMEDIATE_CB;
-   IpoptProblem     Problem;
-};
-#endif
 typedef struct _FUserData FUserData;
 
 static Bool eval_f(
@@ -235,11 +143,7 @@ static Bool eval_f(
    fint NEW_X = new_x;
    FUserData* fuser_data = (FUserData*) user_data;
    fint* IDAT = fuser_data->IDAT;
-#ifdef IPOPT_SINGLE
-   ffloat*  DDAT = fuser_data->DDAT;
-#else
-   fdouble* DDAT = fuser_data->DDAT;
-#endif
+   freal*  DDAT = fuser_data->DDAT;
    fint IERR = 0;
 
    fuser_data->EVAL_F(&N, x, &NEW_X, obj_value, IDAT, DDAT, &IERR);
@@ -259,11 +163,7 @@ static Bool eval_grad_f(
    fint NEW_X = new_x;
    FUserData* fuser_data = (FUserData*) user_data;
    fint* IDAT = fuser_data->IDAT;
-#ifdef IPOPT_SINGLE
-   ffloat*  DDAT = fuser_data->DDAT;
-#else
-   fdouble* DDAT = fuser_data->DDAT;
-#endif
+   freal*  DDAT = fuser_data->DDAT;
    fint IERR = 0;
 
    fuser_data->EVAL_GRAD_F(&N, x, &NEW_X, grad_f, IDAT, DDAT, &IERR);
@@ -285,11 +185,7 @@ static Bool eval_g(
    fint M = m;
    FUserData* fuser_data = (FUserData*) user_data;
    fint* IDAT = fuser_data->IDAT;
-#ifdef IPOPT_SINGLE
-   ffloat*  DDAT = fuser_data->DDAT;
-#else
-   fdouble* DDAT = fuser_data->DDAT;
-#endif
+   freal* DDAT = fuser_data->DDAT;
    fint IERR = 0;
 
    fuser_data->EVAL_G(&N, x, &NEW_X, &M, g, IDAT, DDAT, &IERR);
@@ -316,11 +212,7 @@ static Bool eval_jac_g(
    fint TASK;
    FUserData* fuser_data = (FUserData*) user_data;
    fint* IDAT = fuser_data->IDAT;
-#ifdef IPOPT_SINGLE
-   ffloat*  DDAT = fuser_data->DDAT;
-#else
-   fdouble* DDAT = fuser_data->DDAT;
-#endif
+   freal*  DDAT = fuser_data->DDAT;
    fint IERR = 0;
 
    if( iRow != NULL && jCol != NULL && values == NULL )
@@ -367,11 +259,7 @@ static Bool eval_h(
    fint TASK;
    FUserData* fuser_data = (FUserData*) user_data;
    fint* IDAT = fuser_data->IDAT;
-#ifdef IPOPT_SINGLE
-   ffloat*  DDAT = fuser_data->DDAT;
-#else
-   fdouble* DDAT = fuser_data->DDAT;
-#endif
+   freal* DDAT = fuser_data->DDAT;
    fint IERR = 0;
 
    if( iRow != NULL && jCol != NULL && values == NULL )
@@ -413,32 +301,17 @@ static Bool intermediate_cb(
    FUserData* fuser_data = (FUserData*) user_data;
    fint ALG_MODE = alg_mod;
    fint ITER_COUNT = iter_count;
-#ifdef IPOPT_SINGLE
-   ffloat  OBJVAL = obj_value;
-   ffloat  INF_PR = inf_pr;
-   ffloat  INF_DU = inf_du;
-   ffloat  MU = mu;
-   ffloat  DNORM = d_norm;
-   ffloat  REGU_SIZE = regularization_size;
-   ffloat  ALPHA_DU = alpha_du;
-   ffloat  ALPHA_PR = alpha_pr;
-#else
-   fdouble OBJVAL = obj_value;
-   fdouble INF_PR = inf_pr;
-   fdouble INF_DU = inf_du;
-   fdouble MU = mu;
-   fdouble DNORM = d_norm;
-   fdouble REGU_SIZE = regularization_size;
-   fdouble ALPHA_DU = alpha_du;
-   fdouble ALPHA_PR = alpha_pr;
-#endif
+   freal OBJVAL = obj_value;
+   freal INF_PR = inf_pr;
+   freal INF_DU = inf_du;
+   freal MU = mu;
+   freal DNORM = d_norm;
+   freal REGU_SIZE = regularization_size;
+   freal ALPHA_DU = alpha_du;
+   freal ALPHA_PR = alpha_pr;
    fint LS_TRIAL = ls_trials;
    fint* IDAT = fuser_data->IDAT;
-#ifdef IPOPT_SINGLE
-   ffloat*  DDAT = fuser_data->DDAT;
-#else
-   fdouble* DDAT = fuser_data->DDAT;
-#endif
+   freal* DDAT = fuser_data->DDAT;
    fint ISTOP = 0;
 
    if( !fuser_data->INTERMEDIATE_CB )
@@ -454,21 +327,11 @@ static Bool intermediate_cb(
 
 IPOPTLIB_EXPORT fptr F77_FUNC(ipcreate, IPCREATE)(
    fint*           N,
-#ifdef IPOPT_SINGLE
-   ffloat*         X_L,
-   ffloat*         X_U,
-#else
-   fdouble*        X_L,
-   fdouble*        X_U,
-#endif
+   freal*          X_L,
+   freal*          X_U,
    fint*           M,
-#ifdef IPOPT_SINGLE
-   ffloat*         G_L,
-   ffloat*         G_U,
-#else
-   fdouble*        G_L,
-   fdouble*        G_U,
-#endif
+   freal*          G_L,
+   freal*          G_U,
    fint*           NELE_JAC,
    fint*           NELE_HESS,
    fint*           IDX_STY,
@@ -523,27 +386,14 @@ IPOPTLIB_EXPORT void F77_FUNC(ipfree, IPFREE)(
 
 IPOPTLIB_EXPORT fint F77_FUNC(ipsolve, IPSOLVE)(
    fptr*    FProblem,
-#ifdef IPOPT_SINGLE
-   ffloat*  X,
-   ffloat*  G,
-   ffloat*  OBJ_VAL,
-   ffloat*  MULT_G,
-   ffloat*  MULT_X_L,
-   ffloat*  MULT_X_U,
-#else
-   fdouble* X,
-   fdouble* G,
-   fdouble* OBJ_VAL,
-   fdouble* MULT_G,
-   fdouble* MULT_X_L,
-   fdouble* MULT_X_U,
-#endif
+   freal*   X,
+   freal*   G,
+   freal*   OBJ_VAL,
+   freal*   MULT_G,
+   freal*   MULT_X_L,
+   freal*   MULT_X_U,
    fint*    IDAT,
-#ifdef IPOPT_SINGLE
-   ffloat*  DDAT
-#else
-   fdouble* DDAT
-#endif
+   freal*   DDAT
 )
 {
    FUserData* fuser_data = (FUserData*) *FProblem;
@@ -605,11 +455,7 @@ IPOPTLIB_EXPORT fint F77_FUNC(ipaddstroption, IPADDSTROPTION)(
 IPOPTLIB_EXPORT fint F77_FUNC(ipaddnumoption, IPADDNUMOPTION)(
    fptr*    FProblem,
    char*    KEYWORD,
-#ifdef IPOPT_SINGLE
-   ffloat*  VALUE,
-#else
-   fdouble* VALUE,
-#endif
+   freal*   VALUE,
    int      klen
 )
 {
