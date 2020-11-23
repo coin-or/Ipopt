@@ -11,6 +11,14 @@ matrix:
             - libmetis-dev
       env: ENABLEDEBUG=true
     - os: linux
+      addons:
+        apt:
+          packages:
+            - gfortran
+            - liblapack-dev
+            - libmetis-dev
+      env: NOF77=true SINGLEPRECISION=true
+    - os: linux
       dist: bionic
       addons:
         apt:
@@ -40,6 +48,7 @@ before_script:
   - export VISHIDDEN=${VISHIDDEN:-false}
   - export NOF77=${NOF77:-false}
   - export ENABLEDEBUG=${ENABLEDEBUG:-false}
+  - export SINGLEPRECISION=${SINGLEPRECISION:-false}
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && ! $NOF77; then brew update; brew install bash gcc metis; export CC=gcc-9 ; export CXX=g++-9 ; $CC --version; $CXX --version; gfortran --version; fi
 
 script:
@@ -55,6 +64,7 @@ script:
   - export CFGFLAGS=""
   - if $NOF77 ; then CFGFLAGS="$CFGFLAGS --disable-f77" ; fi
   - if $ENABLEDEBUG ; then CFGFLAGS="$CFGFLAGS --enable-debug --with-ipopt-checklevel=5 --with-ipopt-verbosity=5" ; fi
+  - if $SINGLEPRECISION ; then CFGFLAGS="$CFGFLAGS --enable-single-precision" ; fi
   - ../configure --prefix=$HOME/install $CFGFLAGS
   - make
   - if $NOF77 ; then echo "skip test as no linear solver" ; else make test ; fi
