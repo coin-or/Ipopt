@@ -64,7 +64,7 @@ script:
   - export CFGFLAGS=""
   - if $NOF77 ; then CFGFLAGS="$CFGFLAGS --disable-f77" ; fi
   - if $ENABLEDEBUG ; then CFGFLAGS="$CFGFLAGS --enable-debug --with-ipopt-checklevel=5 --with-ipopt-verbosity=5" ; fi
-  - if $SINGLEPRECISION ; then CFGFLAGS="$CFGFLAGS --enable-single-precision" ; fi
+  - if $SINGLEPRECISION ; then CFGFLAGS="$CFGFLAGS --with-precision=single" ; fi
   - ../configure --prefix=$HOME/install $CFGFLAGS
   - make
   - if $NOF77 ; then echo "skip test as no linear solver" ; else make test ; fi

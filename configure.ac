@@ -57,6 +57,21 @@ AC_COIN_DOXYGEN
 # IPOPT_VERBOSITY and IPOPT_DEBUGLEVEL
 AC_COIN_DEBUGLEVEL
 
+########################################################################
+#                   Floating-point Precision                           #
+########################################################################
+
+AC_ARG_WITH([precision],
+            [AC_HELP_STRING([--with-precision],[floating-point precision to use: single or double (default)])],
+            [precision=$withval],
+            [precision=double])
+case "$precision" in
+  single ) AC_DEFINE([IPOPT_SINGLE],[1],[Define to 1 if using single precision floating point]) ;;
+  double ) ;;
+  *) AC_MSG_ERROR([unsupported value $precision for option --with-precision])
+esac
+AM_CONDITIONAL([IPOPT_DOUBLE],[test "$precision" = double])
+
 #############################################################################
 #                                 Dependencies                              #
 #############################################################################
@@ -409,17 +424,6 @@ AC_ARG_ENABLE([sipopt],
   [use_sipopt=yes])
 AM_CONDITIONAL(BUILD_SIPOPT, [test "$use_sipopt" = yes])
 
-########################################################################
-##                          Single Precision                          ##
-########################################################################
-
-AC_ARG_ENABLE([single-precision],
-			  AC_HELP_STRING([--enable-single-precision],[use single precision in this build of IPOPT]))
-
-if test "x$enable_single_precision" = "xyes" ; then
-   AC_DEFINE([IPOPT_SINGLE],[1],[Define to 1 if using single precision floating point])
-fi
-AM_CONDITIONAL([IPOPT_DOUBLE],[test "$enable_single_precision" != yes])
 ########################################################################
 ##             Create links for the test source files                 ##
 ########################################################################
