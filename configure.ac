@@ -297,10 +297,15 @@ fi
 AC_ARG_ENABLE([java],
   [AC_HELP_STRING([--disable-java],[disable building of Java interface])],
   [enable_java="$enableval"],
-  [case "$JAVA_HOME" in
-     *\ * ) enable_java=no ;;   # do not enable java-check by default, if there are spaces in JAVA_HOME - that causes trouble
-     * )    enable_java="$enable_shared" ;;
-   esac
+  [if test $precision != double ; then
+     # Java interface only available for double-precision floating-point numbers currently
+     enable_java=no
+   else
+     case "$JAVA_HOME" in
+       *\ * ) enable_java=no ;;   # do not enable java-check by default, if there are spaces in JAVA_HOME - that causes trouble
+       * )    enable_java="$enable_shared" ;;
+     esac
+   fi
   ])
 
 if test "$enable_java" != no ; then

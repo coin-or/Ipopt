@@ -24817,10 +24817,15 @@ fi
 if test "${enable_java+set}" = set; then :
   enableval=$enable_java; enable_java="$enableval"
 else
-  case "$JAVA_HOME" in
-     *\ * ) enable_java=no ;;   # do not enable java-check by default, if there are spaces in JAVA_HOME - that causes trouble
-     * )    enable_java="$enable_shared" ;;
-   esac
+  if test $precision != double ; then
+     # Java interface only available for double-precision floating-point numbers currently
+     enable_java=no
+   else
+     case "$JAVA_HOME" in
+       *\ * ) enable_java=no ;;   # do not enable java-check by default, if there are spaces in JAVA_HOME - that causes trouble
+       * )    enable_java="$enable_shared" ;;
+     esac
+   fi
 
 fi
 
@@ -24931,7 +24936,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 24934 "configure" */
+/* #line 24939 "configure" */
 public class Test {
 }
 EOF
@@ -25417,7 +25422,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25420 "configure" */
+/* #line 25425 "configure" */
 public class Test {
 }
 EOF
@@ -25451,7 +25456,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25454 "configure" */
+/* [#]line 25459 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
