@@ -42,44 +42,44 @@ extern "C"
       const ipfint* MTYPE,
       const ipfint* SOLVER,
       ipfint*       IPARM,
-      ipfreal*      DPARM,
+      ipnumber*     DPARM,
       ipfint*       ERROR
    );
 #endif
 
    void IPOPT_PARDISO_FUNC(pardiso, PARDISO)(
-      void**        PT,
-      const ipfint* MAXFCT,
-      const ipfint* MNUM,
-      const ipfint* MTYPE,
-      const ipfint* PHASE,
-      const ipfint* N,
-      const ipfreal* A,
-      const ipfint* IA,
-      const ipfint* JA,
-      const ipfint* PERM,
-      const ipfint* NRHS,
-      ipfint*       IPARM,
-      const ipfint* MSGLVL,
-      ipfreal*      B,
-      ipfreal*      X,
-      ipfint*       ERROR,
-      ipfreal*      DPARM
+      void**          PT,
+      const ipfint*   MAXFCT,
+      const ipfint*   MNUM,
+      const ipfint*   MTYPE,
+      const ipfint*   PHASE,
+      const ipfint*   N,
+      const ipnumber* A,
+      const ipfint*   IA,
+      const ipfint*   JA,
+      const ipfint*   PERM,
+      const ipfint*   NRHS,
+      ipfint*         IPARM,
+      const ipfint*   MSGLVL,
+      ipnumber*       B,
+      ipnumber*       X,
+      ipfint*         ERROR,
+      ipnumber*       DPARM
    );
 
 #ifdef PARDISO_MATCHING_PREPROCESS
    void IPOPT_PARDISO_FUNC(smat_reordering_pardiso_wsmp, SMAT_REORDERING_PARDISO_WSMP)(
-      const ipfint* N,
-      const ipfint* ia,
-      const ipfint* ja,
-      const ipfreal* a_,
-      ipfint*       a2,
-      ipfint*       ja2,
-      ipfreal*      a2_,
-      ipfint*       perm2,
-      ipfreal*      scale2,
-      ipfint*       tmp2_,
-      ipfint        preprocess
+      const ipfint*   N,
+      const ipfint*   ia,
+      const ipfint*   ja,
+      const ipnumber* a_,
+      ipfint*         a2,
+      ipfint*         ja2,
+      ipnumber*       a2_,
+      ipfint*         perm2,
+      ipnumber*       scale2,
+      ipfint*         tmp2_,
+      ipfint          preprocess
    );
 #endif
 }

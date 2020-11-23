@@ -26,26 +26,26 @@
 extern "C"
 {
    /** BLAS Fortran function XDOT */
-   ipfreal IPOPT_BLAS_FUNCP(dot, DOT)(
-      ipfint*        n,
-      const ipfreal* x,
-      ipfint*        incX,
-      const ipfreal* y,
-      ipfint*        incY
+   ipnumber IPOPT_BLAS_FUNCP(dot, DOT)(
+      ipfint*         n,
+      const ipnumber* x,
+      ipfint*         incX,
+      const ipnumber* y,
+      ipfint*         incY
    );
 
    /** BLAS Fortran function XNRM2 */
-   ipfreal IPOPT_BLAS_FUNCP(nrm2, NRM2)(
-      ipfint*        n,
-      const ipfreal* x,
-      ipfint*        incX
+   ipnumber IPOPT_BLAS_FUNCP(nrm2, NRM2)(
+      ipfint*         n,
+      const ipnumber* x,
+      ipfint*         incX
    );
 
    /** BLAS Fortran function XASUM */
-   ipfreal IPOPT_BLAS_FUNCP(asum, ASUM)(
-      ipfint*        n,
-      const ipfreal* x,
-      ipfint*        incX
+   ipnumber IPOPT_BLAS_FUNCP(asum, ASUM)(
+      ipfint*         n,
+      const ipnumber* x,
+      ipfint*         incX
    );
 
 #ifdef IPOPT_SINGLE
@@ -55,121 +55,121 @@ extern "C"
    /** BLAS Fortran function IDAMAX */
    ipfint IPOPT_BLAS_FUNC(idamax, IDAMAX)(
 #endif
-      ipfint*        n,
-      const ipfreal* x,
-      ipfint*        incX
+      ipfint*         n,
+      const ipnumber* x,
+      ipfint*         incX
    );
 
    /** BLAS Fortran subroutine XCOPY */
    void IPOPT_BLAS_FUNCP(copy, COPY)(
-      ipfint*        n,
-      const ipfreal* x,
-      ipfint*        incX,
-      ipfreal*       y,
-      ipfint*        incY
+      ipfint*         n,
+      const ipnumber* x,
+      ipfint*         incX,
+      ipnumber*       y,
+      ipfint*         incY
    );
 
    /** BLAS Fortran subroutine XAXPY */
    void IPOPT_BLAS_FUNCP(axpy, AXPY)(
-      ipfint*        n,
-      const ipfreal* alpha,
-      const ipfreal* x,
-      ipfint*        incX,
-      ipfreal*       y,
-      ipfint*        incY
+      ipfint*         n,
+      const ipnumber* alpha,
+      const ipnumber* x,
+      ipfint*         incX,
+      ipnumber*       y,
+      ipfint*         incY
    );
 
    /** BLAS Fortran subroutine XSCAL */
    void IPOPT_BLAS_FUNCP(scal, SCAL)(
-      ipfint*        n,
-      const ipfreal* alpha,
-      const ipfreal* x,
-      ipfint*        incX
+      ipfint*         n,
+      const ipnumber* alpha,
+      const ipnumber* x,
+      ipfint*         incX
    );
 
    /** BLAS Fortran subroutine XGEMV */
    void IPOPT_BLAS_FUNCP(gemv, GEMV)(
-      char*          trans,
-      ipfint*        m,
-      ipfint*        n,
-      const ipfreal* alpha,
-      const ipfreal* a,
-      ipfint*        lda,
-      const ipfreal* x,
-      ipfint*        incX,
-      const ipfreal* beta,
-      ipfreal*       y,
-      ipfint*        incY,
-      int            trans_len
+      char*           trans,
+      ipfint*         m,
+      ipfint*         n,
+      const ipnumber* alpha,
+      const ipnumber* a,
+      ipfint*         lda,
+      const ipnumber* x,
+      ipfint*         incX,
+      const ipnumber* beta,
+      ipnumber*       y,
+      ipfint*         incY,
+      int             trans_len
    );
 
    /** BLAS Fortran subroutine XSYMV */
    void IPOPT_BLAS_FUNCP(symv, SYMV)(
-      char*          uplo,
-      ipfint*        n,
-      const ipfreal* alpha,
-      const ipfreal* a,
-      ipfint*        lda,
-      const ipfreal* x,
-      ipfint*        incX,
-      const ipfreal* beta,
-      ipfreal*       y,
-      ipfint*        incY,
-      int            uplo_len
+      char*           uplo,
+      ipfint*         n,
+      const ipnumber* alpha,
+      const ipnumber* a,
+      ipfint*         lda,
+      const ipnumber* x,
+      ipfint*         incX,
+      const ipnumber* beta,
+      ipnumber*       y,
+      ipfint*         incY,
+      int             uplo_len
    );
 
    /** BLAS Fortran subroutine XGEMM */
    void IPOPT_BLAS_FUNCP(gemm, GEMM)(
-      char*          transa,
-      char*          transb,
-      ipfint*        m,
-      ipfint*        n,
-      ipfint*        k,
-      const ipfreal* alpha,
-      const ipfreal* a,
-      ipfint*        lda,
-      const ipfreal* b,
-      ipfint*        ldb,
-      const ipfreal* beta,
-      ipfreal*       c,
-      ipfint*        ldc,
-      int            transa_len,
-      int            transb_len
+      char*           transa,
+      char*           transb,
+      ipfint*         m,
+      ipfint*         n,
+      ipfint*         k,
+      const ipnumber* alpha,
+      const ipnumber* a,
+      ipfint*         lda,
+      const ipnumber* b,
+      ipfint*         ldb,
+      const ipnumber* beta,
+      ipnumber*       c,
+      ipfint*         ldc,
+      int             transa_len,
+      int             transb_len
    );
 
    /** BLAS Fortran subroutine XSYRK */
    void IPOPT_BLAS_FUNCP(syrk, SYRK)(
-      char*          uplo,
-      char*          trans,
-      ipfint*        n,
-      ipfint*        k,
-      const ipfreal* alpha,
-      const ipfreal* a,
-      ipfint*        lda,
-      const ipfreal* beta,
-      ipfreal*       c,
-      ipfint*        ldc,
-      int            uplo_len,
-      int            trans_len
+      char*           uplo,
+      char*           trans,
+      ipfint*         n,
+      ipfint*         k,
+      const ipnumber* alpha,
+      const ipnumber* a,
+      ipfint*         lda,
+      const ipnumber* beta,
+      ipnumber*       c,
+      ipfint*         ldc,
+      int             uplo_len,
+      int             trans_len
    );
 
    /** BLAS Fortran subroutine XTRSM */
    void IPOPT_BLAS_FUNCP(trsm, TRSM)(
-      char*          side,
-      char*          uplo,
-      char*          transa,
-      char*          diag,
-      ipfint*        m,
-      ipfint*        n,
-      const ipfreal* alpha,
-      const ipfreal* a,
-      ipfint*        lda,
-      const ipfreal* b,
-      ipfint*        ldb,
-      int            side_len,
-      int            uplo_len,
-      int            transa_len,
-      int            diag_len
+      char*           side,
+      char*           uplo,
+      char*           transa,
+      char*           diag,
+      ipfint*         m,
+      ipfint*         n,
+      const ipnumber* alpha,
+      const ipnumber* a,
+      ipfint*         lda,
+      const ipnumber* b,
+      ipfint*         ldb,
+      int             side_len,
+      int             uplo_len,
+      int             transa_len,
+      int             diag_len
    );
 }
 

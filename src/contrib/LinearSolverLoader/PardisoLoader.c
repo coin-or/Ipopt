@@ -6,22 +6,13 @@
  */
 
 #include "IpoptConfig.h"
+#include "IpTypes.h"
 #include "LibraryHandler.h"
 #include "PardisoLoader.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-
-/* Type of Fortran integer translated into C */
-typedef IPOPT_FORTRAN_INTEGER_TYPE ipfint;
-
-/* Type of Fortran real translated into C */
-#ifdef IPOPT_SINGLE
-typedef float ipfreal;
-#else
-typedef double ipfreal;
-#endif
 
 static soHandle_t Pardiso_handle = NULL;
 
@@ -42,28 +33,28 @@ typedef void (*pardisoinit_t)(
    const ipfint* MTYPE,
    const ipfint* SOLVER,
    ipfint*       IPARM,
-   ipfreal*      DPARM,
+   ipnumber*     DPARM,
    ipfint*       E
 );
 
 typedef void (*pardiso_t)(
-   void**        PT,
-   const ipfint* MAXFCT,
-   const ipfint* MNUM,
-   const ipfint* MTYPE,
-   const ipfint* PHASE,
-   const ipfint* N,
-   const ipfreal* A,
-   const ipfint* IA,
-   const ipfint* JA,
-   const ipfint* PERM,
-   const ipfint* NRHS,
-   ipfint*       IPARM,
-   const ipfint* MSGLVL,
-   ipfreal*      B,
-   ipfreal*      X,
-   ipfint*       E,
-   ipfreal*      DPARM
+   void**          PT,
+   const ipfint*   MAXFCT,
+   const ipfint*   MNUM,
+   const ipfint*   MTYPE,
+   const ipfint*   PHASE,
+   const ipfint*   N,
+   const ipnumber* A,
+   const ipfint*   IA,
+   const ipfint*   JA,
+   const ipfint*   PERM,
+   const ipfint*   NRHS,
+   ipfint*         IPARM,
+   const ipfint*   MSGLVL,
+   ipnumber*       B,
+   ipnumber*       X,
+   ipfint*         E,
+   ipnumber*       DPARM
 );
 
 static pardisoinit_t func_pardisoinit = NULL;
@@ -75,7 +66,7 @@ void pardisoinit(
    const ipfint* MTYPE,
    const ipfint* SOLVER,
    ipfint*       IPARM,
-   ipfreal*      DPARM,
+   ipnumber*     DPARM,
    ipfint*       E
 )
 {
@@ -89,23 +80,23 @@ void pardisoinit(
 }
 
 void pardiso(
-   void**        PT,
-   const ipfint* MAXFCT,
-   const ipfint* MNUM,
-   const ipfint* MTYPE,
-   const ipfint* PHASE,
-   const ipfint* N,
-   const ipfreal* A,
-   const ipfint* IA,
-   const ipfint* JA,
-   const ipfint* PERM,
-   const ipfint* NRHS,
-   ipfint*       IPARM,
-   const ipfint* MSGLVL,
-   ipfreal*      B,
-   ipfreal*      X,
-   ipfint*       E,
-   ipfreal*      DPARM
+   void**          PT,
+   const ipfint*   MAXFCT,
+   const ipfint*   MNUM,
+   const ipfint*   MTYPE,
+   const ipfint*   PHASE,
+   const ipfint*   N,
+   const ipnumber* A,
+   const ipfint*   IA,
+   const ipfint*   JA,
+   const ipfint*   PERM,
+   const ipfint*   NRHS,
+   ipfint*         IPARM,
+   const ipfint*   MSGLVL,
+   ipnumber*       B,
+   ipnumber*       X,
+   ipfint*         E,
+   ipnumber*       DPARM
 )
 {
    if (func_pardiso == NULL)

@@ -60,9 +60,9 @@ void IPOPT_HSL_FUNC(ma27a, MA27A)(
    ipfint*       NSTEPS,
    ipfint*       IFLAG,
    ipfint*       ICNTL,
-   ipfreal*      CNTL,
+   ipnumber*     CNTL,
    ipfint*       INFO,
-   ipfreal*      OPS
+   ipnumber*     OPS
 )
 {
    if( func_ma27a == NULL )
@@ -82,7 +82,7 @@ void IPOPT_HSL_FUNC(ma27b, MA27B)(
    ipfint*       NZ,
    const ipfint* IRN,
    const ipfint* ICN,
-   ipfreal*      A,
+   ipnumber*     A,
    ipfint*       LA,
    ipfint*       IW,
    ipfint*       LIW,
@@ -91,7 +91,7 @@ void IPOPT_HSL_FUNC(ma27b, MA27B)(
    ipfint*       MAXFRT,
    ipfint*       IW1,
    ipfint*       ICNTL,
-   ipfreal*      CNTL,
+   ipnumber*     CNTL,
    ipfint*       INFO
 )
 {
@@ -108,18 +108,18 @@ void IPOPT_HSL_FUNC(ma27b, MA27B)(
 }
 
 void IPOPT_HSL_FUNC(ma27c, MA27C)(
-   ipfint*  N,
-   ipfreal* A,
-   ipfint*  LA,
-   ipfint*  IW,
-   ipfint*  LIW,
-   ipfreal* W,
-   ipfint*  MAXFRT,
-   ipfreal* RHS,
-   ipfint*  IW1,
-   ipfint*  NSTEPS,
-   ipfint*  ICNTL,
-   ipfreal* CNTL
+   ipfint*   N,
+   ipnumber* A,
+   ipfint*   LA,
+   ipfint*   IW,
+   ipfint*   LIW,
+   ipnumber* W,
+   ipfint*   MAXFRT,
+   ipnumber* RHS,
+   ipfint*   IW1,
+   ipfint*   NSTEPS,
+   ipfint*   ICNTL,
+   ipnumber* CNTL
 )
 {
    if( func_ma27c == NULL )
@@ -135,8 +135,8 @@ void IPOPT_HSL_FUNC(ma27c, MA27C)(
 }
 
 void IPOPT_HSL_FUNC(ma27i, MA27I)(
-   ipfint*  ICNTL,
-   ipfreal* CNTL
+   ipfint*   ICNTL,
+   ipnumber* CNTL
 )
 {
    if( func_ma27i == NULL )
@@ -160,8 +160,8 @@ static ma57c_t func_ma57c = NULL;
 static ma57e_t func_ma57e = NULL;
 
 void IPOPT_HSL_FUNC(ma57i, MA57I)(
-   ipfreal* cntl,
-   ipfint*  icntl
+   ipnumber* cntl,
+   ipfint*   icntl
 )
 {
    if( func_ma57i == NULL )
@@ -186,7 +186,7 @@ void IPOPT_HSL_FUNC(ma57a, MA57A)(
    ipfint*       iwork,   /**< Integer work space. */
    ipfint*       icntl,   /**< Integer Control parameter of length 30*/
    ipfint*       info,    /**< Statistical Information; Integer array of length 20 */
-   ipfreal*      rinfo    /**< Double Control parameter of length 5 */
+   ipnumber*     rinfo    /**< Double Control parameter of length 5 */
 )
 {
    if( func_ma57a == NULL )
@@ -204,8 +204,8 @@ void IPOPT_HSL_FUNC(ma57a, MA57A)(
 void IPOPT_HSL_FUNC(ma57b, MA57B)(
    ipfint*    n,         /**< Order of matrix. */
    ipfint*    ne,        /**< Number of entries. */
-   ipfreal*   a,         /**< Numerical values. */
-   ipfreal*   fact,      /**< Entries of factors. */
+   ipnumber*  a,         /**< Numerical values. */
+   ipnumber*  fact,      /**< Entries of factors. */
    ipfint*    lfact,     /**< Length of array `fact'. */
    ipfint*    ifact,     /**< Indexing info for factors. */
    ipfint*    lifact,    /**< Length of array `ifact'. */
@@ -213,9 +213,9 @@ void IPOPT_HSL_FUNC(ma57b, MA57B)(
    ipfint*    keep,      /**< Integer array. */
    ipfint*    iwork,     /**< Workspace of length `n'. */
    ipfint*    icntl,     /**< Integer Control parameter of length 20. */
-   ipfreal*   cntl,      /**< Double Control parameter of length 5. */
+   ipnumber*  cntl,      /**< Double Control parameter of length 5. */
    ipfint*    info,      /**< Statistical Information; Integer array of length 40. */
-   ipfreal*   rinfo      /**< Statistical Information; Real array of length 20. */
+   ipnumber*  rinfo      /**< Statistical Information; Real array of length 20. */
 )
 {
    if( func_ma57b == NULL )
@@ -233,14 +233,14 @@ void IPOPT_HSL_FUNC(ma57b, MA57B)(
 void IPOPT_HSL_FUNC(ma57c, MA57C)(
    ipfint*    job,       /**< Solution job.  Solve for... */
    ipfint*    n,         /**< Order of matrix. */
-   ipfreal*   fact,      /**< Entries of factors. */
+   ipnumber*  fact,      /**< Entries of factors. */
    ipfint*    lfact,     /**< Length of array `fact'. */
    ipfint*    ifact,     /**< Indexing info for factors. */
    ipfint*    lifact,    /**< Length of array `ifact'. */
    ipfint*    nrhs,      /**< Number of right hand sides. */
-   ipfreal*   rhs,       /**< Numerical Values. */
+   ipnumber*  rhs,       /**< Numerical Values. */
    ipfint*    lrhs,      /**< Leading dimensions of `rhs'. */
-   ipfreal*   work,      /**< Real workspace. */
+   ipnumber*  work,      /**< Real workspace. */
    ipfint*    lwork,     /**< Length of `work', >= N*NRHS. */
    ipfint*    iwork,     /**< Integer array of length `n'. */
    ipfint*    icntl,     /**< Integer Control parameter array of length 20. */
@@ -263,9 +263,9 @@ void IPOPT_HSL_FUNC(ma57e, MA57E)(
    ipfint*    n,
    ipfint*    ic,        /**< 0: copy real array.  >=1:  copy integer array. */
    ipfint*    keep,
-   ipfreal*   fact,
+   ipnumber*  fact,
    ipfint*    lfact,
-   ipfreal*   newfac,
+   ipnumber*  newfac,
    ipfint*    lnew,
    ipfint*    ifact,
    ipfint*    lifact,
@@ -947,14 +947,14 @@ void ma97_free_akeep(
 static mc19a_t func_mc19a = NULL;
 
 void IPOPT_HSL_FUNC(mc19a, MC19A)(
-   ipfint*  N,
-   ipfint*  NZ,
-   ipfreal* A,
-   ipfint*  IRN,
-   ipfint*  ICN,
-   ipfreal* R,
-   ipfreal* C,
-   ipfreal* W
+   ipfint*   N,
+   ipfint*   NZ,
+   ipnumber* A,
+   ipfint*   IRN,
+   ipfint*   ICN,
+   ipnumber* R,
+   ipnumber* C,
+   ipnumber* W
 )
 {
    if( func_mc19a == NULL )

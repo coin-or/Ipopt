@@ -26,75 +26,75 @@ extern "C"
 {
    /** LAPACK Fortran subroutine XPOTRS. */
    void IPOPT_LAPACK_FUNCP(potrs, POTRS)(
-      char*          uplo,
-      ipfint*        n,
-      ipfint*        nrhs,
-      const ipfreal* A,
-      ipfint*        ldA,
-      ipfreal*       B,
-      ipfint*        ldB,
-      ipfint*        info,
-      int            uplo_len
+      char*           uplo,
+      ipfint*         n,
+      ipfint*         nrhs,
+      const ipnumber* A,
+      ipfint*         ldA,
+      ipnumber*       B,
+      ipfint*         ldB,
+      ipfint*         info,
+      int             uplo_len
    );
 
    /** LAPACK Fortran subroutine XPOTRF. */
    void IPOPT_LAPACK_FUNCP(potrf, POTRF)(
-      char*    uplo,
-      ipfint*  n,
-      ipfreal* A,
-      ipfint*  ldA,
-      ipfint*  info,
-      int      uplo_len
+      char*     uplo,
+      ipfint*   n,
+      ipnumber* A,
+      ipfint*   ldA,
+      ipfint*   info,
+      int       uplo_len
    );
 
    /** LAPACK Fortran subroutine XSYEV */
    void IPOPT_LAPACK_FUNCP(syev, SYEV)(
-      char*    jobz,
-      char*    uplo,
-      ipfint*  n,
-      ipfreal* A,
-      ipfint*  ldA,
-      ipfreal* W,
-      ipfreal* WORK,
-      ipfint*  LWORK,
-      ipfint*  info,
-      int      jobz_len,
-      int      uplo_len
+      char*     jobz,
+      char*     uplo,
+      ipfint*   n,
+      ipnumber* A,
+      ipfint*   ldA,
+      ipnumber* W,
+      ipnumber* WORK,
+      ipfint*   LWORK,
+      ipfint*   info,
+      int       jobz_len,
+      int       uplo_len
    );
 
    /** LAPACK Fortran subroutine XGETRF. */
    void IPOPT_LAPACK_FUNCP(getrf, GETRF)(
-      ipfint*      m,
-      ipfint*      n,
-      ipfreal*     A,
-      ipfint*      ldA,
-      ipfintarray* IPIV,
-      ipfint*      info
+      ipfint*       m,
+      ipfint*       n,
+      ipnumber*     A,
+      ipfint*       ldA,
+      ipfintarray*  IPIV,
+      ipfint*       info
    );
 
    /** LAPACK Fortran subroutine XGETRS. */
    void IPOPT_LAPACK_FUNCP(getrs, GETRS)(
-      char*          trans,
-      ipfint*        n,
-      ipfint*        nrhs,
-      const ipfreal* A,
-      ipfint*        ldA,
-      ipfintarray*   IPIV,
-      ipfreal*       B,
-      ipfint*        ldB,
-      ipfint*        info,
-      int            trans_len
+      char*           trans,
+      ipfint*         n,
+      ipfint*         nrhs,
+      const ipnumber* A,
+      ipfint*         ldA,
+      ipfintarray*    IPIV,
+      ipnumber*       B,
+      ipfint*         ldB,
+      ipfint*         info,
+      int             trans_len
    );
 
    /** LAPACK Fortran subroutine XPPSV. */
    void IPOPT_LAPACK_FUNCP(ppsv, PPSV)(
-      char*          uplo,
-      ipfint*        n,
-      ipfint*        nrhs,
-      const ipfreal* A,
-      ipfreal*       B,
-      ipfint*        ldB,
-      ipfint*        info
+      char*           uplo,
+      ipfint*         n,
+      ipfint*         nrhs,
+      const ipnumber* A,
+      ipnumber*       B,
+      ipfint*         ldB,
+      ipfint*         info
    );
 }
 

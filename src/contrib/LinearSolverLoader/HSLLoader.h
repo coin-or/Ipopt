@@ -9,6 +9,7 @@
 #define HSLLOADER_H_
 
 #include "IpoptConfig.h"
+#include "IpTypes.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -76,18 +77,6 @@ typedef double ma97realtype_d_;
 struct mc68_control_i;
 struct mc68_info_i;
 
-#ifndef __IPTYPES_HPP__
-/* Type of Fortran integer translated into C */
-typedef IPOPT_FORTRAN_INTEGER_TYPE ipfint;
-
-/* Type of Fortran real translated into C */
-#ifdef IPOPT_SINGLE
-typedef float ipfreal;
-#else
-typedef double ipfreal;
-#endif
-#endif
-
 typedef void (*ma27a_t)(
    ipfint*       N,
    ipfint*       NZ,
@@ -100,9 +89,9 @@ typedef void (*ma27a_t)(
    ipfint*       NSTEPS,
    ipfint*       IFLAG,
    ipfint*       ICNTL,
-   ipfreal*      CNTL,
+   ipnumber*     CNTL,
    ipfint*       INFO,
-   ipfreal*      OPS
+   ipnumber*     OPS
 );
 
 typedef void (*ma27b_t)(
@@ -110,7 +99,7 @@ typedef void (*ma27b_t)(
    ipfint*       NZ,
    const ipfint* IRN,
    const ipfint* ICN,
-   ipfreal*      A,
+   ipnumber*     A,
    ipfint*       LA,
    ipfint*       IW,
    ipfint*       LIW,
@@ -119,28 +108,28 @@ typedef void (*ma27b_t)(
    ipfint*       MAXFRT,
    ipfint*       IW1,
    ipfint*       ICNTL,
-   ipfreal*      CNTL,
+   ipnumber*     CNTL,
    ipfint*       INFO
 );
 
 typedef void (*ma27c_t)(
-   ipfint*  N,
-   ipfreal* A,
-   ipfint*  LA,
-   ipfint*  IW,
-   ipfint*  LIW,
-   ipfreal* W,
-   ipfint*  MAXFRT,
-   ipfreal* RHS,
-   ipfint*  IW1,
-   ipfint*  NSTEPS,
-   ipfint*  ICNTL,
-   ipfreal* CNTL
+   ipfint*   N,
+   ipnumber* A,
+   ipfint*   LA,
+   ipfint*   IW,
+   ipfint*   LIW,
+   ipnumber* W,
+   ipfint*   MAXFRT,
+   ipnumber* RHS,
+   ipfint*   IW1,
+   ipfint*   NSTEPS,
+   ipfint*   ICNTL,
+   ipnumber* CNTL
 );
 
 typedef void (*ma27i_t)(
-   ipfint*  ICNTL,
-   ipfreal* CNTL
+   ipfint*   ICNTL,
+   ipnumber* CNTL
 );
 
 typedef void (*ma57a_t)(
@@ -154,61 +143,61 @@ typedef void (*ma57a_t)(
    ipfint*       iwork, /**< Integer work space. */
    ipfint*       icntl, /**< Integer Control parameter of length 30 */
    ipfint*       info,  /**< Statistical Information; Integer array of length 20 */
-   ipfreal*      rinfo  /**< Double Control parameter of length 5 */
+   ipnumber*     rinfo  /**< Double Control parameter of length 5 */
 );
 
 typedef void (*ma57b_t)(
-   ipfint*  n,      /**< Order of matrix. */
-   ipfint*  ne,     /**< Number of entries. */
-   ipfreal* a,      /**< Numerical values. */
-   ipfreal* fact,   /**< Entries of factors. */
-   ipfint*  lfact,  /**< Length of array `fact'. */
-   ipfint*  ifact,  /**< Indexing info for factors. */
-   ipfint*  lifact, /**< Length of array `ifact'. */
-   ipfint*  lkeep,  /**< Length of array `keep'. */
-   ipfint*  keep,   /**< Integer array. */
-   ipfint*  iwork,  /**< Workspace of length `n'. */
-   ipfint*  icntl,  /**< Integer Control parameter of length 20. */
-   ipfreal* cntl,   /**< Double Control parameter of length 5. */
-   ipfint*  info,   /**< Statistical Information; Integer array of length 40. */
-   ipfreal* rinfo   /**< Statistical Information; Real array of length 20. */
+   ipfint*   n,      /**< Order of matrix. */
+   ipfint*   ne,     /**< Number of entries. */
+   ipnumber* a,      /**< Numerical values. */
+   ipnumber* fact,   /**< Entries of factors. */
+   ipfint*   lfact,  /**< Length of array `fact'. */
+   ipfint*   ifact,  /**< Indexing info for factors. */
+   ipfint*   lifact, /**< Length of array `ifact'. */
+   ipfint*   lkeep,  /**< Length of array `keep'. */
+   ipfint*   keep,   /**< Integer array. */
+   ipfint*   iwork,  /**< Workspace of length `n'. */
+   ipfint*   icntl,  /**< Integer Control parameter of length 20. */
+   ipnumber* cntl,   /**< Double Control parameter of length 5. */
+   ipfint*   info,   /**< Statistical Information; Integer array of length 40. */
+   ipnumber* rinfo   /**< Statistical Information; Real array of length 20. */
 );
 
 typedef void (*ma57c_t)(
-   ipfint*  job,    /**< Solution job.  Solve for... */
-   ipfint*  n,      /**< Order of matrix. */
-   ipfreal* fact,   /**< Entries of factors. */
-   ipfint*  lfact,  /**< Length of array `fact'. */
-   ipfint*  ifact,  /**< Indexing info for factors. */
-   ipfint*  lifact, /**< Length of array `ifact'. */
-   ipfint*  nrhs,   /**< Number of right hand sides. */
-   ipfreal* rhs,    /**< Numerical Values. */
-   ipfint*  lrhs,   /**< Leading dimensions of `rhs'. */
-   ipfreal* work,   /**< Real workspace. */
-   ipfint*  lwork,  /**< Length of `work', >= N*NRHS. */
-   ipfint*  iwork,  /**< Integer array of length `n'. */
-   ipfint*  icntl,  /**< Integer Control parameter array of length 20. */
-   ipfint*  info    /**< Statistical Information; Integer array of length 40. */
+   ipfint*   job,    /**< Solution job.  Solve for... */
+   ipfint*   n,      /**< Order of matrix. */
+   ipnumber* fact,   /**< Entries of factors. */
+   ipfint*   lfact,  /**< Length of array `fact'. */
+   ipfint*   ifact,  /**< Indexing info for factors. */
+   ipfint*   lifact, /**< Length of array `ifact'. */
+   ipfint*   nrhs,   /**< Number of right hand sides. */
+   ipnumber* rhs,    /**< Numerical Values. */
+   ipfint*   lrhs,   /**< Leading dimensions of `rhs'. */
+   ipnumber* work,   /**< Real workspace. */
+   ipfint*   lwork,  /**< Length of `work', >= N*NRHS. */
+   ipfint*   iwork,  /**< Integer array of length `n'. */
+   ipfint*   icntl,  /**< Integer Control parameter array of length 20. */
+   ipfint*   info    /**< Statistical Information; Integer array of length 40. */
 );
 
 typedef void (*ma57e_t)(
-   ipfint*  n,
-   ipfint*  ic,    /**< 0: copy real array.  >=1:  copy integer array. */
-   ipfint*  keep,
-   ipfreal* fact,
-   ipfint*  lfact,
-   ipfreal* newfac,
-   ipfint*  lnew,
-   ipfint*  ifact,
-   ipfint*  lifact,
-   ipfint*  newifc,
-   ipfint*  linew,
-   ipfint*  info
+   ipfint*   n,
+   ipfint*   ic,    /**< 0: copy real array.  >=1:  copy integer array. */
+   ipfint*   keep,
+   ipnumber* fact,
+   ipfint*   lfact,
+   ipnumber* newfac,
+   ipfint*   lnew,
+   ipfint*   ifact,
+   ipfint*   lifact,
+   ipfint*   newifc,
+   ipfint*   linew,
+   ipfint*   info
 );
 
 typedef void (*ma57i_t)(
-   ipfreal*cntl,
-   ipfint* icntl
+   ipnumber* cntl,
+   ipfint*   icntl
 );
 
 typedef void (*ma77_default_control_t)(
@@ -474,14 +463,14 @@ typedef void (*ma97_free_akeep_t)(
 );
 
 typedef void (*mc19a_t)(
-   ipfint*  N,
-   ipfint*  NZ,
-   ipfreal* A,
-   ipfint*  IRN,
-   ipfint*  ICN,
-   ipfreal* R,
-   ipfreal* C,
-   ipfreal* W
+   ipfint*   N,
+   ipfint*   NZ,
+   ipnumber* A,
+   ipfint*   IRN,
+   ipfint*   ICN,
+   ipnumber* R,
+   ipnumber* C,
+   ipnumber* W
 );
 
 typedef void (*mc68_default_control_t)(

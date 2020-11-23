@@ -18,6 +18,7 @@ includeipopt_HEADERS = \
 	IpTaggedObject.hpp \
 	IpTimedTask.hpp \
 	IpTypes.hpp \
+	IpTypes.h \
 	IpUtils.hpp
 
 noinst_LTLIBRARIES = libcommon.la
