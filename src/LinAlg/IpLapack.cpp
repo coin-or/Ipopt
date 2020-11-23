@@ -93,183 +93,6 @@ extern "C"
    );
 }
 
-namespace Ipopt
-{
-void IpLapackPotrs(
-   Index         ndim,
-   Index         nrhs,
-   const Number* a,
-   Index         lda,
-   Number*       b,
-   Index         ldb
-)
-{
-#ifdef IPOPT_HAS_LAPACK
-   ipfint N = ndim, NRHS = nrhs, LDA = lda, LDB = ldb, INFO;
-   char uplo = 'L';
-
-   IPOPT_LAPACK_FUNC(spotrs, SPOTRS)(&uplo, &N, &NRHS, a, &LDA, b, &LDB, &INFO, 1);
-   DBG_ASSERT(INFO == 0);
-#else
-
-   std::string msg =
-      "Ipopt has been compiled without LAPACK routine SPOTRS, but options are chosen that require this dependency.  Abort.";
-   THROW_EXCEPTION(LAPACK_NOT_INCLUDED, msg);
-#endif
-}
-
-void IpLapackPotrf(
-   Index   ndim,
-   Number* a,
-   Index   lda,
-   Index&  info
-)
-{
-#ifdef IPOPT_HAS_LAPACK
-   ipfint N = ndim, LDA = lda, INFO;
-
-   char UPLO = 'L';
-
-   IPOPT_LAPACK_FUNC(spotrf, SPOTRF)(&UPLO, &N, a, &LDA, &INFO, 1);
-
-   info = INFO;
-#else
-
-   std::string msg =
-      "Ipopt has been compiled without LAPACK routine SPOTRF, but options are chosen that require this dependency.  Abort.";
-   THROW_EXCEPTION(LAPACK_NOT_INCLUDED, msg);
-#endif
-
-}
-
-void IpLapackSyev(
-   bool    compute_eigenvectors,
-   Index   ndim,
-   Number* a,
-   Index   lda,
-   Number* w,
-   Index&  info
-)
-{
-#ifdef IPOPT_HAS_LAPACK
-   ipfint N = ndim, LDA = lda, INFO;
-
-   char JOBZ;
-   if (compute_eigenvectors)
-   {
-      JOBZ = 'V';
-   }
-   else
-   {
-      JOBZ = 'N';
-   }
-   char UPLO = 'L';
-
-   // First we find out how large LWORK should be
-   ipfint LWORK = -1;
-   Number WORK_PROBE;
-   IPOPT_LAPACK_FUNC(ssyev, SSYEV)(&JOBZ, &UPLO, &N, a, &LDA, w,
-                                  &WORK_PROBE, &LWORK, &INFO, 1, 1);
-   DBG_ASSERT(INFO == 0);
-
-   LWORK = (ipfint) WORK_PROBE;
-   DBG_ASSERT(LWORK > 0);
-
-   Number* WORK = new Number[LWORK];
-   for (Index i = 0; i < LWORK; i++)
-   {
-      WORK[i] = i;
-   }
-   IPOPT_LAPACK_FUNC(ssyev, SSYEV)(&JOBZ, &UPLO, &N, a, &LDA, w,
-                                  WORK, &LWORK, &INFO, 1, 1);
-
-   DBG_ASSERT(INFO >= 0);
-   info = INFO;
-
-   delete [] WORK;
-#else
-
-   std::string msg =
-      "Ipopt has been compiled without LAPACK routine SSYEV, but options are chosen that require this dependency.  Abort.";
-   THROW_EXCEPTION(LAPACK_NOT_INCLUDED, msg);
-#endif
-
-}
-
-void IpLapackGetrf(
-   Index   ndim,
-   Number* a,
-   Index*  ipiv,
-   Index   lda,
-   Index&  info
-)
-{
-#ifdef IPOPT_HAS_LAPACK
-   ipfint M = ndim, N = ndim, LDA = lda, INFO;
-
-   IPOPT_LAPACK_FUNC(sgetrf, SGETRF)(&M, &N, a, &LDA, ipiv, &INFO);
-
-   info = INFO;
-#else
-
-   std::string msg =
-      "Ipopt has been compiled without LAPACK routine SGETRF, but options are chosen that require this dependency.  Abort.";
-   THROW_EXCEPTION(LAPACK_NOT_INCLUDED, msg);
-#endif
-
-}
-
-void IpLapackGetrs(
-   Index         ndim,
-   Index         nrhs,
-   const Number* a,
-   Index         lda,
-   Index*        ipiv,
-   Number*       b,
-   Index         ldb
-)
-{
-#ifdef IPOPT_HAS_LAPACK
-   ipfint N = ndim, NRHS = nrhs, LDA = lda, LDB = ldb, INFO;
-   char trans = 'N';
-
-   IPOPT_LAPACK_FUNC(sgetrs, SGETRS)(&trans, &N, &NRHS, a, &LDA, ipiv, b, &LDB,
-                                    &INFO, 1);
-   DBG_ASSERT(INFO == 0);
-#else
-
-   std::string msg =
-      "Ipopt has been compiled without LAPACK routine SGETRS, but options are chosen that require this dependency.  Abort.";
-   THROW_EXCEPTION(LAPACK_NOT_INCLUDED, msg);
-#endif
-
-}
-
-void IpLapackPpsv(
-   Index         ndim,
-   Index         nrhs,
-   const Number* a,
-   Number*       b,
-   Index         ldb,
-   Index&        info
-)
-{
-#ifdef IPOPT_HAS_LAPACK
-   ipfint N = ndim, NRHS = nrhs, LDB = ldb, INFO;
-   char uplo = 'U';
-
-   IPOPT_LAPACK_FUNC(sppsv, SPPSV)(&uplo, &N, &NRHS, a, b, &LDB, &INFO);
-
-   info = INFO;
-#else
-
-   std::string msg =
-      "Ipopt has been compiled without LAPACK routine SPPSV, but options are chosen that require this dependency.  Abort.";
-   THROW_EXCEPTION(LAPACK_NOT_INCLUDED, msg);
-#endif
-}
-
-} // namespace Ipopt
 #else
 extern "C"
 {
@@ -346,6 +169,7 @@ extern "C"
       ipfint*       info
    );
 }
+#endif  /* ifdef IPOPT_SINGLE */
 
 namespace Ipopt
 {
@@ -362,7 +186,11 @@ void IpLapackPotrs(
    ipfint N = ndim, NRHS = nrhs, LDA = lda, LDB = ldb, INFO;
    char uplo = 'L';
 
+#ifdef IPOPT_SINGLE
+   IPOPT_LAPACK_FUNC(spotrs, SPOTRS)(&uplo, &N, &NRHS, a, &LDA, b, &LDB, &INFO, 1);
+#else
    IPOPT_LAPACK_FUNC(dpotrs, DPOTRS)(&uplo, &N, &NRHS, a, &LDA, b, &LDB, &INFO, 1);
+#endif
    DBG_ASSERT(INFO == 0);
 #else
 
@@ -384,7 +212,11 @@ void IpLapackPotrf(
 
    char UPLO = 'L';
 
+#ifdef IPOPT_SINGLE
+   IPOPT_LAPACK_FUNC(spotrf, SPOTRF)(&UPLO, &N, a, &LDA, &INFO, 1);
+#else
    IPOPT_LAPACK_FUNC(dpotrf, DPOTRF)(&UPLO, &N, a, &LDA, &INFO, 1);
+#endif
 
    info = INFO;
 #else
@@ -422,8 +254,13 @@ void IpLapackSyev(
    // First we find out how large LWORK should be
    ipfint LWORK = -1;
    Number WORK_PROBE;
+#ifdef IPOPT_SINGLE
+   IPOPT_LAPACK_FUNC(ssyev, SSYEV)(&JOBZ, &UPLO, &N, a, &LDA, w,
+                                  &WORK_PROBE, &LWORK, &INFO, 1, 1);
+#else
    IPOPT_LAPACK_FUNC(dsyev, DSYEV)(&JOBZ, &UPLO, &N, a, &LDA, w,
                                   &WORK_PROBE, &LWORK, &INFO, 1, 1);
+#endif
    DBG_ASSERT(INFO == 0);
 
    LWORK = (ipfint) WORK_PROBE;
@@ -434,8 +271,13 @@ void IpLapackSyev(
    {
       WORK[i] = i;
    }
+#ifdef IPOPT_SINGLE
+   IPOPT_LAPACK_FUNC(ssyev, SSYEV)(&JOBZ, &UPLO, &N, a, &LDA, w,
+                                  WORK, &LWORK, &INFO, 1, 1);
+#else
    IPOPT_LAPACK_FUNC(dsyev, DSYEV)(&JOBZ, &UPLO, &N, a, &LDA, w,
                                   WORK, &LWORK, &INFO, 1, 1);
+#endif
 
    DBG_ASSERT(INFO >= 0);
    info = INFO;
@@ -461,7 +303,11 @@ void IpLapackGetrf(
 #ifdef IPOPT_HAS_LAPACK
    ipfint M = ndim, N = ndim, LDA = lda, INFO;
 
+#ifdef IPOPT_SINGLE
+   IPOPT_LAPACK_FUNC(sgetrf, SGETRF)(&M, &N, a, &LDA, ipiv, &INFO);
+#else
    IPOPT_LAPACK_FUNC(dgetrf, DGETRF)(&M, &N, a, &LDA, ipiv, &INFO);
+#endif
 
    info = INFO;
 #else
@@ -487,8 +333,14 @@ void IpLapackGetrs(
    ipfint N = ndim, NRHS = nrhs, LDA = lda, LDB = ldb, INFO;
    char trans = 'N';
 
+#ifdef IPOPT_SINGLE
+   IPOPT_LAPACK_FUNC(sgetrs, SGETRS)(&trans, &N, &NRHS, a, &LDA, ipiv, b, &LDB,
+                                    &INFO, 1);
+#else
    IPOPT_LAPACK_FUNC(dgetrs, DGETRS)(&trans, &N, &NRHS, a, &LDA, ipiv, b, &LDB,
                                     &INFO, 1);
+#endif
+
    DBG_ASSERT(INFO == 0);
 #else
 
@@ -512,7 +364,11 @@ void IpLapackPpsv(
    ipfint N = ndim, NRHS = nrhs, LDB = ldb, INFO;
    char uplo = 'U';
 
+#ifdef IPOPT_SINGLE
+   IPOPT_LAPACK_FUNC(sppsv, SPPSV)(&uplo, &N, &NRHS, a, b, &LDB, &INFO);
+#else
    IPOPT_LAPACK_FUNC(dppsv, DPPSV)(&uplo, &N, &NRHS, a, b, &LDB, &INFO);
+#endif
 
    info = INFO;
 #else
@@ -524,5 +380,4 @@ void IpLapackPpsv(
 }
 
 } // namespace Ipopt
-#endif
-#endif
+#endif  /* ifdef IPOPT_HAS_LAPACK */
