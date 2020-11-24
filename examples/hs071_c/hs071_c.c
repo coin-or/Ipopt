@@ -152,7 +152,7 @@ int main()
     * they might not be suitable for your problem.
     */
 #ifdef IPOPT_SINGLE
-   AddIpoptNumOption(nlp, "tol", 3.82e-6); // reduce tolerance in single precision to avoid "EXIT: Search Direction is becoming Too Small."
+   AddIpoptNumOption(nlp, "tol", 3.82e-6); // increase tolerance in single precision to avoid "EXIT: Search Direction is becoming Too Small."
 #else
    AddIpoptNumOption(nlp, "tol", 1e-7);
 #endif

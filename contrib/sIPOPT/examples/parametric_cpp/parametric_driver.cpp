@@ -38,6 +38,10 @@ int main(
    }
    app_ipopt->Initialize();
 
+#ifdef IPOPT_SINGLE
+   app_ipopt->Options()->SetNumericValue("tol", 3.82e-6); // increase tolerance in single precision to avoid "EXIT: Search Direction is becoming Too Small."
+#endif
+
    // create AmplSensTNLP from argc. This is an nlp because we are using our own TNLP Adapter
    SmartPtr<TNLP> sens_tnlp = new ParametricTNLP();
 
