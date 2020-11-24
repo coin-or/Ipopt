@@ -26272,7 +26272,7 @@ ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefi
 
 
 if test -n "$F77" ; then
-  ac_config_files="$ac_config_files examples/hs071_f/hs071_f.f examples/hs071_f/Makefile tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f tutorial/CodingExercise/Fortran/1-skeleton/Makefile tutorial/CodingExercise/Fortran/2-mistake/Makefile tutorial/CodingExercise/Fortran/3-solution/Makefile"
+  ac_config_files="$ac_config_files examples/hs071_f/hs071_f.f examples/hs071_f/hs071_fs.f examples/hs071_f/Makefile tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f tutorial/CodingExercise/Fortran/1-skeleton/Makefile tutorial/CodingExercise/Fortran/2-mistake/Makefile tutorial/CodingExercise/Fortran/3-solution/Makefile"
 
 fi
 
@@ -27713,6 +27713,7 @@ do
     "tutorial/CodingExercise/Matlab/2-mistake/startup.m") CONFIG_FILES="$CONFIG_FILES tutorial/CodingExercise/Matlab/2-mistake/startup.m" ;;
     "tutorial/CodingExercise/Matlab/3-solution/startup.m") CONFIG_FILES="$CONFIG_FILES tutorial/CodingExercise/Matlab/3-solution/startup.m" ;;
     "examples/hs071_f/hs071_f.f") CONFIG_FILES="$CONFIG_FILES examples/hs071_f/hs071_f.f" ;;
+    "examples/hs071_f/hs071_fs.f") CONFIG_FILES="$CONFIG_FILES examples/hs071_f/hs071_fs.f" ;;
     "examples/hs071_f/Makefile") CONFIG_FILES="$CONFIG_FILES examples/hs071_f/Makefile" ;;
     "tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f") CONFIG_FILES="$CONFIG_FILES tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f" ;;
     "tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f") CONFIG_FILES="$CONFIG_FILES tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f" ;;

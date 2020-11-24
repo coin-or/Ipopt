@@ -100,7 +100,7 @@ build_triplet = @build@
 host_triplet = @host@
 noinst_PROGRAMS = hs071_cpp$(EXEEXT) hs071_c$(EXEEXT) $(am__EXEEXT_1) \
 	$(am__EXEEXT_2)
-@COIN_HAS_F77_TRUE@@IPOPT_SINGLE_FALSE@am__append_1 = hs071_f
+@COIN_HAS_F77_TRUE@am__append_1 = hs071_f
 @BUILD_SIPOPT_TRUE@am__append_2 = parametric_cpp redhess_cpp
 subdir = test
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -115,8 +115,7 @@ CONFIG_CLEAN_FILES = run_unitTests hs071_main.cpp hs071_nlp.cpp \
 	hs071_nlp.hpp hs071_c.c parametric_driver.cpp \
 	parametricTNLP.cpp MySensTNLP.cpp redhess_cpp.cpp
 CONFIG_CLEAN_VPATH_FILES =
-@COIN_HAS_F77_TRUE@@IPOPT_SINGLE_FALSE@am__EXEEXT_1 =  \
-@COIN_HAS_F77_TRUE@@IPOPT_SINGLE_FALSE@	hs071_f$(EXEEXT)
+@COIN_HAS_F77_TRUE@am__EXEEXT_1 = hs071_f$(EXEEXT)
 @BUILD_SIPOPT_TRUE@am__EXEEXT_2 = parametric_cpp$(EXEEXT) \
 @BUILD_SIPOPT_TRUE@	redhess_cpp$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
@@ -132,7 +131,8 @@ am__v_lt_1 =
 nodist_hs071_cpp_OBJECTS = hs071_main.$(OBJEXT) hs071_nlp.$(OBJEXT)
 hs071_cpp_OBJECTS = $(nodist_hs071_cpp_OBJECTS)
 hs071_cpp_DEPENDENCIES = ../src/Interfaces/libipopt.la
-nodist_hs071_f_OBJECTS = hs071_f.$(OBJEXT)
+@IPOPT_SINGLE_FALSE@nodist_hs071_f_OBJECTS = hs071_f.$(OBJEXT)
+@IPOPT_SINGLE_TRUE@nodist_hs071_f_OBJECTS = hs071_fs.$(OBJEXT)
 hs071_f_OBJECTS = $(nodist_hs071_f_OBJECTS)
 hs071_f_DEPENDENCIES = ../src/Interfaces/libipopt.la \
 	$(am__DEPENDENCIES_1)
@@ -416,7 +416,8 @@ nodist_hs071_cpp_SOURCES = hs071_main.cpp hs071_nlp.cpp hs071_nlp.hpp
 hs071_cpp_LDADD = ../src/Interfaces/libipopt.la
 nodist_hs071_c_SOURCES = hs071_c.c
 hs071_c_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
-nodist_hs071_f_SOURCES = hs071_f.f
+@IPOPT_SINGLE_FALSE@nodist_hs071_f_SOURCES = hs071_f.f
+@IPOPT_SINGLE_TRUE@nodist_hs071_f_SOURCES = hs071_fs.f
 hs071_f_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
 @BUILD_JAVA_TRUE@CLEANFILES = HS071.class
 nodist_parametric_cpp_SOURCES = parametricTNLP.cpp parametric_driver.cpp
@@ -778,7 +779,7 @@ uninstall-am:
 
 @BUILD_JAVA_TRUE@all-local : HS071.class
 
-hs071_f.f:
+hs071_f.f hs071_fs.f:
 	$(LN_S) ../examples/hs071_f/$@ $@
 
 @BUILD_JAVA_TRUE@test: $(noinst_PROGRAMS) HS071.class

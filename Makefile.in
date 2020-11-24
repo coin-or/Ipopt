@@ -121,7 +121,8 @@ CONFIG_CLEAN_FILES = ipopt.pc doc/Doxyfile \
 	tutorial/CodingExercise/Matlab/1-skeleton/startup.m \
 	tutorial/CodingExercise/Matlab/2-mistake/startup.m \
 	tutorial/CodingExercise/Matlab/3-solution/startup.m \
-	examples/hs071_f/hs071_f.f examples/hs071_f/Makefile \
+	examples/hs071_f/hs071_f.f examples/hs071_f/hs071_fs.f \
+	examples/hs071_f/Makefile \
 	tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f \
 	tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f \
 	tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f \
@@ -531,6 +532,8 @@ tutorial/CodingExercise/Matlab/2-mistake/startup.m: $(top_builddir)/config.statu
 tutorial/CodingExercise/Matlab/3-solution/startup.m: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Matlab/3-solution/startup.m.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/hs071_f/hs071_f.f: $(top_builddir)/config.status $(top_srcdir)/examples/hs071_f/hs071_f.f.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+examples/hs071_f/hs071_fs.f: $(top_builddir)/config.status $(top_srcdir)/examples/hs071_f/hs071_fs.f.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/hs071_f/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/hs071_f/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@

@@ -11,9 +11,7 @@
 noinst_PROGRAMS = hs071_cpp hs071_c
 
 if COIN_HAS_F77
-if !IPOPT_SINGLE
 noinst_PROGRAMS += hs071_f
-endif
 endif
 
 if BUILD_SIPOPT
@@ -26,7 +24,11 @@ hs071_cpp_LDADD = ../src/Interfaces/libipopt.la
 nodist_hs071_c_SOURCES = hs071_c.c
 hs071_c_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
 
-nodist_hs071_f_SOURCES = hs071_f.f
+if !IPOPT_SINGLE
+  nodist_hs071_f_SOURCES = hs071_f.f
+else
+  nodist_hs071_f_SOURCES = hs071_fs.f
+endif
 hs071_f_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
 
 if BUILD_JAVA
@@ -59,7 +61,7 @@ AM_CPPFLAGS = \
 
 AM_FFLAGS = -I$(srcdir)/../src/Interfaces
 
-hs071_f.f:
+hs071_f.f hs071_fs.f:
 	$(LN_S) ../examples/hs071_f/$@ $@
 
 if BUILD_JAVA

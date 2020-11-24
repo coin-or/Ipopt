@@ -584,7 +584,7 @@ AC_CONFIG_FILES([Makefile
 ])
 
 if test -n "$F77" ; then
-  AC_CONFIG_FILES([examples/hs071_f/hs071_f.f examples/hs071_f/Makefile
+  AC_CONFIG_FILES([examples/hs071_f/hs071_f.f examples/hs071_f/hs071_fs.f examples/hs071_f/Makefile
     tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f
     tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f
     tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f
