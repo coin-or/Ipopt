@@ -4,6 +4,7 @@ commit history.
 
 202x-yy-zz: 3.13.4
         - Fixed a linking issue for ipopt_sens [#418]
+        - Fixed Makefile for Java example regarding location of jar file
 
 2020-10-16: 3.13.3
         - Members of AmplTNLP class are now protected instead of private.

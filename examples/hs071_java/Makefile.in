@@ -17,7 +17,7 @@ JAVA = @JAVA@
 # Ipopt JAR
 prefix = @prefix@
 exec_prefix = @exec_prefix@
-IPOPTJAR = @libdir@/org.coinor.ipopt.jar
+IPOPTJAR = @datadir@/java/org.coinor.ipopt.jar
 
 ##########################################################################
 
