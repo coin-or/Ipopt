@@ -5,6 +5,10 @@ environment:
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
       ARCH: win64-mingw
+      PRECISION: double
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+      ARCH: win64-mingw
+      PRECISION: single
     #- APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
     #  ARCH: win64-msvc15
     #- APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
@@ -19,10 +23,10 @@ install:
   - IF %ARCH%==win64-mingw (CALL C:\msys64\usr\bin\bash -lc "PATH=/mingw64/bin:$PATH ; gcc --version; g++ --version; gfortran --version; pkg-config --libs lapack ; echo PATH=$PATH")
 
 build_script:
-  - IF %ARCH%==win64-mingw (CALL C:\msys64\usr\bin\bash -lc "PATH=/mingw64/bin:$PATH ; git clone --depth 1 https://github.com/coin-or-tools/ThirdParty-ASL && cd ThirdParty-ASL && ./get.ASL && ./configure --prefix=$HOME/install && make && make install")
-  - IF %ARCH%==win64-mingw (CALL C:\msys64\usr\bin\bash -lc "PATH=/mingw64/bin:$PATH ; git clone --depth 1 https://github.com/coin-or-tools/ThirdParty-Mumps && cd ThirdParty-Mumps && ./get.Mumps && ./configure --prefix=$HOME/install && make && make install")
-  - IF %ARCH%==win64-mingw (CALL C:\msys64\usr\bin\bash -lc "PATH=/mingw64/bin:$PATH ; JAVA_HOME=/c/Progra~2/Java/jdk1.8.0 ; /c/projects/ipopt-5qaur/configure --prefix=$HOME/install && make && make install")
+  - IF %ARCH%-%PRECISION%==win64-mingw-double (CALL C:\msys64\usr\bin\bash -lc "PATH=/mingw64/bin:$PATH ; git clone --depth 1 https://github.com/coin-or-tools/ThirdParty-ASL && cd ThirdParty-ASL && ./get.ASL && ./configure --prefix=$HOME/install && make && make install")
+  - IF %ARCH%-%PRECISION%==win64-mingw-double (CALL C:\msys64\usr\bin\bash -lc "PATH=/mingw64/bin:$PATH ; git clone --depth 1 https://github.com/coin-or-tools/ThirdParty-Mumps && cd ThirdParty-Mumps && ./get.Mumps && ./configure --prefix=$HOME/install && make && make install")
+  - IF %ARCH%==win64-mingw (CALL C:\msys64\usr\bin\bash -lc "PATH=/mingw64/bin:$PATH ; JAVA_HOME=/c/Progra~2/Java/jdk1.8.0 ; /c/projects/ipopt-5qaur/configure --prefix=$HOME/install --with-precision=%PRECISION% && make && make install")
   - IF %ARCH%==win64-msvc15 (CALL C:\msys64\usr\bin\bash -lc "/c/projects/ipopt-5qaur/configure --enable-msvc && make")
 
 test_script:
-  - IF %ARCH%==win64-mingw (CALL C:\msys64\usr\bin\bash -lc "PATH=/mingw64/bin:$PATH ; make test")
+  - IF %ARCH%-%PRECISION%==win64-mingw-double (CALL C:\msys64\usr\bin\bash -lc "PATH=/mingw64/bin:$PATH ; make test")
