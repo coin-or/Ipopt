@@ -24846,16 +24846,10 @@ fi
 if test "${enable_java+set}" = set; then :
   enableval=$enable_java; enable_java="$enableval"
 else
-  if test $precision != double ; then
-     # Java interface only available for double-precision floating-point numbers currently
-     enable_java=no
-   else
-     case "$JAVA_HOME" in
-       *\ * ) enable_java=no ;;   # do not enable java-check by default, if there are spaces in JAVA_HOME - that causes trouble
-       * )    enable_java="$enable_shared" ;;
-     esac
-   fi
-
+  case "$JAVA_HOME" in
+     *\ * ) enable_java=no ;;   # do not enable java-check by default, if there are spaces in JAVA_HOME - that causes trouble
+     * )    enable_java="$enable_shared" ;;
+   esac
 fi
 
 
@@ -24965,7 +24959,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 24968 "configure" */
+/* #line 24962 "configure" */
 public class Test {
 }
 EOF
@@ -25451,7 +25445,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25454 "configure" */
+/* #line 25448 "configure" */
 public class Test {
 }
 EOF
@@ -25485,7 +25479,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25488 "configure" */
+/* [#]line 25482 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
@@ -25969,10 +25963,16 @@ fi
 
 
 if test "$enable_java" != no ; then
+  case $precision in
+    single )
+  ac_config_links="$ac_config_links examples/hs071_java/HS071s.java:examples/hs071_java/HS071s.java"
 
+ ;;
+    double )
   ac_config_links="$ac_config_links examples/hs071_java/HS071.java:examples/hs071_java/HS071.java"
 
-
+ ;;
+  esac
 fi
 
 
@@ -26272,8 +26272,18 @@ ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefi
 
 
 if test -n "$F77" ; then
-  ac_config_files="$ac_config_files examples/hs071_f/hs071_f.f examples/hs071_f/hs071_fs.f examples/hs071_f/Makefile tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f tutorial/CodingExercise/Fortran/1-skeleton/Makefile tutorial/CodingExercise/Fortran/2-mistake/Makefile tutorial/CodingExercise/Fortran/3-solution/Makefile"
+  ac_config_files="$ac_config_files examples/hs071_f/Makefile"
 
+  case $precision in
+    single )
+      ac_config_files="$ac_config_files examples/hs071_f/hs071_fs.f"
+
+      ;;
+    double )
+      ac_config_files="$ac_config_files examples/hs071_f/hs071_f.f tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f tutorial/CodingExercise/Fortran/1-skeleton/Makefile tutorial/CodingExercise/Fortran/2-mistake/Makefile tutorial/CodingExercise/Fortran/3-solution/Makefile"
+
+      ;;
+  esac
 fi
 
 if test "$enable_java" != no ; then
@@ -27648,6 +27658,7 @@ do
     "examples/hs071_cpp/hs071_nlp.cpp") CONFIG_LINKS="$CONFIG_LINKS examples/hs071_cpp/hs071_nlp.cpp:examples/hs071_cpp/hs071_nlp.cpp" ;;
     "examples/hs071_cpp/hs071_nlp.hpp") CONFIG_LINKS="$CONFIG_LINKS examples/hs071_cpp/hs071_nlp.hpp:examples/hs071_cpp/hs071_nlp.hpp" ;;
     "examples/hs071_c/hs071_c.c") CONFIG_LINKS="$CONFIG_LINKS examples/hs071_c/hs071_c.c:examples/hs071_c/hs071_c.c" ;;
+    "examples/hs071_java/HS071s.java") CONFIG_LINKS="$CONFIG_LINKS examples/hs071_java/HS071s.java:examples/hs071_java/HS071s.java" ;;
     "examples/hs071_java/HS071.java") CONFIG_LINKS="$CONFIG_LINKS examples/hs071_java/HS071.java:examples/hs071_java/HS071.java" ;;
     "tutorial/AmplExperiments/hs71.mod") CONFIG_LINKS="$CONFIG_LINKS tutorial/AmplExperiments/hs71.mod:tutorial/AmplExperiments/hs71.mod" ;;
     "tutorial/AmplExperiments/infeasible.mod") CONFIG_LINKS="$CONFIG_LINKS tutorial/AmplExperiments/infeasible.mod:tutorial/AmplExperiments/infeasible.mod" ;;
@@ -27712,9 +27723,9 @@ do
     "tutorial/CodingExercise/Matlab/1-skeleton/startup.m") CONFIG_FILES="$CONFIG_FILES tutorial/CodingExercise/Matlab/1-skeleton/startup.m" ;;
     "tutorial/CodingExercise/Matlab/2-mistake/startup.m") CONFIG_FILES="$CONFIG_FILES tutorial/CodingExercise/Matlab/2-mistake/startup.m" ;;
     "tutorial/CodingExercise/Matlab/3-solution/startup.m") CONFIG_FILES="$CONFIG_FILES tutorial/CodingExercise/Matlab/3-solution/startup.m" ;;
-    "examples/hs071_f/hs071_f.f") CONFIG_FILES="$CONFIG_FILES examples/hs071_f/hs071_f.f" ;;
-    "examples/hs071_f/hs071_fs.f") CONFIG_FILES="$CONFIG_FILES examples/hs071_f/hs071_fs.f" ;;
     "examples/hs071_f/Makefile") CONFIG_FILES="$CONFIG_FILES examples/hs071_f/Makefile" ;;
+    "examples/hs071_f/hs071_fs.f") CONFIG_FILES="$CONFIG_FILES examples/hs071_f/hs071_fs.f" ;;
+    "examples/hs071_f/hs071_f.f") CONFIG_FILES="$CONFIG_FILES examples/hs071_f/hs071_f.f" ;;
     "tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f") CONFIG_FILES="$CONFIG_FILES tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f" ;;
     "tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f") CONFIG_FILES="$CONFIG_FILES tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f" ;;
     "tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f") CONFIG_FILES="$CONFIG_FILES tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f" ;;

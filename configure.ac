@@ -312,16 +312,10 @@ fi
 AC_ARG_ENABLE([java],
   [AC_HELP_STRING([--disable-java],[disable building of Java interface])],
   [enable_java="$enableval"],
-  [if test $precision != double ; then
-     # Java interface only available for double-precision floating-point numbers currently
-     enable_java=no
-   else
-     case "$JAVA_HOME" in
-       *\ * ) enable_java=no ;;   # do not enable java-check by default, if there are spaces in JAVA_HOME - that causes trouble
-       * )    enable_java="$enable_shared" ;;
-     esac
-   fi
-  ])
+  [case "$JAVA_HOME" in
+     *\ * ) enable_java=no ;;   # do not enable java-check by default, if there are spaces in JAVA_HOME - that causes trouble
+     * )    enable_java="$enable_shared" ;;
+   esac])
 
 if test "$enable_java" != no ; then
   # look for javac: required to compile Java code and build C-header
@@ -503,7 +497,10 @@ AC_COIN_VPATH_LINK(examples/hs071_cpp/hs071_nlp.cpp)
 AC_COIN_VPATH_LINK(examples/hs071_cpp/hs071_nlp.hpp)
 AC_COIN_VPATH_LINK(examples/hs071_c/hs071_c.c)
 if test "$enable_java" != no ; then
-  AC_COIN_VPATH_LINK(examples/hs071_java/HS071.java)
+  case $precision in
+    single ) AC_COIN_VPATH_LINK(examples/hs071_java/HS071s.java) ;;
+    double ) AC_COIN_VPATH_LINK(examples/hs071_java/HS071.java) ;;
+  esac
 fi
 
 AC_COIN_VPATH_LINK(tutorial/AmplExperiments/hs71.mod)
@@ -584,13 +581,21 @@ AC_CONFIG_FILES([Makefile
 ])
 
 if test -n "$F77" ; then
-  AC_CONFIG_FILES([examples/hs071_f/hs071_f.f examples/hs071_f/hs071_fs.f examples/hs071_f/Makefile
-    tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f
-    tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f
-    tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f
-    tutorial/CodingExercise/Fortran/1-skeleton/Makefile
-    tutorial/CodingExercise/Fortran/2-mistake/Makefile
-    tutorial/CodingExercise/Fortran/3-solution/Makefile])
+  AC_CONFIG_FILES([examples/hs071_f/Makefile])
+  case $precision in
+    single )
+      AC_CONFIG_FILES([examples/hs071_f/hs071_fs.f])
+      ;;
+    double )
+      AC_CONFIG_FILES([examples/hs071_f/hs071_f.f
+        tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f
+        tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f
+        tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f
+        tutorial/CodingExercise/Fortran/1-skeleton/Makefile
+        tutorial/CodingExercise/Fortran/2-mistake/Makefile
+        tutorial/CodingExercise/Fortran/3-solution/Makefile])
+      ;;
+  esac
 fi
 
 if test "$enable_java" != no ; then

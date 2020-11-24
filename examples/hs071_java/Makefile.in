@@ -19,6 +19,9 @@ prefix = @prefix@
 exec_prefix = @exec_prefix@
 IPOPTJAR = @datadir@/java/org.coinor.ipopt.jar
 
+@IPOPT_SINGLE_FALSE@CLASS = HS071
+@IPOPT_SINGLE_TRUE@CLASS = HS071s
+
 ##########################################################################
 
 .SUFFIXES: .java .class
@@ -26,10 +29,10 @@ IPOPTJAR = @datadir@/java/org.coinor.ipopt.jar
 .java.class:
 	$(JAVAC) -cp $(IPOPTJAR) $<
 
-all : HS071.class
+all : $(CLASS).class
 
-test : HS071.class
-	$(JAVA) -cp $(IPOPTJAR):. -Djava.library.path=@libdir@ HS071
+test : $(CLASS).class
+	$(JAVA) -cp $(IPOPTJAR):. -Djava.library.path=@libdir@ $(CLASS)
 
 clean :
-	rm -rf HS071.class
+	rm -rf $(CLASS).class

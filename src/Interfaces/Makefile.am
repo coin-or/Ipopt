@@ -38,9 +38,19 @@ BUILT_SOURCES = org_coinor_Ipopt.h
 org.coinor.ipopt.jar : org/coinor/Ipopt.class
 	$(JAR) cf $@ $<
 
+if IPOPT_SINGLE
+# replace double by float in Ipopt.java; filename needs to be Ipopt.java, so put into subdir
+tmp/Ipopt.java : $(srcdir)/Ipopt.java
+	@mkdir -p tmp
+	sed -e s/double/float/g $< > $@
+
+org/coinor/Ipopt.class org_coinor_Ipopt.h : tmp/Ipopt.java
+	$(JAVAC) $< -d $(PWD) -h $(PWD)
+else
 # had  -target 1.8 -source 1.8, but that produces a warning if Java 8 RT is not setup
 org/coinor/Ipopt.class org_coinor_Ipopt.h : $(srcdir)/Ipopt.java
 	$(JAVAC) $< -d $(PWD) -h $(PWD)
+endif
 
 all-local : org.coinor.ipopt.jar
 

@@ -13,6 +13,20 @@
 using namespace std;
 using namespace Ipopt;
 
+#ifdef IPOPT_SINGLE
+typedef jfloat jnumber;
+typedef jfloatArray jnumberArray;
+#define NewNumberArray NewFloatArray
+#define GetNumberArrayRegion GetFloatArrayRegion
+#define SetNumberArrayRegion SetFloatArrayRegion
+#else
+typedef jdouble jnumber;
+typedef jdoubleArray jnumberArray;
+#define NewNumberArray NewDoubleArray
+#define GetNumberArrayRegion GetDoubleArrayRegion
+#define SetNumberArrayRegion SetDoubleArrayRegion
+#endif
+
 /** Main structure for Ipopt JNI implementation.
  *
  * All functions will receive a pointer to this structure as
@@ -176,17 +190,17 @@ public:
    jint index_style;
 
    // some cached arguments
-   jdoubleArray mult_gj;
-   jdoubleArray mult_x_Lj;
-   jdoubleArray mult_x_Uj;
+   jnumberArray mult_gj;
+   jnumberArray mult_x_Lj;
+   jnumberArray mult_x_Uj;
 
    // the callback arguments
-   jdoubleArray xj;
-   jdoubleArray fj;
-   jdoubleArray grad_fj;
-   jdoubleArray gj;
-   jdoubleArray jac_gj;
-   jdoubleArray hessj;
+   jnumberArray xj;
+   jnumberArray fj;
+   jnumberArray grad_fj;
+   jnumberArray gj;
+   jnumberArray jac_gj;
+   jnumberArray hessj;
 
    jboolean using_scaling_parameters;
    jboolean using_LBFGS;
@@ -232,6 +246,7 @@ Jipopt::Jipopt(
    jclass solverCls = env->GetObjectClass(solver);
 
    // get the methods
+#ifndef IPOPT_SINGLE
    get_bounds_info_    = env->GetMethodID(solverCls, "get_bounds_info", "(I[D[DI[D[D)Z");
    get_starting_point_ = env->GetMethodID(solverCls, "get_starting_point", "(IZ[DZ[D[DIZ[D)Z");
    eval_f_             = env->GetMethodID(solverCls, "eval_f", "(I[DZ[D)Z");
@@ -240,6 +255,16 @@ Jipopt::Jipopt(
    eval_jac_g_         = env->GetMethodID(solverCls, "eval_jac_g", "(I[DZII[I[I[D)Z");
    eval_h_             = env->GetMethodID(solverCls, "eval_h", "(I[DZDI[DZI[I[I[D)Z");
    get_scaling_parameters_            = env->GetMethodID(solverCls, "get_scaling_parameters", "([DI[DI[D[Z)Z");
+#else
+   get_bounds_info_    = env->GetMethodID(solverCls, "get_bounds_info", "(I[F[FI[F[F)Z");
+   get_starting_point_ = env->GetMethodID(solverCls, "get_starting_point", "(IZ[FZ[F[FIZ[F)Z");
+   eval_f_             = env->GetMethodID(solverCls, "eval_f", "(I[FZ[F)Z");
+   eval_grad_f_        = env->GetMethodID(solverCls, "eval_grad_f", "(I[FZ[F)Z");
+   eval_g_             = env->GetMethodID(solverCls, "eval_g", "(I[FZI[F)Z");
+   eval_jac_g_         = env->GetMethodID(solverCls, "eval_jac_g", "(I[FZII[I[I[F)Z");
+   eval_h_             = env->GetMethodID(solverCls, "eval_h", "(I[FZFI[FZI[I[I[F)Z");
+   get_scaling_parameters_            = env->GetMethodID(solverCls, "get_scaling_parameters", "([FI[FI[F[Z)Z");
+#endif
    get_number_of_nonlinear_variables_ = env->GetMethodID(solverCls, "get_number_of_nonlinear_variables", "()I");
    get_list_of_nonlinear_variables_   = env->GetMethodID(solverCls, "get_list_of_nonlinear_variables", "(I[I)Z");
 
@@ -288,20 +313,20 @@ bool Jipopt::get_bounds_info(
    Number* g_l,
    Number* g_u)
 {
-   jdoubleArray x_lj = NULL;
-   jdoubleArray x_uj = NULL;
-   jdoubleArray g_lj = NULL;
-   jdoubleArray g_uj = NULL;
+   jnumberArray x_lj = NULL;
+   jnumberArray x_uj = NULL;
+   jnumberArray g_lj = NULL;
+   jnumberArray g_uj = NULL;
 
    assert(x_l != NULL);
    assert(x_u != NULL);
    assert(g_l != NULL);
    assert(g_u != NULL);
 
-   x_lj = env->NewDoubleArray(n);
-   x_uj = env->NewDoubleArray(n);
-   g_lj = env->NewDoubleArray(m);
-   g_uj = env->NewDoubleArray(m);
+   x_lj = env->NewNumberArray(n);
+   x_uj = env->NewNumberArray(n);
+   g_lj = env->NewNumberArray(m);
+   g_uj = env->NewNumberArray(m);
 
    if( !env->CallBooleanMethod(solver, get_bounds_info_, n, x_lj, x_uj, m, g_lj, g_uj) )
    {
@@ -309,10 +334,10 @@ bool Jipopt::get_bounds_info(
    }
 
    // Copy from Java to native value
-   env->GetDoubleArrayRegion(x_lj, 0, n, x_l);
-   env->GetDoubleArrayRegion(x_uj, 0, n, x_u);
-   env->GetDoubleArrayRegion(g_lj, 0, m, g_l);
-   env->GetDoubleArrayRegion(g_uj, 0, m, g_u);
+   env->GetNumberArrayRegion(x_lj, 0, n, x_l);
+   env->GetNumberArrayRegion(x_uj, 0, n, x_u);
+   env->GetNumberArrayRegion(g_lj, 0, m, g_l);
+   env->GetNumberArrayRegion(g_uj, 0, m, g_u);
 
    return true;
 }
@@ -328,10 +353,10 @@ bool Jipopt::get_starting_point(
    bool    init_lambda,
    Number* lambda)
 {
-   jdoubleArray xj      = this->xj;
-   jdoubleArray z_lj    = this->mult_x_Lj;
-   jdoubleArray z_uj    = this->mult_x_Uj;
-   jdoubleArray lambdaj = this->mult_gj;
+   jnumberArray xj      = this->xj;
+   jnumberArray z_lj    = this->mult_x_Lj;
+   jnumberArray z_uj    = this->mult_x_Uj;
+   jnumberArray lambdaj = this->mult_gj;
 
    if( !env->CallBooleanMethod(solver, get_starting_point_, n, init_x, xj, init_z, z_lj, z_uj, m, init_lambda, lambdaj) )
    {
@@ -341,18 +366,18 @@ bool Jipopt::get_starting_point(
    /* Copy from Java to native value */
    if( init_x )
    {
-      env->GetDoubleArrayRegion(xj, 0, n, x);
+      env->GetNumberArrayRegion(xj, 0, n, x);
    }
 
    if( init_z )
    {
-      env->GetDoubleArrayRegion(z_lj, 0, n, z_L);
-      env->GetDoubleArrayRegion(z_uj, 0, n, z_U);
+      env->GetNumberArrayRegion(z_lj, 0, n, z_L);
+      env->GetNumberArrayRegion(z_uj, 0, n, z_U);
    }
 
    if( init_lambda )
    {
-      env->GetDoubleArrayRegion(lambdaj, 0, m, lambda);
+      env->GetNumberArrayRegion(lambdaj, 0, m, lambda);
    }
 
    return true;
@@ -367,7 +392,7 @@ bool Jipopt::eval_f(
    /* Copy the native double x to the Java double array xj, if new values */
    if( new_x )
    {
-      env->SetDoubleArrayRegion(xj, 0, n, const_cast<Number*>(x));
+      env->SetNumberArrayRegion(xj, 0, n, const_cast<Number*>(x));
    }
 
    /* Call the java method */
@@ -378,7 +403,7 @@ bool Jipopt::eval_f(
    }
 
    /* Copy from Java to native value */
-   env->GetDoubleArrayRegion(fj, 0, 1, &obj_value);
+   env->GetNumberArrayRegion(fj, 0, 1, &obj_value);
 
    return true;
 }
@@ -392,7 +417,7 @@ bool Jipopt::eval_grad_f(
    /* Copy the native double x to the Java double array xj, if new values */
    if( new_x )
    {
-      env->SetDoubleArrayRegion(xj, 0, n, const_cast<Number*>(x));
+      env->SetNumberArrayRegion(xj, 0, n, const_cast<Number*>(x));
    }
 
    /* Call the java method */
@@ -402,7 +427,7 @@ bool Jipopt::eval_grad_f(
       return false;
    }
 
-   env->GetDoubleArrayRegion(grad_fj, 0, n, grad_f);
+   env->GetNumberArrayRegion(grad_fj, 0, n, grad_f);
 
    return true;
 }
@@ -417,7 +442,7 @@ bool Jipopt::eval_g(
    /* Copy the native double x to the Java double array xj, if new values */
    if( new_x )
    {
-      env->SetDoubleArrayRegion(xj, 0, n, const_cast<Number*>(x));
+      env->SetNumberArrayRegion(xj, 0, n, const_cast<Number*>(x));
    }
 
    /* Call the java method */
@@ -428,7 +453,7 @@ bool Jipopt::eval_g(
    }
 
    /* Copy from Java to native value */
-   env->GetDoubleArrayRegion(gj, 0, m, g);
+   env->GetNumberArrayRegion(gj, 0, m, g);
 
    return true;
 }
@@ -446,7 +471,7 @@ bool Jipopt::eval_jac_g(
    // Copy the native double x to the Java double array xj, if new values
    if( new_x && x != NULL )
    {
-      env->SetDoubleArrayRegion(xj, 0, n, const_cast<Number*>(x));
+      env->SetNumberArrayRegion(xj, 0, n, const_cast<Number*>(x));
    }
 
    /// Create the index arrays if needed
@@ -468,7 +493,7 @@ bool Jipopt::eval_jac_g(
    /* Copy from Java to native value */
    if( jac_g != NULL )
    {
-      env->GetDoubleArrayRegion(jac_gj, 0, nele_jac, jac_g);
+      env->GetNumberArrayRegion(jac_gj, 0, nele_jac, jac_g);
    }
 
    if( iRow != NULL && jCol != NULL )
@@ -517,13 +542,13 @@ bool Jipopt::eval_h(
    /* Copy the native double x to the Java double array xj, if new values */
    if( new_x && x != NULL )
    {
-      env->SetDoubleArrayRegion(xj, 0, n, const_cast<Number*>(x));
+      env->SetNumberArrayRegion(xj, 0, n, const_cast<Number*>(x));
    }
 
    /* Copy the native double lambda to the Java double array lambdaj, if new values */
    if( new_lambda && lambda != NULL )
    {
-      env->SetDoubleArrayRegion(mult_gj, 0, m, const_cast<Number*>(lambda));
+      env->SetNumberArrayRegion(mult_gj, 0, m, const_cast<Number*>(lambda));
    }
 
    /* Create the index arrays if needed */
@@ -546,7 +571,7 @@ bool Jipopt::eval_h(
    /* Copy from Java to native value */
    if( hess != NULL )
    {
-      env->GetDoubleArrayRegion(hessj, 0, nele_hess, hess);
+      env->GetNumberArrayRegion(hessj, 0, nele_hess, hess);
    }
 
    if( iRow != NULL && jCol != NULL )
@@ -597,30 +622,30 @@ void Jipopt::finalize_solution(
 
    if( x != NULL )
    {
-      env->SetDoubleArrayRegion(xj, 0, n, const_cast<Number*>(x));
+      env->SetNumberArrayRegion(xj, 0, n, const_cast<Number*>(x));
    }
 
    if( z_L != NULL )
    {
-      env->SetDoubleArrayRegion(mult_x_Lj, 0, n, const_cast<Number*>(z_L));
+      env->SetNumberArrayRegion(mult_x_Lj, 0, n, const_cast<Number*>(z_L));
    }
 
    if( z_U != NULL )
    {
-      env->SetDoubleArrayRegion(mult_x_Uj, 0, n, const_cast<Number*>(z_U));
+      env->SetNumberArrayRegion(mult_x_Uj, 0, n, const_cast<Number*>(z_U));
    }
 
    if( g != NULL )
    {
-      env->SetDoubleArrayRegion(gj, 0, m, const_cast<Number*>(g));
+      env->SetNumberArrayRegion(gj, 0, m, const_cast<Number*>(g));
    }
 
    if( lambda != NULL )
    {
-      env->SetDoubleArrayRegion(mult_gj, 0, m, const_cast<Number*>(lambda));
+      env->SetNumberArrayRegion(mult_gj, 0, m, const_cast<Number*>(lambda));
    }
 
-   env->GetDoubleArrayRegion(fj, 0, 1, &obj_value);
+   env->GetNumberArrayRegion(fj, 0, 1, &obj_value);
 }
 
 bool Jipopt::get_scaling_parameters(
@@ -637,9 +662,9 @@ bool Jipopt::get_scaling_parameters(
       return false;
    }
 
-   jdoubleArray obj_scaling_j = env->NewDoubleArray(1);
-   jdoubleArray x_scaling_j   = env->NewDoubleArray(n);
-   jdoubleArray g_scaling_j   = env->NewDoubleArray(m);
+   jnumberArray obj_scaling_j = env->NewNumberArray(1);
+   jnumberArray x_scaling_j   = env->NewNumberArray(n);
+   jnumberArray g_scaling_j   = env->NewNumberArray(m);
 
    jbooleanArray use_x_g_scaling_j = env->NewBooleanArray(2);
 
@@ -648,12 +673,12 @@ bool Jipopt::get_scaling_parameters(
    jboolean* use_x_g_scaling = env->GetBooleanArrayElements(use_x_g_scaling_j, 0);
 
    /* Copy from Java to native value */
-   env->GetDoubleArrayRegion(obj_scaling_j, 0, 1, &obj_scaling);
+   env->GetNumberArrayRegion(obj_scaling_j, 0, 1, &obj_scaling);
 
    /* Copy from Java to native value */
    if( use_x_g_scaling[0] )
    {
-      env->GetDoubleArrayRegion(x_scaling_j, 0, n, x_scaling);
+      env->GetNumberArrayRegion(x_scaling_j, 0, n, x_scaling);
       use_x_scaling = true;
    }
    else
@@ -664,7 +689,7 @@ bool Jipopt::get_scaling_parameters(
    /* Copy from Java to native value */
    if( use_x_g_scaling[1] )
    {
-      env->GetDoubleArrayRegion(g_scaling_j, 0, n, g_scaling);
+      env->GetNumberArrayRegion(g_scaling_j, 0, n, g_scaling);
       use_g_scaling = true;
    }
    else
@@ -752,15 +777,15 @@ extern "C"
       JNIEnv*      env,
       jobject      obj_this,
       jlong        pipopt,
-      jdoubleArray xj,
-      jdoubleArray gj,
-      jdoubleArray obj_valj,
-      jdoubleArray mult_gj,
-      jdoubleArray mult_x_Lj,
-      jdoubleArray mult_x_Uj,
-      jdoubleArray callback_grad_f,
-      jdoubleArray callback_jac_g,
-      jdoubleArray callback_hess)
+      jnumberArray xj,
+      jnumberArray gj,
+      jnumberArray obj_valj,
+      jnumberArray mult_gj,
+      jnumberArray mult_x_Lj,
+      jnumberArray mult_x_Uj,
+      jnumberArray callback_grad_f,
+      jnumberArray callback_jac_g,
+      jnumberArray callback_hess)
    {
       Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);
 
@@ -840,7 +865,7 @@ extern "C"
       jobject /*obj_this*/,
       jlong   pipopt,
       jstring jparname,
-      jdouble jparvalue
+      jnumber jparvalue
    )
    {
       Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);

@@ -121,8 +121,8 @@ CONFIG_CLEAN_FILES = ipopt.pc doc/Doxyfile \
 	tutorial/CodingExercise/Matlab/1-skeleton/startup.m \
 	tutorial/CodingExercise/Matlab/2-mistake/startup.m \
 	tutorial/CodingExercise/Matlab/3-solution/startup.m \
-	examples/hs071_f/hs071_f.f examples/hs071_f/hs071_fs.f \
-	examples/hs071_f/Makefile \
+	examples/hs071_f/Makefile examples/hs071_f/hs071_fs.f \
+	examples/hs071_f/hs071_f.f \
 	tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f \
 	tutorial/CodingExercise/Fortran/2-mistake/TutorialFortran.f \
 	tutorial/CodingExercise/Fortran/3-solution/TutorialFortran.f \
@@ -169,7 +169,7 @@ CONFIG_CLEAN_VPATH_FILES = contrib/RInterface/DESCRIPTION \
 	examples/hs071_cpp/hs071_main.cpp \
 	examples/hs071_cpp/hs071_nlp.cpp \
 	examples/hs071_cpp/hs071_nlp.hpp examples/hs071_c/hs071_c.c \
-	examples/hs071_java/HS071.java \
+	examples/hs071_java/HS071s.java examples/hs071_java/HS071.java \
 	tutorial/AmplExperiments/hs71.mod \
 	tutorial/AmplExperiments/infeasible.mod \
 	tutorial/AmplExperiments/MoreAmplModels.txt \
@@ -531,11 +531,11 @@ tutorial/CodingExercise/Matlab/2-mistake/startup.m: $(top_builddir)/config.statu
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 tutorial/CodingExercise/Matlab/3-solution/startup.m: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Matlab/3-solution/startup.m.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
-examples/hs071_f/hs071_f.f: $(top_builddir)/config.status $(top_srcdir)/examples/hs071_f/hs071_f.f.in
+examples/hs071_f/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/hs071_f/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/hs071_f/hs071_fs.f: $(top_builddir)/config.status $(top_srcdir)/examples/hs071_f/hs071_fs.f.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
-examples/hs071_f/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/hs071_f/Makefile.in
+examples/hs071_f/hs071_f.f: $(top_builddir)/config.status $(top_srcdir)/examples/hs071_f/hs071_f.f.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f: $(top_builddir)/config.status $(top_srcdir)/tutorial/CodingExercise/Fortran/1-skeleton/TutorialFortran.f.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@

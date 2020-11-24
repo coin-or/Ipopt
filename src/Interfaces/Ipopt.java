@@ -130,7 +130,7 @@ public abstract class Ipopt
    private double x[];
 
    /** Final value of objective function */
-   private double obj_val[] = {0.0};
+   private double obj_val[] = {0};
 
    /** Values of constraint at final point */
    private double g[];

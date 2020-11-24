@@ -419,7 +419,9 @@ hs071_c_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
 @IPOPT_SINGLE_FALSE@nodist_hs071_f_SOURCES = hs071_f.f
 @IPOPT_SINGLE_TRUE@nodist_hs071_f_SOURCES = hs071_fs.f
 hs071_f_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
-@BUILD_JAVA_TRUE@CLEANFILES = HS071.class
+@BUILD_JAVA_TRUE@@IPOPT_SINGLE_FALSE@HS071J = HS071
+@BUILD_JAVA_TRUE@@IPOPT_SINGLE_TRUE@HS071J = HS071s
+@BUILD_JAVA_TRUE@CLEANFILES = $(HS071J).class
 nodist_parametric_cpp_SOURCES = parametricTNLP.cpp parametric_driver.cpp
 parametric_cpp_LDADD = ../contrib/sIPOPT/src/libsipopt.la
 nodist_redhess_cpp_SOURCES = MySensTNLP.cpp redhess_cpp.cpp
@@ -774,15 +776,15 @@ uninstall-am:
 .PRECIOUS: Makefile
 
 
-@BUILD_JAVA_TRUE@HS071.class : $(top_srcdir)/examples/hs071_java/HS071.java
+@BUILD_JAVA_TRUE@$(HS071J).class : $(top_srcdir)/examples/hs071_java/$(HS071J).java
 @BUILD_JAVA_TRUE@	$(JAVAC) -classpath ../src/Interfaces/org.coinor.ipopt.jar $< -d $(PWD)
 
-@BUILD_JAVA_TRUE@all-local : HS071.class
+@BUILD_JAVA_TRUE@all-local : $(HS071J).class
 
 hs071_f.f hs071_fs.f:
 	$(LN_S) ../examples/hs071_f/$@ $@
 
-@BUILD_JAVA_TRUE@test: $(noinst_PROGRAMS) HS071.class
+@BUILD_JAVA_TRUE@test: $(noinst_PROGRAMS) $(HS071J).class
 @BUILD_JAVA_FALSE@test: $(noinst_PROGRAMS)
 	chmod u+x ./run_unitTests
 	./run_unitTests

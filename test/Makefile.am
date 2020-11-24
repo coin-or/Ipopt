@@ -32,13 +32,18 @@ endif
 hs071_f_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
 
 if BUILD_JAVA
+if !IPOPT_SINGLE
+  HS071J=HS071
+else
+  HS071J=HS071s
+endif
 
-HS071.class : $(top_srcdir)/examples/hs071_java/HS071.java
+$(HS071J).class : $(top_srcdir)/examples/hs071_java/$(HS071J).java
 	$(JAVAC) -classpath ../src/Interfaces/org.coinor.ipopt.jar $< -d $(PWD)
 
-all-local : HS071.class
+all-local : $(HS071J).class
 
-CLEANFILES = HS071.class
+CLEANFILES = $(HS071J).class
 
 endif
 
@@ -65,7 +70,7 @@ hs071_f.f hs071_fs.f:
 	$(LN_S) ../examples/hs071_f/$@ $@
 
 if BUILD_JAVA
-test: $(noinst_PROGRAMS) HS071.class
+test: $(noinst_PROGRAMS) $(HS071J).class
 else
 test: $(noinst_PROGRAMS)
 endif

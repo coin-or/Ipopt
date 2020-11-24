@@ -818,9 +818,16 @@ uninstall-am: uninstall-includeipoptHEADERS uninstall-libLTLIBRARIES \
 @BUILD_JAVA_TRUE@org.coinor.ipopt.jar : org/coinor/Ipopt.class
 @BUILD_JAVA_TRUE@	$(JAR) cf $@ $<
 
+# replace double by float in Ipopt.java; filename needs to be Ipopt.java, so put into subdir
+@BUILD_JAVA_TRUE@@IPOPT_SINGLE_TRUE@tmp/Ipopt.java : $(srcdir)/Ipopt.java
+@BUILD_JAVA_TRUE@@IPOPT_SINGLE_TRUE@	@mkdir -p tmp
+@BUILD_JAVA_TRUE@@IPOPT_SINGLE_TRUE@	sed -e s/double/float/g $< > $@
+
+@BUILD_JAVA_TRUE@@IPOPT_SINGLE_TRUE@org/coinor/Ipopt.class org_coinor_Ipopt.h : tmp/Ipopt.java
+@BUILD_JAVA_TRUE@@IPOPT_SINGLE_TRUE@	$(JAVAC) $< -d $(PWD) -h $(PWD)
 # had  -target 1.8 -source 1.8, but that produces a warning if Java 8 RT is not setup
-@BUILD_JAVA_TRUE@org/coinor/Ipopt.class org_coinor_Ipopt.h : $(srcdir)/Ipopt.java
-@BUILD_JAVA_TRUE@	$(JAVAC) $< -d $(PWD) -h $(PWD)
+@BUILD_JAVA_TRUE@@IPOPT_SINGLE_FALSE@org/coinor/Ipopt.class org_coinor_Ipopt.h : $(srcdir)/Ipopt.java
+@BUILD_JAVA_TRUE@@IPOPT_SINGLE_FALSE@	$(JAVAC) $< -d $(PWD) -h $(PWD)
 
 @BUILD_JAVA_TRUE@all-local : org.coinor.ipopt.jar
 
