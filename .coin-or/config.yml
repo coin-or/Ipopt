@@ -15,7 +15,7 @@ Description:
     Slug: ipopt-5qaur
   Language:
     - C++
-  Categories: 
+  Categories:
     - Optimization deterministic nonlinear
 
 Dependencies:
@@ -29,7 +29,7 @@ Dependencies:
     Required: Optional
   - Description: ThirdParty wrapper for building HSL codes
     URL: https://github.com/coin-or-tools/ThirdParty-HSL
-    Version: stable/2.1
+    Version: stable/2.2
     Required: Optional
   - Description: Parallel Sparse Direct Solver from Pardiso-Project
     URL: http://www.pardiso-project.org/
@@ -47,10 +47,10 @@ Dependencies:
     URL: http://www.netlib.org/lapack
     Required: Required
 
-DevelopmentStatus: 
+DevelopmentStatus:
   activityStatus: Active
   maturityLevel: 5
-  testedPlatforms: 
+  testedPlatforms:
   - operatingSystem: Linux
     compiler: gcc
   - operatingSystem: macOS
