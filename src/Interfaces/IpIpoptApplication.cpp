@@ -376,7 +376,9 @@ ApplicationReturnStatus IpoptApplication::Initialize(
             options_to_print.push_back("point_perturbation_radius");
 
             // Special linear solver
-#if defined(COINHSL_HAS_MA27) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
+#if (defined(COINHSL_HAS_MA27) && !defined(IPOPT_SINGLE)) || \
+    (defined(COINHSL_HAS_MA27S) && defined(IPOPT_SINGLE)) || \
+    defined(IPOPT_HAS_LINEARSOLVERLOADER)
 
             options_to_print.push_back("#MA27 Linear Solver");
             options_to_print.push_back("ma27_pivtol");
@@ -386,7 +388,9 @@ ApplicationReturnStatus IpoptApplication::Initialize(
             options_to_print.push_back("ma27_meminc_factor");
 #endif
 
-#if defined(COINHSL_HAS_MA57) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
+#if (defined(COINHSL_HAS_MA57) && !defined(IPOPT_SINGLE)) || \
+    (defined(COINHSL_HAS_MA57S) && defined(IPOPT_SINGLE)) || \
+    defined(IPOPT_HAS_LINEARSOLVERLOADER)
 
             options_to_print.push_back("#MA57 Linear Solver");
             options_to_print.push_back("ma57_pivtol");

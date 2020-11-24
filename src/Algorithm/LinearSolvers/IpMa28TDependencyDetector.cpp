@@ -11,36 +11,14 @@
 #include "CoinHslConfig.h"
 #endif
 
-// if we have MA28 in HSL or the linear solver loader, then we want to build the MA28 interface
-#if defined(COINHSL_HAS_MA28) && defined(F77_FUNC)
+// if we have MA28 in HSL or the linear solver loader, and build for double precision, then we want to build the MA28 interface
+#if defined(COINHSL_HAS_MA28) && defined(F77_FUNC) && !defined(IPOPT_SINGLE)
 
 #include "IpMa28TDependencyDetector.hpp"
 
 /** Prototypes for MA28's Fortran auxiliary function */
 extern "C"
 {
-#ifdef IPOPT_SINGLE
-   void
-   F77_FUNC(ma28part, MA28PART)(
-      ipfint* TASK,
-      ipfint* N,
-      ipfint* M,
-      ipfint* NZ,
-      float*  A,
-      ipfint* IROW,
-      ipfint* ICOL,
-      float*  PIVTOL,
-      ipfint* FILLFACT,
-      ipfint* IVAR,
-      ipfint* NDEGEN,
-      ipfint* IDEGEN,
-      ipfint* LIW,
-      ipfint* IW,
-      ipfint* LRW,
-      float*  RW,
-      ipfint* IERR
-   );
-#else
    void
    F77_FUNC(ma28part, MA28PART)(
       ipfint* TASK,
@@ -61,7 +39,6 @@ extern "C"
       double* RW,
       ipfint* IERR
    );
-#endif
 }
 
 namespace Ipopt

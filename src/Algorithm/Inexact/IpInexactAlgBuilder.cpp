@@ -132,7 +132,7 @@ SmartPtr<IpoptAlgorithm> InexactAlgorithmBuilder::BuildBasicAlgorithm(
    options.GetStringValue("linear_solver", linear_solver, prefix);
    if( linear_solver == "ma27" )
    {
-#ifndef COINHSL_HAS_MA27
+#if (defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA27S)) || (!defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA27))
 # ifdef IPOPT_HAS_LINEARSOLVERLOADER
       SolverInterface = new Ma27TSolverInterface();
       char buf[256];
@@ -156,7 +156,7 @@ SmartPtr<IpoptAlgorithm> InexactAlgorithmBuilder::BuildBasicAlgorithm(
    }
    else if( linear_solver == "ma57" )
    {
-#ifndef COINHSL_HAS_MA57
+#if (defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA57S)) || (!defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA57))
 # ifdef IPOPT_HAS_LINEARSOLVERLOADER
       SolverInterface = new Ma57TSolverInterface();
       char buf[256];

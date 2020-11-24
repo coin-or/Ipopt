@@ -31,6 +31,21 @@
 #define IPOPT_HSL_FUNCP(name,NAME) IPOPT_HSL_FUNC(name ## d,NAME ## D)
 #endif
 
+/* make MA27 available in HSL loader if MA27(S) not available in HSL */
+#if (defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA27S)) || (!defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA27))
+#define HSLLOADER_MA27
+#endif
+
+/* make MA57 available in HSL loader if MA57(S) not available in HSL */
+#if (defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA57S)) || (!defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA57))
+#define HSLLOADER_MA57
+#endif
+
+/* make MC19 available in HSL loader if MC19(S) not available in HSL */
+#if (defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MC19S)) || (!defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MC19))
+#define HSLLOADER_MC19
+#endif
+
 static soHandle_t HSL_handle = NULL;
 
 void LSL_lateHSLLoad(void);
@@ -44,7 +59,7 @@ voidfun LSL_loadSym(
    int         msgLen
 );
 
-#ifndef COINHSL_HAS_MA27
+#ifdef HSLLOADER_MA27
 static ma27a_t func_ma27a = NULL;
 static ma27b_t func_ma27b = NULL;
 static ma27c_t func_ma27c = NULL;
@@ -154,7 +169,7 @@ void IPOPT_HSL_FUNCP(ma27i, MA27I)(
 }
 #endif
 
-#ifndef COINHSL_HAS_MA57
+#ifdef HSLLOADER_MA57
 static ma57i_t func_ma57i = NULL;
 static ma57a_t func_ma57a = NULL;
 static ma57b_t func_ma57b = NULL;
@@ -945,7 +960,7 @@ void ma97_free_akeep(
 }
 #endif
 
-#ifndef COINHSL_HAS_MC19
+#ifdef HSLLOADER_MC19
 static mc19a_t func_mc19a = NULL;
 
 void IPOPT_HSL_FUNCP(mc19a, MC19A)(
@@ -954,9 +969,9 @@ void IPOPT_HSL_FUNCP(mc19a, MC19A)(
    ipnumber* A,
    ipfint*   IRN,
    ipfint*   ICN,
-   ipnumber* R,
-   ipnumber* C,
-   ipnumber* W
+   float*    R,
+   float*    C,
+   float*    W
 )
 {
    if( func_mc19a == NULL )
@@ -1038,14 +1053,14 @@ int LSL_loadHSL(
    }
 
    /* load HSL functions */
-#ifndef COINHSL_HAS_MA27
+#ifdef HSLLOADER_MA27
    func_ma27i = (ma27i_t)LSL_loadSym(HSL_handle, "ma27i" HSLFUNCNAMESUFFIX, msgbuf, msglen);
    func_ma27a = (ma27a_t)LSL_loadSym(HSL_handle, "ma27a" HSLFUNCNAMESUFFIX, msgbuf, msglen);
    func_ma27b = (ma27b_t)LSL_loadSym(HSL_handle, "ma27b" HSLFUNCNAMESUFFIX, msgbuf, msglen);
    func_ma27c = (ma27c_t)LSL_loadSym(HSL_handle, "ma27c" HSLFUNCNAMESUFFIX, msgbuf, msglen);
 #endif
 
-#ifndef COINHSL_HAS_MA57
+#ifdef HSLLOADER_MA57
    func_ma57i = (ma57i_t)LSL_loadSym(HSL_handle, "ma57i" HSLFUNCNAMESUFFIX, msgbuf, msglen);
    func_ma57a = (ma57a_t)LSL_loadSym(HSL_handle, "ma57a" HSLFUNCNAMESUFFIX, msgbuf, msglen);
    func_ma57b = (ma57b_t)LSL_loadSym(HSL_handle, "ma57b" HSLFUNCNAMESUFFIX, msgbuf, msglen);
@@ -1094,7 +1109,7 @@ int LSL_loadHSL(
    func_ma97_free_akeep = (ma97_free_akeep_t)LSL_loadSym(HSL_handle, "ma97_free_akeep_d", msgbuf, msglen);
 #endif
 
-#ifndef COINHSL_HAS_MC19
+#ifdef HSLLOADER_MC19
    func_mc19a = (mc19a_t)LSL_loadSym(HSL_handle, "mc19a" HSLFUNCNAMESUFFIX, msgbuf, msglen);
 #endif
 
@@ -1118,14 +1133,14 @@ int LSL_unloadHSL(void)
    rc = LSL_unloadLib(HSL_handle);
    HSL_handle = NULL;
 
-#ifndef COINHSL_HAS_MA27
+#ifdef HSLLOADER_MA27
    func_ma27i = NULL;
    func_ma27a = NULL;
    func_ma27b = NULL;
    func_ma27c = NULL;
 #endif
 
-#ifndef COINHSL_HAS_MA57
+#ifdef HSLLOADER_MA57
    func_ma57i = NULL;
    func_ma57a = NULL;
    func_ma57b = NULL;
@@ -1170,7 +1185,7 @@ int LSL_unloadHSL(void)
    func_ma97_finalise = NULL;
 #endif
 
-#ifndef COINHSL_HAS_MC19
+#ifdef HSLLOADER_MC19
    func_mc19a = NULL;
 #endif
 
@@ -1189,7 +1204,7 @@ int LSL_isHSLLoaded(void)
 
 int LSL_isMA27available(void)
 {
-#ifndef COINHSL_HAS_MA27
+#ifdef HSLLOADER_MA27
    return func_ma27i != NULL && func_ma27a != NULL && func_ma27b != NULL && func_ma27c != NULL;
 #else
    return 1;
@@ -1198,7 +1213,7 @@ int LSL_isMA27available(void)
 
 int LSL_isMA57available(void)
 {
-#ifndef COINHSL_HAS_MA57
+#ifdef HSLLOADER_MA57
    return func_ma57i != NULL && func_ma57a != NULL && func_ma57b != NULL && func_ma57c != NULL && func_ma57e != NULL;
 #else
    return 1;
@@ -1234,7 +1249,7 @@ int LSL_isMA97available(void)
 
 int LSL_isMC19available(void)
 {
-#ifndef COINHSL_HAS_MC19
+#ifdef HSLLOADER_MC19
    return func_mc19a != NULL;
 #else
    return 1;
@@ -1277,7 +1292,7 @@ void LSL_setMA27(
    ma27i_t ma27i
 )
 {
-#ifndef COINHSL_HAS_MA27
+#ifdef HSLLOADER_MA27
    func_ma27a = ma27a;
    func_ma27b = ma27b;
    func_ma27c = ma27c;
@@ -1287,7 +1302,7 @@ void LSL_setMA27(
    (void) ma27b;
    (void) ma27c;
    (void) ma27i;
-#endif // COINHSL_HAS_MA27
+#endif // HSLLOADER_MA27
 }
 
 void LSL_setMA57(
@@ -1298,7 +1313,7 @@ void LSL_setMA57(
    ma57i_t ma57i
 )
 {
-#ifndef COINHSL_HAS_MA57
+#ifdef HSLLOADER_MA57
    func_ma57a = ma57a;
    func_ma57b = ma57b;
    func_ma57c = ma57c;
@@ -1310,7 +1325,7 @@ void LSL_setMA57(
    (void) ma57c;
    (void) ma57e;
    (void) ma57i;
-#endif // COINHSL_HAS_MA57
+#endif // HSLLOADER_MA57
 }
 
 void LSL_setMA77(
@@ -1428,11 +1443,11 @@ void LSL_setMC19(
    mc19a_t mc19a
 )
 {
-#ifndef COINHSL_HAS_MC19
+#ifdef HSLLOADER_MC19
    func_mc19a = mc19a;
 #else
    (void) mc19a;
-#endif // COINHSL_HAS_MC19
+#endif // HSLLOADER_MC19
 }
 
 void LSL_setMC68(

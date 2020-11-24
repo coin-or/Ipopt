@@ -36,11 +36,15 @@ void RegisterOptions_LinearSolvers(
 {
    roptions->SetRegisteringCategory("Linear Solver");
    TSymLinearSolver::RegisterOptions(roptions);
-#if defined(COINHSL_HAS_MA27) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
+#if (defined(COINHSL_HAS_MA27) && !defined(IPOPT_SINGLE)) || \
+    (defined(COINHSL_HAS_MA27S) && defined(IPOPT_SINGLE)) || \
+    defined(IPOPT_HAS_LINEARSOLVERLOADER)
    roptions->SetRegisteringCategory("MA27 Linear Solver");
    Ma27TSolverInterface::RegisterOptions(roptions);
 #endif
-#if defined(COINHSL_HAS_MA57) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
+#if (defined(COINHSL_HAS_MA57) && !defined(IPOPT_SINGLE)) || \
+    (defined(COINHSL_HAS_MA57S) && defined(IPOPT_SINGLE)) || \
+    defined(IPOPT_HAS_LINEARSOLVERLOADER)
    roptions->SetRegisteringCategory("MA57 Linear Solver");
    Ma57TSolverInterface::RegisterOptions(roptions);
 #endif
@@ -76,7 +80,7 @@ void RegisterOptions_LinearSolvers(
    IterativeWsmpSolverInterface::RegisterOptions(roptions);
 #endif
 
-#if defined(COINHSL_HAS_MA28) && defined(F77_FUNC)
+#if defined(COINHSL_HAS_MA28) && defined(F77_FUNC) && !defined(IPOPT_SINGLE)
    roptions->SetRegisteringCategory("MA28 Linear Solver");
    Ma28TDependencyDetector::RegisterOptions(roptions);
 #endif

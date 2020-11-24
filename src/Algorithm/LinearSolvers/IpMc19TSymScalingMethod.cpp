@@ -14,8 +14,16 @@
 #define IPOPT_HSL_FUNC(name,NAME) name
 #endif
 
-// if we do not have MC19 in HSL or the linear solver loader, then we want to build the MC19 interface
-#if defined(COINHSL_HAS_MC19) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
+// if we have MC19 in HSL or the linear solver loader, then we want to build the MC19 interface
+#if (defined(COINHSL_HAS_MC19) && !defined(IPOPT_SINGLE)) || \
+    (defined(COINHSL_HAS_MC19S) && defined(IPOPT_SINGLE)) || \
+    defined(IPOPT_HAS_LINEARSOLVERLOADER)
+
+#ifdef IPOPT_SINGLE
+#define IPOPT_HSL_FUNCP(name,NAME) IPOPT_HSL_FUNC(name,NAME)
+#else
+#define IPOPT_HSL_FUNCP(name,NAME) IPOPT_HSL_FUNC(name ## d,NAME ## D)
+#endif
 
 #include "IpMc19TSymScalingMethod.hpp"
 
@@ -24,30 +32,18 @@
 /** Prototypes for MC19's Fortran subroutines */
 extern "C"
 {
-#ifdef IPOPT_SINGLE
-   void IPOPT_HSL_FUNC(mc19a, MC19A)(
-      ipfint* N,
-      ipfint* NZ,
-      float* A,
-      ipfint* IRN,
-      ipfint* ICN,
-      float*  R,
-      float*  C,
-      float*  W
-   );
-#else
+// note that R,C,W are single-precision also in the double-precision version of MC19 (MC19AD)
 // here we assume that float corresponds to Fortran's single precision
-   void IPOPT_HSL_FUNC(mc19ad, MC19AD)(
-      ipfint* N,
-      ipfint* NZ,
-      double* A,
-      ipfint* IRN,
-      ipfint* ICN,
-      float*  R,
-      float*  C,
-      float*  W
+   void IPOPT_HSL_FUNCP(mc19a, MC19A)(
+      ipfint*   N,
+      ipfint*   NZ,
+      ipnumber* A,
+      ipfint*   IRN,
+      ipfint*   ICN,
+      float*    R,
+      float*    C,
+      float*    W
    );
-#endif
 }
 
 namespace Ipopt
@@ -153,11 +149,7 @@ bool Mc19TSymScalingMethod::ComputeSymTScalingFactors(
    float* R = new float[n];
    float* C = new float[n];
    float* W = new float[5 * n];
-#ifdef IPOPT_SINGLE
-   IPOPT_HSL_FUNC(mc19a, MC19A)(&n, &nnz2, A2, AIRN2, AJCN2, R, C, W);
-#else
-   IPOPT_HSL_FUNC(mc19ad, MC19AD)(&n, &nnz2, A2, AIRN2, AJCN2, R, C, W);
-#endif
+   IPOPT_HSL_FUNCP(mc19a, MC19A)(&n, &nnz2, A2, AIRN2, AJCN2, R, C, W);
    delete[] W;
 
    if( DBG_VERBOSITY() >= 3 )
@@ -212,4 +204,4 @@ bool Mc19TSymScalingMethod::ComputeSymTScalingFactors(
 
 } // namespace Ipopt
 
-#endif /* COINHSL_HAS_MC19 or IPOPT_HAS_LINEARSOLVERLOADER */
+#endif /* COINHSL_HAS_MC19(S) or IPOPT_HAS_LINEARSOLVERLOADER */

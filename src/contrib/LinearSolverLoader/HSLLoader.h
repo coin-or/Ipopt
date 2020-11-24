@@ -468,9 +468,9 @@ typedef void (*mc19a_t)(
    ipnumber* A,
    ipfint*   IRN,
    ipfint*   ICN,
-   ipnumber* R,
-   ipnumber* C,
-   ipnumber* W
+   float*    R,
+   float*    C,
+   float*    W
 );
 
 typedef void (*mc68_default_control_t)(

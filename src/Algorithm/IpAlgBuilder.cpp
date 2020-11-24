@@ -95,10 +95,10 @@ void AlgorithmBuilder::RegisterOptions(
    roptions->AddStringOption9(
       "linear_solver",
       "Linear solver used for step computations.",
-#ifdef COINHSL_HAS_MA27
+#if (defined(COINHSL_HAS_MA27) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA27S) && defined(IPOPT_SINGLE))
       "ma27",
 #else
-# ifdef COINHSL_HAS_MA57
+# if (defined(COINHSL_HAS_MA57) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA57S) && defined(IPOPT_SINGLE))
       "ma57",
 # else
 # ifdef COINHSL_HAS_MA97
@@ -143,7 +143,7 @@ void AlgorithmBuilder::RegisterOptions(
    roptions->SetRegisteringCategory("Linear Solver");
    roptions->AddStringOption3(
       "linear_system_scaling", "Method for scaling the linear system.",
-#ifdef COINHSL_HAS_MC19
+#if (defined(COINHSL_HAS_MC19) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MC19S) && defined(IPOPT_SINGLE))
       "mc19",
 #else
       "none",
@@ -251,7 +251,7 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    options.GetStringValue("linear_solver", linear_solver, prefix);
    if( linear_solver == "ma27" )
    {
-#ifndef COINHSL_HAS_MA27
+#if (defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA27S)) || (!defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA27))
 # ifdef IPOPT_HAS_LINEARSOLVERLOADER
       SolverInterface = new Ma27TSolverInterface();
       if (!LSL_isMA27available())
@@ -278,7 +278,7 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    }
    else if( linear_solver == "ma57" )
    {
-#ifndef COINHSL_HAS_MA57
+#if (defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA57S)) || (!defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA57))
 # ifdef IPOPT_HAS_LINEARSOLVERLOADER
       SolverInterface = new Ma57TSolverInterface();
       if (!LSL_isMA57available())
@@ -459,7 +459,7 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    }
    if( linear_system_scaling == "mc19" )
    {
-#ifndef COINHSL_HAS_MC19
+#if (defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MC19S)) || (!defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MC19))
 # ifdef IPOPT_HAS_LINEARSOLVERLOADER
       ScalingMethod = new Mc19TSymScalingMethod();
       if (!LSL_isMC19available())
