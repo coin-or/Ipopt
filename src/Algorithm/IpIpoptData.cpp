@@ -30,7 +30,11 @@ void IpoptData::RegisterOptions(
       "tol",
       "Desired convergence tolerance (relative).",
       0., true,
+#ifdef IPOPT_SINGLE
+      1e-5,
+#else
       1e-8,
+#endif
       "Determines the convergence tolerance for the algorithm. "
       "The algorithm terminates successfully, if the (scaled) NLP error becomes smaller than this value, and "
       "if the (absolute) criteria according to \"dual_inf_tol\", \"constr_viol_tol\", and \"compl_inf_tol\" are met. "

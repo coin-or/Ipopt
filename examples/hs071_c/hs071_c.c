@@ -151,11 +151,7 @@ int main()
    /* Set some options.  Note the following ones are only examples,
     * they might not be suitable for your problem.
     */
-#ifdef IPOPT_SINGLE
-   AddIpoptNumOption(nlp, "tol", 3.82e-6); // increase tolerance in single precision to avoid "EXIT: Search Direction is becoming Too Small."
-#else
-   AddIpoptNumOption(nlp, "tol", 1e-7);
-#endif
+   AddIpoptNumOption(nlp, "tol", 3.82e-6);
    AddIpoptStrOption(nlp, "mu_strategy", "adaptive");
    AddIpoptStrOption(nlp, "output_file", "ipopt.out");
 
