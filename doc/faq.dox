@@ -35,7 +35,7 @@ The \Ipopt documentation gives detailed instructions on how to obtain and compil
 
 ## On what operating systems can \Ipopt be used?
 
-Convenient configuration scripts and Makefiles are provided and have been tested for several flavors of GNU/Linux, Mac OS X, and MSYS2/MinGW.
+Convenient configuration scripts and Makefiles are provided and have been tested for several flavors of GNU/Linux, macOS, and MSYS2/MinGW.
 Previous versions of IPOPT have also been run on an old iPod, as well as BlueGene.
 
 ## Is \Ipopt thread-safe?

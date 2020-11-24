@@ -37,7 +37,7 @@ The previously released [pre-3.0 Fortran version](https://github.com/coin-or/Ipo
 
 The Ipopt distribution can be used to generate a library that can be linked to one's own C++, C, Fortran, or Java code, as well as a solver executable for the [AMPL](http://www.ampl.com) modeling environment.
 The package includes an interface to the [R](http://www.r-project.org/) programming environment.
-IPOPT can be used on Linux/UNIX, Mac OS X, and Windows platforms.
+IPOPT can be used on Linux/UNIX, macOS, and Windows platforms.
 
 As open source software, the source code for Ipopt is provided without charge.
 You are free to use it, also for commercial purposes.

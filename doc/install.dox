@@ -4,7 +4,7 @@
 \tableofcontents
 
 The following sections describe the installation procedures on
-UNIX/Linux, Mac OS X, and Windows systems.
+UNIX/Linux, macOS, and Windows systems.
 
 The configuration script and Makefiles in the \Ipopt
 distribution have been created using GNU's autoconf and automake.
@@ -31,7 +31,7 @@ RedHat-based distributions, `pacman` for Arch, etc. The g++ and gfortran
 compilers may need to be specified respectively as `gcc-c++` and
 `gcc-gfortran` with some package managers.
 
-\subsection SYSTEMPACKAGES_MAC Mac OS X
+\subsection SYSTEMPACKAGES_MAC macOS
 
 You need either the [Xcode Command Line Tools](https://developer.apple.com/downloads)
 or a community alternative such as Homebrew to install the GNU compilers:
@@ -159,7 +159,7 @@ in your system.
 On Ubuntu, such libraries can be made available by installing liblapack-dev.
 Other Linux distributions typically also offer a way to install Blas and
 Lapack via its package manager.
-On Mac OS X, \Ipopt's build system should pick up the Blas and Lapack
+On macOS, \Ipopt's build system should pick up the Blas and Lapack
 from the Accelerate framework.
 
 \note It is **highly recommended that you obtain an efficient
@@ -386,7 +386,7 @@ This means, if you obtain one of those solvers
 after you compiled \Ipopt, you don't need to recompile to
 use it. Instead, you can just put a shared library called `libhsl.so` or
 `libpardiso.so` into the shared library search path, `LD_LIBRARY_PATH`.
-These are the names on most UNIX platforms, including Linux. On Mac OS X,
+These are the names on most UNIX platforms, including Linux. On macOS,
 the names are `libhsl.dylib`, `libpardiso.dylib`, and
 `DYLD_LIBRARY_PATH`. On Windows, the names are `libhsl.dll`,
 `libpardiso.dll`, and `PATH`.
