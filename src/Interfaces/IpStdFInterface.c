@@ -7,6 +7,7 @@
 
 #include "IpStdCInterface.h"
 #include "IpoptConfig.h"
+#include "IpTypes.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -16,14 +17,6 @@
 #define F77_FUNC(name,NAME) name ## _
 #endif
 
-/* ToDo: The following needs to be adapted based on configuration */
-typedef IPOPT_FORTRAN_INTEGER_TYPE fint;
-/* Type of Fortran real translated into C */
-#ifdef IPOPT_SINGLE
-typedef float freal;
-#else
-typedef double freal;
-#endif
 /* in configure, we checked whether an int* is 32 or 64bit long to decide how much space
  * is needed to store a pointer
  * thus, we can use a void* here to represent a pointer for Fortran
@@ -31,96 +24,96 @@ typedef double freal;
 typedef void* fptr;
 
 /** Return value for indicating that evaluation could be done without problem. */
-static const fint OKRetVal = 0;
+static const ipfint OKRetVal = 0;
 /** Return value for indicating that evaluation could not be done without problem. */
-static const fint NotOKRetVal = 1;
+static const ipfint NotOKRetVal = 1;
 
 /* Function pointer types for the Fortran callback functions */
 typedef void (*FEval_F_CB)(
-   fint*    N,
-   freal*   X,
-   fint*    NEW_X,
-   freal*   OBJVAL,
-   fint*    IDAT,
-   freal*   DDAT,
-   fint*    IERR
+   ipfint*    N,
+   ipnumber*  X,
+   ipfint*    NEW_X,
+   ipnumber*  OBJVAL,
+   ipfint*    IDAT,
+   ipnumber*  DDAT,
+   ipfint*    IERR
 );
 
 typedef void (*FEval_G_CB)(
-   fint*    N,
-   freal*   X,
-   fint*    NEW_X,
-   fint*    M,
-   freal*   G,
-   fint*    IDAT,
-   freal*   DDAT,
-   fint*    IERR
+   ipfint*    N,
+   ipnumber*  X,
+   ipfint*    NEW_X,
+   ipfint*    M,
+   ipnumber*  G,
+   ipfint*    IDAT,
+   ipnumber*  DDAT,
+   ipfint*    IERR
 );
 
 typedef void (*FEval_Grad_F_CB)(
-   fint*    N,
-   freal*   X,
-   fint*    NEW_X,
-   freal*   GRAD,
-   fint*    IDAT,
-   freal*   DDAT,
-   fint*    IERR
+   ipfint*    N,
+   ipnumber*  X,
+   ipfint*    NEW_X,
+   ipnumber*  GRAD,
+   ipfint*    IDAT,
+   ipnumber*  DDAT,
+   ipfint*    IERR
 );
 
 typedef void (*FEval_Jac_G_CB)(
-   fint*    TASK,
-   fint*    N,
-   freal*   X,
-   fint*    NEW_X,
-   fint*    M,
-   fint*    NNZJAC,
-   fint*    IROW,
-   fint*    JCOL,
-   freal*   VALUES,
-   fint*    IDAT,
-   freal*   DDAT,
-   fint*    IERR
+   ipfint*    TASK,
+   ipfint*    N,
+   ipnumber*  X,
+   ipfint*    NEW_X,
+   ipfint*    M,
+   ipfint*    NNZJAC,
+   ipfint*    IROW,
+   ipfint*    JCOL,
+   ipnumber*  VALUES,
+   ipfint*    IDAT,
+   ipnumber*  DDAT,
+   ipfint*    IERR
 );
 
 typedef void (*FEval_Hess_CB)(
-   fint*    TASK,
-   fint*    N,
-   freal*   X,
-   fint*    NEW_X,
-   freal*   OBJFACT,
-   fint*    M,
-   freal*   LAMBDA,
-   fint*    NEW_LAM,
-   fint*    NNZHESS,
-   fint*    IROW,
-   fint*    JCOL,
-   freal*   VALUES,
-   fint*    IDAT,
-   freal*   DDAT,
-   fint*    IERR
+   ipfint*    TASK,
+   ipfint*    N,
+   ipnumber*  X,
+   ipfint*    NEW_X,
+   ipnumber*  OBJFACT,
+   ipfint*    M,
+   ipnumber*  LAMBDA,
+   ipfint*    NEW_LAM,
+   ipfint*    NNZHESS,
+   ipfint*    IROW,
+   ipfint*    JCOL,
+   ipnumber*  VALUES,
+   ipfint*    IDAT,
+   ipnumber*  DDAT,
+   ipfint*    IERR
 );
 
 typedef void (*FIntermediate_CB)(
-   fint*    ALG_MODE,
-   fint*    ITER_COUNT,
-   freal*   OBJVAL,
-   freal*   INF_PR,
-   freal*   INF_DU,
-   freal*   MU,
-   freal*   DNORM,
-   freal*   REGU_SIZE,
-   freal*   ALPHA_DU,
-   freal*   ALPHA_PR,
-   fint*    LS_TRIAL,
-   fint*    IDAT,
-   freal*   DDAT,
-   fint*    ISTOP
+   ipfint*    ALG_MODE,
+   ipfint*    ITER_COUNT,
+   ipnumber*  OBJVAL,
+   ipnumber*  INF_PR,
+   ipnumber*  INF_DU,
+   ipnumber*  MU,
+   ipnumber*  DNORM,
+   ipnumber*  REGU_SIZE,
+   ipnumber*  ALPHA_DU,
+   ipnumber*  ALPHA_PR,
+   ipfint*    LS_TRIAL,
+   ipfint*    IDAT,
+   ipnumber*  DDAT,
+   ipfint*    ISTOP
 );
 
 struct _FUserData
 {
-   fint*            IDAT;
-   freal*           DDAT;
+   ipfint*          IDAT;
+   ipnumber*        DDAT;
    FEval_F_CB       EVAL_F;
    FEval_G_CB       EVAL_G;
    FEval_Grad_F_CB  EVAL_GRAD_F;
@@ -139,12 +132,12 @@ static Bool eval_f(
    UserDataPtr user_data
 )
 {
-   fint N = n;
-   fint NEW_X = new_x;
+   ipfint N = n;
+   ipfint NEW_X = new_x;
    FUserData* fuser_data = (FUserData*) user_data;
-   fint* IDAT = fuser_data->IDAT;
-   freal*  DDAT = fuser_data->DDAT;
-   fint IERR = 0;
+   ipfint* IDAT = fuser_data->IDAT;
+   ipnumber*  DDAT = fuser_data->DDAT;
+   ipfint IERR = 0;
 
    fuser_data->EVAL_F(&N, x, &NEW_X, obj_value, IDAT, DDAT, &IERR);
 
@@ -159,12 +152,12 @@ static Bool eval_grad_f(
    UserDataPtr user_data
 )
 {
-   fint N = n;
-   fint NEW_X = new_x;
+   ipfint N = n;
+   ipfint NEW_X = new_x;
    FUserData* fuser_data = (FUserData*) user_data;
-   fint* IDAT = fuser_data->IDAT;
-   freal*  DDAT = fuser_data->DDAT;
-   fint IERR = 0;
+   ipfint* IDAT = fuser_data->IDAT;
+   ipnumber*  DDAT = fuser_data->DDAT;
+   ipfint IERR = 0;
 
    fuser_data->EVAL_GRAD_F(&N, x, &NEW_X, grad_f, IDAT, DDAT, &IERR);
 
@@ -180,13 +173,13 @@ static Bool eval_g(
    UserDataPtr user_data
 )
 {
-   fint N = n;
-   fint NEW_X = new_x;
-   fint M = m;
+   ipfint N = n;
+   ipfint NEW_X = new_x;
+   ipfint M = m;
    FUserData* fuser_data = (FUserData*) user_data;
-   fint* IDAT = fuser_data->IDAT;
-   freal* DDAT = fuser_data->DDAT;
-   fint IERR = 0;
+   ipfint* IDAT = fuser_data->IDAT;
+   ipnumber* DDAT = fuser_data->DDAT;
+   ipfint IERR = 0;
 
    fuser_data->EVAL_G(&N, x, &NEW_X, &M, g, IDAT, DDAT, &IERR);
 
@@ -205,15 +198,15 @@ static Bool eval_jac_g(
    UserDataPtr user_data
 )
 {
-   fint N = n;
-   fint NEW_X = new_x;
-   fint M = m;
-   fint NNZJAC = nele_jac;
-   fint TASK;
+   ipfint N = n;
+   ipfint NEW_X = new_x;
+   ipfint M = m;
+   ipfint NNZJAC = nele_jac;
+   ipfint TASK;
    FUserData* fuser_data = (FUserData*) user_data;
-   fint* IDAT = fuser_data->IDAT;
-   freal*  DDAT = fuser_data->DDAT;
-   fint IERR = 0;
+   ipfint* IDAT = fuser_data->IDAT;
+   ipnumber*  DDAT = fuser_data->DDAT;
+   ipfint IERR = 0;
 
    if( iRow != NULL && jCol != NULL && values == NULL )
    {
@@ -251,16 +244,16 @@ static Bool eval_h(
    UserDataPtr user_data
 )
 {
-   fint N = n;
-   fint NEW_X = new_x;
-   fint M = m;
-   fint NEW_LAM = new_lambda;
-   fint NNZHESS = nele_hess;
-   fint TASK;
+   ipfint N = n;
+   ipfint NEW_X = new_x;
+   ipfint M = m;
+   ipfint NEW_LAM = new_lambda;
+   ipfint NNZHESS = nele_hess;
+   ipfint TASK;
    FUserData* fuser_data = (FUserData*) user_data;
-   fint* IDAT = fuser_data->IDAT;
-   freal* DDAT = fuser_data->DDAT;
-   fint IERR = 0;
+   ipfint* IDAT = fuser_data->IDAT;
+   ipnumber* DDAT = fuser_data->DDAT;
+   ipfint IERR = 0;
 
    if( iRow != NULL && jCol != NULL && values == NULL )
    {
@@ -299,20 +292,20 @@ static Bool intermediate_cb(
 )
 {
    FUserData* fuser_data = (FUserData*) user_data;
-   fint ALG_MODE = alg_mod;
-   fint ITER_COUNT = iter_count;
-   freal OBJVAL = obj_value;
-   freal INF_PR = inf_pr;
-   freal INF_DU = inf_du;
-   freal MU = mu;
-   freal DNORM = d_norm;
-   freal REGU_SIZE = regularization_size;
-   freal ALPHA_DU = alpha_du;
-   freal ALPHA_PR = alpha_pr;
-   fint LS_TRIAL = ls_trials;
-   fint* IDAT = fuser_data->IDAT;
-   freal* DDAT = fuser_data->DDAT;
-   fint ISTOP = 0;
+   ipfint ALG_MODE = alg_mod;
+   ipfint ITER_COUNT = iter_count;
+   ipnumber OBJVAL = obj_value;
+   ipnumber INF_PR = inf_pr;
+   ipnumber INF_DU = inf_du;
+   ipnumber MU = mu;
+   ipnumber DNORM = d_norm;
+   ipnumber REGU_SIZE = regularization_size;
+   ipnumber ALPHA_DU = alpha_du;
+   ipnumber ALPHA_PR = alpha_pr;
+   ipfint LS_TRIAL = ls_trials;
+   ipfint* IDAT = fuser_data->IDAT;
+   ipnumber* DDAT = fuser_data->DDAT;
+   ipfint ISTOP = 0;
 
    if( !fuser_data->INTERMEDIATE_CB )
    {
@@ -326,15 +319,15 @@ static Bool intermediate_cb(
 }
 
 IPOPTLIB_EXPORT fptr F77_FUNC(ipcreate, IPCREATE)(
-   fint*           N,
-   freal*          X_L,
-   freal*          X_U,
-   fint*           M,
-   freal*          G_L,
-   freal*          G_U,
-   fint*           NELE_JAC,
-   fint*           NELE_HESS,
-   fint*           IDX_STY,
+   ipfint*         N,
+   ipnumber*       X_L,
+   ipnumber*       X_U,
+   ipfint*         M,
+   ipnumber*       G_L,
+   ipnumber*       G_U,
+   ipfint*         NELE_JAC,
+   ipfint*         NELE_HESS,
+   ipfint*         IDX_STY,
    FEval_F_CB      EVAL_F,
    FEval_G_CB      EVAL_G,
    FEval_Grad_F_CB EVAL_GRAD_F,
@@ -384,16 +377,16 @@ IPOPTLIB_EXPORT void F77_FUNC(ipfree, IPFREE)(
    *FProblem = (fptr)NULL;
 }
 
-IPOPTLIB_EXPORT fint F77_FUNC(ipsolve, IPSOLVE)(
-   fptr*    FProblem,
-   freal*   X,
-   freal*   G,
-   freal*   OBJ_VAL,
-   freal*   MULT_G,
-   freal*   MULT_X_L,
-   freal*   MULT_X_U,
-   fint*    IDAT,
-   freal*   DDAT
+IPOPTLIB_EXPORT ipfint F77_FUNC(ipsolve, IPSOLVE)(
+   fptr*      FProblem,
+   ipnumber*  X,
+   ipnumber*  G,
+   ipnumber*  OBJ_VAL,
+   ipnumber*  MULT_G,
+   ipnumber*  MULT_X_L,
+   ipnumber*  MULT_X_U,
+   ipfint*    IDAT,
+   ipnumber*  DDAT
 )
 {
    FUserData* fuser_data = (FUserData*) *FProblem;
@@ -403,7 +396,7 @@ IPOPTLIB_EXPORT fint F77_FUNC(ipsolve, IPSOLVE)(
    fuser_data->DDAT = DDAT;
    user_data = (UserDataPtr) fuser_data;
 
-   return (fint)IpoptSolve(fuser_data->Problem, X, G, OBJ_VAL, MULT_G, MULT_X_L, MULT_X_U, user_data);
+   return (ipfint)IpoptSolve(fuser_data->Problem, X, G, OBJ_VAL, MULT_G, MULT_X_L, MULT_X_U, user_data);
 }
 
 static char* f2cstr(
@@ -428,7 +421,7 @@ static char* f2cstr(
 }
 
 /* ToDo make sure position of vlen and klen are at the right place */
-IPOPTLIB_EXPORT fint F77_FUNC(ipaddstroption, IPADDSTROPTION)(
+IPOPTLIB_EXPORT ipfint F77_FUNC(ipaddstroption, IPADDSTROPTION)(
    fptr* FProblem,
    char* KEYWORD,
    char* VALUE,
@@ -439,7 +432,7 @@ IPOPTLIB_EXPORT fint F77_FUNC(ipaddstroption, IPADDSTROPTION)(
    char* keyword;
    char* val;
    FUserData* fuser_data = (FUserData*) *FProblem;
-   fint retval;
+   ipfint retval;
 
    keyword = f2cstr(KEYWORD, klen);
    val = f2cstr(VALUE, vlen);
@@ -452,16 +445,16 @@ IPOPTLIB_EXPORT fint F77_FUNC(ipaddstroption, IPADDSTROPTION)(
    return retval ? OKRetVal : NotOKRetVal;
 }
 
-IPOPTLIB_EXPORT fint F77_FUNC(ipaddnumoption, IPADDNUMOPTION)(
-   fptr*    FProblem,
-   char*    KEYWORD,
-   freal*   VALUE,
-   int      klen
+IPOPTLIB_EXPORT ipfint F77_FUNC(ipaddnumoption, IPADDNUMOPTION)(
+   fptr*     FProblem,
+   char*     KEYWORD,
+   ipnumber* VALUE,
+   int       klen
 )
 {
    char* keyword;
    FUserData* fuser_data = (FUserData*) *FProblem;
-   fint retval;
+   ipfint retval;
 
    keyword = f2cstr(KEYWORD, klen);
 
@@ -472,17 +465,17 @@ IPOPTLIB_EXPORT fint F77_FUNC(ipaddnumoption, IPADDNUMOPTION)(
    return retval ? OKRetVal : NotOKRetVal;
 }
 
-IPOPTLIB_EXPORT fint F77_FUNC(ipaddintoption, IPADDINTOPTION)(
-   fptr* FProblem,
-   char* KEYWORD,
-   fint* VALUE,
-   int   klen
+IPOPTLIB_EXPORT ipfint F77_FUNC(ipaddintoption, IPADDINTOPTION)(
+   fptr*   FProblem,
+   char*   KEYWORD,
+   ipfint* VALUE,
+   int     klen
 )
 {
    char* keyword;
    FUserData* fuser_data = (FUserData*) *FProblem;
    Int value = *VALUE;
-   fint retval;
+   ipfint retval;
 
    keyword = f2cstr(KEYWORD, klen);
 
@@ -493,17 +486,17 @@ IPOPTLIB_EXPORT fint F77_FUNC(ipaddintoption, IPADDINTOPTION)(
    return retval ? OKRetVal : NotOKRetVal;
 }
 
-IPOPTLIB_EXPORT fint F77_FUNC(ipopenoutputfile, IPOPENOUTPUTFILE)(
-   fptr* FProblem,
-   char* FILENAME,
-   fint* PRINTLEVEL,
-   int   flen
+IPOPTLIB_EXPORT ipfint F77_FUNC(ipopenoutputfile, IPOPENOUTPUTFILE)(
+   fptr*   FProblem,
+   char*   FILENAME,
+   ipfint* PRINTLEVEL,
+   int     flen
 )
 {
    char* filename;
    FUserData* fuser_data = (FUserData*) *FProblem;
    Int printlevel = *PRINTLEVEL;
-   fint retval;
+   ipfint retval;
 
    filename = f2cstr(FILENAME, flen);
 
@@ -515,7 +508,7 @@ IPOPTLIB_EXPORT fint F77_FUNC(ipopenoutputfile, IPOPENOUTPUTFILE)(
 }
 
 IPOPTLIB_EXPORT void F77_FUNC(ipsetcallback, IPSETCALLBACK)(
-   fptr*         FProblem,
+   fptr*            FProblem,
    FIntermediate_CB inter_cb
 )
 {
