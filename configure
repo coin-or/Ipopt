@@ -23849,8 +23849,90 @@ $as_echo "$as_me: WARNING: Unsupported or unknown name-mangling scheme: $ac_cv_h
     as_fn_error $? "Provided package HSL is not working or does not contain MA27." "$LINENO" 5
   fi
 
-  # extra check for MA28, since that decides whether we have to build IpMa28Partition.F
-  if test -n "$F77" && test $precision = double ; then
+  # extra check for MA28(s), since that decides whether we have to build IpMa28(s)Partition.F
+  if test -n "$F77" ; then
+    case $precision in
+      single )
+
+  ac_save_LIBS="$LIBS"
+  LIBS="$HSLLIB_LFLAGS $LIBS"
+
+
+  ma28a_namemangling=unknown
+
+  for ac_extra in "no extra underscore" ; do
+    for ac_case in "lower case" "upper case" ; do
+      for ac_trail in "underscore" "no underscore" ; do
+        case $ac_case in
+          "lower case")
+            ac_name=ma28a
+            ;;
+          "upper case")
+            ac_name=MA28A
+            ;;
+        esac
+        if test "$ac_trail" = underscore ; then
+          ac_name=${ac_name}_
+        fi
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for function $ac_name in $LIBS" >&5
+$as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char $ac_name ();
+#ifdef F77_DUMMY_MAIN
+
+#  ifdef __cplusplus
+     extern "C"
+#  endif
+   int F77_DUMMY_MAIN() { return 1; }
+
+#endif
+int
+main ()
+{
+return $ac_name ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ma28a_namemangling="${ac_case}, ${ac_trail}, ${ac_extra}"
+           ac_success=yes
+else
+  ac_success=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_success" >&5
+$as_echo "$ac_success" >&6; }
+        if test $ac_success = yes ; then
+          break 3
+        fi
+      done
+    done
+  done
+  LIBS=$ac_save_LIBS
+
+  if test $ac_success = yes ; then
+
+          if test "$ma28a_namemangling" != "$ac_cv_f77_mangling" ; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Name mangling of MA28 different than Fortran. This will not link. Disabling MA28" >&5
+$as_echo "$as_me: WARNING: Name mangling of MA28 different than Fortran. This will not link. Disabling MA28" >&2;}
+          else
+            have_ma28=yes
+          fi
+
+
+  fi
+ ;;
+      double )
 
   ac_save_LIBS="$LIBS"
   LIBS="$HSLLIB_LFLAGS $LIBS"
@@ -23920,16 +24002,18 @@ $as_echo "$ac_success" >&6; }
 
   if test $ac_success = yes ; then
 
-      if test "$ma28ad_namemangling" != "$ac_cv_f77_mangling" ; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Name mangling of MA28 different than Fortran. This will not link. Disabling MA28" >&5
+          if test "$ma28ad_namemangling" != "$ac_cv_f77_mangling" ; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Name mangling of MA28 different than Fortran. This will not link. Disabling MA28" >&5
 $as_echo "$as_me: WARNING: Name mangling of MA28 different than Fortran. This will not link. Disabling MA28" >&2;}
-      else
-        have_ma28=yes
-      fi
+          else
+            have_ma28=yes
+          fi
 
 
   fi
-
+ ;;
+      * ) as_fn_error $? "HSL cannot be used with --with-precision=$precision" "$LINENO" 5 ;;
+    esac
   fi
 fi
  if test "$have_ma28" = yes; then
@@ -24959,7 +25043,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 24962 "configure" */
+/* #line 25046 "configure" */
 public class Test {
 }
 EOF
@@ -25445,7 +25529,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25448 "configure" */
+/* #line 25532 "configure" */
 public class Test {
 }
 EOF
@@ -25479,7 +25563,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25482 "configure" */
+/* [#]line 25566 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);

@@ -36,7 +36,11 @@ endif # BUILD_LINEARSOLVERLOADER
 
 if HAVE_MA28
   liblinsolvers_la_SOURCES += IpMa28TDependencyDetector.cpp
+if IPOPT_SINGLE
+  liblinsolvers_la_SOURCES += IpMa28sPartition.F
+else
   liblinsolvers_la_SOURCES += IpMa28Partition.F
+endif
 endif
 
 if HAVE_WSMP

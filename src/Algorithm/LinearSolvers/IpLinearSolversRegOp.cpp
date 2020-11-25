@@ -80,7 +80,7 @@ void RegisterOptions_LinearSolvers(
    IterativeWsmpSolverInterface::RegisterOptions(roptions);
 #endif
 
-#if defined(COINHSL_HAS_MA28) && defined(F77_FUNC) && !defined(IPOPT_SINGLE)
+#if ((defined(COINHSL_HAS_MA28) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA28S) && defined(IPOPT_SINGLE))) && defined(F77_FUNC)
    roptions->SetRegisteringCategory("MA28 Linear Solver");
    Ma28TDependencyDetector::RegisterOptions(roptions);
 #endif

@@ -18,7 +18,7 @@ C-------------------------------------------------------------------------------
 C                                 Title
 C-------------------------------------------------------------------------------
 C
-CT    Interface to MA28 double precision for detecting degenerate constraints
+CT    Interface to MA28 single precision for detecting degenerate constraints
 C
 C-------------------------------------------------------------------------------
 C                          Programm description
@@ -69,7 +69,7 @@ CP   IDEGEN    O    INT    List of linearly dependent constraints
 CP   LIW       I    INT    length of IW (Output for TASK = 0)
 CP   IW        W    INT    integer work space
 CP   LRW       I    INT    length of RW (Output for TASK = 0)
-CP   RW        W    DP     double precision work space
+CP   RW        W    DP     real work space
 CP   IERR      O    INT    =0: everything OK
 CP                         >0: Error occured; abort optimization
 CP                         <0: Warning; message to user
@@ -90,16 +90,16 @@ C
       integer N
       integer M
       integer NZ
-      double precision A(NZ)
+      real A(NZ)
       integer IROW(NZ)
       integer ICOL(NZ)
-      double precision PIVTOL
+      real PIVTOL
       integer FILLFACT
       integer IVAR(N)
       integer NDEGEN
       integer IDEGEN(*)
       integer LRW
-      double precision RW(LRW)
+      real RW(LRW)
       integer LIW
       integer IW(LIW)
       integer IERR
@@ -110,7 +110,7 @@ C-------------------------------------------------------------------------------
 C
       integer LP, MP, IRNCP, ICNCP, MINIRN, MINICN, IRANK
       logical LBLOCK, GROW, ABORT1, ABORT2
-      double precision EPS, RMIN, RESID
+      real EPS, RMIN, RESID
 
       COMMON/MA28ED/LP, MP, LBLOCK, GROW
       COMMON/MA28FD/EPS, RMIN, RESID, IRNCP, ICNCP, MINIRN, MINICN,
