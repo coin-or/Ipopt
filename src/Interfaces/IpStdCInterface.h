@@ -9,6 +9,7 @@
 #define __IPSTDCINTERFACE_H__
 
 #include "IpoptConfig.h"
+#include "IpTypes.h"
 
 #ifndef IPOPT_EXPORT
 #ifdef _MSC_VER
@@ -23,15 +24,9 @@ extern "C"
 {
 #endif
 
-/** Type for all number.
- *
- * We need to make sure that this is identical with what is defined in Common/IpTypes.hpp
- */
-#ifdef IPOPT_SINGLE
-  typedef float Number;
-#else
-  typedef double Number;
-#endif
+/** Type for all number. */
+typedef ipnumber Number;
+
 /** Type for all indices.
  *
  * We need to make sure that this is identical with what is defined in Common/IpTypes.hpp
