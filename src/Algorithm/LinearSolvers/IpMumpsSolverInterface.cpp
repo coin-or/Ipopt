@@ -32,7 +32,15 @@
 
 #include "IpMumpsSolverInterface.hpp"
 
+#if IPOPT_SINGLE
+#include "smumps_c.h"
+#define MUMPS_STRUC_C SMUMPS_STRUC_C
+#define mumps_c smumps_c
+#else
 #include "dmumps_c.h"
+#define MUMPS_STRUC_C DMUMPS_STRUC_C
+#define mumps_c dmumps_c
+#endif
 
 #include <cmath>
 #include <cstdlib>
@@ -74,12 +82,12 @@ MumpsSolverInterface::MumpsSolverInterface()
 #endif
 
    //initialize mumps
-   DMUMPS_STRUC_C* mumps_ = (DMUMPS_STRUC_C*) calloc(1, sizeof(DMUMPS_STRUC_C));
+   MUMPS_STRUC_C* mumps_ = (MUMPS_STRUC_C*) calloc(1, sizeof(MUMPS_STRUC_C));
    mumps_->job = -1; //initialize mumps
    mumps_->par = 1; //working host for sequential version
    mumps_->sym = 2; //general symetric matrix
    mumps_->comm_fortran = USE_COMM_WORLD;
-   dmumps_c(mumps_);
+   mumps_c(mumps_);
    mumps_->icntl[1] = 0;
    mumps_->icntl[2] = 0; //QUIETLY!
    mumps_->icntl[3] = 0;
@@ -91,9 +99,9 @@ MumpsSolverInterface::~MumpsSolverInterface()
    DBG_START_METH("MumpsSolverInterface::~MumpsSolverInterface()",
                   dbg_verbosity);
 
-   DMUMPS_STRUC_C* mumps_ = (DMUMPS_STRUC_C*) mumps_ptr_;
+   MUMPS_STRUC_C* mumps_ = (MUMPS_STRUC_C*) mumps_ptr_;
    mumps_->job = -2; //terminate mumps
-   dmumps_c(mumps_);
+   mumps_c(mumps_);
 #ifndef MUMPS_MPI_H
 #ifdef HAVE_MPI_INITIALIZED
    if( instancecount_mpi == 1 )
@@ -198,7 +206,7 @@ bool MumpsSolverInterface::InitializeImpl(
    refactorize_ = false;
    have_symbolic_factorization_ = false;
 
-   DMUMPS_STRUC_C* mumps_ = (DMUMPS_STRUC_C*) mumps_ptr_;
+   MUMPS_STRUC_C* mumps_ = (MUMPS_STRUC_C*) mumps_ptr_;
    if( !warm_start_same_structure_ )
    {
       mumps_->n = 0;
@@ -226,9 +234,9 @@ ESymSolverStatus MumpsSolverInterface::MultiSolve(
    DBG_START_METH("MumpsSolverInterface::MultiSolve", dbg_verbosity);
    DBG_ASSERT(!check_NegEVals || ProvidesInertia());
    DBG_ASSERT(initialized_);
-   DBG_ASSERT(((DMUMPS_STRUC_C*)mumps_ptr_)->irn == ia);
+   DBG_ASSERT(((MUMPS_STRUC_C*)mumps_ptr_)->irn == ia);
    (void) ia;
-   DBG_ASSERT(((DMUMPS_STRUC_C*)mumps_ptr_)->jcn == ja);
+   DBG_ASSERT(((MUMPS_STRUC_C*)mumps_ptr_)->jcn == ja);
    (void) ja;
 
    if( pivtol_changed_ )
@@ -276,7 +284,7 @@ ESymSolverStatus MumpsSolverInterface::MultiSolve(
 
 Number* MumpsSolverInterface::GetValuesArrayPtr()
 {
-   DMUMPS_STRUC_C* mumps_ = (DMUMPS_STRUC_C*) mumps_ptr_;
+   MUMPS_STRUC_C* mumps_ = (MUMPS_STRUC_C*) mumps_ptr_;
    DBG_START_METH("MumpsSolverInterface::GetValuesArrayPtr", dbg_verbosity)
    DBG_ASSERT(initialized_);
    return mumps_->a;
@@ -284,7 +292,7 @@ Number* MumpsSolverInterface::GetValuesArrayPtr()
 
 static
 void dump_matrix(
-   DMUMPS_STRUC_C* mumps_data
+   MUMPS_STRUC_C* mumps_data
 )
 {
 #ifdef write_matrices
@@ -322,7 +330,7 @@ ESymSolverStatus MumpsSolverInterface::InitializeStructure(
    const Index* ja
 )
 {
-   DMUMPS_STRUC_C* mumps_ = (DMUMPS_STRUC_C*) mumps_ptr_;
+   MUMPS_STRUC_C* mumps_ = (MUMPS_STRUC_C*) mumps_ptr_;
    DBG_START_METH("MumpsSolverInterface::InitializeStructure", dbg_verbosity);
 
    ESymSolverStatus retval = SYMSOLVER_SUCCESS;
@@ -355,7 +363,7 @@ ESymSolverStatus MumpsSolverInterface::SymbolicFactorization()
 {
    DBG_START_METH("MumpsSolverInterface::SymbolicFactorization",
                   dbg_verbosity);
-   DMUMPS_STRUC_C* mumps_data = (DMUMPS_STRUC_C*) mumps_ptr_;
+   MUMPS_STRUC_C* mumps_data = (MUMPS_STRUC_C*) mumps_ptr_;
 
    if( HaveIpData() )
    {
@@ -381,7 +389,7 @@ ESymSolverStatus MumpsSolverInterface::SymbolicFactorization()
 
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                   "Calling MUMPS-1 for symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
-   dmumps_c(mumps_data);
+   mumps_c(mumps_data);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                   "Done with MUMPS-1 for symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
    int error = mumps_data->info[0];
@@ -420,14 +428,14 @@ ESymSolverStatus MumpsSolverInterface::Factorization(
 )
 {
    DBG_START_METH("MumpsSolverInterface::Factorization", dbg_verbosity);
-   DMUMPS_STRUC_C* mumps_data = (DMUMPS_STRUC_C*) mumps_ptr_;
+   MUMPS_STRUC_C* mumps_data = (MUMPS_STRUC_C*) mumps_ptr_;
 
    mumps_data->job = 2;  //numerical factorization
 
    dump_matrix(mumps_data);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                   "Calling MUMPS-2 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
-   dmumps_c(mumps_data);
+   mumps_c(mumps_data);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                   "Done with MUMPS-2 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
    int error = mumps_data->info[0];
@@ -451,7 +459,7 @@ ESymSolverStatus MumpsSolverInterface::Factorization(
          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                         "Calling MUMPS-2 (repeated) for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(),
                         WallclockTime());
-         dmumps_c(mumps_data);
+         mumps_c(mumps_data);
          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                         "Done with MUMPS-2 (repeated) for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(),
                         WallclockTime());
@@ -515,7 +523,7 @@ ESymSolverStatus MumpsSolverInterface::Solve(
 )
 {
    DBG_START_METH("MumpsSolverInterface::Solve", dbg_verbosity);
-   DMUMPS_STRUC_C* mumps_data = (DMUMPS_STRUC_C*) mumps_ptr_;
+   MUMPS_STRUC_C* mumps_data = (MUMPS_STRUC_C*) mumps_ptr_;
    ESymSolverStatus retval = SYMSOLVER_SUCCESS;
    if( HaveIpData() )
    {
@@ -528,7 +536,7 @@ ESymSolverStatus MumpsSolverInterface::Solve(
       mumps_data->job = 3;  //solve
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "Calling MUMPS-3 for solve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
-      dmumps_c(mumps_data);
+      mumps_c(mumps_data);
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "Done with MUMPS-3 for solve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
       int error = mumps_data->info[0];
@@ -586,7 +594,7 @@ ESymSolverStatus MumpsSolverInterface::DetermineDependentRows(
 {
    DBG_START_METH("MumpsSolverInterface::DetermineDependentRows",
                   dbg_verbosity);
-   DMUMPS_STRUC_C* mumps_data = (DMUMPS_STRUC_C*) mumps_ptr_;
+   MUMPS_STRUC_C* mumps_data = (MUMPS_STRUC_C*) mumps_ptr_;
 
    c_deps.clear();
 
@@ -615,7 +623,7 @@ ESymSolverStatus MumpsSolverInterface::DetermineDependentRows(
    mumps_data->job = 2;   //numerical factorization
 
    dump_matrix(mumps_data);
-   dmumps_c(mumps_data);
+   mumps_c(mumps_data);
    int error = mumps_data->info[0];
 
    //Check for errors
@@ -634,7 +642,7 @@ ESymSolverStatus MumpsSolverInterface::DetermineDependentRows(
                         "%d.\n", mumps_data->icntl[13]);
 
          dump_matrix(mumps_data);
-         dmumps_c(mumps_data);
+         mumps_c(mumps_data);
          error = mumps_data->info[0];
          if( error != -8 && error != -9 )
          {

@@ -23143,8 +23143,6 @@ fi
 # MUMPS #
 #########
 
-# TODO even though there is a single-precision variant of Mumps, Ipopt hasn't been setup to use it so far
-if test $precision = double ; then
 
 
 
@@ -23382,9 +23380,9 @@ $as_echo "#define IPOPT_HAS_MUMPS 1" >>confdefs.h
   fi
 
 
-  # Check whether MPI_Initialized is available
-  #   we assume that MPI_Finalized is present if MPI_Initialized is present
-  for ac_func in MPI_Initialized
+# Check whether MPI_Initialized is available
+#   we assume that MPI_Finalized is present if MPI_Initialized is present
+for ac_func in MPI_Initialized
 do :
   ac_fn_c_check_func "$LINENO" "MPI_Initialized" "ac_cv_func_MPI_Initialized"
 if test "x$ac_cv_func_MPI_Initialized" = xyes; then :
@@ -23395,16 +23393,6 @@ _ACEOF
 fi
 done
 
-else
-   if false; then
-  COIN_HAS_MUMPS_TRUE=
-  COIN_HAS_MUMPS_FALSE='#'
-else
-  COIN_HAS_MUMPS_TRUE='#'
-  COIN_HAS_MUMPS_FALSE=
-fi
-
-fi
 
 #######
 # HSL #
@@ -25043,7 +25031,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25046 "configure" */
+/* #line 25034 "configure" */
 public class Test {
 }
 EOF
@@ -25529,7 +25517,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25532 "configure" */
+/* #line 25520 "configure" */
 public class Test {
 }
 EOF
@@ -25563,7 +25551,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25566 "configure" */
+/* [#]line 25554 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
@@ -26581,10 +26569,6 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${COIN_HAS_ASL_TRUE}" && test -z "${COIN_HAS_ASL_FALSE}"; then
   as_fn_error $? "conditional \"COIN_HAS_ASL\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
-if test -z "${COIN_HAS_MUMPS_TRUE}" && test -z "${COIN_HAS_MUMPS_FALSE}"; then
-  as_fn_error $? "conditional \"COIN_HAS_MUMPS\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${COIN_HAS_MUMPS_TRUE}" && test -z "${COIN_HAS_MUMPS_FALSE}"; then

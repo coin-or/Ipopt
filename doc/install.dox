@@ -739,7 +739,9 @@ Regarding included code that interfaces to %Ipopt, the situation is as follows:
 Regarding dependencies of %Ipopt, the situations is as follows:
 - A single-precision variant of Blas and Lapack is required.
   Many implementations of Blas and Lapack include a single-precision variant.
-- The interface to Mumps has not yet been updated to allow using a single-precision version of MUMPS.
+- The interface to Mumps can use a single-precision version of MUMPS.
+  If using ThirdParty-Mumps to build a MUMPS library, note that only the branch `mumps5` has been updated to allow for building a single-precision version of MUMPS.
+  See https://github.com/coin-or-tools/ThirdParty-Mumps/tree/mumps5#single-precision-codes for details.
 - The interfaces to the HSL routines MA27, MA28, MA57, and MC19 can use single-precision versions of these routines.
   See https://github.com/coin-or-tools/ThirdParty-HSL/#single-precision-codes for more details on how to obtain these.
   Note, that ThirdParty-HSL does not support building a single-precision version of MA28 at the moment.
