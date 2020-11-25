@@ -710,4 +710,45 @@ library('ipoptr')
 ?ipoptr
 \endverbatim
 
+
+\section SINGLEPRECISION_BUILD Building for single-precision floating-point arithmetic
+
+%Ipopt by default uses double-precision floating point arithmetic.
+Using the configure flag `--with-precision=float`, it is possible to build
+a variant of %Ipopt that uses single-precision floating point arithmetic.
+It is not possible to build for both single- and double-precision simultaneously.
+In the single-precision configuration, the types Ipopt::Number and \ref ipnumber
+are defined to be `float` and the C preprocessor variable `IPOPT_SINGLE` is defined.
+
+If the %Ipopt code is compiled for single-precision, then also third-party
+codes that interface with or are interfaced by %Ipopt need to support this
+floating point format.
+Regarding included code that interfaces to %Ipopt, the situation is as follows:
+- \ref INTERFACE_CPP supports single-precision arithmetic by having Ipopt::Number defined as `float`
+- \ref INTERFACE_C supports single-precision arithmetic by having \ref Number defined as `float`
+- \ref INTERFACE_FORTRAN supports single-precision arithmetic by using `real` instead of `double precision`.
+  A single-precision variant of the HS071 example is available in `examples/hs071_f/hs071_fs.f`
+- \ref INTERFACE_JAVA supports single-precision arithmetic by using `float` instead of `double` for real numbers.
+  A single-precision variant of the HS071 example is available in `examples/hs071_java/HS071s.java`.
+  Note, that for the single-precision version of class `org.coinor.Ipopt`, all mention of `double` are replaced by `float` before compilation.
+- \ref INTERFACE_AMPL "The AMPL interface" is not available when building for single-precision.
+- \ref INTERFACE_R seems to work, but without understanding what is actually happening.
+- Fortran and Java examples (other than HS071) and tutorials are not available for single-precision.
+- \ref SIPOPT "sIpopt" is build in single-precision if %Ipopt is build in single-precision.
+
+Regarding dependencies of %Ipopt, the situations is as follows:
+- A single-precision variant of Blas and Lapack is required.
+  Many implementations of Blas and Lapack include a single-precision variant.
+- The interface to Mumps has not yet been updated to allow using a single-precision version of MUMPS.
+- The interfaces to the HSL routines MA27, MA28, MA57, and MC19 can use single-precision versions of these routines.
+  See https://github.com/coin-or-tools/ThirdParty-HSL/#single-precision-codes for more details on how to obtain these.
+  Note, that ThirdParty-HSL does not support building a single-precision version of MA28 at the moment.
+- The interfaces for HSL_MA77, HSL_MA86, and HSL_MA97 are not available for single-precision yet,
+  because HSL does not provide a single-precision version of the C interface files for these routines so far.
+- The interface for Pardiso (both MKL and from pardiso-project.org) is available for single-precision usage.
+  The Pardiso library contains a single-precision version of its solver.
+- The interface to WSMP is not available when building for single-precision.
+
+When building %Ipopt for single-precision arithmetic, the default for option \ref OPT_tol "tol" is changed to 1e-5.
+
 */
