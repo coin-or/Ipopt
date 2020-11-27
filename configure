@@ -22110,7 +22110,7 @@ $as_echo "$ac_success" >&6; }
       *-linux*)
 
   ac_save_LIBS="$LIBS"
-  LIBS="-lmkl_core -lmkl_intel_lp64 -lmkl_sequential -lm $LIBS"
+  LIBS="-lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lm $LIBS"
 
 
   dsyev_namemangling=unknown
@@ -22178,7 +22178,7 @@ $as_echo "$ac_success" >&6; }
   if test $ac_success = yes ; then
 
            coin_has_lapack=yes
-           lapack_lflags="-lmkl_core -lmkl_intel_lp64 -lmkl_sequential -lm"
+           lapack_lflags="-lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lm"
 
   fi
 
@@ -22440,7 +22440,7 @@ $as_echo "$ac_success" >&6; }
       *-darwin*)
 
   ac_save_LIBS="$LIBS"
-  LIBS="-lmkl_core -lmkl_intel_lp64 -lmkl_sequential -lm $LIBS"
+  LIBS="-lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lm $LIBS"
 
 
   dsyev_namemangling=unknown
@@ -22508,7 +22508,7 @@ $as_echo "$ac_success" >&6; }
   if test $ac_success = yes ; then
 
           coin_has_lapack=yes
-          lapack_lflags="-lmkl_core -lmkl_intel_lp64 -lmkl_sequential -lm"
+          lapack_lflags="-lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lm"
 
   fi
 
