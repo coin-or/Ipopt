@@ -115,10 +115,9 @@ if test "$coin_has_hsl" = yes ; then
     double ) ma27func=ma27ad MA27FUNC=MA27AD ;;
     * ) AC_MSG_ERROR([HSL cannot be used with --with-precision=$precision]) ;;
   esac
-  AC_COIN_NAMEMANGLING([HSL],[$ma27func],[$HSLLIB_LFLAGS])
-  if test "$ac_cv_hsl_namemangling" = "unknown" ; then
-    AC_MSG_ERROR([Provided package HSL is not working or does not contain MA27.])
-  fi
+  AC_COIN_TRY_LINK(ma27ad,[$HSLLIB_LFLAGS],,
+    [AC_COIN_DEFINENAMEMANGLING(IPOPT_HSL,$ma27ad_namemangling)],
+    [AC_MSG_ERROR([Provided package HSL is not working or does not contain MA27.])])
 
   # extra check for MA28(s), since that decides whether we have to build IpMa28(s)Partition.F
   if test -n "$F77" ; then
