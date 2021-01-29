@@ -86,7 +86,7 @@ fi
 
 # check for ASL only if building for double precision
 if test $precision = double ; then
-  AC_COIN_CHK_PKG(ASL,[IpoptAmplInterfaceLib SIpoptAmplInterfaceLib],[coinasl],[build])
+  AC_COIN_CHK_PKG(ASL,[IpoptAmplInterfaceLib SIpoptAmplInterfaceLib],[coinasl])
 else
   AM_CONDITIONAL([COIN_HAS_ASL],[false])
 fi
@@ -95,7 +95,7 @@ fi
 # MUMPS #
 #########
 
-AC_COIN_CHK_PKG(Mumps,[IpoptLib],[coinmumps],[build])
+AC_COIN_CHK_PKG(Mumps,[IpoptLib],[coinmumps])
 
 # Check whether MPI_Initialized is available
 #   we assume that MPI_Finalized is present if MPI_Initialized is present
@@ -105,7 +105,7 @@ AC_CHECK_FUNCS([MPI_Initialized])
 # HSL #
 #######
 
-AC_COIN_CHK_PKG(HSL,[IpoptLib HSLLib],[coinhsl],[build])
+AC_COIN_CHK_PKG(HSL,[IpoptLib HSLLib],[coinhsl])
 
 have_ma28=no
 if test "$coin_has_hsl" = yes ; then
