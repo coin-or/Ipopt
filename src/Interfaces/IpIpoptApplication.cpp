@@ -473,6 +473,32 @@ ApplicationReturnStatus IpoptApplication::Initialize(
             //options_to_print.push_back("pardiso_out_of_core_power");
 #endif
 
+#ifdef IPOPT_HAS_SPRAL
+
+            options_to_print.push_back("#SPRAL Linear Solver");
+            options_to_print.push_back("spral_cpu_block_size");
+            options_to_print.push_back("spral_gpu_perf_coeff");
+            options_to_print.push_back("spral_ignore_numa");
+            options_to_print.push_back("spral_max_load_inbalance");
+            options_to_print.push_back("spral_min_gpu_work");
+            options_to_print.push_back("spral_nemin");
+            options_to_print.push_back("spral_order");
+            options_to_print.push_back("spral_pivot_method");
+            options_to_print.push_back("spral_print_level");
+            options_to_print.push_back("spral_scaling");
+            options_to_print.push_back("spral_scaling_1");
+            options_to_print.push_back("spral_scaling_2");
+            options_to_print.push_back("spral_scaling_3");
+            options_to_print.push_back("spral_small");
+            options_to_print.push_back("spral_small_subtree_threshold");
+            options_to_print.push_back("spral_switch_1");
+            options_to_print.push_back("spral_switch_2");
+            options_to_print.push_back("spral_switch_3");
+            options_to_print.push_back("spral_u");
+            options_to_print.push_back("spral_umax");
+            options_to_print.push_back("spral_use_gpu");
+#endif
+
 #ifdef IPOPT_HAS_WSMP
 
             options_to_print.push_back("#WSMP Linear Solver");
@@ -513,6 +539,10 @@ ApplicationReturnStatus IpoptApplication::Initialize(
             categories.push_back("MA27 Linear Solver");
             categories.push_back("MA57 Linear Solver");
             categories.push_back("Pardiso Linear Solver");
+#ifdef IPOPT_HAS_SPRAL
+
+            categories.push_back("SPRAL Linear Solver");
+#endif
 #ifdef IPOPT_HAS_WSMP
 
             categories.push_back("WSMP Linear Solver");

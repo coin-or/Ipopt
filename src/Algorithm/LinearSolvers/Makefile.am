@@ -51,6 +51,10 @@ if COIN_HAS_MUMPS
   liblinsolvers_la_SOURCES += IpMumpsSolverInterface.cpp
 endif
 
+if HAVE_SPRAL
+  liblinsolvers_la_SOURCES += IpSpralSolverInterface.cpp
+endif
+
 AM_CPPFLAGS = \
 	-I$(srcdir)/../../Common \
 	-I$(srcdir)/../../LinAlg \

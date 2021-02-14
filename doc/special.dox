@@ -266,15 +266,14 @@ descent direction for the objective function when the constraint
 violation is sufficiently small, which in turn is necessary to guarantee
 global convergence.
 
-To detect the presence of negative curvature, the default method
-implemented in IPOPT requires inertia information of the augmented
-system. The inertia of the augmented system is the number of positive,
-negative, and zero eigenvalues. Inertia is currently estimated using
-symmetric indefinite factorization routines implemented in powerful
-packages such as MA27, MA57, or Pardiso. When more general linear
-algebra strategies/packages are used (e.g., iterative, parallel
-decomposition), however, inertia information is difficult (if not
-impossible) to obtain.
+To detect the presence of negative curvature, the default method implemented in
+IPOPT requires inertia information of the augmented system. The inertia of the
+augmented system is the number of positive, negative, and zero eigenvalues.
+Inertia is currently estimated using symmetric indefinite factorization
+routines implemented in powerful packages such as MA27, MA57, Pardiso, or
+SPRAL. When more general linear algebra strategies/packages are used (e.g.,
+iterative, parallel decomposition), however, inertia information is difficult
+(if not impossible) to obtain.
 
 In \cite ChiangZavala2014, we present acceptance tests for the search step
 that do not require inertia information of the linear system and prove

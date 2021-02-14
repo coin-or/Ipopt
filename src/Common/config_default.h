@@ -50,6 +50,9 @@
 /* Define to 1 if you are using the parallel version of Pardiso */
 /* #undef IPOPT_HAS_PARDISO_PARALLEL */
 
+/* Define to 1 if SPRAL is available */
+/* #undef IPOPT_HAS_SPRAL */
+
 /* Define to 1 if WSMP is available */
 /* #undef IPOPT_HAS_WSMP */
 
