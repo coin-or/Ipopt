@@ -780,6 +780,7 @@ Possible values:
  - ma86: use the Harwell routine HSL_MA86
  - ma97: use the Harwell routine HSL_MA97
  - pardiso: use the Pardiso package
+ - spral: use the SPRAL package
  - wsmp: use WSMP package
  - mumps: use MUMPS package
  - custom: use custom linear solver
@@ -1511,6 +1512,222 @@ Possible values:
  - pmetis: parallel (OpenMP) version of MeTiS nested dissection algorithm
  - four: undocumented
  - five: undocumented
+</blockquote>
+
+\subsection OPT_SPRAL_Linear_Solver SPRAL Linear Solver
+
+\anchor OPT_spral_print_level
+ <strong>spral_print_level</strong>: Print level for the linear solver SPRAL.
+<blockquote>
+ The valid range for this integer option is unrestricted, and its default value is 0.
+
+ Possible values:
+ - < 0 No printing.
+ - 0   Error and warning messages only.
+ - 1   Limited diagnostic printing.
+ - > 1 Additional diagnostic printing.
+
+</blockquote>
+
+\anchor OPT_spral_nemin
+ <strong>spral_nemin</strong>: Node amalgamation parameter.
+<blockquote>
+ Two nodes in the elimination tree are merged if the result has fewer than
+ spral_nemin variables. The lower bound for this integer option is 1 and its
+ default value is 32.
+
+</blockquote>
+
+\anchor OPT_spral_order
+ <strong>spral_order</strong>: Controls type of ordering used by SPRAL.
+<blockquote>
+ The default value for this string option is "matching".
+
+Possible values:
+ - metis: Use METIS with default settings.
+ - matching: Use matching-based elimination ordering.
+</blockquote>
+
+\anchor OPT_spral_scaling
+ <strong>spral_scaling</strong>: Specifies strategy for scaling in SPRAL linear solver.
+<blockquote>
+ The default value for this string option is "matching".
+
+Possible values:
+ - none: Do not scale the linear system matrix.
+ - mc64: Scale using weighted bipartite matching (MC64).
+ - auction: Scale using the auction algorithm.
+ - matching: Scale using the matching-based ordering.
+ - ruiz: Scale using the norm-equilibration algorithm of Ruiz (MC77).
+ - dynamic: Dynamically select scaling according to switch options.
+</blockquote>
+
+\anchor OPT_spral_use_gpu
+ <strong>spral_use_gpu</strong>: Specifies whether or not graphics processing units (GPUs) are used by the SPRAL linear solver.
+<blockquote>
+ The default value for this string option is "yes".
+
+Possible values:
+ - no: Do not use GPUs, even if present.
+ - yes: Use GPUs if present.
+</blockquote>
+
+\anchor OPT_spral_gpu_perf_coeff
+ <strong>spral_gpu_perf_coeff</strong>: GPU performance coefficient.
+<blockquote>
+ How many times faster a GPU is than a CPU at factoring a subtree.
+ The lower bound for this real option is 0 and its default value is 1.
+</blockquote>
+
+\anchor OPT_spral_min_gpu_work
+ <strong>spral_min_gpu_work</strong>: Minimum GPU work.
+<blockquote>
+ Minimum number of FLOPS in subtree before scheduling on GPU.
+ The strict lower bound for this real option is 0 and its default value is 5 * 10<sup>9</sup>.
+</blockquote>
+
+\anchor OPT_spral_ignore_numa
+ <strong>spral_ignore_numa</strong>: Non-uniform memory access (NUMA) region setting.
+<blockquote>
+ The default value for this string option is "yes".
+
+Possible values:
+ - no: Do not treat CPUs and GPUs as belonging to a single NUMA region.
+ - yes: Treat CPUs and GPUs as belonging to a single NUMA region.
+</blockquote>
+
+\anchor OPT_spral_cpu_block_size
+ <strong>spral_cpu_block_size</strong>: CPU parallelization block size.
+<blockquote>
+ Block size to use for parallelization of large nodes on CPU resources.
+ The lower bound for this integer option is 1 and its default value is 256.
+</blockquote>
+
+\anchor OPT_spral_max_load_inbalance
+ <strong>spral_max_load_inbalance</strong>: Maximum permissible load.
+<blockquote>
+ Maximum permissible load inbalance for leaf subtree allocations.
+ The lower bound for this real option is 1 and its default value is 1.2.
+</blockquote>
+
+\anchor OPT_spral_small
+ <strong>spral_small</strong>: Zero pivot threshold.
+<blockquote>
+ Any pivot less than spral_small is treated as zero. The lower bound for this real option is 0 and its default value is 10<sup>-20</sup>.
+</blockquote>
+
+\anchor OPT_spral_u
+ <strong>spral_u</strong>: Pivoting threshold
+<blockquote>
+ Relative pivot threshold. See SPRAL documentation. The valid range for this
+ real option is 0 &le; spral_u &le; 0.5 and its default value is
+ 10<sup>-8</sup>.
+</blockquote>
+
+\anchor OPT_spral_umax
+ <strong>spral_umax</strong>: Maximum pivoting threshold
+<blockquote>
+ See SPRAL documentation. The valid range for this real option is 0 &le; spral_umax &le; 0.5 and its default value is 0.0001.
+</blockquote>
+
+\anchor OPT_spral_scaling_1
+ <strong>spral_scaling_1</strong>: First scaling.
+<blockquote>
+ If spral_scaling = dynamic, this scaling is used according to the trigger
+ spral_switch_1. If spral_switch_2 is triggered, it is disabled. The default
+ value for this string option is "matching".
+
+Possible values:
+ - none: Do not scale the linear system matrix.
+ - mc64: Scale using weighted bipartite matching (MC64).
+ - auction: Scale using the auction algorithm.
+ - matching: Scale using the matching-based ordering.
+ - ruiz: Scale using the norm-equilibration algorithm of Ruiz (MC77).
+</blockquote>
+
+\anchor OPT_spral_scaling_2
+ <strong>spral_scaling_2</strong>: Second scaling.
+<blockquote>
+ If spral_scaling = dynamic, this scaling is used according to the trigger
+ spral_switch_2. If spral_switch_3 is triggered, it is disabled. The default
+ value for this string option is "mc64".
+
+Possible values:
+ - none: Do not scale the linear system matrix.
+ - mc64: Scale using weighted bipartite matching (MC64).
+ - auction: Scale using the auction algorithm.
+ - matching: Scale using the matching-based ordering.
+ - ruiz: Scale using the norm-equilibration algorithm of Ruiz (MC77).
+</blockquote>
+
+\anchor OPT_spral_scaling3
+ <strong>spral_scaling3</strong>: Third scaling.
+<blockquote>
+ If spral_scaling = dynamic, this scaling is used according to the trigger
+ spral_switch_3. The default value for this string option is "none".
+
+Possible values:
+ - none: Do not scale the linear system matrix.
+ - mc64: Scale using weighted bipartite matching (MC64).
+ - auction: Scale using the auction algorithm.
+ - matching: Scale using the matching-based ordering.
+ - ruiz: Scale using the norm-equilibration algorithm of Ruiz (MC77).
+</blockquote>
+
+\anchor OPT_spral_switch_1
+ <strong>spral_switch_1</strong>: First switch, determining when spral_scaling_1 is enabled.
+<blockquote>
+ If spral_scaling = dynamic, spral_scaling_1 is enabled according to this
+ condition. If spral_switch_2 occurs, this option is henceforth ignored.
+ The default value for this string option is "at_start".
+
+Possible values:
+ - never: Scaling is never enabled.
+ - at_start: Scaling to be used from the very start.
+ - at_start_reuse: Scaling is used on the first iteration, then reused thereafter.
+ - on_demand: Scaling is used when iterative refinement has failed.
+ - on_demand_reuse: As on_demand, but scaling from previous iteration is reused.
+ - high_delay: Scaling is used after more than 0.05*n delays are present.
+ - high_delay_reuse: Scaling is used only when previous iteration created more that 0.05*n additional delays; otherwise, reuse scaling from the previous iteration.
+ - od_hd: Combination of on_demand and high_delay.
+ - od_hd_reuse: Combination of on_demand_reuse and high_delay_reuse
+</blockquote>
+
+\anchor OPT_spral_switch_2
+ <strong>spral_switch_2</strong>: Second switch, determining when spral_scaling_2 is enabled.
+<blockquote>
+ If spral_scaling = dynamic, spral_scaling_2 is enabled according to this
+ condition. If spral_switch_3 occurs, this option is henceforth ignored.
+ The default value for this string option is "on_demand".
+
+Possible values:
+ - never: Scaling is never enabled.
+ - at_start: Scaling to be used from the very start.
+ - at_start_reuse: Scaling is used on the first iteration, then reused thereafter.
+ - on_demand: Scaling is used when iterative refinement has failed.
+ - on_demand_reuse: As on_demand, but scaling from previous iteration is reused.
+ - high_delay: Scaling is used after more than 0.05*n delays are present.
+ - high_delay_reuse: Scaling is used only when previous iteration created more that 0.05*n additional delays; otherwise, reuse scaling from the previous iteration.
+ - od_hd: Combination of on_demand and high_delay.
+ - od_hd_reuse: Combination of on_demand_reuse and high_delay_reuse
+</blockquote>
+
+\anchor OPT_spral_switch_3
+ <strong>spral_switch_3</strong>: Third switch, determining when spral_scaling_3 is enabled.
+<blockquote>
+ If spral_scaling = dynamic, spral_scaling_3 is enabled according to this
+ condition. The default value for this string option is "never".
+
+Possible values:
+ - never: Scaling is never enabled.
+ - at_start: Scaling to be used from the very start.
+ - at_start_reuse: Scaling is used on the first iteration, then reused thereafter.
+ - on_demand: Scaling is used when iterative refinement has failed.
+ - on_demand_reuse: As on_demand, but scaling from previous iteration is reused.
+ - high_delay: Scaling is used after more than 0.05*n delays are present.
+ - high_delay_reuse: Scaling is used only when previous iteration created more that 0.05*n additional delays; otherwise, reuse scaling from the previous iteration.
+ - od_hd: Combination of on_demand and high_delay.
+ - od_hd_reuse: Combination of on_demand_reuse and high_delay_reuse
 </blockquote>
 
 \section OPTIONS_AMPL Options available via the AMPL Interface

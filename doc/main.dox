@@ -143,6 +143,8 @@ required:
         or Intel MKL. Note that current versions from Pardiso Project typically
         offer much better performance than the one from Intel MKL.
 
+    -   [SPRAL](https://github.com/lanl-ansi/spral) (Sparse Parallel Robust Algorithms Library)
+
     -   [WSMP](http://researcher.ibm.com/view_project.php?id=1426) (Watson Sparse Matrix Package)
 
     You must include at least one of the linear solvers above in order
@@ -164,8 +166,8 @@ required:
     this in mind, particularly when you are comparing
     \Ipopt with other optimization codes.
 
-    If you are compiling MA57, HSL_MA77, HSL_MA86, HSL_MA97, or MUMPS
-    within the \Ipopt build system, you should also include
+    If you are compiling MA57, HSL_MA77, HSL_MA86, HSL_MA97, MUMPS,
+    or SPRAL within the \Ipopt build system, you should also include
     the METIS linear system ordering package.
 
     Interfaces to other linear solvers might be added in the future; if

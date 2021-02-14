@@ -184,6 +184,36 @@ fi
 
 AM_CONDITIONAL([HAVE_PARDISO],[test "$have_pardiso_mkl$have_pardiso_project" != nono])
 
+#########
+# SPRAL #
+#########
+
+AC_ARG_WITH([spral_lflags],
+            AC_HELP_STRING([--with-spral-lflags],[specify SPRAL library]),
+            [have_spral_lflags=yes; spral_lflags=$withval],
+            [have_spral_lflags=no])
+# Ensure the required library exists.
+if test "$have_spral_lflags" = "yes"; then
+  AC_COIN_TRY_LINK([spral_ssids_analyse],[$spral_lflags],[],
+    [IPOPTLIB_LFLAGS="$spral_lflags $IPOPTLIB_LFLAGS"
+     AC_DEFINE(IPOPT_HAS_SPRAL,1,[Define to 1 if SPRAL is available])
+    ],
+    [AC_MSG_ERROR([Symbol ssids_solve not found with SPRAL flags $spral_lflags.])])
+fi
+
+AC_ARG_WITH([spral_cflags],
+            AC_HELP_STRING([--with-spral-cflags],[specify SPRAL include directory]),
+            [have_spral_cflags=yes; spral_cflags=$withval],
+            [have_spral_cflags=no])
+    # Ensure the required header file exists.
+    coin_CPPFLAGS="$CPPFLAGS"
+    CPPFLAGS="$CPPFLAGS $spral_cflags"
+    AC_CHECK_HEADER([spral_ssids.h],,[have_spral_cflags=no])
+    CPPFLAGS="$coin_CPPFLAGS"
+fi
+
+AM_CONDITIONAL([HAVE_SPRAL],[test $have_spral_lflags = yes && test $have_spral_cflags = yes])
+
 ########
 # WSMP #
 ########
