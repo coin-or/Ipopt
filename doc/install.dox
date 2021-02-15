@@ -341,26 +341,26 @@ see \ref EXTERNALCODE_LINALG.
 
 \subsection DOWNLOAD_SPRAL SPRAL (Sparse Parallel Robust Algorithms Library)
 
-To compile \Ipopt with the linear solver SPRAL, the [LANL ANSI version of
+To compile \Ipopt with the linear solver SPRAL, the [LANL ANSI fork of
 SPRAL](https://github.com/lanl-ansi/spral) should first be downloaded and
 compiled according to the associated <a
 href="https://github.com/lanl-ansi/spral/blob/master/COMPILE.md">SPRAL
 compilation guide</a>. After compilation of SPRAL, while configuring \Ipopt,
-you need to specify the link flags for the library with the `--with-spral`
-flag, including required additional libraries and flags. For example, if you
-want to compile \Ipopt with a purely CPU-parallel version of SPRAL (located in
-`$HOME/lib`) and its headers (located in `$HOME/include`) on a GNU/Linux
-system, you should add the following flags to the `configure` command:
+you need to specify the link and include directories for the library with the
+`--with-spral-lflags` and `--with-spral-cflags` flags, including required
+additional libraries and flags. For example, if you want to compile \Ipopt with
+a purely CPU-parallel version of SPRAL (located in `$HOME/lib`) and its headers
+(located in `$HOME/include`) on a GNU/Linux system, you should add the
+following flags to the `configure` command:
 \verbatim
---with-spral-lflags="-L${HOME}/lib -lspral -lgfortran -lhwloc -lm -lcoinmetis \
-                  -lopenblas -lstdc++ -fopenmp"
---with-spral-lflags="-I${HOME}/include"
+--with-spral-lflags="-L${HOME}/lib -lspral -lgfortran -lhwloc -lm -lcoinmetis -lopenblas -lstdc++ -fopenmp"
+--with-spral-cflags="-I${HOME}/include"
 \endverbatim
 For a CPU and graphics processing unit- (GPU-) parallel version of SPRAL
 (located in `$HOME/lib`), the following flags should be used, instead:
 \verbatim
---with-spral="-L${HOME}/lib -lspral -lgfortran -lhwloc -lm -lcoinmetis \
-              -lopenblas -lstdc++ -fopenmp -lcudadevrt -lcudart -lcuda -lcublas"
+--with-spral-lflags="-L${HOME}/lib -lspral -lgfortran -lhwloc -lm -lcoinmetis -lopenblas -lstdc++ -fopenmp -lcudadevrt -lcudart -lcuda -lcublas"
+--with-spral-cflags="-I${HOME}/include"
 \endverbatim
 The above assume a SPRAL compilation using OpenBLAS libraries. For best
 performance, use SPRAL together with linear algebra routines from the Intel MKL

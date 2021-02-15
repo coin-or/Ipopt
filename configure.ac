@@ -210,9 +210,8 @@ AC_ARG_WITH([spral_cflags],
     CPPFLAGS="$CPPFLAGS $spral_cflags"
     AC_CHECK_HEADER([spral_ssids.h],,[have_spral_cflags=no])
     CPPFLAGS="$coin_CPPFLAGS"
-fi
 
-AM_CONDITIONAL([HAVE_SPRAL],[test $have_spral_lflags = yes && test $have_spral_cflags = yes])
+AM_CONDITIONAL([HAVE_SPRAL],[test "$have_spral_lflags$have_spral_cflags" = yesyes])
 
 ########
 # WSMP #
