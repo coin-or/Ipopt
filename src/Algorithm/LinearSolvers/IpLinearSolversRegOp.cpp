@@ -22,6 +22,9 @@
 #ifdef IPOPT_HAS_MUMPS
 # include "IpMumpsSolverInterface.hpp"
 #endif
+#ifdef IPOPT_HAS_SPRAL
+# include "IpSpralSolverInterface.hpp"
+#endif
 #ifdef IPOPT_HAS_WSMP
 # include "IpWsmpSolverInterface.hpp"
 # include "IpIterativeWsmpSolverInterface.hpp"
@@ -72,6 +75,11 @@ void RegisterOptions_LinearSolvers(
 #if defined(IPOPT_HAS_PARDISO) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
    roptions->SetRegisteringCategory("Pardiso Linear Solver");
    PardisoSolverInterface::RegisterOptions(roptions);
+#endif
+
+#ifdef IPOPT_HAS_SPRAL
+   roptions->SetRegisteringCategory("SPRAL Linear Solver");
+   SpralSolverInterface::RegisterOptions(roptions);
 #endif
 
 #ifdef IPOPT_HAS_WSMP
