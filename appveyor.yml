@@ -26,8 +26,8 @@ build_script:
   - IF %ARCH%-%PRECISION%==win64-mingw-double (CALL C:\msys64\usr\bin\bash -lc "PATH=/mingw64/bin:$PATH ; git clone --depth 1 https://github.com/coin-or-tools/ThirdParty-ASL && cd ThirdParty-ASL && ./get.ASL && ./configure --prefix=$HOME/install && make && make install")
   - IF %ARCH%-%PRECISION%==win64-mingw-double (CALL C:\msys64\usr\bin\bash -lc "PATH=/mingw64/bin:$PATH ; git clone --depth 1 https://github.com/coin-or-tools/ThirdParty-Mumps && cd ThirdParty-Mumps && ./get.Mumps && ./configure --prefix=$HOME/install && make && make install")
   - IF %ARCH%-%PRECISION%==win64-mingw-single (CALL C:\msys64\usr\bin\bash -lc "PATH=/mingw64/bin:$PATH ; git clone --depth 1 --branch mumps5 https://github.com/coin-or-tools/ThirdParty-Mumps && cd ThirdParty-Mumps && ./get.Mumps && ./configure --prefix=$HOME/install --with-precision=single && make && make install")
-  - IF %ARCH%==win64-mingw (CALL C:\msys64\usr\bin\bash -lc "PATH=/mingw64/bin:$PATH ; JAVA_HOME=/c/Progra~2/Java/jdk1.8.0 ; /c/projects/ipopt-5qaur/configure --prefix=$HOME/install --with-precision=%PRECISION% && make && make install")
-  - IF %ARCH%==win64-msvc15 (CALL C:\msys64\usr\bin\bash -lc "/c/projects/ipopt-5qaur/configure --enable-msvc && make")
+  - IF %ARCH%==win64-mingw (CALL C:\msys64\usr\bin\bash -lc "PATH=/mingw64/bin:$PATH ; JAVA_HOME=/c/Progra~2/Java/jdk1.8.0 ; /c/projects/ipopt/configure --prefix=$HOME/install --with-precision=%PRECISION% && make && make install")
+  - IF %ARCH%==win64-msvc15 (CALL C:\msys64\usr\bin\bash -lc "/c/projects/ipopt/configure --enable-msvc && make")
 
 test_script:
   - IF %ARCH%==win64-mingw (CALL C:\msys64\usr\bin\bash -lc "PATH=/mingw64/bin:$PATH ; make test")
