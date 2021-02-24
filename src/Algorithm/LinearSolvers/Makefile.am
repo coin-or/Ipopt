@@ -51,7 +51,7 @@ if COIN_HAS_MUMPS
   liblinsolvers_la_SOURCES += IpMumpsSolverInterface.cpp
 endif
 
-if HAVE_SPRAL
+if COIN_HAS_SPRAL
   liblinsolvers_la_SOURCES += IpSpralSolverInterface.cpp
 endif
 

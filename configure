@@ -667,8 +667,8 @@ BIT32FCOMMENT
 BITS_PER_POINTER
 HAVE_WSMP_FALSE
 HAVE_WSMP_TRUE
-HAVE_SPRAL_FALSE
-HAVE_SPRAL_TRUE
+COIN_HAS_SPRAL_FALSE
+COIN_HAS_SPRAL_TRUE
 HAVE_PARDISO_FALSE
 HAVE_PARDISO_TRUE
 HAVE_MA28_FALSE
@@ -886,6 +886,7 @@ with_hsl
 with_hsl_lflags
 with_hsl_cflags
 with_pardiso
+with_spral
 with_spral_lflags
 with_spral_cflags
 with_wsmp
@@ -1617,8 +1618,15 @@ Optional Packages:
                           directories.)
   --with-pardiso          specify Pardiso library (>= 4.0) from
                           pardiso-project.org
-  --with-spral-lflags     specify SPRAL library
-  --with-spral-cflags     specify SPRAL include directory
+  --with-spral            Use Spral. If an argument is given, 'yes' is
+                          equivalent to --with-spral, 'no' is
+                          equivalent to --without-spral. Any other argument is
+                          applied as for --with-spral-lflags
+  --with-spral-lflags     Linker flags for Spral appropriate for your
+                          environment. (Most often, -l specs for libraries.)
+  --with-spral-cflags     Compiler flags for Spral appropriate for your
+                          environment. (Most often, -I specs for header file
+                          directories.)
   --with-wsmp             specify WSMP library
 
 Some influential environment variables:
@@ -2208,12 +2216,12 @@ fi
 
 } # ac_fn_f77_try_link
 
-# ac_fn_c_check_header_mongrel LINENO HEADER VAR INCLUDES
-# -------------------------------------------------------
+# ac_fn_cxx_check_header_mongrel LINENO HEADER VAR INCLUDES
+# ---------------------------------------------------------
 # Tests whether HEADER exists, giving a warning if it cannot be compiled using
 # the include files in INCLUDES and setting the cache variable VAR
 # accordingly.
-ac_fn_c_check_header_mongrel ()
+ac_fn_cxx_check_header_mongrel ()
 {
   as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
   if eval \${$3+:} false; then :
@@ -2234,7 +2242,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 $4
 #include <$2>
 _ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
+if ac_fn_cxx_try_compile "$LINENO"; then :
   ac_header_compiler=yes
 else
   ac_header_compiler=no
@@ -2250,7 +2258,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <$2>
 _ACEOF
-if ac_fn_c_try_cpp "$LINENO"; then :
+if ac_fn_cxx_try_cpp "$LINENO"; then :
   ac_header_preproc=yes
 else
   ac_header_preproc=no
@@ -2260,7 +2268,7 @@ rm -f conftest.err conftest.i conftest.$ac_ext
 $as_echo "$ac_header_preproc" >&6; }
 
 # So?  What about this header?
-case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in #((
+case $ac_header_compiler:$ac_header_preproc:$ac_cxx_preproc_warn_flag in #((
   yes:no: )
     { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: accepted by the compiler, rejected by the preprocessor!" >&5
 $as_echo "$as_me: WARNING: $2: accepted by the compiler, rejected by the preprocessor!" >&2;}
@@ -2297,7 +2305,7 @@ $as_echo "$ac_res" >&6; }
 fi
   eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
 
-} # ac_fn_c_check_header_mongrel
+} # ac_fn_cxx_check_header_mongrel
 
 # ac_fn_c_compute_int LINENO EXPR VAR INCLUDES
 # --------------------------------------------
@@ -2530,97 +2538,6 @@ rm -f conftest.val
 
 } # ac_fn_c_compute_int
 
-# ac_fn_cxx_check_header_mongrel LINENO HEADER VAR INCLUDES
-# ---------------------------------------------------------
-# Tests whether HEADER exists, giving a warning if it cannot be compiled using
-# the include files in INCLUDES and setting the cache variable VAR
-# accordingly.
-ac_fn_cxx_check_header_mongrel ()
-{
-  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
-  if eval \${$3+:} false; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $2" >&5
-$as_echo_n "checking for $2... " >&6; }
-if eval \${$3+:} false; then :
-  $as_echo_n "(cached) " >&6
-fi
-eval ac_res=\$$3
-	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-$as_echo "$ac_res" >&6; }
-else
-  # Is the header compilable?
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking $2 usability" >&5
-$as_echo_n "checking $2 usability... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-$4
-#include <$2>
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-  ac_header_compiler=yes
-else
-  ac_header_compiler=no
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_header_compiler" >&5
-$as_echo "$ac_header_compiler" >&6; }
-
-# Is the header present?
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking $2 presence" >&5
-$as_echo_n "checking $2 presence... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <$2>
-_ACEOF
-if ac_fn_cxx_try_cpp "$LINENO"; then :
-  ac_header_preproc=yes
-else
-  ac_header_preproc=no
-fi
-rm -f conftest.err conftest.i conftest.$ac_ext
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_header_preproc" >&5
-$as_echo "$ac_header_preproc" >&6; }
-
-# So?  What about this header?
-case $ac_header_compiler:$ac_header_preproc:$ac_cxx_preproc_warn_flag in #((
-  yes:no: )
-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: accepted by the compiler, rejected by the preprocessor!" >&5
-$as_echo "$as_me: WARNING: $2: accepted by the compiler, rejected by the preprocessor!" >&2;}
-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: proceeding with the compiler's result" >&5
-$as_echo "$as_me: WARNING: $2: proceeding with the compiler's result" >&2;}
-    ;;
-  no:yes:* )
-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: present but cannot be compiled" >&5
-$as_echo "$as_me: WARNING: $2: present but cannot be compiled" >&2;}
-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2:     check for missing prerequisite headers?" >&5
-$as_echo "$as_me: WARNING: $2:     check for missing prerequisite headers?" >&2;}
-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: see the Autoconf documentation" >&5
-$as_echo "$as_me: WARNING: $2: see the Autoconf documentation" >&2;}
-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2:     section \"Present But Cannot Be Compiled\"" >&5
-$as_echo "$as_me: WARNING: $2:     section \"Present But Cannot Be Compiled\"" >&2;}
-    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: proceeding with the compiler's result" >&5
-$as_echo "$as_me: WARNING: $2: proceeding with the compiler's result" >&2;}
-( $as_echo "## ---------------------------------------------------------- ##
-## Report this to https://github.com/coin-or/Ipopt/issues/new ##
-## ---------------------------------------------------------- ##"
-     ) | sed "s/^/$as_me: WARNING:     /" >&2
-    ;;
-esac
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $2" >&5
-$as_echo_n "checking for $2... " >&6; }
-if eval \${$3+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  eval "$3=\$ac_header_compiler"
-fi
-eval ac_res=\$$3
-	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-$as_echo "$ac_res" >&6; }
-fi
-  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
-
-} # ac_fn_cxx_check_header_mongrel
-
 # ac_fn_cxx_check_decl LINENO SYMBOL VAR INCLUDES
 # -----------------------------------------------
 # Tests whether SYMBOL is declared in INCLUDES, setting cache variable VAR
@@ -2674,6 +2591,97 @@ $as_echo "$ac_res" >&6; }
   eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
 
 } # ac_fn_cxx_check_decl
+
+# ac_fn_c_check_header_mongrel LINENO HEADER VAR INCLUDES
+# -------------------------------------------------------
+# Tests whether HEADER exists, giving a warning if it cannot be compiled using
+# the include files in INCLUDES and setting the cache variable VAR
+# accordingly.
+ac_fn_c_check_header_mongrel ()
+{
+  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
+  if eval \${$3+:} false; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $2" >&5
+$as_echo_n "checking for $2... " >&6; }
+if eval \${$3+:} false; then :
+  $as_echo_n "(cached) " >&6
+fi
+eval ac_res=\$$3
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+else
+  # Is the header compilable?
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking $2 usability" >&5
+$as_echo_n "checking $2 usability... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+$4
+#include <$2>
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  ac_header_compiler=yes
+else
+  ac_header_compiler=no
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_header_compiler" >&5
+$as_echo "$ac_header_compiler" >&6; }
+
+# Is the header present?
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking $2 presence" >&5
+$as_echo_n "checking $2 presence... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <$2>
+_ACEOF
+if ac_fn_c_try_cpp "$LINENO"; then :
+  ac_header_preproc=yes
+else
+  ac_header_preproc=no
+fi
+rm -f conftest.err conftest.i conftest.$ac_ext
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_header_preproc" >&5
+$as_echo "$ac_header_preproc" >&6; }
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in #((
+  yes:no: )
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: accepted by the compiler, rejected by the preprocessor!" >&5
+$as_echo "$as_me: WARNING: $2: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: proceeding with the compiler's result" >&5
+$as_echo "$as_me: WARNING: $2: proceeding with the compiler's result" >&2;}
+    ;;
+  no:yes:* )
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: present but cannot be compiled" >&5
+$as_echo "$as_me: WARNING: $2: present but cannot be compiled" >&2;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2:     check for missing prerequisite headers?" >&5
+$as_echo "$as_me: WARNING: $2:     check for missing prerequisite headers?" >&2;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: see the Autoconf documentation" >&5
+$as_echo "$as_me: WARNING: $2: see the Autoconf documentation" >&2;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2:     section \"Present But Cannot Be Compiled\"" >&5
+$as_echo "$as_me: WARNING: $2:     section \"Present But Cannot Be Compiled\"" >&2;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $2: proceeding with the compiler's result" >&5
+$as_echo "$as_me: WARNING: $2: proceeding with the compiler's result" >&2;}
+( $as_echo "## ---------------------------------------------------------- ##
+## Report this to https://github.com/coin-or/Ipopt/issues/new ##
+## ---------------------------------------------------------- ##"
+     ) | sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+esac
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $2" >&5
+$as_echo_n "checking for $2... " >&6; }
+if eval \${$3+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  eval "$3=\$ac_header_compiler"
+fi
+eval ac_res=\$$3
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+fi
+  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
+
+} # ac_fn_c_check_header_mongrel
 cat >config.log <<_ACEOF
 This file contains any messages produced by compilers while
 running configure, to aid debugging if configure makes a mistake.
@@ -24402,40 +24410,170 @@ fi
 # SPRAL #
 #########
 
+ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-# Check whether --with-spral_lflags was given.
-if test "${with_spral_lflags+set}" = set; then :
-  withval=$with_spral_lflags; have_spral_lflags=yes; spral_lflags=$withval
-else
-  have_spral_lflags=no
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for package Spral with function spral_ssids_analyse" >&5
+$as_echo_n "checking for package Spral with function spral_ssids_analyse... " >&6; }
+
+
+
+
+
+  # Check to see if the user has overridden configure parameters from the
+  # environment.
+  coin_has_spral=noInfo
+  if test x"$COIN_SKIP_PROJECTS" != x ; then
+    for pkg in $COIN_SKIP_PROJECTS ; do
+      if test "$pkg" = "$spral" ; then
+        coin_has_spral=skipping
+      fi
+    done
+  fi
+
+  if test "$coin_has_spral" != skipping ; then
+
+
+
+
+# Check whether --with-spral was given.
+if test "${with_spral+set}" = set; then :
+  withval=$with_spral;
 fi
 
-# Ensure the required library exists.
-if test "$have_spral_lflags" = "yes"; then
-
-  ac_save_LIBS="$LIBS"
-  LIBS="$spral_lflags $LIBS"
 
 
-  spral_ssids_analyse_namemangling=unknown
+# Check whether --with-spral-lflags was given.
+if test "${with_spral_lflags+set}" = set; then :
+  withval=$with_spral_lflags;
+fi
 
-  for ac_extra in "no extra underscore" ; do
-    for ac_case in "lower case" "upper case" ; do
-      for ac_trail in "underscore" "no underscore" ; do
-        case $ac_case in
-          "lower case")
-            ac_name=spral_ssids_analyse
-            ;;
-          "upper case")
-            ac_name=SPRAL_SSIDS_ANALYSE
-            ;;
-        esac
-        if test "$ac_trail" = underscore ; then
-          ac_name=${ac_name}_
-        fi
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for function $ac_name in $LIBS" >&5
-$as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
-        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+
+
+# Check whether --with-spral-cflags was given.
+if test "${with_spral_cflags+set}" = set; then :
+  withval=$with_spral_cflags;
+fi
+
+
+
+
+
+  dflt_action=yes
+
+  # Initialize variables for the primary library.
+  coin_has_spral=noInfo
+  spral_lflags=
+  spral_cflags=
+  spral_data=
+
+  # --with-prim is always present.
+  withval="$with_spral"
+  if test -n "$withval" ; then
+    case "$withval" in
+      no )
+        coin_has_spral=skipping
+        ;;
+      yes )
+        coin_has_spral=requested
+        ;;
+      build )
+        coin_has_spral=build
+        ;;
+      * )
+        coin_has_spral=yes
+        spral_lflags="$withval"
+        ;;
+    esac
+  fi
+
+  # --with-prim-lflags and --with-prim-cflags are present
+     # Specifying --with-prim=no overrides the individual options for lflags and cflags.
+     if test "$coin_has_spral" != skipping ; then
+       withval="$with_spral_lflags"
+       if test -n "$withval" ; then
+         case "$withval" in
+           build | no | yes )
+             as_fn_error $? "\"$withval\" is not valid here; please specify linker flags appropriate for your environment." "$LINENO" 5
+             ;;
+           * )
+             coin_has_spral=yes
+             spral_lflags="$withval"
+             ;;
+         esac
+       fi
+
+       withval="$with_spral_cflags"
+       if test -n "$withval" ; then
+         case "$withval" in
+           build | no | yes )
+             as_fn_error $? "\"$withval\" is not valid here; please specify compiler flags appropriate for your environment." "$LINENO" 5
+             ;;
+           * )
+             coin_has_spral=yes
+             spral_cflags="$withval"
+             ;;
+         esac
+       fi
+     fi
+
+
+
+  # At this point, coin_has_prim can be one of
+  # - noInfo (no user options specified),
+  # - skipping (user said no),
+  # - requested,
+  # - build (user said yes or build and gave no further guidance), or
+  # - yes (user specified one or more --with-prim options).
+  # If we're already at yes or skipping, we're done looking.
+
+  # If there are no user options (noInfo) and the default is no, we're skipping.
+  # Otherwise, the default must be yes or build; consider the package requested.
+  # A default action we don't recognise defaults to yes.
+  if test "$coin_has_spral" = noInfo ; then
+    case $dflt_action in
+      no )
+        coin_has_spral=skipping
+        ;;
+      build )
+        coin_has_spral=build
+        ;;
+      * )
+        coin_has_spral=requested
+        ;;
+    esac
+  fi
+
+  # Now coin_has_prim can be one of skipping, yes, build, or requested.
+  # For build or requested, use the parameter values or invent some.
+  case $coin_has_spral in
+    build | requested)
+      spral_lflags="-lspral"
+         if test "$coin_has_spral" = build ; then
+              spral_cflags="-I\$(pkgincludedir)/ThirdParty"
+            fi
+
+      coin_has_spral=yes
+      ;;
+    skipping | yes )
+      ;;
+    * )
+      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Unexpected status \"$coin_has_spral\" in COIN_FIND_PRIM_LIB" >&5
+$as_echo "$as_me: WARNING: Unexpected status \"$coin_has_spral\" in COIN_FIND_PRIM_LIB" >&2;}
+      ;;
+  esac
+
+  # At this point, coin_has_prim is yes or skipping.
+  if test $coin_has_spral != skipping ; then
+       # Time to run a link check since we have a function name.
+       # Use whatever we've collected for lflags, plus other libraries ().
+       ac_save_LIBS=$LIBS
+       LIBS="$spral_lflags "
+       cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 /* Override any GCC internal prototype to avoid an error.
@@ -24444,7 +24582,7 @@ $as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
 #ifdef __cplusplus
 extern "C"
 #endif
-char $ac_name ();
+char spral_ssids_analyse ();
 #ifdef F77_DUMMY_MAIN
 
 #  ifdef __cplusplus
@@ -24456,68 +24594,94 @@ char $ac_name ();
 int
 main ()
 {
-return $ac_name ();
+return spral_ssids_analyse ();
   ;
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  spral_ssids_analyse_namemangling="${ac_case}, ${ac_trail}, ${ac_extra}"
-           ac_success=yes
+if ac_fn_cxx_try_link "$LINENO"; then :
+
 else
-  ac_success=no
+  coin_has_spral=no
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_success" >&5
-$as_echo "$ac_success" >&6; }
-        if test $ac_success = yes ; then
-          break 3
-        fi
-      done
-    done
-  done
-  LIBS=$ac_save_LIBS
+       LIBS=$ac_save_LIBS
+     fi
 
-  if test $ac_success = yes ; then
-    IPOPTLIB_LFLAGS="$spral_lflags $IPOPTLIB_LFLAGS"
+  # The final value of coin_has_prim will be yes, no, or skipping. No means that
+  # the link check failed. Yes means that we passed the link check, or no link
+  # check was performed. Skipping means the user said `don't use.'
+
+  # Define BUILDTOOLS_DEBUG to enable debugging output
+  if test "$BUILDTOOLS_DEBUG" = 1 ; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: FIND_PRIM_LIB result for spral: \"$coin_has_spral\"" >&5
+$as_echo "$as_me: FIND_PRIM_LIB result for spral: \"$coin_has_spral\"" >&6;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: Collected values for package 'spral'" >&5
+$as_echo "$as_me: Collected values for package 'spral'" >&6;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: spral_lflags is \"$spral_lflags\"" >&5
+$as_echo "$as_me: spral_lflags is \"$spral_lflags\"" >&6;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: spral_cflags is \"$spral_cflags\"" >&5
+$as_echo "$as_me: spral_cflags is \"$spral_cflags\"" >&6;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: spral_data is \"$spral_data\"" >&5
+$as_echo "$as_me: spral_data is \"$spral_data\"" >&6;}
+    { $as_echo "$as_me:${as_lineno-$LINENO}: spral_pcfiles is \"$spral_pcfiles\"" >&5
+$as_echo "$as_me: spral_pcfiles is \"$spral_pcfiles\"" >&6;}
+  fi
+
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $coin_has_spral" >&5
+$as_echo "$coin_has_spral" >&6; }
+  else
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $coin_has_spral due to COIN_SKIP_PROJECTS" >&5
+$as_echo "$coin_has_spral due to COIN_SKIP_PROJECTS" >&6; }
+  fi
+
+  # Possibilities are `yes', `no', or `skipping'. Normalise to `yes' or `no'.
+  if test "$coin_has_spral" != yes ; then
+    coin_has_spral=no
+  fi
+
+   if test $coin_has_spral = yes; then
+  COIN_HAS_SPRAL_TRUE=
+  COIN_HAS_SPRAL_FALSE='#'
+else
+  COIN_HAS_SPRAL_TRUE='#'
+  COIN_HAS_SPRAL_FALSE=
+fi
+
+
+  # If we've located the package, define preprocessor symbol COIN_HAS_PRIM
+  # and augment the necessary variables for the client packages.
+  if test $coin_has_spral = yes ; then
 
 $as_echo "#define IPOPT_HAS_SPRAL 1" >>confdefs.h
 
+    IPOPTLIB_LFLAGS="$spral_lflags $IPOPTLIB_LFLAGS"
+       IPOPTLIB_CFLAGS="$spral_cflags $IPOPTLIB_CFLAGS"
 
-    else as_fn_error $? "Symbol ssids_solve not found with SPRAL flags $spral_lflags." "$LINENO" 5
+
+
   fi
 
-fi
+if test "$coin_has_spral" = yes ; then
+  coin_save_CPPFLAGS="$CPPFLAGS"
+  CPPFLAGS="$spral_cflags $CPPFLAGS"
 
-
-# Check whether --with-spral_cflags was given.
-if test "${with_spral_cflags+set}" = set; then :
-  withval=$with_spral_cflags; have_spral_cflags=yes; spral_cflags=$withval
-else
-  have_spral_cflags=no
-fi
-
-    # Ensure the required header file exists.
-    coin_CPPFLAGS="$CPPFLAGS"
-    CPPFLAGS="$CPPFLAGS $spral_cflags"
-    ac_fn_c_check_header_mongrel "$LINENO" "spral_ssids.h" "ac_cv_header_spral_ssids_h" "$ac_includes_default"
+ac_fn_cxx_check_header_mongrel "$LINENO" "spral_ssids.h" "ac_cv_header_spral_ssids_h" "$ac_includes_default"
 if test "x$ac_cv_header_spral_ssids_h" = xyes; then :
-  IPOPTLIB_CFLAGS="$spral_cflags $IPOPTLIB_CFLAGS"
+  CPPFLAGS="$coin_save_CPPFLAGS"
 else
-  have_spral_cflags=no
+  as_fn_error $? "Spral library available, but Spral header spral_ssids.h cannot be compiled. Consider using --without-spral." "$LINENO" 5
 fi
 
 
-    CPPFLAGS="$coin_CPPFLAGS"
-
- if test "$have_spral_lflags$have_spral_cflags" = yesyes; then
-  HAVE_SPRAL_TRUE=
-  HAVE_SPRAL_FALSE='#'
-else
-  HAVE_SPRAL_TRUE='#'
-  HAVE_SPRAL_FALSE=
 fi
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 ########
@@ -24751,7 +24915,6 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 #####################
 # Function isfinite #
 #####################
-
 
 
   for ac_header in cmath math.h
@@ -25159,7 +25322,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25162 "configure" */
+/* #line 25325 "configure" */
 public class Test {
 }
 EOF
@@ -25645,7 +25808,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25648 "configure" */
+/* #line 25811 "configure" */
 public class Test {
 }
 EOF
@@ -25679,7 +25842,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25682 "configure" */
+/* [#]line 25845 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
@@ -26715,8 +26878,8 @@ if test -z "${HAVE_PARDISO_TRUE}" && test -z "${HAVE_PARDISO_FALSE}"; then
   as_fn_error $? "conditional \"HAVE_PARDISO\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
-if test -z "${HAVE_SPRAL_TRUE}" && test -z "${HAVE_SPRAL_FALSE}"; then
-  as_fn_error $? "conditional \"HAVE_SPRAL\" was never defined.
+if test -z "${COIN_HAS_SPRAL_TRUE}" && test -z "${COIN_HAS_SPRAL_FALSE}"; then
+  as_fn_error $? "conditional \"COIN_HAS_SPRAL\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${HAVE_WSMP_TRUE}" && test -z "${HAVE_WSMP_FALSE}"; then

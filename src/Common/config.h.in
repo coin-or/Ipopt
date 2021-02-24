@@ -138,7 +138,7 @@
 /* Define to 1 if function rand is available */
 #undef IPOPT_HAS_RAND
 
-/* Define to 1 if SPRAL is available */
+/* Define to 1 if the Spral package is available */
 #undef IPOPT_HAS_SPRAL
 
 /* Define to 1 if function std::rand is available */

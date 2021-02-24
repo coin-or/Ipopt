@@ -107,7 +107,7 @@ host_triplet = @host@
 @HAVE_MA28_TRUE@@IPOPT_SINGLE_FALSE@am__append_6 = IpMa28Partition.F
 @HAVE_WSMP_TRUE@am__append_7 = IpWsmpSolverInterface.cpp IpIterativeWsmpSolverInterface.cpp
 @COIN_HAS_MUMPS_TRUE@am__append_8 = IpMumpsSolverInterface.cpp
-@HAVE_SPRAL_TRUE@am__append_9 = IpSpralSolverInterface.cpp
+@COIN_HAS_SPRAL_TRUE@am__append_9 = IpSpralSolverInterface.cpp
 subdir = src/Algorithm/LinearSolvers
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -135,7 +135,7 @@ liblinsolvers_la_LIBADD =
 @HAVE_WSMP_TRUE@am__objects_7 = IpWsmpSolverInterface.lo \
 @HAVE_WSMP_TRUE@	IpIterativeWsmpSolverInterface.lo
 @COIN_HAS_MUMPS_TRUE@am__objects_8 = IpMumpsSolverInterface.lo
-@HAVE_SPRAL_TRUE@am__objects_9 = IpSpralSolverInterface.lo
+@COIN_HAS_SPRAL_TRUE@am__objects_9 = IpSpralSolverInterface.lo
 am_liblinsolvers_la_OBJECTS = IpLinearSolversRegOp.lo \
 	IpSlackBasedTSymScalingMethod.lo IpTripletToCSRConverter.lo \
 	IpTSymDependencyDetector.lo IpTSymLinearSolver.lo \
