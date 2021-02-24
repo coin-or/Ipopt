@@ -24503,7 +24503,7 @@ fi
     CPPFLAGS="$CPPFLAGS $spral_cflags"
     ac_fn_c_check_header_mongrel "$LINENO" "spral_ssids.h" "ac_cv_header_spral_ssids_h" "$ac_includes_default"
 if test "x$ac_cv_header_spral_ssids_h" = xyes; then :
-
+  IPOPTLIB_CFLAGS="$spral_cflags $IPOPTLIB_CFLAGS"
 else
   have_spral_cflags=no
 fi

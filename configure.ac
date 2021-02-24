@@ -208,7 +208,7 @@ AC_ARG_WITH([spral_cflags],
     # Ensure the required header file exists.
     coin_CPPFLAGS="$CPPFLAGS"
     CPPFLAGS="$CPPFLAGS $spral_cflags"
-    AC_CHECK_HEADER([spral_ssids.h],,[have_spral_cflags=no])
+    AC_CHECK_HEADER([spral_ssids.h],[IPOPTLIB_CFLAGS="$spral_cflags $IPOPTLIB_CFLAGS"],[have_spral_cflags=no])
     CPPFLAGS="$coin_CPPFLAGS"
 
 AM_CONDITIONAL([HAVE_SPRAL],[test "$have_spral_lflags$have_spral_cflags" = yesyes])
