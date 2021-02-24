@@ -136,6 +136,13 @@ Contributors:
 
   many source files affected, see https://github.com/coin-or/Ipopt/pull/428
 
+- Byron Tasseff (LANL)
+  Spral interface
+
+  src/Algorithm/LinearSolvers/IpSpralSolverInterface.hpp
+  src/Algorithm/LinearSolvers/IpSpralSolverInterface.cpp
+
+
 Contributors of code that is no longer included in Ipopt distribution:
 
 - Yifan Hu (Wolfram): Contributed TAUCS interface, implemented in the files
