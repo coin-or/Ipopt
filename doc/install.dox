@@ -373,6 +373,10 @@ export OMP_NESTED=TRUE
 export OMP_PROC_BIND=TRUE
 \endverbatim
 
+A guide for building Ipopt with Spral on Ubuntu Linux is also avaiable
+[here](https://gist.github.com/tasseff/ee61ef6c15d3c54e0a6b3e488f2a65be)
+(some GitHub URLs need to be adjusted to use coin-or/Ipopt instead of lanl-ansi/Ipopt).
+
 \subsection DOWNLOAD_WSMP WSMP (Watson Sparse Matrix Package)
 
 If you would like to compile \Ipopt with WSMP, you need to obtain the
