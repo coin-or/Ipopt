@@ -2,7 +2,7 @@ Here we list changes of Ipopt since the release of version 3.0.0.
 More detailed information about incremental changes can be found in the
 commit history.
 
-202x-yy-zz: 3.13.4
+2021-02-24: 3.13.4
         - Fixed a linking issue for ipopt_sens [#418]
         - Fixed Makefile for Java example regarding location of jar file
         - Fixed build of R interface if using -fvisibility=hidden.
