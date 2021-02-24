@@ -9,6 +9,7 @@ matrix:
             - gfortran
             - liblapack-dev
             - libmetis-dev
+            - libhwloc-dev
       env: ENABLEDEBUG=true
     - os: linux
       addons:
@@ -26,6 +27,7 @@ matrix:
             - gfortran
             - liblapack-dev
             - libmetis-dev
+            - libhwloc-dev
       env: VISHIDDEN=true
     - os: osx
       osx_image: xcode11.3
@@ -49,25 +51,78 @@ before_script:
   - export NOF77=${NOF77:-false}
   - export ENABLEDEBUG=${ENABLEDEBUG:-false}
   - export SINGLEPRECISION=${SINGLEPRECISION:-false}
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && ! $NOF77; then brew update; brew install bash gcc metis; export CC=gcc-9 ; export CXX=g++-9 ; $CC --version; $CXX --version; gfortran --version; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && ! $NOF77; then brew update; brew install bash gcc metis hwloc; export CC=gcc-9 ; export CXX=g++-9 ; $CC --version; $CXX --version; gfortran --version; fi
 
 script:
+  # Spral doesn't compile on macOS at the moment: https://github.com/ralna/spral/issues/21
+  - >
+    if $NOF77 || $SINGLEPRECISION || [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+    echo "Skipping Spral build." ;
+    else
+    git clone --depth 1 --branch master https://github.com/lanl-ansi/spral.git &&
+    pushd spral &&
+    ./autogen.sh &&
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]] ; then
+    CFLAGS=-fPIC CXXFLAGS=-fPIC FFLAGS=-fPIC FCFLAGS=-fPIC ./configure --prefix ${HOME}/spral --with-metis="-L/usr/local/Cellar/metis/5.1.0/lib -lmetis" --with-metic-inc-dir=/usr/local/Cellar/metis/5.1.0/include ;
+    else
+    CFLAGS=-fPIC CXXFLAGS=-fPIC FFLAGS=-fPIC FCFLAGS=-fPIC ./configure --prefix ${HOME}/spral ;
+    fi &&
+    make install &&
+    popd ;
+    fi
+  - >
+    mkdir -p $HOME/install/share && touch $HOME/install/share/config.site ;
+    ( $NOF77 && echo enable_f77=no ;
+    $ENABLEDEBUG && ( echo enable_debug=yes ; echo with_ipopt_checklevel=5 ; echo with_ipopt_verbosity=5 ) ;
+    $SINGLEPRECISION && echo "with_precision=single" ;
+    [[ -d $HOME/spral ]] && echo "with_spral_cflags=-I${HOME}/spral/include" ;
+    [[ -d $HOME/spral ]] && [[ "$TRAVIS_OS_NAME" == "linux" ]] && echo "with_spral_lflags=\"-L${HOME}/spral/lib -lspral -lgfortran -lhwloc -lm -lmetis -llapack -lblas -fopenmp\"" ;
+    [[ -d $HOME/spral ]] && [[ "$TRAVIS_OS_NAME" == "osx" ]] && echo "with_spral_lflags=\"-L${HOME}/spral/lib -lspral -lgfortran -lhwloc -lm -L/usr/local/Cellar/metis/5.1.0/lib -lmetis -llapack -lblas -fopenmp\"" ;
+    [[ "$TRAVIS_OS_NAME" == "osx" ]] && ( echo "with_metis_cflags=-I/usr/local/Cellar/metis/5.1.0/include" ; echo "with_metis_lflags=\"-L/usr/local/Cellar/metis/5.1.0/lib -lmetis\"" ) ;
+    ) > $HOME/install/share/config.site ;
+    cat $HOME/install/share/config.site
   - git clone --depth 1 https://github.com/coin-or-tools/ThirdParty-ASL
-  - pushd ThirdParty-ASL && ./get.ASL && ./configure --prefix=$HOME/install && make && make install && popd
-  - if $NOF77 ; then echo "Skipping Mumps build." ; elif $SINGLEPRECISION ; then git clone --depth 1 --branch mumps5 https://github.com/coin-or-tools/ThirdParty-Mumps ; pushd ThirdParty-Mumps && ./get.Mumps && ./configure --prefix=$HOME/install --with-precision=single && make && make install && popd ; else git clone --depth 1 https://github.com/coin-or-tools/ThirdParty-Mumps ; pushd ThirdParty-Mumps && ./get.Mumps && ./configure --prefix=$HOME/install && make && make install && popd ; fi
+  - >
+    pushd ThirdParty-ASL &&
+    ./get.ASL &&
+    ./configure --prefix=$HOME/install &&
+    make && make install &&
+    popd
+  - >
+    if $NOF77 ; then
+    echo "Skipping Mumps build." ;
+    else
+    if $SINGLEPRECISION ; then
+    git clone --depth 1 --branch mumps5 https://github.com/coin-or-tools/ThirdParty-Mumps ;
+    else
+    git clone --depth 1 https://github.com/coin-or-tools/ThirdParty-Mumps ;
+    fi ;
+    pushd ThirdParty-Mumps &&
+    ./get.Mumps &&
+    ./configure --prefix=$HOME/install &&
+    make && make install &&
+    popd ;
+    fi
   - mkdir build
   - pushd build
   - export ADD_CFLAGS="-Wall -Wextra -Werror"
   - export ADD_CXXFLAGS="-Wall -Wextra -Werror"
   - if $VISHIDDEN ; then ADD_CFLAGS="$ADD_CFLAGS -fvisibility=hidden" ; fi
   - if $VISHIDDEN ; then ADD_CXXFLAGS="$ADD_CXXFLAGS -fvisibility=hidden" ; fi
-  - export CFGFLAGS=""
-  - if $NOF77 ; then CFGFLAGS="$CFGFLAGS --disable-f77" ; fi
-  - if $ENABLEDEBUG ; then CFGFLAGS="$CFGFLAGS --enable-debug --with-ipopt-checklevel=5 --with-ipopt-verbosity=5" ; fi
-  - if $SINGLEPRECISION ; then CFGFLAGS="$CFGFLAGS --with-precision=single" ; fi
-  - ../configure --prefix=$HOME/install $CFGFLAGS
+  - ../configure --prefix=$HOME/install
   - make
-  - if $NOF77 ; then echo "skip test as no linear solver" ; else make test ; fi
+  - export OMP_CANCELLATION=TRUE
+  - export OMP_NESTED=TRUE
+  - export OMP_PROC_BIND=TRUE
+  - >
+    if $NOF77 ; then echo "skip test as no linear solver" ;
+    else
+    make test || exit 1 ;
+    if [[ -d $HOME/spral ]] ; then
+    echo "linear_solver mumps" > test/ipopt.opt ;
+    make test ;
+    fi
+    fi
   - make install
   - pushd examples/Cpp_example
   - make
