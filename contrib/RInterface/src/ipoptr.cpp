@@ -119,6 +119,9 @@ void setApplicationOptions(
 // we want this function to be available in R, so we put extern around it.
 extern "C" {
 
+#if defined(__GNUC__) && __GNUC__ >= 4
+   __attribute__((__visibility__("default")))
+#endif
    SEXP IpoptRSolve(
       SEXP args
    )

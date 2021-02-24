@@ -109,10 +109,11 @@ More details on using coinbrew can be found at the instructions on
 
 Some precompiled binaries of Ipopt are also available:
 
-- **[Ipopt releases page](https://github.com/coin-or/Ipopt/releases)**
-- **[JuliaBinaryWrappers provides Ipopt binaries](https://github.com/JuliaBinaryWrappers/Ipopt_jll.jl/releases)**
-- **[AMPL provides binaries](http://ampl.com/products/solvers/open-source/#ipopt)** for using Ipopt through AMPL
-- **[Pardiso project provides binaries](https://pardiso-project.org/index.html#binaries)** for using Ipopt with Pardiso through Matlab
+- **[Ipopt releases page](https://github.com/coin-or/Ipopt/releases)** provides libraries and executables
+- **[JuliaBinaryWrappers](https://github.com/JuliaBinaryWrappers/Ipopt_jll.jl/releases)** provides libraries and executables
+- **[IDEAS](https://github.com/IDAES/idaes-ext/releases)** provides executables; these executables include HSL solvers
+- **[AMPL](http://ampl.com/products/solvers/open-source/#ipopt)** provides executables
+- **[Pardiso project](https://pardiso-project.org/index.html#binaries)** provides libraries for using Ipopt with Pardiso through Matlab (Matpower)
 
 Getting Help
 ------------
@@ -120,8 +121,8 @@ Getting Help
  * **[Ipopt Documentation](https://coin-or.github.io/Ipopt/)** with installation instructions, options reference, and more
  * **[Issue tracking system](https://github.com/coin-or/Ipopt/issues/)**: If you believe you found a **bug** in the code, please use the issue tracking system.
    Please include as much information as possible, and if possible some (ideally simple) example code so that we can reproduce the error.
- * **[Mailing list](http://list.coin-or.org/mailman/listinfo/ipopt)**: subscribe to get notifications about updates and to post questions and comments regarding Ipopt
- * **[Mailing list archive](http://list.coin-or.org/pipermail/ipopt/)**
+ * **[Discussions](https://github.com/coin-or/Ipopt/discussions)**: ask questions, share ideas, engage with the Ipopt community
+ * **[Mailing list archive](http://list.coin-or.org/pipermail/ipopt/)** (2002-2020): predecessor of Discussions
  * **[Ipopt Wiki](https://github.com/coin-or/Ipopt/wiki)** with hints and tricks
  * External resources:
    * [short Ipopt tutorial](http://drops.dagstuhl.de/volltexte/2009/2089/pdf/09061.WaechterAndreas.Paper.2089.pdf)

@@ -57,10 +57,9 @@ Additional technical information may be found in other publications [here](https
 
 ## Who do I contact with questions about \Ipopt?
 
-If you have any questions or comments please send a message to the [Ipopt Mailing List](http://list.coin-or.org/mailman/listinfo/ipopt)
-or open an issue on the [Ipopt GitHub issue tracker](https://github.com/coin-or/Ipopt/issues).
+If you have any questions or comments please create a discussion at the [Ipopt GitHub Discussions system](https://github.com/coin-or/Ipopt/discussions).
 Please include detailed information about your configuration (operating system, compilers, version number of Ipopt, etc) if you are writing about a compilation or execution problem.
-(Note: You need to subscribe to the mailing list before you can post a message.)
+(Note: You need a GitHub account to create or contribute to a discussion.)
 
 ## What is the difference between the Fortran version and the C++ version?
 

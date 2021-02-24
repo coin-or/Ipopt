@@ -16,9 +16,10 @@ commit history.
         - Added new header IpTypes.h that defines Ipopt types for integer
           and real numbers for C users.
 
-202x-yy-zz: 3.13.4
+2021-02-24: 3.13.4
         - Fixed a linking issue for ipopt_sens [#418]
         - Fixed Makefile for Java example regarding location of jar file
+        - Fixed build of R interface if using -fvisibility=hidden.
 
 2020-10-16: 3.13.3
         - Members of AmplTNLP class are now protected instead of private.

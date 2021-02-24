@@ -2844,7 +2844,7 @@ bool TNLPAdapter::CheckDerivatives(
                        "In TNLP derivative test: g could not be evaluated at reference point.");
    }
 
-   // Obtain gradient of objective function at reference pont
+   // Obtain gradient of objective function at reference point
    Number* grad_f = new Number[nx];
    retval = tnlp_->eval_grad_f(nx, xref, true, grad_f);
    ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,

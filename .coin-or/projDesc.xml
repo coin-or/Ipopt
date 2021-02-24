@@ -77,7 +77,7 @@
   <leftMenuLinks>
     <documentation>https://coin-or.github.io/Ipopt</documentation>
     <sourceCodeDownload>https://github.com/coin-or/Ipopt</sourceCodeDownload>
-    <!--binaryDownload>http://www.coin-or.org/download/binary/Ipopt/</binaryDownload-->
-    <mailingList>http://list.coin-or.org/mailman/listinfo/ipopt</mailingList>
+    <binaryDownload>https://github.com/coin-or/Ipopt/releases</binaryDownload>
+    <mailingList>https://github.com/coin-or/Ipopt/discussions</mailingList>
   </leftMenuLinks>
 </projectData>

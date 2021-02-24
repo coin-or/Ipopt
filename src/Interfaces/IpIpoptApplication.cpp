@@ -28,6 +28,7 @@
 # include "IpInexactAlgBuilder.hpp"
 #endif
 
+#include <cassert>
 #include <cmath>
 #include <fstream>
 

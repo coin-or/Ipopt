@@ -315,7 +315,7 @@ maintained by other people, among them are:
 
 \subsection MOREINFO More Information and Contributions
 
-An issue tracking system and a wiki can be found at the \Ipopt
+An issue tracking, discussion system, and a wiki can be found at the \Ipopt
 homepage,
 
 https://github.com/coin-or/Ipopt.
@@ -344,22 +344,14 @@ interested in contributing code, please have a look at the
 [COIN-OR contributions webpage](http://www.coin-or.org/contributions.html)
 and contact the \Ipopt project leader.
 
-There is also a mailing list for \Ipopt, available from the
-webpage
+There also has been a mailing list for \Ipopt. Its archive (2002-2020) is
+available from the webpage
 
-<http://list.coin-or.org/mailman/listinfo/ipopt>,
+<https://list.coin-or.org/pipermail/ipopt/>.
 
-where you can subscribe to get notified of updates, to ask general
-questions regarding installation and usage, or to share your experience
-with \Ipopt. You might want to look at the archives before
-posting a question. An easy way to search the archive with Google is to
+An easy way to search the archive with Google is to
 specify `site:http://list.coin-or.org/pipermail/ipopt` in addition to
 your keywords in the search string.
-
-We try to answer questions posted to the mailing list in a reasonable
-manner. Please understand that we cannot answer all questions in detail,
-and because of time constraints, we are not able to help you model and
-debug your particular optimization problem.
 
 A short tutorial on getting started with \Ipopt is also
 available \cite Waechter90Minutes.
