@@ -12,7 +12,7 @@ var index =
     [ "Installing Ipopt", "INSTALL.html", [
       [ "Getting System Packages (Compilers, ...)", "INSTALL.html#SYSTEMPACKAGES", [
         [ "Linux distributions", "INSTALL.html#SYSTEMPACKAGES_LINUX", null ],
-        [ "Mac OS X", "INSTALL.html#SYSTEMPACKAGES_MAC", null ],
+        [ "macOS", "INSTALL.html#SYSTEMPACKAGES_MAC", null ],
         [ "Windows with MSYS2/MinGW", "INSTALL.html#SYSTEMPACKAGES_MSYS", null ]
       ] ],
       [ "Download, build, and install dependencies", "INSTALL.html#EXTERNALCODE", [

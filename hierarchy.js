@@ -6,7 +6,8 @@ var hierarchy =
     [ "Ipopt::CachedResults< Ipopt::SmartPtr< const Ipopt::Vector > >", "classIpopt_1_1CachedResults.html", null ],
     [ "Ipopt::CachedResults< Ipopt::SmartPtr< Ipopt::Vector > >", "classIpopt_1_1CachedResults.html", null ],
     [ "Ipopt::CachedResults< Number >", "classIpopt_1_1CachedResults.html", null ],
-    [ "Ipopt::CachedResults< void *>", "classIpopt_1_1CachedResults.html", null ],
+    [ "Ipopt::CachedResults< void * >", "classIpopt_1_1CachedResults.html", null ],
+    [ "Ipopt::DependentResult< T >", "classIpopt_1_1DependentResult.html", null ],
     [ "Ipopt::Filter", "classIpopt_1_1Filter.html", null ],
     [ "Ipopt::FilterEntry", "classIpopt_1_1FilterEntry.html", null ],
     [ "org.coinor.Ipopt", "classorg_1_1coinor_1_1Ipopt.html", null ],
@@ -21,9 +22,7 @@ var hierarchy =
     [ "ma97_info", "structma97__info.html", null ],
     [ "mc68_control", "structmc68__control.html", null ],
     [ "mc68_info", "structmc68__info.html", null ],
-    [ "Ipopt::Observer", "classIpopt_1_1Observer.html", [
-      [ "Ipopt::DependentResult< T >", "classIpopt_1_1DependentResult.html", null ]
-    ] ],
+    [ "Ipopt::Observer", "classIpopt_1_1Observer.html", null ],
     [ "Ipopt::OptionsList::OptionValue", "classIpopt_1_1OptionsList_1_1OptionValue.html", null ],
     [ "Ipopt::PiecewisePenalty", "classIpopt_1_1PiecewisePenalty.html", null ],
     [ "Ipopt::PiecewisePenEntry", "structIpopt_1_1PiecewisePenEntry.html", null ],
@@ -369,6 +368,5 @@ var hierarchy =
     [ "Ipopt::TimedTask", "classIpopt_1_1TimedTask.html", null ],
     [ "Ipopt::TripletToCSRConverter::TripletEntry", "classIpopt_1_1TripletToCSRConverter_1_1TripletEntry.html", null ],
     [ "Ipopt::TripletHelper", "classIpopt_1_1TripletHelper.html", null ],
-    [ "File", null, null ],
-    [ "T", null, null ]
+    [ "File", null, null ]
 ];
