@@ -165,6 +165,7 @@ required:
     should use a good BLAS library tailored to your system. Please keep
     this in mind, particularly when you are comparing
     \Ipopt with other optimization codes.
+    See also \cite Tasseff2019 for a comparison of Ipopt with various linear solvers.
 
     If you are compiling MA57, HSL_MA77, HSL_MA86, HSL_MA97, MUMPS,
     or SPRAL within the \Ipopt build system, you should also include

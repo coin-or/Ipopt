@@ -136,7 +136,7 @@ Contributors:
 
   many source files affected, see https://github.com/coin-or/Ipopt/pull/428
 
-- Byron Tasseff (LANL)
+- Byron Tasseff (LANL, University of Michigan)
   Spral interface
 
   src/Algorithm/LinearSolvers/IpSpralSolverInterface.hpp

@@ -345,6 +345,7 @@ To compile \Ipopt with the linear solver SPRAL, the
 [LANL ANSI fork of SPRAL](https://github.com/lanl-ansi/spral) should first
 be downloaded and compiled according to the associated
 [SPRAL compilation guide](https://github.com/lanl-ansi/spral/blob/master/COMPILE.md).
+
 After compilation of SPRAL, while configuring \Ipopt,
 you need to specify the link and include directories for the library with the
 `--with-spral-lflags` and `--with-spral-cflags` flags, including required
@@ -366,7 +367,7 @@ The above assume a SPRAL compilation using OpenBLAS libraries. For best
 performance, use SPRAL together with linear algebra routines from the Intel MKL
 (see \ref EXTERNALCODE_LINALG).
 
-Finally, ensure the following environment variables are employed when using SPRAL
+Finally, ensure the following environment variables are employed when using SPRAL:
 \verbatim
 export OMP_CANCELLATION=TRUE
 export OMP_NESTED=TRUE
@@ -376,6 +377,7 @@ export OMP_PROC_BIND=TRUE
 A guide for building Ipopt with Spral on Ubuntu Linux is also avaiable
 [here](https://gist.github.com/tasseff/ee61ef6c15d3c54e0a6b3e488f2a65be)
 (some GitHub URLs need to be adjusted to use coin-or/Ipopt instead of lanl-ansi/Ipopt).
+More information on the Spral interface of Ipopt can be found in \cite Tasseff2019.
 
 \subsection DOWNLOAD_WSMP WSMP (Watson Sparse Matrix Package)
 
