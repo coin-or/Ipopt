@@ -15,6 +15,14 @@ commit history.
           using the old names are available, but their use is deprecated.
         - Added new header IpTypes.h that defines Ipopt types for integer
           and real numbers for C users.
+        - Due to a contribution by Byron Tasseff [#446], it is now possible
+          to use the linear solver SPRAL (Sparse Parallel Robust Algorithms Library)
+          with Ipopt. SPRAL is open-source and can, optionally, make use
+          of NVIDIA GPUs. See the installation instructions on how to build
+          the Ipopt/SPRAL interface. If Ipopt has been build with SPRAL,
+          then option linear_solver can be set to spral to enable use of
+          SPRAL. See also the options documentation for new options that
+          are available for the Ipopt/SPRAL interface.
 
 2021-02-24: 3.13.4
         - Fixed a linking issue for ipopt_sens [#418]
