@@ -602,7 +602,7 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
                {
                   rescale_ = false;
                }
-            // Falls through to:
+               // fall through
             case SWITCH_NDELAY:
             case SWITCH_OD_ND:
                if ( rescale_ )
