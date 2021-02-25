@@ -112,8 +112,6 @@ script:
   - ../configure --prefix=$HOME/install
   - make
   - export OMP_CANCELLATION=TRUE
-  - export OMP_NESTED=TRUE
-  - export OMP_PROC_BIND=TRUE
   - >
     if $NOF77 ; then echo "skip test as no linear solver" ;
     else
