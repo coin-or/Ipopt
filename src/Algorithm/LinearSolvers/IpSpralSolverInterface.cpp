@@ -4,8 +4,6 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// $Id: IpSpralSolverInterface.cpp 2020-03-21 00:00:00Z tasseff $
-//
 // Authors: Byron Tasseff                    LANL   2020-03-21
 //          Jonathan Hogg                    STFC   2012-12-21
 //          Jonathan Hogg                           2009-07-29
@@ -13,8 +11,7 @@
 
 #include "IpoptConfig.h"
 #include "IpSpralSolverInterface.hpp"
-#include <iostream>
-#include <stdio.h>
+
 #include <cassert>
 #include <cmath>
 
@@ -26,11 +23,7 @@ namespace Ipopt
 SpralSolverInterface::~SpralSolverInterface()
 {
    delete[] val_;
-
-   if ( scaling_ )
-   {
-      delete[] scaling_;
-   }
+   delete[] scaling_;
 
    spral_ssids_free(&akeep_, &fkeep_);
 }
@@ -50,7 +43,7 @@ void SpralSolverInterface::RegisterOptions(
    roptions->AddStringOption2(
       "spral_ignore_numa", "Non-uniform memory access (NUMA) region setting.",
       "yes", "no", "Do not treat CPUs and GPUs as belonging to a single NUMA region.",
-      "yes", "Treat CPUs and GPUs as belonging to a single NUMA region.", "");
+      "yes", "Treat CPUs and GPUs as belonging to a single NUMA region.");
 
    roptions->AddLowerBoundedNumberOption(
       "spral_max_load_inbalance",
@@ -70,22 +63,18 @@ void SpralSolverInterface::RegisterOptions(
       "spral_order",
       "Controls type of ordering used by SPRAL", "matching",
       "metis", "Use METIS with default settings.",
-      "matching", "Use matching-based elimination ordering.", "");
+      "matching", "Use matching-based elimination ordering.");
 
    roptions->AddStringOption3(
       "spral_pivot_method",
       "Specifies strategy for scaling in SPRAL linear solver.", "block",
       "aggressive", "Aggressive a posteori pivoting.",
       "block", "Block a posteori pivoting.",
-      "threshold", "Threshold partial pivoting (not parallel).", "");
+      "threshold", "Threshold partial pivoting (not parallel).");
 
    roptions->AddIntegerOption(
-      "spral_print_level", "Print level for the linear solver SPRAL", -1, ""
-      /*
-       "<0 No printing.\n"
-       "0  Error and warning messages only.\n"
-       "=1 Limited diagnostic printing.\n"
-       ">1 Additional diagnostic printing."*/);
+      "spral_print_level", "Print level for the linear solver SPRAL", -1,
+      "<0: no printing, 0: errors and warning messages, 1: limited diagnostics, >1: additional diagnostics");
 
    roptions->AddStringOption6(
       "spral_scaling",
@@ -95,7 +84,7 @@ void SpralSolverInterface::RegisterOptions(
       "auction", "Scale using the auction algorithm.",
       "matching", "Scale using the matching-based ordering.",
       "ruiz", "Scale using the norm-equilibration algorithm of Ruiz (MC77).",
-      "dynamic", "Dynamically select scaling according to switch options.", "");
+      "dynamic", "Dynamically select scaling according to switch options.");
 
    roptions->AddStringOption5(
       "spral_scaling_1",
@@ -195,24 +184,24 @@ void SpralSolverInterface::RegisterOptions(
       "See SPRAL documentation.");
 
    roptions->AddStringOption2(
-      "spral_use_gpu", "GPU Setting",
-      "yes", "no", "Do not use NVIDIA GPUs.",
-      "yes", "Use NVIDIA GPUs if present.", "");
+      "spral_use_gpu", "GPU Setting", "yes",
+      "no", "Do not use NVIDIA GPUs.",
+      "yes", "Use NVIDIA GPUs if present.");
 }
 
 int SpralSolverInterface::PivotMethodNameToNum(
    const std::string& name
 )
 {
-   if ( name == "aggressive" )
+   if( name == "aggressive" )
    {
       return 0;
    }
-   else if ( name == "block" )
+   else if( name == "block" )
    {
       return 1;
    }
-   else if ( name == "threshold" )
+   else if( name == "threshold" )
    {
       return 2;
    }
@@ -227,23 +216,23 @@ int SpralSolverInterface::ScaleNameToNum(
    const std::string& name
 )
 {
-   if ( name == "none" )
+   if( name == "none" )
    {
       return 0;
    }
-   else if ( name == "mc64" )
+   else if( name == "mc64" )
    {
       return 1;
    }
-   else if ( name == "auction" )
+   else if( name == "auction" )
    {
       return 2;
    }
-   else if ( name == "matching" )
+   else if( name == "matching" )
    {
       return 3;
    }
-   else if ( name == "ruiz" )
+   else if( name == "ruiz" )
    {
       return 4;
    }
@@ -305,11 +294,11 @@ bool SpralSolverInterface::InitializeImpl(
    std::string order_method;
    options.GetStringValue("spral_order", order_method, prefix);
 
-   if (order_method == "metis")
+   if( order_method == "metis" )
    {
       control_.ordering = 1;
    }
-   else if (order_method == "matching")
+   else if( order_method == "matching" )
    {
       control_.ordering = 2;
    }
@@ -318,7 +307,7 @@ bool SpralSolverInterface::InitializeImpl(
    options.GetStringValue("spral_scaling", scaling_method, prefix);
    current_level_ = 0;
 
-   if ( scaling_method == "dynamic" )
+   if( scaling_method == "dynamic" )
    {
       scaling_type_ = 0;
       std::string switch_val[3], scaling_val[3];
@@ -330,15 +319,15 @@ bool SpralSolverInterface::InitializeImpl(
       options.GetStringValue("spral_switch_3",   switch_val[2], prefix);
       options.GetStringValue("spral_scaling_3", scaling_val[2], prefix);
 
-      for ( int i = 0; i < 3; i++ )
+      for( int i = 0; i < 3; i++ )
       {
          scaling_val_[i] = ScaleNameToNum(scaling_val[i]);
 
-         if ( switch_val[i] == "never" )
+         if( switch_val[i] == "never" )
          {
             switch_[i] = SWITCH_NEVER;
          }
-         else if ( switch_val[i] == "at_start" )
+         else if( switch_val[i] == "at_start" )
          {
             switch_[i] = SWITCH_AT_START;
             scaling_type_ = scaling_val_[i];
@@ -426,15 +415,11 @@ ESymSolverStatus SpralSolverInterface::InitializeStructure(
    ndim_ = dim;
 
    // Setup memory for values
-   if ( val_ != NULL )
-   {
-      delete[] val_;
-   }
-
+   delete[] val_;
    val_ = new double[nonzeros];
 
    // Correct scaling and ordering if necessary.
-   if ( control_.ordering == 2 && control_.scaling != 3 )
+   if( control_.ordering == 2 && control_.scaling != 3 )
    {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "In SpralSolverInterface, "
                      "matching-based ordering was used, but matching-based scaling was "
@@ -442,7 +427,7 @@ ESymSolverStatus SpralSolverInterface::InitializeStructure(
       control_.scaling = scaling_type_ = 3;
    }
 
-   if ( control_.ordering != 2 && control_.scaling == 3 )
+   if( control_.ordering != 2 && control_.scaling == 3 )
    {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "In SpralSolverInterface, "
                      "matching-based scaling was used, but matching-based ordering was "
@@ -451,9 +436,9 @@ ESymSolverStatus SpralSolverInterface::InitializeStructure(
    }
 
    // Perform analyse.
-   if ( !( control_.ordering == 2 && control_.scaling == 3 ) )
+   if( !( control_.ordering == 2 && control_.scaling == 3 ) )
    {
-      if ( HaveIpData() )
+      if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
       }
@@ -463,24 +448,20 @@ ESymSolverStatus SpralSolverInterface::InitializeStructure(
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "nfactor = %d, nflops = %d:\n",
                      info.num_factor, info.num_flops);
 
-      if ( HaveIpData() )
+      if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemSymbolicFactorization().End();
       }
 
-      if ( info.flag >= 0 )
+      if( info.flag < 0 )
       {
-         return SYMSOLVER_SUCCESS;
-      }
-      else
-      {
+         Jnlst().Printf(J_STRONGWARNING, J_LINEAR_ALGEBRA, "In SpralSolverInterface::InitializeStructure: "
+                        "Unhandled error. info.flag = %d.\n", info.flag);
          return SYMSOLVER_FATAL_ERROR;
       }
    }
-   else
-   {
-      return SYMSOLVER_SUCCESS;
-   }
+
+   return SYMSOLVER_SUCCESS;
 }
 
 ESymSolverStatus SpralSolverInterface::MultiSolve(
@@ -496,15 +477,15 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
    struct spral_ssids_inform info;
    Number t1 = 0, t2;
 
-   if ( new_matrix || pivtol_changed_ )
+   if( new_matrix || pivtol_changed_ )
    {
       // Set scaling option
-      if ( rescale_ )
+      if( rescale_ )
       {
          control_.scaling = scaling_type_;
          control_.ordering = scaling_type_ != 3 ? 1 : 2;
 
-         if ( scaling_type_ != 0 && scaling_ == NULL )
+         if( scaling_type_ != 0 && scaling_ == NULL )
          {
             scaling_ = new double[ndim_];
          }
@@ -514,9 +495,9 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
          control_.scaling = 0; // None or user (depends if scaling_ is allocated).
       }
 
-      if ( control_.ordering == 2 && control_.scaling == 3 && rescale_ )
+      if( control_.ordering == 2 && control_.scaling == 3 && rescale_ )
       {
-         if ( HaveIpData() )
+         if( HaveIpData() )
          {
             IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
          }
@@ -526,7 +507,7 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "nfactor = %d, nflops = %d:\n",
                         info.num_factor, info.num_flops);
 
-         if ( HaveIpData() )
+         if( HaveIpData() )
          {
             IpData().TimingStats().LinearSystemSymbolicFactorization().End();
          }
@@ -537,7 +518,8 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
                            "Singular system, estimated rank %d of %d\n", info.matrix_rank, ndim_);
             return SYMSOLVER_SINGULAR;
          }
-         else if ( info.flag < 0 )
+
+         if ( info.flag < 0 )
          {
             Jnlst().Printf(J_STRONGWARNING, J_LINEAR_ALGEBRA, "In SpralSolverInterface::Factorization: "
                            "Unhandled error. info.flag = %d.\n", info.flag);
@@ -545,7 +527,7 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
          }
       }
 
-      if ( HaveIpData() )
+      if( HaveIpData() )
       {
          t1 = IpData().TimingStats().LinearSystemFactorization().TotalWallclockTime();
          IpData().TimingStats().LinearSystemFactorization().Start();
@@ -557,7 +539,7 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
                      "nflops %ld, maxfront %d\n", info.num_delay, info.num_factor, info.num_flops,
                      info.maxfront);
 
-      if ( HaveIpData() )
+      if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemFactorization().End();
          t2 = IpData().TimingStats().LinearSystemFactorization().TotalWallclockTime();
@@ -565,16 +547,27 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
                         "spral_factor_solve took %10.3f\n", t2 - t1);
       }
 
-      if ( info.flag == 7 || info.flag == 6 || info.flag == -5 )
+      if( info.flag == 7 || info.flag == 6 || info.flag == -5 )
       {
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "In SpralSolverInterface::Factorization: "
                         "Singular system, estimated rank %d of %d\n", info.matrix_rank, ndim_);
          return SYMSOLVER_SINGULAR;
       }
 
-      for ( int i = current_level_; i < 3; i++ )
+      if( info.flag < 0 )
       {
-         switch ( switch_[i] )
+         Jnlst().Printf(J_STRONGWARNING, J_LINEAR_ALGEBRA, "In SpralSolverInterface::Factorization: "
+                        "Unhandled error. info.flag = %d.\n", info.flag);
+         if( info.flag == -53 )
+            Jnlst().Printf(J_STRONGWARNING, J_LINEAR_ALGEBRA, "Maybe one forgot to set environment variable OMP_CANCELLATION to TRUE.\n");
+         if( control_.print_level < 0 )
+            Jnlst().Printf(J_STRONGWARNING, J_LINEAR_ALGEBRA, "Set spral_print_level=0 to see more details.\n");
+         return SYMSOLVER_FATAL_ERROR;
+      }
+
+      for( int i = current_level_; i < 3; i++ )
+      {
+         switch( switch_[i] )
          {
             case SWITCH_NEVER:
             case SWITCH_AT_START:
@@ -586,7 +579,7 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
                rescale_ = false;
                break;
             case SWITCH_ON_DEMAND_REUSE:
-               if ( i == current_level_ && rescale_ )
+               if( i == current_level_ && rescale_ )
                {
                   rescale_ = false;
                }
@@ -594,25 +587,25 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
                break;
             case SWITCH_NDELAY_REUSE:
             case SWITCH_OD_ND_REUSE:
-               if ( rescale_ )
+               if( rescale_ )
                {
                   // Need to do this before we reset rescale.
                   numdelay_ = info.num_delay;
                }
 
-               if ( i == current_level_ && rescale_ )
+               if( i == current_level_ && rescale_ )
                {
                   rescale_ = false;
                }
                // fall through
             case SWITCH_NDELAY:
             case SWITCH_OD_ND:
-               if ( rescale_ )
+               if( rescale_ )
                {
                   numdelay_ = info.num_delay;
                }
 
-               if ( info.num_delay - numdelay_ > 0.05 * ndim_ )
+               if( info.num_delay - numdelay_ > 0.05 * ndim_ )
                {
                   // Number of delays has signficantly increased, so trigger.
                   current_level_ = i;
@@ -626,32 +619,21 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
          }
       }
 
-      if ( info.flag < 0 )
-      {
-         Jnlst().Printf(J_STRONGWARNING, J_LINEAR_ALGEBRA, "In SpralSolverInterface::Factorization: "
-                        "Unhandled error. info.flag = %d.\n", info.flag);
-         if( info.flag == -53 )
-            Jnlst().Printf(J_STRONGWARNING, J_LINEAR_ALGEBRA, "Maybe one forgot to set environment variable OMP_CANCELLATION to TRUE.\n");
-         if( control_.print_level < 0 )
-            Jnlst().Printf(J_STRONGWARNING, J_LINEAR_ALGEBRA, "Set spral_print_level=0 to see more details.\n");
-         return SYMSOLVER_FATAL_ERROR;
-      }
-
-      if ( check_NegEVals && info.num_neg != numberOfNegEVals )
+      if( check_NegEVals && info.num_neg != numberOfNegEVals )
       {
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "In SpralSolverInterface::Factorization: "
                         "info.num_neg = %d, but numberOfNegEVals = %d\n", info.num_neg, numberOfNegEVals);
          return SYMSOLVER_WRONG_INERTIA;
       }
 
-      if ( HaveIpData() )
+      if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemBackSolve().Start();
       }
 
       spral_ssids_solve(0, nrhs, rhs_vals, ndim_, akeep_, fkeep_, &control_, &info);
 
-      if ( HaveIpData() )
+      if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemBackSolve().End();
       }
@@ -662,14 +644,14 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
    }
    else
    {
-      if ( HaveIpData() )
+      if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemBackSolve().Start();
       }
 
       spral_ssids_solve(0, nrhs, rhs_vals, ndim_, akeep_, fkeep_, &control_, &info);
 
-      if ( HaveIpData() )
+      if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemBackSolve().End();
       }
@@ -680,9 +662,9 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
 
 bool SpralSolverInterface::IncreaseQuality()
 {
-   for ( int i = current_level_; i < 3; i++ )
+   for( int i = current_level_; i < 3; i++ )
    {
-      switch ( switch_[i] )
+      switch( switch_[i] )
       {
          case SWITCH_ON_DEMAND:
          case SWITCH_ON_DEMAND_REUSE:
@@ -699,7 +681,7 @@ bool SpralSolverInterface::IncreaseQuality()
       }
    }
 
-   if ( control_.u >= umax_ )
+   if( control_.u >= umax_ )
    {
       return false;
    }
