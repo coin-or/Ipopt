@@ -1060,7 +1060,7 @@ void TripletHelper::FillRowCol_(
    {
       const Index* exppos = P->ExpandedPosIndices();
       const Index nExp = P->NCols();
-      DBG_ASSERT(n_entries = nRows * nExp);
+      DBG_ASSERT(n_entries == nRows * nExp);
       for( Index irow = row_offset; irow < row_offset + nRows; irow++ )
       {
          for( Index j = 0; j < nExp; j++ )
@@ -1073,7 +1073,7 @@ void TripletHelper::FillRowCol_(
    else
    {
       const Index nCols = matrix.NCols();
-      DBG_ASSERT(n_entries = nRows * nCols);
+      DBG_ASSERT(n_entries == nRows * nCols);
       (void) n_entries;
       for( Index irow = row_offset; irow < row_offset + nRows; irow++ )
       {

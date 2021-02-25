@@ -634,7 +634,7 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
    while( fact_error > 0 )
    {
       IPOPT_HSL_FUNCP(ma57b, MA57B)(&n, &ne, a_, wd_fact_, &wd_lfact_, wd_ifact_, &wd_lifact_, &wd_lkeep_, wd_keep_,
-								            wd_iwork_, wd_icntl_, wd_cntl_, wd_info_, wd_rinfo_);
+                                    wd_iwork_, wd_icntl_, wd_cntl_, wd_info_, wd_rinfo_);
       negevals_ = (Index) wd_info_[24 - 1]; // Number of negative eigenvalues
 
       if( wd_info_[0] == 0 )

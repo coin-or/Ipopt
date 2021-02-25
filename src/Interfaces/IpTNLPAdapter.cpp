@@ -2478,7 +2478,9 @@ void TNLPAdapter::ResortBnds(
    if( x_L_orig )
    {
       if( clearorig )
-         memset(x_L_orig, 0, n_full_x_*sizeof(Number));
+      {
+         memset(x_L_orig, 0, n_full_x_ * sizeof(Number));
+      }
 
       const DenseVector* dx_L = static_cast<const DenseVector*>(&x_L);
       DBG_ASSERT(dynamic_cast<const DenseVector*>(&x_L));
@@ -2536,7 +2538,9 @@ void TNLPAdapter::ResortBnds(
    if( x_U_orig )
    {
       if( clearorig )
-         memset(x_U_orig, 0, n_full_x_*sizeof(Number));
+      {
+         memset(x_U_orig, 0, n_full_x_ * sizeof(Number));
+      }
 
       const DenseVector* dx_U = static_cast<const DenseVector*>(&x_U);
       DBG_ASSERT(dynamic_cast<const DenseVector*>(&x_U));
