@@ -108,24 +108,24 @@ void AlgorithmBuilder::RegisterOptions(
       "ma97",
 #else
 #   ifdef COINHSL_HAS_MA86
-     "ma86",
+      "ma86",
 #   else
 #    ifdef IPOPT_HAS_PARDISO
       "pardiso",
 #    else
 #     ifdef IPOPT_HAS_SPRAL
-       "spral",
+      "spral",
 #     else
 #      ifdef IPOPT_HAS_WSMP
-        "wsmp",
+      "wsmp",
 #      else
 #       ifdef IPOPT_HAS_MUMPS
-         "mumps",
+      "mumps",
 #       else
 #        ifdef COINHSL_HAS_MA77
-          "ma77",
+      "ma77",
 #        else
-          "ma27",
+      "ma27",
 #        endif
 #       endif
 #      endif

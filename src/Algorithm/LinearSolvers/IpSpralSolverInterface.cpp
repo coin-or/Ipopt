@@ -560,9 +560,13 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
          Jnlst().Printf(J_STRONGWARNING, J_LINEAR_ALGEBRA, "In SpralSolverInterface::Factorization: "
                         "Unhandled error. info.flag = %d.\n", info.flag);
          if( info.flag == -53 )
+         {
             Jnlst().Printf(J_STRONGWARNING, J_LINEAR_ALGEBRA, "Maybe one forgot to set environment variable OMP_CANCELLATION to TRUE.\n");
+         }
          if( control_.print_level < 0 )
+         {
             Jnlst().Printf(J_STRONGWARNING, J_LINEAR_ALGEBRA, "Set spral_print_level=0 to see more details.\n");
+         }
          return SYMSOLVER_FATAL_ERROR;
       }
 
@@ -598,7 +602,7 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
                {
                   rescale_ = false;
                }
-               // fall through
+            // fall through
             case SWITCH_NDELAY:
             case SWITCH_OD_ND:
                if( rescale_ )

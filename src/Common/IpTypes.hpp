@@ -13,9 +13,9 @@ namespace Ipopt
 {
 /** Type of all numbers */
 #ifdef IPOPT_SINGLE
-  typedef float Number;
+typedef float Number;
 #else
-  typedef double Number;
+typedef double Number;
 #endif
 /** Type of all indices of vectors, matrices etc */
 typedef int Index;
