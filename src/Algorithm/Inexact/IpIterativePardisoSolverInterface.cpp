@@ -139,7 +139,7 @@ IterativePardisoSolverInterface::~IterativePardisoSolverInterface()
       ipfint idmy;
       double ddmy;
       IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_,
-                                     &MSGLVL_, &ddmy, &ddmy, &ERROR, DPARM_);
+                                           &MSGLVL_, &ddmy, &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
    }
 
@@ -215,7 +215,7 @@ bool IterativePardisoSolverInterface::InitializeImpl(
       ipfint idmy;
       double ddmy;
       IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_,
-                                     &MSGLVL_, &ddmy, &ddmy, &ERROR, DPARM_);
+                                           &MSGLVL_, &ddmy, &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
    }
 
@@ -527,7 +527,7 @@ ESymSolverStatus IterativePardisoSolverInterface::Factorization(
          DPARM_[8] = 25; // maximum number of non-improvement steps
 
          IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, a_, ia, ja, &PERM, &NRHS, IPARM_, &MSGLVL_,
-                                        &B, &X, &ERROR, DPARM_);
+                                              &B, &X, &ERROR, DPARM_);
          if( HaveIpData() )
          {
             IpData().TimingStats().LinearSystemSymbolicFactorization().End();
@@ -604,7 +604,7 @@ ESymSolverStatus IterativePardisoSolverInterface::Factorization(
       DPARM_[8] = 25; // maximum number of non-improvement steps
 
       IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, a_, ia, ja, &PERM, &NRHS, IPARM_, &MSGLVL_,
-                                     &B, &X, &ERROR, DPARM_);
+                                           &B, &X, &ERROR, DPARM_);
       if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemFactorization().End();
@@ -733,7 +733,7 @@ ESymSolverStatus IterativePardisoSolverInterface::Solve(
 
       DPARM_[8] = 25; // non_improvement in SQMR iteration
       IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, a_, ia, ja, &PERM, &NRHS, IPARM_, &MSGLVL_,
-                                     rhs_vals, X, &ERROR, DPARM_);
+                                           rhs_vals, X, &ERROR, DPARM_);
 
       if( ERROR <= -100 && ERROR >= -110 )
       {

@@ -561,7 +561,7 @@ ESymSolverStatus Ma57TSolverInterface::SymbolicFactorization(
    }
 
    IPOPT_HSL_FUNC (ma57ad, MA57AD)(&n, &ne, airn_ma57int, ajcn_ma57int, &wd_lkeep_, wd_keep_, wd_iwork_, wd_icntl_, wd_info_,
-                             wd_rinfo_);
+                                   wd_rinfo_);
 
    // free copy-casted ma57int arrays, no longer needed
    if( sizeof(ma57int) != sizeof(Index) )
@@ -630,7 +630,7 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
    while( fact_error > 0 )
    {
       IPOPT_HSL_FUNC (ma57bd, MA57BD)(&n, &ne, a_, wd_fact_, &wd_lfact_, wd_ifact_, &wd_lifact_, &wd_lkeep_, wd_keep_,
-                                wd_iwork_, wd_icntl_, wd_cntl_, wd_info_, wd_rinfo_);
+                                      wd_iwork_, wd_icntl_, wd_cntl_, wd_info_, wd_rinfo_);
 
       negevals_ = (Index) wd_info_[24 - 1]; // Number of negative eigenvalues
 
@@ -664,7 +664,7 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
 
          ma57int idmy;
          IPOPT_HSL_FUNC (ma57ed, MA57ED)(&n, &ic, wd_keep_, wd_fact_, &wd_info_[1], temp, &wd_lfact_, wd_ifact_, &wd_info_[1],
-                                   &idmy, &wd_lfact_, wd_info_);
+                                         &idmy, &wd_lfact_, wd_info_);
 
          delete[] wd_fact_;
          wd_fact_ = temp;
@@ -689,7 +689,7 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
 
          double ddmy;
          IPOPT_HSL_FUNC (ma57ed, MA57ED)(&n, &ic, wd_keep_, wd_fact_, &wd_info_[1], &ddmy, &wd_lifact_, wd_ifact_,
-                                   &wd_info_[1], temp, &wd_lifact_, wd_info_);
+                                         &wd_info_[1], temp, &wd_lifact_, wd_info_);
 
          delete[] wd_ifact_;
          wd_ifact_ = temp;
@@ -782,7 +782,7 @@ ESymSolverStatus Ma57TSolverInterface::Backsolve(
    }
 
    IPOPT_HSL_FUNC (ma57cd, MA57CD)(&job, &n, wd_fact_, &wd_lfact_, wd_ifact_, &wd_lifact_, &nrhs_X, rhs_vals, &lrhs, work,
-                             &lwork, wd_iwork_, wd_icntl_, wd_info_);
+                                   &lwork, wd_iwork_, wd_icntl_, wd_info_);
 
    if( wd_info_[0] != 0 )
    {

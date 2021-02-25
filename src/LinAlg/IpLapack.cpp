@@ -169,7 +169,7 @@ void IpLapackDsyev(
    ipfint LWORK = -1;
    double WORK_PROBE;
    IPOPT_LAPACK_FUNC(dsyev, DSYEV)(&JOBZ, &UPLO, &N, a, &LDA, w,
-                                  &WORK_PROBE, &LWORK, &INFO, 1, 1);
+                                   &WORK_PROBE, &LWORK, &INFO, 1, 1);
    DBG_ASSERT(INFO == 0);
 
    LWORK = (ipfint) WORK_PROBE;
@@ -181,7 +181,7 @@ void IpLapackDsyev(
       WORK[i] = i;
    }
    IPOPT_LAPACK_FUNC(dsyev, DSYEV)(&JOBZ, &UPLO, &N, a, &LDA, w,
-                                  WORK, &LWORK, &INFO, 1, 1);
+                                   WORK, &LWORK, &INFO, 1, 1);
 
    DBG_ASSERT(INFO >= 0);
    info = INFO;
@@ -234,7 +234,7 @@ void IpLapackDgetrs(
    char trans = 'N';
 
    IPOPT_LAPACK_FUNC(dgetrs, DGETRS)(&trans, &N, &NRHS, a, &LDA, ipiv, b, &LDB,
-                                    &INFO, 1);
+                                     &INFO, 1);
    DBG_ASSERT(INFO == 0);
 #else
 

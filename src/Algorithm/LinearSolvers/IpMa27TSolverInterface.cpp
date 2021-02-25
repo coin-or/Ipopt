@@ -487,7 +487,7 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
    cntl_[0] = pivtol_;  // Set pivot tolerance
 
    IPOPT_HSL_FUNC(ma27bd, MA27BD)(&N, &NZ, airn, ajcn, a_, &la_, iw_, &liw_, ikeep_, &nsteps_, &maxfrt_, IW1, icntl_, cntl_,
-                            INFO);
+                                  INFO);
    delete[] IW1;
 
    // Receive information about the factorization
@@ -630,7 +630,7 @@ ESymSolverStatus Ma27TSolverInterface::Backsolve(
       }
 
       IPOPT_HSL_FUNC(ma27cd, MA27CD)(&N, a_, &la_, iw_, &liw_, W, &maxfrt_, &rhs_vals[irhs * dim_], IW1, &nsteps_, icntl_,
-                               cntl_);
+                                     cntl_);
 
       if( DBG_VERBOSITY() >= 2 )
       {

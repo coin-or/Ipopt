@@ -129,7 +129,7 @@ PardisoSolverInterface::~PardisoSolverInterface()
       ipfint idmy;
       double ddmy;
       IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
-                                     &ddmy, &ERROR, DPARM_);
+                                           &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
    }
 
@@ -362,7 +362,7 @@ bool PardisoSolverInterface::InitializeImpl(
       ipfint idmy;
       double ddmy;
       IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
-                                     &ddmy, &ERROR, DPARM_);
+                                           &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
    }
 
@@ -774,11 +774,11 @@ ESymSolverStatus PardisoSolverInterface::Factorization(
                         "Calling Pardiso for symbolic factorization.\n");
          IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
 #ifdef PARDISO_MATCHING_PREPROCESS
-                                        &PHASE, &N, a2_, ia2, ja2, &PERM,
+                                              &PHASE, &N, a2_, ia2, ja2, &PERM,
 #else
-                                        &PHASE, &N, a_, ia, ja, &PERM,
+                                              &PHASE, &N, a_, ia, ja, &PERM,
 #endif
-                                        &NRHS, IPARM_, &MSGLVL_, &B, &X, &ERROR, DPARM_);
+                                              &NRHS, IPARM_, &MSGLVL_, &B, &X, &ERROR, DPARM_);
          if( HaveIpData() )
          {
             IpData().TimingStats().LinearSystemSymbolicFactorization().End();
@@ -838,11 +838,11 @@ ESymSolverStatus PardisoSolverInterface::Factorization(
 
       IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
 #ifdef PARDISO_MATCHING_PREPROCESS
-                                     &PHASE, &N, a2_, ia2, ja2, &PERM,
+                                           &PHASE, &N, a2_, ia2, ja2, &PERM,
 #else
-                                     &PHASE, &N, a_, ia, ja, &PERM,
+                                           &PHASE, &N, a_, ia, ja, &PERM,
 #endif
-                                     &NRHS, IPARM_, &MSGLVL_, &B, &X, &ERROR, DPARM_);
+                                           &NRHS, IPARM_, &MSGLVL_, &B, &X, &ERROR, DPARM_);
       if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemFactorization().End();
@@ -991,9 +991,9 @@ ESymSolverStatus PardisoSolverInterface::Solve(
          rhs_vals[perm2[i]] = scale2[i] * ORIG_RHS[ i ];
       }
       IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
-                                     &PHASE, &N, a2_, ia2, ja2, &PERM,
-                                     &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
-                                     &ERROR, DPARM_);
+                                           &PHASE, &N, a2_, ia2, ja2, &PERM,
+                                           &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
+                                           &ERROR, DPARM_);
       for (int i = 0; i < N; i++)
       {
          X[i] = rhs_vals[ perm2[i]];
@@ -1009,7 +1009,7 @@ ESymSolverStatus PardisoSolverInterface::Solve(
          rhs_vals[i] = ORIG_RHS[i];
       }
       IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, a_, ia, ja, &PERM, &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
-                                     &ERROR, DPARM_);
+                                           &ERROR, DPARM_);
 #endif
 
       if( ERROR <= -100 && ERROR >= -102 )

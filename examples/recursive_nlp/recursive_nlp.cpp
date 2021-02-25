@@ -44,19 +44,19 @@ public:
    }
 
    // constructor for the inner problem
-   recursive_nlp(const Number &a)
-   : inner_(true),
-     a_(a),
-     arg_min_(0.0),
-     y_(0.0)
+   recursive_nlp(const Number& a)
+      : inner_(true),
+        a_(a),
+        arg_min_(0.0),
+        y_(0.0)
    { }
 
    // constructor for the outer problem
    recursive_nlp(void)
-   : inner_(false),
-     a_(0.0),
-     arg_min_(0.0),
-     y_(0.0)
+      : inner_(false),
+        a_(0.0),
+        arg_min_(0.0),
+        y_(0.0)
    { }
 
    // default destructor
@@ -141,12 +141,16 @@ public:
          app->Options()->SetStringValue("hessian_approximation", "limited-memory");
          ApplicationReturnStatus status = app->Initialize();
          if( status != Solve_Succeeded )
+         {
             return false;
+         }
 
          SmartPtr<recursive_nlp> nlp = new recursive_nlp(x[0]);
          status = app->OptimizeTNLP(nlp);
          if( status != Solve_Succeeded )
+         {
             return false;
+         }
 
          // set y_ equal to the arg_min for the inner problem
          y_ = nlp->arg_min();
@@ -264,7 +268,9 @@ int main(int argc, char** argv)
    status = app->OptimizeTNLP(nlp);
 
    if( status == Solve_Succeeded )
+   {
       std::cout << "nlp->arg_min() = " << nlp->arg_min() << "\n";
+   }
 
    return EXIT_SUCCESS;
 }
