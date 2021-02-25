@@ -3,15 +3,7 @@ language: cpp
 matrix:
   include:
     - os: linux
-      addons:
-        apt:
-          packages:
-            - gfortran
-            - liblapack-dev
-            - libmetis-dev
-            - libhwloc-dev
-      env: ENABLEDEBUG=true
-    - os: linux
+      dist: focal
       addons:
         apt:
           packages:
@@ -29,6 +21,43 @@ matrix:
             - libmetis-dev
             - libhwloc-dev
       env: VISHIDDEN=true
+    - os: linux
+      dist: xenial
+      addons:
+        apt:
+          packages:
+            - gfortran
+            - liblapack-dev
+            - libmetis-dev
+            - libhwloc-dev
+    - os: linux
+      arch: arm64
+      addons:
+        apt:
+          packages:
+            - gfortran
+            - liblapack-dev
+            - libmetis-dev
+            - libhwloc-dev
+      env: ENABLEDEBUG=true
+    - os: linux
+      arch: ppc64le
+      addons:
+        apt:
+          packages:
+            - gfortran
+            - liblapack-dev
+            - libmetis-dev
+            - libhwloc-dev
+    - os: linux
+      arch: s390x
+      addons:
+        apt:
+          packages:
+            - gfortran
+            - liblapack-dev
+            - libmetis-dev
+            - libhwloc-dev
     - os: osx
       osx_image: xcode11.3
       env: OSX=10.14 VISHIDDEN=true
@@ -38,12 +67,12 @@ matrix:
       env: OSX=10.14 VISHIDDEN=true NOF77=true
       compiler: clang
     - os: osx
-      osx_image: xcode10.1
-      env: OSX=10.13 ENABLEDEBUG=true
+      osx_image: xcode11.6
+      env: OSX=10.15 ENABLEDEBUG=true
       compiler: clang
     - os: osx
-      osx_image: xcode9.4
-      env: OSX=10.13
+      osx_image: xcode12.2
+      env: OSX=10.15
       compiler: clang
 
 before_script:
@@ -51,7 +80,14 @@ before_script:
   - export NOF77=${NOF77:-false}
   - export ENABLEDEBUG=${ENABLEDEBUG:-false}
   - export SINGLEPRECISION=${SINGLEPRECISION:-false}
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && ! $NOF77; then brew update; brew install bash gcc metis hwloc; export CC=gcc-9 ; export CXX=g++-9 ; $CC --version; $CXX --version; gfortran --version; fi
+  - >
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]] && ! $NOF77; then
+    brew update;
+    brew install bash gcc metis hwloc;
+    if [[ "$OSX" == 10.14 ]] ; then export CC=gcc-9 ; export CXX=g++-9 ;
+    elif [[ "$OSX" == 10.15 ]] ; then export CC=gcc-10 ; export CXX=g++-10 ; fi ;
+    $CC --version; $CXX --version; gfortran --version;
+    fi
 
 script:
   # Spral doesn't compile on macOS at the moment: https://github.com/ralna/spral/issues/21
