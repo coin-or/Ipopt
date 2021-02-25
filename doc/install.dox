@@ -367,6 +367,7 @@ The above assume a SPRAL compilation using OpenBLAS libraries. For best
 performance, use SPRAL together with linear algebra routines from the Intel MKL
 (see \ref EXTERNALCODE_LINALG).
 
+\attention
 Finally, ensure the following environment variables are employed when using SPRAL:
 \verbatim
 export OMP_CANCELLATION=TRUE
