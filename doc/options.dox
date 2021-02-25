@@ -1517,29 +1517,21 @@ Possible values:
 \subsection OPT_SPRAL_Linear_Solver SPRAL Linear Solver
 
 \anchor OPT_spral_print_level
- <strong>spral_print_level</strong>: Print level for the linear solver SPRAL.
+ <strong>spral_print_level</strong>: Print level for the linear solver SPRAL
 <blockquote>
- The valid range for this integer option is unrestricted, and its default value is 0.
-
- Possible values:
- - < 0 No printing.
- - 0   Error and warning messages only.
- - 1   Limited diagnostic printing.
- - > 1 Additional diagnostic printing.
+ <0: no printing, 0: errors and warning messages, 1: limited diagnostics, >1: additional diagnostics The valid range for this integer option is unrestricted and its default value is -1.
 
 </blockquote>
 
 \anchor OPT_spral_nemin
- <strong>spral_nemin</strong>: Node amalgamation parameter.
+ <strong>spral_nemin</strong>: Node Amalgamation Parameter
 <blockquote>
- Two nodes in the elimination tree are merged if the result has fewer than
- spral_nemin variables. The lower bound for this integer option is 1 and its
- default value is 32.
+ Two nodes in the elimination tree are merged if the result has fewer than spral_nemin variables. The valid range for this integer option is 1 &le; spral_nemin and its default value is 32.
 
 </blockquote>
 
 \anchor OPT_spral_order
- <strong>spral_order</strong>: Controls type of ordering used by SPRAL.
+ <strong>spral_order</strong>: Controls type of ordering used by SPRAL
 <blockquote>
  The default value for this string option is "matching".
 
@@ -1568,22 +1560,22 @@ Possible values:
  The default value for this string option is "yes".
 
 Possible values:
- - no: Do not use GPUs, even if present.
+ - no: Do not use GPUs.
  - yes: Use GPUs if present.
 </blockquote>
 
 \anchor OPT_spral_gpu_perf_coeff
- <strong>spral_gpu_perf_coeff</strong>: GPU performance coefficient.
+ <strong>spral_gpu_perf_coeff</strong>: GPU Performance Coefficient
 <blockquote>
- How many times faster a GPU is than a CPU at factoring a subtree.
- The lower bound for this real option is 0 and its default value is 1.
+ How many times faster a GPU is than a CPU at factoring a subtree. The valid range for this real option is 0 < spral_gpu_perf_coeff and its default value is 1.
+
 </blockquote>
 
 \anchor OPT_spral_min_gpu_work
- <strong>spral_min_gpu_work</strong>: Minimum GPU work.
+ <strong>spral_min_gpu_work</strong>: Minimum GPU Work
 <blockquote>
- Minimum number of FLOPS in subtree before scheduling on GPU.
- The strict lower bound for this real option is 0 and its default value is 5 * 10<sup>9</sup>.
+ Minimum number of FLOPS in subtree before scheduling on GPU. The valid range for this real option is 0 &le; spral_min_gpu_work and its default value is 5 &middot; 10<sup>+09</sup>.
+
 </blockquote>
 
 \anchor OPT_spral_ignore_numa
@@ -1597,45 +1589,55 @@ Possible values:
 </blockquote>
 
 \anchor OPT_spral_cpu_block_size
- <strong>spral_cpu_block_size</strong>: CPU parallelization block size.
+ <strong>spral_cpu_block_size</strong>: CPU Parallelization Block Size
 <blockquote>
- Block size to use for parallelization of large nodes on CPU resources.
- The lower bound for this integer option is 1 and its default value is 256.
+ Block size to use for parallelization of large nodes on CPU resources. The valid range for this integer option is 1 &le; spral_cpu_block_size and its default value is 256.
+
 </blockquote>
 
 \anchor OPT_spral_max_load_inbalance
- <strong>spral_max_load_inbalance</strong>: Maximum permissible load.
+ <strong>spral_max_load_inbalance</strong>: Maximum Permissible Load
 <blockquote>
- Maximum permissible load inbalance for leaf subtree allocations.
- The lower bound for this real option is 1 and its default value is 1.2.
+ Maximum permissible load inbalance for leaf subtree allocations. The valid range for this real option is 1 < spral_max_load_inbalance and its default value is 1.2.
+
 </blockquote>
 
 \anchor OPT_spral_small
- <strong>spral_small</strong>: Zero pivot threshold.
+ <strong>spral_small</strong>: Zero Pivot Threshold
 <blockquote>
- Any pivot less than spral_small is treated as zero. The lower bound for this real option is 0 and its default value is 10<sup>-20</sup>.
+ Any pivot less than spral_small is treated as zero. The valid range for this real option is 0 < spral_small and its default value is 10<sup>-20</sup>.
+
 </blockquote>
 
 \anchor OPT_spral_u
- <strong>spral_u</strong>: Pivoting threshold
+ <strong>spral_u</strong>: Pivoting Threshold
 <blockquote>
- Relative pivot threshold. See SPRAL documentation. The valid range for this
- real option is 0 &le; spral_u &le; 0.5 and its default value is
- 10<sup>-8</sup>.
+ Relative pivot threshold used in symmetric indefinite case. The valid range for this real option is 0 < spral_u &le; 0.5 and its default value is 10<sup>-08</sup>.
+
 </blockquote>
 
 \anchor OPT_spral_umax
- <strong>spral_umax</strong>: Maximum pivoting threshold
+ <strong>spral_umax</strong>: Maximum Pivoting Threshold
 <blockquote>
- See SPRAL documentation. The valid range for this real option is 0 &le; spral_umax &le; 0.5 and its default value is 0.0001.
+ See SPRAL documentation. The valid range for this real option is 0 < spral_umax &le; 0.5 and its default value is 0.0001.
+
+</blockquote>
+
+\anchor OPT_spral_pivot_method
+ <strong>spral_pivot_method</strong>: Specifies strategy for scaling in SPRAL linear solver.
+<blockquote>
+ The default value for this string option is "block".
+
+Possible values:
+ - aggressive: Aggressive a posteori pivoting.
+ - block: Block a posteori pivoting.
+ - threshold: Threshold partial pivoting (not parallel).
 </blockquote>
 
 \anchor OPT_spral_scaling_1
- <strong>spral_scaling_1</strong>: First scaling.
+ <strong>spral_scaling_1</strong>: First scaling strategy.
 <blockquote>
- If spral_scaling = dynamic, this scaling is used according to the trigger
- spral_switch_1. If spral_switch_2 is triggered, it is disabled. The default
- value for this string option is "matching".
+ If spral_scaling = dynamic, this scaling is used according to the trigger spral_switch_1. If spral_switch_2 is triggered, it is disabled. The default value for this string option is "matching".
 
 Possible values:
  - none: Do not scale the linear system matrix.
@@ -1646,11 +1648,9 @@ Possible values:
 </blockquote>
 
 \anchor OPT_spral_scaling_2
- <strong>spral_scaling_2</strong>: Second scaling.
+ <strong>spral_scaling_2</strong>: Second scaling strategy.
 <blockquote>
- If spral_scaling = dynamic, this scaling is used according to the trigger
- spral_switch_2. If spral_switch_3 is triggered, it is disabled. The default
- value for this string option is "mc64".
+ If spral_scaling = dynamic, this scaling is used according to the trigger spral_switch_2. If spral_switch_3 is triggered, it is disabled. The default value for this string option is "mc64".
 
 Possible values:
  - none: Do not scale the linear system matrix.
@@ -1660,11 +1660,10 @@ Possible values:
  - ruiz: Scale using the norm-equilibration algorithm of Ruiz (MC77).
 </blockquote>
 
-\anchor OPT_spral_scaling3
- <strong>spral_scaling3</strong>: Third scaling.
+\anchor OPT_spral_scaling_3
+ <strong>spral_scaling_3</strong>: Third scaling strategy.
 <blockquote>
- If spral_scaling = dynamic, this scaling is used according to the trigger
- spral_switch_3. The default value for this string option is "none".
+ If spral_scaling = dynamic, this scaling is used according to the trigger spral_switch_3. The default value for this string option is "none".
 
 Possible values:
  - none: Do not scale the linear system matrix.
@@ -1672,18 +1671,23 @@ Possible values:
  - auction: Scale using the auction algorithm.
  - matching: Scale using the matching-based ordering.
  - ruiz: Scale using the norm-equilibration algorithm of Ruiz (MC77).
+</blockquote>
+
+\anchor OPT_spral_small_subtree_threshold
+ <strong>spral_small_subtree_threshold</strong>: Small Subtree Threshold
+<blockquote>
+ Maximum number of FLOPS in a subtree treated as a single task. The valid range for this real option is 0 < spral_small_subtree_threshold and its default value is 4 &middot; 10<sup>+06</sup>.
+
 </blockquote>
 
 \anchor OPT_spral_switch_1
  <strong>spral_switch_1</strong>: First switch, determining when spral_scaling_1 is enabled.
 <blockquote>
- If spral_scaling = dynamic, spral_scaling_1 is enabled according to this
- condition. If spral_switch_2 occurs, this option is henceforth ignored.
- The default value for this string option is "at_start".
+ If spral_scaling = dynamic, spral_scaling_1 is enabled according to this condition. If spral_switch_2 occurs, this option is henceforth ignored. The default value for this string option is "at_start".
 
 Possible values:
  - never: Scaling is never enabled.
- - at_start: Scaling to be used from the very start.
+ - at_start: Scaling is used from the very start.
  - at_start_reuse: Scaling is used on the first iteration, then reused thereafter.
  - on_demand: Scaling is used when iterative refinement has failed.
  - on_demand_reuse: As on_demand, but scaling from previous iteration is reused.
@@ -1696,13 +1700,11 @@ Possible values:
 \anchor OPT_spral_switch_2
  <strong>spral_switch_2</strong>: Second switch, determining when spral_scaling_2 is enabled.
 <blockquote>
- If spral_scaling = dynamic, spral_scaling_2 is enabled according to this
- condition. If spral_switch_3 occurs, this option is henceforth ignored.
- The default value for this string option is "on_demand".
+ If spral_scaling = dynamic, spral_scaling_2 is enabled according to this condition. If spral_switch_3 occurs, this option is henceforth ignored. The default value for this string option is "on_demand".
 
 Possible values:
  - never: Scaling is never enabled.
- - at_start: Scaling to be used from the very start.
+ - at_start: Scaling is used from the very start.
  - at_start_reuse: Scaling is used on the first iteration, then reused thereafter.
  - on_demand: Scaling is used when iterative refinement has failed.
  - on_demand_reuse: As on_demand, but scaling from previous iteration is reused.
@@ -1715,12 +1717,11 @@ Possible values:
 \anchor OPT_spral_switch_3
  <strong>spral_switch_3</strong>: Third switch, determining when spral_scaling_3 is enabled.
 <blockquote>
- If spral_scaling = dynamic, spral_scaling_3 is enabled according to this
- condition. The default value for this string option is "never".
+ If spral_scaling = dynamic, spral_scaling_3 is enabled according to this condition. The default value for this string option is "never".
 
 Possible values:
  - never: Scaling is never enabled.
- - at_start: Scaling to be used from the very start.
+ - at_start: Scaling is used from the very start.
  - at_start_reuse: Scaling is used on the first iteration, then reused thereafter.
  - on_demand: Scaling is used when iterative refinement has failed.
  - on_demand_reuse: As on_demand, but scaling from previous iteration is reused.

@@ -38,7 +38,7 @@ void SpralSolverInterface::RegisterOptions(
 
    roptions->AddLowerBoundedNumberOption(
       "spral_gpu_perf_coeff", "GPU Performance Coefficient", 0.0, true, 1.0,
-      "How many times faster a GPU is than CPU at factoring a subtree.");
+      "How many times faster a GPU is than a CPU at factoring a subtree.");
 
    roptions->AddStringOption2(
       "spral_ignore_numa", "Non-uniform memory access (NUMA) region setting.",
@@ -52,11 +52,11 @@ void SpralSolverInterface::RegisterOptions(
 
    roptions->AddLowerBoundedNumberOption(
       "spral_min_gpu_work", "Minimum GPU Work", 0.0, false, 5.0e9,
-      "Minimum number of flops in subtree before scheduling on GPU.");
+      "Minimum number of FLOPS in subtree before scheduling on GPU.");
 
    roptions->AddLowerBoundedIntegerOption(
       "spral_nemin", "Node Amalgamation Parameter", 1, 32,
-      "Two nodes in elimination tree are merged if result has fewer than "
+      "Two nodes in the elimination tree are merged if the result has fewer than "
       "spral_nemin variables.");
 
    roptions->AddStringOption2(
@@ -93,7 +93,7 @@ void SpralSolverInterface::RegisterOptions(
       "mc64", "Scale using weighted bipartite matching (MC64).",
       "auction", "Scale using the auction algorithm.",
       "matching", "Scale using the matching-based ordering.",
-      "ruiz", "Scale using the norm-equilibration algorithm of Ruiz (MC77)."
+      "ruiz", "Scale using the norm-equilibration algorithm of Ruiz (MC77).",
       "If spral_scaling = dynamic, this scaling is used according to the trigger "
       "spral_switch_1. If spral_switch_2 is triggered, it is disabled.");
 
@@ -104,7 +104,7 @@ void SpralSolverInterface::RegisterOptions(
       "mc64", "Scale using weighted bipartite matching (MC64).",
       "auction", "Scale using the auction algorithm.",
       "matching", "Scale using the matching-based ordering.",
-      "ruiz", "Scale using the norm-equilibration algorithm of Ruiz (MC77)."
+      "ruiz", "Scale using the norm-equilibration algorithm of Ruiz (MC77).",
       "If spral_scaling = dynamic, this scaling is used according to the trigger "
       "spral_switch_2. If spral_switch_3 is triggered, it is disabled.");
 
@@ -115,7 +115,7 @@ void SpralSolverInterface::RegisterOptions(
       "mc64", "Scale using weighted bipartite matching (MC64).",
       "auction", "Scale using the auction algorithm.",
       "matching", "Scale using the matching-based ordering.",
-      "ruiz", "Scale using the norm-equilibration algorithm of Ruiz (MC77)."
+      "ruiz", "Scale using the norm-equilibration algorithm of Ruiz (MC77).",
       "If spral_scaling = dynamic, this scaling is used according to the trigger "
       "spral_switch_3.");
 
@@ -125,7 +125,7 @@ void SpralSolverInterface::RegisterOptions(
 
    roptions->AddLowerBoundedNumberOption(
       "spral_small_subtree_threshold", "Small Subtree Threshold", 0.0, true, 4.0e6,
-      "Maximum number of flops in a subtree treated as a single task.");
+      "Maximum number of FLOPS in a subtree treated as a single task.");
 
    roptions->AddStringOption9(
       "spral_switch_1",
@@ -141,7 +141,7 @@ void SpralSolverInterface::RegisterOptions(
       "od_hd", "Combination of on_demand and high_delay.",
       "od_hd_reuse", "Combination of on_demand_reuse and high_delay_reuse",
       "If spral_scaling = dynamic, spral_scaling_1 is enabled according to this "
-      "condition. If spral_switch_2 occurs this option is henceforth ignored.");
+      "condition. If spral_switch_2 occurs, this option is henceforth ignored.");
 
    roptions->AddStringOption9(
       "spral_switch_2",
@@ -151,13 +151,13 @@ void SpralSolverInterface::RegisterOptions(
       "at_start_reuse", "Scaling is used on the first iteration, then reused thereafter.",
       "on_demand", "Scaling is used when iterative refinement has failed.",
       "on_demand_reuse", "As on_demand, but scaling from previous iteration is reused.",
-      "high_delay", "Scaling is used after more than 0.05*n delays are present",
+      "high_delay", "Scaling is used after more than 0.05*n delays are present.",
       "high_delay_reuse", "Scaling is used only when previous iteration created "
       "more that 0.05*n additional delays; otherwise, reuse scaling from the previous iteration.",
-      "od_hd", "Combination of on_demand and high_delay",
+      "od_hd", "Combination of on_demand and high_delay.",
       "od_hd_reuse", "Combination of on_demand_reuse and high_delay_reuse",
       "If spral_scaling = dynamic, spral_scaling_2 is enabled according to this "
-      "condition. If spral_switch_3 occurs this option is henceforth ignored.");
+      "condition. If spral_switch_3 occurs, this option is henceforth ignored.");
 
    roptions->AddStringOption9(
       "spral_switch_3",
@@ -167,10 +167,10 @@ void SpralSolverInterface::RegisterOptions(
       "at_start_reuse", "Scaling is used on the first iteration, then reused thereafter.",
       "on_demand", "Scaling is used when iterative refinement has failed.",
       "on_demand_reuse", "As on_demand, but scaling from previous iteration is reused.",
-      "high_delay", "Scaling is used after more than 0.05*n delays are present",
+      "high_delay", "Scaling is used after more than 0.05*n delays are present.",
       "high_delay_reuse", "Scaling is used only when previous iteration created "
       "more that 0.05*n additional delays; otherwise, reuse scaling from the previous iteration.",
-      "od_hd", "Combination of on_demand and high_delay",
+      "od_hd", "Combination of on_demand and high_delay.",
       "od_hd_reuse", "Combination of on_demand_reuse and high_delay_reuse",
       "If spral_scaling = dynamic, spral_scaling_3 is enabled according to this condition.");
 
@@ -184,9 +184,10 @@ void SpralSolverInterface::RegisterOptions(
       "See SPRAL documentation.");
 
    roptions->AddStringOption2(
-      "spral_use_gpu", "GPU Setting", "yes",
-      "no", "Do not use NVIDIA GPUs.",
-      "yes", "Use NVIDIA GPUs if present.");
+      "spral_use_gpu",
+      "Specifies whether or not graphics processing units (GPUs) are used by the SPRAL linear solver.", "yes",
+      "no", "Do not use GPUs.",
+      "yes", "Use GPUs if present.");
 }
 
 int SpralSolverInterface::PivotMethodNameToNum(
