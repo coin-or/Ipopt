@@ -5,7 +5,7 @@
 /***************************************************************************/
 
 /* Version number of project */
-#define IPOPT_VERSION "3.13.4"
+#define IPOPT_VERSION "3.13.5"
 
 /* Major Version number of project */
 #define IPOPT_VERSION_MAJOR 3
@@ -14,7 +14,7 @@
 #define IPOPT_VERSION_MINOR 13
 
 /* Release Version number of project */
-#define IPOPT_VERSION_RELEASE 4
+#define IPOPT_VERSION_RELEASE 5
 
 /* Define to the C type corresponding to Fortran INTEGER */
 #ifndef IPOPT_FORTRAN_INTEGER_TYPE
