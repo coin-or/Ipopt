@@ -187,16 +187,16 @@ AM_CONDITIONAL([HAVE_PARDISO],[test "$have_pardiso_mkl$have_pardiso_project" != 
 # SPRAL #
 #########
 
-AC_LANG_PUSH(C++)
-AC_COIN_CHK_LIB(Spral,[IpoptLib],[-lspral],[],[],[spral_ssids_analyse])
-if test "$coin_has_spral" = yes ; then
-  coin_save_CPPFLAGS="$CPPFLAGS"
-  CPPFLAGS="$spral_cflags $CPPFLAGS"
-  AC_CHECK_HEADER([spral_ssids.h],
-    [CPPFLAGS="$coin_save_CPPFLAGS"],
-    [AC_MSG_ERROR([Spral library available, but Spral header spral_ssids.h cannot be compiled. Consider using --without-spral.])])
+# check for Spral only if building for double precision
+if test $precision = double ; then
+  AC_LANG_PUSH(C++)
+  AC_COIN_CHK_LIBHDR(Spral,[IpoptLib],[-lspral],[],[],
+    [spral_ssids_solve(0, 0, (double*)0, 0, (void*)0, (void*)0, (const struct spral_ssids_options*)0, (struct spral_ssids_inform*)0);],
+    [#include "spral_ssids.h"])
+  AC_LANG_POP(C++)
+else
+  AM_CONDITIONAL([COIN_HAS_SPRAL],[false])
 fi
-AC_LANG_POP(C++)
 
 ########
 # WSMP #
