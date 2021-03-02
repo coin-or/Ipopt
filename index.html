@@ -150,22 +150,22 @@ Prerequisites</h2>
 <ul>
 <li><p class="startli">BLAS (Basic Linear Algebra Subroutines) and LAPACK (Linear Algebra PACKage). Many vendors of compilers and operating systems provide precompiled and optimized libraries for these dense linear algebra subroutines. You can also get the source code for a simple reference implementation from <a href="http://www.netlib.org">http://www.netlib.org</a>. However, it is strongly recommended to use some optimized BLAS and LAPACK implementations, for large problems this can make a runtime difference of an order of magnitude!</p>
 <p class="startli">Examples for efficient BLAS implementations are:</p><ul>
+<li>Generic:<ul>
+<li><a href="https://github.com/xianyi/OpenBLAS">OpenBLAS</a>, BSD license</li>
+<li><a href="https://github.com/flame/blis">BLIS</a> (BLAS-like Library Instantiation Software Framework), BSD license</li>
+<li><a href="http://math-atlas.sourceforge.net/">ATLAS</a> (Automatically Tuned Linear Algebra Software), BSD license</li>
+</ul>
+</li>
 <li>From hardware vendors:<ul>
 <li><a href="https://developer.apple.com/documentation/accelerate">Accelerate</a> Framework by Apple</li>
-<li><a href="https://github.com/amd/blis">BLIS</a> (BLAS-like Library Instantiation Software Framework) by AMD</li>
+<li><a href="https://github.com/amd/blis">BLIS fork</a> (BLAS-like Library Instantiation Software Framework) by AMD</li>
 <li><a href="https://www.ibm.com/support/knowledgecenter/en/SSFHY8/essl_welcome.html">ESSL</a> (Engineering Scientific Subroutine Library) by IBM</li>
 <li><a href="https://software.intel.com/content/www/us/en/develop/tools/math-kernel-library.html">MKL</a> (Math Kernel Library) by Intel</li>
 <li><a href="https://docs.oracle.com/cd/E18659_01/html/821-2763/gjgis.html">Sun Performance Library</a> by Sun</li>
 </ul>
 </li>
-<li>Generic:<ul>
-<li>Atlas (Automatically Tuned Linear Algebra Software)</li>
-<li>GotoBLAS</li>
 </ul>
-</li>
-</ul>
-<p class="startli">You find more information on the web.</p>
-<p class="startli">Note: BLAS libraries distributed with Linux are often not optimized.</p>
+<p class="startli">Note: BLAS libraries distributed with Linux were often not optimized in the past. Nowadays, OpenBLAS is often found in Linux distributions, but you should check.</p>
 </li>
 <li><p class="startli">A sparse symmetric indefinite linear solver. <code>Ipopt</code> needs to obtain the solution of sparse, symmetric, indefinite linear systems, and for this it relies on third-party code.</p>
 <p class="startli">Currently, the following linear solvers can be used:</p><ul>
