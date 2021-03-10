@@ -113,8 +113,12 @@ AM_CONDITIONAL([HAVE_MA28],[test "$have_ma28" = yes])
 ###########
 
 AC_ARG_WITH([pardiso],
-            AC_HELP_STRING([--with-pardiso],[specify Pardiso library (>= 4.0) from pardiso-project.org]),
-            [have_pardiso_project=yes; pardiso_lflags=$withval],
+            [AC_HELP_STRING([--with-pardiso],[specify Pardiso library (>= 4.0) from pardiso-project.org; use --without-pardiso to disable also MKL Pardiso check])],
+            [case "$withval" in
+               yes) have_pardiso_project=no ;;   # no linker flags given; --with-pardiso[=yes] actually doesn't make sense, but we use it as signal to fall back to checking MKL
+               no) have_pardiso_project=no ;;  # so with_pardiso=no, we use that below to skip checking MKL
+               *) have_pardiso_project=yes; pardiso_lflags="$withval" ;;
+             esac],
             [have_pardiso_project=no])
 
 have_pardiso_mkl=no
@@ -131,7 +135,7 @@ if test "$have_pardiso_project" = yes ; then
   AC_COIN_TRY_LINK([pardiso_exist_parallel],[$pardiso_lflags $lapack_lflags],[$lapack_pcfiles],
     [AC_DEFINE(IPOPT_HAS_PARDISO_PARALLEL,1,[Define to 1 if you are using the parallel version of Pardiso])])
 
-else
+elif test "$with_pardiso" != no ; then
   # check whether Pardiso is available via Lapack, which should then be MKL
   # figure out name mangling and define PARDISO_FUNC
   AC_COIN_TRY_LINK([pardiso],[$lapack_lflags],[$lapack_pcfiles],
