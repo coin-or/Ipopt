@@ -98,11 +98,19 @@ required:
 
     Examples for efficient BLAS implementations are:
 
+    -   Generic:
+
+        -   [OpenBLAS](https://github.com/xianyi/OpenBLAS), BSD license
+
+        -   [BLIS](https://github.com/flame/blis) (BLAS-like Library Instantiation Software Framework), BSD license
+
+        -   [ATLAS](http://math-atlas.sourceforge.net/) (Automatically Tuned Linear Algebra Software), BSD license
+
     -   From hardware vendors:
 
         -   [Accelerate](https://developer.apple.com/documentation/accelerate) Framework by Apple
 
-        -   [BLIS](https://github.com/amd/blis) (BLAS-like Library Instantiation Software Framework) by AMD
+        -   [BLIS fork](https://github.com/amd/blis) (BLAS-like Library Instantiation Software Framework) by AMD
 
         -   [ESSL](https://www.ibm.com/support/knowledgecenter/en/SSFHY8/essl_welcome.html) (Engineering Scientific Subroutine Library) by IBM
 
@@ -110,16 +118,8 @@ required:
 
         -   [Sun Performance Library](https://docs.oracle.com/cd/E18659_01/html/821-2763/gjgis.html) by Sun
 
-    -   Generic:
-
-        -   Atlas (Automatically Tuned Linear Algebra Software)
-
-        -   GotoBLAS
-
-    You find more information on the web. <!-- TODO add links -->
-
-    Note: BLAS libraries distributed with Linux are often not
-    optimized.
+    Note: BLAS libraries distributed with Linux were often not optimized in the past.
+    Nowadays, OpenBLAS is often found in Linux distributions, but you should check.
 
 -   A sparse symmetric indefinite linear solver. \Ipopt
     needs to obtain the solution of sparse, symmetric, indefinite linear

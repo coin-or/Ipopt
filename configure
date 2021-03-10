@@ -1614,7 +1614,8 @@ Optional Packages:
                           environment. (Most often, -I specs for header file
                           directories.)
   --with-pardiso          specify Pardiso library (>= 4.0) from
-                          pardiso-project.org
+                          pardiso-project.org; use --without-pardiso to
+                          disable also MKL Pardiso check
   --with-spral            Use Spral. If an argument is given, 'yes' is
                           equivalent to --with-spral, 'no' is
                           equivalent to --without-spral. Any other argument is
@@ -23837,7 +23838,11 @@ fi
 
 # Check whether --with-pardiso was given.
 if test "${with_pardiso+set}" = set; then :
-  withval=$with_pardiso; have_pardiso_project=yes; pardiso_lflags=$withval
+  withval=$with_pardiso; case "$withval" in
+               yes) have_pardiso_project=no ;;   # no linker flags given; --with-pardiso[=yes] actually doesn't make sense, but we use it as signal to fall back to checking MKL
+               no) have_pardiso_project=no ;;  # so with_pardiso=no, we use that below to skip checking MKL
+               *) have_pardiso_project=yes; pardiso_lflags="$withval" ;;
+             esac
 else
   have_pardiso_project=no
 fi
@@ -24065,7 +24070,7 @@ $as_echo "#define IPOPT_HAS_PARDISO_PARALLEL 1" >>confdefs.h
   fi
 
 
-else
+elif test "$with_pardiso" != no ; then
   # check whether Pardiso is available via Lapack, which should then be MKL
   # figure out name mangling and define PARDISO_FUNC
 
@@ -25176,7 +25181,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25179 "configure" */
+/* #line 25184 "configure" */
 public class Test {
 }
 EOF
@@ -25662,7 +25667,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25665 "configure" */
+/* #line 25670 "configure" */
 public class Test {
 }
 EOF
@@ -25696,7 +25701,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25699 "configure" */
+/* [#]line 25704 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);

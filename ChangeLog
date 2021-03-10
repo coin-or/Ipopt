@@ -24,6 +24,9 @@ commit history.
           SPRAL. See also the options documentation for new options that
           are available for the Ipopt/SPRAL interface.
 
+2021-0x-yy: 3.13.5
+        - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]
+
 2021-02-24: 3.13.4
         - Fixed a linking issue for ipopt_sens [#418]
         - Fixed Makefile for Java example regarding location of jar file
