@@ -19,7 +19,15 @@
 #endif
 
 // if we have MA97 in HSL or the linear solver loader, then we want to build the MA97 interface
-#if defined(COINHSL_HAS_MA97) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
+#if (defined(COINHSL_HAS_MA97) && !defined(IPOPT_SINGLE)) || \
+    (defined(COINHSL_HAS_MA97S) && defined(IPOPT_SINGLE)) || \
+    defined(IPOPT_HAS_LINEARSOLVERLOADER)
+
+#ifdef IPOPT_SINGLE
+#define IPOPT_HSL_FUNCP(name,NAME) IPOPT_HSL_FUNC(name,NAME)
+#else
+#define IPOPT_HSL_FUNCP(name,NAME) IPOPT_HSL_FUNC(name ## d,NAME ## D)
+#endif
 
 #include "IpMa97SolverInterface.hpp"
 #include <iostream>
@@ -36,12 +44,12 @@ using namespace std;
 #ifdef MA97_DUMP_MATRIX
 extern "C"
 {
-   extern void IPOPT_HSL_FUNC(dump_mat_csc, DUMP_MAT_CSC) (
+   extern void IPOPT_HSL_FUNCP(dump_mat_csc, DUMP_MAT_CSC) (
       const ipfint* factidx,
       const ipfint* n,
       const ipfint* ptr,
       const ipfint* row,
-      const double* a
+      const ipfnumber* a
    );
 }
 #endif
@@ -393,7 +401,7 @@ ESymSolverStatus Ma97SolverInterface::InitializeStructure(
    {
       delete[] val_;
    }
-   val_ = new double[nonzeros];
+   val_ = new Number[nonzeros];
 
    // Check if analyse needs to be postponed
    if( ordering_ == ORDER_MATCHED_AMD || ordering_ == ORDER_MATCHED_METIS )
@@ -524,7 +532,7 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
    const Index* ia,
    const Index* ja,
    Index        nrhs,
-   double*      rhs_vals,
+   Number*      rhs_vals,
    bool         check_NegEVals,
    Index        numberOfNegEVals
 )
@@ -555,7 +563,7 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
          control_.scaling = scaling_type_;
          if( scaling_type_ != 0 && scaling_ == NULL )
          {
-            scaling_ = new double[ndim_];   // alloc if not already
+            scaling_ = new Number[ndim_];   // alloc if not already
          }
       }
       else
@@ -759,4 +767,4 @@ bool Ma97SolverInterface::IncreaseQuality()
 
 } // namespace Ipopt
 
-#endif /* COINHSL_HAS_MA97 or IPOPT_HAS_LINEARSOLVERLOADER */
+#endif /* COINHSL_HAS_MA97(S) or IPOPT_HAS_LINEARSOLVERLOADER */

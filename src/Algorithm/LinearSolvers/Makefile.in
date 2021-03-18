@@ -95,19 +95,14 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@IPOPT_SINGLE_FALSE@am__append_1 = \
-@IPOPT_SINGLE_FALSE@	IpMa86SolverInterface.cpp \
-@IPOPT_SINGLE_FALSE@	IpMa97SolverInterface.cpp \
-@IPOPT_SINGLE_FALSE@	IpMa77SolverInterface.cpp
-
-@BUILD_LINEARSOLVERLOADER_TRUE@am__append_2 = IpPardisoSolverInterface.cpp
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__append_3 = IpPardisoSolverInterface.cpp
-@HAVE_MA28_TRUE@am__append_4 = IpMa28TDependencyDetector.cpp
-@HAVE_MA28_TRUE@@IPOPT_SINGLE_TRUE@am__append_5 = IpMa28sPartition.F
-@HAVE_MA28_TRUE@@IPOPT_SINGLE_FALSE@am__append_6 = IpMa28Partition.F
-@HAVE_WSMP_TRUE@am__append_7 = IpWsmpSolverInterface.cpp IpIterativeWsmpSolverInterface.cpp
-@COIN_HAS_MUMPS_TRUE@am__append_8 = IpMumpsSolverInterface.cpp
-@COIN_HAS_SPRAL_TRUE@am__append_9 = IpSpralSolverInterface.cpp
+@BUILD_LINEARSOLVERLOADER_TRUE@am__append_1 = IpPardisoSolverInterface.cpp
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__append_2 = IpPardisoSolverInterface.cpp
+@HAVE_MA28_TRUE@am__append_3 = IpMa28TDependencyDetector.cpp
+@HAVE_MA28_TRUE@@IPOPT_SINGLE_TRUE@am__append_4 = IpMa28sPartition.F
+@HAVE_MA28_TRUE@@IPOPT_SINGLE_FALSE@am__append_5 = IpMa28Partition.F
+@HAVE_WSMP_TRUE@am__append_6 = IpWsmpSolverInterface.cpp IpIterativeWsmpSolverInterface.cpp
+@COIN_HAS_MUMPS_TRUE@am__append_7 = IpMumpsSolverInterface.cpp
+@COIN_HAS_SPRAL_TRUE@am__append_8 = IpSpralSolverInterface.cpp
 subdir = src/Algorithm/LinearSolvers
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -121,29 +116,27 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 liblinsolvers_la_LIBADD =
-@IPOPT_SINGLE_FALSE@am__objects_1 = IpMa86SolverInterface.lo \
-@IPOPT_SINGLE_FALSE@	IpMa97SolverInterface.lo \
-@IPOPT_SINGLE_FALSE@	IpMa77SolverInterface.lo
-@BUILD_LINEARSOLVERLOADER_TRUE@am__objects_2 =  \
+@BUILD_LINEARSOLVERLOADER_TRUE@am__objects_1 =  \
 @BUILD_LINEARSOLVERLOADER_TRUE@	IpPardisoSolverInterface.lo
-@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__objects_3 = IpPardisoSolverInterface.lo
-@HAVE_MA28_TRUE@am__objects_4 = IpMa28TDependencyDetector.lo
-@HAVE_MA28_TRUE@@IPOPT_SINGLE_TRUE@am__objects_5 =  \
+@BUILD_LINEARSOLVERLOADER_FALSE@@HAVE_PARDISO_TRUE@am__objects_2 = IpPardisoSolverInterface.lo
+@HAVE_MA28_TRUE@am__objects_3 = IpMa28TDependencyDetector.lo
+@HAVE_MA28_TRUE@@IPOPT_SINGLE_TRUE@am__objects_4 =  \
 @HAVE_MA28_TRUE@@IPOPT_SINGLE_TRUE@	IpMa28sPartition.lo
-@HAVE_MA28_TRUE@@IPOPT_SINGLE_FALSE@am__objects_6 =  \
+@HAVE_MA28_TRUE@@IPOPT_SINGLE_FALSE@am__objects_5 =  \
 @HAVE_MA28_TRUE@@IPOPT_SINGLE_FALSE@	IpMa28Partition.lo
-@HAVE_WSMP_TRUE@am__objects_7 = IpWsmpSolverInterface.lo \
+@HAVE_WSMP_TRUE@am__objects_6 = IpWsmpSolverInterface.lo \
 @HAVE_WSMP_TRUE@	IpIterativeWsmpSolverInterface.lo
-@COIN_HAS_MUMPS_TRUE@am__objects_8 = IpMumpsSolverInterface.lo
-@COIN_HAS_SPRAL_TRUE@am__objects_9 = IpSpralSolverInterface.lo
+@COIN_HAS_MUMPS_TRUE@am__objects_7 = IpMumpsSolverInterface.lo
+@COIN_HAS_SPRAL_TRUE@am__objects_8 = IpSpralSolverInterface.lo
 am_liblinsolvers_la_OBJECTS = IpLinearSolversRegOp.lo \
 	IpSlackBasedTSymScalingMethod.lo IpTripletToCSRConverter.lo \
 	IpTSymDependencyDetector.lo IpTSymLinearSolver.lo \
-	IpMa27TSolverInterface.lo IpMa57TSolverInterface.lo \
-	IpMc19TSymScalingMethod.lo $(am__objects_1) $(am__objects_2) \
-	$(am__objects_3) $(am__objects_4) $(am__objects_5) \
-	$(am__objects_6) $(am__objects_7) $(am__objects_8) \
-	$(am__objects_9)
+	IpMc19TSymScalingMethod.lo IpMa27TSolverInterface.lo \
+	IpMa57TSolverInterface.lo IpMa77SolverInterface.lo \
+	IpMa86SolverInterface.lo IpMa97SolverInterface.lo \
+	$(am__objects_1) $(am__objects_2) $(am__objects_3) \
+	$(am__objects_4) $(am__objects_5) $(am__objects_6) \
+	$(am__objects_7) $(am__objects_8)
 liblinsolvers_la_OBJECTS = $(am_liblinsolvers_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -466,11 +459,12 @@ noinst_LTLIBRARIES = liblinsolvers.la
 liblinsolvers_la_SOURCES = IpLinearSolversRegOp.cpp \
 	IpSlackBasedTSymScalingMethod.cpp IpTripletToCSRConverter.cpp \
 	IpTSymDependencyDetector.cpp IpTSymLinearSolver.cpp \
-	IpMa27TSolverInterface.cpp IpMa57TSolverInterface.cpp \
-	IpMc19TSymScalingMethod.cpp $(am__append_1) $(am__append_2) \
-	$(am__append_3) $(am__append_4) $(am__append_5) \
-	$(am__append_6) $(am__append_7) $(am__append_8) \
-	$(am__append_9)
+	IpMc19TSymScalingMethod.cpp IpMa27TSolverInterface.cpp \
+	IpMa57TSolverInterface.cpp IpMa77SolverInterface.cpp \
+	IpMa86SolverInterface.cpp IpMa97SolverInterface.cpp \
+	$(am__append_1) $(am__append_2) $(am__append_3) \
+	$(am__append_4) $(am__append_5) $(am__append_6) \
+	$(am__append_7) $(am__append_8)
 AM_CPPFLAGS = \
 	-I$(srcdir)/../../Common \
 	-I$(srcdir)/../../LinAlg \

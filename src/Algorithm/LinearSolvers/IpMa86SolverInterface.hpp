@@ -14,7 +14,11 @@
 #include "IpSparseSymLinearSolverInterface.hpp"
 extern "C"
 {
+#ifdef IPOPT_SINGLE
+#include "hsl_ma86s.h"
+#else
 #include "hsl_ma86d.h"
+#endif
 }
 
 namespace Ipopt

@@ -17,15 +17,13 @@ liblinsolvers_la_SOURCES = \
 	IpTSymLinearSolver.cpp
 
 liblinsolvers_la_SOURCES += \
+	IpMc19TSymScalingMethod.cpp \
 	IpMa27TSolverInterface.cpp \
 	IpMa57TSolverInterface.cpp \
-	IpMc19TSymScalingMethod.cpp
-if !IPOPT_SINGLE
-liblinsolvers_la_SOURCES += \
+	IpMa77SolverInterface.cpp \
 	IpMa86SolverInterface.cpp \
-	IpMa97SolverInterface.cpp \
-	IpMa77SolverInterface.cpp
-endif
+	IpMa97SolverInterface.cpp
+
 if BUILD_LINEARSOLVERLOADER
   liblinsolvers_la_SOURCES += IpPardisoSolverInterface.cpp
 else

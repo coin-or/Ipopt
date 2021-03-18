@@ -39,12 +39,14 @@ void RegisterOptions_LinearSolvers(
 {
    roptions->SetRegisteringCategory("Linear Solver");
    TSymLinearSolver::RegisterOptions(roptions);
+
 #if (defined(COINHSL_HAS_MA27) && !defined(IPOPT_SINGLE)) || \
     (defined(COINHSL_HAS_MA27S) && defined(IPOPT_SINGLE)) || \
     defined(IPOPT_HAS_LINEARSOLVERLOADER)
    roptions->SetRegisteringCategory("MA27 Linear Solver");
    Ma27TSolverInterface::RegisterOptions(roptions);
 #endif
+
 #if (defined(COINHSL_HAS_MA57) && !defined(IPOPT_SINGLE)) || \
     (defined(COINHSL_HAS_MA57S) && defined(IPOPT_SINGLE)) || \
     defined(IPOPT_HAS_LINEARSOLVERLOADER)
@@ -52,20 +54,26 @@ void RegisterOptions_LinearSolvers(
    Ma57TSolverInterface::RegisterOptions(roptions);
 #endif
 
-#ifndef IPOPT_SINGLE // don't build these if using single precision
-#if defined(COINHSL_HAS_MA77) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
+#if (defined(COINHSL_HAS_MA77) && !defined(IPOPT_SINGLE)) || \
+    (defined(COINHSL_HAS_MA77S) && defined(IPOPT_SINGLE)) || \
+    defined(IPOPT_HAS_LINEARSOLVERLOADER)
    roptions->SetRegisteringCategory("MA77 Linear Solver");
    Ma77SolverInterface::RegisterOptions(roptions);
 #endif
-#if defined(COINHSL_HAS_MA86) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
+
+#if (defined(COINHSL_HAS_MA86) && !defined(IPOPT_SINGLE)) || \
+    (defined(COINHSL_HAS_MA86S) && defined(IPOPT_SINGLE)) || \
+    defined(IPOPT_HAS_LINEARSOLVERLOADER)
    roptions->SetRegisteringCategory("MA86 Linear Solver");
    Ma86SolverInterface::RegisterOptions(roptions);
 #endif
-#if defined(COINHSL_HAS_MA97) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
+
+#if (defined(COINHSL_HAS_MA97) && !defined(IPOPT_SINGLE)) || \
+    (defined(COINHSL_HAS_MA97S) && defined(IPOPT_SINGLE)) || \
+    defined(IPOPT_HAS_LINEARSOLVERLOADER)
    roptions->SetRegisteringCategory("MA97 Linear Solver");
    Ma97SolverInterface::RegisterOptions(roptions);
 #endif
-#endif // IPOPT_SINGLE
 
 #ifdef IPOPT_HAS_MUMPS
    roptions->SetRegisteringCategory("Mumps Linear Solver");

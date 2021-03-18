@@ -25,10 +25,10 @@ extern "C"
       ipfint* N,
       ipfint* M,
       ipfint* NZ,
-      double* A,
+      ipnumber* A,
       ipfint* IROW,
       ipfint* ICOL,
-      double* PIVTOL,
+      ipnumber* PIVTOL,
       ipfint* FILLFACT,
       ipfint* IVAR,
       ipfint* NDEGEN,
@@ -36,7 +36,7 @@ extern "C"
       ipfint* LIW,
       ipfint* IW,
       ipfint* LRW,
-      double* RW,
+      ipnumber* RW,
       ipfint* IERR
    );
 }

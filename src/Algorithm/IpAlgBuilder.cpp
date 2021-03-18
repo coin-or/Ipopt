@@ -104,7 +104,7 @@ void AlgorithmBuilder::RegisterOptions(
 # if (defined(COINHSL_HAS_MA57) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA57S) && defined(IPOPT_SINGLE))
       "ma57",
 # else
-# ifdef COINHSL_HAS_MA97
+# if (defined(COINHSL_HAS_MA97) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA97S) && defined(IPOPT_SINGLE))
       "ma97",
 #else
 #   ifdef COINHSL_HAS_MA86
@@ -314,8 +314,7 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    else if( linear_solver == "ma77" )
    {
 
-#ifndef IPOPT_SINGLE // don't build these if in single precision
-#ifndef COINHSL_HAS_MA77
+#if (defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA77S)) || (!defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA77))
 # ifdef IPOPT_HAS_LINEARSOLVERLOADER
       SolverInterface = new Ma77SolverInterface();
       if (!LSL_isMA77available())
@@ -342,7 +341,7 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    }
    else if( linear_solver == "ma86" )
    {
-#ifndef COINHSL_HAS_MA86
+#if (defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA86S)) || (!defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA86))
 # ifdef IPOPT_HAS_LINEARSOLVERLOADER
       SolverInterface = new Ma86SolverInterface();
       if (!LSL_isMA86available())
@@ -365,7 +364,6 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
 #else
       SolverInterface = new Ma86SolverInterface();
 #endif
-#endif // IPOPT_SINGLE
 
    }
    else if( linear_solver == "pardiso" )
@@ -400,11 +398,12 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
 #else
       THROW_EXCEPTION(OPTION_INVALID, "Selected linear solver SPRAL not available.");
 #endif
+#endif // IPOPT_SINGLE
 
    }
    else if( linear_solver == "ma97" )
    {
-#ifndef COINHSL_HAS_MA97
+#if (defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA97S)) || (!defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA97))
 # ifdef IPOPT_HAS_LINEARSOLVERLOADER
       SolverInterface = new Ma97SolverInterface();
       if (!LSL_isMA97available())
@@ -427,7 +426,6 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
 #else
       SolverInterface = new Ma97SolverInterface();
 #endif
-#endif // IPOPT_SINGLE
 
    }
    else if( linear_solver == "wsmp" )

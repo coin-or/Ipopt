@@ -41,6 +41,21 @@
 #define HSLLOADER_MA57
 #endif
 
+/* make MA77 available in HSL loader if MA77(S) not available in HSL */
+#if (defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA77S)) || (!defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA77))
+#define HSLLOADER_MA77
+#endif
+
+/* make MA86 available in HSL loader if MA86(S) not available in HSL */
+#if (defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA86S)) || (!defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA86))
+#define HSLLOADER_MA86
+#endif
+
+/* make MA97 available in HSL loader if MA97(S) not available in HSL */
+#if (defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA97S)) || (!defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA97))
+#define HSLLOADER_MA97
+#endif
+
 /* make MC19 available in HSL loader if MC19(S) not available in HSL */
 #if (defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MC19S)) || (!defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MC19))
 #define HSLLOADER_MC19
@@ -304,7 +319,7 @@ void IPOPT_HSL_FUNCP(ma57e, MA57E)(
 }
 #endif
 
-#ifndef COINHSL_HAS_MA77
+#ifdef HSLLOADER_MA77
 
 static ma77_default_control_t func_ma77_default_control = NULL;
 static ma77_open_nelt_t       func_ma77_open_nelt       = NULL;
@@ -325,7 +340,7 @@ static ma77_finalise_t        func_ma77_finalise        = NULL;
 
 /** Initialize control with default values */
 void ma77_default_control(
-   struct ma77_control_d* control
+   struct ma77_control* control
 )
 {
    if( func_ma77_default_control == NULL )
@@ -347,8 +362,8 @@ void ma77_open_nelt(
    const char*                  fname3,
    const char*                  fname4,
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info,
+   const struct ma77_control*   control,
+   struct ma77_info*            info,
    const int                    nelt
 )
 {
@@ -371,8 +386,8 @@ void ma77_open(
    const char*                  fname3,
    const char*                  fname4,
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info
+   const struct ma77_control*   control,
+   struct ma77_info*            info
 )
 {
    if( func_ma77_open == NULL )
@@ -392,8 +407,8 @@ void ma77_input_vars(
    const int                    nvar,
    const int                    list[],
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info
+   const struct ma77_control*   control,
+   struct ma77_info*            info
 )
 {
    if( func_ma77_input_vars == NULL )
@@ -411,10 +426,10 @@ void ma77_input_vars(
 void ma77_input_reals(
    const int                    idx,
    const int                    length,
-   const ma77pkgtype_d_         reals[],
+   const ipnumber               reals[],
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info
+   const struct ma77_control*   control,
+   struct ma77_info*            info
 )
 {
    if( func_ma77_input_reals == NULL )
@@ -432,8 +447,8 @@ void ma77_input_reals(
 void ma77_analyse(
    const int                    order[],
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info
+   const struct ma77_control*   control,
+   struct ma77_info*            info
 )
 {
    if( func_ma77_analyse == NULL )
@@ -451,9 +466,9 @@ void ma77_analyse(
 void ma77_factor(
    const int                    posdef,
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info,
-   const ma77pkgtype_d_*        scale
+   const struct ma77_control*   control,
+   struct ma77_info*            info,
+   const ipnumber*              scale
 )
 {
    if( func_ma77_factor == NULL )
@@ -471,12 +486,12 @@ void ma77_factor(
 void ma77_factor_solve(
    const int                    posdef,
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info,
-   const ma77pkgtype_d_*        scale,
+   const struct ma77_control*   control,
+   struct ma77_info*            info,
+   const ipnumber*              scale,
    const int                    nrhs,
    const int                    lx,
-   ma77pkgtype_d_               rhs[]
+   ipnumber                     rhs[]
 )
 {
    if( func_ma77_factor_solve == NULL )
@@ -495,11 +510,11 @@ void ma77_solve(
    const int                    job,
    const int                    nrhs,
    const int                    lx,
-   ma77pkgtype_d_               x[],
+   ipnumber                     x[],
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info,
-   const ma77pkgtype_d_*        scale
+   const struct ma77_control*   control,
+   struct ma77_info*            info,
+   const ipnumber*              scale
 )
 {
    if( func_ma77_solve == NULL )
@@ -517,13 +532,13 @@ void ma77_solve(
 void ma77_resid(
    const int                    nrhs,
    const int                    lx,
-   const ma77pkgtype_d_         x[],
+   const ipnumber               x[],
    const int                    lresid,
-   ma77pkgtype_d_               resid[],
+   ipnumber                     resid[],
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info,
-   ma77pkgtype_d_*              anorm_bnd
+   const struct ma77_control*   control,
+   struct ma77_info*            info,
+   ipnumber*                    anorm_bnd
 )
 {
    if( func_ma77_resid == NULL )
@@ -539,11 +554,11 @@ void ma77_resid(
 }
 
 void ma77_scale(
-   ma77pkgtype_d_               scale[],
+   ipnumber                     scale[],
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info,
-   ma77pkgtype_d_*              anorm
+   const struct ma77_control*   control,
+   struct ma77_info*            info,
+   ipnumber*                    anorm
 )
 {
    if( func_ma77_scale == NULL )
@@ -559,10 +574,10 @@ void ma77_scale(
 }
 
 void ma77_enquire_posdef(
-   ma77pkgtype_d_               d[],
+   ipnumber                     d[],
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info
+   const struct ma77_control*   control,
+   struct ma77_info*            info
 )
 {
    if( func_ma77_enquire_posdef == NULL )
@@ -579,10 +594,10 @@ void ma77_enquire_posdef(
 
 void ma77_enquire_indef(
    int                          piv_order[],
-   ma77pkgtype_d_               d[],
+   ipnumber                     d[],
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info
+   const struct ma77_control*   control,
+   struct ma77_info*            info
 )
 {
    if( func_ma77_enquire_indef == NULL )
@@ -598,10 +613,10 @@ void ma77_enquire_indef(
 }
 
 void ma77_alter(
-   const ma77pkgtype_d_         d[],
+   const ipnumber               d[],
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info
+   const struct ma77_control*   control,
+   struct ma77_info*            info
 )
 {
    if( func_ma77_alter == NULL )
@@ -623,8 +638,8 @@ void ma77_restart(
    const char*                  fname3,
    const char*                  fname4,
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info
+   const struct ma77_control*   control,
+   struct ma77_info*            info
 )
 {
    if( func_ma77_restart == NULL )
@@ -641,8 +656,8 @@ void ma77_restart(
 
 void ma77_finalise(
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info
+   const struct ma77_control*   control,
+   struct ma77_info*            info
 )
 {
    if( func_ma77_finalise == NULL )
@@ -660,7 +675,7 @@ void ma77_finalise(
 #endif
 
 
-#ifndef COINHSL_HAS_MA86
+#ifdef HSLLOADER_MA86
 
 static ma86_default_control_t func_ma86_default_control = NULL;
 static ma86_analyse_t         func_ma86_analyse         = NULL;
@@ -711,12 +726,12 @@ void ma86_factor(
    const int                  n,
    const int                  ptr[],
    const int                  row[],
-   const ma86pkgtype_d_       val[],
+   const ipnumber             val[],
    const int                  order[],
    void**                     keep,
    const struct ma86_control* control,
    struct ma86_info*          info,
-   const ma86pkgtype_d_       scale[]
+   const ipnumber             scale[]
 )
 {
    if( func_ma86_factor == NULL )
@@ -735,15 +750,15 @@ void ma86_factor_solve(
    const int                  n,
    const int                  ptr[],
    const int                  row[],
-   const ma86pkgtype_d_       val[],
+   const ipnumber             val[],
    const int                  order[],
    void**                     keep,
    const struct ma86_control* control,
    struct ma86_info*          info,
    const int                  nrhs,
    const int                  ldx,
-   ma86pkgtype_d_             x[],
-   const ma86pkgtype_d_       scale[]
+   ipnumber                   x[],
+   const ipnumber             scale[]
 )
 {
    if( func_ma86_factor_solve == NULL )
@@ -763,12 +778,12 @@ void ma86_solve(
    const int                  job,
    const int                  nrhs,
    const int                  ldx,
-   ma86pkgtype_d_*            x,
+   ipnumber*                  x,
    const int                  order[],
    void**                     keep,
    const struct ma86_control* control,
    struct ma86_info*          info,
-   const ma86pkgtype_d_       scale[]
+   const ipnumber             scale[]
 )
 {
    if( func_ma86_solve == NULL )
@@ -801,7 +816,7 @@ void ma86_finalise(
 }
 #endif
 
-#ifndef COINHSL_HAS_MA97
+#ifdef HSLLOADER_MA97
 
 static ma97_default_control_t func_ma97_default_control = NULL;
 static ma97_analyse_t         func_ma97_analyse         = NULL;
@@ -832,7 +847,7 @@ void ma97_analyse(
    const int                  n,
    const int                  ptr[],
    const int                  row[],
-   ma97pkgtype_d_             val[],
+   ipnumber                   val[],
    void**                     akeep,
    const struct ma97_control* control,
    struct ma97_info*          info,
@@ -852,15 +867,15 @@ void ma97_analyse(
 }
 
 void ma97_factor(
-   const int                  matrix_type,
+   int                        matrix_type,
    const int                  ptr[],
    const int                  row[],
-   const ma97pkgtype_d_       val[],
+   const ipnumber             val[],
    void**                     akeep,
    void**                     fkeep,
    const struct ma97_control* control,
    struct ma97_info*          info,
-   const ma97pkgtype_d_       scale[]
+   ipnumber                   scale[]
 )
 {
    if( func_ma97_factor == NULL )
@@ -877,18 +892,18 @@ void ma97_factor(
 }
 
 void ma97_factor_solve(
-   const int                  matrix_type,
+   int                        matrix_type,
    const int                  ptr[],
    const int                  row[],
-   const ma97pkgtype_d_       val[],
-   const int                  nrhs,
-   ma97pkgtype_d_             x[],
-   const int                  ldx,
+   const ipnumber             val[],
+   int                        nrhs,
+   ipnumber                   x[],
+   int                        ldx,
    void**                     akeep,
    void**                     fkeep,
    const struct ma97_control* control,
    struct ma97_info*          info,
-   const ma97pkgtype_d_       scale[]
+   ipnumber                   scale[]
 )
 {
    if( func_ma97_factor_solve == NULL )
@@ -906,7 +921,7 @@ void ma97_factor_solve(
 void ma97_solve(
    const int                  job,
    const int                  nrhs,
-   ma97pkgtype_d_*            x,
+   ipnumber*                  x,
    const int                  ldx,
    void**                     akeep,
    void**                     fkeep,
@@ -992,8 +1007,8 @@ void IPOPT_HSL_FUNCP(mc19a, MC19A)(
 mc68_default_control_t func_mc68_default_control = NULL;
 mc68_order_t           func_mc68_order           = NULL;
 
-void mc68_default_control_i(
-   struct mc68_control_i* control
+void mc68_default_control(
+   struct mc68_control* control
 )
 {
    if( func_mc68_default_control == NULL )
@@ -1008,14 +1023,14 @@ void mc68_default_control_i(
    func_mc68_default_control(control);
 }
 
-void mc68_order_i(
+void mc68_order(
    int                          ord,
    int                          n,
    const int                    ptr[],
    const int                    row[],
    int                          perm[],
-   const struct mc68_control_i* control,
-   struct mc68_info_i*          info
+   const struct mc68_control*   control,
+   struct mc68_info*            info
 )
 {
    if( func_mc68_order == NULL )
@@ -1068,9 +1083,12 @@ int LSL_loadHSL(
    func_ma57e = (ma57e_t)LSL_loadSym(HSL_handle, "ma57e" HSLFUNCNAMESUFFIX, msgbuf, msglen);
 #endif
 
-#ifndef COINHSL_HAS_MA77
+#define STR(x) STR2(x)
+#define STR2(x) #x
+
+#ifdef HSLLOADER_MA77
 #define LOADMA77SYM( sym ) \
-   func_##sym = (sym##_t)LSL_loadSym(HSL_handle, #sym"_d", msgbuf, msglen);
+   func_##sym = (sym##_t)LSL_loadSym(HSL_handle, STR(sym), msgbuf, msglen);
 
    LOADMA77SYM(ma77_default_control)
    LOADMA77SYM(ma77_open_nelt)
@@ -1090,23 +1108,23 @@ int LSL_loadHSL(
    LOADMA77SYM(ma77_finalise)
 #endif
 
-#ifndef COINHSL_HAS_MA86
-   func_ma86_default_control = (ma86_default_control_t)LSL_loadSym(HSL_handle, "ma86_default_control_d", msgbuf, msglen);
-   func_ma86_analyse = (ma86_analyse_t)LSL_loadSym(HSL_handle, "ma86_analyse_d", msgbuf, msglen);
-   func_ma86_factor = (ma86_factor_t)LSL_loadSym(HSL_handle, "ma86_factor_d", msgbuf, msglen);
-   func_ma86_factor_solve = (ma86_factor_solve_t)LSL_loadSym(HSL_handle, "ma86_factor_solve_d", msgbuf, msglen);
-   func_ma86_solve = (ma86_solve_t)LSL_loadSym(HSL_handle, "ma86_solve_d", msgbuf, msglen);
-   func_ma86_finalise = (ma86_finalise_t)LSL_loadSym(HSL_handle, "ma86_finalise_d", msgbuf, msglen);
+#ifdef HSLLOADER_MA86
+   func_ma86_default_control = (ma86_default_control_t)LSL_loadSym(HSL_handle, STR(ma86_default_control), msgbuf, msglen);
+   func_ma86_analyse = (ma86_analyse_t)LSL_loadSym(HSL_handle, STR(ma86_analyse), msgbuf, msglen);
+   func_ma86_factor = (ma86_factor_t)LSL_loadSym(HSL_handle, STR(ma86_factor), msgbuf, msglen);
+   func_ma86_factor_solve = (ma86_factor_solve_t)LSL_loadSym(HSL_handle, STR(ma86_factor_solve), msgbuf, msglen);
+   func_ma86_solve = (ma86_solve_t)LSL_loadSym(HSL_handle, STR(ma86_solve), msgbuf, msglen);
+   func_ma86_finalise = (ma86_finalise_t)LSL_loadSym(HSL_handle, STR(ma86_finalise), msgbuf, msglen);
 #endif
 
-#ifndef COINHSL_HAS_MA97
-   func_ma97_default_control = (ma97_default_control_t)LSL_loadSym(HSL_handle, "ma97_default_control_d", msgbuf, msglen);
-   func_ma97_analyse = (ma97_analyse_t)LSL_loadSym(HSL_handle, "ma97_analyse_d", msgbuf, msglen);
-   func_ma97_factor = (ma97_factor_t)LSL_loadSym(HSL_handle, "ma97_factor_d", msgbuf, msglen);
-   func_ma97_factor_solve = (ma97_factor_solve_t)LSL_loadSym(HSL_handle, "ma97_factor_solve_d", msgbuf, msglen);
-   func_ma97_solve = (ma97_solve_t)LSL_loadSym(HSL_handle, "ma97_solve_d", msgbuf, msglen);
-   func_ma97_finalise = (ma97_finalise_t)LSL_loadSym(HSL_handle, "ma97_finalise_d", msgbuf, msglen);
-   func_ma97_free_akeep = (ma97_free_akeep_t)LSL_loadSym(HSL_handle, "ma97_free_akeep_d", msgbuf, msglen);
+#ifdef HSLLOADER_MA97
+   func_ma97_default_control = (ma97_default_control_t)LSL_loadSym(HSL_handle, STR(ma97_default_control), msgbuf, msglen);
+   func_ma97_analyse = (ma97_analyse_t)LSL_loadSym(HSL_handle, STR(ma97_analyse), msgbuf, msglen);
+   func_ma97_factor = (ma97_factor_t)LSL_loadSym(HSL_handle, STR(ma97_factor), msgbuf, msglen);
+   func_ma97_factor_solve = (ma97_factor_solve_t)LSL_loadSym(HSL_handle, STR(ma97_factor_solve), msgbuf, msglen);
+   func_ma97_solve = (ma97_solve_t)LSL_loadSym(HSL_handle, STR(ma97_solve), msgbuf, msglen);
+   func_ma97_finalise = (ma97_finalise_t)LSL_loadSym(HSL_handle, STR(ma97_finalise), msgbuf, msglen);
+   func_ma97_free_akeep = (ma97_free_akeep_t)LSL_loadSym(HSL_handle, STR(ma97_free_akeep), msgbuf, msglen);
 #endif
 
 #ifdef HSLLOADER_MC19

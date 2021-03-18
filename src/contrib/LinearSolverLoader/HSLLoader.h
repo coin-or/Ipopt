@@ -16,64 +16,110 @@ extern "C"
 {
 #endif
 
-#ifndef ma77_default_control
-#define ma77_control         ma77_control_d
-#define ma77_info            ma77_info_d
+#ifdef IPOPT_SINGLE
+#define ma77_control ma77_control_s
+#define ma77_info ma77_info_s
+#define ma77_default_control ma77_default_control_s
+#define ma77_open_nelt ma77_open_nelt_s
+#define ma77_open ma77_open_s
+#define ma77_input_vars ma77_input_vars_s
+#define ma77_input_reals ma77_input_reals_s
+#define ma77_analyse ma77_analyse_s
+#define ma77_factor ma77_factor_s
+#define ma77_factor_solve ma77_factor_solve_s
+#define ma77_solve ma77_solve_s
+#define ma77_resid ma77_resid_s
+#define ma77_scale ma77_scale_s
+#define ma77_enquire_posdef ma77_enquire_posdef_s
+#define ma77_enquire_indef ma77_enquire_indef_s
+#define ma77_alter ma77_alter_s
+#define ma77_restart ma77_restart_s
+#define ma77_finalise ma77_finalise_s
+#define ma77_solve_fredholm ma77_solve_fredholm_s
+#define ma77_lmultiply ma77_lmultiply_s
+#define ma86_control ma86_control_s
+#define ma86_info ma86_info_s
+#define ma86_default_control ma86_default_control_s
+#define ma86_analyse ma86_analyse_s
+#define ma86_factor ma86_factor_s
+#define ma86_factor_solve ma86_factor_solve_s
+#define ma86_solve ma86_solve_s
+#define ma86_finalise ma86_finalise_s
+#define ma97_control ma97_control_s
+#define ma97_info ma97_info_s
+#define ma97_default_control ma97_default_control_s
+#define ma97_analyse ma97_analyse_s
+#define ma97_analyse_coord ma97_analyse_coord_s
+#define ma97_factor ma97_factor_s
+#define ma97_factor_solve ma97_factor_solve_s
+#define ma97_solve ma97_solve_s
+#define ma97_free_akeep ma97_free_akeep_s
+#define ma97_free_fkeep ma97_free_fkeep_s
+#define ma97_finalise ma97_finalise_s
+#define ma97_enquire_posdef ma97_enquire_posdef_s
+#define ma97_enquire_indef ma97_enquire_indef_s
+#define ma97_alter ma97_alter_s
+#define ma97_solve_fredholm ma97_solve_fredholm_s
+#define ma97_lmultiply ma97_lmultiply_s
+#define ma97_sparse_fwd_solve ma97_sparse_fwd_solve_s
+#else
+#define ma77_control ma77_control_d
+#define ma77_info ma77_info_d
 #define ma77_default_control ma77_default_control_d
-#define ma77_open_nelt       ma77_open_nelt_d
-#define ma77_open            ma77_open_d
-#define ma77_input_vars      ma77_input_vars_d
-#define ma77_input_reals     ma77_input_reals_d
-#define ma77_analyse         ma77_analyse_d
-#define ma77_factor          ma77_factor_d
-#define ma77_factor_solve    ma77_factor_solve_d
-#define ma77_solve           ma77_solve_d
-#define ma77_resid           ma77_resid_d
-#define ma77_scale           ma77_scale_d
-#define ma77_enquire_posdef  ma77_enquire_posdef_d
-#define ma77_enquire_indef   ma77_enquire_indef_d
-#define ma77_alter           ma77_alter_d
-#define ma77_restart         ma77_restart_d
-#define ma77_finalise        ma77_finalise_d
+#define ma77_open_nelt ma77_open_nelt_d
+#define ma77_open ma77_open_d
+#define ma77_input_vars ma77_input_vars_d
+#define ma77_input_reals ma77_input_reals_d
+#define ma77_analyse ma77_analyse_d
+#define ma77_factor ma77_factor_d
+#define ma77_factor_solve ma77_factor_solve_d
+#define ma77_solve ma77_solve_d
+#define ma77_resid ma77_resid_d
+#define ma77_scale ma77_scale_d
+#define ma77_enquire_posdef ma77_enquire_posdef_d
+#define ma77_enquire_indef ma77_enquire_indef_d
+#define ma77_alter ma77_alter_d
+#define ma77_restart ma77_restart_d
+#define ma77_finalise ma77_finalise_d
+#define ma77_solve_fredholm ma77_solve_fredholm_d
+#define ma77_lmultiply ma77_lmultiply_d
+#define ma86_control ma86_control_d
+#define ma86_info ma86_info_d
+#define ma86_default_control ma86_default_control_d
+#define ma86_analyse ma86_analyse_d
+#define ma86_factor ma86_factor_d
+#define ma86_factor_solve ma86_factor_solve_d
+#define ma86_solve ma86_solve_d
+#define ma86_finalise ma86_finalise_d
+#define ma97_control ma97_control_d
+#define ma97_info ma97_info_d
+#define ma97_default_control ma97_default_control_d
+#define ma97_analyse ma97_analyse_d
+#define ma97_analyse_coord ma97_analyse_coord_d
+#define ma97_factor ma97_factor_d
+#define ma97_factor_solve ma97_factor_solve_d
+#define ma97_solve ma97_solve_d
+#define ma97_free_akeep ma97_free_akeep_d
+#define ma97_free_fkeep ma97_free_fkeep_d
+#define ma97_finalise ma97_finalise_d
+#define ma97_enquire_posdef ma97_enquire_posdef_d
+#define ma97_enquire_indef ma97_enquire_indef_d
+#define ma97_alter ma97_alter_d
+#define ma97_solve_fredholm ma97_solve_fredholm_d
+#define ma97_lmultiply ma97_lmultiply_d
+#define ma97_sparse_fwd_solve ma97_sparse_fwd_solve_d
 #endif
+#define mc68_control mc68_control_i
+#define mc68_info mc68_info_i
+#define mc68_default_control mc68_default_control_i
+#define mc68_order mc68_order_i
 
 struct ma77_control;
 struct ma77_info;
-typedef double ma77pkgtype_d_;
-
-#ifndef ma86_default_control
-#define ma86_control         ma86_control_d
-#define ma86_info            ma86_info_d
-#define ma86_default_control ma86_default_control_d
-#define ma86_analyse         ma86_analyse_d
-#define ma86_factor          ma86_factor_d
-#define ma86_factor_solve    ma86_factor_solve_d
-#define ma86_solve           ma86_solve_d
-#define ma86_finalise        ma86_finalise_d
-#endif
-
 struct ma86_control;
 struct ma86_info;
-typedef double ma86pkgtype_d_;
-typedef double ma86realtype_d_;
-
-#ifndef ma97_default_control
-#define ma97_control         ma97_control_d
-#define ma97_info            ma97_info_d
-#define ma97_default_control ma97_default_control_d
-#define ma97_analyse         ma97_analyse_d
-#define ma97_factor          ma97_factor_d
-#define ma97_factor_solve    ma97_factor_solve_d
-#define ma97_solve           ma97_solve_d
-#define ma97_finalise        ma97_finalise_d
-#define ma97_free_akeep      ma97_free_akeep_d
-#endif
-
 struct ma97_control;
 struct ma97_info;
-typedef double ma97pkgtype_d_;
-typedef double ma97realtype_d_;
-
 struct mc68_control_i;
 struct mc68_info_i;
 
@@ -201,7 +247,7 @@ typedef void (*ma57i_t)(
 );
 
 typedef void (*ma77_default_control_t)(
-   struct ma77_control_d* control
+   struct ma77_control* control
 );
 
 typedef void (*ma77_open_nelt_t)(
@@ -211,8 +257,8 @@ typedef void (*ma77_open_nelt_t)(
    const char*                  fname3,
    const char*                  fname4,
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info,
+   const struct ma77_control*   control,
+   struct ma77_info*            info,
    const int                    nelt
 );
 
@@ -223,8 +269,8 @@ typedef void (*ma77_open_t)(
    const char*                  fname3,
    const char*                  fname4,
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info
+   const struct ma77_control*   control,
+   struct ma77_info*            info
 );
 
 typedef void (*ma77_input_vars_t)(
@@ -232,96 +278,96 @@ typedef void (*ma77_input_vars_t)(
    const int                    nvar,
    const int                    list[],
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info
+   const struct ma77_control*   control,
+   struct ma77_info*            info
 );
 
 typedef void (*ma77_input_reals_t)(
    const int                    idx,
    const int                    length,
-   const double                 reals[],
+   const ipnumber               reals[],
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info
+   const struct ma77_control*   control,
+   struct ma77_info*            info
 );
 
 typedef void (*ma77_analyse_t)(
    const int                    order[],
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info
+   const struct ma77_control*   control,
+   struct ma77_info*            info
 );
 
 typedef void (*ma77_factor_t)(
    const int                    posdef,
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info,
-   const double*                scale
+   const struct ma77_control*   control,
+   struct ma77_info*            info,
+   const ipnumber*              scale
 );
 
 typedef void (*ma77_factor_solve_t)(
    const int                    posdef,
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info,
-   const double*                scale,
+   const struct ma77_control*   control,
+   struct ma77_info*            info,
+   const ipnumber*              scale,
    const int                    nrhs,
    const int                    lx,
-   double                       rhs[]
+   ipnumber                     rhs[]
 );
 
 typedef void (*ma77_solve_t)(
    const int                    job,
    const int                    nrhs,
    const int                    lx,
-   double                       x[],
+   ipnumber                     x[],
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info,
-   const double*                scale
+   const struct ma77_control*   control,
+   struct ma77_info*            info,
+   const ipnumber*              scale
 );
 
 typedef void (*ma77_resid_t)(
    const int                    nrhs,
    const int                    lx,
-   const double                 x[],
+   const ipnumber               x[],
    const int                    lresid,
-   double                       resid[],
+   ipnumber                     resid[],
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info,
-   double*                      anorm_bnd
+   const struct ma77_control*   control,
+   struct ma77_info*            info,
+   ipnumber*                    anorm_bnd
 );
 
 typedef void (*ma77_scale_t)(
-   double                       scale[],
+   ipnumber                     scale[],
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info,
-   double*                      anorm
+   const struct ma77_control*   control,
+   struct ma77_info*            info,
+   ipnumber*                    anorm
 );
 
 typedef void (*ma77_enquire_posdef_t)(
-   double                       d[],
+   ipnumber                     d[],
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info
+   const struct ma77_control*   control,
+   struct ma77_info*            info
 );
 
 typedef void (*ma77_enquire_indef_t)(
    int                          piv_order[],
-   double                       d[],
+   ipnumber                     d[],
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info
+   const struct ma77_control*   control,
+   struct ma77_info*            info
 );
 
 typedef void (*ma77_alter_t)(
-   const double                 d[],
+   const ipnumber               d[],
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info
+   const struct ma77_control*   control,
+   struct ma77_info*            info
 );
 
 typedef void (*ma77_restart_t)(
@@ -331,14 +377,14 @@ typedef void (*ma77_restart_t)(
    const char*                  fname3,
    const char*                  fname4,
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info
+   const struct ma77_control*   control,
+   struct ma77_info*            info
 );
 
 typedef void (*ma77_finalise_t)(
    void**                       keep,
-   const struct ma77_control_d* control,
-   struct ma77_info_d*          info
+   const struct ma77_control*   control,
+   struct ma77_info*            info
 );
 
 typedef void (*ma86_default_control_t)(
@@ -359,39 +405,39 @@ typedef void (*ma86_factor_t)(
    const int                  n,
    const int                  ptr[],
    const int                  row[],
-   const ma86pkgtype_d_       val[],
+   const ipnumber             val[],
    const int                  order[],
    void**                     keep,
    const struct ma86_control* control,
    struct ma86_info*          info,
-   const ma86pkgtype_d_       scale[]
+   const ipnumber             scale[]
 );
 
 typedef void (*ma86_factor_solve_t)(
    const int                  n,
    const int                  ptr[],
    const int                  row[],
-   const ma86pkgtype_d_       val[],
+   const ipnumber             val[],
    const int                  order[],
    void**                     keep,
    const struct ma86_control* control,
    struct ma86_info*          info,
    const int                  nrhs,
    const int                  ldx,
-   ma86pkgtype_d_             x[],
-   const ma86pkgtype_d_       scale[]
+   ipnumber                   x[],
+   const ipnumber             scale[]
 );
 
 typedef void (*ma86_solve_t)(
    const int                  job,
    const int                  nrhs,
    const int                  ldx,
-   ma86pkgtype_d_*            x,
+   ipnumber*                  x,
    const int                  order[],
    void**                     keep,
    const struct ma86_control* control,
    struct ma86_info*          info,
-   const ma86pkgtype_d_       scale[]
+   const ipnumber             scale[]
 );
 
 typedef void (*ma86_finalise_t)(
@@ -408,7 +454,7 @@ typedef void (*ma97_analyse_t)(
    const int                  n,
    const int                  ptr[],
    const int                  row[],
-   ma97pkgtype_d_             val[],
+   ipnumber                   val[],
    void**                     akeep,
    const struct ma97_control* control,
    struct ma97_info*          info,
@@ -416,36 +462,36 @@ typedef void (*ma97_analyse_t)(
 );
 
 typedef void (*ma97_factor_t)(
-   const int                  matrix_type,
+   int                        matrix_type,
    const int                  ptr[],
    const int                  row[],
-   const ma97pkgtype_d_       val[],
+   const ipnumber             val[],
    void**                     akeep,
    void**                     fkeep,
    const struct ma97_control* control,
    struct ma97_info*          info,
-   const ma97pkgtype_d_       scale[]
+   ipnumber                   scale[]
 );
 
 typedef void (*ma97_factor_solve_t)(
-   const int                  matrix_type,
+   int                        matrix_type,
    const int                  ptr[],
    const int                  row[],
-   const ma97pkgtype_d_       val[],
-   const int                  nrhs,
-   ma97pkgtype_d_             x[],
-   const int                  ldx,
+   const ipnumber             val[],
+   int                        nrhs,
+   ipnumber                   x[],
+   int                        ldx,
    void**                     akeep,
    void**                     fkeep,
    const struct ma97_control* control,
    struct ma97_info*          info,
-   const ma97pkgtype_d_       scale[]
+   ipnumber                   scale[]
 );
 
 typedef void (*ma97_solve_t)(
    const int                  job,
    const int                  nrhs,
-   ma97pkgtype_d_*            x,
+   ipnumber*                  x,
    const int                  ldx,
    void**                     akeep,
    void**                     fkeep,
@@ -474,7 +520,7 @@ typedef void (*mc19a_t)(
 );
 
 typedef void (*mc68_default_control_t)(
-   struct mc68_control_i* control
+   struct mc68_control* control
 );
 
 typedef void (*mc68_order_t)(
@@ -483,8 +529,8 @@ typedef void (*mc68_order_t)(
    const int                    ptr[],
    const int                    row[],
    int                          perm[],
-   const struct mc68_control_i* control,
-   struct mc68_info_i*          info
+   const struct mc68_control*   control,
+   struct mc68_info*            info
 );
 
 /** Tries to load a dynamically linked library with HSL routines.

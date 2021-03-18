@@ -14,8 +14,10 @@
 #include "CoinHslConfig.h"
 #endif
 
-// if we do not have HSL_MA77 in HSL or the linear solver loader, then we want to build the MA77 interface
-#if defined(COINHSL_HAS_MA77) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
+// if we have MA77 in HSL or the linear solver loader, then we want to build the MA77 interface
+#if (defined(COINHSL_HAS_MA77) && !defined(IPOPT_SINGLE)) || \
+    (defined(COINHSL_HAS_MA77S) && defined(IPOPT_SINGLE)) || \
+    defined(IPOPT_HAS_LINEARSOLVERLOADER)
 
 #include "IpMa77SolverInterface.hpp"
 #include <iostream>
@@ -270,7 +272,7 @@ ESymSolverStatus Ma77SolverInterface::InitializeStructure(
    {
       delete[] val_;
    }
-   val_ = new double[nonzeros];
+   val_ = new Number[nonzeros];
 
    if( info.flag >= 0 )
    {
@@ -287,7 +289,7 @@ ESymSolverStatus Ma77SolverInterface::MultiSolve(
    const Index* ia,
    const Index* /*ja*/,
    Index        nrhs,
-   double*      rhs_vals,
+   Number*      rhs_vals,
    bool         check_NegEVals,
    Index        numberOfNegEVals
 )
@@ -365,4 +367,4 @@ bool Ma77SolverInterface::IncreaseQuality()
 
 } // namespace Ipopt
 
-#endif /* COINHSL_HAS_MA77 or IPOPT_HAS_LINEARSOLVERLOADER */
+#endif /* COINHSL_HAS_MA77(S) or IPOPT_HAS_LINEARSOLVERLOADER */

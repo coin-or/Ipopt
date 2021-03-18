@@ -14,7 +14,11 @@
 
 extern "C"
 {
+#ifdef IPOPT_SINGLE
+#include "hsl_ma77s.h"
+#else
 #include "hsl_ma77d.h"
+#endif
 }
 
 namespace Ipopt

@@ -14,8 +14,10 @@
 #include "CoinHslConfig.h"
 #endif
 
-// if we do not have MA86 in HSL or the linear solver loader, then we want to build the MA86 interface
-#if defined(COINHSL_HAS_MA86) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
+// if we have MA86 in HSL or the linear solver loader, then we want to build the MA86 interface
+#if (defined(COINHSL_HAS_MA86) && !defined(IPOPT_SINGLE)) || \
+    (defined(COINHSL_HAS_MA86S) && defined(IPOPT_SINGLE)) || \
+    defined(IPOPT_HAS_LINEARSOLVERLOADER)
 
 #include "IpMa86SolverInterface.hpp"
 #include <iostream>
@@ -263,7 +265,7 @@ ESymSolverStatus Ma86SolverInterface::InitializeStructure(
    {
       delete[] val_;
    }
-   val_ = new double[nonzeros];
+   val_ = new Number[nonzeros];
 
    if( info.flag >= 0 )
    {
@@ -280,7 +282,7 @@ ESymSolverStatus Ma86SolverInterface::MultiSolve(
    const Index* ia,
    const Index* ja,
    Index        nrhs,
-   double*      rhs_vals,
+   Number*      rhs_vals,
    bool         check_NegEVals,
    Index        numberOfNegEVals)
 {
@@ -359,4 +361,4 @@ bool Ma86SolverInterface::IncreaseQuality()
 
 } // namespace Ipopt
 
-#endif /* COINHSL_HAS_MA86 or IPOPT_HAS_LINEARSOLVERLOADER */
+#endif /* COINHSL_HAS_MA86(S) or IPOPT_HAS_LINEARSOLVERLOADER */

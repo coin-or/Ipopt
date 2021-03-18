@@ -53,12 +53,12 @@ CP                              variables and find dependent constraints
 CP   N         I    INT    total number of variables (only TASK = 0,1)
 CP   M         I    INT    number of constraints = number of depentent vars
 CP   NZ        I    INT    number of nonzero elements in A
-CP   A         I    DP     TASK =1,2: nonzero elements of matrix
+CP   A         I    R      TASK =1,2: nonzero elements of matrix
 CP                                     (unchanged on exit)
 CP                            (note: NZ is different for TASK=1 and others)
 CP   IROW      I    INT    TASK =1,2: row indices for A (unchanged on exit)
 CP   ICOL      I    INT    TASK =1,2: col indices for A (unchanged on exit)
-CP   PIVTOL    I    DP     pivot tolerance  (e.g., 1.d-4 ?)
+CP   PIVTOL    I    R      pivot tolerance  (e.g., 1.d-4 ?)
 CP   FILLFACT  I    INT    estimated fillin factor (e.g. 40)
 CP   IVAR      O    INT    TASK = 1: IVAR(  1,..,M) containts the indices of
 CP                                   a set of linear independent columns of A
@@ -69,7 +69,7 @@ CP   IDEGEN    O    INT    List of linearly dependent constraints
 CP   LIW       I    INT    length of IW (Output for TASK = 0)
 CP   IW        W    INT    integer work space
 CP   LRW       I    INT    length of RW (Output for TASK = 0)
-CP   RW        W    DP     real work space
+CP   RW        W    R      real work space
 CP   IERR      O    INT    =0: everything OK
 CP                         >0: Error occured; abort optimization
 CP                         <0: Warning; message to user
@@ -112,8 +112,8 @@ C
       logical LBLOCK, GROW, ABORT1, ABORT2
       real EPS, RMIN, RESID
 
-      COMMON/MA28ED/LP, MP, LBLOCK, GROW
-      COMMON/MA28FD/EPS, RMIN, RESID, IRNCP, ICNCP, MINIRN, MINICN,
+      COMMON/MA28E/LP, MP, LBLOCK, GROW
+      COMMON/MA28F/EPS, RMIN, RESID, IRNCP, ICNCP, MINIRN, MINICN,
      *             IRANK, ABORT1, ABORT2
 C
 C-------------------------------------------------------------------------------
@@ -198,7 +198,7 @@ C
 C
 C     Copy A, IROW, ICOL into work space (delete old factorization!)
 C
-      call DCOPY(NZ, A,    1, RW(p_a+1)  , 1)
+      call SCOPY(NZ, A,    1, RW(p_a+1)  , 1)
       do i = 1, NZ
          IW(p_irn+i) = IROW(i)
          IW(p_icn+i) = ICOL(i)
@@ -209,7 +209,7 @@ C
       ABORT1 = .false.
       ABORT2 = .false.
 
-      call MA28AD(nsize, NZ, RW(p_a+1), LICN, IW(p_irn+1), LIRN,
+      call MA28A(nsize, NZ, RW(p_a+1), LICN, IW(p_irn+1), LIRN,
      1            IW(p_icn+1), PIVTOL, IW(p_ikeep+1), IW(p_iw+1),
      1            RW(p_w+1), iflag)
       if( iflag.lt.0 ) then

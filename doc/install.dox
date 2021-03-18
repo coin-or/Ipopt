@@ -783,11 +783,8 @@ Regarding dependencies of %Ipopt, the situation is as follows:
 - The interface to Mumps can use a single-precision version of MUMPS.
   If using ThirdParty-Mumps to build a MUMPS library, note that only the branch `mumps5` has been updated to allow for building a single-precision version of MUMPS.
   See https://github.com/coin-or-tools/ThirdParty-Mumps/tree/mumps5#single-precision-codes for details.
-- The interfaces to the HSL routines MA27, MA28, MA57, and MC19 can use single-precision versions of these routines.
+- The interfaces to the HSL routines can use single-precision versions of these routines.
   See https://github.com/coin-or-tools/ThirdParty-HSL/#single-precision-codes for more details on how to obtain these.
-  Note, that ThirdParty-HSL does not support building a single-precision version of MA28 at the moment.
-- The interfaces for HSL_MA77, HSL_MA86, and HSL_MA97 are not available for single-precision yet,
-  because HSL does not provide a single-precision version of the C interface files for these routines so far.
 - The interface for Pardiso (both MKL and from pardiso-project.org) is available for single-precision usage.
   The Pardiso library contains a single-precision version of its solver.
 - The interface to WSMP is not available when building for single-precision.
