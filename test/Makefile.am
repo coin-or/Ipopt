@@ -8,7 +8,7 @@
 #                        unitTest for Ipopt                            #
 ########################################################################
 
-noinst_PROGRAMS = hs071_cpp hs071_c
+noinst_PROGRAMS = hs071_cpp hs071_c emptynlp
 
 if COIN_HAS_F77
 noinst_PROGRAMS += hs071_f
@@ -23,6 +23,9 @@ hs071_cpp_LDADD = ../src/Interfaces/libipopt.la
 
 nodist_hs071_c_SOURCES = hs071_c.c
 hs071_c_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
+
+nodist_emptynlp_SOURCES = emptynlp.cpp
+emptynlp_LDADD = ../src/Interfaces/libipopt.la
 
 if !IPOPT_SINGLE
   nodist_hs071_f_SOURCES = hs071_f.f
