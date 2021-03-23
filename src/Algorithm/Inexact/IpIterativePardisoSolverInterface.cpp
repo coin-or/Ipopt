@@ -9,8 +9,8 @@
 #include "IpoptConfig.h"
 #include "IpIterativePardisoSolverInterface.hpp"
 #include "IpBlas.hpp"
-# include <math.h>
 
+#include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -27,11 +27,11 @@ Ipopt::IterativeSolverTerminationTester::ETerminationTest test_result_;
 extern "C"
 {
    int IpoptTerminationTest(
-      int     n,
-      Number* sol,
-      Number* resid,
-      int     iter,
-      Number  norm2_rhs
+      int       n,
+      ipnumber* sol,
+      ipnumber* resid,
+      int       iter,
+      ipnumber  norm2_rhs
    )
    {
       fflush(stdout);
@@ -54,11 +54,11 @@ extern "C"
 // The following global function pointer is defined in the Pardiso library
    void SetIpoptCallbackFunction(
       int (*IpoptFunction)(
-         int     n,
-         Number* x,
-         Number* r,
-         int     k,
-         Number  b)
+         int       n,
+         ipnumber* x,
+         ipnumber* r,
+         int       k,
+         ipnumber  b)
    );
 }
 
@@ -70,7 +70,7 @@ extern "C"
       const ipfint* MTYPE,
       const ipfint* SOLVER,
       ipfint*       IPARM,
-      Number*       DPARM,
+      ipnumber*     DPARM,
       ipfint*       ERROR
    );
 
@@ -81,17 +81,17 @@ extern "C"
       const ipfint* MTYPE,
       const ipfint* PHASE,
       const ipfint* N,
-      const Number* A,
+      const ipnumber* A,
       const ipfint* IA,
       const ipfint* JA,
       const ipfint* PERM,
       const ipfint* NRHS,
       ipfint*       IPARM,
       const ipfint* MSGLVL,
-      Number*       B,
-      Number*       X,
+      ipnumber*     B,
+      ipnumber*     X,
       ipfint*       ERROR,
-      Number*       DPARM
+      ipnumber*     DPARM
    );
 }
 
@@ -150,7 +150,7 @@ IterativePardisoSolverInterface::~IterativePardisoSolverInterface()
 }
 
 void IterativePardisoSolverInterface::RegisterOptions(
-   SmartPtr<RegisteredOptions> roptions
+   SmartPtr<RegisteredOptions> /* roptions */
 )
 { }
 
@@ -386,8 +386,8 @@ ESymSolverStatus IterativePardisoSolverInterface::InitializeStructure(
 }
 
 ESymSolverStatus IterativePardisoSolverInterface::SymbolicFactorization(
-   const Index* ia,
-   const Index* ja
+   const Index* /* ia */,
+   const Index* /* ja */
 )
 {
    DBG_START_METH("IterativePardisoSolverInterface::SymbolicFactorization",
@@ -487,7 +487,7 @@ ESymSolverStatus IterativePardisoSolverInterface::Factorization(
    ipfint ERROR;
 
    bool done = false;
-   bool just_performed_symbolic_factorization = false;
+   /* bool just_performed_symbolic_factorization = false; */
 
    while( !done )
    {
@@ -549,7 +549,7 @@ ESymSolverStatus IterativePardisoSolverInterface::Factorization(
             return SYMSOLVER_FATAL_ERROR;
          }
          have_symbolic_factorization_ = true;
-         just_performed_symbolic_factorization = true;
+         /* just_performed_symbolic_factorization = true; */
 
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                         "Memory in KB required for the symbolic factorization  = %d.\n", IPARM_[14]);

@@ -5,12 +5,13 @@
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 includeipoptdir = $(includedir)/coin-or
-includeipopt_HEADERS = IpSymLinearSolver.hpp
+includeipopt_HEADERS = IpSymLinearSolver.hpp IpLinearSolvers.h
 
 noinst_LTLIBRARIES = liblinsolvers.la
 
 liblinsolvers_la_SOURCES = \
 	IpLinearSolversRegOp.cpp \
+	IpLinearSolvers.c \
 	IpSlackBasedTSymScalingMethod.cpp \
 	IpTripletToCSRConverter.cpp \
 	IpTSymDependencyDetector.cpp \

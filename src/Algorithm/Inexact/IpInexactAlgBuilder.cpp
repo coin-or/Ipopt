@@ -43,6 +43,7 @@
 #include "IpInexactNormalTerminationTester.hpp"
 #include "IpInexactPDTerminationTester.hpp"
 
+#include "IpLinearSolvers.h"
 #ifdef IPOPT_HAS_HSL
 # include "CoinHslConfig.h"
 #endif
@@ -128,63 +129,58 @@ SmartPtr<IpoptAlgorithm> InexactAlgorithmBuilder::BuildBasicAlgorithm(
 
    SmartPtr<InexactNormalTerminationTester> NormalTester;
    SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
+   IpoptLinearSolver linkedsolvers = IpoptGetAvailableLinearSolvers(true);
    std::string linear_solver;
    options.GetStringValue("linear_solver", linear_solver, prefix);
+
    if( linear_solver == "ma27" )
    {
-#if (defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA27S)) || (!defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA27))
-# ifdef IPOPT_HAS_LINEARSOLVERLOADER
       SolverInterface = new Ma27TSolverInterface();
-      char buf[256];
-      int rc = LSL_loadHSL(NULL, buf, 255);
-      if (rc)
+#ifdef IPOPT_HAS_LINEARSOLVERLOADER
+      if( !(linkedsolvers & IPOPTLINEARSOLVER_MA27) && !LSL_isMA27available() )
       {
-         std::string errmsg;
-         errmsg = "Selected linear solver MA27 not available.\nTried to obtain MA27 from shared library \"";
-         errmsg += LSL_HSLLibraryName();
-         errmsg += "\", but the following error occured:\n";
-         errmsg += buf;
-         THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
+         char buf[256];
+         int rc = LSL_loadHSL(NULL, buf, 255);
+         if (rc)
+         {
+            std::string errmsg;
+            errmsg = "Selected linear solver MA27 not available.\nTried to obtain MA27 from shared library \"";
+            errmsg += LSL_HSLLibraryName();
+            errmsg += "\", but the following error occured:\n";
+            errmsg += buf;
+            THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
+         }
       }
-# else
-      THROW_EXCEPTION(OPTION_INVALID, "Support for MA27 has not been compiled into Ipopt.");
-# endif
-#else
-      SolverInterface = new Ma27TSolverInterface();
 #endif
-
    }
+
    else if( linear_solver == "ma57" )
    {
-#if (defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA57S)) || (!defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MA57))
-# ifdef IPOPT_HAS_LINEARSOLVERLOADER
       SolverInterface = new Ma57TSolverInterface();
-      char buf[256];
-      int rc = LSL_loadHSL(NULL, buf, 255);
-      if (rc)
+#ifdef IPOPT_HAS_LINEARSOLVERLOADER
+      if( !(linkedsolvers & IPOPTLINEARSOLVER_MA57) && !LSL_isMA57available() )
       {
-         std::string errmsg;
-         errmsg = "Selected linear solver MA57 not available.\nTried to obtain MA57 from shared library \"";
-         errmsg += LSL_HSLLibraryName();
-         errmsg += "\", but the following error occured:\n";
-         errmsg += buf;
-         THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
+         char buf[256];
+         int rc = LSL_loadHSL(NULL, buf, 255);
+         if (rc)
+         {
+            std::string errmsg;
+            errmsg = "Selected linear solver MA57 not available.\nTried to obtain MA57 from shared library \"";
+            errmsg += LSL_HSLLibraryName();
+            errmsg += "\", but the following error occured:\n";
+            errmsg += buf;
+            THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
+         }
       }
-# else
-      THROW_EXCEPTION(OPTION_INVALID, "Support for MA57 has not been compiled into Ipopt.");
-# endif
-#else
-      SolverInterface = new Ma57TSolverInterface();
 #endif
-
    }
+
    else if( linear_solver == "pardiso" )
    {
       NormalTester = new InexactNormalTerminationTester();
       SmartPtr<IterativeSolverTerminationTester> pd_tester = new InexactPDTerminationTester();
-#ifndef IPOPT_HAS_PARDISO
-# ifdef IPOPT_HAS_LINEARSOLVERLOADER
       SolverInterface = new IterativePardisoSolverInterface(*NormalTester, *pd_tester);
+#if !defined(IPOPT_HAS_PARDISO) && defined(IPOPT_HAS_LINEARSOLVERLOADER)
       char buf[256];
       int rc = LSL_loadPardisoLib(NULL, buf, 255);
       if (rc)
@@ -196,34 +192,23 @@ SmartPtr<IpoptAlgorithm> InexactAlgorithmBuilder::BuildBasicAlgorithm(
          errmsg += buf;
          THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
       }
-# else
-      THROW_EXCEPTION(OPTION_INVALID, "Support for Pardiso has not been compiled into Ipopt.");
 # endif
-#else
-      SolverInterface = new IterativePardisoSolverInterface(*NormalTester, *pd_tester);
-#endif
-
    }
+
+#ifdef IPOPT_HAS_WSMP
    else if( linear_solver == "wsmp" )
    {
-#ifdef IPOPT_HAS_WSMP
       SolverInterface = new WsmpSolverInterface();
-#else
-
-      THROW_EXCEPTION(OPTION_INVALID, "Selected linear solver WSMP not available.");
+   }
 #endif
 
-   }
+#ifdef IPOPT_HAS_MUMPS
    else if( linear_solver == "mumps" )
    {
-#ifdef IPOPT_HAS_MUMPS
       SolverInterface = new MumpsSolverInterface();
-#else
-
-      THROW_EXCEPTION(OPTION_INVALID, "Selected linear solver MUMPS not available.");
+   }
 #endif
 
-   }
    else
    {
       THROW_EXCEPTION(OPTION_INVALID, "Inexact version not available for this selection of linear solver.");

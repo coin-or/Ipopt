@@ -5,10 +5,8 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2005-08-16
 
 #include "IpoptConfig.h"
-#ifdef IPOPT_HAS_HSL
-#include "CoinHslConfig.h"
-#endif
 #include "IpLinearSolversRegOp.hpp"
+#include "IpLinearSolvers.h"
 #include "IpRegOptions.hpp"
 #include "IpTSymLinearSolver.hpp"
 
@@ -40,60 +38,67 @@ void RegisterOptions_LinearSolvers(
    roptions->SetRegisteringCategory("Linear Solver");
    TSymLinearSolver::RegisterOptions(roptions);
 
-#if (defined(COINHSL_HAS_MA27) && !defined(IPOPT_SINGLE)) || \
-    (defined(COINHSL_HAS_MA27S) && defined(IPOPT_SINGLE)) || \
-    defined(IPOPT_HAS_LINEARSOLVERLOADER)
-   roptions->SetRegisteringCategory("MA27 Linear Solver");
-   Ma27TSolverInterface::RegisterOptions(roptions);
-#endif
+   IpoptLinearSolver availablesolvers = IpoptGetAvailableLinearSolvers(false);
 
-#if (defined(COINHSL_HAS_MA57) && !defined(IPOPT_SINGLE)) || \
-    (defined(COINHSL_HAS_MA57S) && defined(IPOPT_SINGLE)) || \
-    defined(IPOPT_HAS_LINEARSOLVERLOADER)
-   roptions->SetRegisteringCategory("MA57 Linear Solver");
-   Ma57TSolverInterface::RegisterOptions(roptions);
-#endif
+   if( availablesolvers & IPOPTLINEARSOLVER_MA27 )
+   {
+      roptions->SetRegisteringCategory("MA27 Linear Solver");
+      Ma27TSolverInterface::RegisterOptions(roptions);
+   }
 
-#if (defined(COINHSL_HAS_MA77) && !defined(IPOPT_SINGLE)) || \
-    (defined(COINHSL_HAS_MA77S) && defined(IPOPT_SINGLE)) || \
-    defined(IPOPT_HAS_LINEARSOLVERLOADER)
-   roptions->SetRegisteringCategory("MA77 Linear Solver");
-   Ma77SolverInterface::RegisterOptions(roptions);
-#endif
+   if( availablesolvers & IPOPTLINEARSOLVER_MA57 )
+   {
+      roptions->SetRegisteringCategory("MA57 Linear Solver");
+      Ma57TSolverInterface::RegisterOptions(roptions);
+   }
 
-#if (defined(COINHSL_HAS_MA86) && !defined(IPOPT_SINGLE)) || \
-    (defined(COINHSL_HAS_MA86S) && defined(IPOPT_SINGLE)) || \
-    defined(IPOPT_HAS_LINEARSOLVERLOADER)
-   roptions->SetRegisteringCategory("MA86 Linear Solver");
-   Ma86SolverInterface::RegisterOptions(roptions);
-#endif
+   if( availablesolvers & IPOPTLINEARSOLVER_MA77 )
+   {
+      roptions->SetRegisteringCategory("MA77 Linear Solver");
+      Ma77SolverInterface::RegisterOptions(roptions);
+   }
 
-#if (defined(COINHSL_HAS_MA97) && !defined(IPOPT_SINGLE)) || \
-    (defined(COINHSL_HAS_MA97S) && defined(IPOPT_SINGLE)) || \
-    defined(IPOPT_HAS_LINEARSOLVERLOADER)
-   roptions->SetRegisteringCategory("MA97 Linear Solver");
-   Ma97SolverInterface::RegisterOptions(roptions);
-#endif
+   if( availablesolvers & IPOPTLINEARSOLVER_MA86 )
+   {
+      roptions->SetRegisteringCategory("MA86 Linear Solver");
+      Ma86SolverInterface::RegisterOptions(roptions);
+   }
+
+   if( availablesolvers & IPOPTLINEARSOLVER_MA97 )
+   {
+      roptions->SetRegisteringCategory("MA97 Linear Solver");
+      Ma97SolverInterface::RegisterOptions(roptions);
+   }
 
 #ifdef IPOPT_HAS_MUMPS
-   roptions->SetRegisteringCategory("Mumps Linear Solver");
-   MumpsSolverInterface::RegisterOptions(roptions);
+   if( availablesolvers & IPOPTLINEARSOLVER_MUMPS )
+   {
+      roptions->SetRegisteringCategory("Mumps Linear Solver");
+      MumpsSolverInterface::RegisterOptions(roptions);
+   }
 #endif
 
-#if defined(IPOPT_HAS_PARDISO) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
-   roptions->SetRegisteringCategory("Pardiso Linear Solver");
-   PardisoSolverInterface::RegisterOptions(roptions);
-#endif
+   if( availablesolvers & IPOPTLINEARSOLVER_PARDISO )
+   {
+      roptions->SetRegisteringCategory("Pardiso Linear Solver");
+      PardisoSolverInterface::RegisterOptions(roptions);
+   }
 
 #ifdef IPOPT_HAS_SPRAL
-   roptions->SetRegisteringCategory("SPRAL Linear Solver");
-   SpralSolverInterface::RegisterOptions(roptions);
+   if( availablesolvers & IPOPTLINEARSOLVER_SPRAL )
+   {
+      roptions->SetRegisteringCategory("SPRAL Linear Solver");
+      SpralSolverInterface::RegisterOptions(roptions);
+   }
 #endif
 
 #ifdef IPOPT_HAS_WSMP
-   roptions->SetRegisteringCategory("WSMP Linear Solver");
-   WsmpSolverInterface::RegisterOptions(roptions);
-   IterativeWsmpSolverInterface::RegisterOptions(roptions);
+   if( availablesolvers & IPOPTLINEARSOLVER_WSMP )
+   {
+      roptions->SetRegisteringCategory("WSMP Linear Solver");
+      WsmpSolverInterface::RegisterOptions(roptions);
+      IterativeWsmpSolverInterface::RegisterOptions(roptions);
+   }
 #endif
 
 #if ((defined(COINHSL_HAS_MA28) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA28S) && defined(IPOPT_SINGLE))) && defined(F77_FUNC)

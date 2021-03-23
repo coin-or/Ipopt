@@ -31,6 +31,11 @@ commit history.
           invalid problem definition error (-11) (5cdb2624bb). As a consequence,
           solve statistics should now always be available if the return
           status from (Re)Optimize is larger than -10.
+        - Added IpoptLinearSolvers.h with function IpoptGetAvailableLinearSolvers()
+          to retrieve information which linear solvers are available for
+          Ipopt (linked in or load at runtime). Options linear_solver and
+          linear_system_scaling can now only be set to values that are
+          available (linked in or load at runtime).
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]
