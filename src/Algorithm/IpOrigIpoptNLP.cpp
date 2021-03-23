@@ -296,7 +296,6 @@ bool OrigIpoptNLP::InitializeStructures(
                   c_space_->Dim(), x_space_->Dim());
          THROW_EXCEPTION(TOO_FEW_DOF, msg);
       }
-      ASSERT_EXCEPTION(x_space_->Dim() > 0, TOO_FEW_DOF, "Too few degrees of freedom (no free variables)!");
 
       // cannot have any null pointers, want zero length vectors
       // instead of null - this will later need to be changed for _h;
