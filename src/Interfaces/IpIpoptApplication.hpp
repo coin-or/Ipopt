@@ -223,6 +223,10 @@ public:
 
    /** Get the object with the statistics about the most recent
     *  optimization run.
+    *
+    *  @note Statistics are not available if optimization terminated
+    *  with a serious problem, that is, an ApplicationReturnStatus of
+    *  Not_Enough_Degrees_Of_Freedom or lower.
     */
    virtual SmartPtr<SolveStatistics> Statistics();
 
