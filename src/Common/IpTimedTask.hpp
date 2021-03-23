@@ -105,6 +105,11 @@ public:
       return total_walltime_;
    }
 
+   bool IsStarted() const
+   {
+      return start_called_;
+   }
+
 private:
    /**@name Default Compiler Generated Methods (Hidden to avoid
     * implicit creation/calling).  These methods are not

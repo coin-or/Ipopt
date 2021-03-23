@@ -240,6 +240,26 @@ bool IpoptAlgorithm::InitializeImpl(
    return true;
 }
 
+// class to end a TimedTask when object is destructed
+class EndTimedTask
+{
+private:
+   TimedTask& task;
+public:
+   EndTimedTask(
+      TimedTask& task_
+      )
+   : task(task_)
+   {
+      DBG_ASSERT(task.IsStarted());
+   }
+
+   ~EndTimedTask()
+   {
+      task.End();
+   }
+};
+
 SolverReturn IpoptAlgorithm::Optimize(
    bool isResto /*= false */
 )
@@ -248,6 +268,7 @@ SolverReturn IpoptAlgorithm::Optimize(
 
    // Start measuring CPU time
    IpData().TimingStats().OverallAlgorithm().Start();
+   EndTimedTask endtask(IpData().TimingStats().OverallAlgorithm());  // ensure task is ended when Optimize() is left
 
    // Reset Cpu start time (so doesn't carry over from previous Optimize)
    IpData().ResetCpuStartTime();
@@ -490,7 +511,6 @@ SolverReturn IpoptAlgorithm::Optimize(
    }
 
    DBG_ASSERT(retval != UNASSIGNED && "Unknown return code in the algorithm");
-   IpData().TimingStats().OverallAlgorithm().End();
    return retval;
 }
 
