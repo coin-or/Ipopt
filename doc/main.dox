@@ -36,14 +36,15 @@ form \anchor NLP
 \f}
 where \f$x \in \mathbb{R}^n\f$ are the optimization variables (possibly with
 lower and upper bounds, \f$x^L\in(\mathbb{R}\cup\{-\infty\})^n\f$ and
-\f$x^U\in(\mathbb{R}\cup\{+\infty\})^n\f$),
+\f$x^U\in(\mathbb{R}\cup\{+\infty\})^n\f$) with \f$x^L \leq x^U\f$,
 \f$f:\mathbb{R}^n \to \mathbb{R}\f$ is the objective function, and
 \f$g:\mathbb{R}^n \to \mathbb{R}^m\f$ are the general nonlinear
 constraints. The functions \f$f(x)\f$ and \f$g(x)\f$ can be linear or nonlinear
 and convex or non-convex (but should be twice continuously
-differentiable). The constraints, \f$g(x)\f$, have lower and upper bounds,
+differentiable). The constraint functions, \f$g(x)\f$, have lower and upper bounds,
 \f$g^L\in(\mathbb{R}\cup\{-\infty\})^m\f$ and
-\f$g^U\in(\mathbb{R}\cup\{+\infty\})^m\f$. Note that equality constraints of
+\f$g^U\in(\mathbb{R}\cup\{+\infty\})^m\f$ with \f$g^L \leq g^U\f$.
+Note that equality constraints of
 the form \f$g_i(x)=\bar g_i\f$ can be specified by setting
 \f$g^L_{i}=g^U_{i}=\bar g_i\f$.
 

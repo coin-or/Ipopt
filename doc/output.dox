@@ -216,10 +216,12 @@ output message to the console, and a brief description.
 
 - `Invalid_Problem_Definition`:
 
-   Console Message: (no console message, this is a return code for the C and Fortran interfaces only.)
-   
-   This indicates that there was an exception of some sort when
-   building the \ref IpoptProblem structure in the C or Fortran interface.
+   Console Message: `EXIT: Problem has inconsistent variable bounds or constraint sides.`
+
+   This indicates that either there was an exception of some sort when
+   building the \ref IpoptProblem structure in the C or Fortran interface
+   or bounds specified for variables or constraints were inconsistent
+   (lower bound larger than upper bound, left-hand-side larger than right-hand-side).
    Likely there is an error in your model or the main routine.
 
 - `Unrecoverable_Exception`:

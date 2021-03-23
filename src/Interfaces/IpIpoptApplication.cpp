@@ -1135,9 +1135,8 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
    {
       exc.ReportException(*jnlst_, J_MOREDETAILED);
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Problem has inconsistent variable bounds or constraint sides.\n");
-      retValue = Infeasible_Problem_Detected;
+      retValue = Invalid_Problem_Definition;
       status = LOCAL_INFEASIBILITY;
-      skip_finalize_solution_call = true; /* has already been called by TNLPAdapter (and we don't know the correct primal solution) */
    }
    catch( IpoptException& exc )
    {
