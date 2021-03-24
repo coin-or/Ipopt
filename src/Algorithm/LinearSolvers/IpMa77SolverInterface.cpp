@@ -9,28 +9,37 @@
 //          Carl Laird, Andreas Waechter     IBM    2004-03-17
 
 #include "IpoptConfig.h"
+#include "IpMa77SolverInterface.hpp"
+
+#include <iostream>
+#include <cmath>
 
 #ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"
 #endif
 
-// if we have MA77 in HSL or the linear solver loader, then we want to build the MA77 interface
-#if (defined(COINHSL_HAS_MA77) && !defined(IPOPT_SINGLE)) || \
-    (defined(COINHSL_HAS_MA77S) && defined(IPOPT_SINGLE)) || \
-    defined(IPOPT_HAS_LINEARSOLVERLOADER)
-
-#include "IpMa77SolverInterface.hpp"
-#include <iostream>
-#include <cmath>
 using namespace std;
-
-extern "C"
-{
-#include "hsl_mc68i.h"
-}
 
 namespace Ipopt
 {
+static IPOPT_DECL_MA77_DEFAULT_CONTROL(*user_ma77_default_control) = NULL;
+static IPOPT_DECL_MA77_OPEN_NELT(*user_ma77_open_nelt) = NULL;
+static IPOPT_DECL_MA77_OPEN(*user_ma77_open) = NULL;
+static IPOPT_DECL_MA77_INPUT_VARS(*user_ma77_input_vars) = NULL;
+static IPOPT_DECL_MA77_INPUT_REALS(*user_ma77_input_reals) = NULL;
+static IPOPT_DECL_MA77_ANALYSE(*user_ma77_analyse) = NULL;
+static IPOPT_DECL_MA77_FACTOR(*user_ma77_factor) = NULL;
+static IPOPT_DECL_MA77_FACTOR_SOLVE(*user_ma77_factor_solve) = NULL;
+static IPOPT_DECL_MA77_SOLVE(*user_ma77_solve) = NULL;
+static IPOPT_DECL_MA77_RESID(*user_ma77_resid) = NULL;
+static IPOPT_DECL_MA77_SCALE(*user_ma77_scale) = NULL;
+static IPOPT_DECL_MA77_ENQUIRE_POSDEF(*user_ma77_enquire_posdef) = NULL;
+static IPOPT_DECL_MA77_ENQUIRE_INDEF(*user_ma77_enquire_indef) = NULL;
+static IPOPT_DECL_MA77_ALTER(*user_ma77_alter) = NULL;
+static IPOPT_DECL_MA77_RESTART(*user_ma77_restart) = NULL;
+static IPOPT_DECL_MA77_FINALISE(*user_ma77_finalise) = NULL;
+static IPOPT_DECL_MC68_DEFAULT_CONTROL(*user_mc68_default_control) = NULL;
+static IPOPT_DECL_MC68_ORDER(*user_mc68_order) = NULL;
 
 Ma77SolverInterface::~Ma77SolverInterface()
 {
@@ -129,11 +138,164 @@ void Ma77SolverInterface::RegisterOptions(
       "This option controls ordering for the solver HSL_MA77.");
 }
 
+
+/// set MA77 functions to use for every instantiation of this class
+void Ma77SolverInterface::SetFunctions(
+   IPOPT_DECL_MA77_DEFAULT_CONTROL(*ma77_default_control),
+   IPOPT_DECL_MA77_OPEN_NELT(*ma77_open_nelt),
+   IPOPT_DECL_MA77_OPEN(*ma77_open),
+   IPOPT_DECL_MA77_INPUT_VARS(*ma77_input_vars),
+   IPOPT_DECL_MA77_INPUT_REALS(*ma77_input_reals),
+   IPOPT_DECL_MA77_ANALYSE(*ma77_analyse),
+   IPOPT_DECL_MA77_FACTOR(*ma77_factor),
+   IPOPT_DECL_MA77_FACTOR_SOLVE(*ma77_factor_solve),
+   IPOPT_DECL_MA77_SOLVE(*ma77_solve),
+   IPOPT_DECL_MA77_RESID(*ma77_resid),
+   IPOPT_DECL_MA77_SCALE(*ma77_scale),
+   IPOPT_DECL_MA77_ENQUIRE_POSDEF(*ma77_enquire_posdef),
+   IPOPT_DECL_MA77_ENQUIRE_INDEF(*ma77_enquire_indef),
+   IPOPT_DECL_MA77_ALTER(*ma77_alter),
+   IPOPT_DECL_MA77_RESTART(*ma77_restart),
+   IPOPT_DECL_MA77_FINALISE(*ma77_finalise),
+   IPOPT_DECL_MC68_DEFAULT_CONTROL(*mc68_default_control),
+   IPOPT_DECL_MC68_ORDER(*mc68_order)
+   )
+{
+   DBG_ASSERT(ma77_default_control != NULL);
+   DBG_ASSERT(ma77_open_nelt != NULL);
+   DBG_ASSERT(ma77_open != NULL);
+   DBG_ASSERT(ma77_input_vars != NULL);
+   DBG_ASSERT(ma77_input_reals != NULL);
+   DBG_ASSERT(ma77_analyse != NULL);
+   DBG_ASSERT(ma77_factor != NULL);
+   DBG_ASSERT(ma77_factor_solve != NULL);
+   DBG_ASSERT(ma77_solve != NULL);
+   DBG_ASSERT(ma77_resid != NULL);
+   DBG_ASSERT(ma77_scale != NULL);
+   DBG_ASSERT(ma77_enquire_posdef != NULL);
+   DBG_ASSERT(ma77_enquire_indef != NULL);
+   DBG_ASSERT(ma77_alter != NULL);
+   DBG_ASSERT(ma77_restart != NULL);
+   DBG_ASSERT(ma77_finalise != NULL);
+   DBG_ASSERT(mc68_default_control != NULL);
+   DBG_ASSERT(mc68_order != NULL);
+
+   user_ma77_default_control = ma77_default_control;
+   user_ma77_open_nelt = ma77_open_nelt;
+   user_ma77_open = ma77_open;
+   user_ma77_input_vars = ma77_input_vars;
+   user_ma77_input_reals = ma77_input_reals;
+   user_ma77_analyse = ma77_analyse;
+   user_ma77_factor = ma77_factor;
+   user_ma77_factor_solve = ma77_factor_solve;
+   user_ma77_solve = ma77_solve;
+   user_ma77_resid = ma77_resid;
+   user_ma77_scale = ma77_scale;
+   user_ma77_enquire_posdef = ma77_enquire_posdef;
+   user_ma77_enquire_indef = ma77_enquire_indef;
+   user_ma77_alter = ma77_alter;
+   user_ma77_restart = ma77_restart;
+   user_ma77_finalise = ma77_finalise;
+   user_mc68_default_control = mc68_default_control;
+   user_mc68_order = mc68_order;
+}
+
 bool Ma77SolverInterface::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
 )
 {
+   if( user_ma77_default_control != NULL )
+   {
+      ma77_default_control = user_ma77_default_control;
+      ma77_open_nelt = user_ma77_open_nelt;
+      ma77_open = user_ma77_open;
+      ma77_input_vars = user_ma77_input_vars;
+      ma77_input_reals = user_ma77_input_reals;
+      ma77_analyse = user_ma77_analyse;
+      ma77_factor = user_ma77_factor;
+      ma77_factor_solve = user_ma77_factor_solve;
+      ma77_solve = user_ma77_solve;
+      ma77_resid = user_ma77_resid;
+      ma77_scale = user_ma77_scale;
+      ma77_enquire_posdef = user_ma77_enquire_posdef;
+      ma77_enquire_indef = user_ma77_enquire_indef;
+      ma77_alter = user_ma77_alter;
+      ma77_restart = user_ma77_restart;
+      ma77_finalise = user_ma77_finalise;
+      mc68_default_control = user_mc68_default_control;
+      mc68_order = user_mc68_order;
+   }
+   else
+   {
+#if (defined(COINHSL_HAS_MA77) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA77S) && defined(IPOPT_SINGLE))
+      // use HSL functions that should be available in linked HSL library
+      ma77_default_control = &::ma77_default_control;
+      ma77_open_nelt = &::ma77_open_nelt;
+      ma77_open = &::ma77_open;
+      ma77_input_vars = &::ma77_input_vars;
+      ma77_input_reals = &::ma77_input_reals;
+      ma77_analyse = &::ma77_analyse;
+      ma77_factor = &::ma77_factor;
+      ma77_factor_solve = &::ma77_factor_solve;
+      ma77_solve = &::ma77_solve;
+      ma77_resid = &::ma77_resid;
+      ma77_scale = &::ma77_scale;
+      ma77_enquire_posdef = &::ma77_enquire_posdef;
+      ma77_enquire_indef = &::ma77_enquire_indef;
+      ma77_alter = &::ma77_alter;
+      ma77_restart = &::ma77_restart;
+      ma77_finalise = &::ma77_finalise;
+      mc68_default_control = &::mc68_default_control;
+      mc68_order = &::mc68_order;
+#else
+      // try to load HSL functions from a shared library at runtime
+      std::string hsllibname;
+      options.GetStringValue("hsllib", hsllibname, prefix);
+      hslloader = new LibraryLoader(hsllibname);
+
+#define STR2(x) #x
+#define STR(x) STR2(x)
+      ma77_default_control = (IPOPT_DECL_MA77_DEFAULT_CONTROL(*))hslloader->loadSymbol(STR(ma77_default_control));
+      ma77_open_nelt = (IPOPT_DECL_MA77_OPEN_NELT(*))hslloader->loadSymbol(STR(ma77_open_nelt));
+      ma77_open = (IPOPT_DECL_MA77_OPEN(*))hslloader->loadSymbol(STR(ma77_open));
+      ma77_input_vars = (IPOPT_DECL_MA77_INPUT_VARS(*))hslloader->loadSymbol(STR(ma77_input_vars));
+      ma77_input_reals = (IPOPT_DECL_MA77_INPUT_REALS(*))hslloader->loadSymbol(STR(ma77_input_reals));
+      ma77_analyse = (IPOPT_DECL_MA77_ANALYSE(*))hslloader->loadSymbol(STR(ma77_analyse));
+      ma77_factor = (IPOPT_DECL_MA77_FACTOR(*))hslloader->loadSymbol(STR(ma77_factor));
+      ma77_factor_solve = (IPOPT_DECL_MA77_FACTOR_SOLVE(*))hslloader->loadSymbol(STR(ma77_factor_solve));
+      ma77_solve = (IPOPT_DECL_MA77_SOLVE(*))hslloader->loadSymbol(STR(ma77_solve));
+      ma77_resid = (IPOPT_DECL_MA77_RESID(*))hslloader->loadSymbol(STR(ma77_resid));
+      ma77_scale = (IPOPT_DECL_MA77_SCALE(*))hslloader->loadSymbol(STR(ma77_scale));
+      ma77_enquire_posdef = (IPOPT_DECL_MA77_ENQUIRE_POSDEF(*))hslloader->loadSymbol(STR(ma77_enquire_posdef));
+      ma77_enquire_indef = (IPOPT_DECL_MA77_ENQUIRE_INDEF(*))hslloader->loadSymbol(STR(ma77_enquire_indef));
+      ma77_alter = (IPOPT_DECL_MA77_ALTER(*))hslloader->loadSymbol(STR(ma77_alter));
+      ma77_restart = (IPOPT_DECL_MA77_RESTART(*))hslloader->loadSymbol(STR(ma77_restart));
+      ma77_finalise = (IPOPT_DECL_MA77_FINALISE(*))hslloader->loadSymbol(STR(ma77_finalise));
+      mc68_default_control = (IPOPT_DECL_MC68_DEFAULT_CONTROL(*))hslloader->loadSymbol(STR(mc68_default_control));
+      mc68_order = (IPOPT_DECL_MC68_ORDER(*))hslloader->loadSymbol(STR(mc68_order));
+#endif
+   }
+
+   DBG_ASSERT(ma77_default_control != NULL);
+   DBG_ASSERT(ma77_open_nelt != NULL);
+   DBG_ASSERT(ma77_open != NULL);
+   DBG_ASSERT(ma77_input_vars != NULL);
+   DBG_ASSERT(ma77_input_reals != NULL);
+   DBG_ASSERT(ma77_analyse != NULL);
+   DBG_ASSERT(ma77_factor != NULL);
+   DBG_ASSERT(ma77_factor_solve != NULL);
+   DBG_ASSERT(ma77_solve != NULL);
+   DBG_ASSERT(ma77_resid != NULL);
+   DBG_ASSERT(ma77_scale != NULL);
+   DBG_ASSERT(ma77_enquire_posdef != NULL);
+   DBG_ASSERT(ma77_enquire_indef != NULL);
+   DBG_ASSERT(ma77_alter != NULL);
+   DBG_ASSERT(ma77_restart != NULL);
+   DBG_ASSERT(ma77_finalise != NULL);
+   DBG_ASSERT(mc68_default_control != NULL);
+   DBG_ASSERT(mc68_order != NULL);
+
    ma77_default_control(&control_);
    control_.f_arrays = 1; // Use Fortran numbering (faster)
    control_.bits = 32;
@@ -366,5 +528,3 @@ bool Ma77SolverInterface::IncreaseQuality()
 }
 
 } // namespace Ipopt
-
-#endif /* COINHSL_HAS_MA77(S) or IPOPT_HAS_LINEARSOLVERLOADER */

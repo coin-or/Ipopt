@@ -257,7 +257,7 @@ void Ma57TSolverInterface::RegisterOptions(
 
 }
 
-/// set MA27 functions to use for every instantiation of this class
+/// set MA57 functions to use for every instantiation of this class
 void Ma57TSolverInterface::SetFunctions(
    IPOPT_DECL_MA57A(*ma57a),
    IPOPT_DECL_MA57B(*ma57b),
@@ -742,7 +742,7 @@ ESymSolverStatus Ma57TSolverInterface::Backsolve(
    Number* rhs_vals
 )
 {
-   DBG_START_METH("Ma27TSolverInterface::Backsolve", dbg_verbosity);
+   DBG_START_METH("Ma57TSolverInterface::Backsolve", dbg_verbosity);
    if( HaveIpData() )
    {
       IpData().TimingStats().LinearSystemBackSolve().Start();

@@ -11,6 +11,8 @@
 #define __IPMA77SOLVERINTERFACE_HPP__
 
 #include "IpSparseSymLinearSolverInterface.hpp"
+#include "IpLibraryLoader.hpp"
+#include "IpTypes.h"
 
 extern "C"
 {
@@ -19,7 +21,163 @@ extern "C"
 #else
 #include "hsl_ma77d.h"
 #endif
+#include "hsl_mc68i.h"
 }
+
+#define IPOPT_DECL_MA77_DEFAULT_CONTROL(x) void (x)( \
+   struct ma77_control* control \
+)
+
+#define IPOPT_DECL_MA77_OPEN_NELT(x) void (x)( \
+   const int                    n,      \
+   const char*                  fname1, \
+   const char*                  fname2, \
+   const char*                  fname3, \
+   const char*                  fname4, \
+   void**                       keep,   \
+   const struct ma77_control*   control,\
+   struct ma77_info*            info,   \
+   const int                    nelt    \
+)
+
+#define IPOPT_DECL_MA77_OPEN(x) void (x)( \
+   const int                    n,      \
+   const char*                  fname1, \
+   const char*                  fname2, \
+   const char*                  fname3, \
+   const char*                  fname4, \
+   void**                       keep,   \
+   const struct ma77_control*   control,\
+   struct ma77_info*            info    \
+)
+
+#define IPOPT_DECL_MA77_INPUT_VARS(x) void (x)( \
+   const int                    idx,    \
+   const int                    nvar,   \
+   const int                    list[], \
+   void**                       keep,   \
+   const struct ma77_control*   control,\
+   struct ma77_info*            info    \
+)
+
+#define IPOPT_DECL_MA77_INPUT_REALS(x) void (x)( \
+   const int                    idx,    \
+   const int                    length, \
+   const ipnumber               reals[],\
+   void**                       keep,   \
+   const struct ma77_control*   control,\
+   struct ma77_info*            info    \
+)
+
+#define IPOPT_DECL_MA77_ANALYSE(x) void (x)( \
+   const int                    order[], \
+   void**                       keep,    \
+   const struct ma77_control*   control, \
+   struct ma77_info*            info     \
+)
+
+#define IPOPT_DECL_MA77_FACTOR(x) void (x)( \
+   const int                    posdef, \
+   void**                       keep,   \
+   const struct ma77_control*   control,\
+   struct ma77_info*            info,   \
+   const ipnumber*              scale   \
+)
+
+#define IPOPT_DECL_MA77_FACTOR_SOLVE(x) void (x)( \
+   const int                    posdef, \
+   void**                       keep,   \
+   const struct ma77_control*   control,\
+   struct ma77_info*            info,   \
+   const ipnumber*              scale,  \
+   const int                    nrhs,   \
+   const int                    lx,     \
+   ipnumber                     rhs[]   \
+)
+
+#define IPOPT_DECL_MA77_SOLVE(x) void (x)( \
+   const int                    job,    \
+   const int                    nrhs,   \
+   const int                    lx,     \
+   ipnumber                     xx[],   \
+   void**                       keep,   \
+   const struct ma77_control*   control,\
+   struct ma77_info*            info,   \
+   const ipnumber*              scale   \
+)
+
+#define IPOPT_DECL_MA77_RESID(x) void (x)( \
+   const int                    nrhs,    \
+   const int                    lx,      \
+   const ipnumber               xx[],    \
+   const int                    lresid,  \
+   ipnumber                     resid[], \
+   void**                       keep,    \
+   const struct ma77_control*   control, \
+   struct ma77_info*            info,    \
+   ipnumber*                    anorm_bnd\
+)
+
+#define IPOPT_DECL_MA77_SCALE(x) void (x)( \
+   ipnumber                     scale[], \
+   void**                       keep,    \
+   const struct ma77_control*   control, \
+   struct ma77_info*            info,    \
+   ipnumber*                    anorm    \
+)
+
+#define IPOPT_DECL_MA77_ENQUIRE_POSDEF(x) void (x)( \
+   ipnumber                     d[],    \
+   void**                       keep,   \
+   const struct ma77_control*   control,\
+   struct ma77_info*            info    \
+)
+
+#define IPOPT_DECL_MA77_ENQUIRE_INDEF(x) void (x)( \
+   int                          piv_order[], \
+   ipnumber                     d[],         \
+   void**                       keep,        \
+   const struct ma77_control*   control,     \
+   struct ma77_info*            info         \
+)
+
+#define IPOPT_DECL_MA77_ALTER(x) void (x)( \
+   const ipnumber               d[],     \
+   void**                       keep,    \
+   const struct ma77_control*   control, \
+   struct ma77_info*            info     \
+)
+
+#define IPOPT_DECL_MA77_RESTART(x) void (x)( \
+   const char*                  restart_file, \
+   const char*                  fname1,       \
+   const char*                  fname2,       \
+   const char*                  fname3,       \
+   const char*                  fname4,       \
+   void**                       keep,         \
+   const struct ma77_control*   control,      \
+   struct ma77_info*            info          \
+)
+
+#define IPOPT_DECL_MA77_FINALISE(x) void (x)( \
+   void**                       keep,   \
+   const struct ma77_control*   control,\
+   struct ma77_info*            info    \
+)
+
+#define IPOPT_DECL_MC68_DEFAULT_CONTROL(x) void (x)( \
+   struct mc68_control* control \
+)
+
+#define IPOPT_DECL_MC68_ORDER(x) void (x)( \
+   int                          ord,    \
+   int                          n,      \
+   const int                    ptr[],  \
+   const int                    row[],  \
+   int                          perm[], \
+   const struct mc68_control*   control,\
+   struct mc68_info*            info    \
+)
 
 namespace Ipopt
 {
@@ -44,12 +202,55 @@ private:
    Number umax_;
    int ordering_;
 
+   /**@name MA77 and MC68 function pointers
+    * @{
+    */
+   SmartPtr<LibraryLoader> hslloader;
+
+   IPOPT_DECL_MA77_DEFAULT_CONTROL(*ma77_default_control);
+   IPOPT_DECL_MA77_OPEN_NELT(*ma77_open_nelt);
+   IPOPT_DECL_MA77_OPEN(*ma77_open);
+   IPOPT_DECL_MA77_INPUT_VARS(*ma77_input_vars);
+   IPOPT_DECL_MA77_INPUT_REALS(*ma77_input_reals);
+   IPOPT_DECL_MA77_ANALYSE(*ma77_analyse);
+   IPOPT_DECL_MA77_FACTOR(*ma77_factor);
+   IPOPT_DECL_MA77_FACTOR_SOLVE(*ma77_factor_solve);
+   IPOPT_DECL_MA77_SOLVE(*ma77_solve);
+   IPOPT_DECL_MA77_RESID(*ma77_resid);
+   IPOPT_DECL_MA77_SCALE(*ma77_scale);
+   IPOPT_DECL_MA77_ENQUIRE_POSDEF(*ma77_enquire_posdef);
+   IPOPT_DECL_MA77_ENQUIRE_INDEF(*ma77_enquire_indef);
+   IPOPT_DECL_MA77_ALTER(*ma77_alter);
+   IPOPT_DECL_MA77_RESTART(*ma77_restart);
+   IPOPT_DECL_MA77_FINALISE(*ma77_finalise);
+   IPOPT_DECL_MC68_DEFAULT_CONTROL(*mc68_default_control);
+   IPOPT_DECL_MC68_ORDER(*mc68_order);
+   ///@}
+
 public:
 
    Ma77SolverInterface()
       : val_(NULL),
         keep_(NULL),
-        pivtol_changed_(false)
+        pivtol_changed_(false),
+        ma77_default_control(NULL),
+        ma77_open_nelt(NULL),
+        ma77_open(NULL),
+        ma77_input_vars(NULL),
+        ma77_input_reals(NULL),
+        ma77_analyse(NULL),
+        ma77_factor(NULL),
+        ma77_factor_solve(NULL),
+        ma77_solve(NULL),
+        ma77_resid(NULL),
+        ma77_scale(NULL),
+        ma77_enquire_posdef(NULL),
+        ma77_enquire_indef(NULL),
+        ma77_alter(NULL),
+        ma77_restart(NULL),
+        ma77_finalise(NULL),
+        mc68_default_control(NULL),
+        mc68_order(NULL)
    { }
 
    ~Ma77SolverInterface();
@@ -57,6 +258,28 @@ public:
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
    );
+
+   /// set MA77 functions to use for every instantiation of this class
+   static void SetFunctions(
+      IPOPT_DECL_MA77_DEFAULT_CONTROL(*ma77_default_control),
+      IPOPT_DECL_MA77_OPEN_NELT(*ma77_open_nelt),
+      IPOPT_DECL_MA77_OPEN(*ma77_open),
+      IPOPT_DECL_MA77_INPUT_VARS(*ma77_input_vars),
+      IPOPT_DECL_MA77_INPUT_REALS(*ma77_input_reals),
+      IPOPT_DECL_MA77_ANALYSE(*ma77_analyse),
+      IPOPT_DECL_MA77_FACTOR(*ma77_factor),
+      IPOPT_DECL_MA77_FACTOR_SOLVE(*ma77_factor_solve),
+      IPOPT_DECL_MA77_SOLVE(*ma77_solve),
+      IPOPT_DECL_MA77_RESID(*ma77_resid),
+      IPOPT_DECL_MA77_SCALE(*ma77_scale),
+      IPOPT_DECL_MA77_ENQUIRE_POSDEF(*ma77_enquire_posdef),
+      IPOPT_DECL_MA77_ENQUIRE_INDEF(*ma77_enquire_indef),
+      IPOPT_DECL_MA77_ALTER(*ma77_alter),
+      IPOPT_DECL_MA77_RESTART(*ma77_restart),
+      IPOPT_DECL_MA77_FINALISE(*ma77_finalise),
+      IPOPT_DECL_MC68_DEFAULT_CONTROL(*mc68_default_control),
+      IPOPT_DECL_MC68_ORDER(*mc68_order)
+      );
 
    bool InitializeImpl(
       const OptionsList& options,
