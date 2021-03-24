@@ -296,7 +296,7 @@ void ma77_enquire_indef_d(
 );
 
 void ma77_alter_d(
-   ma77pkgtype_d_               d[],
+   const ma77pkgtype_d_         d[],
    void**                       keep,
    const struct ma77_control_d* control,
    struct ma77_info_d*          info
