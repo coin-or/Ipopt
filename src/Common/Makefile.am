@@ -30,7 +30,8 @@ libcommon_la_SOURCES = \
 	IpOptionsList.cpp \
 	IpRegOptions.cpp \
 	IpTaggedObject.cpp \
-	IpUtils.cpp
+	IpUtils.cpp \
+	IpLibraryLoader.cpp
 
 AM_CPPFLAGS = -DIPOPTLIB_BUILD
 

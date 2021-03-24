@@ -108,7 +108,8 @@ CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libcommon_la_LIBADD =
 am_libcommon_la_OBJECTS = IpDebug.lo IpJournalist.lo IpObserver.lo \
-	IpOptionsList.lo IpRegOptions.lo IpTaggedObject.lo IpUtils.lo
+	IpOptionsList.lo IpRegOptions.lo IpTaggedObject.lo IpUtils.lo \
+	IpLibraryLoader.lo
 libcommon_la_OBJECTS = $(am_libcommon_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -130,9 +131,10 @@ DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/IpDebug.Plo \
-	./$(DEPDIR)/IpJournalist.Plo ./$(DEPDIR)/IpObserver.Plo \
-	./$(DEPDIR)/IpOptionsList.Plo ./$(DEPDIR)/IpRegOptions.Plo \
-	./$(DEPDIR)/IpTaggedObject.Plo ./$(DEPDIR)/IpUtils.Plo
+	./$(DEPDIR)/IpJournalist.Plo ./$(DEPDIR)/IpLibraryLoader.Plo \
+	./$(DEPDIR)/IpObserver.Plo ./$(DEPDIR)/IpOptionsList.Plo \
+	./$(DEPDIR)/IpRegOptions.Plo ./$(DEPDIR)/IpTaggedObject.Plo \
+	./$(DEPDIR)/IpUtils.Plo
 am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -402,7 +404,8 @@ libcommon_la_SOURCES = \
 	IpOptionsList.cpp \
 	IpRegOptions.cpp \
 	IpTaggedObject.cpp \
-	IpUtils.cpp
+	IpUtils.cpp \
+	IpLibraryLoader.cpp
 
 AM_CPPFLAGS = -DIPOPTLIB_BUILD
 all: config.h config_ipopt.h
@@ -485,6 +488,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpDebug.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpJournalist.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpLibraryLoader.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpObserver.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpOptionsList.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpRegOptions.Plo@am__quote@ # am--include-marker
@@ -644,6 +648,7 @@ clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
 distclean: distclean-am
 		-rm -f ./$(DEPDIR)/IpDebug.Plo
 	-rm -f ./$(DEPDIR)/IpJournalist.Plo
+	-rm -f ./$(DEPDIR)/IpLibraryLoader.Plo
 	-rm -f ./$(DEPDIR)/IpObserver.Plo
 	-rm -f ./$(DEPDIR)/IpOptionsList.Plo
 	-rm -f ./$(DEPDIR)/IpRegOptions.Plo
@@ -696,6 +701,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/IpDebug.Plo
 	-rm -f ./$(DEPDIR)/IpJournalist.Plo
+	-rm -f ./$(DEPDIR)/IpLibraryLoader.Plo
 	-rm -f ./$(DEPDIR)/IpObserver.Plo
 	-rm -f ./$(DEPDIR)/IpOptionsList.Plo
 	-rm -f ./$(DEPDIR)/IpRegOptions.Plo
