@@ -17,9 +17,7 @@ namespace Ipopt
 # include <dlfcn.h>
 #endif
 
-void LibraryLoader::loadLibrary(
-   const std::string& libname
-   )
+void LibraryLoader::loadLibrary()
 {
    if( libname.empty() )
       THROW_EXCEPTION(DYNAMIC_LIBRARY_FAILURE, "No library name given (libname is empty)");
@@ -54,7 +52,7 @@ void LibraryLoader::unloadLibrary()
    if( FreeLibrary((HMODULE)libhandle) == 0 )
    {
       std::stringstream s;
-      s << "Error " << GetLastError() << " while unloading DLL (see https://docs.microsoft.com/en-us/windows/win32/debug/system-error-codes)";
+      s << "Error " << GetLastError() << " while unloading " << libname << " (see https://docs.microsoft.com/en-us/windows/win32/debug/system-error-codes)";
       THROW_EXCEPTION(DYNAMIC_LIBRARY_FAILURE, s.str());
    }
 
@@ -70,7 +68,8 @@ void* LibraryLoader::loadSymbol(
    )
 {
    if( libhandle == NULL )
-      THROW_EXCEPTION(DYNAMIC_LIBRARY_FAILURE, "No library loaded");
+      loadLibrary();
+   DBG_ASSERT(libhandle != NULL);
 
    size_t len = symbolname.size();
    char* tripSym = new char[symbolname.size()+2];
@@ -126,7 +125,7 @@ void* LibraryLoader::loadSymbol(
    {
 #ifdef HAVE_WINDOWS_H
       std::stringstream s;
-      s << "Error " << GetLastError() << " while loading symbol " << symbolname << " from DLL (see https://docs.microsoft.com/en-us/windows/win32/debug/system-error-codes)";
+      s << "Error " << GetLastError() << " while loading symbol " << symbolname << " from " << libname << " (see https://docs.microsoft.com/en-us/windows/win32/debug/system-error-codes)";
       THROW_EXCEPTION(DYNAMIC_LIBRARY_FAILURE, s.str());
 #elif defined(HAVE_DLFCN_H)
       THROW_EXCEPTION(DYNAMIC_LIBRARY_FAILURE, dlerror());

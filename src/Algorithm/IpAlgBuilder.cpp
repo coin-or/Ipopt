@@ -79,6 +79,14 @@
 # include "PardisoLoader.h"
 #endif
 
+#ifdef _MSC_VER
+# define SHAREDLIBEXT "dll"
+#elif defined(__APPLE__)
+# define SHAREDLIBEXT "dylib"
+#else
+# define SHAREDLIBEXT "so"
+#endif
+
 namespace Ipopt
 {
 #if IPOPT_VERBOSITY > 0
@@ -232,7 +240,6 @@ void AlgorithmBuilder::RegisterOptions(
    options.push_back("slack-based");
    descrs.push_back("use the slack values");
 
-   roptions->SetRegisteringCategory("Linear Solver");
    roptions->AddStringOption(
       "linear_system_scaling", "Method for scaling the linear system.",
       defaultsolver,
@@ -245,6 +252,11 @@ void AlgorithmBuilder::RegisterOptions(
       " The default is MC19 only if MA27, MA57, MA77, or MA86 are selected as linear solvers. Otherwise it is 'none'."
 #endif
       );
+
+   roptions->AddStringOption1(
+      "hsllib", "Name of library containing HSL routines for load at runtime",
+      "libhsl." SHAREDLIBEXT,
+      "*", "Any acceptable filename (may contain path, too)");
 
    roptions->SetRegisteringCategory("NLP Scaling");
    roptions->AddStringOption4(
@@ -343,22 +355,6 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    if( linear_solver == "ma27" )
    {
       SolverInterface = new Ma27TSolverInterface();
-#ifdef IPOPT_HAS_LINEARSOLVERLOADER
-      if( !(linkedsolvers & IPOPTLINEARSOLVER_MA27) && !LSL_isMA27available() )
-      {
-         char buf[256];
-         int rc = LSL_loadHSL(NULL, buf, 255);
-         if (rc)
-         {
-            std::string errmsg;
-            errmsg = "Selected linear solver MA27 not available.\nTried to obtain MA27 from shared library \"";
-            errmsg += LSL_HSLLibraryName();
-            errmsg += "\", but the following error occured:\n";
-            errmsg += buf;
-            THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
-         }
-      }
-#endif
    }
 
    else if( linear_solver == "ma57" )

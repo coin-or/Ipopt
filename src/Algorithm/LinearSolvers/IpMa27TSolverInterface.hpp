@@ -8,7 +8,63 @@
 #define __IPMA27TSOLVERINTERFACE_HPP__
 
 #include "IpSparseSymLinearSolverInterface.hpp"
+#include "IpLibraryLoader.hpp"
 #include "IpTypes.h"
+
+#define IPOPT_DECL_MA27A(x) void (x)( \
+   ipfint*       N,     \
+   ipfint*       NZ,    \
+   const ipfint* IRN,   \
+   const ipfint* ICN,   \
+   ipfint*       IW,    \
+   ipfint*       LIW,   \
+   ipfint*       IKEEP, \
+   ipfint*       IW1,   \
+   ipfint*       NSTEPS,\
+   ipfint*       IFLAG, \
+   ipfint*       ICNTL, \
+   ipnumber*     CNTL,  \
+   ipfint*       INFO,  \
+   ipnumber*     OPS    \
+)
+
+#define IPOPT_DECL_MA27B(x) void (x)( \
+   ipfint*       N,      \
+   ipfint*       NZ,     \
+   const ipfint* IRN,    \
+   const ipfint* ICN,    \
+   ipnumber*     A,      \
+   ipfint*       LA,     \
+   ipfint*       IW,     \
+   ipfint*       LIW,    \
+   ipfint*       IKEEP,  \
+   ipfint*       NSTEPS, \
+   ipfint*       MAXFRT, \
+   ipfint*       IW1,    \
+   ipfint*       ICNTL,  \
+   ipnumber*     CNTL,   \
+   ipfint*       INFO    \
+)
+
+#define IPOPT_DECL_MA27C(x) void (x)( \
+   ipfint*   N,      \
+   ipnumber* A,      \
+   ipfint*   LA,     \
+   ipfint*   IW,     \
+   ipfint*   LIW,    \
+   ipnumber* W,      \
+   ipfint*   MAXFRT, \
+   ipnumber* RHS,    \
+   ipfint*   IW1,    \
+   ipfint*   NSTEPS, \
+   ipfint*   ICNTL,  \
+   ipnumber* CNTL    \
+)
+
+#define IPOPT_DECL_MA27I(x) void (x)( \
+   ipfint*   ICNTL, \
+   ipnumber* CNTL   \
+)
 
 namespace Ipopt
 {
@@ -76,6 +132,14 @@ public:
    );
    ///@}
 
+   /// set MA27 functions to use for every instantiation of this class
+   static void SetMA27Functions(
+      IPOPT_DECL_MA27A(*ma27a),
+      IPOPT_DECL_MA27B(*ma27b),
+      IPOPT_DECL_MA27C(*ma27c),
+      IPOPT_DECL_MA27I(*ma27i)
+      );
+
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
@@ -94,6 +158,17 @@ private:
    void operator=(
       const Ma27TSolverInterface&
    );
+   ///@}
+
+   /**@name MA27 function pointers
+    * @{
+    */
+   SmartPtr<LibraryLoader> hslloader;
+
+   IPOPT_DECL_MA27A(*ma27a);
+   IPOPT_DECL_MA27B(*ma27b);
+   IPOPT_DECL_MA27C(*ma27c);
+   IPOPT_DECL_MA27I(*ma27i);
    ///@}
 
    /** @name Information about the matrix */

@@ -18,6 +18,7 @@ namespace Ipopt
 class IPOPTLIB_EXPORT LibraryLoader : public ReferencedObject
 {
 private:
+   std::string libname;
    void* libhandle;
 
    /** unimplemented copy constructor */
@@ -27,8 +28,11 @@ private:
 
 public:
    /** constructor */
-   LibraryLoader()
-   : libhandle(NULL)
+   LibraryLoader(
+      const std::string& libname_  /**< full name of library, can include path */
+      )
+   : libname(libname_),
+     libhandle(NULL)
    { }
 
    /** destructor */
@@ -38,14 +42,15 @@ public:
    }
 
    /** tries to load library */
-   void loadLibrary(
-      const std::string& libname  /**< full name of library, can include path */
-      );
+   void loadLibrary();
 
    /** unload library, if loaded */
    void unloadLibrary();
 
-   /** tries to load symbol from a loaded library */
+   /** tries to load symbol
+    *
+    * calls loadLibrary() if no library loaded yet
+    */
    void* loadSymbol(
       const std::string& symbolname  /**< base name of symbol */
       );
