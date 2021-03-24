@@ -133,7 +133,7 @@ public:
    ///@}
 
    /// set MA27 functions to use for every instantiation of this class
-   static void SetMA27Functions(
+   static void SetFunctions(
       IPOPT_DECL_MA27A(*ma27a),
       IPOPT_DECL_MA27B(*ma27b),
       IPOPT_DECL_MA27C(*ma27c),

@@ -360,22 +360,6 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    else if( linear_solver == "ma57" )
    {
       SolverInterface = new Ma57TSolverInterface();
-#ifdef IPOPT_HAS_LINEARSOLVERLOADER
-      if( !(linkedsolvers & IPOPTLINEARSOLVER_MA57) && !LSL_isMA57available() )
-      {
-         char buf[256];
-         int rc = LSL_loadHSL(NULL, buf, 255);
-         if (rc)
-         {
-            std::string errmsg;
-            errmsg = "Selected linear solver MA57 not available.\nTried to obtain MA57 from shared library \"";
-            errmsg += LSL_HSLLibraryName();
-            errmsg += "\", but the following error occured:\n";
-            errmsg += buf;
-            THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
-         }
-      }
-#endif
    }
 
    else if( linear_solver == "ma77" )

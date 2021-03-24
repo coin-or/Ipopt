@@ -6,119 +6,46 @@
 //               original version (based on MA27TSolverInterface.cpp)
 
 #include "IpoptConfig.h"
-
-#ifdef IPOPT_HAS_HSL
-#include "CoinHslConfig.h"
-#else
-/* if we build for the Linear Solver loader, then use normal C-naming style */
-#define IPOPT_HSL_FUNC(name,NAME) name
-#endif
-
-// if we have MA57 in HSL or the linear solver loader, then we want to build the MA57 interface
-#if (defined(COINHSL_HAS_MA57) && !defined(IPOPT_SINGLE)) || \
-    (defined(COINHSL_HAS_MA57S) && defined(IPOPT_SINGLE)) || \
-    defined(IPOPT_HAS_LINEARSOLVERLOADER)
-
-#ifdef IPOPT_SINGLE
-#define IPOPT_HSL_FUNCP(name,NAME) IPOPT_HSL_FUNC(name,NAME)
-#else
-#define IPOPT_HSL_FUNCP(name,NAME) IPOPT_HSL_FUNC(name ## d,NAME ## D)
-#endif
-
 #include "IpMa57TSolverInterface.hpp"
 
 #include <cmath>
 #include <iostream>
 #include <limits>
 
-/** Prototypes for MA57's Fortran subroutines */
+#ifdef IPOPT_HAS_HSL
+#include "CoinHslConfig.h"
+#endif
+
+#if (defined(COINHSL_HAS_MA57) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA57S) && defined(IPOPT_SINGLE))
+#ifdef IPOPT_SINGLE
+#define IPOPT_HSL_FUNCP(name,NAME) IPOPT_HSL_FUNC(name,NAME)
+#else
+#define IPOPT_HSL_FUNCP(name,NAME) IPOPT_HSL_FUNC(name ## d,NAME ## D)
+#endif
+
+/** MA57 functions from HSL library (symbols resolved at linktime) */
 extern "C"
 {
-   /** MA57I -- Initialize solver. */
-   void IPOPT_HSL_FUNCP(ma57i, MA57I)(
-      ipnumber* cntl,
-      ma57int*  icntl
-   );
-
-   /** MA57A -- Symbolic Factorization. */
-   void IPOPT_HSL_FUNCP(ma57a, MA57A)(
-      ma57int*       n,     /**< Order of matrix. */
-      ma57int*       ne,    /**< Number of entries. */
-      const ma57int* irn,   /**< Matrix nonzero row structure */
-      const ma57int* jcn,   /**< Matrix nonzero column structure */
-      ma57int*       lkeep, /**< Workspace for the pivot order of length 3*n */
-      ma57int*       keep,  /**< Workspace for the pivot order of length 3*n */
-      /* Automatically iflag = 0; ikeep pivot order iflag = 1 */
-      ma57int*       iwork, /**< Integer work space. */
-      ma57int*       icntl, /**< Integer Control parameter of length 30 */
-      ma57int*       info,  /**< Statistical Information; Integer array of length 20 */
-      ipnumber*      rinfo  /**< Float Control parameter of length 5 */
-   );
-
-   /** MA57B -- Numerical Factorization. */
-   void IPOPT_HSL_FUNCP(ma57b, MA57B)(
-      ma57int*  n,      /**< Order of matrix. */
-      ma57int*  ne,     /**< Number of entries. */
-      ipnumber* a,      /**< Numerical values. */
-      ipnumber* fact,   /**< Entries of factors. */
-      ma57int*  lfact,  /**< Length of array `fact'. */
-      ma57int*  ifact,  /**< Indexing info for factors. */
-      ma57int*  lifact, /**< Length of array `ifact'. */
-      ma57int*  lkeep,  /**< Length of array `keep'. */
-      ma57int*  keep,   /**< Integer array. */
-      ma57int*  iwork,  /**< Workspace of length `n'. */
-      ma57int*  icntl,  /**< Integer Control parameter of length 20. */
-      ipnumber* cntl,   /**< Float Control parameter of length 5. */
-      ma57int*  info,   /**< Statistical Information; Integer array of length 40. */
-      ipnumber* rinfo   /**< Statistical Information; Real array of length 20. */
-   );
-
-   /** MA57C -- Solution. */
-   void IPOPT_HSL_FUNCP(ma57c, MA57C)(
-      /** Solution job.  Solve for...
-       * - JOB <= 1:  A
-       * - JOB == 2:  PLP^t
-       * - JOB == 3:  PDP^t
-       * - JOB >= 4:  PL^t P^t
-       */
-      ma57int*  job,
-      ma57int*  n,      /**< Order of matrix. */
-      ipnumber* fact,   /**< Entries of factors. */
-      ma57int*  lfact,  /**< Length of array `fact'. */
-      ma57int*  ifact,  /**< Indexing info for factors. */
-      ma57int*  lifact, /**< Length of array `ifact'. */
-      ma57int*  nrhs,   /**< Number of right hand sides. */
-      ipnumber* rhs,    /**< Numerical Values. */
-      ma57int*  lrhs,   /**< Leading dimensions of `rhs'. */
-      ipnumber* work,   /**< Real workspace. */
-      ma57int*  lwork,  /**< Length of `work', >= N*NRHS. */
-      ma57int*  iwork,  /**< Integer array of length `n'. */
-      ma57int*  icntl,  /**< Integer Control parameter array of length 20. */
-      ma57int*  info    /**< Statistical Information; Integer array of length 40. */
-   );
-
-   /** MC57E -- Copy arrays. */
-   void IPOPT_HSL_FUNCP(ma57e, MA57E)(
-      ma57int*  n,
-      ma57int*  ic,   /**< 0: copy real array.  >=1:  copy integer array. */
-      ma57int*  keep,
-      ipnumber* fact,
-      ma57int*  lfact,
-      ipnumber* newfac,
-      ma57int*  lnew,
-      ma57int*  ifact,
-      ma57int*  lifact,
-      ma57int*  newifc,
-      ma57int*  linew,
-      ma57int*  info
-   );
+   IPOPT_DECL_MA57A(IPOPT_HSL_FUNCP(ma57a, MA57A));
+   IPOPT_DECL_MA57B(IPOPT_HSL_FUNCP(ma57b, MA57B));
+   IPOPT_DECL_MA57C(IPOPT_HSL_FUNCP(ma57c, MA57C));
+   IPOPT_DECL_MA57E(IPOPT_HSL_FUNCP(ma57e, MA57E));
+   IPOPT_DECL_MA57I(IPOPT_HSL_FUNCP(ma57i, MA57I));
 }
+#endif
 
 namespace Ipopt
 {
 #if IPOPT_VERBOSITY > 0
 static const Index dbg_verbosity = 0;
 #endif
+
+/** pointer to MA57 function that can be set via Ma57TSolverInterface::SetFunctions() */
+static IPOPT_DECL_MA57A(*user_ma57a) = NULL;
+static IPOPT_DECL_MA57B(*user_ma57b) = NULL;
+static IPOPT_DECL_MA57C(*user_ma57c) = NULL;
+static IPOPT_DECL_MA57E(*user_ma57e) = NULL;
+static IPOPT_DECL_MA57I(*user_ma57i) = NULL;
 
 const char* ma57_err_msg[] =
 {
@@ -223,7 +150,12 @@ const char* ma57_wrn_msg[] =
 };
 
 Ma57TSolverInterface::Ma57TSolverInterface()
-   : dim_(0),
+   : ma57a(NULL),
+     ma57b(NULL),
+     ma57c(NULL),
+     ma57e(NULL),
+     ma57i(NULL),
+     dim_(0),
      nonzeros_(0),
      initialized_(false),
      pivtol_changed_(false),
@@ -325,11 +257,71 @@ void Ma57TSolverInterface::RegisterOptions(
 
 }
 
+/// set MA27 functions to use for every instantiation of this class
+void Ma57TSolverInterface::SetFunctions(
+   IPOPT_DECL_MA57A(*ma57a),
+   IPOPT_DECL_MA57B(*ma57b),
+   IPOPT_DECL_MA57C(*ma57c),
+   IPOPT_DECL_MA57E(*ma57e),
+   IPOPT_DECL_MA57I(*ma57i)
+   )
+{
+   DBG_ASSERT(ma57a != NULL);
+   DBG_ASSERT(ma57b != NULL);
+   DBG_ASSERT(ma57c != NULL);
+   DBG_ASSERT(ma57e != NULL);
+   DBG_ASSERT(ma57i != NULL);
+
+   user_ma57a = ma57a;
+   user_ma57b = ma57b;
+   user_ma57c = ma57c;
+   user_ma57e = ma57e;
+   user_ma57i = ma57i;
+}
+
 bool Ma57TSolverInterface::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
 )
 {
+   if( user_ma57a != NULL )
+   {
+      // someone set MA57 functions via setFunctions - prefer these
+      ma57a = user_ma57a;
+      ma57b = user_ma57b;
+      ma57c = user_ma57c;
+      ma57e = user_ma57e;
+      ma57i = user_ma57i;
+   }
+   else
+   {
+#if (defined(COINHSL_HAS_MA57) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA57S) && defined(IPOPT_SINGLE))
+      // use HSL functions that should be available in linked HSL library
+      ma57a = &::IPOPT_HSL_FUNCP(ma57a, MA57A);
+      ma57b = &::IPOPT_HSL_FUNCP(ma57b, MA57B);
+      ma57c = &::IPOPT_HSL_FUNCP(ma57c, MA57C);
+      ma57e = &::IPOPT_HSL_FUNCP(ma57e, MA57E);
+      ma57i = &::IPOPT_HSL_FUNCP(ma57i, MA57I);
+#else
+      // try to load HSL functions from a shared library at runtime
+      std::string hsllibname;
+      options.GetStringValue("hsllib", hsllibname, prefix);
+      hslloader = new LibraryLoader(hsllibname);
+
+      ma57a = (IPOPT_DECL_MA57A(*))hslloader->loadSymbol("ma57a");
+      ma57b = (IPOPT_DECL_MA57B(*))hslloader->loadSymbol("ma57b");
+      ma57c = (IPOPT_DECL_MA57C(*))hslloader->loadSymbol("ma57c");
+      ma57e = (IPOPT_DECL_MA57E(*))hslloader->loadSymbol("ma57e");
+      ma57i = (IPOPT_DECL_MA57I(*))hslloader->loadSymbol("ma57i");
+#endif
+   }
+
+   DBG_ASSERT(ma57a != NULL);
+   DBG_ASSERT(ma57b != NULL);
+   DBG_ASSERT(ma57c != NULL);
+   DBG_ASSERT(ma57e != NULL);
+   DBG_ASSERT(ma57i != NULL);
+
    // Obtain the options settings
    options.GetNumericValue("ma57_pivtol", pivtol_, prefix);
    if( options.GetNumericValue("ma57_pivtolmax", pivtolmax_, prefix) )
@@ -365,7 +357,7 @@ bool Ma57TSolverInterface::InitializeImpl(
    // CET 04-29-2010
 
    /* Initialize. */
-   IPOPT_HSL_FUNCP(ma57i, MA57I)(wd_cntl_, wd_icntl_);
+   ma57i(wd_cntl_, wd_icntl_);
    /* Custom settings for MA57. */
    wd_icntl_[1 - 1] = 0; /* Error stream */
    wd_icntl_[2 - 1] = 0; /* Warning stream. */
@@ -566,7 +558,7 @@ ESymSolverStatus Ma57TSolverInterface::SymbolicFactorization(
       airn_ma57int = (ma57int*) (void*) const_cast<Index*>(airn);
       ajcn_ma57int = (ma57int*) (void*) const_cast<Index*>(ajcn);
    }
-   IPOPT_HSL_FUNCP(ma57a, MA57A)(&n, &ne, airn_ma57int, ajcn_ma57int, &wd_lkeep_, wd_keep_, wd_iwork_, wd_icntl_, wd_info_, wd_rinfo_);
+   ma57a(&n, &ne, airn_ma57int, ajcn_ma57int, &wd_lkeep_, wd_keep_, wd_iwork_, wd_icntl_, wd_info_, wd_rinfo_);
    // free copy-casted ma57int arrays, no longer needed
    if( sizeof(ma57int) != sizeof(Index) )
    {
@@ -633,8 +625,8 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
 
    while( fact_error > 0 )
    {
-      IPOPT_HSL_FUNCP(ma57b, MA57B)(&n, &ne, a_, wd_fact_, &wd_lfact_, wd_ifact_, &wd_lifact_, &wd_lkeep_, wd_keep_,
-                                    wd_iwork_, wd_icntl_, wd_cntl_, wd_info_, wd_rinfo_);
+      ma57b(&n, &ne, a_, wd_fact_, &wd_lfact_, wd_ifact_, &wd_lifact_, &wd_lkeep_, wd_keep_,
+            wd_iwork_, wd_icntl_, wd_cntl_, wd_info_, wd_rinfo_);
       negevals_ = (Index) wd_info_[24 - 1]; // Number of negative eigenvalues
 
       if( wd_info_[0] == 0 )
@@ -666,8 +658,8 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
          temp = new Number[wd_lfact_];
 
          ma57int idmy;
-         IPOPT_HSL_FUNCP(ma57e, MA57E)(&n, &ic, wd_keep_, wd_fact_, &wd_info_[1], temp, &wd_lfact_, wd_ifact_, &wd_info_[1],
-                                       &idmy, &wd_lfact_, wd_info_);
+         ma57e(&n, &ic, wd_keep_, wd_fact_, &wd_info_[1], temp, &wd_lfact_, wd_ifact_, &wd_info_[1],
+               &idmy, &wd_lfact_, wd_info_);
          delete[] wd_fact_;
          wd_fact_ = temp;
       }
@@ -690,8 +682,8 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
                         "Reallocating lifact (%d)\n", wd_lifact_);
 
          Number ddmy;
-         IPOPT_HSL_FUNCP(ma57e, MA57E)(&n, &ic, wd_keep_, wd_fact_, &wd_info_[1], &ddmy, &wd_lifact_, wd_ifact_,
-                                       &wd_info_[1], temp, &wd_lifact_, wd_info_);
+         ma57e(&n, &ic, wd_keep_, wd_fact_, &wd_info_[1], &ddmy, &wd_lifact_, wd_ifact_,
+               &wd_info_[1], temp, &wd_lifact_, wd_info_);
          delete[] wd_ifact_;
          wd_ifact_ = temp;
       }
@@ -781,8 +773,8 @@ ESymSolverStatus Ma57TSolverInterface::Backsolve(
          }
       }
    }
-   IPOPT_HSL_FUNCP(ma57c, MA57C)(&job, &n, wd_fact_, &wd_lfact_, wd_ifact_, &wd_lifact_, &nrhs_X, rhs_vals, &lrhs, work,
-                                 &lwork, wd_iwork_, wd_icntl_, wd_info_);
+   ma57c(&job, &n, wd_fact_, &wd_lfact_, wd_ifact_, &wd_lifact_, &nrhs_X, rhs_vals, &lrhs, work,
+         &lwork, wd_iwork_, wd_icntl_, wd_info_);
    if( wd_info_[0] != 0 )
    {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
@@ -835,5 +827,3 @@ bool Ma57TSolverInterface::IncreaseQuality()
 }
 
 } // namespace Ipopt
-
-#endif /* COINHSL_HAS_MA57(S) or IPOPT_HAS_LINEARSOLVERLOADER */

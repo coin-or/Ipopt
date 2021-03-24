@@ -13,7 +13,7 @@
 #include "CoinHslConfig.h"
 #endif
 
-#if (defined(COINHSL_HAS_MA57) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA57S) && defined(IPOPT_SINGLE))
+#if (defined(COINHSL_HAS_MA27) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA27S) && defined(IPOPT_SINGLE))
 #ifdef IPOPT_SINGLE
 #define IPOPT_HSL_FUNCP(name,NAME) IPOPT_HSL_FUNC(name,NAME)
 #else
@@ -36,6 +36,7 @@ namespace Ipopt
 static const Index dbg_verbosity = 0;
 #endif
 
+/** pointer to MA27 function that can be set via Ma27TSolverInterface::SetFunctions() */
 static IPOPT_DECL_MA27A(*user_ma27a) = NULL;
 static IPOPT_DECL_MA27B(*user_ma27b) = NULL;
 static IPOPT_DECL_MA27C(*user_ma27c) = NULL;
@@ -134,17 +135,17 @@ void Ma27TSolverInterface::RegisterOptions(
 }
 
 /// set MA27 functions to use for every instantiation of this class
-void Ma27TSolverInterface::SetMA27Functions(
+void Ma27TSolverInterface::SetFunctions(
    IPOPT_DECL_MA27A(*ma27a),
    IPOPT_DECL_MA27B(*ma27b),
    IPOPT_DECL_MA27C(*ma27c),
    IPOPT_DECL_MA27I(*ma27i)
    )
 {
-   DBG_ASSERT(ma27a);
-   DBG_ASSERT(ma27b);
-   DBG_ASSERT(ma27c);
-   DBG_ASSERT(ma27i);
+   DBG_ASSERT(ma27a != NULL);
+   DBG_ASSERT(ma27b != NULL);
+   DBG_ASSERT(ma27c != NULL);
+   DBG_ASSERT(ma27i != NULL);
 
    user_ma27a = ma27a;
    user_ma27b = ma27b;
@@ -159,7 +160,7 @@ bool Ma27TSolverInterface::InitializeImpl(
 {
    if( user_ma27a != NULL )
    {
-      // someone set MA27 functions for setMA27Functions - prefer these
+      // someone set MA27 functions via setFunctions - prefer these
       ma27a = user_ma27a;
       ma27b = user_ma27b;
       ma27c = user_ma27c;
@@ -167,7 +168,7 @@ bool Ma27TSolverInterface::InitializeImpl(
    }
    else
    {
-#if (defined(COINHSL_HAS_MA57) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA57S) && defined(IPOPT_SINGLE))
+#if (defined(COINHSL_HAS_MA27) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA27S) && defined(IPOPT_SINGLE))
       // use HSL functions that should be available in linked HSL library
       ma27a = &::IPOPT_HSL_FUNCP(ma27a, MA27A);
       ma27b = &::IPOPT_HSL_FUNCP(ma27b, MA27B);

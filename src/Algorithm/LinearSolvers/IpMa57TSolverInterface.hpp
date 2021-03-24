@@ -9,6 +9,8 @@
 #define __IPMA57TSOLVERINTERFACE_HPP__
 
 #include "IpSparseSymLinearSolverInterface.hpp"
+#include "IpLibraryLoader.hpp"
+#include "IpTypes.h"
 
 #ifdef FUNNY_MA57_FINT
 #include <cstddef>
@@ -17,6 +19,80 @@ typedef ptrdiff_t ma57int;
 #include "IpTypes.h"
 typedef ipfint ma57int;
 #endif
+
+#define IPOPT_DECL_MA57A(x) void (x)( \
+   ipfint*       n,     /**< Order of matrix. */ \
+   ipfint*       ne,    /**< Number of entries. */ \
+   const ipfint* irn,   /**< Matrix nonzero row structure */ \
+   const ipfint* jcn,   /**< Matrix nonzero column structure */ \
+   ipfint*       lkeep, /**< Workspace for the pivot order of lenght 3*n */ \
+   ipfint*       keep,  /**< Workspace for the pivot order of lenght 3*n */ \
+   /* Automatically iflag = 0; ikeep pivot order iflag = 1 */ \
+   ipfint*       iwork, /**< Integer work space. */ \
+   ipfint*       icntl, /**< Integer Control parameter of length 30 */ \
+   ipfint*       info,  /**< Statistical Information; Integer array of length 20 */ \
+   ipnumber*     rinfo  /**< Double Control parameter of length 5 */ \
+)
+
+#define IPOPT_DECL_MA57B(x) void (x)( \
+   ipfint*   n,      /**< Order of matrix. */ \
+   ipfint*   ne,     /**< Number of entries. */ \
+   ipnumber* a,      /**< Numerical values. */ \
+   ipnumber* fact,   /**< Entries of factors. */ \
+   ipfint*   lfact,  /**< Length of array `fact'. */ \
+   ipfint*   ifact,  /**< Indexing info for factors. */ \
+   ipfint*   lifact, /**< Length of array `ifact'. */ \
+   ipfint*   lkeep,  /**< Length of array `keep'. */ \
+   ipfint*   keep,   /**< Integer array. */ \
+   ipfint*   iwork,  /**< Workspace of length `n'. */ \
+   ipfint*   icntl,  /**< Integer Control parameter of length 20. */ \
+   ipnumber* cntl,   /**< Double Control parameter of length 5. */ \
+   ipfint*   info,   /**< Statistical Information; Integer array of length 40. */ \
+   ipnumber* rinfo   /**< Statistical Information; Real array of length 20. */ \
+)
+
+/* Solution job:  Solve for...
+ * - JOB <= 1:  A
+ * - JOB == 2:  PLP^t
+ * - JOB == 3:  PDP^t
+ * - JOB >= 4:  PL^t P^t
+ */
+#define IPOPT_DECL_MA57C(x) void (x)( \
+   ipfint*   job,    /**< Solution job. */ \
+   ipfint*   n,      /**< Order of matrix. */ \
+   ipnumber* fact,   /**< Entries of factors. */ \
+   ipfint*   lfact,  /**< Length of array `fact'. */ \
+   ipfint*   ifact,  /**< Indexing info for factors. */ \
+   ipfint*   lifact, /**< Length of array `ifact'. */ \
+   ipfint*   nrhs,   /**< Number of right hand sides. */ \
+   ipnumber* rhs,    /**< Numerical Values. */ \
+   ipfint*   lrhs,   /**< Leading dimensions of `rhs'. */ \
+   ipnumber* work,   /**< Real workspace. */ \
+   ipfint*   lwork,  /**< Length of `work', >= N*NRHS. */ \
+   ipfint*   iwork,  /**< Integer array of length `n'. */ \
+   ipfint*   icntl,  /**< Integer Control parameter array of length 20. */ \
+   ipfint*   info    /**< Statistical Information; Integer array of length 40. */ \
+)
+
+#define IPOPT_DECL_MA57E(x) void (x)( \
+   ipfint*   n, \
+   ipfint*   ic,    /**< 0: copy real array.  >=1:  copy integer array. */ \
+   ipfint*   keep,   \
+   ipnumber* fact,   \
+   ipfint*   lfact,  \
+   ipnumber* newfac, \
+   ipfint*   lnew,   \
+   ipfint*   ifact,  \
+   ipfint*   lifact, \
+   ipfint*   newifc, \
+   ipfint*   linew,  \
+   ipfint*   info    \
+)
+
+#define IPOPT_DECL_MA57I(x) void (x)( \
+   ipnumber* cntl, \
+   ipfint*   icntl \
+)
 
 namespace Ipopt
 {
@@ -85,6 +161,15 @@ public:
    );
    ///@}
 
+   /// set MA57 functions to use for every instantiation of this class
+   static void SetFunctions(
+      IPOPT_DECL_MA57A(*ma57a),
+      IPOPT_DECL_MA57B(*ma57b),
+      IPOPT_DECL_MA57C(*ma57c),
+      IPOPT_DECL_MA57E(*ma57e),
+      IPOPT_DECL_MA57I(*ma57i)
+      );
+
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
@@ -103,6 +188,23 @@ private:
    void operator=(
       const Ma57TSolverInterface&
    );
+   ///@}
+
+   /**@name MA57 function pointers
+    * @{
+    */
+   SmartPtr<LibraryLoader> hslloader;
+
+   /// symbolic factorization
+   IPOPT_DECL_MA57A(*ma57a);
+   /// numerical factorization
+   IPOPT_DECL_MA57B(*ma57b);
+   /// solution
+   IPOPT_DECL_MA57C(*ma57c);
+   /// copy arrays
+   IPOPT_DECL_MA57E(*ma57e);
+   /// initialize solver
+   IPOPT_DECL_MA57I(*ma57i);
    ///@}
 
    /** @name Information about the matrix */
