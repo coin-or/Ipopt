@@ -18,6 +18,7 @@
 #include "IpAlgorithmRegOp.hpp"
 #include "IpCGPenaltyRegOp.hpp"
 #include "IpNLPBoundsRemover.hpp"
+#include "IpLibraryLoader.hpp"
 #include "IpLinearSolvers.h"
 
 #ifdef BUILD_INEXACT
@@ -1122,6 +1123,12 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Invalid option encountered.\n");
       retValue = Invalid_Option;
       status = INVALID_OPTION;
+   }
+   catch( DYNAMIC_LIBRARY_FAILURE& exc )
+   {
+      exc.ReportException(*jnlst_, J_ERROR);
+      jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Library loading failure.\n");
+      retValue = Invalid_Option;
    }
    catch( INCONSISTENT_BOUNDS& exc )
    {

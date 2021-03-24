@@ -204,6 +204,8 @@ output message to the console, and a brief description.
    
    This indicates that there was some problem specifying the options.
    See the specific message for details.
+   This return code is also used when a linear solver is choosen that was
+   not linked in and a library that contains this linear solver could not be loaded.
 
 - `Not_Enough_Degrees_Of_Freedom`:
 
