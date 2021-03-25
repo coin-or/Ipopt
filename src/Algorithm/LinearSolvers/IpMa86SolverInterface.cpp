@@ -9,28 +9,28 @@
 //          Carl Laird, Andreas Waechter     IBM    2004-03-17
 
 #include "IpoptConfig.h"
+#include "IpMa86SolverInterface.hpp"
+
+#include <iostream>
+#include <cmath>
 
 #ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"
 #endif
 
-// if we have MA86 in HSL or the linear solver loader, then we want to build the MA86 interface
-#if (defined(COINHSL_HAS_MA86) && !defined(IPOPT_SINGLE)) || \
-    (defined(COINHSL_HAS_MA86S) && defined(IPOPT_SINGLE)) || \
-    defined(IPOPT_HAS_LINEARSOLVERLOADER)
-
-#include "IpMa86SolverInterface.hpp"
-#include <iostream>
-#include <cmath>
 using namespace std;
-
-extern "C"
-{
-#include "hsl_mc68i.h"
-}
 
 namespace Ipopt
 {
+
+static IPOPT_DECL_MA86_DEFAULT_CONTROL(*user_ma86_default_control) = NULL;
+static IPOPT_DECL_MA86_ANALYSE(*user_ma86_analyse) = NULL;
+static IPOPT_DECL_MA86_FACTOR(*user_ma86_factor) = NULL;
+static IPOPT_DECL_MA86_FACTOR_SOLVE(*user_ma86_factor_solve) = NULL;
+static IPOPT_DECL_MA86_SOLVE(*user_ma86_solve) = NULL;
+static IPOPT_DECL_MA86_FINALISE(*user_ma86_finalise) = NULL;
+static IPOPT_DECL_MC68_DEFAULT_CONTROL(*user_mc68_default_control) = NULL;
+static IPOPT_DECL_MC68_ORDER(*user_mc68_order) = NULL;
 
 Ma86SolverInterface::~Ma86SolverInterface()
 {
@@ -111,11 +111,92 @@ void Ma86SolverInterface::RegisterOptions(
       "metis", "Use the MeTiS nested dissection algorithm (if available)");
 }
 
+void Ma86SolverInterface::SetFunctions(
+   IPOPT_DECL_MA86_DEFAULT_CONTROL(*ma86_default_control),
+   IPOPT_DECL_MA86_ANALYSE(*ma86_analyse),
+   IPOPT_DECL_MA86_FACTOR(*ma86_factor),
+   IPOPT_DECL_MA86_FACTOR_SOLVE(*ma86_factor_solve),
+   IPOPT_DECL_MA86_SOLVE(*ma86_solve),
+   IPOPT_DECL_MA86_FINALISE(*ma86_finalise),
+   IPOPT_DECL_MC68_DEFAULT_CONTROL(*mc68_default_control),
+   IPOPT_DECL_MC68_ORDER(*mc68_order)
+   )
+{
+   DBG_ASSERT(ma86_default_control != NULL);
+   DBG_ASSERT(ma86_analyse != NULL);
+   DBG_ASSERT(ma86_factor != NULL);
+   DBG_ASSERT(ma86_factor_solve != NULL);
+   DBG_ASSERT(ma86_solve != NULL);
+   DBG_ASSERT(ma86_finalise != NULL);
+   DBG_ASSERT(mc68_default_control != NULL);
+   DBG_ASSERT(mc68_order != NULL);
+
+   user_ma86_default_control = ma86_default_control;
+   user_ma86_analyse = ma86_analyse;
+   user_ma86_factor = ma86_factor;
+   user_ma86_factor_solve = ma86_factor_solve;
+   user_ma86_solve = ma86_solve;
+   user_ma86_finalise = ma86_finalise;
+   user_mc68_default_control = mc68_default_control;
+   user_mc68_order = mc68_order;
+}
+
 bool Ma86SolverInterface::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
 )
 {
+   if( user_ma86_default_control != NULL )
+   {
+      ma86_default_control = user_ma86_default_control;
+      ma86_analyse = user_ma86_analyse;
+      ma86_factor = user_ma86_factor;
+      ma86_factor_solve = user_ma86_factor_solve;
+      ma86_solve = user_ma86_solve;
+      ma86_finalise = user_ma86_finalise;
+      mc68_default_control = user_mc68_default_control;
+      mc68_order = user_mc68_order;
+   }
+   else
+   {
+#if (defined(COINHSL_HAS_MA86) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA86S) && defined(IPOPT_SINGLE))
+      // use HSL functions that should be available in linked HSL library
+      ma86_default_control = &::ma86_default_control;
+      ma86_analyse = &::ma86_analyse;
+      ma86_factor = &::ma86_factor;
+      ma86_factor_solve = &::ma86_factor_solve;
+      ma86_solve = &::ma86_solve;
+      ma86_finalise = &::ma86_finalise;
+      mc68_default_control = &::mc68_default_control;
+      mc68_order = &::mc68_order;
+#else
+      // try to load HSL functions from a shared library at runtime
+      std::string hsllibname;
+      options.GetStringValue("hsllib", hsllibname, prefix);
+      hslloader = new LibraryLoader(hsllibname);
+
+#define STR2(x) #x
+#define STR(x) STR2(x)
+      ma86_default_control = (IPOPT_DECL_MA86_DEFAULT_CONTROL(*))hslloader->loadSymbol(STR(ma86_default_control));
+      ma86_analyse = (IPOPT_DECL_MA86_ANALYSE(*))hslloader->loadSymbol(STR(ma86_analyse));
+      ma86_factor = (IPOPT_DECL_MA86_FACTOR(*))hslloader->loadSymbol(STR(ma86_factor));
+      ma86_factor_solve = (IPOPT_DECL_MA86_FACTOR_SOLVE(*))hslloader->loadSymbol(STR(ma86_factor_solve));
+      ma86_solve = (IPOPT_DECL_MA86_SOLVE(*))hslloader->loadSymbol(STR(ma86_solve));
+      ma86_finalise = (IPOPT_DECL_MA86_FINALISE(*))hslloader->loadSymbol(STR(ma86_finalise));
+      mc68_default_control = (IPOPT_DECL_MC68_DEFAULT_CONTROL(*))hslloader->loadSymbol(STR(mc68_default_control));
+      mc68_order = (IPOPT_DECL_MC68_ORDER(*))hslloader->loadSymbol(STR(mc68_order));
+#endif
+   }
+
+   DBG_ASSERT(ma86_default_control != NULL);
+   DBG_ASSERT(ma86_analyse != NULL);
+   DBG_ASSERT(ma86_factor != NULL);
+   DBG_ASSERT(ma86_factor_solve != NULL);
+   DBG_ASSERT(ma86_solve != NULL);
+   DBG_ASSERT(ma86_finalise != NULL);
+   DBG_ASSERT(mc68_default_control != NULL);
+   DBG_ASSERT(mc68_order != NULL);
+
    ma86_default_control(&control_);
    control_.f_arrays = 1; // Use Fortran numbering (faster)
    /* Note: we can't set control_.action = false as we need to know the
@@ -360,5 +441,3 @@ bool Ma86SolverInterface::IncreaseQuality()
 }
 
 } // namespace Ipopt
-
-#endif /* COINHSL_HAS_MA86(S) or IPOPT_HAS_LINEARSOLVERLOADER */

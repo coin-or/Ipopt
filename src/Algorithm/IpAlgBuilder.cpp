@@ -370,22 +370,6 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    else if( linear_solver == "ma86" )
    {
       SolverInterface = new Ma86SolverInterface();
-#ifdef IPOPT_HAS_LINEARSOLVERLOADER
-      if( !(linkedsolvers & IPOPTLINEARSOLVER_MA86) && !LSL_isMA86available() )
-      {
-         char buf[256];
-         int rc = LSL_loadHSL(NULL, buf, 255);
-         if (rc)
-         {
-            std::string errmsg;
-            errmsg = "Selected linear solver HSL_MA86 not available.\nTried to obtain HSL_MA86 from shared library \"";
-            errmsg += LSL_HSLLibraryName();
-            errmsg += "\", but the following error occured:\n";
-            errmsg += buf;
-            THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
-         }
-      }
-#endif
    }
 
    else if( linear_solver == "ma97" )

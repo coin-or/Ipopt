@@ -12,6 +12,10 @@
 #define __IPMA86SOLVERINTERFACE_HPP__
 
 #include "IpSparseSymLinearSolverInterface.hpp"
+#include "IpMa77SolverInterface.hpp"   // to get MC68 declaration macros
+#include "IpLibraryLoader.hpp"
+#include "IpTypes.h"
+
 extern "C"
 {
 #ifdef IPOPT_SINGLE
@@ -20,6 +24,65 @@ extern "C"
 #include "hsl_ma86d.h"
 #endif
 }
+
+#define IPOPT_DECL_MA86_DEFAULT_CONTROL(x) void (x)( \
+   struct ma86_control* control \
+)
+
+#define IPOPT_DECL_MA86_ANALYSE(x) void (x)( \
+   const int                  n,       \
+   const int                  ptr[],   \
+   const int                  row[],   \
+   int                        order[], \
+   void**                     keep,    \
+   const struct ma86_control* control, \
+   struct ma86_info*          info     \
+)
+
+#define IPOPT_DECL_MA86_FACTOR(x) void (x)( \
+   const int                  n,       \
+   const int                  ptr[],   \
+   const int                  row[],   \
+   const ipnumber             val[],   \
+   const int                  order[], \
+   void**                     keep,    \
+   const struct ma86_control* control, \
+   struct ma86_info*          info,    \
+   const ipnumber             scale[]  \
+)
+
+#define IPOPT_DECL_MA86_FACTOR_SOLVE(x) void (x)( \
+   const int                  n,        \
+   const int                  ptr[],    \
+   const int                  row[],    \
+   const ipnumber             val[],    \
+   const int                  order[],  \
+   void**                     keep,     \
+   const struct ma86_control* control,  \
+   struct ma86_info*          info,     \
+   const int                  nrhs,     \
+   const int                  ldx,      \
+   ipnumber                   xx[],     \
+   const ipnumber             scale[]   \
+)
+
+#define IPOPT_DECL_MA86_SOLVE(x) void (x)( \
+   const int                  job,    \
+   const int                  nrhs,   \
+   const int                  ldx,    \
+   ipnumber*                  xx,     \
+   const int                  order[],\
+   void**                     keep,   \
+   const struct ma86_control* control,\
+   struct ma86_info*          info,   \
+   const ipnumber             scale[] \
+)
+
+#define IPOPT_DECL_MA86_FINALISE(x) void (x)( \
+   void**                     keep,   \
+   const struct ma86_control* control \
+)
+
 
 namespace Ipopt
 {
@@ -46,13 +109,36 @@ private:
    Number umax_;
    int ordering_;
 
+   /**@name MA68 and MC68 function pointers
+    * @{
+    */
+   SmartPtr<LibraryLoader> hslloader;
+
+   IPOPT_DECL_MA86_DEFAULT_CONTROL(*ma86_default_control);
+   IPOPT_DECL_MA86_ANALYSE(*ma86_analyse);
+   IPOPT_DECL_MA86_FACTOR(*ma86_factor);
+   IPOPT_DECL_MA86_FACTOR_SOLVE(*ma86_factor_solve);
+   IPOPT_DECL_MA86_SOLVE(*ma86_solve);
+   IPOPT_DECL_MA86_FINALISE(*ma86_finalise);
+   IPOPT_DECL_MC68_DEFAULT_CONTROL(*mc68_default_control);
+   IPOPT_DECL_MC68_ORDER(*mc68_order);
+   ///@}
+
 public:
 
    Ma86SolverInterface()
       : val_(NULL),
         order_(NULL),
         keep_(NULL),
-        pivtol_changed_(false)
+        pivtol_changed_(false),
+        ma86_default_control(NULL),
+        ma86_analyse(NULL),
+        ma86_factor(NULL),
+        ma86_factor_solve(NULL),
+        ma86_solve(NULL),
+        ma86_finalise(NULL),
+        mc68_default_control(NULL),
+        mc68_order(NULL)
    { }
 
    ~Ma86SolverInterface();
@@ -60,6 +146,18 @@ public:
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
    );
+
+   /// set MA86 and MC68 functions to use for every instantiation of this class
+   static void SetFunctions(
+      IPOPT_DECL_MA86_DEFAULT_CONTROL(*ma86_default_control),
+      IPOPT_DECL_MA86_ANALYSE(*ma86_analyse),
+      IPOPT_DECL_MA86_FACTOR(*ma86_factor),
+      IPOPT_DECL_MA86_FACTOR_SOLVE(*ma86_factor_solve),
+      IPOPT_DECL_MA86_SOLVE(*ma86_solve),
+      IPOPT_DECL_MA86_FINALISE(*ma86_finalise),
+      IPOPT_DECL_MC68_DEFAULT_CONTROL(*mc68_default_control),
+      IPOPT_DECL_MC68_ORDER(*mc68_order)
+      );
 
    bool InitializeImpl(
       const OptionsList& options,

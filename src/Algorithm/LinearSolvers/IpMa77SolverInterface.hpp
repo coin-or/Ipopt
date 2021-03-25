@@ -259,7 +259,7 @@ public:
       SmartPtr<RegisteredOptions> roptions
    );
 
-   /// set MA77 functions to use for every instantiation of this class
+   /// set MA77 and MC68 functions to use for every instantiation of this class
    static void SetFunctions(
       IPOPT_DECL_MA77_DEFAULT_CONTROL(*ma77_default_control),
       IPOPT_DECL_MA77_OPEN_NELT(*ma77_open_nelt),
