@@ -113,15 +113,29 @@ void TNLPAdapter::RegisterOptions(
       "evaluated with the fixed values for those variables.  "
       "Also, for \"relax_bounds\", the fixing bound constraints are relaxed (according to\" bound_relax_factor\"). "
       "For both \"make_constraints\" and \"relax_bounds\", bound multipliers are computed for the fixed variables.");
-   roptions->AddStringOption4(
+
+   std::vector<std::string> options;
+   std::vector<std::string> descrs;
+   options.push_back("none");
+   descrs.push_back("don't check; no extra work at beginning");
+#ifdef IPOPT_HAS_MUMPS
+   options.push_back("mumps");
+   descrs.push_back("use MUMPS");
+#endif
+#ifdef IPOPT_HAS_WSMP
+   options.push_back("wsmp");
+   descrs.push_back("use WSMP");
+#endif
+#if ((defined(COINHSL_HAS_MA28) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA28S) && defined(IPOPT_SINGLE))) && defined(F77_FUNC)
+   options.push_back("ma28");
+   descrs.push_back("use MA28");
+#endif
+   roptions->AddStringOption(
       "dependency_detector",
       "Indicates which linear solver should be used to detect linearly dependent equality constraints.",
       "none",
-      "none", "don't check; no extra work at beginning",
-      "mumps", "use MUMPS",
-      "wsmp", "use WSMP",
-      "ma28", "use MA28",
-      "The default and available choices depend on how Ipopt has been compiled. "
+      options,
+      descrs,
       "This is experimental and does not work well.");
    roptions->AddStringOption2(
       "dependency_detection_with_rhs",
@@ -253,7 +267,6 @@ bool TNLPAdapter::ProcessOptions(
             new TSymLinearSolver(SolverInterface, NULL);
          dependency_detector_ = new TSymDependencyDetector(*ScaledSolver);
 #else
-
          THROW_EXCEPTION(OPTION_INVALID,
                          "Ipopt has not been compiled with MUMPS.  You cannot choose \"mumps\" for \"dependency_detector\".");
 #endif
@@ -268,7 +281,6 @@ bool TNLPAdapter::ProcessOptions(
             new TSymLinearSolver(SolverInterface, NULL);
          dependency_detector_ = new TSymDependencyDetector(*ScaledSolver);
 #else
-
          THROW_EXCEPTION(OPTION_INVALID,
                          "Ipopt has not been compiled with WSMP.  You cannot choose \"wsmp\" for \"dependency_detector\".");
 #endif
