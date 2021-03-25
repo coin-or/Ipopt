@@ -20,69 +20,17 @@
 #include <cstdlib>
 #include <cstring>
 
-// determine the correct name of the Pardiso function
-#ifndef IPOPT_HAS_PARDISO
-// if we build for the Linear Solver loader, then use normal C-naming style
-# define IPOPT_PARDISO_FUNC(name,NAME) name
-#endif
-
+#ifdef IPOPT_HAS_PARDISO
 /* Prototypes for Pardiso's subroutines */
 extern "C"
 {
-#ifdef IPOPT_HAS_PARDISO_MKL
-   void IPOPT_PARDISO_FUNC(pardisoinit, PARDISOINIT)(
-      void*         PT,
-      const ipfint* MTYPE,
-      ipfint*       IPARM
-   );
-#else
-// The following is a fix to allow linking with Pardiso library under Windows
-   void IPOPT_PARDISO_FUNC(pardisoinit, PARDISOINIT)(
-      void*         PT,
-      const ipfint* MTYPE,
-      const ipfint* SOLVER,
-      ipfint*       IPARM,
-      ipnumber*     DPARM,
-      ipfint*       ERROR
-   );
-#endif
-
-   void IPOPT_PARDISO_FUNC(pardiso, PARDISO)(
-      void**          PT,
-      const ipfint*   MAXFCT,
-      const ipfint*   MNUM,
-      const ipfint*   MTYPE,
-      const ipfint*   PHASE,
-      const ipfint*   N,
-      const ipnumber* A,
-      const ipfint*   IA,
-      const ipfint*   JA,
-      const ipfint*   PERM,
-      const ipfint*   NRHS,
-      ipfint*         IPARM,
-      const ipfint*   MSGLVL,
-      ipnumber*       B,
-      ipnumber*       X,
-      ipfint*         ERROR,
-      ipnumber*       DPARM
-   );
-
+   IPOPT_DECL_PARDISOINIT(IPOPT_PARDISO_FUNC(pardisoinit, PARDISOINIT));
+   IPOPT_DECL_PARDISO(IPOPT_PARDISO_FUNC(pardiso, PARDISO));
 #ifdef PARDISO_MATCHING_PREPROCESS
-   void IPOPT_PARDISO_FUNC(smat_reordering_pardiso_wsmp, SMAT_REORDERING_PARDISO_WSMP)(
-      const ipfint*   N,
-      const ipfint*   ia,
-      const ipfint*   ja,
-      const ipnumber* a_,
-      ipfint*         a2,
-      ipfint*         ja2,
-      ipnumber*       a2_,
-      ipfint*         perm2,
-      ipnumber*       scale2,
-      ipfint*         tmp2_,
-      ipfint          preprocess
-   );
+   IPOPT_DECL_PARDISO(IPOPT_PARDISO_FUNC(smat_reordering_pardiso_wsmp, SMAT_REORDERING_PARDISO_WSMP));
 #endif
 }
+#endif
 
 namespace Ipopt
 {
@@ -105,7 +53,13 @@ PardisoSolverInterface::PardisoSolverInterface()
      MNUM_(1),
      MTYPE_(-2),
      MSGLVL_(0),
-     debug_last_iter_(-1)
+     debug_last_iter_(-1),
+     pardisoinit(NULL),
+     pardiso(NULL),
+#ifdef PARDISO_MATCHING_PREPROCESS
+     smat_reordering_pardiso_wsmp(NULL),
+#endif
+     pardiso_exist_parallel(false)
 {
    DBG_START_METH("PardisoSolverInterface::PardisoSolverInterface()", dbg_verbosity);
 
@@ -128,8 +82,8 @@ PardisoSolverInterface::~PardisoSolverInterface()
       ipfint ERROR;
       ipfint idmy;
       Number ddmy;
-      IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
-                                           &ddmy, &ERROR, DPARM_);
+      pardiso(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
+              &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
    }
 
@@ -303,6 +257,12 @@ void PardisoSolverInterface::RegisterOptions(
       4,
       "This is relevant only for iterative Pardiso options.");
 #endif
+#ifndef IPOPT_HAS_PARDISO
+   roptions->AddStringOption1(
+      "pardisolib", "Name of library containing Pardiso routines (from pardiso-project.org) for load at runtime",
+      "libpardiso." IPOPT_SHAREDLIBEXT,
+      "*", "Any acceptable filename (may contain path, too)");
+#endif
 }
 
 bool PardisoSolverInterface::InitializeImpl(
@@ -310,6 +270,49 @@ bool PardisoSolverInterface::InitializeImpl(
    const std::string& prefix
 )
 {
+#ifdef IPOPT_HAS_PARDISO
+   // use Pardiso functions that should be available in linked Pardiso (or MKL) library
+   pardisoinit = &::IPOPT_PARDISO_FUNC(pardisoinit, PARDISOINIT);
+   pardiso = &::IPOPT_PARDISO_FUNC(pardiso, PARDISO);
+#ifdef PARDISO_MATCHING_PREPROCESS
+   smat_reordering_pardiso_wsmp = &::IPOPT_PARDISO_FUNC(smat_reordering_pardiso_wsmp, SMAT_REORDERING_PARDISO_WSMP);
+#endif
+#ifdef IPOPT_HAS_PARDISO_PARALLEL
+   pardiso_exist_parallel = true;
+#else
+   DBG_ASSERT(!pardiso_exist_parallel);
+#endif
+#else
+   std::string libname;
+   options.GetStringValue("pardisolib", libname, prefix);
+   pardisoloader = new LibraryLoader(libname);
+
+   pardisoinit = (IPOPT_DECL_PARDISOINIT(*))pardisoloader->loadSymbol("pardisoinit");
+   pardiso = (IPOPT_DECL_PARDISO(*))pardisoloader->loadSymbol("pardiso");
+#ifdef PARDISO_MATCHING_PREPROCESS
+   smat_reordering_pardiso_wsmp = (IPOPT_DECL_SMAT_REORDERING_PARDISO_WSMP(*))pardisoloader->loadSymbol("smat_reordering_pardiso_wsmp");
+#endif
+   // load pardiso_ipopt_newinterface only as check that we get Pardiso >= 4.0.0 from pardiso-project
+   pardisoloader->loadSymbol("pardiso_ipopt_newinterface");
+   // set pardiso_exist_parallel to true if symbol pardiso_exist_parallel exists in pardiso library
+   // ignore if symbol doesn't exist (pardiso_exist_parallel == false)
+   try
+   {
+      pardisoloader->loadSymbol("pardiso_exist_parallel");
+      pardiso_exist_parallel = true;
+   }
+   catch( const DYNAMIC_LIBRARY_FAILURE& )
+   {
+      DBG_ASSERT(!pardiso_exist_parallel);
+   }
+#endif
+
+   DBG_ASSERT(pardisoinit != NULL);
+   DBG_ASSERT(pardiso != NULL);
+#ifdef PARDISO_MATCHING_PREPROCESS
+   DBG_ASSERT(smat_reordering_pardiso_wsmp);
+#endif
+
    Index enum_int;
    options.GetEnumValue("pardiso_matching_strategy", enum_int, prefix);
    match_strat_ = PardisoMatchingStrategy(enum_int);
@@ -361,8 +364,8 @@ bool PardisoSolverInterface::InitializeImpl(
       ipfint ERROR;
       ipfint idmy;
       Number ddmy;
-      IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
-                                           &ddmy, &ERROR, DPARM_);
+      pardiso(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
+              &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
    }
 
@@ -399,40 +402,38 @@ bool PardisoSolverInterface::InitializeImpl(
    ipfint ERROR = 0;
    ipfint SOLVER = 0; // initialize only direct solver
 
-   IPOPT_PARDISO_FUNC(pardisoinit, PARDISOINIT)(PT_, &MTYPE_, &SOLVER, IPARM_, DPARM_, &ERROR);
+   pardisoinit(PT_, &MTYPE_, &SOLVER, IPARM_, DPARM_, &ERROR);
 #else
-   IPOPT_PARDISO_FUNC(pardisoinit, PARDISOINIT)(PT_, &MTYPE_, IPARM_);
+   pardisoinit(PT_, &MTYPE_, IPARM_);
 #endif
 
    // Set some parameters for Pardiso
    IPARM_[0] = 1;  // Don't use the default values
 
    int num_procs = 1;
-#if defined(IPOPT_HAS_PARDISO_PARALLEL) || ! defined(IPOPT_HAS_PARDISO)
-   // Obtain the numbers of processors from the value of OMP_NUM_THREADS
-   char* var = getenv("OMP_NUM_THREADS");
-   if( var != NULL )
+   if( pardiso_exist_parallel )
    {
-      sscanf(var, "%d", &num_procs);
-      if( num_procs < 1 )
+      // Obtain the numbers of processors from the value of OMP_NUM_THREADS
+      char* var = getenv("OMP_NUM_THREADS");
+      if( var != NULL )
       {
-         Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                        "Invalid value for OMP_NUM_THREADS (\"%s\").\n", var);
-         return false;
+         sscanf(var, "%d", &num_procs);
+         if( num_procs < 1 )
+         {
+            Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+               "Invalid value for OMP_NUM_THREADS (\"%s\").\n", var);
+            return false;
+         }
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+            "Using environment OMP_NUM_THREADS = %d as the number of processors for PARDISO.\n", num_procs);
       }
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "Using environment OMP_NUM_THREADS = %d as the number of processors for PARDISO.\n", num_procs);
    }
-#if defined(IPOPT_HAS_PARDISO) && ! defined(IPOPT_HAS_PARDISO_MKL)
-   // If we run Pardiso through the linear solver loader,
-   // we do not know whether it is the parallel version, so we do not report a warning if OMP_NUM_THREADS is not set.
-   // If we run Pardiso from MKL, then OMP_NUM_THREADS does not need to be set, so no warning.
+#ifndef IPOPT_HAS_PARDISO_MKL // If we run Pardiso from MKL, then OMP_NUM_THREADS does not need to be set, so no warning.
    else
    {
       Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                      "You should set the environment variable OMP_NUM_THREADS to the number of processors used in Pardiso (e.g., 1).\n\n");
    }
-#endif
 #endif
 
 #ifdef IPOPT_HAS_PARDISO_MKL
@@ -773,7 +774,7 @@ ESymSolverStatus PardisoSolverInterface::Factorization(
          scale2 = new Number[N];
          ipfint* tmp2_ = new ipfint[N];
 
-         IPOPT_PARDISO_FUNC(smat_reordering_pardiso_wsmp, SMAT_REORDERING_PARDISO_WSMP)(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp2_, 0);
+         smat_reordering_pardiso_wsmp(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp2_, 0);
 
          delete[] tmp2_;
 
@@ -781,13 +782,13 @@ ESymSolverStatus PardisoSolverInterface::Factorization(
 
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                         "Calling Pardiso for symbolic factorization.\n");
-         IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+         pardiso(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
 #ifdef PARDISO_MATCHING_PREPROCESS
-                                              &PHASE, &N, a2_, ia2, ja2, &PERM,
+                 &PHASE, &N, a2_, ia2, ja2, &PERM,
 #else
-                                              &PHASE, &N, a_, ia, ja, &PERM,
+                 &PHASE, &N, a_, ia, ja, &PERM,
 #endif
-                                              &NRHS, IPARM_, &MSGLVL_, &B, &X, &ERROR, DPARM_);
+                 &NRHS, IPARM_, &MSGLVL_, &B, &X, &ERROR, DPARM_);
          if( HaveIpData() )
          {
             IpData().TimingStats().LinearSystemSymbolicFactorization().End();
@@ -841,17 +842,17 @@ ESymSolverStatus PardisoSolverInterface::Factorization(
 
 #ifdef PARDISO_MATCHING_PREPROCESS
       ipfint* tmp3_ = new ipfint[N];
-      IPOPT_PARDISO_FUNC(smat_reordering_pardiso_wsmp, SMAT_REORDERING_PARDISO_WSMP)(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp3_, 1);
+      smat_reordering_pardiso_wsmp(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp3_, 1);
       delete[] tmp3_;
 #endif
 
-      IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+      pardiso(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
 #ifdef PARDISO_MATCHING_PREPROCESS
-                                           &PHASE, &N, a2_, ia2, ja2, &PERM,
+              &PHASE, &N, a2_, ia2, ja2, &PERM,
 #else
-                                           &PHASE, &N, a_, ia, ja, &PERM,
+              &PHASE, &N, a_, ia, ja, &PERM,
 #endif
-                                           &NRHS, IPARM_, &MSGLVL_, &B, &X, &ERROR, DPARM_);
+              &NRHS, IPARM_, &MSGLVL_, &B, &X, &ERROR, DPARM_);
       if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemFactorization().End();
@@ -999,10 +1000,10 @@ ESymSolverStatus PardisoSolverInterface::Solve(
       {
          rhs_vals[perm2[i]] = scale2[i] * ORIG_RHS[ i ];
       }
-      IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
-                                           &PHASE, &N, a2_, ia2, ja2, &PERM,
-                                           &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
-                                           &ERROR, DPARM_);
+      pardiso(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+              &PHASE, &N, a2_, ia2, ja2, &PERM,
+              &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
+              &ERROR, DPARM_);
       for (int i = 0; i < N; i++)
       {
          X[i] = rhs_vals[ perm2[i]];
@@ -1017,8 +1018,8 @@ ESymSolverStatus PardisoSolverInterface::Solve(
       {
          rhs_vals[i] = ORIG_RHS[i];
       }
-      IPOPT_PARDISO_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, a_, ia, ja, &PERM, &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
-                                           &ERROR, DPARM_);
+      pardiso(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, a_, ia, ja, &PERM, &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
+              &ERROR, DPARM_);
 #endif
 
       if( ERROR <= -100 && ERROR >= -102 )

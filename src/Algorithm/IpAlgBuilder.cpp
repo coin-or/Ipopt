@@ -74,18 +74,6 @@
 # include "IpMumpsSolverInterface.hpp"
 #endif
 
-#ifdef IPOPT_HAS_LINEARSOLVERLOADER
-# include "PardisoLoader.h"
-#endif
-
-#ifdef _MSC_VER
-# define SHAREDLIBEXT "dll"
-#elif defined(__APPLE__)
-# define SHAREDLIBEXT "dylib"
-#else
-# define SHAREDLIBEXT "so"
-#endif
-
 namespace Ipopt
 {
 #if IPOPT_VERBOSITY > 0
@@ -254,7 +242,7 @@ void AlgorithmBuilder::RegisterOptions(
 
    roptions->AddStringOption1(
       "hsllib", "Name of library containing HSL routines for load at runtime",
-      "libhsl." SHAREDLIBEXT,
+      "libhsl." IPOPT_SHAREDLIBEXT,
       "*", "Any acceptable filename (may contain path, too)");
 
    roptions->SetRegisteringCategory("NLP Scaling");
@@ -395,22 +383,6 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    else if( linear_solver == "pardiso" )
    {
       SolverInterface = new PardisoSolverInterface();
-#if defined(IPOPT_HAS_LINEARSOLVERLOADER) && !defined(IPOPT_HAS_PARDISO)
-      if( !(IpoptGetAvailableLinearSolvers(true) & IPOPTLINEARSOLVER_PARDISO) )
-      {
-         char buf[256];
-         int rc = LSL_loadPardisoLib(NULL, buf, 255);
-         if (rc)
-         {
-            std::string errmsg;
-            errmsg = "Selected linear solver Pardiso not available.\nTried to obtain Pardiso from shared library \"";
-            errmsg += LSL_PardisoLibraryName();
-            errmsg += "\", but the following error occured:\n";
-            errmsg += buf;
-            THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
-         }
-      }
-#endif
    }
 
 #if !defined(IPOPT_SINGLE) && defined(IPOPT_HAS_SPRAL)

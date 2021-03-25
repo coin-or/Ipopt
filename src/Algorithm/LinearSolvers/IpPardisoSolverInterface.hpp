@@ -7,10 +7,64 @@
 #ifndef __IPPARDISOSOLVERINTERFACE_HPP__
 #define __IPPARDISOSOLVERINTERFACE_HPP__
 
+#include "IpoptConfig.h"
 #include "IpSparseSymLinearSolverInterface.hpp"
+#include "IpLibraryLoader.hpp"
 #include "IpTypes.h"
 
 //#define PARDISO_MATCHING_PREPROCESS
+
+#ifdef IPOPT_HAS_PARDISO_MKL
+#define IPOPT_DECL_PARDISOINIT(x) void (x)( \
+   void*         PT,    \
+   const ipfint* MTYPE, \
+   ipfint*       IPARM  \
+)
+#else
+/* assuming PARDISO 4.0.0 or above */
+#define IPOPT_DECL_PARDISOINIT(x) void (x)( \
+   void*         PT,     \
+   const ipfint* MTYPE,  \
+   const ipfint* SOLVER, \
+   ipfint*       IPARM,  \
+   ipnumber*     DPARM,  \
+   ipfint*       E       \
+)
+#endif
+
+#define IPOPT_DECL_PARDISO(x) void (x)( \
+   void**          PT,     \
+   const ipfint*   MAXFCT, \
+   const ipfint*   MNUM,   \
+   const ipfint*   MTYPE,  \
+   const ipfint*   PHASE,  \
+   const ipfint*   N,      \
+   const ipnumber* A,      \
+   const ipfint*   IA,     \
+   const ipfint*   JA,     \
+   const ipfint*   PERM,   \
+   const ipfint*   NRHS,   \
+   ipfint*         IPARM,  \
+   const ipfint*   MSGLVL, \
+   ipnumber*       B,      \
+   ipnumber*       X,      \
+   ipfint*         E,      \
+   ipnumber*       DPARM   \
+)
+
+#define IPOPT_DECL_SMAT_REORDERING_PARDISO_WSMP(x) void (x)( \
+   const ipfint*   N,          \
+   const ipfint*   ia,         \
+   const ipfint*   ja,         \
+   const ipnumber* a_,         \
+   ipfint*         a2,         \
+   ipfint*         ja2,        \
+   ipnumber*       a2_,        \
+   ipfint*         perm2,      \
+   ipnumber*       scale2,     \
+   ipfint*         tmp2_,      \
+   ipfint          preprocess  \
+)
 
 namespace Ipopt
 {
@@ -189,6 +243,20 @@ private:
    Index debug_last_iter_;
    Index debug_cnt_;
    ///@}
+
+   /**@name PARDISO function pointers
+    * @{
+    */
+   SmartPtr<LibraryLoader> pardisoloader;
+
+   IPOPT_DECL_PARDISOINIT(*pardisoinit);
+   IPOPT_DECL_PARDISO(*pardiso);
+#ifdef PARDISO_MATCHING_PREPROCESS
+   IPOPT_DECL_SMAT_REORDERING_PARDISO_WSMP(*smat_reordering_pardiso_wsmp);
+#endif
+
+   bool pardiso_exist_parallel;
+   /**@} */
 
    /** @name Internal functions */
    ///@{
