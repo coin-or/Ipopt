@@ -9,6 +9,21 @@
 
 #include "IpUtils.hpp"
 #include "IpTSymScalingMethod.hpp"
+#include "IpLibraryLoader.hpp"
+#include "IpTypes.h"
+
+// note that R,C,W are single-precision also in the double-precision version of MC19 (MC19AD)
+// here we assume that float corresponds to Fortran's single precision
+#define IPOPT_DECL_MC19A(x) void (x)( \
+   const ipfint* N,   \
+   const ipfint* NZ,  \
+   ipnumber*     A,   \
+   ipfint*       IRN, \
+   ipfint*       ICN, \
+   float*        R,   \
+   float*        C,   \
+   float*        W    \
+)
 
 namespace Ipopt
 {
@@ -22,6 +37,7 @@ public:
    /** @name Constructor/Destructor */
    ///@{
    Mc19TSymScalingMethod()
+   : mc19a(NULL)
    { }
 
    virtual ~Mc19TSymScalingMethod()
@@ -45,6 +61,16 @@ public:
       Number*       scaling_factors
    );
 
+   /// set MC19 function to use for every instantiation of this class
+   static void SetFunctions(
+      IPOPT_DECL_MC19A(*mc19a)
+      );
+
+   /// get MC19A function that has been set via SetFunctions
+   ///
+   /// this does not return a MC19A that has been linked in or loaded from a library at runtime
+   static IPOPT_DECL_MC19A(*GetMC19A());
+
 private:
    /**@name Default Compiler Generated Methods (Hidden to avoid
     * implicit creation/calling).  These methods are not implemented
@@ -61,6 +87,14 @@ private:
    void operator=(
       const Mc19TSymScalingMethod&
    );
+
+   /**@name MC19 function pointer
+    * @{
+    */
+   SmartPtr<LibraryLoader> hslloader;
+
+   IPOPT_DECL_MC19A(*mc19a);
+   /**@} */
 };
 
 } // namespace Ipopt

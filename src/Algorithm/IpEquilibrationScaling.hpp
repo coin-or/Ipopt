@@ -9,6 +9,7 @@
 
 #include "IpNLPScaling.hpp"
 #include "IpNLP.hpp"
+#include "IpMc19TSymScalingMethod.hpp"  // to get IPOPT_DECL_MC19A
 
 namespace Ipopt
 {
@@ -24,7 +25,8 @@ public:
    EquilibrationScaling(
       const SmartPtr<NLP>& nlp)
       : StandardScalingBase(),
-        nlp_(nlp)
+        nlp_(nlp),
+        mc19a(NULL)
    { }
 
    /** Destructor */
@@ -92,6 +94,14 @@ private:
 
    /** maximal radius for the random perturbation of the initial point */
    Number point_perturbation_radius_;
+
+   /**@name MC19 function pointer
+    * @{
+    */
+   SmartPtr<LibraryLoader> hslloader;
+
+   IPOPT_DECL_MC19A(*mc19a);
+   /**@} */
 };
 
 /** This class is a simple object for generating randomly perturbed

@@ -5,46 +5,28 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-03-17
 
 #include "IpoptConfig.h"
+#include "IpMc19TSymScalingMethod.hpp"
 #include "IpTypes.h"
+
+#include <cmath>
 
 #ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"
-#else
-/* if we build for the Linear Solver loader, then use normal C-naming style */
-#define IPOPT_HSL_FUNC(name,NAME) name
 #endif
 
-// if we have MC19 in HSL or the linear solver loader, then we want to build the MC19 interface
-#if (defined(COINHSL_HAS_MC19) && !defined(IPOPT_SINGLE)) || \
-    (defined(COINHSL_HAS_MC19S) && defined(IPOPT_SINGLE)) || \
-    defined(IPOPT_HAS_LINEARSOLVERLOADER)
-
+#if (defined(COINHSL_HAS_MC19) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MC19S) && defined(IPOPT_SINGLE))
 #ifdef IPOPT_SINGLE
 #define IPOPT_HSL_FUNCP(name,NAME) IPOPT_HSL_FUNC(name,NAME)
 #else
 #define IPOPT_HSL_FUNCP(name,NAME) IPOPT_HSL_FUNC(name ## d,NAME ## D)
 #endif
 
-#include "IpMc19TSymScalingMethod.hpp"
-
-#include <cmath>
-
 /** Prototypes for MC19's Fortran subroutines */
 extern "C"
 {
-// note that R,C,W are single-precision also in the double-precision version of MC19 (MC19AD)
-// here we assume that float corresponds to Fortran's single precision
-   void IPOPT_HSL_FUNCP(mc19a, MC19A)(
-      ipfint*   N,
-      ipfint*   NZ,
-      ipnumber* A,
-      ipfint*   IRN,
-      ipfint*   ICN,
-      float*    R,
-      float*    C,
-      float*    W
-   );
+   IPOPT_DECL_MC19A(IPOPT_HSL_FUNCP(mc19a, MC19A));
 }
+#endif
 
 namespace Ipopt
 {
@@ -52,11 +34,52 @@ namespace Ipopt
 static const Index dbg_verbosity = 0;
 #endif
 
+static IPOPT_DECL_MC19A(*user_mc19a) = NULL;
+
+/// set MC19 function to use for every instantiation of this class
+void Mc19TSymScalingMethod::SetFunctions(
+   IPOPT_DECL_MC19A(*mc19a)
+   )
+{
+   DBG_ASSERT(mc19a != NULL);
+
+   user_mc19a = mc19a;
+}
+
+IPOPT_DECL_MC19A(*Mc19TSymScalingMethod::GetMC19A())
+{
+   return user_mc19a;
+}
+
 bool Mc19TSymScalingMethod::InitializeImpl(
-   const OptionsList& /*options*/,
-   const std::string& /*prefix*/
+   const OptionsList& options,
+   const std::string& prefix
 )
 {
+   if( user_mc19a != NULL )
+   {
+      // someone set MC19 functions via setFunctions - prefer these
+      mc19a = user_mc19a;
+   }
+   else
+   {
+#if (defined(COINHSL_HAS_MC19) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MC19S) && defined(IPOPT_SINGLE))
+      // use HSL function that should be available in linked HSL library
+      mc19a = &::IPOPT_HSL_FUNCP(mc19a, MC19A);
+      (void) options;
+      (void) prefix;
+#else
+      // try to load HSL function from a shared library at runtime
+      std::string hsllibname;
+      options.GetStringValue("hsllib", hsllibname, prefix);
+      hslloader = new LibraryLoader(hsllibname);
+
+      mc19a = (IPOPT_DECL_MC19A(*))hslloader->loadSymbol("mc19a");
+#endif
+   }
+
+   DBG_ASSERT(mc19a != NULL);
+
    return true;
 }
 
@@ -149,7 +172,7 @@ bool Mc19TSymScalingMethod::ComputeSymTScalingFactors(
    float* R = new float[n];
    float* C = new float[n];
    float* W = new float[5 * n];
-   IPOPT_HSL_FUNCP(mc19a, MC19A)(&n, &nnz2, A2, AIRN2, AJCN2, R, C, W);
+   mc19a(&n, &nnz2, A2, AIRN2, AJCN2, R, C, W);
    delete[] W;
 
    if( DBG_VERBOSITY() >= 3 )
@@ -203,5 +226,3 @@ bool Mc19TSymScalingMethod::ComputeSymTScalingFactors(
 }
 
 } // namespace Ipopt
-
-#endif /* COINHSL_HAS_MC19(S) or IPOPT_HAS_LINEARSOLVERLOADER */

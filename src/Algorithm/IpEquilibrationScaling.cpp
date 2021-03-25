@@ -9,37 +9,26 @@
 #include "IpTripletHelper.hpp"
 #include "IpTypes.h"
 
+#include <cmath>
+
 #ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"
 #else
-/* if we build for the Linear Solver loader, then use normal C-naming style */
-#define IPOPT_HSL_FUNC(name,NAME) name
 #endif
 
+#if (defined(COINHSL_HAS_MC19) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MC19S) && defined(IPOPT_SINGLE))
 #ifdef IPOPT_SINGLE
 #define IPOPT_HSL_FUNCP(name,NAME) IPOPT_HSL_FUNC(name,NAME)
 #else
 #define IPOPT_HSL_FUNCP(name,NAME) IPOPT_HSL_FUNC(name ## d,NAME ## D)
 #endif
 
-#include <cmath>
-
-/** Prototypes for MA27's Fortran subroutines */
+/** Prototypes for MC19's Fortran subroutines */
 extern "C"
 {
-// note that R,C,W are single-precision also in the double-precision version of MC19 (MC19AD)
-// here we assume that float corresponds to Fortran's single precision
-   void IPOPT_HSL_FUNCP(mc19a, MC19A)(
-      const ipfint*   N,
-      const ipfint*   NZ,
-      const ipnumber* A,
-      const ipfint*   IRN,
-      const ipfint*   ICN,
-      float*          R,
-      float*          C,
-      float*          W
-   );
+   IPOPT_DECL_MC19A(IPOPT_HSL_FUNCP(mc19a, MC19A));
 }
+#endif
 
 namespace Ipopt
 {
@@ -57,6 +46,25 @@ bool EquilibrationScaling::InitializeImpl(
    const std::string& prefix
 )
 {
+   // check if user stored a MC19A in Mc19TSymScalingMethod
+   mc19a = Mc19TSymScalingMethod::GetMC19A();
+   if( mc19a == NULL )
+   {
+#if (defined(COINHSL_HAS_MC19) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MC19S) && defined(IPOPT_SINGLE))
+      // use HSL function that should be available in linked HSL library
+      mc19a = &::IPOPT_HSL_FUNCP(mc19a, MC19A);
+#else
+      // try to load HSL function from a shared library at runtime
+      std::string hsllibname;
+      options.GetStringValue("hsllib", hsllibname, prefix);
+      hslloader = new LibraryLoader(hsllibname);
+
+      mc19a = (IPOPT_DECL_MC19A(*))hslloader->loadSymbol("mc19a");
+#endif
+   }
+
+   DBG_ASSERT(mc19a != NULL);
+
    options.GetNumericValue("point_perturbation_radius", point_perturbation_radius_, prefix);
    return StandardScalingBase::InitializeImpl(options, prefix);
 }
@@ -216,15 +224,8 @@ void EquilibrationScaling::DetermineScalingParametersImpl(
    float* R = new float[N];
    float* C = new float[N];
    float* W = new float[5 * N];
-#if (defined(COINHSL_HAS_MC19) && !defined(IPOPT_SINGLE)) || \
-    (defined(COINHSL_HAS_MC19S) && defined(IPOPT_SINGLE)) || \
-    defined(IPOPT_HAS_LINEARSOLVERLOADER)
    const ipfint NZ = nnz_jac_c + nnz_jac_d + nnz_grad_f;
-   IPOPT_HSL_FUNCP(mc19a, MC19A)(&N, &NZ, avrg_values, AJCN, AIRN, C, R, W);
-#else
-
-   THROW_EXCEPTION(OPTION_INVALID, "Currently cannot do equilibration-based NLP scaling if MC19 is not available.");
-#endif
+   mc19a(&N, &NZ, avrg_values, AJCN, AIRN, C, R, W);
 
    delete[] W;
 

@@ -259,14 +259,29 @@ void AlgorithmBuilder::RegisterOptions(
       "*", "Any acceptable filename (may contain path, too)");
 
    roptions->SetRegisteringCategory("NLP Scaling");
-   roptions->AddStringOption4(
-      "nlp_scaling_method",
-      "Select the technique used for scaling the NLP.",
+
+   options.clear();
+   descrs.clear();
+   options.push_back("none");
+   descrs.push_back("no problem scaling will be performed");
+   options.push_back("user-scaling");
+   descrs.push_back("scaling parameters will come from the user");
+   options.push_back("gradient-based");
+   descrs.push_back("scale the problem so the maximum gradient at the starting point is scaling_max_gradient");
+
+#if (defined(COINHSL_HAS_MC19) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MC19S) && defined(IPOPT_SINGLE)) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
+   options.push_back("equilibration-based");
+#if (defined(COINHSL_HAS_MC19) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MC19S) && defined(IPOPT_SINGLE))
+   descrs.push_back("scale the problem so that first derivatives are of order 1 at random points");
+#else
+   descrs.push_back("scale the problem so that first derivatives are of order 1 at random points (load the Harwell routine MC19 from library at runtime)");
+#endif
+#endif
+   roptions->AddStringOption(
+      "nlp_scaling_method", "Select the technique used for scaling the NLP.",
       "gradient-based",
-      "none", "no problem scaling will be performed",
-      "user-scaling", "scaling parameters will come from the user",
-      "gradient-based", "scale the problem so the maximum gradient at the starting point is scaling_max_gradient",
-      "equilibration-based", "scale the problem so that first derivatives are of order 1 at random points (only available with MC19)",
+      options,
+      descrs,
       "Selects the technique used for scaling the problem internally before it is solved. "
       "For user-scaling, the parameters come from the NLP. "
       "If you are using AMPL, they can be specified through suffixes (\"scaling_factor\")");
@@ -452,20 +467,6 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    if( linear_system_scaling == "mc19" )
    {
       ScalingMethod = new Mc19TSymScalingMethod();
-#if ((defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MC19S)) || (!defined(IPOPT_SINGLE) && !defined(COINHSL_HAS_MC19))) && defined(IPOPT_HAS_LINEARSOLVERLOADER)
-      if (!LSL_isMC19available())
-      {
-         char buf[256];
-         int rc = LSL_loadHSL(NULL, buf, 255);
-         if (rc)
-         {
-            std::string errmsg;
-            errmsg = "Selected linear system scaling method MC19 not available.\n";
-            errmsg += buf;
-            THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
-         }
-      }
-#endif
    }
    else if( linear_system_scaling == "slack-based" )
    {
