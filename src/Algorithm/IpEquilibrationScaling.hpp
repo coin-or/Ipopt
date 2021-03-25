@@ -23,9 +23,11 @@ public:
    /**@name Constructors/Destructors */
    ///@{
    EquilibrationScaling(
-      const SmartPtr<NLP>& nlp)
-      : StandardScalingBase(),
+      const SmartPtr<NLP>& nlp,
+      SmartPtr<LibraryLoader> hslloader_
+   )  : StandardScalingBase(),
         nlp_(nlp),
+        hslloader(hslloader_),
         mc19a(NULL)
    { }
 

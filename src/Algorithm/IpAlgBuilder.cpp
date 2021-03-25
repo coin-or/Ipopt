@@ -75,7 +75,6 @@
 #endif
 
 #ifdef IPOPT_HAS_LINEARSOLVERLOADER
-# include "HSLLoader.h"
 # include "PardisoLoader.h"
 #endif
 
@@ -366,29 +365,31 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    std::string linear_solver;
    options.GetStringValue("linear_solver", linear_solver, prefix);
 
+   // try to load HSL functions from a shared library at runtime
+
    if( linear_solver == "ma27" )
    {
-      SolverInterface = new Ma27TSolverInterface();
+      SolverInterface = new Ma27TSolverInterface(GetHSLLoader(options, prefix));
    }
 
    else if( linear_solver == "ma57" )
    {
-      SolverInterface = new Ma57TSolverInterface();
+      SolverInterface = new Ma57TSolverInterface(GetHSLLoader(options, prefix));
    }
 
    else if( linear_solver == "ma77" )
    {
-      SolverInterface = new Ma77SolverInterface();
+      SolverInterface = new Ma77SolverInterface(GetHSLLoader(options, prefix));
    }
 
    else if( linear_solver == "ma86" )
    {
-      SolverInterface = new Ma86SolverInterface();
+      SolverInterface = new Ma86SolverInterface(GetHSLLoader(options, prefix));
    }
 
    else if( linear_solver == "ma97" )
    {
-      SolverInterface = new Ma97SolverInterface();
+      SolverInterface = new Ma97SolverInterface(GetHSLLoader(options, prefix));
    }
 
    else if( linear_solver == "pardiso" )
@@ -466,7 +467,7 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
 
    if( linear_system_scaling == "mc19" )
    {
-      ScalingMethod = new Mc19TSymScalingMethod();
+      ScalingMethod = new Mc19TSymScalingMethod(GetHSLLoader(options, prefix));
    }
    else if( linear_system_scaling == "slack-based" )
    {
@@ -611,7 +612,7 @@ void AlgorithmBuilder::BuildIpoptObjects(
    }
    else if( nlp_scaling_method == "equilibration-based" )
    {
-      nlp_scaling = new EquilibrationScaling(nlp);
+      nlp_scaling = new EquilibrationScaling(nlp, GetHSLLoader(options, prefix));
    }
    else
    {
@@ -1053,6 +1054,21 @@ SmartPtr<MuUpdate> AlgorithmBuilder::BuildMuUpdate(
       MuUpdate = new AdaptiveMuUpdate(GetRawPtr(LineSearch_), muOracle, FixMuOracle);
    }
    return MuUpdate;
+}
+
+SmartPtr<LibraryLoader> AlgorithmBuilder::GetHSLLoader(
+   const OptionsList& options,
+   const std::string& prefix
+)
+{
+   if( !IsValid(hslloader) )
+   {
+      std::string hsllibname;
+      options.GetStringValue("hsllib", hsllibname, prefix);
+      hslloader = new LibraryLoader(hsllibname);
+   }
+
+   return hslloader;
 }
 
 } // namespace

@@ -61,9 +61,7 @@ bool EquilibrationScaling::InitializeImpl(
       mc19a = &::IPOPT_HSL_FUNCP(mc19a, MC19A);
 #else
       // try to load HSL function from a shared library at runtime
-      std::string hsllibname;
-      options.GetStringValue("hsllib", hsllibname, prefix);
-      hslloader = new LibraryLoader(hsllibname);
+      DBG_ASSERT(IsValid(hslloader));
 
       mc19a = (IPOPT_DECL_MC19A(*))hslloader->loadSymbol("mc19a" HSLFUNCNAMESUFFIX);
 #endif

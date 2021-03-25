@@ -126,11 +126,13 @@ private:
 
 public:
 
-   Ma86SolverInterface()
-      : val_(NULL),
+   Ma86SolverInterface(
+      SmartPtr<LibraryLoader> hslloader_
+   )  : val_(NULL),
         order_(NULL),
         keep_(NULL),
         pivtol_changed_(false),
+        hslloader(hslloader_),
         ma86_default_control(NULL),
         ma86_analyse(NULL),
         ma86_factor(NULL),

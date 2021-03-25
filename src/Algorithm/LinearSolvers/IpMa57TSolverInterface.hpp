@@ -105,7 +105,9 @@ public:
    /** @name Constructor/Destructor */
    ///@{
    /** Constructor */
-   Ma57TSolverInterface();
+   Ma57TSolverInterface(
+      SmartPtr<LibraryLoader> hslloader_
+   );
 
    /** Destructor */
    virtual ~Ma57TSolverInterface();

@@ -11,6 +11,7 @@
 #include "IpReferenced.hpp"
 #include "IpAugSystemSolver.hpp"
 #include "IpPDSystemSolver.hpp"
+#include "IpLibraryLoader.hpp"
 
 namespace Ipopt
 {
@@ -328,6 +329,12 @@ public:
    );
    ///@}
 
+protected:
+   SmartPtr<LibraryLoader> GetHSLLoader(
+      const OptionsList& options,
+      const std::string& prefix
+   );
+
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
@@ -382,6 +389,9 @@ private:
    /** Optional pointer to AugSystemSolver.  If this is set in the
     *  contructor, we will use this to solve the linear systems. */
    SmartPtr<AugSystemSolver> custom_solver_;
+
+   /// loader of HSL library (at runtime)
+   SmartPtr<LibraryLoader> hslloader;
 
 };
 } // namespace Ipopt

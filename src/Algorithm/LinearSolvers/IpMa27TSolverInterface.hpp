@@ -77,7 +77,9 @@ public:
    /** @name Constructor/Destructor */
    ///@{
    /** Constructor */
-   Ma27TSolverInterface();
+   Ma27TSolverInterface(
+      SmartPtr<LibraryLoader> hslloader_
+      );
 
    /** Destructor */
    virtual ~Ma27TSolverInterface();

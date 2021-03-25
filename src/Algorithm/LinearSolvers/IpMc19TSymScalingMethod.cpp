@@ -58,8 +58,8 @@ IPOPT_DECL_MC19A(*Mc19TSymScalingMethod::GetMC19A())
 }
 
 bool Mc19TSymScalingMethod::InitializeImpl(
-   const OptionsList& options,
-   const std::string& prefix
+   const OptionsList& /*options*/,
+   const std::string& /*prefix*/
 )
 {
    if( user_mc19a != NULL )
@@ -72,13 +72,9 @@ bool Mc19TSymScalingMethod::InitializeImpl(
 #if (defined(COINHSL_HAS_MC19) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MC19S) && defined(IPOPT_SINGLE))
       // use HSL function that should be available in linked HSL library
       mc19a = &::IPOPT_HSL_FUNCP(mc19a, MC19A);
-      (void) options;
-      (void) prefix;
 #else
       // try to load HSL function from a shared library at runtime
-      std::string hsllibname;
-      options.GetStringValue("hsllib", hsllibname, prefix);
-      hslloader = new LibraryLoader(hsllibname);
+      DBG_ASSERT(IsValid(hslloader));
 
       mc19a = (IPOPT_DECL_MC19A(*))hslloader->loadSymbol("mc19a" HSLFUNCNAMESUFFIX);
 #endif

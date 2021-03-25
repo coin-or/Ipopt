@@ -229,10 +229,12 @@ private:
 
 public:
 
-   Ma77SolverInterface()
-      : val_(NULL),
+   Ma77SolverInterface(
+      SmartPtr<LibraryLoader> hslloader_
+   )  : val_(NULL),
         keep_(NULL),
         pivtol_changed_(false),
+        hslloader(hslloader_),
         ma77_default_control(NULL),
         ma77_open_nelt(NULL),
         ma77_open(NULL),

@@ -171,9 +171,7 @@ bool Ma86SolverInterface::InitializeImpl(
       mc68_order = &::mc68_order;
 #else
       // try to load HSL functions from a shared library at runtime
-      std::string hsllibname;
-      options.GetStringValue("hsllib", hsllibname, prefix);
-      hslloader = new LibraryLoader(hsllibname);
+      DBG_ASSERT(IsValid(hslloader));
 
 #define STR2(x) #x
 #define STR(x) STR2(x)

@@ -36,8 +36,10 @@ class Mc19TSymScalingMethod: public TSymScalingMethod
 public:
    /** @name Constructor/Destructor */
    ///@{
-   Mc19TSymScalingMethod()
-   : mc19a(NULL)
+   Mc19TSymScalingMethod(
+      SmartPtr<LibraryLoader> hslloader_
+   ) : hslloader(hslloader_),
+       mc19a(NULL)
    { }
 
    virtual ~Mc19TSymScalingMethod()

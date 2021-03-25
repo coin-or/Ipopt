@@ -155,8 +155,10 @@ const char* ma57_wrn_msg[] =
    "continue the factorization.\n"
 };
 
-Ma57TSolverInterface::Ma57TSolverInterface()
-   : ma57a(NULL),
+Ma57TSolverInterface::Ma57TSolverInterface(
+   SmartPtr<LibraryLoader> hslloader_
+)  : hslloader(hslloader_),
+     ma57a(NULL),
      ma57b(NULL),
      ma57c(NULL),
      ma57e(NULL),
@@ -310,9 +312,7 @@ bool Ma57TSolverInterface::InitializeImpl(
       ma57i = &::IPOPT_HSL_FUNCP(ma57i, MA57I);
 #else
       // try to load HSL functions from a shared library at runtime
-      std::string hsllibname;
-      options.GetStringValue("hsllib", hsllibname, prefix);
-      hslloader = new LibraryLoader(hsllibname);
+      DBG_ASSERT(IsValid(hslloader));
 
       ma57a = (IPOPT_DECL_MA57A(*))hslloader->loadSymbol("ma57a" HSLFUNCNAMESUFFIX);
       ma57b = (IPOPT_DECL_MA57B(*))hslloader->loadSymbol("ma57b" HSLFUNCNAMESUFFIX);

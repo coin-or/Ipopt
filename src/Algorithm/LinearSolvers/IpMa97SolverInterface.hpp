@@ -153,8 +153,9 @@ private:
 
 public:
 
-   Ma97SolverInterface()
-      : val_(NULL),
+   Ma97SolverInterface(
+      SmartPtr<LibraryLoader> hslloader_
+   )  : val_(NULL),
         numdelay_(0),
         akeep_(NULL),
         fkeep_(NULL),
@@ -164,6 +165,7 @@ public:
         fctidx_(0),
         scaling_type_(0),
         dump_(false),
+        hslloader(hslloader_),
         ma97_default_control(NULL),
         ma97_analyse(NULL),
         ma97_factor(NULL),

@@ -48,8 +48,10 @@ static IPOPT_DECL_MA27B(*user_ma27b) = NULL;
 static IPOPT_DECL_MA27C(*user_ma27c) = NULL;
 static IPOPT_DECL_MA27I(*user_ma27i) = NULL;
 
-Ma27TSolverInterface::Ma27TSolverInterface()
-   : ma27a(NULL),
+Ma27TSolverInterface::Ma27TSolverInterface(
+   SmartPtr<LibraryLoader> hslloader_
+)  : hslloader(hslloader_),
+     ma27a(NULL),
      ma27b(NULL),
      ma27c(NULL),
      ma27i(NULL),
@@ -181,10 +183,7 @@ bool Ma27TSolverInterface::InitializeImpl(
       ma27c = &::IPOPT_HSL_FUNCP(ma27c, MA27C);
       ma27i = &::IPOPT_HSL_FUNCP(ma27i, MA27I);
 #else
-      // try to load HSL functions from a shared library at runtime
-      std::string hsllibname;
-      options.GetStringValue("hsllib", hsllibname, prefix);
-      hslloader = new LibraryLoader(hsllibname);
+      DBG_ASSERT(IsValid(hslloader));
 
       ma27a = (IPOPT_DECL_MA27A(*))hslloader->loadSymbol("ma27a" HSLFUNCNAMESUFFIX);
       ma27b = (IPOPT_DECL_MA27B(*))hslloader->loadSymbol("ma27b" HSLFUNCNAMESUFFIX);

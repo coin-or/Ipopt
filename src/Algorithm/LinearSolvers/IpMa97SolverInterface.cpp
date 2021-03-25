@@ -297,9 +297,7 @@ bool Ma97SolverInterface::InitializeImpl(
       ma97_free_akeep = &::ma97_free_akeep;
 #else
       // try to load HSL functions from a shared library at runtime
-      std::string hsllibname;
-      options.GetStringValue("hsllib", hsllibname, prefix);
-      hslloader = new LibraryLoader(hsllibname);
+      DBG_ASSERT(IsValid(hslloader));
 
 #define STR2(x) #x
 #define STR(x) STR2(x)
