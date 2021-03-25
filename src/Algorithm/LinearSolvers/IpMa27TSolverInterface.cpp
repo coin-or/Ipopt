@@ -28,6 +28,12 @@ extern "C"
    IPOPT_DECL_MA27C(IPOPT_HSL_FUNCP(ma27c, MA27C));
    IPOPT_DECL_MA27I(IPOPT_HSL_FUNCP(ma27i, MA27I));
 }
+#else
+#ifdef IPOPT_SINGLE
+#define HSLFUNCNAMESUFFIX ""
+#else
+#define HSLFUNCNAMESUFFIX "d"
+#endif
 #endif
 
 namespace Ipopt
@@ -180,10 +186,10 @@ bool Ma27TSolverInterface::InitializeImpl(
       options.GetStringValue("hsllib", hsllibname, prefix);
       hslloader = new LibraryLoader(hsllibname);
 
-      ma27a = (IPOPT_DECL_MA27A(*))hslloader->loadSymbol("ma27a");
-      ma27b = (IPOPT_DECL_MA27B(*))hslloader->loadSymbol("ma27b");
-      ma27c = (IPOPT_DECL_MA27C(*))hslloader->loadSymbol("ma27c");
-      ma27i = (IPOPT_DECL_MA27I(*))hslloader->loadSymbol("ma27i");
+      ma27a = (IPOPT_DECL_MA27A(*))hslloader->loadSymbol("ma27a" HSLFUNCNAMESUFFIX);
+      ma27b = (IPOPT_DECL_MA27B(*))hslloader->loadSymbol("ma27b" HSLFUNCNAMESUFFIX);
+      ma27c = (IPOPT_DECL_MA27C(*))hslloader->loadSymbol("ma27c" HSLFUNCNAMESUFFIX);
+      ma27i = (IPOPT_DECL_MA27I(*))hslloader->loadSymbol("ma27i" HSLFUNCNAMESUFFIX);
 #endif
    }
 

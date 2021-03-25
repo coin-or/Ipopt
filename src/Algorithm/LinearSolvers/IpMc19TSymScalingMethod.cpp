@@ -26,6 +26,12 @@ extern "C"
 {
    IPOPT_DECL_MC19A(IPOPT_HSL_FUNCP(mc19a, MC19A));
 }
+#else
+#ifdef IPOPT_SINGLE
+#define HSLFUNCNAMESUFFIX ""
+#else
+#define HSLFUNCNAMESUFFIX "d"
+#endif
 #endif
 
 namespace Ipopt
@@ -74,7 +80,7 @@ bool Mc19TSymScalingMethod::InitializeImpl(
       options.GetStringValue("hsllib", hsllibname, prefix);
       hslloader = new LibraryLoader(hsllibname);
 
-      mc19a = (IPOPT_DECL_MC19A(*))hslloader->loadSymbol("mc19a");
+      mc19a = (IPOPT_DECL_MC19A(*))hslloader->loadSymbol("mc19a" HSLFUNCNAMESUFFIX);
 #endif
    }
 

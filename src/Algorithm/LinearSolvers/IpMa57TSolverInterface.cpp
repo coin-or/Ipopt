@@ -32,6 +32,12 @@ extern "C"
    IPOPT_DECL_MA57E(IPOPT_HSL_FUNCP(ma57e, MA57E));
    IPOPT_DECL_MA57I(IPOPT_HSL_FUNCP(ma57i, MA57I));
 }
+#else
+#ifdef IPOPT_SINGLE
+#define HSLFUNCNAMESUFFIX ""
+#else
+#define HSLFUNCNAMESUFFIX "d"
+#endif
 #endif
 
 namespace Ipopt
@@ -308,11 +314,11 @@ bool Ma57TSolverInterface::InitializeImpl(
       options.GetStringValue("hsllib", hsllibname, prefix);
       hslloader = new LibraryLoader(hsllibname);
 
-      ma57a = (IPOPT_DECL_MA57A(*))hslloader->loadSymbol("ma57a");
-      ma57b = (IPOPT_DECL_MA57B(*))hslloader->loadSymbol("ma57b");
-      ma57c = (IPOPT_DECL_MA57C(*))hslloader->loadSymbol("ma57c");
-      ma57e = (IPOPT_DECL_MA57E(*))hslloader->loadSymbol("ma57e");
-      ma57i = (IPOPT_DECL_MA57I(*))hslloader->loadSymbol("ma57i");
+      ma57a = (IPOPT_DECL_MA57A(*))hslloader->loadSymbol("ma57a" HSLFUNCNAMESUFFIX);
+      ma57b = (IPOPT_DECL_MA57B(*))hslloader->loadSymbol("ma57b" HSLFUNCNAMESUFFIX);
+      ma57c = (IPOPT_DECL_MA57C(*))hslloader->loadSymbol("ma57c" HSLFUNCNAMESUFFIX);
+      ma57e = (IPOPT_DECL_MA57E(*))hslloader->loadSymbol("ma57e" HSLFUNCNAMESUFFIX);
+      ma57i = (IPOPT_DECL_MA57I(*))hslloader->loadSymbol("ma57i" HSLFUNCNAMESUFFIX);
 #endif
    }
 
