@@ -18,7 +18,7 @@
 #include <cstdarg>
 #include <limits>
 
-// The special treatment of vsnprintf on SUN has been suggsted by Lou Hafer 2010/07/04
+// The special treatment of vsnprintf on SUN has been suggested by Lou Hafer 2010/07/04
 #if defined(HAVE_VSNPRINTF) && defined(__SUNPRO_CC)
 namespace std
 {
