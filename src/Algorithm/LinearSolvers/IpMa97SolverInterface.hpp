@@ -12,6 +12,9 @@
 #define __IPMA97SOLVERINTERFACE_HPP__
 
 #include "IpSparseSymLinearSolverInterface.hpp"
+#include "IpLibraryLoader.hpp"
+#include "IpTypes.h"
+
 extern "C"
 {
 #ifdef IPOPT_SINGLE
@@ -20,6 +23,69 @@ extern "C"
 #include "hsl_ma97d.h"
 #endif
 }
+
+#define IPOPT_DECL_MA97_DEFAULT_CONTROL(x) void (x)( \
+   struct ma97_control* control \
+)
+
+#define IPOPT_DECL_MA97_ANALYSE(x) void (x)( \
+   const int                  check,  \
+   const int                  n,      \
+   const int                  ptr[],  \
+   const int                  row[],  \
+   ipnumber                   val[],  \
+   void**                     akeep,  \
+   const struct ma97_control* control,\
+   struct ma97_info*          info,   \
+   int                        order[] \
+)
+
+#define IPOPT_DECL_MA97_FACTOR(x) void (x)( \
+   int                        matrix_type, \
+   const int                  ptr[],       \
+   const int                  row[],       \
+   const ipnumber             val[],       \
+   void**                     akeep,       \
+   void**                     fkeep,       \
+   const struct ma97_control* control,     \
+   struct ma97_info*          info,        \
+   ipnumber                   scale[]      \
+)
+
+#define IPOPT_DECL_MA97_FACTOR_SOLVE(x) void (x)( \
+   int                        matrix_type, \
+   const int                  ptr[],       \
+   const int                  row[],       \
+   const ipnumber             val[],       \
+   int                        nrhs,        \
+   ipnumber                   xx[],        \
+   int                        ldx,         \
+   void**                     akeep,       \
+   void**                     fkeep,       \
+   const struct ma97_control* control,     \
+   struct ma97_info*          info,        \
+   ipnumber                   scale[]      \
+)
+
+#define IPOPT_DECL_MA97_SOLVE(x) void (x)( \
+   const int                  job,     \
+   const int                  nrhs,    \
+   ipnumber*                  xx,      \
+   const int                  ldx,     \
+   void**                     akeep,   \
+   void**                     fkeep,   \
+   const struct ma97_control* control, \
+   struct ma97_info*          info     \
+)
+
+#define IPOPT_DECL_MA97_FINALISE(x) void (x)( \
+   void** akeep, \
+   void** fkeep  \
+)
+
+#define IPOPT_DECL_MA97_FREE_AKEEP(x) void (x)( \
+   void** akeep \
+)
 
 namespace Ipopt
 {
@@ -71,6 +137,20 @@ private:
    int current_level_;
    bool dump_;
 
+   /**@name MA97 function pointers
+    * @{
+    */
+   SmartPtr<LibraryLoader> hslloader;
+
+   IPOPT_DECL_MA97_DEFAULT_CONTROL(*ma97_default_control);
+   IPOPT_DECL_MA97_ANALYSE(*ma97_analyse);
+   IPOPT_DECL_MA97_FACTOR(*ma97_factor);
+   IPOPT_DECL_MA97_FACTOR_SOLVE(*ma97_factor_solve);
+   IPOPT_DECL_MA97_SOLVE(*ma97_solve);
+   IPOPT_DECL_MA97_FINALISE(*ma97_finalise);
+   IPOPT_DECL_MA97_FREE_AKEEP(*ma97_free_akeep);
+   ///@}
+
 public:
 
    Ma97SolverInterface()
@@ -83,7 +163,14 @@ public:
         scaling_(NULL),
         fctidx_(0),
         scaling_type_(0),
-        dump_(false)
+        dump_(false),
+        ma97_default_control(NULL),
+        ma97_analyse(NULL),
+        ma97_factor(NULL),
+        ma97_factor_solve(NULL),
+        ma97_solve(NULL),
+        ma97_finalise(NULL),
+        ma97_free_akeep(NULL)
    { }
 
    ~Ma97SolverInterface();
@@ -91,6 +178,17 @@ public:
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
    );
+
+   /// set MA97 functions to use for every instantiation of this class
+   static void SetFunctions(
+      IPOPT_DECL_MA97_DEFAULT_CONTROL(*ma97_default_control),
+      IPOPT_DECL_MA97_ANALYSE(*ma97_analyse),
+      IPOPT_DECL_MA97_FACTOR(*ma97_factor),
+      IPOPT_DECL_MA97_FACTOR_SOLVE(*ma97_factor_solve),
+      IPOPT_DECL_MA97_SOLVE(*ma97_solve),
+      IPOPT_DECL_MA97_FINALISE(*ma97_finalise),
+      IPOPT_DECL_MA97_FREE_AKEEP(*ma97_free_akeep)
+      );
 
    bool InitializeImpl(
       const OptionsList& options,

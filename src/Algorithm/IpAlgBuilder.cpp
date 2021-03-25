@@ -348,7 +348,6 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
 )
 {
    SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
-   IpoptLinearSolver linkedsolvers = IpoptGetAvailableLinearSolvers(true);
    std::string linear_solver;
    options.GetStringValue("linear_solver", linear_solver, prefix);
 
@@ -375,29 +374,13 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    else if( linear_solver == "ma97" )
    {
       SolverInterface = new Ma97SolverInterface();
-#ifdef IPOPT_HAS_LINEARSOLVERLOADER
-      if( !(linkedsolvers & IPOPTLINEARSOLVER_MA97) && !LSL_isMA97available() )
-      {
-         char buf[256];
-         int rc = LSL_loadHSL(NULL, buf, 255);
-         if (rc)
-         {
-            std::string errmsg;
-            errmsg = "Selected linear solver HSL_MA97 not available.\nTried to obtain HSL_MA97 from shared library \"";
-            errmsg += LSL_HSLLibraryName();
-            errmsg += "\", but the following error occured:\n";
-            errmsg += buf;
-            THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
-         }
-      }
-#endif
    }
 
    else if( linear_solver == "pardiso" )
    {
       SolverInterface = new PardisoSolverInterface();
 #if defined(IPOPT_HAS_LINEARSOLVERLOADER) && !defined(IPOPT_HAS_PARDISO)
-      if( !(linkedsolvers & IPOPTLINEARSOLVER_PARDISO) )
+      if( !(IpoptGetAvailableLinearSolvers(true) & IPOPTLINEARSOLVER_PARDISO) )
       {
          char buf[256];
          int rc = LSL_loadPardisoLib(NULL, buf, 255);

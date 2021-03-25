@@ -9,39 +9,29 @@
 //          Carl Laird, Andreas Waechter     IBM    2004-03-17
 
 #include "IpoptConfig.h"
-#include "IpTypes.h"
+#include "IpMa97SolverInterface.hpp"
+
+#include <iostream>
+#include <cstdio>
+#include <cmath>
+#include <cassert>
 
 #ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"
-#else
-/* if we build for the Linear Solver loader, then use normal C-naming style */
-#define IPOPT_HSL_FUNC(name,NAME) name
 #endif
 
-// if we have MA97 in HSL or the linear solver loader, then we want to build the MA97 interface
-#if (defined(COINHSL_HAS_MA97) && !defined(IPOPT_SINGLE)) || \
-    (defined(COINHSL_HAS_MA97S) && defined(IPOPT_SINGLE)) || \
-    defined(IPOPT_HAS_LINEARSOLVERLOADER)
-
+/* Uncomment the following line to enable the ma97_dump_matrix option.
+ * This option requires a version of the coinhsl that supports this function.
+ * This is only available when linking against coinhsl, not when loading at runtime.
+ */
+//#define MA97_DUMP_MATRIX
+#ifdef MA97_DUMP_MATRIX
 #ifdef IPOPT_SINGLE
 #define IPOPT_HSL_FUNCP(name,NAME) IPOPT_HSL_FUNC(name,NAME)
 #else
 #define IPOPT_HSL_FUNCP(name,NAME) IPOPT_HSL_FUNC(name ## d,NAME ## D)
 #endif
 
-#include "IpMa97SolverInterface.hpp"
-#include <iostream>
-#include <cstdio>
-#include <cmath>
-#include <cassert>
-
-using namespace std;
-
-/* Uncomment the following line to enable the ma97_dump_matrix option.
- * This option requires a version of the coinhsl that supports this function.
- */
-//#define MA97_DUMP_MATRIX
-#ifdef MA97_DUMP_MATRIX
 extern "C"
 {
    extern void IPOPT_HSL_FUNCP(dump_mat_csc, DUMP_MAT_CSC) (
@@ -54,8 +44,18 @@ extern "C"
 }
 #endif
 
+using namespace std;
+
 namespace Ipopt
 {
+
+static IPOPT_DECL_MA97_DEFAULT_CONTROL(*user_ma97_default_control) = NULL;
+static IPOPT_DECL_MA97_ANALYSE(*user_ma97_analyse) = NULL;
+static IPOPT_DECL_MA97_FACTOR(*user_ma97_factor) = NULL;
+static IPOPT_DECL_MA97_FACTOR_SOLVE(*user_ma97_factor_solve) = NULL;
+static IPOPT_DECL_MA97_SOLVE(*user_ma97_solve) = NULL;
+static IPOPT_DECL_MA97_FINALISE(*user_ma97_finalise)= NULL;
+static IPOPT_DECL_MA97_FREE_AKEEP(*user_ma97_free_akeep) = NULL;
 
 Ma97SolverInterface::~Ma97SolverInterface()
 {
@@ -216,6 +216,34 @@ void Ma97SolverInterface::RegisterOptions(
       "yes", "Use BLAS3 (slower)");
 }
 
+/// set MA97 functions to use for every instantiation of this class
+void Ma97SolverInterface::SetFunctions(
+   IPOPT_DECL_MA97_DEFAULT_CONTROL(*ma97_default_control),
+   IPOPT_DECL_MA97_ANALYSE(*ma97_analyse),
+   IPOPT_DECL_MA97_FACTOR(*ma97_factor),
+   IPOPT_DECL_MA97_FACTOR_SOLVE(*ma97_factor_solve),
+   IPOPT_DECL_MA97_SOLVE(*ma97_solve),
+   IPOPT_DECL_MA97_FINALISE(*ma97_finalise),
+   IPOPT_DECL_MA97_FREE_AKEEP(*ma97_free_akeep)
+)
+{
+   DBG_ASSERT(ma97_default_control != NULL);
+   DBG_ASSERT(ma97_analyse != NULL);
+   DBG_ASSERT(ma97_factor != NULL);
+   DBG_ASSERT(ma97_factor_solve != NULL);
+   DBG_ASSERT(ma97_solve != NULL);
+   DBG_ASSERT(ma97_finalise != NULL);
+   DBG_ASSERT(ma97_free_akeep != NULL);
+
+   user_ma97_default_control = ma97_default_control;
+   user_ma97_analyse = ma97_analyse;
+   user_ma97_factor = ma97_factor;
+   user_ma97_factor_solve = ma97_factor_solve;
+   user_ma97_solve = ma97_solve;
+   user_ma97_finalise = ma97_finalise;
+   user_ma97_free_akeep = ma97_free_akeep;
+}
+
 int Ma97SolverInterface::ScaleNameToNum(
    const std::string& name
 )
@@ -246,6 +274,53 @@ bool Ma97SolverInterface::InitializeImpl(
    const std::string& prefix
 )
 {
+   if( user_ma97_default_control != NULL )
+   {
+      ma97_default_control = user_ma97_default_control;
+      ma97_analyse = user_ma97_analyse;
+      ma97_factor = user_ma97_factor;
+      ma97_factor_solve = user_ma97_factor_solve;
+      ma97_solve = user_ma97_solve;
+      ma97_finalise = user_ma97_finalise;
+      ma97_free_akeep = user_ma97_free_akeep;
+   }
+   else
+   {
+#if (defined(COINHSL_HAS_MA97) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA97S) && defined(IPOPT_SINGLE))
+      // use HSL functions that should be available in linked HSL library
+      ma97_default_control = &::ma97_default_control;
+      ma97_analyse = &::ma97_analyse;
+      ma97_factor = &::ma97_factor;
+      ma97_factor_solve = &::ma97_factor_solve;
+      ma97_solve = &::ma97_solve;
+      ma97_finalise = &::ma97_finalise;
+      ma97_free_akeep = &::ma97_free_akeep;
+#else
+      // try to load HSL functions from a shared library at runtime
+      std::string hsllibname;
+      options.GetStringValue("hsllib", hsllibname, prefix);
+      hslloader = new LibraryLoader(hsllibname);
+
+#define STR2(x) #x
+#define STR(x) STR2(x)
+      ma97_default_control = (IPOPT_DECL_MA97_DEFAULT_CONTROL(*))hslloader->loadSymbol(STR(ma97_default_control));
+      ma97_analyse = (IPOPT_DECL_MA97_ANALYSE(*))hslloader->loadSymbol(STR(ma97_analyse));
+      ma97_factor = (IPOPT_DECL_MA97_FACTOR(*))hslloader->loadSymbol(STR(ma97_factor));
+      ma97_factor_solve = (IPOPT_DECL_MA97_FACTOR_SOLVE(*))hslloader->loadSymbol(STR(ma97_factor_solve));
+      ma97_solve = (IPOPT_DECL_MA97_SOLVE(*))hslloader->loadSymbol(STR(ma97_solve));
+      ma97_finalise = (IPOPT_DECL_MA97_FINALISE(*))hslloader->loadSymbol(STR(ma97_finalise));
+      ma97_free_akeep = (IPOPT_DECL_MA97_FREE_AKEEP(*))hslloader->loadSymbol(STR(ma97_free_akeep));
+#endif
+   }
+
+   DBG_ASSERT(ma97_default_control != NULL);
+   DBG_ASSERT(ma97_analyse != NULL);
+   DBG_ASSERT(ma97_factor != NULL);
+   DBG_ASSERT(ma97_factor_solve != NULL);
+   DBG_ASSERT(ma97_solve != NULL);
+   DBG_ASSERT(ma97_finalise != NULL);
+   DBG_ASSERT(ma97_free_akeep != NULL);
+
    ma97_default_control(&control_);
    control_.f_arrays = 1; // Use Fortran numbering (faster)
    control_.action = 0; // false, shuold exit with error on singularity
@@ -548,7 +623,7 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
       {
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                         "Dumping matrix %d\n", fctidx_);
-         IPOPT_HSL_FUNC (dump_mat_csc, DUMP_MAT_CSC)
+         IPOPT_HSL_FUNCP(dump_mat_csc, DUMP_MAT_CSC)
          (&fctidx_, &ndim_, ia, ja, val_);
          fctidx_++;
       }
@@ -766,5 +841,3 @@ bool Ma97SolverInterface::IncreaseQuality()
 }
 
 } // namespace Ipopt
-
-#endif /* COINHSL_HAS_MA97(S) or IPOPT_HAS_LINEARSOLVERLOADER */
