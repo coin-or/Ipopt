@@ -29,10 +29,6 @@
 # include "IpWsmpSolverInterface.hpp"
 #endif
 
-#ifdef IPOPT_HAS_LINEARSOLVERLOADER
-# include "HSLLoader.h"
-#endif
-
 #include <cmath>
 #include <cstdio>
 #include <cstring>

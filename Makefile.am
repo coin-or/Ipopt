@@ -4,13 +4,7 @@
 #
 # Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
-SUBDIRS = src/Common src/LinAlg src/Algorithm src/contrib/CGPenalty
-
-if BUILD_LINEARSOLVERLOADER
-  SUBDIRS += src/contrib/LinearSolverLoader
-endif
-
-SUBDIRS += src/Interfaces src/Apps
+SUBDIRS = src/Common src/LinAlg src/Algorithm src/contrib/CGPenalty src/Interfaces src/Apps
 
 if BUILD_SIPOPT
   SUBDIRS += contrib/sIPOPT

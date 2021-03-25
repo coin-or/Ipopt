@@ -71,12 +71,9 @@ Contributors:
 - Stefan Vigerske (GAMS)
   Dynamic loading of linear solver shared libraries
 
-  src/contrib/LinearSolverLoader/HSLLoader.c
-  src/contrib/LinearSolverLoader/HSLLoader.h
-  src/contrib/LinearSolverLoader/LibraryHandler.c
-  src/contrib/LinearSolverLoader/LibraryHandler.h
-  src/contrib/LinearSolverLoader/PardisoLoader.c
-  src/contrib/LinearSolverLoader/PardisoLoader.h
+  src/Common/IpLibraryLoader.hpp
+  src/Common/IpLibraryLoader.cpp
+  HSL and Pardiso interface files
 
 - Marcel Roelofs (AIMMS)
   MSVC project files for Intel Fortran compiler, creating a DLL

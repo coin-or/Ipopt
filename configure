@@ -650,8 +650,6 @@ IPOPTLIB_CFLAGS_NOPC
 IPOPTLIB_LFLAGS_NOPC
 BUILD_SIPOPT_FALSE
 BUILD_SIPOPT_TRUE
-BUILD_LINEARSOLVERLOADER_FALSE
-BUILD_LINEARSOLVERLOADER_TRUE
 IPALLLIBS
 BUILD_JAVA_FALSE
 BUILD_JAVA_TRUE
@@ -1560,7 +1558,7 @@ Optional Features:
                           (default: no)
   --disable-java          disable building of Java interface
   --disable-linear-solver-loader
-                          disable build of linear solver loader
+                          disable use of linear solver loader
   --disable-sipopt        disable build of sIpopt
 
 Optional Packages:
@@ -25181,7 +25179,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25184 "configure" */
+/* #line 25182 "configure" */
 public class Test {
 }
 EOF
@@ -25667,7 +25665,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25670 "configure" */
+/* #line 25668 "configure" */
 public class Test {
 }
 EOF
@@ -25701,7 +25699,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25704 "configure" */
+/* [#]line 25702 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
@@ -25880,8 +25878,8 @@ else
 fi
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether the linear solver loader should be compiled" >&5
-$as_echo_n "checking whether the linear solver loader should be compiled... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether the linear solver loader should be used" >&5
+$as_echo_n "checking whether the linear solver loader should be used... " >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $use_linearsolverloader" >&5
 $as_echo "$use_linearsolverloader" >&6; }
 
@@ -25889,17 +25887,7 @@ if test $use_linearsolverloader = yes; then
 
 $as_echo "#define IPOPT_HAS_LINEARSOLVERLOADER 1" >>confdefs.h
 
-  IPALLLIBS="../contrib/LinearSolverLoader/libLinearSolverLoader.la $IPALLLIBS"
 fi
-
- if test $use_linearsolverloader = yes; then
-  BUILD_LINEARSOLVERLOADER_TRUE=
-  BUILD_LINEARSOLVERLOADER_FALSE='#'
-else
-  BUILD_LINEARSOLVERLOADER_TRUE='#'
-  BUILD_LINEARSOLVERLOADER_FALSE=
-fi
-
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -26490,7 +26478,7 @@ $as_echo "$as_me: SIPOPTAMPLINTERFACELIB_CFLAGS: \"${SIPOPTAMPLINTERFACELIB_CFLA
 
 
 
-ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Algorithm/Inexact/Makefile src/contrib/CGPenalty/Makefile src/contrib/LinearSolverLoader/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile test/Makefile test/run_unitTests ipopt.pc doc/Doxyfile examples/Cpp_example/Makefile examples/recursive_nlp/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile tutorial/CodingExercise/C/1-skeleton/Makefile tutorial/CodingExercise/C/2-mistake/Makefile tutorial/CodingExercise/C/3-solution/Makefile tutorial/CodingExercise/Cpp/1-skeleton/Makefile tutorial/CodingExercise/Cpp/2-mistake/Makefile tutorial/CodingExercise/Cpp/3-solution/Makefile tutorial/CodingExercise/Matlab/1-skeleton/startup.m tutorial/CodingExercise/Matlab/2-mistake/startup.m tutorial/CodingExercise/Matlab/3-solution/startup.m"
+ac_config_files="$ac_config_files Makefile src/Common/Makefile src/LinAlg/Makefile src/LinAlg/TMatrices/Makefile src/Interfaces/Makefile src/Algorithm/Makefile src/Algorithm/LinearSolvers/Makefile src/Algorithm/Inexact/Makefile src/contrib/CGPenalty/Makefile src/Apps/Makefile src/Apps/AmplSolver/Makefile test/Makefile test/run_unitTests ipopt.pc doc/Doxyfile examples/Cpp_example/Makefile examples/recursive_nlp/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile tutorial/CodingExercise/C/1-skeleton/Makefile tutorial/CodingExercise/C/2-mistake/Makefile tutorial/CodingExercise/C/3-solution/Makefile tutorial/CodingExercise/Cpp/1-skeleton/Makefile tutorial/CodingExercise/Cpp/2-mistake/Makefile tutorial/CodingExercise/Cpp/3-solution/Makefile tutorial/CodingExercise/Matlab/1-skeleton/startup.m tutorial/CodingExercise/Matlab/2-mistake/startup.m tutorial/CodingExercise/Matlab/3-solution/startup.m"
 
 
 if test -n "$F77" ; then
@@ -26759,10 +26747,6 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${BUILD_INEXACT_TRUE}" && test -z "${BUILD_INEXACT_FALSE}"; then
   as_fn_error $? "conditional \"BUILD_INEXACT\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
-if test -z "${BUILD_LINEARSOLVERLOADER_TRUE}" && test -z "${BUILD_LINEARSOLVERLOADER_FALSE}"; then
-  as_fn_error $? "conditional \"BUILD_LINEARSOLVERLOADER\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${BUILD_SIPOPT_TRUE}" && test -z "${BUILD_SIPOPT_FALSE}"; then
@@ -27928,7 +27912,6 @@ do
     "src/Algorithm/LinearSolvers/Makefile") CONFIG_FILES="$CONFIG_FILES src/Algorithm/LinearSolvers/Makefile" ;;
     "src/Algorithm/Inexact/Makefile") CONFIG_FILES="$CONFIG_FILES src/Algorithm/Inexact/Makefile" ;;
     "src/contrib/CGPenalty/Makefile") CONFIG_FILES="$CONFIG_FILES src/contrib/CGPenalty/Makefile" ;;
-    "src/contrib/LinearSolverLoader/Makefile") CONFIG_FILES="$CONFIG_FILES src/contrib/LinearSolverLoader/Makefile" ;;
     "src/Apps/Makefile") CONFIG_FILES="$CONFIG_FILES src/Apps/Makefile" ;;
     "src/Apps/AmplSolver/Makefile") CONFIG_FILES="$CONFIG_FILES src/Apps/AmplSolver/Makefile" ;;
     "test/Makefile") CONFIG_FILES="$CONFIG_FILES test/Makefile" ;;

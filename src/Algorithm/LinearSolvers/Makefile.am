@@ -23,15 +23,8 @@ liblinsolvers_la_SOURCES += \
 	IpMa57TSolverInterface.cpp \
 	IpMa77SolverInterface.cpp \
 	IpMa86SolverInterface.cpp \
-	IpMa97SolverInterface.cpp
-
-if BUILD_LINEARSOLVERLOADER
-  liblinsolvers_la_SOURCES += IpPardisoSolverInterface.cpp
-else
-if HAVE_PARDISO
-  liblinsolvers_la_SOURCES += IpPardisoSolverInterface.cpp
-endif
-endif # BUILD_LINEARSOLVERLOADER
+	IpMa97SolverInterface.cpp \
+	IpPardisoSolverInterface.cpp
 
 if HAVE_MA28
   liblinsolvers_la_SOURCES += IpMa28TDependencyDetector.cpp

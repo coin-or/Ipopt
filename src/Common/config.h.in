@@ -119,8 +119,8 @@
 /* Define to 1 if the LAPACK package is available */
 #undef IPOPT_HAS_LAPACK
 
-/* Define to 1 if the linear solver loader should be compiled to allow dynamic
-   loading of shared libraries with linear solvers */
+/* Define to 1 if the linear solver loader should be used to load libraries
+   with linear solvers at runtime */
 #undef IPOPT_HAS_LINEARSOLVERLOADER
 
 /* Define to 1 if Mumps is available. */

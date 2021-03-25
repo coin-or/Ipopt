@@ -418,10 +418,9 @@ But the actual flags depend on WSMP library and your preference for the Blas/Lap
 
 \subsection LINEARSOLVERLOADER Using the Linear Solver Loader
 
-By default, \Ipopt will be compiled with a mechanism, the
-Linear Solver Loader, which can dynamically load shared libraries with
-MA27, MA57, HSL_MA77, HSL_MA86, HSL_MA97, or the Pardiso linear
-solver at runtime.
+By default, \Ipopt will be compiled with a mechanism to load shared
+libraries with MA27, MA57, HSL_MA77, HSL_MA86, HSL_MA97, MC19, or the
+Pardiso linear solver at runtime.
 
 This means, if you obtain one of those solvers
 after you compiled \Ipopt, you don't need to recompile to
@@ -437,8 +436,8 @@ To create a shared library containing the HSL linear solvers, follow
 the instructions from \ref DOWNLOAD_HSL, but rename the resulting library
 to `libhsl.so`.
 
-If you have problems compiling this feature, you can disable this
-by specifying `--disable-linear-solver-loader` for the `configure` script.
+If you want to disable this feature, you can specify
+`--disable-linear-solver-loader` for the `configure` script.
 
 
 \section GETIPOPT Getting the Ipopt Code

@@ -421,7 +421,7 @@ fi
 ########################################################################
 
 AC_ARG_ENABLE([linear-solver-loader],
-  [AC_HELP_STRING([--disable-linear-solver-loader],[disable build of linear solver loader])],
+  [AC_HELP_STRING([--disable-linear-solver-loader],[disable use of linear solver loader])],
   [case "$enableval" in
      no | yes) ;;
      *)
@@ -430,16 +430,13 @@ AC_ARG_ENABLE([linear-solver-loader],
    use_linearsolverloader=$enableval],
   [use_linearsolverloader=yes])
 
-AC_MSG_CHECKING([whether the linear solver loader should be compiled])
+AC_MSG_CHECKING([whether the linear solver loader should be used])
 AC_MSG_RESULT([$use_linearsolverloader])
 
 if test $use_linearsolverloader = yes; then
   AC_DEFINE([IPOPT_HAS_LINEARSOLVERLOADER],[1],
-            [Define to 1 if the linear solver loader should be compiled to allow dynamic loading of shared libraries with linear solvers])
-  IPALLLIBS="../contrib/LinearSolverLoader/libLinearSolverLoader.la $IPALLLIBS"
+            [Define to 1 if the linear solver loader should be used to load libraries with linear solvers at runtime])
 fi
-
-AM_CONDITIONAL([BUILD_LINEARSOLVERLOADER],[test $use_linearsolverloader = yes])
 
 AC_LANG_PUSH(C)
 AC_CHECK_HEADER([windows.h],AC_DEFINE(HAVE_WINDOWS_H,[1],[Define to 1 if windows.h is available.]))
@@ -582,7 +579,6 @@ AC_CONFIG_FILES([Makefile
 		 src/Algorithm/LinearSolvers/Makefile
 		 src/Algorithm/Inexact/Makefile
 		 src/contrib/CGPenalty/Makefile
-		 src/contrib/LinearSolverLoader/Makefile
 		 src/Apps/Makefile
 		 src/Apps/AmplSolver/Makefile
 		 test/Makefile

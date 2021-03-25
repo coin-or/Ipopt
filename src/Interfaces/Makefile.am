@@ -78,5 +78,4 @@ AM_CPPFLAGS = \
 	-I$(srcdir)/../Algorithm \
 	-I$(srcdir)/../Algorithm/Inexact \
 	-I$(srcdir)/../contrib/CGPenalty \
-	-I$(srcdir)/../contrib/LinearSolverLoader \
 	$(IPOPTLIB_CFLAGS)

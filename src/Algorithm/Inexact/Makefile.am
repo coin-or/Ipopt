@@ -31,6 +31,5 @@ AM_CPPFLAGS = \
 	-I$(srcdir)/../../Interfaces \
 	-I$(srcdir)/.. \
 	-I$(srcdir)/../LinearSolvers \
-	-I$(srcdir)/../../contrib/LinearSolverLoader \
 	$(IPOPTLIB_CFLAGS)
 
