@@ -280,17 +280,7 @@ SolverReturn IpoptAlgorithm::Optimize(
    if( !isResto )
    {
       Jnlst().Printf(J_ITERSUMMARY, J_MAIN,
-                     "This is Ipopt version " IPOPT_VERSION ", running with linear solver %s.\n", linear_solver_name_.c_str());
-
-#ifndef IPOPT_NOMUMPSNOTE
-      if( linear_solver_name_ == "mumps" )
-      {
-         Jnlst().Printf(J_ITERSUMMARY, J_MAIN,
-                        "NOTE: Other linear solvers might be more efficient (see Ipopt documentation).\n");
-      }
-#endif
-      Jnlst().Printf(J_ITERSUMMARY, J_MAIN,
-                     "\n");
+                     "This is Ipopt version " IPOPT_VERSION ", running with linear solver %s.\n\n", linear_solver_name_.c_str());
    }
 
    SolverReturn retval = UNASSIGNED;

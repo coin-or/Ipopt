@@ -418,6 +418,7 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    else if( linear_solver == "mumps" )
    {
       SolverInterface = new MumpsSolverInterface();
+      linear_solver = MumpsSolverInterface::GetName();
    }
 #endif
 

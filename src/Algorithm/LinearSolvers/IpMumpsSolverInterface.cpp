@@ -174,6 +174,12 @@ void MumpsSolverInterface::RegisterOptions(
       "This is CNTL(3) in MUMPS.");
 }
 
+/// give name of MUMPS with version info
+std::string MumpsSolverInterface::GetName()
+{
+   return "MUMPS " MUMPS_VERSION;
+}
+
 bool MumpsSolverInterface::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix

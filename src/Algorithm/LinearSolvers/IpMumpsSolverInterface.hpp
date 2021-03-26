@@ -81,6 +81,9 @@ public:
       SmartPtr<RegisteredOptions> roptions
    );
 
+   /// give name of MUMPS with version info
+   static std::string GetName();
+
    virtual bool ProvidesDegeneracyDetection() const;
 
    virtual ESymSolverStatus DetermineDependentRows(
