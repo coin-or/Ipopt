@@ -51,9 +51,6 @@
 #include "IpExactHessianUpdater.hpp"
 
 #include "IpLinearSolvers.h"
-#ifdef IPOPT_HAS_HSL
-#include "CoinHslConfig.h"
-#endif
 #include "IpMa27TSolverInterface.hpp"
 #include "IpMa57TSolverInterface.hpp"
 #include "IpMa77SolverInterface.hpp"
@@ -210,19 +207,28 @@ void AlgorithmBuilder::RegisterOptions(
    options.clear();
    descrs.clear();
 
+   std::string longdescr =
+      "Determines the method used to compute symmetric scaling factors for the augmented system "
+      "(see also the \"linear_scaling_on_demand\" option). "
+      "This scaling is independent of the NLP problem scaling.";
+
    options.push_back("none");
    descrs.push_back("no scaling will be performed");
    defaultsolver = "none";
 
-#if (defined(COINHSL_HAS_MC19) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MC19S) && defined(IPOPT_SINGLE)) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
-   options.push_back("mc19");
-#if (defined(COINHSL_HAS_MC19) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MC19S) && defined(IPOPT_SINGLE))
-   descrs.push_back("use the Harwell routine MC19");
-   defaultsolver = "mc19";
-#else
-   descrs.push_back("load the Harwell routine MC19 from library at runtime");
-#endif
-#endif
+   if( availablesolvers & IPOPTLINEARSOLVER_MC19 )
+   {
+      options.push_back("mc19");
+
+      if( availablesolverslinked & IPOPTLINEARSOLVER_MC19 )
+      {
+         descrs.push_back("use the Harwell routine MC19");
+         defaultsolver = "mc19";
+         longdescr += " The default is MC19 only if MA27, MA57, MA77, or MA86 are selected as linear solvers. Otherwise it is 'none'.";
+      }
+      else
+         descrs.push_back("load the Harwell routine MC19 from library at runtime");
+   }
 
    options.push_back("slack-based");
    descrs.push_back("use the slack values");
@@ -230,15 +236,9 @@ void AlgorithmBuilder::RegisterOptions(
    roptions->AddStringOption(
       "linear_system_scaling", "Method for scaling the linear system.",
       defaultsolver,
-      options,
-      descrs,
-      "Determines the method used to compute symmetric scaling factors for the augmented system "
-      "(see also the \"linear_scaling_on_demand\" option). "
-      "This scaling is independent of the NLP problem scaling."
-#if (defined(COINHSL_HAS_MC19) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MC19S) && defined(IPOPT_SINGLE))
-      " The default is MC19 only if MA27, MA57, MA77, or MA86 are selected as linear solvers. Otherwise it is 'none'."
-#endif
-      );
+      options, descrs,
+      longdescr);
+
 
    roptions->AddStringOption1(
       "hsllib", "Name of library containing HSL routines for load at runtime",
@@ -263,14 +263,13 @@ void AlgorithmBuilder::RegisterOptions(
    options.push_back("gradient-based");
    descrs.push_back("scale the problem so the maximum gradient at the starting point is scaling_max_gradient");
 
-#if (defined(COINHSL_HAS_MC19) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MC19S) && defined(IPOPT_SINGLE)) || defined(IPOPT_HAS_LINEARSOLVERLOADER)
-   options.push_back("equilibration-based");
-#if (defined(COINHSL_HAS_MC19) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MC19S) && defined(IPOPT_SINGLE))
-   descrs.push_back("scale the problem so that first derivatives are of order 1 at random points");
-#else
-   descrs.push_back("scale the problem so that first derivatives are of order 1 at random points (load the Harwell routine MC19 from library at runtime)");
-#endif
-#endif
+   if( availablesolvers & IPOPTLINEARSOLVER_MC19 )
+   {
+      options.push_back("equilibration-based");
+      descrs.push_back("scale the problem so that first derivatives are of order 1 at random points");
+      if( !(availablesolverslinked & IPOPTLINEARSOLVER_MC19) )
+         descrs.back() += " (load the Harwell routine MC19 from library at runtime)";
+   }
    roptions->AddStringOption(
       "nlp_scaling_method", "Select the technique used for scaling the NLP.",
       "gradient-based",
