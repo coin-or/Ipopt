@@ -8,14 +8,14 @@
 #include <sstream>
 #include <cstring>
 
-namespace Ipopt
-{
-
 #ifdef HAVE_WINDOWS_H
 # include <windows.h>
 #elif defined(HAVE_DLFCN_H)
 # include <dlfcn.h>
 #endif
+
+namespace Ipopt
+{
 
 void LibraryLoader::loadLibrary()
 {
