@@ -121,7 +121,6 @@ SmartPtr<IpoptAlgorithm> InexactAlgorithmBuilder::BuildBasicAlgorithm(
 
    SmartPtr<InexactNormalTerminationTester> NormalTester;
    SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
-   IpoptLinearSolver linkedsolvers = IpoptGetAvailableLinearSolvers(true);
    std::string linear_solver;
    options.GetStringValue("linear_solver", linear_solver, prefix);
 
@@ -139,7 +138,7 @@ SmartPtr<IpoptAlgorithm> InexactAlgorithmBuilder::BuildBasicAlgorithm(
    {
       NormalTester = new InexactNormalTerminationTester();
       SmartPtr<IterativeSolverTerminationTester> pd_tester = new InexactPDTerminationTester();
-      SolverInterface = new IterativePardisoSolverInterface(*NormalTester, *pd_tester);
+      SolverInterface = new IterativePardisoSolverInterface(*NormalTester, *pd_tester, GetPardisoLoader(options, prefix));
    }
 
 #ifdef IPOPT_HAS_WSMP

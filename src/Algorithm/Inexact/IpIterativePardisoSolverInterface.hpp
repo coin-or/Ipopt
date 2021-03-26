@@ -11,7 +11,18 @@
 #include "IpSparseSymLinearSolverInterface.hpp"
 #include "IpInexactCq.hpp"
 #include "IpIterativeSolverTerminationTester.hpp"
+#include "IpPardisoSolverInterface.hpp"  // for IPOPT_DECL_... macros
 #include "IpTypes.h"
+
+#define IPOPT_DECL_SETIPOPTCALLBACKFUNCTION(x) void (x)( \
+   int (*IpoptFunction)( \
+      int       n,  \
+      ipnumber* xx, \
+      ipnumber* r,  \
+      int       k,  \
+      ipnumber  b   \
+   ) \
+)
 
 namespace Ipopt
 {
@@ -27,7 +38,8 @@ public:
    /** Constructor */
    IterativePardisoSolverInterface(
       IterativeSolverTerminationTester& normal_tester,
-      IterativeSolverTerminationTester& pd_tester
+      IterativeSolverTerminationTester& pd_tester,
+      SmartPtr<LibraryLoader> pardisoloader_
    );
 
    /** Destructor */
@@ -239,6 +251,18 @@ private:
    Index debug_last_iter_;
    Index debug_cnt_;
    ///@}
+
+   /**@name PARDISO function pointers
+    * @{
+    */
+   SmartPtr<LibraryLoader> pardisoloader;
+
+   IPOPT_DECL_PARDISOINIT(*pardisoinit);
+   IPOPT_DECL_PARDISO(*pardiso);
+   IPOPT_DECL_SETIPOPTCALLBACKFUNCTION(*SetIpoptCallbackFunction);
+
+   bool pardiso_exist_parallel;
+   /**@} */
 
    /** @name Internal functions */
    ///@{
