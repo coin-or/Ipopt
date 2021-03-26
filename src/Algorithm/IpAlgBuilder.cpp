@@ -239,18 +239,19 @@ void AlgorithmBuilder::RegisterOptions(
       options, descrs,
       longdescr);
 
+   // have hsllib option if some HSL solvers are not linked but can be loaded
+   if( (availablesolverslinked ^ availablesolvers) & IPOPTLINEARSOLVER_ALLHSL )
+      roptions->AddStringOption1(
+         "hsllib", "Name of library containing HSL routines for load at runtime",
+         "libhsl." IPOPT_SHAREDLIBEXT,
+         "*", "Any acceptable filename (may contain path, too)");
 
-   roptions->AddStringOption1(
-      "hsllib", "Name of library containing HSL routines for load at runtime",
-      "libhsl." IPOPT_SHAREDLIBEXT,
-      "*", "Any acceptable filename (may contain path, too)");
-
-#ifndef IPOPT_HAS_PARDISO
-   roptions->AddStringOption1(
-      "pardisolib", "Name of library containing Pardiso routines (from pardiso-project.org) for load at runtime",
-      "libpardiso." IPOPT_SHAREDLIBEXT,
-      "*", "Any acceptable filename (may contain path, too)");
-#endif
+   // have pardisolib option if Pardiso is not linked but can be loaded
+   if( (availablesolverslinked ^ availablesolvers) & IPOPTLINEARSOLVER_PARDISO )
+      roptions->AddStringOption1(
+         "pardisolib", "Name of library containing Pardiso routines (from pardiso-project.org) for load at runtime",
+         "libpardiso." IPOPT_SHAREDLIBEXT,
+         "*", "Any acceptable filename (may contain path, too)");
 
    roptions->SetRegisteringCategory("NLP Scaling");
 
@@ -1041,9 +1042,17 @@ SmartPtr<LibraryLoader> AlgorithmBuilder::GetHSLLoader(
 {
    if( !IsValid(hslloader) )
    {
-      std::string libname;
-      options.GetStringValue("hsllib", libname, prefix);
-      hslloader = new LibraryLoader(libname);
+      IpoptLinearSolver availablesolvers = IpoptGetAvailableLinearSolvers(false);
+      IpoptLinearSolver availablesolverslinked = IpoptGetAvailableLinearSolvers(true);
+
+      // we don't have the hsllib option if linked against all hsl routines
+      // but then we also don't use the hslloader, so can return NULL
+      if( (availablesolverslinked ^ availablesolvers) & IPOPTLINEARSOLVER_ALLHSL )
+      {
+         std::string libname;
+         options.GetStringValue("hsllib", libname, prefix);
+         hslloader = new LibraryLoader(libname);
+      }
    }
 
    return hslloader;
@@ -1054,16 +1063,21 @@ SmartPtr<LibraryLoader> AlgorithmBuilder::GetPardisoLoader(
    const std::string& prefix
 )
 {
-   // we don't have the pardisolib option if linked against pardiso
-   // but then we also don't use the pardisoloader, so can return NULL
-#ifndef IPOPT_HAS_PARDISO
    if( !IsValid(pardisoloader) )
    {
-      std::string libname;
-      options.GetStringValue("pardisolib", libname, prefix);
-      pardisoloader = new LibraryLoader(libname);
+      IpoptLinearSolver availablesolvers = IpoptGetAvailableLinearSolvers(false);
+      IpoptLinearSolver availablesolverslinked = IpoptGetAvailableLinearSolvers(true);
+
+      // we don't have the pardisolib option if linked against pardiso
+      // but then we also don't use the pardisoloader, so can return NULL
+      if( (availablesolverslinked ^ availablesolvers) & IPOPTLINEARSOLVER_PARDISO )
+      {
+         std::string libname;
+         options.GetStringValue("pardisolib", libname, prefix);
+         pardisoloader = new LibraryLoader(libname);
+      }
    }
-#endif
+
    return pardisoloader;
 }
 
