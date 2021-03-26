@@ -102,9 +102,8 @@ void PardisoMKLSolverInterface::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   // Todo Use keywords instead of integer numbers
    roptions->AddStringOption3(
-      "pardiso_matching_strategy",
+      "pardisomkl_matching_strategy",
       "Matching strategy to be used by Pardiso",
       "complete+2x2",
       "complete", "Match complete (IPAR(13)=1)",
@@ -112,19 +111,19 @@ void PardisoMKLSolverInterface::RegisterOptions(
       "constraints", "Match constraints (IPAR(13)=3)",
       "This is IPAR(13) in Pardiso manual.");
    roptions->AddStringOption2(
-      "pardiso_redo_symbolic_fact_only_if_inertia_wrong",
+      "pardisomkl_redo_symbolic_fact_only_if_inertia_wrong",
       "Toggle for handling case when elements were perturbed by Pardiso.",
       "no",
       "no", "Always redo symbolic factorization when elements were perturbed",
       "yes", "Only redo symbolic factorization when elements were perturbed if also the inertia was wrong");
    roptions->AddStringOption2(
-      "pardiso_repeated_perturbation_means_singular",
+      "pardisomkl_repeated_perturbation_means_singular",
       "Interpretation of perturbed elements.",
       "no",
       "no", "Don't assume that matrix is singular if elements were perturbed after recent symbolic factorization",
       "yes", "Assume that matrix is singular if elements were perturbed after recent symbolic factorization");
    //roptions->AddLowerBoundedIntegerOption(
-   //  "pardiso_out_of_core_power",
+   //  "pardisomkl_out_of_core_power",
    //  "Enables out-of-core variant of Pardiso",
    //  0, 0,
    //  "Setting this option to a positive integer k makes Pardiso work in the "
@@ -132,14 +131,14 @@ void PardisoMKLSolverInterface::RegisterOptions(
    //  "is IPARM(50) in the Pardiso manual.  This option is only available if "
    //  "Ipopt has been compiled with Pardiso.");
    roptions->AddLowerBoundedIntegerOption(
-      "pardiso_msglvl",
+      "pardisomkl_msglvl",
       "Pardiso message level",
       0,
       0,
       "This determines the amount of analysis output from the Pardiso solver. "
       "This is MSGLVL in the Pardiso manual.");
    roptions->AddStringOption2(
-      "pardiso_skip_inertia_check",
+      "pardisomkl_skip_inertia_check",
       "Always pretend inertia is correct.",
       "no",
       "no", "check inertia",
@@ -147,7 +146,7 @@ void PardisoMKLSolverInterface::RegisterOptions(
       "Setting this option to \"yes\" essentially disables inertia check. "
       "This option makes the algorithm non-robust and easily fail, but it might give some insight into the necessity of inertia control.");
    roptions->AddIntegerOption(
-      "pardiso_max_iterative_refinement_steps",
+      "pardisomkl_max_iterative_refinement_steps",
       "Limit on number of iterative refinement steps.",
       // ToDo: Decide how many iterative refinement steps in Pardiso.
       //       For MKL Pardiso, it seems that setting it to 1 makes it more
@@ -162,7 +161,7 @@ void PardisoMKLSolverInterface::RegisterOptions(
       "Perturbed pivots result in iterative refinement. "
       "The solver automatically performs two steps of iterative refinements when perturbed pivots are obtained during the numerical factorization and this option is set to 0.");
    roptions->AddStringOption4(
-      "pardiso_order",
+      "pardisomkl_order",
       "Controls the fill-in reduction ordering algorithm for the input matrix.",
       "metis",
       "amd", "minimum degree algorithm",
@@ -177,22 +176,22 @@ bool PardisoMKLSolverInterface::InitializeImpl(
 )
 {
    Index enum_int;
-   options.GetEnumValue("pardiso_matching_strategy", enum_int, prefix);
+   options.GetEnumValue("pardisomkl_matching_strategy", enum_int, prefix);
    match_strat_ = PardisoMatchingStrategy(enum_int);
-   options.GetBoolValue("pardiso_redo_symbolic_fact_only_if_inertia_wrong",
+   options.GetBoolValue("pardisomkl_redo_symbolic_fact_only_if_inertia_wrong",
                         pardiso_redo_symbolic_fact_only_if_inertia_wrong_, prefix);
-   options.GetBoolValue("pardiso_repeated_perturbation_means_singular", pardiso_repeated_perturbation_means_singular_,
+   options.GetBoolValue("pardisomkl_repeated_perturbation_means_singular", pardiso_repeated_perturbation_means_singular_,
                         prefix);
    //Index pardiso_out_of_core_power;
    //options.GetIntegerValue("pardiso_out_of_core_power",
    //                        pardiso_out_of_core_power, prefix);
-   options.GetBoolValue("pardiso_skip_inertia_check", skip_inertia_check_, prefix);
+   options.GetBoolValue("pardisomkl_skip_inertia_check", skip_inertia_check_, prefix);
    int pardiso_msglvl;
-   options.GetIntegerValue("pardiso_msglvl", pardiso_msglvl, prefix);
+   options.GetIntegerValue("pardisomkl_msglvl", pardiso_msglvl, prefix);
    int max_iterref_steps;
-   options.GetIntegerValue("pardiso_max_iterative_refinement_steps", max_iterref_steps, prefix);
+   options.GetIntegerValue("pardisomkl_max_iterative_refinement_steps", max_iterref_steps, prefix);
    int order;
-   options.GetEnumValue("pardiso_order", order, prefix);
+   options.GetEnumValue("pardisomkl_order", order, prefix);
 
    // Number value = 0.0;
 

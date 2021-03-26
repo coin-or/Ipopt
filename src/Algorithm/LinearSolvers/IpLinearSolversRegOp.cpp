@@ -17,6 +17,9 @@
 #include "IpMa97SolverInterface.hpp"
 #include "IpMa28TDependencyDetector.hpp"
 #include "IpPardisoSolverInterface.hpp"
+#ifdef IPOPT_HAS_PARDISO_MKL
+#include "IpPardisoMKLSolverInterface.hpp"
+#endif
 #ifdef IPOPT_HAS_MUMPS
 # include "IpMumpsSolverInterface.hpp"
 #endif
@@ -80,9 +83,17 @@ void RegisterOptions_LinearSolvers(
 
    if( availablesolvers & IPOPTLINEARSOLVER_PARDISO )
    {
-      roptions->SetRegisteringCategory("Pardiso Linear Solver");
+      roptions->SetRegisteringCategory("Pardiso (pardiso-project.org) Linear Solver");
       PardisoSolverInterface::RegisterOptions(roptions);
    }
+
+#ifdef IPOPT_HAS_PARDISO_MKL
+   if( availablesolvers & IPOPTLINEARSOLVER_PARDISOMKL )
+   {
+      roptions->SetRegisteringCategory("Pardiso (MKL) Linear Solver");
+      PardisoMKLSolverInterface::RegisterOptions(roptions);
+   }
+#endif
 
 #ifdef IPOPT_HAS_SPRAL
    if( availablesolvers & IPOPTLINEARSOLVER_SPRAL )
