@@ -17,6 +17,29 @@
 namespace Ipopt
 {
 
+#ifdef HAVE_WINDOWS_H
+// add description of last error on windows to string
+// see https://stackoverflow.com/questions/455434/how-should-i-use-formatmessage-properly-in-c
+static
+void addLastError(
+   std::stringstream& s
+   )
+{
+   LPTSTR errorText = NULL;
+   FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_ALLOCATE_BUFFER,
+      NULL, GetLastError(), 0, (LPTSTR)&errorText, 0, NULL);
+   if( errorText != NULL )
+   {
+      s << errorText;
+      LocalFree(errorText);
+   }
+   else
+   {
+      s << "see https://docs.microsoft.com/en-us/windows/win32/debug/system-error-codes)";
+   }
+}
+#endif
+
 void LibraryLoader::loadLibrary()
 {
    if( libname.empty() )
@@ -27,7 +50,8 @@ void LibraryLoader::loadLibrary()
    if( libhandle == NULL )
    {
       std::stringstream s;
-      s << "Error " << GetLastError() << " while loading DLL " << libname << " (see https://docs.microsoft.com/en-us/windows/win32/debug/system-error-codes)";
+      s << "Error " << GetLastError() << " while loading DLL " << libname << ": ";
+      addLastError(s);
       THROW_EXCEPTION(DYNAMIC_LIBRARY_FAILURE, s.str());
    }
 
@@ -52,7 +76,8 @@ void LibraryLoader::unloadLibrary()
    if( FreeLibrary((HMODULE)libhandle) == 0 )
    {
       std::stringstream s;
-      s << "Error " << GetLastError() << " while unloading " << libname << " (see https://docs.microsoft.com/en-us/windows/win32/debug/system-error-codes)";
+      s << "Error " << GetLastError() << " while unloading " << libname << ": ";
+      addLastError(s);
       THROW_EXCEPTION(DYNAMIC_LIBRARY_FAILURE, s.str());
    }
 
@@ -125,7 +150,8 @@ void* LibraryLoader::loadSymbol(
    {
 #ifdef HAVE_WINDOWS_H
       std::stringstream s;
-      s << "Error " << GetLastError() << " while loading symbol " << symbolname << " from " << libname << " (see https://docs.microsoft.com/en-us/windows/win32/debug/system-error-codes)";
+      s << "Error " << GetLastError() << " while loading symbol " << symbolname << " from " << libname << ": ";
+      addLastError(s);
       THROW_EXCEPTION(DYNAMIC_LIBRARY_FAILURE, s.str());
 #elif defined(HAVE_DLFCN_H)
       THROW_EXCEPTION(DYNAMIC_LIBRARY_FAILURE, dlerror());
