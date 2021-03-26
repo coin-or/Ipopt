@@ -38,8 +38,9 @@ namespace Ipopt
 static const Index dbg_verbosity = 0;
 #endif
 
-PardisoSolverInterface::PardisoSolverInterface()
-   : a_(NULL),
+PardisoSolverInterface::PardisoSolverInterface(
+   SmartPtr<LibraryLoader> pardisoloader_
+)  : a_(NULL),
 #ifdef PARDISO_MATCHING_PREPROCESS
      ia2(NULL),
      ja2(NULL),
@@ -54,6 +55,7 @@ PardisoSolverInterface::PardisoSolverInterface()
      MTYPE_(-2),
      MSGLVL_(0),
      debug_last_iter_(-1),
+     pardisoloader(pardisoloader_),
      pardisoinit(NULL),
      pardiso(NULL),
 #ifdef PARDISO_MATCHING_PREPROCESS
@@ -257,12 +259,6 @@ void PardisoSolverInterface::RegisterOptions(
       4,
       "This is relevant only for iterative Pardiso options.");
 #endif
-#ifndef IPOPT_HAS_PARDISO
-   roptions->AddStringOption1(
-      "pardisolib", "Name of library containing Pardiso routines (from pardiso-project.org) for load at runtime",
-      "libpardiso." IPOPT_SHAREDLIBEXT,
-      "*", "Any acceptable filename (may contain path, too)");
-#endif
 }
 
 bool PardisoSolverInterface::InitializeImpl(
@@ -283,9 +279,7 @@ bool PardisoSolverInterface::InitializeImpl(
    DBG_ASSERT(!pardiso_exist_parallel);
 #endif
 #else
-   std::string libname;
-   options.GetStringValue("pardisolib", libname, prefix);
-   pardisoloader = new LibraryLoader(libname);
+   DBG_ASSERT(IsValid(pardisoloader));
 
    pardisoinit = (IPOPT_DECL_PARDISOINIT(*))pardisoloader->loadSymbol("pardisoinit");
    pardiso = (IPOPT_DECL_PARDISO(*))pardisoloader->loadSymbol("pardiso");

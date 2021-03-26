@@ -335,6 +335,11 @@ protected:
       const std::string& prefix
    );
 
+   SmartPtr<LibraryLoader> GetPardisoLoader(
+      const OptionsList& options,
+      const std::string& prefix
+   );
+
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
@@ -392,6 +397,8 @@ private:
 
    /// loader of HSL library (at runtime)
    SmartPtr<LibraryLoader> hslloader;
+   /// loader of Pardiso library (at runtime)
+   SmartPtr<LibraryLoader> pardisoloader;
 
 };
 } // namespace Ipopt

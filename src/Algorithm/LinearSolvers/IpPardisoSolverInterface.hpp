@@ -78,7 +78,9 @@ public:
    /** @name Constructor/Destructor */
    ///@{
    /** Constructor */
-   PardisoSolverInterface();
+   PardisoSolverInterface(
+      SmartPtr<LibraryLoader> pardisoloader_
+   );
 
    /** Destructor */
    virtual ~PardisoSolverInterface();
