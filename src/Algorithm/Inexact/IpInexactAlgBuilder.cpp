@@ -55,11 +55,6 @@
 # include "IpMumpsSolverInterface.hpp"
 #endif
 
-#ifdef IPOPT_HAS_LINEARSOLVERLOADER
-# include "HSLLoader.h"
-# include "PardisoLoader.h"
-#endif
-
 namespace Ipopt
 {
 #if IPOPT_VERBOSITY > 0
@@ -135,44 +130,12 @@ SmartPtr<IpoptAlgorithm> InexactAlgorithmBuilder::BuildBasicAlgorithm(
 
    if( linear_solver == "ma27" )
    {
-      SolverInterface = new Ma27TSolverInterface();
-#ifdef IPOPT_HAS_LINEARSOLVERLOADER
-      if( !(linkedsolvers & IPOPTLINEARSOLVER_MA27) && !LSL_isMA27available() )
-      {
-         char buf[256];
-         int rc = LSL_loadHSL(NULL, buf, 255);
-         if (rc)
-         {
-            std::string errmsg;
-            errmsg = "Selected linear solver MA27 not available.\nTried to obtain MA27 from shared library \"";
-            errmsg += LSL_HSLLibraryName();
-            errmsg += "\", but the following error occured:\n";
-            errmsg += buf;
-            THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
-         }
-      }
-#endif
+      SolverInterface = new Ma27TSolverInterface(GetHSLLoader(options, prefix));
    }
 
    else if( linear_solver == "ma57" )
    {
-      SolverInterface = new Ma57TSolverInterface();
-#ifdef IPOPT_HAS_LINEARSOLVERLOADER
-      if( !(linkedsolvers & IPOPTLINEARSOLVER_MA57) && !LSL_isMA57available() )
-      {
-         char buf[256];
-         int rc = LSL_loadHSL(NULL, buf, 255);
-         if (rc)
-         {
-            std::string errmsg;
-            errmsg = "Selected linear solver MA57 not available.\nTried to obtain MA57 from shared library \"";
-            errmsg += LSL_HSLLibraryName();
-            errmsg += "\", but the following error occured:\n";
-            errmsg += buf;
-            THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
-         }
-      }
-#endif
+      SolverInterface = new Ma57TSolverInterface(GetHSLLoader(options, prefix));
    }
 
    else if( linear_solver == "pardiso" )
@@ -180,19 +143,6 @@ SmartPtr<IpoptAlgorithm> InexactAlgorithmBuilder::BuildBasicAlgorithm(
       NormalTester = new InexactNormalTerminationTester();
       SmartPtr<IterativeSolverTerminationTester> pd_tester = new InexactPDTerminationTester();
       SolverInterface = new IterativePardisoSolverInterface(*NormalTester, *pd_tester);
-#if !defined(IPOPT_HAS_PARDISO) && defined(IPOPT_HAS_LINEARSOLVERLOADER)
-      char buf[256];
-      int rc = LSL_loadPardisoLib(NULL, buf, 255);
-      if (rc)
-      {
-         std::string errmsg;
-         errmsg = "Selected linear solver Pardiso not available.\nTried to obtain Pardiso from shared library \"";
-         errmsg += LSL_PardisoLibraryName();
-         errmsg += "\", but the following error occured:\n";
-         errmsg += buf;
-         THROW_EXCEPTION(OPTION_INVALID, errmsg.c_str());
-      }
-# endif
    }
 
 #ifdef IPOPT_HAS_WSMP
