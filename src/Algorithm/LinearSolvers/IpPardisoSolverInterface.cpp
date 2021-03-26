@@ -403,6 +403,12 @@ bool PardisoSolverInterface::InitializeImpl(
    ipfint SOLVER = 0; // initialize only direct solver
 
    pardisoinit(PT_, &MTYPE_, &SOLVER, IPARM_, DPARM_, &ERROR);
+
+   if( ERROR != 0 )
+   {
+      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Problem with Pardiso license (error %d from pardisoinit).\n", ERROR);
+      return false;
+   }
 #else
    pardisoinit(PT_, &MTYPE_, IPARM_);
 #endif
