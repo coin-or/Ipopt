@@ -44,9 +44,6 @@
 #include "IpInexactPDTerminationTester.hpp"
 
 #include "IpLinearSolvers.h"
-#ifdef IPOPT_HAS_HSL
-# include "CoinHslConfig.h"
-#endif
 
 #ifdef IPOPT_HAS_WSMP
 # include "IpWsmpSolverInterface.hpp"
