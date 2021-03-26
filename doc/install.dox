@@ -418,23 +418,22 @@ But the actual flags depend on WSMP library and your preference for the Blas/Lap
 
 \subsection LINEARSOLVERLOADER Using the Linear Solver Loader
 
-By default, \Ipopt will be compiled with a mechanism to load shared
-libraries with MA27, MA57, HSL_MA77, HSL_MA86, HSL_MA97, MC19, or the
-Pardiso linear solver at runtime.
+\Ipopt can load shared libraries with MA27, MA57, HSL_MA77, HSL_MA86,
+HSL_MA97, MC19, or the Pardiso linear solver from pardiso-project.org at runtime.
 
 This means, if you obtain one of those solvers
-after you compiled \Ipopt, you don't need to recompile to
-use it. Instead, you can just put a shared library called `libhsl.so` or
-`libpardiso.so` into the shared library search path, `LD_LIBRARY_PATH`.
-These are the names on most UNIX platforms, including Linux. On macOS,
-the names are `libhsl.dylib`, `libpardiso.dylib`, and
-`DYLD_LIBRARY_PATH`. On Windows, the names are `libhsl.dll`,
-`libpardiso.dll`, and `PATH`.
+after you compiled \Ipopt, you don't need to recompile Ipopt to
+use it. Instead, you can just put a shared library into the shared library
+search path (e.g., `LD_LIBRARY_PATH`). The name (including path) of these
+library can be set via options `hsllib` and `pardisolib`, respectively,
+and default to `libhsl.so` and `libpardiso.so`, resp., on most UNIX platforms.
+On macOS, the names are `libhsl.dylib` and `libpardiso.dylib`.
+On Windows, the names are `libhsl.dll` and `libpardiso.dll`.
 
 The Pardiso shared library can be downloaded from the Pardiso website.
 To create a shared library containing the HSL linear solvers, follow
-the instructions from \ref DOWNLOAD_HSL, but rename the resulting library
-to `libhsl.so`.
+the instructions from \ref DOWNLOAD_HSL, and possibly rename the resulting
+library to `libhsl.so`.
 
 If you want to disable this feature, you can specify
 `--disable-linear-solver-loader` for the `configure` script.
