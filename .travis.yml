@@ -27,14 +27,6 @@ matrix:
       osx_image: xcode11
       env: OSX=10.14 VISHIDDEN=true NOF77=true
       compiler: clang
-    - os: osx
-      osx_image: xcode10.1
-      env: OSX=10.13 ENABLEDEBUG=true
-      compiler: clang
-    - os: osx
-      osx_image: xcode9.4
-      env: OSX=10.13
-      compiler: clang
 
 before_script:
   - export VISHIDDEN=${VISHIDDEN:-false}
