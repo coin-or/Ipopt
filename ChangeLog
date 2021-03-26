@@ -36,6 +36,10 @@ commit history.
           Ipopt (linked in or load at runtime). Options linear_solver and
           linear_system_scaling can now only be set to values that are
           available (linked in or load at runtime).
+        - Revised and streamlined implementation of feature that loads
+          libraries with HSL or Pardiso routines at runtime. Added options
+          hsllib and pardisolib to specify name of of HSL and Pardiso
+          libraries, respectively.
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]
