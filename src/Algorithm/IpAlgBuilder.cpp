@@ -392,14 +392,14 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
       SolverInterface = new PardisoSolverInterface(GetPardisoLoader(options, prefix));
    }
 
-#if !defined(IPOPT_SINGLE) && defined(IPOPT_HAS_SPRAL)
+#ifdef IPOPT_HAS_SPRAL
    else if( linear_solver == "spral" )
    {
       SolverInterface = new SpralSolverInterface();
    }
 #endif
 
-#if !defined(IPOPT_SINGLE) && defined(IPOPT_HAS_WSMP)
+#ifdef IPOPT_HAS_WSMP
    else if( linear_solver == "wsmp" )
    {
       bool wsmp_iterative;
