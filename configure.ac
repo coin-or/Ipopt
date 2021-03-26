@@ -194,9 +194,10 @@ AM_CONDITIONAL([HAVE_PARDISO],[test "$have_pardiso_mkl$have_pardiso_project" != 
 # check for Spral only if building for double precision
 if test $precision = double ; then
   AC_LANG_PUSH(C++)
-  AC_COIN_CHK_LIBHDR(Spral,[IpoptLib],[-lspral],[],[],
+  AC_COIN_CHK_LIBHDR(Spral,[IpoptLib],[],[],[],
     [spral_ssids_solve(0, 0, (double*)0, 0, (void*)0, (void*)0, (const struct spral_ssids_options*)0, (struct spral_ssids_inform*)0);],
-    [#include "spral_ssids.h"])
+    [#include "spral_ssids.h"],
+    [default_skip])
   AC_LANG_POP(C++)
 else
   AM_CONDITIONAL([COIN_HAS_SPRAL],[false])

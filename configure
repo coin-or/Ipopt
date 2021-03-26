@@ -24368,10 +24368,11 @@ fi
 
 
 
-  spral_lflags="-lspral"
+  spral_lflags=""
   spral_cflags=""
   spral_data=""
-  coin_has_spral=requested
+  coin_has_spral=skipping
+     spral_failmode='default'
   spral_userflags='no'
 
 
@@ -25266,7 +25267,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25269 "configure" */
+/* #line 25270 "configure" */
 public class Test {
 }
 EOF
@@ -25752,7 +25753,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25755 "configure" */
+/* #line 25756 "configure" */
 public class Test {
 }
 EOF
@@ -25786,7 +25787,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25789 "configure" */
+/* [#]line 25790 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
