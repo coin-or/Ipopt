@@ -392,8 +392,11 @@ private:
    ///@}
 
    /** Optional pointer to AugSystemSolver.  If this is set in the
-    *  contructor, we will use this to solve the linear systems. */
+    *  constructor, we will use this to solve the linear systems. */
    SmartPtr<AugSystemSolver> custom_solver_;
+
+   /// name of linear solver constructed in SymLinearSolverFactory
+   std::string linear_solver;
 
    /// loader of HSL library (at runtime)
    SmartPtr<LibraryLoader> hslloader;

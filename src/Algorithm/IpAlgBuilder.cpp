@@ -357,7 +357,6 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
 )
 {
    SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
-   std::string linear_solver;
    options.GetStringValue("linear_solver", linear_solver, prefix);
 
    // try to load HSL functions from a shared library at runtime
@@ -658,7 +657,7 @@ SmartPtr<IpoptAlgorithm> AlgorithmBuilder::BuildBasicAlgorithm(
    MuUpdate_ = BuildMuUpdate(jnlst, options, prefix);
 
    SmartPtr<IpoptAlgorithm> alg = new IpoptAlgorithm(SearchDirCalc_, LineSearch_, MuUpdate_, ConvCheck_,
-         IterInitializer_, IterOutput_, HessUpdater_, EqMultCalculator_);
+         IterInitializer_, IterOutput_, HessUpdater_, EqMultCalculator_, linear_solver);
 
    return alg;
 }

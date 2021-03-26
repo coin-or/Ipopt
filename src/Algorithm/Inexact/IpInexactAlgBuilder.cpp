@@ -222,7 +222,7 @@ SmartPtr<IpoptAlgorithm> InexactAlgorithmBuilder::BuildBasicAlgorithm(
 
    // Create the main algorithm
    SmartPtr<IpoptAlgorithm> alg = new IpoptAlgorithm(SearchDirCalc, GetRawPtr(lineSearch), MuUpdate, convCheck,
-         IterInitializer, IterOutput, HessUpdater);
+         IterInitializer, IterOutput, HessUpdater, linear_solver);
 
    return alg;
 }

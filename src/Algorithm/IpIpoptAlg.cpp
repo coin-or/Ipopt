@@ -28,7 +28,8 @@ IpoptAlgorithm::IpoptAlgorithm(
    const SmartPtr<IterateInitializer>&        iterate_initializer,
    const SmartPtr<IterationOutput>&           iter_output,
    const SmartPtr<HessianUpdater>&            hessian_updater,
-   const SmartPtr<EqMultiplierCalculator>&    eq_multiplier_calculator /* = NULL*/
+   const SmartPtr<EqMultiplierCalculator>&    eq_multiplier_calculator, /* = NULL*/
+   const std::string&                         linear_solver_name /* = "" */
 )
    : search_dir_calculator_(search_dir_calculator),
      line_search_(line_search),
@@ -37,7 +38,8 @@ IpoptAlgorithm::IpoptAlgorithm(
      iterate_initializer_(iterate_initializer),
      iter_output_(iter_output),
      hessian_updater_(hessian_updater),
-     eq_multiplier_calculator_(eq_multiplier_calculator)
+     eq_multiplier_calculator_(eq_multiplier_calculator),
+     linear_solver_name_(linear_solver_name)
 {
    DBG_START_METH("IpoptAlgorithm::IpoptAlgorithm",
                   dbg_verbosity);
@@ -173,9 +175,6 @@ bool IpoptAlgorithm::InitializeImpl(
       copyright_message_printed = true;
    }
 
-   // Store which linear solver is chosen for later output
-   options.GetStringValue("linear_solver", linear_solver_, prefix);
-
    // Read the IpoptAlgorithm options
    // Initialize the Data object
    bool retvalue = IpData().Initialize(Jnlst(), *my_options, prefix);
@@ -281,10 +280,10 @@ SolverReturn IpoptAlgorithm::Optimize(
    if( !isResto )
    {
       Jnlst().Printf(J_ITERSUMMARY, J_MAIN,
-                     "This is Ipopt version " IPOPT_VERSION ", running with linear solver %s.\n", linear_solver_.c_str());
+                     "This is Ipopt version " IPOPT_VERSION ", running with linear solver %s.\n", linear_solver_name_.c_str());
 
 #ifndef IPOPT_NOMUMPSNOTE
-      if( linear_solver_ == "mumps" )
+      if( linear_solver_name_ == "mumps" )
       {
          Jnlst().Printf(J_ITERSUMMARY, J_MAIN,
                         "NOTE: Other linear solvers might be more efficient (see Ipopt documentation).\n");

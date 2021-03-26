@@ -52,6 +52,8 @@ public:
     *  The IpoptAlgorithm uses smart pointers for these
     *  passed-in pieces to make sure that a user of IpoptAlgoroithm
     *  cannot pass in an object created on the stack!
+    *
+    *  The optional linear_solver_name is used for printing.
     */
    IpoptAlgorithm(
       const SmartPtr<SearchDirectionCalculator>& search_dir_calculator,
@@ -61,7 +63,8 @@ public:
       const SmartPtr<IterateInitializer>&        iterate_initializer,
       const SmartPtr<IterationOutput>&           iter_output,
       const SmartPtr<HessianUpdater>&            hessian_updater,
-      const SmartPtr<EqMultiplierCalculator>&    eq_multiplier_calculator = NULL
+      const SmartPtr<EqMultiplierCalculator>&    eq_multiplier_calculator = NULL,
+      const std::string&                         linear_solver_name = ""
    );
 
    /** Destructor */
@@ -219,7 +222,7 @@ private:
     */
    bool mehrotra_algorithm_;
    /** String specifying linear solver */
-   std::string linear_solver_;
+   std::string linear_solver_name_;
    ///@}
 
    /** @name auxiliary functions */
