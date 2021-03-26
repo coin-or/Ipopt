@@ -15,12 +15,6 @@
 #include <cstdlib>
 #include <cstring>
 
-// determine the correct name of the Pardiso function
-#ifndef IPOPT_HAS_PARDISO
-// if we build for the Linear Solver loader, then use normal C-naming style
-# define IPOPT_PARDISO_FUNC(name,NAME) name
-#endif
-
 Ipopt::IterativeSolverTerminationTester* global_tester_ptr_;
 Ipopt::IterativeSolverTerminationTester::ETerminationTest test_result_;
 
@@ -236,7 +230,7 @@ bool IterativePardisoSolverInterface::InitializeImpl(
    // Set some parameters for Pardiso
    IPARM_[0] = 1;  // Don't use the default values
 
-#if defined(IPOPT_HAS_PARDISO_PARALLEL) || ! defined(IPOPT_HAS_PARDISO)
+#ifdef IPOPT_HAS_PARDISO_PARALLEL
    // Obtain the numbers of processors from the value of OMP_NUM_THREADS
    char* var = getenv("OMP_NUM_THREADS");
    int num_procs = 1;
@@ -252,16 +246,12 @@ bool IterativePardisoSolverInterface::InitializeImpl(
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Using environment OMP_NUM_THREADS = %d as the number of processors.\n", num_procs);
    }
-#ifdef IPOPT_HAS_PARDISO
-   // If we run Pardiso through the linear solver loader,
-   // we do not know whether it is the parallel version, so we do not report an error if OMP_NUM_THREADS is not set.
    else
    {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                      "You need to set environment variable OMP_NUM_THREADS to the number of processors used in Pardiso (e.g., 1).\n\n");
       return false;
    }
-#endif
    IPARM_[2] = num_procs;  // Set the number of processors
 #else
 
