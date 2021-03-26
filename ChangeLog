@@ -40,6 +40,19 @@ commit history.
           libraries with HSL or Pardiso routines at runtime. Added options
           hsllib and pardisolib to specify name of of HSL and Pardiso
           libraries, respectively.
+        - Separated interfaces for Pardiso from pardiso-project.org and
+          Pardiso from Intel MKL and allow to have both Pardiso versions
+          available with the same Ipopt libraries. Pardiso from pardiso-project.org
+          can be selected via linear_solver=pardiso. configure option
+          --with-pardiso should now specify only a Pardiso library to be
+          loaded at runtime (the value for --with-pardiso decides the default
+          value for option pardisolib). To avoid conflicts with Pardiso
+          from MKL, it is no longer possible to link against Pardiso from
+          pardiso-project.org. Pardiso from MKL can be selected via
+          linear_solver=pardisomkl. configure option --disable-pardisomkl
+          can be used to disable the check for MKL Pardiso. Options that
+          influence Pardiso from MKL are named pardisomkl_msglvl,
+          pardisomkl_order, etc.
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]
