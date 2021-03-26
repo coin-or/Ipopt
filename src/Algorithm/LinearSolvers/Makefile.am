@@ -26,6 +26,10 @@ liblinsolvers_la_SOURCES += \
 	IpMa97SolverInterface.cpp \
 	IpPardisoSolverInterface.cpp
 
+if HAVE_PARDISO_MKL
+  liblinsolvers_la_SOURCES += IpPardisoMKLSolverInterface.cpp
+endif
+
 if HAVE_MA28
   liblinsolvers_la_SOURCES += IpMa28TDependencyDetector.cpp
 if IPOPT_SINGLE

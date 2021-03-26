@@ -35,8 +35,12 @@ IpoptLinearSolver IpoptGetAvailableLinearSolvers(
    solvers |= IPOPTLINEARSOLVER_MC19;
 #endif
 
-#ifdef IPOPT_HAS_PARDISO
+#ifdef PARDISO_LIB
    solvers |= IPOPTLINEARSOLVER_PARDISO;
+#endif
+
+#ifdef IPOPT_HAS_PARDISO_MKL
+   solvers |= IPOPTLINEARSOLVER_PARDISOMKL;
 #endif
 
 #if !defined(IPOPT_SINGLE) && defined(COINHSL_HAS_SPRAL)

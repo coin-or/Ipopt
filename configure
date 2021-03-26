@@ -667,8 +667,8 @@ HAVE_WSMP_FALSE
 HAVE_WSMP_TRUE
 COIN_HAS_SPRAL_FALSE
 COIN_HAS_SPRAL_TRUE
-HAVE_PARDISO_FALSE
-HAVE_PARDISO_TRUE
+HAVE_PARDISO_MKL_FALSE
+HAVE_PARDISO_MKL_TRUE
 HAVE_MA28_FALSE
 HAVE_MA28_TRUE
 HSLLIB_CFLAGS_NOPC
@@ -884,6 +884,7 @@ with_hsl
 with_hsl_lflags
 with_hsl_cflags
 with_pardiso
+enable_pardisomkl
 with_spral
 with_spral_lflags
 with_spral_cflags
@@ -1554,6 +1555,7 @@ Optional Features:
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
+  --disable-pardisomkl    disable check for MKL version of Pardiso in Lapack
   --enable-inexact-solver enable inexact linear solver version EXPERIMENTAL!
                           (default: no)
   --disable-java          disable building of Java interface
@@ -1612,8 +1614,7 @@ Optional Packages:
                           environment. (Most often, -I specs for header file
                           directories.)
   --with-pardiso          specify Pardiso library (>= 4.0) from
-                          pardiso-project.org; use --without-pardiso to
-                          disable also MKL Pardiso check
+                          pardiso-project.org
   --with-spral            Use Spral. If an argument is given, 'yes' is
                           equivalent to --with-spral, 'no' is
                           equivalent to --without-spral. Any other argument is
@@ -23912,240 +23913,36 @@ fi
 # Check whether --with-pardiso was given.
 if test "${with_pardiso+set}" = set; then :
   withval=$with_pardiso; case "$withval" in
-               yes) have_pardiso_project=no ;;   # no linker flags given; --with-pardiso[=yes] actually doesn't make sense, but we use it as signal to fall back to checking MKL
-               no) have_pardiso_project=no ;;  # so with_pardiso=no, we use that below to skip checking MKL
-               *) have_pardiso_project=yes; pardiso_lflags="$withval" ;;
-             esac
-else
-  have_pardiso_project=no
+     no)  have_pardiso_project=no ;;  # so with_pardiso=no
+     yes) as_fn_error $? "\"expected filename as argument for --with-pardiso\"" "$LINENO" 5 ;;
+     *)
+cat >>confdefs.h <<_ACEOF
+#define PARDISO_LIB "$withval"
+_ACEOF
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: Pardiso from pardiso-project.org specified as $withval" >&5
+$as_echo "$as_me: Pardiso from pardiso-project.org specified as $withval" >&6;}
+          have_pardiso_project=yes
+          ;;
+   esac
 fi
 
+
+# check whether Pardiso is available via Lapack, which should then be MKL
+# Check whether --enable-pardisomkl was given.
+if test "${enable_pardisomkl+set}" = set; then :
+  enableval=$enable_pardisomkl; case "$enableval" in
+     no | yes) ;;
+     *)
+       as_fn_error $? "invalid argument for --enable-pardisomkl: $enableval" "$LINENO" 5;;
+   esac
+   checkpardisomkl=$enableval
+else
+  checkpardisomkl=yes
+fi
 
 have_pardiso_mkl=no
-if test "$have_pardiso_project" = yes ; then
-  # check whether flags from --with-pardiso work and figure out name mangling
-  # if so, define PARDISO_FUNC and keep lflags
-
-  ac_save_LIBS="$LIBS"
-  LIBS="$pardiso_lflags $lapack_lflags $LIBS"
-
-    if test -n "$lapack_pcfiles" ; then
-      temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs $pkg_static $lapack_pcfiles`
-      LIBS="$temp_LFLAGS $LIBS"
-    fi
-
-
-  pardiso_ipopt_newinterface_namemangling=unknown
-
-  for ac_extra in "no extra underscore" "extra underscore" ; do
-    for ac_case in "lower case" "upper case" ; do
-      for ac_trail in "underscore" "no underscore" ; do
-        case $ac_case in
-          "lower case")
-            ac_name=pardiso_ipopt_newinterface
-            ;;
-          "upper case")
-            ac_name=PARDISO_IPOPT_NEWINTERFACE
-            ;;
-        esac
-        if test "$ac_trail" = "underscore" ; then
-          ac_name=${ac_name}_
-        fi
-        if test "$ac_extra" = "extra underscore" ; then
-          ac_name=${ac_name}_
-        fi
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for function $ac_name in $LIBS" >&5
-$as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
-        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char $ac_name ();
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-return $ac_name ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  pardiso_ipopt_newinterface_namemangling="${ac_case}, ${ac_trail}, ${ac_extra}"
-           ac_success=yes
-else
-  ac_success=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_success" >&5
-$as_echo "$ac_success" >&6; }
-        if test $ac_success = yes ; then
-          break 3
-        fi
-      done
-    done
-  done
-  LIBS=$ac_save_LIBS
-
-  if test $ac_success = yes ; then
-
-
-
-  case "$pardiso_ipopt_newinterface_namemangling" in
-   "lower case, no underscore, no extra underscore")
-      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) name" >>confdefs.h
-
-      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) name" >>confdefs.h
- ;;
-   "lower case, no underscore, extra underscore")
-      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) name" >>confdefs.h
-
-      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) name ## _" >>confdefs.h
- ;;
-   "lower case, underscore, no extra underscore")
-      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) name ## _" >>confdefs.h
-
-      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) name ## _" >>confdefs.h
- ;;
-   "lower case, underscore, extra underscore")
-      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) name ## _" >>confdefs.h
-
-      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) name ## __" >>confdefs.h
- ;;
-   "upper case, no underscore, no extra underscore")
-      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) NAME" >>confdefs.h
-
-      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) NAME" >>confdefs.h
- ;;
-   "upper case, no underscore, extra underscore")
-      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) NAME" >>confdefs.h
-
-      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) NAME ## _" >>confdefs.h
- ;;
-   "upper case, underscore, no extra underscore")
-      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) NAME ## _" >>confdefs.h
-
-      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) NAME ## _" >>confdefs.h
- ;;
-   "upper case, underscore, extra underscore")
-      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) NAME ## _" >>confdefs.h
-
-      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) NAME ## __" >>confdefs.h
- ;;
-   *)
-      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Unsupported or unknown name-mangling scheme: $pardiso_ipopt_newinterface_namemangling" >&5
-$as_echo "$as_me: WARNING: Unsupported or unknown name-mangling scheme: $pardiso_ipopt_newinterface_namemangling" >&2;}
-      ;;
-  esac
-
-     IPOPTLIB_LFLAGS="$pardiso_lflags $IPOPTLIB_LFLAGS"
-
-$as_echo "#define IPOPT_HAS_PARDISO 1" >>confdefs.h
-
-
-    else as_fn_error $? "Symbol pardiso_ipopt_newinterface not found with Pardiso flags $pardiso_lflags and Lapack. Require Pardiso >= 4.0." "$LINENO" 5
-  fi
-
-
-
-  ac_save_LIBS="$LIBS"
-  LIBS="$pardiso_lflags $lapack_lflags $LIBS"
-
-    if test -n "$lapack_pcfiles" ; then
-      temp_LFLAGS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG --libs $pkg_static $lapack_pcfiles`
-      LIBS="$temp_LFLAGS $LIBS"
-    fi
-
-
-  pardiso_exist_parallel_namemangling=unknown
-
-  for ac_extra in "no extra underscore" "extra underscore" ; do
-    for ac_case in "lower case" "upper case" ; do
-      for ac_trail in "underscore" "no underscore" ; do
-        case $ac_case in
-          "lower case")
-            ac_name=pardiso_exist_parallel
-            ;;
-          "upper case")
-            ac_name=PARDISO_EXIST_PARALLEL
-            ;;
-        esac
-        if test "$ac_trail" = "underscore" ; then
-          ac_name=${ac_name}_
-        fi
-        if test "$ac_extra" = "extra underscore" ; then
-          ac_name=${ac_name}_
-        fi
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for function $ac_name in $LIBS" >&5
-$as_echo_n "checking for function $ac_name in $LIBS... " >&6; }
-        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char $ac_name ();
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-return $ac_name ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  pardiso_exist_parallel_namemangling="${ac_case}, ${ac_trail}, ${ac_extra}"
-           ac_success=yes
-else
-  ac_success=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_success" >&5
-$as_echo "$ac_success" >&6; }
-        if test $ac_success = yes ; then
-          break 3
-        fi
-      done
-    done
-  done
-  LIBS=$ac_save_LIBS
-
-  if test $ac_success = yes ; then
-
-$as_echo "#define IPOPT_HAS_PARDISO_PARALLEL 1" >>confdefs.h
-
-
-  fi
-
-
-elif test "$with_pardiso" != no ; then
-  # check whether Pardiso is available via Lapack, which should then be MKL
-  # figure out name mangling and define PARDISO_FUNC
+if test $checkpardisomkl = yes ; then
 
   ac_save_LIBS="$LIBS"
   LIBS="$lapack_lflags $LIBS"
@@ -24222,65 +24019,7 @@ $as_echo "$ac_success" >&6; }
   LIBS=$ac_save_LIBS
 
   if test $ac_success = yes ; then
-
-
-
-  case "$pardiso_namemangling" in
-   "lower case, no underscore, no extra underscore")
-      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) name" >>confdefs.h
-
-      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) name" >>confdefs.h
- ;;
-   "lower case, no underscore, extra underscore")
-      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) name" >>confdefs.h
-
-      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) name ## _" >>confdefs.h
- ;;
-   "lower case, underscore, no extra underscore")
-      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) name ## _" >>confdefs.h
-
-      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) name ## _" >>confdefs.h
- ;;
-   "lower case, underscore, extra underscore")
-      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) name ## _" >>confdefs.h
-
-      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) name ## __" >>confdefs.h
- ;;
-   "upper case, no underscore, no extra underscore")
-      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) NAME" >>confdefs.h
-
-      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) NAME" >>confdefs.h
- ;;
-   "upper case, no underscore, extra underscore")
-      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) NAME" >>confdefs.h
-
-      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) NAME ## _" >>confdefs.h
- ;;
-   "upper case, underscore, no extra underscore")
-      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) NAME ## _" >>confdefs.h
-
-      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) NAME ## _" >>confdefs.h
- ;;
-   "upper case, underscore, extra underscore")
-      $as_echo "#define IPOPT_PARDISO_FUNC(name,NAME) NAME ## _" >>confdefs.h
-
-      $as_echo "#define IPOPT_PARDISO_FUNC_(name,NAME) NAME ## __" >>confdefs.h
- ;;
-   *)
-      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Unsupported or unknown name-mangling scheme: $pardiso_namemangling" >&5
-$as_echo "$as_me: WARNING: Unsupported or unknown name-mangling scheme: $pardiso_namemangling" >&2;}
-      ;;
-  esac
-
-     have_pardiso_mkl=yes
-
-$as_echo "#define IPOPT_HAS_PARDISO 1" >>confdefs.h
-
-     # assume MKL Pardiso is parallel (it never has pardiso_exist_parallel)
-     # TODO does sequential MKL also have a parallel Pardiso? do we need some check here?
-
-$as_echo "#define IPOPT_HAS_PARDISO_PARALLEL 1" >>confdefs.h
-
+    have_pardiso_mkl=yes
 
 $as_echo "#define IPOPT_HAS_PARDISO_MKL 1" >>confdefs.h
 
@@ -24289,13 +24028,12 @@ $as_echo "#define IPOPT_HAS_PARDISO_MKL 1" >>confdefs.h
   fi
 
 fi
-
- if test "$have_pardiso_mkl$have_pardiso_project" != nono; then
-  HAVE_PARDISO_TRUE=
-  HAVE_PARDISO_FALSE='#'
+ if test "$have_pardiso_mkl" = yes; then
+  HAVE_PARDISO_MKL_TRUE=
+  HAVE_PARDISO_MKL_FALSE='#'
 else
-  HAVE_PARDISO_TRUE='#'
-  HAVE_PARDISO_FALSE=
+  HAVE_PARDISO_MKL_TRUE='#'
+  HAVE_PARDISO_MKL_FALSE=
 fi
 
 
@@ -25267,7 +25005,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25270 "configure" */
+/* #line 25008 "configure" */
 public class Test {
 }
 EOF
@@ -25753,7 +25491,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25756 "configure" */
+/* #line 25494 "configure" */
 public class Test {
 }
 EOF
@@ -25787,7 +25525,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25790 "configure" */
+/* [#]line 25528 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
@@ -26785,8 +26523,8 @@ if test -z "${HAVE_MA28_TRUE}" && test -z "${HAVE_MA28_FALSE}"; then
   as_fn_error $? "conditional \"HAVE_MA28\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
-if test -z "${HAVE_PARDISO_TRUE}" && test -z "${HAVE_PARDISO_FALSE}"; then
-  as_fn_error $? "conditional \"HAVE_PARDISO\" was never defined.
+if test -z "${HAVE_PARDISO_MKL_TRUE}" && test -z "${HAVE_PARDISO_MKL_FALSE}"; then
+  as_fn_error $? "conditional \"HAVE_PARDISO_MKL\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${COIN_HAS_SPRAL_TRUE}" && test -z "${COIN_HAS_SPRAL_FALSE}"; then

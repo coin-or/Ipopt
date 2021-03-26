@@ -41,14 +41,8 @@
    loading of shared libraries with linear solvers */
 /* #undef IPOPT_HAS_LINEARSOLVERLOADER */
 
-/* Define to 1 if Pardiso is available */
-/* #undef IPOPT_HAS_PARDISO */
-
 /* Define to 1 if you are using Pardiso from MKL */
 /* #undef IPOPT_HAS_PARDISO_MKL */
-
-/* Define to 1 if you are using the parallel version of Pardiso */
-/* #undef IPOPT_HAS_PARDISO_PARALLEL */
 
 /* Define to 1 if SPRAL is available */
 /* #undef IPOPT_HAS_SPRAL */

@@ -15,18 +15,6 @@
 #include <cstdlib>
 #include <cstring>
 
-#ifdef IPOPT_HAS_PARDISO
-/* Prototypes for Pardiso's subroutines */
-extern "C"
-{
-   IPOPT_DECL_PARDISOINIT(IPOPT_PARDISO_FUNC(pardisoinit, PARDISOINIT));
-   IPOPT_DECL_PARDISO(IPOPT_PARDISO_FUNC(pardiso, PARDISO));
-#ifdef PARDISO_MATCHING_PREPROCESS
-   IPOPT_DECL_PARDISO(IPOPT_PARDISO_FUNC(smat_reordering_pardiso_wsmp, SMAT_REORDERING_PARDISO_WSMP));
-#endif
-}
-#endif
-
 namespace Ipopt
 {
 #if IPOPT_VERBOSITY > 0
@@ -222,8 +210,7 @@ void PardisoSolverInterface::RegisterOptions(
       "Switch on iterative solver in Pardiso library",
       "no",
       "no", "do not switch on iterative solver",
-      "yes", "switch on iterative solver"
-      "This option is not available for Pardiso < 4.0 or MKL Pardiso");
+      "yes", "switch on iterative solver");
    roptions->AddLowerBoundedIntegerOption(
       "pardiso_max_droptol_corrections",
       "Maximal number of decreases of drop tolerance during one solve.",
@@ -237,19 +224,6 @@ bool PardisoSolverInterface::InitializeImpl(
    const std::string& prefix
 )
 {
-#ifdef IPOPT_HAS_PARDISO
-   // use Pardiso functions that should be available in linked Pardiso (or MKL) library
-   pardisoinit = &::IPOPT_PARDISO_FUNC(pardisoinit, PARDISOINIT);
-   pardiso = &::IPOPT_PARDISO_FUNC(pardiso, PARDISO);
-#ifdef PARDISO_MATCHING_PREPROCESS
-   smat_reordering_pardiso_wsmp = &::IPOPT_PARDISO_FUNC(smat_reordering_pardiso_wsmp, SMAT_REORDERING_PARDISO_WSMP);
-#endif
-#ifdef IPOPT_HAS_PARDISO_PARALLEL
-   pardiso_exist_parallel = true;
-#else
-   DBG_ASSERT(!pardiso_exist_parallel);
-#endif
-#else
    DBG_ASSERT(IsValid(pardisoloader));
 
    pardisoinit = (IPOPT_DECL_PARDISOINIT(*))pardisoloader->loadSymbol("pardisoinit");
@@ -270,7 +244,6 @@ bool PardisoSolverInterface::InitializeImpl(
    {
       DBG_ASSERT(!pardiso_exist_parallel);
    }
-#endif
 
    DBG_ASSERT(pardisoinit != NULL);
    DBG_ASSERT(pardiso != NULL);

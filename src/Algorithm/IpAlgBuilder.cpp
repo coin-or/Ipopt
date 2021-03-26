@@ -49,6 +49,7 @@
 #include "IpGradientScaling.hpp"
 #include "IpEquilibrationScaling.hpp"
 #include "IpExactHessianUpdater.hpp"
+#include "IpSlackBasedTSymScalingMethod.hpp"
 
 #include "IpLinearSolvers.h"
 #include "IpMa27TSolverInterface.hpp"
@@ -58,8 +59,9 @@
 #include "IpMa97SolverInterface.hpp"
 #include "IpMc19TSymScalingMethod.hpp"
 #include "IpPardisoSolverInterface.hpp"
-#include "IpSlackBasedTSymScalingMethod.hpp"
-
+#ifdef IPOPT_HAS_PARDISO_MKL
+# include "IpPardisoMKLSolverInterface.hpp"
+#endif
 #ifdef IPOPT_HAS_SPRAL
 # include "IpSpralSolverInterface.hpp"
 #endif
@@ -144,9 +146,15 @@ void AlgorithmBuilder::RegisterOptions(
    {
       options.push_back("pardiso");
       if( availablesolverslinked & IPOPTLINEARSOLVER_PARDISO )
-         descrs.push_back("use the Pardiso package");
+         descrs.push_back("use the Pardiso package from pardiso-project.org");
       else
-         descrs.push_back("load the Pardiso package from library at runtime");
+         descrs.push_back("load the Pardiso package from pardiso-project.org from library at runtime");
+   }
+
+   if( availablesolvers & IPOPTLINEARSOLVER_PARDISOMKL )
+   {
+      options.push_back("pardisomkl");
+      descrs.push_back("use the Pardiso package from MKL");
    }
 
    if( availablesolvers & IPOPTLINEARSOLVER_SPRAL )
@@ -187,6 +195,8 @@ void AlgorithmBuilder::RegisterOptions(
       defaultsolver = "wsmp";
    else if( availablesolverslinked & IPOPTLINEARSOLVER_MUMPS )
       defaultsolver = "mumps";
+   else if( availablesolverslinked & IPOPTLINEARSOLVER_PARDISOMKL )
+      defaultsolver = "pardisomkl";
    else if( availablesolverslinked & IPOPTLINEARSOLVER_MA77 )
       defaultsolver = "ma77";
    else if( availablesolvers & IPOPTLINEARSOLVER_MA27 )
@@ -246,12 +256,14 @@ void AlgorithmBuilder::RegisterOptions(
          "libhsl." IPOPT_SHAREDLIBEXT,
          "*", "Any acceptable filename (may contain path, too)");
 
-   // have pardisolib option if Pardiso is not linked but can be loaded
-   if( (availablesolverslinked ^ availablesolvers) & IPOPTLINEARSOLVER_PARDISO )
-      roptions->AddStringOption1(
-         "pardisolib", "Name of library containing Pardiso routines (from pardiso-project.org) for load at runtime",
-         "libpardiso." IPOPT_SHAREDLIBEXT,
-         "*", "Any acceptable filename (may contain path, too)");
+   roptions->AddStringOption1(
+      "pardisolib", "Name of library containing Pardiso routines (from pardiso-project.org) for load at runtime",
+#ifdef PARDISO_LIB
+      PARDISO_LIB,
+#else
+      "libpardiso." IPOPT_SHAREDLIBEXT,
+#endif
+      "*", "Any acceptable filename (may contain path, too)");
 
    roptions->SetRegisteringCategory("NLP Scaling");
 
@@ -390,6 +402,13 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    {
       SolverInterface = new PardisoSolverInterface(GetPardisoLoader(options, prefix));
    }
+
+#ifdef IPOPT_HAS_PARDISO_MKL
+   else if( linear_solver == "pardisomkl" )
+   {
+      SolverInterface = new PardisoMKLSolverInterface();
+   }
+#endif
 
 #ifdef IPOPT_HAS_SPRAL
    else if( linear_solver == "spral" )
@@ -1065,17 +1084,9 @@ SmartPtr<LibraryLoader> AlgorithmBuilder::GetPardisoLoader(
 {
    if( !IsValid(pardisoloader) )
    {
-      IpoptLinearSolver availablesolvers = IpoptGetAvailableLinearSolvers(false);
-      IpoptLinearSolver availablesolverslinked = IpoptGetAvailableLinearSolvers(true);
-
-      // we don't have the pardisolib option if linked against pardiso
-      // but then we also don't use the pardisoloader, so can return NULL
-      if( (availablesolverslinked ^ availablesolvers) & IPOPTLINEARSOLVER_PARDISO )
-      {
-         std::string libname;
-         options.GetStringValue("pardisolib", libname, prefix);
-         pardisoloader = new LibraryLoader(libname);
-      }
+      std::string libname;
+      options.GetStringValue("pardisolib", libname, prefix);
+      pardisoloader = new LibraryLoader(libname);
    }
 
    return pardisoloader;

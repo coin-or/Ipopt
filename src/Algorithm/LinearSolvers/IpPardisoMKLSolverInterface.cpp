@@ -20,16 +20,13 @@
 #include <cstdlib>
 #include <cstring>
 
-/* Prototypes for Pardiso's subroutines */
+/* Prototypes for MKL Pardiso's subroutines */
 extern "C"
 {
 void IPOPT_LAPACK_FUNC(pardisoinit,PARDISOINIT)(
    void*         PT,
    const ipfint* MTYPE,
-   const ipfint* SOLVER,
-   ipfint*       IPARM,
-   ipnumber*     DPARM,
-   ipfint*       E
+   ipfint*       IPARM
 );
 
 void IPOPT_LAPACK_FUNC(pardiso,PARDISO)(
@@ -665,38 +662,25 @@ ESymSolverStatus PardisoMKLSolverInterface::Solve(
 
    write_iajaa_matrix(N, ia, ja, a_, rhs_vals, iter_count, debug_cnt_);
 
-   int attempts = 0;
-   const int max_attempts = pardiso_iterative_ ? pardiso_max_droptol_corrections_ + 1 : 1;
-
-   while( attempts < max_attempts )
+   for( int i = 0; i < N; i++ )
    {
+      rhs_vals[i] = ORIG_RHS[i];
+   }
+   IPOPT_LAPACK_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, a_, ia, ja, &PERM, &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
+      &ERROR, DPARM_);
 
-      for( int i = 0; i < N; i++ )
-      {
-         rhs_vals[i] = ORIG_RHS[i];
-      }
-      IPOPT_LAPACK_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, a_, ia, ja, &PERM, &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
-                                         &ERROR, DPARM_);
-
-      if( ERROR <= -100 && ERROR >= -102 )
-      {
-         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                        "Iterative solver in Pardiso did not converge (ERROR = %d)\n", ERROR);
-         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                        "  Decreasing drop tolerances from DPARM_[4] = %e and DPARM_[5] = %e\n", DPARM_[4], DPARM_[5]);
-         PHASE = 23;
-         DPARM_[4] /= 2.0;
-         DPARM_[5] /= 2.0;
-         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                        "                               to DPARM_[4] = %e and DPARM_[5] = %e\n", DPARM_[4], DPARM_[5]);
-         attempts++;
-         ERROR = 0;
-      }
-      else
-      {
-         attempts = max_attempts;
-         // TODO we could try again with some PARDISO parameters changed, i.e., enabling iterative refinement
-      }
+   if( ERROR <= -100 && ERROR >= -102 )
+   {
+      Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+         "Iterative solver in Pardiso did not converge (ERROR = %d)\n", ERROR);
+      Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+         "  Decreasing drop tolerances from DPARM_[4] = %e and DPARM_[5] = %e\n", DPARM_[4], DPARM_[5]);
+      PHASE = 23;
+      DPARM_[4] /= 2.0;
+      DPARM_[5] /= 2.0;
+      Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
+         "                               to DPARM_[4] = %e and DPARM_[5] = %e\n", DPARM_[4], DPARM_[5]);
+      ERROR = 0;
    }
 
    delete[] X;

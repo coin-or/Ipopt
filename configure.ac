@@ -149,43 +149,34 @@ AM_CONDITIONAL([HAVE_MA28],[test "$have_ma28" = yes])
 ###########
 
 AC_ARG_WITH([pardiso],
-            [AC_HELP_STRING([--with-pardiso],[specify Pardiso library (>= 4.0) from pardiso-project.org; use --without-pardiso to disable also MKL Pardiso check])],
-            [case "$withval" in
-               yes) have_pardiso_project=no ;;   # no linker flags given; --with-pardiso[=yes] actually doesn't make sense, but we use it as signal to fall back to checking MKL
-               no) have_pardiso_project=no ;;  # so with_pardiso=no, we use that below to skip checking MKL
-               *) have_pardiso_project=yes; pardiso_lflags="$withval" ;;
-             esac],
-            [have_pardiso_project=no])
+  [AC_HELP_STRING([--with-pardiso],[specify Pardiso library (>= 4.0) from pardiso-project.org])],
+  [case "$withval" in
+     no)  have_pardiso_project=no ;;  # so with_pardiso=no
+     yes) AC_MSG_ERROR(["expected filename as argument for --with-pardiso"]) ;;
+     *)   AC_DEFINE_UNQUOTED([PARDISO_LIB],["$withval"],[Name of Pardiso library from pardiso-project.org])
+          AC_MSG_NOTICE([Pardiso from pardiso-project.org specified as $withval])
+          have_pardiso_project=yes
+          ;;
+   esac])
 
+# check whether Pardiso is available via Lapack, which should then be MKL
+AC_ARG_ENABLE([pardisomkl],
+  [AC_HELP_STRING([--disable-pardisomkl],[disable check for MKL version of Pardiso in Lapack])],
+  [case "$enableval" in
+     no | yes) ;;
+     *)
+       AC_MSG_ERROR([invalid argument for --enable-pardisomkl: $enableval]);;
+   esac
+   checkpardisomkl=$enableval],
+  [checkpardisomkl=yes])
 have_pardiso_mkl=no
-if test "$have_pardiso_project" = yes ; then
-  # check whether flags from --with-pardiso work and figure out name mangling
-  # if so, define PARDISO_FUNC and keep lflags
-  AC_COIN_TRY_LINK([pardiso_ipopt_newinterface],[$pardiso_lflags $lapack_lflags],[$lapack_pcfiles],
-    [AC_COIN_DEFINENAMEMANGLING([IPOPT_PARDISO],[$pardiso_ipopt_newinterface_namemangling])
-     IPOPTLIB_LFLAGS="$pardiso_lflags $IPOPTLIB_LFLAGS"
-     AC_DEFINE(IPOPT_HAS_PARDISO,1,[Define to 1 if Pardiso is available])
-    ],
-    [AC_MSG_ERROR([Symbol pardiso_ipopt_newinterface not found with Pardiso flags $pardiso_lflags and Lapack. Require Pardiso >= 4.0.])])
-
-  AC_COIN_TRY_LINK([pardiso_exist_parallel],[$pardiso_lflags $lapack_lflags],[$lapack_pcfiles],
-    [AC_DEFINE(IPOPT_HAS_PARDISO_PARALLEL,1,[Define to 1 if you are using the parallel version of Pardiso])])
-
-elif test "$with_pardiso" != no ; then
-  # check whether Pardiso is available via Lapack, which should then be MKL
-  # figure out name mangling and define PARDISO_FUNC
+if test $checkpardisomkl = yes ; then
   AC_COIN_TRY_LINK([pardiso],[$lapack_lflags],[$lapack_pcfiles],
-    [AC_COIN_DEFINENAMEMANGLING([IPOPT_PARDISO],[$pardiso_namemangling])
-     have_pardiso_mkl=yes
-     AC_DEFINE(IPOPT_HAS_PARDISO,1,[Define to 1 if Pardiso is available])
-     # assume MKL Pardiso is parallel (it never has pardiso_exist_parallel)
-     # TODO does sequential MKL also have a parallel Pardiso? do we need some check here?
-     AC_DEFINE(IPOPT_HAS_PARDISO_PARALLEL,1,[Define to 1 if you are using the parallel version of Pardiso])
-     AC_DEFINE(IPOPT_HAS_PARDISO_MKL,1,[Define to 1 if you are using Pardiso from MKL])
+    [have_pardiso_mkl=yes
+     AC_DEFINE(IPOPT_HAS_PARDISO_MKL,1,[Define to 1 if Pardiso from MKL is available])
     ])
 fi
-
-AM_CONDITIONAL([HAVE_PARDISO],[test "$have_pardiso_mkl$have_pardiso_project" != nono])
+AM_CONDITIONAL([HAVE_PARDISO_MKL],[test "$have_pardiso_mkl" = yes])
 
 #########
 # SPRAL #

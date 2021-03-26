@@ -95,12 +95,13 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@HAVE_MA28_TRUE@am__append_1 = IpMa28TDependencyDetector.cpp
-@HAVE_MA28_TRUE@@IPOPT_SINGLE_TRUE@am__append_2 = IpMa28sPartition.F
-@HAVE_MA28_TRUE@@IPOPT_SINGLE_FALSE@am__append_3 = IpMa28Partition.F
-@HAVE_WSMP_TRUE@am__append_4 = IpWsmpSolverInterface.cpp IpIterativeWsmpSolverInterface.cpp
-@COIN_HAS_MUMPS_TRUE@am__append_5 = IpMumpsSolverInterface.cpp
-@COIN_HAS_SPRAL_TRUE@am__append_6 = IpSpralSolverInterface.cpp
+@HAVE_PARDISO_MKL_TRUE@am__append_1 = IpPardisoMKLSolverInterface.cpp
+@HAVE_MA28_TRUE@am__append_2 = IpMa28TDependencyDetector.cpp
+@HAVE_MA28_TRUE@@IPOPT_SINGLE_TRUE@am__append_3 = IpMa28sPartition.F
+@HAVE_MA28_TRUE@@IPOPT_SINGLE_FALSE@am__append_4 = IpMa28Partition.F
+@HAVE_WSMP_TRUE@am__append_5 = IpWsmpSolverInterface.cpp IpIterativeWsmpSolverInterface.cpp
+@COIN_HAS_MUMPS_TRUE@am__append_6 = IpMumpsSolverInterface.cpp
+@COIN_HAS_SPRAL_TRUE@am__append_7 = IpSpralSolverInterface.cpp
 subdir = src/Algorithm/LinearSolvers
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -114,15 +115,16 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 liblinsolvers_la_LIBADD =
-@HAVE_MA28_TRUE@am__objects_1 = IpMa28TDependencyDetector.lo
-@HAVE_MA28_TRUE@@IPOPT_SINGLE_TRUE@am__objects_2 =  \
+@HAVE_PARDISO_MKL_TRUE@am__objects_1 = IpPardisoMKLSolverInterface.lo
+@HAVE_MA28_TRUE@am__objects_2 = IpMa28TDependencyDetector.lo
+@HAVE_MA28_TRUE@@IPOPT_SINGLE_TRUE@am__objects_3 =  \
 @HAVE_MA28_TRUE@@IPOPT_SINGLE_TRUE@	IpMa28sPartition.lo
-@HAVE_MA28_TRUE@@IPOPT_SINGLE_FALSE@am__objects_3 =  \
+@HAVE_MA28_TRUE@@IPOPT_SINGLE_FALSE@am__objects_4 =  \
 @HAVE_MA28_TRUE@@IPOPT_SINGLE_FALSE@	IpMa28Partition.lo
-@HAVE_WSMP_TRUE@am__objects_4 = IpWsmpSolverInterface.lo \
+@HAVE_WSMP_TRUE@am__objects_5 = IpWsmpSolverInterface.lo \
 @HAVE_WSMP_TRUE@	IpIterativeWsmpSolverInterface.lo
-@COIN_HAS_MUMPS_TRUE@am__objects_5 = IpMumpsSolverInterface.lo
-@COIN_HAS_SPRAL_TRUE@am__objects_6 = IpSpralSolverInterface.lo
+@COIN_HAS_MUMPS_TRUE@am__objects_6 = IpMumpsSolverInterface.lo
+@COIN_HAS_SPRAL_TRUE@am__objects_7 = IpSpralSolverInterface.lo
 am_liblinsolvers_la_OBJECTS = IpLinearSolversRegOp.lo \
 	IpLinearSolvers.lo IpSlackBasedTSymScalingMethod.lo \
 	IpTripletToCSRConverter.lo IpTSymDependencyDetector.lo \
@@ -131,7 +133,8 @@ am_liblinsolvers_la_OBJECTS = IpLinearSolversRegOp.lo \
 	IpMa77SolverInterface.lo IpMa86SolverInterface.lo \
 	IpMa97SolverInterface.lo IpPardisoSolverInterface.lo \
 	$(am__objects_1) $(am__objects_2) $(am__objects_3) \
-	$(am__objects_4) $(am__objects_5) $(am__objects_6)
+	$(am__objects_4) $(am__objects_5) $(am__objects_6) \
+	$(am__objects_7)
 liblinsolvers_la_OBJECTS = $(am_liblinsolvers_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -163,6 +166,7 @@ am__depfiles_remade = ./$(DEPDIR)/IpIterativeWsmpSolverInterface.Plo \
 	./$(DEPDIR)/IpMa97SolverInterface.Plo \
 	./$(DEPDIR)/IpMc19TSymScalingMethod.Plo \
 	./$(DEPDIR)/IpMumpsSolverInterface.Plo \
+	./$(DEPDIR)/IpPardisoMKLSolverInterface.Plo \
 	./$(DEPDIR)/IpPardisoSolverInterface.Plo \
 	./$(DEPDIR)/IpSlackBasedTSymScalingMethod.Plo \
 	./$(DEPDIR)/IpSpralSolverInterface.Plo \
@@ -460,7 +464,7 @@ liblinsolvers_la_SOURCES = IpLinearSolversRegOp.cpp IpLinearSolvers.c \
 	IpMa86SolverInterface.cpp IpMa97SolverInterface.cpp \
 	IpPardisoSolverInterface.cpp $(am__append_1) $(am__append_2) \
 	$(am__append_3) $(am__append_4) $(am__append_5) \
-	$(am__append_6)
+	$(am__append_6) $(am__append_7)
 AM_CPPFLAGS = \
 	-I$(srcdir)/../../Common \
 	-I$(srcdir)/../../LinAlg \
@@ -535,6 +539,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMa97SolverInterface.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMc19TSymScalingMethod.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpMumpsSolverInterface.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpPardisoMKLSolverInterface.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpPardisoSolverInterface.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpSlackBasedTSymScalingMethod.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpSpralSolverInterface.Plo@am__quote@ # am--include-marker
@@ -740,6 +745,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/IpMa97SolverInterface.Plo
 	-rm -f ./$(DEPDIR)/IpMc19TSymScalingMethod.Plo
 	-rm -f ./$(DEPDIR)/IpMumpsSolverInterface.Plo
+	-rm -f ./$(DEPDIR)/IpPardisoMKLSolverInterface.Plo
 	-rm -f ./$(DEPDIR)/IpPardisoSolverInterface.Plo
 	-rm -f ./$(DEPDIR)/IpSlackBasedTSymScalingMethod.Plo
 	-rm -f ./$(DEPDIR)/IpSpralSolverInterface.Plo
@@ -803,6 +809,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/IpMa97SolverInterface.Plo
 	-rm -f ./$(DEPDIR)/IpMc19TSymScalingMethod.Plo
 	-rm -f ./$(DEPDIR)/IpMumpsSolverInterface.Plo
+	-rm -f ./$(DEPDIR)/IpPardisoMKLSolverInterface.Plo
 	-rm -f ./$(DEPDIR)/IpPardisoSolverInterface.Plo
 	-rm -f ./$(DEPDIR)/IpSlackBasedTSymScalingMethod.Plo
 	-rm -f ./$(DEPDIR)/IpSpralSolverInterface.Plo

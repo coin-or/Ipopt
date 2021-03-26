@@ -141,8 +141,6 @@ private:
     *  correct.
     */
    bool skip_inertia_check_;
-   /** Maximal number of decreases of drop tolerance during one solve. */
-   Index pardiso_max_droptol_corrections_;
    ///@}
 
    /** @name Initialization flags */
