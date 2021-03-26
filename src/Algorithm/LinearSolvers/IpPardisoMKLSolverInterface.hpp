@@ -4,78 +4,30 @@
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2005-03-17
 
-#ifndef __IPPARDISOSOLVERINTERFACE_HPP__
-#define __IPPARDISOSOLVERINTERFACE_HPP__
+#ifndef __IPPARDISOMKLSOLVERINTERFACE_HPP__
+#define __IPPARDISOMKLSOLVERINTERFACE_HPP__
 
 #include "IpoptConfig.h"
 #include "IpSparseSymLinearSolverInterface.hpp"
 #include "IpLibraryLoader.hpp"
 #include "IpTypes.h"
 
-//#define PARDISO_MATCHING_PREPROCESS
-
-/* assuming PARDISO 4.0.0 or above */
-#define IPOPT_DECL_PARDISOINIT(x) void (x)( \
-   void*         PT,     \
-   const ipfint* MTYPE,  \
-   const ipfint* SOLVER, \
-   ipfint*       IPARM,  \
-   ipnumber*     DPARM,  \
-   ipfint*       E       \
-)
-
-#define IPOPT_DECL_PARDISO(x) void (x)( \
-   void**          PT,     \
-   const ipfint*   MAXFCT, \
-   const ipfint*   MNUM,   \
-   const ipfint*   MTYPE,  \
-   const ipfint*   PHASE,  \
-   const ipfint*   N,      \
-   const ipnumber* A,      \
-   const ipfint*   IA,     \
-   const ipfint*   JA,     \
-   const ipfint*   PERM,   \
-   const ipfint*   NRHS,   \
-   ipfint*         IPARM,  \
-   const ipfint*   MSGLVL, \
-   ipnumber*       B,      \
-   ipnumber*       X,      \
-   ipfint*         E,      \
-   ipnumber*       DPARM   \
-)
-
-#define IPOPT_DECL_SMAT_REORDERING_PARDISO_WSMP(x) void (x)( \
-   const ipfint*   N,          \
-   const ipfint*   ia,         \
-   const ipfint*   ja,         \
-   const ipnumber* a_,         \
-   ipfint*         a2,         \
-   ipfint*         ja2,        \
-   ipnumber*       a2_,        \
-   ipfint*         perm2,      \
-   ipnumber*       scale2,     \
-   ipfint*         tmp2_,      \
-   ipfint          preprocess  \
-)
-
 namespace Ipopt
 {
 
-/** Interface to the linear solver Pardiso as distributed by pardiso-project.org, derived from
+/** Interface to the linear solver Pardiso as distributed by Intel MKL, derived from
  *  SparseSymLinearSolverInterface.
  */
-class PardisoSolverInterface: public SparseSymLinearSolverInterface
+class PardisoMKLSolverInterface: public SparseSymLinearSolverInterface
 {
 public:
    /** @name Constructor/Destructor */
    ///@{
    /** Constructor */
-   PardisoSolverInterface(
-      SmartPtr<LibraryLoader> pardisoloader_
-   );
+   PardisoMKLSolverInterface();
 
    /** Destructor */
-   virtual ~PardisoSolverInterface();
+   virtual ~PardisoMKLSolverInterface();
    ///@}
 
    bool InitializeImpl(
@@ -137,12 +89,12 @@ private:
     * they will not be implicitly created/called. */
    ///@{
    /** Copy Constructor */
-   PardisoSolverInterface(
-      const PardisoSolverInterface&);
+   PardisoMKLSolverInterface(
+      const PardisoMKLSolverInterface&);
 
    /** Default Assignment Operator */
    void operator=(
-      const PardisoSolverInterface&);
+      const PardisoMKLSolverInterface&);
    ///@}
 
    /** @name Information about the matrix */
@@ -156,15 +108,6 @@ private:
    /** Array for storing the values of the matrix. */
    Number* a_;
    ///@}
-
-#ifdef PARDISO_MATCHING_PREPROCESS
-   /** Array for storing the values of a second matrix that has been already reordered. */
-   ipfint* ia2;
-   ipfint* ja2;
-   Number* a2_;
-   ipfint* perm2;
-   Number* scale2;
-#endif
 
    /** @name Information about most recent factorization/solve */
    ///@{
@@ -198,8 +141,6 @@ private:
     *  correct.
     */
    bool skip_inertia_check_;
-   /** Flag indicating whether we are using the iterative solver in Pardiso. */
-   bool pardiso_iterative_;
    /** Maximal number of decreases of drop tolerance during one solve. */
    Index pardiso_max_droptol_corrections_;
    ///@}
@@ -238,20 +179,6 @@ private:
    Index debug_cnt_;
    ///@}
 
-   /**@name PARDISO function pointers
-    * @{
-    */
-   SmartPtr<LibraryLoader> pardisoloader;
-
-   IPOPT_DECL_PARDISOINIT(*pardisoinit);
-   IPOPT_DECL_PARDISO(*pardiso);
-#ifdef PARDISO_MATCHING_PREPROCESS
-   IPOPT_DECL_SMAT_REORDERING_PARDISO_WSMP(*smat_reordering_pardiso_wsmp);
-#endif
-
-   bool pardiso_exist_parallel;
-   /**@} */
-
    /** @name Internal functions */
    ///@{
    /** Call Pardiso to do the analysis phase. */
@@ -280,4 +207,4 @@ private:
 
 } // namespace Ipopt
 
-#endif  /* __IPPARDISOSOLVERINTERFACE_HPP__ */
+#endif  /* __IPPARDISOMKLSOLVERINTERFACE_HPP__ */
