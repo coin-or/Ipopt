@@ -2131,25 +2131,25 @@ INCLUDE_FILE_PATTERNS  =
 # recursively expanded use the := operator instead of the = operator.
 # This tag requires that the tag ENABLE_PREPROCESSING is set to YES.
 
-PREDEFINED             = COIN_HAS_ASL \
-                         COIN_HAS_HSL \
-                         COIN_HAS_LAPACK \
-                         COIN_HAS_MUMPS \
+PREDEFINED             = IPOPT_HAS_ASL \
+                         IPOPT_HAS_HSL \
+                         IPOPT_HAS_LAPACK \
+                         IPOPT_HAS_MUMPS \
+                         IPOPT_HAS_LINEARSOLVERLOADER \
                          HAVE_CFLOAT \
                          HAVE_CIEEEFP \
                          HAVE_DLFCN_H \
                          HAVE_DRAND48 \
-                         HAVE_LINEARSOLVERLOADER \
                          HAVE_PARDISO \
                          HAVE_SNPRINTF \
                          HAVE_VA_COPY \
                          HAVE_VSNPRINTF \
                          HAVE_WSMP \
-                         COIN_LAPACK_FUNC(x)=x \
                          F77_FUNC(x)=x \
-                         HSL_FUNC(x)=x \
-                         PARDISO_FUNC(x)=x \
-                         WSMP_FUNC(x)=x \
+                         IPOPT_LAPACK_FUNC(x)=x \
+                         IPOPT_HSL_FUNC(x)=x \
+                         IPOPT_PARDISO_FUNC(x)=x \
+                         IPOPT_WSMP_FUNC(x)=x \
                          IPOPT_EXPORT(x)=x \
                          __cplusplus
 
