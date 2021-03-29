@@ -446,6 +446,8 @@ void IpoptApplication::print_options_docu()
       options_to_print.push_back("min_refinement_steps");
       options_to_print.push_back("neg_curv_test_reg");
       options_to_print.push_back("neg_curv_test_tol");
+      if( IsValid(reg_options_->GetOption("hsllib")) )
+         options_to_print.push_back("hsllib");
 
       options_to_print.push_back("#Hessian Perturbation");
       options_to_print.push_back("max_hessian_perturbation");
@@ -561,6 +563,7 @@ void IpoptApplication::print_options_docu()
       if( availablesolver & IPOPTLINEARSOLVER_PARDISO )
       {
          options_to_print.push_back("#Pardiso Linear Solver from Pardiso Project");
+         options_to_print.push_back("pardisolib");
          options_to_print.push_back("pardiso_matching_strategy");
          options_to_print.push_back("pardiso_max_iterative_refinement_steps");
          options_to_print.push_back("pardiso_msglvl");

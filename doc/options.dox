@@ -840,6 +840,15 @@ Possible values:
 
 </blockquote>
 
+\anchor OPT_hsllib
+ <strong>hsllib</strong>: Name of library containing HSL routines for load at runtime
+<blockquote>
+ The default value for this string option is "libhsl.so" ("libhsl.dylib" on macOS, "libhsl.dll" on Windows).
+
+Possible values:
+ - *: Any acceptable filename (may contain path, too)
+</blockquote>
+
 \subsection OPT_Hessian_Perturbation Hessian Perturbation
 
 \anchor OPT_max_hessian_perturbation
@@ -1476,6 +1485,15 @@ Possible values:
 </blockquote>
 
 \subsection OPT_Pardiso_Linear_Solver_from_Pardiso_Project Pardiso Linear Solver from Pardiso Project
+
+\anchor OPT_pardisolib
+ <strong>pardisolib</strong>: Name of library containing Pardiso routines (from pardiso-project.org) for load at runtime
+<blockquote>
+ The default value for this string option is "libpardiso.so".
+
+Possible values:
+ - *: Any acceptable filename (may contain path, too)
+</blockquote>
 
 \anchor OPT_pardiso_matching_strategy
  <strong>pardiso_matching_strategy</strong>: Matching strategy to be used by Pardiso
