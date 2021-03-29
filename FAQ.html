@@ -118,7 +118,7 @@ $(document).ready(function(){initNavTree('FAQ.html',''); initResizable(); });
 <h2>On what operating systems can <code>Ipopt</code> be used?</h2>
 <p>Convenient configuration scripts and Makefiles are provided and have been tested for several flavors of GNU/Linux, macOS, and MSYS2/MinGW. Previous versions of IPOPT have also been run on an old iPod, as well as BlueGene.</p>
 <h2>Is <code>Ipopt</code> thread-safe?</h2>
-<p><code>Ipopt</code> itself is thread-safe. Please check the used third-party components, i.e., linear algebra and linear solvers, for thread-safety, too.</p>
+<p><code>Ipopt</code> itself is thread-safe. Please check the used third-party components, i.e., linear algebra and linear solvers, for thread-safety, too. For example, MUMPS is <b>not</b> thread-safe.</p>
 <h2>What is the method behind <code>Ipopt</code>?</h2>
 <p><code>Ipopt</code> implements a interior point method for nonlinear programming. Search directions (coming from a linearization of the optimality conditions) can be computed in a full-space version by solving a large symmetric linear system.</p>
 <p><code>Ipopt</code> can employ second derivative information, if available, or otherwise approximate it by means of a limited-memory quasi-Newton approach (BFGS and SR1).</p>

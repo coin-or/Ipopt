@@ -145,7 +145,7 @@ brew install bash gcc
 brew link --overwrite gcc
 </pre><p>Further, pkg-config is required, which can be installed via Homebrew by </p><pre class="fragment">brew install pkg-config
 </pre><p>If you have Xcode installed, the Command Line Tools are available under Preferences, Downloads. These items unfortunately do not come with a Fortran compiler, but you can get gfortran from <a href="http://gcc.gnu.org/wiki/GFortranBinaries#MacOS">http://gcc.gnu.org/wiki/GFortranBinaries#MacOS</a>. In the past, we have been able to compile <code>Ipopt</code> using default Xcode versions of gcc and g++ and a newer version of gfortran from this link, but consistent version numbers may be an issue in future cases.</p>
-<p>If you intend to use <a class="el" href="INSTALL.html#DOWNLOAD_MUMPS">MUMPS</a> or one of the DOWNLOAD_HSL "HSL linear solvers", then they may profit from an installation of METIS. This can be accomplished via </p><pre class="fragment">brew install metis
+<p>If you intend to use <a class="el" href="INSTALL.html#DOWNLOAD_MUMPS">MUMPS</a> or one of the <a class="el" href="INSTALL.html#DOWNLOAD_HSL">HSL linear solvers</a>, then they may profit from an installation of METIS. This can be accomplished via </p><pre class="fragment">brew install metis
 </pre><h2><a class="anchor" id="SYSTEMPACKAGES_MSYS"></a>
 Windows with MSYS2/MinGW</h2>
 <p>For Windows, one can compile <code>Ipopt</code> under MSYS2/MinGW, which is a light-weight UNIX-like environment for Windows.</p>
@@ -226,7 +226,7 @@ sudo make install
 <dd>
 MUMPS uses internally a fake implementation of MPI. If you are using <code>Ipopt</code> within an MPI program together with MUMPS, the code will not run. You will have to modify the MUMPS sources so that the MPI symbols inside the MUMPS code are renamed.</dd>
 <dd>
-Branch mumps5 of project ThirdParty-Mumps can be used to build a a library of MUMPS 5.2.x that is usable with <code>Ipopt</code>. However, initial experiments on the CUTEst testset have shown that performance with MUMPS 5.2.x is worse than with Mumps 4.10.0 on average.</dd></dl>
+Branch <code>mumps5</code> of project ThirdParty-Mumps can be used to build a a library of MUMPS 5.2.x that is usable with <code>Ipopt</code>. However, initial experiments on the CUTEst testset have shown that performance with MUMPS 5.2.x is worse than with Mumps 4.10.0 on average.</dd></dl>
 <p>To compile <code>Ipopt</code> with a precompiled MUMPS library, you need to specify the <code>-I</code> flag to have the compiler find the directory containing the MUMPS header files with the <code>--with-mumps-cflags</code> flag of <code>Ipopt</code>'s configure, e.g., </p><pre class="fragment">--with-mumps-cflags="-I$HOME/MUMPS/include"
 </pre><p> and you also need to provide the linker flags for MUMPS with the <code>--with-mumps-lflags</code> flag.</p>
 <h2><a class="anchor" id="DOWNLOAD_PARDISO"></a>
@@ -269,7 +269,7 @@ Getting the Ipopt code via git</h2>
 Getting the Ipopt code as a tarball</h2>
 <p>To use the tarball, follow the steps below:</p>
 <ol type="1">
-<li>Download the desired tarball from <a href="http://www.coin-or.org/download/source/Ipopt">http://www.coin-or.org/download/source/Ipopt</a>, it has the form <code>Ipopt-x.y.z.tgz</code>, where <code>x.y.z</code> is the version number, such as 3.12.0.</li>
+<li>Download the desired tarball from <a href="https://github.com/coin-or/Ipopt/releases">https://github.com/coin-or/Ipopt/releases</a>, it has the form <code>Ipopt-x.y.z.tgz</code>, where <code>x.y.z</code> is the version number, such as 3.12.0.</li>
 <li>Issue the following commands to unpack the archive file: <pre class="fragment">gunzip Ipopt-x.y.z.tgz
 tar xvf Ipopt-x.y.z.tar</pre></li>
 <li>Rename the directory you just extracted:<pre class="fragment">mv Ipopt-x.y.z Ipopt</pre></li>
@@ -296,7 +296,8 @@ Compiling and Installing Ipopt</h1>
 <li>the <code>Ipopt</code> and <code>sIpopt</code> AMPL solver executables (if ASL source was downloaded) in <code>/usr/local/bin</code>,</li>
 <li>the <code>Ipopt</code> and <code>sIpopt</code> libraries (<code>libipopt.so</code>, <code>libipopt.a</code> or similar) in <code>/usr/local/lib</code>,</li>
 <li>pkg-config files for use of the <code>Ipopt</code> and <code>sIpopt</code> libraries (<code>ipopt.pc</code>, <code>sipopt.pc</code>) in <code>/usr/local/lib/pkgconfig</code>.</li>
-<li><code>Ipopt</code> and <code>sIpopt</code> header files <code>/usr/local/include/coin-or</code>.</li>
+<li><code>Ipopt</code> and <code>sIpopt</code> header files <code>/usr/local/include/coin-or</code>,</li>
+<li>the <a class="el" href="INTERFACES.html#INTERFACE_JAVA">Java Interface</a> jar file in <code>/usr/local/share/java</code>.</li>
 </ul>
 <p class="startli">You can change the default installation directory (here <code>/usr/local</code>) by using the <code>--prefix</code> switch for <code>configure</code>. If this is a directory that you have write permissions for, <code>sudo</code> can be omitted for <code>make install</code>.</p>
 </li>
@@ -313,8 +314,8 @@ Flags to configure</h2>
 <p class="startli">Also, you can tell <code>Ipopt</code> to do some additional runtime sanity checks, by specifying the flag <code>--with-ipopt-checklevel=1</code>.</p>
 <p class="startli">This usually leads to a significant slowdown of the code, but might be helpful when debugging something.</p>
 </li>
-<li><p class="startli">If you want to link the <code>Ipopt</code> library with a main program written in C or Fortran, the C and Fortran compiler doing the linking of the executable needs to be told about the C++ runtime libraries. Unfortunately, the current version of autoconf does not provide the automatic detection of those libraries. We have hard-coded some default values for some systems and compilers, but this might not work all the time.</p>
-<p class="startli">If you have problems linking your Fortran or C code with the <code>Ipopt</code> library libipopt.a and the linker complains about missing symbols from C++ (e.g., the standard template library), you should specify the C++ libraries with the <code>CXXLIBS</code> variable. To find out what those libraries are, it is probably helpful to link a simple C++ program with verbose compiler output.</p>
+<li><p class="startli">If you want to link the <code>Ipopt</code> library with a main program written in C or Fortran, the C and Fortran compiler doing the linking of the executable needs to be told about the C++ runtime libraries. Unfortunately, the build system does not provide a functionality for automatic detection of those libraries. We have hard-coded some default values for some systems and compilers, but this might not work all the time.</p>
+<p class="startli">If you have problems linking your Fortran or C code with the <code>Ipopt</code> library <code>libipopt.a</code> and the linker complains about missing symbols from C++ (e.g., the standard template library), you should specify the C++ libraries with the <code>CXXLIBS</code> variable. To find out what those libraries are, it is probably helpful to link a simple C++ program with verbose compiler output.</p>
 <p class="startli">For example, for the Intel compilers on a Linux system, you might need to specify something like </p><pre class="fragment">./configure CC=icc F77=ifort CXX=icpc CXXLIBS='-L/usr/lib/gcc-lib/i386-redhat-linux/3.2.3 -lstdc++'</pre></li>
 <li>Compilation on an AIX 64bit system sometimes requires some special consideration. We recommend the following configuration <pre class="fragment">./configure AR='ar -X64' NM='nm -X64' CC='xlc -q64' F77='xlf -q64' CXX='xlC -q64' CFLAGS='-O3 -bmaxdata:0x3f0000000' FFLAGS='-O3 -bmaxdata:0x3f0000000' CXXFLAGS='-qrtti=dyna -O3 -bmaxdata:0x3f0000000'</pre> (Alternatively, a simpler solution for AIX is to set the environment variable <code>OBJECT_MODE</code> to 64.)</li>
 <li><p class="startli"><a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a>'s Java interface <code>JIpopt</code> uses the Java Native Interface (JNI), which is a programming framework that allows Java code running in the Java Virtual Machine (JVM) to call and be called by native applications and libraries written in languages such as C and C++.</p>

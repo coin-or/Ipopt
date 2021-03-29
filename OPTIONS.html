@@ -126,6 +126,7 @@ $(document).ready(function(){initNavTree('OPTIONS.html',''); initResizable(); })
 <li class="level2"><a href="#OPT_MA97_Linear_Solver">MA97 Linear Solver</a></li>
 <li class="level2"><a href="#OPT_MUMPS_Linear_Solver">MUMPS Linear Solver</a></li>
 <li class="level2"><a href="#OPT_Pardiso_Linear_Solver">Pardiso Linear Solver</a></li>
+<li class="level2"><a href="#OPT_WSMP_Linear_Solver">WSMP Linear Solver</a></li>
 </ul>
 </li>
 <li class="level1"><a href="#OPTIONS_AMPL">Options available via the AMPL Interface</a></li>
@@ -146,8 +147,8 @@ max_iter 500
 <p>Options can also be set in code. Have a look at the examples to see how this is done.</p>
 <p>A subset of <code>Ipopt</code> options are available through AMPL. To set options through AMPL, use the internal AMPL command options. For example, </p><pre class="fragment">options ipopt_options "nlp_scaling_method=none mu_init=1e-2 max_iter=500"
 </pre><p> is a valid options command in AMPL. The most important options are referenced in <a class="el" href="OPTIONS.html#OPTIONS_REF">Options Reference</a>. To see which options are available through AMPL, see <a class="el" href="OPTIONS.html#OPTIONS_AMPL">Options available via the AMPL Interface</a>, or run the AMPL solver executable with the "-=" flag from the command prompt. To specify other options when using AMPL, you can always create <code>ipopt.opt</code>. Note, the <code>ipopt.opt</code> file is given preference when setting options. This way, you can easily override any options set in a particular executable or AMPL model by specifying new values in <code>ipopt.opt</code>.</p>
-<p>For a list of the most important valid options, see <a class="el" href="OPTIONS.html#OPTIONS_REF">Options Reference</a>. You can print the documentation for all <code>Ipopt</code> options by using the option </p><pre class="fragment">print_options_documentation yes
-</pre><p> and running <code>Ipopt</code> (like the AMPL solver executable, for instance). This will output the documentation of almost all options to the console.</p>
+<p>A list of the most important options is given next. You can print the documentation for all <code>Ipopt</code> options by using the option </p><pre class="fragment">print_options_documentation yes
+</pre><p> and running <code>Ipopt</code>. This will output the documentation of almost all options to the console. If you have the AMPL solver executable, you can generate this list also by calling the executable with flag <code>--print-options</code>.</p>
 <h1><a class="anchor" id="OPTIONS_REF"></a>
 Options Reference</h1>
 <h2><a class="anchor" id="OPT_Output"></a>
@@ -1095,6 +1096,32 @@ Pardiso Linear Solver</h2>
 <li>four: undocumented</li>
 <li>five: undocumented </li>
 </ul>
+</blockquote>
+<h2><a class="anchor" id="OPT_WSMP_Linear_Solver"></a>
+WSMP Linear Solver</h2>
+<p><a class="anchor" id="OPT_wsmp_num_threads"></a> <b>wsmp_num_threads</b>: Number of threads to be used in WSMP </p><blockquote class="doxtable">
+<p>The valid range for this integer option is unrestricted and its default value is 1.</p>
+<p></p>
+</blockquote>
+<p><a class="anchor" id="OPT_wsmp_ordering_option"></a> <b>wsmp_ordering_option</b>: Determines how ordering is done in WSMP </p><blockquote class="doxtable">
+<p>This corresponds to the value of WSSMP's IPARM(16). The valid range for this integer option is -2 &le; wsmp_ordering_option &le; 3 and its default value is 1.</p>
+<p></p>
+</blockquote>
+<p><a class="anchor" id="OPT_wsmp_pivtol"></a> <b>wsmp_pivtol</b>: Pivot tolerance for the linear solver WSMP. </p><blockquote class="doxtable">
+<p>A smaller number pivots for sparsity, a larger number pivots for stability. The valid range for this real option is 0 &lt; wsmp_pivtol &lt; 1 and its default value is 0.0001.</p>
+<p></p>
+</blockquote>
+<p><a class="anchor" id="OPT_wsmp_pivtolmax"></a> <b>wsmp_pivtolmax</b>: Maximum pivot tolerance for the linear solver WSMP. </p><blockquote class="doxtable">
+<p><a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> may increase pivtol as high as pivtolmax to get a more accurate solution to the linear system. The valid range for this real option is 0 &lt; wsmp_pivtolmax &lt; 1 and its default value is 0.1.</p>
+<p></p>
+</blockquote>
+<p><a class="anchor" id="OPT_wsmp_scaling"></a> <b>wsmp_scaling</b>: Determines how the matrix is scaled by WSMP. </p><blockquote class="doxtable">
+<p>This corresponds to the value of WSSMP's IPARM(10). The valid range for this integer option is 0 &le; wsmp_scaling &le; 3 and its default value is 0.</p>
+<p></p>
+</blockquote>
+<p><a class="anchor" id="OPT_wsmp_singularity_threshold"></a> <b>wsmp_singularity_threshold</b>: WSMP's singularity threshold. </p><blockquote class="doxtable">
+<p>WSMP's DPARM(10) parameter. The smaller this value the less likely a matrix is declared singular. The valid range for this real option is 0 &lt; wsmp_singularity_threshold &lt; 1 and its default value is 10<sup>-18</sup>.</p>
+<p></p>
 </blockquote>
 <h1><a class="anchor" id="OPTIONS_AMPL"></a>
 Options available via the AMPL Interface</h1>
