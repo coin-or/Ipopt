@@ -249,6 +249,13 @@ bool WsmpSolverInterface::InitializeImpl(
    double ddmy;
    IPOPT_WSMP_FUNC(wssmp, WSSMP)(&idmy, &idmy, &idmy, &ddmy, &ddmy, &idmy, &idmy, &ddmy, &idmy, &idmy, &ddmy, &idmy, &idmy,
                                  IPARM_, DPARM_);
+
+   if( IPARM_[63] < 0 )
+   {
+      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Error %d from WSMP initialization.\n", IPARM_[63]);
+      return false;
+   }
+
    IPARM_[15] = wsmp_ordering_option; // ordering option
    IPARM_[17] = 0; // use local minimum fill-in ordering
    IPARM_[19] = wsmp_ordering_option2; // for ordering in IP methods?
@@ -340,7 +347,7 @@ ESymSolverStatus WsmpSolverInterface::InitializeStructure(
    a_ = NULL;
    a_ = new double[nonzeros];
 
-   // Do the symbolic facotrization
+   // Do the symbolic factorization
    ESymSolverStatus retval = SymbolicFactorization(ia, ja);
    if( retval != SYMSOLVER_SUCCESS )
    {
@@ -672,7 +679,7 @@ ESymSolverStatus WsmpSolverInterface::Solve(
    ipfint LDB = dim_;
    ipfint NRHS = nrhs;
    ipfint NAUX = 0;
-   IPARM_[1] = 4; // Forward and Backward Elimintation
+   IPARM_[1] = 4; // Forward and Backward Elimination
    IPARM_[2] = 5; // Iterative refinement
    IPARM_[5] = 1;
    DPARM_[5] = 1e-12;

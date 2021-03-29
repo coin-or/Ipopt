@@ -160,6 +160,13 @@ bool IterativeWsmpSolverInterface::InitializeImpl(
    ipfint idmy;
    double ddmy;
    F77_FUNC(wismp, WISMP)(&idmy, &idmy, &idmy, &ddmy, &ddmy, &idmy, &ddmy, &idmy, &idmy, &ddmy, &ddmy, IPARM_, DPARM_);
+
+   if( IPARM_[63] < 0 )
+   {
+      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Error %d from WSMP initialization.\n", IPARM_[63]);
+      return false;
+   }
+
    IPARM_[3] = 3; // Upper triangular portion of matrix in CSR format
    // (same as for WSSMP)
    IPARM_[6] = 3;
@@ -239,7 +246,7 @@ ESymSolverStatus IterativeWsmpSolverInterface::InitializeStructure(
    a_ = NULL;
    a_ = new double[nonzeros];
 
-   // Do the symbolic facotrization
+   // Do the symbolic factorization
    ESymSolverStatus retval = SymbolicFactorization(ia, ja);
    if( retval != SYMSOLVER_SUCCESS )
    {
@@ -353,7 +360,7 @@ ESymSolverStatus IterativeWsmpSolverInterface::Factorization(
       for( Index icol = 0; icol < dim_; icol++ )
       {
          fprintf(fp, "%d", ia[icol + 1] - ia[icol]); // number of elements for this column
-         // Now for each colum we write row indices and values
+         // Now for each column we write row indices and values
          for( Index irow = ia[icol]; irow < ia[icol + 1]; irow++ )
          {
             fprintf(fp, " %23.16e %d", a_[irow - 1], ja[irow - 1]);
