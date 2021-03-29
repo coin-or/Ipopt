@@ -360,8 +360,8 @@ ESymSolverStatus WsmpSolverInterface::InitializeStructure(
 }
 
 ESymSolverStatus WsmpSolverInterface::SymbolicFactorization(
-   const Index* ia,
-   const Index* ja
+   const Index* /*ia*/,
+   const Index* /*ja*/
 )
 {
    DBG_START_METH("WsmpSolverInterface::SymbolicFactorization",

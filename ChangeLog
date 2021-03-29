@@ -56,6 +56,8 @@ commit history.
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]
+          (note: name of this option will change to --disable-pardisomkl
+          with Ipopt 3.14)
 
 2021-02-24: 3.13.4
         - Fixed a linking issue for ipopt_sens [#418]

@@ -342,7 +342,7 @@ void InexactPDSolver::ComputeResiduals(
    const Vector&         v_U,
    const Vector&         slack_s_L,
    const Vector&         slack_s_U,
-   const Vector&         sigma_s,
+   const Vector&         /*sigma_s*/,
    const IteratesVector& rhs,
    const IteratesVector& res,
    IteratesVector&       resid

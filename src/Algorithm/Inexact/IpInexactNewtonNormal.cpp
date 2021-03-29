@@ -24,7 +24,7 @@ InexactNewtonNormalStep::~InexactNewtonNormalStep()
 { }
 
 void InexactNewtonNormalStep::RegisterOptions(
-   SmartPtr<RegisteredOptions> reg_options
+   SmartPtr<RegisteredOptions> /*reg_options*/
 )
 { }
 

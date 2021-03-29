@@ -55,7 +55,7 @@ void InexactCq::RegisterOptions(
 }
 
 bool InexactCq::Initialize(
-   const Journalist&  jnlst,
+   const Journalist&  /*jnlst*/,
    const OptionsList& options,
    const std::string& prefix
 )

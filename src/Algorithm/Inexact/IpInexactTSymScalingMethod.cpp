@@ -16,19 +16,19 @@ static const Index dbg_verbosity = 0;
 #endif
 
 bool InexactTSymScalingMethod::InitializeImpl(
-   const OptionsList& options,
-   const std::string& prefix
+   const OptionsList& /*options*/,
+   const std::string& /*prefix*/
 )
 {
    return true;
 }
 
 bool InexactTSymScalingMethod::ComputeSymTScalingFactors(
-   Index         n,
-   Index         nnz,
-   const Index*  airn,
-   const Index*  ajcn,
-   const Number* a,
+   Index         /*n*/,
+   Index         /*nnz*/,
+   const Index*  /*airn*/,
+   const Index*  /*ajcn*/,
+   const Number* /*a*/,
    Number*       scaling_factors
 )
 {

@@ -429,9 +429,9 @@ void InexactLSAcceptor::Reset()
 }
 
 bool InexactLSAcceptor::TrySecondOrderCorrection(
-   Number                    alpha_primal_test,
-   Number&                   alpha_primal,
-   SmartPtr<IteratesVector>& actual_delta
+   Number                    /*alpha_primal_test*/,
+   Number&                   /*alpha_primal*/,
+   SmartPtr<IteratesVector>& /*actual_delta*/
 )
 {
    DBG_START_METH("InexactLSAcceptor::TrySecondOrderCorrection",
@@ -440,9 +440,9 @@ bool InexactLSAcceptor::TrySecondOrderCorrection(
 }
 
 bool InexactLSAcceptor::TryCorrector(
-   Number                    alpha_primal_test,
-   Number&                   alpha_primal,
-   SmartPtr<IteratesVector>& actual_delta
+   Number                    /*alpha_primal_test*/,
+   Number&                   /*alpha_primal*/,
+   SmartPtr<IteratesVector>& /*actual_delta*/
 )
 {
    return false;
@@ -517,7 +517,7 @@ void InexactLSAcceptor::PrepareRestoPhaseStart()
 bool InexactLSAcceptor::IsAcceptableToCurrentIterate(
    Number trial_barr,
    Number trial_theta,
-   bool   called_from_restoration /*=false*/
+   bool   /*called_from_restoration*/ /*=false*/
 ) const
 {
    DBG_START_METH("InexactLSAcceptor::IsAcceptableToCurrentIterate",
@@ -547,7 +547,7 @@ bool InexactLSAcceptor::IsAcceptableToCurrentIterate(
 
 Number InexactLSAcceptor::ComputeAlphaForY(
    Number                    alpha_primal,
-   Number                    alpha_dual,
+   Number                    /*alpha_dual*/,
    SmartPtr<IteratesVector>& delta
 )
 {

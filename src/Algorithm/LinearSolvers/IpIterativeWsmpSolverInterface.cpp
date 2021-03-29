@@ -259,8 +259,8 @@ ESymSolverStatus IterativeWsmpSolverInterface::InitializeStructure(
 }
 
 ESymSolverStatus IterativeWsmpSolverInterface::SymbolicFactorization(
-   const Index* ia,
-   const Index* ja
+   const Index* /*ia*/,
+   const Index* /*ja*/
 )
 {
    DBG_START_METH("IterativeWsmpSolverInterface::SymbolicFactorization",
@@ -336,8 +336,8 @@ ESymSolverStatus IterativeWsmpSolverInterface::InternalSymFact(
 ESymSolverStatus IterativeWsmpSolverInterface::Factorization(
    const Index* ia,
    const Index* ja,
-   bool         check_NegEVals,
-   Index        numberOfNegEVals
+   bool         /*check_NegEVals*/,
+   Index        /*numberOfNegEVals*/
 )
 {
    DBG_START_METH("IterativeWsmpSolverInterface::Factorization", dbg_verbosity);
