@@ -48,15 +48,16 @@ setting options. This way, you can easily override any options set in a
 particular executable or AMPL model by specifying new values in
 `ipopt.opt`.
 
-For a list of the most important valid options, see \ref OPTIONS_REF.
+A list of the most important options is given next.
 You can print the documentation for all \Ipopt options by
 using the option
 \verbatim
 print_options_documentation yes
 \endverbatim
-and running \Ipopt (like the AMPL solver executable, for
-instance). This will output the documentation of almost all options to
+and running \Ipopt. This will output the documentation of almost all options to
 the console.
+If you have the AMPL solver executable, you can generate this list also
+by calling the executable with flag `--print-options`.
 
 \section OPTIONS_REF Options Reference
 
@@ -269,7 +270,7 @@ Possible values:
  - none: no problem scaling will be performed
  - user-scaling: scaling parameters will come from the user
  - gradient-based: scale the problem so the maximum gradient at the starting point is scaling_max_gradient
- - equilibration-based: scale the problem so that first derivatives are of order 1 at random points (only available with MC19)
+ - equilibration-based: scale the problem o that first derivatives are of order 1 at random points (uses Harwell routine MC19)
 </blockquote>
 
 \anchor OPT_nlp_scaling_max_gradient
@@ -771,7 +772,7 @@ Possible values:
 \anchor OPT_linear_solver
  <strong>linear_solver</strong>: Linear solver used for step computations.
 <blockquote>
- Determines which linear algebra package is to be used for the solution of the augmented linear system (for obtaining the search directions). Note, the code must have been compiled with the linear solver you want to choose. Depending on your Ipopt installation, not all options are available. The default value for this string option is "ma27".
+ Determines which linear algebra package is to be used for the solution of the augmented linear system (for obtaining the search directions). The default value for this string option is "ma27".
 
 Possible values:
  - ma27: use the Harwell routine MA27
@@ -779,17 +780,18 @@ Possible values:
  - ma77: use the Harwell routine HSL_MA77
  - ma86: use the Harwell routine HSL_MA86
  - ma97: use the Harwell routine HSL_MA97
- - pardiso: use the Pardiso package
- - spral: use the SPRAL package
+ - pardiso: load the Pardiso package from pardiso-project.org from library at runtime
+ - pardisomkl: use the Pardiso package from Intel MKL
+ - spral: use the Spral package
+ - mumps: use the Mumps package
  - wsmp: use WSMP package
- - mumps: use MUMPS package
- - custom: use custom linear solver
+ - custom: use custom linear solver (expert use)
 </blockquote>
 
 \anchor OPT_linear_system_scaling
  <strong>linear_system_scaling</strong>: Method for scaling the linear system.
 <blockquote>
- Determines the method used to compute symmetric scaling factors for the augmented system (see also the "linear_scaling_on_demand" option). This scaling is independent of the NLP problem scaling. By default, MC19 is only used if MA27 or MA57 are selected as linear solvers. This value is only available if Ipopt has been compiled with MC19. The default value for this string option is "mc19".
+ Determines the method used to compute symmetric scaling factors for the augmented system (see also the "linear_scaling_on_demand" option). This scaling is independent of the NLP problem scaling. The default is MC19 only if MA27, MA57, MA77, or MA86 are selected as linear solvers. Otherwise it is 'none'. The default value for this string option is "mc19".
 
 Possible values:
  - none: no scaling will be performed
@@ -1473,7 +1475,7 @@ Possible values:
 
 </blockquote>
 
-\subsection OPT_Pardiso_Linear_Solver Pardiso Linear Solver
+\subsection OPT_Pardiso_Linear_Solver_from_Pardiso_Project Pardiso Linear Solver from Pardiso Project
 
 \anchor OPT_pardiso_matching_strategy
  <strong>pardiso_matching_strategy</strong>: Matching strategy to be used by Pardiso
@@ -1512,6 +1514,45 @@ Possible values:
  - pmetis: parallel (OpenMP) version of MeTiS nested dissection algorithm
  - four: undocumented
  - five: undocumented
+</blockquote>
+
+\subsection OPT_Pardiso_Linear_Solver_from_Intel_MKL Pardiso Linear Solver from Intel MKL
+
+\anchor OPT_pardisomkl_matching_strategy
+ <strong>pardisomkl_matching_strategy</strong>: Matching strategy to be used by Pardiso
+<blockquote>
+ This is IPAR(13) in Pardiso manual. The default value for this string option is "complete+2x2".
+
+Possible values:
+ - complete: Match complete (IPAR(13)=1)
+ - complete+2x2: Match complete+2x2 (IPAR(13)=2)
+ - constraints: Match constraints (IPAR(13)=3)
+</blockquote>
+
+\anchor OPT_pardisomkl_max_iterative_refinement_steps
+ <strong>pardisomkl_max_iterative_refinement_steps</strong>: Limit on number of iterative refinement steps.
+<blockquote>
+ The solver does not perform more than the absolute value of this value steps of iterative refinement and stops the process if a satisfactory level of accuracy of the solution in terms of backward error is achieved. If negative, the accumulation of the residue uses extended precision real and complex data types. Perturbed pivots result in iterative refinement. The solver automatically performs two steps of iterative refinements when perturbed pivots are obtained during the numerical factorization and this option is set to 0. The valid range for this integer option is unrestricted and its default value is 1.
+
+</blockquote>
+
+\anchor OPT_pardisomkl_msglvl
+ <strong>pardisomkl_msglvl</strong>: Pardiso message level
+<blockquote>
+ This determines the amount of analysis output from the Pardiso solver. This is MSGLVL in the Pardiso manual. The valid range for this integer option is 0 &le; pardisomkl_msglvl and its default value is 0.
+
+</blockquote>
+
+\anchor OPT_pardisomkl_order
+ <strong>pardisomkl_order</strong>: Controls the fill-in reduction ordering algorithm for the input matrix.
+<blockquote>
+ The default value for this string option is "metis".
+
+Possible values:
+ - amd: minimum degree algorithm
+ - one: undocumented
+ - metis: MeTiS nested dissection algorithm
+ - pmetis: parallel (OpenMP) version of MeTiS nested dissection algorithm
 </blockquote>
 
 \subsection OPT_SPRAL_Linear_Solver SPRAL Linear Solver

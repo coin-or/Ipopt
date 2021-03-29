@@ -279,8 +279,10 @@ void AlgorithmBuilder::RegisterOptions(
    if( availablesolvers & IPOPTLINEARSOLVER_MC19 )
    {
       options.push_back("equilibration-based");
-      descrs.push_back("scale the problem so that first derivatives are of order 1 at random points");
-      if( !(availablesolverslinked & IPOPTLINEARSOLVER_MC19) )
+      descrs.push_back("scale the problem o that first derivatives are of order 1 at random points");
+      if( availablesolverslinked & IPOPTLINEARSOLVER_MC19 )
+         descrs.back() += " (uses Harwell routine MC19)";
+      else
          descrs.back() += " (load the Harwell routine MC19 from library at runtime)";
    }
    roptions->AddStringOption(
