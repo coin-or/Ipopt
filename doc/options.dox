@@ -61,6 +61,9 @@ by calling the executable with flag `--print-options`.
 
 \section OPTIONS_REF Options Reference
 
+\note Availability or default values of some options concerning the linear solver depends on the configuration used to build \Ipopt.
+Use the print options documentation feature to see which options are available in a particular build of \Ipopt.
+
 \subsection OPT_Output Output
 
 \anchor OPT_print_level
