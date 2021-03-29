@@ -41,7 +41,7 @@ lower and upper bounds, \f$x^L\in(\mathbb{R}\cup\{-\infty\})^n\f$ and
 \f$g:\mathbb{R}^n \to \mathbb{R}^m\f$ are the general nonlinear
 constraints. The functions \f$f(x)\f$ and \f$g(x)\f$ can be linear or nonlinear
 and convex or non-convex (but should be twice continuously
-differentiable). The constraints, \f$g(x)\f$, have lower and upper bounds,
+differentiable). The constraint functions, \f$g(x)\f$, have lower and upper bounds,
 \f$g^L\in(\mathbb{R}\cup\{-\infty\})^m\f$ and
 \f$g^U\in(\mathbb{R}\cup\{+\infty\})^m\f$. Note that equality constraints of
 the form \f$g_i(x)=\bar g_i\f$ can be specified by setting
@@ -158,7 +158,8 @@ required:
     \note The solution of the linear systems is a central ingredient
     in \Ipopt and the optimizer's performance and
     robustness depends on your choice. The best choice depends on your
-    application, and it makes sense to try different options. Most of
+    application, and it makes sense to try different options, but solvers
+    from HSL or Pardiso Project are often a good choice. Most of
     the solvers also rely on efficient BLAS code (see above), so you
     should use a good BLAS library tailored to your system. Please keep
     this in mind, particularly when you are comparing
@@ -178,8 +179,7 @@ required:
     for scaling of the linear systems before they are passed to the
     linear solver. This may be particularly useful if
     \Ipopt is used with MA27 or MA57. However, it is not
-    required to have MC19 to compile \Ipopt; if this
-    routine is missing, the scaling is never performed.
+    required to have MC19; if this routine is missing, scaling is not performed.
 
 -   ASL (AMPL Solver Library). The source code is available at
     http://www.netlib.org, and COIN-OR's

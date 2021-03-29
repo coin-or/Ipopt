@@ -52,7 +52,7 @@ In the past, we have been able to compile \Ipopt using default Xcode
 versions of gcc and g++ and a newer version of gfortran from this link,
 but consistent version numbers may be an issue in future cases.
 
-If you intend to use \ref DOWNLOAD_MUMPS "MUMPS" or one of the DOWNLOAD_HSL "HSL linear solvers",
+If you intend to use \ref DOWNLOAD_MUMPS "MUMPS" or one of the \ref DOWNLOAD_HSL "HSL linear solvers",
 then they may profit from an installation of METIS.
 This can be accomplished via
 
@@ -290,7 +290,7 @@ using \Ipopt within an MPI program together with MUMPS, the
 code will not run. You will have to modify the MUMPS sources so that the
 MPI symbols inside the MUMPS code are renamed.
 
-\note Branch mumps5 of project ThirdParty-Mumps can be used to build a
+\note Branch `mumps5` of project ThirdParty-Mumps can be used to build a
 a library of MUMPS 5.2.x that is usable with \Ipopt. However, initial
 experiments on the CUTEst testset have shown that performance with MUMPS
 5.2.x is worse than with Mumps 4.10.0 on average.
@@ -437,7 +437,7 @@ are right now (output of `pwd`).
 To use the tarball, follow the steps below:
 
 1.  Download the desired tarball from
-    <http://www.coin-or.org/download/source/Ipopt>, it has the form
+    <https://github.com/coin-or/Ipopt/releases>, it has the form
     `Ipopt-x.y.z.tgz`, where `x.y.z` is the version number, such as
     3.12.0.
 
@@ -563,7 +563,9 @@ sudo make install
     -   pkg-config files for use of the \Ipopt and `sIpopt` libraries
         (`ipopt.pc`, `sipopt.pc`) in `/usr/local/lib/pkgconfig`.
 
-    -   \Ipopt and `sIpopt` header files `/usr/local/include/coin-or`.
+    -   \Ipopt and `sIpopt` header files `/usr/local/include/coin-or`,
+
+    -   the \ref INTERFACE_JAVA "Java Interface" jar file in `/usr/local/share/java`.
 
     You can change the default installation directory (here `/usr/local`)
     by using the `--prefix` switch for `configure`. If this is a directory
@@ -618,13 +620,13 @@ Below a few particular options are discussed:
 -   If you want to link the \Ipopt library with a main
     program written in C or Fortran, the C and Fortran compiler doing
     the linking of the executable needs to be told about the C++ runtime
-    libraries. Unfortunately, the current version of autoconf does not
-    provide the automatic detection of those libraries. We have
+    libraries. Unfortunately, the build system does not provide a
+    functionality for automatic detection of those libraries. We have
     hard-coded some default values for some systems and compilers, but
     this might not work all the time.
 
     If you have problems linking your Fortran or C code with the
-    \Ipopt library libipopt.a and the linker complains
+    \Ipopt library `libipopt.a` and the linker complains
     about missing symbols from C++ (e.g., the standard template
     library), you should specify the C++ libraries with the `CXXLIBS`
     variable. To find out what those libraries are, it is probably
