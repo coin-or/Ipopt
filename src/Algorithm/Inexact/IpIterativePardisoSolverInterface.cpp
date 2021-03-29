@@ -150,7 +150,7 @@ IterativePardisoSolverInterface::~IterativePardisoSolverInterface()
 }
 
 void IterativePardisoSolverInterface::RegisterOptions(
-   SmartPtr<RegisteredOptions> roptions
+   SmartPtr<RegisteredOptions> /*roptions*/
 )
 { }
 
@@ -382,8 +382,8 @@ ESymSolverStatus IterativePardisoSolverInterface::InitializeStructure(
 }
 
 ESymSolverStatus IterativePardisoSolverInterface::SymbolicFactorization(
-   const Index* ia,
-   const Index* ja
+   const Index* /*ia*/,
+   const Index* /*ja*/
 )
 {
    DBG_START_METH("IterativePardisoSolverInterface::SymbolicFactorization",
@@ -483,7 +483,7 @@ ESymSolverStatus IterativePardisoSolverInterface::Factorization(
    ipfint ERROR;
 
    bool done = false;
-   bool just_performed_symbolic_factorization = false;
+   // bool just_performed_symbolic_factorization = false;
 
    while( !done )
    {
@@ -545,7 +545,7 @@ ESymSolverStatus IterativePardisoSolverInterface::Factorization(
             return SYMSOLVER_FATAL_ERROR;
          }
          have_symbolic_factorization_ = true;
-         just_performed_symbolic_factorization = true;
+         // just_performed_symbolic_factorization = true;
 
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                         "Memory in KB required for the symbolic factorization  = %d.\n", IPARM_[14]);

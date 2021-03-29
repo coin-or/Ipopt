@@ -16,9 +16,9 @@ InexactData::~InexactData()
 { }
 
 bool InexactData::Initialize(
-   const Journalist&  jnlst,
-   const OptionsList& options,
-   const std::string& prefix
+   const Journalist&  /*jnlst*/,
+   const OptionsList& /*options*/,
+   const std::string& /*prefix*/
 )
 {
    full_step_accepted_ = false;

@@ -115,7 +115,7 @@ void InexactAlgorithmBuilder::RegisterOptions(
 }
 
 SmartPtr<IpoptAlgorithm> InexactAlgorithmBuilder::BuildBasicAlgorithm(
-   const Journalist&  jnlst,
+   const Journalist&  /*jnlst*/,
    const OptionsList& options,
    const std::string& prefix
 )
