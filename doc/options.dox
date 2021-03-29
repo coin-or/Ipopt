@@ -783,8 +783,8 @@ Possible values:
  - pardiso: load the Pardiso package from pardiso-project.org from library at runtime
  - pardisomkl: use the Pardiso package from Intel MKL
  - spral: use the Spral package
+ - wsmp: use the Wsmp package
  - mumps: use the Mumps package
- - wsmp: use WSMP package
  - custom: use custom linear solver (expert use)
 </blockquote>
 
@@ -1788,6 +1788,50 @@ Possible values:
  - high_delay_reuse: Scaling is used only when previous iteration created more that 0.05*n additional delays; otherwise, reuse scaling from the previous iteration.
  - od_hd: Combination of on_demand and high_delay.
  - od_hd_reuse: Combination of on_demand_reuse and high_delay_reuse
+</blockquote>
+
+\subsection OPT_WSMP_Linear_Solver WSMP Linear Solver
+
+\anchor OPT_wsmp_num_threads
+ <strong>wsmp_num_threads</strong>: Number of threads to be used in WSMP
+<blockquote>
+ The valid range for this integer option is unrestricted and its default value is 1.
+
+</blockquote>
+
+\anchor OPT_wsmp_ordering_option
+ <strong>wsmp_ordering_option</strong>: Determines how ordering is done in WSMP
+<blockquote>
+ This corresponds to the value of WSSMP's IPARM(16). The valid range for this integer option is -2 &le; wsmp_ordering_option &le; 3 and its default value is 1.
+
+</blockquote>
+
+\anchor OPT_wsmp_pivtol
+ <strong>wsmp_pivtol</strong>: Pivot tolerance for the linear solver WSMP.
+<blockquote>
+ A smaller number pivots for sparsity, a larger number pivots for stability. The valid range for this real option is 0 < wsmp_pivtol < 1 and its default value is 0.0001.
+
+</blockquote>
+
+\anchor OPT_wsmp_pivtolmax
+ <strong>wsmp_pivtolmax</strong>: Maximum pivot tolerance for the linear solver WSMP.
+<blockquote>
+ Ipopt may increase pivtol as high as pivtolmax to get a more accurate solution to the linear system. The valid range for this real option is 0 < wsmp_pivtolmax < 1 and its default value is 0.1.
+
+</blockquote>
+
+\anchor OPT_wsmp_scaling
+ <strong>wsmp_scaling</strong>: Determines how the matrix is scaled by WSMP.
+<blockquote>
+ This corresponds to the value of WSSMP's IPARM(10). The valid range for this integer option is 0 &le; wsmp_scaling &le; 3 and its default value is 0.
+
+</blockquote>
+
+\anchor OPT_wsmp_singularity_threshold
+ <strong>wsmp_singularity_threshold</strong>: WSMP's singularity threshold.
+<blockquote>
+ WSMP's DPARM(10) parameter. The smaller this value the less likely a matrix is declared singular. The valid range for this real option is 0 < wsmp_singularity_threshold < 1 and its default value is 10<sup>-18</sup>.
+
 </blockquote>
 
 \section OPTIONS_AMPL Options available via the AMPL Interface

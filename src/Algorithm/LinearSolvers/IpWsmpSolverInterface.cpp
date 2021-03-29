@@ -113,45 +113,39 @@ void WsmpSolverInterface::RegisterOptions(
    roptions->AddIntegerOption(
       "wsmp_num_threads",
       "Number of threads to be used in WSMP",
-      1,
-      "This option is only available if Ipopt has been compiled with WSMP.");
+      1);
    roptions->AddBoundedIntegerOption(
       "wsmp_ordering_option",
       "Determines how ordering is done in WSMP",
       -2, 3,
       1,
-      "This corresponds to the value of WSSMP's IPARM(16)."
-      "This option is only available if Ipopt has been compiled with WSMP.");
+      "This corresponds to the value of WSSMP's IPARM(16).");
    roptions->AddBoundedIntegerOption(
       "wsmp_ordering_option2",
       "Determines how ordering is done in WSMP",
       0, 3,
       1,
-      "This corresponds to the value of WSSMP's IPARM(20)."
-      "This option is only available if Ipopt has been compiled with WSMP.");
+      "This corresponds to the value of WSSMP's IPARM(20).");
    roptions->AddBoundedNumberOption(
       "wsmp_pivtol",
       "Pivot tolerance for the linear solver WSMP.",
       0.0, true,
       1.0, true,
       1e-4,
-      "A smaller number pivots for sparsity, a larger number pivots for stability. "
-      "This option is only available if Ipopt has been compiled with WSMP.");
+      "A smaller number pivots for sparsity, a larger number pivots for stability.");
    roptions->AddBoundedNumberOption(
       "wsmp_pivtolmax",
       "Maximum pivot tolerance for the linear solver WSMP.",
       0.0, true,
       1.0, true,
       1e-1,
-      "Ipopt may increase pivtol as high as pivtolmax to get a more accurate solution to the linear system. "
-      "This option is only available if Ipopt has been compiled with WSMP.");
+      "Ipopt may increase pivtol as high as pivtolmax to get a more accurate solution to the linear system.");
    roptions->AddBoundedIntegerOption(
       "wsmp_scaling",
       "Determines how the matrix is scaled by WSMP.",
       0, 3,
       0,
-      "This corresponds to the value of WSSMP's IPARM(10). "
-      "This option is only available if Ipopt has been compiled with WSMP.");
+      "This corresponds to the value of WSSMP's IPARM(10).");
    roptions->AddBoundedNumberOption(
       "wsmp_singularity_threshold",
       "WSMP's singularity threshold.",
@@ -159,16 +153,14 @@ void WsmpSolverInterface::RegisterOptions(
       1.0, true,
       1e-18,
       "WSMP's DPARM(10) parameter. "
-      "The smaller this value the less likely a matrix is declared singular. "
-      "This option is only available if Ipopt has been compiled with WSMP.");
+      "The smaller this value the less likely a matrix is declared singular.");
    roptions->SetRegisteringCategory("Uncategorized"); // ????
    roptions->AddLowerBoundedIntegerOption(
       "wsmp_write_matrix_iteration",
       "Iteration in which the matrices are written to files.",
       -1,
       -1,
-      "If non-negative, this option determines the iteration in which all matrices given to WSMP are written to files. "
-      "This option is only available if Ipopt has been compiled with WSMP.");
+      "If non-negative, this option determines the iteration in which all matrices given to WSMP are written to files.");
    roptions->AddStringOption2(
       "wsmp_skip_inertia_check",
       "Always pretend inertia is correct.",
