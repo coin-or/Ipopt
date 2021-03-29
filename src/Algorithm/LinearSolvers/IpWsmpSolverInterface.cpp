@@ -37,22 +37,6 @@ extern "C"
    );
 
    void IPOPT_WSMP_FUNC_(wsmp_clear, WSMP_CLEAR)(void);
-
-#ifdef PARDISO_MATCHING_PREPROCESS
-   void IPOPT_PARDISO_FUNC(smat_reordering_pardiso_wsmp, SMAT_REORDERING_PARDISO_WSMP)(
-      const ipfint* N,
-      const ipfint* ia,
-      const ipfint* ja,
-      const double* a_,
-      ipfint*       a2,
-      ipfint*       ja2,
-      double*       a2_,
-      ipfint*       perm2,
-      double*       scale2,
-      ipfint*       tmp2_,
-      ipfint        preprocess
-   );
-#endif
 }
 
 namespace Ipopt
@@ -61,14 +45,19 @@ namespace Ipopt
 static const Index dbg_verbosity = 3;
 #endif
 
-WsmpSolverInterface::WsmpSolverInterface()
-   : a_(NULL),
+WsmpSolverInterface::WsmpSolverInterface(
+#ifdef PARDISO_MATCHING_PREPROCESS
+      SmartPtr<LibraryLoader> pardisoloader_
+#endif
+)  : a_(NULL),
 #ifdef PARDISO_MATCHING_PREPROCESS
      ia2(NULL),
      ja2(NULL),
      a2_(NULL),
      perm2(NULL),
      scale2(NULL),
+     pardisoloader(pardisoloader_),
+     smat_reordering_pardiso_wsmp(NULL),
 #endif
      negevals_(-1),
      initialized_(false),
@@ -185,6 +174,12 @@ bool WsmpSolverInterface::InitializeImpl(
    const std::string& prefix
 )
 {
+#ifdef PARDISO_MATCHING_PREPROCESS
+   DBG_ASSERT(IsValid(pardisoloader));
+   smat_reordering_pardiso_wsmp = (IPOPT_DECL_SMAT_REORDERING_PARDISO_WSMP(*))pardisoloader->loadSymbol("smat_reordering_pardiso_wsmp");
+   DBG_ASSERT(smat_reordering_pardiso_wsmp);
+#endif
+
    options.GetIntegerValue("wsmp_num_threads", wsmp_num_threads_, prefix);
    Index wsmp_ordering_option;
    options.GetIntegerValue("wsmp_ordering_option", wsmp_ordering_option, prefix);
@@ -418,8 +413,7 @@ ESymSolverStatus WsmpSolverInterface::InternalSymFact(
    scale2 = new double[N];
    ipfint* tmp2_ = new ipfint[N];
 
-   IPOPT_PARDISO_FUNC(smat_reordering_pardiso_wsmp, SMAT_REORDERING_PARDISO_WSMP)(&N, ia, ja, a_, ia2, ja2, a2_, perm2,
-         scale2, tmp2_, 0);
+   smat_reordering_pardiso_wsmp(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp2_, 0);
 
    delete[] tmp2_;
 
@@ -569,7 +563,7 @@ ESymSolverStatus WsmpSolverInterface::Factorization(
 #ifdef PARDISO_MATCHING_PREPROCESS
    {
       ipfint* tmp2_ = new ipfint[N];
-      IPOPT_PARDISO_FUNC(smat_reordering_pardiso_wsmp, SMAT_REORDERING_PARDISO_WSMP)(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp2_, 1);
+      smat_reordering_pardiso_wsmp(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp2_, 1);
       delete[] tmp2_;
    }
 #endif

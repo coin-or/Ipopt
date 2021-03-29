@@ -424,13 +424,17 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    {
       bool wsmp_iterative;
       options.GetBoolValue("wsmp_iterative", wsmp_iterative, prefix);
-      if (wsmp_iterative)
+      if( wsmp_iterative )
       {
          SolverInterface = new IterativeWsmpSolverInterface();
       }
       else
       {
+#ifdef PARDISO_MATCHING_PREPROCESS
+         SolverInterface = new WsmpSolverInterface(GetPardisoLoader(options, prefix));
+#else
          SolverInterface = new WsmpSolverInterface();
+#endif
       }
    }
 #endif

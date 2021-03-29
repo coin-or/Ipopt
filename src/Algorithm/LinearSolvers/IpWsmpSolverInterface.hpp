@@ -8,9 +8,8 @@
 #define __IPWSMPSOLVERINTERFACE_HPP__
 
 #include "IpSparseSymLinearSolverInterface.hpp"
+#include "IpPardisoSolverInterface.hpp"  // for IPOPT_DECL_SMAT_REORDERING_PARDISO_WSMP
 #include "IpTypes.h"
-
-//#define PARDISO_MATCHING_PREPROCESS
 
 namespace Ipopt
 {
@@ -24,7 +23,11 @@ public:
    /** @name Constructor/Destructor */
    ///@{
    /** Constructor */
-   WsmpSolverInterface();
+   WsmpSolverInterface(
+#ifdef PARDISO_MATCHING_PREPROCESS
+      SmartPtr<LibraryLoader> pardisoloader_
+#endif
+   );
 
    /** Destructor */
    virtual ~WsmpSolverInterface();
@@ -201,6 +204,15 @@ private:
    /** WSSMP's internal MRP array */
    ipfint* MRP_;
    ///@}
+
+   /**@name PARDISO function pointer
+    * @{
+    */
+#ifdef PARDISO_MATCHING_PREPROCESS
+   SmartPtr<LibraryLoader> pardisoloader;
+   IPOPT_DECL_SMAT_REORDERING_PARDISO_WSMP(*smat_reordering_pardiso_wsmp);
+#endif
+   /**@} */
 
    /** @name Internal functions */
    ///@{

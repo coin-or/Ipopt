@@ -272,7 +272,13 @@ bool TNLPAdapter::ProcessOptions(
       {
 #ifdef IPOPT_HAS_WSMP
          SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
+#ifdef PARDISO_MATCHING_PREPROCESS
+         std::string libname;
+         options.GetStringValue("pardisolib", libname, prefix);
+         SolverInterface = new WsmpSolverInterface(new LibraryLoader(libname));
+#else
          SolverInterface = new WsmpSolverInterface();
+#endif
          SmartPtr<TSymLinearSolver> ScaledSolver =
             new TSymLinearSolver(SolverInterface, NULL);
          dependency_detector_ = new TSymDependencyDetector(*ScaledSolver);
