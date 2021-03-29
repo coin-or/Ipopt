@@ -4,6 +4,9 @@
 
 #include "IpLinearSolvers.h"
 #include "IpoptConfig.h"
+#ifdef IPOPT_HAS_HSL
+#include "CoinHslConfig.h"
+#endif
 
 IpoptLinearSolver IpoptGetAvailableLinearSolvers(
    int buildinonly
@@ -43,11 +46,11 @@ IpoptLinearSolver IpoptGetAvailableLinearSolvers(
    solvers |= IPOPTLINEARSOLVER_PARDISOMKL;
 #endif
 
-#if !defined(IPOPT_SINGLE) && defined(COINHSL_HAS_SPRAL)
+#if !defined(IPOPT_SINGLE) && defined(IPOPT_HAS_SPRAL)
    solvers |= IPOPTLINEARSOLVER_SPRAL;
 #endif
 
-#if !defined(IPOPT_SINGLE) && defined(COINHSL_HAS_WSMP)
+#if !defined(IPOPT_SINGLE) && defined(IPOPT_HAS_WSMP)
    solvers |= IPOPTLINEARSOLVER_WSMP;
 #endif
 

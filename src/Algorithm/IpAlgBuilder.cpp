@@ -154,7 +154,7 @@ void AlgorithmBuilder::RegisterOptions(
    if( availablesolvers & IPOPTLINEARSOLVER_PARDISOMKL )
    {
       options.push_back("pardisomkl");
-      descrs.push_back("use the Pardiso package from MKL");
+      descrs.push_back("use the Pardiso package from Intel MKL");
    }
 
    if( availablesolvers & IPOPTLINEARSOLVER_SPRAL )
