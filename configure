@@ -23925,6 +23925,8 @@ $as_echo "$as_me: Pardiso from pardiso-project.org specified as $withval" >&6;}
           have_pardiso_project=yes
           ;;
    esac
+else
+  have_pardiso_project=no
 fi
 
 
@@ -25005,7 +25007,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25008 "configure" */
+/* #line 25010 "configure" */
 public class Test {
 }
 EOF
@@ -25491,7 +25493,7 @@ else
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25494 "configure" */
+/* #line 25496 "configure" */
 public class Test {
 }
 EOF
@@ -25525,7 +25527,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 25528 "configure" */
+/* [#]line 25530 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);

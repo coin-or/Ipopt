@@ -157,7 +157,8 @@ AC_ARG_WITH([pardiso],
           AC_MSG_NOTICE([Pardiso from pardiso-project.org specified as $withval])
           have_pardiso_project=yes
           ;;
-   esac])
+   esac],
+   [have_pardiso_project=no])
 
 # check whether Pardiso is available via Lapack, which should then be MKL
 AC_ARG_ENABLE([pardisomkl],
