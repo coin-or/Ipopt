@@ -52,7 +52,7 @@ In the past, we have been able to compile \Ipopt using default Xcode
 versions of gcc and g++ and a newer version of gfortran from this link,
 but consistent version numbers may be an issue in future cases.
 
-If you intend to use \ref DOWNLOAD_MUMPS "MUMPS" or one of the DOWNLOAD_HSL "HSL linear solvers",
+If you intend to use \ref DOWNLOAD_MUMPS "MUMPS" or one of the \ref DOWNLOAD_HSL "HSL linear solvers",
 then they may profit from an installation of METIS.
 This can be accomplished via
 
@@ -261,6 +261,20 @@ make use of the matrix ordering algorithms implemented in
 ThirdParty-HSL will look automatically for a METIS installation in your
 system and should work with both METIS 4 and METIS 5.
 
+\subsubsection LINEARSOLVERLOADER Providing a HSL library at runtime
+
+Alternatively to linking against HSL routines when \Ipopt is build,
+\Ipopt can also load a shared library with MA27, MA57, HSL_MA77, HSL_MA86,
+HSL_MA97, or MC19 at runtime.
+This means, if you obtain one of those solvers
+after you compiled \Ipopt, you don't need to recompile Ipopt to
+use it. Instead, you can just place a shared library onto your system and
+ensure that \Ipopt can find it at runtime.
+Option \ref OPT_hsllib "hsllib" can be set to the name of the library from
+which to load HSL routines if a HSL solver is selected. The name can contain
+a path; otherwise, the shared library search path (e.g., `LD_LIBRARY_PATH`)
+will be used.
+
 \subsection DOWNLOAD_MUMPS MUMPS Linear Solver
 
 You can also use the (public domain) sparse linear solver MUMPS. Please
@@ -290,7 +304,7 @@ using \Ipopt within an MPI program together with MUMPS, the
 code will not run. You will have to modify the MUMPS sources so that the
 MPI symbols inside the MUMPS code are renamed.
 
-\note Branch mumps5 of project ThirdParty-Mumps can be used to build a
+\note Branch `mumps5` of project ThirdParty-Mumps can be used to build a
 a library of MUMPS 5.2.x that is usable with \Ipopt. However, initial
 experiments on the CUTEst testset have shown that performance with MUMPS
 5.2.x is worse than with Mumps 4.10.0 on average.
@@ -305,10 +319,10 @@ e.g.,
 and you also need to provide the linker flags for MUMPS with the
 `--with-mumps-lflags` flag.
 
-\subsection DOWNLOAD_PARDISO Pardiso (Parallel Sparse Direct Linear Solver)
+\subsection DOWNLOAD_PARDISO Pardiso (Parallel Sparse Direct Linear Solver) from Pardiso Project
 
-If you would like to compile \Ipopt with Pardiso, you need to obtain either
-Intel's MKL library or the Pardiso library from <http://www.pardiso-project.org>
+If you would like to use \Ipopt with Pardiso from Pardiso Project,
+you need to obtain the Pardiso library from <http://www.pardiso-project.org>
 for your operating system.
 
 From <http://www.pardiso-project.org>, you can obtain a limited time
@@ -316,28 +330,48 @@ license of Pardiso for academic or evaluation purposes or buy a
 non-profit or commercial license. Make sure you read the license
 agreement before filling out the download form.
 
-To compile \Ipopt with the linear solver Pardiso from the Pardiso project
-website, you need to specify the link flags for the library with the
-`--with-pardiso` flag, including required additional libraries (except
-for Lapack) and flags.
-For example, if you want to compile \Ipopt with the parallel version of
-Pardiso (located in `$HOME/lib`) on a GNU/Linux system, you should add
-the flag
+To avoid conflicts with \ref DOWNLOAD_PARDISOMKL, \Ipopt only offers the
+option to load Pardiso from Pardiso Project at runtime.
+Therefore, the \Ipopt interface to Pardiso from Pardiso Project is always
+build and the value of option \ref OPT_pardisolib "pardisolib" is used as
+name (possibly including a path) for the library to be loaded.
+The configure option `--with-pardiso` can be used to specify the default
+value for option `pardisolib`. Further, if `--with-pardiso` is specified
+and HSL codes are not available at compile time, then the default of option
+\ref OPT_linear_solver "linear_solver" is set to `pardiso`.
+For example, if you want that \Ipopt loads the GCC version of Pardiso
+on a GNU/Linux system and this library is located in `$HOME/lib`, you
+should add the flag
 \verbatim
---with-pardiso="$HOME/lib/libpardiso600-GNU800-X86-64.so -fopenmp -lgfortran"
+--with-pardiso="$HOME/lib/libpardiso720-GNU831-X86-64.so"
 \endverbatim
-For best performance on Linux, use Pardiso from the Pardiso project website
-together with linear algebra routines from Intel MKL (see \ref EXTERNALCODE_LINALG).
+
+\attention With \Ipopt <= 3.13, Pardiso from Pardiso Project was linked
+when \Ipopt was build and option `--with-pardiso` used to specify the
+corresponding linker flags. This has been changed with \Ipopt 3.14!
 
 If you are using the parallel version of Pardiso, you need to
 specify the number of processors it should run on with the
 environment variable `OMP_NUM_THREADS`, as described in the Pardiso
 manual.
 
+\subsection DOWNLOAD_PARDISOMKL Pardiso from Intel MKL
+
 If you want to compile \Ipopt with the Pardiso library
 that is included in Intel MKL, it is sufficient to ensure
 that MKL is used for the linear algebra routines (Blas/Lapack),
 see \ref EXTERNALCODE_LINALG.
+
+If configure finds that Pardiso is available with Lapack, option
+\ref OPT_linear_solver "linear_solver" can be set to `pardisomkl` to use
+Pardiso from Intel MKL.
+Specifying `--disable-pardisomkl` as option for configure disables the
+check for Pardiso from Intel MKL.
+
+\attention With \Ipopt <= 3.13, Pardiso from Intel MKL could be selected
+by setting \ref OPT_linear_solver "linear_solver" to `pardiso`. With
+\Ipopt 3.14, value `pardiso` is reserved for Pardiso from Pardiso Project
+and value `pardisomkl` has to be used to select Pardiso from Intel MKL.
 
 \subsection DOWNLOAD_SPRAL SPRAL (Sparse Parallel Robust Algorithms Library)
 
@@ -416,28 +450,6 @@ you may use the `configure` flag
 \endverbatim
 But the actual flags depend on WSMP library and your preference for the Blas/Lapack libraries.
 
-\subsection LINEARSOLVERLOADER Using the Linear Solver Loader
-
-\Ipopt can load shared libraries with MA27, MA57, HSL_MA77, HSL_MA86,
-HSL_MA97, MC19, or the Pardiso linear solver from pardiso-project.org at runtime.
-
-This means, if you obtain one of those solvers
-after you compiled \Ipopt, you don't need to recompile Ipopt to
-use it. Instead, you can just put a shared library into the shared library
-search path (e.g., `LD_LIBRARY_PATH`). The name (including path) of these
-library can be set via options `hsllib` and `pardisolib`, respectively,
-and default to `libhsl.so` and `libpardiso.so`, resp., on most UNIX platforms.
-On macOS, the names are `libhsl.dylib` and `libpardiso.dylib`.
-On Windows, the names are `libhsl.dll` and `libpardiso.dll`.
-
-The Pardiso shared library can be downloaded from the Pardiso website.
-To create a shared library containing the HSL linear solvers, follow
-the instructions from \ref DOWNLOAD_HSL, and possibly rename the resulting
-library to `libhsl.so`.
-
-If you want to disable this feature, you can specify
-`--disable-linear-solver-loader` for the `configure` script.
-
 
 \section GETIPOPT Getting the Ipopt Code
 
@@ -476,7 +488,7 @@ are right now (output of `pwd`).
 To use the tarball, follow the steps below:
 
 1.  Download the desired tarball from
-    <http://www.coin-or.org/download/source/Ipopt>, it has the form
+    <https://github.com/coin-or/Ipopt/releases>, it has the form
     `Ipopt-x.y.z.tgz`, where `x.y.z` is the version number, such as
     3.12.0.
 
@@ -602,7 +614,9 @@ sudo make install
     -   pkg-config files for use of the \Ipopt and `sIpopt` libraries
         (`ipopt.pc`, `sipopt.pc`) in `/usr/local/lib/pkgconfig`.
 
-    -   \Ipopt and `sIpopt` header files `/usr/local/include/coin-or`.
+    -   \Ipopt and `sIpopt` header files `/usr/local/include/coin-or`,
+
+    -   the \ref INTERFACE_JAVA "Java Interface" jar file in `/usr/local/share/java`.
 
     You can change the default installation directory (here `/usr/local`)
     by using the `--prefix` switch for `configure`. If this is a directory
@@ -657,13 +671,13 @@ Below a few particular options are discussed:
 -   If you want to link the \Ipopt library with a main
     program written in C or Fortran, the C and Fortran compiler doing
     the linking of the executable needs to be told about the C++ runtime
-    libraries. Unfortunately, the current version of autoconf does not
-    provide the automatic detection of those libraries. We have
+    libraries. Unfortunately, the build system does not provide a
+    functionality for automatic detection of those libraries. We have
     hard-coded some default values for some systems and compilers, but
     this might not work all the time.
 
     If you have problems linking your Fortran or C code with the
-    \Ipopt library libipopt.a and the linker complains
+    \Ipopt library `libipopt.a` and the linker complains
     about missing symbols from C++ (e.g., the standard template
     library), you should specify the C++ libraries with the `CXXLIBS`
     variable. To find out what those libraries are, it is probably
@@ -703,6 +717,9 @@ Below a few particular options are discussed:
     This is also the default if `JAVA_HOME` contains a space or the build
     of shared libraries has been disabled as `JIpopt` needs to be able to
     load the \Ipopt library dynamically at runtime.
+
+-   \Ipopt can load HSL or Pardiso libraries at runtime. To disable this
+    feature, specify `--disable-linear-solver-loader`.
 
 -   \ref SIPOPT "sIpopt" is build and installed together with Ipopt. If
     you do not need sIpopt, you can disable it via `--disable-sipopt`.

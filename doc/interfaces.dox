@@ -942,8 +942,8 @@ via javadoc by executing `make javadoc` in the \Ipopt build directory
 
 If the \Ipopt build includes the Java interface, then a JAR file
 `org.coinor.ipopt.jar` containing class org.coinor.Ipopt will have been
-installed in `$PREFIX/lib`. To use the Java interface, make sure that this
-jar file is part of your Java classpath.
+installed in `$PREFIX/share/java`. To use the Java interface, make sure
+that this jar file is part of your Java classpath.
 A sample makefile that compiles and runs example HS071 can be found in
 `$IPOPTDIR/examples/hs071_java`.
 

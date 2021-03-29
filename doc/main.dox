@@ -149,19 +149,18 @@ required:
     -   [WSMP](http://researcher.ibm.com/view_project.php?id=1426) (Watson Sparse Matrix Package)
 
     You must include at least one of the linear solvers above in order
-    to run \Ipopt, and if you want to be able to switch
-    easily between different alternatives, you can compile
-    \Ipopt with all of them.
-
-    The \Ipopt library also has mechanisms to load MC19 and the
-    linear solvers MA27, MA57, HSL_MA77, HSL_MA86, HSL_MA97, and
-    Pardiso from a shared library at runtime, if the library has not
-    been compiled with them, see \ref LINEARSOLVERLOADER.
+    to run \Ipopt, and if you want to be able to switch easily between
+    different alternatives, you can compile \Ipopt with interfaces to all of them.
+    The linear solvers from HSL and Pardiso Project can also be loaded
+    from a shared library at runtime, see \ref LINEARSOLVERLOADER and
+    \ref DOWNLOAD_PARDISO "Pardiso from Pardiso Project".
+    For the latter, this is also the only option.
 
     \note The solution of the linear systems is a central ingredient
     in \Ipopt and the optimizer's performance and
     robustness depends on your choice. The best choice depends on your
-    application, and it makes sense to try different options. Most of
+    application, and it makes sense to try different options, but solvers
+    from HSL or Pardiso Project are often a good choice. Most of
     the solvers also rely on efficient BLAS code (see above), so you
     should use a good BLAS library tailored to your system. Please keep
     this in mind, particularly when you are comparing
@@ -182,8 +181,7 @@ required:
     for scaling of the linear systems before they are passed to the
     linear solver. This may be particularly useful if
     \Ipopt is used with MA27 or MA57. However, it is not
-    required to have MC19 to compile \Ipopt; if this
-    routine is missing, the scaling is never performed.
+    required to have MC19; if this routine is missing, scaling is not performed.
 
 -   ASL (AMPL Solver Library). The source code is available at
     http://www.netlib.org, and COIN-OR's
