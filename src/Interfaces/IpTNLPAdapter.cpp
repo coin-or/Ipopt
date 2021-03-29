@@ -252,59 +252,44 @@ bool TNLPAdapter::ProcessOptions(
    options.GetBoolValue("dependency_detection_with_rhs", dependency_detection_with_rhs_, prefix);
    std::string dependency_detector;
    options.GetStringValue("dependency_detector", dependency_detector, prefix);
-   if( dependency_detector != "none" )
-   {
-      if( dependency_detector == "mumps" )
-      {
 #ifdef IPOPT_HAS_MUMPS
-         SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
-         SolverInterface = new MumpsSolverInterface();
-         SmartPtr<TSymLinearSolver> ScaledSolver =
-            new TSymLinearSolver(SolverInterface, NULL);
-         dependency_detector_ = new TSymDependencyDetector(*ScaledSolver);
-#else
-         THROW_EXCEPTION(OPTION_INVALID,
-                         "Ipopt has not been compiled with MUMPS.  You cannot choose \"mumps\" for \"dependency_detector\".");
-#endif
-
-      }
-      else if( dependency_detector == "wsmp" )
-      {
-#ifdef IPOPT_HAS_WSMP
-         SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
-#ifdef PARDISO_MATCHING_PREPROCESS
-         std::string libname;
-         options.GetStringValue("pardisolib", libname, prefix);
-         SolverInterface = new WsmpSolverInterface(new LibraryLoader(libname));
-#else
-         SolverInterface = new WsmpSolverInterface();
-#endif
-         SmartPtr<TSymLinearSolver> ScaledSolver =
-            new TSymLinearSolver(SolverInterface, NULL);
-         dependency_detector_ = new TSymDependencyDetector(*ScaledSolver);
-#else
-         THROW_EXCEPTION(OPTION_INVALID,
-                         "Ipopt has not been compiled with WSMP.  You cannot choose \"wsmp\" for \"dependency_detector\".");
-#endif
-
-      }
-      else if( dependency_detector == "ma28" )
-      {
-#if ((defined(COINHSL_HAS_MA28) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA28S) && defined(IPOPT_SINGLE))) && defined(F77_FUNC)
-         dependency_detector_ = new Ma28TDependencyDetector();
-#else
-         THROW_EXCEPTION(OPTION_INVALID, "Ipopt has not been compiled with MA28.  You cannot choose \"ma28\" for \"dependency_detector\".");
-#endif
-      }
-      else
-      {
-         THROW_EXCEPTION(OPTION_INVALID, "Something internally wrong for \"dependency_detector\".");
-      }
-      if( !dependency_detector_->ReducedInitialize(*jnlst_, options, prefix) )
-      {
-         return false;
-      }
+   if( dependency_detector == "mumps" )
+   {
+      SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
+      SolverInterface = new MumpsSolverInterface();
+      SmartPtr<TSymLinearSolver> ScaledSolver =
+         new TSymLinearSolver(SolverInterface, NULL);
+      dependency_detector_ = new TSymDependencyDetector(*ScaledSolver);
    }
+#endif
+
+#ifdef IPOPT_HAS_WSMP
+   else if( dependency_detector == "wsmp" )
+   {
+      SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
+#ifdef PARDISO_MATCHING_PREPROCESS
+      std::string libname;
+      options.GetStringValue("pardisolib", libname, prefix);
+      SolverInterface = new WsmpSolverInterface(new LibraryLoader(libname));
+#else
+      SolverInterface = new WsmpSolverInterface();
+#endif
+      SmartPtr<TSymLinearSolver> ScaledSolver =
+         new TSymLinearSolver(SolverInterface, NULL);
+      dependency_detector_ = new TSymDependencyDetector(*ScaledSolver);
+   }
+#endif
+
+#if ((defined(COINHSL_HAS_MA28) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA28S) && defined(IPOPT_SINGLE))) && defined(F77_FUNC)
+   else if( dependency_detector == "ma28" )
+   {
+      dependency_detector_ = new Ma28TDependencyDetector();
+   }
+#endif
+
+   if( IsValid(dependency_detector_) )
+      if( !dependency_detector_->ReducedInitialize(*jnlst_, options, prefix) )
+         return false;
 
    return true;
 }
