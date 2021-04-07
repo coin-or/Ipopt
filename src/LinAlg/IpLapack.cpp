@@ -8,13 +8,6 @@
 #include "IpLapack.hpp"
 #include "IpTypes.h"
 
-#ifdef FUNNY_LAPACK_FINT
-# define ipfint long
-# define ipfintarray int
-#else
-# define ipfintarray ipfint
-#endif
-
 #ifdef IPOPT_SINGLE
 #define IPOPT_LAPACK_FUNCP(name,NAME) IPOPT_LAPACK_FUNC(s ## name,S ## NAME)
 #else
@@ -69,7 +62,7 @@ extern "C"
       ipfint*       n,
       ipnumber*     A,
       ipfint*       ldA,
-      ipfintarray*  IPIV,
+      ipfint*       IPIV,
       ipfint*       info
    );
 
@@ -80,7 +73,7 @@ extern "C"
       ipfint*         nrhs,
       const ipnumber* A,
       ipfint*         ldA,
-      ipfintarray*    IPIV,
+      ipfint*         IPIV,
       ipnumber*       B,
       ipfint*         ldB,
       ipfint*         info,
