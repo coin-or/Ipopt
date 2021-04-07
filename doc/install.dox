@@ -727,6 +727,27 @@ Below a few particular options are discussed:
 Configure flags specific to the use of \Ipopt's dependencies were discussed
 in the corresponding sections of \ref EXTERNALCODE.
 
+\subsection CPP_FLAGS Additional Flags for Compiler Preprocessor
+
+A few flags that influence which Ipopt code is compiled are not controlled by parameters for configure.
+We list some of these flags in the following.
+
+\note These are flags for expert users.
+  Usually, there should be no need to define these.
+  Further, we may change or remove these flags without advanced warning.
+
+- `IPOPT_THREAD_LOCAL`: Keyword to be used to declare a thread-local variable.
+
+- `IPOPT_DEPRECATED`: Keyword to be used to mark a function as deprecated.
+
+- `FUNNY_MA57_FINT`: If defined, then assume that `ptrdiff_t` corresponds to the integer type used by HSL MA57, e.g., 64-bit integers on 64-bit systems.
+  This flag was useful when using MA57 from libraries that come with Matlab.
+
+- `MA97_DUMP_MATRIX`: If defined, then option `ma97_dump_matrix` is available.
+  This requires linking against a HSL library (not loading at runtime) that includes function `dump_mat_csc`.
+
+- `MUMPS_DUMP_MATRIX`: If defined, then matrices are written to stdout in the Mumps interface.
+
 
 \section COINBREW Using CoinBrew
 

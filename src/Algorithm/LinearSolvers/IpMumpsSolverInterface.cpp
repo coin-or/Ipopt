@@ -301,7 +301,7 @@ void dump_matrix(
    MUMPS_STRUC_C* mumps_data
 )
 {
-#ifdef write_matrices
+#ifdef MUMPS_DUMP_MATRIX
    // Dump the matrix
    for (int i = 0; i < 40; i++)
    {

@@ -56,6 +56,7 @@ commit history.
         - Detailed timing statistics are not longer collected by default.
           To reenable, set the new option timing_statistics to yes or set
           the option print_timing_statistics to yes [#299].
+        - Added documentation on some available expert C preprocessor flags.
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]

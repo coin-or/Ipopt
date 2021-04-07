@@ -377,8 +377,7 @@ bool QualityFunctionMuOracle::CalculateMu(
       }
    }
 
-   //#define tracequalityfunction
-#ifdef tracequalityfunction
+#ifdef TRACEQUALITYFUNCTION
    char fname[100];
    Snprintf(fname, 100, "qf_values_%d.dat", IpData().iter_count());
    FILE* fid = fopen(fname, "w");
