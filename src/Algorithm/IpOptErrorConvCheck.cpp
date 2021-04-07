@@ -279,9 +279,8 @@ bool OptimalityErrorConvergenceCheck::CurrentIsAcceptable()
 
    if( IpData().iter_count() != last_obj_val_iter_ )
    {
-      // DELETEME
-      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-                     "obj val update iter = %d\n", IpData().iter_count());
+      //Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+      //               "obj val update iter = %d\n", IpData().iter_count());
       last_obj_val_ = curr_obj_val_;
       curr_obj_val_ = IpCq().curr_f();
       last_obj_val_iter_ = IpData().iter_count();
@@ -322,9 +321,8 @@ bool OptimalityErrorConvergenceCheck::CurrentIsAcceptable()
       Jnlst().Printf(J_MOREDETAILED, J_MAIN,
                      "  fabs(curr_obj_val_-last_obj_val_)/Max(1., fabs(curr_obj_val_)) = %23.16e acceptable_obj_change_tol_ = %23.16e\n",
                      fabs(curr_obj_val_ - last_obj_val_) / Max(Number(1.), fabs(curr_obj_val_)), acceptable_obj_change_tol_);
-      // DELETEME
-      Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-                     "test iter = %d\n", IpData().iter_count());
+      //Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+      //               "test iter = %d\n", IpData().iter_count());
    }
 
    return (overall_error <= acceptable_tol_ && dual_inf <= acceptable_dual_inf_tol_

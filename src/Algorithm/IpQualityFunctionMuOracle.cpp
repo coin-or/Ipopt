@@ -462,19 +462,17 @@ bool QualityFunctionMuOracle::CalculateMu(
    curr_slack_s_L_ = NULL;
    curr_slack_s_U_ = NULL;
 
-   // DELETEME
+   /*
    char ssigma[40];
    Snprintf(ssigma, 39, " sigma=%8.2e", sigma);
    IpData().Append_info_string(ssigma);
    Snprintf(ssigma, 39, " qf=%d", count_qf_evals_);
    IpData().Append_info_string(ssigma);
-   /*
-    Snprintf(ssigma, 39, " xi=%8.2e ", IpCq().curr_centrality_measure());
-    IpData().Append_info_string(ssigma);
-    if (sigma>1.) {
-    IpData().Append_info_string("LARGESIGMA");
-    }
-    */
+   Snprintf(ssigma, 39, " xi=%8.2e ", IpCq().curr_centrality_measure());
+   IpData().Append_info_string(ssigma);
+   if( sigma > 1. )
+      IpData().Append_info_string("LARGESIGMA");
+   */
 
    new_mu = mu;
    return true;

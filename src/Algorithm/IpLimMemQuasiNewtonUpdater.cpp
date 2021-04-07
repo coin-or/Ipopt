@@ -1378,29 +1378,6 @@ void LimMemQuasiNewtonUpdater::SetW()
    {
       IpData().Set_W(GetRawPtr(W));
    }
-
-#ifdef PRINT_W
-   // DELETEME
-   const DenseVector* dx = static_cast<const DenseVector*>
-                           (GetRawPtr(IpData().curr()->x()));
-   DBG_ASSERT(dynamic_cast<const DenseVector*>(GetRawPtr(IpData().curr()->x())));
-   SmartPtr<DenseVector> tmpx = dx->MakeNewDenseVector();
-   SmartPtr<DenseVector> tmpy = dx->MakeNewDenseVector();
-   for (Index i = 0; i < dx->Dim(); i++)
-   {
-      Number* tmpx_vals = tmpx->Values();
-      for (Index j = 0; j < dx->Dim(); j++)
-      {
-         tmpx_vals[j] = 0.;
-      }
-      tmpx_vals[i] = 1.;
-      W->MultVector(1., *tmpx, 0., *tmpy);
-      tmpx->Print(Jnlst(), J_DETAILED, J_MAIN, "tmpx");
-      tmpy->Print(Jnlst(), J_DETAILED, J_MAIN, "tmpy");
-   }
-   // ENDDELETEME
-#endif
-
 }
 
 void LimMemQuasiNewtonUpdater::RecalcY(

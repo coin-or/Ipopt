@@ -56,12 +56,13 @@ bool LoqoMuOracle::CalculateMu(
    Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,
                   "  Barrier parameter proposed by LOQO rule is %lf\n", mu);
 
-   // DELETEME
+   /*
    char ssigma[40];
    sprintf(ssigma, " sigma=%8.2e", sigma);
    IpData().Append_info_string(ssigma);
    sprintf(ssigma, " xi=%8.2e ", IpCq().curr_centrality_measure());
    IpData().Append_info_string(ssigma);
+   */
 
    new_mu = Max(Min(mu_max, mu), mu_min);
    return true;
