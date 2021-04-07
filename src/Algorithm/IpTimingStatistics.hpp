@@ -29,12 +29,19 @@ public:
    { }
    ///@}
 
+   bool IsFunctionEvaluationTimeEnabled() const;
    Number TotalFunctionEvaluationCpuTime() const;
    Number TotalFunctionEvaluationSysTime() const;
    Number TotalFunctionEvaluationWallclockTime() const;
 
    /** Method for resetting all times. */
    void ResetTimes();
+
+   /** Method for enabling all timed tasked. */
+   void EnableTimes();
+
+   /** Method for disabling all timed tasks except for OverallAlgorithm */
+   void DisableTimes();
 
    /** Method for printing all timing information */
    void PrintAllTimingStatistics(

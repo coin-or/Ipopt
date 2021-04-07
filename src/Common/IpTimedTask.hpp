@@ -11,8 +11,7 @@
 
 namespace Ipopt
 {
-/** This class is used to collect timing information for a
- *  particular task. */
+/** This class is used to collect timing information for a particular task. */
 class IPOPTLIB_EXPORT TimedTask
 {
 public:
@@ -24,6 +23,7 @@ public:
       total_cputime_(0.),
       total_systime_(0.),
       total_walltime_(0.),
+      enabled_(true),
       start_called_(false),
       end_called_(true)
    {}
@@ -32,6 +32,20 @@ public:
    ~TimedTask()
    {}
    ///@}
+
+   /// enable the timer
+   void Enable()
+   {
+      enabled_ = true;
+   }
+
+   /// disable the timer
+   ///
+   /// following calls to Start(), End(), and EndIfStarted() have no effect
+   void Disable()
+   {
+      enabled_ = false;
+   }
 
    /** Method for resetting time to zero. */
    void Reset()
@@ -46,6 +60,9 @@ public:
    /** Method that is called before execution of the task. */
    void Start()
    {
+      if( !enabled_ )
+         return;
+
       DBG_ASSERT(end_called_);
       DBG_ASSERT(!start_called_);
       end_called_ = false;
@@ -58,6 +75,9 @@ public:
    /** Method that is called after execution of the task. */
    void End()
    {
+      if( !enabled_ )
+         return;
+
       DBG_ASSERT(!end_called_);
       DBG_ASSERT(start_called_);
       end_called_ = true;
@@ -73,7 +93,9 @@ public:
     *  stop timing after catching exceptions. */
    void EndIfStarted()
    {
-      if (start_called_)
+      if( !enabled_ )
+         return;
+      if( start_called_ )
       {
          end_called_ = true;
          start_called_ = false;
@@ -103,6 +125,11 @@ public:
    {
       DBG_ASSERT(end_called_);
       return total_walltime_;
+   }
+
+   bool IsEnabled() const
+   {
+      return enabled_;
    }
 
    bool IsStarted() const
@@ -138,8 +165,9 @@ private:
    /** Total wall clock time for task measured so far. */
    Number total_walltime_;
 
-   /** @name fields for debugging */
+   /** @name status fields */
    ///@{
+   bool enabled_;
    bool start_called_;
    bool end_called_;
    ///@}
