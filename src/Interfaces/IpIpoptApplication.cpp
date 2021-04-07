@@ -342,7 +342,6 @@ void IpoptApplication::print_options_docu()
       options_to_print.push_back("print_frequency_time");
       options_to_print.push_back("output_file");
       options_to_print.push_back("file_print_level");
-      options_to_print.push_back("option_file_name");
       options_to_print.push_back("print_info_string");
       options_to_print.push_back("inf_pr_output");
       options_to_print.push_back("print_timing_statistics");
@@ -617,6 +616,10 @@ void IpoptApplication::print_options_docu()
          options_to_print.push_back("wsmp_singularity_threshold");
       }
 
+      options_to_print.push_back("#Miscellaneous");
+      options_to_print.push_back("option_file_name");
+      options_to_print.push_back("timing_statistics");
+
       if( printmode == "latex" )
       {
          reg_options_->OutputLatexOptionDocumentation(*jnlst_, options_to_print);
@@ -653,6 +656,7 @@ void IpoptApplication::print_options_docu()
       categories.push_back("WSMP Linear Solver");
       categories.push_back("Mumps Linear Solver");
       categories.push_back("MA28 Linear Solver");
+      categories.push_back("Miscellaneous");
 
       categories.push_back("Uncategorized");
       //categories.push_back("Undocumented Options");
@@ -714,7 +718,6 @@ void IpoptApplication::RegisterOptions(
       "before solving the optimization problem.");
 
 #if IPOPT_VERBOSITY > 0
-
    roptions->AddBoundedIntegerOption(
       "debug_print_level",
       "Verbosity level for debug file.",
@@ -731,8 +734,10 @@ void IpoptApplication::RegisterOptions(
       "no",
       "no", "don't print statistics",
       "yes", "print all timing statistics",
-      "If selected, the program will print the CPU usage (user time) for selected tasks.");
+      "If selected, the program will print the CPU usage (user time) for selected tasks. "
+      "If enabled, timing_statistics=yes is implied.");
 
+   roptions->SetRegisteringCategory("Miscellaneous");
    roptions->AddStringOption1(
       "option_file_name",
       "File name of options file.",
@@ -759,6 +764,14 @@ void IpoptApplication::RegisterOptions(
       "yes", "do not call FinalizeSolution",
       "In some Ipopt applications, the user might want to call the FinalizeSolution method separately. "
       "Setting this option to \"yes\" will cause the IpoptApplication object to suppress the default call to that method.");
+
+   roptions->AddStringOption2(
+      "timing_statistics",
+      "Indicates whether to measure time spend in components of Ipopt and NLP evaluation",
+      "no",
+      "no", "do not collect timing statistics",
+      "yes", "collect timing statistics",
+      "The overall algorithm time is unaffected by this option.");
 
    roptions->SetRegisteringCategory("Undocumented");
    roptions->AddStringOption3(
@@ -942,13 +955,16 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
    bool skip_finalize_solution_call = false;
    try
    {
-
       // Set up the algorithm
       p2alg->Initialize(*jnlst_, *p2ip_nlp, *p2ip_data, *p2ip_cq, *options_, "");
 
-      // Process the options used below
+      // disable detailed timing, if not required
+      bool timing_statistics;
       bool print_timing_statistics;
+      options_->GetBoolValue("timing_statistics", timing_statistics, "");
       options_->GetBoolValue("print_timing_statistics", print_timing_statistics, "");
+      if( !timing_statistics && !print_timing_statistics )
+         p2ip_data->TimingStats().DisableTimes();
 
       // If selected, print the user options
       bool print_user_options;
@@ -1041,7 +1057,7 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
       }
       else
       {
-         jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Total CPU secs in IPOPT                              = %10.3f\n",
+         jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Total CPU secs in IPOPT                              = %.3f\n",
             cpu_time_overall_alg);
       }
 

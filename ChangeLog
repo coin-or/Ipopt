@@ -53,6 +53,9 @@ commit history.
           can be used to disable the check for MKL Pardiso. Options that
           influence Pardiso from MKL are named pardisomkl_msglvl,
           pardisomkl_order, etc.
+        - Detailed timing statistics are not longer collected by default.
+          To reenable, set the new option timing_statistics to yes or set
+          the option print_timing_statistics to yes [#299].
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]

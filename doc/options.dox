@@ -123,15 +123,6 @@ Possible values:
 
 </blockquote>
 
-\anchor OPT_option_file_name
- <strong>option_file_name</strong>: File name of options file.
-<blockquote>
- By default, the name of the Ipopt options file is "ipopt.opt" - or something else if specified in the IpoptApplication::Initialize call. If this option is set by SetStringValue BEFORE the options file is read, it specifies the name of the options file. It does not make any sense to specify this option within the options file. Setting this option to an empty string disables reading of an options file. The default value for this string option is "ipopt.opt".
-
-Possible values:
- - *: Any acceptable standard file name
-</blockquote>
-
 \anchor OPT_print_info_string
  <strong>print_info_string</strong>: Enables printing of additional info string at end of iteration output.
 <blockquote>
@@ -155,7 +146,7 @@ Possible values:
 \anchor OPT_print_timing_statistics
  <strong>print_timing_statistics</strong>: Switch to print timing statistics.
 <blockquote>
- If selected, the program will print the CPU usage (user time) for selected tasks. The default value for this string option is "no".
+ If selected, the program will print the CPU usage (user time) for selected tasks. If enabled, timing_statistics=yes is implied. The default value for this string option is "no".
 
 Possible values:
  - no: don't print statistics
@@ -1835,6 +1826,27 @@ Possible values:
 <blockquote>
  WSMP's DPARM(10) parameter. The smaller this value the less likely a matrix is declared singular. The valid range for this real option is 0 < wsmp_singularity_threshold < 1 and its default value is 10<sup>-18</sup>.
 
+</blockquote>
+
+\subsection OPT_Miscellaneous Miscellaneous
+
+\anchor OPT_option_file_name
+ <strong>option_file_name</strong>: File name of options file.
+<blockquote>
+ By default, the name of the Ipopt options file is "ipopt.opt" - or something else if specified in the IpoptApplication::Initialize call. If this option is set by SetStringValue BEFORE the options file is read, it specifies the name of the options file. It does not make any sense to specify this option within the options file. Setting this option to an empty string disables reading of an options file. The default value for this string option is "ipopt.opt".
+
+Possible values:
+ - *: Any acceptable standard file name
+</blockquote>
+
+\anchor OPT_timing_statistics
+ <strong>timing_statistics</strong>: Indicates whether to measure time spend in components of Ipopt and NLP evaluation
+<blockquote>
+ The overall algorithm time is unaffected by this option. The default value for this string option is "no".
+
+Possible values:
+ - no: do not collect timing statistics
+ - yes: collect timing statistics
 </blockquote>
 
 \section OPTIONS_AMPL Options available via the AMPL Interface
