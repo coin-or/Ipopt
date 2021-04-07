@@ -623,8 +623,6 @@ void AlgorithmBuilder::BuildIpoptObjects(
       nlp_scaling = new NoNLPScalingObject();
    }
 
-   ip_nlp = new OrigIpoptNLP(&jnlst, GetRawPtr(nlp), nlp_scaling);
-
    // Create the IpoptData.  Check if there is additional data that
    // is needed
    std::string lsmethod;
@@ -635,6 +633,8 @@ void AlgorithmBuilder::BuildIpoptObjects(
       add_data = new CGPenaltyData();
    }
    ip_data = new IpoptData(add_data);
+
+   ip_nlp = new OrigIpoptNLP(&jnlst, GetRawPtr(nlp), nlp_scaling, ip_data->TimingStats());
 
    // Create the IpoptCalculators.  Check if there are additional
    // calculated quantities that are needed

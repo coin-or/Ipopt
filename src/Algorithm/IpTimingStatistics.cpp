@@ -9,6 +9,27 @@
 namespace Ipopt
 {
 
+Number TimingStatistics::TotalFunctionEvaluationCpuTime() const
+{
+   return f_eval_time_.TotalCpuTime() + grad_f_eval_time_.TotalCpuTime() + c_eval_time_.TotalCpuTime()
+          + d_eval_time_.TotalCpuTime() + jac_c_eval_time_.TotalCpuTime() + jac_d_eval_time_.TotalCpuTime()
+          + h_eval_time_.TotalCpuTime();
+}
+
+Number TimingStatistics::TotalFunctionEvaluationSysTime() const
+{
+   return f_eval_time_.TotalSysTime() + grad_f_eval_time_.TotalSysTime() + c_eval_time_.TotalSysTime()
+          + d_eval_time_.TotalSysTime() + jac_c_eval_time_.TotalSysTime() + jac_d_eval_time_.TotalSysTime()
+          + h_eval_time_.TotalSysTime();
+}
+
+Number TimingStatistics::TotalFunctionEvaluationWallclockTime() const
+{
+   return f_eval_time_.TotalWallclockTime() + grad_f_eval_time_.TotalWallclockTime() + c_eval_time_.TotalWallclockTime()
+          + d_eval_time_.TotalWallclockTime() + jac_c_eval_time_.TotalWallclockTime()
+          + jac_d_eval_time_.TotalWallclockTime() + h_eval_time_.TotalWallclockTime();
+}
+
 void TimingStatistics::ResetTimes()
 {
    OverallAlgorithm_.Reset();
@@ -39,6 +60,13 @@ void TimingStatistics::ResetTimes()
    Task4_.Reset();
    Task5_.Reset();
    Task6_.Reset();
+   f_eval_time_.Reset();
+   grad_f_eval_time_.Reset();
+   c_eval_time_.Reset();
+   d_eval_time_.Reset();
+   jac_c_eval_time_.Reset();
+   jac_d_eval_time_.Reset();
+   h_eval_time_.Reset();
 }
 
 void TimingStatistics::PrintAllTimingStatistics(
@@ -107,6 +135,24 @@ void TimingStatistics::PrintAllTimingStatistics(
                 "Task4...............................: %10.3f (sys: %10.3f wall: %10.3f)\n", Task4_.TotalCpuTime(), Task4_.TotalSysTime(), Task4_.TotalWallclockTime());
    jnlst.Printf(level, category,
                 "Task5...............................: %10.3f (sys: %10.3f wall: %10.3f)\n", Task5_.TotalCpuTime(), Task5_.TotalSysTime(), Task5_.TotalWallclockTime());
+
+   jnlst.Printf(level, category,
+                "Function Evaluations................: %10.3f (sys: %10.3f wall: %10.3f)\n", TotalFunctionEvaluationCpuTime(), TotalFunctionEvaluationSysTime(), TotalFunctionEvaluationWallclockTime());
+   jnlst.Printf(level, category,
+                " Objective function.................: %10.3f (sys: %10.3f wall: %10.3f)\n", f_eval_time_.TotalCpuTime(), f_eval_time_.TotalSysTime(), f_eval_time_.TotalWallclockTime());
+   jnlst.Printf(level, category,
+                " Objective function gradient........: %10.3f (sys: %10.3f wall: %10.3f)\n", grad_f_eval_time_.TotalCpuTime(), grad_f_eval_time_.TotalSysTime(), grad_f_eval_time_.TotalWallclockTime());
+   jnlst.Printf(level, category,
+                " Equality constraints...............: %10.3f (sys: %10.3f wall: %10.3f)\n", c_eval_time_.TotalCpuTime(), c_eval_time_.TotalSysTime(), c_eval_time_.TotalWallclockTime());
+   jnlst.Printf(level, category,
+                " Inequality constraints.............: %10.3f (sys: %10.3f wall: %10.3f)\n", d_eval_time_.TotalCpuTime(), d_eval_time_.TotalSysTime(), d_eval_time_.TotalWallclockTime());
+   jnlst.Printf(level, category,
+                " Equality constraint Jacobian.......: %10.3f (sys: %10.3f wall: %10.3f)\n", jac_c_eval_time_.TotalCpuTime(), jac_c_eval_time_.TotalSysTime(), jac_c_eval_time_.TotalWallclockTime());
+   jnlst.Printf(level, category,
+                " Inequality constraint Jacobian.....: %10.3f (sys: %10.3f wall: %10.3f)\n", jac_d_eval_time_.TotalCpuTime(), jac_d_eval_time_.TotalSysTime(), jac_d_eval_time_.TotalWallclockTime());
+   jnlst.Printf(level, category,
+                " Lagrangian Hessian.................: %10.3f (sys: %10.3f wall: %10.3f)\n", h_eval_time_.TotalCpuTime(), h_eval_time_.TotalSysTime(), h_eval_time_.TotalWallclockTime());
+
 }
 
 } // namespace Ipopt

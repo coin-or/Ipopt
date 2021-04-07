@@ -29,6 +29,10 @@ public:
    { }
    ///@}
 
+   Number TotalFunctionEvaluationCpuTime() const;
+   Number TotalFunctionEvaluationSysTime() const;
+   Number TotalFunctionEvaluationWallclockTime() const;
+
    /** Method for resetting all times. */
    void ResetTimes();
 
@@ -180,6 +184,41 @@ public:
    {
       return Task6_;
    }
+
+   TimedTask& f_eval_time()
+   {
+      return f_eval_time_;
+   }
+
+   TimedTask& grad_f_eval_time()
+   {
+      return grad_f_eval_time_;
+   }
+
+   TimedTask& c_eval_time()
+   {
+      return c_eval_time_;
+   }
+
+   TimedTask& jac_c_eval_time()
+   {
+      return jac_c_eval_time_;
+   }
+
+   TimedTask& d_eval_time()
+   {
+      return d_eval_time_;
+   }
+
+   TimedTask& jac_d_eval_time()
+   {
+      return jac_d_eval_time_;
+   }
+
+   TimedTask& h_eval_time()
+   {
+      return h_eval_time_;
+   }
    ///@}
 
 private:
@@ -236,6 +275,14 @@ private:
    TimedTask Task4_;
    TimedTask Task5_;
    TimedTask Task6_;
+
+   TimedTask f_eval_time_;
+   TimedTask grad_f_eval_time_;
+   TimedTask c_eval_time_;
+   TimedTask jac_c_eval_time_;
+   TimedTask d_eval_time_;
+   TimedTask jac_d_eval_time_;
+   TimedTask h_eval_time_;
    ///@}
 };
 

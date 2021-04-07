@@ -934,7 +934,6 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
 
    // Reset Timing statistics
    ip_data_->TimingStats().ResetTimes();
-   p2ip_nlp->ResetTimes();
 
    ApplicationReturnStatus retValue = Internal_Error;
    SolverReturn status = INTERNAL_ERROR;
@@ -1032,7 +1031,7 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
       jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Number of Lagrangian Hessian evaluations             = %d\n",
                      p2ip_nlp->h_evals());
       Number cpu_time_overall_alg = p2ip_data->TimingStats().OverallAlgorithm().TotalCpuTime();
-      Number cpu_time_funcs = p2ip_nlp->TotalFunctionEvaluationCpuTime();
+      Number cpu_time_funcs = p2ip_data->TimingStats().TotalFunctionEvaluationCpuTime();
       jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Total CPU secs in IPOPT (w/o function evaluations)   = %10.3f\n",
                      cpu_time_overall_alg - cpu_time_funcs);
       jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Total CPU secs in NLP function evaluations           = %10.3f\n",
@@ -1043,7 +1042,6 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
       {
          jnlst_->Printf(J_SUMMARY, J_TIMING_STATISTICS, "\n\nTiming Statistics:\n\n");
          p2ip_data->TimingStats().PrintAllTimingStatistics(*jnlst_, J_SUMMARY, J_TIMING_STATISTICS);
-         p2ip_nlp->PrintTimingStatistics(*jnlst_, J_SUMMARY, J_TIMING_STATISTICS);
       }
 
       // Write EXIT message

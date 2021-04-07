@@ -21,7 +21,8 @@ static const Index dbg_verbosity = 0;
 OrigIpoptNLP::OrigIpoptNLP(
    const SmartPtr<const Journalist>& jnlst,
    const SmartPtr<NLP>&              nlp,
-   const SmartPtr<NLPScalingObject>& nlp_scaling
+   const SmartPtr<NLPScalingObject>& nlp_scaling,
+   TimingStatistics&                 timing_statistics
 )
    : IpoptNLP(nlp_scaling),
      jnlst_(jnlst),
@@ -35,7 +36,8 @@ OrigIpoptNLP::OrigIpoptNLP(
      jac_d_cache_(1),
      h_cache_(1),
      unscaled_x_cache_(1),
-     initialized_(false)
+     initialized_(false),
+     timing_statistics_(timing_statistics)
 {
 }
 
@@ -479,9 +481,9 @@ Number OrigIpoptNLP::f(
    {
       f_evals_++;
       SmartPtr<const Vector> unscaled_x = get_unscaled_x(x);
-      f_eval_time_.Start();
+      timing_statistics_.f_eval_time().Start();
       bool success = nlp_->Eval_f(*unscaled_x, ret);
-      f_eval_time_.End();
+      timing_statistics_.f_eval_time().End();
       DBG_PRINT((1, "success = %d ret = %e\n", success, ret));
       ASSERT_EXCEPTION(success && IsFiniteNumber(ret), Eval_Error, "Error evaluating the objective function");
       ret = NLP_scaling()->apply_obj_scaling(ret);
@@ -512,9 +514,9 @@ SmartPtr<const Vector> OrigIpoptNLP::grad_f(
       unscaled_grad_f = x_space_->MakeNew();
 
       SmartPtr<const Vector> unscaled_x = get_unscaled_x(x);
-      grad_f_eval_time_.Start();
+      timing_statistics_.grad_f_eval_time().Start();
       bool success = nlp_->Eval_grad_f(*unscaled_x, *unscaled_grad_f);
-      grad_f_eval_time_.End();
+      timing_statistics_.grad_f_eval_time().End();
       ASSERT_EXCEPTION(success && IsFiniteNumber(unscaled_grad_f->Nrm2()), Eval_Error,
                        "Error evaluating the gradient of the objective function");
       retValue = NLP_scaling()->apply_grad_obj_scaling(ConstPtr(unscaled_grad_f));
@@ -557,9 +559,9 @@ SmartPtr<const Vector> OrigIpoptNLP::c(
          SmartPtr<Vector> unscaled_c = c_space_->MakeNew();
          c_evals_++;
          SmartPtr<const Vector> unscaled_x = get_unscaled_x(x);
-         c_eval_time_.Start();
+         timing_statistics_.c_eval_time().Start();
          bool success = nlp_->Eval_c(*unscaled_x, *unscaled_c);
-         c_eval_time_.End();
+         timing_statistics_.c_eval_time().End();
          if( !success || !IsFiniteNumber(unscaled_c->Nrm2()) )
          {
             if( check_derivatives_for_naninf_ && !IsFiniteNumber(unscaled_c->Nrm2()) )
@@ -605,9 +607,9 @@ SmartPtr<const Vector> OrigIpoptNLP::d(
 
          DBG_PRINT_VECTOR(2, "scaled_x", x);
          SmartPtr<const Vector> unscaled_x = get_unscaled_x(x);
-         d_eval_time_.Start();
+         timing_statistics_.d_eval_time().Start();
          bool success = nlp_->Eval_d(*unscaled_x, *unscaled_d);
-         d_eval_time_.End();
+         timing_statistics_.d_eval_time().End();
          DBG_PRINT_VECTOR(2, "unscaled_d", *unscaled_d);
          if( !success || !IsFiniteNumber(unscaled_d->Nrm2()) )
          {
@@ -657,9 +659,9 @@ SmartPtr<const Matrix> OrigIpoptNLP::jac_c(
          SmartPtr<Matrix> unscaled_jac_c = jac_c_space_->MakeNew();
 
          SmartPtr<const Vector> unscaled_x = get_unscaled_x(x);
-         jac_c_eval_time_.Start();
+         timing_statistics_.jac_c_eval_time().Start();
          bool success = nlp_->Eval_jac_c(*unscaled_x, *unscaled_jac_c);
-         jac_c_eval_time_.End();
+         timing_statistics_.jac_c_eval_time().End();
          ASSERT_EXCEPTION(success, Eval_Error, "Error evaluating the jacobian of the equality constraints");
          if( check_derivatives_for_naninf_ )
          {
@@ -711,9 +713,9 @@ SmartPtr<const Matrix> OrigIpoptNLP::jac_d(
          SmartPtr<Matrix> unscaled_jac_d = jac_d_space_->MakeNew();
 
          SmartPtr<const Vector> unscaled_x = get_unscaled_x(x);
-         jac_d_eval_time_.Start();
+         timing_statistics_.jac_d_eval_time().Start();
          bool success = nlp_->Eval_jac_d(*unscaled_x, *unscaled_jac_d);
-         jac_d_eval_time_.End();
+         timing_statistics_.jac_d_eval_time().End();
          ASSERT_EXCEPTION(success, Eval_Error, "Error evaluating the jacobian of the inequality constraints");
          if( check_derivatives_for_naninf_ )
          {
@@ -775,9 +777,9 @@ SmartPtr<const SymMatrix> OrigIpoptNLP::h(
       SmartPtr<const Vector> unscaled_yc = NLP_scaling()->apply_vector_scaling_c(&yc);
       SmartPtr<const Vector> unscaled_yd = NLP_scaling()->apply_vector_scaling_d(&yd);
       Number scaled_obj_factor = NLP_scaling()->apply_obj_scaling(obj_factor);
-      h_eval_time_.Start();
+      timing_statistics_.h_eval_time().Start();
       bool success = nlp_->Eval_h(*unscaled_x, scaled_obj_factor, *unscaled_yc, *unscaled_yd, *unscaled_h);
-      h_eval_time_.End();
+      timing_statistics_.h_eval_time().End();
       ASSERT_EXCEPTION(success, Eval_Error, "Error evaluating the hessian of the lagrangian");
       if( check_derivatives_for_naninf_ )
       {
@@ -979,67 +981,6 @@ void OrigIpoptNLP::AdjustVariableBounds(
    x_U_ = new_x_U.MakeNewCopy();
    d_L_ = new_d_L.MakeNewCopy();
    d_U_ = new_d_U.MakeNewCopy();
-}
-
-void OrigIpoptNLP::PrintTimingStatistics(
-   Journalist&      jnlst,
-   EJournalLevel    level,
-   EJournalCategory category
-) const
-{
-   if( !jnlst.ProduceOutput(level, category) )
-   {
-      return;
-   }
-
-   jnlst.Printf(level, category,
-                "Function Evaluations................: %10.3f (sys: %10.3f wall: %10.3f)\n", TotalFunctionEvaluationCpuTime(), TotalFunctionEvaluationSysTime(), TotalFunctionEvaluationWallclockTime());
-   jnlst.Printf(level, category,
-                " Objective function.................: %10.3f (sys: %10.3f wall: %10.3f)\n", f_eval_time_.TotalCpuTime(), f_eval_time_.TotalSysTime(), f_eval_time_.TotalWallclockTime());
-   jnlst.Printf(level, category,
-                " Objective function gradient........: %10.3f (sys: %10.3f wall: %10.3f)\n", grad_f_eval_time_.TotalCpuTime(), grad_f_eval_time_.TotalSysTime(), grad_f_eval_time_.TotalWallclockTime());
-   jnlst.Printf(level, category,
-                " Equality constraints...............: %10.3f (sys: %10.3f wall: %10.3f)\n", c_eval_time_.TotalCpuTime(), c_eval_time_.TotalSysTime(), c_eval_time_.TotalWallclockTime());
-   jnlst.Printf(level, category,
-                " Inequality constraints.............: %10.3f (sys: %10.3f wall: %10.3f)\n", d_eval_time_.TotalCpuTime(), d_eval_time_.TotalSysTime(), d_eval_time_.TotalWallclockTime());
-   jnlst.Printf(level, category,
-                " Equality constraint Jacobian.......: %10.3f (sys: %10.3f wall: %10.3f)\n", jac_c_eval_time_.TotalCpuTime(), jac_c_eval_time_.TotalSysTime(), jac_c_eval_time_.TotalWallclockTime());
-   jnlst.Printf(level, category,
-                " Inequality constraint Jacobian.....: %10.3f (sys: %10.3f wall: %10.3f)\n", jac_d_eval_time_.TotalCpuTime(), jac_d_eval_time_.TotalSysTime(), jac_d_eval_time_.TotalWallclockTime());
-   jnlst.Printf(level, category,
-                " Lagrangian Hessian.................: %10.3f (sys: %10.3f wall: %10.3f)\n", h_eval_time_.TotalCpuTime(), h_eval_time_.TotalSysTime(), h_eval_time_.TotalWallclockTime());
-}
-
-Number OrigIpoptNLP::TotalFunctionEvaluationCpuTime() const
-{
-   return f_eval_time_.TotalCpuTime() + grad_f_eval_time_.TotalCpuTime() + c_eval_time_.TotalCpuTime()
-          + d_eval_time_.TotalCpuTime() + jac_c_eval_time_.TotalCpuTime() + jac_d_eval_time_.TotalCpuTime()
-          + h_eval_time_.TotalCpuTime();
-}
-
-Number OrigIpoptNLP::TotalFunctionEvaluationSysTime() const
-{
-   return f_eval_time_.TotalSysTime() + grad_f_eval_time_.TotalSysTime() + c_eval_time_.TotalSysTime()
-          + d_eval_time_.TotalSysTime() + jac_c_eval_time_.TotalSysTime() + jac_d_eval_time_.TotalSysTime()
-          + h_eval_time_.TotalSysTime();
-}
-
-Number OrigIpoptNLP::TotalFunctionEvaluationWallclockTime() const
-{
-   return f_eval_time_.TotalWallclockTime() + grad_f_eval_time_.TotalWallclockTime() + c_eval_time_.TotalWallclockTime()
-          + d_eval_time_.TotalWallclockTime() + jac_c_eval_time_.TotalWallclockTime()
-          + jac_d_eval_time_.TotalWallclockTime() + h_eval_time_.TotalWallclockTime();
-}
-
-void OrigIpoptNLP::ResetTimes()
-{
-   f_eval_time_.Reset();
-   grad_f_eval_time_.Reset();
-   c_eval_time_.Reset();
-   d_eval_time_.Reset();
-   jac_c_eval_time_.Reset();
-   jac_d_eval_time_.Reset();
-   h_eval_time_.Reset();
 }
 
 SmartPtr<const Vector> OrigIpoptNLP::get_unscaled_x(
