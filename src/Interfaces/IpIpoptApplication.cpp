@@ -1294,6 +1294,7 @@ void IpoptApplication::RegisterAllIpoptOptions(
 #ifdef BUILD_INEXACT
    RegisterOptions_Inexact(roptions);
 #endif
+   roptions->SetRegisteringCategory("Uncategorized");
 }
 
 SmartPtr<SolveStatistics> IpoptApplication::Statistics()

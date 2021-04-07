@@ -143,7 +143,6 @@ void WsmpSolverInterface::RegisterOptions(
       1e-18,
       "WSMP's DPARM(10) parameter. "
       "The smaller this value the less likely a matrix is declared singular.");
-   roptions->SetRegisteringCategory("Uncategorized"); // ????
    roptions->AddLowerBoundedIntegerOption(
       "wsmp_write_matrix_iteration",
       "Iteration in which the matrices are written to files.",

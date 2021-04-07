@@ -116,8 +116,6 @@ void RegisterOptions_LinearSolvers(
    roptions->SetRegisteringCategory("MA28 Linear Solver");
    Ma28TDependencyDetector::RegisterOptions(roptions);
 #endif
-
-   roptions->SetRegisteringCategory("Uncategorized");
 }
 
 } // namespace Ipopt

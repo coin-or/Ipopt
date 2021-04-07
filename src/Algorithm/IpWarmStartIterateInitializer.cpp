@@ -64,7 +64,6 @@ void WarmStartIterateInitializer::RegisterOptions(
       "no",
       "no", "call GetStartingPoint in the NLP",
       "yes", "call GetWarmStartIterate in the NLP");
-   roptions->SetRegisteringCategory("Uncategorized");
    roptions->AddNumberOption(
       "warm_start_target_mu",
       "Unsupported!",

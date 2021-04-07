@@ -16,11 +16,8 @@ void RegisterOptions_Interfaces(
    const SmartPtr<RegisteredOptions>& roptions
 )
 {
-   roptions->SetRegisteringCategory("Uncategorized");
    IpoptApplication::RegisterOptions(roptions);
-   roptions->SetRegisteringCategory("Uncategorized");
    TNLPAdapter::RegisterOptions(roptions);
-   roptions->SetRegisteringCategory("Uncategorized");
 }
 
 } // namespace Ipopt
