@@ -62,6 +62,8 @@ commit history.
         - Added option max_wall_time to specify a wallclock time limit.
           Added SolverReturn code WALLTIME_EXCEEDED and ApplicationReturnStatus
           code Maximum_WallTime_Exceeded.
+        - Deprecated SolveStatistics::TotalCPUTime(), use SolveStatistics::TotalCpuTime()
+          instead.
         - Added documentation on some available expert C preprocessor flags.
 
 2021-0x-yy: 3.13.5

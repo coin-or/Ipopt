@@ -9,6 +9,7 @@
 
 #include "IpReferenced.hpp"
 #include "IpSmartPtr.hpp"
+#include "IpUtils.hpp"
 
 namespace Ipopt
 {
@@ -58,6 +59,7 @@ public:
     *
     * Included for backward compatibility.
     */
+   IPOPT_DEPRECATED
    Number TotalCPUTime() const
    {
       return TotalCpuTime();
