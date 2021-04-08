@@ -449,8 +449,7 @@ ESymSolverStatus WsmpSolverInterface::InternalSymFact(
    }
 
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                  "Calling WSSMP-1-2 for ordering and symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(),
-                  WallclockTime());
+                  "Calling WSSMP-1-2 for ordering and symbolic factorization.\n");
 #ifdef PARDISO_MATCHING_PREPROCESS
    IPOPT_WSMP_FUNC(wssmp, WSSMP)(&N, ia2, ja2, a2_, &ddmy, PERM_, INVP_,
 #else
@@ -458,8 +457,7 @@ ESymSolverStatus WsmpSolverInterface::InternalSymFact(
 #endif
                                  &ddmy, &idmy, &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                  "Done with WSSMP-1-2 for ordering and symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(),
-                  WallclockTime());
+                  "Done with WSSMP-1-2 for ordering and symbolic factorization.\n");
 
    Index ierror = IPARM_[63];
    if( ierror != 0 )
@@ -575,7 +573,7 @@ ESymSolverStatus WsmpSolverInterface::Factorization(
 #endif
 
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                  "Calling WSSMP-3-3 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+                  "Calling WSSMP-3-3 for numerical factorization.\n");
 #ifdef PARDISO_MATCHING_PREPROCESS
    IPOPT_WSMP_FUNC(wssmp, WSSMP)(&N, ia2, ja2, a2_, &ddmy, PERM_, INVP_, &ddmy, &idmy,
 #else
@@ -583,8 +581,7 @@ ESymSolverStatus WsmpSolverInterface::Factorization(
 #endif
                                  &idmy, &ddmy, &NAUX, MRP_, IPARM_, DPARM_);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                  "Done with WSSMP-3-3 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(),
-                  WallclockTime());
+                  "Done with WSSMP-3-3 for numerical factorization.\n");
 
    const Index ierror = IPARM_[63];
    if( ierror > 0 )
@@ -685,7 +682,7 @@ ESymSolverStatus WsmpSolverInterface::Solve(
 
    double ddmy;
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                  "Calling WSSMP-4-5 for backsolve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+                  "Calling WSSMP-4-5 for backsolve.\n");
 
 #ifdef PARDISO_MATCHING_PREPROCESS
    double* X = new double[nrhs * N];
@@ -708,7 +705,7 @@ ESymSolverStatus WsmpSolverInterface::Solve(
 #endif
 
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                  "Done with WSSMP-4-5 for backsolve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+                  "Done with WSSMP-4-5 for backsolve.\n");
    if( HaveIpData() )
    {
       IpData().TimingStats().LinearSystemBackSolve().End();

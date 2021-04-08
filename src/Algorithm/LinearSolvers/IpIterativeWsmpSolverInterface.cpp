@@ -288,10 +288,10 @@ ESymSolverStatus IterativeWsmpSolverInterface::InternalSymFact(
    ipfint idmy;
    double ddmy;
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                  "Calling WISMP-1-1 for symbolic analysis at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+                  "Calling WISMP-1-1 for symbolic analysis.\n");
    F77_FUNC(wismp, WISMP)(&N, ia, ja, a_, &ddmy, &idmy, &ddmy, &idmy, &idmy, &ddmy, &ddmy, IPARM_, DPARM_);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                  "Done with WISMP-1-1 for symbolic analysis at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+                  "Done with WISMP-1-1 for symbolic analysis.\n");
 
    Index ierror = IPARM_[63];
    if( ierror != 0 )
@@ -408,12 +408,10 @@ ESymSolverStatus IterativeWsmpSolverInterface::Factorization(
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                   "Calling WISMP-2-3 with DPARM(14) = %8.2e and DPARM(15) = %8.2e.\n", DPARM_[13], DPARM_[14]);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                  "Calling WISMP-2-3 for value analysis and preconditioner computation at cpu time %10.3f (wall %10.3f).\n", CpuTime(),
-                  WallclockTime());
+                  "Calling WISMP-2-3 for value analysis and preconditioner computation.\n");
    F77_FUNC(wismp, WISMP)(&N, ia, ja, a_, &ddmy, &idmy, &ddmy, &idmy, &idmy, &ddmy, &ddmy, IPARM_, DPARM_);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                  "Done with WISMP-2-3 for value analysis and preconditioner computation at cpu time %10.3f (wall %10.3f).\n",
-                  CpuTime(), WallclockTime());
+                  "Done with WISMP-2-3 for value analysis and preconditioner computation.\n");
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                   "Done with WISMP-2-3 with DPARM(14) = %8.2e and DPARM(15) = %8.2e.\n", DPARM_[13], DPARM_[14]);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
@@ -514,10 +512,10 @@ ESymSolverStatus IterativeWsmpSolverInterface::Solve(
 
    double ddmy;
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                  "Calling WISMP-4-4 for backsolve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+                  "Calling WISMP-4-4 for backsolve.\n");
    F77_FUNC(wismp, WISMP)(&N, ia, ja, a_, RHS, &LDB, rhs_vals, &LDX, &NRHS, &ddmy, CVGH, IPARM_, DPARM_);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                  "Done with WISMP-4-4 for backsolve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+                  "Done with WISMP-4-4 for backsolve.\n");
    if( HaveIpData() )
    {
       IpData().TimingStats().LinearSystemBackSolve().End();

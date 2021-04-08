@@ -394,10 +394,10 @@ ESymSolverStatus MumpsSolverInterface::SymbolicFactorization()
    dump_matrix(mumps_data);
 
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                  "Calling MUMPS-1 for symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+                  "Calling MUMPS-1 for symbolic factorization.\n");
    mumps_c(mumps_data);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                  "Done with MUMPS-1 for symbolic factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+                  "Done with MUMPS-1 for symbolic factorization.\n");
    int error = mumps_data->info[0];
    const int& mumps_permuting_scaling_used = mumps_data->infog[22];
    const int& mumps_pivot_order_used = mumps_data->infog[6];
@@ -440,10 +440,10 @@ ESymSolverStatus MumpsSolverInterface::Factorization(
 
    dump_matrix(mumps_data);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                  "Calling MUMPS-2 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+                  "Calling MUMPS-2 for numerical factorization.\n");
    mumps_c(mumps_data);
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                  "Done with MUMPS-2 for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+                  "Done with MUMPS-2 for numerical factorization.\n");
    int error = mumps_data->info[0];
 
    //Check for errors
@@ -463,12 +463,10 @@ ESymSolverStatus MumpsSolverInterface::Factorization(
 
          dump_matrix(mumps_data);
          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                        "Calling MUMPS-2 (repeated) for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(),
-                        WallclockTime());
+                        "Calling MUMPS-2 (repeated) for numerical factorization.\n");
          mumps_c(mumps_data);
          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                        "Done with MUMPS-2 (repeated) for numerical factorization at cpu time %10.3f (wall %10.3f).\n", CpuTime(),
-                        WallclockTime());
+                        "Done with MUMPS-2 (repeated) for numerical factorization.\n");
          error = mumps_data->info[0];
          if( error != -8 && error != -9 )
          {
@@ -541,10 +539,10 @@ ESymSolverStatus MumpsSolverInterface::Solve(
       mumps_data->rhs = &(rhs_vals[offset]);
       mumps_data->job = 3;  //solve
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                     "Calling MUMPS-3 for solve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+                     "Calling MUMPS-3 for solve.\n");
       mumps_c(mumps_data);
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                     "Done with MUMPS-3 for solve at cpu time %10.3f (wall %10.3f).\n", CpuTime(), WallclockTime());
+                     "Done with MUMPS-3 for solve.\n");
       int error = mumps_data->info[0];
       if( error < 0 )
       {
