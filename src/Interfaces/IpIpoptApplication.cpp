@@ -1047,19 +1047,19 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
                      p2ip_nlp->jac_d_evals());
       jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Number of Lagrangian Hessian evaluations             = %d\n",
                      p2ip_nlp->h_evals());
-      Number cpu_time_overall_alg = p2ip_data->TimingStats().OverallAlgorithm().TotalCpuTime();
+      Number wall_time_overall_alg = p2ip_data->TimingStats().OverallAlgorithm().TotalWallclockTime();
       if( p2ip_data->TimingStats().IsFunctionEvaluationTimeEnabled() )
       {
-         Number cpu_time_funcs = p2ip_data->TimingStats().TotalFunctionEvaluationCpuTime();
-         jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Total CPU secs in IPOPT (w/o function evaluations)   = %10.3f\n",
-            cpu_time_overall_alg - cpu_time_funcs);
-         jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Total CPU secs in NLP function evaluations           = %10.3f\n",
-            cpu_time_funcs);
+         Number wall_time_funcs = p2ip_data->TimingStats().TotalFunctionEvaluationWallclockTime();
+         jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Total seconds in IPOPT (w/o function evaluations)    = %10.3f\n",
+            wall_time_overall_alg - wall_time_funcs);
+         jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Total seconds in NLP function evaluations            = %10.3f\n",
+            wall_time_funcs);
       }
       else
       {
-         jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Total CPU secs in IPOPT                              = %.3f\n",
-            cpu_time_overall_alg);
+         jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Total seconds in IPOPT                               = %.3f\n",
+            wall_time_overall_alg);
       }
 
       // Write timing statistics information
