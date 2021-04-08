@@ -169,10 +169,17 @@ Possible values:
 
 </blockquote>
 
+\anchor OPT_max_wall_time
+ <strong>max_wall_time</strong>: Maximum number of walltime clock seconds.
+<blockquote>
+ A limit on walltime clock seconds that Ipopt can use to solve one problem. If during the convergence check this limit is exceeded, Ipopt will terminate with a corresponding error message. The valid range for this real option is 0 < max_wall_time and its default value is 10<sup>+20</sup>.
+
+</blockquote>
+
 \anchor OPT_max_cpu_time
  <strong>max_cpu_time</strong>: Maximum number of CPU seconds.
 <blockquote>
- A limit on CPU seconds that Ipopt can use to solve one problem. If during the convergence check this limit is exceeded, Ipopt will terminate with a corresponding error message. The valid range for this real option is 0 < max_cpu_time and its default value is 10<sup>+06</sup>.
+ A limit on CPU seconds that Ipopt can use to solve one problem. If during the convergence check this limit is exceeded, Ipopt will terminate with a corresponding error message. The valid range for this real option is 0 < max_cpu_time and its default value is 10<sup>+20</sup>.
 
 </blockquote>
 
@@ -1883,6 +1890,7 @@ The following is a list of options that is available via AMPL:
 | \ref OPT_ma57_pivtol "ma57_pivtol" | Pivot tolerance for the linear solver MA57 |
 | \ref OPT_ma57_pivtolmax "ma57_pivtolmax" | Maximal pivot tolerance for the linear solver MA57 |
 | \ref OPT_max_cpu_time "max_cpu_time" | CPU time limit |
+| \ref OPT_max_wall_time "max_wall_time" | Wallclock time limit |
 | \ref OPT_max_iter "max_iter" | Maximum number of iterations |
 | \ref OPT_max_refinement_steps "max_refinement_steps" | Maximal number of iterative refinement steps per linear system solve |
 | \ref OPT_max_soc "max_soc" | Maximal number of second order correction trial steps |

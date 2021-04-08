@@ -59,6 +59,9 @@ commit history.
         - Removed IpoptData::ResetCpuStartTime(). Deprecated IpoptData::cpu_time_start(),
           use IpoptData::TimingStats()::OverallAlgorithm()::StartCpuTime() instead.
         - Changed default for max_cpu_time to 1e20 to indicate no CPU timelimit.
+        - Added option max_wall_time to specify a wallclock time limit.
+          Added SolverReturn code WALLTIME_EXCEEDED and ApplicationReturnStatus
+          code Maximum_WallTime_Exceeded.
         - Added documentation on some available expert C preprocessor flags.
 
 2021-0x-yy: 3.13.5

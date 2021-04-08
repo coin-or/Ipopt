@@ -96,6 +96,9 @@ SolverReturn AppReturn2SolverReturn(
       case Maximum_CpuTime_Exceeded:
          retval = CPUTIME_EXCEEDED;
          break;
+      case Maximum_WallTime_Exceeded:
+         retval = WALLTIME_EXCEEDED;
+         break;
       case Not_Enough_Degrees_Of_Freedom:
          retval = TOO_FEW_DEGREES_OF_FREEDOM;
          break;

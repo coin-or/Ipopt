@@ -75,6 +75,7 @@ bool MinC_1NrmRestorationPhase::InitializeImpl(
    // This is registered in OptimalityErrorConvergenceCheck
    options.GetNumericValue("constr_viol_tol", constr_viol_tol_, prefix);
 
+   options.GetNumericValue("max_wall_time", max_wall_time_, prefix);
    options.GetNumericValue("max_cpu_time", max_cpu_time_, prefix);
 
    // Avoid that the restoration phase is triggered by user option in
@@ -121,6 +122,16 @@ bool MinC_1NrmRestorationPhase::PerformRestoration()
    SmartPtr<IpoptData> resto_ip_data = new IpoptData(NULL);
    SmartPtr<IpoptNLP> resto_ip_nlp = new RestoIpoptNLP(IpNLP(), IpData(), IpCq());
    SmartPtr<IpoptCalculatedQuantities> resto_ip_cq = new IpoptCalculatedQuantities(resto_ip_nlp, resto_ip_data);
+
+   if( max_wall_time_ < 1e20 )
+   {
+      // setup timelimit for resto: original timelimit - elapsed time
+      Number elapsed = WallclockTime() - IpData().TimingStats().OverallAlgorithm().StartWallclockTime();
+      DBG_ASSERT(elapsed >= 0);
+      if( elapsed >= max_wall_time_ )
+         THROW_EXCEPTION(RESTORATION_WALLTIME_EXCEEDED, "Maximal wallclock time exceeded at start of restoration phase.");
+      resto_options_->SetNumericValue("max_wall_time", max_wall_time_ - elapsed);
+   }
 
    if( max_cpu_time_ < 1e20 )
    {
@@ -273,6 +284,10 @@ bool MinC_1NrmRestorationPhase::PerformRestoration()
    else if( resto_status == CPUTIME_EXCEEDED )
    {
       THROW_EXCEPTION(RESTORATION_CPUTIME_EXCEEDED, "Maximal CPU time exceeded in restoration phase.");
+   }
+   else if( resto_status == WALLTIME_EXCEEDED )
+   {
+      THROW_EXCEPTION(RESTORATION_WALLTIME_EXCEEDED, "Maximal wallclock time exceeded in restoration phase.");
    }
    else if( resto_status == LOCAL_INFEASIBILITY )
    {

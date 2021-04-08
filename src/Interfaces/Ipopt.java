@@ -109,6 +109,7 @@ public abstract class Ipopt
    public final static int RESTORATION_FAILED = -2;
    public final static int ERROR_IN_STEP_COMPUTATION = -3;
    public final static int CPUTIME_EXCEEDED = -4;
+   public final static int WALLTIME_EXCEEDED = -5;
    public final static int NOT_ENOUGH_DEGREES_OF_FRE = -10;
    public final static int INVALID_PROBLEM_DEFINITION = -11;
    public final static int INVALID_OPTION = -12;

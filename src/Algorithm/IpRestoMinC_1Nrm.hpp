@@ -106,7 +106,8 @@ private:
    /** Constraint violation tolerance */
    Number constr_viol_tol_;
 
-   /** Time limit */
+   /** Time limits */
+   Number max_wall_time_;
    Number max_cpu_time_;
 
    /** Primal infeasibility tolerance for declaring failure of

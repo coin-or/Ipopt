@@ -396,6 +396,9 @@ SolverReturn IpoptAlgorithm::Optimize(
          case ConvergenceCheck::CPUTIME_EXCEEDED:
             retval = CPUTIME_EXCEEDED;
             break;
+         case ConvergenceCheck::WALLTIME_EXCEEDED:
+            retval = WALLTIME_EXCEEDED;
+            break;
          case ConvergenceCheck::DIVERGING:
             retval = DIVERGING_ITERATES;
             break;
@@ -454,6 +457,12 @@ SolverReturn IpoptAlgorithm::Optimize(
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       retval = CPUTIME_EXCEEDED;
+   }
+   catch( RESTORATION_WALLTIME_EXCEEDED& exc )
+   {
+      exc.ReportException(Jnlst(), J_MOREDETAILED);
+      IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
+      retval = WALLTIME_EXCEEDED;
    }
    catch( RESTORATION_USER_STOP& exc )
    {

@@ -783,6 +783,11 @@ void AmplTNLP::finalize_solution(
       message = "Maximum CPU Time Exceeded.";
       solve_result_num = 401;
    }
+   else if( status == WALLTIME_EXCEEDED )
+   {
+      message = "Maximum Wallclock Time Exceeded.";
+      solve_result_num = 402;
+   }
    else if( status == STOP_AT_TINY_STEP )
    {
       message = "Search Direction becomes Too Small.";
@@ -1397,6 +1402,7 @@ AmplTNLP::get_options(
                                     "Maximum number of iterations");
    ampl_options_list->AddAmplOption("maxit", "max_iter", AmplOptionsList::Integer_Option,
                                     "Maximum number of iterations");
+   ampl_options_list->AddAmplOption("max_wall_time", "max_wall_time", AmplOptionsList::Number_Option, "Wallclock time limit");
    ampl_options_list->AddAmplOption("max_cpu_time", "max_cpu_time", AmplOptionsList::Number_Option, "CPU time limit");
    ampl_options_list->AddAmplOption("compl_inf_tol", "compl_inf_tol", AmplOptionsList::Number_Option,
                                     "Acceptance threshold for the complementarity conditions");

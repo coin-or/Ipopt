@@ -170,6 +170,13 @@ output message to the console, and a brief description.
    This indicates that \Ipopt has exceeded the maximum
    number of iterations as specified by the option \ref OPT_max_iter "max_iter".
 
+- `Maximum_WallTime_Exceeded`:
+
+   Console Message: `EXIT: Maximum wallclock time exceeded.`
+
+   This indicates that \Ipopt has exceeded the maximum
+   number of wallclock seconds as specified by the option \ref OPT_max_wall_time "max_wall_time".
+
 - `Maximum_CpuTime_Exceeded`:
 
    Console Message: `EXIT: Maximum CPU time exceeded.`

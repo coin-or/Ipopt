@@ -76,6 +76,8 @@ protected:
    Number diverging_iterates_tol_;
    /** Desired value of the barrier parameter */
    Number mu_target_;
+   /** Upper bound on wallclock time */
+   Number max_wall_time_;
    /** Upper bound on CPU time */
    Number max_cpu_time_;
    ///@}

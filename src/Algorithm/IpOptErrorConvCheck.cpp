@@ -31,6 +31,13 @@ void OptimalityErrorConvergenceCheck::RegisterOptions(
       3000,
       "The algorithm terminates with an error message if the number of iterations exceeded this number.");
    roptions->AddLowerBoundedNumberOption(
+      "max_wall_time",
+      "Maximum number of walltime clock seconds.",
+      0.0, true,
+      1e20,
+      "A limit on walltime clock seconds that Ipopt can use to solve one problem. "
+      "If during the convergence check this limit is exceeded, Ipopt will terminate with a corresponding error message.");
+   roptions->AddLowerBoundedNumberOption(
       "max_cpu_time",
       "Maximum number of CPU seconds.",
       0.0, true,
@@ -135,6 +142,7 @@ bool OptimalityErrorConvergenceCheck::InitializeImpl(
 )
 {
    options.GetIntegerValue("max_iter", max_iterations_, prefix);
+   options.GetNumericValue("max_wall_time", max_wall_time_, prefix);
    options.GetNumericValue("max_cpu_time", max_cpu_time_, prefix);
    options.GetNumericValue("dual_inf_tol", dual_inf_tol_, prefix);
    options.GetNumericValue("constr_viol_tol", constr_viol_tol_, prefix);
@@ -261,6 +269,11 @@ ConvergenceCheck::ConvergenceStatus OptimalityErrorConvergenceCheck::CheckConver
    if( max_cpu_time_ < 1e20 && CpuTime() - IpData().TimingStats().OverallAlgorithm().StartCpuTime() >= max_cpu_time_ )
    {
       return ConvergenceCheck::CPUTIME_EXCEEDED;
+   }
+
+   if( max_wall_time_ < 1e20 && WallclockTime() - IpData().TimingStats().OverallAlgorithm().StartWallclockTime() >= max_wall_time_ )
+   {
+      return ConvergenceCheck::WALLTIME_EXCEEDED;
    }
 
    return ConvergenceCheck::CONTINUE;

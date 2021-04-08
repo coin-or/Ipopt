@@ -349,6 +349,7 @@ void IpoptApplication::print_options_docu()
       options_to_print.push_back("#Termination");
       options_to_print.push_back("tol");
       options_to_print.push_back("max_iter");
+      options_to_print.push_back("max_wall_time");
       options_to_print.push_back("max_cpu_time");
       options_to_print.push_back("dual_inf_tol");
       options_to_print.push_back("constr_viol_tol");
@@ -1083,6 +1084,11 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
       {
          retValue = Maximum_CpuTime_Exceeded;
          jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Maximum CPU time exceeded.\n");
+      }
+      else if( status == WALLTIME_EXCEEDED )
+      {
+         retValue = Maximum_WallTime_Exceeded;
+         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Maximum wallclock time exceeded.\n");
       }
       else if( status == STOP_AT_TINY_STEP )
       {
