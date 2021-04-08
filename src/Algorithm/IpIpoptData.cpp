@@ -11,11 +11,9 @@ namespace Ipopt
 {
 
 IpoptData::IpoptData(
-   SmartPtr<IpoptAdditionalData> add_data /*= NULL*/,
-   Number                        cpu_time_start /*= -1.*/
+   SmartPtr<IpoptAdditionalData> add_data /*= NULL*/
 )
-   : cpu_time_start_(cpu_time_start),
-     add_data_(add_data)
+   : add_data_(add_data)
 { }
 
 IpoptData::~IpoptData()
@@ -91,9 +89,6 @@ bool IpoptData::Initialize(
    info_iters_since_header_ = 1000; // need to be larger 10
 
    initialize_called_ = true;
-
-   // will be set to cputime in IpoptApplication::call_optimize()
-   cpu_time_start_ = -1.;
 
    bool retval = true;
 

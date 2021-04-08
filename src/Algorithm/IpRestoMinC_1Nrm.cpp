@@ -75,7 +75,9 @@ bool MinC_1NrmRestorationPhase::InitializeImpl(
    // This is registered in OptimalityErrorConvergenceCheck
    options.GetNumericValue("constr_viol_tol", constr_viol_tol_, prefix);
 
-   // Avoid that the restoration phase is trigged by user option in
+   options.GetNumericValue("max_cpu_time", max_cpu_time_, prefix);
+
+   // Avoid that the restoration phase is triggered by user option in
    // first iteration of the restoration phase
    resto_options_->SetStringValue("resto.start_with_resto", "no");
 
@@ -116,9 +118,19 @@ bool MinC_1NrmRestorationPhase::PerformRestoration()
 
    // ToDo set those up during initialize?
    // Create the restoration phase NLP etc objects
-   SmartPtr<IpoptData> resto_ip_data = new IpoptData(NULL, IpData().cpu_time_start());
+   SmartPtr<IpoptData> resto_ip_data = new IpoptData(NULL);
    SmartPtr<IpoptNLP> resto_ip_nlp = new RestoIpoptNLP(IpNLP(), IpData(), IpCq());
    SmartPtr<IpoptCalculatedQuantities> resto_ip_cq = new IpoptCalculatedQuantities(resto_ip_nlp, resto_ip_data);
+
+   if( max_cpu_time_ < 1e20 )
+   {
+      // setup timelimit for resto: original timelimit - elapsed time
+      Number elapsed = CpuTime() - IpData().TimingStats().OverallAlgorithm().StartCpuTime();
+      DBG_ASSERT(elapsed >= 0);
+      if( elapsed >= max_cpu_time_ )
+         THROW_EXCEPTION(RESTORATION_CPUTIME_EXCEEDED, "Maximal CPU time exceeded at start of restoration phase.");
+      resto_options_->SetNumericValue("max_cpu_time", max_cpu_time_ - elapsed);
+   }
 
    // Determine if this is a square problem
    bool square_problem = IpCq().IsSquareProblem();

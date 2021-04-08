@@ -53,9 +53,12 @@ commit history.
           can be used to disable the check for MKL Pardiso. Options that
           influence Pardiso from MKL are named pardisomkl_msglvl,
           pardisomkl_order, etc.
-        - Detailed timing statistics are not longer collected by default.
+        - Detailed timing statistics are no longer collected by default.
           To reenable, set the new option timing_statistics to yes or set
           the option print_timing_statistics to yes [#299].
+        - Removed IpoptData::ResetCpuStartTime(). Deprecated IpoptData::cpu_time_start(),
+          use IpoptData::TimingStats()::OverallAlgorithm()::StartCpuTime() instead.
+        - Changed default for max_cpu_time to 1e20 to indicate no CPU timelimit.
         - Added documentation on some available expert C preprocessor flags.
 
 2021-0x-yy: 3.13.5

@@ -101,8 +101,7 @@ public:
    ///@{
    /** Constructor */
    IpoptData(
-      SmartPtr<IpoptAdditionalData> add_data = NULL,
-      Number                        cpu_time_start = -1.
+      SmartPtr<IpoptAdditionalData> add_data = NULL
    );
 
    /** Destructor */
@@ -453,10 +452,10 @@ public:
     *
     *  Can only be called after beginning of optimization.
     */
+   IPOPT_DEPRECATED
    Number cpu_time_start() const
    {
-      DBG_ASSERT(cpu_time_start_ >= 0);
-      return cpu_time_start_;
+      return timing_statistics_.OverallAlgorithm().StartCpuTime();
    }
 
    /** @name Information gathered for iteration output */
@@ -588,12 +587,6 @@ public:
    TimingStatistics& TimingStats()
    {
       return timing_statistics_;
-   }
-
-   /** Resetting CPU Start Time */
-   void ResetCpuStartTime()
-   {
-      cpu_time_start_ = CpuTime();
    }
 
    /** Check if additional data has been set */
@@ -764,9 +757,6 @@ private:
 
    /** TimingStatistics object collecting all Ipopt timing statistics */
    TimingStatistics timing_statistics_;
-
-   /** CPU time counter at begin of optimization. */
-   Number cpu_time_start_;
 
    /** Object for the data specific for the Chen-Goldfarb penalty
     *  method algorithm

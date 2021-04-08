@@ -269,9 +269,6 @@ SolverReturn IpoptAlgorithm::Optimize(
    IpData().TimingStats().OverallAlgorithm().Start();
    EndTimedTask endtask(IpData().TimingStats().OverallAlgorithm());  // ensure task is ended when Optimize() is left
 
-   // Reset Cpu start time (so doesn't carry over from previous Optimize)
-   IpData().ResetCpuStartTime();
-
    if( !copyright_message_printed )
    {
       print_copyright_message(Jnlst());

@@ -34,7 +34,7 @@ void OptimalityErrorConvergenceCheck::RegisterOptions(
       "max_cpu_time",
       "Maximum number of CPU seconds.",
       0.0, true,
-      1e6,
+      1e20,
       "A limit on CPU seconds that Ipopt can use to solve one problem. "
       "If during the convergence check this limit is exceeded, Ipopt will terminate with a corresponding error message.");
    roptions->AddLowerBoundedNumberOption(
@@ -258,8 +258,7 @@ ConvergenceCheck::ConvergenceStatus OptimalityErrorConvergenceCheck::CheckConver
       return ConvergenceCheck::MAXITER_EXCEEDED;
    }
 
-   Number curr_cpu_time = CpuTime();
-   if( max_cpu_time_ < 999999. && curr_cpu_time - IpData().cpu_time_start() > max_cpu_time_ )
+   if( max_cpu_time_ < 1e20 && CpuTime() - IpData().TimingStats().OverallAlgorithm().StartCpuTime() >= max_cpu_time_ )
    {
       return ConvergenceCheck::CPUTIME_EXCEEDED;
    }

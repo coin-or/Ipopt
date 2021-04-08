@@ -127,6 +127,30 @@ public:
       return total_walltime_;
    }
 
+   /** Method returning start CPU time for started task. */
+   Number StartCpuTime() const
+   {
+      DBG_ASSERT(start_called_);
+      DBG_ASSERT(!end_called_);
+      return start_cputime_;
+   }
+
+   /** Method returning start system time for started task. */
+   Number StartSysTime() const
+   {
+      DBG_ASSERT(start_called_);
+      DBG_ASSERT(!end_called_);
+      return start_systime_;
+   }
+
+   /** Method returning start wall clock time for started task. */
+   Number StartWallclockTime() const
+   {
+      DBG_ASSERT(start_called_);
+      DBG_ASSERT(!end_called_);
+      return start_walltime_;
+   }
+
    bool IsEnabled() const
    {
       return enabled_;

@@ -57,6 +57,11 @@ public:
       return OverallAlgorithm_;
    }
 
+   const TimedTask& OverallAlgorithm() const
+   {
+      return OverallAlgorithm_;
+   }
+
    TimedTask& PrintProblemStatistics()
    {
       return PrintProblemStatistics_;
