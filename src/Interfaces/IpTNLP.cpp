@@ -108,7 +108,13 @@ bool TNLP::get_curr_iterate(
          SmartPtr<const Vector> z_U_only = c_vec->GetComp(0);
          DBG_ASSERT(IsValid(z_U_only));
 
-         tnlp_adapter->ResortBnds(*z_L_only, z_L, *z_U_only, z_U, true);
+         DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->y_c())) != NULL);
+         c_vec = static_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->y_c()));
+         DBG_ASSERT(c_vec->NComps() == 1);
+         SmartPtr<const Vector> yc_only = c_vec->GetComp(0);
+         DBG_ASSERT(IsValid(yc_only));
+
+         tnlp_adapter->ResortBoundMultipliers(*yc_only, *z_L_only, z_L, *z_U_only, z_U);
       }
 
       if( lambda != NULL )

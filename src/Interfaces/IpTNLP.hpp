@@ -753,8 +753,6 @@ public:
     * The method translates the x(), y_c(), y_d(), z_L(), and z_U() vectors from ip_data->curr()
     * of the internal NLP representation into the form used by the TNLP.
     *
-    * @note Zero is returned as dual multiplies for fixed variables, even if the fixed-variable treatment has been set to handle them as constraints.
-    *
     * @param ip_data (in)  Ipopt Data
     * @param ip_cq   (in)  Ipopt Calculated Quantities
     * @param n       (in)  the number of variables \f$x\f$ in the problem; can be arbitrary if skipping x, z_L, and z_U

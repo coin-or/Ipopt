@@ -252,6 +252,7 @@ public:
       Number*       x_orig
    );
 
+   /** Sort constraint values */
    void ResortG(
       const Vector& c,
       const Vector& d,
@@ -270,6 +271,17 @@ public:
       bool          clearorig = true  /**< whether to initialize complete x_L_orig and x_U_orig to 0.0 before setting values for non-fixed variables */
    );
 
+   /** Provides values for dual multipliers on lower and upper bounds on variables for given Ipopt-internal vectors.
+    *
+    * Similar to ResortBnds, but also provides dual values for fixed variables if fixed_variable_treatment is set to make_constraint
+    */
+   void ResortBoundMultipliers(
+      const Vector& c,                /**< internal values for equality constraint multipliers */
+      const Vector& z_L,              /**< internal values for lower bound multipliers */
+      Number*       z_L_orig,         /**< vector to fill with values from z_L */
+      const Vector& z_U,              /**< internal values for upper bound multipliers */
+      Number*       z_U_orig          /**< vector to fill with values from z_U */
+   );
 
    void GetFullDimensions(
       Index& n,  /**< storage for full dimension of x (fixed + non-fixed) */

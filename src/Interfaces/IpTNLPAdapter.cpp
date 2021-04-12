@@ -2050,7 +2050,7 @@ void TNLPAdapter::FinalizeSolution(
 
    Number* full_z_L = new Number[n_full_x_];
    Number* full_z_U = new Number[n_full_x_];
-   ResortBnds(z_L, full_z_L, z_U, full_z_U);
+   ResortBoundMultipliers(y_c, z_L, full_z_L, z_U, full_z_U);
 
    SmartPtr<const DenseVectorSpace> z_L_space = dynamic_cast<const DenseVectorSpace*>(GetRawPtr(z_L.OwnerSpace()));
    SmartPtr<const DenseVectorSpace> z_U_space = dynamic_cast<const DenseVectorSpace*>(GetRawPtr(z_U.OwnerSpace()));
@@ -2081,33 +2081,6 @@ void TNLPAdapter::FinalizeSolution(
             z_U_meta_data_tag += "_z_U";
             var_numeric_md[z_L_meta_data_tag] = new_z_L_meta_data;
             var_numeric_md[z_U_meta_data_tag] = new_z_U_meta_data;
-         }
-      }
-   }
-
-   // Hopefully the following is correct to recover the bound
-   // multipliers for fixed variables (sign ok?)
-   if( fixed_variable_treatment_ == MAKE_CONSTRAINT && n_x_fixed_ > 0 )
-   {
-      const DenseVector* dy_c = static_cast<const DenseVector*>(&y_c);
-      DBG_ASSERT(dynamic_cast<const DenseVector*>(&y_c));
-      Index n_c_no_fixed = y_c.Dim() - n_x_fixed_;
-      if( !dy_c->IsHomogeneous() )
-      {
-         const Number* values = dy_c->Values();
-         for( Index i = 0; i < n_x_fixed_; i++ )
-         {
-            full_z_L[x_fixed_map_[i]] = Max(0., -values[n_c_no_fixed + i]);
-            full_z_U[x_fixed_map_[i]] = Max(0., values[n_c_no_fixed + i]);
-         }
-      }
-      else
-      {
-         Number value = dy_c->Scalar();
-         for( Index i = 0; i < n_x_fixed_; i++ )
-         {
-            full_z_L[x_fixed_map_[i]] = Max(Number(0.), -value);
-            full_z_U[x_fixed_map_[i]] = Max(Number(0.), value);
          }
       }
    }
@@ -2507,6 +2480,44 @@ void TNLPAdapter::ResortBnds(
                int idx = bnds_pos_not_fixed[i];
                x_U_orig[idx] = x_U_values[i];
             }
+         }
+      }
+   }
+}
+
+void TNLPAdapter::ResortBoundMultipliers(
+   const Vector& c,
+   const Vector& z_L,
+   Number*       z_L_orig,
+   const Vector& z_U,
+   Number*       z_U_orig
+)
+{
+   ResortBnds(z_L, z_L_orig, z_U, z_U_orig, false);
+
+   // Hopefully the following is correct to recover the bound
+   // multipliers for fixed variables (sign ok?)
+   if( fixed_variable_treatment_ == MAKE_CONSTRAINT && n_x_fixed_ > 0 )
+   {
+      const DenseVector* dy_c = static_cast<const DenseVector*>(&c);
+      DBG_ASSERT(dynamic_cast<const DenseVector*>(&c));
+      Index n_c_no_fixed = c.Dim() - n_x_fixed_;
+      if( !dy_c->IsHomogeneous() )
+      {
+         const Number* values = dy_c->Values();
+         for( Index i = 0; i < n_x_fixed_; i++ )
+         {
+            z_L_orig[x_fixed_map_[i]] = Max(0., -values[n_c_no_fixed + i]);
+            z_U_orig[x_fixed_map_[i]] = Max(0., values[n_c_no_fixed + i]);
+         }
+      }
+      else
+      {
+         Number value = dy_c->Scalar();
+         for( Index i = 0; i < n_x_fixed_; i++ )
+         {
+            z_L_orig[x_fixed_map_[i]] = Max(Number(0.), -value);
+            z_U_orig[x_fixed_map_[i]] = Max(Number(0.), value);
          }
       }
    }
