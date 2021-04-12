@@ -140,7 +140,7 @@ am__DEPENDENCIES_1 =
 @BUILD_JAVA_TRUE@am__objects_1 = IpStdJInterface.lo
 am_libipopt_la_OBJECTS = IpInterfacesRegOp.lo IpIpoptApplication.lo \
 	IpSolveStatistics.lo IpStdCInterface.lo IpStdInterfaceTNLP.lo \
-	IpStdFInterface.lo IpTNLPAdapter.lo IpTNLPReducer.lo \
+	IpStdFInterface.lo IpTNLP.lo IpTNLPAdapter.lo IpTNLPReducer.lo \
 	$(am__objects_1)
 libipopt_la_OBJECTS = $(am_libipopt_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -168,8 +168,8 @@ am__depfiles_remade = ./$(DEPDIR)/IpInterfacesRegOp.Plo \
 	./$(DEPDIR)/IpStdCInterface.Plo \
 	./$(DEPDIR)/IpStdFInterface.Plo \
 	./$(DEPDIR)/IpStdInterfaceTNLP.Plo \
-	./$(DEPDIR)/IpStdJInterface.Plo ./$(DEPDIR)/IpTNLPAdapter.Plo \
-	./$(DEPDIR)/IpTNLPReducer.Plo
+	./$(DEPDIR)/IpStdJInterface.Plo ./$(DEPDIR)/IpTNLP.Plo \
+	./$(DEPDIR)/IpTNLPAdapter.Plo ./$(DEPDIR)/IpTNLPReducer.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -421,8 +421,8 @@ includeipopt_HEADERS = \
 lib_LTLIBRARIES = libipopt.la
 libipopt_la_SOURCES = IpInterfacesRegOp.cpp IpIpoptApplication.cpp \
 	IpSolveStatistics.cpp IpStdCInterface.cpp \
-	IpStdInterfaceTNLP.cpp IpStdFInterface.c IpTNLPAdapter.cpp \
-	IpTNLPReducer.cpp $(am__append_1)
+	IpStdInterfaceTNLP.cpp IpStdFInterface.c IpTNLP.cpp \
+	IpTNLPAdapter.cpp IpTNLPReducer.cpp $(am__append_1)
 @BUILD_JAVA_TRUE@BUILT_SOURCES = org_coinor_Ipopt.h
 @BUILD_JAVA_TRUE@CLEANFILES = org.coinor.ipopt.jar org/coinor/Ipopt.class org_coinor_Ipopt.h
 libipopt_la_LIBADD = $(IPALLLIBS) $(IPOPTLIB_LFLAGS)
@@ -525,6 +525,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdFInterface.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdInterfaceTNLP.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpStdJInterface.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTNLP.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTNLPAdapter.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpTNLPReducer.Plo@am__quote@ # am--include-marker
 
@@ -717,6 +718,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/IpStdFInterface.Plo
 	-rm -f ./$(DEPDIR)/IpStdInterfaceTNLP.Plo
 	-rm -f ./$(DEPDIR)/IpStdJInterface.Plo
+	-rm -f ./$(DEPDIR)/IpTNLP.Plo
 	-rm -f ./$(DEPDIR)/IpTNLPAdapter.Plo
 	-rm -f ./$(DEPDIR)/IpTNLPReducer.Plo
 	-rm -f Makefile
@@ -771,6 +773,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/IpStdFInterface.Plo
 	-rm -f ./$(DEPDIR)/IpStdInterfaceTNLP.Plo
 	-rm -f ./$(DEPDIR)/IpStdJInterface.Plo
+	-rm -f ./$(DEPDIR)/IpTNLP.Plo
 	-rm -f ./$(DEPDIR)/IpTNLPAdapter.Plo
 	-rm -f ./$(DEPDIR)/IpTNLPReducer.Plo
 	-rm -f Makefile

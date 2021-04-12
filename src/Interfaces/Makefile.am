@@ -28,6 +28,7 @@ libipopt_la_SOURCES = \
 	IpStdCInterface.cpp \
 	IpStdInterfaceTNLP.cpp \
 	IpStdFInterface.c \
+	IpTNLP.cpp \
 	IpTNLPAdapter.cpp \
 	IpTNLPReducer.cpp
 

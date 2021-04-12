@@ -743,6 +743,42 @@ public:
    }
    ///@}
 
+   /** Get primal and dual variable values of the current iterate.
+    *
+    * This method can be used to get the values of the current iterate,
+    * e.g., during intermediate_callback().
+    * The method expects the number of variables (dimension of x), number of constraints (dimension of g(x)),
+    * and allocated arrays of appropriate lengths as input.
+    *
+    * The method translates the x(), y_c(), y_d(), z_L(), and z_U() vectors from ip_data->curr()
+    * of the internal NLP representation into the form used by the TNLP.
+    *
+    * @note Zero is returned as dual multiplies for fixed variables, even if the fixed-variable treatment has been set to handle them as constraints.
+    *
+    * @param ip_data (in)  Ipopt Data
+    * @param ip_cq   (in)  Ipopt Calculated Quantities
+    * @param n       (in)  the number of variables \f$x\f$ in the problem; can be arbitrary if skipping x, z_L, and z_U
+    * @param x       (out) buffer to store value of primal variables \f$x\f$, must have length at least n; pass NULL to skip retrieving x
+    * @param z_L     (out) buffer to store the lower bound multipliers \f$z_L\f$, must have length at least n; pass NULL to skip retrieving z_L
+    * @param z_U     (out) buffer to store the upper bound multipliers \f$z_U\f$, must have length at least n; pass NULL to skip retrieving z_U
+    * @param m       (in)  the number of constraints \f$g(x)\f$; can be arbitrary if skipping lambda
+    * @param lambda  (out) buffer to store the constraint multipliers \f$\lambda\f$, must have length at least m; pass NULL to skip retrieving lambda
+    *
+    * @return Whether Ipopt has successfully filled the given arrays
+    */
+   // [TNLP_get_curr_iterate]
+   bool get_curr_iterate(
+      const IpoptData*           ip_data,
+      IpoptCalculatedQuantities* ip_cq,
+      Index                      n,
+      Number*                    x,
+      Number*                    z_L,
+      Number*                    z_U,
+      Index                      m,
+      Number*                    lambda
+      ) const;
+   // [TNLP_get_curr_iterate]
+
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).

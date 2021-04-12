@@ -246,7 +246,7 @@ public:
     *  data for the TNLP formulation from the IpoptNLP structure.
     */
    ///@{
-   /** Sort the primal variables, and add the fixed values in x */
+   /** Sort the primal variables, and add the fixed values in x_orig */
    void ResortX(
       const Vector& x,
       Number*       x_orig
@@ -269,6 +269,16 @@ public:
       Number*       x_U_orig,         /**< vector to fill with values from x_U */
       bool          clearorig = true  /**< whether to initialize complete x_L_orig and x_U_orig to 0.0 before setting values for non-fixed variables */
    );
+
+
+   void GetFullDimensions(
+      Index& n,  /**< storage for full dimension of x (fixed + non-fixed) */
+      Index& m   /**< storage for full dimension of g (c + d) */
+      ) const
+   {
+      n = n_full_x_;
+      m = n_full_g_;
+   }
    ///@}
 
 private:
