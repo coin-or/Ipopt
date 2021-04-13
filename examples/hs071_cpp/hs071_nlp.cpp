@@ -16,7 +16,9 @@ using namespace Ipopt;
 #endif
 
 // constructor
-HS071_NLP::HS071_NLP()
+HS071_NLP::HS071_NLP(
+   bool printiterate
+) : printiterate_(printiterate)
 { }
 
 // destructor
@@ -369,3 +371,68 @@ void HS071_NLP::finalize_solution(
    }
 }
 // [TNLP_finalize_solution]
+
+bool HS071_NLP::intermediate_callback(
+   AlgorithmMode              mode,
+   Index                      iter,
+   Number                     obj_value,
+   Number                     inf_pr,
+   Number                     inf_du,
+   Number                     mu,
+   Number                     d_norm,
+   Number                     regularization_size,
+   Number                     alpha_du,
+   Number                     alpha_pr,
+   Index                      ls_trials,
+   const IpoptData*           ip_data,
+   IpoptCalculatedQuantities* ip_cq
+)
+{
+   if( !printiterate_ )
+      return true;
+
+   Number x[4];
+   Number z_L[4];
+   Number z_U[4];
+   Number compl_x_L[4];
+   Number compl_x_U[4];
+   Number grad_lag_x[4];
+
+   Number lambda[2];
+   Number constraint_violation[2];
+   Number compl_g_L[2];
+   Number compl_g_U[2];
+   Number grad_lag_slacks[2];
+
+   bool have_iter = get_curr_iterate(ip_data, ip_cq, 4, x, z_L, z_U, 2, lambda);
+   bool have_viol = get_curr_violations(ip_data, ip_cq, false, 4, compl_x_L, compl_x_U, grad_lag_x, 2, constraint_violation, compl_g_L, compl_g_U, grad_lag_slacks);
+
+   printf("Current iterate:\n");
+   printf("  %-12s %-12s %-12s %-12s %-12s %-12s\n", "x", "z_L", "z_U", "compl_x_L", "compl_x_U", "grad_lag_x");
+   for( int i = 0; i < 4; ++i )
+   {
+      if( have_iter )
+         printf("  %-12g %-12g %-12g", x[i], z_L[i], z_U[i]);
+      else
+         printf("  %-12s %-12s %-12s", "n/a", "n/a", "n/a");
+      if( have_viol )
+         printf(" %-12g %-12g %-12g\n", compl_x_L[i], compl_x_U[i], grad_lag_x[i]);
+      else
+         printf(" %-12s %-12s %-12s\n", "n/a", "n/a", "n/a");
+   }
+
+   printf("  %-12s %-25s %-12s %-12s %-12s\n", "lambda", "constr_viol", "compl_g_L", "compl_g_U", "grad_lag_slacks");
+   for( int i = 0; i < 2; ++i )
+   {
+      if( have_iter )
+         printf("  %-12g", lambda[i]);
+      else
+         printf("  %-12s", "n/a");
+      if( have_viol )
+         printf(" %-25g %-12g %-12g %-12g\n", constraint_violation[i], compl_g_L[i], compl_g_U[i], grad_lag_slacks[i]);
+      else
+         printf(" %-25s %-12s %-12s %-12s\n", "n/a", "n/a", "n/a", "n/a");
+   }
+
+   return true;
+}

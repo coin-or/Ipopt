@@ -34,10 +34,12 @@ using namespace Ipopt;
 class HS071_NLP: public TNLP
 {
 public:
-   /** Default constructor */
-   HS071_NLP();
+   /** Constructor */
+   HS071_NLP(
+      bool printiterate = false   /**< whether to print the iterate at each iteration */
+      );
 
-   /** Default destructor */
+   /** Destructor */
    virtual ~HS071_NLP();
 
    /**@name Overloaded from TNLP */
@@ -148,7 +150,26 @@ public:
    );
    //@}
 
+   bool intermediate_callback(
+      AlgorithmMode              mode,
+      Index                      iter,
+      Number                     obj_value,
+      Number                     inf_pr,
+      Number                     inf_du,
+      Number                     mu,
+      Number                     d_norm,
+      Number                     regularization_size,
+      Number                     alpha_du,
+      Number                     alpha_pr,
+      Index                      ls_trials,
+      const IpoptData*           ip_data,
+      IpoptCalculatedQuantities* ip_cq
+   );
+
 private:
+   /** whether to print iterate to stdout in intermediate_callback() */
+   bool printiterate_;
+
    /**@name Methods to block default compiler methods.
     *
     * The compiler automatically generates the following three methods.
