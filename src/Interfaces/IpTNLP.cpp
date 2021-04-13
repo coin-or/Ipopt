@@ -9,6 +9,8 @@
 #include "IpOrigIpoptNLP.hpp"
 #include "IpRestoIpoptNLP.hpp"
 #include "IpTNLPAdapter.hpp"
+#include "IpDenseVector.hpp"
+#include "IpBlas.hpp"
 
 namespace Ipopt
 {
@@ -142,5 +144,191 @@ bool TNLP::get_curr_iterate(
    // if it is neither OrigIpoptNLP nor RestoIpoptNLP, then we don't know how to retrieve x
    return false;
 }
+
+bool TNLP::get_curr_violations(
+   const IpoptData*           ip_data,
+   IpoptCalculatedQuantities* ip_cq,
+   bool                       scaled,
+   Index                      n,
+   Number*                    compl_x_L,
+   Number*                    compl_x_U,
+   Number*                    grad_lag_x,
+   Index                      m,
+   Number*                    nlp_constraint_violation,
+   Number*                    compl_g_L,
+   Number*                    compl_g_U,
+   Number*                    grad_lag_slacks
+   ) const
+{
+   if( ip_data == NULL || !IsValid(ip_data->curr()) )
+      return false;
+   if( ip_cq == NULL )
+      return false;
+
+   Ipopt::OrigIpoptNLP* orignlp;
+   TNLPAdapter* tnlp_adapter;
+   Index n_full;
+   Index m_full;
+
+   // check whether we use a OrigIpoptNLP
+   orignlp = dynamic_cast<OrigIpoptNLP*>(GetRawPtr(ip_cq->GetIpoptNLP()));
+   if( orignlp != NULL )
+   {
+      tnlp_adapter = dynamic_cast<TNLPAdapter*>(GetRawPtr(orignlp->nlp()));
+      if( tnlp_adapter == NULL )
+         return false;
+
+      tnlp_adapter->GetFullDimensions(n_full, m_full);
+      if( n != n_full && (compl_x_L != NULL || compl_x_U != NULL || grad_lag_x != NULL) )
+         THROW_EXCEPTION(IpoptException, "Incorrect dimension of x given to TNLP::get_curr_violations().\n");
+      if( m != m_full && (nlp_constraint_violation != NULL || compl_g_L != NULL || compl_g_U != NULL || grad_lag_slacks != NULL) )
+         THROW_EXCEPTION(IpoptException, "Incorrect dimension of g(x) given to TNLP::get_curr_violations().\n");
+
+      // TODO handle fixed variable treatment being make_constraint below
+
+      if( compl_x_L != NULL || compl_x_U != NULL )
+      {
+         // this should give XZe from (5)
+         tnlp_adapter->ResortBnds(*ip_cq->curr_compl_x_L(), compl_x_L, *ip_cq->curr_compl_x_U(), compl_x_U, true);
+
+         if( !scaled )
+         {
+            // IpoptCalculatedQuantities::unscaled_curr_complementarity() calls unapply_obj_scaling() on norm of complementarity vector
+            // so we multiply here each entry of the complementarity vector with the same factor
+            Number obj_unscal = orignlp->NLP_scaling()->unapply_obj_scaling(1.0);
+            if( compl_x_L != NULL )
+               IpBlasScal(n, obj_unscal, compl_x_L, 1);
+            if( compl_x_U != NULL )
+               IpBlasScal(n, obj_unscal, compl_x_U, 1);
+         }
+      }
+
+      if( grad_lag_x != NULL )
+      {
+         if( scaled )
+         {
+            tnlp_adapter->ResortX(*ip_cq->curr_grad_lag_x(), grad_lag_x, false);
+         }
+         else
+         {
+            // adapted from IpoptCalculatedQuantities::unscaled_curr_dual_infeasibility()
+            SmartPtr<const Vector> intern_grad_lag_x = orignlp->NLP_scaling()->unapply_grad_obj_scaling(ip_cq->curr_grad_lag_x());
+            tnlp_adapter->ResortX(*intern_grad_lag_x, grad_lag_x, false);
+         }
+      }
+
+      if( nlp_constraint_violation != NULL )
+      {
+         // adapted from IpoptCalculatedQuantities::curr_(unscaled_)nlp_constraint_violation
+
+         // violation of c(x) = 0
+         SmartPtr<Vector> c_viol;
+         if( scaled )
+            c_viol = ip_cq->curr_c()->MakeNewCopy();
+         else
+            c_viol = ip_cq->unscaled_curr_c()->MakeNewCopy();
+         c_viol->ElementWiseAbs();  // |c(x)|
+
+         // violation of d_L <= d(x)
+         SmartPtr<Vector> d_viol_L;
+         if( orignlp->d_L()->Dim() > 0 )
+         {
+            d_viol_L = ip_cq->curr_d()->MakeNewCopy();
+            orignlp->Pd_L()->MultVector(1., *orignlp->d_L(), -1., *d_viol_L);  // d_L - d
+            if( !scaled )
+               d_viol_L = orignlp->NLP_scaling()->unapply_vector_scaling_d_NonConst(ConstPtr(d_viol_L));
+         }
+         else
+         {
+            d_viol_L = ip_cq->curr_d()->MakeNew();
+            d_viol_L->Set(0.);
+         }
+
+         // violation of d(x) <= d_U
+         SmartPtr<Vector> d_viol_U;
+         if( orignlp->d_U()->Dim() > 0 )
+         {
+            d_viol_U = ip_cq->curr_d()->MakeNewCopy();
+            orignlp->Pd_U()->MultVector(-1., *orignlp->d_U(), 1., *d_viol_U);  // d - d_U
+            if( !scaled )
+               d_viol_U = orignlp->NLP_scaling()->unapply_vector_scaling_d_NonConst(ConstPtr(d_viol_U));
+         }
+         else
+         {
+            d_viol_U = ip_cq->curr_d()->MakeNew();
+            d_viol_U->Set(0.);
+         }
+
+         // violation of d_L <= d(x) <= d_U:   d_viol_L := max(d_viol_L, d_viol_U, 0)
+         d_viol_L->ElementWiseMax(*d_viol_U);
+         SmartPtr<Vector> tmp = d_viol_L->MakeNew();
+         tmp->Set(0.);
+         d_viol_L->ElementWiseMax(*tmp);
+
+         tnlp_adapter->ResortG(*c_viol, *d_viol_L, nlp_constraint_violation);
+      }
+
+      DenseVector c(new DenseVectorSpace(ip_cq->curr_c()->Dim()));  // ToDo get dimension from somewhere else that doesn't get calculated
+      c.Set(0.0);
+
+      if( compl_g_L != NULL )
+      {
+         tnlp_adapter->ResortG(c, *ip_cq->curr_compl_s_L(), compl_g_L);
+
+         if( !scaled )
+         {
+            // IpoptCalculatedQuantities::unscaled_curr_complementarity() calls unapply_obj_scaling() on norm of complementarity vector
+            // so we multiply here each entry of the complementarity vector with the same factor
+            Number obj_unscal = orignlp->NLP_scaling()->unapply_obj_scaling(1.0);
+            if( obj_unscal != 1. )
+               IpBlasScal(m, obj_unscal, compl_g_L, 1);
+         }
+      }
+
+      if( compl_g_U != NULL )
+      {
+         tnlp_adapter->ResortG(c, *ip_cq->curr_compl_s_U(), compl_g_U);
+
+         if( !scaled )
+         {
+            // IpoptCalculatedQuantities::unscaled_curr_complementarity() calls unapply_obj_scaling() on norm of complementarity vector
+            // so we multiply here each entry of the complementarity vector with the same factor
+            Number obj_unscal = orignlp->NLP_scaling()->unapply_obj_scaling(1.0);
+            if( obj_unscal != 1. )
+               IpBlasScal(m, obj_unscal, compl_g_U, 1);
+         }
+      }
+
+      if( grad_lag_slacks != NULL )
+      {
+         if( scaled )
+         {
+            tnlp_adapter->ResortG(c, *ip_cq->curr_grad_lag_s(), grad_lag_slacks);
+         }
+         else
+         {
+            // adapted from IpoptCalculatedQuantities::unscaled_curr_dual_infeasibility()
+            Number obj_unscal = orignlp->NLP_scaling()->unapply_obj_scaling(1.0);
+            SmartPtr<const Vector> intern_grad_lag_s;
+            if( obj_unscal != 1. )
+            {
+               SmartPtr<Vector> tmp = orignlp->NLP_scaling()->apply_vector_scaling_d_NonConst(ConstPtr(ip_cq->curr_grad_lag_s()));
+               tmp->Scal(obj_unscal);
+               intern_grad_lag_s = ConstPtr(tmp);
+            }
+            else
+            {
+               intern_grad_lag_s = orignlp->NLP_scaling()->apply_vector_scaling_d(ip_cq->curr_grad_lag_s());
+            }
+            tnlp_adapter->ResortG(c, *intern_grad_lag_s, grad_lag_slacks);
+         }
+      }
+
+      return true;
+   }
+
+   return false;
+}
+
 
 } // namespace Ipopt

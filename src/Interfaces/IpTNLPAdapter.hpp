@@ -248,8 +248,9 @@ public:
    ///@{
    /** Sort the primal variables, and add the fixed values in x_orig */
    void ResortX(
-      const Vector& x,
-      Number*       x_orig
+      const Vector& x,                   /**< internal values for primal variables x */
+      Number*       x_orig,              /**< vector to fill with values from x */
+      bool          usefixedvals = true  /**< whether to use stored variable fixings for fixed variables (true), or zero (false) */
    );
 
    /** Sort constraint values */

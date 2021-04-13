@@ -777,6 +777,53 @@ public:
       ) const;
    // [TNLP_get_curr_iterate]
 
+   /** Get primal and dual infeasibility of the current iterate.
+    *
+    * This method can be used to get the violations of constraints and optimality conditions
+    * at the current iterate, e.g., during intermediate_callback().
+    * The method expects the number of variables (dimension of x), number of constraints (dimension of g(x)),
+    * and allocated arrays of appropriate lengths as input.
+    *
+    * The method makes the vectors behind (unscaled_)curr_nlp_constraint_violation(), (unscaled_)curr_dual_infeasibility(), (unscaled_)curr_complementarity()
+    * from ip_cq of the internal NLP representation available into the form used by the TNLP.
+    *
+    * @note Fixed variables are not seen by Ipopt internally.
+    *   Thus, the complementarity and derivative of the Lagrangian w.r.t. fixed variables is set to 0.
+    * @note For equality constraints (g_L = g_U), Ipopt does not introduce slack variables internally.
+    *   Thus, the complementarity and derivative of the Lagrangian w.r.t. equality constraints is set to 0.
+    *
+    * @param ip_data    (in)  Ipopt Data
+    * @param ip_cq      (in)  Ipopt Calculated Quantities
+    * @param scaled     (in)  whether to retrieve scaled or unscaled violations
+    * @param n          (in)  the number of variables \f$x\f$ in the problem; can be arbitrary if skipping compl_x_L, compl_x_U, and grad_lag_x
+    * @param compl_x_L  (out) buffer to store violation of complementarity for lower bounds on variables (\f$(x-x_L)z_L\f$), must have length at least n; pass NULL to skip retrieving compl_x_L
+    * @param compl_x_U  (out) buffer to store violation of complementarity for upper bounds on variables (\f$(x_U-x)z_U\f$), must have length at least n; pass NULL to skip retrieving compl_x_U
+    * @param grad_lag_x (out) buffer to store gradient of Lagrangian w.r.t. variables \f$x\f$, must have length at least n; pass NULL to skip retrieving grad_lag_x
+    * @param m          (in)  the number of constraints \f$g(x)\f$; can be arbitrary if skipping lambda
+    * @param nlp_constraint_violation (out) buffer to store violation of constraints \f$max(g_l-g(x),g(x)-g_u,0)\f$, must have length at least m; pass NULL to skip retrieving constraint_violation
+    * @param compl_g_L  (out) buffer to store violation of complementarity of slack variables on constraint lhs (\f$g_l \leq g(x)\f$), must have length at least m; pass NULL to skip retrieving compl_g_L
+    * @param compl_g_U  (out) buffer to store violation of complementarity of slack variables on constraint rhs (\f$g(x) \leq g_u\f$), must have length at least m; pass NULL to skip retrieving compl_g_U
+    * @param grad_lag_slacks (out) buffer to store gradient of Lagrangion w.r.t. slack variables, must have length at least m; pass NULL to skip retrieving grad_lag_slacks
+    *
+    * @return Whether Ipopt has successfully filled the given arrays
+    */
+   // [TNLP_get_curr_violations]
+   bool get_curr_violations(
+      const IpoptData*           ip_data,
+      IpoptCalculatedQuantities* ip_cq,
+      bool                       scaled,
+      Index                      n,
+      Number*                    compl_x_L,
+      Number*                    compl_x_U,
+      Number*                    grad_lag_x,
+      Index                      m,
+      Number*                    nlp_constraint_violation,
+      Number*                    compl_g_L,
+      Number*                    compl_g_U,
+      Number*                    grad_lag_slacks
+      ) const;
+   // [TNLP_get_curr_violations]
+
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).

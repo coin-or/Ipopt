@@ -2251,7 +2251,8 @@ void TNLPAdapter::GetQuasiNewtonApproximationSpaces(
 
 void TNLPAdapter::ResortX(
    const Vector& x,
-   Number*       x_orig
+   Number*       x_orig,
+   bool          usefixedvals
 )
 {
    const DenseVector* dx = static_cast<const DenseVector*>(&x);
@@ -2271,9 +2272,13 @@ void TNLPAdapter::ResortX(
             {
                x_orig[i] = scalar;
             }
-            else
+            else if( usefixedvals )
             {
                x_orig[i] = full_x_[i];
+            }
+            else
+            {
+               x_orig[i] = 0.0;
             }
          }
       }
@@ -2287,9 +2292,13 @@ void TNLPAdapter::ResortX(
             {
                x_orig[i] = x_values[idx];
             }
-            else
+            else if( usefixedvals )
             {
                x_orig[i] = full_x_[i];
+            }
+            else
+            {
+               x_orig[i] = 0.0;
             }
          }
       }
