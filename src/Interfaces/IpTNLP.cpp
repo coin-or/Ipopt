@@ -183,12 +183,34 @@ bool TNLP::get_curr_violations(
       if( m != m_full && (nlp_constraint_violation != NULL || compl_g != NULL) )
          THROW_EXCEPTION(IpoptException, "Incorrect dimension of g(x) given to TNLP::get_curr_violations().\n");
 
-      // TODO handle fixed variable treatment being make_constraint below
+      SmartPtr<Vector> c_compl;
+
+      int n_x_fixed;
+      Index* x_fixed_map;
+      TNLPAdapter::FixedVariableTreatmentEnum fixed_variable_treatment;
+      tnlp_adapter->GetFixedVariables(n_x_fixed, x_fixed_map, fixed_variable_treatment);
 
       if( compl_x_L != NULL || compl_x_U != NULL )
       {
          // this should give XZe from (5)
-         tnlp_adapter->ResortBnds(*ip_cq->curr_compl_x_L(), compl_x_L, *ip_cq->curr_compl_x_U(), compl_x_U, true);
+
+         if( n_x_fixed > 0 && fixed_variable_treatment == TNLPAdapter::MAKE_CONSTRAINT )
+         {
+            // if fixed variables are treated as constraints, we have equality constraints x - x_L = 0 at the end of c(x)=0
+            // we can then use c(x)*y_c as complementarity for these variables
+
+            if( scaled )
+               c_compl = ip_cq->curr_c()->MakeNewCopy();
+            else
+               c_compl = ip_cq->unscaled_curr_c()->MakeNewCopy();
+            c_compl->ElementWiseMultiply(*ip_data->curr()->y_c());      // c(x)*y_c
+
+            tnlp_adapter->ResortBoundMultipliers(*c_compl, *ip_cq->curr_compl_x_L(), compl_x_L, *ip_cq->curr_compl_x_U(), compl_x_U);
+         }
+         else
+         {
+            tnlp_adapter->ResortBnds(*ip_cq->curr_compl_x_L(), compl_x_L, *ip_cq->curr_compl_x_U(), compl_x_U, true);
+         }
 
          if( !scaled )
          {
@@ -204,6 +226,9 @@ bool TNLP::get_curr_violations(
 
       if( grad_lag_x != NULL )
       {
+         // this will set the derivative of the Lagrangian w.r.t. fixed variables to 0 (for any fixed_variables_treatment)
+         // the actual values are nowhere stored within Ipopt Data or CQ, since TNLPAdapter does not seem to pass them on
+         // we may have to reevaluate and capture them in TNLPAdapater
          if( scaled )
          {
             tnlp_adapter->ResortX(*ip_cq->curr_grad_lag_x(), grad_lag_x, false);
@@ -213,6 +238,21 @@ bool TNLP::get_curr_violations(
             // adapted from IpoptCalculatedQuantities::unscaled_curr_dual_infeasibility()
             SmartPtr<const Vector> intern_grad_lag_x = orignlp->NLP_scaling()->unapply_grad_obj_scaling(ip_cq->curr_grad_lag_x());
             tnlp_adapter->ResortX(*intern_grad_lag_x, grad_lag_x, false);
+         }
+
+         if( n_x_fixed > 0 && fixed_variable_treatment == TNLPAdapter::MAKE_CONSTRAINT )
+         {
+            // if fixed_variable_treatment is make_constraint, then fixed variable contribute y_c*x to the Lagrangian
+            // so we should subtract y_c for these entries; let's hope we don't need to deal with scaling
+            const DenseVector* y_c = static_cast<const DenseVector*>(GetRawPtr(ip_data->curr()->y_c()));
+            DBG_ASSERT(dynamic_cast<const DenseVector*>(GetRawPtr(ip_data->curr()->y_c())) != NULL);
+            DBG_ASSERT(y_c->Dim() >= n_x_fixed);
+            if( y_c->IsHomogeneous() )
+               for( Index i = 0; i < n_x_fixed; ++i )
+                  grad_lag_x[x_fixed_map[i]] -= y_c->Scalar();
+            else
+               for( Index i = 0; i < n_x_fixed; ++i )
+                  grad_lag_x[x_fixed_map[i]] -= y_c->Values()[y_c->Dim()-n_x_fixed+i];
          }
       }
 
@@ -250,10 +290,10 @@ bool TNLP::get_curr_violations(
             d_viol_U->Set(0.);
          }
 
-         // c(x) = 0, d_L <= d(x) <= d_U should result in complementarity constraints
-         // y_c*c(x), (d(x)-d_L)*y_d^+, (d_U-d(x))*y_d^-,  where y_d^+ = max(0,y_d) ~= v_L, y_d^- = -min(0,y_d) ~= v_U   (I hope these are the correct signs)
-         // we will merge the latter two into one vector, taking the nonzero entries, i.e., (d(x)-d_L)*y_d^+ + (d_U-d(x))*y_d^-
-         // this is then also consistent with 0 <= c(x) <= 0, since c(x)*y_c^+ + (-c(x))*y_c^- = c(x)*(y_c^+ - y_c^-) = c(x)*y_c
+         // c(x) = 0, d_L <= d(x) <= d_U should result in complementarities
+         // y_c*c(x), (d(x)-d_L)*y_d^-, (d_U-d(x))*y_d^+,  where y_d^+ = max(0,y_d), y_d^- = max(0,-y_d)   (I took the signs from TNLPAdapter::ResortBoundMultipliers)
+         // we will merge the latter two into one vector, taking the nonzero entries, i.e., (d(x)-d_L)*y_d^- + (d_U-d(x))*y_d^+
+         // to be consistent, it looks like we need to negate for 0 <= c(x) <= 0, since c(x)*y_c^- + (-c(x))*y_c^+ = c(x)*(y_c^- - y_c^+) = -c(x)*y_c
          if( compl_g != NULL )
          {
             SmartPtr<Vector> yd_pos = ip_data->curr()->y_d()->MakeNewCopy();
@@ -263,20 +303,22 @@ bool TNLP::get_curr_violations(
             yd_pos->ElementWiseMax(*zero);
             yd_neg->ElementWiseMin(*zero);  // -y_d^-
 
-            yd_pos->ElementWiseMultiply(*d_viol_L);  // (d_L-d(x)) * y_d^+
-            yd_neg->ElementWiseMultiply(*d_viol_U);  // (d(x)-d_U) * (-y_d^-)
+            yd_pos->ElementWiseMultiply(*d_viol_U);  // (d(x)-d_U) * y_d^+
+            yd_neg->ElementWiseMultiply(*d_viol_L);  // (d_L-d(x)) * (-y_d^-)
 
-            yd_pos->Scal(-1.0);          // (d(x)-d_L) * y_d^+
-            yd_pos->Axpy(1.0, *yd_neg);  // (d(x)-d_L) * y_d^+ + (d_U-d(x)) * y_d^-
+            yd_neg->Axpy(-1.0, *yd_pos); // (d(x)-d_L) * y_d^- + (d_U-d(x)) * y_d^+
 
-            SmartPtr<Vector> c_compl;
-            if( scaled )
-               c_compl = ip_cq->curr_c()->MakeNewCopy();
-            else
-               c_compl = ip_cq->unscaled_curr_c()->MakeNewCopy();
-            c_compl->ElementWiseMultiply(*ip_data->curr()->y_c());      // c(x)*y_c
+            if( !IsValid(c_compl) )
+            {
+               if( scaled )
+                  c_compl = ip_cq->curr_c()->MakeNewCopy();
+               else
+                  c_compl = ip_cq->unscaled_curr_c()->MakeNewCopy();
+               c_compl->ElementWiseMultiply(*ip_data->curr()->y_c());      // c(x)*y_c
+            }
+            c_compl->Scal(-1.0);  // -c(x)*y_c
 
-            tnlp_adapter->ResortG(*c_compl, *yd_pos, compl_g);
+            tnlp_adapter->ResortG(*c_compl, *yd_neg, compl_g);
          }
 
          if( nlp_constraint_violation != NULL )

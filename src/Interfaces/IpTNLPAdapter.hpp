@@ -284,6 +284,7 @@ public:
       Number*       z_U_orig          /**< vector to fill with values from z_U */
    );
 
+   /** Get number of variables and number of constraints in TNLP */
    void GetFullDimensions(
       Index& n,  /**< storage for full dimension of x (fixed + non-fixed) */
       Index& m   /**< storage for full dimension of g (c + d) */
@@ -291,6 +292,18 @@ public:
    {
       n = n_full_x_;
       m = n_full_g_;
+   }
+
+   /** Get number and indices of fixed variables */
+   void GetFixedVariables(
+      Index&  n_x_fixed,     /**< storage for number of fixed variables in TNLP */
+      Index*& x_fixed_map,   /**< storage for pointer to array that holds indices of fixed variables (has length n_fixed_x, can be NULL if n_fixed_x=0) */
+      FixedVariableTreatmentEnum& fixed_variable_treatment  /**< treatment for fixed variables as used by TNLP */
+      ) const
+   {
+      n_x_fixed = n_x_fixed_;
+      x_fixed_map = x_fixed_map_;
+      fixed_variable_treatment = fixed_variable_treatment_;
    }
    ///@}
 

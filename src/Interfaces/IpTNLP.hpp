@@ -787,7 +787,7 @@ public:
     * The method makes the vectors behind (unscaled_)curr_nlp_constraint_violation(), (unscaled_)curr_dual_infeasibility(), (unscaled_)curr_complementarity()
     * from ip_cq of the internal NLP representation available into the form used by the TNLP.
     *
-    * @note Fixed variables are not seen by Ipopt internally. Thus, the derivative of the Lagrangian w.r.t. fixed variables is set to 0.
+    * @note If fixed variables are treated as parameters (the default), then their corresponding entry in the derivative of the Lagrangian is set to 0.
     *
     * @param ip_data    (in)  Ipopt Data
     * @param ip_cq      (in)  Ipopt Calculated Quantities
