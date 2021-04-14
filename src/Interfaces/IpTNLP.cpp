@@ -15,6 +15,7 @@
 namespace Ipopt
 {
 
+// TODO return g(x) as well
 bool TNLP::get_curr_iterate(
    const IpoptData*           ip_data,
    IpoptCalculatedQuantities* ip_cq,
@@ -155,9 +156,7 @@ bool TNLP::get_curr_violations(
    Number*                    grad_lag_x,
    Index                      m,
    Number*                    nlp_constraint_violation,
-   Number*                    compl_g_L,
-   Number*                    compl_g_U,
-   Number*                    grad_lag_slacks
+   Number*                    compl_g
    ) const
 {
    if( ip_data == NULL || !IsValid(ip_data->curr()) )
@@ -181,7 +180,7 @@ bool TNLP::get_curr_violations(
       tnlp_adapter->GetFullDimensions(n_full, m_full);
       if( n != n_full && (compl_x_L != NULL || compl_x_U != NULL || grad_lag_x != NULL) )
          THROW_EXCEPTION(IpoptException, "Incorrect dimension of x given to TNLP::get_curr_violations().\n");
-      if( m != m_full && (nlp_constraint_violation != NULL || compl_g_L != NULL || compl_g_U != NULL || grad_lag_slacks != NULL) )
+      if( m != m_full && (nlp_constraint_violation != NULL || compl_g != NULL) )
          THROW_EXCEPTION(IpoptException, "Incorrect dimension of g(x) given to TNLP::get_curr_violations().\n");
 
       // TODO handle fixed variable treatment being make_constraint below
@@ -217,17 +216,9 @@ bool TNLP::get_curr_violations(
          }
       }
 
-      if( nlp_constraint_violation != NULL )
+      if( nlp_constraint_violation != NULL || compl_g != NULL )
       {
          // adapted from IpoptCalculatedQuantities::curr_(unscaled_)nlp_constraint_violation
-
-         // violation of c(x) = 0
-         SmartPtr<Vector> c_viol;
-         if( scaled )
-            c_viol = ip_cq->curr_c()->MakeNewCopy();
-         else
-            c_viol = ip_cq->unscaled_curr_c()->MakeNewCopy();
-         c_viol->ElementWiseAbs();  // |c(x)|
 
          // violation of d_L <= d(x)
          SmartPtr<Vector> d_viol_L;
@@ -259,68 +250,52 @@ bool TNLP::get_curr_violations(
             d_viol_U->Set(0.);
          }
 
-         // violation of d_L <= d(x) <= d_U:   d_viol_L := max(d_viol_L, d_viol_U, 0)
-         d_viol_L->ElementWiseMax(*d_viol_U);
-         SmartPtr<Vector> tmp = d_viol_L->MakeNew();
-         tmp->Set(0.);
-         d_viol_L->ElementWiseMax(*tmp);
-
-         tnlp_adapter->ResortG(*c_viol, *d_viol_L, nlp_constraint_violation);
-      }
-
-      DenseVector c(new DenseVectorSpace(ip_cq->curr_c()->Dim()));  // ToDo get dimension from somewhere else that doesn't get calculated
-      c.Set(0.0);
-
-      if( compl_g_L != NULL )
-      {
-         tnlp_adapter->ResortG(c, *ip_cq->curr_compl_s_L(), compl_g_L);
-
-         if( !scaled )
+         // c(x) = 0, d_L <= d(x) <= d_U should result in complementarity constraints
+         // y_c*c(x), (d(x)-d_L)*y_d^+, (d_U-d(x))*y_d^-,  where y_d^+ = max(0,y_d) ~= v_L, y_d^- = -min(0,y_d) ~= v_U   (I hope these are the correct signs)
+         // we will merge the latter two into one vector, taking the nonzero entries, i.e., (d(x)-d_L)*y_d^+ + (d_U-d(x))*y_d^-
+         // this is then also consistent with 0 <= c(x) <= 0, since c(x)*y_c^+ + (-c(x))*y_c^- = c(x)*(y_c^+ - y_c^-) = c(x)*y_c
+         if( compl_g != NULL )
          {
-            // IpoptCalculatedQuantities::unscaled_curr_complementarity() calls unapply_obj_scaling() on norm of complementarity vector
-            // so we multiply here each entry of the complementarity vector with the same factor
-            Number obj_unscal = orignlp->NLP_scaling()->unapply_obj_scaling(1.0);
-            if( obj_unscal != 1. )
-               IpBlasScal(m, obj_unscal, compl_g_L, 1);
-         }
-      }
+            SmartPtr<Vector> yd_pos = ip_data->curr()->y_d()->MakeNewCopy();
+            SmartPtr<Vector> yd_neg = ip_data->curr()->y_d()->MakeNewCopy();
+            SmartPtr<Vector> zero = yd_pos->MakeNew();
+            zero->Set(0.);
+            yd_pos->ElementWiseMax(*zero);
+            yd_neg->ElementWiseMin(*zero);  // -y_d^-
 
-      if( compl_g_U != NULL )
-      {
-         tnlp_adapter->ResortG(c, *ip_cq->curr_compl_s_U(), compl_g_U);
+            yd_pos->ElementWiseMultiply(*d_viol_L);  // (d_L-d(x)) * y_d^+
+            yd_neg->ElementWiseMultiply(*d_viol_U);  // (d(x)-d_U) * (-y_d^-)
 
-         if( !scaled )
-         {
-            // IpoptCalculatedQuantities::unscaled_curr_complementarity() calls unapply_obj_scaling() on norm of complementarity vector
-            // so we multiply here each entry of the complementarity vector with the same factor
-            Number obj_unscal = orignlp->NLP_scaling()->unapply_obj_scaling(1.0);
-            if( obj_unscal != 1. )
-               IpBlasScal(m, obj_unscal, compl_g_U, 1);
-         }
-      }
+            yd_pos->Scal(-1.0);          // (d(x)-d_L) * y_d^+
+            yd_pos->Axpy(1.0, *yd_neg);  // (d(x)-d_L) * y_d^+ + (d_U-d(x)) * y_d^-
 
-      if( grad_lag_slacks != NULL )
-      {
-         if( scaled )
-         {
-            tnlp_adapter->ResortG(c, *ip_cq->curr_grad_lag_s(), grad_lag_slacks);
-         }
-         else
-         {
-            // adapted from IpoptCalculatedQuantities::unscaled_curr_dual_infeasibility()
-            Number obj_unscal = orignlp->NLP_scaling()->unapply_obj_scaling(1.0);
-            SmartPtr<const Vector> intern_grad_lag_s;
-            if( obj_unscal != 1. )
-            {
-               SmartPtr<Vector> tmp = orignlp->NLP_scaling()->apply_vector_scaling_d_NonConst(ConstPtr(ip_cq->curr_grad_lag_s()));
-               tmp->Scal(obj_unscal);
-               intern_grad_lag_s = ConstPtr(tmp);
-            }
+            SmartPtr<Vector> c_compl;
+            if( scaled )
+               c_compl = ip_cq->curr_c()->MakeNewCopy();
             else
-            {
-               intern_grad_lag_s = orignlp->NLP_scaling()->apply_vector_scaling_d(ip_cq->curr_grad_lag_s());
-            }
-            tnlp_adapter->ResortG(c, *intern_grad_lag_s, grad_lag_slacks);
+               c_compl = ip_cq->unscaled_curr_c()->MakeNewCopy();
+            c_compl->ElementWiseMultiply(*ip_data->curr()->y_c());      // c(x)*y_c
+
+            tnlp_adapter->ResortG(*c_compl, *yd_pos, compl_g);
+         }
+
+         if( nlp_constraint_violation != NULL )
+         {
+            // violation of c(x) = 0
+            SmartPtr<Vector> c_viol;
+            if( scaled )
+               c_viol = ip_cq->curr_c()->MakeNewCopy();
+            else
+               c_viol = ip_cq->unscaled_curr_c()->MakeNewCopy();
+            c_viol->ElementWiseAbs();  // |c(x)|
+
+            // violation of d_L <= d(x) <= d_U:   d_viol_L := max(d_viol_L, d_viol_U, 0)
+            d_viol_L->ElementWiseMax(*d_viol_U);
+            SmartPtr<Vector> tmp = d_viol_L->MakeNew();
+            tmp->Set(0.);
+            d_viol_L->ElementWiseMax(*tmp);
+
+            tnlp_adapter->ResortG(*c_viol, *d_viol_L, nlp_constraint_violation);
          }
       }
 

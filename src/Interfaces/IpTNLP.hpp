@@ -787,10 +787,7 @@ public:
     * The method makes the vectors behind (unscaled_)curr_nlp_constraint_violation(), (unscaled_)curr_dual_infeasibility(), (unscaled_)curr_complementarity()
     * from ip_cq of the internal NLP representation available into the form used by the TNLP.
     *
-    * @note Fixed variables are not seen by Ipopt internally.
-    *   Thus, the complementarity and derivative of the Lagrangian w.r.t. fixed variables is set to 0.
-    * @note For equality constraints (g_L = g_U), Ipopt does not introduce slack variables internally.
-    *   Thus, the complementarity and derivative of the Lagrangian w.r.t. equality constraints is set to 0.
+    * @note Fixed variables are not seen by Ipopt internally. Thus, the derivative of the Lagrangian w.r.t. fixed variables is set to 0.
     *
     * @param ip_data    (in)  Ipopt Data
     * @param ip_cq      (in)  Ipopt Calculated Quantities
@@ -801,9 +798,7 @@ public:
     * @param grad_lag_x (out) buffer to store gradient of Lagrangian w.r.t. variables \f$x\f$, must have length at least n; pass NULL to skip retrieving grad_lag_x
     * @param m          (in)  the number of constraints \f$g(x)\f$; can be arbitrary if skipping lambda
     * @param nlp_constraint_violation (out) buffer to store violation of constraints \f$max(g_l-g(x),g(x)-g_u,0)\f$, must have length at least m; pass NULL to skip retrieving constraint_violation
-    * @param compl_g_L  (out) buffer to store violation of complementarity of slack variables on constraint lhs (\f$g_l \leq g(x)\f$), must have length at least m; pass NULL to skip retrieving compl_g_L
-    * @param compl_g_U  (out) buffer to store violation of complementarity of slack variables on constraint rhs (\f$g(x) \leq g_u\f$), must have length at least m; pass NULL to skip retrieving compl_g_U
-    * @param grad_lag_slacks (out) buffer to store gradient of Lagrangion w.r.t. slack variables, must have length at least m; pass NULL to skip retrieving grad_lag_slacks
+    * @param compl_g    (out) buffer to store violation of complementarity of constraint (\f$(g(x)-g_l)*\lambda^+ + (g_l-g(x))*\lambda^-\f$, where \f$\lambda^+=max(0,\lambda)\f$ and \f$\lambda^-=max(0,-\lambda)\f$ (componentwise)), must have length at least m; pass NULL to skip retrieving compl_g
     *
     * @return Whether Ipopt has successfully filled the given arrays
     */
@@ -818,9 +813,7 @@ public:
       Number*                    grad_lag_x,
       Index                      m,
       Number*                    nlp_constraint_violation,
-      Number*                    compl_g_L,
-      Number*                    compl_g_U,
-      Number*                    grad_lag_slacks
+      Number*                    compl_g
       ) const;
    // [TNLP_get_curr_violations]
 
