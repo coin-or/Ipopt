@@ -10,13 +10,13 @@
 #include "IpNLP.hpp"
 #include "IpTNLP.hpp"
 #include "IpOrigIpoptNLP.hpp"
+#include "IpExpansionMatrix.hpp"
 #include <list>
 
 namespace Ipopt
 {
 
 // forward declarations
-class ExpansionMatrix;
 class ExpansionMatrixSpace;
 class IteratesVector;
 class TDependencyDetector;
@@ -305,6 +305,28 @@ public:
       x_fixed_map = x_fixed_map_;
       fixed_variable_treatment = fixed_variable_treatment_;
    }
+
+   /** Get mappings between TNLP indices and Ipopt internal indices for variables and constraints.
+    *
+    * See the various ResortXyz functions on usage.
+    *
+    * \attention P_x_full_x is set to NULL if there are no fixed variables or fixed_variable_treatment is not make_parameter
+    */
+   void GetPermutationMatrices(
+      SmartPtr<const ExpansionMatrix>& P_x_full_x, /**< map from TNLP variable indices to Ipopt internal indices, filtered variables get mapped to -1 */
+      SmartPtr<const ExpansionMatrix>& P_x_x_L,    /**< map from indices on lower bounds on x to Ipopt internal indices for x */
+      SmartPtr<const ExpansionMatrix>& P_x_x_U,    /**< map from indices on upper bounds on x to Ipopt internal indices for x */
+      SmartPtr<const ExpansionMatrix>& P_c_g,      /**< map from indices on equality constraints (c(x)=0) into TNLP constraint indices (g_l <= g(x) <= g_u) */
+      SmartPtr<const ExpansionMatrix>& P_d_g       /**< map from indices on inequality constraints (d(x)-s=0) into TNLP constraint indices (g_l <= g(x) <= g_u) */
+      ) const
+   {
+      P_x_full_x = ConstPtr(P_x_full_x_);
+      P_x_x_L = ConstPtr(P_x_x_L_);
+      P_x_x_U = ConstPtr(P_x_x_U_);
+      P_c_g = ConstPtr(P_c_g_);
+      P_d_g = ConstPtr(P_d_g_);
+   }
+
    ///@}
 
 private:
