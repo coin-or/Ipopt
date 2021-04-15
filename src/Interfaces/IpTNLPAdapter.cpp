@@ -2499,10 +2499,10 @@ void TNLPAdapter::ResortBoundMultipliers(
    Number*       z_U_orig
 )
 {
-   ResortBnds(z_L, z_L_orig, z_U, z_U_orig, false);
+   ResortBnds(z_L, z_L_orig, z_U, z_U_orig);
 
    // Hopefully the following is correct to recover the bound
-   // multipliers for fixed variables (sign ok?)
+   // multipliers for fixed variables
    if( fixed_variable_treatment_ == MAKE_CONSTRAINT && n_x_fixed_ > 0 )
    {
       const DenseVector* dy_c = static_cast<const DenseVector*>(&c);

@@ -59,7 +59,7 @@ bool TNLP::get_curr_iterate(
 
       // resort Ipopt-internal variable duals to TNLP-version
       if( z_L != NULL || z_U != NULL )
-         tnlp_adapter->ResortBnds(*ip_data->curr()->z_L(), z_L, *ip_data->curr()->z_U(), z_U, true);
+         tnlp_adapter->ResortBoundMultipliers(*ip_data->curr()->y_c(), *ip_data->curr()->z_L(), z_L, *ip_data->curr()->z_U(), z_U);
 
       // resort Ipopt-interval constraint activity to TNLP-version
       if( g != NULL )
@@ -228,8 +228,6 @@ bool TNLP::get_curr_violations(
       if( m != m_full && (nlp_constraint_violation != NULL || compl_g != NULL) )
          THROW_EXCEPTION(IpoptException, "Incorrect dimension of g(x) given to TNLP::get_curr_violations().\n");
 
-      SmartPtr<Vector> c_compl;
-
       int n_x_fixed;
       Index* x_fixed_map;
       TNLPAdapter::FixedVariableTreatmentEnum fixed_variable_treatment;
@@ -239,22 +237,40 @@ bool TNLP::get_curr_violations(
       {
          // this should give XZe from (5)
 
+         tnlp_adapter->ResortBnds(*ip_cq->curr_compl_x_L(), compl_x_L, *ip_cq->curr_compl_x_U(), compl_x_U);
+
          if( n_x_fixed > 0 && fixed_variable_treatment == TNLPAdapter::MAKE_CONSTRAINT )
          {
-            // if fixed variables are treated as constraints, we have equality constraints x - x_L = 0 at the end of c(x)=0
-            // we can then use c(x)*y_c as complementarity for these variables
+            // compl_x_L = z_L * c(x) = y_c^- * c(x)
+            // compl_x_U = z_U * (-c(x)) = -y_c^+ * c(x)
+
+            SmartPtr<Vector> yc_pos = ip_data->curr()->y_c()->MakeNewCopy();
+            SmartPtr<Vector> yc_neg = ip_data->curr()->y_c()->MakeNewCopy();
+            SmartPtr<Vector> zero = yc_pos->MakeNew();
+            zero->Set(0.);
+            yc_pos->ElementWiseMax(*zero);  //  y_c^+
+            yc_neg->ElementWiseMin(*zero);  // -y_c^-
 
             if( scaled )
-               c_compl = ip_cq->curr_c()->MakeNewCopy();
+            {
+               yc_pos->ElementWiseMultiply(*ip_cq->curr_c());  // y_c^+ * c(x)
+               yc_neg->ElementWiseMultiply(*ip_cq->curr_c());  // -y_c^- * c(x)
+            }
             else
-               c_compl = ip_cq->unscaled_curr_c()->MakeNewCopy();
-            c_compl->ElementWiseMultiply(*ip_data->curr()->y_c());      // c(x)*y_c
+            {
+               yc_pos->ElementWiseMultiply(*ip_cq->unscaled_curr_c());  // y_c^+ * c(x)
+               yc_neg->ElementWiseMultiply(*ip_cq->unscaled_curr_c());  // -y_c^- * c(x)
+            }
 
-            tnlp_adapter->ResortBoundMultipliers(*c_compl, *ip_cq->curr_compl_x_L(), compl_x_L, *ip_cq->curr_compl_x_U(), compl_x_U);
-         }
-         else
-         {
-            tnlp_adapter->ResortBnds(*ip_cq->curr_compl_x_L(), compl_x_L, *ip_cq->curr_compl_x_U(), compl_x_U, true);
+            DBG_ASSERT(dynamic_cast<DenseVector*>(GetRawPtr(yc_pos)) != NULL);
+            DBG_ASSERT(dynamic_cast<DenseVector*>(GetRawPtr(yc_neg)) != NULL);
+            Number* yc_pos_val = static_cast<DenseVector*>(GetRawPtr(yc_pos))->ExpandedValues();
+            Number* yc_neg_val = static_cast<DenseVector*>(GetRawPtr(yc_neg))->ExpandedValues();
+            for( int i = 0; i < n_x_fixed; ++i )
+            {
+               compl_x_L[x_fixed_map[i]] = -yc_neg_val[yc_neg->Dim()-n_x_fixed+i];
+               compl_x_U[x_fixed_map[i]] = -yc_pos_val[yc_pos->Dim()-n_x_fixed+i];
+            }
          }
 
          if( !scaled )
@@ -353,14 +369,12 @@ bool TNLP::get_curr_violations(
 
             yd_neg->Axpy(-1.0, *yd_pos); // (d(x)-d_L) * y_d^- + (d_U-d(x)) * y_d^+
 
-            if( !IsValid(c_compl) )
-            {
-               if( scaled )
-                  c_compl = ip_cq->curr_c()->MakeNewCopy();
-               else
-                  c_compl = ip_cq->unscaled_curr_c()->MakeNewCopy();
-               c_compl->ElementWiseMultiply(*ip_data->curr()->y_c());      // c(x)*y_c
-            }
+            SmartPtr<Vector> c_compl;
+            if( scaled )
+               c_compl = ip_cq->curr_c()->MakeNewCopy();
+            else
+               c_compl = ip_cq->unscaled_curr_c()->MakeNewCopy();
+            c_compl->ElementWiseMultiply(*ip_data->curr()->y_c());      // c(x)*y_c
             c_compl->Scal(-1.0);  // -c(x)*y_c
 
             tnlp_adapter->ResortG(*c_compl, *yd_neg, compl_g);
@@ -406,9 +420,13 @@ bool TNLP::get_curr_violations(
       if( m != m_full && (nlp_constraint_violation != NULL || compl_g != NULL) )
          THROW_EXCEPTION(IpoptException, "Incorrect dimension of g(x) given to TNLP::get_curr_violations().\n");
 
+      int n_x_fixed;
+      Index* x_fixed_map;
+      TNLPAdapter::FixedVariableTreatmentEnum fixed_variable_treatment;
+      tnlp_adapter->GetFixedVariables(n_x_fixed, x_fixed_map, fixed_variable_treatment);
+
       const CompoundVector* c_vec;
       SmartPtr<Vector> c;        // will hold c(x) of original NLP
-      SmartPtr<Vector> c_compl;  // will hold c(x)*y_c of original NLP
 
       // if fixed variables are treated as constraints, we have equality constraints x - x_L = 0 at the end of c(x)=0
       // we can then use c(x)*y_c as complementarity for these variables
@@ -442,9 +460,6 @@ bool TNLP::get_curr_violations(
       SmartPtr<const Vector> yc_only = c_vec->GetComp(0);
       DBG_ASSERT(IsValid(yc_only));
 
-      c_compl = c->MakeNewCopy();
-      c_compl->ElementWiseMultiply(*yc_only);      // c(x)*y_c
-
       if( compl_x_L != NULL || compl_x_U != NULL )
       {
          // get duals z_L and z_U for x from the compound vector for the duals of (x,p,n)
@@ -475,7 +490,33 @@ bool TNLP::get_curr_violations(
          SmartPtr<Vector> compl_x_U_v = slack_x_U->MakeNewCopy();
          compl_x_U_v->ElementWiseMultiply(*z_U_only);
 
-         tnlp_adapter->ResortBoundMultipliers(*c_compl, *compl_x_L_v, compl_x_L, *compl_x_U_v, compl_x_U);
+         tnlp_adapter->ResortBnds(*compl_x_L_v, compl_x_L, *compl_x_U_v, compl_x_U);
+
+         if( n_x_fixed > 0 && fixed_variable_treatment == TNLPAdapter::MAKE_CONSTRAINT )
+         {
+            // compl_x_L = z_L * c(x) = y_c^- * c(x)
+            // compl_x_U = z_U * (-c(x)) = -y_c^+ * c(x)
+
+            SmartPtr<Vector> yc_pos = yc_only->MakeNewCopy();
+            SmartPtr<Vector> yc_neg = yc_only->MakeNewCopy();
+            SmartPtr<Vector> zero = yc_pos->MakeNew();
+            zero->Set(0.);
+            yc_pos->ElementWiseMax(*zero);  //  y_c^+
+            yc_neg->ElementWiseMin(*zero);  // -y_c^-
+
+            yc_pos->ElementWiseMultiply(*c);  // y_c^+ * c(x)
+            yc_neg->ElementWiseMultiply(*c);  // -y_c^- * c(x)
+
+            DBG_ASSERT(dynamic_cast<DenseVector*>(GetRawPtr(yc_pos)) != NULL);
+            DBG_ASSERT(dynamic_cast<DenseVector*>(GetRawPtr(yc_neg)) != NULL);
+            Number* yc_pos_val = static_cast<DenseVector*>(GetRawPtr(yc_pos))->ExpandedValues();
+            Number* yc_neg_val = static_cast<DenseVector*>(GetRawPtr(yc_neg))->ExpandedValues();
+            for( int i = 0; i < n_x_fixed; ++i )
+            {
+               compl_x_L[x_fixed_map[i]] = -yc_neg_val[c->Dim()-n_x_fixed+i];
+               compl_x_U[x_fixed_map[i]] = -yc_pos_val[c->Dim()-n_x_fixed+i];
+            }
+         }
 
          if( !scaled )
          {
@@ -492,7 +533,7 @@ bool TNLP::get_curr_violations(
       if( grad_lag_x != NULL )
       {
          // this looks like it would require reevaluating to get the gradient for the Lagrangian in the original NLP
-         memset(grad_lag_x, 0, m*sizeof(Number));
+         memset(grad_lag_x, 0, n*sizeof(Number));
       }
 
       if( nlp_constraint_violation != NULL || compl_g != NULL )
@@ -570,6 +611,8 @@ bool TNLP::get_curr_violations(
 
             yd_neg->Axpy(-1.0, *yd_pos); // (d(x)-d_L) * y_d^- + (d_U-d(x)) * y_d^+
 
+            SmartPtr<Vector> c_compl = c->MakeNewCopy();
+            c_compl->ElementWiseMultiply(*yc_only);      // c(x)*y_c
             c_compl->Scal(-1.0);  // -c(x)*y_c
 
             tnlp_adapter->ResortG(*c_compl, *yd_neg, compl_g);
