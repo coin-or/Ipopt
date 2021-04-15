@@ -12,6 +12,8 @@
 #include "IpDenseVector.hpp"
 #include "IpBlas.hpp"
 
+#include <cstring>
+
 namespace Ipopt
 {
 
@@ -157,8 +159,8 @@ bool TNLP::get_curr_iterate(
          d_resto->Axpy(1.0, *pd_only);
 
          // unscale using scaling in original NLP
-         c_resto = restonlp->OrigIpNLP().NLP_scaling()->unapply_vector_scaling_c_NonConst(c_resto);
-         d_resto = restonlp->OrigIpNLP().NLP_scaling()->unapply_vector_scaling_d_NonConst(d_resto);
+         c_resto = orignlp->NLP_scaling()->unapply_vector_scaling_c_NonConst(c_resto);
+         d_resto = orignlp->NLP_scaling()->unapply_vector_scaling_d_NonConst(d_resto);
 
          tnlp_adapter->ResortG(*c_resto, *d_resto, g, true);
       }
@@ -381,6 +383,209 @@ bool TNLP::get_curr_violations(
             d_viol_L->ElementWiseMax(*tmp);
 
             tnlp_adapter->ResortG(*c_viol, *d_viol_L, nlp_constraint_violation);
+         }
+      }
+
+      return true;
+   }
+
+   // check whether we are in restoration phase, so get a RestoIpoptNLP
+   Ipopt::RestoIpoptNLP* restonlp = dynamic_cast<RestoIpoptNLP*>(GetRawPtr(ip_cq->GetIpoptNLP()));
+   if( restonlp != NULL )
+   {
+      if( (orignlp = dynamic_cast<OrigIpoptNLP*>(&restonlp->OrigIpNLP())) == NULL )
+         return false;
+
+      tnlp_adapter = dynamic_cast<TNLPAdapter*>(GetRawPtr(orignlp->nlp()));
+      if( tnlp_adapter == NULL )
+         return false;
+
+      tnlp_adapter->GetFullDimensions(n_full, m_full);
+      if( n != n_full && (compl_x_L != NULL || compl_x_U != NULL || grad_lag_x != NULL) )
+         THROW_EXCEPTION(IpoptException, "Incorrect dimension of x given to TNLP::get_curr_violations().\n");
+      if( m != m_full && (nlp_constraint_violation != NULL || compl_g != NULL) )
+         THROW_EXCEPTION(IpoptException, "Incorrect dimension of g(x) given to TNLP::get_curr_violations().\n");
+
+      const CompoundVector* c_vec;
+      SmartPtr<Vector> c;        // will hold c(x) of original NLP
+      SmartPtr<Vector> c_compl;  // will hold c(x)*y_c of original NLP
+
+      // if fixed variables are treated as constraints, we have equality constraints x - x_L = 0 at the end of c(x)=0
+      // we can then use c(x)*y_c as complementarity for these variables
+      // but for restoration nlp, we actually have c(x)-pc+nc=0, so need to undo this, too
+
+      // get activity for c(x)
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_cq->curr_c())) != NULL);
+      c_vec = static_cast<const CompoundVector*>(GetRawPtr(ip_cq->curr_c()));
+      c = c_vec->GetComp(0)->MakeNewCopy();
+
+      // get nc, pc
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->x())) != NULL);
+      c_vec = static_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->x()));
+      SmartPtr<const Vector> nc_only = c_vec->GetComp(1);
+      SmartPtr<const Vector> pc_only = c_vec->GetComp(2);
+      DBG_ASSERT(IsValid(nc_only));
+      DBG_ASSERT(IsValid(pc_only));
+
+      // undo addition of slacks nc-pc
+      c->Axpy(-1.0, *nc_only);
+      c->Axpy(1.0, *pc_only);
+
+      // unscale using scaling in original NLP
+      if( !scaled )
+         c = orignlp->NLP_scaling()->unapply_vector_scaling_c_NonConst(c);
+
+      // get duals for c(x)=0
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->y_c())) != NULL);
+      c_vec = static_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->y_c()));
+      DBG_ASSERT(c_vec->NComps() == 1);
+      SmartPtr<const Vector> yc_only = c_vec->GetComp(0);
+      DBG_ASSERT(IsValid(yc_only));
+
+      c_compl = c->MakeNewCopy();
+      c_compl->ElementWiseMultiply(*yc_only);      // c(x)*y_c
+
+      if( compl_x_L != NULL || compl_x_U != NULL )
+      {
+         // get duals z_L and z_U for x from the compound vector for the duals of (x,p,n)
+         DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->z_L())) != NULL);
+         c_vec = static_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->z_L()));
+         SmartPtr<const Vector> z_L_only = c_vec->GetComp(0);
+         DBG_ASSERT(IsValid(z_L_only));
+
+         DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->z_U())) != NULL);
+         c_vec = static_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->z_U()));
+         SmartPtr<const Vector> z_U_only = c_vec->GetComp(0);
+         DBG_ASSERT(IsValid(z_U_only));
+
+         // get slacks for x
+         DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_cq->curr_slack_x_L())) != NULL);
+         c_vec = static_cast<const CompoundVector*>(GetRawPtr(ip_cq->curr_slack_x_L()));
+         SmartPtr<const Vector> slack_x_L = c_vec->GetComp(0);
+         DBG_ASSERT(IsValid(slack_x_L));
+
+         DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_cq->curr_slack_x_U())) != NULL);
+         c_vec = static_cast<const CompoundVector*>(GetRawPtr(ip_cq->curr_slack_x_U()));
+         SmartPtr<const Vector> slack_x_U = c_vec->GetComp(0);
+         DBG_ASSERT(IsValid(slack_x_U));
+
+         // calculate complementarity for x_L and x_U
+         SmartPtr<Vector> compl_x_L_v = slack_x_L->MakeNewCopy();
+         compl_x_L_v->ElementWiseMultiply(*z_L_only);
+         SmartPtr<Vector> compl_x_U_v = slack_x_U->MakeNewCopy();
+         compl_x_U_v->ElementWiseMultiply(*z_U_only);
+
+         tnlp_adapter->ResortBoundMultipliers(*c_compl, *compl_x_L_v, compl_x_L, *compl_x_U_v, compl_x_U);
+
+         if( !scaled )
+         {
+            // IpoptCalculatedQuantities::unscaled_curr_complementarity() calls unapply_obj_scaling() on norm of complementarity vector
+            // so we multiply here each entry of the complementarity vector with the same factor
+            Number obj_unscal = orignlp->NLP_scaling()->unapply_obj_scaling(1.0);
+            if( compl_x_L != NULL )
+               IpBlasScal(n, obj_unscal, compl_x_L, 1);
+            if( compl_x_U != NULL )
+               IpBlasScal(n, obj_unscal, compl_x_U, 1);
+         }
+      }
+
+      if( grad_lag_x != NULL )
+      {
+         // this looks like it would require reevaluating to get the gradient for the Lagrangian in the original NLP
+         memset(grad_lag_x, 0, m*sizeof(Number));
+      }
+
+      if( nlp_constraint_violation != NULL || compl_g != NULL )
+      {
+         // adapted from IpoptCalculatedQuantities::curr_(unscaled_)nlp_constraint_violation
+
+         // get nd, pd from the compound vector (x,nc,pc,nd,pd,...)
+         DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->x())) != NULL);
+         c_vec = static_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->x()));
+         SmartPtr<const Vector> nd_only = c_vec->GetComp(3);
+         SmartPtr<const Vector> pd_only = c_vec->GetComp(4);
+         DBG_ASSERT(IsValid(nd_only));
+         DBG_ASSERT(IsValid(pd_only));
+
+         // get scaled d from restonlp
+         DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_cq->curr_d())) != NULL);
+         c_vec = static_cast<const CompoundVector*>(GetRawPtr(ip_cq->curr_d()));
+         SmartPtr<Vector> d_resto = c_vec->GetComp(0)->MakeNewCopy();
+
+         // undo addition of slacks nd-pd
+         d_resto->Axpy(-1.0, *nd_only);
+         d_resto->Axpy(1.0, *pd_only);
+
+         // violation of d_L <= d(x)
+         SmartPtr<Vector> d_viol_L;
+         if( orignlp->d_L()->Dim() > 0 )
+         {
+            d_viol_L = d_resto->MakeNewCopy();
+            orignlp->Pd_L()->MultVector(1., *orignlp->d_L(), -1., *d_viol_L);  // d_L - d
+            if( !scaled )
+               d_viol_L = orignlp->NLP_scaling()->unapply_vector_scaling_d_NonConst(ConstPtr(d_viol_L));
+         }
+         else
+         {
+            d_viol_L = d_resto->MakeNew();
+            d_viol_L->Set(0.);
+         }
+
+         // violation of d(x) <= d_U
+         SmartPtr<Vector> d_viol_U;
+         if( orignlp->d_U()->Dim() > 0 )
+         {
+            d_viol_U = d_resto->MakeNewCopy();
+            orignlp->Pd_U()->MultVector(-1., *orignlp->d_U(), 1., *d_viol_U);  // d - d_U
+            if( !scaled )
+               d_viol_U = orignlp->NLP_scaling()->unapply_vector_scaling_d_NonConst(ConstPtr(d_viol_U));
+         }
+         else
+         {
+            d_viol_U = d_resto->MakeNew();
+            d_viol_U->Set(0.);
+         }
+
+         // c(x) = 0, d_L <= d(x) <= d_U should result in complementarities
+         // y_c*c(x), (d(x)-d_L)*y_d^-, (d_U-d(x))*y_d^+,  where y_d^+ = max(0,y_d), y_d^- = max(0,-y_d)   (I took the signs from TNLPAdapter::ResortBoundMultipliers)
+         // we will merge the latter two into one vector, taking the nonzero entries, i.e., (d(x)-d_L)*y_d^- + (d_U-d(x))*y_d^+
+         // to be consistent, it looks like we need to negate for 0 <= c(x) <= 0, since c(x)*y_c^- + (-c(x))*y_c^+ = c(x)*(y_c^- - y_c^+) = -c(x)*y_c
+         if( compl_g != NULL )
+         {
+            DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->y_d())) != NULL);
+            c_vec = static_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->y_d()));
+            DBG_ASSERT(c_vec->NComps() == 1);
+            SmartPtr<const Vector> yd_only = c_vec->GetComp(0);
+            DBG_ASSERT(IsValid(yd_only));
+
+            SmartPtr<Vector> yd_pos = yd_only->MakeNewCopy();
+            SmartPtr<Vector> yd_neg = yd_only->MakeNewCopy();
+            SmartPtr<Vector> zero = yd_pos->MakeNew();
+            zero->Set(0.);
+            yd_pos->ElementWiseMax(*zero);
+            yd_neg->ElementWiseMin(*zero);  // -y_d^-
+
+            yd_pos->ElementWiseMultiply(*d_viol_U);  // (d(x)-d_U) * y_d^+
+            yd_neg->ElementWiseMultiply(*d_viol_L);  // (d_L-d(x)) * (-y_d^-)
+
+            yd_neg->Axpy(-1.0, *yd_pos); // (d(x)-d_L) * y_d^- + (d_U-d(x)) * y_d^+
+
+            c_compl->Scal(-1.0);  // -c(x)*y_c
+
+            tnlp_adapter->ResortG(*c_compl, *yd_neg, compl_g);
+         }
+
+         if( nlp_constraint_violation != NULL )
+         {
+            c->ElementWiseAbs();  // |c(x)|
+
+            // violation of d_L <= d(x) <= d_U:   d_viol_L := max(d_viol_L, d_viol_U, 0)
+            d_viol_L->ElementWiseMax(*d_viol_U);
+            SmartPtr<Vector> tmp = d_viol_L->MakeNew();
+            tmp->Set(0.);
+            d_viol_L->ElementWiseMax(*tmp);
+
+            tnlp_adapter->ResortG(*c, *d_viol_L, nlp_constraint_violation);
          }
       }
 

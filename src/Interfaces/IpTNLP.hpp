@@ -790,6 +790,7 @@ public:
     * from ip_cq of the internal NLP representation available into the form used by the TNLP.
     *
     * @note If fixed variables are treated as parameters (the default), then their corresponding entry in the derivative of the Lagrangian is set to 0.
+    * @note If in restoration phase, then grad_lag_x is set to all zero.
     *
     * @param ip_data    (in)  Ipopt Data
     * @param ip_cq      (in)  Ipopt Calculated Quantities
