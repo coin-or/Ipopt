@@ -2038,15 +2038,7 @@ void TNLPAdapter::FinalizeSolution(
       const Number zero = 0.;
       IpBlasCopy(n_full_g_, &zero, 0, full_g, 1);
    }
-   ResortG(c, d, full_g);
-   // To Ipopt, the equality constraints are presented with right
-   // hand side zero, so we correct for the original right hand side.
-   const Index* c_pos = P_c_g_->ExpandedPosIndices();
-   Index n_c_no_fixed = P_c_g_->NCols();
-   for( Index i = 0; i < n_c_no_fixed; i++ )
-   {
-      full_g[c_pos[i]] += c_rhs_[i];
-   }
+   ResortG(c, d, full_g, true);
 
    Number* full_z_L = new Number[n_full_x_];
    Number* full_z_U = new Number[n_full_x_];
@@ -2320,7 +2312,8 @@ void TNLPAdapter::ResortX(
 void TNLPAdapter::ResortG(
    const Vector& c,
    const Vector& d,
-   Number*       g_orig
+   Number*       g_orig,
+   bool          correctrhs
 )
 {
    const DenseVector* dc = static_cast<const DenseVector*>(&c);
@@ -2333,6 +2326,8 @@ void TNLPAdapter::ResortG(
       for( Index i = 0; i < P_c_g_->NCols(); i++ )
       {
          g_orig[c_pos[i]] = scalar;
+         if( correctrhs )
+            g_orig[c_pos[i]] += c_rhs_[i];
       }
    }
    else
@@ -2341,6 +2336,8 @@ void TNLPAdapter::ResortG(
       for( Index i = 0; i < P_c_g_->NCols(); i++ )
       {
          g_orig[c_pos[i]] = c_values[i];
+         if( correctrhs )
+            g_orig[c_pos[i]] += c_rhs_[i];
       }
    }
 

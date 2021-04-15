@@ -253,11 +253,16 @@ public:
       bool          usefixedvals = true  /**< whether to use stored variable fixings for fixed variables (true), or zero (false) */
    );
 
-   /** Sort constraint values */
+   /** Sort constraint values
+    *
+    * To Ipopt, the equality constraints are presented with right hand side zero.
+    * Specifying correctrhs=true corrects for the original right hand side.
+    */
    void ResortG(
-      const Vector& c,
-      const Vector& d,
-      Number*       g_orig
+      const Vector& c,                   /**< internal activity for equality constraints */
+      const Vector& d,                   /**< internal activity for inequality constraints */
+      Number*       g_orig,              /**< vector to fill with values from c and d */
+      bool          correctrhs = false   /**< whether to add rhs-values for constraints that internally correspond to c(x)=0 */
    );
 
    /** Provides values for lower and upper bounds on variables for given Ipopt-internal vectors.
