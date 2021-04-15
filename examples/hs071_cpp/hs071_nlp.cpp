@@ -398,11 +398,12 @@ bool HS071_NLP::intermediate_callback(
    Number compl_x_U[4];
    Number grad_lag_x[4];
 
+   Number g[2];
    Number lambda[2];
    Number constraint_violation[2];
    Number compl_g[2];
 
-   bool have_iter = get_curr_iterate(ip_data, ip_cq, 4, x, z_L, z_U, 2, lambda);
+   bool have_iter = get_curr_iterate(ip_data, ip_cq, 4, x, z_L, z_U, 2, g, lambda);
    bool have_viol = get_curr_violations(ip_data, ip_cq, false, 4, compl_x_L, compl_x_U, grad_lag_x, 2, constraint_violation, compl_g);
 
    printf("Current iterate:\n");
@@ -419,17 +420,17 @@ bool HS071_NLP::intermediate_callback(
          printf(" %-12s %-12s %-12s\n", "n/a", "n/a", "n/a");
    }
 
-   printf("  %-12s %-25s %-12s\n", "lambda", "constr_viol", "compl_g");
+   printf("  %-12s %-12s %-12s %-12s\n", "g", "lambda", "constr_viol", "compl_g");
    for( int i = 0; i < 2; ++i )
    {
       if( have_iter )
-         printf("  %-12g", lambda[i]);
+         printf("  %-12g %-12g", g[i], lambda[i]);
       else
-         printf("  %-12s", "n/a");
+         printf("  %-12s %-12s", "n/a", "n/a");
       if( have_viol )
-         printf(" %-25g %-12g\n", constraint_violation[i], compl_g[i]);
+         printf(" %-12g %-12g\n", constraint_violation[i], compl_g[i]);
       else
-         printf(" %-25s %-12s %-12s %-12s\n", "n/a", "n/a", "n/a", "n/a");
+         printf(" %-12s %-12s %-12s %-12s\n", "n/a", "n/a", "n/a", "n/a");
    }
 
    return true;

@@ -15,7 +15,6 @@
 namespace Ipopt
 {
 
-// TODO return g(x) as well
 bool TNLP::get_curr_iterate(
    const IpoptData*           ip_data,
    IpoptCalculatedQuantities* ip_cq,
@@ -24,6 +23,7 @@ bool TNLP::get_curr_iterate(
    Number*                    z_L,
    Number*                    z_U,
    Index                      m,
+   Number*                    g,
    Number*                    lambda
    ) const
 {
@@ -48,7 +48,7 @@ bool TNLP::get_curr_iterate(
       tnlp_adapter->GetFullDimensions(n_full, m_full);
       if( n != n_full && (x != NULL || z_L != NULL || z_U != NULL) )
          THROW_EXCEPTION(IpoptException, "Incorrect dimension of x given to TNLP::get_curr_iterate().\n");
-      if( m != m_full && lambda != NULL )
+      if( m != m_full && (lambda != NULL || g != NULL) )
          THROW_EXCEPTION(IpoptException, "Incorrect dimension of g(x) given to TNLP::get_curr_iterate().\n");
 
       // resort Ipopt-internal x to TNLP-version of x, i.e., reinsert fixed variables
@@ -58,6 +58,10 @@ bool TNLP::get_curr_iterate(
       // resort Ipopt-internal variable duals to TNLP-version
       if( z_L != NULL || z_U != NULL )
          tnlp_adapter->ResortBnds(*ip_data->curr()->z_L(), z_L, *ip_data->curr()->z_U(), z_U, true);
+
+      // resort Ipopt-interval constraint activity to TNLP-version
+      if( g != NULL )
+         tnlp_adapter->ResortG(*ip_cq->unscaled_curr_c(), *ip_cq->unscaled_curr_d(), g, true);
 
       // resort Ipopt-internal constraint duals to TNLP-version
       if( lambda != NULL )
@@ -80,7 +84,7 @@ bool TNLP::get_curr_iterate(
       tnlp_adapter->GetFullDimensions(n_full, m_full);
       if( n != n_full && (x != NULL || z_L != NULL || z_U != NULL) )
          THROW_EXCEPTION(IpoptException, "Incorrect dimension of x given to TNLP::get_curr_iterate().\n");
-      if( m != m_full && lambda != NULL )
+      if( m != m_full && (g != NULL || lambda != NULL) )
          THROW_EXCEPTION(IpoptException, "Incorrect dimension of g(x) given to TNLP::get_curr_iterate().\n");
 
       const CompoundVector* c_vec;
@@ -118,6 +122,45 @@ bool TNLP::get_curr_iterate(
          DBG_ASSERT(IsValid(yc_only));
 
          tnlp_adapter->ResortBoundMultipliers(*yc_only, *z_L_only, z_L, *z_U_only, z_U);
+      }
+
+      if( g != NULL )
+      {
+         // get nc, pc, nd, pd from the compound vector (x,nc,pc,nd,pd,...)
+         DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->x())) != NULL);
+         c_vec = static_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->x()));
+         SmartPtr<const Vector> nc_only = c_vec->GetComp(1);
+         SmartPtr<const Vector> pc_only = c_vec->GetComp(2);
+         SmartPtr<const Vector> nd_only = c_vec->GetComp(3);
+         SmartPtr<const Vector> pd_only = c_vec->GetComp(4);
+         DBG_ASSERT(IsValid(nc_only));
+         DBG_ASSERT(IsValid(pc_only));
+         DBG_ASSERT(IsValid(nd_only));
+         DBG_ASSERT(IsValid(pd_only));
+
+         // get scaled c from restonlp
+         DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_cq->curr_c())) != NULL);
+         c_vec = static_cast<const CompoundVector*>(GetRawPtr(ip_cq->curr_c()));
+         SmartPtr<Vector> c_resto = c_vec->GetComp(0)->MakeNewCopy();
+
+         // get scaled d from restonlp
+         DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_cq->curr_d())) != NULL);
+         c_vec = static_cast<const CompoundVector*>(GetRawPtr(ip_cq->curr_d()));
+         SmartPtr<Vector> d_resto = c_vec->GetComp(0)->MakeNewCopy();
+
+         // undo addition of slacks nc-pc
+         c_resto->Axpy(-1.0, *nc_only);
+         c_resto->Axpy(1.0, *pc_only);
+
+         // undo addition of slacks nd-pd
+         d_resto->Axpy(-1.0, *nd_only);
+         d_resto->Axpy(1.0, *pd_only);
+
+         // unscale using scaling in original NLP
+         c_resto = restonlp->OrigIpNLP().NLP_scaling()->unapply_vector_scaling_c_NonConst(c_resto);
+         d_resto = restonlp->OrigIpNLP().NLP_scaling()->unapply_vector_scaling_d_NonConst(d_resto);
+
+         tnlp_adapter->ResortG(*c_resto, *d_resto, g, true);
       }
 
       if( lambda != NULL )

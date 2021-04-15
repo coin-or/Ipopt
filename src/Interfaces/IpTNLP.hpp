@@ -750,7 +750,7 @@ public:
     * The method expects the number of variables (dimension of x), number of constraints (dimension of g(x)),
     * and allocated arrays of appropriate lengths as input.
     *
-    * The method translates the x(), y_c(), y_d(), z_L(), and z_U() vectors from ip_data->curr()
+    * The method translates the x(), c(), d(), y_c(), y_d(), z_L(), and z_U() vectors from ip_data->curr()
     * of the internal NLP representation into the form used by the TNLP.
     *
     * @param ip_data (in)  Ipopt Data
@@ -759,7 +759,8 @@ public:
     * @param x       (out) buffer to store value of primal variables \f$x\f$, must have length at least n; pass NULL to skip retrieving x
     * @param z_L     (out) buffer to store the lower bound multipliers \f$z_L\f$, must have length at least n; pass NULL to skip retrieving z_L
     * @param z_U     (out) buffer to store the upper bound multipliers \f$z_U\f$, must have length at least n; pass NULL to skip retrieving z_U
-    * @param m       (in)  the number of constraints \f$g(x)\f$; can be arbitrary if skipping lambda
+    * @param m       (in)  the number of constraints \f$g(x)\f$; can be arbitrary if skipping g and lambda
+    * @param g       (out) buffer to store the constraint values \f$g(x)\f$, must have length at least m; pass NULL to skip retrieving g
     * @param lambda  (out) buffer to store the constraint multipliers \f$\lambda\f$, must have length at least m; pass NULL to skip retrieving lambda
     *
     * @return Whether Ipopt has successfully filled the given arrays
@@ -773,6 +774,7 @@ public:
       Number*                    z_L,
       Number*                    z_U,
       Index                      m,
+      Number*                    g,
       Number*                    lambda
       ) const;
    // [TNLP_get_curr_iterate]
