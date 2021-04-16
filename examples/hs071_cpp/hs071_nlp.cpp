@@ -372,6 +372,7 @@ void HS071_NLP::finalize_solution(
 }
 // [TNLP_finalize_solution]
 
+// [TNLP_intermediate_callback]
 bool HS071_NLP::intermediate_callback(
    AlgorithmMode              mode,
    Index                      iter,
@@ -435,3 +436,4 @@ bool HS071_NLP::intermediate_callback(
 
    return true;
 }
+// [TNLP_intermediate_callback]

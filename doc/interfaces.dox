@@ -660,6 +660,11 @@ callback is already available in the C and Fortran interfaces.
 \copydoc Ipopt::TNLP::intermediate_callback
 </blockquote>
 
+In our example, we optionally print the current iterate and its violation
+of optimality conditions to the screen.
+
+\snippet hs071_nlp.cpp TNLP_intermediate_callback
+
 
 \ref Ipopt::TNLP::get_scaling_parameters
 
