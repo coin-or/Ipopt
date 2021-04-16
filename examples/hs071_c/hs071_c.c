@@ -82,6 +82,7 @@ Bool intermediate_cb(
 struct MyUserData
 {
    Number g_offset[2]; /**< This is an offset for the constraints.  */
+   IpoptProblem nlp;   /**< The problem to be solved. Required in intermediate_cb. */
 };
 
 /** Main Program */
@@ -170,6 +171,7 @@ int main()
    /* Initialize the user data */
    user_data.g_offset[0] = 0.;
    user_data.g_offset[1] = 0.;
+   user_data.nlp = nlp;
 
    /* Set the callback method for intermediate user-control.
     * This is not required, just gives you some intermediate control in
@@ -497,7 +499,53 @@ Bool intermediate_cb(
    UserDataPtr user_data
 )
 {
-   printf("Testing intermediate callback in iteration %d\n", iter_count);
+   Bool have_iter;
+   Bool have_viol;
+
+   Number x[4];
+   Number z_L[4];
+   Number z_U[4];
+   Number compl_x_L[4];
+   Number compl_x_U[4];
+   Number grad_lag_x[4];
+
+   Number g[2];
+   Number lambda[2];
+   Number constraint_violation[2];
+   Number compl_g[2];
+
+   IpoptProblem nlp = ((struct MyUserData*)user_data)->nlp;
+
+   have_iter = GetIpoptCurrentIterate(nlp, 4, x, z_L, z_U, 2, g, lambda);
+   have_viol = GetIpoptCurrentViolations(nlp, FALSE, 4, compl_x_L, compl_x_U, grad_lag_x, 2, constraint_violation, compl_g);
+
+   printf("Current iterate at iteration %d:\n", iter_count);
+   printf("  %-12s %-12s %-12s %-12s %-12s %-12s\n", "x", "z_L", "z_U", "compl_x_L", "compl_x_U", "grad_lag_x");
+   for( int i = 0; i < 4; ++i )
+   {
+      if( have_iter )
+         printf("  %-12g %-12g %-12g", x[i], z_L[i], z_U[i]);
+      else
+         printf("  %-12s %-12s %-12s", "n/a", "n/a", "n/a");
+      if( have_viol )
+         printf(" %-12g %-12g %-12g\n", compl_x_L[i], compl_x_U[i], grad_lag_x[i]);
+      else
+         printf(" %-12s %-12s %-12s\n", "n/a", "n/a", "n/a");
+   }
+
+   printf("  %-12s %-12s %-12s %-12s\n", "g(x)", "lambda", "constr_viol", "compl_g");
+   for( int i = 0; i < 2; ++i )
+   {
+      if( have_iter )
+         printf("  %-12g %-12g", g[i], lambda[i]);
+      else
+         printf("  %-12s %-12s", "n/a", "n/a");
+      if( have_viol )
+         printf(" %-12g %-12g\n", constraint_violation[i], compl_g[i]);
+      else
+         printf(" %-12s %-12s %-12s %-12s\n", "n/a", "n/a", "n/a", "n/a");
+   }
+
    if( inf_pr < 1e-4 )
    {
       return FALSE;
@@ -512,7 +560,6 @@ Bool intermediate_cb(
    (void) alpha_du;
    (void) alpha_pr;
    (void) ls_trials;
-   (void) user_data;
 
    return TRUE;
 }
