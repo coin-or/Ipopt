@@ -99,7 +99,8 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 noinst_PROGRAMS = hs071_cpp$(EXEEXT) hs071_c$(EXEEXT) \
-	emptynlp$(EXEEXT) $(am__EXEEXT_1) $(am__EXEEXT_2)
+	emptynlp$(EXEEXT) getcurr$(EXEEXT) $(am__EXEEXT_1) \
+	$(am__EXEEXT_2)
 @COIN_HAS_F77_TRUE@am__append_1 = hs071_f
 @BUILD_SIPOPT_TRUE@am__append_2 = parametric_cpp redhess_cpp
 subdir = test
@@ -126,6 +127,9 @@ AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
+nodist_getcurr_OBJECTS = getcurr.$(OBJEXT)
+getcurr_OBJECTS = $(nodist_getcurr_OBJECTS)
+getcurr_DEPENDENCIES = ../src/Interfaces/libipopt.la
 nodist_hs071_c_OBJECTS = hs071_c.$(OBJEXT)
 hs071_c_OBJECTS = $(nodist_hs071_c_OBJECTS)
 am__DEPENDENCIES_1 =
@@ -163,10 +167,10 @@ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src/Common
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/MySensTNLP.Po \
-	./$(DEPDIR)/emptynlp.Po ./$(DEPDIR)/hs071_c.Po \
-	./$(DEPDIR)/hs071_main.Po ./$(DEPDIR)/hs071_nlp.Po \
-	./$(DEPDIR)/parametricTNLP.Po ./$(DEPDIR)/parametric_driver.Po \
-	./$(DEPDIR)/redhess_cpp.Po
+	./$(DEPDIR)/emptynlp.Po ./$(DEPDIR)/getcurr.Po \
+	./$(DEPDIR)/hs071_c.Po ./$(DEPDIR)/hs071_main.Po \
+	./$(DEPDIR)/hs071_nlp.Po ./$(DEPDIR)/parametricTNLP.Po \
+	./$(DEPDIR)/parametric_driver.Po ./$(DEPDIR)/redhess_cpp.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -219,9 +223,10 @@ AM_V_F77LD = $(am__v_F77LD_@AM_V@)
 am__v_F77LD_ = $(am__v_F77LD_@AM_DEFAULT_V@)
 am__v_F77LD_0 = @echo "  F77LD   " $@;
 am__v_F77LD_1 = 
-SOURCES = $(nodist_emptynlp_SOURCES) $(nodist_hs071_c_SOURCES) \
-	$(nodist_hs071_cpp_SOURCES) $(nodist_hs071_f_SOURCES) \
-	$(nodist_parametric_cpp_SOURCES) $(nodist_redhess_cpp_SOURCES)
+SOURCES = $(nodist_emptynlp_SOURCES) $(nodist_getcurr_SOURCES) \
+	$(nodist_hs071_c_SOURCES) $(nodist_hs071_cpp_SOURCES) \
+	$(nodist_hs071_f_SOURCES) $(nodist_parametric_cpp_SOURCES) \
+	$(nodist_redhess_cpp_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -422,6 +427,8 @@ nodist_hs071_c_SOURCES = hs071_c.c
 hs071_c_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
 nodist_emptynlp_SOURCES = emptynlp.cpp
 emptynlp_LDADD = ../src/Interfaces/libipopt.la
+nodist_getcurr_SOURCES = getcurr.cpp
+getcurr_LDADD = ../src/Interfaces/libipopt.la
 @IPOPT_SINGLE_FALSE@nodist_hs071_f_SOURCES = hs071_f.f
 @IPOPT_SINGLE_TRUE@nodist_hs071_f_SOURCES = hs071_fs.f
 hs071_f_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
@@ -494,6 +501,10 @@ emptynlp$(EXEEXT): $(emptynlp_OBJECTS) $(emptynlp_DEPENDENCIES) $(EXTRA_emptynlp
 	@rm -f emptynlp$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(emptynlp_OBJECTS) $(emptynlp_LDADD) $(LIBS)
 
+getcurr$(EXEEXT): $(getcurr_OBJECTS) $(getcurr_DEPENDENCIES) $(EXTRA_getcurr_DEPENDENCIES) 
+	@rm -f getcurr$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(getcurr_OBJECTS) $(getcurr_LDADD) $(LIBS)
+
 hs071_c$(EXEEXT): $(hs071_c_OBJECTS) $(hs071_c_DEPENDENCIES) $(EXTRA_hs071_c_DEPENDENCIES) 
 	@rm -f hs071_c$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(hs071_c_OBJECTS) $(hs071_c_LDADD) $(LIBS)
@@ -522,6 +533,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MySensTNLP.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/emptynlp.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/getcurr.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hs071_c.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hs071_main.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hs071_nlp.Po@am__quote@ # am--include-marker
@@ -693,6 +705,7 @@ clean-am: clean-generic clean-libtool clean-noinstPROGRAMS \
 distclean: distclean-am
 		-rm -f ./$(DEPDIR)/MySensTNLP.Po
 	-rm -f ./$(DEPDIR)/emptynlp.Po
+	-rm -f ./$(DEPDIR)/getcurr.Po
 	-rm -f ./$(DEPDIR)/hs071_c.Po
 	-rm -f ./$(DEPDIR)/hs071_main.Po
 	-rm -f ./$(DEPDIR)/hs071_nlp.Po
@@ -746,6 +759,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/MySensTNLP.Po
 	-rm -f ./$(DEPDIR)/emptynlp.Po
+	-rm -f ./$(DEPDIR)/getcurr.Po
 	-rm -f ./$(DEPDIR)/hs071_c.Po
 	-rm -f ./$(DEPDIR)/hs071_main.Po
 	-rm -f ./$(DEPDIR)/hs071_nlp.Po

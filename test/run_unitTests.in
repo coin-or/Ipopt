@@ -84,6 +84,14 @@ fi
 @BUILD_SIPOPT_TRUE@checkrun ./redhess_cpp || retval=$?
 @BUILD_SIPOPT_FALSE@echo "Skip testing sIpopt examples (sIPOPT not build)"
 
+# empty NLP example
+echo "Testing EmptyNLP Example..."
+checkrun ./emptynlp || retval=$?
+
+# getcurr example
+echo "Testing GetCurr Example..."
+checkrun ./getcurr || retval=$?
+
 # clean up
 rm -rf tmpfile debug.out ipopt.out IPOPT.OUT
 

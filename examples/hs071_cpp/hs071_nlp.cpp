@@ -420,7 +420,7 @@ bool HS071_NLP::intermediate_callback(
          printf(" %-12s %-12s %-12s\n", "n/a", "n/a", "n/a");
    }
 
-   printf("  %-12s %-12s %-12s %-12s\n", "g", "lambda", "constr_viol", "compl_g");
+   printf("  %-12s %-12s %-12s %-12s\n", "g(x)", "lambda", "constr_viol", "compl_g");
    for( int i = 0; i < 2; ++i )
    {
       if( have_iter )
