@@ -332,6 +332,74 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(enum ApplicationReturnStatus) IpoptSolve(
                                 */
 );
 
+/** Get primal and dual variable values of the current iterate.
+ *
+ * This method can be used to get the values of the current iterate during the intermediate callback set by SetIntermediateCallback().
+ * The method expects the number of variables (dimension of x), number of constraints (dimension of g(x)),
+ * and allocated arrays of appropriate lengths as input.
+ *
+ * The method translates the x(), c(), d(), y_c(), y_d(), z_L(), and z_U() vectors from ip_data->curr()
+ * of the internal NLP representation into the form used by the TNLP.
+ *
+ * @param ipopt_problem (in) Problem that is currently optimized.
+ * @param n       (in)  the number of variables \f$x\f$ in the problem; can be arbitrary if skipping x, z_L, and z_U
+ * @param x       (out) buffer to store value of primal variables \f$x\f$, must have length at least n; pass NULL to skip retrieving x
+ * @param z_L     (out) buffer to store the lower bound multipliers \f$z_L\f$, must have length at least n; pass NULL to skip retrieving z_L
+ * @param z_U     (out) buffer to store the upper bound multipliers \f$z_U\f$, must have length at least n; pass NULL to skip retrieving z_U
+ * @param m       (in)  the number of constraints \f$g(x)\f$; can be arbitrary if skipping g and lambda
+ * @param g       (out) buffer to store the constraint values \f$g(x)\f$, must have length at least m; pass NULL to skip retrieving g
+ * @param lambda  (out) buffer to store the constraint multipliers \f$\lambda\f$, must have length at least m; pass NULL to skip retrieving lambda
+ *
+ * @return Whether Ipopt has successfully filled the given arrays
+ */
+IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) GetIpoptCurrentIterate(
+   IpoptProblem    ipopt_problem,
+   Index           n,
+   Number*         x,
+   Number*         z_L,
+   Number*         z_U,
+   Index           m,
+   Number*         g,
+   Number*         lambda
+);
+
+/** Get primal and dual infeasibility of the current iterate.
+ *
+ * This method can be used to get the violations of constraints and optimality conditions
+ * at the current iterate during the intermediate callback set by SetIntermediateCallback().
+ * The method expects the number of variables (dimension of x), number of constraints (dimension of g(x)),
+ * and allocated arrays of appropriate lengths as input.
+ *
+ * The method makes the vectors behind (unscaled_)curr_nlp_constraint_violation(), (unscaled_)curr_dual_infeasibility(), (unscaled_)curr_complementarity()
+ * from ip_cq of the internal NLP representation available into the form used by the TNLP.
+ *
+ * @note If fixed variables are treated as parameters (the default), then their corresponding entry in the derivative of the Lagrangian is set to 0.
+ * @note If in restoration phase, then grad_lag_x is set to all zero.
+ *
+ * @param ipopt_problem (in) Problem that is currently optimized.
+ * @param scaled     (in)  whether to retrieve scaled or unscaled violations
+ * @param n          (in)  the number of variables \f$x\f$ in the problem; can be arbitrary if skipping compl_x_L, compl_x_U, and grad_lag_x
+ * @param compl_x_L  (out) buffer to store violation of complementarity for lower bounds on variables (\f$(x-x_L)z_L\f$), must have length at least n; pass NULL to skip retrieving compl_x_L
+ * @param compl_x_U  (out) buffer to store violation of complementarity for upper bounds on variables (\f$(x_U-x)z_U\f$), must have length at least n; pass NULL to skip retrieving compl_x_U
+ * @param grad_lag_x (out) buffer to store gradient of Lagrangian w.r.t. variables \f$x\f$, must have length at least n; pass NULL to skip retrieving grad_lag_x
+ * @param m          (in)  the number of constraints \f$g(x)\f$; can be arbitrary if skipping lambda
+ * @param nlp_constraint_violation (out) buffer to store violation of constraints \f$max(g_l-g(x),g(x)-g_u,0)\f$, must have length at least m; pass NULL to skip retrieving constraint_violation
+ * @param compl_g    (out) buffer to store violation of complementarity of constraint (\f$(g(x)-g_l)*\lambda^+ + (g_l-g(x))*\lambda^-\f$, where \f$\lambda^+=max(0,\lambda)\f$ and \f$\lambda^-=max(0,-\lambda)\f$ (componentwise)), must have length at least m; pass NULL to skip retrieving compl_g
+ *
+ * @return Whether Ipopt has successfully filled the given arrays
+ */
+IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) GetIpoptCurrentViolations(
+   IpoptProblem  ipopt_problem,
+   Bool          scaled,
+   Index         n,
+   Number*       compl_x_L,
+   Number*       compl_x_U,
+   Number*       grad_lag_x,
+   Index         m,
+   Number*       nlp_constraint_violation,
+   Number*       compl_g
+);
+
 #ifdef __cplusplus
 } /* extern "C" { */
 #endif

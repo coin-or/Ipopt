@@ -73,7 +73,9 @@ StdInterfaceTNLP::StdInterfaceTNLP(
      z_U_sol_(z_U_sol),
      g_sol_(g_sol),
      lambda_sol_(lam_sol),
-     obj_sol_(obj_sol)
+     obj_sol_(obj_sol),
+     ip_data_(NULL),
+     ip_cq_(NULL)
 {
    ASSERT_EXCEPTION(n_var_ > 0, INVALID_STDINTERFACE_NLP, "The number of variables must be at least 1.");
    ASSERT_EXCEPTION(n_con_ >= 0, INVALID_STDINTERFACE_NLP, "The number of constrains must be non-negative.");
@@ -389,15 +391,21 @@ bool StdInterfaceTNLP::intermediate_callback(
    Number                     alpha_du,
    Number                     alpha_pr,
    Index                      ls_trials,
-   const IpoptData*           /*ip_data*/,
-   IpoptCalculatedQuantities* /*ip_cq*/
+   const IpoptData*           ip_data,
+   IpoptCalculatedQuantities* ip_cq
 )
 {
-   Bool retval = 1;
+   if( !intermediate_cb_ )
+      return true;
 
-   if( intermediate_cb_ )
-      retval = (*intermediate_cb_)((Index) mode, iter, obj_value, inf_pr, inf_du, mu, d_norm, regularization_size,
-                                   alpha_du, alpha_pr, ls_trials, user_data_);
+   ip_data_ = ip_data;
+   ip_cq_ = ip_cq;
+
+   Bool retval = (*intermediate_cb_)((Index) mode, iter, obj_value, inf_pr, inf_du, mu, d_norm, regularization_size,
+                                     alpha_du, alpha_pr, ls_trials, user_data_);
+
+   ip_data_ = NULL;
+   ip_cq_ = NULL;
 
    return (retval != 0);
 }

@@ -27,6 +27,31 @@ DECLARE_STD_EXCEPTION(INVALID_STDINTERFACE_NLP);
  */
 class StdInterfaceTNLP : public TNLP
 {
+   friend
+   Bool ::GetIpoptCurrentIterate(
+      IpoptProblem    ipopt_problem,
+      Index           n,
+      Number*         x,
+      Number*         z_L,
+      Number*         z_U,
+      Index           m,
+      Number*         g,
+      Number*         lambda
+   );
+
+   friend
+   Bool ::GetIpoptCurrentViolations(
+      IpoptProblem  ipopt_problem,
+      Bool          scaled,
+      Index         n,
+      Number*       compl_x_L,
+      Number*       compl_x_U,
+      Number*       grad_lag_x,
+      Index         m,
+      Number*       nlp_constraint_violation,
+      Number*       compl_g
+   );
+
 public:
    /**@name Constructors/Destructors */
    ///@{
@@ -263,6 +288,13 @@ private:
    Number* lambda_sol_;
    Number* obj_sol_;
    ///@}
+
+   /** @name Temporary pointers to IpoptData and IpoptCalculatedQuantities
+    *
+    * For implementation of GetIpoptCurrentIterate() and GetIpoptCurrentViolations() (without API change).
+    */
+   const IpoptData*           ip_data_;
+   IpoptCalculatedQuantities* ip_cq_;
 
    /** Update the internal state if the x value changes */
    void apply_new_x(

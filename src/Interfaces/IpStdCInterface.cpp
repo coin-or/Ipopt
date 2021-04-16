@@ -14,6 +14,7 @@
 struct IpoptProblemInfo
 {
    Ipopt::SmartPtr<Ipopt::IpoptApplication> app;
+   Ipopt::SmartPtr<Ipopt::StdInterfaceTNLP> tnlp;
    Index           n;
    Number*         x_L;
    Number*         x_U;
@@ -283,21 +284,19 @@ enum ApplicationReturnStatus IpoptSolve(
       }
    }
 
-   // Create the original nlp
-   Ipopt::SmartPtr<Ipopt::TNLP> tnlp;
-
    Ipopt::ApplicationReturnStatus status;
    try
    {
-      tnlp = new Ipopt::StdInterfaceTNLP(ipopt_problem->n, ipopt_problem->x_L, ipopt_problem->x_U,
-                                         ipopt_problem->m, ipopt_problem->g_L, ipopt_problem->g_U,
-                                         ipopt_problem->nele_jac, ipopt_problem->nele_hess, ipopt_problem->index_style,
-                                         start_x, start_lam, start_z_L, start_z_U,
-                                         ipopt_problem->eval_f, ipopt_problem->eval_g, ipopt_problem->eval_grad_f, ipopt_problem->eval_jac_g, ipopt_problem->eval_h,
-                                         ipopt_problem->intermediate_cb,
-                                         x, mult_x_L, mult_x_U, g, mult_g, obj_val, user_data,
-                                         ipopt_problem->obj_scaling, ipopt_problem->x_scaling, ipopt_problem->g_scaling);
-      status = ipopt_problem->app->OptimizeTNLP(tnlp);
+      // Create the original nlp
+      ipopt_problem->tnlp = new Ipopt::StdInterfaceTNLP(ipopt_problem->n, ipopt_problem->x_L, ipopt_problem->x_U,
+                                                        ipopt_problem->m, ipopt_problem->g_L, ipopt_problem->g_U,
+                                                        ipopt_problem->nele_jac, ipopt_problem->nele_hess, ipopt_problem->index_style,
+                                                        start_x, start_lam, start_z_L, start_z_U,
+                                                        ipopt_problem->eval_f, ipopt_problem->eval_g, ipopt_problem->eval_grad_f, ipopt_problem->eval_jac_g, ipopt_problem->eval_h,
+                                                        ipopt_problem->intermediate_cb,
+                                                        x, mult_x_L, mult_x_U, g, mult_g, obj_val, user_data,
+                                                        ipopt_problem->obj_scaling, ipopt_problem->x_scaling, ipopt_problem->g_scaling);
+      status = ipopt_problem->app->OptimizeTNLP(ipopt_problem->tnlp);
    }
    catch( Ipopt::INVALID_STDINTERFACE_NLP& exc )
    {
@@ -309,6 +308,7 @@ enum ApplicationReturnStatus IpoptSolve(
       exc.ReportException(*ipopt_problem->app->Jnlst(), Ipopt::J_ERROR);
       status = Ipopt::Unrecoverable_Exception;
    }
+   ipopt_problem->tnlp = NULL;
 
    delete[] start_x;
    delete[] start_lam;
@@ -316,4 +316,33 @@ enum ApplicationReturnStatus IpoptSolve(
    delete[] start_z_U;
 
    return ApplicationReturnStatus(status);
+}
+
+Bool GetIpoptCurrentIterate(
+   IpoptProblem    ipopt_problem,
+   Index           n,
+   Number*         x,
+   Number*         z_L,
+   Number*         z_U,
+   Index           m,
+   Number*         g,
+   Number*         lambda
+)
+{
+   return (Bool) ipopt_problem->tnlp->get_curr_iterate(ipopt_problem->tnlp->ip_data_, ipopt_problem->tnlp->ip_cq_, n, x, z_L, z_U, m, g, lambda);
+}
+
+IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) GetIpoptCurrentViolations(
+   IpoptProblem  ipopt_problem,
+   Bool          scaled,
+   Index         n,
+   Number*       compl_x_L,
+   Number*       compl_x_U,
+   Number*       grad_lag_x,
+   Index         m,
+   Number*       nlp_constraint_violation,
+   Number*       compl_g
+)
+{
+   return (Bool) ipopt_problem->tnlp->get_curr_violations(ipopt_problem->tnlp->ip_data_, ipopt_problem->tnlp->ip_cq_, scaled != 0, n, compl_x_L, compl_x_U, grad_lag_x, m, nlp_constraint_violation, compl_g);
 }
