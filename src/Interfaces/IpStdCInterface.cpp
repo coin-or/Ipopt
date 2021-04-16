@@ -329,7 +329,7 @@ Bool GetIpoptCurrentIterate(
    Number*         lambda
 )
 {
-   return (Bool) ipopt_problem->tnlp->get_curr_iterate(ipopt_problem->tnlp->ip_data_, ipopt_problem->tnlp->ip_cq_, n, x, z_L, z_U, m, g, lambda);
+   return (Bool) ipopt_problem->tnlp->get_curr_iterate(n, x, z_L, z_U, m, g, lambda);
 }
 
 IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) GetIpoptCurrentViolations(
@@ -344,5 +344,5 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) GetIpoptCurrentViolations(
    Number*       compl_g
 )
 {
-   return (Bool) ipopt_problem->tnlp->get_curr_violations(ipopt_problem->tnlp->ip_data_, ipopt_problem->tnlp->ip_cq_, scaled != 0, n, compl_x_L, compl_x_U, grad_lag_x, m, nlp_constraint_violation, compl_g);
+   return (Bool) ipopt_problem->tnlp->get_curr_violations(scaled != 0, n, compl_x_L, compl_x_U, grad_lag_x, m, nlp_constraint_violation, compl_g);
 }

@@ -27,31 +27,6 @@ DECLARE_STD_EXCEPTION(INVALID_STDINTERFACE_NLP);
  */
 class StdInterfaceTNLP : public TNLP
 {
-   friend
-   Bool ::GetIpoptCurrentIterate(
-      IpoptProblem    ipopt_problem,
-      Index           n,
-      Number*         x,
-      Number*         z_L,
-      Number*         z_U,
-      Index           m,
-      Number*         g,
-      Number*         lambda
-   );
-
-   friend
-   Bool ::GetIpoptCurrentViolations(
-      IpoptProblem  ipopt_problem,
-      Bool          scaled,
-      Index         n,
-      Number*       compl_x_L,
-      Number*       compl_x_U,
-      Number*       grad_lag_x,
-      Index         m,
-      Number*       nlp_constraint_violation,
-      Number*       compl_g
-   );
-
 public:
    /**@name Constructors/Destructors */
    ///@{
@@ -221,6 +196,35 @@ public:
       IpoptCalculatedQuantities* ip_cq
    );
    ///@}
+
+   // get_curr_iterate() to be called by GetIpoptCurrentIterate()
+   bool get_curr_iterate(
+      Index                      n,
+      Number*                    x,
+      Number*                    z_L,
+      Number*                    z_U,
+      Index                      m,
+      Number*                    g,
+      Number*                    lambda
+      ) const
+   {
+      return TNLP::get_curr_iterate(ip_data_, ip_cq_, n, x, z_L, z_U, m, g, lambda);
+   }
+
+   // get_curr_violations() to be called by GetIpoptCurrentViolations()
+   bool get_curr_violations(
+      bool                       scaled,
+      Index                      n,
+      Number*                    compl_x_L,
+      Number*                    compl_x_U,
+      Number*                    grad_lag_x,
+      Index                      m,
+      Number*                    nlp_constraint_violation,
+      Number*                    compl_g
+      ) const
+   {
+      return TNLP::get_curr_violations(ip_data_, ip_cq_, scaled, n, compl_x_L, compl_x_U, grad_lag_x, m, nlp_constraint_violation, compl_g);
+   }
 
 private:
    /** Journalist */
