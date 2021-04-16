@@ -312,7 +312,7 @@ bool run(
       assert(app->Statistics()->IterationCount() == 0);
    }
 
-   return status == (infeascons ? Infeasible_Problem_Detected : Solve_Succeeded);
+   return true;
 }
 
 int main(
