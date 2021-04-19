@@ -332,6 +332,12 @@ public:
       P_d_g = ConstPtr(P_d_g_);
    }
 
+   /** Get right-hand-sides that are added into c(x) */
+   const Number* GetC_Rhs() const
+   {
+      return c_rhs_;
+   }
+
    ///@}
 
 private:

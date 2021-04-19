@@ -1873,7 +1873,7 @@ void TNLPAdapter::GetScalingParameters(
    x_scaling = x_space->MakeNew();
    c_scaling = c_space->MakeNew();
    d_scaling = d_space->MakeNew();
-   DBG_ASSERT((c_scaling->Dim() + d_scaling->Dim()) == n_full_g_);
+   DBG_ASSERT(c_scaling->Dim() + d_scaling->Dim() == n_full_g_ + (fixed_variable_treatment_ == MAKE_CONSTRAINT ? n_x_fixed_ : 0));
 
    DenseVector* dx = static_cast<DenseVector*>(GetRawPtr(x_scaling));
    DBG_ASSERT(dynamic_cast<DenseVector*>(GetRawPtr(x_scaling)));
@@ -1972,7 +1972,6 @@ void TNLPAdapter::FinalizeSolution(
 )
 {
    DBG_START_METH("TNLPAdapter::FinalizeSolution", dbg_verbosity);
-   printf("y_c y_d in TNLPAdapter::FinalizeSolution: %p %p\n", &y_c, &y_d);
 
    update_local_x(x);
    update_local_lambda(y_c, y_d);

@@ -18,15 +18,12 @@ namespace Ipopt
 static
 SmartPtr<const DenseVector> curr_x(
    const IpoptData*           ip_data,
-   IpoptCalculatedQuantities* /*ip_cq*/,
+   IpoptCalculatedQuantities* /* ip_cq */,
    OrigIpoptNLP*              orignlp,
    RestoIpoptNLP*             restonlp,
    bool                       scaled
    )
 {
-   (void) orignlp;  // TODO
-   (void) scaled;   // TODO
-
    SmartPtr<const Vector> x;
 
    if( restonlp == NULL )
@@ -42,6 +39,11 @@ SmartPtr<const DenseVector> curr_x(
    }
    DBG_ASSERT(IsValid(x));
 
+   if( !scaled && orignlp->NLP_scaling()->have_x_scaling() )
+   {
+      x = orignlp->NLP_scaling()->unapply_vector_scaling_x(x);
+   }
+
    DBG_ASSERT(dynamic_cast<const DenseVector*>(GetRawPtr(x)) != NULL);
    return static_cast<const DenseVector*>(GetRawPtr(x));
 }
@@ -49,15 +51,12 @@ SmartPtr<const DenseVector> curr_x(
 static
 SmartPtr<const DenseVector> curr_z_L(
    const IpoptData*           ip_data,
-   IpoptCalculatedQuantities* /*ip_cq*/,
+   IpoptCalculatedQuantities* ip_cq,
    OrigIpoptNLP*              orignlp,
    RestoIpoptNLP*             restonlp,
    bool                       scaled
    )
 {
-   (void) orignlp;  // TODO
-   (void) scaled;   // TODO
-
    SmartPtr<const Vector> z_L;
 
    if( restonlp == NULL )
@@ -72,6 +71,27 @@ SmartPtr<const DenseVector> curr_z_L(
    }
    DBG_ASSERT(IsValid(z_L));
 
+   if( !scaled )
+   {
+      Number obj_unscale_factor = orignlp->NLP_scaling()->unapply_obj_scaling(1.);
+      if( orignlp->NLP_scaling()->have_x_scaling() )
+      {
+         // get copy with x scaling unapplied
+         int x_dim = curr_x(ip_data, ip_cq, orignlp, restonlp, true)->Dim();
+         SmartPtr<Vector> tmp = orignlp->NLP_scaling()->apply_vector_scaling_x_LU_NonConst(*orignlp->Px_L(), z_L, *new DenseVectorSpace(x_dim));
+         // unapply obj scaling
+         tmp->Scal(obj_unscale_factor);
+         z_L = ConstPtr(tmp);
+      }
+      else if( obj_unscale_factor != 1. )
+      {
+         // make copy and unapply obj scaling
+         SmartPtr<Vector> tmp = z_L->MakeNewCopy();
+         tmp->Scal(obj_unscale_factor);
+         z_L = ConstPtr(tmp);
+      }
+   }
+
    DBG_ASSERT(dynamic_cast<const DenseVector*>(GetRawPtr(z_L)) != NULL);
    return static_cast<const DenseVector*>(GetRawPtr(z_L));
 }
@@ -79,15 +99,12 @@ SmartPtr<const DenseVector> curr_z_L(
 static
 SmartPtr<const DenseVector> curr_z_U(
    const IpoptData*           ip_data,
-   IpoptCalculatedQuantities* /*ip_cq*/,
+   IpoptCalculatedQuantities* ip_cq,
    OrigIpoptNLP*              orignlp,
    RestoIpoptNLP*             restonlp,
    bool                       scaled
    )
 {
-   (void) orignlp;  // TODO
-   (void) scaled;   // TODO
-
    SmartPtr<const Vector> z_U;
 
    if( restonlp == NULL )
@@ -102,6 +119,27 @@ SmartPtr<const DenseVector> curr_z_U(
    }
    DBG_ASSERT(IsValid(z_U));
 
+   if( !scaled )
+   {
+      Number obj_unscale_factor = orignlp->NLP_scaling()->unapply_obj_scaling(1.);
+      if( orignlp->NLP_scaling()->have_x_scaling() )
+      {
+         // get copy with x scaling unapplied
+         int x_dim = curr_x(ip_data, ip_cq, orignlp, restonlp, true)->Dim();
+         SmartPtr<Vector> tmp = orignlp->NLP_scaling()->apply_vector_scaling_x_LU_NonConst(*orignlp->Px_U(), z_U, *new DenseVectorSpace(x_dim));
+         // unapply obj scaling
+         tmp->Scal(obj_unscale_factor);
+         z_U = ConstPtr(tmp);
+      }
+      else if( obj_unscale_factor != 1. )
+      {
+         // make copy and unapply obj scaling
+         SmartPtr<Vector> tmp = z_U->MakeNewCopy();
+         tmp->Scal(obj_unscale_factor);
+         z_U = ConstPtr(tmp);
+      }
+   }
+
    DBG_ASSERT(dynamic_cast<const DenseVector*>(GetRawPtr(z_U)) != NULL);
    return static_cast<const DenseVector*>(GetRawPtr(z_U));
 }
@@ -115,9 +153,6 @@ SmartPtr<const DenseVector> curr_grad_lag_x(
    bool                       scaled
    )
 {
-   (void) orignlp;  // TODO
-   (void) scaled;   // TODO
-
    SmartPtr<const Vector> grad;
 
    if( restonlp == NULL )
@@ -129,6 +164,7 @@ SmartPtr<const DenseVector> curr_grad_lag_x(
       else
       {
          // adapted from IpoptCalculatedQuantities::unscaled_curr_dual_infeasibility()
+         // TODO this doesn't look as if it does something correct if the NLP is scaled
          grad = orignlp->NLP_scaling()->unapply_grad_obj_scaling(ip_cq->curr_grad_lag_x());
       }
    }
@@ -158,14 +194,11 @@ SmartPtr<const DenseVector> curr_c(
    bool                       scaled
    )
 {
-   (void) orignlp;  // TODO
-   (void) scaled;   // TODO
-
    SmartPtr<const Vector> c;
 
    if( restonlp == NULL )
    {
-      c = ip_cq->unscaled_curr_c();
+      c = ip_cq->curr_c();
    }
    else
    {
@@ -186,11 +219,12 @@ SmartPtr<const DenseVector> curr_c(
       c_resto->Axpy(-1.0, *nc_only);
       c_resto->Axpy(1.0, *pc_only);
 
-      // unscale using scaling in original NLP
-//      c_resto = orignlp->NLP_scaling()->unapply_vector_scaling_c_NonConst(c_resto);
       c = c_resto;
    }
    DBG_ASSERT(IsValid(c));
+
+   if( !scaled )
+      c = orignlp->NLP_scaling()->unapply_vector_scaling_c(c);
 
    DBG_ASSERT(dynamic_cast<const DenseVector*>(GetRawPtr(c)) != NULL);
    return static_cast<const DenseVector*>(GetRawPtr(c));
@@ -199,15 +233,12 @@ SmartPtr<const DenseVector> curr_c(
 static
 SmartPtr<const DenseVector> curr_y_c(
    const IpoptData*           ip_data,
-   IpoptCalculatedQuantities* /*ip_cq*/,
+   IpoptCalculatedQuantities* /* ip_cq */,
    OrigIpoptNLP*              orignlp,
    RestoIpoptNLP*             restonlp,
    bool                       scaled
    )
 {
-   (void) orignlp;  // TODO
-   (void) scaled;   // TODO
-
    SmartPtr<const Vector> y_c;
 
    if( restonlp == NULL )
@@ -223,6 +254,25 @@ SmartPtr<const DenseVector> curr_y_c(
    }
    DBG_ASSERT(IsValid(y_c));
 
+   if( !scaled )
+   {
+      Number obj_unscale_factor = orignlp->NLP_scaling()->unapply_obj_scaling(1.);
+
+      if( orignlp->NLP_scaling()->have_c_scaling() )
+      {
+         SmartPtr<Vector> tmp = orignlp->NLP_scaling()->apply_vector_scaling_c_NonConst(y_c);
+         tmp->Scal(obj_unscale_factor);
+         y_c = ConstPtr(tmp);
+      }
+      else if( obj_unscale_factor != 1. )
+      {
+         // make copy and unapply obj scaling
+         SmartPtr<Vector> tmp = y_c->MakeNewCopy();
+         tmp->Scal(obj_unscale_factor);
+         y_c = ConstPtr(tmp);
+      }
+   }
+
    DBG_ASSERT(dynamic_cast<const DenseVector*>(GetRawPtr(y_c)) != NULL);
    return static_cast<const DenseVector*>(GetRawPtr(y_c));
 }
@@ -236,14 +286,11 @@ SmartPtr<const DenseVector> curr_d(
    bool                       scaled
    )
 {
-   (void) orignlp;  // TODO
-   (void) scaled;   // TODO
-
    SmartPtr<const Vector> d;
 
    if( restonlp == NULL )
    {
-      d = ip_cq->unscaled_curr_d();
+      d = ip_cq->curr_d();
    }
    else
    {
@@ -264,11 +311,12 @@ SmartPtr<const DenseVector> curr_d(
       d_resto->Axpy(-1.0, *nd_only);
       d_resto->Axpy(1.0, *pd_only);
 
-      // unscale using scaling in original NLP
-//      d_resto = orignlp->NLP_scaling()->unapply_vector_scaling_d_NonConst(d_resto);
       d = d_resto;
    }
    DBG_ASSERT(IsValid(d));
+
+   if( !scaled )
+      d = orignlp->NLP_scaling()->unapply_vector_scaling_d(d);
 
    DBG_ASSERT(dynamic_cast<const DenseVector*>(GetRawPtr(d)) != NULL);
    return static_cast<const DenseVector*>(GetRawPtr(d));
@@ -277,15 +325,12 @@ SmartPtr<const DenseVector> curr_d(
 static
 SmartPtr<const DenseVector> curr_y_d(
    const IpoptData*           ip_data,
-   IpoptCalculatedQuantities* /*ip_cq*/,
+   IpoptCalculatedQuantities* /* ip_cq */,
    OrigIpoptNLP*              orignlp,
    RestoIpoptNLP*             restonlp,
    bool                       scaled
    )
 {
-   (void) orignlp;  // TODO
-   (void) scaled;   // TODO
-
    SmartPtr<const Vector> y_d;
 
    if( restonlp == NULL )
@@ -301,6 +346,25 @@ SmartPtr<const DenseVector> curr_y_d(
    }
    DBG_ASSERT(IsValid(y_d));
 
+   if( !scaled )
+   {
+      Number obj_unscale_factor = orignlp->NLP_scaling()->unapply_obj_scaling(1.);
+
+      if( orignlp->NLP_scaling()->have_d_scaling() )
+      {
+         SmartPtr<Vector> tmp = orignlp->NLP_scaling()->apply_vector_scaling_d_NonConst(y_d);
+         tmp->Scal(obj_unscale_factor);
+         y_d = ConstPtr(tmp);
+      }
+      else if( obj_unscale_factor != 1. )
+      {
+         // make copy and unapply obj scaling
+         SmartPtr<Vector> tmp = y_d->MakeNewCopy();
+         tmp->Scal(obj_unscale_factor);
+         y_d = ConstPtr(tmp);
+      }
+   }
+
    DBG_ASSERT(dynamic_cast<const DenseVector*>(GetRawPtr(y_d)) != NULL);
    return static_cast<const DenseVector*>(GetRawPtr(y_d));
 }
@@ -314,14 +378,19 @@ SmartPtr<const DenseVector> curr_compl_x_L(
    bool                       scaled
    )
 {
-   (void) orignlp;  // TODO
-   (void) scaled;   // TODO
-
    SmartPtr<const Vector> compl_x_L;
+
+   Number obj_unscal = scaled ? 1.0 : orignlp->NLP_scaling()->unapply_obj_scaling(1.0);
 
    if( restonlp == NULL )
    {
       compl_x_L = ip_cq->curr_compl_x_L();
+      if( obj_unscal != 1.0 )
+      {
+         SmartPtr<Vector> tmp = compl_x_L->MakeNewCopy();
+         tmp->Scal(obj_unscal);
+         compl_x_L = tmp;
+      }
    }
    else
    {
@@ -341,6 +410,9 @@ SmartPtr<const DenseVector> curr_compl_x_L(
       SmartPtr<Vector> compl_x_L_v = slack_x_L->MakeNewCopy();
       compl_x_L_v->ElementWiseMultiply(*z_L_only);
 
+      // unscale, if desired
+      compl_x_L_v->Scal(obj_unscal);
+
       compl_x_L = compl_x_L_v;
    }
    DBG_ASSERT(IsValid(compl_x_L));
@@ -358,14 +430,19 @@ SmartPtr<const DenseVector> curr_compl_x_U(
    bool                       scaled
    )
 {
-   (void) orignlp;  // TODO
-   (void) scaled;   // TODO
-
    SmartPtr<const Vector> compl_x_U;
+
+   Number obj_unscal = scaled ? 1.0 : orignlp->NLP_scaling()->unapply_obj_scaling(1.0);
 
    if( restonlp == NULL )
    {
       compl_x_U = ip_cq->curr_compl_x_U();
+      if( obj_unscal != 1.0 )
+      {
+         SmartPtr<Vector> tmp = compl_x_U->MakeNewCopy();
+         tmp->Scal(obj_unscal);
+         compl_x_U = tmp;
+      }
    }
    else
    {
@@ -384,6 +461,9 @@ SmartPtr<const DenseVector> curr_compl_x_U(
       // calculate complementarity for x_U
       SmartPtr<Vector> compl_x_U_v = slack_x_U->MakeNewCopy();
       compl_x_U_v->ElementWiseMultiply(*z_U_only);
+
+      // unscale, if desired
+      compl_x_U_v->Scal(obj_unscal);
 
       compl_x_U = compl_x_U_v;
    }
@@ -455,29 +535,31 @@ bool TNLP::get_curr_iterate(
 
    // resort Ipopt-interval constraint activity to TNLP-version
    if( g != NULL )
-      tnlp_adapter->ResortG(*curr_c(ip_data, ip_cq, orignlp, restonlp, scaled), *curr_d(ip_data, ip_cq, orignlp, restonlp, scaled), g, true);
+   {
+      if( !scaled || !orignlp->NLP_scaling()->have_c_scaling() )
+      {
+         tnlp_adapter->ResortG(*curr_c(ip_data, ip_cq, orignlp, restonlp, scaled), *curr_d(ip_data, ip_cq, orignlp, restonlp, scaled), g, true);
+      }
+      else
+      {
+         // scaled: add c(x) + c_rhs here, so we can scale c_rhs first
+         SmartPtr<const DenseVector> c_scaled = curr_c(ip_data, ip_cq, orignlp, restonlp, true);
+
+         SmartPtr<DenseVector> c_rhs = new DenseVector(new DenseVectorSpace(c_scaled->Dim()));
+         c_rhs->SetValues(tnlp_adapter->GetC_Rhs());
+         SmartPtr<Vector> c_rhs_scaled = orignlp->NLP_scaling()->apply_vector_scaling_c_NonConst(c_rhs);
+
+         c_rhs_scaled->Axpy(1.0, *c_scaled);  // c(x) + c_rhs = g(x)  (scaled)
+
+         tnlp_adapter->ResortG(*c_rhs_scaled, *curr_d(ip_data, ip_cq, orignlp, restonlp, scaled), g);
+      }
+   }
 
    // resort Ipopt-internal constraint duals to TNLP-version
    if( lambda != NULL )
       tnlp_adapter->ResortG(*curr_y_c(ip_data, ip_cq, orignlp, restonlp, scaled), *curr_y_d(ip_data, ip_cq, orignlp, restonlp, scaled), lambda);
 
-
    return true;
-
-#if 0
-      // unscale
-      // TODO more, see OrigIpoptNLP::FinalizeSolution()
-      Number obj_unscal = orignlp->NLP_scaling()->unapply_obj_scaling(1.0);
-      if( obj_unscal != 1.0 )
-      {
-         if( z_L != NULL )
-            IpBlasScal(n, obj_unscal, z_L, 1);
-         if( z_U != NULL )
-            IpBlasScal(n, obj_unscal, z_U, 1);
-         if( lambda != NULL )
-            IpBlasScal(n, obj_unscal, lambda, 1);
-      }
-#endif
 }
 
 bool TNLP::get_curr_violations(
@@ -537,7 +619,6 @@ bool TNLP::get_curr_violations(
    if( compl_x_L != NULL || compl_x_U != NULL )
    {
       // this should give XZe from (5)
-
       tnlp_adapter->ResortBnds(*curr_compl_x_L(ip_data, ip_cq, orignlp, restonlp, scaled), compl_x_L,
          *curr_compl_x_U(ip_data, ip_cq, orignlp, restonlp, scaled), compl_x_U);
 
@@ -568,19 +649,6 @@ bool TNLP::get_curr_violations(
             compl_x_U[x_fixed_map[i]] = -yc_pos_val[yc_pos->Dim()-n_x_fixed+i];
          }
       }
-
-#if 0
-      if( !scaled )
-      {
-         // IpoptCalculatedQuantities::unscaled_curr_complementarity() calls unapply_obj_scaling() on norm of complementarity vector
-         // so we multiply here each entry of the complementarity vector with the same factor
-         Number obj_unscal = orignlp->NLP_scaling()->unapply_obj_scaling(1.0);
-         if( compl_x_L != NULL )
-            IpBlasScal(n, obj_unscal, compl_x_L, 1);
-         if( compl_x_U != NULL )
-            IpBlasScal(n, obj_unscal, compl_x_U, 1);
-      }
-#endif
    }
 
    if( grad_lag_x != NULL )
@@ -591,7 +659,7 @@ bool TNLP::get_curr_violations(
       tnlp_adapter->ResortX(*curr_grad_lag_x(ip_data, ip_cq, orignlp, restonlp, scaled), grad_lag_x, false);
 
       // if fixed_variable_treatment is make_constraint, then fixed variable contribute y_c*x to the Lagrangian
-      // so we should subtract y_c for these entries; let's hope we don't need to deal with scaling
+      // so we should subtract y_c for these entries; FIXME deal with scaling
       // but if we are in restoration phase, then curr_grad_lag_x() just returns a zero vector, so don't change this
       if( restonlp == NULL && n_x_fixed > 0 && fixed_variable_treatment == TNLPAdapter::MAKE_CONSTRAINT )
       {
@@ -611,15 +679,15 @@ bool TNLP::get_curr_violations(
       // adapted from IpoptCalculatedQuantities::curr_(unscaled_)nlp_constraint_violation
 
       SmartPtr<const DenseVector> c = curr_c(ip_data, ip_cq, orignlp, restonlp, scaled);
-      SmartPtr<const DenseVector> d = curr_d(ip_data, ip_cq, orignlp, restonlp, scaled);
+      SmartPtr<const DenseVector> d = curr_d(ip_data, ip_cq, orignlp, restonlp, true);
 
       // violation of d_L <= d(x)
       SmartPtr<Vector> d_viol_L;
       if( orignlp->d_L()->Dim() > 0 )
       {
          d_viol_L = d->MakeNewCopy();
-         orignlp->Pd_L()->MultVector(1., *orignlp->d_L(), -1., *d_viol_L);  // d_L - d
-         if( !scaled )
+         orignlp->Pd_L()->MultVector(1., *orignlp->d_L(), -1., *d_viol_L);  // d_L - d, scaled
+         if( !scaled && orignlp->NLP_scaling()->have_d_scaling() )
             d_viol_L = orignlp->NLP_scaling()->unapply_vector_scaling_d_NonConst(ConstPtr(d_viol_L));
       }
       else
@@ -633,11 +701,9 @@ bool TNLP::get_curr_violations(
       if( orignlp->d_U()->Dim() > 0 )
       {
          d_viol_U = d->MakeNewCopy();
-         orignlp->Pd_U()->MultVector(-1., *orignlp->d_U(), 1., *d_viol_U);  // d - d_U
-#if 0
-         if( !scaled )
+         orignlp->Pd_U()->MultVector(-1., *orignlp->d_U(), 1., *d_viol_U);  // d - d_U, scaled
+         if( !scaled && orignlp->NLP_scaling()->have_d_scaling() )
             d_viol_U = orignlp->NLP_scaling()->unapply_vector_scaling_d_NonConst(ConstPtr(d_viol_U));
-#endif
       }
       else
       {
@@ -672,13 +738,6 @@ bool TNLP::get_curr_violations(
          c_compl->Scal(-1.0);  // -c(x)*y_c
 
          tnlp_adapter->ResortG(*c_compl, *yd_neg, compl_g);
-
-#if 0
-         // unscale, ToDo more
-         Number obj_unscal = orignlp->NLP_scaling()->unapply_obj_scaling(1.0);
-         if( obj_unscal != 1.0 )
-            IpBlasScal(m, obj_unscal, compl_g, 1);
-#endif
       }
 
       if( nlp_constraint_violation != NULL )
