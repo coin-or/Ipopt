@@ -376,7 +376,7 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) GetIpoptCurrentIterate(
  * from ip_cq of the internal NLP representation available into the form used by the TNLP.
  *
  * @note If fixed variables are treated as parameters (the default), then their corresponding entry in the derivative of the Lagrangian is set to 0.
- * @note If in restoration phase, then grad_lag_x is set to all zero.
+ * @note If in restoration phase, then requesting grad_lag_x can trigger a call to eval_grad_f().
  *
  * @param ipopt_problem (in) Problem that is currently optimized.
  * @param scaled     (in)  whether to retrieve scaled or unscaled violations

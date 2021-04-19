@@ -145,46 +145,6 @@ SmartPtr<const DenseVector> curr_z_U(
 }
 
 static
-SmartPtr<const DenseVector> curr_grad_lag_x(
-   const IpoptData*           ip_data,
-   IpoptCalculatedQuantities* ip_cq,
-   OrigIpoptNLP*              orignlp,
-   RestoIpoptNLP*             restonlp,
-   bool                       scaled
-   )
-{
-   SmartPtr<const Vector> grad;
-
-   if( restonlp == NULL )
-   {
-      if( scaled )
-      {
-         grad = ip_cq->curr_grad_lag_x();
-      }
-      else
-      {
-         // adapted from IpoptCalculatedQuantities::unscaled_curr_dual_infeasibility()
-         grad = orignlp->NLP_scaling()->unapply_grad_obj_scaling(ip_cq->curr_grad_lag_x());
-      }
-   }
-   else
-   {
-      // this looks like it would require reevaluating to get the gradient for the Lagrangian in the original NLP
-      // we don't do this, but just return a 0-vector
-      // get x from the compound vector (x,p,n)
-      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->x())) != NULL);
-      const CompoundVector* c_vec = static_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->x()));
-      SmartPtr<Vector> zero = c_vec->GetComp(0)->MakeNew();
-      zero->Set(0.);
-      grad = zero;
-   }
-   DBG_ASSERT(IsValid(grad));
-
-   DBG_ASSERT(dynamic_cast<const DenseVector*>(GetRawPtr(grad)) != NULL);
-   return static_cast<const DenseVector*>(GetRawPtr(grad));
-}
-
-static
 SmartPtr<const DenseVector> curr_c(
    const IpoptData*           ip_data,
    IpoptCalculatedQuantities* ip_cq,
@@ -472,6 +432,60 @@ SmartPtr<const DenseVector> curr_compl_x_U(
    return static_cast<const DenseVector*>(GetRawPtr(compl_x_U));
 }
 
+static
+SmartPtr<const DenseVector> curr_grad_lag_x(
+   const IpoptData*           ip_data,
+   IpoptCalculatedQuantities* ip_cq,
+   OrigIpoptNLP*              orignlp,
+   RestoIpoptNLP*             restonlp,
+   bool                       scaled
+   )
+{
+   SmartPtr<const Vector> grad;
+
+   if( restonlp == NULL )
+   {
+      grad = ip_cq->curr_grad_lag_x();
+   }
+   else
+   {
+      // get grad f(x), this is likely going to reevaluate
+      SmartPtr<Vector> tmp = orignlp->grad_f(*curr_x(ip_data, ip_cq, orignlp, restonlp, true))->MakeNewCopy();
+
+      // add y_c^T jac_c
+      SmartPtr<const Vector> resto_c_part = ip_cq->curr_jac_cT_times_curr_y_c();
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(resto_c_part)) != NULL);
+      const CompoundVector* c_vec = static_cast<const CompoundVector*>(GetRawPtr(resto_c_part));
+      tmp->Axpy(1.0, *c_vec->GetComp(0));
+
+      // add y_d^T jac_d
+      SmartPtr<const Vector> resto_d_part = ip_cq->curr_jac_dT_times_curr_y_d();
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(resto_d_part)) != NULL);
+      c_vec = static_cast<const CompoundVector*>(GetRawPtr(resto_d_part));
+      tmp->Axpy(1.0, *c_vec->GetComp(0));
+
+      // add -z_L
+      SmartPtr<const DenseVector> z_L = curr_z_L(ip_data, ip_cq, orignlp, restonlp, true);
+      orignlp->Px_L()->MultVector(-1., *z_L, 1., *tmp);
+
+      // add z_U
+      SmartPtr<const DenseVector> z_U = curr_z_U(ip_data, ip_cq, orignlp, restonlp, true);
+      orignlp->Px_U()->MultVector(1., *z_U, 1., *tmp);
+
+      grad = ConstPtr(tmp);
+   }
+   DBG_ASSERT(IsValid(grad));
+
+   if( !scaled )
+   {
+      // adapted from IpoptCalculatedQuantities::unscaled_curr_dual_infeasibility()
+      grad = orignlp->NLP_scaling()->unapply_grad_obj_scaling(grad);
+   }
+
+   DBG_ASSERT(dynamic_cast<const DenseVector*>(GetRawPtr(grad)) != NULL);
+   return static_cast<const DenseVector*>(GetRawPtr(grad));
+}
+
 bool TNLP::get_curr_iterate(
    const IpoptData*           ip_data,
    IpoptCalculatedQuantities* ip_cq,
@@ -654,14 +668,12 @@ bool TNLP::get_curr_violations(
    {
       // this will set the derivative of the Lagrangian w.r.t. fixed variables to 0 (for any fixed_variables_treatment)
       // the actual values are nowhere stored within Ipopt Data or CQ, since TNLPAdapter does not seem to pass them on
-      // we may have to reevaluate and capture them in TNLPAdapater
       tnlp_adapter->ResortX(*curr_grad_lag_x(ip_data, ip_cq, orignlp, restonlp, scaled), grad_lag_x, false);
 
       // if fixed_variable_treatment is make_constraint, then fixed variable contribute y_c*x to the Lagrangian
       // however, we want to get -z_L + z_U
       // using z_L = -y_c^-, z_U = y_c^+, this means to add -z_L + z_U - y_c x = y_c - y_c x = y_c (1-x)
-      // but if we are in restoration phase, then curr_grad_lag_x() just returns a zero vector, so don't change this
-      if( restonlp == NULL && n_x_fixed > 0 && fixed_variable_treatment == TNLPAdapter::MAKE_CONSTRAINT )
+      if( n_x_fixed > 0 && fixed_variable_treatment == TNLPAdapter::MAKE_CONSTRAINT )
       {
          SmartPtr<const DenseVector> y_c = curr_y_c(ip_data, ip_cq, orignlp, restonlp, scaled);
          const Number* c_rhs = tnlp_adapter->GetC_Rhs();

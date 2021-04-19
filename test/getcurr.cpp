@@ -422,21 +422,12 @@ public:
       ASSERTEQ(compl_x_U[2], 0.0);
 
       // check gradient on Lagrangian
-      if( mode == RegularMode )
-      {
-         ASSERTEQ(grad_lag_x[0], 1.0 + lambda[0] * 2*x[0] + lambda[1] * 2*x[0] - z_L[0]);
-         if( fixedvar_makeconstr_ )
-            ASSERTEQ(grad_lag_x[1], 1.0 + lambda[0] * 2*x[1] - z_L[1] + z_U[1]);
-         else
-            ASSERTEQ(grad_lag_x[1], 0.0);
-         ASSERTEQ(grad_lag_x[2], 1.0 + lambda[0] * 2*x[2] - lambda[1] * 2*x[2]);
-      }
+      ASSERTEQ(grad_lag_x[0], 1.0 + lambda[0] * 2*x[0] + lambda[1] * 2*x[0] - z_L[0]);
+      if( fixedvar_makeconstr_ )
+         ASSERTEQ(grad_lag_x[1], 1.0 + lambda[0] * 2*x[1] - z_L[1] + z_U[1]);
       else
-      {
-         ASSERTEQ(grad_lag_x[0], 0.0);
          ASSERTEQ(grad_lag_x[1], 0.0);
-         ASSERTEQ(grad_lag_x[2], 0.0);
-      }
+      ASSERTEQ(grad_lag_x[2], 1.0 + lambda[0] * 2*x[2] - lambda[1] * 2*x[2]);
 
       // check constraint violation
       ASSERTEQ(constraint_violation[0], std::max(0.0, std::max(1.0 - g[0], g[0] - 2.0)));
@@ -506,22 +497,12 @@ public:
       ASSERTEQ(s_compl_x_L[2], 0.0);
       ASSERTEQ(s_compl_x_U[2], 0.0);
 
-      // check gradient on Lagrangian
-      if( mode == RegularMode )
-      {
-         ASSERTEQ(s_grad_lag_x[0], (1.0*obj_scaling + s_lambda[0] * 2*x[0] * g_scaling[0] + s_lambda[1] * 2*x[0] * g_scaling[1])/x_scaling[0] - s_z_L[0]);
-         if( fixedvar_makeconstr_ )
-            ASSERTEQ(s_grad_lag_x[1], (1.0*obj_scaling + s_lambda[0] * 2*x[1] * g_scaling[0])/x_scaling[1] - s_z_L[1] + s_z_U[1]);
-         else
-            ASSERTEQ(s_grad_lag_x[1], 0.0);
-         ASSERTEQ(s_grad_lag_x[2], (1.0*obj_scaling + s_lambda[0] * 2*x[2] * g_scaling[0] - s_lambda[1] * 2*x[2] * g_scaling[1])/x_scaling[2]);
-      }
+      ASSERTEQ(s_grad_lag_x[0], (1.0*obj_scaling + s_lambda[0] * 2*x[0] * g_scaling[0] + s_lambda[1] * 2*x[0] * g_scaling[1])/x_scaling[0] - s_z_L[0]);
+      if( fixedvar_makeconstr_ )
+         ASSERTEQ(s_grad_lag_x[1], (1.0*obj_scaling + s_lambda[0] * 2*x[1] * g_scaling[0])/x_scaling[1] - s_z_L[1] + s_z_U[1]);
       else
-      {
-         ASSERTEQ(grad_lag_x[0], 0.0);
-         ASSERTEQ(grad_lag_x[1], 0.0);
-         ASSERTEQ(grad_lag_x[2], 0.0);
-      }
+         ASSERTEQ(s_grad_lag_x[1], 0.0);
+      ASSERTEQ(s_grad_lag_x[2], (1.0*obj_scaling + s_lambda[0] * 2*x[2] * g_scaling[0] - s_lambda[1] * 2*x[2] * g_scaling[1])/x_scaling[2]);
 
       // check constraint violation
       ASSERTEQ(s_constraint_violation[0], std::max(0.0, std::max(1.0 - g[0], g[0] - 2.0)*g_scaling[0]));
