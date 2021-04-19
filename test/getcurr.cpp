@@ -143,6 +143,35 @@ public:
       return true;
    }
 
+   /** Method to request scaling parameters. */
+   // [TNLP_get_scaling_parameters]
+   bool get_scaling_parameters(
+      Number& obj_scaling,
+      bool&   use_x_scaling,
+      Index   n,
+      Number* x_scaling,
+      bool&   use_g_scaling,
+      Index   m,
+      Number* g_scaling
+   )
+   {
+      assert(n == 3);
+      assert(m == 2);
+
+      obj_scaling = 2.0;
+
+      use_x_scaling = true;
+      x_scaling[0] = 1.0;
+      x_scaling[1] = 1.0;
+      x_scaling[2] = 1.0;
+
+      use_g_scaling = true;
+      g_scaling[0] = 1.0;
+      g_scaling[1] = 1.0;
+
+      return true;
+   }
+
    /** Method to return the gradient of the objective */
    bool eval_grad_f(
       Index         n,
@@ -311,7 +340,7 @@ public:
       Number curr_z_U[3];
       Number curr_g[3];
       Number curr_lambda[3];
-      assert(get_curr_iterate(ip_data, ip_cq, n, curr_x, curr_z_L, curr_z_U, m, curr_g, curr_lambda));
+      assert(get_curr_iterate(ip_data, ip_cq, false, n, curr_x, curr_z_L, curr_z_U, m, curr_g, curr_lambda));
 
       ASSERTEQ(curr_x[0], x[0]);
       ASSERTEQ(curr_x[1], x[1]);
@@ -348,18 +377,18 @@ public:
    )
    {
       Number x[3];
-      Number z_L[3] = { 17, 17, 17 };
-      Number z_U[3] = { 19, 19, 19 };
-      Number compl_x_L[3] = { 42, 42, 42 };
-      Number compl_x_U[3] = { 42, 42, 42 };
-      Number grad_lag_x[3] = { 42, 42, 42 };
+      Number z_L[3];
+      Number z_U[3];
+      Number compl_x_L[3];
+      Number compl_x_U[3];
+      Number grad_lag_x[3];
 
       Number g[2];
       Number lambda[2];
-      Number constraint_violation[2] = { 42, 42 };
-      Number compl_g[2] = { 42, 42 };
+      Number constraint_violation[2];
+      Number compl_g[2];
 
-      bool have_iter = get_curr_iterate(ip_data, ip_cq, 3, x, z_L, z_U, 2, g, lambda);
+      bool have_iter = get_curr_iterate(ip_data, ip_cq, false, 3, x, z_L, z_U, 2, g, lambda);
       bool have_viol = get_curr_violations(ip_data, ip_cq, false, 3, compl_x_L, compl_x_U, grad_lag_x, 2, constraint_violation, compl_g);
 
       assert(have_iter);
@@ -410,13 +439,26 @@ public:
       ASSERTEQ(compl_g[0], (g[0] - 1.0) * std::max(Number(0.0), -lambda[0]) + (2.0 - g[0]) * std::max(Number(0.0), lambda[0]));
       ASSERTEQ(compl_g[1], -(g[1] - 0.5) * lambda[1]);
 
+
+      have_iter = get_curr_iterate(ip_data, ip_cq, true, 3, x, z_L, z_U, 2, g, lambda);
+      have_viol = get_curr_violations(ip_data, ip_cq, true, 3, compl_x_L, compl_x_U, grad_lag_x, 2, constraint_violation, compl_g);
+      printf("Scaled iterate (%s mode):\n", mode == RegularMode ? "regular" : "restoration");
+      printf("  %-12s %-12s %-12s %-12s %-12s %-12s\n", "x", "z_L", "z_U", "compl_x_L", "compl_x_U", "grad_lag_x");
+      for( int i = 0; i < 3; ++i )
+         printf("  %-12g %-12g %-12g %-12g %-12g %-12g\n", x[i], z_L[i], z_U[i], compl_x_L[i], compl_x_U[i], grad_lag_x[i]);
+
+      printf("  %-12s %-12s %-12s %-12s\n", "g(x)", "lambda", "constr_viol", "compl_g");
+      for( int i = 0; i < 2; ++i )
+         printf("  %-12g %-12g %-12g %-12g\n", g[i], lambda[i], constraint_violation[i], compl_g[i]);
+
       return true;
    }
 };
 
 bool run(
    bool fixedvar_makeconstr,
-   bool start_resto
+   bool start_resto,
+   bool scale
    )
 {
    // Create an instance of your nlp...
@@ -444,6 +486,9 @@ bool run(
    if( start_resto )
       app->Options()->SetStringValue("start_with_resto", "yes");
 
+   if( scale )
+      app->Options()->SetStringValue("nlp_scaling_method", "user-scaling");
+
    status = app->OptimizeTNLP(nlp);
 
    return EXIT_SUCCESS;
@@ -454,17 +499,20 @@ int main(
    char**
 )
 {
-   if( run(false, false) != EXIT_SUCCESS )
+   if( run(false, false, false) != EXIT_SUCCESS )
       return EXIT_FAILURE;
 
-   if( run(true, false) != EXIT_SUCCESS )
+   if( run(true, false, false) != EXIT_SUCCESS )
       return EXIT_FAILURE;
 
-   if( run(false, true) != EXIT_SUCCESS )
+   if( run(false, true, false) != EXIT_SUCCESS )
       return EXIT_FAILURE;
 
-   if( run(true, true) != EXIT_SUCCESS )
+   if( run(true, true, false) != EXIT_SUCCESS )
       return EXIT_FAILURE;
+
+//   if( run(false, false, true) != EXIT_SUCCESS )
+//      return EXIT_FAILURE;
 
    std::cout << std::endl << "*** All tests passed" << std::endl;
 

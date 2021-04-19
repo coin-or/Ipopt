@@ -706,6 +706,7 @@ public:
     *
     * @param ip_data (in)  Ipopt Data
     * @param ip_cq   (in)  Ipopt Calculated Quantities
+    * @param scaled  (in)  whether to retrieve scaled or unscaled iterate
     * @param n       (in)  the number of variables \f$x\f$ in the problem; can be arbitrary if skipping x, z_L, and z_U
     * @param x       (out) buffer to store value of primal variables \f$x\f$, must have length at least n; pass NULL to skip retrieving x
     * @param z_L     (out) buffer to store the lower bound multipliers \f$z_L\f$, must have length at least n; pass NULL to skip retrieving z_L
@@ -720,6 +721,7 @@ public:
    bool get_curr_iterate(
       const IpoptData*           ip_data,
       IpoptCalculatedQuantities* ip_cq,
+      bool                       scaled,
       Index                      n,
       Number*                    x,
       Number*                    z_L,

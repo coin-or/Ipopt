@@ -404,7 +404,7 @@ bool HS071_NLP::intermediate_callback(
    Number constraint_violation[2];
    Number compl_g[2];
 
-   bool have_iter = get_curr_iterate(ip_data, ip_cq, 4, x, z_L, z_U, 2, g, lambda);
+   bool have_iter = get_curr_iterate(ip_data, ip_cq, false, 4, x, z_L, z_U, 2, g, lambda);
    bool have_viol = get_curr_violations(ip_data, ip_cq, false, 4, compl_x_L, compl_x_U, grad_lag_x, 2, constraint_violation, compl_g);
 
    printf("Current iterate:\n");

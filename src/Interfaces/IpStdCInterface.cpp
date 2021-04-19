@@ -320,6 +320,7 @@ enum ApplicationReturnStatus IpoptSolve(
 
 Bool GetIpoptCurrentIterate(
    IpoptProblem    ipopt_problem,
+   Bool            scaled,
    Index           n,
    Number*         x,
    Number*         z_L,
@@ -329,7 +330,7 @@ Bool GetIpoptCurrentIterate(
    Number*         lambda
 )
 {
-   return (Bool) ipopt_problem->tnlp->get_curr_iterate(n, x, z_L, z_U, m, g, lambda);
+   return (Bool) ipopt_problem->tnlp->get_curr_iterate(scaled, n, x, z_L, z_U, m, g, lambda);
 }
 
 IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) GetIpoptCurrentViolations(

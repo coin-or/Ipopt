@@ -1972,6 +1972,7 @@ void TNLPAdapter::FinalizeSolution(
 )
 {
    DBG_START_METH("TNLPAdapter::FinalizeSolution", dbg_verbosity);
+   printf("y_c y_d in TNLPAdapter::FinalizeSolution: %p %p\n", &y_c, &y_d);
 
    update_local_x(x);
    update_local_lambda(y_c, y_d);

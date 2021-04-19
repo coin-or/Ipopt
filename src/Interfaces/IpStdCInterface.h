@@ -343,6 +343,7 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(enum ApplicationReturnStatus) IpoptSolve(
  *
  * @param ipopt_problem (in) Problem that is currently optimized.
  * @param n       (in)  the number of variables \f$x\f$ in the problem; can be arbitrary if skipping x, z_L, and z_U
+ * @param scaled  (in)  whether to retrieve scaled or unscaled iterate
  * @param x       (out) buffer to store value of primal variables \f$x\f$, must have length at least n; pass NULL to skip retrieving x
  * @param z_L     (out) buffer to store the lower bound multipliers \f$z_L\f$, must have length at least n; pass NULL to skip retrieving z_L
  * @param z_U     (out) buffer to store the upper bound multipliers \f$z_U\f$, must have length at least n; pass NULL to skip retrieving z_U
@@ -354,6 +355,7 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(enum ApplicationReturnStatus) IpoptSolve(
  */
 IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) GetIpoptCurrentIterate(
    IpoptProblem    ipopt_problem,
+   Bool            scaled,
    Index           n,
    Number*         x,
    Number*         z_L,

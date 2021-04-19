@@ -199,6 +199,7 @@ public:
 
    // get_curr_iterate() to be called by GetIpoptCurrentIterate()
    bool get_curr_iterate(
+      Bool                       scaled,
       Index                      n,
       Number*                    x,
       Number*                    z_L,
@@ -208,7 +209,7 @@ public:
       Number*                    lambda
       ) const
    {
-      return TNLP::get_curr_iterate(ip_data_, ip_cq_, n, x, z_L, z_U, m, g, lambda);
+      return TNLP::get_curr_iterate(ip_data_, ip_cq_, scaled, n, x, z_L, z_U, m, g, lambda);
    }
 
    // get_curr_violations() to be called by GetIpoptCurrentViolations()

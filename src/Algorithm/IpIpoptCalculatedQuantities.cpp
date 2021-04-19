@@ -2464,6 +2464,7 @@ Number IpoptCalculatedQuantities::unscaled_curr_dual_infeasibility(
 
    if( !unscaled_curr_dual_infeasibility_cache_.GetCachedResult(result, deps, sdeps) )
    {
+      // ToDo this doesn't seem to take the different scalings for constraints into account, but assumes that objective and constraints have been scaled equally?
       SmartPtr<const Vector> grad_lag_x = ip_nlp_->NLP_scaling()->unapply_grad_obj_scaling(curr_grad_lag_x());
 
       Number obj_unscal = ip_nlp_->NLP_scaling()->unapply_obj_scaling(1.);

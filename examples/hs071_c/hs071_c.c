@@ -516,7 +516,7 @@ Bool intermediate_cb(
 
    IpoptProblem nlp = ((struct MyUserData*)user_data)->nlp;
 
-   have_iter = GetIpoptCurrentIterate(nlp, 4, x, z_L, z_U, 2, g, lambda);
+   have_iter = GetIpoptCurrentIterate(nlp, FALSE, 4, x, z_L, z_U, 2, g, lambda);
    have_viol = GetIpoptCurrentViolations(nlp, FALSE, 4, compl_x_L, compl_x_U, grad_lag_x, 2, constraint_violation, compl_g);
 
    printf("Current iterate at iteration %d:\n", iter_count);
