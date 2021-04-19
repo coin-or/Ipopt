@@ -131,23 +131,7 @@ public:
       return true;
    }
 
-   /** Method to return the objective value */
-   bool eval_f(
-      Index         n,
-      const Number* x,
-      bool          ,
-      Number&       obj_value
-   )
-   {
-      assert(n == 3);
-
-      obj_value = x[0] + x[1] + x[2];
-
-      return true;
-   }
-
    /** Method to request scaling parameters. */
-   // [TNLP_get_scaling_parameters]
    bool get_scaling_parameters(
       Number& obj_scaling,
       bool&   use_x_scaling,
@@ -171,6 +155,21 @@ public:
       use_g_scaling = true;
       g_scaling[0] = 7.0;
       g_scaling[1] = 11.0;
+
+      return true;
+   }
+
+   /** Method to return the objective value */
+   bool eval_f(
+      Index         n,
+      const Number* x,
+      bool          ,
+      Number&       obj_value
+   )
+   {
+      assert(n == 3);
+
+      obj_value = x[0] + x[1] + x[2];
 
       return true;
    }
@@ -425,15 +424,12 @@ public:
       // check gradient on Lagrangian
       if( mode == RegularMode )
       {
-         if( !scaling_ )  // TODO
-         {
-            ASSERTEQ(grad_lag_x[0], 1.0 + lambda[0] * 2*x[0] + lambda[1] * 2*x[0] - z_L[0]);
-            if( fixedvar_makeconstr_ )
-               ASSERTEQ(grad_lag_x[1], 1.0 + lambda[0] * 2*x[1] - z_U[1] + z_U[1]);
-            else
-               ASSERTEQ(grad_lag_x[1], 0.0);
-            ASSERTEQ(grad_lag_x[2], 1.0 + lambda[0] * 2*x[2] - lambda[1] * 2*x[2]);
-         }
+         ASSERTEQ(grad_lag_x[0], 1.0 + lambda[0] * 2*x[0] + lambda[1] * 2*x[0] - z_L[0]);
+         if( fixedvar_makeconstr_ )
+            ASSERTEQ(grad_lag_x[1], 1.0 + lambda[0] * 2*x[1] - z_L[1] + z_U[1]);
+         else
+            ASSERTEQ(grad_lag_x[1], 0.0);
+         ASSERTEQ(grad_lag_x[2], 1.0 + lambda[0] * 2*x[2] - lambda[1] * 2*x[2]);
       }
       else
       {
@@ -513,13 +509,12 @@ public:
       // check gradient on Lagrangian
       if( mode == RegularMode )
       {
-         // TODO
-//         ASSERTEQ(s_grad_lag_x[0], 1.0 + lambda[0] * 2*x[0] + lambda[1] * 2*x[0] - z_L[0]);
-//         if( fixedvar_makeconstr_ )
-//            ASSERTEQ(s_grad_lag_x[1], 1.0 + lambda[0] * 2*x[1] - z_U[1] + z_U[1]);
-//         else
-//            ASSERTEQ(s_grad_lag_x[1], 0.0);
-//         ASSERTEQ(s_grad_lag_x[2], 1.0 + lambda[0] * 2*x[2] - lambda[1] * 2*x[2]);
+         ASSERTEQ(s_grad_lag_x[0], (1.0*obj_scaling + s_lambda[0] * 2*x[0] * g_scaling[0] + s_lambda[1] * 2*x[0] * g_scaling[1])/x_scaling[0] - s_z_L[0]);
+         if( fixedvar_makeconstr_ )
+            ASSERTEQ(s_grad_lag_x[1], (1.0*obj_scaling + s_lambda[0] * 2*x[1] * g_scaling[0])/x_scaling[1] - s_z_L[1] + s_z_U[1]);
+         else
+            ASSERTEQ(s_grad_lag_x[1], 0.0);
+         ASSERTEQ(s_grad_lag_x[2], (1.0*obj_scaling + s_lambda[0] * 2*x[2] * g_scaling[0] - s_lambda[1] * 2*x[2] * g_scaling[1])/x_scaling[2]);
       }
       else
       {

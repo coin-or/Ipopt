@@ -164,7 +164,6 @@ SmartPtr<const DenseVector> curr_grad_lag_x(
       else
       {
          // adapted from IpoptCalculatedQuantities::unscaled_curr_dual_infeasibility()
-         // TODO this doesn't look as if it does something correct if the NLP is scaled
          grad = orignlp->NLP_scaling()->unapply_grad_obj_scaling(ip_cq->curr_grad_lag_x());
       }
    }
@@ -659,18 +658,20 @@ bool TNLP::get_curr_violations(
       tnlp_adapter->ResortX(*curr_grad_lag_x(ip_data, ip_cq, orignlp, restonlp, scaled), grad_lag_x, false);
 
       // if fixed_variable_treatment is make_constraint, then fixed variable contribute y_c*x to the Lagrangian
-      // so we should subtract y_c for these entries; FIXME deal with scaling
+      // however, we want to get -z_L + z_U
+      // using z_L = -y_c^-, z_U = y_c^+, this means to add -z_L + z_U - y_c x = y_c - y_c x = y_c (1-x)
       // but if we are in restoration phase, then curr_grad_lag_x() just returns a zero vector, so don't change this
       if( restonlp == NULL && n_x_fixed > 0 && fixed_variable_treatment == TNLPAdapter::MAKE_CONSTRAINT )
       {
          SmartPtr<const DenseVector> y_c = curr_y_c(ip_data, ip_cq, orignlp, restonlp, scaled);
+         const Number* c_rhs = tnlp_adapter->GetC_Rhs();
          DBG_ASSERT(y_c->Dim() >= n_x_fixed);
          if( y_c->IsHomogeneous() )
             for( Index i = 0; i < n_x_fixed; ++i )
-               grad_lag_x[x_fixed_map[i]] -= y_c->Scalar();
+               grad_lag_x[x_fixed_map[i]] += y_c->Scalar() * (1.0 - c_rhs[y_c->Dim()-n_x_fixed+i]);
          else
             for( Index i = 0; i < n_x_fixed; ++i )
-               grad_lag_x[x_fixed_map[i]] -= y_c->Values()[y_c->Dim()-n_x_fixed+i];
+               grad_lag_x[x_fixed_map[i]] += y_c->Values()[y_c->Dim()-n_x_fixed+i] * (1.0 - c_rhs[y_c->Dim()-n_x_fixed+i]);
       }
    }
 

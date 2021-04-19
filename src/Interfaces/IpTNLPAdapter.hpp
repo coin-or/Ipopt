@@ -262,7 +262,7 @@ public:
       const Vector& c,                   /**< internal activity for equality constraints */
       const Vector& d,                   /**< internal activity for inequality constraints */
       Number*       g_orig,              /**< vector to fill with values from c and d */
-      bool          correctrhs = false   /**< whether to add rhs-values for constraints that internally correspond to c(x)=0 */
+      bool          correctrhs = false   /**< whether to add unscaled rhs-values for constraints that internally correspond to c(x)=0 */
    );
 
    /** Provides values for lower and upper bounds on variables for given Ipopt-internal vectors.
@@ -282,7 +282,7 @@ public:
     * Similar to ResortBnds, but also provides dual values for fixed variables if fixed_variable_treatment is set to make_constraint
     */
    void ResortBoundMultipliers(
-      const Vector& c,                /**< internal values for equality constraint multipliers */
+      const Vector& y_c,              /**< internal values for equality constraint multipliers */
       const Vector& z_L,              /**< internal values for lower bound multipliers */
       Number*       z_L_orig,         /**< vector to fill with values from z_L */
       const Vector& z_U,              /**< internal values for upper bound multipliers */

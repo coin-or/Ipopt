@@ -2492,7 +2492,7 @@ void TNLPAdapter::ResortBnds(
 }
 
 void TNLPAdapter::ResortBoundMultipliers(
-   const Vector& c,
+   const Vector& y_c,
    const Vector& z_L,
    Number*       z_L_orig,
    const Vector& z_U,
@@ -2505,9 +2505,9 @@ void TNLPAdapter::ResortBoundMultipliers(
    // multipliers for fixed variables
    if( fixed_variable_treatment_ == MAKE_CONSTRAINT && n_x_fixed_ > 0 )
    {
-      const DenseVector* dy_c = static_cast<const DenseVector*>(&c);
-      DBG_ASSERT(dynamic_cast<const DenseVector*>(&c));
-      Index n_c_no_fixed = c.Dim() - n_x_fixed_;
+      const DenseVector* dy_c = static_cast<const DenseVector*>(&y_c);
+      DBG_ASSERT(dynamic_cast<const DenseVector*>(&y_c));
+      Index n_c_no_fixed = y_c.Dim() - n_x_fixed_;
       if( !dy_c->IsHomogeneous() )
       {
          const Number* values = dy_c->Values();
