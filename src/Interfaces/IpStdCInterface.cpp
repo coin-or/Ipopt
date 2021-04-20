@@ -333,7 +333,7 @@ Bool GetIpoptCurrentIterate(
    return (Bool) ipopt_problem->tnlp->get_curr_iterate(scaled, n, x, z_L, z_U, m, g, lambda);
 }
 
-IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) GetIpoptCurrentViolations(
+Bool GetIpoptCurrentViolations(
    IpoptProblem  ipopt_problem,
    Bool          scaled,
    Index         n,
