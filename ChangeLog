@@ -65,6 +65,24 @@ commit history.
         - Deprecated SolveStatistics::TotalCPUTime(), use SolveStatistics::TotalCpuTime()
           instead.
         - Added documentation on some available expert C preprocessor flags.
+        - Extended the Java interface by the possibility to specify an
+          intermediate_callback.
+        - Added flag to TNLPAdapter::ResortX() to specify how to handle
+          fixed variables. Added flag to TNLPAdapter::ResortG() to specify
+          whether to correct by rhs of equality constraints. Added
+          TNLPAdapter::ResortBoundMultipliers() to generate correct duals
+          for fixed variables if fixed_variable_treatment is make_constraint.
+          Added TNLPAdapter::GetFullDimensions(), TNLPAdapter::GetFixedVariables(),
+          TNLPAdapter::GetPermutationMatrices(), and TNLPAdapter::GetC_Rhs()
+          to retrieve more information of the transformation in a TNLPAdapter.
+        - Added TNLP::get_curr_iterate() and TNLP::get_curr_violations()
+          to request the current iterate (primal and dual variable values)
+          and primal and dual infeasibility w.r.t. the TNLP. The methods
+          are meant to be called during intermediate_callback to inspect
+          the current iterate. The C, Fortran, and Java interfaces have
+          been extended by corresponding functions, too. The hs071 examples
+          have been extended to show use of the new functions. Added test
+          getcurr to test new functions. [#382, #451]
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]
