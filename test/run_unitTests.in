@@ -15,6 +15,8 @@ echo " "
 echo Running unitTests...
 echo " "
 
+SKIPGREP=false
+
 function checkrun ()
 {
   if ! $@ > tmpfile 2>&1 ; then
@@ -28,7 +30,7 @@ function checkrun ()
     return 1
   fi
 
-  if ! grep -q "EXIT: Optimal Solution Found." tmpfile ; then
+  if ! $SKIPGREP && ! grep -q "EXIT: Optimal Solution Found." tmpfile ; then
     echo " "
     echo " ---- 8< ---- Start of test program output ---- 8< ----"
     cat tmpfile
@@ -86,11 +88,11 @@ fi
 
 # empty NLP example
 echo "Testing EmptyNLP Example..."
-checkrun ./emptynlp || retval=$?
+SKIPGREP=true checkrun ./emptynlp || retval=$?
 
 # getcurr example
 echo "Testing GetCurr Example..."
-checkrun ./getcurr || retval=$?
+SKIPGREP=true checkrun ./getcurr || retval=$?
 
 # clean up
 rm -rf tmpfile debug.out ipopt.out IPOPT.OUT

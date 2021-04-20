@@ -43,15 +43,18 @@ private:
    /// whether fixed variables are treated as constraints
    bool fixedvar_makeconstr_;
    bool scaling_;
+   bool maximize_;
 
 public:
    /** constructor */
    TestNLP(
       bool fixedvar_makeconstr,
-      bool scaling
+      bool scaling,
+      bool maximize
    )
    : fixedvar_makeconstr_(fixedvar_makeconstr),
-     scaling_(scaling)
+     scaling_(scaling),
+     maximize_(maximize)
    { }
 
    /** Method to return some info about the nlp */
@@ -146,6 +149,8 @@ public:
       assert(m == 2);
 
       obj_scaling = 2.0;
+      if( maximize_ )
+         obj_scaling *= -1.0;
 
       use_x_scaling = true;
       x_scaling[0] = 3.0;
@@ -319,23 +324,24 @@ public:
       IpoptCalculatedQuantities* ip_cq
    )
    {
-      std::cout << "x =";
+      std::cout << "Finalizing:" << std::endl;
+      std::cout << "  x =";
       for( int i = 0; i < n; ++i )
          std::cout << ' ' << x[i];
       std::cout << std::endl;
-      std::cout << "z_L =";
+      std::cout << "  z_L =";
       for( int i = 0; i < n; ++i )
          std::cout << ' ' << z_L[i];
       std::cout << std::endl;
-      std::cout << "z_U =";
+      std::cout << "  z_U =";
       for( int i = 0; i < n; ++i )
          std::cout << ' ' << z_U[i];
       std::cout << std::endl;
-      std::cout << "g =";
+      std::cout << "  g =";
       for( int i = 0; i < m; ++i )
          std::cout << ' ' << g[i];
       std::cout << std::endl;
-      std::cout << "lambda =";
+      std::cout << "  lambda =";
       for( int i = 0; i < m; ++i )
          std::cout << ' ' << lambda[i];
       std::cout << std::endl;
@@ -417,7 +423,7 @@ public:
       ASSERTEQ(compl_x_L[0], z_L[0] * (x[0] + 10.0));
       ASSERTEQ(compl_x_U[0], 0.0);
       ASSERTEQ(compl_x_L[1], z_L[1] * (x[1] - 1.0));
-      ASSERTEQ(compl_x_U[1], z_U[1] * (x[1] - 1.0));
+      ASSERTEQ(compl_x_U[1], z_U[1] * (1.0 - x[1]));
       ASSERTEQ(compl_x_L[2], 0.0);
       ASSERTEQ(compl_x_U[2], 0.0);
 
@@ -476,11 +482,17 @@ public:
       ASSERTEQ(s_x[2], x[2]*x_scaling[2]);
 
       ASSERTEQ(s_z_L[0], z_L[0]/x_scaling[0]*obj_scaling);
-      ASSERTEQ(s_z_L[1], z_L[1]/x_scaling[1]*obj_scaling);
+      if( obj_scaling > 0.0 )
+         ASSERTEQ(s_z_L[1], z_L[1]/x_scaling[1]*obj_scaling);
+      else
+         ASSERTEQ(s_z_L[1], z_U[1]/x_scaling[1]*(-obj_scaling));
       ASSERTEQ(s_z_L[2], z_L[2]/x_scaling[2]*obj_scaling);
 
       ASSERTEQ(s_z_U[0], z_U[0]/x_scaling[0]*obj_scaling);
-      ASSERTEQ(s_z_U[1], z_U[1]/x_scaling[1]*obj_scaling);
+      if( obj_scaling > 0.0 )
+         ASSERTEQ(s_z_U[1], z_U[1]/x_scaling[1]*obj_scaling);
+      else
+         ASSERTEQ(s_z_U[1], z_L[1]/x_scaling[1]*(-obj_scaling));
       ASSERTEQ(s_z_U[2], z_U[2]/x_scaling[2]*obj_scaling);
 
       ASSERTEQ(s_g[0], g[0]*g_scaling[0]);
@@ -493,7 +505,7 @@ public:
       ASSERTEQ(s_compl_x_L[0], s_z_L[0] * (x[0] + 10.0)*x_scaling[0]);
       ASSERTEQ(s_compl_x_U[0], 0.0);
       ASSERTEQ(s_compl_x_L[1], s_z_L[1] * (x[1] - 1.0)*x_scaling[1]);
-      ASSERTEQ(s_compl_x_U[1], s_z_U[1] * (x[1] - 1.0)*x_scaling[1]);
+      ASSERTEQ(s_compl_x_U[1], s_z_U[1] * (1.0 - x[1])*x_scaling[1]);
       ASSERTEQ(s_compl_x_L[2], 0.0);
       ASSERTEQ(s_compl_x_U[2], 0.0);
 
@@ -519,11 +531,12 @@ public:
 bool run(
    bool fixedvar_makeconstr,
    bool start_resto,
-   bool scale
+   bool scale,
+   bool maximize
    )
 {
    // Create an instance of your nlp...
-   SmartPtr<TNLP> nlp = new TestNLP(fixedvar_makeconstr, scale);
+   SmartPtr<TNLP> nlp = new TestNLP(fixedvar_makeconstr, scale, maximize);
 
    // Create an instance of the IpoptApplication
    SmartPtr<IpoptApplication> app = new IpoptApplication();
@@ -538,8 +551,8 @@ bool run(
    }
 
    app->Options()->SetStringValue("print_user_options", "yes", true, true);
-   app->Options()->SetNumericValue("bound_relax_factor", 0.0);
-   app->Options()->SetIntegerValue("print_level", 4);
+   app->Options()->SetNumericValue("bound_relax_factor", 0.0, true, true);
+   app->Options()->SetIntegerValue("print_level", 2, true, true);
 
    if( fixedvar_makeconstr )
       app->Options()->SetStringValue("fixed_variable_treatment", "make_constraint");
@@ -549,6 +562,8 @@ bool run(
 
    if( scale )
       app->Options()->SetStringValue("nlp_scaling_method", "user-scaling");
+   else
+      assert(!maximize);  // maximize requires scaling in this test
 
    status = app->OptimizeTNLP(nlp);
 
@@ -560,28 +575,31 @@ int main(
    char**
 )
 {
-   if( run(false, false, false) != EXIT_SUCCESS )
+   if( run(false, false, false, false) != EXIT_SUCCESS )
       return EXIT_FAILURE;
 
-   if( run(true, false, false) != EXIT_SUCCESS )
+   if( run(true, false, false, false) != EXIT_SUCCESS )
       return EXIT_FAILURE;
 
-   if( run(false, true, false) != EXIT_SUCCESS )
+   if( run(false, true, false, false) != EXIT_SUCCESS )
       return EXIT_FAILURE;
 
-   if( run(true, true, false) != EXIT_SUCCESS )
+   if( run(true, true, false, false) != EXIT_SUCCESS )
       return EXIT_FAILURE;
 
-   if( run(false, false, true) != EXIT_SUCCESS )
+   if( run(false, false, true, false) != EXIT_SUCCESS )
       return EXIT_FAILURE;
 
-   if( run(true, false, true) != EXIT_SUCCESS )
+   if( run(true, false, true, false) != EXIT_SUCCESS )
       return EXIT_FAILURE;
 
-   if( run(false, true, true) != EXIT_SUCCESS )
+   if( run(false, true, true, false) != EXIT_SUCCESS )
       return EXIT_FAILURE;
 
-   if( run(true, true, true) != EXIT_SUCCESS )
+   if( run(true, true, true, false) != EXIT_SUCCESS )
+      return EXIT_FAILURE;
+
+   if( run(true, true, true, true) != EXIT_SUCCESS )
       return EXIT_FAILURE;
 
    std::cout << std::endl << "*** All tests passed" << std::endl;
