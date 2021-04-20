@@ -17,11 +17,19 @@ namespace Ipopt
 class IteratesVector;
 
 /** This is the abstract base class for classes that map
- *  the traditional NLP into
- *  something that is more useful by Ipopt.
+ *  the traditional NLP into something that is more useful for %Ipopt.
+ *
+ *  As for NLP, the represented %NLP is
+ *  \f{eqnarray*}
+ *     \mathrm{min}  && f(x), \\
+ *     \mathrm{s.t.} && c(x) = 0,               &\qquad y_c\\
+ *                   && d_L \leq d(x) \leq d_U, &\qquad y_d \\
+ *                   && x_L \leq  x \leq x_U,   &\qquad z_L, z_U
+ *  \f}
+ *  where \f$y_c\f$, \f$y_d\f$, \f$z_L\f$, \f$z_U\f$ name the dual variables of the corresponding constraints.
  *
  *  This class takes care of storing the
- *  calculated model results, handles caching,
+ *  calculated model results, handles caching, scaling,
  *  and (some day) takes care of addition of slacks.
  */
 class IPOPTLIB_EXPORT IpoptNLP: public ReferencedObject

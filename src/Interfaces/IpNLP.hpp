@@ -23,6 +23,21 @@ class IpoptData;
 class IpoptCalculatedQuantities;
 class IteratesVector;
 
+/** Traditional %NLP.
+ *
+ * Represents NLPs of the form
+ *  \f{eqnarray*}
+ *     \mathrm{min}  && f(x), \\
+ *     \mathrm{s.t.} && c(x) = 0,               &\qquad y_c\\
+ *                   && d_L \leq d(x) \leq d_U, &\qquad y_d \\
+ *                   && x_L \leq  x \leq x_U,   &\qquad z_L, z_U
+ *  \f}
+ *  where \f$y_c\f$, \f$y_d\f$, \f$z_L\f$, \f$z_U\f$ name the dual variables of the corresponding constraints.
+ *
+ *  A prominent implementation of a NLP is TNLPAdapter.
+ *
+ *  A traditional %NLP is wrapper into a IpoptNLP, e.g., OrigIpoptNLP.
+ */
 class IPOPTLIB_EXPORT NLP: public ReferencedObject
 {
 public:
@@ -117,7 +132,7 @@ public:
    }
    ///@}
 
-   /** @name NLP evaluation routines (overload in derived classes. */
+   /** @name NLP evaluation routines (overload in derived classes). */
    ///@{
    virtual bool Eval_f(
       const Vector& x,

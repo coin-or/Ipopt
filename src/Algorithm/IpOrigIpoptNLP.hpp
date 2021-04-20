@@ -29,11 +29,38 @@ enum HessianApproximationSpace
 };
 
 /** This class maps the traditional NLP into
- *  something that is more useful by Ipopt.
+ *  something that is more useful for %Ipopt.
  *
  *  This class takes care of storing the
- *  calculated model results, handles caching,
+ *  calculated model results, handles caching, scaling,
  *  and (some day) takes care of addition of slacks.
+ *
+ *  Given a NLP
+ *  \f{eqnarray*}
+ *     \mathrm{min}  && f(x), \\
+ *     \mathrm{s.t.} && c(x) = 0,               &\qquad y_c\\
+ *                   && d_L \leq d(x) \leq d_U, &\qquad y_d \\
+ *                   && x_L \leq  x \leq x_U,   &\qquad z_L, z_U
+ *  \f}
+ *  and (invertible diagonal) scaling matrices \f$s_o\f$, \f$s_c\f$, \f$s_d\f$, \f$s_x\f$,
+ *  this class represents the %NLP
+ *  \f{eqnarray*}
+ *     \mathrm{min}  && s_o f(s_x^{-1} \tilde x), \\
+ *     \mathrm{s.t.} && s_c c(s_x^{-1} \tilde x) = 0,                       &\qquad \tilde y_c \\
+ *                   && s_d d_L \leq s_d d(s_x^{-1} \tilde x) \leq s_d d_U, &\qquad \tilde y_d \\
+ *                   && s_x x_L \leq \tilde x \leq s_x x_U,                 &\qquad \tilde z_L, z_U
+ *  \f}
+ *  where \f$\tilde x\f$, \f$\tilde y_c\f$, \f$\tilde y_d\f$, \f$\tilde z_L\f$, \f$\tilde z_U\f$,
+ *  are the primal and dual variables of the scaled problem (though, %Ipopt adds slack variables additionally).
+ *
+ *  The correspondence between a scaled and its corresponding unscaled solution is
+ *  \f{eqnarray*}
+ *    x   && = s_x^{-1} \tilde x \\
+ *    y_c && = s_o^{-1} s_c \tilde y_c \\
+ *    y_d && = s_o^{-1} s_d \tilde y_d \\
+ *    z_L && = s_o^{-1} s_x \tilde z_L \\
+ *    z_U && = s_o^{-1} s_x \tilde z_U
+ *  \f}
  */
 class IPOPTLIB_EXPORT OrigIpoptNLP: public IpoptNLP
 {

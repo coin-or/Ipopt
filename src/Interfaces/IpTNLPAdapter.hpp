@@ -25,6 +25,42 @@ class TDependencyDetector;
  *
  *  This is an Adapter class (Design Patterns) that converts a TNLP to an NLP.
  *  This allows users to write to the "more convenient" TNLP interface.
+ *
+ *  Given a TNLP
+ *  \f{eqnarray*}
+ *     \mathrm{min}  && f(x), \\
+ *     \mathrm{s.t.} && g_L \leq g(x) \leq g_U, &\qquad \lambda\\
+ *                   && x_L \leq  x   \leq x_U, &\qquad z_L, z_U
+ *  \f}
+ *  let \f$E = \{i : g_{L,i} = g_{U,i}\}\f$ and \f$I = \{i : g_{L,i} \neq g_{U,i}\}\f$
+ *  be the indices of equality and inequality constraints, respectively.
+ *  The dual variables for the constraints are \f$\lambda\f$.
+ *  The dual variables for the variable bounds are \f$z_L\f$ and \f$z_U\f$.
+ *
+ *  A TNLPAdapter represents the problem
+ *  \f{eqnarray*}
+ *     \mathrm{min}  && f(x), \\
+ *     \mathrm{s.t.} && c(x) = 0,               &\qquad y_c\\
+ *                   && d_L \leq d(x) \leq d_U, &\qquad y_d \\
+ *                   && x_L \leq  x \leq x_U,   &\qquad z_L, z_U
+ *  \f}
+ *  where \f$c(x) = g_E(x) - g_{L,E}\f$, i.e., corresponding to equality constraints of TNLP, and
+ *  \f$d(x) = g_I(x)\f$, \f$d_L = g_{L,I}\f$, \f$d_U = g_{U,I}\f$, i.e., corresponding to inequality constraints of TNLP.
+ *
+ *  The dual variables for the constraints are \f$y_c\f$ and \f$y_d\f$.
+ *  The dual variables for the bounds on slack and original variables are \f$s_L\f$, \f$s_U\f$, \f$z_L\f$, \f$z_U\f$.
+ *
+ *  Internally, %Ipopt reformulates \f$d_L \leq d(x) \leq d_U\f$ as
+ *  \f{eqnarray*}
+ *                   && d(x) - s = 0        &\qquad y_d\\
+ *                   && d_L \leq s \leq d_U &\qquad v_L, v_U \\
+ *  \f}
+ *
+ *  If fixed variables are present (\f$x_{L,i} = x_{U,i}\f$) in the TNLP and
+ *  fixed_variable_treatment is set to make_parameter, then these variables are not made visible
+ *  to Ipopt internally.
+ *  If fixed_variable_treatment is set to make_constraint, then their bounds relaxed and equality
+ *  constraints \f$x_i - x_{L,i} = 0\f$ are added to the end of \f$c(x) = 0\f$.
  */
 class IPOPTLIB_EXPORT TNLPAdapter : public NLP
 {

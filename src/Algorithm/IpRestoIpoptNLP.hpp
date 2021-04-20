@@ -21,12 +21,28 @@
 namespace Ipopt
 {
 
-/** This class maps the traditional NLP into
- *  something that is more useful by Ipopt.
+/** This class maps a IpoptNLP into one that is used for the restoration phase of %Ipopt.
  *
- *  This class takes care of storing the
- *  calculated model results, handles caching,
- *  and (some day) takes care of addition of slacks.
+ *  Given a IpoptNLP
+ *  \f{eqnarray*}
+ *     \mathrm{min}  && f(x), \\
+ *     \mathrm{s.t.} && c(x) = 0,               &\qquad y_c\\
+ *                   && d_L \leq d(x) \leq d_U, &\qquad y_d \\
+ *                   && x_L \leq  x \leq x_U,   &\qquad z_L, z_U
+ *  \f}
+ *  parameters \f$\rho\f$, \f$\eta\f$, and a reference point \f$x_r\f$,
+ *  a RestoIpoptNLP is the %NLP
+ *  \f{eqnarray*}
+ *     \mathrm{min}  && \rho (p_c^Te + n_c^Te + p_d^Te + n_d^Te) + \frac{\eta}{2} \Vert D_r (x-x_r) \Vert_2^2, \\
+ *     \mathrm{s.t.} && c(x) - p_c + n_c = 0,               &\qquad y_c\\
+ *                   && d_L \leq d(x) - p_d + n_d \leq d_U, &\qquad y_d \\
+ *                   && x_L \leq  x \leq x_U,               &\qquad z_L, z_U \\
+ *                   && p_c, n_c, p_d, n_d \geq 0.          &\qquad ...
+ *  \f}
+ *  where \f$D_r = \mathrm{diag}(\frac{1}{\max\{1,|x_{r,i}|\}},\ldots,\frac{1}{\max\{1,|x_{r,n}|\}})\f$.
+ *
+ *  Parameter \f$\rho\f$ is determined by option `resto_penalty_parameter` (default = 1000).
+ *  Parameter \f$\eta = \eta_f \sqrt{\mu}\f$, where \f$\eta_f\f$ is determined by option `resto_proximity_weight` (default = 1).
  */
 class RestoIpoptNLP: public IpoptNLP
 {
@@ -419,9 +435,7 @@ private:
 
    /** @name Values particular to the restoration phase problem statement */
    ///@{
-   /** Penalty parameter for the \$l_1\$ norm
-    * @todo make this parameter?
-    */
+   /** Penalty parameter for the \$l_1\$ norm, given by resto_penalty_parameter */
    Number rho_;
 
    /** scaling factor for eta calculation */

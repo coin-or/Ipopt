@@ -30,17 +30,16 @@ class IteratesVector;
  *  directly by \Ipopt.
  *
  *  This interface presents the problem form:
- *
- *     min f(x)
- *
- *     s.t. gL <= g(x) <= gU
- *
- *          xL <=  x   <= xU
- *
- *  In order to specify an equality constraint, set gL_i = gU_i = rhs.
+ *  \f{eqnarray*}
+ *     \mathrm{min}  && f(x) \\
+ *     \mathrm{s.t.} && g_L \leq g(x) \leq g_U \\
+ *                   && x_L \leq  x   \leq x_U
+ *  \f}
+ *  In order to specify an equality constraint, set \f$g_{L,i} = g_{U,i}\f$.
  *  The value that indicates "infinity" for the bounds
  *  (i.e. the variable or constraint has no lower bound (-infinity) or upper bound (+infinity))
- *  is set through the option nlp_lower_bound_inf and nlp_upper_bound_inf, respectively.
+ *  is set through the option \ref OPT_nlp_lower_bound_inf "nlp_lower_bound_inf" and
+ *  \ref OPT_nlp_upper_bound_inf "nlp_upper_bound_inf", respectively.
  *  To indicate that a variable has no upper or lower bound, set the bound to
  *  -ipopt_inf or +ipopt_inf, respectively.
  */
@@ -703,6 +702,8 @@ public:
     *
     * The method translates the x(), c(), d(), y_c(), y_d(), z_L(), and z_U() vectors from ip_data->curr()
     * of the internal NLP representation into the form used by the TNLP.
+    * For the correspondence between scaled and unscaled solutions, see the detailed description of OrigIpoptNLP.
+    * If Ipopt is in restoration mode, it maps the current iterate of restoration %NLP (see RestoIpoptNLP) back to the original TNLP.
     *
     * @param ip_data (in)  Ipopt Data
     * @param ip_cq   (in)  Ipopt Calculated Quantities
@@ -741,6 +742,7 @@ public:
     *
     * The method makes the vectors behind (unscaled_)curr_nlp_constraint_violation(), (unscaled_)curr_dual_infeasibility(), (unscaled_)curr_complementarity()
     * from ip_cq of the internal NLP representation available into the form used by the TNLP.
+    * If Ipopt is in restoration mode, it maps the current iterate of restoration %NLP (see RestoIpoptNLP) back to the original TNLP.
     *
     * @note If fixed variables are treated as parameters (the default), then their corresponding entry in the derivative of the Lagrangian is set to 0.
     * @note If in restoration phase, then requesting grad_lag_x can trigger a call to eval_grad_f().

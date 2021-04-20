@@ -280,35 +280,42 @@ public:
    );
    /** Constraint Violation (at current iterate).
     *
-    *  This value should
-    *  be used in the line search, and not curr_primal_infeasibility().
+    *  This considers the inequality constraints with slacks, i.e., the violation of
+    *  c(x) = 0, d(x) - s = 0,
+    *
+    *  This value should be used in the line search instead of curr_primal_infeasibility().
     *  What type of norm is used depends on constr_viol_normtype
     */
    virtual Number curr_constraint_violation();
    /** Constraint Violation (at trial point).
     *
-    *  This value should
-    *  be used in the line search, and not curr_primal_infeasibility().
+    *  This considers the inequality constraints with slacks, i.e., the violation of
+    *  c(x) = 0, d(x) - s = 0,
+    *
+    *  This value should be used in the line search instead of curr_primal_infeasibility().
     *  What type of norm is used depends on constr_viol_normtype
     */
    virtual Number trial_constraint_violation();
    /** Real constraint violation in a given norm (at current iterate).
     *
-    *  This considers the inequality constraints without slacks.
+    *  This considers the inequality constraints without slacks, i.e., the violation of
+    *  c(x) = 0, d_L <= d(x) <= d_U, with scaling applied.
     */
    virtual Number curr_nlp_constraint_violation(
       ENormType NormType
    );
    /** Unscaled real constraint violation in a given norm (at current iterate).
     *
-    *  This considers the inequality constraints without slacks.
+    *  This considers the inequality constraints without slacks, i.e., the violation of
+    *  c(x) = 0, d_L <= d(x) <= d_U, without scaling applied.
     */
    virtual Number unscaled_curr_nlp_constraint_violation(
       ENormType NormType
    );
    /** Unscaled real constraint violation in a given norm (at trial iterate).
     *
-    *  This considers the inequality constraints without slacks.
+    *  This considers the inequality constraints without slacks, i.e., the violation of
+    *  c(x) = 0, d_L <= d(x) <= d_U, with scaling applied.
     */
    virtual Number unscaled_trial_nlp_constraint_violation(
       ENormType NormType
