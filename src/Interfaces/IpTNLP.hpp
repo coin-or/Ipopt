@@ -502,6 +502,10 @@ public:
    ///@{
    /** This method is called when the algorithm has finished (successfully or not) so the TNLP can digest the outcome, e.g., store/write the solution, if any.
     *
+    *  @note If fixed_variable_treatment is make_parameter (the default), then zero is returned for the bound multipliers of fixed variables.
+    *     Therefore, in an optimal solution, the gradient of the Lagrangian w.r.t. fixed variables may not appear to be zero.
+    *     If this is a problem, setting parameter fixed_variable_treatment to make_constraint could be workaround.
+    *
     *  @param status @parblock (in) gives the status of the algorithm
     *   - SUCCESS: Algorithm terminated successfully at a locally optimal
     *     point, satisfying the convergence tolerances (can be specified

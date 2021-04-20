@@ -1131,7 +1131,7 @@ bool TNLPAdapter::GetSpaces(
       jac_c_jCol = NULL;
 
       // ... build the nonzero structure for jac_d
-      // ... (the permuation from rows in jac_g to jac_c is the
+      // ... (the permutation from rows in jac_g to jac_c is the
       // ...  the same as P_d_g_)
       Index* jac_d_iRow = new Index[nz_full_jac_g_];
       Index* jac_d_jCol = new Index[nz_full_jac_g_];
@@ -2824,7 +2824,7 @@ bool TNLPAdapter::CheckDerivatives(
          }
       }
 #endif
-      // Obtain values at reference pont
+      // Obtain values at reference point
       jac_g = new Number[nz_jac_g];
       retval = tnlp_->eval_jac_g(nx, xref, new_x, ng, nz_jac_g, NULL, NULL, jac_g);
       ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
