@@ -543,7 +543,7 @@ Bool intermediate_cb(
       if( have_viol )
          printf(" %-12g %-12g\n", constraint_violation[i], compl_g[i]);
       else
-         printf(" %-12s %-12s %-12s %-12s\n", "n/a", "n/a", "n/a", "n/a");
+         printf(" %-12s %-12s\n", "n/a", "n/a");
    }
 
    if( inf_pr < 1e-4 )

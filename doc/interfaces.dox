@@ -976,6 +976,15 @@ very similar to the C++ interface:
 
 \snippet HS071.java eval
 
+For this example, we override the callback that is called by \Ipopt in
+every iteration and can be used to indicate to \Ipopt whether to stop
+prematurely. We use this callback to print the current iterate and its
+violations of primal and dual feasibility (obtained via
+\ref org.coinor.Ipopt::get_curr_iterate "get_curr_iterate()" and
+\ref org.coinor.Ipopt::get_curr_violations "get_curr_violations()", resp.):
+
+\snippet HS071.java intermediate_callback
+
 Finally, we add a main routine to run this example. The main routines
 creates an instance of our class, calls the solve method
 \ref org.coinor.Ipopt::OptimizeNLP "OptimizeNLP", and prints the solution.

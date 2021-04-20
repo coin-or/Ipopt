@@ -431,7 +431,7 @@ bool HS071_NLP::intermediate_callback(
       if( have_viol )
          printf(" %-12g %-12g\n", constraint_violation[i], compl_g[i]);
       else
-         printf(" %-12s %-12s %-12s %-12s\n", "n/a", "n/a", "n/a", "n/a");
+         printf(" %-12s %-12s\n", "n/a", "n/a");
    }
 
    return true;

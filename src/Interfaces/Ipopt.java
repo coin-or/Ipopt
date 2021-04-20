@@ -92,6 +92,36 @@ public abstract class Ipopt
       double callback_hess[]
    );
 
+   /* Native function should not be used directly */
+   private native boolean GetCurrIterate(
+      long     ipopt,
+      long     ip_data,
+      long     ip_cq,
+      boolean  scaled,
+      int      n,
+      double   x[],
+      double   z_L[],
+      double   z_U[],
+      int      m,
+      double   g[],
+      double   lambda[]
+   );
+
+   /* Native function should not be used directly */
+   private native boolean GetCurrViolations(
+      long     ipopt,
+      long     ip_data,
+      long     ip_cq,
+      boolean  scaled,
+      int      n,
+      double   compl_x_L[],
+      double   compl_x_U[],
+      double   grad_lag_x[],
+      int      m,
+      double   nlp_constraint_violation[],
+      double   compl_g[]
+   );
+
    /** Use C index style for iRow and jCol vectors */
    public final static int C_STYLE = 0;
 
@@ -118,6 +148,10 @@ public abstract class Ipopt
    public final static int NON_IPOPT_EXCEPTION = -101;
    public final static int INSUFFICIENT_MEMORY = -102;
    public final static int INTERNAL_ERROR = -199;
+
+   /** The possible algorithm modes (passed to intermediate_callback) */
+   public final static int REGULARMODE = 0;
+   public final static int RESTORATIONPHASEMODE = 1;
 
    /** Pointer to the native optimization object */
    private long ipopt;
@@ -574,6 +608,89 @@ public abstract class Ipopt
       return this.status;
    }
 
+   /** Get primal and dual variable values of the current iterate.
+    *
+    * This method can be used to get the values of the current iterate during intermediate_callback().
+    * The method expects the number of variables (dimension of x), number of constraints (dimension of g(x)),
+    * and allocated arrays of appropriate lengths as input.
+    *
+    * The method translates the x(), c(), d(), y_c(), y_d(), z_L(), and z_U() vectors from ip_data->curr()
+    * of the internal NLP representation into the form used by the TNLP.
+    * For the correspondence between scaled and unscaled solutions, see the detailed description of OrigIpoptNLP.
+    * If Ipopt is in restoration mode, it maps the current iterate of restoration %NLP (see RestoIpoptNLP) back to the original TNLP.
+    *
+    * @param ip_data (in)  Ipopt Data (pass on value given to intermediate_callback)
+    * @param ip_cq   (in)  Ipopt Calculated Quantities (pass on value given to intermediate_callback)
+    * @param scaled  (in)  whether to retrieve scaled or unscaled iterate
+    * @param n       (in)  the number of variables \f$x\f$ in the problem; can be arbitrary if skipping x, z_L, and z_U
+    * @param x       (out) buffer to store value of primal variables \f$x\f$, must have length at least n; pass null to skip retrieving x
+    * @param z_L     (out) buffer to store the lower bound multipliers \f$z_L\f$, must have length at least n; pass null to skip retrieving z_L
+    * @param z_U     (out) buffer to store the upper bound multipliers \f$z_U\f$, must have length at least n; pass null to skip retrieving z_U
+    * @param m       (in)  the number of constraints \f$g(x)\f$; can be arbitrary if skipping g and lambda
+    * @param g       (out) buffer to store the constraint values \f$g(x)\f$, must have length at least m; pass null to skip retrieving g
+    * @param lambda  (out) buffer to store the constraint multipliers \f$\lambda\f$, must have length at least m; pass null to skip retrieving lambda
+    *
+    * @return Whether Ipopt has successfully filled the given arrays
+    */
+   public boolean get_curr_iterate(
+      long     ip_data,
+      long     ip_cq,
+      boolean  scaled,
+      int      n,
+      double   x[],
+      double   z_L[],
+      double   z_U[],
+      int      m,
+      double   g[],
+      double   lambda[]
+   )
+   {
+      return this.GetCurrIterate(ipopt, ip_data, ip_cq, scaled, n, x, z_L, z_U, m, g, lambda);
+   }
+
+   /** Get primal and dual infeasibility of the current iterate.
+    *
+    * This method can be used to get the violations of constraints and optimality conditions
+    * at the current iterate, e.g., during intermediate_callback().
+    * The method expects the number of variables (dimension of x), number of constraints (dimension of g(x)),
+    * and allocated arrays of appropriate lengths as input.
+    *
+    * The method makes the vectors behind (unscaled_)curr_nlp_constraint_violation(), (unscaled_)curr_dual_infeasibility(), (unscaled_)curr_complementarity()
+    * from ip_cq of the internal NLP representation available into the form used by the TNLP.
+    * If Ipopt is in restoration mode, it maps the current iterate of restoration %NLP (see RestoIpoptNLP) back to the original TNLP.
+    *
+    * @note If fixed variables are treated as parameters (the default), then their corresponding entry in the derivative of the Lagrangian is set to 0.
+    * @note If in restoration phase, then requesting grad_lag_x can trigger a call to eval_grad_f().
+    *
+    * @param ip_data    (in)  Ipopt Data (pass on value given to intermediate_callback)
+    * @param ip_cq      (in)  Ipopt Calculated Quantities (pass on value given to intermediate_callback)
+    * @param scaled     (in)  whether to retrieve scaled or unscaled violations
+    * @param n          (in)  the number of variables \f$x\f$ in the problem; can be arbitrary if skipping compl_x_L, compl_x_U, and grad_lag_x
+    * @param compl_x_L  (out) buffer to store violation of complementarity for lower bounds on variables (\f$(x-x_L)z_L\f$), must have length at least n; pass null to skip retrieving compl_x_L
+    * @param compl_x_U  (out) buffer to store violation of complementarity for upper bounds on variables (\f$(x_U-x)z_U\f$), must have length at least n; pass null to skip retrieving compl_x_U
+    * @param grad_lag_x (out) buffer to store gradient of Lagrangian w.r.t. variables \f$x\f$, must have length at least n; pass null to skip retrieving grad_lag_x
+    * @param m          (in)  the number of constraints \f$g(x)\f$; can be arbitrary if skipping lambda
+    * @param nlp_constraint_violation (out) buffer to store violation of constraints \f$max(g_l-g(x),g(x)-g_u,0)\f$, must have length at least m; pass null to skip retrieving constraint_violation
+    * @param compl_g    (out) buffer to store violation of complementarity of constraint (\f$(g(x)-g_l)*\lambda^+ + (g_l-g(x))*\lambda^-\f$, where \f$\lambda^+=max(0,\lambda)\f$ and \f$\lambda^-=max(0,-\lambda)\f$ (componentwise)), must have length at least m; pass null to skip retrieving compl_g
+    *
+    * @return Whether Ipopt has successfully filled the given arrays
+    */
+   public boolean get_curr_violations(
+      long     ip_data,
+      long     ip_cq,
+      boolean  scaled,
+      int      n,
+      double   compl_x_L[],
+      double   compl_x_U[],
+      double   grad_lag_x[],
+      int      m,
+      double   nlp_constraint_violation[],
+      double   compl_g[]
+   )
+   {
+      return this.GetCurrViolations(ipopt, ip_data, ip_cq, scaled, n, compl_x_L, compl_x_U, grad_lag_x, m, nlp_constraint_violation, compl_g);
+   }
+
    /** Gives primal variable values at final point.
     * @return the primal variable values at the final point.
     */
@@ -630,6 +747,45 @@ public abstract class Ipopt
    public double[] getUpperBoundMultipliers()
    {
       return mult_x_U;
+   }
+
+   /** Intermediate Callback method for the user.
+    *
+    * This method is called once per iteration (during the convergence check),
+    * and can be used to obtain information about the optimization status while
+    * \Ipopt solves the problem, and also to request a premature termination.
+    *
+    * The information provided by the entities in the argument list correspond
+    * to what \Ipopt prints in the iteration summary (see also \ref OUTPUT).
+    * The value of algorithmmode is either REGULARMODE or RESTORATIONPHASEMODE.
+    *
+    * The current iterate and violations of feasibility and optimality can be
+    * accessed via the methods get_curr_iterate() and get_curr_violations().
+    * These methods translate values for the *internal representation* of
+    * the problem from `ip_data` and `ip_cq` objects.
+    *
+    * @return If this method returns false, \Ipopt will terminate with the
+    *   User_Requested_Stop status.
+    *
+    * It is not required to implement (overload) this method.
+    * The default implementation always returns true.
+    */
+   public boolean intermediate_callback(
+      int      algorithmmode,
+      int      iter,
+      double   obj_value,
+      double   inf_pr,
+      double   inf_du,
+      double   mu,
+      double   d_norm,
+      double   regularization_size,
+      double   alpha_du,
+      double   alpha_pr,
+      int      ls_trials,
+      long     ip_data,
+      long     ip_cq)
+   {
+      return true;
    }
 
    /** If you using_scaling_parameters = true, this method should be overloaded.

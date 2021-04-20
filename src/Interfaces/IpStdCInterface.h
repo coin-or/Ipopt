@@ -340,6 +340,8 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(enum ApplicationReturnStatus) IpoptSolve(
  *
  * The method translates the x(), c(), d(), y_c(), y_d(), z_L(), and z_U() vectors from ip_data->curr()
  * of the internal NLP representation into the form used by the TNLP.
+ * For the correspondence between scaled and unscaled solutions, see the detailed description of OrigIpoptNLP.
+ * If Ipopt is in restoration mode, it maps the current iterate of restoration %NLP (see RestoIpoptNLP) back to the original TNLP.
  *
  * @param ipopt_problem (in) Problem that is currently optimized.
  * @param n       (in)  the number of variables \f$x\f$ in the problem; can be arbitrary if skipping x, z_L, and z_U
@@ -374,9 +376,10 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) GetIpoptCurrentIterate(
  *
  * The method makes the vectors behind (unscaled_)curr_nlp_constraint_violation(), (unscaled_)curr_dual_infeasibility(), (unscaled_)curr_complementarity()
  * from ip_cq of the internal NLP representation available into the form used by the TNLP.
+ * If Ipopt is in restoration mode, it maps the current iterate of restoration %NLP (see RestoIpoptNLP) back to the original TNLP.
  *
  * @note If fixed variables are treated as parameters (the default), then their corresponding entry in the derivative of the Lagrangian is set to 0.
- * @note If in restoration phase, then requesting grad_lag_x can trigger a call to eval_grad_f().
+ * @note If in restoration phase, then requesting grad_lag_x can trigger a call to Eval_F_CB.
  *
  * @param ipopt_problem (in) Problem that is currently optimized.
  * @param scaled     (in)  whether to retrieve scaled or unscaled violations

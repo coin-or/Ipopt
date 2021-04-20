@@ -158,6 +158,23 @@ public:
       IpoptCalculatedQuantities* ip_cq
    );
 
+   /* Intermediate Callback method for the user. */
+   virtual bool intermediate_callback(
+      AlgorithmMode              mode,
+      Index                      iter,
+      Number                     obj_value,
+      Number                     inf_pr,
+      Number                     inf_du,
+      Number                     mu,
+      Number                     d_norm,
+      Number                     regularization_size,
+      Number                     alpha_du,
+      Number                     alpha_pr,
+      Index                      ls_trials,
+      const IpoptData*           ip_data,
+      IpoptCalculatedQuantities* ip_cq
+   );
+
    /* Method to return scaling parameters. */
    virtual bool get_scaling_parameters(
       Number&  obj_scaling,
@@ -216,6 +233,7 @@ public:
    jmethodID eval_jac_g_;
    jmethodID eval_h_;
 
+   jmethodID intermediate_callback_;
    jmethodID get_scaling_parameters_;
    jmethodID get_number_of_nonlinear_variables_;
    jmethodID get_list_of_nonlinear_variables_;
@@ -254,7 +272,8 @@ Jipopt::Jipopt(
    eval_g_             = env->GetMethodID(solverCls, "eval_g", "(I[DZI[D)Z");
    eval_jac_g_         = env->GetMethodID(solverCls, "eval_jac_g", "(I[DZII[I[I[D)Z");
    eval_h_             = env->GetMethodID(solverCls, "eval_h", "(I[DZDI[DZI[I[I[D)Z");
-   get_scaling_parameters_            = env->GetMethodID(solverCls, "get_scaling_parameters", "([DI[DI[D[Z)Z");
+   get_scaling_parameters_ = env->GetMethodID(solverCls, "get_scaling_parameters", "([DI[DI[D[Z)Z");
+   intermediate_callback_ = env->GetMethodID(solverCls, "intermediate_callback", "(IIDDDDDDDDIJJ)Z");
 #else
    get_bounds_info_    = env->GetMethodID(solverCls, "get_bounds_info", "(I[F[FI[F[F)Z");
    get_starting_point_ = env->GetMethodID(solverCls, "get_starting_point", "(IZ[FZ[F[FIZ[F)Z");
@@ -263,7 +282,8 @@ Jipopt::Jipopt(
    eval_g_             = env->GetMethodID(solverCls, "eval_g", "(I[FZI[F)Z");
    eval_jac_g_         = env->GetMethodID(solverCls, "eval_jac_g", "(I[FZII[I[I[F)Z");
    eval_h_             = env->GetMethodID(solverCls, "eval_h", "(I[FZFI[FZI[I[I[F)Z");
-   get_scaling_parameters_            = env->GetMethodID(solverCls, "get_scaling_parameters", "([FI[FI[F[Z)Z");
+   get_scaling_parameters_ = env->GetMethodID(solverCls, "get_scaling_parameters", "([FI[FI[F[Z)Z");
+   intermediate_callback_ = env->GetMethodID(solverCls, "intermediate_callback", "(IIFFFFFFFFIJJ)Z");
 #endif
    get_number_of_nonlinear_variables_ = env->GetMethodID(solverCls, "get_number_of_nonlinear_variables", "()I");
    get_list_of_nonlinear_variables_   = env->GetMethodID(solverCls, "get_list_of_nonlinear_variables", "(I[I)Z");
@@ -648,6 +668,26 @@ void Jipopt::finalize_solution(
    env->GetNumberArrayRegion(fj, 0, 1, &obj_value);
 }
 
+/* Intermediate Callback method for the user. */
+bool Jipopt::intermediate_callback(
+   AlgorithmMode              mode,
+   Index                      iter,
+   Number                     obj_value,
+   Number                     inf_pr,
+   Number                     inf_du,
+   Number                     mu,
+   Number                     d_norm,
+   Number                     regularization_size,
+   Number                     alpha_du,
+   Number                     alpha_pr,
+   Index                      ls_trials,
+   const IpoptData*           ip_data,
+   IpoptCalculatedQuantities* ip_cq
+)
+{
+   return env->CallBooleanMethod(solver, intermediate_callback_, (int)mode, iter, obj_value, inf_pr, inf_du, mu, d_norm, regularization_size, alpha_du, alpha_pr, ls_trials, ip_data, ip_cq);
+}
+
 bool Jipopt::get_scaling_parameters(
    Number& obj_scaling,
    bool&   use_x_scaling,
@@ -817,6 +857,132 @@ extern "C"
       status = problem->application->OptimizeTNLP(problem);
 
       return (jint) status;
+   }
+
+   JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_GetCurrIterate(
+      JNIEnv*      env,
+      jobject      /* obj_this */,
+      jlong        pipopt,
+      jlong        jip_data,
+      jlong        jip_cq,
+      jboolean     jscaled,
+      jint         jn,
+      jnumberArray jx,
+      jnumberArray jz_L,
+      jnumberArray jz_U,
+      jint         jm,
+      jnumberArray jg,
+      jnumberArray jlambda)
+   {
+      Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);
+      IpoptData* ip_data = (IpoptData*)jip_data;
+      IpoptCalculatedQuantities* ip_cq = (IpoptCalculatedQuantities*)jip_cq;
+
+      int n = jn;
+      int m = jm;
+
+      Number* x = NULL;
+      Number* z_L = NULL;
+      Number* z_U = NULL;
+      Number* g = NULL;
+      Number* lambda = NULL;
+
+      if( jx != NULL )
+         x = new Number[n];
+      if( jz_L != NULL )
+         z_L = new Number[n];
+      if( jz_U != NULL )
+         z_U = new Number[n];
+      if( jg != NULL )
+         g = new Number[m];
+      if( jlambda != NULL )
+         lambda = new Number[m];
+
+      bool ok = problem->get_curr_iterate(ip_data, ip_cq, jscaled, n, x, z_L, z_U, m, g, lambda);
+      if( ok )
+      {
+         if( jx != NULL )
+            env->SetNumberArrayRegion(jx, 0, n, const_cast<Number*>(x));
+         if( jz_L != NULL )
+            env->SetNumberArrayRegion(jz_L, 0, n, const_cast<Number*>(z_L));
+         if( jz_U != NULL )
+            env->SetNumberArrayRegion(jz_U, 0, n, const_cast<Number*>(z_U));
+         if( jg != NULL )
+            env->SetNumberArrayRegion(jg, 0, m, const_cast<Number*>(g));
+         if( jlambda != NULL )
+            env->SetNumberArrayRegion(jlambda, 0, m, const_cast<Number*>(lambda));
+      }
+
+      delete[] lambda;
+      delete[] g;
+      delete[] z_U;
+      delete[] z_L;
+      delete[] x;
+
+      return ok;
+   }
+
+   JNIEXPORT jboolean JNICALL Java_org_coinor_Ipopt_GetCurrViolations(
+      JNIEnv*      env,
+      jobject      /* obj_this */,
+      jlong        pipopt,
+      jlong        jip_data,
+      jlong        jip_cq,
+      jboolean     jscaled,
+      jint         jn,
+      jnumberArray jcompl_x_L,
+      jnumberArray jcompl_x_U,
+      jnumberArray jgrad_lag_x,
+      jint         jm,
+      jnumberArray jnlp_constraint_violation,
+      jnumberArray jcompl_g)
+   {
+      Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);
+      IpoptData* ip_data = (IpoptData*)jip_data;
+      IpoptCalculatedQuantities* ip_cq = (IpoptCalculatedQuantities*)jip_cq;
+
+      int n = jn;
+      int m = jm;
+
+      Number* compl_x_L = NULL;
+      Number* compl_x_U = NULL;
+      Number* grad_lag_x = NULL;
+      Number* nlp_constraint_violation = NULL;
+      Number* compl_g = NULL;
+
+      if( jcompl_x_L != NULL )
+         compl_x_L = new Number[n];
+      if( jcompl_x_U != NULL )
+         compl_x_U = new Number[n];
+      if( jgrad_lag_x != NULL )
+         grad_lag_x = new Number[n];
+      if( jnlp_constraint_violation != NULL )
+         nlp_constraint_violation = new Number[m];
+      if( jcompl_g != NULL )
+         compl_g = new Number[m];
+
+      bool ok = problem->get_curr_violations(ip_data, ip_cq, jscaled, n, compl_x_L, compl_x_U, grad_lag_x, m, nlp_constraint_violation, compl_g);
+      if( ok )
+      {
+         if( jcompl_x_L != NULL )
+            env->SetNumberArrayRegion(jcompl_x_L, 0, n, const_cast<Number*>(compl_x_L));
+         if( jcompl_x_U != NULL )
+            env->SetNumberArrayRegion(jcompl_x_U, 0, n, const_cast<Number*>(compl_x_U));
+         if( jgrad_lag_x != NULL )
+            env->SetNumberArrayRegion(jgrad_lag_x, 0, n, const_cast<Number*>(grad_lag_x));
+         if( jnlp_constraint_violation != NULL )
+            env->SetNumberArrayRegion(jnlp_constraint_violation, 0, m, const_cast<Number*>(nlp_constraint_violation));
+         if( jcompl_g != NULL )
+            env->SetNumberArrayRegion(jcompl_g, 0, m, const_cast<Number*>(compl_g));
+      }
+
+      delete[] compl_g;
+      delete[] nlp_constraint_violation;
+      delete[] grad_lag_x;
+      delete[] compl_x_U;
+      delete[] compl_x_L;
+
+      return ok;
    }
 
    JNIEXPORT void JNICALL Java_org_coinor_Ipopt_FreeIpoptProblem(

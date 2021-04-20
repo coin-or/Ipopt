@@ -29,6 +29,8 @@ public class HS071 extends Ipopt
    int count_bounds = 0;
    int dcount_start = 0;
 
+   boolean printiterate;
+
    /** Creates a new instance of HS071 */
    // [HS071]
    public HS071()
@@ -49,6 +51,9 @@ public class HS071 extends Ipopt
 
       /* Index style for the irow/jcol elements */
       int index_style = Ipopt.C_STYLE;
+
+      /* Whether to print iterate in intermediate_callback */
+      printiterate = false;
 
       /* create the IpoptProblem */
       create(n, m, nele_jac, nele_hess, index_style);
@@ -288,6 +293,69 @@ public class HS071 extends Ipopt
    }
    // [eval]
 
+   // [intermediate_callback]
+   public boolean intermediate_callback(
+      int      algorithmmode,
+      int      iter,
+      double   obj_value,
+      double   inf_pr,
+      double   inf_du,
+      double   mu,
+      double   d_norm,
+      double   regularization_size,
+      double   alpha_du,
+      double   alpha_pr,
+      int      ls_trials,
+      long     ip_data,
+      long     ip_cq)
+   {
+      if( !printiterate )
+         return true;
+
+      double x[] = new double[n];
+      double z_L[] = new double[n];
+      double z_U[] = new double[n];
+      double compl_x_L[] = new double[n];
+      double compl_x_U[] = new double[n];
+      double grad_lag_x[] = new double[n];
+      double g[] = new double[m];
+      double lambda[] = new double[m];
+      double constr_viol[] = new double[m];
+      double compl_g[] = new double[m];
+
+      boolean have_iter = get_curr_iterate(ip_data, ip_cq, false, n, x, z_L, z_U, m, g, lambda);
+      boolean have_viol = get_curr_violations(ip_data, ip_cq, false, n, compl_x_L, compl_x_U, grad_lag_x, m, constr_viol, compl_g);
+
+      System.out.println("Current iterate at iteration " + iter + ":");
+      System.out.println("  x z_L z_U compl_x_L compl_x_U grad_lag_x");
+      for( int i = 0; i < n; ++i )
+      {
+         if( have_iter )
+            System.out.print("  " + x[i] + " " + z_L[i] + " " + z_U[i]);
+         else
+            System.out.print("  n/a n/a n/a");
+         if( have_viol )
+            System.out.println(" " + compl_x_L[i] + " " + compl_x_U[i] + " " + grad_lag_x[i]);
+         else
+            System.out.println("  n/a n/a n/a");
+      }
+      System.out.println("  g(x) lambda constr_viol compl_g");
+      for( int i = 0; i < m; ++i )
+      {
+         if( have_iter )
+            System.out.print("  " + g[i] + " " + lambda[i]);
+         else
+            System.out.print("  n/a n/a");
+         if( have_viol )
+            System.out.println(" " + constr_viol[i] + " " + compl_g[i]);
+         else
+            System.out.println(" n/a + n/a");
+      }
+
+      return true;
+   }
+   // [intermediate_callback]
+
    private void print(
       double[] x,
       String   str)
@@ -317,6 +385,9 @@ public class HS071 extends Ipopt
       // hs071.setNumericOption("warm_start_slack_bound_frac",1e-9);
       // hs071.setNumericOption("warm_start_slack_bound_push",1e-9);
       // hs071.setNumericOption("warm_start_mult_bound_push",1e-9);
+
+      // enable printing of current iterate in intermediate_callback
+      // hs071.printiterate = true;
 
       // Solve the problem
       int status = hs071.OptimizeNLP();
