@@ -525,3 +525,46 @@ IPOPTLIB_EXPORT void F77_FUNC(ipunsetcallback, IPUNSETCALLBACK)(
    fuser_data->INTERMEDIATE_CB = NULL;
    SetIntermediateCallback(fuser_data->Problem, NULL);
 }
+
+IPOPTLIB_EXPORT ipfint F77_FUNC(ipgetcurriterate, IPGETCURRITERATE)(
+   fptr*      FProblem,
+   ipfint*    scaled,
+   ipfint*    get_X,
+   ipfint*    get_Z,
+   ipfint*    get_G,
+   ipfint*    get_LAMBDA,
+   ipfint*    n,
+   ipnumber*  X,
+   ipnumber*  Z_L,
+   ipnumber*  Z_U,
+   ipfint*    m,
+   ipnumber*  G,
+   ipnumber*  LAMBDA
+)
+{
+   FUserData* fuser_data = (FUserData*) *FProblem;
+   return GetIpoptCurrentIterate(fuser_data->Problem, *scaled != 0,
+      *n, *get_X ? X : NULL, *get_Z ? Z_L : NULL, *get_Z ? Z_U : NULL,
+      *m, *get_G ? G : NULL, *get_LAMBDA ? LAMBDA : NULL) ? OKRetVal : NotOKRetVal;
+}
+
+IPOPTLIB_EXPORT ipfint F77_FUNC(ipgetcurrviolations, IPGETCURRVIOLATIONS)(
+   fptr*      FProblem,
+   ipfint*    scaled,
+   ipfint*    get_compl,
+   ipfint*    get_grad_lag_x,
+   ipfint*    get_nlp_constraint_violation,
+   ipfint*    n,
+   ipnumber*  COMPL_X_L,
+   ipnumber*  COMPL_X_U,
+   ipnumber*  GRAD_LAG_X,
+   ipfint*    m,
+   ipnumber*  NLP_CONSTRAINT_VIOLATION,
+   ipnumber*  COMPL_G
+)
+{
+   FUserData* fuser_data = (FUserData*) *FProblem;
+   return GetIpoptCurrentViolations(fuser_data->Problem, *scaled != 0,
+      *n, *get_compl ? COMPL_X_L : NULL, *get_compl ? COMPL_X_U : NULL, *get_grad_lag_x ? GRAD_LAG_X : NULL,
+      *m, *get_nlp_constraint_violation ? NLP_CONSTRAINT_VIOLATION : NULL, *get_compl ? COMPL_G : NULL) ? OKRetVal : NotOKRetVal;
+}
