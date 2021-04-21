@@ -2098,7 +2098,7 @@ void TNLPAdapter::FinalizeSolution(
          break;
       default:
          // if IpoptApplication doesn't provide an actual solution, do not bother to setup good multipliers for fixed variables
-         ResortBnds(z_L, full_z_L, z_U, full_z_U);
+         ResortBounds(z_L, full_z_L, z_U, full_z_U);
          break;
    }
 
@@ -2124,7 +2124,7 @@ void TNLPAdapter::FinalizeSolution(
             }
             std::vector<Number> new_z_L_meta_data(n_full_x_, 0.0);
             std::vector<Number> new_z_U_meta_data(n_full_x_, 0.0);
-            ResortBnds(*z_L_meta_vector, &new_z_L_meta_data[0], *z_U_meta_vector, &new_z_U_meta_data[0], false);
+            ResortBounds(*z_L_meta_vector, &new_z_L_meta_data[0], *z_U_meta_vector, &new_z_U_meta_data[0], false);
             std::string z_L_meta_data_tag = z_L_meta_iter->first;
             std::string z_U_meta_data_tag = z_L_meta_iter->first;
             z_L_meta_data_tag += "_z_L";
@@ -2421,7 +2421,7 @@ void TNLPAdapter::ResortG(
    }
 }
 
-void TNLPAdapter::ResortBnds(
+void TNLPAdapter::ResortBounds(
    const Vector& x_L,
    Number*       x_L_orig,
    const Vector& x_U,
@@ -2559,7 +2559,7 @@ bool TNLPAdapter::ResortBoundMultipliers(
    Number*       z_U_orig
 )
 {
-   ResortBnds(z_L, z_L_orig, z_U, z_U_orig);
+   ResortBounds(z_L, z_L_orig, z_U, z_U_orig);
 
    if( n_x_fixed_ == 0 )
       return true;

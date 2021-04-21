@@ -306,7 +306,7 @@ public:
     *
     * Similar to ResortX, but does so for two arrays and does not set any values for fixed variables.
     */
-   void ResortBnds(
+   void ResortBounds(
       const Vector& x_L,              /**< internal values for lower bounds on x */
       Number*       x_L_orig,         /**< vector to fill with values from x_L */
       const Vector& x_U,              /**< internal values for upper bounds on x */
@@ -314,9 +314,27 @@ public:
       bool          clearorig = true  /**< whether to initialize complete x_L_orig and x_U_orig to 0.0 before setting values for non-fixed variables */
    );
 
+   /** Provides values for lower and upper bounds on variables for given Ipopt-internal vectors.
+    *
+    * Similar to ResortX, but does so for two arrays and does not set any values for fixed variables.
+    *
+    * @deprecated Use ResortBounds() instead.
+    */
+   IPOPT_DEPRECATED
+   void ResortBnds(
+      const Vector& x_L,              /**< internal values for lower bounds on x */
+      Number*       x_L_orig,         /**< vector to fill with values from x_L */
+      const Vector& x_U,              /**< internal values for upper bounds on x */
+      Number*       x_U_orig,         /**< vector to fill with values from x_U */
+      bool          clearorig = true  /**< whether to initialize complete x_L_orig and x_U_orig to 0.0 before setting values for non-fixed variables */
+   )
+   {
+      ResortBounds(x_L, x_L_orig, x_U, x_U_orig, clearorig);
+   }
+
    /** Provides values for dual multipliers on lower and upper bounds on variables for given Ipopt-internal vectors.
     *
-    * Similar to ResortBnds, but also provides dual values for fixed variables if fixed_variable_treatment is set to make_constraint or make_parameter.
+    * Similar to ResortBounds, but also provides dual values for fixed variables if fixed_variable_treatment is set to make_constraint or make_parameter.
     *
     * @attention If there are fixed variables and fixed_variable_treatment is make_parameter (the default),
     *   then the Gradient of f(x) and the Jacobian of g(x) may be reevaluated here (that's why the function needs x).

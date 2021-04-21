@@ -681,7 +681,7 @@ bool TNLP::get_curr_violations(
    if( compl_x_L != NULL || compl_x_U != NULL )
    {
       // this should give XZe from (5)
-      tnlp_adapter->ResortBnds(*curr_compl_x_L(ip_data, ip_cq, orignlp, restonlp, scaled), compl_x_L,
+      tnlp_adapter->ResortBounds(*curr_compl_x_L(ip_data, ip_cq, orignlp, restonlp, scaled), compl_x_L,
          *curr_compl_x_U(ip_data, ip_cq, orignlp, restonlp, scaled), compl_x_U);
 
       if( n_x_fixed > 0 && fixed_variable_treatment == TNLPAdapter::MAKE_CONSTRAINT )
