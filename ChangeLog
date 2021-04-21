@@ -88,7 +88,7 @@ commit history.
           This can trigger a reevaluating of the gradient of the objective
           function or the Jacobian of the constraint functions. If this
           is not desired, then option fixed_variable_treatment can be set
-          to the new value make_parameter_nodual.
+          to the new value make_parameter_nodual. [#308]
         - Added TNLPAdapter::ResortBounds() and deprecated TNLPAdapter::ResortBnds().
 
 2021-0x-yy: 3.13.5

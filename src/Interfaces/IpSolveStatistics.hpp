@@ -57,7 +57,7 @@ public:
 
    /** Total CPU time, including function evaluations.
     *
-    * Included for backward compatibility.
+    * @deprecated Use TotalCpuTime() instead.
     */
    IPOPT_DEPRECATED
    Number TotalCPUTime() const
