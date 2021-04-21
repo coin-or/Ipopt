@@ -25,38 +25,18 @@ namespace Ipopt
 static const Index dbg_verbosity = 0;
 #endif
 
-AmplTNLP::AmplTNLP(
-   const SmartPtr<const Journalist>& jnlst,
+void AmplTNLP::gutsOfConstructor(
+   const SmartPtr<RegisteredOptions> regoptions,
    const SmartPtr<OptionsList>       options,
    char**&                           argv,
-   SmartPtr<AmplSuffixHandler>       suffix_handler /* = NULL */,
    bool                              allow_discrete /* = false */,
    SmartPtr<AmplOptionsList>         ampl_options_list /* = NULL */,
    const char*                       ampl_option_string /* = NULL */,
    const char*                       ampl_invokation_string /* = NULL */,
    const char*                       ampl_banner_string /* = NULL */,
    std::string*                      nl_file_content /* = NULL */
-)
-   : TNLP(),
-     jnlst_(jnlst),
-     asl_(NULL),
-     obj_sign_(1),
-     nz_h_full_(-1),
-     x_sol_(NULL),
-     z_L_sol_(NULL),
-     z_U_sol_(NULL),
-     g_sol_(NULL),
-     lambda_sol_(NULL),
-     obj_sol_(0.0),
-     objval_called_with_current_x_(false),
-     conval_called_with_current_x_(false),
-     hesset_called_(false),
-     set_active_objective_called_(false),
-     Oinfo_ptr_(NULL),
-     suffix_handler_(suffix_handler)
+   )
 {
-   DBG_START_METH("AmplTNLP::AmplTNLP", dbg_verbosity);
-
    // The ASL include files #define certain
    // variables that they expect you to work with.
    // These variables then appear as though they are
@@ -74,7 +54,7 @@ AmplTNLP::AmplTNLP(
    nerror_ = (void*) fint_nerror;
 
    // Read the options and stub
-   char* stub = get_options(options, ampl_options_list, ampl_option_string, ampl_invokation_string, ampl_banner_string,
+   char* stub = get_options(regoptions, options, ampl_options_list, ampl_option_string, ampl_invokation_string, ampl_banner_string,
                             argv);
    FILE* nl = NULL;
    if( nl_file_content )
@@ -131,9 +111,9 @@ AmplTNLP::AmplTNLP(
    havepi0 = new char[n_con];
 
    // prepare for suffixes
-   if( IsValid(suffix_handler) )
+   if( IsValid(suffix_handler_) )
    {
-      suffix_handler->PrepareAmplForSuffixes(asl_);
+      suffix_handler_->PrepareAmplForSuffixes(asl);
    }
 
    // read the rest of the nl file
@@ -195,6 +175,77 @@ AmplTNLP::AmplTNLP(
          break;
       }
    }
+}
+
+AmplTNLP::AmplTNLP(
+   const SmartPtr<const Journalist>& jnlst,
+   const SmartPtr<RegisteredOptions> regoptions,
+   const SmartPtr<OptionsList>       options,
+   char**&                           argv,
+   SmartPtr<AmplSuffixHandler>       suffix_handler /* = NULL */,
+   bool                              allow_discrete /* = false */,
+   SmartPtr<AmplOptionsList>         ampl_options_list /* = NULL */,
+   const char*                       ampl_option_string /* = NULL */,
+   const char*                       ampl_invokation_string /* = NULL */,
+   const char*                       ampl_banner_string /* = NULL */,
+   std::string*                      nl_file_content /* = NULL */
+)
+   : TNLP(),
+     jnlst_(jnlst),
+     asl_(NULL),
+     obj_sign_(1),
+     nz_h_full_(-1),
+     x_sol_(NULL),
+     z_L_sol_(NULL),
+     z_U_sol_(NULL),
+     g_sol_(NULL),
+     lambda_sol_(NULL),
+     obj_sol_(0.0),
+     objval_called_with_current_x_(false),
+     conval_called_with_current_x_(false),
+     hesset_called_(false),
+     set_active_objective_called_(false),
+     Oinfo_ptr_(NULL),
+     suffix_handler_(suffix_handler)
+{
+   DBG_START_METH("AmplTNLP::AmplTNLP", dbg_verbosity);
+
+   gutsOfConstructor(regoptions, options, argv, allow_discrete, ampl_options_list, ampl_option_string, ampl_invokation_string, ampl_banner_string, nl_file_content);
+}
+
+AmplTNLP::AmplTNLP(
+   const SmartPtr<const Journalist>& jnlst,
+   const SmartPtr<OptionsList>       options,
+   char**&                           argv,
+   SmartPtr<AmplSuffixHandler>       suffix_handler /* = NULL */,
+   bool                              allow_discrete /* = false */,
+   SmartPtr<AmplOptionsList>         ampl_options_list /* = NULL */,
+   const char*                       ampl_option_string /* = NULL */,
+   const char*                       ampl_invokation_string /* = NULL */,
+   const char*                       ampl_banner_string /* = NULL */,
+   std::string*                      nl_file_content /* = NULL */
+)
+   : TNLP(),
+     jnlst_(jnlst),
+     asl_(NULL),
+     obj_sign_(1),
+     nz_h_full_(-1),
+     x_sol_(NULL),
+     z_L_sol_(NULL),
+     z_U_sol_(NULL),
+     g_sol_(NULL),
+     lambda_sol_(NULL),
+     obj_sol_(0.0),
+     objval_called_with_current_x_(false),
+     conval_called_with_current_x_(false),
+     hesset_called_(false),
+     set_active_objective_called_(false),
+     Oinfo_ptr_(NULL),
+     suffix_handler_(suffix_handler)
+{
+   DBG_START_METH("AmplTNLP::AmplTNLP", dbg_verbosity);
+
+   gutsOfConstructor(NULL, options, argv, allow_discrete, ampl_options_list, ampl_option_string, ampl_invokation_string, ampl_banner_string, nl_file_content);
 }
 
 void AmplTNLP::set_active_objective(
@@ -1366,6 +1417,7 @@ void AmplOptionsList::PrintDoxygen(
 
 char*
 AmplTNLP::get_options(
+   const SmartPtr<RegisteredOptions> regoptions,
    const SmartPtr<OptionsList>& options,
    SmartPtr<AmplOptionsList>&   ampl_options_list,
    const char*                  ampl_option_string,
@@ -1381,169 +1433,158 @@ AmplTNLP::get_options(
       ampl_options_list = new AmplOptionsList();
    }
 
-   // Output
-   ampl_options_list->AddAmplOption("print_level", "print_level", AmplOptionsList::Integer_Option, "Verbosity level");
-   ampl_options_list->AddAmplOption("outlev", "print_level", AmplOptionsList::Integer_Option, "Verbosity level");
-   ampl_options_list->AddAmplOption("print_user_options", "print_user_options", AmplOptionsList::String_Option,
-                                    "Toggle printing of user options");
-   ampl_options_list->AddAmplOption("print_options_documentation", "print_options_documentation",
-                                    AmplOptionsList::String_Option, "Print all available options (for ipopt.opt)");
-   ampl_options_list->AddAmplOption("output_file", "output_file", AmplOptionsList::String_Option,
-                                    "File name of an output file (leave unset for no file output)");
-   ampl_options_list->AddAmplOption("file_print_level", "file_print_level", AmplOptionsList::Integer_Option,
-                                    "Verbosity level for output file");
-   ampl_options_list->AddAmplOption("option_file_name", "option_file_name", AmplOptionsList::String_Option,
-                                    "File name of options file (default: ipopt.opt)");
+   if( IsValid(regoptions) )
+   {
+      for( RegisteredOptions::RegOptionsList::const_iterator it_opt(regoptions->RegisteredOptionsList().begin()); it_opt != regoptions->RegisteredOptionsList().end(); ++it_opt )
+      {
+         AmplOptionsList::AmplOptionType ampltype = AmplOptionsList::Number_Option;
 
-   // Termination
-   ampl_options_list->AddAmplOption("tol", "tol", AmplOptionsList::Number_Option,
-                                    "Desired convergence tolerance (relative)");
-   ampl_options_list->AddAmplOption("max_iter", "max_iter", AmplOptionsList::Integer_Option,
-                                    "Maximum number of iterations");
+         switch( it_opt->second->Type() )
+         {
+            case Ipopt::OT_Number:
+               ampltype = AmplOptionsList::Number_Option;
+               break;
+            case Ipopt::OT_Integer:
+               ampltype = AmplOptionsList::Integer_Option;
+               break;
+            case Ipopt::OT_String:
+               ampltype = AmplOptionsList::String_Option;
+               break;
+            case Ipopt::OT_Unknown:
+               continue;
+         }
+         ampl_options_list->AddAmplOption(it_opt->first, it_opt->first, ampltype, it_opt->second->ShortDescription());
+      }
+   }
+   else
+   {
+      // old deprecated use of AmplTNLP: manually list some options
+      // Output
+      ampl_options_list->AddAmplOption("print_level", "print_level", AmplOptionsList::Integer_Option, "Verbosity level");
+      ampl_options_list->AddAmplOption("print_user_options", "print_user_options", AmplOptionsList::String_Option,
+                                       "Toggle printing of user options");
+      ampl_options_list->AddAmplOption("print_options_documentation", "print_options_documentation",
+                                       AmplOptionsList::String_Option, "Print all available options (for ipopt.opt)");
+      ampl_options_list->AddAmplOption("output_file", "output_file", AmplOptionsList::String_Option,
+                                       "File name of an output file (leave unset for no file output)");
+      ampl_options_list->AddAmplOption("file_print_level", "file_print_level", AmplOptionsList::Integer_Option,
+                                       "Verbosity level for output file");
+      ampl_options_list->AddAmplOption("option_file_name", "option_file_name", AmplOptionsList::String_Option,
+                                       "File name of options file (default: ipopt.opt)");
+
+      // Termination
+      ampl_options_list->AddAmplOption("tol", "tol", AmplOptionsList::Number_Option,
+                                       "Desired convergence tolerance (relative)");
+      ampl_options_list->AddAmplOption("max_iter", "max_iter", AmplOptionsList::Integer_Option,
+                                       "Maximum number of iterations");
+      ampl_options_list->AddAmplOption("max_wall_time", "max_wall_time", AmplOptionsList::Number_Option, "Wallclock time limit");
+      ampl_options_list->AddAmplOption("max_cpu_time", "max_cpu_time", AmplOptionsList::Number_Option, "CPU time limit");
+      ampl_options_list->AddAmplOption("compl_inf_tol", "compl_inf_tol", AmplOptionsList::Number_Option,
+                                       "Acceptance threshold for the complementarity conditions");
+      ampl_options_list->AddAmplOption("dual_inf_tol", "dual_inf_tol", AmplOptionsList::Number_Option,
+                                       "Desired threshold for the dual infeasibility");
+      ampl_options_list->AddAmplOption("constr_viol_tol", "constr_viol_tol", AmplOptionsList::Number_Option,
+                                       "Desired threshold for the constraint violation");
+      ampl_options_list->AddAmplOption("acceptable_tol", "acceptable_tol", AmplOptionsList::Number_Option,
+                                       "Acceptable convergence tolerance (relative)");
+      ampl_options_list->AddAmplOption("acceptable_compl_inf_tol", "acceptable_compl_inf_tol",
+                                       AmplOptionsList::Number_Option, "Acceptance threshold for the complementarity conditions");
+      ampl_options_list->AddAmplOption("acceptable_dual_inf_tol", "acceptable_dual_inf_tol",
+                                       AmplOptionsList::Number_Option, "Acceptance threshold for the dual infeasibility");
+      ampl_options_list->AddAmplOption("acceptable_constr_viol_tol", "acceptable_constr_viol_tol",
+                                       AmplOptionsList::Number_Option, "Acceptance threshold for the constraint violation");
+
+      ampl_options_list->AddAmplOption("diverging_iterates_tol", "diverging_iterates_tol", AmplOptionsList::Number_Option,
+                                       "Threshold for maximal value of primal iterates");
+
+      // NLP scaling
+      ampl_options_list->AddAmplOption("obj_scaling_factor", "obj_scaling_factor", AmplOptionsList::Number_Option,
+                                       "Scaling factor for the objective function");
+      ampl_options_list->AddAmplOption("nlp_scaling_method", "nlp_scaling_method", AmplOptionsList::String_Option,
+                                       "Select the technique used for scaling the NLP");
+      ampl_options_list->AddAmplOption("nlp_scaling_max_gradient", "nlp_scaling_max_gradient",
+                                       AmplOptionsList::Number_Option, "Maximum gradient after scaling");
+
+      // NLP corrections
+      ampl_options_list->AddAmplOption("bound_relax_factor", "bound_relax_factor", AmplOptionsList::Number_Option,
+                                       "Factor for initial relaxation of the bounds");
+      ampl_options_list->AddAmplOption("honor_original_bounds", "honor_original_bounds", AmplOptionsList::String_Option,
+                                       "If no, solution might slightly violate bounds");
+
+      // Barrier parameter
+      ampl_options_list->AddAmplOption("mu_strategy", "mu_strategy", AmplOptionsList::String_Option,
+                                       "Update strategy for barrier parameter");
+      ampl_options_list->AddAmplOption("mu_oracle", "mu_oracle", AmplOptionsList::String_Option,
+                                       "Oracle for a new barrier parameter in the adaptive strategy");
+      // Barrier parameter
+      ampl_options_list->AddAmplOption("mu_max", "mu_max", AmplOptionsList::Number_Option,
+                                       "Maximal value for barrier parameter for adaptive strategy");
+      ampl_options_list->AddAmplOption("mu_init", "mu_init", AmplOptionsList::Number_Option,
+                                       "Initial value for the barrier parameter");
+
+      // Initialization
+      ampl_options_list->AddAmplOption("bound_frac", "bound_frac", AmplOptionsList::Number_Option,
+                                       "Desired minimal relative distance of initial point to bound");
+      ampl_options_list->AddAmplOption("bound_push", "bound_push", AmplOptionsList::Number_Option,
+                                       "Desired minimal absolute distance of initial point to bound");
+      ampl_options_list->AddAmplOption("slack_bound_frac", "slack_bound_frac", AmplOptionsList::Number_Option,
+                                       "Desired minimal relative distance of initial slack to bound");
+      ampl_options_list->AddAmplOption("slack_bound_push", "slack_bound_push", AmplOptionsList::Number_Option,
+                                       "Desired minimal absolute distance of initial slack to bound");
+      ampl_options_list->AddAmplOption("bound_mult_init_val", "bound_mult_init_val", AmplOptionsList::Number_Option,
+                                       "Initial value for the bound multipliers");
+      ampl_options_list->AddAmplOption("constr_mult_init_max", "constr_mult_init_max", AmplOptionsList::Number_Option,
+                                       "Maximal allowed least-square guess of constraint multipliers");
+
+      // Multiplier updates
+      ampl_options_list->AddAmplOption("alpha_for_y", "alpha_for_y", AmplOptionsList::String_Option,
+                                       "Step size for constraint multipliers");
+
+      // Line search
+      ampl_options_list->AddAmplOption("max_soc", "max_soc", AmplOptionsList::Integer_Option,
+                                       "Maximal number of second order correction trial steps");
+      ampl_options_list->AddAmplOption("watchdog_shortened_iter_trigger", "watchdog_shortened_iter_trigger",
+                                       AmplOptionsList::Integer_Option, "Trigger counter for watchdog procedure");
+
+      // Restoration phase
+      ampl_options_list->AddAmplOption("expect_infeasible_problem", "expect_infeasible_problem",
+                                       AmplOptionsList::String_Option, "Enable heuristics to quickly detect an infeasible problem");
+      ampl_options_list->AddAmplOption("required_infeasibility_reduction", "required_infeasibility_reduction",
+                                       AmplOptionsList::Number_Option, "Required infeasibility reduction in restoration phase");
+
+      // Added for Warm-Start
+      ampl_options_list->AddAmplOption("warm_start_init_point", "warm_start_init_point", AmplOptionsList::String_Option,
+                                       "Enables to specify bound multiplier values");
+      ampl_options_list->AddAmplOption("warm_start_bound_push", "warm_start_bound_push", AmplOptionsList::Number_Option,
+                                       "Enables to specify how much should variables should be pushed inside the feasible region");
+      ampl_options_list->AddAmplOption("warm_start_mult_bound_push", "warm_start_mult_bound_push",
+                                       AmplOptionsList::Number_Option,
+                                       "Enables to specify how much should bound multipliers should be pushed inside the feasible region");
+
+      // Quasi-Newton
+      ampl_options_list->AddAmplOption("hessian_approximation", "hessian_approximation", AmplOptionsList::String_Option,
+                                       "Can enable Quasi-Newton approximation of hessian");
+      // Linear solver
+      ampl_options_list->AddAmplOption("linear_solver", "linear_solver", AmplOptionsList::String_Option,
+                                       "Linear solver to be used for step calculation");
+      ampl_options_list->AddAmplOption("linear_system_scaling", "linear_system_scaling", AmplOptionsList::String_Option,
+                                       "Method for scaling the linear systems");
+      ampl_options_list->AddAmplOption("linear_scaling_on_demand", "linear_scaling_on_demand",
+                                       AmplOptionsList::String_Option, "Enables heuristic for scaling only when seems required");
+      ampl_options_list->AddAmplOption("max_refinement_steps", "max_refinement_steps", AmplOptionsList::Integer_Option,
+                                       "Maximal number of iterative refinement steps per linear system solve");
+      ampl_options_list->AddAmplOption("min_refinement_steps", "min_refinement_steps", AmplOptionsList::Integer_Option,
+                                       "Minimum number of iterative refinement steps per linear system solve");
+
+      // Quasi-Newton
+      ampl_options_list->AddAmplOption("hessian_approximation", "hessian_approximation", AmplOptionsList::String_Option,
+                                       "Can enable Quasi-Newton approximation of hessian");
+   }
+
+   // Synonyms for AMPL interface only
+   ampl_options_list->AddAmplOption("outlev", "print_level", AmplOptionsList::Integer_Option, "Verbosity level");
    ampl_options_list->AddAmplOption("maxit", "max_iter", AmplOptionsList::Integer_Option,
                                     "Maximum number of iterations");
-   ampl_options_list->AddAmplOption("max_wall_time", "max_wall_time", AmplOptionsList::Number_Option, "Wallclock time limit");
-   ampl_options_list->AddAmplOption("max_cpu_time", "max_cpu_time", AmplOptionsList::Number_Option, "CPU time limit");
-   ampl_options_list->AddAmplOption("compl_inf_tol", "compl_inf_tol", AmplOptionsList::Number_Option,
-                                    "Acceptance threshold for the complementarity conditions");
-   ampl_options_list->AddAmplOption("dual_inf_tol", "dual_inf_tol", AmplOptionsList::Number_Option,
-                                    "Desired threshold for the dual infeasibility");
-   ampl_options_list->AddAmplOption("constr_viol_tol", "constr_viol_tol", AmplOptionsList::Number_Option,
-                                    "Desired threshold for the constraint violation");
-   ampl_options_list->AddAmplOption("acceptable_tol", "acceptable_tol", AmplOptionsList::Number_Option,
-                                    "Acceptable convergence tolerance (relative)");
-   ampl_options_list->AddAmplOption("acceptable_compl_inf_tol", "acceptable_compl_inf_tol",
-                                    AmplOptionsList::Number_Option, "Acceptance threshold for the complementarity conditions");
-   ampl_options_list->AddAmplOption("acceptable_dual_inf_tol", "acceptable_dual_inf_tol",
-                                    AmplOptionsList::Number_Option, "Acceptance threshold for the dual infeasibility");
-   ampl_options_list->AddAmplOption("acceptable_constr_viol_tol", "acceptable_constr_viol_tol",
-                                    AmplOptionsList::Number_Option, "Acceptance threshold for the constraint violation");
-
-   ampl_options_list->AddAmplOption("diverging_iterates_tol", "diverging_iterates_tol", AmplOptionsList::Number_Option,
-                                    "Threshold for maximal value of primal iterates");
-
-   // NLP scaling
-   ampl_options_list->AddAmplOption("obj_scaling_factor", "obj_scaling_factor", AmplOptionsList::Number_Option,
-                                    "Scaling factor for the objective function");
-   ampl_options_list->AddAmplOption("nlp_scaling_method", "nlp_scaling_method", AmplOptionsList::String_Option,
-                                    "Select the technique used for scaling the NLP");
-   ampl_options_list->AddAmplOption("nlp_scaling_max_gradient", "nlp_scaling_max_gradient",
-                                    AmplOptionsList::Number_Option, "Maximum gradient after scaling");
-
-   // NLP corrections
-   ampl_options_list->AddAmplOption("bound_relax_factor", "bound_relax_factor", AmplOptionsList::Number_Option,
-                                    "Factor for initial relaxation of the bounds");
-   ampl_options_list->AddAmplOption("honor_original_bounds", "honor_original_bounds", AmplOptionsList::String_Option,
-                                    "If no, solution might slightly violate bounds");
-
-   // Barrier parameter
-   ampl_options_list->AddAmplOption("mu_strategy", "mu_strategy", AmplOptionsList::String_Option,
-                                    "Update strategy for barrier parameter");
-   ampl_options_list->AddAmplOption("mu_oracle", "mu_oracle", AmplOptionsList::String_Option,
-                                    "Oracle for a new barrier parameter in the adaptive strategy");
-   // Barrier parameter
-   ampl_options_list->AddAmplOption("mu_max", "mu_max", AmplOptionsList::Number_Option,
-                                    "Maximal value for barrier parameter for adaptive strategy");
-   ampl_options_list->AddAmplOption("mu_init", "mu_init", AmplOptionsList::Number_Option,
-                                    "Initial value for the barrier parameter");
-
-   // Initialization
-   ampl_options_list->AddAmplOption("bound_frac", "bound_frac", AmplOptionsList::Number_Option,
-                                    "Desired minimal relative distance of initial point to bound");
-   ampl_options_list->AddAmplOption("bound_push", "bound_push", AmplOptionsList::Number_Option,
-                                    "Desired minimal absolute distance of initial point to bound");
-   ampl_options_list->AddAmplOption("slack_bound_frac", "slack_bound_frac", AmplOptionsList::Number_Option,
-                                    "Desired minimal relative distance of initial slack to bound");
-   ampl_options_list->AddAmplOption("slack_bound_push", "slack_bound_push", AmplOptionsList::Number_Option,
-                                    "Desired minimal absolute distance of initial slack to bound");
-   ampl_options_list->AddAmplOption("bound_mult_init_val", "bound_mult_init_val", AmplOptionsList::Number_Option,
-                                    "Initial value for the bound multipliers");
-   ampl_options_list->AddAmplOption("constr_mult_init_max", "constr_mult_init_max", AmplOptionsList::Number_Option,
-                                    "Maximal allowed least-square guess of constraint multipliers");
-
-   // Multiplier updates
-   ampl_options_list->AddAmplOption("alpha_for_y", "alpha_for_y", AmplOptionsList::String_Option,
-                                    "Step size for constraint multipliers");
-
-   // Line search
-   ampl_options_list->AddAmplOption("max_soc", "max_soc", AmplOptionsList::Integer_Option,
-                                    "Maximal number of second order correction trial steps");
-   ampl_options_list->AddAmplOption("watchdog_shortened_iter_trigger", "watchdog_shortened_iter_trigger",
-                                    AmplOptionsList::Integer_Option, "Trigger counter for watchdog procedure");
-
-   // Restoration phase
-   ampl_options_list->AddAmplOption("expect_infeasible_problem", "expect_infeasible_problem",
-                                    AmplOptionsList::String_Option, "Enable heuristics to quickly detect an infeasible problem");
-   ampl_options_list->AddAmplOption("required_infeasibility_reduction", "required_infeasibility_reduction",
-                                    AmplOptionsList::Number_Option, "Required infeasibility reduction in restoration phase");
-
-   // Added for Warm-Start
-   ampl_options_list->AddAmplOption("warm_start_init_point", "warm_start_init_point", AmplOptionsList::String_Option,
-                                    "Enables to specify bound multiplier values");
-   ampl_options_list->AddAmplOption("warm_start_bound_push", "warm_start_bound_push", AmplOptionsList::Number_Option,
-                                    "Enables to specify how much should variables should be pushed inside the feasible region");
-   ampl_options_list->AddAmplOption("warm_start_mult_bound_push", "warm_start_mult_bound_push",
-                                    AmplOptionsList::Number_Option,
-                                    "Enables to specify how much should bound multipliers should be pushed inside the feasible region");
-
-   // Quasi-Newton
-   ampl_options_list->AddAmplOption("hessian_approximation", "hessian_approximation", AmplOptionsList::String_Option,
-                                    "Can enable Quasi-Newton approximation of hessian");
-   // Linear solver
-   ampl_options_list->AddAmplOption("linear_solver", "linear_solver", AmplOptionsList::String_Option,
-                                    "Linear solver to be used for step calculation");
-   ampl_options_list->AddAmplOption("linear_system_scaling", "linear_system_scaling", AmplOptionsList::String_Option,
-                                    "Method for scaling the linear systems");
-   ampl_options_list->AddAmplOption("linear_scaling_on_demand", "linear_scaling_on_demand",
-                                    AmplOptionsList::String_Option, "Enables heuristic for scaling only when seems required");
-   ampl_options_list->AddAmplOption("max_refinement_steps", "max_refinement_steps", AmplOptionsList::Integer_Option,
-                                    "Maximal number of iterative refinement steps per linear system solve");
-   ampl_options_list->AddAmplOption("min_refinement_steps", "min_refinement_steps", AmplOptionsList::Integer_Option,
-                                    "Minimum number of iterative refinement steps per linear system solve");
-
-   // Quasi-Newton
-   ampl_options_list->AddAmplOption("hessian_approximation", "hessian_approximation", AmplOptionsList::String_Option,
-                                    "Can enable Quasi-Newton approximation of hessian");
-
-   // Special linear solver options
-   ampl_options_list->AddAmplOption("ma27_pivtol", "ma27_pivtol", AmplOptionsList::Number_Option,
-                                    "Pivot tolerance for the linear solver MA27");
-   ampl_options_list->AddAmplOption("ma27_pivtolmax", "ma27_pivtolmax", AmplOptionsList::Number_Option,
-                                    "Maximal pivot tolerance for the linear solver MA27");
-
-   ampl_options_list->AddAmplOption("ma57_pivtol", "ma57_pivtol", AmplOptionsList::Number_Option,
-                                    "Pivot tolerance for the linear solver MA57");
-   ampl_options_list->AddAmplOption("ma57_pivtolmax", "ma57_pivtolmax", AmplOptionsList::Number_Option,
-                                    "Maximal pivot tolerance for the linear solver MA57");
-   ampl_options_list->AddAmplOption("ma57_pivot_order", "ma57_pivot_order", AmplOptionsList::Integer_Option,
-                                    "Controls pivot order in MA57");
-
-   ampl_options_list->AddAmplOption("pardiso_matching_strategy", "pardiso_matching_strategy",
-                                    AmplOptionsList::String_Option, "Matching strategy for linear solver Pardiso");
-   //ampl_options_list->AddAmplOption("pardiso_out_of_core_power",
-   //                                 "pardiso_out_of_core_power",
-   //                                 AmplOptionsList::Integer_Option,
-   //                                 "Enables out-of-core version of linear solver Pardiso");
-
-#ifdef IPOPT_HAS_WSMP
-
-   ampl_options_list->AddAmplOption("wsmp_num_threads",
-                                    "wsmp_num_threads",
-                                    AmplOptionsList::Integer_Option,
-                                    "Number of threads to be used in WSMP");
-   ampl_options_list->AddAmplOption("wsmp_pivtol",
-                                    "wsmp_pivtol",
-                                    AmplOptionsList::Number_Option,
-                                    "Pivot tolerance for the linear solver WSMP");
-   ampl_options_list->AddAmplOption("wsmp_pivtolmax",
-                                    "wsmp_pivtolmax",
-                                    AmplOptionsList::Number_Option,
-                                    "Maximum pivot tolerance for the linear solver WSMP");
-   ampl_options_list->AddAmplOption("wsmp_scaling",
-                                    "wsmp_scaling",
-                                    AmplOptionsList::Integer_Option,
-                                    "Determines how the matrix is scaled by WSMP");
-#endif
 
    // AMPL's wantsol option
    // description was originally taken from WS_desc_ASL+5, but that didn't make it through DLL boundaries

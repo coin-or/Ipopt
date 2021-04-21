@@ -90,6 +90,13 @@ commit history.
           is not desired, then option fixed_variable_treatment can be set
           to the new value make_parameter_nodual. [#308]
         - Added TNLPAdapter::ResortBounds() and deprecated TNLPAdapter::ResortBnds().
+        - All Ipopt options are now also available via the AMPL interface,
+          that is, can be set in AMPL via an option ipopt_options "..." statement.
+        - AmplTNLP constructor and AmplTNLP::get_options() now expect to
+          receive a pointer to a RegisteredOptions object as well.
+          Previous versions of these methods are still available but deprecated.
+          Using a NULL pointer for the RegisteredOptions argument is
+          also deprecated.
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]

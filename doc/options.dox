@@ -1859,66 +1859,14 @@ Possible values:
 
 \section OPTIONS_AMPL Options available via the AMPL Interface
 
-The following is a list of options that is available via AMPL:
+All \ref OPTIONS_REF "Ipopt options" are also available via the AMPL interface.
+In addition, these options are available:
 
 | Option | Description |
 |:-------|:------------|
-| \ref OPT_acceptable_compl_inf_tol "acceptable_compl_inf_tol" | Acceptance threshold for the complementarity conditions |
-| \ref OPT_acceptable_constr_viol_tol "acceptable_constr_viol_tol" | Acceptance threshold for the constraint violation |
-| \ref OPT_acceptable_dual_inf_tol "acceptable_dual_inf_tol" | Acceptance threshold for the dual infeasibility |
-| \ref OPT_acceptable_tol "acceptable_tol" | Acceptable convergence tolerance (relative) |
-| \ref OPT_alpha_for_y "alpha_for_y" | Step size for constraint multipliers |
-| \ref OPT_bound_frac "bound_frac" | Desired minimal relative distance of initial point to bound |
-| \ref OPT_bound_mult_init_val "bound_mult_init_val" | Initial value for the bound multipliers |
-| \ref OPT_bound_push "bound_push" | Desired minimal absolute distance of initial point to bound |
-| \ref OPT_bound_relax_factor "bound_relax_factor" | Factor for initial relaxation of the bounds |
-| \ref OPT_compl_inf_tol "compl_inf_tol" | Acceptance threshold for the complementarity conditions |
-| \ref OPT_constr_mult_init_max "constr_mult_init_max" | Maximal allowed least-square guess of constraint multipliers |
-| \ref OPT_constr_viol_tol "constr_viol_tol" | Desired threshold for the constraint violation |
-| \ref OPT_diverging_iterates_tol "diverging_iterates_tol" | Threshold for maximal value of primal iterates |
-| \ref OPT_dual_inf_tol "dual_inf_tol" | Desired threshold for the dual infeasibility |
-| \ref OPT_expect_infeasible_problem "expect_infeasible_problem" | Enable heuristics to quickly detect an infeasible problem |
-| \ref OPT_file_print_level "file_print_level" | Verbosity level for output file |
 | halt_on_ampl_error | Exit with message on evaluation error |
-| \ref OPT_hessian_approximation "hessian_approximation" | Can enable Quasi-Newton approximation of hessian |
-| \ref OPT_honor_original_bounds "honor_original_bounds" | If no, solution might slightly violate bounds |
-| \ref OPT_linear_scaling_on_demand "linear_scaling_on_demand" | Enables heuristic for scaling only when seems required |
-| \ref OPT_linear_solver "linear_solver" | Linear solver to be used for step calculation |
-| \ref OPT_linear_system_scaling "linear_system_scaling" | Method for scaling the linear systems |
-| \ref OPT_ma27_pivtol "ma27_pivtol" | Pivot tolerance for the linear solver MA27 |
-| \ref OPT_ma27_pivtolmax "ma27_pivtolmax" | Maximal pivot tolerance for the linear solver MA27 |
-| \ref OPT_ma57_pivot_order "ma57_pivot_order" | Controls pivot order in MA57 |
-| \ref OPT_ma57_pivtol "ma57_pivtol" | Pivot tolerance for the linear solver MA57 |
-| \ref OPT_ma57_pivtolmax "ma57_pivtolmax" | Maximal pivot tolerance for the linear solver MA57 |
-| \ref OPT_max_cpu_time "max_cpu_time" | CPU time limit |
-| \ref OPT_max_wall_time "max_wall_time" | Wallclock time limit |
-| \ref OPT_max_iter "max_iter" | Maximum number of iterations |
-| \ref OPT_max_refinement_steps "max_refinement_steps" | Maximal number of iterative refinement steps per linear system solve |
-| \ref OPT_max_soc "max_soc" | Maximal number of second order correction trial steps |
-| \ref OPT_max_iter "maxit" (Ipopt name: max_iter) | Maximum number of iterations |
-| \ref OPT_min_refinement_steps "min_refinement_steps" | Minimum number of iterative refinement steps per linear system solve |
-| \ref OPT_mu_init "mu_init" | Initial value for the barrier parameter |
-| \ref OPT_mu_max "mu_max" | Maximal value for barrier parameter for adaptive strategy |
-| \ref OPT_mu_oracle "mu_oracle" | Oracle for a new barrier parameter in the adaptive strategy |
-| \ref OPT_mu_strategy "mu_strategy" | Update strategy for barrier parameter |
-| \ref OPT_nlp_scaling_max_gradient "nlp_scaling_max_gradient" | Maximum gradient after scaling |
-| \ref OPT_nlp_scaling_method "nlp_scaling_method" | Select the technique used for scaling the NLP |
-| \ref OPT_obj_scaling_factor "obj_scaling_factor" | Scaling factor for the objective function |
-| \ref OPT_option_file_name "option_file_name" | File name of options file (default: ipopt.opt) |
-| \ref OPT_print_level "outlev" (Ipopt name: print_level) | Verbosity level |
-| \ref OPT_output_file "output_file" | File name of an output file (leave unset for no file output) |
-| \ref OPT_pardiso_matching_strategy "pardiso_matching_strategy" | Matching strategy for linear solver Pardiso |
-| \ref OPT_print_level "print_level" | Verbosity level |
-| \ref OPT_print_options_documentation "print_options_documentation" | Print all available options (for ipopt.opt) |
-| \ref OPT_print_user_options "print_user_options" | Toggle printing of user options |
-| \ref OPT_required_infeasibility_reduction "required_infeasibility_reduction" | Required infeasibility reduction in restoration phase |
-| \ref OPT_slack_bound_frac "slack_bound_frac" | Desired minimal relative distance of initial slack to bound |
-| \ref OPT_slack_bound_push "slack_bound_push" | Desired minimal absolute distance of initial slack to bound |
-| \ref OPT_tol "tol" | Desired convergence tolerance (relative) |
-| wantsol | solution report without -AMPL: sum of;		1 ==> write .sol file;		2 ==> print primal variable values;		4 ==> print dual variable values;		8 ==> do not print solution message |
-| \ref OPT_warm_start_bound_push "warm_start_bound_push" | Enables to specify how much should variables should be pushed inside the feasible region |
-| \ref OPT_warm_start_init_point "warm_start_init_point" | Enables to specify bound multiplier values |
-| \ref OPT_warm_start_mult_bound_push "warm_start_mult_bound_push" | Enables to specify how much should bound multipliers should be pushed inside the feasible region |
-| \ref OPT_watchdog_shortened_iter_trigger "watchdog_shortened_iter_trigger" | Trigger counter for watchdog procedure |
+| wantsol | solution report without -AMPL: sum of; 1 => write .sol file; 2 => print primal variable values; 4 => print dual variable values; 8 => do not print solution message |
+| maxit | Synonym for \ref OPT_max_iter "max_iter" |
+| outlev | Synonym for \ref OPT_print_level "print_level" |
 
 */

@@ -321,6 +321,25 @@ public:
    /** Constructor. */
    AmplTNLP(
       const SmartPtr<const Journalist>& jnlst,
+      const SmartPtr<RegisteredOptions> regoptions,
+      const SmartPtr<OptionsList>       options,
+      char**&                           argv,
+      SmartPtr<AmplSuffixHandler>       suffix_handler = NULL,
+      bool                              allow_discrete = false,
+      SmartPtr<AmplOptionsList>         ampl_options_list = NULL,
+      const char*                       ampl_option_string = NULL,
+      const char*                       ampl_invokation_string = NULL,
+      const char*                       ampl_banner_string = NULL,
+      std::string*                      nl_file_content = NULL
+   );
+
+   /** Constructor without RegisteredOptions.
+    *
+    * @deprecated Use other constructor that also expects regoptions instead.
+    */
+   IPOPT_DEPRECATED
+   AmplTNLP(
+      const SmartPtr<const Journalist>& jnlst,
       const SmartPtr<OptionsList>       options,
       char**&                           argv,
       SmartPtr<AmplSuffixHandler>       suffix_handler = NULL,
@@ -596,6 +615,18 @@ private:
    );
    ///@}
 
+   void gutsOfConstructor(
+      const SmartPtr<RegisteredOptions> regoptions,
+      const SmartPtr<OptionsList>       options,
+      char**&                           argv,
+      bool                              allow_discrete /* = false */,
+      SmartPtr<AmplOptionsList>         ampl_options_list /* = NULL */,
+      const char*                       ampl_option_string /* = NULL */,
+      const char*                       ampl_invokation_string /* = NULL */,
+      const char*                       ampl_banner_string /* = NULL */,
+      std::string*                      nl_file_content /* = NULL */
+      );
+
 protected:
    /** Journalist */
    SmartPtr<const Journalist> jnlst_;
@@ -676,6 +707,7 @@ protected:
     *  @return a pointer to a char* with the name of the stub
     */
    char* get_options(
+      const SmartPtr<RegisteredOptions> regoptions,
       const SmartPtr<OptionsList>& options,
       SmartPtr<AmplOptionsList>&   ampl_options_list,
       const char*                  ampl_option_string,
@@ -683,6 +715,24 @@ protected:
       const char*                  ampl_banner_string,
       char**&                      argv
    );
+
+   /** Method for obtaining the name of the NL file and the options set from AMPL
+    *
+    *  @return a pointer to a char* with the name of the stub
+    *  @deprecated Use get_options() with RegisteredOptions argument instead.
+    */
+   IPOPT_DEPRECATED
+   char* get_options(
+      const SmartPtr<OptionsList>& options,
+      SmartPtr<AmplOptionsList>&   ampl_options_list,
+      const char*                  ampl_option_string,
+      const char*                  ampl_invokation_string,
+      const char*                  ampl_banner_string,
+      char**&                      argv
+   )
+   {
+      return get_options(NULL, options, ampl_options_list, ampl_option_string, ampl_invokation_string, ampl_banner_string, argv);
+   }
 
    /** whether the ampl nerror code is ok */
    bool nerror_ok(

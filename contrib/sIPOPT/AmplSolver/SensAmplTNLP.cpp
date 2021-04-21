@@ -24,6 +24,7 @@ static const Index dbg_verbosity = 1;
 
 SensAmplTNLP::SensAmplTNLP(
    const SmartPtr<const Journalist>& jnlst,
+   const SmartPtr<RegisteredOptions> regoptions,
    const SmartPtr<OptionsList>       options,
    char**&                           argv,
    SmartPtr<AmplSuffixHandler>       suffix_handler /* = NULL */,
@@ -36,7 +37,7 @@ SensAmplTNLP::SensAmplTNLP(
 )
    : AmplTNLP(
         jnlst, // gotta call constructor of base class properly
-        options, argv, suffix_handler /* = NULL */, allow_discrete /* = false */, ampl_options_list /* = NULL */,
+        regoptions, options, argv, suffix_handler /* = NULL */, allow_discrete /* = false */, ampl_options_list /* = NULL */,
         ampl_option_string /* = NULL */, ampl_invokation_string /* = NULL */, ampl_banner_string /* = NULL */,
         nl_file_content /* = NULL */),
      jnlst_(jnlst),

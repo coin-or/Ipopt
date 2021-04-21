@@ -82,7 +82,7 @@ int main(
    suffix_handler->AddAvailableSuffix("ipopt_zU_in", AmplSuffixHandler::Variable_Source,
                                       AmplSuffixHandler::Number_Type);
 
-   SmartPtr<TNLP> ampl_tnlp = new AmplTNLP(ConstPtr(app->Jnlst()), app->Options(), args, suffix_handler);
+   SmartPtr<TNLP> ampl_tnlp = new AmplTNLP(ConstPtr(app->Jnlst()), app->RegOptions(), app->Options(), args, suffix_handler);
 
    // Call Initialize again to process output related options
    retval = app->Initialize();

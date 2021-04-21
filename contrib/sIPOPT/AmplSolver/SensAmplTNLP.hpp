@@ -46,6 +46,7 @@ public:
    /** constructor */
    SensAmplTNLP(
       const SmartPtr<const Journalist>&  jnlst,
+      const SmartPtr<RegisteredOptions>  regoptions,
       const SmartPtr<OptionsList>        options,
       char**&                            argv,
       SmartPtr<AmplSuffixHandler>        suffix_handler = NULL,
