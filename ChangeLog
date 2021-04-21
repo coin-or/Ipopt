@@ -83,6 +83,12 @@ commit history.
           been extended by corresponding functions, too. The hs071 examples
           have been extended to show use of the new functions. Added test
           getcurr to test new functions. [#382, #451]
+        - Bound multipliers are now computed for fixed variables if
+          fixed_variable_treatment is set to make_parameter (the default).
+          This can trigger a reevaluating of the gradient of the objective
+          function or the Jacobian of the constraint functions. If this
+          is not desired, then option fixed_variable_treatment can be set
+          to the new value make_parameter_nodual.
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]

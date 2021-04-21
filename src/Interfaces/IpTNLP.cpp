@@ -530,21 +530,70 @@ bool TNLP::get_curr_iterate(
       return false;
 
    tnlp_adapter->GetFullDimensions(n_full, m_full);
-   if( n != n_full && (x != NULL || z_L != NULL || z_U != NULL) )
+   if( n != n_full && (x != NULL || (z_L != NULL && z_U != NULL)) )
       THROW_EXCEPTION(IpoptException, "Incorrect dimension of x given to TNLP::get_curr_iterate().\n");
    if( m != m_full && (lambda != NULL || g != NULL) )
       THROW_EXCEPTION(IpoptException, "Incorrect dimension of g(x) given to TNLP::get_curr_iterate().\n");
 
+   SmartPtr<const DenseVector> intern_x;
+   SmartPtr<const DenseVector> intern_y_c;
+   SmartPtr<const DenseVector> intern_y_d;
+
+   if( x != NULL || (z_L != NULL && z_U != NULL) )
+      intern_x = curr_x(ip_data, ip_cq, orignlp, restonlp, scaled);
+
+   if( (z_L != NULL && z_U != NULL) || lambda != NULL )
+   {
+      intern_y_c = curr_y_c(ip_data, ip_cq, orignlp, restonlp, scaled);
+      intern_y_d = curr_y_d(ip_data, ip_cq, orignlp, restonlp, scaled);
+   }
+
    // resort Ipopt-internal x to TNLP-version of x, i.e., reinsert fixed variables
    if( x != NULL )
-      tnlp_adapter->ResortX(*curr_x(ip_data, ip_cq, orignlp, restonlp, scaled), x);
+      tnlp_adapter->ResortX(*intern_x, x);
 
    // resort Ipopt-internal variable duals to TNLP-version
-   if( z_L != NULL || z_U != NULL )
-      tnlp_adapter->ResortBoundMultipliers(
-         *curr_y_c(ip_data, ip_cq, orignlp, restonlp, scaled),
-         *curr_z_L(ip_data, ip_cq, orignlp, restonlp, scaled), z_L,
-         *curr_z_U(ip_data, ip_cq, orignlp, restonlp, scaled), z_U);
+   if( z_L != NULL && z_U != NULL )
+   {
+      int n_x_fixed;
+      Index* x_fixed_map;
+      TNLPAdapter::FixedVariableTreatmentEnum fixed_variable_treatment;
+      tnlp_adapter->GetFixedVariables(n_x_fixed, x_fixed_map, fixed_variable_treatment);
+
+      if( !scaled || n_x_fixed == 0 || fixed_variable_treatment != TNLPAdapter::MAKE_PARAMETER )
+         tnlp_adapter->ResortBoundMultipliers(
+            *intern_x, *intern_y_c, *intern_y_d,
+            *curr_z_L(ip_data, ip_cq, orignlp, restonlp, scaled), z_L,
+            *curr_z_U(ip_data, ip_cq, orignlp, restonlp, scaled), z_U);
+      else
+      {
+         // ResortBoundMultipliers() doesn't work for scaled input on x, y_c, and y_d in this case
+         // so we pass on unscaled values of x, y_c, and y_d and then scale entries of z_L and z_U for fixed vars manually
+         tnlp_adapter->ResortBoundMultipliers(
+            *curr_x(ip_data, ip_cq, orignlp, restonlp, false),
+            *curr_y_c(ip_data, ip_cq, orignlp, restonlp, false),
+            *curr_y_d(ip_data, ip_cq, orignlp, restonlp, false),
+            *curr_z_L(ip_data, ip_cq, orignlp, restonlp, true), z_L,
+            *curr_z_U(ip_data, ip_cq, orignlp, restonlp, true), z_U);
+         Number obj_scal = orignlp->NLP_scaling()->apply_obj_scaling(1.0);
+         if( obj_scal != 1.0 )
+            for( Index i = 0; i < n_x_fixed; ++i )
+            {
+               if( obj_scal > 0.0 )
+               {
+                  z_L[x_fixed_map[i]] *= obj_scal;
+                  z_U[x_fixed_map[i]] *= obj_scal;
+               }
+               else
+               {
+                  // need to swap between z_L and z_U in this case
+                  Number tmp = -z_L[x_fixed_map[i]] * obj_scal;
+                  z_L[x_fixed_map[i]] = -z_U[x_fixed_map[i]] * obj_scal;
+                  z_U[x_fixed_map[i]] = tmp;
+               }
+            }
+      }
+   }
 
    // resort Ipopt-interval constraint activity to TNLP-version
    if( g != NULL )
@@ -570,7 +619,7 @@ bool TNLP::get_curr_iterate(
 
    // resort Ipopt-internal constraint duals to TNLP-version
    if( lambda != NULL )
-      tnlp_adapter->ResortG(*curr_y_c(ip_data, ip_cq, orignlp, restonlp, scaled), *curr_y_d(ip_data, ip_cq, orignlp, restonlp, scaled), lambda);
+      tnlp_adapter->ResortG(*intern_y_c, *intern_y_d, lambda);
 
    return true;
 }
@@ -666,8 +715,10 @@ bool TNLP::get_curr_violations(
 
    if( grad_lag_x != NULL )
    {
-      // this will set the derivative of the Lagrangian w.r.t. fixed variables to 0 (for any fixed_variables_treatment)
-      // the actual values are nowhere stored within Ipopt Data or CQ, since TNLPAdapter does not seem to pass them on
+      // this will set the derivative of the Lagrangian w.r.t. fixed variables to 0 if fixed_variable_treatment is make_parameter(_nodual)
+      // since the actual values are not computed within Ipopt
+      // but for fixed_variable_treatment=make_parameter, the bound multipliers (z_L and z_U) are computed by TNLP::ResortBoundMultipliers()
+      // such that the Gradient of the Lagrangian will be zero, so leaving them at 0 is correct here
       tnlp_adapter->ResortX(*curr_grad_lag_x(ip_data, ip_cq, orignlp, restonlp, scaled), grad_lag_x, false);
 
       // if fixed_variable_treatment is make_constraint, then fixed variable contribute y_c*x to the Lagrangian

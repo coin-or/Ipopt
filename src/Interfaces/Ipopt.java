@@ -619,13 +619,16 @@ public abstract class Ipopt
     * For the correspondence between scaled and unscaled solutions, see the detailed description of OrigIpoptNLP.
     * If Ipopt is in restoration mode, it maps the current iterate of restoration %NLP (see RestoIpoptNLP) back to the original TNLP.
     *
+    * If there are fixed variables and fixed_variable_treatment=make_parameter, then requesting z_L and z_U can trigger a reevaluation of
+    * the Gradient of the objective function and the Jacobian of the constraint functions.
+    *
     * @param ip_data (in)  Ipopt Data (pass on value given to intermediate_callback)
     * @param ip_cq   (in)  Ipopt Calculated Quantities (pass on value given to intermediate_callback)
     * @param scaled  (in)  whether to retrieve scaled or unscaled iterate
     * @param n       (in)  the number of variables \f$x\f$ in the problem; can be arbitrary if skipping x, z_L, and z_U
     * @param x       (out) buffer to store value of primal variables \f$x\f$, must have length at least n; pass null to skip retrieving x
-    * @param z_L     (out) buffer to store the lower bound multipliers \f$z_L\f$, must have length at least n; pass null to skip retrieving z_L
-    * @param z_U     (out) buffer to store the upper bound multipliers \f$z_U\f$, must have length at least n; pass null to skip retrieving z_U
+    * @param z_L     (out) buffer to store the lower bound multipliers \f$z_L\f$, must have length at least n; pass null to skip retrieving z_L and z_U
+    * @param z_U     (out) buffer to store the upper bound multipliers \f$z_U\f$, must have length at least n; pass null to skip retrieving z_L and z_U
     * @param m       (in)  the number of constraints \f$g(x)\f$; can be arbitrary if skipping g and lambda
     * @param g       (out) buffer to store the constraint values \f$g(x)\f$, must have length at least m; pass null to skip retrieving g
     * @param lambda  (out) buffer to store the constraint multipliers \f$\lambda\f$, must have length at least m; pass null to skip retrieving lambda
@@ -659,7 +662,6 @@ public abstract class Ipopt
     * from ip_cq of the internal NLP representation available into the form used by the TNLP.
     * If Ipopt is in restoration mode, it maps the current iterate of restoration %NLP (see RestoIpoptNLP) back to the original TNLP.
     *
-    * @note If fixed variables are treated as parameters (the default), then their corresponding entry in the derivative of the Lagrangian is set to 0.
     * @note If in restoration phase, then requesting grad_lag_x can trigger a call to eval_grad_f().
     *
     * @param ip_data    (in)  Ipopt Data (pass on value given to intermediate_callback)

@@ -18,7 +18,7 @@
 using namespace Ipopt;
 
 #ifdef IPOPT_SINGLE
-#define TESTTOL 1e-6
+#define TESTTOL 1e-5
 #else
 #define TESTTOL 1e-9
 #endif
@@ -429,10 +429,7 @@ public:
 
       // check gradient on Lagrangian
       ASSERTEQ(grad_lag_x[0], 1.0 + lambda[0] * 2*x[0] + lambda[1] * 2*x[0] - z_L[0]);
-      if( fixedvar_makeconstr_ )
-         ASSERTEQ(grad_lag_x[1], 1.0 + lambda[0] * 2*x[1] - z_L[1] + z_U[1]);
-      else
-         ASSERTEQ(grad_lag_x[1], 0.0);
+      ASSERTEQ(grad_lag_x[1], 1.0 + lambda[0] * 2*x[1] - z_L[1] + z_U[1]);
       ASSERTEQ(grad_lag_x[2], 1.0 + lambda[0] * 2*x[2] - lambda[1] * 2*x[2]);
 
       // check constraint violation
@@ -510,10 +507,7 @@ public:
       ASSERTEQ(s_compl_x_U[2], 0.0);
 
       ASSERTEQ(s_grad_lag_x[0], (1.0*obj_scaling + s_lambda[0] * 2*x[0] * g_scaling[0] + s_lambda[1] * 2*x[0] * g_scaling[1])/x_scaling[0] - s_z_L[0]);
-      if( fixedvar_makeconstr_ )
-         ASSERTEQ(s_grad_lag_x[1], (1.0*obj_scaling + s_lambda[0] * 2*x[1] * g_scaling[0])/x_scaling[1] - s_z_L[1] + s_z_U[1]);
-      else
-         ASSERTEQ(s_grad_lag_x[1], 0.0);
+      ASSERTEQ(s_grad_lag_x[1], (1.0*obj_scaling + s_lambda[0] * 2*x[1] * g_scaling[0])/x_scaling[1] - s_z_L[1] + s_z_U[1]);
       ASSERTEQ(s_grad_lag_x[2], (1.0*obj_scaling + s_lambda[0] * 2*x[2] * g_scaling[0] - s_lambda[1] * 2*x[2] * g_scaling[1])/x_scaling[2]);
 
       // check constraint violation
@@ -597,6 +591,9 @@ int main(
       return EXIT_FAILURE;
 
    if( run(true, true, true, false) != EXIT_SUCCESS )
+      return EXIT_FAILURE;
+
+   if( run(false, true, true, true) != EXIT_SUCCESS )
       return EXIT_FAILURE;
 
    if( run(true, true, true, true) != EXIT_SUCCESS )

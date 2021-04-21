@@ -58,6 +58,10 @@ TNLPAdapter::TNLPAdapter(
      jac_idx_map_(NULL),
      h_idx_map_(NULL),
      x_fixed_map_(NULL),
+     jac_fixed_idx_map_(NULL),
+     jac_fixed_iRow_(NULL),
+     jac_fixed_jCol_(NULL),
+     nz_jac_fixed_(0),
      findiff_jac_ia_(NULL),
      findiff_jac_ja_(NULL),
      findiff_jac_postriplet_(NULL),
@@ -77,6 +81,9 @@ TNLPAdapter::~TNLPAdapter()
    delete[] jac_idx_map_;
    delete[] h_idx_map_;
    delete[] x_fixed_map_;
+   delete[] jac_fixed_idx_map_;
+   delete[] jac_fixed_iRow_;
+   delete[] jac_fixed_jCol_;
    delete[] findiff_jac_ia_;
    delete[] findiff_jac_ja_;
    delete[] findiff_jac_postriplet_;
@@ -97,18 +104,19 @@ void TNLPAdapter::RegisterOptions(
       "nlp_upper_bound_inf",
       "any bound greater or this value will be considered +inf (i.e. not upper bounded).",
       1e19);
-   roptions->AddStringOption3(
+   roptions->AddStringOption4(
       "fixed_variable_treatment",
       "Determines how fixed variables should be handled.",
       "make_parameter",
       "make_parameter", "Remove fixed variable from optimization variables",
+      "make_parameter_nodual", "Remove fixed variable from optimization variables and do not compute bound multipliers for fixed variables",
       "make_constraint", "Add equality constraints fixing variables",
       "relax_bounds", "Relax fixing bound constraints",
       "The main difference between those options is that the starting point in the \"make_constraint\" case still "
-      "has the fixed variables at their given values, whereas in the case \"make_parameter\" the functions are always "
+      "has the fixed variables at their given values, whereas in the case \"make_parameter(_nodual)\" the functions are always "
       "evaluated with the fixed values for those variables.  "
       "Also, for \"relax_bounds\", the fixing bound constraints are relaxed (according to\" bound_relax_factor\"). "
-      "For both \"make_constraints\" and \"relax_bounds\", bound multipliers are computed for the fixed variables.");
+      "For all but \"make_parameter_nodual\", bound multipliers are computed for the fixed variables.");
 
    std::vector<std::string> options;
    std::vector<std::string> descrs;
@@ -353,6 +361,12 @@ bool TNLPAdapter::GetSpaces(
       h_idx_map_ = NULL;
       delete[] x_fixed_map_;
       x_fixed_map_ = NULL;
+      delete[] jac_fixed_idx_map_;
+      jac_fixed_idx_map_ = NULL;
+      delete[] jac_fixed_iRow_;
+      jac_fixed_iRow_ = NULL;
+      delete[] jac_fixed_jCol_;
+      jac_fixed_jCol_ = NULL;
    }
 
    // Get the full dimensions of the problem
@@ -450,6 +464,7 @@ bool TNLPAdapter::GetSpaces(
                switch( fixed_variable_treatment_ )
                {
                   case MAKE_PARAMETER:
+                  case MAKE_PARAMETER_NODUAL:
                      // Variable is fixed, remove it from the problem
                      full_x_[i] = lower_bound;
                      x_fixed_map_tmp[n_x_fixed_] = i;
@@ -682,7 +697,7 @@ bool TNLPAdapter::GetSpaces(
       SmartPtr<DenseVectorSpace> dv_x_u_space = new DenseVectorSpace(n_x_u);
       x_u_space_ = GetRawPtr(dv_x_u_space);
 
-      if( n_x_fixed_ > 0 && fixed_variable_treatment_ == MAKE_PARAMETER )
+      if( n_x_fixed_ > 0 && (fixed_variable_treatment_ == MAKE_PARAMETER || fixed_variable_treatment_ == MAKE_PARAMETER_NODUAL) )
       {
          P_x_full_x_space_ = new ExpansionMatrixSpace(n_full_x_, n_x_var, x_not_fixed_map);
          P_x_full_x_ = P_x_full_x_space_->MakeNewExpansionMatrix();
@@ -843,7 +858,7 @@ bool TNLPAdapter::GetSpaces(
       // create the required c_space
 
       SmartPtr<DenseVectorSpace> dc_space;
-      if( n_x_fixed_ == 0 || fixed_variable_treatment_ == MAKE_PARAMETER )
+      if( n_x_fixed_ == 0 || fixed_variable_treatment_ == MAKE_PARAMETER || fixed_variable_treatment_ == MAKE_PARAMETER_NODUAL )
       {
          dc_space = new DenseVectorSpace(n_c);
       }
@@ -1060,7 +1075,7 @@ bool TNLPAdapter::GetSpaces(
       // ... (the permutation from rows in jac_g to jac_c is
       // ...  the same as P_c_g_)
       Index nz_jac_all;
-      if( fixed_variable_treatment_ == MAKE_PARAMETER )
+      if( fixed_variable_treatment_ == MAKE_PARAMETER || fixed_variable_treatment_ == MAKE_PARAMETER_NODUAL )
       {
          nz_jac_all = nz_full_jac_g_;
       }
@@ -1072,6 +1087,19 @@ bool TNLPAdapter::GetSpaces(
       Index* jac_c_iRow = new Index[nz_jac_all];
       Index* jac_c_jCol = new Index[nz_jac_all];
       Index current_nz = 0;
+
+      // prepare memory for mapping from Jacobian on fixed variables to full Jacobian
+      Index jac_fixed_length = 0;
+      if( fixed_variable_treatment_ == MAKE_PARAMETER && IsValid(P_x_full_x_) )
+      {
+         nz_jac_fixed_ = 0;
+         // the Jacobian w.r.t. fixed variables can have at most number-of-fixed-variables*number-of-constraints nonzeros
+         jac_fixed_length = std::min(nz_jac_all, n_x_fixed_ * n_full_g);
+         jac_fixed_idx_map_ = new Index[jac_fixed_length];
+         jac_fixed_iRow_ = new Index[jac_fixed_length];
+         jac_fixed_jCol_ = new Index[jac_fixed_length];
+      }
+
       const Index* c_row_pos = P_c_g_->CompressedPosIndices();
       if( IsValid(P_x_full_x_) )
       {
@@ -1087,6 +1115,16 @@ bool TNLPAdapter::GetSpaces(
                jac_c_iRow[current_nz] = c_row + 1;
                jac_c_jCol[current_nz] = c_col + 1;
                current_nz++;
+            }
+            else if( c_col == -1 && fixed_variable_treatment_ == MAKE_PARAMETER )
+            {
+               // c_col == -1 should mean a fixed variables
+               // c_row == -1 should mean a row in d(x)  (but the distinction into c(x) and d(x) isn't relevant for us here)
+               DBG_ASSERT(nz_jac_fixed_ < jac_fixed_length);
+               jac_fixed_idx_map_[nz_jac_fixed_] = i;
+               jac_fixed_iRow_[nz_jac_fixed_] = g_iRow[i];
+               jac_fixed_jCol_[nz_jac_fixed_] = g_jCol[i];
+               nz_jac_fixed_++;
             }
          }
       }
@@ -1107,7 +1145,7 @@ bool TNLPAdapter::GetSpaces(
       }
       nz_jac_c_no_extra_ = current_nz;
       Index n_added_constr;
-      if( fixed_variable_treatment_ == MAKE_PARAMETER )
+      if( fixed_variable_treatment_ == MAKE_PARAMETER || fixed_variable_treatment_ == MAKE_PARAMETER_NODUAL )
       {
          nz_jac_c_ = nz_jac_c_no_extra_;
          n_added_constr = 0;
@@ -1325,7 +1363,7 @@ bool TNLPAdapter::GetBoundsInformation(
    bool retval = tnlp_->get_bounds_info(n_full_x_, x_l, x_u, n_full_g_, g_l, g_u);
    ASSERT_EXCEPTION(retval, INVALID_TNLP, "get_bounds_info returned false in GetBoundsInformation");
 
-   if( fixed_variable_treatment_ == MAKE_PARAMETER )
+   if( fixed_variable_treatment_ == MAKE_PARAMETER || fixed_variable_treatment_ == MAKE_PARAMETER_NODUAL )
    {
       // Set the values of fixed variables
       for( Index i = 0; i < n_x_fixed_; i++ )
@@ -2042,7 +2080,27 @@ void TNLPAdapter::FinalizeSolution(
 
    Number* full_z_L = new Number[n_full_x_];
    Number* full_z_U = new Number[n_full_x_];
-   ResortBoundMultipliers(y_c, z_L, full_z_L, z_U, full_z_U);
+   switch( status )
+   {
+      case SUCCESS:
+      case MAXITER_EXCEEDED:
+      case STOP_AT_TINY_STEP:
+      case STOP_AT_ACCEPTABLE_POINT:
+      case LOCAL_INFEASIBILITY:
+      case USER_REQUESTED_STOP:
+      case FEASIBLE_POINT_FOUND:
+      case DIVERGING_ITERATES:
+      case RESTORATION_FAILURE:
+      case ERROR_IN_STEP_COMPUTATION:
+         // only for these status codes, IpoptApplication calls without all vectors 0
+         if( !ResortBoundMultipliers(x, y_c, y_d, z_L, full_z_L, z_U, full_z_U) )
+            jnlst_->Printf(J_WARNING, J_INITIALIZATION, "Failed to evaluate gradient of objective or constraints when computing bound multipliers for fixed variables.\n");
+         break;
+      default:
+         // if IpoptApplication doesn't provide an actual solution, do not bother to setup good multipliers for fixed variables
+         ResortBnds(z_L, full_z_L, z_U, full_z_U);
+         break;
+   }
 
    SmartPtr<const DenseVectorSpace> z_L_space = dynamic_cast<const DenseVectorSpace*>(GetRawPtr(z_L.OwnerSpace()));
    SmartPtr<const DenseVectorSpace> z_U_space = dynamic_cast<const DenseVectorSpace*>(GetRawPtr(z_U.OwnerSpace()));
@@ -2491,8 +2549,10 @@ void TNLPAdapter::ResortBnds(
    }
 }
 
-void TNLPAdapter::ResortBoundMultipliers(
+bool TNLPAdapter::ResortBoundMultipliers(
+   const Vector& x,
    const Vector& y_c,
+   const Vector& y_d,
    const Vector& z_L,
    Number*       z_L_orig,
    const Vector& z_U,
@@ -2501,9 +2561,11 @@ void TNLPAdapter::ResortBoundMultipliers(
 {
    ResortBnds(z_L, z_L_orig, z_U, z_U_orig);
 
-   // Hopefully the following is correct to recover the bound
-   // multipliers for fixed variables
-   if( fixed_variable_treatment_ == MAKE_CONSTRAINT && n_x_fixed_ > 0 )
+   if( n_x_fixed_ == 0 )
+      return true;
+
+   // recover the bound multipliers for fixed variables
+   if( fixed_variable_treatment_ == MAKE_CONSTRAINT )
    {
       const DenseVector* dy_c = static_cast<const DenseVector*>(&y_c);
       DBG_ASSERT(dynamic_cast<const DenseVector*>(&y_c));
@@ -2513,8 +2575,10 @@ void TNLPAdapter::ResortBoundMultipliers(
          const Number* values = dy_c->Values();
          for( Index i = 0; i < n_x_fixed_; i++ )
          {
-            z_L_orig[x_fixed_map_[i]] = Max(0., -values[n_c_no_fixed + i]);
-            z_U_orig[x_fixed_map_[i]] = Max(0., values[n_c_no_fixed + i]);
+            if( z_L_orig != NULL )
+               z_L_orig[x_fixed_map_[i]] = Max(0., -values[n_c_no_fixed + i]);
+            if( z_U_orig != NULL )
+               z_U_orig[x_fixed_map_[i]] = Max(0., values[n_c_no_fixed + i]);
          }
       }
       else
@@ -2522,11 +2586,90 @@ void TNLPAdapter::ResortBoundMultipliers(
          Number value = dy_c->Scalar();
          for( Index i = 0; i < n_x_fixed_; i++ )
          {
-            z_L_orig[x_fixed_map_[i]] = Max(Number(0.), -value);
-            z_U_orig[x_fixed_map_[i]] = Max(Number(0.), value);
+            if( z_L_orig != NULL )
+               z_L_orig[x_fixed_map_[i]] = Max(Number(0.), -value);
+            if( z_U_orig != NULL )
+               z_U_orig[x_fixed_map_[i]] = Max(Number(0.), value);
          }
       }
    }
+
+   if( fixed_variable_treatment_ == MAKE_PARAMETER )
+   {
+      // Lagrangian should be grad_f + lambda jac - z_L + z_U  == 0
+      // so fixed variables get z_L - z_U = grad_f + lambda_jac
+      Number* mult = new Number[n_full_x_];
+      memset(mult, 0, sizeof(Number) * n_full_x_);
+
+      bool new_x = update_local_x(x);
+      if( !tnlp_->eval_grad_f(n_full_x_, full_x_, new_x, mult) )
+      {
+         delete[] mult;
+         return false;
+      }
+
+      if( nz_jac_fixed_ > 0 )
+      {
+         if( !internal_eval_jac_g(false) )
+         {
+            delete[] mult;
+            return false;
+         }
+         DBG_ASSERT(dynamic_cast<const DenseVector*>(&y_c));
+         DBG_ASSERT(dynamic_cast<const DenseVector*>(&y_d));
+         const DenseVector* dy_c = static_cast<const DenseVector*>(&y_c);
+         const DenseVector* dy_d = static_cast<const DenseVector*>(&y_d);
+         // mappings from full g() indices to index in c() and d()
+         const Index* c_row_pos = P_c_g_->CompressedPosIndices();
+         const Index* d_row_pos = P_d_g_->CompressedPosIndices();
+         for( Index i = 0; i < nz_jac_fixed_; i++ )
+         {
+            // Assume the same structure as initially given
+            // correct for 1-based indexing in jac_fixed_iRow_ and jac_fixed_jCol_
+            Index row = jac_fixed_iRow_[i] - 1;
+            Index col = jac_fixed_jCol_[i] - 1;
+            Number val = jac_g_[jac_fixed_idx_map_[i]];
+            DBG_ASSERT(row >= 0);
+            DBG_ASSERT(row < n_full_g_);
+            DBG_ASSERT(col >= 0);
+            DBG_ASSERT(col < n_full_x_);
+
+            Number lambda = 0.0;
+            if( c_row_pos[row] != -1 )
+            {
+               if( dy_c->IsHomogeneous() )
+                  lambda = dy_c->Scalar();
+               else
+                  lambda = dy_c->Values()[c_row_pos[row]];
+            }
+            else if( d_row_pos[row] != -1 )
+            {
+               if( dy_d->IsHomogeneous() )
+                  lambda = dy_d->Scalar();
+               else
+                  lambda = dy_d->Values()[d_row_pos[row]];
+            }
+            // else: a constraint that is neither in c() nor d(), so assuming lambda=0 seems ok
+
+            // add lambda*jac part
+            mult[col] += lambda * val;
+         }
+      }
+
+      // set z_L = max(0,mult), z_U = max(0,-mult)
+      for( Index i = 0; i < n_x_fixed_; ++i )
+      {
+         Index xidx = x_fixed_map_[i];
+         if( z_L_orig != NULL )
+            z_L_orig[xidx] = Max(0.0,  mult[xidx]);
+         if( z_U_orig != NULL )
+            z_U_orig[xidx] = Max(0.0, -mult[xidx]);
+      }
+
+      delete[] mult;
+   }
+
+   return true;
 }
 
 bool TNLPAdapter::update_local_x(

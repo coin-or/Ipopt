@@ -240,6 +240,7 @@ public:
    enum FixedVariableTreatmentEnum
    {
       MAKE_PARAMETER = 0,
+      MAKE_PARAMETER_NODUAL,
       MAKE_CONSTRAINT,
       RELAX_BOUNDS
    };
@@ -315,10 +316,19 @@ public:
 
    /** Provides values for dual multipliers on lower and upper bounds on variables for given Ipopt-internal vectors.
     *
-    * Similar to ResortBnds, but also provides dual values for fixed variables if fixed_variable_treatment is set to make_constraint
+    * Similar to ResortBnds, but also provides dual values for fixed variables if fixed_variable_treatment is set to make_constraint or make_parameter.
+    *
+    * @attention If there are fixed variables and fixed_variable_treatment is make_parameter (the default),
+    *   then the Gradient of f(x) and the Jacobian of g(x) may be reevaluated here (that's why the function needs x).
+    *   Further, in this setting, this function only provides correct bound multipliers for fixed variables
+    *   if x, y_c, and y_d correspond to the unscaled problem.
+    *
+    * @return True, if bound multipliers could be assigned. False if there was an evaluation error when calculating bound multipliers for fixed variables.
     */
-   void ResortBoundMultipliers(
+   bool ResortBoundMultipliers(
+      const Vector& x,                /**< internal values for primal variables x */
       const Vector& y_c,              /**< internal values for equality constraint multipliers */
+      const Vector& y_d,              /**< internal values for inequality constraint multipliers */
       const Vector& z_L,              /**< internal values for lower bound multipliers */
       Number*       z_L_orig,         /**< vector to fill with values from z_L */
       const Vector& z_U,              /**< internal values for upper bound multipliers */
@@ -573,6 +583,12 @@ private:
 
    /** Position of fixed variables. This is required for a warm start */
    Index* x_fixed_map_;
+
+   /** Index mapping of Jacobian w.r.t. fixed variables. */
+   Index* jac_fixed_idx_map_;
+   Index* jac_fixed_iRow_;
+   Index* jac_fixed_jCol_;
+   Index nz_jac_fixed_;
    ///@}
 
    /** @name Data for finite difference approximations of derivatives */
