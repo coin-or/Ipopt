@@ -55,6 +55,7 @@ public:
       Index counter
    )
       : type_(OT_Unknown),
+        advanced_(false),
         has_lower_(false),
         has_upper_(false),
         counter_(counter)
@@ -66,13 +67,15 @@ public:
       const std::string& short_description,
       const std::string& long_description,
       const std::string& registering_category,
-      Index counter
+      Index counter,
+      bool advanced = false
    )
       : name_(name),
         short_description_(short_description),
         long_description_(long_description),
         registering_category_(registering_category),
         type_(OT_Unknown),
+        advanced_(advanced),
         has_lower_(false),
         has_upper_(false),
         counter_(counter)
@@ -87,6 +90,7 @@ public:
         long_description_(copy.long_description_),
         registering_category_(copy.registering_category_),
         type_(copy.type_),
+        advanced_(copy.advanced_),
         has_lower_(copy.has_lower_),
         lower_(copy.lower_),
         has_upper_(copy.has_upper_),
@@ -165,12 +169,25 @@ public:
       return type_;
 
    }
-   /** Get the Option's type */
+   /** Set the Option's type */
    virtual void SetType(
       const RegisteredOptionType& type
    )
    {
       type_ = type;
+   }
+
+   /** Get the advanced flag */
+   virtual bool Advanced() const
+   {
+      return advanced_;
+   }
+   /** Set the advanced flag */
+   virtual void SetAdvanced(
+      bool advanced = true
+   )
+   {
+      advanced_ = advanced;
    }
 
    /** Counter */
@@ -511,6 +528,7 @@ private:
    std::string long_description_;
    std::string registering_category_;
    RegisteredOptionType type_;
+   bool advanced_;
 
    bool has_lower_;
    bool lower_strict_;
@@ -519,6 +537,13 @@ private:
    bool upper_strict_;
    Number upper_;
    Number default_number_;
+
+   std::vector<string_entry> valid_strings_;
+   std::string default_string_;
+
+   /** Has the information as how many-th option this one was
+    *  registered. */
+   const Index counter_;
 
    void MakeValidLatexString(
       std::string source,
@@ -538,13 +563,6 @@ private:
       const std::string& s1,
       const std::string& s2
    ) const;
-
-   std::vector<string_entry> valid_strings_;
-   std::string default_string_;
-
-   /** Has the information as how many-th option this one was
-    *  registered. */
-   const Index counter_;
 };
 
 /** Class for storing registered options.
@@ -594,7 +612,8 @@ public:
       const std::string& name,
       const std::string& short_description,
       Number             default_value,
-      const std::string& long_description = ""
+      const std::string& long_description = "",
+      bool               advanced = false
    );
 
    /** Add a Number option (with a lower bound) */
@@ -604,7 +623,8 @@ public:
       Number             lower,
       bool               strict,
       Number             default_value,
-      const std::string& long_description = ""
+      const std::string& long_description = "",
+      bool               advanced = false
    );
 
    /** Add a Number option (with a upper bound) */
@@ -614,7 +634,8 @@ public:
       Number             upper,
       bool               strict,
       Number             default_value,
-      const std::string& long_description = ""
+      const std::string& long_description = "",
+      bool               advanced = false
    );
 
    /** Add a Number option (with a both bounds) */
@@ -626,7 +647,8 @@ public:
       Number             upper,
       bool               upper_strict,
       Number             default_value,
-      const std::string& long_description = ""
+      const std::string& long_description = "",
+      bool               advanced = false
    );
 
    /** Add a Integer option (with no restrictions) */
@@ -634,7 +656,8 @@ public:
       const std::string& name,
       const std::string& short_description,
       Index              default_value,
-      const std::string& long_description = ""
+      const std::string& long_description = "",
+      bool               advanced = false
    );
 
    /** Add a Integer option (with a lower bound) */
@@ -643,7 +666,8 @@ public:
       const std::string& short_description,
       Index              lower,
       Index              default_value,
-      const std::string& long_description = ""
+      const std::string& long_description = "",
+      bool               advanced = false
    );
 
    /** Add a Integer option (with a upper bound) */
@@ -652,7 +676,8 @@ public:
       const std::string& short_description,
       Index              upper,
       Index              default_value,
-      const std::string& long_description = ""
+      const std::string& long_description = "",
+      bool               advanced = false
    );
 
    /** Add a Integer option (with a both bounds) */
@@ -662,7 +687,8 @@ public:
       Index              lower,
       Index              upper,
       Index              default_value,
-      const std::string& long_description = ""
+      const std::string& long_description = "",
+      bool               advanced = false
    );
 
    /** Add a String option (with no restrictions) */
@@ -672,7 +698,8 @@ public:
       const std::string&              default_value,
       const std::vector<std::string>& settings,
       const std::vector<std::string>& descriptions,
-      const std::string&              long_description = ""
+      const std::string&              long_description = "",
+      bool               advanced = false
    );
 
    /** Methods that make adding string options with only a few entries easier */
@@ -682,7 +709,8 @@ public:
       const std::string& default_value,
       const std::string& setting1,
       const std::string& description1,
-      const std::string& long_description = ""
+      const std::string& long_description = "",
+      bool               advanced = false
    );
 
    virtual void AddStringOption2(
@@ -693,7 +721,8 @@ public:
       const std::string& description1,
       const std::string& setting2,
       const std::string& description2,
-      const std::string& long_description = ""
+      const std::string& long_description = "",
+      bool               advanced = false
    );
 
    virtual void AddStringOption3(
@@ -706,7 +735,8 @@ public:
       const std::string& description2,
       const std::string& setting3,
       const std::string& description3,
-      const std::string& long_description = ""
+      const std::string& long_description = "",
+      bool               advanced = false
    );
 
    virtual void AddStringOption4(
@@ -721,7 +751,8 @@ public:
       const std::string& description3,
       const std::string& setting4,
       const std::string& description4,
-      const std::string& long_description = ""
+      const std::string& long_description = "",
+      bool               advanced = false
    );
 
    virtual void AddStringOption5(
@@ -738,7 +769,8 @@ public:
       const std::string& description4,
       const std::string& setting5,
       const std::string& description5,
-      const std::string& long_description = ""
+      const std::string& long_description = "",
+      bool               advanced = false
    );
 
    virtual void AddStringOption6(
@@ -757,7 +789,8 @@ public:
       const std::string& description5,
       const std::string& setting6,
       const std::string& description6,
-      const std::string& long_description = ""
+      const std::string& long_description = "",
+      bool               advanced = false
    );
 
    virtual void AddStringOption7(
@@ -778,7 +811,8 @@ public:
       const std::string& description6,
       const std::string& setting7,
       const std::string& description7,
-      const std::string& long_description = ""
+      const std::string& long_description = "",
+      bool               advanced = false
    );
 
    virtual void AddStringOption8(
@@ -801,7 +835,8 @@ public:
       const std::string& description7,
       const std::string& setting8,
       const std::string& description8,
-      const std::string& long_description = ""
+      const std::string& long_description = "",
+      bool               advanced = false
    );
 
    virtual void AddStringOption9(
@@ -826,7 +861,8 @@ public:
       const std::string& description8,
       const std::string& setting9,
       const std::string& description9,
-      const std::string& long_description = ""
+      const std::string& long_description = "",
+      bool               advanced = false
    );
 
    virtual void AddStringOption10(
@@ -853,7 +889,8 @@ public:
       const std::string& description9,
       const std::string& setting10,
       const std::string& description10,
-      const std::string& long_description = ""
+      const std::string& long_description = "",
+      bool               advanced = false
    );
 
    /** Get a registered option

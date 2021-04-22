@@ -781,11 +781,12 @@ void RegisteredOptions::AddNumberOption(
    const std::string& name,
    const std::string& short_description,
    Number             default_value,
-   const std::string& long_description
+   const std::string& long_description,
+   bool               advanced
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++);
+         current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_Number);
    option->SetDefaultNumber(default_value);
    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
@@ -799,11 +800,12 @@ void RegisteredOptions::AddLowerBoundedNumberOption(
    Number             lower,
    bool               strict,
    Number             default_value,
-   const std::string& long_description
+   const std::string& long_description,
+   bool               advanced
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++);
+         current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_Number);
    option->SetDefaultNumber(default_value);
    option->SetLowerNumber(lower, strict);
@@ -818,11 +820,12 @@ void RegisteredOptions::AddUpperBoundedNumberOption(
    Number             upper,
    bool               strict,
    Number             default_value,
-   const std::string& long_description
+   const std::string& long_description,
+   bool               advanced
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++);
+         current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_Number);
    option->SetDefaultNumber(default_value);
    option->SetUpperNumber(upper, strict);
@@ -839,11 +842,12 @@ void RegisteredOptions::AddBoundedNumberOption(
    Number             upper,
    bool               upper_strict,
    Number             default_value,
-   const std::string& long_description
+   const std::string& long_description,
+   bool               advanced
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++);
+         current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_Number);
    option->SetDefaultNumber(default_value);
    option->SetLowerNumber(lower, lower_strict);
@@ -857,11 +861,12 @@ void RegisteredOptions::AddIntegerOption(
    const std::string& name,
    const std::string& short_description,
    Index              default_value,
-   const std::string& long_description
+   const std::string& long_description,
+   bool               advanced
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++);
+         current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_Integer);
    option->SetDefaultInteger(default_value);
    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
@@ -874,11 +879,12 @@ void RegisteredOptions::AddLowerBoundedIntegerOption(
    const std::string& short_description,
    Index              lower,
    Index              default_value,
-   const std::string& long_description
+   const std::string& long_description,
+   bool               advanced
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++);
+         current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_Integer);
    option->SetDefaultInteger(default_value);
    option->SetLowerInteger(lower);
@@ -892,11 +898,12 @@ void RegisteredOptions::AddUpperBoundedIntegerOption(
    const std::string& short_description,
    Index              upper,
    Index              default_value,
-   const std::string& long_description
+   const std::string& long_description,
+   bool               advanced
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++);
+         current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_Integer);
    option->SetDefaultInteger(default_value);
    option->SetUpperInteger(upper);
@@ -911,11 +918,12 @@ void RegisteredOptions::AddBoundedIntegerOption(
    Index              lower,
    Index              upper,
    Index              default_value,
-   const std::string& long_description
+   const std::string& long_description,
+   bool               advanced
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++);
+         current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_Integer);
    option->SetDefaultInteger(default_value);
    option->SetLowerInteger(lower);
@@ -931,11 +939,12 @@ void RegisteredOptions::AddStringOption(
    const std::string&              default_value,
    const std::vector<std::string>& settings,
    const std::vector<std::string>& descriptions,
-   const std::string&              long_description
+   const std::string&              long_description,
+   bool                            advanced
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++);
+         current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    DBG_ASSERT(settings.size() == descriptions.size());
@@ -954,11 +963,12 @@ void RegisteredOptions::AddStringOption1(
    const std::string& default_value,
    const std::string& setting1,
    const std::string& description1,
-   const std::string& long_description
+   const std::string& long_description,
+   bool               advanced
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++);
+         current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -975,11 +985,12 @@ void RegisteredOptions::AddStringOption2(
    const std::string& description1,
    const std::string& setting2,
    const std::string& description2,
-   const std::string& long_description
+   const std::string& long_description,
+   bool               advanced
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++);
+         current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -999,11 +1010,12 @@ void RegisteredOptions::AddStringOption3(
    const std::string& description2,
    const std::string& setting3,
    const std::string& description3,
-   const std::string& long_description
+   const std::string& long_description,
+   bool               advanced
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++);
+         current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -1026,11 +1038,12 @@ void RegisteredOptions::AddStringOption4(
    const std::string& description3,
    const std::string& setting4,
    const std::string& description4,
-   const std::string& long_description
+   const std::string& long_description,
+   bool               advanced
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++);
+         current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -1056,11 +1069,12 @@ void RegisteredOptions::AddStringOption5(
    const std::string& description4,
    const std::string& setting5,
    const std::string& description5,
-   const std::string& long_description
+   const std::string& long_description,
+   bool               advanced
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++);
+         current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -1089,11 +1103,12 @@ void RegisteredOptions::AddStringOption6(
    const std::string& description5,
    const std::string& setting6,
    const std::string& description6,
-   const std::string& long_description
+   const std::string& long_description,
+   bool               advanced
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++);
+         current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -1125,11 +1140,12 @@ void RegisteredOptions::AddStringOption7(
    const std::string& description6,
    const std::string& setting7,
    const std::string& description7,
-   const std::string& long_description
+   const std::string& long_description,
+   bool               advanced
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++);
+         current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -1164,11 +1180,12 @@ void RegisteredOptions::AddStringOption8(
    const std::string& description7,
    const std::string& setting8,
    const std::string& description8,
-   const std::string& long_description
+   const std::string& long_description,
+   bool               advanced
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++);
+         current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -1206,11 +1223,12 @@ void RegisteredOptions::AddStringOption9(
    const std::string& description8,
    const std::string& setting9,
    const std::string& description9,
-   const std::string& long_description
+   const std::string& long_description,
+   bool               advanced
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++);
+         current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -1251,11 +1269,12 @@ void RegisteredOptions::AddStringOption10(
    const std::string& description9,
    const std::string& setting10,
    const std::string& description10,
-   const std::string& long_description
+   const std::string& long_description,
+   bool               advanced
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++);
+         current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);

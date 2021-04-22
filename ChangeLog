@@ -97,6 +97,8 @@ commit history.
           Previous versions of these methods are still available but deprecated.
           Using a NULL pointer for the RegisteredOptions argument is
           also deprecated.
+        - Added flag "advanced" for RegisteredOption to store whether an
+          option is rather meant for expert users.
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]
