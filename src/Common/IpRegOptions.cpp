@@ -33,7 +33,8 @@ void RegisteredOption::OutputDescription(
    }
 
    jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                "\n### %s (%s) ###\nCategory: %s\nDescription: %s\n", name_.c_str(), type_str.c_str(), registering_category_.c_str(), short_description_.c_str());
+                "\n### %s (%s) ###\nCategory: %s\nDescription: %s\n", name_.c_str(), type_str.c_str(),
+                IsValid(registering_category_) ? registering_category_->Name().c_str() : "n/a", short_description_.c_str());
 
    if( type_ == OT_Number )
    {
@@ -777,6 +778,18 @@ bool RegisteredOption::string_equal_insensitive(
    return true;
 }
 
+void RegisteredOptions::AddOption(
+   const SmartPtr<RegisteredOption>& option
+   )
+{
+   ASSERT_EXCEPTION(registered_options_.find(option->Name()) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
+                    std::string("The option: ") + option->Name() + " has already been registered by someone else");
+   registered_options_[option->Name()] = option;
+
+   if( IsValid(option->registering_category_) )
+      option->registering_category_->regoptions_.push_back(option);
+}
+
 void RegisteredOptions::AddNumberOption(
    const std::string& name,
    const std::string& short_description,
@@ -789,9 +802,7 @@ void RegisteredOptions::AddNumberOption(
          current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_Number);
    option->SetDefaultNumber(default_value);
-   ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
-                    std::string("The option: ") + option->Name() + " has already been registered by someone else");
-   registered_options_[name] = option;
+   AddOption(option);
 }
 
 void RegisteredOptions::AddLowerBoundedNumberOption(
@@ -811,7 +822,7 @@ void RegisteredOptions::AddLowerBoundedNumberOption(
    option->SetLowerNumber(lower, strict);
    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
                     std::string("The option: ") + option->Name() + " has already been registered by someone else");
-   registered_options_[name] = option;
+   AddOption(option);
 }
 
 void RegisteredOptions::AddUpperBoundedNumberOption(
@@ -831,7 +842,7 @@ void RegisteredOptions::AddUpperBoundedNumberOption(
    option->SetUpperNumber(upper, strict);
    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
                     std::string("The option: ") + option->Name() + " has already been registered by someone else");
-   registered_options_[name] = option;
+   AddOption(option);
 }
 
 void RegisteredOptions::AddBoundedNumberOption(
@@ -854,7 +865,7 @@ void RegisteredOptions::AddBoundedNumberOption(
    option->SetUpperNumber(upper, upper_strict);
    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
                     std::string("The option: ") + option->Name() + " has already been registered by someone else");
-   registered_options_[name] = option;
+   AddOption(option);
 }
 
 void RegisteredOptions::AddIntegerOption(
@@ -871,7 +882,7 @@ void RegisteredOptions::AddIntegerOption(
    option->SetDefaultInteger(default_value);
    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
                     std::string("The option: ") + option->Name() + " has already been registered by someone else");
-   registered_options_[name] = option;
+   AddOption(option);
 }
 
 void RegisteredOptions::AddLowerBoundedIntegerOption(
@@ -890,7 +901,7 @@ void RegisteredOptions::AddLowerBoundedIntegerOption(
    option->SetLowerInteger(lower);
    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
                     std::string("The option: ") + option->Name() + " has already been registered by someone else");
-   registered_options_[name] = option;
+   AddOption(option);
 }
 
 void RegisteredOptions::AddUpperBoundedIntegerOption(
@@ -909,7 +920,7 @@ void RegisteredOptions::AddUpperBoundedIntegerOption(
    option->SetUpperInteger(upper);
    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
                     std::string("The option: ") + option->Name() + " has already been registered by someone else");
-   registered_options_[name] = option;
+   AddOption(option);
 }
 
 void RegisteredOptions::AddBoundedIntegerOption(
@@ -930,7 +941,7 @@ void RegisteredOptions::AddBoundedIntegerOption(
    option->SetUpperInteger(upper);
    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
                     std::string("The option: ") + option->Name() + " has already been registered by someone else");
-   registered_options_[name] = option;
+   AddOption(option);
 }
 
 void RegisteredOptions::AddStringOption(
@@ -954,7 +965,7 @@ void RegisteredOptions::AddStringOption(
    }
    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
                     std::string("The option: ") + option->Name() + " has already been registered by someone else");
-   registered_options_[name] = option;
+   AddOption(option);
 }
 
 void RegisteredOptions::AddStringOption1(
@@ -974,7 +985,7 @@ void RegisteredOptions::AddStringOption1(
    option->AddValidStringSetting(setting1, description1);
    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
                     std::string("The option: ") + option->Name() + " has already been registered by someone else");
-   registered_options_[name] = option;
+   AddOption(option);
 }
 
 void RegisteredOptions::AddStringOption2(
@@ -997,7 +1008,7 @@ void RegisteredOptions::AddStringOption2(
    option->AddValidStringSetting(setting2, description2);
    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
                     std::string("The option: ") + option->Name() + " has already been registered by someone else");
-   registered_options_[name] = option;
+   AddOption(option);
 }
 
 void RegisteredOptions::AddStringOption3(
@@ -1023,7 +1034,7 @@ void RegisteredOptions::AddStringOption3(
    option->AddValidStringSetting(setting3, description3);
    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
                     std::string("The option: ") + option->Name() + " has already been registered by someone else");
-   registered_options_[name] = option;
+   AddOption(option);
 }
 
 void RegisteredOptions::AddStringOption4(
@@ -1052,7 +1063,7 @@ void RegisteredOptions::AddStringOption4(
    option->AddValidStringSetting(setting4, description4);
    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
                     std::string("The option: ") + option->Name() + " has already been registered by someone else");
-   registered_options_[name] = option;
+   AddOption(option);
 }
 
 void RegisteredOptions::AddStringOption5(
@@ -1084,7 +1095,7 @@ void RegisteredOptions::AddStringOption5(
    option->AddValidStringSetting(setting5, description5);
    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
                     std::string("The option: ") + option->Name() + " has already been registered by someone else");
-   registered_options_[name] = option;
+   AddOption(option);
 }
 
 void RegisteredOptions::AddStringOption6(
@@ -1119,7 +1130,7 @@ void RegisteredOptions::AddStringOption6(
    option->AddValidStringSetting(setting6, description6);
    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
                     std::string("The option: ") + option->Name() + " has already been registered by someone else");
-   registered_options_[name] = option;
+   AddOption(option);
 }
 
 void RegisteredOptions::AddStringOption7(
@@ -1157,7 +1168,7 @@ void RegisteredOptions::AddStringOption7(
    option->AddValidStringSetting(setting7, description7);
    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
                     std::string("The option: ") + option->Name() + " has already been registered by someone else");
-   registered_options_[name] = option;
+   AddOption(option);
 }
 
 void RegisteredOptions::AddStringOption8(
@@ -1198,7 +1209,7 @@ void RegisteredOptions::AddStringOption8(
    option->AddValidStringSetting(setting8, description8);
    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
                     std::string("The option: ") + option->Name() + " has already been registered by someone else");
-   registered_options_[name] = option;
+   AddOption(option);
 }
 
 void RegisteredOptions::AddStringOption9(
@@ -1242,7 +1253,7 @@ void RegisteredOptions::AddStringOption9(
    option->AddValidStringSetting(setting9, description9);
    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
                     std::string("The option: ") + option->Name() + " has already been registered by someone else");
-   registered_options_[name] = option;
+   AddOption(option);
 }
 
 void RegisteredOptions::AddStringOption10(
@@ -1289,7 +1300,7 @@ void RegisteredOptions::AddStringOption10(
    option->AddValidStringSetting(setting10, description10);
    ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
                     std::string("The option: ") + option->Name() + " has already been registered by someone else");
-   registered_options_[name] = option;
+   AddOption(option);
 }
 
 SmartPtr<const RegisteredOption> RegisteredOptions::GetOption(
@@ -1316,67 +1327,81 @@ SmartPtr<const RegisteredOption> RegisteredOptions::GetOption(
    return option;
 }
 
-void RegisteredOptions::OutputOptionDocumentation(
-   const Journalist&       jnlst,
-   std::list<std::string>& categories,
-   bool                    output_advanced
-)
+/** Giving access to registered categories ordered by priority (decreasing) */
+void RegisteredOptions::RegisteredCategoriesByPriority(
+   RegCategoriesByPriority& categories
+   ) const
 {
-   // create a set to print sorted output
-   //     std::set
-   //       <std::string> classes;
-   //     std::map <std::string, SmartPtr<RegisteredOption> >::iterator option;
-   //     for (option = registered_options_.begin(); option != registered_options_.end(); option++) {
-   //       classes.insert(option->second->RegisteringCategory());
-   //     }
+   for( RegCategoriesList::const_iterator it = registered_categories_.begin(); it != registered_categories_.end(); ++it )
+      categories.insert(it->second);
+}
 
-   std::list<std::string>::iterator i;
-   for( i = categories.begin(); i != categories.end(); i++ )
+void RegisteredOptions::OutputOptionDocumentation(
+   const Journalist&             jnlst,
+   const std::list<std::string>& categories,
+   bool                          output_advanced
+) const
+{
+   if( !categories.empty() )
    {
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                   "\n### %s ###\n\n", (*i).c_str());
-      std::map<Index, SmartPtr<RegisteredOption> > class_options;
-      std::map<std::string, SmartPtr<RegisteredOption> >::iterator option;
-      for( option = registered_options_.begin(); option != registered_options_.end(); option++ )
+      for( std::list<std::string>::const_iterator i = categories.begin(); i != categories.end(); i++ )
       {
-         if( option->second->RegisteringCategory() != (*i) )
+         RegCategoriesList::const_iterator cat_it = registered_categories_.find(*i);
+         // skip nonexisting category
+         if( cat_it == registered_categories_.end() )
             continue;
 
-         if( !output_advanced && option->second->Advanced() )
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n### %s ###\n\n", i->c_str());
+
+         for( std::list<SmartPtr<RegisteredOption> >::const_iterator opt_it = cat_it->second->RegisteredOptions().begin(); opt_it != cat_it->second->RegisteredOptions().end(); ++opt_it )
+         {
+            if( !output_advanced && (*opt_it)->Advanced() )
+               continue;
+
+            (*opt_it)->OutputShortDescription(jnlst);
+         }
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
+      }
+   }
+   else
+   {
+      for( RegCategoriesList::const_iterator cat_it = registered_categories_.begin(); cat_it != registered_categories_.end(); ++cat_it )
+      {
+         if( cat_it->second->Priority() < 0 )
             continue;
 
-         class_options[option->second->Counter()] = option->second;
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n### %s ###\n\n", cat_it->first.c_str());
+
+         for( std::list<SmartPtr<RegisteredOption> >::const_iterator opt_it = cat_it->second->RegisteredOptions().begin(); opt_it != cat_it->second->RegisteredOptions().end(); ++opt_it )
+         {
+            if( !output_advanced && (*opt_it)->Advanced() )
+               continue;
+
+            (*opt_it)->OutputShortDescription(jnlst);
+         }
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
       }
-      std::map<Index, SmartPtr<RegisteredOption> >::const_iterator co;
-      for( co = class_options.begin(); co != class_options.end(); co++ )
-      {
-         co->second->OutputShortDescription(jnlst);
-      }
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                   "\n");
    }
 }
 
 void RegisteredOptions::OutputLatexOptionDocumentation(
-   const Journalist&       jnlst,
-   std::list<std::string>& options_to_print,
-   bool                    output_advanced
-)
+   const Journalist&             jnlst,
+   const std::list<std::string>& options_to_print,
+   bool                          output_advanced
+) const
 {
-
    if( !options_to_print.empty() )
    {
-      std::list<std::string>::iterator coption;
+      std::list<std::string>::const_iterator coption;
       for( coption = options_to_print.begin(); coption != options_to_print.end(); coption++ )
       {
          if( coption->c_str()[0] == '#' )
          {
-            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                         "\\subsection{%s}\n\n", &coption->c_str()[1]);
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\subsection{%s}\n\n", &coption->c_str()[1]);
             continue;
          }
 
-         SmartPtr<RegisteredOption> option = registered_options_[*coption];
+         SmartPtr<RegisteredOption> option = registered_options_.at(*coption);
          DBG_ASSERT(IsValid(option));
 
          if( !output_advanced && option->Advanced() )
@@ -1387,27 +1412,40 @@ void RegisteredOptions::OutputLatexOptionDocumentation(
    }
    else
    {
-      std::map<std::string, SmartPtr<RegisteredOption> >::iterator option;
-      for( option = registered_options_.begin(); option != registered_options_.end(); option++ )
+      RegCategoriesByPriority cats;
+      RegisteredCategoriesByPriority(cats);
+      for( RegCategoriesByPriority::const_reverse_iterator cat_it = cats.rbegin(); cat_it != cats.rend(); ++cat_it )
       {
-         if( !output_advanced && option->second->Advanced() )
+         if( (*cat_it)->Priority() < 0 )
             continue;
 
-         option->second->OutputLatexDescription(jnlst);
+         std::string anchorname = (*cat_it)->Name();
+         for( std::string::iterator it = anchorname.begin(); it != anchorname.end(); ++it )
+            if( *it == ' ' || *it == '(' || *it == ')' )
+               *it = '_';
+
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\subsection{%s}\n\n", (*cat_it)->Name().c_str());
+
+         for( std::list<SmartPtr<RegisteredOption> >::const_iterator opt_it = (*cat_it)->RegisteredOptions().begin(); opt_it != (*cat_it)->RegisteredOptions().end(); ++opt_it )
+         {
+            if( !output_advanced && (*opt_it)->Advanced() )
+               continue;
+
+            (*opt_it)->OutputLatexDescription(jnlst);
+         }
       }
    }
 }
 
 void RegisteredOptions::OutputDoxygenOptionDocumentation(
-   const Journalist&       jnlst,
-   std::list<std::string>& options_to_print,
-   bool                    output_advanced
-)
+   const Journalist&             jnlst,
+   const std::list<std::string>& options_to_print,
+   bool                          output_advanced
+) const
 {
-
    if( !options_to_print.empty() )
    {
-      std::list<std::string>::iterator coption;
+      std::list<std::string>::const_iterator coption;
       for( coption = options_to_print.begin(); coption != options_to_print.end(); coption++ )
       {
          if( (*coption)[0] == '#' )
@@ -1422,7 +1460,7 @@ void RegisteredOptions::OutputDoxygenOptionDocumentation(
             continue;
          }
 
-         SmartPtr<RegisteredOption> option = registered_options_[*coption];
+         SmartPtr<RegisteredOption> option = registered_options_.at(*coption);
          DBG_ASSERT(IsValid(option));
 
          if( !output_advanced && option->Advanced() )
@@ -1433,13 +1471,27 @@ void RegisteredOptions::OutputDoxygenOptionDocumentation(
    }
    else
    {
-      std::map<std::string, SmartPtr<RegisteredOption> >::iterator option;
-      for( option = registered_options_.begin(); option != registered_options_.end(); option++ )
+      RegCategoriesByPriority cats;
+      RegisteredCategoriesByPriority(cats);
+      for( RegCategoriesByPriority::const_reverse_iterator cat_it = cats.rbegin(); cat_it != cats.rend(); ++cat_it )
       {
-         if( !output_advanced && option->second->Advanced() )
+         if( (*cat_it)->Priority() < 0 )
             continue;
 
-         option->second->OutputDoxygenDescription(jnlst);
+         std::string anchorname = (*cat_it)->Name();
+         for( std::string::iterator it = anchorname.begin(); it != anchorname.end(); ++it )
+            if( *it == ' ' || *it == '(' || *it == ')' )
+               *it = '_';
+
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\subsection OPT_%s %s\n\n", anchorname.c_str(), (*cat_it)->Name().c_str());
+
+         for( std::list<SmartPtr<RegisteredOption> >::const_iterator opt_it = (*cat_it)->RegisteredOptions().begin(); opt_it != (*cat_it)->RegisteredOptions().end(); ++opt_it )
+         {
+            if( !output_advanced && (*opt_it)->Advanced() )
+               continue;
+
+            (*opt_it)->OutputDoxygenDescription(jnlst);
+         }
       }
    }
 }

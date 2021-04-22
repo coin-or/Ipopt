@@ -43,51 +43,51 @@ void RegisterOptions_Algorithm(
    const SmartPtr<RegisteredOptions>& roptions
 )
 {
-   roptions->SetRegisteringCategory("Barrier Parameter Update");
+   roptions->SetRegisteringCategory("Barrier Parameter Update", 390000);
    AdaptiveMuUpdate::RegisterOptions(roptions);
-   roptions->SetRegisteringCategory("Initialization");
+   roptions->SetRegisteringCategory("Initialization", 460000);
    DefaultIterateInitializer::RegisterOptions(roptions);
-   roptions->SetRegisteringCategory("Main Algorithm");
+   roptions->SetRegisteringCategory("Main Algorithm", -50000);
    AlgorithmBuilder::RegisterOptions(roptions);
-   roptions->SetRegisteringCategory("Line Search");
+   roptions->SetRegisteringCategory("Line Search", 380000);
    BacktrackingLineSearch::RegisterOptions(roptions);
    roptions->SetRegisteringCategory("Line Search");
    FilterLSAcceptor::RegisterOptions(roptions);
    roptions->SetRegisteringCategory("Line Search");
    PenaltyLSAcceptor::RegisterOptions(roptions);
-   roptions->SetRegisteringCategory("NLP Scaling");
+   roptions->SetRegisteringCategory("NLP Scaling", 480000);
    StandardScalingBase::RegisterOptions(roptions);
    roptions->SetRegisteringCategory("NLP Scaling");
    GradientScaling::RegisterOptions(roptions);
    roptions->SetRegisteringCategory("NLP Scaling");
    EquilibrationScaling::RegisterOptions(roptions);
-   roptions->SetRegisteringCategory("Uncategorized");
+   roptions->SetRegisteringCategory("");
    IpoptAlgorithm::RegisterOptions(roptions);
-   roptions->SetRegisteringCategory("Uncategorized");
+   roptions->SetRegisteringCategory("");
    IpoptData::RegisterOptions(roptions);
-   roptions->SetRegisteringCategory("Uncategorized");
+   roptions->SetRegisteringCategory("");
    IpoptCalculatedQuantities::RegisterOptions(roptions);
-   roptions->SetRegisteringCategory("Hessian Approximation");
+   roptions->SetRegisteringCategory("Hessian Approximation", 280000);
    LimMemQuasiNewtonUpdater::RegisterOptions(roptions);
-   roptions->SetRegisteringCategory("Barrier Parameter Update");
+   roptions->SetRegisteringCategory("Barrier Parameter Update", 390000);
    MonotoneMuUpdate::RegisterOptions(roptions);
-   roptions->SetRegisteringCategory("Convergence");
+   roptions->SetRegisteringCategory("Termination", 490000);
    OptimalityErrorConvergenceCheck::RegisterOptions(roptions);
-   roptions->SetRegisteringCategory("NLP");
+   roptions->SetRegisteringCategory("NLP", 470000);
    OrigIpoptNLP::RegisterOptions(roptions);
-   roptions->SetRegisteringCategory("Output");
+   roptions->SetRegisteringCategory("Output", 900000);
    OrigIterationOutput::RegisterOptions(roptions);
-   roptions->SetRegisteringCategory("Step Calculation");
+   roptions->SetRegisteringCategory("Step Calculation", 350000);
    PDSearchDirCalculator::RegisterOptions(roptions);
-   roptions->SetRegisteringCategory("Step Calculation");
+   roptions->SetRegisteringCategory("Linear Solver", 360000);
    PDFullSpaceSolver::RegisterOptions(roptions);
    roptions->SetRegisteringCategory("Step Calculation");
    PDPerturbationHandler::RegisterOptions(roptions);
-   roptions->SetRegisteringCategory("Barrier Parameter Update");
+   roptions->SetRegisteringCategory("Barrier Parameter Update", 390000);
    ProbingMuOracle::RegisterOptions(roptions);
    roptions->SetRegisteringCategory("Barrier Parameter Update");
    QualityFunctionMuOracle::RegisterOptions(roptions);
-   roptions->SetRegisteringCategory("Restoration Phase");
+   roptions->SetRegisteringCategory("Restoration Phase", 340000);
    RestoConvergenceCheck::RegisterOptions(roptions);
    roptions->SetRegisteringCategory("Restoration Phase");
    RestoFilterConvergenceCheck::RegisterOptions(roptions);
@@ -97,7 +97,7 @@ void RegisterOptions_Algorithm(
    RestoPenaltyConvergenceCheck::RegisterOptions(roptions);
    roptions->SetRegisteringCategory("Restoration Phase");
    MinC_1NrmRestorationPhase::RegisterOptions(roptions);
-   roptions->SetRegisteringCategory("Warm Start");
+   roptions->SetRegisteringCategory("Warm Start", 370000);
    WarmStartIterateInitializer::RegisterOptions(roptions);
 }
 

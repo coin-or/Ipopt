@@ -95,7 +95,7 @@ void TNLPAdapter::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->SetRegisteringCategory("NLP");
+   roptions->SetRegisteringCategory("NLP", 470000);
    roptions->AddNumberOption(
       "nlp_lower_bound_inf",
       "any bound less or equal this value will be considered -inf (i.e. not lower bounded).",
@@ -160,7 +160,7 @@ void TNLPAdapter::RegisterOptions(
       "If the get_number_of_nonlinear_variables method in the TNLP is implemented, this option is ignored.",
       true);
 
-   roptions->SetRegisteringCategory("Derivative Checker");
+   roptions->SetRegisteringCategory("Derivative Checker", 290000);
    roptions->AddStringOption4(
       "derivative_test",
       "Enable derivative checker",

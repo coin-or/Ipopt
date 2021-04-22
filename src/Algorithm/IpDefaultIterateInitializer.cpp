@@ -109,7 +109,7 @@ void DefaultIterateInitializer::RegisterOptions(
       "If successful, the bound multipliers are possibly corrected to be at least bound_mult_init_val. "
       "This might be useful if the user doesn't know anything about the starting point, or for solving an LP or QP. "
       "This overwrites option \"bound_mult_init_method\".");
-   reg_options->SetRegisteringCategory("Warm Start");
+   reg_options->SetRegisteringCategory("Warm Start", 370000);
    reg_options->AddStringOption2(
       "warm_start_init_point",
       "Warm-start for initial point",

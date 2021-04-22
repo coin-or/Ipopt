@@ -18,7 +18,7 @@ void RegisterOptions_CGPenalty(
    const SmartPtr<RegisteredOptions>& roptions
 )
 {
-   roptions->SetRegisteringCategory("Undocumented");
+   roptions->SetRegisteringCategory("CG Penalty", -50000);
    CGSearchDirCalculator::RegisterOptions(roptions);
    CGPenaltyLSAcceptor::RegisterOptions(roptions);
    CGPenaltyCq::RegisterOptions(roptions);

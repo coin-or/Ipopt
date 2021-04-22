@@ -23,7 +23,7 @@ void IpoptData::RegisterOptions(
    const SmartPtr<RegisteredOptions>& roptions
 )
 {
-   roptions->SetRegisteringCategory("Convergence");
+   roptions->SetRegisteringCategory("Termination", 490000);
    roptions->AddLowerBoundedNumberOption(
       "tol",
       "Desired convergence tolerance (relative).",

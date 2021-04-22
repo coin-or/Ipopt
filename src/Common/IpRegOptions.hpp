@@ -13,6 +13,8 @@
 #include "IpSmartPtr.hpp"
 
 #include <map>
+#include <set>
+#include <list>
 
 namespace Ipopt
 {
@@ -25,13 +27,79 @@ enum RegisteredOptionType
    OT_Unknown
 };
 
-/** Base class for registered options.
- *
- *  The derived types are more
- *  specific to a string option or a Number (real) option, etc.
- */
+class RegisteredOption;
+
+/** A category of registered options. */
+class IPOPTLIB_EXPORT RegisteredCategory: public ReferencedObject
+{
+   friend class RegisteredOptions;
+public:
+   /// Constructor
+   ///
+   /// Use negative value for priority to suppress it being included in documentation.
+   RegisteredCategory(
+      std::string name,
+      int         priority
+      )
+   : name_(name),
+     priority_(priority)
+   { }
+
+   /// name of category
+   const std::string& Name() const
+   {
+      return name_;
+   }
+
+   /// priority of category
+   int Priority() const
+   {
+      return priority_;
+   }
+
+   /// gives list of options in this category
+   const std::list<SmartPtr<RegisteredOption> >& RegisteredOptions() const
+   {
+      return regoptions_;
+   }
+
+   // class comparing two categories by priority
+   class ComparePriority
+   {
+   public:
+      bool operator()(
+         const SmartPtr<RegisteredCategory>& lhs,
+         const SmartPtr<RegisteredCategory>& rhs
+         ) const
+      {
+         DBG_ASSERT(IsValid(lhs));
+         DBG_ASSERT(IsValid(rhs));
+         return lhs->priority_ < rhs->priority_;
+      }
+   };
+
+private:
+   /// unimplemented default constructor
+   RegisteredCategory();
+   /// unimplemented copy constructor
+   RegisteredCategory(const RegisteredCategory&);
+   /// unimplemented assignment operator
+   RegisteredCategory& operator=(const RegisteredCategory&);
+
+   /// name of category
+   std::string name_;
+
+   /// priority of category (used to decide whether to print and printing order)
+   int priority_;
+
+   /// options of this category
+   std::list<SmartPtr<RegisteredOption> > regoptions_;
+};
+
+/** Option that has been registered. */
 class IPOPTLIB_EXPORT RegisteredOption: public ReferencedObject
 {
+   friend class RegisteredOptions;
 public:
    /** class to hold the valid string settings for a string option */
    class string_entry
@@ -59,14 +127,13 @@ public:
         has_lower_(false),
         has_upper_(false),
         counter_(counter)
-   {
-   }
+   { }
 
    RegisteredOption(
       const std::string& name,
       const std::string& short_description,
       const std::string& long_description,
-      const std::string& registering_category,
+      const SmartPtr<RegisteredCategory>& registering_category,
       Index counter,
       bool advanced = false
    )
@@ -79,8 +146,7 @@ public:
         has_lower_(false),
         has_upper_(false),
         counter_(counter)
-   {
-   }
+   { }
 
    RegisteredOption(
       const RegisteredOption& copy
@@ -97,15 +163,13 @@ public:
         upper_(copy.upper_),
         valid_strings_(copy.valid_strings_),
         counter_(copy.counter_)
-   {
-   }
+   { }
 
    virtual ~RegisteredOption()
    { }
    ///@}
 
-   DECLARE_STD_EXCEPTION(ERROR_CONVERTING_STRING_TO_ENUM)
-   ;
+   DECLARE_STD_EXCEPTION(ERROR_CONVERTING_STRING_TO_ENUM);
 
    /** Standard Get / Set Methods */
    ///@{
@@ -150,17 +214,9 @@ public:
    }
 
    /** Get the registering class */
-   virtual const std::string& RegisteringCategory() const
+   virtual SmartPtr<const RegisteredCategory> RegisteringCategory() const
    {
-      return registering_category_;
-   }
-
-   /** Set the registering class */
-   virtual void SetRegisteringCategory(
-      const std::string& registering_category
-   )
-   {
-      registering_category_ = registering_category;
+      return ConstPtr(registering_category_);
    }
 
    /** Get the Option's type */
@@ -526,7 +582,7 @@ private:
    std::string name_;
    std::string short_description_;
    std::string long_description_;
-   std::string registering_category_;
+   SmartPtr<RegisteredCategory> registering_category_;
    RegisteredOptionType type_;
    bool advanced_;
 
@@ -572,37 +628,80 @@ private:
 class IPOPTLIB_EXPORT RegisteredOptions: public ReferencedObject
 {
 public:
+   typedef std::map<std::string, SmartPtr<RegisteredOption> > RegOptionsList;
+   typedef std::map<std::string, SmartPtr<RegisteredCategory> > RegCategoriesList;
+   typedef std::set<SmartPtr<RegisteredCategory>, RegisteredCategory::ComparePriority> RegCategoriesByPriority;
+
    /** Constructors / Destructors */
    ///@{
    /** Default Constructor */
    RegisteredOptions()
-      : next_counter_(0),
-        current_registering_category_("Uncategorized")
+      : next_counter_(0)
    { }
 
    /** Destructor */
    virtual ~RegisteredOptions()
-   { }
+   {
+      // break circular reference between registered options and registered categories
+      for( RegCategoriesList::iterator it(registered_categories_.begin()); it != registered_categories_.end(); ++it )
+         it->second->regoptions_.clear();
+   }
    ///@}
 
-   DECLARE_STD_EXCEPTION(OPTION_ALREADY_REGISTERED)
-   ;
+   DECLARE_STD_EXCEPTION(OPTION_ALREADY_REGISTERED);
 
    /** Methods to interact with registered options */
    ///@{
    /** set the registering class
     *
-    * All subsequent options will be added with the registered class
+    * If nonempty name, then all subsequent options will be added with the registered category.
+    * If empty name, then all subsequent options will not be added to any registered category.
+    *
+    * If the category doesn't exist yet, it will be created with given data.
+    * If it exists already, given priority and undocumented flag are ignored.
     */
    virtual void SetRegisteringCategory(
-      const std::string& registering_category
+      const std::string& registering_category,
+      int                priority = 0
+   )
+   {
+      if( registering_category.empty() )
+      {
+         current_registering_category_ = NULL;
+         return;
+      }
+
+      SmartPtr<RegisteredCategory>& reg_categ = registered_categories_[registering_category];
+      if( !IsValid(reg_categ) )
+         reg_categ = new RegisteredCategory(registering_category, priority);
+      current_registering_category_ = reg_categ;
+   }
+
+   /** set the registering class
+    *
+    * If not NULL, then all subsequent options will be added with the registered category.
+    * If NULL, then all subsequent options will not be added to any registered category.
+    */
+   virtual void SetRegisteringCategory(
+      SmartPtr<RegisteredCategory> registering_category
    )
    {
       current_registering_category_ = registering_category;
+      if( !IsValid(registering_category) )
+         return;
+
+      SmartPtr<RegisteredCategory>& reg_categ = registered_categories_[registering_category->Name()];
+      if( !IsValid(reg_categ) )
+         reg_categ = registering_category;
+      else
+      {
+         // if we already had a category under this name, then it should be the same as the given one
+         DBG_ASSERT(reg_categ == registering_category);
+      }
    }
 
    /** retrieve the value of the current registering category */
-   virtual std::string RegisteringCategory()
+   virtual SmartPtr<RegisteredCategory> RegisteringCategory()
    {
       return current_registering_category_;
    }
@@ -901,46 +1000,67 @@ public:
       const std::string& name
    );
 
-   /** Output documentation for the options - gives a description, etc. */
+   /** Giving access to iteratable representation of the registered options */
+   const RegOptionsList& RegisteredOptionsList() const
+   {
+      return registered_options_;
+   }
+
+   /** Giving access to registered categories */
+   const RegCategoriesList& RegisteredCategories() const
+   {
+      return registered_categories_;
+   }
+
+   /** Giving access to registered categories ordered by (increasing) priority
+    *
+    * Result is stored in given set.
+    */
+   void RegisteredCategoriesByPriority(
+      RegCategoriesByPriority& categories
+      ) const;
+
+   /** Output documentation in text format
+    *
+    * If categories is empty, then all options are printed.
+    */
    virtual void OutputOptionDocumentation(
-      const Journalist&       jnlst,
-      std::list<std::string>& categories,
-      bool                    output_advanced = false
-   );
+      const Journalist&             jnlst,
+      const std::list<std::string>& categories = std::list<std::string>(),
+      bool                          output_advanced = false
+   ) const;
 
    /** Output documentation in Latex format to include in a latex file
     *
     * If options_to_print is empty, then all options are printed.
     */
    virtual void OutputLatexOptionDocumentation(
-      const Journalist&       jnlst,
-      std::list<std::string>& options_to_print,
-      bool                    output_advanced = false
-   );
+      const Journalist&             jnlst,
+      const std::list<std::string>& options_to_print = std::list<std::string>(),
+      bool                          output_advanced = false
+   ) const;
 
    /** Output documentation in Doxygen format to include in doxygen documentation
     *
     * If options_to_print is empty, then all options are printed.
     */
    virtual void OutputDoxygenOptionDocumentation(
-      const Journalist&       jnlst,
-      std::list<std::string>& options_to_print,
-      bool                    output_advanced = false
-   );
+      const Journalist&             jnlst,
+      const std::list<std::string>& options_to_print = std::list<std::string>(),
+      bool                          output_advanced = false
+   ) const;
    ///@}
 
-   typedef std::map<std::string, SmartPtr<RegisteredOption> > RegOptionsList;
-
-   /** Giving access to iteratable representation of the registered options */
-   virtual const RegOptionsList& RegisteredOptionsList() const
-   {
-      return registered_options_;
-   }
-
 private:
+   void AddOption(
+      const SmartPtr<RegisteredOption>& option
+      );
+
+   RegOptionsList registered_options_;
+   RegCategoriesList registered_categories_;
+
    Index next_counter_;
-   std::string current_registering_category_;
-   std::map<std::string, SmartPtr<RegisteredOption> > registered_options_;
+   SmartPtr<RegisteredCategory> current_registering_category_;
 };
 
 } // namespace Ipopt

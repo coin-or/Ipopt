@@ -62,7 +62,7 @@ void IpoptAlgorithm::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->SetRegisteringCategory("Line Search");
+   roptions->SetRegisteringCategory("Line Search", 380000);
    roptions->AddLowerBoundedNumberOption(
       "kappa_sigma",
       "Factor limiting the deviation of dual variables from primal estimates.",
@@ -88,7 +88,7 @@ void IpoptAlgorithm::RegisterOptions(
       0., true,
       1e-6,
       "If recalc_y is chosen and the current infeasibility is less than this value, then the multipliers are recomputed.");
-   roptions->SetRegisteringCategory("Step Calculation");
+   roptions->SetRegisteringCategory("Step Calculation", 350000);
    roptions->AddStringOption2(
       "mehrotra_algorithm",
       "Indicates if we want to do Mehrotra's algorithm.",

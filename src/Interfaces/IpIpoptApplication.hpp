@@ -306,9 +306,6 @@ private:
     */
    ApplicationReturnStatus call_optimize();
 
-   /** Method that prints options documentation */
-   void print_options_docu();
-
    /**@name Variables that customize the application behavior */
    ///@{
    /** Decide whether or not the ipopt.opt file should be read */

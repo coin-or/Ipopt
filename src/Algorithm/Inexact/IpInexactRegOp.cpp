@@ -25,7 +25,7 @@ void RegisterOptions_Inexact(
    const SmartPtr<RegisteredOptions>& roptions
 )
 {
-   roptions->SetRegisteringCategory("Inexact Step Computation");
+   roptions->SetRegisteringCategory("Inexact Step Computation", -100000);
    InexactAlgorithmBuilder::RegisterOptions(roptions);
    InexactSearchDirCalculator::RegisterOptions(roptions);
    InexactDoglegNormalStep::RegisterOptions(roptions);

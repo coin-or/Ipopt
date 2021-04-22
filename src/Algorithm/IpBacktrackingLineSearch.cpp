@@ -55,8 +55,8 @@ void BacktrackingLineSearch::RegisterOptions(
       "At every step of the backtracking line search, the trial step size is reduced by this factor.",
       true);
 
-   std::string prev_category = roptions->RegisteringCategory();
-   roptions->SetRegisteringCategory("Undocumented");
+   SmartPtr<RegisteredCategory> prev_category = roptions->RegisteringCategory();
+   roptions->SetRegisteringCategory("Undocumented", -100000);
    roptions->AddStringOption2(
       "magic_steps",
       "Enables magic steps.",
@@ -141,7 +141,7 @@ void BacktrackingLineSearch::RegisterOptions(
       "This option determines the number of trial iterations allowed before the watchdog "
       "procedure is aborted and the algorithm returns to the stored point.");
 
-   roptions->SetRegisteringCategory("Restoration Phase");
+   roptions->SetRegisteringCategory("Restoration Phase", 340000);
    roptions->AddStringOption2(
       "expect_infeasible_problem",
       "Enable heuristics to quickly detect an infeasible problem.",

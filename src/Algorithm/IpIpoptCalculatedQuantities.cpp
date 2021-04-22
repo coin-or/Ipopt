@@ -135,7 +135,7 @@ void IpoptCalculatedQuantities::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->SetRegisteringCategory("Convergence");
+   roptions->SetRegisteringCategory("Termination", 490000);
    roptions->AddLowerBoundedNumberOption(
       "s_max",
       "Scaling threshold for the NLP error.",
@@ -144,7 +144,7 @@ void IpoptCalculatedQuantities::RegisterOptions(
       "(See paragraph after Eqn. (6) in the implementation paper.)",
       true);
 
-   roptions->SetRegisteringCategory("NLP");
+   roptions->SetRegisteringCategory("NLP", 470000);
    roptions->AddLowerBoundedNumberOption(
       "kappa_d",
       "Weight for linear damping term (to handle one-sided bounds).",
@@ -153,7 +153,7 @@ void IpoptCalculatedQuantities::RegisterOptions(
       "(see Section 3.7 in implementation paper.)",
       true);
 
-   roptions->SetRegisteringCategory("Line Search");
+   roptions->SetRegisteringCategory("Line Search", 380000);
    roptions->AddLowerBoundedNumberOption(
       "slack_move",
       "Correction size for very small slacks.",
@@ -165,7 +165,6 @@ void IpoptCalculatedQuantities::RegisterOptions(
       "Its default value is mach_eps^{3/4}. "
       "(See also end of Section 3.5 in implementation paper - but actual implementation might be somewhat different.)",
       true);
-   roptions->SetRegisteringCategory("Line Search");
    roptions->AddStringOption3(
       "constraint_violation_norm_type",
       "Norm to be used for the constraint violation in the line search.",

@@ -56,7 +56,7 @@ void SensApplication::RegisterOptions(
 )
 {
    // Options for parameter sensitivity
-   roptions->SetRegisteringCategory("sIPOPT");
+   roptions->SetRegisteringCategory("sIPOPT", 1000000);
    roptions->AddLowerBoundedIntegerOption("n_sens_steps",
                                           "Number of steps computed by sIPOPT",
                                           0, 1);

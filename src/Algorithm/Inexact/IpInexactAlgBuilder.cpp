@@ -99,7 +99,6 @@ void InexactAlgorithmBuilder::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->SetRegisteringCategory("Linear Solver");
    roptions->AddStringOption2(
       "inexact_linear_system_scaling",
       "Method for scaling the linear system for the inexact approach", "slack-based",

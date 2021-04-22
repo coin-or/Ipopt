@@ -63,8 +63,8 @@ void AdaptiveMuUpdate::RegisterOptions(
       "By default, it is set to the minimum of 1e-11 and min(\"tol\",\"compl_inf_tol\")/(\"barrier_tol_factor\"+1), "
       "which should be a reasonable value. "
       "(Only used if option \"mu_strategy\" is chosen as \"adaptive\".)");
-   std::string prev_cat = roptions->RegisteringCategory();
-   roptions->SetRegisteringCategory("Undocumented");
+   SmartPtr<RegisteredCategory> prev_cat = roptions->RegisteringCategory();
+   roptions->SetRegisteringCategory("Undocumented", -100000);
    roptions->AddLowerBoundedNumberOption(
       "adaptive_mu_safeguard_factor",
       "",

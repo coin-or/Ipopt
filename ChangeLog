@@ -99,6 +99,13 @@ commit history.
           also deprecated.
         - Added flag "advanced" for RegisteredOption to store whether an
           option is rather meant for expert users.
+        - Added class RegisteredCategory to store information on category
+          of registered option. Next to the name, this is a priority, which
+          determines the order in which categories are printed. As a
+          consequence, methods RegisteredOption::RegisteringCategory() and
+          RegisteredOptions::RegisteringCategory() now return a pointer
+          to a RegisteredCategory object instead of a string. Further,
+          RegisteredOption::SetRegisteringCategory() has been removed.
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]
