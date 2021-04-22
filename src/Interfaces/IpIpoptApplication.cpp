@@ -227,16 +227,7 @@ ApplicationReturnStatus IpoptApplication::Initialize(
       bool print_options_documentation;
       options_->GetBoolValue("print_options_documentation", print_options_documentation, "");
       if( print_options_documentation )
-      {
-         std::string printmode;
-         options_->GetStringValue("print_options_mode", printmode, "");
-         if( printmode == "text" )
-            reg_options_->OutputOptionDocumentation(*jnlst_);
-         else if( printmode == "latex" )
-            reg_options_->OutputLatexOptionDocumentation(*jnlst_);
-         else
-            reg_options_->OutputDoxygenOptionDocumentation(*jnlst_);
-      }
+         reg_options_->OutputOptionDocumentation(*jnlst_, options_);
 
 #ifdef BUILD_INEXACT
       // Check if we are to use the inexact linear solver option
@@ -446,15 +437,6 @@ void IpoptApplication::RegisterOptions(
       "The overall algorithm time is unaffected by this option.");
 
    roptions->SetRegisteringCategory("Undocumented", -100000);
-   roptions->AddStringOption3(
-      "print_options_mode",
-      "Undocumented",
-      "text",
-      "text", "Ordinary text",
-      "latex", "LaTeX formatted",
-      "doxygen", "Doxygen (markdown) formatted",
-      "",
-      true);
    roptions->AddStringOption2(
       "suppress_all_output",
       "Undocumented",

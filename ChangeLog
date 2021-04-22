@@ -106,6 +106,10 @@ commit history.
           RegisteredOptions::RegisteringCategory() now return a pointer
           to a RegisteredCategory object instead of a string. Further,
           RegisteredOption::SetRegisteringCategory() has been removed.
+        - Deprecated existing RegisteredOptions::OutputXyz() methods and
+          added new variant of RegisteredOptions::OutputOptionDocumentation().
+          Added parameter print_advanced_options to indicate whether to
+          print documentation for advanced options, too.
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]

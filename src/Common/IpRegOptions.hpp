@@ -27,6 +27,7 @@ enum RegisteredOptionType
    OT_Unknown
 };
 
+class OptionsList;
 class RegisteredOption;
 
 /** A category of registered options. */
@@ -632,6 +633,14 @@ public:
    typedef std::map<std::string, SmartPtr<RegisteredCategory> > RegCategoriesList;
    typedef std::set<SmartPtr<RegisteredCategory>, RegisteredCategory::ComparePriority> RegCategoriesByPriority;
 
+   /** output modes */
+   enum OutputMode
+   {
+      OUTPUTTEXT = 0,
+      OUTPUTLATEX,
+      OUTPUTDOXYGEN
+   };
+
    /** Constructors / Destructors */
    ///@{
    /** Default Constructor */
@@ -650,8 +659,6 @@ public:
 
    DECLARE_STD_EXCEPTION(OPTION_ALREADY_REGISTERED);
 
-   /** Methods to interact with registered options */
-   ///@{
    /** set the registering class
     *
     * If nonempty name, then all subsequent options will be added with the registered category.
@@ -1020,36 +1027,56 @@ public:
       RegCategoriesByPriority& categories
       ) const;
 
-   /** Output documentation in text format
+   /** Output documentation
     *
-    * If categories is empty, then all options are printed.
+    * Format is decided according to print_options_mode option.
+    * Whether to print advanced options is decided according to print_advanced_options option.
     */
    virtual void OutputOptionDocumentation(
       const Journalist&             jnlst,
-      const std::list<std::string>& categories = std::list<std::string>(),
-      bool                          output_advanced = false
+      SmartPtr<OptionsList>         options
+   ) const;
+
+   /** Output documentation in text format
+    *
+    * If categories is empty, then all options are printed.
+    *
+    * @deprecated Use other OutputOptionDocumentation() instead.
+    */
+   IPOPT_DEPRECATED
+   virtual void OutputOptionDocumentation(
+      const Journalist&             jnlst,
+      const std::list<std::string>& categories = std::list<std::string>()
    ) const;
 
    /** Output documentation in Latex format to include in a latex file
     *
     * If options_to_print is empty, then all options are printed.
+    *
+    * @deprecated Use OutputOptionDocumentation() instead.
     */
+   IPOPT_DEPRECATED
    virtual void OutputLatexOptionDocumentation(
       const Journalist&             jnlst,
-      const std::list<std::string>& options_to_print = std::list<std::string>(),
-      bool                          output_advanced = false
+      const std::list<std::string>& options_to_print = std::list<std::string>()
    ) const;
 
    /** Output documentation in Doxygen format to include in doxygen documentation
     *
     * If options_to_print is empty, then all options are printed.
+    *
+    * @deprecated Use OutputOptionDocumentation() instead.
     */
+   IPOPT_DEPRECATED
    virtual void OutputDoxygenOptionDocumentation(
       const Journalist&             jnlst,
-      const std::list<std::string>& options_to_print = std::list<std::string>(),
-      bool                          output_advanced = false
+      const std::list<std::string>& options_to_print = std::list<std::string>()
    ) const;
-   ///@}
+
+   /** register options of RegisteredOptions class */
+   static void RegisterOptions(
+      SmartPtr<RegisteredOptions> roptions
+   );
 
 private:
    void AddOption(

@@ -17,6 +17,7 @@ void RegisterOptions_Interfaces(
 )
 {
    IpoptApplication::RegisterOptions(roptions);
+   RegisteredOptions::RegisterOptions(roptions);
    TNLPAdapter::RegisterOptions(roptions);
 }
 

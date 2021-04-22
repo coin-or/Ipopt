@@ -6,8 +6,8 @@
 
 #include "IpoptConfig.h"
 #include "IpRegOptions.hpp"
+#include "IpOptionsList.hpp"
 
-#include <set>
 #include <cstdio>
 #include <cctype>
 
@@ -1336,10 +1336,89 @@ void RegisteredOptions::RegisteredCategoriesByPriority(
       categories.insert(it->second);
 }
 
+/** Output documentation
+ *
+ * Format is decided according to print_options_mode parameter.
+ */
 void RegisteredOptions::OutputOptionDocumentation(
    const Journalist&             jnlst,
-   const std::list<std::string>& categories,
-   bool                          output_advanced
+   SmartPtr<OptionsList>         options
+) const
+{
+   OutputMode printmode;
+   Index enum_int;
+   options->GetEnumValue("print_options_mode", enum_int, "");
+   printmode = OutputMode(enum_int);
+
+   bool printadvanced;
+   options->GetBoolValue("print_advanced_options", printadvanced, "");
+
+   RegCategoriesByPriority cats;
+   RegisteredCategoriesByPriority(cats);
+   for( RegCategoriesByPriority::const_reverse_iterator cat_it = cats.rbegin(); cat_it != cats.rend(); ++cat_it )
+   {
+      if( (*cat_it)->Priority() < 0 )
+         continue;
+
+      bool firstopt = true;
+      for( std::list<SmartPtr<RegisteredOption> >::const_iterator opt_it = (*cat_it)->RegisteredOptions().begin(); opt_it != (*cat_it)->RegisteredOptions().end(); ++opt_it )
+      {
+         if( !printadvanced && (*opt_it)->Advanced() )
+            continue;
+
+         if( firstopt )
+         {
+            const std::string& catname = (*cat_it)->Name();
+            switch( printmode )
+            {
+               case OUTPUTTEXT :
+               {
+                  jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n### %s ###\n\n", catname.c_str());
+                  break;
+               }
+
+               case OUTPUTLATEX:
+               {
+                  jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\subsection{%s}\n\n", catname.c_str());
+                  break;
+               }
+
+               case OUTPUTDOXYGEN:
+               {
+                  std::string anchorname = catname;
+                  for( std::string::iterator it = anchorname.begin(); it != anchorname.end(); ++it )
+                     if( *it == ' ' || *it == '(' || *it == ')' )
+                        *it = '_';
+
+                  jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\subsection OPT_%s %s\n\n", anchorname.c_str(), catname.c_str());
+               }
+            }
+
+            firstopt = false;
+         }
+
+         switch( printmode )
+         {
+            case OUTPUTTEXT :
+               (*opt_it)->OutputShortDescription(jnlst);
+               break;
+
+            case OUTPUTLATEX:
+               (*opt_it)->OutputLatexDescription(jnlst);
+               break;
+
+            case OUTPUTDOXYGEN:
+               (*opt_it)->OutputDoxygenDescription(jnlst);
+               break;
+         }
+      }
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
+   }
+}
+
+void RegisteredOptions::OutputOptionDocumentation(
+   const Journalist&             jnlst,
+   const std::list<std::string>& categories
 ) const
 {
    if( !categories.empty() )
@@ -1355,9 +1434,6 @@ void RegisteredOptions::OutputOptionDocumentation(
 
          for( std::list<SmartPtr<RegisteredOption> >::const_iterator opt_it = cat_it->second->RegisteredOptions().begin(); opt_it != cat_it->second->RegisteredOptions().end(); ++opt_it )
          {
-            if( !output_advanced && (*opt_it)->Advanced() )
-               continue;
-
             (*opt_it)->OutputShortDescription(jnlst);
          }
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
@@ -1374,7 +1450,7 @@ void RegisteredOptions::OutputOptionDocumentation(
 
          for( std::list<SmartPtr<RegisteredOption> >::const_iterator opt_it = cat_it->second->RegisteredOptions().begin(); opt_it != cat_it->second->RegisteredOptions().end(); ++opt_it )
          {
-            if( !output_advanced && (*opt_it)->Advanced() )
+            if( (*opt_it)->Advanced() )
                continue;
 
             (*opt_it)->OutputShortDescription(jnlst);
@@ -1386,8 +1462,7 @@ void RegisteredOptions::OutputOptionDocumentation(
 
 void RegisteredOptions::OutputLatexOptionDocumentation(
    const Journalist&             jnlst,
-   const std::list<std::string>& options_to_print,
-   bool                          output_advanced
+   const std::list<std::string>& options_to_print
 ) const
 {
    if( !options_to_print.empty() )
@@ -1404,9 +1479,6 @@ void RegisteredOptions::OutputLatexOptionDocumentation(
          SmartPtr<RegisteredOption> option = registered_options_.at(*coption);
          DBG_ASSERT(IsValid(option));
 
-         if( !output_advanced && option->Advanced() )
-            continue;
-
          option->OutputLatexDescription(jnlst);
       }
    }
@@ -1419,16 +1491,11 @@ void RegisteredOptions::OutputLatexOptionDocumentation(
          if( (*cat_it)->Priority() < 0 )
             continue;
 
-         std::string anchorname = (*cat_it)->Name();
-         for( std::string::iterator it = anchorname.begin(); it != anchorname.end(); ++it )
-            if( *it == ' ' || *it == '(' || *it == ')' )
-               *it = '_';
-
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\subsection{%s}\n\n", (*cat_it)->Name().c_str());
 
          for( std::list<SmartPtr<RegisteredOption> >::const_iterator opt_it = (*cat_it)->RegisteredOptions().begin(); opt_it != (*cat_it)->RegisteredOptions().end(); ++opt_it )
          {
-            if( !output_advanced && (*opt_it)->Advanced() )
+            if( (*opt_it)->Advanced() )
                continue;
 
             (*opt_it)->OutputLatexDescription(jnlst);
@@ -1439,8 +1506,7 @@ void RegisteredOptions::OutputLatexOptionDocumentation(
 
 void RegisteredOptions::OutputDoxygenOptionDocumentation(
    const Journalist&             jnlst,
-   const std::list<std::string>& options_to_print,
-   bool                          output_advanced
+   const std::list<std::string>& options_to_print
 ) const
 {
    if( !options_to_print.empty() )
@@ -1452,7 +1518,7 @@ void RegisteredOptions::OutputDoxygenOptionDocumentation(
          {
             std::string anchorname = &coption->c_str()[1];
             for( std::string::iterator it = anchorname.begin(); it != anchorname.end(); ++it )
-               if( *it == ' ' )
+               if( *it == ' ' || *it == '(' || *it == ')' )
                   *it = '_';
             jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
                          "\\subsection OPT_%s %s\n\n", anchorname.c_str(), &coption->c_str()[1]);
@@ -1462,9 +1528,6 @@ void RegisteredOptions::OutputDoxygenOptionDocumentation(
 
          SmartPtr<RegisteredOption> option = registered_options_.at(*coption);
          DBG_ASSERT(IsValid(option));
-
-         if( !output_advanced && option->Advanced() )
-            continue;
 
          option->OutputDoxygenDescription(jnlst);
       }
@@ -1487,13 +1550,39 @@ void RegisteredOptions::OutputDoxygenOptionDocumentation(
 
          for( std::list<SmartPtr<RegisteredOption> >::const_iterator opt_it = (*cat_it)->RegisteredOptions().begin(); opt_it != (*cat_it)->RegisteredOptions().end(); ++opt_it )
          {
-            if( !output_advanced && (*opt_it)->Advanced() )
+            if( (*opt_it)->Advanced() )
                continue;
 
             (*opt_it)->OutputDoxygenDescription(jnlst);
          }
       }
    }
+}
+
+void RegisteredOptions::RegisterOptions(
+   SmartPtr<RegisteredOptions> roptions
+)
+{
+   roptions->SetRegisteringCategory("Output", 900000);
+   roptions->AddStringOption3(
+      "print_options_mode",
+      "format in which to print options documentation",
+      "text",
+      "text", "Ordinary text",
+      "latex", "LaTeX formatted",
+      "doxygen", "Doxygen (markdown) formatted",
+      "",
+      true);
+
+   roptions->AddStringOption2(
+      "print_advanced_options",
+      "whether to print also advanced options",
+      "no",
+      "yes", "",
+      "no", "",
+      "",
+      true);
+
 }
 
 } // namespace Ipopt
