@@ -756,7 +756,8 @@ void IpoptApplication::RegisterOptions(
       "no",
       "no", "leave bounds on variables",
       "yes", "replace variable bounds by inequality constraints",
-      "This option must be set for the inexact algorithm");
+      "This option must be set for the inexact algorithm",
+      true);
    roptions->AddStringOption2(
       "skip_finalize_solution_call",
       "Indicates if call to NLP::FinalizeSolution after optimization should be suppressed",
@@ -764,7 +765,8 @@ void IpoptApplication::RegisterOptions(
       "no", "call FinalizeSolution",
       "yes", "do not call FinalizeSolution",
       "In some Ipopt applications, the user might want to call the FinalizeSolution method separately. "
-      "Setting this option to \"yes\" will cause the IpoptApplication object to suppress the default call to that method.");
+      "Setting this option to \"yes\" will cause the IpoptApplication object to suppress the default call to that method.",
+      true);
 
    roptions->AddStringOption2(
       "timing_statistics",
@@ -781,21 +783,26 @@ void IpoptApplication::RegisterOptions(
       "text",
       "text", "Ordinary text",
       "latex", "LaTeX formatted",
-      "doxygen", "Doxygen (markdown) formatted");
+      "doxygen", "Doxygen (markdown) formatted",
+      "",
+      true);
    roptions->AddStringOption2(
       "suppress_all_output",
       "Undocumented",
       "no",
       "no", "Undocumented",
       "yes", "Undocumented",
-      "Undocumented");
+      "Undocumented",
+      true);
 #ifdef BUILD_INEXACT
    roptions->AddStringOption2(
       "inexact_algorithm",
       "Activate the version of Ipopt that allows iterative linear solvers.",
       "no",
       "no", "use default algorithm with direct linear solvers",
-      "yes", "use the EXPERIMENTAL iterative linear solver option");
+      "yes", "use the EXPERIMENTAL iterative linear solver option",
+      "",
+      true);
 #endif
 }
 

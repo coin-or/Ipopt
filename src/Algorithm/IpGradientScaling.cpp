@@ -32,7 +32,8 @@ void GradientScaling::RegisterOptions(
       0.,
       "If a positive number is chosen, the scaling factor the objective function is computed "
       "so that the gradient has the max norm of the given size at the starting point. "
-      "This overrides nlp_scaling_max_gradient for the objective function.");
+      "This overrides nlp_scaling_max_gradient for the objective function.",
+      true);
    roptions->AddLowerBoundedNumberOption(
       "nlp_scaling_constr_target_gradient",
       "Target value for constraint function gradient size.",
@@ -40,7 +41,8 @@ void GradientScaling::RegisterOptions(
       0.,
       "If a positive number is chosen, the scaling factor the constraint functions is computed "
       "so that the gradient has the max norm of the given size at the starting point. "
-      "This overrides nlp_scaling_max_gradient for the constraint functions.");
+      "This overrides nlp_scaling_max_gradient for the constraint functions.",
+      true);
    roptions->AddLowerBoundedNumberOption(
       "nlp_scaling_min_value",
       "Minimum value of gradient-based scaling values.",

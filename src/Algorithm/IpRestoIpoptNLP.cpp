@@ -60,14 +60,16 @@ void RestoIpoptNLP::RegisterOptions(
       "Penalty parameter in the restoration phase objective function.",
       0., true,
       1e3,
-      "This is the parameter rho in equation (31a) in the Ipopt implementation paper.");
+      "This is the parameter rho in equation (31a) in the Ipopt implementation paper.",
+      true);
    roptions->AddLowerBoundedNumberOption(
       "resto_proximity_weight",
       "Weighting factor for the proximity term in restoration phase objective.",
       0., false,
       1.,
       "This determines how the parameter zeta in equation (29a) in the implementation paper is computed. "
-      "zeta here is resto_proximity_weight*sqrt(mu), where mu is the current barrier parameter.");
+      "zeta here is resto_proximity_weight*sqrt(mu), where mu is the current barrier parameter.",
+      true);
 }
 
 bool RestoIpoptNLP::Initialize(

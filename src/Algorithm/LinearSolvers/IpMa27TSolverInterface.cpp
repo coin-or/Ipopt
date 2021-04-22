@@ -130,7 +130,8 @@ void Ma27TSolverInterface::RegisterOptions(
       "no", "check inertia",
       "yes", "skip inertia check",
       "Setting this option to \"yes\" essentially disables inertia check. "
-      "This option makes the algorithm non-robust and easily fail, but it might give some insight into the necessity of inertia control.");
+      "This option makes the algorithm non-robust and easily fail, but it might give some insight into the necessity of inertia control.",
+      true);
    roptions->AddStringOption2(
       "ma27_ignore_singularity",
       "Enables MA27's ability to solve a linear system even if the matrix is singular.",
@@ -139,7 +140,8 @@ void Ma27TSolverInterface::RegisterOptions(
       "yes", "Have MA27 solve singular systems",
       "Setting this option to \"yes\" means that Ipopt will call MA27 to compute solutions for right hand sides, "
       "even if MA27 has detected that the matrix is singular (but is still able to solve the linear system). "
-      "In some cases this might be better than using Ipopt's heuristic of small perturbation of the lower diagonal of the KKT matrix.");
+      "In some cases this might be better than using Ipopt's heuristic of small perturbation of the lower diagonal of the KKT matrix.",
+      true);
 }
 
 /// set MA27 functions to use for every instantiation of this class

@@ -52,7 +52,8 @@ void BacktrackingLineSearch::RegisterOptions(
       0.0, true,
       1.0, true,
       0.5,
-      "At every step of the backtracking line search, the trial step size is reduced by this factor.");
+      "At every step of the backtracking line search, the trial step size is reduced by this factor.",
+      true);
 
    std::string prev_category = roptions->RegisteringCategory();
    roptions->SetRegisteringCategory("Undocumented");
@@ -62,7 +63,8 @@ void BacktrackingLineSearch::RegisterOptions(
       "no",
       "no", "don't take magic steps",
       "yes", "take magic steps",
-      "DOESN'T REALLY WORK YET!");
+      "DOESN'T REALLY WORK YET!",
+      true);
    roptions->SetRegisteringCategory(prev_category);
 
    roptions->AddStringOption2(
@@ -78,7 +80,8 @@ void BacktrackingLineSearch::RegisterOptions(
       "Accept a trial point after maximal this number of steps.",
       -1,
       -1,
-      "Even if it does not satisfy line search conditions.");
+      "Even if it does not satisfy line search conditions.",
+      true);
 
    roptions->AddStringOption10(
       "alpha_for_y",
@@ -111,7 +114,8 @@ void BacktrackingLineSearch::RegisterOptions(
       "If the search direction in the primal variables (x and s) is, in relative terms for each component, "
       "less than this value, the algorithm accepts the full step without line search. "
       "If this happens repeatedly, the algorithm will terminate with a corresponding exit message. "
-      "The default value is 10 times machine precision.");
+      "The default value is 10 times machine precision.",
+      true);
    roptions->AddLowerBoundedNumberOption(
       "tiny_step_y_tol",
       "Tolerance for quitting because of numerically insignificant steps.",
@@ -119,7 +123,8 @@ void BacktrackingLineSearch::RegisterOptions(
       1e-2,
       "If the search direction in the primal variables (x and s) is, "
       "in relative terms for each component, repeatedly less than tiny_step_tol, and "
-      "the step in the y variables is smaller than this threshold, the algorithm will terminate.");
+      "the step in the y variables is smaller than this threshold, the algorithm will terminate.",
+      true);
    roptions->AddLowerBoundedIntegerOption(
       "watchdog_shortened_iter_trigger",
       "Number of shortened iterations that trigger the watchdog.",
@@ -186,7 +191,8 @@ void BacktrackingLineSearch::RegisterOptions(
       0,
       10,
       "If the soft restoration phase is performed for more than so many iterations in a row, "
-      "the regular restoration phase is called.");
+      "the regular restoration phase is called.",
+      true);
 }
 
 bool BacktrackingLineSearch::InitializeImpl(

@@ -70,7 +70,8 @@ void IpoptAlgorithm::RegisterOptions(
       1e10,
       "If the dual variables deviate from their primal estimates, a correction is performed. "
       "(See Eqn. (16) in the implementation paper.) "
-      "Setting the value to less than 1 disables the correction.");
+      "Setting the value to less than 1 disables the correction.",
+      true);
    roptions->AddStringOption2(
       "recalc_y",
       "Tells the algorithm to recalculate the equality and inequality multipliers as least square estimates.",
@@ -102,7 +103,7 @@ void IpoptAlgorithm::RegisterOptions(
       "Also, unless otherwise specified, the values of \"bound_push\", \"bound_frac\", and "
       "\"bound_mult_init_val\" are set more aggressive, and sets \"alpha_for_y=bound_mult\".");
    roptions->SetRegisteringCategory("");
-   roptions->AddStringOption2("sb", "", "no", "no", "", "yes", "");
+   roptions->AddStringOption2("sb", "", "no", "no", "", "yes", "", "", true);
 }
 
 static bool copyright_message_printed = false;

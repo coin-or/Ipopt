@@ -56,7 +56,8 @@ void MinC_1NrmRestorationPhase::RegisterOptions(
       0.,
       "If the restoration phase is terminated because of the \"acceptable\" termination criteria and "
       "the primal infeasibility is smaller than this value, the restoration phase is declared to have failed. "
-      "The default value is actually 1e2*tol, where tol is the general termination tolerance.");
+      "The default value is actually 1e2*tol, where tol is the general termination tolerance.",
+      true);
 }
 
 bool MinC_1NrmRestorationPhase::InitializeImpl(

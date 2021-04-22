@@ -141,7 +141,8 @@ void IpoptCalculatedQuantities::RegisterOptions(
       "Scaling threshold for the NLP error.",
       0., true,
       100.,
-      "(See paragraph after Eqn. (6) in the implementation paper.)");
+      "(See paragraph after Eqn. (6) in the implementation paper.)",
+      true);
 
    roptions->SetRegisteringCategory("NLP");
    roptions->AddLowerBoundedNumberOption(
@@ -149,7 +150,8 @@ void IpoptCalculatedQuantities::RegisterOptions(
       "Weight for linear damping term (to handle one-sided bounds).",
       0., false,
       1e-5,
-      "(see Section 3.7 in implementation paper.)");
+      "(see Section 3.7 in implementation paper.)",
+      true);
 
    roptions->SetRegisteringCategory("Line Search");
    roptions->AddLowerBoundedNumberOption(
@@ -161,7 +163,8 @@ void IpoptCalculatedQuantities::RegisterOptions(
       "If a slack becomes very small compared to machine precision, the corresponding bound is moved slightly. "
       "This parameter determines how large the move should be. "
       "Its default value is mach_eps^{3/4}. "
-      "(See also end of Section 3.5 in implementation paper - but actual implementation might be somewhat different.)");
+      "(See also end of Section 3.5 in implementation paper - but actual implementation might be somewhat different.)",
+      true);
    roptions->SetRegisteringCategory("Line Search");
    roptions->AddStringOption3(
       "constraint_violation_norm_type",
@@ -170,7 +173,8 @@ void IpoptCalculatedQuantities::RegisterOptions(
       "1-norm", "use the 1-norm",
       "2-norm", "use the 2-norm",
       "max-norm", "use the infinity norm",
-      "Determines which norm should be used when the algorithm computes the constraint violation in the line search.");
+      "Determines which norm should be used when the algorithm computes the constraint violation in the line search.",
+      true);
 }
 
 bool IpoptCalculatedQuantities::Initialize(

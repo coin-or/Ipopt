@@ -46,7 +46,8 @@ void FilterLSAcceptor::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
       "The algorithmic parameter theta_max is determined as theta_max_fact "
       "times the maximum of 1 and the constraint violation at initial point. "
       "Any point with a constraint violation larger than theta_max is "
-      "unacceptable to the filter (see Eqn. (21) in the implementation paper).");
+      "unacceptable to the filter (see Eqn. (21) in the implementation paper).",
+      true);
    roptions->AddLowerBoundedNumberOption(
       "theta_min_fact",
       "Determines constraint violation threshold in the switching rule.",
@@ -56,53 +57,61 @@ void FilterLSAcceptor::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
       "times the maximum of 1 and the constraint violation at initial point. "
       "The switching rules treats an iteration as an h-type iteration whenever "
       "the current constraint violation is larger than theta_min (see "
-      "paragraph before Eqn. (19) in the implementation paper).");
+      "paragraph before Eqn. (19) in the implementation paper).",
+      true);
    roptions->AddBoundedNumberOption(
       "eta_phi",
       "Relaxation factor in the Armijo condition.",
       0.0, true,
       0.5, true,
       1e-8,
-      "(See Eqn. (20) in the implementation paper)");
+      "(See Eqn. (20) in the implementation paper)",
+      true);
    roptions->AddLowerBoundedNumberOption(
       "delta",
       "Multiplier for constraint violation in the switching rule.",
       0.0, true,
       1.0,
-      "(See Eqn. (19) in the implementation paper.)");
+      "(See Eqn. (19) in the implementation paper.)",
+      true);
    roptions->AddLowerBoundedNumberOption(
       "s_phi",
       "Exponent for linear barrier function model in the switching rule.",
       1.0, true,
       2.3,
-      "(See Eqn. (19) in the implementation paper.)");
+      "(See Eqn. (19) in the implementation paper.)",
+      true);
    roptions->AddLowerBoundedNumberOption(
       "s_theta",
       "Exponent for current constraint violation in the switching rule.",
       1.0, true,
       1.1,
-      "(See Eqn. (19) in the implementation paper.)");
+      "(See Eqn. (19) in the implementation paper.)",
+      true);
    roptions->AddBoundedNumberOption(
       "gamma_phi",
       "Relaxation factor in the filter margin for the barrier function.",
       0.0, true,
       1.0, true,
       1e-8,
-      "(See Eqn. (18a) in the implementation paper.)");
+      "(See Eqn. (18a) in the implementation paper.)",
+      true);
    roptions->AddBoundedNumberOption(
       "gamma_theta",
       "Relaxation factor in the filter margin for the constraint violation.",
       0.0, true,
       1.0, true,
       1e-5,
-      "(See Eqn. (18b) in the implementation paper.)");
+      "(See Eqn. (18b) in the implementation paper.)",
+      true);
    roptions->AddBoundedNumberOption(
       "alpha_min_frac",
       "Safety factor for the minimal step size (before switching to restoration phase).",
       0.0, true,
       1.0, true,
       0.05,
-      "(This is gamma_alpha in Eqn. (20) in the implementation paper.)");
+      "(This is gamma_alpha in Eqn. (20) in the implementation paper.)",
+      true);
    roptions->AddLowerBoundedIntegerOption(
       "max_soc",
       "Maximum number of second order correction trial steps at each iteration.",
@@ -117,14 +126,16 @@ void FilterLSAcceptor::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
       0.99,
       "This option determines how much a second order correction step must reduce the "
       "constraint violation so that further correction steps are attempted. "
-      "(See Step A-5.9 of Algorithm A in the implementation paper.)");
+      "(See Step A-5.9 of Algorithm A in the implementation paper.)",
+      true);
    roptions->AddLowerBoundedNumberOption(
       "obj_max_inc",
       "Determines the upper bound on the acceptable increase of barrier objective function.",
       1.0, true,
       5.0,
       "Trial points are rejected if they lead to an increase in the "
-      "barrier objective function by more than obj_max_inc orders of magnitude.");
+      "barrier objective function by more than obj_max_inc orders of magnitude.",
+      true);
 
    roptions->AddLowerBoundedIntegerOption(
       "max_filter_resets",
@@ -134,7 +145,8 @@ void FilterLSAcceptor::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
       "A positive number enables a heuristic that resets the filter, whenever "
       "in more than \"filter_reset_trigger\" successive iterations the last "
       "rejected trial steps size was rejected because of the filter. "
-      "This option determine the maximal number of resets that are allowed to take place.");
+      "This option determine the maximal number of resets that are allowed to take place.",
+      true);
    roptions->AddLowerBoundedIntegerOption(
       "filter_reset_trigger",
       "Number of iterations that trigger the filter reset.",
@@ -142,7 +154,8 @@ void FilterLSAcceptor::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
       5,
       "If the filter reset heuristic is active and the number of successive "
       "iterations in which the last rejected trial step size was rejected "
-      "because of the filter, the filter is reset.");
+      "because of the filter, the filter is reset.",
+      true);
 
    roptions->AddStringOption3(
       "corrector_type",
@@ -163,7 +176,8 @@ void FilterLSAcceptor::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
       "The corrector step is not tried if negative curvature has been "
       "encountered during the computation of the search direction in the current iteration. "
       "This option is only used if \"mu_strategy\" is \"adaptive\". "
-      "Changing this option is experimental.");
+      "Changing this option is experimental.",
+      true);
 
    roptions->AddStringOption2(
       "skip_corr_in_monotone_mode",
@@ -173,7 +187,8 @@ void FilterLSAcceptor::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
       "yes", "skip",
       "The corrector step is not tried if the algorithm is currently in the monotone mode (see also option \"barrier_strategy\"). "
       "This option is only used if \"mu_strategy\" is \"adaptive\". "
-      "Changing this option is experimental.");
+      "Changing this option is experimental.",
+      true);
 
    roptions->AddLowerBoundedNumberOption(
       "corrector_compl_avrg_red_fact",
@@ -181,7 +196,8 @@ void FilterLSAcceptor::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
       0.0, true,
       1.0,
       "This option determines the factor by which complementarity is allowed to increase "
-      "for a corrector step to be accepted. Changing this option is experimental.");
+      "for a corrector step to be accepted. Changing this option is experimental.",
+      true);
 
    roptions->AddBoundedIntegerOption(
       "soc_method",

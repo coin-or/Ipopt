@@ -82,7 +82,8 @@ void MonotoneMuUpdate::RegisterOptions(
       "no", "Take at least one iteration per barrier problem",
       "yes", "Allow fast decrease of mu if barrier test it met",
       "If set to \"no\", the algorithm enforces at least one iteration per barrier problem, "
-      "even if the barrier test is already met for the updated barrier parameter.");
+      "even if the barrier test is already met for the updated barrier parameter.",
+      true);
    roptions->AddBoundedNumberOption(
       "tau_min",
       "Lower bound on fraction-to-the-boundary parameter tau.",
@@ -90,7 +91,8 @@ void MonotoneMuUpdate::RegisterOptions(
       1., true,
       0.99,
       "(This is tau_min in the implementation paper.) "
-      "This option is also used in the adaptive mu strategy during the monotone mode.");
+      "This option is also used in the adaptive mu strategy during the monotone mode.",
+      true);
 }
 
 bool MonotoneMuUpdate::InitializeImpl(

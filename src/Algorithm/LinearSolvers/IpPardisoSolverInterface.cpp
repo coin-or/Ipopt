@@ -105,13 +105,17 @@ void PardisoSolverInterface::RegisterOptions(
       "Toggle for handling case when elements were perturbed by Pardiso.",
       "no",
       "no", "Always redo symbolic factorization when elements were perturbed",
-      "yes", "Only redo symbolic factorization when elements were perturbed if also the inertia was wrong");
+      "yes", "Only redo symbolic factorization when elements were perturbed if also the inertia was wrong",
+      "",
+      true);
    roptions->AddStringOption2(
       "pardiso_repeated_perturbation_means_singular",
       "Interpretation of perturbed elements.",
       "no",
       "no", "Don't assume that matrix is singular if elements were perturbed after recent symbolic factorization",
-      "yes", "Assume that matrix is singular if elements were perturbed after recent symbolic factorization");
+      "yes", "Assume that matrix is singular if elements were perturbed after recent symbolic factorization",
+      "",
+      true);
    //roptions->AddLowerBoundedIntegerOption(
    //  "pardiso_out_of_core_power",
    //  "Enables out-of-core variant of Pardiso",
@@ -134,7 +138,8 @@ void PardisoSolverInterface::RegisterOptions(
       "no", "check inertia",
       "yes", "skip inertia check",
       "Setting this option to \"yes\" essentially disables inertia check. "
-      "This option makes the algorithm non-robust and easily fail, but it might give some insight into the necessity of inertia control.");
+      "This option makes the algorithm non-robust and easily fail, but it might give some insight into the necessity of inertia control.",
+      true);
    roptions->AddIntegerOption(
       "pardiso_max_iterative_refinement_steps",
       "Limit on number of iterative refinement steps.",
@@ -159,64 +164,75 @@ void PardisoSolverInterface::RegisterOptions(
       "Maximum number of Krylov-Subspace Iteration",
       1,
       500,
-      "DPARM(1)");
+      "DPARM(1)",
+      true);
    roptions->AddBoundedNumberOption(
       "pardiso_iter_relative_tol",
       "Relative Residual Convergence",
       0.0, true,
       1.0, true,
       1e-6,
-      "DPARM(2)");
+      "DPARM(2)",
+      true);
    roptions->AddLowerBoundedIntegerOption(
       "pardiso_iter_coarse_size",
       "Maximum Size of Coarse Grid Matrix",
       1,
       5000,
-      "DPARM(3)");
+      "DPARM(3)",
+      true);
    roptions->AddLowerBoundedIntegerOption(
       "pardiso_iter_max_levels",
       "Maximum Size of Grid Levels",
       1,
       10,
-      "DPARM(4)");
+      "DPARM(4)",
+      true);
    roptions->AddBoundedNumberOption(
       "pardiso_iter_dropping_factor",
       "dropping value for incomplete factor",
       0.0, true,
       1.0, true,
       0.5,
-      "DPARM(5)");
+      "DPARM(5)",
+      true);
    roptions->AddBoundedNumberOption(
       "pardiso_iter_dropping_schur",
       "dropping value for sparsify schur complement factor",
       0.0, true,
       1.0, true,
       1e-1,
-      "DPARM(6)");
+      "DPARM(6)",
+      true);
    roptions->AddLowerBoundedIntegerOption(
       "pardiso_iter_max_row_fill",
       "max fill for each row",
       1,
       10000000,
-      "DPARM(7)");
+      "DPARM(7)",
+      true);
    roptions->AddLowerBoundedNumberOption(
       "pardiso_iter_inverse_norm_factor",
       "",
       1, true,
       5000000,
-      "DPARM(8)");
+      "DPARM(8)",
+      true);
    roptions->AddStringOption2(
       "pardiso_iterative",
       "Switch on iterative solver in Pardiso library",
       "no",
       "no", "do not switch on iterative solver",
-      "yes", "switch on iterative solver");
+      "yes", "switch on iterative solver",
+      "",
+      true);
    roptions->AddLowerBoundedIntegerOption(
       "pardiso_max_droptol_corrections",
       "Maximal number of decreases of drop tolerance during one solve.",
       1,
       4,
-      "This is relevant only for iterative Pardiso options.");
+      "This is relevant only for iterative Pardiso options.",
+      true);
 }
 
 bool PardisoSolverInterface::InitializeImpl(

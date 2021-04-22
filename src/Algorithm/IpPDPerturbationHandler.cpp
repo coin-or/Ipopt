@@ -90,7 +90,8 @@ void PDPerturbationHandler::RegisterOptions(
       "Exponent for mu in the regularization for rank-deficient constraint Jacobians.",
       0., false,
       0.25,
-      "(This is kappa_c in the implementation paper.)");
+      "(This is kappa_c in the implementation paper.)",
+      true);
    roptions->AddStringOption2(
       "perturb_always_cd",
       "Active permanent perturbation of constraint linearization.",
@@ -98,7 +99,8 @@ void PDPerturbationHandler::RegisterOptions(
       "no", "perturbation only used when required",
       "yes", "always use perturbation",
       "This options makes the delta_c and delta_d perturbation be used for the computation of every search direction. "
-      "Usually, it is only used when the iteration matrix is singular.");
+      "Usually, it is only used when the iteration matrix is singular.",
+      true);
 }
 
 bool PDPerturbationHandler::InitializeImpl(

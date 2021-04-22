@@ -58,14 +58,16 @@ void PDFullSpaceSolver::RegisterOptions(
       0., true,
       1e-10,
       "Iterative refinement is performed until the residual test ratio is less than this tolerance "
-      "(or until \"max_refinement_steps\" refinement steps are performed).");
+      "(or until \"max_refinement_steps\" refinement steps are performed).",
+      true);
    roptions->AddLowerBoundedNumberOption(
       "residual_ratio_singular",
       "Threshold for declaring linear system singular after failed iterative refinement.",
       0., true,
       1e-5,
       "If the residual test ratio is larger than this value after failed iterative refinement, "
-      "the algorithm pretends that the linear system is singular.");
+      "the algorithm pretends that the linear system is singular.",
+      true);
    // ToDo Think about following option - are the correct norms used?
    roptions->AddLowerBoundedNumberOption(
       "residual_improvement_factor",
@@ -73,7 +75,8 @@ void PDFullSpaceSolver::RegisterOptions(
       0., true,
       0.999999999,
       "If the improvement of the residual test ratio made by one iterative refinement step is not better than this factor, "
-      "iterative refinement is aborted.");
+      "iterative refinement is aborted.",
+      true);
    roptions->AddLowerBoundedNumberOption(
       "neg_curv_test_tol",
       "Tolerance for heuristic to ignore wrong inertia.",

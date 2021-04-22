@@ -59,37 +59,51 @@ void CGSearchDirCalculator::RegisterOptions(
       "pen_des_fact",
       "a parameter used in penalty parameter computation (for Chen-Goldfarb line search).",
       0., true,
-      2e-1);
+      2e-1,
+      "",
+      true);
    roptions->AddLowerBoundedNumberOption(
       "kappa_x_dis",
       "a parameter used to check if the fast direction can be used as the line search direction (for Chen-Goldfarb line search).",
       0., true,
-      1e2);
+      1e2,
+      "",
+      true);
    roptions->AddLowerBoundedNumberOption(
       "kappa_y_dis",
       "a parameter used to check if the fast direction can be used as the line search direction (for Chen-Goldfarb line search).",
       0., true,
-      1e4);
+      1e4,
+      "",
+      true);
    roptions->AddLowerBoundedNumberOption(
       "vartheta",
       "a parameter used to check if the fast direction can be used as the line search direction (for Chen-Goldfarb line search).",
       0., true,
-      0.5);
+      0.5,
+      "",
+      true);
    roptions->AddLowerBoundedNumberOption(
       "delta_y_max",
       "a parameter used to check if the fast direction can be used as the line search direction (for Chen-Goldfarb line search).",
       0., true,
-      1e12);
+      1e12,
+      "",
+      true);
    roptions->AddLowerBoundedNumberOption(
       "fast_des_fact",
       "a parameter used to check if the fast direction can be used as the line search direction (for Chen-Goldfarb line search).",
       0., true,
-      1e-1);
+      1e-1,
+      "",
+      true);
    roptions->AddLowerBoundedNumberOption(
       "pen_init_fac",
       "a parameter used to choose initial penalty parameters when the regularized Newton method is used.",
       0., true,
-      5e1);
+      5e1,
+      "",
+      true);
    roptions->AddStringOption2(
       "never_use_fact_cgpen_direction",
       "Toggle to switch off the fast Chen-Goldfarb direction",

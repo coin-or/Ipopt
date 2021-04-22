@@ -63,11 +63,15 @@ void WarmStartIterateInitializer::RegisterOptions(
       "Tells algorithm whether to use the GetWarmStartIterate method in the NLP.",
       "no",
       "no", "call GetStartingPoint in the NLP",
-      "yes", "call GetWarmStartIterate in the NLP");
+      "yes", "call GetWarmStartIterate in the NLP",
+      "",
+      true);
    roptions->AddNumberOption(
       "warm_start_target_mu",
       "Unsupported!",
-      0.);
+      0.,
+      "",
+      true);
 }
 
 bool WarmStartIterateInitializer::InitializeImpl(

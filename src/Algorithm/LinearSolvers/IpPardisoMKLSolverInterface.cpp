@@ -115,13 +115,17 @@ void PardisoMKLSolverInterface::RegisterOptions(
       "Toggle for handling case when elements were perturbed by Pardiso.",
       "no",
       "no", "Always redo symbolic factorization when elements were perturbed",
-      "yes", "Only redo symbolic factorization when elements were perturbed if also the inertia was wrong");
+      "yes", "Only redo symbolic factorization when elements were perturbed if also the inertia was wrong",
+      "",
+      true);
    roptions->AddStringOption2(
       "pardisomkl_repeated_perturbation_means_singular",
       "Interpretation of perturbed elements.",
       "no",
       "no", "Don't assume that matrix is singular if elements were perturbed after recent symbolic factorization",
-      "yes", "Assume that matrix is singular if elements were perturbed after recent symbolic factorization");
+      "yes", "Assume that matrix is singular if elements were perturbed after recent symbolic factorization",
+      "",
+      true);
    //roptions->AddLowerBoundedIntegerOption(
    //  "pardisomkl_out_of_core_power",
    //  "Enables out-of-core variant of Pardiso",
@@ -144,7 +148,8 @@ void PardisoMKLSolverInterface::RegisterOptions(
       "no", "check inertia",
       "yes", "skip inertia check",
       "Setting this option to \"yes\" essentially disables inertia check. "
-      "This option makes the algorithm non-robust and easily fail, but it might give some insight into the necessity of inertia control.");
+      "This option makes the algorithm non-robust and easily fail, but it might give some insight into the necessity of inertia control.",
+      true);
    roptions->AddIntegerOption(
       "pardisomkl_max_iterative_refinement_steps",
       "Limit on number of iterative refinement steps.",

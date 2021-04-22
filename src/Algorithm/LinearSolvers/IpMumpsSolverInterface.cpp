@@ -171,7 +171,7 @@ void MumpsSolverInterface::RegisterOptions(
       0.0,
       "When MUMPS is used to determine linearly dependent constraints, "
       "this is determines the threshold for a pivot to be considered zero. "
-      "This is CNTL(3) in MUMPS.");
+      "This is CNTL(3) in MUMPS.", true);
 }
 
 /// give name of MUMPS with version info

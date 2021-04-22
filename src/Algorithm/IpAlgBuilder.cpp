@@ -328,7 +328,9 @@ void AlgorithmBuilder::RegisterOptions(
       "Strategy for solving the augmented system for low-rank Hessian.",
       "sherman-morrison",
       "sherman-morrison", "use Sherman-Morrison formula",
-      "extended", "use an extended augmented system");
+      "extended", "use an extended augmented system",
+      "",
+      true);
 
    roptions->SetRegisteringCategory("Line Search");
    roptions->AddStringOption3(
@@ -339,7 +341,8 @@ void AlgorithmBuilder::RegisterOptions(
       "cg-penalty", "Chen-Goldfarb penalty function",
       "penalty", "Standard penalty function",
       "Only the \"filter\" choice is officially supported. "
-      "But sometimes, good results might be obtained with the other choices.");
+      "But sometimes, good results might be obtained with the other choices.",
+      true);
    roptions->SetRegisteringCategory("Undocumented");
    roptions->AddStringOption2(
       "wsmp_iterative",
@@ -347,7 +350,8 @@ void AlgorithmBuilder::RegisterOptions(
       "no",
       "no", "use direct solver",
       "yes", "use iterative solver",
-      "EXPERIMENTAL!");
+      "EXPERIMENTAL!",
+      true);
 }
 
 SmartPtr<SymLinearSolver> AlgorithmBuilder::GetSymLinearSolver(

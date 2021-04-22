@@ -140,13 +140,16 @@ void TNLPAdapter::RegisterOptions(
       "none",
       options,
       descrs,
-      "This is experimental and does not work well.");
+      "This is experimental and does not work well.",
+      true);
    roptions->AddStringOption2(
       "dependency_detection_with_rhs",
       "Indicates if the right hand sides of the constraints should be considered during dependency detection",
       "no",
       "no", "only look at gradients",
-      "yes", "also consider right hand side");
+      "yes", "also consider right hand side",
+      "",
+      true);
    roptions->AddLowerBoundedIntegerOption(
       "num_linear_variables",
       "Number of linear variables",
@@ -154,7 +157,8 @@ void TNLPAdapter::RegisterOptions(
       0,
       "When the Hessian is approximated, it is assumed that the first num_linear_variables variables are linear. "
       "The Hessian is then not approximated in this space. "
-      "If the get_number_of_nonlinear_variables method in the TNLP is implemented, this option is ignored.");
+      "If the get_number_of_nonlinear_variables method in the TNLP is implemented, this option is ignored.",
+      true);
 
    roptions->SetRegisteringCategory("Derivative Checker");
    roptions->AddStringOption4(
@@ -201,13 +205,16 @@ void TNLPAdapter::RegisterOptions(
       "Specifies technique to compute constraint Jacobian",
       "exact",
       "exact", "user-provided derivatives",
-      "finite-difference-values", "user-provided structure, values by finite differences");
+      "finite-difference-values", "user-provided structure, values by finite differences",
+      "",
+      true);
    roptions->AddLowerBoundedNumberOption(
       "findiff_perturbation",
       "Size of the finite difference perturbation for derivative approximation.",
       0., true,
       1e-7,
-      "This determines the relative perturbation of the variable entries.");
+      "This determines the relative perturbation of the variable entries.",
+      true);
    roptions->AddLowerBoundedNumberOption(
       "point_perturbation_radius",
       "Maximal perturbation of an evaluation point.",

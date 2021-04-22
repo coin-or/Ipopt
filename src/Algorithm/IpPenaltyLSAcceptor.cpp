@@ -40,16 +40,22 @@ void PenaltyLSAcceptor::RegisterOptions(
       "nu_init",
       "Initial value of the penalty parameter.",
       0., true,
-      1e-6);
+      1e-6,
+      "",
+      true);
    roptions->AddLowerBoundedNumberOption(
       "nu_inc", "Increment of the penalty parameter.",
       0., true,
-      1e-4);
+      1e-4,
+      "",
+      true);
    roptions->AddBoundedNumberOption(
       "rho", "Value in penalty parameter update formula.",
       0., true,
       1., true,
-      1e-1);
+      1e-1,
+      "",
+      true);
 
 }
 

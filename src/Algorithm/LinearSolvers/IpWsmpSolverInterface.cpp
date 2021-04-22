@@ -114,7 +114,8 @@ void WsmpSolverInterface::RegisterOptions(
       "Determines how ordering is done in WSMP",
       0, 3,
       1,
-      "This corresponds to the value of WSSMP's IPARM(20).");
+      "This corresponds to the value of WSSMP's IPARM(20).",
+      true);
    roptions->AddBoundedNumberOption(
       "wsmp_pivtol",
       "Pivot tolerance for the linear solver WSMP.",
@@ -148,7 +149,8 @@ void WsmpSolverInterface::RegisterOptions(
       "Iteration in which the matrices are written to files.",
       -1,
       -1,
-      "If non-negative, this option determines the iteration in which all matrices given to WSMP are written to files.");
+      "If non-negative, this option determines the iteration in which all matrices given to WSMP are written to files.",
+      true);
    roptions->AddStringOption2(
       "wsmp_skip_inertia_check",
       "Always pretend inertia is correct.",
@@ -156,7 +158,8 @@ void WsmpSolverInterface::RegisterOptions(
       "no", "check inertia",
       "yes", "skip inertia check",
       "Setting this option to \"yes\" essentially disables inertia check. "
-      "This option makes the algorithm non-robust and easily fail, but it might give some insight into the necessity of inertia control.");
+      "This option makes the algorithm non-robust and easily fail, but it might give some insight into the necessity of inertia control.",
+      true);
    roptions->AddStringOption2(
       "wsmp_no_pivoting",
       "Use the static pivoting option of WSMP.",
@@ -165,7 +168,8 @@ void WsmpSolverInterface::RegisterOptions(
       "yes", "use static pivoting",
       "Setting this option to \"yes\" means that WSMP instructed not to do pivoting. "
       "This works only in certain situations (when the Hessian block is known to be positive definite or when we are using L-BFGS). "
-      "It can also lead to a lot of fill-in.");
+      "It can also lead to a lot of fill-in.",
+      true);
 }
 
 bool WsmpSolverInterface::InitializeImpl(

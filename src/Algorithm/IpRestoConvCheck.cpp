@@ -46,7 +46,8 @@ void RestoConvergenceCheck::RegisterOptions(
       "max_resto_iter",
       "Maximum number of successive iterations in restoration phase.", 0, 3000000,
       "The algorithm terminates with an error message if the number of iterations successively taken "
-      "in the restoration phase exceeds this number.");
+      "in the restoration phase exceeds this number.",
+      true);
 }
 
 bool RestoConvergenceCheck::InitializeImpl(

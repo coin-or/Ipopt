@@ -76,7 +76,8 @@ void OrigIpoptNLP::RegisterOptions(
       "no", "Assume this is a new problem.",
       "yes", "Assume this is problem has known structure",
       "If \"yes\" is chosen, then the algorithm assumes that an NLP is now to be solved, "
-      "whose structure is identical to one that already was considered (with the same NLP object).");
+      "whose structure is identical to one that already was considered (with the same NLP object).",
+      true);
    roptions->SetRegisteringCategory("NLP");
    roptions->AddStringOption2(
       "check_derivatives_for_naninf",
@@ -127,7 +128,9 @@ void OrigIpoptNLP::RegisterOptions(
       "Indicates in which subspace the Hessian information is to be approximated.",
       "nonlinear-variables",
       "nonlinear-variables", "only in space of nonlinear variables.",
-      "all-variables", "in space of all variables (without slacks)");
+      "all-variables", "in space of all variables (without slacks)",
+      "",
+      true);
 }
 
 bool OrigIpoptNLP::Initialize(
