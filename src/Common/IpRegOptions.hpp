@@ -904,19 +904,28 @@ public:
    /** Output documentation for the options - gives a description, etc. */
    virtual void OutputOptionDocumentation(
       const Journalist&       jnlst,
-      std::list<std::string>& categories
+      std::list<std::string>& categories,
+      bool                    output_advanced = false
    );
 
-   /** Output documentation in Latex format to include in a latex file */
+   /** Output documentation in Latex format to include in a latex file
+    *
+    * If options_to_print is empty, then all options are printed.
+    */
    virtual void OutputLatexOptionDocumentation(
       const Journalist&       jnlst,
-      std::list<std::string>& categories
+      std::list<std::string>& options_to_print,
+      bool                    output_advanced = false
    );
 
-   /** Output documentation in Doxygen format to include in doxygen documentation */
+   /** Output documentation in Doxygen format to include in doxygen documentation
+    *
+    * If options_to_print is empty, then all options are printed.
+    */
    virtual void OutputDoxygenOptionDocumentation(
       const Journalist&       jnlst,
-      std::list<std::string>& categories
+      std::list<std::string>& options_to_print,
+      bool                    output_advanced = false
    );
    ///@}
 

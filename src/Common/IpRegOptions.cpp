@@ -1318,7 +1318,8 @@ SmartPtr<const RegisteredOption> RegisteredOptions::GetOption(
 
 void RegisteredOptions::OutputOptionDocumentation(
    const Journalist&       jnlst,
-   std::list<std::string>& categories
+   std::list<std::string>& categories,
+   bool                    output_advanced
 )
 {
    // create a set to print sorted output
@@ -1338,11 +1339,13 @@ void RegisteredOptions::OutputOptionDocumentation(
       std::map<std::string, SmartPtr<RegisteredOption> >::iterator option;
       for( option = registered_options_.begin(); option != registered_options_.end(); option++ )
       {
-         if( option->second->RegisteringCategory() == (*i) )
-         {
+         if( option->second->RegisteringCategory() != (*i) )
+            continue;
 
-            class_options[option->second->Counter()] = option->second;
-         }
+         if( !output_advanced && option->second->Advanced() )
+            continue;
+
+         class_options[option->second->Counter()] = option->second;
       }
       std::map<Index, SmartPtr<RegisteredOption> >::const_iterator co;
       for( co = class_options.begin(); co != class_options.end(); co++ )
@@ -1356,7 +1359,8 @@ void RegisteredOptions::OutputOptionDocumentation(
 
 void RegisteredOptions::OutputLatexOptionDocumentation(
    const Journalist&       jnlst,
-   std::list<std::string>& options_to_print
+   std::list<std::string>& options_to_print,
+   bool                    output_advanced
 )
 {
 
@@ -1365,18 +1369,20 @@ void RegisteredOptions::OutputLatexOptionDocumentation(
       std::list<std::string>::iterator coption;
       for( coption = options_to_print.begin(); coption != options_to_print.end(); coption++ )
       {
-         // std::map <std::string, SmartPtr<RegisteredOption> >::iterator option;
          if( coption->c_str()[0] == '#' )
          {
             jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
                          "\\subsection{%s}\n\n", &coption->c_str()[1]);
+            continue;
          }
-         else
-         {
-            SmartPtr<RegisteredOption> option = registered_options_[*coption];
-            DBG_ASSERT(IsValid(option));
-            option->OutputLatexDescription(jnlst);
-         }
+
+         SmartPtr<RegisteredOption> option = registered_options_[*coption];
+         DBG_ASSERT(IsValid(option));
+
+         if( !output_advanced && option->Advanced() )
+            continue;
+
+         option->OutputLatexDescription(jnlst);
       }
    }
    else
@@ -1384,6 +1390,9 @@ void RegisteredOptions::OutputLatexOptionDocumentation(
       std::map<std::string, SmartPtr<RegisteredOption> >::iterator option;
       for( option = registered_options_.begin(); option != registered_options_.end(); option++ )
       {
+         if( !output_advanced && option->second->Advanced() )
+            continue;
+
          option->second->OutputLatexDescription(jnlst);
       }
    }
@@ -1391,7 +1400,8 @@ void RegisteredOptions::OutputLatexOptionDocumentation(
 
 void RegisteredOptions::OutputDoxygenOptionDocumentation(
    const Journalist&       jnlst,
-   std::list<std::string>& options_to_print
+   std::list<std::string>& options_to_print,
+   bool                    output_advanced
 )
 {
 
@@ -1400,24 +1410,25 @@ void RegisteredOptions::OutputDoxygenOptionDocumentation(
       std::list<std::string>::iterator coption;
       for( coption = options_to_print.begin(); coption != options_to_print.end(); coption++ )
       {
-         // std::map <std::string, SmartPtr<RegisteredOption> >::iterator option;
          if( (*coption)[0] == '#' )
          {
             std::string anchorname = &coption->c_str()[1];
             for( std::string::iterator it = anchorname.begin(); it != anchorname.end(); ++it )
                if( *it == ' ' )
-               {
                   *it = '_';
-               }
             jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
                          "\\subsection OPT_%s %s\n\n", anchorname.c_str(), &coption->c_str()[1]);
+
+            continue;
          }
-         else
-         {
-            SmartPtr<RegisteredOption> option = registered_options_[*coption];
-            DBG_ASSERT(IsValid(option));
-            option->OutputDoxygenDescription(jnlst);
-         }
+
+         SmartPtr<RegisteredOption> option = registered_options_[*coption];
+         DBG_ASSERT(IsValid(option));
+
+         if( !output_advanced && option->Advanced() )
+            continue;
+
+         option->OutputDoxygenDescription(jnlst);
       }
    }
    else
@@ -1425,6 +1436,9 @@ void RegisteredOptions::OutputDoxygenOptionDocumentation(
       std::map<std::string, SmartPtr<RegisteredOption> >::iterator option;
       for( option = registered_options_.begin(); option != registered_options_.end(); option++ )
       {
+         if( !output_advanced && option->second->Advanced() )
+            continue;
+
          option->second->OutputDoxygenDescription(jnlst);
       }
    }
