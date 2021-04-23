@@ -356,7 +356,7 @@ void RegisteredOption::OutputDoxygenDescription(
 ) const
 {
    jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                "\\anchor OPT_%s\n <strong>%s</strong>", name_.c_str(), name_.c_str());
+                "\\anchor OPT_%s\n<strong>%s</strong>", name_.c_str(), name_.c_str());
    if( advanced_ )
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " (<em>advanced</em>)");
 
@@ -439,7 +439,7 @@ void RegisteredOption::OutputDoxygenDescription(
 
       buff = MakeValidHTMLNumber(default_number_);
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                   " and its default value is %s.\n\n", buff.c_str());
+                   " and its default value is %s.\n", buff.c_str());
 
    }
    else if( type_ == OT_Integer )
@@ -480,7 +480,7 @@ void RegisteredOption::OutputDoxygenDescription(
       }
 
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                   " and its default value is %d.\n\n", (Index) default_number_);
+                   " and its default value is %d.\n", (Index) default_number_);
    }
    else if( type_ == OT_String )
    {
