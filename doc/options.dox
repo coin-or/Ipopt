@@ -104,9 +104,7 @@ Possible values:
 <blockquote>
  If selected, the algorithm will print the list of all options set by the user including their values and whether they have been used. In some cases this information might be incorrect, due to the internal program flow. The default value for this string option is "no".
 
-Possible values:
- - yes
- - no
+Possible values: yes, no
 </blockquote>
 
 \anchor OPT_print_options_documentation
@@ -114,9 +112,7 @@ Possible values:
 <blockquote>
  The default value for this string option is "no".
 
-Possible values:
- - yes
- - no
+Possible values: yes, no
 </blockquote>
 
 \anchor OPT_print_timing_statistics
@@ -124,9 +120,7 @@ Possible values:
 <blockquote>
  If selected, the program will print the CPU usage (user time) for selected tasks. If enabled, timing_statistics=yes is implied. The default value for this string option is "no".
 
-Possible values:
- - yes
- - no
+Possible values: yes, no
 </blockquote>
 
 \anchor OPT_print_info_string
@@ -134,9 +128,7 @@ Possible values:
 <blockquote>
  This string contains some insider information about the current iteration. For details, look for "Diagnostic Tags" in the Ipopt documentation. The default value for this string option is "no".
 
-Possible values:
- - yes
- - no
+Possible values: yes, no
 </blockquote>
 
 \anchor OPT_inf_pr_output
@@ -348,9 +340,7 @@ Possible values:
 <blockquote>
  Ipopt might relax the bounds during the optimization (see, e.g., option "bound_relax_factor"). This option determines whether the final point should be projected back into the user-provide original bounds after the optimization. The default value for this string option is "yes".
 
-Possible values:
- - yes
- - no
+Possible values: yes, no
 </blockquote>
 
 \anchor OPT_check_derivatives_for_naninf
@@ -358,9 +348,7 @@ Possible values:
 <blockquote>
  Activating this option will cause an error if an invalid number is detected in the constraint Jacobians or the Lagrangian Hessian. If this is not activated, the test is skipped, and the algorithm might proceed with invalid numbers and fail. If test is activated and an invalid number is detected, the matrix is written to output with print_level corresponding to J_MORE_DETAILED; so beware of large output! The default value for this string option is "no".
 
-Possible values:
- - yes
- - no
+Possible values: yes, no
 </blockquote>
 
 \anchor OPT_jac_c_constant
@@ -368,9 +356,7 @@ Possible values:
 <blockquote>
  Activating this option will cause Ipopt to ask for the Jacobian of the equality constraints only once from the NLP and reuse this information later. The default value for this string option is "no".
 
-Possible values:
- - yes
- - no
+Possible values: yes, no
 </blockquote>
 
 \anchor OPT_jac_d_constant
@@ -378,9 +364,7 @@ Possible values:
 <blockquote>
  Activating this option will cause Ipopt to ask for the Jacobian of the inequality constraints only once from the NLP and reuse this information later. The default value for this string option is "no".
 
-Possible values:
- - yes
- - no
+Possible values: yes, no
 </blockquote>
 
 \anchor OPT_hessian_constant
@@ -388,9 +372,7 @@ Possible values:
 <blockquote>
  Activating this option will cause Ipopt to ask for the Hessian of the Lagrangian function only once from the NLP and reuse this information later. The default value for this string option is "no".
 
-Possible values:
- - yes
- - no
+Possible values: yes, no
 </blockquote>
 
 
@@ -579,9 +561,7 @@ Possible values:
 <blockquote>
  Setting this option to "yes" essentially disables the line search and makes the algorithm take aggressive steps, without global convergence guarantees. The default value for this string option is "no".
 
-Possible values:
- - yes
- - no
+Possible values: yes, no
 </blockquote>
 
 \anchor OPT_alpha_for_y
@@ -796,9 +776,7 @@ Possible values:
 <blockquote>
  This option is only important if a linear scaling method (e.g., mc19) is used. If you choose "no", then the scaling factors are computed for every linear system from the start. This can be quite expensive. Choosing "yes" means that the algorithm will start the scaling method only when the solutions to the linear system seem not good, and then use it until the end. The default value for this string option is "yes".
 
-Possible values:
- - yes
- - no
+Possible values: yes, no
 </blockquote>
 
 
@@ -809,9 +787,7 @@ Possible values:
 <blockquote>
  If enabled, line search is disabled and the (unglobalized) adaptive mu strategy is chosen with the "probing" oracle, and "corrector_type=affine" is used without any safeguards; you should not set any of those options explicitly in addition. Also, unless otherwise specified, the values of "bound_push", "bound_frac", and "bound_mult_init_val" are set more aggressive, and sets "alpha_for_y=bound_mult". The Mehrotra's predictor-corrector algorithm works usually very well for LPs and convex QPs. The default value for this string option is "no".
 
-Possible values:
- - yes
- - no
+Possible values: yes, no
 </blockquote>
 
 \anchor OPT_fast_step_computation
@@ -819,9 +795,7 @@ Possible values:
 <blockquote>
  If enabled, the algorithm assumes that the linear system that is solved to obtain the search direction is solved sufficiently well. In that case, no residuals are computed to verify the solution and the computation of the search direction is a little faster. The default value for this string option is "no".
 
-Possible values:
- - yes
- - no
+Possible values: yes, no
 </blockquote>
 
 \anchor OPT_max_hessian_perturbation
@@ -881,9 +855,7 @@ Possible values:
 <blockquote>
  This options is meant to activate heuristics that may speed up the infeasibility determination if you expect that there is a good chance for the problem to be infeasible. In the filter line search procedure, the restoration phase is called more quickly than usually, and more reduction in the constraint violation is enforced before the restoration phase is left. If the problem is square, this option is enabled automatically. The default value for this string option is "no".
 
-Possible values:
- - yes
- - no
+Possible values: yes, no
 </blockquote>
 
 \anchor OPT_expect_infeasible_problem_ctol
@@ -905,9 +877,7 @@ Possible values:
 <blockquote>
  Setting this option to "yes" forces the algorithm to switch to the feasibility restoration phase in the first iteration. If the initial point is feasible, the algorithm will abort with a failure. The default value for this string option is "no".
 
-Possible values:
- - yes
- - no
+Possible values: yes, no
 </blockquote>
 
 \anchor OPT_soft_resto_pderror_reduction_factor
@@ -929,9 +899,7 @@ Possible values:
 <blockquote>
  Enabling this option makes the restoration phase algorithm evaluate the objective function of the original problem at every trial point encountered during the restoration phase, even if this value is not required.  In this way, it is guaranteed that the original objective function can be evaluated without error at all accepted iterates; otherwise the algorithm might fail at a point where the restoration phase accepts an iterate that is good for the restoration phase problem, but not the original problem. On the other hand, if the evaluation of the original objective is expensive, this might be costly. The default value for this string option is "yes".
 
-Possible values:
- - yes
- - no
+Possible values: yes, no
 </blockquote>
 
 \anchor OPT_bound_mult_reset_threshold
@@ -989,9 +957,7 @@ Possible values:
 <blockquote>
  Determines verbosity of derivative checker. The default value for this string option is "no".
 
-Possible values:
- - yes
- - no
+Possible values: yes, no
 </blockquote>
 
 \anchor OPT_point_perturbation_radius
@@ -1067,9 +1033,7 @@ Possible values:
 <blockquote>
  Until Nov 2010, Ipopt used a special update during the restoration phase, but it turned out that this does not work well. The new default uses the regular update procedure and it improves results. If for some reason you want to get back to the original update, set this option to "yes". The default value for this string option is "no".
 
-Possible values:
- - yes
- - no
+Possible values: yes, no
 </blockquote>
 
 \anchor OPT_hessian_approximation
@@ -1156,9 +1120,7 @@ Possible values:
 <blockquote>
  For higher reliability of the MA57 solver, you may want to set this option to yes. This is ICNTL(15) in MA57. The default value for this string option is "no".
 
-Possible values:
- - yes
- - no
+Possible values: yes, no
 </blockquote>
 
 \anchor OPT_ma57_block_size
@@ -1603,9 +1565,7 @@ Possible values:
 <blockquote>
  The default value for this string option is "yes".
 
-Possible values:
- - yes
- - no
+Possible values: yes, no
 </blockquote>
 
 
@@ -1725,9 +1685,7 @@ Possible values:
 <blockquote>
  The overall algorithm time is unaffected by this option. The default value for this string option is "no".
 
-Possible values:
- - yes
- - no
+Possible values: yes, no
 </blockquote>
 
 */

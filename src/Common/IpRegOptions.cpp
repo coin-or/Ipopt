@@ -482,19 +482,35 @@ void RegisteredOption::OutputDoxygenDescription(
                    " The default value for this string option is \"%s\".\n", default_string_.c_str());
 
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                   "\nPossible values:\n");
-      for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end(); i++ )
-      {
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                      " - %s", i->value_.c_str());
+                   "\nPossible values:");
 
+      bool havedescr = false;
+      for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end() && !havedescr; i++ )
          if( (*i).description_.length() > 0 )
+            havedescr = true;
+
+      if( havedescr )
+      {
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
+         for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end(); i++ )
          {
-            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                         ": %s", i->description_.c_str());
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " - %s", i->value_.c_str());
+            if( (*i).description_.length() > 0 )
+            {
+               jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, ": %s", i->description_.c_str());
+            }
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
          }
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                      "\n");
+      }
+      else
+      {
+         for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end(); i++ )
+         {
+            if( i != valid_strings_.begin() )
+               jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, ",", i->value_.c_str());
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " %s", i->value_.c_str());
+         }
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
       }
 
       /*
