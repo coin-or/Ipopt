@@ -33,7 +33,8 @@ void RegisteredOption::OutputDescription(
    }
 
    jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                "\n### %s (%s) ###\nCategory: %s\nDescription: %s\n", name_.c_str(), type_str.c_str(),
+                "\n### %s (%s) %s ###\nCategory: %s\nDescription: %s\n", name_.c_str(), type_str.c_str(),
+                advanced_ ? "(advanced)" : "",
                 IsValid(registering_category_) ? registering_category_->Name().c_str() : "n/a", short_description_.c_str());
 
    if( type_ == OT_Number )
@@ -137,6 +138,8 @@ void RegisteredOption::OutputLatexDescription(
    MakeValidLatexString(short_description_, latex_desc);
    jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
                 "\\paragraph{%s:}\\label{opt:%s} ", latex_name.c_str(), name_.c_str());
+   if( advanced_ )
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "(advanced) ");
    if( short_description_.length() == 0 )
    {
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
@@ -354,6 +357,9 @@ void RegisteredOption::OutputDoxygenDescription(
 {
    jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
                 "\\anchor OPT_%s\n <strong>%s</strong>", name_.c_str(), name_.c_str());
+   if( advanced_ )
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " (<em>advanced</em>)");
+
    if( short_description_.length() > 0 )
    {
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
@@ -662,6 +668,8 @@ void RegisteredOption::OutputShortDescription(
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
                    "(\"%s\")\n", default_string_.c_str());
    }
+   if( advanced_ )
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "   Advanced option for expert users.\n");
    jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
                 "   ");
    jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 3, 76, short_description_.c_str());
@@ -1568,9 +1576,7 @@ void RegisteredOptions::RegisterOptions(
       "text",
       "text", "Ordinary text",
       "latex", "LaTeX formatted",
-      "doxygen", "Doxygen (markdown) formatted",
-      "",
-      true);
+      "doxygen", "Doxygen (markdown) formatted");
 
    roptions->AddBoolOption(
       "print_advanced_options",

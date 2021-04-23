@@ -110,6 +110,7 @@ commit history.
           added new variant of RegisteredOptions::OutputOptionDocumentation().
           Added parameter print_advanced_options to indicate whether to
           print documentation for advanced options, too.
+        - Added previously undocumented advanced options to options reference.
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]

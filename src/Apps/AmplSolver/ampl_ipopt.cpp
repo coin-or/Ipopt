@@ -48,6 +48,7 @@ int main(
       {
          SmartPtr<OptionsList> options = app->Options();
          options->SetStringValue("print_options_documentation", "yes");
+         options->SetStringValue("print_advanced_options", "yes");
          options->SetStringValue("print_options_mode", print_options_mode);
          app->Initialize("");
          return 0;
