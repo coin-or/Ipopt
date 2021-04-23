@@ -328,7 +328,7 @@ Possible values: yes, no
 \anchor OPT_bound_relax_factor
 <strong>bound_relax_factor</strong>: Factor for initial relaxation of the bounds.
 <blockquote>
- Before start of the optimization, the bounds given by the user are relaxed. This option sets the factor for this relaxation. If it is set to zero, then then bounds relaxation is disabled. (See Eqn.(35) in implementation paper.) Note that the constraint violation reported by Ipopt at the end of the solution process does not include violations of the original (non-relaxed) variable bounds. See also option honor_original_bounds. The valid range for this real option is 0 &le; bound_relax_factor and its default value is 10<sup>-08</sup>.
+ Before start of the optimization, the bounds given by the user are relaxed. This option sets the factor for this relaxation. Additional, the constraint violation tolerance constr_viol_tol is used to bound the relaxation by an absolute value. If it is set to zero, then then bounds relaxation is disabled. See Eqn.(35) in implementation paper. Note that the constraint violation reported by Ipopt at the end of the solution process does not include violations of the original (non-relaxed) variable bounds. See also option honor_original_bounds. The valid range for this real option is 0 &le; bound_relax_factor and its default value is 10<sup>-08</sup>.
 </blockquote>
 
 \anchor OPT_honor_original_bounds

@@ -11,6 +11,7 @@
 
 #include <cstdio>
 #include <cassert>
+#include <cmath>
 
 namespace Ipopt
 {
@@ -56,8 +57,9 @@ void OrigIpoptNLP::RegisterOptions(
       1e-8,
       "Before start of the optimization, the bounds given by the user are relaxed. "
       "This option sets the factor for this relaxation. "
+      "Additional, the constraint violation tolerance constr_viol_tol is used to bound the relaxation by an absolute value. "
       "If it is set to zero, then then bounds relaxation is disabled. "
-      "(See Eqn.(35) in implementation paper.) "
+      "See Eqn.(35) in implementation paper. "
       "Note that the constraint violation reported by Ipopt at the end of the solution process "
       "does not include violations of the original (non-relaxed) variable bounds. See also option honor_original_bounds.");
    roptions->AddBoolOption(
@@ -130,6 +132,7 @@ bool OrigIpoptNLP::Initialize(
 )
 {
    options.GetNumericValue("bound_relax_factor", bound_relax_factor_, prefix);
+   options.GetNumericValue("constr_viol_tol", constr_viol_tol_, prefix);
    options.GetBoolValue("honor_original_bounds", honor_original_bounds_, prefix);
    options.GetBoolValue("warm_start_same_structure", warm_start_same_structure_, prefix);
    options.GetBoolValue("check_derivatives_for_naninf", check_derivatives_for_naninf_, prefix);
@@ -452,13 +455,16 @@ void OrigIpoptNLP::relax_bounds(
       SmartPtr<Vector> tmp = bounds.MakeNew();
       tmp->Copy(bounds);
       tmp->ElementWiseAbs();
+      tmp->Scal(fabs(bound_relax_factor)); // |relaxfactor|*|bounds|
       SmartPtr<Vector> ones = bounds.MakeNew();
-      ones->Set(1.);
-      tmp->ElementWiseMax(*ones);
-      DBG_PRINT((1, "bound_relax_factor = %e", bound_relax_factor));
+      ones->Set(fabs(bound_relax_factor));
+      tmp->ElementWiseMax(*ones);    // |relaxfactor|*max(|bounds|,1)
+      ones->Set(constr_viol_tol_);
+      tmp->ElementWiseMin(*ones);    // min(constr_viol_tol_,|relaxfactor|*max(|bounds|,1))
+      DBG_PRINT((1, "bound_relax_factor = %e constr_viol_tol = %e", bound_relax_factor, constr_viol_tol_));
       DBG_PRINT_VECTOR(2, "tmp", *tmp);
       DBG_PRINT_VECTOR(2, "bounds before", bounds);
-      bounds.Axpy(bound_relax_factor, *tmp);
+      bounds.Axpy(bound_relax_factor < 0.0 ? -1.0 : 1.0, *tmp);
       DBG_PRINT_VECTOR(2, "bounds after", bounds);
    }
 }

@@ -489,6 +489,9 @@ private:
    /** relaxation factor for the bounds */
    Number bound_relax_factor_;
 
+   /** constraint violation tolerance (from OptimalityErrorConvergenceCheck) */
+   Number constr_viol_tol_;
+
    /** Flag indicating whether the primal variables should be
     *  projected back into original bounds are optimization.
     */
