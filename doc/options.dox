@@ -33,20 +33,32 @@ is a valid `ipopt.opt` file.
 %Options can also be set in code. Have a look at the examples to see how
 this is done.
 
-A subset of \Ipopt options are available through AMPL. To
-set options through AMPL, use the internal AMPL command options. For
-example,
+\section OPTIONS_AMPL Options in the AMPL Interface
+
+To set options through AMPL, use the internal AMPL command options.
+For example,
 \verbatim
 options ipopt_options "nlp_scaling_method=none mu_init=1e-2 max_iter=500"
 \endverbatim
-is a valid options command in AMPL. The most important options are
-referenced in \ref OPTIONS_REF. To see which options are available through
-AMPL, see \ref OPTIONS_AMPL, or run the AMPL solver executable with the "-=" flag from the
-command prompt. To specify other options when using AMPL, you can always
-create `ipopt.opt`. Note, the `ipopt.opt` file is given preference when
-setting options. This way, you can easily override any options set in a
-particular executable or AMPL model by specifying new values in
-`ipopt.opt`.
+is a valid options command in AMPL. Further, you can always create `ipopt.opt`.
+Note, the `ipopt.opt` file is given preference when setting options.
+This way, you can easily override any options set in a particular executable
+or AMPL model by specifying new values in `ipopt.opt`.
+
+All \Ipopt options are also available through AMPL.
+In addition, these options are available:
+
+| Option | Description |
+|:-------|:------------|
+| halt_on_ampl_error | Exit with message on evaluation error |
+| wantsol | solution report without -AMPL: sum of; 1 => write .sol file; 2 => print primal variable values; 4 => print dual variable values; 8 => do not print solution message |
+| maxit | Synonym for \ref OPT_max_iter "max_iter" |
+| outlev | Synonym for \ref OPT_print_level "print_level" |
+
+Running the AMPL solver executable with the "-=" flag from the command prompt
+prints a list of all options available in AMPL.
+
+\section OPTIONS_REF Options Reference
 
 A list of the most important options is given next.
 You can print the documentation for all \Ipopt options by
@@ -58,8 +70,6 @@ and running \Ipopt. This will output the documentation of almost all options to
 the console.
 If you have the AMPL solver executable, you can generate this list also
 by calling the executable with flag `--print-options`.
-
-\section OPTIONS_REF Options Reference
 
 \note Availability or default values of some options concerning the linear solver depends on the configuration used to build \Ipopt.
 Use the print options documentation feature to see which options are available in a particular build of \Ipopt.
@@ -1857,16 +1867,5 @@ Possible values:
  - yes: collect timing statistics
 </blockquote>
 
-\section OPTIONS_AMPL Options available via the AMPL Interface
-
-All \ref OPTIONS_REF "Ipopt options" are also available via the AMPL interface.
-In addition, these options are available:
-
-| Option | Description |
-|:-------|:------------|
-| halt_on_ampl_error | Exit with message on evaluation error |
-| wantsol | solution report without -AMPL: sum of; 1 => write .sol file; 2 => print primal variable values; 4 => print dual variable values; 8 => do not print solution message |
-| maxit | Synonym for \ref OPT_max_iter "max_iter" |
-| outlev | Synonym for \ref OPT_print_level "print_level" |
 
 */
