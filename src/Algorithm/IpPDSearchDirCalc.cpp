@@ -34,7 +34,7 @@ void PDSearchDirCalculator::RegisterOptions(
    const SmartPtr<RegisteredOptions>& roptions
 )
 {
-   roptions->SetRegisteringCategory("Step Calculation", 350000);
+   roptions->SetRegisteringCategory("Step Calculation");
    roptions->AddBoolOption(
       "fast_step_computation",
       "Indicates if the linear system should be solved quickly.",

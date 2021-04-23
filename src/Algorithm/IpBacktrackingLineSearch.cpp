@@ -56,7 +56,7 @@ void BacktrackingLineSearch::RegisterOptions(
       true);
 
    SmartPtr<RegisteredCategory> prev_category = roptions->RegisteringCategory();
-   roptions->SetRegisteringCategory("Undocumented", -100000);
+   roptions->SetRegisteringCategory("Undocumented");
    roptions->AddBoolOption(
       "magic_steps",
       "Enables magic steps.",
@@ -136,7 +136,7 @@ void BacktrackingLineSearch::RegisterOptions(
       "This option determines the number of trial iterations allowed before the watchdog "
       "procedure is aborted and the algorithm returns to the stored point.");
 
-   roptions->SetRegisteringCategory("Restoration Phase", 340000);
+   roptions->SetRegisteringCategory("Restoration Phase");
    roptions->AddBoolOption(
       "expect_infeasible_problem",
       "Enable heuristics to quickly detect an infeasible problem.",

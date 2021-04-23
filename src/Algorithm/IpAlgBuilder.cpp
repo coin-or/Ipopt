@@ -204,7 +204,7 @@ void AlgorithmBuilder::RegisterOptions(
    else
       defaultsolver = "custom";
 
-   roptions->SetRegisteringCategory("Linear Solver", 360000);
+   roptions->SetRegisteringCategory("Linear Solver");
    roptions->AddStringOption(
       "linear_solver",
       "Linear solver used for step computations.",
@@ -265,7 +265,7 @@ void AlgorithmBuilder::RegisterOptions(
 #endif
       "*", "Any acceptable filename (may contain path, too)");
 
-   roptions->SetRegisteringCategory("NLP Scaling", 480000);
+   roptions->SetRegisteringCategory("NLP Scaling");
 
    options.clear();
    descrs.clear();
@@ -294,7 +294,7 @@ void AlgorithmBuilder::RegisterOptions(
       "For user-scaling, the parameters come from the NLP. "
       "If you are using AMPL, they can be specified through suffixes (\"scaling_factor\")");
 
-   roptions->SetRegisteringCategory("Barrier Parameter Update", 390000);
+   roptions->SetRegisteringCategory("Barrier Parameter Update");
    roptions->AddStringOption2(
       "mu_strategy",
       "Update strategy for barrier parameter.",
@@ -322,7 +322,7 @@ void AlgorithmBuilder::RegisterOptions(
       "Determines how the first value of the barrier parameter should be computed when switching to the \"monotone mode\" in the adaptive strategy. "
       "(Only considered if \"adaptive\" is selected for option \"mu_strategy\".)");
 
-   roptions->SetRegisteringCategory("Hessian Approximation", 280000);
+   roptions->SetRegisteringCategory("Hessian Approximation");
    roptions->AddStringOption2(
       "limited_memory_aug_solver",
       "Strategy for solving the augmented system for low-rank Hessian.",
@@ -332,7 +332,7 @@ void AlgorithmBuilder::RegisterOptions(
       "",
       true);
 
-   roptions->SetRegisteringCategory("Line Search", 380000);
+   roptions->SetRegisteringCategory("Line Search");
    roptions->AddStringOption3(
       "line_search_method",
       "Globalization method used in backtracking line search",
@@ -343,7 +343,7 @@ void AlgorithmBuilder::RegisterOptions(
       "Only the \"filter\" choice is officially supported. "
       "But sometimes, good results might be obtained with the other choices.",
       true);
-   roptions->SetRegisteringCategory("Undocumented", -100000);
+   roptions->SetRegisteringCategory("Undocumented");
    roptions->AddBoolOption(
       "wsmp_iterative",
       "Switches to use iterative instead of direct solver in WSMP.",

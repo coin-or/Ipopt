@@ -23,7 +23,7 @@ void OrigIterationOutput::RegisterOptions(
 )
 {
    SmartPtr<RegisteredCategory> prev_cat = roptions->RegisteringCategory();
-   roptions->SetRegisteringCategory("Output", 900000);
+   roptions->SetRegisteringCategory("Output");
    roptions->AddBoolOption(
       "print_info_string",
       "Enables printing of additional info string at end of iteration output.",

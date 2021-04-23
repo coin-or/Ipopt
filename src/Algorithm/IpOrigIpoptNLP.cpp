@@ -66,7 +66,7 @@ void OrigIpoptNLP::RegisterOptions(
       true,
       "Ipopt might relax the bounds during the optimization (see, e.g., option \"bound_relax_factor\"). "
       "This option determines whether the final point should be projected back into the user-provide original bounds after the optimization.");
-   roptions->SetRegisteringCategory("Warm Start", 370000);
+   roptions->SetRegisteringCategory("Warm Start");
    roptions->AddBoolOption(
       "warm_start_same_structure",
       "Indicates whether a problem with a structure identical to the previous one is to be solved.",
@@ -74,7 +74,7 @@ void OrigIpoptNLP::RegisterOptions(
       "If enabled, then the algorithm assumes that an NLP is now to be solved "
       "whose structure is identical to one that already was considered (with the same NLP object).",
       true);
-   roptions->SetRegisteringCategory("NLP", 470000);
+   roptions->SetRegisteringCategory("NLP");
    roptions->AddBoolOption(
       "check_derivatives_for_naninf",
       "Indicates whether it is desired to check for Nan/Inf in derivative matrices",
@@ -103,7 +103,7 @@ void OrigIpoptNLP::RegisterOptions(
       false,
       "Activating this option will cause Ipopt to ask for the Hessian of the Lagrangian function "
       "only once from the NLP and reuse this information later.");
-   roptions->SetRegisteringCategory("Hessian Approximation", 280000);
+   roptions->SetRegisteringCategory("Hessian Approximation");
    roptions->AddStringOption2(
       "hessian_approximation",
       "Indicates what Hessian information is to be used.",

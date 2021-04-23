@@ -62,7 +62,7 @@ void IpoptAlgorithm::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->SetRegisteringCategory("Line Search", 380000);
+   roptions->SetRegisteringCategory("Line Search");
    roptions->AddLowerBoundedNumberOption(
       "kappa_sigma",
       "Factor limiting the deviation of dual variables from primal estimates.",
@@ -88,7 +88,7 @@ void IpoptAlgorithm::RegisterOptions(
       0., true,
       1e-6,
       "If recalc_y is chosen and the current infeasibility is less than this value, then the multipliers are recomputed.");
-   roptions->SetRegisteringCategory("Step Calculation", 350000);
+   roptions->SetRegisteringCategory("Step Calculation");
    roptions->AddBoolOption(
       "mehrotra_algorithm",
       "Indicates whether to do Mehrotra's predictor-corrector algorithm.",
@@ -99,7 +99,7 @@ void IpoptAlgorithm::RegisterOptions(
       "Also, unless otherwise specified, the values of \"bound_push\", \"bound_frac\", and "
       "\"bound_mult_init_val\" are set more aggressive, and sets \"alpha_for_y=bound_mult\". "
       "The Mehrotra's predictor-corrector algorithm works usually very well for LPs and convex QPs.");
-   roptions->SetRegisteringCategory("Undocumented", -100000);
+   roptions->SetRegisteringCategory("Undocumented");
    roptions->AddBoolOption("sb",
       "whether to skip printing Ipopt copyright banner",
       false);

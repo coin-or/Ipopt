@@ -64,7 +64,7 @@ void AdaptiveMuUpdate::RegisterOptions(
       "which should be a reasonable value. "
       "(Only used if option \"mu_strategy\" is chosen as \"adaptive\".)");
    SmartPtr<RegisteredCategory> prev_cat = roptions->RegisteringCategory();
-   roptions->SetRegisteringCategory("Undocumented", -100000);
+   roptions->SetRegisteringCategory("Undocumented");
    roptions->AddLowerBoundedNumberOption(
       "adaptive_mu_safeguard_factor",
       "",

@@ -18,7 +18,7 @@ void RegisterOptions_CGPenalty(
    const SmartPtr<RegisteredOptions>& roptions
 )
 {
-   roptions->SetRegisteringCategory("CG Penalty", -50000);
+   roptions->SetRegisteringCategory("CG Penalty");
    CGSearchDirCalculator::RegisterOptions(roptions);
    CGPenaltyLSAcceptor::RegisterOptions(roptions);
    CGPenaltyCq::RegisterOptions(roptions);

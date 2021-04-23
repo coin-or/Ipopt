@@ -1561,7 +1561,7 @@ void RegisteredOptions::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->SetRegisteringCategory("Output", 900000);
+   roptions->SetRegisteringCategory("Output");
    roptions->AddStringOption3(
       "print_options_mode",
       "format in which to print options documentation",

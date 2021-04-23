@@ -335,7 +335,7 @@ void IpoptApplication::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->SetRegisteringCategory("Output", 900000);
+   roptions->SetRegisteringCategory("Output");
    roptions->AddBoundedIntegerOption(
       "print_level",
       "Output verbosity level.",
@@ -390,7 +390,7 @@ void IpoptApplication::RegisterOptions(
       "If selected, the program will print the CPU usage (user time) for selected tasks. "
       "If enabled, timing_statistics=yes is implied.");
 
-   roptions->SetRegisteringCategory("Miscellaneous", 100000);
+   roptions->SetRegisteringCategory("Miscellaneous");
    roptions->AddStringOption1(
       "option_file_name",
       "File name of options file.",
@@ -422,7 +422,7 @@ void IpoptApplication::RegisterOptions(
       false,
       "The overall algorithm time is unaffected by this option.");
 
-   roptions->SetRegisteringCategory("Undocumented", -100000);
+   roptions->SetRegisteringCategory("Undocumented");
    roptions->AddBoolOption(
       "suppress_all_output",
       "",
@@ -933,6 +933,37 @@ void IpoptApplication::RegisterAllIpoptOptions(
    const SmartPtr<RegisteredOptions>& roptions
 )
 {
+   // create Ipopt categories here to have place where to specify its priorities
+   roptions->SetRegisteringCategory("Output", 900000);
+   roptions->SetRegisteringCategory("Termination", 490000);
+   roptions->SetRegisteringCategory("NLP Scaling", 480000);
+   roptions->SetRegisteringCategory("NLP", 470000);
+   roptions->SetRegisteringCategory("Initialization", 460000);
+   roptions->SetRegisteringCategory("Barrier Parameter Update", 390000);
+   roptions->SetRegisteringCategory("Line Search", 380000);
+   roptions->SetRegisteringCategory("Warm Start", 370000);
+   roptions->SetRegisteringCategory("Linear Solver", 360000);
+   roptions->SetRegisteringCategory("Step Calculation", 350000);
+   roptions->SetRegisteringCategory("Restoration Phase", 340000);
+   roptions->SetRegisteringCategory("Derivative Checker", 290000);
+   roptions->SetRegisteringCategory("Hessian Approximation", 280000);
+   roptions->SetRegisteringCategory("MA27 Linear Solver", 199000);
+   roptions->SetRegisteringCategory("MA57 Linear Solver", 198000);
+   roptions->SetRegisteringCategory("MA77 Linear Solver", 197000);
+   roptions->SetRegisteringCategory("MA86 Linear Solver", 196000);
+   roptions->SetRegisteringCategory("MA97 Linear Solver", 195000);
+   roptions->SetRegisteringCategory("Pardiso (pardiso-project.org) Linear Solver", 190000);
+   roptions->SetRegisteringCategory("Pardiso (MKL) Linear Solver", 189000);
+   roptions->SetRegisteringCategory("SPRAL Linear Solver", 180000);
+   roptions->SetRegisteringCategory("WSMP Linear Solver", 170000);
+   roptions->SetRegisteringCategory("Mumps Linear Solver", 160000);
+   roptions->SetRegisteringCategory("MA28 Linear Solver", 150000);
+   roptions->SetRegisteringCategory("Miscellaneous", 100000);
+
+   roptions->SetRegisteringCategory("CG Penalty", -400000);
+   roptions->SetRegisteringCategory("Inexact Step Computation", -900000);
+   roptions->SetRegisteringCategory("Undocumented", -1000000);
+
    RegisterOptions_Interfaces(roptions);
    RegisterOptions_Algorithm(roptions);
    RegisterOptions_CGPenalty(roptions);

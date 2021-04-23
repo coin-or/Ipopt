@@ -135,7 +135,7 @@ void IpoptCalculatedQuantities::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->SetRegisteringCategory("Termination", 490000);
+   roptions->SetRegisteringCategory("Termination");
    roptions->AddLowerBoundedNumberOption(
       "s_max",
       "Scaling threshold for the NLP error.",
@@ -144,7 +144,7 @@ void IpoptCalculatedQuantities::RegisterOptions(
       "See paragraph after Eqn. (6) in the implementation paper.",
       true);
 
-   roptions->SetRegisteringCategory("NLP", 470000);
+   roptions->SetRegisteringCategory("NLP");
    roptions->AddLowerBoundedNumberOption(
       "kappa_d",
       "Weight for linear damping term (to handle one-sided bounds).",
@@ -153,7 +153,7 @@ void IpoptCalculatedQuantities::RegisterOptions(
       "See Section 3.7 in implementation paper.",
       true);
 
-   roptions->SetRegisteringCategory("Line Search", 380000);
+   roptions->SetRegisteringCategory("Line Search");
    roptions->AddLowerBoundedNumberOption(
       "slack_move",
       "Correction size for very small slacks.",
