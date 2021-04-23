@@ -820,8 +820,6 @@ void RegisteredOptions::AddLowerBoundedNumberOption(
    option->SetType(OT_Number);
    option->SetDefaultNumber(default_value);
    option->SetLowerNumber(lower, strict);
-   ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
-                    std::string("The option: ") + option->Name() + " has already been registered by someone else");
    AddOption(option);
 }
 
@@ -840,8 +838,6 @@ void RegisteredOptions::AddUpperBoundedNumberOption(
    option->SetType(OT_Number);
    option->SetDefaultNumber(default_value);
    option->SetUpperNumber(upper, strict);
-   ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
-                    std::string("The option: ") + option->Name() + " has already been registered by someone else");
    AddOption(option);
 }
 
@@ -863,8 +859,6 @@ void RegisteredOptions::AddBoundedNumberOption(
    option->SetDefaultNumber(default_value);
    option->SetLowerNumber(lower, lower_strict);
    option->SetUpperNumber(upper, upper_strict);
-   ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
-                    std::string("The option: ") + option->Name() + " has already been registered by someone else");
    AddOption(option);
 }
 
@@ -880,8 +874,6 @@ void RegisteredOptions::AddIntegerOption(
          current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_Integer);
    option->SetDefaultInteger(default_value);
-   ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
-                    std::string("The option: ") + option->Name() + " has already been registered by someone else");
    AddOption(option);
 }
 
@@ -899,8 +891,6 @@ void RegisteredOptions::AddLowerBoundedIntegerOption(
    option->SetType(OT_Integer);
    option->SetDefaultInteger(default_value);
    option->SetLowerInteger(lower);
-   ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
-                    std::string("The option: ") + option->Name() + " has already been registered by someone else");
    AddOption(option);
 }
 
@@ -918,8 +908,6 @@ void RegisteredOptions::AddUpperBoundedIntegerOption(
    option->SetType(OT_Integer);
    option->SetDefaultInteger(default_value);
    option->SetUpperInteger(upper);
-   ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
-                    std::string("The option: ") + option->Name() + " has already been registered by someone else");
    AddOption(option);
 }
 
@@ -939,8 +927,6 @@ void RegisteredOptions::AddBoundedIntegerOption(
    option->SetDefaultInteger(default_value);
    option->SetLowerInteger(lower);
    option->SetUpperInteger(upper);
-   ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
-                    std::string("The option: ") + option->Name() + " has already been registered by someone else");
    AddOption(option);
 }
 
@@ -963,8 +949,6 @@ void RegisteredOptions::AddStringOption(
    {
       option->AddValidStringSetting(settings[i], descriptions[i]);
    }
-   ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
-                    std::string("The option: ") + option->Name() + " has already been registered by someone else");
    AddOption(option);
 }
 
@@ -983,8 +967,6 @@ void RegisteredOptions::AddStringOption1(
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
-   ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
-                    std::string("The option: ") + option->Name() + " has already been registered by someone else");
    AddOption(option);
 }
 
@@ -1006,8 +988,6 @@ void RegisteredOptions::AddStringOption2(
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
    option->AddValidStringSetting(setting2, description2);
-   ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
-                    std::string("The option: ") + option->Name() + " has already been registered by someone else");
    AddOption(option);
 }
 
@@ -1032,8 +1012,6 @@ void RegisteredOptions::AddStringOption3(
    option->AddValidStringSetting(setting1, description1);
    option->AddValidStringSetting(setting2, description2);
    option->AddValidStringSetting(setting3, description3);
-   ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
-                    std::string("The option: ") + option->Name() + " has already been registered by someone else");
    AddOption(option);
 }
 
@@ -1061,8 +1039,6 @@ void RegisteredOptions::AddStringOption4(
    option->AddValidStringSetting(setting2, description2);
    option->AddValidStringSetting(setting3, description3);
    option->AddValidStringSetting(setting4, description4);
-   ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
-                    std::string("The option: ") + option->Name() + " has already been registered by someone else");
    AddOption(option);
 }
 
@@ -1093,8 +1069,6 @@ void RegisteredOptions::AddStringOption5(
    option->AddValidStringSetting(setting3, description3);
    option->AddValidStringSetting(setting4, description4);
    option->AddValidStringSetting(setting5, description5);
-   ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
-                    std::string("The option: ") + option->Name() + " has already been registered by someone else");
    AddOption(option);
 }
 
@@ -1128,8 +1102,6 @@ void RegisteredOptions::AddStringOption6(
    option->AddValidStringSetting(setting4, description4);
    option->AddValidStringSetting(setting5, description5);
    option->AddValidStringSetting(setting6, description6);
-   ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
-                    std::string("The option: ") + option->Name() + " has already been registered by someone else");
    AddOption(option);
 }
 
@@ -1166,8 +1138,6 @@ void RegisteredOptions::AddStringOption7(
    option->AddValidStringSetting(setting5, description5);
    option->AddValidStringSetting(setting6, description6);
    option->AddValidStringSetting(setting7, description7);
-   ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
-                    std::string("The option: ") + option->Name() + " has already been registered by someone else");
    AddOption(option);
 }
 
@@ -1207,8 +1177,6 @@ void RegisteredOptions::AddStringOption8(
    option->AddValidStringSetting(setting6, description6);
    option->AddValidStringSetting(setting7, description7);
    option->AddValidStringSetting(setting8, description8);
-   ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
-                    std::string("The option: ") + option->Name() + " has already been registered by someone else");
    AddOption(option);
 }
 
@@ -1251,8 +1219,6 @@ void RegisteredOptions::AddStringOption9(
    option->AddValidStringSetting(setting7, description7);
    option->AddValidStringSetting(setting8, description8);
    option->AddValidStringSetting(setting9, description9);
-   ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
-                    std::string("The option: ") + option->Name() + " has already been registered by someone else");
    AddOption(option);
 }
 
@@ -1298,8 +1264,24 @@ void RegisteredOptions::AddStringOption10(
    option->AddValidStringSetting(setting8, description8);
    option->AddValidStringSetting(setting9, description9);
    option->AddValidStringSetting(setting10, description10);
-   ASSERT_EXCEPTION(registered_options_.find(name) == registered_options_.end(), OPTION_ALREADY_REGISTERED,
-                    std::string("The option: ") + option->Name() + " has already been registered by someone else");
+   AddOption(option);
+}
+
+/** Create a string value with two possible settings: yes and no */
+void RegisteredOptions::AddBoolOption(
+   const std::string& name,
+   const std::string& short_description,
+   bool               default_value,
+   const std::string& long_description,
+   bool               advanced
+)
+{
+   SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
+         current_registering_category_, next_counter_++, advanced);
+   option->SetType(OT_String);
+   option->SetDefaultString(default_value ? "yes" : "no");
+   option->AddValidStringSetting("yes", "");
+   option->AddValidStringSetting("no", "");
    AddOption(option);
 }
 

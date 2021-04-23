@@ -999,6 +999,15 @@ public:
       bool               advanced = false
    );
 
+   /** Create a string value with two possible settings: yes and no */
+   virtual void AddBoolOption(
+      const std::string& name,
+      const std::string& short_description,
+      bool               default_value,
+      const std::string& long_description = "",
+      bool               advanced = false
+   );
+
    /** Get a registered option
     *
     * @return NULL, if the option does not exist
