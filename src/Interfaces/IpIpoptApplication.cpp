@@ -934,19 +934,20 @@ void IpoptApplication::RegisterAllIpoptOptions(
 )
 {
    // create Ipopt categories here to have place where to specify its priorities
-   roptions->SetRegisteringCategory("Output", 900000);
-   roptions->SetRegisteringCategory("Termination", 490000);
-   roptions->SetRegisteringCategory("NLP Scaling", 480000);
-   roptions->SetRegisteringCategory("NLP", 470000);
+   roptions->SetRegisteringCategory("Termination", 600000);
+   roptions->SetRegisteringCategory("Output", 500000);
+   roptions->SetRegisteringCategory("NLP", 480000);
+   roptions->SetRegisteringCategory("NLP Scaling", 470000);
    roptions->SetRegisteringCategory("Initialization", 460000);
+   roptions->SetRegisteringCategory("Warm Start", 450000);
+   roptions->SetRegisteringCategory("Miscellaneous", 400000);
    roptions->SetRegisteringCategory("Barrier Parameter Update", 390000);
    roptions->SetRegisteringCategory("Line Search", 380000);
-   roptions->SetRegisteringCategory("Warm Start", 370000);
    roptions->SetRegisteringCategory("Linear Solver", 360000);
    roptions->SetRegisteringCategory("Step Calculation", 350000);
    roptions->SetRegisteringCategory("Restoration Phase", 340000);
-   roptions->SetRegisteringCategory("Derivative Checker", 290000);
-   roptions->SetRegisteringCategory("Hessian Approximation", 280000);
+   roptions->SetRegisteringCategory("Hessian Approximation", 290000);
+   roptions->SetRegisteringCategory("Derivative Checker", 280000);
    roptions->SetRegisteringCategory("MA27 Linear Solver", 199000);
    roptions->SetRegisteringCategory("MA57 Linear Solver", 198000);
    roptions->SetRegisteringCategory("MA77 Linear Solver", 197000);
@@ -958,7 +959,6 @@ void IpoptApplication::RegisterAllIpoptOptions(
    roptions->SetRegisteringCategory("WSMP Linear Solver", 170000);
    roptions->SetRegisteringCategory("Mumps Linear Solver", 160000);
    roptions->SetRegisteringCategory("MA28 Linear Solver", 150000);
-   roptions->SetRegisteringCategory("Miscellaneous", 100000);
 
    roptions->SetRegisteringCategory("CG Penalty", -400000);
    roptions->SetRegisteringCategory("Inexact Step Computation", -900000);

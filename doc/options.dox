@@ -73,87 +73,6 @@ Use the print options documentation feature to see which options are available i
 
 The implementation paper mentioned for some options is \cite WaecBieg06:mp.
 
-\subsection OPT_Output Output
-
-\anchor OPT_print_level
- <strong>print_level</strong>: Output verbosity level.
-<blockquote>
- Sets the default verbosity level for console output. The larger this value the more detailed is the output. The valid range for this integer option is 0 &le; print_level &le; 12 and its default value is 5.
-
-</blockquote>
-
-\anchor OPT_output_file
- <strong>output_file</strong>: File name of desired output file (leave unset for no file output).
-<blockquote>
- NOTE: This option only works when read from the ipopt.opt options file! An output file with this name will be written (leave unset for no file output). The verbosity level is by default set to "print_level", but can be overridden with "file_print_level". The file name is changed to use only small letters. The default value for this string option is "".
-
-Possible values:
- - *: Any acceptable standard file name
-</blockquote>
-
-\anchor OPT_file_print_level
- <strong>file_print_level</strong>: Verbosity level for output file.
-<blockquote>
- NOTE: This option only works when read from the ipopt.opt options file! Determines the verbosity level for the file specified by "output_file". By default it is the same as "print_level". The valid range for this integer option is 0 &le; file_print_level &le; 12 and its default value is 5.
-
-</blockquote>
-
-\anchor OPT_print_user_options
- <strong>print_user_options</strong>: Print all options set by the user.
-<blockquote>
- If selected, the algorithm will print the list of all options set by the user including their values and whether they have been used. In some cases this information might be incorrect, due to the internal program flow. The default value for this string option is "no".
-
-Possible values: yes, no
-</blockquote>
-
-\anchor OPT_print_options_documentation
- <strong>print_options_documentation</strong>: Switch to print all algorithmic options with some documentation before solving the optimization problem.
-<blockquote>
- The default value for this string option is "no".
-
-Possible values: yes, no
-</blockquote>
-
-\anchor OPT_print_timing_statistics
- <strong>print_timing_statistics</strong>: Switch to print timing statistics.
-<blockquote>
- If selected, the program will print the CPU usage (user time) for selected tasks. If enabled, timing_statistics=yes is implied. The default value for this string option is "no".
-
-Possible values: yes, no
-</blockquote>
-
-\anchor OPT_print_info_string
- <strong>print_info_string</strong>: Enables printing of additional info string at end of iteration output.
-<blockquote>
- This string contains some insider information about the current iteration. For details, look for "Diagnostic Tags" in the Ipopt documentation. The default value for this string option is "no".
-
-Possible values: yes, no
-</blockquote>
-
-\anchor OPT_inf_pr_output
- <strong>inf_pr_output</strong>: Determines what value is printed in the "inf_pr" output column.
-<blockquote>
- Ipopt works with a reformulation of the original problem, where slacks are introduced and the problem might have been scaled. The choice "internal" prints out the constraint violation of this formulation. With "original" the true constraint violation in the original NLP is printed. The default value for this string option is "original".
-
-Possible values:
- - internal: max-norm of violation of internal equality constraints
- - original: maximal constraint violation in original NLP
-</blockquote>
-
-\anchor OPT_print_frequency_iter
- <strong>print_frequency_iter</strong>: Determines at which iteration frequency the summarizing iteration output line should be printed.
-<blockquote>
- Summarizing iteration output is printed every print_frequency_iter iterations, if at least print_frequency_time seconds have passed since last output. The valid range for this integer option is 1 &le; print_frequency_iter and its default value is 1.
-
-</blockquote>
-
-\anchor OPT_print_frequency_time
- <strong>print_frequency_time</strong>: Determines at which time frequency the summarizing iteration output line should be printed.
-<blockquote>
- Summarizing iteration output is printed if at least print_frequency_time seconds have passed since last output and the iteration number is a multiple of print_frequency_iter. The valid range for this real option is 0 &le; print_frequency_time and its default value is 0.
-
-</blockquote>
-
 
 \subsection OPT_Termination Termination
 
@@ -263,38 +182,84 @@ Possible values:
 </blockquote>
 
 
-\subsection OPT_NLP_Scaling NLP Scaling
+\subsection OPT_Output Output
 
-\anchor OPT_nlp_scaling_method
- <strong>nlp_scaling_method</strong>: Select the technique used for scaling the NLP.
+\anchor OPT_print_level
+ <strong>print_level</strong>: Output verbosity level.
 <blockquote>
- Selects the technique used for scaling the problem internally before it is solved. For user-scaling, the parameters come from the NLP. If you are using AMPL, they can be specified through suffixes ("scaling_factor") The default value for this string option is "gradient-based".
+ Sets the default verbosity level for console output. The larger this value the more detailed is the output. The valid range for this integer option is 0 &le; print_level &le; 12 and its default value is 5.
+
+</blockquote>
+
+\anchor OPT_output_file
+ <strong>output_file</strong>: File name of desired output file (leave unset for no file output).
+<blockquote>
+ NOTE: This option only works when read from the ipopt.opt options file! An output file with this name will be written (leave unset for no file output). The verbosity level is by default set to "print_level", but can be overridden with "file_print_level". The file name is changed to use only small letters. The default value for this string option is "".
 
 Possible values:
- - none: no problem scaling will be performed
- - user-scaling: scaling parameters will come from the user
- - gradient-based: scale the problem so the maximum gradient at the starting point is scaling_max_gradient
- - equilibration-based: scale the problem o that first derivatives are of order 1 at random points (uses Harwell routine MC19)
+ - *: Any acceptable standard file name
 </blockquote>
 
-\anchor OPT_obj_scaling_factor
- <strong>obj_scaling_factor</strong>: Scaling factor for the objective function.
+\anchor OPT_file_print_level
+ <strong>file_print_level</strong>: Verbosity level for output file.
 <blockquote>
- This option sets a scaling factor for the objective function. The scaling is seen internally by Ipopt but the unscaled objective is reported in the console output. If additional scaling parameters are computed (e.g. user-scaling or gradient-based), both factors are multiplied. If this value is chosen to be negative, Ipopt will maximize the objective function instead of minimizing it. The valid range for this real option is unrestricted and its default value is 1.
+ NOTE: This option only works when read from the ipopt.opt options file! Determines the verbosity level for the file specified by "output_file". By default it is the same as "print_level". The valid range for this integer option is 0 &le; file_print_level &le; 12 and its default value is 5.
 
 </blockquote>
 
-\anchor OPT_nlp_scaling_max_gradient
- <strong>nlp_scaling_max_gradient</strong>: Maximum gradient after NLP scaling.
+\anchor OPT_print_user_options
+ <strong>print_user_options</strong>: Print all options set by the user.
 <blockquote>
- This is the gradient scaling cut-off. If the maximum gradient is above this value, then gradient based scaling will be performed. Scaling parameters are calculated to scale the maximum gradient back to this value. (This is g_max in Section 3.8 of the implementation paper.) Note: This option is only used if "nlp_scaling_method" is chosen as "gradient-based". The valid range for this real option is 0 < nlp_scaling_max_gradient and its default value is 100.
+ If selected, the algorithm will print the list of all options set by the user including their values and whether they have been used. In some cases this information might be incorrect, due to the internal program flow. The default value for this string option is "no".
+
+Possible values: yes, no
+</blockquote>
+
+\anchor OPT_print_options_documentation
+ <strong>print_options_documentation</strong>: Switch to print all algorithmic options with some documentation before solving the optimization problem.
+<blockquote>
+ The default value for this string option is "no".
+
+Possible values: yes, no
+</blockquote>
+
+\anchor OPT_print_timing_statistics
+ <strong>print_timing_statistics</strong>: Switch to print timing statistics.
+<blockquote>
+ If selected, the program will print the CPU usage (user time) for selected tasks. If enabled, timing_statistics=yes is implied. The default value for this string option is "no".
+
+Possible values: yes, no
+</blockquote>
+
+\anchor OPT_print_info_string
+ <strong>print_info_string</strong>: Enables printing of additional info string at end of iteration output.
+<blockquote>
+ This string contains some insider information about the current iteration. For details, look for "Diagnostic Tags" in the Ipopt documentation. The default value for this string option is "no".
+
+Possible values: yes, no
+</blockquote>
+
+\anchor OPT_inf_pr_output
+ <strong>inf_pr_output</strong>: Determines what value is printed in the "inf_pr" output column.
+<blockquote>
+ Ipopt works with a reformulation of the original problem, where slacks are introduced and the problem might have been scaled. The choice "internal" prints out the constraint violation of this formulation. With "original" the true constraint violation in the original NLP is printed. The default value for this string option is "original".
+
+Possible values:
+ - internal: max-norm of violation of internal equality constraints
+ - original: maximal constraint violation in original NLP
+</blockquote>
+
+\anchor OPT_print_frequency_iter
+ <strong>print_frequency_iter</strong>: Determines at which iteration frequency the summarizing iteration output line should be printed.
+<blockquote>
+ Summarizing iteration output is printed every print_frequency_iter iterations, if at least print_frequency_time seconds have passed since last output. The valid range for this integer option is 1 &le; print_frequency_iter and its default value is 1.
 
 </blockquote>
 
-\anchor OPT_nlp_scaling_min_value
- <strong>nlp_scaling_min_value</strong>: Minimum value of gradient-based scaling values.
+\anchor OPT_print_frequency_time
+ <strong>print_frequency_time</strong>: Determines at which time frequency the summarizing iteration output line should be printed.
 <blockquote>
- This is the lower bound for the scaling factors computed by gradient-based scaling method. If some derivatives of some functions are huge, the scaling factors will otherwise become very small, and the (unscaled) final constraint violation, for example, might then be significant. Note: This option is only used if "nlp_scaling_method" is chosen as "gradient-based". The valid range for this real option is 0 &le; nlp_scaling_min_value and its default value is 10<sup>-08</sup>.
+ Summarizing iteration output is printed if at least print_frequency_time seconds have passed since last output and the iteration number is a multiple of print_frequency_iter. The valid range for this real option is 0 &le; print_frequency_time and its default value is 0.
 
 </blockquote>
 
@@ -375,6 +340,42 @@ Possible values: yes, no
 </blockquote>
 
 
+\subsection OPT_NLP_Scaling NLP Scaling
+
+\anchor OPT_nlp_scaling_method
+ <strong>nlp_scaling_method</strong>: Select the technique used for scaling the NLP.
+<blockquote>
+ Selects the technique used for scaling the problem internally before it is solved. For user-scaling, the parameters come from the NLP. If you are using AMPL, they can be specified through suffixes ("scaling_factor") The default value for this string option is "gradient-based".
+
+Possible values:
+ - none: no problem scaling will be performed
+ - user-scaling: scaling parameters will come from the user
+ - gradient-based: scale the problem so the maximum gradient at the starting point is scaling_max_gradient
+ - equilibration-based: scale the problem o that first derivatives are of order 1 at random points (uses Harwell routine MC19)
+</blockquote>
+
+\anchor OPT_obj_scaling_factor
+ <strong>obj_scaling_factor</strong>: Scaling factor for the objective function.
+<blockquote>
+ This option sets a scaling factor for the objective function. The scaling is seen internally by Ipopt but the unscaled objective is reported in the console output. If additional scaling parameters are computed (e.g. user-scaling or gradient-based), both factors are multiplied. If this value is chosen to be negative, Ipopt will maximize the objective function instead of minimizing it. The valid range for this real option is unrestricted and its default value is 1.
+
+</blockquote>
+
+\anchor OPT_nlp_scaling_max_gradient
+ <strong>nlp_scaling_max_gradient</strong>: Maximum gradient after NLP scaling.
+<blockquote>
+ This is the gradient scaling cut-off. If the maximum gradient is above this value, then gradient based scaling will be performed. Scaling parameters are calculated to scale the maximum gradient back to this value. (This is g_max in Section 3.8 of the implementation paper.) Note: This option is only used if "nlp_scaling_method" is chosen as "gradient-based". The valid range for this real option is 0 < nlp_scaling_max_gradient and its default value is 100.
+
+</blockquote>
+
+\anchor OPT_nlp_scaling_min_value
+ <strong>nlp_scaling_min_value</strong>: Minimum value of gradient-based scaling values.
+<blockquote>
+ This is the lower bound for the scaling factors computed by gradient-based scaling method. If some derivatives of some functions are huge, the scaling factors will otherwise become very small, and the (unscaled) final constraint violation, for example, might then be significant. Note: This option is only used if "nlp_scaling_method" is chosen as "gradient-based". The valid range for this real option is 0 &le; nlp_scaling_min_value and its default value is 10<sup>-08</sup>.
+
+</blockquote>
+
+
 \subsection OPT_Initialization Initialization
 
 \anchor OPT_bound_push
@@ -447,6 +448,81 @@ Possible values:
 Possible values:
  - no: use bound_mult_init_val and least-square equality constraint multipliers
  - yes: overwrite user-provided point with least-square estimates
+</blockquote>
+
+
+\subsection OPT_Warm_Start Warm Start
+
+\anchor OPT_warm_start_init_point
+ <strong>warm_start_init_point</strong>: Warm-start for initial point
+<blockquote>
+ Indicates whether this optimization should use a warm start initialization, where values of primal and dual variables are given (e.g., from a previous optimization of a related problem.) The default value for this string option is "no".
+
+Possible values:
+ - no: do not use the warm start initialization
+ - yes: use the warm start initialization
+</blockquote>
+
+\anchor OPT_warm_start_bound_push
+ <strong>warm_start_bound_push</strong>: same as bound_push for the regular initializer
+<blockquote>
+ The valid range for this real option is 0 < warm_start_bound_push and its default value is 0.001.
+
+</blockquote>
+
+\anchor OPT_warm_start_bound_frac
+ <strong>warm_start_bound_frac</strong>: same as bound_frac for the regular initializer
+<blockquote>
+ The valid range for this real option is 0 < warm_start_bound_frac &le; 0.5 and its default value is 0.001.
+
+</blockquote>
+
+\anchor OPT_warm_start_slack_bound_push
+ <strong>warm_start_slack_bound_push</strong>: same as slack_bound_push for the regular initializer
+<blockquote>
+ The valid range for this real option is 0 < warm_start_slack_bound_push and its default value is 0.001.
+
+</blockquote>
+
+\anchor OPT_warm_start_slack_bound_frac
+ <strong>warm_start_slack_bound_frac</strong>: same as slack_bound_frac for the regular initializer
+<blockquote>
+ The valid range for this real option is 0 < warm_start_slack_bound_frac &le; 0.5 and its default value is 0.001.
+
+</blockquote>
+
+\anchor OPT_warm_start_mult_bound_push
+ <strong>warm_start_mult_bound_push</strong>: same as mult_bound_push for the regular initializer
+<blockquote>
+ The valid range for this real option is 0 < warm_start_mult_bound_push and its default value is 0.001.
+
+</blockquote>
+
+\anchor OPT_warm_start_mult_init_max
+ <strong>warm_start_mult_init_max</strong>: Maximum initial value for the equality multipliers.
+<blockquote>
+ The valid range for this real option is unrestricted and its default value is 10<sup>+06</sup>.
+
+</blockquote>
+
+
+\subsection OPT_Miscellaneous Miscellaneous
+
+\anchor OPT_option_file_name
+ <strong>option_file_name</strong>: File name of options file.
+<blockquote>
+ By default, the name of the Ipopt options file is "ipopt.opt" - or something else if specified in the IpoptApplication::Initialize call. If this option is set by SetStringValue BEFORE the options file is read, it specifies the name of the options file. It does not make any sense to specify this option within the options file. Setting this option to an empty string disables reading of an options file. The default value for this string option is "ipopt.opt".
+
+Possible values:
+ - *: Any acceptable standard file name
+</blockquote>
+
+\anchor OPT_timing_statistics
+ <strong>timing_statistics</strong>: Indicates whether to measure time spend in components of Ipopt and NLP evaluation
+<blockquote>
+ The overall algorithm time is unaffected by this option. The default value for this string option is "no".
+
+Possible values: yes, no
 </blockquote>
 
 
@@ -630,61 +706,6 @@ Possible values:
  <strong>recalc_y_feas_tol</strong>: Feasibility threshold for recomputation of multipliers.
 <blockquote>
  If recalc_y is chosen and the current infeasibility is less than this value, then the multipliers are recomputed. The valid range for this real option is 0 < recalc_y_feas_tol and its default value is 10<sup>-06</sup>.
-
-</blockquote>
-
-
-\subsection OPT_Warm_Start Warm Start
-
-\anchor OPT_warm_start_init_point
- <strong>warm_start_init_point</strong>: Warm-start for initial point
-<blockquote>
- Indicates whether this optimization should use a warm start initialization, where values of primal and dual variables are given (e.g., from a previous optimization of a related problem.) The default value for this string option is "no".
-
-Possible values:
- - no: do not use the warm start initialization
- - yes: use the warm start initialization
-</blockquote>
-
-\anchor OPT_warm_start_bound_push
- <strong>warm_start_bound_push</strong>: same as bound_push for the regular initializer
-<blockquote>
- The valid range for this real option is 0 < warm_start_bound_push and its default value is 0.001.
-
-</blockquote>
-
-\anchor OPT_warm_start_bound_frac
- <strong>warm_start_bound_frac</strong>: same as bound_frac for the regular initializer
-<blockquote>
- The valid range for this real option is 0 < warm_start_bound_frac &le; 0.5 and its default value is 0.001.
-
-</blockquote>
-
-\anchor OPT_warm_start_slack_bound_push
- <strong>warm_start_slack_bound_push</strong>: same as slack_bound_push for the regular initializer
-<blockquote>
- The valid range for this real option is 0 < warm_start_slack_bound_push and its default value is 0.001.
-
-</blockquote>
-
-\anchor OPT_warm_start_slack_bound_frac
- <strong>warm_start_slack_bound_frac</strong>: same as slack_bound_frac for the regular initializer
-<blockquote>
- The valid range for this real option is 0 < warm_start_slack_bound_frac &le; 0.5 and its default value is 0.001.
-
-</blockquote>
-
-\anchor OPT_warm_start_mult_bound_push
- <strong>warm_start_mult_bound_push</strong>: same as mult_bound_push for the regular initializer
-<blockquote>
- The valid range for this real option is 0 < warm_start_mult_bound_push and its default value is 0.001.
-
-</blockquote>
-
-\anchor OPT_warm_start_mult_init_max
- <strong>warm_start_mult_init_max</strong>: Maximum initial value for the equality multipliers.
-<blockquote>
- The valid range for this real option is unrestricted and its default value is 10<sup>+06</sup>.
 
 </blockquote>
 
@@ -916,57 +937,6 @@ Possible values: yes, no
 </blockquote>
 
 
-\subsection OPT_Derivative_Checker Derivative Checker
-
-\anchor OPT_derivative_test
- <strong>derivative_test</strong>: Enable derivative checker
-<blockquote>
- If this option is enabled, a (slow!) derivative test will be performed before the optimization. The test is performed at the user provided starting point and marks derivative values that seem suspicious The default value for this string option is "none".
-
-Possible values:
- - none: do not perform derivative test
- - first-order: perform test of first derivatives at starting point
- - second-order: perform test of first and second derivatives at starting point
- - only-second-order: perform test of second derivatives at starting point
-</blockquote>
-
-\anchor OPT_derivative_test_first_index
- <strong>derivative_test_first_index</strong>: Index of first quantity to be checked by derivative checker
-<blockquote>
- If this is set to -2, then all derivatives are checked. Otherwise, for the first derivative test it specifies the first variable for which the test is done (counting starts at 0). For second derivatives, it specifies the first constraint for which the test is done; counting of constraint indices starts at 0, and -1 refers to the objective function Hessian. The valid range for this integer option is -2 &le; derivative_test_first_index and its default value is -2.
-
-</blockquote>
-
-\anchor OPT_derivative_test_perturbation
- <strong>derivative_test_perturbation</strong>: Size of the finite difference perturbation in derivative test.
-<blockquote>
- This determines the relative perturbation of the variable entries. The valid range for this real option is 0 < derivative_test_perturbation and its default value is 10<sup>-08</sup>.
-
-</blockquote>
-
-\anchor OPT_derivative_test_tol
- <strong>derivative_test_tol</strong>: Threshold for indicating wrong derivative.
-<blockquote>
- If the relative deviation of the estimated derivative from the given one is larger than this value, the corresponding derivative is marked as wrong. The valid range for this real option is 0 < derivative_test_tol and its default value is 0.0001.
-
-</blockquote>
-
-\anchor OPT_derivative_test_print_all
- <strong>derivative_test_print_all</strong>: Indicates whether information for all estimated derivatives should be printed.
-<blockquote>
- Determines verbosity of derivative checker. The default value for this string option is "no".
-
-Possible values: yes, no
-</blockquote>
-
-\anchor OPT_point_perturbation_radius
- <strong>point_perturbation_radius</strong>: Maximal perturbation of an evaluation point.
-<blockquote>
- If a random perturbation of a points is required, this number indicates the maximal perturbation. This is for example used when determining the center point at which the finite difference derivative test is executed. The valid range for this real option is 0 &le; point_perturbation_radius and its default value is 10.
-
-</blockquote>
-
-
 \subsection OPT_Hessian_Approximation Hessian Approximation
 
 \anchor OPT_limited_memory_max_history
@@ -1043,6 +1013,57 @@ Possible values: yes, no
 Possible values:
  - exact: Use second derivatives provided by the NLP.
  - limited-memory: Perform a limited-memory quasi-Newton approximation
+</blockquote>
+
+
+\subsection OPT_Derivative_Checker Derivative Checker
+
+\anchor OPT_derivative_test
+ <strong>derivative_test</strong>: Enable derivative checker
+<blockquote>
+ If this option is enabled, a (slow!) derivative test will be performed before the optimization. The test is performed at the user provided starting point and marks derivative values that seem suspicious The default value for this string option is "none".
+
+Possible values:
+ - none: do not perform derivative test
+ - first-order: perform test of first derivatives at starting point
+ - second-order: perform test of first and second derivatives at starting point
+ - only-second-order: perform test of second derivatives at starting point
+</blockquote>
+
+\anchor OPT_derivative_test_first_index
+ <strong>derivative_test_first_index</strong>: Index of first quantity to be checked by derivative checker
+<blockquote>
+ If this is set to -2, then all derivatives are checked. Otherwise, for the first derivative test it specifies the first variable for which the test is done (counting starts at 0). For second derivatives, it specifies the first constraint for which the test is done; counting of constraint indices starts at 0, and -1 refers to the objective function Hessian. The valid range for this integer option is -2 &le; derivative_test_first_index and its default value is -2.
+
+</blockquote>
+
+\anchor OPT_derivative_test_perturbation
+ <strong>derivative_test_perturbation</strong>: Size of the finite difference perturbation in derivative test.
+<blockquote>
+ This determines the relative perturbation of the variable entries. The valid range for this real option is 0 < derivative_test_perturbation and its default value is 10<sup>-08</sup>.
+
+</blockquote>
+
+\anchor OPT_derivative_test_tol
+ <strong>derivative_test_tol</strong>: Threshold for indicating wrong derivative.
+<blockquote>
+ If the relative deviation of the estimated derivative from the given one is larger than this value, the corresponding derivative is marked as wrong. The valid range for this real option is 0 < derivative_test_tol and its default value is 0.0001.
+
+</blockquote>
+
+\anchor OPT_derivative_test_print_all
+ <strong>derivative_test_print_all</strong>: Indicates whether information for all estimated derivatives should be printed.
+<blockquote>
+ Determines verbosity of derivative checker. The default value for this string option is "no".
+
+Possible values: yes, no
+</blockquote>
+
+\anchor OPT_point_perturbation_radius
+ <strong>point_perturbation_radius</strong>: Maximal perturbation of an evaluation point.
+<blockquote>
+ If a random perturbation of a points is required, this number indicates the maximal perturbation. This is for example used when determining the center point at which the finite difference derivative test is executed. The valid range for this real option is 0 &le; point_perturbation_radius and its default value is 10.
+
 </blockquote>
 
 
@@ -1667,24 +1688,5 @@ Possible values: yes, no
 
 </blockquote>
 
-
-\subsection OPT_Miscellaneous Miscellaneous
-
-\anchor OPT_option_file_name
- <strong>option_file_name</strong>: File name of options file.
-<blockquote>
- By default, the name of the Ipopt options file is "ipopt.opt" - or something else if specified in the IpoptApplication::Initialize call. If this option is set by SetStringValue BEFORE the options file is read, it specifies the name of the options file. It does not make any sense to specify this option within the options file. Setting this option to an empty string disables reading of an options file. The default value for this string option is "ipopt.opt".
-
-Possible values:
- - *: Any acceptable standard file name
-</blockquote>
-
-\anchor OPT_timing_statistics
- <strong>timing_statistics</strong>: Indicates whether to measure time spend in components of Ipopt and NLP evaluation
-<blockquote>
- The overall algorithm time is unaffected by this option. The default value for this string option is "no".
-
-Possible values: yes, no
-</blockquote>
 
 */
