@@ -1393,7 +1393,7 @@ void RegisteredOptions::OutputOptionDocumentation(
                {
                   std::string anchorname = catname;
                   for( std::string::iterator it = anchorname.begin(); it != anchorname.end(); ++it )
-                     if( *it == ' ' || *it == '(' || *it == ')' )
+                     if( !isalnum(*it) )
                         *it = '_';
 
                   jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\subsection OPT_%s %s\n\n", anchorname.c_str(), catname.c_str());
@@ -1524,7 +1524,7 @@ void RegisteredOptions::OutputDoxygenOptionDocumentation(
          {
             std::string anchorname = &coption->c_str()[1];
             for( std::string::iterator it = anchorname.begin(); it != anchorname.end(); ++it )
-               if( *it == ' ' || *it == '(' || *it == ')' )
+               if( !isalnum(*it) )
                   *it = '_';
             jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
                          "\\subsection OPT_%s %s\n\n", anchorname.c_str(), &coption->c_str()[1]);
@@ -1549,7 +1549,7 @@ void RegisteredOptions::OutputDoxygenOptionDocumentation(
 
          std::string anchorname = (*cat_it)->Name();
          for( std::string::iterator it = anchorname.begin(); it != anchorname.end(); ++it )
-            if( *it == ' ' || *it == '(' || *it == ')' )
+            if( !isalnum(*it) )
                *it = '_';
 
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\subsection OPT_%s %s\n\n", anchorname.c_str(), (*cat_it)->Name().c_str());

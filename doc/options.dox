@@ -2058,7 +2058,7 @@ Possible values:
 </blockquote>
 
 
-\subsection OPT_Pardiso__pardiso-project.org__Linear_Solver Pardiso (pardiso-project.org) Linear Solver
+\subsection OPT_Pardiso__pardiso_project_org__Linear_Solver Pardiso (pardiso-project.org) Linear Solver
 
 \anchor OPT_pardiso_matching_strategy
  <strong>pardiso_matching_strategy</strong>: Matching strategy to be used by Pardiso
