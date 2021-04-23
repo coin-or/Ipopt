@@ -63,7 +63,7 @@ void OrigIpoptNLP::RegisterOptions(
    roptions->AddBoolOption(
       "honor_original_bounds",
       "Indicates whether final points should be projected into original bounds.",
-      true,
+      false,
       "Ipopt might relax the bounds during the optimization (see, e.g., option \"bound_relax_factor\"). "
       "This option determines whether the final point should be projected back into the user-provide original bounds after the optimization. "
       "Note that violations of constraints and complementarity reported by Ipopt at the end of the solution process "
