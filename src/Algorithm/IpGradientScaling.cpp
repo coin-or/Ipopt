@@ -30,7 +30,7 @@ void GradientScaling::RegisterOptions(
       "Target value for objective function gradient size.",
       0., false,
       0.,
-      "If a positive number is chosen, the scaling factor the objective function is computed "
+      "If a positive number is chosen, the scaling factor for the objective function is computed "
       "so that the gradient has the max norm of the given size at the starting point. "
       "This overrides nlp_scaling_max_gradient for the objective function.",
       true);
@@ -39,7 +39,7 @@ void GradientScaling::RegisterOptions(
       "Target value for constraint function gradient size.",
       0., false,
       0.,
-      "If a positive number is chosen, the scaling factor the constraint functions is computed "
+      "If a positive number is chosen, the scaling factors for the constraint functions are computed "
       "so that the gradient has the max norm of the given size at the starting point. "
       "This overrides nlp_scaling_max_gradient for the constraint functions.",
       true);

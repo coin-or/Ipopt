@@ -881,7 +881,7 @@ private:
 
    /** Check if slacks are becoming too small.
     *
-    *  If slacks are becoming too small, they are change.
+    *  If slacks are becoming too small, they are changed.
     *
     *  @return number of corrected slacks
     */

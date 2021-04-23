@@ -274,7 +274,7 @@ void AlgorithmBuilder::RegisterOptions(
    options.push_back("user-scaling");
    descrs.push_back("scaling parameters will come from the user");
    options.push_back("gradient-based");
-   descrs.push_back("scale the problem so the maximum gradient at the starting point is scaling_max_gradient");
+   descrs.push_back("scale the problem so the maximum gradient at the starting point is nlp_scaling_max_gradient");
 
    if( availablesolvers & IPOPTLINEARSOLVER_MC19 )
    {

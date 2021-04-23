@@ -382,7 +382,7 @@ Possible values: yes, no
 Possible values:
  - none: no problem scaling will be performed
  - user-scaling: scaling parameters will come from the user
- - gradient-based: scale the problem so the maximum gradient at the starting point is scaling_max_gradient
+ - gradient-based: scale the problem so the maximum gradient at the starting point is nlp_scaling_max_gradient
  - equilibration-based: scale the problem o that first derivatives are of order 1 at random points (uses Harwell routine MC19)
 </blockquote>
 
@@ -401,13 +401,13 @@ Possible values:
 \anchor OPT_nlp_scaling_obj_target_gradient
 <strong>nlp_scaling_obj_target_gradient</strong> (<em>advanced</em>): Target value for objective function gradient size.
 <blockquote>
- If a positive number is chosen, the scaling factor the objective function is computed so that the gradient has the max norm of the given size at the starting point. This overrides nlp_scaling_max_gradient for the objective function. The valid range for this real option is 0 &le; nlp_scaling_obj_target_gradient and its default value is 0.
+ If a positive number is chosen, the scaling factor for the objective function is computed so that the gradient has the max norm of the given size at the starting point. This overrides nlp_scaling_max_gradient for the objective function. The valid range for this real option is 0 &le; nlp_scaling_obj_target_gradient and its default value is 0.
 </blockquote>
 
 \anchor OPT_nlp_scaling_constr_target_gradient
 <strong>nlp_scaling_constr_target_gradient</strong> (<em>advanced</em>): Target value for constraint function gradient size.
 <blockquote>
- If a positive number is chosen, the scaling factor the constraint functions is computed so that the gradient has the max norm of the given size at the starting point. This overrides nlp_scaling_max_gradient for the constraint functions. The valid range for this real option is 0 &le; nlp_scaling_constr_target_gradient and its default value is 0.
+ If a positive number is chosen, the scaling factors for the constraint functions are computed so that the gradient has the max norm of the given size at the starting point. This overrides nlp_scaling_max_gradient for the constraint functions. The valid range for this real option is 0 &le; nlp_scaling_constr_target_gradient and its default value is 0.
 </blockquote>
 
 \anchor OPT_nlp_scaling_min_value
