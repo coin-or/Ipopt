@@ -60,49 +60,41 @@ void SensApplication::RegisterOptions(
    roptions->AddLowerBoundedIntegerOption("n_sens_steps",
                                           "Number of steps computed by sIPOPT",
                                           0, 1);
-   roptions->AddStringOption2("sens_boundcheck",
-                              "Activate boundcheck and re-solve for sIPOPT",
-                              "no",
-                              "no", "don't check bounds and do another SchurSolve",
-                              "yes", "check bounds and resolve Schur decomposition",
-                              "If this option is activated, the algorithm will check the iterate after an initial Schursolve and will resolve the decomposition if any bounds are not satisfied");
+   roptions->AddBoolOption("sens_boundcheck",
+                           "Activate boundcheck and re-solve Schur decomposition for sIPOPT",
+                           false,
+                           "If this option is activated, the algorithm will check the iterate after an initial Schursolve and will resolve the decomposition if any bounds are not satisfied");
    roptions->AddLowerBoundedNumberOption("sens_bound_eps",
                                          "Bound accuracy within which a bound still is considered to be valid",
                                          0, true, 1e-3,
                                          "The schur complement solution cannot make sure that variables stay inside bounds. "
                                          "I cannot use the primal-frac-to-the-bound step because I don't know if the initial iterate is feasible. "
                                          "To make things easier for me I have decided to make bounds not so strict.");
-   roptions->AddStringOption2("compute_red_hessian",
-                              "Determines if reduced Hessian should be computed",
-                              "no",
-                              "yes", "compute reduced hessian",
-                              "no", "don't compute reduced hessian");
-   roptions->AddStringOption2("compute_dsdp",
-                              "Determines if matrix of sensitivites should be computed",
-                              "no",
-                              "yes", "compute matrix of sensitivites",
-                              "no", "don't compute matrix of sensitivities");
+   roptions->AddBoolOption("compute_red_hessian",
+                           "Determines if reduced Hessian should be computed",
+                           false);
+   roptions->AddBoolOption("compute_dsdp",
+                           "Determines if matrix of sensitivites should be computed",
+                           false);
    // This option must be in IpInterfacesRegOp.cpp
-   roptions->AddStringOption2("run_sens",
-                              "Determines if sIPOPT alg runs",
-                              "no",
-                              "yes", "run sIPOPT",
-                              "no", "don't run sIPOPT");
-   roptions->AddStringOption2("sens_internal_abort",
-                              "Internal option - if set (internally), sens algorithm is not conducted",
-                              "no",
-                              "yes", "abort sIPOPT",
-                              "no", "run sIPOPT");
-   roptions->AddStringOption2("redhess_internal_abort",
-                              "Internal option - if set (internally), reduced hessian computation is not conducted",
-                              "no",
-                              "yes", "abort redhess computation",
-                              "no", "run redhess computation");
-   roptions->AddStringOption2("ignore_suffix_error",
-                              "If set, IPOPT runs even if there are errors in the suffixes",
-                              "no",
-                              "yes", "don't abort on suffix error",
-                              "no", "abort on suffix error");
+   roptions->AddBoolOption("run_sens",
+                           "Determines if sIPOPT alg runs",
+                           false,
+                           "",
+                           true);
+   roptions->AddBoolOption("sens_internal_abort",
+                           "Internal option - if set (internally), sens algorithm is not conducted",
+                           false,
+                           "",
+                           true);
+   roptions->AddBoolOption("redhess_internal_abort",
+                           "Internal option - if set (internally), reduced hessian computation is not conducted",
+                           false,
+                           "",
+                           true);
+   roptions->AddBoolOption("ignore_suffix_error",
+                           "If set, IPOPT runs even if there are errors in the suffixes",
+                           false);
    roptions->AddLowerBoundedNumberOption("sens_max_pdpert",
                                          "Maximum perturbation of primal dual system, for that the sIPOPT algorithm will not abort",
                                          0.0, true, 1e-3,
@@ -111,23 +103,17 @@ void SensApplication::RegisterOptions(
                                          "useless for the use with sIPOPT. This option sets an upper bound, which the inertia correction "
                                          "may have. If any of the inertia correction values is above this bound, the sIPOPT algorithm "
                                          "is aborted.");
-   roptions->AddStringOption2("rh_eigendecomp",
-                              "If yes, the eigenvalue decomposition of the reduced hessian matrix is computed",
-                              "no",
-                              "yes", "compute eigenvalue decomposition of reduced hessian",
-                              "no", "don't compute eigenvalue decomposition of reduced hessian",
-                              "The eigenvalue decomposition of the reduced hessian has different meanings depending on the specific problem. For parameter estimation problems, the eigenvalues are linked to the confidence interval of the parameters. See for example Victor Zavala's Phd thesis, chapter 4 for details.");
-   roptions->AddStringOption2("sens_allow_inexact_backsolve",
-                              "Allow inexact computation of backsolve in sIPOPT.",
-                              "yes",
-                              "yes", "Allow inexact computation of backsolve in sIPOPT.",
-                              "no", "Don't allow inexact computation of backsolve in sIPOPT.");
-   roptions->AddStringOption2("sens_kkt_residuals",
-                              "For sensitivity solution, take KKT residuals into account",
-                              "yes",
-                              "yes", "Take residuals into account",
-                              "no", "Don't take residuals into account",
-                              "The residuals of the KKT conditions should be zero at the optimal solution. However, in practice, especially for large problems and depending on the termination criteria, they may deviate from this theoretical state. If this option is set to yes, the residuals will be taken into account when computing the right hand side for the sensitivity step.");
+   roptions->AddBoolOption("rh_eigendecomp",
+                           "Whether the eigenvalue decomposition of the reduced hessian matrix is computed",
+                           false,
+                           "The eigenvalue decomposition of the reduced hessian has different meanings depending on the specific problem. For parameter estimation problems, the eigenvalues are linked to the confidence interval of the parameters. See for example Victor Zavala's Phd thesis, chapter 4 for details.");
+   roptions->AddBoolOption("sens_allow_inexact_backsolve",
+                           "Allow inexact computation of backsolve in sIPOPT.",
+                           true);
+   roptions->AddBoolOption("sens_kkt_residuals",
+                           "For sensitivity solution, take KKT residuals into account",
+                           true,
+                           "The residuals of the KKT conditions should be zero at the optimal solution. However, in practice, especially for large problems and depending on the termination criteria, they may deviate from this theoretical state. If this option is set to yes, the residuals will be taken into account when computing the right hand side for the sensitivity step.");
 }
 
 SensAlgorithmExitStatus SensApplication::Run()

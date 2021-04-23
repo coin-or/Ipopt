@@ -29,21 +29,21 @@ void OptimalityErrorConvergenceCheck::RegisterOptions(
       "Maximum number of iterations.",
       0,
       3000,
-      "The algorithm terminates with an error message if the number of iterations exceeded this number.");
+      "The algorithm terminates with a message if the number of iterations exceeded this number.");
    roptions->AddLowerBoundedNumberOption(
       "max_wall_time",
       "Maximum number of walltime clock seconds.",
       0.0, true,
       1e20,
       "A limit on walltime clock seconds that Ipopt can use to solve one problem. "
-      "If during the convergence check this limit is exceeded, Ipopt will terminate with a corresponding error message.");
+      "If during the convergence check this limit is exceeded, Ipopt will terminate with a corresponding message.");
    roptions->AddLowerBoundedNumberOption(
       "max_cpu_time",
       "Maximum number of CPU seconds.",
       0.0, true,
       1e20,
       "A limit on CPU seconds that Ipopt can use to solve one problem. "
-      "If during the convergence check this limit is exceeded, Ipopt will terminate with a corresponding error message.");
+      "If during the convergence check this limit is exceeded, Ipopt will terminate with a corresponding message.");
    roptions->AddLowerBoundedNumberOption(
       "dual_inf_tol",
       "Desired threshold for the dual infeasibility.",

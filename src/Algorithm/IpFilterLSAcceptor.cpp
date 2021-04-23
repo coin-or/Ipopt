@@ -65,28 +65,28 @@ void FilterLSAcceptor::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
       0.0, true,
       0.5, true,
       1e-8,
-      "(See Eqn. (20) in the implementation paper)",
+      "See Eqn. (20) in the implementation paper.",
       true);
    roptions->AddLowerBoundedNumberOption(
       "delta",
       "Multiplier for constraint violation in the switching rule.",
       0.0, true,
       1.0,
-      "(See Eqn. (19) in the implementation paper.)",
+      "See Eqn. (19) in the implementation paper.",
       true);
    roptions->AddLowerBoundedNumberOption(
       "s_phi",
       "Exponent for linear barrier function model in the switching rule.",
       1.0, true,
       2.3,
-      "(See Eqn. (19) in the implementation paper.)",
+      "See Eqn. (19) in the implementation paper.",
       true);
    roptions->AddLowerBoundedNumberOption(
       "s_theta",
       "Exponent for current constraint violation in the switching rule.",
       1.0, true,
       1.1,
-      "(See Eqn. (19) in the implementation paper.)",
+      "See Eqn. (19) in the implementation paper.",
       true);
    roptions->AddBoundedNumberOption(
       "gamma_phi",
@@ -94,7 +94,7 @@ void FilterLSAcceptor::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
       0.0, true,
       1.0, true,
       1e-8,
-      "(See Eqn. (18a) in the implementation paper.)",
+      "See Eqn. (18a) in the implementation paper.",
       true);
    roptions->AddBoundedNumberOption(
       "gamma_theta",
@@ -102,7 +102,7 @@ void FilterLSAcceptor::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
       0.0, true,
       1.0, true,
       1e-5,
-      "(See Eqn. (18b) in the implementation paper.)",
+      "See Eqn. (18b) in the implementation paper.",
       true);
    roptions->AddBoundedNumberOption(
       "alpha_min_frac",
@@ -110,7 +110,7 @@ void FilterLSAcceptor::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
       0.0, true,
       1.0, true,
       0.05,
-      "(This is gamma_alpha in Eqn. (20) in the implementation paper.)",
+      "This is gamma_alpha in Eqn. (20) in the implementation paper.",
       true);
    roptions->AddLowerBoundedIntegerOption(
       "max_soc",
@@ -118,7 +118,7 @@ void FilterLSAcceptor::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
       0,
       4,
       "Choosing 0 disables the second order corrections. "
-      "(This is p^{max} of Step A-5.9 of Algorithm A in the implementation paper.)");
+      "This is p^{max} of Step A-5.9 of Algorithm A in the implementation paper.");
    roptions->AddLowerBoundedNumberOption(
       "kappa_soc",
       "Factor in the sufficient reduction rule for second order correction.",
@@ -126,7 +126,7 @@ void FilterLSAcceptor::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
       0.99,
       "This option determines how much a second order correction step must reduce the "
       "constraint violation so that further correction steps are attempted. "
-      "(See Step A-5.9 of Algorithm A in the implementation paper.)",
+      "See Step A-5.9 of Algorithm A in the implementation paper.",
       true);
    roptions->AddLowerBoundedNumberOption(
       "obj_max_inc",
@@ -165,26 +165,23 @@ void FilterLSAcceptor::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
       "affine", "corrector step towards mu=0",
       "primal-dual", "corrector step towards current mu",
       "If \"mu_strategy\" is \"adaptive\", this option determines what kind of corrector steps should be tried. "
-      "Changing this option is experimental.");
+      "Changing this option is experimental.",
+      true);
 
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "skip_corr_if_neg_curv",
-      "Skip the corrector step in negative curvature iteration.",
-      "yes",
-      "no", "don't skip",
-      "yes", "skip",
+      "Whether to skip the corrector step in negative curvature iteration.",
+      true,
       "The corrector step is not tried if negative curvature has been "
       "encountered during the computation of the search direction in the current iteration. "
       "This option is only used if \"mu_strategy\" is \"adaptive\". "
       "Changing this option is experimental.",
       true);
 
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "skip_corr_in_monotone_mode",
-      "Skip the corrector step during monotone barrier parameter mode.",
-      "yes",
-      "no", "don't skip",
-      "yes", "skip",
+      "Whether to skip the corrector step during monotone barrier parameter mode.",
+      true,
       "The corrector step is not tried if the algorithm is currently in the monotone mode (see also option \"barrier_strategy\"). "
       "This option is only used if \"mu_strategy\" is \"adaptive\". "
       "Changing this option is experimental.",
@@ -204,7 +201,7 @@ void FilterLSAcceptor::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
       "Ways to apply second order correction",
       0, 1,
       0,
-      "This option determins the way to apply second order correction, 0 is the method described in the implementation paper. "
+      "This option determines the way to apply second order correction, 0 is the method described in the implementation paper. "
       "1 is the modified way which adds alpha on the rhs of x and s rows.");
 }
 

@@ -123,12 +123,10 @@ void AdaptiveMuUpdate::RegisterOptions(
       1.0,
       "",
       true); // ToDo Detailed description later
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "adaptive_mu_restore_previous_iterate",
-      "Indicates if the previous iterate should be restored if the monotone mode is entered.",
-      "no",
-      "no", "don't restore accepted iterate",
-      "yes", "restore accepted iterate",
+      "Indicates if the previous accepted iterate should be restored if the monotone mode is entered.",
+      false,
       "When the globalization strategy for the adaptive barrier algorithm switches to the monotone mode, "
       "it can either start from the most recent iterate (no), or from the last iterate that was accepted (yes).",
       true);

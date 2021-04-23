@@ -123,21 +123,17 @@ void Ma27TSolverInterface::RegisterOptions(
       2.0,
       "If the integer or real workspace is not large enough, Ipopt will increase its size by this factor. "
       "This option is only available if Ipopt has been compiled with MA27.");
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "ma27_skip_inertia_check",
-      "Always pretend inertia is correct.",
-      "no",
-      "no", "check inertia",
-      "yes", "skip inertia check",
+      "Whether to always pretend that inertia is correct.",
+      false,
       "Setting this option to \"yes\" essentially disables inertia check. "
       "This option makes the algorithm non-robust and easily fail, but it might give some insight into the necessity of inertia control.",
       true);
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "ma27_ignore_singularity",
-      "Enables MA27's ability to solve a linear system even if the matrix is singular.",
-      "no",
-      "no", "Don't have MA27 solve singular systems",
-      "yes", "Have MA27 solve singular systems",
+      "Whether to use MA27's ability to solve a linear system even if the matrix is singular.",
+      false,
       "Setting this option to \"yes\" means that Ipopt will call MA27 to compute solutions for right hand sides, "
       "even if MA27 has detected that the matrix is singular (but is still able to solve the linear system). "
       "In some cases this might be better than using Ipopt's heuristic of small perturbation of the lower diagonal of the KKT matrix.",

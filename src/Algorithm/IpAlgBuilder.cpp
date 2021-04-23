@@ -344,12 +344,10 @@ void AlgorithmBuilder::RegisterOptions(
       "But sometimes, good results might be obtained with the other choices.",
       true);
    roptions->SetRegisteringCategory("Undocumented", -100000);
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "wsmp_iterative",
-      "Switches to iterative solver in WSMP.",
-      "no",
-      "no", "use direct solver",
-      "yes", "use iterative solver",
+      "Switches to use iterative instead of direct solver in WSMP.",
+      false,
       "EXPERIMENTAL!",
       true);
 }

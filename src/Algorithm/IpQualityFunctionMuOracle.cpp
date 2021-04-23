@@ -57,7 +57,7 @@ void QualityFunctionMuOracle::RegisterOptions(
       0., true,
       1e2,
       "This is the upper bound for the centering parameter chosen by the quality function based barrier parameter update. "
-      "(Only used if option \"mu_oracle\" is set to \"quality-function\".)",
+      "Only used if option \"mu_oracle\" is set to \"quality-function\".",
       true);
    roptions->AddLowerBoundedNumberOption(
       "sigma_min",
@@ -65,7 +65,7 @@ void QualityFunctionMuOracle::RegisterOptions(
       0., false,
       1e-6,
       "This is the lower bound for the centering parameter chosen by the quality function based barrier parameter update. "
-      "(Only used if option \"mu_oracle\" is set to \"quality-function\".)",
+      "Only used if option \"mu_oracle\" is set to \"quality-function\".",
       true);
    roptions->AddStringOption4(
       "quality_function_norm_type",
@@ -75,7 +75,7 @@ void QualityFunctionMuOracle::RegisterOptions(
       "2-norm-squared", "use the 2-norm squared (sum of squares)",
       "max-norm", "use the infinity norm (max)",
       "2-norm", "use 2-norm",
-      "(Only used if option \"mu_oracle\" is set to \"quality-function\".)",
+      "Only used if option \"mu_oracle\" is set to \"quality-function\".",
       true);
    roptions->AddStringOption4(
       "quality_function_centrality",
@@ -87,7 +87,7 @@ void QualityFunctionMuOracle::RegisterOptions(
       "cubed-reciprocal", "complementarity * the reciprocal of the centrality measure cubed",
       "This determines whether a term is added to the quality function to penalize deviation from centrality with respect to complementarity. "
       "The complementarity measure here is the xi in the Loqo update rule. "
-      "(Only used if option \"mu_oracle\" is set to \"quality-function\".)",
+      "Only used if option \"mu_oracle\" is set to \"quality-function\".",
       true);
    roptions->AddStringOption2(
       "quality_function_balancing_term",
@@ -97,7 +97,7 @@ void QualityFunctionMuOracle::RegisterOptions(
       "cubic", "Max(0,Max(dual_inf,primal_inf)-compl)^3",
       "This determines whether a term is added to the quality function that penalizes situations "
       "where the complementarity is much smaller than dual and primal infeasibilities. "
-      "(Only used if option \"mu_oracle\" is set to \"quality-function\".)",
+      "Only used if option \"mu_oracle\" is set to \"quality-function\".",
       true);
    roptions->AddLowerBoundedIntegerOption(
       "quality_function_max_section_steps",
@@ -105,7 +105,7 @@ void QualityFunctionMuOracle::RegisterOptions(
       0,
       8,
       "The golden section search is performed for the quality function based mu oracle. "
-      "(Only used if option \"mu_oracle\" is set to \"quality-function\".)");
+      "Only used if option \"mu_oracle\" is set to \"quality-function\".");
    roptions->AddBoundedNumberOption(
       "quality_function_section_sigma_tol",
       "Tolerance for the section search procedure determining the optimal centering parameter (in sigma space).",
@@ -113,7 +113,7 @@ void QualityFunctionMuOracle::RegisterOptions(
       1., true,
       1e-2,
       "The golden section search is performed for the quality function based mu oracle. "
-      "(Only used if option \"mu_oracle\" is set to \"quality-function\".)",
+      "Only used if option \"mu_oracle\" is set to \"quality-function\".",
       true);
    roptions->AddBoundedNumberOption(
       "quality_function_section_qf_tol",
@@ -122,7 +122,7 @@ void QualityFunctionMuOracle::RegisterOptions(
       1., true,
       0.,
       "The golden section search is performed for the quality function based mu oracle. "
-      "(Only used if option \"mu_oracle\" is set to \"quality-function\".)",
+      "Only used if option \"mu_oracle\" is set to \"quality-function\".",
       true);
 }
 

@@ -141,7 +141,7 @@ void IpoptCalculatedQuantities::RegisterOptions(
       "Scaling threshold for the NLP error.",
       0., true,
       100.,
-      "(See paragraph after Eqn. (6) in the implementation paper.)",
+      "See paragraph after Eqn. (6) in the implementation paper.",
       true);
 
    roptions->SetRegisteringCategory("NLP", 470000);
@@ -150,7 +150,7 @@ void IpoptCalculatedQuantities::RegisterOptions(
       "Weight for linear damping term (to handle one-sided bounds).",
       0., false,
       1e-5,
-      "(see Section 3.7 in implementation paper.)",
+      "See Section 3.7 in implementation paper.",
       true);
 
    roptions->SetRegisteringCategory("Line Search", 380000);
@@ -163,7 +163,7 @@ void IpoptCalculatedQuantities::RegisterOptions(
       "If a slack becomes very small compared to machine precision, the corresponding bound is moved slightly. "
       "This parameter determines how large the move should be. "
       "Its default value is mach_eps^{3/4}. "
-      "(See also end of Section 3.5 in implementation paper - but actual implementation might be somewhat different.)",
+      "See also end of Section 3.5 in implementation paper - but actual implementation might be somewhat different.",
       true);
    roptions->AddStringOption3(
       "constraint_violation_norm_type",

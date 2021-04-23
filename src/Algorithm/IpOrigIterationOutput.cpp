@@ -24,12 +24,10 @@ void OrigIterationOutput::RegisterOptions(
 {
    SmartPtr<RegisteredCategory> prev_cat = roptions->RegisteringCategory();
    roptions->SetRegisteringCategory("Output", 900000);
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "print_info_string",
       "Enables printing of additional info string at end of iteration output.",
-      "no",
-      "no", "don't print string",
-      "yes", "print string at end of each iteration output",
+      false,
       "This string contains some insider information about the current iteration. "
       "For details, look for \"Diagnostic Tags\" in the Ipopt documentation.");
    roptions->AddStringOption2(

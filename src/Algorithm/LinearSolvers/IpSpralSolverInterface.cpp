@@ -33,11 +33,17 @@ void SpralSolverInterface::RegisterOptions(
 )
 {
    roptions->AddLowerBoundedIntegerOption(
-      "spral_cpu_block_size", "CPU Parallelization Block Size", 1, 256,
+      "spral_cpu_block_size",
+      "CPU Parallelization Block Size",
+      1,
+      256,
       "Block size to use for parallelization of large nodes on CPU resources.");
 
    roptions->AddLowerBoundedNumberOption(
-      "spral_gpu_perf_coeff", "GPU Performance Coefficient", 0.0, true, 1.0,
+      "spral_gpu_perf_coeff",
+      "GPU Performance Coefficient",
+      0.0, true,
+      1.0,
       "How many times faster a GPU is than a CPU at factoring a subtree.");
 
    roptions->AddStringOption2(
@@ -47,38 +53,50 @@ void SpralSolverInterface::RegisterOptions(
 
    roptions->AddLowerBoundedNumberOption(
       "spral_max_load_inbalance",
-      "Maximum Permissible Load", 1.0, true, 1.2,
+      "Maximum Permissible Load",
+      1.0, true,
+      1.2,
       "Maximum permissible load inbalance for leaf subtree allocations.");
 
    roptions->AddLowerBoundedNumberOption(
-      "spral_min_gpu_work", "Minimum GPU Work", 0.0, false, 5.0e9,
+      "spral_min_gpu_work",
+      "Minimum GPU Work",
+      0.0, false,
+      5.0e9,
       "Minimum number of FLOPS in subtree before scheduling on GPU.");
 
    roptions->AddLowerBoundedIntegerOption(
-      "spral_nemin", "Node Amalgamation Parameter", 1, 32,
-      "Two nodes in the elimination tree are merged if the result has fewer than "
-      "spral_nemin variables.");
+      "spral_nemin",
+      "Node Amalgamation Parameter",
+      1,
+      32,
+      "Two nodes in the elimination tree are merged if the result has fewer than spral_nemin variables.");
 
    roptions->AddStringOption2(
       "spral_order",
-      "Controls type of ordering used by SPRAL", "matching",
+      "Controls type of ordering used by SPRAL",
+      "matching",
       "metis", "Use METIS with default settings.",
       "matching", "Use matching-based elimination ordering.");
 
    roptions->AddStringOption3(
       "spral_pivot_method",
-      "Specifies strategy for scaling in SPRAL linear solver.", "block",
+      "Specifies strategy for scaling in SPRAL linear solver.",
+      "block",
       "aggressive", "Aggressive a posteori pivoting.",
       "block", "Block a posteori pivoting.",
       "threshold", "Threshold partial pivoting (not parallel).");
 
    roptions->AddIntegerOption(
-      "spral_print_level", "Print level for the linear solver SPRAL", -1,
+      "spral_print_level",
+      "Print level for the linear solver SPRAL",
+      -1,
       "<0: no printing, 0: errors and warning messages, 1: limited diagnostics, >1: additional diagnostics");
 
    roptions->AddStringOption6(
       "spral_scaling",
-      "Specifies strategy for scaling in SPRAL linear solver.", "matching",
+      "Specifies strategy for scaling in SPRAL linear solver.",
+      "matching",
       "none", "Do not scale the linear system matrix.",
       "mc64", "Scale using weighted bipartite matching (MC64).",
       "auction", "Scale using the auction algorithm.",
@@ -88,48 +106,46 @@ void SpralSolverInterface::RegisterOptions(
 
    roptions->AddStringOption5(
       "spral_scaling_1",
-      "First scaling strategy.", "matching",
+      "First scaling strategy.",
+      "matching",
       "none", "Do not scale the linear system matrix.",
       "mc64", "Scale using weighted bipartite matching (MC64).",
       "auction", "Scale using the auction algorithm.",
       "matching", "Scale using the matching-based ordering.",
       "ruiz", "Scale using the norm-equilibration algorithm of Ruiz (MC77).",
       "If spral_scaling = dynamic, this scaling is used according to the trigger "
-      "spral_switch_1. If spral_switch_2 is triggered, it is disabled.");
+      "spral_switch_1. If spral_switch_2 is triggered, it is disabled.",
+      true);
 
    roptions->AddStringOption5(
       "spral_scaling_2",
-      "Second scaling strategy.", "mc64",
+      "Second scaling strategy.",
+      "mc64",
       "none", "Do not scale the linear system matrix.",
       "mc64", "Scale using weighted bipartite matching (MC64).",
       "auction", "Scale using the auction algorithm.",
       "matching", "Scale using the matching-based ordering.",
       "ruiz", "Scale using the norm-equilibration algorithm of Ruiz (MC77).",
       "If spral_scaling = dynamic, this scaling is used according to the trigger "
-      "spral_switch_2. If spral_switch_3 is triggered, it is disabled.");
+      "spral_switch_2. If spral_switch_3 is triggered, it is disabled.",
+      true);
 
    roptions->AddStringOption5(
       "spral_scaling_3",
-      "Third scaling strategy.", "none",
+      "Third scaling strategy.",
+      "none",
       "none", "Do not scale the linear system matrix.",
       "mc64", "Scale using weighted bipartite matching (MC64).",
       "auction", "Scale using the auction algorithm.",
       "matching", "Scale using the matching-based ordering.",
       "ruiz", "Scale using the norm-equilibration algorithm of Ruiz (MC77).",
-      "If spral_scaling = dynamic, this scaling is used according to the trigger "
-      "spral_switch_3.");
-
-   roptions->AddLowerBoundedNumberOption(
-      "spral_small", "Zero Pivot Threshold", 0.0, true, 1.0e-20,
-      "Any pivot less than spral_small is treated as zero.");
-
-   roptions->AddLowerBoundedNumberOption(
-      "spral_small_subtree_threshold", "Small Subtree Threshold", 0.0, true, 4.0e6,
-      "Maximum number of FLOPS in a subtree treated as a single task.");
+      "If spral_scaling = dynamic, this scaling is used according to the trigger spral_switch_3.",
+      true);
 
    roptions->AddStringOption9(
       "spral_switch_1",
-      "First switch, determining when spral_scaling_1 is enabled.", "at_start",
+      "First switch, determining when spral_scaling_1 is enabled.",
+      "at_start",
       "never", "Scaling is never enabled.",
       "at_start", "Scaling is used from the very start.",
       "at_start_reuse", "Scaling is used on the first iteration, then reused thereafter.",
@@ -141,11 +157,13 @@ void SpralSolverInterface::RegisterOptions(
       "od_hd", "Combination of on_demand and high_delay.",
       "od_hd_reuse", "Combination of on_demand_reuse and high_delay_reuse",
       "If spral_scaling = dynamic, spral_scaling_1 is enabled according to this "
-      "condition. If spral_switch_2 occurs, this option is henceforth ignored.");
+      "condition. If spral_switch_2 occurs, this option is henceforth ignored.",
+      true);
 
    roptions->AddStringOption9(
       "spral_switch_2",
-      "Second switch, determining when spral_scaling_2 is enabled.", "on_demand",
+      "Second switch, determining when spral_scaling_2 is enabled.",
+      "on_demand",
       "never", "Scaling is never enabled.",
       "at_start", "Scaling is used from the very start.",
       "at_start_reuse", "Scaling is used on the first iteration, then reused thereafter.",
@@ -157,11 +175,13 @@ void SpralSolverInterface::RegisterOptions(
       "od_hd", "Combination of on_demand and high_delay.",
       "od_hd_reuse", "Combination of on_demand_reuse and high_delay_reuse",
       "If spral_scaling = dynamic, spral_scaling_2 is enabled according to this "
-      "condition. If spral_switch_3 occurs, this option is henceforth ignored.");
+      "condition. If spral_switch_3 occurs, this option is henceforth ignored.",
+      true);
 
    roptions->AddStringOption9(
       "spral_switch_3",
-      "Third switch, determining when spral_scaling_3 is enabled.", "never",
+      "Third switch, determining when spral_scaling_3 is enabled.",
+      "never",
       "never", "Scaling is never enabled.",
       "at_start", "Scaling is used from the very start.",
       "at_start_reuse", "Scaling is used on the first iteration, then reused thereafter.",
@@ -172,22 +192,43 @@ void SpralSolverInterface::RegisterOptions(
       "more that 0.05*n additional delays; otherwise, reuse scaling from the previous iteration.",
       "od_hd", "Combination of on_demand and high_delay.",
       "od_hd_reuse", "Combination of on_demand_reuse and high_delay_reuse",
-      "If spral_scaling = dynamic, spral_scaling_3 is enabled according to this condition.");
+      "If spral_scaling = dynamic, spral_scaling_3 is enabled according to this condition.",
+      true);
+
+   roptions->AddLowerBoundedNumberOption(
+      "spral_small",
+      "Zero Pivot Threshold",
+      0.0, true,
+      1.0e-20,
+      "Any pivot less than spral_small is treated as zero.");
+
+   roptions->AddLowerBoundedNumberOption(
+      "spral_small_subtree_threshold",
+      "Small Subtree Threshold",
+      0.0, true,
+      4.0e6,
+      "Maximum number of FLOPS in a subtree treated as a single task.");
 
    roptions->AddBoundedNumberOption(
       "spral_u",
-      "Pivoting Threshold", 0.0, true, 0.5, false, 1.0e-8,
+      "Pivoting Threshold",
+      0.0, true,
+      0.5, false,
+      1.0e-8,
       "Relative pivot threshold used in symmetric indefinite case.");
 
    roptions->AddBoundedNumberOption(
-      "spral_umax", "Maximum Pivoting Threshold", 0.0, true, 0.5, false, 1.0e-4,
+      "spral_umax",
+      "Maximum Pivoting Threshold",
+      0.0, true,
+      0.5, false,
+      1.0e-4,
       "See SPRAL documentation.");
 
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "spral_use_gpu",
-      "Specifies whether or not graphics processing units (GPUs) are used by the SPRAL linear solver.", "yes",
-      "no", "Do not use GPUs.",
-      "yes", "Use GPUs if present.");
+      "Specifies whether or not graphics processing units (GPUs) are used by the SPRAL linear solver if present.",
+      true);
 }
 
 int SpralSolverInterface::PivotMethodNameToNum(

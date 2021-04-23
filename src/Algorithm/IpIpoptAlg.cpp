@@ -69,7 +69,7 @@ void IpoptAlgorithm::RegisterOptions(
       0., true,
       1e10,
       "If the dual variables deviate from their primal estimates, a correction is performed. "
-      "(See Eqn. (16) in the implementation paper.) "
+      "See Eqn. (16) in the implementation paper. "
       "Setting the value to less than 1 disables the correction.",
       true);
    roptions->AddStringOption2(
@@ -89,21 +89,20 @@ void IpoptAlgorithm::RegisterOptions(
       1e-6,
       "If recalc_y is chosen and the current infeasibility is less than this value, then the multipliers are recomputed.");
    roptions->SetRegisteringCategory("Step Calculation", 350000);
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "mehrotra_algorithm",
-      "Indicates if we want to do Mehrotra's algorithm.",
-      "no",
-      "no", "Do the usual Ipopt algorithm.",
-      "yes", "Do Mehrotra's predictor-corrector algorithm.",
-      "If set to yes, Ipopt runs as Mehrotra's predictor-corrector algorithm. "
-      "This works usually very well for LPs and convex QPs. "
-      "This automatically disables the line search, and chooses the (unglobalized) adaptive mu strategy "
-      "with the \"probing\" oracle, and uses \"corrector_type=affine\" without any safeguards; "
+      "Indicates whether to do Mehrotra's predictor-corrector algorithm.",
+      false,
+      "If enabled, line search is disabled and the (unglobalized) adaptive mu strategy is chosen "
+      "with the \"probing\" oracle, and \"corrector_type=affine\" is used without any safeguards; "
       "you should not set any of those options explicitly in addition. "
       "Also, unless otherwise specified, the values of \"bound_push\", \"bound_frac\", and "
-      "\"bound_mult_init_val\" are set more aggressive, and sets \"alpha_for_y=bound_mult\".");
-   roptions->SetRegisteringCategory("");
-   roptions->AddStringOption2("sb", "", "no", "no", "", "yes", "", "", true);
+      "\"bound_mult_init_val\" are set more aggressive, and sets \"alpha_for_y=bound_mult\". "
+      "The Mehrotra's predictor-corrector algorithm works usually very well for LPs and convex QPs.");
+   roptions->SetRegisteringCategory("Undocumented", -100000);
+   roptions->AddBoolOption("sb",
+      "whether to skip printing Ipopt copyright banner",
+      false);
 }
 
 static bool copyright_message_printed = false;

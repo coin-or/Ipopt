@@ -1556,12 +1556,10 @@ void RegisteredOptions::RegisterOptions(
       "",
       true);
 
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "print_advanced_options",
       "whether to print also advanced options",
-      "no",
-      "yes", "",
-      "no", "",
+      false,
       "",
       true);
 

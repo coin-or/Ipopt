@@ -37,12 +37,10 @@ void InexactLSAcceptor::RegisterOptions(
       "nu_update_inf_skip_tol",
       "Lower bound on infeasibility to perform penalty parameter update.", 0.0, true, 1e-9,
       "If the current infeasibility is less than this value, the penalty parameter update is skipped");
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "flexible_penalty_function",
       "Switch to use Curtis/Nocedal flexible penalty function",
-      "yes",
-      "no", "do not use the flexible penalty function procedure",
-      "yes", "use the flexible penalty function procedure",
+      true,
       "This determines if the flexible penalty function procedure by Curtis/Nocedal should be used in the line search. "
       "For now, this only is implemented for the inexact algorithm.");
    roptions->AddLowerBoundedNumberOption(

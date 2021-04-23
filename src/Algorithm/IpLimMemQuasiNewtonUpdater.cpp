@@ -37,11 +37,10 @@ void LimMemQuasiNewtonUpdater::RegisterOptions(
 
    roptions->AddStringOption2(
       "limited_memory_update_type",
-      "Quasi-Newton update formula for the limited memory approximation.",
+      "Quasi-Newton update formula for the limited memory quasi-Newton approximation.",
       "bfgs",
       "bfgs", "BFGS update (with skipping)",
-      "sr1", "SR1 (not working well)",
-      "Determines which update formula is to be used for the limited-memory quasi-Newton approximation.");
+      "sr1", "SR1 (not working well)");
 
    roptions->AddStringOption5(
       "limited_memory_initialization",
@@ -86,12 +85,10 @@ void LimMemQuasiNewtonUpdater::RegisterOptions(
       2,
       "If the update is skipped more than this number of successive iterations, the quasi-Newton approximation is reset.");
 
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "limited_memory_special_for_resto",
       "Determines if the quasi-Newton updates should be special during the restoration phase.",
-      "no",
-      "no", "use the same update as in regular iterations",
-      "yes", "use the a special update during restoration phase",
+      false,
       "Until Nov 2010, Ipopt used a special update during the restoration phase, but it turned out that this does not work well. "
       "The new default uses the regular update procedure and it improves results. "
       "If for some reason you want to get back to the original update, set this option to \"yes\".");

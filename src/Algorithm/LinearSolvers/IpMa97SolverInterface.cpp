@@ -75,12 +75,8 @@ void Ma97SolverInterface::RegisterOptions(
    roptions->AddIntegerOption(
       "ma97_print_level",
       "Debug printing level",
-      -1  /* changed from 0 to -1, as MA97 would write error messages about singular systems to stdout, which are "errors" that Ipopt handles fine */
-      /*
-      "<0 no printing.\n"
-      "0  Error and warning messages only.\n"
-      "=1 Limited diagnostic printing.\n"
-      ">1 Additional diagnostic printing."*/);
+      -1,
+      "<0: no printing; 0: Error and warning messages only; 1: Limited diagnostic printing; >1 Additional diagnostic printing.");
    roptions->AddLowerBoundedIntegerOption(
       "ma97_nemin",
       "Node Amalgamation parameter",
@@ -125,7 +121,8 @@ void Ma97SolverInterface::RegisterOptions(
       "mc64", "Scale linear system matrix using MC64",
       "mc77", "Scale linear system matrix using MC77 [1,3,0]",
       "If ma97_scaling=dynamic, this scaling is used according to the trigger ma97_switch1. "
-      "If ma97_switch2 is triggered it is disabled.");
+      "If ma97_switch2 is triggered it is disabled.",
+      true);
    roptions->AddStringOption9(
       "ma97_switch1",
       "First switch, determine when ma97_scaling1 is enabled.",
@@ -140,7 +137,8 @@ void Ma97SolverInterface::RegisterOptions(
       "od_hd", "Combination of on_demand and high_delay",
       "od_hd_reuse", "Combination of on_demand_reuse and high_delay_reuse",
       "If ma97_scaling=dynamic, ma97_scaling1 is enabled according to this condition. "
-      "If ma97_switch2 occurs this option is henceforth ignored.");
+      "If ma97_switch2 occurs this option is henceforth ignored.",
+      true);
    roptions->AddStringOption4(
       "ma97_scaling2",
       "Second scaling.",
@@ -150,7 +148,8 @@ void Ma97SolverInterface::RegisterOptions(
       "mc64", "Scale linear system matrix using MC64",
       "mc77", "Scale linear system matrix using MC77 [1,3,0]",
       "If ma97_scaling=dynamic, this scaling is used according to the trigger ma97_switch2. "
-      "If ma97_switch3 is triggered it is disabled.");
+      "If ma97_switch3 is triggered it is disabled.",
+      true);
    roptions->AddStringOption9(
       "ma97_switch2",
       "Second switch, determine when ma97_scaling2 is enabled.",
@@ -165,7 +164,8 @@ void Ma97SolverInterface::RegisterOptions(
       "od_hd", "Combination of on_demand and high_delay",
       "od_hd_reuse", "Combination of on_demand_reuse and high_delay_reuse",
       "If ma97_scaling=dynamic, ma97_scaling2 is enabled according to this condition. "
-      "If ma97_switch3 occurs this option is henceforth ignored.");
+      "If ma97_switch3 occurs this option is henceforth ignored.",
+      true);
    roptions->AddStringOption4(
       "ma97_scaling3",
       "Third scaling.",
@@ -174,7 +174,8 @@ void Ma97SolverInterface::RegisterOptions(
       "mc30", "Scale linear system matrix using MC30",
       "mc64", "Scale linear system matrix using MC64",
       "mc77", "Scale linear system matrix using MC77 [1,3,0]",
-      "If ma97_scaling=dynamic, this scaling is used according to the trigger ma97_switch3.");
+      "If ma97_scaling=dynamic, this scaling is used according to the trigger ma97_switch3.",
+      true);
    roptions->AddStringOption9(
       "ma97_switch3",
       "Third switch, determine when ma97_scaling3 is enabled.",
@@ -188,7 +189,8 @@ void Ma97SolverInterface::RegisterOptions(
       "high_delay_reuse", "Scaling to be used only when previous itr created more that 0.05*n additional delays, otherwise reuse scaling from previous itr",
       "od_hd", "Combination of on_demand and high_delay",
       "od_hd_reuse", "Combination of on_demand_reuse and high_delay_reuse",
-      "If ma97_scaling=dynamic, ma97_scaling3 is enabled according to this condition.");
+      "If ma97_scaling=dynamic, ma97_scaling3 is enabled according to this condition.",
+      true);
    roptions->AddStringOption7(
       "ma97_order",
       "Controls type of ordering",
@@ -213,7 +215,9 @@ void Ma97SolverInterface::RegisterOptions(
       "Controls if blas2 or blas3 routines are used for solve",
       "no",
       "no", "Use BLAS2 (faster, some implementations bit incompatible)",
-      "yes", "Use BLAS3 (slower)");
+      "yes", "Use BLAS3 (slower)",
+      "",
+      true);
 }
 
 /// set MA97 functions to use for every instantiation of this class

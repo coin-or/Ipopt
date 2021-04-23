@@ -227,13 +227,10 @@ void Ma57TSolverInterface::RegisterOptions(
       5,
 #endif
       "This is ICNTL(6) in MA57.");
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "ma57_automatic_scaling",
-      "Controls MA57 automatic scaling",
-      "no",
-      "no", "Do not scale the linear system matrix",
-      "yes", "Scale the linear system matrix",
-      "This option controls the internal scaling option of MA57. "
+      "Controls whether to enable automatic scaling in MA57",
+      false,
       "For higher reliability of the MA57 solver, you may want to set this option to yes. "
       "This is ICNTL(15) in MA57.");
 
@@ -262,7 +259,6 @@ void Ma57TSolverInterface::RegisterOptions(
       "This can be particularly efficient if the matrix is highly rank deficient. "
       "This is ICNTL(16) in MA57.");
    // CET 04-29-2010
-
 }
 
 /// set MA57 functions to use for every instantiation of this class

@@ -361,22 +361,16 @@ void IpoptApplication::RegisterOptions(
       "NOTE: This option only works when read from the ipopt.opt options file! "
       "Determines the verbosity level for the file specified by \"output_file\". "
       "By default it is the same as \"print_level\".");
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "print_user_options",
       "Print all options set by the user.",
-      "no",
-      "no", "don't print options",
-      "yes", "print options",
+      false,
       "If selected, the algorithm will print the list of all options set by the user including their values and whether they have been used. "
       "In some cases this information might be incorrect, due to the internal program flow.");
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "print_options_documentation",
-      "Switch to print all algorithmic options.",
-      "no",
-      "no", "don't print list",
-      "yes", "print list",
-      "If selected, the algorithm will print the list of all available algorithmic options with some documentation "
-      "before solving the optimization problem.");
+      "Switch to print all algorithmic options with some documentation before solving the optimization problem.",
+      false);
 
 #if IPOPT_VERBOSITY > 0
    roptions->AddBoundedIntegerOption(
@@ -389,12 +383,10 @@ void IpoptApplication::RegisterOptions(
       "By default it is the same as \"print_level\".");
 #endif
 
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "print_timing_statistics",
       "Switch to print timing statistics.",
-      "no",
-      "no", "don't print statistics",
-      "yes", "print all timing statistics",
+      false,
       "If selected, the program will print the CPU usage (user time) for selected tasks. "
       "If enabled, timing_statistics=yes is implied.");
 
@@ -410,49 +402,39 @@ void IpoptApplication::RegisterOptions(
       "It does not make any sense to specify this option within the options file. "
       "Setting this option to an empty string disables reading of an options file.");
 
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "replace_bounds",
-      "Indicates if all variable bounds should be replaced by inequality constraints",
-      "no",
-      "no", "leave bounds on variables",
-      "yes", "replace variable bounds by inequality constraints",
-      "This option must be set for the inexact algorithm",
+      "Whether all variable bounds should be replaced by inequality constraints",
+      false,
+      "This option must be set for the inexact algorithm.",
       true);
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "skip_finalize_solution_call",
-      "Indicates if call to NLP::FinalizeSolution after optimization should be suppressed",
-      "no",
-      "no", "call FinalizeSolution",
-      "yes", "do not call FinalizeSolution",
+      "Whether a call to NLP::FinalizeSolution after optimization should be suppressed",
+      false,
       "In some Ipopt applications, the user might want to call the FinalizeSolution method separately. "
       "Setting this option to \"yes\" will cause the IpoptApplication object to suppress the default call to that method.",
       true);
 
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "timing_statistics",
       "Indicates whether to measure time spend in components of Ipopt and NLP evaluation",
-      "no",
-      "no", "do not collect timing statistics",
-      "yes", "collect timing statistics",
+      false,
       "The overall algorithm time is unaffected by this option.");
 
    roptions->SetRegisteringCategory("Undocumented", -100000);
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "suppress_all_output",
-      "Undocumented",
-      "no",
-      "no", "Undocumented",
-      "yes", "Undocumented",
-      "Undocumented",
+      "",
+      false,
+      "",
       true);
 #ifdef BUILD_INEXACT
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "inexact_algorithm",
-      "Activate the version of Ipopt that allows iterative linear solvers.",
-      "no",
-      "no", "use default algorithm with direct linear solvers",
-      "yes", "use the EXPERIMENTAL iterative linear solver option",
-      "",
+      "Whether to activate the version of Ipopt that allows iterative linear solvers.",
+      false,
+      "EXPERIMENTAL",
       true);
 #endif
 }

@@ -60,59 +60,47 @@ void OrigIpoptNLP::RegisterOptions(
       "(See Eqn.(35) in implementation paper.) "
       "Note that the constraint violation reported by Ipopt at the end of the solution process "
       "does not include violations of the original (non-relaxed) variable bounds.");
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "honor_original_bounds",
       "Indicates whether final points should be projected into original bounds.",
-      "yes",
-      "no", "Leave final point unchanged",
-      "yes", "Project final point back into original bounds",
+      true,
       "Ipopt might relax the bounds during the optimization (see, e.g., option \"bound_relax_factor\"). "
       "This option determines whether the final point should be projected back into the user-provide original bounds after the optimization.");
    roptions->SetRegisteringCategory("Warm Start", 370000);
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "warm_start_same_structure",
       "Indicates whether a problem with a structure identical to the previous one is to be solved.",
-      "no",
-      "no", "Assume this is a new problem.",
-      "yes", "Assume this is problem has known structure",
-      "If \"yes\" is chosen, then the algorithm assumes that an NLP is now to be solved, "
+      false,
+      "If enabled, then the algorithm assumes that an NLP is now to be solved "
       "whose structure is identical to one that already was considered (with the same NLP object).",
       true);
    roptions->SetRegisteringCategory("NLP", 470000);
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "check_derivatives_for_naninf",
       "Indicates whether it is desired to check for Nan/Inf in derivative matrices",
-      "no",
-      "no", "Don't check (faster).",
-      "yes", "Check Jacobians and Hessian for Nan and Inf.",
+      false,
       "Activating this option will cause an error if an invalid number is detected "
       "in the constraint Jacobians or the Lagrangian Hessian. "
       "If this is not activated, the test is skipped, and the algorithm might proceed with invalid numbers and fail. "
       "If test is activated and an invalid number is detected, "
       "the matrix is written to output with print_level corresponding to J_MORE_DETAILED; "
       "so beware of large output!");
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "jac_c_constant",
-      "Indicates whether all equality constraints are linear",
-      "no",
-      "no", "Don't assume that all equality constraints are linear",
-      "yes", "Assume that equality constraints Jacobian are constant",
+      "Indicates whether to assume that all equality constraints are linear",
+      false,
       "Activating this option will cause Ipopt to ask for the Jacobian of the equality constraints "
       "only once from the NLP and reuse this information later.");
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "jac_d_constant",
-      "Indicates whether all inequality constraints are linear",
-      "no",
-      "no", "Don't assume that all inequality constraints are linear",
-      "yes", "Assume that equality constraints Jacobian are constant",
+      "Indicates whether to assume that all inequality constraints are linear",
+      false,
       "Activating this option will cause Ipopt to ask for the Jacobian of the inequality constraints "
       "only once from the NLP and reuse this information later.");
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "hessian_constant",
-      "Indicates whether the problem is a quadratic problem",
-      "no",
-      "no", "Assume that Hessian changes",
-      "yes", "Assume that Hessian is constant",
+      "Indicates whether to assume the problem is a QP (quadratic objective, linear constraints)",
+      false,
       "Activating this option will cause Ipopt to ask for the Hessian of the Lagrangian function "
       "only once from the NLP and reuse this information later.");
    roptions->SetRegisteringCategory("Hessian Approximation", 280000);

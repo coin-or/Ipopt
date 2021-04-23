@@ -44,12 +44,10 @@ void CGPenaltyLSAcceptor::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "never_use_piecewise_penalty_ls",
       "Toggle to switch off the piecewise penalty method",
-      "no",
-      "no", "always use the piecewise penalty method",
-      "yes", "never use the piecewise penalty method");
+      false);
    roptions->AddBoundedNumberOption(
       "eta_penalty",
       "Relaxation factor in the Armijo condition for the penalty function.",
@@ -64,7 +62,7 @@ void CGPenaltyLSAcceptor::RegisterOptions(
       "If the new constraint violation is smaller than this tolerance, the penalty parameter is not increased.");
    roptions->AddLowerBoundedNumberOption(
       "eta_min",
-      "LIFENG WRITES THIS.",
+      "", // TODO LIFENG WRITES THIS
       0., true,
       1e1,
       "",
@@ -80,42 +78,42 @@ void CGPenaltyLSAcceptor::RegisterOptions(
       "(see Eqn. (21) in implementation paper).");
    roptions->AddLowerBoundedNumberOption(
       "penalty_update_compl_tol",
-      "LIFENG WRITES THIS.",
+      "", // TODO LIFENG WRITES THIS
       0., true,
       1e1,
       "",
       true);
    roptions->AddLowerBoundedNumberOption(
       "chi_hat",
-      "LIFENG WRITES THIS.",
+      "", // TODO LIFENG WRITES THIS
       0., true,
       2.,
       "",
       true);
    roptions->AddLowerBoundedNumberOption(
       "chi_tilde",
-      "LIFENG WRITES THIS.",
+      "", // TODO LIFENG WRITES THIS
       0., true,
       5.,
       "",
       true);
    roptions->AddLowerBoundedNumberOption(
       "chi_cup",
-      "LIFENG WRITES THIS.",
+      "", // TODO LIFENG WRITES THIS
       0., true,
       1.5,
       "",
       true);
    roptions->AddLowerBoundedNumberOption(
       "gamma_hat",
-      "LIFENG WRITES THIS.",
+      "", // TODO LIFENG WRITES THIS
       0., true,
       0.04,
       "",
       true);
    roptions->AddLowerBoundedNumberOption(
       "gamma_tilde",
-      "LIFENG WRITES THIS.",
+      "", // TODO LIFENG WRITES THIS
       0., true,
       4.,
       "",
@@ -123,35 +121,35 @@ void CGPenaltyLSAcceptor::RegisterOptions(
 
    roptions->AddLowerBoundedNumberOption(
       "epsilon_c",
-      "LIFENG WRITES THIS.",
+      "", // TODO LIFENG WRITES THIS
       0., true,
       1e-2,
       "",
       true);
    roptions->AddLowerBoundedNumberOption(
       "piecewisepenalty_gamma_obj",
-      "LIFENG WRITES THIS.",
+      "", // TODO LIFENG WRITES THIS
       0., true,
       1e-13,
       "",
       true);
    roptions->AddLowerBoundedNumberOption(
       "piecewisepenalty_gamma_infeasi",
-      "LIFENG WRITES THIS.",
+      "", // TODO LIFENG WRITES THIS
       0., true,
       1e-13,
       "",
       true);
    roptions->AddLowerBoundedNumberOption(
       "min_alpha_primal",
-      "LIFENG WRITES THIS.",
+      "", // TODO LIFENG WRITES THIS
       0., true,
       1e-13,
       "",
       true);
    roptions->AddLowerBoundedNumberOption(
       "theta_min",
-      "LIFENG WRITES THIS.",
+      "", // TODO LIFENG WRITES THIS
       0., true,
       1e-6,
       "",
@@ -170,7 +168,6 @@ void CGPenaltyLSAcceptor::RegisterOptions(
       1e8,
       "",
       true);
-
 }
 
 bool CGPenaltyLSAcceptor::InitializeImpl(

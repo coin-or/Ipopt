@@ -142,12 +142,10 @@ void TNLPAdapter::RegisterOptions(
       descrs,
       "This is experimental and does not work well.",
       true);
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "dependency_detection_with_rhs",
-      "Indicates if the right hand sides of the constraints should be considered during dependency detection",
-      "no",
-      "no", "only look at gradients",
-      "yes", "also consider right hand side",
+      "Indicates if the right hand sides of the constraints should be considered in addition to gradients during dependency detection",
+      false,
       "",
       true);
    roptions->AddLowerBoundedIntegerOption(
@@ -193,12 +191,10 @@ void TNLPAdapter::RegisterOptions(
       1e-4,
       "If the relative deviation of the estimated derivative from the given one is larger than this value, "
       "the corresponding derivative is marked as wrong.");
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "derivative_test_print_all",
       "Indicates whether information for all estimated derivatives should be printed.",
-      "no",
-      "no", "Print only suspect derivatives",
-      "yes", "Print all derivatives",
+      false,
       "Determines verbosity of derivative checker.");
    roptions->AddStringOption2(
       "jacobian_approximation",

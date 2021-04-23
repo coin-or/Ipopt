@@ -104,12 +104,10 @@ void CGSearchDirCalculator::RegisterOptions(
       5e1,
       "",
       true);
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "never_use_fact_cgpen_direction",
       "Toggle to switch off the fast Chen-Goldfarb direction",
-      "no",
-      "no", "always compute the fast direction",
-      "yes", "never compute the fast direction");
+      false);
 }
 
 bool CGSearchDirCalculator::InitializeImpl(

@@ -57,35 +57,31 @@ void BacktrackingLineSearch::RegisterOptions(
 
    SmartPtr<RegisteredCategory> prev_category = roptions->RegisteringCategory();
    roptions->SetRegisteringCategory("Undocumented", -100000);
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "magic_steps",
       "Enables magic steps.",
-      "no",
-      "no", "don't take magic steps",
-      "yes", "take magic steps",
+      false,
       "DOESN'T REALLY WORK YET!",
       true);
    roptions->SetRegisteringCategory(prev_category);
 
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "accept_every_trial_step",
       "Always accept the first trial step.",
-      "no",
-      "no", "don't arbitrarily accept the full step",
-      "yes", "always accept the full step",
+      false,
       "Setting this option to \"yes\" essentially disables the line search and "
       "makes the algorithm take aggressive steps, without global convergence guarantees.");
    roptions->AddLowerBoundedIntegerOption(
       "accept_after_max_steps",
-      "Accept a trial point after maximal this number of steps.",
+      "Accept a trial point after maximal this number of steps even if it does not satisfy line search conditions.",
       -1,
       -1,
-      "Even if it does not satisfy line search conditions.",
+      "Setting this to -1 disables this option.",
       true);
 
    roptions->AddStringOption10(
       "alpha_for_y",
-      "Method to determine the step size for constraint multipliers.",
+      "Method to determine the step size for constraint multipliers (alpha_y) .",
       "primal",
       "primal", "use primal step size",
       "bound-mult", "use step size for the bound multipliers (good for LPs)",
@@ -96,8 +92,7 @@ void BacktrackingLineSearch::RegisterOptions(
       "safer-min-dual-infeas", "like \"min_dual_infeas\", but safeguarded by \"min\" and \"max\"",
       "primal-and-full", "use the primal step size, and full step if delta_x <= alpha_for_y_tol",
       "dual-and-full", "use the dual step size, and full step if delta_x <= alpha_for_y_tol",
-      "acceptor", "Call LSAcceptor to get step size for y",
-      "This option determines how the step size (alpha_y) will be calculated when updating the constraint multipliers.");
+      "acceptor", "Call LSAcceptor to get step size for y");
    roptions->AddLowerBoundedNumberOption(
       "alpha_for_y_tol",
       "Tolerance for switching to full equality multiplier steps.",
@@ -142,12 +137,10 @@ void BacktrackingLineSearch::RegisterOptions(
       "procedure is aborted and the algorithm returns to the stored point.");
 
    roptions->SetRegisteringCategory("Restoration Phase", 340000);
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "expect_infeasible_problem",
       "Enable heuristics to quickly detect an infeasible problem.",
-      "no",
-      "no", "the problem probably be feasible",
-      "yes", "the problem has a good chance to be infeasible",
+      false,
       "This options is meant to activate heuristics that may speed up the infeasibility determination "
       "if you expect that there is a good chance for the problem to be infeasible. "
       "In the filter line search procedure, the restoration phase is called more quickly than usually, "
@@ -168,12 +161,10 @@ void BacktrackingLineSearch::RegisterOptions(
       1e8,
       "If the max norm of the constraint multipliers becomes larger than this value and "
       "\"expect_infeasible_problem\" is chosen, then the restoration phase is entered.");
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "start_with_resto",
-      "Tells algorithm to switch to restoration phase in first iteration.",
-      "no",
-      "no", "don't force start in restoration phase",
-      "yes", "force start in restoration phase",
+      "Whether to switch to restoration phase in first iteration.",
+      false,
       "Setting this option to \"yes\" forces the algorithm to switch to the feasibility restoration phase in the first iteration. "
       "If the initial point is feasible, the algorithm will abort with a failure.");
    roptions->AddLowerBoundedNumberOption(

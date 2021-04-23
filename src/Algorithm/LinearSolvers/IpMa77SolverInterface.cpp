@@ -59,19 +59,13 @@ void Ma77SolverInterface::RegisterOptions(
    roptions->AddIntegerOption(
       "ma77_print_level",
       "Debug printing level for the linear solver MA77",
-      -1);
-   /*
-    "<0 no printing.\n"
-    "0  Error and warning messages only.\n"
-    "=1 Limited diagnostic printing.\n"
-    ">1 Additional diagnostic printing.");
-    */
+      -1,
+      "<0: no printing; 0: Error and warning messages only; 1: Limited diagnostic printing; >1 Additional diagnostic printing.");
    roptions->AddLowerBoundedIntegerOption(
       "ma77_buffer_lpage",
-      "Number of scalars per MA77 buffer page",
+      "Number of scalars per MA77 in-core buffer page in the out-of-core solver MA77",
       1,
       4096,
-      "Number of scalars per an in-core buffer in the out-of-core solver MA77. "
       "Must be at most ma77_file_size.");
    roptions->AddLowerBoundedIntegerOption(
       "ma77_buffer_npage",
@@ -127,15 +121,14 @@ void Ma77SolverInterface::RegisterOptions(
       "Maximum value to which u will be increased to improve quality.");
    roptions->AddStringOption2(
       "ma77_order",
-      "Controls type of ordering used by HSL_MA77",
+      "Controls type of ordering used by MA77",
 #ifdef COINHSL_HAS_METIS
       "metis",
 #else
       "amd",
 #endif
       "amd", "Use the HSL_MC68 approximate minimum degree algorithm",
-      "metis", "Use the MeTiS nested dissection algorithm (if available)",
-      "This option controls ordering for the solver HSL_MA77.");
+      "metis", "Use the MeTiS nested dissection algorithm (if available)");
 }
 
 

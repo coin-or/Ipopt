@@ -118,12 +118,10 @@ void PardisoMKLSolverInterface::RegisterOptions(
       "yes", "Only redo symbolic factorization when elements were perturbed if also the inertia was wrong",
       "",
       true);
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "pardisomkl_repeated_perturbation_means_singular",
-      "Interpretation of perturbed elements.",
-      "no",
-      "no", "Don't assume that matrix is singular if elements were perturbed after recent symbolic factorization",
-      "yes", "Assume that matrix is singular if elements were perturbed after recent symbolic factorization",
+      "Whether to assume that matrix is singular if elements were perturbed after recent symbolic factorization.",
+      false,
       "",
       true);
    //roptions->AddLowerBoundedIntegerOption(
@@ -139,14 +137,11 @@ void PardisoMKLSolverInterface::RegisterOptions(
       "Pardiso message level",
       0,
       0,
-      "This determines the amount of analysis output from the Pardiso solver. "
       "This is MSGLVL in the Pardiso manual.");
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "pardisomkl_skip_inertia_check",
-      "Always pretend inertia is correct.",
-      "no",
-      "no", "check inertia",
-      "yes", "skip inertia check",
+      "Whether to pretend that inertia is correct.",
+      false,
       "Setting this option to \"yes\" essentially disables inertia check. "
       "This option makes the algorithm non-robust and easily fail, but it might give some insight into the necessity of inertia control.",
       true);

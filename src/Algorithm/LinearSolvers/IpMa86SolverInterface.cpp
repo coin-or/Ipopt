@@ -50,13 +50,8 @@ void Ma86SolverInterface::RegisterOptions(
    roptions->AddIntegerOption(
       "ma86_print_level",
       "Debug printing level",
-      -1);
-   /*
-    "<0 no printing.\n"
-    "0  Error and warning messages only.\n"
-    "=1 Limited diagnostic printing.\n"
-    ">1 Additional diagnostic printing.");
-    */
+      -1,
+      "<0: no printing; 0: Error and warning messages only; 1: Limited diagnostic printing; >1 Additional diagnostic printing.");
    roptions->AddLowerBoundedIntegerOption(
       "ma86_nemin",
       "Node Amalgamation parameter",

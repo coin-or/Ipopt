@@ -41,13 +41,11 @@ void RestoIpoptNLP::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "evaluate_orig_obj_at_resto_trial",
       "Determines if the original objective function should be evaluated at restoration phase trial points.",
-      "yes",
-      "no", "skip evaluation",
-      "yes", "evaluate at every trial point",
-      "Setting this option to \"yes\" makes the restoration phase algorithm evaluate the objective function "
+      true,
+      "Enabling this option makes the restoration phase algorithm evaluate the objective function "
       "of the original problem at every trial point encountered during the restoration phase, "
       "even if this value is not required.  "
       "In this way, it is guaranteed that the original objective function can be evaluated without error "

@@ -91,7 +91,6 @@ void PardisoSolverInterface::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
-   // Todo Use keywords instead of integer numbers
    roptions->AddStringOption3(
       "pardiso_matching_strategy",
       "Matching strategy to be used by Pardiso",
@@ -108,12 +107,10 @@ void PardisoSolverInterface::RegisterOptions(
       "yes", "Only redo symbolic factorization when elements were perturbed if also the inertia was wrong",
       "",
       true);
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "pardiso_repeated_perturbation_means_singular",
-      "Interpretation of perturbed elements.",
-      "no",
-      "no", "Don't assume that matrix is singular if elements were perturbed after recent symbolic factorization",
-      "yes", "Assume that matrix is singular if elements were perturbed after recent symbolic factorization",
+      "Whether to assume that matrix is singular if elements were perturbed after recent symbolic factorization.",
+      false,
       "",
       true);
    //roptions->AddLowerBoundedIntegerOption(
@@ -129,14 +126,11 @@ void PardisoSolverInterface::RegisterOptions(
       "Pardiso message level",
       0,
       0,
-      "This determines the amount of analysis output from the Pardiso solver. "
       "This is MSGLVL in the Pardiso manual.");
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "pardiso_skip_inertia_check",
-      "Always pretend inertia is correct.",
-      "no",
-      "no", "check inertia",
-      "yes", "skip inertia check",
+      "Whether to pretend that inertia is correct.",
+      false,
       "Setting this option to \"yes\" essentially disables inertia check. "
       "This option makes the algorithm non-robust and easily fail, but it might give some insight into the necessity of inertia control.",
       true);
@@ -154,11 +148,11 @@ void PardisoSolverInterface::RegisterOptions(
       "Controls the fill-in reduction ordering algorithm for the input matrix.",
       "metis",
       "amd", "minimum degree algorithm",
-      "one", "undocumented",
+      "one", "",
       "metis", "MeTiS nested dissection algorithm",
       "pmetis", "parallel (OpenMP) version of MeTiS nested dissection algorithm",
-      "four", "undocumented",
-      "five", "undocumented");
+      "four", "",
+      "five", "");
    roptions->AddLowerBoundedIntegerOption(
       "pardiso_max_iter",
       "Maximum number of Krylov-Subspace Iteration",
@@ -218,12 +212,10 @@ void PardisoSolverInterface::RegisterOptions(
       5000000,
       "DPARM(8)",
       true);
-   roptions->AddStringOption2(
+   roptions->AddBoolOption(
       "pardiso_iterative",
-      "Switch on iterative solver in Pardiso library",
-      "no",
-      "no", "do not switch on iterative solver",
-      "yes", "switch on iterative solver",
+      "Switch for iterative solver in Pardiso library",
+      false,
       "",
       true);
    roptions->AddLowerBoundedIntegerOption(

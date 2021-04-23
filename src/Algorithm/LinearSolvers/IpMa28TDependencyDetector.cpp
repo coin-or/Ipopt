@@ -59,8 +59,7 @@ void Ma28TDependencyDetector::RegisterOptions(
       "Pivot tolerance for linear solver MA28.",
       0.0, true,
       1., false,
-      0.01,
-      "This is used when MA28 tries to find the dependent constraints.");
+      0.01);
 }
 
 bool Ma28TDependencyDetector::InitializeImpl(
