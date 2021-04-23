@@ -59,13 +59,15 @@ void OrigIpoptNLP::RegisterOptions(
       "If it is set to zero, then then bounds relaxation is disabled. "
       "(See Eqn.(35) in implementation paper.) "
       "Note that the constraint violation reported by Ipopt at the end of the solution process "
-      "does not include violations of the original (non-relaxed) variable bounds.");
+      "does not include violations of the original (non-relaxed) variable bounds. See also option honor_original_bounds.");
    roptions->AddBoolOption(
       "honor_original_bounds",
       "Indicates whether final points should be projected into original bounds.",
       true,
       "Ipopt might relax the bounds during the optimization (see, e.g., option \"bound_relax_factor\"). "
-      "This option determines whether the final point should be projected back into the user-provide original bounds after the optimization.");
+      "This option determines whether the final point should be projected back into the user-provide original bounds after the optimization. "
+      "Note that violations of constraints and complementarity reported by Ipopt at the end of the solution process "
+      "are for the non-projected point.");
    roptions->SetRegisteringCategory("Warm Start");
    roptions->AddBoolOption(
       "warm_start_same_structure",
