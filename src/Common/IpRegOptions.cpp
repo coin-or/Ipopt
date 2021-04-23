@@ -802,6 +802,41 @@ bool RegisteredOption::string_equal_insensitive(
    return true;
 }
 
+void RegisteredOptions::SetRegisteringCategory(
+   const std::string& registering_category,
+   int                priority
+)
+{
+   if( registering_category.empty() )
+   {
+      current_registering_category_ = NULL;
+      return;
+   }
+
+   SmartPtr<RegisteredCategory>& reg_categ = registered_categories_[registering_category];
+   if( !IsValid(reg_categ) )
+      reg_categ = new RegisteredCategory(registering_category, priority);
+   current_registering_category_ = reg_categ;
+}
+
+void RegisteredOptions::SetRegisteringCategory(
+   SmartPtr<RegisteredCategory> registering_category
+)
+{
+   current_registering_category_ = registering_category;
+   if( !IsValid(registering_category) )
+      return;
+
+   SmartPtr<RegisteredCategory>& reg_categ = registered_categories_[registering_category->Name()];
+   if( !IsValid(reg_categ) )
+      reg_categ = registering_category;
+   else
+   {
+      // if we already had a category under this name, then it should be the same as the given one
+      DBG_ASSERT(reg_categ == registering_category);
+   }
+}
+
 void RegisteredOptions::AddOption(
    const SmartPtr<RegisteredOption>& option
    )
