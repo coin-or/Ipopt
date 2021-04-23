@@ -52,6 +52,52 @@ public:
       return name_;
    }
 
+   /// name of category
+   ///
+   /// This one is for backward-compatibility with previous Ipopt versions where RegisteredCategory was a string.
+   /// @deprecated Use Name() instead.
+   IPOPT_DEPRECATED
+   operator const std::string&() const
+   {
+      return name_;
+   }
+
+   /// compare with string
+   ///
+   /// This one is for backward-compatibility with previous Ipopt versions where RegisteredCategory was a string.
+   /// @deprecated Use Name() and string comparison instead.
+   IPOPT_DEPRECATED
+   bool operator!=(
+      const std::string& other
+      ) const
+   {
+      return name_ != other;
+   }
+
+   /// compare with string
+   ///
+   /// This one is for backward-compatibility with previous Ipopt versions where RegisteredCategory was a string.
+   /// @deprecated Use Name() and string comparison instead.
+   IPOPT_DEPRECATED
+   bool operator==(
+      const std::string& other
+      ) const
+   {
+      return name_ == other;
+   }
+
+   /// compare two categories
+   ///
+   /// This one is for backward-compatibility with previous Ipopt versions where RegisteredCategory was a string.
+   /// @deprecated Use Name() and string comparison on them instead.
+   IPOPT_DEPRECATED
+   bool operator<(
+      const RegisteredCategory& other
+      ) const
+   {
+      return name_ < other.name_;
+   }
+
    /// priority of category
    int Priority() const
    {
@@ -215,9 +261,9 @@ public:
    }
 
    /** Get the registering class */
-   virtual SmartPtr<const RegisteredCategory> RegisteringCategory() const
+   virtual const RegisteredCategory& RegisteringCategory() const
    {
-      return ConstPtr(registering_category_);
+      return *registering_category_;
    }
 
    /** Get the Option's type */

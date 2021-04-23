@@ -103,8 +103,8 @@ commit history.
           of registered option. Next to the name, this is a priority, which
           determines the order in which categories are printed. As a
           consequence, methods RegisteredOption::RegisteringCategory() and
-          RegisteredOptions::RegisteringCategory() now return a pointer
-          to a RegisteredCategory object instead of a string. Further,
+          RegisteredOptions::RegisteringCategory() now return a
+          RegisteredCategory object instead of a string. Further,
           RegisteredOption::SetRegisteringCategory() has been removed.
         - Deprecated existing RegisteredOptions::OutputXyz() methods and
           added new variant of RegisteredOptions::OutputOptionDocumentation().
