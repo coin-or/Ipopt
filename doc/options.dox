@@ -83,6 +83,22 @@ Use the print options documentation feature to see which options are available i
 
 </blockquote>
 
+\anchor OPT_output_file
+ <strong>output_file</strong>: File name of desired output file (leave unset for no file output).
+<blockquote>
+ NOTE: This option only works when read from the ipopt.opt options file! An output file with this name will be written (leave unset for no file output). The verbosity level is by default set to "print_level", but can be overridden with "file_print_level". The file name is changed to use only small letters. The default value for this string option is "".
+
+Possible values:
+ - *: Any acceptable standard file name
+</blockquote>
+
+\anchor OPT_file_print_level
+ <strong>file_print_level</strong>: Verbosity level for output file.
+<blockquote>
+ NOTE: This option only works when read from the ipopt.opt options file! Determines the verbosity level for the file specified by "output_file". By default it is the same as "print_level". The valid range for this integer option is 0 &le; file_print_level &le; 12 and its default value is 5.
+
+</blockquote>
+
 \anchor OPT_print_user_options
  <strong>print_user_options</strong>: Print all options set by the user.
 <blockquote>
@@ -103,34 +119,14 @@ Possible values:
  - yes: print list
 </blockquote>
 
-\anchor OPT_print_frequency_iter
- <strong>print_frequency_iter</strong>: Determines at which iteration frequency the summarizing iteration output line should be printed.
+\anchor OPT_print_timing_statistics
+ <strong>print_timing_statistics</strong>: Switch to print timing statistics.
 <blockquote>
- Summarizing iteration output is printed every print_frequency_iter iterations, if at least print_frequency_time seconds have passed since last output. The valid range for this integer option is 1 &le; print_frequency_iter and its default value is 1.
-
-</blockquote>
-
-\anchor OPT_print_frequency_time
- <strong>print_frequency_time</strong>: Determines at which time frequency the summarizing iteration output line should be printed.
-<blockquote>
- Summarizing iteration output is printed if at least print_frequency_time seconds have passed since last output and the iteration number is a multiple of print_frequency_iter. The valid range for this real option is 0 &le; print_frequency_time and its default value is 0.
-
-</blockquote>
-
-\anchor OPT_output_file
- <strong>output_file</strong>: File name of desired output file (leave unset for no file output).
-<blockquote>
- NOTE: This option only works when read from the ipopt.opt options file! An output file with this name will be written (leave unset for no file output). The verbosity level is by default set to "print_level", but can be overridden with "file_print_level". The file name is changed to use only small letters. The default value for this string option is "".
+ If selected, the program will print the CPU usage (user time) for selected tasks. If enabled, timing_statistics=yes is implied. The default value for this string option is "no".
 
 Possible values:
- - *: Any acceptable standard file name
-</blockquote>
-
-\anchor OPT_file_print_level
- <strong>file_print_level</strong>: Verbosity level for output file.
-<blockquote>
- NOTE: This option only works when read from the ipopt.opt options file! Determines the verbosity level for the file specified by "output_file". By default it is the same as "print_level". The valid range for this integer option is 0 &le; file_print_level &le; 12 and its default value is 5.
-
+ - no: don't print statistics
+ - yes: print all timing statistics
 </blockquote>
 
 \anchor OPT_print_info_string
@@ -153,15 +149,20 @@ Possible values:
  - original: maximal constraint violation in original NLP
 </blockquote>
 
-\anchor OPT_print_timing_statistics
- <strong>print_timing_statistics</strong>: Switch to print timing statistics.
+\anchor OPT_print_frequency_iter
+ <strong>print_frequency_iter</strong>: Determines at which iteration frequency the summarizing iteration output line should be printed.
 <blockquote>
- If selected, the program will print the CPU usage (user time) for selected tasks. If enabled, timing_statistics=yes is implied. The default value for this string option is "no".
+ Summarizing iteration output is printed every print_frequency_iter iterations, if at least print_frequency_time seconds have passed since last output. The valid range for this integer option is 1 &le; print_frequency_iter and its default value is 1.
 
-Possible values:
- - no: don't print statistics
- - yes: print all timing statistics
 </blockquote>
+
+\anchor OPT_print_frequency_time
+ <strong>print_frequency_time</strong>: Determines at which time frequency the summarizing iteration output line should be printed.
+<blockquote>
+ Summarizing iteration output is printed if at least print_frequency_time seconds have passed since last output and the iteration number is a multiple of print_frequency_iter. The valid range for this real option is 0 &le; print_frequency_time and its default value is 0.
+
+</blockquote>
+
 
 \subsection OPT_Termination Termination
 
@@ -228,17 +229,17 @@ Possible values:
 
 </blockquote>
 
-\anchor OPT_acceptable_constr_viol_tol
- <strong>acceptable_constr_viol_tol</strong>: "Acceptance" threshold for the constraint violation.
-<blockquote>
- Absolute tolerance on the constraint violation. "Acceptable" termination requires that the max-norm of the (unscaled) constraint violation is less than this threshold; see also acceptable_tol. The valid range for this real option is 0 < acceptable_constr_viol_tol and its default value is 0.01.
-
-</blockquote>
-
 \anchor OPT_acceptable_dual_inf_tol
  <strong>acceptable_dual_inf_tol</strong>: "Acceptance" threshold for the dual infeasibility.
 <blockquote>
  Absolute tolerance on the dual infeasibility. "Acceptable" termination requires that the (max-norm of the unscaled) dual infeasibility is less than this threshold; see also acceptable_tol. The valid range for this real option is 0 < acceptable_dual_inf_tol and its default value is 10<sup>+10</sup>.
+
+</blockquote>
+
+\anchor OPT_acceptable_constr_viol_tol
+ <strong>acceptable_constr_viol_tol</strong>: "Acceptance" threshold for the constraint violation.
+<blockquote>
+ Absolute tolerance on the constraint violation. "Acceptable" termination requires that the max-norm of the (unscaled) constraint violation is less than this threshold; see also acceptable_tol. The valid range for this real option is 0 < acceptable_constr_viol_tol and its default value is 0.01.
 
 </blockquote>
 
@@ -263,14 +264,15 @@ Possible values:
 
 </blockquote>
 
-\subsection OPT_NLP_Scaling NLP Scaling
-
-\anchor OPT_obj_scaling_factor
- <strong>obj_scaling_factor</strong>: Scaling factor for the objective function.
+\anchor OPT_mu_target
+ <strong>mu_target</strong>: Desired value of complementarity.
 <blockquote>
- This option sets a scaling factor for the objective function. The scaling is seen internally by Ipopt but the unscaled objective is reported in the console output. If additional scaling parameters are computed (e.g. user-scaling or gradient-based), both factors are multiplied. If this value is chosen to be negative, Ipopt will maximize the objective function instead of minimizing it. The valid range for this real option is unrestricted and its default value is 1.
+ Usually, the barrier parameter is driven to zero and the termination test for complementarity is measured with respect to zero complementarity. However, in some cases it might be desired to have Ipopt solve barrier problem for strictly positive value of the barrier parameter. In this case, the value of "mu_target" specifies the final value of the barrier parameter, and the termination tests are then defined with respect to the barrier problem for this value of the barrier parameter. The valid range for this real option is 0 &le; mu_target and its default value is 0.
 
 </blockquote>
+
+
+\subsection OPT_NLP_Scaling NLP Scaling
 
 \anchor OPT_nlp_scaling_method
  <strong>nlp_scaling_method</strong>: Select the technique used for scaling the NLP.
@@ -282,6 +284,13 @@ Possible values:
  - user-scaling: scaling parameters will come from the user
  - gradient-based: scale the problem so the maximum gradient at the starting point is scaling_max_gradient
  - equilibration-based: scale the problem o that first derivatives are of order 1 at random points (uses Harwell routine MC19)
+</blockquote>
+
+\anchor OPT_obj_scaling_factor
+ <strong>obj_scaling_factor</strong>: Scaling factor for the objective function.
+<blockquote>
+ This option sets a scaling factor for the objective function. The scaling is seen internally by Ipopt but the unscaled objective is reported in the console output. If additional scaling parameters are computed (e.g. user-scaling or gradient-based), both factors are multiplied. If this value is chosen to be negative, Ipopt will maximize the objective function instead of minimizing it. The valid range for this real option is unrestricted and its default value is 1.
+
 </blockquote>
 
 \anchor OPT_nlp_scaling_max_gradient
@@ -298,7 +307,34 @@ Possible values:
 
 </blockquote>
 
+
 \subsection OPT_NLP NLP
+
+\anchor OPT_nlp_lower_bound_inf
+ <strong>nlp_lower_bound_inf</strong>: any bound less or equal this value will be considered -inf (i.e. not lower bounded).
+<blockquote>
+ The valid range for this real option is unrestricted and its default value is -10<sup>+19</sup>.
+
+</blockquote>
+
+\anchor OPT_nlp_upper_bound_inf
+ <strong>nlp_upper_bound_inf</strong>: any bound greater or this value will be considered +inf (i.e. not upper bounded).
+<blockquote>
+ The valid range for this real option is unrestricted and its default value is 10<sup>+19</sup>.
+
+</blockquote>
+
+\anchor OPT_fixed_variable_treatment
+ <strong>fixed_variable_treatment</strong>: Determines how fixed variables should be handled.
+<blockquote>
+ The main difference between those options is that the starting point in the "make_constraint" case still has the fixed variables at their given values, whereas in the case "make_parameter(_nodual)" the functions are always evaluated with the fixed values for those variables.  Also, for "relax_bounds", the fixing bound constraints are relaxed (according to" bound_relax_factor"). For all but "make_parameter_nodual", bound multipliers are computed for the fixed variables. The default value for this string option is "make_parameter".
+
+Possible values:
+ - make_parameter: Remove fixed variable from optimization variables
+ - make_parameter_nodual: Remove fixed variable from optimization variables and do not compute bound multipliers for fixed variables
+ - make_constraint: Add equality constraints fixing variables
+ - relax_bounds: Relax fixing bound constraints
+</blockquote>
 
 \anchor OPT_bound_relax_factor
  <strong>bound_relax_factor</strong>: Factor for initial relaxation of the bounds.
@@ -325,32 +361,6 @@ Possible values:
 Possible values:
  - no: Don't check (faster).
  - yes: Check Jacobians and Hessian for Nan and Inf.
-</blockquote>
-
-\anchor OPT_nlp_lower_bound_inf
- <strong>nlp_lower_bound_inf</strong>: any bound less or equal this value will be considered -inf (i.e. not lower bounded).
-<blockquote>
- The valid range for this real option is unrestricted and its default value is -10<sup>+19</sup>.
-
-</blockquote>
-
-\anchor OPT_nlp_upper_bound_inf
- <strong>nlp_upper_bound_inf</strong>: any bound greater or this value will be considered +inf (i.e. not upper bounded).
-<blockquote>
- The valid range for this real option is unrestricted and its default value is 10<sup>+19</sup>.
-
-</blockquote>
-
-\anchor OPT_fixed_variable_treatment
- <strong>fixed_variable_treatment</strong>: Determines how fixed variables should be handled.
-<blockquote>
- The main difference between those options is that the starting point in the "make_constraint" case still has the fixed variables at their given values, whereas in the case "make_parameter(_nodual)" the functions are always evaluated with the fixed values for those variables.  Also, for "relax_bounds", the fixing bound constraints are relaxed (according to" bound_relax_factor"). For all but "make_parameter_nodual", bound multipliers are computed for the fixed variables. The default value for this string option is "make_parameter".
-
-Possible values:
- - make_parameter: Remove fixed variable from optimization variables
- - make_parameter_nodual: Remove fixed variable from optimization variables and do not compute bound multipliers for fixed variables
- - make_constraint: Add equality constraints fixing variables
- - relax_bounds: Relax fixing bound constraints
 </blockquote>
 
 \anchor OPT_jac_c_constant
@@ -383,14 +393,8 @@ Possible values:
  - yes: Assume that Hessian is constant
 </blockquote>
 
+
 \subsection OPT_Initialization Initialization
-
-\anchor OPT_bound_frac
- <strong>bound_frac</strong>: Desired minimum relative distance from the initial point to bound.
-<blockquote>
- Determines how much the initial point might have to be modified in order to be sufficiently inside the bounds (together with "bound_push"). (This is kappa_2 in Section 3.6 of implementation paper.) The valid range for this real option is 0 < bound_frac &le; 0.5 and its default value is 0.01.
-
-</blockquote>
 
 \anchor OPT_bound_push
  <strong>bound_push</strong>: Desired minimum absolute distance from the initial point to bound.
@@ -399,10 +403,10 @@ Possible values:
 
 </blockquote>
 
-\anchor OPT_slack_bound_frac
- <strong>slack_bound_frac</strong>: Desired minimum relative distance from the initial slack to bound.
+\anchor OPT_bound_frac
+ <strong>bound_frac</strong>: Desired minimum relative distance from the initial point to bound.
 <blockquote>
- Determines how much the initial slack variables might have to be modified in order to be sufficiently inside the inequality bounds (together with "slack_bound_push"). (This is kappa_2 in Section 3.6 of implementation paper.) The valid range for this real option is 0 < slack_bound_frac &le; 0.5 and its default value is 0.01.
+ Determines how much the initial point might have to be modified in order to be sufficiently inside the bounds (together with "bound_push"). (This is kappa_2 in Section 3.6 of implementation paper.) The valid range for this real option is 0 < bound_frac &le; 0.5 and its default value is 0.01.
 
 </blockquote>
 
@@ -413,10 +417,10 @@ Possible values:
 
 </blockquote>
 
-\anchor OPT_bound_mult_init_val
- <strong>bound_mult_init_val</strong>: Initial value for the bound multipliers.
+\anchor OPT_slack_bound_frac
+ <strong>slack_bound_frac</strong>: Desired minimum relative distance from the initial slack to bound.
 <blockquote>
- All dual variables corresponding to bound constraints are initialized to this value. The valid range for this real option is 0 < bound_mult_init_val and its default value is 1.
+ Determines how much the initial slack variables might have to be modified in order to be sufficiently inside the inequality bounds (together with "slack_bound_push"). (This is kappa_2 in Section 3.6 of implementation paper.) The valid range for this real option is 0 < slack_bound_frac &le; 0.5 and its default value is 0.01.
 
 </blockquote>
 
@@ -424,6 +428,13 @@ Possible values:
  <strong>constr_mult_init_max</strong>: Maximum allowed least-square guess of constraint multipliers.
 <blockquote>
  Determines how large the initial least-square guesses of the constraint multipliers are allowed to be (in max-norm). If the guess is larger than this value, it is discarded and all constraint multipliers are set to zero. This options is also used when initializing the restoration phase. By default, "resto.constr_mult_init_max" (the one used in RestoIterateInitializer) is set to zero. The valid range for this real option is 0 &le; constr_mult_init_max and its default value is 1000.
+
+</blockquote>
+
+\anchor OPT_bound_mult_init_val
+ <strong>bound_mult_init_val</strong>: Initial value for the bound multipliers.
+<blockquote>
+ All dual variables corresponding to bound constraints are initialized to this value. The valid range for this real option is 0 < bound_mult_init_val and its default value is 1.
 
 </blockquote>
 
@@ -437,16 +448,59 @@ Possible values:
  - mu-based: initialize to mu_init/x_slack
 </blockquote>
 
-\subsection OPT_Barrier_Parameter Barrier Parameter
-
-\anchor OPT_mehrotra_algorithm
- <strong>mehrotra_algorithm</strong>: Indicates if we want to do Mehrotra's algorithm.
+\anchor OPT_least_square_init_primal
+ <strong>least_square_init_primal</strong>: Least square initialization of the primal variables
 <blockquote>
- If set to yes, Ipopt runs as Mehrotra's predictor-corrector algorithm. This works usually very well for LPs and convex QPs. This automatically disables the line search, and chooses the (unglobalized) adaptive mu strategy with the "probing" oracle, and uses "corrector_type=affine" without any safeguards; you should not set any of those options explicitly in addition. Also, unless otherwise specified, the values of "bound_push", "bound_frac", and "bound_mult_init_val" are set more aggressive, and sets "alpha_for_y=bound_mult". The default value for this string option is "no".
+ If set to yes, Ipopt ignores the user provided point and solves a least square problem for the primal variables (x and s) to fit the linearized equality and inequality constraints.This might be useful if the user doesn't know anything about the starting point, or for solving an LP or QP. The default value for this string option is "no".
 
 Possible values:
- - no: Do the usual Ipopt algorithm.
- - yes: Do Mehrotra's predictor-corrector algorithm.
+ - no: take user-provided point
+ - yes: overwrite user-provided point with least-square estimates
+</blockquote>
+
+\anchor OPT_least_square_init_duals
+ <strong>least_square_init_duals</strong>: Least square initialization of all dual variables
+<blockquote>
+ If set to yes, Ipopt tries to compute least-square multipliers (considering ALL dual variables). If successful, the bound multipliers are possibly corrected to be at least bound_mult_init_val. This might be useful if the user doesn't know anything about the starting point, or for solving an LP or QP. This overwrites option "bound_mult_init_method". The default value for this string option is "no".
+
+Possible values:
+ - no: use bound_mult_init_val and least-square equality constraint multipliers
+ - yes: overwrite user-provided point with least-square estimates
+</blockquote>
+
+
+\subsection OPT_Barrier_Parameter_Update Barrier Parameter Update
+
+\anchor OPT_mu_max_fact
+ <strong>mu_max_fact</strong>: Factor for initialization of maximum value for barrier parameter.
+<blockquote>
+ This option determines the upper bound on the barrier parameter. This upper bound is computed as the average complementarity at the initial point times the value of this option. (Only used if option "mu_strategy" is chosen as "adaptive".) The valid range for this real option is 0 < mu_max_fact and its default value is 1000.
+
+</blockquote>
+
+\anchor OPT_mu_max
+ <strong>mu_max</strong>: Maximum value for barrier parameter.
+<blockquote>
+ This option specifies an upper bound on the barrier parameter in the adaptive mu selection mode. If this option is set, it overwrites the effect of mu_max_fact. (Only used if option "mu_strategy" is chosen as "adaptive".) The valid range for this real option is 0 < mu_max and its default value is 100000.
+
+</blockquote>
+
+\anchor OPT_mu_min
+ <strong>mu_min</strong>: Minimum value for barrier parameter.
+<blockquote>
+ This option specifies the lower bound on the barrier parameter in the adaptive mu selection mode. By default, it is set to the minimum of 1e-11 and min("tol","compl_inf_tol")/("barrier_tol_factor"+1), which should be a reasonable value. (Only used if option "mu_strategy" is chosen as "adaptive".) The valid range for this real option is 0 < mu_min and its default value is 10<sup>-11</sup>.
+
+</blockquote>
+
+\anchor OPT_adaptive_mu_globalization
+ <strong>adaptive_mu_globalization</strong>: Globalization strategy for the adaptive mu selection mode.
+<blockquote>
+ To achieve global convergence of the adaptive version, the algorithm has to switch to the monotone mode (Fiacco-McCormick approach) when convergence does not seem to appear. This option sets the criterion used to decide when to do this switch. (Only used if option "mu_strategy" is chosen as "adaptive".) The default value for this string option is "obj-constr-filter".
+
+Possible values:
+ - kkt-error: nonmonotone decrease of kkt-error
+ - obj-constr-filter: 2-dim filter for objective and constraint violation
+ - never-monotone-mode: disables globalization
 </blockquote>
 
 \anchor OPT_mu_strategy
@@ -470,13 +524,6 @@ Possible values:
  - quality-function: minimize a quality function
 </blockquote>
 
-\anchor OPT_quality_function_max_section_steps
- <strong>quality_function_max_section_steps</strong>: Maximum number of search steps during direct search procedure determining the optimal centering parameter.
-<blockquote>
- The golden section search is performed for the quality function based mu oracle. (Only used if option "mu_oracle" is set to "quality-function".) The valid range for this integer option is 0 &le; quality_function_max_section_steps and its default value is 8.
-
-</blockquote>
-
 \anchor OPT_fixed_mu_oracle
  <strong>fixed_mu_oracle</strong>: Oracle for the barrier parameter when switching to fixed mode.
 <blockquote>
@@ -489,49 +536,10 @@ Possible values:
  - average_compl: base on current average complementarity
 </blockquote>
 
-\anchor OPT_adaptive_mu_globalization
- <strong>adaptive_mu_globalization</strong>: Globalization strategy for the adaptive mu selection mode.
-<blockquote>
- To achieve global convergence of the adaptive version, the algorithm has to switch to the monotone mode (Fiacco-McCormick approach) when convergence does not seem to appear. This option sets the criterion used to decide when to do this switch. (Only used if option "mu_strategy" is chosen as "adaptive".) The default value for this string option is "obj-constr-filter".
-
-Possible values:
- - kkt-error: nonmonotone decrease of kkt-error
- - obj-constr-filter: 2-dim filter for objective and constraint violation
- - never-monotone-mode: disables globalization
-</blockquote>
-
 \anchor OPT_mu_init
  <strong>mu_init</strong>: Initial value for the barrier parameter.
 <blockquote>
  This option determines the initial value for the barrier parameter (mu). It is only relevant in the monotone, Fiacco-McCormick version of the algorithm. (i.e., if "mu_strategy" is chosen as "monotone") The valid range for this real option is 0 < mu_init and its default value is 0.1.
-
-</blockquote>
-
-\anchor OPT_mu_max_fact
- <strong>mu_max_fact</strong>: Factor for initialization of maximum value for barrier parameter.
-<blockquote>
- This option determines the upper bound on the barrier parameter. This upper bound is computed as the average complementarity at the initial point times the value of this option. (Only used if option "mu_strategy" is chosen as "adaptive".) The valid range for this real option is 0 < mu_max_fact and its default value is 1000.
-
-</blockquote>
-
-\anchor OPT_mu_max
- <strong>mu_max</strong>: Maximum value for barrier parameter.
-<blockquote>
- This option specifies an upper bound on the barrier parameter in the adaptive mu selection mode. If this option is set, it overwrites the effect of mu_max_fact. (Only used if option "mu_strategy" is chosen as "adaptive".) The valid range for this real option is 0 < mu_max and its default value is 100000.
-
-</blockquote>
-
-\anchor OPT_mu_min
- <strong>mu_min</strong>: Minimum value for barrier parameter.
-<blockquote>
- This option specifies the lower bound on the barrier parameter in the adaptive mu selection mode. By default, it is set to the minimum of 1e-11 and min("tol","compl_inf_tol")/("barrier_tol_factor"+1), which should be a reasonable value. (Only used if option "mu_strategy" is chosen as "adaptive".) The valid range for this real option is 0 < mu_min and its default value is 10<sup>-11</sup>.
-
-</blockquote>
-
-\anchor OPT_mu_target
- <strong>mu_target</strong>: Desired value of complementarity.
-<blockquote>
- Usually, the barrier parameter is driven to zero and the termination test for complementarity is measured with respect to zero complementarity. However, in some cases it might be desired to have Ipopt solve barrier problem for strictly positive value of the barrier parameter. In this case, the value of "mu_target" specifies the final value of the barrier parameter, and the termination tests are then defined with respect to the barrier problem for this value of the barrier parameter. The valid range for this real option is 0 &le; mu_target and its default value is 0.
 
 </blockquote>
 
@@ -556,7 +564,25 @@ Possible values:
 
 </blockquote>
 
-\subsection OPT_Multiplier_Updates Multiplier Updates
+\anchor OPT_quality_function_max_section_steps
+ <strong>quality_function_max_section_steps</strong>: Maximum number of search steps during direct search procedure determining the optimal centering parameter.
+<blockquote>
+ The golden section search is performed for the quality function based mu oracle. (Only used if option "mu_oracle" is set to "quality-function".) The valid range for this integer option is 0 &le; quality_function_max_section_steps and its default value is 8.
+
+</blockquote>
+
+
+\subsection OPT_Line_Search Line Search
+
+\anchor OPT_accept_every_trial_step
+ <strong>accept_every_trial_step</strong>: Always accept the first trial step.
+<blockquote>
+ Setting this option to "yes" essentially disables the line search and makes the algorithm take aggressive steps, without global convergence guarantees. The default value for this string option is "no".
+
+Possible values:
+ - no: don't arbitrarily accept the full step
+ - yes: always accept the full step
+</blockquote>
 
 \anchor OPT_alpha_for_y
  <strong>alpha_for_y</strong>: Method to determine the step size for constraint multipliers.
@@ -583,32 +609,6 @@ Possible values:
 
 </blockquote>
 
-\anchor OPT_recalc_y
- <strong>recalc_y</strong>: Tells the algorithm to recalculate the equality and inequality multipliers as least square estimates.
-<blockquote>
- This asks the algorithm to recompute the multipliers, whenever the current infeasibility is less than recalc_y_feas_tol. Choosing yes might be helpful in the quasi-Newton option. However, each recalculation requires an extra factorization of the linear system. If a limited memory quasi-Newton option is chosen, this is used by default. The default value for this string option is "no".
-
-Possible values:
- - no: use the Newton step to update the multipliers
- - yes: use least-square multiplier estimates
-</blockquote>
-
-\anchor OPT_recalc_y_feas_tol
- <strong>recalc_y_feas_tol</strong>: Feasibility threshold for recomputation of multipliers.
-<blockquote>
- If recalc_y is chosen and the current infeasibility is less than this value, then the multipliers are recomputed. The valid range for this real option is 0 < recalc_y_feas_tol and its default value is 10<sup>-06</sup>.
-
-</blockquote>
-
-\subsection OPT_Line_Search Line Search
-
-\anchor OPT_max_soc
- <strong>max_soc</strong>: Maximum number of second order correction trial steps at each iteration.
-<blockquote>
- Choosing 0 disables the second order corrections. (This is p^{max} of Step A-5.9 of Algorithm A in the implementation paper.) The valid range for this integer option is 0 &le; max_soc and its default value is 4.
-
-</blockquote>
-
 \anchor OPT_watchdog_shortened_iter_trigger
  <strong>watchdog_shortened_iter_trigger</strong>: Number of shortened iterations that trigger the watchdog.
 <blockquote>
@@ -623,14 +623,11 @@ Possible values:
 
 </blockquote>
 
-\anchor OPT_accept_every_trial_step
- <strong>accept_every_trial_step</strong>: Always accept the first trial step.
+\anchor OPT_max_soc
+ <strong>max_soc</strong>: Maximum number of second order correction trial steps at each iteration.
 <blockquote>
- Setting this option to "yes" essentially disables the line search and makes the algorithm take aggressive steps, without global convergence guarantees. The default value for this string option is "no".
+ Choosing 0 disables the second order corrections. (This is p^{max} of Step A-5.9 of Algorithm A in the implementation paper.) The valid range for this integer option is 0 &le; max_soc and its default value is 4.
 
-Possible values:
- - no: don't arbitrarily accept the full step
- - yes: always accept the full step
 </blockquote>
 
 \anchor OPT_corrector_type
@@ -650,6 +647,24 @@ Possible values:
  This option determins the way to apply second order correction, 0 is the method described in the implementation paper. 1 is the modified way which adds alpha on the rhs of x and s rows. The valid range for this integer option is 0 &le; soc_method &le; 1 and its default value is 0.
 
 </blockquote>
+
+\anchor OPT_recalc_y
+ <strong>recalc_y</strong>: Tells the algorithm to recalculate the equality and inequality multipliers as least square estimates.
+<blockquote>
+ This asks the algorithm to recompute the multipliers, whenever the current infeasibility is less than recalc_y_feas_tol. Choosing yes might be helpful in the quasi-Newton option. However, each recalculation requires an extra factorization of the linear system. If a limited memory quasi-Newton option is chosen, this is used by default. The default value for this string option is "no".
+
+Possible values:
+ - no: use the Newton step to update the multipliers
+ - yes: use least-square multiplier estimates
+</blockquote>
+
+\anchor OPT_recalc_y_feas_tol
+ <strong>recalc_y_feas_tol</strong>: Feasibility threshold for recomputation of multipliers.
+<blockquote>
+ If recalc_y is chosen and the current infeasibility is less than this value, then the multipliers are recomputed. The valid range for this real option is 0 < recalc_y_feas_tol and its default value is 10<sup>-06</sup>.
+
+</blockquote>
+
 
 \subsection OPT_Warm_Start Warm Start
 
@@ -677,17 +692,17 @@ Possible values:
 
 </blockquote>
 
-\anchor OPT_warm_start_slack_bound_frac
- <strong>warm_start_slack_bound_frac</strong>: same as slack_bound_frac for the regular initializer.
-<blockquote>
- The valid range for this real option is 0 < warm_start_slack_bound_frac &le; 0.5 and its default value is 0.001.
-
-</blockquote>
-
 \anchor OPT_warm_start_slack_bound_push
  <strong>warm_start_slack_bound_push</strong>: same as slack_bound_push for the regular initializer.
 <blockquote>
  The valid range for this real option is 0 < warm_start_slack_bound_push and its default value is 0.001.
+
+</blockquote>
+
+\anchor OPT_warm_start_slack_bound_frac
+ <strong>warm_start_slack_bound_frac</strong>: same as slack_bound_frac for the regular initializer.
+<blockquote>
+ The valid range for this real option is 0 < warm_start_slack_bound_frac &le; 0.5 and its default value is 0.001.
 
 </blockquote>
 
@@ -704,6 +719,171 @@ Possible values:
  The valid range for this real option is unrestricted and its default value is 10<sup>+06</sup>.
 
 </blockquote>
+
+
+\subsection OPT_Linear_Solver Linear Solver
+
+\anchor OPT_linear_solver
+ <strong>linear_solver</strong>: Linear solver used for step computations.
+<blockquote>
+ Determines which linear algebra package is to be used for the solution of the augmented linear system (for obtaining the search directions). The default value for this string option is "ma27".
+
+Possible values:
+ - ma27: use the Harwell routine MA27
+ - ma57: use the Harwell routine MA57
+ - ma77: use the Harwell routine HSL_MA77
+ - ma86: use the Harwell routine HSL_MA86
+ - ma97: use the Harwell routine HSL_MA97
+ - pardiso: load the Pardiso package from pardiso-project.org from library at runtime
+ - pardisomkl: use the Pardiso package from Intel MKL
+ - spral: use the Spral package
+ - wsmp: use the Wsmp package
+ - mumps: use the Mumps package
+ - custom: use custom linear solver (expert use)
+</blockquote>
+
+\anchor OPT_linear_system_scaling
+ <strong>linear_system_scaling</strong>: Method for scaling the linear system.
+<blockquote>
+ Determines the method used to compute symmetric scaling factors for the augmented system (see also the "linear_scaling_on_demand" option). This scaling is independent of the NLP problem scaling. The default is MC19 only if MA27, MA57, MA77, or MA86 are selected as linear solvers. Otherwise it is 'none'. The default value for this string option is "mc19".
+
+Possible values:
+ - none: no scaling will be performed
+ - mc19: use the Harwell routine MC19
+ - slack-based: use the slack values
+</blockquote>
+
+\anchor OPT_hsllib
+ <strong>hsllib</strong>: Name of library containing HSL routines for load at runtime
+<blockquote>
+ The default value for this string option is "libhsl.so" ("libhsl.dylib" on macOS, "libhsl.dll" on Windows).
+
+Possible values:
+ - *: Any acceptable filename (may contain path, too)
+</blockquote>
+
+\anchor OPT_pardisolib
+ <strong>pardisolib</strong>: Name of library containing Pardiso routines (from pardiso-project.org) for load at runtime
+<blockquote>
+ The default value for this string option is "/home/stefan/work/coin/libpardiso600-GNU800-X86-64.so".
+
+Possible values:
+ - *: Any acceptable filename (may contain path, too)
+</blockquote>
+
+\anchor OPT_min_refinement_steps
+ <strong>min_refinement_steps</strong>: Minimum number of iterative refinement steps per linear system solve.
+<blockquote>
+ Iterative refinement (on the full unsymmetric system) is performed for each right hand side. This option determines the minimum number of iterative refinements (i.e. at least "min_refinement_steps" iterative refinement steps are enforced per right hand side.) The valid range for this integer option is 0 &le; min_refinement_steps and its default value is 1.
+
+</blockquote>
+
+\anchor OPT_max_refinement_steps
+ <strong>max_refinement_steps</strong>: Maximum number of iterative refinement steps per linear system solve.
+<blockquote>
+ Iterative refinement (on the full unsymmetric system) is performed for each right hand side. This option determines the maximum number of iterative refinement steps. The valid range for this integer option is 0 &le; max_refinement_steps and its default value is 10.
+
+</blockquote>
+
+\anchor OPT_neg_curv_test_tol
+ <strong>neg_curv_test_tol</strong>: Tolerance for heuristic to ignore wrong inertia.
+<blockquote>
+ If nonzero, incorrect inertia in the augmented system is ignored, and Ipopt tests if the direction is a direction of positive curvature. This tolerance is alpha_n in the paper by Zavala and Chiang (2014) and it determines when the direction is considered to be sufficiently positive. A value in the range of [1e-12, 1e-11] is recommended. The valid range for this real option is 0 &le; neg_curv_test_tol and its default value is 0.
+
+</blockquote>
+
+\anchor OPT_neg_curv_test_reg
+ <strong>neg_curv_test_reg</strong>: Whether to do the curvature test with the primal regularization (see Zavala and Chiang, 2014).
+<blockquote>
+ The default value for this string option is "yes".
+
+Possible values:
+ - yes: use primal regularization with the inertia-free curvature test
+ - no: use original IPOPT approach, in which the primal regularization is ignored
+</blockquote>
+
+\anchor OPT_linear_scaling_on_demand
+ <strong>linear_scaling_on_demand</strong>: Flag indicating that linear scaling is only done if it seems required.
+<blockquote>
+ This option is only important if a linear scaling method (e.g., mc19) is used. If you choose "no", then the scaling factors are computed for every linear system from the start. This can be quite expensive. Choosing "yes" means that the algorithm will start the scaling method only when the solutions to the linear system seem not good, and then use it until the end. The default value for this string option is "yes".
+
+Possible values:
+ - no: Always scale the linear system.
+ - yes: Start using linear system scaling if solutions seem not good.
+</blockquote>
+
+
+\subsection OPT_Step_Calculation Step Calculation
+
+\anchor OPT_mehrotra_algorithm
+ <strong>mehrotra_algorithm</strong>: Indicates if we want to do Mehrotra's algorithm.
+<blockquote>
+ If set to yes, Ipopt runs as Mehrotra's predictor-corrector algorithm. This works usually very well for LPs and convex QPs. This automatically disables the line search, and chooses the (unglobalized) adaptive mu strategy with the "probing" oracle, and uses "corrector_type=affine" without any safeguards; you should not set any of those options explicitly in addition. Also, unless otherwise specified, the values of "bound_push", "bound_frac", and "bound_mult_init_val" are set more aggressive, and sets "alpha_for_y=bound_mult". The default value for this string option is "no".
+
+Possible values:
+ - no: Do the usual Ipopt algorithm.
+ - yes: Do Mehrotra's predictor-corrector algorithm.
+</blockquote>
+
+\anchor OPT_fast_step_computation
+ <strong>fast_step_computation</strong>: Indicates if the linear system should be solved quickly.
+<blockquote>
+ If set to yes, the algorithm assumes that the linear system that is solved to obtain the search direction, is solved sufficiently well. In that case, no residuals are computed, and the computation of the search direction is a little faster. The default value for this string option is "no".
+
+Possible values:
+ - no: Verify solution of linear system by computing residuals.
+ - yes: Trust that linear systems are solved well.
+</blockquote>
+
+\anchor OPT_max_hessian_perturbation
+ <strong>max_hessian_perturbation</strong>: Maximum value of regularization parameter for handling negative curvature.
+<blockquote>
+ In order to guarantee that the search directions are indeed proper descent directions, Ipopt requires that the inertia of the (augmented) linear system for the step computation has the correct number of negative and positive eigenvalues. The idea is that this guides the algorithm away from maximizers and makes Ipopt more likely converge to first order optimal points that are minimizers. If the inertia is not correct, a multiple of the identity matrix is added to the Hessian of the Lagrangian in the augmented system. This parameter gives the maximum value of the regularization parameter. If a regularization of that size is not enough, the algorithm skips this iteration and goes to the restoration phase. (This is delta_w^max in the implementation paper.) The valid range for this real option is 0 < max_hessian_perturbation and its default value is 10<sup>+20</sup>.
+
+</blockquote>
+
+\anchor OPT_min_hessian_perturbation
+ <strong>min_hessian_perturbation</strong>: Smallest perturbation of the Hessian block.
+<blockquote>
+ The size of the perturbation of the Hessian block is never selected smaller than this value, unless no perturbation is necessary. (This is delta_w^min in implementation paper.) The valid range for this real option is 0 &le; min_hessian_perturbation and its default value is 10<sup>-20</sup>.
+
+</blockquote>
+
+\anchor OPT_perturb_inc_fact_first
+ <strong>perturb_inc_fact_first</strong>: Increase factor for x-s perturbation for very first perturbation.
+<blockquote>
+ The factor by which the perturbation is increased when a trial value was not sufficient - this value is used for the computation of the very first perturbation and allows a different value for the first perturbation than that used for the remaining perturbations. (This is bar_kappa_w^+ in the implementation paper.) The valid range for this real option is 1 < perturb_inc_fact_first and its default value is 100.
+
+</blockquote>
+
+\anchor OPT_perturb_inc_fact
+ <strong>perturb_inc_fact</strong>: Increase factor for x-s perturbation.
+<blockquote>
+ The factor by which the perturbation is increased when a trial value was not sufficient - this value is used for the computation of all perturbations except for the first. (This is kappa_w^+ in the implementation paper.) The valid range for this real option is 1 < perturb_inc_fact and its default value is 8.
+
+</blockquote>
+
+\anchor OPT_perturb_dec_fact
+ <strong>perturb_dec_fact</strong>: Decrease factor for x-s perturbation.
+<blockquote>
+ The factor by which the perturbation is decreased when a trial value is deduced from the size of the most recent successful perturbation. (This is kappa_w^- in the implementation paper.) The valid range for this real option is 0 < perturb_dec_fact < 1 and its default value is 0.333333.
+
+</blockquote>
+
+\anchor OPT_first_hessian_perturbation
+ <strong>first_hessian_perturbation</strong>: Size of first x-s perturbation tried.
+<blockquote>
+ The first value tried for the x-s perturbation in the inertia correction scheme.(This is delta_0 in the implementation paper.) The valid range for this real option is 0 < first_hessian_perturbation and its default value is 0.0001.
+
+</blockquote>
+
+\anchor OPT_jacobian_regularization_value
+ <strong>jacobian_regularization_value</strong>: Size of the regularization for rank-deficient constraint Jacobians.
+<blockquote>
+ (This is bar delta_c in the implementation paper.) The valid range for this real option is 0 &le; jacobian_regularization_value and its default value is 10<sup>-08</sup>.
+
+</blockquote>
+
 
 \subsection OPT_Restoration_Phase Restoration Phase
 
@@ -755,6 +935,16 @@ Possible values:
 
 </blockquote>
 
+\anchor OPT_evaluate_orig_obj_at_resto_trial
+ <strong>evaluate_orig_obj_at_resto_trial</strong>: Determines if the original objective function should be evaluated at restoration phase trial points.
+<blockquote>
+ Setting this option to "yes" makes the restoration phase algorithm evaluate the objective function of the original problem at every trial point encountered during the restoration phase, even if this value is not required.  In this way, it is guaranteed that the original objective function can be evaluated without error at all accepted iterates; otherwise the algorithm might fail at a point where the restoration phase accepts an iterate that is good for the restoration phase problem, but not the original problem. On the other hand, if the evaluation of the original objective is expensive, this might be costly. The default value for this string option is "yes".
+
+Possible values:
+ - no: skip evaluation
+ - yes: evaluate at every trial point
+</blockquote>
+
 \anchor OPT_bound_mult_reset_threshold
  <strong>bound_mult_reset_threshold</strong>: Threshold for resetting bound multipliers after the restoration phase.
 <blockquote>
@@ -769,159 +959,67 @@ Possible values:
 
 </blockquote>
 
-\anchor OPT_evaluate_orig_obj_at_resto_trial
- <strong>evaluate_orig_obj_at_resto_trial</strong>: Determines if the original objective function should be evaluated at restoration phase trial points.
+
+\subsection OPT_Derivative_Checker Derivative Checker
+
+\anchor OPT_derivative_test
+ <strong>derivative_test</strong>: Enable derivative checker
 <blockquote>
- Setting this option to "yes" makes the restoration phase algorithm evaluate the objective function of the original problem at every trial point encountered during the restoration phase, even if this value is not required.  In this way, it is guaranteed that the original objective function can be evaluated without error at all accepted iterates; otherwise the algorithm might fail at a point where the restoration phase accepts an iterate that is good for the restoration phase problem, but not the original problem. On the other hand, if the evaluation of the original objective is expensive, this might be costly. The default value for this string option is "yes".
+ If this option is enabled, a (slow!) derivative test will be performed before the optimization. The test is performed at the user provided starting point and marks derivative values that seem suspicious The default value for this string option is "none".
 
 Possible values:
- - no: skip evaluation
- - yes: evaluate at every trial point
+ - none: do not perform derivative test
+ - first-order: perform test of first derivatives at starting point
+ - second-order: perform test of first and second derivatives at starting point
+ - only-second-order: perform test of second derivatives at starting point
 </blockquote>
 
-\subsection OPT_Linear_Solver Linear Solver
-
-\anchor OPT_linear_solver
- <strong>linear_solver</strong>: Linear solver used for step computations.
+\anchor OPT_derivative_test_first_index
+ <strong>derivative_test_first_index</strong>: Index of first quantity to be checked by derivative checker
 <blockquote>
- Determines which linear algebra package is to be used for the solution of the augmented linear system (for obtaining the search directions). The default value for this string option is "ma27".
+ If this is set to -2, then all derivatives are checked. Otherwise, for the first derivative test it specifies the first variable for which the test is done (counting starts at 0). For second derivatives, it specifies the first constraint for which the test is done; counting of constraint indices starts at 0, and -1 refers to the objective function Hessian. The valid range for this integer option is -2 &le; derivative_test_first_index and its default value is -2.
+
+</blockquote>
+
+\anchor OPT_derivative_test_perturbation
+ <strong>derivative_test_perturbation</strong>: Size of the finite difference perturbation in derivative test.
+<blockquote>
+ This determines the relative perturbation of the variable entries. The valid range for this real option is 0 < derivative_test_perturbation and its default value is 10<sup>-08</sup>.
+
+</blockquote>
+
+\anchor OPT_derivative_test_tol
+ <strong>derivative_test_tol</strong>: Threshold for indicating wrong derivative.
+<blockquote>
+ If the relative deviation of the estimated derivative from the given one is larger than this value, the corresponding derivative is marked as wrong. The valid range for this real option is 0 < derivative_test_tol and its default value is 0.0001.
+
+</blockquote>
+
+\anchor OPT_derivative_test_print_all
+ <strong>derivative_test_print_all</strong>: Indicates whether information for all estimated derivatives should be printed.
+<blockquote>
+ Determines verbosity of derivative checker. The default value for this string option is "no".
 
 Possible values:
- - ma27: use the Harwell routine MA27
- - ma57: use the Harwell routine MA57
- - ma77: use the Harwell routine HSL_MA77
- - ma86: use the Harwell routine HSL_MA86
- - ma97: use the Harwell routine HSL_MA97
- - pardiso: load the Pardiso package from pardiso-project.org from library at runtime
- - pardisomkl: use the Pardiso package from Intel MKL
- - spral: use the Spral package
- - wsmp: use the Wsmp package
- - mumps: use the Mumps package
- - custom: use custom linear solver (expert use)
+ - no: Print only suspect derivatives
+ - yes: Print all derivatives
 </blockquote>
 
-\anchor OPT_linear_system_scaling
- <strong>linear_system_scaling</strong>: Method for scaling the linear system.
+\anchor OPT_point_perturbation_radius
+ <strong>point_perturbation_radius</strong>: Maximal perturbation of an evaluation point.
 <blockquote>
- Determines the method used to compute symmetric scaling factors for the augmented system (see also the "linear_scaling_on_demand" option). This scaling is independent of the NLP problem scaling. The default is MC19 only if MA27, MA57, MA77, or MA86 are selected as linear solvers. Otherwise it is 'none'. The default value for this string option is "mc19".
-
-Possible values:
- - none: no scaling will be performed
- - mc19: use the Harwell routine MC19
- - slack-based: use the slack values
-</blockquote>
-
-\anchor OPT_linear_scaling_on_demand
- <strong>linear_scaling_on_demand</strong>: Flag indicating that linear scaling is only done if it seems required.
-<blockquote>
- This option is only important if a linear scaling method (e.g., mc19) is used. If you choose "no", then the scaling factors are computed for every linear system from the start. This can be quite expensive. Choosing "yes" means that the algorithm will start the scaling method only when the solutions to the linear system seem not good, and then use it until the end. The default value for this string option is "yes".
-
-Possible values:
- - no: Always scale the linear system.
- - yes: Start using linear system scaling if solutions seem not good.
-</blockquote>
-
-\anchor OPT_max_refinement_steps
- <strong>max_refinement_steps</strong>: Maximum number of iterative refinement steps per linear system solve.
-<blockquote>
- Iterative refinement (on the full unsymmetric system) is performed for each right hand side. This option determines the maximum number of iterative refinement steps. The valid range for this integer option is 0 &le; max_refinement_steps and its default value is 10.
+ If a random perturbation of a points is required, this number indicates the maximal perturbation. This is for example used when determining the center point at which the finite difference derivative test is executed. The valid range for this real option is 0 &le; point_perturbation_radius and its default value is 10.
 
 </blockquote>
 
-\anchor OPT_min_refinement_steps
- <strong>min_refinement_steps</strong>: Minimum number of iterative refinement steps per linear system solve.
+
+\subsection OPT_Hessian_Approximation Hessian Approximation
+
+\anchor OPT_limited_memory_max_history
+ <strong>limited_memory_max_history</strong>: Maximum size of the history for the limited quasi-Newton Hessian approximation.
 <blockquote>
- Iterative refinement (on the full unsymmetric system) is performed for each right hand side. This option determines the minimum number of iterative refinements (i.e. at least "min_refinement_steps" iterative refinement steps are enforced per right hand side.) The valid range for this integer option is 0 &le; min_refinement_steps and its default value is 1.
+ This option determines the number of most recent iterations that are taken into account for the limited-memory quasi-Newton approximation. The valid range for this integer option is 0 &le; limited_memory_max_history and its default value is 6.
 
-</blockquote>
-
-\anchor OPT_neg_curv_test_reg
- <strong>neg_curv_test_reg</strong>: Whether to do the curvature test with the primal regularization (see Zavala and Chiang, 2014).
-<blockquote>
- The default value for this string option is "yes".
-
-Possible values:
- - yes: use primal regularization with the inertia-free curvature test
- - no: use original IPOPT approach, in which the primal regularization is ignored
-</blockquote>
-
-\anchor OPT_neg_curv_test_tol
- <strong>neg_curv_test_tol</strong>: Tolerance for heuristic to ignore wrong inertia.
-<blockquote>
- If nonzero, incorrect inertia in the augmented system is ignored, and Ipopt tests if the direction is a direction of positive curvature. This tolerance is alpha_n in the paper by Zavala and Chiang (2014) and it determines when the direction is considered to be sufficiently positive. A value in the range of [1e-12, 1e-11] is recommended. The valid range for this real option is 0 &le; neg_curv_test_tol and its default value is 0.
-
-</blockquote>
-
-\anchor OPT_hsllib
- <strong>hsllib</strong>: Name of library containing HSL routines for load at runtime
-<blockquote>
- The default value for this string option is "libhsl.so" ("libhsl.dylib" on macOS, "libhsl.dll" on Windows).
-
-Possible values:
- - *: Any acceptable filename (may contain path, too)
-</blockquote>
-
-\subsection OPT_Hessian_Perturbation Hessian Perturbation
-
-\anchor OPT_max_hessian_perturbation
- <strong>max_hessian_perturbation</strong>: Maximum value of regularization parameter for handling negative curvature.
-<blockquote>
- In order to guarantee that the search directions are indeed proper descent directions, Ipopt requires that the inertia of the (augmented) linear system for the step computation has the correct number of negative and positive eigenvalues. The idea is that this guides the algorithm away from maximizers and makes Ipopt more likely converge to first order optimal points that are minimizers. If the inertia is not correct, a multiple of the identity matrix is added to the Hessian of the Lagrangian in the augmented system. This parameter gives the maximum value of the regularization parameter. If a regularization of that size is not enough, the algorithm skips this iteration and goes to the restoration phase. (This is delta_w^max in the implementation paper.) The valid range for this real option is 0 < max_hessian_perturbation and its default value is 10<sup>+20</sup>.
-
-</blockquote>
-
-\anchor OPT_min_hessian_perturbation
- <strong>min_hessian_perturbation</strong>: Smallest perturbation of the Hessian block.
-<blockquote>
- The size of the perturbation of the Hessian block is never selected smaller than this value, unless no perturbation is necessary. (This is delta_w^min in implementation paper.) The valid range for this real option is 0 &le; min_hessian_perturbation and its default value is 10<sup>-20</sup>.
-
-</blockquote>
-
-\anchor OPT_first_hessian_perturbation
- <strong>first_hessian_perturbation</strong>: Size of first x-s perturbation tried.
-<blockquote>
- The first value tried for the x-s perturbation in the inertia correction scheme.(This is delta_0 in the implementation paper.) The valid range for this real option is 0 < first_hessian_perturbation and its default value is 0.0001.
-
-</blockquote>
-
-\anchor OPT_perturb_inc_fact_first
- <strong>perturb_inc_fact_first</strong>: Increase factor for x-s perturbation for very first perturbation.
-<blockquote>
- The factor by which the perturbation is increased when a trial value was not sufficient - this value is used for the computation of the very first perturbation and allows a different value for the first perturbation than that used for the remaining perturbations. (This is bar_kappa_w^+ in the implementation paper.) The valid range for this real option is 1 < perturb_inc_fact_first and its default value is 100.
-
-</blockquote>
-
-\anchor OPT_perturb_inc_fact
- <strong>perturb_inc_fact</strong>: Increase factor for x-s perturbation.
-<blockquote>
- The factor by which the perturbation is increased when a trial value was not sufficient - this value is used for the computation of all perturbations except for the first. (This is kappa_w^+ in the implementation paper.) The valid range for this real option is 1 < perturb_inc_fact and its default value is 8.
-
-</blockquote>
-
-\anchor OPT_perturb_dec_fact
- <strong>perturb_dec_fact</strong>: Decrease factor for x-s perturbation.
-<blockquote>
- The factor by which the perturbation is decreased when a trial value is deduced from the size of the most recent successful perturbation. (This is kappa_w^- in the implementation paper.) The valid range for this real option is 0 < perturb_dec_fact < 1 and its default value is 0.333333.
-
-</blockquote>
-
-\anchor OPT_jacobian_regularization_value
- <strong>jacobian_regularization_value</strong>: Size of the regularization for rank-deficient constraint Jacobians.
-<blockquote>
- (This is bar delta_c in the implementation paper.) The valid range for this real option is 0 &le; jacobian_regularization_value and its default value is 10<sup>-08</sup>.
-
-</blockquote>
-
-\subsection OPT_Quasi-Newton Quasi-Newton
-
-\anchor OPT_hessian_approximation
- <strong>hessian_approximation</strong>: Indicates what Hessian information is to be used.
-<blockquote>
- This determines which kind of information for the Hessian of the Lagrangian function is used by the algorithm. The default value for this string option is "exact".
-
-Possible values:
- - exact: Use second derivatives provided by the NLP.
- - limited-memory: Perform a limited-memory quasi-Newton approximation
 </blockquote>
 
 \anchor OPT_limited_memory_update_type
@@ -932,20 +1030,6 @@ Possible values:
 Possible values:
  - bfgs: BFGS update (with skipping)
  - sr1: SR1 (not working well)
-</blockquote>
-
-\anchor OPT_limited_memory_max_history
- <strong>limited_memory_max_history</strong>: Maximum size of the history for the limited quasi-Newton Hessian approximation.
-<blockquote>
- This option determines the number of most recent iterations that are taken into account for the limited-memory quasi-Newton approximation. The valid range for this integer option is 0 &le; limited_memory_max_history and its default value is 6.
-
-</blockquote>
-
-\anchor OPT_limited_memory_max_skipping
- <strong>limited_memory_max_skipping</strong>: Threshold for successive iterations where update is skipped.
-<blockquote>
- If the update is skipped more than this number of successive iterations, the quasi-Newton approximation is reset. The valid range for this integer option is 1 &le; limited_memory_max_skipping and its default value is 2.
-
 </blockquote>
 
 \anchor OPT_limited_memory_initialization
@@ -982,6 +1066,13 @@ Possible values:
 
 </blockquote>
 
+\anchor OPT_limited_memory_max_skipping
+ <strong>limited_memory_max_skipping</strong>: Threshold for successive iterations where update is skipped.
+<blockquote>
+ If the update is skipped more than this number of successive iterations, the quasi-Newton approximation is reset. The valid range for this integer option is 1 &le; limited_memory_max_skipping and its default value is 2.
+
+</blockquote>
+
 \anchor OPT_limited_memory_special_for_resto
  <strong>limited_memory_special_for_resto</strong>: Determines if the quasi-Newton updates should be special during the restoration phase.
 <blockquote>
@@ -992,57 +1083,16 @@ Possible values:
  - yes: use the a special update during restoration phase
 </blockquote>
 
-\subsection OPT_Derivative_Test Derivative Test
-
-\anchor OPT_derivative_test
- <strong>derivative_test</strong>: Enable derivative checker
+\anchor OPT_hessian_approximation
+ <strong>hessian_approximation</strong>: Indicates what Hessian information is to be used.
 <blockquote>
- If this option is enabled, a (slow!) derivative test will be performed before the optimization. The test is performed at the user provided starting point and marks derivative values that seem suspicious The default value for this string option is "none".
+ This determines which kind of information for the Hessian of the Lagrangian function is used by the algorithm. The default value for this string option is "exact".
 
 Possible values:
- - none: do not perform derivative test
- - first-order: perform test of first derivatives at starting point
- - second-order: perform test of first and second derivatives at starting point
- - only-second-order: perform test of second derivatives at starting point
+ - exact: Use second derivatives provided by the NLP.
+ - limited-memory: Perform a limited-memory quasi-Newton approximation
 </blockquote>
 
-\anchor OPT_derivative_test_perturbation
- <strong>derivative_test_perturbation</strong>: Size of the finite difference perturbation in derivative test.
-<blockquote>
- This determines the relative perturbation of the variable entries. The valid range for this real option is 0 < derivative_test_perturbation and its default value is 10<sup>-08</sup>.
-
-</blockquote>
-
-\anchor OPT_derivative_test_tol
- <strong>derivative_test_tol</strong>: Threshold for indicating wrong derivative.
-<blockquote>
- If the relative deviation of the estimated derivative from the given one is larger than this value, the corresponding derivative is marked as wrong. The valid range for this real option is 0 < derivative_test_tol and its default value is 0.0001.
-
-</blockquote>
-
-\anchor OPT_derivative_test_print_all
- <strong>derivative_test_print_all</strong>: Indicates whether information for all estimated derivatives should be printed.
-<blockquote>
- Determines verbosity of derivative checker. The default value for this string option is "no".
-
-Possible values:
- - no: Print only suspect derivatives
- - yes: Print all derivatives
-</blockquote>
-
-\anchor OPT_derivative_test_first_index
- <strong>derivative_test_first_index</strong>: Index of first quantity to be checked by derivative checker
-<blockquote>
- If this is set to -2, then all derivatives are checked. Otherwise, for the first derivative test it specifies the first variable for which the test is done (counting starts at 0). For second derivatives, it specifies the first constraint for which the test is done; counting of constraint indices starts at 0, and -1 refers to the objective function Hessian. The valid range for this integer option is -2 &le; derivative_test_first_index and its default value is -2.
-
-</blockquote>
-
-\anchor OPT_point_perturbation_radius
- <strong>point_perturbation_radius</strong>: Maximal perturbation of an evaluation point.
-<blockquote>
- If a random perturbation of a points is required, this number indicates the maximal perturbation. This is for example used when determining the center point at which the finite difference derivative test is executed. The valid range for this real option is 0 &le; point_perturbation_radius and its default value is 10.
-
-</blockquote>
 
 \subsection OPT_MA27_Linear_Solver MA27 Linear Solver
 
@@ -1080,6 +1130,7 @@ Possible values:
  If the integer or real workspace is not large enough, Ipopt will increase its size by this factor. This option is only available if Ipopt has been compiled with MA27. The valid range for this real option is 1 &le; ma27_meminc_factor and its default value is 2.
 
 </blockquote>
+
 
 \subsection OPT_MA57_Linear_Solver MA57 Linear Solver
 
@@ -1142,6 +1193,7 @@ Possible values:
 
 </blockquote>
 
+
 \subsection OPT_MA77_Linear_Solver MA77 Linear Solver
 
 \anchor OPT_ma77_print_level
@@ -1186,16 +1238,6 @@ Possible values:
 
 </blockquote>
 
-\anchor OPT_ma77_order
- <strong>ma77_order</strong>: Controls type of ordering used by HSL_MA77
-<blockquote>
- This option controls ordering for the solver HSL_MA77. The default value for this string option is "metis".
-
-Possible values:
- - amd: Use the HSL_MC68 approximate minimum degree algorithm
- - metis: Use the MeTiS nested dissection algorithm (if available)
-</blockquote>
-
 \anchor OPT_ma77_small
  <strong>ma77_small</strong>: Zero Pivot Threshold
 <blockquote>
@@ -1224,6 +1266,17 @@ Possible values:
 
 </blockquote>
 
+\anchor OPT_ma77_order
+ <strong>ma77_order</strong>: Controls type of ordering used by HSL_MA77
+<blockquote>
+ This option controls ordering for the solver HSL_MA77. The default value for this string option is "metis".
+
+Possible values:
+ - amd: Use the HSL_MC68 approximate minimum degree algorithm
+ - metis: Use the MeTiS nested dissection algorithm (if available)
+</blockquote>
+
+
 \subsection OPT_MA86_Linear_Solver MA86 Linear Solver
 
 \anchor OPT_ma86_print_level
@@ -1238,28 +1291,6 @@ Possible values:
 <blockquote>
  Two nodes in elimination tree are merged if result has fewer than ma86_nemin variables. The valid range for this integer option is 1 &le; ma86_nemin and its default value is 32.
 
-</blockquote>
-
-\anchor OPT_ma86_order
- <strong>ma86_order</strong>: Controls type of ordering
-<blockquote>
- The default value for this string option is "auto".
-
-Possible values:
- - auto: Try both AMD and MeTiS, pick best
- - amd: Use the HSL_MC68 approximate minimum degree algorithm
- - metis: Use the MeTiS nested dissection algorithm (if available)
-</blockquote>
-
-\anchor OPT_ma86_scaling
- <strong>ma86_scaling</strong>: Controls scaling of matrix
-<blockquote>
- The default value for this string option is "mc64".
-
-Possible values:
- - none: Do not scale the linear system matrix
- - mc64: Scale linear system matrix using MC64
- - mc77: Scale linear system matrix using MC77 [1,3,0]
 </blockquote>
 
 \anchor OPT_ma86_small
@@ -1290,6 +1321,29 @@ Possible values:
 
 </blockquote>
 
+\anchor OPT_ma86_scaling
+ <strong>ma86_scaling</strong>: Controls scaling of matrix
+<blockquote>
+ The default value for this string option is "mc64".
+
+Possible values:
+ - none: Do not scale the linear system matrix
+ - mc64: Scale linear system matrix using MC64
+ - mc77: Scale linear system matrix using MC77 [1,3,0]
+</blockquote>
+
+\anchor OPT_ma86_order
+ <strong>ma86_order</strong>: Controls type of ordering
+<blockquote>
+ The default value for this string option is "auto".
+
+Possible values:
+ - auto: Try both AMD and MeTiS, pick best
+ - amd: Use the HSL_MC68 approximate minimum degree algorithm
+ - metis: Use the MeTiS nested dissection algorithm (if available)
+</blockquote>
+
+
 \subsection OPT_MA97_Linear_Solver MA97 Linear Solver
 
 \anchor OPT_ma97_print_level
@@ -1306,19 +1360,25 @@ Possible values:
 
 </blockquote>
 
-\anchor OPT_ma97_order
- <strong>ma97_order</strong>: Controls type of ordering
+\anchor OPT_ma97_small
+ <strong>ma97_small</strong>: Zero Pivot Threshold
 <blockquote>
- The default value for this string option is "auto".
+ Any pivot less than ma97_small is treated as zero. The valid range for this real option is 0 &le; ma97_small and its default value is 10<sup>-20</sup>.
 
-Possible values:
- - auto: Use HSL_MA97 heuristic to guess best of AMD and METIS
- - best: Try both AMD and MeTiS, pick best
- - amd: Use the HSL_MC68 approximate minimum degree algorithm
- - metis: Use the MeTiS nested dissection algorithm
- - matched-auto: Use the HSL_MC80 matching with heuristic choice of AMD or METIS
- - matched-metis: Use the HSL_MC80 matching based ordering with METIS
- - matched-amd: Use the HSL_MC80 matching based ordering with AMD
+</blockquote>
+
+\anchor OPT_ma97_u
+ <strong>ma97_u</strong>: Pivoting Threshold
+<blockquote>
+ See MA97 documentation. The valid range for this real option is 0 &le; ma97_u &le; 0.5 and its default value is 10<sup>-08</sup>.
+
+</blockquote>
+
+\anchor OPT_ma97_umax
+ <strong>ma97_umax</strong>: Maximum Pivoting Threshold
+<blockquote>
+ See MA97 documentation. The valid range for this real option is 0 &le; ma97_umax &le; 0.5 and its default value is 0.0001.
+
 </blockquote>
 
 \anchor OPT_ma97_scaling
@@ -1346,47 +1406,6 @@ Possible values:
  - mc77: Scale linear system matrix using MC77 [1,3,0]
 </blockquote>
 
-\anchor OPT_ma97_scaling2
- <strong>ma97_scaling2</strong>: Second scaling.
-<blockquote>
- If ma97_scaling=dynamic, this scaling is used according to the trigger ma97_switch2. If ma97_switch3 is triggered it is disabled. The default value for this string option is "mc64".
-
-Possible values:
- - none: No scaling
- - mc30: Scale linear system matrix using MC30
- - mc64: Scale linear system matrix using MC64
- - mc77: Scale linear system matrix using MC77 [1,3,0]
-</blockquote>
-
-\anchor OPT_ma97_scaling3
- <strong>ma97_scaling3</strong>: Third scaling.
-<blockquote>
- If ma97_scaling=dynamic, this scaling is used according to the trigger ma97_switch3. The default value for this string option is "mc64".
-
-Possible values:
- - none: No scaling
- - mc30: Scale linear system matrix using MC30
- - mc64: Scale linear system matrix using MC64
- - mc77: Scale linear system matrix using MC77 [1,3,0]
-</blockquote>
-
-\anchor OPT_ma97_small
- <strong>ma97_small</strong>: Zero Pivot Threshold
-<blockquote>
- Any pivot less than ma97_small is treated as zero. The valid range for this real option is 0 &le; ma97_small and its default value is 10<sup>-20</sup>.
-
-</blockquote>
-
-\anchor OPT_ma97_solve_blas3
- <strong>ma97_solve_blas3</strong>: Controls if blas2 or blas3 routines are used for solve
-<blockquote>
- The default value for this string option is "no".
-
-Possible values:
- - no: Use BLAS2 (faster, some implementations bit incompatible)
- - yes: Use BLAS3 (slower)
-</blockquote>
-
 \anchor OPT_ma97_switch1
  <strong>ma97_switch1</strong>: First switch, determine when ma97_scaling1 is enabled.
 <blockquote>
@@ -1402,6 +1421,18 @@ Possible values:
  - high_delay_reuse: Scaling to be used only when previous itr created more that 0.05*n additional delays, otherwise reuse scaling from previous itr
  - od_hd: Combination of on_demand and high_delay
  - od_hd_reuse: Combination of on_demand_reuse and high_delay_reuse
+</blockquote>
+
+\anchor OPT_ma97_scaling2
+ <strong>ma97_scaling2</strong>: Second scaling.
+<blockquote>
+ If ma97_scaling=dynamic, this scaling is used according to the trigger ma97_switch2. If ma97_switch3 is triggered it is disabled. The default value for this string option is "mc64".
+
+Possible values:
+ - none: No scaling
+ - mc30: Scale linear system matrix using MC30
+ - mc64: Scale linear system matrix using MC64
+ - mc77: Scale linear system matrix using MC77 [1,3,0]
 </blockquote>
 
 \anchor OPT_ma97_switch2
@@ -1421,6 +1452,18 @@ Possible values:
  - od_hd_reuse: Combination of on_demand_reuse and high_delay_reuse
 </blockquote>
 
+\anchor OPT_ma97_scaling3
+ <strong>ma97_scaling3</strong>: Third scaling.
+<blockquote>
+ If ma97_scaling=dynamic, this scaling is used according to the trigger ma97_switch3. The default value for this string option is "mc64".
+
+Possible values:
+ - none: No scaling
+ - mc30: Scale linear system matrix using MC30
+ - mc64: Scale linear system matrix using MC64
+ - mc77: Scale linear system matrix using MC77 [1,3,0]
+</blockquote>
+
 \anchor OPT_ma97_switch3
  <strong>ma97_switch3</strong>: Third switch, determine when ma97_scaling3 is enabled.
 <blockquote>
@@ -1438,74 +1481,33 @@ Possible values:
  - od_hd_reuse: Combination of on_demand_reuse and high_delay_reuse
 </blockquote>
 
-\anchor OPT_ma97_u
- <strong>ma97_u</strong>: Pivoting Threshold
+\anchor OPT_ma97_order
+ <strong>ma97_order</strong>: Controls type of ordering
 <blockquote>
- See MA97 documentation. The valid range for this real option is 0 &le; ma97_u &le; 0.5 and its default value is 10<sup>-08</sup>.
-
-</blockquote>
-
-\anchor OPT_ma97_umax
- <strong>ma97_umax</strong>: Maximum Pivoting Threshold
-<blockquote>
- See MA97 documentation. The valid range for this real option is 0 &le; ma97_umax &le; 0.5 and its default value is 0.0001.
-
-</blockquote>
-
-\subsection OPT_MUMPS_Linear_Solver MUMPS Linear Solver
-
-\anchor OPT_mumps_pivtol
- <strong>mumps_pivtol</strong>: Pivot tolerance for the linear solver MUMPS.
-<blockquote>
- A smaller number pivots for sparsity, a larger number pivots for stability. This option is only available if Ipopt has been compiled with MUMPS. The valid range for this real option is 0 &le; mumps_pivtol &le; 1 and its default value is 10<sup>-06</sup>.
-
-</blockquote>
-
-\anchor OPT_mumps_pivtolmax
- <strong>mumps_pivtolmax</strong>: Maximum pivot tolerance for the linear solver MUMPS.
-<blockquote>
- Ipopt may increase pivtol as high as pivtolmax to get a more accurate solution to the linear system. This option is only available if Ipopt has been compiled with MUMPS. The valid range for this real option is 0 &le; mumps_pivtolmax &le; 1 and its default value is 0.1.
-
-</blockquote>
-
-\anchor OPT_mumps_mem_percent
- <strong>mumps_mem_percent</strong>: Percentage increase in the estimated working space for MUMPS.
-<blockquote>
- In MUMPS when significant extra fill-in is caused by numerical pivoting, larger values of mumps_mem_percent may help use the workspace more efficiently. On the other hand, if memory requirement are too large at the very beginning of the optimization, choosing a much smaller value for this option, such as 5, might reduce memory requirements. The valid range for this integer option is 0 &le; mumps_mem_percent and its default value is 1000.
-
-</blockquote>
-
-\anchor OPT_mumps_permuting_scaling
- <strong>mumps_permuting_scaling</strong>: Controls permuting and scaling in MUMPS
-<blockquote>
- This is ICNTL(6) in MUMPS. The valid range for this integer option is 0 &le; mumps_permuting_scaling &le; 7 and its default value is 7.
-
-</blockquote>
-
-\anchor OPT_mumps_pivot_order
- <strong>mumps_pivot_order</strong>: Controls pivot order in MUMPS
-<blockquote>
- This is ICNTL(7) in MUMPS. The valid range for this integer option is 0 &le; mumps_pivot_order &le; 7 and its default value is 7.
-
-</blockquote>
-
-\anchor OPT_mumps_scaling
- <strong>mumps_scaling</strong>: Controls scaling in MUMPS
-<blockquote>
- This is ICNTL(8) in MUMPS. The valid range for this integer option is -2 &le; mumps_scaling &le; 77 and its default value is 77.
-
-</blockquote>
-
-\subsection OPT_Pardiso_Linear_Solver_from_Pardiso_Project Pardiso Linear Solver from Pardiso Project
-
-\anchor OPT_pardisolib
- <strong>pardisolib</strong>: Name of library containing Pardiso routines (from pardiso-project.org) for load at runtime
-<blockquote>
- The default value for this string option is "libpardiso.so".
+ The default value for this string option is "auto".
 
 Possible values:
- - *: Any acceptable filename (may contain path, too)
+ - auto: Use HSL_MA97 heuristic to guess best of AMD and METIS
+ - best: Try both AMD and MeTiS, pick best
+ - amd: Use the HSL_MC68 approximate minimum degree algorithm
+ - metis: Use the MeTiS nested dissection algorithm
+ - matched-auto: Use the HSL_MC80 matching with heuristic choice of AMD or METIS
+ - matched-metis: Use the HSL_MC80 matching based ordering with METIS
+ - matched-amd: Use the HSL_MC80 matching based ordering with AMD
 </blockquote>
+
+\anchor OPT_ma97_solve_blas3
+ <strong>ma97_solve_blas3</strong>: Controls if blas2 or blas3 routines are used for solve
+<blockquote>
+ The default value for this string option is "no".
+
+Possible values:
+ - no: Use BLAS2 (faster, some implementations bit incompatible)
+ - yes: Use BLAS3 (slower)
+</blockquote>
+
+
+\subsection OPT_Pardiso__pardiso-project.org__Linear_Solver Pardiso (pardiso-project.org) Linear Solver
 
 \anchor OPT_pardiso_matching_strategy
  <strong>pardiso_matching_strategy</strong>: Matching strategy to be used by Pardiso
@@ -1518,17 +1520,17 @@ Possible values:
  - constraints: Match constraints (IPAR(13)=3)
 </blockquote>
 
-\anchor OPT_pardiso_max_iterative_refinement_steps
- <strong>pardiso_max_iterative_refinement_steps</strong>: Limit on number of iterative refinement steps.
-<blockquote>
- The solver does not perform more than the absolute value of this value steps of iterative refinement and stops the process if a satisfactory level of accuracy of the solution in terms of backward error is achieved. If negative, the accumulation of the residue uses extended precision real and complex data types. Perturbed pivots result in iterative refinement. The solver automatically performs two steps of iterative refinements when perturbed pivots are obtained during the numerical factorization and this option is set to 0. The valid range for this integer option is unrestricted and its default value is 0.
-
-</blockquote>
-
 \anchor OPT_pardiso_msglvl
  <strong>pardiso_msglvl</strong>: Pardiso message level
 <blockquote>
  This determines the amount of analysis output from the Pardiso solver. This is MSGLVL in the Pardiso manual. The valid range for this integer option is 0 &le; pardiso_msglvl and its default value is 0.
+
+</blockquote>
+
+\anchor OPT_pardiso_max_iterative_refinement_steps
+ <strong>pardiso_max_iterative_refinement_steps</strong>: Limit on number of iterative refinement steps.
+<blockquote>
+ The solver does not perform more than the absolute value of this value steps of iterative refinement and stops the process if a satisfactory level of accuracy of the solution in terms of backward error is achieved. If negative, the accumulation of the residue uses extended precision real and complex data types. Perturbed pivots result in iterative refinement. The solver automatically performs two steps of iterative refinements when perturbed pivots are obtained during the numerical factorization and this option is set to 0. The valid range for this integer option is unrestricted and its default value is 0.
 
 </blockquote>
 
@@ -1546,7 +1548,8 @@ Possible values:
  - five: undocumented
 </blockquote>
 
-\subsection OPT_Pardiso_Linear_Solver_from_Intel_MKL Pardiso Linear Solver from Intel MKL
+
+\subsection OPT_Pardiso__MKL__Linear_Solver Pardiso (MKL) Linear Solver
 
 \anchor OPT_pardisomkl_matching_strategy
  <strong>pardisomkl_matching_strategy</strong>: Matching strategy to be used by Pardiso
@@ -1559,17 +1562,17 @@ Possible values:
  - constraints: Match constraints (IPAR(13)=3)
 </blockquote>
 
-\anchor OPT_pardisomkl_max_iterative_refinement_steps
- <strong>pardisomkl_max_iterative_refinement_steps</strong>: Limit on number of iterative refinement steps.
-<blockquote>
- The solver does not perform more than the absolute value of this value steps of iterative refinement and stops the process if a satisfactory level of accuracy of the solution in terms of backward error is achieved. If negative, the accumulation of the residue uses extended precision real and complex data types. Perturbed pivots result in iterative refinement. The solver automatically performs two steps of iterative refinements when perturbed pivots are obtained during the numerical factorization and this option is set to 0. The valid range for this integer option is unrestricted and its default value is 1.
-
-</blockquote>
-
 \anchor OPT_pardisomkl_msglvl
  <strong>pardisomkl_msglvl</strong>: Pardiso message level
 <blockquote>
  This determines the amount of analysis output from the Pardiso solver. This is MSGLVL in the Pardiso manual. The valid range for this integer option is 0 &le; pardisomkl_msglvl and its default value is 0.
+
+</blockquote>
+
+\anchor OPT_pardisomkl_max_iterative_refinement_steps
+ <strong>pardisomkl_max_iterative_refinement_steps</strong>: Limit on number of iterative refinement steps.
+<blockquote>
+ The solver does not perform more than the absolute value of this value steps of iterative refinement and stops the process if a satisfactory level of accuracy of the solution in terms of backward error is achieved. If negative, the accumulation of the residue uses extended precision real and complex data types. Perturbed pivots result in iterative refinement. The solver automatically performs two steps of iterative refinements when perturbed pivots are obtained during the numerical factorization and this option is set to 0. The valid range for this integer option is unrestricted and its default value is 1.
 
 </blockquote>
 
@@ -1585,12 +1588,44 @@ Possible values:
  - pmetis: parallel (OpenMP) version of MeTiS nested dissection algorithm
 </blockquote>
 
+
 \subsection OPT_SPRAL_Linear_Solver SPRAL Linear Solver
 
-\anchor OPT_spral_print_level
- <strong>spral_print_level</strong>: Print level for the linear solver SPRAL
+\anchor OPT_spral_cpu_block_size
+ <strong>spral_cpu_block_size</strong>: CPU Parallelization Block Size
 <blockquote>
- <0: no printing, 0: errors and warning messages, 1: limited diagnostics, >1: additional diagnostics The valid range for this integer option is unrestricted and its default value is -1.
+ Block size to use for parallelization of large nodes on CPU resources. The valid range for this integer option is 1 &le; spral_cpu_block_size and its default value is 256.
+
+</blockquote>
+
+\anchor OPT_spral_gpu_perf_coeff
+ <strong>spral_gpu_perf_coeff</strong>: GPU Performance Coefficient
+<blockquote>
+ How many times faster a GPU is than a CPU at factoring a subtree. The valid range for this real option is 0 < spral_gpu_perf_coeff and its default value is 1.
+
+</blockquote>
+
+\anchor OPT_spral_ignore_numa
+ <strong>spral_ignore_numa</strong>: Non-uniform memory access (NUMA) region setting.
+<blockquote>
+ The default value for this string option is "yes".
+
+Possible values:
+ - no: Do not treat CPUs and GPUs as belonging to a single NUMA region.
+ - yes: Treat CPUs and GPUs as belonging to a single NUMA region.
+</blockquote>
+
+\anchor OPT_spral_max_load_inbalance
+ <strong>spral_max_load_inbalance</strong>: Maximum Permissible Load
+<blockquote>
+ Maximum permissible load inbalance for leaf subtree allocations. The valid range for this real option is 1 < spral_max_load_inbalance and its default value is 1.2.
+
+</blockquote>
+
+\anchor OPT_spral_min_gpu_work
+ <strong>spral_min_gpu_work</strong>: Minimum GPU Work
+<blockquote>
+ Minimum number of FLOPS in subtree before scheduling on GPU. The valid range for this real option is 0 &le; spral_min_gpu_work and its default value is 5 &middot; 10<sup>+09</sup>.
 
 </blockquote>
 
@@ -1611,6 +1646,24 @@ Possible values:
  - matching: Use matching-based elimination ordering.
 </blockquote>
 
+\anchor OPT_spral_pivot_method
+ <strong>spral_pivot_method</strong>: Specifies strategy for scaling in SPRAL linear solver.
+<blockquote>
+ The default value for this string option is "block".
+
+Possible values:
+ - aggressive: Aggressive a posteori pivoting.
+ - block: Block a posteori pivoting.
+ - threshold: Threshold partial pivoting (not parallel).
+</blockquote>
+
+\anchor OPT_spral_print_level
+ <strong>spral_print_level</strong>: Print level for the linear solver SPRAL
+<blockquote>
+ <0: no printing, 0: errors and warning messages, 1: limited diagnostics, >1: additional diagnostics The valid range for this integer option is unrestricted and its default value is -1.
+
+</blockquote>
+
 \anchor OPT_spral_scaling
  <strong>spral_scaling</strong>: Specifies strategy for scaling in SPRAL linear solver.
 <blockquote>
@@ -1623,86 +1676,6 @@ Possible values:
  - matching: Scale using the matching-based ordering.
  - ruiz: Scale using the norm-equilibration algorithm of Ruiz (MC77).
  - dynamic: Dynamically select scaling according to switch options.
-</blockquote>
-
-\anchor OPT_spral_use_gpu
- <strong>spral_use_gpu</strong>: Specifies whether or not graphics processing units (GPUs) are used by the SPRAL linear solver.
-<blockquote>
- The default value for this string option is "yes".
-
-Possible values:
- - no: Do not use GPUs.
- - yes: Use GPUs if present.
-</blockquote>
-
-\anchor OPT_spral_gpu_perf_coeff
- <strong>spral_gpu_perf_coeff</strong>: GPU Performance Coefficient
-<blockquote>
- How many times faster a GPU is than a CPU at factoring a subtree. The valid range for this real option is 0 < spral_gpu_perf_coeff and its default value is 1.
-
-</blockquote>
-
-\anchor OPT_spral_min_gpu_work
- <strong>spral_min_gpu_work</strong>: Minimum GPU Work
-<blockquote>
- Minimum number of FLOPS in subtree before scheduling on GPU. The valid range for this real option is 0 &le; spral_min_gpu_work and its default value is 5 &middot; 10<sup>+09</sup>.
-
-</blockquote>
-
-\anchor OPT_spral_ignore_numa
- <strong>spral_ignore_numa</strong>: Non-uniform memory access (NUMA) region setting.
-<blockquote>
- The default value for this string option is "yes".
-
-Possible values:
- - no: Do not treat CPUs and GPUs as belonging to a single NUMA region.
- - yes: Treat CPUs and GPUs as belonging to a single NUMA region.
-</blockquote>
-
-\anchor OPT_spral_cpu_block_size
- <strong>spral_cpu_block_size</strong>: CPU Parallelization Block Size
-<blockquote>
- Block size to use for parallelization of large nodes on CPU resources. The valid range for this integer option is 1 &le; spral_cpu_block_size and its default value is 256.
-
-</blockquote>
-
-\anchor OPT_spral_max_load_inbalance
- <strong>spral_max_load_inbalance</strong>: Maximum Permissible Load
-<blockquote>
- Maximum permissible load inbalance for leaf subtree allocations. The valid range for this real option is 1 < spral_max_load_inbalance and its default value is 1.2.
-
-</blockquote>
-
-\anchor OPT_spral_small
- <strong>spral_small</strong>: Zero Pivot Threshold
-<blockquote>
- Any pivot less than spral_small is treated as zero. The valid range for this real option is 0 < spral_small and its default value is 10<sup>-20</sup>.
-
-</blockquote>
-
-\anchor OPT_spral_u
- <strong>spral_u</strong>: Pivoting Threshold
-<blockquote>
- Relative pivot threshold used in symmetric indefinite case. The valid range for this real option is 0 < spral_u &le; 0.5 and its default value is 10<sup>-08</sup>.
-
-</blockquote>
-
-\anchor OPT_spral_umax
- <strong>spral_umax</strong>: Maximum Pivoting Threshold
-<blockquote>
- See SPRAL documentation. The valid range for this real option is 0 < spral_umax &le; 0.5 and its default value is 0.0001.
-
-</blockquote>
-
-\anchor OPT_spral_pivot_method
- <strong>spral_pivot_method</strong>: Specifies strategy for scaling in SPRAL linear solver.
-<blockquote>
- The default value for this string option is "block".
-
-Possible values:
- - aggressive: Aggressive a posteori pivoting.
- - block: Block a posteori pivoting.
- - threshold: Threshold partial pivoting (not parallel).
 </blockquote>
 
 \anchor OPT_spral_scaling_1
@@ -1742,6 +1715,13 @@ Possible values:
  - auction: Scale using the auction algorithm.
  - matching: Scale using the matching-based ordering.
  - ruiz: Scale using the norm-equilibration algorithm of Ruiz (MC77).
+</blockquote>
+
+\anchor OPT_spral_small
+ <strong>spral_small</strong>: Zero Pivot Threshold
+<blockquote>
+ Any pivot less than spral_small is treated as zero. The valid range for this real option is 0 < spral_small and its default value is 10<sup>-20</sup>.
+
 </blockquote>
 
 \anchor OPT_spral_small_subtree_threshold
@@ -1802,6 +1782,31 @@ Possible values:
  - od_hd_reuse: Combination of on_demand_reuse and high_delay_reuse
 </blockquote>
 
+\anchor OPT_spral_u
+ <strong>spral_u</strong>: Pivoting Threshold
+<blockquote>
+ Relative pivot threshold used in symmetric indefinite case. The valid range for this real option is 0 < spral_u &le; 0.5 and its default value is 10<sup>-08</sup>.
+
+</blockquote>
+
+\anchor OPT_spral_umax
+ <strong>spral_umax</strong>: Maximum Pivoting Threshold
+<blockquote>
+ See SPRAL documentation. The valid range for this real option is 0 < spral_umax &le; 0.5 and its default value is 0.0001.
+
+</blockquote>
+
+\anchor OPT_spral_use_gpu
+ <strong>spral_use_gpu</strong>: Specifies whether or not graphics processing units (GPUs) are used by the SPRAL linear solver.
+<blockquote>
+ The default value for this string option is "yes".
+
+Possible values:
+ - no: Do not use GPUs.
+ - yes: Use GPUs if present.
+</blockquote>
+
+
 \subsection OPT_WSMP_Linear_Solver WSMP Linear Solver
 
 \anchor OPT_wsmp_num_threads
@@ -1846,6 +1851,62 @@ Possible values:
 
 </blockquote>
 
+
+\subsection OPT_Mumps_Linear_Solver Mumps Linear Solver
+
+\anchor OPT_mumps_pivtol
+ <strong>mumps_pivtol</strong>: Pivot tolerance for the linear solver MUMPS.
+<blockquote>
+ A smaller number pivots for sparsity, a larger number pivots for stability. This option is only available if Ipopt has been compiled with MUMPS. The valid range for this real option is 0 &le; mumps_pivtol &le; 1 and its default value is 10<sup>-06</sup>.
+
+</blockquote>
+
+\anchor OPT_mumps_pivtolmax
+ <strong>mumps_pivtolmax</strong>: Maximum pivot tolerance for the linear solver MUMPS.
+<blockquote>
+ Ipopt may increase pivtol as high as pivtolmax to get a more accurate solution to the linear system. This option is only available if Ipopt has been compiled with MUMPS. The valid range for this real option is 0 &le; mumps_pivtolmax &le; 1 and its default value is 0.1.
+
+</blockquote>
+
+\anchor OPT_mumps_mem_percent
+ <strong>mumps_mem_percent</strong>: Percentage increase in the estimated working space for MUMPS.
+<blockquote>
+ In MUMPS when significant extra fill-in is caused by numerical pivoting, larger values of mumps_mem_percent may help use the workspace more efficiently. On the other hand, if memory requirement are too large at the very beginning of the optimization, choosing a much smaller value for this option, such as 5, might reduce memory requirements. The valid range for this integer option is 0 &le; mumps_mem_percent and its default value is 1000.
+
+</blockquote>
+
+\anchor OPT_mumps_permuting_scaling
+ <strong>mumps_permuting_scaling</strong>: Controls permuting and scaling in MUMPS
+<blockquote>
+ This is ICNTL(6) in MUMPS. The valid range for this integer option is 0 &le; mumps_permuting_scaling &le; 7 and its default value is 7.
+
+</blockquote>
+
+\anchor OPT_mumps_pivot_order
+ <strong>mumps_pivot_order</strong>: Controls pivot order in MUMPS
+<blockquote>
+ This is ICNTL(7) in MUMPS. The valid range for this integer option is 0 &le; mumps_pivot_order &le; 7 and its default value is 7.
+
+</blockquote>
+
+\anchor OPT_mumps_scaling
+ <strong>mumps_scaling</strong>: Controls scaling in MUMPS
+<blockquote>
+ This is ICNTL(8) in MUMPS. The valid range for this integer option is -2 &le; mumps_scaling &le; 77 and its default value is 77.
+
+</blockquote>
+
+
+\subsection OPT_MA28_Linear_Solver MA28 Linear Solver
+
+\anchor OPT_ma28_pivtol
+ <strong>ma28_pivtol</strong>: Pivot tolerance for linear solver MA28.
+<blockquote>
+ This is used when MA28 tries to find the dependent constraints. The valid range for this real option is 0 < ma28_pivtol &le; 1 and its default value is 0.01.
+
+</blockquote>
+
+
 \subsection OPT_Miscellaneous Miscellaneous
 
 \anchor OPT_option_file_name
@@ -1866,6 +1927,5 @@ Possible values:
  - no: do not collect timing statistics
  - yes: collect timing statistics
 </blockquote>
-
 
 */
