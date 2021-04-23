@@ -114,6 +114,9 @@ commit history.
         - Changed default for honor_original_bounds to no.
           Variable bounds (see option bound_relax_factor) are now relaxed
           by at most the value of constr_viol_tol.
+          The solve summary now reports the violation of original bounds
+          and SolveStatistics::(Scaled)Infeasibilities() has been extended
+          to report the violation of original variable bounds.
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]

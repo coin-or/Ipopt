@@ -32,6 +32,8 @@ SolveStatistics::SolveStatistics(
      dual_inf_(ip_cq->unscaled_curr_dual_infeasibility(NORM_MAX)),
      scaled_constr_viol_(ip_cq->curr_nlp_constraint_violation(NORM_MAX)),
      constr_viol_(ip_cq->unscaled_curr_nlp_constraint_violation(NORM_MAX)),
+     scaled_bound_viol_(ip_cq->curr_variable_bound_violation()),
+     bound_viol_(ip_cq->unscaled_curr_variable_bound_violation()),
      scaled_compl_(ip_cq->curr_complementarity(0., NORM_MAX)),
      compl_(ip_cq->unscaled_curr_complementarity(0., NORM_MAX)),
      scaled_kkt_error_(ip_cq->curr_nlp_error()),
@@ -86,6 +88,21 @@ void SolveStatistics::Infeasibilities(
    kkt_error       = kkt_error_;
 }
 
+void SolveStatistics::Infeasibilities(
+   Number& dual_inf,
+   Number& constr_viol,
+   Number& varbounds_viol,
+   Number& complementarity,
+   Number& kkt_error
+) const
+{
+   dual_inf        = dual_inf_;
+   constr_viol     = constr_viol_;
+   varbounds_viol  = bound_viol_;
+   complementarity = compl_;
+   kkt_error       = kkt_error_;
+}
+
 void SolveStatistics::ScaledInfeasibilities(
    Number& scaled_dual_inf,
    Number& scaled_constr_viol,
@@ -95,6 +112,21 @@ void SolveStatistics::ScaledInfeasibilities(
 {
    scaled_dual_inf        = scaled_dual_inf_;
    scaled_constr_viol     = scaled_constr_viol_;
+   scaled_complementarity = scaled_compl_;
+   scaled_kkt_error       = scaled_kkt_error_;
+}
+
+void SolveStatistics::ScaledInfeasibilities(
+   Number& scaled_dual_inf,
+   Number& scaled_constr_viol,
+   Number& scaled_varbound_viol,
+   Number& scaled_complementarity,
+   Number& scaled_kkt_error
+) const
+{
+   scaled_dual_inf        = scaled_dual_inf_;
+   scaled_constr_viol     = scaled_constr_viol_;
+   scaled_varbound_viol   = scaled_bound_viol_;
    scaled_complementarity = scaled_compl_;
    scaled_kkt_error       = scaled_kkt_error_;
 }

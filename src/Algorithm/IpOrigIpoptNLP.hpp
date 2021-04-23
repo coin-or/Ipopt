@@ -271,6 +271,22 @@ public:
       const Vector& new_d_U
    );
 
+   /** Method to get scaled bound violation.
+    *
+    * If OrigIpoptNLP relaxed variable bounds (bound_relax_factor > 0), then this function computes the violation of the original scaled bounds for the given scaled point x.
+    */
+   virtual Number GetScaledBoundViolation(
+      const Vector& x
+   );
+
+   /** Method to get unscaled bound violation.
+    *
+    * If OrigIpoptNLP relaxed variable bounds (bound_relax_factor > 0), then this function computes the violation of the original unscaled bounds for the given scaled point x.
+    */
+   virtual Number GetUnscaledBoundViolation(
+      const Vector& x
+   );
+
    /** @name Counters for the number of function evaluations. */
    ///@{
    virtual Index f_evals() const

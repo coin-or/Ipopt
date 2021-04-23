@@ -332,14 +332,11 @@ bool OrigIpoptNLP::InitializeStructures(
    d_L->Print(*jnlst_, J_MOREVECTOR, J_INITIALIZATION, "original d_L unscaled");
    d_U->Print(*jnlst_, J_MOREVECTOR, J_INITIALIZATION, "original d_U unscaled");
 
-   if( honor_original_bounds_ )
-   {
-      SmartPtr<Vector> tmp;
-      tmp = x_L->MakeNewCopy();
-      orig_x_L_ = ConstPtr(tmp);
-      tmp = x_U->MakeNewCopy();
-      orig_x_U_ = ConstPtr(tmp);
-   }
+   SmartPtr<Vector> tmp;
+   tmp = x_L->MakeNewCopy();
+   orig_x_L_ = ConstPtr(tmp);
+   tmp = x_U->MakeNewCopy();
+   orig_x_U_ = ConstPtr(tmp);
 
    relax_bounds(-bound_relax_factor_, *x_L);
    relax_bounds(bound_relax_factor_, *x_U);
@@ -915,7 +912,7 @@ void OrigIpoptNLP::FinalizeSolution(
       unscaled_y_d = NLP_scaling()->apply_vector_scaling_d(&y_d);
    }
 
-   if( honor_original_bounds_ && (Px_L_->NCols() > 0 || Px_U_->NCols() > 0) )
+   if( honor_original_bounds_ && bound_relax_factor_ > 0.0 && (Px_L_->NCols() > 0 || Px_U_->NCols() > 0) )
    {
       // Make sure the user specified bounds are satisfied
       SmartPtr<Vector> tmp;
@@ -980,6 +977,85 @@ void OrigIpoptNLP::AdjustVariableBounds(
    x_U_ = new_x_U.MakeNewCopy();
    d_L_ = new_d_L.MakeNewCopy();
    d_U_ = new_d_U.MakeNewCopy();
+}
+
+Number OrigIpoptNLP::GetScaledBoundViolation(
+   const Vector& x
+)
+{
+   // if we did not relax bounds, then the bound violation must be 0
+   if( bound_relax_factor_ == 0.0 )
+      return 0.0;
+
+   assert(IsValid(orig_x_L_));
+   assert(IsValid(orig_x_U_));
+
+   Number viol = 0.0;
+
+   if( !NLP_scaling()->have_x_scaling() )
+      return GetUnscaledBoundViolation(x);
+
+   // calculate violations of user-specified lower bounds
+   if( Px_L_->NCols() > 0 )
+   {
+      SmartPtr<Vector> x_L = NLP_scaling()->apply_vector_scaling_x_LU_NonConst(*Px_L_, orig_x_L_, *x_space_);
+      SmartPtr<Vector> tmp = orig_x_L_->MakeNew();
+      Px_L_->TransMultVector(-1., x, 0., *tmp);  // get -x in x_L space
+      tmp->Axpy(1.0, *x_L);  // tmp = -x + x_L, so positive entries are violations of lower bounds
+      Number v = tmp->Max();
+      viol = Max(v, 0.0);
+   }
+
+   // calculate violations of user-specified upper bounds
+   if( Px_U_->NCols() > 0 )
+   {
+      SmartPtr<Vector> x_U = NLP_scaling()->apply_vector_scaling_x_LU_NonConst(*Px_U_, orig_x_U_, *x_space_);
+      SmartPtr<Vector> tmp = orig_x_U_->MakeNew();
+      Px_U_->TransMultVector(1., x, 0., *tmp);   // get x in x_U space
+      tmp->Axpy(-1.0, *x_U);  // tmp = x - x_U, so positive entries are violations of upper bounds
+      Number v = tmp->Max();
+      viol = Max(v, 0.0);
+   }
+
+   return viol;
+}
+
+Number OrigIpoptNLP::GetUnscaledBoundViolation(
+   const Vector& x
+)
+{
+   // if we did not relax bounds, then the bound violation must be 0
+   if( bound_relax_factor_ == 0.0 )
+      return 0.0;
+
+   assert(IsValid(orig_x_L_));
+   assert(IsValid(orig_x_U_));
+
+   Number viol = 0.0;
+
+   SmartPtr<const Vector> un_x = get_unscaled_x(x);
+
+   // calculate violations of user-specified lower bounds
+   if( Px_L_->NCols() > 0 )
+   {
+      SmartPtr<Vector> tmp = orig_x_L_->MakeNew();
+      Px_L_->TransMultVector(-1., *un_x, 0., *tmp);  // get -x in x_L space
+      tmp->Axpy(1.0, *orig_x_L_);  // tmp = -x + x_L, so positive entries are violations of lower bounds
+      Number v = tmp->Max();
+      viol = Max(v, 0.0);
+   }
+
+   // calculate violations of user-specified upper bounds
+   if( Px_U_->NCols() > 0 )
+   {
+      SmartPtr<Vector> tmp = orig_x_U_->MakeNew();
+      Px_U_->TransMultVector(1., *un_x, 0., *tmp);   // get x in x_U space
+      tmp->Axpy(-1.0, *orig_x_U_);  // tmp = x - x_U, so positive entries are violations of upper bounds
+      Number v = tmp->Max();
+      viol = Max(v, 0.0);
+   }
+
+   return viol;
 }
 
 SmartPtr<const Vector> OrigIpoptNLP::get_unscaled_x(

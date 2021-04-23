@@ -80,7 +80,11 @@ public:
       Index& num_hess_evals
    ) const;
 
-   /** Unscaled solution infeasibilities. */
+   /** Unscaled solution infeasibilities.
+    *
+    * @deprecated Use Infeasibilities() with 5 arguments instead.
+    */
+   IPOPT_DEPRECATED
    virtual void Infeasibilities(
       Number& dual_inf,
       Number& constr_viol,
@@ -88,10 +92,35 @@ public:
       Number& kkt_error
    ) const;
 
-   /** Scaled solution infeasibilities. */
+   /** Unscaled solution infeasibilities. */
+   virtual void Infeasibilities(
+      Number& dual_inf,
+      Number& constr_viol,
+      Number& varbounds_viol,
+      Number& complementarity,
+      Number& kkt_error
+   ) const;
+
+   /** Scaled solution infeasibilities.
+    *
+    * @deprecated Use ScaledInfeasibilities() with 5 arguments instead.
+    */
+   IPOPT_DEPRECATED
    virtual void ScaledInfeasibilities(
       Number& scaled_dual_inf,
       Number& scaled_constr_viol,
+      Number& scaled_complementarity,
+      Number& scaled_kkt_error
+   ) const;
+
+   /** Scaled solution infeasibilities.
+    *
+    * @deprecated Use ScaledInfeasibilities() with 5 arguments instead.
+    */
+   virtual void ScaledInfeasibilities(
+      Number& scaled_dual_inf,
+      Number& scaled_constr_viol,
+      Number& scaled_varbounds_viol,
       Number& scaled_complementarity,
       Number& scaled_kkt_error
    ) const;
@@ -161,6 +190,10 @@ private:
    Number scaled_constr_viol_;
    /** Final unscaled constraint violation (max-norm) */
    Number constr_viol_;
+   /** Final scaled variable bound violation (max-norm) */
+   Number scaled_bound_viol_;
+   /** Final unscaled variable bound violation (max-norm) */
+   Number bound_viol_;
    /** Final scaled complementarity error (max-norm) */
    Number scaled_compl_;
    /** Final unscaled complementarity error (max-norm) */

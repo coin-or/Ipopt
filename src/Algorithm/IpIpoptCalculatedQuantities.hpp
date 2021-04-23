@@ -322,6 +322,20 @@ public:
    );
    ///@}
 
+   /** @name Variable bounds */
+   ///@{
+   /** Unscaled violation of variable bounds.
+    *
+    * Calls OrigIpoptNLP::GetUnscaledBoundViolation() if current NLP is a OrigIpoptNLP.
+    */
+   virtual Number unscaled_curr_variable_bound_violation();
+   /** Scaled violation of variable bounds.
+    *
+    * Calls OrigIpoptNLP::GetScaledBoundViolation() if current NLP is a OrigIpoptNLP.
+    */
+   virtual Number curr_variable_bound_violation();
+   ///@}
+
    /** @name Hessian matrices */
    ///@{
    /** exact Hessian at current iterate (uncached) */

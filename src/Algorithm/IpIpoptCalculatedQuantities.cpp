@@ -1571,6 +1571,26 @@ Number IpoptCalculatedQuantities::unscaled_curr_nlp_constraint_violation(
    return result;
 }
 
+Number IpoptCalculatedQuantities::unscaled_curr_variable_bound_violation()
+{
+   OrigIpoptNLP* orignlp = dynamic_cast<OrigIpoptNLP*>(GetRawPtr(ip_nlp_));
+   if( orignlp == NULL )
+      return 0.0;
+
+   // TODO caching
+   return orignlp->GetUnscaledBoundViolation(*ip_data_->curr()->x());
+}
+
+Number IpoptCalculatedQuantities::curr_variable_bound_violation()
+{
+   OrigIpoptNLP* orignlp = dynamic_cast<OrigIpoptNLP*>(GetRawPtr(ip_nlp_));
+   if( orignlp == NULL )
+      return 0.0;
+
+   // TODO caching
+   return orignlp->GetScaledBoundViolation(*ip_data_->curr()->x());
+}
+
 Number IpoptCalculatedQuantities::unscaled_trial_nlp_constraint_violation(
    ENormType NormType
 )
