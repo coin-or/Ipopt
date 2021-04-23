@@ -62,10 +62,7 @@ prints a list of all options available in AMPL.
 
 A list of the most important options is given next.
 You can print the documentation for all \Ipopt options by
-using the option
-\verbatim
-print_options_documentation yes
-\endverbatim
+using the option \ref OPT_print_options_documentation "print_options_documentation"
 and running \Ipopt. This will output the documentation of almost all options to
 the console.
 If you have the AMPL solver executable, you can generate this list also
@@ -73,6 +70,8 @@ by calling the executable with flag `--print-options`.
 
 \note Availability or default values of some options concerning the linear solver depends on the configuration used to build \Ipopt.
 Use the print options documentation feature to see which options are available in a particular build of \Ipopt.
+
+The implementation paper mentioned for some options is \cite WaecBieg06:mp.
 
 \subsection OPT_Output Output
 
