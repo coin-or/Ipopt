@@ -324,16 +324,45 @@ public:
 
    /** @name Variable bounds */
    ///@{
-   /** Unscaled violation of variable bounds.
+   /** Violation of original variable lower bounds x_L.
     *
-    * Calls OrigIpoptNLP::GetUnscaledBoundViolation() if current NLP is a OrigIpoptNLP.
+    * Computes violation of current (unscaled) solution w.r.t. OrigIpoptNLP::orig_x_L() if current NLP is a OrigIpoptNLP.
+    * If current NLP is not an original OrigIpoptNLP, returns zero vector.
     */
-   virtual Number unscaled_curr_variable_bound_violation();
-   /** Scaled violation of variable bounds.
+   SmartPtr<const Vector> unscaled_curr_orig_x_L_violation();
+   /** Violation of original variable upper bounds x_U.
     *
-    * Calls OrigIpoptNLP::GetScaledBoundViolation() if current NLP is a OrigIpoptNLP.
+    * Computes violation of current (unscaled) solution w.r.t. OrigIpoptNLP::orig_x_U() if current NLP is a OrigIpoptNLP.
+    * If current NLP is not an original OrigIpoptNLP, returns zero vector.
     */
-   virtual Number curr_variable_bound_violation();
+   SmartPtr<const Vector> unscaled_curr_orig_x_U_violation();
+   /** Unscaled violation of original variable bounds.
+    *
+    * Norm of unscaled_curr_violation_x_L() and unscaled_curr_violation_x_U().
+    */
+   virtual Number unscaled_curr_orig_bounds_violation(
+      ENormType NormType
+   );
+
+   /** Violation of original variable lower bounds x_L.
+    *
+    * Computes violation of current (scaled) solution w.r.t. OrigIpoptNLP::orig_x_L() if current NLP is a OrigIpoptNLP.
+    * If current NLP is not an original OrigIpoptNLP, returns zero vector.
+    */
+   SmartPtr<const Vector> curr_orig_x_L_violation();
+   /** Violation of original variable upper bounds x_U.
+    *
+    * Computes violation of current (scaled) solution w.r.t. OrigIpoptNLP::orig_x_U() if current NLP is a OrigIpoptNLP.
+    * If current NLP is not an original OrigIpoptNLP, returns zero vector.
+    */
+   SmartPtr<const Vector> curr_orig_x_U_violation();
+   /** Scaled violation of original variable bounds.
+    *
+    * Norm of curr_violation_x_L() and curr_violation_x_U().
+    */
+   virtual Number curr_orig_bounds_violation(
+      ENormType NormType
+   );
    ///@}
 
    /** @name Hessian matrices */
@@ -759,6 +788,15 @@ private:
    CachedResults<Number> curr_barrier_error_cache_;
    CachedResults<Number> curr_primal_dual_system_error_cache_;
    CachedResults<Number> trial_primal_dual_system_error_cache_;
+   ///@}
+
+   /** @name Caches for violation of original bounds */
+   ///@{
+   CachedResults<std::pair<SmartPtr<Vector>, SmartPtr<Vector> > > unscaled_curr_orig_x_LU_viol_cache_;
+   CachedResults<Number> unscaled_curr_orig_bounds_viol_cache_;
+   CachedResults<SmartPtr<Vector> > curr_orig_x_L_viol_cache_;
+   CachedResults<SmartPtr<Vector> > curr_orig_x_U_viol_cache_;
+   CachedResults<Number> curr_orig_bounds_viol_cache_;
    ///@}
 
    /** @name Caches for fraction to the boundary step sizes */

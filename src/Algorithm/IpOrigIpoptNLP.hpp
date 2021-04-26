@@ -197,6 +197,15 @@ public:
       return Px_L_;
    }
 
+   /** Original lower bounds on x
+    *
+    * Returns NULL if bounds are not relaxed.
+    */
+   virtual SmartPtr<const Vector> orig_x_L() const
+   {
+      return orig_x_L_;
+   }
+
    /** Upper bounds on x */
    virtual SmartPtr<const Vector> x_U() const
    {
@@ -207,6 +216,15 @@ public:
    virtual SmartPtr<const Matrix> Px_U() const
    {
       return Px_U_;
+   }
+
+   /** Original upper bounds on x
+    *
+    * Returns NULL if bounds are not relaxed.
+    */
+   virtual SmartPtr<const Vector> orig_x_U() const
+   {
+      return orig_x_U_;
    }
 
    /** Lower bounds on d */
@@ -269,22 +287,6 @@ public:
       const Vector& new_x_U,
       const Vector& new_d_L,
       const Vector& new_d_U
-   );
-
-   /** Method to get scaled bound violation.
-    *
-    * If OrigIpoptNLP relaxed variable bounds (bound_relax_factor > 0), then this function computes the violation of the original scaled bounds for the given scaled point x.
-    */
-   virtual Number GetScaledBoundViolation(
-      const Vector& x
-   );
-
-   /** Method to get unscaled bound violation.
-    *
-    * If OrigIpoptNLP relaxed variable bounds (bound_relax_factor > 0), then this function computes the violation of the original unscaled bounds for the given scaled point x.
-    */
-   virtual Number GetUnscaledBoundViolation(
-      const Vector& x
    );
 
    /** @name Counters for the number of function evaluations. */

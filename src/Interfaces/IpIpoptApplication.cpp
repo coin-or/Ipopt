@@ -648,8 +648,8 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
                            p2ip_cq->curr_nlp_constraint_violation(NORM_MAX),
                            p2ip_cq->unscaled_curr_nlp_constraint_violation(NORM_MAX));
             jnlst_->Printf(J_SUMMARY, J_SOLUTION, "Variable bound violation: %24.16e  %24.16e\n",
-                           p2ip_cq->curr_variable_bound_violation(),
-                           p2ip_cq->unscaled_curr_variable_bound_violation());
+                           p2ip_cq->curr_orig_bounds_violation(NORM_MAX),
+                           p2ip_cq->unscaled_curr_orig_bounds_violation(NORM_MAX));
             jnlst_->Printf(J_SUMMARY, J_SOLUTION, "Complementarity.........: %24.16e  %24.16e\n",
                            p2ip_cq->curr_complementarity(0., NORM_MAX), p2ip_cq->unscaled_curr_complementarity(0., NORM_MAX));
             jnlst_->Printf(J_SUMMARY, J_SOLUTION, "Overall NLP error.......: %24.16e  %24.16e\n\n",

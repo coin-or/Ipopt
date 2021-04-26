@@ -332,16 +332,19 @@ bool OrigIpoptNLP::InitializeStructures(
    d_L->Print(*jnlst_, J_MOREVECTOR, J_INITIALIZATION, "original d_L unscaled");
    d_U->Print(*jnlst_, J_MOREVECTOR, J_INITIALIZATION, "original d_U unscaled");
 
-   SmartPtr<Vector> tmp;
-   tmp = x_L->MakeNewCopy();
-   orig_x_L_ = ConstPtr(tmp);
-   tmp = x_U->MakeNewCopy();
-   orig_x_U_ = ConstPtr(tmp);
+   if( bound_relax_factor_ > 0.0 )
+   {
+      SmartPtr<Vector> tmp;
+      tmp = x_L->MakeNewCopy();
+      orig_x_L_ = ConstPtr(tmp);
+      tmp = x_U->MakeNewCopy();
+      orig_x_U_ = ConstPtr(tmp);
 
-   relax_bounds(-bound_relax_factor_, *x_L);
-   relax_bounds(bound_relax_factor_, *x_U);
-   relax_bounds(-bound_relax_factor_, *d_L);
-   relax_bounds(bound_relax_factor_, *d_U);
+      relax_bounds(-bound_relax_factor_, *x_L);
+      relax_bounds(bound_relax_factor_, *x_U);
+      relax_bounds(-bound_relax_factor_, *d_L);
+      relax_bounds(bound_relax_factor_, *d_U);
+   }
 
    x_L_ = ConstPtr(x_L);
    Px_L_ = ConstPtr(Px_L);
@@ -447,23 +450,22 @@ void OrigIpoptNLP::relax_bounds(
 )
 {
    DBG_START_METH("OrigIpoptNLP::relax_bounds", dbg_verbosity);
-   if( bound_relax_factor != 0. )
-   {
-      SmartPtr<Vector> tmp = bounds.MakeNew();
-      tmp->Copy(bounds);
-      tmp->ElementWiseAbs();
-      tmp->Scal(fabs(bound_relax_factor)); // |relaxfactor|*|bounds|
-      SmartPtr<Vector> ones = bounds.MakeNew();
-      ones->Set(fabs(bound_relax_factor));
-      tmp->ElementWiseMax(*ones);    // |relaxfactor|*max(|bounds|,1)
-      ones->Set(constr_viol_tol_);
-      tmp->ElementWiseMin(*ones);    // min(constr_viol_tol_,|relaxfactor|*max(|bounds|,1))
-      DBG_PRINT((1, "bound_relax_factor = %e constr_viol_tol = %e", bound_relax_factor, constr_viol_tol_));
-      DBG_PRINT_VECTOR(2, "tmp", *tmp);
-      DBG_PRINT_VECTOR(2, "bounds before", bounds);
-      bounds.Axpy(bound_relax_factor < 0.0 ? -1.0 : 1.0, *tmp);
-      DBG_PRINT_VECTOR(2, "bounds after", bounds);
-   }
+   DBG_ASSERT(bound_relax_factor != 0.);  // checked in caller
+
+   SmartPtr<Vector> tmp = bounds.MakeNew();
+   tmp->Copy(bounds);
+   tmp->ElementWiseAbs();
+   tmp->Scal(fabs(bound_relax_factor)); // |relaxfactor|*|bounds|
+   SmartPtr<Vector> ones = bounds.MakeNew();
+   ones->Set(fabs(bound_relax_factor));
+   tmp->ElementWiseMax(*ones);    // |relaxfactor|*max(|bounds|,1)
+   ones->Set(constr_viol_tol_);
+   tmp->ElementWiseMin(*ones);    // min(constr_viol_tol_,|relaxfactor|*max(|bounds|,1))
+   DBG_PRINT((1, "bound_relax_factor = %e constr_viol_tol = %e", bound_relax_factor, constr_viol_tol_));
+   DBG_PRINT_VECTOR(2, "tmp", *tmp);
+   DBG_PRINT_VECTOR(2, "bounds before", bounds);
+   bounds.Axpy(bound_relax_factor < 0.0 ? -1.0 : 1.0, *tmp);
+   DBG_PRINT_VECTOR(2, "bounds after", bounds);
 }
 
 Number OrigIpoptNLP::f(
@@ -919,6 +921,7 @@ void OrigIpoptNLP::FinalizeSolution(
       SmartPtr<Vector> un_x = unscaled_x->MakeNewCopy();
       if( Px_L_->NCols() > 0 )
       {
+         DBG_ASSERT(IsValid(orig_x_L_));
          tmp = orig_x_L_->MakeNewCopy();
          Px_L_->TransMultVector(1., *un_x, 0., *tmp);
          Px_L_->MultVector(-1., *tmp, 1., *un_x);
@@ -927,6 +930,7 @@ void OrigIpoptNLP::FinalizeSolution(
       }
       if( Px_U_->NCols() > 0 )
       {
+         DBG_ASSERT(IsValid(orig_x_U_));
          tmp = orig_x_U_->MakeNewCopy();
          Px_U_->TransMultVector(1., *un_x, 0., *tmp);
          Px_U_->MultVector(-1., *tmp, 1., *un_x);
@@ -977,85 +981,6 @@ void OrigIpoptNLP::AdjustVariableBounds(
    x_U_ = new_x_U.MakeNewCopy();
    d_L_ = new_d_L.MakeNewCopy();
    d_U_ = new_d_U.MakeNewCopy();
-}
-
-Number OrigIpoptNLP::GetScaledBoundViolation(
-   const Vector& x
-)
-{
-   // if we did not relax bounds, then the bound violation must be 0
-   if( bound_relax_factor_ == 0.0 )
-      return 0.0;
-
-   assert(IsValid(orig_x_L_));
-   assert(IsValid(orig_x_U_));
-
-   Number viol = 0.0;
-
-   if( !NLP_scaling()->have_x_scaling() )
-      return GetUnscaledBoundViolation(x);
-
-   // calculate violations of user-specified lower bounds
-   if( Px_L_->NCols() > 0 )
-   {
-      SmartPtr<Vector> x_L = NLP_scaling()->apply_vector_scaling_x_LU_NonConst(*Px_L_, orig_x_L_, *x_space_);
-      SmartPtr<Vector> tmp = orig_x_L_->MakeNew();
-      Px_L_->TransMultVector(-1., x, 0., *tmp);  // get -x in x_L space
-      tmp->Axpy(1.0, *x_L);  // tmp = -x + x_L, so positive entries are violations of lower bounds
-      Number v = tmp->Max();
-      viol = Max(v, 0.0);
-   }
-
-   // calculate violations of user-specified upper bounds
-   if( Px_U_->NCols() > 0 )
-   {
-      SmartPtr<Vector> x_U = NLP_scaling()->apply_vector_scaling_x_LU_NonConst(*Px_U_, orig_x_U_, *x_space_);
-      SmartPtr<Vector> tmp = orig_x_U_->MakeNew();
-      Px_U_->TransMultVector(1., x, 0., *tmp);   // get x in x_U space
-      tmp->Axpy(-1.0, *x_U);  // tmp = x - x_U, so positive entries are violations of upper bounds
-      Number v = tmp->Max();
-      viol = Max(v, 0.0);
-   }
-
-   return viol;
-}
-
-Number OrigIpoptNLP::GetUnscaledBoundViolation(
-   const Vector& x
-)
-{
-   // if we did not relax bounds, then the bound violation must be 0
-   if( bound_relax_factor_ == 0.0 )
-      return 0.0;
-
-   assert(IsValid(orig_x_L_));
-   assert(IsValid(orig_x_U_));
-
-   Number viol = 0.0;
-
-   SmartPtr<const Vector> un_x = get_unscaled_x(x);
-
-   // calculate violations of user-specified lower bounds
-   if( Px_L_->NCols() > 0 )
-   {
-      SmartPtr<Vector> tmp = orig_x_L_->MakeNew();
-      Px_L_->TransMultVector(-1., *un_x, 0., *tmp);  // get -x in x_L space
-      tmp->Axpy(1.0, *orig_x_L_);  // tmp = -x + x_L, so positive entries are violations of lower bounds
-      Number v = tmp->Max();
-      viol = Max(v, 0.0);
-   }
-
-   // calculate violations of user-specified upper bounds
-   if( Px_U_->NCols() > 0 )
-   {
-      SmartPtr<Vector> tmp = orig_x_U_->MakeNew();
-      Px_U_->TransMultVector(1., *un_x, 0., *tmp);   // get x in x_U space
-      tmp->Axpy(-1.0, *orig_x_U_);  // tmp = x - x_U, so positive entries are violations of upper bounds
-      Number v = tmp->Max();
-      viol = Max(v, 0.0);
-   }
-
-   return viol;
 }
 
 SmartPtr<const Vector> OrigIpoptNLP::get_unscaled_x(
