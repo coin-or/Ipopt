@@ -4,12 +4,11 @@
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
-/// @todo use memcpy for various for-loop-copies
-
 #include "IpStdCInterface.h"
 #include "IpStdInterfaceTNLP.hpp"
 #include "IpOptionsList.hpp"
 #include "IpIpoptApplication.hpp"
+#include "IpBlas.hpp"
 
 struct IpoptProblemInfo
 {
@@ -63,31 +62,19 @@ IpoptProblem CreateIpoptProblem(
 
    retval->n   = n;
    retval->x_L = new Number[n];
-   for( Index i = 0; i < n; i++ )
-   {
-      retval->x_L[i] = x_L[i];
-   }
+   Ipopt::IpBlasCopy(n, x_L, 1, retval->x_L, 1);
 
    retval->x_U = new Number[n];
-   for( Index i = 0; i < n; i++ )
-   {
-      retval->x_U[i] = x_U[i];
-   }
+   Ipopt::IpBlasCopy(n, x_U, 1, retval->x_U, 1);
 
    retval->m = m;
    if( m > 0 )
    {
       retval->g_L = new Number[m];
-      for( Index i = 0; i < m; i++ )
-      {
-         retval->g_L[i] = g_L[i];
-      }
+      Ipopt::IpBlasCopy(m, g_L, 1, retval->g_L, 1);
 
       retval->g_U = new Number[m];
-      for( Index i = 0; i < m; i++ )
-      {
-         retval->g_U[i] = g_U[i];
-      }
+      Ipopt::IpBlasCopy(m, g_U, 1, retval->g_U, 1);
    }
    else
    {
@@ -179,13 +166,8 @@ Bool SetIpoptProblemScaling(
    if( x_scaling )
    {
       if( !ipopt_problem->x_scaling )
-      {
          ipopt_problem->x_scaling = new Number[ipopt_problem->n];
-      }
-      for( ::Index i = 0; i < ipopt_problem->n; i++ )
-      {
-         ipopt_problem->x_scaling[i] = x_scaling[i];
-      }
+      Ipopt::IpBlasCopy(ipopt_problem->n, x_scaling, 1, ipopt_problem->x_scaling, 1);
    }
    else
    {
@@ -196,13 +178,8 @@ Bool SetIpoptProblemScaling(
    if( g_scaling )
    {
       if( !ipopt_problem->g_scaling )
-      {
          ipopt_problem->g_scaling = new Number[ipopt_problem->m];
-      }
-      for( ::Index i = 0; i < ipopt_problem->m; i++ )
-      {
-         ipopt_problem->g_scaling[i] = g_scaling[i];
-      }
+      Ipopt::IpBlasCopy(ipopt_problem->m, g_scaling, 1, ipopt_problem->g_scaling, 1);
    }
    else
    {
@@ -249,39 +226,27 @@ enum ApplicationReturnStatus IpoptSolve(
 
    // Copy the starting point information
    Number* start_x = new Number[ipopt_problem->n];
-   for( Index i = 0; i < ipopt_problem->n; ++i )
-   {
-      start_x[i] = x[i];
-   }
+   Ipopt::IpBlasCopy(ipopt_problem->n, x, 1, start_x, 1);
 
    Number* start_lam = NULL;
    if( mult_g )
    {
       start_lam = new Number[ipopt_problem->m];
-      for( Index i = 0; i < ipopt_problem->m; ++i )
-      {
-         start_lam[i] = mult_g[i];
-      }
+      Ipopt::IpBlasCopy(ipopt_problem->m, mult_g, 1, start_lam, 1);
    }
 
    Number* start_z_L = NULL;
    if( mult_x_L )
    {
       start_z_L = new Number[ipopt_problem->n];
-      for( Index i = 0; i < ipopt_problem->n; ++i )
-      {
-         start_z_L[i] = mult_x_L[i];
-      }
+      Ipopt::IpBlasCopy(ipopt_problem->n, mult_x_L, 1, start_z_L, 1);
    }
 
    Number* start_z_U = NULL;
    if( mult_x_U )
    {
       start_z_U = new Number[ipopt_problem->n];
-      for( Index i = 0; i < ipopt_problem->n; ++i )
-      {
-         start_z_U[i] = mult_x_U[i];
-      }
+      Ipopt::IpBlasCopy(ipopt_problem->n, mult_x_U, 1, start_z_U, 1);
    }
 
    Ipopt::ApplicationReturnStatus status;
