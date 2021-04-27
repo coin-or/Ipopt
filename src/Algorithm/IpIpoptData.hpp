@@ -159,6 +159,11 @@ public:
    void set_trial(
       SmartPtr<IteratesVector>& trial
    );
+   /* ToDo: I may need to add versions of set_trial like the
+    *  following, but I am not sure
+    */
+   // void set_trial(const SmartPtr<IteratesVector>& trial_iterates);
+   // void set_trial(SmartPtr<const IteratesVector>& trial_iterates);
 
    /** Set the values of the primal trial variables (x and s) from
     *  provided Step with step length alpha.
@@ -189,11 +194,6 @@ public:
       const Vector& delta_v_U
    );
 
-   /** ToDo: I may need to add versions of set_trial like the
-    *  following, but I am not sure
-    */
-   // void set_trial(const SmartPtr<IteratesVector>& trial_iterates);
-   // void set_trial(SmartPtr<const IteratesVector>& trial_iterates);
    /** get the current delta */
    inline SmartPtr<const IteratesVector> delta() const;
 

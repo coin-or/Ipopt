@@ -20,8 +20,8 @@ PiecewisePenalty::PiecewisePenalty(
    Index dim
 )
    : dim_(dim),
-     min_piece_penalty_(0),  // @todo make it regular option here or elsewhere?
-     max_piece_number_(100)  // @todo make it regular option here or elsewhere?
+     min_piece_penalty_(0),  // ToDo make it regular option here or elsewhere?
+     max_piece_number_(100)  // ToDo make it regular option here or elsewhere?
 {
 }
 

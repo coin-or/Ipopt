@@ -12,9 +12,7 @@
 #include "IpSumSymMatrix.hpp"
 #include "IpDiagMatrix.hpp"
 #include "IpIdentityMatrix.hpp"
-// ToDo: Remove below here - for debug only
-#include "IpTripletHelper.hpp"
-// ToDo: Remove above here
+//#include "IpTripletHelper.hpp"
 
 #include <cstdio>
 
@@ -172,10 +170,9 @@ ESymSolverStatus StdAugSystemSolver::MultiSolve(
    }
 
    augmented_system_->Print(Jnlst(), J_MATRIX, J_LINEAR_ALGEBRA, "KKT");
-#ifndef HAVE_MPI
+#if 0 // debug code
    if( Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA) )
    {
-      // ToDo: remove below here - for debug only
       Index dbg_nz = TripletHelper::GetNumberEntries(*augmented_system_);
       Index* dbg_iRows = new Index[dbg_nz];
       Index* dbg_jCols = new Index[dbg_nz];
@@ -195,7 +192,6 @@ ESymSolverStatus StdAugSystemSolver::MultiSolve(
       dbg_jCols = NULL;
       delete[] dbg_values;
       dbg_values = NULL;
-      // ToDo: remove above here
    }
 #endif
 

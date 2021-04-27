@@ -295,15 +295,13 @@ void ExpansionMatrix::SinvBlrmZMTdBrImpl(
          {
             for( Index i = 0; i < NCols(); i++ )
             {
-               // ToDo could treat val == 0 extra
-               vals_X[i] = (scalar_R) / vals_S[i];
+               vals_X[i] = scalar_R / vals_S[i];
             }
          }
          else
          {
             for( Index i = 0; i < NCols(); i++ )
             {
-               // ToDo could treat val == 0 extra
                vals_X[i] = (scalar_R + val * vals_D[exp_pos[i]]) / vals_S[i];
             }
          }

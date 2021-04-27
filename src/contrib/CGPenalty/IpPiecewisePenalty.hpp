@@ -44,7 +44,7 @@ public:
    /** Destructor */
    ~PiecewisePenalty()
    {
-      // @todo figure out if that here is necessary
+      // ToDo figure out if that here is necessary
       //    Clear();
    }
    ///@}

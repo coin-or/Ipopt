@@ -265,7 +265,6 @@ bool MinC_1NrmRestorationPhase::PerformRestoration()
    else if( resto_status == STOP_AT_TINY_STEP || resto_status == STOP_AT_ACCEPTABLE_POINT )
    {
       Number orig_primal_inf = IpCq().curr_primal_infeasibility(NORM_MAX);
-      // ToDo make the factor in following line an option
       if( orig_primal_inf <= resto_failure_feasibility_threshold_ )
       {
          Jnlst().Printf(J_WARNING, J_LINE_SEARCH,

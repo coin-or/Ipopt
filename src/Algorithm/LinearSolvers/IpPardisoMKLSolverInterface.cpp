@@ -543,7 +543,6 @@ ESymSolverStatus PardisoMKLSolverInterface::Factorization(
       else if( ERROR == -4 )
       {
          // I think this means that the matrix is singular
-         // OLAF said that this will never happen (ToDo)
          return SYMSOLVER_SINGULAR;
       }
       else if( ERROR != 0 )

@@ -56,8 +56,7 @@ void LibraryLoader::loadLibrary()
    }
 
 #elif defined(HAVE_DLFCN_H)
-   // TODO reTRY with "| RTLD_GLOBAL" if failing
-   // TODO switch to RTLD_LAZY ?
+   // ToDo switch to RTLD_LAZY for performance?
    libhandle = dlopen(libname.c_str(), RTLD_NOW);
    if( libhandle == NULL )
       THROW_EXCEPTION(DYNAMIC_LIBRARY_FAILURE, dlerror());

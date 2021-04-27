@@ -98,7 +98,7 @@ private:
 
    /** Indicates whether problem can be expected to be infeasible.
     *
-    *  This will request the to set kappa_resto to a small value for
+    *  This will request to set kappa_resto to a small value for
     *  the first time the restoration phase is called.  (ToDo)
     */
    bool expect_infeasible_problem_;

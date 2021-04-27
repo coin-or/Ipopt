@@ -121,8 +121,8 @@ void AdaptiveMuUpdate::RegisterOptions(
       "Maximum width of margin in obj-constr-filter adaptive globalization strategy.",
       0.0, true,
       1.0,
-      "",
-      true); // ToDo Detailed description later
+      "", // ToDo Detailed description
+      true);
    roptions->AddBoolOption(
       "adaptive_mu_restore_previous_iterate",
       "Indicates if the previous accepted iterate should be restored if the monotone mode is entered.",

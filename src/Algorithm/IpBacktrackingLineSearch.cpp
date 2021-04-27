@@ -577,7 +577,7 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
                }
                else
                {
-                  // ToDo does that happen too often?
+                  // ToDo this happens too often, see various issues
                   Jnlst().Printf(J_STRONGWARNING, J_LINE_SEARCH,
                                  "Restoration phase is called at point that is almost feasible,\n  with constraint violation %e. Abort.\n",
                                  IpCq().curr_constraint_violation());

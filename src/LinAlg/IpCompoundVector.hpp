@@ -49,7 +49,7 @@ public:
    );
 
    /** Default destructor */
-   virtual ~CompoundVector();
+   virtual ~CompoundVector() { }
    ///@}
 
    /** Method for setting the pointer for a component that is a const Vector */

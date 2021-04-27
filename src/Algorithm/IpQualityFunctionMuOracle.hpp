@@ -113,7 +113,6 @@ private:
    /** Auxiliary function for computing the average complementarity
     *  at a point, given step sizes and step.
     */
-   // ToDo Replace pointers by references
    Number CalculateQualityFunction(
       Number        sigma,
       const Vector& step_aff_x_L,

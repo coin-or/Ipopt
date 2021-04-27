@@ -593,7 +593,7 @@ SmartPtr<const Matrix> StandardScalingBase::apply_jac_c_scaling(
    {
       SmartPtr<ScaledMatrix> ret = scaled_jac_c_space_->MakeNewScaledMatrix(false);
       ret->SetUnscaledMatrix(matrix);
-      return GetRawPtr(ret);
+      return ConstPtr(ret);
    }
    else
    {
@@ -612,7 +612,7 @@ SmartPtr<const Matrix> StandardScalingBase::apply_jac_d_scaling(
    {
       SmartPtr<ScaledMatrix> ret = scaled_jac_d_space_->MakeNewScaledMatrix(false);
       ret->SetUnscaledMatrix(matrix);
-      return GetRawPtr(ret);
+      return ConstPtr(ret);
    }
    else
    {
@@ -631,7 +631,7 @@ SmartPtr<const SymMatrix> StandardScalingBase::apply_hessian_scaling(
    {
       SmartPtr<SymScaledMatrix> ret = scaled_h_space_->MakeNewSymScaledMatrix(false);
       ret->SetUnscaledMatrix(matrix);
-      return GetRawPtr(ret);
+      return ConstPtr(ret);
    }
    else
    {

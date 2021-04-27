@@ -3154,9 +3154,7 @@ Number IpoptCalculatedQuantities::unscaled_curr_nlp_error()
       result = unscaled_curr_dual_infeasibility(NORM_MAX);
       // Constraint violation
       result = Max(result, unscaled_curr_nlp_constraint_violation(NORM_MAX));
-      // Complementarity (ToDo use unscaled?)
-      DBG_PRINT((1, "curr_complementarity(mu_target_, NORM_MAX) = %8.2e\n",
-                 curr_complementarity(mu_target_, NORM_MAX)));
+      // Complementarity
       result = Max(result, unscaled_curr_complementarity(mu_target_, NORM_MAX));
 
       unscaled_curr_nlp_error_cache_.AddCachedResult(result, tdeps);

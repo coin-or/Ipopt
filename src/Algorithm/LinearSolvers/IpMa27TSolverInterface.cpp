@@ -419,26 +419,33 @@ ESymSolverStatus Ma27TSolverInterface::SymbolicFactorization(
       return SYMSOLVER_FATAL_ERROR;
    }
 
-   // ToDo: try and catch
-   // Reserve memory for iw_ for later calls, based on suggested size
-   delete[] iw_;
-   iw_ = NULL;
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                  "Size of integer work space recommended by MA27 is %d\n", nirnec);
-   liw_ = (ipfint) (liw_init_factor_ * (Number) (nirnec));
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                  "Setting integer work space size to %d\n", liw_);
-   iw_ = new ipfint[liw_];
+   try
+   {
+      // Reserve memory for iw_ for later calls, based on suggested size
+      delete[] iw_;
+      iw_ = NULL;
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+         "Size of integer work space recommended by MA27 is %d\n", nirnec);
+      liw_ = (ipfint) (liw_init_factor_ * (Number) (nirnec));
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+         "Setting integer work space size to %d\n", liw_);
+      iw_ = new ipfint[liw_];
 
-   // Reserve memory for a_
-   delete[] a_;
-   a_ = NULL;
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                  "Size of doublespace recommended by MA27 is %d\n", nrlnec);
-   la_ = Max(nonzeros_, (ipfint) (la_init_factor_ * (Number) (nrlnec)));
-   Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                  "Setting double work space size to %d\n", la_);
-   a_ = new Number[la_];
+      // Reserve memory for a_
+      delete[] a_;
+      a_ = NULL;
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+         "Size of doublespace recommended by MA27 is %d\n", nrlnec);
+      la_ = Max(nonzeros_, (ipfint) (la_init_factor_ * (Number) (nrlnec)));
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+         "Setting double work space size to %d\n", la_);
+      a_ = new Number[la_];
+   }
+   catch( const std::bad_alloc& e )
+   {
+      Jnlst().Printf(J_STRONGWARNING, J_LINEAR_ALGEBRA, "Failed to allocate more working space memory for MA27\n");
+      throw e; // will be caught in IpIpoptApplication
+   }
 
    if( HaveIpData() )
    {

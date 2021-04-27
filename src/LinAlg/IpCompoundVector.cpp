@@ -49,11 +49,6 @@ CompoundVector::CompoundVector(
    }
 }
 
-CompoundVector::~CompoundVector()
-{
-   // ToDo: Do we need an empty here?
-}
-
 void CompoundVector::SetComp(
    Index         icomp,
    const Vector& vec
