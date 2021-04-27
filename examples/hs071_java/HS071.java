@@ -315,6 +315,8 @@ public class HS071 extends Ipopt
       double x[] = new double[n];
       double z_L[] = new double[n];
       double z_U[] = new double[n];
+      double x_L_viol[] = new double[n];
+      double x_U_viol[] = new double[n];
       double compl_x_L[] = new double[n];
       double compl_x_U[] = new double[n];
       double grad_lag_x[] = new double[n];
@@ -324,10 +326,10 @@ public class HS071 extends Ipopt
       double compl_g[] = new double[m];
 
       boolean have_iter = get_curr_iterate(ip_data, ip_cq, false, n, x, z_L, z_U, m, g, lambda);
-      boolean have_viol = get_curr_violations(ip_data, ip_cq, false, n, compl_x_L, compl_x_U, grad_lag_x, m, constr_viol, compl_g);
+      boolean have_viol = get_curr_violations(ip_data, ip_cq, false, n, x_L_viol, x_U_viol, compl_x_L, compl_x_U, grad_lag_x, m, constr_viol, compl_g);
 
       System.out.println("Current iterate at iteration " + iter + ":");
-      System.out.println("  x z_L z_U compl_x_L compl_x_U grad_lag_x");
+      System.out.println("  x z_L z_U bound_viol compl_x_L compl_x_U grad_lag_x");
       for( int i = 0; i < n; ++i )
       {
          if( have_iter )
@@ -335,9 +337,9 @@ public class HS071 extends Ipopt
          else
             System.out.print("  n/a n/a n/a");
          if( have_viol )
-            System.out.println(" " + compl_x_L[i] + " " + compl_x_U[i] + " " + grad_lag_x[i]);
+            System.out.println(" " + Math.max(x_L_viol[i],x_U_viol[i]) + " " + compl_x_L[i] + " " + compl_x_U[i] + " " + grad_lag_x[i]);
          else
-            System.out.println("  n/a n/a n/a");
+            System.out.println("  n/a/ n/a n/a n/a");
       }
       System.out.println("  g(x) lambda constr_viol compl_g");
       for( int i = 0; i < m; ++i )

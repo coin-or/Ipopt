@@ -116,7 +116,7 @@ commit history.
           by at most the value of constr_viol_tol.
           The solve summary now reports the violation of original bounds
           and SolveStatistics::(Scaled)Infeasibilities() has been extended
-          to report the violation of original variable bounds.
+          to report the violation of original variable bounds. [#312]
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]

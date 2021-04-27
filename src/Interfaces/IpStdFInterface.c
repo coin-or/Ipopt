@@ -551,10 +551,13 @@ IPOPTLIB_EXPORT ipfint F77_FUNC(ipgetcurriterate, IPGETCURRITERATE)(
 IPOPTLIB_EXPORT ipfint F77_FUNC(ipgetcurrviolations, IPGETCURRVIOLATIONS)(
    fptr*      FProblem,
    ipfint*    scaled,
+   ipfint*    get_bound_violation,
    ipfint*    get_compl,
    ipfint*    get_grad_lag_x,
    ipfint*    get_nlp_constraint_violation,
    ipfint*    n,
+   ipnumber*  X_L_VIOLATION,
+   ipnumber*  X_U_VIOLATION,
    ipnumber*  COMPL_X_L,
    ipnumber*  COMPL_X_U,
    ipnumber*  GRAD_LAG_X,
@@ -565,6 +568,12 @@ IPOPTLIB_EXPORT ipfint F77_FUNC(ipgetcurrviolations, IPGETCURRVIOLATIONS)(
 {
    FUserData* fuser_data = (FUserData*) *FProblem;
    return GetIpoptCurrentViolations(fuser_data->Problem, *scaled != 0,
-      *n, *get_compl ? COMPL_X_L : NULL, *get_compl ? COMPL_X_U : NULL, *get_grad_lag_x ? GRAD_LAG_X : NULL,
-      *m, *get_nlp_constraint_violation ? NLP_CONSTRAINT_VIOLATION : NULL, *get_compl ? COMPL_G : NULL) ? OKRetVal : NotOKRetVal;
+      *n,
+      *get_bound_violation ? X_L_VIOLATION : NULL, *get_bound_violation ? X_U_VIOLATION : NULL,
+      *get_compl ? COMPL_X_L : NULL, *get_compl ? COMPL_X_U : NULL,
+      *get_grad_lag_x ? GRAD_LAG_X : NULL,
+      *m,
+      *get_nlp_constraint_violation ? NLP_CONSTRAINT_VIOLATION : NULL,
+      *get_compl ? COMPL_G : NULL)
+      ? OKRetVal : NotOKRetVal;
 }

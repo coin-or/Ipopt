@@ -329,6 +329,84 @@ SmartPtr<const DenseVector> curr_y_d(
 }
 
 static
+SmartPtr<const DenseVector> curr_x_L_viol(
+   const IpoptData*           ip_data,
+   IpoptCalculatedQuantities* ip_cq,
+   OrigIpoptNLP*              orignlp,
+   RestoIpoptNLP*             restonlp,
+   bool                       scaled
+   )
+{
+   SmartPtr<const Vector> x_L_viol;
+
+   if( restonlp == NULL )
+   {
+      if( scaled )
+         x_L_viol = ip_cq->curr_orig_x_L_violation();
+      else
+         x_L_viol = ip_cq->unscaled_curr_orig_x_L_violation();
+   }
+   else
+   {
+      // get x from the compound vector (x,p,n)
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->x())) != NULL);
+      const CompoundVector* c_vec = static_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->x()));
+      SmartPtr<const Vector> x = c_vec->GetComp(0);
+
+      if( scaled )
+         x_L_viol = restonlp->OrigIpCq().orig_x_L_violation(*x);
+      else
+      {
+         x = orignlp->NLP_scaling()->unapply_vector_scaling_x(x);
+         x_L_viol = restonlp->OrigIpCq().unscaled_orig_x_L_violation(*x);
+      }
+   }
+   DBG_ASSERT(IsValid(x_L_viol));
+
+   DBG_ASSERT(dynamic_cast<const DenseVector*>(GetRawPtr(x_L_viol)) != NULL);
+   return static_cast<const DenseVector*>(GetRawPtr(x_L_viol));
+}
+
+static
+SmartPtr<const DenseVector> curr_x_U_viol(
+   const IpoptData*           ip_data,
+   IpoptCalculatedQuantities* ip_cq,
+   OrigIpoptNLP*              orignlp,
+   RestoIpoptNLP*             restonlp,
+   bool                       scaled
+   )
+{
+   SmartPtr<const Vector> x_U_viol;
+
+   if( restonlp == NULL )
+   {
+      if( scaled )
+         x_U_viol = ip_cq->curr_orig_x_U_violation();
+      else
+         x_U_viol = ip_cq->unscaled_curr_orig_x_U_violation();
+   }
+   else
+   {
+      // get x from the compound vector (x,p,n)
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->x())) != NULL);
+      const CompoundVector* c_vec = static_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->x()));
+      SmartPtr<const Vector> x = c_vec->GetComp(0);
+
+      if( scaled )
+         x_U_viol = restonlp->OrigIpCq().orig_x_U_violation(*x);
+      else
+      {
+         x = orignlp->NLP_scaling()->unapply_vector_scaling_x(x);
+         x_U_viol = restonlp->OrigIpCq().unscaled_orig_x_U_violation(*x);
+      }
+   }
+   DBG_ASSERT(IsValid(x_U_viol));
+
+   DBG_ASSERT(dynamic_cast<const DenseVector*>(GetRawPtr(x_U_viol)) != NULL);
+   return static_cast<const DenseVector*>(GetRawPtr(x_U_viol));
+}
+
+static
 SmartPtr<const DenseVector> curr_compl_x_L(
    const IpoptData*           ip_data,
    IpoptCalculatedQuantities* ip_cq,
@@ -629,6 +707,8 @@ bool TNLP::get_curr_violations(
    IpoptCalculatedQuantities* ip_cq,
    bool                       scaled,
    Index                      n,
+   Number*                    x_L_violation,
+   Number*                    x_U_violation,
    Number*                    compl_x_L,
    Number*                    compl_x_U,
    Number*                    grad_lag_x,
@@ -668,7 +748,7 @@ bool TNLP::get_curr_violations(
       return false;
 
    tnlp_adapter->GetFullDimensions(n_full, m_full);
-   if( n != n_full && (compl_x_L != NULL || compl_x_U != NULL || grad_lag_x != NULL) )
+   if( n != n_full && (x_L_violation != NULL || x_U_violation != NULL || compl_x_L != NULL || compl_x_U != NULL || grad_lag_x != NULL) )
       THROW_EXCEPTION(IpoptException, "Incorrect dimension of x given to TNLP::get_curr_violations().\n");
    if( m != m_full && (nlp_constraint_violation != NULL || compl_g != NULL) )
       THROW_EXCEPTION(IpoptException, "Incorrect dimension of g(x) given to TNLP::get_curr_violations().\n");
@@ -677,6 +757,31 @@ bool TNLP::get_curr_violations(
    Index* x_fixed_map;
    TNLPAdapter::FixedVariableTreatmentEnum fixed_variable_treatment;
    tnlp_adapter->GetFixedVariables(n_x_fixed, x_fixed_map, fixed_variable_treatment);
+
+   if( x_L_violation != NULL || x_U_violation != NULL )
+   {
+      tnlp_adapter->ResortBounds(*curr_x_L_viol(ip_data, ip_cq, orignlp, restonlp, scaled), x_L_violation,
+         *curr_x_U_viol(ip_data, ip_cq, orignlp, restonlp, scaled), x_U_violation);
+
+      if( n_x_fixed > 0 && fixed_variable_treatment == TNLPAdapter::MAKE_CONSTRAINT )
+      {
+         // if fixed vars are treated as parameters, then they have no bounds in the OrigIpoptNLP
+         // but bound violations should correspond to violation at end of c(x)=0
+         SmartPtr<const DenseVector> c = curr_c(ip_data, ip_cq, orignlp, restonlp, scaled);
+         for( int i = 0; i < n_x_fixed; ++i )
+         {
+            Number viol;
+            if( c->IsHomogeneous() )
+               viol = c->Scalar();
+            else
+               viol = c->Values()[c->Dim()-n_x_fixed+i];
+            if( x_L_violation != NULL )
+               x_L_violation[x_fixed_map[i]] = Max(0., -viol);  // x - xfix < 0
+            if( x_U_violation != NULL )
+               x_U_violation[x_fixed_map[i]] = Max(0., viol);   // x - xfix > 0
+         }
+      }
+   }
 
    if( compl_x_L != NULL || compl_x_U != NULL )
    {
@@ -707,8 +812,10 @@ bool TNLP::get_curr_violations(
          Number* yc_neg_val = static_cast<DenseVector*>(GetRawPtr(yc_neg))->ExpandedValues();
          for( int i = 0; i < n_x_fixed; ++i )
          {
-            compl_x_L[x_fixed_map[i]] = -yc_neg_val[yc_neg->Dim()-n_x_fixed+i];
-            compl_x_U[x_fixed_map[i]] = -yc_pos_val[yc_pos->Dim()-n_x_fixed+i];
+            if( compl_x_L != NULL )
+               compl_x_L[x_fixed_map[i]] = -yc_neg_val[yc_neg->Dim()-n_x_fixed+i];
+            if( compl_x_U != NULL )
+               compl_x_U[x_fixed_map[i]] = -yc_pos_val[yc_pos->Dim()-n_x_fixed+i];
          }
       }
    }

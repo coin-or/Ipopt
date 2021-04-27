@@ -377,15 +377,21 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) GetIpoptCurrentIterate(
  * The method expects the number of variables (dimension of x), number of constraints (dimension of g(x)),
  * and allocated arrays of appropriate lengths as input.
  *
- * The method makes the vectors behind (unscaled_)curr_nlp_constraint_violation(), (unscaled_)curr_dual_infeasibility(), (unscaled_)curr_complementarity()
- * from ip_cq of the internal NLP representation available into the form used by the TNLP.
+ * The method makes the vectors behind (unscaled_)curr_orig_bounds_violation(), (unscaled_)curr_nlp_constraint_violation(), (unscaled_)curr_dual_infeasibility(),
+ * (unscaled_)curr_complementarity() from ip_cq of the internal NLP representation available into the form used by the TNLP.
  * If Ipopt is in restoration mode, it maps the current iterate of restoration %NLP (see RestoIpoptNLP) back to the original TNLP.
  *
  * @note If in restoration phase, then requesting grad_lag_x can trigger a call to Eval_F_CB.
  *
+ * @note Ipopt by default relaxes variable bounds (option bound_relax_factor > 0.0).
+ *   x_L_violation and x_U_violation report the violation of a solution w.r.t. the original unrelaxed bounds.
+ *   However, compl_x_L and compl_x_U use the relaxed variable bounds to calculate the complementarity.
+ *
  * @param ipopt_problem (in) Problem that is currently optimized.
  * @param scaled     (in)  whether to retrieve scaled or unscaled violations
  * @param n          (in)  the number of variables \f$x\f$ in the problem; can be arbitrary if skipping compl_x_L, compl_x_U, and grad_lag_x
+ * @param x_L_violation (out) buffer to store violation of original lower bounds on variables (\f$max(orig_x_L-x,0)\f$), must have length at least n; pass NULL to skip retrieving orig_x_L
+ * @param x_U_violation (out) buffer to store violation of original upper bounds on variables (\f$max(x-orig_x_U,0)\f$), must have length at least n; pass NULL to skip retrieving orig_x_U
  * @param compl_x_L  (out) buffer to store violation of complementarity for lower bounds on variables (\f$(x-x_L)z_L\f$), must have length at least n; pass NULL to skip retrieving compl_x_L
  * @param compl_x_U  (out) buffer to store violation of complementarity for upper bounds on variables (\f$(x_U-x)z_U\f$), must have length at least n; pass NULL to skip retrieving compl_x_U
  * @param grad_lag_x (out) buffer to store gradient of Lagrangian w.r.t. variables \f$x\f$, must have length at least n; pass NULL to skip retrieving grad_lag_x
@@ -399,6 +405,8 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) GetIpoptCurrentViolations(
    IpoptProblem  ipopt_problem,
    Bool          scaled,
    Index         n,
+   Number*       x_L_violation,
+   Number*       x_U_violation,
    Number*       compl_x_L,
    Number*       compl_x_U,
    Number*       grad_lag_x,

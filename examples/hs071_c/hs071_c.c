@@ -503,6 +503,8 @@ Bool intermediate_cb(
    Bool have_viol;
 
    Number x[4];
+   Number x_L_viol[4];
+   Number x_U_viol[4];
    Number z_L[4];
    Number z_U[4];
    Number compl_x_L[4];
@@ -517,10 +519,10 @@ Bool intermediate_cb(
    IpoptProblem nlp = ((struct MyUserData*)user_data)->nlp;
 
    have_iter = GetIpoptCurrentIterate(nlp, FALSE, 4, x, z_L, z_U, 2, g, lambda);
-   have_viol = GetIpoptCurrentViolations(nlp, FALSE, 4, compl_x_L, compl_x_U, grad_lag_x, 2, constraint_violation, compl_g);
+   have_viol = GetIpoptCurrentViolations(nlp, FALSE, 4, x_L_viol, x_U_viol, compl_x_L, compl_x_U, grad_lag_x, 2, constraint_violation, compl_g);
 
    printf("Current iterate at iteration %d:\n", iter_count);
-   printf("  %-12s %-12s %-12s %-12s %-12s %-12s\n", "x", "z_L", "z_U", "compl_x_L", "compl_x_U", "grad_lag_x");
+   printf("  %-12s %-12s %-12s %-12s %-12s %-12s %-12s\n", "x", "z_L", "z_U", "bound_viol", "compl_x_L", "compl_x_U", "grad_lag_x");
    for( int i = 0; i < 4; ++i )
    {
       if( have_iter )
@@ -528,9 +530,9 @@ Bool intermediate_cb(
       else
          printf("  %-12s %-12s %-12s", "n/a", "n/a", "n/a");
       if( have_viol )
-         printf(" %-12g %-12g %-12g\n", compl_x_L[i], compl_x_U[i], grad_lag_x[i]);
+         printf(" %-12g %-12g %-12g %-12g\n", x_L_viol[i] > x_U_viol[i] ? x_L_viol[i] : x_U_viol[i], compl_x_L[i], compl_x_U[i], grad_lag_x[i]);
       else
-         printf(" %-12s %-12s %-12s\n", "n/a", "n/a", "n/a");
+         printf(" %-12s %-12s %-12s %-12s\n", "n/a", "n/a", "n/a", "n/a");
    }
 
    printf("  %-12s %-12s %-12s %-12s\n", "g(x)", "lambda", "constr_viol", "compl_g");

@@ -418,8 +418,8 @@ C
 C
 C     Get violations and print
 C
-      IERR = IPGETCURRVIOLATIONS(IDAT, 0, 1, 1, 1, 4,
-     1   COMPL_X_L, COMPL_X_U, GRAD_LAG_X, 2, CONS_VIOL, COMPL_G)
+      IERR = IPGETCURRVIOLATIONS(IDAT, 0, 0, 1, 1, 1, 4,
+     1   0, 0, COMPL_X_L, COMPL_X_U, GRAD_LAG_X, 2, CONS_VIOL, COMPL_G)
       if ( IERR.eq.0 ) then
          do i = 1, 4
             write(*,*) 'COMPL_X_L, COMPL_X_U, GRAD_LAG_X (',i,') = ',

@@ -930,6 +930,8 @@ extern "C"
       jlong        jip_cq,
       jboolean     jscaled,
       jint         jn,
+      jnumberArray jx_L_violation,
+      jnumberArray jx_U_violation,
       jnumberArray jcompl_x_L,
       jnumberArray jcompl_x_U,
       jnumberArray jgrad_lag_x,
@@ -944,12 +946,18 @@ extern "C"
       int n = jn;
       int m = jm;
 
+      Number* x_L_violation = NULL;
+      Number* x_U_violation = NULL;
       Number* compl_x_L = NULL;
       Number* compl_x_U = NULL;
       Number* grad_lag_x = NULL;
       Number* nlp_constraint_violation = NULL;
       Number* compl_g = NULL;
 
+      if( jx_L_violation != NULL )
+         x_L_violation = new Number[n];
+      if( jx_U_violation != NULL )
+         x_U_violation = new Number[n];
       if( jcompl_x_L != NULL )
          compl_x_L = new Number[n];
       if( jcompl_x_U != NULL )
@@ -961,9 +969,13 @@ extern "C"
       if( jcompl_g != NULL )
          compl_g = new Number[m];
 
-      bool ok = problem->get_curr_violations(ip_data, ip_cq, jscaled, n, compl_x_L, compl_x_U, grad_lag_x, m, nlp_constraint_violation, compl_g);
+      bool ok = problem->get_curr_violations(ip_data, ip_cq, jscaled, n, x_L_violation, x_U_violation, compl_x_L, compl_x_U, grad_lag_x, m, nlp_constraint_violation, compl_g);
       if( ok )
       {
+         if( jx_L_violation != NULL )
+            env->SetNumberArrayRegion(jx_L_violation, 0, n, const_cast<Number*>(x_L_violation));
+         if( jx_U_violation != NULL )
+            env->SetNumberArrayRegion(jx_U_violation, 0, n, const_cast<Number*>(x_U_violation));
          if( jcompl_x_L != NULL )
             env->SetNumberArrayRegion(jcompl_x_L, 0, n, const_cast<Number*>(compl_x_L));
          if( jcompl_x_U != NULL )
@@ -981,6 +993,8 @@ extern "C"
       delete[] grad_lag_x;
       delete[] compl_x_U;
       delete[] compl_x_L;
+      delete[] x_U_violation;
+      delete[] x_L_violation;
 
       return ok;
    }

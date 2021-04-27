@@ -216,6 +216,8 @@ public:
    bool get_curr_violations(
       bool                       scaled,
       Index                      n,
+      Number*                    x_L_violation,
+      Number*                    x_U_violation,
       Number*                    compl_x_L,
       Number*                    compl_x_U,
       Number*                    grad_lag_x,
@@ -224,7 +226,7 @@ public:
       Number*                    compl_g
       ) const
    {
-      return TNLP::get_curr_violations(ip_data_, ip_cq_, scaled, n, compl_x_L, compl_x_U, grad_lag_x, m, nlp_constraint_violation, compl_g);
+      return TNLP::get_curr_violations(ip_data_, ip_cq_, scaled, n, x_L_violation, x_U_violation, compl_x_L, compl_x_U, grad_lag_x, m, nlp_constraint_violation, compl_g);
    }
 
 private:

@@ -337,6 +337,8 @@ Bool GetIpoptCurrentViolations(
    IpoptProblem  ipopt_problem,
    Bool          scaled,
    Index         n,
+   Number*       x_L_violation,
+   Number*       x_U_violation,
    Number*       compl_x_L,
    Number*       compl_x_U,
    Number*       grad_lag_x,
@@ -345,5 +347,5 @@ Bool GetIpoptCurrentViolations(
    Number*       compl_g
 )
 {
-   return (Bool) ipopt_problem->tnlp->get_curr_violations(scaled != 0, n, compl_x_L, compl_x_U, grad_lag_x, m, nlp_constraint_violation, compl_g);
+   return (Bool) ipopt_problem->tnlp->get_curr_violations(scaled != 0, n, x_L_violation, x_U_violation, compl_x_L, compl_x_U, grad_lag_x, m, nlp_constraint_violation, compl_g);
 }

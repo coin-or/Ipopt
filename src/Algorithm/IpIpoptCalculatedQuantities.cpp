@@ -1577,6 +1577,74 @@ Number IpoptCalculatedQuantities::unscaled_curr_nlp_constraint_violation(
    return result;
 }
 
+SmartPtr<Vector> IpoptCalculatedQuantities::unscaled_orig_x_L_violation(
+   const Vector& x
+   )
+{
+   DBG_START_METH("IpoptCalculatedQuantities::unscaled_orig_x_L_violation()", dbg_verbosity);
+
+   SmartPtr<const Vector> orig_x_L;
+   SmartPtr<Vector> viol_L;
+
+   OrigIpoptNLP* orignlp = dynamic_cast<OrigIpoptNLP*>(GetRawPtr(ip_nlp_));
+   if( orignlp != NULL )
+      orig_x_L = orignlp->orig_x_L();
+
+   if( !IsValid(orig_x_L) || ip_nlp_->Px_L()->NCols() == 0 )
+   {
+      // not OrigIpoptNLP, bounds not relaxed, or no lower bounds
+      viol_L = ip_nlp_->x_L()->MakeNew();
+      viol_L->Set(0.0);
+   }
+   else
+   {
+      viol_L = orig_x_L->MakeNew();
+      ip_nlp_->Px_L()->TransMultVector(-1., x, 0., *viol_L);  // get -x in x_L space
+      viol_L->Axpy(1.0, *orig_x_L);  // tmp = -x + x_L, so positive entries are violations of lower bounds
+
+      // set negative entries to 0
+      SmartPtr<Vector> zero = viol_L->MakeNew();
+      zero->Set(0.);
+      viol_L->ElementWiseMax(*zero);
+   }
+
+   return viol_L;
+}
+
+SmartPtr<Vector> IpoptCalculatedQuantities::unscaled_orig_x_U_violation(
+   const Vector& x
+   )
+{
+   DBG_START_METH("IpoptCalculatedQuantities::unscaled_orig_x_U_violation()", dbg_verbosity);
+
+   SmartPtr<const Vector> orig_x_U;
+   SmartPtr<Vector> viol_U;
+
+   OrigIpoptNLP* orignlp = dynamic_cast<OrigIpoptNLP*>(GetRawPtr(ip_nlp_));
+   if( orignlp != NULL )
+      orig_x_U = orignlp->orig_x_U();
+
+   if( !IsValid(orig_x_U) || ip_nlp_->Px_U()->NCols() == 0 )
+   {
+      // not OrigIpoptNLP, bounds not relaxed, or no lower bounds
+      viol_U = ip_nlp_->x_U()->MakeNew();
+      viol_U->Set(0.0);
+   }
+   else
+   {
+      viol_U = orig_x_U->MakeNew();
+      ip_nlp_->Px_U()->TransMultVector(1., x, 0., *viol_U);   // get x in x_U space
+      viol_U->Axpy(-1.0, *orig_x_U);  // tmp = x - x_U, so positive entries are violations of upper bounds
+
+      // set negative entries to 0
+      SmartPtr<Vector> zero = viol_U->MakeNew();
+      zero->Set(0.);
+      viol_U->ElementWiseMax(*zero);
+   }
+
+   return viol_U;
+}
+
 SmartPtr<const Vector> IpoptCalculatedQuantities::unscaled_curr_orig_x_L_violation()
 {
    DBG_START_METH("IpoptCalculatedQuantities::unscaled_curr_orig_x_L_violation()", dbg_verbosity);
@@ -1588,63 +1656,11 @@ SmartPtr<const Vector> IpoptCalculatedQuantities::unscaled_curr_orig_x_L_violati
    SmartPtr<const Vector> x = ip_data_->curr()->x();
    if( !unscaled_curr_orig_x_LU_viol_cache_.GetCachedResult1Dep(viol_LU, *x) )
    {
-      SmartPtr<const Vector> orig_x_L;
-      SmartPtr<const Vector> orig_x_U;
+      SmartPtr<const Vector> un_x = ip_nlp_->NLP_scaling()->unapply_vector_scaling_x(x);
 
-      SmartPtr<Vector> viol_L;
-      SmartPtr<Vector> viol_U;
+      viol_LU.first = unscaled_orig_x_L_violation(*un_x);
+      viol_LU.second = unscaled_orig_x_U_violation(*un_x);
 
-      OrigIpoptNLP* orignlp = dynamic_cast<OrigIpoptNLP*>(GetRawPtr(ip_nlp_));
-      if( orignlp != NULL )
-      {
-         orig_x_L = orignlp->orig_x_L();
-         orig_x_U = orignlp->orig_x_U();
-      }
-
-      SmartPtr<const Vector> un_x;
-      if( !IsValid(orig_x_L) || ip_nlp_->Px_L()->NCols() == 0 )
-      {
-         // not OrigIpoptNLP, bounds not relaxed, or no lower bounds
-         viol_L = ip_nlp_->x_L()->MakeNew();
-         viol_L->Set(0.0);
-      }
-      else
-      {
-         un_x = ip_nlp_->NLP_scaling()->unapply_vector_scaling_x(x);
-
-         viol_L = orig_x_L->MakeNew();
-         ip_nlp_->Px_L()->TransMultVector(-1., *un_x, 0., *viol_L);  // get -x in x_L space
-         viol_L->Axpy(1.0, *orig_x_L);  // tmp = -x + x_L, so positive entries are violations of lower bounds
-
-         // set negative entries to 0
-         SmartPtr<Vector> zero = viol_L->MakeNew();
-         zero->Set(0.);
-         viol_L->ElementWiseMax(*zero);
-      }
-
-      if( !IsValid(orig_x_U) || ip_nlp_->Px_U()->NCols() == 0 )
-      {
-         // not OrigIpoptNLP, bounds not relaxed, or no upper bounds
-         viol_U = ip_nlp_->x_U()->MakeNew();
-         viol_U->Set(0.0);
-      }
-      else
-      {
-         if( !IsValid(un_x) )
-            un_x = ip_nlp_->NLP_scaling()->unapply_vector_scaling_x(x);
-
-         viol_U = orig_x_U->MakeNew();
-         ip_nlp_->Px_U()->TransMultVector(1., *un_x, 0., *viol_U);   // get x in x_U space
-         viol_U->Axpy(-1.0, *orig_x_U);  // tmp = x - x_U, so positive entries are violations of upper bounds
-
-         // set negative entries to 0
-         SmartPtr<Vector> zero = viol_U->MakeNew();
-         zero->Set(0.);
-         viol_U->ElementWiseMax(*zero);
-      }
-
-      viol_LU.first = viol_L;
-      viol_LU.second = viol_U;
       unscaled_curr_orig_x_LU_viol_cache_.AddCachedResult1Dep(viol_LU, *x);
    }
 
@@ -1695,6 +1711,81 @@ Number IpoptCalculatedQuantities::unscaled_curr_orig_bounds_violation(
    return result;
 }
 
+SmartPtr<Vector> IpoptCalculatedQuantities::orig_x_L_violation(
+   const Vector& x
+   )
+{
+   DBG_START_METH("IpoptCalculatedQuantities::orig_x_L_violation()", dbg_verbosity);
+
+   SmartPtr<const Vector> orig_x_L;
+   SmartPtr<Vector> viol_L;
+
+   OrigIpoptNLP* orignlp = dynamic_cast<OrigIpoptNLP*>(GetRawPtr(ip_nlp_));
+   if( orignlp != NULL )
+      orig_x_L = orignlp->orig_x_L();
+
+   if( !IsValid(orig_x_L) || ip_nlp_->Px_L()->NCols() == 0 )
+   {
+      // not OrigIpoptNLP, bounds not relaxed, or no lower bounds
+      viol_L = ip_nlp_->x_L()->MakeNew();
+      viol_L->Set(0.0);
+   }
+   else
+   {
+      // orig_x_L scaled
+      SmartPtr<const Vector> x_L = ip_nlp_->NLP_scaling()->apply_vector_scaling_x_LU(*ip_nlp_->Px_L(), orig_x_L, *Tmp_x().OwnerSpace());
+
+      viol_L = x_L->MakeNew();
+      ip_nlp_->Px_L()->TransMultVector(-1., x, 0., *viol_L);  // get -x in x_L space
+
+      viol_L->Axpy(1.0, *x_L);  // tmp = -x + x_L, so positive entries are violations of lower bounds
+
+      // set negative entries to 0
+      SmartPtr<Vector> zero = viol_L->MakeNew();
+      zero->Set(0.);
+      viol_L->ElementWiseMax(*zero);
+   }
+
+   return viol_L;
+}
+
+SmartPtr<Vector> IpoptCalculatedQuantities::orig_x_U_violation(
+   const Vector& x
+   )
+{
+   DBG_START_METH("IpoptCalculatedQuantities::orig_x_U_violation()", dbg_verbosity);
+
+   SmartPtr<Vector> viol_U;
+   SmartPtr<const Vector> orig_x_U;
+
+   OrigIpoptNLP* orignlp = dynamic_cast<OrigIpoptNLP*>(GetRawPtr(ip_nlp_));
+   if( orignlp != NULL )
+      orig_x_U = orignlp->orig_x_U();
+
+   if( !IsValid(orig_x_U) || ip_nlp_->Px_U()->NCols() == 0 )
+   {
+      // not OrigIpoptNLP, bounds not relaxed, or no lower bounds
+      viol_U = ip_nlp_->x_U()->MakeNew();
+      viol_U->Set(0.0);
+   }
+   else
+   {
+      SmartPtr<const Vector> x_U = ip_nlp_->NLP_scaling()->apply_vector_scaling_x_LU(*ip_nlp_->Px_U(), orig_x_U, *Tmp_x().OwnerSpace());
+
+      viol_U = x_U->MakeNew();
+      ip_nlp_->Px_U()->TransMultVector(1., x, 0., *viol_U);   // get x in x_U space
+
+      viol_U->Axpy(-1.0, *x_U);  // tmp = x - x_U, so positive entries are violations of upper bounds
+
+      // set negative entries to 0
+      SmartPtr<Vector> zero = viol_U->MakeNew();
+      zero->Set(0.);
+      viol_U->ElementWiseMax(*zero);
+   }
+
+   return viol_U;
+}
+
 SmartPtr<const Vector> IpoptCalculatedQuantities::curr_orig_x_L_violation()
 {
    DBG_START_METH("IpoptCalculatedQuantities::curr_orig_x_L_violation()", dbg_verbosity);
@@ -1706,33 +1797,7 @@ SmartPtr<const Vector> IpoptCalculatedQuantities::curr_orig_x_L_violation()
    SmartPtr<const Vector> x = ip_data_->curr()->x();
    if( !curr_orig_x_L_viol_cache_.GetCachedResult1Dep(viol_L, *x) )
    {
-      SmartPtr<const Vector> orig_x_L;
-
-      OrigIpoptNLP* orignlp = dynamic_cast<OrigIpoptNLP*>(GetRawPtr(ip_nlp_));
-      if( orignlp != NULL )
-         orig_x_L = orignlp->orig_x_L();
-
-      if( !IsValid(orig_x_L) || ip_nlp_->Px_L()->NCols() == 0 )
-      {
-         // not OrigIpoptNLP, bounds not relaxed, or no lower bounds
-         viol_L = ip_nlp_->x_L()->MakeNew();
-         viol_L->Set(0.0);
-      }
-      else
-      {
-         // orig_x_L scaled
-         SmartPtr<const Vector> x_L = ip_nlp_->NLP_scaling()->apply_vector_scaling_x_LU(*ip_nlp_->Px_L(), orig_x_L, *Tmp_x().OwnerSpace());
-
-         viol_L = x_L->MakeNew();
-         ip_nlp_->Px_L()->TransMultVector(-1., *x, 0., *viol_L);  // get -x in x_L space
-
-         viol_L->Axpy(1.0, *x_L);  // tmp = -x + x_L, so positive entries are violations of lower bounds
-
-         // set negative entries to 0
-         SmartPtr<Vector> zero = viol_L->MakeNew();
-         zero->Set(0.);
-         viol_L->ElementWiseMax(*zero);
-      }
+      viol_L = orig_x_L_violation(*x);
 
       curr_orig_x_L_viol_cache_.AddCachedResult1Dep(viol_L, *x);
    }
@@ -1751,32 +1816,7 @@ SmartPtr<const Vector> IpoptCalculatedQuantities::curr_orig_x_U_violation()
    SmartPtr<const Vector> x = ip_data_->curr()->x();
    if( !curr_orig_x_U_viol_cache_.GetCachedResult1Dep(viol_U, *x) )
    {
-      SmartPtr<const Vector> orig_x_U;
-
-      OrigIpoptNLP* orignlp = dynamic_cast<OrigIpoptNLP*>(GetRawPtr(ip_nlp_));
-      if( orignlp != NULL )
-         orig_x_U = orignlp->orig_x_U();
-
-      if( !IsValid(orig_x_U) || ip_nlp_->Px_L()->NCols() == 0 )
-      {
-         // not OrigIpoptNLP, bounds not relaxed, or no lower bounds
-         viol_U = ip_nlp_->x_U()->MakeNew();
-         viol_U->Set(0.0);
-      }
-      else
-      {
-         SmartPtr<const Vector> x_U = ip_nlp_->NLP_scaling()->apply_vector_scaling_x_LU(*ip_nlp_->Px_U(), orig_x_U, *Tmp_x().OwnerSpace());
-
-         viol_U = x_U->MakeNew();
-         ip_nlp_->Px_U()->TransMultVector(1., *x, 0., *viol_U);   // get x in x_U space
-
-         viol_U->Axpy(-1.0, *x_U);  // tmp = x - x_U, so positive entries are violations of upper bounds
-
-         // set negative entries to 0
-         SmartPtr<Vector> zero = viol_U->MakeNew();
-         zero->Set(0.);
-         viol_U->ElementWiseMax(*zero);
-      }
+      viol_U = orig_x_U_violation(*x);
 
       curr_orig_x_U_viol_cache_.AddCachedResult1Dep(viol_U, *x);
    }

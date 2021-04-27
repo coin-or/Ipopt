@@ -391,6 +391,8 @@ public:
       Number x[3];
       Number z_L[3];
       Number z_U[3];
+      Number x_L_viol[3];
+      Number x_U_viol[3];
       Number compl_x_L[3];
       Number compl_x_U[3];
       Number grad_lag_x[3];
@@ -401,15 +403,15 @@ public:
       Number compl_g[2];
 
       bool have_iter = get_curr_iterate(ip_data, ip_cq, false, 3, x, z_L, z_U, 2, g, lambda);
-      bool have_viol = get_curr_violations(ip_data, ip_cq, false, 3, compl_x_L, compl_x_U, grad_lag_x, 2, constraint_violation, compl_g);
+      bool have_viol = get_curr_violations(ip_data, ip_cq, false, 3, x_L_viol, x_U_viol, compl_x_L, compl_x_U, grad_lag_x, 2, constraint_violation, compl_g);
 
       assert(have_iter);
       assert(have_viol);
 
       printf("Current iterate (%s mode):\n", mode == RegularMode ? "regular" : "restoration");
-      printf("  %-12s %-12s %-12s %-12s %-12s %-12s\n", "x", "z_L", "z_U", "compl_x_L", "compl_x_U", "grad_lag_x");
+      printf("  %-12s %-12s %-12s %-12s %-12s %-12s %-12s %-12s\n", "x", "x_L_viol", "x_U_viol", "z_L", "z_U", "compl_x_L", "compl_x_U", "grad_lag_x");
       for( int i = 0; i < 3; ++i )
-         printf("  %-12g %-12g %-12g %-12g %-12g %-12g\n", x[i], z_L[i], z_U[i], compl_x_L[i], compl_x_U[i], grad_lag_x[i]);
+         printf("  %-12g %-12g %-12g %-12g %-12g %-12g %-12g %-12g\n", x[i], x_L_viol[i], x_U_viol[i], z_L[i], z_U[i], compl_x_L[i], compl_x_U[i], grad_lag_x[i]);
 
       printf("  %-12s %-12s %-12s %-12s\n", "g(x)", "lambda", "constr_viol", "compl_g");
       for( int i = 0; i < 2; ++i )
@@ -418,6 +420,14 @@ public:
       // check activity
       ASSERTEQ(g[0], x[0]*x[0] + x[1]*x[1] + x[2]*x[2]);
       ASSERTEQ(g[1], x[0]*x[0] - x[2]*x[2]);
+
+      // check violation of variable bounds
+      ASSERTEQ(x_L_viol[0], std::max(0.0, -10.0-x[0]));
+      ASSERTEQ(x_U_viol[0], 0.0);
+      ASSERTEQ(x_L_viol[1], std::max(0.0, 1.0-x[1]));
+      ASSERTEQ(x_U_viol[1], std::max(0.0, x[1]-1.0));
+      ASSERTEQ(x_L_viol[2], 0.0);
+      ASSERTEQ(x_U_viol[2], 0.0);
 
       // check complementarity for variable bounds
       ASSERTEQ(compl_x_L[0], z_L[0] * (x[0] + 10.0));
@@ -441,6 +451,8 @@ public:
       ASSERTEQ(compl_g[1], -(g[1] - 0.5) * lambda[1]);
 
       Number s_x[3];
+      Number s_x_L_viol[3];
+      Number s_x_U_viol[3];
       Number s_z_L[3];
       Number s_z_U[3];
       Number s_compl_x_L[3];
@@ -453,14 +465,14 @@ public:
       Number s_compl_g[2];
 
       have_iter = get_curr_iterate(ip_data, ip_cq, true, 3, s_x, s_z_L, s_z_U, 2, s_g, s_lambda);
-      have_viol = get_curr_violations(ip_data, ip_cq, true, 3, s_compl_x_L, s_compl_x_U, s_grad_lag_x, 2, s_constraint_violation, s_compl_g);
+      have_viol = get_curr_violations(ip_data, ip_cq, true, 3, s_x_L_viol, s_x_U_viol, s_compl_x_L, s_compl_x_U, s_grad_lag_x, 2, s_constraint_violation, s_compl_g);
 
       assert(have_iter);
       assert(have_viol);
       printf("Scaled iterate (%s mode):\n", mode == RegularMode ? "regular" : "restoration");
-      printf("  %-12s %-12s %-12s %-12s %-12s %-12s\n", "x", "z_L", "z_U", "compl_x_L", "compl_x_U", "grad_lag_x");
+      printf("  %-12s %-12s %-12s %-12s %-12s %-12s %-12s %-12s\n", "x", "x_L_viol", "x_U_viol", "z_L", "z_U", "compl_x_L", "compl_x_U", "grad_lag_x");
       for( int i = 0; i < 3; ++i )
-         printf("  %-12g %-12g %-12g %-12g %-12g %-12g\n", s_x[i], s_z_L[i], s_z_U[i], s_compl_x_L[i], s_compl_x_U[i], s_grad_lag_x[i]);
+         printf("  %-12g %-12g %-12g %-12g %-12g %-12g %-12g %-12g\n", s_x[i], s_x_L_viol[i], s_x_U_viol[i], s_z_L[i], s_z_U[i], s_compl_x_L[i], s_compl_x_U[i], s_grad_lag_x[i]);
 
       printf("  %-12s %-12s %-12s %-12s\n", "g(x)", "lambda", "constr_viol", "compl_g");
       for( int i = 0; i < 2; ++i )
@@ -497,6 +509,14 @@ public:
 
       ASSERTEQ(s_lambda[0], lambda[0]/g_scaling[0]*obj_scaling);
       ASSERTEQ(s_lambda[1], lambda[1]/g_scaling[1]*obj_scaling);
+
+      // check violation of variable bounds
+      ASSERTEQ(s_x_L_viol[0], std::max(0.0, -10.0*x_scaling[0]-s_x[0]));
+      ASSERTEQ(s_x_U_viol[0], 0.0);
+      ASSERTEQ(s_x_L_viol[1], std::max(0.0, 1.0*x_scaling[1]-x[1]));
+      ASSERTEQ(s_x_U_viol[1], std::max(0.0, x[1]-1.0*x_scaling[1]));
+      ASSERTEQ(s_x_L_viol[2], 0.0);
+      ASSERTEQ(s_x_U_viol[2], 0.0);
 
       // check complementarity for variable bounds
       ASSERTEQ(s_compl_x_L[0], s_z_L[0] * (x[0] + 10.0)*x_scaling[0]);
@@ -545,8 +565,9 @@ bool run(
    }
 
    app->Options()->SetStringValue("print_user_options", "yes", true, true);
-   app->Options()->SetNumericValue("bound_relax_factor", 0.0, true, true);
    app->Options()->SetIntegerValue("print_level", 2, true, true);
+   // allow only very little relaxation of variable bounds, since the asserts on compl_x_L/U use the original bounds, not the relaxed one that Ipopt uses
+   app->Options()->SetNumericValue("constr_viol_tol", 1e-3*TESTTOL, true, true);
 
    if( fixedvar_makeconstr )
       app->Options()->SetStringValue("fixed_variable_treatment", "make_constraint");

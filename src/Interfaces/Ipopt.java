@@ -114,6 +114,8 @@ public abstract class Ipopt
       long     ip_cq,
       boolean  scaled,
       int      n,
+      double   x_L_violation[],
+      double   x_U_violation[],
       double   compl_x_L[],
       double   compl_x_U[],
       double   grad_lag_x[],
@@ -664,10 +666,16 @@ public abstract class Ipopt
     *
     * @note If in restoration phase, then requesting grad_lag_x can trigger a call to eval_grad_f().
     *
+    * @note Ipopt by default relaxes variable bounds (option bound_relax_factor > 0.0).
+    *   x_L_violation and x_U_violation report the violation of a solution w.r.t. the original unrelaxed bounds.
+    *   However, compl_x_L and compl_x_U use the relaxed variable bounds to calculate the complementarity.
+    *
     * @param ip_data    (in)  Ipopt Data (pass on value given to intermediate_callback)
     * @param ip_cq      (in)  Ipopt Calculated Quantities (pass on value given to intermediate_callback)
     * @param scaled     (in)  whether to retrieve scaled or unscaled violations
     * @param n          (in)  the number of variables \f$x\f$ in the problem; can be arbitrary if skipping compl_x_L, compl_x_U, and grad_lag_x
+    * @param x_L_violation (out) buffer to store violation of original lower bounds on variables (\f$max(orig_x_L-x,0)\f$), must have length at least n; pass NULL to skip retrieving orig_x_L
+    * @param x_U_violation (out) buffer to store violation of original upper bounds on variables (\f$max(x-orig_x_U,0)\f$), must have length at least n; pass NULL to skip retrieving orig_x_U
     * @param compl_x_L  (out) buffer to store violation of complementarity for lower bounds on variables (\f$(x-x_L)z_L\f$), must have length at least n; pass null to skip retrieving compl_x_L
     * @param compl_x_U  (out) buffer to store violation of complementarity for upper bounds on variables (\f$(x_U-x)z_U\f$), must have length at least n; pass null to skip retrieving compl_x_U
     * @param grad_lag_x (out) buffer to store gradient of Lagrangian w.r.t. variables \f$x\f$, must have length at least n; pass null to skip retrieving grad_lag_x
@@ -682,6 +690,8 @@ public abstract class Ipopt
       long     ip_cq,
       boolean  scaled,
       int      n,
+      double   x_L_violation[],
+      double   x_U_violation[],
       double   compl_x_L[],
       double   compl_x_U[],
       double   grad_lag_x[],
@@ -690,7 +700,7 @@ public abstract class Ipopt
       double   compl_g[]
    )
    {
-      return this.GetCurrViolations(ipopt, ip_data, ip_cq, scaled, n, compl_x_L, compl_x_U, grad_lag_x, m, nlp_constraint_violation, compl_g);
+      return this.GetCurrViolations(ipopt, ip_data, ip_cq, scaled, n, x_L_violation, x_U_violation, compl_x_L, compl_x_U, grad_lag_x, m, nlp_constraint_violation, compl_g);
    }
 
    /** Gives primal variable values at final point.
