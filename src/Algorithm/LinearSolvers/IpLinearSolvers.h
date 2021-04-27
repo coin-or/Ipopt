@@ -5,6 +5,8 @@
 #ifndef __IPLINEARSOLVERS_H__
 #define __IPLINEARSOLVERS_H__
 
+#include "IpoptConfig.h"
+
 #define IPOPTLINEARSOLVER_MA27    0x001u
 #define IPOPTLINEARSOLVER_MA57    0x002u
 #define IPOPTLINEARSOLVER_MA77    0x004u
@@ -31,6 +33,7 @@ typedef unsigned int IpoptLinearSolver;
  * If buildinonly if set to a nonzero value, then only report linear solvers that have been linked into Ipopt.
  * Otherwise, also linear solvers are reported which are loaded from a shared library at runtime, if this feature has been compiled.
  */
+IPOPTLIB_EXPORT
 IpoptLinearSolver IpoptGetAvailableLinearSolvers(
    int buildinonly
    );
