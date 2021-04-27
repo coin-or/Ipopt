@@ -29,18 +29,30 @@ public:
    { }
    ///@}
 
+   /// Whether timing of function evaluation has been enabled
+   /// @since 3.14.0
    bool IsFunctionEvaluationTimeEnabled() const;
+   /// total CPU time spend in function evaluation
+   /// @since 3.14.0
    Number TotalFunctionEvaluationCpuTime() const;
+   /// total system time spend in function evaluation
+   /// @since 3.14.0
    Number TotalFunctionEvaluationSysTime() const;
-   Number TotalFunctionEvaluationWallclockTime() const;
+   /// total wall-clock time spend in function evaluation
+   /// @since 3.14.0
+Number TotalFunctionEvaluationWallclockTime() const;
 
    /** Method for resetting all times. */
    void ResetTimes();
 
-   /** Method for enabling all timed tasked. */
+   /** Method for enabling all timed tasked.
+    * @since 3.14.0
+    */
    void EnableTimes();
 
-   /** Method for disabling all timed tasks except for OverallAlgorithm */
+   /** Method for disabling all timed tasks except for OverallAlgorithm
+    * @since 3.14.0
+    */
    void DisableTimes();
 
    /** Method for printing all timing information */
@@ -57,6 +69,7 @@ public:
       return OverallAlgorithm_;
    }
 
+   /// @since 3.14.0
    const TimedTask& OverallAlgorithm() const
    {
       return OverallAlgorithm_;
@@ -197,36 +210,43 @@ public:
       return Task6_;
    }
 
+   /// @since 3.14.0
    TimedTask& f_eval_time()
    {
       return f_eval_time_;
    }
 
+   /// @since 3.14.0
    TimedTask& grad_f_eval_time()
    {
       return grad_f_eval_time_;
    }
 
+   /// @since 3.14.0
    TimedTask& c_eval_time()
    {
       return c_eval_time_;
    }
 
+   /// @since 3.14.0
    TimedTask& jac_c_eval_time()
    {
       return jac_c_eval_time_;
    }
 
+   /// @since 3.14.0
    TimedTask& d_eval_time()
    {
       return d_eval_time_;
    }
 
+   /// @since 3.14.0
    TimedTask& jac_d_eval_time()
    {
       return jac_d_eval_time_;
    }
 
+   /// @since 3.14.0
    TimedTask& h_eval_time()
    {
       return h_eval_time_;

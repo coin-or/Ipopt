@@ -130,7 +130,7 @@ public abstract class Ipopt
    /** Use FORTRAN index style for iRow and jCol vectors */
    public final static int FORTRAN_STYLE = 1;
 
-   /** The possible Ipopt status return codes: should be kept in sync with Ipopt return codes */
+   /* The possible Ipopt status return codes: should be kept in sync with Ipopt return codes */
    public final static int SOLVE_SUCCEEDED = 0;
    public final static int ACCEPTABLE_LEVEL = 1;
    public final static int INFEASIBLE_PROBLEM = 2;
@@ -141,7 +141,7 @@ public abstract class Ipopt
    public final static int RESTORATION_FAILED = -2;
    public final static int ERROR_IN_STEP_COMPUTATION = -3;
    public final static int CPUTIME_EXCEEDED = -4;
-   public final static int WALLTIME_EXCEEDED = -5;
+   public final static int WALLTIME_EXCEEDED = -5;           ///< @since 3.14.0
    public final static int NOT_ENOUGH_DEGREES_OF_FRE = -10;
    public final static int INVALID_PROBLEM_DEFINITION = -11;
    public final static int INVALID_OPTION = -12;
@@ -151,9 +151,9 @@ public abstract class Ipopt
    public final static int INSUFFICIENT_MEMORY = -102;
    public final static int INTERNAL_ERROR = -199;
 
-   /** The possible algorithm modes (passed to intermediate_callback) */
-   public final static int REGULARMODE = 0;
-   public final static int RESTORATIONPHASEMODE = 1;
+   /* The possible algorithm modes (passed to intermediate_callback) */
+   public final static int REGULARMODE = 0;            ///< @since 3.14.0
+   public final static int RESTORATIONPHASEMODE = 1;   ///< @since 3.14.0
 
    /** Pointer to the native optimization object */
    private long ipopt;
@@ -636,6 +636,7 @@ public abstract class Ipopt
     * @param lambda  (out) buffer to store the constraint multipliers \f$\lambda\f$, must have length at least m; pass null to skip retrieving lambda
     *
     * @return Whether Ipopt has successfully filled the given arrays
+    * @since 3.14.0
     */
    public boolean get_curr_iterate(
       long     ip_data,
@@ -684,6 +685,7 @@ public abstract class Ipopt
     * @param compl_g    (out) buffer to store violation of complementarity of constraint (\f$(g(x)-g_l)*\lambda^+ + (g_l-g(x))*\lambda^-\f$, where \f$\lambda^+=max(0,\lambda)\f$ and \f$\lambda^-=max(0,-\lambda)\f$ (componentwise)), must have length at least m; pass null to skip retrieving compl_g
     *
     * @return Whether Ipopt has successfully filled the given arrays
+    * @since 3.14.0
     */
    public boolean get_curr_violations(
       long     ip_data,
@@ -781,6 +783,7 @@ public abstract class Ipopt
     *
     * It is not required to implement (overload) this method.
     * The default implementation always returns true.
+    * @since 3.14.0
     */
    public boolean intermediate_callback(
       int      algorithmmode,

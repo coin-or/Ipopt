@@ -14,6 +14,7 @@ namespace Ipopt
 /** Wrapper for BLAS function XDOT.
  *
  * Compute dot product of vector x and vector y.
+ * @since 3.14.0
  */
 IPOPTLIB_EXPORT Number IpBlasDot(
    Index         size,
@@ -44,6 +45,7 @@ inline Number IpBlasDdot(
 /** Wrapper for BLAS function XNRM2.
  *
  * Compute 2-norm of vector x.
+ * @since 3.14.0
  */
 IPOPTLIB_EXPORT Number IpBlasNrm2(
    Index         size,
@@ -70,6 +72,7 @@ inline Number IpBlasDnrm2(
 /** Wrapper for BLAS function XASUM.
  *
  * Compute 1-norm of vector x.
+ * @since 3.14.0
  */
 IPOPTLIB_EXPORT Number IpBlasAsum(
    Index         size,
@@ -96,6 +99,7 @@ inline Number IpBlasDasum(
 /** Wrapper for BLAS function IXAMAX.
  *
  * Compute index for largest absolute element of vector x.
+ * @since 3.14.0
  */
 IPOPTLIB_EXPORT int IpBlasIamax(
    Index         size,
@@ -122,6 +126,7 @@ inline int IpBlasIdamax(
 /** Wrapper for BLAS subroutine XCOPY.
  *
  * Copying vector x into vector y.
+ * @since 3.14.0
  */
 IPOPTLIB_EXPORT void IpBlasCopy(
    Index         size,
@@ -152,6 +157,7 @@ inline void IpBlasDcopy(
 /** Wrapper for BLAS subroutine XAXPY.
  *
  * Adding the alpha multiple of vector x to vector y.
+ * @since 3.14.0
  */
 IPOPTLIB_EXPORT void IpBlasAxpy(
    Index         size,
@@ -184,6 +190,7 @@ inline void IpBlasDaxpy(
 /** Wrapper for BLAS subroutine XSCAL.
  *
  * Scaling vector x by scalar alpha.
+ * @since 3.14.0
  */
 IPOPTLIB_EXPORT void IpBlasScal(
    Index   size,
@@ -212,6 +219,7 @@ inline void IpBlasDscal(
 /** Wrapper for BLAS subroutine XGEMV.
  *
  * Multiplying a matrix with a vector.
+ * @since 3.14.0
  */
 IPOPTLIB_EXPORT void IpBlasGemv(
    bool          trans,
@@ -254,6 +262,7 @@ inline void IpBlasDgemv(
 /** Wrapper for BLAS subroutine XSYMV.
  *
  * Multiplying a symmetric matrix with a vector.
+ * @since 3.14.0
  */
 IPOPTLIB_EXPORT void IpBlasSymv(
    Index         n,
@@ -292,6 +301,7 @@ inline void IpBlasDsymv(
 /** Wrapper for BLAS subroutine XGEMM.
  *
  * Multiplying two matrices.
+ * @since 3.14.0
  */
 IPOPTLIB_EXPORT void IpBlasGemm(
    bool          transa,
@@ -338,6 +348,7 @@ inline void IpBlasDgemm(
 /** Wrapper for BLAS subroutine XSYRK.
  *
  * Adding a high-rank update to a matrix.
+ * @since 3.14.0
  */
 IPOPTLIB_EXPORT void IpBlasSyrk(
    bool          trans,
@@ -376,6 +387,7 @@ inline void IpBlasDsyrk(
 /** Wrapper for BLAS subroutine XTRSM.
  *
  * Backsolve for a lower triangular matrix.
+ * @since 3.14.0
  */
 IPOPTLIB_EXPORT void IpBlasTrsm(
    bool          trans,

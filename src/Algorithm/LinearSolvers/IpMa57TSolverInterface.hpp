@@ -20,6 +20,7 @@ typedef ptrdiff_t ma57int;
 typedef ipfint ma57int;
 #endif
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA57A(x) void (x)( \
    ipfint*       n,     /**< Order of matrix. */ \
    ipfint*       ne,    /**< Number of entries. */ \
@@ -34,6 +35,7 @@ typedef ipfint ma57int;
    ipnumber*     rinfo  /**< Double Control parameter of length 5 */ \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA57B(x) void (x)( \
    ipfint*   n,      /**< Order of matrix. */ \
    ipfint*   ne,     /**< Number of entries. */ \
@@ -57,6 +59,7 @@ typedef ipfint ma57int;
  * - JOB == 3:  PDP^t
  * - JOB >= 4:  PL^t P^t
  */
+/// @since 3.14.0
 #define IPOPT_DECL_MA57C(x) void (x)( \
    ipfint*   job,    /**< Solution job. */ \
    ipfint*   n,      /**< Order of matrix. */ \
@@ -74,6 +77,7 @@ typedef ipfint ma57int;
    ipfint*   info    /**< Statistical Information; Integer array of length 40. */ \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA57E(x) void (x)( \
    ipfint*   n, \
    ipfint*   ic,    /**< 0: copy real array.  >=1:  copy integer array. */ \
@@ -89,6 +93,7 @@ typedef ipfint ma57int;
    ipfint*   info    \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA57I(x) void (x)( \
    ipnumber* cntl, \
    ipfint*   icntl \
@@ -106,7 +111,7 @@ public:
    ///@{
    /** Constructor */
    Ma57TSolverInterface(
-      SmartPtr<LibraryLoader> hslloader_
+      SmartPtr<LibraryLoader> hslloader_   ///< @since 3.14.0
    );
 
    /** Destructor */
@@ -164,6 +169,7 @@ public:
    ///@}
 
    /// set MA57 functions to use for every instantiation of this class
+   /// @since 3.14.0
    static void SetFunctions(
       IPOPT_DECL_MA57A(*ma57a),
       IPOPT_DECL_MA57B(*ma57b),

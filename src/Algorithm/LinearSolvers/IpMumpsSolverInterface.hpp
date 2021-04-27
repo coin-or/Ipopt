@@ -82,6 +82,7 @@ public:
    );
 
    /// give name of MUMPS with version info
+   /// @since 3.14.0
    static std::string GetName();
 
    virtual bool ProvidesDegeneracyDetection() const;

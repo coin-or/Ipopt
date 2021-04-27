@@ -56,15 +56,15 @@ public:
     *  The optional linear_solver_name is used for printing.
     */
    IpoptAlgorithm(
-      const SmartPtr<SearchDirectionCalculator>& search_dir_calculator,
-      const SmartPtr<LineSearch>&                line_search,
-      const SmartPtr<MuUpdate>&                  mu_update,
-      const SmartPtr<ConvergenceCheck>&          conv_check,
-      const SmartPtr<IterateInitializer>&        iterate_initializer,
-      const SmartPtr<IterationOutput>&           iter_output,
-      const SmartPtr<HessianUpdater>&            hessian_updater,
-      const SmartPtr<EqMultiplierCalculator>&    eq_multiplier_calculator = NULL,
-      const std::string&                         linear_solver_name = ""
+      const SmartPtr<SearchDirectionCalculator>& search_dir_calculator,  ///< search direction calculator
+      const SmartPtr<LineSearch>&                line_search,            ///< line search
+      const SmartPtr<MuUpdate>&                  mu_update,              ///< mu updater
+      const SmartPtr<ConvergenceCheck>&          conv_check,             ///< convergence check
+      const SmartPtr<IterateInitializer>&        iterate_initializer,    ///< iterate initializer
+      const SmartPtr<IterationOutput>&           iter_output,            ///< iteration output
+      const SmartPtr<HessianUpdater>&            hessian_updater,        ///< hessian updater
+      const SmartPtr<EqMultiplierCalculator>&    eq_multiplier_calculator = NULL,  ///< calculator for multipliers
+      const std::string&                         linear_solver_name = ""  ///< name of linear solver @since 3.14.0
    );
 
    /** Destructor */

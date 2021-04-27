@@ -240,7 +240,7 @@ public:
    enum FixedVariableTreatmentEnum
    {
       MAKE_PARAMETER = 0,
-      MAKE_PARAMETER_NODUAL,
+      MAKE_PARAMETER_NODUAL,  ///< @since 3.14.0
       MAKE_CONSTRAINT,
       RELAX_BOUNDS
    };
@@ -287,7 +287,7 @@ public:
    void ResortX(
       const Vector& x,                   /**< internal values for primal variables x */
       Number*       x_orig,              /**< vector to fill with values from x */
-      bool          usefixedvals = true  /**< whether to use stored variable fixings for fixed variables (true), or zero (false) */
+      bool          usefixedvals = true  /**< whether to use stored variable fixings for fixed variables (true), or zero (false) @since 3.14.0 */
    );
 
    /** Sort constraint values
@@ -299,12 +299,13 @@ public:
       const Vector& c,                   /**< internal activity for equality constraints */
       const Vector& d,                   /**< internal activity for inequality constraints */
       Number*       g_orig,              /**< vector to fill with values from c and d */
-      bool          correctrhs = false   /**< whether to add unscaled rhs-values for constraints that internally correspond to c(x)=0 */
+      bool          correctrhs = false   /**< whether to add unscaled rhs-values for constraints that internally correspond to c(x)=0 @since 3.14.0 */
    );
 
    /** Provides values for lower and upper bounds on variables for given Ipopt-internal vectors.
     *
     * Similar to ResortX, but does so for two arrays and does not set any values for fixed variables.
+    * @since 3.14.0
     */
    void ResortBounds(
       const Vector& x_L,              /**< internal values for lower bounds on x */
@@ -342,6 +343,7 @@ public:
     *   if x, y_c, and y_d correspond to the unscaled problem.
     *
     * @return True, if bound multipliers could be assigned. False if there was an evaluation error when calculating bound multipliers for fixed variables.
+    * @since 3.14.0
     */
    bool ResortBoundMultipliers(
       const Vector& x,                /**< internal values for primal variables x */
@@ -353,7 +355,9 @@ public:
       Number*       z_U_orig          /**< vector to fill with values from z_U */
    );
 
-   /** Get number of variables and number of constraints in TNLP */
+   /** Get number of variables and number of constraints in TNLP
+    * @since 3.14.0
+    */
    void GetFullDimensions(
       Index& n,  /**< storage for full dimension of x (fixed + non-fixed) */
       Index& m   /**< storage for full dimension of g (c + d) */
@@ -363,7 +367,9 @@ public:
       m = n_full_g_;
    }
 
-   /** Get number and indices of fixed variables */
+   /** Get number and indices of fixed variables
+    * @since 3.14.0
+    */
    void GetFixedVariables(
       Index&  n_x_fixed,     /**< storage for number of fixed variables in TNLP */
       Index*& x_fixed_map,   /**< storage for pointer to array that holds indices of fixed variables (has length n_fixed_x, can be NULL if n_fixed_x=0) */
@@ -380,6 +386,7 @@ public:
     * See the various ResortXyz functions on usage.
     *
     * \attention P_x_full_x is set to NULL if there are no fixed variables or fixed_variable_treatment is not make_parameter
+    * @since 3.14.0
     */
    void GetPermutationMatrices(
       SmartPtr<const ExpansionMatrix>& P_x_full_x, /**< map from TNLP variable indices to Ipopt internal indices, filtered variables get mapped to -1 */
@@ -396,7 +403,9 @@ public:
       P_d_g = ConstPtr(P_d_g_);
    }
 
-   /** Get right-hand-sides that are added into c(x) */
+   /** Get right-hand-sides that are added into c(x)
+    * @since 3.14.0
+    */
    const Number* GetC_Rhs() const
    {
       return c_rhs_;

@@ -15,6 +15,7 @@
 //#define PARDISO_MATCHING_PREPROCESS
 
 /* assuming PARDISO 4.0.0 or above */
+/// @since 3.14.0
 #define IPOPT_DECL_PARDISOINIT(x) void (x)( \
    void*         PT,     \
    const ipfint* MTYPE,  \
@@ -24,6 +25,7 @@
    ipfint*       E       \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_PARDISO(x) void (x)( \
    void**          PT,     \
    const ipfint*   MAXFCT, \
@@ -44,6 +46,7 @@
    ipnumber*       DPARM   \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_SMAT_REORDERING_PARDISO_WSMP(x) void (x)( \
    const ipfint*   N,          \
    const ipfint*   ia,         \
@@ -71,7 +74,7 @@ public:
    ///@{
    /** Constructor */
    PardisoSolverInterface(
-      SmartPtr<LibraryLoader> pardisoloader_
+      SmartPtr<LibraryLoader> pardisoloader_  ///< @since 3.14.0
    );
 
    /** Destructor */

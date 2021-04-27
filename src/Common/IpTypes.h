@@ -13,6 +13,7 @@ typedef IPOPT_FORTRAN_INTEGER_TYPE ipfint;
 /** Type for floating-point numbers
  *
  * Must be the same as Ipopt::Number.
+ * @since 3.14.0
  */
 #ifdef IPOPT_SINGLE
 typedef float ipnumber;

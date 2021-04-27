@@ -25,10 +25,12 @@ extern "C"
 #endif
 }
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA86_DEFAULT_CONTROL(x) void (x)( \
    struct ma86_control* control \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA86_ANALYSE(x) void (x)( \
    const int                  n,       \
    const int                  ptr[],   \
@@ -39,6 +41,7 @@ extern "C"
    struct ma86_info*          info     \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA86_FACTOR(x) void (x)( \
    const int                  n,       \
    const int                  ptr[],   \
@@ -51,6 +54,7 @@ extern "C"
    const ipnumber             scale[]  \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA86_FACTOR_SOLVE(x) void (x)( \
    const int                  n,        \
    const int                  ptr[],    \
@@ -66,6 +70,7 @@ extern "C"
    const ipnumber             scale[]   \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA86_SOLVE(x) void (x)( \
    const int                  job,    \
    const int                  nrhs,   \
@@ -78,6 +83,7 @@ extern "C"
    const ipnumber             scale[] \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA86_FINALISE(x) void (x)( \
    void**                     keep,   \
    const struct ma86_control* control \
@@ -127,7 +133,7 @@ private:
 public:
 
    Ma86SolverInterface(
-      SmartPtr<LibraryLoader> hslloader_
+      SmartPtr<LibraryLoader> hslloader_  ///< @since 3.14.0
    )  : val_(NULL),
         order_(NULL),
         keep_(NULL),
@@ -150,6 +156,7 @@ public:
    );
 
    /// set MA86 and MC68 functions to use for every instantiation of this class
+   /// @since 3.14.0
    static void SetFunctions(
       IPOPT_DECL_MA86_DEFAULT_CONTROL(*ma86_default_control),
       IPOPT_DECL_MA86_ANALYSE(*ma86_analyse),

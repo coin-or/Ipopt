@@ -24,7 +24,7 @@ enum ApplicationReturnStatus
    Restoration_Failed                 = -2,
    Error_In_Step_Computation          = -3,
    Maximum_CpuTime_Exceeded           = -4,
-   Maximum_WallTime_Exceeded          = -5,
+   Maximum_WallTime_Exceeded          = -5,   ///< @since 3.14.0
 
    Not_Enough_Degrees_Of_Freedom      = -10,
    Invalid_Problem_Definition         = -11,

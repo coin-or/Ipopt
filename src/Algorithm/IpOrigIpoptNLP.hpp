@@ -69,10 +69,10 @@ public:
    ///@{
    /** Constructor */
    OrigIpoptNLP(
-      const SmartPtr<const Journalist>& jnlst,
-      const SmartPtr<NLP>&              nlp,
-      const SmartPtr<NLPScalingObject>& nlp_scaling,
-      TimingStatistics&                 timing_statistics
+      const SmartPtr<const Journalist>& jnlst,             ///< Journalist
+      const SmartPtr<NLP>&              nlp,               ///< NLP
+      const SmartPtr<NLPScalingObject>& nlp_scaling,       ///< NLP scaling
+      TimingStatistics&                 timing_statistics  ///< Timing statistics @since 3.14.0
    );
 
    /** Destructor */
@@ -200,6 +200,7 @@ public:
    /** Original lower bounds on x
     *
     * Returns NULL if bounds are not relaxed.
+    * @since 3.14.0
     */
    virtual SmartPtr<const Vector> orig_x_L() const
    {
@@ -221,6 +222,7 @@ public:
    /** Original upper bounds on x
     *
     * Returns NULL if bounds are not relaxed.
+    * @since 3.14.0
     */
    virtual SmartPtr<const Vector> orig_x_U() const
    {

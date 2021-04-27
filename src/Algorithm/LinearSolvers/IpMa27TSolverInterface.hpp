@@ -11,6 +11,7 @@
 #include "IpLibraryLoader.hpp"
 #include "IpTypes.h"
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA27A(x) void (x)( \
    ipfint*       N,     \
    ipfint*       NZ,    \
@@ -28,6 +29,7 @@
    ipnumber*     OPS    \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA27B(x) void (x)( \
    ipfint*       N,      \
    ipfint*       NZ,     \
@@ -46,6 +48,7 @@
    ipfint*       INFO    \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA27C(x) void (x)( \
    ipfint*   N,      \
    ipnumber* A,      \
@@ -61,6 +64,7 @@
    ipnumber* CNTL    \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA27I(x) void (x)( \
    ipfint*   ICNTL, \
    ipnumber* CNTL   \
@@ -78,7 +82,7 @@ public:
    ///@{
    /** Constructor */
    Ma27TSolverInterface(
-      SmartPtr<LibraryLoader> hslloader_
+      SmartPtr<LibraryLoader> hslloader_  ///< @since 3.14.0
       );
 
    /** Destructor */
@@ -135,6 +139,7 @@ public:
    ///@}
 
    /// set MA27 functions to use for every instantiation of this class
+   /// @since 3.14.0
    static void SetFunctions(
       IPOPT_DECL_MA27A(*ma27a),
       IPOPT_DECL_MA27B(*ma27b),

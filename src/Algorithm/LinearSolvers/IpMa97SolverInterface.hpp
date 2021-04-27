@@ -24,10 +24,12 @@ extern "C"
 #endif
 }
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA97_DEFAULT_CONTROL(x) void (x)( \
    struct ma97_control* control \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA97_ANALYSE(x) void (x)( \
    const int                  check,  \
    const int                  n,      \
@@ -40,6 +42,7 @@ extern "C"
    int                        order[] \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA97_FACTOR(x) void (x)( \
    int                        matrix_type, \
    const int                  ptr[],       \
@@ -52,6 +55,7 @@ extern "C"
    ipnumber                   scale[]      \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA97_FACTOR_SOLVE(x) void (x)( \
    int                        matrix_type, \
    const int                  ptr[],       \
@@ -67,6 +71,7 @@ extern "C"
    ipnumber                   scale[]      \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA97_SOLVE(x) void (x)( \
    const int                  job,     \
    const int                  nrhs,    \
@@ -78,11 +83,13 @@ extern "C"
    struct ma97_info*          info     \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA97_FINALISE(x) void (x)( \
    void** akeep, \
    void** fkeep  \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA97_FREE_AKEEP(x) void (x)( \
    void** akeep \
 )
@@ -154,7 +161,7 @@ private:
 public:
 
    Ma97SolverInterface(
-      SmartPtr<LibraryLoader> hslloader_
+      SmartPtr<LibraryLoader> hslloader_  ///< @since 3.14.0
    )  : val_(NULL),
         numdelay_(0),
         akeep_(NULL),
@@ -182,6 +189,7 @@ public:
    );
 
    /// set MA97 functions to use for every instantiation of this class
+   /// @since 3.14.0
    static void SetFunctions(
       IPOPT_DECL_MA97_DEFAULT_CONTROL(*ma97_default_control),
       IPOPT_DECL_MA97_ANALYSE(*ma97_analyse),

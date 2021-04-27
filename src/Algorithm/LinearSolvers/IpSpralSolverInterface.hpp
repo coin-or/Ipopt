@@ -22,6 +22,9 @@ extern "C"
 namespace Ipopt
 {
 
+/** Interface to the linear solver SPRAL.
+ * @since 3.14.0
+ */
 class SpralSolverInterface: public SparseSymLinearSolverInterface
 {
 private:

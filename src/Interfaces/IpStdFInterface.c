@@ -526,6 +526,7 @@ IPOPTLIB_EXPORT void F77_FUNC(ipunsetcallback, IPUNSETCALLBACK)(
    SetIntermediateCallback(fuser_data->Problem, NULL);
 }
 
+/// @since 3.14.0
 IPOPTLIB_EXPORT ipfint F77_FUNC(ipgetcurriterate, IPGETCURRITERATE)(
    fptr*      FProblem,
    ipfint*    scaled,
@@ -548,6 +549,7 @@ IPOPTLIB_EXPORT ipfint F77_FUNC(ipgetcurriterate, IPGETCURRITERATE)(
       *m, *get_G ? G : NULL, *get_LAMBDA ? LAMBDA : NULL) ? OKRetVal : NotOKRetVal;
 }
 
+/// @since 3.14.0
 IPOPTLIB_EXPORT ipfint F77_FUNC(ipgetcurrviolations, IPGETCURRVIOLATIONS)(
    fptr*      FProblem,
    ipfint*    scaled,

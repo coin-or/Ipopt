@@ -720,6 +720,7 @@ public:
     * @param lambda  (out) buffer to store the constraint multipliers \f$\lambda\f$, must have length at least m; pass NULL to skip retrieving lambda
     *
     * @return Whether Ipopt has successfully filled the given arrays
+    * @since 3.14.0
     */
    // [TNLP_get_curr_iterate]
    bool get_curr_iterate(
@@ -767,6 +768,7 @@ public:
     * @param compl_g    (out) buffer to store violation of complementarity of constraint (\f$(g(x)-g_l)*\lambda^+ + (g_l-g(x))*\lambda^-\f$, where \f$\lambda^+=max(0,\lambda)\f$ and \f$\lambda^-=max(0,-\lambda)\f$ (componentwise)), must have length at least m; pass NULL to skip retrieving compl_g
     *
     * @return Whether Ipopt has successfully filled the given arrays
+    * @since 3.14.0
     */
    // [TNLP_get_curr_violations]
    bool get_curr_violations(

@@ -318,7 +318,9 @@ class IPOPTAMPLINTERFACELIB_EXPORT AmplTNLP: public TNLP
 public:
    /**@name Constructors/Destructors */
    ///@{
-   /** Constructor. */
+   /** Constructor.
+    * @since 3.14.0
+    */
    AmplTNLP(
       const SmartPtr<const Journalist>& jnlst,
       const SmartPtr<RegisteredOptions> regoptions,
@@ -707,13 +709,13 @@ protected:
     *  @return a pointer to a char* with the name of the stub
     */
    char* get_options(
-      const SmartPtr<RegisteredOptions> regoptions,
-      const SmartPtr<OptionsList>& options,
-      SmartPtr<AmplOptionsList>&   ampl_options_list,
-      const char*                  ampl_option_string,
-      const char*                  ampl_invokation_string,
-      const char*                  ampl_banner_string,
-      char**&                      argv
+      const SmartPtr<RegisteredOptions> regoptions,        ///< Registered Ipopt options @since 3.14.0
+      const SmartPtr<OptionsList>& options,                ///< Options
+      SmartPtr<AmplOptionsList>&   ampl_options_list,      ///< AMPL options list
+      const char*                  ampl_option_string,     ///< AMPL options string
+      const char*                  ampl_invokation_string, ///< AMPL invokation string
+      const char*                  ampl_banner_string,     ///< AMPL banner string
+      char**&                      argv                    ///< Program arguments
    );
 
    /** Method for obtaining the name of the NL file and the options set from AMPL

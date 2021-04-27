@@ -32,6 +32,7 @@ typedef unsigned int IpoptLinearSolver;
  *
  * If buildinonly if set to a nonzero value, then only report linear solvers that have been linked into Ipopt.
  * Otherwise, also linear solvers are reported which are loaded from a shared library at runtime, if this feature has been compiled.
+ * @since 3.14.0
  */
 IPOPTLIB_EXPORT
 IpoptLinearSolver IpoptGetAvailableLinearSolvers(

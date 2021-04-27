@@ -94,11 +94,11 @@ public:
 
    /** Unscaled solution infeasibilities. */
    virtual void Infeasibilities(
-      Number& dual_inf,
-      Number& constr_viol,
-      Number& varbounds_viol,
-      Number& complementarity,
-      Number& kkt_error
+      Number& dual_inf,        ///< dual infeasibility (Gradient of Lagrangian not zero)
+      Number& constr_viol,     ///< violation of constraints
+      Number& varbounds_viol,  ///< violation of variable bounds @since 3.14.0
+      Number& complementarity, ///< violation of complementarity
+      Number& kkt_error        ///< KKT error
    ) const;
 
    /** Scaled solution infeasibilities.
@@ -118,11 +118,11 @@ public:
     * @deprecated Use ScaledInfeasibilities() with 5 arguments instead.
     */
    virtual void ScaledInfeasibilities(
-      Number& scaled_dual_inf,
-      Number& scaled_constr_viol,
-      Number& scaled_varbounds_viol,
-      Number& scaled_complementarity,
-      Number& scaled_kkt_error
+      Number& scaled_dual_inf,        ///< scaled dual infeasibility (Gradient of Lagrangian not zero)
+      Number& scaled_constr_viol,     ///< violation of scaled constraints
+      Number& scaled_varbounds_viol,  ///< violation of scaled variable bounds @since 3.14.0
+      Number& scaled_complementarity, ///< violation of scaled complementarity
+      Number& scaled_kkt_error        ///< scaled KKT error
    ) const;
 
    /** Final value of objective function */

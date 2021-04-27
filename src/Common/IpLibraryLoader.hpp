@@ -22,6 +22,7 @@ namespace Ipopt
 /** loading of a library at runtime
  *
  * wrapper around dlopen()/dlsym() and variants
+ * @since 3.14.0
  */
 class IPOPTLIB_EXPORT LibraryLoader : public ReferencedObject
 {

@@ -330,11 +330,19 @@ public:
    ///@}
 
 protected:
+   /// Gives Library Loader for HSL library if not all HSL routines are linked in
+   ///
+   /// Creates new loader if not existing yet.
+   /// @since 3.14.0
    SmartPtr<LibraryLoader> GetHSLLoader(
       const OptionsList& options,
       const std::string& prefix
    );
 
+   /// Gives Library Loader for Pardiso library from pardiso-project.org.
+   ///
+   /// Creates new loader if not existing yet.
+   /// @since 3.14.0
    SmartPtr<LibraryLoader> GetPardisoLoader(
       const OptionsList& options,
       const std::string& prefix

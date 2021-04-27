@@ -14,6 +14,7 @@
 
 // note that R,C,W are single-precision also in the double-precision version of MC19 (MC19AD)
 // here we assume that float corresponds to Fortran's single precision
+/// @since 3.14.0
 #define IPOPT_DECL_MC19A(x) void (x)( \
    const ipfint* N,   \
    const ipfint* NZ,  \
@@ -37,7 +38,7 @@ public:
    /** @name Constructor/Destructor */
    ///@{
    Mc19TSymScalingMethod(
-      SmartPtr<LibraryLoader> hslloader_
+      SmartPtr<LibraryLoader> hslloader_  ///< @since 3.14.0
    ) : hslloader(hslloader_),
        mc19a(NULL)
    { }
@@ -64,6 +65,7 @@ public:
    );
 
    /// set MC19 function to use for every instantiation of this class
+   /// @since 3.14.0
    static void SetFunctions(
       IPOPT_DECL_MC19A(*mc19a)
       );
@@ -71,6 +73,7 @@ public:
    /// get MC19A function that has been set via SetFunctions
    ///
    /// this does not return a MC19A that has been linked in or loaded from a library at runtime
+   /// @since 3.14.0
    static IPOPT_DECL_MC19A(*GetMC19A());
 
 private:

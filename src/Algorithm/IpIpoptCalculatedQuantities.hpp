@@ -322,13 +322,15 @@ public:
    );
    ///@}
 
-   /** @name Variable bounds */
-   ///@{
+   /// @name Variable bounds
+   /// @since 3.14.0
+   /// @{
 
    /** Violation of original variable lower bounds x_L.
     *
     * Computes violation of given unscaled solution w.r.t. OrigIpoptNLP::orig_x_L() if current NLP is a OrigIpoptNLP.
     * If current NLP is not an original OrigIpoptNLP, returns zero vector.
+    * @since 3.14.0
     */
    SmartPtr<Vector> unscaled_orig_x_L_violation(
       const Vector& x
@@ -337,6 +339,7 @@ public:
     *
     * Computes violation of given unscaled solution w.r.t. OrigIpoptNLP::orig_x_U() if current NLP is a OrigIpoptNLP.
     * If current NLP is not an original OrigIpoptNLP, returns zero vector.
+    * @since 3.14.0
     */
    SmartPtr<Vector> unscaled_orig_x_U_violation(
       const Vector& x
@@ -345,17 +348,20 @@ public:
     *
     * Computes violation of current (unscaled) solution w.r.t. OrigIpoptNLP::orig_x_L() if current NLP is a OrigIpoptNLP.
     * If current NLP is not an original OrigIpoptNLP, returns zero vector.
+    * @since 3.14.0
     */
    SmartPtr<const Vector> unscaled_curr_orig_x_L_violation();
    /** Violation of original variable upper bounds x_U.
     *
     * Computes violation of current (unscaled) solution w.r.t. OrigIpoptNLP::orig_x_U() if current NLP is a OrigIpoptNLP.
     * If current NLP is not an original OrigIpoptNLP, returns zero vector.
+    * @since 3.14.0
     */
    SmartPtr<const Vector> unscaled_curr_orig_x_U_violation();
    /** Violation of (unscaled) original variable bounds.
     *
     * Norm of unscaled_curr_violation_x_L() and unscaled_curr_violation_x_U().
+    * @since 3.14.0
     */
    virtual Number unscaled_curr_orig_bounds_violation(
       ENormType NormType
@@ -365,6 +371,7 @@ public:
     *
     * Computes violation of given scaled solution w.r.t. OrigIpoptNLP::orig_x_L() if current NLP is a OrigIpoptNLP.
     * If current NLP is not an original OrigIpoptNLP, returns zero vector.
+    * @since 3.14.0
     */
    SmartPtr<Vector> orig_x_L_violation(
       const Vector& x
@@ -373,6 +380,7 @@ public:
     *
     * Computes violation of given scaled solution w.r.t. OrigIpoptNLP::orig_x_U() if current NLP is a OrigIpoptNLP.
     * If current NLP is not an original OrigIpoptNLP, returns zero vector.
+    * @since 3.14.0
     */
    SmartPtr<Vector> orig_x_U_violation(
       const Vector& x
@@ -381,17 +389,20 @@ public:
     *
     * Computes violation of current (scaled) solution w.r.t. OrigIpoptNLP::orig_x_L() if current NLP is a OrigIpoptNLP.
     * If current NLP is not an original OrigIpoptNLP, returns zero vector.
+    * @since 3.14.0
     */
    SmartPtr<const Vector> curr_orig_x_L_violation();
    /** Violation of scaled original variable upper bounds x_U.
     *
     * Computes violation of current (scaled) solution w.r.t. OrigIpoptNLP::orig_x_U() if current NLP is a OrigIpoptNLP.
     * If current NLP is not an original OrigIpoptNLP, returns zero vector.
+    * @since 3.14.0
     */
    SmartPtr<const Vector> curr_orig_x_U_violation();
    /** Violation of scaled original variable bounds.
     *
     * Norm of curr_violation_x_L() and curr_violation_x_U().
+    * @since 3.14.0
     */
    virtual Number curr_orig_bounds_violation(
       ENormType NormType

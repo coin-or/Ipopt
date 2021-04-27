@@ -15,8 +15,8 @@
 namespace Ipopt
 {
 
-/** Interface to the linear solver Pardiso as distributed by Intel MKL, derived from
- *  SparseSymLinearSolverInterface.
+/** Interface to the linear solver Pardiso as distributed by Intel MKL, derived from SparseSymLinearSolverInterface.
+ * @since 3.14.0
  */
 class PardisoMKLSolverInterface: public SparseSymLinearSolverInterface
 {

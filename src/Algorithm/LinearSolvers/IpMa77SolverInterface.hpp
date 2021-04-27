@@ -24,10 +24,12 @@ extern "C"
 #include "hsl_mc68i.h"
 }
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA77_DEFAULT_CONTROL(x) void (x)( \
    struct ma77_control* control \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA77_OPEN_NELT(x) void (x)( \
    const int                    n,      \
    const char*                  fname1, \
@@ -40,6 +42,7 @@ extern "C"
    const int                    nelt    \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA77_OPEN(x) void (x)( \
    const int                    n,      \
    const char*                  fname1, \
@@ -51,6 +54,7 @@ extern "C"
    struct ma77_info*            info    \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA77_INPUT_VARS(x) void (x)( \
    const int                    idx,    \
    const int                    nvar,   \
@@ -60,6 +64,7 @@ extern "C"
    struct ma77_info*            info    \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA77_INPUT_REALS(x) void (x)( \
    const int                    idx,    \
    const int                    length, \
@@ -69,6 +74,7 @@ extern "C"
    struct ma77_info*            info    \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA77_ANALYSE(x) void (x)( \
    const int                    order[], \
    void**                       keep,    \
@@ -76,6 +82,7 @@ extern "C"
    struct ma77_info*            info     \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA77_FACTOR(x) void (x)( \
    const int                    posdef, \
    void**                       keep,   \
@@ -84,6 +91,7 @@ extern "C"
    const ipnumber*              scale   \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA77_FACTOR_SOLVE(x) void (x)( \
    const int                    posdef, \
    void**                       keep,   \
@@ -95,6 +103,7 @@ extern "C"
    ipnumber                     rhs[]   \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA77_SOLVE(x) void (x)( \
    const int                    job,    \
    const int                    nrhs,   \
@@ -106,6 +115,7 @@ extern "C"
    const ipnumber*              scale   \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA77_RESID(x) void (x)( \
    const int                    nrhs,    \
    const int                    lx,      \
@@ -118,6 +128,7 @@ extern "C"
    ipnumber*                    anorm_bnd\
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA77_SCALE(x) void (x)( \
    ipnumber                     scale[], \
    void**                       keep,    \
@@ -126,6 +137,7 @@ extern "C"
    ipnumber*                    anorm    \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA77_ENQUIRE_POSDEF(x) void (x)( \
    ipnumber                     d[],    \
    void**                       keep,   \
@@ -133,6 +145,7 @@ extern "C"
    struct ma77_info*            info    \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA77_ENQUIRE_INDEF(x) void (x)( \
    int                          piv_order[], \
    ipnumber                     d[],         \
@@ -141,6 +154,7 @@ extern "C"
    struct ma77_info*            info         \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA77_ALTER(x) void (x)( \
    const ipnumber               d[],     \
    void**                       keep,    \
@@ -148,6 +162,7 @@ extern "C"
    struct ma77_info*            info     \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA77_RESTART(x) void (x)( \
    const char*                  restart_file, \
    const char*                  fname1,       \
@@ -159,16 +174,19 @@ extern "C"
    struct ma77_info*            info          \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MA77_FINALISE(x) void (x)( \
    void**                       keep,   \
    const struct ma77_control*   control,\
    struct ma77_info*            info    \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MC68_DEFAULT_CONTROL(x) void (x)( \
    struct mc68_control* control \
 )
 
+/// @since 3.14.0
 #define IPOPT_DECL_MC68_ORDER(x) void (x)( \
    int                          ord,    \
    int                          n,      \
@@ -230,7 +248,7 @@ private:
 public:
 
    Ma77SolverInterface(
-      SmartPtr<LibraryLoader> hslloader_
+      SmartPtr<LibraryLoader> hslloader_  ///< @since 3.14.0
    )  : val_(NULL),
         keep_(NULL),
         pivtol_changed_(false),
@@ -262,6 +280,7 @@ public:
    );
 
    /// set MA77 and MC68 functions to use for every instantiation of this class
+   /// @since 3.14.0
    static void SetFunctions(
       IPOPT_DECL_MA77_DEFAULT_CONTROL(*ma77_default_control),
       IPOPT_DECL_MA77_OPEN_NELT(*ma77_open_nelt),

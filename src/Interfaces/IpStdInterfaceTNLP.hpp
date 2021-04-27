@@ -197,7 +197,8 @@ public:
    );
    ///@}
 
-   // get_curr_iterate() to be called by GetIpoptCurrentIterate()
+   /// get_curr_iterate() to be called by GetIpoptCurrentIterate()
+   /// @since 3.14.0
    bool get_curr_iterate(
       Bool                       scaled,
       Index                      n,
@@ -212,7 +213,8 @@ public:
       return TNLP::get_curr_iterate(ip_data_, ip_cq_, scaled, n, x, z_L, z_U, m, g, lambda);
    }
 
-   // get_curr_violations() to be called by GetIpoptCurrentViolations()
+   /// get_curr_violations() to be called by GetIpoptCurrentViolations()
+   /// @since 3.14.0
    bool get_curr_violations(
       bool                       scaled,
       Index                      n,

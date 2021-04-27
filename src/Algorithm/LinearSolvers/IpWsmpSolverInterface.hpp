@@ -25,7 +25,7 @@ public:
    /** Constructor */
    WsmpSolverInterface(
 #ifdef PARDISO_MATCHING_PREPROCESS
-      SmartPtr<LibraryLoader> pardisoloader_
+      SmartPtr<LibraryLoader> pardisoloader_  ///< @since 3.14.0
 #endif
    );
 

@@ -34,6 +34,7 @@ public:
    ///@}
 
    /// enable the timer
+   /// @since 3.14.0
    void Enable()
    {
       enabled_ = true;
@@ -42,6 +43,7 @@ public:
    /// disable the timer
    ///
    /// following calls to Start(), End(), and EndIfStarted() have no effect
+   /// @since 3.14.0
    void Disable()
    {
       enabled_ = false;
@@ -127,7 +129,9 @@ public:
       return total_walltime_;
    }
 
-   /** Method returning start CPU time for started task. */
+   /** Method returning start CPU time for started task.
+    * @since 3.14.0
+    */
    Number StartCpuTime() const
    {
       DBG_ASSERT(start_called_);
@@ -135,7 +139,9 @@ public:
       return start_cputime_;
    }
 
-   /** Method returning start system time for started task. */
+   /** Method returning start system time for started task.
+    * @since 3.14.0
+    */
    Number StartSysTime() const
    {
       DBG_ASSERT(start_called_);
@@ -143,7 +149,9 @@ public:
       return start_systime_;
    }
 
-   /** Method returning start wall clock time for started task. */
+   /** Method returning start wall clock time for started task.
+    * @since 3.14.0
+    */
    Number StartWallclockTime() const
    {
       DBG_ASSERT(start_called_);
@@ -151,11 +159,13 @@ public:
       return start_walltime_;
    }
 
+   /// @since 3.14.0
    bool IsEnabled() const
    {
       return enabled_;
    }
 
+   /// @since 3.14.0
    bool IsStarted() const
    {
       return start_called_;
