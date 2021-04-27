@@ -206,10 +206,8 @@ private:
       Number alpha_primal_test
    );
 
-   /** Check comparison "lhs <= rhs", using machine precision based on BasVal
-    *
-    * @todo This should probably not be a static member function if we want to allow for different relaxation parameters values
-    */
+   /** Check comparison "lhs <= rhs", using machine precision based on BasVal */
+   // ToDo This should probably not be a static member function if we want to allow for different relaxation parameters values
    static bool Compare_le(
       Number lhs,
       Number rhs,

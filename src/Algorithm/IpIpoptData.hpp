@@ -663,8 +663,8 @@ private:
     *  direction.
     *
     *  This flag is reset when the AcceptTrialPoint method is called.
-    *  @todo we could cue off of a null delta_
     */
+   // ToDo we could cue off of a null delta_
    bool have_deltas_;
    ///@}
 
@@ -682,8 +682,8 @@ private:
     *  parameter) has already computed the affine-scaling step.
     *
     *  This flag is reset when the AcceptTrialPoint method is called.
-    *  @todo we could cue off of a null delta_aff_
     */
+   // ToDo we could cue off of a null delta_aff_
    bool have_affine_deltas_;
    ///@}
 

@@ -98,10 +98,8 @@ protected:
       const std::string& prefix
    ) const;
 
-   /** X = beta*X + alpha*(Matrix S^{-1} Z).
-    *
-    * @todo Specialized implementation missing so far!
-    */
+   /** X = beta*X + alpha*(Matrix S^{-1} Z). */
+   // ToDo Specialized implementation missing so far!
    virtual void AddMSinvZImpl(
       Number        alpha,
       const Vector& S,
@@ -109,10 +107,8 @@ protected:
       Vector&       X
    ) const;
 
-   /** X = S^{-1} (r + alpha*Z*M^Td).
-    *
-    * @todo Specialized implementation missing so far!
-    */
+   /** X = S^{-1} (r + alpha*Z*M^Td). */
+   // ToDo Specialized implementation missing so far!
    virtual void SinvBlrmZMTdBrImpl(
       Number        alpha,
       const Vector& S,

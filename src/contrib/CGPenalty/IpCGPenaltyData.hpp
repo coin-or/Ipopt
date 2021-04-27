@@ -239,8 +239,8 @@ private:
    /** The following flag is set to true, if some other part of the
     *  algorithm has already computed the Chen-Goldfarb step.  This
     *  flag is reset when the AcceptTrialPoint method is called.
-    *  @todo we could cue off of a null delta_cgpen_
     */
+   // ToDo we could cue off of a null delta_cgpen_
    bool have_cgpen_deltas_;
    ///@}
 
@@ -257,8 +257,8 @@ private:
     *  algorithm has already computed the fast Chen-Goldfarb step.
     *
     *  This flag is reset when the AcceptTrialPoint method is called.
-    *  @todo we could cue off of a null delta_cgfast_
     */
+   // ToDo we could cue off of a null delta_cgfast_
    bool have_cgfast_deltas_;
    ///@}
 

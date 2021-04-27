@@ -84,10 +84,8 @@ public:
       Vector&       d_U
    );
 
-   /** Method for obtaining the starting point for all the iterates.
-    *
-    *  @todo it might not make sense to ask for initial values for v_L and v_U?
-    */
+   /** Method for obtaining the starting point for all the iterates. */
+   // ToDo it might not make sense to ask for initial values for v_L and v_U?
    virtual bool GetStartingPoint(
       SmartPtr<Vector> x,
       bool             need_x,

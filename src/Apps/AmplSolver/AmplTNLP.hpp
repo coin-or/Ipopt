@@ -503,8 +503,8 @@ public:
    /** Write the solution file.
     *
     *  This is a wrapper for AMPL's write_sol.
-    *  @todo Maybe this should be at a different place, or collect the numbers itself?
     */
+   // ToDo Maybe this should be at a different place, or collect the numbers itself?
    void write_solution_file(
       const std::string& message
    ) const;
