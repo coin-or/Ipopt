@@ -53,11 +53,13 @@ void OptimalityErrorConvergenceCheck::RegisterOptions(
       "Successful termination requires that the max-norm of the (unscaled) dual infeasibility is less than this threshold.");
    roptions->AddLowerBoundedNumberOption(
       "constr_viol_tol",
-      "Desired threshold for the constraint violation.",
+      "Desired threshold for the constraint and variable bound violation.",
       0.0, true,
       1e-4,
-      "Absolute tolerance on the constraint violation. "
-      "Successful termination requires that the max-norm of the (unscaled) constraint violation is less than this threshold.");
+      "Absolute tolerance on the constraint and variable bound violation. "
+      "Successful termination requires that the max-norm of the (unscaled) constraint violation is less than this threshold. "
+      "If option bound_relax_factor is not zero 0, then Ipopt relaxes given variable bounds. "
+      "The value of constr_viol_tol is used to restrict the absolute amount of this bound relaxation. ");
    roptions->AddLowerBoundedNumberOption(
       "compl_inf_tol",
       "Desired threshold for the complementarity conditions.",

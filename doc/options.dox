@@ -76,7 +76,7 @@ The implementation paper mentioned for some options is \cite WaecBieg06:mp.
 \anchor OPT_tol
 <strong>tol</strong>: Desired convergence tolerance (relative).
 <blockquote>
- Determines the convergence tolerance for the algorithm. The algorithm terminates successfully, if the (scaled) NLP error becomes smaller than this value, and if the (absolute) criteria according to "dual_inf_tol", "constr_viol_tol", and "compl_inf_tol" are met. (This is epsilon_tol in Eqn. (6) in implementation paper). See also "acceptable_tol" as a second termination criterion. Note, some other algorithmic features also use this quantity to determine thresholds etc. The valid range for this real option is 0 < tol and its default value is 10<sup>-08</sup>.
+ Determines the convergence tolerance for the algorithm. The algorithm terminates successfully, if the (scaled) NLP error becomes smaller than this value, and if the (absolute) criteria according to "dual_inf_tol", "constr_viol_tol", and "compl_inf_tol" are met. This is epsilon_tol in Eqn. (6) in implementation paper. See also "acceptable_tol" as a second termination criterion. Note, some other algorithmic features also use this quantity to determine thresholds etc. The valid range for this real option is 0 < tol and its default value is 10<sup>-08</sup>.
 </blockquote>
 
 \anchor OPT_s_max
@@ -110,9 +110,9 @@ The implementation paper mentioned for some options is \cite WaecBieg06:mp.
 </blockquote>
 
 \anchor OPT_constr_viol_tol
-<strong>constr_viol_tol</strong>: Desired threshold for the constraint violation.
+<strong>constr_viol_tol</strong>: Desired threshold for the constraint and variable bound violation.
 <blockquote>
- Absolute tolerance on the constraint violation. Successful termination requires that the max-norm of the (unscaled) constraint violation is less than this threshold. The valid range for this real option is 0 < constr_viol_tol and its default value is 0.0001.
+ Absolute tolerance on the constraint and variable bound violation. Successful termination requires that the max-norm of the (unscaled) constraint violation is less than this threshold. If option bound_relax_factor is not zero 0, then Ipopt relaxes given variable bounds. The value of constr_viol_tol is used to restrict the absolute amount of this bound relaxation.  The valid range for this real option is 0 < constr_viol_tol and its default value is 0.0001.
 </blockquote>
 
 \anchor OPT_compl_inf_tol
