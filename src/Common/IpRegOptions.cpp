@@ -1383,7 +1383,8 @@ void RegisteredOptions::RegisteredCategoriesByPriority(
  */
 void RegisteredOptions::OutputOptionDocumentation(
    const Journalist&             jnlst,
-   SmartPtr<OptionsList>         options
+   SmartPtr<OptionsList>         options,
+   int                           minpriority
 ) const
 {
    OutputMode printmode;
@@ -1398,7 +1399,7 @@ void RegisteredOptions::OutputOptionDocumentation(
    RegisteredCategoriesByPriority(cats);
    for( RegCategoriesByPriority::const_reverse_iterator cat_it = cats.rbegin(); cat_it != cats.rend(); ++cat_it )
    {
-      if( (*cat_it)->Priority() < 0 )
+      if( (*cat_it)->Priority() < minpriority )
          continue;
 
       bool firstopt = true;

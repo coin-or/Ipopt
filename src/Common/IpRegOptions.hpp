@@ -1060,10 +1060,12 @@ public:
     *
     * Format is decided according to print_options_mode option.
     * Whether to print advanced options is decided according to print_advanced_options option.
+    * All categories with priority equal or greater minpriority are printed.
     */
    virtual void OutputOptionDocumentation(
       const Journalist&             jnlst,
-      SmartPtr<OptionsList>         options
+      SmartPtr<OptionsList>         options,
+      int                           minpriority = 0
    ) const;
 
    /** Output documentation in text format
