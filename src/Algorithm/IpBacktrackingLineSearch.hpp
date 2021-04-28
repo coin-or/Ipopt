@@ -112,6 +112,13 @@ public:
     */
    virtual bool ActivateFallbackMechanism();
 
+   /** Stop watch dog if started and restore iterate from before watchdog started.
+    *
+    *  This method is intended to be called if Ipopt is interrupted during the watchdog pahase.
+    *  @since 3.14.0
+    */
+   void StopWatchDog();
+
    /** Methods for OptionsList */
    ///@{
    static void RegisterOptions(

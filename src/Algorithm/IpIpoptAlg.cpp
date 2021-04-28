@@ -9,6 +9,7 @@
 #include "IpJournalist.hpp"
 #include "IpRestoPhase.hpp"
 #include "IpOrigIpoptNLP.hpp"
+#include "IpBacktrackingLineSearch.hpp"
 
 #ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"
@@ -373,15 +374,7 @@ SolverReturn IpoptAlgorithm::Optimize(
       OutputIteration();
       IpData().TimingStats().OutputIteration().End();
 
-      if( conv_status == ConvergenceCheck::CONVERGED || conv_status == ConvergenceCheck::CONVERGED_TO_ACCEPTABLE_POINT )
-      {
-         if( IpCq().IsSquareProblem() )
-         {
-            // make the sure multipliers are computed properly
-            ComputeFeasibilityMultipliers();
-         }
-      }
-
+      bool stop_watchdog = false;
       switch( conv_status )
       {
          case ConvergenceCheck::CONVERGED:
@@ -392,12 +385,15 @@ SolverReturn IpoptAlgorithm::Optimize(
             break;
          case ConvergenceCheck::MAXITER_EXCEEDED:
             retval = MAXITER_EXCEEDED;
+            stop_watchdog = true;
             break;
          case ConvergenceCheck::CPUTIME_EXCEEDED:
             retval = CPUTIME_EXCEEDED;
+            stop_watchdog = true;
             break;
          case ConvergenceCheck::WALLTIME_EXCEEDED:
             retval = WALLTIME_EXCEEDED;
+            stop_watchdog = true;
             break;
          case ConvergenceCheck::DIVERGING:
             retval = DIVERGING_ITERATES;
@@ -408,6 +404,19 @@ SolverReturn IpoptAlgorithm::Optimize(
          default:
             retval = INTERNAL_ERROR;
             break;
+      }
+
+      // stop watchdog if interrupted due to limit to restore iterate from before watchdog (#289)
+      if( stop_watchdog && dynamic_cast<BacktrackingLineSearch*>(GetRawPtr(line_search_)) != NULL )
+         static_cast<BacktrackingLineSearch*>(GetRawPtr(line_search_))->StopWatchDog();
+
+      if( conv_status == ConvergenceCheck::CONVERGED || conv_status == ConvergenceCheck::CONVERGED_TO_ACCEPTABLE_POINT )
+      {
+         if( IpCq().IsSquareProblem() )
+         {
+            // make the sure multipliers are computed properly
+            ComputeFeasibilityMultipliers();
+         }
       }
    }
    catch( TINY_STEP_DETECTED& exc )

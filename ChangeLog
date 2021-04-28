@@ -117,6 +117,11 @@ commit history.
           The solve summary now reports the violation of original bounds
           and SolveStatistics::(Scaled)Infeasibilities() has been extended
           to report the violation of original variable bounds. [#312]
+        - If Ipopt hits a time or iteration limit during watchdog phase,
+          the iterate from before the watchdog phase is now restored and
+          passed to finalize_solution. Note that this does not apply if
+          Ipopt is stopped due to a user-interrupt (intermediate_callback).
+          [#289]
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]

@@ -883,6 +883,14 @@ void BacktrackingLineSearch::StopWatchDog(
    acceptor_->StopWatchDog();
 }
 
+void BacktrackingLineSearch::StopWatchDog()
+{
+   if( !in_watchdog_ )
+      return;
+   SmartPtr<IteratesVector> actual_delta;
+   StopWatchDog(actual_delta);
+}
+
 void BacktrackingLineSearch::Reset()
 {
    DBG_START_FUN("BacktrackingLineSearch::Reset", dbg_verbosity);
