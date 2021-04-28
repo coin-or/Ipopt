@@ -124,6 +124,18 @@ commit history.
           [#289]
         - Fixed a problem where moving slack away from 0 did not succeed
           when mu was very small. [#212]
+        - When BacktrackingLinesearch could not find a trial point that
+          provided sufficient progress, it may resort to call the feasibility
+          restoration phase. If, however, the current (scaled) constraint
+          violation was below tol/100, this would result in the infamous
+          "Restoration phase is called at almost feasible point..." abort
+          with status code Restoration_Failure. Now, this message has been
+          changed to "Linesearch failed, but no restoration phase or other
+          fall back is available." and the status code to Error_In_Step_Computation
+          to better reflect that the linesearch failed and not the restoration
+          phase. Further, the unscaled constraint violation tolerance now
+          needs to be below constr_viol_tol/10 as well in order to trigger
+          this abort.
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]

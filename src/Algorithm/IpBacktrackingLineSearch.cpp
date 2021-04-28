@@ -208,6 +208,7 @@ bool BacktrackingLineSearch::InitializeImpl(
    options.GetBoolValue("expect_infeasible_problem", expect_infeasible_problem_, prefix);
 
    options.GetBoolValue("start_with_resto", start_with_resto_, prefix);
+   options.GetNumericValue("constr_viol_tol", constr_viol_tol_, prefix);
 
    options.GetNumericValue("tiny_step_tol", tiny_step_tol_, prefix);
    options.GetNumericValue("tiny_step_y_tol", tiny_step_y_tol_, prefix);
@@ -301,24 +302,21 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
       {
          goto_resto = true;
       }
+      else if( acceptor_->DoFallback() )
+      {
+         in_watchdog_ = false;
+         watchdog_iterate_ = NULL;
+         watchdog_delta_ = NULL;
+         count_successive_shortened_steps_ = 0;
+         watchdog_shortened_iter_ = 0;
+         IpData().Set_info_alpha_primal_char('X');
+         fallback_activated_ = false;
+         return;
+      }
       else
       {
-         if( acceptor_->DoFallback() )
-         {
-            in_watchdog_ = false;
-            watchdog_iterate_ = NULL;
-            watchdog_delta_ = NULL;
-            count_successive_shortened_steps_ = 0;
-            watchdog_shortened_iter_ = 0;
-            IpData().Set_info_alpha_primal_char('X');
-            fallback_activated_ = false;
-            return;
-         }
-         else
-         {
-            THROW_EXCEPTION(RESTORATION_FAILED,
-                            "We are in an emergency mode, but not restoration phase or other fall back is available.");
-         }
+         THROW_EXCEPTION(STEP_COMPUTATION_FAILED,
+            "We are in an emergency mode, but no restoration phase or other fall back is available.");
       }
       fallback_activated_ = false; // reset the flag
    }
@@ -339,7 +337,8 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
    }
 
    if( expect_infeasible_problem_
-       && Max(IpData().curr()->y_c()->Amax(), IpData().curr()->y_d()->Amax()) > expect_infeasible_problem_ytol_ )
+       && IsValid(resto_phase_)
+       && Max(IpData().curr()->y_c()->Amax(), IpData().curr()->y_d()->Amax()) > expect_infeasible_problem_ytol_)
    {
       goto_resto = true;
    }
@@ -563,25 +562,27 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
             {
                THROW_EXCEPTION(IpoptException, "No Restoration Phase given to this Backtracking Line Search Object!");
             }
+
             // ToDo make the 1e-2 below a parameter?
-            if( IpCq().curr_constraint_violation() <= 1e-2 * IpData().tol() )
+            // added second criteria to cover cases where tol has been set to a large value
+            if( IpCq().curr_constraint_violation() <= 1e-2 * IpData().tol() &&
+               IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX) <= 1e-1 * constr_viol_tol_ )
             {
                bool found_acceptable = RestoreAcceptablePoint();
                if( found_acceptable )
                {
                   Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
-                                 "Restoration phase is called at almost feasible point,\n  but acceptable point from iteration %d could be restored.\n",
+                                 "Cannot call restoration phase at almost feasible point,\n  but acceptable point from iteration %d could be restored.\n",
                                  acceptable_iteration_number_);
                   THROW_EXCEPTION(ACCEPTABLE_POINT_REACHED,
                                   "Restoration phase called at almost feasible point, but acceptable point could be restored.\n");
                }
                else
                {
-                  // ToDo this happens too often, see various issues
                   Jnlst().Printf(J_STRONGWARNING, J_LINE_SEARCH,
-                                 "Restoration phase is called at point that is almost feasible,\n  with constraint violation %e. Abort.\n",
-                                 IpCq().curr_constraint_violation());
-                  THROW_EXCEPTION(RESTORATION_FAILED, "Restoration phase called, but point is almost feasible.");
+                                 "Cannot call restoration phase at almost feasible point (violation %e),\n  abort in line search due to no other fall back.\n",
+                                 IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX));
+                  THROW_EXCEPTION(STEP_COMPUTATION_FAILED, "Linesearch failed, but no restoration phase or other fall back is available.");
                }
             }
 

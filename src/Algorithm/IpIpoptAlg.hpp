@@ -23,11 +23,6 @@
 namespace Ipopt
 {
 
-/** @name Exceptions */
-///@{
-DECLARE_STD_EXCEPTION(STEP_COMPUTATION_FAILED);
-///@}
-
 /** The main ipopt algorithm class.
  *
  *  Main Ipopt algorithm class, contains the main optimize method,

@@ -196,14 +196,26 @@ output message to the console, and a brief description.
 
 - `Error_In_Step_Computation`:
 
-   Console Output: `EXIT: Error in step computation (regularization becomes too large?)!`
+   Console Output: `EXIT: Error in step computation!`
    
-   This messages is printed if \Ipopt is unable to compute
-   a search direction, despite several attempts to modify the iteration
-   matrix. Usually, the value of the regularization parameter then
-   becomes too large. One situation where this can happen is when
-   values in the Hessian are invalid (NaN or Inf). You can check
-   whether this is true by using the option \ref OPT_check_derivatives_for_naninf "check_derivatives_for_naninf".
+   This message is printed if \Ipopt is unable to compute a step towards
+   a new iterate and the current iterate is not acceptable for the specified
+   tolerances.
+
+   A possible reason is that a search direction could not be computed
+   despite several attempts to modify the iteration matrix.
+   Usually, the value of the regularization parameter then becomes too large.
+   One situation where this can happen is when  values in the Hessian
+   are invalid (NaN or Inf). You can check whether this is true by using
+   the option \ref OPT_check_derivatives_for_naninf "check_derivatives_for_naninf".
+
+   Another reason is that the feasibility restoration phase could not be
+   activated because the current iterate is not infeasible. Reasons for
+   this again include that the problem is highly degenerate, badly scaled,
+   does not satisfy the constraint qualification, or that your NLP code
+   provides incorrect derivative information.
+   Before Ipopt 3.14, this resulted in a Restoration_Failed status code
+   with message "Restoration phase is called at almost feasible point..."
 
 - `Invalid_Option`:
 

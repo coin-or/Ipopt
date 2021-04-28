@@ -391,6 +391,9 @@ private:
     *  restoration phase.
     */
    bool start_with_resto_;
+
+   /** unscaled constraint violation tolerance */
+   Number constr_viol_tol_;
    ///@}
 
    /** @name Information related to watchdog procedure */

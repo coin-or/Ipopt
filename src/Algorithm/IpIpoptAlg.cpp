@@ -334,7 +334,7 @@ SolverReturn IpoptAlgorithm::Optimize(
             IpData().TimingStats().ComputeSearchDirection().End();
          }
 
-         // If we are in the emergency mode, ask to line search object
+         // If we are in the emergency mode, ask the line search object
          // to go to the fallback options.  If that isn't possible,
          // issue error message
          if( emergency_mode )
