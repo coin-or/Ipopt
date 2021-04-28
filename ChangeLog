@@ -183,7 +183,7 @@ commit history.
         longer possible. Dependencies should now be build and installed
         before building Ipopt.
         Additionally, support for some outdated versions of dependencies
-        and unmaintained components of Ipopt have been dropped and some
+        and unmaintained components of Ipopt has been dropped and some
         improvements that may require changes on the users side have been
         applied.
         A more detailed, probably incomplete, list of changes follows:
