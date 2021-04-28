@@ -122,6 +122,8 @@ commit history.
           passed to finalize_solution. Note that this does not apply if
           Ipopt is stopped due to a user-interrupt (intermediate_callback).
           [#289]
+        - Fixed a problem where moving slack away from 0 did not succeed
+          when mu was very small. [#212]
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]

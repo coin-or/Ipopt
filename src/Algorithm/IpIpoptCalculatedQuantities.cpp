@@ -468,6 +468,12 @@ Index IpoptCalculatedQuantities::CalculateSafeSlack(
       Number min_slack = slack->Min();
       // TODO we need to make sure that this also works for non-monotone MUs
       Number s_min = std::numeric_limits<Number>::epsilon() * Min(1., ip_data_->curr_mu());
+      // if mu = is very small, then s_min may have dropped to 0  (e.g., #212)
+      // but we want slack corrections also if (and especially if) slacks are at 0
+      // (otherwise the barrier_obj becomes inf and there are asserts that say that this shouldn't happen)
+      // so we ensure that s_min is at least positive
+      if( s_min == 0.0 )
+         s_min = std::numeric_limits<Number>::min();
       DBG_PRINT((1, "s_min = %g, min_slack=%g\n", s_min, min_slack));
       if( min_slack < s_min )
       {
@@ -475,46 +481,46 @@ Index IpoptCalculatedQuantities::CalculateSafeSlack(
          SmartPtr<Vector> t = slack->MakeNew();
          t->Copy(*slack);
          t->AddScalar(-s_min);
-         t->ElementWiseSgn();
+         t->ElementWiseSgn();  // sign(slack-s_min), so -1 if slack < s_min   (and this is a strict "<", so s_min=0 would be a problem here!)
 
          SmartPtr<Vector> zero_vec = t->MakeNew();
          zero_vec->Set(0.0);
-         t->ElementWiseMin(*zero_vec);
-         t->Scal(-1.0);
+         t->ElementWiseMin(*zero_vec);  // t = -1 if slack < s_min, otherwise 0
+         t->Scal(-1.0);                 // t =  1 if slack < s_min, otherwise 0
          retval = (Index) t->Asum();
          DBG_PRINT((1, "Number of slack corrections = %d\n", retval));
          DBG_PRINT_VECTOR(2, "t(sgn)", *t);
 
-         // ToDo AW: I added the follwing line b/c I found a case where
+         // ToDo AW: I added the following line b/c I found a case where
          // slack was negative and this correction produced 0
          slack->ElementWiseMax(*zero_vec);
 
          SmartPtr<Vector> t2 = t->MakeNew();
          t2->Set(ip_data_->curr_mu());
-         t2->ElementWiseDivide(*multiplier);
+         t2->ElementWiseDivide(*multiplier);  // t2 = mu / multiplier
 
          SmartPtr<Vector> s_min_vec = t2->MakeNew();
          s_min_vec->Set(s_min);
 
-         t2->ElementWiseMax(*s_min_vec);
-         t2->Axpy(-1.0, *slack);
-         DBG_PRINT_VECTOR(2, "tw(smin,mu/mult)", *t2);
+         t2->ElementWiseMax(*s_min_vec);   // t2 = max(mu/multiplier,s_min)
+         t2->Axpy(-1.0, *slack);           // t2 = max(mu/multiplier,s_min) - slack
+         DBG_PRINT_VECTOR(2, "tw(smin,mu/mult)=max(mu/multiplier,s_min)-slack", *t2);
 
-         t->ElementWiseMultiply(*t2);
-         t->Axpy(1.0, *slack);
+         t->ElementWiseMultiply(*t2);  // t = max(mu/multiplier,s_min) - slack if slack < s_min, otherwise 0
+         t->Axpy(1.0, *slack);         // t = max(mu/multiplier,s_min) if slack < s_min, otherwise slack
 
          SmartPtr<Vector> t_max = t2;
          t_max->Set(1.0);
          SmartPtr<Vector> abs_bound = bound->MakeNew();
          abs_bound->Copy(*bound);
          abs_bound->ElementWiseAbs();
-         t_max->ElementWiseMax(*abs_bound);
+         t_max->ElementWiseMax(*abs_bound);   // max(1.0,|bound|)
          DBG_PRINT_VECTOR(2, "t_max1", *t_max);
          DBG_PRINT_VECTOR(2, "slack", *slack);
-         t_max->AddOneVector(1.0, *slack, slack_move_);
-         DBG_PRINT_VECTOR(2, "t_max2", *t_max);
+         t_max->AddOneVector(1.0, *slack, slack_move_);   // t_max = slack_move*max(1.0,|bound|) + slack
+         DBG_PRINT_VECTOR(2, "t_max2=slack_move*max(1.0,|bound|)+slack", *t_max);
 
-         t->ElementWiseMin(*t_max);
+         t->ElementWiseMin(*t_max);  // t = min(max(mu/multiplier,s_min), slack_move*max(1.0,|bound|))+slack, if slack < s_min, otherwise slack
          DBG_PRINT_VECTOR(2, "new_slack", *t);
 
          slack = t;

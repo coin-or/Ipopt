@@ -468,7 +468,7 @@ bool FilterLSAcceptor::IsAcceptableToCurrentIterate(Number trial_barr,
    DBG_START_METH("FilterLSAcceptor::IsAcceptableToCurrentIterate",
                   dbg_verbosity);
 
-   // Check if the barrier objective function is increasing to
+   // Check if the barrier objective function is increasing too
    // rapidly (according to option obj_max_inc)
    if (!called_from_restoration && trial_barr > reference_barr_)
    {
