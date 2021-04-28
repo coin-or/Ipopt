@@ -279,7 +279,7 @@ void AlgorithmBuilder::RegisterOptions(
    if( availablesolvers & IPOPTLINEARSOLVER_MC19 )
    {
       options.push_back("equilibration-based");
-      descrs.push_back("scale the problem o that first derivatives are of order 1 at random points");
+      descrs.push_back("scale the problem so that first derivatives are of order 1 at random points");
       if( availablesolverslinked & IPOPTLINEARSOLVER_MC19 )
          descrs.back() += " (uses Harwell routine MC19)";
       else
@@ -291,8 +291,11 @@ void AlgorithmBuilder::RegisterOptions(
       options,
       descrs,
       "Selects the technique used for scaling the problem internally before it is solved. "
-      "For user-scaling, the parameters come from the NLP. "
-      "If you are using AMPL, they can be specified through suffixes (\"scaling_factor\")");
+      "For user-scaling, the parameters come from the NLP."
+#ifdef IPOPT_HAS_ASL
+      " If you are using AMPL, they can be specified through suffixes (\"scaling_factor\")"
+#endif
+      );
 
    roptions->SetRegisteringCategory("Barrier Parameter Update");
    roptions->AddStringOption2(
