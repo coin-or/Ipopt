@@ -131,7 +131,7 @@ bool MinC_1NrmRestorationPhase::PerformRestoration()
       DBG_ASSERT(elapsed >= 0);
       if( elapsed >= max_wall_time_ )
          THROW_EXCEPTION(RESTORATION_WALLTIME_EXCEEDED, "Maximal wallclock time exceeded at start of restoration phase.");
-      resto_options_->SetNumericValue("max_wall_time", max_wall_time_ - elapsed);
+      resto_options_->SetNumericValue("resto.max_wall_time", max_wall_time_ - elapsed);
    }
 
    if( max_cpu_time_ < 1e20 )
@@ -141,7 +141,7 @@ bool MinC_1NrmRestorationPhase::PerformRestoration()
       DBG_ASSERT(elapsed >= 0);
       if( elapsed >= max_cpu_time_ )
          THROW_EXCEPTION(RESTORATION_CPUTIME_EXCEEDED, "Maximal CPU time exceeded at start of restoration phase.");
-      resto_options_->SetNumericValue("max_cpu_time", max_cpu_time_ - elapsed);
+      resto_options_->SetNumericValue("resto.max_cpu_time", max_cpu_time_ - elapsed);
    }
 
    // Determine if this is a square problem
