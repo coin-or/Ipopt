@@ -12,7 +12,7 @@ endif
 
 doc_DATA = README.md AUTHORS LICENSE
 
-.PHONY: test unitTest doc javadoc astyle
+.PHONY: test unitTest doc javadoc astyle cppcheck
 
 test: unitTest
 
@@ -36,6 +36,9 @@ clean-local : clean-doc
 astyle:
 	cd $(srcdir) && astyle --mode=c -A1 --indent=spaces=3 --indent-switches --min-conditional-indent=1 --convert-tabs --align-pointer=type --pad-oper --add-brackets -n -r "*.hpp" "*.h"  "*.cpp" "*.c"
 	cd $(srcdir) && astyle --mode=java -A1 --indent=spaces=3 --indent-switches --min-conditional-indent=1 --convert-tabs --align-pointer=type --pad-oper --add-brackets -n -r "*.java"
+
+cppcheck:
+	cppcheck -q -j4 --inline-suppr --enable=warning --suppress=uninitMemberVar --addon=threadsafety.py --std=c++03 --std=c99 --suppress=uninitMemberVar -Isrc/Common -DHAVE_CONFIG_H -DIPOPTLIB_BUILD $(srcdir)/src
 
 pkgconfiglibdir = $(libdir)/pkgconfig
 pkgconfiglib_DATA = ipopt.pc

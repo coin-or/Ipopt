@@ -56,6 +56,7 @@ public:
 
    /**@name Constructors/Destructors */
    ///@{
+   // cppcheck-suppress syntaxError
    TNLP()
    { }
 
