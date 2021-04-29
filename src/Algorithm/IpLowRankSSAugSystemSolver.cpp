@@ -85,6 +85,8 @@ ESymSolverStatus LowRankSSAugSystemSolver::Solve(
 )
 {
    DBG_START_METH("LowRankSSAugSystemSolver::Solve", dbg_verbosity);
+   DBG_ASSERT(J_c != NULL);  // since we de-ref this pointer below
+   DBG_ASSERT(J_d != NULL);  // since we de-ref this pointer below
 
    ESymSolverStatus retval;
 
@@ -137,14 +139,15 @@ ESymSolverStatus LowRankSSAugSystemSolver::Solve(
          d_s_tag_ = 0;
       }
       delta_s_ = delta_s;
-      if( J_c )
-      {
-         j_c_tag_ = J_c->GetTag();
-      }
-      else
-      {
-         j_c_tag_ = 0;
-      }
+//      if( J_c )
+//      {
+//         j_c_tag_ = J_c->GetTag();
+//      }
+//      else
+//      {
+//         j_c_tag_ = 0;
+//      }
+      j_c_tag_ = J_c->GetTag();
       if( D_c )
       {
          d_c_tag_ = D_c->GetTag();
@@ -154,14 +157,15 @@ ESymSolverStatus LowRankSSAugSystemSolver::Solve(
          d_c_tag_ = 0;
       }
       delta_c_ = delta_c;
-      if( J_d )
-      {
-         j_d_tag_ = J_d->GetTag();
-      }
-      else
-      {
-         j_d_tag_ = 0;
-      }
+//      if( J_d )
+//      {
+//         j_d_tag_ = J_d->GetTag();
+//      }
+//      else
+//      {
+//         j_d_tag_ = 0;
+//      }
+      j_d_tag_ = J_d->GetTag();
       if( D_d )
       {
          d_d_tag_ = D_d->GetTag();

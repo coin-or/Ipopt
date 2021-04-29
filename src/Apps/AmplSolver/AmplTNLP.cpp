@@ -942,7 +942,6 @@ bool AmplTNLP::internal_conval(
    if( allocated )
    {
       delete[] g;
-      g = NULL;
    }
 
    if( nerror_ok(nerror_) )
@@ -1098,7 +1097,7 @@ bool AmplTNLP::get_list_of_nonlinear_variables(
    Index* pos_nonlin_vars
 )
 {
-   DBG_DO(ASL_pfgh* asl = asl_;)
+   DBG_DO(ASL_pfgh* asl = asl_);
    DBG_ASSERT(num_nonlin_vars == Max(nlvo, nlvc));
 
    // The first variables are the nonlinear ones (using Fortran
@@ -1415,6 +1414,10 @@ void AmplOptionsList::PrintDoxygen(
    }
 }
 
+static const char sname_default[] = "ipopt";
+static const char bsname_default[] = "Ipopt " IPOPT_VERSION;
+static const char opname_default[] = "ipopt_options";
+
 char*
 AmplTNLP::get_options(
    const SmartPtr<RegisteredOptions> regoptions,
@@ -1600,9 +1603,6 @@ AmplTNLP::get_options(
 
    keyword* keywds = (keyword*) ampl_options_list->Keywords(options, jnlst_, (void**) &nerror_);
 
-   static const char sname_default[] = "ipopt";
-   static const char bsname_default[] = "Ipopt " IPOPT_VERSION;
-   static const char opname_default[] = "ipopt_options";
    const char* sname;
    const char* bsname;
    const char* opname;

@@ -51,7 +51,7 @@ void IterativeSolverTerminationTester::GetVectors(
    SmartPtr<Vector> sol_d = IpData().curr()->y_d()->MakeNew();
    dim = sol_d->Dim();
    TripletHelper::PutValuesInVector(dim, array, *sol_d);
-   array += dim;
+   // array += dim;
    comp_d = ConstPtr(sol_d);
 }
 

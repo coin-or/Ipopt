@@ -263,6 +263,7 @@ ESymSolverStatus Ma86SolverInterface::InitializeStructure(
          // MeTiS not available
          ordering_ = ORDER_AMD;
          delete[] order_metis;
+         order_metis = NULL;
       }
       else if( info68.flag < 0 )
       {

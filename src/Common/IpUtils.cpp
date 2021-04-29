@@ -233,8 +233,8 @@ int Snprintf(
    ret = vsprintf(str, format, apcopy);
    (void) size;
 #  endif
-   va_end(apcopy);
 # endif
+   va_end(apcopy);
 #else
 # ifdef HAVE_VSNPRINTF
 #  ifdef __SUNPRO_CC

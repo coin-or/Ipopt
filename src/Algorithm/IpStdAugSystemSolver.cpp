@@ -123,7 +123,7 @@ ESymSolverStatus StdAugSystemSolver::MultiSolve(
    // Create the compound matrix of the augmented system if it has not
    // yet been created - It is assumed that the structure will not change
    // after this call
-   DBG_DO(bool debug_first_time_through = false;)
+   DBG_DO(bool debug_first_time_through = false);
    if( !IsValid(augmented_system_) )
    {
       // pass in the information to form the structure of the augmented system
@@ -133,7 +133,7 @@ ESymSolverStatus StdAugSystemSolver::MultiSolve(
       CreateAugmentedSpace(*W, *J_c, *J_d, *rhs_xV[0], *rhs_sV[0], *rhs_cV[0], *rhs_dV[0]);
       CreateAugmentedSystem(W, W_factor, D_x, delta_x, D_s, delta_s, *J_c, D_c, delta_c, *J_d, D_d, delta_d, *rhs_xV[0],
                             *rhs_sV[0], *rhs_cV[0], *rhs_dV[0]);
-      DBG_DO(debug_first_time_through = true;)
+      DBG_DO(debug_first_time_through = true);
    }
 
    // Check if anything that was just passed in is different from

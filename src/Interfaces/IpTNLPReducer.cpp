@@ -137,6 +137,7 @@ bool TNLPReducer::get_nlp_info(
       {
          delete[] iRow;
          delete[] jCol;
+         return false;
       }
       nnz_jac_g_reduced_ = 0;
       nnz_jac_g_skipped_ = 0;

@@ -538,6 +538,7 @@ ESymSolverStatus IterativeWsmpSolverInterface::Solve(
          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                         "Error in WISMP during ordering/symbolic factorization phase.\n     Error code is %d.\n", ierror);
       }
+      delete[] CVGH;
       return SYMSOLVER_FATAL_ERROR;
    }
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
@@ -551,8 +552,8 @@ ESymSolverStatus IterativeWsmpSolverInterface::Solve(
          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                         " Resid[%3d] = %13.6e\n", i, CVGH[i]);
       }
-      delete[] CVGH;
    }
+   delete[] CVGH;
 
    return SYMSOLVER_SUCCESS;
 }
