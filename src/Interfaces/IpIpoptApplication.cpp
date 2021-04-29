@@ -51,10 +51,10 @@ IpoptApplication::IpoptApplication(
 )
    : read_params_dat_(true),
      rethrow_nonipoptexception_(false),
+     options_(new OptionsList()),
      inexact_algorithm_(false),
      replace_bounds_(false)
 {
-   options_ = new OptionsList();
    if( create_empty )
    {
       return;
@@ -173,14 +173,10 @@ ApplicationReturnStatus IpoptApplication::Initialize(
             stdout_jrnl->SetPrintLevel(J_DBG, J_NONE);
          }
 
-         bool option_set;
-
 #if IPOPT_VERBOSITY > 0
          // Set printlevel for debug
-         option_set = options_->GetIntegerValue("debug_print_level",
-                                                ivalue, "");
          EJournalLevel debug_print_level;
-         if (option_set)
+         if( options_->GetIntegerValue("debug_print_level", ivalue, "") )
          {
             debug_print_level = (EJournalLevel)ivalue;
          }
@@ -205,8 +201,7 @@ ApplicationReturnStatus IpoptApplication::Initialize(
          if( output_filename != "" )
          {
             EJournalLevel file_print_level;
-            option_set = options_->GetIntegerValue("file_print_level", ivalue, "");
-            if( option_set )
+            if( options_->GetIntegerValue("file_print_level", ivalue, "") )
             {
                file_print_level = (EJournalLevel) ivalue;
             }
@@ -591,9 +586,6 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
 
    ApplicationReturnStatus retValue = Internal_Error;
    SolverReturn status = INTERNAL_ERROR;
-   /** Flag indicating if the NLP:FinalizeSolution method should not
-    *  be called after optimization. */
-   bool skip_finalize_solution_call = false;
    try
    {
       // Set up the algorithm
@@ -847,10 +839,10 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
       }
    }
 
-   if( !skip_finalize_solution_call )
-   {
-      options_->GetBoolValue("skip_finalize_solution_call", skip_finalize_solution_call, "");
-   }
+   /** Flag indicating if the NLP:FinalizeSolution method should not
+    *  be called after optimization. */
+   bool skip_finalize_solution_call;
+   options_->GetBoolValue("skip_finalize_solution_call", skip_finalize_solution_call, "");
 
    if( !skip_finalize_solution_call && IsValid(p2ip_data->curr()) && IsValid(p2ip_data->curr()->x()) )
    {

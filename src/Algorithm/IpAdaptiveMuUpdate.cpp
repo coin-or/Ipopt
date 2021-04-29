@@ -457,7 +457,7 @@ bool AdaptiveMuUpdate::CheckSufficientProgress()
             retval = false;
             Number curr_error = quality_function_pd_system();
             std::list<Number>::iterator iter;
-            for( iter = refs_vals_.begin(); iter != refs_vals_.end(); iter++ )
+            for( iter = refs_vals_.begin(); iter != refs_vals_.end(); ++iter )
             {
                if( curr_error <= refs_red_fact_ * (*iter) )
                {
@@ -505,13 +505,13 @@ void AdaptiveMuUpdate::RememberCurrentPointAsAccepted()
 
          if( Jnlst().ProduceOutput(J_MOREDETAILED, J_BARRIER_UPDATE) )
          {
-            Index num_refs = 0;
+            Index refidx = 0;
             std::list<Number>::iterator iter;
-            for( iter = refs_vals_.begin(); iter != refs_vals_.end(); iter++ )
+            for( iter = refs_vals_.begin(); iter != refs_vals_.end(); ++iter )
             {
-               num_refs++;
+               refidx++;
                Jnlst().Printf(J_MOREDETAILED, J_BARRIER_UPDATE,
-                              "pd system reference[%2d] = %.6e\n", num_refs, *iter);
+                              "pd system reference[%2d] = %.6e\n", refidx, *iter);
             }
          }
       }
@@ -556,15 +556,11 @@ Number AdaptiveMuUpdate::min_ref_val()
 {
    DBG_ASSERT(adaptive_mu_globalization_ == KKT_ERROR);
    Number min_ref;
-   DBG_ASSERT(refs_vals_.size() > 0);
+   DBG_ASSERT(!refs_vals_.empty());
    std::list<Number>::iterator iter = refs_vals_.begin();
    min_ref = *iter;
-   iter++;
-   while( iter != refs_vals_.end() )
-   {
+   for( ++iter; iter != refs_vals_.end(); ++iter )
       min_ref = Min(min_ref, *iter);
-      iter++;
-   }
    return min_ref;
 }
 
@@ -572,15 +568,11 @@ Number AdaptiveMuUpdate::max_ref_val()
 {
    DBG_ASSERT(adaptive_mu_globalization_ == KKT_ERROR);
    Number max_ref;
-   DBG_ASSERT(refs_vals_.size() > 0);
+   DBG_ASSERT(!refs_vals_.empty());
    std::list<Number>::iterator iter = refs_vals_.begin();
    max_ref = *iter;
-   iter++;
-   while( iter != refs_vals_.end() )
-   {
+   for( ++iter; iter != refs_vals_.end(); ++iter )
       max_ref = Max(max_ref, *iter);
-      iter++;
-   }
    return max_ref;
 }
 

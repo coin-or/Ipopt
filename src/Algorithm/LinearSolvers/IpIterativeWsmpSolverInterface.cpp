@@ -569,6 +569,7 @@ bool IterativeWsmpSolverInterface::IncreaseQuality()
 {
    // TODO!!!!
    return false;
+#if 0
    DBG_START_METH("IterativeWsmpSolverInterface::IncreaseQuality", dbg_verbosity);
    if( wsmp_pivtol_ == wsmp_pivtolmax_ )
    {
@@ -604,6 +605,7 @@ bool IterativeWsmpSolverInterface::IncreaseQuality()
    }
 
    return true;
+#endif
 }
 
 } // namespace Ipopt

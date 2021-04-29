@@ -363,7 +363,9 @@ bool StdInterfaceTNLP::intermediate_callback(
    Bool retval = (*intermediate_cb_)((Index) mode, iter, obj_value, inf_pr, inf_du, mu, d_norm, regularization_size,
                                      alpha_du, alpha_pr, ls_trials, user_data_);
 
+   // cppcheck-suppress redundantAssignment
    ip_data_ = NULL;
+   // cppcheck-suppress redundantAssignment
    ip_cq_ = NULL;
 
    return (retval != 0);

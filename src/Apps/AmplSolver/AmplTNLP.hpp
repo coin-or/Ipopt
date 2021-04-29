@@ -45,9 +45,9 @@ public:
    };
 
    void AddAvailableSuffix(
-      std::string   suffix_string,
-      Suffix_Source source,
-      Suffix_Type   type
+      const std::string& suffix_string,
+      Suffix_Source      source,
+      Suffix_Type        type
    )
    {
       suffix_ids_.push_back(suffix_string);
@@ -57,25 +57,25 @@ public:
    }
 
    const Index* GetIntegerSuffixValues(
-      std::string   suffix_string,
-      Suffix_Source source
+      const std::string& suffix_string,
+      Suffix_Source      source
    ) const;
 
    const Number* GetNumberSuffixValues(
-      std::string   suffix_string,
-      Suffix_Source source
+      const std::string& suffix_string,
+      Suffix_Source      source
    ) const;
 
    std::vector<Index> GetIntegerSuffixValues(
       Index         n,
-      std::string   suffix_string,
-      Suffix_Source source
+      const std::string& suffix_string,
+      Suffix_Source      source
    ) const;
 
    std::vector<Number> GetNumberSuffixValues(
       Index         n,
-      std::string   suffix_string,
-      Suffix_Source source
+      const std::string& suffix_string,
+      Suffix_Source      source
    ) const;
 
 private:
@@ -140,9 +140,9 @@ public:
    {
    public:
       AmplOption(
-         const std::string ipopt_option_name,
-         AmplOptionType    type,
-         const std::string description);
+         const std::string& ipopt_option_name,
+         AmplOptionType     type,
+         const std::string& description);
 
       ~AmplOption()
       {
@@ -193,7 +193,7 @@ public:
    {
    public:
       PrivatInfo(
-         const std::string          ipopt_name,
+         const std::string&         ipopt_name,
          SmartPtr<OptionsList>      options,
          SmartPtr<const Journalist> jnlst,
          void**                     nerror = NULL
@@ -239,10 +239,10 @@ public:
 
    /** Adding a new AMPL Option */
    void AddAmplOption(
-      const std::string               ampl_option_name,
-      const std::string               ipopt_option_name,
+      const std::string&              ampl_option_name,
+      const std::string&              ipopt_option_name,
       AmplOptionsList::AmplOptionType type,
-      const std::string               description
+      const std::string&              description
    )
    {
       SmartPtr<AmplOption> new_option = new AmplOption(ipopt_option_name, type, description);
@@ -544,43 +544,49 @@ public:
     */
    ///@{
    void set_string_metadata_for_var(
-      std::string              tag,
-      std::vector<std::string> meta_data)
+      const std::string&              tag,
+      const std::vector<std::string>& meta_data
+      )
    {
       var_string_md_[tag] = meta_data;
    }
 
    void set_integer_metadata_for_var(
-      std::string        tag,
-      std::vector<Index> meta_data)
+      const std::string&        tag,
+      const std::vector<Index>& meta_data
+      )
    {
       var_integer_md_[tag] = meta_data;
    }
 
    void set_numeric_metadata_for_var(
-      std::string         tag,
-      std::vector<Number> meta_data)
+      const std::string&         tag,
+      const std::vector<Number>& meta_data
+      )
    {
       var_numeric_md_[tag] = meta_data;
    }
 
    void set_string_metadata_for_con(
-      std::string              tag,
-      std::vector<std::string> meta_data)
+      const std::string&              tag,
+      const std::vector<std::string>& meta_data
+      )
    {
       con_string_md_[tag] = meta_data;
    }
 
    void set_integer_metadata_for_con(
-      std::string        tag,
-      std::vector<Index> meta_data)
+      const std::string&        tag,
+      const std::vector<Index>& meta_data
+      )
    {
       con_integer_md_[tag] = meta_data;
    }
 
    void set_numeric_metadata_for_con(
-      std::string         tag,
-      std::vector<Number> meta_data)
+      const std::string&         tag,
+      const std::vector<Number>& meta_data
+      )
    {
       con_numeric_md_[tag] = meta_data;
    }

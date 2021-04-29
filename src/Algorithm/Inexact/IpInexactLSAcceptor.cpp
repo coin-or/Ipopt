@@ -142,9 +142,9 @@ void InexactLSAcceptor::InitThisLineSearch(
       bool compute_normal = InexData().compute_normal();
 
       Number Upsilon = -1.;
-      Number Nu = -1.;
       if( !compute_normal )
       {
+         Number Nu;
 #if 0
 // Compute Nu = ||A*u||^2/||A||^2
          SmartPtr<const Vector> curr_Au_c = IpCq().curr_jac_c_times_vec(*tangential_x);

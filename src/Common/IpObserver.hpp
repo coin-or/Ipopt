@@ -346,8 +346,7 @@ inline Subject::~Subject()
    DBG_START_METH("Subject::~Subject", dbg_verbosity);
 #endif
 
-   std::vector<Observer*>::iterator iter;
-   for( iter = observers_.begin(); iter != observers_.end(); iter++ )
+   for( std::vector<Observer*>::iterator iter = observers_.begin(); iter != observers_.end(); ++iter )
    {
       (*iter)->ProcessNotification(Observer::NT_BeingDestroyed, this);
    }
@@ -412,8 +411,7 @@ void Subject::Notify(
    DBG_START_METH("Subject::Notify", dbg_verbosity);
 #endif
 
-   std::vector<Observer*>::iterator iter;
-   for( iter = observers_.begin(); iter != observers_.end(); iter++ )
+   for( std::vector<Observer*>::iterator iter = observers_.begin(); iter != observers_.end(); ++iter )
    {
       (*iter)->ProcessNotification(notify_type, this);
    }

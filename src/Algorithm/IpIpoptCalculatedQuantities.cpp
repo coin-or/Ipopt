@@ -188,7 +188,6 @@ bool IpoptCalculatedQuantities::Initialize(
    const std::string& prefix
 )
 {
-   std::string svalue;
    Index enum_int;
 
    options.GetNumericValue("s_max", s_max_, prefix);
@@ -2945,7 +2944,6 @@ Number IpoptCalculatedQuantities::CalcCentralityMeasure(
                   dbg_verbosity);
 
    Number MinCompl = std::numeric_limits<Number>::max();
-   bool have_bounds = false;
 
    Index n_compl_x_L = compl_x_L.Dim();
    Index n_compl_x_U = compl_x_U.Dim();
@@ -2955,55 +2953,23 @@ Number IpoptCalculatedQuantities::CalcCentralityMeasure(
    // Compute the Minimum of all complementarities
    if( n_compl_x_L > 0 )
    {
-      if( have_bounds )
-      {
-         MinCompl = Min(MinCompl, compl_x_L.Min());
-      }
-      else
-      {
-         MinCompl = compl_x_L.Min();
-      }
-      have_bounds = true;
+      MinCompl = compl_x_L.Min();
    }
    if( n_compl_x_U > 0 )
    {
-      if( have_bounds )
-      {
-         MinCompl = Min(MinCompl, compl_x_U.Min());
-      }
-      else
-      {
-         MinCompl = compl_x_U.Min();
-      }
-      have_bounds = true;
+      MinCompl = Min(MinCompl, compl_x_U.Min());
    }
    if( n_compl_s_L > 0 )
    {
-      if( have_bounds )
-      {
-         MinCompl = Min(MinCompl, compl_s_L.Min());
-      }
-      else
-      {
-         MinCompl = compl_s_L.Min();
-      }
-      have_bounds = true;
+      MinCompl = Min(MinCompl, compl_s_L.Min());
    }
    if( n_compl_s_U > 0 )
    {
-      if( have_bounds )
-      {
-         MinCompl = Min(MinCompl, compl_s_U.Min());
-      }
-      else
-      {
-         MinCompl = compl_s_U.Min();
-      }
-      have_bounds = true;
+      MinCompl = Min(MinCompl, compl_s_U.Min());
    }
 
-   // If there are no bounds, just return 0.;
-   if( !have_bounds )
+   // If there are no bounds, just return 0
+   if( MinCompl == std::numeric_limits<Number>::max() )
    {
       return 0.;
    }

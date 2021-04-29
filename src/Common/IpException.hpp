@@ -61,10 +61,10 @@ public:
    ///@{
    /** Constructor */
    IpoptException(
-      std::string msg,
-      std::string file_name,
-      Index       line_number,
-      std::string type = "IpoptException"
+      const std::string& msg,
+      const std::string& file_name,
+      Index              line_number,
+      const std::string& type = "IpoptException"
    )
       : msg_(msg),
         file_name_(file_name),
@@ -144,7 +144,7 @@ private:
     class IPOPTLIB_EXPORT  __except_type : public Ipopt::IpoptException \
     { \
     public: \
-      __except_type(std::string msg, std::string fname, Ipopt::Index line) \
+      __except_type(const std::string& msg, const std::string& fname, Ipopt::Index line) \
       : Ipopt::IpoptException(msg,fname,line, #__except_type) {} \
       __except_type(const __except_type& copy) \
       : Ipopt::IpoptException(copy) {} \

@@ -44,7 +44,7 @@ void AmplTNLP::gutsOfConstructor(
    // Most of them are data members of an asl object
 
    // Create the ASL structure
-   ASL_pfgh* asl = (ASL_pfgh*) ASL_alloc(ASL_read_pfgh);
+   ASL_pfgh* asl = reinterpret_cast<ASL_pfgh*>(ASL_alloc(ASL_read_pfgh));
    DBG_ASSERT(asl);
    asl_ = asl; // keep the pointer for ourselves to use later...
 
@@ -79,7 +79,7 @@ void AmplTNLP::gutsOfConstructor(
    {
       jnlst_->Printf(J_WARNING, J_MAIN, "==> Warning: Treating %d binary and %d integer variables as continous.\n\n",
                      nbv, niv + nlvbi + nlvci + nlvoi);
-      allow_discrete = true;
+      // never used: allow_discrete = true;
    }
    allow_discrete = true;
    ASSERT_EXCEPTION(allow_discrete || (nbv == 0 && niv == 0 && nlvbi == 0 && nlvci == 0 && nlvoi == 0), IpoptException,
@@ -818,60 +818,60 @@ void AmplTNLP::finalize_solution(
    }
    obj_sol_ = obj_value;
 
-   std::string message;
+   std::string message = " \nIpopt " IPOPT_VERSION ": ";
    if( status == SUCCESS )
    {
-      message = "Optimal Solution Found";
+      message += "Optimal Solution Found";
       solve_result_num = 0;
    }
    else if( status == MAXITER_EXCEEDED )
    {
-      message = "Maximum Number of Iterations Exceeded.";
+      message += "Maximum Number of Iterations Exceeded.";
       solve_result_num = 400;
    }
    else if( status == CPUTIME_EXCEEDED )
    {
-      message = "Maximum CPU Time Exceeded.";
+      message += "Maximum CPU Time Exceeded.";
       solve_result_num = 401;
    }
    else if( status == WALLTIME_EXCEEDED )
    {
-      message = "Maximum Wallclock Time Exceeded.";
+      message += "Maximum Wallclock Time Exceeded.";
       solve_result_num = 402;
    }
    else if( status == STOP_AT_TINY_STEP )
    {
-      message = "Search Direction becomes Too Small.";
+      message += "Search Direction becomes Too Small.";
       solve_result_num = 500;
    }
    else if( status == STOP_AT_ACCEPTABLE_POINT )
    {
-      message = "Solved To Acceptable Level.";
+      message += "Solved To Acceptable Level.";
       solve_result_num = 1;
    }
    else if( status == FEASIBLE_POINT_FOUND )
    {
-      message = "Found feasible point for square problem.";
+      message += "Found feasible point for square problem.";
       solve_result_num = 2;
    }
    else if( status == LOCAL_INFEASIBILITY )
    {
-      message = "Converged to a locally infeasible point. Problem may be infeasible.";
+      message += "Converged to a locally infeasible point. Problem may be infeasible.";
       solve_result_num = 200;
    }
    else if( status == RESTORATION_FAILURE )
    {
-      message = "Restoration Phase Failed.";
+      message += "Restoration Phase Failed.";
       solve_result_num = 501;
    }
    else if( status == DIVERGING_ITERATES )
    {
-      message = "Iterates diverging; problem might be unbounded.";
+      message += "Iterates diverging; problem might be unbounded.";
       solve_result_num = 300;
    }
    else
    {
-      message = "Unknown Error";
+      message += "Unknown Error";
       solve_result_num = 502;
    }
 
@@ -883,8 +883,7 @@ void AmplTNLP::finalize_solution(
    }
 
    // Write the .sol file
-   message = " \nIpopt " IPOPT_VERSION ": " + message;
-   write_solution_file(message.c_str());
+   write_solution_file(message);
 }
 
 bool AmplTNLP::internal_objval(
@@ -1121,6 +1120,7 @@ extern "C"
 
       real real_val;
       // cppcheck-suppress autoVariables
+      // cppcheck-suppress unmatchedSuppression
       kw->info = &real_val;
       char* retval = D_val(oi, kw, value);
       kw->info = (void*) pinfo;
@@ -1144,6 +1144,7 @@ extern "C"
 
       int int_val;
       // cppcheck-suppress autoVariables
+      // cppcheck-suppress unmatchedSuppression
       kw->info = &int_val;
       char* retval = I_val(oi, kw, value);
       kw->info = (void*) pinfo;
@@ -1167,6 +1168,7 @@ extern "C"
 
       char* str_val;
       // cppcheck-suppress autoVariables
+      // cppcheck-suppress unmatchedSuppression
       kw->info = &str_val;
       char* retval = C_val(oi, kw, value);
       kw->info = (void*) pinfo;
@@ -1190,6 +1192,7 @@ extern "C"
 
       char* str_val;
       // cppcheck-suppress autoVariables
+      // cppcheck-suppress unmatchedSuppression
       kw->info = &str_val;
       char* retval = C_val(oi, kw, value);
       kw->info = (void*) pinfo;
@@ -1218,9 +1221,9 @@ extern "C"
 }
 
 AmplOptionsList::AmplOption::AmplOption(
-   const std::string ipopt_option_name,
-   AmplOptionType    type,
-   const std::string description
+   const std::string& ipopt_option_name,
+   AmplOptionType     type,
+   const std::string& description
 )
    : ipopt_option_name_(ipopt_option_name),
      type_(type)
@@ -1237,7 +1240,7 @@ AmplOptionsList::~AmplOptionsList()
       keyword* keywords = (keyword*) keywds_;
       for( Index i = 0; i < nkeywds_; i++ )
       {
-         PrivatInfo* pinfo = (PrivatInfo*) keywords[i].info;
+         PrivatInfo* pinfo = static_cast<PrivatInfo*>(keywords[i].info);
          delete pinfo;
          delete[] keywords[i].name;
       }
@@ -1257,7 +1260,7 @@ void* AmplOptionsList::Keywords(
       keyword* keywords = (keyword*) keywds_;
       for( Index i = 0; i < nkeywds_; i++ )
       {
-         PrivatInfo* pinfo = (PrivatInfo*) keywords[i].info;
+         PrivatInfo* pinfo = static_cast<PrivatInfo*>(keywords[i].info);
          delete pinfo;
          delete[] keywords[i].name;
       }
@@ -1273,7 +1276,7 @@ void* AmplOptionsList::Keywords(
 
    Index ioption = 0;
    for( std::map<std::string, SmartPtr<const AmplOption> >::iterator iter = ampl_options_map_.begin();
-        iter != ampl_options_map_.end(); iter++ )
+        iter != ampl_options_map_.end(); ++iter )
    {
       keywords[ioption].name = new char[iter->first.size() + 1];
       strcpy(keywords[ioption].name, iter->first.c_str());
@@ -1325,8 +1328,7 @@ void AmplOptionsList::MakeValidLatexString(
    std::string& dest
 ) const
 {
-   std::string::iterator c;
-   for( c = source.begin(); c != source.end(); c++ )
+   for( std::string::iterator c = source.begin(); c != source.end(); ++c )
    {
       if( *c == '_' )
       {
@@ -1760,8 +1762,8 @@ void AmplSuffixHandler::PrepareAmplForSuffixes(
 
 const Index*
 AmplSuffixHandler::GetIntegerSuffixValues(
-   std::string   suffix_string,
-   Suffix_Source source
+   const std::string& suffix_string,
+   Suffix_Source      source
 ) const
 {
    ASL_pfgh* asl = asl_;
@@ -1794,9 +1796,9 @@ AmplSuffixHandler::GetIntegerSuffixValues(
 }
 
 std::vector<Index> AmplSuffixHandler::GetIntegerSuffixValues(
-   Index         n,
-   std::string   suffix_string,
-   Suffix_Source source
+   Index              n,
+   const std::string& suffix_string,
+   Suffix_Source      source
 ) const
 {
    std::vector<Index> ret;
@@ -1814,8 +1816,8 @@ std::vector<Index> AmplSuffixHandler::GetIntegerSuffixValues(
 
 const Number*
 AmplSuffixHandler::GetNumberSuffixValues(
-   std::string   suffix_string,
-   Suffix_Source source
+   const std::string& suffix_string,
+   Suffix_Source      source
 ) const
 {
    ASL_pfgh* asl = asl_;
@@ -1848,9 +1850,10 @@ AmplSuffixHandler::GetNumberSuffixValues(
 }
 
 std::vector<Number> AmplSuffixHandler::GetNumberSuffixValues(
-   Index n,
-   std::string suffix_string,
-   Suffix_Source source) const
+   Index              n,
+   const std::string& suffix_string,
+   Suffix_Source      source
+   ) const
 {
    std::vector<Number> ret;
    const Number* ptr = GetNumberSuffixValues(suffix_string, source);

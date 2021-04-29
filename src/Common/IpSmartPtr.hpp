@@ -233,6 +233,7 @@ public:
     * SmartPtr of a different type
     */
    template<class U>
+   // cppcheck-suppress operatorEq  ; wrong cppcheck suggestion
    SmartPtr<T>& operator=(
       const SmartPtr<U>& rhs);
 
@@ -449,6 +450,7 @@ SmartPtr<T>::SmartPtr()
 #endif
 
 #ifndef NDEBUG
+   // cppcheck-suppress unreadVariable
    const ReferencedObject* IPOPT_UNUSED trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ = ptr_;
 #endif
 }
@@ -464,6 +466,7 @@ SmartPtr<T>::SmartPtr(
 #endif
 
 #ifndef NDEBUG
+   // cppcheck-suppress unreadVariable
    const ReferencedObject* IPOPT_UNUSED trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ =
       ptr_;
 #endif
@@ -483,6 +486,7 @@ SmartPtr<T>::SmartPtr(
 #endif
 
 #ifndef NDEBUG
+   // cppcheck-suppress unreadVariable
    const ReferencedObject* IPOPT_UNUSED trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ =
       ptr_;
 #endif
@@ -501,6 +505,7 @@ SmartPtr<T>::SmartPtr(
 #endif
 
 #ifndef NDEBUG
+   // cppcheck-suppress unreadVariable
    const ReferencedObject* IPOPT_UNUSED trying_to_use_SmartPtr_with_an_object_that_does_not_inherit_from_ReferencedObject_ =
       ptr_;
 #endif

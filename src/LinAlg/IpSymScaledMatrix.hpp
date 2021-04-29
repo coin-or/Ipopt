@@ -134,9 +134,9 @@ public:
       const SmartPtr<const SymMatrixSpace>& unscaled_matrix_space
    )
       : SymMatrixSpace(unscaled_matrix_space->Dim()),
+        scaling_(row_col_scaling->MakeNewCopy()),
         unscaled_matrix_space_(unscaled_matrix_space)
    {
-      scaling_ = row_col_scaling->MakeNewCopy();
       if( row_col_scaling_reciprocal )
       {
          scaling_->ElementWiseReciprocal();

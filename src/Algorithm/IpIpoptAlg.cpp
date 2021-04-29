@@ -339,8 +339,7 @@ SolverReturn IpoptAlgorithm::Optimize(
          // issue error message
          if( emergency_mode )
          {
-            bool retval = line_search_->ActivateFallbackMechanism();
-            if( retval )
+            if( line_search_->ActivateFallbackMechanism() )
             {
                Jnlst().Printf(J_WARNING, J_MAIN,
                               "WARNING: Problem in step computation; switching to emergency mode.\n");
@@ -781,12 +780,6 @@ void IpoptAlgorithm::PrintProblemStatistics()
       // nothing to print
       return;
    }
-
-   SmartPtr<const Vector> x = IpData().curr()->x();
-   SmartPtr<const Vector> x_L = IpNLP().x_L();
-   SmartPtr<const Vector> x_U = IpNLP().x_U();
-   SmartPtr<const Matrix> Px_L = IpNLP().Px_L();
-   SmartPtr<const Matrix> Px_U = IpNLP().Px_U();
 
    Index nx_tot, nx_only_lower, nx_both, nx_only_upper;
    calc_number_of_bounds(*IpData().curr()->x(), *IpNLP().x_L(), *IpNLP().x_U(), *IpNLP().Px_L(), *IpNLP().Px_U(),

@@ -532,6 +532,8 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
    }
 
    // Check termination test 1, model reduction condition
+   // cppcheck-suppress variableScope
+   // cppcheck-suppress unreadVariable
    bool model_reduction = false;
    if( !compute_normal || tt1 )
    {

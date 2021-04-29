@@ -228,6 +228,7 @@ bool DenseGenMatrix::ComputeEigenVectors(
 void DenseGenMatrix::CholeskyBackSolveMatrix(
    bool            trans,
    Number          alpha,
+   // cppcheck-suppress constParameter  // cannot be const since it is modified in Blas
    DenseGenMatrix& B
 ) const
 {
@@ -235,12 +236,11 @@ void DenseGenMatrix::CholeskyBackSolveMatrix(
    DBG_ASSERT(B.NRows() == NRows());
    DBG_ASSERT(initialized_);
 
-   Number* Bvalues = B.Values();
-
-   IpBlasTrsm(trans, NRows(), B.NCols(), alpha, values_, NRows(), Bvalues, B.NRows());
+   IpBlasTrsm(trans, NRows(), B.NCols(), alpha, values_, NRows(), B.Values(), B.NRows());
 }
 
 void DenseGenMatrix::CholeskySolveVector(
+   // cppcheck-suppress constParameter  // cannot be const since it is modified in Blas
    DenseVector& b
 ) const
 {
@@ -249,12 +249,11 @@ void DenseGenMatrix::CholeskySolveVector(
    DBG_ASSERT(initialized_);
    DBG_ASSERT(factorization_ == CHOL);
 
-   Number* bvalues = b.Values();
-
-   IpLapackPotrs(NRows(), 1, values_, NRows(), bvalues, b.Dim());
+   IpLapackPotrs(NRows(), 1, values_, NRows(), b.Values(), b.Dim());
 }
 
 void DenseGenMatrix::CholeskySolveMatrix(
+   // cppcheck-suppress constParameter  // cannot be const since it is modified in Blas
    DenseGenMatrix& B
 ) const
 {
@@ -263,9 +262,7 @@ void DenseGenMatrix::CholeskySolveMatrix(
    DBG_ASSERT(initialized_);
    DBG_ASSERT(factorization_ == CHOL);
 
-   Number* Bvalues = B.Values();
-
-   IpLapackPotrs(NRows(), B.NCols(), values_, NRows(), Bvalues, B.NRows());
+   IpLapackPotrs(NRows(), B.NCols(), values_, NRows(), B.Values(), B.NRows());
 }
 
 bool DenseGenMatrix::ComputeLUFactorInPlace()
@@ -305,6 +302,7 @@ bool DenseGenMatrix::ComputeLUFactorInPlace()
 }
 
 void DenseGenMatrix::LUSolveMatrix(
+   // cppcheck-suppress constParameter  // cannot be const since it is modified in Blas
    DenseGenMatrix& B
 ) const
 {
@@ -313,12 +311,11 @@ void DenseGenMatrix::LUSolveMatrix(
    DBG_ASSERT(initialized_);
    DBG_ASSERT(factorization_ == LU);
 
-   Number* Bvalues = B.Values();
-
-   IpLapackGetrs(NRows(), B.NCols(), values_, NRows(), pivot_, Bvalues, B.NRows());
+   IpLapackGetrs(NRows(), B.NCols(), values_, NRows(), pivot_, B.Values(), B.NRows());
 }
 
 void DenseGenMatrix::LUSolveVector(
+   // cppcheck-suppress constParameter  // cannot be const since it is modified in Blas
    DenseVector& b
 ) const
 {
@@ -327,9 +324,7 @@ void DenseGenMatrix::LUSolveVector(
    DBG_ASSERT(initialized_);
    DBG_ASSERT(factorization_ == LU);
 
-   Number* bvalues = b.Values();
-
-   IpLapackGetrs(NRows(), 1, values_, NRows(), pivot_, bvalues, b.Dim());
+   IpLapackGetrs(NRows(), 1, values_, NRows(), pivot_, b.Values(), b.Dim());
 }
 
 void DenseGenMatrix::MultVectorImpl(

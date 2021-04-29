@@ -18,8 +18,8 @@ Index DebugJournalistWrapper::indentation_level_ = 0;
 Journalist* DebugJournalistWrapper::jrnl_ = NULL;
 
 DebugJournalistWrapper::DebugJournalistWrapper(
-   std::string func_name,
-   Index       verbose_level
+   const std::string& func_name,
+   Index              verbose_level
 )
    : func_name_(func_name),
      verbose_level_(verbose_level),
@@ -38,9 +38,9 @@ DebugJournalistWrapper::DebugJournalistWrapper(
 }
 
 DebugJournalistWrapper::DebugJournalistWrapper(
-   std::string       func_name,
-   Index             verbose_level,
-   const void* const method_owner
+   const std::string& func_name,
+   Index              verbose_level,
+   const void* const  method_owner
 )
    : func_name_(func_name),
      verbose_level_(verbose_level),

@@ -412,7 +412,7 @@ char PenaltyLSAcceptor::UpdateForNextIteration(
    reference_JacC_delta_ = NULL;
    reference_JacD_delta_ = NULL;
 
-   char info_alpha_primal_char = ' ';
+   char info_alpha_primal_char;
    // Augment the filter if required
    if( last_nu_ != nu_ )
    {

@@ -255,9 +255,9 @@ Jipopt::Jipopt(
    : env(env_), solver(solver_), n(n_), m(m_), nele_jac(nele_jac_), nele_hess(nele_hess_), index_style(index_style_),
      mult_gj(NULL), mult_x_Lj(NULL), mult_x_Uj(NULL), xj(NULL), fj(NULL), grad_fj(NULL),
      gj(NULL), jac_gj(NULL), hessj(NULL),
-     using_scaling_parameters(false), using_LBFGS(false)
+     using_scaling_parameters(false), using_LBFGS(false),
+     application(new IpoptApplication())
 {
-   application = new IpoptApplication();
    application->RethrowNonIpoptException(false);
 
    // the solver class

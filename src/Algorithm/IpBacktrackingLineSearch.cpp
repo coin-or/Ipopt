@@ -344,8 +344,6 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
    }
 
    bool accept = false;
-   bool corr_taken = false;
-   bool soc_taken = false;
    Index n_steps = 0;
    Number alpha_primal = 0.;
 
@@ -462,6 +460,8 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
          bool evaluation_error;
          while( !done )
          {
+            bool corr_taken = false;
+            bool soc_taken = false;
             accept = DoBacktrackingLineSearch(skip_first_trial_point, alpha_primal, corr_taken, soc_taken, n_steps,
                                               evaluation_error, actual_delta);
             DBG_PRINT((1, "evaluation_error = %d\n", evaluation_error));

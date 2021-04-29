@@ -38,7 +38,9 @@ astyle:
 	cd $(srcdir) && astyle --mode=java -A1 --indent=spaces=3 --indent-switches --min-conditional-indent=1 --convert-tabs --align-pointer=type --pad-oper --add-brackets -n -r "*.java"
 
 cppcheck:
-	cppcheck -q -j4 --enable=warning --addon=threadsafety.py --suppress=uninitMemberVar --inline-suppr --std=c++03 --std=c99 --error-exitcode=2 -Isrc/Common -DHAVE_CONFIG_H -DIPOPTLIB_BUILD $(srcdir)/src
+	cppcheck -q -j4 --enable=all --suppress=uninitMemberVar --suppress=noExplicitConstructor --suppress=unreadVariable:$(srcdir)/src/Apps/AmplSolver/AmplTNLP.cpp --inline-suppr \
+	  --addon=threadsafety.py --std=c++03 --std=c99 --error-exitcode=2 \
+	  -Isrc/Common -DHAVE_CONFIG_H -DIPOPTLIB_BUILD -DIPOPTLIB_EXPORT= $(srcdir)/src
 
 pkgconfiglibdir = $(libdir)/pkgconfig
 pkgconfiglib_DATA = ipopt.pc

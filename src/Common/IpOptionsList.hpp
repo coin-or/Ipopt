@@ -44,9 +44,9 @@ class IPOPTLIB_EXPORT OptionsList: public ReferencedObject
 
       /** Constructor given the value */
       OptionValue(
-         std::string value,
-         bool        allow_clobber,
-         bool        dont_print
+         const std::string& value,
+         bool               allow_clobber,
+         bool               dont_print
       )
          : value_(value),
            counter_(0),
@@ -69,7 +69,7 @@ class IPOPTLIB_EXPORT OptionsList: public ReferencedObject
       }
 
       /** Equals operator */
-      void operator=(
+      OptionValue& operator=(
          const OptionValue& copy
       )
       {
@@ -78,6 +78,7 @@ class IPOPTLIB_EXPORT OptionsList: public ReferencedObject
          initialized_ = copy.initialized_;
          allow_clobber_ = copy.allow_clobber_;
          dont_print_ = copy.dont_print_;
+         return *this;
       }
 
       /** Default Destructor */
@@ -162,25 +163,23 @@ public:
    OptionsList(
       const OptionsList& copy
    )
-   {
-      // copy all the option strings and values
-      options_ = copy.options_;
-      // copy the registered options pointer
-      reg_options_ = copy.reg_options_;
-   }
+   : options_(copy.options_),        // copy all the option strings and values
+     reg_options_(copy.reg_options_) // copy the registered options pointer
+   { }
 
    /** Destructor */
    virtual ~OptionsList()
    { }
 
    /** Default Assignment Operator */
-   virtual void operator=(
+   virtual OptionsList& operator=(
       const OptionsList& source
    )
    {
       options_ = source.options_;
       reg_options_ = source.reg_options_;
       jnlst_ = source.jnlst_;
+      return *this;
    }
    ///@}
 
@@ -340,7 +339,7 @@ private:
 
    /** auxiliary method for converting sting to all lower-case letters */
    const std::string& lowercase(
-      const std::string tag
+      const std::string& tag
    ) const;
 
    /** auxiliary method for finding the value for a tag in the options list

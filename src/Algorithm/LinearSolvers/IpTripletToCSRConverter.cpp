@@ -71,7 +71,7 @@ Index TripletToCSRConverter::InitializeConverter(
    for( Index i = 0; i < nonzeros; i++ )
    {
       list_iterator->Set(airn[i], ajcn[i], i);
-      list_iterator++;
+      ++list_iterator;
    }
    DBG_ASSERT(list_iterator == entry_list.end());
 
@@ -134,7 +134,7 @@ Index TripletToCSRConverter::InitializeConverter(
       }
    }
 
-   list_iterator++;
+   ++list_iterator;
    Index idouble = 0;
    Index idouble_full = 0;
    while( list_iterator != entry_list.end() )
@@ -179,7 +179,7 @@ Index TripletToCSRConverter::InitializeConverter(
          }
       }
 
-      list_iterator++;
+      ++list_iterator;
    }
    nonzeros_compressed_++;
    for( Index i = cur_row; i <= dim_; i++ )

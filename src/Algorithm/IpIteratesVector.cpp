@@ -138,19 +138,18 @@ IteratesVectorSpace::IteratesVectorSpace(
    const VectorSpace& v_L_space,
    const VectorSpace& v_U_space
 )
-   : CompoundVectorSpace(8,
-                         x_space.Dim() + s_space.Dim() + y_c_space.Dim() + y_d_space.Dim() + z_L_space.Dim() + z_U_space.Dim()
-                         + v_L_space.Dim() + v_U_space.Dim())
+:  CompoundVectorSpace(8,
+                       x_space.Dim() + s_space.Dim() + y_c_space.Dim() + y_d_space.Dim() + z_L_space.Dim() + z_U_space.Dim()
+                       + v_L_space.Dim() + v_U_space.Dim()),
+   x_space_(&x_space),
+   s_space_(&s_space),
+   y_c_space_(&y_c_space),
+   y_d_space_(&y_d_space),
+   z_L_space_(&z_L_space),
+   z_U_space_(&z_U_space),
+   v_L_space_(&v_L_space),
+   v_U_space_(&v_U_space)
 {
-   x_space_ = &x_space;
-   s_space_ = &s_space;
-   y_c_space_ = &y_c_space;
-   y_d_space_ = &y_d_space;
-   z_L_space_ = &z_L_space;
-   z_U_space_ = &z_U_space;
-   v_L_space_ = &v_L_space;
-   v_U_space_ = &v_U_space;
-
    this->CompoundVectorSpace::SetCompSpace(0, *x_space_);
    this->CompoundVectorSpace::SetCompSpace(1, *s_space_);
    this->CompoundVectorSpace::SetCompSpace(2, *y_c_space_);

@@ -115,10 +115,9 @@ void RegisteredOption::OutputDescription(
    }
    else if( type_ == OT_String )
    {
-      std::vector<string_entry>::const_iterator i;
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
                    "Valid Settings:\n");
-      for( i = valid_strings_.begin(); i != valid_strings_.end(); i++ )
+      for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end(); ++i )
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
                       "\t%s (%s)\n", (*i).value_.c_str(), (*i).description_.c_str());
@@ -271,7 +270,7 @@ void RegisteredOption::OutputLatexDescription(
                    "\\\\ \nPossible values:\n");
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
                    "\\begin{itemize}\n");
-      for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end(); i++ )
+      for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end(); ++i )
       {
          std::string latex_value;
          MakeValidLatexString((*i).value_, latex_value);
@@ -280,7 +279,6 @@ void RegisteredOption::OutputLatexDescription(
 
          if( (*i).description_.length() > 0 )
          {
-            std::string latex_desc;
             MakeValidLatexString((*i).description_, latex_desc);
             jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
                          ": ");
@@ -298,12 +296,11 @@ void RegisteredOption::OutputLatexDescription(
 }
 
 void RegisteredOption::MakeValidLatexString(
-   std::string source,
-   std::string& dest
+   const std::string& source,
+   std::string&       dest
 ) const
 {
-   std::string::iterator c;
-   for( c = source.begin(); c != source.end(); c++ )
+   for( std::string::const_iterator c = source.begin(); c != source.end(); ++c )
    {
       if( *c == '_' )
       {
@@ -329,9 +326,8 @@ std::string RegisteredOption::MakeValidLatexNumber(
    std::string source = buffer;
    std::string dest;
 
-   std::string::iterator c;
    bool found_e = false;
-   for( c = source.begin(); c != source.end(); c++ )
+   for( std::string::iterator c = source.begin(); c != source.end(); ++c )
    {
       if( *c == 'e' )
       {
@@ -491,14 +487,14 @@ void RegisteredOption::OutputDoxygenDescription(
                    "\nPossible values:");
 
       bool havedescr = false;
-      for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end() && !havedescr; i++ )
+      for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end() && !havedescr; ++i )
          if( (*i).description_.length() > 0 )
             havedescr = true;
 
       if( havedescr )
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
-         for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end(); i++ )
+         for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end(); ++i )
          {
             jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " - %s", i->value_.c_str());
             if( (*i).description_.length() > 0 )
@@ -510,7 +506,7 @@ void RegisteredOption::OutputDoxygenDescription(
       }
       else
       {
-         for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end(); i++ )
+         for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end(); ++i )
          {
             if( i != valid_strings_.begin() )
                jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, ",", i->value_.c_str());
@@ -546,9 +542,8 @@ std::string RegisteredOption::MakeValidHTMLNumber(
    std::string source = buffer;
    std::string dest;
 
-   std::string::iterator c;
    bool found_e = false;
-   for( c = source.begin(); c != source.end(); c++ )
+   for( std::string::iterator c = source.begin(); c != source.end(); ++c )
    {
       if( *c == 'e' )
       {
@@ -672,18 +667,18 @@ void RegisteredOption::OutputShortDescription(
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "   Advanced option for expert users.\n");
    jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
                 "   ");
-   jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 3, 76, short_description_.c_str());
+   jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 3, 76, short_description_);
    if( long_description_ != "" )
    {
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
                    "\n     ");
-      jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 5, 74, long_description_.c_str());
+      jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 5, 74, long_description_);
    }
    if( type_ == OT_String )
    {
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
                    "\n   Possible values:\n");
-      for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end(); i++ )
+      for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end(); ++i )
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
                       "    - %-23s", (*i).value_.c_str());
@@ -692,7 +687,7 @@ void RegisteredOption::OutputShortDescription(
          {
             jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
                          " [");
-            jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 31, 48, (*i).description_.c_str());
+            jnlst.PrintStringOverLines(J_SUMMARY, J_DOCUMENTATION, 31, 48, (*i).description_);
             jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
                          "]");
          }
@@ -715,8 +710,7 @@ bool RegisteredOption::IsValidStringSetting(
 {
    DBG_ASSERT(type_ == OT_String);
 
-   std::vector<string_entry>::const_iterator i;
-   for( i = valid_strings_.begin(); i != valid_strings_.end(); i++ )
+   for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end(); ++i )
    {
       if( i->value_ == "*" || string_equal_insensitive(i->value_, value) )
       {
@@ -734,8 +728,7 @@ std::string RegisteredOption::MapStringSetting(
 
    std::string matched_setting = "";
 
-   std::vector<string_entry>::const_iterator i;
-   for( i = valid_strings_.begin(); i != valid_strings_.end(); i++ )
+   for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end(); ++i )
    {
       if( i->value_ == "*" )
       {
@@ -758,8 +751,7 @@ Index RegisteredOption::MapStringSettingToEnum(
    Index matched_setting = -1;
 
    Index cnt = 0;
-   std::vector<string_entry>::const_iterator i;
-   for( i = valid_strings_.begin(); i != valid_strings_.end(); i++ )
+   for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end(); ++i )
    {
       ASSERT_EXCEPTION(i->value_ != "*", IpoptException, "Cannot map a wildcard setting to an enumeration");
       if( string_equal_insensitive(i->value_, value) )
@@ -796,8 +788,8 @@ bool RegisteredOption::string_equal_insensitive(
       {
          return false;
       }
-      i1++;
-      i2++;
+      ++i1;
+      ++i2;
    }
    return true;
 }
@@ -1465,7 +1457,7 @@ void RegisteredOptions::OutputOptionDocumentation(
 {
    if( !categories.empty() )
    {
-      for( std::list<std::string>::const_iterator i = categories.begin(); i != categories.end(); i++ )
+      for( std::list<std::string>::const_iterator i = categories.begin(); i != categories.end(); ++i )
       {
          RegCategoriesList::const_iterator cat_it = registered_categories_.find(*i);
          // skip nonexisting category
@@ -1509,8 +1501,7 @@ void RegisteredOptions::OutputLatexOptionDocumentation(
 {
    if( !options_to_print.empty() )
    {
-      std::list<std::string>::const_iterator coption;
-      for( coption = options_to_print.begin(); coption != options_to_print.end(); coption++ )
+      for( std::list<std::string>::const_iterator coption = options_to_print.begin(); coption != options_to_print.end(); ++coption )
       {
          if( coption->c_str()[0] == '#' )
          {
@@ -1553,8 +1544,7 @@ void RegisteredOptions::OutputDoxygenOptionDocumentation(
 {
    if( !options_to_print.empty() )
    {
-      std::list<std::string>::const_iterator coption;
-      for( coption = options_to_print.begin(); coption != options_to_print.end(); coption++ )
+      for( std::list<std::string>::const_iterator coption = options_to_print.begin(); coption != options_to_print.end(); ++coption )
       {
          if( (*coption)[0] == '#' )
          {

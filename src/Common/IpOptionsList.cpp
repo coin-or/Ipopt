@@ -626,7 +626,7 @@ bool OptionsList::GetIntegerValue(
 }
 
 const std::string& OptionsList::lowercase(
-   const std::string tag
+   const std::string& tag
 ) const
 {
    lowercase_buffer_ = tag;
@@ -645,7 +645,7 @@ void OptionsList::PrintList(
    char buffer[256];
    Snprintf(buffer, 255, "%40s   %-20s %s\n", "Name", "Value", "# times used");
    list += buffer;
-   for( std::map<std::string, OptionValue>::const_iterator p = options_.begin(); p != options_.end(); p++ )
+   for( std::map<std::string, OptionValue>::const_iterator p = options_.begin(); p != options_.end(); ++p )
    {
       Snprintf(buffer, 255, "%40s = %-20s %6d\n", p->first.c_str(), p->second.Value().c_str(), p->second.Counter());
       list += buffer;
@@ -660,7 +660,7 @@ void OptionsList::PrintUserOptions(
    char buffer[256];
    Snprintf(buffer, 255, "%40s   %-20s %s\n", "Name", "Value", "used");
    list += buffer;
-   for( std::map<std::string, OptionValue>::const_iterator p = options_.begin(); p != options_.end(); p++ )
+   for( std::map<std::string, OptionValue>::const_iterator p = options_.begin(); p != options_.end(); ++p )
    {
       if( !p->second.DontPrint() )
       {

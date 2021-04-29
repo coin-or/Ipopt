@@ -174,7 +174,7 @@ void Vector::Scal(
             max_cache_tag_ = GetTag();
             cached_max_ *= alpha;
          }
-         else if( alpha < 0. )
+         else // alpha < 0.
          {
             min_cache_tag_ = GetTag();
             cached_min_ = cached_max_ * alpha;
@@ -187,7 +187,7 @@ void Vector::Scal(
             min_cache_tag_ = GetTag();
             cached_min_ *= alpha;
          }
-         else if( alpha < 0. )
+         else // alpha < 0.
          {
             max_cache_tag_ = GetTag();
             cached_max_ = cached_min_ * alpha;

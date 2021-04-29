@@ -12,10 +12,9 @@ namespace Ipopt
 TransposeMatrix::TransposeMatrix(
    const TransposeMatrixSpace* owner_space
 )
-   : Matrix(owner_space)
-{
-   orig_matrix_ = owner_space->MakeNewOrigMatrix();
-}
+   : Matrix(owner_space),
+     orig_matrix_(owner_space->MakeNewOrigMatrix())
+{ }
 
 void TransposeMatrix::PrintImpl(
    const Journalist&  jnlst,

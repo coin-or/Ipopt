@@ -154,8 +154,8 @@ bool CGSearchDirCalculator::ComputeSearchDirection()
    /** Initialize the penalty parameter */
    if( !CGPenData().PenaltyInitialized() || !CGPenData().KKTPenaltyInitialized() )
    {
-      Number penalty_init = penalty_init_min_;
-      Number kkt_penalty_init = penalty_init_min_;
+      Number penalty_init;
+      Number kkt_penalty_init;
       if( !CGPenData().NeverTryPureNewton() )
       {
          Number y_max = Max(IpData().curr()->y_c()->Amax(), IpData().curr()->y_d()->Amax());
@@ -164,6 +164,7 @@ bool CGSearchDirCalculator::ComputeSearchDirection()
          Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
                         "Max(||y_c||_inf,||y_d||_inf = %8.2e\n", y_max);
          penalty_init = Max(penalty_init_min_, Min(y_max, penalty_init_max_));
+         kkt_penalty_init = penalty_init_min_;
       }
       else
       {

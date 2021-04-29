@@ -444,7 +444,7 @@ ESymSolverStatus Ma27TSolverInterface::SymbolicFactorization(
    catch( const std::bad_alloc& e )
    {
       Jnlst().Printf(J_STRONGWARNING, J_LINEAR_ALGEBRA, "Failed to allocate more working space memory for MA27\n");
-      throw e; // will be caught in IpIpoptApplication
+      throw; // will be caught in IpIpoptApplication
    }
 
    if( HaveIpData() )

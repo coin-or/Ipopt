@@ -41,8 +41,8 @@ public:
    ///
    /// Use negative value for priority to suppress it being included in documentation.
    RegisteredCategory(
-      std::string name,
-      int         priority
+      const std::string& name,
+      int                priority
       )
    : name_(name),
      priority_(priority)
@@ -453,8 +453,8 @@ public:
     * can be called for OT_String
     */
    virtual void AddValidStringSetting(
-      const std::string value,
-      const std::string description)
+      const std::string& value,
+      const std::string& description)
    {
       DBG_ASSERT(type_ == OT_String);
       valid_strings_.push_back(string_entry(value, description));
@@ -657,8 +657,8 @@ private:
    const Index counter_;
 
    void MakeValidLatexString(
-      std::string source,
-      std::string& dest
+      const std::string& source,
+      std::string&       dest
    ) const;
 
    std::string MakeValidLatexNumber(

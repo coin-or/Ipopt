@@ -380,7 +380,7 @@ ESymSolverStatus Ma86SolverInterface::MultiSolve(
       {
          return SYMSOLVER_FATAL_ERROR;
       }
-      if( info.flag == 2 || info.flag == -3 )
+      if( info.flag == 2 /* || info.flag == -3 */ )
       {
          return SYMSOLVER_SINGULAR;
       }

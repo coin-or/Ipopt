@@ -7,6 +7,7 @@
 #ifndef __IPTNLP_HPP__
 #define __IPTNLP_HPP__
 
+#include "IpoptConfig.h"
 #include "IpUtils.hpp"
 #include "IpReferenced.hpp"
 #include "IpException.hpp"
@@ -56,7 +57,6 @@ public:
 
    /**@name Constructors/Destructors */
    ///@{
-   // cppcheck-suppress syntaxError
    TNLP()
    { }
 

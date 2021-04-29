@@ -332,7 +332,7 @@ bool Ma97SolverInterface::InitializeImpl(
    options.GetNumericValue("ma97_small", control_.small, prefix);
    options.GetNumericValue("ma97_u", control_.u, prefix);
    options.GetNumericValue("ma97_umax", umax_, prefix);
-   std::string order_method, scaling_method, rescale_strategy;
+   std::string order_method, scaling_method;
    options.GetStringValue("ma97_order", order_method, prefix);
    if( order_method == "metis" )
    {

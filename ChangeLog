@@ -136,6 +136,8 @@ commit history.
           phase. Further, the unscaled constraint violation tolerance now
           needs to be below constr_viol_tol/10 as well in order to trigger
           this abort.
+        - Various tiny bugfixes and improvements in performance and code
+          style from cppcheck suggestions.
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]

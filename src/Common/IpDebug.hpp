@@ -62,14 +62,14 @@ public:
    /** @name Constructors/Destructors. */
    ///@{
    DebugJournalistWrapper(
-      std::string func_name,
-      Index       verbose_level
+      const std::string& func_name,
+      Index              verbose_level
    );
 
    DebugJournalistWrapper(
-      std::string       func_name,
-      Index             verbose_level,
-      const void* const method_owner
+      const std::string& func_name,
+      Index              verbose_level,
+      const void* const  method_owner
    );
    ~DebugJournalistWrapper();
    ///@}

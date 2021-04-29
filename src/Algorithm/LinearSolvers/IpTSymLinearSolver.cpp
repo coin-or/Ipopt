@@ -706,7 +706,7 @@ ESymSolverStatus TSymLinearSolver::DetermineDependentRows(
    // We need to correct the indices
    if( retval == SYMSOLVER_SUCCESS )
    {
-      for( std::list<Index>::iterator i = c_deps.begin(); i != c_deps.end(); i++ )
+      for( std::list<Index>::iterator i = c_deps.begin(); i != c_deps.end(); ++i )
       {
          *i -= n_cols;
       }

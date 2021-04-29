@@ -101,8 +101,8 @@ bool InexactPDSolver::Solve(
    DBG_PRINT_VECTOR(2, "sol_vU in", *sol.v_U());
 
    // Receive data about matrix
-   SmartPtr<const Vector> x = IpData().curr()->x();
-   SmartPtr<const Vector> s = IpData().curr()->s();
+//   SmartPtr<const Vector> x = IpData().curr()->x();
+//   SmartPtr<const Vector> s = IpData().curr()->s();
    SmartPtr<const SymMatrix> W = IpData().W();
    SmartPtr<const Matrix> J_c = IpCq().curr_jac_c();
    SmartPtr<const Matrix> J_d = IpCq().curr_jac_d();

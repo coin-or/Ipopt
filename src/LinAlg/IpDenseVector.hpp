@@ -375,19 +375,19 @@ public:
    /** Check if string meta exists for tag */
    inline
    bool HasStringMetaData(
-      const std::string tag
+      const std::string& tag
    ) const;
 
    /** Check if Integer meta exists for tag */
    inline
    bool HasIntegerMetaData(
-      const std::string tag
+      const std::string& tag
    ) const;
 
    /** Check if Numeric meta exists for tag */
    inline
    bool HasNumericMetaData(
-      const std::string tag
+      const std::string& tag
    ) const;
 
    /** Get meta data of type std::string by tag */
@@ -407,20 +407,20 @@ public:
 
    /** Set meta data of type std::string by tag */
    inline void SetStringMetaData(
-      std::string              tag,
-      std::vector<std::string> meta_data
+      const std::string&              tag,
+      const std::vector<std::string>& meta_data
    );
 
    /** Set meta data of type Index by tag */
    inline void SetIntegerMetaData(
-      std::string        tag,
-      std::vector<Index> meta_data
+      const std::string&        tag,
+      const std::vector<Index>& meta_data
    );
 
    /** Set meta data of type Number by tag */
    inline void SetNumericMetaData(
-      std::string         tag,
-      std::vector<Number> meta_data
+      const std::string&         tag,
+      const std::vector<Number>& meta_data
    );
 
    /** Get map of meta data of type Number */
@@ -501,7 +501,7 @@ inline SmartPtr<DenseVector> DenseVector::MakeNewDenseVector() const
 
 inline
 bool DenseVectorSpace::HasStringMetaData(
-   const std::string tag
+   const std::string& tag
 ) const
 {
    StringMetaDataMapType::const_iterator iter;
@@ -517,7 +517,7 @@ bool DenseVectorSpace::HasStringMetaData(
 
 inline
 bool DenseVectorSpace::HasIntegerMetaData(
-   const std::string tag
+   const std::string& tag
 ) const
 {
    IntegerMetaDataMapType::const_iterator iter;
@@ -533,7 +533,7 @@ bool DenseVectorSpace::HasIntegerMetaData(
 
 inline
 bool DenseVectorSpace::HasNumericMetaData(
-   const std::string tag
+   const std::string& tag
 ) const
 {
    NumericMetaDataMapType::const_iterator iter;
@@ -578,24 +578,24 @@ inline const std::vector<Number>& DenseVectorSpace::GetNumericMetaData(
 }
 
 inline void DenseVectorSpace::SetStringMetaData(
-   std::string              tag,
-   std::vector<std::string> meta_data
+   const std::string&              tag,
+   const std::vector<std::string>& meta_data
 )
 {
    string_meta_data_[tag] = meta_data;
 }
 
 inline void DenseVectorSpace::SetIntegerMetaData(
-   std::string        tag,
-   std::vector<Index> meta_data
+   const std::string&        tag,
+   const std::vector<Index>& meta_data
 )
 {
    integer_meta_data_[tag] = meta_data;
 }
 
 inline void DenseVectorSpace::SetNumericMetaData(
-   std::string         tag,
-   std::vector<Number> meta_data
+   const std::string&         tag,
+   const std::vector<Number>& meta_data
 )
 {
    numeric_meta_data_[tag] = meta_data;

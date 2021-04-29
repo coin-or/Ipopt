@@ -87,8 +87,6 @@ bool CGPerturbationHandler::ConsiderNewSystem(
    // initialize perturbationhandler data
    if( CGPenData().restor_iter() == IpData().iter_count() )
    {
-      hess_degenerate_ = NOT_YET_DETERMINED;
-      jac_degenerate_ = NOT_YET_DETERMINED;
       degen_iters_ = 0;
       hess_degenerate_ = NOT_DEGENERATE;
       jac_degenerate_ = NOT_DEGENERATE;

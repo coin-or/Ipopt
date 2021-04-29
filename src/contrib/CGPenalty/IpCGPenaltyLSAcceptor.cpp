@@ -282,7 +282,6 @@ bool CGPenaltyLSAcceptor::CheckAcceptabilityOfTrialPoint(
    Number curr_infeasi = IpCq().curr_constraint_violation();
    //Number trial_barr = IpCq().trial_barrier_obj();
    Number trial_infeasi = IpCq().trial_constraint_violation();
-   bool accept = false;
    ls_counter_++;
    if( ls_counter_ == 1 )
    {
@@ -321,10 +320,7 @@ bool CGPenaltyLSAcceptor::CheckAcceptabilityOfTrialPoint(
       return false;
    }
    // Check Armijo conditions.
-   if( !accept )
-   {
-      accept = ArmijoHolds(alpha_primal_test);
-   }
+   bool accept = ArmijoHolds(alpha_primal_test);
    // Check PLPF criteria.
    if( !accept && !never_use_piecewise_penalty_ls_ )
    {
@@ -790,17 +786,15 @@ char CGPenaltyLSAcceptor::UpdatePenaltyParameter()
    if( increase )
    {
       SmartPtr<Vector> vec = IpData().curr()->y_c()->MakeNewCopy();
-      vec->AddTwoVectors(1., *CGPenData().delta_cgpen()->y_c(), -1. / CGPenCq().curr_cg_pert_fact(), *IpCq().curr_c(),
-                         1.);
+      vec->AddTwoVectors(1., *CGPenData().delta_cgpen()->y_c(), -1. / CGPenCq().curr_cg_pert_fact(), *IpCq().curr_c(), 1.);
       Number omega_test = vec->Amax();
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
                      "omega_test for c = %8.2\n", omega_test);
       increase = (omega_test < curr_eta_);
       if( increase )
       {
-         SmartPtr<Vector> vec = IpData().curr()->y_d()->MakeNewCopy();
-         vec->AddTwoVectors(1., *IpData().delta()->y_d(), -1. / CGPenCq().curr_cg_pert_fact(), *IpCq().curr_d_minus_s(),
-                            1.);
+         vec = IpData().curr()->y_d()->MakeNewCopy();
+         vec->AddTwoVectors(1., *IpData().delta()->y_d(), -1. / CGPenCq().curr_cg_pert_fact(), *IpCq().curr_d_minus_s(), 1.);
          omega_test = vec->Amax();
          Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
                         "omega_test for d = %8.2\n", omega_test);

@@ -19,8 +19,8 @@ static const Index dbg_verbosity = 0;
 ///////////////////////////////////////////////////////////////////////////
 
 FilterEntry::FilterEntry(
-   std::vector<Number> vals,
-   Index               iter
+   const std::vector<Number>& vals,
+   Index                      iter
 )
    : vals_(vals),
      iter_(iter)
@@ -47,7 +47,7 @@ bool Filter::Acceptable(
    DBG_ASSERT((Index)vals.size() == dim_);
    bool acceptable = true;
    std::list<FilterEntry*>::iterator iter;
-   for( iter = filter_list_.begin(); iter != filter_list_.end(); iter++ )
+   for( iter = filter_list_.begin(); iter != filter_list_.end(); ++iter )
    {
       if( !(*iter)->Acceptable(vals) )
       {
@@ -71,15 +71,14 @@ void Filter::AddEntry(
    {
       if( (*iter)->Dominated(vals) )
       {
-         std::list<FilterEntry*>::iterator iter_to_remove = iter;
-         iter++;
+         std::list<FilterEntry*>::iterator iter_to_remove = iter++;
          FilterEntry* entry_to_remove = *iter_to_remove;
          filter_list_.erase(iter_to_remove);
          delete entry_to_remove;
       }
       else
       {
-         iter++;
+         ++iter;
       }
    }
    FilterEntry* new_entry = new FilterEntry(vals, iteration);
@@ -110,7 +109,7 @@ void Filter::Print(
    }
    std::list<FilterEntry*>::iterator iter;
    Index count = 0;
-   for( iter = filter_list_.begin(); iter != filter_list_.end(); iter++ )
+   for( iter = filter_list_.begin(); iter != filter_list_.end(); ++iter )
    {
       if( count % 10 == 0 )
       {

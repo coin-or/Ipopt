@@ -167,8 +167,8 @@ bool PDFullSpaceSolver::Solve(
    }
 
    // Receive data about matrix
-   SmartPtr<const Vector> x = IpData().curr()->x();
-   SmartPtr<const Vector> s = IpData().curr()->s();
+//   SmartPtr<const Vector> x = IpData().curr()->x();
+//   SmartPtr<const Vector> s = IpData().curr()->s();
    SmartPtr<const SymMatrix> W = IpData().W();
    SmartPtr<const Matrix> J_c = IpCq().curr_jac_c();
    SmartPtr<const Matrix> J_d = IpCq().curr_jac_d();
@@ -254,7 +254,7 @@ bool PDFullSpaceSolver::Solve(
       // Beginning of loop for iterative refinement
       Index num_iter_ref = 0;
       bool quit_refinement = false;
-      while( !allow_inexact && !quit_refinement
+      while( /* !allow_inexact &&*/ !quit_refinement   // allow_inexact is always false here
              && (num_iter_ref < min_refinement_steps_ || residual_ratio > residual_ratio_max_) )
       {
 
@@ -498,9 +498,7 @@ bool PDFullSpaceSolver::SolveOnce(
       perturbHandler_->ConsiderNewSystem(delta_x, delta_s, delta_c, delta_d);
 
       retval = SYMSOLVER_SINGULAR;
-      bool fail = false;
-
-      while( retval != SYMSOLVER_SUCCESS && !fail )
+      while( retval != SYMSOLVER_SUCCESS )
       {
 
          if( pretend_singular )
@@ -640,7 +638,7 @@ bool PDFullSpaceSolver::SolveOnce(
                }
             }
          }
-      } // while (retval!=SYMSOLVER_SUCCESS && !fail) {
+      } // while (retval!=SYMSOLVER_SUCCESS)
 
       // Some output
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,

@@ -128,8 +128,6 @@ void RestoIterationOutput::WriteOutput()
    Number f = orig_ip_cq->unscaled_trial_f();
 
    // Retrieve some information set in the different parts of the algorithm
-   char info_iter = 'r';
-
    Number alpha_primal = IpData().info_alpha_primal();
    char alpha_primal_char = IpData().info_alpha_primal_char();
    Number alpha_dual = IpData().info_alpha_dual();
@@ -155,7 +153,7 @@ void RestoIterationOutput::WriteOutput()
             WallclockTime()) - print_frequency_time_ || last_output < 0.0) )
    {
       Jnlst().Printf(J_ITERSUMMARY, J_MAIN,
-                     "%4d%c%14.7e %7.2e %7.2e %5.1f %7.2e %5s %7.2e %7.2e%c%3d", iter, info_iter, f, inf_pr, inf_du, log10(mu), dnrm, regu_x_ptr, alpha_dual, alpha_primal, alpha_primal_char, ls_count);
+                     "%4dr%14.7e %7.2e %7.2e %5.1f %7.2e %5s %7.2e %7.2e%c%3d", iter, f, inf_pr, inf_du, log10(mu), dnrm, regu_x_ptr, alpha_dual, alpha_primal, alpha_primal_char, ls_count);
       if( print_info_string_ )
       {
          Jnlst().Printf(J_ITERSUMMARY, J_MAIN,

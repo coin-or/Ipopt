@@ -361,33 +361,33 @@ bool Ma57TSolverInterface::InitializeImpl(
    /* Initialize. */
    ma57i(wd_cntl_, wd_icntl_);
    /* Custom settings for MA57. */
-   wd_icntl_[1 - 1] = 0; /* Error stream */
-   wd_icntl_[2 - 1] = 0; /* Warning stream. */
+   wd_icntl_[0] = 0; /* Error stream */
+   wd_icntl_[1] = 0; /* Warning stream. */
 
-   wd_icntl_[4 - 1] = 1; /* Print statistics.  NOT Used. */
-   wd_icntl_[5 - 1] = 0; /* Print error. */
+   wd_icntl_[3] = 1; /* Print statistics.  NOT Used. */
+   wd_icntl_[4] = 0; /* Print error. */
 
-   wd_icntl_[6 - 1] = ma57_pivot_order; /* Pivoting order. */
+   wd_icntl_[5] = ma57_pivot_order; /* Pivoting order. */
 
-   wd_cntl_[1 - 1] = pivtol_; /* Pivot threshold. */
-   wd_icntl_[7 - 1] = 1; /* Pivoting strategy. */
+   wd_cntl_[0] = pivtol_; /* Pivot threshold. */
+   wd_icntl_[6] = 1; /* Pivoting strategy. */
 
    // CET: Added 04-29-2010 at suggestion of Jonathan Hogg of HSL
-   wd_icntl_[11 - 1] = ma57_block_size; /* Block size used by Level 3 BLAS in MA57BD - should be a multiple of 8.  Default is 16. */
-   wd_icntl_[12 - 1] = ma57_node_amalgamation; /* Two nodes of the assembly tree are merged only if both involve less than ICNTL(12) eliminations.  Default is 16. */
+   wd_icntl_[10] = ma57_block_size; /* Block size used by Level 3 BLAS in MA57BD - should be a multiple of 8.  Default is 16. */
+   wd_icntl_[11] = ma57_node_amalgamation; /* Two nodes of the assembly tree are merged only if both involve less than ICNTL(12) eliminations.  Default is 16. */
    // CET: 04-29-2010
 
    if( ma57_automatic_scaling )
    {
-      wd_icntl_[15 - 1] = 1;
+      wd_icntl_[14] = 1;
    }
    else
    {
-      wd_icntl_[15 - 1] = 0;
+      wd_icntl_[14] = 0;
    }
 
    // CET: Added 04-29-2010 at suggestion of Jonathan Hogg of HSL
-   wd_icntl_[16 - 1] = ma57_small_pivot_flag; /* If set to 1, small entries are removed and corresponding pivots are placed at the end of factorization.  May be useful for highly rank deficient matrices.  Default is 0. */
+   wd_icntl_[15] = ma57_small_pivot_flag; /* If set to 1, small entries are removed and corresponding pivots are placed at the end of factorization.  May be useful for highly rank deficient matrices.  Default is 0. */
    // CET: 04-29-2010
 
    // wd_icntl[8-1] = 0;       /* Retry factorization. */
@@ -532,7 +532,7 @@ ESymSolverStatus Ma57TSolverInterface::SymbolicFactorization(
 
    wd_lkeep_ = 5 * n + ne + (n > ne ? n : ne) + 42;
 
-   wd_cntl_[1 - 1] = pivtol_; /* Pivot threshold. */
+   wd_cntl_[0] = pivtol_; /* Pivot threshold. */
 
    wd_iwork_ = new ma57int[5 * n];
    wd_keep_ = new ma57int[wd_lkeep_];
@@ -620,7 +620,7 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
 
    int fact_error = 1;
 
-   wd_cntl_[1 - 1] = pivtol_; /* Pivot threshold. */
+   wd_cntl_[0] = pivtol_; /* Pivot threshold. */
 
    ma57int n = dim_;
    ma57int ne = nonzeros_;
@@ -694,7 +694,7 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                         "Error in MA57BD:  %d\n", wd_info_[0]);
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                        "MA57 Error message: %s\n", ma57_err_msg[-wd_info_[1 - 1]]);
+                        "MA57 Error message: %s\n", ma57_err_msg[-wd_info_[0]]);
          return SYMSOLVER_FATAL_ERROR;
       }
       // Check if the system is singular.
@@ -705,7 +705,7 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
             IpData().TimingStats().LinearSystemFactorization().End();
          }
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                        "System singular, rank = %d\n", wd_info_[25 - 1]);
+                        "System singular, rank = %d\n", wd_info_[24]);
          return SYMSOLVER_SINGULAR;
       }
       else if( wd_info_[0] > 0 )
@@ -713,7 +713,7 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                         "Warning in MA57BD:  %d\n", wd_info_[0]);
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                        "MA57 Warning message: %s\n", ma57_wrn_msg[wd_info_[1 - 1]]);
+                        "MA57 Warning message: %s\n", ma57_wrn_msg[wd_info_[0]]);
          // For now, abort the process so that we don't miss any problems
          return SYMSOLVER_FATAL_ERROR;
       }

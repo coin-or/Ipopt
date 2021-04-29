@@ -423,7 +423,7 @@ bool TNLPAdapter::GetSpaces(
       Number* x_u = new Number[n_full_x_];
       Number* g_l = new Number[n_full_g_];
       Number* g_u = new Number[n_full_g_];
-      bool retval = tnlp_->get_bounds_info(n_full_x_, x_l, x_u, n_full_g_, g_l, g_u);
+      retval = tnlp_->get_bounds_info(n_full_x_, x_l, x_u, n_full_g_, g_l, g_u);
       ASSERT_EXCEPTION(retval, INVALID_TNLP, "get_bounds_info returned false in GetSpaces");
 
       //*********************************************************
@@ -633,7 +633,7 @@ bool TNLPAdapter::GetSpaces(
                            "Dependent constraint detector had a problem, assume full rank.\n");
          }
          c_deps.sort();
-         if( c_deps.size() > 0 )
+         if( !c_deps.empty() )
          {
             jnlst_->Printf(J_WARNING, J_INITIALIZATION,
                            "\nDetected %d linearly dependent equality constraints; taking those out.\n\n", c_deps.size());
@@ -646,13 +646,13 @@ bool TNLPAdapter::GetSpaces(
          {
             jnlst_->Printf(J_DETAILED, J_INITIALIZATION, "\nList of indices of dependent constraints:\n");
             int count = 0;
-            for( std::list<Index>::iterator i = c_deps.begin(); i != c_deps.end(); i++ )
+            for( std::list<Index>::iterator i = c_deps.begin(); i != c_deps.end(); ++i )
             {
                jnlst_->Printf(J_DETAILED, J_INITIALIZATION, "c_dep[%d] = %d\n", count++, *i);
             }
             jnlst_->Printf(J_DETAILED, J_INITIALIZATION, "\n");
          }
-         if( c_deps.size() > 0 )
+         if( !c_deps.empty() )
          {
             // Take the dependent constraints out.
             // We assume that the list in c_dep is sorted
@@ -662,7 +662,7 @@ bool TNLPAdapter::GetSpaces(
             {
                if( i == *idep )
                {
-                  idep++;
+                  ++idep;
                }
                else
                {
@@ -721,8 +721,7 @@ bool TNLPAdapter::GetSpaces(
       // setup the variable meta data if present
       if( var_string_md.size() > 0 )
       {
-         StringMetaDataMapType::iterator iter;
-         for( iter = var_string_md.begin(); iter != var_string_md.end(); iter++ )
+         for( StringMetaDataMapType::iterator iter = var_string_md.begin(); iter != var_string_md.end(); ++iter )
          {
             std::vector<std::string> string_md(n_x_var);
             const Index* pos_idx = NULL;
@@ -765,8 +764,7 @@ bool TNLPAdapter::GetSpaces(
 
       if( var_integer_md.size() > 0 )
       {
-         IntegerMetaDataMapType::iterator iter;
-         for( iter = var_integer_md.begin(); iter != var_integer_md.end(); iter++ )
+         for( IntegerMetaDataMapType::iterator iter = var_integer_md.begin(); iter != var_integer_md.end(); ++iter )
          {
             std::vector<Index> integer_md(n_x_var);
             const Index* pos_idx = NULL;
@@ -809,8 +807,7 @@ bool TNLPAdapter::GetSpaces(
 
       if( var_numeric_md.size() > 0 )
       {
-         NumericMetaDataMapType::iterator iter;
-         for( iter = var_numeric_md.begin(); iter != var_numeric_md.end(); iter++ )
+         for( NumericMetaDataMapType::iterator iter = var_numeric_md.begin(); iter != var_numeric_md.end(); ++iter )
          {
             std::vector<Number> numeric_md(n_x_var);
             const Index* pos_idx = NULL;
@@ -913,8 +910,7 @@ bool TNLPAdapter::GetSpaces(
       // set the constraint meta data if present
       if( con_string_md.size() > 0 )
       {
-         StringMetaDataMapType::iterator iter;
-         for( iter = con_string_md.begin(); iter != con_string_md.end(); iter++ )
+         for( StringMetaDataMapType::iterator iter = con_string_md.begin(); iter != con_string_md.end(); ++iter )
          {
             std::vector<std::string> string_md(n_c);
             const Index* pos_idx = P_c_g_space_->ExpandedPosIndices();
@@ -955,8 +951,7 @@ bool TNLPAdapter::GetSpaces(
 
       if( con_integer_md.size() > 0 )
       {
-         IntegerMetaDataMapType::iterator iter;
-         for( iter = con_integer_md.begin(); iter != con_integer_md.end(); iter++ )
+         for( IntegerMetaDataMapType::iterator iter = con_integer_md.begin(); iter != con_integer_md.end(); ++iter )
          {
             std::vector<Index> integer_md(n_c);
             const Index* pos_idx = P_c_g_space_->ExpandedPosIndices();
@@ -997,8 +992,7 @@ bool TNLPAdapter::GetSpaces(
 
       if( con_numeric_md.size() > 0 )
       {
-         NumericMetaDataMapType::iterator iter;
-         for( iter = con_numeric_md.begin(); iter != con_numeric_md.end(); iter++ )
+         for( NumericMetaDataMapType::iterator iter = con_numeric_md.begin(); iter != con_numeric_md.end(); ++iter )
          {
             std::vector<Number> numeric_md(n_c);
             const Index* pos_idx = P_c_g_space_->ExpandedPosIndices();
@@ -1228,7 +1222,7 @@ bool TNLPAdapter::GetSpaces(
          Index* full_h_jCol = new Index[nz_full_h_];
          Index* h_iRow = new Index[nz_full_h_];
          Index* h_jCol = new Index[nz_full_h_];
-         bool retval = tnlp_->eval_h(n_full_x_, NULL, false, 0, n_full_g_,
+         retval = tnlp_->eval_h(n_full_x_, NULL, false, 0, n_full_g_,
                                      NULL, false, nz_full_h_, full_h_iRow, full_h_jCol, NULL);
          if( !retval )
          {

@@ -96,7 +96,7 @@ int main(
    const int n_loops = 1; // make larger for profiling
    for( Index i = 0; i < n_loops; i++ )
    {
-      retval = app->OptimizeTNLP(ampl_tnlp);
+      app->OptimizeTNLP(ampl_tnlp);
    }
 
    // finalize_solution method in AmplTNLP writes the solution file

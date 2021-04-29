@@ -800,7 +800,7 @@ Number QualityFunctionMuOracle::PerformGoldenSection(
          if( qtmp < q )
          {
             sigma = sigma_up;
-            q = qtmp;
+            // never used: q = qtmp;
          }
       }
       else if( sigma_lo == ScaleSigma(sigma_lo_in) )
@@ -820,7 +820,7 @@ Number QualityFunctionMuOracle::PerformGoldenSection(
          if( qtmp < q )
          {
             sigma = sigma_lo;
-            q = qtmp;
+            // never used: q = qtmp;
          }
       }
    }

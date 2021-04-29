@@ -23,8 +23,8 @@ public:
    ///@{
    /** Constructor with the two components and the current iteration count */
    FilterEntry(
-      std::vector<Number> vals,
-      Index               iter
+      const std::vector<Number>& vals,
+      Index                      iter
    );
 
    /** Destructor */
