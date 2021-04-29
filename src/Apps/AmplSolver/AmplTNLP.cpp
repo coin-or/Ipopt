@@ -1120,6 +1120,7 @@ extern "C"
       AmplOptionsList::PrivatInfo* pinfo = (AmplOptionsList::PrivatInfo*) kw->info;
 
       real real_val;
+      // cppcheck-suppress autoVariables
       kw->info = &real_val;
       char* retval = D_val(oi, kw, value);
       kw->info = (void*) pinfo;
@@ -1142,6 +1143,7 @@ extern "C"
       AmplOptionsList::PrivatInfo* pinfo = (AmplOptionsList::PrivatInfo*) kw->info;
 
       int int_val;
+      // cppcheck-suppress autoVariables
       kw->info = &int_val;
       char* retval = I_val(oi, kw, value);
       kw->info = (void*) pinfo;
@@ -1164,6 +1166,7 @@ extern "C"
       AmplOptionsList::PrivatInfo* pinfo = (AmplOptionsList::PrivatInfo*) kw->info;
 
       char* str_val;
+      // cppcheck-suppress autoVariables
       kw->info = &str_val;
       char* retval = C_val(oi, kw, value);
       kw->info = (void*) pinfo;
@@ -1186,6 +1189,7 @@ extern "C"
       AmplOptionsList::PrivatInfo* pinfo = (AmplOptionsList::PrivatInfo*) kw->info;
 
       char* str_val;
+      // cppcheck-suppress autoVariables
       kw->info = &str_val;
       char* retval = C_val(oi, kw, value);
       kw->info = (void*) pinfo;
