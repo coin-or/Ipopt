@@ -77,7 +77,7 @@ public:
    ///@{
    /** Constructor */
    CachedResults(
-      Int max_cache_size /**< maximal number of results that should be cached, negative for infinity */
+      int max_cache_size /**< maximal number of results that should be cached, negative for infinity */
    );
 
    /** Destructor */
@@ -248,7 +248,7 @@ public:
 
    /** Invalidate all cached results and changes max_cache_size */
    void Clear(
-      Int max_cache_size
+      int max_cache_size
    );
 
 private:
@@ -277,7 +277,7 @@ private:
    ///@}
 
    /** maximum number of cached results */
-   Int max_cache_size_;
+   int max_cache_size_;
 
    /** list of currently cached results. */
    mutable std::list<DependentResult<T>*>* cached_results_;
@@ -547,7 +547,7 @@ void DependentResult<T>::DebugPrint() const
 
 template<class T>
 CachedResults<T>::CachedResults(
-   Int max_cache_size
+   int max_cache_size
 )
    : max_cache_size_(max_cache_size),
      cached_results_(NULL)
@@ -610,8 +610,8 @@ void CachedResults<T>::AddCachedResult(
    {
       // if negative, allow infinite cache
       // non-negative - limit size of list to max_cache_size
-      DBG_ASSERT((Int)cached_results_->size() <= max_cache_size_ + 1);
-      if( (Int) cached_results_->size() > max_cache_size_ )
+      DBG_ASSERT(cached_results_->size() <= (size_t)max_cache_size_ + 1);
+      if( cached_results_->size() > (size_t)max_cache_size_ )
       {
          delete cached_results_->back();
          cached_results_->pop_back();
@@ -830,7 +830,7 @@ void CachedResults<T>::Clear()
 
 template<class T>
 void CachedResults<T>::Clear(
-   Int max_cache_size
+   int max_cache_size
 )
 {
    Clear();

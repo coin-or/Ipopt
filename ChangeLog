@@ -138,6 +138,7 @@ commit history.
           this abort.
         - Various tiny bugfixes and improvements in performance and code
           style from cppcheck suggestions.
+        - Deprecate almost never used type Ipopt::Int, use int instead.
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]

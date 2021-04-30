@@ -11,18 +11,6 @@
 #include "IpTypes.hpp"
 #include "IpDebug.hpp"
 
-/// macro to declare symbols as deprecated
-/// @since 3.14.0
-#ifndef IPOPT_DEPRECATED
-#if defined(_MSC_VER)
-#  define IPOPT_DEPRECATED __declspec(deprecated)
-#elif defined(__GNUC__)
-#  define IPOPT_DEPRECATED __attribute__ ((deprecated))
-#else
-#  define IPOPT_DEPRECATED
-#endif
-#endif
-
 namespace Ipopt
 {
 

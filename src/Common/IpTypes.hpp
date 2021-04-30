@@ -8,18 +8,21 @@
 #define __IPTYPES_HPP__
 
 #include "IpoptConfig.h"
+#include "IpTypes.h"
 
 namespace Ipopt
 {
+
 /** Type of all numbers */
-#ifdef IPOPT_SINGLE
-typedef float Number;
-#else
-typedef double Number;
-#endif
+typedef ipnumber Number;
+
 /** Type of all indices of vectors, matrices etc */
-typedef int Index;
-/** Type of default integer */
+typedef ipindex Index;
+
+/** Type of default integer
+ * @deprecated Use int instead.
+ */
+IPOPT_DEPRECATED
 typedef int Int;
 
 } // namespace Ipopt

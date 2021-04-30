@@ -233,20 +233,20 @@ inline Observer::~Observer()
    DBG_START_METH("Observer::~Observer", dbg_verbosity);
    if (DBG_VERBOSITY() >= 1)
    {
-      for (Index i = 0; i < (Index)subjects_.size(); i++)
+      for( size_t i = 0; i < subjects_.size(); ++i )
       {
          DBG_PRINT((1, "subjects_[%d] = 0x%x\n", i, subjects_[i]));
       }
    }
 #endif
    // Detach all subjects
-   for( Int i = (Int) (subjects_.size() - 1); i >= 0; i-- )
+   for( size_t i = subjects_.size(); i > 0; --i )
    {
 #ifdef IP_DEBUG_OBSERVER
-      DBG_PRINT((1, "About to detach subjects_[%d] = 0x%x\n", i, subjects_[i]));
+      DBG_PRINT((1, "About to detach subjects_[%d] = 0x%x\n", i, subjects_[i-1]));
 #endif
 
-      RequestDetach(NT_All, subjects_[i]);
+      RequestDetach(NT_All, subjects_[i-1]);
    }
 }
 
