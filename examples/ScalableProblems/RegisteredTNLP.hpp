@@ -29,7 +29,7 @@ class RegisteredTNLPs
 public:
    RegisteredTNLPs(
       const SmartPtr<RegisteredTNLP>& tnlp,
-      const std::string               name
+      const std::string&              name
    )
    {
       RegisterTNLP(tnlp, name);
@@ -37,8 +37,9 @@ public:
 
    virtual ~RegisteredTNLPs()
    { }
+
    static SmartPtr<RegisteredTNLP> GetTNLP(
-      const std::string name
+      const std::string& name
    );
 
    static void PrintRegisteredProblems();
@@ -46,7 +47,7 @@ public:
 private:
    void RegisterTNLP(
       const SmartPtr<RegisteredTNLP>& tnlp,
-      const std::string               name
+      const std::string&              name
    );
 
    SmartPtr<RegisteredTNLP> tnlp_;

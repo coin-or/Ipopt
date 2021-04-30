@@ -15,10 +15,9 @@ LuksanVlcek4::LuksanVlcek4(
    Number g_l,
    Number g_u
 )
-{
-   g_l_ = g_l;
-   g_u_ = g_u;
-}
+: g_l_(g_l),
+  g_u_(g_u)
+{ }
 
 bool LuksanVlcek4::InitializeProblem(
    Index N
@@ -261,7 +260,7 @@ bool LuksanVlcek4::eval_h(
       }
       iRow[ihes] = n - 1;
       jCol[ihes] = n - 1;
-      ihes++;
+      DBG_DO(ihes++);
       DBG_ASSERT(ihes == nele_hess);
       (void) nele_hess;
    }
@@ -304,7 +303,6 @@ bool LuksanVlcek4::eval_h(
       }
 
       // Now the constraints
-      ihes = 0;
       for( Index i = 0; i < N_ - 2; i++ )
       {
          // x[i] x[i+1]

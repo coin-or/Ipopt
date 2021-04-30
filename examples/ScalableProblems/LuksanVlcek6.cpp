@@ -29,10 +29,9 @@ LuksanVlcek6::LuksanVlcek6(
    Number g_l,
    Number g_u
 )
-{
-   g_l_ = g_l;
-   g_u_ = g_u;
-}
+: g_l_(g_l),
+  g_u_(g_u)
+{ }
 
 bool LuksanVlcek6::InitializeProblem(
    Index N

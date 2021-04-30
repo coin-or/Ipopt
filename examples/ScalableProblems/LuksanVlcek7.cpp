@@ -15,10 +15,9 @@ LuksanVlcek7::LuksanVlcek7(
    Number g_l,
    Number g_u
 )
-{
-   g_l_ = g_l;
-   g_u_ = g_u;
-}
+: g_l_(g_l),
+  g_u_(g_u)
+{ }
 
 bool LuksanVlcek7::InitializeProblem(
    Index N
@@ -230,7 +229,7 @@ bool LuksanVlcek7::eval_jac_g(
       ijac++;
       iRow[ijac] = 3;
       jCol[ijac] = N_;
-      ijac++;
+      DBG_DO(ijac++);
 
       DBG_ASSERT(ijac == nele_jac);
       (void) nele_jac;
@@ -271,7 +270,7 @@ bool LuksanVlcek7::eval_jac_g(
       values[ijac] = -8. * x[N_] + 2. * x[N_ - 1];
       ijac++;
       values[ijac] = 24. * x[N_] * x[N_] - 8. * x[N_ - 1] + 2.;
-      ijac++;
+      // ijac++;
    }
 
    return true;

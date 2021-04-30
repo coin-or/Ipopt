@@ -177,7 +177,7 @@ int main(
          }
          else
          {
-            tnlp = RegisteredTNLPs::GetTNLP(inputword.c_str());
+            tnlp = RegisteredTNLPs::GetTNLP(inputword);
             if( !IsValid(tnlp) )
             {
                printf("Problem with name \"%s\" not known.\n", inputword.c_str());

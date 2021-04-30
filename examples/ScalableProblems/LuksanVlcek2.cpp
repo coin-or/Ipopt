@@ -15,10 +15,9 @@ LuksanVlcek2::LuksanVlcek2(
    Number g_l,
    Number g_u
 )
-{
-   g_l_ = g_l;
-   g_u_ = g_u;
-}
+: g_l_(g_l),
+  g_u_(g_u)
+{ }
 
 bool LuksanVlcek2::InitializeProblem(
    Index N
@@ -269,7 +268,7 @@ bool LuksanVlcek2::eval_h(
       }
       iRow[ihes] = n - 2;
       jCol[ihes] = n - 1;
-      ihes++;
+      DBG_DO(ihes++);
       DBG_ASSERT(ihes == nele_hess);
       (void) nele_hess;
    }

@@ -872,15 +872,16 @@ astyle:
 	cd $(srcdir) && astyle --mode=java -A1 --indent=spaces=3 --indent-switches --min-conditional-indent=1 --convert-tabs --align-pointer=type --pad-oper --add-brackets -n -r "*.java"
 
 cppcheck:
-	cppcheck -q -j4 --enable=all --suppress=uninitMemberVar --suppress=noExplicitConstructor --suppress=cstyleCast:src/Apps/AmplSolver/AmplTNLP.cpp --inline-suppr \
+	cppcheck -q -j4 --enable=all --suppress=uninitMemberVar --suppress=noExplicitConstructor --inline-suppr \
+	  --suppress=cstyleCast:src/Apps/AmplSolver/AmplTNLP.cpp --suppress=constArgument:examples/hs071_c/hs071_c.c \
 	  --addon=threadsafety.py --std=c++03 --std=c99 --error-exitcode=2 --relative-paths=$(srcdir) \
 	  $(IPOPTLIB_CFLAGS) $(IPOPTAMPLINTERFACELIB_CFLAGS) $(addprefix -I,$(shell find $(srcdir)/src -type d)) -Isrc/Common \
-	  -DHAVE_CONFIG_H $(srcdir)/src $(srcdir)/test
+	  -DHAVE_CONFIG_H $(srcdir)/src $(srcdir)/test $(srcdir)/examples
 
 cppcheck-config:
 	cppcheck -q --check-config --suppress=missingIncludeSystem --std=c++03 --std=c99 --error-exitcode=2 \
 	  $(IPOPTLIB_CFLAGS) $(IPOPTAMPLINTERFACELIB_CFLAGS) $(addprefix -I,$(shell find $(srcdir)/src -type d)) -Isrc/Common \
-	  -DHAVE_CONFIG_H $(srcdir)/src $(srcdir)/test
+	  -DHAVE_CONFIG_H $(srcdir)/src $(srcdir)/test $(srcdir)/examples
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

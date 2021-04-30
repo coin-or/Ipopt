@@ -15,10 +15,9 @@ LuksanVlcek3::LuksanVlcek3(
    Number g_l,
    Number g_u
 )
-{
-   g_l_ = g_l;
-   g_u_ = g_u;
-}
+: g_l_(g_l),
+  g_u_(g_u)
+{ }
 
 bool LuksanVlcek3::InitializeProblem(
    Index N
@@ -203,7 +202,7 @@ bool LuksanVlcek3::eval_jac_g(
       ijac++;
       iRow[ijac] = 1;
       jCol[ijac] = n - 3;
-      ijac++;
+      DBG_DO(ijac++);
 
       DBG_ASSERT(ijac == nele_jac);
       (void) nele_jac;
@@ -220,7 +219,7 @@ bool LuksanVlcek3::eval_jac_g(
       values[ijac] = -(1. + x[n - 4]) * exp(x[n - 4] - x[n - 3]);
       ijac++;
       values[ijac] = 4. + x[n - 4] * exp(x[n - 4] - x[n - 3]);
-      ijac++;
+      // ijac++;
    }
 
    return true;
@@ -270,7 +269,7 @@ bool LuksanVlcek3::eval_h(
       ihes++;
       iRow[ihes] = N_ + 1;
       jCol[ihes] = N_ + 1;
-      ihes++;
+      DBG_DO(ihes++);
       DBG_ASSERT(ihes == nele_hess);
       (void) nele_hess;
    }

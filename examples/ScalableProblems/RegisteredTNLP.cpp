@@ -10,20 +10,21 @@
 
 std::map<std::string, SmartPtr<RegisteredTNLP> >& RegisteredTNLPListMap()
 {
+   // cppcheck-suppress threadsafety-threadsafety
    static std::map<std::string, SmartPtr<RegisteredTNLP> > tnlp_map_;
    return tnlp_map_;
 }
 
 void RegisteredTNLPs::RegisterTNLP(
    const SmartPtr<RegisteredTNLP>& tnlp,
-   const std::string               name
+   const std::string&              name
 )
 {
    RegisteredTNLPListMap()[name] = GetRawPtr(tnlp);
 }
 
 SmartPtr<RegisteredTNLP> RegisteredTNLPs::GetTNLP(
-   const std::string name
+   const std::string& name
 )
 {
    SmartPtr<RegisteredTNLP> retval = NULL;
@@ -39,7 +40,7 @@ SmartPtr<RegisteredTNLP> RegisteredTNLPs::GetTNLP(
 void RegisteredTNLPs::PrintRegisteredProblems()
 {
    for( std::map<std::string, SmartPtr<RegisteredTNLP> >::iterator it = RegisteredTNLPListMap().begin();
-        it != RegisteredTNLPListMap().end(); it++ )
+        it != RegisteredTNLPListMap().end(); ++it )
    {
       printf("%s\n", it->first.c_str());
    }

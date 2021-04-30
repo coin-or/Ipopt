@@ -411,10 +411,6 @@ Bool eval_h(
    UserDataPtr user_data
 )
 {
-   Index idx = 0; /* nonzero element counter */
-   Index row = 0; /* row counter for loop */
-   Index col = 0; /* col counter for loop */
-
    (void) n;
    (void) new_x;
    (void) m;
@@ -423,6 +419,10 @@ Bool eval_h(
 
    if( values == NULL )
    {
+      Index idx; /* nonzero element counter */
+      Index row; /* row counter for loop */
+      Index col; /* col counter for loop */
+
       /* return the structure. This is a symmetric matrix, fill the lower left
        * triangle only. */
 
