@@ -28,12 +28,12 @@ CompoundVector::CompoundVector(
      owner_space_(owner_space),
      vectors_valid_(false)
 {
-   Index dim_check = 0;
+   DBG_DO(Index dim_check = 0);
    for( Index i = 0; i < NComps(); i++ )
    {
       SmartPtr<const VectorSpace> space = owner_space_->GetCompSpace(i);
       DBG_ASSERT(IsValid(space));
-      dim_check += space->Dim();
+      DBG_DO(dim_check += space->Dim());
 
       if( create_new )
       {

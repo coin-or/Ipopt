@@ -11,7 +11,17 @@ matrix:
             - liblapack-dev
             - libmetis-dev
             - cppcheck
-      env: ENABLEDEBUG=true
+      env: ENABLEDEBUG=true CPPCHECK=true
+    - os: linux
+      dist: focal
+      addons:
+        apt:
+          packages:
+            - gfortran
+            - liblapack-dev
+            - libmetis-dev
+            - cppcheck
+      env: VISHIDDEN=true CPPCHECK=true
     - os: linux
       dist: bionic
       addons:
@@ -20,7 +30,7 @@ matrix:
             - gfortran
             - liblapack-dev
             - libmetis-dev
-      env: VISHIDDEN=true SINGLEPRECISION=true
+      env: SINGLEPRECISION=true
     - os: linux
       dist: xenial
       addons:
@@ -79,6 +89,7 @@ before_script:
   - export NOF77=${NOF77:-false}
   - export ENABLEDEBUG=${ENABLEDEBUG:-false}
   - export SINGLEPRECISION=${SINGLEPRECISION:-false}
+  - export CPPCHECK=${CPPCHECK:-false}
   - >
     if [[ "$TRAVIS_OS_NAME" == "osx" ]] && ! $NOF77; then
     brew update;
@@ -179,7 +190,7 @@ script:
   - make
   - if ! $NOF77 ; then ./recursive_nlp ; fi
   - popd
-  - if $ENABLEDEBUG && [[ "$TRAVIS_OS_NAME" == "linux" ]] ; then make cppcheck ; fi
+  - if $CPPCHECK ; then make cppcheck ; fi
 
 after_failure:
   - find . -name config.log -exec tail -n 1000 {} \;

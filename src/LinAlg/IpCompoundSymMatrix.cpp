@@ -381,7 +381,7 @@ CompoundSymMatrix* CompoundSymMatrixSpace::MakeNewCompoundSymMatrix() const
 
 bool CompoundSymMatrixSpace::DimensionsSet() const
 {
-   Index total_dim = 0;
+   DBG_DO(Index total_dim = 0);
    bool valid = true;
    for( Index i = 0; i < ncomp_spaces_; i++ )
    {
@@ -390,7 +390,7 @@ bool CompoundSymMatrixSpace::DimensionsSet() const
          valid = false;
          break;
       }
-      total_dim += block_dim_[i];
+      DBG_DO(total_dim += block_dim_[i]);
    }
 
    if( valid )

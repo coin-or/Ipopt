@@ -1086,6 +1086,7 @@ bool TNLPAdapter::GetSpaces(
       Index current_nz = 0;
 
       // prepare memory for mapping from Jacobian on fixed variables to full Jacobian
+      // cppcheck-suppress unreadVariable
       Index jac_fixed_length = 0;
       if( fixed_variable_treatment_ == MAKE_PARAMETER && IsValid(P_x_full_x_) )
       {

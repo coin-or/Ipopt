@@ -899,8 +899,8 @@ CompoundMatrix* CompoundMatrixSpace::MakeNewCompoundMatrix() const
 bool CompoundMatrixSpace::DimensionsSet() const
 {
    DBG_START_METH("CompoundMatrixSpace::DimensionsSet", 0);
-   Index total_nrows = 0;
-   Index total_ncols = 0;
+   DBG_DO(Index total_nrows = 0);
+   DBG_DO(Index total_ncols = 0);
    bool valid = true;
    for( Index i = 0; i < ncomps_rows_; i++ )
    {
@@ -909,7 +909,7 @@ bool CompoundMatrixSpace::DimensionsSet() const
          valid = false;
          break;
       }
-      total_nrows += block_rows_[i];
+      DBG_DO(total_nrows += block_rows_[i]);
    }
    if( valid )
    {
@@ -920,7 +920,7 @@ bool CompoundMatrixSpace::DimensionsSet() const
             valid = false;
             break;
          }
-         total_ncols += block_cols_[j];
+         DBG_DO(total_ncols += block_cols_[j]);
       }
    }
 
