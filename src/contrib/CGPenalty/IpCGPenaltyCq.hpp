@@ -129,6 +129,7 @@ private:
    CGPenaltyData& CGPenData()
    {
       CGPenaltyData& cg_pen_data = static_cast<CGPenaltyData&>(ip_data_->AdditionalData());
+      // cppcheck-suppress assertWithSideEffect
       DBG_ASSERT(dynamic_cast<CGPenaltyData*>(&ip_data_->AdditionalData()));
       return cg_pen_data;
    }
