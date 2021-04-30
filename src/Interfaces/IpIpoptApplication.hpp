@@ -7,20 +7,11 @@
 #ifndef __IPIPOPTAPPLICATION_HPP__
 #define __IPIPOPTAPPLICATION_HPP__
 
-#ifndef IPOPT_EXPORT
-#ifdef _MSC_VER
-#define IPOPT_EXPORT(type) type __cdecl
-#else
-#define IPOPT_EXPORT(type) type
-#endif
-#endif
-
 #include <iostream>
 
 #include "IpJournalist.hpp"
 #include "IpTNLP.hpp"
 #include "IpNLP.hpp"
-/* Return codes for the Optimize call for an application */
 #include "IpReturnCodes.hpp"
 
 namespace Ipopt
@@ -373,6 +364,6 @@ private:
 
 } // namespace Ipopt
 
-extern "C" IPOPTLIB_EXPORT IPOPT_EXPORT(class Ipopt::IpoptApplication*) IpoptApplicationFactory();
+extern "C" IPOPTLIB_EXPORT class Ipopt::IpoptApplication* IPOPT_CALLCONV IpoptApplicationFactory();
 
 #endif

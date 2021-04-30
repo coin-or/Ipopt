@@ -15,11 +15,8 @@
 #include "IpReturnCodes.h"
 
 #ifndef IPOPT_EXPORT
-#ifdef _MSC_VER
-#define IPOPT_EXPORT(type) type __cdecl
-#else
-#define IPOPT_EXPORT(type) type
-#endif
+/** @deprecated Use IPOPT_CALLCONV instead. */
+#define IPOPT_EXPORT(type) type IPOPT_CALLCONV
 #endif
 
 #ifdef __cplusplus
@@ -189,7 +186,7 @@ typedef bool (*Intermediate_CB)(
  *
  *  See also Ipopt::TNLP::get_nlp_info and Ipopt::TNLP::get_bounds_info.
  */
-IPOPTLIB_EXPORT IPOPT_EXPORT(IpoptProblem) CreateIpoptProblem(
+IPOPTLIB_EXPORT IpoptProblem IPOPT_CALLCONV CreateIpoptProblem(
    ipindex       n,           /**< Number of optimization variables */
    ipnumber*     x_L,         /**< Lower bounds on variables
                                *
@@ -238,7 +235,7 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(IpoptProblem) CreateIpoptProblem(
  *
  * After freeing an IpoptProblem, it cannot be used anymore.
  */
-IPOPTLIB_EXPORT IPOPT_EXPORT(void) FreeIpoptProblem(
+IPOPTLIB_EXPORT void IPOPT_CALLCONV FreeIpoptProblem(
    IpoptProblem ipopt_problem
 );
 
@@ -246,7 +243,7 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(void) FreeIpoptProblem(
  *
  * @return false, if the option could not be set (e.g., if keyword is unknown)
  */
-IPOPTLIB_EXPORT IPOPT_EXPORT(bool) AddIpoptStrOption(
+IPOPTLIB_EXPORT bool IPOPT_CALLCONV AddIpoptStrOption(
    IpoptProblem ipopt_problem,
    char*        keyword,
    char*        val
@@ -256,7 +253,7 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(bool) AddIpoptStrOption(
  *
  * @return false, if the option could not be set (e.g., if keyword is unknown)
  */
-IPOPTLIB_EXPORT IPOPT_EXPORT(bool) AddIpoptNumOption(
+IPOPTLIB_EXPORT bool IPOPT_CALLCONV AddIpoptNumOption(
    IpoptProblem ipopt_problem,
    char*        keyword,
    ipnumber     val
@@ -266,7 +263,7 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(bool) AddIpoptNumOption(
  *
  * @return false, if the option  could not be set (e.g., if keyword is unknown)
  @*/
-IPOPTLIB_EXPORT IPOPT_EXPORT(bool) AddIpoptIntOption(
+IPOPTLIB_EXPORT bool IPOPT_CALLCONV AddIpoptIntOption(
    IpoptProblem ipopt_problem,
    char*        keyword,
    ipindex      val
@@ -276,7 +273,7 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(bool) AddIpoptIntOption(
  *
  * @return false, if there was a problem opening the file.
  */
-IPOPTLIB_EXPORT IPOPT_EXPORT(bool) OpenIpoptOutputFile(
+IPOPTLIB_EXPORT bool IPOPT_CALLCONV OpenIpoptOutputFile(
    IpoptProblem ipopt_problem,
    char*        file_name,
    int          print_level
@@ -288,7 +285,7 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(bool) OpenIpoptOutputFile(
  *  If the pointers x_scaling or g_scaling are NULL, then no scaling
  *  for x resp. g is done.
  */
-IPOPTLIB_EXPORT IPOPT_EXPORT(bool) SetIpoptProblemScaling(
+IPOPTLIB_EXPORT bool IPOPT_CALLCONV SetIpoptProblemScaling(
    IpoptProblem ipopt_problem,
    ipnumber     obj_scaling,
    ipnumber*    x_scaling,
@@ -305,7 +302,7 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(bool) SetIpoptProblemScaling(
  *  method returns false, Ipopt will terminate the optimization.
  *  Calling this set method to set the CB pointer to NULL disables
  *  the intermediate callback functionality. */
-IPOPTLIB_EXPORT IPOPT_EXPORT(bool) SetIntermediateCallback(
+IPOPTLIB_EXPORT bool IPOPT_CALLCONV SetIntermediateCallback(
    IpoptProblem    ipopt_problem,
    Intermediate_CB intermediate_cb
 );
@@ -315,7 +312,7 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(bool) SetIntermediateCallback(
  *
  * @return outcome of the optimization procedure (e.g., success, failure etc).
  */
-IPOPTLIB_EXPORT IPOPT_EXPORT(enum ApplicationReturnStatus) IpoptSolve(
+IPOPTLIB_EXPORT enum ApplicationReturnStatus IPOPT_CALLCONV IpoptSolve(
    IpoptProblem ipopt_problem, /**< Problem that is to be optimized.
                                 *
                                 * Ipopt will use the options previously specified with
@@ -366,7 +363,7 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(enum ApplicationReturnStatus) IpoptSolve(
  * @return Whether Ipopt has successfully filled the given arrays
  * @since 3.14.0
  */
-IPOPTLIB_EXPORT IPOPT_EXPORT(bool) GetIpoptCurrentIterate(
+IPOPTLIB_EXPORT bool IPOPT_CALLCONV GetIpoptCurrentIterate(
    IpoptProblem    ipopt_problem,
    bool            scaled,
    ipindex         n,
@@ -410,7 +407,7 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(bool) GetIpoptCurrentIterate(
  * @return Whether Ipopt has successfully filled the given arrays
  * @since 3.14.0
  */
-IPOPTLIB_EXPORT IPOPT_EXPORT(bool) GetIpoptCurrentViolations(
+IPOPTLIB_EXPORT bool IPOPT_CALLCONV GetIpoptCurrentViolations(
    IpoptProblem  ipopt_problem,
    bool          scaled,
    ipindex       n,

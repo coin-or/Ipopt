@@ -6,6 +6,7 @@
 #define __IPLINEARSOLVERS_H__
 
 #include "IpoptConfig.h"
+#include "IpTypes.h"
 
 #define IPOPTLINEARSOLVER_MA27    0x001u
 #define IPOPTLINEARSOLVER_MA57    0x002u
@@ -34,8 +35,7 @@ typedef unsigned int IpoptLinearSolver;
  * Otherwise, also linear solvers are reported which are loaded from a shared library at runtime, if this feature has been compiled.
  * @since 3.14.0
  */
-IPOPTLIB_EXPORT
-IpoptLinearSolver IpoptGetAvailableLinearSolvers(
+IPOPTLIB_EXPORT IpoptLinearSolver IPOPT_CALLCONV IpoptGetAvailableLinearSolvers(
    int buildinonly
    );
 

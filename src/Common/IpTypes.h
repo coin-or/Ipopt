@@ -7,14 +7,21 @@
 
 #include "IpoptConfig.h"
 
-/// macro to declare symbols as deprecated
-/// @since 3.14.0
 #ifndef IPOPT_DEPRECATED
 #if defined(_MSC_VER)
+/** macro to declare symbols as deprecated
+ * @since Ipopt 3.14.0
+ */
 #  define IPOPT_DEPRECATED __declspec(deprecated)
 #elif defined(__GNUC__)
+/** macro to declare symbols as deprecated
+ * @since Ipopt 3.14.0
+ */
 #  define IPOPT_DEPRECATED __attribute__ ((deprecated))
 #else
+/** macro to declare symbols as deprecated
+ * @since Ipopt 3.14.0
+ */
 #  define IPOPT_DEPRECATED
 #endif
 #endif
@@ -23,6 +30,16 @@
 #  define IPOPT_UNUSED __attribute__((unused))
 #else
 #  define IPOPT_UNUSED
+#endif
+
+#ifndef IPOPT_CALLCONV
+#ifdef _MSC_VER
+/** @since Ipopt 3.14.0 */
+#define IPOPT_CALLCONV __cdecl
+#else
+/** @since Ipopt 3.14.0 */
+#define IPOPT_CALLCONV
+#endif
 #endif
 
 /* Type of Fortran integer translated into C */
