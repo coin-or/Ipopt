@@ -9,7 +9,15 @@
 #define __IPRETURNCODES_H__
 
 /* include from a common include file */
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #include "IpReturnCodes_inc.h"
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

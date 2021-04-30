@@ -10,6 +10,7 @@
 
 #include "IpoptConfig.h"
 #include "IpTypes.h"
+#include "IpReturnCodes.h"
 
 #ifndef IPOPT_EXPORT
 #ifdef _MSC_VER
@@ -38,9 +39,6 @@ typedef int Index;
  * We need to make sure that this is identical with what is defined in Common/IpTypes.hpp
  */
 typedef int Int;
-
-/* This includes the SolverReturn enum type */
-#include "IpReturnCodes.h"
 
 /** Structure collecting all information about the problem definition and solve statistics etc. */
 struct IpoptProblemInfo;
