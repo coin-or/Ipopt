@@ -82,7 +82,7 @@ MumpsSolverInterface::MumpsSolverInterface()
 #endif
 
    //initialize mumps
-   MUMPS_STRUC_C* mumps_ = (MUMPS_STRUC_C*) calloc(1, sizeof(MUMPS_STRUC_C));
+   MUMPS_STRUC_C* mumps_ = static_cast<MUMPS_STRUC_C*>(calloc(1, sizeof(MUMPS_STRUC_C)));
    mumps_->job = -1; //initialize mumps
    mumps_->par = 1; //working host for sequential version
    mumps_->sym = 2; //general symetric matrix
@@ -99,7 +99,7 @@ MumpsSolverInterface::~MumpsSolverInterface()
    DBG_START_METH("MumpsSolverInterface::~MumpsSolverInterface()",
                   dbg_verbosity);
 
-   MUMPS_STRUC_C* mumps_ = (MUMPS_STRUC_C*) mumps_ptr_;
+   MUMPS_STRUC_C* mumps_ = static_cast<MUMPS_STRUC_C*>(mumps_ptr_);
    mumps_->job = -2; //terminate mumps
    mumps_c(mumps_);
 #ifndef MUMPS_MPI_H
@@ -208,7 +208,7 @@ bool MumpsSolverInterface::InitializeImpl(
    refactorize_ = false;
    have_symbolic_factorization_ = false;
 
-   MUMPS_STRUC_C* mumps_ = (MUMPS_STRUC_C*) mumps_ptr_;
+   MUMPS_STRUC_C* mumps_ = static_cast<MUMPS_STRUC_C*>(mumps_ptr_);
    if( !warm_start_same_structure_ )
    {
       mumps_->n = 0;
@@ -236,9 +236,9 @@ ESymSolverStatus MumpsSolverInterface::MultiSolve(
    DBG_START_METH("MumpsSolverInterface::MultiSolve", dbg_verbosity);
    DBG_ASSERT(!check_NegEVals || ProvidesInertia());
    DBG_ASSERT(initialized_);
-   DBG_ASSERT(((MUMPS_STRUC_C*)mumps_ptr_)->irn == ia);
+   DBG_ASSERT(static_cast<MUMPS_STRUC_C*>(mumps_ptr_)->irn == ia);
    (void) ia;
-   DBG_ASSERT(((MUMPS_STRUC_C*)mumps_ptr_)->jcn == ja);
+   DBG_ASSERT(static_cast<MUMPS_STRUC_C*>(mumps_ptr_)->jcn == ja);
    (void) ja;
 
    if( pivtol_changed_ )
@@ -286,7 +286,7 @@ ESymSolverStatus MumpsSolverInterface::MultiSolve(
 
 Number* MumpsSolverInterface::GetValuesArrayPtr()
 {
-   MUMPS_STRUC_C* mumps_ = (MUMPS_STRUC_C*) mumps_ptr_;
+   MUMPS_STRUC_C* mumps_ = static_cast<MUMPS_STRUC_C*>(mumps_ptr_);
    DBG_START_METH("MumpsSolverInterface::GetValuesArrayPtr", dbg_verbosity)
    DBG_ASSERT(initialized_);
    return mumps_->a;
@@ -332,7 +332,7 @@ ESymSolverStatus MumpsSolverInterface::InitializeStructure(
    const Index* ja
 )
 {
-   MUMPS_STRUC_C* mumps_ = (MUMPS_STRUC_C*) mumps_ptr_;
+   MUMPS_STRUC_C* mumps_ = static_cast<MUMPS_STRUC_C*>(mumps_ptr_);
    DBG_START_METH("MumpsSolverInterface::InitializeStructure", dbg_verbosity);
 
    ESymSolverStatus retval = SYMSOLVER_SUCCESS;
@@ -365,7 +365,7 @@ ESymSolverStatus MumpsSolverInterface::SymbolicFactorization()
 {
    DBG_START_METH("MumpsSolverInterface::SymbolicFactorization",
                   dbg_verbosity);
-   MUMPS_STRUC_C* mumps_data = (MUMPS_STRUC_C*) mumps_ptr_;
+   MUMPS_STRUC_C* mumps_data = static_cast<MUMPS_STRUC_C*>(mumps_ptr_);
 
    if( HaveIpData() )
    {
@@ -430,7 +430,7 @@ ESymSolverStatus MumpsSolverInterface::Factorization(
 )
 {
    DBG_START_METH("MumpsSolverInterface::Factorization", dbg_verbosity);
-   MUMPS_STRUC_C* mumps_data = (MUMPS_STRUC_C*) mumps_ptr_;
+   MUMPS_STRUC_C* mumps_data = static_cast<MUMPS_STRUC_C*>(mumps_ptr_);
 
    mumps_data->job = 2;  //numerical factorization
 
@@ -523,7 +523,7 @@ ESymSolverStatus MumpsSolverInterface::Solve(
 )
 {
    DBG_START_METH("MumpsSolverInterface::Solve", dbg_verbosity);
-   MUMPS_STRUC_C* mumps_data = (MUMPS_STRUC_C*) mumps_ptr_;
+   MUMPS_STRUC_C* mumps_data = static_cast<MUMPS_STRUC_C*>(mumps_ptr_);
    ESymSolverStatus retval = SYMSOLVER_SUCCESS;
    if( HaveIpData() )
    {
@@ -594,7 +594,7 @@ ESymSolverStatus MumpsSolverInterface::DetermineDependentRows(
 {
    DBG_START_METH("MumpsSolverInterface::DetermineDependentRows",
                   dbg_verbosity);
-   MUMPS_STRUC_C* mumps_data = (MUMPS_STRUC_C*) mumps_ptr_;
+   MUMPS_STRUC_C* mumps_data = static_cast<MUMPS_STRUC_C*>(mumps_ptr_);
 
    c_deps.clear();
 

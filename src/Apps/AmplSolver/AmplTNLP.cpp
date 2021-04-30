@@ -260,6 +260,7 @@ void AmplTNLP::set_active_objective(
                       "Internal error: AmplTNLP::set_active_objective called after AmplTNLP::call_hesset.");
    }
    ASL_pfgh* asl = asl_;
+   DBG_ASSERT(asl);
    obj_no = in_obj_no;
    set_active_objective_called_ = true;
 }
@@ -273,6 +274,7 @@ void AmplTNLP::call_hesset()
    }
 
    ASL_pfgh* asl = asl_;
+   DBG_ASSERT(asl);
 
    if( n_obj == 0 )
    {
@@ -370,7 +372,7 @@ bool AmplTNLP::get_nlp_info(
 )
 {
    ASL_pfgh* asl = asl_;
-   DBG_ASSERT(asl_);
+   DBG_ASSERT(asl);
 
    if( !hesset_called_ )
    {
@@ -399,7 +401,7 @@ bool AmplTNLP::get_var_con_metadata(
 )
 {
    ASL_pfgh* asl = asl_;
-   DBG_ASSERT(asl_);
+   DBG_ASSERT(asl);
 
    // pick up the variable and constraints names if available
    Index rlen = maxrownamelen;
@@ -450,7 +452,7 @@ bool AmplTNLP::get_bounds_info(
 )
 {
    ASL_pfgh* asl = asl_;
-   DBG_ASSERT(asl_);
+   DBG_ASSERT(asl);
 
    DBG_ASSERT(n == n_var);
    DBG_ASSERT(m == n_con);
@@ -476,6 +478,7 @@ bool AmplTNLP::get_constraints_linearity(
 )
 {
    ASL_pfgh* asl = AmplSolverObject();
+   DBG_ASSERT(asl);
    //check that n is good
    DBG_ASSERT(n == n_con);
    (void) n;
@@ -507,7 +510,7 @@ bool AmplTNLP::get_starting_point(
 )
 {
    ASL_pfgh* asl = asl_;
-   DBG_ASSERT(asl_);
+   DBG_ASSERT(asl);
    DBG_ASSERT(n == n_var);
    DBG_ASSERT(m == n_con);
 
@@ -566,7 +569,7 @@ bool AmplTNLP::eval_grad_f(
    DBG_START_METH("AmplTNLP::eval_grad_f",
                   dbg_verbosity);
    ASL_pfgh* asl = asl_;
-   DBG_ASSERT(asl_);
+   DBG_ASSERT(asl);
 
    if( !apply_new_x(new_x, n, x) )
    {
@@ -635,7 +638,7 @@ bool AmplTNLP::eval_jac_g(
    DBG_START_METH("AmplTNLP::eval_jac_g",
                   dbg_verbosity);
    ASL_pfgh* asl = asl_;
-   DBG_ASSERT(asl_);
+   DBG_ASSERT(asl);
    DBG_ASSERT(n == n_var);
    DBG_ASSERT(m == n_con);
    (void) m;
@@ -697,7 +700,7 @@ bool AmplTNLP::eval_h(
    DBG_START_METH("AmplTNLP::eval_h",
                   dbg_verbosity);
    ASL_pfgh* asl = asl_;
-   DBG_ASSERT(asl_);
+   DBG_ASSERT(asl);
    DBG_ASSERT(n == n_var);
    DBG_ASSERT(m == n_con);
 
@@ -771,6 +774,7 @@ void AmplTNLP::finalize_solution(
 )
 {
    ASL_pfgh* asl = asl_;
+   DBG_ASSERT(asl);
 
    if( !x_sol_ )
    {
@@ -894,7 +898,7 @@ bool AmplTNLP::internal_objval(
    DBG_START_METH("AmplTNLP::internal_objval",
                   dbg_verbosity);
    ASL_pfgh* asl = asl_;
-   DBG_ASSERT(asl_);
+   DBG_ASSERT(asl);
    objval_called_with_current_x_ = false; // in case the call below fails
 
    if( n_obj == 0 )
@@ -926,7 +930,7 @@ bool AmplTNLP::internal_conval(
    DBG_START_METH("AmplTNLP::internal_conval",
                   dbg_verbosity);
    ASL_pfgh* asl = asl_;
-   DBG_ASSERT(asl_);
+   DBG_ASSERT(asl);
    DBG_ASSERT(m == n_con);
    conval_called_with_current_x_ = false; // in case the call below fails
 
@@ -961,7 +965,7 @@ bool AmplTNLP::apply_new_x(
                   dbg_verbosity);
 
    ASL_pfgh* asl = asl_;
-   DBG_ASSERT(asl_);
+   DBG_ASSERT(asl);
 
    if( new_x )
    {
@@ -1088,6 +1092,7 @@ bool AmplTNLP::get_scaling_parameters(
 Index AmplTNLP::get_number_of_nonlinear_variables()
 {
    ASL_pfgh* asl = asl_;
+   DBG_ASSERT(asl);
    return Max(nlvo, nlvc);
 }
 
