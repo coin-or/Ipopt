@@ -13,13 +13,6 @@
 #if IPOPT_CHECKLEVEL > 2
 # define IP_DEBUG_SMARTPTR
 #endif
-#ifndef IPOPT_UNUSED
-# if defined(__GNUC__)
-#   define IPOPT_UNUSED __attribute__((unused))
-# else
-#   define IPOPT_UNUSED
-# endif
-#endif
 
 namespace Ipopt
 {

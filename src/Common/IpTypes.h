@@ -19,6 +19,12 @@
 #endif
 #endif
 
+#ifdef __GNUC__
+#  define IPOPT_UNUSED __attribute__((unused))
+#else
+#  define IPOPT_UNUSED
+#endif
+
 /* Type of Fortran integer translated into C */
 typedef IPOPT_FORTRAN_INTEGER_TYPE ipfint;
 
