@@ -12,76 +12,76 @@
 
 /* Function Declarations */
 Bool eval_f(
-   Index       n,
-   Number*     x,
+   ipindex     n,
+   ipnumber*   x,
    Bool        new_x,
-   Number*     obj_value,
+   ipnumber*   obj_value,
    UserDataPtr user_data
 );
 
 Bool eval_grad_f(
-   Index       n,
-   Number*     x,
+   ipindex     n,
+   ipnumber*   x,
    Bool        new_x,
-   Number*     grad_f,
+   ipnumber*   grad_f,
    UserDataPtr user_data
 );
 
 Bool eval_g(
-   Index       n,
-   Number*     x,
+   ipindex     n,
+   ipnumber*   x,
    Bool        new_x,
-   Index       m,
-   Number*     g,
+   ipindex     m,
+   ipnumber*   g,
    UserDataPtr user_data
 );
 
 Bool eval_jac_g(
-   Index       n,
-   Number*     x,
+   ipindex     n,
+   ipnumber*   x,
    Bool        new_x,
-   Index       m,
-   Index       nele_jac,
-   Index*      iRow,
-   Index*      jCol,
-   Number*     values,
+   ipindex     m,
+   ipindex     nele_jac,
+   ipindex*    iRow,
+   ipindex*    jCol,
+   ipnumber*   values,
    UserDataPtr user_data
 );
 
 Bool eval_h(
-   Index       n,
-   Number*     x,
+   ipindex     n,
+   ipnumber*   x,
    Bool        new_x,
-   Number      obj_factor,
-   Index       m,
-   Number*     lambda,
+   ipnumber    obj_factor,
+   ipindex     m,
+   ipnumber*   lambda,
    Bool        new_lambda,
-   Index       nele_hess,
-   Index*      iRow,
-   Index*      jCol,
-   Number*     values,
+   ipindex     nele_hess,
+   ipindex*    iRow,
+   ipindex*    jCol,
+   ipnumber*   values,
    UserDataPtr user_data
 );
 
 Bool intermediate_cb(
-   Index       alg_mod,
-   Index       iter_count,
-   Number      obj_value,
-   Number      inf_pr,
-   Number      inf_du,
-   Number      mu,
-   Number      d_norm,
-   Number      regularization_size,
-   Number      alpha_du,
-   Number      alpha_pr,
-   Index       ls_trials,
+   ipindex     alg_mod,
+   ipindex     iter_count,
+   ipnumber    obj_value,
+   ipnumber    inf_pr,
+   ipnumber    inf_du,
+   ipnumber    mu,
+   ipnumber    d_norm,
+   ipnumber    regularization_size,
+   ipnumber    alpha_du,
+   ipnumber    alpha_pr,
+   ipindex     ls_trials,
    UserDataPtr user_data
 );
 
 /** This is an example how user_data can be used. */
 struct MyUserData
 {
-   Number g_offset[2]; /**< This is an offset for the constraints.  */
+   ipnumber g_offset[2]; /**< This is an offset for the constraints.  */
    IpoptProblem nlp;   /**< The problem to be solved. Required in intermediate_cb. */
 };
 
@@ -89,29 +89,29 @@ struct MyUserData
 /* [MAIN] */
 int main()
 {
-   Index n = -1;                        /* number of variables */
-   Index m = -1;                        /* number of constraints */
-   Index nele_jac;                      /* number of nonzeros in the Jacobian of the constraints */
-   Index nele_hess;                     /* number of nonzeros in the Hessian of the Lagrangian (lower or upper triangular part only) */
-   Index index_style;                   /* indexing style for matrices */
-   Number* x_L = NULL;                  /* lower bounds on x */
-   Number* x_U = NULL;                  /* upper bounds on x */
-   Number* g_L = NULL;                  /* lower bounds on g */
-   Number* g_U = NULL;                  /* upper bounds on g */
+   ipindex n = -1;                      /* number of variables */
+   ipindex m = -1;                      /* number of constraints */
+   ipindex nele_jac;                    /* number of nonzeros in the Jacobian of the constraints */
+   ipindex nele_hess;                   /* number of nonzeros in the Hessian of the Lagrangian (lower or upper triangular part only) */
+   ipindex index_style;                 /* indexing style for matrices */
+   ipnumber* x_L = NULL;                /* lower bounds on x */
+   ipnumber* x_U = NULL;                /* upper bounds on x */
+   ipnumber* g_L = NULL;                /* lower bounds on g */
+   ipnumber* g_U = NULL;                /* upper bounds on g */
    IpoptProblem nlp = NULL;             /* IpoptProblem */
    enum ApplicationReturnStatus status; /* Solve return code */
-   Number* x = NULL;                    /* starting point and solution vector */
-   Number* mult_g = NULL;               /* constraint multipliers at the solution */
-   Number* mult_x_L = NULL;             /* lower bound multipliers at the solution */
-   Number* mult_x_U = NULL;             /* upper bound multipliers at the solution */
-   Number obj;                          /* objective value */
+   ipnumber* x = NULL;                  /* starting point and solution vector */
+   ipnumber* mult_g = NULL;             /* constraint multipliers at the solution */
+   ipnumber* mult_x_L = NULL;           /* lower bound multipliers at the solution */
+   ipnumber* mult_x_U = NULL;           /* upper bound multipliers at the solution */
+   ipnumber obj;                        /* objective value */
    struct MyUserData user_data;         /* our user data for the function evaluations */
-   Index i;                             /* generic counter */
+   ipindex i;                           /* generic counter */
 
    /* set the number of variables and allocate space for the bounds */
    n = 4;
-   x_L = (Number*) malloc(sizeof(Number) * n);
-   x_U = (Number*) malloc(sizeof(Number) * n);
+   x_L = (ipnumber*) malloc(sizeof(ipnumber) * n);
+   x_U = (ipnumber*) malloc(sizeof(ipnumber) * n);
    /* set the values for the variable bounds */
    for( i = 0; i < n; i++ )
    {
@@ -121,8 +121,8 @@ int main()
 
    /* set the number of constraints and allocate space for the bounds */
    m = 2;
-   g_L = (Number*) malloc(sizeof(Number) * m);
-   g_U = (Number*) malloc(sizeof(Number) * m);
+   g_L = (ipnumber*) malloc(sizeof(ipnumber) * m);
+   g_U = (ipnumber*) malloc(sizeof(ipnumber) * m);
    /* set the values of the constraint bounds */
    g_L[0] = 25;
    g_U[0] = 2e19;
@@ -157,16 +157,16 @@ int main()
    AddIpoptStrOption(nlp, "output_file", "ipopt.out");
 
    /* allocate space for the initial point and set the values */
-   x = (Number*) malloc(sizeof(Number) * n);
+   x = (ipnumber*) malloc(sizeof(ipnumber) * n);
    x[0] = 1.0;
    x[1] = 5.0;
    x[2] = 5.0;
    x[3] = 1.0;
 
    /* allocate space to store the bound multipliers at the solution */
-   mult_g = (Number*) malloc(sizeof(Number) * m);
-   mult_x_L = (Number*) malloc(sizeof(Number) * n);
-   mult_x_U = (Number*) malloc(sizeof(Number) * n);
+   mult_g = (ipnumber*) malloc(sizeof(ipnumber) * m);
+   mult_x_L = (ipnumber*) malloc(sizeof(ipnumber) * n);
+   mult_x_U = (ipnumber*) malloc(sizeof(ipnumber) * n);
 
    /* Initialize the user data */
    user_data.g_offset[0] = 0.;
@@ -274,10 +274,10 @@ int main()
 
 /* Function Implementations */
 Bool eval_f(
-   Index       n,
-   Number*     x,
+   ipindex     n,
+   ipnumber*   x,
    Bool        new_x,
-   Number*     obj_value,
+   ipnumber*   obj_value,
    UserDataPtr user_data
 )
 {
@@ -293,10 +293,10 @@ Bool eval_f(
 }
 
 Bool eval_grad_f(
-   Index       n,
-   Number*     x,
+   ipindex     n,
+   ipnumber*   x,
    Bool        new_x,
-   Number*     grad_f,
+   ipnumber*   grad_f,
    UserDataPtr user_data
 )
 {
@@ -315,11 +315,11 @@ Bool eval_grad_f(
 }
 
 Bool eval_g(
-   Index       n,
-   Number*     x,
+   ipindex     n,
+   ipnumber*   x,
    Bool        new_x,
-   Index       m,
-   Number*     g,
+   ipindex     m,
+   ipnumber*   g,
    UserDataPtr user_data
 )
 {
@@ -339,14 +339,14 @@ Bool eval_g(
 }
 
 Bool eval_jac_g(
-   Index       n,
-   Number*     x,
+   ipindex     n,
+   ipnumber*   x,
    Bool        new_x,
-   Index       m,
-   Index       nele_jac,
-   Index*      iRow,
-   Index*      jCol,
-   Number*     values,
+   ipindex     m,
+   ipindex     nele_jac,
+   ipindex*    iRow,
+   ipindex*    jCol,
+   ipnumber*   values,
    UserDataPtr user_data
 )
 {
@@ -397,17 +397,17 @@ Bool eval_jac_g(
 }
 
 Bool eval_h(
-   Index       n,
-   Number*     x,
+   ipindex     n,
+   ipnumber*   x,
    Bool        new_x,
-   Number      obj_factor,
-   Index       m,
-   Number*     lambda,
+   ipnumber    obj_factor,
+   ipindex     m,
+   ipnumber*   lambda,
    Bool        new_lambda,
-   Index       nele_hess,
-   Index*      iRow,
-   Index*      jCol,
-   Number*     values,
+   ipindex     nele_hess,
+   ipindex*    iRow,
+   ipindex*    jCol,
+   ipnumber*   values,
    UserDataPtr user_data
 )
 {
@@ -419,9 +419,9 @@ Bool eval_h(
 
    if( values == NULL )
    {
-      Index idx; /* nonzero element counter */
-      Index row; /* row counter for loop */
-      Index col; /* col counter for loop */
+      ipindex idx; /* nonzero element counter */
+      ipindex row; /* row counter for loop */
+      ipindex col; /* col counter for loop */
 
       /* return the structure. This is a symmetric matrix, fill the lower left
        * triangle only. */
@@ -485,36 +485,36 @@ Bool eval_h(
 }
 
 Bool intermediate_cb(
-   Index       alg_mod,
-   Index       iter_count,
-   Number      obj_value,
-   Number      inf_pr,
-   Number      inf_du,
-   Number      mu,
-   Number      d_norm,
-   Number      regularization_size,
-   Number      alpha_du,
-   Number      alpha_pr,
-   Index       ls_trials,
+   ipindex     alg_mod,
+   ipindex     iter_count,
+   ipnumber    obj_value,
+   ipnumber    inf_pr,
+   ipnumber    inf_du,
+   ipnumber    mu,
+   ipnumber    d_norm,
+   ipnumber    regularization_size,
+   ipnumber    alpha_du,
+   ipnumber    alpha_pr,
+   ipindex     ls_trials,
    UserDataPtr user_data
 )
 {
    Bool have_iter;
    Bool have_viol;
 
-   Number x[4];
-   Number x_L_viol[4];
-   Number x_U_viol[4];
-   Number z_L[4];
-   Number z_U[4];
-   Number compl_x_L[4];
-   Number compl_x_U[4];
-   Number grad_lag_x[4];
+   ipnumber x[4];
+   ipnumber x_L_viol[4];
+   ipnumber x_U_viol[4];
+   ipnumber z_L[4];
+   ipnumber z_U[4];
+   ipnumber compl_x_L[4];
+   ipnumber compl_x_U[4];
+   ipnumber grad_lag_x[4];
 
-   Number g[2];
-   Number lambda[2];
-   Number constraint_violation[2];
-   Number compl_g[2];
+   ipnumber g[2];
+   ipnumber lambda[2];
+   ipnumber constraint_violation[2];
+   ipnumber compl_g[2];
 
    IpoptProblem nlp = ((struct MyUserData*)user_data)->nlp;
 

@@ -125,10 +125,10 @@ struct _FUserData
 typedef struct _FUserData FUserData;
 
 static Bool eval_f(
-   Index       n,
-   Number*     x,
+   ipindex     n,
+   ipnumber*   x,
    Bool        new_x,
-   Number*     obj_value,
+   ipnumber*   obj_value,
    UserDataPtr user_data
 )
 {
@@ -145,10 +145,10 @@ static Bool eval_f(
 }
 
 static Bool eval_grad_f(
-   Index       n,
-   Number*     x,
+   ipindex     n,
+   ipnumber*   x,
    Bool        new_x,
-   Number*     grad_f,
+   ipnumber*   grad_f,
    UserDataPtr user_data
 )
 {
@@ -165,11 +165,11 @@ static Bool eval_grad_f(
 }
 
 static Bool eval_g(
-   Index       n,
-   Number*     x,
+   ipindex     n,
+   ipnumber*   x,
    Bool        new_x,
-   Index       m,
-   Number*     g,
+   ipindex     m,
+   ipnumber*   g,
    UserDataPtr user_data
 )
 {
@@ -187,14 +187,14 @@ static Bool eval_g(
 }
 
 static Bool eval_jac_g(
-   Index       n,
-   Number*     x,
+   ipindex     n,
+   ipnumber*   x,
    Bool        new_x,
-   Index       m,
-   Index       nele_jac,
-   Index*      iRow,
-   Index*      jCol,
-   Number*     values,
+   ipindex     m,
+   ipindex     nele_jac,
+   ipindex*    iRow,
+   ipindex*    jCol,
+   ipnumber*   values,
    UserDataPtr user_data
 )
 {
@@ -230,17 +230,17 @@ static Bool eval_jac_g(
 }
 
 static Bool eval_h(
-   Index       n,
-   Number*     x,
+   ipindex     n,
+   ipnumber*   x,
    Bool        new_x,
-   Number      obj_factor,
-   Index       m,
-   Number*     lambda,
+   ipnumber    obj_factor,
+   ipindex     m,
+   ipnumber*   lambda,
    Bool        new_lambda,
-   Index       nele_hess,
-   Index*      iRow,
-   Index*      jCol,
-   Number*     values,
+   ipindex     nele_hess,
+   ipindex*    iRow,
+   ipindex*    jCol,
+   ipnumber*   values,
    UserDataPtr user_data
 )
 {
@@ -277,17 +277,17 @@ static Bool eval_h(
 }
 
 static Bool intermediate_cb(
-   Index       alg_mod,
-   Index       iter_count,
-   Number      obj_value,
-   Number      inf_pr,
-   Number      inf_du,
-   Number      mu,
-   Number      d_norm,
-   Number      regularization_size,
-   Number      alpha_du,
-   Number      alpha_pr,
-   Index       ls_trials,
+   ipindex     alg_mod,
+   ipindex     iter_count,
+   ipnumber    obj_value,
+   ipnumber    inf_pr,
+   ipnumber    inf_du,
+   ipnumber    mu,
+   ipnumber    d_norm,
+   ipnumber    regularization_size,
+   ipnumber    alpha_du,
+   ipnumber    alpha_pr,
+   ipindex     ls_trials,
    UserDataPtr user_data
 )
 {
@@ -335,11 +335,11 @@ IPOPTLIB_EXPORT fptr F77_FUNC(ipcreate, IPCREATE)(
    FEval_Hess_CB   EVAL_HESS
 )
 {
-   Index n = *N;
-   Index m = *M;
-   Index nele_jac = *NELE_JAC;
-   Index nele_hess = *NELE_HESS;
-   Index index_style = *IDX_STY;
+   ipindex n = *N;
+   ipindex m = *M;
+   ipindex nele_jac = *NELE_JAC;
+   ipindex nele_hess = *NELE_HESS;
+   ipindex index_style = *IDX_STY;
 
    FUserData* fuser_data;
 
@@ -474,7 +474,7 @@ IPOPTLIB_EXPORT ipfint F77_FUNC(ipaddintoption, IPADDINTOPTION)(
 {
    char* keyword;
    FUserData* fuser_data = (FUserData*) *FProblem;
-   Int value = *VALUE;
+   ipindex value = *VALUE;
    ipfint retval;
 
    keyword = f2cstr(KEYWORD, klen);
@@ -495,7 +495,7 @@ IPOPTLIB_EXPORT ipfint F77_FUNC(ipopenoutputfile, IPOPENOUTPUTFILE)(
 {
    char* filename;
    FUserData* fuser_data = (FUserData*) *FProblem;
-   Int printlevel = *PRINTLEVEL;
+   int printlevel = *PRINTLEVEL;
    ipfint retval;
 
    filename = f2cstr(FILENAME, flen);

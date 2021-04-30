@@ -14,36 +14,36 @@ struct IpoptProblemInfo
 {
    Ipopt::SmartPtr<Ipopt::IpoptApplication> app;
    Ipopt::SmartPtr<Ipopt::StdInterfaceTNLP> tnlp;
-   Index           n;
-   Number*         x_L;
-   Number*         x_U;
-   Index           m;
-   Number*         g_L;
-   Number*         g_U;
-   Index           nele_jac;
-   Index           nele_hess;
-   Index           index_style;
+   ipindex         n;
+   ipnumber*       x_L;
+   ipnumber*       x_U;
+   ipindex         m;
+   ipnumber*       g_L;
+   ipnumber*       g_U;
+   ipindex         nele_jac;
+   ipindex         nele_hess;
+   ipindex         index_style;
    Eval_F_CB       eval_f;
    Eval_G_CB       eval_g;
    Eval_Grad_F_CB  eval_grad_f;
    Eval_Jac_G_CB   eval_jac_g;
    Eval_H_CB       eval_h;
    Intermediate_CB intermediate_cb;
-   Number          obj_scaling;
-   Number*         x_scaling;
-   Number*         g_scaling;
+   ipnumber        obj_scaling;
+   ipnumber*       x_scaling;
+   ipnumber*       g_scaling;
 };
 
 IpoptProblem CreateIpoptProblem(
-   Index          n,
-   Number*        x_L,
-   Number*        x_U,
-   Index          m,
-   Number*        g_L,
-   Number*        g_U,
-   Index          nele_jac,
-   Index          nele_hess,
-   Index          index_style,
+   ipindex        n,
+   ipnumber*      x_L,
+   ipnumber*      x_U,
+   ipindex        m,
+   ipnumber*      g_L,
+   ipnumber*      g_U,
+   ipindex        nele_jac,
+   ipindex        nele_hess,
+   ipindex        index_style,
    Eval_F_CB      eval_f,
    Eval_G_CB      eval_g,
    Eval_Grad_F_CB eval_grad_f,
@@ -61,19 +61,19 @@ IpoptProblem CreateIpoptProblem(
    IpoptProblem retval = new IpoptProblemInfo;
 
    retval->n   = n;
-   retval->x_L = new Number[n];
+   retval->x_L = new ipnumber[n];
    Ipopt::IpBlasCopy(n, x_L, 1, retval->x_L, 1);
 
-   retval->x_U = new Number[n];
+   retval->x_U = new ipnumber[n];
    Ipopt::IpBlasCopy(n, x_U, 1, retval->x_U, 1);
 
    retval->m = m;
    if( m > 0 )
    {
-      retval->g_L = new Number[m];
+      retval->g_L = new ipnumber[m];
       Ipopt::IpBlasCopy(m, g_L, 1, retval->g_L, 1);
 
-      retval->g_U = new Number[m];
+      retval->g_U = new ipnumber[m];
       Ipopt::IpBlasCopy(m, g_U, 1, retval->g_U, 1);
    }
    else
@@ -130,7 +130,7 @@ Bool AddIpoptStrOption(
 Bool AddIpoptNumOption(
    IpoptProblem ipopt_problem,
    char*        keyword,
-   Number       val
+   ipnumber     val
 )
 {
    return (Bool) ipopt_problem->app->Options()->SetNumericValue(keyword, val);
@@ -139,7 +139,7 @@ Bool AddIpoptNumOption(
 Bool AddIpoptIntOption(
    IpoptProblem ipopt_problem,
    char*        keyword,
-   Int          val
+   ipindex      val
 )
 {
    return (Bool) ipopt_problem->app->Options()->SetIntegerValue(keyword, val);
@@ -148,7 +148,7 @@ Bool AddIpoptIntOption(
 Bool OpenIpoptOutputFile(
    IpoptProblem ipopt_problem,
    char*        file_name,
-   Int          print_level
+   int          print_level
 )
 {
    return (Bool) ipopt_problem->app->OpenOutputFile(file_name, Ipopt::EJournalLevel(print_level));
@@ -156,9 +156,9 @@ Bool OpenIpoptOutputFile(
 
 Bool SetIpoptProblemScaling(
    IpoptProblem ipopt_problem,
-   Number       obj_scaling,
-   Number*      x_scaling,
-   Number*      g_scaling
+   ipnumber     obj_scaling,
+   ipnumber*    x_scaling,
+   ipnumber*    g_scaling
 )
 {
    ipopt_problem->obj_scaling = obj_scaling;
@@ -166,7 +166,7 @@ Bool SetIpoptProblemScaling(
    if( x_scaling )
    {
       if( !ipopt_problem->x_scaling )
-         ipopt_problem->x_scaling = new Number[ipopt_problem->n];
+         ipopt_problem->x_scaling = new ipnumber[ipopt_problem->n];
       Ipopt::IpBlasCopy(ipopt_problem->n, x_scaling, 1, ipopt_problem->x_scaling, 1);
    }
    else
@@ -178,7 +178,7 @@ Bool SetIpoptProblemScaling(
    if( g_scaling )
    {
       if( !ipopt_problem->g_scaling )
-         ipopt_problem->g_scaling = new Number[ipopt_problem->m];
+         ipopt_problem->g_scaling = new ipnumber[ipopt_problem->m];
       Ipopt::IpBlasCopy(ipopt_problem->m, g_scaling, 1, ipopt_problem->g_scaling, 1);
    }
    else
@@ -202,12 +202,12 @@ Bool SetIntermediateCallback(
 
 enum ApplicationReturnStatus IpoptSolve(
    IpoptProblem ipopt_problem,
-   Number*      x,
-   Number*      g,
-   Number*      obj_val,
-   Number*      mult_g,
-   Number*      mult_x_L,
-   Number*      mult_x_U,
+   ipnumber*    x,
+   ipnumber*    g,
+   ipnumber*    obj_val,
+   ipnumber*    mult_g,
+   ipnumber*    mult_x_L,
+   ipnumber*    mult_x_U,
    UserDataPtr  user_data
 )
 {
@@ -225,27 +225,27 @@ enum ApplicationReturnStatus IpoptSolve(
    }
 
    // Copy the starting point information
-   Number* start_x = new Number[ipopt_problem->n];
+   ipnumber* start_x = new ipnumber[ipopt_problem->n];
    Ipopt::IpBlasCopy(ipopt_problem->n, x, 1, start_x, 1);
 
-   Number* start_lam = NULL;
+   ipnumber* start_lam = NULL;
    if( mult_g )
    {
-      start_lam = new Number[ipopt_problem->m];
+      start_lam = new ipnumber[ipopt_problem->m];
       Ipopt::IpBlasCopy(ipopt_problem->m, mult_g, 1, start_lam, 1);
    }
 
-   Number* start_z_L = NULL;
+   ipnumber* start_z_L = NULL;
    if( mult_x_L )
    {
-      start_z_L = new Number[ipopt_problem->n];
+      start_z_L = new ipnumber[ipopt_problem->n];
       Ipopt::IpBlasCopy(ipopt_problem->n, mult_x_L, 1, start_z_L, 1);
    }
 
-   Number* start_z_U = NULL;
+   ipnumber* start_z_U = NULL;
    if( mult_x_U )
    {
-      start_z_U = new Number[ipopt_problem->n];
+      start_z_U = new ipnumber[ipopt_problem->n];
       Ipopt::IpBlasCopy(ipopt_problem->n, mult_x_U, 1, start_z_U, 1);
    }
 
@@ -286,13 +286,13 @@ enum ApplicationReturnStatus IpoptSolve(
 Bool GetIpoptCurrentIterate(
    IpoptProblem    ipopt_problem,
    Bool            scaled,
-   Index           n,
-   Number*         x,
-   Number*         z_L,
-   Number*         z_U,
-   Index           m,
-   Number*         g,
-   Number*         lambda
+   ipindex         n,
+   ipnumber*       x,
+   ipnumber*       z_L,
+   ipnumber*       z_U,
+   ipindex         m,
+   ipnumber*       g,
+   ipnumber*       lambda
 )
 {
    return (Bool) ipopt_problem->tnlp->get_curr_iterate(scaled, n, x, z_L, z_U, m, g, lambda);
@@ -301,15 +301,15 @@ Bool GetIpoptCurrentIterate(
 Bool GetIpoptCurrentViolations(
    IpoptProblem  ipopt_problem,
    Bool          scaled,
-   Index         n,
-   Number*       x_L_violation,
-   Number*       x_U_violation,
-   Number*       compl_x_L,
-   Number*       compl_x_U,
-   Number*       grad_lag_x,
-   Index         m,
-   Number*       nlp_constraint_violation,
-   Number*       compl_g
+   ipindex       n,
+   ipnumber*     x_L_violation,
+   ipnumber*     x_U_violation,
+   ipnumber*     compl_x_L,
+   ipnumber*     compl_x_U,
+   ipnumber*     grad_lag_x,
+   ipindex       m,
+   ipnumber*     nlp_constraint_violation,
+   ipnumber*     compl_g
 )
 {
    return (Bool) ipopt_problem->tnlp->get_curr_violations(scaled != 0, n, x_L_violation, x_U_violation, compl_x_L, compl_x_U, grad_lag_x, m, nlp_constraint_violation, compl_g);

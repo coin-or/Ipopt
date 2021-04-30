@@ -25,19 +25,22 @@ extern "C"
 {
 #endif
 
-/** Type for all number. */
+/** Type for all number.
+ * @deprecated Use ipnumber instead.
+ */
+IPOPT_DEPRECATED
 typedef ipnumber Number;
 
 /** Type for all indices.
- *
- * We need to make sure that this is identical with what is defined in Common/IpTypes.hpp
+ * @deprecated Use ipindex instead.
  */
+IPOPT_DEPRECATED
 typedef int Index;
 
 /** Type for all integers.
- *
- * We need to make sure that this is identical with what is defined in Common/IpTypes.hpp
+ * @deprecated Use int instead.
  */
+IPOPT_DEPRECATED
 typedef int Int;
 
 /** Structure collecting all information about the problem definition and solve statistics etc. */
@@ -65,10 +68,10 @@ typedef void* UserDataPtr;
  *  See also Ipopt::TNLP::eval_f.
  */
 typedef Bool (*Eval_F_CB)(
-   Index       n,
-   Number*     x,
+   ipindex     n,
+   ipnumber*   x,
    Bool        new_x,
-   Number*     obj_value,
+   ipnumber*   obj_value,
    UserDataPtr user_data
 );
 
@@ -79,10 +82,10 @@ typedef Bool (*Eval_F_CB)(
  *  See also Ipopt::TNLP::eval_grad_f.
  */
 typedef Bool (*Eval_Grad_F_CB)(
-   Index       n,
-   Number*     x,
+   ipindex     n,
+   ipnumber*   x,
    Bool        new_x,
-   Number*     grad_f,
+   ipnumber*   grad_f,
    UserDataPtr user_data
 );
 
@@ -93,11 +96,11 @@ typedef Bool (*Eval_Grad_F_CB)(
  *  See also Ipopt::TNLP::eval_g.
  */
 typedef Bool (*Eval_G_CB)(
-   Index       n,
-   Number*     x,
+   ipindex     n,
+   ipnumber*   x,
    Bool        new_x,
-   Index       m,
-   Number*     g,
+   ipindex     m,
+   ipnumber*   g,
    UserDataPtr user_data
 );
 
@@ -108,14 +111,14 @@ typedef Bool (*Eval_G_CB)(
  *  See also Ipopt::TNLP::eval_jac_g.
  */
 typedef Bool (*Eval_Jac_G_CB)(
-   Index       n,
-   Number*     x,
+   ipindex     n,
+   ipnumber*   x,
    Bool        new_x,
-   Index       m,
-   Index       nele_jac,
-   Index*      iRow,
-   Index*      jCol,
-   Number*     values,
+   ipindex     m,
+   ipindex     nele_jac,
+   ipindex*    iRow,
+   ipindex*    jCol,
+   ipnumber*   values,
    UserDataPtr user_data
 );
 
@@ -126,17 +129,17 @@ typedef Bool (*Eval_Jac_G_CB)(
  *  See also Ipopt::TNLP::eval_h.
  */
 typedef Bool (*Eval_H_CB)(
-   Index       n,
-   Number*     x,
+   ipindex     n,
+   ipnumber*   x,
    Bool        new_x,
-   Number      obj_factor,
-   Index       m,
-   Number*     lambda,
+   ipnumber    obj_factor,
+   ipindex     m,
+   ipnumber*   lambda,
    Bool        new_lambda,
-   Index       nele_hess,
-   Index*      iRow,
-   Index*      jCol,
-   Number*     values,
+   ipindex     nele_hess,
+   ipindex*    iRow,
+   ipindex*    jCol,
+   ipnumber*   values,
    UserDataPtr user_data
 );
 
@@ -151,17 +154,17 @@ typedef Bool (*Eval_H_CB)(
  *  See also Ipopt::TNLP::intermediate_callback.
  */
 typedef Bool (*Intermediate_CB)(
-   Index       alg_mod,   /**< algorithm mode: 0 is regular, 1 is restoration */
-   Index       iter_count,
-   Number      obj_value,
-   Number      inf_pr,
-   Number      inf_du,
-   Number      mu,
-   Number      d_norm,
-   Number      regularization_size,
-   Number      alpha_du,
-   Number      alpha_pr,
-   Index       ls_trials,
+   ipindex     alg_mod,   /**< algorithm mode: 0 is regular, 1 is restoration */
+   ipindex     iter_count,
+   ipnumber    obj_value,
+   ipnumber    inf_pr,
+   ipnumber    inf_du,
+   ipnumber    mu,
+   ipnumber    d_norm,
+   ipnumber    regularization_size,
+   ipnumber    alpha_du,
+   ipnumber    alpha_pr,
+   ipindex     ls_trials,
    UserDataPtr user_data
 );
 
@@ -181,8 +184,8 @@ typedef Bool (*Intermediate_CB)(
  *  See also Ipopt::TNLP::get_nlp_info and Ipopt::TNLP::get_bounds_info.
  */
 IPOPTLIB_EXPORT IPOPT_EXPORT(IpoptProblem) CreateIpoptProblem(
-   Index         n,           /**< Number of optimization variables */
-   Number*       x_L,         /**< Lower bounds on variables
+   ipindex       n,           /**< Number of optimization variables */
+   ipnumber*     x_L,         /**< Lower bounds on variables
                                *
                                * This array of size n is copied internally, so that the
                                * caller can change the incoming data after
@@ -190,7 +193,7 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(IpoptProblem) CreateIpoptProblem(
                                * Any value less or equal than the number specified by option
                                * 'nlp_lower_bound_inf' is interpreted to be minus infinity.
                                */
-   Number*        x_U,         /**< Upper bounds on variables
+   ipnumber*      x_U,         /**< Upper bounds on variables
                                *
                                * This array of size n is copied internally,
                                * so that the caller can change the incoming data after
@@ -198,8 +201,8 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(IpoptProblem) CreateIpoptProblem(
                                * Any value greater or equal than the number specified by option
                                * 'nlp_upper_bound_inf' is interpreted to be plus infinity.
                                */
-   Index          m,           /**< Number of constraints */
-   Number*        g_L,         /**< Lower bounds on constraints
+   ipindex        m,           /**< Number of constraints */
+   ipnumber*      g_L,         /**< Lower bounds on constraints
                                *
                                * This array of size m is copied internally,
                                * so that the caller can change the incoming data after
@@ -207,7 +210,7 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(IpoptProblem) CreateIpoptProblem(
                                * Any value less or equal than the number specified by option
                                * 'nlp_lower_bound_inf' is interpreted to be minus infinity.
                                */
-   Number*        g_U,         /**< Upper bounds on constraints
+   ipnumber*      g_U,         /**< Upper bounds on constraints
                                *
                                * This array of size m is copied internally,
                                * so that the caller can change the incoming data after
@@ -215,9 +218,9 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(IpoptProblem) CreateIpoptProblem(
                                * Any value greater or equal than the number specified by option
                                * 'nlp_upper_bound_inf' is interpreted to be plus infinity.
                                */
-   Index          nele_jac,    /**< Number of non-zero elements in constraint Jacobian */
-   Index          nele_hess,   /**< Number of non-zero elements in Hessian of Lagrangian */
-   Index          index_style, /**< Indexing style for iRow & jCol, 0 for C style, 1 for Fortran style */
+   ipindex        nele_jac,    /**< Number of non-zero elements in constraint Jacobian */
+   ipindex        nele_hess,   /**< Number of non-zero elements in Hessian of Lagrangian */
+   ipindex        index_style, /**< Indexing style for iRow & jCol, 0 for C style, 1 for Fortran style */
    Eval_F_CB      eval_f,      /**< Callback function for evaluating objective function */
    Eval_G_CB      eval_g,      /**< Callback function for evaluating constraint functions */
    Eval_Grad_F_CB eval_grad_f, /**< Callback function for evaluating gradient of objective function */
@@ -250,17 +253,17 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) AddIpoptStrOption(
 IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) AddIpoptNumOption(
    IpoptProblem ipopt_problem,
    char*        keyword,
-   Number       val
+   ipnumber     val
 );
 
-/** Function for adding an Int option.
+/** Function for adding an Integer option.
  *
  * @return FALSE, if the option  could not be set (e.g., if keyword is unknown)
  @*/
 IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) AddIpoptIntOption(
    IpoptProblem ipopt_problem,
    char*        keyword,
-   Int          val
+   ipindex      val
 );
 
 /** Function for opening an output file for a given name with given printlevel.
@@ -270,7 +273,7 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) AddIpoptIntOption(
 IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) OpenIpoptOutputFile(
    IpoptProblem ipopt_problem,
    char*        file_name,
-   Int          print_level
+   int          print_level
 );
 
 /** Optional function for setting scaling parameter for the NLP.
@@ -281,9 +284,9 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) OpenIpoptOutputFile(
  */
 IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) SetIpoptProblemScaling(
    IpoptProblem ipopt_problem,
-   Number       obj_scaling,
-   Number*      x_scaling,
-   Number*      g_scaling
+   ipnumber     obj_scaling,
+   ipnumber*    x_scaling,
+   ipnumber*    g_scaling
 );
 
 /** Setting a callback function for the "intermediate callback" method in the TNLP.
@@ -312,16 +315,16 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(enum ApplicationReturnStatus) IpoptSolve(
                                 * Ipopt will use the options previously specified with
                                 * AddIpoptOption (etc) for this problem.
                                 */
-   Number*      x,             /**< Input: Starting point; Output: Optimal solution */
-   Number*      g,             /**< Values of constraint at final point (output only; ignored if set to NULL) */
-   Number*      obj_val,       /**< Final value of objective function (output only; ignored if set to NULL) */
-   Number*      mult_g,        /**< Input: Initial values for the constraint multipliers (only if warm start option is chosen);
+   ipnumber*    x,             /**< Input: Starting point; Output: Optimal solution */
+   ipnumber*    g,             /**< Values of constraint at final point (output only; ignored if set to NULL) */
+   ipnumber*    obj_val,       /**< Final value of objective function (output only; ignored if set to NULL) */
+   ipnumber*    mult_g,        /**< Input: Initial values for the constraint multipliers (only if warm start option is chosen);
                                 *  Output: Final multipliers for constraints (ignored if set to NULL)
                                 */
-   Number*      mult_x_L,      /**< Input: Initial values for the multipliers for lower variable bounds (only if warm start option is chosen);
+   ipnumber*    mult_x_L,      /**< Input: Initial values for the multipliers for lower variable bounds (only if warm start option is chosen);
                                 *  Output: Final multipliers for lower variable bounds (ignored if set to NULL)
                                 */
-   Number*      mult_x_U,      /**< Input: Initial values for the multipliers for upper variable bounds (only if warm start option is chosen);
+   ipnumber*    mult_x_U,      /**< Input: Initial values for the multipliers for upper variable bounds (only if warm start option is chosen);
                                 *  Output: Final multipliers for upper variable bounds (ignored if set to NULL)
                                 */
    UserDataPtr  user_data      /**< Pointer to user data.
@@ -360,13 +363,13 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(enum ApplicationReturnStatus) IpoptSolve(
 IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) GetIpoptCurrentIterate(
    IpoptProblem    ipopt_problem,
    Bool            scaled,
-   Index           n,
-   Number*         x,
-   Number*         z_L,
-   Number*         z_U,
-   Index           m,
-   Number*         g,
-   Number*         lambda
+   ipindex         n,
+   ipnumber*       x,
+   ipnumber*       z_L,
+   ipnumber*       z_U,
+   ipindex         m,
+   ipnumber*       g,
+   ipnumber*       lambda
 );
 
 /** Get primal and dual infeasibility of the current iterate.
@@ -404,15 +407,15 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) GetIpoptCurrentIterate(
 IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) GetIpoptCurrentViolations(
    IpoptProblem  ipopt_problem,
    Bool          scaled,
-   Index         n,
-   Number*       x_L_violation,
-   Number*       x_U_violation,
-   Number*       compl_x_L,
-   Number*       compl_x_U,
-   Number*       grad_lag_x,
-   Index         m,
-   Number*       nlp_constraint_violation,
-   Number*       compl_g
+   ipindex       n,
+   ipnumber*     x_L_violation,
+   ipnumber*     x_U_violation,
+   ipnumber*     compl_x_L,
+   ipnumber*     compl_x_U,
+   ipnumber*     grad_lag_x,
+   ipindex       m,
+   ipnumber*     nlp_constraint_violation,
+   ipnumber*     compl_g
 );
 
 #ifdef __cplusplus
