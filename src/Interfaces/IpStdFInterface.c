@@ -124,10 +124,10 @@ struct _FUserData
 };
 typedef struct _FUserData FUserData;
 
-static Bool eval_f(
+static bool eval_f(
    ipindex     n,
    ipnumber*   x,
-   Bool        new_x,
+   bool        new_x,
    ipnumber*   obj_value,
    UserDataPtr user_data
 )
@@ -141,13 +141,13 @@ static Bool eval_f(
 
    fuser_data->EVAL_F(&N, x, &NEW_X, obj_value, IDAT, DDAT, &IERR);
 
-   return (Bool) (IERR == OKRetVal);
+   return IERR == OKRetVal;
 }
 
-static Bool eval_grad_f(
+static bool eval_grad_f(
    ipindex     n,
    ipnumber*   x,
-   Bool        new_x,
+   bool        new_x,
    ipnumber*   grad_f,
    UserDataPtr user_data
 )
@@ -161,13 +161,13 @@ static Bool eval_grad_f(
 
    fuser_data->EVAL_GRAD_F(&N, x, &NEW_X, grad_f, IDAT, DDAT, &IERR);
 
-   return (Bool) (IERR == OKRetVal);
+   return IERR == OKRetVal;
 }
 
-static Bool eval_g(
+static bool eval_g(
    ipindex     n,
    ipnumber*   x,
-   Bool        new_x,
+   bool        new_x,
    ipindex     m,
    ipnumber*   g,
    UserDataPtr user_data
@@ -183,13 +183,13 @@ static Bool eval_g(
 
    fuser_data->EVAL_G(&N, x, &NEW_X, &M, g, IDAT, DDAT, &IERR);
 
-   return (Bool) (IERR == OKRetVal);
+   return IERR == OKRetVal;
 }
 
-static Bool eval_jac_g(
+static bool eval_jac_g(
    ipindex     n,
    ipnumber*   x,
-   Bool        new_x,
+   bool        new_x,
    ipindex     m,
    ipindex     nele_jac,
    ipindex*    iRow,
@@ -221,22 +221,22 @@ static Bool eval_jac_g(
    else
    {
       printf("Error in IpStdFInterface eval_jac_g!\n");
-      return (Bool) 0;
+      return false;
    }
 
    fuser_data->EVAL_JAC_G(&TASK, &N, x, &NEW_X, &M, &NNZJAC, iRow, jCol, values, IDAT, DDAT, &IERR);
 
-   return (Bool) (IERR == OKRetVal);
+   return IERR == OKRetVal;
 }
 
-static Bool eval_h(
+static bool eval_h(
    ipindex     n,
    ipnumber*   x,
-   Bool        new_x,
+   bool        new_x,
    ipnumber    obj_factor,
    ipindex     m,
    ipnumber*   lambda,
-   Bool        new_lambda,
+   bool        new_lambda,
    ipindex     nele_hess,
    ipindex*    iRow,
    ipindex*    jCol,
@@ -268,15 +268,15 @@ static Bool eval_h(
    else
    {
       printf("Error in IpStdFInterface eval_hess!\n");
-      return (Bool) 0;
+      return false;
    }
 
    fuser_data->EVAL_HESS(&TASK, &N, x, &NEW_X, &obj_factor, &M, lambda, &NEW_LAM, &NNZHESS, iRow, jCol, values, IDAT, DDAT, &IERR);
 
-   return (Bool) (IERR == OKRetVal);
+   return IERR == OKRetVal;
 }
 
-static Bool intermediate_cb(
+static bool intermediate_cb(
    ipindex     alg_mod,
    ipindex     iter_count,
    ipnumber    obj_value,
@@ -309,13 +309,13 @@ static Bool intermediate_cb(
 
    if( !fuser_data->INTERMEDIATE_CB )
    {
-      return (Bool) TRUE;
+      return true;
    }
 
    fuser_data->INTERMEDIATE_CB(&ALG_MODE, &ITER_COUNT, &OBJVAL, &INF_PR, &INF_DU, &MU, &DNORM, &REGU_SIZE, &ALPHA_DU,
                                &ALPHA_PR, &LS_TRIAL, IDAT, DDAT, &ISTOP);
 
-   return (Bool) (ISTOP == OKRetVal);
+   return ISTOP == OKRetVal;
 }
 
 IPOPTLIB_EXPORT fptr F77_FUNC(ipcreate, IPCREATE)(

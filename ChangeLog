@@ -141,6 +141,10 @@ commit history.
         - Deprecated almost never used type Ipopt::Int, use int instead.
         - Deprecated Number, Index, and Int (on global namespace) in
           IpStdCInterface.h, use ipnumber, ipindex, and int instead, respectively.
+        - Deprecated Bool in IpStdCInterface.h and replaced it by bool
+          from stdbool.h. Note, Bool was defined to be int, but bool is
+          likely a shorter type, e.g., signed char. Deprecated TRUE and
+          FALSE, use true and false instead.
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]

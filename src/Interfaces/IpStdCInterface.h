@@ -8,6 +8,8 @@
 #ifndef __IPSTDCINTERFACE_H__
 #define __IPSTDCINTERFACE_H__
 
+#include <stdbool.h>
+
 #include "IpoptConfig.h"
 #include "IpTypes.h"
 #include "IpReturnCodes.h"
@@ -49,11 +51,15 @@ struct IpoptProblemInfo;
 /** Pointer to an Ipopt Problem. */
 typedef struct IpoptProblemInfo* IpoptProblem;
 
-/** define a boolean type for C */
-typedef int Bool;
+/** define a boolean type for C
+ * @deprecated Use bool instead.
+ */
+typedef bool Bool;
 #ifndef TRUE
+/* @deprecated Use true instead. */
 # define TRUE (1)
 #endif
+/* @deprecated Use false instead. */
 #ifndef FALSE
 # define FALSE (0)
 #endif
@@ -67,10 +73,10 @@ typedef void* UserDataPtr;
  *
  *  See also Ipopt::TNLP::eval_f.
  */
-typedef Bool (*Eval_F_CB)(
+typedef bool (*Eval_F_CB)(
    ipindex     n,
    ipnumber*   x,
-   Bool        new_x,
+   bool        new_x,
    ipnumber*   obj_value,
    UserDataPtr user_data
 );
@@ -81,10 +87,10 @@ typedef Bool (*Eval_F_CB)(
  *
  *  See also Ipopt::TNLP::eval_grad_f.
  */
-typedef Bool (*Eval_Grad_F_CB)(
+typedef bool (*Eval_Grad_F_CB)(
    ipindex     n,
    ipnumber*   x,
-   Bool        new_x,
+   bool        new_x,
    ipnumber*   grad_f,
    UserDataPtr user_data
 );
@@ -95,10 +101,10 @@ typedef Bool (*Eval_Grad_F_CB)(
  *
  *  See also Ipopt::TNLP::eval_g.
  */
-typedef Bool (*Eval_G_CB)(
+typedef bool (*Eval_G_CB)(
    ipindex     n,
    ipnumber*   x,
-   Bool        new_x,
+   bool        new_x,
    ipindex     m,
    ipnumber*   g,
    UserDataPtr user_data
@@ -110,10 +116,10 @@ typedef Bool (*Eval_G_CB)(
  *
  *  See also Ipopt::TNLP::eval_jac_g.
  */
-typedef Bool (*Eval_Jac_G_CB)(
+typedef bool (*Eval_Jac_G_CB)(
    ipindex     n,
    ipnumber*   x,
-   Bool        new_x,
+   bool        new_x,
    ipindex     m,
    ipindex     nele_jac,
    ipindex*    iRow,
@@ -128,14 +134,14 @@ typedef Bool (*Eval_Jac_G_CB)(
  *
  *  See also Ipopt::TNLP::eval_h.
  */
-typedef Bool (*Eval_H_CB)(
+typedef bool (*Eval_H_CB)(
    ipindex     n,
    ipnumber*   x,
-   Bool        new_x,
+   bool        new_x,
    ipnumber    obj_factor,
    ipindex     m,
    ipnumber*   lambda,
-   Bool        new_lambda,
+   bool        new_lambda,
    ipindex     nele_hess,
    ipindex*    iRow,
    ipindex*    jCol,
@@ -153,7 +159,7 @@ typedef Bool (*Eval_H_CB)(
  *
  *  See also Ipopt::TNLP::intermediate_callback.
  */
-typedef Bool (*Intermediate_CB)(
+typedef bool (*Intermediate_CB)(
    ipindex     alg_mod,   /**< algorithm mode: 0 is regular, 1 is restoration */
    ipindex     iter_count,
    ipnumber    obj_value,
@@ -238,9 +244,9 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(void) FreeIpoptProblem(
 
 /** Function for adding a string option.
  *
- * @return FALSE, if the option could not be set (e.g., if keyword is unknown)
+ * @return false, if the option could not be set (e.g., if keyword is unknown)
  */
-IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) AddIpoptStrOption(
+IPOPTLIB_EXPORT IPOPT_EXPORT(bool) AddIpoptStrOption(
    IpoptProblem ipopt_problem,
    char*        keyword,
    char*        val
@@ -248,9 +254,9 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) AddIpoptStrOption(
 
 /** Function for adding a Number option.
  *
- * @return FALSE, if the option could not be set (e.g., if keyword is unknown)
+ * @return false, if the option could not be set (e.g., if keyword is unknown)
  */
-IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) AddIpoptNumOption(
+IPOPTLIB_EXPORT IPOPT_EXPORT(bool) AddIpoptNumOption(
    IpoptProblem ipopt_problem,
    char*        keyword,
    ipnumber     val
@@ -258,9 +264,9 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) AddIpoptNumOption(
 
 /** Function for adding an Integer option.
  *
- * @return FALSE, if the option  could not be set (e.g., if keyword is unknown)
+ * @return false, if the option  could not be set (e.g., if keyword is unknown)
  @*/
-IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) AddIpoptIntOption(
+IPOPTLIB_EXPORT IPOPT_EXPORT(bool) AddIpoptIntOption(
    IpoptProblem ipopt_problem,
    char*        keyword,
    ipindex      val
@@ -268,9 +274,9 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) AddIpoptIntOption(
 
 /** Function for opening an output file for a given name with given printlevel.
  *
- * @return FALSE, if there was a problem opening the file.
+ * @return false, if there was a problem opening the file.
  */
-IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) OpenIpoptOutputFile(
+IPOPTLIB_EXPORT IPOPT_EXPORT(bool) OpenIpoptOutputFile(
    IpoptProblem ipopt_problem,
    char*        file_name,
    int          print_level
@@ -282,7 +288,7 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) OpenIpoptOutputFile(
  *  If the pointers x_scaling or g_scaling are NULL, then no scaling
  *  for x resp. g is done.
  */
-IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) SetIpoptProblemScaling(
+IPOPTLIB_EXPORT IPOPT_EXPORT(bool) SetIpoptProblemScaling(
    IpoptProblem ipopt_problem,
    ipnumber     obj_scaling,
    ipnumber*    x_scaling,
@@ -299,7 +305,7 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) SetIpoptProblemScaling(
  *  method returns false, Ipopt will terminate the optimization.
  *  Calling this set method to set the CB pointer to NULL disables
  *  the intermediate callback functionality. */
-IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) SetIntermediateCallback(
+IPOPTLIB_EXPORT IPOPT_EXPORT(bool) SetIntermediateCallback(
    IpoptProblem    ipopt_problem,
    Intermediate_CB intermediate_cb
 );
@@ -360,9 +366,9 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(enum ApplicationReturnStatus) IpoptSolve(
  * @return Whether Ipopt has successfully filled the given arrays
  * @since 3.14.0
  */
-IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) GetIpoptCurrentIterate(
+IPOPTLIB_EXPORT IPOPT_EXPORT(bool) GetIpoptCurrentIterate(
    IpoptProblem    ipopt_problem,
-   Bool            scaled,
+   bool            scaled,
    ipindex         n,
    ipnumber*       x,
    ipnumber*       z_L,
@@ -404,9 +410,9 @@ IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) GetIpoptCurrentIterate(
  * @return Whether Ipopt has successfully filled the given arrays
  * @since 3.14.0
  */
-IPOPTLIB_EXPORT IPOPT_EXPORT(Bool) GetIpoptCurrentViolations(
+IPOPTLIB_EXPORT IPOPT_EXPORT(bool) GetIpoptCurrentViolations(
    IpoptProblem  ipopt_problem,
-   Bool          scaled,
+   bool          scaled,
    ipindex       n,
    ipnumber*     x_L_violation,
    ipnumber*     x_U_violation,

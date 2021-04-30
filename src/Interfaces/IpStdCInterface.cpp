@@ -118,43 +118,43 @@ void FreeIpoptProblem(
    delete ipopt_problem;
 }
 
-Bool AddIpoptStrOption(
+bool AddIpoptStrOption(
    IpoptProblem ipopt_problem,
    char*        keyword,
    char*        val
 )
 {
-   return (Bool) ipopt_problem->app->Options()->SetStringValue(keyword, val);
+   return ipopt_problem->app->Options()->SetStringValue(keyword, val);
 }
 
-Bool AddIpoptNumOption(
+bool AddIpoptNumOption(
    IpoptProblem ipopt_problem,
    char*        keyword,
    ipnumber     val
 )
 {
-   return (Bool) ipopt_problem->app->Options()->SetNumericValue(keyword, val);
+   return ipopt_problem->app->Options()->SetNumericValue(keyword, val);
 }
 
-Bool AddIpoptIntOption(
+bool AddIpoptIntOption(
    IpoptProblem ipopt_problem,
    char*        keyword,
    ipindex      val
 )
 {
-   return (Bool) ipopt_problem->app->Options()->SetIntegerValue(keyword, val);
+   return ipopt_problem->app->Options()->SetIntegerValue(keyword, val);
 }
 
-Bool OpenIpoptOutputFile(
+bool OpenIpoptOutputFile(
    IpoptProblem ipopt_problem,
    char*        file_name,
    int          print_level
 )
 {
-   return (Bool) ipopt_problem->app->OpenOutputFile(file_name, Ipopt::EJournalLevel(print_level));
+   return ipopt_problem->app->OpenOutputFile(file_name, Ipopt::EJournalLevel(print_level));
 }
 
-Bool SetIpoptProblemScaling(
+bool SetIpoptProblemScaling(
    IpoptProblem ipopt_problem,
    ipnumber     obj_scaling,
    ipnumber*    x_scaling,
@@ -187,17 +187,17 @@ Bool SetIpoptProblemScaling(
       ipopt_problem->g_scaling = NULL;
    }
 
-   return (Bool) true;
+   return true;
 }
 
-Bool SetIntermediateCallback(
+bool SetIntermediateCallback(
    IpoptProblem    ipopt_problem,
    Intermediate_CB intermediate_cb
 )
 {
    ipopt_problem->intermediate_cb = intermediate_cb;
 
-   return (Bool) true;
+   return true;
 }
 
 enum ApplicationReturnStatus IpoptSolve(
@@ -283,9 +283,9 @@ enum ApplicationReturnStatus IpoptSolve(
    return ApplicationReturnStatus(status);
 }
 
-Bool GetIpoptCurrentIterate(
+bool GetIpoptCurrentIterate(
    IpoptProblem    ipopt_problem,
-   Bool            scaled,
+   bool            scaled,
    ipindex         n,
    ipnumber*       x,
    ipnumber*       z_L,
@@ -295,12 +295,12 @@ Bool GetIpoptCurrentIterate(
    ipnumber*       lambda
 )
 {
-   return (Bool) ipopt_problem->tnlp->get_curr_iterate(scaled, n, x, z_L, z_U, m, g, lambda);
+   return ipopt_problem->tnlp->get_curr_iterate(scaled, n, x, z_L, z_U, m, g, lambda);
 }
 
-Bool GetIpoptCurrentViolations(
+bool GetIpoptCurrentViolations(
    IpoptProblem  ipopt_problem,
-   Bool          scaled,
+   bool          scaled,
    ipindex       n,
    ipnumber*     x_L_violation,
    ipnumber*     x_U_violation,
@@ -312,5 +312,5 @@ Bool GetIpoptCurrentViolations(
    ipnumber*     compl_g
 )
 {
-   return (Bool) ipopt_problem->tnlp->get_curr_violations(scaled != 0, n, x_L_violation, x_U_violation, compl_x_L, compl_x_U, grad_lag_x, m, nlp_constraint_violation, compl_g);
+   return ipopt_problem->tnlp->get_curr_violations(scaled != 0, n, x_L_violation, x_U_violation, compl_x_L, compl_x_U, grad_lag_x, m, nlp_constraint_violation, compl_g);
 }

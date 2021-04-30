@@ -11,35 +11,35 @@
 #include <stdio.h>
 
 /* Function Declarations */
-Bool eval_f(
+bool eval_f(
    ipindex     n,
    ipnumber*   x,
-   Bool        new_x,
+   bool        new_x,
    ipnumber*   obj_value,
    UserDataPtr user_data
 );
 
-Bool eval_grad_f(
+bool eval_grad_f(
    ipindex     n,
    ipnumber*   x,
-   Bool        new_x,
+   bool        new_x,
    ipnumber*   grad_f,
    UserDataPtr user_data
 );
 
-Bool eval_g(
+bool eval_g(
    ipindex     n,
    ipnumber*   x,
-   Bool        new_x,
+   bool        new_x,
    ipindex     m,
    ipnumber*   g,
    UserDataPtr user_data
 );
 
-Bool eval_jac_g(
+bool eval_jac_g(
    ipindex     n,
    ipnumber*   x,
-   Bool        new_x,
+   bool        new_x,
    ipindex     m,
    ipindex     nele_jac,
    ipindex*    iRow,
@@ -48,14 +48,14 @@ Bool eval_jac_g(
    UserDataPtr user_data
 );
 
-Bool eval_h(
+bool eval_h(
    ipindex     n,
    ipnumber*   x,
-   Bool        new_x,
+   bool        new_x,
    ipnumber    obj_factor,
    ipindex     m,
    ipnumber*   lambda,
-   Bool        new_lambda,
+   bool        new_lambda,
    ipindex     nele_hess,
    ipindex*    iRow,
    ipindex*    jCol,
@@ -63,7 +63,7 @@ Bool eval_h(
    UserDataPtr user_data
 );
 
-Bool intermediate_cb(
+bool intermediate_cb(
    ipindex     alg_mod,
    ipindex     iter_count,
    ipnumber    obj_value,
@@ -273,10 +273,10 @@ int main()
 /* [MAIN] */
 
 /* Function Implementations */
-Bool eval_f(
+bool eval_f(
    ipindex     n,
    ipnumber*   x,
-   Bool        new_x,
+   bool        new_x,
    ipnumber*   obj_value,
    UserDataPtr user_data
 )
@@ -289,13 +289,13 @@ Bool eval_f(
 
    *obj_value = x[0] * x[3] * (x[0] + x[1] + x[2]) + x[2];
 
-   return TRUE;
+   return true;
 }
 
-Bool eval_grad_f(
+bool eval_grad_f(
    ipindex     n,
    ipnumber*   x,
-   Bool        new_x,
+   bool        new_x,
    ipnumber*   grad_f,
    UserDataPtr user_data
 )
@@ -311,13 +311,13 @@ Bool eval_grad_f(
    grad_f[2] = x[0] * x[3] + 1;
    grad_f[3] = x[0] * (x[0] + x[1] + x[2]);
 
-   return TRUE;
+   return true;
 }
 
-Bool eval_g(
+bool eval_g(
    ipindex     n,
    ipnumber*   x,
-   Bool        new_x,
+   bool        new_x,
    ipindex     m,
    ipnumber*   g,
    UserDataPtr user_data
@@ -335,13 +335,13 @@ Bool eval_g(
    g[0] = x[0] * x[1] * x[2] * x[3] + my_data->g_offset[0];
    g[1] = x[0] * x[0] + x[1] * x[1] + x[2] * x[2] + x[3] * x[3] + my_data->g_offset[1];
 
-   return TRUE;
+   return true;
 }
 
-Bool eval_jac_g(
+bool eval_jac_g(
    ipindex     n,
    ipnumber*   x,
-   Bool        new_x,
+   bool        new_x,
    ipindex     m,
    ipindex     nele_jac,
    ipindex*    iRow,
@@ -393,17 +393,17 @@ Bool eval_jac_g(
       values[7] = 2 * x[3]; /* 1,3 */
    }
 
-   return TRUE;
+   return true;
 }
 
-Bool eval_h(
+bool eval_h(
    ipindex     n,
    ipnumber*   x,
-   Bool        new_x,
+   bool        new_x,
    ipnumber    obj_factor,
    ipindex     m,
    ipnumber*   lambda,
-   Bool        new_lambda,
+   bool        new_lambda,
    ipindex     nele_hess,
    ipindex*    iRow,
    ipindex*    jCol,
@@ -481,10 +481,10 @@ Bool eval_h(
       values[9] += lambda[1] * 2; /* 3,3 */
    }
 
-   return TRUE;
+   return true;
 }
 
-Bool intermediate_cb(
+bool intermediate_cb(
    ipindex     alg_mod,
    ipindex     iter_count,
    ipnumber    obj_value,
@@ -499,8 +499,8 @@ Bool intermediate_cb(
    UserDataPtr user_data
 )
 {
-   Bool have_iter;
-   Bool have_viol;
+   bool have_iter;
+   bool have_viol;
 
    ipnumber x[4];
    ipnumber x_L_viol[4];
@@ -518,8 +518,8 @@ Bool intermediate_cb(
 
    IpoptProblem nlp = ((struct MyUserData*)user_data)->nlp;
 
-   have_iter = GetIpoptCurrentIterate(nlp, FALSE, 4, x, z_L, z_U, 2, g, lambda);
-   have_viol = GetIpoptCurrentViolations(nlp, FALSE, 4, x_L_viol, x_U_viol, compl_x_L, compl_x_U, grad_lag_x, 2, constraint_violation, compl_g);
+   have_iter = GetIpoptCurrentIterate(nlp, false, 4, x, z_L, z_U, 2, g, lambda);
+   have_viol = GetIpoptCurrentViolations(nlp, false, 4, x_L_viol, x_U_viol, compl_x_L, compl_x_U, grad_lag_x, 2, constraint_violation, compl_g);
 
    printf("Current iterate at iteration %d:\n", iter_count);
    printf("  %-12s %-12s %-12s %-12s %-12s %-12s %-12s\n", "x", "z_L", "z_U", "bound_viol", "compl_x_L", "compl_x_U", "grad_lag_x");
@@ -550,7 +550,7 @@ Bool intermediate_cb(
 
    if( inf_pr < 1e-4 )
    {
-      return FALSE;
+      return false;
    }
 
    (void) alg_mod;
@@ -563,5 +563,5 @@ Bool intermediate_cb(
    (void) alpha_pr;
    (void) ls_trials;
 
-   return TRUE;
+   return true;
 }
