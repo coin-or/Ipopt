@@ -28,7 +28,7 @@ static const Index dbg_verbosity = 0;
 void AmplTNLP::gutsOfConstructor(
    const SmartPtr<RegisteredOptions> regoptions,
    const SmartPtr<OptionsList>       options,
-   char**&                           argv,
+   const char* const*                argv,
    bool                              allow_discrete /* = false */,
    SmartPtr<AmplOptionsList>         ampl_options_list /* = NULL */,
    const char*                       ampl_option_string /* = NULL */,
@@ -49,9 +49,8 @@ void AmplTNLP::gutsOfConstructor(
    asl_ = asl; // keep the pointer for ourselves to use later...
 
    // First assume that we don't want to halt on error (default)
-   fint* fint_nerror = new fint;
-   *fint_nerror = 0;
-   nerror_ = (void*) fint_nerror;
+   nerror_ = (void*) new fint;
+   *(fint*)nerror_ = 0;
 
    // Read the options and stub
    char* stub = get_options(regoptions, options, ampl_options_list, ampl_option_string, ampl_invokation_string, ampl_banner_string,
@@ -129,50 +128,42 @@ void AmplTNLP::gutsOfConstructor(
       {
          jnlst_->Printf(J_ERROR, J_MAIN, "Cannot open .nl file\n");
          THROW_EXCEPTION(INVALID_TNLP, "Cannot open .nl file");
-         break;
       }
       case ASL_readerr_nonlin:
       {
          DBG_ASSERT(false); // this better not be an error!
          jnlst_->Printf(J_ERROR, J_MAIN, "model involves nonlinearities (ed0read)\n");
          THROW_EXCEPTION(INVALID_TNLP, "model involves nonlinearities (ed0read)");
-         break;
       }
       case ASL_readerr_argerr:
       {
          jnlst_->Printf(J_ERROR, J_MAIN, "user-defined function with bad args\n");
          THROW_EXCEPTION(INVALID_TNLP, "user-defined function with bad args");
-         break;
       }
       case ASL_readerr_unavail:
       {
          jnlst_->Printf(J_ERROR, J_MAIN, "user-defined function not available\n");
          THROW_EXCEPTION(INVALID_TNLP, "user-defined function not available");
-         break;
       }
       case ASL_readerr_corrupt:
       {
          jnlst_->Printf(J_ERROR, J_MAIN, "corrupt .nl file\n");
          THROW_EXCEPTION(INVALID_TNLP, "corrupt .nl file");
-         break;
       }
       case ASL_readerr_bug:
       {
          jnlst_->Printf(J_ERROR, J_MAIN, "bug in .nl reader\n");
          THROW_EXCEPTION(INVALID_TNLP, "bug in .nl reader");
-         break;
       }
       case ASL_readerr_CLP:
       {
          jnlst_->Printf(J_ERROR, J_MAIN, "Ampl model contains a constraint without \"=\", \">=\", or \"<=\".\n");
          THROW_EXCEPTION(INVALID_TNLP, "Ampl model contains a constraint without \"=\", \">=\", or \"<=\".");
-         break;
       }
       default:
       {
          jnlst_->Printf(J_ERROR, J_MAIN, "Unknown error in stub file read. retcode = %d\n", retcode);
          THROW_EXCEPTION(INVALID_TNLP, "Unknown error in stub file read");
-         break;
       }
    }
 }
@@ -181,7 +172,7 @@ AmplTNLP::AmplTNLP(
    const SmartPtr<const Journalist>& jnlst,
    const SmartPtr<RegisteredOptions> regoptions,
    const SmartPtr<OptionsList>       options,
-   char**&                           argv,
+   const char* const*                argv,
    SmartPtr<AmplSuffixHandler>       suffix_handler /* = NULL */,
    bool                              allow_discrete /* = false */,
    SmartPtr<AmplOptionsList>         ampl_options_list /* = NULL */,
@@ -216,6 +207,7 @@ AmplTNLP::AmplTNLP(
 AmplTNLP::AmplTNLP(
    const SmartPtr<const Journalist>& jnlst,
    const SmartPtr<OptionsList>       options,
+   // cppcheck-suppress constParameter
    char**&                           argv,
    SmartPtr<AmplSuffixHandler>       suffix_handler /* = NULL */,
    bool                              allow_discrete /* = false */,
@@ -613,6 +605,7 @@ bool AmplTNLP::eval_g(
    DBG_START_METH("AmplTNLP::eval_g", dbg_verbosity);
 
    DBG_DO(ASL_pfgh* asl = asl_);
+   DBG_ASSERT(asl);
    DBG_ASSERT(n == n_var);
    DBG_ASSERT(m == n_con);
 
@@ -1102,6 +1095,7 @@ bool AmplTNLP::get_list_of_nonlinear_variables(
 )
 {
    DBG_DO(ASL_pfgh* asl = asl_);
+   DBG_ASSERT(asl);
    DBG_ASSERT(num_nonlin_vars == Max(nlvo, nlvc));
 
    // The first variables are the nonlinear ones (using Fortran
@@ -1204,11 +1198,13 @@ extern "C"
 
       fint** nerror = (fint**) pinfo->NError();
 
+      // cppcheck-suppress uninitvar
       if( strcmp(str_val, "yes") == 0 )
       {
          delete *nerror;
          *nerror = NULL;
       }
+      // cppcheck-suppress uninitvar
       else if( strcmp(str_val, "no") == 0 )
       {
          delete *nerror;
@@ -1437,7 +1433,7 @@ AmplTNLP::get_options(
    const char*                  ampl_option_string,
    const char*                  ampl_invokation_string,
    const char*                  ampl_banner_string,
-   char**&                      argv
+   const char* const*           argv
 )
 {
    ASL_pfgh* asl = asl_;
@@ -1673,7 +1669,7 @@ AmplTNLP::get_options(
 
    Oinfo_ptr_ = Oinfo;
 
-   char* stub = getstops(argv, Oinfo);
+   char* stub = getstops(const_cast<char**>(argv), Oinfo);
 
    return stub;
 }

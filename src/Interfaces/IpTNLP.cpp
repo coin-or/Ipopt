@@ -170,8 +170,9 @@ SmartPtr<const DenseVector> curr_c(
       DBG_ASSERT(IsValid(pc_only));
 
       // get scaled c from restonlp
-      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_cq->curr_c())) != NULL);
       c_vec = static_cast<const CompoundVector*>(GetRawPtr(ip_cq->curr_c()));
+      // cppcheck-suppress assertWithSideEffect
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_cq->curr_c())) != NULL);
       SmartPtr<Vector> c_resto = c_vec->GetComp(0)->MakeNewCopy();
 
       // undo addition of slacks nc-pc
@@ -262,8 +263,9 @@ SmartPtr<const DenseVector> curr_d(
       DBG_ASSERT(IsValid(pd_only));
 
       // get scaled d from restonlp
-      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_cq->curr_d())) != NULL);
       c_vec = static_cast<const CompoundVector*>(GetRawPtr(ip_cq->curr_d()));
+      // cppcheck-suppress assertWithSideEffect
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_cq->curr_d())) != NULL);
       SmartPtr<Vector> d_resto = c_vec->GetComp(0)->MakeNewCopy();
 
       // undo addition of slacks nc-pc
@@ -438,8 +440,9 @@ SmartPtr<const DenseVector> curr_compl_x_L(
       DBG_ASSERT(IsValid(z_L_only));
 
       // get slacks for x w.r.t. x_L
-      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_cq->curr_slack_x_L())) != NULL);
       c_vec = static_cast<const CompoundVector*>(GetRawPtr(ip_cq->curr_slack_x_L()));
+      // cppcheck-suppress assertWithSideEffect
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_cq->curr_slack_x_L())) != NULL);
       SmartPtr<const Vector> slack_x_L = c_vec->GetComp(0);
       DBG_ASSERT(IsValid(slack_x_L));
 
@@ -484,14 +487,15 @@ SmartPtr<const DenseVector> curr_compl_x_U(
    else
    {
       // get duals z_U for x from the compound vector for the duals of (x,nc,pc,nd,pd,...)
-      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->z_U())) != NULL);
       const CompoundVector* c_vec = static_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->z_U()));
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_data->curr()->z_U())) != NULL);
       SmartPtr<const Vector> z_U_only = c_vec->GetComp(0);
       DBG_ASSERT(IsValid(z_U_only));
 
       // get slacks for x w.r.t. x_U
-      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_cq->curr_slack_x_U())) != NULL);
       c_vec = static_cast<const CompoundVector*>(GetRawPtr(ip_cq->curr_slack_x_U()));
+      // cppcheck-suppress assertWithSideEffect
+      DBG_ASSERT(dynamic_cast<const CompoundVector*>(GetRawPtr(ip_cq->curr_slack_x_U())) != NULL);
       SmartPtr<const Vector> slack_x_U = c_vec->GetComp(0);
       DBG_ASSERT(IsValid(slack_x_U));
 

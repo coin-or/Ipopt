@@ -156,9 +156,9 @@ void TimingStatistics::ResetTimes()
 }
 
 void TimingStatistics::PrintAllTimingStatistics(
-   Journalist&      jnlst,
-   EJournalLevel    level,
-   EJournalCategory category
+   const Journalist& jnlst,
+   EJournalLevel     level,
+   EJournalCategory  category
 ) const
 {
    if( !jnlst.ProduceOutput(level, category) )

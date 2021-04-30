@@ -513,14 +513,15 @@ void InexactLSAcceptor::PrepareRestoPhaseStart()
 }
 
 bool InexactLSAcceptor::IsAcceptableToCurrentIterate(
-   Number trial_barr,
-   Number trial_theta,
+   Number /*trial_barr*/,
+   Number /*trial_theta*/,
    bool   /*called_from_restoration*/ /*=false*/
 ) const
 {
    DBG_START_METH("InexactLSAcceptor::IsAcceptableToCurrentIterate",
                   dbg_verbosity);
    THROW_EXCEPTION(INTERNAL_ABORT, "InexactLSAcceptor::IsAcceptableToCurrentIterate called");
+#if 0
    ASSERT_EXCEPTION(resto_pred_ <= 0., INTERNAL_ABORT, "resto_pred_ not set for check from restoration phase.");
 
    Number ared = reference_barr_ + nu_ * (reference_theta_) - (trial_barr + nu_ * trial_theta);
@@ -541,6 +542,7 @@ bool InexactLSAcceptor::IsAcceptableToCurrentIterate(
       accept = false;
    }
    return accept;
+#endif
 }
 
 Number InexactLSAcceptor::ComputeAlphaForY(

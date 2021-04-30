@@ -303,7 +303,9 @@ void FilterLSAcceptor::AugmentFilter()
 }
 
 bool
-FilterLSAcceptor::CheckAcceptabilityOfTrialPoint(Number alpha_primal_test)
+FilterLSAcceptor::CheckAcceptabilityOfTrialPoint(
+   Number alpha_primal_test
+   )
 {
    DBG_START_METH("FilterLSAcceptor::CheckAcceptabilityOfTrialPoint",
                   dbg_verbosity);

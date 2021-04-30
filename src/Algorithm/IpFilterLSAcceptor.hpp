@@ -304,7 +304,7 @@ private:
    /** @name Filter reset stuff */
    ///@{
    /** True, if last rejected was due to the filter. */
-   Number last_rejection_due_to_filter_;
+   bool last_rejection_due_to_filter_;
    /** Counter of successive iterations in which filter was reason
     *  for last rejection.
     */

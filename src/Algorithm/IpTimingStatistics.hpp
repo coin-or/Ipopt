@@ -57,9 +57,9 @@ Number TotalFunctionEvaluationWallclockTime() const;
 
    /** Method for printing all timing information */
    void PrintAllTimingStatistics(
-      Journalist&      jnlst,
-      EJournalLevel    level,
-      EJournalCategory category
+      const Journalist& jnlst,
+      EJournalLevel     level,
+      EJournalCategory  category
    ) const;
 
    /**@name Accessor methods to all timed tasks. */

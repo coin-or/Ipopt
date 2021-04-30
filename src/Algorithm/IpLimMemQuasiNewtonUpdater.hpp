@@ -308,8 +308,8 @@ private:
     *  @return true, if no update is to be performed this time.
     */
    bool CheckSkippingBFGS(
-      Vector& s_new,
-      Vector& y_new
+      const Vector& s_new,
+      const Vector& y_new
    );
 
    /** Update the internal data, such as the S, Y, L, D etc matrices
@@ -467,15 +467,15 @@ private:
 
    /** Method for recomputing D from S and Y */
    void RecalcD(
-      MultiVectorMatrix&     S,
-      MultiVectorMatrix&     Y,
-      SmartPtr<DenseVector>& D
+      const MultiVectorMatrix& S,
+      const MultiVectorMatrix& Y,
+      SmartPtr<DenseVector>&   D
    );
 
    /** Method for recomputing L from S and Y */
    void RecalcL(
-      MultiVectorMatrix&        S,
-      MultiVectorMatrix&        Y,
+      const MultiVectorMatrix&  S,
+      const MultiVectorMatrix&  Y,
       SmartPtr<DenseGenMatrix>& L
    );
 
@@ -515,7 +515,7 @@ private:
    /** Release anything that we allocated for
     *  StoreInternalDataBackup and is no longer needed.
     */
-   void ReleaseInternalDataBackup();
+   // void ReleaseInternalDataBackup();
 
    /** Set the W field in IpData based on the current values of
     *  B0_, V_, and U_.

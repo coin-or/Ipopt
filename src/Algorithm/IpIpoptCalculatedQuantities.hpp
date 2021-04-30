@@ -109,6 +109,7 @@ public:
       SmartPtr<IpoptAdditionalCq> add_cq
    )
    {
+      // cppcheck-suppress assertWithSideEffect
       DBG_ASSERT(!HaveAddCq());
       add_cq_ = add_cq;
    }

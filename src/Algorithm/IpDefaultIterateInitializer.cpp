@@ -513,6 +513,7 @@ void DefaultIterateInitializer::push_variables(
    SmartPtr<Vector> tiny_l = x_L.MakeNew();
    tiny_l->Set(tiny_double);
 
+   // cppcheck-suppress duplicateAssignExpression
    SmartPtr<Vector> q_l = x_L.MakeNew();
    SmartPtr<Vector> p_l = x_L.MakeNew();
    SmartPtr<Vector> delta_x = my_orig_x->MakeNew();
@@ -561,7 +562,9 @@ void DefaultIterateInitializer::push_variables(
       DBG_PRINT_VECTOR(1, "p_l", *p_l);
 
       // Calculate p_u
+      // cppcheck-suppress duplicateAssignExpression
       SmartPtr<Vector> q_u = x_U.MakeNew();
+      // cppcheck-suppress duplicateAssignExpression
       SmartPtr<Vector> p_u = x_U.MakeNew();
       SmartPtr<Vector> tiny_u = x_U.MakeNew();
       tiny_u->Set(tiny_double);

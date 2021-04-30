@@ -478,13 +478,15 @@ public:
       for( int i = 0; i < 2; ++i )
          printf("  %-12g %-12g %-12g %-12g\n", s_g[i], s_lambda[i], s_constraint_violation[i], s_compl_g[i]);
 
-      bool use_x_scaling;
-      bool use_g_scaling;
       Number obj_scaling = 1.0;
       Number x_scaling[3] = { 1.0, 1.0, 1.0 };
       Number g_scaling[2] = { 1.0, 1.0 };
       if( scaling_ )
+      {
+         bool use_x_scaling;
+         bool use_g_scaling;
          get_scaling_parameters(obj_scaling, use_x_scaling, 3, x_scaling, use_g_scaling, 2, g_scaling);
+      }
 
       ASSERTEQ(s_x[0], x[0]*x_scaling[0]);
       ASSERTEQ(s_x[1], x[1]*x_scaling[1]);
@@ -580,7 +582,7 @@ bool run(
    else
       assert(!maximize);  // maximize requires scaling in this test
 
-   status = app->OptimizeTNLP(nlp);
+   app->OptimizeTNLP(nlp);
 
    return EXIT_SUCCESS;
 }

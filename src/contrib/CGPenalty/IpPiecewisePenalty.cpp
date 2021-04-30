@@ -31,6 +31,7 @@ bool PiecewisePenalty::Acceptable(
 )
 {
    DBG_START_METH("PiebcewisePenalty::Acceptable", dbg_verbosity);
+   // cppcheck-suppress assertWithSideEffect
    DBG_ASSERT(!IsPiecewisePenaltyListEmpty());
    bool acceptable = false;
    std::vector<PiecewisePenEntry>::iterator iter;
@@ -72,9 +73,9 @@ bool PiecewisePenalty::Acceptable(
          }
       }
       // Finally, check the middle entries of the list.
-      Number value_left, value_mid, value_right;
       for( iter = PiecewisePenalty_list_.begin() + 1; iter != PiecewisePenalty_list_.end(); ++iter )
       {
+         Number value_left, value_mid, value_right;
          value_mid = iter->barrier_obj + iter->pen_r * iter->infeasi - trial_barrier - iter->pen_r * trial_inf;
          ++iter;
          value_right = iter->barrier_obj + iter->pen_r * iter->infeasi - trial_barrier - iter->pen_r * trial_inf;
@@ -88,10 +89,9 @@ bool PiecewisePenalty::Acceptable(
       }
    }
    // Check if the trial point is acceptable to the piecewise list
-   Number Fz;
    for( iter = PiecewisePenalty_list_.begin(); iter != PiecewisePenalty_list_.end(); ++iter )
    {
-      Fz = Fzconst + iter->pen_r * (Fzlin - iter->infeasi) - iter->barrier_obj;
+      Number Fz = Fzconst + iter->pen_r * (Fzlin - iter->infeasi) - iter->barrier_obj;
       if( Fz < 0. )
       {
          acceptable = true;
@@ -109,6 +109,7 @@ bool PiecewisePenalty::Acceptable(
 Number PiecewisePenalty::BiggestBarr()
 {
    DBG_START_METH("PiecewisePenalty::BiggestBarr", dbg_verbosity);
+   // cppcheck-suppress assertWithSideEffect
    DBG_ASSERT(!IsPiecewisePenaltyListEmpty());
    Number value = -1e20;
    if( !PiecewisePenalty_list_.empty() )
@@ -123,6 +124,7 @@ void PiecewisePenalty::UpdateEntry(
 {
 
    DBG_START_METH("PiecewisePenalty::UpdateEntry", dbg_verbosity);
+   // cppcheck-suppress assertWithSideEffect
    DBG_ASSERT(!IsPiecewisePenaltyListEmpty());
 
    Number Gzi1, Gzi2;

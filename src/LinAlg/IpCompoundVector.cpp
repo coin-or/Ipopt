@@ -99,6 +99,7 @@ void CompoundVector::ScalImpl(
    DBG_ASSERT(vectors_valid_);
    for( Index i = 0; i < NComps(); i++ )
    {
+      // cppcheck-suppress assertWithSideEffect
       DBG_ASSERT(Comp(i));
       Comp(i)->Scal(alpha);
    }
@@ -117,6 +118,7 @@ void CompoundVector::AxpyImpl(
    DBG_ASSERT(NComps() == comp_x->NComps());
    for( Index i = 0; i < NComps(); i++ )
    {
+      // cppcheck-suppress assertWithSideEffect
       DBG_ASSERT(Comp(i));
       Comp(i)->Axpy(alpha, *comp_x->GetComp(i));
    }

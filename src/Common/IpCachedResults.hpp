@@ -567,7 +567,7 @@ CachedResults<T>::~CachedResults()
 
    if( cached_results_ )
    {
-      for( typename std::list<DependentResult<T>*>::iterator iter = cached_results_->begin(); iter != cached_results_->end(); iter++ )
+      for( typename std::list<DependentResult<T>*>::iterator iter = cached_results_->begin(); iter != cached_results_->end(); ++iter )
       {
          delete *iter;
       }
@@ -653,8 +653,7 @@ bool CachedResults<T>::GetCachedResult(
    CleanupInvalidatedResults();
 
    bool retValue = false;
-   typename std::list<DependentResult<T>*>::const_iterator iter;
-   for( iter = cached_results_->begin(); iter != cached_results_->end(); iter++ )
+   for( typename std::list<DependentResult<T>*>::const_iterator iter = cached_results_->begin(); iter != cached_results_->end(); ++iter )
       if( (*iter)->DependentsIdentical(dependents, scalar_dependents) )
       {
          retResult = (*iter)->GetResult();
@@ -802,8 +801,7 @@ bool CachedResults<T>::InvalidateResult(
    CleanupInvalidatedResults();
 
    bool retValue = false;
-   typename std::list<DependentResult<T>*>::const_iterator iter;
-   for( iter = cached_results_->begin(); iter != cached_results_->end(); iter++ )
+   for( typename std::list<DependentResult<T>*>::const_iterator iter = cached_results_->begin(); iter != cached_results_->end(); ++iter )
       if( (*iter)->DependentsIdentical(dependents, scalar_dependents) )
       {
          (*iter)->Invalidate();
@@ -822,8 +820,7 @@ void CachedResults<T>::Clear()
       return;
    }
 
-   typename std::list<DependentResult<T>*>::const_iterator iter;
-   for( iter = cached_results_->begin(); iter != cached_results_->end(); iter++ )
+   for( typename std::list<DependentResult<T>*>::const_iterator iter = cached_results_->begin(); iter != cached_results_->end(); ++iter )
    {
       (*iter)->Invalidate();
    }
@@ -858,15 +855,14 @@ void CachedResults<T>::CleanupInvalidatedResults() const
    {
       if( (*iter)->IsStale() )
       {
-         typename std::list<DependentResult<T>*>::iterator iter_to_remove = iter;
-         iter++;
+         typename std::list<DependentResult<T>*>::iterator iter_to_remove = iter++;
          DependentResult<T>* result_to_delete = (*iter_to_remove);
          cached_results_->erase(iter_to_remove);
          delete result_to_delete;
       }
       else
       {
-         iter++;
+         ++iter;
       }
    }
 }
@@ -886,7 +882,7 @@ void CachedResults<T>::DebugPrintCachedResults() const
       {
          typename std::list< DependentResult<T>* >::const_iterator iter;
          DBG_PRINT((2, "Current set of cached results:\n"));
-         for (iter = cached_results_->begin(); iter != cached_results_->end(); iter++)
+         for (iter = cached_results_->begin(); iter != cached_results_->end(); ++iter)
          {
             DBG_PRINT((2, "  DependentResult:0x%x\n", (*iter)));
          }

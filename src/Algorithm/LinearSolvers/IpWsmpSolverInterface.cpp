@@ -246,8 +246,8 @@ bool WsmpSolverInterface::InitializeImpl(
    IPARM_[0] = 0;
    IPARM_[1] = 0;
    IPARM_[2] = 0;
-   ipfint idmy;
-   double ddmy;
+   ipfint idmy = 0;
+   double ddmy = 0.;
    IPOPT_WSMP_FUNC(wssmp, WSSMP)(&idmy, &idmy, &idmy, &ddmy, &ddmy, &idmy, &idmy, &ddmy, &idmy, &idmy, &ddmy, &idmy, &idmy,
                                  IPARM_, DPARM_);
 
@@ -440,8 +440,8 @@ ESymSolverStatus WsmpSolverInterface::InternalSymFact(
    // =6 limited pivots
    DPARM_[21] = 2e-8;// set pivot perturbation
 #endif
-   ipfint idmy;
-   double ddmy;
+   ipfint idmy = 0;
+   double ddmy = 0.;
 
    if( wsmp_no_pivoting_ )
    {
@@ -563,8 +563,8 @@ ESymSolverStatus WsmpSolverInterface::Factorization(
    IPARM_[1] = 3; // numerical factorization
    IPARM_[2] = 3; // numerical factorization
    DPARM_[10] = wsmp_pivtol_; // set current pivot tolerance
-   ipfint idmy;
-   double ddmy;
+   ipfint idmy = 0;
+   double ddmy = 0.;
 
 #ifdef PARDISO_MATCHING_PREPROCESS
    {
@@ -808,8 +808,8 @@ ESymSolverStatus WsmpSolverInterface::DetermineDependentRows(
    IPARM_[1] = 3; // numerical factorization
    IPARM_[2] = 3; // numerical factorization
    DPARM_[10] = wsmp_pivtol_; // set current pivot tolerance
-   ipfint idmy;
-   double ddmy;
+   ipfint idmy = 0;
+   double ddmy = 0.;
 
 #ifdef PARDISO_MATCHING_PREPROCESS
    IPOPT_WSMP_FUNC(wssmp, WSSMP)(&N, ia2, ja2, a2_, &ddmy, PERM_, INVP_, &ddmy, &idmy,

@@ -615,7 +615,6 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
 )
 {
    struct ma97_info info;
-   Number t1 = 0, t2;
 
    if( new_matrix || pivtol_changed_ )
    {
@@ -695,6 +694,7 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
 
       }
 
+      Number t1 = 0;
       if( HaveIpData() )
       {
          t1 = IpData().TimingStats().LinearSystemFactorization().TotalWallclockTime();
@@ -708,7 +708,7 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
       if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemFactorization().End();
-         t2 = IpData().TimingStats().LinearSystemFactorization().TotalWallclockTime();
+         Number t2 = IpData().TimingStats().LinearSystemFactorization().TotalWallclockTime();
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                         "Ma97SolverInterface::Factorization: ma97_factor_solve took %10.3f\n", t2 - t1);
       }

@@ -747,6 +747,7 @@ void LimMemQuasiNewtonUpdater::RestoreInternalDataBackup()
    U_ = U_old_;
 }
 
+#if 0
 void LimMemQuasiNewtonUpdater::ReleaseInternalDataBackup()
 {
    DBG_START_METH("LimMemQuasiNewtonUpdater::ReleaseInternalDataBackup",
@@ -763,6 +764,7 @@ void LimMemQuasiNewtonUpdater::ReleaseInternalDataBackup()
    V_old_ = NULL;
    U_old_ = NULL;
 }
+#endif
 
 bool LimMemQuasiNewtonUpdater::UpdateInternalData(
    const Vector&    s_new,
@@ -981,8 +983,8 @@ bool LimMemQuasiNewtonUpdater::SplitEigenvalues(
 }
 
 bool LimMemQuasiNewtonUpdater::CheckSkippingBFGS(
-   Vector& s_new,
-   Vector& y_new
+   const Vector& s_new,
+   const Vector& y_new
 )
 {
    Number sTy = s_new.Dot(y_new);
@@ -1392,9 +1394,9 @@ void LimMemQuasiNewtonUpdater::RecalcY(
 }
 
 void LimMemQuasiNewtonUpdater::RecalcD(
-   MultiVectorMatrix&     S,
-   MultiVectorMatrix&     Y,
-   SmartPtr<DenseVector>& D
+   const MultiVectorMatrix& S,
+   const MultiVectorMatrix& Y,
+   SmartPtr<DenseVector>&   D
 )
 {
    SmartPtr<DenseVectorSpace> space = new DenseVectorSpace(S.NCols());
@@ -1407,8 +1409,8 @@ void LimMemQuasiNewtonUpdater::RecalcD(
 }
 
 void LimMemQuasiNewtonUpdater::RecalcL(
-   MultiVectorMatrix&        S,
-   MultiVectorMatrix&        Y,
+   const MultiVectorMatrix&  S,
+   const MultiVectorMatrix&  Y,
    SmartPtr<DenseGenMatrix>& L
 )
 {

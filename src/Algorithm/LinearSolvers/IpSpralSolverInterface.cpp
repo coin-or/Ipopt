@@ -517,7 +517,6 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
 )
 {
    struct spral_ssids_inform info;
-   Number t1 = 0, t2;
 
    if( new_matrix || pivtol_changed_ )
    {
@@ -569,6 +568,7 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
          }
       }
 
+      Number t1 = 0;
       if( HaveIpData() )
       {
          t1 = IpData().TimingStats().LinearSystemFactorization().TotalWallclockTime();
@@ -584,7 +584,7 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
       if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemFactorization().End();
-         t2 = IpData().TimingStats().LinearSystemFactorization().TotalWallclockTime();
+         Number t2 = IpData().TimingStats().LinearSystemFactorization().TotalWallclockTime();
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "SpralSolverInterface::Factorization: "
                         "spral_factor_solve took %10.3f\n", t2 - t1);
       }

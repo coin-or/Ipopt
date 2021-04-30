@@ -606,6 +606,7 @@ public:
       SmartPtr<IpoptAdditionalData> add_data
    )
    {
+      // cppcheck-suppress assertWithSideEffect
       DBG_ASSERT(!HaveAddData());
       add_data_ = add_data;
    }
@@ -867,7 +868,7 @@ void IpoptData::set_trial(
 
 #if IPOPT_CHECKLEVEL > 0
    // verify the correct space
-   DBG_ASSERT(trial_->OwnerSpace() == (VectorSpace*)GetRawPtr(iterates_space_));
+   DBG_ASSERT(trial_->OwnerSpace() == static_cast<VectorSpace*>(GetRawPtr(iterates_space_)));
    if (IsValid(trial))
    {
       debug_trial_tag_ = trial->GetTag();

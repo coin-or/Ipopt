@@ -325,7 +325,7 @@ public:
       const SmartPtr<const Journalist>& jnlst,
       const SmartPtr<RegisteredOptions> regoptions,
       const SmartPtr<OptionsList>       options,
-      char**&                           argv,
+      const char* const*                argv,
       SmartPtr<AmplSuffixHandler>       suffix_handler = NULL,
       bool                              allow_discrete = false,
       SmartPtr<AmplOptionsList>         ampl_options_list = NULL,
@@ -626,7 +626,7 @@ private:
    void gutsOfConstructor(
       const SmartPtr<RegisteredOptions> regoptions,
       const SmartPtr<OptionsList>       options,
-      char**&                           argv,
+      const char* const*                argv,
       bool                              allow_discrete /* = false */,
       SmartPtr<AmplOptionsList>         ampl_options_list /* = NULL */,
       const char*                       ampl_option_string /* = NULL */,
@@ -721,7 +721,7 @@ protected:
       const char*                  ampl_option_string,     ///< AMPL options string
       const char*                  ampl_invokation_string, ///< AMPL invokation string
       const char*                  ampl_banner_string,     ///< AMPL banner string
-      char**&                      argv                    ///< Program arguments
+      const char* const*           argv                    ///< Program arguments
    );
 
    /** Method for obtaining the name of the NL file and the options set from AMPL
@@ -736,6 +736,7 @@ protected:
       const char*                  ampl_option_string,
       const char*                  ampl_invokation_string,
       const char*                  ampl_banner_string,
+      // cppcheck-suppress constParameter
       char**&                      argv
    )
    {

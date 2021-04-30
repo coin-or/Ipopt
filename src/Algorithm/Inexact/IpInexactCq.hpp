@@ -158,6 +158,7 @@ private:
    InexactData& InexData()
    {
       InexactData& inexact_data = static_cast<InexactData&>(ip_data_->AdditionalData());
+      // cppcheck-suppress assertWithSideEffect
       DBG_ASSERT(dynamic_cast<InexactData*>(&ip_data_->AdditionalData()));
       return inexact_data;
    }

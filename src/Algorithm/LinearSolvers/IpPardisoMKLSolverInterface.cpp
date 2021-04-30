@@ -85,8 +85,8 @@ PardisoMKLSolverInterface::~PardisoMKLSolverInterface()
       ipfint N = dim_;
       ipfint NRHS = 0;
       ipfint ERROR;
-      ipfint idmy;
-      Number ddmy;
+      ipfint idmy = 0;
+      Number ddmy = 0.;
       IPOPT_LAPACK_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
                                          &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
@@ -202,8 +202,8 @@ bool PardisoMKLSolverInterface::InitializeImpl(
       ipfint N = dim_;
       ipfint NRHS = 0;
       ipfint ERROR;
-      ipfint idmy;
-      Number ddmy;
+      ipfint idmy = 0;
+      Number ddmy = 0.;
       IPOPT_LAPACK_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
                                          &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
@@ -449,7 +449,7 @@ ESymSolverStatus PardisoMKLSolverInterface::Factorization(
    // Call Pardiso to do the factorization
    ipfint PHASE;
    ipfint N = dim_;
-   ipfint PERM;   // This should not be accessed by Pardiso
+   ipfint PERM = 0;   // This should not be accessed by Pardiso
    ipfint NRHS = 0;
    Number B;  // This should not be accessed by Pardiso in factorization
    // phase
@@ -638,7 +638,7 @@ ESymSolverStatus PardisoMKLSolverInterface::Solve(
    // Call Pardiso to do the solve for the given right-hand sides
    ipfint PHASE = 33;
    ipfint N = dim_;
-   ipfint PERM;   // This should not be accessed by Pardiso
+   ipfint PERM = 0;   // This should not be accessed by Pardiso
    ipfint NRHS = nrhs;
    Number* X = new Number[nrhs * dim_];
 

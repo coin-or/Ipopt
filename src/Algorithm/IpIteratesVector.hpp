@@ -91,9 +91,9 @@ public:
     */
    SmartPtr<Vector> create_new_x_copy()
    {
-      SmartPtr<const Vector> curr_x = GetComp(0);
-      Set_x_NonConst(*curr_x->MakeNew());
-      x_NonConst()->Copy(*curr_x);
+      SmartPtr<const Vector> curr_x_ = GetComp(0);
+      Set_x_NonConst(*curr_x_->MakeNew());
+      x_NonConst()->Copy(*curr_x_);
       return x_NonConst();
    }
 
@@ -192,9 +192,9 @@ public:
     */
    SmartPtr<Vector> create_new_y_c_copy()
    {
-      SmartPtr<const Vector> curr_y_c = GetComp(2);
-      Set_y_c_NonConst(*curr_y_c->MakeNew());
-      y_c_NonConst()->Copy(*curr_y_c);
+      SmartPtr<const Vector> curr_y_c_ = GetComp(2);
+      Set_y_c_NonConst(*curr_y_c_->MakeNew());
+      y_c_NonConst()->Copy(*curr_y_c_);
       return y_c_NonConst();
    }
 
@@ -242,9 +242,9 @@ public:
     */
    SmartPtr<Vector> create_new_y_d_copy()
    {
-      SmartPtr<const Vector> curr_y_d = GetComp(3);
-      Set_y_d_NonConst(*curr_y_d->MakeNew());
-      y_d_NonConst()->Copy(*curr_y_d);
+      SmartPtr<const Vector> curr_y_d_ = GetComp(3);
+      Set_y_d_NonConst(*curr_y_d_->MakeNew());
+      y_d_NonConst()->Copy(*curr_y_d_);
       return y_d_NonConst();
    }
 
@@ -292,9 +292,9 @@ public:
     *  values into it. */
    SmartPtr<Vector> create_new_z_L_copy()
    {
-      SmartPtr<const Vector> curr_z_L = GetComp(4);
-      Set_z_L_NonConst(*curr_z_L->MakeNew());
-      z_L_NonConst()->Copy(*curr_z_L);
+      SmartPtr<const Vector> curr_z_L_ = GetComp(4);
+      Set_z_L_NonConst(*curr_z_L_->MakeNew());
+      z_L_NonConst()->Copy(*curr_z_L_);
       return z_L_NonConst();
    }
 
@@ -342,9 +342,9 @@ public:
     */
    SmartPtr<Vector> create_new_z_U_copy()
    {
-      SmartPtr<const Vector> curr_z_U = GetComp(5);
-      Set_z_U_NonConst(*curr_z_U->MakeNew());
-      z_U_NonConst()->Copy(*curr_z_U);
+      SmartPtr<const Vector> curr_z_U_ = GetComp(5);
+      Set_z_U_NonConst(*curr_z_U_->MakeNew());
+      z_U_NonConst()->Copy(*curr_z_U_);
       return z_U_NonConst();
    }
 

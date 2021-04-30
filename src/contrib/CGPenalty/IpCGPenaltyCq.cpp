@@ -230,6 +230,7 @@ Number CGPenaltyCq::curr_fast_direct_deriv_penalty_function()
    Number result;
    SmartPtr<const Vector> x = ip_data_->curr()->x();
    SmartPtr<const Vector> s = ip_data_->curr()->s();
+   // cppcheck-suppress assertWithSideEffect
    DBG_ASSERT(CGPenData().HaveCgPenDeltas());
    SmartPtr<const Vector> dy_c = CGPenData().delta_cgfast()->y_c();
    SmartPtr<const Vector> dy_d = CGPenData().delta_cgfast()->y_d();

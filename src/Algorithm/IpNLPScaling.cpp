@@ -598,7 +598,7 @@ SmartPtr<const Matrix> StandardScalingBase::apply_jac_c_scaling(
    else
    {
       SmartPtr<const Matrix> ret = matrix;
-      matrix = NULL;
+      // matrix = NULL;
       return ret;
    }
 }
@@ -617,7 +617,7 @@ SmartPtr<const Matrix> StandardScalingBase::apply_jac_d_scaling(
    else
    {
       SmartPtr<const Matrix> ret = matrix;
-      matrix = NULL;
+      // matrix = NULL;
       return ret;
    }
 }
@@ -636,7 +636,7 @@ SmartPtr<const SymMatrix> StandardScalingBase::apply_hessian_scaling(
    else
    {
       SmartPtr<const SymMatrix> ret = matrix;
-      matrix = NULL;
+      // matrix = NULL;
       return ret;
    }
 }

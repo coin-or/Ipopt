@@ -161,8 +161,8 @@ bool IterativeWsmpSolverInterface::InitializeImpl(
    IPARM_[0] = 0;
    IPARM_[1] = 0;
    IPARM_[2] = 0;
-   ipfint idmy;
-   double ddmy;
+   ipfint idmy = 0;
+   double ddmy = 0.;
    F77_FUNC(wismp, WISMP)(&idmy, &idmy, &idmy, &ddmy, &ddmy, &idmy, &ddmy, &idmy, &idmy, &ddmy, &ddmy, IPARM_, DPARM_);
 
    if( IPARM_[63] < 0 )
@@ -289,8 +289,8 @@ ESymSolverStatus IterativeWsmpSolverInterface::InternalSymFact(
    ipfint N = dim_;
    IPARM_[1] = 1; // ordering
    IPARM_[2] = 1; // symbolic factorization
-   ipfint idmy;
-   double ddmy;
+   ipfint idmy = 0;
+   double ddmy = 0.;
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                   "Calling WISMP-1-1 for symbolic analysis.\n");
    F77_FUNC(wismp, WISMP)(&N, ia, ja, a_, &ddmy, &idmy, &ddmy, &idmy, &idmy, &ddmy, &ddmy, IPARM_, DPARM_);
@@ -396,8 +396,8 @@ ESymSolverStatus IterativeWsmpSolverInterface::Factorization(
    IPARM_[1] = 2; // value analysis
    IPARM_[2] = 3; // preconditioner generation
    DPARM_[10] = wsmp_pivtol_; // set current pivot tolerance
-   ipfint idmy;
-   double ddmy;
+   ipfint idmy = 0;
+   double ddmy = 0.;
 
    // set drop tolerances for now....
    if( wsmp_inexact_droptol_ != 0. )
