@@ -122,7 +122,20 @@ IpoptApplication::IpoptApplication(
      options_(options),
      inexact_algorithm_(false),
      replace_bounds_(false)
-{ }
+{
+#if IPOPT_VERBOSITY > 0
+   // Kludge: If this is the first IpoptApplication, then store jnlst_ in smart_jnlst, too, so that it doesn't
+   // get freed when the IpoptApplication is freed and DebugJournalistWrapper::jrnl becomes a dangling pointer.
+   // Also add the Debug journal that writes to debug.out.
+   if( IsNull(smart_jnlst) )
+   {
+      smart_jnlst = jnlst_;
+      DebugJournalistWrapper::SetJournalist(GetRawPtr(jnlst_));
+      SmartPtr<Journal> debug_jrnl = jnlst_->AddFileJournal("Debug", "debug.out", J_ITERSUMMARY);
+      debug_jrnl->SetPrintLevel(J_DBG, J_ALL);
+   }
+#endif
+}
 
 SmartPtr<IpoptApplication> IpoptApplication::clone()
 {

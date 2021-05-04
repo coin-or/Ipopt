@@ -146,6 +146,8 @@ commit history.
           likely a shorter type, e.g., signed char. Deprecated TRUE and
           FALSE, use true and false instead.
         - Deprecated IPOPT_EXPORT macro and introduced IPOPT_CALLCONV.
+        - Fixed missing initializing of IpoptApplication::smart_jnlst in
+          second IpoptApplication constructor, if ipopt verbosity > 0.
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]
