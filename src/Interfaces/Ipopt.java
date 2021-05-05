@@ -207,6 +207,13 @@ public abstract class Ipopt
          {
             try
             {
+               /* This loads the Ipopt library with RTLD_LOCAL, which means that symbols loaded are not made available for future dlopen() calls.
+                * This causes a problem when using MKL, which loads an additional library at runtime, e.g., libmkl_avx2, because this lib references
+                * to symbols that could be resolved in previously load MKL libraries - but are not because of RTLD_LOCAL.
+                * TODO should one add some kind of workaround to load the Ipopt lib with RTLD_GLOBAL?, e.g.,
+                *     https://stackoverflow.com/questions/5425034/java-load-shared-libraries-with-dependencies
+                *     https://github.com/victor-paltz/global-load-library
+                */
                System.loadLibrary(c);
                loadedlib = true;
                break;
