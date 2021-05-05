@@ -8,7 +8,7 @@
 #                       Names and other basic things                        #
 #############################################################################
 
-AC_INIT([Ipopt],[3.14.0],[https://github.com/coin-or/Ipopt/issues/new],,[https://github.com/coin-or/Ipopt])
+AC_INIT([Ipopt],[3.14.0],[https://github.com/coin-or/Ipopt/issues/new],[],[https://github.com/coin-or/Ipopt])
 
 AC_COPYRIGHT([
 Copyright 2004, 2011 International Business Machines and others.
@@ -62,7 +62,7 @@ AC_COIN_DEBUGLEVEL
 ########################################################################
 
 AC_ARG_WITH([precision],
-            [AC_HELP_STRING([--with-precision],[floating-point precision to use: single or double (default)])],
+            [AS_HELP_STRING([--with-precision],[floating-point precision to use: single or double (default)])],
             [precision=$withval],
             [precision=double])
 case "$precision" in
@@ -149,7 +149,7 @@ AM_CONDITIONAL([HAVE_MA28],[test "$have_ma28" = yes])
 ###########
 
 AC_ARG_WITH([pardiso],
-  [AC_HELP_STRING([--with-pardiso],[specify Pardiso library (>= 4.0) from pardiso-project.org])],
+  [AS_HELP_STRING([--with-pardiso],[specify Pardiso library (>= 4.0) from pardiso-project.org])],
   [case "$withval" in
      no)  have_pardiso_project=no ;;  # so with_pardiso=no
      yes) AC_MSG_ERROR(["expected filename as argument for --with-pardiso"]) ;;
@@ -162,7 +162,7 @@ AC_ARG_WITH([pardiso],
 
 # check whether Pardiso is available via Lapack, which should then be MKL
 AC_ARG_ENABLE([pardisomkl],
-  [AC_HELP_STRING([--disable-pardisomkl],[disable check for MKL version of Pardiso in Lapack])],
+  [AS_HELP_STRING([--disable-pardisomkl],[disable check for MKL version of Pardiso in Lapack])],
   [case "$enableval" in
      no | yes) ;;
      *)
@@ -200,7 +200,7 @@ fi
 ########
 
 AC_ARG_WITH([wsmp],
-            AC_HELP_STRING([--with-wsmp],[specify WSMP library]),
+            AS_HELP_STRING([--with-wsmp],[specify WSMP library]),
             [have_wsmp=yes; wsmp_lflags=$withval],
             [have_wsmp=no])
 
@@ -280,8 +280,7 @@ AC_COIN_CHECK_NAMESPACE_DECL([std::srand],[1],
 ###################################################
 
 AC_ARG_ENABLE([inexact-solver],
-  [AC_HELP_STRING([--enable-inexact-solver],
-     [enable inexact linear solver version EXPERIMENTAL! (default: no)])],
+  [AS_HELP_STRING([--enable-inexact-solver],[enable inexact linear solver version EXPERIMENTAL! (default: no)])],
   [case "$enableval" in
      no | yes) ;;
      *)
@@ -329,7 +328,7 @@ fi
 ############# JAVA
 
 AC_ARG_ENABLE([java],
-  [AC_HELP_STRING([--disable-java],[disable building of Java interface])],
+  [AS_HELP_STRING([--disable-java],[disable building of Java interface])],
   [enable_java="$enableval"],
   [case "$JAVA_HOME" in
      *\ * ) enable_java=no ;;   # do not enable java-check by default, if there are spaces in JAVA_HOME - that causes trouble
@@ -356,7 +355,7 @@ fi
 if test "$enable_java" != no ; then
   AC_MSG_CHECKING([if javac supports -h])
   echo "public abstract class conftest { private native boolean test(); }" > conftest.java
-  $as_echo "$as_me:${as_lineno-$LINENO}: $JAVAC conftest.java -h conftest.header" >&AS_MESSAGE_LOG_FD
+  AS_ECHO(["$as_me:${as_lineno-$LINENO}: $JAVAC conftest.java -h conftest.header"]) >&AS_MESSAGE_LOG_FD
   "$JAVAC" conftest.java -h conftest.header >&AS_MESSAGE_LOG_FD
   if test -e conftest.header/conftest.h ; then
     AC_MSG_RESULT([yes])
@@ -415,7 +414,7 @@ fi
 ########################################################################
 
 AC_ARG_ENABLE([linear-solver-loader],
-  [AC_HELP_STRING([--disable-linear-solver-loader],[disable use of linear solver loader])],
+  [AS_HELP_STRING([--disable-linear-solver-loader],[disable use of linear solver loader])],
   [case "$enableval" in
      no | yes) ;;
      *)
@@ -442,7 +441,7 @@ AC_LANG_POP(C)
 ########################################################################
 
 AC_ARG_ENABLE([sipopt],
-  [AC_HELP_STRING([--disable-sipopt],[disable build of sIpopt])],
+  [AS_HELP_STRING([--disable-sipopt],[disable build of sIpopt])],
   [case "$enableval" in
      no | yes) ;;
      *)
@@ -641,6 +640,6 @@ if test "$coin_has_asl" = yes ; then
   AC_CONFIG_FILES([ipoptamplinterface.pc:src/Apps/AmplSolver/ipoptamplinterface.pc.in])
 fi
 
-AC_CONFIG_HEADER([src/Common/config.h src/Common/config_ipopt.h])
+AC_CONFIG_HEADERS([src/Common/config.h src/Common/config_ipopt.h])
 
 AC_COIN_FINALIZE
