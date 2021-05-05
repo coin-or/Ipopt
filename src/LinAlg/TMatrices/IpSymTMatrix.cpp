@@ -175,10 +175,12 @@ void SymTMatrix::ComputeRowAMaxImpl(
    const Index* jcn = Jcols();
    const Number* val = values_;
    Number* vec_vals = dense_vec->Values();
-   vec_vals--;
 
    const Number zero = 0.;
    IpBlasCopy(NRows(), &zero, 0, vec_vals, 1);
+
+   // to deal with 1-based indexing in irn and jcn (I believe)
+   vec_vals--;
 
    for( Index i = 0; i < Nonzeros(); i++ )
    {
