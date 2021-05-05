@@ -457,7 +457,8 @@ ExpansionMatrixSpace::ExpansionMatrixSpace(
       //ToDo decide for offset
       DBG_ASSERT(ExpPos[i] - offset < NRows() && ExpPos[i] - offset >= 0);
       expanded_pos_[i] = ExpPos[i] - offset;
-      compressed_pos_[ExpPos[i] - offset] = i;
+      if( NRows() > 0 )
+         compressed_pos_[ExpPos[i] - offset] = i;
    }
 }
 

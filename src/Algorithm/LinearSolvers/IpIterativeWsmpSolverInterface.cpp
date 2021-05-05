@@ -545,6 +545,7 @@ ESymSolverStatus IterativeWsmpSolverInterface::Solve(
                   "Number of iterative solver steps in WISMP: %d\n", IPARM_[25]);
    if( Jnlst().ProduceOutput(J_MOREDETAILED, J_LINEAR_ALGEBRA) )
    {
+      DBG_ASSERT(CVGH != NULL);
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "WISMP congergence history:\n");
       for( Index i = 0; i <= IPARM_[25]; ++i )

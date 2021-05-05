@@ -908,6 +908,7 @@ ESymSolverStatus PardisoSolverInterface::Solve(
 
    int attempts = 0;
    const int max_attempts = pardiso_iterative_ ? pardiso_max_droptol_corrections_ + 1 : 1;
+   DBG_ASSERT(max_attempts > 0);
 
    while( attempts < max_attempts )
    {

@@ -213,6 +213,7 @@ bool TNLPReducer::get_bounds_info(
             }
             if( index_x_fix_[count_x] == i )
             {
+               DBG_ASSERT(x_start != NULL);
                x_l[i] = x_start[i];
                x_u[i] = x_start[i];
                count_x++;

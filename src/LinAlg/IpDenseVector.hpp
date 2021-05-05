@@ -456,7 +456,9 @@ inline Number* DenseVector::Values()
    ObjectChanged();
    initialized_ = true;
    homogeneous_ = false;
-   return values_allocated();
+   values_allocated();
+   DBG_ASSERT(Dim() == 0 || values_ != NULL);
+   return values_;
 }
 
 inline const Number* DenseVector::Values() const

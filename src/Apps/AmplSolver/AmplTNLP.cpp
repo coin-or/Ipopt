@@ -1789,8 +1789,7 @@ AmplSuffixHandler::GetIntegerSuffixValues(
    }
    else
    {
-      kind = 0;
-      DBG_ASSERT(false && "Unknown suffix source in GetIntegerSuffixValues");
+      THROW_EXCEPTION(IpoptException, "Unknown suffix source in GetIntegerSuffixValues");
    }
    SufDesc* dp = suf_get(suffix_string.c_str(), kind);
    return dp->u.i;
@@ -1843,8 +1842,7 @@ AmplSuffixHandler::GetNumberSuffixValues(
    }
    else
    {
-      kind = 0;
-      DBG_ASSERT(false && "Unknown suffix source in GetNumberSuffixValues");
+      THROW_EXCEPTION(IpoptException, "Unknown suffix source in GetNumberSuffixValues");
    }
    SufDesc* dp = suf_get(suffix_string.c_str(), kind);
    return dp->u.r;

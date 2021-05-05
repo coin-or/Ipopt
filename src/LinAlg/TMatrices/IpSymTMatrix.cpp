@@ -168,6 +168,9 @@ void SymTMatrix::ComputeRowAMaxImpl(
 {
    DBG_ASSERT(initialized_);
 
+   if( NRows() == 0 )
+      return;
+
    DenseVector* dense_vec = static_cast<DenseVector*>(&rows_norms);
    DBG_ASSERT(dynamic_cast<DenseVector*>(&rows_norms));
 
@@ -175,13 +178,12 @@ void SymTMatrix::ComputeRowAMaxImpl(
    const Index* jcn = Jcols();
    const Number* val = values_;
    Number* vec_vals = dense_vec->Values();
+   DBG_ASSERT(vec_vals != NULL);
 
    const Number zero = 0.;
    IpBlasCopy(NRows(), &zero, 0, vec_vals, 1);
 
-   // to deal with 1-based indexing in irn and jcn (I believe)
-   vec_vals--;
-
+   vec_vals--; // to deal with 1-based indexing in irn and jcn (I believe)
    for( Index i = 0; i < Nonzeros(); i++ )
    {
       const Number f = fabs(*val);

@@ -3124,6 +3124,7 @@ bool TNLPAdapter::CheckDerivatives(
          }
          else
          {
+            DBG_ASSERT(lambda != NULL);
             lambda[icon] = 1.;
             IpBlasCopy(nx, &zero, 0, gradref, 1);
             for( Index i = 0; i < nz_jac_g; i++ )
@@ -3138,8 +3139,6 @@ bool TNLPAdapter::CheckDerivatives(
          new_x = true;
          bool new_y = true;
          retval = tnlp_->eval_h(nx, xref, new_x, objfact, ng, lambda, new_y, nz_hess_lag, NULL, NULL, h_values);
-         new_x = false;
-         new_y = false;
          ASSERT_EXCEPTION(retval, ERROR_IN_TNLP_DERIVATIVE_TEST,
                           "In TNLP derivative test: Hessian could not be evaluated at reference point.");
 
@@ -3174,7 +3173,6 @@ bool TNLPAdapter::CheckDerivatives(
                   }
                }
             }
-            new_x = false;
 
             for( Index ivar2 = 0; ivar2 < nx; ivar2++ )
             {

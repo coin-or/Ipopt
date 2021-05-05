@@ -686,6 +686,7 @@ ESymSolverStatus IterativePardisoSolverInterface::Solve(
 
    int attempts = 0;
    const int max_attempts = pardiso_max_droptol_corrections_ + 1;
+   DBG_ASSERT(max_attempts > 0);
 
    bool is_normal = false;
    if( IsNull(InexData().normal_x()) && InexData().compute_normal() )

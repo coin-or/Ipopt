@@ -442,7 +442,7 @@ bool PDFullSpaceSolver::SolveOnce(
    deps[10] = &slack_s_U;
    deps[11] = &sigma_x;
    deps[12] = &sigma_s;
-   void* dummy;
+   void* dummy = NULL;
    bool uptodate = dummy_cache_.GetCachedResult(dummy, deps);
    if( !uptodate )
    {

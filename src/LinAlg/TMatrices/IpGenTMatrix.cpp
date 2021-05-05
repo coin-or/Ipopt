@@ -65,6 +65,9 @@ void GenTMatrix::MultVectorImpl(
       y.Set(0.0);  // In case y hasn't been initialized yet
    }
 
+   if( Nonzeros() == 0 )
+      return;
+
    // See if we can understand the data
    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
    DBG_ASSERT(dynamic_cast<const DenseVector*>(&x));
@@ -77,6 +80,8 @@ void GenTMatrix::MultVectorImpl(
       const Index* jcols = Jcols();
       const Number* val = values_;
       Number* yvals = dense_y->Values();
+      DBG_ASSERT(yvals != NULL);
+
       yvals--;
       if( dense_x->IsHomogeneous() )
       {
@@ -125,6 +130,9 @@ void GenTMatrix::TransMultVectorImpl(
       y.Set(0.0);  // In case y hasn't been initialized yet
    }
 
+   if( Nonzeros() == 0 )
+      return;
+
    // See if we can understand the data
    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
    DBG_ASSERT(dynamic_cast<const DenseVector*>(&x));
@@ -137,6 +145,7 @@ void GenTMatrix::TransMultVectorImpl(
       const Index* jcols = Jcols();
       const Number* val = values_;
       Number* yvals = dense_y->Values();
+      DBG_ASSERT(yvals != NULL);
       yvals--;
 
       if( dense_x->IsHomogeneous() )
@@ -178,14 +187,18 @@ void GenTMatrix::ComputeRowAMaxImpl(
 {
    DBG_ASSERT(initialized_);
 
+   if( NRows() == 0 )
+      return;
+
    DenseVector* dense_vec = static_cast<DenseVector*>(&rows_norms);
    DBG_ASSERT(dynamic_cast<DenseVector*>(&rows_norms));
 
    const Index* irows = Irows();
    const Number* val = values_;
    Number* vec_vals = dense_vec->Values();
-   vec_vals--;
+   DBG_ASSERT(vec_vals != NULL);
 
+   vec_vals--;
    for( Index i = 0; i < Nonzeros(); i++ )
    {
       vec_vals[irows[i]] = Max(vec_vals[irows[i]], fabs(val[i]));
@@ -199,14 +212,18 @@ void GenTMatrix::ComputeColAMaxImpl(
 {
    DBG_ASSERT(initialized_);
 
+   if( NCols() == 0 )
+      return;
+
    DenseVector* dense_vec = static_cast<DenseVector*>(&cols_norms);
    DBG_ASSERT(dynamic_cast<DenseVector*>(&cols_norms));
 
    const Index* jcols = Jcols();
    const Number* val = values_;
    Number* vec_vals = dense_vec->Values();
-   vec_vals--;
+   DBG_ASSERT(vec_vals != NULL);
 
+   vec_vals--; // to deal with 1-based indexing in jcols, I believe
    for( Index i = 0; i < Nonzeros(); i++ )
    {
       vec_vals[jcols[i]] = Max(vec_vals[jcols[i]], fabs(val[i]));

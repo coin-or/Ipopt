@@ -378,6 +378,7 @@ ESymSolverStatus Ma77SolverInterface::InitializeStructure(
       {
          delete[] ia_half;
          delete[] ja_half;
+         delete[] perm;
          return SYMSOLVER_FATAL_ERROR;
       }
    }
@@ -388,6 +389,7 @@ ESymSolverStatus Ma77SolverInterface::InitializeStructure(
       {
          delete[] ia_half;
          delete[] ja_half;
+         delete[] perm;
          return SYMSOLVER_FATAL_ERROR;
       }
    }
@@ -398,6 +400,7 @@ ESymSolverStatus Ma77SolverInterface::InitializeStructure(
    ma77_open(ndim_, "ma77_int", "ma77_real", "ma77_work", "ma77_delay", &keep_, &control_, &info);
    if( info.flag < 0 )
    {
+      delete[] perm;
       return SYMSOLVER_FATAL_ERROR;
    }
 
@@ -407,6 +410,7 @@ ESymSolverStatus Ma77SolverInterface::InitializeStructure(
       ma77_input_vars(i + 1, ia[i + 1] - ia[i], &(ja[ia[i] - 1]), &keep_, &control_, &info);
       if( info.flag < 0 )
       {
+         delete[] perm;
          return SYMSOLVER_FATAL_ERROR;
       }
    }

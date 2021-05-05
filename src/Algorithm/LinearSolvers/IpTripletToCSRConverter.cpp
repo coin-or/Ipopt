@@ -55,6 +55,7 @@ Index TripletToCSRConverter::InitializeConverter(
 
    DBG_ASSERT(dim > 0);
    DBG_ASSERT(nonzeros > 0);
+   DBG_ASSERT(hf_ == Triangular_Format || hf_ == Full_Format);
 
    delete[] ia_;
    delete[] ja_;

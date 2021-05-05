@@ -254,6 +254,7 @@ ESymSolverStatus Ma86SolverInterface::InitializeStructure(
    control68.f_array_out = 1; // Use Fortran numbering (faster)
    order_amd = NULL;
    order_metis = NULL;
+   DBG_ASSERT(ordering_ == ORDER_METIS || ordering_ == ORDER_AMD || ordering_ == ORDER_AUTO);
    if( ordering_ == ORDER_METIS || ordering_ == ORDER_AUTO )
    {
       order_metis = new Index[dim];

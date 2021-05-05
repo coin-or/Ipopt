@@ -648,6 +648,12 @@ void DenseVector::AddTwoVectorsImpl(
    Number        c
 )
 {
+   if( Dim() == 0 )
+   {
+      DBG_ASSERT(initialized_);
+      return;
+   }
+
    const Number* values_v1 = NULL;
    bool homogeneous_v1 = false;
    Number scalar_v1 = 0;
@@ -709,10 +715,13 @@ void DenseVector::AddTwoVectorsImpl(
       Vector::AddTwoVectorsImpl(a, v1, b, v2, c);
       return;
    }
+   DBG_ASSERT(values_v1 != NULL || a == 0.);
+   DBG_ASSERT(values_v2 != NULL || b == 0.);
+   DBG_ASSERT(values_ != NULL);
 
    // I guess I'm going over board here, but it might be best to
    // capture all cases for a, b, and c separately...
-   if( c == 0 )
+   if( c == 0. )
    {
       if( a == 1. )
       {
