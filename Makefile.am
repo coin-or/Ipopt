@@ -10,7 +10,7 @@ if BUILD_SIPOPT
   SUBDIRS += contrib/sIPOPT
 endif
 
-doc_DATA = README.md AUTHORS LICENSE
+doc_DATA = README.md AUTHORS LICENSE ChangeLog
 
 .PHONY: test doc javadoc astyle cppcheck cppcheck-config
 
