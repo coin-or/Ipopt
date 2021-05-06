@@ -25706,8 +25706,6 @@ fi
 rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
 
 
-##########################################################################
-
 ###################################################
 # Check if user wants inexact algorithm available #
 ###################################################
@@ -25750,47 +25748,9 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
-######################################
-# Equivalent int Fortran and C types #
-######################################
-
-# FIXME: The following test should be active, but this requires change in
-#        code to copy Index* to ipfint* arrays...
-if test "$cross_compiling" = no && test "$is_bg" != yes; then
-  ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-
-printf "%s\n" "#define IPOPT_FORTRAN_INTEGER_TYPE int" >>confdefs.h
-
-#  AC_CHECK_SIZEOF([long])
-#  AC_CHECK_SIZEOF([int])
-#  AC_CHECK_SIZEOF([double])
-#  AC_MSG_CHECKING([for C type corresponding to Fortran INTEGER])
-#  if test $ac_cv_sizeof_long = $ac_cv_sizeof_double; then
-#    AC_DEFINE([IPOPT_FORTRAN_INTEGER_TYPE],[int],[Define to the C type corresponding to Fortran INTEGER])
-#    AC_MSG_RESULT([int])
-#  else
-#    AC_DEFINE([IPOPT_FORTRAN_INTEGER_TYPE],[long])
-#    AC_MSG_RESULT([long])
-#  fi
-  ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-else
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: We are cross compiling, assuming Fortran 'INTEGER' type corresponds to C 'int' type" >&5
-printf "%s\n" "$as_me: WARNING: We are cross compiling, assuming Fortran 'INTEGER' type corresponds to C 'int' type" >&2;}
-  printf "%s\n" "#define IPOPT_FORTRAN_INTEGER_TYPE int" >>confdefs.h
-
-fi
-
-############# JAVA
+########
+# Java #
+########
 
 # Check whether --enable-java was given.
 if test ${enable_java+y}
@@ -25922,7 +25882,7 @@ else $as_nop
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25925 "configure" */
+/* #line 25885 "configure" */
 public class Test {
 }
 EOF
@@ -26448,7 +26408,7 @@ else $as_nop
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 26451 "configure" */
+/* #line 26411 "configure" */
 public class Test {
 }
 EOF
@@ -26483,7 +26443,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 26486 "configure" */
+/* [#]line 26446 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
@@ -27249,7 +27209,6 @@ if test "$use_sipopt" = yes ; then
   ac_config_files="$ac_config_files contrib/sIPOPT/Makefile contrib/sIPOPT/src/Makefile contrib/sIPOPT/AmplSolver/Makefile contrib/sIPOPT/examples/parametric_cpp/Makefile contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile contrib/sIPOPT/examples/redhess_cpp/Makefile"
 
 fi
-
 
 # under Windows, the Makevars file for the R Interface need to be named Makevars.win
 case $build in

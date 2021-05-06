@@ -50,11 +50,6 @@
 /* Define to 1 if WSMP is available */
 /* #undef IPOPT_HAS_WSMP */
 
-/* Define to the C type corresponding to Fortran INTEGER */
-#ifndef IPOPT_FORTRAN_INTEGER_TYPE
-#define IPOPT_FORTRAN_INTEGER_TYPE int
-#endif
-
 /* Define to be the name of C-function for Inf check */
 #ifdef _MSC_VER
 #define IPOPT_C_FINITE _finite

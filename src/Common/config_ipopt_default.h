@@ -16,9 +16,11 @@
 /* Release Version number of project */
 #define IPOPT_VERSION_RELEASE 0
 
-/* Define to the C type corresponding to Fortran INTEGER */
+/* Define to the C type corresponding to Fortran INTEGER
+ * @deprecated Use ipindex instead.
+ */
 #ifndef IPOPT_FORTRAN_INTEGER_TYPE
-#define IPOPT_FORTRAN_INTEGER_TYPE int
+#define IPOPT_FORTRAN_INTEGER_TYPE ipindex
 #endif
 
 #ifndef IPOPTLIB_EXPORT

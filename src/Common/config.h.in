@@ -98,9 +98,6 @@
 /* Define to be the name of C-function for Inf check */
 #undef IPOPT_C_FINITE
 
-/* Define to the C type corresponding to Fortran INTEGER */
-#undef IPOPT_FORTRAN_INTEGER_TYPE
-
 /* Define to 1 if ASL is available. */
 #undef IPOPT_HAS_ASL
 

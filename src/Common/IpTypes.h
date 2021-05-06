@@ -42,9 +42,6 @@
 #endif
 #endif
 
-/* Type of Fortran integer translated into C */
-typedef IPOPT_FORTRAN_INTEGER_TYPE ipfint;
-
 /** Type for floating-point numbers
  * @since 3.14.0
  */
@@ -58,5 +55,8 @@ typedef double ipnumber;
  * @since 3.14.0
  */
 typedef int ipindex;
+
+/* Type of Fortran integer translated into C */
+typedef ipindex ipfint;
 
 #endif

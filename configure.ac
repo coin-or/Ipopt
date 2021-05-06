@@ -273,8 +273,6 @@ AC_COIN_CHECK_NAMESPACE_DECL([std::srand],[1],
   [AC_DEFINE([IPOPT_HAS_STD__RAND],[1],[Define to 1 if function std::rand is available])],[],
   [#include <cstdlib>])
 
-##########################################################################
-
 ###################################################
 # Check if user wants inexact algorithm available #
 ###################################################
@@ -299,33 +297,9 @@ AM_CONDITIONAL([BUILD_INEXACT], [test $use_inexact = yes])
 
 AC_LANG_POP(C++)
 
-######################################
-# Equivalent int Fortran and C types #
-######################################
-
-# FIXME: The following test should be active, but this requires change in
-#        code to copy Index* to ipfint* arrays...
-if test "$cross_compiling" = no && test "$is_bg" != yes; then
-  AC_LANG_PUSH(C)
-  AC_DEFINE([IPOPT_FORTRAN_INTEGER_TYPE],[int],[Define to the C type corresponding to Fortran INTEGER])
-#  AC_CHECK_SIZEOF([long])
-#  AC_CHECK_SIZEOF([int])
-#  AC_CHECK_SIZEOF([double])
-#  AC_MSG_CHECKING([for C type corresponding to Fortran INTEGER])
-#  if test $ac_cv_sizeof_long = $ac_cv_sizeof_double; then
-#    AC_DEFINE([IPOPT_FORTRAN_INTEGER_TYPE],[int],[Define to the C type corresponding to Fortran INTEGER])
-#    AC_MSG_RESULT([int])
-#  else
-#    AC_DEFINE([IPOPT_FORTRAN_INTEGER_TYPE],[long])
-#    AC_MSG_RESULT([long])
-#  fi
-  AC_LANG_POP(C)
-else
-  AC_MSG_WARN([We are cross compiling, assuming Fortran 'INTEGER' type corresponds to C 'int' type])
-  AC_DEFINE([IPOPT_FORTRAN_INTEGER_TYPE],[int])
-fi
-
-############# JAVA
+########
+# Java #
+########
 
 AC_ARG_ENABLE([java],
   [AS_HELP_STRING([--disable-java],[disable building of Java interface])],
@@ -601,7 +575,6 @@ if test "$use_sipopt" = yes ; then
 		 contrib/sIPOPT/examples/redhess_cpp/Makefile
   ])
 fi
-
 
 # under Windows, the Makevars file for the R Interface need to be named Makevars.win
 case $build in 

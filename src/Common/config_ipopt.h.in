@@ -21,9 +21,6 @@
 /* Define to the debug verbosity level (0 is no output) */
 #undef IPOPT_VERBOSITY
 
-/* Define to the C type corresponding to Fortran INTEGER */
-#undef IPOPT_FORTRAN_INTEGER_TYPE
-
 /* Define to 1 if using single precision floating point */
 #undef IPOPT_SINGLE
 
@@ -37,5 +34,10 @@
 #define FORTRAN_INTEGER_TYPE  IPOPT_FORTRAN_INTEGER_TYPE
 #define COIN_IPOPT_CHECKLEVEL IPOPT_CHECKLEVEL
 #define COIN_IPOPT_VERBOSITY  IPOPT_VERBOSITY
+
+/** type corresponding to integers in Fortran
+ * @deprecated Use ipindex instead.
+ */
+#define IPOPT_FORTRAN_INTEGER_TYPE ipindex
 
 #endif
