@@ -30,11 +30,6 @@
 /* Library Visibility Attribute */
 #undef IPOPTLIB_EXPORT
 
-/* for backward compatibility: will be removed in Ipopt 3.14 */
-#define FORTRAN_INTEGER_TYPE  IPOPT_FORTRAN_INTEGER_TYPE
-#define COIN_IPOPT_CHECKLEVEL IPOPT_CHECKLEVEL
-#define COIN_IPOPT_VERBOSITY  IPOPT_VERBOSITY
-
 /** type corresponding to integers in Fortran
  * @deprecated Use ipindex instead.
  */
