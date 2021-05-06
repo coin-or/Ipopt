@@ -12,11 +12,9 @@ endif
 
 doc_DATA = README.md AUTHORS LICENSE
 
-.PHONY: test unitTest doc javadoc astyle cppcheck cppcheck-config
+.PHONY: test doc javadoc astyle cppcheck cppcheck-config
 
-test: unitTest
-
-unitTest: all
+test: all
 	cd test; $(MAKE) test
 
 doc :
@@ -48,6 +46,3 @@ cppcheck-config:
 	cppcheck -q --check-config --suppress=missingIncludeSystem --std=c++03 --std=c99 --error-exitcode=2 \
 	  $(IPOPTLIB_CFLAGS) $(IPOPTAMPLINTERFACELIB_CFLAGS) $(addprefix -I,$(shell find $(srcdir)/src -type d)) -Isrc/Common \
 	  -DHAVE_CONFIG_H $(srcdir)/src $(srcdir)/test $(srcdir)/examples
-
-pkgconfiglibdir = $(libdir)/pkgconfig
-pkgconfiglib_DATA = ipopt.pc

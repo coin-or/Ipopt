@@ -284,6 +284,9 @@ if BUILD_JAVA
 	$(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(datadir)/java/org.coinor.ipopt.jar"
 endif
 
+pkgconfiglibdir = $(libdir)/pkgconfig
+pkgconfiglib_DATA = ipopt.pc
+
 if COIN_HAS_ASL
   SUBDIRS = . Apps/AmplSolver
 endif

@@ -107,10 +107,9 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/src/Common/config.h \
 	$(top_builddir)/src/Common/config_ipopt.h
-CONFIG_CLEAN_FILES = ipopt.pc doc/Doxyfile \
-	examples/Cpp_example/Makefile examples/recursive_nlp/Makefile \
-	examples/hs071_cpp/Makefile examples/hs071_c/Makefile \
-	examples/ScalableProblems/Makefile \
+CONFIG_CLEAN_FILES = doc/Doxyfile examples/Cpp_example/Makefile \
+	examples/recursive_nlp/Makefile examples/hs071_cpp/Makefile \
+	examples/hs071_c/Makefile examples/ScalableProblems/Makefile \
 	tutorial/CodingExercise/C/1-skeleton/Makefile \
 	tutorial/CodingExercise/C/2-mistake/Makefile \
 	tutorial/CodingExercise/C/3-solution/Makefile \
@@ -254,8 +253,8 @@ am__uninstall_files_from_dir = { \
     || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
          $(am__cd) "$$dir" && rm -f $$files; }; \
   }
-am__installdirs = "$(DESTDIR)$(docdir)" "$(DESTDIR)$(pkgconfiglibdir)"
-DATA = $(doc_DATA) $(pkgconfiglib_DATA)
+am__installdirs = "$(DESTDIR)$(docdir)"
+DATA = $(doc_DATA)
 RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
   distclean-recursive maintainer-clean-recursive
 am__recursive_targets = \
@@ -456,8 +455,6 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = src $(am__append_1)
 doc_DATA = README.md AUTHORS LICENSE
-pkgconfiglibdir = $(libdir)/pkgconfig
-pkgconfiglib_DATA = ipopt.pc
 all: all-recursive
 
 .SUFFIXES:
@@ -517,8 +514,6 @@ src/Common/stamp-h2: $(top_srcdir)/src/Common/config_ipopt.h.in $(top_builddir)/
 
 distclean-hdr:
 	-rm -f src/Common/config.h src/Common/stamp-h1 src/Common/config_ipopt.h src/Common/stamp-h2
-ipopt.pc: $(top_builddir)/config.status $(srcdir)/ipopt.pc.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
 doc/Doxyfile: $(top_builddir)/config.status $(top_srcdir)/doc/Doxyfile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/Cpp_example/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/Cpp_example/Makefile.in
@@ -613,27 +608,6 @@ uninstall-docDATA:
 	@list='$(doc_DATA)'; test -n "$(docdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	dir='$(DESTDIR)$(docdir)'; $(am__uninstall_files_from_dir)
-install-pkgconfiglibDATA: $(pkgconfiglib_DATA)
-	@$(NORMAL_INSTALL)
-	@list='$(pkgconfiglib_DATA)'; test -n "$(pkgconfiglibdir)" || list=; \
-	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(pkgconfiglibdir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(pkgconfiglibdir)" || exit 1; \
-	fi; \
-	for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  echo "$$d$$p"; \
-	done | $(am__base_list) | \
-	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(pkgconfiglibdir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(pkgconfiglibdir)" || exit $$?; \
-	done
-
-uninstall-pkgconfiglibDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(pkgconfiglib_DATA)'; test -n "$(pkgconfiglibdir)" || list=; \
-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(pkgconfiglibdir)'; $(am__uninstall_files_from_dir)
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run 'make' without going through this Makefile.
@@ -745,7 +719,7 @@ check: check-recursive
 all-am: Makefile $(DATA)
 installdirs: installdirs-recursive
 installdirs-am:
-	for dir in "$(DESTDIR)$(docdir)" "$(DESTDIR)$(pkgconfiglibdir)"; do \
+	for dir in "$(DESTDIR)$(docdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-recursive
@@ -800,7 +774,7 @@ info: info-recursive
 
 info-am:
 
-install-data-am: install-docDATA install-pkgconfiglibDATA
+install-data-am: install-docDATA
 
 install-dvi: install-dvi-recursive
 
@@ -846,7 +820,7 @@ ps: ps-recursive
 
 ps-am:
 
-uninstall-am: uninstall-docDATA uninstall-pkgconfiglibDATA
+uninstall-am: uninstall-docDATA
 
 .MAKE: $(am__recursive_targets) install-am install-strip
 
@@ -858,22 +832,19 @@ uninstall-am: uninstall-docDATA uninstall-pkgconfiglibDATA
 	install-am install-data install-data-am install-docDATA \
 	install-dvi install-dvi-am install-exec install-exec-am \
 	install-html install-html-am install-info install-info-am \
-	install-man install-pdf install-pdf-am \
-	install-pkgconfiglibDATA install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
-	installdirs-am maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am \
-	ps ps-am tags tags-am uninstall uninstall-am uninstall-docDATA \
-	uninstall-pkgconfiglibDATA
+	install-man install-pdf install-pdf-am install-ps \
+	install-ps-am install-strip installcheck installcheck-am \
+	installdirs installdirs-am maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-generic \
+	mostlyclean-libtool pdf pdf-am ps ps-am tags tags-am uninstall \
+	uninstall-am uninstall-docDATA
 
 .PRECIOUS: Makefile
 
 
-.PHONY: test unitTest doc javadoc astyle cppcheck cppcheck-config
+.PHONY: test doc javadoc astyle cppcheck cppcheck-config
 
-test: unitTest
-
-unitTest: all
+test: all
 	cd test; $(MAKE) test
 
 doc :

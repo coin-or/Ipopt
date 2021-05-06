@@ -546,11 +546,11 @@ fi
 AC_COIN_FINALIZE_FLAGS([IpoptLib IpoptAmplInterfaceLib SIpoptAmplInterfaceLib])
 
 AC_CONFIG_FILES([Makefile
+		 src/ipopt.pc
 		 src/Makefile
 		 src/Apps/AmplSolver/Makefile
 		 test/Makefile
 		 test/run_unitTests
-		 ipopt.pc
 		 doc/Doxyfile
 		 examples/Cpp_example/Makefile
 		 examples/recursive_nlp/Makefile
