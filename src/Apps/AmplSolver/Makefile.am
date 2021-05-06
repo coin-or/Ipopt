@@ -32,4 +32,4 @@ includeipoptdir = $(includedir)/coin-or
 includeipopt_HEADERS = AmplTNLP.hpp
 
 pkgconfiglibdir = $(libdir)/pkgconfig
-pkgconfiglib_DATA = ../../../ipoptamplinterface.pc
+pkgconfiglib_DATA = ipoptamplinterface.pc

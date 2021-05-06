@@ -27222,7 +27222,7 @@ printf "%s\n" "$as_me: SIPOPTAMPLINTERFACELIB_CFLAGS: \"${SIPOPTAMPLINTERFACELIB
 
 
 
-ac_config_files="$ac_config_files Makefile src/ipopt.pc src/Makefile src/Apps/AmplSolver/Makefile test/Makefile test/run_unitTests doc/Doxyfile examples/Cpp_example/Makefile examples/recursive_nlp/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile tutorial/CodingExercise/C/1-skeleton/Makefile tutorial/CodingExercise/C/2-mistake/Makefile tutorial/CodingExercise/C/3-solution/Makefile tutorial/CodingExercise/Cpp/1-skeleton/Makefile tutorial/CodingExercise/Cpp/2-mistake/Makefile tutorial/CodingExercise/Cpp/3-solution/Makefile tutorial/CodingExercise/Matlab/1-skeleton/startup.m tutorial/CodingExercise/Matlab/2-mistake/startup.m tutorial/CodingExercise/Matlab/3-solution/startup.m"
+ac_config_files="$ac_config_files Makefile src/ipopt.pc src/Makefile src/Apps/AmplSolver/Makefile src/Apps/AmplSolver/ipoptamplinterface.pc test/Makefile test/run_unitTests doc/Doxyfile examples/Cpp_example/Makefile examples/recursive_nlp/Makefile examples/hs071_cpp/Makefile examples/hs071_c/Makefile examples/ScalableProblems/Makefile tutorial/CodingExercise/C/1-skeleton/Makefile tutorial/CodingExercise/C/2-mistake/Makefile tutorial/CodingExercise/C/3-solution/Makefile tutorial/CodingExercise/Cpp/1-skeleton/Makefile tutorial/CodingExercise/Cpp/2-mistake/Makefile tutorial/CodingExercise/Cpp/3-solution/Makefile tutorial/CodingExercise/Matlab/1-skeleton/startup.m tutorial/CodingExercise/Matlab/2-mistake/startup.m tutorial/CodingExercise/Matlab/3-solution/startup.m"
 
 
 if test -n "$F77" ; then
@@ -27262,11 +27262,6 @@ case $build in
 
     ;;
 esac
-
-if test "$coin_has_asl" = yes ; then
-  ac_config_files="$ac_config_files ipoptamplinterface.pc:src/Apps/AmplSolver/ipoptamplinterface.pc.in"
-
-fi
 
 ac_config_headers="$ac_config_headers src/Common/config.h src/Common/config_ipopt.h"
 
@@ -28642,6 +28637,7 @@ do
     "src/ipopt.pc") CONFIG_FILES="$CONFIG_FILES src/ipopt.pc" ;;
     "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
     "src/Apps/AmplSolver/Makefile") CONFIG_FILES="$CONFIG_FILES src/Apps/AmplSolver/Makefile" ;;
+    "src/Apps/AmplSolver/ipoptamplinterface.pc") CONFIG_FILES="$CONFIG_FILES src/Apps/AmplSolver/ipoptamplinterface.pc" ;;
     "test/Makefile") CONFIG_FILES="$CONFIG_FILES test/Makefile" ;;
     "test/run_unitTests") CONFIG_FILES="$CONFIG_FILES test/run_unitTests" ;;
     "doc/Doxyfile") CONFIG_FILES="$CONFIG_FILES doc/Doxyfile" ;;
@@ -28678,7 +28674,6 @@ do
     "contrib/sIPOPT/examples/redhess_cpp/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/sIPOPT/examples/redhess_cpp/Makefile" ;;
     "contrib/RInterface/src/Makevars.win") CONFIG_FILES="$CONFIG_FILES contrib/RInterface/src/Makevars.win:contrib/RInterface/src/Makevars.in" ;;
     "contrib/RInterface/src/Makevars") CONFIG_FILES="$CONFIG_FILES contrib/RInterface/src/Makevars" ;;
-    "ipoptamplinterface.pc") CONFIG_FILES="$CONFIG_FILES ipoptamplinterface.pc:src/Apps/AmplSolver/ipoptamplinterface.pc.in" ;;
     "src/Common/config.h") CONFIG_HEADERS="$CONFIG_HEADERS src/Common/config.h" ;;
     "src/Common/config_ipopt.h") CONFIG_HEADERS="$CONFIG_HEADERS src/Common/config_ipopt.h" ;;
 

@@ -133,7 +133,7 @@ CONFIG_CLEAN_FILES = doc/Doxyfile examples/Cpp_example/Makefile \
 	contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile \
 	contrib/sIPOPT/examples/redhess_cpp/Makefile \
 	contrib/RInterface/src/Makevars.win \
-	contrib/RInterface/src/Makevars ipoptamplinterface.pc
+	contrib/RInterface/src/Makevars
 CONFIG_CLEAN_VPATH_FILES = contrib/RInterface/DESCRIPTION \
 	contrib/RInterface/NAMESPACE contrib/RInterface/inst/CITATION \
 	contrib/RInterface/inst/doc/ipoptr.Rnw \
@@ -575,8 +575,6 @@ contrib/sIPOPT/examples/redhess_cpp/Makefile: $(top_builddir)/config.status $(to
 contrib/RInterface/src/Makevars.win: $(top_builddir)/config.status $(top_srcdir)/contrib/RInterface/src/Makevars.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 contrib/RInterface/src/Makevars: $(top_builddir)/config.status $(top_srcdir)/contrib/RInterface/src/Makevars.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-ipoptamplinterface.pc: $(top_builddir)/config.status $(top_srcdir)/src/Apps/AmplSolver/ipoptamplinterface.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 mostlyclean-libtool:

@@ -107,7 +107,7 @@ DIST_COMMON = $(srcdir)/Makefile.am $(includeipopt_HEADERS)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/src/Common/config.h \
 	$(top_builddir)/src/Common/config_ipopt.h
-CONFIG_CLEAN_FILES =
+CONFIG_CLEAN_FILES = ipoptamplinterface.pc
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(libdir)" \
 	"$(DESTDIR)$(pkgconfiglibdir)" "$(DESTDIR)$(includeipoptdir)"
@@ -408,7 +408,7 @@ AM_CPPFLAGS = \
 includeipoptdir = $(includedir)/coin-or
 includeipopt_HEADERS = AmplTNLP.hpp
 pkgconfiglibdir = $(libdir)/pkgconfig
-pkgconfiglib_DATA = ../../../ipoptamplinterface.pc
+pkgconfiglib_DATA = ipoptamplinterface.pc
 all: all-am
 
 .SUFFIXES:
@@ -442,6 +442,8 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
+ipoptamplinterface.pc: $(top_builddir)/config.status $(srcdir)/ipoptamplinterface.pc.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 install-binPROGRAMS: $(bin_PROGRAMS)
 	@$(NORMAL_INSTALL)
 	@list='$(bin_PROGRAMS)'; test -n "$(bindir)" || list=; \

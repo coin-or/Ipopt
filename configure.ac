@@ -549,6 +549,7 @@ AC_CONFIG_FILES([Makefile
 		 src/ipopt.pc
 		 src/Makefile
 		 src/Apps/AmplSolver/Makefile
+		 src/Apps/AmplSolver/ipoptamplinterface.pc
 		 test/Makefile
 		 test/run_unitTests
 		 doc/Doxyfile
@@ -611,10 +612,6 @@ case $build in
     AC_CONFIG_FILES([contrib/RInterface/src/Makevars])
     ;;
 esac
-
-if test "$coin_has_asl" = yes ; then
-  AC_CONFIG_FILES([ipoptamplinterface.pc:src/Apps/AmplSolver/ipoptamplinterface.pc.in])
-fi
 
 AC_CONFIG_HEADERS([src/Common/config.h src/Common/config_ipopt.h])
 
