@@ -16,14 +16,14 @@
 // here we assume that float corresponds to Fortran's single precision
 /// @since 3.14.0
 #define IPOPT_DECL_MC19A(x) void (x)( \
-   const ipfint* N,   \
-   const ipfint* NZ,  \
-   ipnumber*     A,   \
-   ipfint*       IRN, \
-   ipfint*       ICN, \
-   float*        R,   \
-   float*        C,   \
-   float*        W    \
+   const ipindex* N,   \
+   const ipindex* NZ,  \
+   ipnumber*      A,   \
+   ipindex*       IRN, \
+   ipindex*       ICN, \
+   float*         R,   \
+   float*         C,   \
+   float*         W    \
 )
 
 namespace Ipopt

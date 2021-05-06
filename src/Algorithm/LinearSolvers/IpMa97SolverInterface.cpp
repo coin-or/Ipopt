@@ -35,11 +35,11 @@
 extern "C"
 {
    extern void IPOPT_HSL_FUNCP(dump_mat_csc, DUMP_MAT_CSC) (
-      const ipfint* factidx,
-      const ipfint* n,
-      const ipfint* ptr,
-      const ipfint* row,
-      const ipfnumber* a
+      const ipindex*  factidx,
+      const ipindex*  n,
+      const ipindex*  ptr,
+      const ipindex*  row,
+      const ipnumber* a
    );
 }
 #endif

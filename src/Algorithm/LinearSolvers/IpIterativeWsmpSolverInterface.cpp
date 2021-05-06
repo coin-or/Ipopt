@@ -16,23 +16,23 @@
 extern "C"
 {
    void F77_FUNC(wsetmaxthrds, WSETMAXTHRDS)(
-      const ipfint* NTHREADS
+      const ipindex* NTHREADS
    );
 
    void F77_FUNC(wismp, WISMP)(
-      const ipfint* N,
-      const ipfint* IA,
-      const ipfint* JA,
-      const double* AVALS,
-      double*       B,
-      const ipfint* LDB,
+      const ipindex* N,
+      const ipindex* IA,
+      const ipindex* JA,
+      const double*  AVALS,
+      double*        B,
+      const ipindex* LDB,
       double*        X,
-      const ipfint* LDX,
-      const ipfint* NRHS,
-      double*       RMISC,
-      double*       CVGH,
-      ipfint*       IPARM,
-      double*       DPARM
+      const ipindex* LDX,
+      const ipindex* NRHS,
+      double*        RMISC,
+      double*        CVGH,
+      ipindex*       IPARM,
+      double*        DPARM
    );
 
    void F77_FUNC_(wsmp_clear, WSMP_CLEAR)(void);
@@ -50,7 +50,7 @@ IterativeWsmpSolverInterface::IterativeWsmpSolverInterface()
 {
    DBG_START_METH("IterativeWsmpSolverInterface::IterativeWsmpSolverInterface()", dbg_verbosity);
 
-   IPARM_ = new ipfint[64];
+   IPARM_ = new Index[64];
    DPARM_ = new double[64];
 }
 
@@ -148,7 +148,7 @@ bool IterativeWsmpSolverInterface::InitializeImpl(
 
 #if 1
    // Set the number of threads
-   ipfint NTHREADS = wsmp_num_threads_;
+   Index NTHREADS = wsmp_num_threads_;
    F77_FUNC(wsetmaxthrds, WSETMAXTHRDS)(&NTHREADS);
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "WSMP will use %d threads.\n", wsmp_num_threads_);
@@ -161,7 +161,7 @@ bool IterativeWsmpSolverInterface::InitializeImpl(
    IPARM_[0] = 0;
    IPARM_[1] = 0;
    IPARM_[2] = 0;
-   ipfint idmy = 0;
+   Index idmy = 0;
    double ddmy = 0.;
    F77_FUNC(wismp, WISMP)(&idmy, &idmy, &idmy, &ddmy, &ddmy, &idmy, &ddmy, &idmy, &idmy, &ddmy, &ddmy, IPARM_, DPARM_);
 
@@ -286,10 +286,10 @@ ESymSolverStatus IterativeWsmpSolverInterface::InternalSymFact(
    }
 
    // Call WISMP for ordering and symbolic factorization
-   ipfint N = dim_;
+   Index N = dim_;
    IPARM_[1] = 1; // ordering
    IPARM_[2] = 1; // symbolic factorization
-   ipfint idmy = 0;
+   Index idmy = 0;
    double ddmy = 0.;
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                   "Calling WISMP-1-1 for symbolic analysis.\n");
@@ -392,11 +392,11 @@ ESymSolverStatus IterativeWsmpSolverInterface::Factorization(
    }
 
    // Call WSSMP for numerical factorization
-   ipfint N = dim_;
+   Index N = dim_;
    IPARM_[1] = 2; // value analysis
    IPARM_[2] = 3; // preconditioner generation
    DPARM_[10] = wsmp_pivtol_; // set current pivot tolerance
-   ipfint idmy = 0;
+   Index idmy = 0;
    double ddmy = 0.;
 
    // set drop tolerances for now....
@@ -494,12 +494,12 @@ ESymSolverStatus IterativeWsmpSolverInterface::Solve(
    // Call WISMP to solve for some right hand sides.  The solution
    // will be stored in rhs_vals, and we need to make a copy of the
    // original right hand side before the call.
-   ipfint N = dim_;
-   ipfint LDB = dim_;
+   Index N = dim_;
+   Index LDB = dim_;
    double* RHS = new double[dim_ * nrhs];
    IpBlasCopy(dim_ * nrhs, rhs_vals, 1, RHS, 1);
-   ipfint LDX = dim_; // Q: Do we have to zero out solution?
-   ipfint NRHS = nrhs;
+   Index LDX = dim_; // Q: Do we have to zero out solution?
+   Index NRHS = nrhs;
    IPARM_[1] = 4; // Iterative solver solution
    IPARM_[2] = 4;
 

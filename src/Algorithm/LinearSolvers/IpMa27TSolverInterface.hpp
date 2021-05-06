@@ -13,60 +13,60 @@
 
 /// @since 3.14.0
 #define IPOPT_DECL_MA27A(x) void (x)( \
-   ipfint*       N,     \
-   ipfint*       NZ,    \
-   const ipfint* IRN,   \
-   const ipfint* ICN,   \
-   ipfint*       IW,    \
-   ipfint*       LIW,   \
-   ipfint*       IKEEP, \
-   ipfint*       IW1,   \
-   ipfint*       NSTEPS,\
-   ipfint*       IFLAG, \
-   ipfint*       ICNTL, \
-   ipnumber*     CNTL,  \
-   ipfint*       INFO,  \
-   ipnumber*     OPS    \
+   ipindex*       N,     \
+   ipindex*       NZ,    \
+   const ipindex* IRN,   \
+   const ipindex* ICN,   \
+   ipindex*       IW,    \
+   ipindex*       LIW,   \
+   ipindex*       IKEEP, \
+   ipindex*       IW1,   \
+   ipindex*       NSTEPS,\
+   ipindex*       IFLAG, \
+   ipindex*       ICNTL, \
+   ipnumber*      CNTL,  \
+   ipindex*       INFO,  \
+   ipnumber*      OPS    \
 )
 
 /// @since 3.14.0
 #define IPOPT_DECL_MA27B(x) void (x)( \
-   ipfint*       N,      \
-   ipfint*       NZ,     \
-   const ipfint* IRN,    \
-   const ipfint* ICN,    \
-   ipnumber*     A,      \
-   ipfint*       LA,     \
-   ipfint*       IW,     \
-   ipfint*       LIW,    \
-   ipfint*       IKEEP,  \
-   ipfint*       NSTEPS, \
-   ipfint*       MAXFRT, \
-   ipfint*       IW1,    \
-   ipfint*       ICNTL,  \
-   ipnumber*     CNTL,   \
-   ipfint*       INFO    \
+   ipindex*       N,      \
+   ipindex*       NZ,     \
+   const ipindex* IRN,    \
+   const ipindex* ICN,    \
+   ipnumber*      A,      \
+   ipindex*       LA,     \
+   ipindex*       IW,     \
+   ipindex*       LIW,    \
+   ipindex*       IKEEP,  \
+   ipindex*       NSTEPS, \
+   ipindex*       MAXFRT, \
+   ipindex*       IW1,    \
+   ipindex*       ICNTL,  \
+   ipnumber*      CNTL,   \
+   ipindex*       INFO    \
 )
 
 /// @since 3.14.0
 #define IPOPT_DECL_MA27C(x) void (x)( \
-   ipfint*   N,      \
-   ipnumber* A,      \
-   ipfint*   LA,     \
-   ipfint*   IW,     \
-   ipfint*   LIW,    \
-   ipnumber* W,      \
-   ipfint*   MAXFRT, \
-   ipnumber* RHS,    \
-   ipfint*   IW1,    \
-   ipfint*   NSTEPS, \
-   ipfint*   ICNTL,  \
-   ipnumber* CNTL    \
+   ipindex*   N,      \
+   ipnumber*  A,      \
+   ipindex*   LA,     \
+   ipindex*   IW,     \
+   ipindex*   LIW,    \
+   ipnumber*  W,      \
+   ipindex*   MAXFRT, \
+   ipnumber*  RHS,    \
+   ipindex*   IW1,    \
+   ipindex*   NSTEPS, \
+   ipindex*   ICNTL,  \
+   ipnumber*  CNTL    \
 )
 
 /// @since 3.14.0
 #define IPOPT_DECL_MA27I(x) void (x)( \
-   ipfint*   ICNTL, \
+   ipindex*  ICNTL, \
    ipnumber* CNTL   \
 )
 
@@ -242,24 +242,24 @@ private:
     */
    ///@{
    /** integer control values */
-   ipfint icntl_[30];
+   Index icntl_[30];
    /** real control values */
    Number cntl_[5];
 
    /** length of integer work space */
-   ipfint liw_;
+   Index liw_;
    /** integer work space */
-   ipfint* iw_;
+   Index* iw_;
 
    /** MA27's IKEEP */
-   ipfint* ikeep_;
+   Index* ikeep_;
    /** MA27's NSTEPS */
-   ipfint nsteps_;
+   Index nsteps_;
    /** MA27's MAXFRT */
-   ipfint maxfrt_;
+   Index maxfrt_;
 
    /** length LA of A */
-   ipfint la_;
+   Index la_;
    /** factor A of matrix */
    Number* a_;
 

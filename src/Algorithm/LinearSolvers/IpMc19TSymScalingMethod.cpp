@@ -106,10 +106,10 @@ bool Mc19TSymScalingMethod::ComputeSymTScalingFactors(
    }
    // First copy the symmetric matrix into an unsymmetric (MA28)
    // format matrix
-   ipfint* AIRN2 = new ipfint[2 * nnz];
-   ipfint* AJCN2 = new ipfint[2 * nnz];
+   Index* AIRN2 = new Index[2 * nnz];
+   Index* AJCN2 = new Index[2 * nnz];
    Number* A2 = new Number[2 * nnz];
-   ipfint nnz2 = 0;
+   Index nnz2 = 0;
    for( Index i = 0; i < nnz; i++ )
    {
       // ToDo decide if small values in A2 should be set to 0,

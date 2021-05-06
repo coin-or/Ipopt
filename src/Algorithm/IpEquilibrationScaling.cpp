@@ -198,17 +198,11 @@ void EquilibrationScaling::DetermineScalingParametersImpl(
    }
 
    // Get the sparsity structure
-   ipfint* AIRN = new ipfint[nnz_jac_c + nnz_jac_d + nx];
-   ipfint* AJCN = new ipfint[nnz_jac_c + nnz_jac_d + nx];
-   if( sizeof(ipfint) == sizeof(Index) )
-   {
-      TripletHelper::FillRowCol(nnz_jac_c, *jac_c, &AIRN[0], &AJCN[0]);
-      TripletHelper::FillRowCol(nnz_jac_d, *jac_d, &AIRN[nnz_jac_c], &AJCN[nnz_jac_c], nc);
-   }
-   else
-   {
-      THROW_EXCEPTION(INTERNAL_ABORT, "Need to implement missing code in EquilibriationScaling.");
-   }
+   Index* AIRN = new Index[nnz_jac_c + nnz_jac_d + nx];
+   Index* AJCN = new Index[nnz_jac_c + nnz_jac_d + nx];
+   TripletHelper::FillRowCol(nnz_jac_c, *jac_c, &AIRN[0], &AJCN[0]);
+   TripletHelper::FillRowCol(nnz_jac_d, *jac_d, &AIRN[nnz_jac_c], &AJCN[nnz_jac_c], nc);
+
    // sort out the zero entries in objective function gradient
    Index nnz_grad_f = 0;
    const Index idx = nnz_jac_c + nnz_jac_d;
@@ -224,11 +218,11 @@ void EquilibrationScaling::DetermineScalingParametersImpl(
    }
 
    // Now call MC19 to compute the scaling factors
-   const ipfint N = Max(nc + nd + 1, nx);
+   const Index N = Max(nc + nd + 1, nx);
    float* R = new float[N];
    float* C = new float[N];
    float* W = new float[5 * N];
-   const ipfint NZ = nnz_jac_c + nnz_jac_d + nnz_grad_f;
+   const Index NZ = nnz_jac_c + nnz_jac_d + nnz_grad_f;
    mc19a(&N, &NZ, avrg_values, AJCN, AIRN, C, R, W);
 
    delete[] W;

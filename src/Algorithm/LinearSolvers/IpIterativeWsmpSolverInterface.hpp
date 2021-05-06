@@ -153,7 +153,7 @@ private:
    /** @name Solver specific information */
    ///@{
    /** Integer parameter array for WISMP. */
-   ipfint* IPARM_;
+   ipindex* IPARM_;
    /** Double precision parameter array for WISMP. */
    double* DPARM_;
    ///@}

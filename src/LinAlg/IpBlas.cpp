@@ -28,94 +28,94 @@ extern "C"
 {
    /** BLAS Fortran function XDOT */
    ipnumber IPOPT_BLAS_FUNCP(dot, DOT)(
-      ipfint*         n,
+      ipindex*        n,
       const ipnumber* x,
-      ipfint*         incX,
+      ipindex*        incX,
       const ipnumber* y,
-      ipfint*         incY
+      ipindex*        incY
    );
 
    /** BLAS Fortran function XNRM2 */
    ipnumber IPOPT_BLAS_FUNCP(nrm2, NRM2)(
-      ipfint*         n,
+      ipindex*        n,
       const ipnumber* x,
-      ipfint*         incX
+      ipindex*        incX
    );
 
    /** BLAS Fortran function XASUM */
    ipnumber IPOPT_BLAS_FUNCP(asum, ASUM)(
-      ipfint*         n,
+      ipindex*        n,
       const ipnumber* x,
-      ipfint*         incX
+      ipindex*        incX
    );
 
 #ifdef IPOPT_SINGLE
    /** BLAS Fortran function ISAMAX */
-   ipfint IPOPT_BLAS_FUNC(isamax, ISAMAX)(
+   ipindex IPOPT_BLAS_FUNC(isamax, ISAMAX)(
 #else
    /** BLAS Fortran function IDAMAX */
-   ipfint IPOPT_BLAS_FUNC(idamax, IDAMAX)(
+   ipindex IPOPT_BLAS_FUNC(idamax, IDAMAX)(
 #endif
-      ipfint*         n,
+      ipindex*        n,
       const ipnumber* x,
-      ipfint*         incX
+      ipindex*        incX
    );
 
    /** BLAS Fortran subroutine XCOPY */
    void IPOPT_BLAS_FUNCP(copy, COPY)(
-      ipfint*         n,
+      ipindex*        n,
       const ipnumber* x,
-      ipfint*         incX,
+      ipindex*        incX,
       ipnumber*       y,
-      ipfint*         incY
+      ipindex*        incY
    );
 
    /** BLAS Fortran subroutine XAXPY */
    void IPOPT_BLAS_FUNCP(axpy, AXPY)(
-      ipfint*         n,
+      ipindex*        n,
       const ipnumber* alpha,
       const ipnumber* x,
-      ipfint*         incX,
+      ipindex*        incX,
       ipnumber*       y,
-      ipfint*         incY
+      ipindex*        incY
    );
 
    /** BLAS Fortran subroutine XSCAL */
    void IPOPT_BLAS_FUNCP(scal, SCAL)(
-      ipfint*         n,
+      ipindex*        n,
       const ipnumber* alpha,
       const ipnumber* x,
-      ipfint*         incX
+      ipindex*        incX
    );
 
    /** BLAS Fortran subroutine XGEMV */
    void IPOPT_BLAS_FUNCP(gemv, GEMV)(
       char*           trans,
-      ipfint*         m,
-      ipfint*         n,
+      ipindex*        m,
+      ipindex*        n,
       const ipnumber* alpha,
       const ipnumber* a,
-      ipfint*         lda,
+      ipindex*        lda,
       const ipnumber* x,
-      ipfint*         incX,
+      ipindex*        incX,
       const ipnumber* beta,
       ipnumber*       y,
-      ipfint*         incY,
+      ipindex*        incY,
       int             trans_len
    );
 
    /** BLAS Fortran subroutine XSYMV */
    void IPOPT_BLAS_FUNCP(symv, SYMV)(
       char*           uplo,
-      ipfint*         n,
+      ipindex*        n,
       const ipnumber* alpha,
       const ipnumber* a,
-      ipfint*         lda,
+      ipindex*        lda,
       const ipnumber* x,
-      ipfint*         incX,
+      ipindex*        incX,
       const ipnumber* beta,
       ipnumber*       y,
-      ipfint*         incY,
+      ipindex*        incY,
       int             uplo_len
    );
 
@@ -123,17 +123,17 @@ extern "C"
    void IPOPT_BLAS_FUNCP(gemm, GEMM)(
       char*           transa,
       char*           transb,
-      ipfint*         m,
-      ipfint*         n,
-      ipfint*         k,
+      ipindex*        m,
+      ipindex*        n,
+      ipindex*        k,
       const ipnumber* alpha,
       const ipnumber* a,
-      ipfint*         lda,
+      ipindex*        lda,
       const ipnumber* b,
-      ipfint*         ldb,
+      ipindex*        ldb,
       const ipnumber* beta,
       ipnumber*       c,
-      ipfint*         ldc,
+      ipindex*        ldc,
       int             transa_len,
       int             transb_len
    );
@@ -142,14 +142,14 @@ extern "C"
    void IPOPT_BLAS_FUNCP(syrk, SYRK)(
       char*           uplo,
       char*           trans,
-      ipfint*         n,
-      ipfint*         k,
+      ipindex*        n,
+      ipindex*        k,
       const ipnumber* alpha,
       const ipnumber* a,
-      ipfint*         lda,
+      ipindex*        lda,
       const ipnumber* beta,
       ipnumber*       c,
-      ipfint*         ldc,
+      ipindex*        ldc,
       int             uplo_len,
       int             trans_len
    );
@@ -160,13 +160,13 @@ extern "C"
       char*           uplo,
       char*           transa,
       char*           diag,
-      ipfint*         m,
-      ipfint*         n,
+      ipindex*        m,
+      ipindex*        n,
       const ipnumber* alpha,
       const ipnumber* a,
-      ipfint*         lda,
+      ipindex*        lda,
       const ipnumber* b,
-      ipfint*         ldb,
+      ipindex*        ldb,
       int             side_len,
       int             uplo_len,
       int             transa_len,
@@ -186,7 +186,7 @@ Number IpBlasDot(
 {
    if( incX > 0 && incY > 0 )
    {
-      ipfint n = size, INCX = incX, INCY = incY;
+      ipindex n = size, INCX = incX, INCY = incY;
       return IPOPT_BLAS_FUNCP(dot, DOT)(&n, x, &INCX, y, &INCY);
    }
    else
@@ -208,7 +208,7 @@ Number IpBlasNrm2(
    Index         incX
 )
 {
-   ipfint n = size, INCX = incX;
+   ipindex n = size, INCX = incX;
    return IPOPT_BLAS_FUNCP(nrm2, NRM2)(&n, x, &INCX);
 }
 
@@ -218,7 +218,7 @@ Number IpBlasAsum(
    Index         incX
 )
 {
-   ipfint n = size, INCX = incX;
+   ipindex n = size, INCX = incX;
    return IPOPT_BLAS_FUNCP(asum, ASUM)(&n, x, &INCX);
 }
 
@@ -229,7 +229,7 @@ Index IpBlasIamax(
    Index         incX
 )
 {
-   ipfint n = size, INCX = incX;
+   ipindex n = size, INCX = incX;
 #ifdef IPOPT_SINGLE
    return (Index) IPOPT_BLAS_FUNC(isamax, ISAMAX)(&n, x, &INCX);
 #else
@@ -248,7 +248,7 @@ void IpBlasCopy(
 {
    if( incX > 0 )
    {
-      ipfint N = size, INCX = incX, INCY = incY;
+      ipindex N = size, INCX = incX, INCY = incY;
       IPOPT_BLAS_FUNCP(copy, COPY)(&N, x, &INCX, y, &INCY);
    }
    else if( incY == 1 )
@@ -278,7 +278,7 @@ void IpBlasAxpy(
 {
    if( incX > 0 )
    {
-      ipfint N = size, INCX = incX, INCY = incY;
+      ipindex N = size, INCX = incX, INCY = incY;
       IPOPT_BLAS_FUNCP(axpy, AXPY)(&N, &alpha, x, &INCX, y, &INCY);
    }
    else if( incY == 1 )
@@ -304,7 +304,7 @@ void IpBlasScal(
    Index   incX
 )
 {
-   ipfint N = size, INCX = incX;
+   ipindex N = size, INCX = incX;
    IPOPT_BLAS_FUNCP(scal, SCAL)(&N, &alpha, x, &INCX);
 }
 
@@ -322,7 +322,7 @@ void IpBlasGemv(
    Index         incY
 )
 {
-   ipfint M = nCols, N = nRows, LDA = ldA, INCX = incX, INCY = incY;
+   ipindex M = nCols, N = nRows, LDA = ldA, INCX = incX, INCY = incY;
 
    char TRANS;
    if( trans )
@@ -348,7 +348,7 @@ void IpBlasSymv(
    Index         incY
 )
 {
-   ipfint N = n, LDA = ldA, INCX = incX, INCY = incY;
+   ipindex N = n, LDA = ldA, INCX = incX, INCY = incY;
 
    char UPLO = 'L';
    IPOPT_BLAS_FUNCP(symv, SYMV)(&UPLO, &N, &alpha, A, &LDA, x, &INCX, &beta, y, &INCY, 1);
@@ -370,7 +370,7 @@ void IpBlasGemm(
    Index         ldC
 )
 {
-   ipfint M = m, N = n, K = k, LDA = ldA, LDB = ldB, LDC = ldC;
+   ipindex M = m, N = n, K = k, LDA = ldA, LDB = ldB, LDC = ldC;
 
    char TRANSA;
    if( transa )
@@ -405,7 +405,7 @@ void IpBlasSyrk(
    Index         ldC
 )
 {
-   ipfint N = ndim, K = nrank, LDA = ldA, LDC = ldC;
+   ipindex N = ndim, K = nrank, LDA = ldA, LDC = ldC;
 
    char UPLO = 'L';
    char TRANS;
@@ -431,7 +431,7 @@ void IpBlasTrsm(
    Index         ldB
 )
 {
-   ipfint M = ndim, N = nrhs, LDA = ldA, LDB = ldB;
+   ipindex M = ndim, N = nrhs, LDA = ldA, LDB = ldB;
 
    char SIDE = 'L';
    char UPLO = 'L';

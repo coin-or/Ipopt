@@ -77,7 +77,7 @@ IterativePardisoSolverInterface::IterativePardisoSolverInterface(
    DBG_START_METH("IterativePardisoSolverInterface::IterativePardisoSolverInterface()", dbg_verbosity);
 
    PT_ = new void* [64];
-   IPARM_ = new ipfint[64];
+   IPARM_ = new Index[64];
    DPARM_ = new Number[64];
 }
 
@@ -89,11 +89,11 @@ IterativePardisoSolverInterface::~IterativePardisoSolverInterface()
    // Tell Pardiso to release all memory
    if( initialized_ )
    {
-      ipfint PHASE = -1;
-      ipfint N = dim_;
-      ipfint NRHS = 0;
-      ipfint ERROR;
-      ipfint idmy;
+      Index PHASE = -1;
+      Index N = dim_;
+      Index NRHS = 0;
+      Index ERROR;
+      Index idmy;
       Number ddmy;
       pardiso(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_,
               &MSGLVL_, &ddmy, &ddmy, &ERROR, DPARM_);
@@ -184,11 +184,11 @@ bool IterativePardisoSolverInterface::InitializeImpl(
    // Tell Pardiso to release all memory if it had been used before
    if( initialized_ )
    {
-      ipfint PHASE = -1;
-      ipfint N = dim_;
-      ipfint NRHS = 0;
-      ipfint ERROR;
-      ipfint idmy;
+      Index PHASE = -1;
+      Index N = dim_;
+      Index NRHS = 0;
+      Index ERROR;
+      Index idmy;
       Number ddmy;
       pardiso(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_,
               &MSGLVL_, &ddmy, &ddmy, &ERROR, DPARM_);
@@ -205,8 +205,8 @@ bool IterativePardisoSolverInterface::InitializeImpl(
 
    // Call Pardiso's initialization routine
    IPARM_[0] = 0;  // Tell it to fill IPARM with default values(?)
-   ipfint ERROR = 0;
-   ipfint SOLVER = 1; // initialze only direct solver
+   Index ERROR = 0;
+   Index SOLVER = 1; // initialze only direct solver
    pardisoinit(PT_, &MTYPE_, &SOLVER, IPARM_, DPARM_, &ERROR);
 
    // Set some parameters for Pardiso
@@ -395,8 +395,8 @@ static void write_iajaa_matrix(
       char mat_name[128];
       char mat_pref[32];
 
-      ipfint NNZ = ia[N] - 1;
-      ipfint i;
+      Index NNZ = ia[N] - 1;
+      Index i;
 
       if( getenv("IPOPT_WRITE_PREFIX") )
       {
@@ -450,15 +450,15 @@ ESymSolverStatus IterativePardisoSolverInterface::Factorization(
    DBG_START_METH("IterativePardisoSolverInterface::Factorization", dbg_verbosity);
 
    // Call Pardiso to do the factorization
-   ipfint PHASE;
-   ipfint N = dim_;
-   ipfint PERM;   // This should not be accessed by Pardiso
-   ipfint NRHS = 0;
+   Index PHASE;
+   Index N = dim_;
+   Index PERM;   // This should not be accessed by Pardiso
+   Index NRHS = 0;
    Number B;  // This should not be accessed by Pardiso in factorization
    // phase
    Number X;  // This should not be accessed by Pardiso in factorization
    // phase
-   ipfint ERROR;
+   Index ERROR;
 
    bool done = false;
    // bool just_performed_symbolic_factorization = false;
@@ -659,13 +659,13 @@ ESymSolverStatus IterativePardisoSolverInterface::Solve(
       IpData().TimingStats().LinearSystemBackSolve().Start();
    }
    // Call Pardiso to do the solve for the given right-hand sides
-   ipfint PHASE = 33;
-   ipfint N = dim_;
-   ipfint PERM;   // This should not be accessed by Pardiso
-   ipfint NRHS = nrhs;
+   Index PHASE = 33;
+   Index N = dim_;
+   Index PERM;   // This should not be accessed by Pardiso
+   Index NRHS = nrhs;
    Number* X = new Number[nrhs * dim_];
    Number* ORIG_RHS = new Number[nrhs * dim_];
-   ipfint ERROR;
+   Index ERROR;
 
    // Initialize solution with zero and save right hand side
    for( int i = 0; i < N; i++ )

@@ -125,10 +125,10 @@ private:
 #ifdef PARDISO_MATCHING_PREPROCESS
    /**  @name Arrays for storing the values of a second matrix that has been already reordered. */
    ///@{
-   ipfint* ia2;
-   ipfint* ja2;
+   Index* ia2;
+   Index* ja2;
    double* a2_;
-   ipfint* perm2;
+   Index* perm2;
    double* scale2;
    ///@}
 #endif
@@ -194,15 +194,15 @@ private:
    /** @name Solver specific information */
    ///@{
    /** Integer parameter array for WSSMP. */
-   ipfint* IPARM_;
+   Index* IPARM_;
    /** Double precision parameter array for WSSMP. */
    double* DPARM_;
    /** WSSMP's permutation vector */
-   ipfint* PERM_;
+   Index* PERM_;
    /** WSSMP's inverse permutation vector */
-   ipfint* INVP_;
+   Index* INVP_;
    /** WSSMP's internal MRP array */
-   ipfint* MRP_;
+   Index* MRP_;
    ///@}
 
    /**@name PARDISO function pointer

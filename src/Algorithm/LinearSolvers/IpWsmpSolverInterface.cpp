@@ -15,25 +15,25 @@
 extern "C"
 {
    void IPOPT_WSMP_FUNC(wsetmaxthrds, WSETMAXTHRDS)(
-      const ipfint* NTHREADS
+      const ipindex* NTHREADS
    );
 
    void IPOPT_WSMP_FUNC(wssmp, WSSMP)(
-      const ipfint* N,
-      const ipfint* IA,
-      const ipfint* JA,
-      const double* AVALS,
-      double*       DIAG,
-      ipfint*       PERM,
-      ipfint*       INVP,
-      double*       B,
-      const ipfint* LDB,
-      const ipfint* NRHS,
-      double*       AUX,
-      const ipfint* NAUX,
-      ipfint*       MRP,
-      ipfint*       IPARM,
-      double*       DPARM
+      const ipindex* N,
+      const ipindex* IA,
+      const ipindex* JA,
+      const double*  AVALS,
+      double*        DIAG,
+      ipindex*       PERM,
+      ipindex*       INVP,
+      double*        B,
+      const ipindex* LDB,
+      const ipindex* NRHS,
+      double*        AUX,
+      const ipindex* NAUX,
+      ipindex*       MRP,
+      ipindex*       IPARM,
+      double*        DPARM
    );
 
    void IPOPT_WSMP_FUNC_(wsmp_clear, WSMP_CLEAR)(void);
@@ -67,7 +67,7 @@ WsmpSolverInterface::WsmpSolverInterface(
 {
    DBG_START_METH("WsmpSolverInterface::WsmpSolverInterface()", dbg_verbosity);
 
-   IPARM_ = new ipfint[64];
+   IPARM_ = new Index[64];
    DPARM_ = new double[64];
 }
 
@@ -237,7 +237,7 @@ bool WsmpSolverInterface::InitializeImpl(
 #endif
 
    // Set the number of threads
-   ipfint NTHREADS = wsmp_num_threads_;
+   Index NTHREADS = wsmp_num_threads_;
    IPOPT_WSMP_FUNC(wsetmaxthrds, WSETMAXTHRDS)(&NTHREADS);
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "WSMP will use %d threads.\n", wsmp_num_threads_);
@@ -246,7 +246,7 @@ bool WsmpSolverInterface::InitializeImpl(
    IPARM_[0] = 0;
    IPARM_[1] = 0;
    IPARM_[2] = 0;
-   ipfint idmy = 0;
+   Index idmy = 0;
    double ddmy = 0.;
    IPOPT_WSMP_FUNC(wssmp, WSSMP)(&idmy, &idmy, &idmy, &ddmy, &ddmy, &idmy, &idmy, &ddmy, &idmy, &idmy, &ddmy, &idmy, &idmy,
                                  IPARM_, DPARM_);
@@ -391,11 +391,11 @@ ESymSolverStatus WsmpSolverInterface::InternalSymFact(
    INVP_ = NULL;
    delete[] MRP_;
    MRP_ = NULL;
-   PERM_ = new ipfint[dim_];
-   INVP_ = new ipfint[dim_];
-   MRP_ = new ipfint[dim_];
+   PERM_ = new Index[dim_];
+   INVP_ = new Index[dim_];
+   MRP_ = new Index[dim_];
 
-   ipfint N = dim_;
+   Index N = dim_;
 
 #ifdef PARDISO_MATCHING_PREPROCESS
 
@@ -414,12 +414,12 @@ ESymSolverStatus WsmpSolverInterface::InternalSymFact(
    delete[] scale2;
    scale2 = NULL;
 
-   ia2 = new ipfint[N + 1];
-   ja2 = new ipfint[nonzeros_];
+   ia2 = new Index[N + 1];
+   ja2 = new Index[nonzeros_];
    a2_ = new double[nonzeros_];
-   perm2 = new ipfint[N];
+   perm2 = new Index[N];
    scale2 = new double[N];
-   ipfint* tmp2_ = new ipfint[N];
+   Index* tmp2_ = new Index[N];
 
    smat_reordering_pardiso_wsmp(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp2_, 0);
 
@@ -428,7 +428,7 @@ ESymSolverStatus WsmpSolverInterface::InternalSymFact(
 #endif
 
    // Call WSSMP for ordering and symbolic factorization
-   ipfint NAUX = 0;
+   Index NAUX = 0;
    IPARM_[1] = 1; // ordering
    IPARM_[2] = 2; // symbolic factorization
 #ifdef PARDISO_MATCHING_PREPROCESS
@@ -440,7 +440,7 @@ ESymSolverStatus WsmpSolverInterface::InternalSymFact(
    // =6 limited pivots
    DPARM_[21] = 2e-8;// set pivot perturbation
 #endif
-   ipfint idmy = 0;
+   Index idmy = 0;
    double ddmy = 0.;
 
    if( wsmp_no_pivoting_ )
@@ -558,17 +558,17 @@ ESymSolverStatus WsmpSolverInterface::Factorization(
    }
 
    // Call WSSMP for numerical factorization
-   ipfint N = dim_;
-   ipfint NAUX = 0;
+   Index N = dim_;
+   Index NAUX = 0;
    IPARM_[1] = 3; // numerical factorization
    IPARM_[2] = 3; // numerical factorization
    DPARM_[10] = wsmp_pivtol_; // set current pivot tolerance
-   ipfint idmy = 0;
+   Index idmy = 0;
    double ddmy = 0.;
 
 #ifdef PARDISO_MATCHING_PREPROCESS
    {
-      ipfint* tmp2_ = new ipfint[N];
+      Index* tmp2_ = new Index[N];
       smat_reordering_pardiso_wsmp(&N, ia, ja, a_, ia2, ja2, a2_, perm2, scale2, tmp2_, 1);
       delete[] tmp2_;
    }
@@ -673,10 +673,10 @@ ESymSolverStatus WsmpSolverInterface::Solve(
    // Call WSMP to solve for some right hand sides (including
    // iterative refinement)
    // ToDo: Make iterative refinement an option?
-   ipfint N = dim_;
-   ipfint LDB = dim_;
-   ipfint NRHS = nrhs;
-   ipfint NAUX = 0;
+   Index N = dim_;
+   Index LDB = dim_;
+   Index NRHS = nrhs;
+   Index NAUX = 0;
    IPARM_[1] = 4; // Forward and Backward Elimination
    IPARM_[2] = 5; // Iterative refinement
    IPARM_[5] = 1;
@@ -803,12 +803,12 @@ ESymSolverStatus WsmpSolverInterface::DetermineDependentRows(
 
    // Call WSSMP for numerical factorization to detect degenerate
    // rows/columns
-   ipfint N = dim_;
-   ipfint NAUX = 0;
+   Index N = dim_;
+   Index NAUX = 0;
    IPARM_[1] = 3; // numerical factorization
    IPARM_[2] = 3; // numerical factorization
    DPARM_[10] = wsmp_pivtol_; // set current pivot tolerance
-   ipfint idmy = 0;
+   Index idmy = 0;
    double ddmy = 0.;
 
 #ifdef PARDISO_MATCHING_PREPROCESS

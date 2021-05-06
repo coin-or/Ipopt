@@ -17,48 +17,48 @@
 /* assuming PARDISO 4.0.0 or above */
 /// @since 3.14.0
 #define IPOPT_DECL_PARDISOINIT(x) void (x)( \
-   void*         PT,     \
-   const ipfint* MTYPE,  \
-   const ipfint* SOLVER, \
-   ipfint*       IPARM,  \
-   ipnumber*     DPARM,  \
-   ipfint*       E       \
+   void*          PT,     \
+   const ipindex* MTYPE,  \
+   const ipindex* SOLVER, \
+   ipindex*       IPARM,  \
+   ipnumber*      DPARM,  \
+   ipindex*       E       \
 )
 
 /// @since 3.14.0
 #define IPOPT_DECL_PARDISO(x) void (x)( \
-   void**          PT,     \
-   const ipfint*   MAXFCT, \
-   const ipfint*   MNUM,   \
-   const ipfint*   MTYPE,  \
-   const ipfint*   PHASE,  \
-   const ipfint*   N,      \
-   const ipnumber* A,      \
-   const ipfint*   IA,     \
-   const ipfint*   JA,     \
-   const ipfint*   PERM,   \
-   const ipfint*   NRHS,   \
-   ipfint*         IPARM,  \
-   const ipfint*   MSGLVL, \
-   ipnumber*       B,      \
-   ipnumber*       X,      \
-   ipfint*         E,      \
-   ipnumber*       DPARM   \
+   void**           PT,     \
+   const ipindex*   MAXFCT, \
+   const ipindex*   MNUM,   \
+   const ipindex*   MTYPE,  \
+   const ipindex*   PHASE,  \
+   const ipindex*   N,      \
+   const ipnumber*  A,      \
+   const ipindex*   IA,     \
+   const ipindex*   JA,     \
+   const ipindex*   PERM,   \
+   const ipindex*   NRHS,   \
+   ipindex*         IPARM,  \
+   const ipindex*   MSGLVL, \
+   ipnumber*        B,      \
+   ipnumber*        X,      \
+   ipindex*         E,      \
+   ipnumber*        DPARM   \
 )
 
 /// @since 3.14.0
 #define IPOPT_DECL_SMAT_REORDERING_PARDISO_WSMP(x) void (x)( \
-   const ipfint*   N,          \
-   const ipfint*   ia,         \
-   const ipfint*   ja,         \
-   const ipnumber* a_,         \
-   ipfint*         a2,         \
-   ipfint*         ja2,        \
-   ipnumber*       a2_,        \
-   ipfint*         perm2,      \
-   ipnumber*       scale2,     \
-   ipfint*         tmp2_,      \
-   ipfint          preprocess  \
+   const ipindex*   N,          \
+   const ipindex*   ia,         \
+   const ipindex*   ja,         \
+   const ipnumber*  a_,         \
+   ipindex*         a2,         \
+   ipindex*         ja2,        \
+   ipnumber*        a2_,        \
+   ipindex*         perm2,      \
+   ipnumber*        scale2,     \
+   ipindex*         tmp2_,      \
+   ipindex          preprocess  \
 )
 
 namespace Ipopt
@@ -162,10 +162,10 @@ private:
 
 #ifdef PARDISO_MATCHING_PREPROCESS
    /** Array for storing the values of a second matrix that has been already reordered. */
-   ipfint* ia2;
-   ipfint* ja2;
+   Index* ia2;
+   Index* ja2;
    Number* a2_;
-   ipfint* perm2;
+   Index* perm2;
    Number* scale2;
 #endif
 
@@ -222,17 +222,17 @@ private:
    /** Maximal number of factors with identical nonzero
     *  structure. Here, we only store one factorization. Is always 1.
     */
-   ipfint MAXFCT_;
+   Index MAXFCT_;
    /** Actual matrix for the solution phase. Is always 1.*/
-   ipfint MNUM_;
+   Index MNUM_;
    /** Matrix type; real and symmetric indefinite.  Is always -2.*/
-   ipfint MTYPE_;
+   Index MTYPE_;
    /** Parameter and info array for Pardiso. */
-   ipfint* IPARM_;
+   Index* IPARM_;
    /** Parameter and info array for Pardiso. */
    Number* DPARM_;
    /** Message level. */
-   ipfint MSGLVL_;
+   Index MSGLVL_;
    ///@}
 
    /**@name Some counters for debugging */

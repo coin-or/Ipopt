@@ -24,29 +24,29 @@
 extern "C"
 {
 void IPOPT_LAPACK_FUNC(pardisoinit,PARDISOINIT)(
-   void*         PT,
-   const ipfint* MTYPE,
-   ipfint*       IPARM
+   void*          PT,
+   const ipindex* MTYPE,
+   ipindex*       IPARM
 );
 
 void IPOPT_LAPACK_FUNC(pardiso,PARDISO)(
-   void**          PT,
-   const ipfint*   MAXFCT,
-   const ipfint*   MNUM,
-   const ipfint*   MTYPE,
-   const ipfint*   PHASE,
-   const ipfint*   N,
-   const ipnumber* A,
-   const ipfint*   IA,
-   const ipfint*   JA,
-   const ipfint*   PERM,
-   const ipfint*   NRHS,
-   ipfint*         IPARM,
-   const ipfint*   MSGLVL,
-   ipnumber*       B,
-   ipnumber*       X,
-   ipfint*         E,
-   ipnumber*       DPARM
+   void**           PT,
+   const ipindex*   MAXFCT,
+   const ipindex*   MNUM,
+   const ipindex*   MTYPE,
+   const ipindex*   PHASE,
+   const ipindex*   N,
+   const ipnumber*  A,
+   const ipindex*   IA,
+   const ipindex*   JA,
+   const ipindex*   PERM,
+   const ipindex*   NRHS,
+   ipindex*         IPARM,
+   const ipindex*   MSGLVL,
+   ipnumber*        B,
+   ipnumber*        X,
+   ipindex*         E,
+   ipnumber*        DPARM
 );
 }
 
@@ -69,7 +69,7 @@ PardisoMKLSolverInterface::PardisoMKLSolverInterface()
    DBG_START_METH("PardisoMKLSolverInterface::PardisoMKLSolverInterface()", dbg_verbosity);
 
    PT_ = new void* [64];
-   IPARM_ = new ipfint[64];
+   IPARM_ = new Index[64];
    DPARM_ = new Number[64];
 }
 
@@ -81,11 +81,11 @@ PardisoMKLSolverInterface::~PardisoMKLSolverInterface()
    // Tell Pardiso to release all memory
    if( initialized_ )
    {
-      ipfint PHASE = -1;
-      ipfint N = dim_;
-      ipfint NRHS = 0;
-      ipfint ERROR;
-      ipfint idmy = 0;
+      Index PHASE = -1;
+      Index N = dim_;
+      Index NRHS = 0;
+      Index ERROR;
+      Index idmy = 0;
       Number ddmy = 0.;
       IPOPT_LAPACK_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
                                          &ddmy, &ERROR, DPARM_);
@@ -198,11 +198,11 @@ bool PardisoMKLSolverInterface::InitializeImpl(
    // Tell Pardiso to release all memory if it had been used before
    if( initialized_ )
    {
-      ipfint PHASE = -1;
-      ipfint N = dim_;
-      ipfint NRHS = 0;
-      ipfint ERROR;
-      ipfint idmy = 0;
+      Index PHASE = -1;
+      Index N = dim_;
+      Index NRHS = 0;
+      Index ERROR;
+      Index idmy = 0;
       Number ddmy = 0.;
       IPOPT_LAPACK_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
                                          &ddmy, &ERROR, DPARM_);
@@ -360,8 +360,8 @@ void write_iajaa_matrix(
       char mat_name[128];
       char mat_pref[32];
 
-      ipfint NNZ = ia[N] - 1;
-      ipfint i;
+      Index NNZ = ia[N] - 1;
+      Index i;
 
       if( getenv("IPOPT_WRITE_PREFIX") )
       {
@@ -410,8 +410,8 @@ void write_iajaa_matrix(
       char mat_name[128];
       char mat_pref[32];
 
-      ipfint i;
-      ipfint j;
+      Index i;
+      Index j;
 
       if( getenv("IPOPT_WRITE_PREFIX") )
       {
@@ -447,15 +447,15 @@ ESymSolverStatus PardisoMKLSolverInterface::Factorization(
    DBG_START_METH("PardisoMKLSolverInterface::Factorization", dbg_verbosity);
 
    // Call Pardiso to do the factorization
-   ipfint PHASE;
-   ipfint N = dim_;
-   ipfint PERM = 0;   // This should not be accessed by Pardiso
-   ipfint NRHS = 0;
+   Index PHASE;
+   Index N = dim_;
+   Index PERM = 0;   // This should not be accessed by Pardiso
+   Index NRHS = 0;
    Number B;  // This should not be accessed by Pardiso in factorization
    // phase
    Number X;  // This should not be accessed by Pardiso in factorization
    // phase
-   ipfint ERROR;
+   Index ERROR;
 
    bool done = false;
    bool just_performed_symbolic_factorization = false;
@@ -636,14 +636,14 @@ ESymSolverStatus PardisoMKLSolverInterface::Solve(
       IpData().TimingStats().LinearSystemBackSolve().Start();
    }
    // Call Pardiso to do the solve for the given right-hand sides
-   ipfint PHASE = 33;
-   ipfint N = dim_;
-   ipfint PERM = 0;   // This should not be accessed by Pardiso
-   ipfint NRHS = nrhs;
+   Index PHASE = 33;
+   Index N = dim_;
+   Index PERM = 0;   // This should not be accessed by Pardiso
+   Index NRHS = nrhs;
    Number* X = new Number[nrhs * dim_];
 
    Number* ORIG_RHS = new Number[nrhs * dim_];
-   ipfint ERROR;
+   Index ERROR;
    // Initialize solution with zero and save right hand side
    for( int i = 0; i < N; i++ )
    {

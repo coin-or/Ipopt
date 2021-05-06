@@ -21,23 +21,23 @@ extern "C"
 {
    void
    F77_FUNC(ma28part, MA28PART)(
-      ipfint* TASK,
-      ipfint* N,
-      ipfint* M,
-      ipfint* NZ,
+      ipindex* TASK,
+      ipindex* N,
+      ipindex* M,
+      ipindex* NZ,
       ipnumber* A,
-      ipfint* IROW,
-      ipfint* ICOL,
+      ipindex* IROW,
+      ipindex* ICOL,
       ipnumber* PIVTOL,
-      ipfint* FILLFACT,
-      ipfint* IVAR,
-      ipfint* NDEGEN,
-      ipfint* IDEGEN,
-      ipfint* LIW,
-      ipfint* IW,
-      ipfint* LRW,
+      ipindex* FILLFACT,
+      ipindex* IVAR,
+      ipindex* NDEGEN,
+      ipindex* IDEGEN,
+      ipindex* LIW,
+      ipindex* IW,
+      ipindex* LRW,
       ipnumber* RW,
-      ipfint* IERR
+      ipindex* IERR
    );
 }
 
@@ -84,32 +84,30 @@ bool Ma28TDependencyDetector::DetermineDependentRows(
    DBG_START_METH("Ma28TDependencyDetector::DetermineDependentRows",
                   dbg_verbosity);
 
-   DBG_ASSERT(sizeof(ipfint) == sizeof(Index));
-
    c_deps.clear();
 
    // Now comes the interesting part:
    // Call Ma28 to get the dependencies
-   ipfint TASK = 0;
-   ipfint N = n_cols;
-   ipfint M = n_rows;
-   ipfint NZ = n_jac_nz;
+   Index TASK = 0;
+   Index N = n_cols;
+   Index M = n_rows;
+   Index NZ = n_jac_nz;
    Number PIVTOL = ma28_pivtol_;
-   ipfint FILLFACT = 40;
-   ipfint* IVAR;
-   ipfint NDEGEN;
-   ipfint* IDEGEN;
-   ipfint LRW;
-   ipfint LIW;
+   Index FILLFACT = 40;
+   Index* IVAR;
+   Index NDEGEN;
+   Index* IDEGEN;
+   Index LRW;
+   Index LIW;
    Number ddummy;
-   ipfint idummy;
-   ipfint IERR;
+   Index idummy;
+   Index IERR;
    // First determine how much work space we need to allocate
-   IVAR = new ipfint[N];
-   IDEGEN = new ipfint[M];
+   IVAR = new Index[N];
+   IDEGEN = new Index[M];
    F77_FUNC(ma28part, MA28PART)(&TASK, &N, &M, &NZ, &ddummy, jac_c_iRow, jac_c_jCol, &PIVTOL, &FILLFACT, IVAR, &NDEGEN,
                                 IDEGEN, &LIW, &idummy, &LRW, &ddummy, &IERR);
-   ipfint* IW = new ipfint[LIW];
+   Index* IW = new Index[LIW];
    Number* RW = new Number[LRW];
 
    // Now do the actual factorization and determine dependent constraints

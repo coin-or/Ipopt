@@ -366,13 +366,13 @@ ESymSolverStatus Ma27TSolverInterface::SymbolicFactorization(
    const Number LiwFact = 2.0;      // This is 100% overestimation
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "In Ma27TSolverInterface::InitializeStructure: Using overestimation factor LiwFact = %e\n", LiwFact);
-   liw_ = (ipfint) (LiwFact * (Number(2 * nonzeros_ + 3 * dim_ + 1)));
-   iw_ = new ipfint[liw_];
+   liw_ = (Index) (LiwFact * (Number(2 * nonzeros_ + 3 * dim_ + 1)));
+   iw_ = new Index[liw_];
 
    // Get memory for IKEEP
    delete[] ikeep_;
    ikeep_ = NULL;
-   ikeep_ = new ipfint[3 * dim_];
+   ikeep_ = new Index[3 * dim_];
 
    if( Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA) )
    {
@@ -385,21 +385,21 @@ ESymSolverStatus Ma27TSolverInterface::SymbolicFactorization(
       }
    }
 
-   // Call MA27AX (cast to ipfint for Index types)
-   ipfint N = dim_;
-   ipfint NZ = nonzeros_;
-   ipfint IFLAG = 0;
+   // Call MA27AX
+   Index N = dim_;
+   Index NZ = nonzeros_;
+   Index IFLAG = 0;
    Number OPS;
-   ipfint INFO[20];
-   ipfint* IW1 = new ipfint[2 * dim_];      // Get memory for IW1 (only local)
+   Index INFO[20];
+   Index* IW1 = new Index[2 * dim_];      // Get memory for IW1 (only local)
    ma27a(&N, &NZ, airn, ajcn, iw_, &liw_, ikeep_, IW1, &nsteps_, &IFLAG, icntl_, cntl_, INFO, &OPS);
    delete[] IW1;      // No longer required
 
    // Receive several information
-   const ipfint& iflag = INFO[0];      // Information flag
-   const ipfint& ierror = INFO[1];      // Error flag
-   const ipfint& nrlnec = INFO[4];      // recommended value for la
-   const ipfint& nirnec = INFO[5];      // recommended value for liw
+   const Index& iflag = INFO[0];      // Information flag
+   const Index& ierror = INFO[1];      // Error flag
+   const Index& nrlnec = INFO[4];      // recommended value for la
+   const Index& nirnec = INFO[5];      // recommended value for liw
 
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                   "Return values from MA27AD: IFLAG = %d, IERROR = %d\n", iflag, ierror);
@@ -426,17 +426,17 @@ ESymSolverStatus Ma27TSolverInterface::SymbolicFactorization(
       iw_ = NULL;
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
          "Size of integer work space recommended by MA27 is %d\n", nirnec);
-      liw_ = (ipfint) (liw_init_factor_ * (Number) (nirnec));
+      liw_ = (Index) (liw_init_factor_ * (Number) (nirnec));
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
          "Setting integer work space size to %d\n", liw_);
-      iw_ = new ipfint[liw_];
+      iw_ = new Index[liw_];
 
       // Reserve memory for a_
       delete[] a_;
       a_ = NULL;
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
          "Size of doublespace recommended by MA27 is %d\n", nrlnec);
-      la_ = Max(nonzeros_, (ipfint) (la_init_factor_ * (Number) (nrlnec)));
+      la_ = Max(nonzeros_, (Index) (la_init_factor_ * (Number) (nrlnec)));
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
          "Setting double work space size to %d\n", la_);
       a_ = new Number[la_];
@@ -473,8 +473,8 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
    if( la_increase_ )
    {
       Number* a_old = a_;
-      ipfint la_old = la_;
-      la_ = (ipfint) (meminc_factor_ * (Number) (la_));
+      Index la_old = la_;
+      la_ = (Index) (meminc_factor_ * (Number) (la_));
       a_ = new Number[la_];
       for( Index i = 0; i < nonzeros_; i++ )
       {
@@ -491,23 +491,23 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
    {
       delete[] iw_;
       iw_ = NULL;
-      ipfint liw_old = liw_;
-      liw_ = (ipfint) (meminc_factor_ * (Number) (liw_));
-      iw_ = new ipfint[liw_];
+      Index liw_old = liw_;
+      liw_ = (Index) (meminc_factor_ * (Number) (liw_));
+      iw_ = new Index[liw_];
       liw_increase_ = false;
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "In Ma27TSolverInterface::Factorization: Increasing liw from %d to %d\n", liw_old, liw_);
    }
 
-   ipfint iflag;  // Information flag
-   ipfint ncmpbr;  // Number of double precision compressions
-   ipfint ncmpbi;  // Number of integer compressions
+   Index iflag;  // Information flag
+   Index ncmpbr;  // Number of double precision compressions
+   Index ncmpbi;  // Number of integer compressions
 
    // Call MA27BX; possibly repeatedly if workspaces are too small
-   ipfint N = dim_;
-   ipfint NZ = nonzeros_;
-   ipfint* IW1 = new ipfint[2 * dim_];
-   ipfint INFO[20];
+   Index N = dim_;
+   Index NZ = nonzeros_;
+   Index* IW1 = new Index[2 * dim_];
+   Index INFO[20];
    cntl_[0] = pivtol_;  // Set pivot tolerance
 
    ma27b(&N, &NZ, airn, ajcn, a_, &la_, iw_, &liw_, ikeep_, &nsteps_, &maxfrt_, IW1, icntl_, cntl_, INFO);
@@ -515,7 +515,7 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
 
    // Receive information about the factorization
    iflag = INFO[0];  // Information flag
-   const ipfint& ierror = INFO[1];  // Error flag
+   const Index& ierror = INFO[1];  // Error flag
    ncmpbr = INFO[11];  // Number of double compressions
    ncmpbi = INFO[12];  // Number of integer compressions
    negevals_ = INFO[14];  // Number of negative eigenvalues
@@ -536,19 +536,19 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
       iw_ = NULL;
       delete[] a_;
       a_ = NULL;
-      ipfint liw_old = liw_;
-      ipfint la_old = la_;
+      Index liw_old = liw_;
+      Index la_old = la_;
       if( iflag == -3 )
       {
-         liw_ = (ipfint) (meminc_factor_ * (Number) (ierror));
-         la_ = (ipfint) (meminc_factor_ * (Number) (la_));
+         liw_ = (Index) (meminc_factor_ * (Number) (ierror));
+         la_ = (Index) (meminc_factor_ * (Number) (la_));
       }
       else
       {
-         liw_ = (ipfint) (meminc_factor_ * (Number) (liw_));
-         la_ = (ipfint) (meminc_factor_ * (Number) (ierror));
+         liw_ = (Index) (meminc_factor_ * (Number) (liw_));
+         la_ = (Index) (meminc_factor_ * (Number) (ierror));
       }
-      iw_ = new ipfint[liw_];
+      iw_ = new Index[liw_];
       a_ = new Number[la_];
       Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                      "MA27BD returned iflag=%d and requires more memory.\n Increase liw from %d to %d and la from %d to %d and factorize again.\n",
@@ -637,9 +637,9 @@ ESymSolverStatus Ma27TSolverInterface::Backsolve(
       IpData().TimingStats().LinearSystemBackSolve().Start();
    }
 
-   ipfint N = dim_;
+   Index N = dim_;
    Number* W = new Number[maxfrt_];
-   ipfint* IW1 = new ipfint[nsteps_];
+   Index* IW1 = new Index[nsteps_];
 
    // For each right hand side, call MA27CX
    for( Index irhs = 0; irhs < nrhs; irhs++ )

@@ -233,17 +233,17 @@ private:
     *
     * Here, we only store one factorization. Is always 1.
     */
-   ipfint MAXFCT_;
+   Index MAXFCT_;
    /** Actual matrix for the solution phase. Is always 1. */
-   ipfint MNUM_;
+   Index MNUM_;
    /** Matrix type; real and symmetric indefinite.  Is always -2. */
-   ipfint MTYPE_;
+   Index MTYPE_;
    /** Parameter and info array for Pardiso. */
-   ipfint* IPARM_;
+   Index* IPARM_;
    /** Parameter and info array for Pardiso. */
    Number* DPARM_;
    /** Message level. */
-   ipfint MSGLVL_;
+   Index MSGLVL_;
    ///@}
 
    /**@name Some counters for debugging */

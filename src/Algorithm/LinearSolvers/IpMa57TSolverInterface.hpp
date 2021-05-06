@@ -17,40 +17,40 @@
 typedef ptrdiff_t ma57int;
 #else
 #include "IpTypes.h"
-typedef ipfint ma57int;
+typedef ipindex ma57int;
 #endif
 
 /// @since 3.14.0
 #define IPOPT_DECL_MA57A(x) void (x)( \
-   ipfint*       n,     /**< Order of matrix. */ \
-   ipfint*       ne,    /**< Number of entries. */ \
-   const ipfint* irn,   /**< Matrix nonzero row structure */ \
-   const ipfint* jcn,   /**< Matrix nonzero column structure */ \
-   ipfint*       lkeep, /**< Workspace for the pivot order of lenght 3*n */ \
-   ipfint*       keep,  /**< Workspace for the pivot order of lenght 3*n */ \
+   ipindex*       n,     /**< Order of matrix. */ \
+   ipindex*       ne,    /**< Number of entries. */ \
+   const ipindex* irn,   /**< Matrix nonzero row structure */ \
+   const ipindex* jcn,   /**< Matrix nonzero column structure */ \
+	ipindex*       lkeep, /**< Workspace for the pivot order of lenght 3*n */ \
+	ipindex*       keep,  /**< Workspace for the pivot order of lenght 3*n */ \
    /* Automatically iflag = 0; ikeep pivot order iflag = 1 */ \
-   ipfint*       iwork, /**< Integer work space. */ \
-   ipfint*       icntl, /**< Integer Control parameter of length 30 */ \
-   ipfint*       info,  /**< Statistical Information; Integer array of length 20 */ \
-   ipnumber*     rinfo  /**< Double Control parameter of length 5 */ \
+	ipindex*       iwork, /**< Integer work space. */ \
+	ipindex*       icntl, /**< Integer Control parameter of length 30 */ \
+	ipindex*       info,  /**< Statistical Information; Integer array of length 20 */ \
+   ipnumber*      rinfo  /**< Double Control parameter of length 5 */ \
 )
 
 /// @since 3.14.0
 #define IPOPT_DECL_MA57B(x) void (x)( \
-   ipfint*   n,      /**< Order of matrix. */ \
-   ipfint*   ne,     /**< Number of entries. */ \
-   ipnumber* a,      /**< Numerical values. */ \
-   ipnumber* fact,   /**< Entries of factors. */ \
-   ipfint*   lfact,  /**< Length of array `fact'. */ \
-   ipfint*   ifact,  /**< Indexing info for factors. */ \
-   ipfint*   lifact, /**< Length of array `ifact'. */ \
-   ipfint*   lkeep,  /**< Length of array `keep'. */ \
-   ipfint*   keep,   /**< Integer array. */ \
-   ipfint*   iwork,  /**< Workspace of length `n'. */ \
-   ipfint*   icntl,  /**< Integer Control parameter of length 20. */ \
-   ipnumber* cntl,   /**< Double Control parameter of length 5. */ \
-   ipfint*   info,   /**< Statistical Information; Integer array of length 40. */ \
-   ipnumber* rinfo   /**< Statistical Information; Real array of length 20. */ \
+	ipindex*   n,      /**< Order of matrix. */ \
+	ipindex*   ne,     /**< Number of entries. */ \
+   ipnumber* a,       /**< Numerical values. */ \
+   ipnumber* fact,    /**< Entries of factors. */ \
+	ipindex*   lfact,  /**< Length of array `fact'. */ \
+	ipindex*   ifact,  /**< Indexing info for factors. */ \
+	ipindex*   lifact, /**< Length of array `ifact'. */ \
+	ipindex*   lkeep,  /**< Length of array `keep'. */ \
+	ipindex*   keep,   /**< Integer array. */ \
+	ipindex*   iwork,  /**< Workspace of length `n'. */ \
+	ipindex*   icntl,  /**< Integer Control parameter of length 20. */ \
+   ipnumber* cntl,    /**< Double Control parameter of length 5. */ \
+	ipindex*   info,   /**< Statistical Information; Integer array of length 40. */ \
+   ipnumber* rinfo    /**< Statistical Information; Real array of length 20. */ \
 )
 
 /* Solution job:  Solve for...
@@ -61,42 +61,42 @@ typedef ipfint ma57int;
  */
 /// @since 3.14.0
 #define IPOPT_DECL_MA57C(x) void (x)( \
-   ipfint*   job,    /**< Solution job. */ \
-   ipfint*   n,      /**< Order of matrix. */ \
-   ipnumber* fact,   /**< Entries of factors. */ \
-   ipfint*   lfact,  /**< Length of array `fact'. */ \
-   ipfint*   ifact,  /**< Indexing info for factors. */ \
-   ipfint*   lifact, /**< Length of array `ifact'. */ \
-   ipfint*   nrhs,   /**< Number of right hand sides. */ \
-   ipnumber* rhs,    /**< Numerical Values. */ \
-   ipfint*   lrhs,   /**< Leading dimensions of `rhs'. */ \
-   ipnumber* work,   /**< Real workspace. */ \
-   ipfint*   lwork,  /**< Length of `work', >= N*NRHS. */ \
-   ipfint*   iwork,  /**< Integer array of length `n'. */ \
-   ipfint*   icntl,  /**< Integer Control parameter array of length 20. */ \
-   ipfint*   info    /**< Statistical Information; Integer array of length 40. */ \
+	ipindex*   job,    /**< Solution job. */ \
+	ipindex*   n,      /**< Order of matrix. */ \
+   ipnumber*  fact,   /**< Entries of factors. */ \
+	ipindex*   lfact,  /**< Length of array `fact'. */ \
+   ipindex*   ifact,  /**< Indexing info for factors. */ \
+	ipindex*   lifact, /**< Length of array `ifact'. */ \
+	ipindex*   nrhs,   /**< Number of right hand sides. */ \
+   ipnumber*  rhs,    /**< Numerical Values. */ \
+	ipindex*   lrhs,   /**< Leading dimensions of `rhs'. */ \
+   ipnumber*  work,   /**< Real workspace. */ \
+	ipindex*   lwork,  /**< Length of `work', >= N*NRHS. */ \
+   ipindex*   iwork,  /**< Integer array of length `n'. */ \
+	ipindex*   icntl,  /**< Integer Control parameter array of length 20. */ \
+	ipindex*   info    /**< Statistical Information; Integer array of length 40. */ \
 )
 
 /// @since 3.14.0
 #define IPOPT_DECL_MA57E(x) void (x)( \
-   ipfint*   n, \
-   ipfint*   ic,    /**< 0: copy real array.  >=1:  copy integer array. */ \
-   ipfint*   keep,   \
-   ipnumber* fact,   \
-   ipfint*   lfact,  \
-   ipnumber* newfac, \
-   ipfint*   lnew,   \
-   ipfint*   ifact,  \
-   ipfint*   lifact, \
-   ipfint*   newifc, \
-   ipfint*   linew,  \
-   ipfint*   info    \
+	ipindex*   n,      \
+	ipindex*   ic,  /**< 0: copy real array.  >=1:  copy integer array. */ \
+	ipindex*   keep,   \
+   ipnumber*  fact,   \
+   ipindex*   lfact,  \
+   ipnumber*  newfac, \
+   ipindex*   lnew,   \
+   ipindex*   ifact,  \
+   ipindex*   lifact, \
+   ipindex*   newifc, \
+   ipindex*   linew,  \
+   ipindex*   info    \
 )
 
 /// @since 3.14.0
 #define IPOPT_DECL_MA57I(x) void (x)( \
    ipnumber* cntl, \
-   ipfint*   icntl \
+   ipindex*   icntl \
 )
 
 namespace Ipopt

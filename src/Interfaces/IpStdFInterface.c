@@ -24,95 +24,95 @@
 typedef void* fptr;
 
 /** Return value for indicating that evaluation could be done without problem. */
-static const ipfint OKRetVal = 0;
+static const ipindex OKRetVal = 0;
 /** Return value for indicating that evaluation could not be done without problem. */
-static const ipfint NotOKRetVal = 1;
+static const ipindex NotOKRetVal = 1;
 
 /* Function pointer types for the Fortran callback functions */
 typedef void (*FEval_F_CB)(
-   ipfint*    N,
-   ipnumber*  X,
-   ipfint*    NEW_X,
-   ipnumber*  OBJVAL,
-   ipfint*    IDAT,
-   ipnumber*  DDAT,
-   ipfint*    IERR
+   ipindex*    N,
+   ipnumber*   X,
+   ipindex*    NEW_X,
+   ipnumber*   OBJVAL,
+   ipindex*    IDAT,
+   ipnumber*   DDAT,
+   ipindex*    IERR
 );
 
 typedef void (*FEval_G_CB)(
-   ipfint*    N,
-   ipnumber*  X,
-   ipfint*    NEW_X,
-   ipfint*    M,
-   ipnumber*  G,
-   ipfint*    IDAT,
-   ipnumber*  DDAT,
-   ipfint*    IERR
+   ipindex*    N,
+   ipnumber*   X,
+   ipindex*    NEW_X,
+   ipindex*    M,
+   ipnumber*   G,
+   ipindex*    IDAT,
+   ipnumber*   DDAT,
+   ipindex*    IERR
 );
 
 typedef void (*FEval_Grad_F_CB)(
-   ipfint*    N,
-   ipnumber*  X,
-   ipfint*    NEW_X,
-   ipnumber*  GRAD,
-   ipfint*    IDAT,
-   ipnumber*  DDAT,
-   ipfint*    IERR
+   ipindex*    N,
+   ipnumber*   X,
+   ipindex*    NEW_X,
+   ipnumber*   GRAD,
+   ipindex*    IDAT,
+   ipnumber*   DDAT,
+   ipindex*    IERR
 );
 
 typedef void (*FEval_Jac_G_CB)(
-   ipfint*    TASK,
-   ipfint*    N,
-   ipnumber*  X,
-   ipfint*    NEW_X,
-   ipfint*    M,
-   ipfint*    NNZJAC,
-   ipfint*    IROW,
-   ipfint*    JCOL,
-   ipnumber*  VALUES,
-   ipfint*    IDAT,
-   ipnumber*  DDAT,
-   ipfint*    IERR
+   ipindex*    TASK,
+   ipindex*    N,
+   ipnumber*   X,
+   ipindex*    NEW_X,
+   ipindex*    M,
+   ipindex*    NNZJAC,
+   ipindex*    IROW,
+   ipindex*    JCOL,
+   ipnumber*   VALUES,
+   ipindex*    IDAT,
+   ipnumber*   DDAT,
+   ipindex*    IERR
 );
 
 typedef void (*FEval_Hess_CB)(
-   ipfint*    TASK,
-   ipfint*    N,
-   ipnumber*  X,
-   ipfint*    NEW_X,
-   ipnumber*  OBJFACT,
-   ipfint*    M,
-   ipnumber*  LAMBDA,
-   ipfint*    NEW_LAM,
-   ipfint*    NNZHESS,
-   ipfint*    IROW,
-   ipfint*    JCOL,
-   ipnumber*  VALUES,
-   ipfint*    IDAT,
-   ipnumber*  DDAT,
-   ipfint*    IERR
+   ipindex*    TASK,
+   ipindex*    N,
+   ipnumber*   X,
+   ipindex*    NEW_X,
+   ipnumber*   OBJFACT,
+   ipindex*    M,
+   ipnumber*   LAMBDA,
+   ipindex*    NEW_LAM,
+   ipindex*    NNZHESS,
+   ipindex*    IROW,
+   ipindex*    JCOL,
+   ipnumber*   VALUES,
+   ipindex*    IDAT,
+   ipnumber*   DDAT,
+   ipindex*    IERR
 );
 
 typedef void (*FIntermediate_CB)(
-   ipfint*    ALG_MODE,
-   ipfint*    ITER_COUNT,
-   ipnumber*  OBJVAL,
-   ipnumber*  INF_PR,
-   ipnumber*  INF_DU,
-   ipnumber*  MU,
-   ipnumber*  DNORM,
-   ipnumber*  REGU_SIZE,
-   ipnumber*  ALPHA_DU,
-   ipnumber*  ALPHA_PR,
-   ipfint*    LS_TRIAL,
-   ipfint*    IDAT,
-   ipnumber*  DDAT,
-   ipfint*    ISTOP
+   ipindex*    ALG_MODE,
+   ipindex*    ITER_COUNT,
+   ipnumber*   OBJVAL,
+   ipnumber*   INF_PR,
+   ipnumber*   INF_DU,
+   ipnumber*   MU,
+   ipnumber*   DNORM,
+   ipnumber*   REGU_SIZE,
+   ipnumber*   ALPHA_DU,
+   ipnumber*   ALPHA_PR,
+   ipindex*    LS_TRIAL,
+   ipindex*    IDAT,
+   ipnumber*   DDAT,
+   ipindex*    ISTOP
 );
 
 struct _FUserData
 {
-   ipfint*          IDAT;
+   ipindex*         IDAT;
    ipnumber*        DDAT;
    FEval_F_CB       EVAL_F;
    FEval_G_CB       EVAL_G;
@@ -132,12 +132,12 @@ static bool eval_f(
    UserDataPtr user_data
 )
 {
-   ipfint N = n;
-   ipfint NEW_X = new_x;
+   ipindex N = n;
+   ipindex NEW_X = new_x;
    FUserData* fuser_data = (FUserData*) user_data;
-   ipfint* IDAT = fuser_data->IDAT;
+   ipindex* IDAT = fuser_data->IDAT;
    ipnumber*  DDAT = fuser_data->DDAT;
-   ipfint IERR = 0;
+   ipindex IERR = 0;
 
    fuser_data->EVAL_F(&N, x, &NEW_X, obj_value, IDAT, DDAT, &IERR);
 
@@ -152,12 +152,12 @@ static bool eval_grad_f(
    UserDataPtr user_data
 )
 {
-   ipfint N = n;
-   ipfint NEW_X = new_x;
+   ipindex N = n;
+   ipindex NEW_X = new_x;
    FUserData* fuser_data = (FUserData*) user_data;
-   ipfint* IDAT = fuser_data->IDAT;
+   ipindex* IDAT = fuser_data->IDAT;
    ipnumber*  DDAT = fuser_data->DDAT;
-   ipfint IERR = 0;
+   ipindex IERR = 0;
 
    fuser_data->EVAL_GRAD_F(&N, x, &NEW_X, grad_f, IDAT, DDAT, &IERR);
 
@@ -173,13 +173,13 @@ static bool eval_g(
    UserDataPtr user_data
 )
 {
-   ipfint N = n;
-   ipfint NEW_X = new_x;
-   ipfint M = m;
+   ipindex N = n;
+   ipindex NEW_X = new_x;
+   ipindex M = m;
    FUserData* fuser_data = (FUserData*) user_data;
-   ipfint* IDAT = fuser_data->IDAT;
+   ipindex* IDAT = fuser_data->IDAT;
    ipnumber* DDAT = fuser_data->DDAT;
-   ipfint IERR = 0;
+   ipindex IERR = 0;
 
    fuser_data->EVAL_G(&N, x, &NEW_X, &M, g, IDAT, DDAT, &IERR);
 
@@ -198,15 +198,15 @@ static bool eval_jac_g(
    UserDataPtr user_data
 )
 {
-   ipfint N = n;
-   ipfint NEW_X = new_x;
-   ipfint M = m;
-   ipfint NNZJAC = nele_jac;
-   ipfint TASK;
+   ipindex N = n;
+   ipindex NEW_X = new_x;
+   ipindex M = m;
+   ipindex NNZJAC = nele_jac;
+   ipindex TASK;
    FUserData* fuser_data = (FUserData*) user_data;
-   ipfint* IDAT = fuser_data->IDAT;
+   ipindex* IDAT = fuser_data->IDAT;
    ipnumber*  DDAT = fuser_data->DDAT;
-   ipfint IERR = 0;
+   ipindex IERR = 0;
 
    if( iRow != NULL && jCol != NULL && values == NULL )
    {
@@ -244,16 +244,16 @@ static bool eval_h(
    UserDataPtr user_data
 )
 {
-   ipfint N = n;
-   ipfint NEW_X = new_x;
-   ipfint M = m;
-   ipfint NEW_LAM = new_lambda;
-   ipfint NNZHESS = nele_hess;
-   ipfint TASK;
+   ipindex N = n;
+   ipindex NEW_X = new_x;
+   ipindex M = m;
+   ipindex NEW_LAM = new_lambda;
+   ipindex NNZHESS = nele_hess;
+   ipindex TASK;
    FUserData* fuser_data = (FUserData*) user_data;
-   ipfint* IDAT = fuser_data->IDAT;
+   ipindex* IDAT = fuser_data->IDAT;
    ipnumber* DDAT = fuser_data->DDAT;
-   ipfint IERR = 0;
+   ipindex IERR = 0;
 
    if( iRow != NULL && jCol != NULL && values == NULL )
    {
@@ -292,8 +292,8 @@ static bool intermediate_cb(
 )
 {
    FUserData* fuser_data = (FUserData*) user_data;
-   ipfint ALG_MODE = alg_mod;
-   ipfint ITER_COUNT = iter_count;
+   ipindex ALG_MODE = alg_mod;
+   ipindex ITER_COUNT = iter_count;
    ipnumber OBJVAL = obj_value;
    ipnumber INF_PR = inf_pr;
    ipnumber INF_DU = inf_du;
@@ -302,10 +302,10 @@ static bool intermediate_cb(
    ipnumber REGU_SIZE = regularization_size;
    ipnumber ALPHA_DU = alpha_du;
    ipnumber ALPHA_PR = alpha_pr;
-   ipfint LS_TRIAL = ls_trials;
-   ipfint* IDAT = fuser_data->IDAT;
+   ipindex LS_TRIAL = ls_trials;
+   ipindex* IDAT = fuser_data->IDAT;
    ipnumber* DDAT = fuser_data->DDAT;
-   ipfint ISTOP = 0;
+   ipindex ISTOP = 0;
 
    if( !fuser_data->INTERMEDIATE_CB )
    {
@@ -319,15 +319,15 @@ static bool intermediate_cb(
 }
 
 IPOPTLIB_EXPORT fptr F77_FUNC(ipcreate, IPCREATE)(
-   ipfint*         N,
+   ipindex*        N,
    ipnumber*       X_L,
    ipnumber*       X_U,
-   ipfint*         M,
+   ipindex*        M,
    ipnumber*       G_L,
    ipnumber*       G_U,
-   ipfint*         NELE_JAC,
-   ipfint*         NELE_HESS,
-   ipfint*         IDX_STY,
+   ipindex*        NELE_JAC,
+   ipindex*        NELE_HESS,
+   ipindex*        IDX_STY,
    FEval_F_CB      EVAL_F,
    FEval_G_CB      EVAL_G,
    FEval_Grad_F_CB EVAL_GRAD_F,
@@ -377,7 +377,7 @@ IPOPTLIB_EXPORT void F77_FUNC(ipfree, IPFREE)(
    *FProblem = (fptr)NULL;
 }
 
-IPOPTLIB_EXPORT ipfint F77_FUNC(ipsolve, IPSOLVE)(
+IPOPTLIB_EXPORT ipindex F77_FUNC(ipsolve, IPSOLVE)(
    fptr*      FProblem,
    ipnumber*  X,
    ipnumber*  G,
@@ -385,7 +385,7 @@ IPOPTLIB_EXPORT ipfint F77_FUNC(ipsolve, IPSOLVE)(
    ipnumber*  MULT_G,
    ipnumber*  MULT_X_L,
    ipnumber*  MULT_X_U,
-   ipfint*    IDAT,
+   ipindex*   IDAT,
    ipnumber*  DDAT
 )
 {
@@ -396,7 +396,7 @@ IPOPTLIB_EXPORT ipfint F77_FUNC(ipsolve, IPSOLVE)(
    fuser_data->DDAT = DDAT;
    user_data = (UserDataPtr) fuser_data;
 
-   return (ipfint)IpoptSolve(fuser_data->Problem, X, G, OBJ_VAL, MULT_G, MULT_X_L, MULT_X_U, user_data);
+   return IpoptSolve(fuser_data->Problem, X, G, OBJ_VAL, MULT_G, MULT_X_L, MULT_X_U, user_data);
 }
 
 static char* f2cstr(
@@ -421,7 +421,7 @@ static char* f2cstr(
 }
 
 /* ToDo make sure position of vlen and klen are at the right place */
-IPOPTLIB_EXPORT ipfint F77_FUNC(ipaddstroption, IPADDSTROPTION)(
+IPOPTLIB_EXPORT ipindex F77_FUNC(ipaddstroption, IPADDSTROPTION)(
    fptr* FProblem,
    char* KEYWORD,
    char* VALUE,
@@ -432,7 +432,7 @@ IPOPTLIB_EXPORT ipfint F77_FUNC(ipaddstroption, IPADDSTROPTION)(
    char* keyword;
    char* val;
    FUserData* fuser_data = (FUserData*) *FProblem;
-   ipfint retval;
+   ipindex retval;
 
    keyword = f2cstr(KEYWORD, klen);
    val = f2cstr(VALUE, vlen);
@@ -445,7 +445,7 @@ IPOPTLIB_EXPORT ipfint F77_FUNC(ipaddstroption, IPADDSTROPTION)(
    return retval ? OKRetVal : NotOKRetVal;
 }
 
-IPOPTLIB_EXPORT ipfint F77_FUNC(ipaddnumoption, IPADDNUMOPTION)(
+IPOPTLIB_EXPORT ipindex F77_FUNC(ipaddnumoption, IPADDNUMOPTION)(
    fptr*     FProblem,
    char*     KEYWORD,
    ipnumber* VALUE,
@@ -454,7 +454,7 @@ IPOPTLIB_EXPORT ipfint F77_FUNC(ipaddnumoption, IPADDNUMOPTION)(
 {
    char* keyword;
    FUserData* fuser_data = (FUserData*) *FProblem;
-   ipfint retval;
+   ipindex retval;
 
    keyword = f2cstr(KEYWORD, klen);
 
@@ -465,17 +465,17 @@ IPOPTLIB_EXPORT ipfint F77_FUNC(ipaddnumoption, IPADDNUMOPTION)(
    return retval ? OKRetVal : NotOKRetVal;
 }
 
-IPOPTLIB_EXPORT ipfint F77_FUNC(ipaddintoption, IPADDINTOPTION)(
+IPOPTLIB_EXPORT ipindex F77_FUNC(ipaddintoption, IPADDINTOPTION)(
    fptr*   FProblem,
    char*   KEYWORD,
-   ipfint* VALUE,
+   ipindex* VALUE,
    int     klen
 )
 {
    char* keyword;
    FUserData* fuser_data = (FUserData*) *FProblem;
    ipindex value = *VALUE;
-   ipfint retval;
+   ipindex retval;
 
    keyword = f2cstr(KEYWORD, klen);
 
@@ -486,17 +486,17 @@ IPOPTLIB_EXPORT ipfint F77_FUNC(ipaddintoption, IPADDINTOPTION)(
    return retval ? OKRetVal : NotOKRetVal;
 }
 
-IPOPTLIB_EXPORT ipfint F77_FUNC(ipopenoutputfile, IPOPENOUTPUTFILE)(
-   fptr*   FProblem,
-   char*   FILENAME,
-   ipfint* PRINTLEVEL,
-   int     flen
+IPOPTLIB_EXPORT ipindex F77_FUNC(ipopenoutputfile, IPOPENOUTPUTFILE)(
+   fptr*    FProblem,
+   char*    FILENAME,
+   ipindex* PRINTLEVEL,
+   int      flen
 )
 {
    char* filename;
    FUserData* fuser_data = (FUserData*) *FProblem;
    int printlevel = *PRINTLEVEL;
-   ipfint retval;
+   ipindex retval;
 
    filename = f2cstr(FILENAME, flen);
 
@@ -527,18 +527,18 @@ IPOPTLIB_EXPORT void F77_FUNC(ipunsetcallback, IPUNSETCALLBACK)(
 }
 
 /// @since 3.14.0
-IPOPTLIB_EXPORT ipfint F77_FUNC(ipgetcurriterate, IPGETCURRITERATE)(
+IPOPTLIB_EXPORT ipindex F77_FUNC(ipgetcurriterate, IPGETCURRITERATE)(
    fptr*      FProblem,
-   ipfint*    scaled,
-   ipfint*    get_X,
-   ipfint*    get_Z,
-   ipfint*    get_G,
-   ipfint*    get_LAMBDA,
-   ipfint*    n,
+   ipindex*   scaled,
+   ipindex*   get_X,
+   ipindex*   get_Z,
+   ipindex*   get_G,
+   ipindex*   get_LAMBDA,
+   ipindex*   n,
    ipnumber*  X,
    ipnumber*  Z_L,
    ipnumber*  Z_U,
-   ipfint*    m,
+   ipindex*   m,
    ipnumber*  G,
    ipnumber*  LAMBDA
 )
@@ -550,22 +550,22 @@ IPOPTLIB_EXPORT ipfint F77_FUNC(ipgetcurriterate, IPGETCURRITERATE)(
 }
 
 /// @since 3.14.0
-IPOPTLIB_EXPORT ipfint F77_FUNC(ipgetcurrviolations, IPGETCURRVIOLATIONS)(
-   fptr*      FProblem,
-   ipfint*    scaled,
-   ipfint*    get_bound_violation,
-   ipfint*    get_compl,
-   ipfint*    get_grad_lag_x,
-   ipfint*    get_nlp_constraint_violation,
-   ipfint*    n,
-   ipnumber*  X_L_VIOLATION,
-   ipnumber*  X_U_VIOLATION,
-   ipnumber*  COMPL_X_L,
-   ipnumber*  COMPL_X_U,
-   ipnumber*  GRAD_LAG_X,
-   ipfint*    m,
-   ipnumber*  NLP_CONSTRAINT_VIOLATION,
-   ipnumber*  COMPL_G
+IPOPTLIB_EXPORT ipindex F77_FUNC(ipgetcurrviolations, IPGETCURRVIOLATIONS)(
+   fptr*       FProblem,
+   ipindex*    scaled,
+   ipindex*    get_bound_violation,
+   ipindex*    get_compl,
+   ipindex*    get_grad_lag_x,
+   ipindex*    get_nlp_constraint_violation,
+   ipindex*    n,
+   ipnumber*   X_L_VIOLATION,
+   ipnumber*   X_U_VIOLATION,
+   ipnumber*   COMPL_X_L,
+   ipnumber*   COMPL_X_U,
+   ipnumber*   GRAD_LAG_X,
+   ipindex*    m,
+   ipnumber*   NLP_CONSTRAINT_VIOLATION,
+   ipnumber*   COMPL_G
 )
 {
    FUserData* fuser_data = (FUserData*) *FProblem;

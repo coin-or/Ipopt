@@ -56,7 +56,10 @@ typedef double ipnumber;
  */
 typedef int ipindex;
 
-/* Type of Fortran integer translated into C */
+/** Type of Fortran integer translated into C
+ * @deprecated Use ipindex instead.
+ */
+IPOPT_DEPRECATED
 typedef ipindex ipfint;
 
 #endif
