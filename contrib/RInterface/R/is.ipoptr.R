@@ -46,18 +46,18 @@ is.ipoptr <- function(x) {
     stopifnot( length(x$eval_f( x$x0 ))==1 )
     stopifnot( length(x$eval_grad_f( x$x0 ))==num.controls )
     stopifnot( length(x$eval_g( x$x0 ))==num.constraints )
-    stopifnot( length(x$eval_jac_g( x$x0 ))==length(unlist(x$eval_jac_g_structure)) )		# the number of non-zero elements in the Jacobian
+    stopifnot( length(x$eval_jac_g( x$x0 ))==length(unlist(x$eval_jac_g_structure)) )  # the number of non-zero elements in the Jacobian
     if ( !flag_hessian_approximation ) { 
-        stopifnot( length(x$eval_h( x$x0, 1, rep(1,num.constraints) ))==length(unlist(x$eval_h_structure)) )		# the number of non-zero elements in the Hessian
+        stopifnot( length(x$eval_h( x$x0, 1, rep(1,num.constraints) ))==length(unlist(x$eval_h_structure)) )  # the number of non-zero elements in the Hessian
     }
     
     # Check the whether we don't have NA's in initial values
     stopifnot( all(!is.na(x$eval_f( x$x0 ))) )
     stopifnot( all(!is.na(x$eval_grad_f( x$x0 ))) )
     stopifnot( all(!is.na(x$eval_g( x$x0 ))) )
-    stopifnot( all(!is.na(x$eval_jac_g( x$x0 ))) )		# the number of non-zero elements in the Jacobian
+    stopifnot( all(!is.na(x$eval_jac_g( x$x0 ))) )  # the number of non-zero elements in the Jacobian
     if ( !flag_hessian_approximation ) { 
-        stopifnot( all(!is.na(x$eval_h( x$x0, 1, rep(1,num.constraints) ))) )		# the number of non-zero elements in the Hessian
+        stopifnot( all(!is.na(x$eval_h( x$x0, 1, rep(1,num.constraints) ))) )  # the number of non-zero elements in the Hessian
     }
     
     # Check whether a correct structure was supplied, and check the size

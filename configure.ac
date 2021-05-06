@@ -520,27 +520,27 @@ fi
 AC_COIN_FINALIZE_FLAGS([IpoptLib IpoptAmplInterfaceLib SIpoptAmplInterfaceLib])
 
 AC_CONFIG_FILES([Makefile
-		 src/ipopt.pc
-		 src/Makefile
-		 src/Apps/AmplSolver/Makefile
-		 src/Apps/AmplSolver/ipoptamplinterface.pc
-		 test/Makefile
-		 test/run_unitTests
-		 doc/Doxyfile
-		 examples/Cpp_example/Makefile
-		 examples/recursive_nlp/Makefile
-		 examples/hs071_cpp/Makefile
-		 examples/hs071_c/Makefile
-		 examples/ScalableProblems/Makefile
-		 tutorial/CodingExercise/C/1-skeleton/Makefile
-		 tutorial/CodingExercise/C/2-mistake/Makefile
-		 tutorial/CodingExercise/C/3-solution/Makefile
-		 tutorial/CodingExercise/Cpp/1-skeleton/Makefile
-		 tutorial/CodingExercise/Cpp/2-mistake/Makefile
-		 tutorial/CodingExercise/Cpp/3-solution/Makefile
-		 tutorial/CodingExercise/Matlab/1-skeleton/startup.m
-		 tutorial/CodingExercise/Matlab/2-mistake/startup.m
-		 tutorial/CodingExercise/Matlab/3-solution/startup.m
+  src/ipopt.pc
+  src/Makefile
+  src/Apps/AmplSolver/Makefile
+  src/Apps/AmplSolver/ipoptamplinterface.pc
+  test/Makefile
+  test/run_unitTests
+  doc/Doxyfile
+  examples/Cpp_example/Makefile
+  examples/recursive_nlp/Makefile
+  examples/hs071_cpp/Makefile
+  examples/hs071_c/Makefile
+  examples/ScalableProblems/Makefile
+  tutorial/CodingExercise/C/1-skeleton/Makefile
+  tutorial/CodingExercise/C/2-mistake/Makefile
+  tutorial/CodingExercise/C/3-solution/Makefile
+  tutorial/CodingExercise/Cpp/1-skeleton/Makefile
+  tutorial/CodingExercise/Cpp/2-mistake/Makefile
+  tutorial/CodingExercise/Cpp/3-solution/Makefile
+  tutorial/CodingExercise/Matlab/1-skeleton/startup.m
+  tutorial/CodingExercise/Matlab/2-mistake/startup.m
+  tutorial/CodingExercise/Matlab/3-solution/startup.m
 ])
 
 if test -n "$F77" ; then
@@ -567,12 +567,12 @@ fi
 
 if test "$use_sipopt" = yes ; then
   AC_CONFIG_FILES([
-		 contrib/sIPOPT/Makefile
-		 contrib/sIPOPT/src/Makefile
-		 contrib/sIPOPT/AmplSolver/Makefile
-		 contrib/sIPOPT/examples/parametric_cpp/Makefile
-		 contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile
-		 contrib/sIPOPT/examples/redhess_cpp/Makefile
+    contrib/sIPOPT/Makefile
+    contrib/sIPOPT/src/Makefile
+    contrib/sIPOPT/AmplSolver/Makefile
+    contrib/sIPOPT/examples/parametric_cpp/Makefile
+    contrib/sIPOPT/examples/parametric_dsdp_cpp/Makefile
+    contrib/sIPOPT/examples/redhess_cpp/Makefile
   ])
 fi
 

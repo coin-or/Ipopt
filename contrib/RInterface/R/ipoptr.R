@@ -11,32 +11,32 @@
 #               data.table and it wasn't useful (thanks to Florian Oswald for reporting)
 #
 # Input: 
-#		x0 : vector with initial values
-#		eval_f : function to evaluate objective function
-#		eval_grad_f : function to evaluate gradient of objective function
-#		lb : lower bounds of the control
-#		ub : upper bounds of the control
-#		eval_g : function to evaluate (non-)linear constraints that should hold in the solution
-#		eval_jac_g : function to evaluate the jacobian of the (non-)linear constraints that should hold in the solution
-#		eval_jac_g_structure : sparseness structure of the jacobian
-#		constraint_lb : lower bounds of the (non-)linear constraints
-#		constraint_ub : upper bounds of the (non-)linear constraints
-#		eval_h : function to evaluate the hessian
-#		eval_h_structure : sparseness structure of the hessian
-#		opts : list with options that are passed to Ipopt
-#       ... : arguments that will be passed to user-defined functions
+#    x0 : vector with initial values
+#    eval_f : function to evaluate objective function
+#    eval_grad_f : function to evaluate gradient of objective function
+#    lb : lower bounds of the control
+#    ub : upper bounds of the control
+#    eval_g : function to evaluate (non-)linear constraints that should hold in the solution
+#    eval_jac_g : function to evaluate the jacobian of the (non-)linear constraints that should hold in the solution
+#    eval_jac_g_structure : sparseness structure of the jacobian
+#    constraint_lb : lower bounds of the (non-)linear constraints
+#    constraint_ub : upper bounds of the (non-)linear constraints
+#    eval_h : function to evaluate the hessian
+#    eval_h_structure : sparseness structure of the hessian
+#    opts : list with options that are passed to Ipopt
+#    ... : arguments that will be passed to user-defined functions
 #
 # Output: structure with inputs and
-#		call        : the call that was made to solve
-#		status      : integer value with the status of the optimization (0 is success)
-#		message     : more informative message with the status of the optimization
-#		iterations  : number of iterations that were executed
-#		objective   : final value of the objective function
-#		solution    : final values for the controls
-#       z_L         : final values for the lower bound multipliers
-#       z_U         : final values for the upper bound multipliers
-#       constraints : final values for the constraints
-#       lambda      : final values for the Lagrange mulipliers
+#    call        : the call that was made to solve
+#    status      : integer value with the status of the optimization (0 is success)
+#    message     : more informative message with the status of the optimization
+#    iterations  : number of iterations that were executed
+#    objective   : final value of the objective function
+#    solution    : final values for the controls
+#    z_L         : final values for the lower bound multipliers
+#    z_U         : final values for the upper bound multipliers
+#    constraints : final values for the constraints
+#    lambda      : final values for the Lagrange mulipliers
 
 ipoptr <-
 function( x0, 
@@ -60,43 +60,43 @@ function( x0,
 
     # internal function to check the arguments of the functions
     checkFunctionArguments <- function( fun, arglist, funname ) {
-		if( !is.function(fun) ) stop(paste(funname, " must be a function\n", sep = ""))
-		
+        if( !is.function(fun) ) stop(paste(funname, " must be a function\n", sep = ""))
+        
         # determine function arguments
         fargs <- formals(fun)
         
-		if ( length(fargs) > 1 ) {
+        if ( length(fargs) > 1 ) {
             # determine argument names user-defined function
-			argnames_udf <- names(fargs)[2:length(fargs)]	# remove first argument, which is x
+            argnames_udf <- names(fargs)[2:length(fargs)]    # remove first argument, which is x
             
             # determine argument names that where supplied to ipoptr()
-			argnames_supplied <- names(arglist)
+            argnames_supplied <- names(arglist)
             
             # determine which arguments where required but not supplied
-			m1 = match(argnames_udf, argnames_supplied)
-			if( any(is.na(m1)) ){
-				mx1 = which( is.na(m1) )
-				for( i in 1:length(mx1) ){
-					stop(paste(funname, " requires argument '", argnames_udf[mx1], "' but this has not been passed to the 'ipoptr' function.\n", sep = ""))
-				}
-			}
+            m1 = match(argnames_udf, argnames_supplied)
+            if( any(is.na(m1)) ){
+                mx1 = which( is.na(m1) )
+                for( i in 1:length(mx1) ){
+                    stop(paste(funname, " requires argument '", argnames_udf[mx1], "' but this has not been passed to the 'ipoptr' function.\n", sep = ""))
+                }
+            }
             
             # determine which arguments where supplied but not required
-			m2 = match(argnames_supplied, argnames_udf)
-			if( any(is.na(m2)) ){
-				mx2 = which( is.na(m2) )
-				for( i in 1:length(mx2) ){
-					stop(paste("'", argnames_supplied[mx2], "' passed to (...) in 'ipoptr' but this is not required in the ", funname, " function.\n", sep = ""))
-				}
-			}
-		}
-		return( 0 )
-	}
+            m2 = match(argnames_supplied, argnames_udf)
+            if( any(is.na(m2)) ){
+                mx2 = which( is.na(m2) )
+                for( i in 1:length(mx2) ){
+                    stop(paste("'", argnames_supplied[mx2], "' passed to (...) in 'ipoptr' but this is not required in the ", funname, " function.\n", sep = ""))
+                }
+            }
+        }
+        return( 0 )
+    }
     
     # extract list of additional arguments and check user-defined functions
     arglist <- list(...)
-	checkFunctionArguments( eval_f, arglist, 'eval_f' )
-	checkFunctionArguments( eval_grad_f, arglist, 'eval_grad_f' )
+    checkFunctionArguments( eval_f, arglist, 'eval_f' )
+    checkFunctionArguments( eval_grad_f, arglist, 'eval_grad_f' )
     
     num.constraints <- length( constraint_lb )
     if ( num.constraints > 0 ) {
@@ -124,7 +124,6 @@ function( x0,
         checkFunctionArguments( eval_h, c( arglist, obj_factor=0, hessian_lambda=0 ), 'eval_h' )
         eval_h_wrapper = function( x, obj_factor, hessian_lambda ) { eval_h(x, obj_factor, hessian_lambda, ...) }
     }
-	
 
 
     # build ipoptr object

@@ -7,26 +7,23 @@
 lib_LTLIBRARIES = libipoptamplinterface.la
 bin_PROGRAMS = ipopt
 
-libipoptamplinterface_la_SOURCES = \
-	AmplTNLP.cpp
+libipoptamplinterface_la_SOURCES = AmplTNLP.cpp
 
-libipoptamplinterface_la_LIBADD = ../../libipopt.la \
-	$(IPOPTAMPLINTERFACELIB_LFLAGS)
+libipoptamplinterface_la_LIBADD = ../../libipopt.la $(IPOPTAMPLINTERFACELIB_LFLAGS)
 
-ipopt_SOURCES = \
-	ampl_ipopt.cpp
+ipopt_SOURCES = ampl_ipopt.cpp
 
 ipopt_LDADD = libipoptamplinterface.la ../../libipopt.la
 
 AM_LDFLAGS = $(LT_LDFLAGS)
 
 AM_CPPFLAGS = \
-	-I$(srcdir)/../../Common \
-	-I$(srcdir)/../../LinAlg \
-	-I$(srcdir)/../../LinAlg/TMatrices \
-	-I$(srcdir)/../../Algorithm \
-	-I$(srcdir)/../../Interfaces \
-	$(IPOPTAMPLINTERFACELIB_CFLAGS)
+  -I$(srcdir)/../../Common \
+  -I$(srcdir)/../../LinAlg \
+  -I$(srcdir)/../../LinAlg/TMatrices \
+  -I$(srcdir)/../../Algorithm \
+  -I$(srcdir)/../../Interfaces \
+  $(IPOPTAMPLINTERFACELIB_CFLAGS)
 
 includeipoptdir = $(includedir)/coin-or
 includeipopt_HEADERS = AmplTNLP.hpp

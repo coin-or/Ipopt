@@ -901,12 +901,12 @@ Suffix & Direction & \multicolumn{1}{c|}{Description}  \\ \hline
                       the values may not be repeated. Note that the order of the values is crucial.\\ \hline
 \multirow{2}{*}{\textbf{\statei{\emph{i}}}} & \multirow{2}{*}{IN } &
                          This is similar to \textbf{\statez}, but it now indicates the order for the parameters at the perturbed value.
-						 You must define one for each $\curls{i: 1 \leq i \leq \mbox{\texttt{\nstepsopt}}}$. \\
+                         You must define one for each $\curls{i: 1 \leq i \leq \mbox{\texttt{\nstepsopt}}}$. \\
                       && This suffix should have the same values as \textbf{\statez}. It takes values from 1 to length($p$), and
                          the values may no be repeated.\\ \hline
 \multirow{2}{*}{\textbf{\statevi{\emph{i}}}} & \multirow{2}{*}{IN} &
                            This is used to communicate the values of the perturbed parameters.
-					       You must define one for each  $\curls{i: 1 \leq i \leq \mbox{\texttt{\nstepsopt}}}$. \\
+                           You must define one for each  $\curls{i: 1 \leq i \leq \mbox{\texttt{\nstepsopt}}}$. \\
                       &&   It has to be set for the same variables as \textbf{\stateo}.\\ \hline
 \textbf{\initc} & IN & This is a flag that indicates the constraint is artificial, e.g., $w - p_0=0$ in Problem \eqref{eq:reform}.
               If the constraint is artificial, set this suffix to 1 (no indexing is necessary). \\ \hline

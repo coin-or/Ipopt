@@ -14,7 +14,7 @@
 
 get.option.types <- function(opts) {
 
-	# define types of ipopt options
+    # define types of ipopt options
     ipopt.option.types <- list(
 
         # Output
@@ -174,15 +174,15 @@ get.option.types <- function(opts) {
               "wsmp_scaling"="integer",
               "wsmp_singularity_threshold"="numeric"
     )
-	
-	 
-	
-	# initialize list with options sorted by type
-	converted.opts <- list( "integer"=list(), "string"=list(), "numeric"=list() )
-	
-	is.wholenumber <- function(x, tol = .Machine$double.eps^0.5)  abs(x - round(x)) < tol
 
-	# check if we have at least 1 element in the list, otherwise the 
+ 
+
+    # initialize list with options sorted by type
+    converted.opts <- list( "integer"=list(), "string"=list(), "numeric"=list() )
+
+    is.wholenumber <- function(x, tol = .Machine$double.eps^0.5)  abs(x - round(x)) < tol
+
+    # check if we have at least 1 element in the list, otherwise the 
     # loop runs from 1 to down 0 and we get errors
     if ( length( opts ) > 0 ) {
 
@@ -212,6 +212,6 @@ get.option.types <- function(opts) {
             }
         }
     }
-	
-	return ( converted.opts )
+
+    return ( converted.opts )
 }

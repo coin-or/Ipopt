@@ -167,7 +167,7 @@ print( ipoptr( x0=x0,
                eval_h_structure=eval_h_structure,
                opts=opts) )
 
-# solve Rosenbrock Banana function with approximated hessian			   
+# solve Rosenbrock Banana function with approximated hessian
 print( ipoptr( x0=x0, 
                eval_f=eval_f, 
                eval_grad_f=eval_grad_f, 

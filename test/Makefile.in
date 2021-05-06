@@ -439,14 +439,14 @@ redhess_cpp_LDADD = ../contrib/sIPOPT/src/libsipopt.la
 
 # Here list all include flags, relative to this "srcdir" directory.
 AM_CPPFLAGS = \
-	-I$(srcdir)/../src/Common \
-	-I$(srcdir)/../src/LinAlg \
-	-I$(srcdir)/../src/LinAlg/TMatrices \
-	-I$(srcdir)/../src/Algorithm \
-	-I$(srcdir)/../src/Interfaces \
-	-I$(srcdir)/../contrib/sIPOPT/src \
-	-I$(srcdir)/../contrib/sIPOPT/examples/parametric_cpp \
-	-I$(srcdir)/../contrib/sIPOPT/examples/redhess_cpp
+  -I$(srcdir)/../src/Common \
+  -I$(srcdir)/../src/LinAlg \
+  -I$(srcdir)/../src/LinAlg/TMatrices \
+  -I$(srcdir)/../src/Algorithm \
+  -I$(srcdir)/../src/Interfaces \
+  -I$(srcdir)/../contrib/sIPOPT/src \
+  -I$(srcdir)/../contrib/sIPOPT/examples/parametric_cpp \
+  -I$(srcdir)/../contrib/sIPOPT/examples/redhess_cpp
 
 AM_FFLAGS = -I$(srcdir)/../src/Interfaces
 all: all-am

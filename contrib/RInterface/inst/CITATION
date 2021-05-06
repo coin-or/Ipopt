@@ -1,7 +1,7 @@
 citHeader("To cite Ipopt in publications use:")
 
 citEntry(entry="Article",
-  title = 	 "On the Implementation of a Primal-Dual Interior Point Filter Line Search Algorithm for Large-Scale Nonlinear Programming",
+  title = "On the Implementation of a Primal-Dual Interior Point Filter Line Search Algorithm for Large-Scale Nonlinear Programming",
   author = personList(as.person("A. W\"{a}chter"),
                       as.person("L. T. Biegler")),
   year =     "2006",

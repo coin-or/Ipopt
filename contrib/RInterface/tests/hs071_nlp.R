@@ -32,7 +32,7 @@ eval_grad_f <- function( x ) {
     return( c( x[1] * x[4] + x[4] * (x[1] + x[2] + x[3]),
                x[1] * x[4],
                x[1] * x[4] + 1.0,
-               x[1] * (x[1] + x[2] + x[3]) ) )		  
+               x[1] * (x[1] + x[2] + x[3]) ) )
 }
 
 # constraint functions
