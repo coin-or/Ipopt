@@ -19,23 +19,23 @@ noinst_PROGRAMS += parametric_cpp redhess_cpp
 endif
 
 nodist_hs071_cpp_SOURCES = hs071_main.cpp hs071_nlp.cpp hs071_nlp.hpp
-hs071_cpp_LDADD = ../src/Interfaces/libipopt.la
+hs071_cpp_LDADD = ../src/libipopt.la
 
 nodist_hs071_c_SOURCES = hs071_c.c
-hs071_c_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
+hs071_c_LDADD = ../src/libipopt.la $(CXXLIBS)
 
 nodist_emptynlp_SOURCES = emptynlp.cpp
-emptynlp_LDADD = ../src/Interfaces/libipopt.la
+emptynlp_LDADD = ../src/libipopt.la
 
 nodist_getcurr_SOURCES = getcurr.cpp
-getcurr_LDADD = ../src/Interfaces/libipopt.la
+getcurr_LDADD = ../src/libipopt.la
 
 if !IPOPT_SINGLE
   nodist_hs071_f_SOURCES = hs071_f.f
 else
   nodist_hs071_f_SOURCES = hs071_fs.f
 endif
-hs071_f_LDADD = ../src/Interfaces/libipopt.la $(CXXLIBS)
+hs071_f_LDADD = ../src/libipopt.la $(CXXLIBS)
 
 if BUILD_JAVA
 if !IPOPT_SINGLE
@@ -45,7 +45,7 @@ else
 endif
 
 $(HS071J).class : $(top_srcdir)/examples/hs071_java/$(HS071J).java
-	$(JAVAC) -classpath ../src/Interfaces/org.coinor.ipopt.jar $< -d $(PWD)
+	$(JAVAC) -classpath ../src/org.coinor.ipopt.jar $< -d $(PWD)
 
 all-local : $(HS071J).class
 

@@ -393,22 +393,6 @@ fi
 
 AM_CONDITIONAL([BUILD_JAVA], [test "$enable_java" != no])
 
-#########################
-# Makefile conditionals #
-#########################
-
-# The following variable collects the names of libraries that should
-# be included into libipopt.a (relative to subdir Interfaces, where it
-# is made)
-
-AC_SUBST(IPALLLIBS)
-IPALLLIBS="../contrib/CGPenalty/libcgpenalty.la ../Algorithm/libipoptalg.la ../Algorithm/LinearSolvers/liblinsolvers.la ../Common/libcommon.la ../LinAlg/liblinalg.la ../LinAlg/TMatrices/libtmatrices.la"
-
-AM_CONDITIONAL([BUILD_INEXACT], [test $use_inexact = yes])
-if test $use_inexact = yes; then
-  IPALLLIBS="../Algorithm/Inexact/libinexact.la $IPALLLIBS"
-fi
-
 ########################################################################
 ##                      Linear solver loader                          ##
 ########################################################################
@@ -562,15 +546,7 @@ fi
 AC_COIN_FINALIZE_FLAGS([IpoptLib IpoptAmplInterfaceLib SIpoptAmplInterfaceLib])
 
 AC_CONFIG_FILES([Makefile
-		 src/Common/Makefile
-		 src/LinAlg/Makefile
-		 src/LinAlg/TMatrices/Makefile 
-		 src/Interfaces/Makefile
-		 src/Algorithm/Makefile
-		 src/Algorithm/LinearSolvers/Makefile
-		 src/Algorithm/Inexact/Makefile
-		 src/contrib/CGPenalty/Makefile
-		 src/Apps/Makefile
+		 src/Makefile
 		 src/Apps/AmplSolver/Makefile
 		 test/Makefile
 		 test/run_unitTests

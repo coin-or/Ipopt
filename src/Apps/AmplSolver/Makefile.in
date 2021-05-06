@@ -141,7 +141,7 @@ am__uninstall_files_from_dir = { \
   }
 LTLIBRARIES = $(lib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
-libipoptamplinterface_la_DEPENDENCIES = ../../Interfaces/libipopt.la \
+libipoptamplinterface_la_DEPENDENCIES = ../../libipopt.la \
 	$(am__DEPENDENCIES_1)
 am_libipoptamplinterface_la_OBJECTS = AmplTNLP.lo
 libipoptamplinterface_la_OBJECTS =  \
@@ -152,8 +152,7 @@ am__v_lt_0 = --silent
 am__v_lt_1 = 
 am_ipopt_OBJECTS = ampl_ipopt.$(OBJEXT)
 ipopt_OBJECTS = $(am_ipopt_OBJECTS)
-ipopt_DEPENDENCIES = libipoptamplinterface.la \
-	../../Interfaces/libipopt.la
+ipopt_DEPENDENCIES = libipoptamplinterface.la ../../libipopt.la
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -268,7 +267,6 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-IPALLLIBS = @IPALLLIBS@
 IPOPTAMPLINTERFACELIB_CFLAGS = @IPOPTAMPLINTERFACELIB_CFLAGS@
 IPOPTAMPLINTERFACELIB_CFLAGS_NOPC = @IPOPTAMPLINTERFACELIB_CFLAGS_NOPC@
 IPOPTAMPLINTERFACELIB_LFLAGS = @IPOPTAMPLINTERFACELIB_LFLAGS@
@@ -391,13 +389,13 @@ lib_LTLIBRARIES = libipoptamplinterface.la
 libipoptamplinterface_la_SOURCES = \
 	AmplTNLP.cpp
 
-libipoptamplinterface_la_LIBADD = ../../Interfaces/libipopt.la \
+libipoptamplinterface_la_LIBADD = ../../libipopt.la \
 	$(IPOPTAMPLINTERFACELIB_LFLAGS)
 
 ipopt_SOURCES = \
 	ampl_ipopt.cpp
 
-ipopt_LDADD = libipoptamplinterface.la ../../Interfaces/libipopt.la
+ipopt_LDADD = libipoptamplinterface.la ../../libipopt.la
 AM_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = \
 	-I$(srcdir)/../../Common \

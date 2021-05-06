@@ -284,8 +284,7 @@ am__define_uniq_tagged_files = \
 ETAGS = etags
 CTAGS = ctags
 CSCOPE = cscope
-DIST_SUBDIRS = src/Common src/LinAlg src/Algorithm \
-	src/contrib/CGPenalty src/Interfaces src/Apps contrib/sIPOPT
+DIST_SUBDIRS = src contrib/sIPOPT
 ACLOCAL = @ACLOCAL@
 ADD_CFLAGS = @ADD_CFLAGS@
 ADD_CXXFLAGS = @ADD_CXXFLAGS@
@@ -337,7 +336,6 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-IPALLLIBS = @IPALLLIBS@
 IPOPTAMPLINTERFACELIB_CFLAGS = @IPOPTAMPLINTERFACELIB_CFLAGS@
 IPOPTAMPLINTERFACELIB_CFLAGS_NOPC = @IPOPTAMPLINTERFACELIB_CFLAGS_NOPC@
 IPOPTAMPLINTERFACELIB_LFLAGS = @IPOPTAMPLINTERFACELIB_LFLAGS@
@@ -456,8 +454,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = src/Common src/LinAlg src/Algorithm src/contrib/CGPenalty \
-	src/Interfaces src/Apps $(am__append_1)
+SUBDIRS = src $(am__append_1)
 doc_DATA = README.md AUTHORS LICENSE
 pkgconfiglibdir = $(libdir)/pkgconfig
 pkgconfiglib_DATA = ipopt.pc
@@ -497,6 +494,29 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	$(am__cd) $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 $(am__aclocal_m4_deps):
+
+src/Common/config.h: src/Common/stamp-h1
+	@test -f $@ || rm -f src/Common/stamp-h1
+	@test -f $@ || $(MAKE) $(AM_MAKEFLAGS) src/Common/stamp-h1
+
+src/Common/stamp-h1: $(top_srcdir)/src/Common/config.h.in $(top_builddir)/config.status
+	@rm -f src/Common/stamp-h1
+	cd $(top_builddir) && $(SHELL) ./config.status src/Common/config.h
+$(top_srcdir)/src/Common/config.h.in: @MAINTAINER_MODE_TRUE@ $(am__configure_deps) 
+	($(am__cd) $(top_srcdir) && $(AUTOHEADER))
+	rm -f src/Common/stamp-h1
+	touch $@
+
+src/Common/config_ipopt.h: src/Common/stamp-h2
+	@test -f $@ || rm -f src/Common/stamp-h2
+	@test -f $@ || $(MAKE) $(AM_MAKEFLAGS) src/Common/stamp-h2
+
+src/Common/stamp-h2: $(top_srcdir)/src/Common/config_ipopt.h.in $(top_builddir)/config.status
+	@rm -f src/Common/stamp-h2
+	cd $(top_builddir) && $(SHELL) ./config.status src/Common/config_ipopt.h
+
+distclean-hdr:
+	-rm -f src/Common/config.h src/Common/stamp-h1 src/Common/config_ipopt.h src/Common/stamp-h2
 ipopt.pc: $(top_builddir)/config.status $(srcdir)/ipopt.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 doc/Doxyfile: $(top_builddir)/config.status $(top_srcdir)/doc/Doxyfile.in
@@ -765,8 +785,8 @@ clean-am: clean-generic clean-libtool clean-local mostlyclean-am
 distclean: distclean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -f Makefile
-distclean-am: clean-am distclean-generic distclean-libtool \
-	distclean-tags
+distclean-am: clean-am distclean-generic distclean-hdr \
+	distclean-libtool distclean-tags
 
 dvi: dvi-recursive
 
@@ -833,17 +853,18 @@ uninstall-am: uninstall-docDATA uninstall-pkgconfiglibDATA
 .PHONY: $(am__recursive_targets) CTAGS GTAGS TAGS all all-am \
 	am--refresh check check-am clean clean-cscope clean-generic \
 	clean-libtool clean-local cscope cscopelist-am ctags ctags-am \
-	distclean distclean-generic distclean-libtool distclean-tags \
-	dvi dvi-am html html-am info info-am install install-am \
-	install-data install-data-am install-docDATA install-dvi \
-	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-info install-info-am install-man \
-	install-pdf install-pdf-am install-pkgconfiglibDATA install-ps \
-	install-ps-am install-strip installcheck installcheck-am \
-	installdirs installdirs-am maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-generic \
-	mostlyclean-libtool pdf pdf-am ps ps-am tags tags-am uninstall \
-	uninstall-am uninstall-docDATA uninstall-pkgconfiglibDATA
+	distclean distclean-generic distclean-hdr distclean-libtool \
+	distclean-tags dvi dvi-am html html-am info info-am install \
+	install-am install-data install-data-am install-docDATA \
+	install-dvi install-dvi-am install-exec install-exec-am \
+	install-html install-html-am install-info install-info-am \
+	install-man install-pdf install-pdf-am \
+	install-pkgconfiglibDATA install-ps install-ps-am \
+	install-strip installcheck installcheck-am installdirs \
+	installdirs-am maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am \
+	ps ps-am tags tags-am uninstall uninstall-am uninstall-docDATA \
+	uninstall-pkgconfiglibDATA
 
 .PRECIOUS: Makefile
 

@@ -75,8 +75,8 @@ fi
 # libtool magic does not work with Java programs and no rpath on Windows, so add path to find Ipopt DLL dependencies to PATH
 @BUILD_JAVA_TRUE@echo "Testing Java Example..."
 @BUILD_JAVA_TRUE@case @build_os@ in *mingw* | *msys* ) PATH=@bindir@:$PATH ;; esac
-@BUILD_JAVA_TRUE@@IPOPT_SINGLE_FALSE@checkrun java -Djava.library.path=../src/Interfaces/.libs -cp ../src/Interfaces/org.coinor.ipopt.jar:. HS071 || retval=$?
-@BUILD_JAVA_TRUE@@IPOPT_SINGLE_TRUE@checkrun java -Djava.library.path=../src/Interfaces/.libs -cp ../src/Interfaces/org.coinor.ipopt.jar:. HS071s || retval=$?
+@BUILD_JAVA_TRUE@@IPOPT_SINGLE_FALSE@checkrun java -Djava.library.path=../src/.libs -cp ../src/org.coinor.ipopt.jar:. HS071 || retval=$?
+@BUILD_JAVA_TRUE@@IPOPT_SINGLE_TRUE@checkrun java -Djava.library.path=../src/.libs -cp ../src/org.coinor.ipopt.jar:. HS071s || retval=$?
 @BUILD_JAVA_FALSE@echo "Skip testing Java Example (Java interface not build)"
 
 # sIpopt examples

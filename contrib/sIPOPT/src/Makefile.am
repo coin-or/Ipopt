@@ -34,7 +34,7 @@ libsipopt_la_SOURCES = \
 	SensSimpleBacksolver.cpp \
 	SensStdStepCalc.cpp
 
-libsipopt_la_LIBADD = ../../../src/Interfaces/libipopt.la
+libsipopt_la_LIBADD = ../../../src/libipopt.la
 
 AM_LDFLAGS = $(LT_LDFLAGS)
 

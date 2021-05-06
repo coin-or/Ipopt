@@ -136,7 +136,7 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(libdir)" \
 	"$(DESTDIR)$(includesipoptdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
-libsipopt_la_DEPENDENCIES = ../../../src/Interfaces/libipopt.la
+libsipopt_la_DEPENDENCIES = ../../../src/libipopt.la
 am_libsipopt_la_OBJECTS = SensAlgorithm.lo SensRegOp.lo \
 	SensDenseGenSchurDriver.lo SensIndexPCalculator.lo \
 	SensIndexSchurData.lo SensMetadataMeasurement.lo \
@@ -268,7 +268,6 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-IPALLLIBS = @IPALLLIBS@
 IPOPTAMPLINTERFACELIB_CFLAGS = @IPOPTAMPLINTERFACELIB_CFLAGS@
 IPOPTAMPLINTERFACELIB_CFLAGS_NOPC = @IPOPTAMPLINTERFACELIB_CFLAGS_NOPC@
 IPOPTAMPLINTERFACELIB_LFLAGS = @IPOPTAMPLINTERFACELIB_LFLAGS@
@@ -416,7 +415,7 @@ libsipopt_la_SOURCES = \
 	SensSimpleBacksolver.cpp \
 	SensStdStepCalc.cpp
 
-libsipopt_la_LIBADD = ../../../src/Interfaces/libipopt.la
+libsipopt_la_LIBADD = ../../../src/libipopt.la
 AM_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -DSIPOPTLIB_BUILD \
   -I$(srcdir)/../../../src/Common \

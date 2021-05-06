@@ -10,13 +10,13 @@ bin_PROGRAMS = ipopt
 libipoptamplinterface_la_SOURCES = \
 	AmplTNLP.cpp
 
-libipoptamplinterface_la_LIBADD = ../../Interfaces/libipopt.la \
+libipoptamplinterface_la_LIBADD = ../../libipopt.la \
 	$(IPOPTAMPLINTERFACELIB_LFLAGS)
 
 ipopt_SOURCES = \
 	ampl_ipopt.cpp
 
-ipopt_LDADD = libipoptamplinterface.la ../../Interfaces/libipopt.la
+ipopt_LDADD = libipoptamplinterface.la ../../libipopt.la
 
 AM_LDFLAGS = $(LT_LDFLAGS)
 
