@@ -195,8 +195,11 @@ bool Ma86SolverInterface::InitializeImpl(
    /* Note: we can't set control_.action = false as we need to know the
     * intertia. (Otherwise we just enter the restoration phase and fail) */
 
-   options.GetIntegerValue("ma86_print_level", control_.diagnostics_level, prefix);
-   options.GetIntegerValue("ma86_nemin", control_.nemin, prefix);
+   Index temp;
+   options.GetIntegerValue("ma86_print_level", temp, prefix);
+   control_.diagnostics_level = temp;
+   options.GetIntegerValue("ma86_nemin", temp, prefix);
+   control_.nemin = temp;
    options.GetNumericValue("ma86_small", control_.small_, prefix);
    options.GetNumericValue("ma86_static", control_.static_, prefix);
    options.GetNumericValue("ma86_u", control_.u, prefix);
@@ -242,7 +245,7 @@ ESymSolverStatus Ma86SolverInterface::InitializeStructure(
    struct ma86_info info, info2;
    struct mc68_control control68;
    struct mc68_info info68;
-   Index* order_amd, *order_metis;
+   int* order_amd, *order_metis;
    void* keep_amd, *keep_metis;
 
    // Store size for later use
@@ -257,7 +260,7 @@ ESymSolverStatus Ma86SolverInterface::InitializeStructure(
    DBG_ASSERT(ordering_ == ORDER_METIS || ordering_ == ORDER_AMD || ordering_ == ORDER_AUTO);
    if( ordering_ == ORDER_METIS || ordering_ == ORDER_AUTO )
    {
-      order_metis = new Index[dim];
+      order_metis = new int[dim];
       mc68_order(3, dim, ia, ja, order_metis, &control68, &info68); /* MeTiS */
       if( info68.flag == -5 )
       {
@@ -273,7 +276,7 @@ ESymSolverStatus Ma86SolverInterface::InitializeStructure(
    }
    if( ordering_ == ORDER_AMD || ordering_ == ORDER_AUTO )
    {
-      order_amd = new Index[dim];
+      order_amd = new int[dim];
       mc68_order(1, dim, ia, ja, order_amd, &control68, &info68); /* AMD */
    }
    if( info68.flag < 0 )

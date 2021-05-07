@@ -637,7 +637,7 @@ bool TNLP::get_curr_iterate(
    // resort Ipopt-internal variable duals to TNLP-version
    if( z_L != NULL && z_U != NULL )
    {
-      int n_x_fixed;
+      Index n_x_fixed;
       Index* x_fixed_map;
       TNLPAdapter::FixedVariableTreatmentEnum fixed_variable_treatment;
       tnlp_adapter->GetFixedVariables(n_x_fixed, x_fixed_map, fixed_variable_treatment);
@@ -757,7 +757,7 @@ bool TNLP::get_curr_violations(
    if( m != m_full && (nlp_constraint_violation != NULL || compl_g != NULL) )
       THROW_EXCEPTION(IpoptException, "Incorrect dimension of g(x) given to TNLP::get_curr_violations().\n");
 
-   int n_x_fixed;
+   Index n_x_fixed;
    Index* x_fixed_map;
    TNLPAdapter::FixedVariableTreatmentEnum fixed_variable_treatment;
    tnlp_adapter->GetFixedVariables(n_x_fixed, x_fixed_map, fixed_variable_treatment);

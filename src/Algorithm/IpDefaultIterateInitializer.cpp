@@ -145,7 +145,7 @@ bool DefaultIterateInitializer::InitializeImpl(
    options.GetBoolValue("least_square_init_duals", least_square_init_duals_, prefix);
    ASSERT_EXCEPTION(!least_square_init_duals_ || IsValid(aug_system_solver_), OPTION_INVALID,
                     "The least_square_init_duals can only be chosen if the DefaultInitializer object has an AugSystemSolver.\n");
-   int enum_int;
+   Index enum_int;
    options.GetEnumValue("bound_mult_init_method", enum_int, prefix);
    bound_mult_init_method_ = BoundMultInitMethod(enum_int);
    if( bound_mult_init_method_ == B_MU_BASED )

@@ -270,14 +270,14 @@ bool PardisoSolverInterface::InitializeImpl(
    //options.GetIntegerValue("pardiso_out_of_core_power",
    //                        pardiso_out_of_core_power, prefix);
    options.GetBoolValue("pardiso_skip_inertia_check", skip_inertia_check_, prefix);
-   int pardiso_msglvl;
+   Index pardiso_msglvl;
    options.GetIntegerValue("pardiso_msglvl", pardiso_msglvl, prefix);
-   int max_iterref_steps;
+   Index max_iterref_steps;
    options.GetIntegerValue("pardiso_max_iterative_refinement_steps", max_iterref_steps, prefix);
-   int order;
+   Index order;
    options.GetEnumValue("pardiso_order", order, prefix);
    options.GetBoolValue("pardiso_iterative", pardiso_iterative_, prefix);
-   int pardiso_max_iter;
+   Index pardiso_max_iter;
    options.GetIntegerValue("pardiso_max_iter", pardiso_max_iter, prefix);
    Number pardiso_iter_relative_tol;
    options.GetNumericValue("pardiso_iter_relative_tol", pardiso_iter_relative_tol, prefix);

@@ -86,7 +86,7 @@ private:
    InfPrOutput inf_pr_output_;
 
    /** Option indicating at which iteration frequency the summary line should be printed */
-   int print_frequency_iter_;
+   Index print_frequency_iter_;
 
    /** Option indicating at which time frequency the summary line should be printed */
    Number print_frequency_time_;

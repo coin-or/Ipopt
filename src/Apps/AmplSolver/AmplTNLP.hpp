@@ -56,7 +56,7 @@ public:
       //      suffix_values_.push_back();
    }
 
-   const Index* GetIntegerSuffixValues(
+   const int* GetIntegerSuffixValues(
       const std::string& suffix_string,
       Suffix_Source      source
    ) const;

@@ -101,7 +101,7 @@ inline Number IpBlasDasum(
  * Compute index for largest absolute element of vector x.
  * @since 3.14.0
  */
-IPOPTLIB_EXPORT int IpBlasIamax(
+IPOPTLIB_EXPORT Index IpBlasIamax(
    Index         size,
    const Number* x,
    Index         incX

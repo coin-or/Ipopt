@@ -327,8 +327,11 @@ bool Ma97SolverInterface::InitializeImpl(
    control_.f_arrays = 1; // Use Fortran numbering (faster)
    control_.action = 0; // false, shuold exit with error on singularity
 
-   options.GetIntegerValue("ma97_print_level", control_.print_level, prefix);
-   options.GetIntegerValue("ma97_nemin", control_.nemin, prefix);
+   Index temp;
+   options.GetIntegerValue("ma97_print_level", temp, prefix);
+   control_.print_level = temp;
+   options.GetIntegerValue("ma97_nemin", temp, prefix);
+   control_.nemin = temp;
    options.GetNumericValue("ma97_small", control_.small, prefix);
    options.GetNumericValue("ma97_u", control_.u, prefix);
    options.GetNumericValue("ma97_umax", umax_, prefix);

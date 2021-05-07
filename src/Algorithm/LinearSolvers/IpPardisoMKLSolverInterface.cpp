@@ -186,11 +186,11 @@ bool PardisoMKLSolverInterface::InitializeImpl(
    //options.GetIntegerValue("pardiso_out_of_core_power",
    //                        pardiso_out_of_core_power, prefix);
    options.GetBoolValue("pardisomkl_skip_inertia_check", skip_inertia_check_, prefix);
-   int pardiso_msglvl;
+   Index pardiso_msglvl;
    options.GetIntegerValue("pardisomkl_msglvl", pardiso_msglvl, prefix);
-   int max_iterref_steps;
+   Index max_iterref_steps;
    options.GetIntegerValue("pardisomkl_max_iterative_refinement_steps", max_iterref_steps, prefix);
-   int order;
+   Index order;
    options.GetEnumValue("pardisomkl_order", order, prefix);
 
    // Number value = 0.0;

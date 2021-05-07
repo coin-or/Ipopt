@@ -150,7 +150,7 @@ bool IterativePardisoSolverInterface::InitializeImpl(
    //options.GetIntegerValue("pardiso_out_of_core_power",
    //                        pardiso_out_of_core_power, prefix);
    options.GetBoolValue("pardiso_skip_inertia_check", skip_inertia_check_, prefix);
-   int max_iterref_steps;
+   Index max_iterref_steps;
    options.GetIntegerValue("pardiso_max_iterative_refinement_steps", max_iterref_steps, prefix);
 
    // PD system
@@ -173,9 +173,9 @@ bool IterativePardisoSolverInterface::InitializeImpl(
    options.GetNumericValue("pardiso_iter_inverse_norm_factor", normal_pardiso_iter_inverse_norm_factor_,
                            prefix + "normal.");
 
-   int pardiso_msglvl;
+   Index pardiso_msglvl;
    options.GetIntegerValue("pardiso_msglvl", pardiso_msglvl, prefix);
-   int order;
+   Index order;
    options.GetEnumValue("pardiso_order", order, prefix);
    options.GetIntegerValue("pardiso_max_droptol_corrections", pardiso_max_droptol_corrections_, prefix);
 

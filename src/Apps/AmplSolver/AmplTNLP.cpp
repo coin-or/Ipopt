@@ -1761,7 +1761,7 @@ void AmplSuffixHandler::PrepareAmplForSuffixes(
    suf_declare(suftab_, n);
 }
 
-const Index*
+const int*
 AmplSuffixHandler::GetIntegerSuffixValues(
    const std::string& suffix_string,
    Suffix_Source      source
@@ -1802,7 +1802,7 @@ std::vector<Index> AmplSuffixHandler::GetIntegerSuffixValues(
 ) const
 {
    std::vector<Index> ret;
-   const Index* ptr = GetIntegerSuffixValues(suffix_string, source);
+   const int* ptr = GetIntegerSuffixValues(suffix_string, source);
    if( ptr )
    {
       ret.reserve(n);

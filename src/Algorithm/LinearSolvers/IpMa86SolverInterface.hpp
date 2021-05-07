@@ -106,7 +106,7 @@ private:
    int ndim_;     ///< Number of dimensions
    Number* val_;  ///< Storage for variables
    int numneg_;   ///< Number of negative pivots in last factorization
-   Index* order_; ///< Fill reducing permutation
+   int* order_; ///< Fill reducing permutation
    void* keep_;   ///< Stores pointer to factors (only understood by Fortran code!)
    bool pivtol_changed_; ///< indicates if pivtol has been changed
 
