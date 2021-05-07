@@ -97,13 +97,21 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 @HAVE_PARDISO_MKL_TRUE@am__append_1 = Algorithm/LinearSolvers/IpPardisoMKLSolverInterface.cpp
-@HAVE_MA28_TRUE@am__append_2 = Algorithm/LinearSolvers/IpMa28TDependencyDetector.cpp
-@HAVE_MA28_TRUE@@IPOPT_SINGLE_TRUE@am__append_3 = Algorithm/LinearSolvers/IpMa28sPartition.F
-@HAVE_MA28_TRUE@@IPOPT_SINGLE_FALSE@am__append_4 = Algorithm/LinearSolvers/IpMa28Partition.F
-@HAVE_WSMP_TRUE@am__append_5 = Algorithm/LinearSolvers/IpWsmpSolverInterface.cpp Algorithm/LinearSolvers/IpIterativeWsmpSolverInterface.cpp
-@COIN_HAS_MUMPS_TRUE@am__append_6 = Algorithm/LinearSolvers/IpMumpsSolverInterface.cpp
-@COIN_HAS_SPRAL_TRUE@am__append_7 = Algorithm/LinearSolvers/IpSpralSolverInterface.cpp
-@BUILD_INEXACT_TRUE@am__append_8 = \
+@IPOPT_INT64_FALSE@am__append_2 = \
+@IPOPT_INT64_FALSE@  Algorithm/LinearSolvers/IpMc19TSymScalingMethod.cpp \
+@IPOPT_INT64_FALSE@  Algorithm/LinearSolvers/IpMa27TSolverInterface.cpp \
+@IPOPT_INT64_FALSE@  Algorithm/LinearSolvers/IpMa57TSolverInterface.cpp \
+@IPOPT_INT64_FALSE@  Algorithm/LinearSolvers/IpMa77SolverInterface.cpp \
+@IPOPT_INT64_FALSE@  Algorithm/LinearSolvers/IpMa86SolverInterface.cpp \
+@IPOPT_INT64_FALSE@  Algorithm/LinearSolvers/IpMa97SolverInterface.cpp
+
+@HAVE_MA28_TRUE@@IPOPT_INT64_FALSE@am__append_3 = Algorithm/LinearSolvers/IpMa28TDependencyDetector.cpp
+@HAVE_MA28_TRUE@@IPOPT_INT64_FALSE@@IPOPT_SINGLE_TRUE@am__append_4 = Algorithm/LinearSolvers/IpMa28sPartition.F
+@HAVE_MA28_TRUE@@IPOPT_INT64_FALSE@@IPOPT_SINGLE_FALSE@am__append_5 = Algorithm/LinearSolvers/IpMa28Partition.F
+@HAVE_WSMP_TRUE@am__append_6 = Algorithm/LinearSolvers/IpWsmpSolverInterface.cpp Algorithm/LinearSolvers/IpIterativeWsmpSolverInterface.cpp
+@COIN_HAS_MUMPS_TRUE@am__append_7 = Algorithm/LinearSolvers/IpMumpsSolverInterface.cpp
+@COIN_HAS_SPRAL_TRUE@am__append_8 = Algorithm/LinearSolvers/IpSpralSolverInterface.cpp
+@BUILD_INEXACT_TRUE@am__append_9 = \
 @BUILD_INEXACT_TRUE@  Algorithm/Inexact/IpInexactAlgBuilder.cpp \
 @BUILD_INEXACT_TRUE@  Algorithm/Inexact/IpInexactCq.cpp \
 @BUILD_INEXACT_TRUE@  Algorithm/Inexact/IpInexactData.cpp \
@@ -119,7 +127,7 @@ host_triplet = @host@
 @BUILD_INEXACT_TRUE@  Algorithm/Inexact/IpIterativePardisoSolverInterface.cpp \
 @BUILD_INEXACT_TRUE@  Algorithm/Inexact/IpIterativeSolverTerminationTester.cpp
 
-@BUILD_JAVA_TRUE@am__append_9 = Interfaces/IpStdJInterface.cpp org_coinor_Ipopt.h
+@BUILD_JAVA_TRUE@am__append_10 = Interfaces/IpStdJInterface.cpp org_coinor_Ipopt.h
 subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -165,14 +173,20 @@ am__DEPENDENCIES_1 =
 libipopt_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
 am__dirstamp = $(am__leading_dot)dirstamp
 @HAVE_PARDISO_MKL_TRUE@am__objects_1 = Algorithm/LinearSolvers/IpPardisoMKLSolverInterface.lo
-@HAVE_MA28_TRUE@am__objects_2 = Algorithm/LinearSolvers/IpMa28TDependencyDetector.lo
-@HAVE_MA28_TRUE@@IPOPT_SINGLE_TRUE@am__objects_3 = Algorithm/LinearSolvers/IpMa28sPartition.lo
-@HAVE_MA28_TRUE@@IPOPT_SINGLE_FALSE@am__objects_4 = Algorithm/LinearSolvers/IpMa28Partition.lo
-@HAVE_WSMP_TRUE@am__objects_5 = Algorithm/LinearSolvers/IpWsmpSolverInterface.lo \
+@IPOPT_INT64_FALSE@am__objects_2 = Algorithm/LinearSolvers/IpMc19TSymScalingMethod.lo \
+@IPOPT_INT64_FALSE@	Algorithm/LinearSolvers/IpMa27TSolverInterface.lo \
+@IPOPT_INT64_FALSE@	Algorithm/LinearSolvers/IpMa57TSolverInterface.lo \
+@IPOPT_INT64_FALSE@	Algorithm/LinearSolvers/IpMa77SolverInterface.lo \
+@IPOPT_INT64_FALSE@	Algorithm/LinearSolvers/IpMa86SolverInterface.lo \
+@IPOPT_INT64_FALSE@	Algorithm/LinearSolvers/IpMa97SolverInterface.lo
+@HAVE_MA28_TRUE@@IPOPT_INT64_FALSE@am__objects_3 = Algorithm/LinearSolvers/IpMa28TDependencyDetector.lo
+@HAVE_MA28_TRUE@@IPOPT_INT64_FALSE@@IPOPT_SINGLE_TRUE@am__objects_4 = Algorithm/LinearSolvers/IpMa28sPartition.lo
+@HAVE_MA28_TRUE@@IPOPT_INT64_FALSE@@IPOPT_SINGLE_FALSE@am__objects_5 = Algorithm/LinearSolvers/IpMa28Partition.lo
+@HAVE_WSMP_TRUE@am__objects_6 = Algorithm/LinearSolvers/IpWsmpSolverInterface.lo \
 @HAVE_WSMP_TRUE@	Algorithm/LinearSolvers/IpIterativeWsmpSolverInterface.lo
-@COIN_HAS_MUMPS_TRUE@am__objects_6 = Algorithm/LinearSolvers/IpMumpsSolverInterface.lo
-@COIN_HAS_SPRAL_TRUE@am__objects_7 = Algorithm/LinearSolvers/IpSpralSolverInterface.lo
-@BUILD_INEXACT_TRUE@am__objects_8 =  \
+@COIN_HAS_MUMPS_TRUE@am__objects_7 = Algorithm/LinearSolvers/IpMumpsSolverInterface.lo
+@COIN_HAS_SPRAL_TRUE@am__objects_8 = Algorithm/LinearSolvers/IpSpralSolverInterface.lo
+@BUILD_INEXACT_TRUE@am__objects_9 =  \
 @BUILD_INEXACT_TRUE@	Algorithm/Inexact/IpInexactAlgBuilder.lo \
 @BUILD_INEXACT_TRUE@	Algorithm/Inexact/IpInexactCq.lo \
 @BUILD_INEXACT_TRUE@	Algorithm/Inexact/IpInexactData.lo \
@@ -187,7 +201,7 @@ am__dirstamp = $(am__leading_dot)dirstamp
 @BUILD_INEXACT_TRUE@	Algorithm/Inexact/IpInexactTSymScalingMethod.lo \
 @BUILD_INEXACT_TRUE@	Algorithm/Inexact/IpIterativePardisoSolverInterface.lo \
 @BUILD_INEXACT_TRUE@	Algorithm/Inexact/IpIterativeSolverTerminationTester.lo
-@BUILD_JAVA_TRUE@am__objects_9 = Interfaces/IpStdJInterface.lo
+@BUILD_JAVA_TRUE@am__objects_10 = Interfaces/IpStdJInterface.lo
 am_libipopt_la_OBJECTS = Common/IpDebug.lo Common/IpJournalist.lo \
 	Common/IpObserver.lo Common/IpOptionsList.lo \
 	Common/IpRegOptions.lo Common/IpTaggedObject.lo \
@@ -250,12 +264,6 @@ am_libipopt_la_OBJECTS = Common/IpDebug.lo Common/IpJournalist.lo \
 	Algorithm/LinearSolvers/IpTripletToCSRConverter.lo \
 	Algorithm/LinearSolvers/IpTSymDependencyDetector.lo \
 	Algorithm/LinearSolvers/IpTSymLinearSolver.lo \
-	Algorithm/LinearSolvers/IpMc19TSymScalingMethod.lo \
-	Algorithm/LinearSolvers/IpMa27TSolverInterface.lo \
-	Algorithm/LinearSolvers/IpMa57TSolverInterface.lo \
-	Algorithm/LinearSolvers/IpMa77SolverInterface.lo \
-	Algorithm/LinearSolvers/IpMa86SolverInterface.lo \
-	Algorithm/LinearSolvers/IpMa97SolverInterface.lo \
 	Algorithm/LinearSolvers/IpPardisoSolverInterface.lo \
 	contrib/CGPenalty/IpCGPenaltyCq.lo \
 	contrib/CGPenalty/IpCGPenaltyData.lo \
@@ -272,7 +280,7 @@ am_libipopt_la_OBJECTS = Common/IpDebug.lo Common/IpJournalist.lo \
 	Interfaces/IpTNLPReducer.lo $(am__objects_1) $(am__objects_2) \
 	$(am__objects_3) $(am__objects_4) $(am__objects_5) \
 	$(am__objects_6) $(am__objects_7) $(am__objects_8) \
-	$(am__objects_9)
+	$(am__objects_9) $(am__objects_10)
 libipopt_la_OBJECTS = $(am_libipopt_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -822,12 +830,6 @@ libipopt_la_SOURCES = Common/IpDebug.cpp Common/IpJournalist.cpp \
 	Algorithm/LinearSolvers/IpTripletToCSRConverter.cpp \
 	Algorithm/LinearSolvers/IpTSymDependencyDetector.cpp \
 	Algorithm/LinearSolvers/IpTSymLinearSolver.cpp \
-	Algorithm/LinearSolvers/IpMc19TSymScalingMethod.cpp \
-	Algorithm/LinearSolvers/IpMa27TSolverInterface.cpp \
-	Algorithm/LinearSolvers/IpMa57TSolverInterface.cpp \
-	Algorithm/LinearSolvers/IpMa77SolverInterface.cpp \
-	Algorithm/LinearSolvers/IpMa86SolverInterface.cpp \
-	Algorithm/LinearSolvers/IpMa97SolverInterface.cpp \
 	Algorithm/LinearSolvers/IpPardisoSolverInterface.cpp \
 	contrib/CGPenalty/IpCGPenaltyCq.cpp \
 	contrib/CGPenalty/IpCGPenaltyData.cpp \
@@ -845,7 +847,7 @@ libipopt_la_SOURCES = Common/IpDebug.cpp Common/IpJournalist.cpp \
 	Interfaces/IpTNLPReducer.cpp $(am__append_1) $(am__append_2) \
 	$(am__append_3) $(am__append_4) $(am__append_5) \
 	$(am__append_6) $(am__append_7) $(am__append_8) \
-	$(am__append_9)
+	$(am__append_9) $(am__append_10)
 AM_CPPFLAGS = \
   -I$(srcdir)/Common \
   -I$(srcdir)/LinAlg \
@@ -1141,24 +1143,6 @@ Algorithm/LinearSolvers/IpTSymDependencyDetector.lo:  \
 Algorithm/LinearSolvers/IpTSymLinearSolver.lo:  \
 	Algorithm/LinearSolvers/$(am__dirstamp) \
 	Algorithm/LinearSolvers/$(DEPDIR)/$(am__dirstamp)
-Algorithm/LinearSolvers/IpMc19TSymScalingMethod.lo:  \
-	Algorithm/LinearSolvers/$(am__dirstamp) \
-	Algorithm/LinearSolvers/$(DEPDIR)/$(am__dirstamp)
-Algorithm/LinearSolvers/IpMa27TSolverInterface.lo:  \
-	Algorithm/LinearSolvers/$(am__dirstamp) \
-	Algorithm/LinearSolvers/$(DEPDIR)/$(am__dirstamp)
-Algorithm/LinearSolvers/IpMa57TSolverInterface.lo:  \
-	Algorithm/LinearSolvers/$(am__dirstamp) \
-	Algorithm/LinearSolvers/$(DEPDIR)/$(am__dirstamp)
-Algorithm/LinearSolvers/IpMa77SolverInterface.lo:  \
-	Algorithm/LinearSolvers/$(am__dirstamp) \
-	Algorithm/LinearSolvers/$(DEPDIR)/$(am__dirstamp)
-Algorithm/LinearSolvers/IpMa86SolverInterface.lo:  \
-	Algorithm/LinearSolvers/$(am__dirstamp) \
-	Algorithm/LinearSolvers/$(DEPDIR)/$(am__dirstamp)
-Algorithm/LinearSolvers/IpMa97SolverInterface.lo:  \
-	Algorithm/LinearSolvers/$(am__dirstamp) \
-	Algorithm/LinearSolvers/$(DEPDIR)/$(am__dirstamp)
 Algorithm/LinearSolvers/IpPardisoSolverInterface.lo:  \
 	Algorithm/LinearSolvers/$(am__dirstamp) \
 	Algorithm/LinearSolvers/$(DEPDIR)/$(am__dirstamp)
@@ -1213,6 +1197,24 @@ Interfaces/IpTNLPAdapter.lo: Interfaces/$(am__dirstamp) \
 Interfaces/IpTNLPReducer.lo: Interfaces/$(am__dirstamp) \
 	Interfaces/$(DEPDIR)/$(am__dirstamp)
 Algorithm/LinearSolvers/IpPardisoMKLSolverInterface.lo:  \
+	Algorithm/LinearSolvers/$(am__dirstamp) \
+	Algorithm/LinearSolvers/$(DEPDIR)/$(am__dirstamp)
+Algorithm/LinearSolvers/IpMc19TSymScalingMethod.lo:  \
+	Algorithm/LinearSolvers/$(am__dirstamp) \
+	Algorithm/LinearSolvers/$(DEPDIR)/$(am__dirstamp)
+Algorithm/LinearSolvers/IpMa27TSolverInterface.lo:  \
+	Algorithm/LinearSolvers/$(am__dirstamp) \
+	Algorithm/LinearSolvers/$(DEPDIR)/$(am__dirstamp)
+Algorithm/LinearSolvers/IpMa57TSolverInterface.lo:  \
+	Algorithm/LinearSolvers/$(am__dirstamp) \
+	Algorithm/LinearSolvers/$(DEPDIR)/$(am__dirstamp)
+Algorithm/LinearSolvers/IpMa77SolverInterface.lo:  \
+	Algorithm/LinearSolvers/$(am__dirstamp) \
+	Algorithm/LinearSolvers/$(DEPDIR)/$(am__dirstamp)
+Algorithm/LinearSolvers/IpMa86SolverInterface.lo:  \
+	Algorithm/LinearSolvers/$(am__dirstamp) \
+	Algorithm/LinearSolvers/$(DEPDIR)/$(am__dirstamp)
+Algorithm/LinearSolvers/IpMa97SolverInterface.lo:  \
 	Algorithm/LinearSolvers/$(am__dirstamp) \
 	Algorithm/LinearSolvers/$(DEPDIR)/$(am__dirstamp)
 Algorithm/LinearSolvers/IpMa28TDependencyDetector.lo:  \

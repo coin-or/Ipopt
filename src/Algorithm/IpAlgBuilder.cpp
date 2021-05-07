@@ -380,6 +380,7 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
 
    // try to load HSL functions from a shared library at runtime
 
+#ifndef IPOPT_INT64
    if( linear_solver == "ma27" )
    {
       SolverInterface = new Ma27TSolverInterface(GetHSLLoader(options, prefix));
@@ -404,6 +405,9 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    {
       SolverInterface = new Ma97SolverInterface(GetHSLLoader(options, prefix));
    }
+#else
+   if( false ) ;
+#endif
 
    else if( linear_solver == "pardiso" )
    {
@@ -474,14 +478,16 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
       }
    }
 
-   if( linear_system_scaling == "mc19" )
-   {
-      ScalingMethod = new Mc19TSymScalingMethod(GetHSLLoader(options, prefix));
-   }
-   else if( linear_system_scaling == "slack-based" )
+   if( linear_system_scaling == "slack-based" )
    {
       ScalingMethod = new SlackBasedTSymScalingMethod();
    }
+#ifndef IPOPT_INT64
+   else if( linear_system_scaling == "mc19" )
+   {
+      ScalingMethod = new Mc19TSymScalingMethod(GetHSLLoader(options, prefix));
+   }
+#endif
 
    SmartPtr<SymLinearSolver> ScaledSolver = new TSymLinearSolver(SolverInterface, ScalingMethod);
    return ScaledSolver;

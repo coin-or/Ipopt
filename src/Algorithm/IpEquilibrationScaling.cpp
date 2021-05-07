@@ -53,7 +53,9 @@ bool EquilibrationScaling::InitializeImpl(
 )
 {
    // check if user stored a MC19A in Mc19TSymScalingMethod
+#ifndef IPOPT_INT64
    mc19a = Mc19TSymScalingMethod::GetMC19A();
+#endif
    if( mc19a == NULL )
    {
 #if (defined(COINHSL_HAS_MC19) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MC19S) && defined(IPOPT_SINGLE))

@@ -161,12 +161,6 @@ libipopt_la_SOURCES = \
   Algorithm/LinearSolvers/IpTripletToCSRConverter.cpp \
   Algorithm/LinearSolvers/IpTSymDependencyDetector.cpp \
   Algorithm/LinearSolvers/IpTSymLinearSolver.cpp \
-  Algorithm/LinearSolvers/IpMc19TSymScalingMethod.cpp \
-  Algorithm/LinearSolvers/IpMa27TSolverInterface.cpp \
-  Algorithm/LinearSolvers/IpMa57TSolverInterface.cpp \
-  Algorithm/LinearSolvers/IpMa77SolverInterface.cpp \
-  Algorithm/LinearSolvers/IpMa86SolverInterface.cpp \
-  Algorithm/LinearSolvers/IpMa97SolverInterface.cpp \
   Algorithm/LinearSolvers/IpPardisoSolverInterface.cpp \
   contrib/CGPenalty/IpCGPenaltyCq.cpp \
   contrib/CGPenalty/IpCGPenaltyData.cpp \
@@ -189,14 +183,25 @@ if HAVE_PARDISO_MKL
   libipopt_la_SOURCES += Algorithm/LinearSolvers/IpPardisoMKLSolverInterface.cpp
 endif
 
+if !IPOPT_INT64
+libipopt_la_SOURCES += \
+  Algorithm/LinearSolvers/IpMc19TSymScalingMethod.cpp \
+  Algorithm/LinearSolvers/IpMa27TSolverInterface.cpp \
+  Algorithm/LinearSolvers/IpMa57TSolverInterface.cpp \
+  Algorithm/LinearSolvers/IpMa77SolverInterface.cpp \
+  Algorithm/LinearSolvers/IpMa86SolverInterface.cpp \
+  Algorithm/LinearSolvers/IpMa97SolverInterface.cpp
+
 if HAVE_MA28
   libipopt_la_SOURCES += Algorithm/LinearSolvers/IpMa28TDependencyDetector.cpp
 if IPOPT_SINGLE
   libipopt_la_SOURCES += Algorithm/LinearSolvers/IpMa28sPartition.F
 else
   libipopt_la_SOURCES += Algorithm/LinearSolvers/IpMa28Partition.F
-endif
-endif
+endif  # IPOPT_SINGLE
+endif  # HAVE_MA28
+
+endif  # IPOPT_INT64
 
 if HAVE_WSMP
   libipopt_la_SOURCES += Algorithm/LinearSolvers/IpWsmpSolverInterface.cpp Algorithm/LinearSolvers/IpIterativeWsmpSolverInterface.cpp

@@ -130,7 +130,7 @@ void TNLPAdapter::RegisterOptions(
    options.push_back("wsmp");
    descrs.push_back("use WSMP");
 #endif
-#if ((defined(COINHSL_HAS_MA28) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA28S) && defined(IPOPT_SINGLE))) && defined(F77_FUNC)
+#if ((defined(COINHSL_HAS_MA28) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA28S) && defined(IPOPT_SINGLE))) && defined(F77_FUNC) && !defined(IPOPT_INT64)
    options.push_back("ma28");
    descrs.push_back("use MA28");
 #endif
@@ -291,7 +291,7 @@ bool TNLPAdapter::ProcessOptions(
    }
 #endif
 
-#if ((defined(COINHSL_HAS_MA28) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA28S) && defined(IPOPT_SINGLE))) && defined(F77_FUNC)
+#if ((defined(COINHSL_HAS_MA28) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA28S) && defined(IPOPT_SINGLE))) && defined(F77_FUNC) && !defined(IPOPT_INT64)
    else if( dependency_detector == "ma28" )
    {
       dependency_detector_ = new Ma28TDependencyDetector();

@@ -43,6 +43,7 @@ void RegisterOptions_LinearSolvers(
 
    IpoptLinearSolver availablesolvers = IpoptGetAvailableLinearSolvers(false);
 
+#ifndef IPOPT_INT64
    if( availablesolvers & IPOPTLINEARSOLVER_MA27 )
    {
       roptions->SetRegisteringCategory("MA27 Linear Solver");
@@ -72,6 +73,7 @@ void RegisterOptions_LinearSolvers(
       roptions->SetRegisteringCategory("MA97 Linear Solver");
       Ma97SolverInterface::RegisterOptions(roptions);
    }
+#endif
 
 #ifdef IPOPT_HAS_MUMPS
    if( availablesolvers & IPOPTLINEARSOLVER_MUMPS )
