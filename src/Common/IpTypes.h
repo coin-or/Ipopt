@@ -51,10 +51,18 @@ typedef float ipnumber;
 typedef double ipnumber;
 #endif
 
+#ifdef IPOPT_INT64
+#include <stdint.h>
+/** Type of all indices of vectors, matrices etc
+ * @since 3.14.0
+ */
+typedef int64_t ipindex;
+#else
 /** Type of all indices of vectors, matrices etc
  * @since 3.14.0
  */
 typedef int ipindex;
+#endif
 
 /** Type of Fortran integer translated into C
  * @deprecated Use ipindex instead.
