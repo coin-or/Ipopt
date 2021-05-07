@@ -378,10 +378,10 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
    options.GetStringValue("linear_solver", linear_solver, prefix);
 
-   // try to load HSL functions from a shared library at runtime
+   if( false ) ;
 
 #ifndef IPOPT_INT64
-   if( linear_solver == "ma27" )
+   else if( linear_solver == "ma27" )
    {
       SolverInterface = new Ma27TSolverInterface(GetHSLLoader(options, prefix));
    }
@@ -405,14 +405,12 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    {
       SolverInterface = new Ma97SolverInterface(GetHSLLoader(options, prefix));
    }
-#else
-   if( false ) ;
-#endif
 
    else if( linear_solver == "pardiso" )
    {
       SolverInterface = new PardisoSolverInterface(GetPardisoLoader(options, prefix));
    }
+#endif
 
 #ifdef IPOPT_HAS_PARDISO_MKL
    else if( linear_solver == "pardisomkl" )

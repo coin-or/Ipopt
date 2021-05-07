@@ -161,7 +161,6 @@ libipopt_la_SOURCES = \
   Algorithm/LinearSolvers/IpTripletToCSRConverter.cpp \
   Algorithm/LinearSolvers/IpTSymDependencyDetector.cpp \
   Algorithm/LinearSolvers/IpTSymLinearSolver.cpp \
-  Algorithm/LinearSolvers/IpPardisoSolverInterface.cpp \
   contrib/CGPenalty/IpCGPenaltyCq.cpp \
   contrib/CGPenalty/IpCGPenaltyData.cpp \
   contrib/CGPenalty/IpCGPenaltyLSAcceptor.cpp \
@@ -190,7 +189,8 @@ libipopt_la_SOURCES += \
   Algorithm/LinearSolvers/IpMa57TSolverInterface.cpp \
   Algorithm/LinearSolvers/IpMa77SolverInterface.cpp \
   Algorithm/LinearSolvers/IpMa86SolverInterface.cpp \
-  Algorithm/LinearSolvers/IpMa97SolverInterface.cpp
+  Algorithm/LinearSolvers/IpMa97SolverInterface.cpp \
+  Algorithm/LinearSolvers/IpPardisoSolverInterface.cpp
 
 if HAVE_MA28
   libipopt_la_SOURCES += Algorithm/LinearSolvers/IpMa28TDependencyDetector.cpp

@@ -226,6 +226,7 @@ bool PardisoMKLSolverInterface::InitializeImpl(
    IPOPT_LAPACK_FUNC(pardisoinit,PARDISOINIT)(PT_, &MTYPE_, IPARM_);
 
    // Set some parameters for Pardiso
+   // https://software.intel.com/content/www/us/en/develop/documentation/onemkl-developer-reference-c/top/sparse-solver-routines/onemkl-pardiso-parallel-direct-sparse-solver-interface/pardiso-iparm-parameter.html
    IPARM_[0] = 1;  // Don't use the default values
    IPARM_[1] = order;
    // For MKL PARDSIO, the documentation says, "iparm(3) Reserved. Set to zero.", so we don't set IPARM_[2]

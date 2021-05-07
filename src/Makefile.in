@@ -103,7 +103,8 @@ host_triplet = @host@
 @IPOPT_INT64_FALSE@  Algorithm/LinearSolvers/IpMa57TSolverInterface.cpp \
 @IPOPT_INT64_FALSE@  Algorithm/LinearSolvers/IpMa77SolverInterface.cpp \
 @IPOPT_INT64_FALSE@  Algorithm/LinearSolvers/IpMa86SolverInterface.cpp \
-@IPOPT_INT64_FALSE@  Algorithm/LinearSolvers/IpMa97SolverInterface.cpp
+@IPOPT_INT64_FALSE@  Algorithm/LinearSolvers/IpMa97SolverInterface.cpp \
+@IPOPT_INT64_FALSE@  Algorithm/LinearSolvers/IpPardisoSolverInterface.cpp
 
 @HAVE_MA28_TRUE@@IPOPT_INT64_FALSE@am__append_3 = Algorithm/LinearSolvers/IpMa28TDependencyDetector.cpp
 @HAVE_MA28_TRUE@@IPOPT_INT64_FALSE@@IPOPT_SINGLE_TRUE@am__append_4 = Algorithm/LinearSolvers/IpMa28sPartition.F
@@ -178,7 +179,8 @@ am__dirstamp = $(am__leading_dot)dirstamp
 @IPOPT_INT64_FALSE@	Algorithm/LinearSolvers/IpMa57TSolverInterface.lo \
 @IPOPT_INT64_FALSE@	Algorithm/LinearSolvers/IpMa77SolverInterface.lo \
 @IPOPT_INT64_FALSE@	Algorithm/LinearSolvers/IpMa86SolverInterface.lo \
-@IPOPT_INT64_FALSE@	Algorithm/LinearSolvers/IpMa97SolverInterface.lo
+@IPOPT_INT64_FALSE@	Algorithm/LinearSolvers/IpMa97SolverInterface.lo \
+@IPOPT_INT64_FALSE@	Algorithm/LinearSolvers/IpPardisoSolverInterface.lo
 @HAVE_MA28_TRUE@@IPOPT_INT64_FALSE@am__objects_3 = Algorithm/LinearSolvers/IpMa28TDependencyDetector.lo
 @HAVE_MA28_TRUE@@IPOPT_INT64_FALSE@@IPOPT_SINGLE_TRUE@am__objects_4 = Algorithm/LinearSolvers/IpMa28sPartition.lo
 @HAVE_MA28_TRUE@@IPOPT_INT64_FALSE@@IPOPT_SINGLE_FALSE@am__objects_5 = Algorithm/LinearSolvers/IpMa28Partition.lo
@@ -264,7 +266,6 @@ am_libipopt_la_OBJECTS = Common/IpDebug.lo Common/IpJournalist.lo \
 	Algorithm/LinearSolvers/IpTripletToCSRConverter.lo \
 	Algorithm/LinearSolvers/IpTSymDependencyDetector.lo \
 	Algorithm/LinearSolvers/IpTSymLinearSolver.lo \
-	Algorithm/LinearSolvers/IpPardisoSolverInterface.lo \
 	contrib/CGPenalty/IpCGPenaltyCq.lo \
 	contrib/CGPenalty/IpCGPenaltyData.lo \
 	contrib/CGPenalty/IpCGPenaltyLSAcceptor.lo \
@@ -830,7 +831,6 @@ libipopt_la_SOURCES = Common/IpDebug.cpp Common/IpJournalist.cpp \
 	Algorithm/LinearSolvers/IpTripletToCSRConverter.cpp \
 	Algorithm/LinearSolvers/IpTSymDependencyDetector.cpp \
 	Algorithm/LinearSolvers/IpTSymLinearSolver.cpp \
-	Algorithm/LinearSolvers/IpPardisoSolverInterface.cpp \
 	contrib/CGPenalty/IpCGPenaltyCq.cpp \
 	contrib/CGPenalty/IpCGPenaltyData.cpp \
 	contrib/CGPenalty/IpCGPenaltyLSAcceptor.cpp \
@@ -1143,9 +1143,6 @@ Algorithm/LinearSolvers/IpTSymDependencyDetector.lo:  \
 Algorithm/LinearSolvers/IpTSymLinearSolver.lo:  \
 	Algorithm/LinearSolvers/$(am__dirstamp) \
 	Algorithm/LinearSolvers/$(DEPDIR)/$(am__dirstamp)
-Algorithm/LinearSolvers/IpPardisoSolverInterface.lo:  \
-	Algorithm/LinearSolvers/$(am__dirstamp) \
-	Algorithm/LinearSolvers/$(DEPDIR)/$(am__dirstamp)
 contrib/CGPenalty/$(am__dirstamp):
 	@$(MKDIR_P) contrib/CGPenalty
 	@: > contrib/CGPenalty/$(am__dirstamp)
@@ -1215,6 +1212,9 @@ Algorithm/LinearSolvers/IpMa86SolverInterface.lo:  \
 	Algorithm/LinearSolvers/$(am__dirstamp) \
 	Algorithm/LinearSolvers/$(DEPDIR)/$(am__dirstamp)
 Algorithm/LinearSolvers/IpMa97SolverInterface.lo:  \
+	Algorithm/LinearSolvers/$(am__dirstamp) \
+	Algorithm/LinearSolvers/$(DEPDIR)/$(am__dirstamp)
+Algorithm/LinearSolvers/IpPardisoSolverInterface.lo:  \
 	Algorithm/LinearSolvers/$(am__dirstamp) \
 	Algorithm/LinearSolvers/$(DEPDIR)/$(am__dirstamp)
 Algorithm/LinearSolvers/IpMa28TDependencyDetector.lo:  \

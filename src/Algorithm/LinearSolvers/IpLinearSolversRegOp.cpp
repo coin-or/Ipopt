@@ -83,11 +83,13 @@ void RegisterOptions_LinearSolvers(
    }
 #endif
 
+#ifndef IPOPT_INT64
    if( availablesolvers & IPOPTLINEARSOLVER_PARDISO )
    {
       roptions->SetRegisteringCategory("Pardiso (pardiso-project.org) Linear Solver");
       PardisoSolverInterface::RegisterOptions(roptions);
    }
+#endif
 
 #ifdef IPOPT_HAS_PARDISO_MKL
    if( availablesolvers & IPOPTLINEARSOLVER_PARDISOMKL )
