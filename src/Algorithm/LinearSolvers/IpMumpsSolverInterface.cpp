@@ -344,8 +344,8 @@ ESymSolverStatus MumpsSolverInterface::InitializeStructure(
       mumps_->a = NULL;
 
       mumps_->a = new Number[nonzeros];
-      mumps_->irn = const_cast<int*>(ia);
-      mumps_->jcn = const_cast<int*>(ja);
+      mumps_->irn = const_cast<Index*>(ia);
+      mumps_->jcn = const_cast<Index*>(ja);
 
       // make sure we do the symbolic factorization before a real
       // factorization

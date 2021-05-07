@@ -77,7 +77,7 @@ SmartPtr<SensAlgorithm> SensBuilder::BuildSensAlg(
    }
 
    // Find out how many steps there are and create as many SchurSolveDrivers
-   int n_sens_steps;
+   Index n_sens_steps;
    options.GetIntegerValue("n_sens_steps", n_sens_steps, prefix);
 
    // Create std::vector container in which we are going to keep the SchurDrivers

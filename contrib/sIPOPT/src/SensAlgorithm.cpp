@@ -243,7 +243,7 @@ SensAlgorithmExitStatus SensAlgorithm::ComputeSensitivityMatrix(void)
             }
          }
 
-         sprintf(buffer, "Column %i", idx_ipopt[Scol]);
+         sprintf(buffer, "Column %lld", (long long)idx_ipopt[Scol]);
 
          sens_step_calc_->SetSchurDriver(driver_vec_[0]);
 
