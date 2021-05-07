@@ -24,8 +24,8 @@ library('ipoptr')
 #
 # f(x) = x1*x4*(x1 + x2 + x3) + x3
 #
-eval_f <- function( x ) { 
-    return( x[1]*x[4]*(x[1] + x[2] + x[3]) + x[3] ) 
+eval_f <- function( x ) {
+    return( x[1]*x[4]*(x[1] + x[2] + x[3]) + x[3] )
 }
 
 eval_grad_f <- function( x ) {
@@ -55,7 +55,7 @@ eval_jac_g <- function( x ) {
                 2.0*x[4] ) )
 }
 
-# The Hessian for this problem is actually dense, 
+# The Hessian for this problem is actually dense,
 # This is a symmetric matrix, fill the lower left triangle only.
 eval_h_structure <- list( c(1), c(1,2), c(1,2,3), c(1,2,3,4) )
 
@@ -79,7 +79,7 @@ eval_h <- function( x, obj_factor, hessian_lambda ) {
 
     # add the portion for the first constraint
     values[2] = values[2] + hessian_lambda[1] * (x[3] * x[4]) # 2,1
-    
+
     values[4] = values[4] + hessian_lambda[1] * (x[2] * x[4]) # 3,1
     values[5] = values[5] + hessian_lambda[1] * (x[1] * x[4]) # 3,2
 
@@ -111,16 +111,16 @@ constraint_ub <- c( Inf, 40 )
 opts <- list("print_level"=0,
              "file_print_level"=12,
              "output_file"="hs071_nlp.out")
-  
-print( ipoptr( x0=x0, 
-               eval_f=eval_f, 
-               eval_grad_f=eval_grad_f, 
-               lb=lb, 
-               ub=ub, 
-               eval_g=eval_g, 
-               eval_jac_g=eval_jac_g, 
-               constraint_lb=constraint_lb, 
-               constraint_ub=constraint_ub, 
+
+print( ipoptr( x0=x0,
+               eval_f=eval_f,
+               eval_grad_f=eval_grad_f,
+               lb=lb,
+               ub=ub,
+               eval_g=eval_g,
+               eval_jac_g=eval_jac_g,
+               constraint_lb=constraint_lb,
+               constraint_ub=constraint_ub,
                eval_jac_g_structure=eval_jac_g_structure,
                eval_h=eval_h,
                eval_h_structure=eval_h_structure,

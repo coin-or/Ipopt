@@ -111,21 +111,21 @@ Contributors:
   R interface with examples, all files in directory (and subdirectory of)
 
   contrib/RInterface
-  
+
 - Tony Kelman (Berkeley)
   improvements to Matlab interface
-  
+
   Ipopt/contrib/MatlabInterface
 
 - Gabriel Hackebeil
   improved use compound component spaces
-  
+
 - Nai-Yuan Chiang and Victor M. Zavala Tejeda (Argonne National Laboratory)
   inertia free curvature test in solution of primal-dual system (full approach)
 
 - Brad Bell
   recursive NLP example
-  
+
   examples/recursive_nlp/recursive_nlp.cpp
 
 - Mitchell Clement

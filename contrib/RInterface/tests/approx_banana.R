@@ -11,7 +11,7 @@
 library('ipoptr')
 
 # Rosenbrock Banana function
-eval_f <- function(x) {   
+eval_f <- function(x) {
     return( 100 * (x[2] - x[1] * x[1])^2 + (1 - x[1])^2 )
 }
 
@@ -23,7 +23,7 @@ approx_grad_f <- function( x ) {
 
     # if we evaluate at 0, we need a different step size
     stepSizeVec     <- ifelse(abs(x) <= minAbsValue, stepSize^3, x * stepSize)
-    
+
     x_prime <- x
     f       <- eval_f( x )
     grad_f  <- rep( 0, length(x) )
@@ -35,7 +35,7 @@ approx_grad_f <- function( x ) {
         grad_f[i]       <- ( f_prime - f )/stepSizeVec[i]
         x_prime[i]      <- x[i]
     }
-    
+
     return( grad_f )
 }
 
@@ -43,20 +43,19 @@ approx_grad_f <- function( x ) {
 x0 <- c( -1.2, 1 )
 
 opts <- list("tol"=1.0e-8, "max_iter"=5000)
- 
+
 # solve Rosenbrock Banana function with approximated gradient
-print( ipoptr( x0=x0, 
-               eval_f=eval_f, 
-               eval_grad_f=approx_grad_f, 
+print( ipoptr( x0=x0,
+               eval_f=eval_f,
+               eval_grad_f=approx_grad_f,
                opts=opts) )
 
 opts <- list("tol"=1.0e-7)
- 
+
 # solve Rosenbrock Banana function with approximated gradient
 # and lower tolerance
-print( ipoptr( x0=x0, 
-               eval_f=eval_f, 
-               eval_grad_f=approx_grad_f, 
+print( ipoptr( x0=x0,
+               eval_f=eval_f,
+               eval_grad_f=approx_grad_f,
                opts=opts) )
 
-               

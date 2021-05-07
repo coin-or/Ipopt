@@ -357,7 +357,7 @@ fi
 if test "$enable_java" != no ; then
   # the following macros can make configure stop with an error
   # we could work around that, but having javac and no jar, java, or javadoc would be odd anyway
-  
+
   # look for jar: required to pack Java interface
   AX_PROG_JAR
   # look for more java to run tests and examples and do documentation
@@ -577,7 +577,7 @@ if test "$use_sipopt" = yes ; then
 fi
 
 # under Windows, the Makevars file for the R Interface need to be named Makevars.win
-case $build in 
+case $build in
   *-cygwin* | *-mingw* | *-msys* )
     AC_CONFIG_FILES([contrib/RInterface/src/Makevars.win:contrib/RInterface/src/Makevars.in])
     ;;

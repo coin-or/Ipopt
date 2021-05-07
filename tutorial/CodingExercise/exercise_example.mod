@@ -15,7 +15,7 @@ param n := 8;
 var x {1..n} <= 0, >= -1.5, := -0.5;
 
 # The objective function....
-minimize obj: 
+minimize obj:
   sum{i in 1..n} (x[i]-1)^2;
 
 # ... and the constraints

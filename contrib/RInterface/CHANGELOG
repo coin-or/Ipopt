@@ -13,9 +13,9 @@
             R> res$constraints
             R> res$lambda
 
-    * Removed ipoptr_environment as argument in ipoptr because it wasn't useful and it caused undesired behaviour in 
+    * Removed ipoptr_environment as argument in ipoptr because it wasn't useful and it caused undesired behaviour in
       combination with the data.table package (thanks to Florian Oswald for reporting).
-      
+
 20 November 2011, version 0.8.3:
 
     * Added #include <assert.h> to src/IpoptRNLP.hpp

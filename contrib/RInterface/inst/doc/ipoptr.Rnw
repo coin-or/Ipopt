@@ -38,7 +38,7 @@ options(SweaveHooks=list(fig=function()
 @
 
 \begin{abstract}
-This document describes how to use \texttt{ipoptr}, which is an R interface to Ipopt (Interior Point Optimizer). Ipopt is an open source software package for large-scale nonlinear optimization \cite{WachterBiegler2006}. It can be used to solve general nonlinear programming problems with nonlinear constraints and lower and upper bounds for the controls. Ipopt is written in C++ and is released as open source code under the Eclipse Public License (EPL). It is available from the COIN-OR initiative. The code has been written by Carl Laird and Andreas W\"achter, who is the COIN project leader for Ipopt. 
+This document describes how to use \texttt{ipoptr}, which is an R interface to Ipopt (Interior Point Optimizer). Ipopt is an open source software package for large-scale nonlinear optimization \cite{WachterBiegler2006}. It can be used to solve general nonlinear programming problems with nonlinear constraints and lower and upper bounds for the controls. Ipopt is written in C++ and is released as open source code under the Eclipse Public License (EPL). It is available from the COIN-OR initiative. The code has been written by Carl Laird and Andreas W\"achter, who is the COIN project leader for Ipopt.
 \end{abstract}
 
 \section{Introduction}
@@ -59,9 +59,9 @@ The code for the R interface to Ipopt is available from R-Forge and from the Ipo
 
 Detailed installation instructions for Ipopt are available on \texttt{http://www.coin-or.org/Ipopt/documentation}. You should follow these first, before trying to install the R interface. Ipopt needs to be configured using the \texttt{-fPIC} flag for all GNU compilers, which usually happens by default. In builds of debug or static libraries, one need to use the option \verb|--with-pic| for configure.
 
-For the installation of the R interface, I will assume that you have a working installation of Ipopt (i.e. \texttt{configure}, \texttt{make} and \texttt{make install} executed without problems).  
+For the installation of the R interface, I will assume that you have a working installation of Ipopt (i.e. \texttt{configure}, \texttt{make} and \texttt{make install} executed without problems).
 
-During the installation of Ipopt a file \texttt{Makevars} (or \texttt{Makevars.win} on Windows) has been created in the \texttt{src} subdirectory of the build directory of the R interface, e.g., \texttt{\$IPOPTDIR/build/Ipopt/contrib/RInterface/src} if you used the same build directory as in the Ipopt installation notes, \texttt{\$IPOPTDIR/build}. The file \texttt{Makevars}(\texttt{.win}) in this directory has been configured for your system. 
+During the installation of Ipopt a file \texttt{Makevars} (or \texttt{Makevars.win} on Windows) has been created in the \texttt{src} subdirectory of the build directory of the R interface, e.g., \texttt{\$IPOPTDIR/build/Ipopt/contrib/RInterface/src} if you used the same build directory as in the Ipopt installation notes, \texttt{\$IPOPTDIR/build}. The file \texttt{Makevars}(\texttt{.win}) in this directory has been configured for your system.
 
 You can then install the package from R with the command
 <<installIpoptPackage, eval=FALSE>>=
@@ -80,7 +80,7 @@ f( x ) = 100 \left( x_2 - x_1^2 \right)^2 + \left(1 - x_1 \right)^2,
 \]
 which is also used as an example in the documentation for the standard R optimizer \texttt{optim}. The gradient of the objective function is given by
 \[
-\nabla f( x ) = 
+\nabla f( x ) =
 \left( \begin{array}[1]{c}
 -400 \cdot x_1 \cdot (x_2 - x_1^2) - 2 \cdot (1 - x_1) \\
  200 \cdot (x_2 - x_1^2)
@@ -93,12 +93,12 @@ library(ipoptr)
 we start by specifying the objective function and its gradient
 <<defineRosenbrockBanana>>=
 ## Rosenbrock Banana function
-eval_f <- function(x) {   
+eval_f <- function(x) {
     return( 100 * (x[2] - x[1] * x[1])^2 + (1 - x[1])^2 )
 }
 
 ## Gradient of Rosenbrock Banana function
-eval_grad_f <- function(x) { 
+eval_grad_f <- function(x) {
     return( c( -400 * x[1] * (x[2] - x[1] * x[1]) - 2 * (1 - x[1]),
                 200 * (x[2] - x[1] * x[1]) ) )
 }
@@ -108,11 +108,11 @@ We define initial values
 # initial values
 x0 <- c( -1.2, 1 )
 @
-and then minimize the function using the \texttt{ipoptr} command. This command runs some checks on the supplied inputs and returns an object with the exit code of the solver, the optimal value of the objective function and the solution. The checks do not always return very informative messages, but usually there is something wrong with dimensions (e.g. \texttt{eval\_grad\_f} returns a vector that doesn't have the same size as \texttt{x0}). 
-<<solveRosenbrockBanana>>= 
+and then minimize the function using the \texttt{ipoptr} command. This command runs some checks on the supplied inputs and returns an object with the exit code of the solver, the optimal value of the objective function and the solution. The checks do not always return very informative messages, but usually there is something wrong with dimensions (e.g. \texttt{eval\_grad\_f} returns a vector that doesn't have the same size as \texttt{x0}).
+<<solveRosenbrockBanana>>=
 # solve Rosenbrock Banana function
-res <- ipoptr( x0=x0, 
-               eval_f=eval_f, 
+res <- ipoptr( x0=x0,
+               eval_f=eval_f,
                eval_grad_f=eval_grad_f )
 @
 These are the minimal arguments that have to be supplied. If, like above, no Hessian is defined, Ipopt uses an approximation. The Ipopt website has a detailed explanation of the output. We can see a summary of the results by printing the resulting object.
@@ -124,13 +124,13 @@ It's advised to always check the exit code for convergence of the problem and in
 If you do not want to, or cannot calculate the gradient analytically, you can supply a function \texttt{eval\_grad\_f} that approximates the gradient. However, this is not advisable and might result in convergence problems, for instance by not finding the minimum, or by finding the wrong minimum. We can see this from the following example where we approximate \texttt{eval\_grad\_f} using finite differences
 <<defineApproxGradF>>=
 # http://en.wikipedia.org/wiki/Numerical_differentiation
-finite.diff <- function( func, 
-                         x, 
-                         minAbsValue=0, 
+finite.diff <- function( func,
+                         x,
+                         minAbsValue=0,
                          stepSize=sqrt( .Machine$double.eps ), ... ) {
 
-    stepSizeVec <- pmax( abs(x), 1 ) * stepSize 
-    
+    stepSizeVec <- pmax( abs(x), 1 ) * stepSize
+
     fx <- func( x, ... )
     approx.gradf.index <- function(i, x, func, fx, stepSizeVec, ...) {
         x_prime <- x
@@ -139,14 +139,14 @@ finite.diff <- function( func,
         fx_prime <- func( x_prime, ... )
         return( ( fx_prime - fx )/stepSizeVec[i] )
     }
-    grad_fx <- sapply( 1:length(x), 
-                       approx.gradf.index, 
-                       x=x, 
-                       func=func, 
-                       fx=fx, 
-                       stepSizeVec=stepSizeVec, 
+    grad_fx <- sapply( 1:length(x),
+                       approx.gradf.index,
+                       x=x,
+                       func=func,
+                       fx=fx,
+                       stepSizeVec=stepSizeVec,
                        ... )
-    
+
     return( grad_fx )
 }
 
@@ -159,11 +159,11 @@ and using this approximation to minimize the same Rosenbrock Banana function. We
 <<solveRosenbrockBananaApproximation1>>=
 # increase the maximum number of iterations
 opts <- list("tol"=1.0e-8, "max_iter"=5000, "print_level"=0)
- 
+
 # solve Rosenbrock Banana function with approximated gradient
-print( ipoptr( x0=x0, 
-               eval_f=eval_f, 
-               eval_grad_f=approx_grad_f, 
+print( ipoptr( x0=x0,
+               eval_f=eval_f,
+               eval_grad_f=approx_grad_f,
                opts=opts) )
 @
 In this case 5000 iterations are not enough to solve the minimization problem to the required tolerance. This has to do with the step size we choose to approximate the gradient
@@ -174,11 +174,11 @@ which is of the same order of magnitude. If we decrease the tolerance, the algor
 <<solveRosenbrockBananaApproximation2>>=
 # decrease the convergence criterium
 opts <- list("tol"=1.0e-7, "print_level"=0)
- 
+
 # solve Rosenbrock Banana function with approximated gradient
-print( ipoptr( x0=x0, 
-               eval_f=eval_f, 
-               eval_grad_f=approx_grad_f, 
+print( ipoptr( x0=x0,
+               eval_f=eval_f,
+               eval_grad_f=approx_grad_f,
                opts=opts) )
 @
 
@@ -221,8 +221,8 @@ print.sparseness( A_diag, indices=FALSE )
 
 For larger matrices it is easier to plot them using the \texttt{plot.sparseness} command
 <<label=sparsefig,fig=TRUE,echo=TRUE,include=FALSE,results=hide,width=6,height=2.35>>=
-s <- do.call( "cbind", lapply( 1:5, function(i) { 
-                                       diag(5) %x% matrix(1, nrow=5, ncol=20) 
+s <- do.call( "cbind", lapply( 1:5, function(i) {
+                                       diag(5) %x% matrix(1, nrow=5, ncol=20)
                                     } ) )
 s <- do.call( "rbind", lapply( 1:5,  function(i) { s } ) )
 s <- cbind( matrix( 1, nrow=nrow(s), ncol=40 ), s )
@@ -243,18 +243,18 @@ Now that we know how to define a sparseness structure we can supply the Hessian 
 \[
 \nabla^2 f( x ) = \left( \begin{array}[2]{rr}
 2 - 400 \cdot (x_2 - x_1^2) + 800 x_1^2 & -400 x_1 \\
--400 x_1 & 200 
+-400 x_1 & 200
 \end{array} \right)
 \]
 Ipopt needs the Hessian of the Lagrangian in the following form
 \[
 \sigma_f \nabla^2 f(x) + \sum_{i=1}^m \lambda_i \nabla^2 g_i(x),
 \]
-where $g_i(x)$ represents the $i$th of $m$ constraints, $\lambda_i$ are the multipliers of the constraints and $\sigma_f$ is introduced so that Ipopt can ask for the Hessian of the objective or the constraints independently if required. 
+where $g_i(x)$ represents the $i$th of $m$ constraints, $\lambda_i$ are the multipliers of the constraints and $\sigma_f$ is introduced so that Ipopt can ask for the Hessian of the objective or the constraints independently if required.
 
 In this case we don't have any constraints. The user-defined function \texttt{eval\_h} to define the Hessian takes three arguments. The first argument contains the value of the control variables, $x$, the second argument contains the multiplication factor of the Hessian of the objective function, $\sigma_f$, and the third argument contains a vector with the multipliers of the constraints, $\lambda$. We can define the structure of the Hessian and the function to evaluate the Hessian as follows
 <<defineRosenbrockBananaHessian>>=
-# The Hessian for this problem is actually dense, 
+# The Hessian for this problem is actually dense,
 # This is a symmetric matrix, fill the lower left triangle only.
 eval_h_structure <- list( c(1), c(1,2) )
 
@@ -270,15 +270,15 @@ opts <- list("print_level"=0,
              "file_print_level"=12,
              "output_file"="banana.out",
              "tol"=1.0e-8)
-             
+
 # solve Rosenbrock Banana function with analytic Hessian
-print( ipoptr( x0=x0, 
-               eval_f=eval_f, 
-               eval_grad_f=eval_grad_f, 
+print( ipoptr( x0=x0,
+               eval_f=eval_f,
+               eval_grad_f=eval_grad_f,
                eval_h=eval_h,
                eval_h_structure=eval_h_structure,
                opts=opts) )
-@               
+@
 Here we also supplied options to not print any intermediate information to the R screen (\texttt{print\_level=0}). Printing output to the screen directly from Ipopt does not work in all R terminals correctly, so it might be that even though you specify a positive number here, there will still be no output visible on the screen. If you want to print things to the screen, a workaround is to do this directly in the R functions you defined, such as \texttt{eval\_f}.
 
 Also, to inspect more details about the minimization we can write all the output to a file, which will be created in the current working directory. For larger problems, having a large number for \texttt{file\_print\_level} can easily generate very large files, which is probably not desirable. Many more options are available, and a full list of all the options can be found at the Ipopt website, \texttt{http://www.coin-or.org/Ipopt/documentation/node59.html\#app.options\_ref}. Options can also be supplied from an option file, which can be specified in \texttt{option\_file\_name}.
@@ -294,8 +294,8 @@ To look at how we can add constraints to a problem, we take example problem numb
 \end{eqnarray*}
 and we use $x = (1, 5, 5, 1)$ as initial values. In this problem we have one inequality constraint, one equality constraint and upper and lower bounds for all the variables. The optimal solution is $(1.00000000, 4.74299963, 3.82114998, 1.37940829)$. First we define the objective function and its gradient
 <<defineHS071>>=
-eval_f <- function( x ) { 
-    return( x[1]*x[4]*(x[1] + x[2] + x[3]) + x[3] ) 
+eval_f <- function( x ) {
+    return( x[1]*x[4]*(x[1] + x[2] + x[3]) + x[3] )
 }
 
 eval_grad_f <- function( x ) {
@@ -330,7 +330,7 @@ eval_jac_g <- function( x ) {
 @
 The Hessian is also dense, but it looks slightly more complicated because we have to take into account the Hessian of the objective function and of the constraints at the same time, although you could write a function to calculate them both separately and then return the combined result in \texttt{eval\_h}.
 <<defineHS071hessian>>=
-# The Hessian for this problem is actually dense, 
+# The Hessian for this problem is actually dense,
 # This is a symmetric matrix, fill the lower left triangle only.
 eval_h_structure <- list( c(1), c(1,2), c(1,2,3), c(1,2,3,4) )
 
@@ -354,7 +354,7 @@ eval_h <- function( x, obj_factor, hessian_lambda ) {
 
     # add the portion for the first constraint
     values[2] = values[2] + hessian_lambda[1] * (x[3] * x[4]) # 2,1
-    
+
     values[4] = values[4] + hessian_lambda[1] * (x[2] * x[4]) # 3,1
     values[5] = values[5] + hessian_lambda[1] * (x[1] * x[4]) # 3,2
 
@@ -387,16 +387,16 @@ constraint_ub <- c( Inf, 40 )
 opts <- list("print_level"=0,
              "file_print_level"=12,
              "output_file"="hs071_nlp.out")
-  
-print( ipoptr( x0 = x0, 
-               eval_f = eval_f, 
-               eval_grad_f = eval_grad_f, 
-               lb = lb, 
-               ub = ub, 
-               eval_g = eval_g, 
-               eval_jac_g = eval_jac_g, 
-               constraint_lb = constraint_lb, 
-               constraint_ub = constraint_ub, 
+
+print( ipoptr( x0 = x0,
+               eval_f = eval_f,
+               eval_grad_f = eval_grad_f,
+               lb = lb,
+               ub = ub,
+               eval_g = eval_g,
+               eval_jac_g = eval_jac_g,
+               constraint_lb = constraint_lb,
+               constraint_ub = constraint_ub,
                eval_jac_g_structure = eval_jac_g_structure,
                eval_h = eval_h,
                eval_h_structure = eval_h_structure,
@@ -410,24 +410,24 @@ As a very simple example\footnote{A more interesting example is given in \texttt
 \[
 f( x ) = a_1 x^2 + a_2 x + a_3
 \]
-for different values of the parameters $a_1$, $a_2$ and $a_3$. 
+for different values of the parameters $a_1$, $a_2$ and $a_3$.
 
 First we define the objective function and its gradient using, assuming that there is some variable \texttt{params} that contains the values of the parameters.
 <<defineDataFunction1>>=
-eval_f_ex1 <- function(x, params) { 
-    return( params[1]*x^2 + params[2]*x + params[3] ) 
+eval_f_ex1 <- function(x, params) {
+    return( params[1]*x^2 + params[2]*x + params[3] )
 }
-eval_grad_f_ex1 <- function(x, params) { 
-    return( 2*params[1]*x + params[2] ) 
+eval_grad_f_ex1 <- function(x, params) {
+    return( 2*params[1]*x + params[2] )
 }
 @
-Note that the first parameter should always be the control variable. All of the user-defined functions should contain the same set of additional parameters. You have to supply them as input argument to all functions, even if you're not using them in some of the functions. 
+Note that the first parameter should always be the control variable. All of the user-defined functions should contain the same set of additional parameters. You have to supply them as input argument to all functions, even if you're not using them in some of the functions.
 
 Then we can solve the problem for a specific set of parameters, in this case $a_1=1$, $a_2=2$ and $a_3=3$, from initial value $x_0=0$, with the following command
 <<solveDataEnvironment1>>=
 # solve using ipoptr with additional parameters
-ipoptr( x0          = 0, 
-        eval_f      = eval_f_ex1, 
+ipoptr( x0          = 0,
+        eval_f      = eval_f_ex1,
         eval_grad_f = eval_grad_f_ex1,
         opts        = list("print_level"=0),
         params      = c(1,2,3) )
@@ -435,11 +435,11 @@ ipoptr( x0          = 0,
 
 For the second method, we don't have to supply the parameters as additional arguments to the function.
 <<defineDataFunction2>>=
-eval_f_ex2 <- function(x) { 
-    return( params[1]*x^2 + params[2]*x + params[3] ) 
+eval_f_ex2 <- function(x) {
+    return( params[1]*x^2 + params[2]*x + params[3] )
 }
-eval_grad_f_ex2 <- function(x) { 
-    return( 2*params[1]*x + params[2] ) 
+eval_grad_f_ex2 <- function(x) {
+    return( 2*params[1]*x + params[2] )
 }
 @
 Instead, we define an environment that contains specific values of \texttt{params}
@@ -451,9 +451,9 @@ auxdata$params <- c(1,2,3)
 To solve this we supply \texttt{auxdata} as an argument to \texttt{ipoptr}, which will take care of evaluating the functions in the correct environment, so that auxiliary data is available.
 <<solveDataEnvironment2>>=
 # pass the environment that should be used to evaluate functions to ipoptr
-ipoptr( x0                 = 0, 
-        eval_f             = eval_f_ex2, 
-        eval_grad_f        = eval_grad_f_ex2, 
+ipoptr( x0                 = 0,
+        eval_f             = eval_f_ex2,
+        eval_grad_f        = eval_grad_f_ex2,
         ipoptr_environment = auxdata,
         opts               = list("print_level"=0) )
 @

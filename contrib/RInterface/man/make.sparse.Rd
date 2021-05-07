@@ -15,7 +15,7 @@ make.sparse( A )
   }
 }
 \value{
-    List of vectors with indices. Each element of the list corresponds to a row in 
+    List of vectors with indices. Each element of the list corresponds to a row in
     the matrix. Each index corresponds to a non-zero element in the matrix.
 }
 \author{

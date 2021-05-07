@@ -9,11 +9,11 @@
 # Output: list with as elements a vector of indices denoting non-zero (TRUE) elements of the matrix
 
 make.sparse <- function( A ) {
-    
+
     # start with empty list to append to
-    S <- list()    
-    
-    # loop over matrix by row 
+    S <- list()
+
+    # loop over matrix by row
     for ( i in 1:nrow(A) ) {
         indices <- c()
         for ( j in 1:ncol(A) ) {
@@ -23,6 +23,6 @@ make.sparse <- function( A ) {
         }
         S <- c( S, list(indices) )
     }
-    
+
     return( S )
 }

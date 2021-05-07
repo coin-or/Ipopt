@@ -19,16 +19,16 @@ plot.sparseness <- function( x, pch='.', asp=1, xaxs='i', yaxs='i', ... ) {
 
     # plot non-zero elements, where we revert the y-axis (top-left element is 1,1),
     # fix the aspect ratio (asp=1) and do not extend the x and y axis (x/yaxs='i')
-    plot( indices.x, 
-          indices.y, 
-          xlim=c(min(indices.x), max(indices.x)), 
-          ylim=c(max(indices.y), min(indices.y)), 
-          type='p', 
-          pch=pch, 
+    plot( indices.x,
+          indices.y,
+          xlim=c(min(indices.x), max(indices.x)),
+          ylim=c(max(indices.y), min(indices.y)),
+          type='p',
+          pch=pch,
           asp=asp,
           xaxs=xaxs,
           yaxs=yaxs,
           ... )
-    
+
     return( list( x=indices.x, y=indices.y ) )
 }

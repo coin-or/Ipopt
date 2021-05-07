@@ -7,10 +7,10 @@
 #
 # Changelog:
 #   09/03/2012: Added outputs, z_L, z_U, constraints, lambda (thanks to Michael Schedl)
-#   09/03/2012: Removed ipoptr_environment because this caused a bug in combination with 
+#   09/03/2012: Removed ipoptr_environment because this caused a bug in combination with
 #               data.table and it wasn't useful (thanks to Florian Oswald for reporting)
 #
-# Input: 
+# Input:
 #    x0 : vector with initial values
 #    eval_f : function to evaluate objective function
 #    eval_grad_f : function to evaluate gradient of objective function
@@ -39,21 +39,21 @@
 #    lambda      : final values for the Lagrange mulipliers
 
 ipoptr <-
-function( x0, 
-          eval_f, 
-          eval_grad_f, 
-          lb = NULL, 
-          ub = NULL, 
-          eval_g = function( x ) { return( numeric(0) ) }, 
-          eval_jac_g = function( x ) { return( numeric(0) ) }, 
+function( x0,
+          eval_f,
+          eval_grad_f,
+          lb = NULL,
+          ub = NULL,
+          eval_g = function( x ) { return( numeric(0) ) },
+          eval_jac_g = function( x ) { return( numeric(0) ) },
           eval_jac_g_structure = list(),
-          constraint_lb = numeric(0), 
+          constraint_lb = numeric(0),
           constraint_ub = numeric(0),
           eval_h = NULL,
           eval_h_structure = NULL,
           opts = list(),
           ... ) {
-    
+
     # define 'infinite' lower and upper bounds of the control if they haven't been set
     if ( is.null( lb ) ) { lb <- rep( -Inf, length(x0) ) }
     if ( is.null( ub ) ) { ub <- rep(  Inf, length(x0) ) }
@@ -61,17 +61,17 @@ function( x0,
     # internal function to check the arguments of the functions
     checkFunctionArguments <- function( fun, arglist, funname ) {
         if( !is.function(fun) ) stop(paste(funname, " must be a function\n", sep = ""))
-        
+
         # determine function arguments
         fargs <- formals(fun)
-        
+
         if ( length(fargs) > 1 ) {
             # determine argument names user-defined function
             argnames_udf <- names(fargs)[2:length(fargs)]    # remove first argument, which is x
-            
+
             # determine argument names that where supplied to ipoptr()
             argnames_supplied <- names(arglist)
-            
+
             # determine which arguments where required but not supplied
             m1 = match(argnames_udf, argnames_supplied)
             if( any(is.na(m1)) ){
@@ -80,7 +80,7 @@ function( x0,
                     stop(paste(funname, " requires argument '", argnames_udf[mx1], "' but this has not been passed to the 'ipoptr' function.\n", sep = ""))
                 }
             }
-            
+
             # determine which arguments where supplied but not required
             m2 = match(argnames_supplied, argnames_udf)
             if( any(is.na(m2)) ){
@@ -92,28 +92,28 @@ function( x0,
         }
         return( 0 )
     }
-    
+
     # extract list of additional arguments and check user-defined functions
     arglist <- list(...)
     checkFunctionArguments( eval_f, arglist, 'eval_f' )
     checkFunctionArguments( eval_grad_f, arglist, 'eval_grad_f' )
-    
+
     num.constraints <- length( constraint_lb )
     if ( num.constraints > 0 ) {
         checkFunctionArguments( eval_g, arglist, 'eval_g' )
         checkFunctionArguments( eval_jac_g, arglist, 'eval_jac_g' )
     }
-    
+
     # write wrappers around user-defined functions to pass additional arguments
     eval_f_wrapper = function(x){ eval_f(x, ...) }
     eval_grad_f_wrapper = function(x){ eval_grad_f(x, ...) }
-    
+
     if ( num.constraints > 0 ) {
         eval_g_wrapper = function( x ) { eval_g(x, ...) }
         eval_jac_g_wrapper = function( x ) { eval_jac_g(x, ...) }
     } else {
-        eval_g_wrapper = function( x ) { return( numeric(0) ) } 
-        eval_jac_g_wrapper = function( x ) { return( numeric(0) ) } 
+        eval_g_wrapper = function( x ) { return( numeric(0) ) }
+        eval_jac_g_wrapper = function( x ) { return( numeric(0) ) }
     }
 
     # approximate Hessian
@@ -127,32 +127,32 @@ function( x0,
 
 
     # build ipoptr object
-    ret <- list( "x0"=x0, 
-                 "eval_f"=eval_f_wrapper, 
-                 "eval_grad_f"=eval_grad_f_wrapper, 
-                 "lower_bounds"=lb, 
-                 "upper_bounds"=ub, 
-                 "eval_g"=eval_g_wrapper, 
-                 "eval_jac_g"=eval_jac_g_wrapper, 
-                 "constraint_lower_bounds"=constraint_lb, 
-                 "constraint_upper_bounds"=constraint_ub, 
+    ret <- list( "x0"=x0,
+                 "eval_f"=eval_f_wrapper,
+                 "eval_grad_f"=eval_grad_f_wrapper,
+                 "lower_bounds"=lb,
+                 "upper_bounds"=ub,
+                 "eval_g"=eval_g_wrapper,
+                 "eval_jac_g"=eval_jac_g_wrapper,
+                 "constraint_lower_bounds"=constraint_lb,
+                 "constraint_upper_bounds"=constraint_ub,
                  "eval_jac_g_structure"=eval_jac_g_structure,
                  "eval_h"=eval_h_wrapper,
                  "eval_h_structure"=eval_h_structure,
                  "options"=get.option.types(opts),
                  "environment" = new.env() )
-    
+
     attr(ret, "class") <- "ipoptr"
-    
+
     # add the current call to the list
     ret$call <- match.call()
-    
+
     # check whether we have a correctly formed ipoptr object
     is.ipoptr( ret )
-    
+
     # pass ipoptr object to C code
     solution <- .Call( IpoptRSolve, ret )
-    
+
     # add solution variables to object
     ret$status      <- solution$status
     ret$message     <- solution$message
@@ -163,6 +163,6 @@ function( x0,
     ret$z_U         <- solution$z_U
     ret$constraints <- solution$constraints
     ret$lambda      <- solution$lambda
-    
+
     return( ret )
 }

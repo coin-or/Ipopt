@@ -15,7 +15,7 @@ SchurData
 + write new constructor to make this easier
 - Remove StdSchurData?
 - exchange GetMultiplyingVectors by a transmultiply implementation that accepts pointers.
-  (see StdPCalculator for the only use of this function) 
+  (see StdPCalculator for the only use of this function)
 
 AsSensStepCalc
 + move InitializeImpl to the implementation!
@@ -36,7 +36,7 @@ SensApplication
 SensTNLPAdapter
 + write inverse of ResortX in TNLPAdapter
 
-MakeFile 
+MakeFile
 + Remove AsSenscSetup if decided so
 
 General

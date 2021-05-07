@@ -4,13 +4,13 @@
 R interface to Ipopt
 }
 \description{
-ipoptr is an R interface to Ipopt (Interior Point Optimizer), an open source 
-software package for large-scale nonlinear optimization. It can be used to 
-solve general nonlinear programming problems with nonlinear constraints and 
-lower and upper bounds for the controls. Ipopt is written in C++ and is released 
-as open source code under the Eclipse Public License (EPL). It is available from 
-the COIN-OR initiative. The code has been written by Carl Laird and Andreas Waechter, 
-who is the COIN project leader for Ipopt.  
+ipoptr is an R interface to Ipopt (Interior Point Optimizer), an open source
+software package for large-scale nonlinear optimization. It can be used to
+solve general nonlinear programming problems with nonlinear constraints and
+lower and upper bounds for the controls. Ipopt is written in C++ and is released
+as open source code under the Eclipse Public License (EPL). It is available from
+the COIN-OR initiative. The code has been written by Carl Laird and Andreas Waechter,
+who is the COIN project leader for Ipopt.
 
 Ipopt is designed to find (local) solutions of mathematical optimization problems of the from
 
@@ -20,23 +20,23 @@ x in R^n
 s.t.       g_L <= g(x) <= g_U
            x_L <=  x   <= x_U
 
-where f(x): R^n --> R is the objective function, and g(x): R^n --> R^m are the constraint 
-functions. The vectors g_L and g_U denote the lower and upper bounds on the constraints, 
-and the vectors x_L and x_U are the bounds on the variables x. The functions f(x) and g(x) 
-can be nonlinear and nonconvex, but should be twice continuously differentiable. Note that 
-equality constraints can be formulated in the above formulation by setting the corresponding 
+where f(x): R^n --> R is the objective function, and g(x): R^n --> R^m are the constraint
+functions. The vectors g_L and g_U denote the lower and upper bounds on the constraints,
+and the vectors x_L and x_U are the bounds on the variables x. The functions f(x) and g(x)
+can be nonlinear and nonconvex, but should be twice continuously differentiable. Note that
+equality constraints can be formulated in the above formulation by setting the corresponding
 components of g_L and g_U to the same value.
 }
 \usage{
-ipoptr( x0, 
-        eval_f, 
-        eval_grad_f, 
-        lb = NULL, 
-        ub = NULL, 
-        eval_g = function( x ) { return( numeric(0) ) }, 
-        eval_jac_g = function( x ) { return( numeric(0) ) }, 
+ipoptr( x0,
+        eval_f,
+        eval_grad_f,
+        lb = NULL,
+        ub = NULL,
+        eval_g = function( x ) { return( numeric(0) ) },
+        eval_jac_g = function( x ) { return( numeric(0) ) },
         eval_jac_g_structure = list(),
-        constraint_lb = numeric(0), 
+        constraint_lb = numeric(0),
         constraint_ub = numeric(0),
         eval_h = NULL,
         eval_h_structure = NULL,
@@ -69,8 +69,8 @@ ipoptr( x0,
     function to evaluate the jacobian of the (non-)linear constraints that should hold in the solution.
 }
   \item{eval_jac_g_structure}{
-    list of vectors with indices defining the sparseness structure of the Jacobian. 
-    Each element of the list corresponds to a row in the matrix. Each index corresponds 
+    list of vectors with indices defining the sparseness structure of the Jacobian.
+    Each element of the list corresponds to a row in the matrix. Each index corresponds
     to a non-zero element in the matrix (see also \code{\link[ipoptr:print.sparseness]{print.sparseness}}).
 }
   \item{constraint_lb}{
@@ -83,18 +83,18 @@ ipoptr( x0,
     function to evaluate the hessian.
 }
   \item{eval_h_structure}{
-    list of vectors with indices defining the sparseness structure of the Hessian. 
-    Each element of the list corresponds to a row in the matrix. Each index corresponds 
+    list of vectors with indices defining the sparseness structure of the Hessian.
+    Each element of the list corresponds to a row in the matrix. Each index corresponds
     to a non-zero element in the matrix (see also \code{\link[ipoptr:print.sparseness]{print.sparseness}}).
 }
   \item{opts}{
-    list with options, see examples below. For a full list of options use the option 
+    list with options, see examples below. For a full list of options use the option
     "print_options_documentation"='yes', or have a look at the Ipopt documentation at
     \url{http://www.coin-or.org/Ipopt/documentation/}.
   }
   \item{ipoptr_environment}{
-    environment that is used to evaluate the functions. Use this to pass 
-    additional data or parameters to a function. See the second example in 
+    environment that is used to evaluate the functions. Use this to pass
+    additional data or parameters to a function. See the second example in
     \code{parameters.R} in the \code{tests} directory.
   }
   \item{...}{
@@ -130,22 +130,22 @@ Jelmer Ypma
 library('ipoptr')
 
 ## Rosenbrock Banana function
-eval_f <- function(x) {   
+eval_f <- function(x) {
     return( 100 * (x[2] - x[1] * x[1])^2 + (1 - x[1])^2 )
      }
 
 ## Gradient of Rosenbrock Banana function
-eval_grad_f <- function(x) { 
+eval_grad_f <- function(x) {
          c(-400 * x[1] * (x[2] - x[1] * x[1]) - 2 * (1 - x[1]),
             200 * (x[2] - x[1] * x[1]))
      }
 
-# The Hessian for this problem is actually dense, 
+# The Hessian for this problem is actually dense,
 # This is a symmetric matrix, fill the lower left triangle only.
 eval_h_structure <- list( c(1), c(1,2) )
 
 eval_h <- function( x, obj_factor, hessian_lambda ) {
-    
+
     return( obj_factor*c( 2 - 400*(x[2] - x[1]^2) + 800*x[1]^2,      # 1,1
                           -400*x[1],                                 # 2,1
                           200 ) )                                    # 2,2
@@ -158,19 +158,19 @@ opts <- list("print_level"=0,
              "file_print_level"=12,
              "output_file"="banana.out",
              "tol"=1.0e-8)
- 
-# solve Rosenbrock Banana function with analytic hessian 
-print( ipoptr( x0=x0, 
-               eval_f=eval_f, 
-               eval_grad_f=eval_grad_f, 
+
+# solve Rosenbrock Banana function with analytic hessian
+print( ipoptr( x0=x0,
+               eval_f=eval_f,
+               eval_grad_f=eval_grad_f,
                eval_h=eval_h,
                eval_h_structure=eval_h_structure,
                opts=opts) )
 
 # solve Rosenbrock Banana function with approximated hessian
-print( ipoptr( x0=x0, 
-               eval_f=eval_f, 
-               eval_grad_f=eval_grad_f, 
+print( ipoptr( x0=x0,
+               eval_f=eval_f,
+               eval_grad_f=eval_grad_f,
                opts=opts) )
 
 
@@ -187,10 +187,10 @@ print( ipoptr( x0=x0,
 #
 ##
 
-eval_f <- function( x ) { 
+eval_f <- function( x ) {
     print( paste( "In R::eval_f, x = ", paste( c(1,2), collapse=', ' ) ) )
 
-    return( -(x[2] - 2.0)*(x[2] - 2.0) ) 
+    return( -(x[2] - 2.0)*(x[2] - 2.0) )
 }
 
 eval_grad_f <- function( x ) {
@@ -234,17 +234,17 @@ ub <- c(  1,  1.0e19 )
 
 constraint_lb <- 0
 constraint_ub <- 0
-  
+
 opts <- list("print_level"=0,
              "file_print_level"=12,
              "output_file"="ipopttest.out")
-  
-print( ipoptr( x0=x0, 
-               eval_f=eval_f, 
-               eval_grad_f=eval_grad_f, 
-               lb=lb, 
-               ub=ub, 
-               eval_g=eval_g, 
+
+print( ipoptr( x0=x0,
+               eval_f=eval_f,
+               eval_grad_f=eval_grad_f,
+               lb=lb,
+               ub=ub,
+               eval_g=eval_g,
                eval_jac_g=eval_jac_g,
                eval_jac_g_structure=eval_jac_g_structure,
                constraint_lb=constraint_lb,
@@ -252,7 +252,7 @@ print( ipoptr( x0=x0,
                eval_h=eval_h,
                eval_h_structure=eval_h_structure,
                opts=opts) )
-               
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -11,7 +11,7 @@ print.sparseness( x, indices=TRUE, data=NULL, ncol=NULL, ... )
 }
 \arguments{
   \item{x}{
-    list of vectors with indices. Each element of the list corresponds to a row in 
+    list of vectors with indices. Each element of the list corresponds to a row in
     the matrix. Each index corresponds to a non-zero element in the matrix.
   }
   \item{indices}{
@@ -21,7 +21,7 @@ print.sparseness( x, indices=TRUE, data=NULL, ncol=NULL, ... )
     vector with non-zero elements of the sparse matrix.
   }
   \item{ncol}{
-    integer supplying the number of columns of the sparse matrix. If this is not supplied, 
+    integer supplying the number of columns of the sparse matrix. If this is not supplied,
     we take the number of columns as the largest index in \code{s}.
   }
   \item{...}{
@@ -70,7 +70,7 @@ m <- 5      # number of variables
 hessian <- function( A ) {
     H <- t(A) %*% A
     H <- unlist( lapply( 1:m, function(i) { H[i,1:i] } ) )
-    
+
     return( H )
 }
 
@@ -80,7 +80,7 @@ hessian_structure <- c( lapply( 1:m, function(x) { return( c(1:x) ) } ),
 
 # generate data
 set.seed( 3141 )
-A <- hessian( matrix( rnorm( n*m ), nrow=n, ncol=m ) )                        
+A <- hessian( matrix( rnorm( n*m ), nrow=n, ncol=m ) )
 print.sparseness( x       = hessian_structure,
                   indices = TRUE,
                   data    = format( A, digits=2, nsmall=2, justify='right'),

@@ -6,7 +6,7 @@
 # Date:   18 April 2010
 #
 # Example NLP for interfacing a problem with IPOPT.
-# This example is adapted from the C++ example that 
+# This example is adapted from the C++ example that
 # goes along with the Ipopt tutorial document.
 # This example solves the following problem:
 #
@@ -17,10 +17,10 @@
 
 library('ipoptr')
 
-eval_f <- function( x ) { 
+eval_f <- function( x ) {
     print( paste( "In R::eval_f, x = ", paste( x, collapse=', ' ) ) )
 
-    return( -(x[2] - 2.0)*(x[2] - 2.0) ) 
+    return( -(x[2] - 2.0)*(x[2] - 2.0) )
 }
 
 eval_grad_f <- function( x ) {
@@ -64,17 +64,17 @@ ub <- c(  1,  1.0e19 )
 
 constraint_lb <- 0
 constraint_ub <- 0
-  
+
 opts <- list("print_level"=0,
              "file_print_level"=12,
              "output_file"="ipopttest.out")
-  
-print( ipoptr( x0=x0, 
-               eval_f=eval_f, 
-               eval_grad_f=eval_grad_f, 
-               lb=lb, 
-               ub=ub, 
-               eval_g=eval_g, 
+
+print( ipoptr( x0=x0,
+               eval_f=eval_f,
+               eval_grad_f=eval_grad_f,
+               lb=lb,
+               ub=ub,
+               eval_g=eval_g,
                eval_jac_g=eval_jac_g,
                eval_jac_g_structure=eval_jac_g_structure,
                constraint_lb=constraint_lb,

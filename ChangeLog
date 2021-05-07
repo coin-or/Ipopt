@@ -439,7 +439,7 @@ commit history.
         - fix a memory allocation in Java interface in cases where jint
           has a different size than int [r2513]
         - the buildsystem now tries the Accelerate framework instead of
-          vecLib for finding Blas/Lapack on MacOS X 
+          vecLib for finding Blas/Lapack on MacOS X
 
 2014-08-16 releases/3.11.9
         - fix compilation issue of Java interface on systems where Index
@@ -583,12 +583,12 @@ commit history.
           of internally within the mex code (replace Matlab call to ipopt with
           ipopt_auxdata if using auxiliary data in any callbacks) [r2282]
         - exposed more intermediate Ipopt information to iterfunc callback [r2283]
-        
+
         - fixes to JIpopt buildsystem (now may work on windows and uses libtool)
         - JIpopt now reads options file ipopt.opt by default, if present
         - removed predefined KEY_ strings in JIpopt
         - renamed API functions that retrieve solution values in JIpopt
-        
+
         - simplified installation of R interface
 
 2013-05-05 releases/3.10.4
@@ -796,7 +796,7 @@ commit history.
             (no longer in include/ipopt)
         - default for dual_inf_tol is now 1 (instead of 1e-4)
         - In matlab interface, here the text from Peter Carbonetto:
-          There have been several significant changes made to the MATLAB interface since the last release. The most important two changes are: 1) Following the "warm start" feature of IPOPT, you may pass in initial estimates for the Lagrange multipliers. 2) Callback routines for computing the objective, gradient (etc.) are now specified using function handles instead of strings. (Thanks to Marcus Brubaker at the University of Toronto for the initial suggestion.) 
+          There have been several significant changes made to the MATLAB interface since the last release. The most important two changes are: 1) Following the "warm start" feature of IPOPT, you may pass in initial estimates for the Lagrange multipliers. 2) Callback routines for computing the objective, gradient (etc.) are now specified using function handles instead of strings. (Thanks to Marcus Brubaker at the University of Toronto for the initial suggestion.)
 
 2007-09-25 releases/3.3.3
         - minor changes, bug fixes

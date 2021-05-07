@@ -5,9 +5,9 @@
 # Author: Jelmer Ypma
 # Date:   18 April 2010
 #
-# Example showing how the functions print.sparseness and 
-# make.sparse work. These show and create the sparseness 
-# structure of a matrix as it should be used for input 
+# Example showing how the functions print.sparseness and
+# make.sparse work. These show and create the sparseness
+# structure of a matrix as it should be used for input
 # to ipoptr().
 
 library('ipoptr')
@@ -40,7 +40,7 @@ m <- 5      # number of variables
 hessian <- function( A ) {
     H <- t(A) %*% A
     H <- unlist( lapply( 1:m, function(i) { H[i,1:i] } ) )
-    
+
     return( H )
 }
 
@@ -50,13 +50,13 @@ hessian_structure <- c( lapply( 1:m, function(x) { return( c(1:x) ) } ),
 
 # generate data
 set.seed( 3141 )
-A <- hessian( matrix( rnorm( n*m ), nrow=n, ncol=m ) )                        
+A <- hessian( matrix( rnorm( n*m ), nrow=n, ncol=m ) )
 print.sparseness( x       = hessian_structure,
                   indices = TRUE,
                   data    = format( A, digits=2, nsmall=2, justify='right'),
                   ncol    = 2*m )
 
-# make a large sparseness structure and use plot                 
+# make a large sparseness structure and use plot
 s <- do.call( "cbind", lapply( 1:5, function(i) { diag(5) %x% matrix(1, nrow=5, ncol=20) } ) )
 s <- do.call( "rbind", lapply( 1:5,  function(i) { s } ) )
 s <- cbind( matrix( 1, nrow=nrow(s), ncol=40 ), s )

@@ -1,4 +1,4 @@
-% Copyright (C) 2009 International Business Machines 
+% Copyright (C) 2009 International Business Machines
 % All Rights Reserved.
 % This code is published under the Eclipse Public License.
 %
@@ -56,8 +56,8 @@ function [x, info] = TutorialMatlab
   funcs.hessianstructure  = @eval_hess_struct;
 
   [x info] = ipopt(x0, funcs, options);
- 
- 
+
+
   % End of main function
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

@@ -8,5 +8,5 @@ citEntry(entry="Article",
   journal =  "Mathematical Programming",
   volume = "106",
   number = "1",
-  pages = "25--57", 
-  textVersion = "A. W\"{a}chter and L. T. Biegler, On the Implementation of a Primal-Dual Interior Point Filter Line Search Algorithm for Large-Scale Nonlinear Programming, Mathematical Programming 106(1), pp. 25-57, 2006" )  
+  pages = "25--57",
+  textVersion = "A. W\"{a}chter and L. T. Biegler, On the Implementation of a Primal-Dual Interior Point Filter Line Search Algorithm for Large-Scale Nonlinear Programming, Mathematical Programming 106(1), pp. 25-57, 2006" )

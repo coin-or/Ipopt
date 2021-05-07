@@ -7,7 +7,7 @@
 %% merlin.mbs  (with options: `ay,nat,seq-no,nm-rvvc,aunm-semi,xlab-it,keyxyr,blkyear,yr-com,dtbf,note-yr,atit-u,volp-com,jwdpg,pp-last,num-xser,jnm-x,pre-edn,edpar,bkedcap,edby,edbyx,blk-tit,pp,ed,ord,jabr,varand,etal-it,nfss,')
 %% ----------------------------------------
 %% *** iecrv5 ***
-%% 
+%%
 %% Copyright 1994-2005 Patrick W Daly
  % ===============================================================
  % IMPORTANT NOTICE:

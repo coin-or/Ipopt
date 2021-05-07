@@ -61,8 +61,8 @@ let x3.ipopt_zL_in := x3.ipopt_zL_out;
 let x3.ipopt_zU_in := x3.ipopt_zU_out;
 let x4.ipopt_zL_in := x4.ipopt_zL_out;
 let x4.ipopt_zU_in := x4.ipopt_zU_out;
-    
-# set options for warm-start 
+
+# set options for warm-start
 option ipopt_options "warm_start_init_point yes  warm_start_bound_push 1e-6 warm_start_mult_bound_push 1e-6  mu_init 1e-6";
 
 # solve the problem again

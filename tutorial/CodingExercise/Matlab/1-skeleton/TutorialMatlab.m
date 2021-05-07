@@ -1,4 +1,4 @@
-% Copyright (C) 2009 International Business Machines 
+% Copyright (C) 2009 International Business Machines
 % All Rights Reserved.
 % This code is published under the Eclipse Public License.
 %
@@ -64,7 +64,7 @@ function [x, info] = TutorialMatlab
   % Evaluate value of objective function
   function f = eval_f(x)
 
-    
+
 
   end
 
@@ -72,7 +72,7 @@ function [x, info] = TutorialMatlab
   % Evaluate gradient of objective function
   function df = eval_grad_f(x)
 
-    
+
 
   end
 
@@ -80,7 +80,7 @@ function [x, info] = TutorialMatlab
   % Evaluate value of constraint bodies
   function g = eval_g(x)
 
-    
+
 
   end
 

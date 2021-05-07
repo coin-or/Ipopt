@@ -179,11 +179,11 @@ void ma77_input_reals_s(const int idx, const int length,
 void ma77_analyse_s(const int order[], void **keep,
    const struct ma77_control_s *control, struct ma77_info_s *info);
 /* To factorize the matrix */
-void ma77_factor_s(const int posdef, void **keep, 
+void ma77_factor_s(const int posdef, void **keep,
    const struct ma77_control_s *control, struct ma77_info_s *info,
    const ma77pkgtype_s_ *scale);
 /* To factorize the matrix AND solve AX = B */
-void ma77_factor_solve_s(const int posdef, void **keep, 
+void ma77_factor_solve_s(const int posdef, void **keep,
    const struct ma77_control_s *control, struct ma77_info_s *info,
    const ma77pkgtype_s_ *scale, const int nrhs, const int lx,
    ma77pkgtype_s_ rhs[]);
@@ -192,20 +192,20 @@ void ma77_solve_s(const int job, const int nrhs, const int lx, ma77pkgtype_s_ x[
    void **keep, const struct ma77_control_s *control, struct ma77_info_s *info,
    const ma77pkgtype_s_ *scale);
 void ma77_resid_s(const int nrhs, const int lx, const ma77pkgtype_s_ x[],
-   const int lresid, ma77pkgtype_s_ resid[], void **keep, 
+   const int lresid, ma77pkgtype_s_ resid[], void **keep,
    const struct ma77_control_s *control, struct ma77_info_s *info,
    ma77pkgtype_s_ *anorm_bnd);
-void ma77_scale_s(ma77pkgtype_s_ scale[], void **keep, 
+void ma77_scale_s(ma77pkgtype_s_ scale[], void **keep,
    const struct ma77_control_s *control, struct ma77_info_s *info,
    ma77pkgtype_s_ *anorm);
-void ma77_enquire_posdef_s(ma77pkgtype_s_ d[], void **keep, 
+void ma77_enquire_posdef_s(ma77pkgtype_s_ d[], void **keep,
    const struct ma77_control_s *control, struct ma77_info_s *info);
-void ma77_enquire_indef_s(int piv_order[], ma77pkgtype_s_ d[], void **keep, 
+void ma77_enquire_indef_s(int piv_order[], ma77pkgtype_s_ d[], void **keep,
    const struct ma77_control_s *control, struct ma77_info_s *info);
-void ma77_alter_s(const ma77pkgtype_s_ d[], void **keep, 
+void ma77_alter_s(const ma77pkgtype_s_ d[], void **keep,
    const struct ma77_control_s *control, struct ma77_info_s *info);
-void ma77_restart_s(const char *restart_file, const char *fname1, 
-   const char *fname2, const char *fname3, const char *fname4, void **keep, 
+void ma77_restart_s(const char *restart_file, const char *fname1,
+   const char *fname2, const char *fname3, const char *fname4, void **keep,
    const struct ma77_control_s *control, struct ma77_info_s *info);
 void ma77_solve_fredholm_s(int nrhs, int flag_out[], int lx, ma77pkgtype_s_ x[],
    void **keep, const struct ma77_control_s *control,

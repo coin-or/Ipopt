@@ -383,7 +383,7 @@ C
      1              - DAT(i-2))*COS(X(i))
             endif
             inz = inz + 1
-            
+
             HESS(inz) = -LAM(i-1)*(2.d0*X(i)+1.5d0)*SIN(X(i+1))
             inz = inz + 1
         enddo

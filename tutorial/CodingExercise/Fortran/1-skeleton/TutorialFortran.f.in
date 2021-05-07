@@ -97,15 +97,15 @@ C
 C
 C     Number of constraints
 C
-      M = 
+      M =
 C
 C     Number of nonzeros in constraint Jacobian
 C
-      NELE_JAC = 
+      NELE_JAC =
 C
 C     Number of nonzeros in Lagrangian Hessian
 C
-      NELE_HESS = 
+      NELE_HESS =
 C
 C     Set initial point and bounds
 C

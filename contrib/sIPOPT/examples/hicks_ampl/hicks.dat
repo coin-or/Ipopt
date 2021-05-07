@@ -76,7 +76,7 @@ let t[5,1].sens_state_1 := 2;
 let c[5,1].sens_state_value_1 := 0.135;
 let t[5,1].sens_state_value_1 := 0.745;
 #
-# 4. Identify the initial constraints, that will be relaxed 
+# 4. Identify the initial constraints, that will be relaxed
 #    in favor of the new measurements
 let c_init_constr.sens_init_constr :=1;
 let t_init_constr.sens_init_constr :=1;

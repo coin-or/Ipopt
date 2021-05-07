@@ -26,7 +26,7 @@ example problem, number 71 from the Hock-Schittkowsky test suite \cite HS,
     \min_{x \in \Re^4} &&x_1 x_4 (x_1 + x_2 + x_3)  +  x_3  \\
     \mbox{s.t.}  &&x_1 x_2 x_3 x_4 \ge 25  \\
     &&x_1^2 + x_2^2 + x_3^2 + x_4^2  =  40  \\
-    &&1 \leq x_1, x_2, x_3, x_4 \leq 5, 
+    &&1 \leq x_1, x_2, x_3, x_4 \leq 5,
 \end{aligned} \tag{HS071} \f} with the starting point
 \f[ x_0 = (1, 5, 5, 1) \f] and the optimal solution
 \f[ x_* = (1.00000000, 4.74299963, 3.82114998, 1.37940829). \f]
@@ -60,26 +60,26 @@ the following AMPL model.
     # make sure ipopt is in the path!
     option solver ipopt;
 
-    # declare the variables and their bounds, 
+    # declare the variables and their bounds,
     # set notation could be used, but this is straightforward
-    var x1 >= 1, <= 5; 
-    var x2 >= 1, <= 5; 
-    var x3 >= 1, <= 5; 
+    var x1 >= 1, <= 5;
+    var x2 >= 1, <= 5;
+    var x3 >= 1, <= 5;
     var x4 >= 1, <= 5;
 
     # specify the objective function
     minimize obj:
         x1 * x4 * (x1 + x2 + x3) + x3;
-            
+
     # specify the constraints
     s.t.
       inequality:
         x1 * x2 * x3 * x4 >= 25;
-                    
+
       equality:
         x1^2 + x2^2 + x3^2 +x4^2 = 40;
 
-    # specify the starting point            
+    # specify the starting point
     let x1 := 1;
     let x2 := 5;
     let x3 := 5;
@@ -283,7 +283,7 @@ x_4             & 0             & 0             & x_1                   \\
 0               & x_3 x_4       & x_2 x_4       & x_2 x_3       \\
 x_3 x_4         & 0             & x_1 x_4       & x_1 x_3       \\
 x_2 x_4         & x_1 x_4       & 0             & x_1 x_2       \\
-x_2 x_3         & x_1 x_3       & x_1 x_2       & 0 
+x_2 x_3         & x_1 x_3       & x_1 x_2       & 0
 \end{array}
 \right]
 +
@@ -1018,14 +1018,14 @@ available in [contrib/RInterface/inst/doc/ipoptr.pdf](https://github.com/coin-or
 
 First, we define the objective function and its gradient
 \code{.unparsed}
-> eval_f <- function( x ) { 
-    return( x[1]*x[4]*(x[1] + x[2] + x[3]) + x[3] ) 
+> eval_f <- function( x ) {
+    return( x[1]*x[4]*(x[1] + x[2] + x[3]) + x[3] )
   }
 > eval_grad_f <- function( x ) {
     return( c( x[1] * x[4] + x[4] * (x[1] + x[2] + x[3]),
                x[1] * x[4],
                x[1] * x[4] + 1.0,
-               x[1] * (x[1] + x[2] + x[3]) ) )       
+               x[1] * (x[1] + x[2] + x[3]) ) )
   }
 \endcode
 
@@ -1062,7 +1062,7 @@ function and of the constraints at the same time, although you could
 write a function to calculate them both separately and then return the
 combined result in `eval_h`.
 \code{.unparsed}
-> # The Hessian for this problem is actually dense, 
+> # The Hessian for this problem is actually dense,
 > # This is a symmetric matrix, fill the lower left triangle only.
 > eval_h_structure <- list( c(1), c(1,2), c(1,2,3), c(1,2,3,4) )
 > eval_h <- function( x, obj_factor, hessian_lambda ) {
@@ -1071,32 +1071,32 @@ combined result in `eval_h`.
 
      values[2] = obj_factor * (x[4])   # 2,1
      values[3] = 0                     # 2,2
-     
+
      values[4] = obj_factor * (x[4])   # 3,1
      values[5] = 0                     # 4,2
      values[6] = 0                     # 3,3
-     
+
      values[7] = obj_factor * (2*x[1] + x[2] + x[3]) # 4,1
      values[8] = obj_factor * (x[1])                 # 4,2
      values[9] = obj_factor * (x[1])                 # 4,3
      values[10] = 0                                  # 4,4
-     
+
      # add the portion for the first constraint
      values[2] = values[2] + hessian_lambda[1] * (x[3] * x[4]) # 2,1
-         
+
      values[4] = values[4] + hessian_lambda[1] * (x[2] * x[4]) # 3,1
      values[5] = values[5] + hessian_lambda[1] * (x[1] * x[4]) # 3,2
-     
+
      values[7] = values[7] + hessian_lambda[1] * (x[2] * x[3]) # 4,1
      values[8] = values[8] + hessian_lambda[1] * (x[1] * x[3]) # 4,2
      values[9] = values[9] + hessian_lambda[1] * (x[1] * x[2]) # 4,3
-    
+
      # add the portion for the second constraint
      values[1] = values[1] + hessian_lambda[2] * 2 # 1,1
      values[3] = values[3] + hessian_lambda[2] * 2 # 2,2
      values[6] = values[6] + hessian_lambda[2] * 2 # 3,3
      values[10] = values[10] + hessian_lambda[2] * 2 # 4,4
-     
+
      return ( values )
   }
 \endcode
@@ -1125,15 +1125,15 @@ order to redirect the \Ipopt output into a file, we use
 > opts <- list("print_level" = 0,
                "file_print_level" = 12,
                "output_file" = "hs071_nlp.out")
-> print( ipoptr( x0 = x0, 
-                 eval_f = eval_f, 
-                 eval_grad_f = eval_grad_f, 
-                 lb = lb, 
-                 ub = ub, 
-                 eval_g = eval_g, 
-                 eval_jac_g = eval_jac_g, 
-                 constraint_lb = constraint_lb, 
-                 constraint_ub = constraint_ub, 
+> print( ipoptr( x0 = x0,
+                 eval_f = eval_f,
+                 eval_grad_f = eval_grad_f,
+                 lb = lb,
+                 ub = ub,
+                 eval_g = eval_g,
+                 eval_jac_g = eval_jac_g,
+                 constraint_lb = constraint_lb,
+                 constraint_ub = constraint_ub,
                  eval_jac_g_structure = eval_jac_g_structure,
                  eval_h = eval_h,
                  eval_h_structure = eval_h_structure,
@@ -1141,18 +1141,18 @@ order to redirect the \Ipopt output into a file, we use
 
 Call:
 
-ipoptr(x0 = x0, eval_f = eval_f, eval_grad_f = eval_grad_f, lb = lb, 
+ipoptr(x0 = x0, eval_f = eval_f, eval_grad_f = eval_grad_f, lb = lb,
   ub = ub, eval_g = eval_g, eval_jac_g = eval_jac_g,
   eval_jac_g_structure = eval_jac_g_structure, constraint_lb = constraint_lb,
   constraint_ub = constraint_ub, eval_h = eval_h, eval_h_structure = eval_h_structure,
   opts = opts)
 
-Ipopt solver status: 0 ( SUCCESS: Algorithm terminated 
-successfully at a locally optimal point, satisfying the 
+Ipopt solver status: 0 ( SUCCESS: Algorithm terminated
+successfully at a locally optimal point, satisfying the
 convergence tolerances (can be specified by options). )
 
-Number of Iterations....: 8 
-Optimal value of objective function:  17.0140171451792 
+Number of Iterations....: 8
+Optimal value of objective function:  17.0140171451792
 Optimal value of controls: 1 4.743 3.82115 1.379408
 \endcode
 
@@ -1170,11 +1170,11 @@ First, we define the objective function and its gradient using, assuming
 that there is some variable `params` that contains the values of the
 parameters.
 \code{.unparsed}
-> eval_f_ex1 <- function(x, params) { 
-     return( params[1]*x^2 + params[2]*x + params[3] ) 
+> eval_f_ex1 <- function(x, params) {
+     return( params[1]*x^2 + params[2]*x + params[3] )
   }
-> eval_grad_f_ex1 <- function(x, params) { 
-     return( 2*params[1]*x + params[2] ) 
+> eval_grad_f_ex1 <- function(x, params) {
+     return( 2*params[1]*x + params[2] )
   }
 \endcode
 Note, that the first parameter should always be the control variable.
@@ -1187,35 +1187,35 @@ case \f$a_1=1\f$, \f$a_2=2\f$, and \f$a_3=3\f$, from initial value
 \f$x_0=0\f$, with the following command
 \code{.unparsed}
 > # solve using ipoptr with additional parameters
-> ipoptr(x0          = 0, 
-         eval_f      = eval_f_ex1, 
+> ipoptr(x0          = 0,
+         eval_f      = eval_f_ex1,
          eval_grad_f = eval_grad_f_ex1,
          opts        = list("print_level"=0),
          params      = c(1,2,3) )
-             
+
 Call:
 
-ipoptr(x0 = 0, eval_f = eval_f_ex1, eval_grad_f = eval_grad_f_ex1, 
+ipoptr(x0 = 0, eval_f = eval_f_ex1, eval_grad_f = eval_grad_f_ex1,
     opts = list(print_level = 0), params = c(1, 2, 3))
 
 
-Ipopt solver status: 0 ( SUCCESS: Algorithm terminated 
-successfully at a locally optimal point, satisfying the 
+Ipopt solver status: 0 ( SUCCESS: Algorithm terminated
+successfully at a locally optimal point, satisfying the
 convergence tolerances (can be specified by options). )
 
-Number of Iterations....: 1 
-Optimal value of objective function:  2 
+Number of Iterations....: 1
+Optimal value of objective function:  2
 Optimal value of controls: -1
 \endcode
 
 For the second method, we don't have to supply the parameters as
 additional arguments to the function.
 \code{.unparsed}
-> eval_f_ex2 <- function(x) { 
-     return( params[1]*x^2 + params[2]*x + params[3] ) 
+> eval_f_ex2 <- function(x) {
+     return( params[1]*x^2 + params[2]*x + params[3] )
   }
-> eval_grad_f_ex2 <- function(x) { 
-     return( 2*params[1]*x + params[2] ) 
+> eval_grad_f_ex2 <- function(x) {
+     return( 2*params[1]*x + params[2] )
   }
 \endcode
 
@@ -1231,24 +1231,24 @@ take care of evaluating the functions in the correct environment, so
 that the auxiliary data is available.
 \code{.unparsed}
 > # pass the environment that should be used to evaluate functions to ipoptr
-> ipoptr(x0                 = 0, 
-         eval_f             = eval_f_ex2, 
-         eval_grad_f        = eval_grad_f_ex2, 
+> ipoptr(x0                 = 0,
+         eval_f             = eval_f_ex2,
+         eval_grad_f        = eval_grad_f_ex2,
          ipoptr_environment = auxdata,
          opts               = list("print_level"=0) )
-             
+
 Call:
 
-ipoptr(x0 = 0, eval_f = eval_f_ex2, eval_grad_f = eval_grad_f_ex2, 
+ipoptr(x0 = 0, eval_f = eval_f_ex2, eval_grad_f = eval_grad_f_ex2,
     opts = list(print_level = 0), ipoptr_environment = auxdata)
 
 
-Ipopt solver status: 0 ( SUCCESS: Algorithm terminated 
-successfully at a locally optimal point, satisfying the 
+Ipopt solver status: 0 ( SUCCESS: Algorithm terminated
+successfully at a locally optimal point, satisfying the
 convergence tolerances (can be specified by options). )
 
-Number of Iterations....: 1 
-Optimal value of objective function:  2 
+Number of Iterations....: 1
+Optimal value of objective function:  2
 Optimal value of controls: -1
 \endcode
 

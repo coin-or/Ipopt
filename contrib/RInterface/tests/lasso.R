@@ -24,7 +24,7 @@ set.seed( ranseed )
 
 # CREATE DATA SET.
 # Generate the input vectors from the standard normal, and generate the
-# responses from the regression with some additional noise. The variable 
+# responses from the regression with some additional noise. The variable
 # "beta" is the set of true regression coefficients.
 m     <- length(beta)                           # Number of features.
 A     <- matrix( rnorm(n*m), nrow=n, ncol=m )   # The n x m matrix of examples.
@@ -38,14 +38,14 @@ eval_f <- function(x) {
     # separate x in two parts
     w <- x[  1:m ]          # parameters
     u <- x[ (m+1):(2*m) ]
-    
+
     return( sum( (y - A %*% w)^2 )/2 + lambda*sum(u) )
 }
 
 # ------------------------------------------------------------------
 eval_grad_f <- function(x) {
     w <- x[ 1:m ]
-    return( c( -t(A) %*% (y - A %*% w),  
+    return( c( -t(A) %*% (y - A %*% w),
                rep(lambda,m) ) )
 }
 
@@ -54,10 +54,10 @@ eval_g <- function(x) {
     # separate x in two parts
     w <- x[  1:m ]          # parameters
     u <- x[ (m+1):(2*m) ]
-   
+
     return( c( w + u, u - w ) )
 }
-  
+
 # ------------------------------------------------------------------
 #  J = [  I  I
 #        -I  I ],
@@ -80,13 +80,13 @@ eval_jac_g <- function(x) {
 #  .  .  .  . 19  .  .  .  . 20
 eval_jac_g_structure <- lapply( c(1:m,1:m), function(x) { return( c(x,m+x) ) } )
 
-  
+
 # ------------------------------------------------------------------
 # rename lambda so it doesn't cause confusion with lambda in auxdata
 eval_h <- function( x, obj_factor, hessian_lambda ) {
     H <- t(A) %*% A
     H <- unlist( lapply( 1:m, function(i) { H[i,1:i] } ) )
-    
+
     return( obj_factor * H )
 }
 
@@ -109,9 +109,9 @@ eval_h_structure <- c( lapply( 1:m, function(x) { return( c(1:x) ) } ),
 
 
 # The starting point.
-x0 = c( rep(0, m), 
+x0 = c( rep(0, m),
         rep(1, m) )
-       
+
 
 # The constraint functions are bounded from below by zero.
 constraint_lb = rep(   0, 2*m )
@@ -129,16 +129,16 @@ auxdata$m <- m
 auxdata$A <- A
 auxdata$y <- y
 auxdata$lambda <- lambda
-  
+
 # COMPUTE SOLUTION WITH IPOPT.
 # Compute the L1-regularized maximum likelihood estimator.
-print( ipoptr( x0=x0, 
-               eval_f=eval_f, 
-               eval_grad_f=eval_grad_f, 
-               eval_g=eval_g, 
+print( ipoptr( x0=x0,
+               eval_f=eval_f,
+               eval_grad_f=eval_grad_f,
+               eval_g=eval_g,
                eval_jac_g=eval_jac_g,
                eval_jac_g_structure=eval_jac_g_structure,
-               constraint_lb=constraint_lb, 
+               constraint_lb=constraint_lb,
                constraint_ub=constraint_ub,
                eval_h=eval_h,
                eval_h_structure=eval_h_structure,

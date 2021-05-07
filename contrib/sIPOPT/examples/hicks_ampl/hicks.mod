@@ -12,7 +12,7 @@ param ncp >= 1 integer       ;
 
 # define mathematical model parameters
 
-param time      ;  
+param time      ;
 param jj        ;
 param cf        ;
 param alpha     ;
@@ -48,9 +48,9 @@ param h{fe}    ;    # finite element length
 
 # define the decision variables
 
-var c {fe,cp}  >= 0           ;  
-var t {fe,cp}  >= 0           ;  
-var u {fe,cp}  >= 0           ;  
+var c {fe,cp}  >= 0           ;
+var t {fe,cp}  >= 0           ;
+var u {fe,cp}  >= 0           ;
 
 # auxiliary equations
 
@@ -62,10 +62,10 @@ var cdot{i in fe, j in cp} = (1-c[i,j])/theta-k10*exp(-n/t[i,j])*c[i,j]         
 var tdot{i in fe, j in cp} = (yf-t[i,j])/theta+k10*exp(-n/t[i,j])*c[i,j]-alpha*u[i,j]*(t[i,j]-yc) ;
 
 #---------------------------------
-# This is specific to the asNMPC code: 
+# This is specific to the asNMPC code:
 # The initial constraints have to be defined as variables.
 # They have to be set explictly with initial constraints.
-# These constraints need to be identified by the 
+# These constraints need to be identified by the
 # sens_init_constr suffix.
 var c_init_var;
 var t_init_var;

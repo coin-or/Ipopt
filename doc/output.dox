@@ -110,7 +110,7 @@ output message to the console, and a brief description.
 - `Solved_To_Acceptable_Level`:
 
    Console Message: `EXIT: Solved To Acceptable Level.`
-   
+
    This indicates that the algorithm did not converge to the "desired"
    tolerances, but that it was able to obtain a point satisfying the
    "acceptable" tolerance level as specified by the \ref OPT_acceptable_tol "acceptable_tol"
@@ -129,7 +129,7 @@ output message to the console, and a brief description.
 
    Console Message: `EXIT: Converged to a point of local infeasibility.
    Problem may be infeasible.`
-   
+
    The restoration phase converged to a point that is a minimizer for
    the constraint violation (in the \f$\ell_1\f$-norm), but is not feasible
    for the original problem. This indicates that the problem may be
@@ -142,7 +142,7 @@ output message to the console, and a brief description.
 - `Search_Direction_Becomes_Too_Small`:
 
    Console Message: `EXIT: Search Direction is becoming Too Small.`
-   
+
    This indicates that \Ipopt is calculating very small
    step sizes and is making very little progress. This could happen if
    the problem has been solved to the best numerical accuracy possible
@@ -151,22 +151,22 @@ output message to the console, and a brief description.
 - `Diverging_Iterates`:
 
    Console Message: `EXIT: Iterates divering; problem might be unbounded.`
-   
+
    This message is printed if the max-norm of the iterates becomes
    larger than the value of the option \ref OPT_diverging_iterates_tol "diverging_iterates_tol".
    This can happen if the problem is unbounded below and the iterates are diverging.
-   
+
 - `User_Requested_Stop`:
 
    Console Message: `EXIT: Stopping optimization at current point as requested by user.`
-   
+
    This message is printed if the user call-back method
    Ipopt::TNLP::intermediate_callback returned false.
 
 - `Maximum_Iterations_Exceeded`:
 
    Console Message: `EXIT: Maximum Number of Iterations Exceeded.`
-   
+
    This indicates that \Ipopt has exceeded the maximum
    number of iterations as specified by the option \ref OPT_max_iter "max_iter".
 
@@ -180,14 +180,14 @@ output message to the console, and a brief description.
 - `Maximum_CpuTime_Exceeded`:
 
    Console Message: `EXIT: Maximum CPU time exceeded.`
-   
+
    This indicates that \Ipopt has exceeded the maximum
    number of CPU seconds as specified by the option \ref OPT_max_cpu_time "max_cpu_time".
 
 - `Restoration_Failed`:
 
    Console Message: `EXIT: Restoration Failed!`
-   
+
    This indicates that the restoration phase failed to find a feasible
    point that was acceptable to the filter line search for the original
    problem. This could happen if the problem is highly degenerate, does
@@ -197,7 +197,7 @@ output message to the console, and a brief description.
 - `Error_In_Step_Computation`:
 
    Console Output: `EXIT: Error in step computation!`
-   
+
    This message is printed if \Ipopt is unable to compute a step towards
    a new iterate and the current iterate is not acceptable for the specified
    tolerances.
@@ -220,7 +220,7 @@ output message to the console, and a brief description.
 - `Invalid_Option`:
 
    Console Message: (details about the particular error will be output to the console)
-   
+
    This indicates that there was some problem specifying the options.
    See the specific message for details.
    This return code is also used when a linear solver is choosen that was
@@ -229,7 +229,7 @@ output message to the console, and a brief description.
 - `Not_Enough_Degrees_Of_Freedom`:
 
    Console Message: `EXIT: Problem has too few degrees of freedom.`
-   
+
    This indicates that your problem, as specified, has too few degrees
    of freedom. This can happen if you have too many equality
    constraints, or if you fix too many variables (\Ipopt
@@ -248,7 +248,7 @@ output message to the console, and a brief description.
 - `Unrecoverable_Exception`:
 
    Console Message: (details about the particular error will be output to the console)
-   
+
    This indicates that \Ipopt has thrown an exception that
    does not have an internal return code. See the specific message for
    details.
@@ -256,7 +256,7 @@ output message to the console, and a brief description.
 - `NonIpopt_Exception_Thrown`:
 
    Console Message: `Unknown Exception caught in %Ipopt`
-   
+
    An unknown exception was caught in \Ipopt. This exception could have
    originated from your model or any linked in third party code.
    See also Ipopt::IpoptApplication::RethrowNonIpoptException.
@@ -264,14 +264,14 @@ output message to the console, and a brief description.
 - `Insufficient_Memory`:
 
    Console Message: `EXIT: Not enough memory`.
-   
+
    An error occurred while trying to allocate memory. The problem may
    be too large for your current memory and swap configuration.
 
 - `Internal_Error`:
 
    Console: `EXIT: INTERNAL ERROR: Unknown SolverReturn value - Notify IPOPT Authors.`
-   
+
    An unknown internal error has occurred. Please notify the authors of
    \Ipopt via the mailing list.
 

@@ -11,7 +11,7 @@ plot.sparseness( x, pch='.', asp=1, xaxs='i', yaxs='i', ... )
 }
 \arguments{
   \item{x}{
-    list of vectors with indices. Each element of the list corresponds to a row in 
+    list of vectors with indices. Each element of the list corresponds to a row in
     the matrix. Each index corresponds to a non-zero element in the matrix.
   }
   \item{pch}{

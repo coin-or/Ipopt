@@ -10,17 +10,17 @@
 
 print.sparseness <- function( x, indices=TRUE, data=NULL, ncol=NULL, ... ) {
     stopifnot( is.list(x) )
-    
-    # if number of columns is not supplied, take it as the maximum 
+
+    # if number of columns is not supplied, take it as the maximum
     # value of the indices
     if ( is.null(ncol) ) {
         ncol <- max(unlist(x))
     }
-    
+
     # create matrix with dots
     p <- data.frame( matrix( ".", nrow=length(x), ncol ), stringsAsFactors=FALSE )
     names( p ) <- 1:ncol
-    
+
     # change dots by 'x' or count of index
     cnt=1
     for ( row in 1:length(x) ) {
@@ -41,6 +41,6 @@ print.sparseness <- function( x, indices=TRUE, data=NULL, ncol=NULL, ... ) {
             cnt = cnt+1
         }
     }
-    
+
     return( p )
 }

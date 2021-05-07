@@ -5,17 +5,17 @@
 # Date   : 2010-10-04
 
 # This AMPL script shows how to use the reduced hessian feature
-# of the asNMPC code. 
+# of the asNMPC code.
 
 reset;
 option solver ipopt_sens;
 
 # set option to compute reduced hessian
-option ipopt_options 'compute_red_hessian yes'; 
+option ipopt_options 'compute_red_hessian yes';
 
 # turn presolve off so no variables / equations are eliminated
 # by AMPL
-option presolve 0;  
+option presolve 0;
 
 # Introduce the reduced hessian suffix
 suffix red_hessian, IN;
@@ -25,7 +25,7 @@ var x1:=25e7;
 var x2:=0;
 var x3:=0;
 
-# set the variables 2 and 3 free variables. The ordering of the 
+# set the variables 2 and 3 free variables. The ordering of the
 # variable suffixes will correspond to the ordering of the columns
 let x2.red_hessian := 1;
 let x3.red_hessian := 2;

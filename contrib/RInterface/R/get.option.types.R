@@ -5,8 +5,8 @@
 # Author: Jelmer Ypma
 # Date:   18 April 2010
 #
-# This function converts a list with ipopt options into 
-# three sub-lists, where the options are sorted into 
+# This function converts a list with ipopt options into
+# three sub-lists, where the options are sorted into
 # the different value types (integer, numeric, string).
 #
 # Input: list of ipopt options and their values
@@ -175,14 +175,14 @@ get.option.types <- function(opts) {
               "wsmp_singularity_threshold"="numeric"
     )
 
- 
+
 
     # initialize list with options sorted by type
     converted.opts <- list( "integer"=list(), "string"=list(), "numeric"=list() )
 
     is.wholenumber <- function(x, tol = .Machine$double.eps^0.5)  abs(x - round(x)) < tol
 
-    # check if we have at least 1 element in the list, otherwise the 
+    # check if we have at least 1 element in the list, otherwise the
     # loop runs from 1 to down 0 and we get errors
     if ( length( opts ) > 0 ) {
 
@@ -200,7 +200,7 @@ get.option.types <- function(opts) {
                 }
                 cat( paste( "Warning: ", names(opts)[i], " is not a recognized option, we try to pass it to Ipopt as ", tmp.type, "\n" ) )
             }
-            
+
             if ( tmp.type=="string" ) {
                 converted.opts$string[[ names(opts)[i] ]] <- as.character(opts[[i]])
             } else if ( tmp.type=="integer" ) {

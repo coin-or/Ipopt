@@ -1,7 +1,7 @@
                             sIPOPT Toolbox for IPOPT
                             ========================
 
-This is the Sensitivity with IPOPT toolbox. Its purpose is to compute 
+This is the Sensitivity with IPOPT toolbox. Its purpose is to compute
 fast approximate solutions when parameters in the NLP change. For
 more information on the project please see the implementation paper,
 or the project website.
@@ -17,7 +17,7 @@ directory as IPOPT's ampl executable. They are build in the same build
 process as for main Ipopt, unless --disable-sipopt has been specified
 for configure.
 
-Contact: The sIPOPT code was developed by Hans Pirnay (RWTH-Aachen), 
-Rodrigo Lopez-Negrete (CMU), and Prof. Lorenz Biegler (CMU). Any 
+Contact: The sIPOPT code was developed by Hans Pirnay (RWTH-Aachen),
+Rodrigo Lopez-Negrete (CMU), and Prof. Lorenz Biegler (CMU). Any
 questions / problems / bugs may be sent to the Hans Pirnay or the IPOPT
 mailing list.

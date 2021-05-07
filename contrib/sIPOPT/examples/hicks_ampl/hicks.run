@@ -16,11 +16,11 @@ suffix sens_init_constr, IN;
 option solver ipopt_sens                 ;
 
 option presolve 0;
-option ipopt_options 'run_sens no'; 
+option ipopt_options 'run_sens no';
 
-model hicks.mod                          ; 
-data hicks.dat                           ; 
+model hicks.mod                          ;
+data hicks.dat                           ;
 
-option ipopt_options 'run_sens yes'; 
+option ipopt_options 'run_sens yes';
 solve;
-include nmpcresults.inc                  ; 
+include nmpcresults.inc                  ;

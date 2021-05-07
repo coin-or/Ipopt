@@ -17,7 +17,7 @@ param n := 50;
 var x{1..n} >= 0, := 1;
 var p{1..n} >= 0, <= 1, :=0.1;
 
-minimize obj: 
+minimize obj:
   sum{i in 1..n} x[i]
   ;
 
