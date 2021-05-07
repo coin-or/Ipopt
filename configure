@@ -724,6 +724,8 @@ ac_ct_PKG_CONFIG
 PKG_CONFIG
 IPOPTLIB_PCFILES
 IPOPTLIB_LFLAGS
+IPOPT_INT64_FALSE
+IPOPT_INT64_TRUE
 IPOPT_SINGLE_FALSE
 IPOPT_SINGLE_TRUE
 coin_doxy_tagfiles
@@ -898,6 +900,7 @@ with_dot
 with_ipopt_verbosity
 with_ipopt_checklevel
 with_precision
+with_intsize
 with_lapack
 with_lapack_lflags
 with_asl
@@ -1614,6 +1617,8 @@ Optional Packages:
   --with-ipopt-checklevel specify the sanity check level
   --with-precision        floating-point precision to use: single or double
                           (default)
+  --with-intsize          integer type to use: specify 32 for int or 64 for
+                          int64_t
   --with-lapack           Use lapack. If an argument is given, 'yes' is
                           equivalent to --with-lapack, 'no' is
                           equivalent to --without-lapack. Any other argument
@@ -22502,7 +22507,7 @@ printf "%s\n" "#define IPOPT_CHECKLEVEL $coin_checklevel" >>confdefs.h
 
 
 ########################################################################
-#                   Floating-point Precision                           #
+#      Floating-point Precision   and    Integer size                  #
 ########################################################################
 
 
@@ -22527,6 +22532,32 @@ esac
 else
   IPOPT_SINGLE_TRUE='#'
   IPOPT_SINGLE_FALSE=
+fi
+
+
+# check which integer size to build
+
+# Check whether --with-intsize was given.
+if test ${with_intsize+y}
+then :
+  withval=$with_intsize; intsize=$withval
+else $as_nop
+  intsize=32
+fi
+
+case "$intsize" in
+  32 ) ;;
+  64 )
+printf "%s\n" "#define IPOPT_INT64 1" >>confdefs.h
+ ;;
+  *) as_fn_error $? "unsupported value $intsize for option --with-intsize" "$LINENO" 5 ;;
+esac
+ if test "$intsize" = 64; then
+  IPOPT_INT64_TRUE=
+  IPOPT_INT64_FALSE='#'
+else
+  IPOPT_INT64_TRUE='#'
+  IPOPT_INT64_FALSE=
 fi
 
 
@@ -25882,7 +25913,7 @@ else $as_nop
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25885 "configure" */
+/* #line 25916 "configure" */
 public class Test {
 }
 EOF
@@ -26408,7 +26439,7 @@ else $as_nop
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 26411 "configure" */
+/* #line 26442 "configure" */
 public class Test {
 }
 EOF
@@ -26443,7 +26474,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 26446 "configure" */
+/* [#]line 26477 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
@@ -27389,6 +27420,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${IPOPT_SINGLE_TRUE}" && test -z "${IPOPT_SINGLE_FALSE}"; then
   as_fn_error $? "conditional \"IPOPT_SINGLE\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${IPOPT_INT64_TRUE}" && test -z "${IPOPT_INT64_FALSE}"; then
+  as_fn_error $? "conditional \"IPOPT_INT64\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${COIN_HAS_PKGCONFIG_TRUE}" && test -z "${COIN_HAS_PKGCONFIG_FALSE}"; then

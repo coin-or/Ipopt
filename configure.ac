@@ -58,7 +58,7 @@ AC_COIN_DOXYGEN
 AC_COIN_DEBUGLEVEL
 
 ########################################################################
-#                   Floating-point Precision                           #
+#      Floating-point Precision   and    Integer size                  #
 ########################################################################
 
 AC_ARG_WITH([precision],
@@ -71,6 +71,18 @@ case "$precision" in
   *) AC_MSG_ERROR([unsupported value $precision for option --with-precision])
 esac
 AM_CONDITIONAL([IPOPT_SINGLE],[test "$precision" = single])
+
+# check which integer size to build
+AC_ARG_WITH([intsize],
+            [AS_HELP_STRING([--with-intsize],[integer type to use: specify 32 for int or 64 for int64_t])],
+            [intsize=$withval],
+            [intsize=32])
+case "$intsize" in
+  32 ) ;;
+  64 ) AC_DEFINE(IPOPT_INT64, [1], [Define to 1 if Ipopt index type is int64_t]) ;;
+  *) AC_MSG_ERROR([unsupported value $intsize for option --with-intsize]) ;;
+esac
+AM_CONDITIONAL([IPOPT_INT64],[test "$intsize" = 64])
 
 #############################################################################
 #                                 Dependencies                              #
