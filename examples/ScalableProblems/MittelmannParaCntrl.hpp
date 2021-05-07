@@ -877,7 +877,7 @@ public:
          Number t
       )
       {
-         return exp(-4. * t) / 4. - Min(1., Max(0., (exp(t) - exp13_) / (exp23_ - exp13_)));
+         return std::exp(Number(-4.) * t) / Number(4.) - Min(Number(1.), Max(Number(0.), (std::exp(t) - exp13_) / (exp23_ - exp13_)));
       }
 
       inline Number phi(
@@ -1340,7 +1340,7 @@ public:
          Number t
       )
       {
-         return exp(-4. * t) / 4. - Min(1., Max(0., (exp(t) - exp13_) / (exp23_ - exp13_)));
+         return std::exp(Number(-4.) * t) / 4. - Min(Number(1.), Max(Number(0.), (std::exp(t) - exp13_) / (exp23_ - exp13_)));
       }
 
       inline Number phi(

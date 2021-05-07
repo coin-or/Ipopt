@@ -14,130 +14,69 @@
 namespace Ipopt
 {
 
-inline Index Max(
-   Index a,
-   Index b
+template<typename T>
+inline T Max(
+   T a,
+   T b
 )
 {
    return ((a) > (b) ? (a) : (b));
 }
 
-inline Index Max(
-   Index a,
-   Index b,
-   Index c
+template<typename T>
+inline T Max(
+   T a,
+   T b,
+   T c
 )
 {
-   Index max = Max(a, b);
+   T max = Max(a, b);
    max = Max(max, c);
    return max;
 }
 
-inline Index Max(
-   Index a,
-   Index b,
-   Index c,
-   Index d
+template<typename T>
+inline T Max(
+   T a,
+   T b,
+   T c,
+   T d
 )
 {
-   Index max = Max(a, b, c);
-   max = Max(max, d);
-   return max;
+   T max = Max(a, b, c);
+   return Max(max, d);
 }
 
-inline Index Min(
-   Index a,
-   Index b
+template<typename T>
+inline T Min(
+   T a,
+   T b
 )
 {
    return ((a) < (b) ? (a) : (b));
 }
 
-inline Index Min(
-   Index a,
-   Index b,
-   Index c
+template<typename T>
+inline T Min(
+   T a,
+   T b,
+   T c
 )
 {
-   Index min = Min(a, b);
-   min = Min(min, c);
-   return min;
+   T min = Min(a, b);
+   return Min(min, c);
 }
 
-inline Index Min(
-   Index a,
-   Index b,
-   Index c,
-   Index d
+template<typename T>
+inline T Min(
+   T a,
+   T b,
+   T c,
+   T d
 )
 {
-   Index min = Min(a, b, c);
-   min = Min(min, d);
-   return min;
-}
-
-///////////////////////////////////////////
-
-inline Number Max(
-   Number a,
-   Number b
-)
-{
-   return ((a) > (b) ? (a) : (b));
-}
-
-inline Number Max(
-   Number a,
-   Number b,
-   Number c
-)
-{
-   Number max = Max(a, b);
-   max = Max(max, c);
-   return max;
-}
-
-inline Number Max(
-   Number a,
-   Number b,
-   Number c,
-   Number d
-)
-{
-   Number max = Max(a, b, c);
-   max = Max(max, d);
-   return max;
-}
-
-inline Number Min(
-   Number a,
-   Number b
-)
-{
-   return ((a) < (b) ? (a) : (b));
-}
-
-inline Number Min(
-   Number a,
-   Number b,
-   Number c
-)
-{
-   Number min = Min(a, b);
-   min = Min(min, c);
-   return min;
-}
-
-inline Number Min(
-   Number a,
-   Number b,
-   Number c,
-   Number d
-)
-{
-   Number min = Min(a, b, c);
-   min = Min(min, d);
-   return min;
+   T min = Min(a, b, c);
+   return Min(min, d);
 }
 
 /** Function returning true iff the argument is a valid double number

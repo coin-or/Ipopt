@@ -978,7 +978,7 @@ void BacktrackingLineSearch::PerformDualStep(
          }
          else
          {
-            alpha_y = Min(1., Max(0., alpha));
+            alpha_y = Min(Number(1.), Max(Number(0.), alpha));
          }
          break;
    } //switch (alpha_for_y)

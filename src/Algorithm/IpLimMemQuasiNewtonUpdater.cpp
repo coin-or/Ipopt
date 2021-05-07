@@ -555,7 +555,7 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
                else
                {
                   // ToDo: What lower bound to use?
-                  Number sTy_new = Max(Number(1e-8), fabs(s_new->Dot(*y_new)));
+                  Number sTy_new = Max(Number(1e-8), std::abs(s_new->Dot(*y_new)));
                   DBG_ASSERT(sTy_new != 0.);
                   switch( limited_memory_initialization_ )
                   {

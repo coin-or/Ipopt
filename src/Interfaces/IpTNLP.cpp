@@ -780,9 +780,9 @@ bool TNLP::get_curr_violations(
             else
                viol = c->Values()[c->Dim()-n_x_fixed+i];
             if( x_L_violation != NULL )
-               x_L_violation[x_fixed_map[i]] = Max(0., -viol);  // x - xfix < 0
+               x_L_violation[x_fixed_map[i]] = Max(Number(0.), -viol);  // x - xfix < 0
             if( x_U_violation != NULL )
-               x_U_violation[x_fixed_map[i]] = Max(0., viol);   // x - xfix > 0
+               x_U_violation[x_fixed_map[i]] = Max(Number(0.), viol);   // x - xfix > 0
          }
       }
    }

@@ -309,7 +309,7 @@ bool CGPenaltyLSAcceptor::CheckAcceptabilityOfTrialPoint(
    // Initialize the max infeasibility that's allowed for every iteration,
    if( pen_theta_max_ < 0. )
    {
-      pen_theta_max_ = pen_theta_max_fact_ * Max(1.0, reference_theta_);
+      pen_theta_max_ = pen_theta_max_fact_ * Max(Number(1.0), reference_theta_);
    }
    // Check if the constraint violation is becoming too large. If the violation
    // is bigger than pen_theta_max_, the trial point is rejected.
@@ -810,7 +810,7 @@ char CGPenaltyLSAcceptor::UpdatePenaltyParameter()
       // Ok, now we should increase the penalty parameter
       counter_first_type_penalty_updates_++;
       // Update the eta tolerance
-      curr_eta_ = Max(eta_min_, curr_eta_ / 2.);
+      curr_eta_ = Max(eta_min_, curr_eta_ / Number(2.));
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
                      "Updating eta to = %8.2\n", curr_eta_);
       Number penalty = CGPenData().curr_kkt_penalty();
@@ -823,7 +823,7 @@ char CGPenaltyLSAcceptor::UpdatePenaltyParameter()
       y_full_step_max = Max(y_full_step_max, vec->Amax());
       if( IpCq().curr_primal_infeasibility(NORM_2) >= epsilon_c_ )
       {
-         penalty = Max(chi_hat_ * penalty, y_full_step_max + 1.);
+         penalty = Max(chi_hat_ * penalty, y_full_step_max + Number(1.));
          info_alpha_primal_char = 'l';
       }
       else

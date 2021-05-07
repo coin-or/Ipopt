@@ -334,14 +334,14 @@ bool OptimalityErrorConvergenceCheck::CurrentIsAcceptable()
                      "  curr_obj_val_ = %23.16e   last_obj_val                = %23.16e\n", curr_obj_val_, last_obj_val_);
       Jnlst().Printf(J_MOREDETAILED, J_MAIN,
                      "  fabs(curr_obj_val_-last_obj_val_)/Max(1., fabs(curr_obj_val_)) = %23.16e acceptable_obj_change_tol_ = %23.16e\n",
-                     fabs(curr_obj_val_ - last_obj_val_) / Max(Number(1.), fabs(curr_obj_val_)), acceptable_obj_change_tol_);
+                     std::abs(curr_obj_val_ - last_obj_val_) / Max(Number(1.), std::abs(curr_obj_val_)), acceptable_obj_change_tol_);
       //Jnlst().Printf(J_MOREDETAILED, J_MAIN,
       //               "test iter = %d\n", IpData().iter_count());
    }
 
    return (overall_error <= acceptable_tol_ && dual_inf <= acceptable_dual_inf_tol_
            && constr_viol <= acceptable_constr_viol_tol_ && compl_inf <= acceptable_compl_inf_tol_
-           && fabs(curr_obj_val_ - last_obj_val_) / Max(Number(1.), fabs(curr_obj_val_)) <= acceptable_obj_change_tol_);
+           && std::abs(curr_obj_val_ - last_obj_val_) / Max(Number(1.), std::abs(curr_obj_val_)) <= acceptable_obj_change_tol_);
 }
 
 } // namespace Ipopt

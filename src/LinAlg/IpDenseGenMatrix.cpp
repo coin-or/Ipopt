@@ -388,7 +388,7 @@ void DenseGenMatrix::ComputeRowAMaxImpl(
    {
       for( Index jcol = 0; jcol < NCols(); jcol++ )
       {
-         vec_vals[irow] = Max(vec_vals[irow], fabs(*vals));
+         vec_vals[irow] = Max(vec_vals[irow], std::abs(*vals));
          vals++;
       }
    }
@@ -410,7 +410,7 @@ void DenseGenMatrix::ComputeColAMaxImpl(
    for( Index jcol = 0; jcol < NCols(); jcol++ )
    {
       Index i = IpBlasIamax(NRows(), vals, 1);
-      vec_vals[jcol] = Max(vec_vals[jcol], fabs(vals[i]));
+      vec_vals[jcol] = Max(vec_vals[jcol], std::abs(vals[i]));
       vals += NRows();
    }
 }

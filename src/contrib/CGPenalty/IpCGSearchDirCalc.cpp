@@ -172,7 +172,7 @@ bool CGSearchDirCalculator::ComputeSearchDirection()
          // penalty_init = Max(penalty_init_min_, Min(penalty_init, penalty_init_max_));
          // For the moment,let's just not do scale
          penalty_init = 1e2 * IpCq().curr_primal_infeasibility(NORM_2);
-         penalty_init = Min(1e5, Max(1e1, penalty_init));
+         penalty_init = Min(Number(1e5), Max(Number(1e1), penalty_init));
          kkt_penalty_init = penalty_init;
       }
       CGPenData().Set_penalty(penalty_init);
@@ -211,7 +211,7 @@ bool CGSearchDirCalculator::ComputeSearchDirection()
          Number fac = pen_init_fac_ * pow(1e-1, i);
          //Number restor_penalty_init = fac*IpCq().curr_primal_infeasibility(NORM_2);
          Number restor_penalty_init = fac;
-         restor_penalty_init = Min(1e6, Max(1e1, restor_penalty_init));
+         restor_penalty_init = Min(Number(1e6), Max(Number(1e1), restor_penalty_init));
          CGPenData().Set_penalty(restor_penalty_init);
          CGPenData().Set_kkt_penalty(restor_penalty_init);
       }
@@ -281,7 +281,7 @@ bool CGSearchDirCalculator::ComputeSearchDirection()
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
                      "Testing if fast direction can be used.\n"
                      "  diff_dx_nrm = %8.2e tilde_dx_norm = %8.2e\n", diff_dx_nrm, tilde_dx_nrm);
-      tilde_dx_nrm = Max(tilde_dx_nrm, pow(tilde_dx_nrm, vartheta_));
+      tilde_dx_nrm = Max(tilde_dx_nrm, std::pow(tilde_dx_nrm, vartheta_));
       if( diff_dx_nrm > kappa_x_dis_ * tilde_dx_nrm )
       {
          keep_fast_delta = false;
@@ -344,7 +344,7 @@ bool CGSearchDirCalculator::ComputeSearchDirection()
       Number curr_kkt_penalty = CGPenData().curr_kkt_penalty();
       if( penalty > curr_penalty )
       {
-         penalty = Max(penalty, curr_penalty + 1.);
+         penalty = Max(penalty, curr_penalty + Number(1.));
       }
       else
       {

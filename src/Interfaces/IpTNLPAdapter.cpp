@@ -1373,13 +1373,13 @@ bool TNLPAdapter::GetBoundsInformation(
    else if( fixed_variable_treatment_ == RELAX_BOUNDS )
    {
       // Relax the bounds for fixed variables
-      const Number bound_relax = Max(1e-8, bound_relax_factor_);
+      const Number bound_relax = Max(Number(1e-8), bound_relax_factor_);
       for( Index i = 0; i < n_x_fixed_; i++ )
       {
          if( x_l[i] == x_u[i] )
          {
-            x_l[i] -= bound_relax * Max(Number(1.), fabs(x_l[i]));
-            x_u[i] += bound_relax * Max(Number(1.), fabs(x_u[i]));
+            x_l[i] -= bound_relax * Max(Number(1.), std::abs(x_l[i]));
+            x_u[i] += bound_relax * Max(Number(1.), std::abs(x_u[i]));
          }
       }
    }
@@ -2574,9 +2574,9 @@ bool TNLPAdapter::ResortBoundMultipliers(
          for( Index i = 0; i < n_x_fixed_; i++ )
          {
             if( z_L_orig != NULL )
-               z_L_orig[x_fixed_map_[i]] = Max(0., -values[n_c_no_fixed + i]);
+               z_L_orig[x_fixed_map_[i]] = Max(Number(0.), -values[n_c_no_fixed + i]);
             if( z_U_orig != NULL )
-               z_U_orig[x_fixed_map_[i]] = Max(0., values[n_c_no_fixed + i]);
+               z_U_orig[x_fixed_map_[i]] = Max(Number(0.), values[n_c_no_fixed + i]);
          }
       }
       else
@@ -2659,9 +2659,9 @@ bool TNLPAdapter::ResortBoundMultipliers(
       {
          Index xidx = x_fixed_map_[i];
          if( z_L_orig != NULL )
-            z_L_orig[xidx] = Max(0.0,  mult[xidx]);
+            z_L_orig[xidx] = Max(Number(0.0),  mult[xidx]);
          if( z_U_orig != NULL )
-            z_U_orig[xidx] = Max(0.0, -mult[xidx]);
+            z_U_orig[xidx] = Max(Number(0.0), -mult[xidx]);
       }
 
       delete[] mult;
@@ -2758,7 +2758,7 @@ bool TNLPAdapter::internal_eval_jac_g(
             if( findiff_x_l_[ivar] < findiff_x_u_[ivar] )
             {
                const Number xorig = full_x_pert[ivar];
-               Number this_perturbation = findiff_perturbation_ * Max(Number(1.), fabs(full_x_[ivar]));
+               Number this_perturbation = findiff_perturbation_ * Max(Number(1.), std::abs(full_x_[ivar]));
                full_x_pert[ivar] += this_perturbation;
                if( full_x_pert[ivar] > findiff_x_u_[ivar] )
                {
@@ -2994,10 +2994,10 @@ bool TNLPAdapter::CheckDerivatives(
       jnlst_->Printf(J_SUMMARY, J_NLP, "Starting derivative checker for first derivatives.\n\n");
 
       // Now go through all variables and check the partial derivatives
-      const Index ivar_first = Max(0, deriv_test_start_index);
+      const Index ivar_first = Max(Index(0), deriv_test_start_index);
       for( Index ivar = ivar_first; ivar < nx; ivar++ )
       {
-         Number this_perturbation = derivative_test_perturbation_ * Max(Number(1.), fabs(xref[ivar]));
+         Number this_perturbation = derivative_test_perturbation_ * Max(Number(1.), std::abs(xref[ivar]));
          xpert[ivar] = xref[ivar] + this_perturbation;
 
          Number fpert;
@@ -3009,7 +3009,7 @@ bool TNLPAdapter::CheckDerivatives(
 
          Number deriv_approx = (fpert - fref) / this_perturbation;
          Number deriv_exact = grad_f[ivar];
-         Number rel_error = fabs(deriv_approx - deriv_exact) / Max(fabs(deriv_approx), Number(1.));
+         Number rel_error = std::abs(deriv_approx - deriv_exact) / Max(std::abs(deriv_approx), Number(1.));
          char cflag = ' ';
          if( rel_error >= derivative_test_tol_ )
          {
@@ -3040,7 +3040,7 @@ bool TNLPAdapter::CheckDerivatives(
                      deriv_exact += jac_g[i];
                   }
                }
-               rel_error = fabs(deriv_approx - deriv_exact) / Max(fabs(deriv_approx), Number(1.));
+               rel_error = std::abs(deriv_approx - deriv_exact) / Max(std::abs(deriv_approx), Number(1.));
                cflag = ' ';
                if( rel_error >= derivative_test_tol_ )
                {
@@ -3113,7 +3113,7 @@ bool TNLPAdapter::CheckDerivatives(
       Number* jacpert = new Number[nz_jac_g];
 
       // Check all Hessians
-      const Index icon_first = Max(-1, deriv_test_start_index);
+      const Index icon_first = Max(Index(-1), deriv_test_start_index);
       for( Index icon = icon_first; icon < ng; icon++ )
       {
          Number objfact = 0.;
@@ -3144,7 +3144,7 @@ bool TNLPAdapter::CheckDerivatives(
 
          for( Index ivar = 0; ivar < nx; ivar++ )
          {
-            Number this_perturbation = derivative_test_perturbation_ * Max(Number(1.), fabs(xref[ivar]));
+            Number this_perturbation = derivative_test_perturbation_ * Max(Number(1.), std::abs(xref[ivar]));
             xpert[ivar] = xref[ivar] + this_perturbation;
 
             new_x = true;
@@ -3187,7 +3187,7 @@ bool TNLPAdapter::CheckDerivatives(
                      found = true;
                   }
                }
-               Number rel_error = fabs(deriv_approx - deriv_exact) / Max(fabs(deriv_approx), Number(1.));
+               Number rel_error = std::abs(deriv_approx - deriv_exact) / Max(std::abs(deriv_approx), Number(1.));
                char cflag = ' ';
                if( rel_error >= derivative_test_tol_ )
                {

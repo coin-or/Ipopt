@@ -261,7 +261,7 @@ bool AdaptiveMuUpdate::UpdateBarrierParameter()
    // (e.g. in the restoration phase)
    if( mu_min_default_ )
    {
-      mu_min_ = Min(mu_min_, 0.5 * Min(IpData().tol(), IpNLP().NLP_scaling()->apply_obj_scaling(compl_inf_tol_)));
+      mu_min_ = Min(mu_min_, Number(0.5) * Min(IpData().tol(), IpNLP().NLP_scaling()->apply_obj_scaling(compl_inf_tol_)));
    }
 
    // if mu_max has not yet been computed, do so now, based on the
@@ -324,9 +324,9 @@ bool AdaptiveMuUpdate::UpdateBarrierParameter()
             // ToDo combine this code with MonotoneMuUpdate
             Number tol = IpData().tol();
             Number compl_inf_tol = IpNLP().NLP_scaling()->apply_obj_scaling(compl_inf_tol_);
-            Number new_mu = Min(mu_linear_decrease_factor_ * mu, pow(mu, mu_superlinear_decrease_power_));
+            Number new_mu = Min(mu_linear_decrease_factor_ * mu, std::pow(mu, mu_superlinear_decrease_power_));
             DBG_PRINT((1, "new_mu = %e, compl_inf_tol = %e tol = %e\n", new_mu, compl_inf_tol, tol));
-            new_mu = Max(new_mu, Min(compl_inf_tol, tol) / (barrier_tol_factor_ + 1.));
+            new_mu = Max(new_mu, Min(compl_inf_tol, tol) / (barrier_tol_factor_ + Number(1.)));
             if( tiny_step_flag && new_mu == mu )
             {
                THROW_EXCEPTION(TINY_STEP_DETECTED, "Problem solved to best possible numerical accuracy");
@@ -394,7 +394,7 @@ bool AdaptiveMuUpdate::UpdateBarrierParameter()
       // Choose the fraction-to-the-boundary parameter for the current
       // iteration
       // ToDo: Is curr_nlp_error really what we should use here?
-      Number tau = Max(tau_min_, 1. - IpCq().curr_nlp_error());
+      Number tau = Max(tau_min_, Number(1.) - IpCq().curr_nlp_error());
       IpData().Set_tau(tau);
 
       // Compute the new barrier parameter via the oracle
@@ -549,7 +549,7 @@ Number AdaptiveMuUpdate::Compute_tau_monotone(
    Number mu
 )
 {
-   return Max(tau_min_, 1. - mu);
+   return Max(tau_min_, Number(1.) - mu);
 }
 
 Number AdaptiveMuUpdate::min_ref_val()
@@ -614,7 +614,7 @@ Number AdaptiveMuUpdate::NewFixedMu()
       new_mu = adaptive_mu_monotone_init_factor_ * IpCq().curr_avrg_compl();
    }
    new_mu = Max(new_mu, lower_mu_safeguard());
-   new_mu = Min(new_mu, 0.1 * max_ref);
+   new_mu = Min(new_mu, Number(0.1) * max_ref);
 
    new_mu = Max(new_mu, mu_min_);
    new_mu = Min(new_mu, mu_max_);
@@ -719,7 +719,7 @@ Number AdaptiveMuUpdate::quality_function_pd_system()
          //Nothing
          break;
       case 1:
-         balancing_term = pow(Max(0., Max(dual_inf, primal_inf) - complty), 3);
+         balancing_term = pow(Max(Number(0.), Max(dual_inf, primal_inf) - complty), 3);
          break;
       default:
          DBG_ASSERT(false && "Unknown value for adaptive_mu_kkt_balancing_term");
@@ -762,11 +762,11 @@ Number AdaptiveMuUpdate::lower_mu_safeguard()
 
    if( init_dual_inf_ < 0. )
    {
-      init_dual_inf_ = Max(1., dual_inf);
+      init_dual_inf_ = Max(Number(1.), dual_inf);
    }
    if( init_primal_inf_ < 0. )
    {
-      init_primal_inf_ = Max(1., primal_inf);
+      init_primal_inf_ = Max(Number(1.), primal_inf);
    }
 
    Number lower_mu_safeguard = Max(adaptive_mu_safeguard_factor_ * (dual_inf / init_dual_inf_),

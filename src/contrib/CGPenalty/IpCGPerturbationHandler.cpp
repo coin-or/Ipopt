@@ -292,7 +292,7 @@ bool CGPerturbationHandler::PerturbForSingularity(
             penalty = Min(penalty_max_, Max(penalty, CGPenData().curr_kkt_penalty()));
             CGPenData().Set_kkt_penalty(penalty);
             Number mach_pro = std::numeric_limits<Number>::epsilon();
-            delta_d_curr_ = delta_c_curr_ = Max(1e3 * mach_pro, Max(CGPenCq().curr_cg_pert_fact(), delta_cd()));
+            delta_d_curr_ = delta_c_curr_ = Max(Number(1e3) * mach_pro, Max(CGPenCq().curr_cg_pert_fact(), delta_cd()));
             IpData().Append_info_string("u");
          }
       }

@@ -336,7 +336,7 @@ bool QualityFunctionMuOracle::CalculateMu(
                                           *step_cen_x_L, *step_cen_x_U, *step_cen_s_L, *step_cen_s_U, *step_cen->y_c(), *step_cen->y_d(), *step_cen->z_L(),
                                           *step_cen->z_U(), *step_cen->v_L(), *step_cen->v_U());
 
-   Number sigma_1minus = 1. - Max(1e-4, quality_function_section_sigma_tol_);
+   Number sigma_1minus = 1. - Max(Number(1e-4), quality_function_section_sigma_tol_);
    Number qf_1minus = CalculateQualityFunction(sigma_1minus, *step_aff_x_L, *step_aff_x_U, *step_aff_s_L, *step_aff_s_U,
                       *step_aff->y_c(), *step_aff->y_d(), *step_aff->z_L(), *step_aff->z_U(), *step_aff->v_L(), *step_aff->v_U(),
                       *step_cen_x_L, *step_cen_x_U, *step_cen_s_L, *step_cen_s_U, *step_cen->y_c(), *step_cen->y_d(), *step_cen->z_L(),
@@ -651,7 +651,7 @@ Number QualityFunctionMuOracle::CalculateQualityFunction(
          //Nothing
          break;
       case BT_CUBIC:
-         quality_function += pow(Max(0., Max(dual_inf, primal_inf) - compl_inf), 3);
+         quality_function += std::pow(Max(Number(0.), Max(dual_inf, primal_inf) - compl_inf), 3);
          break;
       default:
          DBG_ASSERT(false && "Unknown value for quality_function_balancing term_");

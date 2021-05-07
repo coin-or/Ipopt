@@ -822,7 +822,7 @@ bool Ma57TSolverInterface::IncreaseQuality()
 
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "Increasing pivot tolerance for MA57 from %7.2e ", pivtol_);
-   pivtol_ = Min(pivtolmax_, pow(pivtol_, 0.75));
+   pivtol_ = Min(pivtolmax_, std::pow(pivtol_, Number(0.75)));
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "to %7.2e.\n", pivtol_);
    return true;

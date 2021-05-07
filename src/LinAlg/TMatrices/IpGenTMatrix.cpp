@@ -201,7 +201,7 @@ void GenTMatrix::ComputeRowAMaxImpl(
    vec_vals--;
    for( Index i = 0; i < Nonzeros(); i++ )
    {
-      vec_vals[irows[i]] = Max(vec_vals[irows[i]], fabs(val[i]));
+      vec_vals[irows[i]] = Max(vec_vals[irows[i]], std::abs(val[i]));
    }
 }
 
@@ -226,7 +226,7 @@ void GenTMatrix::ComputeColAMaxImpl(
    vec_vals--; // to deal with 1-based indexing in jcols, I believe
    for( Index i = 0; i < Nonzeros(); i++ )
    {
-      vec_vals[jcols[i]] = Max(vec_vals[jcols[i]], fabs(val[i]));
+      vec_vals[jcols[i]] = Max(vec_vals[jcols[i]], std::abs(val[i]));
    }
 }
 

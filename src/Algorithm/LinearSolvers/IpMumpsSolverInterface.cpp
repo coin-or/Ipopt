@@ -573,9 +573,9 @@ bool MumpsSolverInterface::IncreaseQuality()
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "Increasing pivot tolerance for MUMPS from %7.2e ", pivtol_);
 
-   //this is a more aggresive update then MA27
-   //this should be tuned
-   pivtol_ = Min(pivtolmax_, pow(pivtol_, 0.5));
+   //this is a more aggressive update then MA27
+   //ToDo this should be tuned
+   pivtol_ = Min(pivtolmax_, std::pow(pivtol_, Number(0.5)));
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "to %7.2e.\n", pivtol_);
    return true;

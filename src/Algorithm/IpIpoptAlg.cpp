@@ -938,7 +938,7 @@ Number IpoptAlgorithm::correct_bound_multiplier(
    if( IpData().FreeMuMode() )
    {
       mu = IpCq().trial_avrg_compl();
-      mu = Min(mu, 1e3);
+      mu = Min(mu, Number(1e3));
    }
    else
    {
@@ -965,7 +965,7 @@ Number IpoptAlgorithm::correct_bound_multiplier(
 
    DBG_PRINT_VECTOR(2, "step_z", *step_z);
 
-   Number max_correction_up = Max(0., -step_z->Min());
+   Number max_correction_up = Max(Number(0.), -step_z->Min());
    if( max_correction_up > 0. )
    {
       SmartPtr<Vector> tmp = trial_z.MakeNew();
@@ -981,7 +981,7 @@ Number IpoptAlgorithm::correct_bound_multiplier(
 
    step_z->AddTwoVectors(1. / kappa_sigma_ * mu, *one_over_s, -1., *new_trial_z, 0.);
 
-   Number max_correction_low = Max(0., step_z->Max());
+   Number max_correction_low = Max(Number(0.), step_z->Max());
    if( max_correction_low > 0. )
    {
       SmartPtr<Vector> tmp = trial_z.MakeNew();

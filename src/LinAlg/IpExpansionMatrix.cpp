@@ -384,7 +384,7 @@ void ExpansionMatrix::ComputeRowAMaxImpl(
 
    for( Index i = 0; i < NCols(); i++ )
    {
-      vec_vals[exp_pos[i]] = Max(vec_vals[exp_pos[i]], 1.);
+      vec_vals[exp_pos[i]] = Max(vec_vals[exp_pos[i]], Number(1.));
    }
 }
 

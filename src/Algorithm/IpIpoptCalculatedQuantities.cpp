@@ -466,7 +466,7 @@ Index IpoptCalculatedQuantities::CalculateSafeSlack(
    {
       Number min_slack = slack->Min();
       // TODO we need to make sure that this also works for non-monotone MUs
-      Number s_min = std::numeric_limits<Number>::epsilon() * Min(1., ip_data_->curr_mu());
+      Number s_min = std::numeric_limits<Number>::epsilon() * Min(Number(1.), ip_data_->curr_mu());
       // if mu = is very small, then s_min may have dropped to 0  (e.g., #212)
       // but we want slack corrections also if (and especially if) slacks are at 0
       // (otherwise the barrier_obj becomes inf and there are asserts that say that this shouldn't happen)
@@ -2990,7 +2990,7 @@ Number IpoptCalculatedQuantities::CalcCentralityMeasure(
    Number xi = MinCompl / avrg_compl;
    // The folloking line added for the case that avrg_compl is
    // slighly smaller than MinCompl, due to numerical roundoff
-   xi = Min(1., xi);
+   xi = Min(Number(1.), xi);
 
    return xi;
 }

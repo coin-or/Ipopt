@@ -83,11 +83,11 @@ Number CGPenaltyCq::curr_jac_cd_norm(
    {
       if( nrm_type == 3 )
       {
-         result = Max(result, fabs(values[i]));
+         result = Max(result, std::abs(values[i]));
       }
       if( nrm_type == 1 )
       {
-         result += fabs(values[i]);
+         result += std::abs(values[i]);
          count++;
       }
    }
@@ -100,11 +100,11 @@ Number CGPenaltyCq::curr_jac_cd_norm(
    {
       if( nrm_type == 3 )
       {
-         result = Max(result, fabs(values[i]));
+         result = Max(result, std::abs(values[i]));
       }
       if( nrm_type == 1 )
       {
-         result += fabs(values[i]);
+         result += std::abs(values[i]);
          count++;
       }
    }
@@ -350,7 +350,7 @@ Number CGPenaltyCq::compute_curr_cg_penalty(
    d_xs_times_damped_Hessian_times_d_xs += -(tem_jac_cT_times_y_c_plus_dy_c->Dot(*d_x)
                                            + tem_jac_dT_times_y_d_plus_dy_d->Dot(*d_x) - y_d->Dot(*d_s) - dy_d->Dot(*d_s));
    Number dxs_nrm = pow(d_x->Nrm2(), 2.) + pow(d_s->Nrm2(), 2.);
-   d_xs_times_damped_Hessian_times_d_xs = Max(1e-8 * dxs_nrm, d_xs_times_damped_Hessian_times_d_xs);
+   d_xs_times_damped_Hessian_times_d_xs = Max(Number(1e-8) * dxs_nrm, d_xs_times_damped_Hessian_times_d_xs);
    Number infeasibility = ip_cq_->curr_primal_infeasibility(NORM_2);
    Number penalty = 0.;
    if( infeasibility > 0. )
@@ -404,12 +404,12 @@ Number CGPenaltyCq::compute_curr_cg_penalty_scale()
           / (ip_data_->curr()->y_c()->Dim() + ip_data_->curr()->y_d()->Dim())) / 2.;
       if( CGPenData().restor_iter() == ip_data_->iter_count() || ip_data_->iter_count() == 0 )
       {
-         reference_infeasibility_ = Min(1., infeasibility);
+         reference_infeasibility_ = Min(Number(1.), infeasibility);
       }
       Number i = CGPenData().restor_counter();
       Number fac = 4. * 1e-2 * pow(1e1, i);
       //Number fac = 1e-2;
-      penalty = Min(1e4, infeasibility) / (reference * fac * pow(reference_infeasibility_, 1));
+      penalty = Min(Number(1e4), infeasibility) / (reference * fac * std::pow(reference_infeasibility_, 1));
    }
 
    return penalty;
@@ -431,7 +431,7 @@ Number CGPenaltyCq::curr_scaled_y_Amax()
    if( !curr_scaled_y_Amax_cache_.GetCachedResult(result, deps) )
    {
       result = Max(y_c->Amax(), y_d->Amax());
-      result /= Max(1., ip_cq_->curr_grad_f()->Amax());
+      result /= Max(Number(1.), ip_cq_->curr_grad_f()->Amax());
       curr_scaled_y_Amax_cache_.AddCachedResult(result, deps);
    }
    return result;
