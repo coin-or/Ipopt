@@ -131,7 +131,12 @@ AC_CHECK_FUNCS([MPI_Initialized])
 # HSL #
 #######
 
-AC_COIN_CHK_PKG(HSL,[IpoptLib HSLLib],[coinhsl])
+if test $intsize = 32 ; then
+  AC_COIN_CHK_PKG(HSL,[IpoptLib HSLLib],[coinhsl])
+else
+  coin_has_hsl=no
+  AM_CONDITIONAL([COIN_HAS_HSL],[false])
+fi
 
 have_ma28=no
 if test "$coin_has_hsl" = yes ; then
@@ -174,6 +179,7 @@ AM_CONDITIONAL([HAVE_MA28],[test "$have_ma28" = yes])
 # PARDISO #
 ###########
 
+if test $intsize = 32 ; then
 AC_ARG_WITH([pardiso],
   [AS_HELP_STRING([--with-pardiso],[specify Pardiso library (>= 4.0) from pardiso-project.org])],
   [case "$withval" in
@@ -185,6 +191,7 @@ AC_ARG_WITH([pardiso],
           ;;
    esac],
    [have_pardiso_project=no])
+fi
 
 # check whether Pardiso is available via Lapack, which should then be MKL
 AC_ARG_ENABLE([pardisomkl],
@@ -230,7 +237,7 @@ AC_ARG_WITH([wsmp],
             [have_wsmp=yes; wsmp_lflags=$withval],
             [have_wsmp=no])
 
-if test "$have_wsmp" = "yes"; then
+if test $have_wsmp$intsize = yes32 ; then
   AC_COIN_TRY_LINK([wssmp],[$wsmp_lflags],[],
     [AC_COIN_DEFINENAMEMANGLING([IPOPT_WSMP],[$wssmp_namemangling])
      IPOPTLIB_LFLAGS="$wsmp_lflags $IPOPTLIB_LFLAGS"

@@ -24175,6 +24175,7 @@ fi
 # HSL #
 #######
 
+if test $intsize = 32 ; then
 
 
 
@@ -24423,6 +24424,17 @@ printf "%s\n" "#define IPOPT_HAS_HSL 1" >>confdefs.h
 
   fi
 
+else
+  coin_has_hsl=no
+   if false; then
+  COIN_HAS_HSL_TRUE=
+  COIN_HAS_HSL_FALSE='#'
+else
+  COIN_HAS_HSL_TRUE='#'
+  COIN_HAS_HSL_FALSE=
+fi
+
+fi
 
 have_ma28=no
 if test "$coin_has_hsl" = yes ; then
@@ -24786,6 +24798,7 @@ fi
 # PARDISO #
 ###########
 
+if test $intsize = 32 ; then
 
 # Check whether --with-pardiso was given.
 if test ${with_pardiso+y}
@@ -24805,6 +24818,7 @@ else $as_nop
   have_pardiso_project=no
 fi
 
+fi
 
 # check whether Pardiso is available via Lapack, which should then be MKL
 # Check whether --enable-pardisomkl was given.
@@ -25247,7 +25261,7 @@ else $as_nop
 fi
 
 
-if test "$have_wsmp" = "yes"; then
+if test $have_wsmp$intsize = yes32 ; then
 
   ac_save_LIBS="$LIBS"
   LIBS="$wsmp_lflags $LIBS"
@@ -25957,7 +25971,7 @@ else $as_nop
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25960 "configure" */
+/* #line 25974 "configure" */
 public class Test {
 }
 EOF
@@ -26483,7 +26497,7 @@ else $as_nop
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 26486 "configure" */
+/* #line 26500 "configure" */
 public class Test {
 }
 EOF
@@ -26518,7 +26532,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 26521 "configure" */
+/* [#]line 26535 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
@@ -27488,6 +27502,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${COIN_HAS_MUMPS_TRUE}" && test -z "${COIN_HAS_MUMPS_FALSE}"; then
   as_fn_error $? "conditional \"COIN_HAS_MUMPS\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${COIN_HAS_HSL_TRUE}" && test -z "${COIN_HAS_HSL_FALSE}"; then
+  as_fn_error $? "conditional \"COIN_HAS_HSL\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${COIN_HAS_HSL_TRUE}" && test -z "${COIN_HAS_HSL_FALSE}"; then
