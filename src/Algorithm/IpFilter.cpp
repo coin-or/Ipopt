@@ -118,14 +118,14 @@ void Filter::Print(
       }
       count++;
       jnlst.Printf(J_VECTOR, J_LINE_SEARCH,
-                   "%5d ", count);
+                   "%5" IPOPT_INDEX_FORMAT " ", count);
       for( Index i = 0; i < dim_; i++ )
       {
          jnlst.Printf(J_VECTOR, J_LINE_SEARCH,
                       "%23.16e ", (*iter)->val(i));
       }
       jnlst.Printf(J_VECTOR, J_LINE_SEARCH,
-                   "%5d\n", (*iter)->iter());
+                   "%5" IPOPT_INDEX_FORMAT "\n", (*iter)->iter());
    }
 }
 

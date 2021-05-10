@@ -212,7 +212,7 @@ void ExpandedMultiVectorMatrix::PrintImpl(
       {
          DBG_ASSERT(name.size() < 200);
          char buffer[256];
-         Snprintf(buffer, 255, "%s[%2d]", name.c_str(), i);
+         Snprintf(buffer, 255, "%s[%2" IPOPT_INDEX_FORMAT "]", name.c_str(), i);
          std::string term_name = buffer;
          vecs_[i]->Print(&jnlst, level, category, term_name, indent + 1, prefix);
       }

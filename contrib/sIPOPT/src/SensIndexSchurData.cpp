@@ -339,9 +339,9 @@ void IndexSchurData::PrintImpl(
                         name.c_str(), GetNRowsAdded());
    if( Is_Initialized() )
    {
-      for( unsigned int i = 0; i < idx_.size(); i++ )
+      for( size_t i = 0; i < idx_.size(); i++ )
       {
-         jnlst.PrintfIndented(level, category, indent, "%s%s[%5d,%5d]=%" IPOPT_INDEX_FORMAT "\n", prefix.c_str(), name.c_str(), i, idx_[i],
+         jnlst.PrintfIndented(level, category, indent, "%s%s[%5zd,%5" IPOPT_INDEX_FORMAT "]=%" IPOPT_INDEX_FORMAT "\n", prefix.c_str(), name.c_str(), i, idx_[i],
                               val_[i]);
       }
    }

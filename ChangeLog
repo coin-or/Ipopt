@@ -153,6 +153,8 @@ commit history.
           non-distributed libraries.
         - Deprecated IPOPT_FORTRAN_INTEGER_TYPE and ipfint. These were
           always assumed to be int. Use ipindex or ipopt::Index instead.
+        - Add GCC format attribute to Journalist::Printf functions to enable
+          printf-formatter check.
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]

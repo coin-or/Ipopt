@@ -509,7 +509,7 @@ void RegisteredOption::OutputDoxygenDescription(
          for( std::vector<string_entry>::const_iterator i = valid_strings_.begin(); i != valid_strings_.end(); ++i )
          {
             if( i != valid_strings_.begin() )
-               jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, ",", i->value_.c_str());
+               jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, ",");
             jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, " %s", i->value_.c_str());
          }
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\n");
@@ -636,7 +636,7 @@ void RegisteredOption::OutputShortDescription(
       if( has_lower_ )
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                      "%10d <= ", (Index) lower_);
+                      "%10" IPOPT_INDEX_FORMAT " <= ", (Index) lower_);
       }
       else
       {
@@ -645,12 +645,12 @@ void RegisteredOption::OutputShortDescription(
       }
 
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                   "(%11d)", (Index) default_number_);
+                   "(%11" IPOPT_INDEX_FORMAT ")", (Index) default_number_);
 
       if( has_upper_ )
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                      " <= %-10d\n", (Index) upper_);
+                      " <= %-10" IPOPT_INDEX_FORMAT "\n", (Index) upper_);
       }
       else
       {

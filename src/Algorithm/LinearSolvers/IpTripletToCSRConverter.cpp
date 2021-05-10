@@ -80,7 +80,7 @@ Index TripletToCSRConverter::InitializeConverter(
    {
       for( Index i = 0; i < nonzeros; i++ )
       {
-         DBG_PRINT((2, "airn[%5d] = %5d acjn[%5d] = %5d\n", i, airn[i], i, ajcn[i]));
+         DBG_PRINT((2, "airn[%5" IPOPT_INDEX_FORMAT "] = %5" IPOPT_INDEX_FORMAT " acjn[%5" IPOPT_INDEX_FORMAT "] = %5" IPOPT_INDEX_FORMAT "\n", i, airn[i], i, ajcn[i]));
       }
    }
 
@@ -306,15 +306,15 @@ Index TripletToCSRConverter::InitializeConverter(
    {
       for( Index i = 0; i <= dim_; i++ )
       {
-         DBG_PRINT((2, "ia[%5d] = %5d\n", i, ia_[i]));
+         DBG_PRINT((2, "ia[%5" IPOPT_INDEX_FORMAT "] = %5" IPOPT_INDEX_FORMAT "\n", i, ia_[i]));
       }
       for( Index i = 0; i < nonzeros_compressed_; i++ )
       {
-         DBG_PRINT((2, "ja[%5d] = %5d ipos_first[%5d] = %5d\n", i, ja_[i], i, ipos_first_[i]));
+         DBG_PRINT((2, "ja[%5" IPOPT_INDEX_FORMAT "] = %5" IPOPT_INDEX_FORMAT " ipos_first[%5" IPOPT_INDEX_FORMAT "] = %5" IPOPT_INDEX_FORMAT "\n", i, ja_[i], i, ipos_first_[i]));
       }
       for( Index i = 0; i < nonzeros_triplet_ - nonzeros_compressed_; i++ )
       {
-         DBG_PRINT((2, "ipos_double_triplet[%5d] = %5d ipos_double_compressed[%5d] = %5d\n", i, ipos_double_triplet_[i], i, ipos_double_compressed_[i]));
+         DBG_PRINT((2, "ipos_double_triplet[%5" IPOPT_INDEX_FORMAT "] = %5" IPOPT_INDEX_FORMAT " ipos_double_compressed[%5" IPOPT_INDEX_FORMAT "] = %5" IPOPT_INDEX_FORMAT "\n", i, ipos_double_triplet_[i], i, ipos_double_compressed_[i]));
       }
    }
 
@@ -349,11 +349,11 @@ void TripletToCSRConverter::ConvertValues(
    {
       for( Index i = 0; i < nonzeros_triplet; i++ )
       {
-         DBG_PRINT((2, "atriplet[%5d] = %24.16e\n", i, a_triplet[i]));
+         DBG_PRINT((2, "atriplet[%5" IPOPT_INDEX_FORMAT "] = %24.16e\n", i, a_triplet[i]));
       }
       for( Index i = 0; i < nonzeros_compressed; i++ )
       {
-         DBG_PRINT((2, "acompre[%5d] = %24.16e\n", i, a_compressed[i]));
+         DBG_PRINT((2, "acompre[%5" IPOPT_INDEX_FORMAT "] = %24.16e\n", i, a_compressed[i]));
       }
    }
 }

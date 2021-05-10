@@ -149,7 +149,7 @@ void OrigIterationOutput::WriteOutput()
            || last_output < 0.0) )
    {
       Jnlst().Printf(J_ITERSUMMARY, J_MAIN,
-                     "%4d %14.7e %7.2e %7.2e %5.1f %7.2e %5s %7.2e %7.2e%c%3d", iter, unscaled_f, inf_pr, inf_du, log10(mu), dnrm, regu_x_ptr, alpha_dual, alpha_primal, alpha_primal_char, ls_count);
+                     "%4" IPOPT_INDEX_FORMAT " %14.7e %7.2e %7.2e %5.1f %7.2e %5s %7.2e %7.2e%c%3" IPOPT_INDEX_FORMAT, iter, unscaled_f, inf_pr, inf_du, log10(mu), dnrm, regu_x_ptr, alpha_dual, alpha_primal, alpha_primal_char, ls_count);
       if( print_info_string_ )
       {
          Jnlst().Printf(J_ITERSUMMARY, J_MAIN,

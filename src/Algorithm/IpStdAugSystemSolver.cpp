@@ -164,7 +164,7 @@ ESymSolverStatus StdAugSystemSolver::MultiSolve(
       augrhs->SetComp(2, *rhs_cV[i]);
       augrhs->SetComp(3, *rhs_dV[i]);
       char buffer[16];
-      Snprintf(buffer, 15, "RHS[%2d]", i);
+      Snprintf(buffer, 15, "RHS[%2" IPOPT_INDEX_FORMAT "]", i);
       augrhs->Print(Jnlst(), J_MOREVECTOR, J_LINEAR_ALGEBRA, buffer);
       augmented_rhsV[i] = GetRawPtr(augrhs);
    }
@@ -215,7 +215,7 @@ ESymSolverStatus StdAugSystemSolver::MultiSolve(
       for( Index i = 0; i < nrhs; i++ )
       {
          char buffer[16];
-         Snprintf(buffer, 15, "SOL[%2d]", i);
+         Snprintf(buffer, 15, "SOL[%2" IPOPT_INDEX_FORMAT "]", i);
          augmented_solV[i]->Print(Jnlst(), J_MOREVECTOR, J_LINEAR_ALGEBRA, buffer);
       }
    }

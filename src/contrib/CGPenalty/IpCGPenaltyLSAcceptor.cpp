@@ -715,7 +715,7 @@ char CGPenaltyLSAcceptor::UpdatePenaltyParameter()
    // We use the new infeasibility here...
    Number trial_inf = IpCq().trial_primal_infeasibility(NORM_2);
    Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-                  "trial infeasibility = %8.2\n", trial_inf);
+                  "trial infeasibility = %8.2g\n", trial_inf);
    if( curr_eta_ < 0. )
    {
       // We need to initialize the eta tolerance
@@ -733,7 +733,7 @@ char CGPenaltyLSAcceptor::UpdatePenaltyParameter()
    {
       Number max_step = Max(CGPenData().delta_cgpen()->x()->Amax(), CGPenData().delta_cgpen()->s()->Amax());
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-                     "Max norm of step = %8.2\n", max_step);
+                     "Max norm of step = %8.2g\n", max_step);
       increase = (max_step <= curr_eta_);
       if( !increase )
       {
@@ -772,9 +772,9 @@ char CGPenaltyLSAcceptor::UpdatePenaltyParameter()
          max_compl = Max(max_compl, compl_s_U->Max());
       }
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-                     "Minimal compl = %8.2\n", min_compl);
+                     "Minimal compl = %8.2g\n", min_compl);
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-                     "Maximal compl = %8.2\n", max_compl);
+                     "Maximal compl = %8.2g\n", max_compl);
       increase = (min_compl >= mu * penalty_update_compl_tol_ && max_compl <= mu / penalty_update_compl_tol_);
       if( !increase )
       {
@@ -789,7 +789,7 @@ char CGPenaltyLSAcceptor::UpdatePenaltyParameter()
       vec->AddTwoVectors(1., *CGPenData().delta_cgpen()->y_c(), -1. / CGPenCq().curr_cg_pert_fact(), *IpCq().curr_c(), 1.);
       Number omega_test = vec->Amax();
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-                     "omega_test for c = %8.2\n", omega_test);
+                     "omega_test for c = %8.2g\n", omega_test);
       increase = (omega_test < curr_eta_);
       if( increase )
       {
@@ -797,7 +797,7 @@ char CGPenaltyLSAcceptor::UpdatePenaltyParameter()
          vec->AddTwoVectors(1., *IpData().delta()->y_d(), -1. / CGPenCq().curr_cg_pert_fact(), *IpCq().curr_d_minus_s(), 1.);
          omega_test = vec->Amax();
          Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-                        "omega_test for d = %8.2\n", omega_test);
+                        "omega_test for d = %8.2g\n", omega_test);
          increase = (omega_test < curr_eta_);
       }
       if( !increase )
@@ -812,7 +812,7 @@ char CGPenaltyLSAcceptor::UpdatePenaltyParameter()
       // Update the eta tolerance
       curr_eta_ = Max(eta_min_, curr_eta_ / Number(2.));
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-                     "Updating eta to = %8.2\n", curr_eta_);
+                     "Updating eta to = %8.2g\n", curr_eta_);
       Number penalty = CGPenData().curr_kkt_penalty();
       Number y_full_step_max;
       SmartPtr<Vector> vec = IpData().curr()->y_c()->MakeNew();

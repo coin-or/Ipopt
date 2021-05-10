@@ -209,7 +209,7 @@ ESymSolverStatus TSymLinearSolver::MultiSolve(
          for( Index i = 0; i < dim_; i++ )
          {
             Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
-                           "Trhs[%5d,%5d] = %23.16e\n", irhs, i, rhs_vals[irhs * (dim_) + i]);
+                           "Trhs[%5" IPOPT_INDEX_FORMAT ",%5" IPOPT_INDEX_FORMAT "] = %23.16e\n", irhs, i, rhs_vals[irhs * (dim_) + i]);
          }
       }
       if( use_scaling_ )
@@ -299,7 +299,7 @@ ESymSolverStatus TSymLinearSolver::MultiSolve(
             for( Index i = 0; i < dim_; i++ )
             {
                Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
-                              "Tsol[%5d,%5d] = %23.16e\n", irhs, i, rhs_vals[irhs * (dim_) + i]);
+                              "Tsol[%5" IPOPT_INDEX_FORMAT ",%5" IPOPT_INDEX_FORMAT "] = %23.16e\n", irhs, i, rhs_vals[irhs * (dim_) + i]);
             }
          }
          TripletHelper::PutValuesInVector(dim_, &rhs_vals[irhs * (dim_)], *solV[irhs]);
@@ -456,7 +456,7 @@ void TSymLinearSolver::GiveMatrixToSolver(
 )
 {
    DBG_START_METH("TSymLinearSolver::GiveMatrixToSolver", dbg_verbosity);
-   DBG_PRINT((1, "new_matrix = %" IPOPT_INDEX_FORMAT "\n", new_matrix));
+   DBG_PRINT((1, "new_matrix = %d\n", new_matrix));
 
    Number* pa = solver_interface_->GetValuesArrayPtr();
    Number* atriplet;
@@ -476,7 +476,7 @@ void TSymLinearSolver::GiveMatrixToSolver(
    {
       for( Index i = 0; i < nonzeros_triplet_; i++ )
       {
-         DBG_PRINT((3, "KKTunscaled(%6d,%6d) = %24.16e\n", airn_[i], ajcn_[i], atriplet[i]));
+         DBG_PRINT((3, "KKTunscaled(%6" IPOPT_INDEX_FORMAT ",%6" IPOPT_INDEX_FORMAT ") = %24.16e\n", airn_[i], ajcn_[i], atriplet[i]));
       }
    }
 
@@ -503,7 +503,7 @@ void TSymLinearSolver::GiveMatrixToSolver(
             for( Index i = 0; i < dim_; i++ )
             {
                Jnlst().Printf(J_MOREVECTOR, J_LINEAR_ALGEBRA,
-                              "scaling factor[%6d] = %22.17e\n", i, scaling_factors_[i]);
+                              "scaling factor[%6" IPOPT_INDEX_FORMAT "] = %22.17e\n", i, scaling_factors_[i]);
             }
          }
          just_switched_on_scaling_ = false;
@@ -516,7 +516,7 @@ void TSymLinearSolver::GiveMatrixToSolver(
       {
          for( Index i = 0; i < nonzeros_triplet_; i++ )
          {
-            DBG_PRINT((3, "KKTscaled(%6d,%6d) = %24.16e\n", airn_[i], ajcn_[i], atriplet[i]));
+            DBG_PRINT((3, "KKTscaled(%6" IPOPT_INDEX_FORMAT ",%6" IPOPT_INDEX_FORMAT ") = %24.16e\n", airn_[i], ajcn_[i], atriplet[i]));
          }
       }
       IpData().TimingStats().LinearSystemScaling().End();
@@ -646,7 +646,7 @@ ESymSolverStatus TSymLinearSolver::DetermineDependentRows(
    {
       for( Index i = 0; i < nonzeros_triplet_; i++ )
       {
-         DBG_PRINT((3, "KKTunscaled(%6d,%6d) = %24.16e\n", airn_[i], ajcn_[i], atriplet[i]));
+         DBG_PRINT((3, "KKTunscaled(%6" IPOPT_INDEX_FORMAT ",%6" IPOPT_INDEX_FORMAT ") = %24.16e\n", airn_[i], ajcn_[i], atriplet[i]));
       }
    }
 
@@ -670,7 +670,7 @@ ESymSolverStatus TSymLinearSolver::DetermineDependentRows(
          for( Index i = 0; i < dim_; i++ )
          {
             Jnlst().Printf(J_MOREVECTOR, J_LINEAR_ALGEBRA,
-                           "scaling factor[%6d] = %22.17e\n", i, scaling_factors_[i]);
+                           "scaling factor[%6" IPOPT_INDEX_FORMAT "] = %22.17e\n", i, scaling_factors_[i]);
          }
       }
       for( Index i = 0; i < nonzeros_triplet_; i++ )
@@ -681,7 +681,7 @@ ESymSolverStatus TSymLinearSolver::DetermineDependentRows(
       {
          for( Index i = 0; i < nonzeros_triplet_; i++ )
          {
-            DBG_PRINT((3, "KKTscaled(%6d,%6d) = %24.16e\n", airn_[i], ajcn_[i], atriplet[i]));
+            DBG_PRINT((3, "KKTscaled(%6" IPOPT_INDEX_FORMAT ",%6" IPOPT_INDEX_FORMAT ") = %24.16e\n", airn_[i], ajcn_[i], atriplet[i]));
          }
       }
       IpData().TimingStats().LinearSystemScaling().End();

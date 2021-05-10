@@ -738,7 +738,7 @@ void CompoundMatrix::PrintImpl(
          {
             DBG_ASSERT(name.size() < 200);
             char buffer[256];
-            Snprintf(buffer, 255, "%s[%2d][%2d]", name.c_str(), irow, jcol);
+            Snprintf(buffer, 255, "%s[%2" IPOPT_INDEX_FORMAT "][%2" IPOPT_INDEX_FORMAT "]", name.c_str(), irow, jcol);
             std::string term_name = buffer;
             ConstComp(irow, jcol)->Print(&jnlst, level, category, term_name, indent + 1, prefix);
          }

@@ -633,7 +633,7 @@ ESymSolverStatus MumpsSolverInterface::DetermineDependentRows(
       for( int trycount = 0; trycount < trycount_max; trycount++ )
       {
          Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                        "MUMPS returned INFO(1) = %" IPOPT_INDEX_FORMAT " and requires more memory, reallocating.  Attempt %" IPOPT_INDEX_FORMAT "\n", error, trycount + 1);
+                        "MUMPS returned INFO(1) = %" IPOPT_INDEX_FORMAT " and requires more memory, reallocating.  Attempt %d\n", error, trycount + 1);
          Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                         "  Increasing icntl[13] from %" IPOPT_INDEX_FORMAT " to ", mumps_data->icntl[13]);
          Number mem_percent = mumps_data->icntl[13];

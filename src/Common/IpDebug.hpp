@@ -91,6 +91,9 @@ public:
    ///@}
 
    /** Printing */
+#ifdef __GNUC__
+   __attribute__((format(printf, 3, 4)))
+#endif
    void DebugPrintf(
       Index       verbosity,
       const char* pformat,

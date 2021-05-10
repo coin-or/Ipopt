@@ -149,7 +149,7 @@ void SensAmplTNLP::set_sens_solution(
 {
    DBG_START_METH("SensAmplTNLP::set_sens_solution", dbg_verbosity);
 
-   DBG_PRINT((dbg_verbosity, "n_sens_steps=%zd\n", (Index)sens_sol_.size()));
+   DBG_PRINT((dbg_verbosity, "n_sens_steps=%zd\n", sens_sol_.size()));
    DBG_ASSERT(idx > 0);
    DBG_ASSERT(idx <= (Index)sens_sol_.size());
 

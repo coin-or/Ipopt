@@ -228,9 +228,9 @@ void PiecewisePenalty::Print(
       }
       count++;
       jnlst.Printf(J_DETAILED, J_LINE_SEARCH,
-                   "%5d ", count);
+                   "%5" IPOPT_INDEX_FORMAT, count);
       jnlst.Printf(J_DETAILED, J_LINE_SEARCH,
-                   "%23.16e %23.16e  %23.16e \n", iter->pen_r, iter->barrier_obj, iter->infeasi);
+                   " %23.16e %23.16e  %23.16e \n", iter->pen_r, iter->barrier_obj, iter->infeasi);
    }
 }
 

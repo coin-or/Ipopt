@@ -51,7 +51,7 @@ DebugJournalistWrapper::DebugJournalistWrapper(
       verbose_level_ = 0;
       return;
    }
-   DebugPrintf(1, "-> Calling to: %s in obj: 0x%x\n", func_name_.c_str(),
+   DebugPrintf(1, "-> Calling to: %s in obj: %p\n", func_name_.c_str(),
                method_owner_);
    if (verbose_level_ > 0)
    {
@@ -73,7 +73,7 @@ DebugJournalistWrapper::~DebugJournalistWrapper()
       }
       else
       {
-         DebugPrintf(1, "<- Returning from : %s in obj: 0x%x\n",
+         DebugPrintf(1, "<- Returning from : %s in obj: %p\n",
                      func_name_.c_str(), method_owner_);
       }
    }

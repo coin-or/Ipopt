@@ -1484,7 +1484,7 @@ void DenseVector::PrintImplOffset(
             for( Index i = 0; i < Dim(); i++ )
             {
                jnlst.PrintfIndented(level, category, indent,
-                                    "%s%s[%5d]{%s}=%23.16e\n", prefix.c_str(), name.c_str(),
+                                    "%s%s[%5" IPOPT_INDEX_FORMAT "]{%s}=%23.16e\n", prefix.c_str(), name.c_str(),
                                     i + offset, idx_names[i].c_str(), values_[i]);
             }
          }
@@ -1493,7 +1493,7 @@ void DenseVector::PrintImplOffset(
             for( Index i = 0; i < Dim(); i++ )
             {
                jnlst.PrintfIndented(level, category, indent,
-                                    "%s%s[%5d]=%23.16e\n", prefix.c_str(), name.c_str(),
+                                    "%s%s[%5" IPOPT_INDEX_FORMAT "]=%23.16e\n", prefix.c_str(), name.c_str(),
                                     i + offset, values_[i]);
             }
          }

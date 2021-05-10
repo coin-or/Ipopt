@@ -192,7 +192,7 @@ void IndexPCalculator::PrintImpl(
       col_val = j->second->Values();
       for( Index i = 0; i < nrows_; ++i )
       {
-         jnlst.PrintfIndented(level, category, indent, "%s%s[%5d,%5d]=%23.16e\n", prefix.c_str(), name.c_str(), i,
+         jnlst.PrintfIndented(level, category, indent, "%s%s[%5" IPOPT_INDEX_FORMAT ",%5" IPOPT_INDEX_FORMAT "]=%23.16e\n", prefix.c_str(), name.c_str(), i,
                               col_counter, col_val[i]);
       }
       col_counter++;

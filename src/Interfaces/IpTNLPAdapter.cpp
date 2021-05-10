@@ -645,7 +645,7 @@ bool TNLPAdapter::GetSpaces(
          if( jnlst_->ProduceOutput(J_DETAILED, J_INITIALIZATION) )
          {
             jnlst_->Printf(J_DETAILED, J_INITIALIZATION, "\nList of indices of dependent constraints:\n");
-            int count = 0;
+            Index count = 0;
             for( std::list<Index>::iterator i = c_deps.begin(); i != c_deps.end(); ++i )
             {
                jnlst_->Printf(J_DETAILED, J_INITIALIZATION, "c_dep[%" IPOPT_INDEX_FORMAT "] = %" IPOPT_INDEX_FORMAT "\n", count++, *i);
@@ -1328,11 +1328,11 @@ bool TNLPAdapter::GetSpaces(
 
    if( IsValid(jnlst_) )
    {
-      jnlst_->Printf(J_ITERSUMMARY, J_STATISTICS, "Number of nonzeros in equality constraint Jacobian...:%9d\n",
+      jnlst_->Printf(J_ITERSUMMARY, J_STATISTICS, "Number of nonzeros in equality constraint Jacobian...:%9" IPOPT_INDEX_FORMAT "\n",
                      nz_jac_c_);
-      jnlst_->Printf(J_ITERSUMMARY, J_STATISTICS, "Number of nonzeros in inequality constraint Jacobian.:%9d\n",
+      jnlst_->Printf(J_ITERSUMMARY, J_STATISTICS, "Number of nonzeros in inequality constraint Jacobian.:%9" IPOPT_INDEX_FORMAT "\n",
                      nz_jac_d_);
-      jnlst_->Printf(J_ITERSUMMARY, J_STATISTICS, "Number of nonzeros in Lagrangian Hessian.............:%9d\n\n",
+      jnlst_->Printf(J_ITERSUMMARY, J_STATISTICS, "Number of nonzeros in Lagrangian Hessian.............:%9" IPOPT_INDEX_FORMAT "\n\n",
                      nz_h_);
    }
 
@@ -3018,7 +3018,7 @@ bool TNLPAdapter::CheckDerivatives(
          }
          if( cflag != ' ' || derivative_test_print_all_ )
          {
-            jnlst_->Printf(J_WARNING, J_NLP, "%c grad_f[      %5d] = %23.16e    ~ %23.16e  [%10.3e]\n", cflag,
+            jnlst_->Printf(J_WARNING, J_NLP, "%c grad_f[      %5" IPOPT_INDEX_FORMAT "] = %23.16e    ~ %23.16e  [%10.3e]\n", cflag,
                            ivar + index_correction, deriv_exact, deriv_approx, rel_error);
          }
 
@@ -3054,7 +3054,7 @@ bool TNLPAdapter::CheckDerivatives(
                }
                if( cflag != ' ' || derivative_test_print_all_ )
                {
-                  jnlst_->Printf(J_WARNING, J_NLP, "%c jac_g [%5d,%5d] = %23.16e %c  ~ %23.16e  [%10.3e]\n", cflag,
+                  jnlst_->Printf(J_WARNING, J_NLP, "%c jac_g [%5" IPOPT_INDEX_FORMAT ",%5" IPOPT_INDEX_FORMAT "] = %23.16e %c  ~ %23.16e  [%10.3e]\n", cflag,
                                  icon + index_correction, ivar + index_correction, deriv_exact, sflag, deriv_approx, rel_error);
                }
             }
@@ -3204,13 +3204,13 @@ bool TNLPAdapter::CheckDerivatives(
                   if( icon == -1 )
                   {
                      jnlst_->Printf(J_WARNING, J_NLP,
-                                    "%c             obj_hess[%5d,%5d] = %23.16e %c  ~ %23.16e  [%10.3e]\n", cflag,
+                                    "%c             obj_hess[%5" IPOPT_INDEX_FORMAT ",%5" IPOPT_INDEX_FORMAT "] = %23.16e %c  ~ %23.16e  [%10.3e]\n", cflag,
                                     ivar + index_correction, ivar2 + index_correction, deriv_exact, sflag, deriv_approx, rel_error);
                   }
                   else
                   {
                      jnlst_->Printf(J_WARNING, J_NLP,
-                                    "%c %5d-th constr_hess[%5d,%5d] = %23.16e %c  ~ %23.16e  [%10.3e]\n", cflag,
+                                    "%c %5" IPOPT_INDEX_FORMAT "-th constr_hess[%5" IPOPT_INDEX_FORMAT ",%5" IPOPT_INDEX_FORMAT "] = %23.16e %c  ~ %23.16e  [%10.3e]\n", cflag,
                                     icon + index_correction, ivar + index_correction, ivar2 + index_correction, deriv_exact, sflag,
                                     deriv_approx, rel_error);
                   }

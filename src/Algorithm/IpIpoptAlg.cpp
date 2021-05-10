@@ -790,23 +790,23 @@ void IpoptAlgorithm::PrintProblemStatistics()
                          ns_tot, ns_only_lower, ns_both, ns_only_upper);
 
    Jnlst().Printf(J_SUMMARY, J_STATISTICS,
-                  "Total number of variables............................: %8d\n", nx_tot);
+                  "Total number of variables............................: %8" IPOPT_INDEX_FORMAT "\n", nx_tot);
    Jnlst().Printf(J_SUMMARY, J_STATISTICS,
-                  "                     variables with only lower bounds: %8d\n", nx_only_lower);
+                  "                     variables with only lower bounds: %8" IPOPT_INDEX_FORMAT "\n", nx_only_lower);
    Jnlst().Printf(J_SUMMARY, J_STATISTICS,
-                  "                variables with lower and upper bounds: %8d\n", nx_both);
+                  "                variables with lower and upper bounds: %8" IPOPT_INDEX_FORMAT "\n", nx_both);
    Jnlst().Printf(J_SUMMARY, J_STATISTICS,
-                  "                     variables with only upper bounds: %8d\n", nx_only_upper);
+                  "                     variables with only upper bounds: %8" IPOPT_INDEX_FORMAT "\n", nx_only_upper);
    Jnlst().Printf(J_SUMMARY, J_STATISTICS,
-                  "Total number of equality constraints.................: %8d\n", IpData().curr()->y_c()->Dim());
+                  "Total number of equality constraints.................: %8" IPOPT_INDEX_FORMAT "\n", IpData().curr()->y_c()->Dim());
    Jnlst().Printf(J_SUMMARY, J_STATISTICS,
-                  "Total number of inequality constraints...............: %8d\n", ns_tot);
+                  "Total number of inequality constraints...............: %8" IPOPT_INDEX_FORMAT "\n", ns_tot);
    Jnlst().Printf(J_SUMMARY, J_STATISTICS,
-                  "        inequality constraints with only lower bounds: %8d\n", ns_only_lower);
+                  "        inequality constraints with only lower bounds: %8" IPOPT_INDEX_FORMAT "\n", ns_only_lower);
    Jnlst().Printf(J_SUMMARY, J_STATISTICS,
-                  "   inequality constraints with lower and upper bounds: %8d\n", ns_both);
+                  "   inequality constraints with lower and upper bounds: %8" IPOPT_INDEX_FORMAT "\n", ns_both);
    Jnlst().Printf(J_SUMMARY, J_STATISTICS,
-                  "        inequality constraints with only upper bounds: %8d\n\n", ns_only_upper);
+                  "        inequality constraints with only upper bounds: %8" IPOPT_INDEX_FORMAT "\n\n", ns_only_upper);
 }
 
 void IpoptAlgorithm::ComputeFeasibilityMultipliers()

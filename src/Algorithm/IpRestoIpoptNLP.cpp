@@ -274,7 +274,7 @@ bool RestoIpoptNLP::InitializeStructures(
    jac_d_space_->SetBlockCols(4, orig_d_space->Dim());
 
    jac_d_space_->SetCompSpace(0, 0, *orig_jac_d_space);
-   DBG_PRINT((1, "orig_jac_d_space = %x\n", GetRawPtr(orig_jac_d_space)))
+   DBG_PRINT((1, "orig_jac_d_space = %p\n", GetRawPtr(orig_jac_d_space)))
    // Blocks (0,1) and (0,2) are zero'ed out
    // **NOTE: By placing "flat" identity matrices here, we are creating
    //         potential issues for linalg operations that arise when the original
@@ -620,7 +620,7 @@ SmartPtr<const Matrix> RestoIpoptNLP::jac_d(
    // The zero parts remain NULL, the identities are created from the matrix
    // space (since auto_allocate was set to true in SetCompSpace)
    SmartPtr<CompoundMatrix> retPtr = jac_d_space_->MakeNewCompoundMatrix();
-   DBG_PRINT((1, "jac_d_space_ = %x\n", GetRawPtr(jac_d_space_)))
+   DBG_PRINT((1, "jac_d_space_ = %p\n", GetRawPtr(jac_d_space_)))
 
    // Set the block for the original Jacobian
    retPtr->SetComp(0, 0, *jac_d_only);

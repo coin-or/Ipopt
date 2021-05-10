@@ -276,7 +276,7 @@ void DenseSymMatrix::PrintImpl(
          for( Index i = j; i < NRows(); i++ )
          {
             jnlst.PrintfIndented(level, category, indent,
-                                 "%s%s[%5d,%5d]=%23.16e\n", prefix.c_str(), name.c_str(), i, j, values_[i + NRows() * j]);
+                                 "%s%s[%5" IPOPT_INDEX_FORMAT ",%5" IPOPT_INDEX_FORMAT "]=%23.16e\n", prefix.c_str(), name.c_str(), i, j, values_[i + NRows() * j]);
          }
       }
    }

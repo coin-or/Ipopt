@@ -113,6 +113,9 @@ IPOPTLIB_EXPORT bool Compare_le(
 );
 
 /** Method for printing a formatted output to a string with given size. */
+#ifdef __GNUC__
+__attribute__((format(printf, 3, 4)))
+#endif
 IPOPTLIB_EXPORT int Snprintf(
    char*       str,
    long        size,

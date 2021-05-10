@@ -511,7 +511,7 @@ void AdaptiveMuUpdate::RememberCurrentPointAsAccepted()
             {
                refidx++;
                Jnlst().Printf(J_MOREDETAILED, J_BARRIER_UPDATE,
-                              "pd system reference[%2d] = %.6e\n", refidx, *iter);
+                              "pd system reference[%2" IPOPT_INDEX_FORMAT "] = %.6e\n", refidx, *iter);
             }
          }
       }

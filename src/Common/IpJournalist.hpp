@@ -131,6 +131,9 @@ public:
     */
    ///@{
    /** Method to print a formatted string */
+#ifdef __GNUC__
+   __attribute__((format(printf, 4, 5)))
+#endif
    virtual void Printf(
       EJournalLevel    level,
       EJournalCategory category,
@@ -156,6 +159,9 @@ public:
    ) const;
 
    /** Method to print a formatted string with indentation */
+#ifdef __GNUC__
+   __attribute__((format(printf, 5, 6)))
+#endif
    virtual void PrintfIndented(
       EJournalLevel    level,
       EJournalCategory category,
@@ -169,7 +175,7 @@ public:
       EJournalLevel    level,
       EJournalCategory category,
       const char*      pformat,
-      va_list ap
+      va_list          ap
    ) const;
 
    /** Method to print a formatted string with indentation, using the va_list argument. */
@@ -178,7 +184,7 @@ public:
       EJournalCategory category,
       Index            indent_level,
       const char*      pformat,
-      va_list ap
+      va_list          ap
    ) const;
 
    /** Method that returns true if there is a Journal that would

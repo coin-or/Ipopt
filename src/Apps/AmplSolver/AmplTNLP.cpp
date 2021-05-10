@@ -1687,7 +1687,7 @@ bool AmplTNLP::nerror_ok(
    }
    jnlst_->Printf(J_ERROR, J_MAIN,
                   "Error in an AMPL evaluation. Run with \"halt_on_ampl_error yes\" to see details.\n");
-   DBG_PRINT((1, "nerror = %ld\n", *((fint*)nerror)));
+   DBG_PRINT((1, "nerror = %d\n", *((fint*)nerror)));
    return false;
 }
 

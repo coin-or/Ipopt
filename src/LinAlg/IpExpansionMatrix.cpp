@@ -426,7 +426,7 @@ void ExpansionMatrix::PrintImplOffset(
    for( Index i = 0; i < NCols(); i++ )
    {
       jnlst.PrintfIndented(level, category, indent,
-                           "%s%s[%5d,%5d]=%23.16e  (%" IPOPT_INDEX_FORMAT ")\n", prefix.c_str(), name.c_str(), exp_pos[i] + row_offset, i + col_offset, 1., i);
+                           "%s%s[%5" IPOPT_INDEX_FORMAT ",%5" IPOPT_INDEX_FORMAT "]=%23.16e  (%" IPOPT_INDEX_FORMAT ")\n", prefix.c_str(), name.c_str(), exp_pos[i] + row_offset, i + col_offset, 1., i);
    }
 }
 
