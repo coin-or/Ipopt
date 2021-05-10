@@ -272,7 +272,7 @@ bool intermediate_cb(
    have_iter = GetIpoptCurrentIterate(nlp, false, 4, x, z_L, z_U, 2, g, lambda);
    have_viol = GetIpoptCurrentViolations(nlp, false, 4, x_L_viol, x_U_viol, compl_x_L, compl_x_U, grad_lag_x, 2, constraint_violation, compl_g);
 
-   printf("Current iterate at iteration %d:\n", iter_count);
+   printf("Current iterate at iteration %d:\n", (int)iter_count);
    printf("  %-12s %-12s %-12s %-12s %-12s %-12s %-12s\n", "x", "z_L", "z_U", "bound_viol", "compl_x_L", "compl_x_U", "grad_lag_x");
    for( int i = 0; i < 4; ++i )
    {
@@ -419,22 +419,22 @@ int main()
       printf("\n\nSolution of the primal variables, x\n");
       for( i = 0; i < n; i++ )
       {
-         printf("x[%d] = %e\n", i, x[i]);
+         printf("x[%d] = %e\n", (int)i, x[i]);
       }
 
       printf("\n\nSolution of the constraint multipliers, lambda\n");
       for( i = 0; i < m; i++ )
       {
-         printf("lambda[%d] = %e\n", i, mult_g[i]);
+         printf("lambda[%d] = %e\n", (int)i, mult_g[i]);
       }
       printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
       for( i = 0; i < n; i++ )
       {
-         printf("z_L[%d] = %e\n", i, mult_x_L[i]);
+         printf("z_L[%d] = %e\n", (int)i, mult_x_L[i]);
       }
       for( i = 0; i < n; i++ )
       {
-         printf("z_U[%d] = %e\n", i, mult_x_U[i]);
+         printf("z_U[%d] = %e\n", (int)i, mult_x_U[i]);
       }
 
       printf("\n\nObjective value\nf(x*) = %e\n", obj);
@@ -467,22 +467,22 @@ int main()
          printf("\n\nSolution of the primal variables, x\n");
          for( i = 0; i < n; i++ )
          {
-            printf("x[%d] = %e\n", i, x[i]);
+            printf("x[%d] = %e\n", (int)i, x[i]);
          }
 
          printf("\n\nSolution of the constraint multipliers, lambda\n");
          for( i = 0; i < m; i++ )
          {
-            printf("lambda[%d] = %e\n", i, mult_g[i]);
+            printf("lambda[%d] = %e\n", (int)i, mult_g[i]);
          }
          printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
          for( i = 0; i < n; i++ )
          {
-            printf("z_L[%d] = %e\n", i, mult_x_L[i]);
+            printf("z_L[%d] = %e\n", (int)i, mult_x_L[i]);
          }
          for( i = 0; i < n; i++ )
          {
-            printf("z_U[%d] = %e\n", i, mult_x_U[i]);
+            printf("z_U[%d] = %e\n", (int)i, mult_x_U[i]);
          }
 
          printf("\n\nObjective value\nf(x*) = %e\n", obj);

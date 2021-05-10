@@ -325,13 +325,13 @@ void ParametricTNLP::finalize_solution(
           "                Nominal                    Perturbed\n");
    for( Index k = 0; k < (Index) sens_sol_vec.size(); ++k )
    {
-      printf("x[%3d]   % .23f   % .23f\n", k, x[k], sens_sol_vec[k]);
+      printf("x[%3d]   % .23f   % .23f\n", (int)k, x[k], sens_sol_vec[k]);
    }
 
    printf("\n**********\n");
    for( Index k = 0; k < m; ++k )
    {
-      printf("lambda[%3d] (nom)  % .23f \n", k, lambda[k]);
+      printf("lambda[%3d] (nom)  % .23f \n", (int)k, lambda[k]);
    }
 
 }
@@ -355,7 +355,7 @@ void ParametricTNLP::finalize_metadata(
    {
       for( Index k = 0; k < n; ++k )
       {
-         printf("z_L[%d] = %f      z_U[%d] = %f\n", k, z_L_solution->second[k], k, z_U_solution->second[k]);
+         printf("z_L[%d] = %f      z_U[%d] = %f\n", (int)k, z_L_solution->second[k], (int)k, z_U_solution->second[k]);
       }
    }
 
@@ -366,7 +366,7 @@ void ParametricTNLP::finalize_metadata(
    {
       for( Index k = 0; k < m; ++k )
       {
-         printf("lambda[%d] (upd) = %.14g\n", k, lambda_solution->second[k]);
+         printf("lambda[%d] (upd) = %.14g\n", (int)k, lambda_solution->second[k]);
       }
    }
 }
