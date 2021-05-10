@@ -66,7 +66,7 @@ public:
       Suffix_Source      source
    ) const;
 
-   std::vector<Index> GetIntegerSuffixValues(
+   std::vector<int> GetIntegerSuffixValues(
       Index         n,
       const std::string& suffix_string,
       Suffix_Source      source

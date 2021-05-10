@@ -1795,13 +1795,13 @@ AmplSuffixHandler::GetIntegerSuffixValues(
    return dp->u.i;
 }
 
-std::vector<Index> AmplSuffixHandler::GetIntegerSuffixValues(
+std::vector<int> AmplSuffixHandler::GetIntegerSuffixValues(
    Index              n,
    const std::string& suffix_string,
    Suffix_Source      source
 ) const
 {
-   std::vector<Index> ret;
+   std::vector<int> ret;
    const int* ptr = GetIntegerSuffixValues(suffix_string, source);
    if( ptr )
    {

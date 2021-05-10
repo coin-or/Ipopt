@@ -100,11 +100,11 @@ public:
       IpoptCalculatedQuantities* ip_cq
    );
 
-   const Index* get_index_suffix(
+   const int* get_index_suffix(
       const char* suffix_name
    );
 
-   std::vector<Index> get_index_suffix_vec(
+   std::vector<int> get_index_suffix_vec(
       const char* suffix_name
    );
 
@@ -116,11 +116,11 @@ public:
       const char* suffix_name
    );
 
-   const Index* get_index_suffix_constr(
+   const int* get_index_suffix_constr(
       const char* suffix_name
    );
 
-   std::vector<Index> get_index_suffix_constr_vec(
+   std::vector<int> get_index_suffix_constr_vec(
       const char* suffix_name
    );
 

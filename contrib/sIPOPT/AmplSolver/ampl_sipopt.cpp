@@ -62,7 +62,7 @@ int main(
    suffix_handler->AddAvailableSuffix("sens_init_constr", AmplSuffixHandler::Constraint_Source,
                                       AmplSuffixHandler::Index_Type);
 
-   int n_sens_steps = 0;
+   Index n_sens_steps = 0;
    app_ipopt->Options()->GetIntegerValue("n_sens_steps", n_sens_steps, "");
    std::string state;
    std::string state_value;
