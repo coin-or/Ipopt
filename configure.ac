@@ -104,7 +104,7 @@ fi
 
 AC_COIN_CHK_LIBM(IpoptLib)
 
-AC_COIN_CHK_LAPACK(IpoptLib)
+AC_COIN_CHK_LAPACK(IpoptLib, int$intsize)
 if test $coin_has_lapack != yes; then
   AC_MSG_ERROR([Required package LAPACK not found.])
 #  AC_MSG_WARN([Compiling code without LAPACK.  Certain options (e.g., quasi-Newton) will not work.])

@@ -22944,9 +22944,13 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
   if test "$lapack_keep_looking" = yes ; then
     case $build in
       *-linux*)
+        case " int$intsize " in
+          *\ int64\ * ) coin_mkl="-lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -lm" ;;
+          *)          coin_mkl="-lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lm" ;;
+        esac
 
   ac_save_LIBS="$LIBS"
-  LIBS="-lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lm $LIBS"
+  LIBS="$coin_mkl $LIBS"
 
 
   dsyev_namemangling=unknown
@@ -23012,7 +23016,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
 
   if test $ac_success = yes ; then
     coin_has_lapack=yes
-           lapack_lflags="-lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lm"
+           lapack_lflags="$coin_mkl"
            lapack_what="Intel MKL ($lapack_lflags)"
 
 
@@ -23021,7 +23025,9 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
       ;;
 
       *-*-solaris*)
-
+        case " int$intsize " in
+          *\ int64\ * ) ;;
+          *)
   ac_save_LIBS="$LIBS"
   LIBS="-lsunperf $LIBS"
 
@@ -23089,12 +23095,13 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
 
   if test $ac_success = yes ; then
     coin_has_lapack=yes
-           lapack_lflags=-lsunperf
-           lapack_what="Sun Performance Library ($lapack_lflags)"
+                lapack_lflags=-lsunperf
+                lapack_what="Sun Performance Library ($lapack_lflags)"
 
 
   fi
-
+ ;;
+        esac
       ;;
 
       *-cygwin* | *-mingw* | *-msys*)
@@ -23108,12 +23115,18 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
           d=`cygpath -u "$d"`
           if test "$enable_shared" = yes ; then
             if test -e "$d/mkl_core_dll.lib" ; then
-              coin_mkl="$d/mkl_intel_lp64_dll.lib $d/mkl_sequential_dll.lib $d/mkl_core_dll.lib"
+              case " int$intsize " in
+                *\ int64\ * ) coin_mkl="$d/mkl_intel_ilp64_dll.lib $d/mkl_sequential_dll.lib $d/mkl_core_dll.lib" ;;
+                *)          coin_mkl="$d/mkl_intel_lp64_dll.lib $d/mkl_sequential_dll.lib $d/mkl_core_dll.lib" ;;
+              esac
               break
             fi
           else
             if test -e "$d/mkl_core.lib" ; then
-              coin_mkl="$d/mkl_intel_lp64.lib $d/mkl_sequential.lib $d/mkl_core.lib"
+              case " int$intsize " in
+                *\ int64\ * ) coin_mkl="$d/mkl_intel_ilp64.lib $d/mkl_sequential.lib $d/mkl_core.lib" ;;
+                *)          coin_mkl="$d/mkl_intel_lp64.lib $d/mkl_sequential.lib $d/mkl_core.lib" ;;
+              esac
               break
             fi
           fi
@@ -23198,9 +23211,13 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
       ;;
 
       *-darwin*)
+        case " int$intsize " in
+          *\ int64\ * ) coin_mkl="-lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -lm" ;;
+          *)          coin_mkl="-lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lm" ;;
+        esac
 
   ac_save_LIBS="$LIBS"
-  LIBS="-lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lm $LIBS"
+  LIBS="$coin_mkl $LIBS"
 
 
   dsyev_namemangling=unknown
@@ -23266,14 +23283,16 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
 
   if test $ac_success = yes ; then
     coin_has_lapack=yes
-           lapack_lflags="-lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lm"
+           lapack_lflags="$coin_mkl"
            lapack_what="Intel MKL ($lapack_lflags)"
 
 
   fi
 
         if test "$coin_has_lapack" = no ; then
-
+          case " int$intsize " in
+            *\ int64\ * ) ;;
+            *)
   ac_save_LIBS="$LIBS"
   LIBS="-framework Accelerate $LIBS"
 
@@ -23341,12 +23360,14 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
 
   if test $ac_success = yes ; then
     coin_has_lapack=yes
-             lapack_lflags="-framework Accelerate"
-             lapack_what="Accelerate framework ($lapack_lflags)"
+                  lapack_lflags="-framework Accelerate"
+                  lapack_what="Accelerate framework ($lapack_lflags)"
 
 
   fi
 
+               ;;
+          esac
         fi
       ;;
     esac
@@ -23356,7 +23377,9 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
   fi
 
   if test "$lapack_keep_looking" = yes ; then
-
+    case " int$intsize " in
+      *\ int64\ * ) ;;
+      *)
 
 
   if test -n "$PKG_CONFIG" ; then
@@ -23436,11 +23459,12 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
 
   if test $ac_success = yes ; then
     coin_has_lapack=yes
-         lapack_keep_looking=no
-         lapack_pcfiles="lapack blas"
+               lapack_keep_looking=no
+               lapack_pcfiles="lapack blas"
     else { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: lapack.pc and blas.pc present, but could not find dsyev when trying to link with LAPACK." >&5
 printf "%s\n" "$as_me: WARNING: lapack.pc and blas.pc present, but could not find dsyev when trying to link with LAPACK." >&2;}
   fi
+
 
     else
       LAPACK_PKG_ERRORS=`PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH" $PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "lapack blas"`
@@ -23450,12 +23474,18 @@ printf "%s\n" "$as_me: WARNING: lapack.pc and blas.pc present, but could not fin
     as_fn_error $? "\"Cannot check for existence of module lapack without pkgconf\"" "$LINENO" 5
   fi
 
+         ;;
+    esac
   fi
 
   if test "$lapack_keep_looking" = yes ; then
+    case " int$intsize " in
+      *\ int64\ * ) coin_lapack="-llapack64 -lblas64" ;;
+      *) coin_lapack="-llapack -lblas" ;;
+    esac
 
   ac_save_LIBS="$LIBS"
-  LIBS="-llapack -lblas $LIBS"
+  LIBS="$coin_lapack $LIBS"
 
 
   dsyev_namemangling=unknown
@@ -23521,7 +23551,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
 
   if test $ac_success = yes ; then
     coin_has_lapack=yes
-       lapack_lflags="-llapack -lblas"
+       lapack_lflags="$coin_lapack"
        lapack_what="generic library ($lapack_lflags)"
 
   fi
@@ -25927,7 +25957,7 @@ else $as_nop
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25930 "configure" */
+/* #line 25960 "configure" */
 public class Test {
 }
 EOF
@@ -26453,7 +26483,7 @@ else $as_nop
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 26456 "configure" */
+/* #line 26486 "configure" */
 public class Test {
 }
 EOF
@@ -26488,7 +26518,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 26491 "configure" */
+/* [#]line 26521 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
