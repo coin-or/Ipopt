@@ -386,7 +386,7 @@ bool QualityFunctionMuOracle::CalculateMu(
 
 #ifdef TRACEQUALITYFUNCTION
    char fname[100];
-   Snprintf(fname, 100, "qf_values_%d.dat", IpData().iter_count());
+   Snprintf(fname, 100, "qf_values_%" IPOPT_INDEX_FORMAT ".dat", IpData().iter_count());
    FILE* fid = fopen(fname, "w");
 
    Number sigma_1 = sigma_max_;
@@ -472,7 +472,7 @@ bool QualityFunctionMuOracle::CalculateMu(
    char ssigma[40];
    Snprintf(ssigma, 39, " sigma=%8.2e", sigma);
    IpData().Append_info_string(ssigma);
-   Snprintf(ssigma, 39, " qf=%d", count_qf_evals_);
+   Snprintf(ssigma, 39, " qf=%" IPOPT_INDEX_FORMAT "", count_qf_evals_);
    IpData().Append_info_string(ssigma);
    Snprintf(ssigma, 39, " xi=%8.2e ", IpCq().curr_centrality_measure());
    IpData().Append_info_string(ssigma);

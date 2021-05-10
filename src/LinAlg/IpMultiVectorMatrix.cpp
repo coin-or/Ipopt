@@ -313,7 +313,7 @@ void MultiVectorMatrix::PrintImpl(
    jnlst.Printf(level, category,
                 "\n");
    jnlst.PrintfIndented(level, category, indent,
-                        "%sMultiVectorMatrix \"%s\" with %d columns:\n", prefix.c_str(), name.c_str(), NCols());
+                        "%sMultiVectorMatrix \"%s\" with %" IPOPT_INDEX_FORMAT " columns:\n", prefix.c_str(), name.c_str(), NCols());
 
    for( Index i = 0; i < NCols(); i++ )
    {
@@ -328,7 +328,7 @@ void MultiVectorMatrix::PrintImpl(
       else
       {
          jnlst.PrintfIndented(level, category, indent,
-                              "%sVector in column %d is not yet set!\n", prefix.c_str(), i);
+                              "%sVector in column %" IPOPT_INDEX_FORMAT " is not yet set!\n", prefix.c_str(), i);
       }
    }
 }

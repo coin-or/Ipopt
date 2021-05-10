@@ -251,11 +251,11 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
    ETerminationTest retval = CONTINUE;
 
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                  "Starting PD Termination Tester for iteration %d.\n", iter);
+                  "Starting PD Termination Tester for iteration %" IPOPT_INDEX_FORMAT ".\n", iter);
    /*
     if (iter%5 != 4) {
     Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-    "TT: immediately leaving tester for iteration %d.\n", iter);
+    "TT: immediately leaving tester for iteration %" IPOPT_INDEX_FORMAT ".\n", iter);
     return retval;
     }
     */

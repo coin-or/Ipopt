@@ -262,7 +262,7 @@ bool InexactPDSolver::Solve(
          else
          {
             char buf[32];
-            Snprintf(buf, 31, " TT=%d ", test_result_);
+            Snprintf(buf, 31, " TT=%d", test_result_);
             IpData().Append_info_string(buf);
             if( test_result_ == IterativeSolverTerminationTester::CONTINUE )
             {
@@ -303,7 +303,7 @@ bool InexactPDSolver::Solve(
 
    // Some output
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                  "Number of trial factorizations performed: %d\n", count);
+                  "Number of trial factorizations performed: %" IPOPT_INDEX_FORMAT "\n", count);
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "Final perturbation parameters: delta_x=%e delta_s=%e\n                         delta_c=%e delta_d=%e\n", delta_x,
                   delta_s, delta_c, delta_d);

@@ -151,7 +151,7 @@ bool IterativeWsmpSolverInterface::InitializeImpl(
    Index NTHREADS = wsmp_num_threads_;
    F77_FUNC(wsetmaxthrds, WSETMAXTHRDS)(&NTHREADS);
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                  "WSMP will use %d threads.\n", wsmp_num_threads_);
+                  "WSMP will use %" IPOPT_INDEX_FORMAT " threads.\n", wsmp_num_threads_);
 #else
    Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                   "Not setting WISMP threads at the moment.\n");
@@ -167,7 +167,7 @@ bool IterativeWsmpSolverInterface::InitializeImpl(
 
    if( IPARM_[63] < 0 )
    {
-      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Error %d from WSMP initialization.\n", IPARM_[63]);
+      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Error %" IPOPT_INDEX_FORMAT " from WSMP initialization.\n", IPARM_[63]);
       return false;
    }
 
@@ -308,7 +308,7 @@ ESymSolverStatus IterativeWsmpSolverInterface::InternalSymFact(
       else if( ierror > 0 )
       {
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                        "Matrix appears to be singular (with ierror = %d).\n", ierror);
+                        "Matrix appears to be singular (with ierror = %" IPOPT_INDEX_FORMAT ").\n", ierror);
          if( HaveIpData() )
          {
             IpData().TimingStats().LinearSystemSymbolicFactorization().End();
@@ -318,7 +318,7 @@ ESymSolverStatus IterativeWsmpSolverInterface::InternalSymFact(
       else
       {
          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                        "Error in WISMP during ordering/symbolic factorization phase.\n     Error code is %d.\n", ierror);
+                        "Error in WISMP during ordering/symbolic factorization phase.\n     Error code is %" IPOPT_INDEX_FORMAT ".\n", ierror);
       }
       if( HaveIpData() )
       {
@@ -327,7 +327,7 @@ ESymSolverStatus IterativeWsmpSolverInterface::InternalSymFact(
       return SYMSOLVER_FATAL_ERROR;
    }
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                  "Predicted memory usage for WISMP after symbolic factorization IPARM(23)= %d.\n", IPARM_[22]);
+                  "Predicted memory usage for WISMP after symbolic factorization IPARM(23)= %" IPOPT_INDEX_FORMAT ".\n", IPARM_[22]);
 
    if( HaveIpData() )
    {
@@ -356,18 +356,18 @@ ESymSolverStatus IterativeWsmpSolverInterface::Factorization(
    {
       matrix_file_number_++;
       char buf[256];
-      Snprintf(buf, 255, "wsmp_matrix_%d_%d.dat", iter_count, matrix_file_number_);
+      Snprintf(buf, 255, "wsmp_matrix_%" IPOPT_INDEX_FORMAT "_%" IPOPT_INDEX_FORMAT ".dat", iter_count, matrix_file_number_);
       Jnlst().Printf(J_SUMMARY, J_LINEAR_ALGEBRA,
                      "Writing WSMP matrix into file %s.\n", buf);
       FILE* fp = fopen(buf, "w");
-      fprintf(fp, "%d\n", dim_); // N
+      fprintf(fp, "%" IPOPT_INDEX_FORMAT "\n", dim_); // N
       for( Index icol = 0; icol < dim_; icol++ )
       {
-         fprintf(fp, "%d", ia[icol + 1] - ia[icol]); // number of elements for this column
+         fprintf(fp, "%" IPOPT_INDEX_FORMAT "", ia[icol + 1] - ia[icol]); // number of elements for this column
          // Now for each column we write row indices and values
          for( Index irow = ia[icol]; irow < ia[icol + 1]; irow++ )
          {
-            fprintf(fp, " %23.16e %d", a_[irow - 1], ja[irow - 1]);
+            fprintf(fp, " %23.16e %" IPOPT_INDEX_FORMAT "", a_[irow - 1], ja[irow - 1]);
          }
          fprintf(fp, "\n");
       }
@@ -426,7 +426,7 @@ ESymSolverStatus IterativeWsmpSolverInterface::Factorization(
    if( ierror > 0 )
    {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "WISMP detected that the matrix is singular and encountered %d zero pivots.\n", dim_ + 1 - ierror);
+                     "WISMP detected that the matrix is singular and encountered %" IPOPT_INDEX_FORMAT " zero pivots.\n", dim_ + 1 - ierror);
       if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemFactorization().End();
@@ -443,7 +443,7 @@ ESymSolverStatus IterativeWsmpSolverInterface::Factorization(
       else
       {
          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                        "Error in WSMP during factorization phase.\n     Error code is %d.\n", ierror);
+                        "Error in WSMP during factorization phase.\n     Error code is %" IPOPT_INDEX_FORMAT ".\n", ierror);
       }
       if( HaveIpData() )
       {
@@ -452,7 +452,7 @@ ESymSolverStatus IterativeWsmpSolverInterface::Factorization(
       return SYMSOLVER_FATAL_ERROR;
    }
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                  "Memory usage for WISMP after factorization IPARM(23) = %d\n", IPARM_[22]);
+                  "Memory usage for WISMP after factorization IPARM(23) = %" IPOPT_INDEX_FORMAT "\n", IPARM_[22]);
 
 #if 0
    // Check whether the number of negative eigenvalues matches the requested
@@ -460,7 +460,7 @@ ESymSolverStatus IterativeWsmpSolverInterface::Factorization(
    if (check_NegEVals && (numberOfNegEVals != negevals_))
    {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "Wrong inertia: required are %d, but we got %d.\n",
+                     "Wrong inertia: required are %" IPOPT_INDEX_FORMAT ", but we got %" IPOPT_INDEX_FORMAT ".\n",
                      numberOfNegEVals, negevals_);
       if (HaveIpData())
       {
@@ -536,13 +536,13 @@ ESymSolverStatus IterativeWsmpSolverInterface::Solve(
       else
       {
          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                        "Error in WISMP during ordering/symbolic factorization phase.\n     Error code is %d.\n", ierror);
+                        "Error in WISMP during ordering/symbolic factorization phase.\n     Error code is %" IPOPT_INDEX_FORMAT ".\n", ierror);
       }
       delete[] CVGH;
       return SYMSOLVER_FATAL_ERROR;
    }
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                  "Number of iterative solver steps in WISMP: %d\n", IPARM_[25]);
+                  "Number of iterative solver steps in WISMP: %" IPOPT_INDEX_FORMAT "\n", IPARM_[25]);
    if( Jnlst().ProduceOutput(J_MOREDETAILED, J_LINEAR_ALGEBRA) )
    {
       DBG_ASSERT(CVGH != NULL);

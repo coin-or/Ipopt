@@ -182,7 +182,7 @@ void LowRankUpdateSymMatrix::PrintImpl(
    jnlst.Printf(level, category,
                 "\n");
    jnlst.PrintfIndented(level, category, indent,
-                        "%sLowRankUpdateSymMatrix \"%s\" with %d rows and columns:\n", prefix.c_str(), name.c_str(), Dim());
+                        "%sLowRankUpdateSymMatrix \"%s\" with %" IPOPT_INDEX_FORMAT " rows and columns:\n", prefix.c_str(), name.c_str(), Dim());
 
    if( ReducedDiag() )
    {

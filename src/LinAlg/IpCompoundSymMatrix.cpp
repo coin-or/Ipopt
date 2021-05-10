@@ -249,18 +249,18 @@ void CompoundSymMatrix::PrintImpl(
    jnlst.Printf(level, category,
                 "\n");
    jnlst.PrintfIndented(level, category, indent,
-                        "%sCompoundSymMatrix \"%s\" with %d rows and columns components:\n", prefix.c_str(), name.c_str(), NComps_Dim());
+                        "%sCompoundSymMatrix \"%s\" with %" IPOPT_INDEX_FORMAT " rows and columns components:\n", prefix.c_str(), name.c_str(), NComps_Dim());
    for( Index irow = 0; irow < NComps_Dim(); irow++ )
    {
       for( Index jcol = 0; jcol <= irow; jcol++ )
       {
          jnlst.PrintfIndented(level, category, indent,
-                              "%sComponent for row %d and column %d:\n", prefix.c_str(), irow, jcol);
+                              "%sComponent for row %" IPOPT_INDEX_FORMAT " and column %" IPOPT_INDEX_FORMAT ":\n", prefix.c_str(), irow, jcol);
          if( ConstComp(irow, jcol) )
          {
             DBG_ASSERT(name.size() < 200);
             char buffer[256];
-            Snprintf(buffer, 255, "%s[%d][%d]", name.c_str(), irow, jcol);
+            Snprintf(buffer, 255, "%s[%" IPOPT_INDEX_FORMAT "][%" IPOPT_INDEX_FORMAT "]", name.c_str(), irow, jcol);
             std::string term_name = buffer;
             ConstComp(irow, jcol)->Print(&jnlst, level, category, term_name, indent + 1, prefix);
          }

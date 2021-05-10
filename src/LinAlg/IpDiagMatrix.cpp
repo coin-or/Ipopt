@@ -83,7 +83,7 @@ void DiagMatrix::PrintImpl(
    jnlst.Printf(level, category,
                 "\n");
    jnlst.PrintfIndented(level, category, indent,
-                        "%sDiagMatrix \"%s\" with %d rows and columns, and with diagonal elements:\n", prefix.c_str(), name.c_str(),
+                        "%sDiagMatrix \"%s\" with %" IPOPT_INDEX_FORMAT " rows and columns, and with diagonal elements:\n", prefix.c_str(), name.c_str(),
                         Dim());
    if( IsValid(diag_) )
    {

@@ -76,7 +76,7 @@ void AmplTNLP::gutsOfConstructor(
    DBG_ASSERT(n_var > 0); // need some continuous variables
    if( !allow_discrete && (nbv > 0 || niv > 0 || nlvbi > 0 || nlvci > 0 || nlvoi > 0) )
    {
-      jnlst_->Printf(J_WARNING, J_MAIN, "==> Warning: Treating %d binary and %d integer variables as continous.\n\n",
+      jnlst_->Printf(J_WARNING, J_MAIN, "==> Warning: Treating %d binary and %d integer variables as continuous.\n\n",
                      nbv, niv + nlvbi + nlvci + nlvoi);
       // never used: allow_discrete = true;
    }
@@ -1687,7 +1687,7 @@ bool AmplTNLP::nerror_ok(
    }
    jnlst_->Printf(J_ERROR, J_MAIN,
                   "Error in an AMPL evaluation. Run with \"halt_on_ampl_error yes\" to see details.\n");
-   DBG_PRINT((1, "nerror = %d\n", *((fint*)nerror)));
+   DBG_PRINT((1, "nerror = %ld\n", *((fint*)nerror)));
    return false;
 }
 

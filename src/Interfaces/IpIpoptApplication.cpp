@@ -637,7 +637,7 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
       // case, we rethrow the TOO_FEW_DOF exception here
       ASSERT_EXCEPTION(status != TOO_FEW_DEGREES_OF_FREEDOM, TOO_FEW_DOF, "Too few degrees of freedom (rethrown)!");
 
-      jnlst_->Printf(J_SUMMARY, J_SOLUTION, "\nNumber of Iterations....: %d\n", p2ip_data->iter_count());
+      jnlst_->Printf(J_SUMMARY, J_SOLUTION, "\nNumber of Iterations....: %" IPOPT_INDEX_FORMAT "\n", p2ip_data->iter_count());
 
       if( status != INVALID_NUMBER_DETECTED )
       {
@@ -681,19 +681,19 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
          p2ip_cq->curr_d_minus_s()->Print(*jnlst_, J_VECTOR, J_SOLUTION, "curr_d_minus_s");
       }
 
-      jnlst_->Printf(J_SUMMARY, J_STATISTICS, "\nNumber of objective function evaluations             = %d\n",
+      jnlst_->Printf(J_SUMMARY, J_STATISTICS, "\nNumber of objective function evaluations             = %" IPOPT_INDEX_FORMAT "\n",
                      p2ip_nlp->f_evals());
-      jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Number of objective gradient evaluations             = %d\n",
+      jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Number of objective gradient evaluations             = %" IPOPT_INDEX_FORMAT "\n",
                      p2ip_nlp->grad_f_evals());
-      jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Number of equality constraint evaluations            = %d\n",
+      jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Number of equality constraint evaluations            = %" IPOPT_INDEX_FORMAT "\n",
                      p2ip_nlp->c_evals());
-      jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Number of inequality constraint evaluations          = %d\n",
+      jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Number of inequality constraint evaluations          = %" IPOPT_INDEX_FORMAT "\n",
                      p2ip_nlp->d_evals());
-      jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Number of equality constraint Jacobian evaluations   = %d\n",
+      jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Number of equality constraint Jacobian evaluations   = %" IPOPT_INDEX_FORMAT "\n",
                      p2ip_nlp->jac_c_evals());
-      jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Number of inequality constraint Jacobian evaluations = %d\n",
+      jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Number of inequality constraint Jacobian evaluations = %" IPOPT_INDEX_FORMAT "\n",
                      p2ip_nlp->jac_d_evals());
-      jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Number of Lagrangian Hessian evaluations             = %d\n",
+      jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Number of Lagrangian Hessian evaluations             = %" IPOPT_INDEX_FORMAT "\n",
                      p2ip_nlp->h_evals());
       Number wall_time_overall_alg = p2ip_data->TimingStats().OverallAlgorithm().TotalWallclockTime();
       if( p2ip_data->TimingStats().IsFunctionEvaluationTimeEnabled() )

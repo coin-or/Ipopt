@@ -518,7 +518,7 @@ ESymSolverStatus Ma97SolverInterface::InitializeStructure(
          return SYMSOLVER_FATAL_ERROR;
       }
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "AMD   nfactor = %d, nflops = %d:\n", info2.num_factor, info2.num_flops);
+                     "AMD   nfactor = %ld, nflops = %ld:\n", info2.num_factor, info2.num_flops);
       control_.ordering = 3; // METIS
       ma97_analyse(0, dim, ia, ja, NULL, &akeep_metis, &control_, &info, NULL);
       if( info.flag < 0 )
@@ -526,7 +526,7 @@ ESymSolverStatus Ma97SolverInterface::InitializeStructure(
          return SYMSOLVER_FATAL_ERROR;
       }
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "MeTiS nfactor = %d, nflops = %d:\n", info.num_factor, info.num_flops);
+                     "MeTiS nfactor = %ld, nflops = %ld:\n", info.num_factor, info.num_flops);
       if( info.num_flops > info2.num_flops )
       {
          // Use AMD
@@ -590,7 +590,7 @@ ESymSolverStatus Ma97SolverInterface::InitializeStructure(
    }
 
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                  "HSL_MA97: PREDICTED nfactor %d, maxfront %d\n", info.num_factor, info.maxfront);
+                  "HSL_MA97: PREDICTED nfactor %ld, maxfront %d\n", info.num_factor, info.maxfront);
 
    if( HaveIpData() )
    {
@@ -677,7 +677,7 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
          }
 
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                        "HSL_MA97: PREDICTED nfactor %d, maxfront %d\n", info.num_factor, info.maxfront);
+                        "HSL_MA97: PREDICTED nfactor %ld, maxfront %d\n", info.num_factor, info.maxfront);
 
          if( HaveIpData() )
          {
@@ -707,7 +707,7 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
       //ma97_factor_solve(4, ia, ja, val_, nrhs, rhs_vals, ndim_, &akeep_, &fkeep_,
       //                  &control_, &info, scaling_);
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "HSL_MA97: delays %d, nfactor %d, nflops %ld, maxfront %d\n", info.num_delay, info.num_factor, info.num_flops, info.maxfront);
+                     "HSL_MA97: delays %d, nfactor %ld, nflops %ld, maxfront %d\n", info.num_delay, info.num_factor, info.num_flops, info.maxfront);
       if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemFactorization().End();
@@ -778,7 +778,7 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
       if( check_NegEVals && info.num_neg != numberOfNegEVals )
       {
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                        "In Ma97SolverInterface::Factorization: info.num_neg = %d, but numberOfNegEVals = %d\n", info.num_neg, numberOfNegEVals);
+                        "In Ma97SolverInterface::Factorization: info.num_neg = %d, but numberOfNegEVals = %" IPOPT_INDEX_FORMAT "\n", info.num_neg, numberOfNegEVals);
          return SYMSOLVER_WRONG_INERTIA;
       }
 

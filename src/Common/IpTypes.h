@@ -52,16 +52,24 @@ typedef double ipnumber;
 #endif
 
 #ifdef IPOPT_INT64
-#include <stdint.h>
+#include <inttypes.h>
 /** Type of all indices of vectors, matrices etc
  * @since 3.14.0
  */
 typedef int64_t ipindex;
+/** Format specifier to use for ipindex in printf-format strings
+ * @since 3.14.0
+ */
+#define IPOPT_INDEX_FORMAT PRId64
 #else
 /** Type of all indices of vectors, matrices etc
  * @since 3.14.0
  */
 typedef int ipindex;
+/** Format specifier to use for ipindex in printf-format strings
+ * @since 3.14.0
+ */
+#define IPOPT_INDEX_FORMAT "d"
 #endif
 
 /** Type of Fortran integer translated into C

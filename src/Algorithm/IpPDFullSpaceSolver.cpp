@@ -642,7 +642,7 @@ bool PDFullSpaceSolver::SolveOnce(
 
       // Some output
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "Number of trial factorizations performed: %d\n", count);
+                     "Number of trial factorizations performed: %" IPOPT_INDEX_FORMAT "\n", count);
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Perturbation parameters: delta_x=%e delta_s=%e\n                         delta_c=%e delta_d=%e\n", delta_x,
                      delta_s, delta_c, delta_d);

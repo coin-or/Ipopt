@@ -266,7 +266,7 @@ void DenseSymMatrix::PrintImpl(
    jnlst.Printf(level, category,
                 "\n");
    jnlst.PrintfIndented(level, category, indent,
-                        "%sDenseSymMatrix \"%s\" of dimension %d (only lower triangular part printed):\n", prefix.c_str(), name.c_str(),
+                        "%sDenseSymMatrix \"%s\" of dimension %" IPOPT_INDEX_FORMAT " (only lower triangular part printed):\n", prefix.c_str(), name.c_str(),
                         Dim());
 
    if( initialized_ )

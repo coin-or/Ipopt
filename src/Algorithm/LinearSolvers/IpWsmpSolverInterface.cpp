@@ -240,7 +240,7 @@ bool WsmpSolverInterface::InitializeImpl(
    Index NTHREADS = wsmp_num_threads_;
    IPOPT_WSMP_FUNC(wsetmaxthrds, WSETMAXTHRDS)(&NTHREADS);
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                  "WSMP will use %d threads.\n", wsmp_num_threads_);
+                  "WSMP will use %" IPOPT_INDEX_FORMAT " threads.\n", wsmp_num_threads_);
 
    // Get WSMP's default parameters and set the ones we want differently
    IPARM_[0] = 0;
@@ -253,7 +253,7 @@ bool WsmpSolverInterface::InitializeImpl(
 
    if( IPARM_[63] < 0 )
    {
-      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Error %d from WSMP initialization.\n", IPARM_[63]);
+      Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA, "Error %" IPOPT_INDEX_FORMAT " from WSMP initialization.\n", IPARM_[63]);
       return false;
    }
 
@@ -304,7 +304,7 @@ ESymSolverStatus WsmpSolverInterface::MultiSolve(
    if( !printed_num_threads_ )
    {
       Jnlst().Printf(J_ITERSUMMARY, J_LINEAR_ALGEBRA,
-                     "  -- WSMP is working with %d thread%s.\n", IPARM_[32], IPARM_[32] == 1 ? "" : "s");
+                     "  -- WSMP is working with %" IPOPT_INDEX_FORMAT " thread%s.\n", IPARM_[32], IPARM_[32] == 1 ? "" : "s");
       printed_num_threads_ = true;
    }
    // check if a factorization has to be done
@@ -447,7 +447,7 @@ ESymSolverStatus WsmpSolverInterface::InternalSymFact(
    {
       IPARM_[14] = dim_ - numberOfNegEVals; // CHECK
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                     "Restricting WSMP static pivot sequence with IPARM(15) = %d\n", IPARM_[14]);
+                     "Restricting WSMP static pivot sequence with IPARM(15) = %" IPOPT_INDEX_FORMAT "\n", IPARM_[14]);
    }
 
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
@@ -472,7 +472,7 @@ ESymSolverStatus WsmpSolverInterface::InternalSymFact(
       else if( ierror > 0 )
       {
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                        "Matrix appears to be singular (with ierror = %d).\n", ierror);
+                        "Matrix appears to be singular (with ierror = %" IPOPT_INDEX_FORMAT ").\n", ierror);
          if( HaveIpData() )
          {
             IpData().TimingStats().LinearSystemSymbolicFactorization().End();
@@ -482,7 +482,7 @@ ESymSolverStatus WsmpSolverInterface::InternalSymFact(
       else
       {
          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                        "Error in WSMP during ordering/symbolic factorization phase.\n     Error code is %d.\n", ierror);
+                        "Error in WSMP during ordering/symbolic factorization phase.\n     Error code is %" IPOPT_INDEX_FORMAT ".\n", ierror);
       }
       if( HaveIpData() )
       {
@@ -491,9 +491,9 @@ ESymSolverStatus WsmpSolverInterface::InternalSymFact(
       return SYMSOLVER_FATAL_ERROR;
    }
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                  "Predicted memory usage for WSSMP after symbolic factorization IPARM(23)= %d.\n", IPARM_[22]);
+                  "Predicted memory usage for WSSMP after symbolic factorization IPARM(23)= %" IPOPT_INDEX_FORMAT ".\n", IPARM_[22]);
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                  "Predicted number of nonzeros in factor for WSSMP after symbolic factorization IPARM(23)= %d.\n", IPARM_[23]);
+                  "Predicted number of nonzeros in factor for WSSMP after symbolic factorization IPARM(23)= %" IPOPT_INDEX_FORMAT ".\n", IPARM_[23]);
 
    if( HaveIpData() )
    {
@@ -522,18 +522,18 @@ ESymSolverStatus WsmpSolverInterface::Factorization(
    {
       matrix_file_number_++;
       char buf[256];
-      Snprintf(buf, 255, "wsmp_matrix_%d_%d.dat", iter_count, matrix_file_number_);
+      Snprintf(buf, 255, "wsmp_matrix_%" IPOPT_INDEX_FORMAT "_%" IPOPT_INDEX_FORMAT ".dat", iter_count, matrix_file_number_);
       Jnlst().Printf(J_SUMMARY, J_LINEAR_ALGEBRA,
                      "Writing WSMP matrix into file %s.\n", buf);
       FILE* fp = fopen(buf, "w");
-      fprintf(fp, "%d\n", dim_); // N
+      fprintf(fp, "%" IPOPT_INDEX_FORMAT "\n", dim_); // N
       for( Index icol = 0; icol < dim_; icol++ )
       {
-         fprintf(fp, "%d", ia[icol + 1] - ia[icol]); // number of elements for this column
+         fprintf(fp, "%" IPOPT_INDEX_FORMAT "", ia[icol + 1] - ia[icol]); // number of elements for this column
          // Now for each colum we write row indices and values
          for( Index irow = ia[icol]; irow < ia[icol + 1]; irow++ )
          {
-            fprintf(fp, " %23.16e %d", a_[irow - 1], ja[irow - 1]);
+            fprintf(fp, " %23.16e %" IPOPT_INDEX_FORMAT "", a_[irow - 1], ja[irow - 1]);
          }
          fprintf(fp, "\n");
       }
@@ -589,7 +589,7 @@ ESymSolverStatus WsmpSolverInterface::Factorization(
    if( ierror > 0 )
    {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "WSMP detected that the matrix is singular and encountered %d zero pivots.\n", dim_ + 1 - ierror);
+                     "WSMP detected that the matrix is singular and encountered %" IPOPT_INDEX_FORMAT " zero pivots.\n", dim_ + 1 - ierror);
       if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemFactorization().End();
@@ -606,7 +606,7 @@ ESymSolverStatus WsmpSolverInterface::Factorization(
       else
       {
          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                        "Error in WSMP during factorization phase.\n     Error code is %d.\n", ierror);
+                        "Error in WSMP during factorization phase.\n     Error code is %" IPOPT_INDEX_FORMAT ".\n", ierror);
       }
       if( HaveIpData() )
       {
@@ -615,9 +615,9 @@ ESymSolverStatus WsmpSolverInterface::Factorization(
       return SYMSOLVER_FATAL_ERROR;
    }
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                  "Memory usage for WSSMP after factorization IPARM(23) = %d\n", IPARM_[22]);
+                  "Memory usage for WSSMP after factorization IPARM(23) = %" IPOPT_INDEX_FORMAT "\n", IPARM_[22]);
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                  "Number of nonzeros in WSSMP after factorization IPARM(24) = %d\n", IPARM_[23]);
+                  "Number of nonzeros in WSSMP after factorization IPARM(24) = %" IPOPT_INDEX_FORMAT "\n", IPARM_[23]);
 
    if( factorizations_since_recomputed_ordering_ != -1 )
    {
@@ -631,7 +631,7 @@ ESymSolverStatus WsmpSolverInterface::Factorization(
    if( check_NegEVals && (numberOfNegEVals != negevals_) )
    {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "Wrong inertia: required are %d, but we got %d.\n", numberOfNegEVals, negevals_);
+                     "Wrong inertia: required are %" IPOPT_INDEX_FORMAT ", but we got %" IPOPT_INDEX_FORMAT ".\n", numberOfNegEVals, negevals_);
       if( skip_inertia_check_ )
       {
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
@@ -724,12 +724,12 @@ ESymSolverStatus WsmpSolverInterface::Solve(
       else
       {
          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                        "Error in WSMP during ordering/symbolic factorization phase.\n     Error code is %d.\n", ierror);
+                        "Error in WSMP during ordering/symbolic factorization phase.\n     Error code is %" IPOPT_INDEX_FORMAT ".\n", ierror);
       }
       return SYMSOLVER_FATAL_ERROR;
    }
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                  "Number of iterative refinement steps in WSSMP: %d\n", IPARM_[5]);
+                  "Number of iterative refinement steps in WSSMP: %" IPOPT_INDEX_FORMAT "\n", IPARM_[5]);
 
 #ifdef PARDISO_MATCHING_PREPROCESS
    delete [] X;
@@ -836,7 +836,7 @@ ESymSolverStatus WsmpSolverInterface::DetermineDependentRows(
    if( ierror > 0 )
    {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "WSMP detected that the matrix is singular and encountered %d zero pivots.\n", dim_ + 1 - ierror);
+                     "WSMP detected that the matrix is singular and encountered %" IPOPT_INDEX_FORMAT " zero pivots.\n", dim_ + 1 - ierror);
       if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemFactorization().End();
@@ -853,7 +853,7 @@ ESymSolverStatus WsmpSolverInterface::DetermineDependentRows(
       else
       {
          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                        "Error in WSMP during factorization phase.\n     Error code is %d.\n", ierror);
+                        "Error in WSMP during factorization phase.\n     Error code is %" IPOPT_INDEX_FORMAT ".\n", ierror);
       }
       if( HaveIpData() )
       {

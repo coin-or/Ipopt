@@ -134,7 +134,7 @@ bool StdStepCalculator::Step(
          IpBlasCopy(old_delta_u->Dim(), old_delta_u->Values(), 1, new_du_values, 1);
          for( Index i = 0; i < (int) x_bound_violations_idx.size(); ++i )
          {
-            //   printf("i=%d, delta_u_sort[i]=%d, x_bound_viol_du[i]=%f\n", i, delta_u_sort[i], x_bound_violations_du[i]);
+            //   printf("i=%" IPOPT_INDEX_FORMAT ", delta_u_sort[i]=%" IPOPT_INDEX_FORMAT ", x_bound_viol_du[i]=%f\n", i, delta_u_sort[i], x_bound_violations_du[i]);
             new_du_values[delta_u_sort[i]] = x_bound_violations_du[i];
          }
          SmartPtr<IteratesVector> new_sol = sol.MakeNewIteratesVector();
@@ -254,7 +254,7 @@ bool StdStepCalculator::BoundCheck(
       {
          x_bound_violations_idx.push_back(i + z_L_ItVec_idx);
          x_bound_violations_du.push_back(-z_L_trial_val[i]);
-         //printf("Lower Bound Mult. no. i=%d invalid: delta_u=%f\n", i+z_L_ItVec_idx, z_L_val[i]);
+         //printf("Lower Bound Mult. no. i=%" IPOPT_INDEX_FORMAT " invalid: delta_u=%f\n", i+z_L_ItVec_idx, z_L_val[i]);
       }
    }
 
@@ -264,7 +264,7 @@ bool StdStepCalculator::BoundCheck(
       {
          x_bound_violations_idx.push_back(i + z_U_ItVec_idx);
          x_bound_violations_du.push_back(-z_U_trial_val[i]);
-         //printf("Upper Bound Mult. no. i=%d invalid: delta_u=%f\n", i+z_U_ItVec_idx, z_U_val[i]);
+         //printf("Upper Bound Mult. no. i=%" IPOPT_INDEX_FORMAT " invalid: delta_u=%f\n", i+z_U_ItVec_idx, z_U_val[i]);
       }
    }
 

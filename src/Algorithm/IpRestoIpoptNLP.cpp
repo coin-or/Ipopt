@@ -203,7 +203,7 @@ bool RestoIpoptNLP::InitializeStructures(
    // matrix px_u
    total_rows = orig_x_space->Dim() + 2 * orig_c_space->Dim() + 2 * orig_d_space->Dim();
    total_cols = orig_x_u_space->Dim();
-   DBG_PRINT((1, "total_rows = %d, total_cols = %d\n", total_rows, total_cols));
+   DBG_PRINT((1, "total_rows = %" IPOPT_INDEX_FORMAT ", total_cols = %" IPOPT_INDEX_FORMAT "\n", total_rows, total_cols));
    px_u_space_ = new CompoundMatrixSpace(5, 1, total_rows, total_cols);
    px_u_space_->SetBlockRows(0, orig_x_space->Dim());
    px_u_space_->SetBlockRows(1, orig_c_space->Dim());

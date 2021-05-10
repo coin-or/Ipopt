@@ -252,7 +252,7 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
    DBG_START_METH("BacktrackingLineSearch::FindAcceptableTrialPoint",
                   dbg_verbosity);
    Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                  "--> Starting line search in iteration %d <--\n", IpData().iter_count());
+                  "--> Starting line search in iteration %" IPOPT_INDEX_FORMAT " <--\n", IpData().iter_count());
 
    Number curr_mu = IpData().curr_mu();
    if( last_mu_ != curr_mu )
@@ -572,7 +572,7 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
                if( found_acceptable )
                {
                   Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
-                                 "Cannot call restoration phase at almost feasible point,\n  but acceptable point from iteration %d could be restored.\n",
+                                 "Cannot call restoration phase at almost feasible point,\n  but acceptable point from iteration %" IPOPT_INDEX_FORMAT " could be restored.\n",
                                  acceptable_iteration_number_);
                   THROW_EXCEPTION(ACCEPTABLE_POINT_REACHED,
                                   "Restoration phase called at almost feasible point, but acceptable point could be restored.\n");

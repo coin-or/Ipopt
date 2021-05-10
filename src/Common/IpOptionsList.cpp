@@ -210,7 +210,7 @@ bool OptionsList::SetIntegerValue(
 )
 {
    char buffer[256];
-   Snprintf(buffer, 255, "%d", value);
+   Snprintf(buffer, 255, "%" IPOPT_INDEX_FORMAT, value);
 
    if( IsValid(reg_options_) )
    {

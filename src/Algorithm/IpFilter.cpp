@@ -102,7 +102,7 @@ void Filter::Print(
 {
    DBG_START_METH("FilterLineSearch::Filter::Print", dbg_verbosity);
    jnlst.Printf(J_DETAILED, J_LINE_SEARCH,
-                "The current filter has %d entries.\n", filter_list_.size());
+                "The current filter has %zd entries.\n", filter_list_.size());
    if( !jnlst.ProduceOutput(J_VECTOR, J_LINE_SEARCH) )
    {
       return;

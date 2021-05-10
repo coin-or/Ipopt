@@ -690,7 +690,7 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
       lm_skipped_iter_++;
    }
    Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
-                  "Number of successive iterations with skipping: %d\n", lm_skipped_iter_);
+                  "Number of successive iterations with skipping: %" IPOPT_INDEX_FORMAT "\n", lm_skipped_iter_);
 
    // Keep stuff around in case we want to skip SR1 retroactively
    // because of negative curvature!

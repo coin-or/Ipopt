@@ -235,7 +235,7 @@ inline Observer::~Observer()
    {
       for( size_t i = 0; i < subjects_.size(); ++i )
       {
-         DBG_PRINT((1, "subjects_[%d] = 0x%x\n", i, subjects_[i]));
+         DBG_PRINT((1, "subjects_[%zd] = 0x%x\n", i, subjects_[i]));
       }
    }
 #endif
@@ -243,7 +243,7 @@ inline Observer::~Observer()
    for( size_t i = subjects_.size(); i > 0; --i )
    {
 #ifdef IP_DEBUG_OBSERVER
-      DBG_PRINT((1, "About to detach subjects_[%d] = 0x%x\n", i, subjects_[i-1]));
+      DBG_PRINT((1, "About to detach subjects_[%zd] = 0x%x\n", i, subjects_[i-1]));
 #endif
 
       RequestDetach(NT_All, subjects_[i-1]);

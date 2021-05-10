@@ -136,7 +136,7 @@ ConvergenceCheck::ConvergenceStatus RestoConvergenceCheck::CheckConvergence(
    if( successive_resto_iter_ > maximum_resto_iters_ )
    {
       Jnlst().Printf(J_WARNING, J_MAIN,
-                     "More than %d successive iterations taken in restoration phase.\n", maximum_resto_iters_);
+                     "More than %" IPOPT_INDEX_FORMAT " successive iterations taken in restoration phase.\n", maximum_resto_iters_);
       return ConvergenceCheck::MAXITER_EXCEEDED;
    }
    successive_resto_iter_++;

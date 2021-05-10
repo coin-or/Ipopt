@@ -72,7 +72,7 @@ void RestoIterationOutput::WriteOutput()
    Jnlst().Printf(J_DETAILED, J_MAIN,
                   "\n\n**************************************************\n");
    Jnlst().Printf(J_DETAILED, J_MAIN,
-                  "*** Summary of Iteration %d for original NLP:", IpData().iter_count());
+                  "*** Summary of Iteration %" IPOPT_INDEX_FORMAT " for original NLP:", IpData().iter_count());
    Jnlst().Printf(J_DETAILED, J_MAIN,
                   "\n**************************************************\n\n");
    if( IpData().info_iters_since_header() >= 10 && !IsValid(resto_orig_iteration_output_) )
@@ -180,7 +180,7 @@ void RestoIterationOutput::WriteOutput()
       Jnlst().Printf(J_DETAILED, J_MAIN,
                      "\n**************************************************\n");
       Jnlst().Printf(J_DETAILED, J_MAIN,
-                     "*** Beginning Iteration %d from the following point:", IpData().iter_count());
+                     "*** Beginning Iteration %" IPOPT_INDEX_FORMAT " from the following point:", IpData().iter_count());
       Jnlst().Printf(J_DETAILED, J_MAIN,
                      "\n**************************************************\n\n");
 
@@ -264,7 +264,7 @@ void RestoIterationOutput::WriteOutput()
    if( Jnlst().ProduceOutput(J_DETAILED, J_MAIN) )
    {
       Jnlst().Printf(J_DETAILED, J_MAIN,
-                     "\n\n***Current NLP Values for Iteration (Restoration phase problem) %d:\n", IpData().iter_count());
+                     "\n\n***Current NLP Values for Iteration (Restoration phase problem) %" IPOPT_INDEX_FORMAT ":\n", IpData().iter_count());
       Jnlst().Printf(J_DETAILED, J_MAIN,
                      "\n                                   (scaled)                 (unscaled)\n");
       Jnlst().Printf(J_DETAILED, J_MAIN,

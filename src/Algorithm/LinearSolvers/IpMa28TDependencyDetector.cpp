@@ -120,7 +120,7 @@ bool Ma28TDependencyDetector::DetermineDependentRows(
    if( IERR != 0 )
    {
       jnlst_->Printf(J_WARNING, J_INITIALIZATION,
-                     "MA28 returns IERR = %d when trying to determine dependent constraints\n", IERR);
+                     "MA28 returns IERR = %" IPOPT_INDEX_FORMAT " when trying to determine dependent constraints\n", IERR);
       delete[] IDEGEN;
       return false;
    }

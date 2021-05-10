@@ -838,7 +838,6 @@ inline static void hessvals(
    Number        fact
 )
 {
-   //printf("ihes = %d\n",ihes);
    const Number D = (4 * x[ij] - x[imj] - x[ipj] - x[ijm] - x[ijp]) / hh_;
    const Number val = fact * (1. + 0.5 * sin(D) - 2. * sin(D) * sin(D));
 

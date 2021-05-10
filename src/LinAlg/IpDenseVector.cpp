@@ -1465,7 +1465,7 @@ void DenseVector::PrintImplOffset(
 ) const
 {
    jnlst.PrintfIndented(level, category, indent,
-                        "%sDenseVector \"%s\" with %d elements:\n", prefix.c_str(),
+                        "%sDenseVector \"%s\" with %" IPOPT_INDEX_FORMAT " elements:\n", prefix.c_str(),
                         name.c_str(), Dim());
 
    if( initialized_ )

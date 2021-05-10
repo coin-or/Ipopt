@@ -91,7 +91,7 @@ void RegisteredOption::OutputDescription(
       if( has_lower_ )
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                      "%d", (Index) lower_);
+                      "%" IPOPT_INDEX_FORMAT, (Index) lower_);
       }
       else
       {
@@ -100,12 +100,12 @@ void RegisteredOption::OutputDescription(
       }
 
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                   " <= (%d) <= ", (Index) default_number_);
+                   " <= (%" IPOPT_INDEX_FORMAT ") <= ", (Index) default_number_);
 
       if( has_upper_ )
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                      "%d\n", (Index) upper_);
+                      "%" IPOPT_INDEX_FORMAT "\n", (Index) upper_);
       }
       else
       {
@@ -234,7 +234,7 @@ void RegisteredOption::OutputLatexDescription(
       if( has_lower_ )
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                      "%d \\le ", (Index) lower_);
+                      "%" IPOPT_INDEX_FORMAT " \\le ", (Index) lower_);
       }
       else
       {
@@ -248,7 +248,7 @@ void RegisteredOption::OutputLatexDescription(
       if( has_upper_ )
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                      " \\le %d", (Index) upper_);
+                      " \\le %" IPOPT_INDEX_FORMAT "", (Index) upper_);
       }
       else
       {
@@ -257,7 +257,7 @@ void RegisteredOption::OutputLatexDescription(
       }
 
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                   "$\nand its default value is $%d$.\n\n", (Index) default_number_);
+                   "$\nand its default value is $%" IPOPT_INDEX_FORMAT "$.\n\n", (Index) default_number_);
    }
    else if( type_ == OT_String )
    {
@@ -447,7 +447,7 @@ void RegisteredOption::OutputDoxygenDescription(
          if( has_lower_ )
          {
             jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                         "%d &le; ", (Index) lower_);
+                         "%" IPOPT_INDEX_FORMAT " &le; ", (Index) lower_);
          }
          //else
          //{
@@ -461,7 +461,7 @@ void RegisteredOption::OutputDoxygenDescription(
          if( has_upper_ )
          {
             jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                         " &le; %d", (Index) upper_);
+                         " &le; %" IPOPT_INDEX_FORMAT "", (Index) upper_);
          }
          //else
          //{
@@ -476,7 +476,7 @@ void RegisteredOption::OutputDoxygenDescription(
       }
 
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                   " and its default value is %d.\n", (Index) default_number_);
+                   " and its default value is %" IPOPT_INDEX_FORMAT ".\n", (Index) default_number_);
    }
    else if( type_ == OT_String )
    {

@@ -522,7 +522,7 @@ void IpoptAlgorithm::UpdateHessian()
    Jnlst().Printf(J_DETAILED, J_MAIN,
                   "\n**************************************************\n");
    Jnlst().Printf(J_DETAILED, J_MAIN,
-                  "*** Update HessianMatrix for Iteration %d:", IpData().iter_count());
+                  "*** Update HessianMatrix for Iteration %" IPOPT_INDEX_FORMAT ":", IpData().iter_count());
    Jnlst().Printf(J_DETAILED, J_MAIN,
                   "\n**************************************************\n\n");
    hessian_updater_->UpdateHessian();
@@ -533,7 +533,7 @@ bool IpoptAlgorithm::UpdateBarrierParameter()
    Jnlst().Printf(J_DETAILED, J_MAIN,
                   "\n**************************************************\n");
    Jnlst().Printf(J_DETAILED, J_MAIN,
-                  "*** Update Barrier Parameter for Iteration %d:", IpData().iter_count());
+                  "*** Update Barrier Parameter for Iteration %" IPOPT_INDEX_FORMAT ":", IpData().iter_count());
    Jnlst().Printf(J_DETAILED, J_MAIN,
                   "\n**************************************************\n\n");
    bool retval = mu_update_->UpdateBarrierParameter();
@@ -559,7 +559,7 @@ bool IpoptAlgorithm::ComputeSearchDirection()
    Jnlst().Printf(J_DETAILED, J_MAIN,
                   "\n**************************************************\n");
    Jnlst().Printf(J_DETAILED, J_MAIN,
-                  "*** Solving the Primal Dual System for Iteration %d:", IpData().iter_count());
+                  "*** Solving the Primal Dual System for Iteration %" IPOPT_INDEX_FORMAT ":", IpData().iter_count());
    Jnlst().Printf(J_DETAILED, J_MAIN,
                   "\n**************************************************\n\n");
 
@@ -568,13 +568,13 @@ bool IpoptAlgorithm::ComputeSearchDirection()
    if( retval )
    {
       Jnlst().Printf(J_MOREVECTOR, J_MAIN,
-                     "*** Step Calculated for Iteration: %d\n", IpData().iter_count());
+                     "*** Step Calculated for Iteration: %" IPOPT_INDEX_FORMAT "\n", IpData().iter_count());
       IpData().delta()->Print(Jnlst(), J_MOREVECTOR, J_MAIN, "delta");
    }
    else
    {
       Jnlst().Printf(J_DETAILED, J_MAIN,
-                     "*** Step could not be computed in iteration %d!\n", IpData().iter_count());
+                     "*** Step could not be computed in iteration %" IPOPT_INDEX_FORMAT "!\n", IpData().iter_count());
    }
 
    return retval;
@@ -585,7 +585,7 @@ void IpoptAlgorithm::ComputeAcceptableTrialPoint()
    Jnlst().Printf(J_DETAILED, J_MAIN,
                   "\n**************************************************\n");
    Jnlst().Printf(J_DETAILED, J_MAIN,
-                  "*** Finding Acceptable Trial Point for Iteration %d:", IpData().iter_count());
+                  "*** Finding Acceptable Trial Point for Iteration %" IPOPT_INDEX_FORMAT ":", IpData().iter_count());
    Jnlst().Printf(J_DETAILED, J_MAIN,
                   "\n**************************************************\n\n");
    line_search_->FindAcceptableTrialPoint();
@@ -618,19 +618,19 @@ void IpoptAlgorithm::AcceptTrialPoint()
 
    // Adjust the bounds if necessary
    Index adjusted_slacks = IpCq().AdjustedTrialSlacks();
-   DBG_PRINT((1, "adjusted_slacks = %d\n", adjusted_slacks));
+   DBG_PRINT((1, "adjusted_slacks = %" IPOPT_INDEX_FORMAT "\n", adjusted_slacks));
    if( adjusted_slacks > 0 )
    {
       IpCq().ResetAdjustedTrialSlacks();
       if( adjusted_slacks == 1 )
       {
          Jnlst().Printf(J_WARNING, J_MAIN,
-                        "In iteration %d, %d Slack too small, adjusting variable bound\n", IpData().iter_count(), adjusted_slacks);
+                        "In iteration %" IPOPT_INDEX_FORMAT ", %" IPOPT_INDEX_FORMAT " Slack too small, adjusting variable bound\n", IpData().iter_count(), adjusted_slacks);
       }
       else
       {
          Jnlst().Printf(J_WARNING, J_MAIN,
-                        "In iteration %d, %d Slacks too small, adjusting variable bounds\n", IpData().iter_count(), adjusted_slacks);
+                        "In iteration %" IPOPT_INDEX_FORMAT ", %" IPOPT_INDEX_FORMAT " Slacks too small, adjusting variable bounds\n", IpData().iter_count(), adjusted_slacks);
       }
       if( Jnlst().ProduceOutput(J_VECTOR, J_MAIN) )
       {

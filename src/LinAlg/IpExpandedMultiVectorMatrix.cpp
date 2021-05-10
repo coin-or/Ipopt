@@ -204,7 +204,7 @@ void ExpandedMultiVectorMatrix::PrintImpl(
    jnlst.Printf(level, category,
                 "\n");
    jnlst.PrintfIndented(level, category, indent,
-                        "%sExpandedMultiVectorMatrix \"%s\" with %d columns:\n", prefix.c_str(), name.c_str(), NRows());
+                        "%sExpandedMultiVectorMatrix \"%s\" with %" IPOPT_INDEX_FORMAT " columns:\n", prefix.c_str(), name.c_str(), NRows());
 
    for( Index i = 0; i < NRows(); i++ )
    {
@@ -219,7 +219,7 @@ void ExpandedMultiVectorMatrix::PrintImpl(
       else
       {
          jnlst.PrintfIndented(level, category, indent,
-                              "%sVector in column %d is not yet set!\n", prefix.c_str(), i);
+                              "%sVector in column %" IPOPT_INDEX_FORMAT " is not yet set!\n", prefix.c_str(), i);
       }
    }
    SmartPtr<const ExpansionMatrix> P = GetExpansionMatrix();

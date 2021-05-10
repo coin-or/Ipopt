@@ -76,7 +76,7 @@ void ZeroSymMatrix::PrintImpl(
    jnlst.Printf(level, category,
                 "\n");
    jnlst.PrintfIndented(level, category, indent,
-                        "%sZeroSymMatrix \"%s\" with %d row and %d column components:\n", prefix.c_str(), name.c_str(), NRows(), NCols());
+                        "%sZeroSymMatrix \"%s\" with %" IPOPT_INDEX_FORMAT " row and %" IPOPT_INDEX_FORMAT " column components:\n", prefix.c_str(), name.c_str(), NRows(), NCols());
 }
 
 } // namespace Ipopt

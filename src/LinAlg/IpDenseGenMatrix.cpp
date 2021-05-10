@@ -434,7 +434,7 @@ void DenseGenMatrix::PrintImpl(
    jnlst.Printf(level, category,
                 "\n");
    jnlst.PrintfIndented(level, category, indent,
-                        "%sDenseGenMatrix \"%s\" with %d rows and %d columns:\n", prefix.c_str(), name.c_str(), NRows(), NCols());
+                        "%sDenseGenMatrix \"%s\" with %" IPOPT_INDEX_FORMAT " rows and %" IPOPT_INDEX_FORMAT " columns:\n", prefix.c_str(), name.c_str(), NRows(), NCols());
 
    if( initialized_ )
    {

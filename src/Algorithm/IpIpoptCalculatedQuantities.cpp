@@ -348,7 +348,7 @@ SmartPtr<const Vector> IpoptCalculatedQuantities::curr_slack_s_U()
          DBG_ASSERT(num_adjusted_slack_s_U_ == 0);
          num_adjusted_slack_s_U_ = CalculateSafeSlack(result, s_bound, s, ip_data_->curr()->v_U());
          DBG_PRINT_VECTOR(2, "result", *result);
-         DBG_PRINT((1, "num_adjusted_slack_s_U = %d\n", num_adjusted_slack_s_U_));
+         DBG_PRINT((1, "num_adjusted_slack_s_U = %" IPOPT_INDEX_FORMAT "\n", num_adjusted_slack_s_U_));
       }
       curr_slack_s_U_cache_.AddCachedResult1Dep(result, *s);
    }
@@ -444,7 +444,7 @@ SmartPtr<const Vector> IpoptCalculatedQuantities::trial_slack_s_U()
          DBG_PRINT_VECTOR(2, "result", *result);
          DBG_ASSERT(num_adjusted_slack_s_U_ == 0);
          num_adjusted_slack_s_U_ = CalculateSafeSlack(result, s_bound, s, ip_data_->curr()->v_U());
-         DBG_PRINT((1, "num_adjusted_slack_s_U = %d\n", num_adjusted_slack_s_U_));
+         DBG_PRINT((1, "num_adjusted_slack_s_U = %" IPOPT_INDEX_FORMAT "\n", num_adjusted_slack_s_U_));
          DBG_PRINT_VECTOR(2, "trial_slack_s_U", *result);
       }
       trial_slack_s_U_cache_.AddCachedResult1Dep(result, *s);
@@ -487,7 +487,7 @@ Index IpoptCalculatedQuantities::CalculateSafeSlack(
          t->ElementWiseMin(*zero_vec);  // t = -1 if slack < s_min, otherwise 0
          t->Scal(-1.0);                 // t =  1 if slack < s_min, otherwise 0
          retval = (Index) t->Asum();
-         DBG_PRINT((1, "Number of slack corrections = %d\n", retval));
+         DBG_PRINT((1, "Number of slack corrections = %" IPOPT_INDEX_FORMAT "\n", retval));
          DBG_PRINT_VECTOR(2, "t(sgn)", *t);
 
          // ToDo AW: I added the following line b/c I found a case where
@@ -534,9 +534,8 @@ Index IpoptCalculatedQuantities::AdjustedTrialSlacks()
 {
    DBG_START_METH("IpoptCalculatedQuantities::AdjustedTrialSlacks()",
                   dbg_verbosity);
-   Index result =
-      (num_adjusted_slack_x_L_ + num_adjusted_slack_x_U_ + num_adjusted_slack_s_L_ + num_adjusted_slack_s_U_);
-   DBG_PRINT((1, "result = %d\n", result));
+   Index result = num_adjusted_slack_x_L_ + num_adjusted_slack_x_U_ + num_adjusted_slack_s_L_ + num_adjusted_slack_s_U_;
+   DBG_PRINT((1, "result = %" IPOPT_INDEX_FORMAT "\n", result));
    return result;
 }
 

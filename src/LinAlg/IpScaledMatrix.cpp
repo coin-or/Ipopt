@@ -129,7 +129,7 @@ void ScaledMatrix::PrintImpl(
    jnlst.Printf(level, category,
                 "\n");
    jnlst.PrintfIndented(level, category, indent,
-                        "%sScaledMatrix \"%s\" of dimension %d x %d:\n", prefix.c_str(), name.c_str(), NRows(), NCols());
+                        "%sScaledMatrix \"%s\" of dimension %" IPOPT_INDEX_FORMAT " x %" IPOPT_INDEX_FORMAT ":\n", prefix.c_str(), name.c_str(), NRows(), NCols());
    if( IsValid(owner_space_->RowScaling()) )
    {
       owner_space_->RowScaling()->Print(&jnlst, level, category, name + "_row_scaling", indent + 1, prefix);

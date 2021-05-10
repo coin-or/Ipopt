@@ -377,7 +377,7 @@ ESymSolverStatus Ma27TSolverInterface::SymbolicFactorization(
    if( Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA) )
    {
       Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
-                     "\nMatrix structure given to MA27 with dimension %d and %d nonzero entries:\n", dim_, nonzeros_);
+                     "\nMatrix structure given to MA27 with dimension %" IPOPT_INDEX_FORMAT " and %" IPOPT_INDEX_FORMAT " nonzero entries:\n", dim_, nonzeros_);
       for( Index i = 0; i < nonzeros_; i++ )
       {
          Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
@@ -402,13 +402,13 @@ ESymSolverStatus Ma27TSolverInterface::SymbolicFactorization(
    const Index& nirnec = INFO[5];      // recommended value for liw
 
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                  "Return values from MA27AD: IFLAG = %d, IERROR = %d\n", iflag, ierror);
+                  "Return values from MA27AD: IFLAG = %" IPOPT_INDEX_FORMAT ", IERROR = %" IPOPT_INDEX_FORMAT "\n", iflag, ierror);
 
    // Check if error occurred
    if( iflag != 0 )
    {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                     "*** Error from MA27AD *** IFLAG = %d IERROR = %d\n", iflag, ierror);
+                     "*** Error from MA27AD *** IFLAG = %" IPOPT_INDEX_FORMAT " IERROR = %" IPOPT_INDEX_FORMAT "\n", iflag, ierror);
       if( iflag == 1 )
          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                         "The index of a matrix is out of range.\nPlease check your implementation of the Jacobian and Hessian matrices.\n");
@@ -425,20 +425,20 @@ ESymSolverStatus Ma27TSolverInterface::SymbolicFactorization(
       delete[] iw_;
       iw_ = NULL;
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-         "Size of integer work space recommended by MA27 is %d\n", nirnec);
+         "Size of integer work space recommended by MA27 is %" IPOPT_INDEX_FORMAT "\n", nirnec);
       liw_ = (Index) (liw_init_factor_ * (Number) (nirnec));
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-         "Setting integer work space size to %d\n", liw_);
+         "Setting integer work space size to %" IPOPT_INDEX_FORMAT "\n", liw_);
       iw_ = new Index[liw_];
 
       // Reserve memory for a_
       delete[] a_;
       a_ = NULL;
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-         "Size of doublespace recommended by MA27 is %d\n", nrlnec);
+         "Size of doublespace recommended by MA27 is %" IPOPT_INDEX_FORMAT "\n", nrlnec);
       la_ = Max(nonzeros_, (Index) (la_init_factor_ * (Number) (nrlnec)));
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-         "Setting double work space size to %d\n", la_);
+         "Setting double work space size to %" IPOPT_INDEX_FORMAT "\n", la_);
       a_ = new Number[la_];
    }
    catch( const std::bad_alloc& e )
@@ -483,7 +483,7 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
       delete[] a_old;
       la_increase_ = false;
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "In Ma27TSolverInterface::Factorization: Increasing la from %d to %d\n", la_old, la_);
+                     "In Ma27TSolverInterface::Factorization: Increasing la from %" IPOPT_INDEX_FORMAT " to %" IPOPT_INDEX_FORMAT "\n", la_old, la_);
    }
 
    // Check if liw should be increased
@@ -496,7 +496,7 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
       iw_ = new Index[liw_];
       liw_increase_ = false;
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "In Ma27TSolverInterface::Factorization: Increasing liw from %d to %d\n", liw_old, liw_);
+                     "In Ma27TSolverInterface::Factorization: Increasing liw from %" IPOPT_INDEX_FORMAT " to %" IPOPT_INDEX_FORMAT "\n", liw_old, liw_);
    }
 
    Index iflag;  // Information flag
@@ -521,9 +521,9 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
    negevals_ = INFO[14];  // Number of negative eigenvalues
 
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
-                  "Return values from MA27BD: IFLAG = %d, IERROR = %d\n", iflag, ierror);
+                  "Return values from MA27BD: IFLAG = %" IPOPT_INDEX_FORMAT ", IERROR = %" IPOPT_INDEX_FORMAT "\n", iflag, ierror);
 
-   DBG_PRINT((1, "Return from MA27BD iflag = %d and ierror = %d\n",
+   DBG_PRINT((1, "Return from MA27BD iflag = %" IPOPT_INDEX_FORMAT " and ierror = %" IPOPT_INDEX_FORMAT "\n",
               iflag, ierror));
 
    // Check if factorization failed due to insufficient memory space
@@ -551,7 +551,7 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
       iw_ = new Index[liw_];
       a_ = new Number[la_];
       Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                     "MA27BD returned iflag=%d and requires more memory.\n Increase liw from %d to %d and la from %d to %d and factorize again.\n",
+                     "MA27BD returned iflag=%" IPOPT_INDEX_FORMAT " and requires more memory.\n Increase liw from %" IPOPT_INDEX_FORMAT " to %" IPOPT_INDEX_FORMAT " and la from %" IPOPT_INDEX_FORMAT " to %" IPOPT_INDEX_FORMAT " and factorize again.\n",
                      iflag, liw_old, liw_, la_old, la_);
       if( HaveIpData() )
       {
@@ -573,7 +573,7 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
    {
       Index missing_rank = dim_ - INFO[1];
       Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                     "MA27BD returned iflag=%d and detected rank deficiency of degree %d.\n", iflag, missing_rank);
+                     "MA27BD returned iflag=%" IPOPT_INDEX_FORMAT " and detected rank deficiency of degree %" IPOPT_INDEX_FORMAT ".\n", iflag, missing_rank);
       // We correct the number of negative eigenvalues here to include
       // the zero eigenvalues, since otherwise we indicate the wrong
       // inertia.
@@ -595,19 +595,19 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
    {
       la_increase_ = true;
       Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                     "MA27BD returned ncmpbr=%d. Increase la before the next factorization.\n", ncmpbr);
+                     "MA27BD returned ncmpbr=%" IPOPT_INDEX_FORMAT ". Increase la before the next factorization.\n", ncmpbr);
    }
    if( ncmpbi >= 10 )
    {
       liw_increase_ = true;
       Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                     "MA27BD returned ncmpbi=%d. Increase liw before the next factorization.\n", ncmpbr);
+                     "MA27BD returned ncmpbi=%" IPOPT_INDEX_FORMAT ". Increase liw before the next factorization.\n", ncmpbr);
    }
 
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                  "Number of doubles for MA27 to hold factorization (INFO(9)) = %d\n", INFO[8]);
+                  "Number of doubles for MA27 to hold factorization (INFO(9)) = %" IPOPT_INDEX_FORMAT "\n", INFO[8]);
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                  "Number of integers for MA27 to hold factorization (INFO(10)) = %d\n", INFO[9]);
+                  "Number of integers for MA27 to hold factorization (INFO(10)) = %" IPOPT_INDEX_FORMAT "\n", INFO[9]);
 
    // Check whether the number of negative eigenvalues matches the requested
    // count
@@ -618,7 +618,7 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
    if( !skip_inertia_check_ && check_NegEVals && (numberOfNegEVals != negevals_) )
    {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "In Ma27TSolverInterface::Factorization: negevals_ = %d, but numberOfNegEVals = %d\n", negevals_,
+                     "In Ma27TSolverInterface::Factorization: negevals_ = %" IPOPT_INDEX_FORMAT ", but numberOfNegEVals = %" IPOPT_INDEX_FORMAT "\n", negevals_,
                      numberOfNegEVals);
       return SYMSOLVER_WRONG_INERTIA;
    }

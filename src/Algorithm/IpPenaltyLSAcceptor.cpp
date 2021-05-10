@@ -305,7 +305,7 @@ bool PenaltyLSAcceptor::TrySecondOrderCorrection(
       theta_soc_old = theta_trial;
 
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                     "Trying second order correction number %d\n", count_soc + 1);
+                     "Trying second order correction number %" IPOPT_INDEX_FORMAT "\n", count_soc + 1);
 
       // Compute SOC constraint violation
       c_soc->AddOneVector(1.0, *IpCq().trial_c(), alpha_primal_soc);
@@ -381,7 +381,7 @@ bool PenaltyLSAcceptor::TrySecondOrderCorrection(
       if( accept )
       {
          Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                        "Second order correction step accepted with %d corrections.\n", count_soc + 1);
+                        "Second order correction step accepted with %" IPOPT_INDEX_FORMAT " corrections.\n", count_soc + 1);
          // Accept all SOC quantities
          alpha_primal = alpha_primal_soc;
          actual_delta = delta_soc;

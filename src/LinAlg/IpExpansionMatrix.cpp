@@ -419,14 +419,14 @@ void ExpansionMatrix::PrintImplOffset(
    jnlst.Printf(level, category,
                 "\n");
    jnlst.PrintfIndented(level, category, indent,
-                        "%sExpansionMatrix \"%s\" with %d rows and %d columns:\n", prefix.c_str(), name.c_str(), NRows(), NCols());
+                        "%sExpansionMatrix \"%s\" with %" IPOPT_INDEX_FORMAT " rows and %" IPOPT_INDEX_FORMAT " columns:\n", prefix.c_str(), name.c_str(), NRows(), NCols());
 
    const Index* exp_pos = ExpandedPosIndices();
 
    for( Index i = 0; i < NCols(); i++ )
    {
       jnlst.PrintfIndented(level, category, indent,
-                           "%s%s[%5d,%5d]=%23.16e  (%d)\n", prefix.c_str(), name.c_str(), exp_pos[i] + row_offset, i + col_offset, 1., i);
+                           "%s%s[%5d,%5d]=%23.16e  (%" IPOPT_INDEX_FORMAT ")\n", prefix.c_str(), name.c_str(), exp_pos[i] + row_offset, i + col_offset, 1., i);
    }
 }
 

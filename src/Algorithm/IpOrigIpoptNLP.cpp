@@ -256,7 +256,7 @@ bool OrigIpoptNLP::InitializeStructures(
             h_space_ = new LowRankUpdateSymMatrixSpace(x_space_->Dim(), ConstPtr(P_approx), ConstPtr(approx_vecspace),
                   true);
             jnlst_->Printf(J_DETAILED, J_INITIALIZATION,
-                           "Hessian approximation will be done in smaller space of dimension %d (instead of %d)\n\n",
+                           "Hessian approximation will be done in smaller space of dimension %" IPOPT_INDEX_FORMAT " (instead of %" IPOPT_INDEX_FORMAT ")\n\n",
                            P_approx->NCols(), P_approx->NRows());
          }
          else
@@ -264,7 +264,7 @@ bool OrigIpoptNLP::InitializeStructures(
             DBG_ASSERT(IsNull(P_approx));
             h_space_ = new LowRankUpdateSymMatrixSpace(x_space_->Dim(), ConstPtr(P_approx), ConstPtr(x_space_), true);
             jnlst_->Printf(J_DETAILED, J_INITIALIZATION,
-                           "Hessian approximation will be done in the space of all %d x variables.\n\n", x_space_->Dim());
+                           "Hessian approximation will be done in the space of all %" IPOPT_INDEX_FORMAT " x variables.\n\n", x_space_->Dim());
          }
       }
 
@@ -290,7 +290,7 @@ bool OrigIpoptNLP::InitializeStructures(
       if( x_space_->Dim() < c_space_->Dim() )
       {
          char msg[128];
-         Snprintf(msg, 127, "Too few degrees of freedom: %d equality constriants but only %d variables",
+         Snprintf(msg, 127, "Too few degrees of freedom: %" IPOPT_INDEX_FORMAT " equality constraints but only %" IPOPT_INDEX_FORMAT " variables",
                   c_space_->Dim(), x_space_->Dim());
          THROW_EXCEPTION(TOO_FEW_DOF, msg);
       }

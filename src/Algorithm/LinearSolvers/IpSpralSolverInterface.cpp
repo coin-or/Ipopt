@@ -487,7 +487,7 @@ ESymSolverStatus SpralSolverInterface::InitializeStructure(
 
       spral_ssids_analyse_ptr32(false, ndim_, NULL, ia, ja, NULL, &akeep_, &control_, &info);
 
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "nfactor = %d, nflops = %d:\n",
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "nfactor = %ld, nflops = %ld:\n",
                      info.num_factor, info.num_flops);
 
       if( HaveIpData() )
@@ -545,7 +545,7 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
 
          spral_ssids_analyse_ptr32(false, ndim_, NULL, ia, ja, val_, &akeep_, &control_, &info);
 
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "nfactor = %d, nflops = %d:\n",
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "nfactor = %ld, nflops = %ld:\n",
                         info.num_factor, info.num_flops);
 
          if( HaveIpData() )
@@ -577,7 +577,7 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
 
       spral_ssids_factor_ptr32(false, ia, ja, val_, scaling_, akeep_, &fkeep_, &control_, &info);
 
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "SPRAL: delays %d, nfactor %d, "
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "SPRAL: delays %d, nfactor %ld, "
                      "nflops %ld, maxfront %d\n", info.num_delay, info.num_factor, info.num_flops,
                      info.maxfront);
 
@@ -668,7 +668,7 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
       if( check_NegEVals && info.num_neg != numberOfNegEVals )
       {
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "In SpralSolverInterface::Factorization: "
-                        "info.num_neg = %d, but numberOfNegEVals = %d\n", info.num_neg, numberOfNegEVals);
+                        "info.num_neg = %d, but numberOfNegEVals = %" IPOPT_INDEX_FORMAT "\n", info.num_neg, numberOfNegEVals);
          return SYMSOLVER_WRONG_INERTIA;
       }
 

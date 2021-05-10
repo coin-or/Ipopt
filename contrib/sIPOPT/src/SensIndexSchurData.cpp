@@ -115,7 +115,7 @@ Index IndexSchurData::SetData_Index(
 
    Index w;
    (v > 0) ? w = 1 : w = -1;
-   DBG_PRINT((dbg_verbosity, "Schurdata::w=%d\n", w));
+   DBG_PRINT((dbg_verbosity, "Schurdata::w=%" IPOPT_INDEX_FORMAT "\n", w));
    Index n_ind = AsIndexMax(dim, index, 1);
    std::vector<Index> sortvec(n_ind, -1);
    // fill up sortlist
@@ -335,13 +335,13 @@ void IndexSchurData::PrintImpl(
 {
    DBG_START_METH("IndexSchurData::PrintImpl", dbg_verbosity);
 
-   jnlst.PrintfIndented(level, category, indent, "%sIndexSchurData \"%s\" with %d rows:\n", prefix.c_str(),
+   jnlst.PrintfIndented(level, category, indent, "%sIndexSchurData \"%s\" with %" IPOPT_INDEX_FORMAT " rows:\n", prefix.c_str(),
                         name.c_str(), GetNRowsAdded());
    if( Is_Initialized() )
    {
       for( unsigned int i = 0; i < idx_.size(); i++ )
       {
-         jnlst.PrintfIndented(level, category, indent, "%s%s[%5d,%5d]=%d\n", prefix.c_str(), name.c_str(), i, idx_[i],
+         jnlst.PrintfIndented(level, category, indent, "%s%s[%5d,%5d]=%" IPOPT_INDEX_FORMAT "\n", prefix.c_str(), name.c_str(), i, idx_[i],
                               val_[i]);
       }
    }

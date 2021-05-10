@@ -141,7 +141,7 @@ SmartPtr<ReducedHessianCalculator> SensBuilder::BuildRedHessCalc(
    {
       jnlst.Printf(J_ERROR, J_MAIN,
                    "\nEXIT: An Error Occured while processing the Indices for the reduced Hessian computation: "
-                   "Something is wrong with index %d\n", setdata_error);
+                   "Something is wrong with index %" IPOPT_INDEX_FORMAT "\n", setdata_error);
       THROW_EXCEPTION(SENS_BUILDER_ERROR, "Reduced Hessian Index Error");
    }
 

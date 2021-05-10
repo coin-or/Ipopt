@@ -79,7 +79,7 @@ bool IndexPCalculator::ComputeP()
          DBG_ASSERT(retval);
 
          /* This part is for displaying norm2(I_z*K^(-1)*I_1) */
-         DBG_PRINT((dbg_verbosity, "\ncurr_schur_row=%d, ", curr_schur_row));
+         DBG_PRINT((dbg_verbosity, "\ncurr_schur_row=%" IPOPT_INDEX_FORMAT ", ", curr_schur_row));
          DBG_PRINT((dbg_verbosity, "norm2(z)=%23.16e\n", sol_vec->x()->Nrm2()));
          /* end displaying norm2 */
 
@@ -184,7 +184,7 @@ void IndexPCalculator::PrintImpl(
    DBG_START_METH("IndexPCalculator::PrintImpl", dbg_verbosity);
 
    const Number* col_val;
-   jnlst.PrintfIndented(level, category, indent, "%sIndexPCalculator \"%s\" with %d rows and %d columns:\n",
+   jnlst.PrintfIndented(level, category, indent, "%sIndexPCalculator \"%s\" with %" IPOPT_INDEX_FORMAT " rows and %" IPOPT_INDEX_FORMAT " columns:\n",
                         prefix.c_str(), name.c_str(), nrows_, ncols_);
    Index col_counter = 0;
    for( std::map<Index, SmartPtr<PColumn> >::const_iterator j = cols_.begin(); j != cols_.end(); ++j )

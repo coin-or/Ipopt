@@ -94,7 +94,7 @@ public:
    ) const
    {
       jnlst.Printf(level, J_MAIN,
-                   "Exception of type: %s in file \"%s\" at line %d:\n Exception message: %s\n", type_.c_str(), file_name_.c_str(), line_number_, msg_.c_str());
+                   "Exception of type: %s in file \"%s\" at line %" IPOPT_INDEX_FORMAT ":\n Exception message: %s\n", type_.c_str(), file_name_.c_str(), line_number_, msg_.c_str());
    }
 
    const std::string& Message() const

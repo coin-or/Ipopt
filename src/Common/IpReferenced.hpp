@@ -203,7 +203,7 @@ private:
 inline Index ReferencedObject::ReferenceCount() const
 {
    //    DBG_START_METH("ReferencedObject::ReferenceCount()", 0);
-   //    DBG_PRINT((1,"Returning reference_count_ = %d\n", reference_count_));
+   //    DBG_PRINT((1,"Returning reference_count_ = %" IPOPT_INDEX_FORMAT "\n", reference_count_));
    return reference_count_;
 }
 
@@ -214,7 +214,7 @@ void ReferencedObject::AddRef(
 {
    //    DBG_START_METH("ReferencedObject::AddRef(const Referencer* referencer)", 0);
    reference_count_++;
-   //    DBG_PRINT((1, "New reference_count_ = %d\n", reference_count_));
+   //    DBG_PRINT((1, "New reference_count_ = %" IPOPT_INDEX_FORMAT "\n", reference_count_));
 #   ifdef IP_DEBUG_REFERENCED
    referencers_.push_back(referencer);
 #   else
@@ -230,7 +230,7 @@ void ReferencedObject::ReleaseRef(
    //    DBG_START_METH("ReferencedObject::ReleaseRef(const Referencer* referencer)",
    //                   0);
    reference_count_--;
-   //    DBG_PRINT((1, "New reference_count_ = %d\n", reference_count_));
+   //    DBG_PRINT((1, "New reference_count_ = %" IPOPT_INDEX_FORMAT "\n", reference_count_));
 
 #   ifdef IP_DEBUG_REFERENCED
 

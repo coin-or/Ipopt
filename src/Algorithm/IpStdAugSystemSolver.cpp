@@ -184,7 +184,7 @@ ESymSolverStatus StdAugSystemSolver::MultiSolve(
       for( Index dbg_i = 0; dbg_i < dbg_nz; dbg_i++ )
       {
          Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
-                        "(%d) KKT[%d][%d] = %23.15e\n", dbg_i, dbg_iRows[dbg_i], dbg_jCols[dbg_i], dbg_values[dbg_i]);
+                        "(%" IPOPT_INDEX_FORMAT ") KKT[%" IPOPT_INDEX_FORMAT "][%" IPOPT_INDEX_FORMAT "] = %23.15e\n", dbg_i, dbg_iRows[dbg_i], dbg_jCols[dbg_i], dbg_values[dbg_i]);
       }
       delete[] dbg_iRows;
       dbg_iRows = NULL;

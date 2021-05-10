@@ -75,7 +75,7 @@ void IdentityMatrix::PrintImpl(
    jnlst.Printf(level, category,
                 "\n");
    jnlst.PrintfIndented(level, category, indent,
-                        "%sIdentityMatrix \"%s\" with %d rows and columns and the factor %23.16e.\n", prefix.c_str(), name.c_str(),
+                        "%sIdentityMatrix \"%s\" with %" IPOPT_INDEX_FORMAT " rows and columns and the factor %23.16e.\n", prefix.c_str(), name.c_str(),
                         NRows(), factor_);
 }
 

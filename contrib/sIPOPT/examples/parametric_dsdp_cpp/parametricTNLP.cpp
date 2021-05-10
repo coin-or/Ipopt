@@ -356,7 +356,7 @@ void ParametricTNLP::finalize_metadata(
    {
       for( Index k = 0; k < n; ++k )
       {
-         printf("z_L[%d] = %f      z_U[%d] = %f\n", k, z_L_solution->second[k], k, z_U_solution->second[k]);
+         printf("z_L[%d] = %f      z_U[%d] = %f\n", (int)k, z_L_solution->second[k], (int)k, z_U_solution->second[k]);
       }
    }
 
@@ -367,7 +367,7 @@ void ParametricTNLP::finalize_metadata(
    {
       for( Index k = 0; k < m; ++k )
       {
-         printf("lambda[%d] (upd) = %.14g\n", k, lambda_solution->second[k]);
+         printf("lambda[%d] (upd) = %.14g\n", (int)k, lambda_solution->second[k]);
       }
    }
 }

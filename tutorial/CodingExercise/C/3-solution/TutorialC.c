@@ -208,17 +208,17 @@ int main()
       printf("\n\nSolution of the primal variables, x\n");
       for( i = 0; i < n; i++ )
       {
-         printf("x[%d] = %e\n", i, x[i]);
+         printf("x[%d] = %e\n", (int)i, x[i]);
       }
 
       printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
       for( i = 0; i < n; i++ )
       {
-         printf("z_L[%d] = %e\n", i, mult_x_L[i]);
+         printf("z_L[%d] = %e\n", (int)i, mult_x_L[i]);
       }
       for( i = 0; i < n; i++ )
       {
-         printf("z_U[%d] = %e\n", i, mult_x_U[i]);
+         printf("z_U[%d] = %e\n", (int)i, mult_x_U[i]);
       }
 
       printf("\n\nObjective value\n");

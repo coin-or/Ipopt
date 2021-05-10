@@ -409,7 +409,7 @@ FilterLSAcceptor::CheckAcceptabilityOfTrialPoint(
             if (count_successive_filter_rejections_ >= filter_reset_trigger_)
             {
                Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                              "Resetting filter because in %d iterations last rejection was due to filter", count_successive_filter_rejections_);
+                              "Resetting filter because in %" IPOPT_INDEX_FORMAT " iterations last rejection was due to filter", count_successive_filter_rejections_);
                IpData().Append_info_string("F+");
                Reset();
             }
@@ -557,7 +557,7 @@ FilterLSAcceptor::TrySecondOrderCorrection(
       theta_soc_old = theta_trial;
 
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                     "Trying second order correction number %d\n",
+                     "Trying second order correction number %" IPOPT_INDEX_FORMAT "\n",
                      count_soc + 1);
 
       // Compute SOC constraint violation
@@ -638,7 +638,7 @@ FilterLSAcceptor::TrySecondOrderCorrection(
       if (accept)
       {
          Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                        "Second order correction step accepted with %d corrections.\n", count_soc + 1);
+                        "Second order correction step accepted with %" IPOPT_INDEX_FORMAT " corrections.\n", count_soc + 1);
          // Accept all SOC quantities
          alpha_primal = alpha_primal_soc;
          actual_delta = delta_soc;
@@ -864,7 +864,7 @@ FilterLSAcceptor::TryCorrector(
       if (Jnlst().ProduceOutput(J_MOREVECTOR, J_MAIN))
       {
          Jnlst().Printf(J_MOREVECTOR, J_MAIN,
-                        "*** Accepted corrector for Iteration: %d\n",
+                        "*** Accepted corrector for Iteration: %" IPOPT_INDEX_FORMAT "\n",
                         IpData().iter_count());
          delta_corr->Print(Jnlst(), J_MOREVECTOR, J_MAIN, "delta_corr");
       }

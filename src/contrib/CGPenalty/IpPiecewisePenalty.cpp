@@ -209,11 +209,11 @@ void PiecewisePenalty::Print(
 {
    // DBG_START_METH("FilterLineSearch::Filter::Print", dbg_verbosity);
    jnlst.Printf(J_DETAILED, J_LINE_SEARCH,
-                "The current piecewise penalty has %d entries.\n", PiecewisePenalty_list_.size());
+                "The current piecewise penalty has %zd entries.\n", PiecewisePenalty_list_.size());
    jnlst.Printf(J_DETAILED, J_LINE_SEARCH,
-                "We only allow %d entries.\n", max_piece_number_);
+                "We only allow %" IPOPT_INDEX_FORMAT " entries.\n", max_piece_number_);
    jnlst.Printf(J_DETAILED, J_LINE_SEARCH,
-                "The min piecewise penalty is %d .\n", min_piece_penalty_);
+                "The min piecewise penalty is %g.\n", min_piece_penalty_);
    if( !jnlst.ProduceOutput(J_DETAILED, J_LINE_SEARCH) )
    {
       return;

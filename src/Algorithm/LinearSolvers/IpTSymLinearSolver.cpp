@@ -205,7 +205,7 @@ ESymSolverStatus TSymLinearSolver::MultiSolve(
       if( Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA) )
       {
          Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
-                        "Right hand side %d in TSymLinearSolver:\n", irhs);
+                        "Right hand side %" IPOPT_INDEX_FORMAT " in TSymLinearSolver:\n", irhs);
          for( Index i = 0; i < dim_; i++ )
          {
             Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
@@ -295,7 +295,7 @@ ESymSolverStatus TSymLinearSolver::MultiSolve(
          if( Jnlst().ProduceOutput(J_MOREMATRIX, J_LINEAR_ALGEBRA) )
          {
             Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
-                           "Solution %d in TSymLinearSolver:\n", irhs);
+                           "Solution %" IPOPT_INDEX_FORMAT " in TSymLinearSolver:\n", irhs);
             for( Index i = 0; i < dim_; i++ )
             {
                Jnlst().Printf(J_MOREMATRIX, J_LINEAR_ALGEBRA,
@@ -456,7 +456,7 @@ void TSymLinearSolver::GiveMatrixToSolver(
 )
 {
    DBG_START_METH("TSymLinearSolver::GiveMatrixToSolver", dbg_verbosity);
-   DBG_PRINT((1, "new_matrix = %d\n", new_matrix));
+   DBG_PRINT((1, "new_matrix = %" IPOPT_INDEX_FORMAT "\n", new_matrix));
 
    Number* pa = solver_interface_->GetValuesArrayPtr();
    Number* atriplet;

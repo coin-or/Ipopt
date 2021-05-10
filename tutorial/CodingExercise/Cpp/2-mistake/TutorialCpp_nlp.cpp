@@ -366,17 +366,17 @@ void TutorialCpp_NLP::finalize_solution(
    fprintf(fp, "\n\nSolution of the primal variables, x\n");
    for( Index i = 0; i < n; i++ )
    {
-      fprintf(fp, "x[%d] = %e\n", i, x[i]);
+      fprintf(fp, "x[%d] = %e\n", (int)i, x[i]);
    }
 
    fprintf(fp, "\n\nSolution of the bound multipliers, z_L and z_U\n");
    for( Index i = 0; i < n; i++ )
    {
-      fprintf(fp, "z_L[%d] = %e\n", i, z_L[i]);
+      fprintf(fp, "z_L[%d] = %e\n", (int)i, z_L[i]);
    }
    for( Index i = 0; i < n; i++ )
    {
-      fprintf(fp, "z_U[%d] = %e\n", i, z_U[i]);
+      fprintf(fp, "z_U[%d] = %e\n", (int)i, z_U[i]);
    }
 
    fprintf(fp, "\n\nObjective value\n");

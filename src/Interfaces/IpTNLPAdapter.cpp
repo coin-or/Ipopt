@@ -495,7 +495,7 @@ bool TNLPAdapter::GetSpaces(
             {
                char string[128];
                Snprintf(string, 127,
-                        "There are inconsistent bounds on variable %d: lower = %25.16e and upper = %25.16e.", i, lower_bound,
+                        "There are inconsistent bounds on variable %" IPOPT_INDEX_FORMAT ": lower = %25.16e and upper = %25.16e.", i, lower_bound,
                         upper_bound);
                delete[] x_l;
                delete[] x_u;
@@ -587,7 +587,7 @@ bool TNLPAdapter::GetSpaces(
                delete[] d_u_map;
                char string[128];
                Snprintf(string, 127,
-                        "There are inconsistent bounds on constraint function %d: lower = %25.16e and upper = %25.16e.", i,
+                        "There are inconsistent bounds on constraint function %" IPOPT_INDEX_FORMAT ": lower = %25.16e and upper = %25.16e.", i,
                         lower_bound, upper_bound);
                THROW_EXCEPTION(INCONSISTENT_BOUNDS, string);
             }
@@ -617,7 +617,7 @@ bool TNLPAdapter::GetSpaces(
          {
             fixed_variable_treatment_ = RELAX_BOUNDS;
             jnlst_->Printf(J_WARNING, J_INITIALIZATION,
-                           "Too few degrees of freedom (n_x = %d, n_c = %d).\n  Trying fixed_variable_treatment = RELAX_BOUNDS\n\n",
+                           "Too few degrees of freedom (n_x = %" IPOPT_INDEX_FORMAT ", n_c = %" IPOPT_INDEX_FORMAT ").\n  Trying fixed_variable_treatment = RELAX_BOUNDS\n\n",
                            n_x_var, n_c);
          }
       } // while (!done)
@@ -636,7 +636,7 @@ bool TNLPAdapter::GetSpaces(
          if( !c_deps.empty() )
          {
             jnlst_->Printf(J_WARNING, J_INITIALIZATION,
-                           "\nDetected %d linearly dependent equality constraints; taking those out.\n\n", c_deps.size());
+                           "\nDetected %zd linearly dependent equality constraints; taking those out.\n\n", c_deps.size());
          }
          else
          {
@@ -648,7 +648,7 @@ bool TNLPAdapter::GetSpaces(
             int count = 0;
             for( std::list<Index>::iterator i = c_deps.begin(); i != c_deps.end(); ++i )
             {
-               jnlst_->Printf(J_DETAILED, J_INITIALIZATION, "c_dep[%d] = %d\n", count++, *i);
+               jnlst_->Printf(J_DETAILED, J_INITIALIZATION, "c_dep[%" IPOPT_INDEX_FORMAT "] = %" IPOPT_INDEX_FORMAT "\n", count++, *i);
             }
             jnlst_->Printf(J_DETAILED, J_INITIALIZATION, "\n");
          }
@@ -3251,7 +3251,7 @@ bool TNLPAdapter::CheckDerivatives(
    }
    else
    {
-      jnlst_->Printf(J_WARNING, J_NLP, "\nDerivative checker detected %d error(s).\n\n", nerrors);
+      jnlst_->Printf(J_WARNING, J_NLP, "\nDerivative checker detected %" IPOPT_INDEX_FORMAT " error(s).\n\n", nerrors);
    }
 
    return retval;

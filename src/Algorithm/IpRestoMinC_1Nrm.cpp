@@ -114,7 +114,7 @@ bool MinC_1NrmRestorationPhase::PerformRestoration()
    // Increase counter for restoration phase calls
    count_restorations_++;
    Jnlst().Printf(J_DETAILED, J_MAIN,
-                  "Starting Restoration Phase for the %d. time\n", count_restorations_);
+                  "Starting Restoration Phase for the %" IPOPT_INDEX_FORMAT ". time\n", count_restorations_);
 
    DBG_ASSERT(IpCq().curr_constraint_violation() > 0.);
 
@@ -253,7 +253,7 @@ bool MinC_1NrmRestorationPhase::PerformRestoration()
          Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                         "Optimal Objective Value = %.16E\n", resto_ip_cq->curr_f());
          Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                        "Number of Iterations = %d\n", resto_ip_data->iter_count());
+                        "Number of Iterations = %" IPOPT_INDEX_FORMAT "\n", resto_ip_data->iter_count());
       }
       if( Jnlst().ProduceOutput(J_VECTOR, J_LINE_SEARCH) )
       {
