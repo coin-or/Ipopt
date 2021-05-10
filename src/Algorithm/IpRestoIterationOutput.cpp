@@ -78,13 +78,13 @@ void RestoIterationOutput::WriteOutput()
    if( IpData().info_iters_since_header() >= 10 && !IsValid(resto_orig_iteration_output_) )
    {
       // output the header
-      Jnlst().Printf(J_ITERSUMMARY, J_MAIN,
+      Jnlst().Printf(J_ITERSUMMARY, J_MAIN, "%s",
                      header.c_str());
       IpData().Set_info_iters_since_header(0);
    }
    else
    {
-      Jnlst().Printf(J_DETAILED, J_MAIN,
+      Jnlst().Printf(J_DETAILED, J_MAIN, "%s",
                      header.c_str());
    }
 

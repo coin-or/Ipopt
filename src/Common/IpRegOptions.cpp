@@ -146,7 +146,7 @@ void RegisteredOption::OutputLatexDescription(
    }
    else
    {
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%s",
                    latex_desc.c_str());
    }
    jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
@@ -163,9 +163,7 @@ void RegisteredOption::OutputLatexDescription(
       MakeValidLatexString(long_description_,
                            latex_desc);
       jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                   " ");
-      jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                   latex_desc.c_str());
+                   " %s", latex_desc.c_str());
    }
 
    if( type_ == OT_Number )
@@ -182,7 +180,7 @@ void RegisteredOption::OutputLatexDescription(
       else
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                      "%s", "{\\tt -inf}");
+                      "{\\tt -inf}");
       }
 
       if( has_lower_ && !lower_strict_ )
@@ -219,7 +217,7 @@ void RegisteredOption::OutputLatexDescription(
       else
       {
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                      "%s", "{\\tt +inf}");
+                      "{\\tt +inf}");
       }
 
       buff = MakeValidLatexNumber(default_number_);
@@ -281,9 +279,7 @@ void RegisteredOption::OutputLatexDescription(
          {
             MakeValidLatexString((*i).description_, latex_desc);
             jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                         ": ");
-            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
-                         latex_desc.c_str());
+                         ": %s", latex_desc.c_str());
          }
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
                       "\n");
@@ -380,7 +376,7 @@ void RegisteredOption::OutputDoxygenDescription(
          if( has_lower_ )
          {
             buff = MakeValidHTMLNumber(lower_);
-            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%s",
                          buff.c_str());
 
             if( !lower_strict_ )
@@ -401,7 +397,7 @@ void RegisteredOption::OutputDoxygenDescription(
          //}
 
 
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%s",
                       name_.c_str());
 
          if( has_upper_ )
@@ -418,7 +414,7 @@ void RegisteredOption::OutputDoxygenDescription(
             }
 
             buff = MakeValidHTMLNumber(upper_);
-            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+            jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%s",
                          buff.c_str());
          }
          // else
@@ -455,7 +451,7 @@ void RegisteredOption::OutputDoxygenDescription(
          //        "-&infin; < ");
          //}
 
-         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION,
+         jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%s",
                       name_.c_str());
 
          if( has_upper_ )
