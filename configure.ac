@@ -237,7 +237,7 @@ AC_ARG_WITH([wsmp],
             [have_wsmp=yes; wsmp_lflags=$withval],
             [have_wsmp=no])
 
-if test $have_wsmp$intsize = yes32 ; then
+if test $have_wsmp$precision$intsize = yesdouble32 ; then
   AC_COIN_TRY_LINK([wssmp],[$wsmp_lflags],[],
     [AC_COIN_DEFINENAMEMANGLING([IPOPT_WSMP],[$wssmp_namemangling])
      IPOPTLIB_LFLAGS="$wsmp_lflags $IPOPTLIB_LFLAGS"
