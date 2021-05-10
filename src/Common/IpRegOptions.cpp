@@ -996,7 +996,7 @@ void RegisteredOptions::AddStringOption(
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    DBG_ASSERT(settings.size() == descriptions.size());
-   for( int i = 0; i < (int) settings.size(); i++ )
+   for( size_t i = 0; i < settings.size(); i++ )
    {
       option->AddValidStringSetting(settings[i], descriptions[i]);
    }

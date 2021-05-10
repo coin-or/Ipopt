@@ -122,7 +122,7 @@ public:
    )
    {
       obj_value = 0.0;
-      for( int i = 0; i < n; ++i )
+      for( Index i = 0; i < n; ++i )
          obj_value += x[i];
 
       return true;
@@ -136,7 +136,7 @@ public:
       Number*       grad_f
    )
    {
-      for( int i = 0; i < n; ++i )
+      for( Index i = 0; i < n; ++i )
          grad_f[i] = 1.0;
 
       return true;
@@ -154,7 +154,7 @@ public:
       assert(m == 1);
 
       g[0] = 0.0;
-      for( int i = 0; i < n; ++i )
+      for( Index i = 0; i < n; ++i )
          g[0] += x[i];
 
       return true;
@@ -180,13 +180,13 @@ public:
       assert(nele_jac == n);
 
       if( iRow != NULL )
-         for( int i = 0; i < n; ++i )
+         for( Index i = 0; i < n; ++i )
          {
             iRow[i] = 0;
             jCol[i] = i;
          }
       else
-         for( int i = 0; i < n; ++i )
+         for( Index i = 0; i < n; ++i )
             values[i] = 1.0;
 
       return true;
@@ -230,19 +230,19 @@ public:
    {
       std::cout << "Finalize called" << std::endl;
       std::cout << "x =";
-      for( int i = 0; i < n; ++i )
+      for( Index i = 0; i < n; ++i )
          std::cout << ' ' << x[i];
       std::cout << std::endl;
       std::cout << "z_L =";
-      for( int i = 0; i < n; ++i )
+      for( Index i = 0; i < n; ++i )
          std::cout << ' ' << z_L[i];
       std::cout << std::endl;
       std::cout << "z_U =";
-      for( int i = 0; i < n; ++i )
+      for( Index i = 0; i < n; ++i )
          std::cout << ' ' << z_U[i];
       std::cout << std::endl;
       std::cout << "lambda =";
-      for( int i = 0; i < m; ++i )
+      for( Index i = 0; i < m; ++i )
          std::cout << ' ' << lambda[i];
       std::cout << std::endl;
 
@@ -256,10 +256,10 @@ public:
          Number tol = 1e-6;
          assert(fabs(obj_value) < tol);
 
-         for( int i = 0; i < n; ++i )
+         for( Index i = 0; i < n; ++i )
             assert(fabs(x[i]) < tol);
 
-         for( int i = 0; i < m; ++i )
+         for( Index i = 0; i < m; ++i )
             assert(fabs(g[i]) < tol);
       }
    }

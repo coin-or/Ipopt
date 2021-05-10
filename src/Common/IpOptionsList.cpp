@@ -531,7 +531,7 @@ bool OptionsList::GetNumericValue(
       // numbers.  Therefore, we change a 'd' to an 'e'
       char* buffer = new char[strvalue.length() + 1];
       strcpy(buffer, strvalue.c_str());
-      for( int i = 0; i < (int) strvalue.length(); ++i )
+      for( size_t i = 0; i < strvalue.length(); ++i )
       {
          if( buffer[i] == 'd' || buffer[i] == 'D' )
          {
@@ -738,7 +738,7 @@ bool OptionsList::ReadFromStream(
             // point numbers.  Therefore, we change a 'd' to an 'e'
             char* buffer = new char[value.length() + 1];
             strcpy(buffer, value.c_str());
-            for( int i = 0; i < (int) value.length(); ++i )
+            for( size_t i = 0; i < value.length(); ++i )
             {
                if( buffer[i] == 'd' || buffer[i] == 'D' )
                {
@@ -848,7 +848,7 @@ bool OptionsList::readnexttoken(
 )
 {
    token.erase();
-   int c = is.get();
+   char c = is.get();
 
    // First get rid of all comments and white spaces
    while( !is.eof() && (isspace(c) || c == '#') )

@@ -322,7 +322,7 @@ bool SpralSolverInterface::InitializeImpl(
 
    // Set the pivot method.
    std::string pivot_method;
-   options.GetStringValue("spral_pivot_method", pivot_method, prefix);
+   options.GetStringValue("spral_pivot_method", pivot_method, prefix);  // TODO use GetEnumValue?
    control_.pivot_method = PivotMethodNameToNum(pivot_method);
 
    // Set small_subtree_threshold.

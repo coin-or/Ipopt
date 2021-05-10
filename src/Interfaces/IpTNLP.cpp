@@ -77,7 +77,7 @@ SmartPtr<const DenseVector> curr_z_L(
       if( orignlp->NLP_scaling()->have_x_scaling() )
       {
          // get copy with x scaling unapplied
-         int x_dim = curr_x(ip_data, ip_cq, orignlp, restonlp, true)->Dim();
+         Index x_dim = curr_x(ip_data, ip_cq, orignlp, restonlp, true)->Dim();
          SmartPtr<Vector> tmp = orignlp->NLP_scaling()->apply_vector_scaling_x_LU_NonConst(*orignlp->Px_L(), z_L, *new DenseVectorSpace(x_dim));
          // unapply obj scaling
          tmp->Scal(obj_unscale_factor);
@@ -125,7 +125,7 @@ SmartPtr<const DenseVector> curr_z_U(
       if( orignlp->NLP_scaling()->have_x_scaling() )
       {
          // get copy with x scaling unapplied
-         int x_dim = curr_x(ip_data, ip_cq, orignlp, restonlp, true)->Dim();
+         Index x_dim = curr_x(ip_data, ip_cq, orignlp, restonlp, true)->Dim();
          SmartPtr<Vector> tmp = orignlp->NLP_scaling()->apply_vector_scaling_x_LU_NonConst(*orignlp->Px_U(), z_U, *new DenseVectorSpace(x_dim));
          // unapply obj scaling
          tmp->Scal(obj_unscale_factor);
@@ -772,7 +772,7 @@ bool TNLP::get_curr_violations(
          // if fixed vars are treated as parameters, then they have no bounds in the OrigIpoptNLP
          // but bound violations should correspond to violation at end of c(x)=0
          SmartPtr<const DenseVector> c = curr_c(ip_data, ip_cq, orignlp, restonlp, scaled);
-         for( int i = 0; i < n_x_fixed; ++i )
+         for( Index i = 0; i < n_x_fixed; ++i )
          {
             Number viol;
             if( c->IsHomogeneous() )
@@ -814,7 +814,7 @@ bool TNLP::get_curr_violations(
          DBG_ASSERT(dynamic_cast<DenseVector*>(GetRawPtr(yc_neg)) != NULL);
          Number* yc_pos_val = static_cast<DenseVector*>(GetRawPtr(yc_pos))->ExpandedValues();
          Number* yc_neg_val = static_cast<DenseVector*>(GetRawPtr(yc_neg))->ExpandedValues();
-         for( int i = 0; i < n_x_fixed; ++i )
+         for( Index i = 0; i < n_x_fixed; ++i )
          {
             if( compl_x_L != NULL )
                compl_x_L[x_fixed_map[i]] = -yc_neg_val[yc_neg->Dim()-n_x_fixed+i];

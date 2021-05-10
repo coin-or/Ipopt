@@ -528,13 +528,13 @@ bool Jipopt::eval_jac_g(
          jint* tmp = new jint[nele_jac];
 
          env->GetIntArrayRegion(iRowj, 0, nele_jac, tmp);
-         for( int i = 0; i < nele_jac; ++i )
+         for( Index i = 0; i < nele_jac; ++i )
          {
             iRow[i] = (Index) tmp[i];
          }
 
          env->GetIntArrayRegion(jColj, 0, nele_jac, tmp);
-         for( int i = 0; i < nele_jac; ++i )
+         for( Index i = 0; i < nele_jac; ++i )
          {
             jCol[i] = (Index) tmp[i];
          }
@@ -606,13 +606,13 @@ bool Jipopt::eval_h(
          jint* tmp = new jint[nele_hess];
 
          env->GetIntArrayRegion(iRowj, 0, nele_hess, tmp);
-         for( int i = 0; i < nele_hess; ++i )
+         for( Index i = 0; i < nele_hess; ++i )
          {
             iRow[i] = (Index) tmp[i];
          }
 
          env->GetIntArrayRegion(jColj, 0, nele_hess, tmp);
-         for( int i = 0; i < nele_hess; ++i )
+         for( Index i = 0; i < nele_hess; ++i )
          {
             jCol[i] = (Index) tmp[i];
          }
@@ -779,7 +779,7 @@ bool Jipopt::get_list_of_nonlinear_variables(
          jint* tmp = new jint[num_nonlin_vars];
 
          env->GetIntArrayRegion(pos_nonlin_vars_j, 0, num_nonlin_vars, tmp);
-         for( int i = 0; i < num_nonlin_vars; ++i )
+         for( Index i = 0; i < num_nonlin_vars; ++i )
          {
             pos_nonlin_vars[i] = (Index) tmp[i];
          }
@@ -878,8 +878,8 @@ extern "C"
       IpoptData* ip_data = (IpoptData*)jip_data;
       IpoptCalculatedQuantities* ip_cq = (IpoptCalculatedQuantities*)jip_cq;
 
-      int n = jn;
-      int m = jm;
+      Index n = jn;
+      Index m = jm;
 
       Number* x = NULL;
       Number* z_L = NULL;
@@ -943,8 +943,8 @@ extern "C"
       IpoptData* ip_data = (IpoptData*)jip_data;
       IpoptCalculatedQuantities* ip_cq = (IpoptCalculatedQuantities*)jip_cq;
 
-      int n = jn;
-      int m = jm;
+      Index n = jn;
+      Index m = jm;
 
       Number* x_L_violation = NULL;
       Number* x_U_violation = NULL;

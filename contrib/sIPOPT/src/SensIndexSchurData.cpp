@@ -226,7 +226,7 @@ void IndexSchurData::Multiply(
    Index* v_lens = GetVectorLengths(v);
 
    Index v_row, vec_idx;
-   for( unsigned int i = 0; i < idx_.size(); ++i )
+   for( size_t i = 0; i < idx_.size(); ++i )
    {
       v_row = idx_[i];
 
@@ -282,7 +282,7 @@ void IndexSchurData::TransMultiply(
    // perform v_vals <- A^T*u
    Index row, col;
    Number val;
-   for( unsigned int i = 0; i < idx_.size(); ++i )
+   for( size_t i = 0; i < idx_.size(); ++i )
    {
       row = i;
       col = idx_[i];
@@ -367,7 +367,7 @@ void IndexSchurData::AddData_Flag(
       if( flags[i] )
       {
          oldindex = false;
-         for( unsigned int j = 0; j < idx_.size(); ++j )
+         for( size_t j = 0; j < idx_.size(); ++j )
          {
             if( i == idx_[j] )
             {
@@ -398,10 +398,10 @@ void IndexSchurData::AddData_List(
 
    new_du_size = (Index) idx_.size();
    bool oldindex;
-   for( unsigned int i = 0; i < cols.size(); ++i )
+   for( size_t i = 0; i < cols.size(); ++i )
    {
       oldindex = false;
-      for( unsigned int j = 0; j < idx_.size(); ++j )
+      for( size_t j = 0; j < idx_.size(); ++j )
       {
          if( cols[i] == idx_[j] )
          {

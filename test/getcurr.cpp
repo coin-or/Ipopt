@@ -326,23 +326,23 @@ public:
    {
       std::cout << "Finalizing:" << std::endl;
       std::cout << "  x =";
-      for( int i = 0; i < n; ++i )
+      for( Index i = 0; i < n; ++i )
          std::cout << ' ' << x[i];
       std::cout << std::endl;
       std::cout << "  z_L =";
-      for( int i = 0; i < n; ++i )
+      for( Index i = 0; i < n; ++i )
          std::cout << ' ' << z_L[i];
       std::cout << std::endl;
       std::cout << "  z_U =";
-      for( int i = 0; i < n; ++i )
+      for( Index i = 0; i < n; ++i )
          std::cout << ' ' << z_U[i];
       std::cout << std::endl;
       std::cout << "  g =";
-      for( int i = 0; i < m; ++i )
+      for( Index i = 0; i < m; ++i )
          std::cout << ' ' << g[i];
       std::cout << std::endl;
       std::cout << "  lambda =";
-      for( int i = 0; i < m; ++i )
+      for( Index i = 0; i < m; ++i )
          std::cout << ' ' << lambda[i];
       std::cout << std::endl;
 

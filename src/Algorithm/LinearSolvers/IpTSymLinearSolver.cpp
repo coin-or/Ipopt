@@ -560,12 +560,12 @@ ESymSolverStatus TSymLinearSolver::DetermineDependentRows(
    airn_ = new Index[nonzeros_triplet_];
    ajcn_ = new Index[nonzeros_triplet_];
 
-   for( int i = 0; i < n_jac_nz; i++ )
+   for( Index i = 0; i < n_jac_nz; i++ )
    {
       airn_[i] = jac_c_iRow[i] + n_cols;
       ajcn_[i] = jac_c_jCol[i];
    }
-   for( int i = 0; i < dim_; i++ )
+   for( Index  i = 0; i < dim_; i++ )
    {
       airn_[n_jac_nz + i] = i + 1;
       ajcn_[n_jac_nz + i] = i + 1;

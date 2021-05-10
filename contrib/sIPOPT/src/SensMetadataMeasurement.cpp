@@ -72,7 +72,7 @@ std::vector<Index> MetadataMeasurement::GetInitialEqConstraints()
    const std::vector<Index> constr_metadata = y_c_owner_space_->GetIntegerMetaData("sens_init_constr");
 
    std::vector<Index> retval;
-   for( Index i = 0; i < (int) constr_metadata.size(); ++i )
+   for( size_t i = 0; i < constr_metadata.size(); ++i )
    {
       if( constr_metadata[i] != 0 )
       {
@@ -110,7 +110,7 @@ SmartPtr<DenseVector> MetadataMeasurement::GetMeasurement(
    const Number* u_0_val = dynamic_cast<const DenseVector*>(GetRawPtr(IpData().trial()->x()))->Values();
 
    // Fill up values of delta_u vector
-   for( Index i = 0; i < (int) val_ipopt.size(); ++i )
+   for( size_t i = 0; i < val_ipopt.size(); ++i )
    {
       if( idx_ipopt[i] > 0 )
       {

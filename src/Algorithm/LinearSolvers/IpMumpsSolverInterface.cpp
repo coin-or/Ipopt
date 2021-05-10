@@ -309,13 +309,13 @@ void dump_matrix(
    }
    printf("%-15d :N\n", mumps_data->n);
    printf("%-15d :NZ", mumps_data->nz);
-   for (int i = 0; i < mumps_data->nz; i++)
+   for (Index i = 0; i < mumps_data->nz; i++)
    {
       printf("\n%" IPOPT_INDEX_FORMAT " %" IPOPT_INDEX_FORMAT " %25.15e", mumps_data->irn[i], mumps_data->jcn[i], mumps_data->a[i]);
    }
    printf("       :values");
    // Dummy RHS for now
-   for (int i = 0; i < mumps_data->n; i++)
+   for (Index i = 0; i < mumps_data->n; i++)
    {
       printf("\n%25.15e", 0.);
    }

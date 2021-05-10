@@ -690,14 +690,14 @@ ESymSolverStatus WsmpSolverInterface::Solve(
    double* X = new double[nrhs * N];
 
    // Initialize solution with zero and save right hand side
-   for (int i = 0; i < nrhs * N; i++)
+   for (Index i = 0; i < nrhs * N; i++)
    {
       X[perm2[i]] = scale2[i] * rhs_vals[i];
    }
    IPOPT_WSMP_FUNC(wssmp, WSSMP)(&N, ia, ja, a_, &ddmy, PERM_, INVP_,
                                  X, &LDB, &NRHS, &ddmy, &NAUX,
                                  MRP_, IPARM_, DPARM_);
-   for (int i = 0; i < N; i++)
+   for (Index i = 0; i < N; i++)
    {
       rhs_vals[i] = scale2[i] * X[perm2[i]];
    }
@@ -822,8 +822,8 @@ ESymSolverStatus WsmpSolverInterface::DetermineDependentRows(
    const Index ierror = IPARM_[63];
    if( ierror == 0 )
    {
-      int ii = 0;
-      for( int i = 0; i < N; i++ )
+      Index ii = 0;
+      for( Index i = 0; i < N; i++ )
       {
          if( MRP_[i] == -1 )
          {

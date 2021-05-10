@@ -544,7 +544,7 @@ ESymSolverStatus PardisoSolverInterface::SymbolicFactorization(
 
 static
 void write_iajaa_matrix(
-   int          N,
+   Index        N,
    const Index* ia,
    const Index* ja,
    Number*      a_,
@@ -886,7 +886,7 @@ ESymSolverStatus PardisoSolverInterface::Solve(
    Number* ORIG_RHS = new Number[nrhs * dim_];
    Index ERROR;
    // Initialize solution with zero and save right hand side
-   for( int i = 0; i < N; i++ )
+   for( Index i = 0; i < N; i++ )
    {
       X[i] = 0.;
       ORIG_RHS[i] = rhs_vals[i];
@@ -913,7 +913,7 @@ ESymSolverStatus PardisoSolverInterface::Solve(
    {
 
 #ifdef PARDISO_MATCHING_PREPROCESS
-      for (int i = 0; i < N; i++)
+      for (Index i = 0; i < N; i++)
       {
          rhs_vals[perm2[i]] = scale2[i] * ORIG_RHS[ i ];
       }
@@ -921,17 +921,17 @@ ESymSolverStatus PardisoSolverInterface::Solve(
               &PHASE, &N, a2_, ia2, ja2, &PERM,
               &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
               &ERROR, DPARM_);
-      for (int i = 0; i < N; i++)
+      for (Index i = 0; i < N; i++)
       {
          X[i] = rhs_vals[ perm2[i]];
       }
-      for (int i = 0; i < N; i++)
+      for (Index i = 0; i < N; i++)
       {
          rhs_vals[i] = scale2[i] * X[i];
       }
 
 #else
-      for( int i = 0; i < N; i++ )
+      for( Index i = 0; i < N; i++ )
       {
          rhs_vals[i] = ORIG_RHS[i];
       }

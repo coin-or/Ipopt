@@ -120,7 +120,7 @@ inline int IpBlasIdamax(
    Index         incX
 )
 {
-   return IpBlasIamax(size, x, incX);
+   return (int)IpBlasIamax(size, x, incX);
 }
 
 /** Wrapper for BLAS subroutine XCOPY.

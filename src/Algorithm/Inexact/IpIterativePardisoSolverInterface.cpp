@@ -11,9 +11,11 @@
 #include "IpBlas.hpp"
 
 #include <cmath>
-#include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <limits>
+#include <fstream>
+#include <iomanip>
 
 Ipopt::IterativeSolverTerminationTester* global_tester_ptr_;
 Ipopt::IterativeSolverTerminationTester::ETerminationTest test_result_;
@@ -378,8 +380,9 @@ ESymSolverStatus IterativePardisoSolverInterface::SymbolicFactorization(
    return SYMSOLVER_SUCCESS;
 }
 
-static void write_iajaa_matrix(
-   int          N,
+static
+void write_iajaa_matrix(
+   Index        N,
    const Index* ia,
    const Index* ja,
    Number*      a_,
@@ -391,7 +394,6 @@ static void write_iajaa_matrix(
    if( getenv("IPOPT_WRITE_MAT") )
    {
       /* Write header */
-      FILE* mat_file;
       char mat_name[128];
       char mat_pref[32];
 
@@ -410,33 +412,63 @@ static void write_iajaa_matrix(
       Snprintf(mat_name, 127, "%s_%03d-%02d.iajaa", mat_pref, iter_cnt, sol_cnt);
 
       // Open and write matrix file.
-      mat_file = fopen(mat_name, "w");
+      std::ofstream mat_file(mat_name);
+      mat_file << std::setprecision(std::numeric_limits<Number>::digits10 + 1);
 
-      fprintf(mat_file, "%" IPOPT_INDEX_FORMAT "\n", N);
-      fprintf(mat_file, "%" IPOPT_INDEX_FORMAT "\n", NNZ);
+      mat_file << N << std::endl;
+      mat_file << NNZ << std::endl;
 
       for( i = 0; i < N + 1; i++ )
       {
-         fprintf(mat_file, "%" IPOPT_INDEX_FORMAT "\n", ia[i]);
+         mat_file << ia[i] << std::endl;
       }
       for( i = 0; i < NNZ; i++ )
       {
-         fprintf(mat_file, "%" IPOPT_INDEX_FORMAT "\n", ja[i]);
+         mat_file << ja[i] << std::endl;
       }
       for( i = 0; i < NNZ; i++ )
       {
-         fprintf(mat_file, "%32.24e\n", a_[i]);
+         mat_file << a_[i] << std::endl;
       }
 
       /* Right hand side. */
       if( rhs_vals )
          for( i = 0; i < N; i++ )
-            //FIXME: PUT BACK ORIGINAL:          fprintf (mat_file, "%32.24e\n", rhs_vals[i]);
          {
-            fprintf(mat_file, "%32.24e\n", -rhs_vals[i]);
+            mat_file << rhs_vals[i] << std::endl;
          }
+   }
 
-      fclose(mat_file);
+   /* additional matrix format */
+   if( getenv("IPOPT_WRITE_MAT_MTX") )
+   {
+      /* Write header */
+      char mat_name[128];
+      char mat_pref[32];
+
+      Index i;
+      Index j;
+
+      if( getenv("IPOPT_WRITE_PREFIX") )
+      {
+         strcpy(mat_pref, getenv("IPOPT_WRITE_PREFIX"));
+      }
+      else
+      {
+         strcpy(mat_pref, "mat-ipopt");
+      }
+
+      Snprintf(mat_name, 127, "%s_%03d-%02d.mtx", mat_pref, iter_cnt, sol_cnt);
+
+      // Open and write matrix file.
+      std::ofstream mat_file(mat_name);
+      mat_file << std::setprecision(std::numeric_limits<Number>::digits10 + 1);
+
+      for( i = 0; i < N; i++ )
+         for( j = ia[i]; j < ia[i + 1] - 1; j++ )
+         {
+            mat_file << ' ' << i+1 << ' ' << ja[j - 1] << ' ' << a_[j - 1] << std::endl;
+         }
    }
 }
 
@@ -668,7 +700,7 @@ ESymSolverStatus IterativePardisoSolverInterface::Solve(
    Index ERROR;
 
    // Initialize solution with zero and save right hand side
-   for( int i = 0; i < N; i++ )
+   for( Index i = 0; i < N; i++ )
    {
       X[i] = 0;
       ORIG_RHS[i] = rhs_vals[i];
@@ -705,7 +737,7 @@ ESymSolverStatus IterativePardisoSolverInterface::Solve(
       bool retval = tester->InitializeSolve();
       ASSERT_EXCEPTION(retval, INTERNAL_ABORT, "tester->InitializeSolve(); returned false");
 
-      for( int i = 0; i < N; i++ )
+      for( Index i = 0; i < N; i++ )
       {
          rhs_vals[i] = ORIG_RHS[i];
       }

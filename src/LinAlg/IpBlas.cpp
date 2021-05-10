@@ -231,9 +231,9 @@ Index IpBlasIamax(
 {
    ipindex n = size, INCX = incX;
 #ifdef IPOPT_SINGLE
-   return (Index) IPOPT_BLAS_FUNC(isamax, ISAMAX)(&n, x, &INCX);
+   return IPOPT_BLAS_FUNC(isamax, ISAMAX)(&n, x, &INCX);
 #else
-   return (Index) IPOPT_BLAS_FUNC(idamax, IDAMAX)(&n, x, &INCX);
+   return IPOPT_BLAS_FUNC(idamax, IDAMAX)(&n, x, &INCX);
 #endif
 }
 

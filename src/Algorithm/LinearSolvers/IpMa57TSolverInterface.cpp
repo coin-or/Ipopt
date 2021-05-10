@@ -537,7 +537,7 @@ ESymSolverStatus Ma57TSolverInterface::SymbolicFactorization(
    wd_iwork_ = new ma57int[5 * n];
    wd_keep_ = new ma57int[wd_lkeep_];
    // Initialize to 0 as otherwise MA57EX can sometimes fail
-   for( int k = 0; k < wd_lkeep_; k++ )
+   for( ma57int k = 0; k < wd_lkeep_; k++ )
    {
       wd_keep_[k] = 0;
    }
@@ -549,7 +549,7 @@ ESymSolverStatus Ma57TSolverInterface::SymbolicFactorization(
    {
       airn_ma57int = new ma57int[ne];
       ajcn_ma57int = new ma57int[ne];
-      for( int k = 0; k < ne; ++k )
+      for( ma57int k = 0; k < ne; ++k )
       {
          airn_ma57int[k] = (ma57int) airn[k];
          ajcn_ma57int[k] = (ma57int) ajcn[k];
@@ -618,14 +618,14 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
       IpData().TimingStats().LinearSystemFactorization().Start();
    }
 
-   int fact_error = 1;
+   bool fact_error = true;
 
    wd_cntl_[0] = pivtol_; /* Pivot threshold. */
 
    ma57int n = dim_;
    ma57int ne = nonzeros_;
 
-   while( fact_error > 0 )
+   while( fact_error )
    {
       ma57b(&n, &ne, a_, wd_fact_, &wd_lfact_, wd_ifact_, &wd_lifact_, &wd_lkeep_, wd_keep_,
             wd_iwork_, wd_icntl_, wd_cntl_, wd_info_, wd_rinfo_);
@@ -633,7 +633,7 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
 
       if( wd_info_[0] == 0 )
       {
-         fact_error = 0;
+         fact_error = false;
       }
       else if( wd_info_[0] == -3 )
       {

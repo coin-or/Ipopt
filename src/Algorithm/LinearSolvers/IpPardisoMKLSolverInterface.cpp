@@ -347,7 +347,7 @@ ESymSolverStatus PardisoMKLSolverInterface::SymbolicFactorization(
 
 static
 void write_iajaa_matrix(
-   int          N,
+   Index        N,
    const Index* ia,
    const Index* ja,
    Number*      a_,

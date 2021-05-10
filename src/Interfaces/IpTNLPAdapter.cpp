@@ -2448,7 +2448,7 @@ void TNLPAdapter::ResortBounds(
             Number scalar = dx_L->Scalar();
             for( Index i = 0; i < n_xL; i++ )
             {
-               int idx = bnds_pos_not_fixed[i];
+               Index idx = bnds_pos_not_fixed[i];
                idx = bnds_pos_full[idx];
                x_L_orig[idx] = scalar;
             }
@@ -2458,7 +2458,7 @@ void TNLPAdapter::ResortBounds(
             const Number* x_L_values = dx_L->Values();
             for( Index i = 0; i < n_xL; i++ )
             {
-               int idx = bnds_pos_not_fixed[i];
+               Index idx = bnds_pos_not_fixed[i];
                idx = bnds_pos_full[idx];
                x_L_orig[idx] = x_L_values[i];
             }
@@ -2471,7 +2471,7 @@ void TNLPAdapter::ResortBounds(
             Number scalar = dx_L->Scalar();
             for( Index i = 0; i < n_xL; i++ )
             {
-               int idx = bnds_pos_not_fixed[i];
+               Index idx = bnds_pos_not_fixed[i];
                x_L_orig[idx] = scalar;
             }
          }
@@ -2480,7 +2480,7 @@ void TNLPAdapter::ResortBounds(
             const Number* x_L_values = dx_L->Values();
             for( Index i = 0; i < n_xL; i++ )
             {
-               int idx = bnds_pos_not_fixed[i];
+               Index idx = bnds_pos_not_fixed[i];
                x_L_orig[idx] = x_L_values[i];
             }
          }
@@ -2507,7 +2507,7 @@ void TNLPAdapter::ResortBounds(
             Number scalar = dx_U->Scalar();
             for( Index i = 0; i < x_U.Dim(); i++ )
             {
-               int idx = bnds_pos_not_fixed[i];
+               Index idx = bnds_pos_not_fixed[i];
                idx = bnds_pos_full[idx];
                x_U_orig[idx] = scalar;
             }
@@ -2517,7 +2517,7 @@ void TNLPAdapter::ResortBounds(
             const Number* x_U_values = dx_U->Values();
             for( Index i = 0; i < x_U.Dim(); i++ )
             {
-               int idx = bnds_pos_not_fixed[i];
+               Index idx = bnds_pos_not_fixed[i];
                idx = bnds_pos_full[idx];
                x_U_orig[idx] = x_U_values[i];
             }
@@ -2530,7 +2530,7 @@ void TNLPAdapter::ResortBounds(
             Number scalar = dx_U->Scalar();
             for( Index i = 0; i < x_U.Dim(); i++ )
             {
-               int idx = bnds_pos_not_fixed[i];
+               Index idx = bnds_pos_not_fixed[i];
                x_U_orig[idx] = scalar;
             }
          }
@@ -2539,7 +2539,7 @@ void TNLPAdapter::ResortBounds(
             const Number* x_U_values = dx_U->Values();
             for( Index i = 0; i < x_U.Dim(); i++ )
             {
-               int idx = bnds_pos_not_fixed[i];
+               Index idx = bnds_pos_not_fixed[i];
                x_U_orig[idx] = x_U_values[i];
             }
          }

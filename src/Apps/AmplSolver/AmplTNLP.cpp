@@ -700,10 +700,10 @@ bool AmplTNLP::eval_h(
    if( iRow && jCol && !values )
    {
       // setup the structure
-      int k = 0;
-      for( int i = 0; i < n; i++ )
+      Index k = 0;
+      for( Index i = 0; i < n; i++ )
       {
-         for( int j = sputinfo->hcolstarts[i]; j < sputinfo->hcolstarts[i + 1]; j++ )
+         for( Index j = sputinfo->hcolstarts[i]; j < sputinfo->hcolstarts[i + 1]; j++ )
          {
             iRow[k] = i + 1;
             jCol[k] = sputinfo->hrownos[j] + 1;
@@ -794,7 +794,7 @@ void AmplTNLP::finalize_solution(
    IpBlasCopy(m, g, 1, g_sol_, 1);
    if( obj_sign_ == -1.0 ) // maximization
    {
-      for( int i = 0; i < n; ++i )
+      for( Index i = 0; i < n; ++i )
       {
          z_L_sol_[i] = -z_L[i];
       }
@@ -804,11 +804,11 @@ void AmplTNLP::finalize_solution(
    else
    {
       IpBlasCopy(n, z_L, 1, z_L_sol_, 1);
-      for( int i = 0; i < n; ++i )
+      for( Index i = 0; i < n; ++i )
       {
          z_U_sol_[i] = -z_U[i];
       }
-      for( int i = 0; i < m; ++i )
+      for( Index i = 0; i < m; ++i )
       {
          lambda_sol_[i] = -lambda[i];
       }
@@ -1041,7 +1041,7 @@ bool AmplTNLP::get_scaling_parameters(
    if( x )
    {
       use_x_scaling = true;
-      for( int i = 0; i < n; i++ )
+      for( Index i = 0; i < n; i++ )
       {
          if( x[i] > 0.0 )
          {
@@ -1062,7 +1062,7 @@ bool AmplTNLP::get_scaling_parameters(
    if( g )
    {
       use_g_scaling = true;
-      for( int i = 0; i < m; i++ )
+      for( Index i = 0; i < m; i++ )
       {
          if( g[i] > 0 )
          {
@@ -1606,7 +1606,7 @@ AmplTNLP::get_options(
    ampl_options_list->AddAmplOption("halt_on_ampl_error", "", AmplOptionsList::HaltOnError_Option,
                                     "Exit with message on evaluation error");
 
-   int n_options = ampl_options_list->NumberOfAmplOptions();
+   Index n_options = ampl_options_list->NumberOfAmplOptions();
 
    keyword* keywds = (keyword*) ampl_options_list->Keywords(options, jnlst_, (void**) &nerror_);
 
@@ -1647,7 +1647,7 @@ AmplTNLP::get_options(
    Oinfo->opname = new char[strlen(opname) + 1];
    strcpy(Oinfo->opname, opname);
    Oinfo->keywds = keywds;
-   Oinfo->n_keywds = n_options;
+   Oinfo->n_keywds = (int)n_options;
    // Set the default for the remaining entries
    Oinfo->flags = 0;
    Oinfo->version = NULL;

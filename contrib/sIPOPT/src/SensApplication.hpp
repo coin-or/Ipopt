@@ -76,19 +76,19 @@ public:
           && NULL != DirectionalD_Z_U && NULL != DirectionalD_L )
       {
 
-         for( int i = 0; i < controller->nx(); ++i )
+         for( Index i = 0; i < controller->nx(); ++i )
          {
             SX[i] = DirectionalD_X[i];
          }
-         for( int i = 0; i < controller->nzu(); ++i )
+         for( Index i = 0; i < controller->nzu(); ++i )
          {
             SZU[i] = DirectionalD_Z_U[i];
          }
-         for( int i = 0; i < controller->nzl(); ++i )
+         for( Index i = 0; i < controller->nzl(); ++i )
          {
             SZL[i] = DirectionalD_Z_L[i];
          }
-         for( int i = 0; i < controller->nl(); ++i )
+         for( Index i = 0; i < controller->nl(); ++i )
          {
             SL[i] = DirectionalD_L[i];
          }
@@ -106,19 +106,19 @@ public:
       if( GetRawPtr(controller) != NULL && NULL != SensitivityM_X && NULL != SensitivityM_Z_L
           && NULL != SensitivityM_Z_U && NULL != SensitivityM_L )
       {
-         for( int i = 0; i < controller->nx() * controller->np(); ++i )
+         for( Index i = 0; i < controller->nx() * controller->np(); ++i )
          {
             SX[i] = SensitivityM_X[i];
          }
-         for( int i = 0; i < controller->nzu() * controller->np(); ++i )
+         for( Index i = 0; i < controller->nzu() * controller->np(); ++i )
          {
             SZU[i] = SensitivityM_Z_U[i];
          }
-         for( int i = 0; i < controller->nzl() * controller->np(); ++i )
+         for( Index i = 0; i < controller->nzl() * controller->np(); ++i )
          {
             SZL[i] = SensitivityM_Z_L[i];
          }
-         for( int i = 0; i < controller->nl() * controller->np(); ++i )
+         for( Index i = 0; i < controller->nl() * controller->np(); ++i )
          {
             SL[i] = SensitivityM_L[i];
          }
