@@ -137,7 +137,7 @@ bool LuksanVlcek6::eval_f(
    for( Index i = 0; i < N_; i++ )
    {
       Number b = (2. + 5. * x[i] * x[i]) * x[i] + 1.;
-      for( Index j = Max(0, i - 5); j <= Min(N_ - 1, i + 1); j++ )
+      for( Index j = Max(Index(0), i - 5); j <= Min(N_ - 1, i + 1); j++ )
       {
          b += x[j] * (1. + x[j]);
       }
@@ -160,13 +160,13 @@ bool LuksanVlcek6::eval_grad_f(
    for( Index i = 0; i < N_; i++ )
    {
       Number b = (2. + 5. * x[i] * x[i]) * x[i] + 1.;
-      for( Index j = Max(0, i - 5); j <= Min(N_ - 1, i + 1); j++ )
+      for( Index j = Max(Index(0), i - 5); j <= Min(N_ - 1, i + 1); j++ )
       {
          b += x[j] * (1. + x[j]);
       }
       Number pb1 = pow(fabs(b), p - 1.);
       Number apb1 = p * Sgn(b) * pb1;
-      for( Index j = Max(0, i - 5); j < i; j++ )
+      for( Index j = Max(Index(0), i - 5); j < i; j++ )
       {
          grad_f[j] += (1. + 2. * x[j]) * apb1;
       }
@@ -329,7 +329,7 @@ bool LuksanVlcek6::eval_h(
       for( Index i = 0; i < N_; i++ )
       {
          Number b = (2. + 5. * x[i] * x[i]) * x[i] + 1.;
-         for( Index j = Max(0, i - 5); j <= Min(N_ - 1, i + 1); j++ )
+         for( Index j = Max(Index(0), i - 5); j <= Min(N_ - 1, i + 1); j++ )
          {
             b += x[j] * (1. + x[j]);
          }
@@ -345,13 +345,13 @@ bool LuksanVlcek6::eval_h(
          // x[i] x[j] j<i
          Index ih = n;
          Index ip = n - 1;
-         for( Index j = i - 1; j >= Max(0, i - 5); j-- )
+         for( Index j = i - 1; j >= Max(Index(0), i - 5); j-- )
          {
             values[ih + j] += obj_factor * a1apb2 * (1. + 2. * x[j]);
             ih += ip;
             ip--;
          }
-         for( Index j = Max(0, i - 5); j < i; j++ )
+         for( Index j = Max(Index(0), i - 5); j < i; j++ )
          {
             Number axj = (1. + 2. * x[j]);
             // x[j] x[j] j<i
@@ -359,7 +359,7 @@ bool LuksanVlcek6::eval_h(
             ih = n;
             ip = n - 1;
             // x[j] x[k] j<i, k<j
-            for( Index k = j - 1; k >= Max(0, i - 5); k-- )
+            for( Index k = j - 1; k >= Max(Index(0), i - 5); k-- )
             {
                values[ih + k] += obj_factor * apb2 * (1. + 2. * x[k]) * axj;
                ih += ip;
@@ -374,7 +374,7 @@ bool LuksanVlcek6::eval_h(
             // x[j=i+1] x[k] k<i
             ih = n + n - 1;
             ip = n - 2;
-            for( Index k = i - 1; k >= Max(0, i - 5); k-- )
+            for( Index k = i - 1; k >= Max(Index(0), i - 5); k-- )
             {
                values[ih + k] = obj_factor * apb2 * (1. + 2. * x[k]) * axj;
                ih += ip;
@@ -390,7 +390,7 @@ bool LuksanVlcek6::eval_h(
             values[n + i] = 0.;
             ih = n + n - 1;
             ip = n - 2;
-            for( Index k = i - 1; k >= Max(0, i - 5); k-- )
+            for( Index k = i - 1; k >= Max(Index(0), i - 5); k-- )
             {
                values[ih + k] = 0.;
                ih += ip;
