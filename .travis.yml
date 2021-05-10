@@ -23,6 +23,14 @@ matrix:
             - cppcheck
       env: VISHIDDEN=true CPPCHECK=true
     - os: linux
+      dist: focal
+      addons:
+        apt:
+          packages:
+            - gfortran
+            - liblapack64-dev
+      env: INT64=true
+    - os: linux
       dist: bionic
       addons:
         apt:
@@ -89,6 +97,7 @@ before_script:
   - export NOF77=${NOF77:-false}
   - export ENABLEDEBUG=${ENABLEDEBUG:-false}
   - export SINGLEPRECISION=${SINGLEPRECISION:-false}
+  - export INT64=${INT64:-false}
   - export CPPCHECK=${CPPCHECK:-false}
   - >
     if [[ "$TRAVIS_OS_NAME" == "osx" ]] && ! $NOF77; then
@@ -122,6 +131,7 @@ script:
     ( $NOF77 && echo enable_f77=no ;
     $ENABLEDEBUG && ( echo enable_debug=yes ; echo with_ipopt_checklevel=5 ; echo with_ipopt_verbosity=5 ) ;
     $SINGLEPRECISION && echo "with_precision=single" ;
+    $INT64 && echo "with_intsize=64" ;
     [[ -d $HOME/spral ]] && echo "with_spral_cflags=-I${HOME}/spral/include" ;
     [[ -d $HOME/spral ]] && [[ "$TRAVIS_OS_NAME" == "linux" ]] && echo "with_spral_lflags=\"-L${HOME}/spral/lib -lspral -lgfortran -lhwloc -lm -lmetis -llapack -lblas -fopenmp\"" ;
     [[ -d $HOME/spral ]] && [[ "$TRAVIS_OS_NAME" == "osx" ]] && echo "with_spral_lflags=\"-L${HOME}/spral/lib -lspral -lgfortran -lhwloc -lm -L/usr/local/Cellar/metis/5.1.0/lib -lmetis -llapack -lblas -fopenmp\"" ;
@@ -140,9 +150,11 @@ script:
     echo "Skipping Mumps build." ;
     else
     if $SINGLEPRECISION ; then
-    git clone --depth 1 --branch mumps5 https://github.com/coin-or-tools/ThirdParty-Mumps ;
+      git clone --depth 1 --branch mumps5 https://github.com/coin-or-tools/ThirdParty-Mumps ;
+    elif $INT64 ; then
+      git clone --depth 1 --branch int64 https://github.com/coin-or-tools/ThirdParty-Mumps ;
     else
-    git clone --depth 1 https://github.com/coin-or-tools/ThirdParty-Mumps ;
+      git clone --depth 1 https://github.com/coin-or-tools/ThirdParty-Mumps ;
     fi ;
     pushd ThirdParty-Mumps &&
     ./get.Mumps &&
@@ -162,11 +174,11 @@ script:
   - >
     if $NOF77 ; then echo "skip test as no linear solver" ;
     else
-    make test || exit 1 ;
-    if [[ -d $HOME/spral ]] ; then
-    echo "linear_solver mumps" > test/ipopt.opt ;
-    make test ;
-    fi
+      make test || exit 1 ;
+      if [[ -d $HOME/spral ]] ; then
+        echo "linear_solver mumps" > test/ipopt.opt ;
+        make test ;
+      fi
     fi
   - make install
   - pushd examples/Cpp_example
