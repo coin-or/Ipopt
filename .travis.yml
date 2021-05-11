@@ -83,6 +83,10 @@ matrix:
       osx_image: xcode12.2
       env: OSX=10.15
       compiler: clang
+    - os: osx
+      osx_image: xcode12.5
+      env: OSX=11 NOF77=true SINGLEPRECISION=true INT64=true
+      compiler: clang
 
 before_script:
   - export VISHIDDEN=${VISHIDDEN:-false}
