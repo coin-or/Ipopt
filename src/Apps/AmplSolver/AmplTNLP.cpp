@@ -67,7 +67,7 @@ void AmplTNLP::gutsOfConstructor(
          jnlst_->Printf(J_ERROR, J_MAIN, "No .nl file given!\n");
          THROW_EXCEPTION(INVALID_TNLP, "No .nl file given!\n");
       }
-      nl = jac0dim(stub, (fint )strlen(stub));
+      nl = jac0dim(stub, (ftnlen)strlen(stub));
       DBG_ASSERT(nl);
    }
    jnlst_->Printf(J_SUMMARY, J_MAIN, "\n");
@@ -116,8 +116,11 @@ void AmplTNLP::gutsOfConstructor(
    }
 
    // read the rest of the nl file
+#ifdef IPOPT_INT64
+   int retcode = pfgh_read(nl, ASL_return_read_err | ASL_findgroups | ASL_allow_Z | ASL_use_Z);
+#else
    int retcode = pfgh_read(nl, ASL_return_read_err | ASL_findgroups);
-
+#endif
    switch( retcode )
    {
       case ASL_readerr_none:
@@ -373,7 +376,11 @@ bool AmplTNLP::get_nlp_info(
 
    n = n_var; // # of variables (variable types have been asserted in the constructor
    m = n_con; // # of constraints
+#ifdef IPOPT_INT64
+   nnz_jac_g = nZc; // # of non-zeros in the jacobian
+#else
    nnz_jac_g = nzc; // # of non-zeros in the jacobian
+#endif
    nnz_h_lag = nz_h_full_; // # of non-zeros in the hessian
 
    index_style = TNLP::FORTRAN_STYLE;
@@ -703,7 +710,11 @@ bool AmplTNLP::eval_h(
       Index k = 0;
       for( Index i = 0; i < n; i++ )
       {
+#ifdef IPOPT_INT64
+         for( size_t j = sputinfo->hcolstartsZ[i]; j < sputinfo->hcolstartsZ[i + 1]; j++ )
+#else
          for( Index j = sputinfo->hcolstarts[i]; j < sputinfo->hcolstarts[i + 1]; j++ )
+#endif
          {
             iRow[k] = i + 1;
             jCol[k] = sputinfo->hrownos[j] + 1;
@@ -1814,8 +1825,7 @@ std::vector<int> AmplSuffixHandler::GetIntegerSuffixValues(
    return ret;
 }
 
-const Number*
-AmplSuffixHandler::GetNumberSuffixValues(
+const Number* AmplSuffixHandler::GetNumberSuffixValues(
    const std::string& suffix_string,
    Suffix_Source      source
 ) const
