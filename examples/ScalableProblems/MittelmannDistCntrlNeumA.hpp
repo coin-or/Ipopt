@@ -548,7 +548,7 @@ protected:
       Number u
    ) const
    {
-      return -exp(y) - u;
+      return -std::exp(y) - u;
    }
 
    /** First partial derivative of forcing function w.r.t. y */
@@ -559,7 +559,7 @@ protected:
       Number /*u*/
    ) const
    {
-      return -exp(y);
+      return -std::exp(y);
    }
 
    /** First partial derivative of forcing function w.r.t. u */
@@ -581,7 +581,7 @@ protected:
       Number /*u*/
    ) const
    {
-      return -exp(y);
+      return -std::exp(y);
    }
 
    /** returns true if second partial derivative of d_cont
@@ -791,7 +791,7 @@ protected:
       Number u
    ) const
    {
-      return -exp(y) - u;
+      return -std::exp(y) - u;
    }
 
    /** First partial derivative of forcing function w.r.t. y */
@@ -802,7 +802,7 @@ protected:
       Number /*u*/
    ) const
    {
-      return -exp(y);
+      return -std::exp(y);
    }
 
    /** First partial derivative of forcing function w.r.t. u */
@@ -824,7 +824,7 @@ protected:
       Number /*u*/
    ) const
    {
-      return -exp(y);
+      return -std::exp(y);
    }
 
    /** returns true if second partial derivative of d_cont

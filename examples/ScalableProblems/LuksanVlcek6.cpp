@@ -192,7 +192,7 @@ bool LuksanVlcek6::eval_g(
 {
    for( Index i = 0; i < N_ / 2; i++ )
    {
-      Number e = exp(x[2 * i] - x[2 * i + 1] - x[2 * i + 2]);
+      Number e = std::exp(x[2 * i] - x[2 * i + 1] - x[2 * i + 2]);
       g[i] = 4. * x[2 * i + 1] - (x[2 * i] - x[2 * i + 2]) * e - 3;
    }
    return true;
@@ -237,7 +237,7 @@ bool LuksanVlcek6::eval_jac_g(
       Index ijac = 0;
       for( Index i = 0; i < N_ / 2; i++ )
       {
-         Number e = exp(x[2 * i] - x[2 * i + 1] - x[2 * i + 2]);
+         Number e = std::exp(x[2 * i] - x[2 * i + 1] - x[2 * i + 2]);
          Number a1 = (1. + x[2 * i] - x[2 * i + 2]) * e;
          values[ijac] = -a1;
          ijac++;
@@ -404,7 +404,7 @@ bool LuksanVlcek6::eval_h(
       // Now the constraints
       for( Index i = 0; i < N_ / 2; i++ )
       {
-         Number e = exp(x[2 * i] - x[2 * i + 1] - x[2 * i + 2]);
+         Number e = std::exp(x[2 * i] - x[2 * i + 1] - x[2 * i + 2]);
          Number a1 = 1. + x[2 * i] - x[2 * i + 2];
          Number a2 = 1. + a1;
          // x[2*i] x[2*i]

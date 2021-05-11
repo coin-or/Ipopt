@@ -124,7 +124,7 @@ bool LuksanVlcek4::eval_f(
    obj_value = 0.;
    for( Index i = 0; i < N_ / 2; i++ )
    {
-      Number e0 = exp(x[2 * i]);
+      Number e0 = std::exp(x[2 * i]);
       Number e0mx1 = e0 - x[2 * i + 1];
       Number x1mx2 = x[2 * i + 1] - x[2 * i + 2];
       Number x2mx3 = x[2 * i + 2] - x[2 * i + 3];
@@ -148,7 +148,7 @@ bool LuksanVlcek4::eval_grad_f(
    grad_f[1] = 0.;
    for( Index i = 0; i < N_ / 2; i++ )
    {
-      Number e0 = exp(x[2 * i]);
+      Number e0 = std::exp(x[2 * i]);
       Number e0mx1 = e0 - x[2 * i + 1];
       Number x1mx2 = x[2 * i + 1] - x[2 * i + 2];
       Number x2mx3 = x[2 * i + 2] - x[2 * i + 3];
@@ -273,7 +273,7 @@ bool LuksanVlcek4::eval_h(
       values[2] = 0.;
       for( Index i = 0; i < N_ / 2; i++ )
       {
-         Number e0 = exp(x[2 * i]);
+         Number e0 = std::exp(x[2 * i]);
          Number e0mx1 = e0 - x[2 * i + 1];
          Number x1mx2 = x[2 * i + 1] - x[2 * i + 2];
          Number x2mx3 = x[2 * i + 2] - x[2 * i + 3];

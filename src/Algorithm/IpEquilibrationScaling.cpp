@@ -238,11 +238,11 @@ void EquilibrationScaling::DetermineScalingParametersImpl(
    Number* col_scale = new Number[nx];
    for( Index i = 0; i < nc + nd + 1; i++ )
    {
-      row_scale[i] = exp((Number) R[i]);
+      row_scale[i] = std::exp(Number(R[i]));
    }
    for( Index i = 0; i < nx; i++ )
    {
-      col_scale[i] = exp((Number) C[i]);
+      col_scale[i] = std::exp(Number(C[i]));
    }
    delete[] R;
    delete[] C;

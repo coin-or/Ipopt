@@ -798,10 +798,10 @@ public:
    public:
       ProblemSpecs()
          : pi_(4. * atan(1.)),
-           exp13_(exp(1. / 3.)),
-           exp23_(exp(2. / 3.)),
-           exp1_(exp(1.)),
-           expm1_(exp(-1.)),
+           exp13_(std::exp(1. / 3.)),
+           exp23_(std::exp(2. / 3.)),
+           exp1_(std::exp(1.)),
+           expm1_(std::exp(-1.)),
            sqrt2_(sqrt(2.))
       { }
 
@@ -863,7 +863,7 @@ public:
          Number t
       )
       {
-         return -exp(-2. * t);
+         return -std::exp(-2. * t);
       }
 
       inline Number a_u(
@@ -1261,10 +1261,10 @@ public:
    public:
       ProblemSpecs()
          : pi_(4. * atan(1.)),
-           exp13_(exp(1. / 3.)),
-           exp23_(exp(2. / 3.)),
-           exp1_(exp(1.)),
-           expm1_(exp(-1.)),
+           exp13_(std::exp(1. / 3.)),
+           exp23_(std::exp(2. / 3.)),
+           exp1_(std::exp(1.)),
+           expm1_(std::exp(-1.)),
            sqrt2_(sqrt(2.))
       { }
 
@@ -1326,7 +1326,7 @@ public:
          Number t
       )
       {
-         return -exp(-2. * t);
+         return -std::exp(-2. * t);
       }
 
       inline Number a_u(

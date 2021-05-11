@@ -168,7 +168,7 @@ bool Mc19TSymScalingMethod::ComputeSymTScalingFactors(
    Number smax = 0.;
    for( Index i = 0; i < n; i++ )
    {
-      scaling_factors[i] = exp((Number) ((R[i] + C[i]) / 2.));
+      scaling_factors[i] = std::exp((Number) ((R[i] + C[i]) / 2.));
       sum += scaling_factors[i];
       smax = Max(smax, scaling_factors[i]);
    }

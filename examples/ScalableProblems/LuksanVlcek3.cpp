@@ -169,7 +169,7 @@ bool LuksanVlcek3::eval_g(
 )
 {
    g[0] = 3. * std::pow(x[0], 3) + 2. * x[1] - 5. + sin(x[0] - x[1]) * sin(x[0] + x[1]);
-   g[1] = 4. * x[n - 3] - x[n - 4] * exp(x[n - 4] - x[n - 3]) - 3;
+   g[1] = 4. * x[n - 3] - x[n - 4] * std::exp(x[n - 4] - x[n - 3]) - 3;
 
    return true;
 }
@@ -216,9 +216,9 @@ bool LuksanVlcek3::eval_jac_g(
       ijac++;
       values[ijac] = 2. - cos(x[0] - x[1]) * sin(x[0] + x[1]) + sin(x[0] - x[1]) * cos(x[0] + x[1]);
       ijac++;
-      values[ijac] = -(1. + x[n - 4]) * exp(x[n - 4] - x[n - 3]);
+      values[ijac] = -(1. + x[n - 4]) * std::exp(x[n - 4] - x[n - 3]);
       ijac++;
-      values[ijac] = 4. + x[n - 4] * exp(x[n - 4] - x[n - 3]);
+      values[ijac] = 4. + x[n - 4] * std::exp(x[n - 4] - x[n - 3]);
       // ijac++;
    }
 
@@ -344,15 +344,15 @@ bool LuksanVlcek3::eval_h(
 
       // x[n-4] x[n-4]
       ihes = nele_hess - 8;
-      values[ihes] += -lambda[1] * (2. + x[n - 4]) * exp(d1);
+      values[ihes] += -lambda[1] * (2. + x[n - 4]) * std::exp(d1);
 
       // x[n-4] x[n-3]
       ihes++;
-      values[ihes] += lambda[1] * (1. + x[n - 4]) * exp(d1);
+      values[ihes] += lambda[1] * (1. + x[n - 4]) * std::exp(d1);
 
       // x[n-3] x[n-3]
       ihes += 2;
-      values[ihes] += -lambda[1] * x[n - 4] * exp(d1);
+      values[ihes] += -lambda[1] * x[n - 4] * std::exp(d1);
    }
    return true;
 }

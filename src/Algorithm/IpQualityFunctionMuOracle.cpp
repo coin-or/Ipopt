@@ -830,7 +830,7 @@ Number QualityFunctionMuOracle::PerformGoldenSection(
 
 /*
  Number QualityFunctionMuOracle::ScaleSigma(Number sigma) {return log(sigma);}
- Number QualityFunctionMuOracle::UnscaleSigma(Number scaled_sigma) {return exp(scaled_sigma);}
+ Number QualityFunctionMuOracle::UnscaleSigma(Number scaled_sigma) {return std::exp(scaled_sigma);}
  */
 
 Number QualityFunctionMuOracle::ScaleSigma(
@@ -887,7 +887,7 @@ Number QualityFunctionMuOracle::UnscaleSigma(
  Number log_sigma_mid1 = log_sigma_lo + gfac*(log_sigma_up-log_sigma_lo);
  Number log_sigma_mid2 = log_sigma_lo + (1.-gfac)*(log_sigma_up-log_sigma_lo);
 
- Number qmid1 = CalculateQualityFunction(exp(log_sigma_mid1),
+ Number qmid1 = CalculateQualityFunction(std::exp(log_sigma_mid1),
  step_aff_x_L,
  step_aff_x_U,
  step_aff_s_L,
@@ -908,7 +908,7 @@ Number QualityFunctionMuOracle::UnscaleSigma(
  step_cen_z_U,
  step_cen_v_L,
  step_cen_v_U);
- Number qmid2 = CalculateQualityFunction(exp(log_sigma_mid2),
+ Number qmid2 = CalculateQualityFunction(std::exp(log_sigma_mid2),
  step_aff_x_L,
  step_aff_x_U,
  step_aff_s_L,
@@ -938,7 +938,7 @@ Number QualityFunctionMuOracle::UnscaleSigma(
  log_sigma_mid1 = log_sigma_mid2;
  qmid1 = qmid2;
  log_sigma_mid2 = log_sigma_lo + (1.-gfac)*(log_sigma_up-log_sigma_lo);
- qmid2 = CalculateQualityFunction(exp(log_sigma_mid2),
+ qmid2 = CalculateQualityFunction(std::exp(log_sigma_mid2),
  step_aff_x_L,
  step_aff_x_U,
  step_aff_s_L,
@@ -965,7 +965,7 @@ Number QualityFunctionMuOracle::UnscaleSigma(
  log_sigma_mid2 = log_sigma_mid1;
  qmid2 = qmid1;
  log_sigma_mid1 = log_sigma_lo + gfac*(log_sigma_up-log_sigma_lo);
- qmid1 = CalculateQualityFunction(exp(log_sigma_mid1),
+ qmid1 = CalculateQualityFunction(std::exp(log_sigma_mid1),
  step_aff_x_L,
  step_aff_x_U,
  step_aff_s_L,
@@ -999,7 +999,7 @@ Number QualityFunctionMuOracle::UnscaleSigma(
  q = qmid2;
  }
  if (log_sigma_up == log_sigma_up_in) {
- Number qtmp = CalculateQualityFunction(exp(log_sigma_up),
+ Number qtmp = CalculateQualityFunction(std::exp(log_sigma_up),
  step_aff_x_L,
  step_aff_x_U,
  step_aff_s_L,
@@ -1026,7 +1026,7 @@ Number QualityFunctionMuOracle::UnscaleSigma(
  }
  }
  else if (log_sigma_lo == log_sigma_lo_in) {
- Number qtmp = CalculateQualityFunction(exp(log_sigma_lo),
+ Number qtmp = CalculateQualityFunction(std::exp(log_sigma_lo),
  step_aff_x_L,
  step_aff_x_U,
  step_aff_s_L,
@@ -1053,7 +1053,7 @@ Number QualityFunctionMuOracle::UnscaleSigma(
  }
  }
 
- return exp(log_sigma);
+ return std::exp(log_sigma);
  }
  */
 
