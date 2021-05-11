@@ -31,6 +31,9 @@ RedHat-based distributions, `pacman` for Arch, etc. The g++ and gfortran
 compilers may need to be specified respectively as `gcc-c++` and
 `gcc-gfortran` with some package managers.
 
+If \ref INT64_BUILD, a variant of Lapack that uses 64-bit integers is required.
+On some Linux distributions (e.g., Ubuntu), this is available by installing package `liblapack64-dev`.
+
 \subsection SYSTEMPACKAGES_MAC macOS
 
 You need either the [Xcode Command Line Tools](https://developer.apple.com/downloads)
@@ -826,5 +829,44 @@ Regarding dependencies of %Ipopt, the situation is as follows:
 - The interface to WSMP is not available when building for single-precision.
 
 When building %Ipopt for single-precision arithmetic, the default for option \ref OPT_tol "tol" is changed to 1e-5.
+
+
+\section INT64_BUILD Building for 64-bit integers
+
+%Ipopt by default defines its types Ipopt::Index (C++) and \ref ipindex (C) to be `int`, which on many systems has a size of 32-bit.
+This limits the size of problems to be solved to 2^31 variables, constraints, nonzero elements in matrices, etc.
+Using the configure flag `--with-intsize=64`, it is possible to build a variant of %Ipopt that defines `Ipopt::Index`/\ref ipindex to be `int64_t`, i.e., an integer of size 64 bit.
+Further, the C preprocessor variable `IPOPT_INT64` is defined in `IpoptConfig.h`.
+
+Note that using 64-bit integers increases the memory usage of %Ipopt significantly since type Ipopt::Index is used for almost all integers in %Ipopt.
+It is not possible to build for both 32- and 64-bit integers simultaneously.
+
+If the %Ipopt code is compiled for 64-bit integers, then also third-party
+codes that interface with or are interfaced by %Ipopt may need to support this
+integer size.
+Regarding included code that interfaces to %Ipopt, the situation is as follows:
+- \ref INTERFACE_CPP supports 64-bit integers by having Ipopt::Index defined as `int64_t`.
+- \ref INTERFACE_C supports 64-bit integers by having \ref ipindex defined as `int64_t`.
+- \ref INTERFACE_FORTRAN supports 64-bit integers by using an 8-byte kind for `INTEGER`.
+- \ref INTERFACE_JAVA does not support 64-bit integers because Java arrays can only be indexed by 32-bit integers.
+  However, the Java interface can be used with 32-bit integers and an %Ipopt library that is build for 64-bit integers.
+- \ref INTERFACE_AMPL "The AMPL interface" allows for problem instances with more than 2^31 nonzeros in Jacobian or Hessian.
+  This requires that ASL has been build with `ASL_big_goff` defined (this define also need to be present in the ASL header files that the %Ipopt build includes).
+  If using `ThirdParty-ASL`, then this achieved by selecting configure option `--with-intsize=64`, see also the [ThirdParty-ASL docu](https://github.com/coin-or-tools/ThirdParty-ASL#jacobians-with-for-more-than-231-nonzeros).
+  Note that problems instances are still limited to at most 2^31 variables and constraints - this is a limitation of AMPL or ASL.
+- \ref INTERFACE_R does not support 64-bit integers because R only supports 32-bit integers.
+  However, the R interface can still be used with an %Ipopt library that is build for 64-bit integers.
+- \ref SIPOPT "sIpopt" supports 64-bit integers.
+
+Regarding dependencies of %Ipopt, the situation is as follows:
+- A variant of Blas and Lapack that uses 64-bit integers is required.
+  If `--with-intsize=64` is seletected, then the check in configure by default only looks for Intel MKL and tries `-llapack64 -lblas64`, see also the [BuildTools docu](https://coin-or-tools.github.io/BuildTools/configure#check-for-lapack-with-64-bit-integers).
+- The interface to MUMPS can use a version of MUMPS that has been compiled for 64-bit integers.
+  If using ThirdParty-Mumps to build a MUMPS library, note that only the branch `mumps5` has been updated to allow for building a version of MUMPS that uses 64-bit integers, see also the [ThirdParty-Mumps docu](https://github.com/coin-or-tools/ThirdParty-Mumps/tree/mumps5#64-bit-integers).
+- The interfaces to the HSL routines are not available.
+- The interface for Pardiso from pardiso-project.org is not available.
+- The interface for Pardiso from Intel MKL is available if the ILP64 variant of Intel MKL is used for Blas/Lapack.
+- The interface to WSMP is not available.
+- The interface to SPRAL is not available.
 
 */
