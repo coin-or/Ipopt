@@ -274,8 +274,8 @@ bool CGSearchDirCalculator::ComputeSearchDirection()
       SmartPtr<const Vector> delta_fast_s = CGPenData().delta_cgfast()->s();
       SmartPtr<const Vector> delta_x = CGPenData().delta_cgpen()->x();
       SmartPtr<const Vector> delta_s = CGPenData().delta_cgpen()->s();
-      Number tilde_dx_nrm = sqrt(std::pow(delta_fast_x->Nrm2(), 2.) + std::pow(delta_fast_s->Nrm2(), 2.));
-      Number diff_dx_nrm = sqrt(
+      Number tilde_dx_nrm = std::sqrt(std::pow(delta_fast_x->Nrm2(), 2.) + std::pow(delta_fast_s->Nrm2(), 2.));
+      Number diff_dx_nrm = std::sqrt(
                               std::pow(delta_fast_x->Nrm2(), 2.) + std::pow(delta_fast_s->Nrm2(), 2.) - 2. * delta_x->Dot(*delta_fast_x)
                               - 2. * delta_s->Dot(*delta_fast_s) + std::pow(delta_x->Nrm2(), 2.) + std::pow(delta_s->Nrm2(), 2.));
       Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
@@ -295,8 +295,8 @@ bool CGSearchDirCalculator::ComputeSearchDirection()
          SmartPtr<const Vector> delta_fast_y_d = CGPenData().delta_cgfast()->y_d();
          SmartPtr<const Vector> delta_y_c = CGPenData().delta_cgpen()->y_c();
          SmartPtr<const Vector> delta_y_d = CGPenData().delta_cgpen()->y_d();
-         Number tilde_dy_nrm = sqrt(std::pow(delta_fast_y_c->Nrm2(), 2.) + std::pow(delta_fast_y_d->Nrm2(), 2.));
-         Number bar_y_nrm = sqrt(
+         Number tilde_dy_nrm = std::sqrt(std::pow(delta_fast_y_c->Nrm2(), 2.) + std::pow(delta_fast_y_d->Nrm2(), 2.));
+         Number bar_y_nrm = std::sqrt(
                                std::pow(y_c->Nrm2(), 2.) + std::pow(y_d->Nrm2(), 2.) + 2. * y_c->Dot(*delta_y_c) + 2. * y_d->Dot(*delta_y_d)
                                + std::pow(delta_y_c->Nrm2(), 2.) + std::pow(delta_y_d->Nrm2(), 2.));
          Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,

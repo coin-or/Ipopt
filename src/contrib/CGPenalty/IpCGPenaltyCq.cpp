@@ -456,7 +456,7 @@ Number CGPenaltyCq::curr_added_y_nrm2()
       SmartPtr<Vector> y_d_plus_dy_d = ip_data_->delta()->y_d()->MakeNew();
       y_c_plus_dy_c->AddTwoVectors(1., *ip_data_->delta()->y_c(), 1., *ip_data_->curr()->y_c(), 0.);
       y_d_plus_dy_d->AddTwoVectors(1., *ip_data_->delta()->y_d(), 1., *ip_data_->curr()->y_d(), 0.);
-      result = sqrt(std::pow(y_c_plus_dy_c->Nrm2(), 2) + std::pow(y_d_plus_dy_d->Nrm2(), 2));
+      result = std::sqrt(std::pow(y_c_plus_dy_c->Nrm2(), 2) + std::pow(y_d_plus_dy_d->Nrm2(), 2));
       curr_added_y_nrm2_cache_.AddCachedResult(result, deps);
    }
    return result;

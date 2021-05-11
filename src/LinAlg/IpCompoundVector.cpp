@@ -152,7 +152,7 @@ Number CompoundVector::Nrm2Impl() const
       Number nrm2 = ConstComp(i)->Nrm2();
       sum += nrm2 * nrm2;
    }
-   return sqrt(sum);
+   return std::sqrt(sum);
 }
 
 Number CompoundVector::AsumImpl() const

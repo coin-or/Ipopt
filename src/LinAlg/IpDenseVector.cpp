@@ -209,7 +209,7 @@ Number DenseVector::Nrm2Impl() const
    DBG_ASSERT(initialized_);
    if( homogeneous_ )
    {
-      return sqrt((Number) Dim()) * std::abs(scalar_);
+      return std::sqrt((Number) Dim()) * std::abs(scalar_);
    }
    else
    {
@@ -489,13 +489,13 @@ void DenseVector::ElementWiseSqrtImpl()
    DBG_ASSERT(initialized_);
    if( homogeneous_ )
    {
-      scalar_ = sqrt(scalar_);
+      scalar_ = std::sqrt(scalar_);
    }
    else
    {
       for( Index i = 0; i < Dim(); i++ )
       {
-         values_[i] = sqrt(values_[i]);
+         values_[i] = std::sqrt(values_[i]);
       }
    }
 }

@@ -415,7 +415,7 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
                      sigma_ = (sTy_new / std::pow(s_new->Nrm2(), 2) + std::pow(y_new->Nrm2(), 2) / sTy_new) / 2.;
                      break;
                   case SCALAR4:
-                     sigma_ = sqrt(sTy_new / std::pow(s_new->Nrm2(), 2) * std::pow(y_new->Nrm2(), 2) / sTy_new);
+                     sigma_ = std::sqrt(sTy_new / std::pow(s_new->Nrm2(), 2) * std::pow(y_new->Nrm2(), 2) / sTy_new);
                      break;
                   case CONSTANT:
                      sigma_ = limited_memory_init_val_;
@@ -440,7 +440,7 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
             // First update V - here only the last column is updated
             DBG_ASSERT(sTy_new > 0.);
             SmartPtr<Vector> v_new = y_new->MakeNewCopy();
-            v_new->Scal(1. / sqrt(sTy_new));
+            v_new->Scal(1. / std::sqrt(sTy_new));
             if( augment_memory )
             {
                AugmentMultiVector(V_, *v_new);
@@ -569,7 +569,7 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
                         sigma_ = (sTy_new / std::pow(s_new->Nrm2(), 2) + std::pow(y_new->Nrm2(), 2) / sTy_new) / 2.;
                         break;
                      case SCALAR4:
-                        sigma_ = sqrt(sTy_new / std::pow(s_new->Nrm2(), 2) * std::pow(y_new->Nrm2(), 2) / sTy_new);
+                        sigma_ = std::sqrt(sTy_new / std::pow(s_new->Nrm2(), 2) * std::pow(y_new->Nrm2(), 2) / sTy_new);
                         break;
                      case CONSTANT:
                         sigma_ = limited_memory_init_val_;
@@ -958,7 +958,7 @@ bool LimMemQuasiNewtonUpdater::SplitEigenvalues(
    Number* Qminus_vals = Qminus->Values();
    for( Index j = 0; j < nneg; j++ )
    {
-      Number esqrt = sqrt(-Evals[j]);
+      Number esqrt = std::sqrt(-Evals[j]);
       for( Index i = 0; i < dim; i++ )
       {
          Qminus_vals[i + j * dim] = Qvals[i + j * dim] / esqrt;
@@ -972,7 +972,7 @@ bool LimMemQuasiNewtonUpdater::SplitEigenvalues(
    for( Index j = 0; j < dim - nneg; j++ )
    {
       DBG_ASSERT(Evals[j + nneg] > 0.);
-      Number esqrt = sqrt(Evals[j + nneg]);
+      Number esqrt = std::sqrt(Evals[j + nneg]);
       for( Index i = 0; i < dim; i++ )
       {
          Qplus_vals[i + j * dim] = Qvals[i + (j + nneg) * dim] / esqrt;
@@ -992,7 +992,7 @@ bool LimMemQuasiNewtonUpdater::CheckSkippingBFGS(
    Number ynrm = y_new.Nrm2();
 
    // ToDo make a parameter?
-   Number tol = sqrt(std::numeric_limits<Number>::epsilon());
+   Number tol = std::sqrt(std::numeric_limits<Number>::epsilon());
 
    Jnlst().Printf(J_DETAILED, J_HESSIAN_APPROXIMATION,
                   "Limited-Memory test for skipping:\n");

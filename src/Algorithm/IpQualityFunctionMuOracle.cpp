@@ -601,18 +601,18 @@ Number QualityFunctionMuOracle::CalculateQualityFunction(
                          tmp_slack_s_U_->Amax());
          break;
       case NM_NORM_2:
-         dual_inf = (1. - alpha_dual) * sqrt(std::pow(curr_grad_lag_x_nrm2_, 2) + std::pow(curr_grad_lag_s_nrm2_, 2));
-         primal_inf = (1. - alpha_primal) * sqrt(std::pow(curr_c_nrm2_, 2) + std::pow(curr_d_minus_s_nrm2_, 2));
-         compl_inf = sqrt(
+         dual_inf = (1. - alpha_dual) * std::sqrt(std::pow(curr_grad_lag_x_nrm2_, 2) + std::pow(curr_grad_lag_s_nrm2_, 2));
+         primal_inf = (1. - alpha_primal) * std::sqrt(std::pow(curr_c_nrm2_, 2) + std::pow(curr_d_minus_s_nrm2_, 2));
+         compl_inf = std::sqrt(
                         std::pow(tmp_slack_x_L_->Nrm2(), 2) + std::pow(tmp_slack_x_U_->Nrm2(), 2) + std::pow(tmp_slack_s_L_->Nrm2(), 2)
                         + std::pow(tmp_slack_s_U_->Nrm2(), 2));
-         dual_inf /= sqrt((Number) n_dual_);
+         dual_inf /= std::sqrt((Number) n_dual_);
          if( n_pri_ > 0 )
          {
-            primal_inf /= sqrt((Number) n_pri_);
+            primal_inf /= std::sqrt((Number) n_pri_);
          }
          DBG_ASSERT(n_comp_ > 0);
-         compl_inf /= sqrt((Number) n_comp_);
+         compl_inf /= std::sqrt((Number) n_comp_);
          break;
       default:
          DBG_ASSERT(false && "Unknown value for quality_function_norm_");
@@ -698,7 +698,7 @@ Number QualityFunctionMuOracle::PerformGoldenSection(
    Number sigma_lo = ScaleSigma(sigma_lo_in);
 
    Number sigma;
-   Number gfac = (3. - sqrt(5.)) / 2.;
+   Number gfac = (3. - std::sqrt(5.)) / 2.;
    Number sigma_mid1 = sigma_lo + gfac * (sigma_up - sigma_lo);
    Number sigma_mid2 = sigma_lo + (1. - gfac) * (sigma_up - sigma_lo);
 
@@ -883,7 +883,7 @@ Number QualityFunctionMuOracle::UnscaleSigma(
 
  Number log_sigma_up_in = log_sigma_up;
  Number log_sigma_lo_in = log_sigma_lo;
- Number gfac = (3.-sqrt(5.))/2.;
+ Number gfac = (3.-std::sqrt(5.))/2.;
  Number log_sigma_mid1 = log_sigma_lo + gfac*(log_sigma_up-log_sigma_lo);
  Number log_sigma_mid2 = log_sigma_lo + (1.-gfac)*(log_sigma_up-log_sigma_lo);
 

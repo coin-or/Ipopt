@@ -678,16 +678,16 @@ Number AdaptiveMuUpdate::quality_function_pd_system()
          dual_inf = IpCq().curr_dual_infeasibility(NORM_2);
          primal_inf = IpCq().curr_primal_infeasibility(NORM_2);
          complty = IpCq().curr_complementarity(0., NORM_2);
-         dual_inf /= sqrt((Number) n_dual);
+         dual_inf /= std::sqrt((Number) n_dual);
          DBG_ASSERT(n_pri > 0 || primal_inf == 0.);
          if( n_pri > 0 )
          {
-            primal_inf /= sqrt((Number) n_pri);
+            primal_inf /= std::sqrt((Number) n_pri);
          }
          DBG_ASSERT(n_comp > 0 || complty == 0.);
          if( n_comp > 0 )
          {
-            complty /= sqrt((Number) n_comp);
+            complty /= std::sqrt((Number) n_comp);
          }
          break;
    }

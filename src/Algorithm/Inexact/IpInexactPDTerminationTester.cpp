@@ -193,14 +193,14 @@ bool InexactPDTerminationTester::InitializeSolve()
       curr_Av_norm_ = IpCq().CalcNormOfType(NORM_2, *curr_Av_c_, *curr_Av_d_);
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "TT: curr_Av_norm_ = %23.16e\n", curr_Av_norm_);
-      curr_tt1_norm_ = sqrt(std::pow(curr_tt2_norm_, 2) + std::pow(curr_Av_norm_, 2));
+      curr_tt1_norm_ = std::sqrt(std::pow(curr_tt2_norm_, 2) + std::pow(curr_Av_norm_, 2));
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "TT: curr_tt1_norm_ = %23.16e\n", curr_tt1_norm_);
    }
    else
    {
       curr_Av_norm_ = -1.;
-      curr_tt1_norm_ = sqrt(std::pow(curr_tt2_norm_, 2) + std::pow(c_norm_, 2));
+      curr_tt1_norm_ = std::sqrt(std::pow(curr_tt2_norm_, 2) + std::pow(c_norm_, 2));
    }
 
    if( compute_normal && IsValid(last_grad_barrier_obj_x) )
@@ -213,7 +213,7 @@ bool InexactPDTerminationTester::InitializeSolve()
       last_nabla_phi_plus_ATy_s->AddTwoVectors(1., *last_grad_barrier_obj_s, -1., *IpData().curr()->y_d(), 0.);
       last_nabla_phi_plus_ATy_s->ElementWiseMultiply(*last_scaling_slacks);
       last_tt1_norm_ = IpCq().CalcNormOfType(NORM_2, *last_nabla_phi_plus_ATy_x, *last_nabla_phi_plus_ATy_s);
-      last_tt1_norm_ = sqrt(std::pow(last_tt1_norm_, 2) + std::pow(last_Av_norm_, 2));
+      last_tt1_norm_ = std::sqrt(std::pow(last_tt1_norm_, 2) + std::pow(last_Av_norm_, 2));
    }
    else
    {
@@ -504,7 +504,7 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
       // decomposition.  In that case, c_plus_Ad_norm should indeed be
       // the same as what resid_c and resid_d woulod give (TODO:
       // check?!?)
-      Number resid_norm = sqrt(std::pow(rho_norm, 2) + std::pow(c_plus_Ad_norm, 2));
+      Number resid_norm = std::sqrt(std::pow(rho_norm, 2) + std::pow(c_plus_Ad_norm, 2));
       lhs = resid_norm;
       rhs = tt_kappa1_ * curr_tt1_norm_;
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,

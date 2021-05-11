@@ -409,7 +409,7 @@ void WarmStartIterateInitializer::adapt_to_target_mu(
          values_z[i] = target_mu / values_s[i];
          if( values_z[i] > values_s[i] )
          {
-            values_s[i] = values_z[i] = sqrt(target_mu);
+            values_s[i] = values_z[i] = std::sqrt(target_mu);
          }
       }
       else if( values_z[i] > 1e4 * values_s[i] )
@@ -417,12 +417,12 @@ void WarmStartIterateInitializer::adapt_to_target_mu(
          values_s[i] = target_mu / values_z[i];
          if( values_s[i] > values_z[i] )
          {
-            values_s[i] = values_z[i] = sqrt(target_mu);
+            values_s[i] = values_z[i] = std::sqrt(target_mu);
          }
       }
       else
       {
-         values_s[i] = values_z[i] = sqrt(target_mu);
+         values_s[i] = values_z[i] = std::sqrt(target_mu);
       }
    }
 }

@@ -233,7 +233,7 @@ bool InexactDoglegNormalStep::ComputeNormalStep(
       Number a = v_newton_norm * v_newton_norm - 2 * v_cs_dot_n + v_cauchy_norm * v_cauchy_norm;
       Number b = 2 * (v_cs_dot_n - v_newton_norm * v_newton_norm);
       Number c = v_newton_norm * v_newton_norm - tr_radius * tr_radius;
-      Number lambda = (-b - sqrt(b * b - 4. * a * c)) / (2. * a);
+      Number lambda = (-b - std::sqrt(b * b - 4. * a * c)) / (2. * a);
 
       DBG_PRINT((1, "v_cauchy_norm = %e v_cs_dot_n = %e v_newton_norm = %e\n", v_cauchy_norm, v_cs_dot_n, v_newton_norm));
 

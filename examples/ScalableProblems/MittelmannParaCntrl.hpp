@@ -802,7 +802,7 @@ public:
            exp23_(std::exp(2. / 3.)),
            exp1_(std::exp(1.)),
            expm1_(std::exp(-1.)),
-           sqrt2_(sqrt(2.))
+           sqrt2_(std::sqrt(2.))
       { }
 
       Number T()
@@ -1265,7 +1265,7 @@ public:
            exp23_(std::exp(2. / 3.)),
            exp1_(std::exp(1.)),
            expm1_(std::exp(-1.)),
-           sqrt2_(sqrt(2.))
+           sqrt2_(std::sqrt(2.))
       { }
 
       Number T()
