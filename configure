@@ -22563,14 +22563,15 @@ fi
 
 # Specify 8-byte integers if intsize=64 (TODO This should become a macro in BuildTools that figures out the right flag to use)
 if test $intsize = 64 ; then
-  case $F77 in
+  case "$F77" in
     *gfortran*) FFLAGS="$FFLAGS -fdefault-integer-8" ;;
     *ifort*)
       case $build in
         *-cygwin* | *-mingw* | *-msys* ) FFLAGS="$FFLAGS -integer-size:64" ;;
-        *) F77FLAGS="$FFLAGS -integer-size 64" ;;
+        *) FFLAGS="$FFLAGS -integer-size 64" ;;
       esac
       ;;
+    "" ) ;; # no Fortran compiler, then don't do anything
     *) as_fn_error $? "Do not know how to select 8-byte integers for Fortran compiler $FC" "$LINENO" 5 ;;
   esac
 fi
@@ -25972,7 +25973,7 @@ else $as_nop
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25975 "configure" */
+/* #line 25976 "configure" */
 public class Test {
 }
 EOF
@@ -26498,7 +26499,7 @@ else $as_nop
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 26501 "configure" */
+/* #line 26502 "configure" */
 public class Test {
 }
 EOF
@@ -26533,7 +26534,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 26536 "configure" */
+/* [#]line 26537 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);

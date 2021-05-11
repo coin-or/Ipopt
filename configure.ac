@@ -86,14 +86,15 @@ AM_CONDITIONAL([IPOPT_INT64],[test "$intsize" = 64])
 
 # Specify 8-byte integers if intsize=64 (TODO This should become a macro in BuildTools that figures out the right flag to use)
 if test $intsize = 64 ; then
-  case $F77 in
+  case "$F77" in
     *gfortran*) FFLAGS="$FFLAGS -fdefault-integer-8" ;;
     *ifort*)
       case $build in
         *-cygwin* | *-mingw* | *-msys* ) FFLAGS="$FFLAGS -integer-size:64" ;;
-        *) F77FLAGS="$FFLAGS -integer-size 64" ;;
+        *) FFLAGS="$FFLAGS -integer-size 64" ;;
       esac
       ;;
+    "" ) ;; # no Fortran compiler, then don't do anything
     *) AC_MSG_ERROR([Do not know how to select 8-byte integers for Fortran compiler $FC]) ;;
   esac
 fi
