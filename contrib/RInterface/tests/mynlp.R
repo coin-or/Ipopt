@@ -65,8 +65,8 @@ ub <- c(  1,  1.0e19 )
 constraint_lb <- 0
 constraint_ub <- 0
 
-opts <- list("print_level"=0,
-             "file_print_level"=12,
+opts <- list("print_level"=5,
+             "file_print_level"=6,
              "output_file"="ipopttest.out")
 
 print( ipoptr( x0=x0,

@@ -108,8 +108,8 @@ constraint_lb <- c(  25, 40 )
 constraint_ub <- c( Inf, 40 )
 
 
-opts <- list("print_level"=0,
-             "file_print_level"=12,
+opts <- list("print_level"=5,
+             "file_print_level"=6,
              "output_file"="hs071_nlp.out")
 
 print( ipoptr( x0=x0,
