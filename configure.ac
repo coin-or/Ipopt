@@ -216,8 +216,9 @@ AM_CONDITIONAL([HAVE_PARDISO_MKL],[test "$have_pardiso_mkl" = yes])
 # SPRAL #
 #########
 
-# check for Spral only if building for double precision
-if test $precision = double ; then
+# check for Spral only if building for double precision and 32-bit integers
+# spral_ssids seems to support more than 2^31 nonzeros in a matrix, but not dimensions > 2^31
+if test $precision$intsize = double32 ; then
   AC_LANG_PUSH(C++)
   AC_COIN_CHK_LIBHDR(Spral,[IpoptLib],[],[],[],
     [spral_ssids_solve(0, 0, (double*)0, 0, (void*)0, (void*)0, (const struct spral_ssids_options*)0, (struct spral_ssids_inform*)0);],

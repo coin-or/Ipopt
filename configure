@@ -24932,8 +24932,9 @@ fi
 # SPRAL #
 #########
 
-# check for Spral only if building for double precision
-if test $precision = double ; then
+# check for Spral only if building for double precision and 32-bit integers
+# spral_ssids seems to support more than 2^31 nonzeros in a matrix, but not dimensions > 2^31
+if test $precision$intsize = double32 ; then
   ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -25261,7 +25262,7 @@ else $as_nop
 fi
 
 
-if test $have_wsmp$intsize = yes32 ; then
+if test $have_wsmp$precision$intsize = yesdouble32 ; then
 
   ac_save_LIBS="$LIBS"
   LIBS="$wsmp_lflags $LIBS"
@@ -25971,7 +25972,7 @@ else $as_nop
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25974 "configure" */
+/* #line 25975 "configure" */
 public class Test {
 }
 EOF
@@ -26497,7 +26498,7 @@ else $as_nop
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 26500 "configure" */
+/* #line 26501 "configure" */
 public class Test {
 }
 EOF
@@ -26532,7 +26533,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 26535 "configure" */
+/* [#]line 26536 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
