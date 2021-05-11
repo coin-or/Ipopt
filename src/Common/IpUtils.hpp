@@ -11,6 +11,8 @@
 #include "IpTypes.hpp"
 #include "IpDebug.hpp"
 
+#include <algorithm>
+
 namespace Ipopt
 {
 
@@ -20,7 +22,7 @@ inline T Max(
    T b
 )
 {
-   return ((a) > (b) ? (a) : (b));
+   return std::max(a,b);
 }
 
 template<typename T>
@@ -30,9 +32,7 @@ inline T Max(
    T c
 )
 {
-   T max = Max(a, b);
-   max = Max(max, c);
-   return max;
+   return std::max(std::max(a,b),c);
 }
 
 template<typename T>
@@ -43,8 +43,7 @@ inline T Max(
    T d
 )
 {
-   T max = Max(a, b, c);
-   return Max(max, d);
+   return std::max(std::max(a,b),std::max(c,d));
 }
 
 template<typename T>
@@ -53,7 +52,7 @@ inline T Min(
    T b
 )
 {
-   return ((a) < (b) ? (a) : (b));
+   return std::min(a,b);
 }
 
 template<typename T>
@@ -63,8 +62,7 @@ inline T Min(
    T c
 )
 {
-   T min = Min(a, b);
-   return Min(min, c);
+   return std::min(std::min(a,b),c);
 }
 
 template<typename T>
@@ -75,8 +73,7 @@ inline T Min(
    T d
 )
 {
-   T min = Min(a, b, c);
-   return Min(min, d);
+   return std::min(std::min(a,b),std::min(c,d));
 }
 
 /** Function returning true iff the argument is a valid double number
