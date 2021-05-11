@@ -849,14 +849,14 @@ public:
          Number x
       )
       {
-         return (exp1_ + expm1_) * cos(x);
+         return (exp1_ + expm1_) * std::cos(x);
       }
 
       inline Number a(
          Number x
       )
       {
-         return cos(x);
+         return std::cos(x);
       }
 
       inline Number a_y(
@@ -1312,14 +1312,14 @@ public:
          Number x
       )
       {
-         return (exp1_ + expm1_) * cos(x);
+         return (exp1_ + expm1_) * std::cos(x);
       }
 
       inline Number a(
          Number x
       )
       {
-         return cos(x);
+         return std::cos(x);
       }
 
       inline Number a_y(
@@ -1347,21 +1347,21 @@ public:
          Number y
       )
       {
-         return -y * sin(y / 10.);
+         return -y * std::sin(y / 10.);
       }
 
       inline Number phi_dy(
          Number y
       )
       {
-         return -y * cos(y / 10.) / 10. - sin(y / 10.);
+         return -y * std::cos(y / 10.) / 10. - std::sin(y / 10.);
       }
 
       inline Number phi_dydy(
          Number y
       )
       {
-         return y * sin(y / 10.) / 100.;
+         return y * std::sin(y / 10.) / 100.;
       }
 
       inline bool phi_dydy_always_zero()

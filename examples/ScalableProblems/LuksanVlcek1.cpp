@@ -163,7 +163,7 @@ bool LuksanVlcek1::eval_g(
 {
    for( Index i = 0; i < N_ - 2; i++ )
    {
-      g[i] = 3. * std::pow(x[i + 1], 3.) + 2. * x[i + 2] - 5. + sin(x[i + 1] - x[i + 2]) * sin(x[i + 1] + x[i + 2])
+      g[i] = 3. * std::pow(x[i + 1], 3.) + 2. * x[i + 2] - 5. + std::sin(x[i + 1] - x[i + 2]) * std::sin(x[i + 1] + x[i + 2])
              + 4. * x[i + 1] - x[i] * std::exp(x[i] - x[i + 1]) - 3.;
    }
 
@@ -211,12 +211,12 @@ bool LuksanVlcek1::eval_jac_g(
          values[ijac] = -(1. + x[i]) * std::exp(x[i] - x[i + 1]);
          ijac++;
          // x[i+1]
-         values[ijac] = 9. * x[i + 1] * x[i + 1] + cos(x[i + 1] - x[i + 2]) * sin(x[i + 1] + x[i + 2])
-                        + sin(x[i + 1] - x[i + 2]) * cos(x[i + 1] + x[i + 2]) + 4. + x[i] * std::exp(x[i] - x[i + 1]);
+         values[ijac] = 9. * x[i + 1] * x[i + 1] + std::cos(x[i + 1] - x[i + 2]) * std::sin(x[i + 1] + x[i + 2])
+                        + std::sin(x[i + 1] - x[i + 2]) * std::cos(x[i + 1] + x[i + 2]) + 4. + x[i] * std::exp(x[i] - x[i + 1]);
          ijac++;
          // x[i+2]
-         values[ijac] = 2. - cos(x[i + 1] - x[i + 2]) * sin(x[i + 1] + x[i + 2])
-                        + sin(x[i + 1] - x[i + 2]) * cos(x[i + 1] + x[i + 2]);
+         values[ijac] = 2. - std::cos(x[i + 1] - x[i + 2]) * std::sin(x[i + 1] + x[i + 2])
+                        + std::sin(x[i + 1] - x[i + 2]) * std::cos(x[i + 1] + x[i + 2]);
          ijac++;
       }
    }
@@ -282,15 +282,15 @@ bool LuksanVlcek1::eval_h(
             if( i < N_ - 1 )
             {
                values[ihes] += lambda[i - 1]
-                               * (18. * x[i] - 2. * sin(x[i] - x[i + 1]) * sin(x[i] + x[i + 1])
-                                  + 2. * cos(x[i] - x[i + 1]) * cos(x[i] + x[i + 1]) - x[i - 1] * std::exp(x[i - 1] - x[i]));
+                               * (18. * x[i] - 2. * std::sin(x[i] - x[i + 1]) * std::sin(x[i] + x[i + 1])
+                                  + 2. * std::cos(x[i] - x[i + 1]) * std::cos(x[i] + x[i + 1]) - x[i - 1] * std::exp(x[i - 1] - x[i]));
             }
          }
          if( i > 1 )
          {
             // x[i+2]x[i+2]
             values[ihes] += lambda[i - 2]
-                            * (-2. * sin(x[i - 1] - x[i]) * sin(x[i - 1] + x[i]) - 2. * cos(x[i - 1] - x[i]) * cos(x[i - 1] + x[i]));
+                            * (-2. * std::sin(x[i - 1] - x[i]) * std::sin(x[i - 1] + x[i]) - 2. * std::cos(x[i - 1] - x[i]) * std::cos(x[i - 1] + x[i]));
          }
          ihes++;
 
@@ -306,10 +306,10 @@ bool LuksanVlcek1::eval_h(
              if (i>0) {
              // x[i+1],x[i+2]
              values[ihes] +=
-             lambda[i-1]*(  sin(x[i]-x[i+1])*sin(x[i]+x[i+1])
-             + cos(x[i]-x[i+1])*cos(x[i]+x[i+1])
-             - cos(x[i]-x[i+1])*cos(x[i]+x[i+1])
-             - sin(x[i]-x[i+1])*sin(x[i]+x[i+1])
+             lambda[i-1]*(  std::sin(x[i]-x[i+1])*std::sin(x[i]+x[i+1])
+             + std::cos(x[i]-x[i+1])*std::cos(x[i]+x[i+1])
+             - std::cos(x[i]-x[i+1])*std::cos(x[i]+x[i+1])
+             - std::sin(x[i]-x[i+1])*std::sin(x[i]+x[i+1])
              );
              }
              */

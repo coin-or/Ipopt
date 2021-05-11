@@ -168,7 +168,7 @@ bool LuksanVlcek3::eval_g(
    Number*       g
 )
 {
-   g[0] = 3. * std::pow(x[0], 3) + 2. * x[1] - 5. + sin(x[0] - x[1]) * sin(x[0] + x[1]);
+   g[0] = 3. * std::pow(x[0], 3) + 2. * x[1] - 5. + std::sin(x[0] - x[1]) * std::sin(x[0] + x[1]);
    g[1] = 4. * x[n - 3] - x[n - 4] * std::exp(x[n - 4] - x[n - 3]) - 3;
 
    return true;
@@ -212,9 +212,9 @@ bool LuksanVlcek3::eval_jac_g(
       // return the values of the jacobian of the constraints
 
       Index ijac = 0;
-      values[ijac] = 9. * x[0] * x[0] + cos(x[0] - x[1]) * sin(x[0] + x[1]) + sin(x[0] - x[1]) * cos(x[0] + x[1]);
+      values[ijac] = 9. * x[0] * x[0] + std::cos(x[0] - x[1]) * std::sin(x[0] + x[1]) + std::sin(x[0] - x[1]) * std::cos(x[0] + x[1]);
       ijac++;
-      values[ijac] = 2. - cos(x[0] - x[1]) * sin(x[0] + x[1]) + sin(x[0] - x[1]) * cos(x[0] + x[1]);
+      values[ijac] = 2. - std::cos(x[0] - x[1]) * std::sin(x[0] + x[1]) + std::sin(x[0] - x[1]) * std::cos(x[0] + x[1]);
       ijac++;
       values[ijac] = -(1. + x[n - 4]) * std::exp(x[n - 4] - x[n - 3]);
       ijac++;
@@ -336,9 +336,9 @@ bool LuksanVlcek3::eval_h(
       ihes = 0;
       Number d1 = x[0] - x[1];
       Number d2 = x[0] + x[1];
-      values[ihes] += lambda[0] * (18. * x[0] - 2. * sin(d1) * sin(d2) + 2. * cos(d1) * cos(d2));
+      values[ihes] += lambda[0] * (18. * x[0] - 2. * std::sin(d1) * std::sin(d2) + 2. * std::cos(d1) * std::cos(d2));
       ihes += 3;
-      values[ihes] += lambda[0] * (-2. * sin(d1) * sin(d2) - 2. * cos(d1) * cos(d2));
+      values[ihes] += lambda[0] * (-2. * std::sin(d1) * std::sin(d2) - 2. * std::cos(d1) * std::cos(d2));
 
       d1 = x[n - 4] - x[n - 3];
 

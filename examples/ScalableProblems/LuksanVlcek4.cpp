@@ -128,7 +128,7 @@ bool LuksanVlcek4::eval_f(
       Number e0mx1 = e0 - x[2 * i + 1];
       Number x1mx2 = x[2 * i + 1] - x[2 * i + 2];
       Number x2mx3 = x[2 * i + 2] - x[2 * i + 3];
-      Number t = tan(x2mx3);
+      Number t = std::tan(x2mx3);
       Number x3m1 = x[2 * i + 3] - 1.;
       obj_value += std::pow(e0mx1, 4) + 100. * std::pow(x1mx2, 6) + std::pow(t, 4) + std::pow(x[2 * i], 8) + x3m1 * x3m1;
    }
@@ -153,7 +153,7 @@ bool LuksanVlcek4::eval_grad_f(
       Number x1mx2 = x[2 * i + 1] - x[2 * i + 2];
       Number x2mx3 = x[2 * i + 2] - x[2 * i + 3];
       Number x3m1 = x[2 * i + 3] - 1.;
-      Number dt = 4. * std::pow(tan(x2mx3), 3) / std::pow(cos(x2mx3), 2);
+      Number dt = 4. * std::pow(std::tan(x2mx3), 3) / std::pow(std::cos(x2mx3), 2);
 
       grad_f[2 * i] += 4. * e0 * std::pow(e0mx1, 3) + 8. * std::pow(x[2 * i], 7);
       grad_f[2 * i + 1] += -4. * std::pow(e0mx1, 3) + 600. * std::pow(x1mx2, 5);
@@ -277,9 +277,9 @@ bool LuksanVlcek4::eval_h(
          Number e0mx1 = e0 - x[2 * i + 1];
          Number x1mx2 = x[2 * i + 1] - x[2 * i + 2];
          Number x2mx3 = x[2 * i + 2] - x[2 * i + 3];
-         Number s = sin(x2mx3);
+         Number s = std::sin(x2mx3);
          Number ss = s * s;
-         Number c = cos(x2mx3);
+         Number c = std::cos(x2mx3);
          Number ddt = 4. * (3. * ss * c * c + 5. * ss * ss) / std::pow(c, 6);
 
          // x[2*i] x[2*i]

@@ -535,7 +535,7 @@ protected:
       Number x2
    ) const
    {
-      return sin(2. * pi_ * x1) * sin(2. * pi_ * x2);
+      return std::sin(2. * pi_ * x1) * std::sin(2. * pi_ * x2);
    }
 
    /** Forcing function for the elliptic equation */
@@ -635,7 +635,7 @@ protected:
       Number x2
    ) const
    {
-      return sin(2. * pi_ * x1) * sin(2. * pi_ * x2);
+      return std::sin(2. * pi_ * x1) * std::sin(2. * pi_ * x2);
    }
 
    /** Forcing function for the elliptic equation */

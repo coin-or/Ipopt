@@ -121,7 +121,7 @@ bool LuksanVlcek7::eval_f(
    obj_value = 0.;
    for( Index i = 1; i <= N_; i++ )
    {
-      obj_value += i * ((1. - cos(x[i])) + sin(x[i - 1]) - sin(x[i + 1]));
+      obj_value += i * ((1. - std::cos(x[i])) + std::sin(x[i - 1]) - std::sin(x[i + 1]));
    }
 
    return true;
@@ -139,9 +139,9 @@ bool LuksanVlcek7::eval_grad_f(
    grad_f[1] = 0.;
    for( Index i = 1; i <= N_; i++ )
    {
-      grad_f[i - 1] += i * cos(x[i - 1]);
-      grad_f[i] += i * sin(x[i]);
-      grad_f[i + 1] = -i * cos(x[i + 1]);
+      grad_f[i - 1] += i * std::cos(x[i - 1]);
+      grad_f[i] += i * std::sin(x[i]);
+      grad_f[i + 1] = -i * std::cos(x[i + 1]);
    }
 
    return true;
@@ -317,9 +317,9 @@ bool LuksanVlcek7::eval_h(
       values[1] = 0.;
       for( Index i = 1; i <= N_; i++ )
       {
-         values[i - 1] -= obj_factor * (i * sin(x[i - 1]));
-         values[i] += obj_factor * i * cos(x[i]);
-         values[i + 1] = obj_factor * i * sin(x[i + 1]);
+         values[i - 1] -= obj_factor * (i * std::sin(x[i - 1]));
+         values[i] += obj_factor * i * std::cos(x[i]);
+         values[i + 1] = obj_factor * i * std::sin(x[i + 1]);
       }
 
       // g[0]
