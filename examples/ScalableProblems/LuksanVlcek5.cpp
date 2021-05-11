@@ -140,7 +140,7 @@ bool LuksanVlcek5::eval_f(
    for( Index i = 1; i <= N_; i++ )
    {
       Number b = (3. - 2. * x[i]) * x[i] - x[i - 1] - x[i + 1] + 1.;
-      obj_value += pow(fabs(b), p);
+      obj_value += pow(std::abs(b), p);
    }
 
    return true;
@@ -160,7 +160,7 @@ bool LuksanVlcek5::eval_grad_f(
    for( Index i = 1; i <= N_; i++ )
    {
       Number b = (3. - 2. * x[i]) * x[i] - x[i - 1] - x[i + 1] + 1.;
-      Number pb = pow(fabs(b), p - 1.);
+      Number pb = pow(std::abs(b), p - 1.);
 
       grad_f[i + 1] = -p * Sgn(b) * pb;
       grad_f[i - 1] += grad_f[i + 1];
@@ -300,8 +300,8 @@ bool LuksanVlcek5::eval_h(
       for( Index i = 1; i <= N_; i++ )
       {
          Number b = (3. - 2. * x[i]) * x[i] - x[i - 1] - x[i + 1] + 1.;
-         Number pb1 = pow(fabs(b), p - 1.);
-         Number pb2 = pow(fabs(b), p - 2.);
+         Number pb1 = pow(std::abs(b), p - 1.);
+         Number pb2 = pow(std::abs(b), p - 2.);
          Number a1 = 3. - 4. * x[i];
          Number a2 = p * (p - 1.) * pb2;
          Number a3 = a1 * a2;

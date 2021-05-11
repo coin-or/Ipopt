@@ -475,9 +475,9 @@ bool FilterLSAcceptor::IsAcceptableToCurrentIterate(Number trial_barr,
    if (!called_from_restoration && trial_barr > reference_barr_)
    {
       Number basval = 1.;
-      if (fabs(reference_barr_) > 10.)
+      if (std::abs(reference_barr_) > 10.)
       {
-         basval = log10(fabs(reference_barr_));
+         basval = log10(std::abs(reference_barr_));
       }
       if (log10(trial_barr - reference_barr_) > obj_max_inc_ + basval)
       {

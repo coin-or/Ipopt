@@ -23,7 +23,7 @@ using namespace Ipopt;
 #define TESTTOL 1e-9
 #endif
 #define ASSERTEQ(val1, val2) \
-   do if( fabs((val1)-(val2)) > TESTTOL*std::max(1.0,std::max(fabs(val1),fabs(val2))) ) \
+   do if( std::abs((val1)-(val2)) > TESTTOL*std::max(1.0,std::max((double)std::abs(val1),(double)std::abs(val2))) ) \
    { \
       fprintf(stderr, "Wrong %s = %.12g, expected %s = %.12g\n", #val1, val1, #val2, val2); \
       abort(); \
@@ -444,7 +444,7 @@ public:
 
       // check constraint violation
       ASSERTEQ(constraint_violation[0], std::max(0.0, std::max(1.0 - g[0], g[0] - 2.0)));
-      ASSERTEQ(constraint_violation[1], std::max(0.0, fabs(g[1]-0.5)));
+      ASSERTEQ(constraint_violation[1], std::max(0.0, std::abs(g[1]-0.5)));
 
       // check complementarity for constraints
       ASSERTEQ(compl_g[0], (g[0] - 1.0) * std::max(Number(0.0), -lambda[0]) + (2.0 - g[0]) * std::max(Number(0.0), lambda[0]));
@@ -534,7 +534,7 @@ public:
 
       // check constraint violation
       ASSERTEQ(s_constraint_violation[0], std::max(0.0, std::max(1.0 - g[0], g[0] - 2.0)*g_scaling[0]));
-      ASSERTEQ(s_constraint_violation[1], std::max(0.0, fabs(g[1]-0.5)*g_scaling[1]));
+      ASSERTEQ(s_constraint_violation[1], std::max(0.0, std::abs(g[1]-0.5)*g_scaling[1]));
 
       // check complementarity for constraints
       ASSERTEQ(s_compl_g[0], ((g[0] - 1.0) * std::max(Number(0.0), -s_lambda[0]) + (2.0 - g[0]) * std::max(Number(0.0), s_lambda[0]))*g_scaling[0]);

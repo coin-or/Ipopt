@@ -155,17 +155,17 @@ void Vector::Scal(
       if( old_tag == nrm2_cache_tag_ )
       {
          nrm2_cache_tag_ = GetTag();
-         cached_nrm2_ *= fabs(alpha);
+         cached_nrm2_ *= std::abs(alpha);
       }
       if( old_tag == asum_cache_tag_ )
       {
          asum_cache_tag_ = GetTag();
-         cached_asum_ *= fabs(alpha);
+         cached_asum_ *= std::abs(alpha);
       }
       if( old_tag == amax_cache_tag_ )
       {
          amax_cache_tag_ = GetTag();
-         cached_amax_ *= fabs(alpha);
+         cached_amax_ *= std::abs(alpha);
       }
       if( old_tag == max_cache_tag_ )
       {

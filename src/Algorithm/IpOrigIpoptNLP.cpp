@@ -455,9 +455,9 @@ void OrigIpoptNLP::relax_bounds(
    SmartPtr<Vector> tmp = bounds.MakeNew();
    tmp->Copy(bounds);
    tmp->ElementWiseAbs();
-   tmp->Scal(fabs(bound_relax_factor)); // |relaxfactor|*|bounds|
+   tmp->Scal(std::abs(bound_relax_factor)); // |relaxfactor|*|bounds|
    SmartPtr<Vector> ones = bounds.MakeNew();
-   ones->Set(fabs(bound_relax_factor));
+   ones->Set(std::abs(bound_relax_factor));
    tmp->ElementWiseMax(*ones);    // |relaxfactor|*max(|bounds|,1)
    ones->Set(constr_viol_tol_);
    tmp->ElementWiseMin(*ones);    // min(constr_viol_tol_,|relaxfactor|*max(|bounds|,1))

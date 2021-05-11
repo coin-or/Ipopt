@@ -246,7 +246,7 @@ void DenseSymMatrix::ComputeRowAMaxImpl(
    {
       for( Index jcol = 0; jcol <= irow; jcol++ )
       {
-         const Number f = fabs(*vals);
+         const Number f = std::abs(*vals);
          vec_vals[irow] = Max(vec_vals[irow], f);
          vec_vals[jcol] = Max(vec_vals[jcol], f);
          vals++;

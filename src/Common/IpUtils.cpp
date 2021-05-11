@@ -200,7 +200,7 @@ bool Compare_le(
 )
 {
    Number mach_eps = std::numeric_limits<Number>::epsilon();
-   return (lhs - rhs <= 10.*mach_eps * fabs(BasVal));
+   return (lhs - rhs <= 10.*mach_eps * std::abs(BasVal));
 }
 
 int Snprintf(

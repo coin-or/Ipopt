@@ -186,7 +186,7 @@ void SymTMatrix::ComputeRowAMaxImpl(
    vec_vals--; // to deal with 1-based indexing in irn and jcn (I believe)
    for( Index i = 0; i < Nonzeros(); i++ )
    {
-      const Number f = fabs(*val);
+      const Number f = std::abs(*val);
       vec_vals[*irn] = Max(vec_vals[*irn], f);
       vec_vals[*jcn] = Max(vec_vals[*jcn], f);
       val++;

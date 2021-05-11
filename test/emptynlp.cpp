@@ -254,13 +254,13 @@ public:
       if( status == SUCCESS )
       {
          Number tol = 1e-6;
-         assert(fabs(obj_value) < tol);
+         assert(std::abs(obj_value) < tol);
 
          for( Index i = 0; i < n; ++i )
-            assert(fabs(x[i]) < tol);
+            assert(std::abs(x[i]) < tol);
 
          for( Index i = 0; i < m; ++i )
-            assert(fabs(g[i]) < tol);
+            assert(std::abs(g[i]) < tol);
       }
    }
 };

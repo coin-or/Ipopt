@@ -898,7 +898,7 @@ bool LimMemQuasiNewtonUpdater::SplitEigenvalues(
    }
 
    // Determine the ratio of smallest over the largest eigenvalue
-   Number emax = Max((Number)fabs(Evals[0]), (Number)fabs(Evals[dim - 1]));
+   Number emax = Max(std::abs(Evals[0]), std::abs(Evals[dim - 1]));
    if( emax == 0. )
    {
       return true;

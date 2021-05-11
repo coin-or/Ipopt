@@ -209,7 +209,7 @@ Number DenseVector::Nrm2Impl() const
    DBG_ASSERT(initialized_);
    if( homogeneous_ )
    {
-      return sqrt((Number) Dim()) * fabs(scalar_);
+      return sqrt((Number) Dim()) * std::abs(scalar_);
    }
    else
    {
@@ -222,7 +222,7 @@ Number DenseVector::AsumImpl() const
    DBG_ASSERT(initialized_);
    if( homogeneous_ )
    {
-      return Dim() * fabs(scalar_);
+      return Dim() * std::abs(scalar_);
    }
    else
    {
@@ -241,11 +241,11 @@ Number DenseVector::AmaxImpl() const
    {
       if( homogeneous_ )
       {
-         return fabs(scalar_);
+         return std::abs(scalar_);
       }
       else
       {
-         return fabs(values_[IpBlasIamax(Dim(), values_, 1) - 1]);
+         return std::abs(values_[IpBlasIamax(Dim(), values_, 1) - 1]);
       }
    }
 }
@@ -473,13 +473,13 @@ void DenseVector::ElementWiseAbsImpl()
    DBG_ASSERT(initialized_);
    if( homogeneous_ )
    {
-      scalar_ = fabs(scalar_);
+      scalar_ = std::abs(scalar_);
    }
    else
    {
       for( Index i = 0; i < Dim(); i++ )
       {
-         values_[i] = fabs(values_[i]);
+         values_[i] = std::abs(values_[i]);
       }
    }
 }

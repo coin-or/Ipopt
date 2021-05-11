@@ -884,14 +884,14 @@ public:
          Number y
       )
       {
-         return y * pow(fabs(y), 3);
+         return y * pow(std::abs(y), 3);
       }
 
       inline Number phi_dy(
          Number y
       )
       {
-         return 4. * pow(fabs(y), 3);
+         return 4. * pow(std::abs(y), 3);
       }
 
       inline Number phi_dydy(
