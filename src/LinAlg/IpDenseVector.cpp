@@ -586,7 +586,11 @@ Number DenseVector::SumLogsImpl() const
 {
    DBG_ASSERT(initialized_);
    Number sum;
-   if( homogeneous_ )
+   if( Dim() == 0 )
+   {
+      sum = 0.0;
+   }
+   else if( homogeneous_ )
    {
       sum = Dim() * std::log(scalar_);
    }

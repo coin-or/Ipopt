@@ -160,6 +160,9 @@ commit history.
           the configure flag --with-intsize=64. Doing so has a number of
           consequences on Ipopt interfaces and Ipopt dependencies. See
           the Ipopt installation instructions for more details. [#259]
+        - Fixed DenseVector::SumLogsImpl() such that it returns 0.0 for
+          a vector of dimension 0. Returned nan for homogeneous 0-vector
+          of dimension 0 before.
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]
