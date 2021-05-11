@@ -37,6 +37,12 @@ extern "C"
    );
 
    void IPOPT_WSMP_FUNC_(wsmp_clear, WSMP_CLEAR)(void);
+
+   void IPOPT_WSMP_FUNC_(wsmp_version, WSMP_VERSION)(
+      int*  V,
+      int*  R,
+      int*  M
+   );
 }
 
 namespace Ipopt
@@ -168,6 +174,15 @@ void WsmpSolverInterface::RegisterOptions(
       "This works only in certain situations (when the Hessian block is known to be positive definite or when we are using L-BFGS). "
       "It can also lead to a lot of fill-in.",
       true);
+}
+
+void WsmpSolverInterface::GetVersion(
+   int& V,
+   int& R,
+   int& M
+)
+{
+   IPOPT_WSMP_FUNC_(wsmp_version, WSMP_VERSION)(&V,&R,&M);
 }
 
 bool WsmpSolverInterface::InitializeImpl(

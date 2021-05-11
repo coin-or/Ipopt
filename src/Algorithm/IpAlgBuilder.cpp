@@ -443,6 +443,11 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
          SolverInterface = new WsmpSolverInterface();
 #endif
       }
+      int V, R, M;
+      WsmpSolverInterface::GetVersion(V, R, M);
+      char buffer[100];
+      Snprintf(buffer, 100, "WSMP %d.%d.%d\n", V, R, M);
+      linear_solver = buffer;
    }
 #endif
 

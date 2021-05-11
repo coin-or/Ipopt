@@ -81,6 +81,13 @@ public:
    static void RegisterOptions(
       SmartPtr<RegisteredOptions> roptions
    );
+
+   /// give WSMP version
+   static void GetVersion(
+      int& V,
+      int& R,
+      int& M
+   );
    ///@}
 
    virtual bool ProvidesDegeneracyDetection() const;
