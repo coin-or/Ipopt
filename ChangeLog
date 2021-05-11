@@ -163,6 +163,8 @@ commit history.
         - Fixed DenseVector::SumLogsImpl() such that it returns 0.0 for
           a vector of dimension 0. Returned nan for homogeneous 0-vector
           of dimension 0 before.
+        - Fixed that return code (info%flag) of ma97_solve() was not checked
+          in Ma97SolverInterface::MultiSolve().
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]

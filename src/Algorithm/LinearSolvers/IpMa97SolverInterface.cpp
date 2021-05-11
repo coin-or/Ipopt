@@ -808,7 +808,14 @@ ESymSolverStatus Ma97SolverInterface::MultiSolve(
       }
    }
 
-   return SYMSOLVER_SUCCESS;
+   if( info.flag >= 0 )
+   {
+      return SYMSOLVER_SUCCESS;
+   }
+   else
+   {
+      return SYMSOLVER_FATAL_ERROR;
+   }
 }
 
 bool Ma97SolverInterface::IncreaseQuality()
