@@ -14,29 +14,8 @@
 
 //**********************************************************************
 // Stuff for benchmarking
+// Enable this define to allow passing timelimit as 3rd program parameter
 // #define TIME_LIMIT
-#ifdef TIME_LIMIT
-
-#include <unistd.h>
-#include <pthread.h>
-
-extern "C" void* killer_thread(
-   void* arg
-)
-{
-   int runtime = *reinterpret_cast<int*>(arg);
-   if (runtime <= 0)
-   {
-      printf("Invalid argument for run time (%d)\n", runtime);
-      exit(-100);
-   }
-   printf("Limiting wall clock time to %d seconds.\n", runtime);
-   sleep(runtime);
-   printf("EXIT: Exceeding wall clock time limit of %d seconds.\n", runtime);
-   exit(-999);
-   return NULL;
-}
-#endif
 //**********************************************************************
 
 using namespace Ipopt;
@@ -129,23 +108,20 @@ int main(
    }
 
 #ifdef TIME_LIMIT
-   if (argv == 4)
-   {
-      int runtime = atoi(argc[3]);
-      pthread_t thread;
-      pthread_create(&thread, NULL, killer_thread, &runtime);
-   }
+   int runtime;
+   if( argv == 4 )
+      runtime = atoi(argc[3]);
    else
 #endif
-      if( argv != 3 && argv != 1 )
-      {
-         printf("Usage: %s (this will ask for problem name)\n", argc[0]);
-         printf("       %s ProblemName N\n", argc[0]);
-         printf("          where N is a positive parameter determining problem size\n");
-         printf("       %s list\n", argc[0]);
-         printf("          to list all registered problems.\n");
-         return -1;
-      }
+   if( argv != 3 && argv != 1 )
+   {
+      printf("Usage: %s (this will ask for problem name)\n", argc[0]);
+      printf("       %s ProblemName N\n", argc[0]);
+      printf("          where N is a positive parameter determining problem size\n");
+      printf("       %s list\n", argc[0]);
+      printf("          to list all registered problems.\n");
+      return -1;
+   }
 
    SmartPtr<RegisteredTNLP> tnlp;
    Index N;
@@ -219,6 +195,10 @@ int main(
    // Set option to use internal scaling
    // DOES NOT WORK FOR VLUKL* PROBLEMS:
    // app->Options()->SetStringValueIfUnset("nlp_scaling_method", "user-scaling");
+
+#ifdef TIME_LIMIT
+   app->Options()->SetNumericValue("max_wall_time", runtime);
+#endif
 
    status = app->OptimizeTNLP(GetRawPtr(tnlp));
 
