@@ -236,7 +236,7 @@ private:
     */
    Number kappa_soc_;
    /** Maximal increase in objective function in orders of magnitude
-    *  (log10).
+    *  (std::log10).
     *
     *  If the log10(barrier objective function) is
     *  increased more than this compared to the current point, the

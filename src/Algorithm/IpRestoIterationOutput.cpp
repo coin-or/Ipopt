@@ -141,7 +141,7 @@ void RestoIterationOutput::WriteOutput()
    }
    else
    {
-      Snprintf(regu_x_buf, 7, "%5.1f", log10(regu_x));
+      Snprintf(regu_x_buf, 7, "%5.1f", std::log10(regu_x));
       regu_x_ptr = regu_x_buf;
    }
    Index ls_count = IpData().info_ls_count();
@@ -153,7 +153,7 @@ void RestoIterationOutput::WriteOutput()
             WallclockTime()) - print_frequency_time_ || last_output < 0.0) )
    {
       Jnlst().Printf(J_ITERSUMMARY, J_MAIN,
-                     "%4" IPOPT_INDEX_FORMAT "r%14.7e %7.2e %7.2e %5.1f %7.2e %5s %7.2e %7.2e%c%3" IPOPT_INDEX_FORMAT, iter, f, inf_pr, inf_du, log10(mu), dnrm, regu_x_ptr, alpha_dual, alpha_primal, alpha_primal_char, ls_count);
+                     "%4" IPOPT_INDEX_FORMAT "r%14.7e %7.2e %7.2e %5.1f %7.2e %5s %7.2e %7.2e%c%3" IPOPT_INDEX_FORMAT, iter, f, inf_pr, inf_du, std::log10(mu), dnrm, regu_x_ptr, alpha_dual, alpha_primal, alpha_primal_char, ls_count);
       if( print_info_string_ )
       {
          Jnlst().Printf(J_ITERSUMMARY, J_MAIN,

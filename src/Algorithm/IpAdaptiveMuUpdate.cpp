@@ -699,7 +699,7 @@ Number AdaptiveMuUpdate::quality_function_pd_system()
       switch( adaptive_mu_kkt_centrality_ )
       {
          case 1:
-            centrality = -complty * log(xi);
+            centrality = -complty * std::log(xi);
             break;
          case 2:
             centrality = complty / xi;

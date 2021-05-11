@@ -201,7 +201,7 @@ void Vector::Scal(
       if( old_tag == sumlogs_cache_tag_ )
       {
          sumlogs_cache_tag_ = GetTag();
-         cached_sumlogs_ += ((Number) Dim()) * log(alpha);
+         cached_sumlogs_ += ((Number) Dim()) * std::log(alpha);
       }
    }
 }

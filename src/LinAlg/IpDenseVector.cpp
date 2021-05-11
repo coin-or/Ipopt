@@ -588,14 +588,14 @@ Number DenseVector::SumLogsImpl() const
    Number sum;
    if( homogeneous_ )
    {
-      sum = Dim() * log(scalar_);
+      sum = Dim() * std::log(scalar_);
    }
    else
    {
       sum = 0.0;
       for( Index i = 0; i < Dim(); i++ )
       {
-         sum += log(values_[i]);
+         sum += std::log(values_[i]);
       }
    }
    return sum;

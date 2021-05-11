@@ -477,9 +477,9 @@ bool FilterLSAcceptor::IsAcceptableToCurrentIterate(Number trial_barr,
       Number basval = 1.;
       if (std::abs(reference_barr_) > 10.)
       {
-         basval = log10(std::abs(reference_barr_));
+         basval = std::log10(std::abs(reference_barr_));
       }
-      if (log10(trial_barr - reference_barr_) > obj_max_inc_ + basval)
+      if (std::log10(trial_barr - reference_barr_) > obj_max_inc_ + basval)
       {
          Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
                         "Rejecting trial point because barrier objective function increasing too rapidly (from %27.15e to %27.15e)\n", reference_barr_, trial_barr);

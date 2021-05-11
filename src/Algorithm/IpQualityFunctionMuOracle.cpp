@@ -633,7 +633,7 @@ Number QualityFunctionMuOracle::CalculateQualityFunction(
          //Nothing
          break;
       case CEN_LOG:
-         quality_function -= compl_inf * log(xi);
+         quality_function -= compl_inf * std::log(xi);
          break;
       case CEN_RECIPROCAL:
          quality_function += compl_inf / xi;
@@ -829,7 +829,7 @@ Number QualityFunctionMuOracle::PerformGoldenSection(
 }
 
 /*
- Number QualityFunctionMuOracle::ScaleSigma(Number sigma) {return log(sigma);}
+ Number QualityFunctionMuOracle::ScaleSigma(Number sigma) {return std::log(sigma);}
  Number QualityFunctionMuOracle::UnscaleSigma(Number scaled_sigma) {return std::exp(scaled_sigma);}
  */
 
@@ -878,8 +878,8 @@ Number QualityFunctionMuOracle::UnscaleSigma(
  )
  {
  Number log_sigma;
- Number log_sigma_up = log(sigma_up);
- Number log_sigma_lo = log(sigma_lo);
+ Number log_sigma_up = std::log(sigma_up);
+ Number log_sigma_lo = std::log(sigma_lo);
 
  Number log_sigma_up_in = log_sigma_up;
  Number log_sigma_lo_in = log_sigma_lo;
