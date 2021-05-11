@@ -45,7 +45,7 @@ static IPOPT_DECL_MC19A(*user_mc19a) = NULL;
 /// set MC19 function to use for every instantiation of this class
 void Mc19TSymScalingMethod::SetFunctions(
    IPOPT_DECL_MC19A(*mc19a)
-   )
+)
 {
    DBG_ASSERT(mc19a != NULL);
 

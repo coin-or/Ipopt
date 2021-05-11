@@ -101,54 +101,78 @@ void AlgorithmBuilder::RegisterOptions(
    {
       options.push_back("ma27");
       if( availablesolverslinked & IPOPTLINEARSOLVER_MA27 )
+      {
          descrs.push_back("use the Harwell routine MA27");
+      }
       else
+      {
          descrs.push_back("load the Harwell routine MA27 from library at runtime");
+      }
    }
 
    if( availablesolvers & IPOPTLINEARSOLVER_MA57 )
    {
       options.push_back("ma57");
       if( availablesolverslinked & IPOPTLINEARSOLVER_MA57 )
+      {
          descrs.push_back("use the Harwell routine MA57");
+      }
       else
+      {
          descrs.push_back("load the Harwell routine MA57 from library at runtime");
+      }
    }
 
    if( availablesolvers & IPOPTLINEARSOLVER_MA77 )
    {
       options.push_back("ma77");
       if( availablesolverslinked & IPOPTLINEARSOLVER_MA77 )
+      {
          descrs.push_back("use the Harwell routine HSL_MA77");
+      }
       else
+      {
          descrs.push_back("load the Harwell routine HSL_MA77 from library at runtime");
+      }
    }
 
    if( availablesolvers & IPOPTLINEARSOLVER_MA86 )
    {
       options.push_back("ma86");
       if( availablesolverslinked & IPOPTLINEARSOLVER_MA86 )
+      {
          descrs.push_back("use the Harwell routine HSL_MA86");
+      }
       else
+      {
          descrs.push_back("load the Harwell routine MA86 from library at runtime");
+      }
    }
 
    if( availablesolvers & IPOPTLINEARSOLVER_MA97 )
    {
       options.push_back("ma97");
       if( availablesolverslinked & IPOPTLINEARSOLVER_MA97 )
+      {
          descrs.push_back("use the Harwell routine HSL_MA97");
+      }
       else
+      {
          descrs.push_back("load the Harwell routine MA97 from library at runtime");
+      }
    }
 
    if( availablesolvers & IPOPTLINEARSOLVER_PARDISO )
    {
       options.push_back("pardiso");
       if( availablesolverslinked & IPOPTLINEARSOLVER_PARDISO )
+      {
          descrs.push_back("use the Pardiso package from pardiso-project.org");
+      }
       else
+      {
          descrs.push_back("load the Pardiso package from pardiso-project.org from library at runtime");
+      }
    }
 
    if( availablesolvers & IPOPTLINEARSOLVER_PARDISOMKL )
@@ -180,29 +204,53 @@ void AlgorithmBuilder::RegisterOptions(
 
    std::string defaultsolver;
    if( availablesolverslinked & IPOPTLINEARSOLVER_MA27 )
+   {
       defaultsolver = "ma27";
+   }
    else if( availablesolverslinked & IPOPTLINEARSOLVER_MA57 )
+   {
       defaultsolver = "ma57";
+   }
    else if( availablesolverslinked & IPOPTLINEARSOLVER_MA97 )
+   {
       defaultsolver = "ma97";
+   }
    else if( availablesolverslinked & IPOPTLINEARSOLVER_MA86 )
+   {
       defaultsolver = "ma86";
+   }
    else if( availablesolverslinked & IPOPTLINEARSOLVER_PARDISO )
+   {
       defaultsolver = "pardiso";
+   }
    else if( availablesolverslinked & IPOPTLINEARSOLVER_SPRAL )
+   {
       defaultsolver = "spral";
+   }
    else if( availablesolverslinked & IPOPTLINEARSOLVER_WSMP )
+   {
       defaultsolver = "wsmp";
+   }
    else if( availablesolverslinked & IPOPTLINEARSOLVER_MUMPS )
+   {
       defaultsolver = "mumps";
+   }
    else if( availablesolverslinked & IPOPTLINEARSOLVER_PARDISOMKL )
+   {
       defaultsolver = "pardisomkl";
+   }
    else if( availablesolverslinked & IPOPTLINEARSOLVER_MA77 )
+   {
       defaultsolver = "ma77";
+   }
    else if( availablesolvers & IPOPTLINEARSOLVER_MA27 )
+   {
       defaultsolver = "ma27";
+   }
    else
+   {
       defaultsolver = "custom";
+   }
 
    roptions->SetRegisteringCategory("Linear Solver");
    roptions->AddStringOption(
@@ -237,7 +285,9 @@ void AlgorithmBuilder::RegisterOptions(
          longdescr += " The default is MC19 only if MA27, MA57, MA77, or MA86 are selected as linear solvers. Otherwise it is 'none'.";
       }
       else
+      {
          descrs.push_back("load the Harwell routine MC19 from library at runtime");
+      }
    }
 
    options.push_back("slack-based");
@@ -281,9 +331,13 @@ void AlgorithmBuilder::RegisterOptions(
       options.push_back("equilibration-based");
       descrs.push_back("scale the problem so that first derivatives are of order 1 at random points");
       if( availablesolverslinked & IPOPTLINEARSOLVER_MC19 )
+      {
          descrs.back() += " (uses Harwell routine MC19)";
+      }
       else
+      {
          descrs.back() += " (load the Harwell routine MC19 from library at runtime)";
+      }
    }
    roptions->AddStringOption(
       "nlp_scaling_method", "Select the technique used for scaling the NLP.",
@@ -295,7 +349,7 @@ void AlgorithmBuilder::RegisterOptions(
 #ifdef IPOPT_HAS_ASL
       " If you are using AMPL, they can be specified through suffixes (\"scaling_factor\")"
 #endif
-      );
+   );
 
    roptions->SetRegisteringCategory("Barrier Parameter Update");
    roptions->AddStringOption2(

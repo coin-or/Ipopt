@@ -560,7 +560,9 @@ Number AdaptiveMuUpdate::min_ref_val()
    std::list<Number>::iterator iter = refs_vals_.begin();
    min_ref = *iter;
    for( ++iter; iter != refs_vals_.end(); ++iter )
+   {
       min_ref = Min(min_ref, *iter);
+   }
    return min_ref;
 }
 
@@ -572,7 +574,9 @@ Number AdaptiveMuUpdate::max_ref_val()
    std::list<Number>::iterator iter = refs_vals_.begin();
    max_ref = *iter;
    for( ++iter; iter != refs_vals_.end(); ++iter )
+   {
       max_ref = Max(max_ref, *iter);
+   }
    return max_ref;
 }
 

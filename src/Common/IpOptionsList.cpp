@@ -31,7 +31,7 @@ bool OptionsList::SetStringValue(
          if( IsValid(jnlst_) )
          {
             jnlst_->Printf(J_ERROR, J_MAIN,
-               "Tried to set Option: %s. It is not a valid option. Please check the list of available options.\n", tag.c_str());
+                           "Tried to set Option: %s. It is not a valid option. Please check the list of available options.\n", tag.c_str());
          }
          //THROW_EXCEPTION(OPTION_INVALID, msg);
          return false;
@@ -68,8 +68,8 @@ bool OptionsList::SetStringValue(
          if( IsValid(jnlst_) )
          {
             jnlst_->Printf(J_ERROR, J_MAIN,
-               "Setting: \"%s\" is not a valid setting for Option: %s. Check the option documentation.\n",
-               value.c_str(), tag.c_str());
+                           "Setting: \"%s\" is not a valid setting for Option: %s. Check the option documentation.\n",
+                           value.c_str(), tag.c_str());
             option->OutputDescription(*jnlst_);
          }
          //THROW_EXCEPTION(OPTION_INVALID, msg);
@@ -127,7 +127,7 @@ bool OptionsList::SetNumericValue(
          if( IsValid(jnlst_) )
          {
             jnlst_->Printf(J_ERROR, J_MAIN,
-               "Tried to set Option: %s. It is not a valid option. Please check the list of available options.\n", tag.c_str());
+                           "Tried to set Option: %s. It is not a valid option. Please check the list of available options.\n", tag.c_str());
          }
          //THROW_EXCEPTION(OPTION_INVALID, msg);
          return false;
@@ -164,8 +164,8 @@ bool OptionsList::SetNumericValue(
          if( IsValid(jnlst_) )
          {
             jnlst_->Printf(J_ERROR, J_MAIN,
-               "Setting: \"%s\" is not a valid setting for Option: %s. Check the option documentation.\n",
-               buffer, tag.c_str());
+                           "Setting: \"%s\" is not a valid setting for Option: %s. Check the option documentation.\n",
+                           buffer, tag.c_str());
             option->OutputDescription(*jnlst_);
          }
          //THROW_EXCEPTION(OPTION_INVALID, msg);
@@ -214,7 +214,7 @@ bool OptionsList::SetIntegerValue(
          if( IsValid(jnlst_) )
          {
             jnlst_->Printf(J_ERROR, J_MAIN,
-               "Tried to set Option: %s. It is not a valid option. Please check the list of available options.\n", tag.c_str());
+                           "Tried to set Option: %s. It is not a valid option. Please check the list of available options.\n", tag.c_str());
          }
          //THROW_EXCEPTION(OPTION_INVALID, msg);
          return false;
@@ -251,8 +251,8 @@ bool OptionsList::SetIntegerValue(
          if( IsValid(jnlst_) )
          {
             jnlst_->Printf(J_ERROR, J_MAIN,
-               "Setting: \"%s\" is not a valid setting for Option: %s. Check the option documentation.\n",
-               buffer, tag.c_str());
+                           "Setting: \"%s\" is not a valid setting for Option: %s. Check the option documentation.\n",
+                           buffer, tag.c_str());
             option->OutputDescription(*jnlst_);
          }
          //THROW_EXCEPTION(OPTION_INVALID, msg);

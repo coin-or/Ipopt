@@ -39,9 +39,9 @@ public:
       bool infeascons_    = false,
       bool infeasbounds_  = false
    )
-   : nvars(nvars_),
-     infeascons(infeascons_),
-     infeasbounds(infeasbounds_)
+      : nvars(nvars_),
+        infeascons(infeascons_),
+        infeasbounds(infeasbounds_)
    {
       assert(!infeasbounds || nvars > 0);
    }
@@ -96,16 +96,18 @@ public:
       bool    init_x,
       Number* x,
       bool    init_z,
-      Number* ,
-      Number* ,
-      Index   ,
+      Number*,
+      Number*,
+      Index,
       bool    init_lambda,
       Number*
    )
    {
       if( init_x )
          for( Index i = 0; i < n; ++i )
+         {
             x[i] = 10.0;
+         }
 
       assert(!init_z);
       assert(!init_lambda);
@@ -117,13 +119,15 @@ public:
    bool eval_f(
       Index         n,
       const Number* x,
-      bool          ,
+      bool,
       Number&       obj_value
    )
    {
       obj_value = 0.0;
       for( Index i = 0; i < n; ++i )
+      {
          obj_value += x[i];
+      }
 
       return true;
    }
@@ -131,13 +135,15 @@ public:
    /** Method to return the gradient of the objective */
    bool eval_grad_f(
       Index         n,
-      const Number* ,
-      bool          ,
+      const Number*,
+      bool,
       Number*       grad_f
    )
    {
       for( Index i = 0; i < n; ++i )
+      {
          grad_f[i] = 1.0;
+      }
 
       return true;
    }
@@ -146,7 +152,7 @@ public:
    bool eval_g(
       Index         n,
       const Number* x,
-      bool          ,
+      bool,
       Index         m,
       Number*       g
    )
@@ -155,7 +161,9 @@ public:
 
       g[0] = 0.0;
       for( Index i = 0; i < n; ++i )
+      {
          g[0] += x[i];
+      }
 
       return true;
    }
@@ -166,9 +174,9 @@ public:
     */
    bool eval_jac_g(
       Index         n,
-      const Number* ,
-      bool          ,
-      Index         ,
+      const Number*,
+      bool,
+      Index,
       Index         nele_jac,
       Index*        iRow,
       Index*        jCol,
@@ -187,7 +195,9 @@ public:
          }
       else
          for( Index i = 0; i < n; ++i )
+         {
             values[i] = 1.0;
+         }
 
       return true;
    }
@@ -197,16 +207,16 @@ public:
     *   2) The values of the Hessian of the Lagrangian (if "values" is not NULL)
     */
    bool eval_h(
-      Index         ,
-      const Number* ,
-      bool          ,
-      Number        ,
-      Index         ,
-      const Number* ,
-      bool          ,
-      Index         ,
-      Index*        ,
-      Index*        ,
+      Index,
+      const Number*,
+      bool,
+      Number,
+      Index,
+      const Number*,
+      bool,
+      Index,
+      Index*,
+      Index*,
       Number*
    )
    {
@@ -224,26 +234,34 @@ public:
       const Number*              g,
       const Number*              lambda,
       Number                     obj_value,
-      const IpoptData*           ,
+      const IpoptData*,
       IpoptCalculatedQuantities*
    )
    {
       std::cout << "Finalize called" << std::endl;
       std::cout << "x =";
       for( Index i = 0; i < n; ++i )
+      {
          std::cout << ' ' << x[i];
+      }
       std::cout << std::endl;
       std::cout << "z_L =";
       for( Index i = 0; i < n; ++i )
+      {
          std::cout << ' ' << z_L[i];
+      }
       std::cout << std::endl;
       std::cout << "z_U =";
       for( Index i = 0; i < n; ++i )
+      {
          std::cout << ' ' << z_U[i];
+      }
       std::cout << std::endl;
       std::cout << "lambda =";
       for( Index i = 0; i < m; ++i )
+      {
          std::cout << ' ' << lambda[i];
+      }
       std::cout << std::endl;
 
       if( status != (infeascons ? LOCAL_INFEASIBILITY : SUCCESS) )
@@ -257,10 +275,14 @@ public:
          assert(std::abs(obj_value) < tol);
 
          for( Index i = 0; i < n; ++i )
+         {
             assert(std::abs(x[i]) < tol);
+         }
 
          for( Index i = 0; i < m; ++i )
+         {
             assert(std::abs(g[i]) < tol);
+         }
       }
    }
 };
@@ -269,12 +291,12 @@ bool run(
    int  nvars,
    bool infeascons,
    bool infeasbounds
-   )
+)
 {
    std::cout << std::endl << "*** Solve for " << nvars << " variables, "
-      << (infeascons ? "infeasible" : "feasible") << " constraint, "
-      << (infeasbounds ? "infeasible" : "feasible") << " bounds"
-      << std::endl;
+             << (infeascons ? "infeasible" : "feasible") << " constraint, "
+             << (infeasbounds ? "infeasible" : "feasible") << " bounds"
+             << std::endl;
 
    // Create an instance of your nlp...
    SmartPtr<TNLP> nlp = new EmptyNLP(nvars, infeascons, infeasbounds);
@@ -321,19 +343,29 @@ int main(
 )
 {
    if( !run(0, false, false) )
+   {
       return EXIT_FAILURE;
+   }
 
    if( !run(5, false, false) )
+   {
       return EXIT_FAILURE;
+   }
 
    if( !run(0, true, false) )
+   {
       return EXIT_FAILURE;
+   }
 
    if( !run(5, true, false) )
+   {
       return EXIT_FAILURE;
+   }
 
    if( !run(5, false, true) )
+   {
       return EXIT_FAILURE;
+   }
 
    std::cout << std::endl << "*** All tests passed" << std::endl;
 

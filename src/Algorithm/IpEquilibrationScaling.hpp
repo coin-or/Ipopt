@@ -26,9 +26,9 @@ public:
       const SmartPtr<NLP>& nlp,
       SmartPtr<LibraryLoader> hslloader_
    )  : StandardScalingBase(),
-        nlp_(nlp),
-        hslloader(hslloader_),
-        mc19a(NULL)
+      nlp_(nlp),
+      hslloader(hslloader_),
+      mc19a(NULL)
    { }
 
    /** Destructor */

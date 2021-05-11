@@ -298,10 +298,10 @@ bool OrigIpoptNLP::InitializeStructures(
       // cannot have any null pointers, want zero length vectors
       // instead of null - this will later need to be changed for _h;
       DBG_DO(retValue = IsValid(x_space_) && IsValid(c_space_) && IsValid(d_space_) && IsValid(x_l_space_)
-                  && IsValid(px_l_space_) && IsValid(x_u_space_) && IsValid(px_u_space_) && IsValid(d_u_space_)
-                  && IsValid(pd_u_space_) && IsValid(d_l_space_) && IsValid(pd_l_space_) && IsValid(jac_c_space_)
-                  && IsValid(jac_d_space_) && IsValid(h_space_) && IsValid(scaled_jac_c_space_) && IsValid(scaled_jac_d_space_)
-                  && IsValid(scaled_h_space_));
+                        && IsValid(px_l_space_) && IsValid(x_u_space_) && IsValid(px_u_space_) && IsValid(d_u_space_)
+                        && IsValid(pd_u_space_) && IsValid(d_l_space_) && IsValid(pd_l_space_) && IsValid(jac_c_space_)
+                        && IsValid(jac_d_space_) && IsValid(h_space_) && IsValid(scaled_jac_c_space_) && IsValid(scaled_jac_d_space_)
+                        && IsValid(scaled_h_space_));
 
       DBG_ASSERT(retValue && "Model cannot return null vector or matrix prototypes or spaces,"
                  " please return zero length vectors instead");

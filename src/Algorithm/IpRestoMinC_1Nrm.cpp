@@ -130,7 +130,9 @@ bool MinC_1NrmRestorationPhase::PerformRestoration()
       Number elapsed = WallclockTime() - IpData().TimingStats().OverallAlgorithm().StartWallclockTime();
       DBG_ASSERT(elapsed >= 0);
       if( elapsed >= max_wall_time_ )
+      {
          THROW_EXCEPTION(RESTORATION_WALLTIME_EXCEEDED, "Maximal wallclock time exceeded at start of restoration phase.");
+      }
       resto_options_->SetNumericValue("resto.max_wall_time", max_wall_time_ - elapsed);
    }
 
@@ -140,7 +142,9 @@ bool MinC_1NrmRestorationPhase::PerformRestoration()
       Number elapsed = CpuTime() - IpData().TimingStats().OverallAlgorithm().StartCpuTime();
       DBG_ASSERT(elapsed >= 0);
       if( elapsed >= max_cpu_time_ )
+      {
          THROW_EXCEPTION(RESTORATION_CPUTIME_EXCEEDED, "Maximal CPU time exceeded at start of restoration phase.");
+      }
       resto_options_->SetNumericValue("resto.max_cpu_time", max_cpu_time_ - elapsed);
    }
 

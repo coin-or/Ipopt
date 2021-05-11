@@ -202,7 +202,9 @@ void Vector::Scal(
       {
          sumlogs_cache_tag_ = GetTag();
          if( Dim() > 0 )
+         {
             cached_sumlogs_ += ((Number) Dim()) * std::log(alpha);
+         }
       }
    }
 }

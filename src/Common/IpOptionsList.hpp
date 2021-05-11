@@ -163,8 +163,8 @@ public:
    OptionsList(
       const OptionsList& copy
    )
-   : options_(copy.options_),        // copy all the option strings and values
-     reg_options_(copy.reg_options_) // copy the registered options pointer
+      : options_(copy.options_),        // copy all the option strings and values
+        reg_options_(copy.reg_options_) // copy the registered options pointer
    { }
 
    /** Destructor */

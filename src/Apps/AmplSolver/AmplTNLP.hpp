@@ -546,7 +546,7 @@ public:
    void set_string_metadata_for_var(
       const std::string&              tag,
       const std::vector<std::string>& meta_data
-      )
+   )
    {
       var_string_md_[tag] = meta_data;
    }
@@ -554,7 +554,7 @@ public:
    void set_integer_metadata_for_var(
       const std::string&        tag,
       const std::vector<Index>& meta_data
-      )
+   )
    {
       var_integer_md_[tag] = meta_data;
    }
@@ -562,7 +562,7 @@ public:
    void set_numeric_metadata_for_var(
       const std::string&         tag,
       const std::vector<Number>& meta_data
-      )
+   )
    {
       var_numeric_md_[tag] = meta_data;
    }
@@ -570,7 +570,7 @@ public:
    void set_string_metadata_for_con(
       const std::string&              tag,
       const std::vector<std::string>& meta_data
-      )
+   )
    {
       con_string_md_[tag] = meta_data;
    }
@@ -578,7 +578,7 @@ public:
    void set_integer_metadata_for_con(
       const std::string&        tag,
       const std::vector<Index>& meta_data
-      )
+   )
    {
       con_integer_md_[tag] = meta_data;
    }
@@ -586,7 +586,7 @@ public:
    void set_numeric_metadata_for_con(
       const std::string&         tag,
       const std::vector<Number>& meta_data
-      )
+   )
    {
       con_numeric_md_[tag] = meta_data;
    }
@@ -633,7 +633,7 @@ private:
       const char*                       ampl_invokation_string /* = NULL */,
       const char*                       ampl_banner_string /* = NULL */,
       std::string*                      nl_file_content /* = NULL */
-      );
+   );
 
 protected:
    /** Journalist */

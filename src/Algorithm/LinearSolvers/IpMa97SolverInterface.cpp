@@ -54,7 +54,7 @@ static IPOPT_DECL_MA97_ANALYSE(*user_ma97_analyse) = NULL;
 static IPOPT_DECL_MA97_FACTOR(*user_ma97_factor) = NULL;
 static IPOPT_DECL_MA97_FACTOR_SOLVE(*user_ma97_factor_solve) = NULL;
 static IPOPT_DECL_MA97_SOLVE(*user_ma97_solve) = NULL;
-static IPOPT_DECL_MA97_FINALISE(*user_ma97_finalise)= NULL;
+static IPOPT_DECL_MA97_FINALISE(*user_ma97_finalise) = NULL;
 static IPOPT_DECL_MA97_FREE_AKEEP(*user_ma97_free_akeep) = NULL;
 
 Ma97SolverInterface::~Ma97SolverInterface()

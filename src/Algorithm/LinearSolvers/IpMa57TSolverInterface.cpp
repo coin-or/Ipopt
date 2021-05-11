@@ -158,21 +158,21 @@ const char* ma57_wrn_msg[] =
 Ma57TSolverInterface::Ma57TSolverInterface(
    SmartPtr<LibraryLoader> hslloader_
 )  : hslloader(hslloader_),
-     ma57a(NULL),
-     ma57b(NULL),
-     ma57c(NULL),
-     ma57e(NULL),
-     ma57i(NULL),
-     dim_(0),
-     nonzeros_(0),
-     initialized_(false),
-     pivtol_changed_(false),
-     refactorize_(false),
-     wd_keep_(NULL),
-     wd_iwork_(NULL),
-     wd_fact_(NULL),
-     wd_ifact_(NULL),
-     a_(NULL)
+   ma57a(NULL),
+   ma57b(NULL),
+   ma57c(NULL),
+   ma57e(NULL),
+   ma57i(NULL),
+   dim_(0),
+   nonzeros_(0),
+   initialized_(false),
+   pivtol_changed_(false),
+   refactorize_(false),
+   wd_keep_(NULL),
+   wd_iwork_(NULL),
+   wd_fact_(NULL),
+   wd_ifact_(NULL),
+   a_(NULL)
 {
    DBG_START_METH("Ma57TSolverInterface::Ma57TSolverInterface()", dbg_verbosity);
 }
@@ -268,7 +268,7 @@ void Ma57TSolverInterface::SetFunctions(
    IPOPT_DECL_MA57C(*ma57c),
    IPOPT_DECL_MA57E(*ma57e),
    IPOPT_DECL_MA57I(*ma57i)
-   )
+)
 {
    DBG_ASSERT(ma57a != NULL);
    DBG_ASSERT(ma57b != NULL);

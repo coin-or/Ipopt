@@ -12,8 +12,8 @@ namespace Ipopt
 bool TimingStatistics::IsFunctionEvaluationTimeEnabled() const
 {
    return f_eval_time_.IsEnabled() || grad_f_eval_time_.IsEnabled() || c_eval_time_.IsEnabled()
-      || d_eval_time_.IsEnabled() || jac_c_eval_time_.IsEnabled() || jac_d_eval_time_.IsEnabled()
-      || h_eval_time_.IsEnabled();
+          || d_eval_time_.IsEnabled() || jac_c_eval_time_.IsEnabled() || jac_d_eval_time_.IsEnabled()
+          || h_eval_time_.IsEnabled();
 }
 
 Number TimingStatistics::TotalFunctionEvaluationCpuTime() const
@@ -170,7 +170,9 @@ void TimingStatistics::PrintAllTimingStatistics(
       jnlst.Printf(level, category,
                    "OverallAlgorithm....................: %10.3f (sys: %10.3f wall: %10.3f)\n", OverallAlgorithm_.TotalCpuTime(), OverallAlgorithm_.TotalSysTime(), OverallAlgorithm_.TotalWallclockTime());
    else
+   {
       jnlst.Printf(level, category, "OverallAlgorithm\n");
+   }
    if( PrintProblemStatistics_.IsEnabled() )
       jnlst.Printf(level, category,
                    " PrintProblemStatistics.............: %10.3f (sys: %10.3f wall: %10.3f)\n", PrintProblemStatistics_.TotalCpuTime(), PrintProblemStatistics_.TotalSysTime(), PrintProblemStatistics_.TotalWallclockTime());
@@ -203,7 +205,9 @@ void TimingStatistics::PrintAllTimingStatistics(
       jnlst.Printf(level, category,
                    "PDSystemSolverTotal.................: %10.3f (sys: %10.3f wall: %10.3f)\n", PDSystemSolverTotal_.TotalCpuTime(), PDSystemSolverTotal_.TotalSysTime(), PDSystemSolverTotal_.TotalWallclockTime());
    else if( PDSystemSolverSolveOnce_.IsEnabled() || ComputeResiduals_.IsEnabled() || StdAugSystemSolverMultiSolve_.IsEnabled() || LinearSystemScaling_.IsEnabled() || LinearSystemSymbolicFactorization_.IsEnabled() || LinearSystemFactorization_.IsEnabled() || LinearSystemBackSolve_.IsEnabled() || LinearSystemStructureConverter_.IsEnabled() || LinearSystemStructureConverterInit_.IsEnabled() )
+   {
       jnlst.Printf(level, category, "PDSystemSolverTotal\n");
+   }
    if( PDSystemSolverSolveOnce_.IsEnabled() )
       jnlst.Printf(level, category,
                    " PDSystemSolverSolveOnce............: %10.3f (sys: %10.3f wall: %10.3f)\n", PDSystemSolverSolveOnce_.TotalCpuTime(), PDSystemSolverSolveOnce_.TotalSysTime(), PDSystemSolverSolveOnce_.TotalWallclockTime());

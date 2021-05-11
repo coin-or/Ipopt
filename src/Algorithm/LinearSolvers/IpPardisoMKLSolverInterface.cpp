@@ -25,31 +25,31 @@
 /* Prototypes for MKL Pardiso's subroutines */
 extern "C"
 {
-void IPOPT_LAPACK_FUNC(pardisoinit,PARDISOINIT)(
-   void*          PT,
-   const ipindex* MTYPE,
-   ipindex*       IPARM
-);
+   void IPOPT_LAPACK_FUNC(pardisoinit, PARDISOINIT)(
+      void*          PT,
+      const ipindex* MTYPE,
+      ipindex*       IPARM
+   );
 
-void IPOPT_LAPACK_FUNC(pardiso,PARDISO)(
-   void**           PT,
-   const ipindex*   MAXFCT,
-   const ipindex*   MNUM,
-   const ipindex*   MTYPE,
-   const ipindex*   PHASE,
-   const ipindex*   N,
-   const ipnumber*  A,
-   const ipindex*   IA,
-   const ipindex*   JA,
-   const ipindex*   PERM,
-   const ipindex*   NRHS,
-   ipindex*         IPARM,
-   const ipindex*   MSGLVL,
-   ipnumber*        B,
-   ipnumber*        X,
-   ipindex*         E,
-   ipnumber*        DPARM
-);
+   void IPOPT_LAPACK_FUNC(pardiso, PARDISO)(
+      void**           PT,
+      const ipindex*   MAXFCT,
+      const ipindex*   MNUM,
+      const ipindex*   MTYPE,
+      const ipindex*   PHASE,
+      const ipindex*   N,
+      const ipnumber*  A,
+      const ipindex*   IA,
+      const ipindex*   JA,
+      const ipindex*   PERM,
+      const ipindex*   NRHS,
+      ipindex*         IPARM,
+      const ipindex*   MSGLVL,
+      ipnumber*        B,
+      ipnumber*        X,
+      ipindex*         E,
+      ipnumber*        DPARM
+   );
 }
 
 namespace Ipopt
@@ -89,8 +89,8 @@ PardisoMKLSolverInterface::~PardisoMKLSolverInterface()
       Index ERROR;
       Index idmy = 0;
       Number ddmy = 0.;
-      IPOPT_LAPACK_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
-                                         &ddmy, &ERROR, DPARM_);
+      IPOPT_LAPACK_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
+                                          &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
    }
 
@@ -206,8 +206,8 @@ bool PardisoMKLSolverInterface::InitializeImpl(
       Index ERROR;
       Index idmy = 0;
       Number ddmy = 0.;
-      IPOPT_LAPACK_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
-                                         &ddmy, &ERROR, DPARM_);
+      IPOPT_LAPACK_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
+                                          &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
    }
 
@@ -223,7 +223,7 @@ bool PardisoMKLSolverInterface::InitializeImpl(
    memset(PT_, 0, 64); // needs to be initialized to 0 according to MKL Pardiso docu
    IPARM_[0] = 0;  // Tell it to fill IPARM with default values(?)
 
-   IPOPT_LAPACK_FUNC(pardisoinit,PARDISOINIT)(PT_, &MTYPE_, IPARM_);
+   IPOPT_LAPACK_FUNC(pardisoinit, PARDISOINIT)(PT_, &MTYPE_, IPARM_);
 
    // Set some parameters for Pardiso
    // https://software.intel.com/content/www/us/en/develop/documentation/onemkl-developer-reference-c/top/sparse-solver-routines/onemkl-pardiso-parallel-direct-sparse-solver-interface/pardiso-iparm-parameter.html
@@ -432,7 +432,7 @@ void write_iajaa_matrix(
       for( i = 0; i < N; i++ )
          for( j = ia[i]; j < ia[i + 1] - 1; j++ )
          {
-            mat_file << ' ' << i+1 << ' ' << ja[j - 1] << ' ' << a_[j - 1] << std::endl;
+            mat_file << ' ' << i + 1 << ' ' << ja[j - 1] << ' ' << a_[j - 1] << std::endl;
          }
    }
 }
@@ -472,9 +472,9 @@ ESymSolverStatus PardisoMKLSolverInterface::Factorization(
 
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                         "Calling Pardiso for symbolic factorization.\n");
-         IPOPT_LAPACK_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
-                                            &PHASE, &N, a_, ia, ja, &PERM,
-                                            &NRHS, IPARM_, &MSGLVL_, &B, &X, &ERROR, DPARM_);
+         IPOPT_LAPACK_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+                                             &PHASE, &N, a_, ia, ja, &PERM,
+                                             &NRHS, IPARM_, &MSGLVL_, &B, &X, &ERROR, DPARM_);
          if( HaveIpData() )
          {
             IpData().TimingStats().LinearSystemSymbolicFactorization().End();
@@ -526,9 +526,9 @@ ESymSolverStatus PardisoMKLSolverInterface::Factorization(
          debug_last_iter_ = 0;
       }
 
-      IPOPT_LAPACK_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
-                                         &PHASE, &N, a_, ia, ja, &PERM,
-                                         &NRHS, IPARM_, &MSGLVL_, &B, &X, &ERROR, DPARM_);
+      IPOPT_LAPACK_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_,
+                                          &PHASE, &N, a_, ia, ja, &PERM,
+                                          &NRHS, IPARM_, &MSGLVL_, &B, &X, &ERROR, DPARM_);
       if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemFactorization().End();
@@ -664,20 +664,20 @@ ESymSolverStatus PardisoMKLSolverInterface::Solve(
    {
       rhs_vals[i] = ORIG_RHS[i];
    }
-   IPOPT_LAPACK_FUNC(pardiso,PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, a_, ia, ja, &PERM, &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
-      &ERROR, DPARM_);
+   IPOPT_LAPACK_FUNC(pardiso, PARDISO)(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, a_, ia, ja, &PERM, &NRHS, IPARM_, &MSGLVL_, rhs_vals, X,
+                                       &ERROR, DPARM_);
 
    if( ERROR <= -100 && ERROR >= -102 )
    {
       Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-         "Iterative solver in Pardiso did not converge (ERROR = %" IPOPT_INDEX_FORMAT ")\n", ERROR);
+                     "Iterative solver in Pardiso did not converge (ERROR = %" IPOPT_INDEX_FORMAT ")\n", ERROR);
       Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-         "  Decreasing drop tolerances from DPARM_[4] = %e and DPARM_[5] = %e\n", DPARM_[4], DPARM_[5]);
+                     "  Decreasing drop tolerances from DPARM_[4] = %e and DPARM_[5] = %e\n", DPARM_[4], DPARM_[5]);
       PHASE = 23;
       DPARM_[4] /= 2.0;
       DPARM_[5] /= 2.0;
       Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-         "                               to DPARM_[4] = %e and DPARM_[5] = %e\n", DPARM_[4], DPARM_[5]);
+                     "                               to DPARM_[4] = %e and DPARM_[5] = %e\n", DPARM_[4], DPARM_[5]);
       ERROR = 0;
    }
 

@@ -135,18 +135,18 @@ public:
    Ma86SolverInterface(
       SmartPtr<LibraryLoader> hslloader_  ///< @since 3.14.0
    )  : val_(NULL),
-        order_(NULL),
-        keep_(NULL),
-        pivtol_changed_(false),
-        hslloader(hslloader_),
-        ma86_default_control(NULL),
-        ma86_analyse(NULL),
-        ma86_factor(NULL),
-        ma86_factor_solve(NULL),
-        ma86_solve(NULL),
-        ma86_finalise(NULL),
-        mc68_default_control(NULL),
-        mc68_order(NULL)
+      order_(NULL),
+      keep_(NULL),
+      pivtol_changed_(false),
+      hslloader(hslloader_),
+      ma86_default_control(NULL),
+      ma86_analyse(NULL),
+      ma86_factor(NULL),
+      ma86_factor_solve(NULL),
+      ma86_solve(NULL),
+      ma86_finalise(NULL),
+      mc68_default_control(NULL),
+      mc68_order(NULL)
    { }
 
    ~Ma86SolverInterface();
@@ -166,7 +166,7 @@ public:
       IPOPT_DECL_MA86_FINALISE(*ma86_finalise),
       IPOPT_DECL_MC68_DEFAULT_CONTROL(*mc68_default_control),
       IPOPT_DECL_MC68_ORDER(*mc68_order)
-      );
+   );
 
    bool InitializeImpl(
       const OptionsList& options,

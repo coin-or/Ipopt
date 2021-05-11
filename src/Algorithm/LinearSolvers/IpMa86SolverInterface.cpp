@@ -115,7 +115,7 @@ void Ma86SolverInterface::SetFunctions(
    IPOPT_DECL_MA86_FINALISE(*ma86_finalise),
    IPOPT_DECL_MC68_DEFAULT_CONTROL(*mc68_default_control),
    IPOPT_DECL_MC68_ORDER(*mc68_order)
-   )
+)
 {
    DBG_ASSERT(ma86_default_control != NULL);
    DBG_ASSERT(ma86_analyse != NULL);

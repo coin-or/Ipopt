@@ -235,7 +235,9 @@ ApplicationReturnStatus IpoptApplication::Initialize(
       bool print_options_documentation;
       options_->GetBoolValue("print_options_documentation", print_options_documentation, "");
       if( print_options_documentation )
+      {
          reg_options_->OutputOptionDocumentation(*jnlst_, options_);
+      }
 
 #ifdef BUILD_INEXACT
       // Check if we are to use the inexact linear solver option
@@ -610,7 +612,9 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
       options_->GetBoolValue("timing_statistics", timing_statistics, "");
       options_->GetBoolValue("print_timing_statistics", print_timing_statistics, "");
       if( !timing_statistics && !print_timing_statistics )
+      {
          p2ip_data->TimingStats().DisableTimes();
+      }
 
       // If selected, print the user options
       bool print_user_options;
@@ -700,14 +704,14 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
       {
          Number wall_time_funcs = p2ip_data->TimingStats().TotalFunctionEvaluationWallclockTime();
          jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Total seconds in IPOPT (w/o function evaluations)    = %10.3f\n",
-            wall_time_overall_alg - wall_time_funcs);
+                        wall_time_overall_alg - wall_time_funcs);
          jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Total seconds in NLP function evaluations            = %10.3f\n",
-            wall_time_funcs);
+                        wall_time_funcs);
       }
       else
       {
          jnlst_->Printf(J_SUMMARY, J_STATISTICS, "Total seconds in IPOPT                               = %.3f\n",
-            wall_time_overall_alg);
+                        wall_time_overall_alg);
       }
 
       // Write timing statistics information

@@ -113,7 +113,9 @@ Number PiecewisePenalty::BiggestBarr()
    DBG_ASSERT(!IsPiecewisePenaltyListEmpty());
    Number value = -1e20;
    if( !PiecewisePenalty_list_.empty() )
+   {
       value = PiecewisePenalty_list_.back().barrier_obj;
+   }
    return value;
 }
 

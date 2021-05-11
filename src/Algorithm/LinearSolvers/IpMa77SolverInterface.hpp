@@ -250,27 +250,27 @@ public:
    Ma77SolverInterface(
       SmartPtr<LibraryLoader> hslloader_  ///< @since 3.14.0
    )  : val_(NULL),
-        keep_(NULL),
-        pivtol_changed_(false),
-        hslloader(hslloader_),
-        ma77_default_control(NULL),
-        ma77_open_nelt(NULL),
-        ma77_open(NULL),
-        ma77_input_vars(NULL),
-        ma77_input_reals(NULL),
-        ma77_analyse(NULL),
-        ma77_factor(NULL),
-        ma77_factor_solve(NULL),
-        ma77_solve(NULL),
-        ma77_resid(NULL),
-        ma77_scale(NULL),
-        ma77_enquire_posdef(NULL),
-        ma77_enquire_indef(NULL),
-        ma77_alter(NULL),
-        ma77_restart(NULL),
-        ma77_finalise(NULL),
-        mc68_default_control(NULL),
-        mc68_order(NULL)
+      keep_(NULL),
+      pivtol_changed_(false),
+      hslloader(hslloader_),
+      ma77_default_control(NULL),
+      ma77_open_nelt(NULL),
+      ma77_open(NULL),
+      ma77_input_vars(NULL),
+      ma77_input_reals(NULL),
+      ma77_analyse(NULL),
+      ma77_factor(NULL),
+      ma77_factor_solve(NULL),
+      ma77_solve(NULL),
+      ma77_resid(NULL),
+      ma77_scale(NULL),
+      ma77_enquire_posdef(NULL),
+      ma77_enquire_indef(NULL),
+      ma77_alter(NULL),
+      ma77_restart(NULL),
+      ma77_finalise(NULL),
+      mc68_default_control(NULL),
+      mc68_order(NULL)
    { }
 
    ~Ma77SolverInterface();
@@ -300,7 +300,7 @@ public:
       IPOPT_DECL_MA77_FINALISE(*ma77_finalise),
       IPOPT_DECL_MC68_DEFAULT_CONTROL(*mc68_default_control),
       IPOPT_DECL_MC68_ORDER(*mc68_order)
-      );
+   );
 
    bool InitializeImpl(
       const OptionsList& options,

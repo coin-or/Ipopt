@@ -83,7 +83,7 @@ public:
    /** Constructor */
    Ma27TSolverInterface(
       SmartPtr<LibraryLoader> hslloader_  ///< @since 3.14.0
-      );
+   );
 
    /** Destructor */
    virtual ~Ma27TSolverInterface();
@@ -145,7 +145,7 @@ public:
       IPOPT_DECL_MA27B(*ma27b),
       IPOPT_DECL_MA27C(*ma27c),
       IPOPT_DECL_MA27I(*ma27i)
-      );
+   );
 
 private:
    /**@name Default Compiler Generated Methods

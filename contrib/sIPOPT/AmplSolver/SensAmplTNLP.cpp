@@ -226,18 +226,20 @@ void SensAmplTNLP::finalize_solution(
 static
 std::vector<Index> to_vector_index(
    std::vector<int>& v
-   )
+)
 {
    std::vector<Index> v2(v.size());
    for( size_t i = 0; i < v.size(); ++i )
+   {
       v2[i] = v[i];
+   }
    return v2;
 }
 #else
 static
 std::vector<Index>& to_vector_index(
    std::vector<int>& v
-   )
+)
 {
    return v;
 }
@@ -357,7 +359,7 @@ std::vector<int> SensAmplTNLP::get_index_suffix_vec(
    DBG_ASSERT(IsValid(suffix_handler));
 
    std::vector<int> index_suffix = suffix_handler->GetIntegerSuffixValues(n_var, suffix_name,
-                                     AmplSuffixHandler::Variable_Source);
+                                   AmplSuffixHandler::Variable_Source);
    if( index_suffix.size() == 0 )
    {
       index_suffix.resize(n_var, 0);
@@ -417,7 +419,7 @@ const int* SensAmplTNLP::get_index_suffix_constr(
    SmartPtr<AmplSuffixHandler> suffix_handler = get_suffix_handler();
 
    const int* index_suffix = suffix_handler->GetIntegerSuffixValues(suffix_name,
-                               AmplSuffixHandler::Constraint_Source);
+                             AmplSuffixHandler::Constraint_Source);
 
    if( index_suffix == NULL )
    {
@@ -439,7 +441,7 @@ std::vector<int> SensAmplTNLP::get_index_suffix_constr_vec(
    SmartPtr<AmplSuffixHandler> suffix_handler = get_suffix_handler();
 
    std::vector<int> index_suffix = suffix_handler->GetIntegerSuffixValues(n_con, suffix_name,
-                                     AmplSuffixHandler::Constraint_Source);
+                                   AmplSuffixHandler::Constraint_Source);
 
    if( index_suffix.empty() )
    {

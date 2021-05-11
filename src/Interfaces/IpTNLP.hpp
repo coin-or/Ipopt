@@ -735,7 +735,7 @@ public:
       Index                      m,
       Number*                    g,
       Number*                    lambda
-      ) const;
+   ) const;
    // [TNLP_get_curr_iterate]
 
    /** Get primal and dual infeasibility of the current iterate.
@@ -785,7 +785,7 @@ public:
       Index                      m,
       Number*                    nlp_constraint_violation,
       Number*                    compl_g
-      ) const;
+   ) const;
    // [TNLP_get_curr_violations]
 
 private:

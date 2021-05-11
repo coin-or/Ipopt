@@ -37,7 +37,7 @@ typedef unsigned int IpoptLinearSolver;
  */
 IPOPTLIB_EXPORT IpoptLinearSolver IPOPT_CALLCONV IpoptGetAvailableLinearSolvers(
    int buildinonly
-   );
+);
 
 #ifdef __cplusplus
 }

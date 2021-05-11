@@ -310,7 +310,9 @@ public class HS071 extends Ipopt
       long     ip_cq)
    {
       if( !printiterate )
+      {
          return true;
+      }
 
       double x[] = new double[n];
       double z_L[] = new double[n];
@@ -333,25 +335,41 @@ public class HS071 extends Ipopt
       for( int i = 0; i < n; ++i )
       {
          if( have_iter )
+         {
             System.out.print("  " + x[i] + " " + z_L[i] + " " + z_U[i]);
+         }
          else
+         {
             System.out.print("  n/a n/a n/a");
+         }
          if( have_viol )
-            System.out.println(" " + Math.max(x_L_viol[i],x_U_viol[i]) + " " + compl_x_L[i] + " " + compl_x_U[i] + " " + grad_lag_x[i]);
+         {
+            System.out.println(" " + Math.max(x_L_viol[i], x_U_viol[i]) + " " + compl_x_L[i] + " " + compl_x_U[i] + " " + grad_lag_x[i]);
+         }
          else
+         {
             System.out.println("  n/a/ n/a n/a n/a");
+         }
       }
       System.out.println("  g(x) lambda constr_viol compl_g");
       for( int i = 0; i < m; ++i )
       {
          if( have_iter )
+         {
             System.out.print("  " + g[i] + " " + lambda[i]);
+         }
          else
+         {
             System.out.print("  n/a n/a");
+         }
          if( have_viol )
+         {
             System.out.println(" " + constr_viol[i] + " " + compl_g[i]);
+         }
          else
+         {
             System.out.println(" n/a + n/a");
+         }
       }
 
       return true;

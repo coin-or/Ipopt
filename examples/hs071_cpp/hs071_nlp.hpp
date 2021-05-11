@@ -37,7 +37,7 @@ public:
    /** Constructor */
    HS071_NLP(
       bool printiterate = false   /**< whether to print the iterate at each iteration */
-      );
+   );
 
    /** Destructor */
    virtual ~HS071_NLP();

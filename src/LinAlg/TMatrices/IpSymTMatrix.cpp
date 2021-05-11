@@ -169,7 +169,9 @@ void SymTMatrix::ComputeRowAMaxImpl(
    DBG_ASSERT(initialized_);
 
    if( NRows() == 0 )
+   {
       return;
+   }
 
    DenseVector* dense_vec = static_cast<DenseVector*>(&rows_norms);
    DBG_ASSERT(dynamic_cast<DenseVector*>(&rows_norms));

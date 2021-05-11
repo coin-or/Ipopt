@@ -255,7 +255,7 @@ bool PDFullSpaceSolver::Solve(
       Index num_iter_ref = 0;
       bool quit_refinement = false;
       while( /* !allow_inexact &&*/ !quit_refinement   // allow_inexact is always false here
-             && (num_iter_ref < min_refinement_steps_ || residual_ratio > residual_ratio_max_) )
+                                    && (num_iter_ref < min_refinement_steps_ || residual_ratio > residual_ratio_max_) )
       {
 
          // To the next back solve

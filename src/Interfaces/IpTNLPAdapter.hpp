@@ -361,7 +361,7 @@ public:
    void GetFullDimensions(
       Index& n,  /**< storage for full dimension of x (fixed + non-fixed) */
       Index& m   /**< storage for full dimension of g (c + d) */
-      ) const
+   ) const
    {
       n = n_full_x_;
       m = n_full_g_;
@@ -374,7 +374,7 @@ public:
       Index&  n_x_fixed,     /**< storage for number of fixed variables in TNLP */
       Index*& x_fixed_map,   /**< storage for pointer to array that holds indices of fixed variables (has length n_fixed_x, can be NULL if n_fixed_x=0) */
       FixedVariableTreatmentEnum& fixed_variable_treatment  /**< treatment for fixed variables as used by TNLP */
-      ) const
+   ) const
    {
       n_x_fixed = n_x_fixed_;
       x_fixed_map = x_fixed_map_;
@@ -394,7 +394,7 @@ public:
       SmartPtr<const ExpansionMatrix>& P_x_x_U,    /**< map from indices on upper bounds on x to Ipopt internal indices for x */
       SmartPtr<const ExpansionMatrix>& P_c_g,      /**< map from indices on equality constraints (c(x)=0) into TNLP constraint indices (g_l <= g(x) <= g_u) */
       SmartPtr<const ExpansionMatrix>& P_d_g       /**< map from indices on inequality constraints (d(x)-s=0) into TNLP constraint indices (g_l <= g(x) <= g_u) */
-      ) const
+   ) const
    {
       P_x_full_x = ConstPtr(P_x_full_x_);
       P_x_x_L = ConstPtr(P_x_x_L_);

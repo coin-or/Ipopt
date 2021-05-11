@@ -102,8 +102,8 @@ void IpoptAlgorithm::RegisterOptions(
       "The Mehrotra's predictor-corrector algorithm works usually very well for LPs and convex QPs.");
    roptions->SetRegisteringCategory("Undocumented");
    roptions->AddBoolOption("sb",
-      "whether to skip printing Ipopt copyright banner",
-      false);
+                           "whether to skip printing Ipopt copyright banner",
+                           false);
 }
 
 static bool copyright_message_printed = false;
@@ -248,8 +248,8 @@ private:
 public:
    EndTimedTask(
       TimedTask& task_
-      )
-   : task(task_)
+   )
+      : task(task_)
    {
       DBG_ASSERT(task.IsStarted());
    }
@@ -407,7 +407,9 @@ SolverReturn IpoptAlgorithm::Optimize(
 
       // stop watchdog if interrupted due to limit to restore iterate from before watchdog (#289)
       if( stop_watchdog && dynamic_cast<BacktrackingLineSearch*>(GetRawPtr(line_search_)) != NULL )
+      {
          static_cast<BacktrackingLineSearch*>(GetRawPtr(line_search_))->StopWatchDog();
+      }
 
       if( conv_status == ConvergenceCheck::CONVERGED || conv_status == ConvergenceCheck::CONVERGED_TO_ACCEPTABLE_POINT )
       {

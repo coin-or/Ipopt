@@ -316,7 +316,7 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
       else
       {
          THROW_EXCEPTION(STEP_COMPUTATION_FAILED,
-            "We are in an emergency mode, but no restoration phase or other fall back is available.");
+                         "We are in an emergency mode, but no restoration phase or other fall back is available.");
       }
       fallback_activated_ = false; // reset the flag
    }
@@ -566,7 +566,7 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
             // ToDo make the 1e-2 below a parameter?
             // added second criteria to cover cases where tol has been set to a large value
             if( IpCq().curr_constraint_violation() <= 1e-2 * IpData().tol() &&
-               IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX) <= 1e-1 * constr_viol_tol_ )
+                IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX) <= 1e-1 * constr_viol_tol_ )
             {
                bool found_acceptable = RestoreAcceptablePoint();
                if( found_acceptable )
@@ -887,7 +887,9 @@ void BacktrackingLineSearch::StopWatchDog(
 void BacktrackingLineSearch::StopWatchDog()
 {
    if( !in_watchdog_ )
+   {
       return;
+   }
    SmartPtr<IteratesVector> actual_delta;
    StopWatchDog(actual_delta);
 }

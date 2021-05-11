@@ -53,23 +53,23 @@ static const Index dbg_verbosity = 3;
 
 WsmpSolverInterface::WsmpSolverInterface(
 #ifdef PARDISO_MATCHING_PREPROCESS
-      SmartPtr<LibraryLoader> pardisoloader_
+   SmartPtr<LibraryLoader> pardisoloader_
 #endif
 )  : a_(NULL),
 #ifdef PARDISO_MATCHING_PREPROCESS
-     ia2(NULL),
-     ja2(NULL),
-     a2_(NULL),
-     perm2(NULL),
-     scale2(NULL),
-     pardisoloader(pardisoloader_),
-     smat_reordering_pardiso_wsmp(NULL),
+   ia2(NULL),
+   ja2(NULL),
+   a2_(NULL),
+   perm2(NULL),
+   scale2(NULL),
+   pardisoloader(pardisoloader_),
+   smat_reordering_pardiso_wsmp(NULL),
 #endif
-     negevals_(-1),
-     initialized_(false),
-     PERM_(NULL),
-     INVP_(NULL),
-     MRP_(NULL)
+   negevals_(-1),
+   initialized_(false),
+   PERM_(NULL),
+   INVP_(NULL),
+   MRP_(NULL)
 {
    DBG_START_METH("WsmpSolverInterface::WsmpSolverInterface()", dbg_verbosity);
 
@@ -182,7 +182,7 @@ void WsmpSolverInterface::GetVersion(
    int& M
 )
 {
-   IPOPT_WSMP_FUNC_(wsmp_version, WSMP_VERSION)(&V,&R,&M);
+   IPOPT_WSMP_FUNC_(wsmp_version, WSMP_VERSION)(&V, &R, &M);
 }
 
 bool WsmpSolverInterface::InitializeImpl(

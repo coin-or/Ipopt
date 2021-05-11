@@ -472,7 +472,9 @@ Index IpoptCalculatedQuantities::CalculateSafeSlack(
       // (otherwise the barrier_obj becomes inf and there are asserts that say that this shouldn't happen)
       // so we ensure that s_min is at least positive
       if( s_min == 0.0 )
+      {
          s_min = std::numeric_limits<Number>::min();
+      }
       DBG_PRINT((1, "s_min = %g, min_slack=%g\n", s_min, min_slack));
       if( min_slack < s_min )
       {
@@ -1583,7 +1585,7 @@ Number IpoptCalculatedQuantities::unscaled_curr_nlp_constraint_violation(
 
 SmartPtr<Vector> IpoptCalculatedQuantities::unscaled_orig_x_L_violation(
    const Vector& x
-   )
+)
 {
    DBG_START_METH("IpoptCalculatedQuantities::unscaled_orig_x_L_violation()", dbg_verbosity);
 
@@ -1592,7 +1594,9 @@ SmartPtr<Vector> IpoptCalculatedQuantities::unscaled_orig_x_L_violation(
 
    OrigIpoptNLP* orignlp = dynamic_cast<OrigIpoptNLP*>(GetRawPtr(ip_nlp_));
    if( orignlp != NULL )
+   {
       orig_x_L = orignlp->orig_x_L();
+   }
 
    if( !IsValid(orig_x_L) || ip_nlp_->Px_L()->NCols() == 0 )
    {
@@ -1617,7 +1621,7 @@ SmartPtr<Vector> IpoptCalculatedQuantities::unscaled_orig_x_L_violation(
 
 SmartPtr<Vector> IpoptCalculatedQuantities::unscaled_orig_x_U_violation(
    const Vector& x
-   )
+)
 {
    DBG_START_METH("IpoptCalculatedQuantities::unscaled_orig_x_U_violation()", dbg_verbosity);
 
@@ -1626,7 +1630,9 @@ SmartPtr<Vector> IpoptCalculatedQuantities::unscaled_orig_x_U_violation(
 
    OrigIpoptNLP* orignlp = dynamic_cast<OrigIpoptNLP*>(GetRawPtr(ip_nlp_));
    if( orignlp != NULL )
+   {
       orig_x_U = orignlp->orig_x_U();
+   }
 
    if( !IsValid(orig_x_U) || ip_nlp_->Px_U()->NCols() == 0 )
    {
@@ -1717,7 +1723,7 @@ Number IpoptCalculatedQuantities::unscaled_curr_orig_bounds_violation(
 
 SmartPtr<Vector> IpoptCalculatedQuantities::orig_x_L_violation(
    const Vector& x
-   )
+)
 {
    DBG_START_METH("IpoptCalculatedQuantities::orig_x_L_violation()", dbg_verbosity);
 
@@ -1726,7 +1732,9 @@ SmartPtr<Vector> IpoptCalculatedQuantities::orig_x_L_violation(
 
    OrigIpoptNLP* orignlp = dynamic_cast<OrigIpoptNLP*>(GetRawPtr(ip_nlp_));
    if( orignlp != NULL )
+   {
       orig_x_L = orignlp->orig_x_L();
+   }
 
    if( !IsValid(orig_x_L) || ip_nlp_->Px_L()->NCols() == 0 )
    {
@@ -1755,7 +1763,7 @@ SmartPtr<Vector> IpoptCalculatedQuantities::orig_x_L_violation(
 
 SmartPtr<Vector> IpoptCalculatedQuantities::orig_x_U_violation(
    const Vector& x
-   )
+)
 {
    DBG_START_METH("IpoptCalculatedQuantities::orig_x_U_violation()", dbg_verbosity);
 
@@ -1764,7 +1772,9 @@ SmartPtr<Vector> IpoptCalculatedQuantities::orig_x_U_violation(
 
    OrigIpoptNLP* orignlp = dynamic_cast<OrigIpoptNLP*>(GetRawPtr(ip_nlp_));
    if( orignlp != NULL )
+   {
       orig_x_U = orignlp->orig_x_U();
+   }
 
    if( !IsValid(orig_x_U) || ip_nlp_->Px_U()->NCols() == 0 )
    {
@@ -1795,7 +1805,9 @@ SmartPtr<const Vector> IpoptCalculatedQuantities::curr_orig_x_L_violation()
    DBG_START_METH("IpoptCalculatedQuantities::curr_orig_x_L_violation()", dbg_verbosity);
 
    if( !ip_nlp_->NLP_scaling()->have_x_scaling() )
+   {
       return unscaled_curr_orig_x_L_violation();
+   }
 
    SmartPtr<Vector> viol_L;
    SmartPtr<const Vector> x = ip_data_->curr()->x();
@@ -1814,7 +1826,9 @@ SmartPtr<const Vector> IpoptCalculatedQuantities::curr_orig_x_U_violation()
    DBG_START_METH("IpoptCalculatedQuantities::curr_orig_x_U_violation()", dbg_verbosity);
 
    if( !ip_nlp_->NLP_scaling()->have_x_scaling() )
+   {
       return unscaled_curr_orig_x_U_violation();
+   }
 
    SmartPtr<Vector> viol_U;
    SmartPtr<const Vector> x = ip_data_->curr()->x();
@@ -1835,7 +1849,9 @@ Number IpoptCalculatedQuantities::curr_orig_bounds_violation(
    DBG_START_METH("IpoptCalculatedQuantities::curr_orig_bounds_violation()", dbg_verbosity);
 
    if( !ip_nlp_->NLP_scaling()->have_x_scaling() )
+   {
       return unscaled_curr_orig_bounds_violation(NormType);
+   }
 
    SmartPtr<const Vector> x = ip_data_->curr()->x();
 

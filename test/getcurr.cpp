@@ -52,9 +52,9 @@ public:
       bool scaling,
       bool maximize
    )
-   : fixedvar_makeconstr_(fixedvar_makeconstr),
-     scaling_(scaling),
-     maximize_(maximize)
+      : fixedvar_makeconstr_(fixedvar_makeconstr),
+        scaling_(scaling),
+        maximize_(maximize)
    { }
 
    /** Method to return some info about the nlp */
@@ -112,9 +112,9 @@ public:
       bool    init_x,
       Number* x,
       bool    init_z,
-      Number* ,
-      Number* ,
-      Index   ,
+      Number*,
+      Number*,
+      Index,
       bool    init_lambda,
       Number*
    )
@@ -150,7 +150,9 @@ public:
 
       obj_scaling = 2.0;
       if( maximize_ )
+      {
          obj_scaling *= -1.0;
+      }
 
       use_x_scaling = true;
       x_scaling[0] = 3.0;
@@ -168,7 +170,7 @@ public:
    bool eval_f(
       Index         n,
       const Number* x,
-      bool          ,
+      bool,
       Number&       obj_value
    )
    {
@@ -182,8 +184,8 @@ public:
    /** Method to return the gradient of the objective */
    bool eval_grad_f(
       Index         n,
-      const Number* ,
-      bool          ,
+      const Number*,
+      bool,
       Number*       grad_f
    )
    {
@@ -200,7 +202,7 @@ public:
    bool eval_g(
       Index         n,
       const Number* x,
-      bool          ,
+      bool,
       Index         m,
       Number*       g
    )
@@ -208,8 +210,8 @@ public:
       assert(n == 3);
       assert(m == 2);
 
-      g[0] = x[0]*x[0] + x[1]*x[1] + x[2]*x[2];
-      g[1] = x[0]*x[0] - x[2]*x[2];
+      g[0] = x[0] * x[0] + x[1] * x[1] + x[2] * x[2];
+      g[1] = x[0] * x[0] - x[2] * x[2];
 
       return true;
    }
@@ -221,7 +223,7 @@ public:
    bool eval_jac_g(
       Index         n,
       const Number* x,
-      bool          ,
+      bool,
       Index         m,
       Index         nele_jac,
       Index*        iRow,
@@ -254,11 +256,11 @@ public:
       }
       else
       {
-         values[0] = 2*x[0];
-         values[1] = 2*x[1];
-         values[2] = 2*x[2];
-         values[3] = 2*x[0];
-         values[4] = -2*x[2];
+         values[0] = 2 * x[0];
+         values[1] = 2 * x[1];
+         values[2] = 2 * x[2];
+         values[3] = 2 * x[0];
+         values[4] = -2 * x[2];
       }
 
       return true;
@@ -270,12 +272,12 @@ public:
     */
    bool eval_h(
       Index         n,
-      const Number* ,
-      bool          ,
-      Number        ,
+      const Number*,
+      bool,
+      Number,
       Index         m,
       const Number* lambda,
-      bool          ,
+      bool,
       Index         nele_hess,
       Index*        iRow,
       Index*        jCol,
@@ -301,9 +303,9 @@ public:
       }
       else
       {
-         values[0] = 2*lambda[0] + 2*lambda[1];
-         values[1] = 2*lambda[0];
-         values[2] = 2*lambda[0] - 2*lambda[1];
+         values[0] = 2 * lambda[0] + 2 * lambda[1];
+         values[1] = 2 * lambda[0];
+         values[2] = 2 * lambda[0] - 2 * lambda[1];
       }
 
       return true;
@@ -311,7 +313,7 @@ public:
 
    /** This method is called when the algorithm is complete so the TNLP can store/write the solution */
    void finalize_solution(
-      SolverReturn               ,
+      SolverReturn,
       Index                      n,
       const Number*              x,
       const Number*              z_L,
@@ -319,7 +321,7 @@ public:
       Index                      m,
       const Number*              g,
       const Number*              lambda,
-      Number                     ,
+      Number,
       const IpoptData*           ip_data,
       IpoptCalculatedQuantities* ip_cq
    )
@@ -327,23 +329,33 @@ public:
       std::cout << "Finalizing:" << std::endl;
       std::cout << "  x =";
       for( Index i = 0; i < n; ++i )
+      {
          std::cout << ' ' << x[i];
+      }
       std::cout << std::endl;
       std::cout << "  z_L =";
       for( Index i = 0; i < n; ++i )
+      {
          std::cout << ' ' << z_L[i];
+      }
       std::cout << std::endl;
       std::cout << "  z_U =";
       for( Index i = 0; i < n; ++i )
+      {
          std::cout << ' ' << z_U[i];
+      }
       std::cout << std::endl;
       std::cout << "  g =";
       for( Index i = 0; i < m; ++i )
+      {
          std::cout << ' ' << g[i];
+      }
       std::cout << std::endl;
       std::cout << "  lambda =";
       for( Index i = 0; i < m; ++i )
+      {
          std::cout << ' ' << lambda[i];
+      }
       std::cout << std::endl;
 
       // check that get_curr_iterate() returns the same point
@@ -374,16 +386,16 @@ public:
 
    bool intermediate_callback(
       AlgorithmMode              mode,
-      Index                      ,
-      Number                     ,
-      Number                     ,
-      Number                     ,
-      Number                     ,
-      Number                     ,
-      Number                     ,
-      Number                     ,
-      Number                     ,
-      Index                      ,
+      Index,
+      Number,
+      Number,
+      Number,
+      Number,
+      Number,
+      Number,
+      Number,
+      Number,
+      Index,
       const IpoptData*           ip_data,
       IpoptCalculatedQuantities* ip_cq
    )
@@ -411,21 +423,25 @@ public:
       printf("Current iterate (%s mode):\n", mode == RegularMode ? "regular" : "restoration");
       printf("  %-12s %-12s %-12s %-12s %-12s %-12s %-12s %-12s\n", "x", "x_L_viol", "x_U_viol", "z_L", "z_U", "compl_x_L", "compl_x_U", "grad_lag_x");
       for( int i = 0; i < 3; ++i )
+      {
          printf("  %-12g %-12g %-12g %-12g %-12g %-12g %-12g %-12g\n", x[i], x_L_viol[i], x_U_viol[i], z_L[i], z_U[i], compl_x_L[i], compl_x_U[i], grad_lag_x[i]);
+      }
 
       printf("  %-12s %-12s %-12s %-12s\n", "g(x)", "lambda", "constr_viol", "compl_g");
       for( int i = 0; i < 2; ++i )
+      {
          printf("  %-12g %-12g %-12g %-12g\n", g[i], lambda[i], constraint_violation[i], compl_g[i]);
+      }
 
       // check activity
       ASSERTEQ(g[0], x[0]*x[0] + x[1]*x[1] + x[2]*x[2]);
       ASSERTEQ(g[1], x[0]*x[0] - x[2]*x[2]);
 
       // check violation of variable bounds
-      ASSERTEQ(x_L_viol[0], std::max(0.0, -10.0-x[0]));
+      ASSERTEQ(x_L_viol[0], std::max(0.0, -10.0 - x[0]));
       ASSERTEQ(x_U_viol[0], 0.0);
-      ASSERTEQ(x_L_viol[1], std::max(0.0, 1.0-x[1]));
-      ASSERTEQ(x_U_viol[1], std::max(0.0, x[1]-1.0));
+      ASSERTEQ(x_L_viol[1], std::max(0.0, 1.0 - x[1]));
+      ASSERTEQ(x_U_viol[1], std::max(0.0, x[1] - 1.0));
       ASSERTEQ(x_L_viol[2], 0.0);
       ASSERTEQ(x_U_viol[2], 0.0);
 
@@ -438,13 +454,13 @@ public:
       ASSERTEQ(compl_x_U[2], 0.0);
 
       // check gradient on Lagrangian
-      ASSERTEQ(grad_lag_x[0], 1.0 + lambda[0] * 2*x[0] + lambda[1] * 2*x[0] - z_L[0]);
-      ASSERTEQ(grad_lag_x[1], 1.0 + lambda[0] * 2*x[1] - z_L[1] + z_U[1]);
-      ASSERTEQ(grad_lag_x[2], 1.0 + lambda[0] * 2*x[2] - lambda[1] * 2*x[2]);
+      ASSERTEQ(grad_lag_x[0], 1.0 + lambda[0] * 2 * x[0] + lambda[1] * 2 * x[0] - z_L[0]);
+      ASSERTEQ(grad_lag_x[1], 1.0 + lambda[0] * 2 * x[1] - z_L[1] + z_U[1]);
+      ASSERTEQ(grad_lag_x[2], 1.0 + lambda[0] * 2 * x[2] - lambda[1] * 2 * x[2]);
 
       // check constraint violation
       ASSERTEQ(constraint_violation[0], std::max(0.0, std::max(1.0 - g[0], g[0] - 2.0)));
-      ASSERTEQ(constraint_violation[1], std::max(0.0, std::abs(g[1]-0.5)));
+      ASSERTEQ(constraint_violation[1], std::max(0.0, std::abs(g[1] - 0.5)));
 
       // check complementarity for constraints
       ASSERTEQ(compl_g[0], (g[0] - 1.0) * std::max(Number(0.0), -lambda[0]) + (2.0 - g[0]) * std::max(Number(0.0), lambda[0]));
@@ -472,11 +488,15 @@ public:
       printf("Scaled iterate (%s mode):\n", mode == RegularMode ? "regular" : "restoration");
       printf("  %-12s %-12s %-12s %-12s %-12s %-12s %-12s %-12s\n", "x", "x_L_viol", "x_U_viol", "z_L", "z_U", "compl_x_L", "compl_x_U", "grad_lag_x");
       for( int i = 0; i < 3; ++i )
+      {
          printf("  %-12g %-12g %-12g %-12g %-12g %-12g %-12g %-12g\n", s_x[i], s_x_L_viol[i], s_x_U_viol[i], s_z_L[i], s_z_U[i], s_compl_x_L[i], s_compl_x_U[i], s_grad_lag_x[i]);
+      }
 
       printf("  %-12s %-12s %-12s %-12s\n", "g(x)", "lambda", "constr_viol", "compl_g");
       for( int i = 0; i < 2; ++i )
+      {
          printf("  %-12g %-12g %-12g %-12g\n", s_g[i], s_lambda[i], s_constraint_violation[i], s_compl_g[i]);
+      }
 
       Number obj_scaling = 1.0;
       Number x_scaling[3] = { 1.0, 1.0, 1.0 };
@@ -492,31 +512,39 @@ public:
       ASSERTEQ(s_x[1], x[1]*x_scaling[1]);
       ASSERTEQ(s_x[2], x[2]*x_scaling[2]);
 
-      ASSERTEQ(s_z_L[0], z_L[0]/x_scaling[0]*obj_scaling);
+      ASSERTEQ(s_z_L[0], z_L[0] / x_scaling[0]*obj_scaling);
       if( obj_scaling > 0.0 )
-         ASSERTEQ(s_z_L[1], z_L[1]/x_scaling[1]*obj_scaling);
+      {
+         ASSERTEQ(s_z_L[1], z_L[1] / x_scaling[1]*obj_scaling);
+      }
       else
-         ASSERTEQ(s_z_L[1], z_U[1]/x_scaling[1]*(-obj_scaling));
-      ASSERTEQ(s_z_L[2], z_L[2]/x_scaling[2]*obj_scaling);
+      {
+         ASSERTEQ(s_z_L[1], z_U[1] / x_scaling[1] * (-obj_scaling));
+      }
+      ASSERTEQ(s_z_L[2], z_L[2] / x_scaling[2]*obj_scaling);
 
-      ASSERTEQ(s_z_U[0], z_U[0]/x_scaling[0]*obj_scaling);
+      ASSERTEQ(s_z_U[0], z_U[0] / x_scaling[0]*obj_scaling);
       if( obj_scaling > 0.0 )
-         ASSERTEQ(s_z_U[1], z_U[1]/x_scaling[1]*obj_scaling);
+      {
+         ASSERTEQ(s_z_U[1], z_U[1] / x_scaling[1]*obj_scaling);
+      }
       else
-         ASSERTEQ(s_z_U[1], z_L[1]/x_scaling[1]*(-obj_scaling));
-      ASSERTEQ(s_z_U[2], z_U[2]/x_scaling[2]*obj_scaling);
+      {
+         ASSERTEQ(s_z_U[1], z_L[1] / x_scaling[1] * (-obj_scaling));
+      }
+      ASSERTEQ(s_z_U[2], z_U[2] / x_scaling[2]*obj_scaling);
 
       ASSERTEQ(s_g[0], g[0]*g_scaling[0]);
       ASSERTEQ(s_g[1], g[1]*g_scaling[1]);
 
-      ASSERTEQ(s_lambda[0], lambda[0]/g_scaling[0]*obj_scaling);
-      ASSERTEQ(s_lambda[1], lambda[1]/g_scaling[1]*obj_scaling);
+      ASSERTEQ(s_lambda[0], lambda[0] / g_scaling[0]*obj_scaling);
+      ASSERTEQ(s_lambda[1], lambda[1] / g_scaling[1]*obj_scaling);
 
       // check violation of variable bounds
-      ASSERTEQ(s_x_L_viol[0], std::max(0.0, -10.0*x_scaling[0]-s_x[0]));
+      ASSERTEQ(s_x_L_viol[0], std::max(0.0, -10.0 * x_scaling[0] - s_x[0]));
       ASSERTEQ(s_x_U_viol[0], 0.0);
-      ASSERTEQ(s_x_L_viol[1], std::max(0.0, 1.0*x_scaling[1]-x[1]));
-      ASSERTEQ(s_x_U_viol[1], std::max(0.0, x[1]-1.0*x_scaling[1]));
+      ASSERTEQ(s_x_L_viol[1], std::max(0.0, 1.0 * x_scaling[1] - x[1]));
+      ASSERTEQ(s_x_U_viol[1], std::max(0.0, x[1] - 1.0 * x_scaling[1]));
       ASSERTEQ(s_x_L_viol[2], 0.0);
       ASSERTEQ(s_x_U_viol[2], 0.0);
 
@@ -528,13 +556,13 @@ public:
       ASSERTEQ(s_compl_x_L[2], 0.0);
       ASSERTEQ(s_compl_x_U[2], 0.0);
 
-      ASSERTEQ(s_grad_lag_x[0], (1.0*obj_scaling + s_lambda[0] * 2*x[0] * g_scaling[0] + s_lambda[1] * 2*x[0] * g_scaling[1])/x_scaling[0] - s_z_L[0]);
-      ASSERTEQ(s_grad_lag_x[1], (1.0*obj_scaling + s_lambda[0] * 2*x[1] * g_scaling[0])/x_scaling[1] - s_z_L[1] + s_z_U[1]);
-      ASSERTEQ(s_grad_lag_x[2], (1.0*obj_scaling + s_lambda[0] * 2*x[2] * g_scaling[0] - s_lambda[1] * 2*x[2] * g_scaling[1])/x_scaling[2]);
+      ASSERTEQ(s_grad_lag_x[0], (1.0 * obj_scaling + s_lambda[0] * 2 * x[0] * g_scaling[0] + s_lambda[1] * 2 * x[0] * g_scaling[1]) / x_scaling[0] - s_z_L[0]);
+      ASSERTEQ(s_grad_lag_x[1], (1.0 * obj_scaling + s_lambda[0] * 2 * x[1] * g_scaling[0]) / x_scaling[1] - s_z_L[1] + s_z_U[1]);
+      ASSERTEQ(s_grad_lag_x[2], (1.0 * obj_scaling + s_lambda[0] * 2 * x[2] * g_scaling[0] - s_lambda[1] * 2 * x[2] * g_scaling[1]) / x_scaling[2]);
 
       // check constraint violation
       ASSERTEQ(s_constraint_violation[0], std::max(0.0, std::max(1.0 - g[0], g[0] - 2.0)*g_scaling[0]));
-      ASSERTEQ(s_constraint_violation[1], std::max(0.0, std::abs(g[1]-0.5)*g_scaling[1]));
+      ASSERTEQ(s_constraint_violation[1], std::max(0.0, std::abs(g[1] - 0.5)*g_scaling[1]));
 
       // check complementarity for constraints
       ASSERTEQ(s_compl_g[0], ((g[0] - 1.0) * std::max(Number(0.0), -s_lambda[0]) + (2.0 - g[0]) * std::max(Number(0.0), s_lambda[0]))*g_scaling[0]);
@@ -549,7 +577,7 @@ bool run(
    bool start_resto,
    bool scale,
    bool maximize
-   )
+)
 {
    // Create an instance of your nlp...
    SmartPtr<TNLP> nlp = new TestNLP(fixedvar_makeconstr, scale, maximize);
@@ -569,18 +597,26 @@ bool run(
    app->Options()->SetStringValue("print_user_options", "yes", true, true);
    app->Options()->SetIntegerValue("print_level", 2, true, true);
    // allow only very little relaxation of variable bounds, since the asserts on compl_x_L/U use the original bounds, not the relaxed one that Ipopt uses
-   app->Options()->SetNumericValue("constr_viol_tol", 1e-3*TESTTOL, true, true);
+   app->Options()->SetNumericValue("constr_viol_tol", 1e-3 * TESTTOL, true, true);
 
    if( fixedvar_makeconstr )
+   {
       app->Options()->SetStringValue("fixed_variable_treatment", "make_constraint");
+   }
 
    if( start_resto )
+   {
       app->Options()->SetStringValue("start_with_resto", "yes");
+   }
 
    if( scale )
+   {
       app->Options()->SetStringValue("nlp_scaling_method", "user-scaling");
+   }
    else
-      assert(!maximize);  // maximize requires scaling in this test
+   {
+      assert(!maximize);   // maximize requires scaling in this test
+   }
 
    app->OptimizeTNLP(nlp);
 
@@ -593,34 +629,54 @@ int main(
 )
 {
    if( run(false, false, false, false) != EXIT_SUCCESS )
+   {
       return EXIT_FAILURE;
+   }
 
    if( run(true, false, false, false) != EXIT_SUCCESS )
+   {
       return EXIT_FAILURE;
+   }
 
    if( run(false, true, false, false) != EXIT_SUCCESS )
+   {
       return EXIT_FAILURE;
+   }
 
    if( run(true, true, false, false) != EXIT_SUCCESS )
+   {
       return EXIT_FAILURE;
+   }
 
    if( run(false, false, true, false) != EXIT_SUCCESS )
+   {
       return EXIT_FAILURE;
+   }
 
    if( run(true, false, true, false) != EXIT_SUCCESS )
+   {
       return EXIT_FAILURE;
+   }
 
    if( run(false, true, true, false) != EXIT_SUCCESS )
+   {
       return EXIT_FAILURE;
+   }
 
    if( run(true, true, true, false) != EXIT_SUCCESS )
+   {
       return EXIT_FAILURE;
+   }
 
    if( run(false, true, true, true) != EXIT_SUCCESS )
+   {
       return EXIT_FAILURE;
+   }
 
    if( run(true, true, true, true) != EXIT_SUCCESS )
+   {
       return EXIT_FAILURE;
+   }
 
    std::cout << std::endl << "*** All tests passed" << std::endl;
 

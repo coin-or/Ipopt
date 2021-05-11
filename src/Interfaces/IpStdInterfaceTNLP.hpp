@@ -208,7 +208,7 @@ public:
       Index                      m,
       Number*                    g,
       Number*                    lambda
-      ) const
+   ) const
    {
       return TNLP::get_curr_iterate(ip_data_, ip_cq_, scaled, n, x, z_L, z_U, m, g, lambda);
    }
@@ -226,7 +226,7 @@ public:
       Index                      m,
       Number*                    nlp_constraint_violation,
       Number*                    compl_g
-      ) const
+   ) const
    {
       return TNLP::get_curr_violations(ip_data_, ip_cq_, scaled, n, x_L_violation, x_U_violation, compl_x_L, compl_x_U, grad_lag_x, m, nlp_constraint_violation, compl_g);
    }

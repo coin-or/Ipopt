@@ -35,7 +35,7 @@ void AmplTNLP::gutsOfConstructor(
    const char*                       ampl_invokation_string /* = NULL */,
    const char*                       ampl_banner_string /* = NULL */,
    std::string*                      nl_file_content /* = NULL */
-   )
+)
 {
    // The ASL include files #define certain
    // variables that they expect you to work with.
@@ -1862,7 +1862,7 @@ std::vector<Number> AmplSuffixHandler::GetNumberSuffixValues(
    Index              n,
    const std::string& suffix_string,
    Suffix_Source      source
-   ) const
+) const
 {
    std::vector<Number> ret;
    const Number* ptr = GetNumberSuffixValues(suffix_string, source);

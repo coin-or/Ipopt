@@ -208,27 +208,41 @@ bool StdInterfaceTNLP::get_starting_point(
    DBG_ASSERT(m == n_con_);
 
    if( init_x )
+   {
       Ipopt::IpBlasCopy(n, start_x_, 1, x, 1);
+   }
 
    if( init_z )
    {
       if( start_z_L_ == NULL )
+      {
          retval = false;
+      }
       else
+      {
          Ipopt::IpBlasCopy(n, start_z_L_, 1, z_L, 1);
+      }
 
       if( start_z_U_ == NULL )
+      {
          retval = false;
+      }
       else
+      {
          Ipopt::IpBlasCopy(n, start_z_U_, 1, z_U, 1);
+      }
    }
 
    if( init_lambda )
    {
       if( start_lam_ == NULL )
+      {
          retval = false;
+      }
       else
+      {
          Ipopt::IpBlasCopy(m, start_lam_, 1, lambda, 1);
+      }
    }
 
    return retval;
@@ -329,7 +343,9 @@ bool StdInterfaceTNLP::eval_h(
 
    Number* non_const_lambda = new Number[m];
    if( lambda )
+   {
       Ipopt::IpBlasCopy(m, lambda, 1, non_const_lambda, 1);
+   }
 
    Bool retval = (*eval_h_)(n, non_const_x_, (Bool) new_x, obj_factor, m, non_const_lambda, (Bool) new_lambda, nele_hess, iRow, jCol, values, user_data_);
 
@@ -355,7 +371,9 @@ bool StdInterfaceTNLP::intermediate_callback(
 )
 {
    if( !intermediate_cb_ )
+   {
       return true;
+   }
 
    ip_data_ = ip_data;
    ip_cq_ = ip_cq;
@@ -430,7 +448,9 @@ void StdInterfaceTNLP::apply_new_x(
 
       //copy the data to the non_const_x_
       if( non_const_x_ == NULL )
+      {
          non_const_x_ = new Number[n];
+      }
 
       Ipopt::IpBlasCopy(n, x, 1, non_const_x_, 1);
    }

@@ -51,22 +51,22 @@ static IPOPT_DECL_MA27I(*user_ma27i) = NULL;
 Ma27TSolverInterface::Ma27TSolverInterface(
    SmartPtr<LibraryLoader> hslloader_
 )  : hslloader(hslloader_),
-     ma27a(NULL),
-     ma27b(NULL),
-     ma27c(NULL),
-     ma27i(NULL),
-     dim_(0),
-     nonzeros_(0),
-     initialized_(false),
-     pivtol_changed_(false),
-     refactorize_(false),
-     liw_(0),
-     iw_(NULL),
-     ikeep_(NULL),
-     la_(0),
-     a_(NULL),
-     la_increase_(false),
-     liw_increase_(false)
+   ma27a(NULL),
+   ma27b(NULL),
+   ma27c(NULL),
+   ma27i(NULL),
+   dim_(0),
+   nonzeros_(0),
+   initialized_(false),
+   pivtol_changed_(false),
+   refactorize_(false),
+   liw_(0),
+   iw_(NULL),
+   ikeep_(NULL),
+   la_(0),
+   a_(NULL),
+   la_increase_(false),
+   liw_increase_(false)
 {
    DBG_START_METH("Ma27TSolverInterface::Ma27TSolverInterface()", dbg_verbosity);
 }
@@ -146,7 +146,7 @@ void Ma27TSolverInterface::SetFunctions(
    IPOPT_DECL_MA27B(*ma27b),
    IPOPT_DECL_MA27C(*ma27c),
    IPOPT_DECL_MA27I(*ma27i)
-   )
+)
 {
    DBG_ASSERT(ma27a != NULL);
    DBG_ASSERT(ma27b != NULL);
@@ -425,20 +425,20 @@ ESymSolverStatus Ma27TSolverInterface::SymbolicFactorization(
       delete[] iw_;
       iw_ = NULL;
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-         "Size of integer work space recommended by MA27 is %" IPOPT_INDEX_FORMAT "\n", nirnec);
+                     "Size of integer work space recommended by MA27 is %" IPOPT_INDEX_FORMAT "\n", nirnec);
       liw_ = (Index) (liw_init_factor_ * (Number) (nirnec));
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-         "Setting integer work space size to %" IPOPT_INDEX_FORMAT "\n", liw_);
+                     "Setting integer work space size to %" IPOPT_INDEX_FORMAT "\n", liw_);
       iw_ = new Index[liw_];
 
       // Reserve memory for a_
       delete[] a_;
       a_ = NULL;
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-         "Size of doublespace recommended by MA27 is %" IPOPT_INDEX_FORMAT "\n", nrlnec);
+                     "Size of doublespace recommended by MA27 is %" IPOPT_INDEX_FORMAT "\n", nrlnec);
       la_ = Max(nonzeros_, (Index) (la_init_factor_ * (Number) (nrlnec)));
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-         "Setting double work space size to %" IPOPT_INDEX_FORMAT "\n", la_);
+                     "Setting double work space size to %" IPOPT_INDEX_FORMAT "\n", la_);
       a_ = new Number[la_];
    }
    catch( const std::bad_alloc& e )

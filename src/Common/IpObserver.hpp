@@ -243,10 +243,10 @@ inline Observer::~Observer()
    for( size_t i = subjects_.size(); i > 0; --i )
    {
 #ifdef IP_DEBUG_OBSERVER
-      DBG_PRINT((1, "About to detach subjects_[%zd] = %p\n", i, subjects_[i-1]));
+      DBG_PRINT((1, "About to detach subjects_[%zd] = %p\n", i, subjects_[i - 1]));
 #endif
 
-      RequestDetach(NT_All, subjects_[i-1]);
+      RequestDetach(NT_All, subjects_[i - 1]);
    }
 }
 

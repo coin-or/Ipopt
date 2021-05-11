@@ -63,7 +63,9 @@ public:
    void Start()
    {
       if( !enabled_ )
+      {
          return;
+      }
 
       DBG_ASSERT(end_called_);
       DBG_ASSERT(!start_called_);
@@ -78,7 +80,9 @@ public:
    void End()
    {
       if( !enabled_ )
+      {
          return;
+      }
 
       DBG_ASSERT(!end_called_);
       DBG_ASSERT(start_called_);
@@ -96,7 +100,9 @@ public:
    void EndIfStarted()
    {
       if( !enabled_ )
+      {
          return;
+      }
       if( start_called_ )
       {
          end_called_ = true;

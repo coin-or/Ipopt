@@ -43,9 +43,9 @@ public:
    RegisteredCategory(
       const std::string& name,
       int                priority
-      )
-   : name_(name),
-     priority_(priority)
+   )
+      : name_(name),
+        priority_(priority)
    { }
 
    /// name of category
@@ -59,7 +59,7 @@ public:
    /// This one is for backward-compatibility with previous Ipopt versions where RegisteredCategory was a string.
    /// @deprecated Use Name() instead.
    IPOPT_DEPRECATED
-   operator const std::string&() const
+   operator const std::string& () const
    {
       return name_;
    }
@@ -71,7 +71,7 @@ public:
    IPOPT_DEPRECATED
    bool operator!=(
       const std::string& other
-      ) const
+   ) const
    {
       return name_ != other;
    }
@@ -83,7 +83,7 @@ public:
    IPOPT_DEPRECATED
    bool operator==(
       const std::string& other
-      ) const
+   ) const
    {
       return name_ == other;
    }
@@ -95,7 +95,7 @@ public:
    IPOPT_DEPRECATED
    bool operator<(
       const RegisteredCategory& other
-      ) const
+   ) const
    {
       return name_ < other.name_;
    }
@@ -119,7 +119,7 @@ public:
       bool operator()(
          const SmartPtr<RegisteredCategory>& lhs,
          const SmartPtr<RegisteredCategory>& rhs
-         ) const
+      ) const
       {
          DBG_ASSERT(IsValid(lhs));
          DBG_ASSERT(IsValid(rhs));
@@ -712,7 +712,9 @@ public:
    {
       // break circular reference between registered options and registered categories
       for( RegCategoriesList::iterator it(registered_categories_.begin()); it != registered_categories_.end(); ++it )
+      {
          it->second->regoptions_.clear();
+      }
    }
    ///@}
 
@@ -1075,7 +1077,7 @@ public:
     */
    void RegisteredCategoriesByPriority(
       RegCategoriesByPriority& categories
-      ) const;
+   ) const;
 
    /** Output documentation
     *
@@ -1136,7 +1138,7 @@ public:
 private:
    void AddOption(
       const SmartPtr<RegisteredOption>& option
-      );
+   );
 
    RegOptionsList registered_options_;
    RegCategoriesList registered_categories_;

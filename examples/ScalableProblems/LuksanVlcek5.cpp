@@ -29,8 +29,8 @@ LuksanVlcek5::LuksanVlcek5(
    Number g_l,
    Number g_u
 )
-: g_l_(g_l),
-  g_u_(g_u)
+   : g_l_(g_l),
+     g_u_(g_u)
 { }
 
 bool LuksanVlcek5::InitializeProblem(

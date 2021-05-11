@@ -110,18 +110,20 @@ int main(
 #ifdef TIME_LIMIT
    int runtime;
    if( argv == 4 )
+   {
       runtime = atoi(argc[3]);
+   }
    else
 #endif
-   if( argv != 3 && argv != 1 )
-   {
-      printf("Usage: %s (this will ask for problem name)\n", argc[0]);
-      printf("       %s ProblemName N\n", argc[0]);
-      printf("          where N is a positive parameter determining problem size\n");
-      printf("       %s list\n", argc[0]);
-      printf("          to list all registered problems.\n");
-      return -1;
-   }
+      if( argv != 3 && argv != 1 )
+      {
+         printf("Usage: %s (this will ask for problem name)\n", argc[0]);
+         printf("       %s ProblemName N\n", argc[0]);
+         printf("          where N is a positive parameter determining problem size\n");
+         printf("       %s list\n", argc[0]);
+         printf("          to list all registered problems.\n");
+         return -1;
+      }
 
    SmartPtr<RegisteredTNLP> tnlp;
    Index N;

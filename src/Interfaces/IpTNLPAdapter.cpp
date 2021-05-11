@@ -300,7 +300,9 @@ bool TNLPAdapter::ProcessOptions(
 
    if( IsValid(dependency_detector_) )
       if( !dependency_detector_->ReducedInitialize(*jnlst_, options, prefix) )
+      {
          return false;
+      }
 
    return true;
 }
@@ -1224,7 +1226,7 @@ bool TNLPAdapter::GetSpaces(
          Index* h_iRow = new Index[nz_full_h_];
          Index* h_jCol = new Index[nz_full_h_];
          retval = tnlp_->eval_h(n_full_x_, NULL, false, 0, n_full_g_,
-                                     NULL, false, nz_full_h_, full_h_iRow, full_h_jCol, NULL);
+                                NULL, false, nz_full_h_, full_h_iRow, full_h_jCol, NULL);
          if( !retval )
          {
             delete[] full_h_iRow;
@@ -2092,7 +2094,9 @@ void TNLPAdapter::FinalizeSolution(
       case ERROR_IN_STEP_COMPUTATION:
          // only for these status codes, IpoptApplication calls without all vectors 0
          if( !ResortBoundMultipliers(x, y_c, y_d, z_L, full_z_L, z_U, full_z_U) )
+         {
             jnlst_->Printf(J_WARNING, J_INITIALIZATION, "Failed to evaluate gradient of objective or constraints when computing bound multipliers for fixed variables.\n");
+         }
          break;
       default:
          // if IpoptApplication doesn't provide an actual solution, do not bother to setup good multipliers for fixed variables
@@ -2383,7 +2387,9 @@ void TNLPAdapter::ResortG(
       {
          g_orig[c_pos[i]] = scalar;
          if( correctrhs )
+         {
             g_orig[c_pos[i]] += c_rhs_[i];
+         }
       }
    }
    else
@@ -2393,7 +2399,9 @@ void TNLPAdapter::ResortG(
       {
          g_orig[c_pos[i]] = c_values[i];
          if( correctrhs )
+         {
             g_orig[c_pos[i]] += c_rhs_[i];
+         }
       }
    }
 
@@ -2560,7 +2568,9 @@ bool TNLPAdapter::ResortBoundMultipliers(
    ResortBounds(z_L, z_L_orig, z_U, z_U_orig);
 
    if( n_x_fixed_ == 0 )
+   {
       return true;
+   }
 
    // recover the bound multipliers for fixed variables
    if( fixed_variable_treatment_ == MAKE_CONSTRAINT )
@@ -2574,9 +2584,13 @@ bool TNLPAdapter::ResortBoundMultipliers(
          for( Index i = 0; i < n_x_fixed_; i++ )
          {
             if( z_L_orig != NULL )
+            {
                z_L_orig[x_fixed_map_[i]] = Max(Number(0.), -values[n_c_no_fixed + i]);
+            }
             if( z_U_orig != NULL )
+            {
                z_U_orig[x_fixed_map_[i]] = Max(Number(0.), values[n_c_no_fixed + i]);
+            }
          }
       }
       else
@@ -2585,9 +2599,13 @@ bool TNLPAdapter::ResortBoundMultipliers(
          for( Index i = 0; i < n_x_fixed_; i++ )
          {
             if( z_L_orig != NULL )
+            {
                z_L_orig[x_fixed_map_[i]] = Max(Number(0.), -value);
+            }
             if( z_U_orig != NULL )
+            {
                z_U_orig[x_fixed_map_[i]] = Max(Number(0.), value);
+            }
          }
       }
    }
@@ -2636,16 +2654,24 @@ bool TNLPAdapter::ResortBoundMultipliers(
             if( c_row_pos[row] != -1 )
             {
                if( dy_c->IsHomogeneous() )
+               {
                   lambda = dy_c->Scalar();
+               }
                else
+               {
                   lambda = dy_c->Values()[c_row_pos[row]];
+               }
             }
             else if( d_row_pos[row] != -1 )
             {
                if( dy_d->IsHomogeneous() )
+               {
                   lambda = dy_d->Scalar();
+               }
                else
+               {
                   lambda = dy_d->Values()[d_row_pos[row]];
+               }
             }
             // else: a constraint that is neither in c() nor d(), so assuming lambda=0 seems ok
 
@@ -2659,9 +2685,13 @@ bool TNLPAdapter::ResortBoundMultipliers(
       {
          Index xidx = x_fixed_map_[i];
          if( z_L_orig != NULL )
+         {
             z_L_orig[xidx] = Max(Number(0.0),  mult[xidx]);
+         }
          if( z_U_orig != NULL )
+         {
             z_U_orig[xidx] = Max(Number(0.0), -mult[xidx]);
+         }
       }
 
       delete[] mult;

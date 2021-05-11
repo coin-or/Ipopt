@@ -390,7 +390,9 @@ bool HS071_NLP::intermediate_callback(
 )
 {
    if( !printiterate_ )
+   {
       return true;
+   }
 
    Number x[4];
    Number x_L_viol[4];
@@ -414,26 +416,42 @@ bool HS071_NLP::intermediate_callback(
    for( int i = 0; i < 4; ++i )
    {
       if( have_iter )
+      {
          printf("  %-12g %-12g %-12g", x[i], z_L[i], z_U[i]);
+      }
       else
+      {
          printf("  %-12s %-12s %-12s", "n/a", "n/a", "n/a");
+      }
       if( have_viol )
+      {
          printf(" %-12g %-12g %-12g %-12g\n", x_L_viol[i] > x_U_viol[i] ? x_L_viol[i] : x_U_viol[i], compl_x_L[i], compl_x_U[i], grad_lag_x[i]);
+      }
       else
+      {
          printf(" %-12s %-12s %-12s %-12s\n", "n/a", "n/a", "n/a", "n/a");
+      }
    }
 
    printf("  %-12s %-12s %-12s %-12s\n", "g(x)", "lambda", "constr_viol", "compl_g");
    for( int i = 0; i < 2; ++i )
    {
       if( have_iter )
+      {
          printf("  %-12g %-12g", g[i], lambda[i]);
+      }
       else
+      {
          printf("  %-12s %-12s", "n/a", "n/a");
+      }
       if( have_viol )
+      {
          printf(" %-12g %-12g\n", constraint_violation[i], compl_g[i]);
+      }
       else
+      {
          printf(" %-12s %-12s\n", "n/a", "n/a");
+      }
    }
 
    return true;

@@ -66,7 +66,9 @@ void GenTMatrix::MultVectorImpl(
    }
 
    if( Nonzeros() == 0 )
+   {
       return;
+   }
 
    // See if we can understand the data
    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
@@ -131,7 +133,9 @@ void GenTMatrix::TransMultVectorImpl(
    }
 
    if( Nonzeros() == 0 )
+   {
       return;
+   }
 
    // See if we can understand the data
    const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
@@ -188,7 +192,9 @@ void GenTMatrix::ComputeRowAMaxImpl(
    DBG_ASSERT(initialized_);
 
    if( NRows() == 0 )
+   {
       return;
+   }
 
    DenseVector* dense_vec = static_cast<DenseVector*>(&rows_norms);
    DBG_ASSERT(dynamic_cast<DenseVector*>(&rows_norms));
@@ -213,7 +219,9 @@ void GenTMatrix::ComputeColAMaxImpl(
    DBG_ASSERT(initialized_);
 
    if( NCols() == 0 )
+   {
       return;
+   }
 
    DenseVector* dense_vec = static_cast<DenseVector*>(&cols_norms);
    DBG_ASSERT(dynamic_cast<DenseVector*>(&cols_norms));

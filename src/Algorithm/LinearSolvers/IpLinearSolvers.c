@@ -10,7 +10,7 @@
 
 IpoptLinearSolver IpoptGetAvailableLinearSolvers(
    int buildinonly
-   )
+)
 {
    IpoptLinearSolver solvers = 0u;
 

@@ -888,29 +888,49 @@ extern "C"
       Number* lambda = NULL;
 
       if( jx != NULL )
+      {
          x = new Number[n];
+      }
       if( jz_L != NULL )
+      {
          z_L = new Number[n];
+      }
       if( jz_U != NULL )
+      {
          z_U = new Number[n];
+      }
       if( jg != NULL )
+      {
          g = new Number[m];
+      }
       if( jlambda != NULL )
+      {
          lambda = new Number[m];
+      }
 
       bool ok = problem->get_curr_iterate(ip_data, ip_cq, jscaled, n, x, z_L, z_U, m, g, lambda);
       if( ok )
       {
          if( jx != NULL )
+         {
             env->SetNumberArrayRegion(jx, 0, n, const_cast<Number*>(x));
+         }
          if( jz_L != NULL )
+         {
             env->SetNumberArrayRegion(jz_L, 0, n, const_cast<Number*>(z_L));
+         }
          if( jz_U != NULL )
+         {
             env->SetNumberArrayRegion(jz_U, 0, n, const_cast<Number*>(z_U));
+         }
          if( jg != NULL )
+         {
             env->SetNumberArrayRegion(jg, 0, m, const_cast<Number*>(g));
+         }
          if( jlambda != NULL )
+         {
             env->SetNumberArrayRegion(jlambda, 0, m, const_cast<Number*>(lambda));
+         }
       }
 
       delete[] lambda;
@@ -955,37 +975,65 @@ extern "C"
       Number* compl_g = NULL;
 
       if( jx_L_violation != NULL )
+      {
          x_L_violation = new Number[n];
+      }
       if( jx_U_violation != NULL )
+      {
          x_U_violation = new Number[n];
+      }
       if( jcompl_x_L != NULL )
+      {
          compl_x_L = new Number[n];
+      }
       if( jcompl_x_U != NULL )
+      {
          compl_x_U = new Number[n];
+      }
       if( jgrad_lag_x != NULL )
+      {
          grad_lag_x = new Number[n];
+      }
       if( jnlp_constraint_violation != NULL )
+      {
          nlp_constraint_violation = new Number[m];
+      }
       if( jcompl_g != NULL )
+      {
          compl_g = new Number[m];
+      }
 
       bool ok = problem->get_curr_violations(ip_data, ip_cq, jscaled, n, x_L_violation, x_U_violation, compl_x_L, compl_x_U, grad_lag_x, m, nlp_constraint_violation, compl_g);
       if( ok )
       {
          if( jx_L_violation != NULL )
+         {
             env->SetNumberArrayRegion(jx_L_violation, 0, n, const_cast<Number*>(x_L_violation));
+         }
          if( jx_U_violation != NULL )
+         {
             env->SetNumberArrayRegion(jx_U_violation, 0, n, const_cast<Number*>(x_U_violation));
+         }
          if( jcompl_x_L != NULL )
+         {
             env->SetNumberArrayRegion(jcompl_x_L, 0, n, const_cast<Number*>(compl_x_L));
+         }
          if( jcompl_x_U != NULL )
+         {
             env->SetNumberArrayRegion(jcompl_x_U, 0, n, const_cast<Number*>(compl_x_U));
+         }
          if( jgrad_lag_x != NULL )
+         {
             env->SetNumberArrayRegion(jgrad_lag_x, 0, n, const_cast<Number*>(grad_lag_x));
+         }
          if( jnlp_constraint_violation != NULL )
+         {
             env->SetNumberArrayRegion(jnlp_constraint_violation, 0, m, const_cast<Number*>(nlp_constraint_violation));
+         }
          if( jcompl_g != NULL )
+         {
             env->SetNumberArrayRegion(jcompl_g, 0, m, const_cast<Number*>(compl_g));
+         }
       }
 
       delete[] compl_g;

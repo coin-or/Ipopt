@@ -176,7 +176,7 @@ public:
       IPOPT_DECL_MA57C(*ma57c),
       IPOPT_DECL_MA57E(*ma57e),
       IPOPT_DECL_MA57I(*ma57i)
-      );
+   );
 
 private:
    /**@name Default Compiler Generated Methods

@@ -163,23 +163,23 @@ public:
    Ma97SolverInterface(
       SmartPtr<LibraryLoader> hslloader_  ///< @since 3.14.0
    )  : val_(NULL),
-        numdelay_(0),
-        akeep_(NULL),
-        fkeep_(NULL),
-        pivtol_changed_(false),
-        rescale_(false),
-        scaling_(NULL),
-        fctidx_(0),
-        scaling_type_(0),
-        dump_(false),
-        hslloader(hslloader_),
-        ma97_default_control(NULL),
-        ma97_analyse(NULL),
-        ma97_factor(NULL),
-        ma97_factor_solve(NULL),
-        ma97_solve(NULL),
-        ma97_finalise(NULL),
-        ma97_free_akeep(NULL)
+      numdelay_(0),
+      akeep_(NULL),
+      fkeep_(NULL),
+      pivtol_changed_(false),
+      rescale_(false),
+      scaling_(NULL),
+      fctidx_(0),
+      scaling_type_(0),
+      dump_(false),
+      hslloader(hslloader_),
+      ma97_default_control(NULL),
+      ma97_analyse(NULL),
+      ma97_factor(NULL),
+      ma97_factor_solve(NULL),
+      ma97_solve(NULL),
+      ma97_finalise(NULL),
+      ma97_free_akeep(NULL)
    { }
 
    ~Ma97SolverInterface();
@@ -198,7 +198,7 @@ public:
       IPOPT_DECL_MA97_SOLVE(*ma97_solve),
       IPOPT_DECL_MA97_FINALISE(*ma97_finalise),
       IPOPT_DECL_MA97_FREE_AKEEP(*ma97_free_akeep)
-      );
+   );
 
    bool InitializeImpl(
       const OptionsList& options,

@@ -40,7 +40,7 @@ public:
    Mc19TSymScalingMethod(
       SmartPtr<LibraryLoader> hslloader_  ///< @since 3.14.0
    ) : hslloader(hslloader_),
-       mc19a(NULL)
+      mc19a(NULL)
    { }
 
    virtual ~Mc19TSymScalingMethod()
@@ -68,7 +68,7 @@ public:
    /// @since 3.14.0
    static void SetFunctions(
       IPOPT_DECL_MC19A(*mc19a)
-      );
+   );
 
    /// get MC19A function that has been set via SetFunctions
    ///

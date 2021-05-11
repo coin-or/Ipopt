@@ -40,7 +40,7 @@ public:
    Number TotalFunctionEvaluationSysTime() const;
    /// total wall-clock time spend in function evaluation
    /// @since 3.14.0
-Number TotalFunctionEvaluationWallclockTime() const;
+   Number TotalFunctionEvaluationWallclockTime() const;
 
    /** Method for resetting all times. */
    void ResetTimes();

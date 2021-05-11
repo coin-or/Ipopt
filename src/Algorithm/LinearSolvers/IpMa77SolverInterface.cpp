@@ -152,7 +152,7 @@ void Ma77SolverInterface::SetFunctions(
    IPOPT_DECL_MA77_FINALISE(*ma77_finalise),
    IPOPT_DECL_MC68_DEFAULT_CONTROL(*mc68_default_control),
    IPOPT_DECL_MC68_ORDER(*mc68_order)
-   )
+)
 {
    DBG_ASSERT(ma77_default_control != NULL);
    DBG_ASSERT(ma77_open_nelt != NULL);

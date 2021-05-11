@@ -39,9 +39,9 @@ public:
    /** constructor */
    LibraryLoader(
       const std::string& libname_  /**< full name of library, can include path */
-      )
-   : libname(libname_),
-     libhandle(NULL)
+   )
+      : libname(libname_),
+        libhandle(NULL)
    { }
 
    /** destructor */
@@ -62,7 +62,7 @@ public:
     */
    void* loadSymbol(
       const std::string& symbolname  /**< base name of symbol */
-      );
+   );
 };
 
 /** a problem occurred with a a dynamically loaded library

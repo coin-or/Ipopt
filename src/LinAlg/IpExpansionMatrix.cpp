@@ -458,7 +458,9 @@ ExpansionMatrixSpace::ExpansionMatrixSpace(
       DBG_ASSERT(ExpPos[i] - offset < NRows() && ExpPos[i] - offset >= 0);
       expanded_pos_[i] = ExpPos[i] - offset;
       if( NRows() > 0 )
+      {
          compressed_pos_[ExpPos[i] - offset] = i;
+      }
    }
 }
 

@@ -225,16 +225,16 @@ bool IterativePardisoSolverInterface::InitializeImpl(
          if( num_procs < 1 )
          {
             Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-               "Invalid value for OMP_NUM_THREADS (\"%s\").\n", var);
+                           "Invalid value for OMP_NUM_THREADS (\"%s\").\n", var);
             return false;
          }
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-            "Using environment OMP_NUM_THREADS = %" IPOPT_INDEX_FORMAT " as the number of processors.\n", num_procs);
+                        "Using environment OMP_NUM_THREADS = %" IPOPT_INDEX_FORMAT " as the number of processors.\n", num_procs);
       }
       else
       {
          Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-            "You need to set environment variable OMP_NUM_THREADS to the number of processors used in Pardiso (e.g., 1).\n\n");
+                        "You need to set environment variable OMP_NUM_THREADS to the number of processors used in Pardiso (e.g., 1).\n\n");
          return false;
       }
       IPARM_[2] = num_procs;  // Set the number of processors
@@ -467,7 +467,7 @@ void write_iajaa_matrix(
       for( i = 0; i < N; i++ )
          for( j = ia[i]; j < ia[i + 1] - 1; j++ )
          {
-            mat_file << ' ' << i+1 << ' ' << ja[j - 1] << ' ' << a_[j - 1] << std::endl;
+            mat_file << ' ' << i + 1 << ' ' << ja[j - 1] << ' ' << a_[j - 1] << std::endl;
          }
    }
 }

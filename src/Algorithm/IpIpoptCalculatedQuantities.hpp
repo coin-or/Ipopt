@@ -335,7 +335,7 @@ public:
     */
    SmartPtr<Vector> unscaled_orig_x_L_violation(
       const Vector& x
-      );
+   );
    /** Violation of original variable upper bounds x_U.
     *
     * Computes violation of given unscaled solution w.r.t. OrigIpoptNLP::orig_x_U() if current NLP is a OrigIpoptNLP.
@@ -344,7 +344,7 @@ public:
     */
    SmartPtr<Vector> unscaled_orig_x_U_violation(
       const Vector& x
-      );
+   );
    /** Violation of original variable lower bounds x_L.
     *
     * Computes violation of current (unscaled) solution w.r.t. OrigIpoptNLP::orig_x_L() if current NLP is a OrigIpoptNLP.
@@ -376,7 +376,7 @@ public:
     */
    SmartPtr<Vector> orig_x_L_violation(
       const Vector& x
-      );
+   );
    /** Violation of scaled original variable upper bounds x_U.
     *
     * Computes violation of given scaled solution w.r.t. OrigIpoptNLP::orig_x_U() if current NLP is a OrigIpoptNLP.
@@ -385,7 +385,7 @@ public:
     */
    SmartPtr<Vector> orig_x_U_violation(
       const Vector& x
-      );
+   );
    /** Violation of scaled original variable lower bounds x_L.
     *
     * Computes violation of current (scaled) solution w.r.t. OrigIpoptNLP::orig_x_L() if current NLP is a OrigIpoptNLP.

@@ -240,7 +240,9 @@ ConvergenceCheck::ConvergenceStatus OptimalityErrorConvergenceCheck::CheckConver
    if( IpData().curr()->x()->Dim() == 0 )
    {
       if( constr_viol <= constr_viol_tol_ )
+      {
          return ConvergenceCheck::CONVERGED;
+      }
       THROW_EXCEPTION(LOCALLY_INFEASIBLE, "All variables are fixed and constraint violation is above tolerance. The problem is infeasible.");
    }
 

@@ -22,7 +22,7 @@ inline T Max(
    T b
 )
 {
-   return std::max(a,b);
+   return std::max(a, b);
 }
 
 template<typename T>
@@ -32,7 +32,7 @@ inline T Max(
    T c
 )
 {
-   return std::max(std::max(a,b),c);
+   return std::max(std::max(a, b), c);
 }
 
 template<typename T>
@@ -43,7 +43,7 @@ inline T Max(
    T d
 )
 {
-   return std::max(std::max(a,b),std::max(c,d));
+   return std::max(std::max(a, b), std::max(c, d));
 }
 
 template<typename T>
@@ -52,7 +52,7 @@ inline T Min(
    T b
 )
 {
-   return std::min(a,b);
+   return std::min(a, b);
 }
 
 template<typename T>
@@ -62,7 +62,7 @@ inline T Min(
    T c
 )
 {
-   return std::min(std::min(a,b),c);
+   return std::min(std::min(a, b), c);
 }
 
 template<typename T>
@@ -73,7 +73,7 @@ inline T Min(
    T d
 )
 {
-   return std::min(std::min(a,b),std::min(c,d));
+   return std::min(std::min(a, b), std::min(c, d));
 }
 
 /** Function returning true iff the argument is a valid double number
