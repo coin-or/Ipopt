@@ -164,7 +164,7 @@ void IpoptCalculatedQuantities::RegisterOptions(
       "slack_move",
       "Correction size for very small slacks.",
       0.0, false,
-      pow(std::numeric_limits<Number>::epsilon(), 0.75),
+      std::pow(std::numeric_limits<Number>::epsilon(), 0.75),
       "Due to numerical issues or the lack of an interior, the slack variables might become very small. "
       "If a slack becomes very small compared to machine precision, the corresponding bound is moved slightly. "
       "This parameter determines how large the move should be. "
@@ -2502,7 +2502,7 @@ Number IpoptCalculatedQuantities::CalcNormOfType(
       case NORM_1:
          return vec1.Asum() + vec2.Asum();
       case NORM_2:
-         return sqrt(pow(vec1.Nrm2(), 2) + pow(vec2.Nrm2(), 2));
+         return sqrt(std::pow(vec1.Nrm2(), 2) + std::pow(vec2.Nrm2(), 2));
       case NORM_MAX:
          return Max(vec1.Amax(), vec2.Amax());
       default:

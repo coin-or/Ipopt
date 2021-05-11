@@ -48,8 +48,8 @@ void MittelmannBndryCntrlDiriBase3D_27::SetBaseParameters(
    C_ = C;
 
    PenA_ = 1.5 - 1.125 * C_ / B_;
-   PenB_ = 1.75 * C_ / pow(B_, 3) - 1.5 / (B_ * B_);
-   PenC_ = 0.5 / pow(B_, 4) - 0.625 * C_ / pow(B_, 5);
+   PenB_ = 1.75 * C_ / std::pow(B_, 3) - 1.5 / (B_ * B_);
+   PenC_ = 0.5 / std::pow(B_, 4) - 0.625 * C_ / std::pow(B_, 5);
 
    // Initialize the target profile variables
    delete[] y_d_;

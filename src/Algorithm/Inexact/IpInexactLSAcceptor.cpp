@@ -151,7 +151,7 @@ void InexactLSAcceptor::InitThisLineSearch(
          SmartPtr<Vector> curr_Au_d = delta_s->MakeNew();
          curr_Au_d->AddTwoVectors(1., *IpCq().curr_jac_d_times_vec(*tangential_x), -1., *tangential_s, 0.);
          Number Nu = IpCq().CalcNormOfType(NORM_2, *curr_Au_c, *curr_Au_d);
-         Nu = pow(Nu, 2);
+         Nu = std::pow(Nu, 2);
          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                         "nu update: ||A*u||^2 = %23.16e\n", Nu);
          Number A_norm2 = InexCq().curr_scaled_A_norm2();
@@ -199,7 +199,7 @@ void InexactLSAcceptor::InitThisLineSearch(
          else
          {
             DBG_PRINT((1, "uWu=%e scaled_tangential_norm=%e\n", uWu, scaled_tangential_norm ));
-            numerator = (gradBarrTDelta + Max(0.5 * uWu, tcc_theta_ * pow(scaled_tangential_norm, 2)));
+            numerator = (gradBarrTDelta + Max(0.5 * uWu, tcc_theta_ * std::pow(scaled_tangential_norm, 2)));
             denominator = (1 - rho_) * (reference_theta_ - norm_cplusAd);
          }
          const Number nu_trial = numerator / denominator;
@@ -214,8 +214,8 @@ void InexactLSAcceptor::InitThisLineSearch(
          else
          {
             Jnlst().Printf(J_MOREDETAILED, J_LINE_SEARCH,
-                           "In penalty parameter update formula:\n  gradBarrTDelta = %e 0.5*uWu = %e tcc_theta_*pow(scaled_tangential_norm,2) = %e numerator = %e\n  reference_theta_ = %e norm_cplusAd + %e denominator = %e nu_trial = %e\n",
-                           gradBarrTDelta, 0.5 * uWu, tcc_theta_ * pow(scaled_tangential_norm, 2), numerator, reference_theta_,
+                           "In penalty parameter update formula:\n  gradBarrTDelta = %e 0.5*uWu = %e tcc_theta_*std::pow(scaled_tangential_norm,2) = %e numerator = %e\n  reference_theta_ = %e norm_cplusAd + %e denominator = %e nu_trial = %e\n",
+                           gradBarrTDelta, 0.5 * uWu, tcc_theta_ * std::pow(scaled_tangential_norm, 2), numerator, reference_theta_,
                            norm_cplusAd, denominator, nu_trial);
          }
 
@@ -577,9 +577,9 @@ Number InexactLSAcceptor::ComputeAlphaForY(
    Sdy->ElementWiseMultiply(*curr_scaling_slacks);
 
    // using the magic formula in my notebook
-   Number a = pow(Jxy->Nrm2(), 2) + pow(Sdy->Nrm2(), 2);
+   Number a = std::pow(Jxy->Nrm2(), 2) + std::pow(Sdy->Nrm2(), 2);
    Number b = 2 * (gx->Dot(*Jxy) - gs->Dot(*Sdy));
-   Number c = pow(gx->Nrm2(), 2) + pow(gs->Nrm2(), 2);
+   Number c = std::pow(gx->Nrm2(), 2) + std::pow(gs->Nrm2(), 2);
 
    // First we check if the primal step size is good enough:
    Number val_ap = alpha_primal * alpha_primal * a + alpha_primal * b + c;

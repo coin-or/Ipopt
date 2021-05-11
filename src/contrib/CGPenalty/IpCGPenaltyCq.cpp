@@ -349,7 +349,7 @@ Number CGPenaltyCq::compute_curr_cg_penalty(
    Number d_xs_times_damped_Hessian_times_d_xs = -deriv_barrier_dx_ds;
    d_xs_times_damped_Hessian_times_d_xs += -(tem_jac_cT_times_y_c_plus_dy_c->Dot(*d_x)
                                            + tem_jac_dT_times_y_d_plus_dy_d->Dot(*d_x) - y_d->Dot(*d_s) - dy_d->Dot(*d_s));
-   Number dxs_nrm = pow(d_x->Nrm2(), 2.) + pow(d_s->Nrm2(), 2.);
+   Number dxs_nrm = std::pow(d_x->Nrm2(), 2.) + std::pow(d_s->Nrm2(), 2.);
    d_xs_times_damped_Hessian_times_d_xs = Max(Number(1e-8) * dxs_nrm, d_xs_times_damped_Hessian_times_d_xs);
    Number infeasibility = ip_cq_->curr_primal_infeasibility(NORM_2);
    Number penalty = 0.;
@@ -407,7 +407,7 @@ Number CGPenaltyCq::compute_curr_cg_penalty_scale()
          reference_infeasibility_ = Min(Number(1.), infeasibility);
       }
       Number i = CGPenData().restor_counter();
-      Number fac = 4. * 1e-2 * pow(1e1, i);
+      Number fac = 4. * 1e-2 * std::pow(1e1, i);
       //Number fac = 1e-2;
       penalty = Min(Number(1e4), infeasibility) / (reference * fac * std::pow(reference_infeasibility_, 1));
    }
@@ -456,7 +456,7 @@ Number CGPenaltyCq::curr_added_y_nrm2()
       SmartPtr<Vector> y_d_plus_dy_d = ip_data_->delta()->y_d()->MakeNew();
       y_c_plus_dy_c->AddTwoVectors(1., *ip_data_->delta()->y_c(), 1., *ip_data_->curr()->y_c(), 0.);
       y_d_plus_dy_d->AddTwoVectors(1., *ip_data_->delta()->y_d(), 1., *ip_data_->curr()->y_d(), 0.);
-      result = sqrt(pow(y_c_plus_dy_c->Nrm2(), 2) + pow(y_d_plus_dy_d->Nrm2(), 2));
+      result = sqrt(std::pow(y_c_plus_dy_c->Nrm2(), 2) + std::pow(y_d_plus_dy_d->Nrm2(), 2));
       curr_added_y_nrm2_cache_.AddCachedResult(result, deps);
    }
    return result;

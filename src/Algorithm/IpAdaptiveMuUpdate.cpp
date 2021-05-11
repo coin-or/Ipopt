@@ -705,7 +705,7 @@ Number AdaptiveMuUpdate::quality_function_pd_system()
             centrality = complty / xi;
             break;
          case 3:
-            centrality = complty / pow(xi, 3);
+            centrality = complty / std::pow(xi, 3);
             break;
          default:
             DBG_ASSERT(false && "Unknown value for adaptive_mu_kkt_centrality_");
@@ -719,7 +719,7 @@ Number AdaptiveMuUpdate::quality_function_pd_system()
          //Nothing
          break;
       case 1:
-         balancing_term = pow(Max(Number(0.), Max(dual_inf, primal_inf) - complty), 3);
+         balancing_term = std::pow(Max(Number(0.), Max(dual_inf, primal_inf) - complty), 3);
          break;
       default:
          DBG_ASSERT(false && "Unknown value for adaptive_mu_kkt_balancing_term");

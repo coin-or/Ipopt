@@ -351,7 +351,7 @@ protected:
       Number u
    ) const
    {
-      return pow(y, 3) - y - u;
+      return std::pow(y, 3) - y - u;
    }
 
    /** First partial derivative of forcing function w.r.t. y */
@@ -448,7 +448,7 @@ protected:
       Number u
    ) const
    {
-      return pow(y, 3) - y - u;
+      return std::pow(y, 3) - y - u;
    }
 
    /** First partial derivative of forcing function w.r.t. y */

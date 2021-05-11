@@ -782,7 +782,7 @@ bool WsmpSolverInterface::IncreaseQuality()
 
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "Increasing pivot tolerance for WSMP from %7.2e ", wsmp_pivtol_);
-   wsmp_pivtol_ = Min(wsmp_pivtolmax_, pow(wsmp_pivtol_, 0.75));
+   wsmp_pivtol_ = Min(wsmp_pivtolmax_, std::pow(wsmp_pivtol_, 0.75));
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "to %7.2e.\n", wsmp_pivtol_);
    return true;

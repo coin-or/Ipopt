@@ -114,7 +114,7 @@ bool ProbingMuOracle::CalculateMu(
    DBG_ASSERT(mu_curr > 0.);
 
    // Apply Mehrotra's rule
-   Number sigma = pow((mu_aff / mu_curr), 3);
+   Number sigma = std::pow((mu_aff / mu_curr), 3);
    // Make sure, sigma is not too large
    sigma = Min(sigma, sigma_max_);
 

@@ -50,7 +50,7 @@ bool LoqoMuOracle::CalculateMu(
 
    //Number factor = 1.-tau_min_;   //This is the original values
    Number factor = 0.05;   //This is the value I used otherwise
-   Number sigma = Number(0.1) * pow(Min(factor * (Number(1.) - xi) / xi, Number(2.)), Number(3.));
+   Number sigma = Number(0.1) * std::pow(Min(factor * (Number(1.) - xi) / xi, Number(2.)), Number(3.));
 
    Number mu = sigma * avrg_compl;
    Jnlst().Printf(J_DETAILED, J_BARRIER_UPDATE,

@@ -193,14 +193,14 @@ bool InexactPDTerminationTester::InitializeSolve()
       curr_Av_norm_ = IpCq().CalcNormOfType(NORM_2, *curr_Av_c_, *curr_Av_d_);
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "TT: curr_Av_norm_ = %23.16e\n", curr_Av_norm_);
-      curr_tt1_norm_ = sqrt(pow(curr_tt2_norm_, 2) + pow(curr_Av_norm_, 2));
+      curr_tt1_norm_ = sqrt(std::pow(curr_tt2_norm_, 2) + std::pow(curr_Av_norm_, 2));
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "TT: curr_tt1_norm_ = %23.16e\n", curr_tt1_norm_);
    }
    else
    {
       curr_Av_norm_ = -1.;
-      curr_tt1_norm_ = sqrt(pow(curr_tt2_norm_, 2) + pow(c_norm_, 2));
+      curr_tt1_norm_ = sqrt(std::pow(curr_tt2_norm_, 2) + std::pow(c_norm_, 2));
    }
 
    if( compute_normal && IsValid(last_grad_barrier_obj_x) )
@@ -213,7 +213,7 @@ bool InexactPDTerminationTester::InitializeSolve()
       last_nabla_phi_plus_ATy_s->AddTwoVectors(1., *last_grad_barrier_obj_s, -1., *IpData().curr()->y_d(), 0.);
       last_nabla_phi_plus_ATy_s->ElementWiseMultiply(*last_scaling_slacks);
       last_tt1_norm_ = IpCq().CalcNormOfType(NORM_2, *last_nabla_phi_plus_ATy_x, *last_nabla_phi_plus_ATy_s);
-      last_tt1_norm_ = sqrt(pow(last_tt1_norm_, 2) + pow(last_Av_norm_, 2));
+      last_tt1_norm_ = sqrt(std::pow(last_tt1_norm_, 2) + std::pow(last_Av_norm_, 2));
    }
    else
    {
@@ -376,7 +376,7 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
       SmartPtr<Vector> curr_Au_d = sol_s->MakeNew();
       curr_Au_d->AddTwoVectors(1., *IpCq().curr_jac_d_times_vec(*tangential_x), -1., *tangential_s, 0.);
       Number Nu = IpCq().CalcNormOfType(NORM_2, *curr_Au_c, *curr_Au_d);
-      Nu = pow(Nu, 2);
+      Nu = std::pow(Nu, 2);
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "TT: ||A*u||^2 = %23.16e\n", Nu);
       Number A_norm2 = InexCq().curr_scaled_A_norm2();
@@ -402,7 +402,7 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
    if( !compute_normal )
    {
       lhs = Upsilon;
-      rhs = pow(tcc_psi_, 2) * Nu;
+      rhs = std::pow(tcc_psi_, 2) * Nu;
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "TCC1 testing Upsilon(=%23.16e) <= (tcc_psi_^2)*Nu(=%23.16e) --> ", lhs, rhs);
    }
@@ -430,14 +430,14 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
    rhs = 0.5 * uWu;
    if( !compute_normal )
    {
-      lhs = tcc_theta_ * pow(mu, tcc_theta_mu_exponent_) * Upsilon;
+      lhs = tcc_theta_ * std::pow(mu, tcc_theta_mu_exponent_) * Upsilon;
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "TCC2a testing 0.5*uWu(=%23.16e) >= tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*Upsilon(=%23.16e) -->", rhs,
                      lhs);
    }
    else
    {
-      lhs = tcc_theta_ * pow(mu, tcc_theta_mu_exponent_) * pow(u_norm_scaled, 2);
+      lhs = tcc_theta_ * std::pow(mu, tcc_theta_mu_exponent_) * std::pow(u_norm_scaled, 2);
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "TCC2a testing 0.5*uWu(=%23.16e) >= tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*u_norm^2(=%23.16e) -->", rhs,
                      lhs);
@@ -504,7 +504,7 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
       // decomposition.  In that case, c_plus_Ad_norm should indeed be
       // the same as what resid_c and resid_d woulod give (TODO:
       // check?!?)
-      Number resid_norm = sqrt(pow(rho_norm, 2) + pow(c_plus_Ad_norm, 2));
+      Number resid_norm = sqrt(std::pow(rho_norm, 2) + std::pow(c_plus_Ad_norm, 2));
       lhs = resid_norm;
       rhs = tt_kappa1_ * curr_tt1_norm_;
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
@@ -572,7 +572,7 @@ InexactPDTerminationTester::ETerminationTest InexactPDTerminationTester::TestTer
       }
       else
       {
-         lhs = Max(0.5 * uWu, tcc_theta_ * pow(u_norm_scaled, 2)) + sigma * curr_nu * (c_norm_ - c_plus_Av_norm_);
+         lhs = Max(0.5 * uWu, tcc_theta_ * std::pow(u_norm_scaled, 2)) + sigma * curr_nu * (c_norm_ - c_plus_Av_norm_);
          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                         "MRC testing delta_m(=%23.16e) >= max(0.5*uWu,tcc_theta_*u_norm^2) + sigma*nu*(c_norm_ - c_plus_Av_norm_)(=%23.16e) -->",
                         rhs, lhs);

@@ -751,7 +751,7 @@ Number RestoIpoptNLP::Eta(
    Number mu
 ) const
 {
-   return eta_factor_ * pow(mu, eta_mu_exponent_);
+   return eta_factor_ * std::pow(mu, eta_mu_exponent_);
 }
 
 void RestoIpoptNLP::AdjustVariableBounds(

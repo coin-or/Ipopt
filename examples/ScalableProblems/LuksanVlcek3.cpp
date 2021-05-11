@@ -128,7 +128,7 @@ bool LuksanVlcek3::eval_f(
       Number a2 = x[2 * i + 2] - x[2 * i + 3];
       Number a3 = x[2 * i + 1] - 2. * x[2 * i + 2];
       Number a4 = x[2 * i] - x[2 * i + 3];
-      obj_value += a1 * a1 + 5. * a2 * a2 + pow(a3, 4) + 10. * pow(a4, 4);
+      obj_value += a1 * a1 + 5. * a2 * a2 + std::pow(a3, 4) + 10. * std::pow(a4, 4);
    }
 
    return true;
@@ -150,10 +150,10 @@ bool LuksanVlcek3::eval_grad_f(
       Number a2 = x[2 * i + 2] - x[2 * i + 3];
       Number a3 = x[2 * i + 1] - 2. * x[2 * i + 2];
       Number a4 = x[2 * i] - x[2 * i + 3];
-      grad_f[2 * i] += 2. * a1 + 40. * pow(a4, 3);
-      grad_f[2 * i + 1] += 20. * a1 + 4. * pow(a3, 3);
-      grad_f[2 * i + 2] = 10. * a2 - 8. * pow(a3, 3);
-      grad_f[2 * i + 3] = -10. * a2 - 40. * pow(a4, 3);
+      grad_f[2 * i] += 2. * a1 + 40. * std::pow(a4, 3);
+      grad_f[2 * i + 1] += 20. * a1 + 4. * std::pow(a3, 3);
+      grad_f[2 * i + 2] = 10. * a2 - 8. * std::pow(a3, 3);
+      grad_f[2 * i + 3] = -10. * a2 - 40. * std::pow(a4, 3);
    }
 
    return true;
@@ -168,7 +168,7 @@ bool LuksanVlcek3::eval_g(
    Number*       g
 )
 {
-   g[0] = 3. * pow(x[0], 3) + 2. * x[1] - 5. + sin(x[0] - x[1]) * sin(x[0] + x[1]);
+   g[0] = 3. * std::pow(x[0], 3) + 2. * x[1] - 5. + sin(x[0] - x[1]) * sin(x[0] + x[1]);
    g[1] = 4. * x[n - 3] - x[n - 4] * exp(x[n - 4] - x[n - 3]) - 3;
 
    return true;

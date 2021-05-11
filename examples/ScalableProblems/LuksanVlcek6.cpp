@@ -141,7 +141,7 @@ bool LuksanVlcek6::eval_f(
       {
          b += x[j] * (1. + x[j]);
       }
-      obj_value += pow(std::abs(b), p);
+      obj_value += std::pow(std::abs(b), p);
    }
 
    return true;
@@ -164,7 +164,7 @@ bool LuksanVlcek6::eval_grad_f(
       {
          b += x[j] * (1. + x[j]);
       }
-      Number pb1 = pow(std::abs(b), p - 1.);
+      Number pb1 = std::pow(std::abs(b), p - 1.);
       Number apb1 = p * Sgn(b) * pb1;
       for( Index j = Max(Index(0), i - 5); j < i; j++ )
       {
@@ -333,8 +333,8 @@ bool LuksanVlcek6::eval_h(
          {
             b += x[j] * (1. + x[j]);
          }
-         Number pb1 = pow(std::abs(b), p - 1.);
-         Number pb2 = pow(std::abs(b), p - 2.);
+         Number pb1 = std::pow(std::abs(b), p - 1.);
+         Number pb2 = std::pow(std::abs(b), p - 2.);
          Number apb1 = p * Sgn(b) * pb1;
          Number apb2 = p * (p - 1.) * pb2;
          Number a1 = 3. + 2. * x[i] + 15. * x[i] * x[i];

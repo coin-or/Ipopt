@@ -369,7 +369,7 @@ bool CGPenaltyLSAcceptor::IsAcceptableToPiecewisePenalty(
    SmartPtr<const Vector> ds = IpData().delta()->s();
    Number curr_barr = IpCq().curr_barrier_obj();
    Number trial_barr = IpCq().trial_barrier_obj();
-   Number nrm_dx_ds = pow(dx->Nrm2(), 2.) + pow(ds->Nrm2(), 2.);
+   Number nrm_dx_ds = std::pow(dx->Nrm2(), 2.) + std::pow(ds->Nrm2(), 2.);
    if( infeasibility < theta_min_ )
    {
       Number biggest_barr = PiecewisePenalty_.BiggestBarr();

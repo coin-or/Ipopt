@@ -287,8 +287,8 @@ bool FilterLSAcceptor::IsFtype(Number alpha_primal_test)
    }
    DBG_ASSERT(reference_theta_ > 0. || reference_gradBarrTDelta_ < 0.0);
    return (reference_gradBarrTDelta_ < 0.0 &&
-           alpha_primal_test * pow(-reference_gradBarrTDelta_, s_phi_) >
-           delta_ * pow(reference_theta_, s_theta_));
+           alpha_primal_test * std::pow(-reference_gradBarrTDelta_, s_phi_) >
+           delta_ * std::pow(reference_theta_, s_theta_));
 }
 
 void FilterLSAcceptor::AugmentFilter()

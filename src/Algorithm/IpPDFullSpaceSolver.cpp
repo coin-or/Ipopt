@@ -617,7 +617,7 @@ bool PDFullSpaceSolver::SolveOnce(
                   s_tmp->Scal(delta_s);
                   xWx += s_tmp->Dot(*sol->s());
                }
-               Number xs_nrmsq = pow(sol->x()->Nrm2(), 2) + pow(sol->s()->Nrm2(), 2);
+               Number xs_nrmsq = std::pow(sol->x()->Nrm2(), 2) + std::pow(sol->s()->Nrm2(), 2);
                Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                               "In inertia heuristic: xWx = %e xx = %e\n",
                               xWx, xs_nrmsq);

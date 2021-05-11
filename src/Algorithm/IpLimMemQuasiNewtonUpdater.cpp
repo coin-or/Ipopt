@@ -406,16 +406,16 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
                switch( limited_memory_initialization_ )
                {
                   case SCALAR1:
-                     sigma_ = sTy_new / pow(s_new->Nrm2(), 2);
+                     sigma_ = sTy_new / std::pow(s_new->Nrm2(), 2);
                      break;
                   case SCALAR2:
-                     sigma_ = pow(y_new->Nrm2(), 2) / sTy_new;
+                     sigma_ = std::pow(y_new->Nrm2(), 2) / sTy_new;
                      break;
                   case SCALAR3:
-                     sigma_ = (sTy_new / pow(s_new->Nrm2(), 2) + pow(y_new->Nrm2(), 2) / sTy_new) / 2.;
+                     sigma_ = (sTy_new / std::pow(s_new->Nrm2(), 2) + std::pow(y_new->Nrm2(), 2) / sTy_new) / 2.;
                      break;
                   case SCALAR4:
-                     sigma_ = sqrt(sTy_new / pow(s_new->Nrm2(), 2) * pow(y_new->Nrm2(), 2) / sTy_new);
+                     sigma_ = sqrt(sTy_new / std::pow(s_new->Nrm2(), 2) * std::pow(y_new->Nrm2(), 2) / sTy_new);
                      break;
                   case CONSTANT:
                      sigma_ = limited_memory_init_val_;
@@ -560,16 +560,16 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
                   switch( limited_memory_initialization_ )
                   {
                      case SCALAR1:
-                        sigma_ = sTy_new / pow(s_new->Nrm2(), 2);
+                        sigma_ = sTy_new / std::pow(s_new->Nrm2(), 2);
                         break;
                      case SCALAR2:
-                        sigma_ = pow(y_new->Nrm2(), 2) / sTy_new;
+                        sigma_ = std::pow(y_new->Nrm2(), 2) / sTy_new;
                         break;
                      case SCALAR3:
-                        sigma_ = (sTy_new / pow(s_new->Nrm2(), 2) + pow(y_new->Nrm2(), 2) / sTy_new) / 2.;
+                        sigma_ = (sTy_new / std::pow(s_new->Nrm2(), 2) + std::pow(y_new->Nrm2(), 2) / sTy_new) / 2.;
                         break;
                      case SCALAR4:
-                        sigma_ = sqrt(sTy_new / pow(s_new->Nrm2(), 2) * pow(y_new->Nrm2(), 2) / sTy_new);
+                        sigma_ = sqrt(sTy_new / std::pow(s_new->Nrm2(), 2) * std::pow(y_new->Nrm2(), 2) / sTy_new);
                         break;
                      case CONSTANT:
                         sigma_ = limited_memory_init_val_;

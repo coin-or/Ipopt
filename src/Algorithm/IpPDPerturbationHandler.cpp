@@ -466,7 +466,7 @@ void PDPerturbationHandler::CurrentPerturbation(
 
 Number PDPerturbationHandler::delta_cd()
 {
-   return delta_cd_val_ * pow(IpData().curr_mu(), delta_cd_exp_);
+   return delta_cd_val_ * std::pow(IpData().curr_mu(), delta_cd_exp_);
 }
 
 void PDPerturbationHandler::finalize_test()

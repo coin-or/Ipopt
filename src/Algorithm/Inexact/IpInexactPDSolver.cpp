@@ -471,7 +471,7 @@ bool InexactPDSolver::HessianRequiresChange()
    if( !compute_normal )
    {
       lhs = Upsilon;
-      rhs = pow(tcc_psi_, 2) * Nu;
+      rhs = std::pow(tcc_psi_, 2) * Nu;
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "TCC1 testing Upsilon(=%23.16e) <= (tcc_psi_^2)*Nu(=%23.16e) --> ", lhs, rhs);
    }
@@ -506,14 +506,14 @@ bool InexactPDSolver::HessianRequiresChange()
    rhs = 0.5 * uWu;
    if( !compute_normal )
    {
-      lhs = tcc_theta_ * pow(mu, tcc_theta_mu_exponent_) * Upsilon;
+      lhs = tcc_theta_ * std::pow(mu, tcc_theta_mu_exponent_) * Upsilon;
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "TCC2a testing 0.5*uWu(=%23.16e) >= tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*Upsilon(=%23.16e) -->", rhs,
                      lhs);
    }
    else
    {
-      lhs = tcc_theta_ * pow(mu, tcc_theta_mu_exponent_) * pow(u_norm_scaled, 2);
+      lhs = tcc_theta_ * std::pow(mu, tcc_theta_mu_exponent_) * std::pow(u_norm_scaled, 2);
       Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                      "TCC2a testing 0.5*uWu(=%23.16e) >= tcc_theta_*pow(mu,tcc_theta_mu_exponent_)*u_norm^2(=%23.16e) -->", rhs,
                      lhs);

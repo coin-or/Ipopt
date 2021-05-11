@@ -163,7 +163,7 @@ bool LuksanVlcek1::eval_g(
 {
    for( Index i = 0; i < N_ - 2; i++ )
    {
-      g[i] = 3. * pow(x[i + 1], 3.) + 2. * x[i + 2] - 5. + sin(x[i + 1] - x[i + 2]) * sin(x[i + 1] + x[i + 2])
+      g[i] = 3. * std::pow(x[i + 1], 3.) + 2. * x[i + 2] - 5. + sin(x[i + 1] - x[i + 2]) * sin(x[i + 1] + x[i + 2])
              + 4. * x[i + 1] - x[i] * exp(x[i] - x[i + 1]) - 3.;
    }
 

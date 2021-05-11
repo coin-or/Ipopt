@@ -582,10 +582,10 @@ Number QualityFunctionMuOracle::CalculateQualityFunction(
          compl_inf /= n_comp_;
          break;
       case NM_NORM_2_SQUARED:
-         dual_inf = pow(1. - alpha_dual, 2) * (pow(curr_grad_lag_x_nrm2_, 2) + pow(curr_grad_lag_s_nrm2_, 2));
-         primal_inf = pow(1. - alpha_primal, 2) * (pow(curr_c_nrm2_, 2) + pow(curr_d_minus_s_nrm2_, 2));
-         compl_inf = pow(tmp_slack_x_L_->Nrm2(), 2) + pow(tmp_slack_x_U_->Nrm2(), 2) + pow(tmp_slack_s_L_->Nrm2(), 2)
-                     + pow(tmp_slack_s_U_->Nrm2(), 2);
+         dual_inf = std::pow(1. - alpha_dual, 2) * (std::pow(curr_grad_lag_x_nrm2_, 2) + std::pow(curr_grad_lag_s_nrm2_, 2));
+         primal_inf = std::pow(1. - alpha_primal, 2) * (std::pow(curr_c_nrm2_, 2) + std::pow(curr_d_minus_s_nrm2_, 2));
+         compl_inf = std::pow(tmp_slack_x_L_->Nrm2(), 2) + std::pow(tmp_slack_x_U_->Nrm2(), 2) + std::pow(tmp_slack_s_L_->Nrm2(), 2)
+                     + std::pow(tmp_slack_s_U_->Nrm2(), 2);
          dual_inf /= n_dual_;
          if( n_pri_ > 0 )
          {
@@ -601,11 +601,11 @@ Number QualityFunctionMuOracle::CalculateQualityFunction(
                          tmp_slack_s_U_->Amax());
          break;
       case NM_NORM_2:
-         dual_inf = (1. - alpha_dual) * sqrt(pow(curr_grad_lag_x_nrm2_, 2) + pow(curr_grad_lag_s_nrm2_, 2));
-         primal_inf = (1. - alpha_primal) * sqrt(pow(curr_c_nrm2_, 2) + pow(curr_d_minus_s_nrm2_, 2));
+         dual_inf = (1. - alpha_dual) * sqrt(std::pow(curr_grad_lag_x_nrm2_, 2) + std::pow(curr_grad_lag_s_nrm2_, 2));
+         primal_inf = (1. - alpha_primal) * sqrt(std::pow(curr_c_nrm2_, 2) + std::pow(curr_d_minus_s_nrm2_, 2));
          compl_inf = sqrt(
-                        pow(tmp_slack_x_L_->Nrm2(), 2) + pow(tmp_slack_x_U_->Nrm2(), 2) + pow(tmp_slack_s_L_->Nrm2(), 2)
-                        + pow(tmp_slack_s_U_->Nrm2(), 2));
+                        std::pow(tmp_slack_x_L_->Nrm2(), 2) + std::pow(tmp_slack_x_U_->Nrm2(), 2) + std::pow(tmp_slack_s_L_->Nrm2(), 2)
+                        + std::pow(tmp_slack_s_U_->Nrm2(), 2));
          dual_inf /= sqrt((Number) n_dual_);
          if( n_pri_ > 0 )
          {
@@ -639,7 +639,7 @@ Number QualityFunctionMuOracle::CalculateQualityFunction(
          quality_function += compl_inf / xi;
          break;
       case CEN_CUBED_RECIPROCAL:
-         quality_function += compl_inf / pow(xi, 3);
+         quality_function += compl_inf / std::pow(xi, 3);
          break;
       default:
          DBG_ASSERT(false && "Unknown value for quality_function_centrality_");
