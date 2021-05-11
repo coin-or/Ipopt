@@ -18,18 +18,9 @@ matrix:
         apt:
           packages:
             - gfortran
-            - liblapack-dev
-            - libmetis-dev
-            - cppcheck
-      env: VISHIDDEN=true CPPCHECK=true
-    - os: linux
-      dist: focal
-      addons:
-        apt:
-          packages:
-            - gfortran
             - liblapack64-dev
-      env: INT64=true
+            - cppcheck
+      env: INT64=true CPPCHECK=true
     - os: linux
       dist: bionic
       addons:
@@ -48,6 +39,7 @@ matrix:
             - liblapack-dev
             - libmetis-dev
             - libhwloc-dev
+      env: VISHIDDEN=true
     - os: linux
       arch: arm64
       addons:
