@@ -308,9 +308,9 @@ code will not run. You will have to modify the MUMPS sources so that the
 MPI symbols inside the MUMPS code are renamed.
 
 \note Branch `mumps5` of project ThirdParty-Mumps can be used to build a
-a library of MUMPS 5.2.x that is usable with \Ipopt. However, initial
+a library of MUMPS 5. that is usable with \Ipopt. However, initial
 experiments on the CUTEst testset have shown that performance with MUMPS
-5.2.x is worse than with Mumps 4.10.0 on average.
+5.2.x is worse than with MUMPS 4.10.0 on average.
 
 To compile \Ipopt with a precompiled MUMPS library, you need to specify
 the `-I` flag to have the compiler find the directory containing the
@@ -749,7 +749,7 @@ We list some of these flags in the following.
 - `MA97_DUMP_MATRIX`: If defined, then option `ma97_dump_matrix` is available.
   This requires linking against a HSL library (not loading at runtime) that includes function `dump_mat_csc`.
 
-- `MUMPS_DUMP_MATRIX`: If defined, then matrices are written to stdout in the Mumps interface.
+- `MUMPS_DUMP_MATRIX`: If defined, then matrices are written to stdout in the MUMPS interface.
 
 
 \section COINBREW Using CoinBrew
@@ -765,7 +765,7 @@ After obtaining the script, run
     /path/to/coinbrew install Ipopt --no-prompt
 
 The coinbrew script will take care of building and installing the
-dependencies ASL and Mumps before building \Ipopt.
+dependencies ASL and MUMPS before building \Ipopt.
 To use HSL sources, change to the `ThirdParty/HSL` directory created by
 `coinbrew fetch` and follow the download instructions (i.e., skip the build step)
 from \ref DOWNLOAD_HSL. Then proceed with the `coinbrew build` step.
@@ -819,7 +819,7 @@ Regarding included code that interfaces to %Ipopt, the situation is as follows:
 Regarding dependencies of %Ipopt, the situation is as follows:
 - A single-precision variant of Blas and Lapack is required.
   Many implementations of Blas and Lapack include a single-precision variant.
-- The interface to Mumps can use a single-precision version of MUMPS.
+- The interface to MUMPS can use a single-precision version of MUMPS.
   If using ThirdParty-Mumps to build a MUMPS library, note that only the branch `mumps5` has been updated to allow for building a single-precision version of MUMPS.
   See https://github.com/coin-or-tools/ThirdParty-Mumps/tree/mumps5#single-precision-codes for details.
 - The interfaces to the HSL routines can use single-precision versions of these routines.
