@@ -141,10 +141,8 @@ script:
     if $NOF77 ; then
     echo "Skipping Mumps build." ;
     else
-    if $SINGLEPRECISION ; then
+    if $SINGLEPRECISION || $INT64 ; then
       git clone --depth 1 --branch mumps5 https://github.com/coin-or-tools/ThirdParty-Mumps ;
-    elif $INT64 ; then
-      git clone --depth 1 --branch int64 https://github.com/coin-or-tools/ThirdParty-Mumps ;
     else
       git clone --depth 1 https://github.com/coin-or-tools/ThirdParty-Mumps ;
     fi ;
