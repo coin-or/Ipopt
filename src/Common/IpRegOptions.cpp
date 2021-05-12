@@ -1405,11 +1405,11 @@ void RegisteredOptions::OutputOptionDocumentation(
 
    RegCategoriesByPriority cats;
    RegisteredCategoriesByPriority(cats);
-   for( RegCategoriesByPriority::const_reverse_iterator cat_it = cats.rbegin(); cat_it != cats.rend(); ++cat_it )
+   for( RegCategoriesByPriority::const_iterator cat_it = cats.begin(); cat_it != cats.end(); ++cat_it )
    {
       if( (*cat_it)->Priority() < minpriority )
       {
-         continue;
+         break;
       }
 
       bool firstopt = true;
@@ -1547,11 +1547,11 @@ void RegisteredOptions::OutputLatexOptionDocumentation(
    {
       RegCategoriesByPriority cats;
       RegisteredCategoriesByPriority(cats);
-      for( RegCategoriesByPriority::const_reverse_iterator cat_it = cats.rbegin(); cat_it != cats.rend(); ++cat_it )
+      for( RegCategoriesByPriority::const_iterator cat_it = cats.begin(); cat_it != cats.end(); ++cat_it )
       {
          if( (*cat_it)->Priority() < 0 )
          {
-            continue;
+            break;
          }
 
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "\\subsection{%s}\n\n", (*cat_it)->Name().c_str());
@@ -1602,11 +1602,11 @@ void RegisteredOptions::OutputDoxygenOptionDocumentation(
    {
       RegCategoriesByPriority cats;
       RegisteredCategoriesByPriority(cats);
-      for( RegCategoriesByPriority::const_reverse_iterator cat_it = cats.rbegin(); cat_it != cats.rend(); ++cat_it )
+      for( RegCategoriesByPriority::const_iterator cat_it = cats.begin(); cat_it != cats.end(); ++cat_it )
       {
          if( (*cat_it)->Priority() < 0 )
          {
-            continue;
+            break;
          }
 
          std::string anchorname = (*cat_it)->Name();

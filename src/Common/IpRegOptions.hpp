@@ -123,7 +123,7 @@ public:
       {
          DBG_ASSERT(IsValid(lhs));
          DBG_ASSERT(IsValid(rhs));
-         return lhs->priority_ < rhs->priority_;
+         return lhs->priority_ > rhs->priority_;
       }
    };
 
@@ -1070,7 +1070,7 @@ public:
       return registered_categories_;
    }
 
-   /** Giving access to registered categories ordered by (increasing) priority
+   /** Giving access to registered categories ordered by (decreasing) priority
     *
     * Result is stored in given set.
     * @since 3.14.0
