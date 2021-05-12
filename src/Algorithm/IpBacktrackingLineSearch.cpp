@@ -572,7 +572,7 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
                if( found_acceptable )
                {
                   Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
-                                 "Cannot call restoration phase at almost feasible point,\n  but acceptable point from iteration %" IPOPT_INDEX_FORMAT " could be restored.\n",
+                                 "Cannot call restoration phase at almost feasible point,\nbut acceptable point from iteration %" IPOPT_INDEX_FORMAT " could be restored.\n",
                                  acceptable_iteration_number_);
                   THROW_EXCEPTION(ACCEPTABLE_POINT_REACHED,
                                   "Restoration phase called at almost feasible point, but acceptable point could be restored.\n");
@@ -580,7 +580,7 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
                else
                {
                   Jnlst().Printf(J_STRONGWARNING, J_LINE_SEARCH,
-                                 "Cannot call restoration phase at almost feasible point (violation %e),\n  abort in line search due to no other fall back.\n",
+                                 "Cannot call restoration phase at almost feasible point (violation %e).\nAbort in line search due to no other fall back.\n",
                                  IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX));
                   THROW_EXCEPTION(STEP_COMPUTATION_FAILED, "Linesearch failed, but no restoration phase or other fall back is available.");
                }
