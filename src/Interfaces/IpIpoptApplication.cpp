@@ -388,7 +388,7 @@ void IpoptApplication::RegisterOptions(
       "Verbosity level for debug file.",
       0, J_LAST_LEVEL - 1,
       J_ITERSUMMARY,
-      "This Ipopt library has been compiled in debug mode, and a file \"debug.out\" is produced for every run."
+      "This Ipopt library has been compiled in debug mode, and a file \"debug.out\" is produced for every run. "
       "This option determines the verbosity level for this file. "
       "By default it is the same as \"print_level\".");
 #endif

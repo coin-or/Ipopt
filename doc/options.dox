@@ -383,7 +383,7 @@ Possible values:
  - none: no problem scaling will be performed
  - user-scaling: scaling parameters will come from the user
  - gradient-based: scale the problem so the maximum gradient at the starting point is nlp_scaling_max_gradient
- - equilibration-based: scale the problem o that first derivatives are of order 1 at random points (uses Harwell routine MC19)
+ - equilibration-based: scale the problem so that first derivatives are of order 1 at random points (uses Harwell routine MC19)
 </blockquote>
 
 \anchor OPT_obj_scaling_factor
@@ -1126,6 +1126,33 @@ Possible values:
  - *: Any acceptable filename (may contain path, too)
 </blockquote>
 
+\anchor OPT_linear_scaling_on_demand
+<strong>linear_scaling_on_demand</strong>: Flag indicating that linear scaling is only done if it seems required.
+<blockquote>
+ This option is only important if a linear scaling method (e.g., mc19) is used. If you choose "no", then the scaling factors are computed for every linear system from the start. This can be quite expensive. Choosing "yes" means that the algorithm will start the scaling method only when the solutions to the linear system seem not good, and then use it until the end. The default value for this string option is "yes".
+
+Possible values: yes, no
+</blockquote>
+
+
+\subsection OPT_Step_Calculation Step Calculation
+
+\anchor OPT_mehrotra_algorithm
+<strong>mehrotra_algorithm</strong>: Indicates whether to do Mehrotra's predictor-corrector algorithm.
+<blockquote>
+ If enabled, line search is disabled and the (unglobalized) adaptive mu strategy is chosen with the "probing" oracle, and "corrector_type=affine" is used without any safeguards; you should not set any of those options explicitly in addition. Also, unless otherwise specified, the values of "bound_push", "bound_frac", and "bound_mult_init_val" are set more aggressive, and sets "alpha_for_y=bound_mult". The Mehrotra's predictor-corrector algorithm works usually very well for LPs and convex QPs. The default value for this string option is "no".
+
+Possible values: yes, no
+</blockquote>
+
+\anchor OPT_fast_step_computation
+<strong>fast_step_computation</strong>: Indicates if the linear system should be solved quickly.
+<blockquote>
+ If enabled, the algorithm assumes that the linear system that is solved to obtain the search direction is solved sufficiently well. In that case, no residuals are computed to verify the solution and the computation of the search direction is a little faster. The default value for this string option is "no".
+
+Possible values: yes, no
+</blockquote>
+
 \anchor OPT_min_refinement_steps
 <strong>min_refinement_steps</strong>: Minimum number of iterative refinement steps per linear system solve.
 <blockquote>
@@ -1170,33 +1197,6 @@ Possible values:
 Possible values:
  - yes: use primal regularization with the inertia-free curvature test
  - no: use original IPOPT approach, in which the primal regularization is ignored
-</blockquote>
-
-\anchor OPT_linear_scaling_on_demand
-<strong>linear_scaling_on_demand</strong>: Flag indicating that linear scaling is only done if it seems required.
-<blockquote>
- This option is only important if a linear scaling method (e.g., mc19) is used. If you choose "no", then the scaling factors are computed for every linear system from the start. This can be quite expensive. Choosing "yes" means that the algorithm will start the scaling method only when the solutions to the linear system seem not good, and then use it until the end. The default value for this string option is "yes".
-
-Possible values: yes, no
-</blockquote>
-
-
-\subsection OPT_Step_Calculation Step Calculation
-
-\anchor OPT_mehrotra_algorithm
-<strong>mehrotra_algorithm</strong>: Indicates whether to do Mehrotra's predictor-corrector algorithm.
-<blockquote>
- If enabled, line search is disabled and the (unglobalized) adaptive mu strategy is chosen with the "probing" oracle, and "corrector_type=affine" is used without any safeguards; you should not set any of those options explicitly in addition. Also, unless otherwise specified, the values of "bound_push", "bound_frac", and "bound_mult_init_val" are set more aggressive, and sets "alpha_for_y=bound_mult". The Mehrotra's predictor-corrector algorithm works usually very well for LPs and convex QPs. The default value for this string option is "no".
-
-Possible values: yes, no
-</blockquote>
-
-\anchor OPT_fast_step_computation
-<strong>fast_step_computation</strong>: Indicates if the linear system should be solved quickly.
-<blockquote>
- If enabled, the algorithm assumes that the linear system that is solved to obtain the search direction is solved sufficiently well. In that case, no residuals are computed to verify the solution and the computation of the search direction is a little faster. The default value for this string option is "no".
-
-Possible values: yes, no
 </blockquote>
 
 \anchor OPT_max_hessian_perturbation
