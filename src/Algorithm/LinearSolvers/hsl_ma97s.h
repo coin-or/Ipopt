@@ -116,7 +116,7 @@ struct ma97_info {
     int stat;                 /* error code from failed memory allocation */
 
     /* Reserve space for future interface changes */
-    int ispare[5]; ma97realtype_s_ rspare[10];
+    int ispare[5]; ma97realtype_s_ rspare[10];         
 };
 
 /* Set default values of control */
