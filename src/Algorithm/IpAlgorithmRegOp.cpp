@@ -79,7 +79,7 @@ void RegisterOptions_Algorithm(
    OrigIterationOutput::RegisterOptions(roptions);
    roptions->SetRegisteringCategory("Step Calculation");
    PDSearchDirCalculator::RegisterOptions(roptions);
-   roptions->SetRegisteringCategory("Linear Solver");
+   roptions->SetRegisteringCategory("Step Calculation");
    PDFullSpaceSolver::RegisterOptions(roptions);
    roptions->SetRegisteringCategory("Step Calculation");
    PDPerturbationHandler::RegisterOptions(roptions);
