@@ -1,4 +1,4 @@
-Here we list changes of Ipopt since the release of version 3.0.0.
+Here we list changes of Ipopt since the release of version 2.2.0.
 More detailed information about incremental changes can be found in the
 commit history.
 
@@ -864,6 +864,95 @@ commit history.
         (already taken care of there)
         Several corrections to Windows files
         Fix termination if number of iterations is exceeded in restoration phase
+
 2005-08-26 - version 3.0.0 - dev release number 510
         First official release of the new C++ implementation of Ipopt.
 
+2005-08-19 no new release
+        - corrected detection of BLAS libraries for SUN (make sure the
+          example Makefiles work)
+        - upgrade LICENSE file to CPL version 1.0 as retrieved from
+          www.opensource.org
+
+2005-05-30 release 2.2.1e
+        - fixed sign of multipliers returned to AMPL
+          (bug reported by Rhoda Baker and Karsten Theissen)
+        - switched to automake 1.9.5
+
+2005-01-07 no new release
+        - bugfix for the limited memory BFGS in case of square problems
+          (bug reported by Wanhe Zhang and Ned Nedialkov)
+
+2004-10-05 release 2.2.1d
+        - Added 'outlev' as an option to the AMPL solver as a synonym for iprint
+        - For iprint = 0, the output lines per iteration are now suppressed
+        - corrected two bugs in configure script (test for size of long etc
+          before Fortran libraries as added to LIBS; prevent cycling in
+          'make -j 1' test)
+        - internally renamed subroutine ERROR to OPTERROR (ERROR had a
+          name clash for some Fortran compiler)
+        - avoid uninitialized variable in update_b_lm.f
+        - minor correction in computation of residual in get_step_full.F
+        - minor change for slack correction in filter.F
+
+2004-07-20 release 2.2.1c
+         - corrected bug leading to very small QTAU in rare circumstances
+
+2004-05-21 release 2.2.1b
+
+         - Make DFILLINFACT option available through AMPL interface
+         - Now, later increase of memory requirement for Harwell solvers is also
+           based on DFILLINFACT, instead of using a fixed values of 10.
+
+2004-05-13 release 2.2.1a
+         - BUGFIX in IPOPT/ipopt/mainloop.F
+           The multipliers were not scaled back for low printlevel.
+
+2004-04-28
+         - BUGFIX in IPOPT/AMPL_interface/ipoptAMPL.c:
+           Now the mulitpliers for the constraints are passed back to AMPL.
+         - Added download scripts using `wget' to get ASL, BLAS, and LAPACK more
+           easily.  Thanks to Frank Wuebbeling for the hint.
+
+2004-04-25 release 2.2.1
+         - AMPL solver executable is now called `ipopt' (instead of `ipoptAMPL')
+           This fixed also problem with assigning IPOPT options from within
+           AMPL. (reported by Karsten Theissen)
+         - default value for number of iterations is now 10000 (instead of 1000)
+         - new option: IMAXCPUSEC to be set to the maximum number of CPU seconds
+           after which the algorithm should stop.  The check is performed only at
+           certain points in the algorithm, so that the executable might run longer
+           than specified.
+           The algorithm also stops (as before) when the file "STOP" is detected in
+           the current directory.  Finally, a call to `USER_REQUESTED_STOP' has
+           been added if the preprocessor macro USE_USER_REQUESTED_STOP has been
+           defined. If this LOGICAL function returns .TRUE., the algorithm also
+           stops.  This feature was requested by David Ternet.
+         - if IPOPT is run several time in a row, the counting of function
+           evaluations is restarted after every new call of IPOPT.
+         - in get_step_full, now check if the number of negative eigenvalues is LESS
+           than then number constraints.  If so, increase the pivot tolerance,
+           and if that doesn't help, pretend that the system is singular.
+           (this fixed a problem reported by Hans Mittelmann)
+         - decrease default values for DPIVTOLMAX
+         - suppress superflous leading zeros in iteration output.  For long output
+           (ioutput=1) include CPU time
+         - a few changes regarding the inertia correction (get_step_full.F).
+           This decreases CPU time significantly in a few cases.
+         - corrected problem in C-files related to names for struct's (some GNU
+           compiler complained)
+         - changed default options for GNU compilers (now `-O3 -funroll-loops',
+           no longer `-O2' and `-mieee-fp')
+         - no reference to MC35 in resto_tron if HAVE_MC35 is not defined
+         - '#error' preprocessor directive removed from *.F files, since not all
+           compilers understand it (reported by Hans Mittelmann)
+         - switch to automake 1.8.3
+
+2004-03-10 release 2.2.0
+         Many things have changed since the last official release.
+         Here a few highlights:
+         - easier installation procedure with autoconf
+         - algorithm made more robust and efficient
+         - new restoration phase for filter method (TRON no longer needed for
+           full-space option anymore)
+         - C-interface
