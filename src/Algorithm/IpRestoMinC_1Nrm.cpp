@@ -304,6 +304,12 @@ bool MinC_1NrmRestorationPhase::PerformRestoration()
                      "Restoration phase in the restoration phase failed.\n");
       THROW_EXCEPTION(RESTORATION_FAILED, "Restoration phase in the restoration phase failed.");
    }
+   else if( resto_status == ERROR_IN_STEP_COMPUTATION )
+   {
+      Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+                     "Step computation in the restoration phase failed.\n");
+      THROW_EXCEPTION(RESTORATION_FAILED, "Step computation in the restoration phase failed.");
+   }
    else if( resto_status == USER_REQUESTED_STOP )
    {
       // Use requested stop during restoration phase - rethrow exception
