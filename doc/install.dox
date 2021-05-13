@@ -819,6 +819,9 @@ Regarding included code that interfaces to %Ipopt, the situation is as follows:
 Regarding dependencies of %Ipopt, the situation is as follows:
 - A single-precision variant of Blas and Lapack is required.
   Many implementations of Blas and Lapack include a single-precision variant.
+  \attention macOS vecLib single-precision routines do not work as expected by gfortran.
+  However, configure would still select the Accelerate framework by default and %Ipopt will try to run with faulty numbers.
+  You may want to try switch to Lapack from HomeBrew instead (`--with-lapack="-L/usr/local/opt/lapack/lib -llapack -lblas"`) or try out [this vecLib wrapper](https://github.com/mcg1969/vecLibFort).
 - The interface to MUMPS can use a single-precision version of MUMPS.
   If using ThirdParty-Mumps to build a MUMPS library, note that only the branch `mumps5` has been updated to allow for building a single-precision version of MUMPS.
   See the [ThirdParty-Mumps docu](https://github.com/coin-or-tools/ThirdParty-Mumps/tree/mumps5#single-precision-codes) for details.
