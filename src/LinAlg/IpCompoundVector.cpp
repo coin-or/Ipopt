@@ -221,6 +221,21 @@ void CompoundVector::ElementWiseMultiplyImpl(
    }
 }
 
+void CompoundVector::ElementWiseSelectImpl(
+   const Vector& x
+)
+{
+   DBG_START_METH("CompoundVector::ElementWiseSelectImpl", dbg_verbosity);
+   DBG_ASSERT(vectors_valid_);
+   const CompoundVector* comp_x = static_cast<const CompoundVector*>(&x);
+   DBG_ASSERT(dynamic_cast<const CompoundVector*>(&x));
+   DBG_ASSERT(NComps() == comp_x->NComps());
+   for( Index i = 0; i < NComps(); i++ )
+   {
+      Comp(i)->ElementWiseSelect(*comp_x->GetComp(i));
+   }
+}
+
 void CompoundVector::ElementWiseMaxImpl(
    const Vector& x
 )

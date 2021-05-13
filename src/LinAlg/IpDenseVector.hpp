@@ -174,6 +174,10 @@ protected:
       const Vector& x
    );
 
+   virtual void ElementWiseSelectImpl(
+      const Vector& x
+   );
+
    virtual void ElementWiseMaxImpl(
       const Vector& x
    );

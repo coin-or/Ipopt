@@ -475,7 +475,7 @@ Index IpoptCalculatedQuantities::CalculateSafeSlack(
       {
          s_min = std::numeric_limits<Number>::min();
       }
-      DBG_PRINT((1, "s_min = %g, min_slack=%g\n", s_min, min_slack));
+      DBG_PRINT((1, "s_min = %g, curr_mu = %g, min_slack=%g\n", s_min, ip_data_->curr_mu(), min_slack));
       if( min_slack < s_min )
       {
          // Need to correct the slacks and calculate new bounds...
@@ -492,13 +492,15 @@ Index IpoptCalculatedQuantities::CalculateSafeSlack(
          DBG_PRINT((1, "Number of slack corrections = %" IPOPT_INDEX_FORMAT "\n", retval));
          DBG_PRINT_VECTOR(2, "t(sgn)", *t);
 
+         DBG_PRINT_VECTOR(2, "multiplier", *multiplier);
+
          // ToDo AW: I added the following line b/c I found a case where
          // slack was negative and this correction produced 0
          slack->ElementWiseMax(*zero_vec);
 
          SmartPtr<Vector> t2 = t->MakeNew();
          t2->Set(ip_data_->curr_mu());
-         t2->ElementWiseDivide(*multiplier);  // t2 = mu / multiplier
+         t2->ElementWiseDivide(*multiplier);  // t2 = mu / multiplier  (NOTE: this gives inf where multiplier is 0!)
 
          SmartPtr<Vector> s_min_vec = t2->MakeNew();
          s_min_vec->Set(s_min);
@@ -507,7 +509,9 @@ Index IpoptCalculatedQuantities::CalculateSafeSlack(
          t2->Axpy(-1.0, *slack);           // t2 = max(mu/multiplier,s_min) - slack
          DBG_PRINT_VECTOR(2, "tw(smin,mu/mult)=max(mu/multiplier,s_min)-slack", *t2);
 
-         t->ElementWiseMultiply(*t2);  // t = max(mu/multiplier,s_min) - slack if slack < s_min, otherwise 0
+         // this was t->ElementWiseMultiply(*t2) before, but 0*inf=nan
+         // since entries in t are either 0 or 1, we introduced ElementWiseSelect and use that here
+         t->ElementWiseSelect(*t2);    // t = max(mu/multiplier,s_min) - slack if slack < s_min, otherwise 0
          t->Axpy(1.0, *slack);         // t = max(mu/multiplier,s_min) if slack < s_min, otherwise slack
 
          SmartPtr<Vector> t_max = t2;

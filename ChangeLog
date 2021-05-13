@@ -165,6 +165,8 @@ commit history.
           of dimension 0 before.
         - Fixed that return code (info%flag) of ma97_solve() was not checked
           in Ma97SolverInterface::MultiSolve().
+        - Fixed a problem where moving slack away from 0 resulted in nan
+          if multipliers were zero. Added Vector::ElementWiseSelect().
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]

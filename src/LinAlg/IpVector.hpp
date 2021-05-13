@@ -125,6 +125,15 @@ public:
       const Vector& x
    );
 
+   /** Element-wise selection \f$y_i \gets sgn(y_i)x_i, if y_i != 0, else 0\f$
+    *
+    * So like ElementWiseSgn().ElementWiseMultiply(x), but with 0*inf = 0.
+    * @since 3.14.0
+    */
+   inline void ElementWiseSelect(
+      const Vector& x
+   );
+
    /** Element-wise max against entries in x */
    inline void ElementWiseMax(
       const Vector& x
@@ -298,6 +307,11 @@ protected:
 
    /** Element-wise multiplication \f$y_i \gets y_i*x_i\f$ */
    virtual void ElementWiseMultiplyImpl(
+      const Vector& x
+   ) = 0;
+
+   /** Element-wise selection \f$y_i \gets sgn(y_i)x_i, if y_i != 0, else 0\f$ */
+   virtual void ElementWiseSelectImpl(
       const Vector& x
    ) = 0;
 
@@ -701,6 +715,14 @@ inline void Vector::ElementWiseMultiply(
 )
 {
    ElementWiseMultiplyImpl(x);
+   ObjectChanged();
+}
+
+inline void Vector::ElementWiseSelect(
+   const Vector& x
+)
+{
+   ElementWiseSelectImpl(x);
    ObjectChanged();
 }
 

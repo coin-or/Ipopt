@@ -360,6 +360,75 @@ void DenseVector::ElementWiseMultiplyImpl(
    }
 }
 
+void DenseVector::ElementWiseSelectImpl(
+   const Vector& x
+)
+{
+   DBG_ASSERT(initialized_);
+   const DenseVector* dense_x = static_cast<const DenseVector*>(&x);
+   DBG_ASSERT(dynamic_cast<const DenseVector*>(&x));
+
+   DBG_ASSERT(dense_x->initialized_);
+   const Number* values_x = dense_x->values_;
+   DBG_ASSERT(Dim() == dense_x->Dim());
+   if( homogeneous_ )
+   {
+      if( scalar_ == 0.0 )
+      {
+         return;
+      }
+      if( dense_x->homogeneous_ )
+      {
+         scalar_ *= dense_x->scalar_;
+      }
+      else
+      {
+         homogeneous_ = false;
+         Number* vals = values_allocated();
+         for( Index i = 0; i < Dim(); i++ )
+         {
+            vals[i] = scalar_ * values_x[i];
+         }
+      }
+   }
+   else
+   {
+      if( dense_x->homogeneous_ )
+      {
+         if( dense_x->scalar_ != 1.0 )
+         {
+            for( Index i = 0; i < Dim(); i++ )
+            {
+               if( values_[i] > 0.0 )
+               {
+                  values_[i] = dense_x->scalar_;
+               }
+               else if( values_[i] < 0.0 )
+               {
+                  values_[i] = -dense_x->scalar_;
+               }
+               // else values_[i] remains at 0.0
+            }
+         }
+      }
+      else
+      {
+         for( Index i = 0; i < Dim(); i++ )
+         {
+            if( values_[i] > 0.0 )
+            {
+               values_[i] = values_x[i];
+            }
+            else if( values_[i] < 0.0 )
+            {
+               values_[i] = -values_x[i];
+            }
+            // else values_[i] remains at 0.0
+         }
+      }
+   }
+}
+
 void DenseVector::ElementWiseMaxImpl(
    const Vector& x
 )
