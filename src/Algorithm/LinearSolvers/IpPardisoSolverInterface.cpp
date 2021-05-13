@@ -67,8 +67,8 @@ PardisoSolverInterface::~PardisoSolverInterface()
       Index N = dim_;
       Index NRHS = 0;
       Index ERROR;
-      Index idmy;
-      Number ddmy;
+      Index idmy = 0;
+      Number ddmy = 0.;
       pardiso(PT_, &MAXFCT_, &MNUM_, &MTYPE_, &PHASE, &N, &ddmy, &idmy, &idmy, &idmy, &NRHS, IPARM_, &MSGLVL_, &ddmy,
               &ddmy, &ERROR, DPARM_);
       DBG_ASSERT(ERROR == 0);
