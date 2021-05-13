@@ -80,12 +80,8 @@ matrix:
       env: OSX=10.15 ENABLEDEBUG=true
       compiler: clang
     - os: osx
-      osx_image: xcode12.2
-      env: OSX=10.15
-      compiler: clang
-    - os: osx
       osx_image: xcode12.5
-      env: OSX=11 NOF77=true SINGLEPRECISION=true INT64=true
+      env: OSX=11 SINGLEPRECISION=true
       compiler: clang
 
 before_script:
@@ -98,15 +94,18 @@ before_script:
   - >
     if [[ "$TRAVIS_OS_NAME" == "osx" ]] && ! $NOF77; then
     brew update;
-    brew install bash gcc metis hwloc;
+    brew install bash gcc metis;
+    $SINGLEPRECISION && brew install lapack;
     if [[ "$OSX" == 10.14 ]] ; then export CC=gcc-9 ; export CXX=g++-9 ;
-    elif [[ "$OSX" == 10.15 ]] ; then export CC=gcc-10 ; export CXX=g++-10 ; fi ;
+    elif [[ "$OSX" == 10.15 ]] ; then export CC=gcc-10 ; export CXX=g++-10 ;
+    elif [[ "$OSX" == 11 ]] ; then export CC=gcc-11 ; export CXX=g++-11 ; fi ;
     $CC --version; $CXX --version; gfortran --version;
     fi
 
 script:
   # Spral doesn't compile on macOS at the moment: https://github.com/ralna/spral/issues/21
   # Spral doesn't compile with recent GCC (like on Focal) at the moment: https://github.com/ralna/spral/issues/38
+  # macOS VecLib doesn't work for single-precision routines (https://github.com/mcg1969/vecLibFort) - try with homebrew lapack instead
   - >
     if $NOF77 || $SINGLEPRECISION || [[ "$TRAVIS_OS_NAME" == "osx" ]] || [[ "$TRAVIS_DIST" == "focal" ]]; then
     echo "Skipping Spral build." ;
@@ -127,6 +126,7 @@ script:
     ( $NOF77 && echo enable_f77=no ;
     $ENABLEDEBUG && ( echo enable_debug=yes ; echo with_ipopt_checklevel=5 ; echo with_ipopt_verbosity=5 ) ;
     $SINGLEPRECISION && echo "with_precision=single" ;
+    $SINGLEPRECISION && [[ "$TRAVIS_OS_NAME" == "osx" ]] && ! $NOF77 && echo "with_lapack=\"-L/usr/local/opt/lapack/lib -llapack -lblas\"" ;
     $INT64 && echo "with_intsize=64" ;
     [[ -d $HOME/spral ]] && echo "with_spral_cflags=-I${HOME}/spral/include" ;
     [[ -d $HOME/spral ]] && [[ "$TRAVIS_OS_NAME" == "linux" ]] && echo "with_spral_lflags=\"-L${HOME}/spral/lib -lspral -lgfortran -lhwloc -lm -lmetis -llapack -lblas -fopenmp\"" ;
