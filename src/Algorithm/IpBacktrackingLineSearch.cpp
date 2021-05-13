@@ -10,6 +10,7 @@
 #include "IpJournalist.hpp"
 #include "IpRestoPhase.hpp"
 #include "IpAlgTypes.hpp"
+#include "IpOrigIpoptNLP.hpp"
 
 #include <cmath>
 #include <limits>
@@ -580,7 +581,8 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
                else
                {
                   Jnlst().Printf(J_STRONGWARNING, J_LINE_SEARCH,
-                                 "Cannot call restoration phase at almost feasible point (violation %e).\nAbort in line search due to no other fall back.\n",
+                                 "Cannot call restoration phase at point that is almost feasible %s(violation %e).\nAbort in line search due to no other fall back.\n",
+                                 dynamic_cast<OrigIpoptNLP*>(GetRawPtr(IpCq().GetIpoptNLP())) == NULL ? "for the restoration NLP " : "",
                                  IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX));
                   THROW_EXCEPTION(STEP_COMPUTATION_FAILED, "Linesearch failed, but no restoration phase or other fall back is available.");
                }
