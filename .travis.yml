@@ -143,18 +143,14 @@ script:
     popd
   - >
     if $NOF77 ; then
-    echo "Skipping Mumps build." ;
-    else
-    if $SINGLEPRECISION || $INT64 ; then
-      git clone --depth 1 --branch mumps5 https://github.com/coin-or-tools/ThirdParty-Mumps ;
+      echo "Skipping Mumps build." ;
     else
       git clone --depth 1 https://github.com/coin-or-tools/ThirdParty-Mumps ;
-    fi ;
-    pushd ThirdParty-Mumps &&
-    ./get.Mumps &&
-    ./configure --prefix=$HOME/install &&
-    make && make install &&
-    popd ;
+      pushd ThirdParty-Mumps &&
+      ./get.Mumps &&
+      ./configure --prefix=$HOME/install &&
+      make && make install &&
+      popd ;
     fi
   - mkdir build
   - pushd build
