@@ -167,6 +167,9 @@ commit history.
           in Ma97SolverInterface::MultiSolve().
         - Fixed a problem where moving slack away from 0 resulted in nan
           if multipliers were zero. Added Vector::ElementWiseSelect().
+        - Calls into MUMPS are now protected by a mutex if compiling for
+          C++11 or higher. This prevents Ipopt from calling MUMPS concurrently
+          from several threads.
 
 2021-0x-yy: 3.13.5
         - Allow to use --without-pardiso to disable check for MKL Pardiso [#454]

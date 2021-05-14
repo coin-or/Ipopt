@@ -41,7 +41,8 @@ Previous versions of IPOPT have also been run on an old iPod, as well as BlueGen
 ## Is \Ipopt thread-safe?
 
 \Ipopt itself is thread-safe. Please check the used third-party components, i.e., linear algebra and linear solvers, for thread-safety, too.
-For example, MUMPS is **not** thread-safe.
+For example, MUMPS is not thread-safe.
+Since \Ipopt 3.14.0, however, calls into MUMPS are protected by a mutex in the \Ipopt/MUMPS interface, so that it should be possible to use \Ipopt with MUMPS in a multi-threading environment as well.
 
 ## What is the method behind \Ipopt?
 

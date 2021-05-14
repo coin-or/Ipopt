@@ -751,6 +751,7 @@ We list some of these flags in the following.
 
 - `MUMPS_DUMP_MATRIX`: If defined, then matrices are written to stdout in the MUMPS interface.
 
+- `IPOPT_MUMPS_NOMUTEX`: If defined, concurrent calls of %Ipopt into MUMPS from different threads are not prevented by a mutex.
 
 \section COINBREW Using CoinBrew
 

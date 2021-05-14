@@ -45,6 +45,15 @@
 #include <cmath>
 #include <cstdlib>
 
+#if !defined(IPOPT_MUMPS_NOMUTEX) && __cplusplus < 201103L
+#define IPOPT_MUMPS_NOMUTEX
+#endif
+#ifndef IPOPT_MUMPS_NOMUTEX
+#include <mutex>
+/// a mutex to ensure that only one thread is running MUMPS functions at a time
+static std::mutex mumps_call_mutex;
+#endif
+
 namespace Ipopt
 {
 #if IPOPT_VERBOSITY > 0
@@ -87,6 +96,11 @@ MumpsSolverInterface::MumpsSolverInterface()
    mumps_->par = 1; //working host for sequential version
    mumps_->sym = 2; //general symetric matrix
    mumps_->comm_fortran = USE_COMM_WORLD;
+
+#ifndef IPOPT_MUMPS_NOMUTEX
+   const std::lock_guard<std::mutex> lock(mumps_call_mutex);
+#endif
+
    mumps_c(mumps_);
    mumps_->icntl[1] = 0;
    mumps_->icntl[2] = 0; //QUIETLY!
@@ -98,6 +112,10 @@ MumpsSolverInterface::~MumpsSolverInterface()
 {
    DBG_START_METH("MumpsSolverInterface::~MumpsSolverInterface()",
                   dbg_verbosity);
+
+#ifndef IPOPT_MUMPS_NOMUTEX
+   const std::lock_guard<std::mutex> lock(mumps_call_mutex);
+#endif
 
    MUMPS_STRUC_C* mumps_ = static_cast<MUMPS_STRUC_C*>(mumps_ptr_);
    mumps_->job = -2; //terminate mumps
@@ -367,6 +385,10 @@ ESymSolverStatus MumpsSolverInterface::SymbolicFactorization()
                   dbg_verbosity);
    MUMPS_STRUC_C* mumps_data = static_cast<MUMPS_STRUC_C*>(mumps_ptr_);
 
+#ifndef IPOPT_MUMPS_NOMUTEX
+   const std::lock_guard<std::mutex> lock(mumps_call_mutex);
+#endif
+
    if( HaveIpData() )
    {
       IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
@@ -431,6 +453,10 @@ ESymSolverStatus MumpsSolverInterface::Factorization(
 {
    DBG_START_METH("MumpsSolverInterface::Factorization", dbg_verbosity);
    MUMPS_STRUC_C* mumps_data = static_cast<MUMPS_STRUC_C*>(mumps_ptr_);
+
+#ifndef IPOPT_MUMPS_NOMUTEX
+   const std::lock_guard<std::mutex> lock(mumps_call_mutex);
+#endif
 
    mumps_data->job = 2;  //numerical factorization
 
@@ -524,6 +550,11 @@ ESymSolverStatus MumpsSolverInterface::Solve(
 {
    DBG_START_METH("MumpsSolverInterface::Solve", dbg_verbosity);
    MUMPS_STRUC_C* mumps_data = static_cast<MUMPS_STRUC_C*>(mumps_ptr_);
+
+#ifndef IPOPT_MUMPS_NOMUTEX
+   const std::lock_guard<std::mutex> lock(mumps_call_mutex);
+#endif
+
    ESymSolverStatus retval = SYMSOLVER_SUCCESS;
    if( HaveIpData() )
    {
@@ -616,6 +647,10 @@ ESymSolverStatus MumpsSolverInterface::DetermineDependentRows(
       have_symbolic_factorization_ = true;
    }
    // perform the factorization, in order to find dependent rows/columns
+
+#ifndef IPOPT_MUMPS_NOMUTEX
+   const std::lock_guard<std::mutex> lock(mumps_call_mutex);
+#endif
 
    //Set flags to ask MUMPS for checking linearly dependent rows
    mumps_data->icntl[23] = 1;
