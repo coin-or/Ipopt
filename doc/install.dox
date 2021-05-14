@@ -274,7 +274,7 @@ can be used to download the MUMPS 4.10.0 code and build a MUMPS library
 that is recognized by Ipopt.
 To do so, execute
 
-    git clone https://github.com/coin-or-tools/ThirdParty-Mumps.git
+    git clone --branch stable/2.1 https://github.com/coin-or-tools/ThirdParty-Mumps.git
     cd ThirdParty-Mumps
     ./get.Mumps
     ./configure
@@ -290,8 +290,8 @@ using \Ipopt within an MPI program together with MUMPS, the
 code will not run. You will have to modify the MUMPS sources so that the
 MPI symbols inside the MUMPS code are renamed.
 
-\note Branch `mumps5` of project ThirdParty-Mumps can be used to build a
-a library of MUMPS 5.2.x that is usable with \Ipopt. However, initial
+\note Branch `stable/3.0` of project ThirdParty-Mumps can be used to build a
+a library of MUMPS 5 that is usable with \Ipopt. However, initial
 experiments on the CUTEst testset have shown that performance with MUMPS
 5.2.x is worse than with Mumps 4.10.0 on average.
 
