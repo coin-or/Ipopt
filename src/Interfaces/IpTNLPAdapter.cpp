@@ -2126,7 +2126,7 @@ void TNLPAdapter::FinalizeSolution(
             }
             std::vector<Number> new_z_L_meta_data(n_full_x_, 0.0);
             std::vector<Number> new_z_U_meta_data(n_full_x_, 0.0);
-            ResortBounds(*z_L_meta_vector, &new_z_L_meta_data[0], *z_U_meta_vector, &new_z_U_meta_data[0], false);
+            ResortBounds(*z_L_meta_vector, &new_z_L_meta_data[0], *z_U_meta_vector, &new_z_U_meta_data[0]);
             std::string z_L_meta_data_tag = z_L_meta_iter->first;
             std::string z_U_meta_data_tag = z_L_meta_iter->first;
             z_L_meta_data_tag += "_z_L";
@@ -2431,22 +2431,21 @@ void TNLPAdapter::ResortBounds(
    const Vector& x_L,
    Number*       x_L_orig,
    const Vector& x_U,
-   Number*       x_U_orig,
-   bool          clearorig
+   Number*       x_U_orig
 )
 {
    if( x_L_orig )
    {
-      if( clearorig )
-      {
-         memset(x_L_orig, 0, n_full_x_ * sizeof(Number));
-      }
-
       const DenseVector* dx_L = static_cast<const DenseVector*>(&x_L);
       DBG_ASSERT(dynamic_cast<const DenseVector*>(&x_L));
 
       const Index* bnds_pos_not_fixed = P_x_x_L_->ExpandedPosIndices();
       const Index& n_xL = x_L.Dim();
+
+      if( n_xL < n_full_x_ )
+      {
+         memset(x_L_orig, 0, n_full_x_ * sizeof(Number));
+      }
 
       if( IsValid(P_x_full_x_) )
       {
@@ -2497,13 +2496,13 @@ void TNLPAdapter::ResortBounds(
 
    if( x_U_orig )
    {
-      if( clearorig )
+      const DenseVector* dx_U = static_cast<const DenseVector*>(&x_U);
+      DBG_ASSERT(dynamic_cast<const DenseVector*>(&x_U));
+
+      if( x_U.Dim() < n_full_x_ )
       {
          memset(x_U_orig, 0, n_full_x_ * sizeof(Number));
       }
-
-      const DenseVector* dx_U = static_cast<const DenseVector*>(&x_U);
-      DBG_ASSERT(dynamic_cast<const DenseVector*>(&x_U));
 
       const Index* bnds_pos_not_fixed = P_x_x_U_->ExpandedPosIndices();
 

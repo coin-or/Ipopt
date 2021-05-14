@@ -311,8 +311,7 @@ public:
       const Vector& x_L,              /**< internal values for lower bounds on x */
       Number*       x_L_orig,         /**< vector to fill with values from x_L */
       const Vector& x_U,              /**< internal values for upper bounds on x */
-      Number*       x_U_orig,         /**< vector to fill with values from x_U */
-      bool          clearorig = true  /**< whether to initialize complete x_L_orig and x_U_orig to 0.0 before setting values for non-fixed variables */
+      Number*       x_U_orig          /**< vector to fill with values from x_U */
    );
 
    /** Provides values for lower and upper bounds on variables for given Ipopt-internal vectors.
@@ -327,10 +326,11 @@ public:
       Number*       x_L_orig,         /**< vector to fill with values from x_L */
       const Vector& x_U,              /**< internal values for upper bounds on x */
       Number*       x_U_orig,         /**< vector to fill with values from x_U */
-      bool          clearorig = true  /**< whether to initialize complete x_L_orig and x_U_orig to 0.0 before setting values for non-fixed variables */
+      bool          clearorig = true  /**< whether to initialize complete x_L_orig and x_U_orig to 0.0 before setting values for non-fixed variables - ignored */
    )
    {
-      ResortBounds(x_L, x_L_orig, x_U, x_U_orig, clearorig);
+      ResortBounds(x_L, x_L_orig, x_U, x_U_orig);
+      (void) clearorig;
    }
 
    /** Provides values for dual multipliers on lower and upper bounds on variables for given Ipopt-internal vectors.
