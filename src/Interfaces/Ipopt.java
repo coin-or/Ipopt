@@ -774,10 +774,10 @@ public abstract class Ipopt
     *
     * This method is called once per iteration (during the convergence check),
     * and can be used to obtain information about the optimization status while
-    * \Ipopt solves the problem, and also to request a premature termination.
+    * %Ipopt solves the problem, and also to request a premature termination.
     *
     * The information provided by the entities in the argument list correspond
-    * to what \Ipopt prints in the iteration summary (see also \ref OUTPUT).
+    * to what %Ipopt prints in the iteration summary (see also \ref OUTPUT).
     * The value of algorithmmode is either REGULARMODE or RESTORATIONPHASEMODE.
     *
     * The current iterate and violations of feasibility and optimality can be
@@ -785,7 +785,7 @@ public abstract class Ipopt
     * These methods translate values for the *internal representation* of
     * the problem from `ip_data` and `ip_cq` objects.
     *
-    * @return If this method returns false, \Ipopt will terminate with the
+    * @return If this method returns false, %Ipopt will terminate with the
     *   User_Requested_Stop status.
     *
     * It is not required to implement (overload) this method.

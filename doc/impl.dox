@@ -3,7 +3,7 @@
 
 \section TRIPLET Triplet Format for Sparse Matrices
 
-\Ipopt was designed for optimizing large sparse nonlinear
+%Ipopt was designed for optimizing large sparse nonlinear
 programs. Because of problem sparsity, the required matrices (like the
 constraints Jacobian or Lagrangian Hessian) are not stored as dense
 matrices, but rather in a sparse matrix format. For the tutorials in
@@ -35,7 +35,7 @@ very dramatic. (For an \f$n \times n\f$ matrix, the dense representation
 grows with the the square of \f$n\f$, while the sparse representation grows
 linearly in the number of nonzeros.)
 
-The parameter `index_style` in Ipopt::TNLP::get_nlp_info tells \Ipopt
+The parameter `index_style` in Ipopt::TNLP::get_nlp_info tells %Ipopt
 if you prefer to use C style indexing (0-based, i.e., starting the
 counting at 0) for the row and column indices or Fortran style
 (1-based). The following table shows the triplet format for the
@@ -142,18 +142,18 @@ of the object goes to zero, the object is automatically deleted.
 pointer.
 
 It is very important to use `SmartPtr`'s instead of raw pointers when
-passing objects to \Ipopt. Internally, \Ipopt
+passing objects to %Ipopt. Internally, %Ipopt
 uses smart pointers for referencing objects. If you use a raw pointer in
 your executable, the object's counter will NOT get incremented. Then,
-when \Ipopt uses smart pointers inside its own code, the
-counter will get incremented. However, before \Ipopt
+when %Ipopt uses smart pointers inside its own code, the
+counter will get incremented. However, before %Ipopt
 returns control to your code, it will decrement as many times as it
 incremented earlier, and the counter will return to zero. Therefore,
-\Ipopt will delete the object. When control returns to you,
+%Ipopt will delete the object. When control returns to you,
 you now have a raw pointer that points to a deleted object.
 
 This might sound difficult to anyone not familiar with the use of smart
 pointers, but just follow one simple rule; always use a Ipopt::SmartPtr when
-creating or passing an \Ipopt object.
+creating or passing an %Ipopt object.
 
 */

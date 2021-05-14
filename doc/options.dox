@@ -3,7 +3,7 @@
 
 \tableofcontents
 
-\Ipopt has many (maybe too many) options that can be adjusted for the
+%Ipopt has many (maybe too many) options that can be adjusted for the
 algorithm. %Options are all identified by a string name,
 and their values can be of one of three types: Number (real), Integer,
 or String. Number options are used for things like tolerances, integer
@@ -11,7 +11,7 @@ options are used for things like maximum number of iterations, and
 string options are used for setting algorithm details, like the NLP
 scaling method. %Options can be set through the code that interfaces %Ipopt
 (have a look at the examples to see how this is done)
-or by creating a `ipopt.opt` file in the directory you are executing \Ipopt.
+or by creating a `ipopt.opt` file in the directory you are executing %Ipopt.
 
 The `ipopt.opt` file is read line by line and each line should contain the
 option name, followed by whitespace, and then the value. Comments can be
@@ -42,7 +42,7 @@ Note, the `ipopt.opt` file is given preference when setting options.
 This way, you can easily override any options set in a particular executable
 or AMPL model by specifying new values in `ipopt.opt`.
 
-All \Ipopt options are also available through AMPL.
+All %Ipopt options are also available through AMPL.
 In addition, these options are available:
 
 | Option | Description |
@@ -59,14 +59,14 @@ prints a list of all options available in AMPL.
 
 A list of documented options is given next.
 Options that should be modified by expert users only are marked as <em>advanced</em>.
-You can print the documentation for all \Ipopt options to the console by
+You can print the documentation for all %Ipopt options to the console by
 using the option \ref OPT_print_options_documentation "print_options_documentation"
-and running \Ipopt.
+and running %Ipopt.
 If you have the AMPL solver executable, you can generate this list also
 by calling the executable with flag `--print-options`.
 
-\note Availability or default values of some options concerning the linear solver depends on the configuration used to build \Ipopt.
-Use the print options documentation feature to see which options are available in a particular build of \Ipopt.
+\note Availability or default values of some options concerning the linear solver depends on the configuration used to build %Ipopt.
+Use the print options documentation feature to see which options are available in a particular build of %Ipopt.
 
 The implementation paper mentioned for some options is \cite WaecBieg06:mp.
 

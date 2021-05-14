@@ -1,18 +1,18 @@
 /**
 \page OUTPUT %Ipopt Output
 
-This pages describes the standard \Ipopt console output
+This pages describes the standard %Ipopt console output
 with the default setting for option \ref OPT_print_level "print_level".
-The output is designed to provide a quick summary of each iteration as \Ipopt solves the problem.
+The output is designed to provide a quick summary of each iteration as %Ipopt solves the problem.
 
-Before \Ipopt starts to solve the problem, it displays the
+Before %Ipopt starts to solve the problem, it displays the
 problem statistics (number of nonzero-elements in the matrices, number
 of variables, etc.). Note that if you have fixed variables (both upper
-and lower bounds are equal), \Ipopt may remove these
+and lower bounds are equal), %Ipopt may remove these
 variables from the problem internally and not include them in the
 problem statistics.
 
-Following the problem statistics, \Ipopt will begin to
+Following the problem statistics, %Ipopt will begin to
 solve the problem and you will see output resembling the following,
 
     iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
@@ -83,7 +83,7 @@ and the columns of output are defined as,
 - ls:  The number of backtracking line search steps (does not include
     second-order correction steps).
 
-Note that the step acceptance mechanisms in \Ipopt consider
+Note that the step acceptance mechanisms in %Ipopt consider
 the barrier objective function (Eq (3a) in \cite WaecBieg06:mp) which is
 usually different from the value reported in the `objective` column.
 Similarly, for the purposes of the step acceptance, the constraint
@@ -95,7 +95,7 @@ iterate might have worse values both for the objective function and the
 constraint violation as reported in the iteration output, seemingly
 contradicting globalization procedure.
 
-When the algorithm terminates, \Ipopt will output a message
+When the algorithm terminates, %Ipopt will output a message
 to the screen based on the return status of the call to Optimize. The
 following is a list of the possible return codes, their corresponding
 output message to the console, and a brief description.
@@ -104,7 +104,7 @@ output message to the console, and a brief description.
 
    Console Message: `EXIT: Optimal Solution Found.`
 
-   This message indicates that \Ipopt found a (locally)
+   This message indicates that %Ipopt found a (locally)
    optimal point within the desired tolerances.
 
 - `Solved_To_Acceptable_Level`:
@@ -122,7 +122,7 @@ output message to the console, and a brief description.
    Console Message: `EXIT: Feasible point for square problem found.`
 
    This message is printed if the problem is "square" (i.e., it has as
-   many equality constraints as free variables) and \Ipopt
+   many equality constraints as free variables) and %Ipopt
    found a feasible point.
 
 - `Infeasible_Problem_Detected`:
@@ -143,7 +143,7 @@ output message to the console, and a brief description.
 
    Console Message: `EXIT: Search Direction is becoming Too Small.`
 
-   This indicates that \Ipopt is calculating very small
+   This indicates that %Ipopt is calculating very small
    step sizes and is making very little progress. This could happen if
    the problem has been solved to the best numerical accuracy possible
    given the current scaling.
@@ -167,21 +167,21 @@ output message to the console, and a brief description.
 
    Console Message: `EXIT: Maximum Number of Iterations Exceeded.`
 
-   This indicates that \Ipopt has exceeded the maximum
+   This indicates that %Ipopt has exceeded the maximum
    number of iterations as specified by the option \ref OPT_max_iter "max_iter".
 
 - `Maximum_WallTime_Exceeded`:
 
    Console Message: `EXIT: Maximum wallclock time exceeded.`
 
-   This indicates that \Ipopt has exceeded the maximum
+   This indicates that %Ipopt has exceeded the maximum
    number of wallclock seconds as specified by the option \ref OPT_max_wall_time "max_wall_time".
 
 - `Maximum_CpuTime_Exceeded`:
 
    Console Message: `EXIT: Maximum CPU time exceeded.`
 
-   This indicates that \Ipopt has exceeded the maximum
+   This indicates that %Ipopt has exceeded the maximum
    number of CPU seconds as specified by the option \ref OPT_max_cpu_time "max_cpu_time".
 
 - `Restoration_Failed`:
@@ -198,7 +198,7 @@ output message to the console, and a brief description.
 
    Console Output: `EXIT: Error in step computation!`
 
-   This message is printed if \Ipopt is unable to compute a step towards
+   This message is printed if %Ipopt is unable to compute a step towards
    a new iterate and the current iterate is not acceptable for the specified
    tolerances.
 
@@ -232,7 +232,7 @@ output message to the console, and a brief description.
 
    This indicates that your problem, as specified, has too few degrees
    of freedom. This can happen if you have too many equality
-   constraints, or if you fix too many variables (\Ipopt
+   constraints, or if you fix too many variables (%Ipopt
    removes fixed variables by default, see also the option \ref OPT_fixed_variable_treatment "fixed_variable_treatment").
 
 - `Invalid_Problem_Definition`:
@@ -249,7 +249,7 @@ output message to the console, and a brief description.
 
    Console Message: (details about the particular error will be output to the console)
 
-   This indicates that \Ipopt has thrown an exception that
+   This indicates that %Ipopt has thrown an exception that
    does not have an internal return code. See the specific message for
    details.
 
@@ -257,7 +257,7 @@ output message to the console, and a brief description.
 
    Console Message: `Unknown Exception caught in %Ipopt`
 
-   An unknown exception was caught in \Ipopt. This exception could have
+   An unknown exception was caught in %Ipopt. This exception could have
    originated from your model or any linked in third party code.
    See also Ipopt::IpoptApplication::RethrowNonIpoptException.
 
@@ -273,15 +273,15 @@ output message to the console, and a brief description.
    Console: `EXIT: INTERNAL ERROR: Unknown SolverReturn value - Notify IPOPT Authors.`
 
    An unknown internal error has occurred. Please notify the authors of
-   \Ipopt via the mailing list.
+   %Ipopt via the mailing list.
 
 <!--\section DIAGTAGS Diagnostic Tags for Ipopt -->
 
 To print additional diagnostic tags for each iteration of
-\Ipopt, set the option \ref OPT_print_info_string "print_info_string" to `yes`. With this, a tag will
+%Ipopt, set the option \ref OPT_print_info_string "print_info_string" to `yes`. With this, a tag will
 appear at the end of an iteration line with the following diagnostic
 meaning that are useful to flag difficulties for a particular
-\Ipopt run.
+%Ipopt run.
 
  |Tag   |Description                                                  |Reference                                     |
  |:-----|:------------------------------------------------------------|:---------------------------------------------|
