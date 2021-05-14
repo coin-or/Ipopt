@@ -11,7 +11,8 @@
 //           (incorporated by AW on 2006-11-11 into Ipopt package)
 //
 // NOTES:
-// - Since Mumps 5.1.0, mumps_->nz should be replaced by mumps_->nnz
+// - Since Mumps 5.1.0, mumps_->nz (MUMPS_INT) is deprecated and mumps_->nnz (MUMPS_INT8) should be used.
+//   For now (Mumps 5.4.0), mumps_->nz still works and has no disadvantage for us.
 
 // The following line is a fix for otherwise twice-defined global variable
 // (This would have to be taken out for a parallel MUMPS version!)
