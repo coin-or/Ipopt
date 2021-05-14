@@ -623,10 +623,10 @@ public abstract class Ipopt
     * The method expects the number of variables (dimension of x), number of constraints (dimension of g(x)),
     * and allocated arrays of appropriate lengths as input.
     *
-    * The method translates the x(), c(), d(), y_c(), y_d(), z_L(), and z_U() vectors from ip_data->curr()
+    * The method translates the x(), c(), d(), y_c(), y_d(), z_L(), and z_U() vectors from Ipopt::IpoptData::curr()
     * of the internal NLP representation into the form used by the TNLP.
-    * For the correspondence between scaled and unscaled solutions, see the detailed description of OrigIpoptNLP.
-    * If Ipopt is in restoration mode, it maps the current iterate of restoration %NLP (see RestoIpoptNLP) back to the original TNLP.
+    * For the correspondence between scaled and unscaled solutions, see the detailed description of Ipopt::OrigIpoptNLP.
+    * If %Ipopt is in restoration mode, it maps the current iterate of restoration %NLP (see Ipopt::RestoIpoptNLP) back to the original TNLP.
     *
     * If there are fixed variables and fixed_variable_treatment=make_parameter, then requesting z_L and z_U can trigger a reevaluation of
     * the Gradient of the objective function and the Jacobian of the constraint functions.
@@ -669,8 +669,8 @@ public abstract class Ipopt
     * and allocated arrays of appropriate lengths as input.
     *
     * The method makes the vectors behind (unscaled_)curr_nlp_constraint_violation(), (unscaled_)curr_dual_infeasibility(), (unscaled_)curr_complementarity()
-    * from ip_cq of the internal NLP representation available into the form used by the TNLP.
-    * If Ipopt is in restoration mode, it maps the current iterate of restoration %NLP (see RestoIpoptNLP) back to the original TNLP.
+    * from Ipopt::IpoptCalculatedQuantities of the internal NLP representation available into the form used by the TNLP.
+    * If %Ipopt is in restoration mode, it maps the current iterate of restoration %NLP (see Ipopt::RestoIpoptNLP) back to the original TNLP.
     *
     * @note If in restoration phase, then requesting grad_lag_x can trigger a call to eval_grad_f().
     *
@@ -682,8 +682,8 @@ public abstract class Ipopt
     * @param ip_cq      (in)  Ipopt Calculated Quantities (pass on value given to intermediate_callback)
     * @param scaled     (in)  whether to retrieve scaled or unscaled violations
     * @param n          (in)  the number of variables \f$x\f$ in the problem; can be arbitrary if skipping compl_x_L, compl_x_U, and grad_lag_x
-    * @param x_L_violation (out) buffer to store violation of original lower bounds on variables (\f$max(orig_x_L-x,0)\f$), must have length at least n; pass NULL to skip retrieving orig_x_L
-    * @param x_U_violation (out) buffer to store violation of original upper bounds on variables (\f$max(x-orig_x_U,0)\f$), must have length at least n; pass NULL to skip retrieving orig_x_U
+    * @param x_L_violation (out) buffer to store violation of original lower bounds on variables (max(orig_x_L-x,0)), must have length at least n; pass NULL to skip retrieving orig_x_L
+    * @param x_U_violation (out) buffer to store violation of original upper bounds on variables (max(x-orig_x_U,0)), must have length at least n; pass NULL to skip retrieving orig_x_U
     * @param compl_x_L  (out) buffer to store violation of complementarity for lower bounds on variables (\f$(x-x_L)z_L\f$), must have length at least n; pass null to skip retrieving compl_x_L
     * @param compl_x_U  (out) buffer to store violation of complementarity for upper bounds on variables (\f$(x_U-x)z_U\f$), must have length at least n; pass null to skip retrieving compl_x_U
     * @param grad_lag_x (out) buffer to store gradient of Lagrangian w.r.t. variables \f$x\f$, must have length at least n; pass null to skip retrieving grad_lag_x
