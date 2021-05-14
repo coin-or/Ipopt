@@ -287,8 +287,8 @@ source code. You need to have a Fortran 90 compiler (e.g., the
 GNU compiler gfortran) to be able to use it.
 
 The COIN-OR Tools project [ThirdParty-Mumps](https://github.com/coin-or-tools/ThirdParty-Mumps)
-can be used to download the MUMPS 4.10.0 code and build a MUMPS library
-that is recognized by Ipopt.
+can be used to download the MUMPS code and build a MUMPS library
+that is recognized by %Ipopt.
 To do so, execute
 
     git clone https://github.com/coin-or-tools/ThirdParty-Mumps.git
@@ -307,10 +307,11 @@ using %Ipopt within an MPI program together with MUMPS, the
 code will not run. You will have to modify the MUMPS sources so that the
 MPI symbols inside the MUMPS code are renamed.
 
-\note Branch `mumps5` of project ThirdParty-Mumps can be used to build a
-a library of MUMPS 5. that is usable with %Ipopt. However, initial
-experiments on the CUTEst testset have shown that performance with MUMPS
-5.2.x is worse than with MUMPS 4.10.0 on average.
+\note Branch `stable/2.1` of project ThirdParty-Mumps can be used to build
+a library of MUMPS 4 that is usable with %Ipopt. Initial experiments on
+the CUTEst testset have shown that performance with MUMPS 5.2.x is worse
+than with MUMPS 4.10.0 on average, but note that MUMPS 4 is not longer
+maintained.
 
 To compile %Ipopt with a precompiled MUMPS library, you need to specify
 the `-I` flag to have the compiler find the directory containing the
@@ -824,8 +825,7 @@ Regarding dependencies of %Ipopt, the situation is as follows:
   However, configure would still select the Accelerate framework by default and %Ipopt will try to run with faulty numbers.
   You may want to try switch to Lapack from HomeBrew instead (`--with-lapack="-L/usr/local/opt/lapack/lib -llapack -lblas"`) or try out [this vecLib wrapper](https://github.com/mcg1969/vecLibFort).
 - The interface to MUMPS can use a single-precision version of MUMPS.
-  If using ThirdParty-Mumps to build a MUMPS library, note that only the branch `mumps5` has been updated to allow for building a single-precision version of MUMPS.
-  See the [ThirdParty-Mumps docu](https://github.com/coin-or-tools/ThirdParty-Mumps/tree/mumps5#single-precision-codes) for details.
+  See the [ThirdParty-Mumps docu](https://github.com/coin-or-tools/ThirdParty-Mumps/#single-precision-codes) for details.
 - The interfaces to the HSL routines can use single-precision versions of these routines.
   See the [ThirdParty-HSL docu](https://github.com/coin-or-tools/ThirdParty-HSL/#single-precision-codes) for more details on how to obtain these.
 - The interface for Pardiso (both MKL and from pardiso-project.org) is available.
@@ -867,7 +867,7 @@ Regarding dependencies of %Ipopt, the situation is as follows:
 - A variant of Blas and Lapack that uses 64-bit integers is required.
   If `--with-intsize=64` is seletected, then the check in configure by default only looks for Intel MKL and tries `-llapack64 -lblas64`, see also the [BuildTools docu](https://coin-or-tools.github.io/BuildTools/configure#check-for-lapack-with-64-bit-integers).
 - The interface to MUMPS can use a version of MUMPS that has been compiled for 64-bit integers.
-  If using ThirdParty-Mumps to build a MUMPS library, note that only the branch `mumps5` has been updated to allow for building a version of MUMPS that uses 64-bit integers, see also the [ThirdParty-Mumps docu](https://github.com/coin-or-tools/ThirdParty-Mumps/tree/mumps5#64-bit-integers).
+  See the [ThirdParty-Mumps docu](https://github.com/coin-or-tools/ThirdParty-Mumps/#64-bit-integers) for details.
 - The interfaces to the HSL routines are not available.
 - The interface for Pardiso from pardiso-project.org is not available.
 - The interface for Pardiso from Intel MKL is available if the ILP64 variant of Intel MKL is used for Blas/Lapack.

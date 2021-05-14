@@ -25,7 +25,7 @@ Dependencies:
     Required: Optional
   - Description: ThirdParty wrapper for building Mumps
     URL: https://github.com/coin-or-tools/ThirdParty-Mumps
-    Version: stable/2.1
+    Version: stable/3.0
     Required: Optional
   - Description: ThirdParty wrapper for building HSL codes
     URL: https://github.com/coin-or-tools/ThirdParty-HSL
