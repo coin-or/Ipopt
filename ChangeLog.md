@@ -200,20 +200,20 @@ More detailed information about incremental changes can be found in the
 
 ### 3.13.4 (2021-02-24)
 
-- Fixed a linking issue for ipopt_sens [#418]
+- Fixed a linking issue for `ipopt_sens` [#418]
 - Fixed Makefile for Java example regarding location of jar file
 - Fixed build of R interface if using `-fvisibility=hidden`.
 
 ### 3.13.3 (2020-10-16)
 
-- Members of AmplTNLP class are now protected instead of private.
+- Members of `AmplTNLP` class are now protected instead of private.
 - Updated Eclipse Public License from 1.0 to 2.0.
 - Fixed dangling pointer problems with Journalist used for debugging
-  (`--with-ipopt-verbosity > 0`) when more than one IpoptApplication
+  (`--with-ipopt-verbosity > 0`) when more than one `IpoptApplication`
   is used. [#393, thanks to Brad Bell]
 - Fixed build problem when using HSL library that does not include
   MA27, MA57, or MC19. [#395]
-- Added example recursive_nlp that uses Ipopt to solves an
+- Added example `recursive_nlp` that uses Ipopt to solves an
   optimization problem for the evaluation of the objective function.
   [contributed by Brad Bell]
 - Fixed build of linear-solver loader on Windows [#408]
@@ -467,7 +467,7 @@ A more detailed, probably incomplete, list of changes follows:
 
 ### 3.12.2 (2015-04-04)
 
-- revised integration of doxygen documentation into build system
+- revised integration of doxygen-generated documentation into build system
   (by T. Ralphs)
 
 ### 3.12.1 (2015-02-13)
@@ -571,7 +571,7 @@ A more detailed, probably incomplete, list of changes follows:
 - hopefully fixed non-working linear solver loader in DLLs build with
   MSVS/`v8-ifort` project files [r2365]
 - allow MC19 to be loaded via linear solver loader (by J. Currie) [r2366]
-- fixed new point flag when running dependendency detector [r2368]
+- fixed new point flag when running dependency detector [r2368]
 - experimental: adapt Pardiso interface to work with MKL Pardiso
   (by J. Currie, T. Kelman) [r2369, #216]:
   - in a few tests it has been found that Pardiso from Intel MKL nowadays
@@ -627,7 +627,8 @@ A more detailed, probably incomplete, list of changes follows:
 #### Miscellaneous
 
 - update and extension of Ipopt documentation
-- updated build of doxygen documentation to comply with other COIN-OR projects
+- updated build of doxygen-generated documentation to comply with other
+  COIN-OR projects
 - localized global variables in `TaggedObject` and `RegisteredOption`,
   so that Ipopt should now be threadsafe as long as Ipopt objects
   (esp. `SmartPtr`'s) are not shared between threads and a threadsafe
@@ -803,7 +804,7 @@ A more detailed, probably incomplete, list of changes follows:
 ### 3.7.1 (2009-10-06)
 
 - bugfix for square problems
-- correct timinig information (obj gradient was forgotten)
+- correct timing information (obj gradient was forgotten)
 - flush output buffer after each iteration
 - first code for iterative WSMP version (experimental and undocumented)
 
@@ -872,7 +873,7 @@ A more detailed, probably incomplete, list of changes follows:
 - added wallclock time routine
 - penalty function version does no longer crash if it
   wants to go to restoration phase (not that this really helps
-  converence though)
+  convergence though)
 
 ### 3.4.1 (2008-05-30)
 
@@ -887,7 +888,7 @@ A more detailed, probably incomplete, list of changes follows:
 - added support to dynamically load HSL or Pardiso:
   If Ipopt has been compiled without some HSL or Pardiso solver,
   it can now load those solvers from a shared library at runtime
-  without recompilation.  This will make ditribution of binaries
+  without recompilation.  This will make distribution of binaries
   easier.  Does not work on all platforms yet.
 - several bugfixes
 - ensured compilation of MSVS project files (`v8` and `v9`)
