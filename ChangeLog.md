@@ -3,6 +3,7 @@
 Here we list changes of Ipopt since the release of version 2.2.0.
 More detailed information about incremental changes can be found in the
 [commit history](https://github.com/coin-or/Ipopt/commits).
+[TOC]
 
 ## 3.14
 
