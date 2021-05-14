@@ -816,7 +816,8 @@ WARN_FORMAT            = "$file:$line: $text"
 INPUT                  = @abs_top_srcdir@/doc \
                          @abs_top_srcdir@/src \
                          @abs_top_srcdir@/contrib/sIPOPT/src \
-                         @abs_top_srcdir@/contrib/sIPOPT/AmplSolver
+                         @abs_top_srcdir@/contrib/sIPOPT/AmplSolver \
+                         @abs_top_srcdir@/ChangeLog.md
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -896,7 +897,6 @@ EXCLUDE_SYMBOLS        =
 
 EXAMPLE_PATH           = @abs_top_srcdir@/examples \
                          @abs_top_srcdir@/src/Interfaces \
-                         @abs_top_srcdir@/ChangeLog \
                          @abs_top_srcdir@/AUTHORS \
                          @abs_top_srcdir@/LICENSE
 
@@ -952,7 +952,7 @@ INPUT_FILTER           =
 # need to set EXTENSION_MAPPING for the extension otherwise the files are not
 # properly processed by doxygen.
 
-FILTER_PATTERNS        =
+FILTER_PATTERNS        = *ChangeLog.md="sed -e 's/\bIpopt\b/%Ipopt/g'"
 
 # If the FILTER_SOURCE_FILES tag is set to YES, the input filter (if set using
 # INPUT_FILTER) will also be used to filter the input files that are used for

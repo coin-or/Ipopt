@@ -454,7 +454,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = src $(am__append_1)
-doc_DATA = README.md AUTHORS LICENSE ChangeLog
+doc_DATA = README.md AUTHORS LICENSE ChangeLog.md
 all: all-recursive
 
 .SUFFIXES:

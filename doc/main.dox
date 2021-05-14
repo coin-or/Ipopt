@@ -15,7 +15,7 @@ The documentation consists of the following pages:
 - \subpage OUTPUT
 - \subpage IMPL
 - \subpage FAQ
-- \subpage CHANGELOG
+- \subpage md_ChangeLog
 - \subpage AUTHORS
 - \subpage LICENSE
 
@@ -398,9 +398,6 @@ trademarks: Apple, AMPL, IBM, Intel, Matlab, Microsoft, MKL, Visual Studio C++,
 Visual Studio C++ .NET
 
 
-\page CHANGELOG Release notes
-
-\verbinclude ChangeLog
 
 \page AUTHORS Authors and Contributors
 
