@@ -7,7 +7,9 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
-### 3.14.0 (2021-yy-zz)
+### 3.14 beta1 (2021-05-14)
+
+#### Data Types
 
 - Due to a contribution by Mitchell Clement [#428], it is now possible
   to build Ipopt in a variant that uses single-precision floating
@@ -18,66 +20,104 @@ More detailed information about incremental changes can be found in the
 - The name of all functions in `IpBlas.hpp` and `IpLapack.hpp` has been
   changed to drop the precision-specifier "D" in the name.
   Wrapper using the old names are available, but their use is deprecated.
+- It is now possible to build Ipopt in a variant that uses 64-bit
+  integers for its `Index` type. This can be enabled by specifying
+  the configure flag `--with-intsize=64`. Doing so has a number of
+  consequences on Ipopt interfaces and Ipopt dependencies. See
+  the Ipopt installation instructions for more details. [#259]
 - Added new header `IpTypes.h` that defines Ipopt types for integer
   and real numbers for C users.
+- Deprecated almost never used type `Ipopt::Int`, use `int` instead.
+- Deprecated `Number`, `Index`, and `Int` (on global namespace) in
+  `IpStdCInterface.h`, use `ipnumber`, `ipindex`, and `int` instead, respectively.
+- Deprecated `Bool` in `IpStdCInterface.h` and replaced it by `bool`
+  from `stdbool.h`. Note, that `Bool` was defined to be `int`, but `bool`
+  is likely a shorter type, e.g., `signed char`. Deprecated `TRUE` and
+  `FALSE`, use `true` and `false` instead.
+- Deprecated `IPOPT_EXPORT` macro and introduced `IPOPT_CALLCONV`.
+- Deprecated `IPOPT_FORTRAN_INTEGER_TYPE` and `ipfint`. These were
+  always assumed to be `int`. Use `ipindex` or `ipopt::Index` instead.
+
+#### Linear Solver Interfaces
+
 - Due to a contribution by Byron Tasseff [#446], it is now possible to use
-  the linear solver SPRAL (Sparse Parallel Robust Algorithms Library) with
-  Ipopt. SPRAL is open-source and can, optionally, make use of NVIDIA GPUs.
+  the linear solver [SPRAL](https://github.com/ralna/spral) (Sparse Parallel
+  Robust Algorithms Library) with Ipopt.
+  SPRAL is open-source and can, optionally, make use of NVIDIA GPUs.
   See the installation instructions on how to build the Ipopt/SPRAL interface.
   If Ipopt has been build with SPRAL, then option `linear_solver` can be
   set to `spral` to enable use of SPRAL.
   See also the options documentation for new options that are available
   for the Ipopt/SPRAL interface.
-- Changed treatment of NLPs with all variables fixed and `fixed_variable_treatment=make_parameter`:
-  Ipopt will still terminate early, but initialize its data structures
-  first and print a solve summary (49a0d3a56).
-  Changed treatment of NLPs with inconsistent variable bounds or constraint
-  sides: These will now result in an invalid problem definition error (-11) (5cdb2624bb).
-  As a consequence, solve statistics should now always be available if the return
-  status from `(Re)Optimize()` is larger than -10.
 - Added `IpoptLinearSolvers.h` with function `IpoptGetAvailableLinearSolvers()`
-  to retrieve information which linear solvers are available for
-  Ipopt (linked in or load at runtime). Options `linear_solver` and
+  to retrieve information which linear solvers are available for Ipopt
+  (linked in or loaded at runtime). Options `linear_solver` and
   `linear_system_scaling` can now only be set to values which corresponding
-  code is available (linked in or loaded at runtime).
+  code is available (linked in or for load at runtime).
 - Revised and streamlined implementation of feature that loads libraries
   with HSL or Pardiso routines at runtime. Added options `hsllib` and `pardisolib`
   to specify name of of HSL and Pardiso libraries, respectively.
 - Separated interfaces for Pardiso from [pardiso-project.org](https://pardiso-project.org)
   and Pardiso from Intel MKL and allow to have both Pardiso versions available
-  with the same Ipopt libraries. Pardiso from pardiso-project.org can be selected
-  via `linear_solver=pardiso`. configure option `--with-pardiso` should
-  now specify only a Pardiso library to be loaded at runtime (the value
-  for `--with-pardiso` decides the default value for option `pardisolib`).
-  To avoid conflicts with Pardiso from MKL, it is no longer possible to
-  link against Pardiso from pardiso-project.org. Pardiso from MKL can be
-  selected via `linear_solver=pardisomkl`.
-  configure option `--disable-pardisomkl` can be used to disable the check
-  for MKL Pardiso. [#454]
-  Options that influence Pardiso from MKL are named
-  `pardisomkl_msglvl`, `pardisomkl_order`, etc.
-- Detailed timing statistics are no longer collected by default.
-  To reenable, set the new option `timing_statistics` to yes or set the
-  option `print_timing_statistics` to yes [#299].
-- Removed `IpoptData::ResetCpuStartTime()`. Deprecated `IpoptData::cpu_time_start()`,
-  use `IpoptData::TimingStats()::OverallAlgorithm()::StartCpuTime()` instead.
-- Changed default for `max_cpu_time` to 1e20 to indicate no CPU timelimit.
-- Added option `max_wall_time` to specify a wallclock time limit.
-  Added `SolverReturn` code `WALLTIME_EXCEEDED` and `ApplicationReturnStatus`
-  code `Maximum_WallTime_Exceeded`.
-- Deprecated `SolveStatistics::TotalCPUTime()`, use `SolveStatistics::TotalCpuTime()`
-  instead.
-- Added documentation on some available expert C preprocessor flags.
-- Extended the Java interface by the possibility to specify an
-  intermediate_callback.
-- Added flag to `TNLPAdapter::ResortX()` to specify how to handle
-  fixed variables. Added flag to `TNLPAdapter::ResortG()` to specify
-  whether to correct by right-hand-side of equality constraints. Added
-  `TNLPAdapter::ResortBoundMultipliers()` to generate correct duals
-  for fixed variables if `fixed_variable_treatment` is `make_constraint`.
-  Added `TNLPAdapter::GetFullDimensions()`, `TNLPAdapter::GetFixedVariables()`,
-  `TNLPAdapter::GetPermutationMatrices()`, and `TNLPAdapter::GetC_Rhs()`
-  to retrieve more information of the transformation in a `TNLPAdapter`.
+  with the same Ipopt libraries.
+  - Pardiso from pardiso-project.org can be selected via `linear_solver=pardiso`.
+    configure option <b>`--with-pardiso` should now specify only a Pardiso
+    library to be loaded at runtime</b> (the value for `--with-pardiso` decides
+    the default value for option `pardisolib`).
+    To avoid conflicts with Pardiso from MKL, it is **no longer possible to
+    link against Pardiso from pardiso-project.org**.
+  - Pardiso from MKL can be selected via <b>`linear_solver=pardisomkl`</b>.
+  - Options that influence Pardiso from MKL are named <b>`pardisomkl_msglvl`, `pardisomkl_order`, etc.</b>
+  - configure option `--disable-pardisomkl` can be used to disable the check
+    for MKL Pardiso. [#454]
+- Fixed that return code (`info%flag`) of `ma97_solve()` was not checked
+  in `Ma97SolverInterface::MultiSolve()`.
+- Calls into MUMPS are now protected by a mutex if compiling for C++11 or higher.
+  This prevents Ipopt from calling MUMPS concurrently from several threads.
+
+#### Algorithm
+
+- Changed treatment of NLPs with all variables fixed and `fixed_variable_treatment`
+  set to `make_parameter`:
+  Ipopt will still terminate early, but initialize its data structures
+  first and print a solve summary (49a0d3a56).
+  Changed treatment of NLPs with inconsistent variable bounds or constraint
+  sides: These will now result in an invalid problem definition error (-11)
+  (5cdb2624bb).
+  As a consequence, solve statistics should now always be available if the
+  return status from `(Re)Optimize()` is larger than -10.
+- Bound multipliers are now computed for fixed variables if
+  `fixed_variable_treatment` is set to `make_parameter` (the default).
+  This can trigger a reevaluating of the gradient of the objective
+  function or the Jacobian of the constraint functions. If this
+  is not desired, then option `fixed_variable_treatment` can be set
+  to the new value `make_parameter_nodual`. [#308]
+- Changed default for `honor_original_bounds` to no.
+  Variable bounds (see option `bound_relax_factor`) are now relaxed
+  by at most the value of `constr_viol_tol`.
+  The solve summary now reports the violation of original bounds
+  and `SolveStatistics::(Scaled)Infeasibilities()` has been extended
+  to report the violation of original variable bounds. [#312]
+- If Ipopt hits a time or iteration limit during watchdog phase,
+  the iterate from before the watchdog phase is now restored and
+  passed to `finalize_solution`. Note that this does not apply if
+  Ipopt is stopped due to a user-interrupt (`intermediate_callback`).
+  [#289]
+- When `BacktrackingLinesearch` could not find a trial point that
+  provided sufficient progress, it may resort to call the feasibility
+  restoration phase. If, however, the current (scaled) constraint
+  violation was below tol/100, this would result in the infamous
+  "Restoration phase is called at almost feasible point..." abort
+  with status code `Restoration_Failure`. Now, this message has been
+  changed to "Linesearch failed, but no restoration phase or other
+  fall back is available." and the status code to `Error_In_Step_Computation`
+  to better reflect that the linesearch failed and not the restoration
+  phase. Further, the unscaled constraint violation tolerance now
+  needs to be below `constr_viol_tol/10` as well in order to trigger
+  this abort.
+
+#### Ipopt interfaces
+
 - Added `TNLP::get_curr_iterate()` and `TNLP::get_curr_violations()`
   to request the current iterate (primal and dual variable values)
   and primal and dual infeasibility w.r.t. the TNLP. The methods
@@ -86,20 +126,40 @@ More detailed information about incremental changes can be found in the
   been extended by corresponding functions, too. The hs071 examples
   have been extended to show use of the new functions. Added test
   `getcurr` to test new functions. [#382, #451]
-- Bound multipliers are now computed for fixed variables if
-  `fixed_variable_treatment` is set to `make_parameter` (the default).
-  This can trigger a reevaluating of the gradient of the objective
-  function or the Jacobian of the constraint functions. If this
-  is not desired, then option `fixed_variable_treatment` can be set
-  to the new value `make_parameter_nodual`. [#308]
+- Extended the Java interface by the possibility to specify an `intermediate_callback`.
+- Added flag to `TNLPAdapter::ResortX()` to specify how to handle fixed variables.
+  Added flag to `TNLPAdapter::ResortG()` to specify whether to correct by
+  right-hand-side of equality constraints.
+  Added `TNLPAdapter::ResortBoundMultipliers()` to generate correct duals
+  for fixed variables if `fixed_variable_treatment` is `make_constraint`.
+  Added `TNLPAdapter::GetFullDimensions()`, `TNLPAdapter::GetFixedVariables()`,
+  `TNLPAdapter::GetPermutationMatrices()`, and `TNLPAdapter::GetC_Rhs()`
+  to retrieve more information of the transformation in a `TNLPAdapter`.
 - Added `TNLPAdapter::ResortBounds()` and deprecated `TNLPAdapter::ResortBnds()`.
-- All Ipopt options are now also available via the AMPL interface,
-  that is, can be set in AMPL via an option `ipopt_options "..."` statement.
 - `AmplTNLP` constructor and `AmplTNLP::get_options()` now expect to
   receive a pointer to a `RegisteredOptions` object as well.
   Previous versions of these methods are still available but deprecated.
   Using a NULL pointer for the `RegisteredOptions` argument is
   also deprecated.
+
+#### Timing
+
+- Added option `max_wall_time` to specify a wallclock time limit.
+  Added `SolverReturn` code `WALLTIME_EXCEEDED` and `ApplicationReturnStatus`
+  code `Maximum_WallTime_Exceeded`.
+- Changed default for `max_cpu_time` to 1e20 to indicate no CPU timelimit.
+- Detailed timing statistics are no longer collected by default.
+  To reenable, set the new option `timing_statistics` to yes or set the
+  option `print_timing_statistics` to yes [#299].
+- Removed `IpoptData::ResetCpuStartTime()`. Deprecated `IpoptData::cpu_time_start()`,
+  use `IpoptData::TimingStats()::OverallAlgorithm()::StartCpuTime()` instead.
+- Deprecated `SolveStatistics::TotalCPUTime()`, use `SolveStatistics::TotalCpuTime()`
+  instead.
+
+#### Option handling
+
+- All Ipopt options are now also available via the AMPL interface,
+  that is, can be set in AMPL via an option `ipopt_options "..."` statement.
 - Added flag "advanced" for `RegisteredOption` to store whether an
   option is rather meant for expert users.
 - Added class `RegisteredCategory` to store information on category
@@ -114,64 +174,27 @@ More detailed information about incremental changes can be found in the
   Added parameter `print_advanced_options` to indicate whether to
   print documentation for advanced options, too.
 - Added previously undocumented advanced options to options reference.
-- Changed default for `honor_original_bounds` to no.
-  Variable bounds (see option `bound_relax_factor`) are now relaxed
-  by at most the value of `constr_viol_tol`.
-  The solve summary now reports the violation of original bounds
-  and `SolveStatistics::(Scaled)Infeasibilities()` has been extended
-  to report the violation of original variable bounds. [#312]
-- If Ipopt hits a time or iteration limit during watchdog phase,
-  the iterate from before the watchdog phase is now restored and
-  passed to `finalize_solution`. Note that this does not apply if
-  Ipopt is stopped due to a user-interrupt (`intermediate_callback`).
-  [#289]
-- Fixed a problem where moving slack away from 0 did not succeed
-  when mu was very small. [#212]
-- When `BacktrackingLinesearch` could not find a trial point that
-  provided sufficient progress, it may resort to call the feasibility
-  restoration phase. If, however, the current (scaled) constraint
-  violation was below tol/100, this would result in the infamous
-  "Restoration phase is called at almost feasible point..." abort
-  with status code `Restoration_Failure`. Now, this message has been
-  changed to "Linesearch failed, but no restoration phase or other
-  fall back is available." and the status code to `Error_In_Step_Computation`
-  to better reflect that the linesearch failed and not the restoration
-  phase. Further, the unscaled constraint violation tolerance now
-  needs to be below `constr_viol_tol/10` as well in order to trigger
-  this abort.
-- Various tiny bugfixes and improvements in performance and code style
-  by following suggestions of `cppcheck`.
-- Deprecated almost never used type `Ipopt::Int`, use `int` instead.
-- Deprecated `Number`, `Index`, and `Int` (on global namespace) in
-  `IpStdCInterface.h`, use `ipnumber`, `ipindex`, and `int` instead, respectively.
-- Deprecated `Bool` in `IpStdCInterface.h` and replaced it by `bool`
-  from `stdbool.h`. Note, that `Bool` was defined to be `int`, but `bool`
-  is likely a shorter type, e.g., `signed char`. Deprecated `TRUE` and
-  `FALSE`, use `true` and `false` instead.
-- Deprecated `IPOPT_EXPORT` macro and introduced `IPOPT_CALLCONV`.
-- Fixed missing initialization of `IpoptApplication::smart_jnlst` in
-  second `IpoptApplication` constructor, if `ipopt verbosity > 0`.
+
+#### Miscellaneous
+
 - Updated buildsystem, including improved checks for dependencies,
   use of current autotools, and skipping the build of intermediate
   non-distributed libraries.
-- Deprecated `IPOPT_FORTRAN_INTEGER_TYPE` and `ipfint`. These were
-  always assumed to be `int`. Use `ipindex` or `ipopt::Index` instead.
+- Fixed missing initialization of `IpoptApplication::smart_jnlst` in
+  second `IpoptApplication` constructor, if `ipopt verbosity > 0`.
 - Add GCC format attribute to `Journalist::Printf` functions to enable
   `printf`-formatter check.
-- It is now possible to build Ipopt in a variant that uses 64-bit
-  integers for its `Index` type. This can be enabled by specifying
-  the configure flag `--with-intsize=64`. Doing so has a number of
-  consequences on Ipopt interfaces and Ipopt dependencies. See
-  the Ipopt installation instructions for more details. [#259]
 - Fixed `DenseVector::SumLogsImpl()` such that it returns 0.0 for
   a vector of dimension 0. Returned `nan` for homogeneous 0-vector
   of dimension 0 before.
-- Fixed that return code (`info%flag`) of `ma97_solve()` was not checked
-  in `Ma97SolverInterface::MultiSolve()`.
+- Fixed a problem where moving slack away from 0 did not succeed
+  when mu was very small. [#212]
 - Fixed a problem where moving slacks away from 0 resulted in `nan`
   if multipliers were zero. Added `Vector::ElementWiseSelect()`.
-- Calls into MUMPS are now protected by a mutex if compiling for C++11 or higher.
-  This prevents Ipopt from calling MUMPS concurrently from several threads.
+- Various tiny bugfixes and improvements in performance and code style
+  by following suggestions of `cppcheck`.
+- Added documentation on some available C preprocessor flags for expert users.
+
 
 ## 3.13
 
