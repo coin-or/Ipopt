@@ -103,9 +103,9 @@ before_script:
     fi
 
 script:
-  # Spral doesn't compile on macOS at the moment: https://github.com/ralna/spral/issues/21
-  # Spral doesn't compile with recent GCC (like on Focal) at the moment: https://github.com/ralna/spral/issues/38
-  # macOS VecLib doesn't work for single-precision routines (https://github.com/mcg1969/vecLibFort) - try with homebrew lapack instead
+  # Spral doesn't compile on macOS at the moment: https://github.com/ralna/spral/issues/21 (waiting for merge into lanl-ansi/spral)
+  # Spral doesn't compile with recent GCC (like on Focal) at the moment: https://github.com/ralna/spral/issues/38 (waiting for merge into lanl-ansi/spral)
+  # macOS VecLib doesn't work for single-precision routines (https://github.com/mcg1969/vecLibFort) - use homebrew lapack instead
   - >
     if $NOF77 || $SINGLEPRECISION || [[ "$TRAVIS_OS_NAME" == "osx" ]] || [[ "$TRAVIS_DIST" == "focal" ]]; then
     echo "Skipping Spral build." ;
