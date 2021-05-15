@@ -444,7 +444,7 @@ bool InexactPDSolver::HessianRequiresChange()
    Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
                   "TT: u_norm_scaled = %23.16e\n", u_norm_scaled);
 
-   Number Upsilon;
+   Number Upsilon = 0.;
    Number Nu;
    Number v_norm_scaled = -1.;
    if( compute_normal )
