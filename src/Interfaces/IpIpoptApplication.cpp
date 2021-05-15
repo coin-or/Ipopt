@@ -603,9 +603,6 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
    SolverReturn status = INTERNAL_ERROR;
    try
    {
-      // Set up the algorithm
-      p2alg->Initialize(*jnlst_, *p2ip_nlp, *p2ip_data, *p2ip_cq, *options_, "");
-
       // disable detailed timing, if not required
       bool timing_statistics;
       bool print_timing_statistics;
@@ -613,8 +610,11 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
       options_->GetBoolValue("print_timing_statistics", print_timing_statistics, "");
       if( !timing_statistics && !print_timing_statistics )
       {
-         p2ip_data->TimingStats().DisableTimes();
+         ip_data_->TimingStats().DisableTimes();
       }
+
+      // Set up the algorithm
+      p2alg->Initialize(*jnlst_, *p2ip_nlp, *p2ip_data, *p2ip_cq, *options_, "");
 
       // If selected, print the user options
       bool print_user_options;
