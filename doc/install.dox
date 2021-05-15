@@ -827,7 +827,7 @@ Regarding dependencies of %Ipopt, the situation is as follows:
 - The interface to MUMPS can use a single-precision version of MUMPS.
   See the [ThirdParty-Mumps docu](https://github.com/coin-or-tools/ThirdParty-Mumps/#single-precision-codes) for details.
 - The interfaces to the HSL routines can use single-precision versions of these routines.
-  See the [ThirdParty-HSL docu](https://github.com/coin-or-tools/ThirdParty-HSL/#single-precision-codes) for more details on how to obtain these.
+  A current [ThirdParty-HSL](https://github.com/coin-or-tools/ThirdParty-HSL) can compile these when using a [Coin-HSL](http://hsl.rl.ac.uk/ipopt) 2021.05.05 package.
 - The interface for Pardiso (both MKL and from pardiso-project.org) is available.
   The Pardiso library contains a single-precision version of its solver.
 - The interface to WSMP is not available.

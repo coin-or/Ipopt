@@ -186,7 +186,8 @@ More detailed information about incremental changes can be found in the
   `printf`-formatter check.
 - Fixed `DenseVector::SumLogsImpl()` such that it returns 0.0 for
   a vector of dimension 0. Returned `nan` for homogeneous 0-vector
-  of dimension 0 before.
+  of dimension 0 before, which may have caused the restoration phase to
+  fail for problems with only equality or only inequality constraints.
 - Fixed a problem where moving slack away from 0 did not succeed
   when mu was very small. [#212]
 - Fixed a problem where moving slacks away from 0 resulted in `nan`
