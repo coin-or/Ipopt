@@ -88,9 +88,9 @@ void AmplTNLP::gutsOfConstructor(
    if( n_cc != 0 )
    {
       jnlst_->Printf(J_ERROR, J_MAIN,
-                     "\n\n***** Currently, the AMPL interface to Ipopt does not support\n      complementarity constraints.  Aborting. *****\n\n");
+                     "\n\n***** Ipopt does not support complementarity constraints.  Aborting. *****\n\n");
       ASSERT_EXCEPTION(n_cc == 0, IpoptException,
-                       "Currently, the AMPL interface to Ipopt does not support complementarity constraints.");
+                       "Ipopt does not support complementarity constraints.");
    }
 
    DBG_ASSERT(nlo == 0 || nlo == 1); // Can handle nonlinear obj.
