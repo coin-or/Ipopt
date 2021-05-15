@@ -426,12 +426,6 @@ void IpoptApplication::RegisterOptions(
       "Setting this option to \"yes\" will cause the IpoptApplication object to suppress the default call to that method.",
       true);
 
-   roptions->AddBoolOption(
-      "timing_statistics",
-      "Indicates whether to measure time spend in components of Ipopt and NLP evaluation",
-      false,
-      "The overall algorithm time is unaffected by this option.");
-
    roptions->SetRegisteringCategory("Undocumented");
    roptions->AddBoolOption(
       "suppress_all_output",
@@ -603,15 +597,12 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
    SolverReturn status = INTERNAL_ERROR;
    try
    {
-      // disable detailed timing, if not required
-      bool timing_statistics;
+      // check whether timing statistics need to be printed
       bool print_timing_statistics;
-      options_->GetBoolValue("timing_statistics", timing_statistics, "");
       options_->GetBoolValue("print_timing_statistics", print_timing_statistics, "");
-      if( !timing_statistics && !print_timing_statistics )
-      {
-         ip_data_->TimingStats().DisableTimes();
-      }
+      // enable collecting timing statistics if they need to be printed later
+      if( print_timing_statistics )
+         options_->SetStringValue("timing_statistics", "yes", true, true);
 
       // Set up the algorithm
       p2alg->Initialize(*jnlst_, *p2ip_nlp, *p2ip_data, *p2ip_cq, *options_, "");

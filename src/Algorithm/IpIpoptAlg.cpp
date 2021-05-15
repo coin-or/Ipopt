@@ -104,6 +104,12 @@ void IpoptAlgorithm::RegisterOptions(
    roptions->AddBoolOption("sb",
                            "whether to skip printing Ipopt copyright banner",
                            false);
+   roptions->SetRegisteringCategory("Miscellaneous");
+   roptions->AddBoolOption(
+      "timing_statistics",
+      "Indicates whether to measure time spend in components of Ipopt and NLP evaluation",
+      false,
+      "The overall algorithm time is unaffected by this option.");
 }
 
 static bool copyright_message_printed = false;
@@ -115,6 +121,14 @@ bool IpoptAlgorithm::InitializeImpl(
 {
    DBG_START_METH("IpoptAlgorithm::InitializeImpl",
                   dbg_verbosity);
+
+   // disable detailed timing, if not required
+   bool timing_statistics;
+   options.GetBoolValue("timing_statistics", timing_statistics, "");
+   if( !timing_statistics )
+   {
+      IpData().TimingStats().DisableTimes();
+   }
 
    SmartPtr<const OptionsList> my_options;
    options.GetBoolValue("mehrotra_algorithm", mehrotra_algorithm_, prefix);

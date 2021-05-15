@@ -7,6 +7,11 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
+### 3.14 beta2 (2021-0x-yy)
+
+- Fixed problem that collecting timing statistics were not disabled for
+  initialization and solve in restoration phase. [#299]
+
 ### 3.14 beta1 (2021-05-14)
 
 #### Data Types
